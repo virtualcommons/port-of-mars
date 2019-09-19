@@ -1,0 +1,9 @@
+version: '3'
+services:
+  server:
+    build: server
+    restart: always
+    image: port-of-mars/client/dev:latest
+    volumes:
+      - ./server:/code
+      - /code/node_modules
