@@ -10,7 +10,6 @@
   .title-container {
     display: flex;
     flex-direction: column;
-    align-items: center;
   }
   .title {
     font-family: 'Orbitron', sans-serif;
