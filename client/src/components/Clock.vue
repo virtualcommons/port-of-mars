@@ -1,0 +1,63 @@
+<template>
+  <div class="clock-container">
+    <p>{{ time }}</p>
+  </div>
+</template>
+
+<script lang="ts">
+  import { Vue, Component, Prop } from 'vue-property-decorator'
+
+
+  @Component({
+
+  })
+
+  export default class Clock extends Vue {
+      // non-null operator (!) = compiler prop will have non-null value
+      @Prop(String) time!:string;
+
+      clock = setInterval(this.updateTime, 1000);
+
+      // methods
+      updateTime() {
+          // create Date object (current date and time on user's computer)
+          var currentTime = new Date();
+
+          // extract hours, minutes, seconds components of current time from Date object
+          var currentHours = currentTime.getHours();
+          var currentMinutes = currentTime.getMinutes();
+          var currentSeconds = currentTime.getSeconds();
+
+          // pad minutes and sedconds with leading zeroes
+          this.time = this.zeroPadding(currentHours, 2) + ':' + this.zeroPadding(currentMinutes, 2) + ':' + this.zeroPadding(currentSeconds, 2);
+      }
+
+      zeroPadding(timeComponent, num) {
+        var zero = '';
+        for (var i = 0; i < num; i++) {
+            zero += '0';
+        }
+        return (zero + timeComponent).slice(-num);
+      }
+
+  }
+
+</script>
+
+<style scoped>
+  @import url('https://fonts.googleapis.com/css?family=Space+Mono:400,700&display=swap');
+
+  .clock-container {
+    font-family: 'Space Mono', monospace;
+    font-size: 65px;
+    color: #ffddba;
+    text-shadow: 0 0 20px rgb(230, 219, 0),  0 0 20px rgba(10, 175, 230, 0);
+
+    background: inherit;
+    text-align: center;
+    position: absolute;
+    right: 77%;
+    top: 10%;
+  }
+
+</style>
