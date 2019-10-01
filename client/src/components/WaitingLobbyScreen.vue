@@ -1,0 +1,43 @@
+<template>
+  <div class="waiting-lobby-screen">
+    <Clock />
+    <PortOfMarsLogo />
+  </div>
+</template>
+
+<script lang="ts">
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
+  import PortOfMarsLogo from "@/components/PortOfMarsLogo.vue";
+  import Clock from "@/components/Clock.vue"
+
+  @Component({
+      components: {
+          PortOfMarsLogo,
+          Clock
+      }
+  })
+
+    export default class WaitingLobbyScreen extends Vue {
+      mounted() {}
+
+    }
+</script>
+
+<style scoped>
+  .waiting-lobby-screen {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 5rem;
+    font-weight: 100;
+    letter-spacing: 0.5rem;
+    transition: all 0.2s;
+  }
+</style>
