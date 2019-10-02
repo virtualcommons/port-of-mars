@@ -1,0 +1,30 @@
+<template>
+    <div class="gameplay-guide-container">
+      <p class="gameplay-guide-content">TEST</p>
+    </div>
+</template>
+
+<script lang="ts">
+    import { Vue, Component } from 'vue-property-decorator'
+
+    @Component
+
+    export default class GameplayGuide extends Vue {
+        name: "GameplayGuide"
+    }
+</script>
+
+<style scoped>
+  .gameplay-guide-container {
+    background: inherit;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 80%;
+  }
+
+  .gameplay-guide-content {
+    color: white;
+    font-size: 20px;
+  }
+</style>
