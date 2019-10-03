@@ -82,13 +82,13 @@ export default class Home extends Vue {
   .twinkling {
     background: transparent url(http://www.script-tutorials.com/demos/360/images/twinkling.png) repeat top center;
     z-index: 0;
-    animation: move-twink-back 200s linear infinite;
+    animation: move-twink-back 500s linear infinite;
   }
 
   .clouds {
     background: transparent url(http://www.script-tutorials.com/demos/360/images/clouds3.png) repeat top center;
     z-index: 2;
-    animation: move-clouds-back 200s linear infinite;
+    animation: move-clouds-back 500s linear infinite;
 
   }
 

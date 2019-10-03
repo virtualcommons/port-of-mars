@@ -7,13 +7,13 @@
     position: relative;
 
     /* mars dimensions + spacing */
-    width: 200px;
+    width: 300px;
     height: 300px;
     margin: 3em auto;
 
     /* mars rotating animation */
     transition: transform 200ms linear;
-    animation: rotate 4s linear infinite;
+    animation: rotate 50s linear infinite;
 
     color: black;
     border-radius: 50%;
