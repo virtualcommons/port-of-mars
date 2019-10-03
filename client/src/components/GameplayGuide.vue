@@ -1,6 +1,6 @@
 <template>
     <div class="gameplay-guide-container">
-      <p class="gameplay-guide-content">TEST</p>
+      <h2 class="gameplay-guide-content">[ GAMEPLAY GUIDE GOES HERE ]</h2>
     </div>
 </template>
 

@@ -10,14 +10,16 @@
   .title-container {
     display: flex;
     flex-direction: column;
+    background: inherit;
+    text-align: center;
+    position: absolute;
+    top: 10%;
   }
+
   .title {
     font-family: 'Orbitron', sans-serif;
     font-size: 50px;
     color: #ffddda;
     text-shadow: 0 0 20px #c90000,  0 0 20px #c90000;
-
-    /* temporary solution*/
-    padding-bottom: 1000px;
   }
 </style>

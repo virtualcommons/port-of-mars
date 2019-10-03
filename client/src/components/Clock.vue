@@ -8,11 +8,10 @@
   import { Vue, Component, Prop } from 'vue-property-decorator'
 
 
-  @Component({
-
-  })
-
+  @Component
   export default class Clock extends Vue {
+      name: Clock;
+
       // non-null operator (!) = compiler prop will have non-null value
       @Prop(String) time!:string;
 
@@ -28,7 +27,7 @@
           var currentMinutes = currentTime.getMinutes();
           var currentSeconds = currentTime.getSeconds();
 
-          // pad minutes and sedconds with leading zeroes
+          // pad minutes and seconds with leading zeroes
           this.time = this.zeroPadding(currentHours, 2) + ':' + this.zeroPadding(currentMinutes, 2) + ':' + this.zeroPadding(currentSeconds, 2);
       }
 
@@ -41,23 +40,24 @@
       }
 
   }
-
 </script>
 
 <style scoped>
   @import url('https://fonts.googleapis.com/css?family=Space+Mono:400,700&display=swap');
 
   .clock-container {
+    /*container position*/
+    background: inherit;
+    text-align: center;
+    position: absolute;
+    right: 75%;
+    top: 8%;
+
+    /*container styling*/
     font-family: 'Space Mono', monospace;
     font-size: 65px;
     color: #ffddba;
     text-shadow: 0 0 20px rgb(230, 219, 0),  0 0 20px rgba(10, 175, 230, 0);
-
-    background: inherit;
-    text-align: center;
-    position: absolute;
-    right: 77%;
-    top: 10%;
   }
 
 </style>

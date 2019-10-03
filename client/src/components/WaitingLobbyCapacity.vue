@@ -1,6 +1,6 @@
 <template>
     <div class="lobby-capacity-container">
-      <h2 class="lobby-capacity-status">TEST</h2>
+      <h2 class="lobby-capacity-status">3 PLAYERS</h2>
     </div>
 </template>
 
