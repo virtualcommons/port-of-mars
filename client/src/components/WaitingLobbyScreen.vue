@@ -2,6 +2,7 @@
   <div class="waiting-lobby-screen">
     <Clock />
     <PortOfMarsLogo />
+    <PlanetMars />
     <WaitingLobbyCapacity />
     <GameplayGuide />
   </div>
@@ -13,6 +14,7 @@
   import Clock from "@/components/Clock.vue"
   import WaitingLobbyCapacity from "@/components/WaitingLobbyCapacity.vue";
   import GameplayGuide from "@/components/GameplayGuide.vue";
+  import PlanetMars from "@/components/PlanetMars"
 
   @Component({
       components: {
@@ -20,6 +22,7 @@
           PortOfMarsLogo,
           Clock,
           GameplayGuide,
+          PlanetMars,
       }
   })
 
