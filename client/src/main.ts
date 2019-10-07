@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueSocketIOExt from 'vue-socket.io-extended';
-import App from './App.vue';
 import io from 'socket.io-client';
+import App from './App.vue';
 import router from './router';
 import store from './store';
 
