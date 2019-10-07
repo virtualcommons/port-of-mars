@@ -9,26 +9,26 @@
 </template>
 
 <script lang="ts">
-  import { Vue, Component } from 'vue-property-decorator'
-  import PortOfMarsLogo from "@/components/PortOfMarsLogo.vue";
-  import Clock from "@/components/Clock.vue"
-  import WaitingLobbyCapacity from "@/components/WaitingLobbyCapacity.vue";
-  import GameplayGuide from "@/components/GameplayGuide.vue";
-  import PlanetMars from "@/components/PlanetMars"
+import { Vue, Component } from 'vue-property-decorator';
+import PortOfMarsLogo from '@/components/PortOfMarsLogo.vue';
+import Clock from '@/components/Clock.vue';
+import WaitingLobbyCapacity from '@/components/WaitingLobbyCapacity.vue';
+import GameplayGuide from '@/components/GameplayGuide.vue';
+import PlanetMars from '@/components/PlanetMars';
 
   @Component({
-      components: {
-          WaitingLobbyCapacity,
-          PortOfMarsLogo,
-          Clock,
-          GameplayGuide,
-          PlanetMars,
-      }
+    components: {
+      WaitingLobbyCapacity,
+      PortOfMarsLogo,
+      Clock,
+      GameplayGuide,
+      PlanetMars,
+    },
   })
 
-    export default class WaitingLobbyScreen extends Vue {
-      mounted() {}
-    }
+export default class WaitingLobbyScreen extends Vue {
+  // mounted() {}
+}
 </script>
 
 <style scoped>

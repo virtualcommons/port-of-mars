@@ -15,42 +15,38 @@
 </template>
 
 <script lang="ts">
-    import { Vue, Component } from 'vue-property-decorator'
-  import WaitingLobbyScreen from '@/components/WaitingLobbyScreen.vue'
-  import { Socket } from 'vue-socket.io-extended';
+import { Vue, Component } from 'vue-property-decorator';
+import { Socket } from 'vue-socket.io-extended';
+import WaitingLobbyScreen from '@/components/WaitingLobbyScreen.vue';
 
 @Component({
-    components: {
-        WaitingLobbyScreen,
-    }
+  components: {
+    WaitingLobbyScreen,
+  },
 })
 
 export default class Home extends Vue {
   title: string;
 
-    constructor() {
-      super();
-      this.title = 'Port of Mars'
-    }
+  constructor() {
+    super();
+    this.title = 'Port of Mars';
+  }
 
     @Socket('joinGame')
-    onJoinGame(data: unknown) {
-        console.log(data);
-    }
+  onJoinGame(data: unknown) {
+    console.log(data);
+  }
 
     mounted() {
-        console.log((this as any).$socket);
-        (this as any).$socket.client.emit('joinGame', { my: 'data' });
+      console.log((this as any).$socket);
+      (this as any).$socket.client.emit('joinGame', { my: 'data' });
     }
 }
 </script>
 
 <style>
-
-  /* ==============================================================================================
-      Background - Copyright (c) 2019 by WebSonick (https://codepen.io/WebSonick/pen/vjmgu)
-  ================================================================================================= */
-
+  /* Background - Copyright (c) 2019 by WebSonick (https://codepen.io/WebSonick/pen/vjmgu) */
   * {
     margin: 0;
     padding: 0;

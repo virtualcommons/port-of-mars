@@ -5,13 +5,12 @@
 </template>
 
 <script lang="ts">
-    import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component } from 'vue-property-decorator';
 
-    @Component
+@Component
 
-    export default class GameplayGuide extends Vue {
-        name: "GameplayGuide"
-    }
+export default class GameplayGuide extends Vue {
+}
 </script>
 
 <style scoped>

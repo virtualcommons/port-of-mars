@@ -5,41 +5,42 @@
 </template>
 
 <script lang="ts">
-  import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Component, Prop } from 'vue-property-decorator';
 
 
   @Component
-  export default class Clock extends Vue {
-      name: Clock;
-
+export default class Clock extends Vue {
       // non-null operator (!) = compiler prop will have non-null value
       @Prop(String) time!:string;
 
-      clock = setInterval(this.updateTime, 1000);
+      private clock: NodeJS.Timeout;
+
+      mounted() {
+        this.clock = setInterval(this.updateTime, 1000);
+      }
 
       // methods
       updateTime() {
-          // create Date object (current date and time on user's computer)
-          var currentTime = new Date();
+        // create Date object (current date and time on user's computer)
+        const currentTime = new Date();
 
-          // extract hours, minutes, seconds components of current time from Date object
-          var currentHours = currentTime.getHours();
-          var currentMinutes = currentTime.getMinutes();
-          var currentSeconds = currentTime.getSeconds();
+        // extract hours, minutes, seconds components of current time from Date object
+        const currentHours = currentTime.getHours();
+        const currentMinutes = currentTime.getMinutes();
+        const currentSeconds = currentTime.getSeconds();
 
-          // pad minutes and seconds with leading zeroes
-          this.time = this.zeroPadding(currentHours, 2) + ':' + this.zeroPadding(currentMinutes, 2) + ':' + this.zeroPadding(currentSeconds, 2);
+        // pad minutes and seconds with leading zeroes
+        this.time = `${this.zeroPadding(currentHours, 2)}:${this.zeroPadding(currentMinutes, 2)}:${this.zeroPadding(currentSeconds, 2)}`;
       }
 
       zeroPadding(timeComponent, num) {
-        var zero = '';
-        for (var i = 0; i < num; i++) {
-            zero += '0';
+        let zero = '';
+        for (let i = 0; i < num; i += 1) {
+          zero += '0';
         }
         return (zero + timeComponent).slice(-num);
       }
-
-  }
+}
 </script>
 
 <style scoped>
