@@ -1,10 +1,33 @@
 <template>
-    <div class="mars"></div>
+  <div class="mars-container">
+    <div class="mars">
+    </div>
+  </div>
 </template>
 
+<script lang="ts">
+import { Vue, Component } from 'vue-property-decorator';
+
+@Component
+export default class PlanetMars extends Vue {
+}
+</script>
+
 <style scoped>
+  * {
+    box-sizing: border-box;
+  }
+
+  .mars-container {
+    background: inherit;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(circle, #3d0000, #100f11 20%, transparent);
+  }
+
   .mars {
     position: relative;
+    top: 25%;
 
     /* mars dimensions + spacing */
     width: 300px;
@@ -17,6 +40,7 @@
 
     color: black;
     border-radius: 50%;
+    /*mix-blend-mode: overlay;*/
     background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/85486/mars-bg-min.jpg") 0 0 repeat;
 
     /* position in 3d */
