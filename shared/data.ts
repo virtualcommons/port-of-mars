@@ -1,7 +1,7 @@
 interface Accomplishment {
   id: number
   role: 'Researcher' | 'Curator' | 'Pioneer' | 'Entrepreneur' | 'Politician'
-  accomplishment: string
+  label: string
   flavor_text: string
   science: number
   government: number
@@ -17,7 +17,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 1,
     role: "Researcher",
-    accomplishment: "Interdisciplinary",
+    label: "Interdisciplinary",
     flavor_text: "You have more PhD's than most people have common sense.",
     science: 2,
     government: 1,
@@ -31,7 +31,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 2,
     role: "Researcher",
-    accomplishment: "Mars Helicopter",
+    label: "Mars Helicopter",
     flavor_text: "Your invention of a low gravity, low atmosphere, low-flying vehicle enables greater exploration of the Martian surface.",
     science: 2,
     government: 0,
@@ -45,7 +45,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 3,
     role: "Researcher",
-    accomplishment: "Celebrity Scientist",
+    label: "Celebrity Scientist",
     flavor_text: "You've become a famous science personality both on Mars and Earth.",
     science: 0,
     government: 1,
@@ -59,7 +59,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 4,
     role: "Researcher",
-    accomplishment: "Research Focused",
+    label: "Research Focused",
     flavor_text: "You get long-term commitment from the current leader of the community that scientific research will always remain a priority of Port of Mars.",
     science: 0,
     government: 2,
@@ -73,7 +73,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 5,
     role: "Researcher",
-    accomplishment: "Fully Funded",
+    label: "Fully Funded",
     flavor_text: "You secured funding for your lab and research! It IS possible!",
     science: 0,
     government: 0,
@@ -87,7 +87,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 6,
     role: "Researcher",
-    accomplishment: "Highly Specialized",
+    label: "Highly Specialized",
     flavor_text: "You're solely focused on your research, to the exclusion of all other pursuits.",
     science: 3,
     government: 0,
@@ -101,7 +101,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 7,
     role: "Researcher",
-    accomplishment: "Radiation Shielding",
+    label: "Radiation Shielding",
     flavor_text: "You discover a material that is more effective at shielding the habitats from radiation.",
     science: 1,
     government: 0,
@@ -115,7 +115,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 8,
     role: "Researcher",
-    accomplishment: "Marsball Suit",
+    label: "Marsball Suit",
     flavor_text: "Your brilliant suit design helps reduce the rate of injuries dramatically while heightening the spectacle of the athletes' most awe-inspiring plays.",
     science: 1,
     government: 0,
@@ -129,7 +129,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 9,
     role: "Researcher",
-    accomplishment: "Telescope",
+    label: "Telescope",
     flavor_text: "After much advocacy, you got your dream: funding for a Mars-based telescope to peer even deeper into space.",
     science: 2,
     government: 1,
@@ -143,7 +143,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 10,
     role: "Researcher",
-    accomplishment: "Terraforming",
+    label: "Terraforming",
     flavor_text: "You create a terraforming plan to bring Mars closer to Earth-like conditions. It's a little outlandish, but it energizes the public's imagination.",
     science: 0,
     government: 2,
@@ -157,7 +157,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 11,
     role: "Researcher",
-    accomplishment: "Land Use Study",
+    label: "Land Use Study",
     flavor_text: "You secure financial and legal support to conduct a study about the future of Mars land usage.",
     science: 0,
     government: 2,
@@ -171,7 +171,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 12,
     role: "Researcher",
-    accomplishment: "Mars Mobile Game",
+    label: "Mars Mobile Game",
     flavor_text: "You built an app in 24 hours, added absurd micro-transactions as a joke, and released it. Who could've guessed it would catch on?",
     science: 0,
     government: 0,
@@ -185,7 +185,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 13,
     role: "Researcher",
-    accomplishment: "New Food Flavorer",
+    label: "New Food Flavorer",
     flavor_text: "A simple chemical breakthrough results in an enormous range of added flavor to the otherwise bland diet the settlement endured before.",
     science: 0,
     government: 0,
@@ -199,7 +199,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 14,
     role: "Researcher",
-    accomplishment: "Grant Funk",
+    label: "Grant Funk",
     flavor_text: "Your latest failure to gain research funding sees you in bed for a week. It's not moping, it's mourning. (And time to draft up new proposals.)",
     science: 0,
     government: 0,
@@ -213,7 +213,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 15,
     role: "Researcher",
-    accomplishment: "Mutant Crops",
+    label: "Mutant Crops",
     flavor_text: "Your attempt to improve food production processes instead wipes out an entire crop. Pro: You got incredible data! Con: You might all starve to death.",
     science: 0,
     government: 0,
@@ -227,7 +227,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 16,
     role: "Researcher",
-    accomplishment: "New Facilities",
+    label: "New Facilities",
     flavor_text: "Through your efforts, you secure capital funding for building a new research facility at Port of Mars.",
     science: 3,
     government: 0,
@@ -241,7 +241,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 17,
     role: "Researcher",
-    accomplishment: "Extended Fuel Cells",
+    label: "Extended Fuel Cells",
     flavor_text: "Your research (funded by the Mars Tourism Bureau) has resulted in more efficient fuel cells for rovers.",
     science: 3,
     government: 0,
@@ -255,7 +255,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 18,
     role: "Researcher",
-    accomplishment: "Changing Minds",
+    label: "Changing Minds",
     flavor_text: "Through your lobbying and dedication, you sway public opinion on a key science policy.",
     science: 0,
     government: 3,
@@ -269,7 +269,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 19,
     role: "Researcher",
-    accomplishment: "Innovation",
+    label: "Innovation",
     flavor_text: "Your work across disciplines give you unique insights into many fields.",
     science: 0,
     government: 0,
@@ -283,7 +283,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 20,
     role: "Researcher",
-    accomplishment: "Community Upgrades",
+    label: "Community Upgrades",
     flavor_text: "With your sharp eye, you've helped improve security and safety, making equipment run better and last longer.",
     science: 5,
     government: 0,
@@ -297,8 +297,8 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 21,
     role: "Pioneer",
-    accomplishment: "Jack of All Trades",
-    flavor_text: "You keep up to date on all things happening at Port of Mars. There's no way you're gonna miss any milestone or landmark accomplishment.",
+    label: "Jack of All Trades",
+    flavor_text: "You keep up to date on all things happening at Port of Mars. There's no way you're gonna miss any milestone or landmark label.",
     science: 2,
     government: 1,
     legacy: 1,
@@ -311,7 +311,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 22,
     role: "Pioneer",
-    accomplishment: "Name Branding",
+    label: "Name Branding",
     flavor_text: "With your wealth and connections, you establish your family name as an influential and affluent brand within the community.",
     science: 2,
     government: 0,
@@ -325,7 +325,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 23,
     role: "Pioneer",
-    accomplishment: "Natural Naming",
+    label: "Natural Naming",
     flavor_text: "Your nickname for a nearby geological feature has caught on. Now, everyone refers to that particular formation by the name you coined.",
     science: 0,
     government: 1,
@@ -339,7 +339,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 24,
     role: "Pioneer",
-    accomplishment: "Martian Novelist",
+    label: "Martian Novelist",
     flavor_text: "Your memoirs and travel journal of your time heading to Mars becomes an overnight bestseller.",
     science: 0,
     government: 2,
@@ -353,7 +353,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 25,
     role: "Pioneer",
-    accomplishment: "First Martian Business",
+    label: "First Martian Business",
     flavor_text: "Thanks to your collaboration with the Entrepreneur, you're the first business to form and launch completely on Mars!",
     science: 0,
     government: 0,
@@ -367,7 +367,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 26,
     role: "Pioneer",
-    accomplishment: "First Family in Space",
+    label: "First Family in Space",
     flavor_text: "Your child is the first child to be born in space!",
     science: 3,
     government: 0,
@@ -381,7 +381,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 27,
     role: "Pioneer",
-    accomplishment: "Political Instigator",
+    label: "Political Instigator",
     flavor_text: "In a key election cycle, the political topic you champion has become the key, deciding issue for the community.",
     science: 1,
     government: 0,
@@ -395,7 +395,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 28,
     role: "Pioneer",
-    accomplishment: "Space Influencer",
+    label: "Space Influencer",
     flavor_text: "You are the ultimate ambassador for Port of Mars. Folks know: if they want something funded, get you to hype it up.",
     science: 1,
     government: 0,
@@ -409,7 +409,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 29,
     role: "Pioneer",
-    accomplishment: "Drone Race Champ",
+    label: "Drone Race Champ",
     flavor_text: "Besides Marsball, the most popular pastime is racing drones. You're one of the best pilots at Port of Mars.",
     science: 2,
     government: 1,
@@ -423,7 +423,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 30,
     role: "Pioneer",
-    accomplishment: "First Marsball Star",
+    label: "First Marsball Star",
     flavor_text: "Who knew you'd have a knack for this new sport? You're the first star athlete, and your name will go down in history.",
     science: 0,
     government: 2,
@@ -437,7 +437,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 31,
     role: "Pioneer",
-    accomplishment: "Political Memoir",
+    label: "Political Memoir",
     flavor_text: "You write the first book documenting the workings of Port of Mars' government.",
     science: 0,
     government: 2,
@@ -451,7 +451,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 32,
     role: "Pioneer",
-    accomplishment: "Mining Rights",
+    label: "Mining Rights",
     flavor_text: "You spearhead the first negotiation for space mining rights, laying the groundwork for future mining sites.",
     science: 0,
     government: 0,
@@ -465,7 +465,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 33,
     role: "Pioneer",
-    accomplishment: "Mars Public Parks",
+    label: "Mars Public Parks",
     flavor_text: "You advocate for areas of Mars to be protected from development in an effort to preserve space for future generations.",
     science: 0,
     government: 0,
@@ -479,7 +479,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 34,
     role: "Pioneer",
-    accomplishment: "AWOL",
+    label: "AWOL",
     flavor_text: "Without approval, you take a hoard of supplies and venture outside Port of Mars. You return with an incredible discovery, but your absence was felt.",
     science: 0,
     government: 0,
@@ -493,7 +493,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 35,
     role: "Pioneer",
-    accomplishment: "(In)famous",
+    label: "(In)famous",
     flavor_text: "Well, you certainly won't be forgotten. You are the reason why they now have TRIPLE check procedures on the main breach doors.",
     science: 0,
     government: 0,
@@ -507,7 +507,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 36,
     role: "Pioneer",
-    accomplishment: "Explorer's Permit",
+    label: "Explorer's Permit",
     flavor_text: "You're the first civilian to get permission from Port officials to lead regular expeditions into the depths of Valles Marineris.",
     science: 3,
     government: 0,
@@ -521,7 +521,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 37,
     role: "Pioneer",
-    accomplishment: "Luxury Quarters",
+    label: "Luxury Quarters",
     flavor_text: "You get the permits to build the first luxury quarters in the habitat. Creature comforts for those with discerning taste.",
     science: 3,
     government: 0,
@@ -535,7 +535,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 38,
     role: "Pioneer",
-    accomplishment: "Community Collaborator",
+    label: "Community Collaborator",
     flavor_text: "Some deride you as a glory seeker, ironically unaware of all the ways you contribute and give back to the Port of Mars community.",
     science: 0,
     government: 3,
@@ -549,7 +549,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 39,
     role: "Pioneer",
-    accomplishment: "Technology Upgrade",
+    label: "Technology Upgrade",
     flavor_text: "You invest in the latest tech to help you in your dream of pushing the bounds of what humankind can achieve.",
     science: 0,
     government: 0,
@@ -563,7 +563,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 40,
     role: "Pioneer",
-    accomplishment: "Always New Adventures",
+    label: "Always New Adventures",
     flavor_text: "Each day at Port of Mars is filled with new wonder. Each day you live your life to the fullest, tempting fate and picking fights with lady luck.",
     science: 5,
     government: 0,
@@ -577,7 +577,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 41,
     role: "Entrepreneur",
-    accomplishment: "Diversified Investor",
+    label: "Diversified Investor",
     flavor_text: "You hold stock in many different ventures at Port of Mars.",
     science: 2,
     government: 1,
@@ -591,7 +591,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 42,
     role: "Entrepreneur",
-    accomplishment: "Equipment Contract",
+    label: "Equipment Contract",
     flavor_text: "Your company wins the bid to provide researchers with the supplies they need.",
     science: 2,
     government: 0,
@@ -605,7 +605,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 43,
     role: "Entrepreneur",
-    accomplishment: "MarsChat",
+    label: "MarsChat",
     flavor_text: "You create the social media and communication platforms used by most settlers throughout Port of Mars.",
     science: 0,
     government: 1,
@@ -619,7 +619,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 44,
     role: "Entrepreneur",
-    accomplishment: "Government Funding",
+    label: "Government Funding",
     flavor_text: "You talk to the right people at the right events to secure seed funding for your space business dreams.",
     science: 0,
     government: 2,
@@ -633,7 +633,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 45,
     role: "Entrepreneur",
-    accomplishment: "Dividends",
+    label: "Dividends",
     flavor_text: "Your early investment in a research venture comes to fruition, and as Earthbound companies move to buy the startup, you cash in.",
     science: 0,
     government: 0,
@@ -647,7 +647,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 46,
     role: "Entrepreneur",
-    accomplishment: "Operating in the Red",
+    label: "Operating in the Red",
     flavor_text: "Business is booming at Port of Mars, but isn't profitable yet. Its operation is a burden on the community, but you�re certain it will all pay off soon�.",
     science: 3,
     government: 0,
@@ -661,7 +661,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 47,
     role: "Entrepreneur",
-    accomplishment: "Rocket Revolution",
+    label: "Rocket Revolution",
     flavor_text: "Your company figured out how to make cheaper rockets, allowing more economical travel between Mars and Earth.",
     science: 1,
     government: 0,
@@ -675,7 +675,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 48,
     role: "Entrepreneur",
-    accomplishment: "Habitat 2.0",
+    label: "Habitat 2.0",
     flavor_text: "Your firm helped develop a more efficient architecture plan for future habitats, expanding the number of people Port of Mars can accommodate.",
     science: 1,
     government: 0,
@@ -689,7 +689,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 49,
     role: "Entrepreneur",
-    accomplishment: "Terra Water Craze",
+    label: "Terra Water Craze",
     flavor_text: "You secure space on the next rocket to ship bottled water from Earth, selling \"artisanal terra water\" that \"Tastes Like Home\" at exorbitant prices.",
     science: 2,
     government: 1,
@@ -703,7 +703,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 50,
     role: "Entrepreneur",
-    accomplishment: "Further Automation",
+    label: "Further Automation",
     flavor_text: "You help spearhead advancements in robotic technologies to help automate upkeep tasks previously assigned to humans.",
     science: 0,
     government: 2,
@@ -717,7 +717,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 51,
     role: "Entrepreneur",
-    accomplishment: "Exclusive Contract",
+    label: "Exclusive Contract",
     flavor_text: "You secure an exclusive contract with Port of Mars to build future facilities.",
     science: 0,
     government: 2,
@@ -731,7 +731,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 52,
     role: "Entrepreneur",
-    accomplishment: "Holodeck",
+    label: "Holodeck",
     flavor_text: "You've done it: you've perfected holodeck technology. Homesick settlers flock to pay and experience realistically generated Earth environments.",
     science: 0,
     government: 0,
@@ -745,7 +745,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 53,
     role: "Entrepreneur",
-    accomplishment: "Marsball Team Owner",
+    label: "Marsball Team Owner",
     flavor_text: "You were an early investor in the sport and now own the most successful team in the league!",
     science: 0,
     government: 0,
@@ -759,7 +759,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 54,
     role: "Entrepreneur",
-    accomplishment: "Cutting Corners",
+    label: "Cutting Corners",
     flavor_text: "Surely these slightly sub-standard building materials won't cause that big a problem - and look at the profits!",
     science: 0,
     government: 0,
@@ -773,7 +773,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 55,
     role: "Entrepreneur",
-    accomplishment: "Insider Trading",
+    label: "Insider Trading",
     flavor_text: "You make an opportunistic move to sell a huge chunk of your ownership in Port of Mars stock, making a pretty penny but causing a panic in the market.",
     science: 0,
     government: 0,
@@ -787,7 +787,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 56,
     role: "Entrepreneur",
-    accomplishment: "Future Securities",
+    label: "Future Securities",
     flavor_text: "You secure Earth investors to make sure that your Port of Mars businesses are funded for the near future.",
     science: 3,
     government: 0,
@@ -801,7 +801,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 57,
     role: "Entrepreneur",
-    accomplishment: "Patent Investment",
+    label: "Patent Investment",
     flavor_text: "A lab you funded has secured a patent to an important chemical discovery that yields you nice returns.",
     science: 3,
     government: 0,
@@ -815,7 +815,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 58,
     role: "Entrepreneur",
-    accomplishment: "Favorable Laws",
+    label: "Favorable Laws",
     flavor_text: "As a major investor in the settlement, you put your weight behind laws that spur innovation - and opportunities for your ventures, of course.",
     science: 0,
     government: 3,
@@ -829,7 +829,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 59,
     role: "Entrepreneur",
-    accomplishment: "Martian Patron",
+    label: "Martian Patron",
     flavor_text: "Your keen interest in art pays off as a painter you sponsor becomes wildly popular in both the Port of Mars and Earth art worlds.",
     science: 0,
     government: 0,
@@ -843,7 +843,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 60,
     role: "Entrepreneur",
-    accomplishment: "Incubator",
+    label: "Incubator",
     flavor_text: "You leverage your business acumen to create a start up incubator for Port of Mars, opening the door to new opportunities for ambitious Martians.",
     science: 5,
     government: 0,
@@ -857,7 +857,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 61,
     role: "Politician",
-    accomplishment: "Know Your Constituents",
+    label: "Know Your Constituents",
     flavor_text: "You take the time to meet the people of Port of Mars and are well versed on the concerns of the people.",
     science: 2,
     government: 1,
@@ -871,7 +871,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 62,
     role: "Politician",
-    accomplishment: "Favored Candidate",
+    label: "Favored Candidate",
     flavor_text: "You lead in the polls and are generally well liked by folks. Things look good this election cylce.",
     science: 2,
     government: 0,
@@ -885,7 +885,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 63,
     role: "Politician",
-    accomplishment: "Why Not Both?",
+    label: "Why Not Both?",
     flavor_text: "You manage to balance the needs of government and research, earning the support of researchers and entrepreneurs alike.",
     science: 0,
     government: 1,
@@ -899,7 +899,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 64,
     role: "Politician",
-    accomplishment: "Faith in Government",
+    label: "Faith in Government",
     flavor_text: "Your steady hand and informed decision making inspires high confidence among people in the government's ability to run and improve things.",
     science: 0,
     government: 2,
@@ -913,7 +913,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 65,
     role: "Politician",
-    accomplishment: "Cultural Legacy",
+    label: "Cultural Legacy",
     flavor_text: "You declare your dedication to creating a Martian identity, taking advantage of this opportunity to define what humanity values on a brand-new world.",
     science: 0,
     government: 0,
@@ -927,7 +927,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 66,
     role: "Politician",
-    accomplishment: "Census",
+    label: "Census",
     flavor_text: "You call it collecting data. Some worry it's an overreach of governmental surveillance. You quietly note which folks say it's the latter.",
     science: 3,
     government: 0,
@@ -941,7 +941,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 67,
     role: "Politician",
-    accomplishment: "First Port of Mars Leader",
+    label: "First Port of Mars Leader",
     flavor_text: "You're the first politician to be chosen to lead Port of Mars via Martian-only election. A momentous day!",
     science: 1,
     government: 0,
@@ -955,7 +955,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 68,
     role: "Politician",
-    accomplishment: "Celebrity Martian Recruit",
+    label: "Celebrity Martian Recruit",
     flavor_text: "You convince a major Earth celebrity to move to Port of Mars. The excitement around their arrival boosts your approval ratings.",
     science: 1,
     government: 0,
@@ -969,7 +969,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 69,
     role: "Politician",
-    accomplishment: "Policy Wonk",
+    label: "Policy Wonk",
     flavor_text: "The legislation you push is boring and makes your stump speech a snorefest, but you make some very real (if incremental) progress!",
     science: 2,
     government: 1,
@@ -983,7 +983,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 70,
     role: "Politician",
-    accomplishment: "Political Ads",
+    label: "Political Ads",
     flavor_text: "Even in space, you gotta book air time to win elections.",
     science: 0,
     government: 2,
@@ -997,7 +997,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 71,
     role: "Politician",
-    accomplishment: "Coining Currency",
+    label: "Coining Currency",
     flavor_text: "As the Port of Mars economy flourishes, you get to name the official Martian currency.",
     science: 0,
     government: 2,
@@ -1011,7 +1011,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 72,
     role: "Politician",
-    accomplishment: "Mars Tourism",
+    label: "Mars Tourism",
     flavor_text: "You propose and sign into law rules that promote tourism and exploration of Mars, boosting interest in immigration for the next wave of Martians.",
     science: 0,
     government: 0,
@@ -1025,7 +1025,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 73,
     role: "Politician",
-    accomplishment: "Expansion",
+    label: "Expansion",
     flavor_text: "You run on a platform to expand to a second Port of Mars location, proposing another community among the lava tubes of Pavonis Mons.",
     science: 0,
     government: 0,
@@ -1039,7 +1039,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 74,
     role: "Politician",
-    accomplishment: "Short-Term Gains",
+    label: "Short-Term Gains",
     flavor_text: "You made some outlandish promises to specific groups to win the election. Easy! Now you have to find funding to fulfill those promises...less easy.",
     science: 0,
     government: 0,
@@ -1053,7 +1053,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 75,
     role: "Politician",
-    accomplishment: "Bribes",
+    label: "Bribes",
     flavor_text: "Special interest groups approached you to craft legislation that favors their autonomy. They're a powerful voting bloc... but was it worth the cost?",
     science: 0,
     government: 0,
@@ -1067,7 +1067,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 76,
     role: "Politician",
-    accomplishment: "Polling Well",
+    label: "Polling Well",
     flavor_text: "Your approval ratings are doing well! The start of a positive trend, or the calm before the storm?",
     science: 3,
     government: 0,
@@ -1081,7 +1081,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 77,
     role: "Politician",
-    accomplishment: "Charming",
+    label: "Charming",
     flavor_text: "A video clip of your reaction at a Marsball event goes viral, and folks view you more positively as a result.",
     science: 3,
     government: 0,
@@ -1095,7 +1095,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 78,
     role: "Politician",
-    accomplishment: "Emergency System",
+    label: "Emergency System",
     flavor_text: "You vote to build a better emergency alert and response system for Port of Mars, hoping you will never have to use it.",
     science: 0,
     government: 3,
@@ -1109,7 +1109,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 79,
     role: "Politician",
-    accomplishment: "Disaster Preparations",
+    label: "Disaster Preparations",
     flavor_text: "Tightening the belt is never fun, but you call for mandatory preparations for some major planetary events predicted by your scientists.",
     science: 0,
     government: 0,
@@ -1123,7 +1123,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 80,
     role: "Politician",
-    accomplishment: "Functional Government",
+    label: "Functional Government",
     flavor_text: "You've accomplished what never seems to happen on Earth: the government of Port of Mars is humming along, a portrait of productivity.",
     science: 5,
     government: 0,
@@ -1137,7 +1137,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 81,
     role: "Curator",
-    accomplishment: "A Little Bit of Everything",
+    label: "A Little Bit of Everything",
     flavor_text: "You help to breathe life into cultural and recreational developments across disciplines.",
     science: 2,
     government: 1,
@@ -1151,7 +1151,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 82,
     role: "Curator",
-    accomplishment: "Marsball!",
+    label: "Marsball!",
     flavor_text: "Taking advantage of the lower gravity on Mars, you invent an exciting new sport!",
     science: 2,
     government: 0,
@@ -1165,7 +1165,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 83,
     role: "Curator",
-    accomplishment: "Artist Grants",
+    label: "Artist Grants",
     flavor_text: "You establish a grant that sponsors artists to create Martian artwork, solidifying the arts as a cornerstone of Port of Mars life.",
     science: 0,
     government: 1,
@@ -1179,7 +1179,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 84,
     role: "Curator",
-    accomplishment: "Art Installation",
+    label: "Art Installation",
     flavor_text: "You commission a beautiful sculpture garden that is a beloved gathering place, sure to last for generations. Or at least until the first hull breach.",
     science: 0,
     government: 2,
@@ -1193,7 +1193,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 85,
     role: "Curator",
-    accomplishment: "SNN",
+    label: "SNN",
     flavor_text: "You create the Space News Network: a news show that updates folks on the latest happenings and developments both on Mars and on Earth.",
     science: 0,
     government: 0,
@@ -1207,7 +1207,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 86,
     role: "Curator",
-    accomplishment: "You're Famous!",
+    label: "You're Famous!",
     flavor_text: "You're kind of a big deal.",
     science: 3,
     government: 0,
@@ -1221,7 +1221,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 87,
     role: "Curator",
-    accomplishment: "Make Science Cool",
+    label: "Make Science Cool",
     flavor_text: "Scientific research is important, but dense papers are hardly thrilling. You help translate research into digestible media to build public excitement.",
     science: 1,
     government: 0,
@@ -1235,7 +1235,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 88,
     role: "Curator",
-    accomplishment: "Politics Podcast",
+    label: "Politics Podcast",
     flavor_text: "Your insightful analysis, sharp use of data, and witty banter make your political commentary show a Port of Mars hit.",
     science: 1,
     government: 0,
@@ -1249,7 +1249,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 89,
     role: "Curator",
-    accomplishment: "First Marsball League",
+    label: "First Marsball League",
     flavor_text: "You build the first low-gravity sports league, giving folks a fun diversion and attracting the advertising dollars of Earth viewers and sponsors.",
     science: 2,
     government: 1,
@@ -1263,7 +1263,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 90,
     role: "Curator",
-    accomplishment: "Weekly Report",
+    label: "Weekly Report",
     flavor_text: "Collaborating with community leadership, you establish a weekly show that updates everyone in the settlement about pertinent news.",
     science: 0,
     government: 2,
@@ -1277,7 +1277,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 91,
     role: "Curator",
-    accomplishment: "Rover Touring Company",
+    label: "Rover Touring Company",
     flavor_text: "You commission a few rover vehicles for recreational use, creating an exciting new tourism opportunity.",
     science: 0,
     government: 2,
@@ -1291,7 +1291,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 92,
     role: "Curator",
-    accomplishment: "Ministry of Culture",
+    label: "Ministry of Culture",
     flavor_text: "You advocate for the forming of a ministry of culture, gaining financial and governmental support for arts and entertainment at Port of Mars.",
     science: 0,
     government: 0,
@@ -1305,7 +1305,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 93,
     role: "Curator",
-    accomplishment: "Robot Brawls!",
+    label: "Robot Brawls!",
     flavor_text: "Some scientists frowned at the idea; some called it a \"waste of vital resources\"; but everyone knows folks want to see low-grav robot fights.",
     science: 0,
     government: 0,
@@ -1319,7 +1319,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 94,
     role: "Curator",
-    accomplishment: "Genius Takes Time",
+    label: "Genius Takes Time",
     flavor_text: "Some don't see the value in creating artistic and recreational endeavors. You fight for your vision and get approvals, but cause some social friction.",
     science: 0,
     government: 0,
@@ -1333,7 +1333,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 95,
     role: "Curator",
-    accomplishment: "Ambitious Sculpture",
+    label: "Ambitious Sculpture",
     flavor_text: "The ambitious sculpture project will be a memorable and visible landmark on Mars�if Port of Mars survives the resulting material shortage.",
     science: 0,
     government: 0,
@@ -1347,7 +1347,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 96,
     role: "Curator",
-    accomplishment: "The Drone Show",
+    label: "The Drone Show",
     flavor_text: "You build a documentary-style nature show that has scientists livestreaming drone flights over the Martian landscape.",
     science: 3,
     government: 0,
@@ -1361,7 +1361,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 97,
     role: "Curator",
-    accomplishment: "Official Sport",
+    label: "Official Sport",
     flavor_text: "Through your efforts, Marsball is declared the official sport of Mars.",
     science: 3,
     government: 0,
@@ -1375,7 +1375,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 98,
     role: "Curator",
-    accomplishment: "Cultural Icon",
+    label: "Cultural Icon",
     flavor_text: "You've firmly established yourself as a founding figure in creating Port of Mars' cultural and artistic identity.",
     science: 0,
     government: 3,
@@ -1389,7 +1389,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 99,
     role: "Curator",
-    accomplishment: "Marsball Empire",
+    label: "Marsball Empire",
     flavor_text: "Your promotion of Marsball has exploded its popularity on Earth and Mars, gaining the attention of researchers and politicians alike.",
     science: 0,
     government: 0,
@@ -1403,7 +1403,7 @@ const accomplishments: Array<Accomplishment> = [
   {
     id: 100,
     role: "Curator",
-    accomplishment: "Innovation!",
+    label: "Innovation!",
     flavor_text: "Having established their own unique identities, Martian music, art, and entertainment are now hugely influential on Earth tastes and trends.",
     science: 5,
     government: 0,
