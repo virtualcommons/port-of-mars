@@ -1,19 +1,10 @@
 {
   "compilerOptions": {
+    "outDir": "lib",
+    "target": "es6",
     "module": "commonjs",
-    "declaration": true,
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "target": "es2017",
-    "typeRoots": [
-      "@types",
-      "../types"
-    ],
-    "sourceMap": true,
-    "outDir": "./dist",
-    "baseUrl": "./",
-    "incremental": true
-  },
-  "exclude": ["node_modules", "dist"]
+    "strict": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true
+  }
 }
