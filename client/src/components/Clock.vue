@@ -13,7 +13,7 @@ export default class Clock extends Vue {
       // non-null operator (!) = compiler prop will have non-null value
       @Prop(String) time!:string;
 
-      private clock: NodeJS.Timeout;
+      private clock!: NodeJS.Timeout;
 
       mounted() {
         this.clock = setInterval(this.updateTime, 1000);
@@ -33,7 +33,8 @@ export default class Clock extends Vue {
         this.time = `${this.zeroPadding(currentHours, 2)}:${this.zeroPadding(currentMinutes, 2)}:${this.zeroPadding(currentSeconds, 2)}`;
       }
 
-      zeroPadding(timeComponent, num) {
+      // eslint-disable-next-line class-methods-use-this
+      zeroPadding(timeComponent:number, num:number) {
         let zero = '';
         for (let i = 0; i < num; i += 1) {
           zero += '0';
