@@ -17,13 +17,18 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
+
+/* bootstrap imports */
 import BootstrapVue from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import './custom.scss';
+
 import { Socket } from 'vue-socket.io-extended';
+
+/* component imports : screens */
 import LoginScreen from '@/components/LoginScreen.vue';
-import WaitingLobbyScreen from '@/components/WaitingLobbyScreen.vue';
+// import WaitingLobbyScreen from '@/components/WaitingLobbyScreen.vue';
 
 Vue.use(BootstrapVue);
 
