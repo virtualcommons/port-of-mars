@@ -3,7 +3,8 @@
     <div class="stars"></div>
     <div class="twinkling"></div>
     <div class="clouds"></div>
-    <WaitingLobbyScreen />
+    <LoginScreen />
+<!--    <WaitingLobbyScreen />-->
   </div>
 <!--  <div id="app">-->
 <!--    <div id="nav">-->
@@ -17,11 +18,13 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { Socket } from 'vue-socket.io-extended';
+import LoginScreen from '@/components/LoginScreen.vue';
 import WaitingLobbyScreen from '@/components/WaitingLobbyScreen.vue';
 
 @Component({
   components: {
-    WaitingLobbyScreen,
+    // WaitingLobbyScreen,
+    LoginScreen,
   },
 })
 
@@ -33,15 +36,15 @@ export default class Home extends Vue {
     this.title = 'Port of Mars';
   }
 
-    @Socket('joinGame')
+  @Socket('joinGame')
   onJoinGame(data: unknown) {
     console.log(data);
   }
 
-    mounted() {
-      console.log((this as any).$socket);
-      (this as any).$socket.client.emit('joinGame', { my: 'data' });
-    }
+  mounted() {
+    console.log((this as any).$socket);
+    (this as any).$socket.client.emit('joinGame', { my: 'data' });
+  }
 }
 </script>
 
