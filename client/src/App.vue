@@ -1,8 +1,8 @@
 <template>
   <div class="game">
-    <div class="stars"></div>
-    <div class="twinkling"></div>
-    <div class="clouds"></div>
+    <!-- <div class="stars"></div> -->
+    <!-- <div class="twinkling"></div> -->
+    <!-- <div class="clouds"></div> -->
     <router-link to="/"></router-link>
     <router-view />
   </div>
