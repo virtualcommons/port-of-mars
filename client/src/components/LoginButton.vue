@@ -1,6 +1,8 @@
 <template>
     <div class="login-button-container">
-      <BButton variant="dark">Dark</BButton>
+      <router-link to="/gb">
+        <BButton>Go to dashboard</BButton>
+      </router-link>
     </div>
 </template>
 

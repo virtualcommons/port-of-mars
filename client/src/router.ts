@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import LoginPage from '@/views/LoginPage.vue';
+import GameDashboard from '@/views/GameDashboard.vue'
 
 Vue.use(Router);
 
@@ -10,6 +11,11 @@ export default new Router({
       path: '/',
       name: 'Home',
       component: LoginPage,
+    },
+    {
+      path: '/gb',
+      name: 'GameDashboard',
+      component: GameDashboard,
     },
     // {
     //   path: '/about',
