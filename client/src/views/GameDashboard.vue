@@ -1,9 +1,16 @@
 <template>
-    <BContainer>
-        <BRow class="board">
-            <BCol cols="2" class="blue">1 of 3</BCol>
-            <BCol cols="8" class="green">1 of 3</BCol>
-            <BCol cols = "2" class="blue">1 of 3</BCol>
+    <BContainer class="reset">
+        <BRow class="board reset">
+            <BCol cols="2" class="left reset"></BCol>
+            <BCol cols="8" class="reset">
+                <BRow class="top reset">
+
+                </BRow>
+                <BRow class="bottom reset">
+                    <ContainerBottom />
+                </BRow>
+            </BCol>
+            <BCol cols="2" class="right reset"></BCol>
         </BRow>
     </BContainer>
 </template>
@@ -11,12 +18,15 @@
 <script lang="ts">
     import { Vue, Component } from 'vue-property-decorator';
     import { BContainer, BRow, BCol } from 'bootstrap-vue';
+    import ContainerBottom from '@/components/ContainerBottom.vue';
+
 
     @Component({
         components: {
+            // ContainerBottom,
             BContainer,
             BRow,
-            BCol,
+            BCol,  
         },
     })
 
@@ -25,24 +35,31 @@
 </script>
 
 <style scoped>
-    .container {
-        margin: 0;
+    .reset {
+        margin: 0 !important;
         padding: 0 !important;
     }
+
     .board {
-        margin: 0;
-        padding: 0;
         height: 100vh;
         width: 100vw;
     }
-    .green {
-        margin: 0;
-        padding: 0;
+
+    .left {
+        background-color: blue;
+    }
+
+    .right {
         background-color: green;
     }
-    .blue {
-        margin: 0;
-        padding: 0;
-        background-color: blue;
+
+    .top {
+        height: 40vh;
+        background-color: pink;
+    }
+
+    .bottom {
+        height: 60vh;
+        background-color: orange;
     }
 </style>
