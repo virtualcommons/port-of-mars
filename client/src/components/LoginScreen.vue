@@ -1,16 +1,19 @@
 <template>
     <div class="login-screen">
       <PortOfMarsLogo />
+      <LoginButton />
     </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import PortOfMarsLogo from '@/components/PortOfMarsLogo.vue';
+import LoginButton from '@/components/LoginButton.vue';
 
     @Component({
       components: {
         PortOfMarsLogo,
+        LoginButton,
       },
     })
 
