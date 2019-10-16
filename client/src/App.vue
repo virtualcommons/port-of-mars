@@ -1,11 +1,11 @@
 <template>
   <div class="game">
-  
+
 
     <router-link to="/"></router-link>
     <router-view />
 
-    
+
   </div>
 </template>
 

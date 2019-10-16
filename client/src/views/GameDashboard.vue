@@ -9,18 +9,18 @@
 </template>
 
 <script lang="ts">
-    import { Vue, Component } from 'vue-property-decorator';
-    import { BContainer, BRow, BCol } from 'bootstrap-vue';
+import { Vue, Component } from 'vue-property-decorator';
+import { BContainer, BRow, BCol } from 'bootstrap-vue';
 
     @Component({
-        components: {
-            BContainer,
-            BRow,
-            BCol,
-        },
+      components: {
+        BContainer,
+        BRow,
+        BCol,
+      },
     })
 
-    export default class GameDashboard extends Vue {};
+export default class GameDashboard extends Vue {}
 
 </script>
 

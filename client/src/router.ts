@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import LoginPage from '@/views/LoginPage.vue';
-import GameDashboard from '@/views/GameDashboard.vue'
+import GameDashboard from '@/views/GameDashboard.vue';
 
 Vue.use(Router);
 
