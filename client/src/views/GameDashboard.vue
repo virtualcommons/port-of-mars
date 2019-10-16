@@ -30,7 +30,7 @@
         },
     })
 
-    export default class GameDashboard extends Vue {};
+export default class GameDashboard extends Vue {}
 
 </script>
 
