@@ -1,7 +1,7 @@
 <template>
     <div class="login-screen">
-      <PortOfMarsLogo />
       <LoginButton />
+      <PortOfMarsLogo />
     </div>
 </template>
 
