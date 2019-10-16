@@ -3,7 +3,7 @@ import VueSocketIOExt from 'vue-socket.io-extended';
 import io from 'socket.io-client';
 import App from './App.vue';
 import router from './router';
-import store from './store';
+// import store from './store';
 
 const socket = io('http://localhost:3005');
 
@@ -13,6 +13,6 @@ Vue.use(VueSocketIOExt, socket);
 
 new Vue({
   router,
-  store,
+  // store,
   render: h => h(App),
 }).$mount('#app');
