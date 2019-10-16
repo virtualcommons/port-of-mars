@@ -3,16 +3,9 @@
     <div class="stars"></div>
     <div class="twinkling"></div>
     <div class="clouds"></div>
-    <LoginScreen />
-<!--    <WaitingLobbyScreen />-->
+    <router-link to="/"></router-link>
+    <router-view />
   </div>
-<!--  <div id="app">-->
-<!--    <div id="nav">-->
-<!--      <router-link to="/">Home</router-link> |-->
-<!--      <router-link to="/about">About</router-link>-->
-<!--    </div>-->
-<!--    <router-view/>-->
-<!--  </div>-->
 </template>
 
 <script lang="ts">

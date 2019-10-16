@@ -1,6 +1,6 @@
 <template>
     <div class="login-button-container">
-      <b-button variant="dark">Dark</b-button>
+      <BButton variant="dark">Dark</BButton>
     </div>
 </template>
 
@@ -10,7 +10,7 @@ import { BButton } from 'bootstrap-vue';
 
   @Component({
     components: {
-      'b-button': BButton,
+      BButton,
     },
   })
 
