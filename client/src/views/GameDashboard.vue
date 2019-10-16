@@ -16,18 +16,17 @@
 </template>
 
 <script lang="ts">
-    import { Vue, Component } from 'vue-property-decorator';
-    import { BContainer, BRow, BCol } from 'bootstrap-vue';
-    import ContainerBottom from '@/components/ContainerBottom.vue';
-
+import { Vue, Component } from 'vue-property-decorator';
+import { BContainer, BRow, BCol } from 'bootstrap-vue';
+import ContainerBottom from '@/components/ContainerBottom.vue';
 
     @Component({
-        components: {
-            // ContainerBottom,
-            BContainer,
-            BRow,
-            BCol,  
-        },
+      components: {
+        ContainerBottom,
+        BContainer,
+        BRow,
+        BCol,
+      },
     })
 
 export default class GameDashboard extends Vue {}
