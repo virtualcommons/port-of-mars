@@ -35,8 +35,8 @@ export default class GameDashboard extends Vue {}
 
 <style scoped>
     .reset {
-        margin: 0 !important;
-        padding: 0 !important;
+        margin: 0;
+        padding: 0;
     }
 
     .board {
@@ -58,7 +58,11 @@ export default class GameDashboard extends Vue {}
     }
 
     .bottom {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
         height: 60vh;
-        background-color: orange;
+        background-color: #1E2223;
     }
 </style>
