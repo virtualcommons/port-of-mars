@@ -1,12 +1,15 @@
 <template>
   <BContainer class="container-phase">
     <BRow class="row-phase">
-      <BCol class="phase" cols="4">
+      <BCol class="phase" cols="5">
         <!-- phase component -->
         <Phase />
       </BCol>
-      <BCol class="events" cols="8">
+      <BCol class="events" cols="7">
         <!-- event card components (3) -->
+        <CardEvent />
+        <CardEvent />
+        <CardEvent />
       </BCol>
     </BRow>
   </BContainer>
@@ -16,6 +19,7 @@
 import { Vue, Component } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
 import Phase from '@/components/Phase.vue';
+import CardEvent from '@/components/CardEvent.vue';
 
 @Component({
   components: {
@@ -23,6 +27,7 @@ import Phase from '@/components/Phase.vue';
     BRow,
     BCol,
     Phase,
+    CardEvent,
   },
 })
 
@@ -53,7 +58,10 @@ export default class ContainerPhase extends Vue {}
 }
 
 .events {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
   padding: 0;
-  background-color: orange;
+  /* background-color: orange; */
 }
 </style>
