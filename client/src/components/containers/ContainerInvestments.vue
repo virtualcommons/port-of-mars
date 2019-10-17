@@ -72,7 +72,7 @@ export default class ContainerInvestments extends Vue {}
 }
 
 .investments {
-  background-color: blue;
+  /* background-color: blue; */
   padding: 1rem;
   width: 100%;
 }
