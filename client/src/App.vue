@@ -41,15 +41,15 @@ export default class Home extends Vue {
     this.title = 'Port of Mars';
   }
 
-  @Socket('joinGame')
-  onJoinGame(data: unknown) {
-    console.log(data);
-  }
-
-  mounted() {
-    console.log((this as any).$socket);
-    (this as any).$socket.client.emit('joinGame', { my: 'data' });
-  }
+  // @Socket('joinGame')
+  // onJoinGame(data: unknown) {
+  //   console.log(data);
+  // }
+  //
+  // mounted() {
+  //   console.log((this as any).$socket);
+  //   (this as any).$socket.client.emit('joinGame', { my: 'data' });
+  // }
 }
 </script>
 <style >

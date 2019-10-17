@@ -42,7 +42,7 @@ import CardInvestment from '@/components/CardInvestment.vue';
   },
 })
 
-export default class ContainerInvestments extends Vue {};
+export default class ContainerInvestments extends Vue {}
 </script>
 
 <style scoped>

@@ -32,7 +32,7 @@ import CardAccomplishment from '@/components/CardAccomplishment.vue';
   },
 })
 
-export default class ContainerAccomplishments extends Vue {};
+export default class ContainerAccomplishments extends Vue {}
 </script>
 
 <style scoped>

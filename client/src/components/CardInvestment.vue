@@ -9,7 +9,7 @@ import { Vue, Component } from 'vue-property-decorator';
 
 @Component
 
-export default class CardInvestment extends Vue {};
+export default class CardInvestment extends Vue {}
 </script>
 
 <style scoped>
