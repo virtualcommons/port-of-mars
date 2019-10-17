@@ -4,7 +4,7 @@
             <BCol cols="2" class="left reset"></BCol>
             <BCol cols="8" class="reset">
                 <BRow class="top reset">
-
+                  <ContainerTop />
                 </BRow>
                 <BRow class="bottom reset">
                     <ContainerBottom />
@@ -18,10 +18,12 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
-import ContainerBottom from '@/components/ContainerBottom.vue';
+import ContainerTop from '@/components/containers/ContainerTop.vue';
+import ContainerBottom from '@/components/containers/ContainerBottom.vue';
 
     @Component({
       components: {
+        ContainerTop,
         ContainerBottom,
         BContainer,
         BRow,
@@ -35,8 +37,8 @@ export default class GameDashboard extends Vue {}
 
 <style scoped>
     .reset {
-        margin: 0 !important;
-        padding: 0 !important;
+        margin: 0;
+        padding: 0;
     }
 
     .board {
@@ -54,11 +56,15 @@ export default class GameDashboard extends Vue {}
 
     .top {
         height: 40vh;
-        background-color: pink;
+        background-color: #1E2223;
     }
 
     .bottom {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
         height: 60vh;
-        background-color: orange;
+        background-color: #1E2223;
     }
 </style>

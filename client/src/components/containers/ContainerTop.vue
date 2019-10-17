@@ -1,0 +1,33 @@
+<template>
+  <div class="container-top">
+    <ContainerUpkeep />
+    <ContainerPhase />
+  </div>
+</template>
+
+<script lang="ts">
+import { Vue, Component } from 'vue-property-decorator';
+import ContainerUpkeep from '@/components/containers/ContainerUpkeep.vue';
+import ContainerPhase from '@/components/containers/ContainerPhase.vue';
+
+
+@Component({
+  components: {
+    ContainerUpkeep,
+    ContainerPhase,
+  },
+})
+
+export default class ContainerTop extends Vue {}
+</script>
+
+<style scoped>
+.container-top {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  /* background-color: purple; */
+}
+</style>
