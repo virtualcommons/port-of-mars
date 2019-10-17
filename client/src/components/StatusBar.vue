@@ -11,7 +11,7 @@ import { Vue, Component } from 'vue-property-decorator';
 
 @Component
 
-export default class StatusBar extends Vue {};
+export default class StatusBar extends Vue {}
 </script>
 
 <style lang="css" scoped>
@@ -29,7 +29,7 @@ export default class StatusBar extends Vue {};
   width: 90%; /* adjust with props */
   margin-left: 0.125rem;
   margin-right: 0.125rem;
-  background-color: #F5F5F5;
+  background-color: #F5F5F5; /* adjust with props (?) */
   border-radius: 0.25rem;
 }
 </style>
