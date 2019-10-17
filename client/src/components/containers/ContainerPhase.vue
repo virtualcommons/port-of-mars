@@ -53,7 +53,7 @@ export default class ContainerPhase extends Vue {}
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0;
+  padding: 1rem;
   /* background-color: purple; */
 }
 
@@ -61,7 +61,7 @@ export default class ContainerPhase extends Vue {}
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 0;
+  padding: 1rem;
   /* background-color: orange; */
 }
 </style>
