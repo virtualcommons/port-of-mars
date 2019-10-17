@@ -1,5 +1,5 @@
 <template>
-  <div class="card-accomplishment">
+  <div class="card-event">
 
   </div>
 </template>
@@ -9,11 +9,11 @@ import { Vue, Component } from 'vue-property-decorator';
 
 @Component
 
-export default class CardAccomplishment extends Vue {}
+export default class CardEvent extends Vue {}
 </script>
 
 <style scoped>
-.card-accomplishment {
+.card-event {
   height: 6rem;
   width: 10rem;
   border: 0.125rem solid #F5F5F5;
