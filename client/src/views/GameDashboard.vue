@@ -1,7 +1,10 @@
 <template>
     <BContainer class="reset">
         <BRow class="board reset">
-            <BCol cols="2" class="left reset"></BCol>
+            <BCol cols="2" class="left reset">
+              <!-- left section goes here -->
+              <ContainerLeft />
+            </BCol>
             <BCol cols="8" class="reset">
                 <BRow class="top reset">
                   <ContainerTop />
@@ -10,7 +13,9 @@
                     <ContainerBottom />
                 </BRow>
             </BCol>
-            <BCol cols="2" class="right reset"></BCol>
+            <BCol cols="2" class="right reset">
+              <!-- right section goes here -->
+            </BCol>
         </BRow>
     </BContainer>
 </template>
@@ -20,11 +25,13 @@ import { Vue, Component } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
 import ContainerTop from '@/components/containers/ContainerTop.vue';
 import ContainerBottom from '@/components/containers/ContainerBottom.vue';
+import ContainerLeft from '@/components/containers/ContainerLeft.vue';
 
     @Component({
       components: {
         ContainerTop,
         ContainerBottom,
+        ContainerLeft,
         BContainer,
         BRow,
         BCol,
@@ -47,7 +54,7 @@ export default class GameDashboard extends Vue {}
     }
 
     .left {
-        background-color: blue;
+        background-color: #1E2223;
     }
 
     .right {
