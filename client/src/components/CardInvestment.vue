@@ -17,7 +17,8 @@ export default class CardInvestment extends Vue {}
     height: 6rem;
     width: 10rem;
     border: 0.125rem solid #F5F5F5;
-    border-radius: 15%;
+    border-radius: 1rem;
+    display: flex;
     justify-content: center;
     align-items: center;
   }
