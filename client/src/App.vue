@@ -53,12 +53,13 @@ export default class Home extends Vue {
 }
 </script>
 <style >
-  html, body, .game {
-    height: 100%;
+  html, body{
+
   }
 
   body {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    /* font-family: 'Avenir', Helvetica, Arial, sans-serif; */
+    font-family: 'Space Mono', monospace !important;
   }
 
   .game {
