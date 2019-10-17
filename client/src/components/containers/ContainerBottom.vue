@@ -7,8 +7,8 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import ContainerInvestments from '@/components/ContainerInvestments.vue';
-import ContainerAccomplishments from '@/components/ContainerAccomplishments.vue';
+import ContainerInvestments from '@/components/containers/ContainerInvestments.vue';
+import ContainerAccomplishments from '@/components/containers/ContainerAccomplishments.vue';
 
     @Component({
       components: {

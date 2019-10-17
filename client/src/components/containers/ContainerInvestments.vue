@@ -4,6 +4,8 @@
       <BCol class="investments" cols="7">
         <BRow class="row-investments-title">
           <p>Investments</p>
+          <StatusBar class="investments-statusbar"/>
+          <p>( <span>9</span> )</p>
         </BRow>
         <BRow class="row-investments-cards">
           <CardInvestment/>
@@ -35,6 +37,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
+import StatusBar from '@/components/StatusBar.vue';
 import CardInvestment from '@/components/CardInvestment.vue';
 import Asset from '@/components/Asset.vue';
 
@@ -43,6 +46,7 @@ import Asset from '@/components/Asset.vue';
     BContainer,
     BRow,
     BCol,
+    StatusBar,
     CardInvestment,
     Asset,
   },
@@ -76,12 +80,17 @@ export default class ContainerInvestments extends Vue {}
 .row-investments-title {
   margin: 0;
   height: 20%;
+  display: flex;
   align-items: center;
 }
 
 .row-investments-title p {
   font-size: 1.5rem;
   margin: 0;
+}
+
+.investments-statusbar {
+  margin: 0 1rem 0 1rem;
 }
 
 .row-investments-cards {
