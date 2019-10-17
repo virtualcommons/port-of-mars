@@ -15,7 +15,7 @@ export default class Round extends Vue {}
 
 <style scoped>
 .round {
-  display: flex;
+  /* display: flex; */
   /* background-color: blue; */
   color: #F5F5F5;
   font-size: 1.5rem;

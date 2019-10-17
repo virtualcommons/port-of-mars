@@ -19,7 +19,7 @@ export default class Notification extends Vue {}
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 5rem;
+  min-height: 5rem;
   background-color: #C67B5C;
   border-radius: 1rem;
   margin: 1rem 0;
