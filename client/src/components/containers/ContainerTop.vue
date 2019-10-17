@@ -23,6 +23,7 @@ export default class ContainerTop extends Vue {}
 
 <style scoped>
 .container-top {
+  padding: 1rem 1rem 0 1rem;
   display: flex;
   flex-direction: column;
   justify-content: center;

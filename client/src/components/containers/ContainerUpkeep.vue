@@ -40,7 +40,7 @@ export default class ContainerUpkeep extends Vue {}
 
 .upkeep-statusbar {
   width: 100%;
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
 }
 
 .upkeep-status {
