@@ -21,7 +21,11 @@
           <p>Assets</p>
         </BRow>
         <BRow class="row-assets-list">
-          <p>Assets List</p>
+          <Asset/>
+          <Asset/>
+          <Asset/>
+          <Asset/>
+          <Asset/>
         </BRow>
       </BCol>
     </BRow>
@@ -32,6 +36,7 @@
 import { Vue, Component } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
 import CardInvestment from '@/components/CardInvestment.vue';
+import Asset from '@/components/Asset.vue';
 
 @Component({
   components: {
@@ -39,6 +44,7 @@ import CardInvestment from '@/components/CardInvestment.vue';
     BRow,
     BCol,
     CardInvestment,
+    Asset,
   },
 })
 
@@ -87,7 +93,7 @@ export default class ContainerInvestments extends Vue {}
 }
 
 .assets {
-  background-color: green;
+  /* background-color: green; */
   padding: 1rem;
   width: 100%;
 

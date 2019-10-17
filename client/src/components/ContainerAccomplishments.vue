@@ -51,12 +51,12 @@ export default class ContainerAccomplishments extends Vue {}
 }
 
 .accomplishments {
-  background-color: black;
+  /* background-color: black; */
   padding: 1rem;
 }
 
 .dummy {
-  background-color: purple;
+  /* background-color: purple; */
   padding: 0rem;
 }
 
