@@ -15,6 +15,7 @@
             </BCol>
             <BCol cols="2" class="right reset">
               <!-- right section goes here -->
+              <ContainerRight />
             </BCol>
         </BRow>
     </BContainer>
@@ -26,12 +27,14 @@ import { BContainer, BRow, BCol } from 'bootstrap-vue';
 import ContainerTop from '@/components/containers/ContainerTop.vue';
 import ContainerBottom from '@/components/containers/ContainerBottom.vue';
 import ContainerLeft from '@/components/containers/ContainerLeft.vue';
+import ContainerRight from '@/components/containers/ContainerRight.vue';
 
     @Component({
       components: {
         ContainerTop,
         ContainerBottom,
         ContainerLeft,
+        ContainerRight,
         BContainer,
         BRow,
         BCol,
@@ -58,7 +61,7 @@ export default class GameDashboard extends Vue {}
     }
 
     .right {
-        background-color: green;
+        background-color: #1E2223;
     }
 
     .top {

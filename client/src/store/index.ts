@@ -15,7 +15,7 @@ export default new Vuex.Store({
   getters: {
     layout(state) {
       return state.layout;
-    }
+    },
   },
   actions: {
 
