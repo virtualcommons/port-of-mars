@@ -5,6 +5,18 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    //server side
+    marsLog:Array<Object>(),
+    activeAccCards:Array<Number>(),
+    chat:Array<Object>(),
+    upkeep:Number,
+    phaseTime:Number,
+    round:Number,
+    players:Array<Object>(),
+    playerResources:Object,
+
+    //client side
+    investments:Object,
     layout: 'primary-layout',
 
 
@@ -25,7 +37,13 @@ export default new Vuex.Store({
     },
     SET_LOCAL_INVESTMENT(state:object,payload:object){
       state.localInvestments[payload.name] = payload.amount;
-    }
+
+    },
+    SET_ACCS(state, payload){
+      //payload is an array of numbers
+      //for all the numbers
+        //activecards.push(Data(number))
+    },
   },
   getters: {
     layout(state:any) {
