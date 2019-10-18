@@ -1,7 +1,7 @@
 <template>
   <div class="profile">
     <div class="profile-frame">
-      <p>img</p>
+      <!-- <p>img</p> -->
     </div>
   </div>
 </template>
