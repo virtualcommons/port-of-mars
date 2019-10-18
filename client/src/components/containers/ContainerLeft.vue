@@ -1,12 +1,9 @@
 <template>
   <div class="container-left">
-    <div class="placeholder">
+    <div class="placeholder-left">
       <!-- will eventually refactor -->
-      <!-- round component goes here -->
       <Round />
-      <!-- notification component goes here -->
       <Notification />
-      <!-- profile component goes here -->
       <Profile />
     </div>
     <MarsLog />
@@ -33,7 +30,7 @@ export default class ContainerLeft extends Vue {}
 </script>
 
 <style scoped>
-.placeholder {
+.placeholder-left {
   display: flex;
   flex-direction: column;
   height: 50%;

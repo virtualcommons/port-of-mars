@@ -12,8 +12,6 @@
 import { Vue, Component } from 'vue-property-decorator';
 import PortOfMarsLogo from '@/components/PortOfMarsLogo.vue';
 import Clock from '@/components/Clock.vue';
-import WaitingLobbyCapacity from '@/components/WaitingLobbyCapacity.vue';
-import GameplayGuide from '@/components/GameplayGuide.vue';
 import PlanetMars from '@/components/PlanetMars.vue';
 
   @Component({
