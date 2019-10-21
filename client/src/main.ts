@@ -8,14 +8,14 @@ import store from './store';
 
 //const socket = io('http://localhost:3005');
 
+// const socket = io('http://localhost:3005');
+// Vue.use(VueSocketIOExt, socket);
 Vue.config.productionTip = false;
 
-//Vue.use(VueSocketIOExt, socket);
-
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 new Vue({
   router,
-  // store,
+  store,
   render: h => h(App),
 }).$mount('#app');
