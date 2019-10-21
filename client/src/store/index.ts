@@ -5,18 +5,19 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+
     // server side
-    marsLog: Array<Object>(),
-    activeAccCards: Array<Number>(),
-    chat: Array<Object>(),
-    upkeep: Number,
-    phaseTime: Number,
-    round: Number,
-    players: Array<Object>(),
-    playerResources: Object,
+    marsLog: [],
+    activeAccomplishmentCards: [],
+    chat: Array<string>(),
+    upkeep: 100,
+    phaseTime: 300,
+    round: 1,
+    players: [],
+    playerResources: {},
 
     // client side
-    investments: Object,
+    investments: {},
     layout: 'primary-layout',
 
   },
@@ -29,6 +30,9 @@ export default new Vuex.Store({
       // for all the numbers
       // activecards.push(Data(number))
     },
+    ADD_TO_CHAT(state, payload) {
+      this.state.chat.push(payload);
+    },
   },
   getters: {
     layout(state) {
@@ -36,6 +40,8 @@ export default new Vuex.Store({
     },
   },
   actions: {
-
+    sendChatMsg(context, message) {
+      context.commit('ADD_TO_CHAT', message);
+    },
   },
 });
