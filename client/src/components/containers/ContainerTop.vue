@@ -10,11 +10,11 @@ import { Vue, Component } from 'vue-property-decorator';
 import ContainerUpkeep from '@/components/containers/ContainerUpkeep.vue';
 import ContainerPhase from '@/components/containers/ContainerPhase.vue';
 
-
 @Component({
   components: {
     ContainerUpkeep,
     ContainerPhase,
+    
   },
 })
 
