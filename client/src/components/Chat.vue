@@ -2,7 +2,7 @@
   <div class="chat">
     <p class="chat-title">Chat</p>
     <div class="chat-chat">
-      <p class="chat-message" v-for="message in messages">
+      <p class="chat-message" v-for="message in messages" :key="message">
         {{ message }}
       </p>
     </div>
