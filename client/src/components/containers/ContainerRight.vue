@@ -24,7 +24,7 @@ import Chat from '@/components/Chat.vue';
   },
 })
 
-export default class ContainerLeft extends Vue {}
+export default class ContainerRight extends Vue {}
 </script>
 
 <style scoped>
