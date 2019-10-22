@@ -1,11 +1,7 @@
 <template>
   <div class="game">
-
-
     <router-link to="/"></router-link>
     <router-view />
-
-
   </div>
 </template>
 
@@ -22,25 +18,16 @@ import { Socket } from 'vue-socket.io-extended';
 
 /* component imports : screens */
 import LoginScreen from '@/components/LoginScreen.vue';
-// import WaitingLobbyScreen from '@/components/WaitingLobbyScreen.vue';
 
 Vue.use(BootstrapVue);
 
 @Component({
   components: {
-    // WaitingLobbyScreen,
     LoginScreen,
   },
 })
 
 export default class Home extends Vue {
-  title: string;
-
-  constructor() {
-    super();
-    this.title = 'Port of Mars';
-  }
-
   // @Socket('joinGame')
   // onJoinGame(data: unknown) {
   //   console.log(data);
@@ -54,11 +41,6 @@ export default class Home extends Vue {
 </script>
 <style >
   html, body{
-
-  }
-
-  body {
-    /* font-family: 'Avenir', Helvetica, Arial, sans-serif; */
     font-family: 'Space Mono', monospace !important;
   }
 
