@@ -1,7 +1,9 @@
 <template>
   <div class="game">
-    <router-link to="/"></router-link>
-    <router-view />
+    <component :is="layout">
+      <router-view />
+    </component>
+
   </div>
 </template>
 
@@ -16,18 +18,14 @@ import './custom.scss';
 
 import { Socket } from 'vue-socket.io-extended';
 
-/* component imports : screens */
-import LoginScreen from '@/components/LoginScreen.vue';
-
 Vue.use(BootstrapVue);
 
-@Component({
-  components: {
-    LoginScreen,
-  },
-})
-
 export default class Home extends Vue {
+  private defaultLayout: string = 'default';
+
+  get layout() {
+    return `${this.$route.meta.layout || this.defaultLayout}-layout`;
+  }
   // @Socket('joinGame')
   // onJoinGame(data: unknown) {
   //   console.log(data);
