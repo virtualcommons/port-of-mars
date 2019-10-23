@@ -18,6 +18,7 @@ export default new Vuex.Store({
 
     // client side
     investments: {},
+    layout: 'default-layout',
 
     // this will be merged with the global investmens
     // at the end of each round.
@@ -42,8 +43,15 @@ export default new Vuex.Store({
     SET_LOCAL_INVESTMENT(state:object, payload:object) {
       // state.localInvestments[payload.name] = payload.amount;
     },
+    SET_LAYOUT(state, payload) {
+      state.layout = payload;
+    }
+
   },
   getters: {
+    layout (state) {
+      return state.layout;
+    }
   },
   actions: {
     sendChatMsg(context, message) {
