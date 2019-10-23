@@ -20,7 +20,10 @@ export default new Vuex.Store({
     investments: {},
     layout: 'primary-layout',
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 407f898987223cb845bafe8aeec644a9a9e87899
     //this will be merged with the global investmens
     //at the end of each round.
     localInvestments:{
@@ -42,11 +45,11 @@ export default new Vuex.Store({
       // activecards.push(Data(number))
     },
     ADD_TO_CHAT(state, payload) {
-      this.state.chat.push(payload);
+      // this.state.chat.push(payload);
     },
     SET_LOCAL_INVESTMENT(state:object,payload:object){
-      state.localInvestments[payload.name] = payload.amount;
-    },
+      // state.localInvestments[payload.name] = payload.amount;
+    }
   },
   getters: {
     layout(state:any) {
@@ -59,6 +62,6 @@ export default new Vuex.Store({
     },
     addToLocalInvestment(context,payload){
       context.commit('SET_LOCAL_INVESTMENT',payload);
-    },
+    }
   },
 });
