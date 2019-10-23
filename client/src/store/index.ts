@@ -18,9 +18,10 @@ export default new Vuex.Store({
 
     // client side
     investments: {},
-    layout: 'default-layout',
 
-    // this will be merged with the global investmens
+    layout: 'default-layout',               // define state variable for layout
+
+    // this will be merged with the global investments
     // at the end of each round.
     localInvestments: {
       government: 0,
@@ -31,7 +32,7 @@ export default new Vuex.Store({
       culture: 0,
     },
   },
-  mutations: {
+  mutations: {                              // changes state
     SET_ACCS(state, payload) {
       // payload is an array of numbers
       // for all the numbers
@@ -43,13 +44,13 @@ export default new Vuex.Store({
     SET_LOCAL_INVESTMENT(state:object, payload:object) {
       // state.localInvestments[payload.name] = payload.amount;
     },
-    SET_LAYOUT(state, payload) {
+    SET_LAYOUT(state, payload) {            // change state of the layout state
       state.layout = payload;
     }
 
   },
   getters: {
-    layout (state) {
+    layout (state) {                        // get state of layout variable
       return state.layout;
     }
   },
