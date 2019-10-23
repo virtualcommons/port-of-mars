@@ -41,10 +41,10 @@ export default new Vuex.Store({
       // activecards.push(Data(number))
     },
     ADD_TO_CHAT(state, payload) {
-      this.state.chat.push(payload);
+      // this.state.chat.push(payload);
     },
     SET_LOCAL_INVESTMENT(state:object,payload:object){
-      state.localInvestments[payload.name] = payload.amount;
+      // state.localInvestments[payload.name] = payload.amount;
     }
   },
   getters: {
