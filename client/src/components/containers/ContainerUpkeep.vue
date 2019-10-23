@@ -1,5 +1,5 @@
 <template>
-  <BContainer class="container-upkeep">
+  <BContainer class="container-upkeep" id="v-step-0">
     <StatusBar class="upkeep-statusbar"/>
     <p>Upkeep <span class="upkeep-status">90</span>/100</p>
   </BContainer>

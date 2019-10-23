@@ -1,9 +1,9 @@
 <template>
   <div class="game">
     <component :is="layout">
+      <v-tour name="gameTour" :steps="steps"></v-tour>
       <router-view />
     </component>
-
   </div>
 </template>
 
@@ -16,12 +16,28 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import './custom.scss';
 
+import VueTour from 'vue-tour';
 import { Socket } from 'vue-socket.io-extended';
 
-Vue.use(BootstrapVue);
+require('vue-tour/dist/vue-tour.css');
+Vue.use(BootstrapVue, VueTour);
+
+// @Component ({
+//   components: {
+//     VueTour,
+//   }
+// })
 
 export default class Home extends Vue {
+  name: 'gameTour';
+
   private defaultLayout: string = 'default';
+  public steps = [
+    {
+      target: '#v-step-0',  // We're using document.querySelector() under the hood
+      content: `Discover <strong>Vue Tour</strong>!`
+    }
+  ]
 
   get layout() {
     return `${this.$route.meta.layout || this.defaultLayout}-layout`;
@@ -35,6 +51,10 @@ export default class Home extends Vue {
   //   console.log((this as any).$socket);
   //   (this as any).$socket.client.emit('joinGame', { my: 'data' });
   // }
+
+  mounted() {
+    this.$tours['gameTour'].start()
+  }
 }
 </script>
 <style >

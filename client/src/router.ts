@@ -14,7 +14,7 @@ export default new Router({
       component: LoginPage,
     },
     {
-      path: '/gb',
+      path: '/game',
       name: 'GameDashboard',
       meta: { layout: 'default-layout' },
       component: GameDashboard,

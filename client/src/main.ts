@@ -7,17 +7,21 @@ import router from '@/router';
 import store from '@/store';
 
 // imports: layouts
-import DefaultLayout from '@/layouts/DefaultLayout.vue';
-import TutorialLayout from '@/layouts/TutorialLayout.vue';
+import Default from '@/layouts/DefaultLayout.vue';
+import Tutorial from '@/layouts/TutorialLayout.vue';
+
+import VueTour from 'vue-tour';
 
 // const socket = io('http://localhost:3005');
 // Vue.use(VueSocketIOExt, socket);
 
-Vue.use(Vuex);
+require('vue-tour/dist/vue-tour.css');
+
+Vue.use(Vuex, VueTour);
 
 // register layouts globally at entry point of app
-Vue.component('default-layout', DefaultLayout);
-Vue.component('tutorial-layout', TutorialLayout);
+Vue.component('default-layout', Default);
+Vue.component('tutorial-layout', Tutorial);
 
 Vue.config.productionTip = false;
 

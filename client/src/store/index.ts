@@ -9,7 +9,7 @@ export default new Vuex.Store({
     // server side
     marsLog: [],
     activeAccomplishmentCards: [],
-    chat: [],
+    chat: Array<string>(),
     upkeep: 100,
     phaseTime: 300,
     round: 1,
@@ -18,7 +18,6 @@ export default new Vuex.Store({
 
     // client side
     investments: {},
-    layout: 'primary-layout',
 
     //this will be merged with the global investmens
     //at the end of each round.
@@ -32,9 +31,6 @@ export default new Vuex.Store({
     },
   },
   mutations: {
-    SET_LAYOUT(state:any, payload:any) {
-      state.layout = payload;
-    },
     SET_ACCS(state, payload) {
       // payload is an array of numbers
       // for all the numbers
@@ -48,9 +44,6 @@ export default new Vuex.Store({
     }
   },
   getters: {
-    layout(state:any) {
-      return state.layout;
-    },
   },
   actions: {
     sendChatMsg(context, message) {
