@@ -1,12 +1,10 @@
 import Vue from 'vue';
-//import VueSocketIOExt from 'vue-socket.io-extended';
-//import io from 'socket.io-client';
-import App from './App.vue';
-import Vuex from "vuex";
-import router from './router';
-import store from './store';
-
-//const socket = io('http://localhost:3005');
+import VueSocketIOExt from 'vue-socket.io-extended';
+// import io from 'socket.io-client';
+import Vuex from 'vuex';
+import App from '@/App.vue';
+import router from '@/router';
+import store from '@/store';
 
 // const socket = io('http://localhost:3005');
 // Vue.use(VueSocketIOExt, socket);

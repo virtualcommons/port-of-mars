@@ -36,17 +36,16 @@ export default new Vuex.Store({
     SET_LAYOUT(state:any, payload:any) {
       state.layout = payload;
     },
-    SET_LOCAL_INVESTMENT(state:object,payload:object){
-      state.localInvestments[payload.name] = payload.amount;
-
-    },
-    SET_ACCS(state, payload){
-      //payload is an array of numbers
-      //for all the numbers
-        //activecards.push(Data(number))
+    SET_ACCS(state, payload) {
+      // payload is an array of numbers
+      // for all the numbers
+      // activecards.push(Data(number))
     },
     ADD_TO_CHAT(state, payload) {
       this.state.chat.push(payload);
+    },
+    SET_LOCAL_INVESTMENT(state:object,payload:object){
+      state.localInvestments[payload.name] = payload.amount;
     },
   },
   getters: {
@@ -55,11 +54,11 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    addToLocalInvestment(context,payload){
-      context.commit('SET_LOCAL_INVESTMENT',payload);
-    },
     sendChatMsg(context, message) {
       context.commit('ADD_TO_CHAT', message);
+    },
+    addToLocalInvestment(context,payload){
+      context.commit('SET_LOCAL_INVESTMENT',payload);
     },
   },
 });
