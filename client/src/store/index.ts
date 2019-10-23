@@ -28,32 +28,26 @@ export default new Vuex.Store({
     
   },
   mutations: {
-    SET_LAYOUT(state:any, payload:any) {
-      state.layout = payload;
-    },
     SET_ACCS(state, payload) {
       // payload is an array of numbers
       // for all the numbers
       // activecards.push(Data(number))
     },
     ADD_TO_CHAT(state, payload:ChatMessage) {
-      state.chat.addEntry(payload);
+      //state.chat.addEntry(payload);
     },
     SET_LOCAL_INVESTMENT(state,{investmentToChange:string,amount:number}){
       //state.localInvestments.
     }
   },
   getters: {
-    layout(state:any) {
-      return state.layout;
-    },
   },
   actions: {
     sendChatMsg(context, message) {
       context.commit('ADD_TO_CHAT', message);
     },
-    addToLocalInvestment(context,payload){
-      context.commit('SET_LOCAL_INVESTMENT',payload);
-    }
+    addToLocalInvestment(context, payload) {
+      context.commit('SET_LOCAL_INVESTMENT', payload);
+    },
   },
 });

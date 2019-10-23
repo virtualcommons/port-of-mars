@@ -4,7 +4,7 @@
       <div class="placeholder-right">
         <!-- will eventually refactor -->
         <Member />
-        <Member :setWidth='85'/>
+        <Member :setWidth="100"/>
         <Member />
         <Member />
         <Member />
@@ -29,19 +29,19 @@ import TradingModal from '@/components/containers/Trading/TradingModal.vue';
 })
 
 export default class ContainerLeft extends Vue {
-  
+
 }
 </script>
 
 <style scoped>
 .placeholder-right {
   display: flex;
-  align-items: end;
   flex-direction: column;
   justify-content: space-between;
+  align-items: flex-end;
   height: 50%;
   padding: 1rem 0;
-  /* background-color: purple; */
+  background-color: purple;
 }
 
 .container-right {
