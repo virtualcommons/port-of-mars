@@ -14,7 +14,7 @@ import ContainerPhase from '@/components/containers/ContainerPhase.vue';
   components: {
     ContainerUpkeep,
     ContainerPhase,
-    
+
   },
 })
 

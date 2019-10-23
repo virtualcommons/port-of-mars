@@ -28,7 +28,8 @@ import TradingModal from '@/components/containers/Trading/TradingModal.vue';
   },
 })
 
-export default class ContainerRight extends Vue {}
+export default class ContainerLeft extends Vue {
+}
 </script>
 
 <style scoped>

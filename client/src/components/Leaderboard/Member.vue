@@ -10,17 +10,15 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 @Component
 
 export default class Member extends Vue {
-
-  
-  @Prop({default:50})
+  @Prop({ default: 50 })
   private setWidth!:Number;
 
 
-  style(){
-    return {width:  `${this.setWidth}%`};
+  style() {
+    return { width: `${this.setWidth}%` };
   }
 
-  handleClick(){
+  handleClick() {
     this.$root.$emit('openTrading', 'open');
   }
 }
