@@ -6,24 +6,23 @@
 
 
 <script lang="ts">
-    import { Component, Vue, Prop } from "vue-property-decorator";
-    
+import { Component, Vue, Prop } from 'vue-property-decorator';
+
 
     @Component
-    export default class TradingModal extends Vue{
-
+export default class TradingModal extends Vue {
         setStyle:string = 'none';
 
         mounted() {
-            this.$root.$on('openTrading', data => {
-                this.setStyle = '';
-            });
+          this.$root.$on('openTrading', (data) => {
+            this.setStyle = '';
+          });
         }
 
-        handleClick(){
-            this.setStyle = 'none';
+        handleClick() {
+          this.setStyle = 'none';
         }
-    }
+}
 </script>
 
 <style scoped>

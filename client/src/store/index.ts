@@ -18,11 +18,10 @@ export default new Vuex.Store({
 
     // client side
     investments: {},
-    layout: 'primary-layout',
 
-    //this will be merged with the global investmens
-    //at the end of each round.
-    localInvestments:{
+    // this will be merged with the global investmens
+    // at the end of each round.
+    localInvestments: {
       government: 0,
       legacy: 0,
       upkeep: 0,
@@ -32,32 +31,26 @@ export default new Vuex.Store({
     },
   },
   mutations: {
-    SET_LAYOUT(state:any, payload:any) {
-      state.layout = payload;
-    },
     SET_ACCS(state, payload) {
       // payload is an array of numbers
       // for all the numbers
       // activecards.push(Data(number))
     },
     ADD_TO_CHAT(state, payload) {
-      this.state.chat.push(payload);
+      // this.state.chat.push(payload);
     },
-    SET_LOCAL_INVESTMENT(state:object,payload:object){
-      state.localInvestments[payload.name] = payload.amount;
-    }
+    SET_LOCAL_INVESTMENT(state:object, payload:object) {
+      // state.localInvestments[payload.name] = payload.amount;
+    },
   },
   getters: {
-    layout(state:any) {
-      return state.layout;
-    },
   },
   actions: {
     sendChatMsg(context, message) {
       context.commit('ADD_TO_CHAT', message);
     },
-    addToLocalInvestment(context,payload){
-      context.commit('SET_LOCAL_INVESTMENT',payload);
-    }
+    addToLocalInvestment(context, payload) {
+      context.commit('SET_LOCAL_INVESTMENT', payload);
+    },
   },
 });

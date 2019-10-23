@@ -54,7 +54,6 @@ import Asset from '@/components/Asset.vue';
 
 export default class ContainerInvestments extends Vue {
 
-  
 
 }
 </script>
