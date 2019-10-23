@@ -1,7 +1,9 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-
+import { InvestmentsModel,ChatModel,ChatMessage }  from "../models";
 Vue.use(Vuex);
+
+
 
 export default new Vuex.Store({
   state: {
@@ -9,7 +11,7 @@ export default new Vuex.Store({
     // server side
     marsLog: [],
     activeAccomplishmentCards: [],
-    chat: Array<string>(),
+    chat: ChatModel,
     upkeep: 100,
     phaseTime: 300,
     round: 1,
@@ -17,23 +19,13 @@ export default new Vuex.Store({
     playerResources: {},
 
     // client side
-    investments: {},
+    //investments: {},
     layout: 'primary-layout',
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 407f898987223cb845bafe8aeec644a9a9e87899
-    //this will be merged with the global investmens
+    //this will be merged with the global investments
     //at the end of each round.
-    localInvestments:{
-      government: 0,
-      legacy: 0,
-      upkeep: 0,
-      finace: 0,
-      science: 0,
-      culture: 0,
-    },
+    localInvestments: InvestmentsModel,
+    
   },
   mutations: {
     SET_LAYOUT(state:any, payload:any) {
@@ -44,11 +36,11 @@ export default new Vuex.Store({
       // for all the numbers
       // activecards.push(Data(number))
     },
-    ADD_TO_CHAT(state, payload) {
-      // this.state.chat.push(payload);
+    ADD_TO_CHAT(state, payload:ChatMessage) {
+      state.chat.addEntry(payload);
     },
-    SET_LOCAL_INVESTMENT(state:object,payload:object){
-      // state.localInvestments[payload.name] = payload.amount;
+    SET_LOCAL_INVESTMENT(state,{investmentToChange:string,amount:number}){
+      //state.localInvestments.
     }
   },
   getters: {
