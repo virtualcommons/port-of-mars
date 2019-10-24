@@ -6,17 +6,14 @@
         {{ message }}
       </p>
     </div>
-    <input type="text" @keydown.enter="submitToChat" v-model="message">
+    <input type="text" @keydown.enter="submitToChat" v-model="message" />
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 
-@Component({
-
-})
-
+@Component({})
 export default class Chat extends Vue {
   message: string = '';
 
@@ -47,8 +44,7 @@ export default class Chat extends Vue {
 }
 
 .chat-chat {
-  min-height: 100%;
-  max-height: 100%;
+  height: 100%;
   border: 0.125rem solid #F5F5F5;
   overflow-y: auto;
 }

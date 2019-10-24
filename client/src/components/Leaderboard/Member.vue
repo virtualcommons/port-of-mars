@@ -1,24 +1,30 @@
 <template>
   <div :style="style()" @click="handleClick" class="member">
     <div class="member-notif">
-      <p class="member-notif-num">0</p>
+      <p class="member-notif-num">{{ notificationCount }}</p>
     </div>
-    <p class="member-score">0</p>
+    <p class="member-score">{{ playerScore }}</p>
+    <p class="member-role">{{ playerRole }}</p>
     <img :src="require(`@/assets/characters/${setImg()}.png`)" alt="Player" class="member-img" />
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from "vue-property-decorator";
+import { Vue, Component, Prop } from 'vue-property-decorator';
 // import Curator from '@/assets/characters-svg/Curator.svg';
 
 @Component
 export default class Member extends Vue {
-  @Prop({ default: "Curator" }) private player!: string;
+  @Prop({ default: 'Curator' }) private playerRole!: string;
+
+  @Prop({ default: 0 }) private playerScore!: number;
+
+  @Prop({ default: 1 }) private notificationCount!: number;
+
   @Prop({ default: 90 }) private setWidth!: number;
 
   setImg(): string {
-    return this.player;
+    return this.playerRole;
   }
 
   style(): object {
@@ -26,18 +32,19 @@ export default class Member extends Vue {
   }
 
   handleClick() {
-    this.$root.$emit("openTrading", "open");
+    this.$root.$emit('openTrading', 'open');
   }
 }
 </script>
 
 <style scoped>
 .member {
+  padding: 0.25rem 1rem;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   position: relative;
-  height: 4.5rem;
+  height: 4rem;
   background-color: rgba(245, 245, 245, 0.2);
   border: 0.125rem solid #f5f5f5;
   border-radius: 1rem;
@@ -69,10 +76,12 @@ export default class Member extends Vue {
   margin: 0;
 }
 
-.member-img {
-  fill: #f5f5f5;
-  height: 100%;
-  font-size: 1.5rem;
+.member-role {
+  font-size: 1rem;
   margin: 0;
+}
+
+.member-img {
+  height: 100%;
 }
 </style>
