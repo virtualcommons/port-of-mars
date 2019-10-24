@@ -4,11 +4,11 @@
     <!-- will eventually refactor -->
     <div class="placeholder-right">
       <p class="scores-title">Scores</p>
-      <Member :playerRole="'Researcher'" />
-      <Member :playerRole="'Politician'" :setWidth="100" />
-      <Member :playerRole="'Pioneer'" />
-      <Member :playerRole="'Curator'" />
-      <Member :playerRole="'Entrepreneur'" />
+      <Member :playerRole="'Researcher'" :playerScore="14" :notificationCount="1" />
+      <Member :playerRole="'Politician'" :playerScore="12" :notificationCount="0" :width="100" />
+      <Member :playerRole="'Pioneer'" :playerScore="11" :notificationCount="0" />
+      <Member :playerRole="'Curator'" :playerScore="5" :notificationCount="2" />
+      <Member :playerRole="'Entrepreneur'" :playerScore="3" :notificationCount="0" />
     </div>
     <Chat />
   </div>
@@ -27,7 +27,7 @@ import TradingModal from '@/components/containers/Trading/TradingModal.vue';
     TradingModal,
   },
 })
-export default class ContainerLeft extends Vue {}
+export default class ContainerRight extends Vue {}
 </script>
 
 <style scoped>

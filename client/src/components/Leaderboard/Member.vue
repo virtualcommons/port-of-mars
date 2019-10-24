@@ -1,6 +1,6 @@
 <template>
-  <div :style="style()" @click="handleClick" class="member">
-    <div class="member-notif">
+  <div :style="setWidth()" @click="handleClick" class="member">
+    <div :style="setVisibility()" class="member-notif">
       <p class="member-notif-num">{{ notificationCount }}</p>
     </div>
     <p class="member-score">{{ playerScore }}</p>
@@ -11,7 +11,6 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-// import Curator from '@/assets/characters-svg/Curator.svg';
 
 @Component
 export default class Member extends Vue {
@@ -21,14 +20,18 @@ export default class Member extends Vue {
 
   @Prop({ default: 1 }) private notificationCount!: number;
 
-  @Prop({ default: 90 }) private setWidth!: number;
+  @Prop({ default: 90 }) private width!: number;
 
   setImg(): string {
     return this.playerRole;
   }
 
-  style(): object {
-    return { width: `${this.setWidth}%` };
+  setWidth(): object {
+    return { width: `${this.width}%` };
+  }
+
+  setVisibility(): object {
+    return this.notificationCount > 0 ? { visibility: 'visible' } : { visibility: 'hidden' };
   }
 
   handleClick() {
@@ -77,6 +80,8 @@ export default class Member extends Vue {
 }
 
 .member-role {
+  padding: 0 0.25rem;
+  color: #f5f5f5;
   font-size: 1rem;
   margin: 0;
 }
