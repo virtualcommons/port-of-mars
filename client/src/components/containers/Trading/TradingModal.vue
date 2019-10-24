@@ -5,20 +5,21 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop } from "vue-property-decorator";
 
 @Component
 export default class TradingModal extends Vue {
-  setStyle: string = 'none';
+  setStyle: string = "none";
 
   mounted() {
-    this.$root.$on('openTrading', (data: any) => {
-      this.setStyle = '';
+    this.$root.$on("openTrading", (data: any) => {
+      // Important: will need to set data type
+      this.setStyle = "";
     });
   }
 
   handleClick() {
-    this.setStyle = 'none';
+    this.setStyle = "none";
   }
 }
 </script>

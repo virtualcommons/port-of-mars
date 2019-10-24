@@ -3,11 +3,11 @@
       <TradingModal />
       <div class="placeholder-right">
         <!-- will eventually refactor -->
-        <Member />
-        <Member :setWidth="100"/>
-        <Member />
-        <Member />
-        <Member />
+        <Member :player="'Researcher'"/>
+        <Member :player="'Politician'" :setWidth="100"/>
+        <Member :player="'Pioneer'"/>
+        <Member :player="'Curator'"/>
+        <Member :player="'Entrepreneur'"/>
       </div>
       <Chat />
   </div>
