@@ -9,7 +9,7 @@ export default new Vuex.Store({
     // server side
     marsLog: [],
     activeAccomplishmentCards: [],
-    chat: Array<string>(),
+    chat: [],
     upkeep: 100,
     phaseTime: 300,
     round: 1,

@@ -1,19 +1,13 @@
 <template>
   <BContainer class="container-accomplishments">
-    <BRow class="row-accomplishments">
-      <BCol class="accomplishments" cols="7">
-        <BRow class="row-accomplishments-title">
-          <p>Active Accomplishments</p>
-        </BRow>
-        <BRow class="row-accomplishments-cards">
-          <CardAccomplishment/>
-          <CardAccomplishment/>
-          <CardAccomplishment/>
-        </BRow>
-      </BCol>
-      <BCol class="dummy" cols="5">
-        <!-- will remove later -->
-      </BCol>
+    <BRow class="accomplishments-topbar">
+      <p class="accomplishments-topbar-title">Accomplishments</p>
+    </BRow>
+
+    <BRow class="accomplishments-cards">
+      <CardAccomplishment/>
+      <CardAccomplishment/>
+      <CardAccomplishment/>
     </BRow>
   </BContainer>
 </template>
@@ -38,44 +32,35 @@ export default class ContainerAccomplishments extends Vue {}
 <style scoped>
 .container-accomplishments {
   width: 100%;
-  height: 40%;
-  padding: 0;
-  /* border: 0.25rem solid #F5F5F5; */
-  color: #F5F5F5;
-}
-
-.row-accomplishments {
   height: 100%;
-  width: 100%;
   margin: 0;
+  padding: 0;
 }
 
-.accomplishments {
-  /* background-color: black; */
-  padding: 1rem;
-}
-
-.dummy {
-  /* background-color: purple; */
-  padding: 0rem;
-}
-
-.row-accomplishments-title {
+.accomplishments-topbar {
+  height: 10%;
   margin: 0;
-  height: 20%;
+  padding: 0.5rem 1rem;
+  display: flex;
+  justify-content: center;
   align-items: center;
+  border-bottom: 0.125rem solid #F5F5F5;
+  background-color: #C67B5C;
 }
 
-.row-accomplishments-title p {
+.accomplishments-topbar-title {
+  margin: 0;
+  color: #1E2223;
   font-size: 1.5rem;
-  margin: 0;
 }
 
-.row-accomplishments-cards {
-  width: 100%;
-  height: 80%;
+.accomplishments-cards {
+  height: 90%;
   margin: 0;
-  justify-content: space-between;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
   align-items: center;
 }
 </style>
