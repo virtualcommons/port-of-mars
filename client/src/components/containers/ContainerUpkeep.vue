@@ -1,12 +1,15 @@
 <template>
   <BContainer class="container-upkeep">
-    <StatusBar class="upkeep-statusbar"/>
-    <p>Upkeep <span class="upkeep-status">90</span>/100</p>
+    <StatusBar class="upkeep-statusbar" :setWidth="`${upkeepStatus}`" />
+    <p>
+      Upkeep <span class="upkeep-status">{{ upkeepStatus }}</span
+      >/100
+    </p>
   </BContainer>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
 import StatusBar from '@/components/StatusBar.vue';
 
@@ -18,8 +21,9 @@ import StatusBar from '@/components/StatusBar.vue';
     StatusBar,
   },
 })
-
-export default class ContainerUpkeep extends Vue {}
+export default class ContainerUpkeep extends Vue {
+  @Prop({ default: 30 }) private upkeepStatus!: number;
+}
 </script>
 
 <style scoped>
@@ -28,7 +32,7 @@ export default class ContainerUpkeep extends Vue {}
   height: 20%;
   padding: 0;
   /* background-color: green; */
-  color: #F5F5F5;
+  color: #f5f5f5;
 }
 
 .container-upkeep p {
@@ -44,6 +48,6 @@ export default class ContainerUpkeep extends Vue {}
 }
 
 .upkeep-status {
-  color: #C67B5C;
+  color: #c67b5c;
 }
 </style>

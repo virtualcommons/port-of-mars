@@ -14,8 +14,8 @@ export default class CardAccomplishment extends Vue {}
 
 <style scoped>
 .card-accomplishment {
-  height: 6rem;
-  width: 10rem;
+  height: 7rem;
+  width: 9.5rem;
   border: 0.125rem solid #F5F5F5;
   border-radius: 1rem;
   display: flex;
