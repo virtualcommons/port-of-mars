@@ -3,6 +3,7 @@
     <p class="chat-title">Chat</p>
     <div class="chat-chat">
       <div class="chat-message" v-for="message in messages" :key="message.content">
+        <!-- Need to change key to be time value, need to find package -->
         <p>{{ message.sender }}</p>
         <p>{{ message.content }}</p>
       </div>
@@ -25,7 +26,6 @@ export default class Chat extends Vue {
   count: number = 0;
 
   get messages() {
-    // console.log(this.$store.state.chat.chat);
     return this.$store.state.chat.chat;
   }
 

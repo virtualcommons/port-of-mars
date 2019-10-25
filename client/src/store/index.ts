@@ -36,7 +36,8 @@ export default new Vuex.Store({
     },
     CHANGE_LOCAL_INVESTMENT(state: any, payload) {
       // this is for increment and decrement
-      state.localInvestments.changeValue(payload.investmentName, payload.investmentAmount);
+
+      state.localInvestments.changeInventoryValue(payload.investmentName, payload.investmentAmount);
     },
   },
   getters: {},
