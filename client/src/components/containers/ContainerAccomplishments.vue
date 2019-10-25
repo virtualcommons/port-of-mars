@@ -5,9 +5,9 @@
     </BRow>
 
     <BRow class="accomplishments-cards">
-      <CardAccomplishment/>
-      <CardAccomplishment/>
-      <CardAccomplishment/>
+      <CardAccomplishment />
+      <CardAccomplishment />
+      <CardAccomplishment />
     </BRow>
   </BContainer>
 </template>
@@ -25,7 +25,6 @@ import CardAccomplishment from '@/components/CardAccomplishment.vue';
     CardAccomplishment,
   },
 })
-
 export default class ContainerAccomplishments extends Vue {}
 </script>
 
@@ -44,13 +43,13 @@ export default class ContainerAccomplishments extends Vue {}
   display: flex;
   justify-content: center;
   align-items: center;
-  border-bottom: 0.125rem solid #F5F5F5;
-  background-color: #C67B5C;
+  border-bottom: 0.125rem solid #f5f5f5;
+  background-color: #c67b5c;
 }
 
 .accomplishments-topbar-title {
   margin: 0;
-  color: #1E2223;
+  color: #1e2223;
   font-size: 1.5rem;
 }
 

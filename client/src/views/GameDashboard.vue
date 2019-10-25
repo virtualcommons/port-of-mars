@@ -1,24 +1,24 @@
 <template>
-    <BContainer class="reset">
-        <BRow class="board reset">
-            <BCol cols="2" class="left reset">
-              <!-- left section goes here -->
-              <ContainerLeft />
-            </BCol>
-            <BCol cols="8" class="reset">
-                <BRow class="top reset">
-                  <ContainerTop />
-                </BRow>
-                <BRow class="bottom reset">
-                    <ContainerBottom />
-                </BRow>
-            </BCol>
-            <BCol cols="2" class="right reset">
-              <!-- right section goes here -->
-              <ContainerRight />
-            </BCol>
+  <BContainer class="reset">
+    <BRow class="board reset">
+      <BCol cols="2" class="left reset">
+        <!-- left section goes here -->
+        <ContainerLeft />
+      </BCol>
+      <BCol cols="8" class="reset">
+        <BRow class="top reset">
+          <ContainerTop />
         </BRow>
-    </BContainer>
+        <BRow class="bottom reset">
+          <ContainerBottom />
+        </BRow>
+      </BCol>
+      <BCol cols="2" class="right reset">
+        <!-- right section goes here -->
+        <ContainerRight />
+      </BCol>
+    </BRow>
+  </BContainer>
 </template>
 
 <script lang="ts">
@@ -29,52 +29,51 @@ import ContainerBottom from '@/components/containers/ContainerBottom.vue';
 import ContainerLeft from '@/components/containers/ContainerLeft.vue';
 import ContainerRight from '@/components/containers/ContainerRight.vue';
 
-    @Component({
-      components: {
-        ContainerTop,
-        ContainerBottom,
-        ContainerLeft,
-        ContainerRight,
-        BContainer,
-        BRow,
-        BCol,
-      },
-    })
-
+@Component({
+  components: {
+    ContainerTop,
+    ContainerBottom,
+    ContainerLeft,
+    ContainerRight,
+    BContainer,
+    BRow,
+    BCol,
+  },
+})
 export default class GameDashboard extends Vue {}
-
 </script>
 
 <style scoped>
-    .reset {
-        margin: 0;
-        padding: 0;
-    }
+.reset {
+  margin: 0;
+  padding: 0;
+}
 
-    .board {
-        height: 100vh;
-        width: 100vw;
-    }
+.board {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
 
-    .left {
-        background-color: #1E2223;
-    }
+.left {
+  background-color: #1e2223;
+}
 
-    .right {
-        background-color: #1E2223;
-    }
+.right {
+  background-color: #1e2223;
+}
 
-    .top {
-        height: 40vh;
-        background-color: #1E2223;
-    }
+.top {
+  height: 40vh;
+  background-color: #1e2223;
+}
 
-    .bottom {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 1rem;
-        height: 60vh;
-        background-color: #1E2223;
-    }
+.bottom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  height: 60vh;
+  background-color: #1e2223;
+}
 </style>
