@@ -1,57 +1,51 @@
-interface InvestmentTypes{
-    [key:string]:number
-    government:number,
-    legacy:number,
-    upkeep:number,
-    finance:number,
-    science:number,
-    culture:number,
+interface InvestmentTypes {
+  [key: string]: number;
+  government: number;
+  legacy: number;
+  upkeep: number;
+  finance: number;
+  science: number;
+  culture: number;
 }
 
-class InvestmentsModel{
-    private investmets: InvestmentTypes = {
-        government:0,
-        legacy:0,
-        upkeep:0,
-        finance:0,
-        science:0,
-        culture:0,
-    }
-    
-    changeValue(investmentToChange:any,amount:number){
-        this.investmets[investmentToChange] = amount;
-    }
+class InvestmentsModel {
+  private investments: InvestmentTypes = {
+    government: 0,
+    legacy: 0,
+    upkeep: 0,
+    finance: 0,
+    science: 0,
+    culture: 0,
+  };
 
-    get returnValues(){
-        return this.investmets;
-    }
+  changeValue(investmentToChange: any, amount: number) {
+    this.investments[investmentToChange] = amount;
+  }
+
+  get returnValues() {
+    return this.investments;
+  }
 }
 
-
-class ChatMessage{
-    private sender:string;
-    private content:string;
-
-    constructor(){
-        this.sender = '';
-        this.content = '';
-    }
+interface ChatMessage {
+  sender: string;
+  content: string;
 }
 
-class ChatModel{
-    private messages:ChatMessage[];
+class ChatModel {
+  private messages: ChatMessage[];
 
-    constructor(){
-        this.messages = [];
-    }
+  constructor() {
+    this.messages = [];
+  }
 
-    addEntry(message:ChatMessage){
-        this.messages.push(message);
-    }
+  addEntry(message: ChatMessage) {
+    this.messages.push(message);
+  }
+
+  get chat() {
+    return this.messages;
+  }
 }
 
-export{
-    InvestmentsModel,
-    ChatModel,
-    ChatMessage,
-}
+export { InvestmentsModel, ChatModel, ChatMessage };
