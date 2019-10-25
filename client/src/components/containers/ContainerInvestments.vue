@@ -13,15 +13,15 @@
 
     <BRow class="investments-cards">
       <BRow class="investments-cards-top">
-        <CardInvestment investmentName="upkeep" :investmentAmount='investmentData.upkeep'/>
-        <CardInvestment investmentName="finance" :investmentAmount='investmentData.finance'/>
-        <CardInvestment investmentName="legacy" :investmentAmount='investmentData.legacy'/>
+        <CardInvestment :investmentData="investmentData.upkeep"/>
+        <CardInvestment :investmentData="investmentData.finance"/>
+        <CardInvestment :investmentData="investmentData.legacy"/>
       </BRow>
 
       <BRow class="investments-cards-bottom">
-        <CardInvestment investmentName="government" :investmentAmount='investmentData.government'/>
-        <CardInvestment investmentName="culture" :investmentAmount='investmentData.culture'/>
-        <CardInvestment investmentName="science" :investmentAmount='investmentData.science'/>
+        <CardInvestment :investmentData="investmentData.government"/>
+        <CardInvestment :investmentData="investmentData.culture"/>
+        <CardInvestment :investmentData="investmentData.science"/>
       </BRow>
     </BRow>
   </BContainer>
@@ -45,9 +45,19 @@ import Asset from '@/components/Asset.vue';
   },
 })
 export default class ContainerInvestments extends Vue {
-  @Prop({ default: 4 }) private timeblockStatus!: number;
-  
-  private investmentData:object = this.$store.state.localInvestments.returnValues;
+  private timeblockStatus: number = 10;
+
+  private investmentData: object = this.$store.state.localInvestments.returnValues;
+
+  updated() {
+    console.log(this.timeblockStatus);
+    // let decrement: number = 0;
+    // for(let investment in this.investmentData) {
+    //   decrement += (this.investmentData[investment].currentCost * this.investmentData[investment].currentInventory)
+    // }
+    // this.timeblockStatus -= decrement;
+    // console.log(this.timeblockStatus)
+  }
 }
 </script>
 

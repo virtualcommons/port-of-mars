@@ -1,57 +1,94 @@
-interface InvestmentTypes{
-    [key:string]:number
-    government:number,
-    legacy:number,
-    upkeep:number,
-    finance:number,
-    science:number,
-    culture:number,
+interface InvestmentProperties {
+  n: any;
+  initialCost: number;
+  currentCost: number;
+  currentInventory: number;
 }
 
-class InvestmentsModel{
-    private investmets: InvestmentTypes = {
-        government:0,
-        legacy:0,
-        upkeep:0,
-        finance:0,
-        science:0,
-        culture:0,
-    }
-    
-    changeValue(investmentToChange:any,amount:number){
-        this.investmets[investmentToChange] = amount;
-    }
-
-    get returnValues(){
-        return this.investmets;
-    }
+interface InvestmentTypes {
+  [key: string]: InvestmentProperties;
+  government: InvestmentProperties;
+  legacy: InvestmentProperties;
+  upkeep: InvestmentProperties;
+  finance: InvestmentProperties;
+  science: InvestmentProperties;
+  culture: InvestmentProperties;
 }
 
+class InvestmentsModel {
+  private investments: InvestmentTypes = {
+    government: {
+      n: 'government',
+      initialCost: 0,
+      currentCost: 0,
+      currentInventory: 0,
+    },
+    legacy: {
+      n: 'legacy',
+      initialCost: 0,
+      currentCost: 0,
+      currentInventory: 0,
+    },
+    upkeep: {
+      n: 'upkeep',
+      initialCost: 0,
+      currentCost: 0,
+      currentInventory: 0,
+    },
+    finance: {
+      n: 'finance',
+      initialCost: 0,
+      currentCost: 0,
+      currentInventory: 0,
+    },
+    science: {
+      n: 'science',
+      initialCost: 0,
+      currentCost: 0,
+      currentInventory: 0,
+    },
+    culture: {
+      n: 'culture',
+      initialCost: 0,
+      currentCost: 0,
+      currentInventory: 0,
+    },
+  };
 
-class ChatMessage{
-    private sender:string;
-    private content:string;
+  changeInventoryValue(investmentToChange: any, amount: number) {
+    this.investments[investmentToChange].currentInventory = amount;
+  }
 
-    constructor(){
-        this.sender = '';
-        this.content = '';
-    }
+  updateCurrentCost(investmentToChange: any, amount: number) {
+    this.investments[investmentToChange].currentCost = amount;
+  }
+
+  get returnValues() {
+    return this.investments;
+  }
 }
 
-class ChatModel{
-    private messages:ChatMessage[];
-
-    constructor(){
-        this.messages = [];
-    }
-
-    addEntry(message:ChatMessage){
-        this.messages.push(message);
-    }
+interface ChatMessage {
+  sender: string;
+  content: string;
 }
 
-export{
-    InvestmentsModel,
-    ChatModel,
-    ChatMessage,
+class ChatModel {
+  private messages: ChatMessage[];
+
+  constructor() {
+    this.messages = [];
+  }
+
+  addEntry(message: ChatMessage) {
+    this.messages.push(message);
+  }
+
+  get chat() {
+    return this.messages;
+  }
 }
+
+export {
+  InvestmentProperties, InvestmentsModel, ChatModel, ChatMessage,
+};
