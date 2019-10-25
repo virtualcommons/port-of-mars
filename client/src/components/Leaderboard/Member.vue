@@ -1,10 +1,11 @@
 <template>
-  <div :style="style()" @click='handleClick' class="member">
-    <div class="member-notif">
-      <p class="member-notif-num">0</p>
+  <div :style="setWidth()" @click="handleClick" class="member">
+    <div :style="setVisibility()" class="member-notif">
+      <p class="member-notif-num">{{ notificationCount }}</p>
     </div>
-    <p class="member-score">0</p>
-    <p class="member-img">X</p>
+    <p class="member-score">{{ playerScore }}</p>
+    <p class="member-role">{{ playerRole }}</p>
+    <img :src="require(`@/assets/characters/${setImg()}.png`)" alt="Player" class="member-img" />
   </div>
 </template>
 
@@ -12,13 +13,25 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 
 @Component
-
 export default class Member extends Vue {
-  @Prop({ default: 90 }) private setWidth!: number;
+  @Prop({ default: 'Curator' }) private playerRole!: string;
 
+  @Prop({ default: 0 }) private playerScore!: number;
 
-  style() {
-    return { width: `${this.setWidth}%` };
+  @Prop({ default: 1 }) private notificationCount!: number;
+
+  @Prop({ default: 90 }) private width!: number;
+
+  setImg(): string {
+    return this.playerRole;
+  }
+
+  setWidth(): object {
+    return { width: `${this.width}%` };
+  }
+
+  setVisibility(): object {
+    return this.notificationCount > 0 ? { visibility: 'visible' } : { visibility: 'hidden' };
   }
 
   handleClick() {
@@ -29,13 +42,14 @@ export default class Member extends Vue {
 
 <style scoped>
 .member {
+  padding: 0.25rem 1rem;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   position: relative;
-  height: 4.5rem;
+  height: 4rem;
   background-color: rgba(245, 245, 245, 0.2);
-  border: 0.125rem solid #F5F5F5;
+  border: 0.125rem solid #f5f5f5;
   border-radius: 1rem;
 }
 
@@ -48,26 +62,31 @@ export default class Member extends Vue {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #C67B5C;
+  background-color: #c67b5c;
   border-radius: 50%;
 }
 
 .member-notif-num {
   text-align: center;
   font-size: 0.75rem !important;
-  color: #1E2223 !important;
+  color: #1e2223 !important;
   margin: 0;
 }
 
 .member-score {
-  color: #F5F5F5;
+  color: #f5f5f5;
   font-size: 1.5rem;
   margin: 0;
 }
 
-.member-img {
-  color: #F5F5F5;
-  font-size: 1.5rem;
+.member-role {
+  padding: 0 0.25rem;
+  color: #f5f5f5;
+  font-size: 1rem;
   margin: 0;
+}
+
+.member-img {
+  height: 100%;
 }
 </style>

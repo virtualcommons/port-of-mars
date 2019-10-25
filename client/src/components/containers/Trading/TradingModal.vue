@@ -13,6 +13,7 @@ export default class TradingModal extends Vue {
 
   mounted() {
     this.$root.$on('openTrading', (data: any) => {
+      // Important: will need to set data type
       this.setStyle = '';
     });
   }
