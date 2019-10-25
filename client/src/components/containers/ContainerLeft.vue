@@ -4,7 +4,7 @@
       <!-- will eventually refactor -->
       <Round />
       <Notification />
-      <Profile />
+      <Profile :playerRole="'Politician'" />
     </div>
     <MarsLog />
   </div>
@@ -25,20 +25,20 @@ import MarsLog from '@/components/MarsLog.vue';
     MarsLog,
   },
 })
-
 export default class ContainerLeft extends Vue {}
 </script>
 
 <style scoped>
+.container-left {
+  height: 100vh;
+  width: 100%;
+  padding: 1rem 0rem 1rem 1rem;
+}
+
 .placeholder-left {
   display: flex;
   flex-direction: column;
   height: 50%;
   /* background-color: purple; */
-}
-.container-left {
-  height: 100%;
-  width: 100%;
-  padding: 1rem 0rem 1rem 1rem;
 }
 </style>

@@ -7,7 +7,6 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-
     // server side
     marsLog: [],
     activeAccomplishmentCards: [],
@@ -43,8 +42,7 @@ export default new Vuex.Store({
     },
     
   },
-  getters: {
-  },
+  getters: {},
   actions: {
     sendChatMsg(context, message) {
       context.commit('ADD_TO_CHAT', message);
