@@ -1,11 +1,6 @@
 <template>
   <div class="game">
-
-
-    <router-link to="/"></router-link>
-    <router-view />
-
-
+    <component :is="layout" />
   </div>
 </template>
 
@@ -20,25 +15,24 @@ import './custom.scss';
 
 import { Socket } from 'vue-socket.io-extended';
 
-/* component imports : screens */
-import LoginScreen from '@/components/LoginScreen.vue';
-// import WaitingLobbyScreen from '@/components/WaitingLobbyScreen.vue';
+/* imports: layouts */
+import DefaultLayout from '@/layouts/DefaultLayout.vue';
+import TutorialLayout from '@/layouts/TutorialLayout.vue';
 
 Vue.use(BootstrapVue);
 
 @Component({
   components: {
-    // WaitingLobbyScreen,
-    LoginScreen,
+    DefaultLayout,
+    TutorialLayout,
   },
 })
 
 export default class Home extends Vue {
-  title: string;
+  private defaultLayout: string = 'default';
 
-  constructor() {
-    super();
-    this.title = 'Port of Mars';
+  get layout() {
+    return this.$store.getters.layout;
   }
 
   // @Socket('joinGame')
@@ -50,15 +44,14 @@ export default class Home extends Vue {
   //   console.log((this as any).$socket);
   //   (this as any).$socket.client.emit('joinGame', { my: 'data' });
   // }
+
+  // mounted() {
+  //   this.$tours['gameTour'].start()
+  // }
 }
 </script>
 <style >
   html, body{
-
-  }
-
-  body {
-    /* font-family: 'Avenir', Helvetica, Arial, sans-serif; */
     font-family: 'Space Mono', monospace !important;
   }
 
