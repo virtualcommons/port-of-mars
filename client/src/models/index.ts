@@ -59,6 +59,10 @@ class InvestmentsModel {
     this.investments[investmentToChange].currentInventory = amount;
   }
 
+  updateCurrentCost(investmentToChange: any, amount: number) {
+    this.investments[investmentToChange].currentCost = amount;
+  }
+
   get returnValues() {
     return this.investments;
   }

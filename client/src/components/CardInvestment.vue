@@ -2,7 +2,7 @@
   <div class="card-investment">
     <div class="investment-options">
       <div class="card-type">
-        Type
+        Type {{ investmentData.currentCost }}
       </div>
       <div class="card-increment-and-decrement-holder">
         <div class="investment-increment" @click="incrementInvestment">

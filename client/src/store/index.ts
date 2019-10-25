@@ -15,6 +15,7 @@ export default new Vuex.Store({
     phaseTime: 300,
     round: 1,
     players: [],
+    timeblocks: 10,
     playerResources: {},
 
     // client side
@@ -39,6 +40,12 @@ export default new Vuex.Store({
 
       state.localInvestments.changeInventoryValue(payload.investmentName, payload.investmentAmount);
     },
+    CHANGE_LOCAL_ROUND_COSTS(state, payload) {
+      for (const investment in payload) {
+        // console.log(investment,payload[investment]);
+        state.localInvestments.updateCurrentCost(investment, payload[investment]);
+      }
+    },
   },
   getters: {},
   actions: {
@@ -47,6 +54,9 @@ export default new Vuex.Store({
     },
     changeLocalInvestment(context, payload) {
       context.commit('CHANGE_LOCAL_INVESTMENT', payload);
+    },
+    updateRoundCosts(context, payload) {
+      context.commit('CHANGE_LOCAL_ROUND_COSTS', payload);
     },
   },
 });
