@@ -1,5 +1,6 @@
 <template>
   <BContainer class="reset">
+    <MasterComponent/>
     <BRow class="board reset">
       <BCol cols="2" class="left reset">
         <!-- left section goes here -->
@@ -28,6 +29,7 @@ import ContainerTop from '@/components/containers/ContainerTop.vue';
 import ContainerBottom from '@/components/containers/ContainerBottom.vue';
 import ContainerLeft from '@/components/containers/ContainerLeft.vue';
 import ContainerRight from '@/components/containers/ContainerRight.vue';
+import MasterComponent from '@/components/MasterComponent.vue';
 
 @Component({
   components: {
@@ -38,6 +40,7 @@ import ContainerRight from '@/components/containers/ContainerRight.vue';
     BContainer,
     BRow,
     BCol,
+    MasterComponent,
   },
 })
 export default class GameDashboard extends Vue {}

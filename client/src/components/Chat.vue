@@ -2,9 +2,11 @@
   <div class="chat">
     <p class="chat-title">Chat</p>
     <div class="chat-chat">
-      <p class="chat-message" v-for="message in messages" :key="message">
-        {{ message }}
-      </p>
+      <div class="chat-message" v-for="message in messages" :key="message.content">
+        <!-- Need to change key to be time value, need to find package -->
+        <p>{{ message.sender }}</p>
+        <p>{{ message.content }}</p>
+      </div>
     </div>
     <div class="chat-input-frame">
       <input class="chat-input" type="text" @keydown.enter="submitToChat" v-model="message" />
@@ -15,6 +17,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
+import { ChatMessage } from '@/models/index';
 
 @Component({})
 export default class Chat extends Vue {
@@ -22,12 +25,17 @@ export default class Chat extends Vue {
 
   count: number = 0;
 
-  // get messages() {
-  //   return this.$store.state.chat;
-  // }
+  get messages() {
+    return this.$store.state.chat.chat;
+  }
 
-  async submitToChat() {
-    // await this.$store.dispatch("sendChatMsg", this.message);
+  submitToChat() {
+    const submittedMessage = {
+      sender: this.$store.state.playerRole,
+      content: this.message,
+    };
+
+    this.$store.dispatch('sendChatMsg', submittedMessage);
     this.message = '';
   }
 }

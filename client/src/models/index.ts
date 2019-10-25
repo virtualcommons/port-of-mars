@@ -1,58 +1,94 @@
-interface InvestmentTypes{
-    [key:string]:number
-    government:number,
-    legacy:number,
-    upkeep:number,
-    finance:number,
-    science:number,
-    culture:number,
+interface InvestmentProperties {
+  n: any;
+  initialCost: number;
+  currentCost: number;
+  currentInventory: number;
+}
+
+interface InvestmentTypes {
+  [key: string]: InvestmentProperties;
+  government: InvestmentProperties;
+  legacy: InvestmentProperties;
+  upkeep: InvestmentProperties;
+  finance: InvestmentProperties;
+  science: InvestmentProperties;
+  culture: InvestmentProperties;
 }
 
 class InvestmentsModel {
-    private investmets: InvestmentTypes = {
-      government: 0,
-      legacy: 0,
-      upkeep: 0,
-      finance: 0,
-      science: 0,
-      culture: 0,
-    }
+  private investments: InvestmentTypes = {
+    government: {
+      n: 'government',
+      initialCost: 0,
+      currentCost: 0,
+      currentInventory: 0,
+    },
+    legacy: {
+      n: 'legacy',
+      initialCost: 0,
+      currentCost: 0,
+      currentInventory: 0,
+    },
+    upkeep: {
+      n: 'upkeep',
+      initialCost: 0,
+      currentCost: 0,
+      currentInventory: 0,
+    },
+    finance: {
+      n: 'finance',
+      initialCost: 0,
+      currentCost: 0,
+      currentInventory: 0,
+    },
+    science: {
+      n: 'science',
+      initialCost: 0,
+      currentCost: 0,
+      currentInventory: 0,
+    },
+    culture: {
+      n: 'culture',
+      initialCost: 0,
+      currentCost: 0,
+      currentInventory: 0,
+    },
+  };
 
-    changeValue(investmentToChange:any, amount:number) {
-      this.investmets[investmentToChange] = amount;
-    }
+  changeInventoryValue(investmentToChange: any, amount: number) {
+    this.investments[investmentToChange].currentInventory = amount;
+  }
 
-    get returnValues() {
-      return this.investmets;
-    }
+  updateCurrentCost(investmentToChange: any, amount: number) {
+    this.investments[investmentToChange].currentCost = amount;
+  }
+
+  get returnValues() {
+    return this.investments;
+  }
 }
 
-
-class ChatMessage {
-    private sender:string;
-
-    private content:string;
-
-    constructor() {
-      this.sender = '';
-      this.content = '';
-    }
+interface ChatMessage {
+  sender: string;
+  content: string;
 }
 
 class ChatModel {
-    private messages:ChatMessage[];
+  private messages: ChatMessage[];
 
-    constructor() {
-      this.messages = [];
-    }
+  constructor() {
+    this.messages = [];
+  }
 
-    addEntry(message:ChatMessage) {
-      this.messages.push(message);
-    }
+  addEntry(message: ChatMessage) {
+    this.messages.push(message);
+  }
+
+  get chat() {
+    return this.messages;
+  }
 }
 
 export {
-  InvestmentsModel,
-  ChatModel,
-  ChatMessage,
+  InvestmentProperties, InvestmentsModel, ChatModel, ChatMessage,
 };

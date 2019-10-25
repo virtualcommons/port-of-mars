@@ -1,17 +1,24 @@
+<template></template>
+
+
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import store from '@/store';
+import Synthetic from '@/tutorial/syntheticdata';
 
-    @Component
+@Component({})
 export default class Master extends Vue {
-        private role:String;
+  private data = new Synthetic();
 
-        private roundCount:number;
+  private role: string = this.data.player;
 
-        constructor() {
-          super();
-          this.role = 'Researcher';
-          this.roundCount = 11;
-        }
+  private round: number = this.data.round;
+
+  private costs: object = this.data.roundCosts;
+
+  constructor() {
+    super();
+
+    this.$store.dispatch('updateRoundCosts', this.costs);
+  }
 }
 </script>

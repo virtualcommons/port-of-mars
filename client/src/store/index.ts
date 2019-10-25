@@ -4,17 +4,18 @@ import { InvestmentsModel, ChatModel, ChatMessage } from '../models';
 
 Vue.use(Vuex);
 
-
 export default new Vuex.Store({
   state: {
     // server side
+    playerRole: 'Curator',
     marsLog: [],
     activeAccomplishmentCards: [],
-    chat: ChatModel,
+    chat: new ChatModel(),
     upkeep: 100,
     phaseTime: 300,
     round: 1,
     players: [],
+    timeblocks: 10,
     playerResources: {},
 
     // client side
@@ -24,7 +25,6 @@ export default new Vuex.Store({
     // this will be merged with the global investments
     // at the end of each round.
     localInvestments: new InvestmentsModel(),
-
   },
   mutations: {
     SET_ACCS(state, payload) {
@@ -32,22 +32,31 @@ export default new Vuex.Store({
       // for all the numbers
       // activecards.push(Data(number))
     },
-    ADD_TO_CHAT(state, payload:ChatMessage) {
-      // state.chat.addEntry(payload);
+    ADD_TO_CHAT(state, payload: ChatMessage) {
+      state.chat.addEntry(payload);
     },
-    CHANGE_LOCAL_INVESTMENT(state:any, payload) {
+    CHANGE_LOCAL_INVESTMENT(state: any, payload) {
       // this is for increment and decrement
-      state.localInvestments.changeValue(payload.investmentName, payload.investmentAmount);
-    },
 
+      state.localInvestments.changeInventoryValue(payload.investmentName, payload.investmentAmount);
+    },
+    CHANGE_LOCAL_ROUND_COSTS(state, payload) {
+      for (const investment in payload) {
+        // console.log(investment,payload[investment]);
+        state.localInvestments.updateCurrentCost(investment, payload[investment]);
+      }
+    },
   },
   getters: {},
   actions: {
-    sendChatMsg(context, message) {
+    sendChatMsg(context, message: ChatMessage) {
       context.commit('ADD_TO_CHAT', message);
     },
     changeLocalInvestment(context, payload) {
       context.commit('CHANGE_LOCAL_INVESTMENT', payload);
+    },
+    updateRoundCosts(context, payload) {
+      context.commit('CHANGE_LOCAL_ROUND_COSTS', payload);
     },
   },
 });
