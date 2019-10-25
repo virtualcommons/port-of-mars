@@ -29,7 +29,6 @@ export default new Vuex.Store({
     localInvestments: new InvestmentsModel(),
   },
   mutations: { // changes state
-
     SET_ACCS(state, payload) {
       // payload is an array of numbers
       // for all the numbers
@@ -49,7 +48,6 @@ export default new Vuex.Store({
         state.localInvestments.updateCurrentCost(investment, payload[investment]);
       }
     },
-
     /**
      * SET_LAYOUT() mutation
      * Changes the state of the layout state.
