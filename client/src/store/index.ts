@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { InvestmentsModel,ChatModel,ChatMessage }  from "../models";
-Vue.use(Vuex);
+import { InvestmentsModel, ChatModel, ChatMessage } from '../models';
 
+Vue.use(Vuex);
 
 
 export default new Vuex.Store({
@@ -18,13 +18,13 @@ export default new Vuex.Store({
     playerResources: {},
 
     // client side
-    //investments: {},
+    // investments: {},
     layout: 'primary-layout',
 
-    //this will be merged with the global investments
-    //at the end of each round.
-    localInvestments: new InvestmentsModel,
-    
+    // this will be merged with the global investments
+    // at the end of each round.
+    localInvestments: new InvestmentsModel(),
+
   },
   mutations: {
     SET_ACCS(state, payload) {
@@ -33,14 +33,13 @@ export default new Vuex.Store({
       // activecards.push(Data(number))
     },
     ADD_TO_CHAT(state, payload:ChatMessage) {
-      //state.chat.addEntry(payload);
+      // state.chat.addEntry(payload);
     },
-    CHANGE_LOCAL_INVESTMENT(state:any, payload){
-      //this is for increment and decrement
-      state.localInvestments.changeValue(payload.investmentName,payload.investmentAmount);
+    CHANGE_LOCAL_INVESTMENT(state:any, payload) {
+      // this is for increment and decrement
+      state.localInvestments.changeValue(payload.investmentName, payload.investmentAmount);
+    },
 
-    },
-    
   },
   getters: {},
   actions: {

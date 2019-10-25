@@ -46,7 +46,7 @@ import Asset from '@/components/Asset.vue';
 })
 export default class ContainerInvestments extends Vue {
   @Prop({ default: 4 }) private timeblockStatus!: number;
-  
+
   private investmentData:object = this.$store.state.localInvestments.returnValues;
 }
 </script>

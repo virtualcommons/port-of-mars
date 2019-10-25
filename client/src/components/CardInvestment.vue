@@ -25,32 +25,30 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 
 @Component
 export default class CardInvestment extends Vue {
-  @Prop({default:'ohDear'})
+  @Prop({ default: 'ohDear' })
   private investmentName!:string;
 
-  @Prop({default:0})
+  @Prop({ default: 0 })
   private investmentAmount!:number;
-  
 
-  incrementInvestment(){
+
+  incrementInvestment() {
     this.$store.dispatch('changeLocalInvestment',
       {
-        investmentName:this.investmentName,
-        investmentAmount:this.investmentAmount+1,
+        investmentName: this.investmentName,
+        investmentAmount: this.investmentAmount + 1,
       });
   }
 
-  decrementInvestment(){
-    if(this.investmentAmount > 0){
+  decrementInvestment() {
+    if (this.investmentAmount > 0) {
       this.$store.dispatch('changeLocalInvestment',
-      {
-        investmentName:this.investmentName,
-        investmentAmount:this.investmentAmount-1,
-      });
+        {
+          investmentName: this.investmentName,
+          investmentAmount: this.investmentAmount - 1,
+        });
     }
-    
   }
-
 }
 </script>
 
@@ -83,11 +81,11 @@ export default class CardInvestment extends Vue {
     width: 30%;
     height: 100%;
     border-left: 0.125rem solid #F5F5F5;
-    
+
     display: flex;
     flex-direction: column;
-    
-    
+
+
   }
 
   .investment-increment{
@@ -96,7 +94,7 @@ export default class CardInvestment extends Vue {
     margin: auto;
     padding-top: .6rem;
     border-bottom: 0.125rem solid #F5F5F5;
-    
+
   }
 
   .investment-decrement{
