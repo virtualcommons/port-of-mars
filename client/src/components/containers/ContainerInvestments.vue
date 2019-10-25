@@ -13,15 +13,15 @@
 
     <BRow class="investments-cards">
       <BRow class="investments-cards-top">
-        <CardInvestment />
-        <CardInvestment />
-        <CardInvestment />
+        <CardInvestment investmentName="upkeep" :investmentAmount='investmentData.upkeep'/>
+        <CardInvestment investmentName="finance" :investmentAmount='investmentData.finance'/>
+        <CardInvestment investmentName="legacy" :investmentAmount='investmentData.legacy'/>
       </BRow>
 
       <BRow class="investments-cards-bottom">
-        <CardInvestment />
-        <CardInvestment />
-        <CardInvestment />
+        <CardInvestment investmentName="government" :investmentAmount='investmentData.government'/>
+        <CardInvestment investmentName="culture" :investmentAmount='investmentData.culture'/>
+        <CardInvestment investmentName="science" :investmentAmount='investmentData.science'/>
       </BRow>
     </BRow>
   </BContainer>
@@ -46,6 +46,8 @@ import Asset from '@/components/Asset.vue';
 })
 export default class ContainerInvestments extends Vue {
   @Prop({ default: 4 }) private timeblockStatus!: number;
+  
+  private investmentData:object = this.$store.state.localInvestments.returnValues;
 }
 </script>
 
