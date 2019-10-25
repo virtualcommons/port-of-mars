@@ -1,34 +1,68 @@
 <template>
   <div class="card-investment">
-    <div class='card-type'>
-      Type
-    </div>
-    <div class='card-increment-and-decrement-holder'>
-      <div class='investment-increment'>
-        +
+    <div class='investment-options'>
+      <div class='card-type'>
+        Type
       </div>
+      <div class='card-increment-and-decrement-holder'>
+        <div class='investment-increment' @click="incrementInvestment">
+          +
+        </div>
 
-      <div class='investment-decrement'>
-        -
+        <div class='investment-decrement' @click="decrementInvestment">
+          -
+        </div>
       </div>
+    </div>
+    <div class='investment-amount'>
+      <p>{{`${investmentName}:${investmentAmount}`}}</p>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 
 @Component
-
 export default class CardInvestment extends Vue {
+  @Prop({default:'ohDear'})
+  private investmentName!:string;
 
+  @Prop({default:0})
+  private investmentAmount!:number;
   
+
+  incrementInvestment(){
+    this.$store.dispatch('changeLocalInvestment',
+      {
+        investmentName:this.investmentName,
+        investmentAmount:this.investmentAmount+1,
+      });
+  }
+
+  decrementInvestment(){
+    if(this.investmentAmount > 0){
+      this.$store.dispatch('changeLocalInvestment',
+      {
+        investmentName:this.investmentName,
+        investmentAmount:this.investmentAmount-1,
+      });
+    }
+    
+  }
 
 }
 </script>
 
 <style scoped>
-  .card-investment {
+
+  .investment-amount{
+    color:white;
+    text-align: center;
+  }
+
+
+  .investment-options {
     height: 7rem;
     width: 9.5rem;
     border: 0.125rem solid #F5F5F5;
@@ -37,6 +71,7 @@ export default class CardInvestment extends Vue {
     align-items: center;
     text-align: center;
     overflow:hidden;
+    color:white;
   }
 
 

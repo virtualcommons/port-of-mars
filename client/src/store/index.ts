@@ -24,7 +24,7 @@ export default new Vuex.Store({
 
     //this will be merged with the global investments
     //at the end of each round.
-    localInvestments: InvestmentsModel,
+    localInvestments: new InvestmentsModel,
     
   },
   mutations: {
@@ -36,9 +36,12 @@ export default new Vuex.Store({
     ADD_TO_CHAT(state, payload:ChatMessage) {
       //state.chat.addEntry(payload);
     },
-    SET_LOCAL_INVESTMENT(state,{investmentToChange:string,amount:number}){
-      //state.localInvestments.
-    }
+    CHANGE_LOCAL_INVESTMENT(state:any, payload){
+      //this is for increment and decrement
+      state.localInvestments.changeValue(payload.investmentName,payload.investmentAmount);
+
+    },
+    
   },
   getters: {
   },
@@ -46,8 +49,8 @@ export default new Vuex.Store({
     sendChatMsg(context, message) {
       context.commit('ADD_TO_CHAT', message);
     },
-    addToLocalInvestment(context, payload) {
-      context.commit('SET_LOCAL_INVESTMENT', payload);
+    changeLocalInvestment(context, payload) {
+      context.commit('CHANGE_LOCAL_INVESTMENT', payload);
     },
   },
 });

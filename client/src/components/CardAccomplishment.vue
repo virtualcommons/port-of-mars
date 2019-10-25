@@ -1,7 +1,7 @@
 <template>
   <div class="member">
     <div class="member-notif">
-      <p class="member-notif-num">0</p>
+      <p class="member-notif-num">1</p>
       <!-- will need to change on props -->
     </div>
     <p class="member-score">0</p>
