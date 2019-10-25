@@ -50,6 +50,7 @@ export default class ContainerInvestments extends Vue {
   private investmentData: object = this.$store.state.localInvestments.returnValues;
 
   // updated() {
+<<<<<<< HEAD
   // console.log(this.timeblockStatus);
   // let decrement: number = 0;
   // for(let investment in this.investmentData) {
@@ -58,6 +59,16 @@ export default class ContainerInvestments extends Vue {
   // }
   // this.timeblockStatus -= decrement;
   // console.log(this.timeblockStatus)
+=======
+  //   console.log(this.timeblockStatus);
+  //   let decrement: number = 0;
+  //   for(let investment in this.investmentData) {
+  //     decrement += (this.investmentData[investment].currentCost *
+  //   this.investmentData[investment].currentInventory)
+  //   }
+  //   this.timeblockStatus -= decrement;
+  //   console.log(this.timeblockStatus)
+>>>>>>> feat: implement dynamic layouts using Vuex (#31)
   // }
 }
 </script>
