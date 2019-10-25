@@ -1,11 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-<<<<<<< HEAD
-import { InvestmentsModel,ChatModel,ChatMessage }  from "../models";
-=======
 import { InvestmentsModel, ChatModel, ChatMessage } from '../models';
 
->>>>>>> 1ffe7d7dd7d709c194e9dba192e8e45a5b7d24ac
 Vue.use(Vuex);
 
 
