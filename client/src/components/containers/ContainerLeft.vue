@@ -4,7 +4,7 @@
       <!-- will eventually refactor -->
       <Round />
       <Notification />
-      <Profile :playerRole="'Politician'" />
+      <Profile :playerRole='this.$store.state.playerRole' />
     </div>
     <MarsLog />
   </div>

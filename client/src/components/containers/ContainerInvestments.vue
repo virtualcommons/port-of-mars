@@ -4,11 +4,11 @@
       <p class="investments-topbar-title">Investments</p>
       <StatusBar
         class="investments-topbar-statusbar"
-        :setWidth="`${timeblockStatus * 10}`"
+        :setWidth="`${ this.$store.state.localInvestments.localDecrement  * 10 }`"
         :colorOuter="'statusbar-outer-gray'"
         :colorInner="'statusbar-inner-gray'"
       />
-      <p class="investments-topbar-status">( {{ timeblockStatus }} )</p>
+      <p class="investments-topbar-status">({{ this.$store.state.localInvestments.localDecrement }} )</p>
     </BRow>
 
     <BRow class="investments-cards">
@@ -45,12 +45,12 @@ import Asset from '@/components/Asset.vue';
   },
 })
 export default class ContainerInvestments extends Vue {
-  private timeblockStatus: number = 10;
 
   private investmentData: object = this.$store.state.localInvestments.returnValues;
 
+
   updated() {
-    console.log(this.timeblockStatus);
+    //console.log(this.timeblockStatus);
     // let decrement: number = 0;
     // for(let investment in this.investmentData) {
     //   decrement += (this.investmentData[investment].currentCost * this.investmentData[investment].currentInventory)

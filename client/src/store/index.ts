@@ -9,7 +9,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     // server side
-    playerRole: 'Curator',
+    playerRole: '',
     marsLog: [],
     activeAccomplishmentCards: [],
     chat: new ChatModel(),
@@ -48,6 +48,9 @@ export default new Vuex.Store({
         state.localInvestments.updateCurrentCost(investment, payload[investment]);
       }
     },
+    SET_PLAYER_ROLE(state,payload){
+      state.playerRole = payload;
+    }
     
   },
   getters: {},
@@ -61,5 +64,8 @@ export default new Vuex.Store({
     updateRoundCosts(context, payload) {
       context.commit('CHANGE_LOCAL_ROUND_COSTS', payload);
     },
+    setPlayerRole(context,payload){
+      context.commit('SET_PLAYER_ROLE',payload);
+    }
   },
 });

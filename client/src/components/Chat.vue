@@ -4,8 +4,8 @@
     <div class="chat-chat">
       <div class="chat-message" v-for="message in messages" :key="message.content">
         <!-- Need to change key to be time value, need to find package -->
-        <p>{{ message.sender }}</p>
-        <p>{{ message.content }}</p>
+        <p class='chat-message-header'>{{ message.sender }}:</p>
+        <p class='chat-message-content'>{{ message.content }}</p>
       </div>
     </div>
     <div class="chat-input-frame">
@@ -67,6 +67,20 @@ export default class Chat extends Vue {
 
 .chat-message {
   color: #F5F5F5;
+  background-color: white;
+  border-radius: .75rem;
+  overflow:hidden;
+  margin: 1rem 0.75rem 1rem 5rem;
+}
+
+.chat-message-header{
+  color:orange;
+  margin: 0.2rem 0.75rem 0.2rem 1rem;
+}
+
+.chat-message-content{
+  color:black;
+  margin: 0.2rem 0.75rem 0.2rem 1rem;
 }
 
 .chat-input-frame {

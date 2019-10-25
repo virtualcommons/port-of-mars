@@ -66,6 +66,15 @@ class InvestmentsModel {
   get returnValues() {
     return this.investments;
   }
+
+  get localDecrement(){
+        let decrement = 10;
+        for(let investment in this.investments){
+            decrement -= this.investments[investment].currentCost*this.investments[investment].currentInventory;
+        }
+        //console.log(decrement);
+        return decrement;
+  }
 }
 
 interface ChatMessage {
