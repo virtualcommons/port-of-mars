@@ -29,7 +29,6 @@ export default new Vuex.Store({
     localInvestments: new InvestmentsModel(),
   },
   mutations: { // changes state
-
     SET_ACCS(state, payload) {
       // payload is an array of numbers
       // for all the numbers
@@ -44,12 +43,17 @@ export default new Vuex.Store({
       state.localInvestments.changeInventoryValue(payload.investmentName, payload.investmentAmount);
     },
     CHANGE_LOCAL_ROUND_COSTS(state, payload) {
-      for (const investment in payload) {
-        // console.log(investment,payload[investment]);
-        state.localInvestments.updateCurrentCost(investment, payload[investment]);
-      }
+      Object.keys(payload).forEach((key) => {
+        state.localInvestments.updateCurrentCost(key, payload[key]);
+      });
+      // for (const investment in payload) {
+      //   // console.log(investment,payload[investment]);
+      //   state.localInvestments.updateCurrentCost(investment, payload[investment]);
+      // }
     },
-
+    SET_PLAYER_ROLE(state, payload) {
+      state.playerRole = payload;
+    },
     /**
      * SET_LAYOUT() mutation
      * Changes the state of the layout state.
@@ -72,9 +76,6 @@ export default new Vuex.Store({
    */
     layout(state) {
       return state.layout;
-    },
-    SET_PLAYER_ROLE(state, payload) {
-      state.playerRole = payload;
     },
   },
   actions: {
