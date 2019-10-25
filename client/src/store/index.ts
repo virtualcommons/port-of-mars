@@ -5,11 +5,11 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-
     // server side
     marsLog: [],
     activeAccomplishmentCards: [],
     chat: [],
+    // chat: Array<string>(),
     upkeep: 100,
     phaseTime: 300,
     round: 1,
@@ -39,12 +39,11 @@ export default new Vuex.Store({
     ADD_TO_CHAT(state, payload) {
       // this.state.chat.push(payload);
     },
-    SET_LOCAL_INVESTMENT(state:object, payload:object) {
+    SET_LOCAL_INVESTMENT(state: object, payload: object) {
       // state.localInvestments[payload.name] = payload.amount;
     },
   },
-  getters: {
-  },
+  getters: {},
   actions: {
     sendChatMsg(context, message) {
       context.commit('ADD_TO_CHAT', message);

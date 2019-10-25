@@ -32,7 +32,7 @@ export default class ContainerRight extends Vue {}
 
 <style scoped>
 .container-right {
-  height: 100%;
+  height: 100vh;
   width: 100%;
   padding: 1rem 1rem 1rem 0rem;
   display: flex;
