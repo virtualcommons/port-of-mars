@@ -5,9 +5,9 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
+    "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
-    "test:unit": "vue-cli-service test:unit"
+    "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "bootstrap": "^4.3.1",
@@ -28,12 +28,12 @@
   "devDependencies": {
     "@types/jest": "^24.0.19",
     "@types/socket.io-client": "^1.4.32",
-    "@vue/cli-plugin-babel": "^3.12.0",
-    "@vue/cli-plugin-e2e-cypress": "^3.12.0",
-    "@vue/cli-plugin-eslint": "^3.12.0",
-    "@vue/cli-plugin-typescript": "^3.12.0",
-    "@vue/cli-plugin-unit-jest": "^3.12.0",
-    "@vue/cli-service": "^3.12.0",
+    "@vue/cli-plugin-babel": "^4.0.5",
+    "@vue/cli-plugin-e2e-cypress": "^4.0.5",
+    "@vue/cli-plugin-eslint": "^4.0.5",
+    "@vue/cli-plugin-typescript": "^4.0.5",
+    "@vue/cli-plugin-unit-jest": "^4.0.5",
+    "@vue/cli-service": "^4.0.5",
     "@vue/eslint-config-airbnb": "^4.0.1",
     "@vue/eslint-config-typescript": "^4.0.0",
     "@vue/test-utils": "1.0.0-beta.29",

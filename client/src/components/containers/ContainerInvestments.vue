@@ -4,24 +4,26 @@
       <p class="investments-topbar-title">Investments</p>
       <StatusBar
         class="investments-topbar-statusbar"
-        :setWidth="`${ this.$store.state.localInvestments.localDecrement  * 10 }`"
+        :setWidth="`${this.$store.state.localInvestments.localDecrement * 10}`"
         :colorOuter="'statusbar-outer-gray'"
         :colorInner="'statusbar-inner-gray'"
       />
-      <p class="investments-topbar-status">({{ this.$store.state.localInvestments.localDecrement }} )</p>
+      <p class="investments-topbar-status">
+        ({{ this.$store.state.localInvestments.localDecrement }} )
+      </p>
     </BRow>
 
     <BRow class="investments-cards">
       <BRow class="investments-cards-top">
-        <CardInvestment :investmentData="investmentData.upkeep"/>
-        <CardInvestment :investmentData="investmentData.finance"/>
-        <CardInvestment :investmentData="investmentData.legacy"/>
+        <CardInvestment :investmentData="investmentData.upkeep" />
+        <CardInvestment :investmentData="investmentData.finance" />
+        <CardInvestment :investmentData="investmentData.legacy" />
       </BRow>
 
       <BRow class="investments-cards-bottom">
-        <CardInvestment :investmentData="investmentData.government"/>
-        <CardInvestment :investmentData="investmentData.culture"/>
-        <CardInvestment :investmentData="investmentData.science"/>
+        <CardInvestment :investmentData="investmentData.government" />
+        <CardInvestment :investmentData="investmentData.culture" />
+        <CardInvestment :investmentData="investmentData.science" />
       </BRow>
     </BRow>
   </BContainer>
@@ -41,20 +43,18 @@ import Asset from '@/components/Asset.vue';
     BCol,
     StatusBar,
     CardInvestment,
-    Asset,
-  },
+    Asset
+  }
 })
 export default class ContainerInvestments extends Vue {
-
   private investmentData: object = this.$store.state.localInvestments.returnValues;
-
 
   updated() {
     //console.log(this.timeblockStatus);
     // let decrement: number = 0;
     // for(let investment in this.investmentData) {
-    //   decrement += (this.investmentData[investment].currentCost
-    //                * this.investmentData[investment].currentInventory)
+    //   decrement += (this.investmentData[investment].currentCost *
+    // this.investmentData[investment].currentInventory)
     // }
     // this.timeblockStatus -= decrement;
     // console.log(this.timeblockStatus)
