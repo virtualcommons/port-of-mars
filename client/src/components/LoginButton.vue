@@ -1,6 +1,6 @@
 <template>
     <div class="login-button-container">
-      <router-link to="/gb">
+      <router-link to="/game">
         <BButton>Go to dashboard</BButton>
       </router-link>
     </div>

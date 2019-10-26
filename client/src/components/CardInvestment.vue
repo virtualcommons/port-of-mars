@@ -28,10 +28,13 @@ export default class CardInvestment extends Vue {
   @Prop(InvestmentProperties) private investmentData!: InvestmentProperties;
 
   incrementInvestment() {
-    this.$store.dispatch('changeLocalInvestment', {
-      investmentName: this.investmentData.n,
-      investmentAmount: this.investmentData.currentInventory + 1,
-    });
+    if(((this.$store.state.localInvestments.localDecrement - (this.investmentData.currentCost)) >=0) && this.investmentData.currentCost > 0){
+      this.$store.dispatch('changeLocalInvestment', {
+        investmentName: this.investmentData.n,
+        investmentAmount: this.investmentData.currentInventory + 1,
+      });
+    } 
+    
   }
 
   decrementInvestment() {

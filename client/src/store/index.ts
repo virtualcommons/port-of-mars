@@ -4,10 +4,12 @@ import { InvestmentsModel, ChatModel, ChatMessage } from '../models';
 
 Vue.use(Vuex);
 
+
+
 export default new Vuex.Store({
   state: {
     // server side
-    playerRole: 'Curator',
+    playerRole: '',
     marsLog: [],
     activeAccomplishmentCards: [],
     chat: new ChatModel(),
@@ -19,14 +21,13 @@ export default new Vuex.Store({
     playerResources: {},
 
     // client side
-    // investments: {},
-    layout: 'primary-layout',
+    layout: 'default-layout',
 
     // this will be merged with the global investments
     // at the end of each round.
     localInvestments: new InvestmentsModel(),
   },
-  mutations: {
+  mutations: { // changes state
     SET_ACCS(state, payload) {
       // payload is an array of numbers
       // for all the numbers
@@ -46,8 +47,19 @@ export default new Vuex.Store({
         state.localInvestments.updateCurrentCost(investment, payload[investment]);
       }
     },
+    SET_LAYOUT(state, payload) { // change state of the layout state
+      state.layout = payload;
+    },
+
   },
-  getters: {},
+  getters: {
+    layout(state) { // get state of layout variable
+      return state.layout;
+    },
+    SET_PLAYER_ROLE(state,payload){
+      state.playerRole = payload;
+    }
+  },
   actions: {
     sendChatMsg(context, message: ChatMessage) {
       context.commit('ADD_TO_CHAT', message);
@@ -58,5 +70,8 @@ export default new Vuex.Store({
     updateRoundCosts(context, payload) {
       context.commit('CHANGE_LOCAL_ROUND_COSTS', payload);
     },
+    setPlayerRole(context,payload){
+      context.commit('SET_PLAYER_ROLE',payload);
+    }
   },
 });
