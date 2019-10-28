@@ -44,10 +44,13 @@ export default new Vuex.Store({
       state.localInvestments.changeInventoryValue(payload.investmentName, payload.investmentAmount);
     },
     CHANGE_LOCAL_ROUND_COSTS(state, payload) {
-      for (const investment in payload) {
-        // console.log(investment,payload[investment]);
-        state.localInvestments.updateCurrentCost(investment, payload[investment]);
-      }
+      Object.keys(payload).forEach((key) => {
+        state.localInvestments.updateCurrentCost(key, payload[key]);
+      });
+      // for (const investment in payload) {
+      //   // console.log(investment,payload[investment]);
+      //   state.localInvestments.updateCurrentCost(investment, payload[investment]);
+      // }
     },
 
     /**
@@ -60,7 +63,9 @@ export default new Vuex.Store({
     SET_LAYOUT(state: any, newLayout: string) {
       state.layout = newLayout;
     },
-
+    SET_PLAYER_ROLE(state, payload) {
+      state.playerRole = payload;
+    },
   },
   getters: {
 
@@ -72,9 +77,6 @@ export default new Vuex.Store({
    */
     layout(state) {
       return state.layout;
-    },
-    SET_PLAYER_ROLE(state, payload) {
-      state.playerRole = payload;
     },
   },
   actions: {

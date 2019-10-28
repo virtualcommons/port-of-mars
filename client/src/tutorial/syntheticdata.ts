@@ -1,5 +1,5 @@
 export default class Synthetic {
-  playerRole: string = 'Pioneer';
+  playerRole: string = 'Curator';
 
   roundNumber: number = 0;
 
