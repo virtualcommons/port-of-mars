@@ -43,21 +43,14 @@ export default new Vuex.Store({
       state.localInvestments.changeInventoryValue(payload.investmentName, payload.investmentAmount);
     },
     CHANGE_LOCAL_ROUND_COSTS(state, payload) {
-      for (const investment in payload) {
-        // console.log(investment,payload[investment]);
-        state.localInvestments.updateCurrentCost(investment, payload[investment]);
-      }
+      Object.keys(payload).forEach((key) => {
+        state.localInvestments.updateCurrentCost(key, payload[key]);
+      });
+      // for (const investment in payload) {
+      //   // console.log(investment,payload[investment]);
+      //   state.localInvestments.updateCurrentCost(investment, payload[investment]);
+      // }
     },
-<<<<<<< HEAD
-<<<<<<< HEAD
-    SET_PLAYER_ROLE(state,payload){
-      state.playerRole = payload;
-    }
-    
-=======
-    SET_LAYOUT(state, payload) { // change state of the layout state
-      state.layout = payload;
-=======
 
     /**
      * SET_LAYOUT() mutation
@@ -68,12 +61,25 @@ export default new Vuex.Store({
      */
     SET_LAYOUT(state: any, newLayout: string) {
       state.layout = newLayout;
->>>>>>> 6665ef2... feat: add button to game that uses tutorial layout
     },
-
+    SET_PLAYER_ROLE(state,payload){
+      state.playerRole = payload;
+    },
+    /**
+     * SET_LAYOUT() mutation
+     * Changes the state of the layout state.
+     * @param state The state of the application.
+     * @param payload The string value of layout.
+     *
+     */
+    SET_LAYOUT(state: any, newLayout: string) {
+      state.layout = newLayout;
+    },
+    SET_PLAYER_ROLE(state, payload) {
+      state.playerRole = payload;
+    },
   },
   getters: {
-
     /**
    * layout() getter
    * Gets the state out of state variable layout.
@@ -83,22 +89,6 @@ export default new Vuex.Store({
     layout(state) {
       return state.layout;
     },
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 2a53ed8... feat: start implementation of dynamic layouts using Vuex and VueRouter (#31)
-=======
-<<<<<<< HEAD
-    SET_PLAYER_ROLE(state,payload){
-      state.playerRole = payload;
-    }
-=======
->>>>>>> 6591497... refactor: implement dynamic layouts with store
->>>>>>> 03c6741... feat: create dynamic layout components
-=======
-    SET_PLAYER_ROLE(state,payload){
-      state.playerRole = payload;
-    },
->>>>>>> 6665ef2... feat: add button to game that uses tutorial layout
   },
   actions: {
     sendChatMsg(context, message: ChatMessage) {

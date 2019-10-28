@@ -9,7 +9,7 @@
         :colorInner="'statusbar-inner-gray'"
       />
       <p class="investments-topbar-status">
-        ({{ this.$store.state.localInvestments.localDecrement }} )
+        ( {{ this.$store.state.localInvestments.localDecrement }} )
       </p>
     </BRow>
 
@@ -49,16 +49,16 @@ import Asset from '@/components/Asset.vue';
 export default class ContainerInvestments extends Vue {
   private investmentData: object = this.$store.state.localInvestments.returnValues;
 
-  updated() {
-    //console.log(this.timeblockStatus);
-    // let decrement: number = 0;
-    // for(let investment in this.investmentData) {
-    //   decrement += (this.investmentData[investment].currentCost *
-    // this.investmentData[investment].currentInventory)
-    // }
-    // this.timeblockStatus -= decrement;
-    // console.log(this.timeblockStatus)
-  }
+  // updated() {
+  // console.log(this.timeblockStatus);
+  // let decrement: number = 0;
+  // for(let investment in this.investmentData) {
+  //   decrement += (this.investmentData[investment].currentCost
+  //                * this.investmentData[investment].currentInventory)
+  // }
+  // this.timeblockStatus -= decrement;
+  // console.log(this.timeblockStatus)
+  // }
 }
 </script>
 

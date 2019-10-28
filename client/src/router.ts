@@ -13,7 +13,7 @@ export default new Router({
       component: LoginPage,
     },
     {
-      path: '/gb',
+      path: '/game',
       name: 'GameDashboard',
       component: GameDashboard,
     },
