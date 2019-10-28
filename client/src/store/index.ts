@@ -4,8 +4,6 @@ import { InvestmentsModel, ChatModel, ChatMessage } from '../models';
 
 Vue.use(Vuex);
 
-
-
 export default new Vuex.Store({
   state: {
     // server side
@@ -62,7 +60,16 @@ export default new Vuex.Store({
     layout(state) { // get state of layout variable
       return state.layout;
     },
+<<<<<<< HEAD
 >>>>>>> 2a53ed8... feat: start implementation of dynamic layouts using Vuex and VueRouter (#31)
+=======
+<<<<<<< HEAD
+    SET_PLAYER_ROLE(state,payload){
+      state.playerRole = payload;
+    }
+=======
+>>>>>>> 6591497... refactor: implement dynamic layouts with store
+>>>>>>> 03c6741... feat: create dynamic layout components
   },
   actions: {
     sendChatMsg(context, message: ChatMessage) {
