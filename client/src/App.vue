@@ -7,7 +7,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 
-/* bootstrap imports */
+// imports: bootstrap
 import BootstrapVue from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
@@ -15,7 +15,7 @@ import './custom.scss';
 
 import { Socket } from 'vue-socket.io-extended';
 
-/* imports: layouts */
+// imports: layouts
 import DefaultLayout from '@/layouts/DefaultLayout.vue';
 import TutorialLayout from '@/layouts/TutorialLayout.vue';
 
@@ -31,6 +31,12 @@ Vue.use(BootstrapVue);
 export default class Home extends Vue {
   private defaultLayout: string = 'default';
 
+  /**
+   * getLayout() computed property
+   * Gets the value of the layout from the vuex store
+   * @return the value of layout
+   *
+   */
   get layout() {
     return this.$store.getters.layout;
   }
