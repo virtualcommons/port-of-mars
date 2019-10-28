@@ -9,7 +9,7 @@
         :colorInner="'statusbar-inner-gray'"
       />
       <p class="investments-topbar-status">
-        ({{ this.$store.state.localInvestments.localDecrement }} )
+        ( {{ this.$store.state.localInvestments.localDecrement }} )
       </p>
     </BRow>
 
