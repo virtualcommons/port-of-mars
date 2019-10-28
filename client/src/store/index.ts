@@ -28,6 +28,7 @@ export default new Vuex.Store({
     localInvestments: new InvestmentsModel(),
   },
   mutations: { // changes state
+
     SET_ACCS(state, payload) {
       // payload is an array of numbers
       // for all the numbers
