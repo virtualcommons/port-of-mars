@@ -59,6 +59,7 @@ export default class Home extends Vue {
 <style >
   html, body{
     font-family: 'Space Mono', monospace !important;
+    background-color: #1e2223;
   }
 
   .game {
