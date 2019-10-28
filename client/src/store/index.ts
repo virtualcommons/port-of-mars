@@ -5,7 +5,6 @@ import { InvestmentsModel, ChatModel, ChatMessage } from '../models';
 Vue.use(Vuex);
 
 
-
 export default new Vuex.Store({
   state: {
     // server side
@@ -21,6 +20,8 @@ export default new Vuex.Store({
     playerResources: {},
 
     // client side
+
+    // state variable for layout
     layout: 'default-layout',
 
     // this will be merged with the global investments
@@ -28,6 +29,7 @@ export default new Vuex.Store({
     localInvestments: new InvestmentsModel(),
   },
   mutations: { // changes state
+
     SET_ACCS(state, payload) {
       // payload is an array of numbers
       // for all the numbers
@@ -47,18 +49,33 @@ export default new Vuex.Store({
         state.localInvestments.updateCurrentCost(investment, payload[investment]);
       }
     },
-    SET_LAYOUT(state, payload) { // change state of the layout state
-      state.layout = payload;
+
+    /**
+     * SET_LAYOUT() mutation
+     * Changes the state of the layout state.
+     * @param state The state of the application.
+     * @param payload The string value of layout.
+     *
+     */
+    SET_LAYOUT(state: any, newLayout: string) {
+      state.layout = newLayout;
     },
 
   },
   getters: {
-    layout(state) { // get state of layout variable
+
+    /**
+   * layout() getter
+   * Gets the state out of state variable layout.
+   * @return The state of layout.
+   *
+   */
+    layout(state) {
       return state.layout;
     },
-    SET_PLAYER_ROLE(state,payload){
+    SET_PLAYER_ROLE(state, payload) {
       state.playerRole = payload;
-    }
+    },
   },
   actions: {
     sendChatMsg(context, message: ChatMessage) {
@@ -70,8 +87,8 @@ export default new Vuex.Store({
     updateRoundCosts(context, payload) {
       context.commit('CHANGE_LOCAL_ROUND_COSTS', payload);
     },
-    setPlayerRole(context,payload){
-      context.commit('SET_PLAYER_ROLE',payload);
-    }
+    setPlayerRole(context, payload) {
+      context.commit('SET_PLAYER_ROLE', payload);
+    },
   },
 });
