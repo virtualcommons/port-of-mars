@@ -10,11 +10,19 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
+      meta: { layout: 'default-layout' },
       component: LoginPage,
     },
     {
       path: '/game',
       name: 'GameDashboard',
+      meta: { layout: 'default-layout' },
+      component: GameDashboard,
+    },
+    {
+      path: '/tutorial',
+      name: 'Tutorial',
+      meta: { layout: 'tutorial-layout' },
       component: GameDashboard,
     },
     // {
