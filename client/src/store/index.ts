@@ -28,6 +28,7 @@ export default new Vuex.Store({
     localInvestments: new InvestmentsModel(),
   },
   mutations: { // changes state
+
     SET_ACCS(state, payload) {
       // payload is an array of numbers
       // for all the numbers
@@ -47,6 +48,20 @@ export default new Vuex.Store({
         state.localInvestments.updateCurrentCost(investment, payload[investment]);
       }
     },
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    SET_PLAYER_ROLE(state,payload){
+      state.playerRole = payload;
+    }
+    
+=======
+    SET_LAYOUT(state, payload) { // change state of the layout state
+      state.layout = payload;
+=======
+
+>>>>>>> feat: add button to game that uses tutorial layout
     /**
      * SET_LAYOUT() mutation
      * Changes the state of the layout state.
@@ -56,6 +71,10 @@ export default new Vuex.Store({
      */
     SET_LAYOUT(state: any, newLayout: string) {
       state.layout = newLayout;
+<<<<<<< HEAD
+=======
+>>>>>>> 6665ef2... feat: add button to game that uses tutorial layout
+>>>>>>> feat: add button to game that uses tutorial layout
     },
 
   },
@@ -70,9 +89,28 @@ export default new Vuex.Store({
     layout(state) {
       return state.layout;
     },
+<<<<<<< HEAD
     SET_PLAYER_ROLE(state, payload) {
       state.playerRole = payload;
     },
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 2a53ed8... feat: start implementation of dynamic layouts using Vuex and VueRouter (#31)
+=======
+<<<<<<< HEAD
+    SET_PLAYER_ROLE(state,payload){
+      state.playerRole = payload;
+    }
+=======
+>>>>>>> 6591497... refactor: implement dynamic layouts with store
+>>>>>>> 03c6741... feat: create dynamic layout components
+=======
+    SET_PLAYER_ROLE(state,payload){
+      state.playerRole = payload;
+    },
+>>>>>>> 6665ef2... feat: add button to game that uses tutorial layout
+>>>>>>> feat: add button to game that uses tutorial layout
   },
   actions: {
     sendChatMsg(context, message: ChatMessage) {
