@@ -6,10 +6,20 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 
+// imports: layouts
+import DefaultLayout from '@/layouts/DefaultLayout.vue';
+import TutorialLayout from '@/layouts/TutorialLayout.vue';
+
 // const socket = io('http://localhost:3005');
 // Vue.use(VueSocketIOExt, socket);
 
 Vue.use(Vuex);
+
+Vue.config.productionTip = false;
+
+// register layouts globally at entry point of app
+Vue.component('default-layout', DefaultLayout);
+Vue.component('tutorial-layout', TutorialLayout);
 
 Vue.config.productionTip = false;
 
