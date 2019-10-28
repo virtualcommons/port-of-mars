@@ -1,5 +1,5 @@
 export default class Synthetic {
-  playerRole: string = 'Curator';
+  playerRole: string = 'Pioneer';
 
   roundNumber: number = 0;
 
@@ -11,7 +11,6 @@ export default class Synthetic {
     science: -1,
     culture: 2,
   }
-
 
   get player() {
     return this.playerRole;
