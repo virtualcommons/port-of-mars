@@ -43,8 +43,8 @@ import Asset from '@/components/Asset.vue';
     BCol,
     StatusBar,
     CardInvestment,
-    Asset
-  }
+    Asset,
+  },
 })
 export default class ContainerInvestments extends Vue {
   private investmentData: object = this.$store.state.localInvestments.returnValues;
