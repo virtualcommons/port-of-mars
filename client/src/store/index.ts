@@ -4,7 +4,6 @@ import { InvestmentsModel, ChatModel, ChatMessage } from '../models';
 
 Vue.use(Vuex);
 
-
 export default new Vuex.Store({
   state: {
     // server side
