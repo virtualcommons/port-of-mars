@@ -1,16 +1,13 @@
 <template>
   <div class="card-investment">
     <div class="investment-options">
-      <div class="card-type">
-        Type {{ investmentData.currentCost }}
-      </div>
+      <div class="card-type">Type {{ investmentData.currentCost }}</div>
       <div class="card-increment-and-decrement-holder">
         <div class="investment-increment" @click="incrementInvestment">
-          +
+          <p>+</p>
         </div>
-
         <div class="investment-decrement" @click="decrementInvestment">
-          -
+          <p>-</p>
         </div>
       </div>
     </div>
@@ -28,7 +25,10 @@ export default class CardInvestment extends Vue {
   @Prop(InvestmentProperties) private investmentData!: InvestmentProperties;
 
   incrementInvestment() {
-    if (((this.$store.state.localInvestments.localDecrement - (this.investmentData.currentCost)) >= 0) && this.investmentData.currentCost > 0) {
+    if (
+      this.$store.state.localInvestments.localDecrement - this.investmentData.currentCost >= 0
+      && this.investmentData.currentCost > 0
+    ) {
       this.$store.dispatch('changeLocalInvestment', {
         investmentName: this.investmentData.n,
         investmentAmount: this.investmentData.currentInventory + 1,
@@ -79,18 +79,31 @@ export default class CardInvestment extends Vue {
 }
 
 .investment-increment {
+  height: 50%;
   width: 100%;
-  height: 100%;
-  margin: auto;
-  padding-top: 0.6rem;
-  border-bottom: 0.125rem solid #f5f5f5;
+  border-bottom: 0.0625rem solid #F5F5F5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.investment-increment p {
+  font-size: 1.5rem;
+  margin: 0;
 }
 
 .investment-decrement {
+  height: 50%;
   width: 100%;
-  margin: auto;
-  height: 100%;
-  padding-top: 0.3rem;
+  border-top: 0.0625rem solid #F5F5F5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.investment-decrement p {
+  font-size: 1.5rem;
+  margin: 0;
 }
 
 .investment-increment:hover {

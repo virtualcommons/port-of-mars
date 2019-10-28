@@ -69,10 +69,10 @@ class InvestmentsModel {
 
   get localDecrement() {
     let decrement = 10;
-    for (const investment in this.investments) {
-      decrement -= this.investments[investment].currentCost * this.investments[investment].currentInventory;
-    }
-    // console.log(decrement);
+    Object.keys(this.investments).forEach((key) => {
+      decrement -= this.investments[key].currentCost
+      * this.investments[key].currentInventory;
+    });
     return decrement;
   }
 }

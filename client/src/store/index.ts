@@ -43,10 +43,13 @@ export default new Vuex.Store({
       state.localInvestments.changeInventoryValue(payload.investmentName, payload.investmentAmount);
     },
     CHANGE_LOCAL_ROUND_COSTS(state, payload) {
-      for (const investment in payload) {
-        // console.log(investment,payload[investment]);
-        state.localInvestments.updateCurrentCost(investment, payload[investment]);
-      }
+      Object.keys(payload).forEach((key) => {
+        state.localInvestments.updateCurrentCost(key, payload[key]);
+      });
+      // for (const investment in payload) {
+      //   // console.log(investment,payload[investment]);
+      //   state.localInvestments.updateCurrentCost(investment, payload[investment]);
+      // }
     },
     SET_PLAYER_ROLE(state, payload){
       state.playerRole = payload;
@@ -61,20 +64,7 @@ export default new Vuex.Store({
     SET_LAYOUT(state: any, newLayout: string) {
       state.layout = newLayout;
     },
-
-  },
-  getters: {
-
-    /**
-   * layout() getter
-   * Gets the state out of state variable layout.
-   * @return The state of layout.
-   *
-   */
-    layout(state) {
-      return state.layout;
-    },
-    SET_PLAYER_ROLE(state, payload) {
+    SET_PLAYER_ROLE(state,payload){
       state.playerRole = payload;
     },
     /**
@@ -87,7 +77,20 @@ export default new Vuex.Store({
     SET_LAYOUT(state: any, newLayout: string) {
       state.layout = newLayout;
     },
-
+    SET_PLAYER_ROLE(state, payload) {
+      state.playerRole = payload;
+    },
+  },
+  getters: {
+    /**
+   * layout() getter
+   * Gets the state out of state variable layout.
+   * @return The state of layout.
+   *
+   */
+    layout(state) {
+      return state.layout;
+    },
   },
   actions: {
     sendChatMsg(context, message: ChatMessage) {
