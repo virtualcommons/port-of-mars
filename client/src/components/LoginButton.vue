@@ -22,7 +22,7 @@ import { BButton } from 'bootstrap-vue';
 export default class LoginButton extends Vue {
   /**
    * setLayout() method
-   * @param layout : The name of the layout.
+   * @param layout The string value of the layout.
    * Commits to the store by changing the layout
    * string value on the store.
    *

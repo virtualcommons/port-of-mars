@@ -43,14 +43,14 @@ import Asset from '@/components/Asset.vue';
     BCol,
     StatusBar,
     CardInvestment,
-    Asset
-  }
+    Asset,
+  },
 })
 export default class ContainerInvestments extends Vue {
   private investmentData: object = this.$store.state.localInvestments.returnValues;
 
   updated() {
-    //console.log(this.timeblockStatus);
+    // console.log(this.timeblockStatus);
     // let decrement: number = 0;
     // for(let investment in this.investmentData) {
     //   decrement += (this.investmentData[investment].currentCost *

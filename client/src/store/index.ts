@@ -49,6 +49,7 @@ export default new Vuex.Store({
       }
     },
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -62,6 +63,7 @@ export default new Vuex.Store({
 =======
 
 >>>>>>> feat: add button to game that uses tutorial layout
+=======
     /**
      * SET_LAYOUT() mutation
      * Changes the state of the layout state.
@@ -71,6 +73,34 @@ export default new Vuex.Store({
      */
     SET_LAYOUT(state: any, newLayout: string) {
       state.layout = newLayout;
+    },
+
+  },
+  getters: {
+
+    /**
+   * layout() getter
+   * Gets the state out of state variable layout.
+   * @return The state of layout.
+   *
+   */
+    layout(state) {
+      return state.layout;
+    },
+    SET_PLAYER_ROLE(state, payload) {
+      state.playerRole = payload;
+    },
+>>>>>>> style: lint code to maintain code format + style
+    /**
+     * SET_LAYOUT() mutation
+     * Changes the state of the layout state.
+     * @param state The state of the application.
+     * @param payload The string value of layout.
+     *
+     */
+    SET_LAYOUT(state: any, newLayout: string) {
+      state.layout = newLayout;
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 6665ef2... feat: add button to game that uses tutorial layout
@@ -112,6 +142,11 @@ export default new Vuex.Store({
 >>>>>>> 6665ef2... feat: add button to game that uses tutorial layout
 >>>>>>> feat: add button to game that uses tutorial layout
   },
+=======
+    },
+
+  },
+>>>>>>> style: lint code to maintain code format + style
   actions: {
     sendChatMsg(context, message: ChatMessage) {
       context.commit('ADD_TO_CHAT', message);
