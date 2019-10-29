@@ -1,6 +1,12 @@
-import {AccomplishmentData} from "shared/types";
+import {AccomplishmentData, AccomplishmentRawData} from "shared/types";
+import _ from "lodash";
 
-export const accomplishments: Array<AccomplishmentData> = [
+function toAccomplishment(raw: AccomplishmentRawData): AccomplishmentData {
+  const {id, role, label, flavor_text, culture, finance, government, legacy, science, upkeep, victory_points, effect} = raw;
+  return {id, role, label, flavor_text, costs: {culture, finance, government, legacy, science, upkeep}, victory_points, effect};
+}
+
+export const accomplishments: Array<AccomplishmentData> = _.map([
   {
     id: 1,
     role: "Researcher",
@@ -1401,7 +1407,7 @@ export const accomplishments: Array<AccomplishmentData> = [
     victory_points: 1,
     effect: "Every round, all players gain 1 additional Time Block."
   }
-];
+], toAccomplishment);
 
 interface GameEvent {
   name: string

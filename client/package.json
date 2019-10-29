@@ -13,6 +13,7 @@
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.4",
     "core-js": "^3.3.2",
+    "lodash": "^4.17.15",
     "node": "^12.12.0",
     "passport": "^0.4.0",
     "socket.io-client": "^2.3.0",
@@ -27,6 +28,7 @@
   },
   "devDependencies": {
     "@types/jest": "^24.0.19",
+    "@types/lodash": "^4.14.144",
     "@types/socket.io-client": "^1.4.32",
     "@vue/cli-plugin-babel": "^4.0.5",
     "@vue/cli-plugin-e2e-cypress": "^4.0.5",

@@ -8,10 +8,11 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 
 
-  @Component
+@Component
 export default class Clock extends Vue {
       // non-null operator (!) = compiler prop will have non-null value
-      @Prop(String) time!:string;
+      @Prop(String)
+      time!:string;
 
       private clock!: NodeJS.Timeout;
 
