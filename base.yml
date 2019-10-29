@@ -3,7 +3,7 @@ services:
   server:
     build: server
     restart: always
-    image: port-of-mars/client/dev:latest
+    image: port-of-mars/server/dev:latest
     volumes:
       - ./server:/code
       - /code/node_modules
