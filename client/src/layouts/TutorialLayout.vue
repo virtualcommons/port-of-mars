@@ -1,7 +1,8 @@
 <template>
-  <router-view>
-    <v-tour name="tutorial" :steps="steps"></v-tour>
-  </router-view>
+  <div>
+    <router-view />
+    <v-tour name="gameTour" :steps="steps" />
+  </div>
 </template>
 
 <script lang="ts">
@@ -17,5 +18,20 @@ Vue.use(VueTour);
 })
 
 export default class TutorialLayout extends Vue {
+  steps = [
+    {
+      target: '#v-step-0',
+      content: 'This is a test!',
+    },
+  ];
+
+  /**
+   * mounted() method
+   * Starts the tour.
+   *
+   */
+  mounted() {
+    this.$tours.gameTour.start();
+  }
 }
 </script>
