@@ -50,10 +50,6 @@ export default class Home extends Vue {
   //   console.log((this as any).$socket);
   //   (this as any).$socket.client.emit('joinGame', { my: 'data' });
   // }
-
-  // mounted() {
-  //   this.$tours['gameTour'].start()
-  // }
 }
 </script>
 <style >
