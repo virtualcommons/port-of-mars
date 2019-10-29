@@ -22,7 +22,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import { InvestmentProperties } from '@/models/index';
 @Component({})
 export default class CardInvestment extends Vue {
-  @Prop(InvestmentProperties) private investmentData!: InvestmentProperties;
+  @Prop() private investmentData!: InvestmentProperties;
 
   incrementInvestment() {
     if (
