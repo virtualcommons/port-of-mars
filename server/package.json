@@ -4,7 +4,7 @@
   "description": "Port Of Mars digital version",
   "main": "lib/index.js",
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "start": "ts-node -r tsconfig-paths/register src/index.ts",
     "loadtest": "colyseus-loadtest loadtest/example.ts --room my_room --numClients 2",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -16,10 +16,14 @@
   "homepage": "https://github.com/virtualcommons/port-of-mars#readme",
   "devDependencies": {
     "@colyseus/loadtest": "^0.11.0",
-    "csvtojson": "^2.0.10",
     "@types/cors": "^2.8.6",
     "@types/express": "^4.17.1",
+    "@types/jest": "^24.0.18",
+    "@types/lodash": "^4.14.144",
+    "csvtojson": "^2.0.10",
+    "ts-jest": "^24.1.0",
     "ts-node": "^8.1.0",
+    "tsconfig-paths": "^3.9.0",
     "typescript": "^3.4.5"
   },
   "dependencies": {
