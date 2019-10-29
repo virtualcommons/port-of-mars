@@ -1,0 +1,24 @@
+language: "python"
+python:
+  - "3.6"
+sudo: required
+notifications:
+  email: comses-dev@googlegroups.com
+addons:
+  apt:
+    packages:
+      - docker-ce
+services:
+  - docker
+env:
+  - DOCKER_COMPOSE_VERSION=1.24.1
+before_install:
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod a+rx docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  - sudo sysctl -w vm.max_map_count=262144
+install:
+  - docker --version
+  - ./build.sh build dev
+script:
+  - docker-compose run --rm client yarn test:unit
