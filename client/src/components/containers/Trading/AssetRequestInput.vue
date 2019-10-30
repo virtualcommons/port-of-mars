@@ -3,7 +3,7 @@
     <div class="asset-request-input-img">
       <i class="fas fa-spinner fa-2x"></i>
     </div>
-    <input class="asset-request-input-input" type="number" name="">
+    <input class="asset-request-input-input" type="number" name="" placeholder="0">
   </div>
 </template>
 

@@ -20,8 +20,8 @@
         </div>
       </BCol>
       <BCol cols="4" class="trade-request-content-shuffle">
-        <p>prev</p>
-        <p>next</p>
+        <button type="button" name="button">prev</button>
+        <button type="button" name="button">next</button>
       </BCol>
     </BRow>
     <BRow class="trade-request-buttons">
@@ -118,10 +118,24 @@ export default class TradeRequest extends Vue {}
   /* background-color: coral; */
 }
 
-.trade-request-content-shuffle p {
-  cursor: pointer;
+.trade-request-content-shuffle button {
+  color: #f5f5f5;
+  background: none;
+  border: none;
   text-decoration: underline;
   margin: 0;
+}
+
+.trade-request-content-shuffle button:hover {
+  color: #c67b5c;
+}
+
+.trade-request-content-shuffle button:active {
+  outline: none;
+}
+
+.trade-request-content-shuffle button:focus {
+  outline: none;
 }
 
 .trade-request-buttons {

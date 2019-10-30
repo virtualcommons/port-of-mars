@@ -54,7 +54,9 @@ export default new Vuex.Store({
       //   state.localInvestments.updateCurrentCost(investment, payload[investment]);
       // }
     },
-
+    SET_PLAYER_ROLE(state, payload) {
+      state.playerRole = payload;
+    },
     /**
      * SET_LAYOUT() mutation
      * Changes the state of the layout state.
@@ -65,12 +67,8 @@ export default new Vuex.Store({
     SET_LAYOUT(state: any, newLayout: string) {
       state.layout = newLayout;
     },
-    SET_PLAYER_ROLE(state, payload) {
-      state.playerRole = payload;
-    },
   },
   getters: {
-
     /**
    * layout() getter
    * Gets the state out of state variable layout.
