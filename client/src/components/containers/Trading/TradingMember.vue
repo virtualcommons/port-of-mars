@@ -1,5 +1,5 @@
 <template>
-  <div class="trading-member">
+  <div class="trading-member" :style="setColor()">
     <div class="trading-member-img">
       <img
       :src="require(`@/assets/characters/${setImg()}.png`)"
@@ -21,9 +21,24 @@ export default class TradingModal extends Vue {
 
   @Prop({ default: -1 }) private notificationCount!: number;
 
+  @Prop({ default: false }) private isActive!: boolean;
+
+  @Prop({ default: '#C67B5C' }) private activeColor!: string;
+
+  @Prop({ default: 'none' }) private inactiveColor!: string;
+
   setImg(): string {
     return this.playerRole;
   }
+
+  setColor() {
+    return this.isActive ? { backgroundColor: `${this.activeColor}` } : { backgroundColor: `${this.inactiveColor}` };
+  }
+
+  // this is just for show, will need to re-address...
+  // handleClick() {
+  //   this.isActive = true;
+  // }
 }
 </script>
 
@@ -37,6 +52,7 @@ export default class TradingModal extends Vue {
   align-items: center;
   color: #F5F5F5;
   /* background-color: blue; */
+  cursor: pointer;
 }
 
 .trading-member-img {
