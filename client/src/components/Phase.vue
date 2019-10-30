@@ -1,5 +1,5 @@
 <template>
-  <div class="phase">
+  <div class="phase" id="v-step-7">
     <p class="phase-title">Current Phase</p>
     <p><span class="phase-current">Invest</span>&nbsp;<span class="phase-time">5:00</span></p>
     <!-- phase-current will change on props -->
