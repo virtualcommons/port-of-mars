@@ -2,7 +2,7 @@
   <div class="container-right">
     <TradingModal />
     <!-- will eventually refactor -->
-    <div class="placeholder-right">
+    <div class="placeholder-right" id="v-step-1">
       <p class="scores-title">Scores</p>
       <Member :playerRole="'Researcher'" :playerScore="14" :notificationCount="1" />
       <Member :playerRole="'Politician'" :playerScore="12" :notificationCount="0" :width="100" />
@@ -10,7 +10,7 @@
       <Member :playerRole="'Curator'" :playerScore="5" :notificationCount="2" />
       <Member :playerRole="'Entrepreneur'" :playerScore="3" :notificationCount="0" />
     </div>
-    <Chat />
+    <Chat id="v-step-2" />
   </div>
 </template>
 

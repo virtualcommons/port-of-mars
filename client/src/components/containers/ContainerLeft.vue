@@ -2,11 +2,11 @@
   <div class="container-left">
     <div class="placeholder-left">
       <!-- will eventually refactor -->
-      <Round />
-      <Notification />
+      <Round id="v-step-3"/>
+      <Notification id="v-step-4"/>
       <Profile :playerRole='this.$store.state.playerRole' />
     </div>
-    <MarsLog />
+    <MarsLog id="v-step-5"/>
   </div>
 </template>
 
