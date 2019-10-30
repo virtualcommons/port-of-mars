@@ -1,30 +1,34 @@
 <template>
-  <BContainer>
-    <BRow class="trading-modal" :style="{ display: setStyle }">
-      <BCol class="trading-modal-members" cols="3">
-        <TradingMember
-          :playerRole="'Researcher'"
-          :notificationCount="0"
-          class="trading-modal-members-top trading-modal-members-seperator"/>
-        <TradingMember
-          :playerRole="'Curator'"
-          :notificationCount="1"
-          class="trading-modal-members-seperator"/>
-        <TradingMember
-          :playerRole="'Entrepreneur'"
-          :notificationCount="2"
-          class="trading-modal-members-seperator"/>
-        <TradingMember
-          :playerRole="'Pioneer'"
-          :notificationCount="3"
-          class="trading-modal-members-bottom"/>
-      </BCol>
-      <BCol class="trading-modal-content" cols="9">
-        <button class="close-button" @click="handleClick()">Close</button>
-        <TradeRequest />
-      </BCol>
-    </BRow>
-  </BContainer>
+  <div class="transparent-wrapper" :style="{ display: setStyle }">
+    <BContainer class="wrapper reset">
+      <BRow class="trading-modal">
+        <BCol class="trading-modal-members" cols="3">
+          <TradingMember
+            :playerRole="'Researcher'"
+            :notificationCount="0"
+            class="trading-modal-members-top trading-modal-members-seperator"/>
+          <TradingMember
+            :playerRole="'Curator'"
+            :notificationCount="1"
+            class="trading-modal-members-seperator"/>
+          <TradingMember
+            :playerRole="'Entrepreneur'"
+            :notificationCount="2"
+            class="trading-modal-members-seperator"/>
+          <TradingMember
+            :playerRole="'Pioneer'"
+            :notificationCount="3"
+            class="trading-modal-members-bottom"/>
+        </BCol>
+        <BCol class="trading-modal-content" cols="9">
+          <button class="close-button" @click="handleClick()">Close</button>
+          <!-- NEED TO RENDER CORRECT VIEW (ON TAB SWITCH) -->
+          <!-- <TradeRequest /> -->
+          <TradeIncoming />
+        </BCol>
+      </BRow>
+    </BContainer>
+  </div>
 </template>
 
 <script lang="ts">
@@ -32,6 +36,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
 import TradingMember from '@/components/containers/Trading/TradingMember.vue';
 import TradeRequest from '@/components/containers/Trading/TradeRequest.vue';
+import TradeIncoming from '@/components/containers/Trading/TradeIncoming.vue';
 
 @Component({
   components: {
@@ -40,6 +45,7 @@ import TradeRequest from '@/components/containers/Trading/TradeRequest.vue';
     BCol,
     TradingMember,
     TradeRequest,
+    TradeIncoming,
   },
 })
 
@@ -60,16 +66,36 @@ export default class TradingModal extends Vue {
 </script>
 
 <style scoped>
+.transparent-wrapper {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(30, 34, 35, 0.8);
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: -83.5vw;
+}
+
+.wrapper {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
 .trading-modal {
   width: 60rem;
   height: 30rem;
+  margin: 0;
+  padding: 0;
   background-color: #1e2223;
   border: 0.125rem solid #F5F5F5;
   border-radius: 1.25rem;
-  position: absolute;
-  top: 50%;
-  left: -200%;
-  transform: translate(-50%, -50%);
 }
 
 .trading-modal-members {

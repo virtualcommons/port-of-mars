@@ -17,7 +17,7 @@ export default class AssetRequestInput extends Vue {}
 
 <style scoped>
 .asset-request-input {
-  width: 3.5rem;
+  width: 4rem;
   display: flex;
   flex-direction: column;
   justify-content: center;

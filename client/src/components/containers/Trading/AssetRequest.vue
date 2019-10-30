@@ -1,0 +1,43 @@
+<template>
+  <div class="asset-request">
+    <div class="asset-request-img">
+      <i class="fas fa-spinner fa-2x"></i>
+    </div>
+    <p class="asset-request-value">0</p>
+  </div>
+</template>
+
+<script lang="ts">
+import { Component, Vue, Prop } from 'vue-property-decorator';
+
+@Component({})
+
+export default class AssetRequest extends Vue {}
+</script>
+
+<style lang="css" scoped>
+.asset-request {
+  width: 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* background-color: pink; */
+  margin-right: 1rem;
+}
+
+.asset-request-img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.asset-request-value {
+  width: 100%;
+  margin-top: 1rem;
+  margin-bottom: 0;
+  text-align: center;
+  color: #F5F5F5;
+}
+</style>
