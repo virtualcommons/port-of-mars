@@ -51,6 +51,7 @@ export default class Member extends Vue {
   background-color: rgba(245, 245, 245, 0.2);
   border: 0.125rem solid #f5f5f5;
   border-radius: 1rem;
+  cursor: pointer;
 }
 
 .member-notif {
