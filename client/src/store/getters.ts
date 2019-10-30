@@ -5,7 +5,7 @@ export default {
    * @return The state of layout.
    *
    */
-  layout(state) {
+  layout(state: any) {
     return state.layout;
   },
 };
