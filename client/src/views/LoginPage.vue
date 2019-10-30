@@ -40,19 +40,19 @@ export default class LoginPage extends Vue {}
   .stars, .twinkling, .clouds {
     position: absolute;
     top: 0;
-    bottom: 0;
     left: 0;
     right: 0;
+    bottom: 0;
   }
 
   .stars {
-    background:#000000 url(http://www.script-tutorials.com/demos/360/images/stars.png) repeat top center;
-    z-index: -2;
+    background:#000 url(http://www.script-tutorials.com/demos/360/images/stars.png) repeat top center;
+    z-index: 0;
   }
 
   .twinkling {
     background: transparent url(http://www.script-tutorials.com/demos/360/images/twinkling.png) repeat top center;
-    z-index: -1;
+    z-index: 0;
     animation: move-twink-back 500s linear infinite;
   }
 
@@ -66,10 +66,6 @@ export default class LoginPage extends Vue {}
   /* ==============================================================================================
     End Background - Copyright (c) 2019 by WebSonick (https://codepen.io/WebSonick/pen/vjmgu)
 ================================================================================================= */
-
-  /*html {*/
-  /*  font-size: 16px;*/
-  /*}*/
 
   html, body, .game {
     height: 100%;
