@@ -1,7 +1,14 @@
 <template>
   <div class="card-investment">
     <div class="investment-options">
-      <div class="card-type">Type {{ investmentData.currentCost }}</div>
+      <div class="card-type">
+        <div class="card-type-img">
+          <i class="fas fa-spinner fa-2x"></i>
+        </div>
+        <div class="card-type-cost">
+          <p>{{ investmentData.currentCost }}</p>
+        </div>
+      </div>
       <div class="card-increment-and-decrement-holder">
         <div class="investment-increment" @click="incrementInvestment">
           <p>+</p>
@@ -12,7 +19,7 @@
       </div>
     </div>
     <div class="investment-amount">
-      <p>{{ `${investmentData.n}:${investmentData.currentInventory}` }}</p>
+      <p>{{ `${investmentData.n} - ${investmentData.currentInventory}` }}</p>
     </div>
   </div>
 </template>
@@ -49,8 +56,13 @@ export default class CardInvestment extends Vue {
 
 <style scoped>
 .investment-amount {
+  margin-top: 0.5rem;
   color: white;
   text-align: center;
+}
+
+.investment-amount p {
+  text-transform: capitalize;
 }
 
 .investment-options {
@@ -66,7 +78,34 @@ export default class CardInvestment extends Vue {
 }
 
 .card-type {
+  padding: 0.5rem;
+  height: 100%;
   width: 70%;
+
+}
+
+.card-type-img {
+  height: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+}
+
+.card-type-img i {
+  /* height: 50%; */
+}
+
+.card-type-cost {
+  height: 30%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin: 0;
+}
+
+.card-type-cost p {
+  margin: 0;
 }
 
 .card-increment-and-decrement-holder {
@@ -107,10 +146,11 @@ export default class CardInvestment extends Vue {
 }
 
 .investment-increment:hover {
-  background-color: orange;
-  overflow: hidden;
+  background-color: #c67b5c;
+  cursor: pointer;
 }
 .investment-decrement:hover {
-  background-color: orange;
+  background-color: #c67b5c;
+  cursor: pointer;
 }
 </style>
