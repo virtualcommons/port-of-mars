@@ -5,6 +5,7 @@
     </div>
     <div class="asset-exchange-input-input">
       <input type="number" name="">
+      <!-- this should have a min (0) and max (asset limit) value -->
       <p>/2</p>
     </div>
   </div>
@@ -20,7 +21,7 @@ export default class AssetExchangeInput extends Vue {}
 
 <style scoped>
 .asset-exchange-input {
-  width: 3.5rem;
+  width: 4rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -40,6 +41,7 @@ export default class AssetExchangeInput extends Vue {}
   margin-top: 1rem;
   display: flex;
   align-items: center;
+  justify-content: space-around;
 }
 
 .asset-exchange-input-input p {

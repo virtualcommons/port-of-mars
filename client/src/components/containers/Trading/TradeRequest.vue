@@ -1,7 +1,7 @@
 <template>
   <BContainer class="trade-request">
     <BRow class="trade-request-content">
-      <BCol cols="9" class="trade-request-content-details">
+      <BCol cols="8" class="trade-request-content-details">
         <p>Request from the <span class="request-member">Curator</span>:</p>
         <div class="request-assets">
           <AssetRequestInput />
@@ -19,7 +19,9 @@
           <AssetExchangeInput />
         </div>
       </BCol>
-      <BCol cols="3" class="trade-request-content-shuffle">
+      <BCol cols="4" class="trade-request-content-shuffle">
+        <p>prev</p>
+        <p>next</p>
       </BCol>
     </BRow>
     <BRow class="trade-request-buttons">
@@ -110,7 +112,16 @@ export default class TradeRequest extends Vue {}
 
 .trade-request-content-shuffle {
   height: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
   /* background-color: coral; */
+}
+
+.trade-request-content-shuffle p {
+  cursor: pointer;
+  text-decoration: underline;
+  margin: 0;
 }
 
 .trade-request-buttons {
