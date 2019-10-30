@@ -47,5 +47,13 @@ export default class Profile extends Vue {
 
 .profile-img {
   height: 100%;
+  /* prevent user from highlighting text */
+  -webkit-touch-callout: none !important; /* iOS Safari */
+  -webkit-user-select: none !important; /* Safari */
+  -khtml-user-select: none !important; /* Konqueror HTML */
+  -moz-user-select: none !important; /* Old versions of Firefox */
+  -ms-user-select: none !important; /* Internet Explorer/Edge */
+  user-select: none !important; /* Non-prefixed version, currently
+                                     supported by Chrome, Opera and Firefox */
 }
 </style>
