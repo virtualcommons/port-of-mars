@@ -13,12 +13,6 @@ Vue.use(Vuex);
 
 Vue.config.productionTip = false;
 
-// register layouts globally at entry point of app
-Vue.component('default-layout', DefaultLayout);
-Vue.component('tutorial-layout', TutorialLayout);
-
-Vue.config.productionTip = false;
-
 new Vue({
   router,
   store,
