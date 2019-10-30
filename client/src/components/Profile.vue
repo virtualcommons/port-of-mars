@@ -1,6 +1,6 @@
 <template>
   <div class="profile">
-    <div class="profile-frame">
+    <div class="profile-frame" id="v-step-0">
       <img :src="require(`@/assets/characters/${setImg()}.png`)" alt="Player" class="profile-img" />
     </div>
   </div>
