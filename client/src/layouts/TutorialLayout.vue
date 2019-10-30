@@ -67,6 +67,22 @@ export default class TutorialLayout extends Vue {
         placement: 'right',
       },
     },
+    {
+      // ContainerTop.vue > <ContainerUpkeep />
+      target: '#v-step-6',
+      content: 'This bar represents Upkeep, your teams shared infrastructure. Each round the upkeep level declines due to wear and tear, and without any investment by the residents, the Upkeep will be reduced to zero in a few rounds.',
+      params: {
+        placement: 'bottom',
+      },
+    },
+    {
+      // Phase.vue
+      target: '#v-step-7',
+      content: 'The current phase of the round and timer are displayed here. Each phase allots players 5 minutes to do what they need to do. The timer starts to count down as soon as a phase starts.',
+      params: {
+        placement: 'bottom',
+      },
+    },
   ];
 
   /**
