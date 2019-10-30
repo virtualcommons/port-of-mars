@@ -1,6 +1,14 @@
 <template>
   <div class="transparent-wrapper" :style="{ display: setStyle }">
     <BContainer class="wrapper reset">
+      <BRow class="trading-modal-tabs">
+        <div class="tab tab-request-trades">
+          <p>Request Trade</p>
+        </div>
+        <div class="tab tab-incoming-trades">
+          <p>Incoming Trades</p>
+        </div>
+      </BRow>
       <BRow class="trading-modal">
         <BCol class="trading-modal-members" cols="3">
           <TradingMember
@@ -23,8 +31,8 @@
         <BCol class="trading-modal-content" cols="9">
           <button class="close-button" @click="handleClick()">Close</button>
           <!-- NEED TO RENDER CORRECT VIEW (ON TAB SWITCH) -->
-          <!-- <TradeRequest /> -->
-          <TradeIncoming />
+          <TradeRequest />
+          <!-- <TradeIncoming /> -->
         </BCol>
       </BRow>
     </BContainer>
@@ -83,10 +91,45 @@ export default class TradingModal extends Vue {
   padding: 0;
   margin: 0;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
+.trading-modal-tabs {
+  height: 3rem;
+  width: 60rem;
+  border-left: 0.125rem solid #F5F5F5;
+  border-bottom: 0.125rem solid #F5F5F5;
+  /* background-color: pink; */
+}
+
+.tab {
+  height: 100%;
+  width: 12rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #F5F5F5;
+  background-color: #1E2223;
+  border-right: 0.125rem solid #F5F5F5;
+  border-top: 0.125rem solid #F5F5F5;
+  cursor: pointer;
+}
+
+.tab p {
+  margin: 0;
+}
+
+.tab-request-trades {
+  color: #1E2223;
+  background-color: #c67b5c;
+}
+
+.tab-incoming-trades {
+  /* color: #1E2223; */
+  /* background-color: #c67b5c; */
+}
 
 .trading-modal {
   width: 60rem;
@@ -95,7 +138,8 @@ export default class TradingModal extends Vue {
   padding: 0;
   background-color: #1e2223;
   border: 0.125rem solid #F5F5F5;
-  border-radius: 1.25rem;
+  border-top: none;
+  border-radius: 0 0 1.25rem 1.25rem;
 }
 
 .trading-modal-members {
@@ -125,6 +169,10 @@ export default class TradingModal extends Vue {
   color: #F5F5F5;
   background: none;
   border: none;
+}
+
+.close-button:hover {
+  color: #c67b5c;
 }
 
 .close-button:active {

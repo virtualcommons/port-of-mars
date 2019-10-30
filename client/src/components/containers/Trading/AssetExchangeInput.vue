@@ -4,7 +4,7 @@
       <i class="fas fa-spinner fa-2x"></i>
     </div>
     <div class="asset-exchange-input-input">
-      <input type="number" name="">
+      <input type="number" name="" placeholder="0">
       <!-- this should have a min (0) and max (asset limit) value -->
       <p>/2</p>
     </div>
