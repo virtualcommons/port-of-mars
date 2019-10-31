@@ -4147,19 +4147,6 @@ eslint-module-utils@^2.4.0:
     debug "^2.6.8"
     pkg-dir "^2.0.0"
 
-eslint-plugin-compat@^3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-compat/-/eslint-plugin-compat-3.3.0.tgz#ece063f53793e6859243ce6cb9634865f745b72e"
-  integrity sha512-QCgYy3pZ+zH10dkBJus1xER0359h1UhJjufhQRqp9Owm6BEoLZeSqxf2zINwL1OGao9Yc96xPYIW3nQj5HUryg==
-  dependencies:
-    "@babel/runtime" "^7.4.5"
-    ast-metadata-inferer "^0.1.1"
-    browserslist "^4.6.3"
-    caniuse-db "^1.0.30000977"
-    lodash.memoize "4.1.2"
-    mdn-browser-compat-data "^0.0.84"
-    semver "^6.1.2"
-
 eslint-plugin-cypress@^2.7.0:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-cypress/-/eslint-plugin-cypress-2.7.0.tgz#117f14ce63698e4c4f3afea3d7e27025c8d504f0"

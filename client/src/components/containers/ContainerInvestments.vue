@@ -7,6 +7,7 @@
         :setWidth="`${this.$store.state.localInvestments.localDecrement * 10}`"
         :colorOuter="'statusbar-outer-gray'"
         :colorInner="'statusbar-inner-gray'"
+         id="v-step-10"
       />
       <p class="investments-topbar-status">
         ( {{ this.$store.state.localInvestments.localDecrement }} )
@@ -15,13 +16,13 @@
 
     <BRow class="investments-cards">
       <BRow class="investments-cards-top">
-        <CardInvestment :investmentData="investmentData.upkeep" />
+        <CardInvestment :investmentData="investmentData.upkeep" id="v-step-11" />
         <CardInvestment :investmentData="investmentData.finance" />
         <CardInvestment :investmentData="investmentData.legacy" />
       </BRow>
 
       <BRow class="investments-cards-bottom">
-        <CardInvestment :investmentData="investmentData.government" />
+        <CardInvestment :investmentData="investmentData.government" id="v-step-14" />
         <CardInvestment :investmentData="investmentData.culture" />
         <CardInvestment :investmentData="investmentData.science" />
       </BRow>

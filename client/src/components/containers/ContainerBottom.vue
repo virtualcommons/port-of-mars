@@ -1,11 +1,11 @@
 <template>
-  <BContainer class="container-bottom">
+  <BContainer class="container-bottom" id="v-step-9">
     <BRow class="row-bottom">
       <BCol class="container-bottom-investments" cols="8">
-        <ContainerInvestments/>
+        <ContainerInvestments />
       </BCol>
       <BCol class="container-bottom-accomplishments" cols="4">
-        <ContainerAccomplishments/>
+        <ContainerAccomplishments />
       </BCol>
     </BRow>
   </BContainer >

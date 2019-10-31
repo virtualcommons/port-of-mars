@@ -8,7 +8,7 @@
       <BCol class="events" cols="7">
         <!-- event card components (3) -->
         <CardEvent />
-        <CardEvent />
+        <CardEvent id="v-step-8"/>
         <CardEvent />
       </BCol>
     </BRow>
