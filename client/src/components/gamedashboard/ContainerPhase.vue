@@ -18,8 +18,8 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
-import Phase from '@/components/Phase.vue';
-import CardEvent from '@/components/CardEvent.vue';
+import Phase from '@/components/gamedashboard/Phase.vue';
+import CardEvent from '@/components/gamedashboard/CardEvent.vue';
 
 @Component({
   components: {

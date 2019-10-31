@@ -45,9 +45,9 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
-import TradingMember from '@/components/containers/Trading/TradingMember.vue';
-import TradeRequest from '@/components/containers/Trading/TradeRequest.vue';
-import TradeIncoming from '@/components/containers/Trading/TradeIncoming.vue';
+import TradingMember from '@/components/gamedashboard/trading/TradingMember.vue';
+import TradeRequest from '@/components/gamedashboard/trading/TradeRequest.vue';
+import TradeIncoming from '@/components/gamedashboard/trading/TradeIncoming.vue';
 
 @Component({
   components: {

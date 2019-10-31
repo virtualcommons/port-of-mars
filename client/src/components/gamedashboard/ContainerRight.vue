@@ -21,9 +21,9 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import Member from '@/components/Leaderboard/Member.vue';
-import Chat from '@/components/Chat.vue';
-import TradingModal from '@/components/containers/Trading/TradingModal.vue';
+import Member from '@/components/gamedashboard/Member.vue';
+import Chat from '@/components/gamedashboard/Chat.vue';
+import TradingModal from '@/components/gamedashboard/trading/TradingModal.vue';
 
 @Component({
   components: {

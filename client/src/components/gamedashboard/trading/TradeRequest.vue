@@ -34,8 +34,8 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
-import AssetRequestInput from '@/components/containers/Trading/AssetRequestInput.vue';
-import AssetExchangeInput from '@/components/containers/Trading/AssetExchangeInput.vue';
+import AssetRequestInput from '@/components/gamedashboard/trading/AssetRequestInput.vue';
+import AssetExchangeInput from '@/components/gamedashboard/trading/AssetExchangeInput.vue';
 
 @Component({
   components: {

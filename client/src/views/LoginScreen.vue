@@ -7,8 +7,8 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import PortOfMarsLogo from '@/components/PortOfMarsLogo.vue';
-import LoginButton from '@/components/LoginButton.vue';
+import PortOfMarsLogo from '@/components/waitinglobbyscreen/PortOfMarsLogo.vue';
+import LoginButton from '@/components/loginpage/LoginButton.vue';
 
     @Component({
       components: {
