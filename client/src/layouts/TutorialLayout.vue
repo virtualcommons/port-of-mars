@@ -83,6 +83,86 @@ export default class TutorialLayout extends Vue {
         placement: 'bottom',
       },
     },
+    {
+      // ContainerPhase.vue > <CardEvent /> (2)
+      target: '#v-step-8',
+      content: 'At the beginning of each round, a card event(s) will populate this area. You can view card events in detail by clicking on them directly.',
+      params: {
+        placement: 'left',
+      },
+    },
+    {
+      // ContainerBottom.vue
+      target: '#v-step-9',
+      content: 'This window contains your time blocks, accomplishments and influences that you can purchase.',
+      params: {
+        placement: 'top',
+      },
+    },
+    {
+      // ContainerInvestments.vue > <StatusBar />
+      target: '#v-step-10',
+      content: 'You receive 10 timeblocks per round to invest upkeep or influence.',
+      params: {
+        placement: 'right',
+      },
+    },
+    {
+      // ContainerInvestments.vue > <StatusBar />
+      target: '#v-step-11',
+      content: 'You have the option of investing your timeblocks in upkeep to maintain the shared infrastructure.',
+      params: {
+        placement: 'left',
+      },
+    },
+    {
+      // CardInvestment.vue
+      target: '#v-step-12',
+      content: 'The cost in timeblocks for an upkeep or influence investment is displayed here.',
+      params: {
+        placement: 'bottom',
+      },
+    },
+    {
+      // CardInvestment.vue
+      target: '#v-step-13',
+      content: 'You can increment or decrement the number of time blocks to invest using these buttons.',
+      params: {
+        placement: 'bottom',
+      },
+    },
+    {
+      // ContainerInvestments.vue > <CardInvestment />
+      target: '#v-step-14',
+      content: 'You can also invest your timeblocks to purchase influence. Think of influence as a currency; you can trade influences with other players and also use them to purchase accomplishments.',
+      params: {
+        placement: 'bottom',
+      },
+    },
+    {
+      // ContainerAccomplishments.vue > <BContainer />
+      target: '#v-step-15',
+      content: 'These are the accomplishments you can purchase or discard per round.',
+      params: {
+        placement: 'bottom',
+      },
+    },
+    {
+      // ContainerAccomplishments.vue > <CardAccomplishment />
+      target: '#v-step-16',
+      content: 'You can purchase accomplishments by using the influences that you have and receive points in return.',
+      params: {
+        placement: 'left',
+      },
+    },
+    {
+      // ContainerRight.vue > <Member />
+      target: '#v-step-17',
+      content: 'Your score for the game will be displayed here and updated as you purchase more accomplishments and gain more points.',
+      params: {
+        placement: 'left',
+      },
+    },
   ];
 
   /**

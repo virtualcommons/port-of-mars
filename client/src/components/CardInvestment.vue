@@ -5,11 +5,11 @@
         <div class="card-type-img">
           <i class="fas fa-spinner fa-2x"></i>
         </div>
-        <div class="card-type-cost">
+        <div class="card-type-cost" id="v-step-12">
           <p>{{ investmentData.currentCost }}</p>
         </div>
       </div>
-      <div class="card-increment-and-decrement-holder">
+      <div class="card-increment-and-decrement-holder" id="v-step-13">
         <div class="investment-increment" @click="incrementInvestment">
           <p>+</p>
         </div>

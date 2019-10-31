@@ -1,11 +1,11 @@
 <template>
-  <BContainer class="container-accomplishments">
+  <BContainer class="container-accomplishments" id="v-step-15">
     <BRow class="accomplishments-topbar">
       <p class="accomplishments-topbar-title">Accomplishments</p>
     </BRow>
 
     <BRow class="accomplishments-cards">
-      <CardAccomplishment />
+      <CardAccomplishment id="v-step-16"/>
       <CardAccomplishment />
       <CardAccomplishment />
     </BRow>

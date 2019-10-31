@@ -5,7 +5,12 @@
     <div class="placeholder-right" id="v-step-1">
       <p class="scores-title">Scores</p>
       <Member :playerRole="'Researcher'" :playerScore="14" :notificationCount="1" />
-      <Member :playerRole="'Politician'" :playerScore="12" :notificationCount="0" :width="100" />
+      <Member
+        :playerRole="'Politician'"
+        :playerScore="12"
+        :notificationCount="0"
+        :width="100"
+        id="v-step-17" />
       <Member :playerRole="'Pioneer'" :playerScore="11" :notificationCount="0" />
       <Member :playerRole="'Curator'" :playerScore="5" :notificationCount="2" />
       <Member :playerRole="'Entrepreneur'" :playerScore="3" :notificationCount="0" />
