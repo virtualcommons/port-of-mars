@@ -2,7 +2,7 @@
   <BContainer class="trade-request">
     <BRow class="trade-request-content">
       <BCol cols="8" class="trade-request-content-details">
-        <p>Request from the <span class="request-member">Curator</span>:</p>
+        <p>Request from the <span class="request-member">{{ playerRole }}</span>:</p>
         <div class="request-assets">
           <AssetRequestInput />
           <AssetRequestInput />
@@ -47,7 +47,11 @@ import AssetExchangeInput from '@/components/containers/Trading/AssetExchangeInp
   },
 })
 
-export default class TradeRequest extends Vue {}
+export default class TradeRequest extends Vue {
+  get playerRole() {
+    return this.$store.state.tradingMember;
+  }
+}
 </script>
 
 <style scoped>

@@ -35,6 +35,8 @@ export default class Member extends Vue {
   }
 
   handleClick() {
+    this.$store.dispatch('setTradingMember', this.playerRole);
+    // async (does this need a callback)?
     this.$root.$emit('openTrading', 'open');
   }
 }
