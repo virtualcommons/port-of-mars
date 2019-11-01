@@ -2,10 +2,12 @@
   <div class="chat">
     <p class="chat-title">Chat</p>
     <div class="chat-chat">
-      <div class="chat-message" v-for="message in messages" :key="message.content">
-        <!-- Need to change key to be time value, need to find package -->
-        <p class='chat-message-header'>{{ message.sender }}:</p>
-        <p class='chat-message-content'>{{ message.content }}</p>
+      <div class="chat-message" v-for="message in messages" :key="message.content + Math.random()">
+        <!-- Need to change key to be time value, need to find package? -->
+        <p class="chat-message-content">
+          <span class="chat-message-header">{{ message.sender }}</span
+          >: {{ message.content }}
+        </p>
       </div>
     </div>
     <div class="chat-input-frame">
@@ -24,6 +26,11 @@ export default class Chat extends Vue {
   message: string = '';
 
   count: number = 0;
+
+  updated() {
+    const elem = this.$el.querySelector('.chat-chat');
+    elem.scrollTop = elem.scrollHeight;
+  }
 
   get messages() {
     return this.$store.state.chat.chat;
@@ -58,29 +65,45 @@ export default class Chat extends Vue {
 
 .chat-chat {
   height: 100%;
-  display: flex;
-  flex-direction: column;
+  width: 100%;
+  /* display: flex; */
+  /* flex-direction: column; */
   border: 0.125rem solid #F5F5F5;
   border-bottom: none;
-  overflow-y: auto;
+  overflow-y: scroll;
+  padding: 0.5rem;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE 10+ */
+}
+
+.chat-chat::-webkit-scrollbar { /* WebKit */
+    width: 0;
+    height: 0;
 }
 
 .chat-message {
   color: #F5F5F5;
-  background-color: white;
-  border-radius: .75rem;
-  overflow:hidden;
-  margin: 1rem 0.75rem 1rem 5rem;
+  height: auto;
+  max-width: 100%;
+  font-size: 0.75rem;
+  margin-bottom: 0.5rem;
+  /* background-color: white; */
+  /* border-radius: .75rem; */
+  overflow: auto;
+  /* margin: 1rem 0.75rem 1rem 5rem; */
+  background-color: rgba(245,245,245, 0.05);
 }
 
 .chat-message-header{
-  color:orange;
-  margin: 0.2rem 0.75rem 0.2rem 1rem;
+  color: #C67B5C;
 }
 
 .chat-message-content{
-  color:black;
-  margin: 0.2rem 0.75rem 0.2rem 1rem;
+  /* height: auto; */
+  /* max-width: 100%; */
+  word-wrap: break-word;
+  color: #F5F5F5;
+  margin: 0.5rem;
 }
 
 .chat-input-frame {

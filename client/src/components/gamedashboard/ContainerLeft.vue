@@ -12,10 +12,10 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import Round from '@/components/Round.vue';
-import Notification from '@/components/Notification.vue';
-import Profile from '@/components/Profile.vue';
-import MarsLog from '@/components/MarsLog.vue';
+import Round from '@/components/gamedashboard/Round.vue';
+import Notification from '@/components/gamedashboard/Notification.vue';
+import Profile from '@/components/gamedashboard/Profile.vue';
+import MarsLog from '@/components/gamedashboard/MarsLog.vue';
 
 @Component({
   components: {

@@ -25,21 +25,21 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
-import ContainerTop from '@/components/containers/ContainerTop.vue';
-import ContainerBottom from '@/components/containers/ContainerBottom.vue';
-import ContainerLeft from '@/components/containers/ContainerLeft.vue';
-import ContainerRight from '@/components/containers/ContainerRight.vue';
+import ContainerTop from '@/components/gamedashboard/ContainerTop.vue';
+import ContainerBottom from '@/components/gamedashboard/ContainerBottom.vue';
+import ContainerLeft from '@/components/gamedashboard/ContainerLeft.vue';
+import ContainerRight from '@/components/gamedashboard/ContainerRight.vue';
 import MasterComponent from '@/components/MasterComponent.vue';
 
 @Component({
   components: {
+    BContainer,
+    BRow,
+    BCol,
     ContainerTop,
     ContainerBottom,
     ContainerLeft,
     ContainerRight,
-    BContainer,
-    BRow,
-    BCol,
     MasterComponent,
   },
 })
@@ -55,7 +55,7 @@ export default class GameDashboard extends Vue {}
 .board {
   height: 100vh;
   width: 100vw;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .left {

@@ -14,8 +14,8 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
-import ContainerInvestments from '@/components/containers/ContainerInvestments.vue';
-import ContainerAccomplishments from '@/components/containers/ContainerAccomplishments.vue';
+import ContainerInvestments from '@/components/gamedashboard/ContainerInvestments.vue';
+import ContainerAccomplishments from '@/components/gamedashboard/ContainerAccomplishments.vue';
 
     @Component({
       components: {

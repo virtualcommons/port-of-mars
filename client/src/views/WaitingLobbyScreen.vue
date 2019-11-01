@@ -8,9 +8,9 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import PortOfMarsLogo from '@/components/PortOfMarsLogo.vue';
-import Clock from '@/components/Clock.vue';
-import PlanetMars from '@/components/PlanetMars.vue';
+import PortOfMarsLogo from '@/components/waitinglobbyscreen/PortOfMarsLogo.vue';
+import Clock from '@/components/waitinglobbyscreen/Clock.vue';
+import PlanetMars from '@/components/waitinglobbyscreen/PlanetMars.vue';
 
 @Component({
   components: {

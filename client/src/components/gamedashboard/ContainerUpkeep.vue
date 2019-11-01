@@ -11,7 +11,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
-import StatusBar from '@/components/StatusBar.vue';
+import StatusBar from '@/components/gamedashboard/StatusBar.vue';
 
 @Component({
   components: {

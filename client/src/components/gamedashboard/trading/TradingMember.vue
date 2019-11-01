@@ -1,5 +1,5 @@
 <template>
-  <div class="trading-member" :style="setColor()">
+  <div class="trading-member" :style="setColor()" @click="switchMember(playerRole)">
     <div class="trading-member-img">
       <img
       :src="require(`@/assets/characters/${setImg()}.png`)"
@@ -33,6 +33,10 @@ export default class TradingModal extends Vue {
 
   setColor() {
     return this.isActive ? { backgroundColor: `${this.activeColor}` } : { backgroundColor: `${this.inactiveColor}` };
+  }
+
+  switchMember(member: string) {
+    this.$store.dispatch('setTradingMember', member);
   }
 
   // this is just for show, will need to re-address...

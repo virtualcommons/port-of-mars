@@ -13,4 +13,10 @@ export default {
   setPlayerRole(context: any, payload: any) {
     context.commit('SET_PLAYER_ROLE', payload);
   },
+  setTradingView(context: any, payload: any) {
+    context.commit('SET_TRADING_VIEW', payload);
+  },
+  setTradingMember(context: any, payload: any) {
+    context.commit('SET_TRADING_MEMBER', payload);
+  },
 };

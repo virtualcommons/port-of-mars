@@ -25,6 +25,10 @@ export const initialStoreState = {
   // state variable for layout
   layout: 'default-layout',
 
+  // state variables for trading modal
+  tradingView: 'request',
+  tradingMember: 'Curator',
+
   // this will be merged with the global investments
   // at the end of each round.
   localInvestments: new InvestmentsModel(),

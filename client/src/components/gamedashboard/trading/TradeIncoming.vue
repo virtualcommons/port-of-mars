@@ -1,32 +1,32 @@
 <template>
-  <BContainer class="trade-request">
-    <BRow class="trade-request-content">
-      <BCol cols="8" class="trade-request-content-details">
-        <p>Request from the <span class="request-member">Curator</span>:</p>
-        <div class="request-assets">
-          <AssetRequestInput />
-          <AssetRequestInput />
-          <AssetRequestInput />
-          <AssetRequestInput />
-          <AssetRequestInput />
+  <BContainer class="trade-incoming">
+    <BRow class="trade-incoming-content">
+      <BCol cols="8" class="trade-incoming-content-details">
+        <p>The <span class="request-member">{{ playerRole }}</span> wants:</p>
+        <div class="incoming-assets">
+          <AssetRequest />
+          <AssetRequest />
+          <AssetRequest />
+          <AssetRequest />
+          <AssetRequest />
         </div>
         <p>In exchange for:</p>
         <div class="exchange-assets">
-          <AssetExchangeInput />
-          <AssetExchangeInput />
-          <AssetExchangeInput />
-          <AssetExchangeInput />
-          <AssetExchangeInput />
+          <AssetExchange />
+          <AssetExchange />
+          <AssetExchange />
+          <AssetExchange />
+          <AssetExchange />
         </div>
       </BCol>
-      <BCol cols="4" class="trade-request-content-shuffle">
+      <BCol cols="4" class="trade-incoming-content-shuffle">
         <button type="button" name="button">prev</button>
         <button type="button" name="button">next</button>
       </BCol>
     </BRow>
-    <BRow class="trade-request-buttons">
-      <button type="button" name="button" class="ghost-button">Ghost</button>
-      <button type="button" name="button" class="send-button">Send</button>
+    <BRow class="trade-incoming-buttons">
+      <button type="button" name="button" class="decline-button">Decline</button>
+      <button type="button" name="button" class="send-button">Accept</button>
     </BRow>
   </BContainer>
 </template>
@@ -34,41 +34,44 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
-import AssetRequestInput from '@/components/containers/Trading/AssetRequestInput.vue';
-import AssetExchangeInput from '@/components/containers/Trading/AssetExchangeInput.vue';
+import AssetRequest from '@/components/gamedashboard/trading/AssetRequest.vue';
+import AssetExchange from '@/components/gamedashboard/trading/AssetExchange.vue';
 
 @Component({
   components: {
     BContainer,
     BRow,
     BCol,
-    AssetRequestInput,
-    AssetExchangeInput,
+    AssetRequest,
+    AssetExchange,
   },
 })
-
-export default class TradeRequest extends Vue {}
+export default class TradeIncoming extends Vue {
+  get playerRole() {
+    return this.$store.state.tradingMember;
+  }
+}
 </script>
 
 <style scoped>
-.trade-request {
+.trade-incoming {
   position: absolute;
   z-index: 1;
   height: 100%;
   width: 100%;
   padding: 0;
-  color: #F5F5F5;
-  /* background-color: pink; */
+  color: #f5f5f5;
+  /* background-color: green; */
 }
 
-.trade-request-content {
+.trade-incoming-content {
   height: 80%;
   width: 100%;
   margin: 0;
   /* background-color: blue; */
 }
 
-.trade-request-content-details {
+.trade-incoming-content-details {
   padding: 0 2rem;
   height: 100%;
   display: flex;
@@ -78,7 +81,7 @@ export default class TradeRequest extends Vue {}
   /* background-color: purple; */
 }
 
-.trade-request-content-details p {
+.trade-incoming-content-details p {
   margin: 0;
 }
 
@@ -86,7 +89,7 @@ export default class TradeRequest extends Vue {}
   text-decoration: underline;
 }
 
-.request-assets {
+.incoming-assets {
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -94,7 +97,7 @@ export default class TradeRequest extends Vue {}
   margin: 2rem 0;
 }
 
-.request-assets p {
+.incoming-assets p {
   margin: 0;
 }
 
@@ -110,7 +113,7 @@ export default class TradeRequest extends Vue {}
   margin: 0;
 }
 
-.trade-request-content-shuffle {
+.trade-incoming-content-shuffle {
   height: 100%;
   display: flex;
   justify-content: space-around;
@@ -118,7 +121,7 @@ export default class TradeRequest extends Vue {}
   /* background-color: coral; */
 }
 
-.trade-request-content-shuffle button {
+.trade-incoming-content-shuffle button {
   color: #f5f5f5;
   background: none;
   border: none;
@@ -126,19 +129,19 @@ export default class TradeRequest extends Vue {}
   margin: 0;
 }
 
-.trade-request-content-shuffle button:hover {
+.trade-incoming-content-shuffle button:hover {
   color: #c67b5c;
 }
 
-.trade-request-content-shuffle button:active {
+.trade-incoming-content-shuffle button:active {
   outline: none;
 }
 
-.trade-request-content-shuffle button:focus {
+.trade-incoming-content-shuffle button:focus {
   outline: none;
 }
 
-.trade-request-buttons {
+.trade-incoming-buttons {
   height: 20%;
   width: 100%;
   margin: 0;
@@ -148,21 +151,21 @@ export default class TradeRequest extends Vue {}
   /* background-color: green; */
 }
 
-.ghost-button {
-  visibility: hidden;
+.decline-button {
+  /* visibility: hidden; */
   height: 3rem;
   width: 12.5rem;
   border-radius: 0.5rem;
-  border: 0.125rem solid #C67B5C;
-  color: #F5F5F5;
+  border: 0.125rem solid #c67b5c;
+  color: #f5f5f5;
   background: none;
 }
 
-.ghost-button:active {
+.decline-button:active {
   outline: none !important;
 }
 
-.ghost-button:focus {
+.decline-button:focus {
   outline: none !important;
 }
 
@@ -170,8 +173,8 @@ export default class TradeRequest extends Vue {}
   height: 3rem;
   width: 12.5rem;
   border-radius: 0.5rem;
-  border: 0.125rem solid #C67B5C;
-  background-color: #C67B5C;
+  border: 0.125rem solid #c67b5c;
+  background-color: #c67b5c;
 }
 
 .send-button:focus {

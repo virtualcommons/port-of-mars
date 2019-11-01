@@ -2,10 +2,10 @@
   <div class="transparent-wrapper" :style="{ display: setStyle }">
     <BContainer class="wrapper reset">
       <BRow class="trading-modal-tabs">
-        <div class="tab tab-request-trades">
+        <div class="tab" @click="switchToRequest" :class="setActiveTab('request')">
           <p>Request Trade</p>
         </div>
-        <div class="tab tab-incoming-trades">
+        <div class="tab" @click="switchToIncoming" :class="setActiveTab('incoming')">
           <p>Incoming Trades</p>
         </div>
       </BRow>
@@ -14,25 +14,28 @@
           <TradingMember
             :playerRole="'Researcher'"
             :notificationCount="0"
-            class="trading-modal-members-top trading-modal-members-seperator"/>
+            :class="setActiveMember('Researcher')"
+            class="trading-modal-members-seperator"/>
           <TradingMember
             :playerRole="'Curator'"
             :notificationCount="1"
+            :class="setActiveMember('Curator')"
             class="trading-modal-members-seperator"/>
           <TradingMember
             :playerRole="'Entrepreneur'"
             :notificationCount="2"
+            :class="setActiveMember('Entrepreneur')"
             class="trading-modal-members-seperator"/>
           <TradingMember
             :playerRole="'Pioneer'"
             :notificationCount="3"
+            :class="setActiveMember('Pioneer')"
             class="trading-modal-members-bottom"/>
         </BCol>
         <BCol class="trading-modal-content" cols="9">
-          <button class="close-button" @click="handleClick()">Close</button>
-          <!-- NEED TO RENDER CORRECT VIEW (ON TAB SWITCH) -->
-          <TradeRequest />
-          <!-- <TradeIncoming /> -->
+          <button class="close-button" @click="closeModal">Close</button>
+          <component :is="switchView()" :playerRole="'Pioneer'"></component>
+          <!-- ADD PROPER MEMBER -->
         </BCol>
       </BRow>
     </BContainer>
@@ -42,9 +45,9 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
-import TradingMember from '@/components/containers/Trading/TradingMember.vue';
-import TradeRequest from '@/components/containers/Trading/TradeRequest.vue';
-import TradeIncoming from '@/components/containers/Trading/TradeIncoming.vue';
+import TradingMember from '@/components/gamedashboard/trading/TradingMember.vue';
+import TradeRequest from '@/components/gamedashboard/trading/TradeRequest.vue';
+import TradeIncoming from '@/components/gamedashboard/trading/TradeIncoming.vue';
 
 @Component({
   components: {
@@ -60,6 +63,14 @@ import TradeIncoming from '@/components/containers/Trading/TradeIncoming.vue';
 export default class TradingModal extends Vue {
   setStyle: string = 'none';
 
+  get activeView() {
+    return this.$store.state.tradingView;
+  }
+
+  get activeMember() {
+    return this.$store.state.tradingMember;
+  }
+
   mounted() {
     this.$root.$on('openTrading', (data: any) => {
       // Important: will need to set data type
@@ -67,13 +78,39 @@ export default class TradingModal extends Vue {
     });
   }
 
-  handleClick() {
+  switchView() {
+    return (this.activeView === 'request' ? 'TradeRequest' : 'TradeIncoming');
+  }
+
+  setActiveTab(activeTab: string) {
+    return (this.activeView === activeTab ? 'active' : '');
+  }
+
+  setActiveMember(member:string) {
+    return (this.activeMember === member ? 'active' : '');
+  }
+
+  switchToRequest() {
+    this.$store.dispatch('setTradingView', 'request');
+  }
+
+  switchToIncoming() {
+    this.$store.dispatch('setTradingView', 'incoming');
+  }
+
+  switchMember(member: string) {
+    this.$store.dispatch('setTradingMember', member);
+    console.log(member); // eslint-disable-line no-use-before-define
+  }
+
+  closeModal() {
     this.setStyle = 'none';
   }
 }
 </script>
 
 <style scoped>
+
 .transparent-wrapper {
   height: 100vh;
   width: 100vw;
@@ -82,7 +119,7 @@ export default class TradingModal extends Vue {
   align-items: center;
   background-color: rgba(30, 34, 35, 0.8);
   position: absolute;
-  z-index: 2;
+  z-index: 1;
   top: 0;
   left: -83.5vw;
 }
@@ -117,6 +154,11 @@ export default class TradingModal extends Vue {
   cursor: pointer;
 }
 
+.active {
+  color: #1E2223 !important;
+  background-color: #c67b5c !important;
+}
+
 .tab p {
   margin: 0;
 }
@@ -133,7 +175,7 @@ export default class TradingModal extends Vue {
 
 .trading-modal {
   width: 60rem;
-  height: 30rem;
+  height: 35rem;
   margin: 0;
   padding: 0;
   background-color: #1e2223;
@@ -177,11 +219,6 @@ export default class TradingModal extends Vue {
 
 .close-button:active {
   outline: none;
-}
-
-
-.trading-modal-members-top {
-  border-top-left-radius: 1.25rem;
 }
 
 .trading-modal-members-bottom {

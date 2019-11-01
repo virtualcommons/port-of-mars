@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import LoginScreen from '@/components/LoginScreen.vue';
+import LoginScreen from './LoginScreen.vue';
 
     @Component({
       components: {
