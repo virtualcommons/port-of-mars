@@ -5,5 +5,5 @@ import { GetAccomplishmentsByPerson } from '@/models/AccomplishmentsModels';
 export {
   BaseInvestmentCosts, InvestmentProperties, InvestmentsModel,
   ChatModel, ChatMessage,
-  GetAccomplishmentsByPerson,
+  // GetAccomplishmentsByPerson,
 };

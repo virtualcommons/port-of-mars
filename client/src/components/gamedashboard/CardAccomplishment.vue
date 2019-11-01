@@ -23,7 +23,7 @@ import { Vue, Component } from 'vue-property-decorator';
 @Component
 
 export default class CardAccomplishment extends Vue {
-  private x:number = 3;
+  private x:number = 4;
 }
 </script>
 

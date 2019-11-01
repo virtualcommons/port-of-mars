@@ -1,7 +1,7 @@
 import { BaseInvestmentCosts } from '@/models';
 
 export default class Synthetic {
-  playerRole: string = 'Researcher';
+  playerRole: string = 'Pioneer';
 
   roundNumber: number = 0;
 
@@ -13,5 +13,9 @@ export default class Synthetic {
 
   get round() {
     return this.roundNumber;
+  }
+
+  get roundCosts() {
+    return this.baseRoundCosts;
   }
 }
