@@ -61,7 +61,6 @@ import TradeIncoming from '@/components/gamedashboard/trading/TradeIncoming.vue'
 })
 
 export default class TradingModal extends Vue {
-  // eslint-disable-line no-use-before-define
   setStyle: string = 'none';
 
   get activeView() {
@@ -176,7 +175,7 @@ export default class TradingModal extends Vue {
 
 .trading-modal {
   width: 60rem;
-  height: 30rem;
+  height: 35rem;
   margin: 0;
   padding: 0;
   background-color: #1e2223;

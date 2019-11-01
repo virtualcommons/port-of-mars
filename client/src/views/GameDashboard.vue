@@ -55,7 +55,7 @@ export default class GameDashboard extends Vue {}
 .board {
   height: 100vh;
   width: 100vw;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .left {

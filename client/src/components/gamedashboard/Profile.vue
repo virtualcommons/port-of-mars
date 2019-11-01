@@ -3,6 +3,7 @@
     <div class="profile-frame" id="v-step-0">
       <img :src="require(`@/assets/characters/${setImg()}.png`)" alt="Player" class="profile-img" />
     </div>
+    <p>{{ playerRole }}</p>
   </div>
 </template>
 
@@ -24,12 +25,14 @@ export default class Profile extends Vue {
   height: 100%;
   width: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   /* background-color: pink; */
 }
 
 .profile p {
+  color: #F5F5F5;
   margin: 0;
 }
 
@@ -40,7 +43,8 @@ export default class Profile extends Vue {
   height: 12rem;
   width: 12rem;
   margin: 1rem 0;
-  background-color: rgba(245, 245, 245, 0.2);
+  /* background-color: rgba(245, 245, 245, 0.2); */
+  background-color: rgba(245,245,245, 0.05);
   border: 0.125rem solid #c67b5c;
   border-radius: 50%;
 }
