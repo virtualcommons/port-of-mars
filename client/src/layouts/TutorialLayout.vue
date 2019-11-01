@@ -1,9 +1,13 @@
 <template>
   <div>
     <router-view />
-    <v-tour name="gameTour" :steps="steps" />
+    <v-tour name="gameTour" :steps="steps" :callbacks="tourCallbacks">
+      <template :v-slot="tour">
+      </template>
+    </v-tour>
   </div>
 </template>
+
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
@@ -18,6 +22,11 @@ Vue.use(VueTour);
 })
 
 export default class TutorialLayout extends Vue {
+  tourCallbacks = {
+    onPreviousStep: TutorialLayout.previousStepCallback,
+    onNextStep: TutorialLayout.nextStepCallback,
+  }
+
   steps = [
     {
       //  Profile.vue
@@ -164,6 +173,14 @@ export default class TutorialLayout extends Vue {
       },
     },
   ];
+
+  static previousStepCallback(currentStep: any) {
+    console.log(`[Vue Tour] A custom previousStep callback has been called on step ${currentStep + 1}`);
+  }
+
+  static nextStepCallback(currentStep: any) {
+    console.log(`[Vue Tour] A custom nextStep callback has been called on step ${currentStep + 1}`);
+  }
 
   /**
    * mounted() method
