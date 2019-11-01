@@ -1,6 +1,6 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import Synthetic from '@/tutorial/syntheticdata';
+import Synthetic from '../tutorial/syntheticdata';
 
 @Component({})
 export default class Master extends Vue {
