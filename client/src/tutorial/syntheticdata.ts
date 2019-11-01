@@ -1,16 +1,11 @@
+import { BaseInvestmentCosts } from '@/models';
+
 export default class Synthetic {
-  playerRole: string = 'Curator';
+  playerRole: string = 'Researcher';
 
   roundNumber: number = 0;
 
-  roundCosts: object = {
-    government: -1,
-    legacy: 3,
-    upkeep: 1,
-    finance: 3,
-    science: -1,
-    culture: 2,
-  }
+  baseRoundCosts = BaseInvestmentCosts[this.playerRole];
 
   get player() {
     return this.playerRole;

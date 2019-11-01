@@ -18,7 +18,8 @@
     ],
     "paths": {
       "@/*": [
-        "src/*"
+        "src/*",
+        "../shared/*"
       ]
     },
     "lib": [
@@ -34,6 +35,7 @@
     "src/**/*.vue",
     "tests/**/*.ts",
     "tests/**/*.tsx",
+    "../shared/**/*.ts",
     "node_modules/@types/jest/index.d.ts",
     "node_modules/vue-socket.io-extended/types/index.d.ts"
   ],
