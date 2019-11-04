@@ -188,6 +188,7 @@ export default class TutorialLayout extends Vue {
    *
    */
   mounted() {
+    // @ts-ignore
     this.$tours.gameTour.start();
   }
 }

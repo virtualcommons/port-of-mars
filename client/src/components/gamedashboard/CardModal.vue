@@ -24,12 +24,12 @@ export default class CardModal extends Vue {
   setStyle: string = 'none';
 
   mounted() {
-    this.$root.$on('openCard', (data: object) => {
+    this.$root.$on('openCard', (data: any) => {
       this.setStyle = '';
-      if (data.type === 'event') {
+      if (data.card === 'event') {
         console.log('Modal: Event Card'); // eslint-disable-line no-use-before-define
       }
-      if (data.type === 'accomplishment') {
+      if (data.card === 'accomplishment') {
         console.log('Modal: Accomplishment Card'); // eslint-disable-line no-use-before-define
       }
     });

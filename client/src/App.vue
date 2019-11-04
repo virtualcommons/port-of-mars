@@ -37,7 +37,7 @@ export default class Home extends Vue {
    *
    */
   get layout() {
-    console.log(this.$store.getters.layout); // eslint-disable-line no-use-before-define
+    // console.log(this.$store.getters.layout); // eslint-disable-line no-use-before-define
     return this.$store.getters.layout;
   }
 

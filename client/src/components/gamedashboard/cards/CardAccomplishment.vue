@@ -26,7 +26,7 @@ export default class CardAccomplishment extends Vue {
   private x: number = 4;
 
   private cardModalData: object = {
-    type: 'accomplishment',
+    card: 'accomplishment',
     payload: {},
   }
 

@@ -11,7 +11,7 @@ import { Vue, Component } from 'vue-property-decorator';
 
 export default class CardEvent extends Vue {
   private cardModalData: object = {
-    type: 'event',
+    card: 'event',
     payload: {},
   }
 
