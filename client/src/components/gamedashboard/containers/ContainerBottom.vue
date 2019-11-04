@@ -1,10 +1,10 @@
 <template>
   <BContainer class="container-bottom" id="v-step-9">
     <BRow class="row-bottom">
-      <BCol class="container-bottom-investments" cols="8">
+      <BCol class="container-bottom-investments" cols="7">
         <ContainerInvestments />
       </BCol>
-      <BCol class="container-bottom-accomplishments" cols="4">
+      <BCol class="container-bottom-accomplishments" cols="5">
         <ContainerAccomplishments />
       </BCol>
     </BRow>
@@ -14,8 +14,8 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
-import ContainerInvestments from '@/components/gamedashboard/ContainerInvestments.vue';
-import ContainerAccomplishments from '@/components/gamedashboard/ContainerAccomplishments.vue';
+import ContainerInvestments from '@/components/gamedashboard/containers/ContainerInvestments.vue';
+import ContainerAccomplishments from '@/components/gamedashboard/containers/ContainerAccomplishments.vue';
 
     @Component({
       components: {
@@ -37,6 +37,7 @@ export default class ContainerBottom extends Vue {}
         margin: 0;
         padding: 0;
         border: 0.125rem solid #F5F5F5;
+        max-width: none;
     }
 
     .row-bottom {

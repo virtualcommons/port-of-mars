@@ -1,13 +1,12 @@
 <template>
   <div class="asset-exchange">
     <div class="asset-exchange-img">
+      <!-- Note: need to render image assets -->
       <i class="fas fa-spinner fa-2x"></i>
     </div>
     <p class="asset-exchange-output">
-      <span class="asset-exchange-output-requested">0</span>/<span
-        class="asset-exchange-output-available"
-        >2</span
-      >
+      <span class="asset-exchange-output-requested">{{ value }}</span
+      >/<span class="asset-exchange-output-available">{{ inventory }}</span>
     </p>
   </div>
 </template>
@@ -16,25 +15,28 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component({})
-export default class AssetExchange extends Vue {}
+export default class AssetExchange extends Vue {
+  @Prop({ default: 0 }) private value!: number;
+
+  @Prop({ default: 0 }) private inventory!: number;
+}
 </script>
 
-<style lang="css" scoped>
+<style scoped>
 .asset-exchange {
   width: 4rem;
+  margin-right: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* background-color: pink; */
-  margin-right: 1rem;
 }
 
 .asset-exchange-img {
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
 }
 
 .asset-exchange-output {

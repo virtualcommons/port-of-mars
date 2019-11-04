@@ -1,10 +1,11 @@
 <template>
   <div class="container-left">
+    <!-- <ProfileModal /> -->
     <div class="placeholder-left">
       <!-- will eventually refactor -->
       <Round id="v-step-3"/>
       <Notification id="v-step-4"/>
-      <Profile :playerRole='this.$store.state.playerRole' />
+      <ContainerProfile :playerRole='this.$store.state.playerRole' :playerScore="10"/>
     </div>
     <MarsLog id="v-step-5"/>
   </div>
@@ -14,15 +15,17 @@
 import { Vue, Component } from 'vue-property-decorator';
 import Round from '@/components/gamedashboard/Round.vue';
 import Notification from '@/components/gamedashboard/Notification.vue';
-import Profile from '@/components/gamedashboard/Profile.vue';
+import ContainerProfile from '@/components/gamedashboard/containers/ContainerProfile.vue';
 import MarsLog from '@/components/gamedashboard/MarsLog.vue';
+// import ProfileModal from '@/components/gamedashboard/ProfileModal.vue';
 
 @Component({
   components: {
     Round,
     Notification,
-    Profile,
+    ContainerProfile,
     MarsLog,
+    // ProfileModal,
   },
 })
 export default class ContainerLeft extends Vue {}
@@ -36,9 +39,8 @@ export default class ContainerLeft extends Vue {}
 }
 
 .placeholder-left {
+  height: 50%;
   display: flex;
   flex-direction: column;
-  height: 50%;
-  /* background-color: purple; */
 }
 </style>

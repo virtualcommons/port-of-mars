@@ -1,12 +1,15 @@
 <template>
   <div class="asset-exchange-input">
     <div class="asset-exchange-input-img">
+      <!-- Note: need to render image assets -->
       <i class="fas fa-spinner fa-2x"></i>
     </div>
-    <div class="asset-exchange-input-input">
-      <input type="number" name="" placeholder="0">
+    <div class="asset-exchange-input-field">
+      <input type="number" name="" placeholder="0" />
       <!-- this should have a min (0) and max (asset limit) value -->
-      <p>/2</p>
+      <p>
+        /<span class="asset-exchange-input-field-inventory">{{ inventory }}</span>
+      </p>
     </div>
   </div>
 </template>
@@ -15,60 +18,64 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component({})
-
-export default class AssetExchangeInput extends Vue {}
+export default class AssetExchangeInput extends Vue {
+  @Prop({ default: 0 }) private inventory!: number;
+}
 </script>
 
 <style scoped>
 .asset-exchange-input {
   width: 4rem;
+  margin-right: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* background-color: black; */
-  margin-right: 1rem;
 }
 
 .asset-exchange-input-img {
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
 }
 
-.asset-exchange-input-input {
+.asset-exchange-input-field {
   margin-top: 1rem;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
 }
 
-.asset-exchange-input-input p {
-  margin: 0;
-}
-
-.asset-exchange-input-input input {
+.asset-exchange-input-field input {
   height: 2rem;
   width: 50%;
-  border: 0.125rem solid #C67B5C;
+  border: 0.125rem solid #c67b5c;
   border-radius: 0.5rem;
-  color: #F5F5F5 !important;
-  background: none;
   text-align: center;
+  color: #f5f5f5 !important;
+  background: none;
 }
 
-.asset-exchange-input-input input:focus {
+.asset-exchange-input-field input:focus {
   outline: none;
 }
 
-.asset-exchange-input-input input::-webkit-inner-spin-button {
+.asset-exchange-input-field input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-.asset-exchange-input-input input::-webkit-outer-spin-button {
+.asset-exchange-input-field input::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.asset-exchange-input-field p {
+  margin: 0;
+}
+
+.asset-exchange-input-field-inventory {
+  color: #c67b5c;
 }
 </style>

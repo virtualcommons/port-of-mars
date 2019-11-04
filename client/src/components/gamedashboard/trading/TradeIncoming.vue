@@ -4,29 +4,33 @@
       <BCol cols="8" class="trade-incoming-content-details">
         <p>The <span class="request-member">{{ playerRole }}</span> wants:</p>
         <div class="incoming-assets">
-          <AssetRequest />
-          <AssetRequest />
-          <AssetRequest />
-          <AssetRequest />
-          <AssetRequest />
+          <AssetRequest :value="0"/>
+          <AssetRequest :value="1"/>
+          <AssetRequest :value="2"/>
+          <AssetRequest :value="1"/>
+          <AssetRequest :value="0"/>
         </div>
         <p>In exchange for:</p>
         <div class="exchange-assets">
-          <AssetExchange />
-          <AssetExchange />
-          <AssetExchange />
-          <AssetExchange />
-          <AssetExchange />
+          <AssetExchange :value="1" :inventory="1"/>
+          <AssetExchange :value="0" :inventory="0"/>
+          <AssetExchange :value="0" :inventory="3"/>
+          <AssetExchange :value="0" :inventory="1"/>
+          <AssetExchange :value="2" :inventory="2"/>
         </div>
       </BCol>
       <BCol cols="4" class="trade-incoming-content-shuffle">
+        <!-- Note: Shuffle to previous trade (needs implementation) -->
         <button type="button" name="button">prev</button>
+        <!-- Note: Shuffle to next trade (needs implementation) -->
         <button type="button" name="button">next</button>
       </BCol>
     </BRow>
     <BRow class="trade-incoming-buttons">
+      <!-- Note: Send decline event -->
       <button type="button" name="button" class="decline-button">Decline</button>
-      <button type="button" name="button" class="send-button">Accept</button>
+      <!-- Note: Send accept event -->
+      <button type="button" name="button" class="accept-button">Accept</button>
     </BRow>
   </BContainer>
 </template>
@@ -61,24 +65,21 @@ export default class TradeIncoming extends Vue {
   width: 100%;
   padding: 0;
   color: #f5f5f5;
-  /* background-color: green; */
 }
 
 .trade-incoming-content {
   height: 80%;
   width: 100%;
   margin: 0;
-  /* background-color: blue; */
 }
 
 .trade-incoming-content-details {
-  padding: 0 2rem;
   height: 100%;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: flex-start;
-  /* background-color: purple; */
 }
 
 .trade-incoming-content-details p {
@@ -90,11 +91,10 @@ export default class TradeIncoming extends Vue {
 }
 
 .incoming-assets {
+  margin: 2rem 0;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  /* background-color: black; */
-  margin: 2rem 0;
 }
 
 .incoming-assets p {
@@ -106,7 +106,6 @@ export default class TradeIncoming extends Vue {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  /* background-color: black; */
 }
 
 .exchange-assets p {
@@ -115,29 +114,25 @@ export default class TradeIncoming extends Vue {
 
 .trade-incoming-content-shuffle {
   height: 100%;
+  padding: 2rem;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  /* background-color: coral; */
 }
 
 .trade-incoming-content-shuffle button {
-  color: #f5f5f5;
-  background: none;
+  margin: 0;
   border: none;
   text-decoration: underline;
-  margin: 0;
+  color: #f5f5f5;
+  background: none;
 }
 
 .trade-incoming-content-shuffle button:hover {
   color: #c67b5c;
 }
 
-.trade-incoming-content-shuffle button:active {
-  outline: none;
-}
-
-.trade-incoming-content-shuffle button:focus {
+.trade-incoming-content-shuffle button:active, .trade-incoming-content-shuffle button:focus {
   outline: none;
 }
 
@@ -148,40 +143,30 @@ export default class TradeIncoming extends Vue {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  /* background-color: green; */
 }
 
 .decline-button {
-  /* visibility: hidden; */
   height: 3rem;
   width: 12.5rem;
-  border-radius: 0.5rem;
   border: 0.125rem solid #c67b5c;
+  border-radius: 0.5rem;
   color: #f5f5f5;
   background: none;
 }
 
-.decline-button:active {
+.decline-button:active, .decline-button:focus {
   outline: none !important;
 }
 
-.decline-button:focus {
-  outline: none !important;
-}
-
-.send-button {
+.accept-button {
   height: 3rem;
   width: 12.5rem;
-  border-radius: 0.5rem;
   border: 0.125rem solid #c67b5c;
+  border-radius: 0.5rem;
   background-color: #c67b5c;
 }
 
-.send-button:focus {
-  outline: none !important;
-}
-
-.send-button:active {
+.accept-button:focus, .accept-button:active {
   outline: none !important;
 }
 </style>

@@ -14,7 +14,7 @@ export default class Master extends Vue {
 
   constructor() {
     super();
-    console.log(this.costs);
+    // console.log(this.costs);
     this.$store.dispatch('setPlayerRole', this.role);
     this.$store.dispatch('updateRoundCosts', this.costs);
   }

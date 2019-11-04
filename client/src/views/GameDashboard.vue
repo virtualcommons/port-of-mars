@@ -1,6 +1,9 @@
 <template>
   <BContainer class="reset">
-    <MasterComponent/>
+    <MasterComponent />
+    <ProfileModal />
+    <TradingModal />
+    <CardModal />
     <BRow class="board reset">
       <BCol cols="2" class="left reset">
         <!-- left section goes here -->
@@ -25,11 +28,14 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
-import ContainerTop from '@/components/gamedashboard/ContainerTop.vue';
-import ContainerBottom from '@/components/gamedashboard/ContainerBottom.vue';
-import ContainerLeft from '@/components/gamedashboard/ContainerLeft.vue';
-import ContainerRight from '@/components/gamedashboard/ContainerRight.vue';
+import ContainerTop from '@/components/gamedashboard/containers/ContainerTop.vue';
+import ContainerBottom from '@/components/gamedashboard/containers/ContainerBottom.vue';
+import ContainerLeft from '@/components/gamedashboard/containers/ContainerLeft.vue';
+import ContainerRight from '@/components/gamedashboard/containers/ContainerRight.vue';
 import MasterComponent from '@/components/MasterComponent.vue';
+import ProfileModal from '@/components/gamedashboard/ProfileModal.vue';
+import CardModal from '@/components/gamedashboard/CardModal.vue';
+import TradingModal from '@/components/gamedashboard/trading/TradingModal.vue';
 
 @Component({
   components: {
@@ -41,6 +47,9 @@ import MasterComponent from '@/components/MasterComponent.vue';
     ContainerLeft,
     ContainerRight,
     MasterComponent,
+    ProfileModal,
+    TradingModal,
+    CardModal,
   },
 })
 export default class GameDashboard extends Vue {}
@@ -55,14 +64,15 @@ export default class GameDashboard extends Vue {}
 .board {
   height: 100vh;
   width: 100vw;
-  /* overflow: hidden; */
 }
 
 .left {
+  position: relative;
   background-color: #1e2223;
 }
 
 .right {
+  position: relative;
   background-color: #1e2223;
 }
 
@@ -72,11 +82,11 @@ export default class GameDashboard extends Vue {}
 }
 
 .bottom {
+  height: 60vh;
+  padding: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
-  height: 60vh;
   background-color: #1e2223;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="card-event">
+  <div class="card-event" @click="handleClick">
 
   </div>
 </template>
@@ -7,9 +7,18 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 
-@Component
+@Component({})
 
-export default class CardEvent extends Vue {}
+export default class CardEvent extends Vue {
+  private cardModalData: object = {
+    card: 'event',
+    payload: {},
+  }
+
+  handleClick() {
+    this.$root.$emit('openCard', this.cardModalData);
+  }
+}
 </script>
 
 <style scoped>
@@ -21,5 +30,6 @@ export default class CardEvent extends Vue {}
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 </style>

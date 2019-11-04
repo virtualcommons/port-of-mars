@@ -4,17 +4,23 @@
     <p><span class="phase-current">Invest</span>&nbsp;<span class="phase-time">5:00</span></p>
     <!-- phase-current will change on props -->
     <!-- phase-time will change on props (seperate component?) -->
+    <!-- <Clock /> -->
+    <!-- ADD DONE BUTTON -->
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
+import Clock from '@/components/gamedashboard/Clock.vue';
 
-@Component
+@Component({
+  components: {
+    Clock,
+  },
+})
 
 export default class Phase extends Vue {}
 </script>
-
 
 <style scoped>
 .phase {
@@ -33,14 +39,14 @@ export default class Phase extends Vue {}
 }
 
 .phase-title {
-  color: #F5F5F5;
+  color: #f5f5f5;
 }
 
 .phase-current {
-  color: #C67B5C;
+  color: #c67b5c;
 }
 
 .phase-time {
-  color: #C67B5C;
+  color: #c67b5c;
 }
 </style>

@@ -1,42 +1,42 @@
 <template>
-  <div class="transparent-wrapper" :style="{ display: setStyle }">
-    <BContainer class="wrapper reset">
-      <BRow class="trading-modal-tabs">
-        <div class="tab" @click="switchToRequest" :class="setActiveTab('request')">
+  <div class="tm-transparent-wrapper" :style="{ display: setStyle }">
+    <BContainer class="tm-wrapper">
+      <BRow class="tm-tabs">
+        <div class="tm-tabs-tab" @click="setView('request')" :class="setActiveTab('request')">
           <p>Request Trade</p>
         </div>
-        <div class="tab" @click="switchToIncoming" :class="setActiveTab('incoming')">
+        <div class="tm-tabs-tab" @click="setView('incoming')" :class="setActiveTab('incoming')">
           <p>Incoming Trades</p>
         </div>
       </BRow>
-      <BRow class="trading-modal">
-        <BCol class="trading-modal-members" cols="3">
+      <BRow class="tm">
+        <BCol class="tm-members" cols="3">
           <TradingMember
             :playerRole="'Researcher'"
             :notificationCount="0"
             :class="setActiveMember('Researcher')"
-            class="trading-modal-members-seperator"/>
+            class="tm-members-seperator"/>
           <TradingMember
             :playerRole="'Curator'"
             :notificationCount="1"
             :class="setActiveMember('Curator')"
-            class="trading-modal-members-seperator"/>
+            class="tm-members-seperator"/>
           <TradingMember
             :playerRole="'Entrepreneur'"
             :notificationCount="2"
             :class="setActiveMember('Entrepreneur')"
-            class="trading-modal-members-seperator"/>
+            class="tm-members-seperator"/>
           <TradingMember
             :playerRole="'Pioneer'"
             :notificationCount="3"
             :class="setActiveMember('Pioneer')"
-            class="trading-modal-members-bottom"/>
+            class="tm-members-bottom"/>
         </BCol>
-        <BCol class="trading-modal-content" cols="9">
-          <button class="close-button" @click="closeModal">Close</button>
-          <component :is="switchView()" :playerRole="'Pioneer'"></component>
+        <BCol class="tm-view" cols="9">
           <!-- ADD PROPER MEMBER -->
+          <component :is="switchView()" :playerRole="'Pioneer'"></component>
         </BCol>
+        <button class="tm-close-button" @click="closeModal">Close</button>
       </BRow>
     </BContainer>
   </div>
@@ -72,59 +72,56 @@ export default class TradingModal extends Vue {
   }
 
   mounted() {
-    this.$root.$on('openTrading', (data: any) => {
-      // Important: will need to set data type
+    this.$root.$on('openTrading', (data: string) => {
       this.setStyle = '';
     });
   }
 
-  switchView() {
+  closeModal(): void {
+    this.setStyle = 'none';
+  }
+
+  switchView(): any {
+    // Note: need to adjust return type
     return (this.activeView === 'request' ? 'TradeRequest' : 'TradeIncoming');
   }
 
-  setActiveTab(activeTab: string) {
+  setActiveTab(activeTab: string): string {
     return (this.activeView === activeTab ? 'active' : '');
   }
 
-  setActiveMember(member:string) {
+  setView(view: string): void {
+    if (view === 'request') {
+      this.$store.dispatch('setTradingView', 'request');
+    }
+    if (view === 'incoming') {
+      this.$store.dispatch('setTradingView', 'incoming');
+    }
+    // Note: add additional view as necessary
+  }
+
+  setActiveMember(member: string): string {
     return (this.activeMember === member ? 'active' : '');
-  }
-
-  switchToRequest() {
-    this.$store.dispatch('setTradingView', 'request');
-  }
-
-  switchToIncoming() {
-    this.$store.dispatch('setTradingView', 'incoming');
-  }
-
-  switchMember(member: string) {
-    this.$store.dispatch('setTradingMember', member);
-    console.log(member); // eslint-disable-line no-use-before-define
-  }
-
-  closeModal() {
-    this.setStyle = 'none';
   }
 }
 </script>
 
 <style scoped>
 
-.transparent-wrapper {
+.tm-transparent-wrapper {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
   height: 100vh;
   width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: rgba(30, 34, 35, 0.8);
-  position: absolute;
-  z-index: 1;
-  top: 0;
-  left: -83.5vw;
 }
 
-.wrapper {
+.tm-wrapper {
   padding: 0;
   margin: 0;
   display: flex;
@@ -133,99 +130,86 @@ export default class TradingModal extends Vue {
   align-items: center;
 }
 
-.trading-modal-tabs {
+.tm-tabs {
   height: 3rem;
   width: 60rem;
   border-left: 0.125rem solid #F5F5F5;
   border-bottom: 0.125rem solid #F5F5F5;
-  /* background-color: pink; */
 }
 
-.tab {
+.tm-tabs-tab {
   height: 100%;
   width: 12rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #F5F5F5;
-  background-color: #1E2223;
   border-right: 0.125rem solid #F5F5F5;
   border-top: 0.125rem solid #F5F5F5;
+  color: #F5F5F5;
+  background-color: #1E2223;
   cursor: pointer;
+}
+
+.tm-tabs-tab p {
+  margin: 0;
+}
+
+.tm {
+  position: relative;
+  height: 35rem;
+  width: 60rem;
+  margin: 0;
+  padding: 0;
+  border: 0.125rem solid #F5F5F5;
+  border-top: none;
+  border-radius: 0 0 1.25rem 1.25rem;
+  background-color: #1e2223;
+}
+
+.tm-members {
+  height: 100%;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-right: 0.125rem solid #F5F5F5;
+}
+
+.tm-members-bottom {
+  border-bottom-left-radius: 1.25rem;
+}
+
+.tm-members-seperator {
+  border-bottom: 0.125rem solid #F5F5F5;
+}
+
+.tm-view {
+  height: 100%;
+  padding: 0;
+}
+
+.tm-close-button {
+  position: absolute;
+  z-index: 2;
+  top: 2rem;
+  right: 2rem;
+  border: none;
+  text-decoration: underline;
+  color: #F5F5F5;
+  background: none;
+}
+
+.tm-close-button:hover {
+  color: #c67b5c;
+}
+
+.tm-close-button:active {
+  outline: none;
 }
 
 .active {
   color: #1E2223 !important;
   background-color: #c67b5c !important;
-}
-
-.tab p {
-  margin: 0;
-}
-
-.tab-request-trades {
-  color: #1E2223;
-  background-color: #c67b5c;
-}
-
-.tab-incoming-trades {
-  /* color: #1E2223; */
-  /* background-color: #c67b5c; */
-}
-
-.trading-modal {
-  width: 60rem;
-  height: 35rem;
-  margin: 0;
-  padding: 0;
-  background-color: #1e2223;
-  border: 0.125rem solid #F5F5F5;
-  border-top: none;
-  border-radius: 0 0 1.25rem 1.25rem;
-}
-
-.trading-modal-members {
-  height: 100%;
-  padding: 0;
-  border-right: 0.125rem solid #F5F5F5;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  /* background-color: green; */
-}
-
-.trading-modal-content {
-  height: 100%;
-  padding: 0;
-  position: relative;
-  /* background-color: pink; */
-}
-
-.close-button {
-  position: absolute;
-  top: 2rem;
-  right: 2rem;
-  z-index: 2;
-  text-decoration: underline;
-  color: #F5F5F5;
-  background: none;
-  border: none;
-}
-
-.close-button:hover {
-  color: #c67b5c;
-}
-
-.close-button:active {
-  outline: none;
-}
-
-.trading-modal-members-bottom {
-  border-bottom-left-radius: 1.25rem;
-}
-
-.trading-modal-members-seperator {
-  border-bottom: 0.125rem solid #F5F5F5;
 }
 </style>
