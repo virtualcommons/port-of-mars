@@ -1,6 +1,6 @@
 <template>
-  <div class="notification">
-    <p class="notification-message">The Invest phase has started. Spend those timeblocks wisely!</p>
+  <div class="notification" :style="{ display: setStyle }">
+    <p class="notification-message">{{ message }}</p>
     <!-- will be updated on props -->
   </div>
 </template>
@@ -9,8 +9,21 @@
 import { Vue, Component } from 'vue-property-decorator';
 
 @Component
+export default class Notification extends Vue {
+  // message: string = this.$store.state.notifMessage;
+  setStyle: string = 'none';
 
-export default class Notification extends Vue {}
+  get message() {
+    return this.$store.state.notifMessage;
+  }
+
+  mounted() {
+    this.$root.$on('notification', (data: any) => {
+      this.setStyle = '';
+      this.$store.dispatch('addToMarsLog', this.message);
+    });
+  }
+}
 </script>
 
 <style scoped>
@@ -20,7 +33,7 @@ export default class Notification extends Vue {}
   align-items: center;
   width: 100%;
   min-height: 5rem;
-  background-color: #C67B5C;
+  background-color: #c67b5c;
   border-radius: 1rem;
   margin: 1rem 0;
   padding: 0.75rem;
@@ -30,5 +43,4 @@ export default class Notification extends Vue {}
   font-size: 0.75rem;
   margin: 0;
 }
-
 </style>
