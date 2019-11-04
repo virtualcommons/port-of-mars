@@ -4,7 +4,7 @@
       <!-- will eventually refactor -->
       <Round id="v-step-3"/>
       <Notification id="v-step-4"/>
-      <Profile :playerRole='this.$store.state.playerRole' />
+      <Profile :playerRole='this.$store.state.playerRole' :playerScore="10"/>
     </div>
     <MarsLog id="v-step-5"/>
   </div>

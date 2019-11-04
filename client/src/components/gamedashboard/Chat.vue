@@ -29,7 +29,7 @@ export default class Chat extends Vue {
 
   updated() {
     const elem = this.$el.querySelector('.chat-chat');
-    elem.scrollTop = elem.scrollHeight;
+    elem!.scrollTop = elem!.scrollHeight;
   }
 
   get messages() {
@@ -37,13 +37,15 @@ export default class Chat extends Vue {
   }
 
   submitToChat() {
-    const submittedMessage = {
-      sender: this.$store.state.playerRole,
-      content: this.message,
-    };
+    if (this.message !== '') {
+      const submittedMessage = {
+        sender: this.$store.state.playerRole,
+        content: this.message,
+      };
 
-    this.$store.dispatch('sendChatMsg', submittedMessage);
-    this.message = '';
+      this.$store.dispatch('sendChatMsg', submittedMessage);
+      this.message = '';
+    }
   }
 }
 </script>

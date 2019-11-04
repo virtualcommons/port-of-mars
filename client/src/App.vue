@@ -57,6 +57,7 @@ html,
 body {
   font-family: 'Space Mono', monospace !important;
   background-color: #1e2223;
+  overflow: hidden;
 }
 
 .game {

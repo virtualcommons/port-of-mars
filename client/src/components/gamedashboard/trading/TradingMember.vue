@@ -1,5 +1,5 @@
-<template>
-  <div class="trading-member" :style="setColor()" @click="switchMember(playerRole)">
+setMember<template>
+  <div class="trading-member" :style="setColor()" @click="setMember(playerRole)">
     <div class="trading-member-img">
       <img
       :src="require(`@/assets/characters/${setImg()}.png`)"
@@ -23,26 +23,17 @@ export default class TradingModal extends Vue {
 
   @Prop({ default: false }) private isActive!: boolean;
 
-  @Prop({ default: '#C67B5C' }) private activeColor!: string;
-
-  @Prop({ default: 'none' }) private inactiveColor!: string;
-
   setImg(): string {
     return this.playerRole;
   }
 
-  setColor() {
-    return this.isActive ? { backgroundColor: `${this.activeColor}` } : { backgroundColor: `${this.inactiveColor}` };
+  setColor(): object {
+    return this.isActive ? { backgroundColor: '#C67B5C' } : { backgroundColor: 'none' };
   }
 
-  switchMember(member: string) {
+  setMember(member: string): void {
     this.$store.dispatch('setTradingMember', member);
   }
-
-  // this is just for show, will need to re-address...
-  // handleClick() {
-  //   this.isActive = true;
-  // }
 }
 </script>
 
@@ -55,7 +46,6 @@ export default class TradingModal extends Vue {
   justify-content: center;
   align-items: center;
   color: #F5F5F5;
-  /* background-color: blue; */
   cursor: pointer;
 }
 
@@ -66,7 +56,6 @@ export default class TradingModal extends Vue {
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  /* background-color: purple; */
 }
 
 .trading-member-img img {
@@ -79,7 +68,6 @@ export default class TradingModal extends Vue {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* background-color: orange; */
 }
 
 .trading-member-status p {

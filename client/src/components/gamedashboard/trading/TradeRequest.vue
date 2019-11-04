@@ -20,12 +20,16 @@
         </div>
       </BCol>
       <BCol cols="4" class="trade-request-content-shuffle">
+        <!-- Note: Shuffle to previous trade (needs implementation) -->
         <button type="button" name="button">prev</button>
+        <!-- Note: Shuffle to next trade (needs implementation) -->
         <button type="button" name="button">next</button>
       </BCol>
     </BRow>
     <BRow class="trade-request-buttons">
+      <!-- Note: Send cancel event -->
       <button type="button" name="button" class="ghost-button">Ghost</button>
+      <!-- Note: Send send event -->
       <button type="button" name="button" class="send-button">Send</button>
     </BRow>
   </BContainer>
@@ -62,24 +66,21 @@ export default class TradeRequest extends Vue {
   width: 100%;
   padding: 0;
   color: #F5F5F5;
-  /* background-color: pink; */
 }
 
 .trade-request-content {
   height: 80%;
   width: 100%;
   margin: 0;
-  /* background-color: blue; */
 }
 
 .trade-request-content-details {
-  padding: 0 2rem;
   height: 100%;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: flex-start;
-  /* background-color: purple; */
 }
 
 .trade-request-content-details p {
@@ -91,15 +92,10 @@ export default class TradeRequest extends Vue {
 }
 
 .request-assets {
+  margin: 2rem 0;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  /* background-color: black; */
-  margin: 2rem 0;
-}
-
-.request-assets p {
-  margin: 0;
 }
 
 .exchange-assets {
@@ -107,27 +103,22 @@ export default class TradeRequest extends Vue {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  /* background-color: black; */
-}
-
-.exchange-assets p {
-  margin: 0;
 }
 
 .trade-request-content-shuffle {
   height: 100%;
+  padding: 2rem;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  /* background-color: coral; */
 }
 
 .trade-request-content-shuffle button {
-  color: #f5f5f5;
-  background: none;
+  margin: 0;
   border: none;
   text-decoration: underline;
-  margin: 0;
+  color: #f5f5f5;
+  background: none;
 }
 
 .trade-request-content-shuffle button:hover {
@@ -149,24 +140,19 @@ export default class TradeRequest extends Vue {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  /* background-color: green; */
 }
 
 .ghost-button {
   visibility: hidden;
   height: 3rem;
   width: 12.5rem;
-  border-radius: 0.5rem;
   border: 0.125rem solid #C67B5C;
+  border-radius: 0.5rem;
   color: #F5F5F5;
   background: none;
 }
 
-.ghost-button:active {
-  outline: none !important;
-}
-
-.ghost-button:focus {
+.ghost-button:active, .ghost-button:focus {
   outline: none !important;
 }
 
@@ -178,11 +164,7 @@ export default class TradeRequest extends Vue {
   background-color: #C67B5C;
 }
 
-.send-button:focus {
-  outline: none !important;
-}
-
-.send-button:active {
+.send-button:focus, .send-button:active {
   outline: none !important;
 }
 </style>

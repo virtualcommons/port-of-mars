@@ -1,5 +1,5 @@
 <template>
-  <div :style="setWidth()" @click="handleClick" class="member">
+  <div @click="handleClick" class="member">
     <div :style="setVisibility()" class="member-notif">
       <p class="member-notif-num">{{ notificationCount }}</p>
     </div>
@@ -20,14 +20,8 @@ export default class Member extends Vue {
 
   @Prop({ default: 1 }) private notificationCount!: number;
 
-  @Prop({ default: 90 }) private width!: number;
-
   setImg(): string {
     return this.playerRole;
-  }
-
-  setWidth(): object {
-    return { width: `${this.width}%` };
   }
 
   setVisibility(): object {
@@ -44,6 +38,7 @@ export default class Member extends Vue {
 
 <style scoped>
 .member {
+  width: 100%;
   padding: 0.25rem 1rem;
   display: flex;
   justify-content: space-between;
