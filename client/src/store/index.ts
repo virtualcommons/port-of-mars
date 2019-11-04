@@ -25,6 +25,9 @@ export const initialStoreState = {
   // state variable for layout
   layout: 'default-layout',
 
+  // notification
+  notifMessage: '',
+
   // state variables for trading modal
   tradingView: 'request',
   tradingMember: 'Curator',
@@ -42,5 +45,4 @@ export default new Vuex.Store({
   getters,
 
   actions,
-
 });
