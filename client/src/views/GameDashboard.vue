@@ -25,10 +25,10 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
-import ContainerTop from '@/components/gamedashboard/ContainerTop.vue';
-import ContainerBottom from '@/components/gamedashboard/ContainerBottom.vue';
-import ContainerLeft from '@/components/gamedashboard/ContainerLeft.vue';
-import ContainerRight from '@/components/gamedashboard/ContainerRight.vue';
+import ContainerTop from '@/components/gamedashboard/containers/ContainerTop.vue';
+import ContainerBottom from '@/components/gamedashboard/containers/ContainerBottom.vue';
+import ContainerLeft from '@/components/gamedashboard/containers/ContainerLeft.vue';
+import ContainerRight from '@/components/gamedashboard/containers/ContainerRight.vue';
 import MasterComponent from '@/components/MasterComponent.vue';
 
 @Component({

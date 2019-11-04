@@ -7,8 +7,8 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import ContainerUpkeep from '@/components/gamedashboard/ContainerUpkeep.vue';
-import ContainerPhase from '@/components/gamedashboard/ContainerPhase.vue';
+import ContainerUpkeep from '@/components/gamedashboard/containers/ContainerUpkeep.vue';
+import ContainerPhase from '@/components/gamedashboard/containers/ContainerPhase.vue';
 
 @Component({
   components: {

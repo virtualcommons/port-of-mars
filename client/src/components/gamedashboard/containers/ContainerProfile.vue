@@ -15,7 +15,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 
 @Component({})
 
-export default class Profile extends Vue {
+export default class ContainerProfile extends Vue {
   @Prop({ default: 'Curator' }) private playerRole!: string;
 
   @Prop({ default: 0 }) private playerScore!: number;

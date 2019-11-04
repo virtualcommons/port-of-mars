@@ -34,7 +34,7 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
 import StatusBar from '@/components/gamedashboard/StatusBar.vue';
-import CardInvestment from '@/components/gamedashboard/CardInvestment.vue';
+import CardInvestment from '@/components/gamedashboard/cards/CardInvestment.vue';
 
 @Component({
   components: {

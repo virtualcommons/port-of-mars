@@ -4,8 +4,8 @@
     <p><span class="phase-current">Invest</span>&nbsp;<span class="phase-time">5:00</span></p>
     <!-- phase-current will change on props -->
     <!-- phase-time will change on props (seperate component?) -->
-    <!-- Note: add score -->
     <!-- <Clock /> -->
+    <!-- ADD DONE BUTTON -->
   </div>
 </template>
 
