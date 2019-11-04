@@ -1,7 +1,7 @@
-import { BaseInvestmentCosts } from '@/models';
+import { BaseInvestmentCosts, GetAccomplishmentsByPerson } from '@/models';
 
 export default class Synthetic {
-  playerRole: string = 'Pioneer';
+  playerRole: string = 'Researcher';
 
   roundNumber: number = 0;
 
@@ -17,5 +17,9 @@ export default class Synthetic {
 
   get roundCosts() {
     return this.baseRoundCosts;
+  }
+
+  get activeAccomplishments() {
+    return GetAccomplishmentsByPerson(this.playerRole);
   }
 }

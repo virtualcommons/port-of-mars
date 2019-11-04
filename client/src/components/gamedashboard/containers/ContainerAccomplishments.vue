@@ -5,9 +5,9 @@
     </BRow>
 
     <BRow class="accomplishments-cards">
-      <CardAccomplishment id="v-step-16"/>
-      <CardAccomplishment />
-      <CardAccomplishment />
+      <CardAccomplishment id="v-step-16" :accomplishment="currentAccomplishments[0]"/>
+      <CardAccomplishment :accomplishment="currentAccomplishments[1]"/>
+      <CardAccomplishment :accomplishment="currentAccomplishments[2]"/>
     </BRow>
   </BContainer>
 </template>
@@ -25,7 +25,9 @@ import CardAccomplishment from '@/components/gamedashboard/cards/CardAccomplishm
     CardAccomplishment,
   },
 })
-export default class ContainerAccomplishments extends Vue {}
+export default class ContainerAccomplishments extends Vue {
+  currentAccomplishments = this.$store.state.activeAccomplishmentCards;
+}
 </script>
 
 <style scoped>

@@ -1,16 +1,16 @@
 <template>
   <div class="card-accomplishment" @click="handleClick">
     <div class="card-title">
-      <p>Do not throw away your shot</p>
+      <p>{{accomplishment.label}}</p>
     </div>
     <div class="card-info-container">
       <div class="card-points">
         <p>Points</p>
-        <p>3</p>
+        <p>{{accomplishment.victoryPoints}}</p>
       </div>
       <div class="card-cost">
-        <p v-for="i in x" :key="i">
-          <i class="fas fa-spinner fa-2x"></i>
+        <p v-for="i in total" :key="i">
+          <i :class='imageScale'></i>
         </p>
       </div>
     </div>
@@ -18,16 +18,34 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 
 @Component
 
 export default class CardAccomplishment extends Vue {
-  private x: number = 4;
+  @Prop({ default: {} }) private accomplishment;
 
   private cardModalData: object = {
     card: 'accomplishment',
     payload: {},
+  }
+
+  private costs = ['upkeep', 'finance', 'legacy', 'government', 'culture', 'science'];
+
+  total = this.costs.map((curr) => {
+    const cost = Math.abs(this.accomplishment[[curr]]);
+    const amount = [];
+    for (let i = 0; i < cost; i += 1) {
+      amount.push(curr);
+    }
+    return amount;
+  }).reduce((prev, curr) => prev.concat(curr), [])
+
+  imageScale = this.total.length > 6 ? 'fas fa-spinner fa-1x' : 'fas fa-spinner fa-2x';
+
+  constructor() {
+    super();
+    console.log(this.total);
   }
 
   handleClick() {
@@ -40,7 +58,7 @@ export default class CardAccomplishment extends Vue {
 .card-accomplishment {
   color:white;
   height: 7rem;
-  width: 90%;
+  width: 80%;
   border: 0.125rem solid #F5F5F5;
   border-radius: 1rem;
   display: flex;
