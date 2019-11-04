@@ -27,6 +27,10 @@ export default {
   SET_PLAYER_ROLE(state: any, payload: any) {
     state.playerRole = payload;
   },
+  SET_ACTIVE_ACCOOMPLISHMENTS(state:any, payload:any) {
+    state.activeAccomplishmentCards = payload;
+    console.log(state.activeAccomplishmentCards);
+  },
   /**
      * SET_LAYOUT() mutation
      * Changes the state of the layout state.

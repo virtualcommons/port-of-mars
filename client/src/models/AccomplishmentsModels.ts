@@ -1,3 +1,5 @@
+import * as _ from 'lodash';
+
 interface Accomplishment {
     id: number
     role: 'Researcher' | 'Curator' | 'Pioneer' | 'Entrepreneur' | 'Politician'
@@ -1416,10 +1418,23 @@ const accomplishments: Array<Accomplishment> = [
   },
 ];
 
-
-function GetAccomplishmentsByPerson() {
-  return [accomplishments[0], accomplishments[1], accomplishments[2]];
+function getRandomIndex(maxIndex:number) {
+  return Math.floor(Math.random() * Math.floor(maxIndex));
 }
 
+export default function GetAccomplishmentsByPerson(person:string) {
+  const possibleAccomplishments = accomplishments.filter(a => a.role === person);
+  const indexArray = [-1, -1, -1];
 
-export default GetAccomplishmentsByPerson;
+  for (let i = 0; i < 3; i += 1) {
+    let randomIndex = getRandomIndex(possibleAccomplishments.length);
+    while (indexArray.indexOf(randomIndex) !== -1) {
+      randomIndex = getRandomIndex(possibleAccomplishments.length);
+    }
+
+    indexArray[i] = randomIndex;
+  }
+  return [possibleAccomplishments[indexArray[0]],
+    possibleAccomplishments[indexArray[1]],
+    possibleAccomplishments[indexArray[2]]];
+}
