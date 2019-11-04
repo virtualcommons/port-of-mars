@@ -68,8 +68,8 @@ export default class ProfileModal extends Vue {
 .pm-transparent-wrapper {
   position: absolute;
   z-index: 1;
-  top: 0rem;
-  left: 0rem;
+  top: 0;
+  left: 0;
   height: 100vh;
   width: 100vw;
   display: flex;

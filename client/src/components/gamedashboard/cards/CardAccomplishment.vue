@@ -1,5 +1,5 @@
 <template>
-  <div class="card-accomplishment">
+  <div class="card-accomplishment" @click="handleClick">
     <div class="card-title">
       <p>Do not throw away your shot</p>
     </div>
@@ -23,7 +23,16 @@ import { Vue, Component } from 'vue-property-decorator';
 @Component
 
 export default class CardAccomplishment extends Vue {
-  private x:number = 4;
+  private x: number = 4;
+
+  private cardModalData: object = {
+    type: 'accomplishment',
+    payload: {},
+  }
+
+  handleClick() {
+    this.$root.$emit('openCard', this.cardModalData);
+  }
 }
 </script>
 
@@ -38,6 +47,7 @@ export default class CardAccomplishment extends Vue {
   justify-content: center;
   flex-direction: column;
   text-align: center;
+  cursor: pointer;
 }
 
 .card-info-container{

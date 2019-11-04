@@ -1,6 +1,6 @@
 <template>
   <div class="container-right">
-    <TradingModal />
+    <!-- <TradingModal /> -->
     <!-- will eventually refactor -->
 
     <div class="placeholder-right" id="v-step-1">
@@ -18,13 +18,13 @@
 import { Vue, Component } from 'vue-property-decorator';
 import Member from '@/components/gamedashboard/Member.vue';
 import Chat from '@/components/gamedashboard/Chat.vue';
-import TradingModal from '@/components/gamedashboard/trading/TradingModal.vue';
+// import TradingModal from '@/components/gamedashboard/trading/TradingModal.vue';
 
 @Component({
   components: {
     Member,
     Chat,
-    TradingModal,
+    // TradingModal,
   },
 })
 export default class ContainerRight extends Vue {}

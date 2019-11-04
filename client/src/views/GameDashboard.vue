@@ -1,6 +1,9 @@
 <template>
   <BContainer class="reset">
-    <MasterComponent/>
+    <MasterComponent />
+    <ProfileModal />
+    <TradingModal />
+    <CardModal />
     <BRow class="board reset">
       <BCol cols="2" class="left reset">
         <!-- left section goes here -->
@@ -30,6 +33,9 @@ import ContainerBottom from '@/components/gamedashboard/containers/ContainerBott
 import ContainerLeft from '@/components/gamedashboard/containers/ContainerLeft.vue';
 import ContainerRight from '@/components/gamedashboard/containers/ContainerRight.vue';
 import MasterComponent from '@/components/MasterComponent.vue';
+import ProfileModal from '@/components/gamedashboard/ProfileModal.vue';
+import CardModal from '@/components/gamedashboard/CardModal.vue';
+import TradingModal from '@/components/gamedashboard/trading/TradingModal.vue';
 
 @Component({
   components: {
@@ -41,6 +47,9 @@ import MasterComponent from '@/components/MasterComponent.vue';
     ContainerLeft,
     ContainerRight,
     MasterComponent,
+    ProfileModal,
+    TradingModal,
+    CardModal,
   },
 })
 export default class GameDashboard extends Vue {}

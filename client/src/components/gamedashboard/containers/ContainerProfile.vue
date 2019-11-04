@@ -35,7 +35,7 @@ export default class ContainerProfile extends Vue {
   height: 100%;
   width: 100%;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
 }
 
@@ -55,7 +55,8 @@ export default class ContainerProfile extends Vue {
 .profile-frame {
   height: 8rem;
   width: 8rem;
-  margin: 1rem 0;
+  margin-right: 1rem;
+  padding: 0.5rem;
   display: flex;
   justify-content: center;
   align-items: center;

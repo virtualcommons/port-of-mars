@@ -1,6 +1,6 @@
 <template>
   <div class="container-left">
-    <ProfileModal />
+    <!-- <ProfileModal /> -->
     <div class="placeholder-left">
       <!-- will eventually refactor -->
       <Round id="v-step-3"/>
@@ -17,7 +17,7 @@ import Round from '@/components/gamedashboard/Round.vue';
 import Notification from '@/components/gamedashboard/Notification.vue';
 import ContainerProfile from '@/components/gamedashboard/containers/ContainerProfile.vue';
 import MarsLog from '@/components/gamedashboard/MarsLog.vue';
-import ProfileModal from '@/components/gamedashboard/ProfileModal.vue';
+// import ProfileModal from '@/components/gamedashboard/ProfileModal.vue';
 
 @Component({
   components: {
@@ -25,7 +25,7 @@ import ProfileModal from '@/components/gamedashboard/ProfileModal.vue';
     Notification,
     ContainerProfile,
     MarsLog,
-    ProfileModal,
+    // ProfileModal,
   },
 })
 export default class ContainerLeft extends Vue {}
