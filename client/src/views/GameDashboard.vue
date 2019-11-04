@@ -55,14 +55,15 @@ export default class GameDashboard extends Vue {}
 .board {
   height: 100vh;
   width: 100vw;
-  /* overflow: hidden; */
 }
 
 .left {
+  position: relative;
   background-color: #1e2223;
 }
 
 .right {
+  position: relative;
   background-color: #1e2223;
 }
 
@@ -72,11 +73,11 @@ export default class GameDashboard extends Vue {}
 }
 
 .bottom {
+  height: 60vh;
+  padding: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
-  height: 60vh;
   background-color: #1e2223;
 }
 </style>

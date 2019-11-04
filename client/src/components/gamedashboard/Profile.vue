@@ -1,6 +1,6 @@
 <template>
   <div class="profile">
-    <div class="profile-frame" id="v-step-0">
+    <div class="profile-frame" id="v-step-0" @click="handleClick">
       <img :src="require(`@/assets/characters/${setImg()}.png`)" alt="Player" class="profile-img" />
     </div>
     <div class="profile-info">
@@ -23,6 +23,10 @@ export default class Profile extends Vue {
   setImg(): string {
     return this.playerRole;
   }
+
+  handleClick() {
+    this.$root.$emit('openProfile', 'open');
+  }
 }
 </script>
 
@@ -31,15 +35,13 @@ export default class Profile extends Vue {
   height: 100%;
   width: 100%;
   display: flex;
-  /* flex-direction: column; */
   justify-content: space-around;
   align-items: center;
-  /* background-color: pink; */
 }
 
 .profile-info-player, .profile-info-score {
-  color: #F5F5F5;
   margin: 0;
+  color: #F5F5F5;
 }
 
 .profile-info-player {
@@ -51,16 +53,15 @@ export default class Profile extends Vue {
 }
 
 .profile-frame {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   height: 8rem;
   width: 8rem;
   margin: 1rem 0;
-  /* background-color: rgba(245, 245, 245, 0.2); */
-  background-color: rgba(245,245,245, 0.05);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border: 0.125rem solid #c67b5c;
   border-radius: 50%;
+  background-color: rgba(245,245,245, 0.05);
   cursor: pointer;
 }
 

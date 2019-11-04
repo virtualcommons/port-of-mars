@@ -32,34 +32,24 @@ export default class ContainerRight extends Vue {}
 
 <style scoped>
 .container-right {
-  /* position: relative; */
   height: 100vh;
   width: 100%;
   padding: 1rem 1rem 1rem 0rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
 }
 
 .placeholder-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  justify-content: space-between;
   height: 50%;
   width: 100%;
   padding-bottom: 2rem;
-  /* background-color: purple; */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
 }
 
 .scores-title {
-  /* position: absolute; */
-  /* top: 2rem; */
-  /* right: 2rem; */
-
   margin-bottom: 1rem;
-  color: #f5f5f5;
   font-size: 1.5rem;
+  color: #f5f5f5;
 }
 </style>

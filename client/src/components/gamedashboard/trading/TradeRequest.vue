@@ -12,11 +12,11 @@
         </div>
         <p>In exchange for:</p>
         <div class="exchange-assets">
-          <AssetExchangeInput />
-          <AssetExchangeInput />
-          <AssetExchangeInput />
-          <AssetExchangeInput />
-          <AssetExchangeInput />
+          <AssetExchangeInput :inventory="1"/>
+          <AssetExchangeInput :inventory="0"/>
+          <AssetExchangeInput :inventory="3"/>
+          <AssetExchangeInput :inventory="1"/>
+          <AssetExchangeInput :inventory="2"/>
         </div>
       </BCol>
       <BCol cols="4" class="trade-request-content-shuffle">

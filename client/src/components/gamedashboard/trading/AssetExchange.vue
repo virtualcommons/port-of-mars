@@ -16,9 +16,9 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component({})
 export default class AssetExchange extends Vue {
-  @Prop({ default: 0 }) private value: number;
+  @Prop({ default: 0 }) private value!: number;
 
-  @Prop({ default: 0 }) private inventory: number;
+  @Prop({ default: 0 }) private inventory!: number;
 }
 </script>
 

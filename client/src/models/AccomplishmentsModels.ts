@@ -1422,6 +1422,4 @@ function GetAccomplishmentsByPerson() {
 }
 
 
-export {
-  GetAccomplishmentsByPerson,
-};
+export default GetAccomplishmentsByPerson;

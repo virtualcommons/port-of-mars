@@ -109,11 +109,10 @@ export default class TradingModal extends Vue {
 <style scoped>
 
 .tm-transparent-wrapper {
-  /* Note: could improve position */
   position: absolute;
   z-index: 1;
   top: 0;
-  left: -83.5vw;
+  right: 0;
   height: 100vh;
   width: 100vw;
   display: flex;
