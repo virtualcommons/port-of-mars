@@ -31,10 +31,10 @@ export default class ContainerUpkeep extends Vue {
     this.$store
       .dispatch('changeUpkeepAmount', 25)
       .then(() => {
-        this.$store.dispatch('setNotificationMessage', 'this is a second message');
+        this.$store.dispatch('setNotificationMessage', '-25 Upkeep');
       })
       .then(() => {
-        this.$root.$emit('notification', 'this is a test message');
+        this.$root.$emit('notification', '-25 Upkeep');
       });
   }
 }

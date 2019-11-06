@@ -51,7 +51,8 @@ export default class MarsLog extends Vue {
   /* flex-direction: column; */
   border: 0.125rem solid #F5F5F5;
   border-bottom: none;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
+  overflow: hidden;
   padding: 0.5rem;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none;  /* IE 10+ */

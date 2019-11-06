@@ -5,10 +5,14 @@
 
     <div class="placeholder-right" id="v-step-1">
       <p class="scores-title">Player Scores</p>
-      <Member :playerRole="'Researcher'" :playerScore="14" :notificationCount="1" />
-      <Member :playerRole="'Pioneer'" :playerScore="11" :notificationCount="0" />
-      <Member :playerRole="'Curator'" :playerScore="5" :notificationCount="2" />
-      <Member :playerRole="'Entrepreneur'" :playerScore="3" :notificationCount="0" />
+            <Member :playerRole="'Researcher'" :playerScore="14" :notificationCount="1"
+          :style="{ 'background-color': 'rgba(67, 124, 174, 0.75)' }"/>
+      <Member :playerRole="'Pioneer'" :playerScore="11" :notificationCount="0"
+          :style="{ 'background-color': 'rgba(111, 36, 134, 0.75)' }" />
+      <Member :playerRole="'Curator'" :playerScore="5" :notificationCount="2"
+          :style="{ 'background-color': 'rgba(103, 65, 29, 0.75)' }" />
+      <Member :playerRole="'Entrepreneur'" :playerScore="3" :notificationCount="0"
+          :style="{ 'background-color': 'rgba(199, 168, 40, 0.75)' }" />
     </div>
     <Chat id="v-step-2" />
   </div>

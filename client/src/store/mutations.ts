@@ -1,4 +1,4 @@
-import { ChatMessage } from '@/models';
+import { ChatMessage } from '../models';
 
 export default {
   SET_ACCS(state: any, payload: any) {

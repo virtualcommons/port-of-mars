@@ -28,7 +28,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { InvestmentProperties } from '@/models/index';
+import { InvestmentProperties } from '../../../models/index';
 @Component({})
 export default class CardInvestment extends Vue {
   @Prop() private investmentData!: InvestmentProperties;

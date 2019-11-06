@@ -1,4 +1,4 @@
-import { ChatMessage } from '@/models';
+import { ChatMessage } from '../models';
 
 export default {
   sendChatMsg(context: any, message: ChatMessage) {
