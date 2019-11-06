@@ -26,7 +26,7 @@ export default {
   SET_PLAYER_ROLE(state: any, payload: any) {
     state.playerRole = payload;
   },
-  SET_ACTIVE_ACCOOMPLISHMENTS(state: any, payload: any) {
+  SET_ACTIVE_ACCOMPLISHMENTS(state:any, payload:any) {
     state.activeAccomplishmentCards = payload;
     console.log(state.activeAccomplishmentCards);
   },

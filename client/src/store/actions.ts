@@ -14,7 +14,7 @@ export default {
     context.commit('SET_PLAYER_ROLE', payload);
   },
   setActiveAccomplishments(context: any, payload: any) {
-    context.commit('SET_ACTIVE_ACCOOMPLISHMENTS', payload);
+    context.commit('SET_ACTIVE_ACCOMPLISHMENTS', payload);
   },
   setTradingView(context: any, payload: any) {
     context.commit('SET_TRADING_VIEW', payload);

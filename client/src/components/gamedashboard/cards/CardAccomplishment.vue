@@ -9,8 +9,10 @@
         <p>{{accomplishment.victoryPoints}}</p>
       </div>
       <div class="card-cost">
-        <p v-for="i in total" :key="i">
-          <i :class='imageScale'></i>
+        <p v-for="investment in total" :key="investment">
+          <!--<i :class='imageScale'></i>-->
+          <img :src="require(`@/assets/investmentsIcons/${investment}.png`)"
+            alt="Player" :style="imageScale" />
         </p>
       </div>
     </div>
@@ -25,11 +27,6 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 export default class CardAccomplishment extends Vue {
   @Prop({ default: {} }) private accomplishment;
 
-  private cardModalData: object = {
-    card: 'accomplishment',
-    payload: {},
-  }
-
   private costs = ['upkeep', 'finance', 'legacy', 'government', 'culture', 'science'];
 
   total = this.costs.map((curr) => {
@@ -41,16 +38,27 @@ export default class CardAccomplishment extends Vue {
     return amount;
   }).reduce((prev, curr) => prev.concat(curr), [])
 
-  imageScale = this.total.length > 6 ? 'fas fa-spinner fa-1x' : 'fas fa-spinner fa-2x';
+  imageScale = this.total.length > 6 ? 'width:1.5rem' : 'width:2.5rem';
 
-  constructor() {
-    super();
-    console.log(this.total);
+  private relevantCardData = {
+    title: this.accomplishment.label,
+    info: this.accomplishment.flavorText,
+    total: this.total,
   }
 
-  handleClick() {
-    this.$root.$emit('openCard', this.cardModalData);
-  }
+   private cardModalData: object = {
+     card: 'accomplishment',
+     payload: this.relevantCardData,
+   }
+
+   constructor() {
+     super();
+     console.log(this.total);
+   }
+
+   handleClick() {
+     this.$root.$emit('openCard', this.cardModalData);
+   }
 }
 </script>
 

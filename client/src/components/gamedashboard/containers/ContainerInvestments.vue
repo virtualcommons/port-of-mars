@@ -4,27 +4,27 @@
       <p class="investments-topbar-title">Investments</p>
       <StatusBar
         class="investments-topbar-statusbar"
-        :setWidth="`${this.$store.state.localInvestments.localDecrement * 10}`"
+        :setWidth="`${decrementInvestmentCount* 10}`"
         :colorOuter="'statusbar-outer-gray'"
         :colorInner="'statusbar-inner-gray'"
          id="v-step-10"
       />
       <p class="investments-topbar-status">
-        ( {{ this.$store.state.localInvestments.localDecrement }} )
+        ( {{ decrementInvestmentCount }} )
       </p>
     </BRow>
 
     <BRow class="investments-cards">
       <BRow class="investments-cards-top">
-        <CardInvestment :investmentData="investmentData.upkeep" id="v-step-11" />
-        <CardInvestment :investmentData="investmentData.finance" />
-        <CardInvestment :investmentData="investmentData.legacy" />
+        <CardInvestment :investmentData="iD[[i[2]]]" id="v-step-11" />
+        <CardInvestment :investmentData="iD[[i[3]]]" />
+        <CardInvestment :investmentData="iD[[i[0]]]" />
       </BRow>
 
       <BRow class="investments-cards-bottom">
-        <CardInvestment :investmentData="investmentData.government" id="v-step-14" />
-        <CardInvestment :investmentData="investmentData.culture" />
-        <CardInvestment :investmentData="investmentData.science" />
+        <CardInvestment :investmentData="iD[[i[4]]]" id="v-step-14" />
+        <CardInvestment :investmentData="iD[[i[5]]]" />
+        <CardInvestment :investmentData="iD[[i[1]]]" />
       </BRow>
     </BRow>
   </BContainer>
@@ -46,14 +46,30 @@ import CardInvestment from '@/components/gamedashboard/cards/CardInvestment.vue'
   },
 })
 export default class ContainerInvestments extends Vue {
-  private investmentData: object = this.$store.state.localInvestments.returnValues;
+  private iD: object = this.$store.state.localInvestments.returnValues;
+
+  private availiableInvestments = [];
+
+
+  // private investmentsInOrder = Object.keys(this.iD).sort(function (a, b) {
+  //   return this.iD[a].currentCost - this.iD[b].currentCost;
+  // });
+
+  i = Object.keys(this.iD).sort((a, b) => this.iD[a].currentCost - this.iD[b].currentCost)
+
+  // console.log(temp);
+
+
+  get decrementInvestmentCount() {
+    return this.$store.state.localInvestments.localDecrement;
+  }
 
   // updated() {
   //   console.log(this.timeblockStatus);
   //   let decrement: number = 0;
-  //   for(let investment in this.investmentData) {
-  //     decrement += (this.investmentData[investment].currentCost *
-  //   this.investmentData[investment].currentInventory)
+  //   for(let investment in this.iD) {
+  //     decrement += (this.iD[investment].currentCost *
+  //   this.iD[investment].currentInventory)
   //   }
   //   this.timeblockStatus -= decrement;
   //   console.log(this.timeblockStatus)
