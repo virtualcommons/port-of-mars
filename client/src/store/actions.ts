@@ -13,13 +13,22 @@ export default {
   setPlayerRole(context: any, payload: any) {
     context.commit('SET_PLAYER_ROLE', payload);
   },
-  setActiveAccomplishments(context:any, payload:any) {
-    context.commit('SET_ACTIVE_ACCOOMPLISHMENTS', payload);
+  setActiveAccomplishments(context: any, payload: any) {
+    context.commit('SET_ACTIVE_ACCOMPLISHMENTS', payload);
   },
   setTradingView(context: any, payload: any) {
     context.commit('SET_TRADING_VIEW', payload);
   },
   setTradingMember(context: any, payload: any) {
     context.commit('SET_TRADING_MEMBER', payload);
+  },
+  changeUpkeepAmount(context: any, payload: number) {
+    context.commit('CHANGE_UPKEEP_AMOUNT', payload);
+  },
+  setNotificationMessage(context: any, payload: string) {
+    context.commit('SET_NOTIFICATION_MESSAGE', payload);
+  },
+  addToMarsLog(context: any, payload: string) {
+    context.commit('ADD_TO_MARS_LOG', payload);
   },
 };

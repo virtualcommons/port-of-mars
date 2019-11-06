@@ -1,5 +1,5 @@
 <template>
-  <BContainer class="container-upkeep">
+  <BContainer class="container-upkeep" @click="simEvent">
     <StatusBar class="upkeep-statusbar" :setWidth="`${upkeepStatus}`" />
     <p>
       Upkeep <span class="upkeep-status">{{ upkeepStatus }}</span
@@ -22,7 +22,21 @@ import StatusBar from '@/components/gamedashboard/StatusBar.vue';
   },
 })
 export default class ContainerUpkeep extends Vue {
-  @Prop({ default: 30 }) private upkeepStatus!: number;
+  get upkeepStatus() {
+    return this.$store.state.upkeep;
+  }
+
+  simEvent() {
+    console.log('adf'); // eslint-disable-line no-use-before-define
+    this.$store
+      .dispatch('changeUpkeepAmount', 25)
+      .then(() => {
+        this.$store.dispatch('setNotificationMessage', 'this is a second message');
+      })
+      .then(() => {
+        this.$root.$emit('notification', 'this is a test message');
+      });
+  }
 }
 </script>
 

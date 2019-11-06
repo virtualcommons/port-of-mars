@@ -1,7 +1,6 @@
 import { ChatMessage } from '@/models';
 
 export default {
-
   SET_ACCS(state: any, payload: any) {
     // payload is an array of numbers
     // for all the numbers
@@ -27,17 +26,17 @@ export default {
   SET_PLAYER_ROLE(state: any, payload: any) {
     state.playerRole = payload;
   },
-  SET_ACTIVE_ACCOOMPLISHMENTS(state:any, payload:any) {
+  SET_ACTIVE_ACCOMPLISHMENTS(state:any, payload:any) {
     state.activeAccomplishmentCards = payload;
     console.log(state.activeAccomplishmentCards);
   },
   /**
-     * SET_LAYOUT() mutation
-     * Changes the state of the layout state.
-     * @param state The state of the application.
-     * @param payload The string value of layout.
-     *
-     */
+   * SET_LAYOUT() mutation
+   * Changes the state of the layout state.
+   * @param state The state of the application.
+   * @param payload The string value of layout.
+   *
+   */
   SET_LAYOUT(state: any, newLayout: string) {
     state.layout = newLayout;
   },
@@ -46,5 +45,16 @@ export default {
   },
   SET_TRADING_MEMBER(state: any, newTradingMember: string) {
     state.tradingMember = newTradingMember;
+  },
+  CHANGE_UPKEEP_AMOUNT(state: any, payload: number) {
+    if (state.upkeep - payload >= 0) {
+      state.upkeep -= payload;
+    }
+  },
+  SET_NOTIFICATION_MESSAGE(state: any, payload: string) {
+    state.notifMessage = payload;
+  },
+  ADD_TO_MARS_LOG(state: any, payload: string) {
+    state.marsLog.push(payload);
   },
 };
