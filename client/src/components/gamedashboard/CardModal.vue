@@ -3,6 +3,12 @@
     <BContainer class="cm-wrapper">
       <BRow class="cm">
         <button class="cm-close-button" @click="closeModal">Close</button>
+        <p>{{title}}</p>
+        <p>{{info}}</p>
+        <p v-for="investment in costs" :key="investment">
+          <img :src="require(`@/assets/investmentsIcons/${investment}.png`)"
+            alt="Player" :style="imageScale" />
+        </p>
       </BRow>
     </BContainer>
   </div>
@@ -23,6 +29,14 @@ import { BContainer, BRow, BCol } from 'bootstrap-vue';
 export default class CardModal extends Vue {
   setStyle: string = 'none';
 
+  private title = '';
+
+  private info = '';
+
+  private costs = [];
+
+  private imageScale = 'width:2.5rem';
+
   mounted() {
     this.$root.$on('openCard', (data: any) => {
       this.setStyle = '';
@@ -31,6 +45,10 @@ export default class CardModal extends Vue {
       }
       if (data.card === 'accomplishment') {
         console.log('Modal: Accomplishment Card'); // eslint-disable-line no-use-before-define
+        // console.log(data.payload.title);
+        this.title = data.payload.title;
+        this.info = data.payload.info;
+        this.costs = data.payload.total;
       }
     });
   }
@@ -62,6 +80,7 @@ export default class CardModal extends Vue {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  color:white;
 }
 
 .cm {
@@ -73,6 +92,18 @@ export default class CardModal extends Vue {
   border: 0.125rem solid #F5F5F5;
   border-radius: 1.25rem;
   background-color: #1e2223;
+}
+
+.title{
+  position: relative;
+  z-index: 2;
+  top: 2rem;
+  right: 2rem;
+  border: none;
+  text-decoration: underline;
+  color: #F5F5F5;
+  background: none;
+  width:100%;
 }
 
 .cm-close-button {

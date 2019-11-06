@@ -1,7 +1,7 @@
 import { BaseInvestmentCosts, GetAccomplishmentsByPerson } from '@/models';
 
 export default class Synthetic {
-  playerRole: string = 'Researcher';
+  playerRole: string = 'Politician';
 
   roundNumber: number = 0;
 

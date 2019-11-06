@@ -3,7 +3,9 @@
     <div class="investment-options">
       <div class="card-type">
         <div class="card-type-img">
-          <i class="fas fa-spinner fa-2x"></i>
+          <!--<i class="fas fa-spinner fa-2x"></i>-->
+          <img :src="require(`@/assets/investmentsIcons/${this.investmentData.n}.png`)"
+            alt="Player"/>
         </div>
         <div class="card-type-cost" id="v-step-12">
           <p>{{ investmentData.currentCost }}</p>
@@ -30,6 +32,11 @@ import { InvestmentProperties } from '@/models/index';
 @Component({})
 export default class CardInvestment extends Vue {
   @Prop() private investmentData!: InvestmentProperties;
+
+  constructor() {
+    super();
+    console.log(this.investmentData);
+  }
 
   incrementInvestment() {
     if (
