@@ -34,4 +34,7 @@ export default {
   addToMarsLog(context: any, payload: string) {
     context.commit('ADD_TO_MARS_LOG', payload);
   },
+  setCardModalData(context: any, payload: object) {
+    context.commit('SET_CARD_MODAL_DATA', payload);
+  },
 };
