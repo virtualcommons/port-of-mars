@@ -27,7 +27,6 @@ export default class ContainerUpkeep extends Vue {
   }
 
   simEvent() {
-    console.log('adf'); // eslint-disable-line no-use-before-define
     this.$store
       .dispatch('changeUpkeepAmount', 25)
       .then(() => {

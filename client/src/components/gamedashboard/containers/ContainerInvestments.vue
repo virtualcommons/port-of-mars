@@ -78,8 +78,23 @@ export default class ContainerInvestments extends Vue {
 </script>
 
 <style scoped>
+@media (max-width: 1680px) {
+  .investments-cards {
+    flex-direction: row !important;
+  }
+
+  .investments-cards-top, .investments-cards-bottom {
+    height: 100% !important;
+    width: 50% !important;
+    flex-direction: column !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+  }
+}
+
 .container-investments {
   width: 100%;
+  max-width: none;
   height: 100%;
   margin: 0;
   padding: 0;
@@ -89,6 +104,7 @@ export default class ContainerInvestments extends Vue {
 
 .investments-topbar {
   height: 10%;
+  width: 100%;
   margin: 0;
   padding: 0.5rem 1rem;
   display: flex;
@@ -118,23 +134,13 @@ export default class ContainerInvestments extends Vue {
 .investments-cards {
   height: 90%;
   margin: 0;
-  padding: 1rem;
+  padding: 0.5rem;
   display: flex;
   flex-direction: column;
   border-right: 0.125rem solid #f5f5f5;
 }
 
-.investments-cards-top {
-  height: 50%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-}
-
-.investments-cards-bottom {
+.investments-cards-top, .investments-cards-bottom {
   height: 50%;
   width: 100%;
   margin: 0;

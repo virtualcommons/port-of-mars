@@ -1,5 +1,5 @@
 <template>
-  <div class="notification" :style="{ display: setStyle }">
+  <div class="notification" :class="viewAnim()">
     <p class="notification-message">{{ message }}</p>
     <!-- will be updated on props -->
   </div>
@@ -10,17 +10,41 @@ import { Vue, Component } from 'vue-property-decorator';
 
 @Component
 export default class Notification extends Vue {
-  // message: string = this.$store.state.notifMessage;
-  setStyle: string = 'none';
+  // need to use transition wrapper!
 
   get message() {
     return this.$store.state.notifMessage;
   }
 
+  get inView() {
+    return this.$store.state.notifIsActive;
+  }
+
+  viewAnim() {
+    // console.log(this.inView); // eslint-disable-line no-use-before-define
+    if (this.inView === 'inactive') {
+      return 'notification-hidden';
+    }
+    if (this.inView === 'visible') {
+      return 'animated fadeInLeft';
+    }
+    if (this.inView === 'hide') {
+      return 'animated fadeOut delay-1s';
+    }
+    return '';
+  }
+
   mounted() {
     this.$root.$on('notification', (data: any) => {
-      this.setStyle = '';
-      this.$store.dispatch('addToMarsLog', this.message);
+      this.$store
+        .dispatch('addToMarsLog', this.message)
+        .then(() => {
+          this.$store.dispatch('setNotificationStatus', 'visible');
+        })
+        .then(() => {
+          // this.setStyle = 'hidden';
+          // this.$store.dispatch('setNotificationStatus', 'hide');
+        });
     });
   }
 }
@@ -37,6 +61,10 @@ export default class Notification extends Vue {
   border-radius: 1rem;
   margin: 1rem 0;
   padding: 0.75rem;
+}
+
+.notification-hidden {
+  /* visibility: hidden; */
 }
 
 .notification-message {

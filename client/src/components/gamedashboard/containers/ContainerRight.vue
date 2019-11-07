@@ -2,17 +2,32 @@
   <div class="container-right">
     <!-- <TradingModal /> -->
     <!-- will eventually refactor -->
-
-    <div class="placeholder-right" id="v-step-1">
-      <p class="scores-title">Player Scores</p>
-            <Member :playerRole="'Researcher'" :playerScore="14" :notificationCount="1"
-          :style="{ 'background-color': 'rgba(67, 124, 174, 0.75)' }"/>
-      <Member :playerRole="'Pioneer'" :playerScore="11" :notificationCount="0"
-          :style="{ 'background-color': 'rgba(111, 36, 134, 0.75)' }" />
-      <Member :playerRole="'Curator'" :playerScore="5" :notificationCount="2"
-          :style="{ 'background-color': 'rgba(103, 65, 29, 0.75)' }" />
-      <Member :playerRole="'Entrepreneur'" :playerScore="3" :notificationCount="0"
-          :style="{ 'background-color': 'rgba(199, 168, 40, 0.75)' }" />
+    <p class="scores-title">Player Scores</p>
+    <div class="container-right-member-container" id="v-step-1">
+        <Member
+          :playerRole="'Researcher'"
+          :playerScore="14"
+          :notificationCount="1"
+          :style="{ 'background-color': 'rgba(67, 124, 174, 0.75)' }"
+        />
+        <Member
+          :playerRole="'Pioneer'"
+          :playerScore="11"
+          :notificationCount="0"
+          :style="{ 'background-color': 'rgba(111, 36, 134, 0.75)' }"
+        />
+        <Member
+          :playerRole="'Curator'"
+          :playerScore="5"
+          :notificationCount="2"
+          :style="{ 'background-color': 'rgba(103, 65, 29, 0.75)' }"
+        />
+        <Member
+          :playerRole="'Entrepreneur'"
+          :playerScore="3"
+          :notificationCount="0"
+          :style="{ 'background-color': 'rgba(199, 168, 40, 0.75)' }"
+        />
     </div>
     <Chat id="v-step-2" />
   </div>
@@ -35,16 +50,32 @@ export default class ContainerRight extends Vue {}
 </script>
 
 <style scoped>
+@media (max-width: 1680px) {
+  .container-right p {
+    margin-bottom: 2rem;
+  }
+}
+
 .container-right {
   height: 100vh;
   width: 100%;
   padding: 1rem 1rem 1rem 0rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.placeholder-right {
-  height: 50%;
+.container-right p {
   width: 100%;
-  padding-bottom: 2rem;
+  text-align: right;
+}
+
+.container-right-member-container {
+  flex-grow: 1;
+  /* height: 100%; */
+  width: 100%;
+  /* padding-bottom: 2rem; */
   display: flex;
   flex-direction: column;
   justify-content: space-between;

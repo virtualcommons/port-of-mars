@@ -1,6 +1,7 @@
 interface ChatMessage {
   sender: string;
   content: string;
+  time: object;
 }
 
 class ChatModel {

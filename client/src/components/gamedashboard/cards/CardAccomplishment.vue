@@ -9,7 +9,8 @@
         <p>{{accomplishment.victoryPoints}}</p>
       </div>
       <div class="card-cost">
-        <p v-for="investment in total" :key="investment">
+        <p v-for="investment in total" :key="investment + Math.random()">
+          <!-- Note: will need to adjust key -->
           <!--<i :class='imageScale'></i>-->
           <img :src="require(`@/assets/investmentsIcons/${investment}.png`)"
             alt="Player" :style="imageScale" />
@@ -51,11 +52,6 @@ export default class CardAccomplishment extends Vue {
      payload: this.relevantCardData,
    }
 
-   constructor() {
-     super();
-     console.log(this.total);
-   }
-
    handleClick() {
      this.$root.$emit('openCard', this.cardModalData);
    }
@@ -63,41 +59,79 @@ export default class CardAccomplishment extends Vue {
 </script>
 
 <style scoped>
+@media (max-width: 1680px) {
+  .card-accomplishment {
+    min-height: 6.5rem !important;
+    width: 100% !important;
+  }
+}
+
 .card-accomplishment {
-  color:white;
-  height: 7rem;
+  min-height: 7rem;
   width: 80%;
-  border: 0.125rem solid #F5F5F5;
-  border-radius: 1rem;
   display: flex;
-  justify-content: center;
   flex-direction: column;
   text-align: center;
+  color: #F5F5F5;
+  overflow: hidden;
   cursor: pointer;
 }
 
-.card-info-container{
+.card-title {
+  height: 30%;
+  width: 100%;
+  padding: 0.5rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #F5F5F5;
+  border-radius: 1rem 1rem 0 0;
+  color: #1e2223;
+}
+
+.card-title p {
+  margin: 0;
+  text-align: center;
+}
+
+.card-info-container {
+  height: 70%;
+  width: 100%;
+  padding: 0.5rem;
   display:flex;
-  width: 95%;
-  margin-left:auto;
-  margin-right: auto;
   justify-content: space-between;
+  border-left: 0.125rem solid #F5F5F5;
+  border-right: 0.125rem solid #F5F5F5;
+  border-bottom: 0.125rem solid #F5F5F5;
+  border-radius: 0 0 1rem 1rem;
 }
 
-.card-title{
-  margin:0;
+.card-points {
+  margin-right: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.card-points p{
-  margin:0;
-  height:40%;
+.card-points p {
+  margin: 0;
 }
 
-.card-cost p{
-  display:inline;
+.card-cost {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 100;
 }
 
-.card-cost i{
-  margin-left: 0.4rem;
+.card-cost p {
+  margin: 0;
+}
+
+.card-cost i {
+  margin: 0.125rem;
 }
 </style>

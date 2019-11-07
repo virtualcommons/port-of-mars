@@ -31,8 +31,21 @@ export default class ContainerProfile extends Vue {
 </script>
 
 <style scoped>
+
+@media (max-width: 1680px) {
+  .profile {
+    flex-direction: column-reverse;
+  }
+
+  .profile-frame {
+    margin-right: 0 !important;
+    margin-top: 2rem;
+  }
+}
+
 .profile {
-  height: 100%;
+  /* height: 100%; */
+  flex: 1;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -53,8 +66,8 @@ export default class ContainerProfile extends Vue {
 }
 
 .profile-frame {
-  height: 8rem;
-  width: 8rem;
+  height: 10vh;
+  width: 10vh;
   margin-right: 1rem;
   padding: 0.5rem;
   display: flex;

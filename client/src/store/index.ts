@@ -26,6 +26,7 @@ export const initialStoreState = {
   layout: 'default-layout',
 
   // notification
+  notifIsActive: 'inactive',
   notifMessage: '',
 
   // state variables for trading modal

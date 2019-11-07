@@ -23,6 +23,11 @@ import { Vue, Component } from 'vue-property-decorator';
 
 @Component
 export default class MarsLog extends Vue {
+  updated() {
+    const elem = this.$el.querySelector('.marslog-log');
+    elem!.scrollTop = elem!.scrollHeight;
+  }
+
   get messages() {
     return this.$store.state.marsLog;
   }
@@ -31,6 +36,7 @@ export default class MarsLog extends Vue {
 
 <style scoped>
 .marslog {
+  margin-top: 2rem;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -50,12 +56,15 @@ export default class MarsLog extends Vue {
   /* display: flex; */
   /* flex-direction: column; */
   border: 0.125rem solid #F5F5F5;
-  border-bottom: none;
-  /* overflow-y: scroll; */
-  overflow: hidden;
+  overflow-y: scroll;
   padding: 0.5rem;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none;  /* IE 10+ */
+}
+
+.marslog-log::-webkit-scrollbar { /* WebKit */
+    width: 0;
+    height: 0;
 }
 
 .marslog-message-content {

@@ -15,13 +15,13 @@ export default class Round extends Vue {}
 
 <style scoped>
 .round {
-  /* display: flex; */
-  /* background-color: blue; */
-  color: #F5F5F5;
+  width: 100%;
   font-size: 1.5rem;
+  color: #F5F5F5;
 }
 
 .round p {
-  margin: 0;
+  text-align: left;
+  margin-bottom: 1rem;
 }
 </style>

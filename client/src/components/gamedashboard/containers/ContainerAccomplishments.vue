@@ -32,14 +32,16 @@ export default class ContainerAccomplishments extends Vue {
 
 <style scoped>
 .container-accomplishments {
-  width: 100%;
   height: 100%;
+  width: 100%;
+  max-width: none;
   margin: 0;
   padding: 0;
 }
 
 .accomplishments-topbar {
   height: 10%;
+  width: 100%;
   margin: 0;
   padding: 0.5rem 1rem;
   display: flex;
@@ -58,7 +60,7 @@ export default class ContainerAccomplishments extends Vue {
 .accomplishments-cards {
   height: 90%;
   margin: 0;
-  padding: 1rem;
+  padding: 0.5rem;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
