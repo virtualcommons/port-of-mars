@@ -1,7 +1,7 @@
 <template>
     <div class="login-button-container">
       <router-link to="/game">
-        <BButton @click="setLayout('default-layout')">Go to dashboard</BButton>
+        <BButton @click="setLayout('default-layout')">Let's Go!</BButton>
       </router-link>
       <router-link to="/game">
         <BButton @click="setLayout('tutorial-layout')">Go to Tutorial</BButton>
