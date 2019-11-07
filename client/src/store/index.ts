@@ -33,6 +33,9 @@ export const initialStoreState = {
   tradingView: 'request',
   tradingMember: 'Curator',
 
+  // state variables for card modal
+  cardData: {},
+
   // this will be merged with the global investments
   // at the end of each round.
   localInvestments: new InvestmentsModel(),

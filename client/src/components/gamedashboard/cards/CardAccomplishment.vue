@@ -11,7 +11,6 @@
       <div class="card-cost">
         <p v-for="investment in total" :key="investment + Math.random()">
           <!-- Note: will need to adjust key -->
-          <!--<i :class='imageScale'></i>-->
           <img :src="require(`@/assets/investmentsIcons/${investment}.png`)"
             alt="Player" :style="imageScale" />
         </p>
@@ -131,7 +130,7 @@ export default class CardAccomplishment extends Vue {
   margin: 0;
 }
 
-.card-cost i {
+.card-cost img {
   margin: 0.125rem;
 }
 </style>

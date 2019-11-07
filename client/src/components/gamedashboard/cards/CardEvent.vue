@@ -10,9 +10,16 @@ import { Vue, Component } from 'vue-property-decorator';
 @Component({})
 
 export default class CardEvent extends Vue {
+  // Note: need to pass in actual data
+  private relevantCardData = {
+    title: 'Event Title',
+    info: 'Event Info',
+    effects: 'Event Effects',
+  }
+
   private cardModalData: object = {
     card: 'event',
-    payload: {},
+    payload: this.relevantCardData,
   }
 
   handleClick() {
@@ -25,11 +32,11 @@ export default class CardEvent extends Vue {
 .card-event {
   height: 7rem;
   width: 9.5rem;
-  border: 0.125rem solid #F5F5F5;
-  border-radius: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
+  border: 0.125rem solid #F5F5F5;
+  border-radius: 1rem;
   cursor: pointer;
 }
 </style>

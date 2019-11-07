@@ -34,7 +34,7 @@ import ContainerLeft from '@/components/gamedashboard/containers/ContainerLeft.v
 import ContainerRight from '@/components/gamedashboard/containers/ContainerRight.vue';
 import MasterComponent from '@/components/MasterComponent.vue';
 import ProfileModal from '@/components/gamedashboard/ProfileModal.vue';
-import CardModal from '@/components/gamedashboard/CardModal.vue';
+import CardModal from '@/components/gamedashboard/cards/CardModal.vue';
 import TradingModal from '@/components/gamedashboard/trading/TradingModal.vue';
 
 @Component({
