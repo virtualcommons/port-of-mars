@@ -1,43 +1,39 @@
 <template>
-    <div class="login-screen">
-      <LoginButton />
-      <PortOfMarsLogo />
-    </div>
+  <div class="login-screen">
+    <h1>Port of Mars</h1>
+    <LoginButton />
+  </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import PortOfMarsLogo from '@/components/waitinglobbyscreen/PortOfMarsLogo.vue';
 import LoginButton from '@/components/loginpage/LoginButton.vue';
 
-    @Component({
-      components: {
-        PortOfMarsLogo,
-        LoginButton,
-      },
-    })
-
-export default class LoginScreen extends Vue {
-  // mounted() {}
-}
+@Component({
+  components: {
+    LoginButton,
+  },
+})
+export default class LoginScreen extends Vue {}
 </script>
 
 <style scoped>
-  .login-screen {
-    /*container position*/
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    display: flex;
-    flex-flow: column;
-    justify-content: center;
-    align-items: center;
+.login-screen {
+  position: relative;
+  z-index: 1;
+  height: 80vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
 
-    /*container styling*/
-    font-weight: 100;
-    letter-spacing: 0.5rem;
-    transition: all 0.2s;
-  }
+.login-screen h1 {
+  text-transform: uppercase;
+  letter-spacing: 0.25rem;
+  font-size: 12rem;
+  font-weight: 700;
+  color: #c67b5c;
+}
 </style>

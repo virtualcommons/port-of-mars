@@ -28,8 +28,6 @@ Vue.use(BootstrapVue);
   },
 })
 export default class Home extends Vue {
-  private defaultLayout: string = 'default';
-
   /**
    * getLayout() computed property
    * Gets the value of the layout from the vuex store
@@ -37,7 +35,6 @@ export default class Home extends Vue {
    *
    */
   get layout() {
-    // console.log(this.$store.getters.layout); // eslint-disable-line no-use-before-define
     return this.$store.getters.layout;
   }
 
@@ -45,13 +42,14 @@ export default class Home extends Vue {
   // onJoinGame(data: unknown) {
   //   console.log(data);
   // }
-  //
+
   // mounted() {
   //   console.log((this as any).$socket);
   //   (this as any).$socket.client.emit('joinGame', { my: 'data' });
   // }
 }
 </script>
+
 <style>
 html,
 body {
@@ -60,13 +58,11 @@ body {
   overflow: hidden;
 }
 
-.game {
-  height: 100vh;
-  width: 100vw;
-}
-
-p, img, button {
-  /* prevent user from highlighting text */
+p,
+h1,
+img,
+button {
+  /* prevent user from highlighting p, img, button */
   -webkit-touch-callout: none !important; /* iOS Safari */
   -webkit-user-select: none !important; /* Safari */
   -khtml-user-select: none !important; /* Konqueror HTML */
