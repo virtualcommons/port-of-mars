@@ -1,24 +1,18 @@
 <template>
-    <div class="login-button-container">
-      <router-link to="/game">
-        <BButton @click="setLayout('default-layout')">Let's Go!</BButton>
-      </router-link>
-      <router-link to="/game">
-        <BButton @click="setLayout('tutorial-layout')">Go to Tutorial</BButton>
-      </router-link>
-    </div>
+  <div class="login-button-container">
+    <router-link to="/game">
+      <button @click="setLayout('default-layout')">Let's Go!</button>
+    </router-link>
+    <router-link to="/game">
+      <button @click="setLayout('tutorial-layout')">Go to Tutorial</button>
+    </router-link>
+  </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { BButton } from 'bootstrap-vue';
 
-  @Component({
-    components: {
-      BButton,
-    },
-  })
-
+@Component({})
 export default class LoginButton extends Vue {
   /**
    * setLayout() method
@@ -34,5 +28,14 @@ export default class LoginButton extends Vue {
 </script>
 
 <style scoped>
-
+.login-button-container button {
+  height: 3.5rem;
+  width: 18rem;
+  margin: 0 1rem;
+  border-radius: 0.75rem;
+  border: 0.125rem solid #f5f5f5;
+  outline: none !important;
+  color: #f5f5f5;
+  background-color: rgba(245, 245, 245, 0.2);
+}
 </style>
