@@ -28,7 +28,7 @@ export default {
   },
   SET_ACTIVE_ACCOMPLISHMENTS(state:any, payload:any) {
     state.activeAccomplishmentCards = payload;
-    console.log(state.activeAccomplishmentCards);
+    // console.log(state.activeAccomplishmentCards);
   },
   /**
    * SET_LAYOUT() mutation
@@ -53,6 +53,9 @@ export default {
   },
   SET_NOTIFICATION_MESSAGE(state: any, payload: string) {
     state.notifMessage = payload;
+  },
+  SET_NOTIFICATION_STATUS(state: any, payload: string) {
+    state.notifIsActive = payload;
   },
   ADD_TO_MARS_LOG(state: any, payload: string) {
     state.marsLog.push(payload);

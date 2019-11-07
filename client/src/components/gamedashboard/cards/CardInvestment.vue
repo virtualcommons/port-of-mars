@@ -20,8 +20,11 @@
         </div>
       </div>
     </div>
-    <div class="investment-amount">
-      <p>{{ `${investmentData.n} - ${investmentData.currentInventory}` }}</p>
+    <div class="investment-data">
+      <p class="investment-data-name">{{ `${investmentData.n}` }}</p>
+      <p class="investment-data-inventory">
+        <span>(</span> {{ `${investmentData.currentInventory}` }} <span>)</span>
+      </p>
     </div>
   </div>
 </template>
@@ -32,11 +35,6 @@ import { InvestmentProperties } from '../../../models/index';
 @Component({})
 export default class CardInvestment extends Vue {
   @Prop() private investmentData!: InvestmentProperties;
-
-  constructor() {
-    super();
-    console.log(this.investmentData);
-  }
 
   incrementInvestment() {
     if (
@@ -62,33 +60,31 @@ export default class CardInvestment extends Vue {
 </script>
 
 <style scoped>
-.investment-amount {
-  margin-top: 0.5rem;
-  color: white;
-  text-align: center;
-}
-
-.investment-amount p {
-  text-transform: capitalize;
+@media (max-width: 1680px) {
+  .investment-options {
+    height: 6.5rem !important;
+  }
 }
 
 .investment-options {
   height: 7rem;
   width: 9.5rem;
-  border: 0.125rem solid #f5f5f5;
+  /* border: 0.125rem solid pink; */
   border-radius: 1rem;
   display: flex;
   align-items: center;
   text-align: center;
   overflow: hidden;
-  color: white;
+  color: #1e2223;
 }
 
 .card-type {
+  background-color: #f5f5f5;
+  border: 0.125rem solid #f5f5f5;
+  border-radius: 1rem 0 0 1rem;
   padding: 0.5rem;
   height: 100%;
   width: 70%;
-
 }
 
 .card-type-img {
@@ -118,7 +114,7 @@ export default class CardInvestment extends Vue {
 .card-increment-and-decrement-holder {
   width: 30%;
   height: 100%;
-  border-left: 0.125rem solid #f5f5f5;
+  /* border-left: 0.125rem solid #f5f5f5; */
 
   display: flex;
   flex-direction: column;
@@ -127,10 +123,16 @@ export default class CardInvestment extends Vue {
 .investment-increment {
   height: 50%;
   width: 100%;
-  border-bottom: 0.0625rem solid #F5F5F5;
+  /* border-bottom: 0.0625rem solid #f5f5f5; */
+  border: 0.125rem solid #f5f5f5;
+  /* border: 0.125rem solid pink; */
+  border-radius: 0 1rem 0 0;
+  border-left: none;
+  border-bottom: none;
   display: flex;
   justify-content: center;
   align-items: center;
+  color: #f5f5f5;
 }
 
 .investment-increment p {
@@ -141,10 +143,14 @@ export default class CardInvestment extends Vue {
 .investment-decrement {
   height: 50%;
   width: 100%;
-  border-top: 0.0625rem solid #F5F5F5;
+  border: 0.125rem solid #f5f5f5;
+  border-radius: 0 0 1rem 0;
+  border-left: none;
+  border-top: none;
   display: flex;
   justify-content: center;
   align-items: center;
+  color: #f5f5f5;
 }
 
 .investment-decrement p {
@@ -153,11 +159,38 @@ export default class CardInvestment extends Vue {
 }
 
 .investment-increment:hover {
+  color: #1e2223;
   background-color: #c67b5c;
   cursor: pointer;
 }
 .investment-decrement:hover {
+  color: #1e2223;
   background-color: #c67b5c;
   cursor: pointer;
+}
+
+.investment-data {
+  margin-top: 0.5rem;
+  color: white;
+  /* text-align: center; */
+  display: flex;
+  justify-content: space-between;
+  /* background-color: pink; */
+}
+
+.investment-data p {
+  margin: 0;
+}
+
+.investment-data-name {
+  text-transform: capitalize;
+}
+
+.investment-data-inventory {
+  color: #c67b5c;
+}
+
+.investment-data-inventory span {
+  color: #f5f5f5;
 }
 </style>

@@ -1,12 +1,8 @@
 <template>
   <div class="container-left">
-    <!-- <ProfileModal /> -->
-    <div class="placeholder-left">
-      <!-- will eventually refactor -->
-      <Round id="v-step-3"/>
-      <Notification id="v-step-4"/>
-      <ContainerProfile :playerRole='this.$store.state.playerRole' :playerScore="10"/>
-    </div>
+    <Round id="v-step-3"/>
+    <Notification id="v-step-4"/>
+    <ContainerProfile :playerRole='this.$store.state.playerRole' :playerScore="10"/>
     <MarsLog id="v-step-5"/>
   </div>
 </template>
@@ -36,6 +32,10 @@ export default class ContainerLeft extends Vue {}
   height: 100vh;
   width: 100%;
   padding: 1rem 0rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .placeholder-left {
