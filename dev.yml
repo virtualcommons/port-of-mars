@@ -7,6 +7,7 @@ services:
     image: port-of-mars/client/dev:latest
     volumes:
       - ./client:/code
+      - ./shared:/shared
       - /code/node_modules
     command: './dev.sh'
     ports:
@@ -14,4 +15,4 @@ services:
   server:
     command: './dev.sh'
     ports:
-      - '3006:3005'
+      - '2567:2567'
