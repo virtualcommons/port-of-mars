@@ -6,6 +6,10 @@ export default {
     // for all the numbers
     // activecards.push(Data(number))
   },
+  SET_EVENTS_FOR_ROUND(state:any, payload:any) {
+    state.gameEvents = payload;
+    // console.log(state.gameEvents);
+  },
   ADD_TO_CHAT(state: any, payload: ChatMessage) {
     state.chat.addEntry(payload);
   },

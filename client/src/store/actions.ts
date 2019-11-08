@@ -1,6 +1,9 @@
 import { ChatMessage } from '../models';
 
 export default {
+  updateRoundEvents(context: any, payload:any) {
+    context.commit('SET_EVENTS_FOR_ROUND', payload);
+  },
   sendChatMsg(context: any, message: ChatMessage) {
     context.commit('ADD_TO_CHAT', message);
   },

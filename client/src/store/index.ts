@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import * as _ from 'lodash';
-import { InvestmentsModel, ChatModel } from '../models';
+import { InvestmentsModel, ChatModel, RawGameEvent } from '../models';
 
 import actions from './actions';
 import getters from './getters';
@@ -21,6 +21,7 @@ export const initialStoreState = {
   players: [],
   timeblocks: 10,
   playerResources: {},
+  gameEvents: [],
 
   // state variable for layout
   layout: 'default-layout',

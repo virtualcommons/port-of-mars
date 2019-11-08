@@ -1,15 +1,15 @@
 <template>
   <BContainer class="container-phase">
     <BRow class="row-phase">
-      <BCol class="phase" cols="5">
+      <BCol class="phase" cols="3">
         <!-- phase component -->
         <Phase />
       </BCol>
-      <BCol class="events" cols="7">
+      <BCol class="events" cols="9">
         <!-- event card components (3) -->
-        <CardEvent />
-        <CardEvent id="v-step-8"/>
-        <CardEvent />
+        <CardEvent :event="eventsForTheRound[0]"/>
+        <CardEvent :event="eventsForTheRound[1]" id="v-step-8"/>
+        <CardEvent :event="eventsForTheRound[2]"/>
       </BCol>
     </BRow>
   </BContainer>
@@ -31,7 +31,11 @@ import CardEvent from '@/components/gamedashboard/cards/CardEvent.vue';
   },
 })
 
-export default class ContainerPhase extends Vue {}
+export default class ContainerPhase extends Vue {
+  get eventsForTheRound() {
+    return this.$store.state.gameEvents;
+  }
+}
 </script>
 
 <style scoped>
@@ -39,6 +43,7 @@ export default class ContainerPhase extends Vue {}
   width: 100%;
   height: 80%;
   padding: 0;
+  margin:0;
   /* background-color: pink; */
 }
 
