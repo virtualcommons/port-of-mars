@@ -25,35 +25,47 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 @Component
 
 export default class CardAccomplishment extends Vue {
-  @Prop({ default: {} }) private accomplishment;
+  @Prop({
+    default() {
+      return {
+        label: 'pregame status',
+        victoryPoints: '-',
+      };
+    },
+  }) accomplishment;
 
-  private costs = ['upkeep', 'finance', 'legacy', 'government', 'culture', 'science'];
+  costs = ['upkeep', 'finance', 'legacy', 'government', 'culture', 'science'];
 
-  total = this.costs.map((curr) => {
-    const cost = Math.abs(this.accomplishment[[curr]]);
-    const amount = [];
-    for (let i = 0; i < cost; i += 1) {
-      amount.push(curr);
-    }
-    return amount;
-  }).reduce((prev, curr) => prev.concat(curr), [])
+  total = [];
 
-  imageScale = this.total.length > 6 ? 'width:1.5rem' : 'width:2.5rem';
+  imageScale = '';
 
-  private relevantCardData = {
-    title: this.accomplishment.label,
-    info: this.accomplishment.flavorText,
-    total: this.total,
+  mounted() {
+    this.$root.$on('udpateAccomplishments', (data: any) => {
+      this.total = this.costs.map((curr) => {
+        const cost = Math.abs(this.accomplishment[[curr]]);
+        const amount = [];
+        for (let i = 0; i < cost; i += 1) {
+          amount.push(curr);
+        }
+        return amount;
+      }).reduce((prev, curr) => prev.concat(curr), []);
+
+      this.imageScale = this.total.length > 6 ? 'width:1.5rem' : 'width:2.5rem';
+    });
   }
 
-   private cardModalData: object = {
-     card: 'accomplishment',
-     payload: this.relevantCardData,
-   }
 
-   handleClick() {
-     this.$root.$emit('openCard', this.cardModalData);
-   }
+  handleClick() {
+    this.$root.$emit('openCard', {
+      card: 'accomplishment',
+      payload: {
+        title: this.accomplishment.label,
+        info: this.accomplishment.flavorText,
+        total: this.total,
+      },
+    });
+  }
 }
 </script>
 

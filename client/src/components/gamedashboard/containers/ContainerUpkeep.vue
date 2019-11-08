@@ -1,5 +1,5 @@
 <template>
-  <BContainer class="container-upkeep" @click="simEvent">
+  <BContainer class="container-upkeep">
     <StatusBar class="upkeep-statusbar" :setWidth="`${upkeepStatus}`" />
     <p>
       Upkeep <span class="upkeep-status">{{ upkeepStatus }}</span
@@ -26,16 +26,16 @@ export default class ContainerUpkeep extends Vue {
     return this.$store.state.upkeep;
   }
 
-  simEvent() {
-    this.$store
-      .dispatch('changeUpkeepAmount', 25)
-      .then(() => {
-        this.$store.dispatch('setNotificationMessage', '-25 Upkeep');
-      })
-      .then(() => {
-        this.$root.$emit('notification', '-25 Upkeep');
-      });
-  }
+  // simEvent() {
+  //   this.$store
+  //     .dispatch('changeUpkeepAmount', 25)
+  //     .then(() => {
+  //       this.$store.dispatch('setNotificationMessage', '-25 Upkeep');
+  //     })
+  //     .then(() => {
+  //       this.$root.$emit('notification', '-25 Upkeep');
+  //     });
+  // }
 }
 </script>
 

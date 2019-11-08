@@ -26,7 +26,9 @@ import CardAccomplishment from '@/components/gamedashboard/cards/CardAccomplishm
   },
 })
 export default class ContainerAccomplishments extends Vue {
-  currentAccomplishments = this.$store.state.activeAccomplishmentCards;
+  get currentAccomplishments() {
+    return this.$store.state.activeAccomplishmentCards;
+  }
 }
 </script>
 

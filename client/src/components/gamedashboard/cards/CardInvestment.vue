@@ -40,7 +40,8 @@ export default class CardInvestment extends Vue {
 
   incrementInvestment() {
     if (
-      this.$store.state.localInvestments.localDecrement - this.investmentData.currentCost >= 0
+      this.$store.state.gamePhase === 'Time Blocks'
+      && this.$store.state.localInvestments.localDecrement - this.investmentData.currentCost >= 0
       && this.investmentData.currentCost > 0
     ) {
       this.$store.dispatch('changeLocalInvestment', {

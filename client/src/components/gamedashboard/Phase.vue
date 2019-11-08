@@ -1,6 +1,6 @@
 <template>
   <div class="phase" id="v-step-7">
-    <p class="phase-title">Current Phase</p>
+    <p class="phase-title">{{currentPhase}} Phase</p>
     <p><span class="phase-current">Invest</span>&nbsp;<span class="phase-time">5:00</span></p>
     <!-- phase-current will change on props -->
     <!-- phase-time will change on props (seperate component?) -->
@@ -19,7 +19,11 @@ import Clock from '@/components/gamedashboard/Clock.vue';
   },
 })
 
-export default class Phase extends Vue {}
+export default class Phase extends Vue {
+  get currentPhase() {
+    return this.$store.state.gamePhase;
+  }
+}
 </script>
 
 <style scoped>

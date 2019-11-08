@@ -22,6 +22,7 @@ export const initialStoreState = {
   timeblocks: 10,
   playerResources: {},
   gameEvents: [],
+  gamePhase: '',
 
   // state variable for layout
   layout: 'default-layout',
