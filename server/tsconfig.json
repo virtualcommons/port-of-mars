@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "lib",
+    "lib": ["es6"],
     "target": "es6",
     "module": "commonjs",
     "strict": true,
@@ -15,5 +16,8 @@
         "../shared/*"
       ]
     }
-  }
+  },
+  "include": [
+      "**/*.ts"
+  ]
 }
