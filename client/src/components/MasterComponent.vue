@@ -14,12 +14,15 @@ export default class Master extends Vue {
 
   private activeAccomplishments: [] = this.data.activeAccomplishments;
 
+  private activeEvents = this.data.eventsThisRound;
+
   constructor() {
     super();
     // console.log(this.costs);
     this.$store.dispatch('setPlayerRole', this.role);
     this.$store.dispatch('updateRoundCosts', this.costs);
     this.$store.dispatch('setActiveAccomplishments', this.activeAccomplishments);
+    this.$store.dispatch('updateRoundEvents', this.activeEvents);
   }
 }
 </script>

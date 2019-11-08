@@ -1,5 +1,5 @@
 <template>
-  <div class="card-investment">
+  <div class="card-investment" :style="opacityModifier">
     <div class="investment-options">
       <div class="card-type">
         <div class="card-type-img">
@@ -35,6 +35,8 @@ import { InvestmentProperties } from '../../../models/index';
 @Component({})
 export default class CardInvestment extends Vue {
   @Prop() private investmentData!: InvestmentProperties;
+
+  opacityModifier = this.investmentData.currentCost === -1 ? 'opacity:50%' : '';
 
   incrementInvestment() {
     if (

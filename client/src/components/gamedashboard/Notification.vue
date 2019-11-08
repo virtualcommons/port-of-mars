@@ -81,6 +81,10 @@ export default class Notification extends Vue {
   visibility: hidden;
 }
 
+.notification-hidden {
+  /* visibility: hidden; */
+}
+
 .notification-message {
   font-size: 0.75rem;
   margin: 0;

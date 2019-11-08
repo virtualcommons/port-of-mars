@@ -103,6 +103,22 @@ export default class CardModal extends Vue {
   background: none;
 }
 
+.card-info{
+  position: relative;
+  z-index: 2;
+  top: 0.3rem;
+  left:1rem;
+  border: none;
+  color: #F5F5F5;
+  background: none;
+  width:100%;
+}
+
+.accomplishment-cost{
+  margin-left: auto;
+  margin-right:auto;
+}
+
 .cm-close-button {
   position: absolute;
   z-index: 2;
