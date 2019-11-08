@@ -1,5 +1,3 @@
-import {Player} from "../server/src/Game";
-
 export interface AccomplishmentRawData {
   id: number
   role: 'Researcher' | 'Curator' | 'Pioneer' | 'Entrepreneur' | 'Politician'
