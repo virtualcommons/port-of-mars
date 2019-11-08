@@ -3,7 +3,7 @@ import {
 } from '@/models';
 
 export default class Synthetic {
-  playerRole: string = 'Politician';
+  playerRole: string = 'Researcher';
 
   roundNumber: number = 0;
 
@@ -11,14 +11,9 @@ export default class Synthetic {
 
   private roundArray!:RawGameEvent[];
 
-  constructor() {
-    this.getNewEvents();
-  }
-
   getNewEvents() {
     this.roundArray = GetEventsForTheRound();
   }
-
 
   get player() {
     return this.playerRole;
@@ -37,6 +32,7 @@ export default class Synthetic {
   }
 
   get eventsThisRound() {
+    this.getNewEvents();
     return this.roundArray;
   }
 }

@@ -6,6 +6,9 @@ export default {
     // for all the numbers
     // activecards.push(Data(number))
   },
+  SET_GAME_PHASE(state: any, payload:string) {
+    state.gamePhase = payload;
+  },
   SET_EVENTS_FOR_ROUND(state:any, payload:any) {
     state.gameEvents = payload;
     // console.log(state.gameEvents);

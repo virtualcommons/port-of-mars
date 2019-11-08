@@ -2,7 +2,7 @@
   <div class="card-event" @click="handleClick">
     <div>
       <p class="card-title"><b>{{event.name}}</b></p>
-      <p class="card-info">Event Effects</p>
+      <p class="card-info">{{event.info}}</p>
     </div>
   </div>
 </template>
@@ -14,21 +14,17 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 
 export default class CardEvent extends Vue {
   // Note: need to pass in actual data
-  @Prop() event;
-
-  private relevantCardData = {
-    title: this.event.name,
-    info: this.event.flavorText,
-    effects: 'Event Effects',
-  }
-
-  private cardModalData: object = {
-    card: 'event',
-    payload: this.relevantCardData,
-  }
+  @Prop({ default: () => ({ name: 'pregame status', info: '' }) }) event;
 
   handleClick() {
-    this.$root.$emit('openCard', this.cardModalData);
+    this.$root.$emit('openCard', {
+      card: 'event',
+      payload: {
+        title: this.event.name,
+        info: this.event.flavorText,
+        effects: 'no effects',
+      },
+    });
   }
 }
 </script>
