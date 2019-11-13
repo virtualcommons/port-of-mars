@@ -34,6 +34,6 @@ export default class LoginScreen extends Vue {}
   letter-spacing: 0.25rem;
   font-size: 12rem;
   font-weight: 700;
-  color: #c67b5c;
+  color: var(--space-orange);
 }
 </style>

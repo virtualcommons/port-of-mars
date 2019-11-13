@@ -74,14 +74,14 @@ export default class Chat extends Vue {
 .chat-title {
   font-size: 1.5rem;
   margin: 0 0 0.5rem 0;
-  color: #F5F5F5;
+  color: var(--space-white);
 }
 
 .chat-chat {
   height: 100%;
   width: 100%;
   padding: 0.5rem;
-  border: 0.125rem solid #F5F5F5;
+  border: 0.125rem solid var(--space-white);
   border-bottom: none;
   overflow-y: scroll;
   scrollbar-width: none; /* Firefox */
@@ -95,7 +95,7 @@ export default class Chat extends Vue {
 
 .chat-message {
   padding: 0.5rem;
-  color: #F5F5F5;
+  color: var(--space-white);
   height: auto;
   max-width: 100%;
   font-size: 0.75rem;
@@ -106,7 +106,7 @@ export default class Chat extends Vue {
 
 .chat-message-member{
   margin: 0;
-  color: #c67b5c;
+  color: var(--space-orange);
 }
 
 .chat-message-content {
@@ -119,7 +119,7 @@ export default class Chat extends Vue {
 }
 
 .chat-message-time span {
-  color: #c67b5c;
+  color: var(--space-orange);
 }
 
 .chat-input-frame {
@@ -127,7 +127,7 @@ export default class Chat extends Vue {
   width: 100%;
   padding: 0.5rem;
   display: flex;
-  border: 0.125rem solid #F5F5F5;
+  border: 0.125rem solid var(--space-white);
 }
 
 .chat-input {
@@ -136,8 +136,8 @@ export default class Chat extends Vue {
   padding-right: 0.5rem;
   border: none;
   font-size: 0.75rem;
-  color: #F5F5F5;
-  background-color: #1e2223;
+  color: var(--space-white);
+  background-color: var(--space-gray);
 }
 
 .chat-input:focus{
@@ -153,8 +153,8 @@ export default class Chat extends Vue {
   width: 25%;
   border: none;
   font-size: 1rem;
-  color: #C67B5C;
-  background-color: #1e2223;
+  color: var(--space-orange);
+  background-color: var(--space-gray);
 }
 
 .chat-input-sendbtn:focus {

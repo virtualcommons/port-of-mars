@@ -51,10 +51,17 @@ export default class Home extends Vue {
 </script>
 
 <style>
+/* DECLARE CSS VARIABLES */
+body {
+  --space-gray: #1e2223;
+  --space-orange: #c67b5c;
+  --space-white: #f5f5f5;
+}
+
 html,
 body {
   font-family: 'Space Mono', monospace !important;
-  background-color: #1e2223;
+  background-color: var(--space-gray);
   overflow: hidden;
 }
 
@@ -71,4 +78,17 @@ button {
   user-select: none !important; /* Non-prefixed version, currently
                                      supported by Chrome, Opera and Firefox */
 }
+
+/* iPad Pro default resolution (width) */
+@media (max-width: 1366px) {}
+
+/* MacBook Pro default resolution (width) */
+@media (max-width: 1280px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+/* iPad default resolution */
+@media (max-width: 1024px) {}
 </style>

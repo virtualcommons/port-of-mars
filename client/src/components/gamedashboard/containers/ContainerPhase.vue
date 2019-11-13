@@ -67,6 +67,6 @@ export default class ContainerPhase extends Vue {
   justify-content: space-around;
   align-items: center;
   padding: 1rem;
-  /* background-color: orange; */
+  /* background-color: green; */
 }
 </style>

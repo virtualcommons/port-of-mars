@@ -40,6 +40,6 @@ export default class AssetRequest extends Vue {
   margin-top: 1rem;
   margin-bottom: 0;
   text-align: center;
-  color: #F5F5F5;
+  color: var(--space-white);
 }
 </style>

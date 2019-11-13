@@ -50,10 +50,10 @@ export default class AssetExchangeInput extends Vue {
 .asset-exchange-input-field input {
   height: 2rem;
   width: 50%;
-  border: 0.125rem solid #c67b5c;
+  border: 0.125rem solid var(--space-orange);
   border-radius: 0.5rem;
   text-align: center;
-  color: #f5f5f5 !important;
+  color: var(--space-white) !important;
   background: none;
 }
 
@@ -76,6 +76,6 @@ export default class AssetExchangeInput extends Vue {
 }
 
 .asset-exchange-input-field-inventory {
-  color: #c67b5c;
+  color: var(--space-orange);
 }
 </style>

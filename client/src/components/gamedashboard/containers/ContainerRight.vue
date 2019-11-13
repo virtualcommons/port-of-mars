@@ -85,6 +85,6 @@ export default class ContainerRight extends Vue {}
 .scores-title {
   margin-bottom: 1rem;
   font-size: 1.5rem;
-  color: #f5f5f5;
+  color: var(--space-white);
 }
 </style>

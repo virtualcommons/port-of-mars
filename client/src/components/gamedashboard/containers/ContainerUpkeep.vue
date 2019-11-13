@@ -45,7 +45,7 @@ export default class ContainerUpkeep extends Vue {
   height: 20%;
   padding: 0;
   /* background-color: green; */
-  color: #f5f5f5;
+  color: var(--space-white);
 }
 
 .container-upkeep p {
@@ -61,6 +61,6 @@ export default class ContainerUpkeep extends Vue {
 }
 
 .upkeep-status {
-  color: #c67b5c;
+  color: var(--space-orange);
 }
 </style>

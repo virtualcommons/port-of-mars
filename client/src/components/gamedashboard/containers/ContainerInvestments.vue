@@ -78,20 +78,6 @@ export default class ContainerInvestments extends Vue {
 </script>
 
 <style scoped>
-@media (max-width: 1680px) {
-  .investments-cards {
-    flex-direction: row !important;
-  }
-
-  .investments-cards-top, .investments-cards-bottom {
-    height: 100% !important;
-    width: 50% !important;
-    flex-direction: column !important;
-    justify-content: space-around !important;
-    align-items: center !important;
-  }
-}
-
 .container-investments {
   width: 100%;
   max-width: none;
@@ -106,18 +92,18 @@ export default class ContainerInvestments extends Vue {
   height: 10%;
   width: 100%;
   margin: 0;
-  padding: 0.5rem 1rem;
+  padding: 0.25rem 0.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-bottom: 0.125rem solid #f5f5f5;
-  border-right: 0.125rem solid #f5f5f5;
-  background-color: #c67b5c;
+  border-bottom: 0.125rem solid var(--space-white);
+  border-right: 0.125rem solid var(--space-white);
+  background-color: var(--space-orange);
 }
 
 .investments-topbar-title {
   margin: 0;
-  color: #1e2223;
+  color: var(--space-gray);
   font-size: 1.5rem;
 }
 
@@ -127,7 +113,7 @@ export default class ContainerInvestments extends Vue {
 
 .investments-topbar-status {
   margin: 0;
-  color: #1e2223;
+  color: var(--space-gray);
   font-size: 1.5rem;
 }
 
@@ -137,7 +123,7 @@ export default class ContainerInvestments extends Vue {
   padding: 0.5rem;
   display: flex;
   flex-direction: column;
-  border-right: 0.125rem solid #f5f5f5;
+  border-right: 0.125rem solid var(--space-white);
 }
 
 .investments-cards-top, .investments-cards-bottom {

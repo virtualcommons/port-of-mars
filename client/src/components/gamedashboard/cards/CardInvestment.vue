@@ -3,15 +3,18 @@
     <div class="investment-options">
       <div class="card-type">
         <div class="card-type-img">
-          <!--<i class="fas fa-spinner fa-2x"></i>-->
-          <img :src="require(`@/assets/investmentsIcons/${this.investmentData.n}.png`)"
-            alt="Player"/>
+          <img
+            src="https://www.onlygfx.com/wp-content/uploads/2017/03/scribble-circle-4.png"
+            alt="Player"
+          />
+          <!-- <img :src="require(`@/assets/investmentsIcons/${this.investmentData.n}.png`)"
+            alt="Player"/> -->
         </div>
         <div class="card-type-cost" id="v-step-12">
-          <p>{{ investmentData.currentCost }}</p>
+          <p>{{ investmentData.currentCost !== -1 ? investmentData.currentCost : 'X' }}</p>
         </div>
       </div>
-      <div class="card-increment-and-decrement-holder" id="v-step-13">
+      <div class="card-increment-and-decrement-holder" id="v-step-13" v-if="!disabled">
         <div class="investment-increment" @click="incrementInvestment">
           <p>+</p>
         </div>
@@ -19,6 +22,7 @@
           <p>-</p>
         </div>
       </div>
+      <div class="card-increment-and-decrement-holder-disabled" v-if="disabled"></div>
     </div>
     <div class="investment-data">
       <p class="investment-data-name">{{ `${investmentData.n}` }}</p>
@@ -37,6 +41,10 @@ export default class CardInvestment extends Vue {
   @Prop() private investmentData!: InvestmentProperties;
 
   opacityModifier = this.investmentData.currentCost === -1 ? 'opacity:50%' : '';
+
+  get disabled() {
+    return this.investmentData.currentCost === -1;
+  }
 
   incrementInvestment() {
     if (
@@ -63,10 +71,11 @@ export default class CardInvestment extends Vue {
 </script>
 
 <style scoped>
-@media (max-width: 1680px) {
-  .investment-options {
-    height: 6.5rem !important;
-  }
+.card-investment {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
 }
 
 .investment-options {
@@ -78,12 +87,16 @@ export default class CardInvestment extends Vue {
   align-items: center;
   text-align: center;
   overflow: hidden;
-  color: #1e2223;
+  color: var(--space-gray);
 }
 
 .card-type {
-  background-color: #f5f5f5;
-  border: 0.125rem solid #f5f5f5;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--space-white);
+  border: 0.125rem solid var(--space-white);
   border-radius: 1rem 0 0 1rem;
   padding: 0.5rem;
   height: 100%;
@@ -91,18 +104,27 @@ export default class CardInvestment extends Vue {
 }
 
 .card-type-img {
-  height: 70%;
+  /* height: 70%; */
+  /* background-color: green; */
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 0;
+  border: 0.125rem solid var(--space-orange);
+  border-radius: 50%;
+  padding: 0.25rem;
 }
 
-.card-type-img i {
-  /* height: 50%; */
+.card-type-img img {
+  /* border: 0.125rem solid var(--space-orange); */
+  height: 3.5rem;
+  width: 3.5rem;
 }
 
 .card-type-cost {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.25rem;
   height: 30%;
   display: flex;
   justify-content: flex-end;
@@ -117,17 +139,26 @@ export default class CardInvestment extends Vue {
 .card-increment-and-decrement-holder {
   width: 30%;
   height: 100%;
-  /* border-left: 0.125rem solid #f5f5f5; */
+  /* border-left: 0.125rem solid var(--space-white); */
 
   display: flex;
   flex-direction: column;
 }
 
+.card-increment-and-decrement-holder-disabled {
+  width: 30%;
+  height: 100%;
+  /* background-color: green; */
+  border: 0.125rem solid var(--space-white);
+  border-radius: 0 1rem 1rem 0;
+  border-left: none;
+}
+
 .investment-increment {
   height: 50%;
   width: 100%;
-  /* border-bottom: 0.0625rem solid #f5f5f5; */
-  border: 0.125rem solid #f5f5f5;
+  /* border-bottom: 0.0625rem solid var(--space-white); */
+  border: 0.125rem solid var(--space-white);
   /* border: 0.125rem solid pink; */
   border-radius: 0 1rem 0 0;
   border-left: none;
@@ -135,7 +166,7 @@ export default class CardInvestment extends Vue {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #f5f5f5;
+  color: var(--space-white);
 }
 
 .investment-increment p {
@@ -146,14 +177,14 @@ export default class CardInvestment extends Vue {
 .investment-decrement {
   height: 50%;
   width: 100%;
-  border: 0.125rem solid #f5f5f5;
+  border: 0.125rem solid var(--space-white);
   border-radius: 0 0 1rem 0;
   border-left: none;
   border-top: none;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #f5f5f5;
+  color: var(--space-white);
 }
 
 .investment-decrement p {
@@ -162,23 +193,23 @@ export default class CardInvestment extends Vue {
 }
 
 .investment-increment:hover {
-  color: #1e2223;
-  background-color: #c67b5c;
+  color: var(--space-gray);
+  background-color: var(--space-orange);
   cursor: pointer;
 }
 .investment-decrement:hover {
-  color: #1e2223;
-  background-color: #c67b5c;
+  color: var(--space-gray);
+  background-color: var(--space-orange);
   cursor: pointer;
 }
 
 .investment-data {
+  width: 100%;
   margin-top: 0.5rem;
   color: white;
   /* text-align: center; */
   display: flex;
   justify-content: space-between;
-  /* background-color: pink; */
 }
 
 .investment-data p {
@@ -190,10 +221,10 @@ export default class CardInvestment extends Vue {
 }
 
 .investment-data-inventory {
-  color: #c67b5c;
+  color: var(--space-orange);
 }
 
 .investment-data-inventory span {
-  color: #f5f5f5;
+  color: var(--space-white);
 }
 </style>

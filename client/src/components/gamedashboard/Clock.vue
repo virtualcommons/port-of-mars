@@ -41,10 +41,10 @@ export default class Clock extends Vue {
 <style scoped>
 @import url('https://fonts.googleapis.com/css?family=Space+Mono:400,700&display=swap');
 .timer {
-  color: #F5F5F5;
+  color: var(--space-white);
 }
 .clock-container {
-  color: #f5f5f5;
+  color: var(--space-white);
   font-size: 1rem;
 }
 </style>

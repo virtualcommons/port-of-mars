@@ -17,7 +17,7 @@ export default class Round extends Vue {}
 .round {
   width: 100%;
   font-size: 1.5rem;
-  color: #F5F5F5;
+  color: var(--space-white);
 }
 
 .round p {

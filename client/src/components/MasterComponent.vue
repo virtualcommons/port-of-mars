@@ -16,7 +16,7 @@ export default class Master extends Vue {
 
   private costs: object = this.data.roundCosts;
 
-  private activeAccomplishments: [] = this.data.activeAccomplishments;
+  private activeAccomplishments: object[] = this.data.activeAccomplishments;
 
   private activeEvents = this.data.eventsThisRound;
 
@@ -49,7 +49,7 @@ export default class Master extends Vue {
     this.$store.dispatch('updatePhase', 'Pregame');
   }
 
-  onKeyDown(e) {
+  onKeyDown(e: any) {
     this.round = 0;
     if (e.key === 'r') {
       this.phaseHandler(this.roundDefinitions[this.roundIndex]);

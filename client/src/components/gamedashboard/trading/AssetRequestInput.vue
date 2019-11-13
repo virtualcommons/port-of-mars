@@ -35,10 +35,10 @@ export default class AssetRequestInput extends Vue {}
   height: 2rem;
   width: 100%;
   margin-top: 1rem;
-  border: 0.125rem solid #c67b5c;
+  border: 0.125rem solid var(--space-orange);
   border-radius: 0.5rem;
   text-align: center;
-  color: #f5f5f5 !important;
+  color: var(--space-white) !important;
   background: none;
 }
 

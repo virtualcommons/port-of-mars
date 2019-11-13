@@ -28,7 +28,7 @@ export default class TradingModal extends Vue {
   }
 
   setColor(): object {
-    return this.isActive ? { backgroundColor: '#C67B5C' } : { backgroundColor: 'none' };
+    return this.isActive ? { backgroundColor: 'var(--space-orange)' } : { backgroundColor: 'none' };
   }
 
   setMember(member: string): void {
@@ -45,7 +45,7 @@ export default class TradingModal extends Vue {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #F5F5F5;
+  color: var(--space-white);
   cursor: pointer;
 }
 

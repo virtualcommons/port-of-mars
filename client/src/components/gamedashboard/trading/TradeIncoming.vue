@@ -64,7 +64,7 @@ export default class TradeIncoming extends Vue {
   height: 100%;
   width: 100%;
   padding: 0;
-  color: #f5f5f5;
+  color: var(--space-white);
 }
 
 .trade-incoming-content {
@@ -124,12 +124,12 @@ export default class TradeIncoming extends Vue {
   margin: 0;
   border: none;
   text-decoration: underline;
-  color: #f5f5f5;
+  color: var(--space-white);
   background: none;
 }
 
 .trade-incoming-content-shuffle button:hover {
-  color: #c67b5c;
+  color: var(--space-orange);
 }
 
 .trade-incoming-content-shuffle button:active, .trade-incoming-content-shuffle button:focus {
@@ -148,9 +148,9 @@ export default class TradeIncoming extends Vue {
 .decline-button {
   height: 3rem;
   width: 12.5rem;
-  border: 0.125rem solid #c67b5c;
+  border: 0.125rem solid var(--space-orange);
   border-radius: 0.5rem;
-  color: #f5f5f5;
+  color: var(--space-white);
   background: none;
 }
 
@@ -161,9 +161,9 @@ export default class TradeIncoming extends Vue {
 .accept-button {
   height: 3rem;
   width: 12.5rem;
-  border: 0.125rem solid #c67b5c;
+  border: 0.125rem solid var(--space-orange);
   border-radius: 0.5rem;
-  background-color: #c67b5c;
+  background-color: var(--space-orange);
 }
 
 .accept-button:focus, .accept-button:active {

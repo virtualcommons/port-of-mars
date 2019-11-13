@@ -58,7 +58,7 @@ export default class CardAccomplishmentView extends Vue {
 .cm-accomplishment-title p {
   text-align: center;
   font-size: 2rem;
-  color: #c67b5c;
+  color: var(--space-orange);
 }
 
 .cm-accomplishment-info {
@@ -72,7 +72,7 @@ export default class CardAccomplishmentView extends Vue {
 }
 
 .cm-accomplishment-investments-title span {
-  color: #c67b5c;
+  color: var(--space-orange);
 }
 
 .cm-accomplishment-investments {

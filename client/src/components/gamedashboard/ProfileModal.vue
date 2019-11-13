@@ -90,8 +90,8 @@ export default class ProfileModal extends Vue {
 .pm-tabs {
   height: 3rem;
   width: 60rem;
-  border-left: 0.125rem solid #f5f5f5;
-  border-bottom: 0.125rem solid #f5f5f5;
+  border-left: 0.125rem solid var(--space-white);
+  border-bottom: 0.125rem solid var(--space-white);
 }
 
 .pm-tabs-tab {
@@ -100,10 +100,10 @@ export default class ProfileModal extends Vue {
   display: flex;
   justify-content: center;
   align-items: center;
-  border-right: 0.125rem solid #f5f5f5;
-  border-top: 0.125rem solid #f5f5f5;
-  color: #f5f5f5;
-  background-color: #1e2223;
+  border-right: 0.125rem solid var(--space-white);
+  border-top: 0.125rem solid var(--space-white);
+  color: var(--space-white);
+  background-color: var(--space-gray);
   cursor: pointer;
 }
 
@@ -117,10 +117,10 @@ export default class ProfileModal extends Vue {
   width: 60rem;
   margin: 0;
   padding: 0;
-  border: 0.125rem solid #f5f5f5;
+  border: 0.125rem solid var(--space-white);
   border-top: none;
   border-radius: 0 0 1.25rem 1.25rem;
-  background-color: #1e2223;
+  background-color: var(--space-gray);
 }
 
 .pm-view {
@@ -135,12 +135,12 @@ export default class ProfileModal extends Vue {
   right: 2rem;
   border: none;
   text-decoration: underline;
-  color: #f5f5f5;
+  color: var(--space-white);
   background: none;
 }
 
 .pm-close-button:hover {
-  color: #c67b5c;
+  color: var(--space-orange);
 }
 
 .pm-close-button:active {
@@ -148,7 +148,7 @@ export default class ProfileModal extends Vue {
 }
 
 .active {
-  color: #1e2223 !important;
-  background-color: #c67b5c !important;
+  color: var(--space-gray) !important;
+  background-color: var(--space-orange) !important;
 }
 </style>

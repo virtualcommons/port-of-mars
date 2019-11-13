@@ -51,7 +51,7 @@ export default class CardEventView extends Vue {
 .cm-event-title p {
   text-align: center;
   font-size: 2rem;
-  color: #c67b5c;
+  color: var(--space-orange);
 }
 
 .cm-event-info {

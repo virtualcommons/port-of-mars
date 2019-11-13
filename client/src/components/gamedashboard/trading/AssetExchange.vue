@@ -47,10 +47,10 @@ export default class AssetExchange extends Vue {
 }
 
 .asset-exchange-output-requested {
-  color: #F5F5F5;
+  color: var(--space-white);
 }
 
 .asset-exchange-output-available {
-  color: #C67B5C;
+  color: var(--space-orange);
 }
 </style>
