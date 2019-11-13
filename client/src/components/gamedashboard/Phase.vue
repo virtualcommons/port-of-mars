@@ -5,7 +5,7 @@
       <p class="phase-current">{{ currentPhase }}</p>
     </div>
     <div>
-      <p class="phase-time"><span>( </span>5:00<span> )</span></p>
+      <p class="phase-time"><span>( </span>5<span> : </span>00<span> )</span></p>
     </div>
     <!-- phase-current will change on props -->
     <!-- phase-time will change on props (seperate component?) -->

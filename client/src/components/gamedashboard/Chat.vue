@@ -72,6 +72,7 @@ export default class Chat extends Vue {
 }
 
 .chat-title {
+  text-align: right;
   font-size: var(--font-large);
   margin: 0 0 0.5rem 0;
   color: var(--space-white);

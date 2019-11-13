@@ -84,18 +84,41 @@ button {
   user-select: none !important;
 }
 
-/* iPad Pro default resolution (width) */
-@media (max-width: 1366px) {
+.game {
+  background-color: green;
+  height: 100vh !important;
+  width: 100vw !important;
 }
 
-/* MacBook Pro default resolution (width) */
+/* HANDLE ZOOM */
+
 @media (max-width: 1280px) {
   html {
-    font-size: 12px;
+    font-size: 12px !important;
   }
 }
 
-/* iPad default resolution */
-@media (max-width: 1024px) {
+@media (max-width: 960px) {
+  html {
+    font-size: 10px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 8px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  html {
+    font-size: 6px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 4px !important;
+  }
 }
 </style>
