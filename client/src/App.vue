@@ -53,10 +53,17 @@ export default class Home extends Vue {
 <style>
 /* DECLARE CSS VARIABLES */
 body {
+  --max-screen-height: 62.5625rem;
+  --max-screen-width: 120rem;
+
+  --min-screen-height: 48rem;
+  --min-screen-width: 64rem;
+
   --space-gray: #1e2223;
   --space-orange: #c67b5c;
   --space-white: #f5f5f5;
 
+  --font-family-default: 'Space Mono', monospace;
   --font-small: 0.75rem;
   --font-med: 1rem;
   --font-large: 1.5rem;
@@ -66,7 +73,7 @@ body {
 
 html,
 body {
-  font-family: 'Space Mono', monospace !important;
+  font-family: var(--font-family-default) !important;
   background-color: var(--space-gray);
   overflow: hidden;
 }
@@ -85,7 +92,6 @@ button {
 }
 
 .game {
-  background-color: green;
   height: 100vh !important;
   width: 100vw !important;
 }
@@ -99,12 +105,6 @@ button {
 }
 
 @media (max-width: 960px) {
-  html {
-    font-size: 10px !important;
-  }
-}
-
-@media (max-width: 768px) {
   html {
     font-size: 8px !important;
   }

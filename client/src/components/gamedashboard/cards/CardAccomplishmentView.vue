@@ -15,7 +15,7 @@
         />
       </p>
     </div>
-    <p class="cm-accomplishment-investments-title">( <span>Cost</span> )</p>
+    <p class="cm-accomplishment-cost-title">( <span>Cost</span> )</p>
   </div>
 </template>
 
@@ -67,12 +67,12 @@ export default class CardAccomplishmentView extends Vue {
   text-align: center;
 }
 
-.cm-accomplishment-investments-title {
+.cm-accomplishment-cost-title {
   margin: 1rem 0 0 0 !important;
   font-size: var(--font-small);
 }
 
-.cm-accomplishment-investments-title span {
+.cm-accomplishment-cost-title span {
   color: var(--space-orange);
 }
 

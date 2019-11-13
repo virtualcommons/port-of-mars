@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="tutorial-layout">
     <router-view />
     <v-tour name="gameTour" :steps="steps" :callbacks="tourCallbacks">
       <template :v-slot="tour">
@@ -193,3 +193,10 @@ export default class TutorialLayout extends Vue {
   }
 }
 </script>
+
+<style scoped>
+.tutorial-layout {
+  height: 100% !important;
+  width: 100% !important;
+}
+</style>
