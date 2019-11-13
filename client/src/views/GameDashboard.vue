@@ -1,5 +1,5 @@
 <template>
-  <BContainer class="reset">
+  <BContainer class="game-dashboard reset">
     <MasterComponent />
     <ProfileModal />
     <TradingModal />
@@ -63,9 +63,25 @@ export default class GameDashboard extends Vue {}
   margin: 0;
 }
 
+.game-dashboard {
+  height: 100% !important;
+  width: 100% !important;
+  max-width: none !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--space-gray);
+}
+
 .board {
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
+  /* SET MAX SIZE OF SCREEN */
+  max-height: 62.5625rem;
+  max-width: 120rem;
+  /* SET MIN SIZE OF SCREEN */
+  min-height: 48rem;
+  min-width: 64rem;
   padding: 1rem;
   background-color: var(--space-gray);
 }

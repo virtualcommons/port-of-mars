@@ -21,7 +21,9 @@ export default class Round extends Vue {}
 }
 
 .round p {
+  display: inline-block;
   text-align: left;
   margin-bottom: 1rem;
+  border-bottom: 0.125rem solid var(--space-orange);
 }
 </style>

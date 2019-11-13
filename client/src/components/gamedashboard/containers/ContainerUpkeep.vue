@@ -45,6 +45,7 @@ export default class ContainerUpkeep extends Vue {
   width: 100%;
   height: 20%;
   padding: 0 0.5rem 1rem 0.5rem;
+  max-width: none;
   /* background-color: green; */
   display: flex;
   flex-direction: column;

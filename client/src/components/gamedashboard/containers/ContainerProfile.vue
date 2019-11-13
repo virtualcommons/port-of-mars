@@ -59,7 +59,12 @@ export default class ContainerProfile extends Vue {
 
 .profile-info-player {
   font-size: var(--font-large);
-  border-bottom: 0.125rem solid var(--space-orange);
+  background-color: var(--space-white);
+  padding: 0 0.25rem;
+  padding-right: 1rem;
+  border-radius: 0 0.75rem 0.75rem 0;
+  color: var(--space-gray);
+  /* border-bottom: 0.125rem solid var(--space-orange); */
   margin-bottom: 0.5rem;
 }
 
@@ -68,8 +73,8 @@ export default class ContainerProfile extends Vue {
 }
 
 .profile-frame {
-  height: 10vh;
-  width: 10vh;
+  height: 5rem;
+  width: 5rem;
   margin-right: 1rem;
   padding: 0.5rem;
   display: flex;

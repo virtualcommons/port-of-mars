@@ -42,6 +42,7 @@ export default class ContainerPhase extends Vue {
 .container-phase {
   width: 100%;
   height: 80%;
+  max-width: none;
   padding: 0;
   margin:0;
   /* background-color: pink; */
