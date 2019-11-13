@@ -133,8 +133,8 @@ export default class TradingModal extends Vue {
 .tm-tabs {
   height: 3rem;
   width: 60rem;
-  border-left: 0.125rem solid #F5F5F5;
-  border-bottom: 0.125rem solid #F5F5F5;
+  border-left: var(--border-white);
+  border-bottom: var(--border-white);
 }
 
 .tm-tabs-tab {
@@ -143,10 +143,10 @@ export default class TradingModal extends Vue {
   display: flex;
   justify-content: center;
   align-items: center;
-  border-right: 0.125rem solid #F5F5F5;
-  border-top: 0.125rem solid #F5F5F5;
-  color: #F5F5F5;
-  background-color: #1E2223;
+  border-right: var(--border-white);
+  border-top: var(--border-white);
+  color: var(--space-white);
+  background-color: var(--space-gray);
   cursor: pointer;
 }
 
@@ -160,10 +160,10 @@ export default class TradingModal extends Vue {
   width: 60rem;
   margin: 0;
   padding: 0;
-  border: 0.125rem solid #F5F5F5;
+  border: var(--border-white);
   border-top: none;
   border-radius: 0 0 1.25rem 1.25rem;
-  background-color: #1e2223;
+  background-color: var(--space-gray);
 }
 
 .tm-members {
@@ -173,7 +173,7 @@ export default class TradingModal extends Vue {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-right: 0.125rem solid #F5F5F5;
+  border-right: var(--border-white);
 }
 
 .tm-members-bottom {
@@ -181,7 +181,7 @@ export default class TradingModal extends Vue {
 }
 
 .tm-members-seperator {
-  border-bottom: 0.125rem solid #F5F5F5;
+  border-bottom: var(--border-white);
 }
 
 .tm-view {
@@ -196,12 +196,12 @@ export default class TradingModal extends Vue {
   right: 2rem;
   border: none;
   text-decoration: underline;
-  color: #F5F5F5;
+  color: var(--space-white);
   background: none;
 }
 
 .tm-close-button:hover {
-  color: #c67b5c;
+  color: var(--space-orange);
 }
 
 .tm-close-button:active {
@@ -209,7 +209,7 @@ export default class TradingModal extends Vue {
 }
 
 .active {
-  color: #1E2223 !important;
-  background-color: #c67b5c !important;
+  color: var(--space-gray) !important;
+  background-color: var(--space-orange) !important;
 }
 </style>

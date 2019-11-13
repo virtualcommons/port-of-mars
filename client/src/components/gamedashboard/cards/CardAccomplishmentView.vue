@@ -27,8 +27,8 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 export default class CardAccomplishmentView extends Vue {
   @Prop({
     default: () => ({
-      title: '',
-      info: '',
+      title: '---',
+      info: '---',
       total: [],
     }),
   }) private cardData!: object;
@@ -58,7 +58,8 @@ export default class CardAccomplishmentView extends Vue {
 .cm-accomplishment-title p {
   text-align: center;
   font-size: 2rem;
-  color: #c67b5c;
+  text-transform: capitalize;
+  color: var(--space-orange);
 }
 
 .cm-accomplishment-info {
@@ -68,11 +69,11 @@ export default class CardAccomplishmentView extends Vue {
 
 .cm-accomplishment-investments-title {
   margin: 1rem 0 0 0 !important;
-  font-size: 0.75rem;
+  font-size: var(--font-small);
 }
 
 .cm-accomplishment-investments-title span {
-  color: #c67b5c;
+  color: var(--space-orange);
 }
 
 .cm-accomplishment-investments {

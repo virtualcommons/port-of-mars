@@ -33,31 +33,33 @@ export default class StatusBar extends Vue {
 .statusbar-outer {
   display: flex;
   align-items: center;
-  height: 1rem;
-  flex-grow: 100;
+  /* background-color: green; */
+  height: 1rem !important;
+  /* flex-grow: 100; */
   border-radius: 0.50rem;
 }
 
-.statusbar-outer-white {
-  border: 0.125rem solid #F5F5F5;
-}
-
-.statusbar-outer-gray {
-  border: 0.125rem solid #1E2223;
-}
-
 .statusbar-inner {
-  height: 0.50rem;
+  height: 0.50rem !important;
+  margin: 0.125rem;
   margin-left: 0.125rem;
   margin-right: 0.125rem;
   border-radius: 0.25rem;
 }
 
+.statusbar-outer-white {
+  border: var(--border-white);
+}
+
+.statusbar-outer-gray {
+  border: 0.125rem solid var(--space-gray);
+}
+
 .statusbar-inner-white {
-  background-color: #F5F5F5;
+  background-color: var(--space-white);
 }
 
 .statusbar-inner-gray {
-  background-color: #1E2223;
+  background-color: var(--space-gray);
 }
 </style>

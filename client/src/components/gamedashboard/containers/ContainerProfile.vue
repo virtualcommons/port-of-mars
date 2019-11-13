@@ -54,15 +54,17 @@ export default class ContainerProfile extends Vue {
 
 .profile-info-player, .profile-info-score {
   margin: 0;
-  color: #F5F5F5;
+  color: var(--space-white);
 }
 
 .profile-info-player {
-  font-size: 1.5rem;
+  font-size: var(--font-large);
+  border-bottom: 0.125rem solid var(--space-orange);
+  margin-bottom: 0.5rem;
 }
 
 .profile-info-score {
-  font-size: 1rem;
+  font-size: var(--font-med);
 }
 
 .profile-frame {
@@ -73,7 +75,7 @@ export default class ContainerProfile extends Vue {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 0.125rem solid #c67b5c;
+  border: 0.125rem solid var(--space-orange);
   border-radius: 50%;
   background-color: rgba(245,245,245, 0.05);
   cursor: pointer;

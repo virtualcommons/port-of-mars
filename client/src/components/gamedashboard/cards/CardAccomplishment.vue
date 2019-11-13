@@ -1,18 +1,17 @@
 <template>
   <div class="card-accomplishment" @click="handleClick">
     <div class="card-title">
-      <p>{{accomplishment.label}}</p>
+      <p>{{ accomplishment.label }}</p>
     </div>
     <div class="card-info-container">
       <div class="card-points">
         <p>Points</p>
-        <p>{{accomplishment.victoryPoints}}</p>
+        <p>{{ accomplishment.victoryPoints }}</p>
       </div>
       <div class="card-cost">
         <p v-for="investment in total" :key="investment + Math.random()">
           <!-- Note: will need to adjust key -->
-          <img :src="require(`@/assets/investmentsIcons/${investment}.png`)"
-            alt="Player" :style="imageScale" />
+          <img :src="require(`@/assets/investmentsIcons/${investment}.png`)" alt="Player" />
         </p>
       </div>
     </div>
@@ -23,16 +22,15 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 
 @Component
-
 export default class CardAccomplishment extends Vue {
   @Prop({
     default() {
       return {
-        label: 'pregame status',
-        victoryPoints: '-',
+        label: '---',
+        victoryPoints: '---',
       };
     },
-  }) accomplishment;
+  }) private accomplishment: object;
 
   costs = ['upkeep', 'finance', 'legacy', 'government', 'culture', 'science'];
 
@@ -42,19 +40,20 @@ export default class CardAccomplishment extends Vue {
 
   mounted() {
     this.$root.$on('udpateAccomplishments', (data: any) => {
-      this.total = this.costs.map((curr) => {
-        const cost = Math.abs(this.accomplishment[[curr]]);
-        const amount = [];
-        for (let i = 0; i < cost; i += 1) {
-          amount.push(curr);
-        }
-        return amount;
-      }).reduce((prev, curr) => prev.concat(curr), []);
+      this.total = this.costs
+        .map((curr) => {
+          const cost = Math.abs(this.accomplishment[[curr]]);
+          const amount = [];
+          for (let i = 0; i < cost; i += 1) {
+            amount.push(curr);
+          }
+          return amount;
+        })
+        .reduce((prev, curr) => prev.concat(curr), []);
 
       this.imageScale = this.total.length > 6 ? 'width:1.5rem' : 'width:2.5rem';
     });
   }
-
 
   handleClick() {
     this.$root.$emit('openCard', {
@@ -70,20 +69,13 @@ export default class CardAccomplishment extends Vue {
 </script>
 
 <style scoped>
-@media (max-width: 1680px) {
-  .card-accomplishment {
-    min-height: 6.5rem !important;
-    width: 100% !important;
-  }
-}
-
 .card-accomplishment {
   min-height: 7rem;
   width: 80%;
   display: flex;
   flex-direction: column;
   text-align: center;
-  color: #F5F5F5;
+  color: var(--space-white);
   overflow: hidden;
   cursor: pointer;
 }
@@ -96,13 +88,14 @@ export default class CardAccomplishment extends Vue {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #F5F5F5;
+  background-color: var(--space-white);
   border-radius: 1rem 1rem 0 0;
-  color: #1e2223;
+  color: var(--space-gray);
 }
 
 .card-title p {
   margin: 0;
+  text-transform: capitalize;
   text-align: center;
 }
 
@@ -110,11 +103,11 @@ export default class CardAccomplishment extends Vue {
   height: 70%;
   width: 100%;
   padding: 0.5rem;
-  display:flex;
+  display: flex;
   justify-content: space-between;
-  border-left: 0.125rem solid #F5F5F5;
-  border-right: 0.125rem solid #F5F5F5;
-  border-bottom: 0.125rem solid #F5F5F5;
+  border-left: var(--border-white);
+  border-right: var(--border-white);
+  border-bottom: var(--border-white);
   border-radius: 0 0 1rem 1rem;
 }
 
@@ -144,5 +137,7 @@ export default class CardAccomplishment extends Vue {
 
 .card-cost img {
   margin: 0.125rem;
+  height: 1.25rem;
+  width: 1.25rem;
 }
 </style>

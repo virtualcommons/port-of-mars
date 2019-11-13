@@ -23,12 +23,11 @@ export default class ContainerTop extends Vue {}
 
 <style scoped>
 .container-top {
-  padding: 1rem 1rem 0 1rem;
+  height: 100%;
+  width: 100%;
+  padding: 0 1rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 100%;
-  width: 100%;
-  /* background-color: purple; */
 }
 </style>

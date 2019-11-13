@@ -33,9 +33,9 @@ export default class LoginButton extends Vue {
   width: 18rem;
   margin: 0 1rem;
   border-radius: 0.75rem;
-  border: 0.125rem solid #f5f5f5;
+  border: var(--border-white);
   outline: none !important;
-  color: #f5f5f5;
+  color: var(--space-white);
   background-color: rgba(245, 245, 245, 0.2);
 }
 </style>

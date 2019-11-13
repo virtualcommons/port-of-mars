@@ -45,9 +45,9 @@ export default class MarsLog extends Vue {
 }
 
 .marslog-title {
-  font-size: 1.5rem;
+  font-size: var(--font-large);
   margin: 0 0 0.5rem 0;
-  color: #f5f5f5;
+  color: var(--space-white);
 }
 
 .marslog-log {
@@ -55,7 +55,7 @@ export default class MarsLog extends Vue {
   width: 100%;
   /* display: flex; */
   /* flex-direction: column; */
-  border: 0.125rem solid #F5F5F5;
+  border: var(--border-white);
   overflow-y: scroll;
   padding: 0.5rem;
   scrollbar-width: none; /* Firefox */
@@ -71,15 +71,15 @@ export default class MarsLog extends Vue {
   /* height: auto; */
   /* max-width: 100%; */
   word-wrap: break-word;
-  color: #F5F5F5;
+  color: var(--space-white);
   margin: 0.5rem;
 }
 
 .marslog-message {
-  color: #F5F5F5;
+  color: var(--space-white);
   height: auto;
   max-width: 100%;
-  font-size: 0.75rem;
+  font-size: var(--font-small);
   margin-bottom: 0.5rem;
   /* background-color: white; */
   /* border-radius: .75rem; */
@@ -89,6 +89,6 @@ export default class MarsLog extends Vue {
 }
 
 .marslog-message-header {
-  color: #C67B5C;
+  color: var(--space-orange);
 }
 </style>

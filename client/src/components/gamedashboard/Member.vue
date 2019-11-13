@@ -38,6 +38,7 @@ export default class Member extends Vue {
 
 <style scoped>
 .member {
+  /* overflow: hidden; */
   width: 100%;
   padding: 0.25rem 1rem;
   display: flex;
@@ -46,7 +47,7 @@ export default class Member extends Vue {
   position: relative;
   height: 4rem;
   background-color: rgba(245, 245, 245, 0.2);
-  border: 0.125rem solid #f5f5f5;
+  border: var(--border-white);
   border-radius: 1rem;
   cursor: pointer;
 }
@@ -60,27 +61,27 @@ export default class Member extends Vue {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #c67b5c;
+  background-color: var(--space-orange);
   border-radius: 50%;
 }
 
 .member-notif-num {
   text-align: center;
-  font-size: 0.75rem !important;
-  color: #1e2223 !important;
+  font-size: var(--font-small) !important;
+  color: var(--space-gray) !important;
   margin: 0;
 }
 
 .member-score {
-  color: #f5f5f5;
-  font-size: 1.5rem;
+  color: var(--space-white);
+  font-size: var(--font-large);
   margin: 0;
 }
 
 .member-role {
   padding: 0 0.25rem;
-  color: #f5f5f5;
-  font-size: 1rem;
+  color: var(--space-white);
+  font-size: var(--font-med);
   margin: 0;
 }
 

@@ -1,7 +1,12 @@
 <template>
-  <div class="phase" id="v-step-7">
-    <p class="phase-title">{{currentPhase}} Phase</p>
-    <p><span class="phase-current">Invest</span>&nbsp;<span class="phase-time">5:00</span></p>
+  <div class="phase-component" id="v-step-7">
+    <div>
+      <p class="phase-title">Current Phase</p>
+      <p class="phase-current">{{ currentPhase }}</p>
+    </div>
+    <div>
+      <p class="phase-time"><span>( </span>5:00<span> )</span></p>
+    </div>
     <!-- phase-current will change on props -->
     <!-- phase-time will change on props (seperate component?) -->
     <!-- <Clock /> -->
@@ -18,7 +23,6 @@ import Clock from '@/components/gamedashboard/Clock.vue';
     Clock,
   },
 })
-
 export default class Phase extends Vue {
   get currentPhase() {
     return this.$store.state.gamePhase;
@@ -27,30 +31,37 @@ export default class Phase extends Vue {
 </script>
 
 <style scoped>
-.phase {
+.phase-component {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   width: 100%;
-  height: 50%;
-  /* background-color: blue; */
-  font-size: 1.5rem;
+  height: 60%;
+  /* background-color: var(--space-orange); */
+  text-align: center;
 }
 
-.phase p {
+.phase-component p {
   margin: 0;
 }
 
 .phase-title {
-  color: #f5f5f5;
+  font-size: var(--font-large);
+  color: var(--space-white);
 }
 
 .phase-current {
-  color: #c67b5c;
+  font-size: var(--font-med);
+  color: var(--space-orange);
 }
 
 .phase-time {
-  color: #c67b5c;
+  font-size: var(--font-large);
+  color: var(--space-orange);
+}
+
+.phase-time span {
+  color: var(--space-white);
 }
 </style>

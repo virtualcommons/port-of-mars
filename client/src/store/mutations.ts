@@ -65,7 +65,10 @@ export default {
     state.notifIsActive = payload;
   },
   ADD_TO_MARS_LOG(state: any, payload: string) {
-    state.marsLog.push(payload);
+    // correct location for this?
+    if (payload !== '') {
+      state.marsLog.push(payload);
+    }
   },
   SET_CARD_MODAL_DATA(state: any, payload: object) {
     state.cardData = payload;

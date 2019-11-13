@@ -84,10 +84,10 @@ export default class CardModal extends Vue {
   width: 37.5rem;
   padding: 1rem 2rem;
   margin: 0;
-  border: 0.125rem solid #f5f5f5;
+  border: var(--border-white);
   border-radius: 1.25rem;
-  color: #f5f5f5;
-  background-color: #1e2223;
+  color: var(--space-white);
+  background-color: var(--space-gray);
   overflow: hidden;
 }
 
@@ -99,7 +99,7 @@ export default class CardModal extends Vue {
   width: 100%;
   border: none;
   text-decoration: underline;
-  color: #f5f5f5;
+  color: var(--space-white);
   background: none;
 }
 
@@ -109,7 +109,7 @@ export default class CardModal extends Vue {
   top: 0.3rem;
   left:1rem;
   border: none;
-  color: #F5F5F5;
+  color: var(--space-white);
   background: none;
   width:100%;
 }
@@ -126,12 +126,12 @@ export default class CardModal extends Vue {
   right: 2rem;
   text-decoration: underline;
   border: none;
-  color: #f5f5f5;
+  color: var(--space-white);
   background: none;
 }
 
 .cm-close-button:hover {
-  color: #c67b5c;
+  color: var(--space-orange);
 }
 
 .cm-close-button:active {

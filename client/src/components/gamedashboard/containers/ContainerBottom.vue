@@ -8,7 +8,7 @@
         <ContainerAccomplishments />
       </BCol>
     </BRow>
-  </BContainer >
+  </BContainer>
 </template>
 
 <script lang="ts">
@@ -17,45 +17,38 @@ import { BContainer, BRow, BCol } from 'bootstrap-vue';
 import ContainerInvestments from '@/components/gamedashboard/containers/ContainerInvestments.vue';
 import ContainerAccomplishments from '@/components/gamedashboard/containers/ContainerAccomplishments.vue';
 
-    @Component({
-      components: {
-        BContainer,
-        BRow,
-        BCol,
-        ContainerInvestments,
-        ContainerAccomplishments,
-      },
-    })
-
+@Component({
+  components: {
+    BContainer,
+    BRow,
+    BCol,
+    ContainerInvestments,
+    ContainerAccomplishments,
+  },
+})
 export default class ContainerBottom extends Vue {}
 </script>
 
 <style scoped>
-    .container-bottom {
-        height: 100%;
-        width: 100%;
-        margin: 0;
-        padding: 0;
-        border: 0.125rem solid #F5F5F5;
-        max-width: none;
-    }
+.container-bottom {
+  height: 100%;
+  width: 100%;
+  padding: 0 1rem;
+  margin: 0;
+  max-width: none;
+}
 
-    .row-bottom {
-      height: 100%;
-      width: 100%;
-      margin: 0;
-      padding: 0;
-    }
+.row-bottom {
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  border: var(--border-white);
+}
 
-    .container-bottom-investments {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }
-
-    .container-bottom-accomplishments {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }
+.container-bottom-investments, .container-bottom-accomplishments {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
 </style>

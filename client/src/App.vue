@@ -51,10 +51,23 @@ export default class Home extends Vue {
 </script>
 
 <style>
+/* DECLARE CSS VARIABLES */
+body {
+  --space-gray: #1e2223;
+  --space-orange: #c67b5c;
+  --space-white: #f5f5f5;
+
+  --font-small: 0.75rem;
+  --font-med: 1rem;
+  --font-large: 1.5rem;
+
+  --border-white: 0.125rem solid var(--space-white);
+}
+
 html,
 body {
   font-family: 'Space Mono', monospace !important;
-  background-color: #1e2223;
+  background-color: var(--space-gray);
   overflow: hidden;
 }
 
@@ -63,12 +76,26 @@ h1,
 img,
 button {
   /* prevent user from highlighting p, img, button */
-  -webkit-touch-callout: none !important; /* iOS Safari */
-  -webkit-user-select: none !important; /* Safari */
-  -khtml-user-select: none !important; /* Konqueror HTML */
-  -moz-user-select: none !important; /* Old versions of Firefox */
-  -ms-user-select: none !important; /* Internet Explorer/Edge */
-  user-select: none !important; /* Non-prefixed version, currently
-                                     supported by Chrome, Opera and Firefox */
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: none !important;
+  -khtml-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+
+/* iPad Pro default resolution (width) */
+@media (max-width: 1366px) {
+}
+
+/* MacBook Pro default resolution (width) */
+@media (max-width: 1280px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+/* iPad default resolution */
+@media (max-width: 1024px) {
 }
 </style>

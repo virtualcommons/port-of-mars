@@ -1,6 +1,13 @@
 <template>
-  <div class="notification" :class="viewAnim()" @click="hideNotif()">
-    <p class="notification-message">{{ message }}</p>
+  <div
+    class="notification"
+    :class="viewAnim()"
+    @click="hideNotif()"
+    @mouseover="hover = true"
+    @mouseleave="hover = false"
+  >
+    <p class="notification-close" v-if="hover || inView === 'hide'">Close</p>
+    <p class="notification-message" v-if="!hover">{{ message }}</p>
     <!-- will be updated on props -->
   </div>
 </template>
@@ -11,6 +18,9 @@ import { Vue, Component } from 'vue-property-decorator';
 @Component
 export default class Notification extends Vue {
   // need to use transition wrapper!
+  private dismiss = 'dismiss...';
+
+  private hover = false;
 
   get message() {
     return this.$store.state.notifMessage;
@@ -70,11 +80,18 @@ export default class Notification extends Vue {
   align-items: center;
   width: 100%;
   min-height: 5rem;
-  background-color: #c67b5c;
+  background-color: var(--space-orange);
   border-radius: 1rem;
   margin: 1rem 0;
-  padding: 0.75rem;
+  padding: 0.5rem;
   cursor: pointer;
+  /* background-color: blue; */
+}
+
+.notification:hover {
+  border: var(--border-white);
+  background-color: var(--space-gray);
+  color: var(--space-white);
 }
 
 .notification-hidden {
@@ -86,7 +103,19 @@ export default class Notification extends Vue {
 }
 
 .notification-message {
-  font-size: 0.75rem;
+  /* height: 100%; */
+  /* width: 100%; */
+  font-size: var(--font-small);
   margin: 0;
+  /* background-color: green; */
+  /* text-align: center; */
+}
+
+.notification-close {
+  /* height: 100%; */
+  /* width: 100%; */
+  font-size: var(--font-small);
+  margin: 0;
+  /* background-color: blue; */
 }
 </style>

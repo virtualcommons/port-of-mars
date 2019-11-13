@@ -65,7 +65,7 @@ export default class TradeRequest extends Vue {
   height: 100%;
   width: 100%;
   padding: 0;
-  color: #F5F5F5;
+  color: var(--space-white);
 }
 
 .trade-request-content {
@@ -117,12 +117,12 @@ export default class TradeRequest extends Vue {
   margin: 0;
   border: none;
   text-decoration: underline;
-  color: #f5f5f5;
+  color: var(--space-white);
   background: none;
 }
 
 .trade-request-content-shuffle button:hover {
-  color: #c67b5c;
+  color: var(--space-orange);
 }
 
 .trade-request-content-shuffle button:active {
@@ -146,9 +146,9 @@ export default class TradeRequest extends Vue {
   visibility: hidden;
   height: 3rem;
   width: 12.5rem;
-  border: 0.125rem solid #C67B5C;
+  border: 0.125rem solid var(--space-orange);
   border-radius: 0.5rem;
-  color: #F5F5F5;
+  color: var(--space-white);
   background: none;
 }
 
@@ -160,8 +160,8 @@ export default class TradeRequest extends Vue {
   height: 3rem;
   width: 12.5rem;
   border-radius: 0.5rem;
-  border: 0.125rem solid #C67B5C;
-  background-color: #C67B5C;
+  border: 0.125rem solid var(--space-orange);
+  background-color: var(--space-orange);
 }
 
 .send-button:focus, .send-button:active {
