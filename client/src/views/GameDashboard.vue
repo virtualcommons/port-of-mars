@@ -5,10 +5,11 @@
     <TradingModal />
     <CardModal />
     <BRow class="board reset">
+
       <BCol cols="2" class="left reset">
-        <!-- left section goes here -->
         <ContainerLeft />
       </BCol>
+
       <BCol cols="8" class="reset">
         <BRow class="top reset">
           <ContainerTop />
@@ -17,10 +18,11 @@
           <ContainerBottom />
         </BRow>
       </BCol>
+
       <BCol cols="2" class="right reset">
-        <!-- right section goes here -->
         <ContainerRight />
       </BCol>
+
     </BRow>
   </BContainer>
 </template>
@@ -42,14 +44,14 @@ import TradingModal from '@/components/gamedashboard/trading/TradingModal.vue';
     BContainer,
     BRow,
     BCol,
-    ContainerTop,
-    ContainerBottom,
-    ContainerLeft,
-    ContainerRight,
     MasterComponent,
     ProfileModal,
     TradingModal,
     CardModal,
+    ContainerLeft,
+    ContainerTop,
+    ContainerBottom,
+    ContainerRight,
   },
 })
 export default class GameDashboard extends Vue {}
@@ -57,36 +59,31 @@ export default class GameDashboard extends Vue {}
 
 <style scoped>
 .reset {
-  margin: 0;
   padding: 0;
+  margin: 0;
 }
 
 .board {
   height: 100vh;
   width: 100vw;
-}
-
-.left {
-  position: relative;
+  padding: 1rem;
   background-color: var(--space-gray);
 }
 
-.right {
+.left, .right {
+  height: 100%;
   position: relative;
-  background-color: var(--space-gray);
+  display: flex;
 }
 
 .top {
-  height: 40vh;
-  background-color: var(--space-gray);
+  height: 40%;
 }
 
 .bottom {
-  height: 60vh;
-  padding: 1rem;
+  height: 60%;
   display: flex;
-  align-items: center;
   justify-content: center;
-  background-color: var(--space-gray);
+  align-items: center;
 }
 </style>

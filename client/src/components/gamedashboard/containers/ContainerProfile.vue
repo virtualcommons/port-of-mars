@@ -58,13 +58,13 @@ export default class ContainerProfile extends Vue {
 }
 
 .profile-info-player {
-  font-size: 1.5rem;
+  font-size: var(--font-large);
   border-bottom: 0.125rem solid var(--space-orange);
   margin-bottom: 0.5rem;
 }
 
 .profile-info-score {
-  font-size: 1rem;
+  font-size: var(--font-med);
 }
 
 .profile-frame {

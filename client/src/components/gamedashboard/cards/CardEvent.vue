@@ -11,7 +11,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 @Component({})
 export default class CardEvent extends Vue {
   // Note: need to pass in actual data
-  @Prop({ default: () => ({ name: 'pregame status', flavorText: '-', effect: '-' }) }) event;
+  @Prop({ default: () => ({ name: '---', flavorText: '---', effect: '---' }) }) event;
 
   handleClick() {
     this.$root.$emit('openCard', {
@@ -35,7 +35,7 @@ export default class CardEvent extends Vue {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 0.125rem solid var(--space-white);
+  border: var(--border-white);
   border-radius: 1rem;
   cursor: pointer;
   text-align: center;
@@ -50,7 +50,7 @@ export default class CardEvent extends Vue {
 
 .card-effect {
   /* background-color: orange; */
-  font-size: 0.75rem;
+  font-size: var(--font-small);
   margin-top: 0.5rem;
   margin-bottom: 0;
   color: var(--space-white);

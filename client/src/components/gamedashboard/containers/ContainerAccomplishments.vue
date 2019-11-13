@@ -49,14 +49,14 @@ export default class ContainerAccomplishments extends Vue {
   display: flex;
   justify-content: center;
   align-items: center;
-  border-bottom: 0.125rem solid var(--space-white);
+  border-bottom: var(--border-white);
   background-color: var(--space-orange);
 }
 
 .accomplishments-topbar-title {
   margin: 0;
   color: var(--space-gray);
-  font-size: 1.5rem;
+  font-size: var(--font-large);
 }
 
 .accomplishments-cards {

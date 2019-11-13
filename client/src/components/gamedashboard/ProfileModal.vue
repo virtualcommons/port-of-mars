@@ -90,8 +90,8 @@ export default class ProfileModal extends Vue {
 .pm-tabs {
   height: 3rem;
   width: 60rem;
-  border-left: 0.125rem solid var(--space-white);
-  border-bottom: 0.125rem solid var(--space-white);
+  border-left: var(--border-white);
+  border-bottom: var(--border-white);
 }
 
 .pm-tabs-tab {
@@ -100,8 +100,8 @@ export default class ProfileModal extends Vue {
   display: flex;
   justify-content: center;
   align-items: center;
-  border-right: 0.125rem solid var(--space-white);
-  border-top: 0.125rem solid var(--space-white);
+  border-right: var(--border-white);
+  border-top: var(--border-white);
   color: var(--space-white);
   background-color: var(--space-gray);
   cursor: pointer;
@@ -117,7 +117,7 @@ export default class ProfileModal extends Vue {
   width: 60rem;
   margin: 0;
   padding: 0;
-  border: 0.125rem solid var(--space-white);
+  border: var(--border-white);
   border-top: none;
   border-radius: 0 0 1.25rem 1.25rem;
   background-color: var(--space-gray);

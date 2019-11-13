@@ -133,8 +133,8 @@ export default class TradingModal extends Vue {
 .tm-tabs {
   height: 3rem;
   width: 60rem;
-  border-left: 0.125rem solid var(--space-white);
-  border-bottom: 0.125rem solid var(--space-white);
+  border-left: var(--border-white);
+  border-bottom: var(--border-white);
 }
 
 .tm-tabs-tab {
@@ -143,8 +143,8 @@ export default class TradingModal extends Vue {
   display: flex;
   justify-content: center;
   align-items: center;
-  border-right: 0.125rem solid var(--space-white);
-  border-top: 0.125rem solid var(--space-white);
+  border-right: var(--border-white);
+  border-top: var(--border-white);
   color: var(--space-white);
   background-color: var(--space-gray);
   cursor: pointer;
@@ -160,7 +160,7 @@ export default class TradingModal extends Vue {
   width: 60rem;
   margin: 0;
   padding: 0;
-  border: 0.125rem solid var(--space-white);
+  border: var(--border-white);
   border-top: none;
   border-radius: 0 0 1.25rem 1.25rem;
   background-color: var(--space-gray);
@@ -173,7 +173,7 @@ export default class TradingModal extends Vue {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-right: 0.125rem solid var(--space-white);
+  border-right: var(--border-white);
 }
 
 .tm-members-bottom {
@@ -181,7 +181,7 @@ export default class TradingModal extends Vue {
 }
 
 .tm-members-seperator {
-  border-bottom: 0.125rem solid var(--space-white);
+  border-bottom: var(--border-white);
 }
 
 .tm-view {

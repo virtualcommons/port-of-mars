@@ -89,7 +89,7 @@ export default class Notification extends Vue {
 }
 
 .notification:hover {
-  border: 0.125rem solid var(--space-white);
+  border: var(--border-white);
   background-color: var(--space-gray);
   color: var(--space-white);
 }
@@ -105,7 +105,7 @@ export default class Notification extends Vue {
 .notification-message {
   /* height: 100%; */
   /* width: 100%; */
-  font-size: 0.75rem;
+  font-size: var(--font-small);
   margin: 0;
   /* background-color: green; */
   /* text-align: center; */
@@ -114,7 +114,7 @@ export default class Notification extends Vue {
 .notification-close {
   /* height: 100%; */
   /* width: 100%; */
-  font-size: 0.75rem;
+  font-size: var(--font-small);
   margin: 0;
   /* background-color: blue; */
 }

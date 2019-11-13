@@ -47,17 +47,17 @@ export default class Phase extends Vue {
 }
 
 .phase-title {
-  font-size: 1.5rem;
+  font-size: var(--font-large);
   color: var(--space-white);
 }
 
 .phase-current {
-  font-size: 1rem;
+  font-size: var(--font-med);
   color: var(--space-orange);
 }
 
 .phase-time {
-  font-size: 1.5rem;
+  font-size: var(--font-large);
   color: var(--space-orange);
 }
 

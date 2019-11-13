@@ -26,8 +26,8 @@ export default class CardAccomplishment extends Vue {
   @Prop({
     default() {
       return {
-        label: 'pregame status',
-        victoryPoints: '-',
+        label: '---',
+        victoryPoints: '---',
       };
     },
   }) private accomplishment: object;
@@ -95,6 +95,7 @@ export default class CardAccomplishment extends Vue {
 
 .card-title p {
   margin: 0;
+  text-transform: capitalize;
   text-align: center;
 }
 
@@ -104,9 +105,9 @@ export default class CardAccomplishment extends Vue {
   padding: 0.5rem;
   display: flex;
   justify-content: space-between;
-  border-left: 0.125rem solid var(--space-white);
-  border-right: 0.125rem solid var(--space-white);
-  border-bottom: 0.125rem solid var(--space-white);
+  border-left: var(--border-white);
+  border-right: var(--border-white);
+  border-bottom: var(--border-white);
   border-radius: 0 0 1rem 1rem;
 }
 

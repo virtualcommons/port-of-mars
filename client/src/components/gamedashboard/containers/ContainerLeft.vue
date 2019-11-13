@@ -2,6 +2,7 @@
   <div class="container-left">
     <Round id="v-step-3"/>
     <Notification id="v-step-4"/>
+    <!-- NEED TO ADD PLAYER SCORE -->
     <ContainerProfile :playerRole='this.$store.state.playerRole' :playerScore="10"/>
     <MarsLog id="v-step-5"/>
   </div>
@@ -13,7 +14,6 @@ import Round from '@/components/gamedashboard/Round.vue';
 import Notification from '@/components/gamedashboard/Notification.vue';
 import ContainerProfile from '@/components/gamedashboard/containers/ContainerProfile.vue';
 import MarsLog from '@/components/gamedashboard/MarsLog.vue';
-// import ProfileModal from '@/components/gamedashboard/ProfileModal.vue';
 
 @Component({
   components: {
@@ -21,7 +21,6 @@ import MarsLog from '@/components/gamedashboard/MarsLog.vue';
     Notification,
     ContainerProfile,
     MarsLog,
-    // ProfileModal,
   },
 })
 export default class ContainerLeft extends Vue {}
@@ -29,18 +28,11 @@ export default class ContainerLeft extends Vue {}
 
 <style scoped>
 .container-left {
-  height: 100vh;
+  height: 100%;
   width: 100%;
-  padding: 1rem 0rem 1rem 1rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-}
-
-.placeholder-left {
-  height: 50%;
-  display: flex;
-  flex-direction: column;
 }
 </style>

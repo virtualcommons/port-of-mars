@@ -45,7 +45,7 @@ export default class MarsLog extends Vue {
 }
 
 .marslog-title {
-  font-size: 1.5rem;
+  font-size: var(--font-large);
   margin: 0 0 0.5rem 0;
   color: var(--space-white);
 }
@@ -55,7 +55,7 @@ export default class MarsLog extends Vue {
   width: 100%;
   /* display: flex; */
   /* flex-direction: column; */
-  border: 0.125rem solid var(--space-white);
+  border: var(--border-white);
   overflow-y: scroll;
   padding: 0.5rem;
   scrollbar-width: none; /* Firefox */
@@ -79,7 +79,7 @@ export default class MarsLog extends Vue {
   color: var(--space-white);
   height: auto;
   max-width: 100%;
-  font-size: 0.75rem;
+  font-size: var(--font-small);
   margin-bottom: 0.5rem;
   /* background-color: white; */
   /* border-radius: .75rem; */

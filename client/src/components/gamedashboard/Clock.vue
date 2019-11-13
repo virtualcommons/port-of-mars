@@ -45,6 +45,6 @@ export default class Clock extends Vue {
 }
 .clock-container {
   color: var(--space-white);
-  font-size: 1rem;
+  font-size: var(--font-med);
 }
 </style>

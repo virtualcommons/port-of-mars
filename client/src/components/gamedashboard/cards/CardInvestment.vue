@@ -96,7 +96,7 @@ export default class CardInvestment extends Vue {
   justify-content: center;
   align-items: center;
   background-color: var(--space-white);
-  border: 0.125rem solid var(--space-white);
+  border: var(--border-white);
   border-radius: 1rem 0 0 1rem;
   padding: 0.5rem;
   height: 100%;
@@ -139,7 +139,7 @@ export default class CardInvestment extends Vue {
 .card-increment-and-decrement-holder {
   width: 30%;
   height: 100%;
-  /* border-left: 0.125rem solid var(--space-white); */
+  /* border-left: var(--border-white); */
 
   display: flex;
   flex-direction: column;
@@ -149,7 +149,7 @@ export default class CardInvestment extends Vue {
   width: 30%;
   height: 100%;
   /* background-color: green; */
-  border: 0.125rem solid var(--space-white);
+  border: var(--border-white);
   border-radius: 0 1rem 1rem 0;
   border-left: none;
 }
@@ -158,7 +158,7 @@ export default class CardInvestment extends Vue {
   height: 50%;
   width: 100%;
   /* border-bottom: 0.0625rem solid var(--space-white); */
-  border: 0.125rem solid var(--space-white);
+  border: var(--border-white);
   /* border: 0.125rem solid pink; */
   border-radius: 0 1rem 0 0;
   border-left: none;
@@ -170,14 +170,14 @@ export default class CardInvestment extends Vue {
 }
 
 .investment-increment p {
-  font-size: 1.5rem;
+  font-size: var(--font-large);
   margin: 0;
 }
 
 .investment-decrement {
   height: 50%;
   width: 100%;
-  border: 0.125rem solid var(--space-white);
+  border: var(--border-white);
   border-radius: 0 0 1rem 0;
   border-left: none;
   border-top: none;
@@ -188,7 +188,7 @@ export default class CardInvestment extends Vue {
 }
 
 .investment-decrement p {
-  font-size: 1.5rem;
+  font-size: var(--font-large);
   margin: 0;
 }
 

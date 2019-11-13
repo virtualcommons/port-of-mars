@@ -96,25 +96,26 @@ export default class ContainerInvestments extends Vue {
   display: flex;
   justify-content: center;
   align-items: center;
-  border-bottom: 0.125rem solid var(--space-white);
-  border-right: 0.125rem solid var(--space-white);
+  border-bottom: var(--border-white);
+  border-right: var(--border-white);
   background-color: var(--space-orange);
 }
 
 .investments-topbar-title {
   margin: 0;
   color: var(--space-gray);
-  font-size: 1.5rem;
+  font-size: var(--font-large);
 }
 
 .investments-topbar-statusbar {
+  flex: 1;
   margin: 0 1rem;
 }
 
 .investments-topbar-status {
   margin: 0;
   color: var(--space-gray);
-  font-size: 1.5rem;
+  font-size: var(--font-large);
 }
 
 .investments-cards {
@@ -123,7 +124,7 @@ export default class ContainerInvestments extends Vue {
   padding: 0.5rem;
   display: flex;
   flex-direction: column;
-  border-right: 0.125rem solid var(--space-white);
+  border-right: var(--border-white);
 }
 
 .investments-cards-top, .investments-cards-bottom {

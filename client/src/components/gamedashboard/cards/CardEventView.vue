@@ -20,9 +20,9 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 export default class CardEventView extends Vue {
   @Prop({
     default: () => ({
-      title: '',
-      info: '',
-      effects: '',
+      title: '---',
+      info: '---',
+      effects: '---',
     }),
   }) private cardData!: object;
 }

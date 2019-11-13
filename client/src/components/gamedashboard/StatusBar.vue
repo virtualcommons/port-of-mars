@@ -34,13 +34,13 @@ export default class StatusBar extends Vue {
   display: flex;
   align-items: center;
   /* background-color: green; */
-  height: 1rem;
-  flex-grow: 100;
+  height: 1rem !important;
+  /* flex-grow: 100; */
   border-radius: 0.50rem;
 }
 
 .statusbar-inner {
-  height: 0.50rem;
+  height: 0.50rem !important;
   margin: 0.125rem;
   margin-left: 0.125rem;
   margin-right: 0.125rem;
@@ -48,7 +48,7 @@ export default class StatusBar extends Vue {
 }
 
 .statusbar-outer-white {
-  border: 0.125rem solid var(--space-white);
+  border: var(--border-white);
 }
 
 .statusbar-outer-gray {

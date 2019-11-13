@@ -41,11 +41,16 @@ export default class ContainerUpkeep extends Vue {
 
 <style scoped>
 .container-upkeep {
-  width: 80%;
+  /* width: 80%; */
+  width: 100%;
   height: 20%;
-  padding: 0;
+  padding: 0 0.5rem 1rem 0.5rem;
   /* background-color: green; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   color: var(--space-white);
+  /* background-color: purple; */
 }
 
 .container-upkeep p {
@@ -56,7 +61,7 @@ export default class ContainerUpkeep extends Vue {
 }
 
 .upkeep-statusbar {
-  width: 100%;
+  width: 80%;
   /* margin-top: 1rem; */
 }
 
