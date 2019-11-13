@@ -9,6 +9,7 @@
     <div class="cm-event-effects">
       <p>{{ this.cardData.effects }}</p>
     </div>
+    <p class="cm-event-effects-title">( <span>Effects</span> )</p>
   </div>
 </template>
 
@@ -65,5 +66,14 @@ export default class CardEventView extends Vue {
 
 .cm-event-effects p {
   margin: 0;
+}
+
+.cm-event-effects-title {
+  margin: 1rem 0 0 0 !important;
+  font-size: var(--font-small);
+}
+
+.cm-event-effects-title span {
+  color: var(--space-orange);
 }
 </style>

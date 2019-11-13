@@ -77,11 +77,11 @@ export default class GameDashboard extends Vue {}
   height: 100%;
   width: 100%;
   /* SET MAX SIZE OF SCREEN */
-  max-height: 62.5625rem;
-  max-width: 120rem;
+  max-height: var(--max-screen-height);
+  max-width: var(--max-screen-width);
   /* SET MIN SIZE OF SCREEN */
-  min-height: 48rem;
-  min-width: 64rem;
+  min-height: var(--min-screen-height);
+  min-width: var(--min-screen-width);
   padding: 1rem;
   background-color: var(--space-gray);
 }

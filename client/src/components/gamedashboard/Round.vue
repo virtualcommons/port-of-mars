@@ -1,16 +1,18 @@
 <template>
   <div class="round">
-    <p>Round <span class="round-number">1</span></p>
+    <p>Round <span class="round-number">{{ roundNum }}</span></p>
     <!-- will need to re-render on props -->
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 
 @Component
 
-export default class Round extends Vue {}
+export default class Round extends Vue {
+  @Prop({ default: 0 }) private roundNum!: number;
+}
 </script>
 
 <style scoped>
