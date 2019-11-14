@@ -6,6 +6,13 @@ export default {
     // for all the numbers
     // activecards.push(Data(number))
   },
+  /**
+   * SET_LAYOUT() mutation
+   * Changes the state of the layout state.
+   * @param state The state of the application.
+   * @param payload The string value of layout.
+   *
+   */
 
   // game updates
   SET_GAME_PHASE(state: any, payload:string) {
@@ -31,6 +38,9 @@ export default {
   },
   SET_PLAYER_ROLE(state: any, payload: any) {
     state.playerRole = payload;
+  },
+  SET_PLAYER_FINISHED(state: any, payload: boolean) {
+    state.playerFinishedWithPhase = payload;
   },
 
   // chat
@@ -78,15 +88,5 @@ export default {
     Object.keys(payload).forEach((key) => {
       state.localInvestments.updateCurrentCost(key, payload[key]);
     });
-  },
-  /**
-   * SET_LAYOUT() mutation
-   * Changes the state of the layout state.
-   * @param state The state of the application.
-   * @param payload The string value of layout.
-   *
-   */
-  SET_PLAYER_FINISHED(state: any, payload: boolean) {
-    state.playerFinishedWithPhase = payload;
   },
 };

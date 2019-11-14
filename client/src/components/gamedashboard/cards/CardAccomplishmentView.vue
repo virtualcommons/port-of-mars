@@ -39,7 +39,6 @@ export default class CardAccomplishmentView extends Vue {
 
     let canBuy = true;
     this.cardData.total.forEach((investment) => {
-      console.log(investment, investments[investment].persistentInventory);
       investments[investment].persistentInventory -= 1;
 
       if (investments[investment].persistentInventory <= -1) {

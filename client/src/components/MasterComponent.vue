@@ -52,18 +52,26 @@ export default class Master extends Vue {
 
   onKeyDown(e: any) {
     this.round = 0;
-    if (e.key === 'r' /* && this.$store.state.upkeep > 0 */) {
-      this.phaseHandler(this.roundDefinitions[this.roundIndex]);
-      this.roundIndex += 1;
-
-      if (this.roundIndex >= this.roundDefinitions.length) {
-        this.roundIndex = 0;
-      }
+    if (e.key === 'r') {
+      this.phaseRunner();
     }
   }
 
   mounted() {
     document.onkeydown = this.onKeyDown;
+
+    this.$root.$on('nextRound', () => {
+      this.phaseRunner();
+    });
+  }
+
+  phaseRunner() {
+    this.phaseHandler(this.roundDefinitions[this.roundIndex]);
+    this.roundIndex += 1;
+
+    if (this.roundIndex >= this.roundDefinitions.length) {
+      this.roundIndex = 0;
+    }
   }
 
   // Events:
