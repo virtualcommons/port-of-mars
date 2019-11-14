@@ -45,6 +45,7 @@ export default {
    *
    */
   SET_LAYOUT(state: any, newLayout: string) {
+    console.log('New Layout: ', newLayout);
     state.layout = newLayout;
   },
   SET_TRADING_VIEW(state: any, newTradingView: string) {
@@ -66,11 +67,15 @@ export default {
   },
   ADD_TO_MARS_LOG(state: any, payload: string) {
     // correct location for this?
-    if (payload !== '') {
-      state.marsLog.push(payload);
-    }
+    // if (payload !== '') {
+    //   state.marsLog.push(payload);
+    // }
+    state.marsLog.addEntry(payload);
   },
   SET_CARD_MODAL_DATA(state: any, payload: object) {
     state.cardData = payload;
+  },
+  SET_PLAYER_FINISHED(state: any, payload: boolean) {
+    state.playerFinishedWithPhase = payload;
   },
 };

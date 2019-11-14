@@ -49,7 +49,7 @@ export default class Chat extends Vue {
 
   submitToChat() {
     if (this.message !== '') {
-      const submittedMessage = {
+      const submittedMessage: ChatMessage = {
         sender: this.$store.state.playerRole,
         content: this.message,
         time: new Date(),

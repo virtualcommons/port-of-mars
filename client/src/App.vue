@@ -34,6 +34,7 @@ export default class Home extends Vue {
    * @return the value of layout
    *
    */
+
   get layout() {
     return this.$store.getters.layout;
   }
