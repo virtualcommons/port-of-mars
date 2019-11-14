@@ -1,6 +1,6 @@
 <template>
   <div class="round">
-    <p>Round <span class="round-number">{{ roundNum }}</span></p>
+    <p>Round <span class="round-number">{{ roundNumber }}</span></p>
     <!-- will need to re-render on props -->
   </div>
 </template>
@@ -11,7 +11,18 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 @Component
 
 export default class Round extends Vue {
-  @Prop({ default: 0 }) private roundNum!: number;
+  get roundNumber() {
+    const { round, upkeep } = this.$store.state;
+    if (round > 0 && upkeep > 0) {
+      return round;
+    }
+
+    if (upkeep <= 0) {
+      return 'Over';
+    }
+
+    return 'Pregame';
+  }
 }
 </script>
 

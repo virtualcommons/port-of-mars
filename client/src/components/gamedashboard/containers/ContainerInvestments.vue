@@ -48,32 +48,11 @@ import CardInvestment from '@/components/gamedashboard/cards/CardInvestment.vue'
 export default class ContainerInvestments extends Vue {
   private iD: object = this.$store.state.localInvestments.returnValues;
 
-  private availiableInvestments = [];
-
-
-  // private investmentsInOrder = Object.keys(this.iD).sort(function (a, b) {
-  //   return this.iD[a].currentCost - this.iD[b].currentCost;
-  // });
-
   i = Object.keys(this.iD).sort((a, b) => this.iD[a].currentCost - this.iD[b].currentCost)
-
-  // console.log(temp);
-
 
   get decrementInvestmentCount() {
     return this.$store.state.localInvestments.localDecrement;
   }
-
-  // updated() {
-  //   console.log(this.timeblockStatus);
-  //   let decrement: number = 0;
-  //   for(let investment in this.iD) {
-  //     decrement += (this.iD[investment].currentCost *
-  //   this.iD[investment].currentInventory)
-  //   }
-  //   this.timeblockStatus -= decrement;
-  //   console.log(this.timeblockStatus)
-  // }
 }
 </script>
 

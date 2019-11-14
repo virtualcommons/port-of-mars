@@ -122,7 +122,7 @@ const events: Array<RawGameEvent> = [
   {
     name: 'It Begins',
     copies: 1,
-    effect: '',
+    effect: 'No special effect',
     flavorText: 'Welcome to Port of Mars. Space is now open.',
   },
   {

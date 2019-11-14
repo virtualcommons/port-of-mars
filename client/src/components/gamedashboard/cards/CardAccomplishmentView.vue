@@ -11,11 +11,12 @@
         <!-- Note: will need to edit key implementation -->
         <img
           :src="require(`@/assets/investmentsIcons/${investment}.png`)"
-          alt="Player"
+          alt='investment'
         />
       </p>
     </div>
-    <p class="cm-accomplishment-cost-title">( <span>Cost</span> )</p>
+    <p class="cm-accomplishment-investments-title">( <span>Cost</span> )</p>
+    <p>You {{ canBuy }} have enough influences to buy this card</p>
   </div>
 </template>
 
@@ -31,7 +32,23 @@ export default class CardAccomplishmentView extends Vue {
       info: '---',
       total: [],
     }),
-  }) private cardData!: object;
+  }) private cardData;
+
+  get canBuy() {
+    const investments = this.$store.state.localInvestments.returnSafeValues;
+
+    let canBuy = true;
+    this.cardData.total.forEach((investment) => {
+      investments[investment].persistentInventory -= 1;
+
+      if (investments[investment].persistentInventory <= -1) {
+        canBuy = false;
+      }
+    });
+
+    console.log(canBuy);
+    return canBuy ? '' : 'do not';
+  }
 }
 </script>
 

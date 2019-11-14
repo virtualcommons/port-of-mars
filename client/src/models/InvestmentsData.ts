@@ -1,8 +1,11 @@
+import * as _ from 'lodash';
+
 interface InvestmentProperties {
     n: any;
     initialCost: number;
     currentCost: number;
     currentInventory: number;
+    persistentInventory: number;
 }
 
 interface InvestmentTypes {
@@ -22,36 +25,42 @@ class InvestmentsModel {
         initialCost: 0,
         currentCost: 0,
         currentInventory: 0,
+        persistentInventory: 0,
       },
       legacy: {
         n: 'legacy',
         initialCost: 0,
         currentCost: 0,
         currentInventory: 0,
+        persistentInventory: 0,
       },
       upkeep: {
         n: 'upkeep',
         initialCost: 0,
         currentCost: 0,
         currentInventory: 0,
+        persistentInventory: 0,
       },
       finance: {
         n: 'finance',
         initialCost: 0,
         currentCost: 0,
         currentInventory: 0,
+        persistentInventory: 0,
       },
       science: {
         n: 'science',
         initialCost: 0,
         currentCost: 0,
         currentInventory: 0,
+        persistentInventory: 0,
       },
       culture: {
         n: 'culture',
         initialCost: 0,
         currentCost: 0,
         currentInventory: 0,
+        persistentInventory: 0,
       },
     };
 
@@ -63,8 +72,21 @@ class InvestmentsModel {
       this.investments[investmentToChange].currentCost = amount;
     }
 
+    confirmInvestments() {
+      Object.keys(this.investments).forEach((investment) => {
+        this.investments[investment].persistentInventory
+          += this.investments[investment].currentInventory;
+
+        this.investments[investment].currentInventory = 0;
+      });
+    }
+
     get returnValues() {
       return this.investments;
+    }
+
+    get returnSafeValues() {
+      return _.cloneDeep(this.investments);
     }
 
     get localDecrement() {

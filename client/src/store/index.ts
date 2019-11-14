@@ -18,7 +18,8 @@ export const initialStoreState = {
   activeAccomplishmentCards: [],
   chat: new ChatModel(),
   upkeep: 100,
-  round: 1,
+  phaseTime: 300,
+  round: 0,
   players: [],
   timeblocks: 10,
   playerResources: {},
@@ -26,7 +27,6 @@ export const initialStoreState = {
 
   // phase
   gamePhase: '',
-  phaseTime: 300,
   playerFinishedWithPhase: false,
 
   // state variable for layout

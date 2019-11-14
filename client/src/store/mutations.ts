@@ -6,37 +6,6 @@ export default {
     // for all the numbers
     // activecards.push(Data(number))
   },
-  SET_GAME_PHASE(state: any, payload:string) {
-    state.gamePhase = payload;
-  },
-  SET_EVENTS_FOR_ROUND(state:any, payload:any) {
-    state.gameEvents = payload;
-    // console.log(state.gameEvents);
-  },
-  ADD_TO_CHAT(state: any, payload: ChatMessage) {
-    state.chat.addEntry(payload);
-  },
-  CHANGE_LOCAL_INVESTMENT(state: any, payload: any) {
-    // this is for increment and decrement
-
-    state.localInvestments.changeInventoryValue(payload.investmentName, payload.investmentAmount);
-  },
-  CHANGE_LOCAL_ROUND_COSTS(state: any, payload: any) {
-    Object.keys(payload).forEach((key) => {
-      state.localInvestments.updateCurrentCost(key, payload[key]);
-    });
-    // for (const investment in payload) {
-    //   // console.log(investment,payload[investment]);
-    //   state.localInvestments.updateCurrentCost(investment, payload[investment]);
-    // }
-  },
-  SET_PLAYER_ROLE(state: any, payload: any) {
-    state.playerRole = payload;
-  },
-  SET_ACTIVE_ACCOMPLISHMENTS(state:any, payload:any) {
-    state.activeAccomplishmentCards = payload;
-    // console.log(state.activeAccomplishmentCards);
-  },
   /**
    * SET_LAYOUT() mutation
    * Changes the state of the layout state.
@@ -44,20 +13,52 @@ export default {
    * @param payload The string value of layout.
    *
    */
-  SET_LAYOUT(state: any, newLayout: string) {
-    console.log('New Layout: ', newLayout);
-    state.layout = newLayout;
+
+  // game updates
+  SET_GAME_PHASE(state: any, payload:string) {
+    state.gamePhase = payload;
+    if (payload === 'Upkeep') {
+      state.round += 1;
+    }
+    if (payload === 'Trading') {
+      state.localInvestments.confirmInvestments();
+    }
   },
+  SET_EVENTS_FOR_ROUND(state:any, payload:any) {
+    state.gameEvents = payload;
+    // console.log(state.gameEvents);
+  },
+  CHANGE_UPKEEP_AMOUNT(state: any, payload: number) {
+    if (state.upkeep - payload >= 0) {
+      state.upkeep -= payload;
+    }
+  },
+  SET_CARD_MODAL_DATA(state: any, payload: object) {
+    state.cardData = payload;
+  },
+  SET_PLAYER_ROLE(state: any, payload: any) {
+    state.playerRole = payload;
+  },
+  SET_PLAYER_FINISHED(state: any, payload: boolean) {
+    state.playerFinishedWithPhase = payload;
+  },
+
+  // chat
+  ADD_TO_CHAT(state: any, payload: ChatMessage) {
+    state.chat.addEntry(payload);
+  },
+
+  // trading
   SET_TRADING_VIEW(state: any, newTradingView: string) {
     state.tradingView = newTradingView;
   },
   SET_TRADING_MEMBER(state: any, newTradingMember: string) {
     state.tradingMember = newTradingMember;
   },
-  CHANGE_UPKEEP_AMOUNT(state: any, payload: number) {
-    if (state.upkeep - payload >= 0) {
-      state.upkeep -= payload;
-    }
+
+  // notifications
+  SET_LAYOUT(state: any, newLayout: string) {
+    state.layout = newLayout;
   },
   SET_NOTIFICATION_MESSAGE(state: any, payload: string) {
     state.notifMessage = payload;
@@ -72,10 +73,20 @@ export default {
     // }
     state.marsLog.addEntry(payload);
   },
-  SET_CARD_MODAL_DATA(state: any, payload: object) {
-    state.cardData = payload;
+
+  // accomplishments
+  SET_ACTIVE_ACCOMPLISHMENTS(state:any, payload:any) {
+    state.activeAccomplishmentCards = payload;
   },
-  SET_PLAYER_FINISHED(state: any, payload: boolean) {
-    state.playerFinishedWithPhase = payload;
+  // investments
+  CHANGE_LOCAL_INVESTMENT(state: any, payload: any) {
+    // this is for increment and decrement
+
+    state.localInvestments.changeInventoryValue(payload.investmentName, payload.investmentAmount);
+  },
+  CHANGE_LOCAL_ROUND_COSTS(state: any, payload: any) {
+    Object.keys(payload).forEach((key) => {
+      state.localInvestments.updateCurrentCost(key, payload[key]);
+    });
   },
 };

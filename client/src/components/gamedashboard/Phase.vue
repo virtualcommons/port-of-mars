@@ -41,7 +41,7 @@ export default class Phase extends Vue {
 
   get btnVisibility() {
     switch (this.currentPhase) {
-      case 'Time Blocks':
+      case 'Purchase Investments':
         return true;
       case 'Trading':
         return true;
@@ -55,7 +55,8 @@ export default class Phase extends Vue {
   // Note: Do we want the ability to cancel?
 
   handleClick() {
-    this.$store.dispatch('setPlayerFinished', true);
+    // this.$store.dispatch('setPlayerFinished', true);
+    this.$root.$emit('nextRound');
   }
 }
 </script>
