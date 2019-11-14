@@ -57,7 +57,7 @@ export default class Notification extends Vue {
   mounted() {
     // Note: may want to think about this implementation...
     this.$root.$on('notification', (data: any) => {
-      this.$store.dispatch('addToMarsLog', this.message).then(() => {
+      this.$store.dispatch('addToMarsLog', data).then(() => {
         if (this.inView === 'inactive' || this.inView === 'hide') {
           this.$store.dispatch('setNotificationStatus', 'visible');
         } else {

@@ -55,9 +55,7 @@ export default class Phase extends Vue {
   // Note: Do we want the ability to cancel?
 
   handleClick() {
-    this.$store.dispatch('setPlayerFinished', true).then(() => {
-      console.log('playerFinishedWithPhase: ', this.$store.state.playerFinishedWithPhase); // eslint-disable-line no-use-before-define
-    });
+    this.$store.dispatch('setPlayerFinished', true);
   }
 }
 </script>

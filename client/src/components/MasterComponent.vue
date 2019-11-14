@@ -5,6 +5,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import Synthetic from '../tutorial/syntheticdata';
+import { MarsLogMessage } from '@/models/index';
 
 @Component({})
 export default class Master extends Vue {
@@ -78,9 +79,7 @@ export default class Master extends Vue {
 
   phaseHandler(roundInformation:any) {
     this.$store.dispatch('setPlayerFinished', false).then(() => {
-      console.log('playerFinishedWithPhase: ', this.$store.state.playerFinishedWithPhase); // eslint-disable-line no-use-before-define
       this.$store.dispatch('updatePhase', roundInformation.phaseName).then(() => {
-        console.log('gamePhase: ', this.$store.state.gamePhase); // eslint-disable-line no-use-before-define
         if (roundInformation.roundAction !== null) {
           roundInformation.roundAction();
         }
@@ -106,7 +105,13 @@ export default class Master extends Vue {
         this.$store.dispatch('setNotificationMessage', '-25 Upkeep');
       })
       .then(() => {
-        this.$root.$emit('notification', '-25 Upkeep');
+        const logData: MarsLogMessage = {
+          initiator: 'Phase: Upkeep',
+          category: 'Reduce Upkeep',
+          content: '-25 Upkeep',
+          time: new Date(),
+        };
+        this.$root.$emit('notification', logData);
       });
   }
 

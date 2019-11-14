@@ -67,9 +67,10 @@ export default {
   },
   ADD_TO_MARS_LOG(state: any, payload: string) {
     // correct location for this?
-    if (payload !== '') {
-      state.marsLog.push(payload);
-    }
+    // if (payload !== '') {
+    //   state.marsLog.push(payload);
+    // }
+    state.marsLog.addEntry(payload);
   },
   SET_CARD_MODAL_DATA(state: any, payload: object) {
     state.cardData = payload;
