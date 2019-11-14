@@ -34,6 +34,7 @@ export default class Home extends Vue {
    * @return the value of layout
    *
    */
+
   get layout() {
     return this.$store.getters.layout;
   }
@@ -53,10 +54,17 @@ export default class Home extends Vue {
 <style>
 /* DECLARE CSS VARIABLES */
 body {
+  --max-screen-height: 62.5625rem;
+  --max-screen-width: 120rem;
+
+  --min-screen-height: 48rem;
+  --min-screen-width: 64rem;
+
   --space-gray: #1e2223;
   --space-orange: #c67b5c;
   --space-white: #f5f5f5;
 
+  --font-family-default: 'Space Mono', monospace;
   --font-small: 0.75rem;
   --font-med: 1rem;
   --font-large: 1.5rem;
@@ -66,7 +74,7 @@ body {
 
 html,
 body {
-  font-family: 'Space Mono', monospace !important;
+  font-family: var(--font-family-default) !important;
   background-color: var(--space-gray);
   overflow: hidden;
 }
@@ -84,18 +92,34 @@ button {
   user-select: none !important;
 }
 
-/* iPad Pro default resolution (width) */
-@media (max-width: 1366px) {
+.game {
+  height: 100vh !important;
+  width: 100vw !important;
 }
 
-/* MacBook Pro default resolution (width) */
+/* HANDLE ZOOM */
+
 @media (max-width: 1280px) {
   html {
-    font-size: 12px;
+    font-size: 12px !important;
   }
 }
 
-/* iPad default resolution */
-@media (max-width: 1024px) {
+@media (max-width: 960px) {
+  html {
+    font-size: 8px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  html {
+    font-size: 6px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 4px !important;
+  }
 }
 </style>

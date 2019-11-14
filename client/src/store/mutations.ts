@@ -58,9 +58,10 @@ export default {
   },
   ADD_TO_MARS_LOG(state: any, payload: string) {
     // correct location for this?
-    if (payload !== '') {
-      state.marsLog.push(payload);
-    }
+    // if (payload !== '') {
+    //   state.marsLog.push(payload);
+    // }
+    state.marsLog.addEntry(payload);
   },
 
   // accomplishments
@@ -85,4 +86,7 @@ export default {
    * @param payload The string value of layout.
    *
    */
+  SET_PLAYER_FINISHED(state: any, payload: boolean) {
+    state.playerFinishedWithPhase = payload;
+  },
 };

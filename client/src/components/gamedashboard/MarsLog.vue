@@ -4,14 +4,14 @@
     <div class="marslog-log">
       <div
         class="marslog-message"
-        v-for="message in messages"
-        :key="message + Math.random()"
+        v-for="log in logs"
+        :key="log.time.getTime()"
       >
         <!-- Need to change key to be time value, need to find package? -->
-        <p class="marslog-message-content">
-          <!-- <span class="marslog-message-header">{{ message.sender }}</span
-          >: {{ message.content }} -->
-          {{ message }}
+        <p class="marslog-message-category">{{ log.category }}</p>
+        <p class="marslog-message-content">{{ log.content }}</p>
+        <p class="marslog-message-time">
+          <span>[ </span>{{ log.time.toLocaleTimeString() }}<span> ]</span>
         </p>
       </div>
     </div>
@@ -28,8 +28,8 @@ export default class MarsLog extends Vue {
     elem!.scrollTop = elem!.scrollHeight;
   }
 
-  get messages() {
-    return this.$store.state.marsLog;
+  get logs() {
+    return this.$store.state.marsLog.marsLog;
   }
 }
 </script>
@@ -67,28 +67,38 @@ export default class MarsLog extends Vue {
     height: 0;
 }
 
-.marslog-message-content {
-  /* height: auto; */
-  /* max-width: 100%; */
+/* .marslog-message-content {
   word-wrap: break-word;
   color: var(--space-white);
   margin: 0.5rem;
-}
+} */
 
 .marslog-message {
+  padding: 0.5rem;
   color: var(--space-white);
   height: auto;
   max-width: 100%;
   font-size: var(--font-small);
   margin-bottom: 0.5rem;
-  /* background-color: white; */
-  /* border-radius: .75rem; */
   overflow: auto;
-  /* margin: 1rem 0.75rem 1rem 5rem; */
   background-color: rgba(245,245,245, 0.05);
 }
 
-.marslog-message-header {
+.marslog-message-category {
+  margin: 0;
+  color: var(--space-orange);
+}
+
+.marslog-message-content {
+  margin: 0.5rem 0;
+  word-wrap: break-word;
+}
+
+.marslog-message-time {
+  margin: 0
+}
+
+.marslog-message-time span {
   color: var(--space-orange);
 }
 </style>

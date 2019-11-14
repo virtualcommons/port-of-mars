@@ -57,7 +57,7 @@ export default class Clock extends Vue {
     top: 8%;
 
     /*container styling*/
-    font-family: 'Space Mono', monospace;
+    font-family: var(--font-family-default);
     font-size: 65px;
     color: #ffddba;
     text-shadow: 0 0 20px rgb(230, 219, 0),  0 0 20px rgba(10, 175, 230, 0);

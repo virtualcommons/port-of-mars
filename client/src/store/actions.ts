@@ -38,7 +38,7 @@ export default {
   setNotificationStatus(context: any, payload: string) {
     context.commit('SET_NOTIFICATION_STATUS', payload);
   },
-  addToMarsLog(context: any, payload: string) {
+  addToMarsLog(context: any, payload: any) {
     context.commit('ADD_TO_MARS_LOG', payload);
   },
 
@@ -53,5 +53,8 @@ export default {
   },
   updateRoundCosts(context: any, payload: any) {
     context.commit('CHANGE_LOCAL_ROUND_COSTS', payload);
+  },
+  setPlayerFinished(context: any, payload: object) {
+    context.commit('SET_PLAYER_FINISHED', payload);
   },
 };

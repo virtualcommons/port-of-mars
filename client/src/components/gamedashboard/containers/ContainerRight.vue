@@ -31,9 +31,12 @@ export default class ContainerRight extends Vue {}
 }
 
 .scores-title {
-  width: 100%;
+  display: inline-block;
+  align-self: flex-end;
+  /* width: 100%; */
   margin-bottom: 1rem;
   text-align: right;
+  border-bottom: 0.125rem solid var(--space-orange);
   font-size: var(--font-large);
   color: var(--space-white);
 }

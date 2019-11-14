@@ -1,6 +1,6 @@
 <template>
-  <div class="card-investment" :style="opacityModifier">
-    <div class="investment-options">
+  <div class="card-investment">
+    <div class="investment-options" :style="opacityModifier">
       <div class="card-type">
         <div class="card-type-img">
           <img

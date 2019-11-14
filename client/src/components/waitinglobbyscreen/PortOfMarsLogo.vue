@@ -26,7 +26,7 @@ export default class PortOfMarsLogo extends Vue {
   }
 
   .title {
-    /*font-family: 'Space Mono', monospace;*/
+    /*font-family: var(--font-family-default);*/
     font-family: 'Share Tech Mono', monospace;
     /*font-family: 'Orbitron', sans-serif;*/
     font-size: 50px;

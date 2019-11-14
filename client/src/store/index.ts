@@ -1,7 +1,9 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import * as _ from 'lodash';
-import { InvestmentsModel, ChatModel, RawGameEvent } from '../models';
+import {
+  InvestmentsModel, ChatModel, MarsLogModel, RawGameEvent,
+} from '../models';
 
 import actions from './actions';
 import getters from './getters';
@@ -12,7 +14,7 @@ Vue.use(Vuex);
 export const initialStoreState = {
   // server side
   playerRole: '',
-  marsLog: [],
+  marsLog: new MarsLogModel(),
   activeAccomplishmentCards: [],
   chat: new ChatModel(),
   upkeep: 100,
@@ -22,7 +24,10 @@ export const initialStoreState = {
   timeblocks: 10,
   playerResources: {},
   gameEvents: [],
+
+  // phase
   gamePhase: '',
+  playerFinishedWithPhase: false,
 
   // state variable for layout
   layout: 'default-layout',

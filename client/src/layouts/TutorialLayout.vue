@@ -1,10 +1,32 @@
 <template>
-  <div>
+  <div class="tutorial-layout">
     <router-view />
-    <v-tour name="gameTour" :steps="steps" :callbacks="tourCallbacks">
-      <template :v-slot="tour">
+    <!-- COMMENTING THIS OUT FOR NOW -->
+    <!-- <v-tour name="gameTour" :steps="steps" :callbacks="tourCallbacks">
+      <template slot-scope="tour">
+        <transition name="fade">
+          <v-step
+            v-if="tour.currentStep === index"
+            v-for="(step, index) of tour.steps"
+            :key="index"
+            :step="step"
+            :previous-step="tour.previousStep"
+            :next-step="tour.nextStep"
+            :stop="tour.stop"
+            :is-first="tour.isFirst"
+            :is-last="tour.isLast"
+            :labels="tour.labels"
+          >
+            <template>
+              <div slot="actions">
+                <button @click="tour.previousStep" class="btn btn-primary">Previous step</button>
+                <button @click="tour.nextStep" class="btn btn-primary">Next step</button>
+              </div>
+            </template>
+          </v-step>
+        </transition>
       </template>
-    </v-tour>
+    </v-tour> -->
   </div>
 </template>
 
@@ -193,3 +215,10 @@ export default class TutorialLayout extends Vue {
   }
 }
 </script>
+
+<style scoped>
+.tutorial-layout {
+  height: 100% !important;
+  width: 100% !important;
+}
+</style>
