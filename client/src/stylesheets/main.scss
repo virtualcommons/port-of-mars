@@ -1,0 +1,19 @@
+// sass tools, helper files, variables, functions, mixins, other config files
+@import 'utilities/variables';
+@import 'utilities/mixins';
+
+// third party code from external libraries and frameworks
+@import 'vendors/bootstrap';
+
+// boilerplate code for the project: standard styles, resets, typographic rules
+@import 'base/reset';
+@import 'base/typography';
+
+// project layout styles: header, footer, navigation, grid system
+@import 'layout/grid';
+
+// styles for components/widgets
+@import 'components/buttons';
+
+// styles specific to individual pages
+@import 'pages/login';
