@@ -17,7 +17,7 @@ export const initialStoreState = {
   chat: new ChatModel(),
   upkeep: 100,
   phaseTime: 300,
-  round: 1,
+  round: 0,
   players: [],
   timeblocks: 10,
   playerResources: {},

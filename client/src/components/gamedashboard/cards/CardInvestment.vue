@@ -27,7 +27,9 @@
     <div class="investment-data">
       <p class="investment-data-name">{{ `${investmentData.n}` }}</p>
       <p class="investment-data-inventory">
-        <span>(</span> {{ `${investmentData.currentInventory}` }} <span>)</span>
+        <span>(</span> {{
+        `${investmentData.persistentInventory+investmentData.currentInventory}`
+        }} <span>)</span>
       </p>
     </div>
   </div>
@@ -48,7 +50,7 @@ export default class CardInvestment extends Vue {
 
   incrementInvestment() {
     if (
-      this.$store.state.gamePhase === 'Time Blocks'
+      this.$store.state.gamePhase === 'Purchase Investments'
       && this.$store.state.localInvestments.localDecrement - this.investmentData.currentCost >= 0
       && this.investmentData.currentCost > 0
     ) {

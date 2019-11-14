@@ -28,7 +28,7 @@ export default class Master extends Vue {
       roundAction: this.phaseUpkeep,
     },
     {
-      phaseName: 'Time Blocks',
+      phaseName: 'Purchase Investments',
       roundAction: null,
     },
     {
@@ -51,7 +51,7 @@ export default class Master extends Vue {
 
   onKeyDown(e: any) {
     this.round = 0;
-    if (e.key === 'r') {
+    if (e.key === 'r' /* && this.$store.state.upkeep > 0 */) {
       this.phaseHandler(this.roundDefinitions[this.roundIndex]);
       this.roundIndex += 1;
 
