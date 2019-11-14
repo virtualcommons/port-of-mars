@@ -7,15 +7,22 @@
     <div>
       <p class="phase-time"><span>( </span>5<span> : </span>00<span> )</span></p>
     </div>
-    <!-- phase-current will change on props -->
-    <!-- phase-time will change on props (seperate component?) -->
-    <!-- <Clock /> -->
-    <!-- ADD DONE BUTTON -->
+    <div v-if="btnVisibility">
+      <button
+        class="phase-donebtn"
+        @click.prevent="handleClick"
+        :disabled="btnDisabled"
+        type="button"
+        name="phase complete button"
+      >
+        Done
+      </button>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 import Clock from '@/components/gamedashboard/Clock.vue';
 
 @Component({
@@ -24,8 +31,33 @@ import Clock from '@/components/gamedashboard/Clock.vue';
   },
 })
 export default class Phase extends Vue {
+  get btnDisabled() {
+    return this.$store.state.playerFinishedWithPhase;
+  }
+
   get currentPhase() {
     return this.$store.state.gamePhase;
+  }
+
+  get btnVisibility() {
+    switch (this.currentPhase) {
+      case 'Time Blocks':
+        return true;
+      case 'Trading':
+        return true;
+      case 'Purchase Accomplishments':
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  // Note: Do we want the ability to cancel?
+
+  handleClick() {
+    this.$store.dispatch('setPlayerFinished', true).then(() => {
+      console.log('playerFinishedWithPhase: ', this.$store.state.playerFinishedWithPhase); // eslint-disable-line no-use-before-define
+    });
   }
 }
 </script>
@@ -54,6 +86,35 @@ export default class Phase extends Vue {
 .phase-current {
   font-size: var(--font-med);
   color: var(--space-orange);
+}
+
+.phase-donebtn {
+  height: 1.5625rem;
+  width: 6.25rem;
+  padding: 0.125rem;
+  font-size: 0.75rem;
+  border-radius: 0.5rem;
+  border: var(--border-white);
+  color: var(--space-white);
+  background-color: var(--space-gray);
+}
+
+.phase-donebtn:hover {
+  color: var(--space-gray);
+  background-color: var(--space-white);
+}
+
+.phase-donebtn:focus {
+  outline: none !important;
+}
+
+.phase-donebtn:disabled {
+  opacity: 50%;
+}
+
+.phase-donebtn:disabled:hover {
+  color: var(--space-white);
+  background-color: var(--space-gray);
 }
 
 .phase-time {

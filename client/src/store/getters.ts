@@ -6,6 +6,7 @@ export default {
    *
    */
   layout(state: any) {
+    console.log('CURRENT LAYOUT: ', state.layout);
     return state.layout;
   },
 };

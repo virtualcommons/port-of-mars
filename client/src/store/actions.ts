@@ -43,4 +43,7 @@ export default {
   setCardModalData(context: any, payload: object) {
     context.commit('SET_CARD_MODAL_DATA', payload);
   },
+  setPlayerFinished(context: any, payload: object) {
+    context.commit('SET_PLAYER_FINISHED', payload);
+  },
 };

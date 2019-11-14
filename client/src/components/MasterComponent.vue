@@ -77,10 +77,15 @@ export default class Master extends Vue {
   // end round
 
   phaseHandler(roundInformation:any) {
-    this.$store.dispatch('updatePhase', roundInformation.phaseName);
-    if (roundInformation.roundAction !== null) {
-      roundInformation.roundAction();
-    }
+    this.$store.dispatch('setPlayerFinished', false).then(() => {
+      console.log('playerFinishedWithPhase: ', this.$store.state.playerFinishedWithPhase); // eslint-disable-line no-use-before-define
+      this.$store.dispatch('updatePhase', roundInformation.phaseName).then(() => {
+        console.log('gamePhase: ', this.$store.state.gamePhase); // eslint-disable-line no-use-before-define
+        if (roundInformation.roundAction !== null) {
+          roundInformation.roundAction();
+        }
+      });
+    });
   }
 
   phaseUpkeep() {

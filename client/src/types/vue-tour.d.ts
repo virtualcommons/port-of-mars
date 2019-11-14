@@ -1,6 +1,7 @@
 declare module 'vue-tour' {
     const $tours: any;
     import Vue from 'vue';
+
     export default VueTour;
 }
 
@@ -9,6 +10,6 @@ declare module 'vue-tour' {
 
 // declare module 'vue/types/vue' {
 //     interface Vue {
-//         $tours: VueTour 
+//         $tours: VueTour
 //     }
 // }
