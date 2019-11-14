@@ -1,8 +1,7 @@
 <template>
   <div class="tutorial-layout">
     <router-view />
-    <!-- COMMENTING THIS OUT FOR NOW -->
-    <!-- <v-tour name="gameTour" :steps="steps" :callbacks="tourCallbacks">
+    <v-tour name="gameTour" :steps="steps" :callbacks="tourCallbacks">
       <template slot-scope="tour">
         <transition name="fade">
           <v-step
