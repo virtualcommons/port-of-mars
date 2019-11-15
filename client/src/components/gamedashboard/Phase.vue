@@ -3,20 +3,20 @@
     <div>
       <p class="phase-title">Current Phase</p>
       <p class="phase-current">{{ currentPhase }}</p>
+      <div v-if="btnVisibility">
+        <button
+          class="phase-donebtn"
+          @click="handleClick"
+          :disabled="btnDisabled"
+          type="button"
+          name="phase complete button"
+        >
+          Done
+        </button>
+      </div>
     </div>
     <div>
       <p class="phase-time"><span>( </span>{{ timeRemaining }}<span> )</span></p>
-    </div>
-    <div v-if="btnVisibility">
-      <button
-        class="phase-donebtn"
-        @click.prevent="handleClick"
-        :disabled="btnDisabled"
-        type="button"
-        name="phase complete button"
-      >
-        Done
-      </button>
     </div>
   </div>
 </template>
@@ -54,9 +54,12 @@ export default class Phase extends Vue {
 
   // Note: Do we want the ability to cancel?
 
+  // handleClick() {
+  //   this.$store.dispatch('setPlayerFinished', true);
+  // }
+
   handleClick() {
-    // this.$store.dispatch('setPlayerFinished', true);
-    this.$root.$emit('nextRound');
+    this.$root.$emit('openConfirmation', 'open');
   }
 
   get timeRemaining() {
@@ -76,9 +79,10 @@ export default class Phase extends Vue {
   justify-content: space-around;
   align-items: center;
   width: 100%;
-  height: 60%;
+  height: 80%;
   /* background-color: var(--space-orange); */
   text-align: center;
+  /* background-color: pink; */
 }
 
 .phase-component p {
@@ -99,11 +103,13 @@ export default class Phase extends Vue {
   height: 1.5625rem;
   width: 6.25rem;
   padding: 0.125rem;
+  margin-top: 0.75rem;
   font-size: 0.75rem;
   border-radius: 0.5rem;
   border: var(--border-white);
   color: var(--space-white);
   background-color: var(--space-gray);
+  transition: all .2s ease-in-out;
 }
 
 .phase-donebtn:hover {

@@ -4,25 +4,25 @@
       :playerRole="'Researcher'"
       :playerScore="14"
       :notificationCount="1"
-      :style="{ 'background-color': 'rgba(67, 124, 174, 0.2)' }"
+      :style="{ 'background-color': 'var(--color-researcher)' }"
     />
     <Member
       :playerRole="'Pioneer'"
       :playerScore="11"
       :notificationCount="0"
-      :style="{ 'background-color': 'rgba(111, 36, 134, 0.2)' }"
+      :style="{ 'background-color': 'var(--color-pioneer)' }"
     />
     <Member
       :playerRole="'Curator'"
       :playerScore="5"
       :notificationCount="2"
-      :style="{ 'background-color': 'rgba(103, 65, 29, 0.2)' }"
+      :style="{ 'background-color': 'var(--color-curator)' }"
     />
     <Member
       :playerRole="'Entrepreneur'"
       :playerScore="3"
       :notificationCount="0"
-      :style="{ 'background-color': 'rgba(199, 168, 40, 0.2)' }"
+      :style="{ 'background-color': 'var(--color-entrepreneur)' }"
     />
   </div>
 </template>

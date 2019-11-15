@@ -78,6 +78,11 @@ export default class CardAccomplishment extends Vue {
   color: var(--space-white);
   overflow: hidden;
   cursor: pointer;
+  transition: all .2s ease-in-out;
+}
+
+.card-accomplishment:hover {
+  transform: scale(1.1);
 }
 
 .card-title {
@@ -137,7 +142,7 @@ export default class CardAccomplishment extends Vue {
 
 .card-cost img {
   margin: 0.125rem;
-  height: 1.25rem;
-  width: 1.25rem;
+  height: 2rem;
+  width: 2rem;
 }
 </style>

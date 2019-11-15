@@ -15,7 +15,7 @@ export default {
    */
 
   // game updates
-  SET_GAME_PHASE(state: any, payload:string) {
+  SET_GAME_PHASE(state: any, payload: string) {
     state.gamePhase = payload;
     if (payload === 'Upkeep') {
       state.round += 1;
@@ -47,9 +47,9 @@ export default {
   SET_PLAYER_ROLE(state: any, payload: any) {
     state.playerRole = payload;
   },
-  SET_PLAYER_FINISHED(state: any, payload: boolean) {
-    state.playerFinishedWithPhase = payload;
-  },
+  // SET_PLAYER_FINISHED(state: any, payload: boolean) {
+  //   state.playerFinishedWithPhase = payload;
+  // },
 
   SET_ACTIVE_ACCOMPLISHMENTS(state: any, payload: any) {
     state.activeAccomplishmentCards = payload;
@@ -91,8 +91,8 @@ export default {
     state.marsLog.addEntry(payload);
   },
   CHANGE_LOCAL_ROUND_COSTS(state: any, payload: any) {
-    Object.keys(payload).forEach((key) => {
+    Object.keys(payload).forEach(key => {
       state.localInvestments.updateCurrentCost(key, payload[key]);
     });
-  },
+  }
 };
