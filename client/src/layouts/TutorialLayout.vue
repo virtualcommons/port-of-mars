@@ -40,14 +40,13 @@ require('vue-tour/dist/vue-tour.css');
 Vue.use(VueTour);
 
 @Component({
-  name: 'tutorial-layout',
+  name: 'tutorial-layout'
 })
-
 export default class TutorialLayout extends Vue {
   tourCallbacks = {
     onPreviousStep: TutorialLayout.previousStepCallback,
-    onNextStep: TutorialLayout.nextStepCallback,
-  }
+    onNextStep: TutorialLayout.nextStepCallback
+  };
 
   tourOptions = {
     useKeyboardNavigation: false,
@@ -60,16 +59,16 @@ export default class TutorialLayout extends Vue {
       content: 'Welcome to Port of Mars, Curator! This is your profile. You can click here to'
                + 'learn more about your character.',
       params: {
-        placement: 'right',
-      },
+        placement: 'right'
+      }
     },
     {
       // ContainerRight.vue
       target: '#v-step-1',
       content: 'Your team members and scores are displayed here.',
       params: {
-        placement: 'left',
-      },
+        placement: 'left'
+      }
     },
     {
       // ContainerRight.vue > Chat
@@ -77,8 +76,8 @@ export default class TutorialLayout extends Vue {
       content: 'You can communicate with your team members in this chat window throughout the'
                 + 'game.',
       params: {
-        placement: 'left',
-      },
+        placement: 'left'
+      }
     },
     {
       // ContainerLeft.vue > <Round />
@@ -86,16 +85,16 @@ export default class TutorialLayout extends Vue {
       content: 'The current round number will be displayed here. There is an indefinite number'
                + 'of rounds per game.',
       params: {
-        placement: 'right',
-      },
+        placement: 'right'
+      }
     },
     {
       // ContainerLeft.vue > <Notifcation />
       target: '#v-step-4',
       content: 'Notifications will be displayed here throughout gameplay.',
       params: {
-        placement: 'bottom',
-      },
+        placement: 'bottom'
+      }
     },
     {
       // ContainerLeft.vue > <MarsLog />
@@ -104,8 +103,8 @@ export default class TutorialLayout extends Vue {
                + 'This will display a history of events that have occured throughout the'
                + 'game for your reference.',
       params: {
-        placement: 'right',
-      },
+        placement: 'right'
+      }
     },
     {
       // ContainerTop.vue > <ContainerUpkeep />
@@ -114,8 +113,8 @@ export default class TutorialLayout extends Vue {
                + 'level declines due to wear and tear, and without any investment by the'
                + 'residents, the Upkeep will be reduced to zero in a few rounds.',
       params: {
-        placement: 'bottom',
-      },
+        placement: 'bottom'
+      }
     },
     {
       // Phase.vue
@@ -124,8 +123,8 @@ export default class TutorialLayout extends Vue {
                + 'players 5 minutes to do what they need to do. The timer starts to count down'
                + 'as soon as a phase starts.',
       params: {
-        placement: 'bottom',
-      },
+        placement: 'bottom'
+      }
     },
     {
       // ContainerPhase.vue > <CardEvent /> (2)
@@ -133,8 +132,8 @@ export default class TutorialLayout extends Vue {
       content: 'At the beginning of each round, a card event(s) will populate this area. You can'
                + 'view card events in detail by clicking on them directly.',
       params: {
-        placement: 'left',
-      },
+        placement: 'left'
+      }
     },
     {
       // ContainerBottom.vue
@@ -142,16 +141,16 @@ export default class TutorialLayout extends Vue {
       content: 'This window contains your time blocks, accomplishments and influences that you can'
                + 'purchase.',
       params: {
-        placement: 'top',
-      },
+        placement: 'top'
+      }
     },
     {
       // ContainerInvestments.vue > <StatusBar />
       target: '#v-step-10',
       content: 'You receive 10 timeblocks per round to invest upkeep or influence.',
       params: {
-        placement: 'right',
-      },
+        placement: 'right'
+      }
     },
     {
       // ContainerInvestments.vue > <StatusBar />
@@ -159,16 +158,16 @@ export default class TutorialLayout extends Vue {
       content: 'You have the option of investing your timeblocks in upkeep to maintain the shared'
                + 'infrastructure.',
       params: {
-        placement: 'left',
-      },
+        placement: 'left'
+      }
     },
     {
       // CardInvestment.vue
       target: '#v-step-12',
       content: 'The cost in timeblocks for an upkeep or influence investment is displayed here.',
       params: {
-        placement: 'bottom',
-      },
+        placement: 'bottom'
+      }
     },
     {
       // CardInvestment.vue
@@ -176,8 +175,8 @@ export default class TutorialLayout extends Vue {
       content: 'You can increment or decrement the number of time blocks to invest using these'
                + 'buttons.',
       params: {
-        placement: 'bottom',
-      },
+        placement: 'bottom'
+      }
     },
     {
       // ContainerInvestments.vue > <CardInvestment />
@@ -186,16 +185,16 @@ export default class TutorialLayout extends Vue {
                + 'a currency; you can trade influences with other players and also use them to'
                + 'purchase accomplishments.',
       params: {
-        placement: 'bottom',
-      },
+        placement: 'bottom'
+      }
     },
     {
       // ContainerAccomplishments.vue > <BContainer />
       target: '#v-step-15',
       content: 'These are the accomplishments you can purchase or discard per round.',
       params: {
-        placement: 'bottom',
-      },
+        placement: 'bottom'
+      }
     },
     {
       // ContainerAccomplishments.vue > <CardAccomplishment />
@@ -203,8 +202,8 @@ export default class TutorialLayout extends Vue {
       content: 'You can purchase accomplishments by using the influences that you have and receive'
                + 'points in return.',
       params: {
-        placement: 'left',
-      },
+        placement: 'left'
+      }
     },
     {
       // ContainerRight.vue > <Member />
@@ -212,9 +211,9 @@ export default class TutorialLayout extends Vue {
       content: 'Your score for the game will be displayed here and updated as you purchase more'
                + 'accomplishments and gain more points.',
       params: {
-        placement: 'left',
-      },
-    },
+        placement: 'left'
+      }
+    }
   ];
 
   static previousStepCallback(currentStep: any) {
