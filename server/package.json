@@ -29,7 +29,7 @@
   "dependencies": {
     "@colyseus/monitor": "^0.11.7",
     "@colyseus/social": "^0.11.6",
-    "colyseus": "^0.11.20",
+    "colyseus": "^0.11.22",
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "express-jwt": "^5.3.1"

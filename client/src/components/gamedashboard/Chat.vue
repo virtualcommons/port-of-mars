@@ -2,16 +2,16 @@
   <div class="chat">
     <p class="chat-title">Chat</p>
     <div class="chat-chat">
-      <div class="chat-message" v-for="message in messages" :key="message.time.getTime()">
+      <div class="chat-message" v-for="message in messages" :key="message.time">
         <!-- Need to change key to be time value, need to find package? -->
         <p class="chat-message-member">
-          {{ message.sender }}
+          {{ message.role }}
         </p>
         <p class="chat-message-content">
-          {{ message.content }}
+          {{ message.message }}
         </p>
         <p class="chat-message-time">
-          <span>[ </span>{{ message.time.toLocaleTimeString() }}<span> ]</span>
+          <span>[ </span>{{ toDate(message.time) }}<span> ]</span>
         </p>
       </div>
     </div>
@@ -20,7 +20,7 @@
         class="chat-input"
         type="text"
         @keydown.enter="submitToChat"
-        v-model="message"
+        v-model="pendingMessage"
         placeholder="send a message"
       />
       <button class="chat-input-sendbtn" type="button" @click="submitToChat">Send</button>
@@ -29,12 +29,16 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Inject } from 'vue-property-decorator';
 import { ChatMessage } from '@/models/index';
+import { RequestAPI } from '@/api/request';
 
 @Component({})
 export default class Chat extends Vue {
-  message: string = '';
+  @Inject()
+  $api: RequestAPI;
+
+  pendingMessage: string = '';
 
   count: number = 0;
 
@@ -44,19 +48,18 @@ export default class Chat extends Vue {
   }
 
   get messages() {
-    return this.$store.state.chat.chat;
+    return this.$store.state.chat;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  toDate(unixTimestamp: number) {
+    return (new Date(unixTimestamp)).toLocaleTimeString();
   }
 
   submitToChat() {
-    if (this.message !== '') {
-      const submittedMessage: ChatMessage = {
-        sender: this.$store.state.playerRole,
-        content: this.message,
-        time: new Date(),
-      };
-
-      this.$store.dispatch('sendChatMsg', submittedMessage);
-      this.message = '';
+    if (this.pendingMessage !== '') {
+      this.$api.sendChatMessage(this.pendingMessage);
+      this.pendingMessage = '';
     }
   }
 }

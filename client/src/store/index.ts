@@ -9,6 +9,11 @@ import actions from './actions';
 import getters from './getters';
 import mutations from './mutations';
 
+export interface StoreState {
+  playerRole: string;
+  timeRemaining: number;
+}
+
 Vue.use(Vuex);
 
 export const initialStoreState = {
@@ -16,12 +21,12 @@ export const initialStoreState = {
   playerRole: '',
   marsLog: new MarsLogModel(),
   activeAccomplishmentCards: [],
-  chat: new ChatModel(),
+  chat: [],
   upkeep: 100,
-  phaseTime: 300,
-  round: 0,
+  round: 1,
   players: [],
   timeblocks: 10,
+  timeRemaining: 300,
   playerResources: {},
   gameEvents: [],
 

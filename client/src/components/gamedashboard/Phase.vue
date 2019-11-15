@@ -5,7 +5,7 @@
       <p class="phase-current">{{ currentPhase }}</p>
     </div>
     <div>
-      <p class="phase-time"><span>( </span>5<span> : </span>00<span> )</span></p>
+      <p class="phase-time"><span>( </span>{{ timeRemaining }}<span> )</span></p>
     </div>
     <div v-if="btnVisibility">
       <button
@@ -57,6 +57,14 @@ export default class Phase extends Vue {
   handleClick() {
     // this.$store.dispatch('setPlayerFinished', true);
     this.$root.$emit('nextRound');
+  }
+
+  get timeRemaining() {
+    const tr = this.$store.state.timeRemaining;
+    const minutesRemaining = Math.floor(tr / 60);
+    const minutesRemainingDisplay = `${minutesRemaining}`.padStart(2, '0');
+    const secondsRemainingDisplay = `${tr - minutesRemaining * 60}`.padStart(2, '0');
+    return `${minutesRemainingDisplay}:${secondsRemainingDisplay}`;
   }
 }
 </script>

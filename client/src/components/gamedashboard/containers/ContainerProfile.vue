@@ -1,7 +1,7 @@
 <template>
   <div class="profile">
     <div class="profile-frame" id="v-step-0" @click="handleClick">
-      <img :src="require(`@/assets/characters/${setImg()}.png`)" alt="Player" class="profile-img" />
+      <img :src="avatarURL" alt="Player" class="profile-img" />
     </div>
     <div class="profile-info">
       <p class="profile-info-player">{{ playerRole }}</p>
@@ -14,14 +14,14 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 
 @Component({})
-
 export default class ContainerProfile extends Vue {
   @Prop({ default: 'Curator' }) private playerRole!: string;
 
   @Prop({ default: 0 }) private playerScore!: number;
 
-  setImg(): string {
-    return this.playerRole;
+  get avatarURL(): string {
+    // eslint-disable-next-line global-require,import/no-dynamic-require
+    return require(`@/assets/characters/${this.playerRole}.png`);
   }
 
   handleClick() {

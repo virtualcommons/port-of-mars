@@ -1,4 +1,4 @@
-import { ChatMessage } from '../models';
+import { ChatMessageData } from 'shared/types';
 
 export default {
   SET_ACCS(state: any, payload: any) {
@@ -24,7 +24,7 @@ export default {
       state.localInvestments.confirmInvestments();
     }
   },
-  SET_EVENTS_FOR_ROUND(state:any, payload:any) {
+  SET_EVENTS_FOR_ROUND(state: any, payload: any) {
     state.gameEvents = payload;
     // console.log(state.gameEvents);
   },
@@ -32,6 +32,14 @@ export default {
     if (state.upkeep - payload >= 0) {
       state.upkeep -= payload;
     }
+  },
+  ADD_TO_CHAT(state: any, payload: ChatMessageData) {
+    state.chat.push(payload);
+  },
+  CHANGE_LOCAL_INVESTMENT(state: any, payload: any) {
+    // this is for increment and decrement
+
+    state.localInvestments.changeInventoryValue(payload.investmentName, payload.investmentAmount);
   },
   SET_CARD_MODAL_DATA(state: any, payload: object) {
     state.cardData = payload;
@@ -43,9 +51,18 @@ export default {
     state.playerFinishedWithPhase = payload;
   },
 
-  // chat
-  ADD_TO_CHAT(state: any, payload: ChatMessage) {
-    state.chat.addEntry(payload);
+  SET_ACTIVE_ACCOMPLISHMENTS(state: any, payload: any) {
+    state.activeAccomplishmentCards = payload;
+  },
+  /**
+   * SET_LAYOUT() mutation
+   * Changes the state of the layout state.
+   * @param state The state of the application.
+   * @param newLayout The string value of layout.
+   *
+   */
+  SET_LAYOUT(state: any, newLayout: string) {
+    state.layout = newLayout;
   },
 
   // trading
@@ -57,14 +74,14 @@ export default {
   },
 
   // notifications
-  SET_LAYOUT(state: any, newLayout: string) {
-    state.layout = newLayout;
-  },
   SET_NOTIFICATION_MESSAGE(state: any, payload: string) {
     state.notifMessage = payload;
   },
   SET_NOTIFICATION_STATUS(state: any, payload: string) {
     state.notifIsActive = payload;
+  },
+  SET_TIME_REMAINING(state: any, payload: number) {
+    state.timeRemaining = payload;
   },
   ADD_TO_MARS_LOG(state: any, payload: string) {
     // correct location for this?
@@ -72,17 +89,6 @@ export default {
     //   state.marsLog.push(payload);
     // }
     state.marsLog.addEntry(payload);
-  },
-
-  // accomplishments
-  SET_ACTIVE_ACCOMPLISHMENTS(state:any, payload:any) {
-    state.activeAccomplishmentCards = payload;
-  },
-  // investments
-  CHANGE_LOCAL_INVESTMENT(state: any, payload: any) {
-    // this is for increment and decrement
-
-    state.localInvestments.changeInventoryValue(payload.investmentName, payload.investmentAmount);
   },
   CHANGE_LOCAL_ROUND_COSTS(state: any, payload: any) {
     Object.keys(payload).forEach((key) => {

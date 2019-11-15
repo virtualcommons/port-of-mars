@@ -1,6 +1,9 @@
-import { Room, Client } from "colyseus";
-import {ResourceAmountData, PlayerData, Stage, AccomplishmentData} from "shared/types";
+import {Client, Room} from "colyseus";
+import {AccomplishmentData, PlayerData, ResourceAmountData, Stage, ChatMessageData} from "shared/types";
 import _ from "lodash";
+import {ArraySchema, Schema, type, MapSchema} from "@colyseus/schema";
+import {Requests} from "shared/requests"
+import {Responses} from "shared/responses"
 
 function getRandomIntInclusive(min: number, max: number) {
   min = Math.ceil(min);
@@ -8,11 +11,34 @@ function getRandomIntInclusive(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
 }
 
-const ROLES = ['curator', 'entrepreneur', 'pioneer', 'politician', 'researcher'];
+const ROLES = ['Curator', 'Entrepreneur', 'Pioneer', 'Politician', 'Researcher'];
 
-interface Effect {
+class Effect extends Schema {
 
 }
+
+class ChatMessage extends Schema implements ChatMessageData {
+  constructor(msg: ChatMessageData) {
+    super();
+    this.role = msg.role;
+    this.message = msg.message;
+    this.time = msg.time;
+    this.round = msg.round;
+  }
+
+  @type("string")
+  role: string;
+
+  @type("string")
+  message: string;
+
+  @type('number')
+  time: number;
+
+  @type('number')
+  round: number;
+}
+
 
 interface GameData {
   players: {
@@ -28,34 +54,79 @@ interface GameData {
   active_effects: Array<Effect>
 }
 
-class GameState {
-  constructor() {
-    this.players = {
-      curator: new Player('curator'),
-      entrepreneur: new Player('entrepreneur'),
-      pioneer: new Player('pioneer'),
-      politician: new Player('politician'),
-      researcher: new Player('researcher')
-    };
-    this.round = 0;
-    this.stage = Stage.events;
-    this.active_effects = [];
+class Player extends Schema {
+  constructor(role: string) {
+    super();
+    this.role = role;
   }
 
-  createPlayer(id: string) {}
+  @type("string")
+  role: string;
 }
-interface GameState extends GameData {}
 
-export class GameRoom extends Room {
+class GameState extends Schema {
+  availableRoles = _.cloneDeep(ROLES);
+
+  @type({ map: Player })
+  players = new MapSchema<Player>();
+
+  @type("number")
+  round: number = 0;
+
+  @type("number")
+  stage: Stage = Stage.events;
+
+  @type("number")
+  upkeep: number = 100;
+
+  @type("number")
+  timeRemaining: number = 300;
+
+  @type([ChatMessage])
+  messages = new ArraySchema<ChatMessage>();
+}
+
+export class GameRoom extends Room<GameState> {
+  maxClients = 5;
+
   onCreate (options: any) {
-    this.setState(new GameState())
+    this.setState(new GameState());
+    this.clock.setInterval(() => this.state.timeRemaining -= 1, 1000);
   }
 
   onJoin (client: Client, options: any) {
-    this.state
+    this.createPlayer(client);
   }
 
-  onMessage (client: Client, message: any) {}
+  sendSafe(client: Client, msg: Responses) {
+    this.send(client, msg);
+  }
+
+  createPlayer(client: Client) {
+    const role = this.state.availableRoles.pop();
+    if (role === undefined) {
+      this.sendSafe(client, { kind: 'error', message: 'Player create failed. Out of sessions'});
+      return;
+    }
+    this.state.players[client.sessionId] = new Player(role);
+    this.sendSafe(client, { kind: 'set-player-role', role })
+  }
+
+  addChatMessage(sessionId: string, message: string, round: number) {
+    this.state.messages.push(new ChatMessage({
+      role: this.state.players[sessionId].role,
+      time: (new Date()).getTime(),
+      message,
+      round
+    }))
+  }
+
+  onMessage (client: Client, message: Requests) {
+    switch (message.kind) {
+      case 'send-chat-message': this.addChatMessage(client.sessionId, message.message, this.state.round); break;
+      case 'buy-accomplishment-card': console.log(`buying card ${message.id}`); break;
+    }
+  }
   onLeave (client: Client, consented: boolean) {}
   onDispose() {}
 }
@@ -82,24 +153,3 @@ class ResourceCosts {
   }
 }
 interface ResourceCosts extends ResourceAmountData {}
-
-export class Player {
-  constructor(role: string) {
-    this.accomplishments = [];
-    this.costs = new ResourceCosts();
-    this.resources = new ResourceAllocation();
-    this.role = role;
-  }
-
-  get victoryPoints() {
-    return 1;
-  }
-
-  buy(accomplishment: AccomplishmentData) {
-    
-    this.accomplishments.push(accomplishment);
-    this.resources = _.mergeWith(this.resources, accomplishment.costs, (r, a) => r - a);
-  }
-}
-export interface Player extends PlayerData<AccomplishmentData, ResourceAllocation, ResourceCosts> {}
-

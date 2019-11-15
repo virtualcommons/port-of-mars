@@ -1,3 +1,10 @@
+export interface ChatMessageData {
+  message: string
+  role: string
+  time: number
+  round: number
+}
+
 export interface AccomplishmentRawData {
   id: number
   role: 'Researcher' | 'Curator' | 'Pioneer' | 'Entrepreneur' | 'Politician'
@@ -34,19 +41,19 @@ export interface AccomplishmentData {
     legacy: number
     science: number
     upkeep: number
-  }
+  };
   victory_points: number
   effect: string
 }
 
 export interface PlayerData<A extends AccomplishmentData, RA extends ResourceAmountData, RC extends ResourceAmountData> {
-  accomplishments: Array<A>;
-  resources: RA;
-  costs: RC;
-  role: string;
+  accomplishments: Array<A>
+  resources: RA
+  costs: RC
+  role: string
 }
 
 export enum Stage {
   events,
-  trade
+  trade,
 }
