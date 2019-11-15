@@ -2,7 +2,7 @@
   <div class="tutorial-layout">
     <router-view />
     <v-tour name="gameTour" :steps="steps" :callbacks="tourCallbacks">
-      <template slot-scope="tour">
+      <template v-slot="tour">
         <transition name="fade" v-if="tour.currentStep === index">
           <v-step
             v-for="(step, index) of tour.steps"
@@ -24,7 +24,7 @@
           </v-step>
         </transition>
       </template>
-    </v-tour> -->
+    </v-tour>
   </div>
 </template>
 
