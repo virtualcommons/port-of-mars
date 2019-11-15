@@ -1,4 +1,5 @@
 import { ChatMessageData } from 'shared/types';
+import { BaseInvestmentCosts } from '@/models';
 
 export default {
   SET_ACCS(state: any, payload: any) {
@@ -46,6 +47,10 @@ export default {
   },
   SET_PLAYER_ROLE(state: any, payload: any) {
     state.playerRole = payload;
+    // Object.keys(BaseInvestmentCosts[payload]).forEach(key => {
+    //   // console.log(key, payload);
+    //   state.localInvestments.updateCurrentCost(key, payload[key]);
+    // });
   },
   // SET_PLAYER_FINISHED(state: any, payload: boolean) {
   //   state.playerFinishedWithPhase = payload;
@@ -90,9 +95,9 @@ export default {
     // }
     state.marsLog.addEntry(payload);
   },
-  CHANGE_LOCAL_ROUND_COSTS(state: any, payload: any) {
-    Object.keys(payload).forEach(key => {
-      state.localInvestments.updateCurrentCost(key, payload[key]);
-    });
-  }
+  // CHANGE_LOCAL_ROUND_COSTS(state: any, payload: any) {
+  //   Object.keys(payload).forEach(key => {
+  //     state.localInvestments.updateCurrentCost(key, payload[key]);
+  //   });
+  // }
 };

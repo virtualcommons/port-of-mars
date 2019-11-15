@@ -5,7 +5,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import Synthetic from '../tutorial/syntheticdata';
-import { MarsLogMessage } from '@/models/index';
+import { MarsLogMessage, BaseInvestmentCosts } from '@/models';
 
 @Component({})
 export default class Master extends Vue {
@@ -46,7 +46,7 @@ export default class Master extends Vue {
     super();
     // console.log(this.costs);
     this.$store.dispatch('setPlayerRole', this.role);
-    this.$store.dispatch('updateRoundCosts', this.costs);
+    // this.$store.dispatch('updateRoundCosts', this.costs);
     this.$store.dispatch('updatePhase', 'Pregame');
   }
 

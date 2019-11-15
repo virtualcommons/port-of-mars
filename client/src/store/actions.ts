@@ -51,9 +51,9 @@ export default {
   changeLocalInvestment(context: any, payload: any) {
     context.commit('CHANGE_LOCAL_INVESTMENT', payload);
   },
-  updateRoundCosts(context: any, payload: any) {
-    context.commit('CHANGE_LOCAL_ROUND_COSTS', payload);
-  }
+  // updateRoundCosts(context: any, payload: any) {
+  //   context.commit('CHANGE_LOCAL_ROUND_COSTS', payload);
+  // }
   // setPlayerFinished(context: any, payload: object) {
   //   context.commit('SET_PLAYER_FINISHED', payload);
   // },

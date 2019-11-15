@@ -69,7 +69,9 @@ class InvestmentsModel {
     }
 
     updateCurrentCost(investmentToChange: any, amount: number) {
+      console.log(amount);
       this.investments[investmentToChange].currentCost = amount;
+      console.log(this.investments[investmentToChange].currentCost);
     }
 
     confirmInvestments() {
@@ -112,7 +114,7 @@ interface BaseInvestmentCostsByPerson{
     Entrepreneur:InvestmentCosts,
 }
 
-const BaseInvestmentCosts:BaseInvestmentCostsByPerson = {
+const BaseInvestmentCosts: BaseInvestmentCostsByPerson = {
   Entrepreneur: {
     upkeep: 1,
     finance: 2,
