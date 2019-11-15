@@ -39,7 +39,7 @@ export default class Member extends Vue {
 <style scoped>
 .member {
   /* overflow: hidden; */
-  width: 100%;
+  width: 90%;
   padding: 0.25rem 1rem;
   display: flex;
   justify-content: space-between;
@@ -50,6 +50,11 @@ export default class Member extends Vue {
   border: var(--border-white);
   border-radius: 1rem;
   cursor: pointer;
+  transition: all .2s ease-in-out;
+}
+
+.member:hover {
+  width: 100%;
 }
 
 .member-notif {

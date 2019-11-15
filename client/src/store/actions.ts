@@ -2,10 +2,10 @@ import { ChatMessage } from '../models';
 
 export default {
   // game updates
-  updatePhase(context: any, payload:string) {
+  updatePhase(context: any, payload: string) {
     context.commit('SET_GAME_PHASE', payload);
   },
-  updateRoundEvents(context: any, payload:any) {
+  updateRoundEvents(context: any, payload: any) {
     context.commit('SET_EVENTS_FOR_ROUND', payload);
   },
   changeUpkeepAmount(context: any, payload: number) {
@@ -53,8 +53,8 @@ export default {
   },
   updateRoundCosts(context: any, payload: any) {
     context.commit('CHANGE_LOCAL_ROUND_COSTS', payload);
-  },
-  setPlayerFinished(context: any, payload: object) {
-    context.commit('SET_PLAYER_FINISHED', payload);
-  },
+  }
+  // setPlayerFinished(context: any, payload: object) {
+  //   context.commit('SET_PLAYER_FINISHED', payload);
+  // },
 };

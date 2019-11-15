@@ -7,7 +7,7 @@
     @mouseleave="hover = false"
   >
     <p class="notification-close" v-if="hover || inView === 'hide'">Close</p>
-    <p class="notification-message" v-if="!hover">{{ message }}</p>
+    <p class="notification-message" v-if="!hover && inView !== 'hide'">{{ message }}</p>
     <!-- will be updated on props -->
   </div>
 </template>
@@ -40,7 +40,7 @@ export default class Notification extends Vue {
       return '';
     }
     if (this.inView === 'inactive') {
-      return 'notification-hidden';
+      return 'notification-inactive';
     }
     if (this.inView === 'visible') {
       return 'animated fadeInLeft';
@@ -49,7 +49,8 @@ export default class Notification extends Vue {
       return 'animated bounce';
     }
     if (this.inView === 'hide') {
-      return 'animated fadeOutLeft';
+      return 'animated fadeOutLeft notification-hide';
+      // return 'animated fadeOut faster';
     }
     return '';
   }
@@ -86,6 +87,7 @@ export default class Notification extends Vue {
   padding: 0.5rem;
   cursor: pointer;
   /* background-color: blue; */
+  transition: all .2s ease-in-out;
 }
 
 .notification:hover {
@@ -94,12 +96,14 @@ export default class Notification extends Vue {
   color: var(--space-white);
 }
 
-.notification-hidden {
-  visibility: hidden;
+.notification-hide {
+  border: var(--border-white);
+  background-color: var(--space-gray);
+  color: var(--space-white);
 }
 
-.notification-hidden {
-  /* visibility: hidden; */
+.notification-inactive {
+  visibility: hidden;
 }
 
 .notification-message {

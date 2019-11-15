@@ -60,9 +60,9 @@ export default class ContainerProfile extends Vue {
 .profile-info-player {
   font-size: var(--font-large);
   background-color: var(--space-white);
-  padding: 0 0.25rem;
-  padding-right: 1rem;
-  border-radius: 0 0.75rem 0.75rem 0;
+  padding: 0 0.5rem;
+  /* padding-right: 1rem; */
+  /* border-radius: 0 0.75rem 0.75rem 0; */
   color: var(--space-gray);
   /* border-bottom: 0.125rem solid var(--space-orange); */
   margin-bottom: 0.5rem;
@@ -82,8 +82,13 @@ export default class ContainerProfile extends Vue {
   align-items: center;
   border: 0.125rem solid var(--space-orange);
   border-radius: 50%;
-  background-color: rgba(245,245,245, 0.05);
+  background-color: var(--space-white-opaque);
   cursor: pointer;
+  transition: all .2s ease-in-out;
+}
+
+.profile-frame:hover {
+  transform: scale(1.1);
 }
 
 .profile-img {

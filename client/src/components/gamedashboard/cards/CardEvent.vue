@@ -39,6 +39,11 @@ export default class CardEvent extends Vue {
   border-radius: 1rem;
   cursor: pointer;
   text-align: center;
+  transition: all .2s ease-in-out;
+}
+
+.card-event:hover {
+  transform: scale(1.1);
 }
 
 .card-name {

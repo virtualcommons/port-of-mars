@@ -1,9 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import * as _ from 'lodash';
-import {
-  InvestmentsModel, ChatModel, MarsLogModel, RawGameEvent,
-} from '../models';
+import { InvestmentsModel, ChatModel, MarsLogModel, RawGameEvent } from '../models';
 
 import actions from './actions';
 import getters from './getters';
@@ -32,7 +30,7 @@ export const initialStoreState = {
 
   // phase
   gamePhase: '',
-  playerFinishedWithPhase: false,
+  // playerFinishedWithPhase: false,
 
   // state variable for layout
   layout: 'default-layout',
@@ -50,7 +48,7 @@ export const initialStoreState = {
 
   // this will be merged with the global investments
   // at the end of each round.
-  localInvestments: new InvestmentsModel(),
+  localInvestments: new InvestmentsModel()
 };
 
 export default new Vuex.Store({
@@ -60,5 +58,5 @@ export default new Vuex.Store({
 
   getters,
 
-  actions,
+  actions
 });

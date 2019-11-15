@@ -26,21 +26,21 @@ export default class Master extends Vue {
   private roundDefinitions = [
     {
       phaseName: 'Upkeep',
-      roundAction: this.phaseUpkeep,
+      roundAction: this.phaseUpkeep
     },
     {
       phaseName: 'Purchase Investments',
-      roundAction: null,
+      roundAction: null
     },
     {
       phaseName: 'Trading',
-      roundAction: null,
+      roundAction: null
     },
     {
       phaseName: 'Purchase Accomplishments',
-      roundAction: null,
-    },
-  ]
+      roundAction: null
+    }
+  ];
 
   constructor() {
     super();
@@ -54,6 +54,10 @@ export default class Master extends Vue {
     this.round = 0;
     if (e.key === 'r') {
       this.phaseRunner();
+    }
+
+    if (e.key === 'e') {
+      this.$root.$emit('openEvent', 'open');
     }
   }
 
@@ -85,13 +89,11 @@ export default class Master extends Vue {
   // 4) Purchase accomplishments
   // end round
 
-  phaseHandler(roundInformation:any) {
-    this.$store.dispatch('setPlayerFinished', false).then(() => {
-      this.$store.dispatch('updatePhase', roundInformation.phaseName).then(() => {
-        if (roundInformation.roundAction !== null) {
-          roundInformation.roundAction();
-        }
-      });
+  phaseHandler(roundInformation: any) {
+    this.$store.dispatch('updatePhase', roundInformation.phaseName).then(() => {
+      if (roundInformation.roundAction !== null) {
+        roundInformation.roundAction();
+      }
     });
   }
 
@@ -117,7 +119,7 @@ export default class Master extends Vue {
           initiator: 'Phase: Upkeep',
           category: 'Reduce Upkeep',
           content: '-25 Upkeep',
-          time: new Date(),
+          time: new Date()
         };
         this.$root.$emit('notification', logData);
       });
