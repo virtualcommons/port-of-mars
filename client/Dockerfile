@@ -4,11 +4,11 @@ LABEL maintainer="Allen Lee <allen.lee@asu.edu>"
 
 EXPOSE 3000
 
-WORKDIR /code
+WORKDIR /code/client
 
-COPY package.json /code
+COPY package.json /code/client
 RUN yarn install
 
-COPY . /code
+COPY . /code/client
 
 CMD ["yarn", "serve"]

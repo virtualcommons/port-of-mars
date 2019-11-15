@@ -6,9 +6,9 @@ services:
     restart: always
     image: port-of-mars/client/dev:latest
     volumes:
-      - ./client:/code
-      - ./shared:/shared
-      - /code/node_modules
+      - ./client:/code/client
+      - ./shared:/code/shared
+      - /code/client/node_modules
     command: './dev.sh'
     ports:
       - '8081:8080'
