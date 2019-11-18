@@ -53,14 +53,23 @@ export default class CardAccomplishment extends Vue {
 
 <style scoped>
 .card-accomplishment {
+  height: auto;
   min-height: 7rem;
   width: 80%;
+  margin: 0.5rem;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   text-align: center;
   color: var(--space-white);
   overflow: hidden;
   cursor: pointer;
+  transition: all .2s ease-in-out;
+  /* background-color: blue; */
+}
+
+.card-accomplishment:hover {
+  transform: scale(1.1);
 }
 
 .card-title {
@@ -74,6 +83,7 @@ export default class CardAccomplishment extends Vue {
   background-color: var(--space-white);
   border-radius: 1rem 1rem 0 0;
   color: var(--space-gray);
+  /* background-color: pink; */
 }
 
 .card-title p {
@@ -92,6 +102,7 @@ export default class CardAccomplishment extends Vue {
   border-right: var(--border-white);
   border-bottom: var(--border-white);
   border-radius: 0 0 1rem 1rem;
+  /* background-color: green; */
 }
 
 .card-points {
@@ -120,7 +131,7 @@ export default class CardAccomplishment extends Vue {
 
 .card-cost img {
   margin: 0.125rem;
-  height: 1.25rem;
-  width: 1.25rem;
+  height: 2rem;
+  width: 2rem;
 }
 </style>

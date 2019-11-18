@@ -63,6 +63,13 @@ body {
   --space-gray: #1e2223;
   --space-orange: #c67b5c;
   --space-white: #f5f5f5;
+  --space-white-opaque: rgba(245,245,245, 0.05);
+
+  --color-researcher: rgba(67, 124, 174, 0.2);
+  --color-pioneer: rgba(111, 36, 134, 0.2);
+  --color-curator: rgba(103, 65, 29, 0.2);
+  --color-entrepreneur: rgba(199, 168, 40, 0.2);
+  --color-politician: rgba(0, 0, 0, 0.2);
 
   --font-family-default: 'Space Mono', monospace;
   --font-small: 0.86rem;

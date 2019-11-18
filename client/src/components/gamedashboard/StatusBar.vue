@@ -45,6 +45,7 @@ export default class StatusBar extends Vue {
   margin-left: 0.125rem;
   margin-right: 0.125rem;
   border-radius: 0.25rem;
+  transition: all .4s ease-in-out;
 }
 
 .statusbar-outer-white {
