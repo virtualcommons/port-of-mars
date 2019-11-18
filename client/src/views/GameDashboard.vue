@@ -10,7 +10,7 @@
         <ContainerLeft />
       </BCol>
 
-      <BCol cols="8" class="reset">
+      <BCol cols="8" class="middle reset">
         <BRow class="top reset">
           <ContainerTop />
         </BRow>
@@ -92,6 +92,10 @@ export default class GameDashboard extends Vue {}
   height: 100%;
   position: relative;
   display: flex;
+}
+
+.middle {
+  height: 100%;
 }
 
 .top {

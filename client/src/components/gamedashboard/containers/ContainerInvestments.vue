@@ -47,7 +47,7 @@ export default class ContainerInvestments extends Vue {
   // REFACTOR TO GETTERS
   get iD(): any {
     const rv = this.$store.state.localInvestments.returnValues; // eslint-disable-line no-use-before-define
-    console.log(rv); // eslint-disable-line no-use-before-define
+    // console.log(rv); // eslint-disable-line no-use-before-define
     // console.log(returnValues); // eslint-disable-line no-use-before-define
     // const sorted = Object.keys(rv).sort(
     //   (a, b) => rv[a].currentCost - rv[b].currentCost
@@ -57,7 +57,7 @@ export default class ContainerInvestments extends Vue {
       return prev;
     }, [])
 
-    console.log(costData); // eslint-disable-line no-use-before-define
+    // console.log(costData); // eslint-disable-line no-use-before-define
     return costData;
   }
 
