@@ -1,5 +1,5 @@
 <template>
-  <div class="cm-accomplishment" :style="opacity">
+  <div class="cm-accomplishment" :style='opacity'>
     <div class="cm-accomplishment-title">
       <p>{{ this.cardData.label }}</p>
     </div>
@@ -13,9 +13,7 @@
       </p>
     </div>
     <p class="cm-accomplishment-investments-title">( <span>Cost</span> )</p>
-    <button class="cm-accomplishment-purchase-button" @click="handlePurchase">
-      {{ buyButton }}
-    </button>
+    <button @click='handlePurchase'>{{ canBuy }}</button>
   </div>
 </template>
 
@@ -57,6 +55,7 @@ export default class CardAccomplishmentView extends Vue {
       this.$store.dispatch('purchaseAccomplishment', this.cardData);
     }
   }
+
 }
 </script>
 
