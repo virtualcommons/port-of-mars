@@ -1,5 +1,5 @@
 <template>
-  <div class="cm-accomplishment">
+  <div class="cm-accomplishment" :style='opacity'>
     <div class="cm-accomplishment-title">
       <p>{{ this.cardData.title }}</p>
     </div>
@@ -16,7 +16,7 @@
       </p>
     </div>
     <p class="cm-accomplishment-investments-title">( <span>Cost</span> )</p>
-    <p>You {{ canBuy }} have enough influences to buy this card</p>
+    <button @click='handlePurchase'>{{ canBuy }}</button>
   </div>
 </template>
 
@@ -34,21 +34,18 @@ export default class CardAccomplishmentView extends Vue {
     }),
   }) private cardData;
 
+  opacity = '';
+
   get canBuy() {
-    const investments = this.$store.state.localInvestments.returnSafeValues;
-
-    let canBuy = true;
-    this.cardData.total.forEach((investment) => {
-      investments[investment].persistentInventory -= 1;
-
-      if (investments[investment].persistentInventory <= -1) {
-        canBuy = false;
-      }
-    });
-
-    console.log(canBuy);
-    return canBuy ? '' : 'do not';
+    const b = this.$store.state.localInvestments.canPurchaseAccomplishment(this.cardData.total,true);
+    return b ? 'Purchase accomplishment' : 'You cannot purchase this';
   }
+
+  handlePurchase(){
+    const payload = {title:this.cardData.title, cost:this.cardData.total}
+    this.$store.dispatch('purchaseAccomplishment',payload);
+  }
+
 }
 </script>
 

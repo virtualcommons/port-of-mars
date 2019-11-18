@@ -85,8 +85,27 @@ class InvestmentsModel {
       return this.investments;
     }
 
-    get returnSafeValues() {
-      return _.cloneDeep(this.investments);
+    canPurchaseAccomplishment(accomplishemntCost:[], safety:boolean) {
+      let investments = safety ? _.cloneDeep(this.investments) : this.investments;
+
+      let canBuy = true;
+      accomplishemntCost.forEach((investment) => {
+        investments[investment].persistentInventory -= 1;
+
+        if (investments[investment].persistentInventory <= -1) {
+          canBuy = false;
+        }
+      });
+      return canBuy;
+    }
+
+    purchaseAccomplishment(accomplishementCost:[]){
+      if(this.canPurchaseAccomplishment(accomplishementCost,true)){
+        this.canPurchaseAccomplishment(accomplishementCost,false);
+        return true;
+      } else{
+        return false;
+      }
     }
 
     get localDecrement() {
@@ -99,6 +118,7 @@ class InvestmentsModel {
 }
 
 interface InvestmentCosts{
+    [key:string]:number
     upkeep:number,
     finance:number,
     legacy:number,

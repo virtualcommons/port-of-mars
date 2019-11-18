@@ -1,4 +1,5 @@
 import { ChatMessageData } from 'shared/types';
+import { BaseInvestmentCosts, GetAccomplishmentsByPerson, buyAccomplishment } from "@/models";
 
 export default {
   SET_ACCS(state: any, payload: any) {
@@ -44,15 +45,29 @@ export default {
   SET_CARD_MODAL_DATA(state: any, payload: object) {
     state.cardData = payload;
   },
-  SET_PLAYER_ROLE(state: any, payload: any) {
+  SET_PLAYER_ROLE(state: any, payload: string) {
     state.playerRole = payload;
+    
+    Object.keys(BaseInvestmentCosts[payload]).forEach((key) => {
+      state.localInvestments.updateCurrentCost(key, BaseInvestmentCosts[payload][key]);
+    });
+
+    //state.activeAccomplishmentCards = GetAccomplishmentsByPerson(payload,3);
   },
   SET_PLAYER_FINISHED(state: any, payload: boolean) {
     state.playerFinishedWithPhase = payload;
   },
 
+  // accomplishments
   SET_ACTIVE_ACCOMPLISHMENTS(state: any, payload: any) {
-    state.activeAccomplishmentCards = payload;
+    //state.activeAccomplishmentCards = payload;
+    state.activeAccomplishmentCards = GetAccomplishmentsByPerson(state.playerRole,payload);
+  },
+  PURCHASE_ACCOMPLISHMENT(state:any, payload:any){
+    let bought = state.localInvestments.purchaseAccomplishment(payload.cost);
+    if(bought){
+      buyAccomplishment(payload.title);
+    }
   },
   /**
    * SET_LAYOUT() mutation

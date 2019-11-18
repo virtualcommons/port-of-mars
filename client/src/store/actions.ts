@@ -46,6 +46,9 @@ export default {
   setActiveAccomplishments(context: any, payload: any) {
     context.commit('SET_ACTIVE_ACCOMPLISHMENTS', payload);
   },
+  purchaseAccomplishment(context:any, payload:any) {
+    context.commit('PURCHASE_ACCOMPLISHMENT',payload);
+  },
 
   // investments
   changeLocalInvestment(context: any, payload: any) {

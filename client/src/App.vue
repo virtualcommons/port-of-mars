@@ -65,7 +65,7 @@ body {
   --space-white: #f5f5f5;
 
   --font-family-default: 'Space Mono', monospace;
-  --font-small: 0.75rem;
+  --font-small: 0.86rem;
   --font-med: 1rem;
   --font-large: 1.5rem;
 

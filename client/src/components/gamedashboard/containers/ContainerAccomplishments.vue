@@ -16,6 +16,7 @@
 import { Vue, Component } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
 import CardAccomplishment from '@/components/gamedashboard/cards/CardAccomplishment.vue';
+import { accomplishments } from '../../../../../server/src/data';
 
 @Component({
   components: {
