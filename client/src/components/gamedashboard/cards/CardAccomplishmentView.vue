@@ -15,7 +15,7 @@
         />
       </p>
     </div>
-    <p class="cm-accomplishment-investments-title">( <span>Cost</span> )</p>
+    <p class="cm-accomplishment-cost-title">( <span>Cost</span> )</p>
     <p>You {{ canBuy }} have enough influences to buy this card</p>
   </div>
 </template>

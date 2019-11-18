@@ -47,19 +47,33 @@ export default class EventModal extends Vue {
 }
 
 .em {
+  height: 80%;
+  width: 100%;
+  max-height: var(--max-screen-height);
+  max-width: var(--max-screen-width);
+  min-height: var(--min-screen-height);
+  min-width: var(--min-screen-width);
+  padding: 1rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   color: var(--space-gray);
+  /* background-color: pink; */
 }
 
 .em-header {
   font-size: var(--font-large);
+  border-bottom: 0.25rem solid var(--space-gray);
 }
 
 .em-content {
+  width: 50%;
+  text-align: center;
+  padding: 1rem;
   font-size: var(--font-med);
+  color: var(--space-white);
+  background-color: var(--space-gray);
 }
 
 .em-close-button {

@@ -10,7 +10,6 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 
 @Component({})
 export default class CardEvent extends Vue {
-  // Note: need to pass in actual data
   @Prop({ default: () => ({ name: '---', flavorText: '---', effect: '---' }) }) event;
 
   handleClick() {
@@ -31,14 +30,14 @@ export default class CardEvent extends Vue {
   height: 12rem;
   width: 30%;
   padding: 0.5rem;
+  border: var(--border-white);
+  border-radius: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: var(--border-white);
-  border-radius: 1rem;
-  cursor: pointer;
   text-align: center;
+  cursor: pointer;
   transition: all .2s ease-in-out;
 }
 
@@ -47,17 +46,16 @@ export default class CardEvent extends Vue {
 }
 
 .card-name {
-  color: var(--space-orange);
-  text-transform: capitalize;
-  text-align: center;
   margin: 0 1rem;
+  text-align: center;
+  text-transform: capitalize;
+  color: var(--space-orange);
 }
 
 .card-effect {
-  /* background-color: orange; */
-  font-size: var(--font-small);
   margin-top: 0.5rem;
   margin-bottom: 0;
+  font-size: var(--font-small);
   color: var(--space-white);
 }
 </style>

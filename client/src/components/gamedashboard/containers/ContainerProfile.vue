@@ -15,9 +15,13 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 
 @Component({})
 export default class ContainerProfile extends Vue {
-  @Prop({ default: 'Curator' }) private playerRole!: string;
+  get playerRole() {
+    return this.$store.state.playerRole;
+  }
 
-  @Prop({ default: 0 }) private playerScore!: number;
+  get playerScore() {
+    return this.$store.state.playerScore;
+  }
 
   get avatarURL(): string {
     // eslint-disable-next-line global-require,import/no-dynamic-require
@@ -27,22 +31,20 @@ export default class ContainerProfile extends Vue {
 </script>
 
 <style scoped>
-
 @media (max-width: 1680px) {
   .profile {
     flex-direction: column-reverse;
   }
 
   .profile-frame {
-    margin-right: 0 !important;
     margin-top: 2rem;
+    margin-right: 0 !important;
   }
 }
 
 .profile {
-  /* height: 100%; */
-  flex: 1;
   width: 100%;
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -54,14 +56,11 @@ export default class ContainerProfile extends Vue {
 }
 
 .profile-info-player {
-  font-size: var(--font-large);
-  background-color: var(--space-white);
   padding: 0 0.5rem;
-  /* padding-right: 1rem; */
-  /* border-radius: 0 0.75rem 0.75rem 0; */
-  color: var(--space-gray);
-  /* border-bottom: 0.125rem solid var(--space-orange); */
   margin-bottom: 0.5rem;
+  font-size: var(--font-large);
+  color: var(--space-gray);
+  background-color: var(--space-white);
 }
 
 .profile-info-score {
@@ -71,13 +70,13 @@ export default class ContainerProfile extends Vue {
 .profile-frame {
   height: 5rem;
   width: 5rem;
-  margin-right: 1rem;
   padding: 0.5rem;
+  border: 0.125rem solid var(--space-orange);
+  border-radius: 50%;
+  margin-right: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 0.125rem solid var(--space-orange);
-  border-radius: 50%;
   background-color: var(--space-white-opaque);
 }
 

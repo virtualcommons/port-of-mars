@@ -31,19 +31,17 @@ export default class StatusBar extends Vue {
 
 <style lang="css" scoped>
 .statusbar-outer {
+  height: 1rem !important;
+  border-radius: 0.50rem;
   display: flex;
   align-items: center;
-  /* background-color: green; */
-  height: 1rem !important;
-  /* flex-grow: 100; */
-  border-radius: 0.50rem;
 }
 
 .statusbar-inner {
   height: 0.50rem !important;
   margin: 0.125rem;
-  margin-left: 0.125rem;
   margin-right: 0.125rem;
+  margin-left: 0.125rem;
   border-radius: 0.25rem;
   transition: all .4s ease-in-out;
 }

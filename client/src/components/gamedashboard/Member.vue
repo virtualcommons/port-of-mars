@@ -29,26 +29,25 @@ export default class Member extends Vue {
   }
 
   handleClick() {
-    this.$store.dispatch('setTradingMember', this.playerRole);
-    // async (does this need a callback)?
-    this.$root.$emit('openTrading', 'open');
+    this.$store.dispatch('setTradingMember', this.playerRole).then(() => {
+      this.$root.$emit('openTrading', 'open');
+    });
   }
 }
 </script>
 
 <style scoped>
 .member {
-  /* overflow: hidden; */
+  height: 4rem;
   width: 90%;
   padding: 0.25rem 1rem;
+  border: var(--border-white);
+  border-radius: 1rem;
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: relative;
-  height: 4rem;
   background-color: rgba(245, 245, 245, 0.2);
-  border: var(--border-white);
-  border-radius: 1rem;
   cursor: pointer;
   transition: all .2s ease-in-out;
 }
@@ -58,6 +57,7 @@ export default class Member extends Vue {
 }
 
 .member-notif {
+  border-radius: 50%;
   position: absolute;
   left: -0.75rem;
   top: -0.75rem;
@@ -67,27 +67,26 @@ export default class Member extends Vue {
   align-items: center;
   justify-content: center;
   background-color: var(--space-orange);
-  border-radius: 50%;
 }
 
 .member-notif-num {
-  text-align: center;
-  font-size: var(--font-small) !important;
-  color: var(--space-gray) !important;
   margin: 0;
+  font-size: var(--font-small) !important;
+  text-align: center;
+  color: var(--space-gray) !important;
 }
 
 .member-score {
+  margin: 0;
   color: var(--space-white);
   font-size: var(--font-large);
-  margin: 0;
 }
 
 .member-role {
   padding: 0 0.25rem;
-  color: var(--space-white);
-  font-size: var(--font-med);
   margin: 0;
+  font-size: var(--font-med);
+  color: var(--space-white);
 }
 
 .member-img {
