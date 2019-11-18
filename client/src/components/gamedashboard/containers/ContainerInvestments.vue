@@ -4,27 +4,25 @@
       <p class="investments-topbar-title">Investments</p>
       <StatusBar
         class="investments-topbar-statusbar"
-        :setWidth="`${decrementInvestmentCount* 10}`"
+        :setWidth="`${decrementInvestmentCount * 10}`"
         :colorOuter="'statusbar-outer-gray'"
         :colorInner="'statusbar-inner-gray'"
-         id="v-step-10"
+        id="v-step-10"
       />
-      <p class="investments-topbar-status">
-        ( {{ decrementInvestmentCount }} )
-      </p>
+      <p class="investments-topbar-status">( {{ decrementInvestmentCount }} )</p>
     </BRow>
 
     <BRow class="investments-cards">
       <BRow class="investments-cards-top">
-        <CardInvestment :investmentData="iD[[i[2]]]" id="v-step-11" />
-        <CardInvestment :investmentData="iD[[i[3]]]" />
-        <CardInvestment :investmentData="iD[[i[0]]]" />
+        <CardInvestment :investmentData="iD[2]" id="v-step-11" />
+        <CardInvestment :investmentData="iD[3]" />
+        <CardInvestment :investmentData="iD[0]" />
       </BRow>
 
       <BRow class="investments-cards-bottom">
-        <CardInvestment :investmentData="iD[[i[4]]]" id="v-step-14" />
-        <CardInvestment :investmentData="iD[[i[5]]]" />
-        <CardInvestment :investmentData="iD[[i[1]]]" />
+        <CardInvestment :investmentData="iD[4]" id="v-step-14" />
+        <CardInvestment :investmentData="iD[5]" />
+        <CardInvestment :investmentData="iD[1]" />
       </BRow>
     </BRow>
   </BContainer>
@@ -42,13 +40,31 @@ import CardInvestment from '@/components/gamedashboard/cards/CardInvestment.vue'
     BRow,
     BCol,
     StatusBar,
-    CardInvestment,
-  },
+    CardInvestment
+  }
 })
 export default class ContainerInvestments extends Vue {
-  private iD: object = this.$store.state.localInvestments.returnValues;
+  // REFACTOR TO GETTERS
+  get iD(): any {
+    const rv = this.$store.state.localInvestments.returnValues; // eslint-disable-line no-use-before-define
+    // console.log(rv); // eslint-disable-line no-use-before-define
+    // console.log(returnValues); // eslint-disable-line no-use-before-define
+    // const sorted = Object.keys(rv).sort(
+    //   (a, b) => rv[a].currentCost - rv[b].currentCost
+    // );
+    const costData = Object.keys(rv).reduce((prev, curr) => {
+      prev.push(rv[curr]);
+      return prev;
+    }, [])
 
-  i = Object.keys(this.iD).sort((a, b) => this.iD[a].currentCost - this.iD[b].currentCost)
+    // console.log(costData); // eslint-disable-line no-use-before-define
+    return costData;
+  }
+
+
+  // private iD: object = this.$store.state.localInvestments.returnValues;
+
+  // i = Object.keys(this.iD).sort((a, b) => this.iD[a].currentCost - this.iD[b].currentCost);
 
   get decrementInvestmentCount() {
     return this.$store.state.localInvestments.localDecrement;
@@ -71,7 +87,7 @@ export default class ContainerInvestments extends Vue {
   height: 10%;
   width: 100%;
   margin: 0;
-  padding: 0.25rem 0.5rem;
+  padding: 0.25rem 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -106,7 +122,8 @@ export default class ContainerInvestments extends Vue {
   border-right: var(--border-white);
 }
 
-.investments-cards-top, .investments-cards-bottom {
+.investments-cards-top,
+.investments-cards-bottom {
   height: 50%;
   width: 100%;
   margin: 0;

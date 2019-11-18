@@ -1,6 +1,6 @@
 <template>
   <div class="profile">
-    <div class="profile-frame" id="v-step-0" @click="handleClick">
+    <div class="profile-frame" id="v-step-0">
       <img :src="avatarURL" alt="Player" class="profile-img" />
     </div>
     <div class="profile-info">
@@ -22,10 +22,6 @@ export default class ContainerProfile extends Vue {
   get avatarURL(): string {
     // eslint-disable-next-line global-require,import/no-dynamic-require
     return require(`@/assets/characters/${this.playerRole}.png`);
-  }
-
-  handleClick() {
-    this.$root.$emit('openProfile', 'open');
   }
 }
 </script>
@@ -83,12 +79,6 @@ export default class ContainerProfile extends Vue {
   border: 0.125rem solid var(--space-orange);
   border-radius: 50%;
   background-color: var(--space-white-opaque);
-  cursor: pointer;
-  transition: all .2s ease-in-out;
-}
-
-.profile-frame:hover {
-  transform: scale(1.1);
 }
 
 .profile-img {

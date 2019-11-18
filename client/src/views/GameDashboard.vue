@@ -1,18 +1,16 @@
 <template>
   <BContainer class="game-dashboard reset">
     <MasterComponent />
-    <ProfileModal />
     <TradingModal />
     <ConfirmationModal />
     <CardModal />
     <EventModal />
     <BRow class="board reset">
-
       <BCol cols="2" class="left reset">
         <ContainerLeft />
       </BCol>
 
-      <BCol cols="8" class="reset">
+      <BCol cols="8" class="middle reset">
         <BRow class="top reset">
           <ContainerTop />
         </BRow>
@@ -24,7 +22,6 @@
       <BCol cols="2" class="right reset">
         <ContainerRight />
       </BCol>
-
     </BRow>
   </BContainer>
 </template>
@@ -37,7 +34,6 @@ import ContainerBottom from '@/components/gamedashboard/containers/ContainerBott
 import ContainerLeft from '@/components/gamedashboard/containers/ContainerLeft.vue';
 import ContainerRight from '@/components/gamedashboard/containers/ContainerRight.vue';
 import MasterComponent from '@/components/MasterComponent.vue';
-import ProfileModal from '@/components/gamedashboard/ProfileModal.vue';
 import CardModal from '@/components/gamedashboard/cards/CardModal.vue';
 import TradingModal from '@/components/gamedashboard/trading/TradingModal.vue';
 import ConfirmationModal from '../components/gamedashboard/ConfirmationModal.vue';
@@ -49,7 +45,6 @@ import EventModal from '../components/gamedashboard/EventModal.vue';
     BRow,
     BCol,
     MasterComponent,
-    ProfileModal,
     TradingModal,
     CardModal,
     ConfirmationModal,
@@ -57,8 +52,8 @@ import EventModal from '../components/gamedashboard/EventModal.vue';
     ContainerLeft,
     ContainerTop,
     ContainerBottom,
-    ContainerRight,
-  },
+    ContainerRight
+  }
 })
 export default class GameDashboard extends Vue {}
 </script>
@@ -92,10 +87,15 @@ export default class GameDashboard extends Vue {}
   background-color: var(--space-gray);
 }
 
-.left, .right {
+.left,
+.right {
   height: 100%;
   position: relative;
   display: flex;
+}
+
+.middle {
+  height: 100%;
 }
 
 .top {
