@@ -65,11 +65,11 @@ body {
   --space-white: #f5f5f5;
   --space-white-opaque: rgba(245,245,245, 0.05);
 
-  --color-researcher: rgba(67, 124, 174, 0.2);
-  --color-pioneer: rgba(111, 36, 134, 0.2);
-  --color-curator: rgba(103, 65, 29, 0.2);
-  --color-entrepreneur: rgba(199, 168, 40, 0.2);
-  --color-politician: rgba(0, 0, 0, 0.2);
+  --color-Researcher: rgba(67, 124, 174, 0.2);
+  --color-Pioneer: rgba(111, 36, 134, 0.2);
+  --color-Curator: rgba(103, 65, 29, 0.2);
+  --color-Entrepreneur: rgba(199, 168, 40, 0.2);
+  --color-Politician: rgba(0, 0, 0, 0.2);
 
   --font-family-default: 'Space Mono', monospace;
   --font-small: 0.75rem;

@@ -8,7 +8,6 @@
   >
     <p class="notification-close" v-if="hover || inView === 'hide'">Close</p>
     <p class="notification-message" v-if="!hover && inView !== 'hide'">{{ message }}</p>
-    <!-- will be updated on props -->
   </div>
 </template>
 
@@ -17,9 +16,7 @@ import { Vue, Component } from 'vue-property-decorator';
 
 @Component
 export default class Notification extends Vue {
-  // need to use transition wrapper!
-  private dismiss = 'dismiss...';
-
+  // Note: may want to use transition wrapper
   private hover = false;
 
   get message() {
@@ -35,7 +32,6 @@ export default class Notification extends Vue {
   }
 
   viewAnim() {
-    // console.log(this.inView); // eslint-disable-line no-use-before-define
     if (this.inView === 'reset') {
       return '';
     }
@@ -56,7 +52,7 @@ export default class Notification extends Vue {
   }
 
   mounted() {
-    // Note: may want to think about this implementation...
+    // Note: may want to refactor this...
     this.$root.$on('notification', (data: any) => {
       this.$store.dispatch('addToMarsLog', data).then(() => {
         if (this.inView === 'inactive' || this.inView === 'hide') {
@@ -76,50 +72,31 @@ export default class Notification extends Vue {
 
 <style scoped>
 .notification {
+  min-height: 5rem;
+  width: 100%;
+  padding: 0.5rem;
+  margin: 1rem 0;
+  border-radius: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  min-height: 5rem;
   background-color: var(--space-orange);
-  border-radius: 1rem;
-  margin: 1rem 0;
-  padding: 0.5rem;
   cursor: pointer;
-  /* background-color: blue; */
   transition: all .2s ease-in-out;
 }
 
-.notification:hover {
+.notification:hover, .notification-hide {
   border: var(--border-white);
-  background-color: var(--space-gray);
   color: var(--space-white);
-}
-
-.notification-hide {
-  border: var(--border-white);
   background-color: var(--space-gray);
-  color: var(--space-white);
 }
 
 .notification-inactive {
   visibility: hidden;
 }
 
-.notification-message {
-  /* height: 100%; */
-  /* width: 100%; */
+.notification-close, .notification-message {
   font-size: var(--font-small);
   margin: 0;
-  /* background-color: green; */
-  /* text-align: center; */
-}
-
-.notification-close {
-  /* height: 100%; */
-  /* width: 100%; */
-  font-size: var(--font-small);
-  margin: 0;
-  /* background-color: blue; */
 }
 </style>
