@@ -4,7 +4,6 @@
     <v-tour name="gameTour" :steps="steps" :callbacks="tourCallbacks" :options="tourOptions">
       <template v-slot="tour">
         <transition name="fade">
-          <!-- eslint-disable vue/no-use-v-if-with-v-for,vue/no-confusing-v-for-v-if -->
           <v-step
             v-if="tour.currentStep === index"
             v-for="(step, index) of tour.steps"
@@ -43,9 +42,14 @@ Vue.use(VueTour);
   name: 'tutorial-layout'
 })
 export default class TutorialLayout extends Vue {
+  TOUR_ACTIVE_CLASS: string = 'tour-active';
+  BODY_TOUR: string = 'in-tour';
+
   tourCallbacks = {
-    onPreviousStep: TutorialLayout.previousStepCallback,
-    onNextStep: TutorialLayout.nextStepCallback
+    onStart: this.startTourCallback,
+    onPreviousStep: this.previousStepCallback,
+    onNextStep: this.nextStepCallback,
+    onStop: this.stopTourCallback,
   };
 
   tourOptions = {
@@ -216,14 +220,50 @@ export default class TutorialLayout extends Vue {
     }
   ];
 
-  static previousStepCallback(currentStep: any) {
+  startTourCallback() {
+    const currentStepElement = document.querySelector(this.steps[ 0 ].target);
+
+    // add in-tour class to body
+    document.body.classList.add(this.BODY_TOUR);
+
+    // add active class for first step
+    currentStepElement.classList.add(this.TOUR_ACTIVE_CLASS);
+  }
+
+  previousStepCallback(currentStep: any) {
+    const currentStepElement = document.querySelector(this.steps[currentStep].target);
+    const previousStepElement = document.querySelector(this.steps[currentStep - 1].target);
+
+    // remove active step from current step
+    currentStepElement.classList.remove(this.TOUR_ACTIVE_CLASS);
+
+    // add active class to previous step
+    previousStepElement.classList.add(this.TOUR_ACTIVE_CLASS);
+
     console.log(`[Vue Tour] A custom previousStep callback has been called on step
                 ${currentStep + 1}`);
   }
 
-  static nextStepCallback(currentStep: any) {
+  nextStepCallback(currentStep: any) {
+    const currentStepElement = document.querySelector(this.steps[currentStep].target);
+    const nextStepElement = document.querySelector(this.steps[currentStep + 1].target);
+
+    // remove active step from current step
+    currentStepElement.classList.remove(this.TOUR_ACTIVE_CLASS);
+
+    // add active step to next step
+    nextStepElement.classList.add(this.TOUR_ACTIVE_CLASS);
+
     console.log(`[Vue Tour] A custom nextStep callback has been called on step
                 ${currentStep + 1}`);
+  }
+
+  stopTourCallback() {
+    // remove in-tour from body
+    document.body.classList.remove(this.BODY_TOUR);
+
+    // remove active class from body
+    document.querySelector(`.${this.TOUR_ACTIVE_CLASS}`).classList.remove(this.TOUR_ACTIVE_CLASS);
   }
 
   /**
@@ -232,7 +272,6 @@ export default class TutorialLayout extends Vue {
    *
    */
   mounted() {
-    // @ts-ignore
     this.$tours.gameTour.start();
   }
 }
@@ -243,4 +282,18 @@ export default class TutorialLayout extends Vue {
   height: 100% !important;
   width: 100% !important;
 }
+
+/* custom tour css: highlight an element
+
+body .in-tour {
+  pointer-events: none;
+}
+
+.v-step {
+  z-index: 9999;
+} */
+
+
+
+
 </style>

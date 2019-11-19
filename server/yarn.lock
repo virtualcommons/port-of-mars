@@ -78,7 +78,6 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
-<<<<<<< HEAD
 "@parse/node-apn@3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@parse/node-apn/-/node-apn-3.1.0.tgz#27fa950699cd3f9c292fc8a445a0ac7e4f86e63c"
@@ -90,8 +89,6 @@
     node-forge "^0.7.1"
     verror "^1.10.0"
 
-=======
->>>>>>> feat: remove the option to skip tour
 "@types/body-parser@*":
   version "1.17.1"
   resolved "https://registry.yarnpkg.com/@types/body-parser/-/body-parser-1.17.1.tgz#18fcf61768fb5c30ccc508c21d6fd2e8b3bf7897"
@@ -129,24 +126,15 @@
     "@types/node" "*"
     "@types/range-parser" "*"
 
-<<<<<<< HEAD
-"@types/express@*", "@types/express@^4.17.2":
-  version "4.17.2"
-  resolved "https://registry.yarnpkg.com/@types/express/-/express-4.17.2.tgz#a0fb7a23d8855bac31bc01d5a58cadd9b2173e6c"
-  integrity sha512-5mHFNyavtLoJmnusB8OKJ5bshSzw+qkMIBAobLrIM48HJvunFva9mOa6aBwh64lBFyNwBbs0xiEFuj4eU/NjCA==
-=======
 "@types/express@*":
   version "4.17.1"
   resolved "https://registry.yarnpkg.com/@types/express/-/express-4.17.1.tgz#4cf7849ae3b47125a567dfee18bfca4254b88c5c"
   integrity sha512-VfH/XCP0QbQk5B5puLqTLEeFgR8lfCJHZJKkInZ9mkYd+u8byX0kztXEQxEk4wZXJs8HI+7km2ALXjn4YKcX9w==
->>>>>>> feat: remove the option to skip tour
   dependencies:
     "@types/body-parser" "*"
     "@types/express-serve-static-core" "*"
     "@types/serve-static" "*"
 
-<<<<<<< HEAD
-=======
 "@types/express@^4.17.2":
   version "4.17.2"
   resolved "https://registry.yarnpkg.com/@types/express/-/express-4.17.2.tgz#a0fb7a23d8855bac31bc01d5a58cadd9b2173e6c"
@@ -156,7 +144,6 @@
     "@types/express-serve-static-core" "*"
     "@types/serve-static" "*"
 
->>>>>>> feat: remove the option to skip tour
 "@types/istanbul-lib-coverage@*", "@types/istanbul-lib-coverage@^2.0.0":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@types/istanbul-lib-coverage/-/istanbul-lib-coverage-2.0.1.tgz#42995b446db9a48a11a07ec083499a860e9138ff"
@@ -168,7 +155,6 @@
   integrity sha512-3BUTyMzbZa2DtDI2BkERNC6jJw2Mr2Y0oGI7mRxYNBPxppbtEK1F66u3bKwU2g+wxwWI7PAoRpJnOY1grJqzHg==
   dependencies:
     "@types/istanbul-lib-coverage" "*"
-<<<<<<< HEAD
 
 "@types/istanbul-reports@^1.1.1":
   version "1.1.1"
@@ -183,22 +169,6 @@
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-24.0.23.tgz#046f8e2ade026fe831623e361a36b6fb9a4463e4"
   integrity sha512-L7MBvwfNpe7yVPTXLn32df/EK+AMBFAFvZrRuArGs7npEWnlziUXK+5GMIUTI4NIuwok3XibsjXCs5HxviYXjg==
   dependencies:
-=======
-
-"@types/istanbul-reports@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@types/istanbul-reports/-/istanbul-reports-1.1.1.tgz#7a8cbf6a406f36c8add871625b278eaf0b0d255a"
-  integrity sha512-UpYjBi8xefVChsCoBpKShdxTllC9pwISirfoZsUa2AAdQg/Jd2KQGtSbw+ya7GPo7x/wAPlH6JBhKhAsXUEZNA==
-  dependencies:
-    "@types/istanbul-lib-coverage" "*"
-    "@types/istanbul-lib-report" "*"
-
-"@types/jest@^24.0.22":
-  version "24.0.23"
-  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-24.0.23.tgz#046f8e2ade026fe831623e361a36b6fb9a4463e4"
-  integrity sha512-L7MBvwfNpe7yVPTXLn32df/EK+AMBFAFvZrRuArGs7npEWnlziUXK+5GMIUTI4NIuwok3XibsjXCs5HxviYXjg==
-  dependencies:
->>>>>>> feat: remove the option to skip tour
     jest-diff "^24.3.0"
 
 "@types/json5@^0.0.29":
@@ -225,15 +195,9 @@
     "@types/node" "*"
 
 "@types/mongoose@^5.3.27":
-<<<<<<< HEAD
-  version "5.5.31"
-  resolved "https://registry.yarnpkg.com/@types/mongoose/-/mongoose-5.5.31.tgz#40ae1ff4aa1bc95d5404e7ce57176337a1e8199f"
-  integrity sha512-NNAEmGgHlyLddywanglwDH9fnQi2oKUetUI0/fSc1lep9HE30ayWkIvAvTAIOMiaaQna1+KDAMydrt9TyLUmdw==
-=======
   version "5.5.30"
   resolved "https://registry.yarnpkg.com/@types/mongoose/-/mongoose-5.5.30.tgz#8b6b06e4142771204ae1abec5773157b8a94ec53"
   integrity sha512-LQ7Q/MoRLhtYn1zGefsTrobeg4hieXe6MGYM2plbZHhqf4Ud1zRuEwjDQIjCgDIyMPnACiyCvPMTyzHaoSp0SA==
->>>>>>> feat: remove the option to skip tour
   dependencies:
     "@types/mongodb" "*"
     "@types/node" "*"
@@ -312,29 +276,10 @@ ajv@^5.1.0:
     fast-json-stable-stringify "^2.0.0"
     json-schema-traverse "^0.3.0"
 
-<<<<<<< HEAD
 ajv@^6.5.5:
   version "6.10.2"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.10.2.tgz#d3cea04d6b017b2894ad69040fec8b623eb4bd52"
   integrity sha512-TXtUUEYHuaTEbLZWIKUr5pmBuhDLy+8KYtPYdcV8qC+pOZL+NKqYwvWSRrVXHn+ZmRRAu8vJTAznH7Oag6RVRw==
-=======
-ansi-regex@^4.0.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/ansi-regex/-/ansi-regex-4.1.0.tgz#8b9f8f08cf1acb843756a839ca8c7e3168c51997"
-  integrity sha512-1apePfXM1UOSqw0o9IiFAovVz9M5S1Dg+4TrDwfMewQ6p/rmMueb7tWZjQ1rx4Loy1ArBggoqGpfqqdI4rondg==
-
-ansi-styles@^3.2.0, ansi-styles@^3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-3.2.1.tgz#41fbb20243e50b12be0f04b8dedbf07520ce841d"
-  integrity sha512-VT0ZI6kZRdTh8YyJw3SMbYm/u+NqfsAxEpWO0Pf9sq8/e94WxxOpPKx9FR1FlyCtOVDNOQ+8ntlqFxiRc+r5qA==
-  dependencies:
-    color-convert "^1.9.0"
-
-apn@2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/apn/-/apn-2.2.0.tgz#211ae4adf31b115a033342376b7ce23a5d18c393"
-  integrity sha512-YIypYzPVJA9wzNBLKZ/mq2l1IZX/2FadPvwmSv4ZeR0VH7xdNITQ6Pucgh0Uw6ZZKC+XwheaJ57DFZAhJ0FvPg==
->>>>>>> feat: remove the option to skip tour
   dependencies:
     fast-deep-equal "^2.0.1"
     fast-json-stable-stringify "^2.0.0"
@@ -541,11 +486,7 @@ colyseus.js@^0.11.0:
     notepack.io "^2.1.3"
     strong-events "^1.0.5"
 
-<<<<<<< HEAD
 colyseus@^0.11.22:
-=======
-colyseus@^0.11.20:
->>>>>>> feat: remove the option to skip tour
   version "0.11.22"
   resolved "https://registry.yarnpkg.com/colyseus/-/colyseus-0.11.22.tgz#cc314ca1ef5937cc0c16b0c88222d5ca2d41dec3"
   integrity sha512-1ruQ/tU3PUTi2vZkEdXxGnHBav+mE6ZT/Xu0ReujmUkGgznZYWSpIzPi9As00ofzbnaaPNRZuFsDFa2T94eAwA==
@@ -772,14 +713,11 @@ escape-string-regexp@^1.0.5:
   resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz#1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
   integrity sha1-G2HAViGQqN/2rjuyzwIAyhMLhtQ=
 
-<<<<<<< HEAD
 esprima@^4.0.0:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/esprima/-/esprima-4.0.1.tgz#13b04cdb3e6c5d19df91ab6987a8695619b0aa71"
   integrity sha512-eGuFFw7Upda+g4p+QHvnW0RyTX/SVeJBDM/gCtMARO0cLuT2HcEKnTPvhjV6aGeqrCB/sbNop0Kszm0jsaWU4A==
 
-=======
->>>>>>> feat: remove the option to skip tour
 etag@~1.8.1:
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
@@ -960,7 +898,6 @@ har-validator@~5.0.3:
     ajv "^5.1.0"
     har-schema "^2.0.0"
 
-<<<<<<< HEAD
 har-validator@~5.1.0:
   version "5.1.3"
   resolved "https://registry.yarnpkg.com/har-validator/-/har-validator-5.1.3.tgz#1ef89ebd3e4996557675eed9893110dc350fa080"
@@ -969,8 +906,6 @@ har-validator@~5.1.0:
     ajv "^6.5.5"
     har-schema "^2.0.0"
 
-=======
->>>>>>> feat: remove the option to skip tour
 has-flag@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/has-flag/-/has-flag-3.0.0.tgz#b5d454dc2199ae225699f3467e5a07f3b955bafd"
@@ -1112,7 +1047,6 @@ jest-get-type@^24.9.0:
   resolved "https://registry.yarnpkg.com/jest-get-type/-/jest-get-type-24.9.0.tgz#1684a0c8a50f2e4901b6644ae861f579eed2ef0e"
   integrity sha512-lUseMzAley4LhIcpSP9Jf+fTrQ4a1yHQwLNeeVa2cEmbCGeoZAtYPOIv8JaxLD/sUpKxetKGP+gsHl8f8TSj8Q==
 
-<<<<<<< HEAD
 js-yaml@^3.13.1:
   version "3.13.1"
   resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.13.1.tgz#aff151b30bfdfa8e49e05da22e7415e9dfa37847"
@@ -1121,8 +1055,6 @@ js-yaml@^3.13.1:
     argparse "^1.0.7"
     esprima "^4.0.0"
 
-=======
->>>>>>> feat: remove the option to skip tour
 jsbn@~0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/jsbn/-/jsbn-0.1.1.tgz#a5e654c2e5a2deb5f201d96cefbca80c0ef2f513"
@@ -1597,15 +1529,9 @@ raw-body@2.4.0:
     unpipe "1.0.0"
 
 react-is@^16.8.4:
-<<<<<<< HEAD
-  version "16.12.0"
-  resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.12.0.tgz#2cc0fe0fba742d97fd527c42a13bec4eeb06241c"
-  integrity sha512-rPCkf/mWBtKc97aLL9/txD8DZdemK0vkA3JMLShjlJB3Pj3s+lpf1KaBzMfQrAmhMQB0n1cU/SUGgKKBCe837Q==
-=======
   version "16.11.0"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.11.0.tgz#b85dfecd48ad1ce469ff558a882ca8e8313928fa"
   integrity sha512-gbBVYR2p8mnriqAwWx9LbuUrShnAuSCNnuPGyc7GJrMVQtPDAh8iLpv7FRuMPFb56KkaVZIYSz1PrjI9q0QPCw==
->>>>>>> feat: remove the option to skip tour
 
 redis-commands@^1.2.0:
   version "1.5.0"
@@ -1956,17 +1882,10 @@ type-is@~1.6.17, type-is@~1.6.18:
     media-typer "0.3.0"
     mime-types "~2.1.24"
 
-<<<<<<< HEAD
-typescript@^3.2.4, typescript@^3.7.2:
-  version "3.7.2"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.7.2.tgz#27e489b95fa5909445e9fef5ee48d81697ad18fb"
-  integrity sha512-ml7V7JfiN2Xwvcer+XAf2csGO1bPBdRbFCkYBczNZggrBZ9c7G3riSUeJmqEU5uOtXNPMhE3n+R4FA/3YOAWOQ==
-=======
 typescript@^3.2.4:
   version "3.6.4"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.6.4.tgz#b18752bb3792bc1a0281335f7f6ebf1bbfc5b91d"
   integrity sha512-unoCll1+l+YK4i4F8f22TaNVPRHcD9PA3yCuZ8g5e0qGqlVlJ/8FSateOLLSagn+Yg5+ZwuPkL8LFUc0Jcvksg==
->>>>>>> feat: remove the option to skip tour
 
 typescript@^3.7.2:
   version "3.7.2"
