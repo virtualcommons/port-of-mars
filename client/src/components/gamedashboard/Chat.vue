@@ -2,17 +2,18 @@
   <div class="chat">
     <p class="chat-title">Chat</p>
     <div class="chat-chat">
-      <div class="chat-message" v-for="message in messages" :key="message.time">
-        <!-- Need to change key to be time value, need to find package? -->
+      <div
+        class="chat-message"
+        v-for="message in messages"
+        :key="message.time.toLocaleTimeString()"
+      >
         <p class="chat-message-member">
           {{ message.role }}
         </p>
         <p class="chat-message-content">
           {{ message.message }}
         </p>
-        <p class="chat-message-time">
-          <span>[ </span>{{ toDate(message.time) }}<span> ]</span>
-        </p>
+        <p class="chat-message-time"><span>[ </span>{{ toDate(message.time) }}<span> ]</span></p>
       </div>
     </div>
     <div class="chat-input-frame">
@@ -53,7 +54,7 @@ export default class Chat extends Vue {
 
   // eslint-disable-next-line class-methods-use-this
   toDate(unixTimestamp: number) {
-    return (new Date(unixTimestamp)).toLocaleTimeString();
+    return new Date(unixTimestamp).toLocaleTimeString();
   }
 
   submitToChat() {
@@ -75,9 +76,9 @@ export default class Chat extends Vue {
 }
 
 .chat-title {
-  text-align: right;
-  font-size: var(--font-large);
   margin: 0 0 0.5rem 0;
+  font-size: var(--font-large);
+  text-align: right;
   color: var(--space-white);
 }
 
@@ -89,26 +90,27 @@ export default class Chat extends Vue {
   border-bottom: none;
   overflow-y: scroll;
   scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none;  /* IE 10+ */
+  -ms-overflow-style: none; /* IE 10+ */
 }
 
-.chat-chat::-webkit-scrollbar { /* WebKit */
-    width: 0;
-    height: 0;
+.chat-chat::-webkit-scrollbar {
+  /* WebKit */
+  width: 0;
+  height: 0;
 }
 
 .chat-message {
-  padding: 0.5rem;
-  color: var(--space-white);
   height: auto;
   max-width: 100%;
-  font-size: var(--font-small);
+  padding: 0.5rem;
   margin-bottom: 0.5rem;
+  font-size: var(--font-small);
+  color: var(--space-white);
+  background-color: rgba(245, 245, 245, 0.05);
   overflow: auto;
-  background-color: rgba(245,245,245, 0.05);
 }
 
-.chat-message-member{
+.chat-message-member {
   margin: 0;
   color: var(--space-orange);
 }
@@ -119,7 +121,7 @@ export default class Chat extends Vue {
 }
 
 .chat-message-time {
-  margin: 0
+  margin: 0;
 }
 
 .chat-message-time span {
@@ -130,8 +132,8 @@ export default class Chat extends Vue {
   height: 3rem;
   width: 100%;
   padding: 0.5rem;
-  display: flex;
   border: var(--border-white);
+  display: flex;
 }
 
 .chat-input {
@@ -144,11 +146,11 @@ export default class Chat extends Vue {
   background-color: var(--space-gray);
 }
 
-.chat-input:focus{
+.chat-input:focus {
   outline: none;
 }
 
-.chat-input:active{
+.chat-input:active {
   outline: none;
 }
 

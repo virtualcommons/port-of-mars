@@ -1,7 +1,6 @@
 <template>
   <div class="round">
     <p>Round <span class="round-number">{{ roundNumber }}</span></p>
-    <!-- will need to re-render on props -->
   </div>
 </template>
 
@@ -34,9 +33,9 @@ export default class Round extends Vue {
 }
 
 .round p {
+  margin-bottom: 1rem;
   display: inline-block;
   text-align: left;
-  margin-bottom: 1rem;
   border-bottom: 0.125rem solid var(--space-orange);
 }
 </style>

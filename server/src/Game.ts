@@ -112,6 +112,10 @@ export class GameRoom extends Room<GameState> {
     this.sendSafe(client, { kind: 'set-player-role', role })
   }
 
+  exportClockTime(){
+    return this.state.timeRemaining;
+  }
+
   addChatMessage(sessionId: string, message: string, round: number) {
     this.state.messages.push(new ChatMessage({
       role: this.state.players[sessionId].role,

@@ -1,29 +1,8 @@
 <template>
-  <div class="container-members" id="v-step-1">
-    <Member
-      :playerRole="'Researcher'"
-      :playerScore="14"
-      :notificationCount="1"
-      :style="{ 'background-color': 'var(--color-researcher)' }"
-    />
-    <Member
-      :playerRole="'Pioneer'"
-      :playerScore="11"
-      :notificationCount="0"
-      :style="{ 'background-color': 'var(--color-pioneer)' }"
-    />
-    <Member
-      :playerRole="'Curator'"
-      :playerScore="5"
-      :notificationCount="2"
-      :style="{ 'background-color': 'var(--color-curator)' }"
-    />
-    <Member
-      :playerRole="'Entrepreneur'"
-      :playerScore="3"
-      :notificationCount="0"
-      :style="{ 'background-color': 'var(--color-entrepreneur)' }"
-    />
+  <div class="container-members" id="v-step-1" >
+      <Member v-for="member in members" :key="member" :playerRole="member"
+        :playerScore="10" :notificationCount="1"
+        :style="{ 'background-color': `var(--color-${member})` }"/>
   </div>
 </template>
 
@@ -36,13 +15,15 @@ import Member from '@/components/gamedashboard/Member.vue';
     Member,
   },
 })
-export default class ContainerMembers extends Vue {}
+export default class ContainerMembers extends Vue {
+  const members = ['Researcher', 'Pioneer', 'Curator', 'Entrepreneur', 'Politician'].filter(name => name !== this.$store.state.playerRole);
+}
 </script>
 
 <style scoped>
 .container-members {
-  flex-grow: 1;
   width: 100%;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

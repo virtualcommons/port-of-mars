@@ -17,6 +17,7 @@ Vue.use(Vuex);
 export const initialStoreState = {
   // server side
   playerRole: '',
+  playerScore: 0,
   marsLog: new MarsLogModel(),
   activeAccomplishmentCards: [],
   chat: [],
