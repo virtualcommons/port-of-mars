@@ -7,7 +7,6 @@
           :is="this.cardData.card === 'accomplishment' ? 'CardAccomplishmentView' : 'CardEventView'"
           :cardData="cardData.payload"
         ></component>
-        <!-- <CardAccomplishmentView :cardData="cardData.payload" /> -->
       </BRow>
     </BContainer>
   </div>
@@ -35,17 +34,16 @@ export default class CardModal extends Vue {
     return this.$store.state.cardData;
   }
 
-  switchView() {
-    console.log(this.cardData.card); // eslint-disable-line no-use-before-define
-    return this.cardData.card === 'accomplishment' ? 'CardAccomplishmentView' : 'CardEventView';
-  }
-
   mounted() {
     this.$root.$on('openCard', (data: any) => {
       this.$store.dispatch('setCardModalData', data).then(() => {
         this.setStyle = '';
       });
     });
+  }
+
+  switchView() {
+    return this.cardData.card === 'accomplishment' ? 'CardAccomplishmentView' : 'CardEventView';
   }
 
   closeModal(): void {
@@ -56,12 +54,12 @@ export default class CardModal extends Vue {
 
 <style scoped>
 .cm-transparent-wrapper {
+  height: 100vh;
+  width: 100vw;
   position: absolute;
   z-index: 1;
   top: 0;
   left: 0;
-  height: 100vh;
-  width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -79,39 +77,39 @@ export default class CardModal extends Vue {
 }
 
 .cm {
-  position: relative;
   height: 26.375rem;
   width: 37.5rem;
   padding: 1rem 2rem;
   margin: 0;
   border: var(--border-white);
   border-radius: 1.25rem;
+  position: relative;
   color: var(--space-white);
   background-color: var(--space-gray);
   overflow: hidden;
 }
 
 .title {
+  width: 100%;
+  border: none;
   position: relative;
   z-index: 2;
   top: 2rem;
   right: 2rem;
-  width: 100%;
-  border: none;
   text-decoration: underline;
   color: var(--space-white);
   background: none;
 }
 
-.card-info{
+.card-info {
+  width:100%;
+  border: none;
   position: relative;
   z-index: 2;
   top: 0.3rem;
-  left:1rem;
-  border: none;
+  left: 1rem;
   color: var(--space-white);
   background: none;
-  width:100%;
 }
 
 .accomplishment-cost{
@@ -120,12 +118,12 @@ export default class CardModal extends Vue {
 }
 
 .cm-close-button {
+  border: none;
   position: absolute;
   z-index: 2;
   top: 2rem;
   right: 2rem;
   text-decoration: underline;
-  border: none;
   color: var(--space-white);
   background: none;
 }
