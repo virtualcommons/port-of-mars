@@ -56,7 +56,7 @@ export default class Master extends Vue {
       this.phaseRunner();
     }
 
-    if (e.key === 'e') {
+    if (e.key === ',') {
       this.$root.$emit('openEvent', 'open');
     }
   }

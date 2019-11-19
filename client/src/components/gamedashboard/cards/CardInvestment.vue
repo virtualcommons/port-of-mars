@@ -3,12 +3,12 @@
     <div class="investment-options" :style="opacityModifier">
       <div class="card-type">
         <div class="card-type-img">
-          <img
+          <!-- <img
             src="https://www.onlygfx.com/wp-content/uploads/2017/03/scribble-circle-4.png"
             alt="Player"
-          />
-          <!-- <img :src="require(`@/assets/investmentsIcons/${this.investmentData.n}.png`)"
-            alt="Player"/> -->
+          /> -->
+          <img :src="require(`@/assets/investmentsIcons/${this.investmentData.n}.png`)"
+            alt="Player"/>
         </div>
         <div class="card-type-cost" id="v-step-12">
           <p>{{ investmentData.currentCost !== -1 ? investmentData.currentCost : 'X' }}</p>
@@ -83,55 +83,51 @@ export default class CardInvestment extends Vue {
 .investment-options {
   height: 7rem;
   width: 9.5rem;
-  /* border: 0.125rem solid pink; */
   border-radius: 1rem;
   display: flex;
   align-items: center;
   text-align: center;
-  overflow: hidden;
   color: var(--space-gray);
+  overflow: hidden;
 }
 
 .card-type {
+  height: 100%;
+  width: 70%;
+  padding: 0.5rem;
+  border: var(--border-white);
+  border-radius: 1rem 0 0 1rem;
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: var(--space-white);
-  border: var(--border-white);
-  border-radius: 1rem 0 0 1rem;
-  padding: 0.5rem;
-  height: 100%;
-  width: 70%;
 }
 
 .card-type-img {
-  /* height: 70%; */
-  /* background-color: green; */
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  padding: 0.25rem;
   margin: 0;
   border: 0.125rem solid var(--space-orange);
   border-radius: 50%;
-  padding: 0.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .card-type-img img {
-  /* border: 0.125rem solid var(--space-orange); */
   height: 3.5rem;
   width: 3.5rem;
 }
 
 .card-type-cost {
+  height: 30%;
+  margin: 0;
   position: absolute;
   right: 0.5rem;
   bottom: 0.25rem;
-  height: 30%;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  margin: 0;
 }
 
 .card-type-cost p {
@@ -139,79 +135,74 @@ export default class CardInvestment extends Vue {
 }
 
 .card-increment-and-decrement-holder {
-  width: 30%;
   height: 100%;
-  /* border-left: var(--border-white); */
-
+  width: 30%;
   display: flex;
   flex-direction: column;
+  /* transition: all .2s ease-in-out; */
 }
 
 .card-increment-and-decrement-holder-disabled {
-  width: 30%;
   height: 100%;
-  /* background-color: green; */
+  width: 30%;
   border: var(--border-white);
-  border-radius: 0 1rem 1rem 0;
   border-left: none;
+  border-radius: 0 1rem 1rem 0;
 }
 
 .investment-increment {
   height: 50%;
   width: 100%;
-  /* border-bottom: 0.0625rem solid var(--space-white); */
   border: var(--border-white);
-  /* border: 0.125rem solid pink; */
-  border-radius: 0 1rem 0 0;
+  /* border: 0.125rem solid var(--space-orange); */
   border-left: none;
   border-bottom: none;
+  border-radius: 0 1rem 0 0;
   display: flex;
   justify-content: center;
   align-items: center;
   color: var(--space-white);
+  transition: all .2s ease-in-out;
 }
 
 .investment-increment p {
-  font-size: var(--font-large);
   margin: 0;
+  font-size: var(--font-large);
 }
 
 .investment-decrement {
   height: 50%;
   width: 100%;
   border: var(--border-white);
+  /* border: 0.125rem solid var(--space-orange); */
   border-radius: 0 0 1rem 0;
-  border-left: none;
   border-top: none;
+  border-left: none;
   display: flex;
   justify-content: center;
   align-items: center;
   color: var(--space-white);
+  transition: all .2s ease-in-out;
 }
 
 .investment-decrement p {
-  font-size: var(--font-large);
   margin: 0;
+  font-size: var(--font-large);
 }
 
-.investment-increment:hover {
+.investment-increment:hover, .investment-decrement:hover {
   color: var(--space-gray);
   background-color: var(--space-orange);
   cursor: pointer;
-}
-.investment-decrement:hover {
-  color: var(--space-gray);
-  background-color: var(--space-orange);
-  cursor: pointer;
+  /* transform: scale(1.125); */
 }
 
 .investment-data {
   width: 100%;
   margin-top: 0.5rem;
-  color: white;
-  /* text-align: center; */
   display: flex;
   justify-content: space-between;
+  color: white;
 }
 
 .investment-data p {

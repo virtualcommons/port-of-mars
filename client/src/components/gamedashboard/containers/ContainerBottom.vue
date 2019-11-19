@@ -43,7 +43,6 @@ export default class ContainerBottom extends Vue {}
   width: 100%;
   padding: 0;
   margin: 0;
-  border: var(--border-white);
 }
 
 .container-bottom-investments, .container-bottom-accomplishments {

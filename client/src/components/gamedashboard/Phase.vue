@@ -2,7 +2,7 @@
   <div class="phase-component" id="v-step-7">
     <div>
       <p class="phase-title">Current Phase</p>
-      <p class="phase-current">{{ timeRemaining }}</p>
+      <p class="phase-current">{{ currentPhase }}</p>
       <div v-if="btnVisibility">
         <button
           class="phase-donebtn"
