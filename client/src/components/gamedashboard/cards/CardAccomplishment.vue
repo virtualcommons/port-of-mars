@@ -11,8 +11,7 @@
       <div class="card-cost">
         <p v-for="investment in accomplishment.totalCostArray" :key="investment + Math.random()">
           <!-- Note: will need to adjust key -->
-          <img :src="require(`@/assets/investmentsIcons/${investment}.png`)" alt="Player"
-            :style="imageScale"/>
+          <img :src="require(`@/assets/iconsSVG/${investment}.svg`)" alt="Player"/>
         </p>
       </div>
     </div>
@@ -117,22 +116,20 @@ export default class CardAccomplishment extends Vue {
 
 .card-cost {
   display: flex;
-  flex-grow: 100;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
+  align-items: right;
 }
 
 .card-cost p {
-  height: 2rem;
-  width: 2rem;
-  border-radius: 50%;
-  margin: 0.125rem;
-  background-color: var(--space-white);
+  height: 4rem;
+  width: 4rem;
+  margin: -1.25rem -0.4rem -0rem -0.4rem; 
+  padding:0;
 }
 
 .card-cost img {
-  height: 100%;
-  width: 100%;
+  margin: -2;
+  padding: 0;
 }
 </style>

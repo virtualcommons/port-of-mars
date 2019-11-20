@@ -32,9 +32,8 @@
       </BRow>
 
       <BRow class="accomplishments-cards-inventory" v-if="activeView == 'inventory'">
-      <div v-for="accomplishment in boughtAccomplishments" :key="accomplishment.label">
-        <CardAccomplishment :accomplishment="accomplishment"/>
-      </div>
+        <CardAccomplishment v-for="accomplishment in boughtAccomplishments" :key="accomplishment.label"
+          :accomplishment="accomplishment"/>
       </BRow>
     </BRow>
   </BContainer>

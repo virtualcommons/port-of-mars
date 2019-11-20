@@ -7,8 +7,8 @@
             src="https://www.onlygfx.com/wp-content/uploads/2017/03/scribble-circle-4.png"
             alt="Player"
           /> -->
-          <img :src="require(`@/assets/investmentsIcons/${this.investmentData.n}.png`)"
-            alt="Player"/>
+          <img :src="require(`@/assets/iconsSVG/${this.investmentData.n}.svg`)"
+            style="width:8rem; height:8rem" alt="Player"/>
         </div>
         <div class="card-type-cost" id="v-step-12">
           <p>{{ investmentData.currentCost !== -1 ? investmentData.currentCost : 'X' }}</p>
@@ -104,7 +104,7 @@ export default class CardInvestment extends Vue {
   background-color: var(--space-white);
 }
 
-.card-type-img {
+/* .card-type-img {
   padding: 0.25rem;
   margin: 0;
   border: 0.125rem solid var(--space-orange);
@@ -112,7 +112,7 @@ export default class CardInvestment extends Vue {
   display: flex;
   justify-content: center;
   align-items: center;
-}
+} */
 
 .card-type-img img {
   height: 3.5rem;

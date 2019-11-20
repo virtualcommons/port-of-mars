@@ -156,13 +156,14 @@ const BaseInvestmentCosts: BaseInvestmentCostsByPerson = {
     legacy: -1,
     science: 3,
   },
+  ///CHANGE THIS BEFORE PR!!!!!!!!!!!!
   Researcher: {
     upkeep: 1,
-    finance: -1,
-    culture: -1,
-    government: 3,
-    legacy: 3,
-    science: 2,
+    finance: 1,
+    culture: 1,
+    government: 1,
+    legacy: 1,
+    science: 1,
   },
 };
 

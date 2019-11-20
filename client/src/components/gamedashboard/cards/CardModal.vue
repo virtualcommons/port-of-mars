@@ -4,8 +4,8 @@
       <BRow class="cm">
         <button class="cm-close-button" @click="closeModal">Close</button>
         <component
-          :is="this.cardData.card === 'accomplishment' ? 'CardAccomplishmentView' : 'CardEventView'"
-          :cardData="cardData.payload"
+          :is="this.cardD.card === 'accomplishment' ? 'CardAccomplishmentView' : 'CardEventView'"
+          :cardData="cardD.payload"
         ></component>
       </BRow>
     </BContainer>
@@ -29,21 +29,31 @@ import CardEventView from '@/components/gamedashboard/cards/CardEventView.vue';
 })
 export default class CardModal extends Vue {
   setStyle: string = 'none';
+  cardD = {};
 
-  get cardData() {
-    return this.$store.state.cardData;
-  }
+  // get cardData() {
+  //   this.cardWasBought();
+  //   return this.$store.state.cardData;
+  // }
+
+  // cardWasBought(){
+  //   if(this.$store.state.cardData.bought){
+  //     this.closeModal();
+  //   }
+  // }
 
   mounted() {
     this.$root.$on('openCard', (data: any) => {
-      this.$store.dispatch('setCardModalData', data).then(() => {
-        this.setStyle = '';
-      });
+      // this.$store.dispatch('setCardModalData', data).then(() => {
+      //   this.setStyle = '';
+      // });
+      this.cardD = data;
+      this.setStyle = '';
     });
   }
 
   switchView() {
-    return this.cardData.card === 'accomplishment' ? 'CardAccomplishmentView' : 'CardEventView';
+    return this.cardD.card === 'accomplishment' ? 'CardAccomplishmentView' : 'CardEventView';
   }
 
   closeModal(): void {
