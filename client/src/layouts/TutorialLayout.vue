@@ -19,7 +19,8 @@
             <template>
               <div slot="actions">
                 <button @click="tour.previousStep" class="btn btn-dark">Previous</button>
-                <button @click="tour.nextStep" class="btn btn-dark">Next</button>
+                <button v-if="!tour.isLast" @click="tour.nextStep" class="btn btn-dark">Next</button>
+                <button v-else-if="tour.isLast" @click="tour.stop" class="btn btn-dark">Finish</button>
               </div>
             </template>
           </v-step>
@@ -209,15 +210,15 @@ export default class TutorialLayout extends Vue {
         placement: 'left'
       }
     },
-    {
-      // ContainerRight.vue > <Member />
-      target: '#v-step-17',
-      content: 'Your score for the game will be displayed here and updated as you purchase more'
-               + 'accomplishments and gain more points.',
-      params: {
-        placement: 'left'
-      }
-    }
+    // {
+    //   // ContainerRight.vue > <Member />
+    //   target: '#v-step-17',
+    //   content: 'Your score for the game will be displayed here and updated as you purchase more'
+    //            + 'accomplishments and gain more points.',
+    //   params: {
+    //     placement: 'left'
+    //   }
+    // }
   ];
 
   startTourCallback() {
@@ -258,7 +259,7 @@ export default class TutorialLayout extends Vue {
                 ${currentStep + 1}`);
   }
 
-  stopTourCallback() {
+  stopTourCallback(currentStep: any) {
     // remove in-tour from body
     document.body.classList.remove(this.BODY_TOUR);
 
@@ -296,7 +297,10 @@ body .in-tour {
 .tour-active {
   position: relative;
   z-index: 999;
-  box-shadow: 0 0 0 10000px rgba(0, 0, 0, .6);
+  box-shadow: 
+    0 0 15px 5px rgba(225, 225, 225, 1),  /* inner white */
+    0 0 40px 5px rgba(0, 255, 242, 0.7), /* middle blue */
+    0 0 0 10000px rgba(0, 0, 0, 0.8); /* outer black */
 }
 
 .tour-active, .v-tour {
