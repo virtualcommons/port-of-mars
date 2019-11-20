@@ -277,13 +277,13 @@ export default class TutorialLayout extends Vue {
 }
 </script>
 
-<style scoped>
+<style>
 .tutorial-layout {
   height: 100% !important;
   width: 100% !important;
 }
 
-/* custom tour css: highlight an element
+/* custom tour css: highlight an element */
 
 body .in-tour {
   pointer-events: none;
@@ -291,9 +291,16 @@ body .in-tour {
 
 .v-step {
   z-index: 9999;
-} */
+}
 
+.tour-active {
+  position: relative;
+  z-index: 999;
+  box-shadow: 0 0 0 10000px rgba(0, 0, 0, .6);
+}
 
-
+.tour-active, .v-tour {
+  pointer-events: auto;
+}
 
 </style>
