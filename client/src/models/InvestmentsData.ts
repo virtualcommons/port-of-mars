@@ -69,9 +69,7 @@ class InvestmentsModel {
     }
 
     updateCurrentCost(investmentToChange: any, amount: number) {
-      console.log(amount);
       this.investments[investmentToChange].currentCost = amount;
-      console.log(this.investments[investmentToChange].currentCost);
     }
 
     confirmInvestments() {
@@ -99,15 +97,6 @@ class InvestmentsModel {
         }
       });
       return canBuy;
-    }
-
-    purchaseAccomplishment(accomplishementCost:[]){
-      if(this.canPurchaseAccomplishment(accomplishementCost,true)){
-        this.canPurchaseAccomplishment(accomplishementCost,false);
-        return true;
-      } else{
-        return false;
-      }
     }
 
     get localDecrement() {

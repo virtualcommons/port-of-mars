@@ -32,12 +32,9 @@
       </BRow>
 
       <BRow class="accomplishments-cards-inventory" v-if="activeView == 'inventory'">
-        <CardAccomplishment />
-        <CardAccomplishment />
-        <CardAccomplishment />
-        <CardAccomplishment />
-        <CardAccomplishment />
-        <CardAccomplishment />
+      <div v-for="accomplishment in boughtAccomplishments" :key="accomplishment.label">
+        <CardAccomplishment :accomplishment="accomplishment"/>
+      </div>
       </BRow>
     </BRow>
   </BContainer>
@@ -64,6 +61,10 @@ export default class ContainerAccomplishments extends Vue {
 
   get currentAccomplishments() {
     return this.$store.state.activeAccomplishmentCards;
+  }
+
+  get boughtAccomplishments() {
+    return this.$store.state.boughtAccomplishmentCards;
   }
 
   handleClick(view: string) {

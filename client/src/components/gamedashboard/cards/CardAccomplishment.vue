@@ -29,23 +29,25 @@ export default class CardAccomplishment extends Vue {
       return {
         label: '---',
         victoryPoints: '---',
+        flavorText: '---',
+        totalCostArray: [],
       };
     },
   }) private accomplishment;
-
-  imageScale = '';
 
   
 
   handleClick() {
     this.$root.$emit('openCard', {
       card: 'accomplishment',
-      payload: {
-        title: this.accomplishment.label,
-        info: this.accomplishment.flavorText,
-        total: this.accomplishment.totalCostArray,
-        bought: this.accomplishment.bought,
-      },
+      // payload: {
+      //   title: this.accomplishment.label,
+      //   info: this.accomplishment.flavorText,
+      //   total: this.accomplishment.totalCostArray,
+      //   points: this.accomplishment.victoryPoints,
+      //   bought: this.accomplishment.bought,
+      // },
+      payload: this.accomplishment,
     });
   }
 }

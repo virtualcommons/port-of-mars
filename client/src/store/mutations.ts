@@ -1,5 +1,6 @@
 import { ChatMessageData } from 'shared/types';
 import { BaseInvestmentCosts, GetAccomplishmentsByPerson, buyAccomplishment } from "@/models";
+import * as _ from 'lodash';
 
 export default {
   SET_ACCS(state: any, payload: any) {
@@ -64,9 +65,12 @@ export default {
     state.activeAccomplishmentCards = GetAccomplishmentsByPerson(state.playerRole,payload);
   },
   PURCHASE_ACCOMPLISHMENT(state:any, payload:any){
-    let bought = state.localInvestments.purchaseAccomplishment(payload.cost);
+    let bought = state.localInvestments.canPurchaseAccomplishment(payload.totalCostArray,false);
     if(bought){
-      buyAccomplishment(payload.title);
+      buyAccomplishment(payload.label);
+      state.boughtAccomplishmentCards.push(payload);
+      let index = _.findIndex(state.activeAccomplishmentCards, (e) => e.label == payload.label);
+      state.activeAccomplishmentCards.splice(index,1,GetAccomplishmentsByPerson(state.playerRole,1)[0]);
     }
   },
   /**
