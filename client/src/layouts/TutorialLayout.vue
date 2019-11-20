@@ -54,7 +54,7 @@ export default class TutorialLayout extends Vue {
   };
 
   tourOptions = {
-    // useKeyboardNavigation: false,
+    useKeyboardNavigation: false,
   }
 
   steps = [
