@@ -7,7 +7,6 @@
         v-for="log in logs"
         :key="log.time.getTime()"
       >
-        <!-- Need to change key to be time value, need to find package? -->
         <p class="marslog-message-category">{{ log.category }}</p>
         <p class="marslog-message-content">{{ log.content }}</p>
         <p class="marslog-message-time">
@@ -36,52 +35,43 @@ export default class MarsLog extends Vue {
 
 <style scoped>
 .marslog {
+  height: 50%;
+  width: 100%;
   margin-top: 2rem;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  height: 50%;
-  /* background-color: blue; */
 }
 
 .marslog-title {
-  font-size: var(--font-large);
   margin: 0 0 0.5rem 0;
+  font-size: var(--font-large);
   color: var(--space-white);
 }
 
 .marslog-log {
   height: 100%;
   width: 100%;
-  /* display: flex; */
-  /* flex-direction: column; */
+  padding: 0.5rem;
   border: var(--border-white);
   overflow-y: scroll;
-  padding: 0.5rem;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none;  /* IE 10+ */
 }
 
 .marslog-log::-webkit-scrollbar { /* WebKit */
-    width: 0;
-    height: 0;
+  height: 0;
+  width: 0;
 }
 
-/* .marslog-message-content {
-  word-wrap: break-word;
-  color: var(--space-white);
-  margin: 0.5rem;
-} */
-
 .marslog-message {
-  padding: 0.5rem;
-  color: var(--space-white);
   height: auto;
   max-width: 100%;
-  font-size: var(--font-small);
+  padding: 0.5rem;
   margin-bottom: 0.5rem;
-  overflow: auto;
+  font-size: var(--font-small);
+  color: var(--space-white);
   background-color: rgba(245,245,245, 0.05);
+  overflow: auto;
 }
 
 .marslog-message-category {

@@ -90,7 +90,6 @@ export default class ContainerAccomplishments extends Vue {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: var(--border-white);
   background-color: var(--space-orange);
 }
 
@@ -100,43 +99,32 @@ export default class ContainerAccomplishments extends Vue {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* background-color: pink; */
 }
 
 .accomplishments-topbar-title p {
-  text-align: left;
-  /* background-color: pink; */
   width: 100%;
   margin: 0;
-  color: var(--space-gray);
   font-size: var(--font-large);
+  text-align: left;
+  color: var(--space-gray);
 }
 
 .accomplishments-topbar-button-container {
-  /* background-color: red; */
   height: 100%;
   width: 40%;
-  /* background-color: green; */
   display: flex;
   flex-wrap: wrap;
-  /* flex-direction: column; */
   justify-content: space-around;
   align-items: center;
 }
 
 .accomplishments-topbar-button-container button {
-  text-align: right;
   height: 50%;
-  /* width: 100%; */
-  /* border-radius: 0.25rem; */
   border: none;
-  background-color: transparent;
   font-size: var(--font-small);
+  text-align: right;
+  background-color: transparent;
   transition: all .2s ease-in-out;
-}
-
-.accomplishments-topbar-button-container button:hover {
-  /* transform: scale(1.1); */
 }
 
 .accomplishments-topbar-button-container button:focus {
@@ -151,8 +139,10 @@ export default class ContainerAccomplishments extends Vue {
 .accomplishment-cards {
   height: 90%;
   width: 100%;
-  margin: 0;
   padding: 0.5rem;
+  margin: 0;
+  border-right: var(--border-white);
+  border-bottom: var(--border-white);
   overflow-y: scroll;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE 10+ */
@@ -171,11 +161,10 @@ export default class ContainerAccomplishments extends Vue {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* background-color: red; */
 }
 
 .accomplishments-cards-available {
-  height: 100%;
+  min-height: 100%;
   justify-content: space-around;
 }
 

@@ -2,11 +2,9 @@
   <BContainer class="container-phase">
     <BRow class="row-phase">
       <BCol class="phase" cols="3">
-        <!-- phase component -->
         <Phase />
       </BCol>
       <BCol class="events" cols="9">
-        <!-- event card components (3) -->
         <CardEvent :event="eventsForTheRound[0]"/>
         <CardEvent :event="eventsForTheRound[1]" id="v-step-8"/>
         <CardEvent :event="eventsForTheRound[2]"/>
@@ -40,34 +38,31 @@ export default class ContainerPhase extends Vue {
 
 <style scoped>
 .container-phase {
-  width: 100%;
   height: 80%;
+  width: 100%;
   max-width: none;
   padding: 0;
   margin:0;
-  /* background-color: pink; */
 }
 
 .row-phase {
   height: 100%;
   width: 100%;
-  margin: 0;
   padding: 0;
+  margin: 0;
 }
 
 .phase {
+  padding: 1rem 0.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1rem 0.5rem;
-  /* background-color: purple; */
 }
 
 .events {
+  padding: 1rem 0.5rem;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 1rem 0.5rem;
-  /* background-color: green; */
 }
 </style>

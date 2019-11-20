@@ -57,8 +57,8 @@ export default class CardAccomplishment extends Vue {
 .card-accomplishment {
   height: auto;
   min-height: 7rem;
-  width: 80%;
-  margin: 0.5rem;
+  width: 85%;
+  margin: 0.5rem 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -67,7 +67,6 @@ export default class CardAccomplishment extends Vue {
   overflow: hidden;
   cursor: pointer;
   transition: all .2s ease-in-out;
-  /* background-color: blue; */
 }
 
 .card-accomplishment:hover {
@@ -79,32 +78,29 @@ export default class CardAccomplishment extends Vue {
   width: 100%;
   padding: 0.5rem;
   margin: 0;
+  border-radius: 1rem 1rem 0 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--space-white);
-  border-radius: 1rem 1rem 0 0;
   color: var(--space-gray);
-  /* background-color: pink; */
+  background-color: var(--space-white);
 }
 
 .card-title p {
   margin: 0;
-  text-transform: capitalize;
   text-align: center;
+  text-transform: capitalize;
 }
 
 .card-info-container {
   height: 70%;
   width: 100%;
   padding: 0.5rem;
+  border: var(--border-white);
+  border-top: none;
+  border-radius: 0 0 1rem 1rem;
   display: flex;
   justify-content: space-between;
-  border-left: var(--border-white);
-  border-right: var(--border-white);
-  border-bottom: var(--border-white);
-  border-radius: 0 0 1rem 1rem;
-  /* background-color: green; */
 }
 
 .card-points {
@@ -121,19 +117,22 @@ export default class CardAccomplishment extends Vue {
 
 .card-cost {
   display: flex;
+  flex-grow: 100;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  flex-grow: 100;
 }
 
 .card-cost p {
-  margin: 0;
+  height: 2rem;
+  width: 2rem;
+  border-radius: 50%;
+  margin: 0.125rem;
+  background-color: var(--space-white);
 }
 
 .card-cost img {
-  margin: 0.125rem;
-  height: 2rem;
-  width: 2rem;
+  height: 100%;
+  width: 100%;
 }
 </style>

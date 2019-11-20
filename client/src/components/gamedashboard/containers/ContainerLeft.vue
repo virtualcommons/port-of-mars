@@ -1,9 +1,8 @@
 <template>
   <div class="container-left">
-    <Round id="v-step-3" roundNum="2"/>
+    <Round id="v-step-3" />
     <Notification id="v-step-4"/>
-    <!-- NEED TO ADD PLAYER SCORE -->
-    <ContainerProfile :playerRole='this.$store.state.playerRole' :playerScore="10"/>
+    <ContainerProfile />
     <MarsLog id="v-step-5"/>
   </div>
 </template>

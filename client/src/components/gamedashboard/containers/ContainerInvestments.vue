@@ -40,18 +40,14 @@ import CardInvestment from '@/components/gamedashboard/cards/CardInvestment.vue'
     BRow,
     BCol,
     StatusBar,
-    CardInvestment
+    CardInvestment,
   }
 })
 export default class ContainerInvestments extends Vue {
   // REFACTOR TO GETTERS
+
   get iD(): any {
-    const rv = this.$store.state.localInvestments.returnValues; // eslint-disable-line no-use-before-define
-    // console.log(rv); // eslint-disable-line no-use-before-define
-    // console.log(returnValues); // eslint-disable-line no-use-before-define
-    // const sorted = Object.keys(rv).sort(
-    //   (a, b) => rv[a].currentCost - rv[b].currentCost
-    // );
+    const rv = this.$store.state.localInvestments.returnValues;
     const costData = Object.keys(rv).reduce((prev, curr) => {
       prev.push(rv[curr]);
       return prev;
@@ -61,11 +57,6 @@ export default class ContainerInvestments extends Vue {
     return costData;
   }
 
-
-  // private iD: object = this.$store.state.localInvestments.returnValues;
-
-  // i = Object.keys(this.iD).sort((a, b) => this.iD[a].currentCost - this.iD[b].currentCost);
-
   get decrementInvestmentCount() {
     return this.$store.state.localInvestments.localDecrement;
   }
@@ -74,11 +65,11 @@ export default class ContainerInvestments extends Vue {
 
 <style scoped>
 .container-investments {
+  height: 100%;
   width: 100%;
   max-width: none;
-  height: 100%;
-  margin: 0;
   padding: 0;
+  margin: 0;
   display: flex;
   flex-direction: column;
 }
@@ -86,48 +77,47 @@ export default class ContainerInvestments extends Vue {
 .investments-topbar {
   height: 10%;
   width: 100%;
-  margin: 0;
   padding: 0.25rem 1rem;
+  margin: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-bottom: var(--border-white);
-  border-right: var(--border-white);
   background-color: var(--space-orange);
 }
 
 .investments-topbar-title {
   margin: 0;
-  color: var(--space-gray);
   font-size: var(--font-large);
+  color: var(--space-gray);
 }
 
 .investments-topbar-statusbar {
-  flex: 1;
   margin: 0 1rem;
+  flex: 1;
 }
 
 .investments-topbar-status {
   margin: 0;
-  color: var(--space-gray);
   font-size: var(--font-large);
+  color: var(--space-gray);
 }
 
 .investments-cards {
   height: 90%;
-  margin: 0;
   padding: 0.5rem;
+  margin: 0;
+  border: var(--border-white);
+  border-top: none;
   display: flex;
   flex-direction: column;
-  border-right: var(--border-white);
 }
 
 .investments-cards-top,
 .investments-cards-bottom {
   height: 50%;
   width: 100%;
-  margin: 0;
   padding: 0;
+  margin: 0;
   display: flex;
   justify-content: space-around;
   align-items: center;

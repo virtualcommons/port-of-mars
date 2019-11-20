@@ -33,9 +33,9 @@ export default class ContainerBottom extends Vue {}
 .container-bottom {
   height: 100%;
   width: 100%;
+  max-width: none;
   padding: 0 1rem;
   margin: 0;
-  max-width: none;
 }
 
 .row-bottom {
@@ -43,7 +43,6 @@ export default class ContainerBottom extends Vue {}
   width: 100%;
   padding: 0;
   margin: 0;
-  border: var(--border-white);
 }
 
 .container-bottom-investments, .container-bottom-accomplishments {

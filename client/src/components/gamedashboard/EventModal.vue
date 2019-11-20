@@ -1,7 +1,7 @@
 <template>
   <div class="white-wrapper" :style="{ display: setStyle }">
     <div class="em">
-      <p class="em-header">Event Modal</p>
+      <p class="em-header">THIS IS AN EVENT!</p>
       <p class="em-content">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus pellentesque iaculis tortor
         non placerat. Class aptent taciti sociosqu ad litora.
@@ -43,15 +43,23 @@ export default class EventModal extends Vue {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--space-white);
+  background-color: var(--space-gray);
 }
 
 .em {
+  height: 80%;
+  width: 100%;
+  max-height: var(--max-screen-height);
+  max-width: var(--max-screen-width);
+  min-height: var(--min-screen-height);
+  min-width: var(--min-screen-width);
+  padding: 1rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
-  color: var(--space-gray);
+  color: var(--space-white);
+  /* background-color: pink; */
 }
 
 .em-header {
@@ -59,16 +67,27 @@ export default class EventModal extends Vue {
 }
 
 .em-content {
+  width: 50%;
+  text-align: center;
+  padding: 1rem;
   font-size: var(--font-med);
+  color: var(--space-white);
+  background-color: var(--space-gray);
 }
 
 .em-close-button {
   height: 3rem;
   width: 12.5rem;
-  border: 0.125rem solid var(--space-gray);
+  border: var(--border-white);
   border-radius: 0.5rem;
   color: var(--space-white);
-  background: var(--space-gray);
+  background: none;
+  transition: all .2s ease-in-out;
+}
+
+.em-close-button:hover {
+  color: var(--space-gray);
+  background: var(--space-white);
 }
 
 .em-close-button:active,
