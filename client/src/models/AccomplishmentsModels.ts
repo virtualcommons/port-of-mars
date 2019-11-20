@@ -1,6 +1,7 @@
 import * as _ from 'lodash';
 
 interface Accomplishment {
+    [key: string] : any
     id: number
     role: 'Researcher' | 'Curator' | 'Pioneer' | 'Entrepreneur' | 'Politician'
     label: string
@@ -12,6 +13,7 @@ interface Accomplishment {
     culture: number
     upkeep: number
     victoryPoints: number
+    bought: boolean,
     effect: string
   }
 
@@ -28,6 +30,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 1,
     upkeep: 0,
     victoryPoints: 5,
+    bought: false,
     effect: '',
   },
   {
@@ -42,6 +45,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 1,
     upkeep: 0,
     victoryPoints: 3,
+    bought: false,
     effect: '',
   },
   {
@@ -56,6 +60,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 1,
+    bought: false,
     effect: 'You gain 3 Science Influences. These may ONLY be traded to other players. (You may not spend them to buy any accomplishments.)',
   },
   {
@@ -70,6 +75,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 1,
+    bought: false,
     effect: 'Whenever a "Life as Usual" event is revealed, you gain a Science Influence.',
   },
   {
@@ -84,6 +90,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 2,
     upkeep: 0,
     victoryPoints: 4,
+    bought: false,
     effect: '',
   },
   {
@@ -98,6 +105,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 1,
+    bought: false,
     effect: 'You can no longer make Politics or Legacy Influence. Science Influence only costs 1 Time Block to make.',
   },
   {
@@ -112,6 +120,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 4,
+    bought: false,
     effect: '',
   },
   {
@@ -126,6 +135,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 4,
     upkeep: 0,
     victoryPoints: 4,
+    bought: false,
     effect: '',
   },
   {
@@ -140,6 +150,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 2,
+    bought: false,
     effect: '',
   },
   {
@@ -154,6 +165,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 2,
     upkeep: 0,
     victoryPoints: 2,
+    bought: false,
     effect: '',
   },
   {
@@ -168,6 +180,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 2,
+    bought: false,
     effect: '',
   },
   {
@@ -182,6 +195,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 2,
     upkeep: 0,
     victoryPoints: 2,
+    bought: false,
     effect: '',
   },
   {
@@ -196,6 +210,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 2,
+    bought: false,
     effect: '',
   },
   {
@@ -210,6 +225,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: -6,
     victoryPoints: 3,
+    bought: false,
     effect: '',
   },
   {
@@ -224,6 +240,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: -13,
     victoryPoints: 6,
+    bought: false,
     effect: '',
   },
   {
@@ -238,6 +255,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 3,
+    bought: false,
     effect: '',
   },
   {
@@ -252,6 +270,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 1,
     upkeep: 0,
     victoryPoints: 3,
+    bought: false,
     effect: '',
   },
   {
@@ -266,6 +285,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 1,
+    bought: false,
     effect: 'Whenever a player trades with you, you both gain an additional Time Block next round.',
   },
   {
@@ -280,6 +300,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 1,
+    bought: false,
     effect: 'Every round, after the event, you may turn in 2 Science Influence for 1 Influence of your choice.',
   },
   {
@@ -294,6 +315,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 1,
+    bought: false,
     effect: 'Every round, upkeep goes down by 20 instead of 25.',
   },
   {
@@ -308,6 +330,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 1,
     upkeep: 0,
     victoryPoints: 5,
+    bought: false,
     effect: '',
   },
   {
@@ -322,6 +345,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 1,
     upkeep: 0,
     victoryPoints: 3,
+    bought: false,
     effect: '',
   },
   {
@@ -336,6 +360,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 1,
+    bought: false,
     effect: 'Whenever a "Life as Usual" event is revealed, gain a Legacy Influence.',
   },
   {
@@ -350,6 +375,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 1,
+    bought: false,
     effect: 'You gain three Legacy Influences. These may ONLY be traded to other players. (You may not spend them to buy any accomplishments.)',
   },
   {
@@ -364,6 +390,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 2,
     upkeep: 0,
     victoryPoints: 4,
+    bought: false,
     effect: '',
   },
   {
@@ -378,6 +405,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 1,
+    bought: false,
     effect: 'Every round, after the event, you get an Influence of your choice.\nEvery round, you only get six Time Blocks.',
   },
   {
@@ -392,6 +420,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 4,
+    bought: false,
     effect: '',
   },
   {
@@ -406,6 +435,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 4,
     upkeep: 0,
     victoryPoints: 4,
+    bought: false,
     effect: '',
   },
   {
@@ -420,6 +450,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 2,
+    bought: false,
     effect: '',
   },
   {
@@ -434,6 +465,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 2,
     upkeep: 0,
     victoryPoints: 2,
+    bought: false,
     effect: '',
   },
   {
@@ -448,6 +480,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 2,
+    bought: false,
     effect: '',
   },
   {
@@ -462,6 +495,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 2,
     upkeep: 0,
     victoryPoints: 2,
+    bought: false,
     effect: '',
   },
   {
@@ -476,6 +510,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 2,
+    bought: false,
     effect: '',
   },
   {
@@ -490,6 +525,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: -6,
     victoryPoints: 3,
+    bought: false,
     effect: '',
   },
   {
@@ -504,6 +540,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: -13,
     victoryPoints: 6,
+    bought: false,
     effect: '',
   },
   {
@@ -518,6 +555,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 3,
+    bought: false,
     effect: '',
   },
   {
@@ -532,6 +570,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 1,
     upkeep: 0,
     victoryPoints: 3,
+    bought: false,
     effect: '',
   },
   {
@@ -546,6 +585,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 1,
+    bought: false,
     effect: 'At the end of each round, for each player that traded with you that round, gain 1 upkeep.',
   },
   {
@@ -560,6 +600,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 1,
+    bought: false,
     effect: 'For the next three rounds, you gain your choice of one Government or Business Influence at the start of that round.',
   },
   {
@@ -574,6 +615,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 1,
+    bought: false,
     effect: 'Every round, when the event card is revealed, you may choose to discard that card instead of having it take effect. Reveal a new event card. That event takes effect instead.',
   },
   {
@@ -588,6 +630,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 1,
     upkeep: 0,
     victoryPoints: 5,
+    bought: false,
     effect: '',
   },
   {
@@ -602,6 +645,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 1,
     upkeep: 0,
     victoryPoints: 3,
+    bought: false,
     effect: '',
   },
   {
@@ -616,6 +660,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 1,
+    bought: false,
     effect: 'Whenever a "Life as Usual" event is revealed, gain a Finance Influence.',
   },
   {
@@ -630,6 +675,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 1,
+    bought: false,
     effect: 'You gain 3 Finance Influences. These may ONLY be traded to other players. (You may not spend them to buy any accomplishments).',
   },
   {
@@ -644,6 +690,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 2,
     upkeep: 0,
     victoryPoints: 4,
+    bought: false,
     effect: '',
   },
   {
@@ -658,6 +705,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 1,
+    bought: false,
     effect: 'Every round, after the event, you may destroy 3 Upkeep. If you do, gain 1 Influence of your choice.',
   },
   {
@@ -672,6 +720,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 4,
+    bought: false,
     effect: '',
   },
   {
@@ -686,6 +735,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 4,
     upkeep: 0,
     victoryPoints: 4,
+    bought: false,
     effect: '',
   },
   {
@@ -700,6 +750,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 2,
+    bought: false,
     effect: '',
   },
   {
@@ -714,6 +765,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 2,
     upkeep: 0,
     victoryPoints: 2,
+    bought: false,
     effect: '',
   },
   {
@@ -728,6 +780,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 2,
+    bought: false,
     effect: '',
   },
   {
@@ -742,6 +795,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 2,
     upkeep: 0,
     victoryPoints: 2,
+    bought: false,
     effect: '',
   },
   {
@@ -756,6 +810,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 2,
+    bought: false,
     effect: '',
   },
   {
@@ -770,6 +825,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: -6,
     victoryPoints: 3,
+    bought: false,
     effect: '',
   },
   {
@@ -784,6 +840,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: -13,
     victoryPoints: 6,
+    bought: false,
     effect: '',
   },
   {
@@ -798,6 +855,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 3,
+    bought: false,
     effect: '',
   },
   {
@@ -812,6 +870,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 1,
     upkeep: 0,
     victoryPoints: 3,
+    bought: false,
     effect: '',
   },
   {
@@ -826,6 +885,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 1,
+    bought: false,
     effect: 'Each other player may gain a Government Influence. For each player who does, you gain an Influence of your choice.',
   },
   {
@@ -840,6 +900,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 1,
+    bought: false,
     effect: 'Each player may gain a Culture Influence. For each player who does, you gain an Influence of your choice.',
   },
   {
@@ -854,6 +915,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 1,
+    bought: false,
     effect: 'Every round, all players may reveal an additional Accomplishment card.',
   },
   {
@@ -868,6 +930,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 1,
     upkeep: 0,
     victoryPoints: 5,
+    bought: false,
     effect: '',
   },
   {
@@ -882,6 +945,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 1,
     upkeep: 0,
     victoryPoints: 3,
+    bought: false,
     effect: '',
   },
   {
@@ -896,6 +960,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 1,
+    bought: false,
     effect: 'You gain 3 Government Influences. These may ONLY be traded to other players. (You may not spend them to buy any accomplishments.)',
   },
   {
@@ -910,6 +975,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 1,
+    bought: false,
     effect: 'Whenever a "Life as Usual" event is revealed, gain a Government Influence.',
   },
   {
@@ -924,6 +990,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 2,
     upkeep: 0,
     victoryPoints: 4,
+    bought: false,
     effect: '',
   },
   {
@@ -938,6 +1005,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 1,
+    bought: false,
     effect: 'Every round, after the event, you may choose a player. That player must truthfully disclose how they allocated their time last round.',
   },
   {
@@ -952,6 +1020,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 4,
+    bought: false,
     effect: '',
   },
   {
@@ -966,6 +1035,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 4,
     upkeep: 0,
     victoryPoints: 4,
+    bought: false,
     effect: '',
   },
   {
@@ -980,6 +1050,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 2,
+    bought: false,
     effect: '',
   },
   {
@@ -994,6 +1065,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 2,
     upkeep: 0,
     victoryPoints: 2,
+    bought: false,
     effect: '',
   },
   {
@@ -1008,6 +1080,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 2,
+    bought: false,
     effect: '',
   },
   {
@@ -1022,6 +1095,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 2,
     upkeep: 0,
     victoryPoints: 2,
+    bought: false,
     effect: '',
   },
   {
@@ -1036,6 +1110,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 2,
+    bought: false,
     effect: '',
   },
   {
@@ -1050,6 +1125,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: -6,
     victoryPoints: 3,
+    bought: false,
     effect: '',
   },
   {
@@ -1064,6 +1140,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: -13,
     victoryPoints: 6,
+    bought: false,
     effect: '',
   },
   {
@@ -1078,6 +1155,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 3,
+    bought: false,
     effect: '',
   },
   {
@@ -1092,6 +1170,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 1,
     upkeep: 0,
     victoryPoints: 3,
+    bought: false,
     effect: '',
   },
   {
@@ -1106,6 +1185,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 1,
+    bought: false,
     effect: 'One time this game, you may compel all players use all Time Blocks they have that round for Upkeep.',
   },
   {
@@ -1120,6 +1200,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 1,
+    bought: false,
     effect: 'Next round, each player gets 2 fewer Time Blocks. Add 20 upkeep.',
   },
   {
@@ -1134,6 +1215,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 1,
+    bought: false,
     effect: 'Every round, after the Event, each player gains an Influence of their choice.',
   },
   {
@@ -1148,6 +1230,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 1,
     upkeep: 0,
     victoryPoints: 5,
+    bought: false,
     effect: '',
   },
   {
@@ -1162,6 +1245,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 1,
     upkeep: 0,
     victoryPoints: 3,
+    bought: false,
     effect: '',
   },
   {
@@ -1176,6 +1260,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 1,
+    bought: false,
     effect: 'You gain 3 Culture Influences. These may ONLY be traded to other players (you may not spend them to buy any accomplishments).',
   },
   {
@@ -1190,6 +1275,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 1,
+    bought: false,
     effect: 'Whenever a "Life as Usual" event is revealed, gain a Culture Influence.',
   },
   {
@@ -1204,6 +1290,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 2,
     upkeep: 0,
     victoryPoints: 4,
+    bought: false,
     effect: '',
   },
   {
@@ -1218,6 +1305,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 1,
+    bought: false,
     effect: 'Every round, after the event, other players must give you 1 Time Block.',
   },
   {
@@ -1232,6 +1320,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 4,
+    bought: false,
     effect: '',
   },
   {
@@ -1246,6 +1335,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 4,
     upkeep: 0,
     victoryPoints: 4,
+    bought: false,
     effect: '',
   },
   {
@@ -1260,6 +1350,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 2,
+    bought: false,
     effect: '',
   },
   {
@@ -1274,6 +1365,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 2,
     upkeep: 0,
     victoryPoints: 2,
+    bought: false,
     effect: '',
   },
   {
@@ -1288,6 +1380,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 2,
+    bought: false,
     effect: '',
   },
   {
@@ -1302,6 +1395,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 2,
     upkeep: 0,
     victoryPoints: 2,
+    bought: false,
     effect: '',
   },
   {
@@ -1316,6 +1410,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 2,
+    bought: false,
     effect: '',
   },
   {
@@ -1330,6 +1425,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: -6,
     victoryPoints: 3,
+    bought: false,
     effect: '',
   },
   {
@@ -1344,6 +1440,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: -13,
     victoryPoints: 6,
+    bought: false,
     effect: '',
   },
   {
@@ -1358,6 +1455,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 3,
+    bought: false,
     effect: '',
   },
   {
@@ -1372,6 +1470,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 1,
     upkeep: 0,
     victoryPoints: 3,
+    bought: false,
     effect: '',
   },
   {
@@ -1386,6 +1485,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 1,
+    bought: false,
     effect: 'One time during this game, you may add 10 Upkeep.',
   },
   {
@@ -1400,6 +1500,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 1,
+    bought: false,
     effect: 'For the next 3 rounds, you gain your choice of one Government or Science Influence at the start of that round.',
   },
   {
@@ -1414,6 +1515,7 @@ const accomplishments: Array<Accomplishment> = [
     culture: 0,
     upkeep: 0,
     victoryPoints: 1,
+    bought: false,
     effect: 'Every round, all players gain 1 additional Time Block.',
   },
 ];
@@ -1422,19 +1524,42 @@ function getRandomIndex(maxIndex:number) {
   return Math.floor(Math.random() * Math.floor(maxIndex));
 }
 
-export default function GetAccomplishmentsByPerson(person:string) {
-  const possibleAccomplishments = accomplishments.filter(a => a.role === person);
-  const indexArray = [-1, -1, -1];
+export function GetAccomplishmentsByPerson(person:string, amount:number) {
+  const possibleACards = accomplishments.filter(a => a.role === person && a.bought === false);
+  const indexArray = [];
+  const accomplishmentsToBeSentOut = [];
+  console.log(possibleACards.length);
+  const accomplishmentsAmount = Math.min(possibleACards.length, amount);
 
-  for (let i = 0; i < 3; i += 1) {
-    let randomIndex = getRandomIndex(possibleAccomplishments.length);
+  for (let i = 0; i < accomplishmentsAmount; i += 1) {
+    let randomIndex = getRandomIndex(possibleACards.length);
+
     while (indexArray.indexOf(randomIndex) !== -1) {
-      randomIndex = getRandomIndex(possibleAccomplishments.length);
+      randomIndex = getRandomIndex(possibleACards.length);
     }
 
-    indexArray[i] = randomIndex;
+    indexArray.push(randomIndex);
+    
+    const costs = ['upkeep', 'finance', 'legacy', 'government', 'culture', 'science'];
+    
+    let total = costs.map((curr) => {
+      const cost = Math.abs(possibleACards[randomIndex][curr]);
+      const amount = [];
+      for (let i = 0; i < cost; i += 1) {
+        amount.push(curr);
+      }
+      return amount;
+    })
+    .reduce((prev, curr) => prev.concat(curr), []);
+
+    possibleACards[randomIndex].totalCostArray = total;
+    accomplishmentsToBeSentOut.push(possibleACards[randomIndex]);
   }
-  return [possibleAccomplishments[indexArray[0]],
-    possibleAccomplishments[indexArray[1]],
-    possibleAccomplishments[indexArray[2]]];
+
+  return accomplishmentsToBeSentOut;
+}
+
+export function buyAccomplishment(name:string){
+  const boughtCard = accomplishments.filter(a => a.label === name);
+  boughtCard[0].bought = true;
 }

@@ -17,7 +17,7 @@ export default class Master extends Vue {
 
   private costs: object = this.data.roundCosts;
 
-  private activeAccomplishments: object[] = this.data.activeAccomplishments;
+  //private activeAccomplishments: object[] = this.data.activeAccomplishments;
 
   private activeEvents = this.data.eventsThisRound;
 
@@ -45,7 +45,7 @@ export default class Master extends Vue {
   constructor() {
     super();
     // console.log(this.costs);
-    this.$store.dispatch('setPlayerRole', this.role);
+    // this.$store.dispatch('setPlayerRole', this.role);
     // this.$store.dispatch('updateRoundCosts', this.costs);
     this.$store.dispatch('updatePhase', 'Pregame');
   }
@@ -103,10 +103,11 @@ export default class Master extends Vue {
     this.$store.dispatch('updateRoundEvents', this.activeEvents);
 
     // update the accomplishments
-    this.activeAccomplishments = this.data.activeAccomplishments;
-    this.$store.dispatch('setActiveAccomplishments', this.activeAccomplishments).then(() => {
-      this.$root.$emit('udpateAccomplishments', 'dummyData');
-    });
+    // this.activeAccomplishments = this.data.activeAccomplishments;
+    // this.$store.dispatch('setActiveAccomplishments', this.activeAccomplishments).then(() => {
+    //   this.$root.$emit('udpateAccomplishments', 'dummyData');
+    // });
+    this.$store.dispatch('setActiveAccomplishments',3);
 
     // update the mars log
     this.$store

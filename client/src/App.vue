@@ -72,7 +72,7 @@ body {
   --color-Politician: rgba(0, 0, 0, 0.2);
 
   --font-family-default: 'Space Mono', monospace;
-  --font-small: 0.75rem;
+  --font-small: 0.86rem;
   --font-med: 1rem;
   --font-large: 1.5rem;
 

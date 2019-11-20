@@ -1,13 +1,13 @@
 <template>
-  <div class="cm-accomplishment">
+  <div class="cm-accomplishment" :style='opacity'>
     <div class="cm-accomplishment-title">
-      <p>{{ this.cardData.title }}</p>
+      <p>{{ this.cardData.label }}</p>
     </div>
     <div class="cm-accomplishment-info">
-      <p>{{ this.cardData.info }}</p>
+      <p>{{ this.cardData.flavorText }}</p>
     </div>
     <div class="cm-accomplishment-investments">
-      <p v-for="investment in this.cardData.total" :key="investment + Math.random()">
+      <p v-for="investment in this.cardData.totalCostArray" :key="investment + Math.random()">
         <!-- Note: will need to edit key implementation -->
         <img
           :src="require(`@/assets/investmentsIcons/${investment}.png`)"
@@ -15,8 +15,8 @@
         />
       </p>
     </div>
-    <p class="cm-accomplishment-cost-title">( <span>Cost</span> )</p>
-    <p>You {{ canBuy }} have enough influences to buy this card</p>
+    <p class="cm-accomplishment-investments-title">( <span>Cost</span> )</p>
+    <button @click='handlePurchase'>{{ buyButton }}</button>
   </div>
 </template>
 
@@ -28,27 +28,29 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 export default class CardAccomplishmentView extends Vue {
   @Prop({
     default: () => ({
-      title: '---',
-      info: '---',
-      total: [],
+      label: '---',
+      flavorText: '---',
+      totalCostArray: [],
     }),
   }) private cardData;
 
+  opacity = '';
+
   get canBuy() {
-    const investments = this.$store.state.localInvestments.returnSafeValues;
-
-    let canBuy = true;
-    this.cardData.total.forEach((investment) => {
-      investments[investment].persistentInventory -= 1;
-
-      if (investments[investment].persistentInventory <= -1) {
-        canBuy = false;
-      }
-    });
-
-    console.log(canBuy);
-    return canBuy ? '' : 'do not';
+    return this.$store.state.localInvestments.canPurchaseAccomplishment(this.cardData.totalCostArray,true);  
   }
+
+  get buyButton(){
+    const b = this.canBuy;
+    return b ? 'Purchase accomplishment' : 'You cannot purchase this';
+  }
+
+  handlePurchase(){
+    if(this.cardData.totalCostArray.length > 0 && this.canBuy){
+      this.$store.dispatch('purchaseAccomplishment',this.cardData);
+    }
+  }
+
 }
 </script>
 

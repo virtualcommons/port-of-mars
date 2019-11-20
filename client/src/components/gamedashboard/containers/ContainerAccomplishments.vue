@@ -32,12 +32,9 @@
       </BRow>
 
       <BRow class="accomplishments-cards-inventory" v-if="activeView == 'inventory'">
-        <CardAccomplishment />
-        <CardAccomplishment />
-        <CardAccomplishment />
-        <CardAccomplishment />
-        <CardAccomplishment />
-        <CardAccomplishment />
+      <div v-for="accomplishment in boughtAccomplishments" :key="accomplishment.label">
+        <CardAccomplishment :accomplishment="accomplishment"/>
+      </div>
       </BRow>
     </BRow>
   </BContainer>
@@ -47,6 +44,7 @@
 import { Vue, Component } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
 import CardAccomplishment from '@/components/gamedashboard/cards/CardAccomplishment.vue';
+import { accomplishments } from '../../../../../server/src/data';
 
 @Component({
   components: {
@@ -63,6 +61,10 @@ export default class ContainerAccomplishments extends Vue {
 
   get currentAccomplishments() {
     return this.$store.state.activeAccomplishmentCards;
+  }
+
+  get boughtAccomplishments() {
+    return this.$store.state.boughtAccomplishmentCards;
   }
 
   handleClick(view: string) {

@@ -9,9 +9,10 @@
         <p>{{ accomplishment.victoryPoints }}</p>
       </div>
       <div class="card-cost">
-        <p v-for="investment in total" :key="investment + Math.random()">
+        <p v-for="investment in accomplishment.totalCostArray" :key="investment + Math.random()">
           <!-- Note: will need to adjust key -->
-          <img :src="require(`@/assets/investmentsIcons/${investment}.png`)" alt="Player" />
+          <img :src="require(`@/assets/investmentsIcons/${investment}.png`)" alt="Player"
+            :style="imageScale"/>
         </p>
       </div>
     </div>
@@ -28,41 +29,25 @@ export default class CardAccomplishment extends Vue {
       return {
         label: '---',
         victoryPoints: '---',
+        flavorText: '---',
+        totalCostArray: [],
       };
     },
-  }) private accomplishment: object;
+  }) private accomplishment;
 
-  costs = ['upkeep', 'finance', 'legacy', 'government', 'culture', 'science'];
-
-  total = [];
-
-  imageScale = '';
-
-  mounted() {
-    this.$root.$on('udpateAccomplishments', (data: any) => {
-      this.total = this.costs
-        .map((curr) => {
-          const cost = Math.abs(this.accomplishment[[curr]]);
-          const amount = [];
-          for (let i = 0; i < cost; i += 1) {
-            amount.push(curr);
-          }
-          return amount;
-        })
-        .reduce((prev, curr) => prev.concat(curr), []);
-
-      this.imageScale = this.total.length > 6 ? 'width:1.5rem' : 'width:2.5rem';
-    });
-  }
+  
 
   handleClick() {
     this.$root.$emit('openCard', {
       card: 'accomplishment',
-      payload: {
-        title: this.accomplishment.label,
-        info: this.accomplishment.flavorText,
-        total: this.total,
-      },
+      // payload: {
+      //   title: this.accomplishment.label,
+      //   info: this.accomplishment.flavorText,
+      //   total: this.accomplishment.totalCostArray,
+      //   points: this.accomplishment.victoryPoints,
+      //   bought: this.accomplishment.bought,
+      // },
+      payload: this.accomplishment,
     });
   }
 }

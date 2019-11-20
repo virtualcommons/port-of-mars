@@ -69,9 +69,7 @@ class InvestmentsModel {
     }
 
     updateCurrentCost(investmentToChange: any, amount: number) {
-      console.log(amount);
       this.investments[investmentToChange].currentCost = amount;
-      console.log(this.investments[investmentToChange].currentCost);
     }
 
     confirmInvestments() {
@@ -87,8 +85,18 @@ class InvestmentsModel {
       return this.investments;
     }
 
-    get returnSafeValues() {
-      return _.cloneDeep(this.investments);
+    canPurchaseAccomplishment(accomplishemntCost:[], safety:boolean) {
+      let investments = safety ? _.cloneDeep(this.investments) : this.investments;
+
+      let canBuy = true;
+      accomplishemntCost.forEach((investment) => {
+        investments[investment].persistentInventory -= 1;
+
+        if (investments[investment].persistentInventory <= -1) {
+          canBuy = false;
+        }
+      });
+      return canBuy;
     }
 
     get localDecrement() {
@@ -101,6 +109,7 @@ class InvestmentsModel {
 }
 
 interface InvestmentCosts{
+    [key:string]:number
     upkeep:number,
     finance:number,
     legacy:number,

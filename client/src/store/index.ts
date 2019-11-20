@@ -20,6 +20,7 @@ export const initialStoreState = {
   playerScore: 0,
   marsLog: new MarsLogModel(),
   activeAccomplishmentCards: [],
+  boughtAccomplishmentCards: [],
   chat: [],
   upkeep: 100,
   round: 1,

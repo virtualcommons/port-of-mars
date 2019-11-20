@@ -51,7 +51,9 @@ export default class ContainerInvestments extends Vue {
     const costData = Object.keys(rv).reduce((prev, curr) => {
       prev.push(rv[curr]);
       return prev;
-    }, []);
+    }, []).sort((a,b) => a.currentCost - b.currentCost);
+
+    // console.log(costData); // eslint-disable-line no-use-before-define
     return costData;
   }
 
