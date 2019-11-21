@@ -31,29 +31,11 @@ export default class CardModal extends Vue {
   setStyle: string = 'none';
   cardD = {};
 
-  // get cardData() {
-  //   this.cardWasBought();
-  //   return this.$store.state.cardData;
-  // }
-
-  // cardWasBought(){
-  //   if(this.$store.state.cardData.bought){
-  //     this.closeModal();
-  //   }
-  // }
-
   mounted() {
     this.$root.$on('openCard', (data: any) => {
-      // this.$store.dispatch('setCardModalData', data).then(() => {
-      //   this.setStyle = '';
-      // });
       this.cardD = data;
       this.setStyle = '';
     });
-  }
-
-  switchView() {
-    return this.cardD.card === 'accomplishment' ? 'CardAccomplishmentView' : 'CardEventView';
   }
 
   closeModal(): void {

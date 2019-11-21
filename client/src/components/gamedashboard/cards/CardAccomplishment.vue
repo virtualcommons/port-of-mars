@@ -39,13 +39,6 @@ export default class CardAccomplishment extends Vue {
   handleClick() {
     this.$root.$emit('openCard', {
       card: 'accomplishment',
-      // payload: {
-      //   title: this.accomplishment.label,
-      //   info: this.accomplishment.flavorText,
-      //   total: this.accomplishment.totalCostArray,
-      //   points: this.accomplishment.victoryPoints,
-      //   bought: this.accomplishment.bought,
-      // },
       payload: this.accomplishment,
     });
   }
@@ -118,18 +111,14 @@ export default class CardAccomplishment extends Vue {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: right;
+  align-items: center;
 }
 
 .card-cost p {
-  height: 4rem;
-  width: 4rem;
-  margin: -1.25rem -0.4rem -0rem -0.4rem; 
+  height: 2.5rem;
+  width: 2.5rem;
+  margin:0.125rem;
   padding:0;
 }
 
-.card-cost img {
-  margin: -2;
-  padding: 0;
-}
 </style>

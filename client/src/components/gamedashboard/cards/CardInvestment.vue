@@ -8,7 +8,7 @@
             alt="Player"
           /> -->
           <img :src="require(`@/assets/iconsSVG/${this.investmentData.n}.svg`)"
-            style="width:8rem; height:8rem" alt="Player"/>
+            style="width:5rem; height:5rem" alt="Player"/>
         </div>
         <div class="card-type-cost" id="v-step-12">
           <p>{{ investmentData.currentCost !== -1 ? investmentData.currentCost : 'X' }}</p>

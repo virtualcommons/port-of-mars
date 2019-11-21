@@ -10,7 +10,7 @@
       <p v-for="investment in this.cardData.totalCostArray" :key="investment + Math.random()">
         <!-- Note: will need to edit key implementation -->
         <img
-          :src="require(`@/assets/investmentsIcons/${investment}.png`)"
+          :src="require(`@/assets/iconsSVG/${investment}.svg`)"
           alt='investment'
         />
       </p>

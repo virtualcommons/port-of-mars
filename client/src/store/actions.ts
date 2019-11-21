@@ -11,9 +11,6 @@ export default {
   changeUpkeepAmount(context: any, payload: number) {
     context.commit('CHANGE_UPKEEP_AMOUNT', payload);
   },
-  setCardModalData(context: any, payload: object) {
-    context.commit('SET_CARD_MODAL_DATA', payload);
-  },
   setPlayerRole(context: any, payload: any) {
     context.commit('SET_PLAYER_ROLE', payload);
   },
