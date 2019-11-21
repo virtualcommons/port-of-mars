@@ -11,8 +11,7 @@
       <div class="card-cost">
         <p v-for="investment in accomplishment.totalCostArray" :key="investment + Math.random()">
           <!-- Note: will need to adjust key -->
-          <img :src="require(`@/assets/investmentsIcons/${investment}.png`)" alt="Player"
-            :style="imageScale"/>
+          <img :src="require(`@/assets/iconsSVG/${investment}.svg`)" alt="Player"/>
         </p>
       </div>
     </div>
@@ -40,13 +39,6 @@ export default class CardAccomplishment extends Vue {
   handleClick() {
     this.$root.$emit('openCard', {
       card: 'accomplishment',
-      // payload: {
-      //   title: this.accomplishment.label,
-      //   info: this.accomplishment.flavorText,
-      //   total: this.accomplishment.totalCostArray,
-      //   points: this.accomplishment.victoryPoints,
-      //   bought: this.accomplishment.bought,
-      // },
       payload: this.accomplishment,
     });
   }
@@ -117,22 +109,16 @@ export default class CardAccomplishment extends Vue {
 
 .card-cost {
   display: flex;
-  flex-grow: 100;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
 }
 
 .card-cost p {
-  height: 2rem;
-  width: 2rem;
-  border-radius: 50%;
-  margin: 0.125rem;
-  background-color: var(--space-white);
+  height: 2.5rem;
+  width: 2.5rem;
+  margin:0.125rem;
+  padding:0;
 }
 
-.card-cost img {
-  height: 100%;
-  width: 100%;
-}
 </style>

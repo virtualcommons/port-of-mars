@@ -10,7 +10,7 @@
       <p v-for="investment in this.cardData.totalCostArray" :key="investment + Math.random()">
         <!-- Note: will need to edit key implementation -->
         <img
-          :src="require(`@/assets/investmentsIcons/${investment}.png`)"
+          :src="require(`@/assets/iconsSVG/${investment}.svg`)"
           alt='investment'
         />
       </p>
@@ -41,13 +41,17 @@ export default class CardAccomplishmentView extends Vue {
   }
 
   get buyButton(){
+    if(this.cardData.bought){
+      return 'You already own this'
+    }
     const b = this.canBuy;
     return b ? 'Purchase accomplishment' : 'You cannot purchase this';
   }
 
   handlePurchase(){
-    if(this.cardData.totalCostArray.length > 0 && this.canBuy){
+    if(this.cardData.totalCostArray.length > 0 && this.canBuy && !this.cardData.bought){
       this.$store.dispatch('purchaseAccomplishment',this.cardData);
+
     }
   }
 

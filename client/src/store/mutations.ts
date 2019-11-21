@@ -43,9 +43,6 @@ export default {
 
     state.localInvestments.changeInventoryValue(payload.investmentName, payload.investmentAmount);
   },
-  SET_CARD_MODAL_DATA(state: any, payload: object) {
-    state.cardData = payload;
-  },
   SET_PLAYER_ROLE(state: any, payload: string) {
     state.playerRole = payload;
     
@@ -53,7 +50,6 @@ export default {
       state.localInvestments.updateCurrentCost(key, BaseInvestmentCosts[payload][key]);
     });
 
-    //state.activeAccomplishmentCards = GetAccomplishmentsByPerson(payload,3);
   },
   SET_PLAYER_FINISHED(state: any, payload: boolean) {
     state.playerFinishedWithPhase = payload;
