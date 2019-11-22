@@ -6,7 +6,6 @@
       :playerRole="member"
       :playerScore="10"
       :notificationCount="1"
-      :style="{ 'background-color': `var(--color-${member})` }"
     />
   </div>
 </template>

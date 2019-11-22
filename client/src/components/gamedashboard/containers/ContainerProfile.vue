@@ -82,7 +82,7 @@ export default class ContainerProfile extends Vue {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--space-white-opaque);
+  background-color: var(--space-white-opaque-1);
 }
 
 .profile-img {

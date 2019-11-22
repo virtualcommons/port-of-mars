@@ -23,8 +23,8 @@ import ContainerAccomplishments from '@/components/gamedashboard/containers/Cont
     BRow,
     BCol,
     ContainerInvestments,
-    ContainerAccomplishments,
-  },
+    ContainerAccomplishments
+  }
 })
 export default class ContainerBottom extends Vue {}
 </script>
@@ -42,10 +42,12 @@ export default class ContainerBottom extends Vue {}
   height: 100%;
   width: 100%;
   padding: 0;
+  border: 0.125rem solid var(--space-white-opaque-2);
   margin: 0;
 }
 
-.container-bottom-investments, .container-bottom-accomplishments {
+.container-bottom-investments,
+.container-bottom-accomplishments {
   height: 100%;
   width: 100%;
   padding: 0;

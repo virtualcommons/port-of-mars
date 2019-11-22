@@ -11,7 +11,7 @@
       <div class="card-cost">
         <p v-for="investment in accomplishment.totalCostArray" :key="investment + Math.random()">
           <!-- Note: will need to adjust key -->
-          <img :src="require(`@/assets/iconsSVG/${investment}.svg`)" alt="Player"/>
+          <img :src="require(`@/assets/iconsSVG/${investment}.svg`)" alt="Player" />
         </p>
       </div>
     </div>
@@ -32,9 +32,8 @@ export default class CardAccomplishment extends Vue {
         totalCostArray: [],
       };
     },
-  }) private accomplishment;
-
-  
+  })
+  private accomplishment;
 
   handleClick() {
     this.$root.$emit('openCard', {
@@ -58,7 +57,7 @@ export default class CardAccomplishment extends Vue {
   color: var(--space-white);
   overflow: hidden;
   cursor: pointer;
-  transition: all .2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 .card-accomplishment:hover {
@@ -68,8 +67,9 @@ export default class CardAccomplishment extends Vue {
 .card-title {
   height: 30%;
   width: 100%;
-  padding: 0.5rem;
+  padding: 0.25rem 0.5rem;
   margin: 0;
+  margin-bottom: 0.5rem;
   border-radius: 1rem 1rem 0 0;
   display: flex;
   align-items: center;
@@ -88,11 +88,13 @@ export default class CardAccomplishment extends Vue {
   height: 70%;
   width: 100%;
   padding: 0.5rem;
-  border: var(--border-white);
-  border-top: none;
+  /* border: var(--border-white); */
+  /* border-top: none; */
   border-radius: 0 0 1rem 1rem;
   display: flex;
   justify-content: space-between;
+  /* background-color: var(--space-white-opaque-1); */
+  background-color: var(--space-gray);
 }
 
 .card-points {
@@ -117,8 +119,7 @@ export default class CardAccomplishment extends Vue {
 .card-cost p {
   height: 2.5rem;
   width: 2.5rem;
-  margin:0.125rem;
-  padding:0;
+  margin: 0.125rem;
+  padding: 0;
 }
-
 </style>

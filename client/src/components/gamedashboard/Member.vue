@@ -1,14 +1,20 @@
 <template>
   <div @click="handleClick" class="member">
-    <div :style="setVisibility()" class="member-notif">
-      <p class="member-notif-num">{{ notificationCount }}</p>
-    </div>
-    <div class="member-info">
-      <p class="member-score">{{ playerScore }}</p>
-      <p class="member-role">{{ playerRole }}</p>
-    </div>
-    <div class="member-image">
-      <img :src="require(`@/assets/characters/${setImg()}.png`)" alt="Player" class="member-img" />
+    <div class="member-content" :style="{ 'background-color': `var(--color-${playerRole})` }">
+      <div :style="setVisibility()" class="member-notif">
+        <p class="member-notif-num">{{ notificationCount }}</p>
+      </div>
+      <div class="member-info">
+        <p class="member-score">{{ playerScore }}</p>
+        <p class="member-role">{{ playerRole }}</p>
+      </div>
+      <div class="member-image">
+        <img
+          :src="require(`@/assets/characters/${setImg()}.png`)"
+          alt="Player"
+          class="member-img"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -44,20 +50,25 @@ export default class Member extends Vue {
 .member {
   height: 4rem;
   width: 95%;
-  padding: 0.25rem 0.5rem;
-  border: var(--border-white);
+  padding: 0.25rem;
+  border: 0.125rem solid var(--space-white-opaque-2);
   border-radius: 1rem;
   position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: rgba(245, 245, 245, 0.2);
-  cursor: pointer;
   transition: all 0.2s ease-in-out;
 }
 
 .member:hover {
   width: 100%;
+}
+
+.member-content {
+  height: 100%;
+  width: 100%;
+  border-radius: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
 }
 
 .member-notif {
@@ -90,7 +101,7 @@ export default class Member extends Vue {
 
 .member-score {
   margin-bottom: 0;
-  margin-right: 0.5rem;
+  margin: 0 0.5rem;
   color: var(--space-white);
   font-size: var(--font-large);
 }
