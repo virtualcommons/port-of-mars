@@ -1629,7 +1629,6 @@ export function GetAccomplishmentsByPerson(person:string, amount:number) {
   const possibleACards = accomplishments.filter(a => a.role === person && !a.used);
   const indexArray = [];
   const accomplishmentsToBeSentOut = [];
-  console.log(possibleACards.length);
   const accomplishmentsAmount = Math.min(possibleACards.length, amount);
 
   for (let i = 0; i < accomplishmentsAmount; i += 1) {
@@ -1642,7 +1641,7 @@ export function GetAccomplishmentsByPerson(person:string, amount:number) {
     indexArray.push(randomIndex);
     
     const costs = ['upkeep', 'finance', 'legacy', 'government', 'culture', 'science'];
-    
+
     let total = costs.map((curr) => {
       const cost = Math.abs(possibleACards[randomIndex][curr]);
       const amount = [];

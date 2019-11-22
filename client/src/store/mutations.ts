@@ -65,6 +65,9 @@ export default {
     if(bought){
       buyAccomplishment(payload.label);
       state.boughtAccomplishmentCards.push(payload);
+
+      state.playerScore += payload.victoryPoints;
+      
       let index = _.findIndex(state.activeAccomplishmentCards, (e) => e.label == payload.label);
       state.activeAccomplishmentCards.splice(index,1,GetAccomplishmentsByPerson(state.playerRole,1)[0]);
     }

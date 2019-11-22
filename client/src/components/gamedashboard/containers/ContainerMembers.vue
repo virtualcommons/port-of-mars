@@ -16,7 +16,7 @@ import Member from '@/components/gamedashboard/Member.vue';
   },
 })
 export default class ContainerMembers extends Vue {
-  const members = ['Researcher', 'Pioneer', 'Curator', 'Entrepreneur', 'Politician'].filter(name => name !== this.$store.state.playerRole);
+  members = ['Researcher', 'Pioneer', 'Curator', 'Entrepreneur', 'Politician'].filter(name => name !== this.$store.state.playerRole);
 }
 </script>
 

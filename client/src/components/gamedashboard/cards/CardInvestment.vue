@@ -26,7 +26,7 @@
     </div>
     <div class="investment-data">
       <p class="investment-data-name">{{ `${investmentData.n}` }}</p>
-      <p class="investment-data-inventory">
+      <p class="investment-data-inventory" :style="style">
         <span>(</span> {{
         `${investmentData.persistentInventory+investmentData.currentInventory}`
         }} <span>)</span>
@@ -41,6 +41,13 @@ import { InvestmentProperties } from '../../../models/index';
 @Component({})
 export default class CardInvestment extends Vue {
   @Prop() private investmentData!: InvestmentProperties;
+  
+  get style(){
+    if(this.investmentData.persistentInventory < this.investmentData.persistentInventory+this.investmentData.currentInventory){
+      return 'color:#90ee90';
+    }
+    return '';
+  }
 
   opacityModifier = this.investmentData.currentCost === -1 ? 'opacity:50%' : '';
 
