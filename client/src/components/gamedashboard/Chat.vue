@@ -20,7 +20,8 @@
         v-model="pendingMessage"
         placeholder="send a message"
       />
-      <button class="chat-input-sendbtn" type="button" @click="submitToChat">Send</button>
+      <i class="far fa-paper-plane fa-lg chat-input-sendbtn" @click="submitToChat"></i>
+      <!-- <button class="chat-input-sendbtn" type="button" @click="submitToChat">Send</button> -->
     </div>
   </div>
 </template>
@@ -67,24 +68,26 @@ export default class Chat extends Vue {
 .chat {
   height: 50%;
   width: 100%;
+  padding: 0.5rem;
+  border: 0.125rem solid var(--space-white-opaque-2);
   margin-top: 2rem;
   display: flex;
   flex-direction: column;
 }
 
 .chat-title {
-  margin: 0 0 0.5rem 0;
-  font-size: var(--font-large);
-  text-align: right;
-  color: var(--space-white);
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: var(--font-med);
+  text-align: center;
+  /* text-transform: uppercase; */
+  color: var(--space-gray);
+  background-color: var(--space-orange);
 }
 
 .chat-chat {
   height: 100%;
   width: 100%;
-  padding: 0.5rem;
-  border: var(--border-white);
-  border-bottom: none;
   overflow-y: scroll;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE 10+ */
@@ -103,7 +106,7 @@ export default class Chat extends Vue {
   margin-bottom: 0.5rem;
   font-size: var(--font-small);
   color: var(--space-white);
-  background-color: rgba(245, 245, 245, 0.05);
+  background-color: var(--space-white-opaque-1);
   overflow: auto;
 }
 
@@ -128,19 +131,20 @@ export default class Chat extends Vue {
 .chat-input-frame {
   height: 3rem;
   width: 100%;
-  padding: 0.5rem;
-  border: var(--border-white);
+  padding-top: 0.5rem;
+  border-top: 0.125rem solid var(--space-white-opaque-2);
   display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .chat-input {
   height: 100%;
-  width: 75%;
-  padding-right: 0.5rem;
   border: none;
+  flex: 1;
   font-size: var(--font-small);
   color: var(--space-white);
-  background-color: var(--space-gray);
+  background-color: transparent;
 }
 
 .chat-input:focus {
@@ -151,20 +155,18 @@ export default class Chat extends Vue {
   outline: none;
 }
 
+.chat-input::placeholder {
+  color: var(--space-white-opaque-2);
+}
+
 .chat-input-sendbtn {
-  height: 100%;
-  width: 25%;
-  border: none;
-  font-size: var(--font-med);
+  margin-left: 0.5rem;
   color: var(--space-orange);
-  background-color: var(--space-gray);
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
 }
 
-.chat-input-sendbtn:focus {
-  outline: none;
-}
-
-.chat-input-sendbtn:active {
-  outline: none;
+.chat-input-sendbtn:hover {
+  transform: scale(1.1);
 }
 </style>

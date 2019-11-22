@@ -1,5 +1,5 @@
 <template>
-  <div class="cm-accomplishment" :style='opacity'>
+  <div class="cm-accomplishment" :style="opacity">
     <div class="cm-accomplishment-title">
       <p>{{ this.cardData.label }}</p>
     </div>
@@ -9,14 +9,13 @@
     <div class="cm-accomplishment-investments">
       <p v-for="investment in this.cardData.totalCostArray" :key="investment + Math.random()">
         <!-- Note: will need to edit key implementation -->
-        <img
-          :src="require(`@/assets/iconsSVG/${investment}.svg`)"
-          alt='investment'
-        />
+        <img :src="require(`@/assets/iconsSVG/${investment}.svg`)" alt="investment" />
       </p>
     </div>
     <p class="cm-accomplishment-investments-title">( <span>Cost</span> )</p>
-    <button @click='handlePurchase'>{{ buyButton }}</button>
+    <button class="cm-accomplishment-purchase-button" @click="handlePurchase">
+      {{ buyButton }}
+    </button>
   </div>
 </template>
 
@@ -24,37 +23,38 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component({})
-
 export default class CardAccomplishmentView extends Vue {
   @Prop({
     default: () => ({
       label: '---',
       flavorText: '---',
-      totalCostArray: [],
-    }),
-  }) private cardData;
+      totalCostArray: []
+    })
+  })
+  private cardData;
 
   opacity = '';
 
   get canBuy() {
-    return this.$store.state.localInvestments.canPurchaseAccomplishment(this.cardData.totalCostArray,true);  
+    return this.$store.state.localInvestments.canPurchaseAccomplishment(
+      this.cardData.totalCostArray,
+      true
+    );
   }
 
-  get buyButton(){
-    if(this.cardData.bought){
-      return 'You already own this'
+  get buyButton() {
+    if (this.cardData.bought) {
+      return 'You already own this';
     }
     const b = this.canBuy;
     return b ? 'Purchase accomplishment' : 'You cannot purchase this';
   }
 
-  handlePurchase(){
-    if(this.cardData.totalCostArray.length > 0 && this.canBuy && !this.cardData.bought){
-      this.$store.dispatch('purchaseAccomplishment',this.cardData);
-
+  handlePurchase() {
+    if (this.cardData.totalCostArray.length > 0 && this.canBuy && !this.cardData.bought) {
+      this.$store.dispatch('purchaseAccomplishment', this.cardData);
     }
   }
-
 }
 </script>
 
@@ -90,12 +90,12 @@ export default class CardAccomplishmentView extends Vue {
   text-align: center;
 }
 
-.cm-accomplishment-cost-title {
+.cm-accomplishment-investments-title {
   margin: 1rem 0 0 0 !important;
   font-size: var(--font-small);
 }
 
-.cm-accomplishment-cost-title span {
+.cm-accomplishment-investments-title span {
   color: var(--space-orange);
 }
 
@@ -108,7 +108,19 @@ export default class CardAccomplishmentView extends Vue {
 }
 
 .cm-accomplishment-investments img {
-  width:2.5rem;
+  width: 2.5rem;
   margin: 0 0.25rem;
+}
+
+.cm-accomplishment-purchase-button {
+  border: none;
+  border-bottom: 0.125rem solid var(--space-orange);
+  margin-top: 1rem;
+  color: var(--space-white);
+  background-color: transparent;
+}
+
+.cm-accomplishment-purchase-button:focus {
+  outline: none;
 }
 </style>

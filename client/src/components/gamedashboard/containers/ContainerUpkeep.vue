@@ -1,10 +1,14 @@
 <template>
   <BContainer class="container-upkeep">
     <StatusBar class="upkeep-statusbar" :setWidth="`${upkeepStatus}`" />
-    <p>
-      Upkeep <span class="upkeep-status">{{ upkeepStatus }}</span
-      >/100
-    </p>
+    <div class="upkeep-statusbar-text">
+      <p>Upkeep</p>
+      <p >
+        <span class="upkeep-status">( </span>{{ upkeepStatus }}
+        <span class="upkeep-status">/</span> 100
+        <span class="upkeep-status"> )</span>
+      </p>
+    </div>
   </BContainer>
 </template>
 
@@ -40,18 +44,25 @@ export default class ContainerUpkeep extends Vue {
   color: var(--space-white);
 }
 
-.container-upkeep p {
-  width: 100%;
-  margin: 0.5rem 0 0 0;
-  font-size: 1.25rem;
-  text-align: center;
-}
-
 .upkeep-statusbar {
   width: 80%;
 }
 
-.upkeep-status {
+.upkeep-statusbar-text {
+  width: 80%;
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.upkeep-statusbar-text p {
+  margin: 0 0.25rem;
+  font-size: var(--font-med);
+  text-align: center;
+}
+
+.upkeep-statusbar-text span {
   color: var(--space-orange);
 }
 </style>

@@ -40,7 +40,7 @@ import CardInvestment from '@/components/gamedashboard/cards/CardInvestment.vue'
     BRow,
     BCol,
     StatusBar,
-    CardInvestment,
+    CardInvestment
   }
 })
 export default class ContainerInvestments extends Vue {
@@ -48,10 +48,12 @@ export default class ContainerInvestments extends Vue {
 
   get iD(): any {
     const rv = this.$store.state.localInvestments.returnValues;
-    const costData = Object.keys(rv).reduce((prev, curr) => {
-      prev.push(rv[curr]);
-      return prev;
-    }, []).sort((a,b) => a.currentCost - b.currentCost);
+    const costData = Object.keys(rv)
+      .reduce((prev, curr) => {
+        prev.push(rv[curr]);
+        return prev;
+      }, [])
+      .sort((a, b) => a.currentCost - b.currentCost);
 
     // console.log(costData); // eslint-disable-line no-use-before-define
     return costData;
@@ -68,7 +70,8 @@ export default class ContainerInvestments extends Vue {
   height: 100%;
   width: 100%;
   max-width: none;
-  padding: 0;
+  padding: 0.5rem;
+  padding-right: 0.25rem;
   margin: 0;
   display: flex;
   flex-direction: column;
@@ -77,8 +80,9 @@ export default class ContainerInvestments extends Vue {
 .investments-topbar {
   height: 10%;
   width: 100%;
-  padding: 0.25rem 1rem;
   margin: 0;
+  margin-bottom: 0.5rem;
+  padding: 0.25rem 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -87,7 +91,7 @@ export default class ContainerInvestments extends Vue {
 
 .investments-topbar-title {
   margin: 0;
-  font-size: var(--font-large);
+  font-size: var(--font-med);
   color: var(--space-gray);
 }
 
@@ -98,18 +102,17 @@ export default class ContainerInvestments extends Vue {
 
 .investments-topbar-status {
   margin: 0;
-  font-size: var(--font-large);
+  font-size: var(--font-med);
   color: var(--space-gray);
 }
 
 .investments-cards {
   height: 90%;
-  padding: 0.5rem;
+  width: 100%;
   margin: 0;
-  border: var(--border-white);
-  border-top: none;
   display: flex;
   flex-direction: column;
+  background-color: var(--space-white-opaque-1);
 }
 
 .investments-cards-top,
@@ -121,5 +124,6 @@ export default class ContainerInvestments extends Vue {
   display: flex;
   justify-content: space-around;
   align-items: center;
+  /* background-color: var(--space-white-opaque-1); */
 }
 </style>

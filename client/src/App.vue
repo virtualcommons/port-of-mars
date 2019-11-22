@@ -24,8 +24,8 @@ Vue.use(BootstrapVue);
 @Component({
   components: {
     DefaultLayout,
-    TutorialLayout,
-  },
+    TutorialLayout
+  }
 })
 export default class Home extends Vue {
   /**
@@ -63,7 +63,8 @@ body {
   --space-gray: #1e2223;
   --space-orange: #c67b5c;
   --space-white: #f5f5f5;
-  --space-white-opaque: rgba(245,245,245, 0.05);
+  --space-white-opaque-1: rgba(245, 245, 245, 0.05);
+  --space-white-opaque-2: rgba(245, 245, 245, 0.25);
 
   --color-Researcher: rgba(67, 124, 174, 0.2);
   --color-Pioneer: rgba(111, 36, 134, 0.2);
