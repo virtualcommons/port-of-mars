@@ -24,8 +24,12 @@ export default class ContainerProfile extends Vue {
   }
 
   get avatarURL(): string {
+    if (this.playerRole !== '') {
+      // eslint-disable-next-line global-require,import/no-dynamic-require
+      return require(`@/assets/characters/${this.playerRole}.png`);
+    }
     // eslint-disable-next-line global-require,import/no-dynamic-require
-    return require(`@/assets/characters/${this.playerRole}.png`);
+    return require('@/assets/characters/Curator.png');
   }
 }
 </script>
@@ -50,7 +54,8 @@ export default class ContainerProfile extends Vue {
   align-items: center;
 }
 
-.profile-info-player, .profile-info-score {
+.profile-info-player,
+.profile-info-score {
   margin: 0;
   color: var(--space-white);
 }
@@ -70,14 +75,14 @@ export default class ContainerProfile extends Vue {
 .profile-frame {
   height: 5rem;
   width: 5rem;
-  padding: 0.5rem;
+  padding: 0.25rem;
   border: 0.125rem solid var(--space-orange);
   border-radius: 50%;
   margin-right: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--space-white-opaque);
+  background-color: var(--space-white-opaque-1);
 }
 
 .profile-img {

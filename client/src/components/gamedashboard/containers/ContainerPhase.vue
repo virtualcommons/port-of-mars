@@ -4,10 +4,12 @@
       <BCol class="phase" cols="3">
         <Phase />
       </BCol>
-      <BCol class="events" cols="9">
-        <CardEvent :event="eventsForTheRound[0]"/>
-        <CardEvent :event="eventsForTheRound[1]" id="v-step-8"/>
-        <CardEvent :event="eventsForTheRound[2]"/>
+      <BCol class="events-container" cols="9">
+        <div class="events">
+          <CardEvent :event="eventsForTheRound[0]"/>
+          <CardEvent :event="eventsForTheRound[1]" id="v-step-8"/>
+          <CardEvent :event="eventsForTheRound[2]"/>
+        </div>
       </BCol>
     </BRow>
   </BContainer>
@@ -59,10 +61,18 @@ export default class ContainerPhase extends Vue {
   align-items: center;
 }
 
+.events-container {
+  /* padding: 0.5rem; */
+  /* margin: 1rem 0; */
+  /* border: 0.125rem solid var(--space-white-opaque-2); */
+}
+
 .events {
-  padding: 1rem 0.5rem;
+  height: 100%;
+  width: 100%;
   display: flex;
   justify-content: space-around;
   align-items: center;
+  /* background-color: var(--space-white-opaque-1); */
 }
 </style>

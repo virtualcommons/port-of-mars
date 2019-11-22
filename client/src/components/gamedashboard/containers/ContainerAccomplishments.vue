@@ -11,7 +11,7 @@
           @click="handleClick('available')"
           :class="activeView == 'available' ? 'btn-active' : ''"
         >
-          Available
+          A
         </button>
         <button
           type="button"
@@ -19,7 +19,7 @@
           @click="handleClick('inventory')"
           :class="activeView == 'inventory' ? 'btn-active' : ''"
         >
-          Inventory
+          I
         </button>
       </div>
     </BRow>
@@ -32,8 +32,11 @@
       </BRow>
 
       <BRow class="accomplishments-cards-inventory" v-if="activeView == 'inventory'">
-        <CardAccomplishment v-for="accomplishment in boughtAccomplishments" :key="accomplishment.label"
-          :accomplishment="accomplishment"/>
+        <CardAccomplishment
+          v-for="accomplishment in boughtAccomplishments"
+          :key="accomplishment.label"
+          :accomplishment="accomplishment"
+        />
       </BRow>
     </BRow>
   </BContainer>
@@ -50,8 +53,8 @@ import { accomplishments } from '../../../../../server/src/data';
     BContainer,
     BRow,
     BCol,
-    CardAccomplishment,
-  },
+    CardAccomplishment
+  }
 })
 export default class ContainerAccomplishments extends Vue {
   private activeView = 'available';
@@ -77,14 +80,18 @@ export default class ContainerAccomplishments extends Vue {
   height: 100%;
   width: 100%;
   max-width: none;
+  padding: 0.5rem;
+  padding-left: 0.25rem;
   margin: 0;
-  padding: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .accomplishments-topbar {
   height: 10%;
   width: 100%;
   margin: 0;
+  margin-bottom: 0.5rem;
   padding: 0.25rem 1rem;
   display: flex;
   justify-content: space-between;
@@ -94,7 +101,7 @@ export default class ContainerAccomplishments extends Vue {
 
 .accomplishments-topbar-title {
   height: 100%;
-  width: 60%;
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -103,31 +110,37 @@ export default class ContainerAccomplishments extends Vue {
 .accomplishments-topbar-title p {
   width: 100%;
   margin: 0;
-  font-size: var(--font-large);
-  text-align: left;
+  font-size: var(--font-med);
+  text-align: center;
   color: var(--space-gray);
 }
 
 .accomplishments-topbar-button-container {
   height: 100%;
-  width: 40%;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
 }
 
 .accomplishments-topbar-button-container button {
-  height: 50%;
+  height: 2.5rem;
+  width: 2.5rem;
   border: none;
+  border-radius: 50%;
+  margin: 0 0.25rem;
   font-size: var(--font-small);
-  text-align: right;
+  text-align: center;
   background-color: transparent;
-  transition: all .2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 .accomplishments-topbar-button-container button:focus {
   outline: none;
+}
+
+.accomplishments-topbar-button-container button:hover {
+  color: var(--space-white);
+  background-color: var(--space-gray);
 }
 
 .btn-active {
@@ -138,13 +151,11 @@ export default class ContainerAccomplishments extends Vue {
 .accomplishment-cards {
   height: 90%;
   width: 100%;
-  padding: 0.5rem;
   margin: 0;
-  border-right: var(--border-white);
-  border-bottom: var(--border-white);
   overflow-y: scroll;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE 10+ */
+  background-color: var(--space-white-opaque-1);
 }
 
 .accomplishment-cards::-webkit-scrollbar {
@@ -160,6 +171,7 @@ export default class ContainerAccomplishments extends Vue {
   display: flex;
   flex-direction: column;
   align-items: center;
+  /* background-color: var(--space-white-opaque-1); */
 }
 
 .accomplishments-cards-available {
@@ -170,12 +182,5 @@ export default class ContainerAccomplishments extends Vue {
 .accomplishments-cards-inventory {
   min-height: 100%;
   justify-content: space-around;
-}
-
-.test-card {
-  height: 3.5rem;
-  width: 80%;
-  margin-bottom: 0.5rem;
-  background-color: green;
 }
 </style>

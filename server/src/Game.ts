@@ -119,7 +119,7 @@ export class GameRoom extends Room<GameState> {
   addChatMessage(sessionId: string, message: string, round: number) {
     this.state.messages.push(new ChatMessage({
       role: this.state.players[sessionId].role,
-      time: (new Date()).getTime(),
+      time: (new Date()).getTime(), // Note: Does the new Date() function need to be called twice (Chat.vue)?
       message,
       round
     }))
