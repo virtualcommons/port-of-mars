@@ -1,5 +1,5 @@
 <template>
-  <BContainer class="container-upkeep">
+  <BContainer class="container-upkeep" id="v-step-3">
     <StatusBar class="upkeep-statusbar" :setWidth="`${upkeepStatus}`" />
     <div class="upkeep-statusbar-text">
       <p>Upkeep</p>

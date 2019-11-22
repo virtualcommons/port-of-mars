@@ -1,5 +1,5 @@
 <template>
-  <BContainer class="container-bottom" id="v-step-9">
+  <BContainer class="container-bottom" >
     <BRow class="row-bottom">
       <BCol class="container-bottom-investments" cols="7">
         <ContainerInvestments />

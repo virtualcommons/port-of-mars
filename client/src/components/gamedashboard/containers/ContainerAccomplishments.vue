@@ -1,5 +1,5 @@
 <template>
-  <BContainer class="container-accomplishments" id="v-step-15">
+  <BContainer class="container-accomplishments">
     <BRow class="accomplishments-topbar">
       <div class="accomplishments-topbar-title">
         <p>Accomplishments</p>
@@ -26,7 +26,7 @@
 
     <BRow class="accomplishment-cards">
       <BRow class="accomplishments-cards-available" v-if="activeView == 'available'">
-        <CardAccomplishment id="v-step-16" :accomplishment="currentAccomplishments[0]" />
+        <CardAccomplishment :accomplishment="currentAccomplishments[0]" />
         <CardAccomplishment :accomplishment="currentAccomplishments[1]" />
         <CardAccomplishment :accomplishment="currentAccomplishments[2]" />
       </BRow>
