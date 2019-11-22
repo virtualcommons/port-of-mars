@@ -2,11 +2,7 @@
   <div class="chat">
     <p class="chat-title">Chat</p>
     <div class="chat-chat">
-      <div
-        class="chat-message"
-        v-for="message in messages"
-        :key="message.time.toLocaleTimeString()"
-      >
+      <div class="chat-message" v-for="message in messages" :key="message.time">
         <p class="chat-message-member">
           {{ message.role }}
         </p>
@@ -54,6 +50,7 @@ export default class Chat extends Vue {
 
   // eslint-disable-next-line class-methods-use-this
   toDate(unixTimestamp: number) {
+    // Note: Does the new Date() function need to be called twice (Game.ts)?
     return new Date(unixTimestamp).toLocaleTimeString();
   }
 

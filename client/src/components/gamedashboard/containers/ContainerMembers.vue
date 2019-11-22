@@ -1,8 +1,13 @@
 <template>
-  <div class="container-members" id="v-step-1" >
-      <Member v-for="member in members" :key="member" :playerRole="member"
-        :playerScore="10" :notificationCount="1"
-        :style="{ 'background-color': `var(--color-${member})` }"/>
+  <div class="container-members" id="v-step-1">
+    <Member
+      v-for="member in members"
+      :key="member"
+      :playerRole="member"
+      :playerScore="10"
+      :notificationCount="1"
+      :style="{ 'background-color': `var(--color-${member})` }"
+    />
   </div>
 </template>
 
@@ -12,16 +17,26 @@ import Member from '@/components/gamedashboard/Member.vue';
 
 @Component({
   components: {
-    Member,
-  },
+    Member
+  }
 })
 export default class ContainerMembers extends Vue {
-  const members = ['Researcher', 'Pioneer', 'Curator', 'Entrepreneur', 'Politician'].filter(name => name !== this.$store.state.playerRole);
+  get members() {
+    if (this.$store.state.playerRole !== '') {
+      return ['Researcher', 'Pioneer', 'Curator', 'Entrepreneur', 'Politician'].filter(
+        name => name !== this.$store.state.playerRole
+      );
+    }
+    return ['Researcher', 'Pioneer', 'Curator', 'Entrepreneur', 'Politician'].filter(
+      name => name !== 'Curator'
+    );
+  }
 }
 </script>
 
 <style scoped>
 .container-members {
+  max-height: 50%;
   width: 100%;
   flex-grow: 1;
   display: flex;
