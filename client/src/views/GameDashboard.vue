@@ -65,8 +65,8 @@ export default class GameDashboard extends Vue {}
 }
 
 .game-dashboard {
-  height: 100% !important;
-  width: 100% !important;
+  height: 100vh !important;
+  width: 100vw !important;
   max-width: none !important;
   display: flex;
   justify-content: center;
