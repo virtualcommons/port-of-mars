@@ -1,5 +1,5 @@
 import { ChatMessageData } from 'shared/types';
-import { BaseInvestmentCosts, GetAccomplishmentsByPerson, buyAccomplishment } from "@/models";
+import { BaseInvestmentCosts, GetAccomplishmentsByPerson, buyAccomplishment } from '@/models';
 import * as _ from 'lodash';
 
 export default {
@@ -45,11 +45,13 @@ export default {
   },
   SET_PLAYER_ROLE(state: any, payload: string) {
     state.playerRole = payload;
-    
-    Object.keys(BaseInvestmentCosts[payload]).forEach((key) => {
+    console.log('PLAYER ROLE (MUTATION): ', state.playerRole);
+
+    Object.keys(BaseInvestmentCosts[payload]).forEach(key => {
       state.localInvestments.updateCurrentCost(key, BaseInvestmentCosts[payload][key]);
     });
 
+    state.activeAccomplishmentCards = GetAccomplishmentsByPerson(state.playerRole,3);
   },
   SET_PLAYER_FINISHED(state: any, payload: boolean) {
     state.playerFinishedWithPhase = payload;
@@ -58,18 +60,33 @@ export default {
   // accomplishments
   SET_ACTIVE_ACCOMPLISHMENTS(state: any, payload: any) {
     //state.activeAccomplishmentCards = payload;
-    state.activeAccomplishmentCards = GetAccomplishmentsByPerson(state.playerRole,payload);
+    state.activeAccomplishmentCards = GetAccomplishmentsByPerson(state.playerRole, payload);
   },
-  PURCHASE_ACCOMPLISHMENT(state:any, payload:any){
-    let bought = state.localInvestments.canPurchaseAccomplishment(payload.totalCostArray,false);
-    if(bought){
+  DISCARD_ACCOMPLISHMENT(state:any,payload:any){
+    let index = _.findIndex(state.activeAccomplishmentCards, (e) => e.label == payload);
+    let newAccomplishment = GetAccomplishmentsByPerson(state.playerRole,1)[0];
+    
+    if(newAccomplishment != undefined){
+      state.activeAccomplishmentCards[index].inCurrentDeck = false;
+      state.activeAccomplishmentCards.splice(index,1,newAccomplishment);
+    }
+  },
+  PURCHASE_ACCOMPLISHMENT(state: any, payload: any) {
+    let bought = state.localInvestments.canPurchaseAccomplishment(payload.totalCostArray, false);
+    if (bought) {
       buyAccomplishment(payload.label);
       state.boughtAccomplishmentCards.push(payload);
 
       state.playerScore += payload.victoryPoints;
       
       let index = _.findIndex(state.activeAccomplishmentCards, (e) => e.label == payload.label);
-      state.activeAccomplishmentCards.splice(index,1,GetAccomplishmentsByPerson(state.playerRole,1)[0]);
+      let newAccomplishment = GetAccomplishmentsByPerson(state.playerRole,1)[0];
+
+      if(newAccomplishment !== undefined){
+        state.activeAccomplishmentCards.splice(index,1,newAccomplishment);
+      } else {
+        state.activeAccomplishmentCards.splice(index,1);
+      }
     }
   },
   /**
@@ -107,7 +124,7 @@ export default {
     //   state.marsLog.push(payload);
     // }
     state.marsLog.addEntry(payload);
-  },
+  }
   // CHANGE_LOCAL_ROUND_COSTS(state: any, payload: any) {
   //   Object.keys(payload).forEach(key => {
   //     state.localInvestments.updateCurrentCost(key, payload[key]);

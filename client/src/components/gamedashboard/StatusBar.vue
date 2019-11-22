@@ -25,11 +25,11 @@ export default class StatusBar extends Vue {
 
   styleInner(): string {
     if(45 < this.setWidth && this.setWidth <= 69){
-      this.colorInner = 'statusbar-inner-yellow';
+      return 'statusbar-inner-yellow';
     }
 
     if(this.setWidth <= 45){
-      this.colorInner = 'statusbar-inner-red';
+      return 'statusbar-inner-red';
     }
     return this.colorInner;
   }
@@ -39,22 +39,23 @@ export default class StatusBar extends Vue {
 <style lang="css" scoped>
 .statusbar-outer {
   height: 1rem !important;
-  border-radius: 0.50rem;
+  border-radius: 0.5rem;
   display: flex;
   align-items: center;
 }
 
 .statusbar-inner {
-  height: 0.50rem !important;
+  height: 0.5rem !important;
   margin: 0.125rem;
   margin-right: 0.125rem;
   margin-left: 0.125rem;
   border-radius: 0.25rem;
-  transition: all .4s ease-in-out;
+  transition: all 0.4s ease-in-out;
 }
 
 .statusbar-outer-white {
-  border: var(--border-white);
+  /* border: var(--border-white); */
+  border: 0.125rem solid var(--space-white-opaque-2);
 }
 
 .statusbar-outer-gray {

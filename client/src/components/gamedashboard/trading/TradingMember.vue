@@ -1,9 +1,7 @@
 setMember<template>
   <div class="trading-member" :style="setColor()" @click="setMember(playerRole)">
     <div class="trading-member-img">
-      <img
-      :src="require(`@/assets/characters/${setImg()}.png`)"
-      alt="Player">
+      <img :src="require(`@/assets/characters/${setImg()}.png`)" alt="Player" />
     </div>
     <div class="trading-member-status">
       <p>{{ notificationCount }}</p>
@@ -15,7 +13,6 @@ setMember<template>
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component({})
-
 export default class TradingModal extends Vue {
   @Prop({ default: 'Curator' }) private playerRole!: string;
 
@@ -51,7 +48,7 @@ export default class TradingModal extends Vue {
 
 .trading-member-img {
   height: 100%;
-  width: 40%;
+  width: 60%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -59,12 +56,12 @@ export default class TradingModal extends Vue {
 }
 
 .trading-member-img img {
-  height: 100%;
+  width: 100%;
 }
 
 .trading-member-status {
   height: 100%;
-  width: 60%;
+  width: 40%;
   display: flex;
   justify-content: center;
   align-items: center;

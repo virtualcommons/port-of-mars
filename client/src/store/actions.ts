@@ -39,9 +39,12 @@ export default {
     context.commit('ADD_TO_MARS_LOG', payload);
   },
 
-  // accomplishements
+  // accomplishments
   setActiveAccomplishments(context: any, payload: any) {
     context.commit('SET_ACTIVE_ACCOMPLISHMENTS', payload);
+  },
+  discardAccomplishment(context:any, payload:any) {
+    context.commit('DISCARD_ACCOMPLISHMENT',payload);
   },
   purchaseAccomplishment(context:any, payload:any) {
     context.commit('PURCHASE_ACCOMPLISHMENT',payload);
