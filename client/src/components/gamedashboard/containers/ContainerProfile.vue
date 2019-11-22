@@ -75,7 +75,7 @@ export default class ContainerProfile extends Vue {
 .profile-frame {
   height: 5rem;
   width: 5rem;
-  padding: 0.5rem;
+  padding: 0.25rem;
   border: 0.125rem solid var(--space-orange);
   border-radius: 50%;
   margin-right: 1rem;

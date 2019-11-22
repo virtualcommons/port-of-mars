@@ -3,9 +3,13 @@
     <div :style="setVisibility()" class="member-notif">
       <p class="member-notif-num">{{ notificationCount }}</p>
     </div>
-    <p class="member-score">{{ playerScore }}</p>
-    <p class="member-role">{{ playerRole }}</p>
-    <img :src="require(`@/assets/characters/${setImg()}.png`)" alt="Player" class="member-img" />
+    <div class="member-info">
+      <p class="member-score">{{ playerScore }}</p>
+      <p class="member-role">{{ playerRole }}</p>
+    </div>
+    <div class="member-image">
+      <img :src="require(`@/assets/characters/${setImg()}.png`)" alt="Player" class="member-img" />
+    </div>
   </div>
 </template>
 
@@ -39,8 +43,8 @@ export default class Member extends Vue {
 <style scoped>
 .member {
   height: 4rem;
-  width: 90%;
-  padding: 0.25rem 1rem;
+  width: 95%;
+  padding: 0.25rem 0.5rem;
   border: var(--border-white);
   border-radius: 1rem;
   position: relative;
@@ -49,7 +53,7 @@ export default class Member extends Vue {
   align-items: center;
   background-color: rgba(245, 245, 245, 0.2);
   cursor: pointer;
-  transition: all .2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 .member:hover {
@@ -76,20 +80,42 @@ export default class Member extends Vue {
   color: var(--space-gray) !important;
 }
 
+.member-info {
+  height: 100%;
+  width: 60%;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
 .member-score {
-  margin: 0;
+  margin-bottom: 0;
+  margin-right: 0.5rem;
   color: var(--space-white);
   font-size: var(--font-large);
 }
 
 .member-role {
-  padding: 0 0.25rem;
   margin: 0;
+  flex: 1;
   font-size: var(--font-med);
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   color: var(--space-white);
+  overflow: hidden;
 }
 
-.member-img {
+.member-image {
   height: 100%;
+  max-width: 40%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.member-image img {
+  height: 100%;
+  max-height: 4rem;
 }
 </style>
