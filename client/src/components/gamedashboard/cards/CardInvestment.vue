@@ -17,7 +17,7 @@
           </p>
         </div>
       </div>
-      <div class="card-investment-increment-decrement" id="v-step-13" v-if="!disabled">
+      <div class="card-investment-increment-decrement" v-if="!disabled">
         <button
           class="card-investment-increment"
           type="button"

@@ -7,20 +7,19 @@
         :setWidth="`${decrementInvestmentCount * 10}`"
         :colorOuter="'statusbar-outer-gray'"
         :colorInner="'statusbar-inner-gray'"
-        id="v-step-10"
       />
       <p class="investments-topbar-status">( {{ decrementInvestmentCount }} )</p>
     </BRow>
 
     <BRow class="investments-cards">
       <BRow class="investments-cards-top">
-        <CardInvestment :investmentData="iD[2]" id="v-step-11" />
+        <CardInvestment :investmentData="iD[2]" />
         <CardInvestment :investmentData="iD[3]" />
         <CardInvestment :investmentData="iD[0]" />
       </BRow>
 
       <BRow class="investments-cards-bottom">
-        <CardInvestment :investmentData="iD[4]" id="v-step-14" />
+        <CardInvestment :investmentData="iD[4]" />
         <CardInvestment :investmentData="iD[5]" />
         <CardInvestment :investmentData="iD[1]" />
       </BRow>

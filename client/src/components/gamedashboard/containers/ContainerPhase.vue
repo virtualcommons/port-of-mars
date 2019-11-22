@@ -4,12 +4,10 @@
       <BCol class="phase" cols="3">
         <Phase />
       </BCol>
-      <BCol class="events-container" cols="9">
-        <div class="events">
-          <CardEvent :event="eventsForTheRound[0]"/>
-          <CardEvent :event="eventsForTheRound[1]" id="v-step-8"/>
-          <CardEvent :event="eventsForTheRound[2]"/>
-        </div>
+      <BCol class="events" cols="9">
+        <CardEvent :event="eventsForTheRound[0]"/>
+        <CardEvent :event="eventsForTheRound[1]"/>
+        <CardEvent :event="eventsForTheRound[2]"/>
       </BCol>
     </BRow>
   </BContainer>
