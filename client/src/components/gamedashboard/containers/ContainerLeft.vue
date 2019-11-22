@@ -1,9 +1,9 @@
 <template>
   <div class="container-left">
-    <Round id="v-step-3" />
-    <Notification id="v-step-4"/>
+    <Round />
+    <Notification />
     <ContainerProfile />
-    <MarsLog id="v-step-5"/>
+    <MarsLog />
   </div>
 </template>
 

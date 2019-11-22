@@ -1,5 +1,5 @@
 <template>
-  <BContainer class="container-accomplishments" id="v-step-15">
+  <BContainer class="container-accomplishments">
     <BRow class="accomplishments-topbar">
       <div class="accomplishments-topbar-title">
         <p>Accomplishments</p>

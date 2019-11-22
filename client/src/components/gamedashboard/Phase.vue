@@ -1,5 +1,5 @@
 <template>
-  <div class="phase-component" id="v-step-7">
+  <div class="phase-component">
     <div>
       <p class="phase-title">Current Phase</p>
       <p class="phase-current">{{ currentPhase }}</p>
