@@ -1,11 +1,14 @@
 <template>
-  <BContainer class="container-bottom" >
+  <BContainer class="container-bottom">
     <BRow class="row-bottom">
-      <BCol class="container-bottom-investments" cols="7">
+      <BCol class="container-bottom-investments" cols="7" v-if="currentView === 'default'">
         <ContainerInvestments />
       </BCol>
-      <BCol class="container-bottom-accomplishments" cols="5">
+      <BCol class="container-bottom-accomplishments" cols="5" v-if="currentView === 'default'">
         <ContainerAccomplishments />
+      </BCol>
+      <BCol class="container-bottom-events" cols="12" v-if="currentView === 'event'">
+        <ContainerEvents />
       </BCol>
     </BRow>
   </BContainer>
@@ -16,6 +19,7 @@ import { Vue, Component } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
 import ContainerInvestments from '@/components/gamedashboard/containers/ContainerInvestments.vue';
 import ContainerAccomplishments from '@/components/gamedashboard/containers/ContainerAccomplishments.vue';
+import ContainerEvents from '@/components/gamedashboard/containers/ContainerEvents.vue';
 
 @Component({
   components: {
@@ -23,10 +27,22 @@ import ContainerAccomplishments from '@/components/gamedashboard/containers/Cont
     BRow,
     BCol,
     ContainerInvestments,
-    ContainerAccomplishments
+    ContainerAccomplishments,
+    ContainerEvents
   }
 })
-export default class ContainerBottom extends Vue {}
+export default class ContainerBottom extends Vue {
+  private currentView: string = 'event';
+
+  mounted() {
+    this.$root.$on('openEvent', (data: string) => {
+      this.currentView = 'event';
+    });
+    this.$root.$on('closeEvent', (data: string) => {
+      this.currentView = 'default';
+    });
+  }
+}
 </script>
 
 <style scoped>
@@ -47,7 +63,8 @@ export default class ContainerBottom extends Vue {}
 }
 
 .container-bottom-investments,
-.container-bottom-accomplishments {
+.container-bottom-accomplishments,
+.container-bottom-events {
   height: 100%;
   width: 100%;
   padding: 0;

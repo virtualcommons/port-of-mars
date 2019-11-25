@@ -1,7 +1,7 @@
 <template>
   <BContainer class="container-investments">
     <BRow class="investments-topbar">
-      <p class="investments-topbar-title">Investments</p>
+      <p class="investments-topbar-title">Time Investments</p>
       <StatusBar
         class="investments-topbar-statusbar"
         :setWidth="`${decrementInvestmentCount * 10}`"
