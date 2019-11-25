@@ -1,4 +1,5 @@
 export default {
+<<<<<<< HEAD
   setActiveAccomplishments: function(context: any, payload: any) {
     context.commit('SET_ACTIVE_ACCOMPLISHMENTS', payload);
   },
@@ -9,3 +10,15 @@ export default {
     context.commit('PURCHASE_ACCOMPLISHMENT', payload);
   }
 };
+=======
+    setActiveAccomplishments: function(context: any, payload: any) {
+        context.commit('SET_ACTIVE_ACCOMPLISHMENTS', payload);
+      },
+      discardAccomplishment: function(context:any, payload:any) {
+        context.commit('DISCARD_ACCOMPLISHMENT',payload);
+      },
+      purchaseAccomplishment: function(context:any, payload:any) {
+        context.commit('PURCHASE_ACCOMPLISHMENT',payload);
+      },
+}
+>>>>>>> [refactor] store is modular

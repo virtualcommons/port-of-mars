@@ -5,7 +5,10 @@ import * as _ from 'lodash';
 import actions from './actionsFolder';
 import getters from './getters';
 import mutations from './mutationFolder';
+<<<<<<< HEAD
 import {initialStoreState} from "@/store/state";
+=======
+>>>>>>> [refactor] store is modular
 
 export interface StoreState {
   playerRole: string;

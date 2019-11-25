@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {ChatMessageData} from 'shared/types';
 import * as _ from 'lodash';
 import {State} from "@/store/state";
@@ -11,3 +12,12 @@ export default {
     state.chat.splice(index, 1);
   }
 };
+=======
+import { ChatMessageData } from 'shared/types';
+
+export default {
+    ADD_TO_CHAT(state: any, payload: ChatMessageData) {
+        state.chat.push(payload);
+      },
+}
+>>>>>>> [refactor] store is modular

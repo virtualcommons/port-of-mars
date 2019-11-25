@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {State} from "@/store/state";
 import {Role} from "shared/types";
 
@@ -9,3 +10,13 @@ export default {
     state.tradingMember = newTradingMember;
   },
 }
+=======
+export default {
+    SET_TRADING_VIEW(state: any, newTradingView: string) {
+        state.tradingView = newTradingView;
+      },
+      SET_TRADING_MEMBER(state: any, newTradingMember: string) {
+        state.tradingMember = newTradingMember;
+      },
+}
+>>>>>>> [refactor] store is modular
