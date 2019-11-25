@@ -51,7 +51,7 @@ export default class Phase extends Vue {
   }
 
   handleClick() {
-    this.$root.$emit('openConfirmation', 'open');
+    this.$root.$emit('openConfirmation', {text:`Select 'Yes' if you're ready to end the round.`,type:'nextRound'});
     // this.btnDisabled = true;
   }
 

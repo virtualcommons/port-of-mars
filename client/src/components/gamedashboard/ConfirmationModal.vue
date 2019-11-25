@@ -3,7 +3,7 @@
     <div class="com">
       <div class="com-content">
         <p class="com-content-header">Are you sure?</p>
-        <p class="com-content-question">Select 'Yes' if you're ready to end the round.</p>
+        <p class="com-content-question">{{text}}</p>
       </div>
       <div class="com-buttons">
         <button class="cancel-button" type="button" name="Cancel Button" @click="handleCancel">
@@ -21,10 +21,16 @@ import { Component, Vue } from 'vue-property-decorator';
 @Component({})
 export default class ConfirmationModal extends Vue {
   setStyle: string = 'none';
+  action = '';
+  type = '';
+  text = '';
 
   mounted() {
-    this.$root.$on('openConfirmation', (data: string) => {
+    this.$root.$on('openConfirmation', (data) => {
       this.setStyle = '';
+      this.type = data.type;
+      this.text = data.text;
+      this.action = data.actionData;
     });
   }
 
@@ -37,7 +43,12 @@ export default class ConfirmationModal extends Vue {
     //   this.setStyle = 'none';
     // });
 
-    this.$root.$emit('nextRound');
+    if(this.type=='nextRound'){
+      this.$root.$emit('nextRound');
+    }
+    if(this.type == 'discardAccomplishment'){
+      this.$store.dispatch('discardAccomplishment',this.action);
+    }
     this.setStyle = 'none';
   }
 }

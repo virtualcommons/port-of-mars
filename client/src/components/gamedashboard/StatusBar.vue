@@ -24,6 +24,13 @@ export default class StatusBar extends Vue {
   }
 
   styleInner(): string {
+    if(45 < this.setWidth && this.setWidth <= 69){
+      return 'statusbar-inner-yellow';
+    }
+
+    if(this.setWidth <= 45){
+      return 'statusbar-inner-red';
+    }
     return this.colorInner;
   }
 }
@@ -61,5 +68,13 @@ export default class StatusBar extends Vue {
 
 .statusbar-inner-gray {
   background-color: var(--space-gray);
+}
+
+.statusbar-inner-yellow{
+  background-color: rgb(219, 219, 81);
+}
+
+.statusbar-inner-red {
+  background-color: rgb(238, 70, 70);
 }
 </style>

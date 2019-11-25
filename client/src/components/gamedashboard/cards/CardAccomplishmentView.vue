@@ -42,9 +42,11 @@ export default class CardAccomplishmentView extends Vue {
     );
   }
 
-  get buyButton() {
-    if (this.cardData.bought) {
-      return 'You already own this';
+  get buyButton(){
+    this.opacity = 'opacity:100%';
+    if(this.cardData.bought){
+      this.opacity = 'opacity:50%';
+      return 'You already own this'
     }
     const b = this.canBuy;
     return b ? 'Purchase accomplishment' : 'You cannot purchase this';

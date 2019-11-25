@@ -26,9 +26,16 @@
 
     <BRow class="accomplishment-cards">
       <BRow class="accomplishments-cards-available" v-if="activeView == 'available'">
-        <CardAccomplishment :accomplishment="currentAccomplishments[0]" />
+        <!-- <CardAccomplishment id="v-step-16" :accomplishment="currentAccomplishments[0]" />
         <CardAccomplishment :accomplishment="currentAccomplishments[1]" />
-        <CardAccomplishment :accomplishment="currentAccomplishments[2]" />
+        <CardAccomplishment :accomplishment="currentAccomplishments[2]" /> -->
+
+        <div class="accomplishment-container" :style="{width:setWidth}" v-for="accomplishment in currentAccomplishments" :key="accomplishment.lable">
+          <CardAccomplishment :accomplishment='accomplishment'/>
+          <button class="discard-button" :style="{display:canDiscard}" @click='handleDiscardAccomplishment(accomplishment)'>
+            <img :src="require(`@/assets/trashIcon.svg`)" />
+          </button>
+        </div>
       </BRow>
 
       <BRow class="accomplishments-cards-inventory" v-if="activeView == 'inventory'">
@@ -58,8 +65,8 @@ import { accomplishments } from '../../../../../server/src/data';
 })
 export default class ContainerAccomplishments extends Vue {
   private activeView = 'available';
-
   private isActive = true;
+  private setWidth = '100%';
 
   get currentAccomplishments() {
     return this.$store.state.activeAccomplishmentCards;
@@ -69,13 +76,38 @@ export default class ContainerAccomplishments extends Vue {
     return this.$store.state.boughtAccomplishmentCards;
   }
 
+  get canDiscard(){
+    let phase = this.$store.state.gamePhase;
+    if(phase == "Purchase Investments"){
+      this.setWidth = '95%';
+      return '';
+    } else{
+      this.setWidth = '100%';
+      return 'none';
+    }
+  }
+
   handleClick(view: string) {
     this.activeView = view;
+  }
+
+  handleDiscardAccomplishment(a){
+    this.$root.$emit('openConfirmation', {text:`Select 'Yes' if you want to draw another card.`,
+    type:'discardAccomplishment',
+    actionData: a.label});
+    // this.$store.dispatch('discardAccomplishment',a.label);
   }
 }
 </script>
 
 <style scoped>
+.accomplishment-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  /*width:95%;*/
+  transition: all 0.3s ease-in-out;
+}
 .container-accomplishments {
   height: 100%;
   width: 100%;
@@ -182,5 +214,14 @@ export default class ContainerAccomplishments extends Vue {
 .accomplishments-cards-inventory {
   min-height: 100%;
   justify-content: space-around;
+}
+
+.discard-button{
+  height: 2.5rem;
+  width: 2.5rem;
+  border: none;
+  border-radius: 50%;
+  text-align: center;
+  background-color: white;
 }
 </style>

@@ -7,7 +7,7 @@
           <img :src="require(`@/assets/iconsSVG/${this.investmentData.n}.svg`)" alt="Player" />
         </div>
         <div class="card-investment-type-data">
-          <p>
+          <p :style="style">
             <span>(</span>
             {{ `${investmentData.persistentInventory + investmentData.currentInventory}` }}
             <span>)</span>
@@ -46,6 +46,13 @@ import { InvestmentProperties } from '../../../models/index';
 @Component({})
 export default class CardInvestment extends Vue {
   @Prop() private investmentData!: InvestmentProperties;
+  
+  get style(){
+    if(this.investmentData.persistentInventory < this.investmentData.persistentInventory+this.investmentData.currentInventory){
+      return 'color:green';
+    }
+    return '';
+  }
 
   // opacityModifier = this.investmentData.currentCost === -1 ? 'opacity:50%' : '';
 

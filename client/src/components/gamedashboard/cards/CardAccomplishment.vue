@@ -1,21 +1,21 @@
 <template>
-  <div class="card-accomplishment" @click="handleClick">
-    <div class="card-title">
-      <p>{{ accomplishment.label }}</p>
-    </div>
-    <div class="card-info-container">
-      <div class="card-points">
-        <p>Points</p>
-        <p>{{ accomplishment.victoryPoints }}</p>
+    <div class="card-accomplishment" @click="handleClick">
+      <div class="card-title">
+        <p>{{ accomplishment.label }}</p>
       </div>
-      <div class="card-cost">
-        <p v-for="investment in accomplishment.totalCostArray" :key="investment + Math.random()">
-          <!-- Note: will need to adjust key -->
-          <img :src="require(`@/assets/iconsSVG/${investment}.svg`)" alt="Player" />
-        </p>
+      <div class="card-info-container">
+        <div class="card-points">
+          <p>Points</p>
+          <p>{{ accomplishment.victoryPoints }}</p>
+        </div>
+        <div class="card-cost">
+          <p v-for="investment in accomplishment.totalCostArray" :key="investment + Math.random()">
+            <!-- Note: will need to adjust key -->
+            <img :src="require(`@/assets/iconsSVG/${investment}.svg`)" alt="Player" />
+          </p>
+        </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script lang="ts">
@@ -45,10 +45,11 @@ export default class CardAccomplishment extends Vue {
 </script>
 
 <style scoped>
+
 .card-accomplishment {
   height: auto;
   min-height: 7rem;
-  width: 85%;
+  width: 80%;
   margin: 0.5rem 0;
   display: flex;
   flex-direction: column;

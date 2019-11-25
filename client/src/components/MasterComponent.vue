@@ -107,7 +107,6 @@ export default class Master extends Vue {
     // this.$store.dispatch('setActiveAccomplishments', this.activeAccomplishments).then(() => {
     //   this.$root.$emit('udpateAccomplishments', 'dummyData');
     // });
-    this.$store.dispatch('setActiveAccomplishments',3);
 
     // update the mars log
     this.$store
