@@ -63,6 +63,7 @@ body {
   --space-gray: #1e2223;
   --space-orange: #c67b5c;
   --space-white: #f5f5f5;
+  --space-green: #2d8f44;
   --space-white-opaque-1: rgba(245, 245, 245, 0.05);
   --space-white-opaque-2: rgba(245, 245, 245, 0.25);
 
@@ -71,6 +72,9 @@ body {
   --color-Curator: rgba(103, 65, 29, 0.2);
   --color-Entrepreneur: rgba(199, 168, 40, 0.2);
   --color-Politician: rgba(0, 0, 0, 0.2);
+  --color-Upkeep: rgba(45, 143, 68, 0.2);
+
+  --status-green: rgba(45, 143, 68, 1);
 
   --font-family-default: 'Space Mono', monospace;
   --font-small: 0.86rem;

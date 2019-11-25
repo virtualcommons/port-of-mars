@@ -1,9 +1,14 @@
 <template>
   <div @click="handleClick" class="member">
     <div class="member-content" :style="{ 'background-color': `var(--color-${playerRole})` }">
-      <div :style="setVisibility()" class="member-notif">
-        <p class="member-notif-num">{{ notificationCount }}</p>
+      <div class="member-notif-trade" v-if="memberNotificationTradeCount > 0">
+        <p class="member-notif-trade-num">{{ memberNotificationTradeCount }}</p>
       </div>
+      <div
+        class="member-notif-done animated pulse infinite"
+        v-if="memberNotificationFinished"
+        :style="memberNotificationTradeCount > 0 ? 'left: -0.5rem' : 'left: -0.75rem'"
+      ></div>
       <div class="member-info">
         <p class="member-score">{{ playerScore }}</p>
         <p class="member-role">{{ playerRole }}</p>
@@ -28,14 +33,12 @@ export default class Member extends Vue {
 
   @Prop({ default: 0 }) private playerScore!: number;
 
-  @Prop({ default: 1 }) private notificationCount!: number;
+  @Prop({ default: 1 }) private memberNotificationTradeCount!: number;
+
+  @Prop({ default: false }) private memberNotificationFinished!: boolean;
 
   setImg(): string {
     return this.playerRole;
-  }
-
-  setVisibility(): object {
-    return this.notificationCount > 0 ? { visibility: 'visible' } : { visibility: 'hidden' };
   }
 
   handleClick() {
@@ -71,9 +74,10 @@ export default class Member extends Vue {
   cursor: pointer;
 }
 
-.member-notif {
+.member-notif-trade {
   border-radius: 50%;
   position: absolute;
+  z-index: 3;
   left: -0.75rem;
   top: -0.75rem;
   width: 1.5rem;
@@ -84,11 +88,21 @@ export default class Member extends Vue {
   background-color: var(--space-orange);
 }
 
-.member-notif-num {
+.member-notif-trade-num {
   margin: 0;
   font-size: var(--font-small) !important;
   text-align: center;
   color: var(--space-gray) !important;
+}
+
+.member-notif-done {
+  border-radius: 50%;
+  position: absolute;
+  z-index: 2;
+  top: -0.75rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  background-color: var(--status-green);
 }
 
 .member-info {
