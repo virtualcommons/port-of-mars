@@ -26,11 +26,7 @@
 
     <BRow class="accomplishment-cards">
       <BRow class="accomplishments-cards-available" v-if="activeView == 'available'">
-        <!-- <CardAccomplishment id="v-step-16" :accomplishment="currentAccomplishments[0]" />
-        <CardAccomplishment :accomplishment="currentAccomplishments[1]" />
-        <CardAccomplishment :accomplishment="currentAccomplishments[2]" /> -->
-
-        <div class="accomplishment-container" :style="{width:setWidth}" v-for="accomplishment in currentAccomplishments" :key="accomplishment.lable">
+        <div class="accomplishment-container" :style="{width:setWidth}" v-for="accomplishment in currentAccomplishments" :key="accomplishment.label">
           <CardAccomplishment :accomplishment='accomplishment'/>
           <button class="discard-button" :style="{display:canDiscard}" @click='handleDiscardAccomplishment(accomplishment)'>
             <img :src="require(`@/assets/trashIcon.svg`)" />
@@ -95,7 +91,6 @@ export default class ContainerAccomplishments extends Vue {
     this.$root.$emit('openConfirmation', {text:`Select 'Yes' if you want to draw another card.`,
     type:'discardAccomplishment',
     actionData: a.label});
-    // this.$store.dispatch('discardAccomplishment',a.label);
   }
 }
 </script>

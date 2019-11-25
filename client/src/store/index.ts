@@ -3,9 +3,9 @@ import Vuex from 'vuex';
 import * as _ from 'lodash';
 import { InvestmentsModel, ChatModel, MarsLogModel, RawGameEvent } from '../models';
 
-import actions from './actions';
+import actions from './actionsFolder';
 import getters from './getters';
-import mutations from './mutations';
+import mutations from './mutationFolder';
 
 export interface StoreState {
   playerRole: string;
