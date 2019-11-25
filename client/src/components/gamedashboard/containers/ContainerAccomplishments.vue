@@ -91,6 +91,10 @@ export default class ContainerAccomplishments extends Vue {
     this.$root.$emit('openConfirmation', {text:`Select 'Yes' if you want to draw another card.`,
     type:'discardAccomplishment',
     actionData: a.label});
+<<<<<<< HEAD
+=======
+    // this.$store.dispatch('discardAccomplishment',a.label);
+>>>>>>> upstream/master
   }
 }
 </script>
