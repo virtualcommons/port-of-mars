@@ -20,11 +20,11 @@ import { Component, Vue } from 'vue-property-decorator';
 export default class EventModal extends Vue {
   setStyle: string = 'none';
 
-  mounted() {
-    this.$root.$on('openEvent', (data: string) => {
-      this.setStyle = '';
-    });
-  }
+  // mounted() {
+  //   this.$root.$on('openEvent', (data: string) => {
+  //     this.setStyle = '';
+  //   });
+  // }
 
   handleClose(): void {
     this.setStyle = 'none';
@@ -82,7 +82,7 @@ export default class EventModal extends Vue {
   border-radius: 0.5rem;
   color: var(--space-white);
   background: none;
-  transition: all .2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 .em-close-button:hover {

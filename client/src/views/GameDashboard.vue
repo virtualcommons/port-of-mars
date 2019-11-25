@@ -4,7 +4,6 @@
     <TradingModal />
     <ConfirmationModal />
     <CardModal />
-    <EventModal />
     <BRow class="board reset">
       <BCol cols="2" class="left reset">
         <ContainerLeft />
@@ -37,7 +36,6 @@ import MasterComponent from '@/components/MasterComponent.vue';
 import CardModal from '@/components/gamedashboard/cards/CardModal.vue';
 import TradingModal from '@/components/gamedashboard/trading/TradingModal.vue';
 import ConfirmationModal from '../components/gamedashboard/ConfirmationModal.vue';
-import EventModal from '../components/gamedashboard/EventModal.vue';
 
 @Component({
   components: {
@@ -48,7 +46,6 @@ import EventModal from '../components/gamedashboard/EventModal.vue';
     TradingModal,
     CardModal,
     ConfirmationModal,
-    EventModal,
     ContainerLeft,
     ContainerTop,
     ContainerBottom,
