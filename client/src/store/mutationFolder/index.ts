@@ -6,6 +6,12 @@ import notifications from "./notifications";
 import trading from "./trading";
 
 export default {
+    // layout
+    SET_LAYOUT(state: any, newLayout: string) {
+        state.layout = newLayout;
+    },
+    
+
     //accomplishments
     SET_ACTIVE_ACCOMPLISHMENTS:accomplishments.SET_ACTIVE_ACCOMPLISHMENTS,
     DISCARD_ACCOMPLISHMENT:accomplishments.DISCARD_ACCOMPLISHMENT,
