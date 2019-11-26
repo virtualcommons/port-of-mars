@@ -32,7 +32,7 @@ import ContainerEvents from '@/components/gamedashboard/containers/ContainerEven
   }
 })
 export default class ContainerBottom extends Vue {
-  private currentView: string = 'event';
+  private currentView: string = 'default';
 
   mounted() {
     this.$root.$on('openEvent', (data: string) => {
