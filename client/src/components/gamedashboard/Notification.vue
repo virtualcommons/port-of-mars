@@ -72,20 +72,24 @@ export default class Notification extends Vue {
 
 <style scoped>
 .notification {
-  min-height: 5rem;
-  width: 100%;
+  height: 5rem;
+  width: calc(calc(100 / 12) * 2%);
   padding: 0.5rem;
-  margin: 1rem 0;
   border-radius: 1rem;
+  position: absolute;
+  z-index: 2;
+  left: 1rem;
+  top: 4rem;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: var(--space-orange);
   cursor: pointer;
-  transition: all .2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
-.notification:hover, .notification-hide {
+.notification:hover,
+.notification-hide {
   border: var(--border-white);
   color: var(--space-white);
   background-color: var(--space-gray);
@@ -95,7 +99,8 @@ export default class Notification extends Vue {
   visibility: hidden;
 }
 
-.notification-close, .notification-message {
+.notification-close,
+.notification-message {
   font-size: var(--font-small);
   margin: 0;
 }
