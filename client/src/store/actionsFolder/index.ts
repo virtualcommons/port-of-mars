@@ -10,4 +10,4 @@ export default {
   ...investment,
   ...notifications,
   ...trading
-}
+};
