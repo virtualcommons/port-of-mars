@@ -46,9 +46,12 @@ import { InvestmentProperties } from '../../../models/index';
 @Component({})
 export default class CardInvestment extends Vue {
   @Prop() private investmentData!: InvestmentProperties;
-  
-  get style(){
-    if(this.investmentData.persistentInventory < this.investmentData.persistentInventory+this.investmentData.currentInventory){
+
+  get style() {
+    if (
+      this.investmentData.persistentInventory <
+      this.investmentData.persistentInventory + this.investmentData.currentInventory
+    ) {
       return 'color:green';
     }
     return '';
