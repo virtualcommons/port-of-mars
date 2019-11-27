@@ -5,12 +5,12 @@
       <div
         class="marslog-message"
         v-for="log in logs"
-        :key="log.time.getTime()"
+        :key="log.time"
       >
         <p class="marslog-message-category">{{ log.category }}</p>
         <p class="marslog-message-content">{{ log.content }}</p>
         <p class="marslog-message-time">
-          <span>[ </span>{{ log.time.toLocaleTimeString() }}<span> ]</span>
+          <span>[ </span>{{ log.time }}<span> ]</span>
         </p>
       </div>
     </div>

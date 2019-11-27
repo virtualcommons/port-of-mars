@@ -13,6 +13,12 @@ export default {
         // if (payload !== '') {
         //   state.marsLog.push(payload);
         // }
-        state.marsLog.addEntry(payload);
+        const data = {
+          initiator: state.playerRole,
+          category: 'upkeep',
+          content: payload,
+          time: new Date().toLocaleString(),
+        }
+        state.marsLog.addEntry(data);
       }
 }

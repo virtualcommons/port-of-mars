@@ -16,13 +16,13 @@ export function applyServerResponses<T>(room: Room, store: Store<T>) {
     store.commit('ADD_TO_CHAT', msg);
   };
 
-  room.state.marsEvents.onAdd = (e: MarsEventData) => {
-    store.commit('ADD_TO_EVENTS', e);
-  };
+  // room.state.marsEvents.onAdd = (e: MarsEventData) => {
+  //   store.commit('ADD_TO_EVENTS', e);
+  // };
 
-  room.state.marsEvents.onRemove = (index: number) => {
-    store.commit('REMOVE_FROM_EVENTS', index);
-  };
+  // room.state.marsEvents.onRemove = (index: number) => {
+  //   store.commit('REMOVE_FROM_EVENTS', index);
+  // };
 
   room.state.onChange = (changes: Array<any>) => {
     changes.forEach(change => {
@@ -37,6 +37,9 @@ export function applyServerResponses<T>(room: Room, store: Store<T>) {
       if (change.field === 'upkeep') {
         const upkeep: number = change.value;
         store.commit('SET_UPKEEP', upkeep);
+        if(upkeep < 100) {
+          store.commit('ADD_TO_MARS_LOG','upkeep has dropped by 25!');
+        }
       }
     })
   }

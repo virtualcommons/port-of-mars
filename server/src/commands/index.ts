@@ -70,12 +70,12 @@ export class SetPlayerReadinessCmd implements Command {
   }
 }
 
-export class SetNextPhase implements Command {
+export class SetNextPhaseCmd implements Command {
     constructor(private game: Game, private player: Player) {}
 
     static fromReq(r: req.SetNextPhaseData, game: Game, client: Client) {
       const p = game.getPlayerByClient(client);
-      return new SetNextPhase(game, p);
+      return new SetNextPhaseCmd(game, p);
     }
 
     execute(): Array<GameEvent> {
