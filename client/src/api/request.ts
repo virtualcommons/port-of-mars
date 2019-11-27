@@ -1,5 +1,10 @@
 import { Room } from 'colyseus.js';
-import { SendChatMessage, Requests, BuyAccomplishmentCard } from 'shared/requests';
+import {
+  SendChatMessageData,
+  Requests,
+  BuyAccomplishmentCardData,
+  SetNextPhaseData, ResetGameData
+} from 'shared/requests';
 
 export class RequestAPI {
   constructor(public room: Room) {}
@@ -9,12 +14,17 @@ export class RequestAPI {
   }
 
   public sendChatMessage(message: string) {
-    const msg: SendChatMessage = { message, kind: 'send-chat-message' };
+    const msg: SendChatMessageData = { message, kind: 'send-chat-message' };
     this.send(msg);
   }
 
-  public buyAccomplishmentCard(id: number) {
-    const msg: BuyAccomplishmentCard = { id, kind: 'buy-accomplishment-card' };
+  public setNextPhase() {
+    const msg: SetNextPhaseData = { kind: "set-next-phase"};
+    this.send(msg);
+  }
+
+  public resetGame() {
+    const msg: ResetGameData = { kind: "reset-game" };
     this.send(msg);
   }
 }

@@ -12,7 +12,7 @@ const events: Array<RawGameEvent> = [
   {
     name: 'Changing Tides',
     copies: 1,
-    effect: 'Each player discards all their Accomplishment cards and draws 1 new Accomplishment card. (They still draw up to a total of three cards at the end of this round.)',
+    effect: 'Each player discards all their accomplishment cards and draws 1 new accomplishment card. (They still draw up to a total of three cards at the end of this round.)',
     flavorText: 'Create contingencies for your contingencies and contingencies for those contingencies. Then prepare to improvise.',
   },
   {
@@ -56,7 +56,7 @@ const events: Array<RawGameEvent> = [
   {
     name: 'Efforts Wasted',
     copies: 1,
-    effect: 'Each player must discard an Accomplishment they purchased.',
+    effect: 'Each player must discard an accomplishment they purchased.',
     flavorText: '"All markets are volatile. The trick is learning how to ride the waves." - The Entrepreneur',
   },
   {

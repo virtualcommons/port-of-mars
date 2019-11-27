@@ -3,7 +3,7 @@ import VueSocketIOExt from 'vue-socket.io-extended';
 // import io from 'socket.io-client';
 import Vuex from 'vuex';
 import * as Colyseus from 'colyseus.js';
-import { SendChatMessage } from 'shared/requests';
+import { SendChatMessageData } from 'shared/requests';
 import App from './App.vue';
 import router from './router';
 import store from './store';

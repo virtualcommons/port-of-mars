@@ -2,7 +2,11 @@
   <div class="marslog">
     <p class="marslog-title">Mars Log</p>
     <div class="marslog-log">
-      <div class="marslog-message" v-for="log in logs" :key="log.time.getTime()">
+      <div
+        class="marslog-message"
+        v-for="log in logs"
+        :key="log.time.getTime()"
+      >
         <p class="marslog-message-category">{{ log.category }}</p>
         <p class="marslog-message-content">{{ log.content }}</p>
         <p class="marslog-message-time">

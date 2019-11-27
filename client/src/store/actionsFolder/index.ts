@@ -1,5 +1,4 @@
 import accomplishments from './accomplishments';
-import chat from './chat';
 import gameState from './gameState';
 import investment from './investment';
 import notifications from './notfications';
@@ -11,9 +10,6 @@ export default {
     discardAccomplishment:accomplishments.discardAccomplishment,
     purchaseAccomplishment:accomplishments.purchaseAccomplishment,
 
-    //chat
-    sendChatMsg:chat.sendChatMsg,
-
     //game state
     updatePhase:gameState.updatePhase,
     updateRoundEvents:gameState.updateRoundEvents,
@@ -22,7 +18,7 @@ export default {
 
     //investments
     changeLocalInvestment:investment.changeLocalInvestment,
-    
+
     //notifications
     setNotificationMessage:notifications.setNotificationMessage,
     setNotificationStatus:notifications.setNotificationStatus,

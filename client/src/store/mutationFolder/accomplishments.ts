@@ -1,4 +1,6 @@
 import {GetAccomplishmentsByPerson, buyAccomplishment } from '@/models';
+import {Accomplishment} from "@/models/AccomplishmentsModels";
+import * as _ from 'lodash'
 
 export default {
     SET_ACTIVE_ACCOMPLISHMENTS(state: any, payload: any) {
@@ -6,9 +8,9 @@ export default {
         state.activeAccomplishmentCards = GetAccomplishmentsByPerson(state.playerRole, payload);
       },
       DISCARD_ACCOMPLISHMENT(state:any,payload:any){
-        let index = _.findIndex(state.activeAccomplishmentCards, (e) => e.label == payload);
+        let index = _.findIndex(state.activeAccomplishmentCards, (e: Accomplishment) => e.label == payload);
         let newAccomplishment = GetAccomplishmentsByPerson(state.playerRole,1)[0];
-        
+
         if(newAccomplishment != undefined){
           state.activeAccomplishmentCards[index].inCurrentDeck = false;
           state.activeAccomplishmentCards.splice(index,1,newAccomplishment);
@@ -19,12 +21,12 @@ export default {
         if (bought) {
           buyAccomplishment(payload.label);
           state.boughtAccomplishmentCards.push(payload);
-    
+
           state.playerScore += payload.victoryPoints;
-          
-          let index = _.findIndex(state.activeAccomplishmentCards, (e) => e.label == payload.label);
+
+          let index = _.findIndex(state.activeAccomplishmentCards, (e: Accomplishment) => e.label == payload.label);
           let newAccomplishment = GetAccomplishmentsByPerson(state.playerRole,1)[0];
-    
+
           if(newAccomplishment !== undefined){
             state.activeAccomplishmentCards.splice(index,1,newAccomplishment);
           } else {
