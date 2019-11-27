@@ -4,7 +4,7 @@
       <BCol class="phase" cols="3">
         <Phase />
       </BCol>
-      <BCol class="events-container" cols="9">
+      <BCol id="hscroll" class="events-container" cols="9">
         <div class="events">
           <CardEvent :event="eventsForTheRound[0]" />
           <CardEvent :event="eventsForTheRound[1]" />
@@ -32,6 +32,22 @@ import CardEvent from '@/components/gamedashboard/cards/CardEvent.vue';
   }
 })
 export default class ContainerPhase extends Vue {
+  mounted() {
+    document.getElementById('hscroll').addEventListener('wheel', this.handleScroll);
+  }
+
+  beforeDestroy() {
+    document.getElementById('hscroll').removeEventListener('wheel', this.handleScroll);
+  }
+
+  handleScroll(e) {
+    if (e.deltaY > 0 && e.deltaX === 0) {
+      document.getElementById('hscroll').scrollLeft -= 37.5;
+    } else if (e.deltaY < 0 && e.deltaX === 0) {
+      document.getElementById('hscroll').scrollLeft += 37.5;
+    }
+  }
+
   get eventsForTheRound() {
     return this.$store.state.gameEvents;
   }
