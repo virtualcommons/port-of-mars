@@ -6,8 +6,8 @@
     @mouseover="hover = true"
     @mouseleave="hover = false"
   >
-    <p class="notification-close" v-if="hover || inView === 'hide'">Close</p>
-    <p class="notification-message" v-if="!hover && inView !== 'hide'">{{ message }}</p>
+    <p class="notification-close" v-if="hover || inView === 'hide-close'">Close</p>
+    <p class="notification-message" v-if="!hover && inView !== 'hide-close'">{{ message }}</p>
   </div>
 </template>
 
@@ -28,23 +28,21 @@ export default class Notification extends Vue {
   }
 
   hideNotif() {
-    this.$store.dispatch('setNotificationStatus', 'hide');
+    this.$store.dispatch('setNotificationStatus', 'hide-close');
   }
 
   viewAnim() {
-    if (this.inView === 'reset') {
-      return '';
-    }
     if (this.inView === 'inactive') {
       return 'notification-inactive';
     }
     if (this.inView === 'visible') {
       return 'animated fadeInLeft';
     }
-    if (this.inView === 'attention') {
-      return 'animated bounce';
-    }
     if (this.inView === 'hide') {
+      return 'animated fadeOutLeft';
+      // return 'animated fadeOut faster';
+    }
+    if (this.inView === 'hide-close') {
       return 'animated fadeOutLeft notification-hide';
       // return 'animated fadeOut faster';
     }
@@ -55,13 +53,11 @@ export default class Notification extends Vue {
     // Note: may want to refactor this...
     this.$root.$on('notification', (data: any) => {
       this.$store.dispatch('addToMarsLog', data).then(() => {
-        if (this.inView === 'inactive' || this.inView === 'hide') {
-          this.$store.dispatch('setNotificationStatus', 'visible');
-        } else {
-          this.$store.dispatch('setNotificationStatus', 'reset').then(() => {
+        if (this.inView === 'inactive' || this.inView === 'hide' || this.inView === 'hide-close') {
+          this.$store.dispatch('setNotificationStatus', 'visible').then(() => {
             setTimeout(() => {
-              this.$store.dispatch('setNotificationStatus', 'attention');
-            }, 500);
+              this.$store.dispatch('setNotificationStatus', 'hide');
+            }, 4000);
           });
         }
       });
