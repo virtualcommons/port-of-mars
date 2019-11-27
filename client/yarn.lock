@@ -726,7 +726,7 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@colyseus/schema@^0.5.5":
+"@colyseus/schema@^0.5.5", "@colyseus/schema@^0.5.8":
   version "0.5.8"
   resolved "https://registry.yarnpkg.com/@colyseus/schema/-/schema-0.5.8.tgz#d01c2cc900c0434f153cf9e329e53f71afae6945"
   integrity sha512-lnr5NYYQawlKxwp22bYNmQzFqpMFUwF9tRwdNZDwEwBgD+JbZRBmG+SnrDkOjfWCxGoFsfw23Fl4pCLO00/Gag==

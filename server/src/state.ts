@@ -249,21 +249,16 @@ export class MarsEventsDeck {
   position: number;
   deck: Array<MarsEventData>;
 
-  draw(upkeep: number): Array<MarsEvent> {
-    const [position, cards] = this.peek(upkeep);
-    this.position = position;
-    return cards;
+  updatePosition(cardsUsed: number): void {
+    this.position = (this.position + cardsUsed) % this.deck.length;
   }
 
-  public peek(upkeep: number): [number, Array<MarsEvent>] {
+  public peek(upkeep: number): Array<MarsEvent> {
     const nCardsToDraw = upkeep < 33 ? 3 : upkeep < 67 ? 2 : 1;
     const cardsInds = _.map(_.range(this.position, this.position + nCardsToDraw), ind => ind % this.deck.length);
-    const cards = _.map(cardsInds, ind => new MarsEvent(this.deck[ind]));
-    const position = (this.position + nCardsToDraw) % this.deck.length;
-    return [position, cards];
+    return _.map(cardsInds, ind => new MarsEvent(this.deck[ind]));
   }
 }
-
 
 export class Player extends Schema {
   constructor(role: Role) {
