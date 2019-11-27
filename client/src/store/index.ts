@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import * as _ from 'lodash';
-import { InvestmentsModel, ChatModel, MarsLogModel, RawGameEvent } from '../models';
+import { InvestmentsModel, MarsLogModel, RawGameEvent } from '../models';
 
 import actions from './actionsFolder';
 import getters from './getters';

@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 
-interface Accomplishment {
+export interface Accomplishment {
     [key: string] : any
     id: number
     role: 'Researcher' | 'Curator' | 'Pioneer' | 'Entrepreneur' | 'Politician'
@@ -1625,8 +1625,8 @@ function getRandomIndex(maxIndex:number) {
   return Math.floor(Math.random() * Math.floor(maxIndex));
 }
 
-export function GetAccomplishmentsByPerson(person:string, amount:number) {
-  const possibleACards = accomplishments.filter(a => a.role === person && !a.inCurrentDeck);
+export function GetAccomplishmentsByPerson(person:string, amount:number): Array<Accomplishment> {
+  const possibleACards: Array<Accomplishment> = accomplishments.filter(a => a.role === person && !a.inCurrentDeck);
   const indexArray = [];
   const accomplishmentsToBeSentOut = [];
   const accomplishmentsAmount = Math.min(possibleACards.length, amount);
@@ -1639,7 +1639,7 @@ export function GetAccomplishmentsByPerson(person:string, amount:number) {
     }
 
     indexArray.push(randomIndex);
-    
+
     const costs = ['upkeep', 'finance', 'legacy', 'government', 'culture', 'science'];
 
     let total = costs.map((curr) => {

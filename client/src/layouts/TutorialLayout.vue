@@ -70,7 +70,7 @@ export default class TutorialLayout extends Vue {
         placement: 'bottom'
       }
     },
-    
+
     // containers > ContainerMembers.vue
     {
       target: '#v-step-1',
@@ -105,7 +105,7 @@ export default class TutorialLayout extends Vue {
       target: '#v-step-4',
       content: '',
       params: {
-        placement: 'bottom'
+        placement: 'right'
       }
     },
   ];

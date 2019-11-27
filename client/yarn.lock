@@ -726,10 +726,10 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@colyseus/schema@^0.5.0":
-  version "0.5.5"
-  resolved "https://registry.yarnpkg.com/@colyseus/schema/-/schema-0.5.5.tgz#a5ec0d53615ee6f8b9ef84649d0409da6ba7eb1a"
-  integrity sha512-p2dY9jnzsXPFpOyhd0Sq0zDbPKC30cxIEbZrFirTXzNnxslfvxijn1PzFL94VX9D25ydw4fQZ5QH17f4yKHGnA==
+"@colyseus/schema@^0.5.5":
+  version "0.5.8"
+  resolved "https://registry.yarnpkg.com/@colyseus/schema/-/schema-0.5.8.tgz#d01c2cc900c0434f153cf9e329e53f71afae6945"
+  integrity sha512-lnr5NYYQawlKxwp22bYNmQzFqpMFUwF9tRwdNZDwEwBgD+JbZRBmG+SnrDkOjfWCxGoFsfw23Fl4pCLO00/Gag==
 
 "@cypress/listr-verbose-renderer@0.4.1":
   version "0.4.1"
@@ -2870,11 +2870,11 @@ color@^3.0.0:
     color-string "^1.5.2"
 
 colyseus.js@^0.11.5:
-  version "0.11.5"
-  resolved "https://registry.yarnpkg.com/colyseus.js/-/colyseus.js-0.11.5.tgz#e1d36517807f37d8fd682c487454479f16f50447"
-  integrity sha512-H7ptnvfHlENJq7JZSiDJBpzjPeyEaQhX5oXBfyXa3onalRGrDeYH5Ntgfsolf9rXN1ew1WHvQ4RFG9ZbShVjrw==
+  version "0.11.6"
+  resolved "https://registry.yarnpkg.com/colyseus.js/-/colyseus.js-0.11.6.tgz#3af2dec2cad965fc61e272f38307ff67f64d6ee6"
+  integrity sha512-9C6FWX8gkdVgNTfkpFU2HEPmbHA4uUtKA6eDqETGoyxyp4M3xz13tzXGQjMEQuEcebEsWvJiIlgUmHBrcqWEGw==
   dependencies:
-    "@colyseus/schema" "^0.5.0"
+    "@colyseus/schema" "^0.5.5"
     "@gamestdio/signals" "^1.0.0"
     "@gamestdio/state-listener" "^3.1.0"
     "@gamestdio/websocket" "^0.3.2"

@@ -22,10 +22,10 @@ export default class Clock extends Vue {
 
       // methods
       updateTime() {
-        // create Date object (current date and time on user's computer)
+        // create Date object (current date and dateCreated on user's computer)
         const currentTime = new Date();
 
-        // extract hours, minutes, seconds components of current time from Date object
+        // extract hours, minutes, seconds components of current dateCreated from Date object
         const currentHours = currentTime.getHours();
         const currentMinutes = currentTime.getMinutes();
         const currentSeconds = currentTime.getSeconds();

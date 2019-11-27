@@ -29,11 +29,11 @@ export default class Clock extends Vue {
   //   return this.padTime(seconds);
   // }
   //
-  // padTime = time => (time < 10 ? '0' : '');
+  // padTime = dateCreated => (dateCreated < 10 ? '0' : '');
   //
   // get countdown() {
-  //   const time = this.totalTime - 1;
-  //   return time;
+  //   const dateCreated = this.totalTime - 1;
+  //   return dateCreated;
   // }
 }
 </script>

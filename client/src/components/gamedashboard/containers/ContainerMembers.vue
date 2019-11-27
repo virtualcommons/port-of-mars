@@ -5,7 +5,8 @@
       :key="member"
       :playerRole="member"
       :playerScore="10"
-      :notificationCount="1"
+      :memberNotificationTradeCount="1"
+      :memberNotificationFinished="true"
     />
   </div>
 </template>
