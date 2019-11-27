@@ -1,5 +1,6 @@
 import {BaseInvestmentCosts, GetAccomplishmentsByPerson} from '@/models';
 import {MarsEventData} from "shared/types";
+import {Vue} from "vue-property-decorator";
 
 export default {
   SET_GAME_PHASE(state: any, payload: string) {
@@ -11,11 +12,14 @@ export default {
   SET_UPKEEP(state: any, upkeep: number) {
     state.upkeep = upkeep;
   },
-  ADD_TO_EVENTS(state: any, e: MarsEventData) {
-    state.gameEvents.push(e);
+  ADD_TO_EVENTS(state: any, event: MarsEventData) {
+    state.gameEvents.push(event);
   },
   REMOVE_FROM_EVENTS(state: any, index: number) {
     state.gameEvents.splice(index, 1);
+  },
+  CHANGE_EVENT(state: any, payload: {event: MarsEventData, index: number}) {
+    Vue.set(state.gameEvents, payload.index, payload.event);
   },
   SET_EVENTS_FOR_ROUND(state: any, payload: any) {
     state.gameEvents = payload;

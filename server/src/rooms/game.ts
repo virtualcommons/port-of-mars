@@ -59,7 +59,7 @@ export class GameRoom extends Room<GameState> implements Game {
     const phase = this.state.phase;
     if (phase === Phase.discard) {
       const upkeep = this.state.nextRoundUpkeep();
-      const [, cards] = this.state.marsEventDeck.peek(upkeep);
+      const cards = this.state.marsEventDeck.peek(upkeep);
       return new LeftDiscardPhase(cards);
     }
 

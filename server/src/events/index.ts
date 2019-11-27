@@ -97,5 +97,6 @@ export class LeftDiscardPhase implements GameEvent {
 
     game.phase = Phase.events;
     game.marsEvents.splice(0, game.marsEvents.length, ...this.marsEvents);
+    game.marsEventDeck.updatePosition(this.marsEvents.length);
   }
 }
