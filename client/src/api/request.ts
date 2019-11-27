@@ -27,4 +27,8 @@ export class RequestAPI {
     const msg: ResetGameData = { kind: "reset-game" };
     this.send(msg);
   }
+
+  public investTimeBlocks() {
+
+  }
 }

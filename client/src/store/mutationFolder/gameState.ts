@@ -1,6 +1,7 @@
 import {BaseInvestmentCosts, GetAccomplishmentsByPerson} from '@/models';
 import {MarsEventData} from "shared/types";
 import {Vue} from "vue-property-decorator";
+import * as _ from 'lodash'
 
 export default {
   SET_GAME_PHASE(state: any, payload: string) {
@@ -15,7 +16,8 @@ export default {
   ADD_TO_EVENTS(state: any, event: MarsEventData) {
     state.gameEvents.push(event);
   },
-  REMOVE_FROM_EVENTS(state: any, index: number) {
+  REMOVE_FROM_EVENTS(state: any, event: MarsEventData) {
+    const index = _.findIndex(state.gameEvents, (el: MarsEventData) => el.id === event.id);
     state.gameEvents.splice(index, 1);
   },
   CHANGE_EVENT(state: any, payload: {event: MarsEventData, index: number}) {
