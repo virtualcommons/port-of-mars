@@ -42,9 +42,9 @@ export default class ContainerPhase extends Vue {
 
   handleScroll(e) {
     if (e.deltaY > 0 && e.deltaX === 0) {
-      document.getElementById('hscroll').scrollLeft -= 37.5;
-    } else if (e.deltaY < 0 && e.deltaX === 0) {
       document.getElementById('hscroll').scrollLeft += 37.5;
+    } else if (e.deltaY < 0 && e.deltaX === 0) {
+      document.getElementById('hscroll').scrollLeft -= 37.5;
     }
   }
 

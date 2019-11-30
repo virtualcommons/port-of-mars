@@ -1,6 +1,6 @@
 <template>
   <div class="login-button-container">
-    <router-link to="/game">
+    <router-link to="/lobby">
       <button @click="setLayout('default-layout')">Let's Go!</button>
     </router-link>
     <router-link to="/game">
