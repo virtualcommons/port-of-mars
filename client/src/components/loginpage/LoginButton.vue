@@ -28,12 +28,18 @@ export default class LoginButton extends Vue {
 </script>
 
 <style scoped>
+.login-button-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 .login-button-container button {
   height: 3.5rem;
   width: 18rem;
-  margin: 0 1rem;
+  margin: 0.5rem;
   border-radius: 0.75rem;
-  border: var(--border-white);
+  border: 0.125rem solid var(--space-white-opaque-2);
   outline: none !important;
   color: var(--space-white);
   background-color: rgba(245, 245, 245, 0.2);

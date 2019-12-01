@@ -206,7 +206,7 @@ export default class WaitingLobby extends Vue {}
 }
 
 .character-img {
-  height: 87.5%;
+  height: 110%;
   margin: 0;
   position: absolute;
   top: 50%;
