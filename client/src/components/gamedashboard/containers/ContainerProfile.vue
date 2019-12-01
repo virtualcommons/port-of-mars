@@ -9,38 +9,6 @@
         <p class="profile-info-score">Score: {{ playerScore }}</p>
       </div>
     </div>
-    <div class="profile-investments">
-      <div class="profile-investments-col">
-        <div class="profile-investments-row">
-          <img :src="require('@/assets/iconsSVG/upkeep.svg')" alt="Upkeep" />
-          <p>1</p>
-        </div>
-        <div class="profile-investments-row">
-          <img :src="require('@/assets/iconsSVG/government.svg')" alt="Government" />
-          <p>1</p>
-        </div>
-      </div>
-      <div class="profile-investments-col">
-        <div class="profile-investments-row">
-          <img :src="require('@/assets/iconsSVG/science.svg')" alt="Science" />
-          <p>1</p>
-        </div>
-        <div class="profile-investments-row">
-          <img :src="require('@/assets/iconsSVG/legacy.svg')" alt="Legacy" />
-          <p>1</p>
-        </div>
-      </div>
-      <div class="profile-investments-col">
-        <div class="profile-investments-row">
-          <img :src="require('@/assets/iconsSVG/finance.svg')" alt="Finance" />
-          <p>1</p>
-        </div>
-        <div class="profile-investments-row">
-          <img :src="require('@/assets/iconsSVG/culture.svg')" alt="Culture" />
-          <p>1</p>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -118,51 +86,5 @@ export default class ContainerProfile extends Vue {
 
 .profile-img {
   height: 100%;
-}
-
-.profile-investments {
-  margin-top: 1rem;
-  display: flex;
-  justify-content: space-around;
-}
-
-.profile-investments-row {
-  padding: 0.25rem;
-  border-radius: 1.75rem;
-  margin: 0.5rem 0;
-  border: 0.125rem solid var(--space-white-opaque-2);
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  /* background-color: var(--space-white-opaque-1); */
-}
-
-.profile-investments-row img {
-  height: 1.5rem;
-  width: 1.5rem;
-}
-
-.profile-investments-row p {
-  margin: 0 1rem;
-  font-size: var(--font-small);
-  color: var(--space-white);
-}
-
-.profile-investments-row span {
-  color: var(--space-orange);
-}
-
-@media (max-width: 1366px) {
-  .profile-info-player {
-    font-size: var(--font-med);
-  }
-  .profile-frame {
-    height: 4rem;
-    width: 4rem;
-  }
-  .profile-investments-row img {
-    height: 1.25rem;
-    width: 1.25rem;
-  }
 }
 </style>

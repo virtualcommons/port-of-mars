@@ -2,6 +2,7 @@
   <div class="container-left">
     <Round />
     <ContainerProfile />
+    <ProfileInvestments />
     <MarsLog />
   </div>
 </template>
@@ -10,12 +11,14 @@
 import { Vue, Component } from 'vue-property-decorator';
 import Round from '@/components/gamedashboard/Round.vue';
 import ContainerProfile from '@/components/gamedashboard/containers/ContainerProfile.vue';
+import ProfileInvestments from '@/components/gamedashboard/ProfileInvestments.vue';
 import MarsLog from '@/components/gamedashboard/MarsLog.vue';
 
 @Component({
   components: {
     Round,
     ContainerProfile,
+    ProfileInvestments,
     MarsLog
   }
 })
