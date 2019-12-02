@@ -83,10 +83,20 @@ class ResourceCosts extends Schema implements ResourceCostData {
 
   @type('number')
   upkeep: number;
+
+  investmentWithinBudget(investment: InvestmentData, budget: number) {
+    return this.culture*investment.culture +
+      this.finance*investment.finance +
+      this.government*investment.government +
+      this.legacy*investment.legacy +
+      this.science*investment.science +
+      this.upkeep*investment.upkeep <= budget;
+  }
 }
 
-class ResourceInventory implements ResourceAmountData {
+class ResourceInventory extends Schema implements ResourceAmountData {
   constructor() {
+    super();
     this.culture = 0;
     this.finance = 0;
     this.government = 0;
@@ -120,11 +130,11 @@ class ResourceInventory implements ResourceAmountData {
   }
 
   update(inventory: InvestmentData) {
-    this.culture -= inventory.culture;
-    this.finance -= inventory.finance;
-    this.government -= inventory.government;
-    this.legacy -= inventory.legacy;
-    this.science -= inventory.science;
+    this.culture += inventory.culture;
+    this.finance += inventory.finance;
+    this.government += inventory.government;
+    this.legacy += inventory.legacy;
+    this.science += inventory.science;
   }
 }
 
@@ -281,9 +291,15 @@ export class Player extends Schema {
   @type("boolean")
   ready: boolean = false;
 
+  timeBlocks: number = 10;
+
   contributedUpkeep: number = 0;
 
   inventory = new ResourceInventory();
+
+  isInvestmentFeasible(investment: InvestmentData) {
+    return this.costs.investmentWithinBudget(investment, this.timeBlocks);
+  }
 
   invest(investment: InvestmentData) {
     this.contributedUpkeep = investment.upkeep;
