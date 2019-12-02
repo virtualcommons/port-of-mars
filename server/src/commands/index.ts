@@ -96,9 +96,7 @@ export class ResetGameCmd implements Command {
 
   execute(): Array<GameEvent> {
     // NOTE: dangerously replaces game object. For development only
-    const conn = this.game.state.connections;
-    this.game.setState(new GameState());
-    this.game.state.connections = conn;
+    this.game.state.unsafeReset();
     return [];
   }
 }

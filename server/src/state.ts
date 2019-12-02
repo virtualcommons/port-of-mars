@@ -25,7 +25,9 @@ class Investment {
     this.upkeep = 0;
   }
 }
-interface Investment extends InvestmentData {}
+
+interface Investment extends InvestmentData {
+}
 
 export class ChatMessage extends Schema implements ChatMessageData {
   constructor(msg: ChatMessageData) {
@@ -293,16 +295,27 @@ export class GameState extends Schema {
   constructor() {
     super();
     this.marsEventDeck = new MarsEventsDeck();
-    this.players = new MapSchema<Player>();
     this.lastTimePolled = new Date();
-    this.maxRound = 10;
+    this.maxRound = getRandomIntInclusive(8, 12);
+    this.replacePlayers();
+  }
+
+  static DEFAULTS = {
+    timeRemaining: 300,
+    marsEventsProcessed: 0,
+    round: 0,
+    phase: Phase.pregame,
+    upkeep: 100
+  };
+
+  replacePlayers() {
     ROLES.forEach(r => this.players[r] = new Player(r));
   }
 
   availableRoles = _.cloneDeep(ROLES);
 
-  @type({ map: Player })
-  players: MapSchema<Player>;
+  @type({map: Player})
+  players = new MapSchema<Player>();
 
   connections: { [sessionId: string]: string } = {};
 
@@ -310,16 +323,16 @@ export class GameState extends Schema {
   lastTimePolled: Date;
 
   @type("number")
-  timeRemaining: number = 300;
+  timeRemaining: number = GameState.DEFAULTS.timeRemaining;
 
   @type("number")
-  round: number = 0;
+  round: number = GameState.DEFAULTS.round;
 
   @type("number")
-  phase: Phase = Phase.pregame;
+  phase: Phase = GameState.DEFAULTS.phase;
 
   @type("number")
-  upkeep: number = 100;
+  upkeep: number = GameState.DEFAULTS.upkeep;
 
   @type([ChatMessage])
   messages = new ArraySchema<ChatMessage>();
@@ -328,7 +341,7 @@ export class GameState extends Schema {
   marsEvents = new ArraySchema<MarsEvent>();
 
   @type("number")
-  marsEventsProcessed = 0;
+  marsEventsProcessed = GameState.DEFAULTS.marsEventsProcessed;
 
   marsEventDeck: MarsEventsDeck;
 
@@ -366,6 +379,18 @@ export class GameState extends Schema {
     for (const r of ROLES) {
       const p = this.players[r];
     }
+  }
+
+  unsafeReset(): void {
+    this.marsEventsProcessed = GameState.DEFAULTS.marsEventsProcessed;
+    this.phase = GameState.DEFAULTS.phase;
+    this.round = GameState.DEFAULTS.round;
+    this.timeRemaining = GameState.DEFAULTS.timeRemaining;
+    this.upkeep = GameState.DEFAULTS.upkeep;
+    this.marsEvents.splice(0, this.marsEvents.length);
+    this.messages.splice(0, this.messages.length);
+    this.replacePlayers();
+    this.marsEventDeck = new MarsEventsDeck();
   }
 
   nextRoundUpkeep(): number {

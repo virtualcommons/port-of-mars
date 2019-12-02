@@ -6,6 +6,10 @@ import {Schema} from "@colyseus/schema";
 
 type Schemify<T> = T & Schema
 
+function deschemify<T>(s: Schemify<T>): T {
+  return (s.toJSON() as T);
+}
+
 export function applyServerResponses<T>(room: Room, store: Store<T>) {
   room.onMessage((msg: Responses) => {
     switch (msg.kind) {
@@ -16,19 +20,23 @@ export function applyServerResponses<T>(room: Room, store: Store<T>) {
 
   // eslint-disable-next-line no-param-reassign
   room.state.messages.onAdd = (msg: Schemify<ChatMessageData>, key: number) => {
-    store.commit('ADD_TO_CHAT', msg.toJSON());
+    store.commit('ADD_TO_CHAT', deschemify(msg));
+  };
+
+  room.state.messages.onRemove = (msg: Schemify<ChatMessageData>, index: number) => {
+    store.commit('REMOVE_FROM_CHAT', deschemify(msg));
   };
 
   room.state.marsEvents.onAdd = (e: Schemify<MarsEventData>, index: number) => {
-    store.commit('ADD_TO_EVENTS', e.toJSON());
+    store.commit('ADD_TO_EVENTS', deschemify(e));
   };
 
   room.state.marsEvents.onRemove = (e: Schemify<MarsEventData>, index: number) => {
-    store.commit('REMOVE_FROM_EVENTS', e.id);
+    store.commit('REMOVE_FROM_EVENTS', deschemify(e));
   };
 
   room.state.marsEvents.onChange = (event: Schemify<MarsEventData>, index: number) => {
-    store.commit('CHANGE_EVENT', {event: event.toJSON(), index});
+    store.commit('CHANGE_EVENT', {event: deschemify(event), index});
   };
 
   room.state.onChange = (changes: Array<any>) => {
