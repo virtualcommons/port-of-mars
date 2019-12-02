@@ -65,7 +65,13 @@ export class TimeInvested extends GameEventWithData {
   constructor(public data: {investment: InvestmentData, role: Role}) { super(); }
 
   apply(game: GameState): void {
+<<<<<<< HEAD
     game.players[this.data.role].invest(this.data.investment);
+=======
+    console.log(JSON.stringify(game.players[this.role].inventory));
+    game.players[this.role].invest(this.data);
+    console.log(JSON.stringify(game.players[this.role].inventory));
+>>>>>>> [refactor]Investments sent to server
   }
 }
 
