@@ -1,21 +1,21 @@
 <template>
-    <div class="card-accomplishment" @click="handleClick">
-      <div class="card-title">
-        <p>{{ accomplishment.label }}</p>
+  <div class="card-accomplishment" @click="handleClick">
+    <div class="card-title">
+      <p>{{ accomplishment.label }}</p>
+    </div>
+    <div class="card-info-container">
+      <div class="card-points">
+        <p>Points</p>
+        <p>{{ accomplishment.victoryPoints }}</p>
       </div>
-      <div class="card-info-container">
-        <div class="card-points">
-          <p>Points</p>
-          <p>{{ accomplishment.victoryPoints }}</p>
-        </div>
-        <div class="card-cost">
-          <p v-for="investment in accomplishment.totalCostArray" :key="investment + Math.random()">
-            <!-- Note: will need to adjust key -->
-            <img :src="require(`@/assets/iconsSVG/${investment}.svg`)" alt="Player" />
-          </p>
-        </div>
+      <div class="card-cost">
+        <p v-for="investment in accomplishment.totalCostArray" :key="investment + Math.random()">
+          <!-- Note: will need to adjust key -->
+          <img :src="require(`@/assets/iconsSVG/${investment}.svg`)" alt="Investment" />
+        </p>
       </div>
     </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -29,23 +29,22 @@ export default class CardAccomplishment extends Vue {
         label: '---',
         victoryPoints: '---',
         flavorText: '---',
-        totalCostArray: [],
+        totalCostArray: []
       };
-    },
+    }
   })
   private accomplishment;
 
   handleClick() {
     this.$root.$emit('openCard', {
       card: 'accomplishment',
-      payload: this.accomplishment,
+      payload: this.accomplishment
     });
   }
 }
 </script>
 
 <style scoped>
-
 .card-accomplishment {
   height: auto;
   min-height: 7rem;

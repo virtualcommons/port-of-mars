@@ -1,11 +1,13 @@
 <template>
   <div class="profile" id="v-step-0">
-    <div class="profile-frame">
-      <img :src="avatarURL" alt="Player" class="profile-img" />
-    </div>
-    <div class="profile-info">
-      <p class="profile-info-player">{{ playerRole }}</p>
-      <p class="profile-info-score">Score: {{ playerScore }}</p>
+    <div class="profile-frame-info">
+      <div class="profile-frame">
+        <img :src="avatarURL" alt="Player" class="profile-img" />
+      </div>
+      <div class="profile-info">
+        <p class="profile-info-player">{{ playerRole }}</p>
+        <p class="profile-info-score">Score: {{ playerScore }}</p>
+      </div>
     </div>
   </div>
 </template>
@@ -35,22 +37,18 @@ export default class ContainerProfile extends Vue {
 </script>
 
 <style scoped>
-@media (max-width: 1680px) {
-  .profile {
-    flex-direction: column-reverse;
-  }
-
-  .profile-frame {
-    margin-top: 2rem;
-    margin-right: 0 !important;
-  }
-}
-
 .profile {
   width: 100%;
   flex: 1;
   display: flex;
+  flex-direction: column;
   justify-content: center;
+}
+
+.profile-frame-info {
+  padding-bottom: 1rem;
+  display: flex;
+  justify-content: flex-start;
   align-items: center;
 }
 
@@ -61,6 +59,7 @@ export default class ContainerProfile extends Vue {
 }
 
 .profile-info-player {
+  flex-grow: 1;
   padding: 0 0.5rem;
   margin-bottom: 0.5rem;
   font-size: var(--font-large);

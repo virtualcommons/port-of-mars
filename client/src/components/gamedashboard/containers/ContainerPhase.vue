@@ -4,10 +4,13 @@
       <BCol class="phase" cols="3">
         <Phase />
       </BCol>
-      <BCol class="events" cols="9">
-        <CardEvent :event="eventsForTheRound[0]"/>
-        <CardEvent :event="eventsForTheRound[1]"/>
-        <CardEvent :event="eventsForTheRound[2]"/>
+      <BCol id="hscroll" class="events-container" cols="9">
+        <div class="events">
+          <CardEvent :event="eventsForTheRound[0]" />
+          <CardEvent :event="eventsForTheRound[1]" />
+          <CardEvent :event="eventsForTheRound[2]" />
+          <CardEvent :event="eventsForTheRound[2]" />
+        </div>
       </BCol>
     </BRow>
   </BContainer>
@@ -25,11 +28,26 @@ import CardEvent from '@/components/gamedashboard/cards/CardEvent.vue';
     BRow,
     BCol,
     Phase,
-    CardEvent,
-  },
+    CardEvent
+  }
 })
-
 export default class ContainerPhase extends Vue {
+  mounted() {
+    document.getElementById('hscroll').addEventListener('wheel', this.handleScroll);
+  }
+
+  beforeDestroy() {
+    document.getElementById('hscroll').removeEventListener('wheel', this.handleScroll);
+  }
+
+  handleScroll(e) {
+    if (e.deltaY > 0 && e.deltaX === 0) {
+      document.getElementById('hscroll').scrollLeft += 37.5;
+    } else if (e.deltaY < 0 && e.deltaX === 0) {
+      document.getElementById('hscroll').scrollLeft -= 37.5;
+    }
+  }
+
   get eventsForTheRound() {
     return this.$store.state.gameEvents;
   }
@@ -38,15 +56,18 @@ export default class ContainerPhase extends Vue {
 
 <style scoped>
 .container-phase {
-  height: 80%;
+  height: 100%;
   width: 100%;
   max-width: none;
   padding: 0;
-  margin:0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .row-phase {
-  height: 100%;
+  height: 80%;
   width: 100%;
   padding: 0;
   margin: 0;
@@ -60,17 +81,30 @@ export default class ContainerPhase extends Vue {
 }
 
 .events-container {
-  /* padding: 0.5rem; */
-  /* margin: 1rem 0; */
-  /* border: 0.125rem solid var(--space-white-opaque-2); */
+  height: 100%;
+  width: 100%;
+  max-width: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  overflow-x: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+
+.events-container::-webkit-scrollbar {
+  /* WebKit */
+  width: 0;
+  height: 0;
 }
 
 .events {
   height: 100%;
-  width: 100%;
+  padding: 0 0.5rem;
+  margin: 0;
+  flex-grow: 1;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
-  /* background-color: var(--space-white-opaque-1); */
 }
 </style>

@@ -7,14 +7,11 @@
           <img :src="require(`@/assets/iconsSVG/${this.investmentData.n}.svg`)" alt="Player" />
         </div>
         <div class="card-investment-type-data">
-          <p :style="style">
-            <span>(</span>
-            {{ `${investmentData.persistentInventory + investmentData.currentInventory}` }}
-            <span>)</span>
-          </p>
-          <p id="v-step-12">
-            {{ investmentData.currentCost !== -1 ? investmentData.currentCost : 'X' }}
-          </p>
+          <div class="card-investment-type-data-cost">
+            <p id="v-step-12">
+              {{ investmentData.currentCost !== -1 ? investmentData.currentCost : 'X' }}
+            </p>
+          </div>
         </div>
       </div>
       <div class="card-investment-increment-decrement" v-if="!disabled">
@@ -46,15 +43,6 @@ import { InvestmentProperties } from '../../../models/index';
 @Component({})
 export default class CardInvestment extends Vue {
   @Prop() private investmentData!: InvestmentProperties;
-  
-  get style(){
-    if(this.investmentData.persistentInventory < this.investmentData.persistentInventory+this.investmentData.currentInventory){
-      return 'color:green';
-    }
-    return '';
-  }
-
-  // opacityModifier = this.investmentData.currentCost === -1 ? 'opacity:50%' : '';
 
   get disabled() {
     return this.investmentData.currentCost === -1;
@@ -132,16 +120,25 @@ export default class CardInvestment extends Vue {
 .card-investment-type-data {
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
 }
 
-.card-investment-type-data p {
-  margin: 0;
+.card-investment-type-data-cost {
+  border-radius: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--space-gray);
 }
 
-.card-investment-type-data span {
-  color: var(--space-orange);
+.card-investment-type-data-cost p {
+  margin: 0;
+  font-size: var(--font-small);
+  text-align: center;
+  color: var(--space-white);
 }
 
 .card-investment-increment-decrement {

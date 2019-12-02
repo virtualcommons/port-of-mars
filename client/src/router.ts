@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import LoginPage from '@/views/LoginPage.vue';
+import WaitingLobby from '@/views/WaitingLobby.vue';
 import GameDashboard from '@/views/GameDashboard.vue';
 
 Vue.use(Router);
@@ -10,13 +11,18 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
-      component: LoginPage,
+      component: LoginPage
+    },
+    {
+      path: '/lobby',
+      name: 'WaitingLobby',
+      component: WaitingLobby
     },
     {
       path: '/game',
       name: 'GameDashboard',
-      component: GameDashboard,
-    },
+      component: GameDashboard
+    }
     // {
     //   path: '/about',
     //   name: 'about',
@@ -25,5 +31,5 @@ export default new Router({
     //   // which is lazy-loaded when the route is visited.
     //   component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
     // },
-  ],
+  ]
 });

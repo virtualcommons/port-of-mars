@@ -5,6 +5,7 @@
     <ConfirmationModal />
     <CardModal />
     <BRow class="board reset">
+      <Notification />
       <BCol cols="2" class="left reset">
         <ContainerLeft />
       </BCol>
@@ -33,9 +34,10 @@ import ContainerBottom from '@/components/gamedashboard/containers/ContainerBott
 import ContainerLeft from '@/components/gamedashboard/containers/ContainerLeft.vue';
 import ContainerRight from '@/components/gamedashboard/containers/ContainerRight.vue';
 import MasterComponent from '@/components/MasterComponent.vue';
-import CardModal from '@/components/gamedashboard/cards/CardModal.vue';
 import TradingModal from '@/components/gamedashboard/trading/TradingModal.vue';
 import ConfirmationModal from '../components/gamedashboard/ConfirmationModal.vue';
+import CardModal from '@/components/gamedashboard/cards/CardModal.vue';
+import Notification from '@/components/gamedashboard/Notification.vue';
 
 @Component({
   components: {
@@ -44,8 +46,9 @@ import ConfirmationModal from '../components/gamedashboard/ConfirmationModal.vue
     BCol,
     MasterComponent,
     TradingModal,
-    CardModal,
     ConfirmationModal,
+    CardModal,
+    Notification,
     ContainerLeft,
     ContainerTop,
     ContainerBottom,
@@ -81,6 +84,7 @@ export default class GameDashboard extends Vue {}
   min-height: var(--min-screen-height);
   min-width: var(--min-screen-width);
   padding: 1rem;
+  position: relative;
   background-color: var(--space-gray);
 }
 

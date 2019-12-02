@@ -5,6 +5,7 @@
       <div
         class="marslog-message"
         v-for="log in logs"
+        :style="marsLogColor(log)"
         :key="log.time"
       >
         <p class="marslog-message-category">{{ log.category }}</p>
@@ -29,6 +30,18 @@ export default class MarsLog extends Vue {
 
   get logs() {
     return this.$store.state.marsLog.marsLog;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  marsLogColor(log: object) {
+    switch (log.category) {
+      case 'Reduce Upkeep':
+        return { backgroundColor: 'var(--marslog-red)' };
+      case 'Trade':
+        return { backgroundColor: 'var(--marslog-purple)' };
+      default:
+        return { backgroundColor: 'var(--space-white-opaque-1)' };
+    }
   }
 }
 </script>
@@ -75,7 +88,7 @@ export default class MarsLog extends Vue {
   margin-bottom: 0.5rem;
   font-size: var(--font-small);
   color: var(--space-white);
-  background-color: var(--space-white-opaque-1);
+  /* background-color: var(--space-white-opaque-1); */
   overflow: auto;
 }
 

@@ -1,7 +1,7 @@
-import {BaseInvestmentCosts, GetAccomplishmentsByPerson} from '@/models';
-import {MarsEventData} from "shared/types";
-import {Vue} from "vue-property-decorator";
-import * as _ from 'lodash'
+import { BaseInvestmentCosts, GetAccomplishmentsByPerson } from '@/models';
+import { MarsEventData } from 'shared/types';
+import { Vue } from 'vue-property-decorator';
+import * as _ from 'lodash';
 
 export default {
   SET_GAME_PHASE(state: any, payload: string) {
@@ -20,7 +20,7 @@ export default {
     const index = _.findIndex(state.gameEvents, (el: MarsEventData) => el.id === event.id);
     state.gameEvents.splice(index, 1);
   },
-  CHANGE_EVENT(state: any, payload: {event: MarsEventData, index: number}) {
+  CHANGE_EVENT(state: any, payload: { event: MarsEventData; index: number }) {
     Vue.set(state.gameEvents, payload.index, payload.event);
   },
   SET_EVENTS_FOR_ROUND(state: any, payload: any) {
@@ -39,5 +39,5 @@ export default {
   },
   SET_PLAYER_FINISHED(state: any, payload: boolean) {
     state.playerFinishedWithPhase = payload;
-  },
-}
+  }
+};
