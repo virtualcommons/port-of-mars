@@ -3,8 +3,10 @@ import {
   SendChatMessageData,
   Requests,
   BuyAccomplishmentCardData,
+  SetTimeInvestmentData,
   SetNextPhaseData, ResetGameData
 } from 'shared/requests';
+import { InvestmentData } from 'shared/types';
 
 export class RequestAPI {
   constructor(public room: Room) {}
@@ -28,7 +30,8 @@ export class RequestAPI {
     this.send(msg);
   }
 
-  public investTimeBlocks() {
-
+  public investTimeBlocks(investment: InvestmentData) {
+    const msg: SetTimeInvestmentData = {...investment, kind: 'set-time-investment'};
+    this.send(msg);
   }
 }

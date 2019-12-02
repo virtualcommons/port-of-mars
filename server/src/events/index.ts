@@ -31,7 +31,9 @@ export class TimeInvested implements GameEvent {
   constructor(public data: InvestmentData, public role: Role) {}
 
   apply(game: GameState): void {
+    console.log(JSON.stringify(game.players[this.role].inventory));
     game.players[this.role].invest(this.data);
+    console.log(JSON.stringify(game.players[this.role].inventory));
   }
 }
 

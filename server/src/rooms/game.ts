@@ -2,7 +2,7 @@ import {Client, Room} from "colyseus";
 import {Requests} from "shared/requests"
 import {Responses} from "shared/responses"
 import {GameState, Player} from "@/state";
-import {ResetGameCmd, SendChatMessageCmd, SetNextPhaseCmd, SetPlayerReadinessCmd} from "@/commands";
+import {ResetGameCmd, SendChatMessageCmd, SetNextPhaseCmd, SetPlayerReadinessCmd, TimeInvestmentCmd} from "@/commands";
 import {Game, PlayerReadiness} from "@/rooms/types";
 import {CURATOR, Phase, Role, ROLES} from "shared/types";
 import {Command} from "@/commands/types";
@@ -52,6 +52,7 @@ export class GameRoom extends Room<GameState> implements Game {
       case "set-next-phase": return SetNextPhaseCmd.fromReq(r, this, client);
       case "set-player-readiness": return SetPlayerReadinessCmd.fromReq(r, this, client);
       case "reset-game": return ResetGameCmd.fromReq(r, this);
+      case "set-time-investment": return TimeInvestmentCmd.fromReq(r, this, client);
     }
   }
 
