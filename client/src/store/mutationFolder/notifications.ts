@@ -9,6 +9,16 @@ export default {
     state.timeRemaining = payload;
   },
   ADD_TO_MARS_LOG(state: any, payload: string) {
-    state.marsLog.addEntry(payload);
-  }
+    // correct location for this?
+    // if (payload !== '') {
+    //   state.marsLog.push(payload);
+    // }
+    const data = {
+      initiator: state.playerRole,
+      category: 'upkeep',
+      content: payload,
+      time: new Date().toLocaleString(),
+    }
+    state.marsLog.addEntry(data);
+  },
 };

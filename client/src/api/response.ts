@@ -52,6 +52,9 @@ export function applyServerResponses<T>(room: Room, store: Store<T>) {
       if (change.field === 'upkeep') {
         const upkeep: number = change.value;
         store.commit('SET_UPKEEP', upkeep);
+        if(upkeep < 100) {
+          store.commit('ADD_TO_MARS_LOG','upkeep has dropped by 25!');
+        }
       }
     })
   }
