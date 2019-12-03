@@ -1,5 +1,5 @@
 <template>
-  <div class="container-members" id="v-step-1">
+  <div class="container-members">
     <Member
       v-for="member in members"
       :key="member"
