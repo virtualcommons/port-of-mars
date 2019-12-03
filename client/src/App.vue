@@ -36,7 +36,7 @@ export default class Home extends Vue {
    */
 
   get layout() {
-    return this.$store.getters.layout;
+    return this.$tstore.getters.layout;
   }
 
   // @Socket('joinGame')

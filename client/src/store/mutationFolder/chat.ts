@@ -1,15 +1,13 @@
-import { ChatMessageData } from 'shared/types';
+import {ChatMessageData} from 'shared/types';
 import * as _ from 'lodash';
+import {State} from "@/store/state";
 
 export default {
-  ADD_TO_CHAT(state: any, payload: ChatMessageData) {
+  ADD_TO_CHAT(state: State, payload: ChatMessageData) {
     state.chat.push(payload);
   },
-  REMOVE_FROM_CHAT(state: any, message: ChatMessageData) {
-    const index = _.findIndex(
-      state.chat,
-      (m: ChatMessageData) => m.dateCreated === message.dateCreated
-    );
+  REMOVE_FROM_CHAT(state: State, message: ChatMessageData) {
+    const index = _.findIndex(state.chat, (m: ChatMessageData) => m.dateCreated === message.dateCreated);
     state.chat.splice(index, 1);
   }
 };

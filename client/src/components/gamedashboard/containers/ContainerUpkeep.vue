@@ -27,7 +27,7 @@ import StatusBar from '@/components/gamedashboard/StatusBar.vue';
 })
 export default class ContainerUpkeep extends Vue {
   get upkeepStatus() {
-    return this.$store.state.upkeep;
+    return this.$tstore.state.upkeep;
   }
 }
 </script>
