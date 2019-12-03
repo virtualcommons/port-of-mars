@@ -81,6 +81,12 @@ export default class TutorialLayout extends Vue {
     this.$bvModal.show('bv-modal');
   }
 
+  isHidden() {
+    if (!$('#bv-modal').is(':visible')) {
+      this.$tours.gameTour.start();
+    }
+  }
+
   startTourCallback() {
     const currentStepElement = document.querySelector(this.steps[ 0 ].target);
 
@@ -133,8 +139,10 @@ export default class TutorialLayout extends Vue {
    *
    */
   mounted() {
-    this.$tours.gameTour.start();
     this.showModal();
+
+    setTimeout(() => {this.$tours.gameTour.start()}, 5000);
+    // this.$tours.gameTour.start();
   }
 }
 </script>
