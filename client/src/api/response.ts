@@ -44,7 +44,7 @@ export function applyServerResponses<T>(room: Room, store: TStore) {
     changes.forEach(change => {
       if (change.field === 'phase') {
         const phase: Phase = change.value;
-        store.commit('SET_GAME_PHASE', PHASE_LABELS[phase]);
+        store.commit('SET_GAME_PHASE', phase);
       }
       if (change.field === 'round') {
         const round: number = change.value;

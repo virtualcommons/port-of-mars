@@ -1,6 +1,8 @@
+import {Role} from "./types";
+
 export interface SetPlayerRole {
     kind: 'set-player-role'
-    role: string
+    role: Role
 }
 
 export interface SetError {
