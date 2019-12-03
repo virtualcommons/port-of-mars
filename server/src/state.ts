@@ -119,7 +119,7 @@ class ResourceInventory extends Schema implements ResourceAmountData {
   @type('number')
   science: number;
 
-  inventoryIsValid(inventory: ResourceAmountData): boolean {
+  canAfford(inventory: ResourceAmountData): boolean {
     for (const [k, v] of Object.entries(this)) {
       const resourceRemaining: number = (v as any) - (inventory as any)[k];
       if (resourceRemaining < 0) {
@@ -129,12 +129,12 @@ class ResourceInventory extends Schema implements ResourceAmountData {
     return true;
   }
 
-  update(inventory: InvestmentData) {
-    this.culture += inventory.culture;
-    this.finance += inventory.finance;
-    this.government += inventory.government;
-    this.legacy += inventory.legacy;
-    this.science += inventory.science;
+  update(newResources: ResourceAmountData) {
+    this.culture += newResources.culture;
+    this.finance += newResources.finance;
+    this.government += newResources.government;
+    this.legacy += newResources.legacy;
+    this.science += newResources.science;
   }
 }
 
@@ -217,15 +217,15 @@ export class AccomplishmentSet extends Schema {
     }
   }
 
-  discard(id: number) {
-
-  };
-
   draw() {
     const index = getRandomIntInclusive(0, this.possibleAccomplishments.length - 1);
     const id = this.possibleAccomplishments[index];
     this.possibleAccomplishments.splice(index, 1);
     this.purchasableAccomplishments.push(id);
+  }
+
+  isPurchasable(accomplishment: AccomplishmentData) {
+    return this.purchasableAccomplishments.includes(accomplishment.id);
   }
 }
 
@@ -299,6 +299,23 @@ export class Player extends Schema {
 
   isInvestmentFeasible(investment: InvestmentData) {
     return this.costs.investmentWithinBudget(investment, this.timeBlocks);
+  }
+
+  isAccomplishmentPurchaseFeasible(accomplishment: AccomplishmentData) {
+    return this.accomplishment.isPurchasable(accomplishment) && this.inventory.canAfford(accomplishment);
+  }
+
+  buyAccomplishment(accomplishment: AccomplishmentData) {
+    this.accomplishment.buy(accomplishment);
+    const inv: ResourceAmountData = {
+      culture: - accomplishment.culture,
+      finance: - accomplishment.finance,
+      government: - accomplishment.government,
+      legacy: - accomplishment.legacy,
+      science: - accomplishment.science
+    };
+    this.contributedUpkeep -= accomplishment.upkeep;
+    this.inventory.update(inv)
   }
 
   invest(investment: InvestmentData) {

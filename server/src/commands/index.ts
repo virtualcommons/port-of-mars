@@ -28,23 +28,26 @@ export class SendChatMessageCmd implements Command {
 }
 
 export class BuyAccomplishmentCmd implements Command {
-  constructor(private id: number, private game: Game, private player: Player) {
+  constructor(private id: number, private game: Game, private client: Client) {
   }
 
   static fromReq(r: req.BuyAccomplishmentCardData, game: Game, client: Client) {
-    const p = game.getPlayerByClient(client);
-    return new BuyAccomplishmentCmd(r.id, game, p);
+    return new BuyAccomplishmentCmd(r.id, game, client);
   }
 
   execute() {
-    const accomplishment = getAccomplishmentByID(this.player.role, this.id);
-    // check to see if player has enough resources to purchase
-    return [new BoughtAccomplishment(accomplishment, this.player)];
+    const p = this.game.getPlayerByClient(this.client);
+    const accomplishment = getAccomplishmentByID(p.role, this.id);
+    if (p.isAccomplishmentPurchaseFeasible(accomplishment)) {
+      return [new BoughtAccomplishment(accomplishment, p)];
+    }
+    return [];
   }
 }
 
 export class TimeInvestmentCmd implements Command {
-  constructor(private data: InvestmentData, private game: Game, private player: Player) {}
+  constructor(private data: InvestmentData, private game: Game, private player: Player) {
+  }
 
   static fromReq(r: req.SetTimeInvestmentData, game: Game, client: Client) {
     const p = game.getPlayerByClient(client);
@@ -58,7 +61,8 @@ export class TimeInvestmentCmd implements Command {
 }
 
 export class SetPlayerReadinessCmd implements Command {
-  constructor(private ready: boolean, private game: Game, private player: Player) {}
+  constructor(private ready: boolean, private game: Game, private player: Player) {
+  }
 
   static fromReq(r: req.SetPlayerReadinessData, game: Game, client: Client) {
     const p = game.getPlayerByClient(client);
@@ -71,24 +75,26 @@ export class SetPlayerReadinessCmd implements Command {
 }
 
 export class SetNextPhaseCmd implements Command {
-    constructor(private game: Game, private player: Player) {}
+  constructor(private game: Game, private player: Player) {
+  }
 
-    static fromReq(r: req.SetNextPhaseData, game: Game, client: Client) {
-      const p = game.getPlayerByClient(client);
-      return new SetNextPhaseCmd(game, p);
-    }
+  static fromReq(r: req.SetNextPhaseData, game: Game, client: Client) {
+    const p = game.getPlayerByClient(client);
+    return new SetNextPhaseCmd(game, p);
+  }
 
-    execute(): Array<GameEvent> {
-      const e = this.game.getLeftPhaseEvent();
-      if (e) {
-        return [e]
-      }
-      return [];
+  execute(): Array<GameEvent> {
+    const e = this.game.getLeftPhaseEvent();
+    if (e) {
+      return [e]
     }
+    return [];
+  }
 }
 
 export class ResetGameCmd implements Command {
-  constructor(private game: Game) {}
+  constructor(private game: Game) {
+  }
 
   static fromReq(r: req.ResetGameData, game: Game) {
     return new ResetGameCmd(game);
