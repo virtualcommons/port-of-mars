@@ -1,10 +1,22 @@
 <template>
-    <BModal id="bv-modal" ref= "bv-modal" hide-footer>
+    <BModal 
+        size="lg"
+        id="bv-modal" 
+        centered title="Port of Mars Tutorial" 
+        hide-footer
+        :header-bg-variant="headerBgVariant"
+        :header-text-variant="headerTextVariant"
+        :body-bg-variant="bodyBgVariant"
+        :body-text-variant="bodyTextVariant"
+        no-close-on-backdrop="false"
+        no-close-on-esc="false"
+        no-enforce-focus="false"
+    >
         <template v-slot:modal-title>
-            Using <code>$bvModal</code> Methods
+           <code>Port of Mars Tutorial</code>
         </template>
         <div class="d-block text-center">
-            <h3>This is a modal!</h3>
+            <h3>Welcome to Port of Mars!</h3>
         </div>
     </BModal>
 </template>
@@ -20,5 +32,15 @@ import { BModal, BButtonClose } from 'bootstrap-vue';
     }
 })
 
-export default class TourModal extends Vue {}
+export default class TourModal extends Vue {
+    variants = ['primary', 'secondary', 'success', 'warning', 'danger', 'info', 'light', 'dark'];
+
+    headerBgVariant: string = 'dark';
+    headerTextVariant: string ='light';
+    bodyBgVariant: string = 'dark';
+    bodyTextVariant: string = 'light';
+}
 </script>
+
+<style scoped>
+</style>
