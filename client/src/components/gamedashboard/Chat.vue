@@ -1,5 +1,5 @@
 <template>
-  <div class="chat" id="v-step-2">
+  <div class="chat">
     <p class="chat-title">Chat</p>
     <div class="chat-chat">
       <div class="chat-message" v-for="message in messages" :key="message.dateCreated">

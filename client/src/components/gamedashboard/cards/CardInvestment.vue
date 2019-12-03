@@ -8,7 +8,7 @@
         </div>
         <div class="card-investment-type-data">
           <div class="card-investment-type-data-cost">
-            <p id="v-step-12">
+            <p>
               {{ investmentData.currentCost !== -1 ? investmentData.currentCost : 'X' }}
             </p>
           </div>
