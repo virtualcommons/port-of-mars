@@ -5,7 +5,11 @@
     <ConfirmationModal />
     <CardModal />
     <BRow class="board reset">
+<<<<<<< HEAD
       <Notification v-for="(notification, index) in notifications" :index='index' :length='notifications.length' :key='index' :message='notification'/>
+=======
+      <!-- <Notification /> -->
+>>>>>>> [refactor] investment data sends to server
       <BCol cols="2" class="left reset">
         <ContainerLeft />
       </BCol>

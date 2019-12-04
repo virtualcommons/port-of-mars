@@ -25,6 +25,15 @@ export default {
     state.marsLog.addEntry(data);
   },
   CREATE_NOTIFICATION(state: State, payload:string) {
+<<<<<<< HEAD
+=======
+    // let timer = setTimeout(()=> false,1000);
+    // const data = {
+    //   timer,
+    //   message:payload,
+    // }
+
+>>>>>>> [refactor] investment data sends to server
     state.activeNotifications.push(payload);
   }
 }

@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> [refactor] investment data sends to server
 import { BaseInvestmentCosts } from '@/models';
 import {State} from "@/store/state";
 export default {

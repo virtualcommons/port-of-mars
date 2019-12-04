@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> [refactor] investment data sends to server
 import {MarsEventData, Phase, Role} from "shared/types";
 import {Vue} from "vue-property-decorator";
 import * as _ from 'lodash'
