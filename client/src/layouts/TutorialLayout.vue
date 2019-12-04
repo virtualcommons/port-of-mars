@@ -67,7 +67,7 @@ export default class TutorialLayout extends Vue {
   };
 
   tourOptions = {
-    useKeyboardNavigation: false,
+    // useKeyboardNavigation: false,
   }
 
   steps = [
@@ -92,15 +92,14 @@ export default class TutorialLayout extends Vue {
     this.$bvModal.show('bv-modal');
   }
 
+  /**
+   * startTourOnHideModal() method
+   * Start tutorial when user closes intro tour modal.
+   * 
+   */
   startTourOnHideModal() {
     this.$tours.gameTour.start();
   }
-
-  // isHidden() {
-  //   if (!$('#bv-modal').is(':visible')) {
-  //     this.$tours.gameTour.start();
-  //   }
-  // }
 
   startTourCallback() {
     const currentStepElement = document.querySelector(this.steps[ 0 ].target);
@@ -111,7 +110,7 @@ export default class TutorialLayout extends Vue {
     // add active class for first step
     currentStepElement.classList.add(this.TOUR_ACTIVE_CLASS);
 
-    //
+    // go to next events phase 5 seconds after tour starts
     setTimeout(() => {this.$api.setNextPhase()}, 5000);
   }
 
@@ -153,16 +152,11 @@ export default class TutorialLayout extends Vue {
 
   /**
    * mounted() method
-   * Starts the tour.
+   * Show tour introductory modal.
    *
    */
   mounted() {
     this.showModal();
-
-    // check if modal closes
-
-    // setTimeout(() => {this.$tours.gameTour.start()}, 10000);
-    // this.$tours.gameTour.start();
   }
 }
 </script>
@@ -174,7 +168,6 @@ export default class TutorialLayout extends Vue {
 }
 
 /* custom tour css: highlight an element */
-
 @keyframes shadow-pulse {
   0% {
     box-shadow: 0 0 0 0px rgba(255, 255, 255, 0.2);

@@ -59,6 +59,10 @@ export default class TourModal extends Vue {
     bodyBgVariant: string = 'dark';
     bodyTextVariant: string = 'light';
 
+    /**
+     * hideModal() method
+     * Emits a custom event on hide.
+     */
     hideModal() {
         this.$emit('hide');
     }
