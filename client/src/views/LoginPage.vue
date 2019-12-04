@@ -13,8 +13,8 @@ import LoginButton from '@/components/loginpage/LoginButton.vue';
 
 @Component({
   components: {
-    LoginButton,
-  },
+    LoginButton
+  }
 })
 export default class LoginPage extends Vue {}
 </script>
@@ -41,7 +41,7 @@ export default class LoginPage extends Vue {}
 .login-screen h1 {
   text-transform: uppercase;
   letter-spacing: 0.25rem;
-  font-size: 12rem;
+  font-size: 11rem;
   font-weight: 700;
   color: var(--space-orange);
 }

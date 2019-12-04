@@ -1,3 +1,5 @@
+import {State} from "@/store/state";
+
 export default {
   /**
    * layout() getter
@@ -5,8 +7,8 @@ export default {
    * @return The state of layout.
    *
    */
-  layout(state: any) {
+  layout(state: State) {
     console.log('CURRENT LAYOUT: ', state.layout);
     return state.layout;
-  },
+  }
 };

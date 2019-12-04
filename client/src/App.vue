@@ -36,7 +36,7 @@ export default class Home extends Vue {
    */
 
   get layout() {
-    return this.$store.getters.layout;
+    return this.$tstore.getters.layout;
   }
 
   // @Socket('joinGame')
@@ -56,14 +56,12 @@ export default class Home extends Vue {
 body {
   --max-screen-height: 62.5625rem;
   --max-screen-width: 120rem;
-
   --min-screen-height: 48rem;
   --min-screen-width: 64rem;
 
   --space-gray: #1e2223;
   --space-orange: #c67b5c;
   --space-white: #f5f5f5;
-  --space-green: #2d8f44;
   --space-white-opaque-1: rgba(245, 245, 245, 0.05);
   --space-white-opaque-2: rgba(245, 245, 245, 0.25);
 
@@ -71,13 +69,18 @@ body {
   --color-Pioneer: rgba(111, 36, 134, 0.2);
   --color-Curator: rgba(103, 65, 29, 0.2);
   --color-Entrepreneur: rgba(199, 168, 40, 0.2);
-  --color-Politician: rgba(0, 0, 0, 0.2);
+  --color-Politician: rgba(170, 42, 41, 0.2);
   --color-Upkeep: rgba(45, 143, 68, 0.2);
 
   --status-green: rgba(45, 143, 68, 1);
+  --status-yellow: rgba(199, 168, 40, 1);
+  --status-red: rgba(170, 42, 41, 1);
+
+  --marslog-red: rgba(170, 42, 41, 0.05);
+  --marslog-purple: rgba(111, 36, 134, 0.05);
 
   --font-family-default: 'Space Mono', monospace;
-  --font-small: 0.86rem;
+  --font-small: 0.75rem;
   --font-med: 1rem;
   --font-large: 1.5rem;
 

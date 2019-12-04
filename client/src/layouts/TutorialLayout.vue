@@ -1,5 +1,6 @@
 <template>
   <div class="tutorial-layout">
+    <TourModal />
     <router-view />
     <v-tour name="gameTour" :steps="steps" :callbacks="tourCallbacks" :options="tourOptions">
       <template v-slot="tour">
@@ -33,6 +34,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import VueTour from 'vue-tour';
+import TourModal from '@/tutorial/TourModal.vue'
 
 require('vue-tour/dist/vue-tour.css');
 
@@ -40,7 +42,10 @@ require('vue-tour/dist/vue-tour.css');
 Vue.use(VueTour);
 
 @Component({
-  name: 'tutorial-layout'
+  name: 'tutorial-layout',
+  components: {
+    TourModal,
+  }
 })
 export default class TutorialLayout extends Vue {
   // class for the active step element
@@ -70,45 +75,17 @@ export default class TutorialLayout extends Vue {
         placement: 'bottom'
       }
     },
-
-    // containers > ContainerMembers.vue
-    {
-      target: '#v-step-1',
-      content: 'Your team members and their respective scores are located here for your reference '
-               + 'throughout the game.',
-      params: {
-        placement: 'bottom'
-      }
-    },
-
-    // containers >
-    {
-      target: '#v-step-2',
-      content: 'You can communicate with other players throughout the game by using the chat '
-               + 'feature. Try sending a message now!',
-      params: {
-        placement: 'left'
-      }
-    },
-
-    // containers > ContainerUpkeep.vue
-    {
-      target: '#v-step-3',
-      content: 'Upkeep is your team\'s shared infrastructure. At the beginning of every round, '
-                + 'Upkeep declines due to wear and tear. Without any investment by the residents, '
-                + 'Upkeep will be reduced to zero.',
-      params: {
-        placement: 'bottom'
-      }
-    },
-    {
-      target: '#v-step-4',
-      content: '',
-      params: {
-        placement: 'right'
-      }
-    },
   ];
+
+  showModal() {
+    this.$bvModal.show('bv-modal');
+  }
+
+  isHidden() {
+    if (!$('#bv-modal').is(':visible')) {
+      this.$tours.gameTour.start();
+    }
+  }
 
   startTourCallback() {
     const currentStepElement = document.querySelector(this.steps[ 0 ].target);
@@ -162,7 +139,10 @@ export default class TutorialLayout extends Vue {
    *
    */
   mounted() {
-    this.$tours.gameTour.start();
+    this.showModal();
+
+    setTimeout(() => {this.$tours.gameTour.start()}, 5000);
+    // this.$tours.gameTour.start();
   }
 }
 </script>

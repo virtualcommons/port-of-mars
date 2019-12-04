@@ -1,15 +1,15 @@
 <template>
-  <div class="chat" id="v-step-2">
+  <div class="chat">
     <p class="chat-title">Chat</p>
     <div class="chat-chat">
-      <div class="chat-message" v-for="message in messages" :key="message.time">
+      <div class="chat-message" v-for="message in messages" :key="message.dateCreated">
         <p class="chat-message-member">
           {{ message.role }}
         </p>
         <p class="chat-message-content">
           {{ message.message }}
         </p>
-        <p class="chat-message-time"><span>[ </span>{{ toDate(message.time) }}<span> ]</span></p>
+        <p class="chat-message-time"><span>[ </span>{{ toDate(message.dateCreated) }}<span> ]</span></p>
       </div>
     </div>
     <div class="chat-input-frame">
@@ -28,13 +28,12 @@
 
 <script lang="ts">
 import { Vue, Component, Inject } from 'vue-property-decorator';
-import { ChatMessage } from '@/models/index';
 import { RequestAPI } from '@/api/request';
 
 @Component({})
 export default class Chat extends Vue {
   @Inject()
-  $api: RequestAPI;
+  $api!: RequestAPI;
 
   pendingMessage: string = '';
 

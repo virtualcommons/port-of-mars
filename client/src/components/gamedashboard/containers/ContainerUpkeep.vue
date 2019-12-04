@@ -1,5 +1,5 @@
 <template>
-  <BContainer class="container-upkeep" id="v-step-3">
+  <BContainer class="container-upkeep">
     <StatusBar class="upkeep-statusbar" :setWidth="`${upkeepStatus}`" />
     <div class="upkeep-statusbar-text">
       <p>Upkeep</p>
@@ -27,7 +27,7 @@ import StatusBar from '@/components/gamedashboard/StatusBar.vue';
 })
 export default class ContainerUpkeep extends Vue {
   get upkeepStatus() {
-    return this.$store.state.upkeep;
+    return this.$tstore.state.upkeep;
   }
 }
 </script>

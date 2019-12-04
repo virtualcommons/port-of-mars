@@ -1,8 +1,8 @@
 <template>
   <div class="default-layout">
-    <div class="stars" v-if="$route.path !== '/game'"></div>
-    <div class="twinkling" v-if="$route.path !== '/game'"></div>
-    <div class="clouds" v-if="$route.path !== '/game'"></div>
+    <div class="stars" v-if="$route.path !== '/game' && $route.path !== '/lobby'"></div>
+    <div class="twinkling" v-if="$route.path !== '/game' && $route.path !== '/lobby'"></div>
+    <div class="clouds" v-if="$route.path !== '/game' && $route.path !== '/lobby'"></div>
     <router-view />
   </div>
 </template>
@@ -11,15 +11,12 @@
 import { Vue, Component } from 'vue-property-decorator';
 
 @Component({
-  name: 'default-layout',
+  name: 'default-layout'
 })
-
-export default class DefaultLayout extends Vue {
-}
+export default class DefaultLayout extends Vue {}
 </script>
 
 <style>
-
 .default-layout {
   background-color: var(--space-gray);
 }

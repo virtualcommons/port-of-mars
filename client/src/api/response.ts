@@ -3,6 +3,7 @@ import { Room } from 'colyseus.js';
 import {ChatMessageData, MarsEventData, Phase, PHASE_LABELS} from 'shared/types';
 import { Responses } from 'shared/responses';
 import {Schema} from "@colyseus/schema";
+import {TStore} from "vue/types/vue";
 
 type Schemify<T> = T & Schema
 
@@ -10,7 +11,7 @@ function deschemify<T>(s: Schemify<T>): T {
   return (s.toJSON() as T);
 }
 
-export function applyServerResponses<T>(room: Room, store: Store<T>) {
+export function applyServerResponses<T>(room: Room, store: TStore) {
   room.onMessage((msg: Responses) => {
     switch (msg.kind) {
       case 'set-player-role': store.commit('SET_PLAYER_ROLE', msg.role); break;
@@ -43,7 +44,7 @@ export function applyServerResponses<T>(room: Room, store: Store<T>) {
     changes.forEach(change => {
       if (change.field === 'phase') {
         const phase: Phase = change.value;
-        store.commit('SET_GAME_PHASE', PHASE_LABELS[phase]);
+        store.commit('SET_GAME_PHASE', phase);
       }
       if (change.field === 'round') {
         const round: number = change.value;

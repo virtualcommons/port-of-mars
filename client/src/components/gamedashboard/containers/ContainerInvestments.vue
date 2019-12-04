@@ -43,8 +43,6 @@ import CardInvestment from '@/components/gamedashboard/cards/CardInvestment.vue'
   }
 })
 export default class ContainerInvestments extends Vue {
-  // REFACTOR TO GETTERS
-
   get iD(): any {
     const rv = this.$store.state.localInvestments.returnValues;
     const costData = Object.keys(rv)
@@ -54,7 +52,6 @@ export default class ContainerInvestments extends Vue {
       }, [])
       .sort((a, b) => a.currentCost - b.currentCost);
 
-    // console.log(costData); // eslint-disable-line no-use-before-define
     return costData;
   }
 

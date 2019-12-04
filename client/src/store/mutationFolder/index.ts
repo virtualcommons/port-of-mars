@@ -1,9 +1,10 @@
-import accomplishments from "./accomplishments";
-import chat from "./chat";
-import gameState from "./gameState";
-import investment from "./investment";
-import notifications from "./notifications";
-import trading from "./trading";
+import accomplishments from './accomplishments';
+import chat from './chat';
+import gameState from './gameState';
+import investment from './investment';
+import layout from './layout';
+import notifications from './notifications';
+import trading from './trading';
 
 export default {
   SET_LAYOUT(state: any, newLayout: string) {
@@ -14,6 +15,7 @@ export default {
   ...chat,
   ...gameState,
   ...investment,
+  ...layout,
   ...notifications,
-  ...trading,
-}
+  ...trading
+};

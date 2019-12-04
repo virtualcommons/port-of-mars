@@ -23,7 +23,7 @@ export class BoughtAccomplishment implements GameEvent {
   constructor(public accomplishment: AccomplishmentData, public player: Player) {}
 
   apply(game: GameState): void {
-    // this.player.accomplishment.buy(this.accomplishment);
+    this.player.buyAccomplishment(this.accomplishment);
   }
 }
 

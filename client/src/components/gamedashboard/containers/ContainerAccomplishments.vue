@@ -26,9 +26,18 @@
 
     <BRow class="accomplishment-cards">
       <BRow class="accomplishments-cards-available" v-if="activeView == 'available'">
-        <div class="accomplishment-container" :style="{width:setWidth}" v-for="accomplishment in currentAccomplishments" :key="accomplishment.label">
-          <CardAccomplishment :accomplishment='accomplishment'/>
-          <button class="discard-button" :style="{display:canDiscard}" @click='handleDiscardAccomplishment(accomplishment)'>
+        <div
+          class="accomplishment-container"
+          :style="{ width: setWidth }"
+          v-for="accomplishment in currentAccomplishments"
+          :key="accomplishment.label"
+        >
+          <CardAccomplishment :accomplishment="accomplishment" />
+          <button
+            class="discard-button"
+            :style="{ display: canDiscard }"
+            @click="handleDiscardAccomplishment(accomplishment)"
+          >
             <img :src="require(`@/assets/trashIcon.svg`)" />
           </button>
         </div>
@@ -72,12 +81,12 @@ export default class ContainerAccomplishments extends Vue {
     return this.$store.state.boughtAccomplishmentCards;
   }
 
-  get canDiscard(){
+  get canDiscard() {
     let phase = this.$store.state.gamePhase;
-    if(phase == "Purchase Investments"){
+    if (phase == 'Purchase Investments') {
       this.setWidth = '95%';
       return '';
-    } else{
+    } else {
       this.setWidth = '100%';
       return 'none';
     }
@@ -87,10 +96,12 @@ export default class ContainerAccomplishments extends Vue {
     this.activeView = view;
   }
 
-  handleDiscardAccomplishment(a){
-    this.$root.$emit('openConfirmation', {text:`Select 'Yes' if you want to draw another card.`,
-    type:'discardAccomplishment',
-    actionData: a.label});
+  handleDiscardAccomplishment(a) {
+    this.$root.$emit('openConfirmation', {
+      text: `Select 'Yes' if you want to draw another card.`,
+      type: 'discardAccomplishment',
+      actionData: a.label
+    });
   }
 }
 </script>
@@ -211,7 +222,7 @@ export default class ContainerAccomplishments extends Vue {
   justify-content: space-around;
 }
 
-.discard-button{
+.discard-button {
   height: 2.5rem;
   width: 2.5rem;
   border: none;

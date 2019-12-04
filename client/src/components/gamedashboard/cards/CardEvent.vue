@@ -22,8 +22,8 @@ export default class CardEvent extends Vue {
       payload: {
         title: this.event.name,
         info: this.event.flavorText,
-        effects: this.event.effect,
-      },
+        effects: this.event.effect
+      }
     });
   }
 }
@@ -32,7 +32,8 @@ export default class CardEvent extends Vue {
 <style scoped>
 .card-event {
   height: 12rem;
-  width: 30%;
+  width: 14.5rem;
+  margin: 0.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;

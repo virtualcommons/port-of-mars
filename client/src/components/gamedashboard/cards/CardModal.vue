@@ -24,8 +24,8 @@ import CardEventView from '@/components/gamedashboard/cards/CardEventView.vue';
     BRow,
     BCol,
     CardAccomplishmentView,
-    CardEventView,
-  },
+    CardEventView
+  }
 })
 export default class CardModal extends Vue {
   setStyle: string = 'none';
@@ -49,7 +49,7 @@ export default class CardModal extends Vue {
   height: 100vh;
   width: 100vw;
   position: absolute;
-  z-index: 1;
+  z-index: 3;
   top: 0;
   left: 0;
   display: flex;
@@ -85,7 +85,7 @@ export default class CardModal extends Vue {
   width: 100%;
   border: none;
   position: relative;
-  z-index: 2;
+  z-index: 4;
   top: 2rem;
   right: 2rem;
   text-decoration: underline;
@@ -94,25 +94,25 @@ export default class CardModal extends Vue {
 }
 
 .card-info {
-  width:100%;
+  width: 100%;
   border: none;
   position: relative;
-  z-index: 2;
+  z-index: 4;
   top: 0.3rem;
   left: 1rem;
   color: var(--space-white);
   background: none;
 }
 
-.accomplishment-cost{
+.accomplishment-cost {
   margin-left: auto;
-  margin-right:auto;
+  margin-right: auto;
 }
 
 .cm-close-button {
   border: none;
   position: absolute;
-  z-index: 2;
+  z-index: 4;
   top: 2rem;
   right: 2rem;
   text-decoration: underline;

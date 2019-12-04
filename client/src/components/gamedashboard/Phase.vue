@@ -24,6 +24,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import Clock from '@/components/gamedashboard/Clock.vue';
+import {PHASE_LABELS} from "shared/types";
 
 @Component({
   components: {
@@ -34,7 +35,7 @@ export default class Phase extends Vue {
   private btnDisabled = false;
 
   get currentPhase() {
-    return this.$store.state.gamePhase;
+    return PHASE_LABELS[this.$tstore.state.gamePhase];
   }
 
   get btnVisibility() {
