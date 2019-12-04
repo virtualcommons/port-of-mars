@@ -10,6 +10,7 @@
         :body-text-variant="bodyTextVariant"
         no-close-on-backdrop="false"
         no-close-on-esc="false"
+        @hide="hideModal"
     >
         <template v-slot:modal-title>
            <code><b>TUTORIAL</b></code>
@@ -50,12 +51,17 @@ import { BModal, BButtonClose } from 'bootstrap-vue';
 })
 
 export default class TourModal extends Vue {
+
     variants = ['primary', 'secondary', 'success', 'warning', 'danger', 'info', 'light', 'dark'];
 
     headerBgVariant: string = 'dark';
     headerTextVariant: string ='light';
     bodyBgVariant: string = 'dark';
     bodyTextVariant: string = 'light';
+
+    hideModal() {
+        this.$emit('hide');
+    }
 }
 </script>
 
