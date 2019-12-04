@@ -3,10 +3,10 @@
 </template>
 
 <script lang="ts">
-  import {Component, Inject, Vue} from 'vue-property-decorator';
+import {Component, Inject, Vue} from 'vue-property-decorator';
 import Synthetic from '../tutorial/syntheticdata';
 import { MarsLogMessage, BaseInvestmentCosts } from '@/models';
-  import {RequestAPI} from "@/api/request";
+import {RequestAPI} from "@/api/request";
 
 @Component({})
 export default class Master extends Vue {
