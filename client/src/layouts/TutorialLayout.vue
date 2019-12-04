@@ -72,6 +72,7 @@ export default class TutorialLayout extends Vue {
 
   steps = [
     {
+<<<<<<< HEAD
       //  gamedashboard > containers > ContainerUpkeep.vue
       target: '.v-step-0',
       content: 'The game starts with Upkeep at 100. This represents the habitat at peak '
@@ -87,6 +88,12 @@ export default class TutorialLayout extends Vue {
       content: 'At the start of a round, if Upkeep is lower than 65, reveal 2 events; '
                + 'and if Upkeep is lower than 35 reveal 3 events. Conditions on Mars '
                + 'are tough!',
+=======
+      //  containers > ContainerProfile.vue
+      target: '#v-step-0',
+      content: 'This is your role in the game. Your score is '
+               + 'shown here and updated as you earn points during gameplay.',
+>>>>>>> feat: add info about game to intro modal of tour
       params: {
         placement: 'bottom'
       }
@@ -353,6 +360,9 @@ export default class TutorialLayout extends Vue {
    */
   mounted() {
     this.showModal();
+
+    setTimeout(() => {this.$tours.gameTour.start()}, 20000);
+    // this.$tours.gameTour.start();
   }
 }
 </script>
