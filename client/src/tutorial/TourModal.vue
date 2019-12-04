@@ -10,6 +10,7 @@
         :body-text-variant="bodyTextVariant"
         no-close-on-backdrop="false"
         no-close-on-esc="false"
+        @hide="hideModal"
     >
         <template v-slot:modal-title>
            <code><b>TUTORIAL</b></code>
@@ -58,10 +59,6 @@ export default class TourModal extends Vue {
     bodyBgVariant: string = 'dark';
     bodyTextVariant: string = 'light';
 
-    /**
-     * hideModal() method
-     * Emits a custom event on hide.
-     */
     hideModal() {
         this.$emit('hide');
     }
