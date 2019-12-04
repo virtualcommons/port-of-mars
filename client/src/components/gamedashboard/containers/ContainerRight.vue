@@ -2,7 +2,7 @@
   <div class="container-right">
     <p class="scores-title">Player Scores</p>
     <ContainerMembers />
-    <Chat id="v-step-2" />
+    <Chat />
   </div>
 </template>
 
