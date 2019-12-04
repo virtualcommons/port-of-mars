@@ -22,5 +22,14 @@ export default {
       time: new Date(),
     };
     state.marsLog.addEntry(data);
+  },
+  CREATE_NOTIFICATION(state: State, payload:string) {
+    // let timer = setTimeout(()=> false,1000);
+    // const data = {
+    //   timer,
+    //   message:payload,
+    // }
+
+    state.activeNotifications.push(payload);
   }
 }

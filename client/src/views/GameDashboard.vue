@@ -5,7 +5,7 @@
     <ConfirmationModal />
     <CardModal />
     <BRow class="board reset">
-      <Notification />
+      <!-- <Notification /> -->
       <BCol cols="2" class="left reset">
         <ContainerLeft />
       </BCol>

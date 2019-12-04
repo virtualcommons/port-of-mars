@@ -22,6 +22,7 @@ export interface State {
 
   notifIsActive: string
   notifMessage: string
+  activeNotifications: Array<String>
 
   tradingView: string
   tradingMember: Role
@@ -55,6 +56,7 @@ export const initialStoreState: State = {
   // notification
   notifIsActive: 'inactive',
   notifMessage: '',
+  activeNotifications: [],
 
   // state variables for trading modal
   tradingView: 'request',
