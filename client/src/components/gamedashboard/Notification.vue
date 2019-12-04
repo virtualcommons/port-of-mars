@@ -2,12 +2,12 @@
   <div 
     @click="hideNotif()"
     class="notification"
-    :class="viewAnim"
+    :class="viewAnim()"
     @mouseover="hover = true"
     @mouseleave="hover = false"
   >
     <p class="notification-close" v-if="hover">Close</p>
-    <p class="notification-message" v-if="!hover">{{ message }}</p>
+    <p class="notification-message" v-if="!hover">{{ message }} <br/> Message: {{index+1}}/{{ length }}</p>
   </div>
 </template>
 
@@ -18,26 +18,21 @@ export default class Notification extends Vue {
   // Note: may want to use transition wrapper
   private hover = false;
 
-  @Prop({default:'ahhh, life is pain!'}) message;
+  @Prop({default:`you've been asleep for 20 years. this is the doctor's last way of contacting you from the outside. please wake up.`}) message;
+  @Prop({default: 0}) length;
   @Prop({default: -1}) index;
-  // get message() {
-  //   return this.$store.state.notifMessage;
-  // }
 
   inView = 'visible';
 
   hideNotif() {
-    // this.$store.dispatch('setNotificationStatus', 'hide');
-    this.inView = 'hide';
+    this.inView = 'hide-close';
     
     setTimeout(()=> {
       this.$store.state.activeNotifications.splice(this.index,1);
-    },14000);
+    },1000);
   }
-  get viewAnim() {
-    if (this.inView === 'inactive') {
-      return 'notification-inactive';
-    }
+
+  viewAnim() {
     if (this.inView === 'visible') {
       return 'animated fadeInLeft';
     }
@@ -51,22 +46,6 @@ export default class Notification extends Vue {
     }
     return '';
   }
-  // mounted() {
-  //   // Note: may want to refactor this...
-  //   this.$root.$on('notification', (data: any) => {
-  //     this.$store.dispatch('addToMarsLog', data).then(() => {
-  //       if (this.inView === 'inactive' || this.inView === 'hide') {
-  //         this.$store.dispatch('setNotificationStatus', 'visible');
-  //       } else {
-  //         this.$store.dispatch('setNotificationStatus', 'reset').then(() => {
-  //           setTimeout(() => {
-  //             this.$store.dispatch('setNotificationStatus', 'attention');
-  //           }, 500);
-  //         });
-  //       }
-  //     });
-  //   });
-  // }
 }
 </script>
 
@@ -96,7 +75,7 @@ export default class Notification extends Vue {
   visibility: hidden;
 }
 .notification-close, .notification-message {
-  font-size: var(--font-small);
+  font-size: var(--font-med);
   margin: 0;
 }
 </style>

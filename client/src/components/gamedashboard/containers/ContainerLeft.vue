@@ -1,7 +1,7 @@
 <template>
   <div class="container-left">
     <Round />
-    <Notification v-for="(notification, index) in notifications" :index='index' :key="index" :message='notification'/>
+    
     <ContainerProfile />
     <ProfileInvestments />
     <MarsLog />
@@ -26,15 +26,10 @@ import Notification from "@/components/gamedashboard/Notification.vue";
   }
 })
 export default class ContainerLeft extends Vue {
-  get notifications(){
-    console.log(this.$store.state.activeNotifications);
-    return this.$store.state.activeNotifications;
-  }
-
-  handleClick(index){
-    console.log('adfaf')
-   // this.$store.state.activeNotifications.splice(index,1);
-  }
+  // get notifications(){
+  //   console.log(this.$store.state.activeNotifications);
+  //   return this.$store.state.activeNotifications;
+  // }
 }
 </script>
 

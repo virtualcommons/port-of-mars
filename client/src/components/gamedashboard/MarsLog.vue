@@ -6,7 +6,7 @@
         class="marslog-message"
         v-for="log in logs"
         :style="marsLogColor(log)"
-        :key="log.time"
+        :key="log.time.Date"
       >
         <p class="marslog-message-category">{{ log.category }}</p>
         <p class="marslog-message-content">{{ log.content }}</p>
@@ -29,6 +29,7 @@ export default class MarsLog extends Vue {
   }
 
   get logs() {
+    //console.log(this.$store.state.marsLog.marsLog[0].time);
     return this.$store.state.marsLog.marsLog;
   }
 
