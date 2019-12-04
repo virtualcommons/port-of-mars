@@ -91,9 +91,15 @@ export default class TutorialLayout extends Vue {
 =======
       //  containers > ContainerProfile.vue
       target: '#v-step-0',
+<<<<<<< HEAD
       content: 'This is your role in the game. Your score is '
                + 'shown here and updated as you earn points during gameplay.',
 >>>>>>> feat: add info about game to intro modal of tour
+=======
+      content: 'The game starts with Upkeep at 100. This represents the habitat at peak '
+               + 'condition and maintenance. However, at the start of every round, the '
+               + 'community loses 25 Upkeep. Conditions on Mars are tough!',
+>>>>>>> feat: add general info about game to tour modal
       params: {
         placement: 'bottom'
       }
