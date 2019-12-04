@@ -27,4 +27,4 @@ export interface ResetGameData {
   kind: 'reset-game'
 }
 
-export type Requests = SendChatMessageData | SetPlayerReadinessData | SetNextPhaseData | ResetGameData
+export type Requests = SendChatMessageData | SetPlayerReadinessData | SetNextPhaseData | ResetGameData | SetTimeInvestmentData
