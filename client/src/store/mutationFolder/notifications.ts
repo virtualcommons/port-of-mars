@@ -26,6 +26,7 @@ export default {
   },
   CREATE_NOTIFICATION(state: State, payload:string) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     // let timer = setTimeout(()=> false,1000);
     // const data = {
@@ -34,6 +35,8 @@ export default {
     // }
 
 >>>>>>> [refactor] investment data sends to server
+=======
+>>>>>>> [refactor]Server handles notifications
     state.activeNotifications.push(payload);
   }
 }
