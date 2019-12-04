@@ -1,6 +1,6 @@
 <template>
   <div class="container-top">
-    <ContainerUpkeep />
+    <ContainerUpkeep id="v-step-0" />
     <ContainerPhase />
   </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <div class="profile v-step-8">
+  <div class="profile">
     <div class="profile-frame-info">
       <div class="profile-frame">
         <img :src="avatarURL" alt="Player" class="profile-img" />
