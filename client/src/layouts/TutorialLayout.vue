@@ -1,6 +1,6 @@
 <template>
   <div class="tutorial-layout">
-    <TourModal />
+    <TourModal @hide="startTourOnHideModal"/>
     <router-view />
     <v-tour name="gameTour" :steps="steps" :callbacks="tourCallbacks" :options="tourOptions">
       <template v-slot="tour">
@@ -32,9 +32,10 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Inject, Component } from 'vue-property-decorator';
 import VueTour from 'vue-tour';
-import TourModal from '@/tutorial/TourModal.vue'
+import TourModal from '@/tutorial/TourModal.vue';
+import { RequestAPI } from '@/api/request';
 
 require('vue-tour/dist/vue-tour.css');
 
@@ -47,7 +48,11 @@ Vue.use(VueTour);
     TourModal,
   }
 })
+
 export default class TutorialLayout extends Vue {
+  @Inject()
+  readonly $api!: RequestAPI;
+
   // class for the active step element
   TOUR_ACTIVE_CLASS: string = 'tour-active';
 
@@ -62,7 +67,7 @@ export default class TutorialLayout extends Vue {
   };
 
   tourOptions = {
-    // useKeyboardNavigation: false,
+    useKeyboardNavigation: false,
   }
 
   steps = [
@@ -78,15 +83,24 @@ export default class TutorialLayout extends Vue {
     },
   ];
 
+  /**
+   * showModal() method
+   * Show tour modal to introduce tour.
+   * 
+   */
   showModal() {
     this.$bvModal.show('bv-modal');
   }
 
-  isHidden() {
-    if (!$('#bv-modal').is(':visible')) {
-      this.$tours.gameTour.start();
-    }
+  startTourOnHideModal() {
+    this.$tours.gameTour.start();
   }
+
+  // isHidden() {
+  //   if (!$('#bv-modal').is(':visible')) {
+  //     this.$tours.gameTour.start();
+  //   }
+  // }
 
   startTourCallback() {
     const currentStepElement = document.querySelector(this.steps[ 0 ].target);
@@ -96,6 +110,9 @@ export default class TutorialLayout extends Vue {
 
     // add active class for first step
     currentStepElement.classList.add(this.TOUR_ACTIVE_CLASS);
+
+    //
+    setTimeout(() => {this.$api.setNextPhase()}, 5000);
   }
 
   previousStepCallback(currentStep: any) {
@@ -142,7 +159,9 @@ export default class TutorialLayout extends Vue {
   mounted() {
     this.showModal();
 
-    setTimeout(() => {this.$tours.gameTour.start()}, 20000);
+    // check if modal closes
+
+    // setTimeout(() => {this.$tours.gameTour.start()}, 10000);
     // this.$tours.gameTour.start();
   }
 }
