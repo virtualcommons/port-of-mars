@@ -69,7 +69,7 @@ export default class TutorialLayout extends Vue {
     {
       //  containers > ContainerProfile.vue
       target: '#v-step-0',
-      content: 'Welcome to Port of Mars! This is your role in the game. Your score is '
+      content: 'This is your role in the game. Your score is '
                + 'shown here and updated as you earn points during gameplay.',
       params: {
         placement: 'bottom'
@@ -141,7 +141,7 @@ export default class TutorialLayout extends Vue {
   mounted() {
     this.showModal();
 
-    setTimeout(() => {this.$tours.gameTour.start()}, 5000);
+    setTimeout(() => {this.$tours.gameTour.start()}, 20000);
     // this.$tours.gameTour.start();
   }
 }
