@@ -42,9 +42,9 @@ export default class Member extends Vue {
   }
 
   handleClick() {
-    this.$store.dispatch('setTradingMember', this.playerRole).then(() => {
-      this.$root.$emit('openTrading', 'open');
-    });
+    // this.$store.dispatch('setTradingMember', this.playerRole).then(() => {
+    //   this.$root.$emit('openTrading', 'open');
+    // });
   }
 }
 </script>

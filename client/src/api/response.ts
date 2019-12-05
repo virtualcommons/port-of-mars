@@ -6,16 +6,18 @@ import {
   Phase,
   PHASE_LABELS,
   PlayerData,
-  PlayerSetData, ResourceCostData, Role
+  PlayerSetData,
+  ResourceCostData,
+  Role
 } from 'shared/types';
 import { Responses } from 'shared/responses';
-import {DataChange, Schema} from "@colyseus/schema";
-import {TStore} from "vue/types/vue";
+import { DataChange, Schema } from '@colyseus/schema';
+import { TStore } from 'vue/types/vue';
 
-type Schemify<T> = T & Schema
+type Schemify<T> = T & Schema;
 
 function deschemify<T>(s: Schemify<T>): T {
-  return (s.toJSON() as T);
+  return s.toJSON() as T;
 }
 
 function applyPlayerResponses(player: any, store: TStore) {
@@ -30,8 +32,11 @@ function applyPlayerResponses(player: any, store: TStore) {
 export function applyServerResponses<T>(room: Room, store: TStore) {
   room.onMessage((msg: Responses) => {
     switch (msg.kind) {
-      case 'set-player-role': store.commit('SET_PLAYER_ROLE', msg.role); break;
-      default: break;
+      case 'set-player-role':
+        store.commit('SET_PLAYER_ROLE', msg.role);
+        break;
+      default:
+        break;
     }
   });
 
@@ -46,7 +51,7 @@ export function applyServerResponses<T>(room: Room, store: TStore) {
 
   room.state.players.onChange = (changes: Array<DataChange>) => {
     for (const change of changes) {
-      store.commit('SET_PLAYER', { role: change.field as Role, data: change.value});
+      store.commit('SET_PLAYER', { role: change.field as Role, data: change.value });
     }
   };
 
@@ -59,7 +64,7 @@ export function applyServerResponses<T>(room: Room, store: TStore) {
   };
 
   room.state.marsEvents.onChange = (event: Schemify<MarsEventData>, index: number) => {
-    store.commit('CHANGE_EVENT', {event: deschemify(event), index});
+    store.commit('CHANGE_EVENT', { event: deschemify(event), index });
   };
 
   room.state.onChange = (changes: Array<any>) => {
@@ -75,11 +80,11 @@ export function applyServerResponses<T>(room: Room, store: TStore) {
       if (change.field === 'upkeep') {
         const upkeep: number = change.value;
         store.commit('SET_UPKEEP', upkeep);
-        if(upkeep < 100) {
-          store.commit('ADD_TO_MARS_LOG','upkeep has dropped by 25!');
-          store.commit('CREATE_NOTIFICATION',`ohmygod we're all gonna dieeee!`);
+        if (upkeep < 100) {
+          store.commit('ADD_TO_MARS_LOG', 'upkeep has dropped by 25!');
+          store.commit('CREATE_NOTIFICATION', `ohmygod we're all gonna dieeee!`);
         }
       }
-    })
-  }
+    });
+  };
 }

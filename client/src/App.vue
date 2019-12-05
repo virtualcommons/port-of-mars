@@ -38,16 +38,6 @@ export default class Home extends Vue {
   get layout() {
     return this.$tstore.getters.layout;
   }
-
-  // @Socket('joinGame')
-  // onJoinGame(data: unknown) {
-  //   console.log(data);
-  // }
-
-  // mounted() {
-  //   console.log((this as any).$socket);
-  //   (this as any).$socket.client.emit('joinGame', { my: 'data' });
-  // }
 }
 </script>
 

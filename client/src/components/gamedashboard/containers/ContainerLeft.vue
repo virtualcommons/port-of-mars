@@ -1,7 +1,7 @@
 <template>
   <div class="container-left">
     <Round />
-    
+
     <ContainerProfile />
     <ProfileInvestments class="v-step-15" />
     <MarsLog class="v-step-7" />
@@ -26,10 +26,6 @@ import Notification from "@/components/gamedashboard/Notification.vue";
   }
 })
 export default class ContainerLeft extends Vue {
-  // get notifications(){
-  //   console.log(this.$store.state.activeNotifications);
-  //   return this.$store.state.activeNotifications;
-  // }
 }
 </script>
 

@@ -10,9 +10,7 @@
       >
         <p class="marslog-message-category">{{ log.category }}</p>
         <p class="marslog-message-content">{{ log.content }}</p>
-        <p class="marslog-message-time">
-          <span>[ </span>{{ log.time }}<span> ]</span>
-        </p>
+        <p class="marslog-message-time"><span>[ </span>{{ log.time }}<span> ]</span></p>
       </div>
     </div>
   </div>
@@ -21,7 +19,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 
-@Component
+@Component({})
 export default class MarsLog extends Vue {
   updated() {
     const elem = this.$el.querySelector('.marslog-log');
@@ -29,7 +27,6 @@ export default class MarsLog extends Vue {
   }
 
   get logs() {
-    //console.log(this.$store.state.marsLog.marsLog[0].time);
     return this.$store.state.marsLog.marsLog;
   }
 

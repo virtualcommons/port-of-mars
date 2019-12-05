@@ -6,10 +6,13 @@
       </BCol>
       <BCol id="hscroll" class="events-container v-step-5" cols="9">
         <div class="events">
-          <CardEvent :event="eventsForTheRound[0]" />
-          <CardEvent :event="eventsForTheRound[1]" />
-          <CardEvent :event="eventsForTheRound[2]" />
-          <CardEvent :event="eventsForTheRound[2]" />
+          <!-- need to refactor key -->
+          <p class="events-empty" v-if="eventsForTheRound.length === 0">No Active Events</p>
+          <CardEvent
+            v-for="eventItem in eventsForTheRound"
+            :event="eventItem"
+            :key="Math.random()"
+          />
         </div>
       </BCol>
     </BRow>
@@ -106,5 +109,10 @@ export default class ContainerPhase extends Vue {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.events-empty {
+  color: var(--space-white-opaque-2);
+  font-size: var(--font-large);
 }
 </style>

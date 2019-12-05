@@ -5,6 +5,7 @@
     </div>
     <div class="card-effect">
       <p>{{ event.effect }}</p>
+      <!-- <p>{{ event.effectText }}</p> -->
     </div>
   </div>
 </template>
@@ -61,6 +62,10 @@ export default class CardEvent extends Vue {
   margin-bottom: 0;
   text-align: center;
   text-transform: capitalize;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .card-effect {
