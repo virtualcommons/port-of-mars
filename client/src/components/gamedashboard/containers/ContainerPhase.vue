@@ -2,9 +2,9 @@
   <BContainer class="container-phase">
     <BRow class="row-phase">
       <BCol class="phase" cols="3">
-        <Phase />
+        <Phase class="v-step-2" />
       </BCol>
-      <BCol id="hscroll" class="events-container" cols="9">
+      <BCol id="hscroll" class="events-container v-step-4" cols="9">
         <div class="events">
           <CardEvent :event="eventsForTheRound[0]" />
           <CardEvent :event="eventsForTheRound[1]" />
