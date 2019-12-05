@@ -124,8 +124,18 @@ export default class TutorialLayout extends Vue {
     // gamedashboard > containers > ContainerLeft.vue
     {
       target: '.v-step-5',
-      content: 'Any events and changes in upkeep that occur will be logged in the Mars Log '
+      content: 'Any events and changes in upkeep that occur will be recorded in the Mars Log '
                + 'for your reference.',
+      params: {
+        placement: 'right',
+      }
+    },
+    // gamedashboard > containers > ContainerLeft.vue
+    {
+      target: '.v-step-6',
+      content: 'This is your role and score during the game. Your role determines '
+               + 'the investments in influence currency you can make and the accomplishments '
+               + 'that you can purchase toward the end of a round.',
       params: {
         placement: 'right',
       }
@@ -194,8 +204,14 @@ export default class TutorialLayout extends Vue {
     console.log(`[Vue Tour] A custom nextStep callback has been called on step
                 ${currentStep + 1}`);
 
+    // open event view im BottomContainer
     if (currentStep === 1) {
       this.$root.$emit('openEvent');
+    }
+
+    // close event view in BottomContainer
+    if (currentStep === 3) {
+      this.$root.$emit('closeEvent');
     }
   }
 
