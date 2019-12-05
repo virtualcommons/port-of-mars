@@ -7,7 +7,7 @@
       <BCol class="container-bottom-accomplishments" cols="5" v-if="currentView === 'default'">
         <ContainerAccomplishments />
       </BCol>
-      <BCol class="container-bottom-events" cols="12" v-if="currentView === 'event'">
+      <BCol class="container-bottom-events v-step-3" cols="12" v-if="currentView === 'event'">
         <ContainerEvents />
       </BCol>
     </BRow>

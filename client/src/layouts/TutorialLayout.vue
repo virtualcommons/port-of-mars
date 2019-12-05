@@ -67,18 +67,67 @@ export default class TutorialLayout extends Vue {
   };
 
   tourOptions = {
-    useKeyboardNavigation: false,
+    // useKeyboardNavigation: false,
   }
 
   steps = [
     {
-      //  containers > ContainerProfile.vue
-      target: '#v-step-0',
+      //  gamedashboard > containers > ContainerUpkeep.vue
+      target: '.v-step-0',
       content: 'The game starts with Upkeep at 100. This represents the habitat at peak '
                + 'condition and maintenance. However, at the start of every round, the '
                + 'community loses 25 Upkeep. Conditions on Mars are tough!',
       params: {
         placement: 'bottom'
+      }
+    },
+    // gamedashboard > Round.vue
+    {
+      target: '.v-step-1',
+      content: 'The game progresses in rounds. There is an indefinite number '
+               + 'of rounds per game. Therefore, the game can end at any time given '
+               + 'that Upkeep does not decline to zero.',
+      params: {
+        placement: 'right'
+      }
+    },
+    // gamedashboard > containers > ContainerTop.vue
+    {
+      target: '.v-step-2',
+      content: 'There are multiple phases in a round: Events, Invest, Trade, Purchase '
+               + ' and Discard. Each phase has a time limit of 5 minutes.',
+      params: {
+        placement: 'bottom',
+      }
+    },
+    // gamedashboard > containers > ContainerBottom.vue
+    {
+      target: '.v-step-3',
+      content: 'Events are revealed at the beginning of every round during the events phase. '
+                + 'Some events can be more involved and require players to fulfill tasks '
+                + 'that include voting. Mars is unpredictable; many different events can happen!',
+      params: {
+        placement: 'bottom',
+      }
+    },
+    // gamedashboard > containers > ContainerPhase.vue
+    {
+      target: '.v-step-4',
+      content: 'Events persisting multiple rounds or relevant to the current round '
+               + 'will populate here. At the start of a round, if Upkeep is '
+               + 'lower than 65, reveal 2 events; and if Upkeep is lower than 35 '
+               + 'reveal 3 events.',
+      params: {
+        placement: 'left',
+      }
+    },
+    // gamedashboard > containers > ContainerLeft.vue
+    {
+      target: '.v-step-5',
+      content: 'Any events and changes in upkeep that occur will be logged in the Mars Log '
+               + 'for your reference.',
+      params: {
+        placement: 'right',
       }
     },
   ];
@@ -92,15 +141,14 @@ export default class TutorialLayout extends Vue {
     this.$bvModal.show('bv-modal');
   }
 
+  /**
+   * startTourOnHideModal() method
+   * Start tutorial when user closes intro tour modal.
+   * 
+   */
   startTourOnHideModal() {
     this.$tours.gameTour.start();
   }
-
-  // isHidden() {
-  //   if (!$('#bv-modal').is(':visible')) {
-  //     this.$tours.gameTour.start();
-  //   }
-  // }
 
   startTourCallback() {
     const currentStepElement = document.querySelector(this.steps[ 0 ].target);
@@ -111,8 +159,8 @@ export default class TutorialLayout extends Vue {
     // add active class for first step
     currentStepElement.classList.add(this.TOUR_ACTIVE_CLASS);
 
-    //
-    setTimeout(() => {this.$api.setNextPhase()}, 5000);
+    // go to next events phase 5 seconds after tour starts
+    setTimeout(() => {this.$api.setNextPhase()}, 6500);
   }
 
   previousStepCallback(currentStep: any) {
@@ -127,6 +175,10 @@ export default class TutorialLayout extends Vue {
 
     console.log(`[Vue Tour] A custom previousStep callback has been called on step
                 ${currentStep + 1}`);
+
+    // if (currentStep === 2) {
+    //   this.$root.$emit('closeEvent');
+    // }
   }
 
   nextStepCallback(currentStep: any) {
@@ -141,6 +193,10 @@ export default class TutorialLayout extends Vue {
 
     console.log(`[Vue Tour] A custom nextStep callback has been called on step
                 ${currentStep + 1}`);
+
+    if (currentStep === 1) {
+      this.$root.$emit('openEvent');
+    }
   }
 
   stopTourCallback(currentStep: any) {
@@ -153,16 +209,11 @@ export default class TutorialLayout extends Vue {
 
   /**
    * mounted() method
-   * Starts the tour.
+   * Show tour introductory modal.
    *
    */
   mounted() {
     this.showModal();
-
-    // check if modal closes
-
-    // setTimeout(() => {this.$tours.gameTour.start()}, 10000);
-    // this.$tours.gameTour.start();
   }
 }
 </script>
@@ -174,7 +225,6 @@ export default class TutorialLayout extends Vue {
 }
 
 /* custom tour css: highlight an element */
-
 @keyframes shadow-pulse {
   0% {
     box-shadow: 0 0 0 0px rgba(255, 255, 255, 0.2);
