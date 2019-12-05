@@ -72,13 +72,53 @@ export default class TutorialLayout extends Vue {
 
   steps = [
     {
-      //  containers > ContainerProfile.vue
-      target: '#v-step-0',
+      //  gamedashboard > containers > ContainerUpkeep.vue
+      target: '.v-step-0',
       content: 'The game starts with Upkeep at 100. This represents the habitat at peak '
                + 'condition and maintenance. However, at the start of every round, the '
                + 'community loses 25 Upkeep. Conditions on Mars are tough!',
       params: {
         placement: 'bottom'
+      }
+    },
+    // gamedashboard > Round.vue
+    {
+      target: '.v-step-1',
+      content: 'The game progresses in rounds. There is an indefinite number '
+               + 'of rounds per game. Therefore, the game can end at any time given '
+               + 'that Upkeep does not decline to zero.',
+      params: {
+        placement: 'right'
+      }
+    },
+    // gamedashboard > containers > ContainerTop.vue
+    {
+      target: '.v-step-2',
+      content: 'There are multiple phases in a round: Events, Invest, Trade, Purchase '
+               + ' and Discard. Each phase has a time limit of 5 minutes.',
+      params: {
+        placement: 'bottom',
+      }
+    },
+    // gamedashboard > containers > ContainerBottom.vue
+    {
+      target: '.v-step-3',
+      content: 'Events are revealed at the beginning of every round during the events phase. '
+                + 'Some events can be more involved and require players to fulfill tasks '
+                + 'that include voting. Mars is unpredictable; many different events can happen!',
+      params: {
+        placement: 'bottom',
+      }
+    },
+    // gamedashboard > containers > ContainerPhase.vue
+    {
+      target: '.v-step-4',
+      content: 'Events persisting multiple rounds or relevant to the current round '
+               + 'will be populated here. At the start of the round, if Upkeep is '
+               + 'lower than 65, reveal 2 events; and if Upkeep is lower than 35 '
+               + 'reveal 3 events.',
+      params: {
+        placement: 'left',
       }
     },
   ];
@@ -111,7 +151,7 @@ export default class TutorialLayout extends Vue {
     currentStepElement.classList.add(this.TOUR_ACTIVE_CLASS);
 
     // go to next events phase 5 seconds after tour starts
-    setTimeout(() => {this.$api.setNextPhase()}, 5000);
+    setTimeout(() => {this.$api.setNextPhase()}, 6500);
   }
 
   previousStepCallback(currentStep: any) {
@@ -140,6 +180,10 @@ export default class TutorialLayout extends Vue {
 
     console.log(`[Vue Tour] A custom nextStep callback has been called on step
                 ${currentStep + 1}`);
+
+    if (currentStep === 1) {
+      this.$root.$emit('openEvent');
+    }
   }
 
   stopTourCallback(currentStep: any) {

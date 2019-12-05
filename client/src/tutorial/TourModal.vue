@@ -8,8 +8,8 @@
         :header-text-variant="headerTextVariant"
         :body-bg-variant="bodyBgVariant"
         :body-text-variant="bodyTextVariant"
-        no-close-on-backdrop="false"
-        no-close-on-esc="false"
+        :no-close-on-backdrop="false"
+        :no-close-on-esc="false"
         @hide="hideModal"
     >
         <template v-slot:modal-title>
