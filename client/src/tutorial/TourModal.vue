@@ -8,8 +8,8 @@
         :header-text-variant="headerTextVariant"
         :body-bg-variant="bodyBgVariant"
         :body-text-variant="bodyTextVariant"
-        no-close-on-backdrop="false"
-        no-close-on-esc="false"
+        :no-close-on-backdrop="false"
+        :no-close-on-esc="false"
         @hide="hideModal"
     >
         <template v-slot:modal-title>
@@ -59,6 +59,10 @@ export default class TourModal extends Vue {
     bodyBgVariant: string = 'dark';
     bodyTextVariant: string = 'light';
 
+    /**
+     * hideModal() method
+     * Emits a custom event on hide.
+     */
     hideModal() {
         this.$emit('hide');
     }
