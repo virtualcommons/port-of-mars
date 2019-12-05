@@ -1,4 +1,4 @@
-import {InvestmentsModel, MarsLogModel} from "@/models";
+import { InvestmentsModel, MarsLogModel } from '@/models';
 import {
   ChatMessageData,
   MarsEventData,
@@ -9,15 +9,20 @@ import {
   ResourceAmountData,
   PlayerData,
   InvestmentData,
-  CURATOR, ENTREPRENEUR, POLITICIAN, PIONEER, GameData
-} from "shared/types";
-import {Accomplishment} from "@/models/AccomplishmentsModels";
+  CURATOR,
+  ENTREPRENEUR,
+  POLITICIAN,
+  PIONEER,
+  GameData,
+  EventClientView
+} from 'shared/types';
+import { Accomplishment } from '@/models/AccomplishmentsModels';
 
 export interface PlayerClientData extends PlayerData {
-  pendingInvestments: InvestmentData
+  pendingInvestments: InvestmentData;
 }
 
-type PlayerClientSet = { [role in Role]: PlayerClientData }
+type PlayerClientSet = { [role in Role]: PlayerClientData };
 
 function defaultPlayerClientSet(): PlayerClientSet {
   return {
@@ -26,7 +31,7 @@ function defaultPlayerClientSet(): PlayerClientSet {
     Politician: defaultPlayerData(POLITICIAN),
     Pioneer: defaultPlayerData(PIONEER),
     Researcher: defaultPlayerData(RESEARCHER)
-  }
+  };
 }
 
 function defaultPlayerData(role: Role): PlayerClientData {
@@ -43,7 +48,7 @@ function defaultPlayerData(role: Role): PlayerClientData {
     victoryPoints: 0,
     pendingInvestments: defaultPendingInvestment(),
     contributedUpkeep: 0
-  }
+  };
 }
 
 function defaultCostData(role: Role): ResourceCostData {
@@ -53,8 +58,8 @@ function defaultCostData(role: Role): ResourceCostData {
     legacy: 0,
     finance: 0,
     culture: 0,
-    upkeep: 0,
-  }
+    upkeep: 0
+  };
 }
 
 function defaultInventory(role: Role): ResourceAmountData {
@@ -63,8 +68,8 @@ function defaultInventory(role: Role): ResourceAmountData {
     government: 0,
     legacy: 0,
     finance: 0,
-    culture: 0,
-  }
+    culture: 0
+  };
 }
 
 function defaultPendingInvestment(): ResourceCostData {
@@ -75,21 +80,20 @@ function defaultPendingInvestment(): ResourceCostData {
     finance: 0,
     culture: 0,
     upkeep: 0
-  }
+  };
 }
 
 export interface State extends GameData {
-  role: Role
-  marsLog: MarsLogModel
-  players: PlayerClientSet
+  role: Role;
+  marsLog: MarsLogModel;
+  players: PlayerClientSet;
 
-  phase: Phase
-  layout: string
+  phase: Phase;
+  layout: string;
 
-  activeNotifications: Array<String>
+  activeNotifications: Array<String>;
 
-  tradingView: string
-  tradingMember: Role
+  eventView: EventClientView;
 }
 
 export const initialStoreState: State = {
@@ -103,7 +107,8 @@ export const initialStoreState: State = {
   timeRemaining: 300,
   marsEvents: [],
   marsEventsProcessed: 0,
-
+  // THROWING ERROR
+  // maxRound: 0,
 
   // phase
   phase: Phase.pregame,
@@ -112,7 +117,5 @@ export const initialStoreState: State = {
 
   activeNotifications: [],
 
-  // state variables for trading modal
-  tradingView: 'request',
-  tradingMember: 'Curator',
+  eventView: EventClientView.EVENT_TEST
 };

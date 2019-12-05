@@ -1,7 +1,7 @@
-import {MarsEventData, Phase, PlayerData, Role} from "shared/types";
-import {Vue} from "vue-property-decorator";
-import * as _ from 'lodash'
-import {PlayerClientData, State} from "@/store/state";
+import { MarsEventData, Phase, PlayerData, Role } from 'shared/types';
+import { Vue } from 'vue-property-decorator';
+import * as _ from 'lodash';
+import { PlayerClientData, State } from '@/store/state';
 
 export default {
   SET_GAME_PHASE(state: State, payload: Phase) {
@@ -20,7 +20,7 @@ export default {
     const index = _.findIndex(state.marsEvents, (el: MarsEventData) => el.id === event.id);
     state.marsEvents.splice(index, 1);
   },
-  CHANGE_EVENT(state: State, payload: {event: MarsEventData, index: number}) {
+  CHANGE_EVENT(state: State, payload: { event: MarsEventData; index: number }) {
     Vue.set(state.marsEvents, payload.index, payload.event);
   },
   SET_EVENTS_FOR_ROUND(state: State, payload: any) {
@@ -28,10 +28,8 @@ export default {
   },
   SET_PLAYER_ROLE(state: State, payload: Role) {
     state.role = payload;
-    console.log('PLAYER ROLE (MUTATION): ', state.role);
   },
-  SET_PLAYER(state: State, payload: {role: Role, data: PlayerData}) {
-    console.log(payload);
+  SET_PLAYER(state: State, payload: { role: Role; data: PlayerData }) {
     Object.assign(state.players[payload.role], payload.data);
   }
-}
+};

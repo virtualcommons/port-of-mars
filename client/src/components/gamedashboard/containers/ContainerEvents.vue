@@ -11,7 +11,8 @@
         </BRow>
       </BCol>
       <BCol class="events-actions">
-        <p>This will be where the player will complete events.</p>
+        <!-- <p>This will be where the player will complete events.</p> -->
+        <component :is="layout" />
       </BCol>
     </BRow>
   </BContainer>
@@ -21,11 +22,27 @@
 import { Vue, Component } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
 
-@Component({})
+import EventTest from '@/components/gamedashboard/events/EventTest.vue';
+
+@Component({
+  components: {
+    EventTest,
+  }
+})
 export default class ContainerEvents extends Vue {
   private eventContentName: string = 'Out of Commission';
 
   private eventContentEffect: string = 'The Politician receives only 3 Time Blocks this round.';
+
+  get layout() {
+    console.log(`(${typeof this.$tstore.state.eventView}): ${this.$tstore.state.eventView}`);
+    switch(this.$tstore.state.eventView) {
+      case 'EVENT_TEST':
+        return 'EventTest';
+      default:
+        break;
+    }
+  }
 }
 </script>
 

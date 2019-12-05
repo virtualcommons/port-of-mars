@@ -1,7 +1,6 @@
 <template>
   <BContainer class="game-dashboard reset">
     <MasterComponent />
-    <TradingModal />
     <ConfirmationModal />
     <CardModal />
     <BRow class="board reset">
@@ -34,7 +33,6 @@ import ContainerBottom from '@/components/gamedashboard/containers/ContainerBott
 import ContainerLeft from '@/components/gamedashboard/containers/ContainerLeft.vue';
 import ContainerRight from '@/components/gamedashboard/containers/ContainerRight.vue';
 import MasterComponent from '@/components/MasterComponent.vue';
-import TradingModal from '@/components/gamedashboard/trading/TradingModal.vue';
 import ConfirmationModal from '../components/gamedashboard/ConfirmationModal.vue';
 import CardModal from '@/components/gamedashboard/cards/CardModal.vue';
 import Notification from '@/components/gamedashboard/Notification.vue';
@@ -45,7 +43,6 @@ import Notification from '@/components/gamedashboard/Notification.vue';
     BRow,
     BCol,
     MasterComponent,
-    TradingModal,
     ConfirmationModal,
     CardModal,
     Notification,
@@ -57,7 +54,6 @@ import Notification from '@/components/gamedashboard/Notification.vue';
 })
 export default class GameDashboard extends Vue {
   get notifications(){
-    console.log(this.$store.state.activeNotifications);
     return this.$store.state.activeNotifications;
   }
 }
