@@ -114,11 +114,20 @@ export default class TutorialLayout extends Vue {
     {
       target: '.v-step-4',
       content: 'Events persisting multiple rounds or relevant to the current round '
-               + 'will be populated here. At the start of the round, if Upkeep is '
+               + 'will populate here. At the start of a round, if Upkeep is '
                + 'lower than 65, reveal 2 events; and if Upkeep is lower than 35 '
                + 'reveal 3 events.',
       params: {
         placement: 'left',
+      }
+    },
+    // gamedashboard > containers > ContainerLeft.vue
+    {
+      target: '.v-step-5',
+      content: 'Any events and changes in upkeep that occur will be logged in the Mars Log '
+               + 'for your reference.',
+      params: {
+        placement: 'right',
       }
     },
   ];
@@ -166,6 +175,10 @@ export default class TutorialLayout extends Vue {
 
     console.log(`[Vue Tour] A custom previousStep callback has been called on step
                 ${currentStep + 1}`);
+
+    // if (currentStep === 2) {
+    //   this.$root.$emit('closeEvent');
+    // }
   }
 
   nextStepCallback(currentStep: any) {

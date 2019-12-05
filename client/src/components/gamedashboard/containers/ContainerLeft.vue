@@ -3,7 +3,7 @@
     <Round />
     <ContainerProfile />
     <ProfileInvestments />
-    <MarsLog />
+    <MarsLog class="v-step-5"/>
   </div>
 </template>
 
