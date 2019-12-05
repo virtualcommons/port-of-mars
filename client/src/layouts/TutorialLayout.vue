@@ -130,14 +130,33 @@ export default class TutorialLayout extends Vue {
         placement: 'right',
       }
     },
-    // gamedashboard > containers > ContainerLeft.vue
+    // gamedashboard > containers > ContainerProfile.vue
     {
       target: '.v-step-6',
       content: 'This is your role and score during the game. Your role determines '
                + 'the investments in influence currency you can make and the accomplishments '
                + 'that you can purchase toward the end of a round.',
       params: {
+        placement: 'bottom',
+      }
+    },
+    // gamedashboard > containers > ContainerProfile.vue
+    {
+      target: '.v-step-7',
+      content: 'During the Investment phase, you may invest your timeblocks into '
+               + 'Upkeep or purchase Influence currency.',
+      params: {
         placement: 'right',
+      }
+    },
+    // gamedashboard > containers > ContainerInvestments.vue
+    {
+      target: '.v-step-8',
+      content: 'You are allocated 10 timeblocks (unless something says otherwise) to '
+               + 'spend each round. You can spend timeblocks on Upkeep or on '
+               + 'Influence.',
+      params: {
+        placement: 'top',
       }
     },
   ];
@@ -186,7 +205,7 @@ export default class TutorialLayout extends Vue {
     console.log(`[Vue Tour] A custom previousStep callback has been called on step
                 ${currentStep + 1}`);
 
-    // if (currentStep === 2) {
+    // if (currentStep === 3) {
     //   this.$root.$emit('closeEvent');
     // }
   }
@@ -212,6 +231,10 @@ export default class TutorialLayout extends Vue {
     // close event view in BottomContainer
     if (currentStep === 3) {
       this.$root.$emit('closeEvent');
+    }
+
+    if (currentStep === 5) {
+      this.$api.setNextPhase();
     }
   }
 

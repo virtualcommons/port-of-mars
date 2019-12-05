@@ -2,7 +2,7 @@
   <BContainer class="container-phase">
     <BRow class="row-phase">
       <BCol class="phase" cols="3">
-        <Phase class="v-step-2" />
+        <Phase class="v-step-2 v-step-7" />
       </BCol>
       <BCol id="hscroll" class="events-container v-step-4" cols="9">
         <div class="events">
