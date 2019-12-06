@@ -35,7 +35,7 @@ export default class Phase extends Vue {
   private btnDisabled = false;
 
   get currentPhase() {
-    return PHASE_LABELS[this.$tstore.state.gamePhase];
+    return PHASE_LABELS[this.$tstore.state.phase];
   }
 
   get btnVisibility() {

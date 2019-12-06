@@ -47,6 +47,7 @@ export default class ConfirmationModal extends Vue {
     //   this.setStyle = 'none';
     // });
 
+    // REFACTOR - ON NICK'S COMPUTER
     if(this.type=='nextRound'){
       this.$store.state.localInvestments.confirmInvestments();
       this.$api.investTimeBlocks(this.$store.state.localInvestments.returnPersistentInventory);

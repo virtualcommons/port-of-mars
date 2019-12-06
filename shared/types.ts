@@ -39,6 +39,8 @@ export interface ResourceAmountData {
   culture: number
 }
 
+export type Resource = keyof ResourceAmountData
+
 export enum Phase {
   pregame,
   events,
@@ -103,7 +105,6 @@ export type PlayerSetData = { [role in Role]: PlayerData }
 
 export interface GameData {
   players: PlayerSetData
-  maxRound: number
   timeRemaining: number
   round: number
   phase: Phase

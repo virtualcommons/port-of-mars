@@ -2,9 +2,9 @@
   <div class="profile-investments-container">
     <p class="profile-investments-title">Investments</p>
     <div class="profile-investments">
-      <div v-for="investment in investments" class="profile-investment" :key="investment.n">
-        <img :src="require(`@/assets/iconsSVG/${investment.n}.svg`)" alt="Investment" />
-        <p :style="style(investment)">{{ investment.persistentInventory }}</p>
+      <div v-for="investment in investments" class="profile-investment" :key="investment.name">
+        <img :src="require(`@/assets/iconsSVG/${investment.name}.svg`)" alt="Investment" />
+        <p :style="style(investment)">{{ investment.units }}</p>
       </div>
     </div>
   </div>
@@ -13,16 +13,19 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { InvestmentsModel } from '../../models/InvestmentsData';
+import {Resource} from "shared/types";
 
 @Component({})
 export default class ProfileInvestments extends Vue {
   get investments() {
-    return this.$store.state.localInvestments.returnValues;
+    const inventory = this.$tstore.getters.player.inventory;
+    const pendingInventory = this.$tstore.getters.player.pendingInvestments;
+    return Object.keys(inventory).map(name => ({ name, units: inventory[name as Resource], pendingUnits: pendingInventory[name as Resource]}))
   }
 
-  style(investment: any): string {
-    return investment.persistentInventory <
-      investment.persistentInventory + investment.currentInventory
+  style(inventory: { name: Resource, units: number, pendingUnits: number }): string {
+    return inventory.units <
+      inventory.units + inventory.pendingUnits
       ? 'color: var(--status-green)'
       : '';
   }

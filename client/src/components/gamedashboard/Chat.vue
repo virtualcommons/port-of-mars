@@ -45,7 +45,7 @@ export default class Chat extends Vue {
   }
 
   get messages() {
-    return this.$store.state.chat;
+    return this.$tstore.state.messages;
   }
 
   // eslint-disable-next-line class-methods-use-this

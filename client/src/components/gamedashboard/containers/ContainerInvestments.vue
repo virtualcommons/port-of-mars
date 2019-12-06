@@ -13,15 +13,15 @@
 
     <BRow class="investments-cards v-step-11 v-step-12">
       <BRow class="investments-cards-top">
-        <CardInvestment :investmentData="costs[2]" class="v-step-13" />
-        <CardInvestment :investmentData="costs[3]" />
-        <CardInvestment :investmentData="costs[0]" />
+        <CardInvestment v-bind="costs[2]" class="v-step-13" />
+        <CardInvestment v-bind="costs[3]" />
+        <CardInvestment v-bind="costs[0]" />
       </BRow>
 
       <BRow class="investments-cards-bottom">
-        <CardInvestment :investmentData="costs[4]" />
-        <CardInvestment :investmentData="costs[5]" />
-        <CardInvestment :investmentData="costs[1]" />
+        <CardInvestment v-bind="costs[4]" />
+        <CardInvestment v-bind="costs[5]" />
+        <CardInvestment v-bind="costs[1]" />
       </BRow>
     </BRow>
   </BContainer>
@@ -32,6 +32,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
 import StatusBar from '@/components/gamedashboard/StatusBar.vue';
 import CardInvestment from '@/components/gamedashboard/cards/CardInvestment.vue';
+import {InvestmentData, Resource, ResourceCostData, Role} from "shared/types";
 
 @Component({
   components: {
@@ -44,19 +45,26 @@ import CardInvestment from '@/components/gamedashboard/cards/CardInvestment.vue'
 })
 export default class ContainerInvestments extends Vue {
   get costs(): any {
-    const rv = this.$store.state.localInvestments.returnValues;
-    const costData = Object.keys(rv)
-      .reduce((prev, curr) => {
-        prev.push(rv[curr]);
+    const p = this.$tstore.getters.player;
+    const investmentData = Object.keys(p.costs)
+      .reduce((prev, name) => {
+        const k: keyof ResourceCostData = name as keyof ResourceCostData;
+        const cost = p.costs[k];
+        let pendingInvestment: number;
+        if (k === 'upkeep') {
+          pendingInvestment = p.contributedUpkeep;
+        } else {
+          pendingInvestment = p.pendingInvestments[k];
+        }
+        prev.push({name, cost, pendingInvestment});
         return prev;
-      }, [])
-      .sort((a, b) => a.currentCost - b.currentCost);
+      }, [] as Array<{ name: string, cost: number, pendingInvestment: number}>).sort((a, b) => a.cost - b.cost);
 
-    return costData;
+    return investmentData;
   }
 
   get decrementInvestmentCount() {
-    return this.$store.state.localInvestments.localDecrement;
+    return this.$tstore.getters.player.remainingTimeBlocks;
   }
 }
 </script>

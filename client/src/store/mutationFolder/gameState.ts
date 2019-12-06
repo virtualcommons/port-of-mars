@@ -5,11 +5,7 @@ import {State} from "@/store/state";
 
 export default {
   SET_GAME_PHASE(state: State, payload: Phase) {
-    state.gamePhase = payload;
-
-    if(payload == Phase.trade){
-      state.localInvestments.confirmInvestments();
-    }
+    state.phase = payload;
   },
   SET_ROUND(state: State, round: number) {
     state.round = round;
@@ -18,25 +14,21 @@ export default {
     state.upkeep = upkeep;
   },
   ADD_TO_EVENTS(state: State, event: MarsEventData) {
-    state.gameEvents.push(event);
+    state.marsEvents.push(event);
   },
   REMOVE_FROM_EVENTS(state: State, event: MarsEventData) {
-    const index = _.findIndex(state.gameEvents, (el: MarsEventData) => el.id === event.id);
-    state.gameEvents.splice(index, 1);
+    const index = _.findIndex(state.marsEvents, (el: MarsEventData) => el.id === event.id);
+    state.marsEvents.splice(index, 1);
   },
   CHANGE_EVENT(state: State, payload: {event: MarsEventData, index: number}) {
-    Vue.set(state.gameEvents, payload.index, payload.event);
+    Vue.set(state.marsEvents, payload.index, payload.event);
   },
   SET_EVENTS_FOR_ROUND(state: State, payload: any) {
-    state.gameEvents = payload;
+    state.marsEvents = payload;
     // console.log(state.gameEvents);
   },
   SET_PLAYER_ROLE(state: State, payload: Role) {
-    state.playerRole = payload;
-    console.log('PLAYER ROLE (MUTATION): ', state.playerRole);
-
-
-
-    // state.activeAccomplishmentCards = GetAccomplishmentsByPerson(state.playerRole, 3);
+    state.role = payload;
+    console.log('PLAYER ROLE (MUTATION): ', state.role);
   },
 }

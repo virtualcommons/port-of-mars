@@ -18,20 +18,16 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 @Component({})
 export default class ContainerProfile extends Vue {
   get playerRole() {
-    return this.$store.state.playerRole;
+    return this.$tstore.state.role;
   }
 
   get playerScore() {
-    return this.$store.state.playerScore;
+    return this.$tstore.getters.player.victoryPoints;
   }
 
   get avatarURL(): string {
-    if (this.playerRole !== '') {
-      // eslint-disable-next-line global-require,import/no-dynamic-require
-      return require(`@/assets/characters/${this.playerRole}.png`);
-    }
     // eslint-disable-next-line global-require,import/no-dynamic-require
-    return require('@/assets/characters/Curator.png');
+    return require(`@/assets/characters/${this.playerRole}.png`);
   }
 }
 </script>

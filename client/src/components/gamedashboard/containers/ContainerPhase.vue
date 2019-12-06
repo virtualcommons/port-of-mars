@@ -49,7 +49,7 @@ export default class ContainerPhase extends Vue {
   }
 
   get eventsForTheRound() {
-    return this.$store.state.gameEvents;
+    return this.$tstore.state.marsEvents;
   }
 }
 </script>

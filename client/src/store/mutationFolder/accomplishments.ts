@@ -2,43 +2,21 @@ import { GetAccomplishmentsByPerson, buyAccomplishment } from '@/models';
 import { Accomplishment } from '@/models/AccomplishmentsModels';
 import * as _ from 'lodash';
 import {State} from "@/store/state";
+import {getRole} from "@/store/mutationFolder/util";
+import {AccomplishmentData, Role} from "shared/types";
 
 export default {
-  SET_ACTIVE_ACCOMPLISHMENTS(state: State, payload: number) {
-    //state.activeAccomplishmentCards = payload;
-    state.activeAccomplishmentCards = GetAccomplishmentsByPerson(state.playerRole, payload);
+  SET_ACTIVE_ACCOMPLISHMENTS(state: State, payload: { data: AccomplishmentData, role: Role}) {
+    state.players[payload.role].accomplishment.purchasable.push(payload.data);
   },
-  DISCARD_ACCOMPLISHMENT(state: State, payload: string) {
+  DISCARD_ACCOMPLISHMENT(state: State, payload: { id: number, role: Role}) {
     let index = _.findIndex(
-      state.activeAccomplishmentCards,
-      (e: Accomplishment) => e.label == payload
+      state.players[payload.role].accomplishment.purchasable,
+      (e: AccomplishmentData) => e.id === payload.id
     );
-    let newAccomplishment = GetAccomplishmentsByPerson(state.playerRole, 1)[0];
-
-    if (newAccomplishment != undefined) {
-      state.activeAccomplishmentCards[index].inCurrentDeck = false;
-      state.activeAccomplishmentCards.splice(index, 1, newAccomplishment);
-    }
+    state.players[payload.role].accomplishment.purchasable.splice(index, 1);
   },
-  PURCHASE_ACCOMPLISHMENT(state: State, payload: any) {
-    let bought = state.localInvestments.canPurchaseAccomplishment(payload.totalCostArray, false);
-    if (bought) {
-      buyAccomplishment(payload.label);
-      state.boughtAccomplishmentCards.push(payload);
-
-      state.playerScore += payload.victoryPoints;
-
-      let index = _.findIndex(
-        state.activeAccomplishmentCards,
-        (e: Accomplishment) => e.label == payload.label
-      );
-      let newAccomplishment = GetAccomplishmentsByPerson(state.playerRole, 1)[0];
-
-      if (newAccomplishment !== undefined) {
-        state.activeAccomplishmentCards.splice(index, 1, newAccomplishment);
-      } else {
-        state.activeAccomplishmentCards.splice(index, 1);
-      }
-    }
+  PURCHASE_ACCOMPLISHMENT(state: State, payload: { data: AccomplishmentData, role: Role }) {
+    state.players[payload.role].accomplishment.bought.push(payload.data);
   }
 };
