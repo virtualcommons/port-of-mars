@@ -37,9 +37,10 @@ export class BuyAccomplishmentCmd implements Command {
 
   execute() {
     const p = this.game.getPlayerByClient(this.client);
-    const accomplishment = getAccomplishmentByID(p.role, this.id);
+    const role = p.role;
+    const accomplishment = getAccomplishmentByID(role, this.id);
     if (p.isAccomplishmentPurchaseFeasible(accomplishment)) {
-      return [new BoughtAccomplishment(accomplishment, p)];
+      return [new BoughtAccomplishment({accomplishment, role})];
     }
     return [];
   }
@@ -56,7 +57,8 @@ export class TimeInvestmentCmd implements Command {
   }
 
   execute(): Array<GameEvent> {
-    return [new TimeInvested({...this.data}, this.player.role)];
+    const role = this.player.role;
+    return [new TimeInvested({ investment: this.data, role})];
   }
 }
 

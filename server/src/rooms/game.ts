@@ -12,7 +12,7 @@ import {
   LeftMarsEventPhase, LeftPreGamePhase,
   LeftPurchasePhase,
   LeftTradePhase,
-  PlayerJoined
+  PlayerJoined, StateSnapshotTaken
 } from "@/events";
 import {GameEvent} from "@/events/types";
 
@@ -21,6 +21,8 @@ export class GameRoom extends Room<GameState> implements Game {
 
   onCreate (options: any) {
     this.setState(new GameState());
+    const snapshot = this.state.toJSON();
+    const event = new StateSnapshotTaken(snapshot);
   }
 
   onJoin (client: Client, options: any) {

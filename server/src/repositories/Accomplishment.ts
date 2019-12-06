@@ -8,7 +8,7 @@ export function getAccomplishmentIDs(role: Role) {
 }
 
 export function getAccomplishmentByID(role: Role, id: number): AccomplishmentData {
-  const v = _.head(_.filter(accomplishments[role], a => a.id === id));
+  const v = _.find(accomplishments[role], a => a.id === id);
   if (_.isUndefined(v)) {
     throw new TypeError('accomplishment not found');
   }

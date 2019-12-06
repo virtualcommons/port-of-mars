@@ -5,6 +5,10 @@ export function getAllMarsEvents() {
   return marsEvents;
 }
 
+export function getMarsEventByID(id: number): MarsEventData | undefined {
+  return _.find(marsEvents, me => me.id === id);
+}
+
 interface RawGameEvent extends Omit<MarsEventData, 'id'> {
   copies: number
 }
