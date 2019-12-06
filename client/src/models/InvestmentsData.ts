@@ -85,6 +85,10 @@ class InvestmentsModel {
       return this.investments;
     }
 
+    get returnPersistentInventory(){
+      return _.mapValues(this.investments, (p:any) => p.persistentInventory);
+    }
+
     canPurchaseAccomplishment(accomplishemntCost:[], safety:boolean) {
       let investments = safety ? _.cloneDeep(this.investments) : this.investments;
 

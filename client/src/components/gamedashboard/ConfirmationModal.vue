@@ -16,7 +16,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Inject } from 'vue-property-decorator';
+import { RequestAPI } from '../../api/request';
 
 @Component({})
 export default class ConfirmationModal extends Vue {
@@ -24,6 +25,9 @@ export default class ConfirmationModal extends Vue {
   action = '';
   type = '';
   text = '';
+
+  @Inject()
+  readonly $api!:RequestAPI;
 
   mounted() {
     this.$root.$on('openConfirmation', (data) => {
@@ -44,7 +48,8 @@ export default class ConfirmationModal extends Vue {
     // });
 
     if(this.type=='nextRound'){
-      this.$root.$emit('nextRound');
+      this.$store.state.localInvestments.confirmInvestments();
+      this.$api.investTimeBlocks(this.$store.state.localInvestments.returnPersistentInventory);
     }
     if(this.type == 'discardAccomplishment'){
       this.$store.dispatch('discardAccomplishment',this.action);

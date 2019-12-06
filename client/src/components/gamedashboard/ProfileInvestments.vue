@@ -12,6 +12,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
+import { InvestmentsModel } from '../../models/InvestmentsData';
 
 @Component({})
 export default class ProfileInvestments extends Vue {
@@ -19,7 +20,7 @@ export default class ProfileInvestments extends Vue {
     return this.$store.state.localInvestments.returnValues;
   }
 
-  style(investment: object): string {
+  style(investment: any): string {
     return investment.persistentInventory <
       investment.persistentInventory + investment.currentInventory
       ? 'color: var(--status-green)'

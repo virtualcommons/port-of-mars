@@ -40,7 +40,7 @@ export default class Phase extends Vue {
 
   get btnVisibility() {
     switch (this.currentPhase) {
-      case 'Purchase Investments':
+      case 'Investment':
         return true;
       case 'Trading':
         return true;

@@ -5,7 +5,7 @@
     <ConfirmationModal />
     <CardModal />
     <BRow class="board reset">
-      <Notification />
+      <Notification v-for="(notification, index) in notifications" :index='index' :length='notifications.length' :key='index' :message='notification'/>
       <BCol cols="2" class="left reset">
         <ContainerLeft />
       </BCol>
@@ -55,7 +55,12 @@ import Notification from '@/components/gamedashboard/Notification.vue';
     ContainerRight
   }
 })
-export default class GameDashboard extends Vue {}
+export default class GameDashboard extends Vue {
+  get notifications(){
+    console.log(this.$store.state.activeNotifications);
+    return this.$store.state.activeNotifications;
+  }
+}
 </script>
 
 <style scoped>

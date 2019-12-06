@@ -20,8 +20,9 @@ export interface State {
   gamePhase: Phase
   layout: string
 
-  notifIsActive: string
-  notifMessage: string
+  //notifIsActive: string
+  //notifMessage: string
+  activeNotifications: Array<String>
 
   tradingView: string
   tradingMember: Role
@@ -53,8 +54,9 @@ export const initialStoreState: State = {
   layout: 'default-layout',
 
   // notification
-  notifIsActive: 'inactive',
-  notifMessage: '',
+  //notifIsActive: 'inactive',
+  //notifMessage: '',
+  activeNotifications: [],
 
   // state variables for trading modal
   tradingView: 'request',

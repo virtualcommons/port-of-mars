@@ -1,4 +1,3 @@
-import {BaseInvestmentCosts, GetAccomplishmentsByPerson} from '@/models';
 import {MarsEventData, Phase, Role} from "shared/types";
 import {Vue} from "vue-property-decorator";
 import * as _ from 'lodash'
@@ -7,6 +6,10 @@ import {State} from "@/store/state";
 export default {
   SET_GAME_PHASE(state: State, payload: Phase) {
     state.gamePhase = payload;
+
+    if(payload == Phase.trade){
+      state.localInvestments.confirmInvestments();
+    }
   },
   SET_ROUND(state: State, round: number) {
     state.round = round;
@@ -32,10 +35,8 @@ export default {
     state.playerRole = payload;
     console.log('PLAYER ROLE (MUTATION): ', state.playerRole);
 
-    Object.keys(BaseInvestmentCosts[payload]).forEach(key => {
-      state.localInvestments.updateCurrentCost(key, BaseInvestmentCosts[payload][key]);
-    });
 
-    state.activeAccomplishmentCards = GetAccomplishmentsByPerson(state.playerRole, 3);
+
+    // state.activeAccomplishmentCards = GetAccomplishmentsByPerson(state.playerRole, 3);
   },
 }

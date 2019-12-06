@@ -1,6 +1,7 @@
 <template>
   <div class="container-left">
     <Round />
+    
     <ContainerProfile />
     <ProfileInvestments />
     <MarsLog class="v-step-5"/>
@@ -13,16 +14,23 @@ import Round from '@/components/gamedashboard/Round.vue';
 import ContainerProfile from '@/components/gamedashboard/containers/ContainerProfile.vue';
 import ProfileInvestments from '@/components/gamedashboard/ProfileInvestments.vue';
 import MarsLog from '@/components/gamedashboard/MarsLog.vue';
+import Notification from "@/components/gamedashboard/Notification.vue";
 
 @Component({
   components: {
     Round,
     ContainerProfile,
     ProfileInvestments,
-    MarsLog
+    MarsLog,
+    Notification,
   }
 })
-export default class ContainerLeft extends Vue {}
+export default class ContainerLeft extends Vue {
+  // get notifications(){
+  //   console.log(this.$store.state.activeNotifications);
+  //   return this.$store.state.activeNotifications;
+  // }
+}
 </script>
 
 <style scoped>
