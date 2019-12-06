@@ -1,9 +1,19 @@
 import {ArraySchema, MapSchema, Schema, type} from "@colyseus/schema";
 import {
+  AccomplishmentData,
+  AccomplishmentSetData,
   ChatMessageData,
+  CURATOR,
+  ENTREPRENEUR,
+  GameData,
   InvestmentData,
   MarsEventData,
   Phase,
+  PIONEER,
+  PlayerData,
+  PlayerSetData,
+  POLITICIAN,
+  RESEARCHER,
   ResourceAmountData,
   ResourceCostData,
   Role,
@@ -11,7 +21,7 @@ import {
 } from "shared/types";
 import _ from "lodash";
 import {getRandomIntInclusive} from "@/util";
-import {AccomplishmentData, getAccomplishmentByID, getAccomplishmentIDs} from "@/repositories/Accomplishment";
+import {getAccomplishmentByID, getAccomplishmentIDs} from "@/repositories/Accomplishment";
 import {getAllMarsEvents, getMarsEventByID} from "@/repositories/MarsEvents";
 import {GameEvent} from "@/events/types";
 
@@ -230,59 +240,66 @@ export class Accomplishment extends Schema implements AccomplishmentData {
 }
 
 interface AccomplishmentSetSerialized {
-  boughtAccomplishment: Array<number>
-  purchasableAccomplishments: Array<number>
-  possibleAccomplishments: Array<number>
+  role: Role
+  bought: Array<number>
+  purchasable: Array<number>
+  remaining: Array<number>
 }
 
-export class AccomplishmentSet extends Schema {
+export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
   constructor(role: Role) {
     super();
-    this.boughtAccomplishment = new ArraySchema<Accomplishment>();
-    this.purchasableAccomplishments = new ArraySchema<number>();
-    this.possibleAccomplishments = getAccomplishmentIDs(role);
+    this.role = role;
+    this.bought = new ArraySchema<Accomplishment>();
+    this.purchasable = new ArraySchema<Accomplishment>();
+    this.remaining = getAccomplishmentIDs(role);
   }
 
-  fromJSON(data: AccomplishmentSetSerialized, role: Role) {
-    const boughtAccomplishment = _.map(data.boughtAccomplishment, _id => new Accomplishment(getAccomplishmentByID(role, _id)));
-    this.boughtAccomplishment.splice(0, this.boughtAccomplishment.length, ...boughtAccomplishment);
-    this.purchasableAccomplishments.splice(0, this.purchasableAccomplishments.length, ...data.purchasableAccomplishments);
-    this.possibleAccomplishments =  _.cloneDeep(data.possibleAccomplishments);
+  fromJSON(data: AccomplishmentSetSerialized) {
+    this.role = data.role;
+    const bought = _.map(data.bought, _id => new Accomplishment(getAccomplishmentByID(this.role, _id)));
+    const purchasable = _.map(data.purchasable, _id => new Accomplishment(getAccomplishmentByID(this.role, _id)));
+    this.bought.splice(0, this.bought.length, ...bought);
+    this.purchasable.splice(0, this.purchasable.length, ...purchasable);
+    this.remaining =  _.cloneDeep(data.remaining);
   }
 
   toJSON(): AccomplishmentSetSerialized {
     return {
-      boughtAccomplishment: _.map(this.boughtAccomplishment.map(a => a.id), x => x),
-      purchasableAccomplishments: _.map(this.purchasableAccomplishments, x => x),
-      possibleAccomplishments: this.possibleAccomplishments
+      bought: _.map(this.bought.map(a => a.id), x => x),
+      purchasable: _.map(this.purchasable, a => a.id),
+      remaining: this.remaining,
+      role: this.role
     }
   }
 
+  role: Role;
+
   @type([Accomplishment])
-  boughtAccomplishment: ArraySchema<Accomplishment>;
+  bought: ArraySchema<Accomplishment>;
 
-  @type(['number'])
-  purchasableAccomplishments: ArraySchema<number>;
+  @type([Accomplishment])
+  purchasable: ArraySchema<Accomplishment>;
 
-  possibleAccomplishments: Array<number>;
+  remaining: Array<number>;
 
   buy(accomplishment: AccomplishmentData) {
-    if (this.purchasableAccomplishments.filter(_id => _id === accomplishment.id).length > 0) {
-      this.boughtAccomplishment.push(new Accomplishment(accomplishment));
-      const index = this.purchasableAccomplishments.findIndex(_id => _id === accomplishment.id);
-      this.purchasableAccomplishments.splice(index, 1);
+    if (this.purchasable.filter(a => a.id === accomplishment.id).length > 0) {
+      this.bought.push(new Accomplishment(accomplishment));
+      const index = this.purchasable.findIndex(a => a.id === accomplishment.id);
+      this.purchasable.splice(index, 1);
     }
   }
 
   draw() {
-    const index = getRandomIntInclusive(0, this.possibleAccomplishments.length - 1);
-    const id = this.possibleAccomplishments[index];
-    this.possibleAccomplishments.splice(index, 1);
-    this.purchasableAccomplishments.push(id);
+    const index = getRandomIntInclusive(0, this.remaining.length - 1);
+    const id = this.remaining[index];
+    this.remaining.splice(index, 1);
+    this.purchasable.push(new Accomplishment(getAccomplishmentByID(this.role, id)));
   }
 
   isPurchasable(accomplishment: AccomplishmentData) {
-    return this.purchasableAccomplishments.includes(accomplishment.id);
+    return this.purchasable.find(a => a.id === accomplishment.id);
   }
 }
 
@@ -366,7 +383,7 @@ export interface PlayerSerialized {
   inventory: ResourceAmountData
 }
 
-export class Player extends Schema {
+export class Player extends Schema implements PlayerData {
   constructor(role: Role) {
     super();
     this.role = role;
@@ -376,7 +393,7 @@ export class Player extends Schema {
   fromJSON(data: PlayerSerialized) {
     this.role = data.role;
     this.costs.fromJSON(data.costs);
-    this.accomplishment.fromJSON(data.accomplishment, data.role);
+    this.accomplishment.fromJSON(data.accomplishment);
     this.ready = data.ready;
     this.timeBlocks = data.timeBlocks;
     this.contributedUpkeep = data.contributedUpkeep;
@@ -447,10 +464,77 @@ export class Player extends Schema {
   }
 }
 
-interface GameData {
+type PlayerSetSerialized = { [role in Role]: PlayerSerialized }
+
+class PlayerSet extends Schema implements PlayerSetData {
+  constructor() {
+    super();
+    this.Curator = new Player(CURATOR);
+    this.Entrepreneur = new Player(ENTREPRENEUR);
+    this.Pioneer = new Player(PIONEER);
+    this.Politician = new Player(POLITICIAN);
+    this.Researcher = new Player(RESEARCHER);
+  }
+
+  @type(Player)
+  Curator: Player;
+
+  @type(Player)
+  Entrepreneur: Player;
+
+  @type(Player)
+  Pioneer: Player;
+
+  @type(Player)
+  Politician: Player;
+
+  @type(Player)
+  Researcher: Player;
+
+  toJSON(): PlayerSetSerialized {
+    return {
+      Curator: this.Curator.toJSON(),
+      Entrepreneur: this.Entrepreneur.toJSON(),
+      Pioneer: this.Pioneer.toJSON(),
+      Politician: this.Politician.toJSON(),
+      Researcher: this.Researcher.toJSON()
+    }
+  }
+
+  fromJSON(data: PlayerSetSerialized) {
+    this.Curator.fromJSON(data.Curator);
+    this.Entrepreneur.fromJSON(data.Entrepreneur);
+    this.Pioneer.fromJSON(data.Pioneer);
+    this.Politician.fromJSON(data.Politician);
+    this.Researcher.fromJSON(data.Researcher);
+  }
+
+  [Symbol.iterator](): Iterator<Player> {
+    let index = 0;
+    const self = this;
+    return {
+      next(): IteratorResult<Player> {
+        if (index < ROLES.length) {
+          const role = ROLES[index];
+          return {
+            done: false,
+            value: self[role]
+          }
+        } else {
+          return {
+            done: true,
+            value: null
+          }
+        }
+      }
+    }
+  }
+}
+
+interface GameSerialized {
   availableRoles: Array<Role>
-  players: { [role: string]: PlayerSerialized }
-  connections: { [sessionId: string]: string }
+  players: PlayerSetSerialized
+  connections: { [sessionId: string]: Role }
   maxRound: number
   lastTimePolled: number
   timeRemaining: number
@@ -463,13 +547,13 @@ interface GameData {
   marsEventDeck: MarsEventDeckSerialized
 }
 
-export class GameState extends Schema {
+export class GameState extends Schema implements GameData {
   constructor() {
     super();
     this.marsEventDeck = new MarsEventsDeck();
     this.lastTimePolled = new Date();
     this.maxRound = getRandomIntInclusive(8, 12);
-    this.replacePlayers();
+    this.players = new PlayerSet();
   }
 
   static DEFAULTS = {
@@ -480,20 +564,9 @@ export class GameState extends Schema {
     upkeep: 100
   };
 
-  replacePlayers() {
-    ROLES.forEach(r => this.players[r] = new Player(r));
-  }
-
-  fromJSON(data: GameData): GameState {
+  fromJSON(data: GameSerialized): GameState {
     this.availableRoles = data.availableRoles;
-    Object.keys(this.players).forEach(k => {
-      if (typeof this.players[k] !== 'function') {
-        delete this.players[k];
-      }
-    });
-    Object.keys(data.players).forEach((role: string) => {
-      this.players[role] = (new Player(role as Role)).fromJSON(data.players[role]);
-    });
+    this.players.fromJSON(data.players);
     this.connections = data.connections;
     this.maxRound = data.maxRound;
     this.lastTimePolled = new Date(data.lastTimePolled);
@@ -513,15 +586,10 @@ export class GameState extends Schema {
     return this;
   }
 
-  toJSON(): GameData {
-    const p = Object.keys(this.players).filter(k => typeof this.players[k] !== 'function');
-    const playerData = _.reduce(p, (pd, k) => {
-      pd[k] = this.players[k].toJSON();
-      return pd;
-    }, {} as any);
+  toJSON(): GameSerialized {
     return {
       availableRoles: this.availableRoles,
-      players: playerData,
+      players: this.players.toJSON(),
       connections: this.connections,
       maxRound: this.maxRound,
       lastTimePolled: this.lastTimePolled.getTime(),
@@ -538,10 +606,10 @@ export class GameState extends Schema {
 
   availableRoles = _.cloneDeep(ROLES);
 
-  @type({map: Player})
-  players = new MapSchema<Player>();
+  @type(PlayerSet)
+  players: PlayerSet;
 
-  connections: { [sessionId: string]: string } = {};
+  connections: { [sessionId: string]: Role } = {};
 
   maxRound: number;
   lastTimePolled: Date;
@@ -569,8 +637,8 @@ export class GameState extends Schema {
 
   marsEventDeck: MarsEventsDeck;
 
-  invest(sessionId: string, investment: InvestmentData) {
-    const player = this.players[sessionId];
+  invest(role: Role, investment: InvestmentData) {
+    const player = this.players[role];
     player.invest(investment);
     player.contributedUpkeep = investment.upkeep
   }
@@ -613,12 +681,15 @@ export class GameState extends Schema {
     this.upkeep = GameState.DEFAULTS.upkeep;
     this.marsEvents.splice(0, this.marsEvents.length);
     this.messages.splice(0, this.messages.length);
-    this.replacePlayers();
+    this.players.fromJSON((new PlayerSet()).toJSON());
     this.marsEventDeck = new MarsEventsDeck();
   }
 
   nextRoundUpkeep(): number {
-    const contributedUpkeep = _.reduce(this.players, (s, p) => s + p.contributedUpkeep, 0);
+    let contributedUpkeep = 0;
+    for (const p of this.players) {
+      contributedUpkeep += p.contributedUpkeep;
+    }
     return this.upkeep + contributedUpkeep - 25;
   }
 

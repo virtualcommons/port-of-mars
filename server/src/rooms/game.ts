@@ -44,7 +44,7 @@ export class GameRoom extends Room<GameState> implements Game {
     this.safeSend(client, { kind: 'set-player-role', role })
   }
 
-  getPlayerByClient(client: Client) {
+  getPlayerByClient(client: Client): Player {
     return this.state.players[this.state.connections[client.sessionId]];
   }
 

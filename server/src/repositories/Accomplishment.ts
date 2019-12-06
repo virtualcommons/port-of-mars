@@ -1,7 +1,7 @@
 import * as _ from 'lodash'
-import {Role} from 'shared/types';
+import {AccomplishmentData, Role} from 'shared/types';
 
-type AccomplishmentPartitioned = { [role: string]: Array<AccomplishmentRawData> }
+type AccomplishmentPartitioned = { [role: string]: Array<AccomplishmentData> }
 
 export function getAccomplishmentIDs(role: Role) {
   return _.map(accomplishments[role], a => a.id);
@@ -13,23 +13,6 @@ export function getAccomplishmentByID(role: Role, id: number): AccomplishmentDat
     throw new TypeError('accomplishment not found');
   }
   return v;
-}
-
-export type AccomplishmentData = AccomplishmentRawData;
-
-export interface AccomplishmentRawData {
-  id: number
-  role: Role
-  label: string
-  flavorText: string
-  science: number
-  government: number
-  legacy: number
-  finance: number
-  culture: number
-  upkeep: number
-  victoryPoints: number
-  effect: string
 }
 
 const accomplishments: AccomplishmentPartitioned = _.groupBy([

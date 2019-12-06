@@ -13,15 +13,15 @@
 
     <BRow class="investments-cards">
       <BRow class="investments-cards-top">
-        <CardInvestment :investmentData="iD[2]" />
-        <CardInvestment :investmentData="iD[3]" />
-        <CardInvestment :investmentData="iD[0]" />
+        <CardInvestment :investmentData="costs[2]" />
+        <CardInvestment :investmentData="costs[3]" />
+        <CardInvestment :investmentData="costs[0]" />
       </BRow>
 
       <BRow class="investments-cards-bottom">
-        <CardInvestment :investmentData="iD[4]" />
-        <CardInvestment :investmentData="iD[5]" />
-        <CardInvestment :investmentData="iD[1]" />
+        <CardInvestment :investmentData="costs[4]" />
+        <CardInvestment :investmentData="costs[5]" />
+        <CardInvestment :investmentData="costs[1]" />
       </BRow>
     </BRow>
   </BContainer>
@@ -43,7 +43,7 @@ import CardInvestment from '@/components/gamedashboard/cards/CardInvestment.vue'
   }
 })
 export default class ContainerInvestments extends Vue {
-  get iD(): any {
+  get costs(): any {
     const rv = this.$store.state.localInvestments.returnValues;
     const costData = Object.keys(rv)
       .reduce((prev, curr) => {

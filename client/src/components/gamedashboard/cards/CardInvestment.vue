@@ -40,6 +40,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { InvestmentProperties } from '../../../models/index';
+import {Phase} from "shared/types";
 @Component({})
 export default class CardInvestment extends Vue {
   @Prop() private investmentData!: InvestmentProperties;
@@ -50,8 +51,8 @@ export default class CardInvestment extends Vue {
 
   incrementInvestment() {
     if (
-      this.$store.state.gamePhase === 'Investment' &&
-      this.$store.state.localInvestments.localDecrement - this.investmentData.currentCost >= 0 &&
+      this.$tstore.state.gamePhase === Phase.invest &&
+      this.$tstore.state.localInvestments.localDecrement - this.investmentData.currentCost >= 0 &&
       this.investmentData.currentCost > 0
     ) {
       this.$store.dispatch('changeLocalInvestment', {

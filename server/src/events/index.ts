@@ -1,7 +1,6 @@
-import {ChatMessageData, InvestmentData, MarsEventData, Phase, Role} from "shared/types";
+import {AccomplishmentData, ChatMessageData, InvestmentData, MarsEventData, Phase, Role} from "shared/types";
 import {ChatMessage, GameState, MarsEvent, Player} from "@/state";
 import {GameEvent} from "@/events/types";
-import {AccomplishmentData} from "@/repositories/Accomplishment";
 
 abstract class GameEventWithData implements GameEvent {
   abstract kind: string;
@@ -140,19 +139,23 @@ export class LeftDiscardPhase extends GameEventWithData {
   }
 
   apply(game: GameState): void {
+    console.log('leaving discard');
     game.upkeep = game.nextRoundUpkeep();
     game.round += 1;
 
     if (game.upkeep <= 0) {
+      console.debug('entering defeat phase');
       game.phase = Phase.defeat;
       return;
     }
 
     if (game.round >= game.maxRound) {
+      console.debug('entering victory phase');
       game.phase = Phase.victory;
       return;
     }
 
+    console.debug('entering mars event phase');
     const marsEvents = this.marsEvents.map(e => new MarsEvent(e));
     game.phase = Phase.events;
     game.marsEvents.splice(0, game.marsEvents.length, ...marsEvents);

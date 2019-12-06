@@ -20,7 +20,7 @@ export default class Master extends Vue {
   onKeyDown(e: any) {
     this.round = 0;
     if (e.key === 'r') {
-      this.phaseRunner();
+      this.$api.setNextPhase();
     }
     if (e.key === ',') {
       this.$root.$emit('openEvent');

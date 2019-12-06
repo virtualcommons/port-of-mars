@@ -39,30 +39,6 @@ export interface ResourceAmountData {
   culture: number
 }
 
-export interface AccomplishmentData {
-  id: number
-  role: Role
-  label: string
-  flavor_text: string
-  costs: {
-    culture: number
-    finance: number
-    government: number
-    legacy: number
-    science: number
-    upkeep: number
-  };
-  victory_points: number
-  effect: string
-}
-
-export interface PlayerData<A extends AccomplishmentData, RA extends ResourceAmountData, RC extends ResourceAmountData> {
-  accomplishments: Array<A>
-  resources: RA
-  costs: RC
-  role: string
-}
-
 export enum Phase {
   pregame,
   events,
@@ -90,4 +66,49 @@ export interface MarsEventData {
   name: string
   effect: string
   flavorText: string
+}
+
+export interface AccomplishmentData {
+  id: number
+  role: Role
+  label: string
+  flavorText: string
+  science: number
+  government: number
+  legacy: number
+  finance: number
+  culture: number
+  upkeep: number
+  victoryPoints: number
+  effect: string
+}
+
+export interface AccomplishmentSetData {
+  bought: Array<AccomplishmentData>
+  purchasable: Array<AccomplishmentData>
+}
+
+export interface PlayerData {
+  role: Role
+  costs: ResourceCostData
+  accomplishment: AccomplishmentSetData
+  ready: boolean
+  timeBlocks: number
+  contributedUpkeep: number
+  victoryPoints: number
+  inventory: ResourceAmountData
+}
+
+export type PlayerSetData = { [role in Role]: PlayerData }
+
+export interface GameData {
+  players: PlayerSetData
+  maxRound: number
+  timeRemaining: number
+  round: number
+  phase: Phase
+  upkeep: number
+  messages: Array<ChatMessageData>
+  marsEvents: Array<MarsEventData>
+  marsEventsProcessed: number
 }
