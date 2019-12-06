@@ -21,7 +21,11 @@ import {
 } from "shared/types";
 import _ from "lodash";
 import {getRandomIntInclusive} from "@/util";
+<<<<<<< HEAD
 import {getAccomplishmentByID, getAccomplishmentIDs} from "@/repositories/Accomplishment";
+=======
+import {AccomplishmentData, getAccomplishmentByID, getAccomplishmentIDs} from "@/repositories/Accomplishment";
+>>>>>>> [feat](server): added event and state serialization
 import {getAllMarsEvents, getMarsEventByID} from "@/repositories/MarsEvents";
 import {GameEvent} from "@/events/types";
 
@@ -240,6 +244,7 @@ export class Accomplishment extends Schema implements AccomplishmentData {
 }
 
 interface AccomplishmentSetSerialized {
+<<<<<<< HEAD
   role: Role
   bought: Array<number>
   purchasable: Array<number>
@@ -283,6 +288,44 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
 
   remaining: Array<number>;
 
+=======
+  boughtAccomplishment: Array<number>
+  purchasableAccomplishments: Array<number>
+  possibleAccomplishments: Array<number>
+}
+
+export class AccomplishmentSet extends Schema {
+  constructor(role: Role) {
+    super();
+    this.boughtAccomplishment = new ArraySchema<Accomplishment>();
+    this.purchasableAccomplishments = new ArraySchema<number>();
+    this.possibleAccomplishments = getAccomplishmentIDs(role);
+  }
+
+  fromJSON(data: AccomplishmentSetSerialized, role: Role) {
+    const boughtAccomplishment = _.map(data.boughtAccomplishment, _id => new Accomplishment(getAccomplishmentByID(role, _id)));
+    this.boughtAccomplishment.splice(0, this.boughtAccomplishment.length, ...boughtAccomplishment);
+    this.purchasableAccomplishments.splice(0, this.purchasableAccomplishments.length, ...data.purchasableAccomplishments);
+    this.possibleAccomplishments =  _.cloneDeep(data.possibleAccomplishments);
+  }
+
+  toJSON(): AccomplishmentSetSerialized {
+    return {
+      boughtAccomplishment: _.map(this.boughtAccomplishment.map(a => a.id), x => x),
+      purchasableAccomplishments: _.map(this.purchasableAccomplishments, x => x),
+      possibleAccomplishments: this.possibleAccomplishments
+    }
+  }
+
+  @type([Accomplishment])
+  boughtAccomplishment: ArraySchema<Accomplishment>;
+
+  @type(['number'])
+  purchasableAccomplishments: ArraySchema<number>;
+
+  possibleAccomplishments: Array<number>;
+
+>>>>>>> [feat](server): added event and state serialization
   buy(accomplishment: AccomplishmentData) {
     if (this.purchasable.filter(a => a.id === accomplishment.id).length > 0) {
       this.bought.push(new Accomplishment(accomplishment));
@@ -383,7 +426,7 @@ export interface PlayerSerialized {
   inventory: ResourceAmountData
 }
 
-export class Player extends Schema implements PlayerData {
+export class Player extends Schema {
   constructor(role: Role) {
     super();
     this.role = role;
@@ -393,7 +436,7 @@ export class Player extends Schema implements PlayerData {
   fromJSON(data: PlayerSerialized) {
     this.role = data.role;
     this.costs.fromJSON(data.costs);
-    this.accomplishment.fromJSON(data.accomplishment);
+    this.accomplishment.fromJSON(data.accomplishment, data.role);
     this.ready = data.ready;
     this.timeBlocks = data.timeBlocks;
     this.contributedUpkeep = data.contributedUpkeep;
@@ -464,78 +507,10 @@ export class Player extends Schema implements PlayerData {
   }
 }
 
-type PlayerSetSerialized = { [role in Role]: PlayerSerialized }
-
-class PlayerSet extends Schema implements PlayerSetData {
-  constructor() {
-    super();
-    this.Curator = new Player(CURATOR);
-    this.Entrepreneur = new Player(ENTREPRENEUR);
-    this.Pioneer = new Player(PIONEER);
-    this.Politician = new Player(POLITICIAN);
-    this.Researcher = new Player(RESEARCHER);
-  }
-
-  @type(Player)
-  Curator: Player;
-
-  @type(Player)
-  Entrepreneur: Player;
-
-  @type(Player)
-  Pioneer: Player;
-
-  @type(Player)
-  Politician: Player;
-
-  @type(Player)
-  Researcher: Player;
-
-  toJSON(): PlayerSetSerialized {
-    return {
-      Curator: this.Curator.toJSON(),
-      Entrepreneur: this.Entrepreneur.toJSON(),
-      Pioneer: this.Pioneer.toJSON(),
-      Politician: this.Politician.toJSON(),
-      Researcher: this.Researcher.toJSON()
-    }
-  }
-
-  fromJSON(data: PlayerSetSerialized) {
-    this.Curator.fromJSON(data.Curator);
-    this.Entrepreneur.fromJSON(data.Entrepreneur);
-    this.Pioneer.fromJSON(data.Pioneer);
-    this.Politician.fromJSON(data.Politician);
-    this.Researcher.fromJSON(data.Researcher);
-  }
-
-  [Symbol.iterator](): Iterator<Player> {
-    let index = 0;
-    const self = this;
-    return {
-      next(): IteratorResult<Player> {
-        if (index < ROLES.length) {
-          const role = ROLES[index];
-          index += 1;
-          return {
-            done: false,
-            value: self[role]
-          }
-        } else {
-          return {
-            done: true,
-            value: null
-          }
-        }
-      }
-    }
-  }
-}
-
-interface GameSerialized {
+interface GameData {
   availableRoles: Array<Role>
-  players: PlayerSetSerialized
-  connections: { [sessionId: string]: Role }
+  players: { [role: string]: PlayerSerialized }
+  connections: { [sessionId: string]: string }
   maxRound: number
   lastTimePolled: number
   timeRemaining: number
@@ -548,7 +523,7 @@ interface GameSerialized {
   marsEventDeck: MarsEventDeckSerialized
 }
 
-export class GameState extends Schema implements GameData {
+export class GameState extends Schema {
   constructor() {
     super();
     this.marsEventDeck = new MarsEventsDeck();
@@ -605,6 +580,58 @@ export class GameState extends Schema implements GameData {
     };
   }
 
+  fromJSON(data: GameData): GameState {
+    this.availableRoles = data.availableRoles;
+    Object.keys(this.players).forEach(k => {
+      if (typeof this.players[k] !== 'function') {
+        delete this.players[k];
+      }
+    });
+    Object.keys(data.players).forEach((role: string) => {
+      this.players[role] = (new Player(role as Role)).fromJSON(data.players[role]);
+    });
+    this.connections = data.connections;
+    this.maxRound = data.maxRound;
+    this.lastTimePolled = new Date(data.lastTimePolled);
+    this.timeRemaining = data.timeRemaining;
+    this.round = data.round;
+    this.phase = data.phase;
+    this.upkeep = data.upkeep;
+
+    const chatMessages = _.map(data.messages, m => new ChatMessage(m));
+    this.messages.splice(0, this.messages.length, ...chatMessages);
+
+    const marsEvents = _.map(data.marsEvents, _id => MarsEvent.fromID(_id));
+    this.marsEvents.splice(0, this.marsEvents.length, ...marsEvents);
+
+    this.marsEventsProcessed = data.marsEventsProcessed;
+    this.marsEventDeck.fromJSON(data.marsEventDeck);
+    return this;
+  }
+
+  toJSON(): GameData {
+    const p = Object.keys(this.players).filter(k => typeof this.players[k] !== 'function');
+    const playerData = _.reduce(p, (pd, k) => {
+      pd[k] = this.players[k].toJSON();
+      return pd;
+    }, {} as any);
+    return {
+      availableRoles: this.availableRoles,
+      players: playerData,
+      connections: this.connections,
+      maxRound: this.maxRound,
+      lastTimePolled: this.lastTimePolled.getTime(),
+      timeRemaining: this.timeRemaining,
+      round: this.round,
+      phase: this.phase,
+      upkeep: this.upkeep,
+      messages: _.map(this.messages, x => x),
+      marsEvents: _.map(this.marsEvents, e => e.toJSON()),
+      marsEventsProcessed: this.marsEventsProcessed,
+      marsEventDeck: this.marsEventDeck.toJSON()
+    };
+  }
+
   availableRoles = _.cloneDeep(ROLES);
 
   @type(PlayerSet)
@@ -638,8 +665,8 @@ export class GameState extends Schema implements GameData {
 
   marsEventDeck: MarsEventsDeck;
 
-  invest(role: Role, investment: InvestmentData) {
-    const player = this.players[role];
+  invest(sessionId: string, investment: InvestmentData) {
+    const player = this.players[sessionId];
     player.invest(investment);
     player.contributedUpkeep = investment.upkeep
   }

@@ -1,4 +1,4 @@
-import {AccomplishmentData, ChatMessageData, InvestmentData, MarsEventData, Phase, Role} from "shared/types";
+import {ChatMessageData, InvestmentData, MarsEventData, Phase, Role} from "shared/types";
 import {ChatMessage, GameState, MarsEvent, Player} from "@/state";
 import {GameEvent} from "@/events/types";
 
@@ -66,12 +66,16 @@ export class TimeInvested extends GameEventWithData {
 
   apply(game: GameState): void {
 <<<<<<< HEAD
+<<<<<<< HEAD
     game.players[this.data.role].invest(this.data.investment);
 =======
     console.log(JSON.stringify(game.players[this.role].inventory));
     game.players[this.role].invest(this.data);
     console.log(JSON.stringify(game.players[this.role].inventory));
 >>>>>>> [refactor]Investments sent to server
+=======
+    game.players[this.data.role].invest(this.data.investment);
+>>>>>>> [feat](server): added event and state serialization
   }
 }
 
@@ -161,7 +165,6 @@ export class LeftDiscardPhase extends GameEventWithData {
       return;
     }
 
-    console.debug('entering mars event phase');
     const marsEvents = this.marsEvents.map(e => new MarsEvent(e));
     game.phase = Phase.events;
     game.marsEvents.splice(0, game.marsEvents.length, ...marsEvents);
