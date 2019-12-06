@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
   <BContainer class="game-dashboard reset">
     <MasterComponent />
     <TradingModal />
@@ -32,10 +33,43 @@
       </BCol>
     </BRow>
   </BContainer>
+=======
+  <div>
+    <BContainer v-show="gamePhase != phase.defeat" class="game-dashboard reset">
+      <MasterComponent />
+      <TradingModal />
+      <ConfirmationModal />
+      <CardModal />
+      <BRow class="board reset">
+        <Notification v-for="(notification, index) in notifications" :index='index' :length='notifications.length' :key='index' :message='notification'/>
+        <BCol cols="2" class="left reset">
+          <ContainerLeft />
+        </BCol>
+
+        <BCol cols="8" class="middle reset">
+          <BRow class="top reset">
+            <ContainerTop />
+          </BRow>
+          <BRow class="bottom reset">
+            <ContainerBottom />
+          </BRow>
+        </BCol>
+
+        <BCol cols="2" class="right reset">
+          <ContainerRight />
+        </BCol>
+      </BRow>
+    </BContainer>
+    <div style="text-align:center" v-show="gamePhase == phase.defeat">
+      <h1 style="color:white;">you died lol</h1>
+      <button class="restart-button" @click="handleRestart">Restart the game</button>
+    </div>
+  </div>
+>>>>>>> [feat]Game restarts on end
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Inject } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
 import ContainerTop from '@/components/gamedashboard/containers/ContainerTop.vue';
 import ContainerBottom from '@/components/gamedashboard/containers/ContainerBottom.vue';
@@ -46,6 +80,9 @@ import TradingModal from '@/components/gamedashboard/trading/TradingModal.vue';
 import ConfirmationModal from '../components/gamedashboard/ConfirmationModal.vue';
 import CardModal from '@/components/gamedashboard/cards/CardModal.vue';
 import Notification from '@/components/gamedashboard/Notification.vue';
+
+import { Phase } from "shared/types";
+import { RequestAPI } from '../../api/request';
 
 @Component({
   components: {
@@ -64,9 +101,25 @@ import Notification from '@/components/gamedashboard/Notification.vue';
   }
 })
 export default class GameDashboard extends Vue {
+
+  @Inject()
+  readonly $api!:RequestAPI;
+
   get notifications(){
-    console.log(this.$store.state.activeNotifications);
     return this.$store.state.activeNotifications;
+  }
+
+  get phase(){
+    console.log(Phase);
+    return Phase;
+  }
+
+  get gamePhase(){
+    return this.$store.state.gamePhase;
+  }
+
+  handleRestart(){
+    this.$api.resetGame();
   }
 }
 </script>
@@ -121,5 +174,9 @@ export default class GameDashboard extends Vue {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.restart-button{
+
 }
 </style>

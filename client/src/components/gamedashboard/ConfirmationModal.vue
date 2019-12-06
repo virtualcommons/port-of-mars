@@ -18,6 +18,7 @@
 <script lang="ts">
 import { Component, Vue, Inject } from 'vue-property-decorator';
 import { RequestAPI } from '../../api/request';
+import { Phase } from "shared/types";
 
 @Component({})
 export default class ConfirmationModal extends Vue {
@@ -43,13 +44,13 @@ export default class ConfirmationModal extends Vue {
   }
 
   handleYes() {
-    // this.$store.dispatch('setPlayerFinished', true).then(() => {
-    //   this.setStyle = 'none';
-    // });
-
     if(this.type=='nextRound'){
-      this.$store.state.localInvestments.confirmInvestments();
-      this.$api.investTimeBlocks(this.$store.state.localInvestments.returnPersistentInventory);
+      if(this.$store.state.gameState == Phase.invest){
+        this.$store.state.localInvestments.confirmInvestments();
+        this.$api.investTimeBlocks(this.$store.state.localInvestments.returnPersistentInventory);
+      }
+            
+      this.$api.setNextPhase();
     }
     if(this.type == 'discardAccomplishment'){
       this.$store.dispatch('discardAccomplishment',this.action);
