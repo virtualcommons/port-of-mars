@@ -74,11 +74,17 @@ export default class TutorialLayout extends Vue {
     {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+      //  At the start of a round, if Upkeep is lower than 65, reveal 2 events; 
+      // and if Upkeep is lower than 35 reveal 3 events.
+>>>>>>> feat: open and close events view in bottomcontainer during tutorial (#119)
       //  gamedashboard > containers > ContainerUpkeep.vue
       target: '.v-step-0',
       content: 'The game starts with Upkeep at 100. This represents the habitat at peak '
                + 'condition and maintenance. However, at the start of every round, the '
                + 'community loses 25 Upkeep.',
+<<<<<<< HEAD
       params: {
         placement: 'bottom'
       }
@@ -105,13 +111,25 @@ export default class TutorialLayout extends Vue {
                + 'condition and maintenance. However, at the start of every round, the '
                + 'community loses 25 Upkeep. Conditions on Mars are tough!',
 >>>>>>> feat: add general info about game to tour modal
+=======
+>>>>>>> feat: open and close events view in bottomcontainer during tutorial (#119)
+      params: {
+        placement: 'bottom'
+      }
+    },
+    {
+      //  gamedashboard > containers > ContainerUpkeep.vue
+      target: '.v-step-1',
+      content: 'At the start of a round, if Upkeep is lower than 65, reveal 2 events; '
+               + 'and if Upkeep is lower than 35 reveal 3 events. Conditions on Mars '
+               + 'are tough!',
       params: {
         placement: 'bottom'
       }
     },
     // gamedashboard > Round.vue
     {
-      target: '.v-step-1',
+      target: '.v-step-2',
       content: 'The game progresses in rounds. There is an indefinite number '
                + 'of rounds per game. Therefore, the game can end at any time given '
                + 'that Upkeep does not decline to zero.',
@@ -121,7 +139,7 @@ export default class TutorialLayout extends Vue {
     },
     // gamedashboard > containers > ContainerTop.vue
     {
-      target: '.v-step-2',
+      target: '.v-step-3',
       content: 'There are multiple phases in a round: Events, Invest, Trade, Purchase '
                + ' and Discard. Each phase has a time limit of 5 minutes.',
       params: {
@@ -130,7 +148,7 @@ export default class TutorialLayout extends Vue {
     },
     // gamedashboard > containers > ContainerBottom.vue
     {
-      target: '.v-step-3',
+      target: '.v-step-4',
       content: 'Events are revealed at the beginning of every round during the events phase. '
                 + 'Some events can be more involved and require players to fulfill tasks '
                 + 'that include voting. Mars is unpredictable; many different events can happen!',
@@ -140,25 +158,35 @@ export default class TutorialLayout extends Vue {
     },
     // gamedashboard > containers > ContainerPhase.vue
     {
-      target: '.v-step-4',
+      target: '.v-step-5',
       content: 'Events persisting multiple rounds or relevant to the current round '
-               + 'will populate here. At the start of a round, if Upkeep is '
-               + 'lower than 65, reveal 2 events; and if Upkeep is lower than 35 '
-               + 'reveal 3 events.',
+               + 'will populate here.',
       params: {
         placement: 'left',
       }
     },
+    // gamedashboard > Notfication.vue
+    {
+      target: '.v-step-6',
+      content: 'You will be notifed about events and changes in Upkeep via notifications '
+               + 'that pop up here. Hover over then notification to close it.',
+      params: {
+        placement: 'right',
+      }
+    },
     // gamedashboard > containers > ContainerLeft.vue
     {
-      target: '.v-step-5',
-      content: 'Any events and changes in upkeep that occur will be logged in the Mars Log '
+      target: '.v-step-7',
+      content: 'Any events and changes in upkeep that occur will be recorded in the Mars Log '
                + 'for your reference.',
       params: {
         placement: 'right',
       }
     },
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> feat: open and close events view in bottomcontainer during tutorial (#119)
     // gamedashboard > containers > ContainerProfile.vue
     {
       target: '.v-step-8',
@@ -188,6 +216,7 @@ export default class TutorialLayout extends Vue {
         placement: 'top',
       }
     },
+<<<<<<< HEAD
     // gamedashboard > containers > ContainerInvestments.vue
     {
       target: '.v-step-11',
@@ -273,6 +302,8 @@ export default class TutorialLayout extends Vue {
     },
 =======
 >>>>>>> refactor: add more tour steps (#113)
+=======
+>>>>>>> feat: open and close events view in bottomcontainer during tutorial (#119)
   ];
 
   /**
@@ -319,9 +350,9 @@ export default class TutorialLayout extends Vue {
     console.log(`[Vue Tour] A custom previousStep callback has been called on step
                 ${currentStep + 1}`);
 
-    // if (currentStep === 2) {
-    //   this.$root.$emit('closeEvent');
-    // }
+    if (currentStep === 6) {
+      this.$root.$emit('openEvent');
+    }
   }
 
   nextStepCallback(currentStep: any) {
@@ -337,8 +368,18 @@ export default class TutorialLayout extends Vue {
     console.log(`[Vue Tour] A custom nextStep callback has been called on step
                 ${currentStep + 1}`);
 
-    if (currentStep === 1) {
+    // open event view im BottomContainer
+    if (currentStep === 2) {
       this.$root.$emit('openEvent');
+    }
+
+    // close event view in BottomContainer
+    if (currentStep === 5) {
+      this.$root.$emit('closeEvent');
+    }
+
+    if (currentStep === 6) {
+      this.$api.setNextPhase();
     }
   }
 
