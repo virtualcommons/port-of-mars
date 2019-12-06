@@ -516,6 +516,7 @@ class PlayerSet extends Schema implements PlayerSetData {
       next(): IteratorResult<Player> {
         if (index < ROLES.length) {
           const role = ROLES[index];
+          index += 1;
           return {
             done: false,
             value: self[role]
