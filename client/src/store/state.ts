@@ -22,6 +22,7 @@ export interface State {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   notifIsActive: string
   notifMessage: string
@@ -30,6 +31,8 @@ export interface State {
   //notifIsActive: string
   //notifMessage: string
 >>>>>>> [refactor]Server handles notifications
+=======
+>>>>>>> [refactor]no trace of previous notification handlers
   activeNotifications: Array<String>
 
   tradingView: string
@@ -65,6 +68,7 @@ export const initialStoreState: State = {
 =======
   // notification
 <<<<<<< HEAD
+<<<<<<< HEAD
   notifIsActive: 'inactive',
   notifMessage: '',
 >>>>>>> [refactor] investment data sends to server
@@ -72,6 +76,8 @@ export const initialStoreState: State = {
   //notifIsActive: 'inactive',
   //notifMessage: '',
 >>>>>>> [refactor]Server handles notifications
+=======
+>>>>>>> [refactor]no trace of previous notification handlers
   activeNotifications: [],
 
   // state variables for trading modal
