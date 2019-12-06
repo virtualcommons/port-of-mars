@@ -1,6 +1,6 @@
 <template>
   <BContainer class="container-investments">
-    <BRow class="investments-topbar">
+    <BRow class="investments-topbar v-step-10">
       <p class="investments-topbar-title">Time Investments</p>
       <StatusBar
         class="investments-topbar-statusbar"

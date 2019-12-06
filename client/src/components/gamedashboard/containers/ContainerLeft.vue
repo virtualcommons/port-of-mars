@@ -4,7 +4,7 @@
     
     <ContainerProfile />
     <ProfileInvestments />
-    <MarsLog class="v-step-5"/>
+    <MarsLog class="v-step-7"/>
   </div>
 </template>
 
