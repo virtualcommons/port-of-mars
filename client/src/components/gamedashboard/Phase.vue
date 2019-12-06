@@ -24,7 +24,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import Clock from '@/components/gamedashboard/Clock.vue';
-import {PHASE_LABELS} from "shared/types";
+import { PHASE_LABELS } from "shared/types";
 
 @Component({
   components: {
@@ -42,12 +42,16 @@ export default class Phase extends Vue {
     switch (this.currentPhase) {
       case 'Investment':
         return true;
-      case 'Trading':
+        break;
+      case 'Trade':
         return true;
-      case 'Purchase Accomplishments':
+        break;
+      case 'Purchase':
         return true;
+        break;
       default:
-        return false;
+        // return false;
+        return true;
     }
   }
 
