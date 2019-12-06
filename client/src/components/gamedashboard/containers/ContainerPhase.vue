@@ -6,10 +6,7 @@
       </BCol>
       <BCol id="hscroll" class="events-container v-step-5" cols="9">
         <div class="events">
-          <CardEvent :event="eventsForTheRound[0]" />
-          <CardEvent :event="eventsForTheRound[1]" />
-          <CardEvent :event="eventsForTheRound[2]" />
-          <CardEvent :event="eventsForTheRound[2]" />
+          <CardEvent v-for="event in eventsForTheRound" :key="event.name" :event="event"/>
         </div>
       </BCol>
     </BRow>

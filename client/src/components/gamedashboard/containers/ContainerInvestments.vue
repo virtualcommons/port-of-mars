@@ -51,7 +51,6 @@ export default class ContainerInvestments extends Vue {
         return prev;
       }, [])
       .sort((a, b) => a.currentCost - b.currentCost);
-
     return costData;
   }
 
