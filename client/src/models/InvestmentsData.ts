@@ -123,8 +123,7 @@ interface InvestmentCosts{
 }
 
 interface BaseInvestmentCostsByPerson{
-    [key:string]:InvestmentCosts,
-    Entrepreneur:InvestmentCosts,
+    [key:string]:InvestmentCosts
 }
 
 const BaseInvestmentCosts: BaseInvestmentCostsByPerson = {
