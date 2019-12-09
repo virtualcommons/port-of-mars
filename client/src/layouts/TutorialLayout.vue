@@ -214,12 +214,49 @@ export default class TutorialLayout extends Vue {
       params: {
         placement: 'right',
       }
-    }, // gamedashboard > cards > CardInvestment.vue
+    }, 
+    // gamedashboard > containers > ContainerLeft.vue
     {
       target: '.v-step-15',
       content: 'After you finish investing your timeblocks, your inventory will update here.',
       params: {
         placement: 'right',
+      }
+    },
+    // gamedashboard > Chat.vue
+    {
+      target: '.v-step-16',
+      content: 'During gameplay, you can communicate with other players in your habitat '
+               + 'to plan and strategize.',
+      params: {
+        placement: 'left',
+      }
+    },
+    // gamedashboard > containers > ContainerMembers.vue
+    {
+      target: '.v-step-17',
+      content: 'These are the other residents of Port of Mars. There are 5 roles in the game: '
+               + 'Researcher, Pioneer, Curator, Entrepreneur, and Politician.',
+      params: {
+        placement: 'left',
+      }
+    },
+    // gamedashboard > containers > ContainerMembers.vue
+    {
+      target: '.v-step-17',
+      content: 'These are the other residents of Port of Mars. There are 5 roles in the game: '
+               + 'Researcher, Pioneer, Curator, Entrepreneur, and Politician.',
+      params: {
+        placement: 'left',
+      }
+    },
+    // gamedashboard > containers > ContainerMembers.vue
+    {
+      target: '.v-step-18',
+      content: 'The player score is displayed on the far left; name in the middle; '
+               + 'and character art on the right.',
+      params: {
+        placement: 'left',
       }
     },
   ];
