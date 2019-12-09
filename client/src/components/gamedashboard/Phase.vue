@@ -5,7 +5,7 @@
       <p class="phase-current">{{ currentPhase }}</p>
       <div v-if="btnVisibility">
         <button
-          class="phase-donebtn"
+          class="phase-donebtn v-step-14"
           @click="handleClick"
           :disabled="btnDisabled"
           type="button"
