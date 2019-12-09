@@ -66,6 +66,7 @@ export const initialStoreState: State = {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   // notification
 <<<<<<< HEAD
@@ -84,6 +85,9 @@ export const initialStoreState: State = {
 =======
 >>>>>>> 51e9f9c... [refactor](shared): bring server data structures to shared folder
 >>>>>>> [refactor](shared): bring server data structures to shared folder
+=======
+  // notification
+>>>>>>> rebased and merged
   activeNotifications: [],
 
   // state variables for trading modal
