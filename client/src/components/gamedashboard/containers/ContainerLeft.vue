@@ -3,8 +3,8 @@
     <Round />
     
     <ContainerProfile />
-    <ProfileInvestments />
-    <MarsLog class="v-step-7"/>
+    <ProfileInvestments class="v-step-15" />
+    <MarsLog class="v-step-7" />
   </div>
 </template>
 

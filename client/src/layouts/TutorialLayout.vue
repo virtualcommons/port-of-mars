@@ -72,8 +72,6 @@ export default class TutorialLayout extends Vue {
 
   steps = [
     {
-      //  At the start of a round, if Upkeep is lower than 65, reveal 2 events; 
-      // and if Upkeep is lower than 35 reveal 3 events.
       //  gamedashboard > containers > ContainerUpkeep.vue
       target: '.v-step-0',
       content: 'The game starts with Upkeep at 100. This represents the habitat at peak '
@@ -176,6 +174,52 @@ export default class TutorialLayout extends Vue {
                + 'Influence. Remember that you have 5 minutes to invest your timeblocks.',
       params: {
         placement: 'top',
+      }
+    },
+    // gamedashboard > containers > ContainerInvestments.vue
+    {
+      target: '.v-step-11',
+      content: 'During the Investment phase, you can invest your timeblocks to obtain '
+               + 'influence currency and use your influence currency inventory to trade '
+               + 'with other players in the Trade phase.',
+      params: {
+        placement: 'right',
+      }
+    },
+    // gamedashboard > containers > ContainerInvestments.vue
+    {
+      target: '.v-step-12',
+      content: 'You can also use your timeblocks to keep your habitat from collapsing by '
+               + 'investing your timeblocks in Upkeep.',
+      params: {
+        placement: 'right',
+      }
+    },
+    // gamedashboard > containers > ContainerInvestments.vue
+    {
+      target: '.v-step-13',
+      content: 'The cost of the card in timeblocks in located at the bottom right corner '
+                + 'of the card. Use the increment (+) button on a card to invest your timeblocks or ' 
+                + 'the decrement (-) button to remove timeblocks from an investment '
+                + 'that you have made.',
+      params: {
+        placement: 'right',
+      }
+    },
+    // gamedashboard > cards > CardInvestment.vue
+    {
+      target: '.v-step-14',
+      content: 'You can hit the Done button to surrender your time if you have finished investing '
+               + 'your timeblocks before the 5 minutes for the Investment Phase is up.',
+      params: {
+        placement: 'right',
+      }
+    }, // gamedashboard > cards > CardInvestment.vue
+    {
+      target: '.v-step-15',
+      content: 'After you finish investing your timeblocks, your inventory will update here.',
+      params: {
+        placement: 'right',
       }
     },
   ];

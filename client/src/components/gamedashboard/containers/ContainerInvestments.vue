@@ -11,9 +11,9 @@
       <p class="investments-topbar-status">( {{ decrementInvestmentCount }} )</p>
     </BRow>
 
-    <BRow class="investments-cards">
+    <BRow class="investments-cards v-step-11 v-step-12">
       <BRow class="investments-cards-top">
-        <CardInvestment :investmentData="costs[2]" />
+        <CardInvestment :investmentData="costs[2]" class="v-step-13" />
         <CardInvestment :investmentData="costs[3]" />
         <CardInvestment :investmentData="costs[0]" />
       </BRow>
