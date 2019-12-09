@@ -1,4 +1,5 @@
 import {State} from "@/store/state";
+import { InvestmentTypes } from "@/models/InvestmentsData";
 
 export default {
   /**
@@ -10,5 +11,9 @@ export default {
   layout(state: State) {
     console.log('CURRENT LAYOUT: ', state.layout);
     return state.layout;
+  },
+
+  player(state: State) {
+    return state.players[state.role];
   }
 };

@@ -1,14 +1,30 @@
 import { Store } from 'vuex';
 import { Room } from 'colyseus.js';
-import {ChatMessageData, MarsEventData, Phase, PHASE_LABELS} from 'shared/types';
+import {
+  ChatMessageData,
+  MarsEventData,
+  Phase,
+  PHASE_LABELS,
+  PlayerData,
+  PlayerSetData, ResourceCostData, Role
+} from 'shared/types';
 import { Responses } from 'shared/responses';
-import {Schema} from "@colyseus/schema";
+import {DataChange, Schema} from "@colyseus/schema";
 import {TStore} from "vue/types/vue";
 
 type Schemify<T> = T & Schema
 
 function deschemify<T>(s: Schemify<T>): T {
   return (s.toJSON() as T);
+}
+
+function applyPlayerResponses(player: any, store: TStore) {
+  player.onChange((changes: Array<any>) => {
+    changes.forEach(change => {
+      switch (change.field as keyof PlayerData) {
+      }
+    });
+  });
 }
 
 export function applyServerResponses<T>(room: Room, store: TStore) {
@@ -26,6 +42,12 @@ export function applyServerResponses<T>(room: Room, store: TStore) {
 
   room.state.messages.onRemove = (msg: Schemify<ChatMessageData>, index: number) => {
     store.commit('REMOVE_FROM_CHAT', deschemify(msg));
+  };
+
+  room.state.players.onChange = (changes: Array<DataChange>) => {
+    for (const change of changes) {
+      store.commit('SET_PLAYER', { role: change.field as Role, data: change.value});
+    }
   };
 
   room.state.marsEvents.onAdd = (e: Schemify<MarsEventData>, index: number) => {

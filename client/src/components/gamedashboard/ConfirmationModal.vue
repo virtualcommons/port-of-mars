@@ -44,6 +44,11 @@ export default class ConfirmationModal extends Vue {
   }
 
   handleYes() {
+    // this.$store.dispatch('setPlayerFinished', true).then(() => {
+    //   this.setStyle = 'none';
+    // });
+
+    // REFACTOR - ON NICK'S COMPUTER
     if(this.type=='nextRound'){
       if(this.$store.state.gameState == Phase.invest){
         this.$store.state.localInvestments.confirmInvestments();

@@ -19,6 +19,8 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
+import {canPurchaseAccomplishment} from "shared/validation";
+import {AccomplishmentData} from "shared/types";
 
 @Component({})
 export default class CardAccomplishmentView extends Vue {
@@ -29,31 +31,21 @@ export default class CardAccomplishmentView extends Vue {
       totalCostArray: []
     })
   })
-  private cardData;
+  private cardData!: AccomplishmentData;
 
   opacity = '';
 
   get canBuy() {
-    return this.$store.state.localInvestments.canPurchaseAccomplishment(
-      this.cardData.totalCostArray,
-      true
-    );
+    return canPurchaseAccomplishment(this.cardData, this.$tstore.getters.player.inventory);
   }
 
   get buyButton(){
     this.opacity = 'opacity:100%';
-    if(this.cardData.bought){
-      this.opacity = 'opacity:50%';
-      return 'You already own this'
-    }
     const b = this.canBuy;
     return b ? 'Purchase accomplishment' : 'You cannot purchase this';
   }
 
   handlePurchase() {
-    if (this.cardData.totalCostArray.length > 0 && this.canBuy && !this.cardData.bought) {
-      this.$store.dispatch('purchaseAccomplishment', this.cardData);
-    }
   }
 
 }

@@ -4,10 +4,10 @@ import {State} from "@/store/state";
 
 export default {
   ADD_TO_CHAT(state: State, payload: ChatMessageData) {
-    state.chat.push(payload);
+    state.messages.push(payload);
   },
   REMOVE_FROM_CHAT(state: State, message: ChatMessageData) {
-    const index = _.findIndex(state.chat, (m: ChatMessageData) => m.dateCreated === message.dateCreated);
-    state.chat.splice(index, 1);
+    const index = _.findIndex(state.messages, (m: ChatMessageData) => m.dateCreated === message.dateCreated);
+    state.messages.splice(index, 1);
   }
 };

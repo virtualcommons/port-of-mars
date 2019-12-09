@@ -22,15 +22,6 @@ export interface ResourceCostData {
   upkeep: number
 }
 
-export interface InvestmentData {
-  science: number
-  government: number
-  legacy: number
-  finance: number
-  culture: number
-  upkeep: number
-}
-
 export interface ResourceAmountData {
   science: number
   government: number
@@ -38,6 +29,14 @@ export interface ResourceAmountData {
   finance: number
   culture: number
 }
+
+export interface InvestmentData extends ResourceAmountData {
+  upkeep: number
+}
+
+export type Resource = keyof ResourceAmountData
+export type Investment = keyof InvestmentData;
+export const INVESTMENTS: Array<Investment> = ['culture', 'finance', 'government', 'legacy', "science", 'upkeep'];
 
 export enum Phase {
   pregame,
@@ -103,7 +102,6 @@ export type PlayerSetData = { [role in Role]: PlayerData }
 
 export interface GameData {
   players: PlayerSetData
-  maxRound: number
   timeRemaining: number
   round: number
   phase: Phase

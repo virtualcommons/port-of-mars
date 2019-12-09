@@ -16,7 +16,7 @@ export default {
     //   state.marsLog.push(payload);
     // }
     const data = {
-      initiator: state.playerRole,
+      initiator: state.role,
       category: 'upkeep',
       content: payload,
       time: new Date(),

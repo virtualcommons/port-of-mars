@@ -251,8 +251,10 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
     super();
     this.role = role;
     this.bought = new ArraySchema<Accomplishment>();
-    this.purchasable = new ArraySchema<Accomplishment>();
-    this.remaining = getAccomplishmentIDs(role);
+    const deck = _.shuffle(getAccomplishmentIDs(role));
+    const purchasableInds: Array<number> = deck.slice(0, 3);
+    this.purchasable = new ArraySchema<Accomplishment>(...purchasableInds.map(id => new Accomplishment(getAccomplishmentByID(role, id))));
+    this.deck = deck.slice(3);
   }
 
   fromJSON(data: AccomplishmentSetSerialized) {
@@ -261,14 +263,14 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
     const purchasable = _.map(data.purchasable, _id => new Accomplishment(getAccomplishmentByID(this.role, _id)));
     this.bought.splice(0, this.bought.length, ...bought);
     this.purchasable.splice(0, this.purchasable.length, ...purchasable);
-    this.remaining =  _.cloneDeep(data.remaining);
+    this.deck =  _.cloneDeep(data.remaining);
   }
 
   toJSON(): AccomplishmentSetSerialized {
     return {
       bought: _.map(this.bought.map(a => a.id), x => x),
       purchasable: _.map(this.purchasable, a => a.id),
-      remaining: this.remaining,
+      remaining: this.deck,
       role: this.role
     }
   }
@@ -281,7 +283,9 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
   @type([Accomplishment])
   purchasable: ArraySchema<Accomplishment>;
 
-  remaining: Array<number>;
+  deck: Array<number>;
+
+  position: number = 0;
 
   buy(accomplishment: AccomplishmentData) {
     if (this.purchasable.filter(a => a.id === accomplishment.id).length > 0) {
@@ -292,9 +296,9 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
   }
 
   draw() {
-    const index = getRandomIntInclusive(0, this.remaining.length - 1);
-    const id = this.remaining[index];
-    this.remaining.splice(index, 1);
+    const index = getRandomIntInclusive(0, this.deck.length - 1);
+    const id = this.deck[index];
+    this.deck.splice(index, 1);
     this.purchasable.push(new Accomplishment(getAccomplishmentByID(this.role, id)));
   }
 

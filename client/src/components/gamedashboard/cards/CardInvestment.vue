@@ -2,14 +2,14 @@
   <div class="card-investment-container">
     <div class="card-investment">
       <div class="card-investment-type">
-        <p class="card-investment-type-name">{{ `${investmentData.n}` }}</p>
+        <p class="card-investment-type-name">{{ name }}</p>
         <div class="card-investment-type-img">
-          <img :src="require(`@/assets/iconsSVG/${this.investmentData.n}.svg`)" alt="Player" />
+          <img :src="require(`@/assets/iconsSVG/${name}.svg`)" alt="Player" />
         </div>
         <div class="card-investment-type-data">
           <div class="card-investment-type-data-cost">
             <p>
-              {{ investmentData.currentCost !== -1 ? investmentData.currentCost : 'X' }}
+              {{ cost <= 1000 ? cost : 'X' }}
             </p>
           </div>
         </div>
@@ -19,7 +19,7 @@
           class="card-investment-increment"
           type="button"
           name="button"
-          @click="incrementInvestment"
+          @click="setInvestmentAmount(1)"
         >
           +
         </button>
@@ -27,7 +27,7 @@
           class="card-investment-decrement"
           type="button"
           name="button"
-          @click="decrementInvestment"
+          @click="setInvestmentAmount(-1)"
         >
           -
         </button>
@@ -38,37 +38,28 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
-import { InvestmentProperties } from '../../../models/index';
-import {Phase} from "shared/types";
+import { Vue, Component, Prop, Inject } from 'vue-property-decorator';
+import {Phase, Resource, Role} from "shared/types";
+import { RequestAPI } from '@/api/request';
+
 @Component({})
 export default class CardInvestment extends Vue {
-  @Prop() private investmentData!: InvestmentProperties;
+
+  @Inject()
+  $api!: RequestAPI;
+
+  // @Prop() private investmentData!: InvestmentProperties;
+
+  @Prop() private name!: Resource;
+  @Prop() private cost!: number;
+  @Prop() private pendingInvestment!: number;
 
   get disabled() {
-    return this.investmentData.currentCost === -1;
+    return this.cost === -1;
   }
 
-  incrementInvestment() {
-    if (
-      this.$tstore.state.gamePhase === Phase.invest &&
-      this.$tstore.state.localInvestments.localDecrement - this.investmentData.currentCost >= 0 &&
-      this.investmentData.currentCost > 0
-    ) {
-      this.$store.dispatch('changeLocalInvestment', {
-        investmentName: this.investmentData.n,
-        investmentAmount: this.investmentData.currentInventory + 1
-      });
-    }
-  }
-
-  decrementInvestment() {
-    if (this.investmentData.currentInventory > 0) {
-      this.$store.dispatch('changeLocalInvestment', {
-        investmentName: this.investmentData.n,
-        investmentAmount: this.investmentData.currentInventory - 1
-      });
-    }
+  setInvestmentAmount(diff: number) {
+    this.$emit('input', {name: this.name, units: this.pendingInvestment + diff, cost: this.cost});
   }
 }
 </script>

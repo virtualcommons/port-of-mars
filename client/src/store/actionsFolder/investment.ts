@@ -1,5 +1,5 @@
 export default {
   changeLocalInvestment(context: any, payload: any) {
-    context.commit('CHANGE_LOCAL_INVESTMENT', payload);
+    context.commit('SET_INVESTMENT_AMOUNT', payload);
   }
 };

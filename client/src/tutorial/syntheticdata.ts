@@ -28,7 +28,7 @@ export default class Synthetic {
   }
 
   // get activeAccomplishments() {
-  //   return GetAccomplishmentsByPerson(this.playerRole, 3);
+  //   return GetAccomplishmentsByPerson(this.role, 3);
   // }
 
   get eventsThisRound() {

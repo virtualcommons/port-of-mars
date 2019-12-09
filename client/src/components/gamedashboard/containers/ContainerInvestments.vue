@@ -4,24 +4,24 @@
       <p class="investments-topbar-title">Time Investments</p>
       <StatusBar
         class="investments-topbar-statusbar"
-        :setWidth="`${decrementInvestmentCount * 10}`"
+        :setWidth="`${remainingTimeBlocks * 10}`"
         :colorOuter="'statusbar-outer-gray'"
         :colorInner="'statusbar-inner-gray'"
       />
-      <p class="investments-topbar-status">( {{ decrementInvestmentCount }} )</p>
+      <p class="investments-topbar-status">( {{ remainingTimeBlocks }} )</p>
     </BRow>
 
     <BRow class="investments-cards v-step-11 v-step-12">
       <BRow class="investments-cards-top">
-        <CardInvestment :investmentData="costs[2]" class="v-step-13" />
-        <CardInvestment :investmentData="costs[3]" />
-        <CardInvestment :investmentData="costs[0]" />
+        <CardInvestment v-bind="costs[2]" class="v-step-13" @input="setInvestmentAmount"/>
+        <CardInvestment v-bind="costs[3]" @input="setInvestmentAmount" />
+        <CardInvestment v-bind="costs[0]" @input="setInvestmentAmount" />
       </BRow>
 
       <BRow class="investments-cards-bottom">
-        <CardInvestment :investmentData="costs[4]" />
-        <CardInvestment :investmentData="costs[5]" />
-        <CardInvestment :investmentData="costs[1]" />
+        <CardInvestment v-bind="costs[4]" @input="setInvestmentAmount" />
+        <CardInvestment v-bind="costs[5]" @input="setInvestmentAmount" />
+        <CardInvestment v-bind="costs[1]" @input="setInvestmentAmount" />
       </BRow>
     </BRow>
   </BContainer>
@@ -32,6 +32,8 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
 import StatusBar from '@/components/gamedashboard/StatusBar.vue';
 import CardInvestment from '@/components/gamedashboard/cards/CardInvestment.vue';
+import {InvestmentData, INVESTMENTS, Resource, ResourceCostData, Role} from "shared/types";
+import * as _ from 'lodash';
 
 @Component({
   components: {
@@ -44,18 +46,40 @@ import CardInvestment from '@/components/gamedashboard/cards/CardInvestment.vue'
 })
 export default class ContainerInvestments extends Vue {
   get costs(): any {
-    const rv = this.$store.state.localInvestments.returnValues;
-    const costData = Object.keys(rv)
-      .reduce((prev, curr) => {
-        prev.push(rv[curr]);
+    const p = this.$tstore.getters.player;
+    const investmentData = Object.keys(p.costs)
+      .reduce((prev, name) => {
+        const k: keyof ResourceCostData = name as keyof ResourceCostData;
+        const cost = p.costs[k];
+        let pendingInvestment: number;
+        pendingInvestment = p.pendingInvestments[k];
+        prev.push({name, cost, pendingInvestment});
         return prev;
-      }, [])
-      .sort((a, b) => a.currentCost - b.currentCost);
-    return costData;
+      }, [] as Array<{ name: string, cost: number, pendingInvestment: number}>).sort((a, b) => a.cost - b.cost);
+
+    return investmentData;
   }
 
-  get decrementInvestmentCount() {
-    return this.$store.state.localInvestments.localDecrement;
+  get remainingTimeBlocks() {
+    const p = this.$tstore.getters.player;
+    const timeBlocks = p.timeBlocks;
+    const costs = p.costs;
+    const pendingInvestments = p.pendingInvestments;
+    return timeBlocks - _.reduce(INVESTMENTS, (tot, investment) => tot + pendingInvestments[investment]*costs[investment], 0)
+  }
+
+  setInvestmentAmount(msg: {name: Resource, units: number, cost: number}) {
+    if (
+      this.remainingTimeBlocks - msg.cost >= 0 &&
+      msg.cost > 0 &&
+      msg.units >= 0
+    ) {
+      this.$tstore.commit('SET_INVESTMENT_AMOUNT', {
+        investment: msg.name,
+        units: msg.units,
+        role: this.$tstore.state.role
+      });
+    }
   }
 }
 </script>

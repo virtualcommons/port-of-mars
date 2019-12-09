@@ -149,18 +149,15 @@ export class LeftDiscardPhase extends GameEventWithData {
   }
 
   apply(game: GameState): void {
-    console.log('leaving discard');
     game.upkeep = game.nextRoundUpkeep();
     game.round += 1;
 
     if (game.upkeep <= 0) {
-      console.debug('entering defeat phase');
       game.phase = Phase.defeat;
       return;
     }
 
     if (game.round >= game.maxRound) {
-      console.debug('entering victory phase');
       game.phase = Phase.victory;
       return;
     }

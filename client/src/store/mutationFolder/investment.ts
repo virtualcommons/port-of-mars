@@ -1,14 +1,14 @@
-import { BaseInvestmentCosts } from '@/models';
+import {BaseInvestmentCosts} from '@/models';
 import {State} from "@/store/state";
+import {Investment, Resource, ResourceCostData, Role} from "shared/types";
+
 export default {
-    CHANGE_LOCAL_INVESTMENT(state: State, payload: any) {
-        // this is for increment and decrement
-        state.localInvestments.changeInventoryValue(payload.investmentName, payload.investmentAmount);
-      },
-    SET_PLAYER_INVESTMENT_COSTS(state: State, payload: string){
-      Object.keys(BaseInvestmentCosts[payload]).forEach(key => {
-        state.localInvestments.updateCurrentCost(key, BaseInvestmentCosts[payload][key]);
-      });
-    }
+  SET_INVESTMENT_AMOUNT(state: State, payload: { investment: Investment, units: number, role: Role }) {
+    console.log(payload);
+    state.players[payload.role].pendingInvestments[payload.investment] = payload.units;
+  },
+  SET_INVESTMENT_COSTS(state: State, payload: { costs: ResourceCostData, role: Role}) {
+    state.players[payload.role].costs = payload.costs;
+  }
 }
 

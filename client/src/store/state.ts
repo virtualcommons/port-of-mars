@@ -1,23 +1,89 @@
 import {InvestmentsModel, MarsLogModel} from "@/models";
-import {ChatMessageData, MarsEventData, Phase, RESEARCHER, Role} from "shared/types";
+import {
+  ChatMessageData,
+  MarsEventData,
+  Phase,
+  RESEARCHER,
+  Role,
+  ResourceCostData,
+  ResourceAmountData,
+  PlayerData,
+  InvestmentData,
+  CURATOR, ENTREPRENEUR, POLITICIAN, PIONEER, GameData
+} from "shared/types";
 import {Accomplishment} from "@/models/AccomplishmentsModels";
 
-export interface State {
-  playerRole: Role
-  playerScore: 0
-  marsLog: MarsLogModel
-  activeAccomplishmentCards: Array<Accomplishment>
-  boughtAccomplishmentCards: Array<Accomplishment>
-  chat: Array<ChatMessageData>
-  upkeep: number
-  round: number
-  players: Array<object>
-  timeblocks: number
-  timeRemaining: number
-  playerResources: object
-  gameEvents: Array<MarsEventData>
+export interface PlayerClientData extends PlayerData {
+  pendingInvestments: InvestmentData
+}
 
-  gamePhase: Phase
+type PlayerClientSet = { [role in Role]: PlayerClientData }
+
+function defaultPlayerClientSet(): PlayerClientSet {
+  return {
+    Curator: defaultPlayerData(CURATOR),
+    Entrepreneur: defaultPlayerData(ENTREPRENEUR),
+    Politician: defaultPlayerData(POLITICIAN),
+    Pioneer: defaultPlayerData(PIONEER),
+    Researcher: defaultPlayerData(RESEARCHER)
+  }
+}
+
+function defaultPlayerData(role: Role): PlayerClientData {
+  return {
+    role,
+    accomplishment: {
+      bought: [],
+      purchasable: []
+    },
+    costs: defaultCostData(role),
+    inventory: defaultInventory(role),
+    ready: false,
+    timeBlocks: 10,
+    victoryPoints: 0,
+    pendingInvestments: defaultPendingInvestment(),
+    contributedUpkeep: 0
+  }
+}
+
+function defaultCostData(role: Role): ResourceCostData {
+  return {
+    science: 0,
+    government: 0,
+    legacy: 0,
+    finance: 0,
+    culture: 0,
+    upkeep: 0,
+  }
+}
+
+function defaultInventory(role: Role): ResourceAmountData {
+  return {
+    science: 0,
+    government: 0,
+    legacy: 0,
+    finance: 0,
+    culture: 0,
+  }
+}
+
+function defaultPendingInvestment(): ResourceCostData {
+  return {
+    science: 0,
+    government: 0,
+    legacy: 0,
+    finance: 0,
+    culture: 0,
+    upkeep: 0
+  }
+}
+
+export interface State extends GameData {
+  role: Role
+  marsLog: MarsLogModel
+  players: PlayerClientSet
+
+  phase: Phase
   layout: string
 
 
@@ -25,31 +91,24 @@ export interface State {
 
   tradingView: string
   tradingMember: Role
-
-  localInvestments: InvestmentsModel
 }
 
 export const initialStoreState: State = {
   // server side
-  playerRole: RESEARCHER,
-  playerScore: 0,
+  role: RESEARCHER,
   marsLog: new MarsLogModel(),
-  activeAccomplishmentCards: [],
-  boughtAccomplishmentCards: [],
-  chat: [],
+  messages: [],
   upkeep: 100,
   round: 1,
-  players: [],
-  timeblocks: 10,
+  players: defaultPlayerClientSet(),
   timeRemaining: 300,
-  playerResources: {},
-  gameEvents: [],
+  marsEvents: [],
+  marsEventsProcessed: 0,
+
 
   // phase
-  gamePhase: Phase.pregame,
-  // playerFinishedWithPhase: false,
+  phase: Phase.pregame,
 
-  // state variable for layout
   layout: 'default-layout',
 
   activeNotifications: [],
@@ -57,8 +116,4 @@ export const initialStoreState: State = {
   // state variables for trading modal
   tradingView: 'request',
   tradingMember: 'Curator',
-
-  // this will be merged with the global investments
-  // at the end of each round.
-  localInvestments: new InvestmentsModel()
 };

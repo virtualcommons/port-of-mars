@@ -8,7 +8,7 @@ interface InvestmentProperties {
     persistentInventory: number;
 }
 
-interface InvestmentTypes {
+export interface InvestmentTypes {
     [key: string]: InvestmentProperties;
     government: InvestmentProperties;
     legacy: InvestmentProperties;
@@ -22,8 +22,8 @@ class InvestmentsModel {
     private investments: InvestmentTypes = {
       government: {
         n: 'government',
-        initialCost: 0,
-        currentCost: 0,
+        initialCost: 2,
+        currentCost: 2,
         currentInventory: 0,
         persistentInventory: 0,
       },
@@ -85,6 +85,7 @@ class InvestmentsModel {
       return this.investments;
     }
 
+    // EMITTED BY DONE BUTTON
     get returnPersistentInventory(){
       return _.mapValues(this.investments, (p:any) => p.persistentInventory);
     }
