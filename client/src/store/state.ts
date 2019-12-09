@@ -13,7 +13,7 @@ import {
 } from "shared/types";
 import {Accomplishment} from "@/models/AccomplishmentsModels";
 
-interface PlayerClientData extends PlayerData {
+export interface PlayerClientData extends PlayerData {
   pendingInvestments: ResourceAmountData
   remainingTimeBlocks: number;
 }

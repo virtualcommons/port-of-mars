@@ -9,7 +9,7 @@ import {
   PlayerSetData, ResourceCostData, Role
 } from 'shared/types';
 import { Responses } from 'shared/responses';
-import {Schema} from "@colyseus/schema";
+import {DataChange, Schema} from "@colyseus/schema";
 import {TStore} from "vue/types/vue";
 
 type Schemify<T> = T & Schema
@@ -44,7 +44,10 @@ export function applyServerResponses<T>(room: Room, store: TStore) {
     store.commit('REMOVE_FROM_CHAT', deschemify(msg));
   };
 
-  room.state.players.onChange = (e: Schemify<PlayerData>, role: Role) => {
+  room.state.players.onChange = (changes: Array<DataChange>) => {
+    for (const change of changes) {
+      store.commit('SET_PLAYER', { role: change.field as Role, data: change.value});
+    }
   };
 
   room.state.marsEvents.onAdd = (e: Schemify<MarsEventData>, index: number) => {

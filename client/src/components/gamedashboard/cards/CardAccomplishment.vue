@@ -9,8 +9,7 @@
         <p>{{ accomplishment.victoryPoints }}</p>
       </div>
       <div class="card-cost">
-        <p v-for="investment in accomplishment.totalCostArray" :key="investment + Math.random()">
-          <!-- Note: will need to adjust key -->
+        <p v-for="investment in accomplishmentCost">
           <img :src="require(`@/assets/iconsSVG/${investment}.svg`)" alt="Investment" />
         </p>
       </div>
@@ -20,6 +19,8 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
+import {AccomplishmentData, INVESTMENTS, Resource} from "shared/types";
+import * as _ from 'lodash'
 
 @Component
 export default class CardAccomplishment extends Vue {
@@ -33,7 +34,13 @@ export default class CardAccomplishment extends Vue {
       };
     }
   })
-  private accomplishment;
+  private accomplishment!: AccomplishmentData;
+
+  get accomplishmentCost() {
+    return INVESTMENTS
+      .filter(investment => this.accomplishment[investment] !== 0)
+      .flatMap(investment => _.fill(Array(Math.abs(this.accomplishment[investment])), investment));
+  }
 
   handleClick() {
     this.$root.$emit('openCard', {

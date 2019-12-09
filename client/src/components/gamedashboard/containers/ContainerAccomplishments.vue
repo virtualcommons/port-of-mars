@@ -29,7 +29,7 @@
         <div
           class="accomplishment-container"
           :style="{ width: setWidth }"
-          v-for="accomplishment in currentAccomplishments"
+          v-for="accomplishment in purchasableAccomplishments"
           :key="accomplishment.label"
         >
           <CardAccomplishment :accomplishment="accomplishment" />
@@ -58,7 +58,7 @@
 import { Vue, Component } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
 import CardAccomplishment from '@/components/gamedashboard/cards/CardAccomplishment.vue';
-import { accomplishments } from '../../../../../server/src/data';
+import {Phase} from "shared/types";
 
 @Component({
   components: {
@@ -73,17 +73,17 @@ export default class ContainerAccomplishments extends Vue {
   private isActive = true;
   private setWidth = '100%';
 
-  get currentAccomplishments() {
-    return this.$store.state.activeAccomplishmentCards;
+  get purchasableAccomplishments() {
+    return this.$tstore.getters.player.accomplishment.purchasable;
   }
 
   get boughtAccomplishments() {
-    return this.$store.state.boughtAccomplishmentCards;
+    return this.$tstore.getters.player.accomplishment.bought;
   }
 
   get canDiscard() {
-    let phase = this.$store.state.gamePhase;
-    if (phase == 'Purchase Investments') {
+    let phase = this.$tstore.state.phase;
+    if (phase === Phase.discard) {
       this.setWidth = '95%';
       return '';
     } else {
