@@ -1,39 +1,4 @@
 <template>
-<<<<<<< HEAD
-  <BContainer class="game-dashboard reset">
-    <MasterComponent />
-    <TradingModal />
-    <ConfirmationModal />
-    <CardModal />
-    <BRow class="board reset">
-<<<<<<< HEAD
-<<<<<<< HEAD
-      <Notification v-for="(notification, index) in notifications" :index='index' :length='notifications.length' :key='index' :message='notification'/>
-=======
-      <!-- <Notification /> -->
->>>>>>> [refactor] investment data sends to server
-=======
-      <Notification v-for="(notification, index) in notifications" :index='index' :length='notifications.length' :key='index' :message='notification'/>
->>>>>>> [refactor]Server handles notifications
-      <BCol cols="2" class="left reset">
-        <ContainerLeft />
-      </BCol>
-
-      <BCol cols="8" class="middle reset">
-        <BRow class="top reset">
-          <ContainerTop />
-        </BRow>
-        <BRow class="bottom reset">
-          <ContainerBottom />
-        </BRow>
-      </BCol>
-
-      <BCol cols="2" class="right reset">
-        <ContainerRight />
-      </BCol>
-    </BRow>
-  </BContainer>
-=======
   <div>
     <BContainer v-show="gamePhase != phase.defeat" class="game-dashboard reset">
       <MasterComponent />
@@ -65,7 +30,7 @@
       <button class="restart-button" @click="handleRestart">Restart the game</button>
     </div>
   </div>
->>>>>>> [feat]Game restarts on end
+
 </template>
 
 <script lang="ts">
