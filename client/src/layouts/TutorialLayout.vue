@@ -157,7 +157,7 @@ export default class TutorialLayout extends Vue {
         placement: 'bottom',
       }
     },
-    // gamedashboard > containers > ContainerProfile.vue
+    // gamedashboard > containers > ContainerPhase.vue
     {
       target: '.v-step-9',
       content: 'During the Investment phase, you may invest your timeblocks into '
@@ -259,6 +259,17 @@ export default class TutorialLayout extends Vue {
         placement: 'left',
       }
     },
+    // gamedashboard > containers > ContainerPhase.vue
+    {
+      target: '.v-step-19',
+      content: 'During the Trade Phase, you can trade influence currency with other '
+                + 'players. Trading allows you to obtain other influence currencies '
+                + 'that you yourself cannnot invest in so that you can purchase '
+                + 'accomplishments later in the game.',
+      params: {
+        placement: 'right',
+      }
+    },
   ];
 
   /**
@@ -308,6 +319,7 @@ export default class TutorialLayout extends Vue {
     if (currentStep === 6) {
       this.$root.$emit('openEvent');
     }
+
   }
 
   nextStepCallback(currentStep: any) {
@@ -334,6 +346,10 @@ export default class TutorialLayout extends Vue {
     }
 
     if (currentStep === 6) {
+      this.$api.setNextPhase();
+    }
+
+    if (currentStep === 18) {
       this.$api.setNextPhase();
     }
   }
