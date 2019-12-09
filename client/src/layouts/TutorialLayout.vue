@@ -75,10 +75,13 @@ export default class TutorialLayout extends Vue {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
       //  At the start of a round, if Upkeep is lower than 65, reveal 2 events; 
       // and if Upkeep is lower than 35 reveal 3 events.
 >>>>>>> feat: open and close events view in bottomcontainer during tutorial (#119)
+=======
+>>>>>>> feat(tour): explain investments, player scoreboard, chat (#122)
       //  gamedashboard > containers > ContainerUpkeep.vue
       target: '.v-step-0',
       content: 'The game starts with Upkeep at 100. This represents the habitat at peak '
@@ -217,6 +220,9 @@ export default class TutorialLayout extends Vue {
       }
     },
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> feat(tour): explain investments, player scoreboard, chat (#122)
     // gamedashboard > containers > ContainerInvestments.vue
     {
       target: '.v-step-11',
@@ -300,10 +306,13 @@ export default class TutorialLayout extends Vue {
         placement: 'left',
       }
     },
+<<<<<<< HEAD
 =======
 >>>>>>> refactor: add more tour steps (#113)
 =======
 >>>>>>> feat: open and close events view in bottomcontainer during tutorial (#119)
+=======
+>>>>>>> feat(tour): explain investments, player scoreboard, chat (#122)
   ];
 
   /**
