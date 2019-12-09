@@ -20,19 +20,7 @@ export interface State {
   gamePhase: Phase
   layout: string
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-  notifIsActive: string
-  notifMessage: string
->>>>>>> [refactor] investment data sends to server
-=======
-  //notifIsActive: string
-  //notifMessage: string
->>>>>>> [refactor]Server handles notifications
-=======
->>>>>>> [refactor]no trace of previous notification handlers
+
   activeNotifications: Array<String>
 
   tradingView: string
@@ -64,30 +52,6 @@ export const initialStoreState: State = {
   // state variable for layout
   layout: 'default-layout',
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-  // notification
-<<<<<<< HEAD
-<<<<<<< HEAD
-  notifIsActive: 'inactive',
-  notifMessage: '',
->>>>>>> [refactor] investment data sends to server
-=======
-  //notifIsActive: 'inactive',
-  //notifMessage: '',
->>>>>>> [refactor]Server handles notifications
-=======
->>>>>>> [refactor]no trace of previous notification handlers
-=======
-  // notification
-=======
->>>>>>> 51e9f9c... [refactor](shared): bring server data structures to shared folder
->>>>>>> [refactor](shared): bring server data structures to shared folder
-=======
-  // notification
->>>>>>> rebased and merged
   activeNotifications: [],
 
   // state variables for trading modal

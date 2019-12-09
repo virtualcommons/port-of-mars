@@ -1,14 +1,10 @@
 <template>
   <BContainer class="container-bottom">
     <BRow class="row-bottom">
-      <BCol class="container-bottom-investments" cols="7" v-if="currentView === 'default'">
-        <ContainerInvestments />
-      </BCol>
-      <BCol class="container-bottom-accomplishments" cols="5" v-if="currentView === 'default'">
-        <ContainerAccomplishments />
-      </BCol>
-      <BCol class="container-bottom-events v-step-4" cols="12" v-if="currentView === 'event'">
-        <ContainerEvents />
+      <BCol class="container-bottom" cols="12">
+        <InvestmentsPane v-if="gamePhase == phase.invest"/>
+        <ContainerEvents v-if="gamePhase == phase.events"/>
+        <ContainerDefault v-else/>
       </BCol>
     </BRow>
   </BContainer>
@@ -17,31 +13,34 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
-import ContainerInvestments from '@/components/gamedashboard/containers/ContainerInvestments.vue';
-import ContainerAccomplishments from '@/components/gamedashboard/containers/ContainerAccomplishments.vue';
 import ContainerEvents from '@/components/gamedashboard/containers/ContainerEvents.vue';
+import InvestmentsPane from '@/components/gamedashboard/containers/GameboardPanes/InvestmentsPane.vue';
+import ContainerDefault from '@/components/gamedashboard/containers/ContainerDefaultView.vue';
+
+import { Phase } from "shared/types";
 
 @Component({
   components: {
     BContainer,
     BRow,
     BCol,
-    ContainerInvestments,
-    ContainerAccomplishments,
-    ContainerEvents
+
+    ContainerEvents,
+    InvestmentsPane,
+    ContainerDefault,
   }
 })
 export default class ContainerBottom extends Vue {
   private currentView: string = 'default';
 
-  mounted() {
-    this.$root.$on('openEvent', (data: string) => {
-      this.currentView = 'event';
-    });
-    this.$root.$on('closeEvent', (data: string) => {
-      this.currentView = 'default';
-    });
+  get phase(){
+    return Phase;
   }
+
+  get gamePhase(){
+    return this.$store.state.gamePhase;
+  }
+
 }
 </script>
 
@@ -62,9 +61,7 @@ export default class ContainerBottom extends Vue {
   margin: 0;
 }
 
-.container-bottom-investments,
-.container-bottom-accomplishments,
-.container-bottom-events {
+.container-bottom{
   height: 100%;
   width: 100%;
   padding: 0;
