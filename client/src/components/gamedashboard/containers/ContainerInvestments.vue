@@ -4,11 +4,11 @@
       <p class="investments-topbar-title">Time Investments</p>
       <StatusBar
         class="investments-topbar-statusbar"
-        :setWidth="`${decrementInvestmentCount * 10}`"
+        :setWidth="`${remainingTimeBlocks * 10}`"
         :colorOuter="'statusbar-outer-gray'"
         :colorInner="'statusbar-inner-gray'"
       />
-      <p class="investments-topbar-status">( {{ decrementInvestmentCount }} )</p>
+      <p class="investments-topbar-status">( {{ remainingTimeBlocks }} )</p>
     </BRow>
 
     <BRow class="investments-cards v-step-11 v-step-12">
@@ -32,7 +32,8 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
 import StatusBar from '@/components/gamedashboard/StatusBar.vue';
 import CardInvestment from '@/components/gamedashboard/cards/CardInvestment.vue';
-import {InvestmentData, Resource, ResourceCostData, Role} from "shared/types";
+import {InvestmentData, INVESTMENTS, Resource, ResourceCostData, Role} from "shared/types";
+import * as _ from 'lodash';
 
 @Component({
   components: {
@@ -51,11 +52,7 @@ export default class ContainerInvestments extends Vue {
         const k: keyof ResourceCostData = name as keyof ResourceCostData;
         const cost = p.costs[k];
         let pendingInvestment: number;
-        if (k === 'upkeep') {
-          pendingInvestment = p.contributedUpkeep;
-        } else {
-          pendingInvestment = p.pendingInvestments[k];
-        }
+        pendingInvestment = p.pendingInvestments[k];
         prev.push({name, cost, pendingInvestment});
         return prev;
       }, [] as Array<{ name: string, cost: number, pendingInvestment: number}>).sort((a, b) => a.cost - b.cost);
@@ -63,8 +60,12 @@ export default class ContainerInvestments extends Vue {
     return investmentData;
   }
 
-  get decrementInvestmentCount() {
-    return this.$tstore.getters.player.remainingTimeBlocks;
+  get remainingTimeBlocks() {
+    const p = this.$tstore.getters.player;
+    const timeBlocks = p.timeBlocks;
+    const costs = p.costs;
+    const pendingInvestments = p.pendingInvestments;
+    return timeBlocks - _.reduce(INVESTMENTS, (tot, investment) => tot + pendingInvestments[investment]*costs[investment], 0)
   }
 }
 </script>

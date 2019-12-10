@@ -14,7 +14,7 @@ import {
 import {Accomplishment} from "@/models/AccomplishmentsModels";
 
 export interface PlayerClientData extends PlayerData {
-  pendingInvestments: ResourceAmountData
+  pendingInvestments: InvestmentData
   remainingTimeBlocks: number;
 }
 
@@ -69,13 +69,14 @@ function defaultInventory(role: Role): ResourceAmountData {
   }
 }
 
-function defaultPendingInvestment(): ResourceAmountData {
+function defaultPendingInvestment(): ResourceCostData {
   return {
     science: 0,
     government: 0,
     legacy: 0,
     finance: 0,
     culture: 0,
+    upkeep: 0
   }
 }
 

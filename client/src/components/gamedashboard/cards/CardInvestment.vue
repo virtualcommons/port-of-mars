@@ -63,18 +63,19 @@ export default class CardInvestment extends Vue {
       this.$tstore.getters.player.remainingTimeBlocks - this.cost >= 0 &&
       this.cost > 0
     ) {
-      this.$tstore.commit('SET_INVESTMENT_AMOUNT', {
-        resource: this.name,
+      const msg = {
+        investment: this.name,
         units: this.pendingInvestment + 1,
         role: this.$tstore.state.role
-      })
+      };
+      this.$tstore.commit('SET_INVESTMENT_AMOUNT', msg);
     }
   }
 
   decrementInvestment() {
     if (this.pendingInvestment > 0) {
       this.$tstore.commit('SET_INVESTMENT_AMOUNT', {
-        resource: this.name,
+        investment: this.name,
         units: this.pendingInvestment - 1,
         role: this.$tstore.state.role
       })
