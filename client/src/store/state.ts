@@ -39,7 +39,6 @@ function defaultPlayerData(role: Role): PlayerClientData {
     costs: defaultCostData(role),
     inventory: defaultInventory(role),
     ready: false,
-    remainingTimeBlocks: 10,
     timeBlocks: 10,
     victoryPoints: 0,
     pendingInvestments: defaultPendingInvestment(),

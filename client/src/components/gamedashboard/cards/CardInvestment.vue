@@ -9,7 +9,7 @@
         <div class="card-investment-type-data">
           <div class="card-investment-type-data-cost">
             <p>
-              {{ cost !== -1 ? cost : 'X' }}
+              {{ cost <= 1000 ? cost : 'X' }}
             </p>
           </div>
         </div>
