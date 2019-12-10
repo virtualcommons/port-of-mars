@@ -110,3 +110,13 @@ export interface GameData {
   marsEvents: Array<MarsEventData>
   marsEventsProcessed: number
 }
+
+export interface QuizData {
+  id: number
+  question: string
+  option1: string
+  option2: string
+  option3: string
+  option4: string
+  correct: number
+}
