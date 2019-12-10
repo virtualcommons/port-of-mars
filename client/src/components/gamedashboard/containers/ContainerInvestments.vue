@@ -13,15 +13,15 @@
 
     <BRow class="investments-cards v-step-11 v-step-12">
       <BRow class="investments-cards-top">
-        <CardInvestment v-bind="costs[2]" class="v-step-13" />
-        <CardInvestment v-bind="costs[3]" />
-        <CardInvestment v-bind="costs[0]" />
+        <CardInvestment v-bind="costs[2]" class="v-step-13" @input="setInvestmentAmount"/>
+        <CardInvestment v-bind="costs[3]" @input="setInvestmentAmount" />
+        <CardInvestment v-bind="costs[0]" @input="setInvestmentAmount" />
       </BRow>
 
       <BRow class="investments-cards-bottom">
-        <CardInvestment v-bind="costs[4]" />
-        <CardInvestment v-bind="costs[5]" />
-        <CardInvestment v-bind="costs[1]" />
+        <CardInvestment v-bind="costs[4]" @input="setInvestmentAmount" />
+        <CardInvestment v-bind="costs[5]" @input="setInvestmentAmount" />
+        <CardInvestment v-bind="costs[1]" @input="setInvestmentAmount" />
       </BRow>
     </BRow>
   </BContainer>
@@ -66,6 +66,20 @@ export default class ContainerInvestments extends Vue {
     const costs = p.costs;
     const pendingInvestments = p.pendingInvestments;
     return timeBlocks - _.reduce(INVESTMENTS, (tot, investment) => tot + pendingInvestments[investment]*costs[investment], 0)
+  }
+
+  setInvestmentAmount(msg: {name: Resource, units: number, cost: number}) {
+    if (
+      this.$tstore.getters.player.remainingTimeBlocks - msg.cost >= 0 &&
+      msg.cost > 0 &&
+      msg.units >= 0
+    ) {
+      this.$tstore.commit('SET_INVESTMENT_AMOUNT', {
+        investment: msg.name,
+        units: msg.units,
+        role: this.$tstore.state.role
+      });
+    }
   }
 }
 </script>

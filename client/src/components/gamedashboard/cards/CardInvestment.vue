@@ -19,7 +19,7 @@
           class="card-investment-increment"
           type="button"
           name="button"
-          @click="incrementInvestment"
+          @click="setInvestmentAmount(1)"
         >
           +
         </button>
@@ -27,7 +27,7 @@
           class="card-investment-decrement"
           type="button"
           name="button"
-          @click="decrementInvestment"
+          @click="setInvestmentAmount(-1)"
         >
           -
         </button>
@@ -39,7 +39,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Inject } from 'vue-property-decorator';
-import {Phase, Resource} from "shared/types";
+import {Phase, Resource, Role} from "shared/types";
 import { RequestAPI } from '@/api/request';
 
 @Component({})
@@ -58,28 +58,8 @@ export default class CardInvestment extends Vue {
     return this.cost === -1;
   }
 
-  incrementInvestment() {
-    if (
-      this.$tstore.getters.player.remainingTimeBlocks - this.cost >= 0 &&
-      this.cost > 0
-    ) {
-      const msg = {
-        investment: this.name,
-        units: this.pendingInvestment + 1,
-        role: this.$tstore.state.role
-      };
-      this.$tstore.commit('SET_INVESTMENT_AMOUNT', msg);
-    }
-  }
-
-  decrementInvestment() {
-    if (this.pendingInvestment > 0) {
-      this.$tstore.commit('SET_INVESTMENT_AMOUNT', {
-        investment: this.name,
-        units: this.pendingInvestment - 1,
-        role: this.$tstore.state.role
-      })
-    }
+  setInvestmentAmount(diff: number) {
+    this.$emit('input', {name: this.name, units: this.pendingInvestment + diff, cost: this.cost});
   }
 }
 </script>

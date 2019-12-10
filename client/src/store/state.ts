@@ -15,7 +15,6 @@ import {Accomplishment} from "@/models/AccomplishmentsModels";
 
 export interface PlayerClientData extends PlayerData {
   pendingInvestments: InvestmentData
-  remainingTimeBlocks: number;
 }
 
 type PlayerClientSet = { [role in Role]: PlayerClientData }
