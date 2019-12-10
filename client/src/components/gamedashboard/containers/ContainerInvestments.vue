@@ -70,7 +70,7 @@ export default class ContainerInvestments extends Vue {
 
   setInvestmentAmount(msg: {name: Resource, units: number, cost: number}) {
     if (
-      this.$tstore.getters.player.remainingTimeBlocks - msg.cost >= 0 &&
+      this.remainingTimeBlocks - msg.cost >= 0 &&
       msg.cost > 0 &&
       msg.units >= 0
     ) {
