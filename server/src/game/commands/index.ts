@@ -1,5 +1,5 @@
 import * as req from "shared/requests";
-import {InvestmentData, Phase, TradeData} from "shared/types";
+import {InvestmentData, Phase, TradeData, MarsLogMessageData} from "shared/types";
 import {MarsEvent, Player} from "@/game/state";
 import {
   AcceptTradeRequest,

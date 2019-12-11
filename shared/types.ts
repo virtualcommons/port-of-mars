@@ -144,6 +144,13 @@ export interface MarsEventData {
   flavorText: string
 }
 
+export interface MarsLogMessageData {
+  initiator: string
+  category: string
+  content: string
+  timeStamp: number
+}
+
 export interface AccomplishmentData {
   id: number
   role: Role

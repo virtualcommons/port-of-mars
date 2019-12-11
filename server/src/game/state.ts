@@ -8,6 +8,7 @@ import {
   GameData, Investment,
   InvestmentData,
   MarsEventData,
+  MarsLogMessageData,
   Phase,
   PIONEER,
   PlayerData,
@@ -24,6 +25,7 @@ import {getRandomIntInclusive} from "@/util";
 import {getAccomplishmentByID, getAccomplishmentIDs} from "@/repositories/Accomplishment";
 import {getAllMarsEvents, getMarsEventByID} from "@/repositories/MarsEvents";
 import {GameEvent} from "@/game/events/types";
+import { string } from "@colyseus/schema/lib/encoding/decode";
 
 export class ChatMessage extends Schema implements ChatMessageData {
   constructor(msg: ChatMessageData) {
@@ -119,6 +121,41 @@ class PendingInvestment extends Schema implements InvestmentData {
 
   @type('number')
   upkeep: number;
+}
+
+export class MarsLogMessage extends Schema implements MarsLogMessageData {
+  constructor(msg: MarsLogMessageData) {
+    super();
+    this.initiator = msg.initiator;
+    this.category = msg.category;
+    this.content = msg.content;
+    this.timeStamp = msg.timeStamp;
+  }
+
+  fromJSON(data: MarsLogMessageData) {
+    Object.assign(this, data);
+  }
+
+  toJSON(): MarsLogMessageData  {
+    return {
+      initiator: this.initiator,
+      category: this.category,
+      content: this.content,
+      timeStamp: this.timeStamp,
+    }
+  }
+
+  @type("string")
+  initiator: string;
+
+  @type("string")
+  category: string;
+
+  @type("string")
+  content: string;
+  
+  @type("number")
+  timeStamp: number;
 }
 
 class ResourceCosts extends Schema implements ResourceCostData {
