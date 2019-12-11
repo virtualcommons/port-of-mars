@@ -5,7 +5,8 @@
       <ConfirmationModal />
       <CardModal />
       <BRow class="board reset">
-        <Notification v-for="(notification, index) in notifications" :index='index' :length='notifications.length' :key='index' :message='notification'/>
+        <Notification v-for="(notification, index) in notifications" :index='index'
+                      :length='notifications.length' :key='index' :message='notification'/>
         <BCol cols="2" class="left reset">
           <ContainerLeft />
         </BCol>
@@ -29,7 +30,6 @@
       <button class="restart-button" @click="handleRestart">Restart the game</button>
     </div>
   </div>
-
 </template>
 
 <script lang="ts">
@@ -45,7 +45,7 @@ import CardModal from '@/components/gamedashboard/cards/CardModal.vue';
 import Notification from '@/components/gamedashboard/Notification.vue';
 
 import { Phase } from "shared/types";
-import { RequestAPI } from '../../api/request';
+import { RequestAPI } from '@/api/request';
 
 @Component({
   components: {

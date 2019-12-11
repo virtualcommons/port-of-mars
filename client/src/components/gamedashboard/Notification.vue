@@ -1,13 +1,16 @@
 <template>
-  <div 
+  <div
     @click="hideNotif()"
     class="notification v-step-6"
     :class="viewAnim()"
     @mouseover="hover = true"
     @mouseleave="hover = false"
   >
-    <p class="notification-close" v-if="hover">Close</p>
-    <p class="notification-message" v-if="!hover">{{ message }} <br/> Message: {{index+1}}/{{ length }}</p>
+    <p class="notification-close" v-if="hover || inView === 'hide'">Close</p>
+    <p class="notification-message" v-if="!hover && inView !== 'hide'">
+      {{ message }} <br />
+      Message: {{ index + 1 }}/{{ length }}
+    </p>
   </div>
 </template>
 
@@ -18,18 +21,28 @@ export default class Notification extends Vue {
   // Note: may want to use transition wrapper
   private hover = false;
 
-  @Prop({default:`you've been asleep for 20 years. this is the doctor's last way of contacting you from the outside. please wake up.`}) message;
-  @Prop({default: 0}) length;
-  @Prop({default: -1}) index;
+  @Prop({
+    default: `you've been asleep for 20 years. this is the doctor's last way of contacting you from the outside. please wake up.`
+  })
+  message;
+  @Prop({ default: 0 }) length;
+  @Prop({ default: -1 }) index;
 
   inView = 'visible';
 
+  mounted() {
+    // console.log('MOUNTED');
+    // setTimeout(() => {
+    //   this.hideNotif();
+    // }, 4000);
+  }
+
   hideNotif() {
-    this.inView = 'hide-close';
-    
-    setTimeout(()=> {
-      this.$store.state.activeNotifications.splice(this.index,1);
-    },1000);
+    this.inView = 'hide';
+
+    setTimeout(() => {
+      this.$store.state.activeNotifications.splice(this.index, 1);
+    }, 1000);
   }
 
   viewAnim() {
@@ -37,11 +50,7 @@ export default class Notification extends Vue {
       return 'animated fadeInLeft';
     }
     if (this.inView === 'hide') {
-      return 'animated fadeOutLeft';
-      // return 'animated fadeOut faster';
-    }
-    if (this.inView === 'hide-close') {
-      return 'animated fadeOutLeft notification-hide';
+      return 'animated fadeOutLeft fast';
       // return 'animated fadeOut faster';
     }
     return '';
@@ -52,8 +61,8 @@ export default class Notification extends Vue {
 <style scoped>
 .notification {
   height: 5rem;
-  width: 14rem;
-  padding: 0.5rem;
+  width: calc(calc(100 / 12) * 2%);
+  padding: 0.5rem 1rem;
   border-radius: 1rem;
   position: absolute;
   z-index: 2;
@@ -66,16 +75,16 @@ export default class Notification extends Vue {
   cursor: pointer;
   transition: all 0.2s ease-in-out;
 }
-.notification:hover, .notification-hide {
-  border: var(--border-white);
-  color: var(--space-white);
-  background-color: var(--space-gray);
-}
+
 .notification-inactive {
   visibility: hidden;
 }
-.notification-close, .notification-message {
-  font-size: var(--font-med);
+.notification-close,
+.notification-message {
   margin: 0;
+  font-size: var(--font-small);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 </style>

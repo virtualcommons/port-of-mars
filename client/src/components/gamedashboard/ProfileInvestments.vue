@@ -20,12 +20,15 @@ export default class ProfileInvestments extends Vue {
     const p = this.$tstore.getters.player;
     const inventory = p.inventory;
     const pendingInventory = p.pendingInvestments;
-    return Object.keys(inventory).map(name => ({ name, units: inventory[name as Resource], pendingUnits: pendingInventory[name as Resource]}))
+    return Object.keys(inventory).map(name => ({
+      name,
+      units: inventory[name as Resource],
+      pendingUnits: pendingInventory[name as Resource]
+    }))
   }
 
-  style(inventory: { name: Resource, units: number, pendingUnits: number }): string {
-    return inventory.units <
-      inventory.units + inventory.pendingUnits
+  style(inventory: { name: Resource; units: number; pendingUnits: number }): string {
+    return inventory.units < inventory.units + inventory.pendingUnits
       ? 'color: var(--status-green)'
       : '';
   }

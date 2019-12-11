@@ -9,7 +9,9 @@
         <p class="chat-message-content">
           {{ message.message }}
         </p>
-        <p class="chat-message-time"><span>[ </span>{{ toDate(message.dateCreated) }}<span> ]</span></p>
+        <p class="chat-message-time">
+          <span>[ </span>{{ toDate(message.dateCreated) }}<span> ]</span>
+        </p>
       </div>
     </div>
     <div class="chat-input-frame">
@@ -109,6 +111,10 @@ export default class Chat extends Vue {
   overflow: auto;
 }
 
+.chat-message:last-child {
+  margin-bottom: 0;
+}
+
 .chat-message-member {
   margin: 0;
   color: var(--space-orange);
@@ -132,6 +138,7 @@ export default class Chat extends Vue {
   width: 100%;
   padding-top: 0.5rem;
   border-top: 0.125rem solid var(--space-white-opaque-2);
+  margin-top: 0.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;

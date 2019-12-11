@@ -2,7 +2,7 @@
   <div class="cm-transparent-wrapper" :style="{ display: setStyle }">
     <BContainer class="cm-wrapper">
       <BRow class="cm">
-        <button class="cm-close-button" @click="closeModal">Close</button>
+        <button class="cm-close-button" @click="closeModal">X</button>
         <component
           :is="this.cardD.card === 'accomplishment' ? 'CardAccomplishmentView' : 'CardEventView'"
           :cardData="cardD.payload"
@@ -73,7 +73,7 @@ export default class CardModal extends Vue {
   width: 37.5rem;
   padding: 1rem 2rem;
   margin: 0;
-  border: var(--border-white);
+  border: 0.125rem solid var(--space-white-opaque-2);
   border-radius: 1.25rem;
   position: relative;
   color: var(--space-white);
@@ -110,18 +110,25 @@ export default class CardModal extends Vue {
 }
 
 .cm-close-button {
-  border: none;
+  height: 2.5rem;
+  width: 2.5rem;
+  border: 0.125rem solid var(--space-orange);
+  border-radius: 50%;
   position: absolute;
   z-index: 4;
   top: 2rem;
   right: 2rem;
-  text-decoration: underline;
-  color: var(--space-white);
-  background: none;
+  text-align: center;
+  font-size: var(--font-med);
+  color: var(--space-gray);
+  background-color: transparent;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 .cm-close-button:hover {
-  color: var(--space-orange);
+  background-color: var(--space-orange);
+  transform: scale(1.1);
 }
 
 .cm-close-button:active {
