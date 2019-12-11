@@ -9,13 +9,16 @@ import {
 } from 'shared/types';
 import { Vue } from 'vue-property-decorator';
 import * as _ from 'lodash';
-import { PlayerClientData, State } from '@/store/state';
+import {defaultPendingInvestment, PlayerClientData, State} from '@/store/state';
 
 function SET_GAME_PHASE(state: State, payload: Phase) {
   state.phase = payload;
 }
 function SET_ROUND(state: State, round: number) {
   state.round = round;
+  for (const role of ROLES) {
+    state.players[role].pendingInvestments = defaultPendingInvestment();
+  }
 }
 function SET_UPKEEP(state: State, upkeep: number) {
   state.upkeep = upkeep;
