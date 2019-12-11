@@ -4,6 +4,7 @@ import gameState from './gameState';
 import investment from './investment';
 import layout from './layout';
 import notifications from './notifications';
+import player from './player'
 import trading from './trading';
 
 export default {
@@ -17,5 +18,6 @@ export default {
   ...investment,
   ...layout,
   ...notifications,
-  ...trading
+  ...player,
+  ...trading,
 };

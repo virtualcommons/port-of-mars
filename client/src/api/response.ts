@@ -1,14 +1,10 @@
-import { Store } from 'vuex';
-import { Room } from 'colyseus.js';
+import {Room} from 'colyseus.js';
 import {
-  ChatMessageData,
+  ChatMessageData, GameData,
   MarsEventData,
   Phase,
-  PHASE_LABELS,
   PlayerData,
-  PlayerSetData,
-  ResourceCostData,
-  Role
+  ROLES
 } from 'shared/types';
 import { Responses } from 'shared/responses';
 import { DataChange, Schema } from '@colyseus/schema';
@@ -21,15 +17,40 @@ function deschemify<T>(s: Schemify<T>): T {
 }
 
 function applyPlayerResponses(player: any, store: TStore) {
-  player.onChange((changes: Array<any>) => {
+  player.onChange = (changes: Array<any>) => {
     changes.forEach(change => {
+      const payload = { role: player.role, data: change.value };
       switch (change.field as keyof PlayerData) {
+        case "inventory":
+          store.commit('SET_INVENTORY', payload);
+          break;
+        case "costs":
+          store.commit('SET_INVESTMENT_COSTS', payload);
+          break;
+        case "timeBlocks":
+          store.commit('SET_TIME_BLOCKS', payload);
+          break;
+        case "ready":
+          store.commit('SET_READINESS', payload);
+          break;
+        case "accomplishment":
+          store.commit('SET_ACCOMPLISHMENTS', payload);
+          break;
+        case "victoryPoints":
+          store.commit('SET_VICTORY_POINTS', payload);
+          break;
       }
     });
-  });
+  };
+  player.triggerAll();
 }
 
 export function applyServerResponses<T>(room: Room, store: TStore) {
+  room.onStateChange.once((state: Schemify<GameData>) => {
+    ROLES.forEach(role => applyPlayerResponses(state.players[role], store));
+    state.players.triggerAll();
+  });
+
   room.onMessage((msg: Responses) => {
     switch (msg.kind) {
       case 'set-player-role':
@@ -49,12 +70,6 @@ export function applyServerResponses<T>(room: Room, store: TStore) {
     store.commit('REMOVE_FROM_CHAT', deschemify(msg));
   };
 
-  room.state.players.onChange = (changes: Array<DataChange>) => {
-    for (const change of changes) {
-      store.commit('SET_PLAYER', { role: change.field as Role, data: change.value });
-    }
-  };
-
   room.state.marsEvents.onAdd = (e: Schemify<MarsEventData>, index: number) => {
     store.commit('ADD_TO_EVENTS', deschemify(e));
   };
@@ -64,7 +79,7 @@ export function applyServerResponses<T>(room: Room, store: TStore) {
   };
 
   room.state.marsEvents.onChange = (event: Schemify<MarsEventData>, index: number) => {
-    store.commit('CHANGE_EVENT', { event: deschemify(event), index });
+    store.commit('CHANGE_EVENT', {event: deschemify(event), index});
   };
 
   room.state.onChange = (changes: Array<any>) => {
