@@ -6,10 +6,10 @@
     <div class="cm-event-info">
       <p>{{ this.cardData.info }}</p>
     </div>
+    <p class="cm-event-effects-title"><span>Effects</span></p>
     <div class="cm-event-effects">
       <p>{{ this.cardData.effects }}</p>
     </div>
-    <p class="cm-event-effects-title">( <span>Effects</span> )</p>
   </div>
 </template>
 
@@ -17,15 +17,15 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component({})
-
 export default class CardEventView extends Vue {
   @Prop({
     default: () => ({
       title: '---',
       info: '---',
-      effects: '---',
-    }),
-  }) private cardData!: object;
+      effects: '---'
+    })
+  })
+  private cardData!: object;
 }
 </script>
 
@@ -65,7 +65,7 @@ export default class CardEventView extends Vue {
 }
 
 .cm-event-effects p {
-  margin: 0;
+  margin: 1rem 0 0 0;
 }
 
 .cm-event-effects-title {

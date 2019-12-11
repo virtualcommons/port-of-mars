@@ -13,19 +13,22 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { InvestmentsModel } from '../../models/InvestmentsData';
-import {Resource} from "shared/types";
+import { Resource } from 'shared/types';
 
 @Component({})
 export default class ProfileInvestments extends Vue {
   get investments() {
     const inventory = this.$tstore.getters.player.inventory;
     const pendingInventory = this.$tstore.getters.player.pendingInvestments;
-    return Object.keys(inventory).map(name => ({ name, units: inventory[name as Resource], pendingUnits: pendingInventory[name as Resource]}))
+    return Object.keys(inventory).map(name => ({
+      name,
+      units: inventory[name as Resource],
+      pendingUnits: pendingInventory[name as Resource]
+    }));
   }
 
-  style(inventory: { name: Resource, units: number, pendingUnits: number }): string {
-    return inventory.units <
-      inventory.units + inventory.pendingUnits
+  style(inventory: { name: Resource; units: number; pendingUnits: number }): string {
+    return inventory.units < inventory.units + inventory.pendingUnits
       ? 'color: var(--status-green)'
       : '';
   }

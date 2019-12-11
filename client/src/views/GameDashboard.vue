@@ -3,8 +3,14 @@
     <MasterComponent />
     <ConfirmationModal />
     <CardModal />
+    <Notification
+      v-for="(notification, index) in notifications"
+      :index="index"
+      :length="notifications.length"
+      :key="index"
+      :message="notification"
+    />
     <BRow class="board reset">
-      <Notification v-for="(notification, index) in notifications" :index='index' :length='notifications.length' :key='index' :message='notification'/>
       <BCol cols="2" class="left reset">
         <ContainerLeft />
       </BCol>
@@ -53,7 +59,7 @@ import Notification from '@/components/gamedashboard/Notification.vue';
   }
 })
 export default class GameDashboard extends Vue {
-  get notifications(){
+  get notifications() {
     return this.$store.state.activeNotifications;
   }
 }

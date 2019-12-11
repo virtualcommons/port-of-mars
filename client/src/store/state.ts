@@ -117,5 +117,5 @@ export const initialStoreState: State = {
 
   activeNotifications: [],
 
-  eventView: EventClientView.EVENT_TEST
+  eventView: EventClientView.VOTE_FOR_PLAYER_SINGLE
 };

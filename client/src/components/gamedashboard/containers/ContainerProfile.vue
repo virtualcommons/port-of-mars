@@ -42,9 +42,8 @@ export default class ContainerProfile extends Vue {
 }
 
 .profile-frame-info {
-  padding-bottom: 1rem;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
 }
 

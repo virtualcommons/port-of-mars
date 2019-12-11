@@ -12,7 +12,7 @@
         <img :src="require(`@/assets/iconsSVG/${investment}.svg`)" alt="investment" />
       </p>
     </div>
-    <p class="cm-accomplishment-investments-title">( <span>Cost</span> )</p>
+    <p class="cm-accomplishment-investments-title"><span>Cost</span></p>
     <button class="cm-accomplishment-purchase-button" @click="handlePurchase">
       {{ buyButton }}
     </button>
@@ -21,8 +21,8 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import {canPurchaseAccomplishment} from "shared/validation";
-import {AccomplishmentData} from "shared/types";
+import { canPurchaseAccomplishment } from 'shared/validation';
+import { AccomplishmentData } from 'shared/types';
 
 @Component({})
 export default class CardAccomplishmentView extends Vue {
@@ -41,14 +41,13 @@ export default class CardAccomplishmentView extends Vue {
     return canPurchaseAccomplishment(this.cardData, this.$tstore.getters.player.inventory);
   }
 
-  get buyButton(){
+  get buyButton() {
     this.opacity = 'opacity:100%';
     const b = this.canBuy;
     return b ? 'Purchase accomplishment' : 'You cannot purchase this';
   }
 
-  handlePurchase() {
-  }
+  handlePurchase() {}
 }
 </script>
 

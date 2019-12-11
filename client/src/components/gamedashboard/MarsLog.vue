@@ -90,6 +90,10 @@ export default class MarsLog extends Vue {
   overflow: auto;
 }
 
+.marslog-message:last-child {
+  margin-bottom: 0;
+}
+
 .marslog-message-category {
   margin: 0;
   color: var(--space-orange);

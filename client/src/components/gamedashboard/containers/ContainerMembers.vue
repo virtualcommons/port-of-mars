@@ -23,9 +23,9 @@ import Member from '@/components/gamedashboard/Member.vue';
 })
 export default class ContainerMembers extends Vue {
   get members() {
-    if (this.$store.state.playerRole !== '') {
+    if (this.$store.state.role !== '') {
       return ['Researcher', 'Pioneer', 'Curator', 'Entrepreneur', 'Politician'].filter(
-        name => name !== this.$store.state.playerRole
+        name => name !== this.$store.state.role
       );
     }
     return ['Researcher', 'Pioneer', 'Curator', 'Entrepreneur', 'Politician'].filter(
