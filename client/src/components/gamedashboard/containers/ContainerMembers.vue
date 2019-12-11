@@ -2,10 +2,10 @@
   <div class="container-members v-step-17">
     <Member
       class="v-step-18"
-      v-for="member in members"
-      :key="member"
-      :playerRole="member"
-      :playerScore="10"
+      v-for="(player, role) in otherPlayers"
+      :key="role"
+      :playerRole="role"
+      :playerScore="player.victoryPoints"
       :memberNotificationTradeCount="1"
       :memberNotificationFinished="true"
     />
@@ -22,15 +22,8 @@ import Member from '@/components/gamedashboard/Member.vue';
   }
 })
 export default class ContainerMembers extends Vue {
-  get members() {
-    if (this.$store.state.playerRole !== '') {
-      return ['Researcher', 'Pioneer', 'Curator', 'Entrepreneur', 'Politician'].filter(
-        name => name !== this.$store.state.playerRole
-      );
-    }
-    return ['Researcher', 'Pioneer', 'Curator', 'Entrepreneur', 'Politician'].filter(
-      name => name !== 'Curator'
-    );
+  get otherPlayers() {
+    return this.$tstore.getters.otherPlayers;
   }
 }
 </script>

@@ -1,5 +1,7 @@
-import {State} from "@/store/state";
+import {PlayerClientData, PlayerClientSet, State} from "@/store/state";
 import { InvestmentTypes } from "@/models/InvestmentsData";
+import * as _ from 'lodash'
+import {Role, ROLES} from "shared/types";
 
 export default {
   /**
@@ -14,5 +16,15 @@ export default {
 
   player(state: State) {
     return state.players[state.role];
+  },
+
+  otherPlayers(state: State) {
+    let op: Partial<PlayerClientSet> = {};
+    for (const role of ROLES) {
+      if (role !== state.role) {
+        op[role] = state.players[role];
+      }
+    }
+    return op;
   }
 };

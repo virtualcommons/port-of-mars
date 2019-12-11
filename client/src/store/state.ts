@@ -22,7 +22,7 @@ export interface PlayerClientData extends PlayerData {
   pendingInvestments: InvestmentData;
 }
 
-type PlayerClientSet = { [role in Role]: PlayerClientData };
+export type PlayerClientSet = { [role in Role]: PlayerClientData };
 
 function defaultPlayerClientSet(): PlayerClientSet {
   return {
