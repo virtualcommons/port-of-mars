@@ -1,4 +1,4 @@
-import {GameState, AccomplishmentSet, Player} from "@/state";
+import {GameState, AccomplishmentSet, Player} from "@/game/state";
 import {CURATOR, PIONEER, RESEARCHER} from "shared/types";
 import {getAccomplishmentByID, getAccomplishmentIDs} from "@/repositories/Accomplishment";
 import * as _ from 'lodash'

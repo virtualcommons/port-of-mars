@@ -2,7 +2,7 @@ import http from "http";
 import express from "express";
 import cors from "cors";
 import { Server } from "colyseus";
-import {GameRoom} from "@/rooms/game";
+import {GameRoom} from "@/game/room";
 import * as path from "path";
 
 const port = Number(process.env.PORT || 2567);

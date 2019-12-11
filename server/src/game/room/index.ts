@@ -1,11 +1,11 @@
 import {Client, Room} from "colyseus";
 import {Requests} from "shared/requests"
 import {Responses} from "shared/responses"
-import {GameState, Player} from "@/state";
-import {ResetGameCmd, SendChatMessageCmd, SetNextPhaseCmd, SetPlayerReadinessCmd, TimeInvestmentCmd} from "@/commands";
-import {Game, PlayerReadiness} from "@/rooms/types";
+import {GameState, Player} from "@/game/state";
+import {ResetGameCmd, SendChatMessageCmd, SetNextPhaseCmd, SetPlayerReadinessCmd, TimeInvestmentCmd} from "@/game/commands";
+import {Game, PlayerReadiness} from "@/game/room/types";
 import {CURATOR, Phase, Role, ROLES} from "shared/types";
-import {Command} from "@/commands/types";
+import {Command} from "@/game/commands/types";
 import {
   LeftDiscardPhase,
   LeftInvestmentPhase,
@@ -13,8 +13,8 @@ import {
   LeftPurchasePhase,
   LeftTradePhase,
   PlayerJoined, StateSnapshotTaken
-} from "@/events";
-import {GameEvent} from "@/events/types";
+} from "@/game/events";
+import {GameEvent} from "@/game/events/types";
 
 export class GameRoom extends Room<GameState> implements Game {
   maxClients = 5;

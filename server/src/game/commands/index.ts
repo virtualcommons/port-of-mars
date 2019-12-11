@@ -1,12 +1,12 @@
 import * as req from "shared/requests";
 import {ChatMessageData, InvestmentData, Role} from "shared/types";
-import {GameState, Player} from "@/state";
-import {BoughtAccomplishment, SentChatMessage, TimeInvested} from "@/events";
+import {GameState, Player} from "@/game/state";
+import {BoughtAccomplishment, SentChatMessage, TimeInvested} from "@/game/events";
 import {getAccomplishmentByID} from "@/repositories/Accomplishment";
 import {Client} from "colyseus";
-import {Game} from "@/rooms/types";
-import {Command} from "@/commands/types";
-import {GameEvent} from "@/events/types";
+import {Game} from "@/game/room/types";
+import {Command} from "@/game/commands/types";
+import {GameEvent} from "@/game/events/types";
 
 export class SendChatMessageCmd implements Command {
   constructor(private message: string, private game: Game, private player: Player) {

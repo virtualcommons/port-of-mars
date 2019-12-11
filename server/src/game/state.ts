@@ -23,7 +23,7 @@ import _ from "lodash";
 import {getRandomIntInclusive} from "@/util";
 import {getAccomplishmentByID, getAccomplishmentIDs} from "@/repositories/Accomplishment";
 import {getAllMarsEvents, getMarsEventByID} from "@/repositories/MarsEvents";
-import {GameEvent} from "@/events/types";
+import {GameEvent} from "@/game/events/types";
 
 export class ChatMessage extends Schema implements ChatMessageData {
   constructor(msg: ChatMessageData) {

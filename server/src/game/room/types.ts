@@ -1,8 +1,8 @@
 import {Client, Room} from "colyseus";
-import {GameState, Player} from "@/state";
+import {GameState, Player} from "@/game/state";
 import {Responses} from "shared/responses";
 import {Role} from "shared/types";
-import {GameEvent} from "@/events/types";
+import {GameEvent} from "@/game/events/types";
 
 export type PlayerReadiness = { [role in Role]: boolean }
 

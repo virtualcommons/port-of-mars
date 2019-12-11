@@ -1,6 +1,6 @@
 import {AccomplishmentData, ChatMessageData, InvestmentData, MarsEventData, Phase, Role} from "shared/types";
-import {ChatMessage, GameState, MarsEvent, Player} from "@/state";
-import {GameEvent} from "@/events/types";
+import {ChatMessage, GameState, MarsEvent, Player} from "@/game/state";
+import {GameEvent} from "@/game/events/types";
 
 abstract class GameEventWithData implements GameEvent {
   abstract kind: string;
