@@ -54,7 +54,7 @@ export default class ContainerEvents extends Vue {
   padding: 0.5rem;
   margin: 0;
   color: var(--space-white);
-  border: 0.125rem solid var(--space-white-opaque-2);
+  /* border: 0.125rem solid var(--space-white-opaque-2); */
 }
 
 .row-events {

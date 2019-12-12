@@ -1,5 +1,5 @@
 <template>
-    <BRow class="row-bottom">
+    <BRow class="row-investments">
       <BCol class="container-bottom-investments" cols="7">
         <ContainerInvestments />
       </BCol>
@@ -28,16 +28,15 @@ export default class ContainerBottom extends Vue {}
 </script>
 
 <style scoped>
-.row-bottom {
+.row-investments {
   height: 100%;
   width: 100%;
   padding: 0;
-  border: 0.125rem solid var(--space-white-opaque-2);
   margin: 0;
 }
 
 .container-bottom-investments,
-.container-bottom-accomplishments{
+.container-bottom-accomplishments {
   height: 100%;
   width: 100%;
   padding: 0;

@@ -21,7 +21,6 @@ export default class ContainerDefault extends Vue {}
   width: 100%;
   max-width: none;
   color: var(--space-white);
-  border: 0.125rem solid var(--space-white-opaque-2);
   align-content: center;
 }
 
