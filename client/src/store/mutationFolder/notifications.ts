@@ -24,6 +24,7 @@ export default {
     state.marsLog.addEntry(data);
   },
   CREATE_NOTIFICATION(state: State, payload:string) {
+
     state.activeNotifications.push(payload);
   }
 }

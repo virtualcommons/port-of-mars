@@ -1,5 +1,5 @@
 <template>
-  <BContainer class="container-events">
+  <BContainer class="container-events" cols="12">
     <BRow class="row-events">
       <BCol class="events-info" cols="3">
         <BRow class="events-info-topbar">
@@ -54,6 +54,7 @@ export default class ContainerEvents extends Vue {
   padding: 0.5rem;
   margin: 0;
   color: var(--space-white);
+  border: 0.125rem solid var(--space-white-opaque-2);
 }
 
 .row-events {

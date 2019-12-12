@@ -95,9 +95,10 @@ export function applyServerResponses<T>(room: Room, store: TStore) {
       if (change.field === 'upkeep') {
         const upkeep: number = change.value;
         store.commit('SET_UPKEEP', upkeep);
-        if (upkeep < 100) {
-          store.commit('ADD_TO_MARS_LOG', 'upkeep has dropped by 25!');
-          store.commit('CREATE_NOTIFICATION', `ohmygod we're all gonna dieeee!`);
+        
+        if(upkeep < 100) {
+          store.commit('CREATE_NOTIFICATION',`ohmygod we're all gonna dieeee!`);
+          store.commit('ADD_TO_MARS_LOG','upkeep has dropped by 25!')
         }
       }
     });

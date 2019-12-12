@@ -36,40 +36,30 @@ import { Vue, Inject, Component } from 'vue-property-decorator';
 import VueTour from 'vue-tour';
 import TourModal from '@/tutorial/TourModal.vue';
 import { RequestAPI } from '@/api/request';
-
 require('vue-tour/dist/vue-tour.css');
-
-
 Vue.use(VueTour);
-
 @Component({
   name: 'tutorial-layout',
   components: {
     TourModal,
   }
 })
-
 export default class TutorialLayout extends Vue {
   @Inject()
   readonly $api!: RequestAPI;
-
   // class for the active step element
   TOUR_ACTIVE_CLASS: string = 'tour-active';
-
   // class to show tour is active for click events
   BODY_TOUR: string = 'in-tour';
-
   tourCallbacks = {
     onStart: this.startTourCallback,
     onPreviousStep: this.previousStepCallback,
     onNextStep: this.nextStepCallback,
     onStop: this.stopTourCallback,
   };
-
   tourOptions = {
     // useKeyboardNavigation: false,
   }
-
   steps = [
     {
       //  gamedashboard > containers > ContainerUpkeep.vue
@@ -271,7 +261,6 @@ export default class TutorialLayout extends Vue {
       }
     },
   ];
-
   /**
    * showModal() method
    * Show tour modal to introduce tour.
@@ -280,7 +269,6 @@ export default class TutorialLayout extends Vue {
   showModal() {
     this.$bvModal.show('bv-modal');
   }
-
   /**
    * startTourOnHideModal() method
    * Start tutorial when user closes intro tour modal.
@@ -289,62 +277,46 @@ export default class TutorialLayout extends Vue {
   startTourOnHideModal() {
     this.$tours.gameTour.start();
   }
-
   startTourCallback() {
     const currentStepElement = document.querySelector(this.steps[ 0 ].target);
-
     // add in-tour class to body
     document.body.classList.add(this.BODY_TOUR);
-
     // add active class for first step
     currentStepElement.classList.add(this.TOUR_ACTIVE_CLASS);
-
     // go to next events phase 5 seconds after tour starts
     setTimeout(() => {this.$api.setNextPhase()}, 6500);
   }
-
   previousStepCallback(currentStep: any) {
     const currentStepElement = document.querySelector(this.steps[currentStep].target);
     const previousStepElement = document.querySelector(this.steps[currentStep - 1].target);
-
     // remove active step from current step
     currentStepElement.classList.remove(this.TOUR_ACTIVE_CLASS);
-
     // add active class to previous step
     previousStepElement.classList.add(this.TOUR_ACTIVE_CLASS);
-
     console.log(`[Vue Tour] A custom previousStep callback has been called on step
                 ${currentStep + 1}`);
-
     if (currentStep === 6) {
       this.$root.$emit('openEvent');
     }
 
   }
-
   nextStepCallback(currentStep: any) {
     const currentStepElement = document.querySelector(this.steps[currentStep].target);
     const nextStepElement = document.querySelector(this.steps[currentStep + 1].target);
-
     // remove active step from current step
     currentStepElement.classList.remove(this.TOUR_ACTIVE_CLASS);
-
     // add active step to next step
     nextStepElement.classList.add(this.TOUR_ACTIVE_CLASS);
-
     console.log(`[Vue Tour] A custom nextStep callback has been called on step
                 ${currentStep + 1}`);
-
     // open event view im BottomContainer
     if (currentStep === 2) {
       this.$root.$emit('openEvent');
     }
-
     // close event view in BottomContainer
     if (currentStep === 5) {
       this.$root.$emit('closeEvent');
     }
-
     if (currentStep === 6) {
       this.$api.setNextPhase();
     }
@@ -353,15 +325,12 @@ export default class TutorialLayout extends Vue {
       this.$api.setNextPhase();
     }
   }
-
   stopTourCallback(currentStep: any) {
     // remove in-tour from body
     document.body.classList.remove(this.BODY_TOUR);
-
     // remove active class from body
     document.querySelector(`.${this.TOUR_ACTIVE_CLASS}`).classList.remove(this.TOUR_ACTIVE_CLASS);
   }
-
   /**
    * mounted() method
    * Show tour introductory modal.
@@ -378,26 +347,21 @@ export default class TutorialLayout extends Vue {
   height: 100% !important;
   width: 100% !important;
 }
-
 /* custom tour css: highlight an element */
 @keyframes shadow-pulse {
   0% {
     box-shadow: 0 0 0 0px rgba(255, 255, 255, 0.2);
   }
-
   100% {
     box-shadow: 0 0 0 35px rgba(0, 0, 0, 0);
   }
 }
-
 body .in-tour {
   pointer-events: none;
 }
-
 .v-step {
   z-index: 9999;
 }
-
 .tour-active {
   position: relative;
   z-index: 999;
@@ -405,9 +369,7 @@ body .in-tour {
   box-shadow: 0 0 0 10000px rgba(0, 0, 0, 0.5); /* outer black */
   /* animation: shadow-pulse 2s infinite; */
 }
-
 .tour-active, .v-tour {
   pointer-events: auto;
 }
-
 </style>

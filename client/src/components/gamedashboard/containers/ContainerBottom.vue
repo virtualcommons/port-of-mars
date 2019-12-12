@@ -1,17 +1,17 @@
 <template>
   <BContainer class="container-bottom">
     <BRow class="row-bottom">
-      <BCol class="container-bottom-investments" cols="7" v-if="currentView === 'Default'">
-        <ContainerInvestments />
+      <BCol class="container-bottom container-bottom-view" cols="12" v-if="gamePhase == phase.invest">
+        <InvestmentsPane />
       </BCol>
-      <BCol class="container-bottom-accomplishments" cols="5" v-if="currentView === 'Default'">
-        <ContainerAccomplishments />
-      </BCol>
-      <BCol class="container-bottom-events v-step-4" cols="12" v-if="currentView === 'Events'">
+      <BCol class="container-bottom container-bottom-view" cols="12" v-else-if="gamePhase == phase.events">
         <ContainerEvents />
       </BCol>
-      <BCol class="container-bottom-trade" cols="12" v-if="currentView === 'Trade'">
-        <ContainerTrade />
+      <BCol class="container-bottom container-bottom-view" cols="12" v-else-if="gamePhase == phase.trade">
+        <ContainerTrade  />
+      </BCol>
+      <BCol class="container-bottom container-bottom-view" cols="12" v-else>
+        <ContainerDefault/>
       </BCol>
     </BRow>
   </BContainer>
@@ -24,7 +24,10 @@ import ContainerInvestments from '@/components/gamedashboard/containers/Containe
 import ContainerAccomplishments from '@/components/gamedashboard/containers/ContainerAccomplishments.vue';
 import ContainerEvents from '@/components/gamedashboard/containers/ContainerEvents.vue';
 import ContainerTrade from '@/components/gamedashboard/containers/ContainerTrade.vue';
-import { PHASE_LABELS } from 'shared/types';
+import InvestmentsPane from '@/components/gamedashboard/containers/GameboardPanes/InvestmentsPane.vue';
+import ContainerDefault from '@/components/gamedashboard/containers/ContainerDefaultView.vue';
+
+import { Phase } from "shared/types";
 
 @Component({
   components: {
@@ -34,34 +37,20 @@ import { PHASE_LABELS } from 'shared/types';
     ContainerInvestments,
     ContainerAccomplishments,
     ContainerEvents,
-    ContainerTrade
+    ContainerTrade,
+    ContainerDefault,
+    InvestmentsPane,
   }
 })
 export default class ContainerBottom extends Vue {
-  // private currentView: string = 'default';
-
-  get currentView() {
-    switch (PHASE_LABELS[this.$store.state.phase]) {
-      case 'Events':
-        return 'Events';
-        break;
-      case 'Trade':
-        return 'Trade';
-        break;
-      default:
-        return 'Default';
-        break;
-    }
+  get phase(){
+    return Phase;
   }
 
-  mounted() {
-    this.$root.$on('openEvent', (data: string) => {
-      this.currentView = 'event';
-    });
-    this.$root.$on('closeEvent', (data: string) => {
-      this.currentView = 'default';
-    });
+  get gamePhase(){
+    return this.$store.state.phase;
   }
+
 }
 </script>
 
@@ -82,10 +71,7 @@ export default class ContainerBottom extends Vue {
   margin: 0;
 }
 
-.container-bottom-investments,
-.container-bottom-accomplishments,
-.container-bottom-events,
-.container-bottom-trade {
+.container-bottom-view {
   height: 100%;
   width: 100%;
   padding: 0;

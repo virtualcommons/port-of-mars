@@ -16,3 +16,4 @@ export default {
     state.players[payload.role].timeBlocks = payload.data;
   }
 }
+

@@ -12,6 +12,7 @@ describe('a Researcher Player Accomplishment', () => {
     expect(p.inventory.science).toBe(-accomplishment.science);
     expect(p.victoryPoints).toBe(accomplishment.victoryPoints);
   });
+});
 
   it('cannot be bought if their roles do not match', () => {
     const accomplishment = getAccomplishmentByID(PIONEER, 21);
