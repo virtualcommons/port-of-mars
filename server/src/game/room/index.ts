@@ -2,16 +2,18 @@ import {Client, Room} from "colyseus";
 import {Requests} from "shared/requests"
 import {Responses} from "shared/responses"
 import {GameState, Player} from "@/game/state";
-import {ResetGameCmd, SendChatMessageCmd, SetNextPhaseCmd, SetPlayerReadinessCmd, TimeInvestmentCmd} from "@/game/commands";
+import {
+  BuyAccomplishmentCmd, DiscardAccomplishmentCmd,
+  ResetGameCmd,
+  SendChatMessageCmd,
+  SetNextPhaseCmd,
+  SetPlayerReadinessCmd,
+  TimeInvestmentCmd
+} from "@/game/commands";
 import {Game, PlayerReadiness} from "@/game/room/types";
 import {CURATOR, Phase, Role, ROLES} from "shared/types";
 import {Command} from "@/game/commands/types";
 import {
-  LeftDiscardPhase,
-  LeftInvestmentPhase,
-  LeftMarsEventPhase, LeftPreGamePhase,
-  LeftPurchasePhase,
-  LeftTradePhase,
   PlayerJoined, StateSnapshotTaken
 } from "@/game/events";
 import {GameEvent} from "@/game/events/types";
@@ -55,32 +57,8 @@ export class GameRoom extends Room<GameState> implements Game {
       case "set-player-readiness": return SetPlayerReadinessCmd.fromReq(r, this, client);
       case "reset-game": return ResetGameCmd.fromReq(r, this);
       case "set-time-investment": return TimeInvestmentCmd.fromReq(r, this, client);
-    }
-  }
-
-  getLeftPhaseEvent(): GameEvent | undefined {
-    const phase = this.state.phase;
-    if (phase === Phase.discard) {
-      const upkeep = this.state.nextRoundUpkeep();
-      const cards = this.state.marsEventDeck.peek(upkeep);
-      return new LeftDiscardPhase(cards);
-    }
-
-    switch (phase) {
-      case Phase.pregame: return new LeftPreGamePhase();
-      case Phase.events: return new LeftMarsEventPhase();
-      case Phase.invest: return new LeftInvestmentPhase();
-      case Phase.trade: return new LeftTradePhase();
-      case Phase.purchase: return new LeftPurchasePhase();
-    }
-  }
-
-  gameLoop() {
-    if (this.state.allPlayersAreReady) {
-      const nextPhaseEvent = this.getLeftPhaseEvent();
-      if (nextPhaseEvent) {
-        this.state.apply(nextPhaseEvent);
-      }
+      case "buy-accomplishment-card": return BuyAccomplishmentCmd.fromReq(r, this, client);
+      case "discard-accomplishment-card": return DiscardAccomplishmentCmd.fromReq(r, this, client);
     }
   }
 

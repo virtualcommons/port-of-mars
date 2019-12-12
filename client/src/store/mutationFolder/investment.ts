@@ -1,6 +1,13 @@
 import {BaseInvestmentCosts} from '@/models';
 import {State} from "@/store/state";
-import {Investment, InvestmentData, Resource, ResourceCostData, Role} from "shared/types";
+import {
+  Investment,
+  InvestmentData,
+  Resource,
+  ResourceCostData,
+  RESOURCES,
+  Role
+} from "shared/types";
 import {Vue} from "vue-property-decorator";
 
 export default {
@@ -11,7 +18,9 @@ export default {
     state.players[payload.role].costs = payload.data;
   },
   SET_INVENTORY(state: State, payload: { data: InvestmentData, role: Role }) {
-    Vue.set(state.players[payload.role], 'inventory', payload.data);
+    for (const resource of RESOURCES) {
+      state.players[payload.role].inventory[resource] = payload.data[resource];
+    }
   },
   SET_TIME_BLOCKS(state: State, payload: { data: number, role: Role }) {
     state.players[payload.role].timeBlocks = payload.data;

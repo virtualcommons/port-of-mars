@@ -4,9 +4,9 @@ import {
   Requests,
   BuyAccomplishmentCardData,
   SetTimeInvestmentData,
-  SetNextPhaseData, ResetGameData
+  SetNextPhaseData, ResetGameData, DiscardAccomplishmentCardData
 } from 'shared/requests';
-import { InvestmentData } from 'shared/types';
+import {AccomplishmentData, InvestmentData} from 'shared/types';
 
 export class RequestAPI {
   constructor(public room: Room) {}
@@ -32,6 +32,16 @@ export class RequestAPI {
 
   public investTimeBlocks(investment: InvestmentData) {
     const msg: SetTimeInvestmentData = {...investment, kind: 'set-time-investment'};
+    this.send(msg);
+  }
+
+  public purchaseAccomplishment(accomplishment: AccomplishmentData) {
+    const msg: BuyAccomplishmentCardData = { kind: "buy-accomplishment-card", id: accomplishment.id };
+    this.send(msg);
+  }
+
+  public discardAccomplishment(id: number) {
+    const msg: DiscardAccomplishmentCardData = { kind: "discard-accomplishment-card", id };
     this.send(msg);
   }
 }

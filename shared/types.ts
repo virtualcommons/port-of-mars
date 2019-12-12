@@ -30,6 +30,7 @@ export type ResourceCostData = InvestmentData
 export type Resource = keyof ResourceAmountData
 export type Investment = keyof InvestmentData;
 export const INVESTMENTS: Array<Investment> = ['culture', 'finance', 'government', 'legacy', "science", 'upkeep'];
+export const RESOURCES: Array<Resource> = ['culture', 'finance', 'government', 'legacy', "science"];
 
 export enum Phase {
   pregame,

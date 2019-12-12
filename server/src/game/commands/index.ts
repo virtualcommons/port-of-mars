@@ -1,7 +1,18 @@
 import * as req from "shared/requests";
-import {ChatMessageData, InvestmentData, Role} from "shared/types";
-import {GameState, Player} from "@/game/state";
-import {BoughtAccomplishment, SentChatMessage, TimeInvested} from "@/game/events";
+import {InvestmentData, Phase} from "shared/types";
+import {MarsEvent, Player} from "@/game/state";
+import {
+  BoughtAccomplishment,
+  DiscardedAccomplishment,
+  EnteredDefeatPhase,
+  EnteredDiscardPhase,
+  EnteredInvestmentPhase, EnteredMarsEventPhase,
+  EnteredPurchasePhase,
+  EnteredTradePhase,
+  EnteredVictoryPhase,
+  SentChatMessage,
+  TimeInvested
+} from "@/game/events";
 import {getAccomplishmentByID} from "@/repositories/Accomplishment";
 import {Client} from "colyseus";
 import {Game} from "@/game/room/types";
@@ -46,6 +57,21 @@ export class BuyAccomplishmentCmd implements Command {
   }
 }
 
+export class DiscardAccomplishmentCmd implements Command {
+  constructor(private id: number, private game: Game, private client: Client) {}
+
+  static fromReq(r: req.DiscardAccomplishmentCardData, game: Game, client: Client) {
+    return new DiscardAccomplishmentCmd(r.id, game, client);
+  }
+
+  execute(): Array<GameEvent> {
+    const p = this.game.getPlayerByClient(this.client);
+    const role = p.role;
+    return [new DiscardedAccomplishment({id: this.id, role})]
+  }
+}
+
+
 export class TimeInvestmentCmd implements Command {
   constructor(private data: InvestmentData, private game: Game, private player: Player) {
   }
@@ -88,11 +114,32 @@ export class SetNextPhaseCmd implements Command {
   }
 
   execute(): Array<GameEvent> {
-    const e = this.game.getLeftPhaseEvent();
-    if (e) {
-      return [e]
+    switch (this.game.state.phase) {
+      case Phase.defeat: return [];
+      case Phase.events: return [new EnteredInvestmentPhase()];
+      case Phase.invest: return [new EnteredTradePhase()];
+      case Phase.trade: return [new EnteredPurchasePhase()];
+      case Phase.purchase: return [new EnteredDiscardPhase()];
+      case Phase.discard: {
+        const game = this.game.state;
+        const upkeep = game.nextRoundUpkeep();
+        const round = game.round + 1;
+
+        if (upkeep <= 0) {
+          game.phase = Phase.defeat;
+          return [new EnteredDefeatPhase()];
+        }
+
+        if (round >= game.maxRound) {
+          game.phase = Phase.victory;
+          return [new EnteredVictoryPhase()];
+        }
+
+        return [new EnteredMarsEventPhase()];
+      }
+      case Phase.pregame: return [new EnteredInvestmentPhase()];
+      case Phase.victory: return [];
     }
-    return [];
   }
 }
 

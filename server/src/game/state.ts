@@ -356,11 +356,24 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
     }
   }
 
-  draw() {
-    const index = getRandomIntInclusive(0, this.deck.length - 1);
-    const id = this.deck[index];
-    this.deck.splice(index, 1);
-    this.purchasable.push(new Accomplishment(getAccomplishmentByID(this.role, id)));
+  discard(id: number) {
+    const index = this.purchasable.findIndex(acc => acc.id !== id);
+    if (index < 0) {
+       return;
+    }
+    this.purchasable.splice(index, 1);
+  }
+
+  peek(): number {
+    return this.deck[this.position];
+  }
+
+  update() {
+    let pos = this.position + 1;
+    if (pos > this.deck.length) {
+      pos = pos % this.deck.length;
+    }
+    this.position = pos;
   }
 
   isPurchasable(accomplishment: AccomplishmentData) {

@@ -1,13 +1,13 @@
 <template>
   <BContainer class="container-bottom">
     <BRow class="row-bottom">
-      <BCol class="container-bottom container-bottom-view" cols="12" v-if="gamePhase == phase.invest">
+      <BCol class="container-bottom container-bottom-view" cols="12" v-if="[phase.invest, phase.discard].includes(gamePhase)">
         <InvestmentsPane />
       </BCol>
-      <BCol class="container-bottom container-bottom-view" cols="12" v-else-if="gamePhase == phase.events">
+      <BCol class="container-bottom container-bottom-view" cols="12" v-else-if="gamePhase === phase.events">
         <ContainerEvents />
       </BCol>
-      <BCol class="container-bottom container-bottom-view" cols="12" v-else-if="gamePhase == phase.trade">
+      <BCol class="container-bottom container-bottom-view" cols="12" v-else-if="gamePhase === phase.trade">
         <ContainerTrade  />
       </BCol>
       <BCol class="container-bottom container-bottom-view" cols="12" v-else>

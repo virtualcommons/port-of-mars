@@ -23,7 +23,7 @@ import { Phase } from "shared/types";
 @Component({})
 export default class ConfirmationModal extends Vue {
   setStyle: string = 'none';
-  action = '';
+  action: any = '';
   type = '';
   text = '';
 
@@ -44,21 +44,8 @@ export default class ConfirmationModal extends Vue {
   }
 
   handleYes() {
-    // this.$store.dispatch('setPlayerFinished', true).then(() => {
-    //   this.setStyle = 'none';
-    // });
-
-    // REFACTOR - ON NICK'S COMPUTER
-    if(this.type=='nextRound'){
-      if(this.$store.state.gameState == Phase.invest){
-        this.$store.state.localInvestments.confirmInvestments();
-        this.$api.investTimeBlocks(this.$store.state.localInvestments.returnPersistentInventory);
-      }
-            
-      this.$api.setNextPhase();
-    }
-    if(this.type == 'discardAccomplishment'){
-      this.$store.dispatch('discardAccomplishment',this.action);
+    switch (this.type) {
+      case 'discardAccomplishment': this.$api.discardAccomplishment(this.action);
     }
     this.setStyle = 'none';
   }

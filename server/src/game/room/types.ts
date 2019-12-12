@@ -10,6 +10,4 @@ export interface Game extends Room<GameState> {
   safeSend(client: Client, msg: Responses): void
 
   getPlayerByClient(client: Client): Player
-
-  getLeftPhaseEvent(): GameEvent | undefined
 }

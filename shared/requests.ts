@@ -10,6 +10,11 @@ export interface BuyAccomplishmentCardData {
   id: number
 }
 
+export interface DiscardAccomplishmentCardData {
+  kind: 'discard-accomplishment-card'
+  id: number
+}
+
 export interface SetTimeInvestmentData extends InvestmentData {
   kind: 'set-time-investment'
 }
@@ -27,4 +32,11 @@ export interface ResetGameData {
   kind: 'reset-game'
 }
 
-export type Requests = SendChatMessageData | SetPlayerReadinessData | SetNextPhaseData | ResetGameData | SetTimeInvestmentData
+export type Requests =
+  SendChatMessageData |
+  SetPlayerReadinessData |
+  SetNextPhaseData |
+  ResetGameData |
+  SetTimeInvestmentData |
+  BuyAccomplishmentCardData |
+  DiscardAccomplishmentCardData

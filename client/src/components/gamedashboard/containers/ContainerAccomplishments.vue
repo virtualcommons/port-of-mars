@@ -30,7 +30,7 @@
           class="accomplishment-container"
           :style="{ width: setWidth }"
           v-for="accomplishment in purchasableAccomplishments"
-          :key="accomplishment.label"
+          :key="accomplishment.id"
         >
           <CardAccomplishment :accomplishment="accomplishment" />
           <button
@@ -46,7 +46,7 @@
       <BRow class="accomplishments-cards-inventory" v-if="activeView == 'inventory'">
         <CardAccomplishment
           v-for="accomplishment in boughtAccomplishments"
-          :key="accomplishment.label"
+          :key="accomplishment.id"
           :accomplishment="accomplishment"
         />
       </BRow>
@@ -74,11 +74,11 @@ export default class ContainerAccomplishments extends Vue {
   private setWidth = '100%';
 
   get purchasableAccomplishments() {
-    return this.$tstore.getters.player.accomplishment.purchasable;
+    return this.$store.getters.player.accomplishment.purchasable;
   }
 
   get boughtAccomplishments() {
-    return this.$tstore.getters.player.accomplishment.bought;
+    return this.$store.getters.player.accomplishment.bought;
   }
 
   get canDiscard() {
@@ -100,7 +100,7 @@ export default class ContainerAccomplishments extends Vue {
     this.$root.$emit('openConfirmation', {
       text: `Select 'Yes' if you want to draw another card.`,
       type: 'discardAccomplishment',
-      actionData: a.label
+      actionData: a.id
     });
   }
 }

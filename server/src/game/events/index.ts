@@ -1,6 +1,7 @@
 import {AccomplishmentData, ChatMessageData, InvestmentData, MarsEventData, Phase, Role, ROLES} from "shared/types";
-import {ChatMessage, GameState, MarsEvent, Player} from "@/game/state";
+import {Accomplishment, ChatMessage, GameState, MarsEvent, Player} from "@/game/state";
 import {GameEvent} from "@/game/events/types";
+import {getAccomplishmentByID} from "@/repositories/Accomplishment";
 
 abstract class GameEventWithData implements GameEvent {
   abstract kind: string;
@@ -59,6 +60,23 @@ export class BoughtAccomplishment extends GameEventWithData {
   }
 }
 
+export class DiscardedAccomplishment extends GameEventWithData {
+  kind = 'dicarded-accomplishment';
+
+  constructor(public data: {id: number, role: Role}) { super(); }
+
+  apply(game: GameState): void {
+    const accomplishmentData = game.players[this.data.role].accomplishment;
+    const newId = accomplishmentData.peek();
+    console.log(`replacing ${this.data.id} with ${newId}`);
+    const purchasable = accomplishmentData.purchasable;
+    const index = purchasable.findIndex(acc => acc.id === this.data.id);
+    const accomplishment = new Accomplishment(getAccomplishmentByID(this.data.role, newId));
+    accomplishmentData.update();
+    purchasable.splice(index, 1, accomplishment);
+  }
+}
+
 export class TimeInvested extends GameEventWithData {
   kind = 'time-blocks-invested';
 
@@ -88,25 +106,31 @@ abstract class KindOnlyGameEvent implements GameEvent {
   }
 }
 
-export class LeftPreGamePhase extends KindOnlyGameEvent {
-  kind = 'left-pre-game-phase';
+export class EnteredMarsEventPhase extends KindOnlyGameEvent {
+  kind = 'entered-mars-event-phase';
 
   apply(game: GameState): void {
-    game.phase = Phase.invest;
+    game.phase = Phase.events;
     game.round += 1;
+    game.upkeep = game.nextRoundUpkeep();
+    const cards = game.marsEventDeck.peek(game.upkeep);
+    const marsEvents = cards.map(e => new MarsEvent(e));
+    game.phase = Phase.events;
+    game.marsEvents.splice(0, game.marsEvents.length, ...marsEvents);
+    game.marsEventDeck.updatePosition(game.marsEvents.length);
   }
 }
 
-export class LeftMarsEventPhase extends KindOnlyGameEvent {
-  kind = 'left-mars-event-phase';
+export class EnteredInvestmentPhase extends KindOnlyGameEvent {
+  kind = 'entered-investment-phase';
 
   apply(game: GameState): void {
     game.phase = Phase.invest;
   }
 }
 
-export class LeftInvestmentPhase extends KindOnlyGameEvent {
-  kind = 'left-investment-phase';
+export class EnteredTradePhase extends KindOnlyGameEvent {
+  kind = 'entered-trade-phase';
 
   apply(game: GameState) {
     game.phase = Phase.trade;
@@ -117,49 +141,35 @@ export class LeftInvestmentPhase extends KindOnlyGameEvent {
   }
 }
 
-export class LeftTradePhase extends KindOnlyGameEvent {
-  kind = 'left-trade-phase';
+export class EnteredPurchasePhase extends KindOnlyGameEvent {
+  kind = 'entered-purchase-phase';
 
   apply(game: GameState): void {
     game.phase = Phase.purchase;
   }
 }
 
-export class LeftPurchasePhase extends KindOnlyGameEvent {
-  kind = 'left-purchase-phase';
+export class EnteredDiscardPhase extends KindOnlyGameEvent {
+  kind = 'entered-discard-phase';
 
   apply(game: GameState): void {
     game.phase = Phase.discard;
   }
 }
 
-export class LeftDiscardPhase extends GameEventWithData {
-  kind = 'left-discard-phase';
-
-  constructor(public marsEvents: Array<MarsEventData> = []) { super(); }
-
-  get data() {
-    return this.marsEvents;
-  }
+export class EnteredDefeatPhase extends KindOnlyGameEvent {
+  kind = 'entered-defeat-phase';
 
   apply(game: GameState): void {
-    game.upkeep = game.nextRoundUpkeep();
-    game.round += 1;
+    game.phase = Phase.defeat;
+  }
+}
 
-    if (game.upkeep <= 0) {
-      game.phase = Phase.defeat;
-      return;
-    }
+export class EnteredVictoryPhase extends KindOnlyGameEvent {
+  kind = 'entered-victory-phase';
 
-    if (game.round >= game.maxRound) {
-      game.phase = Phase.victory;
-      return;
-    }
-
-    const marsEvents = this.marsEvents.map(e => new MarsEvent(e));
-    game.phase = Phase.events;
-    game.marsEvents.splice(0, game.marsEvents.length, ...marsEvents);
-    game.marsEventDeck.updatePosition(this.marsEvents.length);
+  apply(game: GameState): void {
+    game.phase = Phase.victory;
   }
 }
 

@@ -12,7 +12,6 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { InvestmentsModel } from '../../models/InvestmentsData';
 import {Resource} from "shared/types";
 
 @Component({})
