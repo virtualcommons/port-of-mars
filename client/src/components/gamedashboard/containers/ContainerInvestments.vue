@@ -74,7 +74,7 @@ export default class ContainerInvestments extends Vue {
       msg.cost > 0 &&
       msg.units >= 0
     ) {
-      this.$tstore.commit('SET_INVESTMENT_AMOUNT', {
+      this.$tstore.commit('SET_PENDING_INVESTMENT_AMOUNT', {
         investment: msg.name,
         units: msg.units,
         role: this.$tstore.state.role

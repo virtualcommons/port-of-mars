@@ -39,6 +39,9 @@ function applyPlayerResponses(player: any, store: TStore) {
         case "victoryPoints":
           store.commit('SET_VICTORY_POINTS', payload);
           break;
+        case "pendingInvestments":
+          store.commit('SET_PENDING_INVESTMENTS', payload);
+          break;
       }
     });
   };
@@ -48,7 +51,7 @@ function applyPlayerResponses(player: any, store: TStore) {
 export function applyServerResponses<T>(room: Room, store: TStore) {
   room.onStateChange.once((state: Schemify<GameData>) => {
     ROLES.forEach(role => applyPlayerResponses(state.players[role], store));
-    state.players.triggerAll();
+    (state.players as any).triggerAll();
   });
 
   room.onMessage((msg: Responses) => {

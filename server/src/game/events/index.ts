@@ -1,4 +1,4 @@
-import {AccomplishmentData, ChatMessageData, InvestmentData, MarsEventData, Phase, Role} from "shared/types";
+import {AccomplishmentData, ChatMessageData, InvestmentData, MarsEventData, Phase, Role, ROLES} from "shared/types";
 import {ChatMessage, GameState, MarsEvent, Player} from "@/game/state";
 import {GameEvent} from "@/game/events/types";
 
@@ -65,10 +65,7 @@ export class TimeInvested extends GameEventWithData {
   constructor(public data: {investment: InvestmentData, role: Role}) { super(); }
 
   apply(game: GameState): void {
-//     console.log(JSON.stringify(game.players[this.role].inventory));
-//     game.players[this.role].invest(this.data);
-//     console.log(JSON.stringify(game.players[this.role].inventory));
-    game.players[this.data.role].invest(this.data.investment);
+    game.players[this.data.role].pendingInvestments.fromJSON(this.data.investment);
   }
 }
 
@@ -113,6 +110,10 @@ export class LeftInvestmentPhase extends KindOnlyGameEvent {
 
   apply(game: GameState) {
     game.phase = Phase.trade;
+    for (const player of game.players) {
+      player.invest();
+      player.pendingInvestments.reset();
+    }
   }
 }
 
@@ -155,7 +156,6 @@ export class LeftDiscardPhase extends GameEventWithData {
       return;
     }
 
-    console.debug('entering mars event phase');
     const marsEvents = this.marsEvents.map(e => new MarsEvent(e));
     game.phase = Phase.events;
     game.marsEvents.splice(0, game.marsEvents.length, ...marsEvents);

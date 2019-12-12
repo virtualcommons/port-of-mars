@@ -5,7 +5,7 @@ import {
   ChatMessageData,
   CURATOR,
   ENTREPRENEUR,
-  GameData,
+  GameData, Investment,
   InvestmentData,
   MarsEventData,
   Phase,
@@ -13,7 +13,7 @@ import {
   PlayerData,
   PlayerSetData,
   POLITICIAN,
-  RESEARCHER,
+  RESEARCHER, Resource,
   ResourceAmountData,
   ResourceCostData,
   Role,
@@ -58,6 +58,67 @@ export class ChatMessage extends Schema implements ChatMessageData {
 
   @type('number')
   round: number;
+}
+
+class PendingInvestment extends Schema implements InvestmentData {
+  constructor() {
+    super();
+    const pendingInvestments = { ...PendingInvestment.defaults() };
+    this.culture = pendingInvestments.culture;
+    this.finance = pendingInvestments.finance;
+    this.government = pendingInvestments.government;
+    this.legacy = pendingInvestments.legacy;
+    this.science = pendingInvestments.science;
+    this.upkeep = pendingInvestments.upkeep;
+  }
+
+  static defaults(): InvestmentData {
+    return {
+      culture: 0,
+      finance: 0,
+      government: 0,
+      legacy: 0,
+      science: 0,
+      upkeep: 0
+    }
+  }
+
+  reset() {
+    Object.assign(this, PendingInvestment.defaults());
+  }
+
+  fromJSON(data: InvestmentData) {
+    Object.assign(this, data);
+  }
+
+  toJSON(): InvestmentData {
+    return {
+      culture: this.culture,
+      finance: this.finance,
+      government: this.government,
+      legacy: this.legacy,
+      science: this.science,
+      upkeep: this.upkeep
+    }
+  }
+
+  @type('number')
+  culture: number;
+
+  @type('number')
+  finance: number;
+
+  @type('number')
+  government: number;
+
+  @type('number')
+  legacy: number;
+
+  @type('number')
+  science: number;
+
+  @type('number')
+  upkeep: number;
 }
 
 class ResourceCosts extends Schema implements ResourceCostData {
@@ -385,6 +446,7 @@ export interface PlayerSerialized {
   contributedUpkeep: number
   victoryPoints: number
   inventory: ResourceAmountData
+  pendingInvestments: InvestmentData
 }
 
 export class Player extends Schema implements PlayerData {
@@ -415,7 +477,8 @@ export class Player extends Schema implements PlayerData {
       timeBlocks: this.timeBlocks,
       contributedUpkeep: this.contributedUpkeep,
       victoryPoints: this.victoryPoints,
-      inventory: this.inventory.toJSON()
+      inventory: this.inventory.toJSON(),
+      pendingInvestments: this.pendingInvestments.toJSON()
     };
   }
 
@@ -431,12 +494,17 @@ export class Player extends Schema implements PlayerData {
   @type("boolean")
   ready: boolean = false;
 
+  @type("number")
   timeBlocks: number = 10;
 
   contributedUpkeep: number = 0;
 
+  @type(ResourceInventory)
   inventory = new ResourceInventory();
 
+  @type(PendingInvestment)
+  pendingInvestments = new PendingInvestment();
+  
   @type("number")
   victoryPoints: number = 0;
 
@@ -462,9 +530,11 @@ export class Player extends Schema implements PlayerData {
     this.inventory.update(inv)
   }
 
-  invest(investment: InvestmentData) {
+  invest(investment?: InvestmentData) {
+    investment = investment ?? this.pendingInvestments;
     this.contributedUpkeep = investment.upkeep;
     this.inventory.update(investment);
+    console.log(this.inventory.toJSON())
   }
 }
 
@@ -669,12 +739,6 @@ export class GameState extends Schema implements GameData {
     for (const r of ROLES) {
       const p = this.players[r];
       p.contributedUpkeep = 0;
-    }
-  }
-
-  resetPlayerInvestmentPlans(): void {
-    for (const r of ROLES) {
-      const p = this.players[r];
     }
   }
 

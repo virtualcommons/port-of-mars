@@ -4,7 +4,7 @@
     <div class="profile-investments">
       <div v-for="investment in investments" class="profile-investment" :key="investment.name">
         <img :src="require(`@/assets/iconsSVG/${investment.name}.svg`)" alt="Investment" />
-        <p :style="style(investment)">{{ investment.units }}</p>
+        <p>{{ investment.units }}<span v-show="investment.pendingUnits >0">+<span :style="style(investment)">{{ investment.pendingUnits }}</span></span></p>
       </div>
     </div>
   </div>
@@ -18,8 +18,9 @@ import {Resource} from "shared/types";
 @Component({})
 export default class ProfileInvestments extends Vue {
   get investments() {
-    const inventory = this.$tstore.getters.player.inventory;
-    const pendingInventory = this.$tstore.getters.player.pendingInvestments;
+    const p = this.$tstore.getters.player;
+    const inventory = p.inventory;
+    const pendingInventory = p.pendingInvestments;
     return Object.keys(inventory).map(name => ({ name, units: inventory[name as Resource], pendingUnits: pendingInventory[name as Resource]}))
   }
 

@@ -1,5 +1,6 @@
 import {State} from "@/store/state";
-import {AccomplishmentSetData, Role} from "shared/types";
+import {AccomplishmentSetData, InvestmentData, Role} from "shared/types";
+import {Vue} from "vue-property-decorator";
 
 function SET_PLAYER_ROLE(state: State, payload: Role) {
   state.role = payload;
@@ -14,10 +15,14 @@ function SET_ACCOMPLISHMENTS(state: State, payload: { data: AccomplishmentSetDat
 function SET_VICTORY_POINTS(state: State, payload: { data: number, role: Role }) {
   state.players[payload.role].victoryPoints = payload.data;
 }
+function SET_PENDING_INVESTMENTS(state: State, payload: {data: InvestmentData, role: Role}) {
+  Vue.set(state.players[payload.role], 'pendingInvestments', payload.data);
+}
 
 export default {
   SET_PLAYER_ROLE,
   SET_READINESS,
   SET_ACCOMPLISHMENTS,
-  SET_VICTORY_POINTS
+  SET_VICTORY_POINTS,
+  SET_PENDING_INVESTMENTS
 }

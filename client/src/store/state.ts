@@ -72,7 +72,7 @@ function defaultInventory(role: Role): ResourceAmountData {
   };
 }
 
-function defaultPendingInvestment(): ResourceCostData {
+export function defaultPendingInvestment(): ResourceCostData {
   return {
     science: 0,
     government: 0,

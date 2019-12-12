@@ -13,15 +13,6 @@ export interface ChatMessageData {
   round: number
 }
 
-export interface ResourceCostData {
-  science: number
-  government: number
-  legacy: number
-  finance: number
-  culture: number
-  upkeep: number
-}
-
 export interface ResourceAmountData {
   science: number
   government: number
@@ -33,6 +24,8 @@ export interface ResourceAmountData {
 export interface InvestmentData extends ResourceAmountData {
   upkeep: number
 }
+
+export type ResourceCostData = InvestmentData
 
 export type Resource = keyof ResourceAmountData
 export type Investment = keyof InvestmentData;
@@ -179,6 +172,7 @@ export interface PlayerData {
   contributedUpkeep: number
   victoryPoints: number
   inventory: ResourceAmountData
+  pendingInvestments: ResourceAmountData
 }
 
 export type PlayerSetData = { [role in Role]: PlayerData }

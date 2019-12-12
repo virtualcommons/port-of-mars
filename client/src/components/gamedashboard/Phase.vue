@@ -1,12 +1,13 @@
+import {Phase} from "shared/types";
 <template>
   <div class="phase-component">
     <div>
       <p class="phase-title">Current Phase</p>
-      <p class="phase-current">{{ currentPhase }}</p>
+      <p class="phase-current">{{ label }}</p>
       <div v-if="btnVisibility">
         <button
           class="phase-donebtn v-step-14"
-          @click="handleClick"
+          @click="submitDone"
           :disabled="btnDisabled"
           type="button"
           name="phase complete button"
@@ -22,42 +23,54 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import {Component, Inject, Vue} from 'vue-property-decorator';
 import Clock from '@/components/gamedashboard/Clock.vue';
-import { PHASE_LABELS } from "shared/types";
+import {PHASE_LABELS} from "shared/types";
+import ConfirmationModal from "@/components/gamedashboard/ConfirmationModal.vue";
+import * as s from 'shared/types'
+import {RequestAPI} from "@/api/request";
 
 @Component({
   components: {
+    ConfirmationModal,
     Clock,
   },
 })
 export default class Phase extends Vue {
+  @Inject()
+  private $api!: RequestAPI;
+
   private btnDisabled = false;
 
-  get currentPhase() {
+  get label() {
     return PHASE_LABELS[this.$tstore.state.phase];
   }
 
+  get phase() {
+    return this.$tstore.state.phase;
+  }
+
   get btnVisibility() {
-    switch (this.currentPhase) {
-      case 'Investment':
+    switch (this.phase) {
+      case s.Phase.invest:
         return true;
-        break;
-      case 'Trade':
+      case s.Phase.trade:
         return true;
-        break;
-      case 'Purchase':
+      case s.Phase.purchase:
         return true;
-        break;
+      case s.Phase.discard:
+        return true;
       default:
-        // return false;
-        return true;
+        return false;
     }
   }
 
-  handleClick() {
-    this.$root.$emit('openConfirmation', {text:`Select 'Yes' if you're ready to end the round.`,type:'nextRound'});
-    // this.btnDisabled = true;
+  submitDone() {
+    switch (this.phase) {
+      case s.Phase.invest:
+        this.$api.investTimeBlocks(this.$tstore.getters.player.pendingInvestments);
+        break;
+    }
   }
 
   get timeRemaining() {
