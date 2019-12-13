@@ -6,6 +6,8 @@ import express from "express";
 import cors from "cors";
 import { Server } from "colyseus";
 import {GameRoom} from "@/game/room";
+import {WaitingRoom} from "@/waitingLobby/room";
+
 import * as path from "path";
 
 function createApp(connection: any) {
@@ -23,8 +25,9 @@ function createApp(connection: any) {
     express: app
     });
 
-    // register your room handlers
-    gameServer.define('game', GameRoom);
+// register your room handlers
+gameServer.define('game', GameRoom);
+gameServer.define('waiting',WaitingRoom);
 
     gameServer.listen(port);
     console.log(`Listening on ws://localhost:${ port }`)

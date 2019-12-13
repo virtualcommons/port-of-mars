@@ -75,8 +75,7 @@ export default class GameDashboard extends Vue {
     return this.$store.state.activeNotifications;
   }
 
-  get phase() {
-    console.log(Phase);
+  get phase(){
     return Phase;
   }
 

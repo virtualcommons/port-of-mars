@@ -29,6 +29,7 @@ export class GameRoom extends Room<GameState> implements Game {
   }
 
   onJoin (client: Client, options: any) {
+    console.log('ran!');
     this.createPlayer(client);
   }
 
