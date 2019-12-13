@@ -81,6 +81,11 @@ export function gameApplyServerResponses<T>(room: Room, store: TStore) {
   room.state.logs.onRemove = (logMsg: Schemify<MarsLogMessageData>, index: number) => {
     store.commit('REMOVE_FROM_MARS_LOG', deschemify(logMsg));
   }
+  // room.state.players.onChange = (changes: Array<DataChange>) => {
+  //   for (const change of changes) {
+  //     store.commit('SET_PLAYER', { role: change.field as Role, data: change.value});
+  //   }
+  // };
 
   room.state.marsEvents.onAdd = (e: Schemify<MarsEventData>, index: number) => {
     store.commit('ADD_TO_EVENTS', deschemify(e));

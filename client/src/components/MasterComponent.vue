@@ -4,8 +4,9 @@
 
 <script lang="ts">
 import {Component, Inject, Vue} from 'vue-property-decorator';
-import { MarsLogMessage } from '@/models';
-import {RequestAPI} from "@/api/request";
+import Synthetic from '../tutorial/syntheticdata';
+import { MarsLogMessage, BaseInvestmentCosts } from '@/models';
+import {GameRequestAPI} from "@/api/gameAPI/request";
 
 @Component({})
 export default class Master extends Vue {
