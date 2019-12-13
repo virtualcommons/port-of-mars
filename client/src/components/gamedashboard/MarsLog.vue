@@ -27,7 +27,7 @@ export default class MarsLog extends Vue {
   }
 
   get logs() {
-    return this.$store.state.marsLog.marsLog;
+    return this.$tstore.getters.logs;
   }
 
   // eslint-disable-next-line class-methods-use-this
