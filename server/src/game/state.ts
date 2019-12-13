@@ -8,6 +8,7 @@ import {
   GameData, Investment,
   InvestmentData,
   MarsEventData,
+  MarsLogMessageData,
   Phase,
   PIONEER,
   PlayerData,
@@ -24,6 +25,7 @@ import {getRandomIntInclusive} from "@/util";
 import {getAccomplishmentByID, getAccomplishmentIDs} from "@/repositories/Accomplishment";
 import {getAllMarsEvents, getMarsEventByID} from "@/repositories/MarsEvents";
 import {GameEvent} from "@/game/events/types";
+import { string } from "@colyseus/schema/lib/encoding/decode";
 
 export class ChatMessage extends Schema implements ChatMessageData {
   constructor(msg: ChatMessageData) {
@@ -119,6 +121,41 @@ class PendingInvestment extends Schema implements InvestmentData {
 
   @type('number')
   upkeep: number;
+}
+
+export class MarsLogMessage extends Schema implements MarsLogMessageData {
+  constructor(msg: MarsLogMessageData) {
+    super();
+    this.performedBy = msg.performedBy;
+    this.category = msg.category;
+    this.content = msg.content;
+    this.timestamp = msg.timestamp;
+  }
+
+  fromJSON(data: MarsLogMessageData) {
+    Object.assign(this, data);
+  }
+
+  toJSON(): MarsLogMessageData  {
+    return {
+      performedBy: this.performedBy,
+      category: this.category,
+      content: this.content,
+      timestamp: this.timestamp,
+    }
+  }
+
+  @type("string")
+  performedBy: Role;
+
+  @type("string")
+  category: string;
+
+  @type("string")
+  content: string;
+  
+  @type("number")
+  timestamp: number;
 }
 
 class ResourceCosts extends Schema implements ResourceCostData {
@@ -693,6 +730,7 @@ interface GameSerialized {
   round: number
   phase: Phase
   upkeep: number
+  logs: Array<MarsLogMessageData>
   messages: Array<ChatMessageData>
   marsEvents: Array<number>
   marsEventsProcessed: number
@@ -728,6 +766,9 @@ export class GameState extends Schema implements GameData {
     this.phase = data.phase;
     this.upkeep = data.upkeep;
 
+    const marsLogs = _.map(data.logs, m => new MarsLogMessage(m));
+    this.logs.splice(0, this.logs.length, ...marsLogs);
+
     const chatMessages = _.map(data.messages, m => new ChatMessage(m));
     this.messages.splice(0, this.messages.length, ...chatMessages);
 
@@ -755,6 +796,7 @@ export class GameState extends Schema implements GameData {
       round: this.round,
       phase: this.phase,
       upkeep: this.upkeep,
+      logs: _.map(this.logs, x => x.toJSON()),
       messages: _.map(this.messages, x => x.toJSON()),
       marsEvents: _.map(this.marsEvents, e => e.toJSON()),
       marsEventsProcessed: this.marsEventsProcessed,
@@ -784,6 +826,9 @@ export class GameState extends Schema implements GameData {
 
   @type("number")
   upkeep: number = GameState.DEFAULTS.upkeep;
+
+  @type([MarsLogMessage])
+  logs = new ArraySchema<MarsLogMessage>();
 
   @type([ChatMessage])
   messages = new ArraySchema<ChatMessage>();
@@ -835,6 +880,7 @@ export class GameState extends Schema implements GameData {
     this.round = GameState.DEFAULTS.round;
     this.timeRemaining = GameState.DEFAULTS.timeRemaining;
     this.upkeep = GameState.DEFAULTS.upkeep;
+    this.logs.splice(0, this.logs.length);
     this.marsEvents.splice(0, this.marsEvents.length);
     this.messages.splice(0, this.messages.length);
     this.players.fromJSON((new PlayerSet()).toJSON());

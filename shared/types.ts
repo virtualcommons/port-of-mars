@@ -144,6 +144,13 @@ export interface MarsEventData {
   flavorText: string
 }
 
+export interface MarsLogMessageData {
+  performedBy: Role
+  category: string
+  content: string
+  timestamp: number
+}
+
 export interface AccomplishmentData {
   id: number
   role: Role
@@ -198,6 +205,7 @@ export interface GameData {
   upkeep: number
   messages: Array<ChatMessageData>
   marsEvents: Array<MarsEventData>
+  logs: Array<MarsLogMessageData>
   marsEventsProcessed: number
   tradeSet: TradeSetData
 }

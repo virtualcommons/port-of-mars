@@ -6,11 +6,11 @@
         class="marslog-message"
         v-for="log in logs"
         :style="marsLogColor(log)"
-        :key="log.time.Date"
+        :key="log.timestamp"
       >
         <p class="marslog-message-category">{{ log.category }}</p>
         <p class="marslog-message-content">{{ log.content }}</p>
-        <p class="marslog-message-time"><span>[ </span>{{ log.time }}<span> ]</span></p>
+        <p class="marslog-message-time"><span>[ </span>{{ marsLogTime(log.timestamp) }}<span> ]</span></p>
       </div>
     </div>
   </div>
@@ -27,7 +27,12 @@ export default class MarsLog extends Vue {
   }
 
   get logs() {
-    return this.$store.state.marsLog.marsLog;
+    return this.$tstore.getters.logs;
+  }
+
+  marsLogTime(timestamp: number) {
+    console.log(timestamp);
+    return new Date(timestamp).toLocaleTimeString();
   }
 
   // eslint-disable-next-line class-methods-use-this

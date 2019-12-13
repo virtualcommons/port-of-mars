@@ -18,6 +18,10 @@ export default {
     return state.players[state.role];
   },
 
+  logs(state: State) {
+    return state.logs;
+  },
+
   otherPlayers(state: State) {
     let op: Partial<PlayerClientSet> = {};
     for (const role of ROLES) {

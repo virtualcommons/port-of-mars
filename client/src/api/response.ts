@@ -4,7 +4,8 @@ import {
   MarsEventData,
   Phase,
   PlayerData,
-  ROLES
+  ROLES,
+  MarsLogMessageData
 } from 'shared/types';
 import { Responses } from 'shared/responses';
 import { DataChange, Schema } from '@colyseus/schema';
@@ -73,6 +74,14 @@ export function applyServerResponses<T>(room: Room, store: TStore) {
     store.commit('REMOVE_FROM_CHAT', deschemify(msg));
   };
 
+  room.state.logs.onAdd = (logMsg: Schemify<MarsLogMessageData>, index: number) => {
+    store.commit('ADD_TO_MARS_LOG', deschemify(logMsg));
+  }
+
+  room.state.logs.onRemove = (logMsg: Schemify<MarsLogMessageData>, index: number) => {
+    store.commit('REMOVE_FROM_MARS_LOG', deschemify(logMsg));
+  }
+
   room.state.marsEvents.onAdd = (e: Schemify<MarsEventData>, index: number) => {
     store.commit('ADD_TO_EVENTS', deschemify(e));
   };
@@ -99,10 +108,10 @@ export function applyServerResponses<T>(room: Room, store: TStore) {
         const upkeep: number = change.value;
         store.commit('SET_UPKEEP', upkeep);
         
-        if(upkeep < 100) {
-          store.commit('CREATE_NOTIFICATION',`ohmygod we're all gonna dieeee!`);
-          store.commit('ADD_TO_MARS_LOG','upkeep has dropped by 25!')
-        }
+        // if(upkeep < 100) {
+        //   store.commit('CREATE_NOTIFICATION',`ohmygod we're all gonna dieeee!`);
+        //   store.commit('ADD_TO_MARS_LOG','upkeep has dropped by 25!')
+        // }
       }
     });
   };

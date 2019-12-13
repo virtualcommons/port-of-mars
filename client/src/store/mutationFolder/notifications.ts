@@ -1,4 +1,5 @@
 import {State} from "@/store/state";
+import { MarsLogMessageData } from 'shared/types';
 
 export default {
   // SET_NOTIFICATION_MESSAGE(state: State, payload: string) {
@@ -10,21 +11,14 @@ export default {
   // SET_TIME_REMAINING(state: State, payload: number) {
   //   state.timeRemaining = payload;
   // },
-  ADD_TO_MARS_LOG(state: State, payload: string) {
-    // correct location for this?
-    // if (payload !== '') {
-    //   state.marsLog.push(payload);
-    // }
-    const data = {
-      initiator: state.role,
-      category: 'upkeep',
-      content: payload,
-      time: new Date(),
-    };
-    state.marsLog.addEntry(data);
+  ADD_TO_MARS_LOG(state: State, payload: MarsLogMessageData) {
+    state.logs.push(payload);
   },
-  CREATE_NOTIFICATION(state: State, payload:string) {
-
+  REMOVE_FROM_MARS_LOG(state: State, payload: MarsLogMessageData) {
+    const index = state.logs.findIndex(log => log.content == payload.content);
+    state.logs.splice(index, 1);
+  },
+  CREATE_NOTIFICATION(state: State, payload: string) {
     state.activeNotifications.push(payload);
   }
 }
