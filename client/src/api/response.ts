@@ -4,8 +4,8 @@ import {
   MarsEventData,
   Phase,
   PlayerData,
-  ROLES,
-  MarsLogMessageData
+  MarsLogMessageData,
+  ROLES, TradeData
 } from 'shared/types';
 import { Responses } from 'shared/responses';
 import { DataChange, Schema } from '@colyseus/schema';
@@ -94,6 +94,14 @@ export function applyServerResponses<T>(room: Room, store: TStore) {
     store.commit('CHANGE_EVENT', {event: deschemify(event), index});
   };
 
+  room.state.tradeSet.onAdd = (event: Schemify<TradeData>, id: string) => {
+    store.commit('ADD_TO_TRADES', { trade: deschemify(event), id })
+  };
+
+  room.state.tradeSet.onRemove = (event: Schemify<TradeData>, id: string) => {
+    store.commit('REMOVE_FROM_TRADES', {id});
+  };
+
   room.state.onChange = (changes: Array<any>) => {
     changes.forEach(change => {
       if (change.field === 'phase') {
@@ -107,11 +115,6 @@ export function applyServerResponses<T>(room: Room, store: TStore) {
       if (change.field === 'upkeep') {
         const upkeep: number = change.value;
         store.commit('SET_UPKEEP', upkeep);
-        
-        // if(upkeep < 100) {
-        //   store.commit('CREATE_NOTIFICATION',`ohmygod we're all gonna dieeee!`);
-        //   store.commit('ADD_TO_MARS_LOG','upkeep has dropped by 25!')
-        // }
       }
     });
   };

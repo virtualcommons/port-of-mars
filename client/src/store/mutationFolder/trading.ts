@@ -1,11 +1,12 @@
 import { State } from '@/store/state';
-import { Role } from 'shared/types';
+import {Role, TradeData} from 'shared/types';
+import {Vue} from "vue-property-decorator";
 
 export default {
-  // SET_TRADING_VIEW(state: State, newTradingView: string) {
-  //   state.tradingView = newTradingView;
-  // },
-  // SET_TRADING_MEMBER(state: State, newTradingMember: Role) {
-  //   state.tradingMember = newTradingMember;
-  // },
+  ADD_TO_TRADES(state: State, payload: { id: string, trade: TradeData }) {
+    Vue.set(state.tradeSet, payload.id, payload.trade);
+  },
+  REMOVE_FROM_TRADES(state: State, payload: { id: string }) {
+    Vue.delete(state.tradeSet, payload.id);
+  }
 };
