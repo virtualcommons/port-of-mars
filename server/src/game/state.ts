@@ -184,8 +184,55 @@ class ResourceCosts extends Schema implements ResourceCostData {
     }
   }
 
-  static researcher() {
-    return new ResourceCosts({culture: Infinity, finance: Infinity, government: 3, legacy: 3, science: 2, upkeep: 1})
+  static fromRole(role: Role): ResourceCosts {
+    switch (role) {
+      case CURATOR:
+        return new ResourceCosts({
+          culture: 2,
+          finance: 3,
+          government: Infinity,
+          legacy: 3,
+          science: Infinity,
+          upkeep: 1
+        });
+      case ENTREPRENEUR:
+        return new ResourceCosts({
+          culture: 3,
+          finance: 2,
+          government: 3,
+          legacy: Infinity,
+          science: Infinity,
+          upkeep: 1
+        });
+      case PIONEER:
+        return new ResourceCosts({
+          culture: 3,
+          finance: Infinity,
+          government: Infinity,
+          legacy: 2,
+          science: 3,
+          upkeep: 1
+        });
+      case POLITICIAN:
+        return new ResourceCosts({
+          culture: Infinity,
+          finance: 3,
+          government: 2,
+          legacy: Infinity,
+          science: 3,
+          upkeep: 1
+        });
+      case RESEARCHER:
+        return new ResourceCosts({
+          culture: Infinity,
+          finance: Infinity,
+          government: 3,
+          legacy: 3,
+          science: 2,
+          upkeep: 1
+        });
+    }
+
   }
 
   @type('number')
@@ -466,7 +513,7 @@ export class MarsEventsDeck {
     this.position = data.position;
   }
 
-  toJSON(): {position: number, deck: Array<MarsEventData>} {
+  toJSON(): { position: number, deck: Array<MarsEventData> } {
     return {
       deck: this.deck,
       position: this.position
@@ -568,6 +615,7 @@ export class Player extends Schema implements PlayerData {
     super();
     this.role = role;
     this.accomplishment = new AccomplishmentSet(role);
+    this.costs = ResourceCosts.fromRole(role);
   }
 
   fromJSON(data: PlayerSerialized) {
@@ -600,7 +648,7 @@ export class Player extends Schema implements PlayerData {
   role: Role;
 
   @type(ResourceCosts)
-  costs = ResourceCosts.researcher();
+  costs: ResourceCosts;
 
   @type(AccomplishmentSet)
   accomplishment: AccomplishmentSet;
@@ -618,7 +666,7 @@ export class Player extends Schema implements PlayerData {
 
   @type(PendingInvestment)
   pendingInvestments = new PendingInvestment();
-  
+
   @type("number")
   victoryPoints: number = 0;
 
