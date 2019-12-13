@@ -107,6 +107,7 @@ export const initialStoreState: State = {
   timeRemaining: 300,
   marsEvents: [],
   marsEventsProcessed: 0,
+  tradeSet: {},
   // THROWING ERROR
   // maxRound: 0,
 

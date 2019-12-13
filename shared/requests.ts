@@ -1,4 +1,4 @@
-import {InvestmentData} from "./types";
+import {InvestmentData, TradeData} from "./types";
 
 export interface SendChatMessageData {
   kind: 'send-chat-message'
@@ -32,6 +32,16 @@ export interface ResetGameData {
   kind: 'reset-game'
 }
 
+export interface SendTradeRequestData {
+  kind: 'send-trade-request',
+  trade: TradeData
+}
+
+export interface AcceptTradeRequestData {
+  kind: 'accept-trade-request'
+  id: string
+}
+
 export type Requests =
   SendChatMessageData |
   SetPlayerReadinessData |
@@ -39,4 +49,6 @@ export type Requests =
   ResetGameData |
   SetTimeInvestmentData |
   BuyAccomplishmentCardData |
-  DiscardAccomplishmentCardData
+  DiscardAccomplishmentCardData |
+  SendTradeRequestData |
+  AcceptTradeRequestData

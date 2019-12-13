@@ -17,7 +17,7 @@ import {
   ResourceAmountData,
   ResourceCostData,
   Role,
-  ROLES
+  ROLES, TradeAmountData, TradeData, TradeSetData
 } from "shared/types";
 import _ from "lodash";
 import {getRandomIntInclusive} from "@/util";
@@ -462,6 +462,70 @@ export interface PlayerSerialized {
   pendingInvestments: InvestmentData
 }
 
+export class TradeAmount extends Schema {
+  constructor(role: Role, resourceAmount: ResourceAmountData) {
+    super();
+    this.role = role;
+    this.resourceAmount = new ResourceInventory();
+    this.resourceAmount.fromJSON(resourceAmount);
+  }
+
+  fromJSON(data: TradeAmountData) {
+    this.role = data.role;
+    this.resourceAmount.fromJSON(data.resourceAmount);
+  }
+
+  toJSON(): TradeAmountData {
+    return {
+      role: this.role,
+      resourceAmount: this.resourceAmount
+    }
+  }
+
+  @type('string')
+  role: Role;
+
+  @type(ResourceInventory)
+  resourceAmount: ResourceInventory;
+}
+
+export class Trade extends Schema {
+  constructor(from: TradeAmountData, to: TradeAmountData) {
+    super();
+    this.from = new TradeAmount(from.role, from.resourceAmount);
+    this.to = new TradeAmount(to.role, to.resourceAmount);
+  }
+
+  fromJSON(data: TradeData) {
+    this.from.fromJSON(data.from);
+    this.to.fromJSON(data.to);
+  }
+
+
+  toJSON(): TradeData {
+    return {
+      from: this.from.toJSON(),
+      to: this.to.toJSON()
+    }
+  }
+
+  @type(TradeAmount)
+  from: TradeAmount;
+
+  @type(TradeAmount)
+  to: TradeAmount;
+
+  apply(game: GameState) {
+    const pFrom = game.players[this.from.role];
+    const pTo = game.players[this.to.role];
+
+    pFrom.inventory.update(_.mapValues(this.from.resourceAmount, r => -r!));
+    pFrom.inventory.update(this.to.resourceAmount);
+    pTo.inventory.update(_.mapValues(this.to.resourceAmount, r => -r!));
+    pTo.inventory.update(this.from.resourceAmount);
+  }
+}
+
 export class Player extends Schema implements PlayerData {
   constructor(role: Role) {
     super();
@@ -633,6 +697,7 @@ interface GameSerialized {
   marsEvents: Array<number>
   marsEventsProcessed: number
   marsEventDeck: MarsEventDeckSerialized
+  tradeSet: TradeSetData
 }
 
 export class GameState extends Schema implements GameData {
@@ -671,6 +736,11 @@ export class GameState extends Schema implements GameData {
 
     this.marsEventsProcessed = data.marsEventsProcessed;
     this.marsEventDeck.fromJSON(data.marsEventDeck);
+    Object.keys(this.tradeSet).forEach(k => delete this.tradeSet[k]);
+    Object.keys(data.tradeSet).forEach(k => {
+      const tradeData: TradeData = data.tradeSet[k];
+      this.tradeSet[k] = new Trade(tradeData.from, tradeData.to);
+    });
     return this;
   }
 
@@ -685,10 +755,11 @@ export class GameState extends Schema implements GameData {
       round: this.round,
       phase: this.phase,
       upkeep: this.upkeep,
-      messages: _.map(this.messages, x => x),
+      messages: _.map(this.messages, x => x.toJSON()),
       marsEvents: _.map(this.marsEvents, e => e.toJSON()),
       marsEventsProcessed: this.marsEventsProcessed,
-      marsEventDeck: this.marsEventDeck.toJSON()
+      marsEventDeck: this.marsEventDeck.toJSON(),
+      tradeSet: this.tradeSet.toJSON()
     };
   }
 
@@ -724,6 +795,9 @@ export class GameState extends Schema implements GameData {
   marsEventsProcessed = GameState.DEFAULTS.marsEventsProcessed;
 
   marsEventDeck: MarsEventsDeck;
+
+  @type({ map: Trade})
+  tradeSet = new MapSchema<Trade>();
 
   invest(role: Role, investment: InvestmentData) {
     const player = this.players[role];

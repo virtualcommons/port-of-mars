@@ -4,9 +4,13 @@ import {
   Requests,
   BuyAccomplishmentCardData,
   SetTimeInvestmentData,
-  SetNextPhaseData, ResetGameData, DiscardAccomplishmentCardData
+  SetNextPhaseData,
+  ResetGameData,
+  DiscardAccomplishmentCardData,
+  SendTradeRequestData,
+  AcceptTradeRequestData
 } from 'shared/requests';
-import {AccomplishmentData, InvestmentData} from 'shared/types';
+import {AccomplishmentData, InvestmentData, TradeData} from 'shared/types';
 
 export class RequestAPI {
   constructor(public room: Room) {}
@@ -42,6 +46,16 @@ export class RequestAPI {
 
   public discardAccomplishment(id: number) {
     const msg: DiscardAccomplishmentCardData = { kind: "discard-accomplishment-card", id };
+    this.send(msg);
+  }
+
+  public sendTradeRequest(trade: TradeData) {
+    const msg: SendTradeRequestData = { kind: "send-trade-request", trade };
+    this.send(msg);
+  }
+
+  public acceptTradeRequest(id: string) {
+    const msg: AcceptTradeRequestData = { kind: "accept-trade-request", id };
     this.send(msg);
   }
 }

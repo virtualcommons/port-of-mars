@@ -1,5 +1,15 @@
-import {AccomplishmentData, ChatMessageData, InvestmentData, MarsEventData, Phase, Role, ROLES} from "shared/types";
-import {Accomplishment, ChatMessage, GameState, MarsEvent, Player} from "@/game/state";
+import { uuid } from 'uuidv4'
+import {
+  AccomplishmentData,
+  ChatMessageData,
+  InvestmentData,
+  MarsEventData,
+  Phase,
+  Role,
+  ROLES,
+  TradeData
+} from "shared/types";
+import {Accomplishment, ChatMessage, GameState, MarsEvent, Player, Trade} from "@/game/state";
 import {GameEvent} from "@/game/events/types";
 import {getAccomplishmentByID} from "@/repositories/Accomplishment";
 
@@ -84,6 +94,31 @@ export class TimeInvested extends GameEventWithData {
 
   apply(game: GameState): void {
     game.players[this.data.role].pendingInvestments.fromJSON(this.data.investment);
+  }
+}
+
+export class AcceptTradeRequest extends GameEventWithData {
+  kind = 'accept-trade-request';
+
+  constructor(public data: { id: string }) { super(); }
+
+  apply(game: GameState): void {
+    const trade: Trade = game.tradeSet[this.data.id];
+    trade.apply(game);
+    delete game.tradeSet[this.data.id];
+  }
+}
+
+export class SentTradeRequest extends GameEventWithData {
+  kind = 'sent-trade-request';
+
+  constructor(public data: TradeData) {
+    super();
+  }
+
+  apply(game: GameState): void {
+    const id = uuid();
+    game.tradeSet[id] = new Trade(this.data.from, this.data.to);
   }
 }
 

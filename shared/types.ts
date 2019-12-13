@@ -164,6 +164,18 @@ export interface AccomplishmentSetData {
   purchasable: Array<AccomplishmentData>
 }
 
+export interface TradeAmountData {
+  role: Role,
+  resourceAmount: ResourceAmountData
+}
+
+export interface TradeData {
+  from: TradeAmountData
+  to: TradeAmountData
+}
+
+export type TradeSetData = { [uuid: string]: TradeData }
+
 export interface PlayerData {
   role: Role
   costs: ResourceCostData
@@ -187,6 +199,7 @@ export interface GameData {
   messages: Array<ChatMessageData>
   marsEvents: Array<MarsEventData>
   marsEventsProcessed: number
+  tradeSet: TradeSetData
 }
 
 export interface QuizData {

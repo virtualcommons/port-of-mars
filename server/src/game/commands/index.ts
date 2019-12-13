@@ -1,7 +1,8 @@
 import * as req from "shared/requests";
-import {InvestmentData, Phase} from "shared/types";
+import {InvestmentData, Phase, TradeData} from "shared/types";
 import {MarsEvent, Player} from "@/game/state";
 import {
+  AcceptTradeRequest,
   BoughtAccomplishment,
   DiscardedAccomplishment,
   EnteredDefeatPhase,
@@ -10,7 +11,7 @@ import {
   EnteredPurchasePhase,
   EnteredTradePhase,
   EnteredVictoryPhase,
-  SentChatMessage,
+  SentChatMessage, SentTradeRequest,
   TimeInvested
 } from "@/game/events";
 import {getAccomplishmentByID} from "@/repositories/Accomplishment";
@@ -104,13 +105,37 @@ export class SetPlayerReadinessCmd implements Command {
   }
 }
 
-export class SetNextPhaseCmd implements Command {
-  constructor(private game: Game, private player: Player) {
+export class AcceptTradeRequestCmd implements Command {
+  constructor(private id: string, private game: Game, private player: Player) {}
+
+  static fromReq(r: req.AcceptTradeRequestData, game: Game, client: Client) {
+    const p = game.getPlayerByClient(client);
+    return new AcceptTradeRequestCmd(r.id, game, p);
   }
 
-  static fromReq(r: req.SetNextPhaseData, game: Game, client: Client) {
+  execute(): Array<GameEvent> {
+    return [new AcceptTradeRequest({id: this.id})];
+  }
+}
+
+export class SendTradeRequestCmd implements Command {
+  constructor(private trade: TradeData, private game: Game, private player: Player) {}
+
+  static fromReq(r: req.SendTradeRequestData, game: Game, client: Client) {
     const p = game.getPlayerByClient(client);
-    return new SetNextPhaseCmd(game, p);
+    return new SendTradeRequestCmd(r.trade, game, p);
+  }
+
+  execute(): Array<GameEvent> {
+    return [new SentTradeRequest(this.trade)];
+  }
+}
+
+export class SetNextPhaseCmd implements Command {
+  constructor(private game: Game) {}
+
+  static fromReq(game: Game) {
+    return new SetNextPhaseCmd(game);
   }
 
   execute(): Array<GameEvent> {
