@@ -16,6 +16,10 @@ class MarsLogModel {
     this.logs.push(log);
   }
 
+  hardReset(){
+    this.logs = [];
+  }
+
   get marsLog() {
     return this.logs;
   }

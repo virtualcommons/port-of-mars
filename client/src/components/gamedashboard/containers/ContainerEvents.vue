@@ -32,6 +32,16 @@ export default class ContainerEvents extends Vue {
   private eventContentName: string = 'Out of Commission';
 
   private eventContentEffect: string = 'The Politician receives only 3 Time Blocks this round.';
+
+  get layout() {
+    console.log(`(${typeof this.$tstore.state.eventView}): ${this.$tstore.state.eventView}`);
+    switch(this.$tstore.state.eventView) {
+      case 'EVENT_TEST':
+        return 'EventTest';
+      default:
+        break;
+    }
+  }
 }
 </script>
 
