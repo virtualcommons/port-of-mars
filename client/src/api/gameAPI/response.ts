@@ -48,7 +48,7 @@ function applyPlayerResponses(player: any, store: TStore) {
   player.triggerAll();
 }
 
-export function applyServerResponses<T>(room: Room, store: TStore) {
+export function gameApplyServerResponses<T>(room: Room, store: TStore) {
   room.onStateChange.once((state: Schemify<GameData>) => {
     ROLES.forEach(role => applyPlayerResponses(state.players[role], store));
     (state.players as any).triggerAll();
@@ -72,6 +72,12 @@ export function applyServerResponses<T>(room: Room, store: TStore) {
   room.state.messages.onRemove = (msg: Schemify<ChatMessageData>, index: number) => {
     store.commit('REMOVE_FROM_CHAT', deschemify(msg));
   };
+
+  // room.state.players.onChange = (changes: Array<DataChange>) => {
+  //   for (const change of changes) {
+  //     store.commit('SET_PLAYER', { role: change.field as Role, data: change.value});
+  //   }
+  // };
 
   room.state.marsEvents.onAdd = (e: Schemify<MarsEventData>, index: number) => {
     store.commit('ADD_TO_EVENTS', deschemify(e));
@@ -101,7 +107,12 @@ export function applyServerResponses<T>(room: Room, store: TStore) {
         
         if(upkeep < 100) {
           store.commit('CREATE_NOTIFICATION',`ohmygod we're all gonna dieeee!`);
-          store.commit('ADD_TO_MARS_LOG','upkeep has dropped by 25!')
+          store.commit('ADD_TO_MARS_LOG',{category:'upkeep',message:'upkeep has dropped by 25!'});
+        }
+
+        if(upkeep == 100){
+          store.commit('HARD_RESET_NOTIFICATIONS','');
+          store.commit('HARD_RESET_MARS_LOG','');
         }
       }
     });

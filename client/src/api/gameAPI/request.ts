@@ -12,7 +12,7 @@ import {
 } from 'shared/requests';
 import {AccomplishmentData, InvestmentData, TradeData} from 'shared/types';
 
-export class RequestAPI {
+export class GameRequestAPI {
   constructor(public room: Room) {}
 
   public send(req: Requests) {

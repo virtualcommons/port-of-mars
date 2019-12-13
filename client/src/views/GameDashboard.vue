@@ -72,7 +72,6 @@ export default class GameDashboard extends Vue {
   }
 
   get phase(){
-    console.log(Phase);
     return Phase;
   }
 

@@ -20,10 +20,10 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue, Prop, Inject} from 'vue-property-decorator';
+  import {Component, Vue, Prop, Inject} from 'vue-property-decorator';
 import {canPurchaseAccomplishment} from "shared/validation";
 import {AccomplishmentData} from "shared/types";
-import {RequestAPI} from "@/api/request";
+  import {RequestAPI} from "@/api/request";
 
 @Component({})
 export default class CardAccomplishmentView extends Vue {

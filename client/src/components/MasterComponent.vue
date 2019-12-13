@@ -6,12 +6,12 @@
 import {Component, Inject, Vue} from 'vue-property-decorator';
 import Synthetic from '../tutorial/syntheticdata';
 import { MarsLogMessage, BaseInvestmentCosts } from '@/models';
-import {RequestAPI} from "@/api/request";
+import {GameRequestAPI} from "@/api/gameAPI/request";
 
 @Component({})
 export default class Master extends Vue {
   @Inject()
-  readonly $api!: RequestAPI;
+  readonly $api!: GameRequestAPI;
 
   private data = new Synthetic();
 
@@ -30,6 +30,12 @@ export default class Master extends Vue {
     }
     if (e.key === 'q') {
       this.$api.resetGame();
+    }
+    if(e.key === 'm'){
+      this.$store.commit('ADD_TO_MARS_LOG',{category:'just fun',message:'this is just for fun!'})
+    }
+    if(e.key=='n'){
+      this.$store.commit('CREATE_NOTIFICATION','this is just a little reminder that it will be alright!');
     }
   }
 

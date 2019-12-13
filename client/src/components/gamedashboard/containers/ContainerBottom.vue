@@ -1,17 +1,11 @@
 <template>
   <BContainer class="container-bottom">
     <BRow class="row-bottom">
-      <BCol class="container-bottom container-bottom-view" cols="12" v-if="[phase.invest, phase.discard].includes(gamePhase)">
-        <InvestmentsPane />
-      </BCol>
-      <BCol class="container-bottom container-bottom-view" cols="12" v-else-if="gamePhase === phase.events">
-        <ContainerEvents />
-      </BCol>
-      <BCol class="container-bottom container-bottom-view" cols="12" v-else-if="gamePhase === phase.trade">
-        <ContainerTrade  />
-      </BCol>
-      <BCol class="container-bottom container-bottom-view" cols="12" v-else>
-        <ContainerDefault/>
+      <BCol class="container-bottom-view" cols="12">
+        <InvestmentsPane v-if="gamePhase == phase.invest"/>
+        <ContainerEvents v-else-if="gamePhase == phase.events"/>
+        <ContainerTrade v-else-if="gamePhase == phase.trade"/>
+        <ContainerDefault v-else/>
       </BCol>
     </BRow>
   </BContainer>
@@ -23,10 +17,9 @@ import { BContainer, BRow, BCol } from 'bootstrap-vue';
 import ContainerInvestments from '@/components/gamedashboard/containers/ContainerInvestments.vue';
 import ContainerAccomplishments from '@/components/gamedashboard/containers/ContainerAccomplishments.vue';
 import ContainerEvents from '@/components/gamedashboard/containers/ContainerEvents.vue';
-import ContainerTrade from '@/components/gamedashboard/containers/ContainerTrade.vue';
 import InvestmentsPane from '@/components/gamedashboard/containers/GameboardPanes/InvestmentsPane.vue';
 import ContainerDefault from '@/components/gamedashboard/containers/ContainerDefaultView.vue';
-
+import ContainerTrade from '@/components/gamedashboard/containers/ContainerTrade.vue';
 import { Phase } from "shared/types";
 
 @Component({
