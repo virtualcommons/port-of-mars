@@ -5,7 +5,7 @@
 <script lang="ts">
 import {Component, Inject, Vue} from 'vue-property-decorator';
 import Synthetic from '../tutorial/syntheticdata';
-import { MarsLogMessage, BaseInvestmentCosts } from '@/models';
+import { MarsLogMessage } from '@/models';
 import {RequestAPI} from "@/api/request";
 
 @Component({})
