@@ -19,7 +19,7 @@ export default {
   },
 
   logs(state: State) {
-    return state.marsLog.marsLog;
+    return state.logs;
   },
 
   otherPlayers(state: State) {

@@ -5,11 +5,6 @@ export interface SendChatMessageData {
   message: string
 }
 
-export interface SendMarsLogMessageData {
-  kind: 'send-mars-log-message'
-  message: string
-}
-
 export interface BuyAccomplishmentCardData {
   kind: 'buy-accomplishment-card',
   id: number

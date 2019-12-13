@@ -4,12 +4,14 @@ import {
   ChatMessageData,
   InvestmentData,
   MarsEventData,
+  MarsLogMessageData,
   Phase,
   Role,
   ROLES,
-  TradeData
+  TradeData,
+  CURATOR
 } from "shared/types";
-import {Accomplishment, ChatMessage, GameState, MarsEvent, Player, Trade} from "@/game/state";
+import {Accomplishment, ChatMessage, GameState, MarsEvent, Player, Trade, MarsLogMessage} from "@/game/state";
 import {GameEvent} from "@/game/events/types";
 import {getAccomplishmentByID} from "@/repositories/Accomplishment";
 
@@ -145,6 +147,13 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
   kind = 'entered-mars-event-phase';
 
   apply(game: GameState): void {
+    const log = new MarsLogMessage({
+      performedBy: CURATOR,
+      category: 'upkeep',
+      content: `upkeep decreased ${game.upkeep - game.nextRoundUpkeep()}`,
+      timestamp: this.dateCreated,
+    });
+
     game.phase = Phase.events;
     game.round += 1;
     game.upkeep = game.nextRoundUpkeep();
@@ -153,6 +162,7 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
     game.phase = Phase.events;
     game.marsEvents.splice(0, game.marsEvents.length, ...marsEvents);
     game.marsEventDeck.updatePosition(game.marsEvents.length);
+    game.logs.push(log);
   }
 }
 

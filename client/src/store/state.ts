@@ -1,4 +1,3 @@
-import { InvestmentsModel, MarsLogModel } from '@/models';
 import {
   ChatMessageData,
   MarsEventData,
@@ -14,7 +13,8 @@ import {
   POLITICIAN,
   PIONEER,
   GameData,
-  EventClientView
+  EventClientView,
+  MarsLogMessageData,
 } from 'shared/types';
 import { Accomplishment } from '@/models/AccomplishmentsModels';
 
@@ -32,7 +32,7 @@ function defaultPlayerClientSet(): PlayerClientSet {
     Pioneer: defaultPlayerData(PIONEER),
     Researcher: defaultPlayerData(RESEARCHER)
   };
-}
+}  
 
 function defaultPlayerData(role: Role): PlayerClientData {
   return {
@@ -85,7 +85,7 @@ export function defaultPendingInvestment(): ResourceCostData {
 
 export interface State extends GameData {
   role: Role;
-  marsLog: MarsLogModel;
+  logs: Array<MarsLogMessageData>;
   players: PlayerClientSet;
 
   phase: Phase;
@@ -99,7 +99,7 @@ export interface State extends GameData {
 export const initialStoreState: State = {
   // server side
   role: RESEARCHER,
-  marsLog: new MarsLogModel(),
+  logs: [],
   messages: [],
   upkeep: 100,
   round: 1,
