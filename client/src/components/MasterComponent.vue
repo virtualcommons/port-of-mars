@@ -4,7 +4,6 @@
 
 <script lang="ts">
 import {Component, Inject, Vue} from 'vue-property-decorator';
-import Synthetic from '../tutorial/syntheticdata';
 import { MarsLogMessage } from '@/models';
 import {RequestAPI} from "@/api/request";
 
@@ -13,12 +12,7 @@ export default class Master extends Vue {
   @Inject()
   readonly $api!: RequestAPI;
 
-  private data = new Synthetic();
-
-  private round: number = this.data.round;
-
   onKeyDown(e: any) {
-    this.round = 0;
     if (e.key === 'r') {
       this.$api.setNextPhase();
     }
