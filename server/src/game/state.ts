@@ -153,7 +153,7 @@ export class MarsLogMessage extends Schema implements MarsLogMessageData {
 
   @type("string")
   content: string;
-  
+
   @type("number")
   timestamp: number;
 }
@@ -793,6 +793,28 @@ export class GameState extends Schema implements GameData {
     this.lastTimePolled = new Date();
     this.maxRound = getRandomIntInclusive(8, 12);
     this.players = new PlayerSet();
+
+    this.tradeSet['123'] = new Trade(
+      {
+      role: 'Curator',
+      resourceAmount: {
+        science: 1,
+        government: 1,
+        legacy: 1,
+        finance: 1,
+        culture: 1
+      }
+    },
+    {
+      role: 'Researcher',
+      resourceAmount: {
+        science: 1,
+        government: 1,
+        legacy: 1,
+        finance: 1,
+        culture: 1
+      }
+    });
   }
 
   static DEFAULTS = {

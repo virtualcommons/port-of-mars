@@ -3,15 +3,15 @@
     <div class="trade-send-receive">
       <div class="trade-profile-sender-container">
         <div class="trade-profile-sender">
-          <img :src="require(`@/assets/characters/${trade.sender}.png`)" alt="Sender" />
+          <img :src="require(`@/assets/characters/${from.role}.png`)" alt="Sender" />
         </div>
       </div>
       <div class="send">
         <div class="send-sender">
-          <p>{{ trade.sender }}</p>
+          <p>{{ from.role }}</p>
         </div>
         <div class="send-investments-container">
-          <div class="send-investments" v-for="(value, name) in trade.send">
+          <div class="send-investments" v-for="(value, name) in from.resourceAmount">
             <img
               v-if="value !== 0"
               :src="require(`@/assets/iconsSVG/${name}.svg`)"
@@ -26,15 +26,15 @@
       </div>
       <div class="trade-profile-receiver-container">
         <div class="trade-profile-receiver">
-          <img :src="require(`@/assets/characters/${trade.receiver}.png`)" alt="Receiver" />
+          <img :src="require(`@/assets/characters/${to.role}.png`)" alt="Receiver" />
         </div>
       </div>
       <div class="receive">
         <div class="receive-receiver">
-          <p>{{ trade.receiver }}</p>
+          <p>{{ to.role }}</p>
         </div>
         <div class="receive-investments-container">
-          <div class="receive-investments" v-for="(value, name) in trade.receive">
+          <div class="receive-investments" v-for="(value, name) in to.resourceAmount">
             <img
               v-if="value !== 0"
               :src="require(`@/assets/iconsSVG/${name}.svg`)"
@@ -46,40 +46,28 @@
       </div>
     </div>
     <div class="trade-buttons">
-      <button type="button" name="button">Accept</button>
+      <button type="button" name="button" @click="handleAcceptTrade">Accept</button>
       <button type="button" name="button">Decline</button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, Inject } from 'vue-property-decorator';
+import { RequestAPI } from '@/api/request';
+import { TradeData } from 'shared/types';
 
 @Component({})
 export default class Trade extends Vue {
-  @Prop({
-    default: {
-      sender: 'Curator',
-      receiver: 'Curator',
-      send: {
-        science: 0,
-        government: 0,
-        legacy: 0,
-        finance: 0,
-        culture: 0
-      },
-      receive: {
-        science: 0,
-        government: 0,
-        legacy: 0,
-        finance: 0,
-        culture: 0
-      }
-    }
-  })
-  private trade!: object;
+  @Prop() private from: object;
+  @Prop() private to: object;
+  @Prop() private id: string;
 
-  mounted() {}
+  @Inject() $api!: RequestAPI;
+
+  handleAcceptTrade() {
+    this.$api.acceptTradeRequest(this.id);
+  }
 }
 </script>
 

@@ -49,7 +49,7 @@ export default class CardModal extends Vue {
   height: 100vh;
   width: 100vw;
   position: absolute;
-  z-index: 3;
+  z-index: 4;
   top: 0;
   left: 0;
   display: flex;
@@ -85,7 +85,7 @@ export default class CardModal extends Vue {
   width: 100%;
   border: none;
   position: relative;
-  z-index: 4;
+  z-index: 5;
   top: 2rem;
   right: 2rem;
   text-decoration: underline;
@@ -97,7 +97,7 @@ export default class CardModal extends Vue {
   width: 100%;
   border: none;
   position: relative;
-  z-index: 4;
+  z-index: 5;
   top: 0.3rem;
   left: 1rem;
   color: var(--space-white);
@@ -115,7 +115,7 @@ export default class CardModal extends Vue {
   border: 0.125rem solid var(--space-orange);
   border-radius: 50%;
   position: absolute;
-  z-index: 4;
+  z-index: 5;
   top: 2rem;
   right: 2rem;
   text-align: center;

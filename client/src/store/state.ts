@@ -14,7 +14,7 @@ import {
   PIONEER,
   GameData,
   EventClientView,
-  MarsLogMessageData,
+  MarsLogMessageData
 } from 'shared/types';
 import { Accomplishment } from '@/models/AccomplishmentsModels';
 
@@ -32,7 +32,7 @@ function defaultPlayerClientSet(): PlayerClientSet {
     Pioneer: defaultPlayerData(PIONEER),
     Researcher: defaultPlayerData(RESEARCHER)
   };
-}  
+}
 
 function defaultPlayerData(role: Role): PlayerClientData {
   return {
@@ -118,5 +118,5 @@ export const initialStoreState: State = {
 
   activeNotifications: [],
 
-  eventView: EventClientView.VOTE_FOR_PLAYER_SINGLE
+  eventView: EventClientView.DRAW_INFLUENCES
 };

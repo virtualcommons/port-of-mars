@@ -23,7 +23,7 @@
         <div class="trade-incoming-list-wrapper">
           <div class="trade-incoming-list">
             <!-- need to refactor key -->
-            <Trade v-for="trade in receivedTrades" :trade="trade" :key="Math.random()" />
+            <Trade v-for="trade in trades" v-bind="trade" :key="Math.random()" />
           </div>
         </div>
       </BCol>
@@ -31,7 +31,7 @@
         <div class="trade-request-list-wrapper">
           <div class="trade-request-list">
             <!-- need to refactor key -->
-            <Trade v-for="trade in sentTrades" :trade="trade" :key="Math.random()" />
+            <Trade v-for="trade in trades" v-bind="trade" :key="Math.random()" />
           </div>
         </div>
         <div class="trade-request-make">
@@ -47,6 +47,7 @@ import { Vue, Component } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
 import Trade from '@/components/gamedashboard/Trade.vue';
 import TradeRequest from '@/components/gamedashboard/TradeRequest.vue';
+// import * as '_' from 'lodash';
 
 @Component({
   components: {
@@ -57,41 +58,64 @@ import TradeRequest from '@/components/gamedashboard/TradeRequest.vue';
 export default class ContainerTrade extends Vue {
   private currentView: string = 'incoming';
 
+  get trades() {
+    const tradeSet = this.$tstore.state.tradeSet;
+    return Object.keys(tradeSet).map(id => ({
+      id,
+      from: tradeSet[id].from,
+      to: tradeSet[id].to
+    }))
+  }
+
+  // get incomingTrades() {}
+  //
+  // get sentTrades() {}
+
   private tradeOne: object = {
-    sender: 'Curator',
-    receiver: this.$store.state.role,
-    send: {
-      science: 5,
-      government: 0,
-      legacy: 5,
-      finance: 0,
-      culture: 5
+    id: 1234,
+    from: {
+      role: 'Curator',
+      resourceAmount: {
+        science: 1,
+        government: 1,
+        legacy: 1,
+        finance: 1,
+        culture: 1
+      }
     },
-    receive: {
-      science: 0,
-      government: 5,
-      legacy: 0,
-      finance: 5,
-      culture: 0
+    to: {
+      role: 'Researcher',
+      resourceAmount: {
+        science: 1,
+        government: 1,
+        legacy: 1,
+        finance: 1,
+        culture: 1
+      }
     }
   };
 
   private tradeTwo: object = {
-    sender: this.$store.state.role,
-    receiver: 'Politician',
-    send: {
-      science: 1,
-      government: 0,
-      legacy: 1,
-      finance: 0,
-      culture: 1
+    id: 123,
+    from: {
+      role: 'Curator',
+      resourceAmount: {
+        science: 1,
+        government: 1,
+        legacy: 1,
+        finance: 1,
+        culture: 1
+      }
     },
-    receive: {
-      science: 0,
-      government: 1,
-      legacy: 0,
-      finance: 1,
-      culture: 0
+    to: {
+      role: 'Researcher',
+      resourceAmount: {
+        science: 1,
+        government: 1,
+        legacy: 1,
+        finance: 1,
+        culture: 1
+      }
     }
   };
 
