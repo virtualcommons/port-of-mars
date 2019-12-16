@@ -120,7 +120,7 @@ export default class CardModal extends Vue {
   right: 2rem;
   text-align: center;
   font-size: var(--font-med);
-  color: var(--space-gray);
+  color: var(--space-orange);
   background-color: transparent;
   -webkit-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
@@ -128,6 +128,7 @@ export default class CardModal extends Vue {
 
 .cm-close-button:hover {
   background-color: var(--space-orange);
+  color: var(--space-gray);
   transform: scale(1.1);
 }
 
