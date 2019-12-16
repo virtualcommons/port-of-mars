@@ -5,8 +5,12 @@ set -o pipefail
 set -o errexit
 
 build() {
-  docker-compose -f base.yml -f "$1.yml" config > docker-compose.yml
+  build_template $1
   docker-compose build --pull 
+}
+
+build_template() {
+  docker-compose -f base.yml -f "$1.yml" config > docker-compose.yml
 }
 
 deploy() {
@@ -23,5 +27,6 @@ case "${1:-deploy}" in
   'build') build "${2:-prod}";;
   'deploy') deploy "${2:-prod}";;
   'test') test_app "${2:-dev}";;
+  'template') build_template "${2:-prod}";;
   *) echo "Invalid option choose one of deploy, build" 1>&2; exit 1;;
 esac

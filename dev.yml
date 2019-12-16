@@ -12,7 +12,19 @@ services:
     command: './dev.sh'
     ports:
       - '8081:8080'
+  db: 
+    image: postgres:12
+    volumes:
+      - ./server/deploy/pom_db_password:/run/secrets/pom_db_password
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: marsmadness
+      POSTGRES_PASSWORD_FILE: /run/secrets/pom_db_password
+      POSTGRES_DB: port_of_mars
   server:
     command: './dev.sh'
+    depends_on:
+      - db
     ports:
       - '2567:2567'

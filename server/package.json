@@ -1,41 +1,46 @@
 {
-  "name": "port-of-mars-server",
-  "version": "0.1.0",
-  "description": "Port Of Mars digital version",
-  "main": "lib/index.js",
-  "scripts": {
-    "start": "ts-node -r tsconfig-paths/register src/index.ts",
-    "loadtest": "colyseus-loadtest loadtest/example.ts --room my_room --numClients 2",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Center for Behavior, Institutions, and the Environment (https://cbie.asu.edu)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/virtualcommons/port-of-mars/issues"
-  },
-  "homepage": "https://github.com/virtualcommons/port-of-mars#readme",
-  "devDependencies": {
-    "@colyseus/loadtest": "^0.11.3",
-    "@types/cors": "^2.8.6",
-    "@types/express": "^4.17.2",
-    "@types/jest": "^24.0.22",
-    "@types/lodash": "^4.14.144",
-    "csvtojson": "^2.0.10",
-    "jest": "^24.9.0",
-    "prettier": "^1.19.1",
-    "ts-jest": "^24.1.0",
-    "ts-node": "^8.1.0",
-    "tsconfig-paths": "^3.9.0",
-    "typescript": "^3.7.2"
-  },
-  "dependencies": {
-    "@colyseus/monitor": "^0.11.7",
-    "@colyseus/social": "^0.11.6",
-    "colyseus": "^0.11.22",
-    "cors": "^2.8.5",
-    "express": "^4.16.4",
-    "express-jwt": "^5.3.1",
-    "tinyqueue": "^2.0.3",
-    "uuidv4": "^6.0.0"
-  }
+   "name": "port-of-mars-server",
+   "version": "0.1.0",
+   "description": "Port Of Mars digital version",
+   "main": "lib/index.js",
+   "scripts": {
+      "start": "ts-node -r tsconfig-paths/register src/index.ts",
+      "loadtest": "colyseus-loadtest loadtest/example.ts --room my_room --numClients 2",
+      "test": "echo \"Error: no test specified\" && exit 1"
+   },
+   "author": "Center for Behavior, Institutions, and the Environment (https://cbie.asu.edu)",
+   "license": "MIT",
+   "bugs": {
+      "url": "https://github.com/virtualcommons/port-of-mars/issues"
+   },
+   "homepage": "https://github.com/virtualcommons/port-of-mars#readme",
+   "devDependencies": {
+      "@colyseus/loadtest": "^0.11.3",
+      "@types/cors": "^2.8.6",
+      "@types/express": "^4.17.2",
+      "@types/jest": "^24.0.22",
+      "@types/lodash": "^4.14.144",
+      "@types/node": "^8.0.29",
+      "csvtojson": "^2.0.10",
+      "jest": "^24.9.0",
+      "prettier": "^1.19.1",
+      "ts-jest": "^24.1.0",
+      "ts-node": "3.3.0",
+      "tsconfig-paths": "^3.9.0",
+      "typescript": "^3.7"
+   },
+   "dependencies": {
+      "@colyseus/monitor": "^0.11.7",
+      "@colyseus/social": "^0.11.6",
+      "colyseus": "^0.11.22",
+      "cors": "^2.8.5",
+      "express": "^4.16.4",
+      "express-jwt": "^5.3.1",
+      "mysql": "^2.14.1",
+      "pg": "^7.14.0",
+      "reflect-metadata": "^0.1.10",
+      "tinyqueue": "^2.0.3",
+      "typeorm": "0.2.21",
+      "uuidv4": "^6.0.0"
+   }
 }
