@@ -32,7 +32,14 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
 import StatusBar from '@/components/gamedashboard/StatusBar.vue';
 import CardInvestment from '@/components/gamedashboard/cards/CardInvestment.vue';
-import {InvestmentData, INVESTMENTS, Resource, ResourceCostData, Role} from "shared/types";
+import {
+  InvestmentData,
+  INVESTMENTS,
+  Resource,
+  ResourceAmountData,
+  ResourceCostData,
+  Role
+} from "shared/types";
 import * as _ from 'lodash';
 
 @Component({
@@ -62,17 +69,23 @@ export default class ContainerInvestments extends Vue {
 
   get remainingTimeBlocks() {
     const p = this.$tstore.getters.player;
+    const pendingInvestments = p.pendingInvestments;
+    return this.getRemainingTimeBlocks(pendingInvestments);
+  }
+
+  getRemainingTimeBlocks(pendingInvestments: ResourceCostData) {
+    const p = this.$tstore.getters.player;
     const timeBlocks = p.timeBlocks;
     const costs = p.costs;
-    const pendingInvestments = p.pendingInvestments;
     return timeBlocks - _.reduce(INVESTMENTS, (tot, investment) => tot + pendingInvestments[investment]*costs[investment], 0)
   }
 
   setInvestmentAmount(msg: {name: Resource, units: number, cost: number}) {
+    const pendingInvestments = _.clone(this.$tstore.getters.player.pendingInvestments);
+    pendingInvestments[msg.name] = msg.units;
     if (
-      this.remainingTimeBlocks - msg.cost >= 0 &&
-      msg.cost > 0 &&
-      msg.units >= 0
+      msg.units >= 0 &&
+      this.getRemainingTimeBlocks(pendingInvestments) >= 0
     ) {
       this.$tstore.commit('SET_PENDING_INVESTMENT_AMOUNT', {
         investment: msg.name,
