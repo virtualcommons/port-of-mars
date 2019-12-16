@@ -4,9 +4,14 @@
       <MasterComponent />
       <ConfirmationModal />
       <CardModal />
+      <Notification
+        v-for="(notification, index) in notifications"
+        :index="index"
+        :length="notifications.length"
+        :key="index"
+        :message="notification"
+      />
       <BRow class="board reset">
-        <Notification v-for="(notification, index) in notifications" :index='index'
-                      :length='notifications.length' :key='index' :message='notification'/>
         <BCol cols="2" class="left reset">
           <ContainerLeft />
         </BCol>
@@ -44,7 +49,7 @@ import ConfirmationModal from '../components/gamedashboard/ConfirmationModal.vue
 import CardModal from '@/components/gamedashboard/cards/CardModal.vue';
 import Notification from '@/components/gamedashboard/Notification.vue';
 
-import { Phase } from "shared/types";
+import { Phase } from 'shared/types';
 import { RequestAPI } from '@/api/request';
 
 @Component({
@@ -63,24 +68,23 @@ import { RequestAPI } from '@/api/request';
   }
 })
 export default class GameDashboard extends Vue {
-
   @Inject()
-  readonly $api!:RequestAPI;
+  readonly $api!: RequestAPI;
 
-  get notifications(){
+  get notifications() {
     return this.$store.state.activeNotifications;
   }
 
-  get phase(){
+  get phase() {
     console.log(Phase);
     return Phase;
   }
 
-  get gamePhase(){
+  get gamePhase() {
     return this.$store.state.phase;
   }
 
-  handleRestart(){
+  handleRestart() {
     this.$api.resetGame();
   }
 }
@@ -138,7 +142,6 @@ export default class GameDashboard extends Vue {
   align-items: center;
 }
 
-.restart-button{
-
+.restart-button {
 }
 </style>

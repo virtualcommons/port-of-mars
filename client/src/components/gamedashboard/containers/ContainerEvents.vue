@@ -11,7 +11,7 @@
         </BRow>
       </BCol>
       <BCol class="events-actions">
-        <EventTest />
+        <EventView />
       </BCol>
     </BRow>
   </BContainer>
@@ -21,11 +21,11 @@
 import { Vue, Component } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
 
-import EventTest from '@/components/gamedashboard/events/EventTest.vue';
+import EventView from '@/components/gamedashboard/events/EventView.vue';
 
 @Component({
   components: {
-    EventTest
+    EventView
   }
 })
 export default class ContainerEvents extends Vue {

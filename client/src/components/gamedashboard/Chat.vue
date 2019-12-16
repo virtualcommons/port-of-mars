@@ -1,5 +1,5 @@
 <template>
-  <div class="chat v-step-16">
+  <div class="chat v-step-16" v-if="layout !== 'DISABLE_CHAT'">
     <p class="chat-title">Chat</p>
     <div class="chat-chat">
       <div class="chat-message" v-for="message in messages" :key="message.dateCreated">
@@ -26,6 +26,11 @@
       <!-- <button class="chat-input-sendbtn" type="button" @click="submitToChat">Send</button> -->
     </div>
   </div>
+  <div class="chat-disabled-container" v-else-if="layout === 'DISABLE_CHAT'">
+    <div class="chat-disabled">
+      <p>Chat is disabled this round.</p>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -42,8 +47,15 @@ export default class Chat extends Vue {
   count: number = 0;
 
   updated() {
-    const elem = this.$el.querySelector('.chat-chat');
-    elem!.scrollTop = elem!.scrollHeight;
+    if (this.layout !== 'DISABLE_CHAT') {
+      const elem = this.$el.querySelector('.chat-chat');
+      elem!.scrollTop = elem!.scrollHeight;
+    }
+  }
+
+  get layout() {
+    console.log(`(${typeof this.$tstore.state.eventView}): ${this.$tstore.state.eventView}`);
+    return this.$tstore.state.eventView;
   }
 
   get messages() {
@@ -65,7 +77,7 @@ export default class Chat extends Vue {
 }
 </script>
 
-<style lang="css" scoped>
+<style scoped>
 .chat {
   height: 50%;
   width: 100%;
@@ -174,5 +186,29 @@ export default class Chat extends Vue {
 
 .chat-input-sendbtn:hover {
   transform: scale(1.1);
+}
+
+.chat-disabled-container {
+  height: 50%;
+  width: 100%;
+  padding: 0.5rem;
+  border: 0.125rem solid var(--space-white-opaque-2);
+  margin-top: 2rem;
+}
+
+.chat-disabled {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--space-white);
+  background-color: var(--space-white-opaque-1);
+}
+
+.chat-disabled p {
+  font-size: var(--font-small);
+  text-align: center;
+  margin-bottom: 0;
 }
 </style>

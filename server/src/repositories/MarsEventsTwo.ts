@@ -69,7 +69,7 @@ const marsEvents: Array<MarsEventDataTwo> = enumerate(
         },
         client: {
           // Need to add timeblocks to user state?
-          view: [EventClientView.YES_NO_VOTE],
+          view: [EventClientView.VOTE_YES_NO],
           actions: [EventClientActions.PLAYER_COLLECT_VOTE, EventClientActions.PLAYER_SEND_VOTE]
         }
       },
