@@ -6,9 +6,11 @@ EXPOSE 3000
 
 WORKDIR /code
 
+COPY ./deploy/wait-for-it.sh /code
+
 COPY package.json /code
 RUN yarn install
 
 COPY . /code
 
-CMD ["yarn", "start"]
+CMD ["wait-for-it.sh", "yarn", "start"]
