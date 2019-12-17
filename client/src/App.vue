@@ -1,5 +1,5 @@
 <template>
-  <div class="game">
+  <div id='app' class="game">
     <component :is="layout" />
   </div>
 </template>

@@ -10,12 +10,9 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Inject } from 'vue-property-decorator';
-import { WaitingRequestAPI } from '../../api/waitingLobbyAPI/request';
+import { Vue, Component } from 'vue-property-decorator';
 @Component({})
 export default class LoginButton extends Vue {
-  @Inject()
-  readonly $api!: WaitingRequestAPI;
   /**
    * setLayout() method
    * @param layout The string value of the layout.
@@ -25,8 +22,7 @@ export default class LoginButton extends Vue {
    */
   setLayout(layout: string) {
     this.$store.commit('SET_LAYOUT', layout);
-    console.log("i made it! ~client");
-    this.$api.joinGame();
+   
   }
 }
 </script>
