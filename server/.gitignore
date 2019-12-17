@@ -4,5 +4,5 @@ node_modules/
 build/
 tmp/
 temp/
-deploy/pom_db_password
+deploy/pom_db_password*
 ormconfig.json

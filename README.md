@@ -7,10 +7,10 @@
 To create a development environment for your client and server run
 
 ```bash
-./build.sh build dev
+./build.sh init dev
 ```
 
-This creates a `docker-compose.yml` file and builds the `client` and `server` docker images.
+This creates secrets for the database, creates a `docker-compose.yml` file and builds the `client` and `server` docker images.
 
 Now run
 

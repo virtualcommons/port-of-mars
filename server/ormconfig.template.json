@@ -4,6 +4,7 @@
     "port": 5432,
     "username": "marsmadness",
     "database": "port_of_mars",
+    "password": "DB_PASSWORD",
     "synchronize": true,
     "logging": false,
     "entities": [
