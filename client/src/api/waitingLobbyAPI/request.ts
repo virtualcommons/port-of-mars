@@ -11,8 +11,8 @@ export class WaitingRequestAPI{
         this.room.send(req);
     }
 
-    public joinGame(){
-        const msg: SwitchRooms = {kind: 'switch-rooms'};
+    public joinRoom(room:string){
+        const msg: SwitchRooms = {kind: 'switch-rooms', room};
         this.send(msg);
     }
 

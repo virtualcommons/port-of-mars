@@ -8,10 +8,6 @@ export class WaitingRoom extends Room{
         message:'youre in the waiting room!'
     }
 
-    switchRooms:WaitingResponses = {
-        kind:'switch-rooms',
-        message:'clear to swtich'
-    }
 
     onJoin(client:Client, options:any){
         this.send(client,this.welcomeMsg);
@@ -23,10 +19,11 @@ export class WaitingRoom extends Room{
     prepareRequest(r: WaitingRequests, client: Client){
         switch(r.kind){
             case 'switch-rooms':
-                console.log("i made it! ~prepare req");
-                // client.leave();
-                // client.joinOrCreate('game');
-                this.send(client,this.switchRooms);
+                const roomToGoTo = {
+                    kind:'switch-rooms',
+                    room:r.room
+                }
+                this.send(client,roomToGoTo);
                 break;
             
         }

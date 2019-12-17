@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import { QuizData } from 'shared/types';
 
-const quizQuestions: Array<QuizData> = [
+export const quizQuestions: Array<QuizData> = [
     {
       id: 1,
       question: "When does the game end?",

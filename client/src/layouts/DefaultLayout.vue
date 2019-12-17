@@ -20,9 +20,16 @@ export default class DefaultLayout extends Vue {
   readonly $api!: WaitingRequestAPI;
 
   get routerInfo(){
-      if(this.$api.joinGame !== undefined && this.$route.path == '/game'){
-         this.$api.joinGame();
+      if(this.$api.joinRoom !== undefined){
+        if(this.$route.path == '/game'){
+          this.$api.joinRoom('game');
+        }
+
+        if(this.$route.path == '/quiz'){
+          this.$api.joinRoom('quiz');
+        }
       }
+
     return this.$route.path;
   }
 }

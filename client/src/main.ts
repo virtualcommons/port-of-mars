@@ -14,6 +14,9 @@ import { gameApplyServerResponses } from './api/gameAPI/response';
 import { WaitingRequestAPI } from './api/waitingLobbyAPI/request';
 import { waitingApplyServerResponses } from './api/waitingLobbyAPI/response';
 
+import { QuizRequestAPI } from './api/quizAPI/request';
+import { quizApplyServerResponses } from './api/quizAPI/response';
+
 import {State} from "@/store/state";
 import Getters from "@/store/getters";
 import Mutations from "@/store/mutationFolder";
@@ -58,6 +61,12 @@ async function setupManager(type:string){
     const gameRoom = await client.joinOrCreate('game');
     gameApplyServerResponses(gameRoom, store);
     return new GameRequestAPI(gameRoom);
+  }
+
+  if(type=='quiz'){
+    const quizRoom = await client.joinOrCreate('quiz');
+    quizApplyServerResponses(quizRoom, store);
+    return new QuizRequestAPI(quizRoom);
   }
 }
 

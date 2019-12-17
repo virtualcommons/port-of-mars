@@ -6,7 +6,7 @@ export interface WaitingLobby{
 
 export interface SwitchRooms{
     kind: 'switch-rooms'
-    message:string
+    room:string
 }
 
 export type WaitingResponses = WaitingLobby | SwitchRooms;

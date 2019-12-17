@@ -9,15 +9,15 @@ import { TStore } from 'vue/types/vue';
 
 type Schemify<T> = T & Schema;
 
-async function switchRooms(){
-    clientRunner('game');
+async function switchRooms(room:string){
+    clientRunner(room);
 }
 
 export function waitingApplyServerResponses<T>(room: Room, store: TStore){
     room.onMessage((msg: WaitingResponses) => {
         switch(msg.kind){
             case 'waiting-lobby' : console.log(msg.message); break;
-            case 'switch-rooms' : switchRooms(); break;
+            case 'switch-rooms' : switchRooms(msg.room); break;
             default:break;
         }
     })
