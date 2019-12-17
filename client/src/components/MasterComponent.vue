@@ -27,9 +27,16 @@ export default class Master extends Vue {
       this.$api.resetGame();
     }
     if(e.key === 'm'){
-      this.$store.commit('ADD_TO_MARS_LOG',{category:'just fun',message:'this is just for fun!'})
+      const dataPackage = {
+            performedBy:this.$store.state.role,
+            category:'justforfun',
+            content:'just a fun little reminder!',
+            timestamp: new Date().getTime()
+          }
+      this.$store.commit('ADD_TO_MARS_LOG',dataPackage)
     }
     if(e.key=='n'){
+      
       this.$store.commit('CREATE_NOTIFICATION','this is just a little reminder that it will be alright!');
     }
   }

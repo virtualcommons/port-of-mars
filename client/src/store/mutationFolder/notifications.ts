@@ -22,7 +22,7 @@ export default {
     state.activeNotifications.push(payload);
   },
   HARD_RESET_MARS_LOG(state:State, payload:string){
-    //state.logs.hardReset();
+    state.logs = [];
   },
   HARD_RESET_NOTIFICATIONS(state: State,payload:string){
     state.activeNotifications = [];
