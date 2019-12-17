@@ -13,6 +13,6 @@ export class Player {
     })
     role!: Role;
 
-    @ManyToOne(type => User, user => user.players)
+    @ManyToOne(type => User, user => user.players, { nullable: false })
     user!: User
 }

@@ -6,7 +6,7 @@ export class GameEvent {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @ManyToOne(type => Game, game => game.events)
+  @ManyToOne(type => Game, game => game.events, { nullable: false })
   game!: Game;
 
   @Column({type: 'jsonb'})
