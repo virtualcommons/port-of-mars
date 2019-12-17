@@ -1,25 +1,23 @@
-import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
+import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import {Player} from "@/entity/Player";
 
 @Entity()
 export class User {
-
-    constructor() {
-        this.id = 1;
-        this.firstName = 'Mars';
-        this.lastName = 'Madness';
-        this.age = 24;
-    }
-
     @PrimaryGeneratedColumn()
-    id: number;
+    id!: number;
 
     @Column()
-    firstName: string;
+    name!: string;
 
     @Column()
-    lastName: string;
+    username!: string;
 
     @Column()
-    age: number;
+    email!: string;
 
+    @OneToMany(type => Player, player => player.user)
+    players!: Array<Player>
 }
+
+
+

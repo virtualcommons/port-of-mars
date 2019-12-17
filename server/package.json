@@ -5,6 +5,7 @@
    "main": "lib/index.js",
    "scripts": {
       "start": "ts-node -r tsconfig-paths/register src/index.ts",
+      "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
       "loadtest": "colyseus-loadtest loadtest/example.ts --room my_room --numClients 2",
       "test": "echo \"Error: no test specified\" && exit 1"
    },
@@ -40,7 +41,7 @@
       "pg": "^7.14.0",
       "reflect-metadata": "^0.1.10",
       "tinyqueue": "^2.0.3",
-      "typeorm": "0.2.21",
+      "typeorm": "^0.2.21",
       "uuidv4": "^6.0.0"
    }
 }
