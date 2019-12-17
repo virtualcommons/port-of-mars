@@ -19,6 +19,8 @@ import Getters from "@/store/getters";
 import Mutations from "@/store/mutationFolder";
 
 declare module 'vue/types/vue' {
+
+
   interface TStore {
     state: State
     readonly getters: { [K in keyof typeof Getters]: ReturnType<typeof Getters[K]> }
@@ -31,46 +33,32 @@ declare module 'vue/types/vue' {
   }
 }
 
-export function setupManager(type:string){
-  if(type=='start'){
-    colyseusSetupWait().then(($api) => {
-      new Vue({
-        router,
-        store,
-        provide() {
-          return { $api };
-        },
-        render: h => h(App),
-      }).$mount('#app');
-    });
-  }
-
-  if(type=='game'){
-    colyseusSetupGame().then(($api) => {
-      new Vue({
-        router,
-        store,
-        provide() {
-          return { $api };
-        },
-        render: h => h(App),
-      }).$mount('#app');
-    });
-  }
+export function clientRunner(type:string){
+  setupManager(type).then(($api) => {
+    new Vue({
+      router,
+      store,
+      provide() {
+        return { $api };
+      },
+      render: h => h(App),
+    }).$mount('#app');
+  });
 }
 
-async function colyseusSetupWait() {
-  const client = new Colyseus.Client('ws://localhost:2567');
-  const waitingRoom = await client.joinOrCreate('waiting');
-  waitingApplyServerResponses(waitingRoom, store);
-  return new WaitingRequestAPI(waitingRoom);
-}
+async function setupManager(type:string){
+  const client = new Colyseus.Client('ws://localhost:2567')
+  if(type == 'start'){
+    const waitingRoom = await client.joinOrCreate('waiting');
+    waitingApplyServerResponses(waitingRoom, store);
+    return new WaitingRequestAPI(waitingRoom);
+  }
 
-async function colyseusSetupGame() {
-  const client = new Colyseus.Client('ws://localhost:2567');
-  const gameRoom = await client.joinOrCreate('game');
-  gameApplyServerResponses(gameRoom, store);
-  return new GameRequestAPI(gameRoom);
+  if(type == 'game'){
+    const gameRoom = await client.joinOrCreate('game');
+    gameApplyServerResponses(gameRoom, store);
+    return new GameRequestAPI(gameRoom);
+  }
 }
 
 Vue.use(Vuex);
@@ -83,7 +71,10 @@ Object.defineProperty(Vue.prototype, '$tstore', {
 
 Vue.config.productionTip = false;
 
-setupManager('start');
+
+clientRunner('start');
+
+
 // colyseusSetup().then(($api) => {
 //   new Vue({
 //     router,
