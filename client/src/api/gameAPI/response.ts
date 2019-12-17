@@ -74,6 +74,7 @@ export function gameApplyServerResponses<T>(room: Room, store: TStore) {
     store.commit('REMOVE_FROM_CHAT', deschemify(msg));
   };
 
+<<<<<<< HEAD:client/src/api/gameAPI/response.ts
   // room.state.logs.onAdd = (logMsg: Schemify<MarsLogMessageData>, index: number) => {
   //   store.commit('ADD_TO_MARS_LOG', deschemify(logMsg));
   // }
@@ -81,6 +82,8 @@ export function gameApplyServerResponses<T>(room: Room, store: TStore) {
   // room.state.logs.onRemove = (logMsg: Schemify<MarsLogMessageData>, index: number) => {
   //   store.commit('REMOVE_FROM_MARS_LOG', deschemify(logMsg));
   // }
+=======
+>>>>>>> 22596054a8ad01963325e216ca8034ab57502e15:client/src/api/gameAPI/response.ts
   // room.state.players.onChange = (changes: Array<DataChange>) => {
   //   for (const change of changes) {
   //     store.commit('SET_PLAYER', { role: change.field as Role, data: change.value});
