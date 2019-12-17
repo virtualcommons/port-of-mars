@@ -10,7 +10,10 @@ type Schemify<T> = T & Schema;
 export function quizApplyServerResponses<T>(room: Room, store: TStore){
     room.onMessage((msg:QuizResponses) => {
         switch(msg.kind){
-            case 'quiz-lobby':console.log(msg.message);break;
+            case 'quiz-lobby':
+                console.log(msg.message);
+                store.commit('SET_QUIZ_QUESTIONS',msg.questions);
+                break;
             default:break;
         }
     })

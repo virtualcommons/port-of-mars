@@ -29,35 +29,50 @@ import { QuizRequestAPI } from '../api/quizAPI/request';
 export default class TutorialQuiz extends Vue {
     private answersArray = [-1,-1,-1,-1,-1,-1];
     private index = 0;
+    
+    get quizQuestions(){
+      console.log(this.$store.state.quizQuestions);
+      return this.$store.state.quizQuestions;
+    }
 
     @Inject()
-    readonly api!: QuizRequestAPI;
+    readonly $api!: QuizRequestAPI;
+
+    
+
+    handleUpdate(id,name){
+        // if(id == this.quizQuestions[this.index].correct){
+        //     this.answersArray[this.index] = 1;
+        // } else {
+        //     this.answersArray[this.index] = 0;
+        // }
+
+        // if(name != 2){
+        //     this.index += name;
+        // } else {
+        //     console.log(this.answersArray);
+        // }
 
 
-    // handleUpdate(id,name){
-    //     if(id == this.quizQuestions[this.index].correct){
-    //         this.answersArray[this.index] = 1;
-    //     } else {
-    //         this.answersArray[this.index] = 0;
-    //     }
+        // if(this.index < 0){
+        //     this.index = 8;
+        // }
 
-    //     if(name != 2){
-    //         this.index += name;
-    //     } else {
-    //         console.log(this.answersArray);
-    //     }
+        // if(this.index > 8){
+        //     this.index = 0;
+        // }
+        this.answersArray[this.index] = id;
 
+        if(name != 2){
+          this.index = (this.index+name)%this.quizQuestions.length;
+          if(this.index <= -1) this.index = this.quizQuestions.length-1;
 
-    //     if(this.index < 0){
-    //         this.index = 8;
-    //     }
+        } else {
+          this.$api.submitQuiz(this.answersArray);
+        }
 
-    //     if(this.index > 8){
-    //         this.index = 0;
-    //     }
-
-
-    // }
+        console.log(this.index);
+    }
 }
 </script>
 

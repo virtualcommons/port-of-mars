@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import { QuizData } from 'shared/types';
 
-export const quizQuestions: Array<QuizData> = [
+const quizQuestionsRaw: Array<QuizData> = [
     {
       id: 1,
       question: "When does the game end?",
@@ -29,7 +29,7 @@ export const quizQuestions: Array<QuizData> = [
       id: 3,
       question: "How do you trade cards with others?",
 
-      correct: 0,
+      correct: 2,
       options:[
         "During the trade period you indicate your preferences of cards",
         "Expressing your preferences in the chat box is sufficient.",
@@ -71,7 +71,7 @@ export const quizQuestions: Array<QuizData> = [
       id: 7,
       question: "You get each round 10 time blocks? Which of the following statements is incorrect:",
        
-      correct: 0,
+      correct: 1,
       options:["You can spend as many time blocks as you want.",
       "Every time block not spend can be saved for next round.",
       "Each player has their special skills impacting the costs of influence cards.",
@@ -98,3 +98,18 @@ export const quizQuestions: Array<QuizData> = [
       "The costs of trade.",]
     }
   ]
+
+export const QuizQuestions = quizQuestionsRaw.map((q) => {
+  return {
+    id:q.id,
+    question:q.question,
+    options:q.options,
+  }
+});
+
+export const QuizQuestionAnswers = quizQuestionsRaw.map((q) => {
+  return {
+    id:q.id,
+    correct:q.correct
+  }
+})

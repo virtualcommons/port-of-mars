@@ -214,13 +214,20 @@ export interface GameData {
   tradeSet: TradeSetData
 }
 
-export interface QuizData {
+export interface QuizQuestionData {
   id: number
   question: string
   // option1: string
   // option2: string
   // option3: string
   // option4: string
-  correct: number
+  // correct: number
   options: Array<String>
+}
+
+export interface QuizResultPackage {
+  id:number
+  userAnswer:number,
+  correctAnswer:number,
+  correct:boolean,
 }
