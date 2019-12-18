@@ -7,7 +7,7 @@ import {QuizResponses} from 'shared/quizLobby/responses';
 
 type Schemify<T> = T & Schema;
 
-export function quizApplyServerResponses<T>(room: Room, store: TStore){
+export function applyQuizServerResponses<T>(room: Room, store: TStore){
     room.onMessage((msg:QuizResponses) => {
         switch(msg.kind){
             case 'quiz-lobby':

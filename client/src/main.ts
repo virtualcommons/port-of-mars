@@ -8,14 +8,14 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 
-import { GameRequestAPI } from './api/gameAPI/request';
-import { gameApplyServerResponses } from './api/gameAPI/response';
+import { GameRequestAPI } from './api/game/request';
+import { applyGameServerResponses } from './api/game/response';
 
-import { WaitingRequestAPI } from './api/waitingLobbyAPI/request';
-import { waitingApplyServerResponses } from './api/waitingLobbyAPI/response';
+import { WaitingRequestAPI } from './api/waitingLobby/request';
+import { applyWaitingServerResponses } from './api/waitingLobby/response';
 
-import { QuizRequestAPI } from './api/quizAPI/request';
-import { quizApplyServerResponses } from './api/quizAPI/response';
+import { QuizRequestAPI } from './api/quiz/request';
+import { applyQuizServerResponses } from './api/quiz/response';
 
 import {State} from "@/store/state";
 import Getters from "@/store/getters";
@@ -53,19 +53,19 @@ async function setupManager(type:string){
   const client = new Colyseus.Client('ws://localhost:2567')
   if(type == 'start'){
     const waitingRoom = await client.joinOrCreate('waiting');
-    waitingApplyServerResponses(waitingRoom, store);
+    applyWaitingServerResponses(waitingRoom, store);
     return new WaitingRequestAPI(waitingRoom);
   }
 
   if(type == 'game'){
     const gameRoom = await client.joinOrCreate('game');
-    gameApplyServerResponses(gameRoom, store);
+    applyGameServerResponses(gameRoom, store);
     return new GameRequestAPI(gameRoom);
   }
 
   if(type=='quiz'){
     const quizRoom = await client.joinOrCreate('quiz');
-    quizApplyServerResponses(quizRoom, store);
+    applyQuizServerResponses(quizRoom, store);
     return new QuizRequestAPI(quizRoom);
   }
 }

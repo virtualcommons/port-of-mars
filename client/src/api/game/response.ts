@@ -49,7 +49,7 @@ function applyPlayerResponses(player: any, store: TStore) {
   player.triggerAll();
 }
 
-export function gameApplyServerResponses<T>(room: Room, store: TStore) {
+export function applyGameServerResponses<T>(room: Room, store: TStore) {
   room.onStateChange.once((state: Schemify<GameData>) => {
     ROLES.forEach(role => applyPlayerResponses(state.players[role], store));
     (state.players as any).triggerAll();

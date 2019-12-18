@@ -13,11 +13,6 @@ export interface ChatMessageData {
   round: number
 }
 
-export interface MarsLogData{
-  category:string,
-  message:string,
-}
-
 export interface ResourceAmountData {
   science: number
   government: number
@@ -217,11 +212,6 @@ export interface GameData {
 export interface QuizQuestionData {
   id: number
   question: string
-  // option1: string
-  // option2: string
-  // option3: string
-  // option4: string
-  // correct: number
   options: Array<String>
 }
 

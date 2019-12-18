@@ -13,7 +13,7 @@ async function switchRooms(room:string){
     clientRunner(room);
 }
 
-export function waitingApplyServerResponses<T>(room: Room, store: TStore){
+export function applyWaitingServerResponses<T>(room: Room, store: TStore){
     room.onMessage((msg: WaitingResponses) => {
         switch(msg.kind){
             case 'waiting-lobby' : console.log(msg.message); break;
