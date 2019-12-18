@@ -49,7 +49,7 @@ function applyPlayerResponses(player: any, store: TStore) {
   player.triggerAll();
 }
 
-export function applyGameServerResponses<T>(room: Room, store: TStore) {
+export function gameApplyServerResponses<T>(room: Room, store: TStore) {
   room.onStateChange.once((state: Schemify<GameData>) => {
     ROLES.forEach(role => applyPlayerResponses(state.players[role], store));
     (state.players as any).triggerAll();
@@ -80,7 +80,7 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
 
   room.state.logs.onRemove = (logMsg: Schemify<MarsLogMessageData>, index: number) => {
     store.commit('REMOVE_FROM_MARS_LOG', deschemify(logMsg));
-  }
+  // }
   // room.state.players.onChange = (changes: Array<DataChange>) => {
   //   for (const change of changes) {
   //     store.commit('SET_PLAYER', { role: change.field as Role, data: change.value});

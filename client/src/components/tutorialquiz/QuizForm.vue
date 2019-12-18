@@ -20,7 +20,6 @@
 
 <script lang='ts'>
 import { Vue, Component,Prop } from "vue-property-decorator";
-import {QuizData} from "shared/types";
 
 @Component({})
 export default class QuizForm extends Vue{

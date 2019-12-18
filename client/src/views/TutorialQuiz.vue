@@ -11,8 +11,6 @@
 </template>
 
 <script lang="ts">
-import { QuizData } from 'shared/types';
-
 import { Component, Vue, Inject } from 'vue-property-decorator';
 import {BContainer, BRow, BCol} from 'bootstrap-vue';
 import QuizForm from "@/components/tutorialquiz/QuizForm.vue";

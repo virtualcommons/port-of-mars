@@ -15,7 +15,7 @@ import {
   GameData,
   EventClientView,
   MarsLogMessageData,
-  QuizData,
+  QuizQuestionData,
 } from 'shared/types';
 import { Accomplishment } from '@/models/AccomplishmentsModels';
 
@@ -96,7 +96,7 @@ export interface State extends GameData {
 
   eventView: EventClientView;
 
-  quizQuestions: Array<QuizData>;
+  quizQuestions: Array<QuizQuestionData>;
 }
 
 export const initialStoreState: State = {

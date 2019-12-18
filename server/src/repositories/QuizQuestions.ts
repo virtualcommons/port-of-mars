@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import { QuizData } from 'shared/types';
+import { QuizData, QuizQuestionData } from 'shared/types';
 
 const quizQuestionsRaw: Array<QuizData> = [
     {
@@ -99,7 +99,7 @@ const quizQuestionsRaw: Array<QuizData> = [
     }
   ]
 
-export const QuizQuestions = quizQuestionsRaw.map((q) => {
+export const QuizQuestions:Array<QuizQuestionData> = quizQuestionsRaw.map((q) => {
   return {
     id:q.id,
     question:q.question,
