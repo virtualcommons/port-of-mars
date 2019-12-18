@@ -8,6 +8,7 @@ To create a development environment for your client and server run
 
 ```bash
 ./build.sh init dev
+docker-compose up -d
 ```
 
 This creates secrets for the database, creates a `docker-compose.yml` file and builds the `client` and `server` docker images.

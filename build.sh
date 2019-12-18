@@ -43,7 +43,7 @@ test_app() {
 case "${1:-deploy}" in
   'build') build "${2:-prod}";;
   'deploy') deploy "${2:-prod}";;
-  'init') deploy "${2:-prod}";;
+  'init') init "${2:-prod}";;
   'secrets') set_secrets;;
   'test') test_app "${2:-dev}";;
   'template') build_template "${2:-prod}";;
