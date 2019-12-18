@@ -81,11 +81,6 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
   room.state.logs.onRemove = (logMsg: Schemify<MarsLogMessageData>, index: number) => {
     store.commit('REMOVE_FROM_MARS_LOG', deschemify(logMsg));
   }
-  // room.state.players.onChange = (changes: Array<DataChange>) => {
-  //   for (const change of changes) {
-  //     store.commit('SET_PLAYER', { role: change.field as Role, data: change.value});
-  //   }
-  // };
 
   room.state.marsEvents.onAdd = (e: Schemify<MarsEventData>, index: number) => {
     store.commit('ADD_TO_EVENTS', deschemify(e));
@@ -120,17 +115,7 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
       if (change.field === 'upkeep') {
         const upkeep: number = change.value;
         store.commit('SET_UPKEEP', upkeep);
-        
-        if(upkeep < 100) {
-          store.commit('CREATE_NOTIFICATION',`ohmygod we're all gonna dieeee!`);
-          const dataPackage = {
-            performedBy:store.state.role,
-            category:'upkeep',
-            content:'upkeep has dropped by 25!',
-            timestamp: new Date().getTime()
-          }
-          store.commit('ADD_TO_MARS_LOG',dataPackage);
-        }
+        store.commit('CREATE_NOTIFICATION','upkeep changed!')
       }
     });
   };
