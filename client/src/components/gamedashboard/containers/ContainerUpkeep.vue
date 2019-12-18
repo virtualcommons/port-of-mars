@@ -34,7 +34,7 @@ export default class ContainerUpkeep extends Vue {
 
 <style scoped>
 .container-upkeep {
-  height: 20%;
+  height: 15%;
   width: 100%;
   max-width: none;
   padding: 0 0.5rem 1rem 0.5rem;

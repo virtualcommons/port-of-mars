@@ -13,11 +13,9 @@ import ContainerPhase from '@/components/gamedashboard/containers/ContainerPhase
 @Component({
   components: {
     ContainerUpkeep,
-    ContainerPhase,
-
-  },
+    ContainerPhase
+  }
 })
-
 export default class ContainerTop extends Vue {}
 </script>
 
@@ -25,7 +23,6 @@ export default class ContainerTop extends Vue {}
 .container-top {
   height: 100%;
   width: 100%;
-  padding: 0 1rem;
   display: flex;
   flex-direction: column;
   justify-content: center;

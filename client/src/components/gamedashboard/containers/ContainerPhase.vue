@@ -4,16 +4,24 @@
       <BCol class="phase" cols="3">
         <Phase class="v-step-3 v-step-9 v-step-19" />
       </BCol>
-      <BCol id="hscroll" class="events-container v-step-5" cols="9">
-        <div class="events">
-          <!-- need to refactor key -->
-          <p class="events-empty" v-if="eventsForTheRound.length === 0">No Active Events</p>
-          <CardEvent
-            v-for="eventItem in eventsForTheRound"
-            :event="eventItem"
-            :key="Math.random()"
-          />
+      <BCol id="hscroll" class="events-container v-step-5" cols="6">
+        <div class="events-container-outer">
+          <p class="events-container-topbar">Events</p>
+          <div class="events-container-inner">
+            <div class="events">
+              <!-- need to refactor key -->
+              <p class="events-empty" v-if="eventsForTheRound.length === 0">No Active Events</p>
+              <CardEvent
+                v-for="eventItem in eventsForTheRound"
+                :event="eventItem"
+                :key="Math.random()"
+              />
+            </div>
+          </div>
         </div>
+      </BCol>
+      <BCol cols="3" class="mars-mars">
+        <MarsLog />
       </BCol>
     </BRow>
   </BContainer>
@@ -24,6 +32,7 @@ import { Vue, Component } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
 import Phase from '@/components/gamedashboard/Phase.vue';
 import CardEvent from '@/components/gamedashboard/cards/CardEvent.vue';
+import MarsLog from '@/components/gamedashboard/MarsLog.vue';
 
 @Component({
   components: {
@@ -31,7 +40,8 @@ import CardEvent from '@/components/gamedashboard/cards/CardEvent.vue';
     BRow,
     BCol,
     Phase,
-    CardEvent
+    CardEvent,
+    MarsLog
   }
 })
 export default class ContainerPhase extends Vue {
@@ -59,7 +69,7 @@ export default class ContainerPhase extends Vue {
 
 <style scoped>
 .container-phase {
-  height: 100%;
+  height: 85%;
   width: 100%;
   max-width: none;
   padding: 0;
@@ -70,14 +80,15 @@ export default class ContainerPhase extends Vue {
 }
 
 .row-phase {
-  height: 80%;
+  height: 100%;
   width: 100%;
   padding: 0;
   margin: 0;
 }
 
 .phase {
-  padding: 1rem 0.5rem;
+  height: 100%;
+  padding: 0.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -85,34 +96,64 @@ export default class ContainerPhase extends Vue {
 
 .events-container {
   height: 100%;
-  width: 100%;
-  max-width: none;
-  padding: 0;
-  margin: 0;
+  padding: 0.5rem 0;
+}
+
+.events-container-outer {
+  height: 100%;
+  padding: 0.5rem;
+  /* border: 0.125rem solid var(--space-white-opaque-2); */
   display: flex;
+  flex-flow: column;
+}
+
+.events-container-topbar {
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: var(--font-med);
+  text-align: center;
+  color: var(--space-gray);
+  background-color: var(--space-orange);
+}
+
+.events-container-inner {
+  flex-grow: 1;
+  width: 100%;
+  padding: 0 0.5rem;
+  display: flex;
+  justify-content: center;
+  background-color: var(--space-white-opaque-1);
+}
+
+.events {
+  height: 100%;
+  width: auto;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
   overflow-x: scroll;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE 10+ */
 }
 
-.events-container::-webkit-scrollbar {
+.events::-webkit-scrollbar {
   /* WebKit */
-  width: 0;
   height: 0;
-}
-
-.events {
-  height: 100%;
-  padding: 0 0.5rem;
-  margin: 0;
-  flex-grow: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 0;
 }
 
 .events-empty {
+  margin-bottom: 0;
+  font-size: var(--font-med);
+  text-align: center;
   color: var(--space-white-opaque-2);
-  font-size: var(--font-large);
+}
+
+/* NEW CONTENT */
+.mars-mars {
+  height: 100%;
+  padding: 0.5rem;
+  /* background-color: green; */
 }
 </style>

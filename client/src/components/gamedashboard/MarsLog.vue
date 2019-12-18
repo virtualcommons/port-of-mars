@@ -2,6 +2,9 @@
   <div class="marslog">
     <p class="marslog-title">Mars Log</p>
     <div class="marslog-log">
+      <p v-if="logs.length === 0" class="marslog-empty">
+        No Logs
+      </p>
       <div
         class="marslog-message"
         v-for="log in logs"
@@ -10,7 +13,9 @@
       >
         <p class="marslog-message-category">{{ log.category }}</p>
         <p class="marslog-message-content">{{ log.content }}</p>
-        <p class="marslog-message-time"><span>[ </span>{{ marsLogTime(log.timestamp) }}<span> ]</span></p>
+        <p class="marslog-message-time">
+          <span>[ </span>{{ marsLogTime(log.timestamp) }}<span> ]</span>
+        </p>
       </div>
     </div>
   </div>
@@ -51,11 +56,10 @@ export default class MarsLog extends Vue {
 
 <style scoped>
 .marslog {
-  height: 50%;
+  height: 100%;
   width: 100%;
   padding: 0.5rem;
-  border: 0.125rem solid var(--space-white-opaque-2);
-  margin-top: 2rem;
+  /* border: 0.125rem solid var(--space-white-opaque-2); */
   display: flex;
   flex-direction: column;
 }
@@ -65,7 +69,6 @@ export default class MarsLog extends Vue {
   margin-bottom: 0.5rem;
   font-size: var(--font-med);
   text-align: center;
-  /* text-transform: uppercase; */
   color: var(--space-gray);
   background-color: var(--space-orange);
 }
@@ -74,12 +77,18 @@ export default class MarsLog extends Vue {
   height: 100%;
   width: 100%;
   overflow-y: scroll;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE 10+ */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.marslog-empty {
+  margin-bottom: 0;
+  font-size: var(--font-small);
+  text-align: center;
+  color: var(--space-white-opaque-2);
 }
 
 .marslog-log::-webkit-scrollbar {
-  /* WebKit */
   height: 0;
   width: 0;
 }
@@ -91,7 +100,6 @@ export default class MarsLog extends Vue {
   margin-bottom: 0.5rem;
   font-size: var(--font-small);
   color: var(--space-white);
-  /* background-color: var(--space-white-opaque-1); */
   overflow: auto;
 }
 

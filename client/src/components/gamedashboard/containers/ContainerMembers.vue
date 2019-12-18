@@ -1,6 +1,6 @@
 <template>
   <div class="container-members v-step-17">
-    <Member
+    <!-- <Member
       class="v-step-18"
       v-for="(player, role) in otherPlayers"
       :key="role"
@@ -8,7 +8,8 @@
       :playerScore="player.victoryPoints"
       :memberNotificationTradeCount="1"
       :memberNotificationFinished="true"
-    />
+    /> -->
+    <p>scoreboard under construction</p>
   </div>
 </template>
 
@@ -34,8 +35,14 @@ export default class ContainerMembers extends Vue {
   width: 100%;
   flex-grow: 1;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-end;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--space-white-opaque-1);
+}
+
+.container-members p {
+  margin-bottom: 0;
+  font-size: var(--font-small);
+  color: var(--space-white);
 }
 </style>

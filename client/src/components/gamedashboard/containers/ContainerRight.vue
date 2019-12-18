@@ -14,8 +14,8 @@ import ContainerMembers from '@/components/gamedashboard/containers/ContainerMem
 @Component({
   components: {
     Chat,
-    ContainerMembers,
-  },
+    ContainerMembers
+  }
 })
 export default class ContainerRight extends Vue {}
 </script>
@@ -31,7 +31,7 @@ export default class ContainerRight extends Vue {}
 }
 
 .scores-title {
-  margin-bottom: 1rem;
+  margin: 0 0 0.5rem 0;
   border-bottom: 0.125rem solid var(--space-orange);
   display: inline-block;
   align-self: flex-end;

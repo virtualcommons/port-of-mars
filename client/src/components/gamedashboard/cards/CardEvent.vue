@@ -1,5 +1,5 @@
 <template>
-  <div class="card-event" @click="handleClick">
+  <div class="card-event-test" @click="handleClick">
     <div class="card-name">
       <p>{{ event.name }}</p>
     </div>
@@ -31,17 +31,25 @@ export default class CardEvent extends Vue {
 </script>
 
 <style scoped>
-.card-event {
+.card-event-test {
   height: 12rem;
-  width: 14.5rem;
-  margin: 0.5rem;
+  width: 14.5rem !important;
+  margin: 0 0.25rem;
+  flex: 0 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-  /* border: 0.125rem solid var(--space-white-opaque-2); */
+}
+
+.card-event-test:first-child {
+  margin-left: 0;
+}
+
+.card-event-test:last-child {
+  margin-right: 0;
 }
 
 .card-event:hover {
@@ -51,9 +59,9 @@ export default class CardEvent extends Vue {
 .card-name {
   width: 100%;
   margin-bottom: 0.5rem;
-  border-radius: 1rem 1rem 0 0;
+  /* border-radius: 1rem 1rem 0 0; */
   color: var(--space-gray);
-  background-color: var(--space-orange);
+  background-color: var(--space-white);
 }
 
 .card-name p {
@@ -71,9 +79,10 @@ export default class CardEvent extends Vue {
 .card-effect {
   width: 100%;
   padding: 0.5rem;
-  border-radius: 0 0 1rem 1rem;
+  /* border-radius: 0 0 1rem 1rem; */
   flex-grow: 1;
-  background-color: var(--space-white-opaque-1);
+  /* background-color: var(--space-white-opaque-1); */
+  background-color: var(--space-gray);
   overflow-y: scroll;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE 10+ */

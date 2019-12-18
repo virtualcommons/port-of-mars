@@ -20,7 +20,7 @@ import ContainerEvents from '@/components/gamedashboard/containers/ContainerEven
 import InvestmentsPane from '@/components/gamedashboard/containers/GameboardPanes/InvestmentsPane.vue';
 import ContainerDefault from '@/components/gamedashboard/containers/ContainerDefaultView.vue';
 import ContainerTrade from '@/components/gamedashboard/containers/ContainerTrade.vue';
-import { Phase } from "shared/types";
+import { Phase } from 'shared/types';
 
 @Component({
   components: {
@@ -32,18 +32,17 @@ import { Phase } from "shared/types";
     ContainerEvents,
     ContainerTrade,
     ContainerDefault,
-    InvestmentsPane,
+    InvestmentsPane
   }
 })
 export default class ContainerBottom extends Vue {
-  get phase(){
+  get phase() {
     return Phase;
   }
 
-  get gamePhase(){
+  get gamePhase() {
     return this.$store.state.phase;
   }
-
 }
 </script>
 
@@ -52,7 +51,7 @@ export default class ContainerBottom extends Vue {
   height: 100%;
   width: 100%;
   max-width: none;
-  padding: 0 1rem;
+  padding: 0 0.5rem;
   margin: 0;
 }
 
