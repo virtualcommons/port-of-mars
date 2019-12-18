@@ -14,7 +14,7 @@
 import { Component, Vue, Inject } from 'vue-property-decorator';
 import {BContainer, BRow, BCol} from 'bootstrap-vue';
 import QuizForm from "@/components/tutorialquiz/QuizForm.vue";
-import { QuizRequestAPI } from '../api/quizAPI/request';
+import { QuizRequestAPI } from '../api/quiz/request';
 @Component({
     components:{
         BContainer,

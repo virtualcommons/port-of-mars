@@ -1,8 +1,8 @@
 <template>
   <div class="default-layout">
-    <div class="stars" v-if="$route.path !== '/game' && $route.path !== '/lobby'"></div>
+    <!-- <div class="stars" v-if="$route.path !== '/game' && $route.path !== '/lobby'"></div>
     <div class="twinkling" v-if="$route.path !== '/game' && $route.path !== '/lobby'"></div>
-    <div class="clouds" v-if="$route.path !== '/game' && $route.path !== '/lobby'"></div>
+    <div class="clouds" v-if="$route.path !== '/game' && $route.path !== '/lobby'"></div> -->
     <router-view />
     {{routerInfo}}
   </div>
@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import { Vue, Component, Inject } from 'vue-property-decorator';
-import { WaitingRequestAPI } from '../api/waitingLobbyAPI/request';
+import { WaitingRequestAPI } from '../api/waitingLobby/request';
 
 @Component({
   name: 'default-layout'

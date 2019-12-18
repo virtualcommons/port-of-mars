@@ -13,6 +13,11 @@ export interface ChatMessageData {
   round: number
 }
 
+export interface MarsLogData{
+  category:string,
+  message:string,
+}
+
 export interface ResourceAmountData {
   science: number
   government: number
