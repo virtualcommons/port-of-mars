@@ -4,7 +4,7 @@
 
     <ContainerProfile />
     <ProfileInvestments class="v-step-15" />
-    <MarsLog class="v-step-7" />
+    <ContainerAccomplishments />
   </div>
 </template>
 
@@ -13,20 +13,17 @@ import { Vue, Component } from 'vue-property-decorator';
 import Round from '@/components/gamedashboard/Round.vue';
 import ContainerProfile from '@/components/gamedashboard/containers/ContainerProfile.vue';
 import ProfileInvestments from '@/components/gamedashboard/ProfileInvestments.vue';
-import MarsLog from '@/components/gamedashboard/MarsLog.vue';
-import Notification from "@/components/gamedashboard/Notification.vue";
+import ContainerAccomplishments from '@/components/gamedashboard/containers/ContainerAccomplishments.vue';
 
 @Component({
   components: {
     Round,
     ContainerProfile,
     ProfileInvestments,
-    MarsLog,
-    Notification,
+    ContainerAccomplishments
   }
 })
-export default class ContainerLeft extends Vue {
-}
+export default class ContainerLeft extends Vue {}
 </script>
 
 <style scoped>

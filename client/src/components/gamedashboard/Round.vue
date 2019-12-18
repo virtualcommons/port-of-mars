@@ -1,6 +1,8 @@
 <template>
   <div class="round">
-    <p class="v-step-2">Round <span class="round-number">{{ roundNumber }}</span></p>
+    <p class="v-step-2">
+      Round <span class="round-number">{{ roundNumber }}</span>
+    </p>
   </div>
 </template>
 
@@ -8,7 +10,6 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 
 @Component
-
 export default class Round extends Vue {
   get roundNumber() {
     const { round, upkeep } = this.$store.state;
@@ -33,7 +34,7 @@ export default class Round extends Vue {
 }
 
 .round p {
-  margin-bottom: 1rem;
+  margin: 0 0 0.5rem 0;
   display: inline-block;
   text-align: left;
   border-bottom: 0.125rem solid var(--space-orange);

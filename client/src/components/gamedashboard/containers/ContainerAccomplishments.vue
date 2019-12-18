@@ -1,49 +1,43 @@
 <template>
   <BContainer class="container-accomplishments">
-    <BRow class="accomplishments-topbar">
-      <div class="accomplishments-topbar-title">
-        <p>Accomplishments</p>
-      </div>
-      <div class="accomplishments-topbar-button-container">
-        <button
-          type="button"
-          name="button"
-          @click="handleClick('available')"
-          :class="activeView == 'available' ? 'btn-active' : ''"
-        >
-          A
-        </button>
-        <button
-          type="button"
-          name="button"
-          @click="handleClick('inventory')"
-          :class="activeView == 'inventory' ? 'btn-active' : ''"
-        >
-          I
-        </button>
-      </div>
-    </BRow>
-
+    <div class="topbar-container">
+      <p class="accomplishments-topbar-title">Accomplishments</p>
+      <button
+        type="button"
+        name="button"
+        @click="handleClick"
+        :class="activeView == false ? 'btn-active' : ''"
+      >
+        <i class="fas fa-user-astronaut"></i>
+      </button>
+    </div>
     <BRow class="accomplishment-cards">
-      <BRow class="accomplishments-cards-available" v-if="activeView == 'available'">
-        <div
-          class="accomplishment-container"
-          :style="{ width: setWidth }"
+      <BRow class="accomplishments-cards-available" v-if="activeView == true">
+        <p
+          v-if="purchasableAccomplishments.length === 0"
+          class="accomplishments-cards-available-empty"
+        >
+          No Available Accomplishments
+        </p>
+        <CardAccomplishment
           v-for="accomplishment in purchasableAccomplishments"
           :key="accomplishment.id"
+          :accomplishment="accomplishment"
+        />
+        <!-- NEED TO FIX DISCARD PHASE ABILITY -->
+        <!-- <button
+          class="discard-button"
+          :style="{ display: canDiscard }"
+          @click="handleDiscardAccomplishment(accomplishment)"
         >
-          <CardAccomplishment :accomplishment="accomplishment" />
-          <button
-            class="discard-button"
-            :style="{ display: canDiscard }"
-            @click="handleDiscardAccomplishment(accomplishment)"
-          >
-            <img :src="require(`@/assets/trashIcon.svg`)" />
-          </button>
-        </div>
+          <img :src="require(`@/assets/trashIcon.svg`)" />
+        </button> -->
       </BRow>
 
-      <BRow class="accomplishments-cards-inventory" v-if="activeView == 'inventory'">
+      <BRow class="accomplishments-cards-inventory" v-if="activeView == false">
+        <p v-if="boughtAccomplishments.length === 0" class="accomplishments-cards-inventory-empty">
+          No Purchased Accomplishments
+        </p>
         <CardAccomplishment
           v-for="accomplishment in boughtAccomplishments"
           :key="accomplishment.id"
@@ -58,7 +52,7 @@
 import { Vue, Component } from 'vue-property-decorator';
 import { BContainer, BRow, BCol } from 'bootstrap-vue';
 import CardAccomplishment from '@/components/gamedashboard/cards/CardAccomplishment.vue';
-import {Phase} from "shared/types";
+import { Phase } from 'shared/types';
 
 @Component({
   components: {
@@ -69,7 +63,7 @@ import {Phase} from "shared/types";
   }
 })
 export default class ContainerAccomplishments extends Vue {
-  private activeView = 'available';
+  private activeView: boolean = true;
   private isActive = true;
   private setWidth = '100%';
 
@@ -92,8 +86,8 @@ export default class ContainerAccomplishments extends Vue {
     }
   }
 
-  handleClick(view: string) {
-    this.activeView = view;
+  handleClick() {
+    this.activeView = !this.activeView;
   }
 
   handleDiscardAccomplishment(a) {
@@ -107,88 +101,64 @@ export default class ContainerAccomplishments extends Vue {
 </script>
 
 <style scoped>
-.accomplishment-container {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  /*width:95%;*/
-  transition: all 0.3s ease-in-out;
-}
 .container-accomplishments {
-  height: 100%;
+  height: 60%;
   width: 100%;
   max-width: none;
   padding: 0.5rem;
-  padding-left: 0.25rem;
-  margin: 0;
+  /* border: 0.125rem solid var(--space-white-opaque-2); */
+  margin: 0.5rem 0 0 0;
   display: flex;
-  flex-direction: column;
+  flex-flow: column;
 }
 
-.accomplishments-topbar {
-  height: 10%;
+.topbar-container {
   width: 100%;
-  margin: 0;
-  margin-bottom: 0.5rem;
-  padding: 0.25rem 1rem;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: var(--space-orange);
+  margin-bottom: 0.5rem;
 }
 
 .accomplishments-topbar-title {
-  height: 100%;
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.accomplishments-topbar-title p {
-  width: 100%;
-  margin: 0;
+  flex-grow: 1;
+  padding: 0.5rem;
+  margin-bottom: 0;
   font-size: var(--font-med);
   text-align: center;
   color: var(--space-gray);
+  background-color: var(--space-orange);
 }
 
-.accomplishments-topbar-button-container {
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.accomplishments-topbar-button-container button {
+.container-accomplishments button {
   height: 2.5rem;
-  width: 2.5rem;
+  width: 20%;
   border: none;
-  border-radius: 50%;
-  margin: 0 0.25rem;
-  font-size: var(--font-small);
+  padding: 0;
+  margin-left: 0.5rem;
+  font-size: var(--font-med);
   text-align: center;
+  color: var(--space-white);
   background-color: transparent;
   transition: all 0.2s ease-in-out;
 }
 
-.accomplishments-topbar-button-container button:focus {
+.container-accomplishments button:focus {
   outline: none;
 }
 
-.accomplishments-topbar-button-container button:hover {
-  color: var(--space-white);
-  background-color: var(--space-gray);
+.container-accomplishments button:hover {
+  color: var(--space-gray);
+  background-color: var(--space-orange);
 }
 
 .btn-active {
-  color: var(--space-white);
-  background-color: var(--space-gray) !important;
+  color: var(--space-gray) !important;
+  background-color: var(--space-orange) !important;
 }
 
 .accomplishment-cards {
   height: 90%;
   width: 100%;
+  padding: 0.5rem;
   margin: 0;
   overflow-y: scroll;
   scrollbar-width: none; /* Firefox */
@@ -204,22 +174,21 @@ export default class ContainerAccomplishments extends Vue {
 
 .accomplishments-cards-available,
 .accomplishments-cards-inventory {
+  min-height: 100%;
   width: 100%;
   margin: 0;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
-  /* background-color: var(--space-white-opaque-1); */
 }
 
-.accomplishments-cards-available {
-  min-height: 100%;
-  justify-content: space-around;
-}
-
-.accomplishments-cards-inventory {
-  min-height: 100%;
-  justify-content: space-around;
+.accomplishments-cards-available-empty,
+.accomplishments-cards-inventory-empty {
+  margin-bottom: 0;
+  font-size: var(--font-small);
+  text-align: center;
+  color: var(--space-white-opaque-2);
 }
 
 .discard-button {

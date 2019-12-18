@@ -83,7 +83,7 @@ export default class Chat extends Vue {
   width: 100%;
   padding: 0.5rem;
   border: 0.125rem solid var(--space-white-opaque-2);
-  margin-top: 2rem;
+  margin: 0.5rem 0 0 0;
   display: flex;
   flex-direction: column;
 }

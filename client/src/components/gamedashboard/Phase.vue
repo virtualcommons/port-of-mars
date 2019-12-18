@@ -1,10 +1,9 @@
-import {Phase} from "shared/types";
 <template>
   <div class="phase-component">
     <div>
       <p class="phase-title">Current Phase</p>
       <p class="phase-current">{{ label }}</p>
-      <div v-if="btnVisibility">
+      <div v-if="btnVisibility" class="container-phase-btns">
         <button
           class="phase-donebtn v-step-14"
           @click="submitDone"
@@ -14,16 +13,21 @@ import {Phase} from "shared/types";
         >
           Done
         </button>
+        <i
+          class="far fa-times-circle"
+          @click="submitCancel"
+          v-if="playerReady == true && btnVisibility"
+        ></i>
       </div>
     </div>
     <div>
-      <p class="phase-time"><span>( </span>{{ timeRemaining }}<span> )</span></p>
+      <p class="phase-time">{{ timeRemaining }}</p>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import {Component, Inject, Vue} from 'vue-property-decorator';
+import { Component, Inject, Vue } from 'vue-property-decorator';
 import Clock from '@/components/gamedashboard/Clock.vue';
 import {PHASE_LABELS} from "shared/types";
 import ConfirmationModal from "@/components/gamedashboard/ConfirmationModal.vue";
@@ -33,8 +37,8 @@ import {GameRequestAPI} from "@/api/game/request";
 @Component({
   components: {
     ConfirmationModal,
-    Clock,
-  },
+    Clock
+  }
 })
 export default class Phase extends Vue {
   @Inject()
@@ -65,11 +69,33 @@ export default class Phase extends Vue {
     }
   }
 
+  get playerReady() {
+    return this.$tstore.state.players[this.$tstore.state.role].ready;
+  }
+
   submitDone() {
     switch (this.phase) {
       case s.Phase.invest:
         this.$api.investTimeBlocks(this.$tstore.getters.player.pendingInvestments);
-        break;
+      default:
+        this.btnDisabled = true;
+        this.$tstore.commit('SET_READINESS', {
+          data: true,
+          role: this.$tstore.state.role
+        });
+    }
+  }
+
+  submitCancel() {
+    switch (this.phase) {
+      case s.Phase.invest:
+      // handle uninvest timeblocks
+      default:
+        this.btnDisabled = false;
+        this.$tstore.commit('SET_READINESS', {
+          data: false,
+          role: this.$tstore.state.role
+        });
     }
   }
 
@@ -85,13 +111,24 @@ export default class Phase extends Vue {
 
 <style scoped>
 .phase-component {
-  height: 80%;
+  height: 100%;
   width: 100%;
+  /* border: 0.125rem solid var(--space-white-opaque-2); */
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
   text-align: center;
+}
+
+.phase-component i {
+  color: var(--space-orange);
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.phase-component i:hover {
+  transform: scale(1.1);
 }
 
 .phase-component p {
@@ -108,17 +145,24 @@ export default class Phase extends Vue {
   color: var(--space-orange);
 }
 
+.container-phase-btns {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .phase-donebtn {
   height: 1.5625rem;
   width: 6.25rem;
   padding: 0.125rem;
-  margin-top: 0.75rem;
+  margin-bottom: 0.5rem;
   border: var(--border-white);
   border-radius: 0.5rem;
   font-size: 0.75rem;
   color: var(--space-white);
   background-color: var(--space-gray);
-  transition: all .2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 .phase-donebtn:hover {

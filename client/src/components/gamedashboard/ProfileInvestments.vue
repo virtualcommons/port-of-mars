@@ -4,7 +4,16 @@
     <div class="profile-investments">
       <div v-for="investment in investments" class="profile-investment" :key="investment.name">
         <img :src="require(`@/assets/iconsSVG/${investment.name}.svg`)" alt="Investment" />
-        <p>{{ investment.units }}<span v-show="investment.pendingUnits >0">+<span :style="style(investment)">{{ investment.pendingUnits }}</span></span></p>
+        <p>
+          {{ investment.units
+          }}<span v-show="investment.pendingUnits > 0"
+            >+<span :style="style(investment)">{{ investment.pendingUnits }}</span></span
+          >
+        </p>
+      </div>
+      <div class="profile-investment">
+        <img :src="require(`@/assets/iconsSVG/upkeep.svg`)" alt="Investment" />
+        <p>{{ upkeep }}</p>
       </div>
     </div>
   </div>
@@ -12,7 +21,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import {Resource} from "shared/types";
+import { Resource } from 'shared/types';
 
 @Component({})
 export default class ProfileInvestments extends Vue {
@@ -24,7 +33,12 @@ export default class ProfileInvestments extends Vue {
       name,
       units: inventory[name as Resource],
       pendingUnits: pendingInventory[name as Resource]
-    }))
+    }));
+  }
+
+  get upkeep() {
+    console.log('UPKEEP: ', this.$tstore.state.players[this.$tstore.state.role].contributedUpkeep);
+    return this.$tstore.state.players[this.$tstore.state.role].contributedUpkeep;
   }
 
   style(inventory: { name: Resource; units: number; pendingUnits: number }): string {
@@ -39,7 +53,7 @@ export default class ProfileInvestments extends Vue {
 .profile-investments-container {
   width: 100%;
   padding: 0.5rem;
-  border: 0.125rem solid var(--space-white-opaque-2);
+  /* border: 0.125rem solid var(--space-white-opaque-2); */
 }
 
 .profile-investments-title {

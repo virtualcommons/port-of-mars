@@ -19,8 +19,8 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import {AccomplishmentData, INVESTMENTS, Resource} from "shared/types";
-import * as _ from 'lodash'
+import { AccomplishmentData, INVESTMENTS, Resource } from 'shared/types';
+import * as _ from 'lodash';
 
 @Component
 export default class CardAccomplishment extends Vue {
@@ -37,9 +37,9 @@ export default class CardAccomplishment extends Vue {
   private accomplishment!: AccomplishmentData;
 
   get accomplishmentCost() {
-    return INVESTMENTS
-      .filter(investment => this.accomplishment[investment] !== 0)
-      .flatMap(investment => _.fill(Array(Math.abs(this.accomplishment[investment])), investment));
+    return INVESTMENTS.filter(
+      investment => this.accomplishment[investment] !== 0
+    ).flatMap(investment => _.fill(Array(Math.abs(this.accomplishment[investment])), investment));
   }
 
   handleClick() {
@@ -55,8 +55,9 @@ export default class CardAccomplishment extends Vue {
 .card-accomplishment {
   height: auto;
   min-height: 7rem;
-  width: 80%;
-  margin: 0.5rem 0;
+  width: 100%;
+  /* margin: 0.5rem 0; */
+  margin-bottom: 0.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -65,6 +66,10 @@ export default class CardAccomplishment extends Vue {
   overflow: hidden;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+}
+
+.card-accomplishment:last-child {
+  margin-bottom: 0;
 }
 
 .card-accomplishment:hover {
@@ -77,7 +82,7 @@ export default class CardAccomplishment extends Vue {
   padding: 0.25rem 0.5rem;
   margin: 0;
   margin-bottom: 0.5rem;
-  border-radius: 1rem 1rem 0 0;
+  /* border-radius: 1rem 1rem 0 0; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -97,7 +102,7 @@ export default class CardAccomplishment extends Vue {
   padding: 0.5rem;
   /* border: var(--border-white); */
   /* border-top: none; */
-  border-radius: 0 0 1rem 1rem;
+  /* border-radius: 0 0 1rem 1rem; */
   display: flex;
   justify-content: space-between;
   /* background-color: var(--space-white-opaque-1); */
@@ -124,8 +129,8 @@ export default class CardAccomplishment extends Vue {
 }
 
 .card-cost p {
-  height: 2.5rem;
-  width: 2.5rem;
+  height: 1.5rem;
+  width: 1.5rem;
   margin: 0.125rem;
   padding: 0;
 }

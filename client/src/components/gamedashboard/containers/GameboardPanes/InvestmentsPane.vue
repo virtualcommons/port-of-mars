@@ -1,12 +1,12 @@
 <template>
-    <BRow class="row-investments">
-      <BCol class="container-bottom-investments" cols="7">
-        <ContainerInvestments />
-      </BCol>
-      <BCol class="container-bottom-accomplishments" cols="5">
-        <ContainerAccomplishments />
-      </BCol>
-    </BRow>
+  <BRow class="row-investments">
+    <BCol class="container-bottom-investments" cols="7">
+      <ContainerInvestments />
+    </BCol>
+    <BCol class="container-bottom-accomplishments" cols="5">
+      <!-- <ContainerAccomplishments /> -->
+    </BCol>
+  </BRow>
 </template>
 
 <script lang="ts">
@@ -21,7 +21,7 @@ import ContainerAccomplishments from '@/components/gamedashboard/containers/Cont
     BRow,
     BCol,
     ContainerInvestments,
-    ContainerAccomplishments,
+    ContainerAccomplishments
   }
 })
 export default class ContainerBottom extends Vue {}

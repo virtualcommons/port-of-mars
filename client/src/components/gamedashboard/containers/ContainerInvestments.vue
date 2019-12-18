@@ -13,7 +13,7 @@
 
     <BRow class="investments-cards v-step-11 v-step-12">
       <BRow class="investments-cards-top">
-        <CardInvestment v-bind="costs[2]" class="v-step-13" @input="setInvestmentAmount"/>
+        <CardInvestment v-bind="costs[2]" class="v-step-13" @input="setInvestmentAmount" />
         <CardInvestment v-bind="costs[3]" @input="setInvestmentAmount" />
         <CardInvestment v-bind="costs[0]" @input="setInvestmentAmount" />
       </BRow>
@@ -39,7 +39,7 @@ import {
   ResourceAmountData,
   ResourceCostData,
   Role
-} from "shared/types";
+} from 'shared/types';
 import * as _ from 'lodash';
 
 @Component({
@@ -60,9 +60,10 @@ export default class ContainerInvestments extends Vue {
         const cost = p.costs[k];
         let pendingInvestment: number;
         pendingInvestment = p.pendingInvestments[k];
-        prev.push({name, cost, pendingInvestment});
+        prev.push({ name, cost, pendingInvestment });
         return prev;
-      }, [] as Array<{ name: string, cost: number, pendingInvestment: number}>).sort((a, b) => a.cost - b.cost);
+      }, [] as Array<{ name: string; cost: number; pendingInvestment: number }>)
+      .sort((a, b) => a.cost - b.cost);
 
     return investmentData;
   }
@@ -77,16 +78,20 @@ export default class ContainerInvestments extends Vue {
     const p = this.$tstore.getters.player;
     const timeBlocks = p.timeBlocks;
     const costs = p.costs;
-    return timeBlocks - _.reduce(INVESTMENTS, (tot, investment) => tot + pendingInvestments[investment]*costs[investment], 0)
+    return (
+      timeBlocks -
+      _.reduce(
+        INVESTMENTS,
+        (tot, investment) => tot + pendingInvestments[investment] * costs[investment],
+        0
+      )
+    );
   }
 
-  setInvestmentAmount(msg: {name: Resource, units: number, cost: number}) {
+  setInvestmentAmount(msg: { name: Resource; units: number; cost: number }) {
     const pendingInvestments = _.clone(this.$tstore.getters.player.pendingInvestments);
     pendingInvestments[msg.name] = msg.units;
-    if (
-      msg.units >= 0 &&
-      this.getRemainingTimeBlocks(pendingInvestments) >= 0
-    ) {
+    if (msg.units >= 0 && this.getRemainingTimeBlocks(pendingInvestments) >= 0) {
       this.$tstore.commit('SET_PENDING_INVESTMENT_AMOUNT', {
         investment: msg.name,
         units: msg.units,
