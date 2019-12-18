@@ -76,24 +76,8 @@ export default class TutorialQuiz extends Vue {
 
 <style>
 .quiz-page {
-    /* position: relative;
-    height: 100vh;
-    width: 100%;
-    display: flex;
-    align-items: center; */
     color:white;
     height:6rem;
-}
-
-.quiz-screen {
-    /* position: relative;
-    z-index: 1;
-    height: 80vh;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center; */
 }
 
 h1 {

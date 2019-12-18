@@ -131,11 +131,6 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
           }
           store.commit('ADD_TO_MARS_LOG',dataPackage);
         }
-
-        if(upkeep == 100){
-          store.commit('HARD_RESET_NOTIFICATIONS','');
-          //store.commit('HARD_RESET_MARS_LOG','');
-        }
       }
     });
   };

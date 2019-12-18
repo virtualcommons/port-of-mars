@@ -12,7 +12,4 @@ export default {
   CREATE_NOTIFICATION(state: State, payload: string) {
     state.activeNotifications.push(payload);
   },
-  HARD_RESET_NOTIFICATIONS(state: State,payload:string){
-    state.activeNotifications = [];
-  }
 }
