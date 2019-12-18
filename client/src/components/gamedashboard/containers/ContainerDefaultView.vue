@@ -1,7 +1,7 @@
 <template>
     <div class="container" cols="12">
     <div class="text">
-      <p>This is the default view.</p>
+      <p>Welcome to Port of Mars</p>
     </div>
     </div>
 </template>
