@@ -8,7 +8,6 @@ To create a development environment for your client and server run
 
 ```bash
 ./build.sh init dev
-docker-compose up -d
 ```
 
 This creates secrets for the database, creates a `docker-compose.yml` file and builds the `client` and `server` docker images.
@@ -20,3 +19,11 @@ docker-compose up -d
 ```
 
 and you should have a working development environment.
+
+Subsequent builds should use
+
+```
+./build.sh build dev
+```
+
+because secrets only need to be generated once.
