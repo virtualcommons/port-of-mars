@@ -10,8 +10,8 @@
                 </div>
                 <div class="quiz-buttons">
                     <button @click='name=-1' class="prev-button">Previous</button>
-                    <button @click='name=1' class="next-button">Next Question</button>
-                    <button v-show='index == 2' @click='name=2' class="next-button">Submit Quiz</button>
+                    <button @click='name=1' class="next-button">Save Answer</button>
+                    <button v-show='complete == true' @click='name=2' class="next-button">Submit Quiz</button>
                 </div>
             </form> 
         </div> 
@@ -35,6 +35,8 @@ export default class QuizForm extends Vue{
     @Prop({default:function(id,name){
         return function(){};
     }})handleUpdate;
+
+    @Prop({default:false})complete;
 
 }
 </script>

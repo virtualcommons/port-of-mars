@@ -1,4 +1,4 @@
-import { QuizQuestionData } from 'shared/types';
+import { QuizQuestionData, QuizResultPackage } from 'shared/types';
 
 export interface QuizLobby{
     kind: 'quiz-lobby'
@@ -11,4 +11,9 @@ export interface GradeQuiz{
     message:string
 }
 
-export type QuizResponses = QuizLobby | GradeQuiz;
+export interface ReturnGradedQuiz{
+    kind: 'graded-quiz'
+    quizResults: Array<QuizResultPackage>
+}
+
+export type QuizResponses = QuizLobby | GradeQuiz | ReturnGradedQuiz;

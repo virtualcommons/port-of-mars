@@ -14,6 +14,9 @@ export function applyQuizServerResponses<T>(room: Room, store: TStore){
                 console.log(msg.message);
                 store.commit('SET_QUIZ_QUESTIONS',msg.questions);
                 break;
+            case 'graded-quiz':
+                store.commit('GET_QUIZ_RESULTS',msg.quizResults);
+                break;
             default:break;
         }
     })

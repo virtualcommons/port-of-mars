@@ -4,8 +4,15 @@
             <h1>QUIZ</h1>
         </div>
 
-        <div class="quiz-form">
-            <QuizForm v-bind="quizQuestions[index]" :index='index' :handleUpdate="handleUpdate"/>
+        <div v-show="submitted == false" class="quiz-form">
+            <QuizForm v-bind="quizQuestions[index]" :index='index' :handleUpdate="handleUpdate" :complete="complete"/>
+        </div>
+
+        <div v-show="submitted == true">
+            <h2>You got {{quizData.correct}} questions correct!</h2>
+            <p>Would you like to take the quiz again?</p>
+            <br/>
+            <button @click="handleReset()">Restart Quiz</button>
         </div>
     </div>
 </template>
@@ -25,51 +32,53 @@ import { QuizRequestAPI } from '../api/quiz/request';
 })
 
 export default class TutorialQuiz extends Vue {
-    private answersArray = [-1,-1,-1,-1,-1,-1];
+    private answersArray = [];
     private index = 0;
+    private complete = false;
+    private submitted = false;
     
     get quizQuestions(){
-      console.log(this.$store.state.quizQuestions);
       return this.$store.state.quizQuestions;
+    }
+
+    get quizResults(){
+        const results = this.$store.state.quizResults;
+        return results;
+    }
+
+    get quizData(){
+        let info = {correct:0};
+
+        this.quizResults.forEach((question) => {
+            if(question.correct) info.correct++;
+        })
+
+        return info;
     }
 
     @Inject()
     readonly $api!: QuizRequestAPI;
 
-    
-
     handleUpdate(id,name){
-        // if(id == this.quizQuestions[this.index].correct){
-        //     this.answersArray[this.index] = 1;
-        // } else {
-        //     this.answersArray[this.index] = 0;
-        // }
+        if(name==1)this.answersArray.splice(this.index,1,id);
 
-        // if(name != 2){
-        //     this.index += name;
-        // } else {
-        //     console.log(this.answersArray);
-        // }
-
-
-        // if(this.index < 0){
-        //     this.index = 8;
-        // }
-
-        // if(this.index > 8){
-        //     this.index = 0;
-        // }
-        this.answersArray[this.index] = id;
+        this.complete = this.answersArray.length == this.quizQuestions.length;
 
         if(name != 2){
-          this.index = (this.index+name)%this.quizQuestions.length;
+          if(this.index+name != this.quizQuestions.length)this.index = (this.index+name)%this.quizQuestions.length;
           if(this.index <= -1) this.index = this.quizQuestions.length-1;
 
         } else {
           this.$api.submitQuiz(this.answersArray);
+          this.submitted = true;
         }
+    }
 
-        console.log(this.index);
+    handleReset(){
+        this.submitted = false;
+        this.index = 0;
+        this.complete = false;
+        this.answersArray = [];
     }
 }
 </script>
