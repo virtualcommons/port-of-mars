@@ -309,14 +309,7 @@ export default class TutorialLayout extends Vue {
     nextStepElement.classList.add(this.TOUR_ACTIVE_CLASS);
     console.log(`[Vue Tour] A custom nextStep callback has been called on step
                 ${currentStep + 1}`);
-    // open event view im BottomContainer
-    if (currentStep === 2) {
-      this.$root.$emit('openEvent');
-    }
-    // close event view in BottomContainer
-    if (currentStep === 5) {
-      this.$root.$emit('closeEvent');
-    }
+
     if (currentStep === 6) {
       this.$api.setNextPhase();
     }
