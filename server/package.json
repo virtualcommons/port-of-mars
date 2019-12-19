@@ -7,7 +7,8 @@
       "start": "ts-node -r tsconfig-paths/register src/index.ts",
       "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
       "loadtest": "colyseus-loadtest loadtest/example.ts --room my_room --numClients 2",
-      "test": "echo \"Error: no test specified\" && exit 1"
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "load-fixtures": "fixtures ./fixtures --config ormconfig.json --require ts-node/register --require tsconfig-paths/register"
    },
    "author": "Center for Behavior, Institutions, and the Environment (https://cbie.asu.edu)",
    "license": "MIT",
@@ -28,6 +29,7 @@
       "ts-jest": "^24.1.0",
       "ts-node": "8.5.4",
       "tsconfig-paths": "^3.9.0",
+      "typeorm-fixtures-cli": "^1.4.2",
       "typescript": "^3.7"
    },
    "dependencies": {

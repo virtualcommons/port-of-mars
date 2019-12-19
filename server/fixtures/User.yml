@@ -1,0 +1,22 @@
+entity: User
+items:
+  bob:
+    username: 'bob'
+    name: 'Bob Smith'
+    email: 'bob@gmail.com'
+  frank:
+    username: 'frank'
+    name: 'Frank Smith'
+    email: 'frank@a.com'
+  amanda:
+    username: 'amanda'
+    name: 'Amanda Smith'
+    email: 'amanda@b.com'
+  syndey:
+    username: 'sydney'
+    name: 'Sydney Smith'
+    email: 'sydney@yahoo.com'
+  adison:
+    username: 'adison'
+    name: 'Adison Smith'
+    email: 'adison@b.com'
