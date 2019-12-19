@@ -1,18 +1,30 @@
 <template>
   <BContainer class="container-accomplishments">
     <div class="topbar-container">
-      <p class="accomplishments-topbar-title">Accomplishments</p>
-      <button
-        type="button"
-        name="button"
-        @click="handleClick"
-        :class="activeView == false ? 'btn-active' : ''"
-      >
-        <i class="fas fa-user-astronaut"></i>
-      </button>
+      <p class="accomplishments-topbar-title">Your Accomplishments</p>
+      <div class="topbar-container-buttons">
+        <button
+          @click="handleClick('available')"
+          :style="activeView == 'available' ? { color: 'var(--space-orange)' } : ''"
+          class="available-btn"
+          type="button"
+          name="button"
+        >
+          Available
+        </button>
+        <button
+          @click="handleClick('purchased')"
+          :style="activeView == 'purchased' ? { color: 'var(--space-orange)' } : ''"
+          class="purchased-btn"
+          type="button"
+          name="button"
+        >
+          Purchased
+        </button>
+      </div>
     </div>
     <BRow class="accomplishment-cards">
-      <BRow class="accomplishments-cards-available" v-if="activeView == true">
+      <BRow class="accomplishments-cards-available" v-if="activeView == 'available'">
         <p
           v-if="purchasableAccomplishments.length === 0"
           class="accomplishments-cards-available-empty"
@@ -34,7 +46,7 @@
         </button> -->
       </BRow>
 
-      <BRow class="accomplishments-cards-inventory" v-if="activeView == false">
+      <BRow class="accomplishments-cards-inventory" v-if="activeView == 'purchased'">
         <p v-if="boughtAccomplishments.length === 0" class="accomplishments-cards-inventory-empty">
           No Purchased Accomplishments
         </p>
@@ -63,7 +75,7 @@ import { Phase } from 'shared/types';
   }
 })
 export default class ContainerAccomplishments extends Vue {
-  private activeView: boolean = true;
+  private activeView: string = 'available';
   private isActive = true;
   private setWidth = '100%';
 
@@ -86,8 +98,8 @@ export default class ContainerAccomplishments extends Vue {
     }
   }
 
-  handleClick() {
-    this.activeView = !this.activeView;
+  handleClick(view: string) {
+    this.activeView = view;
   }
 
   handleDiscardAccomplishment(a) {
@@ -115,48 +127,59 @@ export default class ContainerAccomplishments extends Vue {
 .topbar-container {
   width: 100%;
   display: flex;
+  flex-flow: column;
+  align-items: center;
   margin-bottom: 0.5rem;
 }
 
-.accomplishments-topbar-title {
-  flex-grow: 1;
-  padding: 0.5rem;
-  margin-bottom: 0;
-  font-size: var(--font-med);
-  text-align: center;
-  color: var(--space-gray);
-  background-color: var(--space-orange);
+.topbar-container-buttons {
+  width: 100%;
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: space-between;
 }
 
-.container-accomplishments button {
-  height: 2.5rem;
-  width: 20%;
+.topbar-container-buttons button {
+  width: 50%;
   border: none;
-  padding: 0;
-  margin-left: 0.5rem;
-  font-size: var(--font-med);
-  text-align: center;
-  color: var(--space-white);
-  background-color: transparent;
-  transition: all 0.2s ease-in-out;
+  font-size: var(--font-small);
+  color: var(--space-white-opaque-2);
+  background: transparent;
 }
 
-.container-accomplishments button:focus {
+.topbar-container-buttons button:focus,
+.topbar-container-buttons button:active {
   outline: none;
 }
 
-.container-accomplishments button:hover {
-  color: var(--space-gray);
-  background-color: var(--space-orange);
+.available-btn {
+  margin-right: 0.25rem;
+}
+
+.purchased-btn {
+  margin-left: 0.25rem;
+}
+
+.accomplishments-topbar-title {
+  width: 100%;
+  padding: 0.5rem;
+  border-bottom: 0.125rem solid var(--space-white-opaque-2);
+  margin-bottom: 0;
+  font-size: var(--font-med);
+  text-align: left;
+  /* color: var(--space-orange); */
+  color: var(--space-white-opaque-2);
+  /* background-color: var(--space-orange); */
+  background-color: transparent;
 }
 
 .btn-active {
-  color: var(--space-gray) !important;
-  background-color: var(--space-orange) !important;
+  color: var(--space-white) !important;
+  background-color: var(--space-gray) !important;
 }
 
 .accomplishment-cards {
-  height: 90%;
+  flex-grow: 1;
   width: 100%;
   padding: 0.5rem;
   margin: 0;

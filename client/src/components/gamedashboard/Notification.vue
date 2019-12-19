@@ -69,7 +69,7 @@ export default class Notification extends Vue {
   left: 1rem;
   top: 4rem;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   background-color: var(--space-orange);
   cursor: pointer;

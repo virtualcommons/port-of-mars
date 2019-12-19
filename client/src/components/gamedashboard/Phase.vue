@@ -1,5 +1,6 @@
 <template>
   <div class="phase-component">
+    <Round />
     <div>
       <p class="phase-title">Current Phase</p>
       <p class="phase-current">{{ label }}</p>
@@ -28,6 +29,7 @@
 
 <script lang="ts">
 import { Component, Inject, Vue } from 'vue-property-decorator';
+import Round from '@/components/gamedashboard/Round.vue';
 import Clock from '@/components/gamedashboard/Clock.vue';
 import {PHASE_LABELS} from "shared/types";
 import ConfirmationModal from "@/components/gamedashboard/ConfirmationModal.vue";
@@ -37,6 +39,7 @@ import {GameRequestAPI} from "@/api/game/request";
 @Component({
   components: {
     ConfirmationModal,
+    Round,
     Clock
   }
 })

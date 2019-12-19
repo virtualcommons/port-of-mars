@@ -8,7 +8,8 @@
       :memberNotificationTradeCount="1"
       :memberNotificationFinished="true"
     /> -->
-    <p>scoreboard under construction</p>
+    <p class="container-members-topbar">Player Scores</p>
+    <Member v-for="player in playerInfo" v-bind="player" />
   </div>
 </template>
 
@@ -22,26 +23,46 @@ import Member from '@/components/gamedashboard/Member.vue';
   }
 })
 export default class ContainerMembers extends Vue {
+  mounted() {
+    console.log(this.playerInfo);
+  }
+
   get otherPlayers() {
     return this.$tstore.getters.otherPlayers;
+  }
+
+  get playerInfo() {
+    const allPlayers = this.$tstore.state.players;
+    return Object.keys(allPlayers).map(player => ({
+      role: player,
+      victoryPoints: allPlayers[player].victoryPoints
+    }));
   }
 }
 </script>
 
 <style scoped>
 .container-members {
-  max-height: 50%;
+  height: auto;
   width: 100%;
-  flex-grow: 1;
+  padding: 0.5rem;
   display: flex;
-  justify-content: center;
+  flex-flow: column;
+  justify-content: flex-start;
   align-items: center;
-  background-color: var(--space-white-opaque-1);
+  border: 0.125rem solid var(--space-orange-opaque-2);
 }
 
-.container-members p {
-  margin-bottom: 0;
-  font-size: var(--font-small);
-  color: var(--space-white);
+.container-members-topbar {
+  width: 100%;
+  padding: 0.5rem;
+  border-bottom: 0.125rem solid var(--space-white-opaque-2);
+  margin-bottom: 0.5rem;
+  font-size: var(--font-med);
+  text-align: right;
+  /* color: var(--space-orange); */
+  color: var(--space-white-opaque-2);
+  /* background-color: var(--space-orange); */
+  background-color: transparent;
 }
 </style>

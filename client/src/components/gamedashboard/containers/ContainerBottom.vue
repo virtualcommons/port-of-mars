@@ -59,7 +59,7 @@ export default class ContainerBottom extends Vue {
   height: 100%;
   width: 100%;
   padding: 0;
-  border: 0.125rem solid var(--space-white-opaque-2);
+  border: 0.125rem solid var(--space-orange-opaque-2);
   margin: 0;
 }
 

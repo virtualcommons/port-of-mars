@@ -1,12 +1,14 @@
 <template>
   <div class="profile">
     <div class="profile-frame-info">
-      <div class="profile-frame">
-        <img :src="avatarURL" alt="Player" class="profile-img" />
+      <div class="profile-frame-outer">
+        <div class="profile-frame-inner">
+          <img :src="avatarURL" alt="Player" class="profile-img" />
+        </div>
       </div>
       <div class="profile-info">
         <p class="profile-info-player">{{ playerRole }}</p>
-        <p class="profile-info-score">Score: {{ playerScore }}</p>
+        <!-- <p class="profile-info-score">Score: {{ playerScore }}</p> -->
       </div>
     </div>
   </div>
@@ -39,10 +41,12 @@ export default class ContainerProfile extends Vue {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  /* background-color: var(--space-white-opaque-1); */
 }
 
 .profile-frame-info {
   display: flex;
+  flex-flow: column;
   justify-content: center;
   align-items: center;
 }
@@ -66,13 +70,19 @@ export default class ContainerProfile extends Vue {
   font-size: var(--font-med);
 }
 
-.profile-frame {
+.profile-frame-outer {
   height: 5rem;
   width: 5rem;
   padding: 0.25rem;
-  border: 0.125rem solid var(--space-orange);
+  border: 0.125rem solid var(--space-orange-opaque-2);
   border-radius: 50%;
-  margin-right: 1rem;
+  margin-bottom: 1rem;
+}
+
+.profile-frame-inner {
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -80,6 +90,6 @@ export default class ContainerProfile extends Vue {
 }
 
 .profile-img {
-  height: 100%;
+  height: 80%;
 }
 </style>

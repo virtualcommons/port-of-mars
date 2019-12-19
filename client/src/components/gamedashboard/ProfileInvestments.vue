@@ -1,6 +1,6 @@
 <template>
   <div class="profile-investments-container">
-    <p class="profile-investments-title">Investments</p>
+    <p class="profile-investments-title">Your Investments</p>
     <div class="profile-investments">
       <div v-for="investment in investments" class="profile-investment" :key="investment.name">
         <img :src="require(`@/assets/iconsSVG/${investment.name}.svg`)" alt="Investment" />
@@ -62,13 +62,16 @@ export default class ProfileInvestments extends Vue {
 }
 
 .profile-investments-title {
+  width: 100%;
   padding: 0.5rem;
+  border-bottom: 0.125rem solid var(--space-white-opaque-2);
   margin-bottom: 0.5rem;
   font-size: var(--font-med);
-  text-align: center;
-  /* text-transform: uppercase; */
-  color: var(--space-gray);
-  background-color: var(--space-orange);
+  text-align: left;
+  /* color: var(--space-orange); */
+  color: var(--space-white-opaque-2);
+  /* background-color: var(--space-orange); */
+  background-color: transparent;
 }
 
 .profile-investments {

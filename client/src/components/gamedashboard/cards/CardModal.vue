@@ -74,7 +74,7 @@ export default class CardModal extends Vue {
   padding: 1rem 2rem;
   margin: 0;
   border: 0.125rem solid var(--space-white-opaque-2);
-  border-radius: 1.25rem;
+  /* border-radius: 1.25rem; */
   position: relative;
   color: var(--space-white);
   background-color: var(--space-gray);
