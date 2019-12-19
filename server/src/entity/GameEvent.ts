@@ -9,6 +9,9 @@ export class GameEvent {
   @ManyToOne(type => Game, game => game.events, { nullable: false })
   game!: Game;
 
+  @Column()
+  type!: string;
+
   @Column({type: 'jsonb'})
   payload!: object;
 

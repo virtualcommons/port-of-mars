@@ -1,7 +1,9 @@
-import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique} from "typeorm";
 import {Player} from "@/entity/Player";
 
 @Entity()
+@Unique(['username'])
+@Unique(['email'])
 export class User {
     @PrimaryGeneratedColumn()
     id!: number;
