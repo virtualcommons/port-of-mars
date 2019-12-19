@@ -1,5 +1,6 @@
-import {CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import {CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {GameEvent} from "./GameEvent";
+import {Tournament} from "@/entity/Tournament";
 
 @Entity()
 export class Game {
@@ -11,4 +12,7 @@ export class Game {
 
   @CreateDateColumn()
   dateCreated!: Date;
+
+  @ManyToOne(type => Tournament, tournament => tournament.games)
+  tournament!: Tournament;
 }
