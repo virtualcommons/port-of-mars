@@ -659,6 +659,7 @@ export class Player extends Schema implements PlayerData {
   @type("number")
   timeBlocks: number = 10;
 
+  @type("number")
   contributedUpkeep: number = 0;
 
   @type(ResourceInventory)

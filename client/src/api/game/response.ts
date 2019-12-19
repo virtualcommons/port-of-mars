@@ -43,6 +43,9 @@ function applyPlayerResponses(player: any, store: TStore) {
         case "pendingInvestments":
           store.commit('SET_PENDING_INVESTMENTS', payload);
           break;
+        case "contributedUpkeep":
+          store.commit('SET_CONTRIBUTED_UPKEEP', payload);
+          break;
       }
     });
   };

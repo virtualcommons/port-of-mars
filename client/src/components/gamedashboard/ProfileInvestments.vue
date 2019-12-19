@@ -13,7 +13,8 @@
       </div>
       <div class="profile-investment">
         <img :src="require(`@/assets/iconsSVG/upkeep.svg`)" alt="Investment" />
-        <p>{{ upkeep }}</p>
+        <p>{{ upkeep.units }}<span v-show="upkeep.pendingUnits > 0">+<span :style="style(upkeep)">{{ upkeep.pendingUnits }}</span></span>
+        </p>
       </div>
     </div>
   </div>
@@ -21,7 +22,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { Resource } from 'shared/types';
+import {Resource, RESOURCES} from 'shared/types';
 
 @Component({})
 export default class ProfileInvestments extends Vue {
@@ -29,7 +30,7 @@ export default class ProfileInvestments extends Vue {
     const p = this.$tstore.getters.player;
     const inventory = p.inventory;
     const pendingInventory = p.pendingInvestments;
-    return Object.keys(inventory).map(name => ({
+    return RESOURCES.map(name => ({
       name,
       units: inventory[name as Resource],
       pendingUnits: pendingInventory[name as Resource]
@@ -37,11 +38,15 @@ export default class ProfileInvestments extends Vue {
   }
 
   get upkeep() {
-    console.log('UPKEEP: ', this.$tstore.state.players[this.$tstore.state.role].contributedUpkeep);
-    return this.$tstore.state.players[this.$tstore.state.role].contributedUpkeep;
+    const p = this.$tstore.getters.player;
+    const pendingInvestment = p.pendingInvestments;
+    return {
+      pendingUnits: pendingInvestment.upkeep,
+      units: p.contributedUpkeep
+    }
   }
 
-  style(inventory: { name: Resource; units: number; pendingUnits: number }): string {
+  style(inventory: { units: number; pendingUnits: number }): string {
     return inventory.units < inventory.units + inventory.pendingUnits
       ? 'color: var(--status-green)'
       : '';
