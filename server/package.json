@@ -8,7 +8,8 @@
       "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
       "loadtest": "colyseus-loadtest loadtest/example.ts --room my_room --numClients 2",
       "test": "jest",
-      "load-fixtures": "fixtures ./fixtures --config ormconfig.json --require ts-node/register --require tsconfig-paths/register"
+      "load-fixtures": "fixtures ./fixtures --config ormconfig.json --require ts-node/register --require tsconfig-paths/register",
+      "reset-db": "yarn typeorm schema:drop && yarn typeorm schema:sync && yarn load-fixtures"
    },
    "author": "Center for Behavior, Institutions, and the Environment (https://cbie.asu.edu)",
    "license": "MIT",
