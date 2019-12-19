@@ -35,7 +35,7 @@
 import { Vue, Inject, Component } from 'vue-property-decorator';
 import VueTour from 'vue-tour';
 import TourModal from '@/tutorial/TourModal.vue';
-import { RequestAPI } from '@/api/request';
+import { GameRequestAPI } from '@/api/game/request';
 require('vue-tour/dist/vue-tour.css');
 Vue.use(VueTour);
 @Component({
@@ -46,7 +46,7 @@ Vue.use(VueTour);
 })
 export default class TutorialLayout extends Vue {
   @Inject()
-  readonly $api!: RequestAPI;
+  readonly $api!: GameRequestAPI;
   // class for the active step element
   TOUR_ACTIVE_CLASS: string = 'tour-active';
   // class to show tour is active for click events
@@ -189,7 +189,7 @@ export default class TutorialLayout extends Vue {
     {
       target: '.v-step-13',
       content: 'The cost of the card in timeblocks in located at the bottom right corner '
-                + 'of the card. Use the increment (+) button on a card to invest your timeblocks or ' 
+                + 'of the card. Use the increment (+) button on a card to invest your timeblocks or '
                 + 'the decrement (-) button to remove timeblocks from an investment '
                 + 'that you have made.',
       params: {
@@ -204,7 +204,7 @@ export default class TutorialLayout extends Vue {
       params: {
         placement: 'right',
       }
-    }, 
+    },
     // gamedashboard > containers > ContainerLeft.vue
     {
       target: '.v-step-15',
@@ -264,7 +264,7 @@ export default class TutorialLayout extends Vue {
   /**
    * showModal() method
    * Show tour modal to introduce tour.
-   * 
+   *
    */
   showModal() {
     this.$bvModal.show('bv-modal');
@@ -272,7 +272,7 @@ export default class TutorialLayout extends Vue {
   /**
    * startTourOnHideModal() method
    * Start tutorial when user closes intro tour modal.
-   * 
+   *
    */
   startTourOnHideModal() {
     this.$tours.gameTour.start();

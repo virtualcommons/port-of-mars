@@ -11,7 +11,6 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-
 @Component({})
 export default class LoginButton extends Vue {
   /**
@@ -23,6 +22,7 @@ export default class LoginButton extends Vue {
    */
   setLayout(layout: string) {
     this.$store.commit('SET_LAYOUT', layout);
+   
   }
 }
 </script>

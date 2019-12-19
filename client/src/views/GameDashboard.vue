@@ -50,7 +50,7 @@ import CardModal from '@/components/gamedashboard/cards/CardModal.vue';
 import Notification from '@/components/gamedashboard/Notification.vue';
 
 import { Phase } from 'shared/types';
-import { RequestAPI } from '@/api/request';
+import { GameRequestAPI } from '@/api/game/request';
 
 @Component({
   components: {
@@ -69,14 +69,13 @@ import { RequestAPI } from '@/api/request';
 })
 export default class GameDashboard extends Vue {
   @Inject()
-  readonly $api!: RequestAPI;
+  readonly $api!: GameRequestAPI;
 
   get notifications() {
     return this.$store.state.activeNotifications;
   }
 
-  get phase() {
-    console.log(Phase);
+  get phase(){
     return Phase;
   }
 

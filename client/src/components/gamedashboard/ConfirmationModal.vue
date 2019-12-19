@@ -17,7 +17,7 @@
 
 <script lang="ts">
 import { Component, Vue, Inject } from 'vue-property-decorator';
-import { RequestAPI } from '../../api/request';
+import { GameRequestAPI } from '@/api/game/request';
 import { Phase } from "shared/types";
 
 @Component({})
@@ -28,7 +28,7 @@ export default class ConfirmationModal extends Vue {
   text = '';
 
   @Inject()
-  readonly $api!:RequestAPI;
+  readonly $api!: GameRequestAPI;
 
   mounted() {
     this.$root.$on('openConfirmation', (data) => {

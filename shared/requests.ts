@@ -42,6 +42,7 @@ export interface AcceptTradeRequestData {
   id: string
 }
 
+
 export type Requests =
   SendChatMessageData |
   SetPlayerReadinessData |

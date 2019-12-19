@@ -49,7 +49,7 @@ function applyPlayerResponses(player: any, store: TStore) {
   player.triggerAll();
 }
 
-export function applyServerResponses<T>(room: Room, store: TStore) {
+export function applyGameServerResponses<T>(room: Room, store: TStore) {
   room.onStateChange.once((state: Schemify<GameData>) => {
     ROLES.forEach(role => applyPlayerResponses(state.players[role], store));
     (state.players as any).triggerAll();
@@ -115,6 +115,7 @@ export function applyServerResponses<T>(room: Room, store: TStore) {
       if (change.field === 'upkeep') {
         const upkeep: number = change.value;
         store.commit('SET_UPKEEP', upkeep);
+        store.commit('CREATE_NOTIFICATION','upkeep changed!')
       }
     });
   };

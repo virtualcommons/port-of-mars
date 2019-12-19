@@ -14,7 +14,9 @@ import {
   PIONEER,
   GameData,
   EventClientView,
-  MarsLogMessageData
+  MarsLogMessageData,
+  QuizQuestionData,
+  QuizResultPackage,
 } from 'shared/types';
 import { Accomplishment } from '@/models/AccomplishmentsModels';
 
@@ -94,6 +96,9 @@ export interface State extends GameData {
   activeNotifications: Array<String>;
 
   eventView: EventClientView;
+
+  quizQuestions: Array<QuizQuestionData>;
+  quizResults: Array<QuizResultPackage>;
 }
 
 export const initialStoreState: State = {
@@ -118,5 +123,8 @@ export const initialStoreState: State = {
 
   activeNotifications: [],
 
-  eventView: EventClientView.DRAW_INFLUENCES
+  eventView: EventClientView.VOTE_FOR_PLAYER_SINGLE,
+
+  quizQuestions: [],
+  quizResults: [],
 };

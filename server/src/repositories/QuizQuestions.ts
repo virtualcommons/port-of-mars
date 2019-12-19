@@ -1,86 +1,115 @@
 import * as _ from 'lodash';
-import { QuizData } from 'shared/types';
+import { QuizData, QuizQuestionData } from 'shared/types';
 
-const quizQuestions: Array<QuizData> = [
+const quizQuestionsRaw: Array<QuizData> = [
     {
       id: 1,
       question: "When does the game end?",
-      option1: "When upkeep reaches 0",
-      option2: "After an unknown number of rounds",
-      option3: "After an unknown number of rounds, or earlier if Upkeep reaches 0",
-      option4: "When one of the players reaches 20 points",
-      correct: 3,
+       
+      correct: 2,
+      options: [
+        "When upkeep reaches 0",
+       "After an unknown number of rounds",
+       "After an unknown number of rounds, or earlier if Upkeep reaches 0",
+       "When one of the players reaches 20 points",
+      ]
     },
     {
       id: 2,
       question: "Can you chat with other participants?",
-      option1: "No, communication is not possible in this game.",
-      option2: "Yes, in the chat box during the whole duration of the game.",
-      option3: "Yes, in the chat box during designated periods.",
-      option4: "Yes, if Upkeep is bigger than 35.",
-      correct: 2,
+      correct: 1,
+      options:[
+        "No, communication is not possible in this game.",
+        "Yes, in the chat box during the whole duration of the game.",
+        "Yes, in the chat box during designated periods.",
+        "Yes, if Upkeep is bigger than 35.",
+      ]
     },
     {
       id: 3,
       question: "How do you trade cards with others?",
-      option1: "During the trade period you indicate your preferences of cards",
-      option2: "Expressing your preferences in the chat box is sufficient.",
-      option3: "Discuss via chat and then express your deals during trade period",
-      option4: "When you allocate your time-blocks.",
-      correct: 1,
+
+      correct: 2,
+      options:[
+        "During the trade period you indicate your preferences of cards",
+        "Expressing your preferences in the chat box is sufficient.",
+        "Discuss via chat and then express your deals during trade period",
+        "When you allocate your time-blocks.",
+      ]
     },
     {
       id: 4,
       question: "If Upkeep drops below 65 and is above 35 what happens?",
-      option1: "Chat is not possible anymore.",
-      option2: "Two events will happen that round.",
-      option3: "You get an additional four time-blocks.",
-      option4: "You get an extra accomplishment card.",
-      correct: 2,
+       
+      correct: 1,
+      options:["Chat is not possible anymore.",
+      "Two events will happen that round.",
+      "You get an additional four time-blocks.",
+      "You get an extra accomplishment card.",]
     },
     {
       id: 5,
       question: "The following card is a special accomplishment card [image screwcard]. What does this card do?",
-      option1: "It costs x influence cards, y influence cards , and ..",
-      option2: "You earn x points",
-      option3: "You can only buy this card if you have the required influence cards",
-      option4: "All above three answers are correct",
-      correct: 4,
+       
+      correct: 3,
+      options:["It costs x influence cards, y influence cards , and ..",
+      "You earn x points",
+      "You can only buy this card if you have the required influence cards",
+      "All above three answers are correct",]
     },
     {
       id: 6,
       question: "The following card is a special accomplishment card [image screwcard]. What does this card do?",
-      option1: "It cost the player nothing individually",
-      option2: "The Upkeep level of the group will be reduced with x points",
-      option3: "The individual player will earn x points",
-      option4: "All above three answers are correct",
-      correct: 4,
+       
+      correct: 3,
+      options:["It cost the player nothing individually",
+      "The Upkeep level of the group will be reduced with x points",
+      "The individual player will earn x points",
+      "All above three answers are correct",]
     },
     {
       id: 7,
       question: "You get each round 10 time blocks? Which of the following statements is incorrect:",
-      option1: "You can spend as many time blocks as you want.",
-      option2: "Every time block not spend can be saved for next round.",
-      option3: "Each player has their special skills impacting the costs of influence cards.",
-      option4: "By default each time-block in Upkeep increases the Upkeep of the group with one unit.",
+       
       correct: 1,
+      options:["You can spend as many time blocks as you want.",
+      "Every time block not spend can be saved for next round.",
+      "Each player has their special skills impacting the costs of influence cards.",
+      "By default each time-block in Upkeep increases the Upkeep of the group with one unit.",]
     },
     {
       id: 8,
       question: "If Upkeep drops below 35 which of the following statements is true?",
-      option1: "The game ends",
-      option2: "The group will experience three events this round.",
-      option3: "The player with the least amount of points is eliminated.",
-      option4: "Nothing, life as usual on Mars.",
-      correct: 2,
+       
+      correct: 1,
+      options:["The game ends",
+      "The group will experience three events this round.",
+      "The player with the least amount of points is eliminated.",
+      "Nothing, life as usual on Mars.",]
     },
     {
       id: 9,
       question: "At the start of each round, 25 units is subtracted from Upkeep. What does this represent?",
-      option1: "The lack of contributions of others.",
-      option2: "A standard wear and tear.",
-      option3: "Solar flares",
-      option4: "The costs of trade.",
-      correct: 2,
+       
+      correct: 1,
+      options:["The lack of contributions of others.",
+      "A standard wear and tear.",
+      "Solar flares",
+      "The costs of trade.",]
     }
   ]
+
+export const QuizQuestions:Array<QuizQuestionData> = quizQuestionsRaw.map((q) => {
+  return {
+    id:q.id,
+    question:q.question,
+    options:q.options,
+  }
+});
+
+export const QuizQuestionAnswers = quizQuestionsRaw.map((q) => {
+  return {
+    id:q.id,
+    correct:q.correct
+  }
+})
