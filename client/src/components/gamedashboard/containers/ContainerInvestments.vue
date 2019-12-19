@@ -1,6 +1,6 @@
 <template>
   <BContainer class="container-investments">
-    <BRow class="investments-topbar v-step-10">
+    <BRow class="investments-topbar">
       <p class="investments-topbar-title">Time Investments</p>
       <StatusBar
         class="investments-topbar-statusbar"
@@ -11,9 +11,9 @@
       <p class="investments-topbar-status">( {{ remainingTimeBlocks }} )</p>
     </BRow>
 
-    <BRow class="investments-cards v-step-11 v-step-12">
+    <BRow class="investments-cards">
       <BRow class="investments-cards-top">
-        <CardInvestment v-bind="costs[2]" class="v-step-13" @input="setInvestmentAmount" />
+        <CardInvestment v-bind="costs[2]" @input="setInvestmentAmount" />
         <CardInvestment v-bind="costs[3]" @input="setInvestmentAmount" />
         <CardInvestment v-bind="costs[0]" @input="setInvestmentAmount" />
       </BRow>

@@ -3,7 +3,7 @@
     <Round />
 
     <ContainerProfile />
-    <ProfileInvestments class="v-step-15" />
+    <ProfileInvestments />
     <ContainerAccomplishments />
   </div>
 </template>

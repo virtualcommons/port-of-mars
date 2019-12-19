@@ -1,7 +1,7 @@
 <template>
   <div
     @click="hideNotif()"
-    class="notification v-step-6"
+    class="notification"
     :class="viewAnim()"
     @mouseover="hover = true"
     @mouseleave="hover = false"

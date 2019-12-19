@@ -1,7 +1,6 @@
 <template>
-  <div class="container-members v-step-17">
+  <div class="container-members">
     <!-- <Member
-      class="v-step-18"
       v-for="(player, role) in otherPlayers"
       :key="role"
       :playerRole="role"

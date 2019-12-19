@@ -2,9 +2,9 @@
   <BContainer class="container-phase">
     <BRow class="row-phase">
       <BCol class="phase" cols="3">
-        <Phase class="v-step-3 v-step-9 v-step-19" />
+        <Phase class="v-step-3" />
       </BCol>
-      <BCol id="hscroll" class="events-container v-step-5" cols="6">
+      <BCol id="hscroll" class="events-container" cols="6">
         <div class="events-container-outer">
           <p class="events-container-topbar">Events</p>
           <div class="events-container-inner">
