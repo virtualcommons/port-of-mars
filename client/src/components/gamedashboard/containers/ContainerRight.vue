@@ -1,6 +1,6 @@
 <template>
   <div class="container-right">
-    <p class="scores-title">Player Scores</p>
+    <!-- <p class="scores-title">Player Scores</p> -->
     <ContainerMembers />
     <Chat />
   </div>
@@ -24,10 +24,9 @@ export default class ContainerRight extends Vue {}
 .container-right {
   height: 100%;
   width: 100%;
+  /* border: 0.125rem solid var(--space-orange-opaque-2); */
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
+  flex-flow: column;
 }
 
 .scores-title {

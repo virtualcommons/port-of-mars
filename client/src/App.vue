@@ -54,6 +54,7 @@ body {
   --space-white: #f5f5f5;
   --space-white-opaque-1: rgba(245, 245, 245, 0.05);
   --space-white-opaque-2: rgba(245, 245, 245, 0.25);
+  --space-orange-opaque-2: rgba(198, 123, 92, 0.25);
 
   --color-Researcher: rgba(67, 124, 174, 0.2);
   --color-Pioneer: rgba(111, 36, 134, 0.2);
@@ -69,7 +70,9 @@ body {
   --marslog-red: rgba(170, 42, 41, 0.05);
   --marslog-purple: rgba(111, 36, 134, 0.05);
 
-  --font-family-default: 'Space Mono', monospace;
+  /* --font-family-default: 'Space Mono', monospace; */
+  --font-family-default: 'Maven Pro', sans-serif;
+
   --font-small: 0.75rem;
   --font-med: 1rem;
   --font-large: 1.5rem;

@@ -2,6 +2,9 @@
   <div class="chat" v-if="layout !== 'DISABLE_CHAT'">
     <p class="chat-title">Chat</p>
     <div class="chat-chat">
+      <p v-if="messages.length === 0" class="chat-empty">
+        No Messages
+      </p>
       <div class="chat-message" v-for="message in messages" :key="message.dateCreated">
         <p class="chat-message-member">
           {{ message.role }}
@@ -79,23 +82,27 @@ export default class Chat extends Vue {
 
 <style scoped>
 .chat {
-  height: 50%;
+  flex-grow: 1;
   width: 100%;
   padding: 0.5rem;
-  border: 0.125rem solid var(--space-white-opaque-2);
+  border: 0.125rem solid var(--space-orange-opaque-2);
   margin: 0.5rem 0 0 0;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .chat-title {
+  width: 100%;
   padding: 0.5rem;
+  border-bottom: 0.125rem solid var(--space-white-opaque-2);
   margin-bottom: 0.5rem;
   font-size: var(--font-med);
-  text-align: center;
-  /* text-transform: uppercase; */
-  color: var(--space-gray);
-  background-color: var(--space-orange);
+  text-align: right;
+  /* color: var(--space-orange); */
+  color: var(--space-white-opaque-2);
+  /* background-color: var(--space-orange); */
+  background-color: transparent;
 }
 
 .chat-chat {
@@ -110,6 +117,13 @@ export default class Chat extends Vue {
   /* WebKit */
   width: 0;
   height: 0;
+}
+
+.chat-empty {
+  margin-bottom: 0;
+  font-size: var(--font-small);
+  text-align: center;
+  color: var(--space-white-opaque-2);
 }
 
 .chat-message {

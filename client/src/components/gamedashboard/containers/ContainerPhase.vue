@@ -73,6 +73,7 @@ export default class ContainerPhase extends Vue {
   width: 100%;
   max-width: none;
   padding: 0;
+  /* border: 0.125rem solid var(--space-white-opaque-2); */
   margin: 0;
   display: flex;
   justify-content: center;
@@ -92,11 +93,17 @@ export default class ContainerPhase extends Vue {
   display: flex;
   justify-content: center;
   align-items: center;
+  /* border: 0.125rem solid var(--space-white-opaque-2); */
+  /* background-color: pink; */
 }
 
 .events-container {
   height: 100%;
-  padding: 0.5rem 0;
+  padding: 0;
+  /* padding: 0.5rem 0; */
+  /* border: 0.125rem solid var(--space-white-opaque-2); */
+  /* border: 0.125rem solid red; */
+  /* background-color: green; */
 }
 
 .events-container-outer {
@@ -109,11 +116,13 @@ export default class ContainerPhase extends Vue {
 
 .events-container-topbar {
   padding: 0.5rem;
+  border-bottom: 0.125rem solid var(--space-white-opaque-2);
   margin-bottom: 0.5rem;
   font-size: var(--font-med);
   text-align: center;
-  color: var(--space-gray);
-  background-color: var(--space-orange);
+  color: var(--space-white-opaque-2);
+  /* background-color: var(--space-orange); */
+  background-color: transparent;
 }
 
 .events-container-inner {
@@ -150,10 +159,11 @@ export default class ContainerPhase extends Vue {
   color: var(--space-white-opaque-2);
 }
 
-/* NEW CONTENT */
 .mars-mars {
   height: 100%;
   padding: 0.5rem;
   /* background-color: green; */
+  /* border: 0.125rem solid red; */
+  /* background-color: blue; */
 }
 </style>
