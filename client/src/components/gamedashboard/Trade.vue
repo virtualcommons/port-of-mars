@@ -54,7 +54,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Inject } from 'vue-property-decorator';
-import { RequestAPI } from '@/api/request';
+import { GameRequestAPI } from '@/api/game/request';
 import { TradeData } from 'shared/types';
 
 @Component({})
@@ -63,7 +63,7 @@ export default class Trade extends Vue {
   @Prop() private to: object;
   @Prop() private id: string;
 
-  @Inject() $api!: RequestAPI;
+  @Inject() $api!: GameRequestAPI;
 
   handleAcceptTrade() {
     this.$api.acceptTradeRequest(this.id);

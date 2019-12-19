@@ -21,7 +21,7 @@
 import { Component, Vue, Inject } from 'vue-property-decorator';
 import {BContainer, BRow, BCol} from 'bootstrap-vue';
 import QuizForm from "@/components/tutorialquiz/QuizForm.vue";
-import { QuizRequestAPI } from '../api/quiz/request';
+import { QuizRequestAPI } from '@/api/quiz/request';
 @Component({
     components:{
         BContainer,
@@ -36,7 +36,7 @@ export default class TutorialQuiz extends Vue {
     private index = 0;
     private complete = false;
     private submitted = false;
-    
+
     get quizQuestions(){
       return this.$store.state.quizQuestions;
     }

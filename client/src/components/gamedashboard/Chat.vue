@@ -35,12 +35,12 @@
 
 <script lang="ts">
 import { Vue, Component, Inject } from 'vue-property-decorator';
-import { RequestAPI } from '@/api/request';
+import { GameRequestAPI } from '@/api/game/request';
 
 @Component({})
 export default class Chat extends Vue {
   @Inject()
-  $api!: RequestAPI;
+  $api!: GameRequestAPI;
 
   pendingMessage: string = '';
 

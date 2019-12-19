@@ -28,7 +28,7 @@ import Clock from '@/components/gamedashboard/Clock.vue';
 import {PHASE_LABELS} from "shared/types";
 import ConfirmationModal from "@/components/gamedashboard/ConfirmationModal.vue";
 import * as s from 'shared/types'
-import {RequestAPI} from "@/api/request";
+import {GameRequestAPI} from "@/api/game/request";
 
 @Component({
   components: {
@@ -38,7 +38,7 @@ import {RequestAPI} from "@/api/request";
 })
 export default class Phase extends Vue {
   @Inject()
-  private $api!: RequestAPI;
+  private $api!: GameRequestAPI;
 
   private btnDisabled = false;
 

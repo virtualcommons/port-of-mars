@@ -23,7 +23,7 @@
   import {Component, Vue, Prop, Inject} from 'vue-property-decorator';
 import {canPurchaseAccomplishment} from "shared/validation";
 import {AccomplishmentData} from "shared/types";
-  import {RequestAPI} from "@/api/request";
+  import {GameRequestAPI} from "@/api/game/request";
 
 @Component({})
 export default class CardAccomplishmentView extends Vue {
@@ -37,7 +37,7 @@ export default class CardAccomplishmentView extends Vue {
   private cardData!: AccomplishmentData;
 
   @Inject()
-  $api!: RequestAPI;
+  $api!: GameRequestAPI;
 
   opacity = '';
 

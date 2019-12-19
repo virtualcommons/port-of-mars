@@ -40,13 +40,13 @@
 <script lang="ts">
 import { Vue, Component, Prop, Inject } from 'vue-property-decorator';
 import {Phase, Resource, Role} from "shared/types";
-import { RequestAPI } from '@/api/request';
+import { GameRequestAPI } from '@/api/game/request';
 
 @Component({})
 export default class CardInvestment extends Vue {
 
   @Inject()
-  $api!: RequestAPI;
+  $api!: GameRequestAPI;
 
   // @Prop() private investmentData!: InvestmentProperties;
 
