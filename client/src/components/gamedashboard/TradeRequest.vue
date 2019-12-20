@@ -5,6 +5,7 @@
       <div class="trade-person-icons" v-for="(player,index) in otherPlayers" :key="index">
         <img @click="handleChange(player)" class="person-icons" :src="require(`@/assets/characters/${player}.png`)"
         v-bind:class="{'selected-player':name==player}"/>
+        <p>{{player}}</p>
       </div>
     </div>
 
@@ -17,7 +18,7 @@
     </div>
 
     <div class="trade-send">
-      <button @click="handleTrade">Send Trade</button>
+      <button  v-bind:class="{'trade-impossible':!clientValidation}" @click="handleTrade">Send Trade</button>
     </div>
   </div>
 </template>
@@ -43,6 +44,22 @@ export default class TradeRequest extends Vue {
     })
   }
 
+  get clientValidation(){
+    let hasResourcesToSend = true;
+    let someGreaterThanZero = false;
+    const role = this.$store.state.role;
+    const inventory = this.$store.state.players[role].inventory;
+
+    Object.keys(this.sentResources).forEach(item => {
+      if(this.sentResources[item] > inventory[item]){
+        hasResourcesToSend = false;
+      }
+      if(this.sentResources[item] > 0) someGreaterThanZero = true;
+    });
+
+    return (this.name != "" && hasResourcesToSend && someGreaterThanZero);
+  }
+
   @Inject()
   readonly $api:GameRequestAPI;
 
@@ -62,23 +79,26 @@ export default class TradeRequest extends Vue {
   }
 
   handleTrade(){
-    const fromPackage:TradeAmountData = {
-      role:this.$store.state.role,
-      resourceAmount:this.sentResources
-    }
+    console.log(this.clientValidation);
+    if(this.clientValidation){
+      const fromPackage:TradeAmountData = {
+        role:this.$store.state.role,
+        resourceAmount:this.sentResources
+      }
 
-    const toPackage:TradeAmountData = {
-      role:this.name,
-      resourceAmount:this.exchangeResources
-    }
+      const toPackage:TradeAmountData = {
+        role:this.name,
+        resourceAmount:this.exchangeResources
+      }
 
-    const tradeDataPackage:TradeData = {
-      from:fromPackage,
-      to:toPackage
-    }
+      const tradeDataPackage:TradeData = {
+        from:fromPackage,
+        to:toPackage
+      }
 
-    this.$api.sendTradeRequest(tradeDataPackage);
-    
+      this.$api.sendTradeRequest(tradeDataPackage);
+      this.name = "";
+    }
 
   }
 }
@@ -105,6 +125,7 @@ export default class TradeRequest extends Vue {
 
 .trade-person-icons{
   display:inline-block;
+  text-align: center;
 }
 
 .trade-send-options{
@@ -133,5 +154,9 @@ export default class TradeRequest extends Vue {
 .trade-send{
   margin:0.2rem;
   align-self: flex-end;
+}
+
+.trade-impossible{
+  opacity: 50%;
 }
 </style>
