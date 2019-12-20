@@ -9,7 +9,8 @@ import {
   SendChatMessageCmd, SendTradeRequestCmd,
   SetNextPhaseCmd,
   SetPlayerReadinessCmd,
-  TimeInvestmentCmd
+  TimeInvestmentCmd,
+  RejectTradeRequestCmd
 } from "@/game/commands";
 import {Game, PlayerReadiness} from "@/game/room/types";
 import {CURATOR, Phase, Role, ROLES} from "shared/types";
@@ -62,6 +63,7 @@ export class GameRoom extends Room<GameState> implements Game {
       case "buy-accomplishment-card": return BuyAccomplishmentCmd.fromReq(r, this, client);
       case "discard-accomplishment-card": return DiscardAccomplishmentCmd.fromReq(r, this, client);
       case "accept-trade-request": return AcceptTradeRequestCmd.fromReq(r, this, client);
+      case "reject-trade-request": return RejectTradeRequestCmd.fromReq(r,this,client);
       case "send-trade-request": return SendTradeRequestCmd.fromReq(r, this, client);
     }
   }

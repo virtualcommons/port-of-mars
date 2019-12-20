@@ -111,6 +111,16 @@ export class AcceptTradeRequest extends GameEventWithData {
   }
 }
 
+export class RejectTradeRequest extends GameEventWithData {
+  kind = 'reject-trade-request';
+
+  constructor(public data: {id:string}) {super();}
+
+  apply(game:GameState): void {
+    delete game.tradeSet[this.data.id];
+  }
+}
+
 export class SentTradeRequest extends GameEventWithData {
   kind = 'sent-trade-request';
 
