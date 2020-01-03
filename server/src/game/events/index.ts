@@ -170,6 +170,7 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
     const cards = game.marsEventDeck.peek(game.upkeep);
     const marsEvents = cards.map(e => new MarsEvent(e));
     game.phase = Phase.events;
+    game.timeRemaining = GameState.DEFAULTS.timeRemaining;
     game.marsEvents.splice(0, game.marsEvents.length, ...marsEvents);
     game.marsEventDeck.updatePosition(game.marsEvents.length);
     game.logs.push(log);
@@ -181,6 +182,7 @@ export class EnteredInvestmentPhase extends KindOnlyGameEvent {
 
   apply(game: GameState): void {
     game.phase = Phase.invest;
+    game.timeRemaining = GameState.DEFAULTS.timeRemaining;
   }
 }
 
@@ -189,6 +191,7 @@ export class EnteredTradePhase extends KindOnlyGameEvent {
 
   apply(game: GameState) {
     game.phase = Phase.trade;
+    game.timeRemaining = GameState.DEFAULTS.timeRemaining;
     for (const player of game.players) {
       player.invest();
       player.pendingInvestments.reset();
@@ -201,6 +204,7 @@ export class EnteredPurchasePhase extends KindOnlyGameEvent {
 
   apply(game: GameState): void {
     game.phase = Phase.purchase;
+    game.timeRemaining = GameState.DEFAULTS.timeRemaining;
   }
 }
 
@@ -209,6 +213,7 @@ export class EnteredDiscardPhase extends KindOnlyGameEvent {
 
   apply(game: GameState): void {
     game.phase = Phase.discard;
+    game.timeRemaining = GameState.DEFAULTS.timeRemaining;
   }
 }
 
