@@ -36,6 +36,9 @@ function CHANGE_EVENT(state: State, payload: { event: MarsEventData; index: numb
 function SET_EVENTS_FOR_ROUND(state: State, payload: any) {
   state.marsEvents = payload;
 }
+function SET_TIME_REMAINING(state: State, timeRemaining: number) {
+  state.timeRemaining = timeRemaining;
+}
 
 export default {
   SET_GAME_PHASE,
@@ -45,4 +48,5 @@ export default {
   REMOVE_FROM_EVENTS,
   CHANGE_EVENT,
   SET_EVENTS_FOR_ROUND,
+  SET_TIME_REMAINING,
 }

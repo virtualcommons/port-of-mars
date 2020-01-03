@@ -115,6 +115,10 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
         const round: number = change.value;
         store.commit('SET_ROUND', round);
       }
+      if (change.field === 'timeRemaining') {
+        const timeRemaining: number = change.value;
+        store.commit('SET_TIME_REMAINING', timeRemaining);
+      }
       if (change.field === 'upkeep') {
         const upkeep: number = change.value;
         store.commit('SET_UPKEEP', upkeep);

@@ -26,6 +26,7 @@ export class GameRoom extends Room<GameState> implements Game {
     this.setState(new GameState());
     const snapshot = this.state.toJSON();
     const event = new StateSnapshotTaken(snapshot);
+    this.clock.setInterval(this.gameLoop.bind(this), 1000);
   }
 
   onJoin (client: Client, options: any) {
@@ -67,7 +68,8 @@ export class GameRoom extends Room<GameState> implements Game {
   }
 
   gameLoop() {
-    if (this.state.allPlayersAreReady) {
+    this.state.timeRemaining -= 1;
+    if (this.state.allPlayersAreReady || this.state.timeRemaining <= 0) {
       const cmd = new SetNextPhaseCmd(this);
       const events = cmd.execute();
       this.state.applyMany(events);
