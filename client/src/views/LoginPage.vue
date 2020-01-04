@@ -20,29 +20,5 @@ export default class LoginPage extends Vue {}
 </script>
 
 <style lang="scss">
-.loginpage {
-  position: relative;
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  align-items: center;
-}
-.login-screen {
-  position: relative;
-  z-index: 1;
-  height: 80vh;
-  width: 100vw;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-}
-
-.login-screen h1 {
-  text-transform: uppercase;
-  letter-spacing: 0.25rem;
-  font-size: 11rem;
-  font-weight: 700;
-  color: $space-orange;
-}
+@import '@/stylesheets/views/LoginPage.scss';
 </style>
