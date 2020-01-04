@@ -1,11 +1,13 @@
-import {Room} from 'colyseus.js';
+import { Room } from 'colyseus.js';
 import {
-  ChatMessageData, GameData,
+  ChatMessageData,
+  GameData,
   MarsEventData,
   Phase,
   PlayerData,
   MarsLogMessageData,
-  ROLES, TradeData
+  ROLES,
+  TradeData
 } from 'shared/types';
 import { Responses } from 'shared/responses';
 import { DataChange, Schema } from '@colyseus/schema';
@@ -22,28 +24,28 @@ function applyPlayerResponses(player: any, store: TStore) {
     changes.forEach(change => {
       const payload = { role: player.role, data: change.value };
       switch (change.field as keyof PlayerData) {
-        case "inventory":
+        case 'inventory':
           store.commit('SET_INVENTORY', payload);
           break;
-        case "costs":
+        case 'costs':
           store.commit('SET_INVESTMENT_COSTS', payload);
           break;
-        case "timeBlocks":
+        case 'timeBlocks':
           store.commit('SET_TIME_BLOCKS', payload);
           break;
-        case "ready":
+        case 'ready':
           store.commit('SET_READINESS', payload);
           break;
-        case "accomplishment":
+        case 'accomplishment':
           store.commit('SET_ACCOMPLISHMENTS', payload);
           break;
-        case "victoryPoints":
+        case 'victoryPoints':
           store.commit('SET_VICTORY_POINTS', payload);
           break;
-        case "pendingInvestments":
+        case 'pendingInvestments':
           store.commit('SET_PENDING_INVESTMENTS', payload);
           break;
-        case "contributedUpkeep":
+        case 'contributedUpkeep':
           store.commit('SET_CONTRIBUTED_UPKEEP', payload);
           break;
       }
@@ -79,11 +81,11 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
 
   room.state.logs.onAdd = (logMsg: Schemify<MarsLogMessageData>, index: number) => {
     store.commit('ADD_TO_MARS_LOG', deschemify(logMsg));
-  }
+  };
 
   room.state.logs.onRemove = (logMsg: Schemify<MarsLogMessageData>, index: number) => {
     store.commit('REMOVE_FROM_MARS_LOG', deschemify(logMsg));
-  }
+  };
 
   room.state.marsEvents.onAdd = (e: Schemify<MarsEventData>, index: number) => {
     store.commit('ADD_TO_EVENTS', deschemify(e));
@@ -94,7 +96,7 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
   };
 
   room.state.marsEvents.onChange = (event: Schemify<MarsEventData>, index: number) => {
-    store.commit('CHANGE_EVENT', {event: deschemify(event), index});
+    store.commit('CHANGE_EVENT', { event: deschemify(event), index });
   };
 
   room.state.tradeSet.onAdd = (event: Schemify<TradeData>, id: string) => {
@@ -106,7 +108,7 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
   };
 
   room.state.tradeSet.onRemove = (event: Schemify<TradeData>, id: string) => {
-    store.commit('REMOVE_FROM_TRADES', {id});
+    store.commit('REMOVE_FROM_TRADES', { id });
   };
 
   room.state.onChange = (changes: Array<any>) => {
@@ -126,7 +128,10 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
       if (change.field === 'upkeep') {
         const upkeep: number = change.value;
         store.commit('SET_UPKEEP', upkeep);
-        store.commit('CREATE_NOTIFICATION','upkeep changed!')
+        // store.commit(
+        //   'CREATE_NOTIFICATION',
+        //   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vestibulum.'
+        // );
       }
     });
   };

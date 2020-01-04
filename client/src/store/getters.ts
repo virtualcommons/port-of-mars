@@ -1,5 +1,5 @@
-import {PlayerClientSet, State} from "@/store/state";
-import {ROLES} from "shared/types";
+import { PlayerClientSet, State } from '@/store/state';
+import { ROLES } from 'shared/types';
 
 export default {
   /**

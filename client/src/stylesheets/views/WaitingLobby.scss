@@ -1,0 +1,122 @@
+.waiting-lobby {
+  height: 100vh !important;
+  width: 100vw !important;
+  @include make-center;
+  background-color: $space-gray;
+}
+
+.container {
+  @include expand;
+  max-height: $max-screen-height;
+  min-height: $min-screen-height;
+  max-width: $max-screen-width;
+  min-width: $min-screen-width;
+  position: relative;
+  padding: 1rem;
+  background-color: $space-gray;
+
+  .character {
+    height: 100%;
+    @include column-3;
+    @include make-column-and-center;
+
+    p {
+      margin-top: 1rem;
+      text-align: center;
+      font-size: $font-med;
+    }
+  }
+
+  .frame {
+    height: 0;
+    width: 80%;
+    padding: 40% 0;
+    border-radius: 50%;
+    position: relative;
+    background-color: $space-orange;
+
+    .image {
+      height: 110%;
+      margin: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  .top,
+  .bottom {
+    height: 50%;
+    width: 100%;
+    @include row;
+    color: $space-white;
+  }
+
+  .top {
+    .right {
+      @include column-9;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: flex-end;
+
+      .wrapper {
+        height: 7.5rem;
+        width: 87.5%;
+        margin-right: -1rem;
+        border-bottom: 0.5rem solid $space-orange;
+        border-radius: 0 0 0 0.5rem;
+        display: flex;
+
+        .hint {
+          width: 100%;
+          padding: 0.5rem 1rem;
+          margin-bottom: 0.5rem;
+          flex-grow: 1;
+          background-color: $space-white-opaque-1;
+
+          p {
+            margin-bottom: 0;
+            font-size: $font-med;
+          }
+        }
+      }
+
+      .loading-progress {
+        @include make-column-and-center;
+        align-items: flex-start;
+
+        .progress-text {
+          margin: 0 4rem 0 0;
+          font-size: 6rem;
+          color: $space-orange;
+
+          span {
+            color: $space-white;
+          }
+        }
+
+        /* REMOVE LATER */
+        .continue {
+          @include reset-button;
+          padding: 0.25rem 0.5rem;
+          border-radius: 0.25rem;
+          font-size: $font-small;
+          color: $space-white-opaque-2;
+          @include default-transition-base;
+
+          &:hover {
+            color: $space-white;
+            @include default-scale-up;
+          }
+        }
+        /* REMOVE LATER */
+      }
+    }
+  }
+
+  .bottom {
+  }
+}

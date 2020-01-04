@@ -1,0 +1,54 @@
+.card-event-component {
+  height: 12rem;
+  width: 14.5rem;
+  margin: 0 0.25rem;
+  flex: 0 0 auto;
+  @include make-column-and-center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:first-child {
+    margin-left: 0;
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  &:hover {
+    // transform: scale(1.1);
+  }
+
+  .name {
+    width: 100%;
+    margin-bottom: 0.5rem;
+    color: $space-gray;
+    background-color: $space-white;
+
+    p {
+      width: 100%;
+      padding: 0.25rem 0.5rem;
+      margin-bottom: 0;
+      text-align: center;
+      text-transform: capitalize;
+      @include text-overflow-ellipses;
+    }
+  }
+
+  .effect {
+    flex-grow: 1;
+    width: 100%;
+    padding: 0.5rem;
+    background-color: $space-gray;
+    overflow-y: scroll;
+    @include disable-scroll;
+
+    p {
+      width: 100%;
+      margin-bottom: 0;
+      text-align: center;
+      font-size: $font-small;
+      color: $space-white;
+    }
+  }
+}

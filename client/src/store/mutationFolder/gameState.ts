@@ -1,5 +1,6 @@
 import {
-  AccomplishmentData, AccomplishmentSetData,
+  AccomplishmentData,
+  AccomplishmentSetData,
   MarsEventData,
   Phase,
   PlayerData,
@@ -9,7 +10,7 @@ import {
 } from 'shared/types';
 import { Vue } from 'vue-property-decorator';
 import * as _ from 'lodash';
-import {defaultPendingInvestment, PlayerClientData, State} from '@/store/state';
+import { defaultPendingInvestment, PlayerClientData, State } from '@/store/state';
 
 function SET_GAME_PHASE(state: State, payload: Phase) {
   state.phase = payload;
@@ -48,5 +49,5 @@ export default {
   REMOVE_FROM_EVENTS,
   CHANGE_EVENT,
   SET_EVENTS_FOR_ROUND,
-  SET_TIME_REMAINING,
-}
+  SET_TIME_REMAINING
+};

@@ -1,0 +1,101 @@
+.card-investment {
+  width: calc(100% / 3);
+  @include make-center;
+  background-color: $space-white-opaque-1;
+
+  .ci-container {
+    height: 80%;
+    width: 80%;
+    @include make-center;
+    color: $space-gray;
+    overflow: hidden;
+  }
+
+  .type {
+    height: 100%;
+    width: 70%;
+    padding: 0.5rem;
+    border: $border-white;
+    position: relative;
+    @include make-column-and-expand;
+    background-color: $space-white;
+
+    .name {
+      margin: 0;
+      font-size: $font-med;
+      text-transform: capitalize;
+    }
+
+    img {
+      height: 4.5rem;
+      width: 4.5rem;
+    }
+
+    .data {
+      width: 100%;
+      @include make-right;
+
+      .cost {
+        border-radius: 50%;
+        width: 2rem;
+        height: 2rem;
+        @include make-center;
+        background-color: $space-gray;
+
+        p {
+          margin: 0;
+          font-size: $font-small;
+          text-align: center;
+          color: $space-white;
+        }
+      }
+    }
+  }
+
+  .increment-decrement {
+    height: 100%;
+    width: 30%;
+    @include make-column-and-center;
+    background-color: $space-gray;
+
+    .increment,
+    .decrement {
+      height: 50%;
+      width: 100%;
+      border: $border-white;
+      font-size: $font-large;
+      color: $space-white;
+      background: transparent;
+      @include default-transition-base;
+
+      &:focus,
+      &:active {
+        outline: none;
+      }
+
+      &:hover {
+        color: $space-gray;
+        background-color: $space-orange;
+        cursor: pointer;
+      }
+    }
+
+    .increment {
+      border-left: none;
+      border-bottom: none;
+    }
+
+    .decrement {
+      border-top: none;
+      border-left: none;
+    }
+  }
+
+  .increment-decrement-disabled {
+    height: 100%;
+    width: 30%;
+    border: $border-white;
+    border-left: none;
+    background-color: $space-gray;
+  }
+}

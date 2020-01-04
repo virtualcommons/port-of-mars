@@ -1,0 +1,63 @@
+.game-dashboard {
+  height: 100vh !important;
+  width: 100vw !important;
+  max-width: none !important;
+  @include reset-padding-margin;
+  @include make-center;
+  background-color: $space-gray;
+
+  .board {
+    @include expand;
+    /* SET MAX SIZE OF SCREEN */
+    max-height: $max-screen-height;
+    max-width: $max-screen-width;
+    /* SET MIN SIZE OF SCREEN */
+    min-height: $min-screen-height;
+    min-width: $min-screen-width;
+    padding: 1rem;
+    margin: 0;
+    position: relative;
+    @include row;
+    background-color: $space-gray;
+
+    .left,
+    .right {
+      height: 100%;
+      @include column-2;
+      @include reset-padding-margin;
+      position: relative;
+    }
+
+    .middle {
+      height: 100%;
+      @include column-8;
+      @include reset-padding-margin;
+
+      .top,
+      .bottom {
+        @include row;
+        @include reset-padding-margin;
+      }
+
+      .top {
+        height: 40%;
+      }
+
+      .bottom {
+        height: 60%;
+        @include make-center;
+      }
+    }
+  }
+}
+
+.game-dashboard-defeat {
+  text-align: center;
+
+  h1 {
+    color: $space-white;
+  }
+
+  .restart-button {
+  }
+}

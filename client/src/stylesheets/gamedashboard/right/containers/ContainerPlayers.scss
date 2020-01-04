@@ -1,0 +1,17 @@
+.container-players {
+  height: auto;
+  width: 100%;
+  padding: 0.5rem;
+  @include make-column-and-top;
+  @include border-orange;
+
+  .topbar {
+    width: 100%;
+    padding: 0.5rem;
+    @include border-bottom-white;
+    margin-bottom: 0.5rem;
+    font-size: $font-med;
+    text-align: right;
+    color: $space-white-opaque-2;
+  }
+}

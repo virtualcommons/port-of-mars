@@ -1,0 +1,31 @@
+.modal-event {
+  @include expand;
+  @include make-column-and-center;
+
+  p {
+    margin-bottom: 0;
+  }
+
+  .title {
+    margin: 0 1rem;
+    text-align: center;
+    font-size: 2rem;
+    color: $space-orange;
+  }
+
+  .info {
+    margin: 2rem 0;
+    text-align: center;
+  }
+
+  .effects-title {
+    margin: 1rem 0 0 0 !important;
+    font-size: $font-small;
+    color: $space-orange;
+  }
+
+  .effects {
+    margin: 1rem 0 0 0;
+    text-align: center;
+  }
+}

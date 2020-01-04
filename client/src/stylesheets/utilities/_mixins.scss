@@ -1,37 +1,171 @@
-// -----------------------------------------------------------------------------
-// This file contains all application-wide Sass mixins.
-// -----------------------------------------------------------------------------
+$screen-sm: 480px;
+$screen-md: 640px;
+$screen-lg: 960px;
+$screen-xl: 1280px;
+$screen-xxl: 1680px;
 
-@mixin user-select {
-    -webkit-touch-callout: none !important;
-    -webkit-user-select: none !important;
-    -khtml-user-select: none !important;
-    -moz-user-select: none !important;
-    -ms-user-select: none !important;
-    user-select: none !important;
-}
-
-/// Media queries
 @mixin sm {
-    @media (max-width: #{$screen-sm-max-width}) {
-        @content;
-    }
+  @media (max-width: #{$screen-sm}) {
+    @content;
+  }
 }
 
 @mixin md {
-    @media (max-width: #{$screen-md-max-width}) {
-        @content;
-    }
+  @media (max-width: #{$screen-md}) {
+    @content;
+  }
 }
 
 @mixin lg {
-    @media (max-width: #{$screen-lg-max-width}) {
-        @content;
-    }
+  @media (max-width: #{$screen-lg}) {
+    @content;
+  }
 }
 
 @mixin xl {
-    @media (max-width: #{$screen-xl-max-width}) {
-        @content;
-    }
+  @media (max-width: #{$screen-xl}) {
+    @content;
+  }
+}
+
+@mixin xxl {
+  @media (max-width: #{$screen-xxl}) {
+    @content;
+  }
+}
+
+@mixin text-overflow-ellipses {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@mixin disable-scroll {
+  &::-webkit-scrollbar {
+    height: 0;
+    width: 0 !important;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@mixin reset-button {
+  border: none;
+  background: transparent;
+  &:focus,
+  &:active {
+    outline: none;
+  }
+}
+
+@mixin reset-padding-margin {
+  padding: 0;
+  margin: 0;
+}
+
+@mixin border-orange {
+  border: 0.125rem solid $space-orange-opaque-2;
+}
+
+@mixin border-bottom-white {
+  border-bottom: 0.125rem solid $space-white-opaque-2;
+}
+
+@mixin expand {
+  height: 100%;
+  width: 100%;
+}
+
+@mixin default-transition-base {
+  transition: all 0.2s ease-in-out;
+}
+
+@mixin default-scale-up {
+  transform: scale(1.1);
+}
+
+@mixin make-column-and-expand {
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@mixin make-column-and-center {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin make-column-and-top {
+  display: flex;
+  flex-flow: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+@mixin make-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin make-left {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+@mixin make-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+@mixin make-horizontal-expand {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+@mixin row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+@mixin column-2 {
+  flex: 0 0 16.666667%;
+  max-width: 16.666667%;
+  width: 100%;
+}
+
+@mixin column-3 {
+  flex: 0 0 25%;
+  max-width: 25%;
+  width: 100%;
+}
+
+@mixin column-6 {
+  flex: 0 0 50%;
+  max-width: 50%;
+  width: 100%;
+}
+
+@mixin column-8 {
+  flex: 0 0 66.666667%;
+  max-width: 66.666667%;
+  width: 100%;
+}
+
+@mixin column-9 {
+  flex: 0 0 75%;
+  max-width: 75%;
+  width: 100%;
+}
+
+@mixin column-12 {
+  flex: 0 0 100%;
+  max-width: 100%;
+  width: 100%;
 }

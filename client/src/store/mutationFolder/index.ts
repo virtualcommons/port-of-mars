@@ -4,7 +4,7 @@ import gameState from './gameState';
 import investment from './investment';
 import layout from './layout';
 import notifications from './notifications';
-import player from './player'
+import player from './player';
 import trading from './trading';
 import quiz from './quiz';
 
@@ -21,5 +21,5 @@ export default {
   ...notifications,
   ...player,
   ...trading,
-  ...quiz,
+  ...quiz
 };
