@@ -19,13 +19,6 @@ import ContainerPhase from '@/components/gamedashboard/containers/ContainerPhase
 export default class ContainerTop extends Vue {}
 </script>
 
-<style scoped>
-.container-top {
-  height: 100%;
-  width: 100%;
-  padding: 0 0.5rem 0.5rem 0.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
+<style lang="scss" scoped>
+@import '@/stylesheets/gamedashboard/containers/ContainerTop.scss';
 </style>

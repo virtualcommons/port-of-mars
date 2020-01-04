@@ -19,7 +19,7 @@ import LoginButton from '@/components/loginpage/LoginButton.vue';
 export default class LoginPage extends Vue {}
 </script>
 
-<style>
+<style lang="scss">
 .loginpage {
   position: relative;
   height: 100vh;
@@ -43,6 +43,6 @@ export default class LoginPage extends Vue {}
   letter-spacing: 0.25rem;
   font-size: 11rem;
   font-weight: 700;
-  color: var(--space-orange);
+  color: $space-orange;
 }
 </style>

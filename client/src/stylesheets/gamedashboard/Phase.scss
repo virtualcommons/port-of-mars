@@ -1,0 +1,70 @@
+.phase-component {
+  @include expand;
+  @include make-column-and-expand;
+  text-align: center;
+
+  p {
+    margin: 0;
+  }
+
+  .title {
+    font-size: $font-large;
+    color: $space-white;
+  }
+
+  .current {
+    font-size: $font-med;
+    color: $space-orange;
+  }
+
+  .buttons {
+    margin-top: 0.75rem;
+    @include make-column-and-center;
+
+    .donebtn {
+      @include reset-button;
+      height: 2rem;
+      width: 6rem;
+      padding: 0.125rem;
+      margin-bottom: 0.75rem;
+      border: 0.0625rem solid $space-white;
+      font-size: 0.75rem;
+      color: $space-white;
+      background-color: $space-gray;
+      @include default-transition-base;
+
+      &:hover {
+        color: $space-gray;
+        background-color: $space-white;
+      }
+
+      &:disabled {
+        opacity: 50%;
+      }
+
+      &:disabled:hover {
+        color: $space-white;
+        background-color: $space-gray;
+      }
+    }
+
+    .cancelbtn {
+      color: $space-orange;
+      @include default-transition-base;
+      cursor: pointer;
+
+      &:hover {
+        @include default-scale-up;
+      }
+    }
+  }
+
+  .time {
+    font-size: $font-large;
+    color: $space-orange;
+
+    span {
+      color: $space-white;
+    }
+  }
+}

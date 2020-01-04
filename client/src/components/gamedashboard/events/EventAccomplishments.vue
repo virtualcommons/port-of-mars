@@ -42,30 +42,6 @@ export default class EventAccomplishments extends Vue {
 }
 </script>
 
-<style scoped>
-/* SELECT_PURCHASED_ACCOMPLISHMENT */
-
-.event-select-purchased-accomplishment-container {
-  height: 100%;
-  width: calc(calc(100 / 9) * 5%);
-  background-color: blue;
-}
-
-.event-select-purchased-accomplishment {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  overflow-y: scroll;
-  background-color: green;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE 10+ */
-}
-
-.event-select-purchased-accomplishment::-webkit-scrollbar {
-  /* WebKit */
-  height: 0;
-  width: 0;
-}
+<style lang="scss" scoped>
+@import '@/stylesheets/gamedashboard/events/EventAccomplishments.scss';
 </style>

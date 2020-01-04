@@ -1,0 +1,22 @@
+.event-test {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* NO_CHANGE */
+
+.event-no-change {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: $space-white;
+}
+
+.event-no-change p {
+  margin: 0;
+}

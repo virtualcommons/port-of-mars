@@ -1,7 +1,7 @@
 <template>
   <div class="round">
     <p class="v-step-2">
-      Round <span class="round-number">{{ roundNumber }}</span>
+      Round <span>{{ roundNumber }}</span>
     </p>
   </div>
 </template>
@@ -26,17 +26,6 @@ export default class Round extends Vue {
 }
 </script>
 
-<style scoped>
-.round {
-  width: 100%;
-  font-size: var(--font-large);
-  color: var(--space-white);
-}
-
-.round p {
-  margin: 0 0 0.5rem 0;
-  display: inline-block;
-  text-align: left;
-  border-bottom: 0.125rem solid var(--space-orange);
-}
+<style lang="scss" scoped>
+@import '@/stylesheets/gamedashboard/Round.scss';
 </style>

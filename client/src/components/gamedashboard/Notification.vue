@@ -6,11 +6,11 @@
     @mouseover="hover = true"
     @mouseleave="hover = false"
   >
-    <p class="notification-close" v-if="hover || inView === 'hide'">Close</p>
+    <p class="notification-close" v-if="hover || inView === 'hide'">Dismiss Notification</p>
     <p class="notification-message" v-if="!hover && inView !== 'hide'">
-      {{ message }} <br />
-      Message: {{ index + 1 }}/{{ length }}
+      {{ message }}
     </p>
+    <p class="notification-message">N<sup>o</sup> : {{ index + 1 }} of {{ length }}</p>
   </div>
 </template>
 
@@ -51,40 +51,14 @@ export default class Notification extends Vue {
     }
     if (this.inView === 'hide') {
       return 'animated fadeOutLeft fast';
-      // return 'animated fadeOut faster';
     }
     return '';
   }
 }
 </script>
 
-<style scoped>
-.notification {
-  height: 5rem;
-  width: calc(calc(100 / 12) * 2%);
-  padding: 0.5rem 1rem;
-  border-radius: 1rem;
-  position: absolute;
-  z-index: 2;
-  left: 1rem;
-  top: 4rem;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  background-color: var(--space-orange);
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
-
-.notification-inactive {
-  visibility: hidden;
-}
-.notification-close,
-.notification-message {
-  margin: 0;
-  font-size: var(--font-small);
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-}
+<style lang="scss" scoped>
+@import '~animate.css/source/fading_entrances/fadeInLeft.css';
+@import '~animate.css/source/fading_exits/fadeOutLeft.css';
+@import '@/stylesheets/gamedashboard/Notification.scss';
 </style>

@@ -1,0 +1,5 @@
+.container-left {
+  @include expand;
+  @include border-orange;
+  @include make-column-and-expand;
+}

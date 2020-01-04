@@ -26,33 +26,12 @@ import EventAccomplishments from '@/components/gamedashboard/events/EventAccompl
 })
 export default class EventView extends Vue {
   get layout() {
-    console.log(`(${typeof this.$tstore.state.eventView}): ${this.$tstore.state.eventView}`);
+    // console.log(`(${typeof this.$tstore.state.eventView}): ${this.$tstore.state.eventView}`);
     return this.$tstore.state.eventView;
   }
 }
 </script>
 
-<style scoped>
-.event-test {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* NO_CHANGE */
-
-.event-no-change {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: var(--space-white);
-}
-
-.event-no-change p {
-  margin: 0;
-}
+<style lang="scss" scoped>
+@import '@/stylesheets/gamedashboard/events/EventView.scss';
 </style>

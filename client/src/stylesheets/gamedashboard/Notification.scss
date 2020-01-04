@@ -1,0 +1,37 @@
+.notification {
+  height: 5rem;
+  width: calc(calc(100 / 12) * 2%);
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  position: absolute;
+  z-index: 2;
+  left: 1rem;
+  top: 4rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  background-color: $space-orange;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.notification-inactive {
+  visibility: hidden;
+}
+.notification-close,
+.notification-message {
+  width: 100%;
+  margin: 0;
+  font-size: $font-small;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.notification-close {
+  text-align: center;
+}
