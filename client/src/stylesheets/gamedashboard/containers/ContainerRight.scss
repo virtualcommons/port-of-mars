@@ -1,0 +1,4 @@
+.container-right {
+  @include expand;
+  @include make-column-and-expand;
+}

@@ -1,19 +1,97 @@
-// sass tools, helper files, variables, functions, mixins, other config files
-@import 'utilities/variables';
-@import 'utilities/mixins';
+@import './utilities/_mixins.scss';
+@import './utilities/_variables.scss';
 
-// third party code from external libraries and frameworks
-@import 'vendors/bootstrap';
+@import url('https://fonts.googleapis.com/css?family=Maven+Pro:400,700&display=swap');
 
-// boilerplate code for the project: standard styles, resets, typographic rules
-@import 'base/reset';
-@import 'base/typography';
+html {
+  @include xl {
+    font-size: 12px !important;
+  }
 
-// project layout styles: header, footer, navigation, grid system
-@import 'layout/grid';
+  @include lg {
+    font-size: 8px !important;
+  }
 
-// styles for components/widgets
-@import 'components/buttons';
+  @include md {
+    font-size: 6px !important;
+  }
+  @include sm {
+    font-size: 4px !important;
+  }
+}
 
-// styles specific to individual pages
-@import 'pages/login';
+body {
+  font-family: $font-family-default !important;
+  background-color: $space-gray;
+  overflow: hidden;
+
+  --space-orange: #c67b5c;
+  --space-white-opaque-1: rgba(245, 245, 245, 0.05);
+  --space-white-opaque-2: rgba(245, 245, 245, 0.25);
+  --color-Researcher: rgba(67, 124, 174, 0.2);
+  --color-Pioneer: rgba(111, 36, 134, 0.2);
+  --color-Curator: rgba(103, 65, 29, 0.2);
+  --color-Entrepreneur: rgba(199, 168, 40, 0.2);
+  --color-Politician: rgba(170, 42, 41, 0.2);
+  --color-Upkeep: rgba(45, 143, 68, 0.2);
+  --status-green: rgba(45, 143, 68, 1);
+  --marslog-red: rgba(170, 42, 41, 0.05);
+  --marslog-purple: rgba(111, 36, 134, 0.05);
+}
+
+p,
+h1,
+img,
+button {
+  user-select: none !important;
+}
+
+.game {
+  height: 100vh !important;
+  width: 100vw !important;
+}
+
+.container {
+  width: 100%;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.column-2 {
+  flex: 0 0 16.666667%;
+  max-width: 16.666667%;
+  width: 100%;
+}
+
+.column-3 {
+  flex: 0 0 25%;
+  max-width: 25%;
+  width: 100%;
+}
+
+.column-6 {
+  flex: 0 0 50%;
+  max-width: 50%;
+  width: 100%;
+}
+
+.column-8 {
+  flex: 0 0 66.666667%;
+  max-width: 66.666667%;
+  width: 100%;
+}
+
+.column-9 {
+  flex: 0 0 75%;
+  max-width: 75%;
+  width: 100%;
+}
+
+.column-12 {
+  flex: 0 0 100%;
+  max-width: 100%;
+  width: 100%;
+}

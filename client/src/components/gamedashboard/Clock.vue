@@ -38,13 +38,6 @@ export default class Clock extends Vue {
 }
 </script>
 
-<style scoped>
-@import url('https://fonts.googleapis.com/css?family=Space+Mono:400,700&display=swap');
-.timer {
-  color: var(--space-white);
-}
-.clock-container {
-  color: var(--space-white);
-  font-size: var(--font-med);
-}
+<style lang="scss" scoped>
+@import '@/stylesheets/gamedashboard/Clock.scss';
 </style>

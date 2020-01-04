@@ -22,12 +22,11 @@ export default class LoginButton extends Vue {
    */
   setLayout(layout: string) {
     this.$store.commit('SET_LAYOUT', layout);
-   
   }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .login-button-container {
   display: flex;
   flex-direction: column;
@@ -39,9 +38,9 @@ export default class LoginButton extends Vue {
   width: 18rem;
   margin: 0.5rem;
   border-radius: 0.75rem;
-  border: 0.125rem solid var(--space-white-opaque-2);
+  border: 0.125rem solid $space-white-opaque-2;
   outline: none !important;
-  color: var(--space-white);
+  color: $space-white;
   background-color: rgba(245, 245, 245, 0.2);
 }
 </style>

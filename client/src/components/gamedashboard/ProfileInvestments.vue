@@ -1,9 +1,9 @@
 <template>
-  <div class="profile-investments-container">
-    <p class="profile-investments-title">Your Investments</p>
-    <div class="profile-investments">
-      <div v-for="investment in investments" class="profile-investment" :key="investment.name">
-        <img :src="require(`@/assets/iconsSVG/${investment.name}.svg`)" alt="Investment" />
+  <div class="profile-investments">
+    <p class="title">Your Investments</p>
+    <div class="pi-container">
+      <div v-for="investment in investments" :key="investment.name" class="profile-investment">
+        <img :src="require(`@/assets/icons/${investment.name}.svg`)" alt="Investment" />
         <p>
           {{ investment.units
           }}<span v-show="investment.pendingUnits > 0"
@@ -12,8 +12,12 @@
         </p>
       </div>
       <div class="profile-investment">
-        <img :src="require(`@/assets/iconsSVG/upkeep.svg`)" alt="Investment" />
-        <p>{{ upkeep.units }}<span v-show="upkeep.pendingUnits > 0">+<span :style="style(upkeep)">{{ upkeep.pendingUnits }}</span></span>
+        <img :src="require(`@/assets/icons/upkeep.svg`)" alt="Investment" />
+        <p>
+          {{ upkeep.units
+          }}<span v-show="upkeep.pendingUnits > 0"
+            >+<span :style="style(upkeep)">{{ upkeep.pendingUnits }}</span></span
+          >
         </p>
       </div>
     </div>
@@ -21,8 +25,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
-import {Resource, RESOURCES} from 'shared/types';
+import { Vue, Component } from 'vue-property-decorator';
+import { Resource, RESOURCES } from 'shared/types';
 
 @Component({})
 export default class ProfileInvestments extends Vue {
@@ -43,7 +47,7 @@ export default class ProfileInvestments extends Vue {
     return {
       pendingUnits: pendingInvestment.upkeep,
       units: p.contributedUpkeep
-    }
+    };
   }
 
   style(inventory: { units: number; pendingUnits: number }): string {
@@ -54,63 +58,6 @@ export default class ProfileInvestments extends Vue {
 }
 </script>
 
-<style scoped>
-.profile-investments-container {
-  width: 100%;
-  padding: 0.5rem;
-  /* border: 0.125rem solid var(--space-white-opaque-2); */
-}
-
-.profile-investments-title {
-  width: 100%;
-  padding: 0.5rem;
-  border-bottom: 0.125rem solid var(--space-white-opaque-2);
-  margin-bottom: 0.5rem;
-  font-size: var(--font-med);
-  text-align: left;
-  /* color: var(--space-orange); */
-  color: var(--space-white-opaque-2);
-  /* background-color: var(--space-orange); */
-  background-color: transparent;
-}
-
-.profile-investments {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.profile-investment {
-  width: calc(100% / 3);
-  padding: 0.5rem 0.25rem;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  background-color: var(--space-white-opaque-1);
-}
-
-.profile-investment img {
-  height: 1.5rem;
-  width: 1.5rem;
-  margin: 0 0.5rem;
-}
-
-.profile-investment p {
-  margin: 0 0.5rem;
-  font-size: var(--font-small);
-  color: var(--space-white);
-}
-
-@media (max-width: 1366px) {
-  .profile-info-player {
-    font-size: var(--font-med);
-  }
-  .profile-frame {
-    height: 4rem;
-    width: 4rem;
-  }
-  .profile-investment img {
-    height: 1.25rem;
-    width: 1.25rem;
-  }
-}
+<style lang="scss" scoped>
+@import '@/stylesheets/gamedashboard/ProfileInvestments.scss';
 </style>

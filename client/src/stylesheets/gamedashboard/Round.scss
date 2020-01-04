@@ -1,0 +1,12 @@
+.round {
+  width: 100%;
+  font-size: $font-large;
+  color: $space-white;
+
+  p {
+    margin: 0 0 0.5rem 0;
+    display: inline-block;
+    text-align: left;
+    border-bottom: 0.125rem solid $space-orange;
+  }
+}

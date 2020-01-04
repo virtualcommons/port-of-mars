@@ -1,35 +1,29 @@
 <template>
-  <BContainer class="container-investments">
-    <BRow class="investments-topbar">
-      <p class="investments-topbar-title">Time Investments</p>
+  <div class="container-investments">
+    <div class="topbar">
+      <p class="title">Time Investments</p>
       <StatusBar
-        class="investments-topbar-statusbar"
+        class="statusbar"
         :setWidth="`${remainingTimeBlocks * 10}`"
         :colorOuter="'statusbar-outer-gray'"
         :colorInner="'statusbar-inner-gray'"
       />
-      <p class="investments-topbar-status">( {{ remainingTimeBlocks }} )</p>
-    </BRow>
+      <p class="status">{{ remainingTimeBlocks }}</p>
+    </div>
 
-    <BRow class="investments-cards">
-      <BRow class="investments-cards-top">
-        <CardInvestment v-bind="costs[2]" @input="setInvestmentAmount" />
-        <CardInvestment v-bind="costs[3]" @input="setInvestmentAmount" />
-        <CardInvestment v-bind="costs[0]" @input="setInvestmentAmount" />
-      </BRow>
-
-      <BRow class="investments-cards-bottom">
-        <CardInvestment v-bind="costs[4]" @input="setInvestmentAmount" />
-        <CardInvestment v-bind="costs[5]" @input="setInvestmentAmount" />
-        <CardInvestment v-bind="costs[1]" @input="setInvestmentAmount" />
-      </BRow>
-    </BRow>
-  </BContainer>
+    <div class="cards">
+      <CardInvestment
+        v-for="cost in costs"
+        v-bind="cost"
+        :key="cost.name"
+        @input="setInvestmentAmount"
+      />
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { BContainer, BRow, BCol } from 'bootstrap-vue';
 import StatusBar from '@/components/gamedashboard/StatusBar.vue';
 import CardInvestment from '@/components/gamedashboard/cards/CardInvestment.vue';
 import {
@@ -44,9 +38,6 @@ import * as _ from 'lodash';
 
 @Component({
   components: {
-    BContainer,
-    BRow,
-    BCol,
     StatusBar,
     CardInvestment
   }
@@ -102,65 +93,6 @@ export default class ContainerInvestments extends Vue {
 }
 </script>
 
-<style scoped>
-.container-investments {
-  height: 100%;
-  width: 100%;
-  max-width: none;
-  padding: 0.5rem;
-  padding-right: 0.25rem;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.investments-topbar {
-  height: 10%;
-  width: 100%;
-  margin: 0;
-  margin-bottom: 0.5rem;
-  padding: 0.25rem 1rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--space-orange);
-}
-
-.investments-topbar-title {
-  margin: 0;
-  font-size: var(--font-med);
-  color: var(--space-gray);
-}
-
-.investments-topbar-statusbar {
-  margin: 0 1rem;
-  flex: 1;
-}
-
-.investments-topbar-status {
-  margin: 0;
-  font-size: var(--font-med);
-  color: var(--space-gray);
-}
-
-.investments-cards {
-  height: 90%;
-  width: 100%;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  background-color: var(--space-white-opaque-1);
-}
-
-.investments-cards-top,
-.investments-cards-bottom {
-  height: 50%;
-  width: 100%;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  /* background-color: var(--space-white-opaque-1); */
-}
+<style lang="scss" scoped>
+@import '@/stylesheets/gamedashboard/containers/ContainerInvestments.scss';
 </style>

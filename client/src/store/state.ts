@@ -16,9 +16,8 @@ import {
   EventClientView,
   MarsLogMessageData,
   QuizQuestionData,
-  QuizResultPackage,
+  QuizResultPackage
 } from 'shared/types';
-import { Accomplishment } from '@/models/AccomplishmentsModels';
 
 export interface PlayerClientData extends PlayerData {
   pendingInvestments: InvestmentData;
@@ -126,5 +125,5 @@ export const initialStoreState: State = {
   eventView: EventClientView.VOTE_FOR_PLAYER_SINGLE,
 
   quizQuestions: [],
-  quizResults: [],
+  quizResults: []
 };

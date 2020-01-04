@@ -1,16 +1,16 @@
 <template>
   <div class="card-accomplishment" @click="handleClick">
-    <div class="card-title">
+    <div class="title">
       <p>{{ accomplishment.label }}</p>
     </div>
-    <div class="card-info-container">
-      <div class="card-points">
+    <div class="info">
+      <div class="points">
         <p>Points</p>
         <p>{{ accomplishment.victoryPoints }}</p>
       </div>
-      <div class="card-cost">
+      <div class="cost">
         <p v-for="investment in accomplishmentCost">
-          <img :src="require(`@/assets/iconsSVG/${investment}.svg`)" alt="Investment" />
+          <img :src="require(`@/assets/icons/${investment}.svg`)" alt="Investment" />
         </p>
       </div>
     </div>
@@ -22,17 +22,23 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import { AccomplishmentData, INVESTMENTS, Resource } from 'shared/types';
 import * as _ from 'lodash';
 
-@Component
+@Component({})
 export default class CardAccomplishment extends Vue {
   @Prop({
-    default() {
-      return {
-        label: '---',
-        victoryPoints: '---',
-        flavorText: '---',
-        totalCostArray: []
-      };
-    }
+    default: () => ({
+      id: undefined,
+      role: undefined,
+      label: undefined,
+      flavorText: undefined,
+      science: undefined,
+      government: undefined,
+      legacy: undefined,
+      finance: undefined,
+      culture: undefined,
+      upkeep: undefined,
+      victoryPoints: undefined,
+      effect: undefined
+    })
   })
   private accomplishment!: AccomplishmentData;
 
@@ -51,87 +57,6 @@ export default class CardAccomplishment extends Vue {
 }
 </script>
 
-<style scoped>
-.card-accomplishment {
-  height: auto;
-  min-height: 7rem;
-  width: 100%;
-  /* margin: 0.5rem 0; */
-  margin-bottom: 0.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-  color: var(--space-white);
-  overflow: hidden;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
-
-.card-accomplishment:last-child {
-  margin-bottom: 0;
-}
-
-.card-accomplishment:hover {
-  transform: scale(1.1);
-}
-
-.card-title {
-  height: 30%;
-  width: 100%;
-  padding: 0.25rem 0.5rem;
-  margin: 0;
-  margin-bottom: 0.5rem;
-  /* border-radius: 1rem 1rem 0 0; */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--space-gray);
-  background-color: var(--space-white);
-}
-
-.card-title p {
-  margin: 0;
-  text-align: center;
-  text-transform: capitalize;
-}
-
-.card-info-container {
-  height: 70%;
-  width: 100%;
-  padding: 0.5rem;
-  /* border: var(--border-white); */
-  /* border-top: none; */
-  /* border-radius: 0 0 1rem 1rem; */
-  display: flex;
-  justify-content: space-between;
-  /* background-color: var(--space-white-opaque-1); */
-  background-color: var(--space-gray);
-}
-
-.card-points {
-  margin-right: 0.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.card-points p {
-  margin: 0;
-}
-
-.card-cost {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-}
-
-.card-cost p {
-  height: 1.5rem;
-  width: 1.5rem;
-  margin: 0.125rem;
-  padding: 0;
-}
+<style lang="scss" scoped>
+@import '@/stylesheets/gamedashboard/cards/CardAccomplishment.scss';
 </style>

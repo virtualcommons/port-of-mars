@@ -1,7 +1,5 @@
 <template>
   <div class="container-left">
-    <!-- <Round /> -->
-
     <ContainerProfile />
     <ProfileInvestments />
     <ContainerAccomplishments />
@@ -10,14 +8,12 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-// import Round from '@/components/gamedashboard/Round.vue';
 import ContainerProfile from '@/components/gamedashboard/containers/ContainerProfile.vue';
 import ProfileInvestments from '@/components/gamedashboard/ProfileInvestments.vue';
 import ContainerAccomplishments from '@/components/gamedashboard/containers/ContainerAccomplishments.vue';
 
 @Component({
   components: {
-    // Round,
     ContainerProfile,
     ProfileInvestments,
     ContainerAccomplishments
@@ -26,14 +22,6 @@ import ContainerAccomplishments from '@/components/gamedashboard/containers/Cont
 export default class ContainerLeft extends Vue {}
 </script>
 
-<style scoped>
-.container-left {
-  height: 100%;
-  width: 100%;
-  border: 0.125rem solid var(--space-orange-opaque-2);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-}
+<style lang="scss" scoped>
+@import '@/stylesheets/gamedashboard/containers/ContainerLeft.scss';
 </style>

@@ -1,0 +1,80 @@
+.transparent-wrapper {
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  z-index: 4;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(30, 34, 35, 0.8);
+}
+
+.com {
+  position: relative;
+  height: 25rem;
+  width: 35rem;
+  padding: 1rem 2rem;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  border: $border-white;
+  border-radius: 1.25rem;
+  color: $space-white;
+  background-color: $space-gray;
+  overflow: hidden;
+}
+
+.com-content-header,
+.com-content-question {
+  text-align: center;
+}
+
+.com-content-question {
+  margin: 0;
+}
+
+.com-content-header {
+  font-size: $font-large;
+}
+
+.com-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cancel-button,
+.yes-button {
+  margin: 0.5rem;
+}
+
+.cancel-button {
+  height: 3rem;
+  width: 12.5rem;
+  border: 0.125rem solid $space-orange;
+  border-radius: 0.5rem;
+  color: $space-white;
+  background: none;
+}
+
+.cancel-button:active,
+.cancel-button:focus {
+  outline: none !important;
+}
+
+.yes-button {
+  height: 3rem;
+  width: 12.5rem;
+  border-radius: 0.5rem;
+  border: 0.125rem solid $space-orange;
+  background-color: $space-orange;
+}
+
+.yes-button:focus,
+.yes-button:active {
+  outline: none !important;
+}

@@ -1,37 +1,34 @@
 <template>
-  <BContainer class="container-bottom">
-    <BRow class="row-bottom">
-      <BCol class="container-bottom-view" cols="12">
-        <InvestmentsPane v-if="gamePhase == phase.invest"/>
-        <ContainerEvents v-else-if="gamePhase == phase.events"/>
-        <ContainerTrade v-else-if="gamePhase == phase.trade"/>
-        <ContainerDefault v-else/>
-      </BCol>
-    </BRow>
-  </BContainer>
+  <div class="container-bottom">
+    <div class="b-row">
+      <div class="view">
+        <InvestmentsPane v-if="gamePhase == phase.invest" />
+        <!-- SCSS REVISIT -->
+        <ContainerEvents v-else-if="gamePhase == phase.events" />
+        <ContainerTrade v-else-if="gamePhase == phase.trade" />
+        <ContainerDefaultView v-else />
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { BContainer, BRow, BCol } from 'bootstrap-vue';
 import ContainerInvestments from '@/components/gamedashboard/containers/ContainerInvestments.vue';
 import ContainerAccomplishments from '@/components/gamedashboard/containers/ContainerAccomplishments.vue';
 import ContainerEvents from '@/components/gamedashboard/containers/ContainerEvents.vue';
 import InvestmentsPane from '@/components/gamedashboard/containers/GameboardPanes/InvestmentsPane.vue';
-import ContainerDefault from '@/components/gamedashboard/containers/ContainerDefaultView.vue';
+import ContainerDefaultView from '@/components/gamedashboard/containers/ContainerDefaultView.vue';
 import ContainerTrade from '@/components/gamedashboard/containers/ContainerTrade.vue';
 import { Phase } from 'shared/types';
 
 @Component({
   components: {
-    BContainer,
-    BRow,
-    BCol,
     ContainerInvestments,
     ContainerAccomplishments,
     ContainerEvents,
     ContainerTrade,
-    ContainerDefault,
+    ContainerDefaultView,
     InvestmentsPane
   }
 })
@@ -46,27 +43,6 @@ export default class ContainerBottom extends Vue {
 }
 </script>
 
-<style scoped>
-.container-bottom {
-  height: 100%;
-  width: 100%;
-  max-width: none;
-  padding: 0 0.5rem;
-  margin: 0;
-}
-
-.row-bottom {
-  height: 100%;
-  width: 100%;
-  padding: 0;
-  border: 0.125rem solid var(--space-orange-opaque-2);
-  margin: 0;
-}
-
-.container-bottom-view {
-  height: 100%;
-  width: 100%;
-  padding: 0;
-  margin: 0;
-}
+<style lang="scss" scoped>
+@import '@/stylesheets/gamedashboard/containers/ContainerBottom.scss';
 </style>

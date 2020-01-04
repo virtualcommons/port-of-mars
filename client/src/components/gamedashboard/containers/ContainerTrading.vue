@@ -1,47 +1,37 @@
 <template>
-  <BContainer class="container-trading">
-    <BRow>
-      <BCol cols="6">
-        <BRow>
+  <div class="container-trading">
+    <div class="row">
+      <div class="column-6">
+        <div class="row">
           <p>Incoming Trades</p>
-        </BRow>
-        <BRow>
-          <Trade/>
-          <Trade/>
-        </BRow>
-      </BCol>
+        </div>
+        <div class="row">
+          <Trade />
+          <Trade />
+        </div>
+      </div>
 
-      <BCol cols="6">
-        <BRow>
+      <div class="column-6">
+        <div class="row">
           <p>Build-a-trade workshop</p>
-        </BRow>
-      </BCol>
-    </BRow>
-  </BContainer>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { BContainer, BRow, BCol } from 'bootstrap-vue';
-
-import Trade from "../Trade.vue"; 
+import Trade from '../trading/Trade.vue';
 
 @Component({
-    components: {
-      Trade,
-    }
+  components: {
+    Trade
+  }
 })
-export default class ContainerTrading extends Vue{}
-
+export default class ContainerTrading extends Vue {}
 </script>
 
-<style scoped>
-.container-trading {
-  height: 100%;
-  width: 100%;
-  max-width: none;
-  color: var(--space-white);
-  /* border: 0.125rem solid var(--space-white-opaque-2); */
-}
-
+<style lang="scss" scoped>
+@import '@/stylesheets/gamedashboard/containers/ContainerTrading.scss';
 </style>

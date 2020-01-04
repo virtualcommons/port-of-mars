@@ -1,4 +1,4 @@
-import {State} from "@/store/state";
+import { State } from '@/store/state';
 import { MarsLogMessageData } from 'shared/types';
 
 export default {
@@ -11,5 +11,5 @@ export default {
   },
   CREATE_NOTIFICATION(state: State, payload: string) {
     state.activeNotifications.push(payload);
-  },
-}
+  }
+};

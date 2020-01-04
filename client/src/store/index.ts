@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 import actions from './actionsFolder';
 import getters from './getters';
 import mutations from './mutationFolder';
-import {initialStoreState} from "@/store/state";
+import { initialStoreState } from '@/store/state';
 
 export interface StoreState {
   playerRole: string;

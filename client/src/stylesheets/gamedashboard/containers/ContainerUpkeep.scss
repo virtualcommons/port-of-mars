@@ -1,0 +1,25 @@
+.container-upkeep {
+  height: 10%;
+  width: 100%;
+  padding: 0 0.5rem 0.5rem 0.5rem;
+  @include make-center;
+  color: $space-white;
+
+  p {
+    margin: 0 0.5rem;
+    font-size: $font-small;
+    text-align: center;
+  }
+
+  span {
+    color: $space-orange;
+  }
+
+  .title {
+    color: $space-white-opaque-2;
+  }
+
+  .statusbar {
+    width: 80%;
+  }
+}

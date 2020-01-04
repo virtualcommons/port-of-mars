@@ -1,0 +1,44 @@
+.player {
+  height: 3rem;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  display: flex;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .ready {
+    height: 100%;
+    width: 0.25rem;
+    margin-right: 0.25rem;
+    background-color: $status-green;
+  }
+
+  .p-container {
+    height: 100%;
+    flex-grow: 1;
+    padding: 0.25rem;
+    @include make-horizontal-expand;
+
+    .score-and-role {
+      margin-left: 0.25rem;
+      @include make-left;
+
+      .score {
+        margin-right: 0.5rem;
+      }
+
+      p {
+        margin-bottom: 0;
+        text-align: center;
+        color: $space-white;
+        @include text-overflow-ellipses;
+      }
+    }
+
+    img {
+      height: 100%;
+    }
+  }
+}

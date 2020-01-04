@@ -4,7 +4,7 @@
     <div class="twinkling" v-if="$route.path !== '/game' && $route.path !== '/lobby'"></div>
     <div class="clouds" v-if="$route.path !== '/game' && $route.path !== '/lobby'"></div> -->
     <router-view />
-    {{routerInfo}}
+    {{ routerInfo }}
   </div>
 </template>
 
@@ -19,25 +19,25 @@ export default class DefaultLayout extends Vue {
   @Inject()
   readonly $api!: WaitingRequestAPI;
 
-  get routerInfo(){
-      if(this.$api.joinRoom !== undefined){
-        if(this.$route.path == '/game'){
-          this.$api.joinRoom('game');
-        }
-
-        if(this.$route.path == '/quiz'){
-          this.$api.joinRoom('quiz');
-        }
+  get routerInfo() {
+    if (this.$api.joinRoom !== undefined) {
+      if (this.$route.path == '/game') {
+        this.$api.joinRoom('game');
       }
+
+      if (this.$route.path == '/quiz') {
+        this.$api.joinRoom('quiz');
+      }
+    }
 
     return this.$route.path;
   }
 }
 </script>
 
-<style>
+<style lang="scss">
 .default-layout {
-  background-color: var(--space-gray);
+  background-color: $space-gray;
 }
 
 /* Background - Copyright (c) 2019 by WebSonick (https://codepen.io/WebSonick/pen/vjmgu) */

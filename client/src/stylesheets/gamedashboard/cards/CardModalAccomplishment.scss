@@ -1,0 +1,64 @@
+.cm-accomplishment {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.cm-accomplishment p {
+  margin: 0;
+}
+
+.cm-accomplishment-title {
+  margin: 0 1rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.cm-accomplishment-title p {
+  text-align: center;
+  font-size: 2rem;
+  text-transform: capitalize;
+  color: $space-orange;
+}
+
+.cm-accomplishment-info {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.cm-accomplishment-investments-title {
+  margin: 1rem 0 0 0 !important;
+  font-size: $font-small;
+}
+
+.cm-accomplishment-investments-title span {
+  color: $space-orange;
+}
+
+.cm-accomplishment-investments {
+  margin: 0 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.cm-accomplishment-investments img {
+  width: 2.5rem;
+  margin: 0 0.25rem;
+}
+
+.cm-accomplishment-purchase-button {
+  border: none;
+  border-bottom: 0.125rem solid $space-orange;
+  margin-top: 1rem;
+  color: $space-white;
+  background-color: transparent;
+}
+
+.cm-accomplishment-purchase-button:focus {
+  outline: none;
+}
