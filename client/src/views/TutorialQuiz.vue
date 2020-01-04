@@ -24,7 +24,7 @@
 
 <script lang="ts">
 import { Component, Vue, Inject } from 'vue-property-decorator';
-import QuizForm from '@/components/tutorialquiz/QuizForm.vue';
+import QuizForm from '@/components/tutorial/QuizForm.vue';
 import { QuizRequestAPI } from '@/api/quiz/request';
 @Component({
   components: {
@@ -84,38 +84,5 @@ export default class TutorialQuiz extends Vue {
 </script>
 
 <style lang="scss">
-.quiz-page {
-  color: white;
-  height: 6rem;
-}
-
-h1 {
-  text-transform: uppercase;
-  letter-spacing: 0.25rem;
-  font-size: 11rem;
-  font-weight: 700;
-  color: $space-orange;
-}
-
-.quiz-container {
-  position: relative;
-  z-index: 1;
-  color: white;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-}
-
-.quiz-title {
-  color: white;
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.quiz-form {
-  width: 40%;
-  margin: auto;
-  text-align: left;
-}
+@import '@/stylesheets/views/TutorialQuiz.scss';
 </style>

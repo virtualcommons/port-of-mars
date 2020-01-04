@@ -2,9 +2,9 @@
   <div>
     <div v-show="gamePhase != phase.defeat" class="game-dashboard">
       <MasterComponent />
-      <ConfirmationModal />
-      <ServerMessageModal />
-      <CardModalContainer />
+      <ModalConfirmation />
+      <ModalServer />
+      <ModalCard />
       <div class="board">
         <Notification
           v-for="(notification, index) in notifications"
@@ -41,14 +41,14 @@
 <script lang="ts">
 import { Vue, Component, Inject } from 'vue-property-decorator';
 import MasterComponent from '@/components/MasterComponent.vue';
-import ConfirmationModal from '../components/gamedashboard/ConfirmationModal.vue';
-import ServerMessageModal from '../components/gamedashboard/ServerMessageModal.vue';
-import CardModalContainer from '@/components/gamedashboard/cards/CardModalContainer.vue';
-import Notification from '@/components/gamedashboard/Notification.vue';
-import ContainerLeft from '@/components/gamedashboard/containers/ContainerLeft.vue';
-import ContainerTop from '@/components/gamedashboard/containers/ContainerTop.vue';
-import ContainerBottom from '@/components/gamedashboard/containers/ContainerBottom.vue';
-import ContainerRight from '@/components/gamedashboard/containers/ContainerRight.vue';
+import ModalConfirmation from '../components/gamedashboard/global/modals/ModalConfirmation.vue';
+import ModalServer from '../components/gamedashboard/global/modals/ModalServer.vue';
+import ModalCard from '@/components/gamedashboard/global/modals/ModalCard.vue';
+import Notification from '@/components/gamedashboard/global/Notification.vue';
+import ContainerLeft from '@/components/gamedashboard/left/containers/ContainerLeft.vue';
+import ContainerTop from '@/components/gamedashboard/top/containers/ContainerTop.vue';
+import ContainerBottom from '@/components/gamedashboard/bottom/containers/ContainerBottom.vue';
+import ContainerRight from '@/components/gamedashboard/right/containers/ContainerRight.vue';
 
 import { Phase } from 'shared/types';
 import { GameRequestAPI } from '@/api/game/request';
@@ -56,9 +56,9 @@ import { GameRequestAPI } from '@/api/game/request';
 @Component({
   components: {
     MasterComponent,
-    ConfirmationModal,
-    ServerMessageModal,
-    CardModalContainer,
+    ModalConfirmation,
+    ModalServer,
+    ModalCard,
     Notification,
     ContainerLeft,
     ContainerTop,

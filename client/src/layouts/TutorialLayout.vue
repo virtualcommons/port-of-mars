@@ -40,7 +40,7 @@
 <script lang="ts">
 import { Vue, Inject, Component } from 'vue-property-decorator';
 import VueTour from 'vue-tour';
-import TourModal from '@/tutorial/TourModal.vue';
+import TourModal from '@/components/tutorial/TourModal.vue';
 import { GameRequestAPI } from '@/api/game/request';
 require('vue-tour/dist/vue-tour.css');
 Vue.use(VueTour);
@@ -363,34 +363,5 @@ export default class TutorialLayout extends Vue {
 </script>
 
 <style lang="scss">
-.tutorial-layout {
-  height: 100% !important;
-  width: 100% !important;
-}
-/* custom tour css: highlight an element */
-@keyframes shadow-pulse {
-  0% {
-    box-shadow: 0 0 0 0px rgba(255, 255, 255, 0.2);
-  }
-  100% {
-    box-shadow: 0 0 0 35px rgba(0, 0, 0, 0);
-  }
-}
-body .in-tour {
-  pointer-events: none;
-}
-.v-step {
-  z-index: 9999;
-}
-.tour-active {
-  position: relative;
-  z-index: 999;
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0 0 10000px rgba(0, 0, 0, 0.5); /* outer black */
-  /* animation: shadow-pulse 2s infinite; */
-}
-.tour-active,
-.v-tour {
-  pointer-events: auto;
-}
+@import '@/stylesheets/layouts/TutorialLayout.scss';
 </style>
