@@ -49,19 +49,11 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 @Component({})
 export default class Chat extends Vue {
-  @Inject()
-  $api!: GameRequestAPI;
+  @Inject() readonly $api!: GameRequestAPI;
 
-  pendingMessage: string = '';
+  private pendingMessage: string = '';
 
-  count: number = 0;
-
-  updated() {
-    if (this.layout !== 'DISABLE_CHAT') {
-      const elem = this.$el.querySelector('.chat-chat');
-      elem!.scrollTop = elem!.scrollHeight;
-    }
-  }
+  private count: number = 0;
 
   get layout() {
     return this.$tstore.state.eventView;
@@ -71,11 +63,18 @@ export default class Chat extends Vue {
     return this.$tstore.state.messages;
   }
 
-  toDate(unixTimestamp: number) {
+  private updated() {
+    if (this.layout !== 'DISABLE_CHAT') {
+      const elem = this.$el.querySelector('.chat-chat');
+      elem!.scrollTop = elem!.scrollHeight;
+    }
+  }
+
+  private toDate(unixTimestamp: number) {
     return new Date(unixTimestamp).toLocaleTimeString();
   }
 
-  submitToChat() {
+  private submitToChat() {
     if (this.pendingMessage !== '') {
       this.$api.sendChatMessage(this.pendingMessage);
       this.pendingMessage = '';

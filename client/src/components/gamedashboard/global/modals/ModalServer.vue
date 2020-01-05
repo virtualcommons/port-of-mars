@@ -1,35 +1,16 @@
 <template>
-  <div class="server-message-modal-wrapper" :style="{ display: setStyle }">
-    <div class="server-message-modal">
-      <button class="smm-close-button" @click="closeModal">X</button>
-      <div class="smm-container">
-        <div class="smm-title">
-          <p><span>!!! </span>Message from Server<span> !!!</span></p>
-        </div>
-        <div class="smm-message">
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vestibulum.</p>
-        </div>
-      </div>
-    </div>
+  <div class="modal-server">
+    <p class="title"><span>!!! </span>Message from Server<span> !!!</span></p>
+    <p class="message">{{ modalData.text }}</p>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 
 @Component({})
 export default class ModalServer extends Vue {
-  setStyle: string = 'none';
-
-  mounted() {
-    this.$root.$on('openServerMessage', data => {
-      this.setStyle = '';
-    });
-  }
-
-  closeModal(): void {
-    this.setStyle = 'none';
-  }
+  @Prop({}) private modalData!: object;
 }
 </script>
 

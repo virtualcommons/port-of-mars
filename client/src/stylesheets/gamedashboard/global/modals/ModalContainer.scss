@@ -1,0 +1,37 @@
+.modal-container {
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  z-index: 4;
+  top: 0;
+  left: 0;
+  @include make-center;
+  background-color: rgba(30, 34, 35, 0.8);
+
+  .wrapper {
+    @include make-column-and-center;
+    color: white;
+
+    .modal-close {
+      @include reset-button;
+      height: 3rem;
+      width: 3rem;
+      padding: 0.5rem;
+      border-radius: 50%;
+      margin-top: 2rem;
+      @include make-center;
+      background-color: $space-orange;
+      @include default-transition-base;
+
+      &:hover {
+        @include default-scale-up;
+      }
+
+      .close-icon {
+        height: 80%;
+        width: 80%;
+        color: $space-gray;
+      }
+    }
+  }
+}

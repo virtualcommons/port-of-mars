@@ -1,62 +1,9 @@
-.cm-transparent-wrapper {
-  height: 100vh;
-  width: 100vw;
-  position: absolute;
-  z-index: 4;
-  top: 0;
-  left: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(30, 34, 35, 0.8);
-}
-
-.cm-wrapper {
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: white;
-}
-
-.cm {
+.modal-card {
   height: 25rem;
   width: 35rem;
   padding: 1rem 2rem;
-  margin: 0;
   border: 0.125rem solid $space-white-opaque-2;
-  position: relative;
   color: $space-white;
   background-color: $space-gray;
   overflow: hidden;
-}
-
-.cm-close-button {
-  height: 2.5rem;
-  width: 2.5rem;
-  border: 0.125rem solid $space-orange;
-  border-radius: 50%;
-  position: absolute;
-  z-index: 5;
-  top: 2rem;
-  right: 2rem;
-  text-align: center;
-  font-size: $font-med;
-  color: $space-orange;
-  background-color: transparent;
-  -webkit-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out;
-}
-
-.cm-close-button:hover {
-  background-color: $space-orange;
-  color: $space-gray;
-  transform: scale(1.1);
-}
-
-.cm-close-button:active,
-.cm-close-button:focus {
-  outline: none;
 }

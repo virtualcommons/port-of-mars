@@ -48,8 +48,8 @@ export default class CardAccomplishment extends Vue {
     ).flatMap(investment => _.fill(Array(Math.abs(this.accomplishment[investment])), investment));
   }
 
-  handleClick() {
-    this.$root.$emit('openCard', {
+  private handleClick() {
+    this.$root.$emit('openModalCard', {
       card: 'accomplishment',
       payload: this.accomplishment
     });

@@ -1,19 +1,14 @@
 <template>
-  <div class="cm-accomplishment" :style="opacity">
-    <div class="cm-accomplishment-title">
-      <p>{{ cardData.label }}</p>
+  <div class="modal-accomplishment">
+    <p class="title">{{ cardData.label }}</p>
+    <p class="info">{{ cardData.flavorText }}</p>
+    <div class="investments">
+      <div v-for="investment in accomplishmentCost" :key="investment + Math.random()">
+        <img :src="require(`@/assets/icons/${investment}.svg`)" alt="Investment" />
+      </div>
     </div>
-    <div class="cm-accomplishment-info">
-      <p>{{ cardData.flavorText }}</p>
-    </div>
-    <div class="cm-accomplishment-investments">
-      <p v-for="investment in cardData.totalCostArray" :key="investment + Math.random()">
-        <!-- Note: will need to edit key implementation -->
-        <img :src="require(`@/assets/icons/${investment}.svg`)" alt="investment" />
-      </p>
-    </div>
-    <p class="cm-accomplishment-investments-title"><span>Cost</span></p>
-    <button class="cm-accomplishment-purchase-button" @click="handlePurchase">
+    <p class="cost">Cost</p>
+    <button class="purchase-button" @click="handlePurchase">
       {{ buyButton }}
     </button>
   </div>
@@ -22,11 +17,14 @@
 <script lang="ts">
 import { Component, Vue, Prop, Inject } from 'vue-property-decorator';
 import { canPurchaseAccomplishment } from 'shared/validation';
-import { AccomplishmentData } from 'shared/types';
+import { AccomplishmentData, INVESTMENTS, Resource } from 'shared/types';
 import { GameRequestAPI } from '@/api/game/request';
+import * as _ from 'lodash';
 
 @Component({})
 export default class ModalAccomplishment extends Vue {
+  @Inject() readonly $api!: GameRequestAPI;
+
   @Prop({
     default: () => ({
       id: undefined,
@@ -45,21 +43,22 @@ export default class ModalAccomplishment extends Vue {
   })
   private cardData!: AccomplishmentData;
 
-  private opacity: string = '';
-
-  @Inject() $api!: GameRequestAPI;
+  get accomplishmentCost() {
+    return INVESTMENTS.filter(investment => this.cardData[investment] !== 0).flatMap(investment =>
+      _.fill(Array(Math.abs(this.cardData[investment])), investment)
+    );
+  }
 
   get canBuy() {
     return canPurchaseAccomplishment(this.cardData, this.$tstore.getters.player.inventory);
   }
 
   get buyButton() {
-    this.opacity = 'opacity:100%';
     const b = this.canBuy;
-    return b ? 'Purchase accomplishment' : 'You cannot purchase this';
+    return b ? 'Purchase Accomplishment' : 'You cannot purchase this';
   }
 
-  handlePurchase() {
+  private handlePurchase() {
     this.$api.purchaseAccomplishment(this.cardData);
   }
 }

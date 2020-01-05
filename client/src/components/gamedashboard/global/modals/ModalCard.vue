@@ -1,14 +1,6 @@
 <template>
-  <div class="cm-transparent-wrapper" :style="{ display: setStyle }">
-    <div class="cm-wrapper">
-      <div class="row cm">
-        <button class="cm-close-button" @click="closeModal">X</button>
-        <component
-          :is="cardData.card === 'accomplishment' ? 'ModalAccomplishment' : 'ModalEvent'"
-          :cardData="cardData.payload"
-        ></component>
-      </div>
-    </div>
+  <div class="modal-card">
+    <component :is="setView()" :cardData="modalData.payload"></component>
   </div>
 </template>
 
@@ -24,18 +16,19 @@ import ModalEvent from '@/components/gamedashboard/global/modals/views/ModalEven
   }
 })
 export default class ModalCard extends Vue {
-  private setStyle: string = 'none';
-  private cardData: object = {};
+  @Prop({}) private modalData!: object;
 
-  mounted() {
-    this.$root.$on('openCard', (data: any) => {
-      this.cardData = data;
-      this.setStyle = '';
-    });
-  }
-
-  closeModal(): void {
-    this.setStyle = 'none';
+  private setView(): string {
+    switch (this.modalData.card) {
+      case 'accomplishment':
+        return 'ModalAccomplishment';
+        break;
+      case 'event':
+        return 'ModalEvent';
+        break;
+      default:
+        return 'ModalAccomplishment';
+    }
   }
 }
 </script>
