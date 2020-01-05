@@ -1,5 +1,5 @@
 <template>
-  <div class="event-test">
+  <div class="event-view">
     <!-- NO_CHANGE -->
     <div v-if="layout === 'NO_CHANGE'" class="event-no-change">
       <p>Nothing to see here!</p>
@@ -26,7 +26,6 @@ import EventAccomplishments from '@/components/gamedashboard/bottom/events/Event
 })
 export default class EventView extends Vue {
   get layout() {
-    // console.log(`(${typeof this.$tstore.state.eventView}): ${this.$tstore.state.eventView}`);
     return this.$tstore.state.eventView;
   }
 }

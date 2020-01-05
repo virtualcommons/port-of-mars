@@ -3,7 +3,7 @@
 }
 
 /* Background - Copyright (c) 2019 by WebSonick (https://codepen.io/WebSonick/pen/vjmgu) */
-@keyframes move-twink-back {
+@keyframes move-twinkling-back {
   from {
     background-position: 0 0;
   }
@@ -39,7 +39,7 @@
 .twinkling {
   z-index: 0;
   background: transparent url('../assets/marstwinkling.png') repeat top center;
-  animation: move-twink-back 500s linear infinite;
+  animation: move-twinkling-back 500s linear infinite;
 }
 
 .clouds {

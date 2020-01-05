@@ -7,31 +7,22 @@
   z-index: 2;
   left: 1rem;
   top: 4rem;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  @include make-column-and-expand;
   align-items: flex-start;
-
   background-color: $space-orange;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
+  @include default-transition-base;
 
-.notification-inactive {
-  visibility: hidden;
-}
-.notification-close,
-.notification-message {
-  width: 100%;
-  margin: 0;
-  font-size: $font-small;
-  text-align: left;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-}
+  .close,
+  .message {
+    width: 100%;
+    margin: 0;
+    font-size: $font-small;
+    text-align: left;
+    @include text-overflow-ellipses;
+  }
 
-.notification-close {
-  text-align: center;
+  .close {
+    text-align: center;
+  }
 }

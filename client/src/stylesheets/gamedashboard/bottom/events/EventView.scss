@@ -1,22 +1,14 @@
-.event-test {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+.event-view {
+  @include expand;
+  @include make-center;
 
-/* NO_CHANGE */
+  .event-no-change {
+    @include expand;
+    @include make-center;
+    color: $space-white;
 
-.event-no-change {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: $space-white;
-}
-
-.event-no-change p {
-  margin: 0;
+    p {
+      margin-bottom: 0;
+    }
+  }
 }

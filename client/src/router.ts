@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import LoginPage from '@/views/LoginPage.vue';
+import Login from '@/views/Login.vue';
 import WaitingLobby from '@/views/WaitingLobby.vue';
 import GameDashboard from '@/views/GameDashboard.vue';
 import TutorialQuiz from '@/views/TutorialQuiz.vue';
@@ -12,7 +12,7 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
-      component: LoginPage
+      component: Login
     },
     {
       path: '/lobby',

@@ -1,39 +1,34 @@
 <template>
   <div class="container-investments">
-    <div class="topbar">
-      <p class="title">Time Investments</p>
-      <StatusBar
-        class="statusbar"
-        :setWidth="`${remainingTimeBlocks * 10}`"
-        :colorOuter="'statusbar-outer-gray'"
-        :colorInner="'statusbar-inner-gray'"
-      />
-      <p class="status">{{ remainingTimeBlocks }}</p>
-    </div>
+    <div class="wrapper">
+      <div class="topbar">
+        <p class="title">Time Investments</p>
+        <StatusBar
+          class="statusbar"
+          :setWidth="`${remainingTimeBlocks * 10}`"
+          :colorOuter="'statusbar-outer-gray'"
+          :colorInner="'statusbar-inner-gray'"
+        />
+        <p class="status">{{ remainingTimeBlocks }}</p>
+      </div>
 
-    <div class="cards">
-      <CardInvestment
-        v-for="cost in costs"
-        v-bind="cost"
-        :key="cost.name"
-        @input="setInvestmentAmount"
-      />
+      <div class="cards">
+        <CardInvestment
+          v-for="cost in costs"
+          v-bind="cost"
+          :key="cost.name"
+          @input="setInvestmentAmount"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component } from 'vue-property-decorator';
+import { INVESTMENTS, Resource, ResourceCostData } from 'shared/types';
 import StatusBar from '@/components/gamedashboard/global/StatusBar.vue';
 import CardInvestment from '@/components/gamedashboard/global/cards/CardInvestment.vue';
-import {
-  InvestmentData,
-  INVESTMENTS,
-  Resource,
-  ResourceAmountData,
-  ResourceCostData,
-  Role
-} from 'shared/types';
 import * as _ from 'lodash';
 
 @Component({
@@ -42,7 +37,7 @@ import * as _ from 'lodash';
     CardInvestment
   }
 })
-export default class ContainerInvestments extends Vue {
+export default class ContainerBottom extends Vue {
   get costs(): any {
     const p = this.$tstore.getters.player;
     const investmentData = Object.keys(p.costs)
@@ -65,7 +60,7 @@ export default class ContainerInvestments extends Vue {
     return this.getRemainingTimeBlocks(pendingInvestments);
   }
 
-  getRemainingTimeBlocks(pendingInvestments: ResourceCostData) {
+  private getRemainingTimeBlocks(pendingInvestments: ResourceCostData) {
     const p = this.$tstore.getters.player;
     const timeBlocks = p.timeBlocks;
     const costs = p.costs;
@@ -79,7 +74,7 @@ export default class ContainerInvestments extends Vue {
     );
   }
 
-  setInvestmentAmount(msg: { name: Resource; units: number; cost: number }) {
+  private setInvestmentAmount(msg: { name: Resource; units: number; cost: number }) {
     const pendingInvestments = _.clone(this.$tstore.getters.player.pendingInvestments);
     pendingInvestments[msg.name] = msg.units;
     if (msg.units >= 0 && this.getRemainingTimeBlocks(pendingInvestments) >= 0) {
