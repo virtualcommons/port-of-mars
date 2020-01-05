@@ -1,6 +1,6 @@
 .card-event-component {
   height: 12rem;
-  width: 14.5rem !important;
+  width: 14.5rem;
   margin: 0 0.25rem;
   flex: 0 0 auto;
   @include make-column-and-center;
@@ -16,7 +16,7 @@
   }
 
   &:hover {
-    transform: scale(1.1);
+    // transform: scale(1.1);
   }
 
   .name {

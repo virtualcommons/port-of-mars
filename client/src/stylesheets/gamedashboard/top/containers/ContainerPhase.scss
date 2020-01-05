@@ -50,7 +50,8 @@
             @include make-left;
             flex-wrap: nowrap;
             overflow-x: scroll;
-            @include disable-scroll .empty {
+            @include disable-scroll;
+            .empty {
               margin-bottom: 0;
               font-size: $font-med;
               text-align: center;

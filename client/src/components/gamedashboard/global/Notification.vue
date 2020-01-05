@@ -1,43 +1,35 @@
 <template>
   <div
     @click="hideNotif()"
-    class="notification"
-    :class="viewAnim()"
     @mouseover="hover = true"
     @mouseleave="hover = false"
+    :class="viewAnim()"
+    class="notification"
   >
-    <p class="notification-close" v-if="hover || inView === 'hide'">Dismiss Notification</p>
-    <p class="notification-message" v-if="!hover && inView !== 'hide'">
+    <p class="close" v-if="hover || inView === 'hide'">Dismiss Notification</p>
+    <p class="message" v-if="!hover && inView !== 'hide'">
       {{ message }}
     </p>
-    <p class="notification-message">N<sup>o</sup> : {{ index + 1 }} of {{ length }}</p>
+    <p class="message">N<sup>o</sup> : {{ index + 1 }} of {{ length }}</p>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-@Component
-export default class Notification extends Vue {
-  // Note: may want to use transition wrapper
-  private hover = false;
 
+@Component({})
+export default class Notification extends Vue {
   @Prop({
     default: `you've been asleep for 20 years. this is the doctor's last way of contacting you from the outside. please wake up.`
   })
-  message;
-  @Prop({ default: 0 }) length;
-  @Prop({ default: -1 }) index;
+  message: string;
+  @Prop({ default: 0 }) length: number;
+  @Prop({ default: -1 }) index: number;
 
-  inView = 'visible';
+  private hover: boolean = false;
+  private inView: string = 'visible';
 
-  mounted() {
-    // console.log('MOUNTED');
-    // setTimeout(() => {
-    //   this.hideNotif();
-    // }, 4000);
-  }
-
-  hideNotif() {
+  private hideNotif(): void {
     this.inView = 'hide';
 
     setTimeout(() => {
@@ -45,7 +37,7 @@ export default class Notification extends Vue {
     }, 1000);
   }
 
-  viewAnim() {
+  private viewAnim(): string {
     if (this.inView === 'visible') {
       return 'animated fadeInLeft';
     }

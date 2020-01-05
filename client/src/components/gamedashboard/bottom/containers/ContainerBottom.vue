@@ -2,7 +2,7 @@
   <div class="container-bottom">
     <div class="b-row">
       <div class="view">
-        <InvestmentsPane v-if="gamePhase == phase.invest" />
+        <ContainerInvestments v-if="gamePhase == phase.invest" />
         <!-- SCSS REVISIT -->
         <ContainerEvents v-else-if="gamePhase == phase.events" />
         <ContainerTrade v-else-if="gamePhase == phase.trade" />
@@ -14,20 +14,18 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import ContainerInvestments from '@/components/gamedashboard/bottom/containers/ContainerInvestments.vue';
 import ContainerEvents from '@/components/gamedashboard/bottom/containers/ContainerEvents.vue';
-import InvestmentsPane from '@/components/gamedashboard/bottom/containers/InvestmentsPane.vue';
+import ContainerInvestments from '@/components/gamedashboard/bottom/containers/ContainerInvestments.vue';
 import ContainerDefault from '@/components/gamedashboard/bottom/containers/ContainerDefault.vue';
 import ContainerTrade from '@/components/gamedashboard/bottom/containers/ContainerTrade.vue';
 import { Phase } from 'shared/types';
 
 @Component({
   components: {
-    ContainerInvestments,
     ContainerEvents,
     ContainerTrade,
     ContainerDefault,
-    InvestmentsPane
+    ContainerInvestments
   }
 })
 export default class ContainerBottom extends Vue {
