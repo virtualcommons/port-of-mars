@@ -33,7 +33,15 @@ export default class Master extends Vue {
       //   'this is just a little reminder that it will be alright!'
       // );
     } else if (e.key === ']') {
-      this.$root.$emit('openServerMessage');
+      this.$root.$emit('openModalServer', {
+        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vestibulum.'
+      });
+    } else if (e.key === '[') {
+      this.$root.$emit('openModalConfirmation', {
+        text: `Select 'Yes' if you want to draw another card.`,
+        type: 'discardAccomplishment',
+        actionData: 3
+      });
     }
   }
 

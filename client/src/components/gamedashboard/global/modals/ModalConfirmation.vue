@@ -1,54 +1,30 @@
 <template>
-  <div class="transparent-wrapper" :style="{ display: setStyle }">
-    <div class="com">
-      <div class="com-content">
-        <p class="com-content-header">Are you sure?</p>
-        <p class="com-content-question">{{ text }}</p>
-      </div>
-      <div class="com-buttons">
-        <button class="cancel-button" type="button" name="Cancel Button" @click="handleCancel">
-          Cancel
-        </button>
-        <button class="yes-button" type="button" name="Yes Button" @click="handleYes">Yes</button>
-      </div>
+  <div class="modal-confirmation">
+    <div class="content">
+      <p class="header">Are you sure?</p>
+      <p class="details">{{ modalData.text }}</p>
     </div>
+    <button class="confirm" type="button" name="Confirm Button" @click="handleConfirmation">
+      Yes
+    </button>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { Component, Vue, Prop, Inject } from 'vue-property-decorator';
 import { GameRequestAPI } from '@/api/game/request';
-import { Phase } from 'shared/types';
 
 @Component({})
 export default class ModalConfirmation extends Vue {
-  setStyle: string = 'none';
-  action: any = '';
-  type = '';
-  text = '';
+  @Prop({}) private modalData!: object;
 
-  @Inject()
-  readonly $api!: GameRequestAPI;
+  @Inject() readonly $api!: GameRequestAPI;
 
-  mounted() {
-    this.$root.$on('openConfirmation', data => {
-      this.setStyle = '';
-      this.type = data.type;
-      this.text = data.text;
-      this.action = data.actionData;
-    });
-  }
-
-  handleCancel(): void {
-    this.setStyle = 'none';
-  }
-
-  handleYes() {
-    switch (this.type) {
+  private handleConfirmation() {
+    switch (this.modalData.type) {
       case 'discardAccomplishment':
-        this.$api.discardAccomplishment(this.action);
+        this.$api.discardAccomplishment(this.modalData.action);
     }
-    this.setStyle = 'none';
   }
 }
 </script>

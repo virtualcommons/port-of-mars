@@ -91,16 +91,16 @@ export default class ContainerAccomplishments extends Vue {
     }
   }
 
-  handleClick(view: string) {
+  private handleClick(view: string) {
     this.activeView = view;
   }
 
-  handleStyle(view: string) {
+  private handleStyle(view: string) {
     return this.activeView == view ? { color: 'var(--space-orange)' } : '';
   }
 
-  handleDiscardAccomplishment(a: any) {
-    this.$root.$emit('openConfirmation', {
+  private handleDiscardAccomplishment(a: any) {
+    this.$root.$emit('openModalConfirmation', {
       text: `Select 'Yes' if you want to draw another card.`,
       type: 'discardAccomplishment',
       actionData: a.id

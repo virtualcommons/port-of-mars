@@ -1,15 +1,9 @@
 <template>
-  <div class="cm-event">
-    <div class="cm-event-title">
-      <p>{{ cardData.name }}</p>
-    </div>
-    <div class="cm-event-info">
-      <p>{{ cardData.flavorText }}</p>
-    </div>
-    <p class="cm-event-effects-title"><span>Effects</span></p>
-    <div class="cm-event-effects">
-      <p>{{ cardData.effect }}</p>
-    </div>
+  <div class="modal-event">
+    <p class="title">{{ cardData.name }}</p>
+    <p class="info">{{ cardData.flavorText }}</p>
+    <p class="effects-title"><span>Effects</span></p>
+    <p class="effects">{{ cardData.effect }}</p>
   </div>
 </template>
 
