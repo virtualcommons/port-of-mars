@@ -9,6 +9,7 @@
           :src="require(`@/assets/characters/${player}.png`)"
           v-bind:class="{ 'selected-player': name == player }"
         />
+        <p>{{player}}</p>
       </div>
     </div>
 
@@ -29,7 +30,7 @@
     </div>
 
     <div class="trade-send">
-      <button @click="handleTrade">Send Trade</button>
+      <button v-bind:class="{'trade-impossible':!clientValidation}" @click="handleTrade">Send Trade</button>
     </div>
   </div>
 </template>
@@ -47,46 +48,71 @@ import { GameRequestAPI } from '../../api/game/request';
   }
 })
 export default class TradeRequest extends Vue {
-  private name: string = '';
-  private sentResources: ResourceAmountData = {};
-  private exchangeResources: ResourceAmountData = {};
-  @Inject() readonly $api: GameRequestAPI;
+  name = "";
 
-  get otherPlayers() {
-    return Object.keys(this.$store.state.players).filter(player => {
+  get otherPlayers(){
+    return Object.keys(this.$store.state.players).filter((player) => {
       return player != this.$store.state.role;
-    });
+    })
   }
 
-  handleSendResources(resources) {
+  get clientValidation(){
+    console.log("trade request validation")
+    let hasResourcesToSend = true;
+    let someGreaterThanZero = false;
+    const role = this.$store.state.role;
+    const inventory = this.$store.state.players[role].inventory;
+
+    Object.keys(this.sentResources).forEach(item => {
+      if(this.sentResources[item] > inventory[item]){
+        hasResourcesToSend = false;
+      }
+      if(this.sentResources[item] > 0) someGreaterThanZero = true;
+    });
+
+    return (this.name != "" && hasResourcesToSend && someGreaterThanZero);
+  }
+
+  @Inject()
+  readonly $api:GameRequestAPI;
+
+  sentResources:ResourceAmountData = {};
+  exchangeResources:ResourceAmountData = {};
+
+  handleSendResources(resources){
     this.sentResources = resources;
   }
 
-  handleReciveResources(resources) {
+  handleReciveResources(resources){
     this.exchangeResources = resources;
   }
 
-  handleChange(name) {
+  handleChange(name){
     this.name = name;
   }
 
-  handleTrade() {
-    const fromPackage: TradeAmountData = {
-      role: this.$store.state.role,
-      resourceAmount: this.sentResources
-    };
+  handleTrade(){
+    console.log(this.clientValidation);
+    if(this.clientValidation){
+      const fromPackage:TradeAmountData = {
+        role:this.$store.state.role,
+        resourceAmount:this.sentResources
+      }
 
-    const toPackage: TradeAmountData = {
-      role: this.name,
-      resourceAmount: this.exchangeResources
-    };
+      const toPackage:TradeAmountData = {
+        role:this.name,
+        resourceAmount:this.exchangeResources
+      }
 
-    const tradeDataPackage: TradeData = {
-      from: fromPackage,
-      to: toPackage
-    };
+      const tradeDataPackage:TradeData = {
+        from:fromPackage,
+        to:toPackage
+      }
 
-    this.$api.sendTradeRequest(tradeDataPackage);
+      this.$api.sendTradeRequest(tradeDataPackage);
+      this.name = "";
+    }
+
   }
 }
 </script>

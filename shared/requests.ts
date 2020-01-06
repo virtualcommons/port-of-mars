@@ -42,6 +42,12 @@ export interface AcceptTradeRequestData {
   id: string
 }
 
+//NICK CHANGES
+export interface RejectTradeRquestData{
+  kind: 'reject-trade-request'
+  id: string
+}
+
 
 export type Requests =
   SendChatMessageData |
@@ -52,4 +58,5 @@ export type Requests =
   BuyAccomplishmentCardData |
   DiscardAccomplishmentCardData |
   SendTradeRequestData |
-  AcceptTradeRequestData
+  AcceptTradeRequestData |
+  RejectTradeRquestData

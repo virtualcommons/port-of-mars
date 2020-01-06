@@ -100,7 +100,11 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
   };
 
   room.state.tradeSet.onAdd = (event: Schemify<TradeData>, id: string) => {
-    store.commit('ADD_TO_TRADES', { trade: deschemify(event), id });
+    const rawEvent:TradeData = deschemify(event);
+    store.commit('ADD_TO_TRADES', { trade: rawEvent, id })
+    if(rawEvent.to.role == store.state.role){
+      store.commit('CREATE_NOTIFICATION',`The ${rawEvent.from.role} would like to trade!`)
+    }
   };
 
   room.state.tradeSet.onRemove = (event: Schemify<TradeData>, id: string) => {
