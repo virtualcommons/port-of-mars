@@ -51,13 +51,10 @@ export default class TradeRequest extends Vue {
   name = "";
 
   get otherPlayers(){
-    return Object.keys(this.$store.state.players).filter((player) => {
-      return player != this.$store.state.role;
-    })
+    return Object.keys(this.$store.getters.otherPlayers);
   }
 
   get clientValidation(){
-    console.log("trade request validation")
     let hasResourcesToSend = true;
     let someGreaterThanZero = false;
     const role = this.$store.state.role;
@@ -92,7 +89,6 @@ export default class TradeRequest extends Vue {
   }
 
   handleTrade(){
-    console.log(this.clientValidation);
     if(this.clientValidation){
       const fromPackage:TradeAmountData = {
         role:this.$store.state.role,
