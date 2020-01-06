@@ -5,12 +5,19 @@
     </div>
 
     <div v-show="submitted == false" class="quiz-form">
-      <QuizForm
+      <QuizForm v-for="(question,i) in quizQuestions" :key="question"
+        v-show="index == i"
         v-bind="quizQuestions[index]"
         :index="index"
         :handleUpdate="handleUpdate"
         :complete="complete"
       />
+      <div class="questions-container">
+          <button class="question-nav" v-for="n in quizQuestions.length" :key="n" @click="handleQuestionSwitch(n-1)">
+            <!-- <p class="question-num">{{n}}</p> -->
+            {{n}}
+        </button>
+      </div>
     </div>
 
     <div v-show="submitted == true">
@@ -79,6 +86,10 @@ export default class TutorialQuiz extends Vue {
     this.index = 0;
     this.complete = false;
     this.answersArray = [];
+  }
+
+  handleQuestionSwitch(newIndex){
+    this.index = newIndex;
   }
 }
 </script>
