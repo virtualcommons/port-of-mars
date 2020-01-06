@@ -12,7 +12,8 @@ import {
   EnteredTradePhase,
   EnteredVictoryPhase,
   SentChatMessage, SentTradeRequest,
-  TimeInvested
+  TimeInvested,
+  RejectTradeRequest,
 } from "@/game/events";
 import {getAccomplishmentByID} from "@/repositories/Accomplishment";
 import {Client} from "colyseus";
@@ -115,6 +116,19 @@ export class AcceptTradeRequestCmd implements Command {
 
   execute(): Array<GameEvent> {
     return [new AcceptTradeRequest({id: this.id})];
+  }
+}
+
+export class RejectTradeRequestCmd implements Command {
+  constructor(private id: string, private game: Game, private player:Player){}
+
+  static fromReq(r: req.RejectTradeRquestData, game: Game, client: Client){
+    const p = game.getPlayerByClient(client);
+    return new RejectTradeRequestCmd(r.id, game, p);
+  }
+
+  execute(): Array<GameEvent> {
+    return [new RejectTradeRequest({id:this.id})];
   }
 }
 

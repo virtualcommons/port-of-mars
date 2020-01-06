@@ -14,7 +14,8 @@
       <div
         v-for="member in members"
         class="player-frame"
-        :style="member === selectedPlayer ? 'backgroundColor: var(--space-orange)' : ''"
+        v-bind:class="{'selected-background':member==selectedPlayer}"
+        :key="member+1"
       >
         <img
           @click="handleSelectPlayer(member)"
@@ -40,7 +41,8 @@
       <div
         v-for="member in members"
         class="player-frame"
-        :style="member === selectedHero ? 'backgroundColor: var(--space-orange)' : ''"
+        v-bind:class="{'selected-background':member === selectedHero}"
+        :key="member+2"
       >
         <img
           @click="selectHero(member)"
@@ -60,7 +62,8 @@
       <div
         v-for="member in members"
         class="player-frame"
-        :style="member === selectedPariah ? 'backgroundColor: var(--space-orange)' : ''"
+        v-bind:class="{'selected-background':member === selectedPariah}"
+        :key="member+3"
       >
         <img
           @click="selectPariah(member)"

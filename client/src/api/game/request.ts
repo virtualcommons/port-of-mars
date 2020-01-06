@@ -8,7 +8,8 @@ import {
   ResetGameData,
   DiscardAccomplishmentCardData,
   SendTradeRequestData,
-  AcceptTradeRequestData
+  AcceptTradeRequestData,
+  RejectTradeRquestData,
 } from 'shared/requests';
 import { AccomplishmentData, InvestmentData, TradeData } from 'shared/types';
 
@@ -59,6 +60,11 @@ export class GameRequestAPI {
 
   public acceptTradeRequest(id: string) {
     const msg: AcceptTradeRequestData = { kind: 'accept-trade-request', id };
+    this.send(msg);
+  }
+
+  public rejectTradeRequest(id: string){
+    const msg: RejectTradeRquestData = { kind:"reject-trade-request", id};
     this.send(msg);
   }
 }
