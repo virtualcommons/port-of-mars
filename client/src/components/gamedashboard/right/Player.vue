@@ -13,7 +13,6 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-
 @Component({})
 export default class Player extends Vue {
   @Prop() private role: string;

@@ -1,7 +1,7 @@
 <template>
   <div class="container-players">
     <p class="topbar">Player Scores</p>
-    <Player v-for="player in playerInfo" v-bind="player" />
+    <Player v-for="player in playerInfo" v-bind="player" :key="player.role"/>
   </div>
 </template>
 
@@ -26,6 +26,7 @@ export default class ContainerPlayers extends Vue {
       ready: allPlayers[player].ready,
       victoryPoints: allPlayers[player].victoryPoints
     }));
+
   }
 }
 </script>
