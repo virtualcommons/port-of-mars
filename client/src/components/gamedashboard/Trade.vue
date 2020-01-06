@@ -47,11 +47,8 @@
     </div>
     <div class="trade-buttons">
       <button v-bind:class="{'accept-trade':!clientValidation}" v-show="role == to.role" type="button" name="button" @click="handleAcceptTrade">Accept</button>
-<<<<<<< HEAD
       <button v-show="(role==from.role) || (role ==to.role)" type="button" name="button" @click="handleTradeReject">Decline</button>
-=======
-      <button v-show="(role==from.role) || (role ==to.role)" type="button" name="button">Decline</button>
->>>>>>> c7642fb... [feat]basic trade validation
+
     </div>
   </div>
 </template>
