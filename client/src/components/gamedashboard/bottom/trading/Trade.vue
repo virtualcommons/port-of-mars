@@ -11,7 +11,7 @@
           <p>{{ from.role }}</p>
         </div>
         <div class="send-investments-container">
-          <div class="send-investments" v-for="(value, name) in from.resourceAmount">
+          <div class="send-investments" v-for="(value, name) in from.resourceAmount" :key="name+3">
             <img v-if="value !== 0" :src="require(`@/assets/icons/${name}.svg`)" alt="Investment" />
             <p v-if="value !== 0">{{ value }}</p>
           </div>
@@ -30,7 +30,7 @@
           <p>{{ to.role }}</p>
         </div>
         <div class="receive-investments-container">
-          <div class="receive-investments" v-for="(value, name) in to.resourceAmount">
+          <div class="receive-investments" v-for="(value, name) in to.resourceAmount" :key="name+2">
             <img v-if="value !== 0" :src="require(`@/assets/icons/${name}.svg`)" alt="Investment" />
             <p v-if="value !== 0">{{ value }}</p>
           </div>
@@ -38,8 +38,8 @@
       </div>
     </div>
     <div class="trade-buttons">
-      <button type="button" name="button" @click="handleAcceptTrade">Accept</button>
-      <button type="button" name="button">Decline</button>
+       <button v-bind:class="{'accept-trade':!clientValidation}" v-show="role == to.role" type="button" name="button" @click="handleAcceptTrade">Accept</button>
+      <button v-show="(role==from.role) || (role ==to.role)" type="button" name="button" @click="handleTradeReject">Decline</button>
     </div>
   </div>
 </template>
@@ -47,18 +47,40 @@
 <script lang="ts">
 import { Vue, Component, Prop, Inject } from 'vue-property-decorator';
 import { GameRequestAPI } from '@/api/game/request';
-import { TradeData } from 'shared/types';
+import { TradeData,TradeAmountData  } from 'shared/types';
 
 @Component({})
 export default class Trade extends Vue {
-  @Prop() private from: object;
-  @Prop() private to: object;
+  @Prop() private from: TradeAmountData;
+  @Prop() private to: TradeAmountData;
   @Prop() private id: string;
+
+  private role = this.$store.state.role;
 
   @Inject() $api!: GameRequestAPI;
 
+  get clientValidation(){
+    let hasResourcesToSend = true;
+    const inventory = this.$store.state.players[this.role].inventory;
+
+    Object.keys(inventory).forEach(item => {
+      if(this.to.resourceAmount[item] > inventory[item]){
+        hasResourcesToSend = false;
+      }
+    });
+
+    return hasResourcesToSend;
+  }
+
+
   handleAcceptTrade() {
-    this.$api.acceptTradeRequest(this.id);
+    if(this.clientValidation){
+      this.$api.acceptTradeRequest(this.id);
+    }
+  }
+
+  handleTradeReject(){
+    this.$api.rejectTradeRequest(this.id);
   }
 }
 </script>
