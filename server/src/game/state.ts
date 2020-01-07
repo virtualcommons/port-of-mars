@@ -694,7 +694,34 @@ export class Player extends Schema implements PlayerData {
   }
 
   invest(investment?: InvestmentData) {
+
     investment = investment ?? this.pendingInvestments;
+
+    let leftOvers:number = 0
+    let minCostResource = ''
+    let minCost = Infinity
+
+    for (const [k, v] of Object.entries(this.costs)) {
+      if(v != Infinity){
+        leftOvers += ((investment as any)[k] * v)
+      }
+      if(minCost > v && k != 'upkeep'){
+        minCost = v
+        minCostResource = k
+      }
+    }
+
+    
+    while(leftOvers+minCost <= 6){
+      (investment as any)[minCostResource] += 1
+      leftOvers+=minCost
+    }
+
+    while(leftOvers < 10){
+      investment.upkeep +=1
+      leftOvers+=1
+    }
+
     this.contributedUpkeep = investment.upkeep;
     this.inventory.update(investment);
     console.log(this.inventory.toJSON())
