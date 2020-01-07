@@ -164,6 +164,7 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
       timestamp: this.dateCreated,
     });
 
+    game.resetPlayerReadiness();
     game.phase = Phase.events;
     game.round += 1;
     game.upkeep = game.nextRoundUpkeep();
@@ -182,6 +183,7 @@ export class ReenteredMarsEventPhase extends KindOnlyGameEvent {
   kind = 'reentered-mars-event-phase';
 
   apply(game: GameState): void {
+    game.resetPlayerReadiness();
     game.marsEventsProcessed += 1;
   }
 }
@@ -190,6 +192,7 @@ export class EnteredInvestmentPhase extends KindOnlyGameEvent {
   kind = 'entered-investment-phase';
 
   apply(game: GameState): void {
+    game.resetPlayerReadiness();
     game.phase = Phase.invest;
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
   }
@@ -199,6 +202,7 @@ export class EnteredTradePhase extends KindOnlyGameEvent {
   kind = 'entered-trade-phase';
 
   apply(game: GameState) {
+    game.resetPlayerReadiness();
     game.phase = Phase.trade;
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
     for (const player of game.players) {
@@ -212,6 +216,7 @@ export class EnteredPurchasePhase extends KindOnlyGameEvent {
   kind = 'entered-purchase-phase';
 
   apply(game: GameState): void {
+    game.resetPlayerReadiness();
     game.phase = Phase.purchase;
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
   }
@@ -221,6 +226,7 @@ export class EnteredDiscardPhase extends KindOnlyGameEvent {
   kind = 'entered-discard-phase';
 
   apply(game: GameState): void {
+    game.resetPlayerReadiness();
     game.phase = Phase.discard;
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
   }
