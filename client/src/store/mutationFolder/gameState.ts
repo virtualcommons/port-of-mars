@@ -40,6 +40,9 @@ function SET_EVENTS_FOR_ROUND(state: State, payload: any) {
 function SET_TIME_REMAINING(state: State, timeRemaining: number) {
   state.timeRemaining = timeRemaining;
 }
+function SET_MARS_EVENTS_PROCESSED(state: State, marsEventsProcessed: number) {
+  state.marsEventsProcessed = marsEventsProcessed;
+}
 
 export default {
   SET_GAME_PHASE,
@@ -49,5 +52,6 @@ export default {
   REMOVE_FROM_EVENTS,
   CHANGE_EVENT,
   SET_EVENTS_FOR_ROUND,
-  SET_TIME_REMAINING
+  SET_TIME_REMAINING,
+  SET_MARS_EVENTS_PROCESSED,
 };

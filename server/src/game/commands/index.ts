@@ -11,6 +11,7 @@ import {
   EnteredPurchasePhase,
   EnteredTradePhase,
   EnteredVictoryPhase,
+  ReenteredMarsEventPhase,
   SentChatMessage, SentTradeRequest,
   TimeInvested,
   RejectTradeRequest,
@@ -155,7 +156,13 @@ export class SetNextPhaseCmd implements Command {
   execute(): Array<GameEvent> {
     switch (this.game.state.phase) {
       case Phase.defeat: return [];
-      case Phase.events: return [new EnteredInvestmentPhase()];
+      case Phase.events: {
+        if (this.game.state.marsEventsProcessed + 1 >= this.game.state.marsEvents.length) {
+          return [new EnteredInvestmentPhase()];
+        } else {
+          return [new ReenteredMarsEventPhase()];
+        }
+      }
       case Phase.invest: return [new EnteredTradePhase()];
       case Phase.trade: return [new EnteredPurchasePhase()];
       case Phase.purchase: return [new EnteredDiscardPhase()];

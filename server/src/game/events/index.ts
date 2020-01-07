@@ -172,8 +172,17 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
     game.phase = Phase.events;
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
     game.marsEvents.splice(0, game.marsEvents.length, ...marsEvents);
+    game.marsEventsProcessed = GameState.DEFAULTS.marsEventsProcessed;
     game.marsEventDeck.updatePosition(game.marsEvents.length);
     game.logs.push(log);
+  }
+}
+
+export class ReenteredMarsEventPhase extends KindOnlyGameEvent {
+  kind = 'reentered-mars-event-phase';
+
+  apply(game: GameState): void {
+    game.marsEventsProcessed += 1;
   }
 }
 

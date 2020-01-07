@@ -125,13 +125,12 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
         const timeRemaining: number = change.value;
         store.commit('SET_TIME_REMAINING', timeRemaining);
       }
+      if (change.field === 'marsEventsProcessed') {
+        store.commit('SET_MARS_EVENTS_PROCESSED', change.value);
+      }
       if (change.field === 'upkeep') {
         const upkeep: number = change.value;
         store.commit('SET_UPKEEP', upkeep);
-        // store.commit(
-        //   'CREATE_NOTIFICATION',
-        //   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vestibulum.'
-        // );
       }
     });
   };
