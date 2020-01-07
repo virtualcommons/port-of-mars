@@ -82,13 +82,12 @@ export class TimeInvestmentCmd implements Command {
   static fromReq(r: req.SetTimeInvestmentData, game: Game, client: Client) {
     const p = game.getPlayerByClient(client);
     delete r.kind;
-    console.log({r});
+    //console.log({r});
     return new TimeInvestmentCmd(r, game, p);
   }
 
   execute(): Array<GameEvent> {
     const role = this.player.role;
-    console.log('investing');
     return [new TimeInvested({ investment: this.data, role})];
   }
 }
