@@ -3,7 +3,7 @@
     <div class="wrapper">
       <component :is="modalView" :modalData="modalData"></component>
       <button @click="handleClose" type="button" name="Close Button" class="modal-close">
-        <font-awesome-icon :icon="['fas', 'times']" size="lg" class="close-icon" />
+        <font-awesome-icon :icon="['fas', 'times']" size="md" class="close-icon" />
       </button>
     </div>
   </div>

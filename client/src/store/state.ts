@@ -122,7 +122,7 @@ export const initialStoreState: State = {
 
   activeNotifications: [],
 
-  eventView: EventClientView.VOTE_FOR_PLAYER_SINGLE,
+  eventView: EventClientView.VOTE_FOR_PLAYER_HERO_PARIAH,
 
   quizQuestions: [],
   quizResults: []

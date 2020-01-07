@@ -13,9 +13,9 @@ export interface ChatMessageData {
   round: number
 }
 
-export interface MarsLogData{
-  category:string,
-  message:string,
+export interface MarsLogData {
+  category:string
+  message:string
 }
 
 export interface ResourceAmountData {
@@ -92,14 +92,18 @@ export enum EventServerActions {
 
 export enum EventClientView {
   NO_CHANGE = 'NO_CHANGE',
+
+  AUDIT = 'AUDIT',
+  DISABLE_CHAT = 'DISABLE_CHAT',
+
   VOTE_YES_NO = 'VOTE_YES_NO',
-  SELECT_INFLUENCES = 'SELECT_INFLUENCES',
-  DRAW_INFLUENCES = 'DRAW_INFLUENCES',
   VOTE_FOR_PLAYER_SINGLE = 'VOTE_FOR_PLAYER_SINGLE',
   VOTE_FOR_PLAYER_HERO_PARIAH = 'VOTE_FOR_PLAYER_HERO_PARIAH',
-  AUDIT = 'AUDIT',
-  SELECT_PURCHASED_ACCOMPLISHMENT = 'SELECT_PURCHASED_ACCOMPLISHMENT',
-  DISABLE_CHAT = 'DISABLE_CHAT',
+
+  INFLUENCES_SELECT = 'INFLUENCES_SELECT',
+  INFLUENCES_DRAW = 'INFLUENCES_DRAW',
+
+  ACCOMPLISHMENT_SELECT_PURCHASED = 'ACCOMPLISHMENT_SELECT_PURCHASED',
 }
 
 export enum EventClientActions {
@@ -229,7 +233,7 @@ export interface QuizQuestionData {
 
 export interface QuizResultPackage {
   id:number
-  userAnswer:number,
-  correctAnswer:number,
-  correct:boolean,
+  userAnswer:number
+  correctAnswer:number
+  correct:boolean
 }

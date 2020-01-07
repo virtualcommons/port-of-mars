@@ -1,44 +1,28 @@
 <template>
-  <!-- SELECT_PURCHASED_ACCOMPLISHMENT -->
-  <div
-    v-if="eventView === 'SELECT_PURCHASED_ACCOMPLISHMENT'"
-    class="event-select-purchased-accomplishment-container"
-  >
-    <div class="event-select-purchased-accomplishment">
-      <CardAccomplishment v-for="acc in purchasableAccomplishments" :accomplishment="acc" />
-      <CardAccomplishment v-for="acc in purchasableAccomplishments" :accomplishment="acc" />
-      <!-- <CardAccomplishment
-        v-for="accomplishment in boughtAccomplishments"
-        :key="accomplishment.id"
-        :accomplishment="accomplishment"
-      /> -->
-    </div>
-  </div>
+  <component :is="eventAccomplishmentsView"></component>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { ResourceAmountData, Resource, Role } from 'shared/types';
-import CardAccomplishment from '@/components/gamedashboard/global/cards/CardAccomplishment.vue';
+import AccomplishmentsSelectPurchased from '@/components/gamedashboard/bottom/events/views/AccomplishmentsSelectPurchased.vue';
 
 @Component({
   components: {
-    CardAccomplishment
+    AccomplishmentsSelectPurchased
   }
 })
 export default class EventAccomplishments extends Vue {
   @Prop({ default: '' }) private eventView!: string;
-  // SELECT_PURCHASED_ACCOMPLISHMENT
 
-  get boughtAccomplishments() {
-    return this.$store.getters.player.accomplishment.bought;
+  get eventAccomplishmentsView(): string {
+    switch (this.eventView) {
+      case 'ACCOMPLISHMENT_SELECT_PURCHASED':
+        return 'AccomplishmentsSelectPurchased';
+      default:
+        return '';
+    }
+    return '';
   }
-
-  get purchasableAccomplishments() {
-    return this.$store.getters.player.accomplishment.purchasable;
-  }
-
-  // need to handle click events
 }
 </script>
 

@@ -6,7 +6,7 @@
     :class="viewAnim()"
     class="notification"
   >
-    <p class="close" v-if="hover || inView === 'hide'">Dismiss Notification</p>
+    <p class="button-close" v-if="hover || inView === 'hide'">Dismiss Notification</p>
     <p class="message" v-if="!hover && inView !== 'hide'">
       {{ message }}
     </p>

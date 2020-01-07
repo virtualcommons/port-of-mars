@@ -1,142 +1,35 @@
 <template>
-  <!-- VOTE_YES_NO -->
-  <div v-if="eventView === 'VOTE_YES_NO'" class="event-yes-no-vote">
-    <p>Please select an option:</p>
-    <div class="event-yes-no-vote-buttons">
-      <button type="button" name="yes button" @click="handleYesNoVote(true)">Yes</button>
-      <button type="button" name="no button" @click="handleYesNoVote(false)">No</button>
-    </div>
-  </div>
-
-  <!-- VOTE_FOR_PLAYER_SINGLE -->
-  <div v-else-if="eventView === 'VOTE_FOR_PLAYER_SINGLE'" class="event-for-player-single">
-    <div class="player-frame-container">
-      <div
-        v-for="member in members"
-        class="player-frame"
-        v-bind:class="{'selected-background':member==selectedPlayer}"
-        :key="member+1"
-      >
-        <img
-          @click="handleSelectPlayer(member)"
-          :src="require(`@/assets/characters/${member}.png`)"
-          alt="Player"
-        />
-      </div>
-    </div>
-    <p class="selected-player-title">Selected Player</p>
-    <p
-      :style="selectedPlayer === 'None Selected' ? 'color: var(--space-white-opaque-2)' : ''"
-      class="selected-player-text"
-    >
-      {{ selectedPlayer }}
-    </p>
-    <button type="button" name="button" @click="submitSelectedPlayer">Done</button>
-  </div>
-
-  <!-- VOTE_FOR_PLAYER_HERO_PARIAH -->
-
-  <div v-else-if="eventView === 'VOTE_FOR_PLAYER_HERO_PARIAH'" class="event-for-player-single">
-    <div class="player-frame-container">
-      <div
-        v-for="member in members"
-        class="player-frame"
-        v-bind:class="{'selected-background':member === selectedHero}"
-        :key="member+2"
-      >
-        <img
-          @click="selectHero(member)"
-          :src="require(`@/assets/characters/${member}.png`)"
-          alt="Player"
-        />
-      </div>
-    </div>
-    <p class="selected-hero-text">
-      Selected Hero:
-      <span :style="selectedHero === 'None Selected' ? 'color: var(--space-white-opaque-2)' : ''">{{
-        selectedHero
-      }}</span>
-    </p>
-
-    <div class="player-frame-container">
-      <div
-        v-for="member in members"
-        class="player-frame"
-        v-bind:class="{'selected-background':member === selectedPariah}"
-        :key="member+3"
-      >
-        <img
-          @click="selectPariah(member)"
-          :src="require(`@/assets/characters/${member}.png`)"
-          alt="Player"
-        />
-      </div>
-    </div>
-    <p class="selected-pariah-text">
-      Selected Pariah:
-      <span
-        :style="selectedPariah === 'None Selected' ? 'color: var(--space-white-opaque-2)' : ''"
-        >{{ selectedPariah }}</span
-      >
-    </p>
-
-    <button type="button" name="button" @click="submitHeroPariah">Done</button>
-  </div>
+  <component :is="eventVoteView"></component>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { ResourceAmountData, Resource, Role } from 'shared/types';
+import VoteYesNo from '@/components/gamedashboard/bottom/events/views/VoteYesNo.vue';
+import VoteForPlayerSingle from '@/components/gamedashboard/bottom/events/views/VoteForPlayerSingle.vue';
+import VoteForPlayerHeroPariah from '@/components/gamedashboard/bottom/events/views/VoteForPlayerHeroPariah.vue';
 
-@Component({})
+@Component({
+  components: {
+    VoteYesNo,
+    VoteForPlayerSingle,
+    VoteForPlayerHeroPariah
+  }
+})
 export default class EventVote extends Vue {
   @Prop({ default: '' }) private eventView!: string;
 
-  // VOTE_YES_NO
-  handleYesNoVote(selection: boolean): void {
-    console.log(selection);
-  }
-
-  // VOTE_FOR_PLAYER_SINGLE
-  private selectedPlayer = 'None Selected';
-
-  get members() {
-    // if (this.$store.state.role !== '') {
-    //   return ['Researcher', 'Pioneer', 'Curator', 'Entrepreneur', 'Politician'].filter(
-    //     name => name !== this.$store.state.role
-    //   );
-    // }
-    return ['Researcher', 'Pioneer', 'Curator', 'Entrepreneur', 'Politician'];
-  }
-
-  handleSelectPlayer(member: Role): void {
-    this.selectedPlayer = member;
-    console.log('MEMBER: ', this.selectedPlayer);
-  }
-
-  submitSelectedPlayer() {
-    console.log('SUBMIT MEMBER: ', this.selectedPlayer);
-  }
-
-  // VOTE_FOR_PLAYER_HERO_PARIAH
-
-  private selectedHero = 'None Selected';
-  private selectedPariah = 'None Selected';
-
-  selectHero(member: Role) {
-    this.selectedHero = member;
-    console.log('SELECTED HERO: ', this.selectedHero);
-  }
-
-  selectPariah(member: Role) {
-    this.selectedPariah = member;
-    console.log('SELECTED PARIAH: ', this.selectedPariah);
-  }
-
-  submitHeroPariah() {
-    // Note: Do we want to allow hero and pariah to be same person?
-    console.log('SUBMITTED HERO: ', this.selectedHero);
-    console.log('SUBMITTED PARIAH: ', this.selectedPariah);
+  get eventVoteView(): string {
+    switch (this.eventView) {
+      case 'VOTE_YES_NO':
+        return 'VoteYesNo';
+      case 'VOTE_FOR_PLAYER_SINGLE':
+        return 'VoteForPlayerSingle';
+      case 'VOTE_FOR_PLAYER_HERO_PARIAH':
+        return 'VoteForPlayerHeroPariah';
+      default:
+        return '';
+    }
+    return '';
   }
 }
 </script>

@@ -19,14 +19,15 @@
     height: 100%;
     flex-grow: 1;
     padding: 0.25rem;
-    @include make-horizontal-expand;
+    @include make-center;
+    justify-content: space-between;
 
     .score-and-role {
-      margin-left: 0.25rem;
+      margin-left: 0.75rem;
       @include make-left;
 
       .score {
-        margin-right: 0.5rem;
+        margin-right: 1rem;
       }
 
       p {
