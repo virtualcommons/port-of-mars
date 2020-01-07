@@ -1,6 +1,7 @@
 .phase-component {
   @include expand;
-  @include make-column-and-expand;
+  @include make-column-and-center;
+  justify-content: space-around;
   text-align: center;
 
   p {

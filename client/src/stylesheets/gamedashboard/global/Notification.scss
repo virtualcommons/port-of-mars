@@ -13,7 +13,7 @@
   cursor: pointer;
   @include default-transition-base;
 
-  .close,
+  .button-close,
   .message {
     width: 100%;
     margin: 0;

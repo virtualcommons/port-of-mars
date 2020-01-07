@@ -1,7 +1,7 @@
 <template>
-  <!-- SELECT_INFLUENCES -->
-  <div v-if="eventView === 'SELECT_INFLUENCES'" class="event-select-influences">
+  <div class="event-select-influences">
     <p>Please select up to two available influences:</p>
+
     <div class="event-select-influences-select">
       <div
         class="event-select-influences-select-influence"
@@ -17,10 +17,13 @@
         <!-- <p>{{ investment.units }}</p> -->
       </div>
     </div>
+
     <p>Chosen</p>
+
     <div v-if="selectedInvestmentsDataCount === 0" class="selected-placeholder">
       <p>None Selected</p>
     </div>
+
     <div class="event-select-influences-selected">
       <div
         class="event-select-influences-selected-influence"
@@ -36,62 +39,25 @@
         />
       </div>
     </div>
+
     <button type="button" name="button" @click="submitSelectedInfluences">Done</button>
-  </div>
-
-  <!-- DRAW_INFLUENCES -->
-
-  <div v-else-if="eventView === 'DRAW_INFLUENCES'" class="event-select-influences">
-    <p>Please select one influence:</p>
-    <div class="event-select-influences-select">
-      <div
-        class="event-select-influences-select-influence"
-        v-for="influence in availableInfluences"
-        :key="influence"
-      >
-        <img
-          @click="handleDrawInfluence(influence)"
-          :src="require(`@/assets/icons/${influence}.svg`)"
-          alt="Investment"
-        />
-        <!-- <p>{{ investment.units }}</p> -->
-      </div>
-    </div>
-    <p>Chosen</p>
-    <div v-if="drawnInfluence === 'None Selected'" class="selected-placeholder">
-      <p>None Selected</p>
-    </div>
-    <div class="event-select-influences-selected" v-else-if="drawnInfluence !== 'None Selected'">
-      <div class="event-select-influences-selected-influence">
-        <img
-          @click="handleUndrawInfluence"
-          :src="require(`@/assets/icons/${drawnInfluence}.svg`)"
-          alt="Investment"
-        />
-      </div>
-    </div>
-    <button type="button" name="button" @click="submitDrawnInfluence">Done</button>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
-import { ResourceAmountData, Resource, Role } from 'shared/types';
+import { Vue, Component } from 'vue-property-decorator';
 
 @Component({})
-export default class EventInvestments extends Vue {
-  @Prop({ default: '' }) private eventView!: string;
-  // SELECT_INFLUENCES
-
+export default class InfluencesSelect extends Vue {
   private investmentsTest: ResourceAmountData = {
     science: 1,
-    government: 1,
+    government: 2,
     legacy: 0,
     finance: 1,
     culture: 0
   };
 
-  get investments() {
+  get investments(): any {
     // ACTUAL IMPLEMENTATION
     // const inventory = this.$tstore.getters.player.inventory;
     // return Object.keys(inventory).map(name => ({
@@ -116,14 +82,14 @@ export default class EventInvestments extends Vue {
 
   private selectedInvestmentsDataCount: number = 0;
 
-  get selectedInvestments() {
+  get selectedInvestments(): any {
     return Object.keys(this.selectedInvestmentsData).map(name => ({
       name,
       units: this.selectedInvestmentsData[name as Resource]
     }));
   }
 
-  handleSelectInfluence(investment: string): void {
+  private handleSelectInfluence(investment: string): void {
     // ACTUAL IMPLEMENTATION
     // if (this.selectedInvestmentsDataCount < 2) {
     //   if (this.selectedInvestmentsData[investment] + 1 <= this.$tstore.getters.player.inventory[investment]) {
@@ -141,40 +107,19 @@ export default class EventInvestments extends Vue {
     }
   }
 
-  handleDeselectInfluences(investment: string): void {
+  private handleDeselectInfluences(investment: string): void {
     if (this.selectedInvestmentsData[investment] !== 0 && this.selectedInvestmentsDataCount !== 0) {
       this.selectedInvestmentsData[investment] -= 1;
       this.selectedInvestmentsDataCount -= 1;
     }
   }
 
-  submitSelectedInfluences() {
+  private submitSelectedInfluences(): void {
     console.log(this.selectedInvestmentsData);
-  }
-
-  // DRAW_INFLUENCES
-
-  private drawnInfluence = 'None Selected';
-
-  get availableInfluences() {
-    return ['science', 'government', 'legacy', 'finance', 'culture'];
-  }
-
-  handleDrawInfluence(influence) {
-    this.drawnInfluence = influence;
-    console.log('DRAW: ', influence);
-  }
-
-  handleUndrawInfluence() {
-    this.drawnInfluence = 'None Selected';
-  }
-
-  submitDrawnInfluence() {
-    console.log('SUBMIT DRAWN INFLUENCE: ', this.drawnInfluence);
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/bottom/events/EventInvestments.scss';
+@import '@/stylesheets/gamedashboard/bottom/events/views/InfluencesSelect.scss';
 </style>

@@ -11,7 +11,7 @@
         </div>
       </div>
       <div class="actions">
-        <EventView />
+        <EventContainer />
       </div>
     </div>
   </div>
@@ -19,11 +19,11 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import EventView from '@/components/gamedashboard/bottom/events/EventView.vue';
+import EventContainer from '@/components/gamedashboard/bottom/events/EventContainer.vue';
 
 @Component({
   components: {
-    EventView
+    EventContainer
   }
 })
 export default class ContainerEvents extends Vue {

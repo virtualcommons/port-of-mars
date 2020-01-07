@@ -85,7 +85,7 @@ const marsEvents: Array<MarsEventDataTwo> = enumerate(
           actions: []
         },
         client: {
-          view: [EventClientView.SELECT_INFLUENCES],
+          view: [EventClientView.INFLUENCES_SELECT],
           actions: [
             EventClientActions.PLAYER_SELECT_INFLUENCE_CARD_TWO,
             EventClientActions.PLAYER_DISCARD_INFLUENCE_CARD_ALL,
@@ -105,7 +105,7 @@ const marsEvents: Array<MarsEventDataTwo> = enumerate(
           actions: []
         },
         client: {
-          view: [EventClientView.DRAW_INFLUENCES],
+          view: [EventClientView.INFLUENCES_DRAW],
           actions: [
             EventClientActions.PLAYER_DRAW_INFLUENCE_CARD_ONE,
             EventClientActions.UPDATE_SERVER
@@ -183,7 +183,7 @@ const marsEvents: Array<MarsEventDataTwo> = enumerate(
           actions: []
         },
         client: {
-          view: [EventClientView.SELECT_PURCHASED_ACCOMPLISHMENT],
+          view: [EventClientView.ACCOMPLISHMENT_SELECT_PURCHASED],
           actions: [
             EventClientActions.PLAYER_DISCARD_PURCHASED_ACCOMPLISHMENT_CARD_ONE,
             EventClientActions.UPDATE_SERVER
