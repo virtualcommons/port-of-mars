@@ -206,7 +206,10 @@ export class EnteredTradePhase extends KindOnlyGameEvent {
     game.phase = Phase.trade;
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
     for (const player of game.players) {
-      player.invest();
+      //if you want the default action:
+      //player.invest(undefined,player.getLeftOverInvestments());
+
+      player.invest()
       player.pendingInvestments.reset();
     }
   }

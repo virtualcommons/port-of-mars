@@ -693,13 +693,13 @@ export class Player extends Schema implements PlayerData {
     this.inventory.update(inv)
   }
 
-  invest(investment?: InvestmentData) {
-
-    investment = investment ?? this.pendingInvestments;
+  getLeftOverInvestments(){
+    const investment = _.cloneDeep(this.pendingInvestments);
 
     let leftOvers:number = 0
-    let minCostResource = ''
-    let minCost = Infinity
+    let minCostResource:string = ''
+    let minCost:number = Infinity
+    let leftOverInvestments:InvestmentData = PendingInvestment.defaults()
 
     for (const [k, v] of Object.entries(this.costs)) {
       if(v != Infinity){
@@ -710,17 +710,31 @@ export class Player extends Schema implements PlayerData {
         minCostResource = k
       }
     }
-
-    
-    while(leftOvers+minCost <= 6){
-      (investment as any)[minCostResource] += 1
-      leftOvers+=minCost
+  
+    if(leftOvers == 0){
+      while(leftOvers+minCost <= 6){
+        (leftOverInvestments as any)[minCostResource] += 1
+        leftOvers+=minCost
+      }
+  
+      while(leftOvers < 10){
+        leftOverInvestments.upkeep +=1
+        leftOvers+=1
+      }
     }
 
-    while(leftOvers < 10){
-      investment.upkeep +=1
-      leftOvers+=1
+    return leftOverInvestments;
+  }
+
+  invest(investment?: InvestmentData,leftOverInvestments?: InvestmentData) {
+
+    investment = investment ?? this.pendingInvestments;
+    leftOverInvestments = leftOverInvestments ?? PendingInvestment.defaults()  
+
+    for (const [k,v] of Object.entries(investment)){
+      (investment as any)[k] += (leftOverInvestments as any)[k]
     }
+
 
     this.contributedUpkeep = investment.upkeep;
     this.inventory.update(investment);
