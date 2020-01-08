@@ -178,7 +178,7 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
     game.logs.push(log);
 
     for(const player of game.players){
-        player.accomplishment.replenishDeck(player.role);
+        player.refreshPurchasableAccomplishments();
     }
   }
 }

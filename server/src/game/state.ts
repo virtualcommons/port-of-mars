@@ -449,7 +449,7 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
     this.deck.push(id);
   }
   
-  replenishDeck(role: Role){
+  refreshPurchasableAccomplishments(role: Role){
     const newAmt = Math.min(3 - this.purchasable.length,this.deck.length);
     
     for(let i = 0; i < newAmt; i++){
@@ -703,6 +703,10 @@ export class Player extends Schema implements PlayerData {
     this.contributedUpkeep -= accomplishment.upkeep;
     this.victoryPoints += accomplishment.victoryPoints;
     this.inventory.update(inv)
+  }
+
+  refreshPurchasableAccomplishments(){
+    this.accomplishment.refreshPurchasableAccomplishments(this.role);
   }
 
   getLeftOverInvestments(){
