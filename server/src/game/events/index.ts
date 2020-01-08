@@ -176,6 +176,10 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
     game.marsEventsProcessed = GameState.DEFAULTS.marsEventsProcessed;
     game.marsEventDeck.updatePosition(game.marsEvents.length);
     game.logs.push(log);
+
+    for(const player of game.players){
+        player.accomplishment.replenishDeck(player.role);
+    }
   }
 }
 

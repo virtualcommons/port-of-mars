@@ -448,6 +448,17 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
     this.purchasable.splice(index, 1);
     this.deck.push(id);
   }
+  
+  replenishDeck(role: Role){
+    const newAmt = Math.min(3 - this.purchasable.length,this.deck.length);
+    
+    for(let i = 0; i < newAmt; i++){
+      const newAccomplishment = new Accomplishment(getAccomplishmentByID(role,this.peek()))
+      this.purchasable.push(newAccomplishment)
+      this.deck.splice(0,1)
+    }
+    
+  }
 
   peek(): number {
     return this.deck[this.position];
