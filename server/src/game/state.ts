@@ -446,6 +446,7 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
        return;
     }
     this.purchasable.splice(index, 1);
+    this.deck.push(id);
   }
 
   peek(): number {
