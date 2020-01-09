@@ -448,9 +448,9 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
   }
   
   refreshPurchasableAccomplishments(role: Role){
-    const newAmt = 3 - this.purchasable.length;
+    const nAccomplishmentsToDraw = 3 - this.purchasable.length;
     
-    for(let i = 0; i < newAmt; i++) {
+    for(let i = 0; i < nAccomplishmentsToDraw; i++) {
       const id = this.deck.shift();
       const newAccomplishment = new Accomplishment(getAccomplishmentByID(role, id!));
       this.purchasable.push(newAccomplishment);
