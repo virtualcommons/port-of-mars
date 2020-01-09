@@ -446,6 +446,17 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
        return;
     }
     this.purchasable.splice(index, 1);
+    this.deck.push(id);
+  }
+  
+  refreshPurchasableAccomplishments(role: Role){
+    const nAccomplishmentsToDraw = Math.min(3 - this.purchasable.length,this.deck.length);
+    
+    for(let i = 0; i < nAccomplishmentsToDraw; i++) {
+      const id = this.deck.shift();
+      const newAccomplishment = new Accomplishment(getAccomplishmentByID(role, id!));
+      this.purchasable.push(newAccomplishment);
+    }
   }
 
   peek(): number {
@@ -688,7 +699,7 @@ export class Player extends Schema implements PlayerData {
       legacy: - accomplishment.legacy,
       science: - accomplishment.science
     };
-    this.contributedUpkeep -= accomplishment.upkeep;
+    this.contributedUpkeep -= Math.abs(accomplishment.upkeep);
     this.victoryPoints += accomplishment.victoryPoints;
     this.inventory.update(inv)
   }
