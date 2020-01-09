@@ -430,12 +430,10 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
 
   deck: Array<number>;
 
-  position: number = 0;
-
   buy(accomplishment: AccomplishmentData) {
     if (this.purchasable.filter(a => a.id === accomplishment.id).length > 0) {
       this.bought.push(new Accomplishment(accomplishment));
-      const index = this.purchasable.findIndex(a => a.id === accomplishment.id);
+      const index = this.purchasable.findIndex(acc => acc.id === accomplishment.id);
       this.purchasable.splice(index, 1);
     }
   }
@@ -450,26 +448,17 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
   }
   
   refreshPurchasableAccomplishments(role: Role){
-    const newAmt = Math.min(3 - this.purchasable.length,this.deck.length);
+    const newAmt = 3 - this.purchasable.length;
     
-    for(let i = 0; i < newAmt; i++){
-      const newAccomplishment = new Accomplishment(getAccomplishmentByID(role,this.peek()))
-      this.purchasable.push(newAccomplishment)
-      this.deck.splice(0,1)
+    for(let i = 0; i < newAmt; i++) {
+      const id = this.deck.shift();
+      const newAccomplishment = new Accomplishment(getAccomplishmentByID(role, id!));
+      this.purchasable.push(newAccomplishment);
     }
-    
   }
 
   peek(): number {
-    return this.deck[this.position];
-  }
-
-  update() {
-    let pos = this.position + 1;
-    if (pos > this.deck.length) {
-      pos = pos % this.deck.length;
-    }
-    this.position = pos;
+    return this.deck[0];
   }
 
   isPurchasable(accomplishment: AccomplishmentData) {
@@ -986,6 +975,12 @@ export class GameState extends Schema implements GameData {
       }
     }
     return false;
+  }
+
+  refreshPlayerPurchasableAccomplisments(): void {
+    for (const player of this.players) {
+      player.refreshPurchasableAccomplishments();
+    }
   }
 
   resetPlayerReadiness(): void {

@@ -79,13 +79,7 @@ export class DiscardedAccomplishment extends GameEventWithData {
 
   apply(game: GameState): void {
     const accomplishmentData = game.players[this.data.role].accomplishment;
-    const newId = accomplishmentData.peek();
-    console.log(`replacing ${this.data.id} with ${newId}`);
-    const purchasable = accomplishmentData.purchasable;
-    const index = purchasable.findIndex(acc => acc.id === this.data.id);
-    const accomplishment = new Accomplishment(getAccomplishmentByID(this.data.role, newId));
-    accomplishmentData.update();
-    purchasable.splice(index, 1, accomplishment);
+    accomplishmentData.discard(this.data.id);
   }
 }
 
@@ -165,6 +159,7 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
     });
 
     game.resetPlayerReadiness();
+    game.refreshPlayerPurchasableAccomplisments();
     game.phase = Phase.events;
     game.round += 1;
     game.upkeep = game.nextRoundUpkeep();
