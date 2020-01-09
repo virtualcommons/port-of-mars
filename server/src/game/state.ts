@@ -430,12 +430,10 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
 
   deck: Array<number>;
 
-  position: number = 0;
-
   buy(accomplishment: AccomplishmentData) {
     if (this.purchasable.filter(a => a.id === accomplishment.id).length > 0) {
       this.bought.push(new Accomplishment(accomplishment));
-      const index = this.purchasable.findIndex(a => a.id === accomplishment.id);
+      const index = this.purchasable.findIndex(acc => acc.id === accomplishment.id);
       this.purchasable.splice(index, 1);
     }
   }
@@ -448,17 +446,19 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
     this.purchasable.splice(index, 1);
     this.deck.push(id);
   }
-
-  peek(): number {
-    return this.deck[this.position];
+  
+  refreshPurchasableAccomplishments(role: Role){
+    const nAccomplishmentsToDraw = 3 - this.purchasable.length;
+    
+    for(let i = 0; i < nAccomplishmentsToDraw; i++) {
+      const id = this.deck.shift();
+      const newAccomplishment = new Accomplishment(getAccomplishmentByID(role, id!));
+      this.purchasable.push(newAccomplishment);
+    }
   }
 
-  update() {
-    let pos = this.position + 1;
-    if (pos > this.deck.length) {
-      pos = pos % this.deck.length;
-    }
-    this.position = pos;
+  peek(): number {
+    return this.deck[0];
   }
 
   isPurchasable(accomplishment: AccomplishmentData) {
@@ -692,6 +692,10 @@ export class Player extends Schema implements PlayerData {
     this.contributedUpkeep -= accomplishment.upkeep;
     this.victoryPoints += accomplishment.victoryPoints;
     this.inventory.update(inv)
+  }
+
+  refreshPurchasableAccomplishments(){
+    this.accomplishment.refreshPurchasableAccomplishments(this.role);
   }
 
   getLeftOverInvestments(){
@@ -971,6 +975,12 @@ export class GameState extends Schema implements GameData {
       }
     }
     return false;
+  }
+
+  refreshPlayerPurchasableAccomplisments(): void {
+    for (const player of this.players) {
+      player.refreshPurchasableAccomplishments();
+    }
   }
 
   resetPlayerReadiness(): void {
