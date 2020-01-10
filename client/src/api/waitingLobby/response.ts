@@ -16,7 +16,6 @@ export function applyWaitingServerResponses<T>(room: Room, store: TStore) {
   room.onMessage((msg: WaitingResponses) => {
     switch (msg.kind) {
       case 'waiting-lobby':
-        console.log(msg.message);
         break;
       case 'switch-rooms':
         switchRooms(msg.room);

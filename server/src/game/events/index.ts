@@ -52,6 +52,16 @@ export class PlayerJoined extends GameEventWithData {
   }
 }
 
+export class SetPlayerReadiness extends GameEventWithData {
+  kind = 'set-player-readiness';
+
+  constructor(public data: {value: boolean, role: Role}) { super(); }
+
+  apply(game: GameState): void {
+    game.players[this.data.role].updateReadiness(this.data.value);
+  }
+}
+
 export class SentChatMessage extends GameEventWithData {
   kind = 'sent-chat-message';
 
