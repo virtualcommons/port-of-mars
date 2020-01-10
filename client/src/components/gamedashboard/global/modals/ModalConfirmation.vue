@@ -28,7 +28,6 @@ export default class ModalConfirmation extends Vue {
   private handleConfirmation() {
     switch (this.modalData.type) {
       case 'discardAccomplishment':
-        console.log('this.modalData.action: ', this.modalData.actionData);
         this.$api.discardAccomplishment(this.modalData.actionData);
       default:
         this.$root.$emit('closeModal');

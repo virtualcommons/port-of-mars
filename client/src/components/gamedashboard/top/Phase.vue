@@ -55,7 +55,7 @@ export default class Phase extends Vue {
   get label() {
     const lbl = PHASE_LABELS[this.$tstore.state.phase];
     if (this.$store.state.phase === s.Phase.events) {
-      return `${lbl} (${this.$tstore.state.marsEventsProcessed})`
+      return `${lbl} (${this.$tstore.state.marsEventsProcessed})`;
     }
     return PHASE_LABELS[this.$tstore.state.phase];
   }
@@ -84,25 +84,23 @@ export default class Phase extends Vue {
     return ready;
   }
 
-  submitDone() {
+  private submitDone() {
     switch (this.phase) {
       case s.Phase.invest:
-        this.$api.investTimeBlocks(this.$tstore.getters.player.pendingInvestments);
+        this.$api.investTimeBlocks(
+          this.$tstore.getters.player.pendingInvestments
+        );
       default:
         this.btnDisabled = true;
         this.$api.setPlayerReadiness(true);
-        console.log(
-          `DISABLED: ${this.btnDisabled}, READINESS: ${
-            this.$tstore.state.players[this.$tstore.state.role].ready
-          }`
-        );
     }
   }
 
-  submitCancel() {
+  private submitCancel() {
+    // TODO: Need to handle cancellations (#156)
     switch (this.phase) {
       case s.Phase.invest:
-      // handle uninvest timeblocks
+      // TODO: Un-invest timeblocks
       default:
         this.btnDisabled = false;
         this.$api.setPlayerReadiness(false);
@@ -113,7 +111,10 @@ export default class Phase extends Vue {
     const tr = this.$store.state.timeRemaining;
     const minutesRemaining = Math.floor(tr / 60);
     const minutesRemainingDisplay = `${minutesRemaining}`.padStart(2, '0');
-    const secondsRemainingDisplay = `${tr - minutesRemaining * 60}`.padStart(2, '0');
+    const secondsRemainingDisplay = `${tr - minutesRemaining * 60}`.padStart(
+      2,
+      '0'
+    );
     return `${minutesRemainingDisplay}:${secondsRemainingDisplay}`;
   }
 }
