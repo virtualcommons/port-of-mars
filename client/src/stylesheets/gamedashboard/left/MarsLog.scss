@@ -8,7 +8,7 @@
     @include border-bottom-white;
     margin-bottom: 0.5rem;
     font-size: $font-med;
-    text-align: center;
+    text-align: left;
     color: $space-white-opaque-2;
   }
 
@@ -39,6 +39,7 @@
 
       .category {
         margin: 0;
+        text-transform: capitalize;
         color: $space-orange;
       }
 
