@@ -24,9 +24,7 @@
       </div>
       <div class="purchase">
         <button
-          v-bind:class="{
-            'purchase-accomplishment': !canPurchaseAccomplishment
-          }"
+          :disabled="!canPurchaseAccomplishment"
           @click="handlePurchase()"
         >
           Purchase Accomplishment
@@ -85,7 +83,7 @@ export default class BarAccomplishment extends Vue {
     return canPurchase;
   }
 
-  handlePurchase() {
+  private handlePurchase() {
     if (this.canPurchaseAccomplishment) {
       this.$api.purchaseAccomplishment(this.accomplishment);
     }
