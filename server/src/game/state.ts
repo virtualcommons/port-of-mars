@@ -745,6 +745,10 @@ export class Player extends Schema implements PlayerData {
     this.inventory.update(investment);
     console.log(this.inventory.toJSON())
   }
+
+  updateReadiness(ready: boolean): void {
+    this.ready = ready;
+  }
 }
 
 type PlayerSetSerialized = { [role in Role]: PlayerSerialized }
@@ -970,11 +974,11 @@ export class GameState extends Schema implements GameData {
   get allPlayersAreReady(): boolean {
     for (const r of ROLES) {
       const p = this.players[r];
-      if (p.ready) {
-        return true;
+      if (!p.ready) {
+        return false;
       }
     }
-    return false;
+    return true;
   }
 
   refreshPlayerPurchasableAccomplisments(): void {

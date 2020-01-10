@@ -15,6 +15,7 @@ import {
   SentChatMessage, SentTradeRequest,
   TimeInvested,
   RejectTradeRequest,
+  SetPlayerReadiness
 } from "@/game/events";
 import {getAccomplishmentByID} from "@/repositories/Accomplishment";
 import {Client} from "colyseus";
@@ -102,7 +103,8 @@ export class SetPlayerReadinessCmd implements Command {
   }
 
   execute(): Array<GameEvent> {
-    return [];
+    const role = this.player.role;
+    return [new SetPlayerReadiness({value: this.ready, role: role})];
   }
 }
 

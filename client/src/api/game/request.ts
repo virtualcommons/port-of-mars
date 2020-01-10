@@ -10,8 +10,14 @@ import {
   SendTradeRequestData,
   AcceptTradeRequestData,
   RejectTradeRquestData,
+  SetPlayerReadinessData
 } from 'shared/requests';
-import { AccomplishmentData, InvestmentData, TradeData } from 'shared/types';
+import {
+  AccomplishmentData,
+  InvestmentData,
+  TradeData,
+  Role
+} from 'shared/types';
 
 export class GameRequestAPI {
   constructor(public room: Room) {}
@@ -36,7 +42,10 @@ export class GameRequestAPI {
   }
 
   public investTimeBlocks(investment: InvestmentData) {
-    const msg: SetTimeInvestmentData = { ...investment, kind: 'set-time-investment' };
+    const msg: SetTimeInvestmentData = {
+      ...investment,
+      kind: 'set-time-investment'
+    };
     this.send(msg);
   }
 
@@ -49,7 +58,10 @@ export class GameRequestAPI {
   }
 
   public discardAccomplishment(id: number) {
-    const msg: DiscardAccomplishmentCardData = { kind: 'discard-accomplishment-card', id };
+    const msg: DiscardAccomplishmentCardData = {
+      kind: 'discard-accomplishment-card',
+      id
+    };
     this.send(msg);
   }
 
@@ -63,8 +75,13 @@ export class GameRequestAPI {
     this.send(msg);
   }
 
-  public rejectTradeRequest(id: string){
-    const msg: RejectTradeRquestData = { kind:"reject-trade-request", id};
+  public rejectTradeRequest(id: string) {
+    const msg: RejectTradeRquestData = { kind: 'reject-trade-request', id };
+    this.send(msg);
+  }
+
+  public setPlayerReadiness(value: boolean) {
+    const msg: SetPlayerReadinessData = { kind: 'set-player-readiness', value };
     this.send(msg);
   }
 }

@@ -48,8 +48,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
   }
 })
 export default class Phase extends Vue {
-  @Inject()
-  private $api!: GameRequestAPI;
+  @Inject() private $api!: GameRequestAPI;
 
   private btnDisabled = false;
 
@@ -81,7 +80,8 @@ export default class Phase extends Vue {
   }
 
   get playerReady() {
-    return this.$tstore.state.players[this.$tstore.state.role].ready;
+    let ready = this.$tstore.state.players[this.$tstore.state.role].ready;
+    return ready;
   }
 
   submitDone() {
@@ -90,10 +90,7 @@ export default class Phase extends Vue {
         this.$api.investTimeBlocks(this.$tstore.getters.player.pendingInvestments);
       default:
         this.btnDisabled = true;
-        this.$tstore.commit('SET_READINESS', {
-          data: true,
-          role: this.$tstore.state.role
-        });
+        this.$api.setPlayerReadiness(true);
         console.log(
           `DISABLED: ${this.btnDisabled}, READINESS: ${
             this.$tstore.state.players[this.$tstore.state.role].ready
@@ -108,10 +105,7 @@ export default class Phase extends Vue {
       // handle uninvest timeblocks
       default:
         this.btnDisabled = false;
-        this.$tstore.commit('SET_READINESS', {
-          data: false,
-          role: this.$tstore.state.role
-        });
+        this.$api.setPlayerReadiness(false);
     }
   }
 
