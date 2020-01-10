@@ -470,6 +470,8 @@ export class MarsEvent extends Schema implements MarsEventData {
   constructor(data: MarsEventData) {
     super();
     this.id = data.id;
+    this.duration = data.duration;
+    this.elapsed = 0;
     this.name = data.name;
     this.flavorText = data.flavorText;
     this.effect = data.effect;
@@ -480,12 +482,36 @@ export class MarsEvent extends Schema implements MarsEventData {
     return new MarsEvent(me);
   }
 
+  updateElapsed():void {
+    this.elapsed++;
+  }
+
+  resetElapsed():void {
+    this.elapsed = 0;
+  }
+
+  complete():boolean {
+    if(this.elapsed === this.duration) {
+      // console.log('EVENT COMPLETE');
+      return true;
+    } else {
+      // console.log('EVENT INCOMPLETE');
+      return false;
+    }
+  }
+
   toJSON(): number {
     return this.id;
   }
 
   @type('number')
   id: number;
+
+  @type('number')
+  duration: number;
+
+  @type('number')
+  elapsed: number;
 
   @type('string')
   name: string;
@@ -998,6 +1024,24 @@ export class GameState extends Schema implements GameData {
     for (const r of ROLES) {
       const p = this.players[r];
       p.contributedUpkeep = 0;
+    }
+  }
+
+  updateMarsEventsElapsed(): void {
+    for(const event of this.marsEvents) {
+      // console.log("MARS EVENTS (CURRENT BEFORE): ", event.elapsed);
+      event.updateElapsed();
+      // console.log("MARS EVENTS (CURRENT AFTER): ", event.elapsed);
+    }
+  }
+
+  handleEventCompletion(): void {
+    for(const event of this.marsEvents) {
+      if(event.complete()) {
+        event.resetElapsed();
+      } else {
+        // TODO: KEEP INCOMPLETE CARDS
+      }
     }
   }
 

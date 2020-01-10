@@ -3,39 +3,63 @@ export const CURATOR: 'Curator' = 'Curator';
 export const PIONEER: 'Pioneer' = 'Pioneer';
 export const ENTREPRENEUR: 'Entrepreneur' = 'Entrepreneur';
 export const POLITICIAN: 'Politician' = 'Politician';
-export const ROLES: Array<Role> = [CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER];
-export type Role = 'Researcher' | 'Curator' | 'Pioneer' | 'Entrepreneur' | 'Politician';
+export const ROLES: Array<Role> = [
+  CURATOR,
+  ENTREPRENEUR,
+  PIONEER,
+  POLITICIAN,
+  RESEARCHER
+];
+export type Role =
+  | 'Researcher'
+  | 'Curator'
+  | 'Pioneer'
+  | 'Entrepreneur'
+  | 'Politician';
 
 export interface ChatMessageData {
-  message: string
-  role: string
-  dateCreated: number
-  round: number
+  message: string;
+  role: string;
+  dateCreated: number;
+  round: number;
 }
 
 export interface MarsLogData {
-  category:string
-  message:string
+  category: string;
+  message: string;
 }
 
 export interface ResourceAmountData {
-  science: number
-  government: number
-  legacy: number
-  finance: number
-  culture: number
+  science: number;
+  government: number;
+  legacy: number;
+  finance: number;
+  culture: number;
 }
 
 export interface InvestmentData extends ResourceAmountData {
-  upkeep: number
+  upkeep: number;
 }
 
-export type ResourceCostData = InvestmentData
+export type ResourceCostData = InvestmentData;
 
-export type Resource = keyof ResourceAmountData
+export type Resource = keyof ResourceAmountData;
 export type Investment = keyof InvestmentData;
-export const INVESTMENTS: Array<Investment> = ['culture', 'finance', 'government', 'legacy', "science", 'upkeep'];
-export const RESOURCES: Array<Resource> = ['culture', 'finance', 'government', 'legacy', "science"];
+export const INVESTMENTS: Array<Investment> = [
+  'culture',
+  'finance',
+  'government',
+  'legacy',
+  'science',
+  'upkeep'
+];
+export const RESOURCES: Array<Resource> = [
+  'culture',
+  'finance',
+  'government',
+  'legacy',
+  'science'
+];
 
 export enum Phase {
   pregame,
@@ -87,7 +111,6 @@ export enum EventServerActions {
 
   // TIMEBLOCKS
   PLAYER_MODIFY_TIMEBLOCKS_EQUALS_THREE = 'PLAYER_MODIFY_TIMEBLOCKS_EQUALS_THREE'
-
 }
 
 export enum EventClientView {
@@ -103,7 +126,7 @@ export enum EventClientView {
   INFLUENCES_SELECT = 'INFLUENCES_SELECT',
   INFLUENCES_DRAW = 'INFLUENCES_DRAW',
 
-  ACCOMPLISHMENT_SELECT_PURCHASED = 'ACCOMPLISHMENT_SELECT_PURCHASED',
+  ACCOMPLISHMENT_SELECT_PURCHASED = 'ACCOMPLISHMENT_SELECT_PURCHASED'
 }
 
 export enum EventClientActions {
@@ -128,112 +151,113 @@ export enum EventClientActions {
 
 export interface MarsEventEffects {
   server: {
-    actions: Array<string>
-  }
+    actions: Array<string>;
+  };
   client: {
-    view: Array<string>
-    actions: Array<string>
-  }
+    view: Array<string>;
+    actions: Array<string>;
+  };
 }
 
 export interface MarsEventDataTwo {
-  id: number
-  name: string
-  effectText: string
-  flavorText: string
-  effects: MarsEventEffects
-  duration: number
+  id: number;
+  name: string;
+  effectText: string;
+  flavorText: string;
+  effects: MarsEventEffects;
+  duration: number;
 }
 
 export interface MarsEventData {
-  id: number
-  name: string
-  effect: string
-  flavorText: string
+  id: number;
+  name: string;
+  effect: string;
+  flavorText: string;
+  duration: number;
 }
 
 export interface MarsLogMessageData {
-  performedBy: Role
-  category: string
-  content: string
-  timestamp: number
+  performedBy: Role;
+  category: string;
+  content: string;
+  timestamp: number;
 }
 
 export interface AccomplishmentData {
-  id: number
-  role: Role
-  label: string
-  flavorText: string
-  science: number
-  government: number
-  legacy: number
-  finance: number
-  culture: number
-  upkeep: number
-  victoryPoints: number
-  effect: string
+  id: number;
+  role: Role;
+  label: string;
+  flavorText: string;
+  science: number;
+  government: number;
+  legacy: number;
+  finance: number;
+  culture: number;
+  upkeep: number;
+  victoryPoints: number;
+  effect: string;
 }
 
 export interface AccomplishmentSetData {
-  bought: Array<AccomplishmentData>
-  purchasable: Array<AccomplishmentData>
+  bought: Array<AccomplishmentData>;
+  purchasable: Array<AccomplishmentData>;
 }
 
 export interface TradeAmountData {
-  role: Role,
-  resourceAmount: ResourceAmountData
+  role: Role;
+  resourceAmount: ResourceAmountData;
 }
 
 export interface TradeData {
-  from: TradeAmountData
-  to: TradeAmountData
+  from: TradeAmountData;
+  to: TradeAmountData;
 }
 
-export type TradeSetData = { [uuid: string]: TradeData }
+export type TradeSetData = { [uuid: string]: TradeData };
 
 export interface PlayerData {
-  role: Role
-  costs: ResourceCostData
-  accomplishment: AccomplishmentSetData
-  ready: boolean
-  timeBlocks: number
-  contributedUpkeep: number
-  victoryPoints: number
-  inventory: ResourceAmountData
-  pendingInvestments: ResourceAmountData
+  role: Role;
+  costs: ResourceCostData;
+  accomplishment: AccomplishmentSetData;
+  ready: boolean;
+  timeBlocks: number;
+  contributedUpkeep: number;
+  victoryPoints: number;
+  inventory: ResourceAmountData;
+  pendingInvestments: ResourceAmountData;
 }
 
-export type PlayerSetData = { [role in Role]: PlayerData }
+export type PlayerSetData = { [role in Role]: PlayerData };
 
 export interface GameData {
-  players: PlayerSetData
-  timeRemaining: number
-  round: number
-  phase: Phase
-  upkeep: number
-  messages: Array<ChatMessageData>
-  marsEvents: Array<MarsEventData>
-  logs: Array<MarsLogMessageData>
-  marsEventsProcessed: number
-  tradeSet: TradeSetData
+  players: PlayerSetData;
+  timeRemaining: number;
+  round: number;
+  phase: Phase;
+  upkeep: number;
+  messages: Array<ChatMessageData>;
+  marsEvents: Array<MarsEventData>;
+  logs: Array<MarsLogMessageData>;
+  marsEventsProcessed: number;
+  tradeSet: TradeSetData;
 }
 
-export interface QuizData{
-  id: number
-  question: string
-  correct:number
-  options: Array<String>
+export interface QuizData {
+  id: number;
+  question: string;
+  correct: number;
+  options: Array<String>;
 }
 
 export interface QuizQuestionData {
-  id: number
-  question: string
-  options: Array<String>
+  id: number;
+  question: string;
+  options: Array<String>;
 }
 
 export interface QuizResultPackage {
-  id:number
-  userAnswer:number
-  correctAnswer:number
-  correct:boolean
+  id: number;
+  userAnswer: number;
+  correctAnswer: number;
+  correct: boolean;
 }
