@@ -5,7 +5,9 @@
     </div>
 
     <div v-show="submitted == false" class="quiz-form">
-      <QuizForm v-for="(question,i) in quizQuestions" :key="question"
+      <QuizForm
+        v-for="(question, i) in quizQuestions"
+        :key="question.id"
         v-show="index == i"
         v-bind="quizQuestions[index]"
         :index="index"
@@ -13,9 +15,14 @@
         :complete="complete"
       />
       <div class="questions-container">
-          <button class="question-nav" v-for="n in quizQuestions.length" :key="n" @click="handleQuestionSwitch(n-1)">
-            <!-- <p class="question-num">{{n}}</p> -->
-            {{n}}
+        <button
+          class="question-nav"
+          v-for="n in quizQuestions.length"
+          :key="n.id"
+          @click="handleQuestionSwitch(n - 1)"
+        >
+          <!-- <p class="question-num">{{n}}</p> -->
+          {{ n }}
         </button>
       </div>
     </div>
@@ -45,7 +52,8 @@ export default class TutorialQuiz extends Vue {
   private submitted = false;
 
   get quizQuestions() {
-    return this.$store.state.quizQuestions;
+    const questions = this.$store.state.quizQuestions;
+    return questions;
   }
 
   get quizResults() {
@@ -63,8 +71,7 @@ export default class TutorialQuiz extends Vue {
     return info;
   }
 
-  @Inject()
-  readonly $api!: QuizRequestAPI;
+  @Inject() readonly $api!: QuizRequestAPI;
 
   handleUpdate(id, name) {
     if (name == 1) this.answersArray.splice(this.index, 1, id);
@@ -88,7 +95,7 @@ export default class TutorialQuiz extends Vue {
     this.answersArray = [];
   }
 
-  handleQuestionSwitch(newIndex){
+  handleQuestionSwitch(newIndex) {
     this.index = newIndex;
   }
 }

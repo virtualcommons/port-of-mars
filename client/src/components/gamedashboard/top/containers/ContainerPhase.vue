@@ -9,8 +9,14 @@
           <p class="topbar">Events</p>
           <div class="inner">
             <div id="hscroll" class="events">
-              <p class="empty" v-if="eventsForTheRound.length === 0">No Active Events</p>
-              <CardEvent v-for="event in eventsForTheRound" :event="event" :key="event.id" />
+              <p class="empty" v-if="eventsForTheRound.length === 0">
+                No Active Events
+              </p>
+              <CardEvent
+                v-for="event in eventsForTheRound"
+                :event="event"
+                :key="event.id"
+              />
             </div>
           </div>
         </div>
@@ -37,7 +43,10 @@ import MarsLog from '@/components/gamedashboard/left/MarsLog.vue';
 })
 export default class ContainerPhase extends Vue {
   mounted() {
-    document.getElementById('hscroll').addEventListener('wheel', this.handleScroll);
+    let scrollElement = document.getElementById('hscroll');
+    if (scrollElement) {
+      scrollElement.addEventListener('wheel', this.handleScroll);
+    }
   }
 
   handleScroll(e) {
