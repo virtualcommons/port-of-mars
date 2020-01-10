@@ -1,4 +1,4 @@
-// NEED TO REFACTOR
+// TODO: NEED TO REFACTOR
 
 .container-trade,
 .trade-row {
@@ -9,7 +9,6 @@
 .container-trade {
   padding: 0.5rem;
   color: $space-white;
-  background-color: green;
 
   .trade-row {
     @include row;

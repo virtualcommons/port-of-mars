@@ -1,0 +1,46 @@
+.container-victory {
+  @include expand;
+  /* SET MAX SIZE OF SCREEN */
+  max-height: $max-screen-height;
+  max-width: $max-screen-width;
+  /* SET MIN SIZE OF SCREEN */
+  min-height: $min-screen-height;
+  min-width: $min-screen-width;
+  padding: 1rem;
+  @include make-column-and-center;
+  justify-content: space-around;
+  background-color: $space-gray;
+
+  h1 {
+  }
+
+  .text {
+    @include make-column-and-center;
+
+    p {
+      margin: 0.5rem;
+      font-size: $font-large;
+      text-align: center;
+      color: $space-white;
+    }
+  }
+
+  .buttons {
+    @include make-center;
+
+    button {
+      @include reset-button;
+      height: 3rem;
+      width: 12.5rem;
+      border: 0.0625rem solid $space-orange;
+      margin: 0.5rem;
+      color: $space-orange;
+      @include default-transition-base;
+
+      &:hover {
+        color: $space-gray;
+        background-color: $space-orange;
+      }
+    }
+  }
+}
