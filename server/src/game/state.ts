@@ -439,17 +439,17 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
   }
 
   discard(id: number) {
-    const index = this.purchasable.findIndex(acc => acc.id !== id);
+    const index = this.purchasable.findIndex(acc => acc.id === id);
     if (index < 0) {
        return;
     }
     this.purchasable.splice(index, 1);
     this.deck.push(id);
   }
-  
+
   refreshPurchasableAccomplishments(role: Role){
     const nAccomplishmentsToDraw = Math.min(3 - this.purchasable.length,this.deck.length);
-    
+
     for(let i = 0; i < nAccomplishmentsToDraw; i++) {
       const id = this.deck.shift();
       const newAccomplishment = new Accomplishment(getAccomplishmentByID(role, id!));
@@ -715,13 +715,13 @@ export class Player extends Schema implements PlayerData {
         minCostResource = k
       }
     }
-  
+
     if(leftOvers == 0){
       while(leftOvers+minCost <= 6){
         (leftOverInvestments as any)[minCostResource] += 1
         leftOvers+=minCost
       }
-  
+
       while(leftOvers < 10){
         leftOverInvestments.upkeep +=1
         leftOvers+=1
@@ -734,7 +734,7 @@ export class Player extends Schema implements PlayerData {
   invest(investment?: InvestmentData,leftOverInvestments?: InvestmentData) {
 
     investment = investment ?? this.pendingInvestments;
-    leftOverInvestments = leftOverInvestments ?? PendingInvestment.defaults()  
+    leftOverInvestments = leftOverInvestments ?? PendingInvestment.defaults()
 
     for (const [k,v] of Object.entries(investment)){
       (investment as any)[k] += (leftOverInvestments as any)[k]
@@ -743,7 +743,7 @@ export class Player extends Schema implements PlayerData {
 
     this.contributedUpkeep = investment.upkeep;
     this.inventory.update(investment);
-    console.log(this.inventory.toJSON())
+    // console.log(this.inventory.toJSON())
   }
 
   updateReadiness(ready: boolean): void {

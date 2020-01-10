@@ -25,7 +25,10 @@
     </div>
     <div class="accomplishment-cards">
       <div class="available" v-if="activeView == 'available'">
-        <p v-if="purchasableAccomplishments.length === 0" class="available-empty">
+        <p
+          v-if="purchasableAccomplishments.length === 0"
+          class="available-empty"
+        >
           No Available Accomplishments
         </p>
         <CardAccomplishment
@@ -33,14 +36,6 @@
           :key="accomplishment.id"
           :accomplishment="accomplishment"
         />
-        <!-- NEED TO FIX DISCARD PHASE ABILITY -->
-        <!-- <button
-          class="discard-button"
-          :style="{ display: canDiscard }"
-          @click="handleDiscardAccomplishment(accomplishment)"
-        >
-          <img :src="require(`@/assets/trashIcon.svg`)" />
-        </button> -->
       </div>
 
       <div class="purchased" v-if="activeView == 'purchased'">
@@ -80,31 +75,12 @@ export default class ContainerAccomplishments extends Vue {
     return this.$store.getters.player.accomplishment.bought;
   }
 
-  get canDiscard() {
-    let phase = this.$tstore.state.phase;
-    if (phase === Phase.discard) {
-      this.setWidth = '95%';
-      return '';
-    } else {
-      this.setWidth = '100%';
-      return 'none';
-    }
-  }
-
   private handleClick(view: string) {
     this.activeView = view;
   }
 
   private handleStyle(view: string) {
     return this.activeView == view ? { color: 'var(--space-orange)' } : '';
-  }
-
-  private handleDiscardAccomplishment(a: any) {
-    this.$root.$emit('openModalConfirmation', {
-      text: `Select 'Yes' if you want to draw another card.`,
-      type: 'discardAccomplishment',
-      actionData: a.id
-    });
   }
 }
 </script>

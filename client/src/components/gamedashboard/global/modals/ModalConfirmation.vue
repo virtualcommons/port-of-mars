@@ -4,7 +4,12 @@
       <p class="header">Are you sure?</p>
       <p class="details">{{ modalData.text }}</p>
     </div>
-    <button class="confirm" type="button" name="Confirm Button" @click="handleConfirmation">
+    <button
+      class="confirm"
+      type="button"
+      name="Confirm Button"
+      @click="handleConfirmation"
+    >
       Yes
     </button>
   </div>
@@ -23,7 +28,10 @@ export default class ModalConfirmation extends Vue {
   private handleConfirmation() {
     switch (this.modalData.type) {
       case 'discardAccomplishment':
-        this.$api.discardAccomplishment(this.modalData.action);
+        console.log('this.modalData.action: ', this.modalData.actionData);
+        this.$api.discardAccomplishment(this.modalData.actionData);
+      default:
+        this.$root.$emit('closeModal');
     }
   }
 }

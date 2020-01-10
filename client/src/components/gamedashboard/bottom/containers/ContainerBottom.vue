@@ -6,7 +6,8 @@
         <!-- SCSS REVISIT -->
         <ContainerEvents v-else-if="gamePhase == phase.events" />
         <ContainerTrade v-else-if="gamePhase == phase.trade" />
-        <ContainerPurchase v-else-if="gamePhase == phase.purchase"/>
+        <ContainerPurchase v-else-if="gamePhase == phase.purchase" />
+        <ContainerDiscard v-else-if="gamePhase == phase.discard" />
         <ContainerDefault v-else />
       </div>
     </div>
@@ -20,6 +21,7 @@ import ContainerInvestments from '@/components/gamedashboard/bottom/containers/C
 import ContainerDefault from '@/components/gamedashboard/bottom/containers/ContainerDefault.vue';
 import ContainerTrade from '@/components/gamedashboard/bottom/containers/ContainerTrade.vue';
 import ContainerPurchase from '@/components/gamedashboard/bottom/containers/ContainerPurchase.vue';
+import ContainerDiscard from '@/components/gamedashboard/bottom/containers/ContainerDiscard.vue';
 import { Phase } from 'shared/types';
 
 @Component({
@@ -28,7 +30,8 @@ import { Phase } from 'shared/types';
     ContainerTrade,
     ContainerDefault,
     ContainerInvestments,
-    ContainerPurchase
+    ContainerPurchase,
+    ContainerDiscard
   }
 })
 export default class ContainerBottom extends Vue {

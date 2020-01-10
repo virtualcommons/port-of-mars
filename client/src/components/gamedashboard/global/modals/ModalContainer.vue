@@ -2,8 +2,17 @@
   <div class="modal-container" v-if="visible">
     <div class="wrapper">
       <component :is="modalView" :modalData="modalData"></component>
-      <button @click="handleClose" type="button" name="Close Button" class="modal-close">
-        <font-awesome-icon :icon="['fas', 'times']" size="md" class="close-icon" />
+      <button
+        @click="handleClose"
+        type="button"
+        name="Close Button"
+        class="modal-close"
+      >
+        <font-awesome-icon
+          :icon="['fas', 'times']"
+          size="lg"
+          class="close-icon"
+        />
       </button>
     </div>
   </div>
@@ -50,6 +59,10 @@ export default class ModalContainer extends Vue {
       this.modalView = 'ModalServer';
       this.modalData = data;
       this.visible = true;
+    });
+
+    this.$root.$on('closeModal', data => {
+      this.visible = false;
     });
   }
 

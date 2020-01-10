@@ -68,16 +68,26 @@ export default class ContainerBottom extends Vue {
       timeBlocks -
       _.reduce(
         INVESTMENTS,
-        (tot, investment) => tot + pendingInvestments[investment] * costs[investment],
+        (tot, investment) =>
+          tot + pendingInvestments[investment] * costs[investment],
         0
       )
     );
   }
 
-  private setInvestmentAmount(msg: { name: Resource; units: number; cost: number }) {
-    const pendingInvestments = _.clone(this.$tstore.getters.player.pendingInvestments);
+  private setInvestmentAmount(msg: {
+    name: Resource;
+    units: number;
+    cost: number;
+  }) {
+    const pendingInvestments = _.clone(
+      this.$tstore.getters.player.pendingInvestments
+    );
     pendingInvestments[msg.name] = msg.units;
-    if (msg.units >= 0 && this.getRemainingTimeBlocks(pendingInvestments) >= 0) {
+    if (
+      msg.units >= 0 &&
+      this.getRemainingTimeBlocks(pendingInvestments) >= 0
+    ) {
       this.$tstore.commit('SET_PENDING_INVESTMENT_AMOUNT', {
         investment: msg.name,
         units: msg.units,
