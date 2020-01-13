@@ -1,0 +1,22 @@
+.loadingscreen {
+  height: 100vh;
+  width: 100vw;
+  @include make-column-and-center;
+
+  h1 {
+    text-transform: uppercase;
+    letter-spacing: 0.25rem;
+    font-size: 6rem;
+    font-weight: 700;
+    color: $space-orange;
+  }
+
+  h2 {
+    margin-bottom: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.25rem;
+    font-size: 2rem;
+    font-weight: 700;
+    color: $space-orange;
+  }
+}

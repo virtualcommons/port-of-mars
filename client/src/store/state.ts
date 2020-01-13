@@ -88,42 +88,34 @@ export interface State extends GameData {
   role: Role;
   logs: Array<MarsLogMessageData>;
   players: PlayerClientSet;
-
   phase: Phase;
   layout: string;
-
+  loading: boolean;
   activeNotifications: Array<String>;
-
   eventView: EventClientView;
-
   quizQuestions: Array<QuizQuestionData>;
   quizResults: Array<QuizResultPackage>;
 }
 
 export const initialStoreState: State = {
-  // server side
-  role: RESEARCHER,
-  logs: [],
-  messages: [],
-  upkeep: 100,
-  round: 1,
+  // GameData
   players: defaultPlayerClientSet(),
   timeRemaining: 300,
+  round: 1,
+  phase: Phase.pregame,
+  upkeep: 100,
+  messages: [],
   marsEvents: [],
+  logs: [],
   marsEventsProcessed: 0,
   tradeSet: {},
-  // THROWING ERROR
-  // maxRound: 0,
 
-  // phase
-  phase: Phase.pregame,
-
+  // State
+  role: RESEARCHER,
   layout: 'default-layout',
-
+  loading: false,
   activeNotifications: [],
-
   eventView: EventClientView.VOTE_FOR_PLAYER_HERO_PARIAH,
-
   quizQuestions: [],
   quizResults: []
 };

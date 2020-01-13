@@ -10,7 +10,11 @@ import {
 } from 'shared/types';
 import { Vue } from 'vue-property-decorator';
 import * as _ from 'lodash';
-import { defaultPendingInvestment, PlayerClientData, State } from '@/store/state';
+import {
+  defaultPendingInvestment,
+  PlayerClientData,
+  State
+} from '@/store/state';
 
 function SET_GAME_PHASE(state: State, payload: Phase) {
   state.phase = payload;
@@ -28,10 +32,16 @@ function ADD_TO_EVENTS(state: State, event: MarsEventData) {
   state.marsEvents.push(event);
 }
 function REMOVE_FROM_EVENTS(state: State, event: MarsEventData) {
-  const index = _.findIndex(state.marsEvents, (el: MarsEventData) => el.id === event.id);
+  const index = _.findIndex(
+    state.marsEvents,
+    (el: MarsEventData) => el.id === event.id
+  );
   state.marsEvents.splice(index, 1);
 }
-function CHANGE_EVENT(state: State, payload: { event: MarsEventData; index: number }) {
+function CHANGE_EVENT(
+  state: State,
+  payload: { event: MarsEventData; index: number }
+) {
   Vue.set(state.marsEvents, payload.index, payload.event);
 }
 function SET_EVENTS_FOR_ROUND(state: State, payload: any) {
@@ -42,6 +52,11 @@ function SET_TIME_REMAINING(state: State, timeRemaining: number) {
 }
 function SET_MARS_EVENTS_PROCESSED(state: State, marsEventsProcessed: number) {
   state.marsEventsProcessed = marsEventsProcessed;
+}
+// TODO: REMOVE BEFORE DEPLOY
+function TOGGLE_LOADING(state: State) {
+  const reverse = !state.loading;
+  state.loading = reverse;
 }
 
 export default {
@@ -54,4 +69,5 @@ export default {
   SET_EVENTS_FOR_ROUND,
   SET_TIME_REMAINING,
   SET_MARS_EVENTS_PROCESSED,
+  TOGGLE_LOADING
 };
