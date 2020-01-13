@@ -21,8 +21,8 @@
           <div class="loading-progress">
             <p class="progress-text">86<span>%</span></p>
             <!-- REMOVE LATER -->
-            <router-link to="/game">
-              <button class="continue">Continue to Game</button>
+            <router-link :to="'game'">
+              <span class="continue">Continue to Game</span>
             </router-link>
             <!-- REMOVE LATER -->
           </div>
@@ -45,11 +45,17 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import {Vue, Component, Inject} from 'vue-property-decorator';
 import { ROLES } from 'shared/types';
+import { Client } from 'colyseus.js';
+import {applyWaitingServerResponses} from "@/api/waitingLobby/response";
+import store from "@/store";
+import {WaitingRequestAPI} from "@/api/waitingLobby/request";
 
 @Component({})
 export default class WaitingLobby extends Vue {
+  @Inject() $client!: Client;
+
   private hint: string = '';
   private hintCount: number = 0;
   private hints: Array<string> = [

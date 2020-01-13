@@ -37,40 +37,6 @@ declare module 'vue/types/vue' {
   }
 }
 
-export function clientRunner(type: string) {
-  setupManager(type).then($api => {
-    new Vue({
-      router,
-      store,
-      provide() {
-        return { $api };
-      },
-      render: h => h(App)
-    }).$mount('#app');
-  });
-}
-
-async function setupManager(type: string) {
-  const client = new Colyseus.Client('ws://localhost:2567');
-  if (type == 'start') {
-    const waitingRoom = await client.joinOrCreate('waiting');
-    applyWaitingServerResponses(waitingRoom, store);
-    return new WaitingRequestAPI(waitingRoom);
-  }
-
-  if (type == 'game') {
-    const gameRoom = await client.joinOrCreate('game');
-    applyGameServerResponses(gameRoom, store);
-    return new GameRequestAPI(gameRoom);
-  }
-
-  if (type == 'quiz') {
-    const quizRoom = await client.joinOrCreate('quiz');
-    applyQuizServerResponses(quizRoom, store);
-    return new QuizRequestAPI(quizRoom);
-  }
-}
-
 Vue.use(Vuex);
 
 Object.defineProperty(Vue.prototype, '$tstore', {
@@ -81,15 +47,13 @@ Object.defineProperty(Vue.prototype, '$tstore', {
 
 Vue.config.productionTip = false;
 
-clientRunner('start');
+const $client = new Colyseus.Client('ws://localhost:2567');
 
-// colyseusSetup().then(($api) => {
-//   new Vue({
-//     router,
-//     store,
-//     provide() {
-//       return { $api };
-//     },
-//     render: h => h(App),
-//   }).$mount('#app');
-// });
+new Vue({
+  router,
+  store,
+  render: h => h(App),
+  provide() {
+    return { $client }
+  }
+}).$mount('#app');

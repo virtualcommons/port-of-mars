@@ -1,4 +1,3 @@
-import { GetAccomplishmentsByPerson, buyAccomplishment } from '@/models';
 import * as _ from 'lodash';
 import { State } from '@/store/state';
 import { getRole } from '@/store/mutationFolder/util';

@@ -3,18 +3,18 @@
 </template>
 
 <script lang="ts">
-import { Component, Inject, Vue } from 'vue-property-decorator';
-import { GameRequestAPI } from '@/api/gameAPI/request';
+import {Component, Inject, InjectReactive, Vue} from 'vue-property-decorator';
+import { GameRequestAPI } from '@/api/game/request';
 
 @Component({})
 export default class Master extends Vue {
-  @Inject() readonly $api!: GameRequestAPI;
+  @Inject() readonly api!: GameRequestAPI;
 
   onKeyDown(e: any) {
     if (e.key === 'r') {
-      this.$api.setNextPhase();
+      this.api.setNextPhase();
     } else if (e.key === 'q') {
-      this.$api.resetGame();
+      this.api.resetGame();
     } else if (e.key === '.') {
       console.log('TOGGLE LOADING SCREEN');
       this.$store.commit('TOGGLE_LOADING');
@@ -48,7 +48,7 @@ export default class Master extends Vue {
   }
 
   phaseRunner() {
-    this.$api.setNextPhase();
+    this.api.setNextPhase();
   }
 }
 </script>

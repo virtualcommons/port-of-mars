@@ -3,8 +3,9 @@ import Router from 'vue-router';
 import Home from '@/views/Home.vue';
 import Login from '@/views/Login.vue';
 import WaitingLobby from '@/views/WaitingLobby.vue';
-import GameDashboard from '@/views/GameDashboard.vue';
+import Game from '@/views/Game.vue';
 import TutorialQuiz from '@/views/TutorialQuiz.vue';
+import Tutorial from "@/views/Tutorial.vue";
 
 Vue.use(Router);
 
@@ -27,21 +28,18 @@ export default new Router({
     },
     {
       path: '/game',
-      name: 'GameDashboard',
-      component: GameDashboard
+      name: 'Game',
+      component: Game
     },
     {
       path: '/quiz',
       name: 'TutorialQuiz',
       component: TutorialQuiz
+    },
+    {
+      path: '/tutorial',
+      name: 'Tutorial',
+      component: Tutorial
     }
-    // {
-    //   path: '/about',
-    //   name: 'about',
-    //   // route level code-splitting
-    //   // this generates a separate chunk (about.[hash].js) for this route
-    //   // which is lazy-loaded when the route is visited.
-    //   component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
-    // },
   ]
 });

@@ -35,14 +35,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Inject } from 'vue-property-decorator';
+import {Vue, Component, Prop, InjectReactive, Inject} from 'vue-property-decorator';
 import { AccomplishmentData, INVESTMENTS, Resource } from 'shared/types';
 import * as _ from 'lodash';
-import GameRequestAPI from '../../../../api/game/request';
+import {GameRequestAPI} from '@/api/game/request';
 
 @Component({})
 export default class BarAccomplishment extends Vue {
-  @Inject() readonly $api: GameRequestAPI;
+  @Inject() readonly api!: GameRequestAPI;
 
   @Prop({
     default: () => ({
@@ -85,7 +85,7 @@ export default class BarAccomplishment extends Vue {
 
   private handlePurchase() {
     if (this.canPurchaseAccomplishment) {
-      this.$api.purchaseAccomplishment(this.accomplishment);
+      this.api.purchaseAccomplishment(this.accomplishment);
     }
   }
 }

@@ -1,20 +1,20 @@
 <template>
   <div id="app" class="game">
-    <component :is="layout" />
+    <router-view :key="$route.path"/>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import DefaultLayout from '@/layouts/DefaultLayout.vue';
-import TutorialLayout from '@/layouts/TutorialLayout.vue';
+import Game from '@/views/Game.vue';
+import Tutorial from '@/views/Tutorial.vue';
 import BootstrapVue from 'bootstrap-vue';
 Vue.use(BootstrapVue);
 
 @Component({
   components: {
-    DefaultLayout,
-    TutorialLayout
+    Game,
+    Tutorial
   }
 })
 export default class Home extends Vue {

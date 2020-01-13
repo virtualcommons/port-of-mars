@@ -37,9 +37,12 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import {Component, Vue, InjectReactive, Inject} from 'vue-property-decorator';
 import QuizForm from '@/components/tutorial/QuizForm.vue';
 import { QuizRequestAPI } from '@/api/quiz/request';
+import {applyQuizServerResponses} from "@/api/quiz/response";
+import store from "@/store";
+import {Client} from 'colyseus.js';
 @Component({
   components: {
     QuizForm
@@ -50,6 +53,16 @@ export default class TutorialQuiz extends Vue {
   private index = 0;
   private complete = false;
   private submitted = false;
+
+  @Inject() readonly $client!: Client;
+
+  api!: QuizRequestAPI = new QuizRequestAPI();
+
+  async created() {
+    const quizRoom = await this.$client.joinOrCreate('quiz');
+    applyQuizServerResponses(quizRoom, store);
+    this.api.connect(quizRoom);
+  }
 
   get quizQuestions() {
     const questions = this.$store.state.quizQuestions;
@@ -71,8 +84,6 @@ export default class TutorialQuiz extends Vue {
     return info;
   }
 
-  @Inject() readonly $api!: QuizRequestAPI;
-
   handleUpdate(id, name) {
     if (name == 1) this.answersArray.splice(this.index, 1, id);
 
@@ -83,7 +94,7 @@ export default class TutorialQuiz extends Vue {
         this.index = (this.index + name) % this.quizQuestions.length;
       if (this.index <= -1) this.index = this.quizQuestions.length - 1;
     } else {
-      this.$api.submitQuiz(this.answersArray);
+      this.api.submitQuiz(this.answersArray);
       this.submitted = true;
     }
   }

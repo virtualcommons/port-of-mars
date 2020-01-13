@@ -2,7 +2,11 @@ import { Room, Client } from 'colyseus.js';
 import { WaitingRequests, SwitchRooms } from 'shared/waitingLobby/requests';
 
 export class WaitingRequestAPI {
-  constructor(public room: Room) {}
+  room!: Room;
+
+  connect(room: Room) {
+    this.room = room;
+  }
 
   public send(req: WaitingRequests) {
     this.room.send(req);

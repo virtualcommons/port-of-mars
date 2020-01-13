@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Inject, Vue } from 'vue-property-decorator';
+import {Component, Inject, InjectReactive, Vue} from 'vue-property-decorator';
 import Round from '@/components/gamedashboard/top/Round.vue';
 import { PHASE_LABELS } from 'shared/types';
 import ModalConfirmation from '@/components/gamedashboard/global/modals/ModalConfirmation.vue';
@@ -48,7 +48,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
   }
 })
 export default class Phase extends Vue {
-  @Inject() private $api!: GameRequestAPI;
+  @Inject() private api!: GameRequestAPI;
 
   private btnDisabled = false;
 
@@ -87,12 +87,12 @@ export default class Phase extends Vue {
   private submitDone() {
     switch (this.phase) {
       case s.Phase.invest:
-        this.$api.investTimeBlocks(
+        this.api.investTimeBlocks(
           this.$tstore.getters.player.pendingInvestments
         );
       default:
         this.btnDisabled = true;
-        this.$api.setPlayerReadiness(true);
+        this.api.setPlayerReadiness(true);
     }
   }
 
@@ -103,7 +103,7 @@ export default class Phase extends Vue {
       // TODO: Un-invest timeblocks
       default:
         this.btnDisabled = false;
-        this.$api.setPlayerReadiness(false);
+        this.api.setPlayerReadiness(false);
     }
   }
 

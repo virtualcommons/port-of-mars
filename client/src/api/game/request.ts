@@ -1,4 +1,4 @@
-import { Room } from 'colyseus.js';
+import {Client, Room} from 'colyseus.js';
 import {
   SendChatMessageData,
   Requests,
@@ -20,7 +20,11 @@ import {
 } from 'shared/types';
 
 export class GameRequestAPI {
-  constructor(public room: Room) {}
+  room!: Room;
+
+  public connect(room: Room) {
+    this.room = room;
+  }
 
   public send(req: Requests) {
     this.room.send(req);

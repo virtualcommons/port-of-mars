@@ -16,15 +16,15 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Inject } from 'vue-property-decorator';
+import {Vue, Component, InjectReactive, Inject} from 'vue-property-decorator';
 import { GameRequestAPI } from '@/api/game/request';
 
 @Component({})
 export default class ContainerVictory extends Vue {
-  @Inject() readonly $api!: GameRequestAPI;
+  @Inject() readonly api!: GameRequestAPI;
 
   private handleRestart() {
-    this.$api.resetGame();
+    this.api.resetGame();
   }
 
   private handleExit() {

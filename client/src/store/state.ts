@@ -112,8 +112,9 @@ export const initialStoreState: State = {
 
   // State
   role: RESEARCHER,
-  layout: 'default-layout',
+  layout: 'game',
   loading: false,
+
   activeNotifications: [],
   eventView: EventClientView.VOTE_FOR_PLAYER_HERO_PARIAH,
   quizQuestions: [],

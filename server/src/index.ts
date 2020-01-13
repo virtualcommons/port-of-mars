@@ -29,6 +29,7 @@ function createApp(connection: any) {
 
 // register your room handlers
 gameServer.define('game', GameRoom);
+gameServer.define('tutorial', GameRoom);
 gameServer.define('waiting',WaitingRoom);
 gameServer.define('quiz', QuizRoom);
 

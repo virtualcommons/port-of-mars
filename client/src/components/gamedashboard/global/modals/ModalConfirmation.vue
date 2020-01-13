@@ -16,19 +16,19 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Inject } from 'vue-property-decorator';
+import {Component, Vue, Prop, InjectReactive, Inject} from 'vue-property-decorator';
 import { GameRequestAPI } from '@/api/game/request';
 
 @Component({})
 export default class ModalConfirmation extends Vue {
   @Prop({}) private modalData!: object;
 
-  @Inject() readonly $api!: GameRequestAPI;
+  @Inject() readonly api!: GameRequestAPI;
 
   private handleConfirmation() {
     switch (this.modalData.type) {
       case 'discardAccomplishment':
-        this.$api.discardAccomplishment(this.modalData.actionData);
+        this.api.discardAccomplishment(this.modalData.actionData);
       default:
         this.$root.$emit('closeModal');
     }

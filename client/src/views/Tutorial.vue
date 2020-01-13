@@ -1,7 +1,7 @@
 <template>
   <div class="tutorial-layout">
     <TourModal @hide="startTourOnHideModal" />
-    <router-view />
+    <GameDashboard />
     <v-tour name="gameTour" :steps="steps" :callbacks="tourCallbacks" :options="tourOptions">
       <template v-slot="tour">
         <transition name="fade">
@@ -38,21 +38,47 @@
 </template>
 
 <script lang="ts">
-import { Vue, Inject, Component } from 'vue-property-decorator';
+import {
+  Vue,
+  Component,
+  Inject,
+  Provide
+} from 'vue-property-decorator';
 import VueTour from 'vue-tour';
 import TourModal from '@/components/tutorial/TourModal.vue';
 import { GameRequestAPI } from '@/api/game/request';
+import {applyGameServerResponses} from "@/api/game/response";
+import {Client} from 'colyseus.js'
+import GameDashboard from "@/components/GameDashboard.vue";
 require('vue-tour/dist/vue-tour.css');
 Vue.use(VueTour);
 @Component({
-  name: 'tutorial-layout',
+  name: 'tutorial',
   components: {
+    GameDashboard,
     TourModal
   }
 })
-export default class TutorialLayout extends Vue {
+export default class Tutorial extends Vue {
+  @Provide()
+  api = new GameRequestAPI();
+
   @Inject()
-  readonly $api!: GameRequestAPI;
+  $client!: Client;
+
+  hasApi = false;
+
+  async created() {
+    const gameRoom = await this.$client.joinOrCreate('tutorial');
+    applyGameServerResponses(gameRoom, this.$tstore);
+    this.api.connect(gameRoom);
+    this.hasApi = true;
+  }
+
+  destroyed() {
+    this.api.room.leave();
+  }
+
   // class for the active step element
   TOUR_ACTIVE_CLASS: string = 'tour-active';
   // class to show tour is active for click events
@@ -68,7 +94,7 @@ export default class TutorialLayout extends Vue {
   };
   steps = [
     {
-      //  gamedashboard > containers > ContainerUpkeep.vue
+      // gamedashboard > containers > ContainerUpkeep.vue
       target: '.v-step-0',
       content:
         'The game starts with Upkeep at 100. This represents the habitat at peak ' +
@@ -311,7 +337,7 @@ export default class TutorialLayout extends Vue {
     currentStepElement.classList.add(this.TOUR_ACTIVE_CLASS);
     // go to next events phase 5 seconds after tour starts
     setTimeout(() => {
-      this.$api.setNextPhase();
+      this.api.setNextPhase();
     }, 6500);
   }
   previousStepCallback(currentStep: any) {
@@ -338,11 +364,11 @@ export default class TutorialLayout extends Vue {
                 ${currentStep + 1}`);
 
     if (currentStep === 6) {
-      this.$api.setNextPhase();
+      this.api.setNextPhase();
     }
 
     if (currentStep === 18) {
-      this.$api.setNextPhase();
+      this.api.setNextPhase();
     }
   }
   stopTourCallback(currentStep: any) {

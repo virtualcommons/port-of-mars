@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Inject } from 'vue-property-decorator';
+import {Component, Vue, Prop,  InjectReactive, Inject} from 'vue-property-decorator';
 import { canPurchaseAccomplishment } from 'shared/validation';
 import { AccomplishmentData, INVESTMENTS, Resource } from 'shared/types';
 import { GameRequestAPI } from '@/api/game/request';
@@ -23,7 +23,7 @@ import * as _ from 'lodash';
 
 @Component({})
 export default class ModalAccomplishment extends Vue {
-  @Inject() readonly $api!: GameRequestAPI;
+  @Inject() readonly api!: GameRequestAPI;
 
   @Prop({
     default: () => ({
@@ -59,7 +59,7 @@ export default class ModalAccomplishment extends Vue {
   }
 
   private handlePurchase() {
-    this.$api.purchaseAccomplishment(this.cardData);
+    this.api.purchaseAccomplishment(this.cardData);
   }
 }
 </script>

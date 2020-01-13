@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Inject } from 'vue-property-decorator';
+import {Vue, Component, InjectReactive, Inject} from 'vue-property-decorator';
 import { GameRequestAPI } from '@/api/game/request';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons/faPaperPlane';
@@ -49,7 +49,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 @Component({})
 export default class Chat extends Vue {
-  @Inject() readonly $api!: GameRequestAPI;
+  @Inject() readonly api!: GameRequestAPI;
 
   private pendingMessage: string = '';
 
@@ -76,7 +76,7 @@ export default class Chat extends Vue {
 
   private submitToChat() {
     if (this.pendingMessage !== '') {
-      this.$api.sendChatMessage(this.pendingMessage);
+      this.api.sendChatMessage(this.pendingMessage);
       this.pendingMessage = '';
     }
   }

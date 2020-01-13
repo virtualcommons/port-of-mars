@@ -36,11 +36,11 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Inject } from 'vue-property-decorator';
+import {Vue, Component, Prop, InjectReactive, Inject} from 'vue-property-decorator';
 import * as _ from 'lodash';
 import TradeOptions from './TradeOptions';
 import { TradeData, TradeAmountData, ResourceAmountData } from 'shared/types';
-import { GameRequestAPI } from '../../api/game/request';
+import { GameRequestAPI } from '@/api/game/request';
 
 @Component({
   components: {
@@ -71,7 +71,7 @@ export default class TradeRequest extends Vue {
   }
 
   @Inject()
-  readonly $api:GameRequestAPI;
+  readonly api:GameRequestAPI;
 
   sentResources:ResourceAmountData = {};
   exchangeResources:ResourceAmountData = {};
@@ -105,7 +105,7 @@ export default class TradeRequest extends Vue {
         to:toPackage
       }
 
-      this.$api.sendTradeRequest(tradeDataPackage);
+      this.api.sendTradeRequest(tradeDataPackage);
       this.name = "";
     }
 

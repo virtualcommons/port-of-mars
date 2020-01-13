@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Inject } from 'vue-property-decorator';
+import {Vue, Component, Prop, InjectReactive, Inject} from 'vue-property-decorator';
 import { GameRequestAPI } from '@/api/game/request';
 import { TradeData,TradeAmountData  } from 'shared/types';
 
@@ -57,7 +57,7 @@ export default class Trade extends Vue {
 
   private role = this.$store.state.role;
 
-  @Inject() $api!: GameRequestAPI;
+  @Inject() api!: GameRequestAPI;
 
   get clientValidation(){
     let hasResourcesToSend = true;
@@ -75,12 +75,12 @@ export default class Trade extends Vue {
 
   handleAcceptTrade() {
     if(this.clientValidation){
-      this.$api.acceptTradeRequest(this.id);
+      this.api.acceptTradeRequest(this.id);
     }
   }
 
   handleTradeReject(){
-    this.$api.rejectTradeRequest(this.id);
+    this.api.rejectTradeRequest(this.id);
   }
 }
 </script>
