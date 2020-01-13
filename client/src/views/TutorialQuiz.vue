@@ -101,6 +101,6 @@ export default class TutorialQuiz extends Vue {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import '@/stylesheets/views/TutorialQuiz.scss';
 </style>
