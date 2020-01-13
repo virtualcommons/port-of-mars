@@ -1,0 +1,41 @@
+.home {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  @include make-center;
+}
+.wrapper {
+  position: relative;
+  z-index: 1;
+  height: 80vh;
+  width: 100vw;
+  @include make-column-and-center;
+  justify-content: space-around;
+
+  h1 {
+    text-transform: uppercase;
+    letter-spacing: 0.25rem;
+    font-size: 11rem;
+    font-weight: 700;
+    color: $space-orange;
+  }
+
+  .buttons {
+    @include make-center;
+
+    button {
+      @include reset-button;
+      height: 3.5rem;
+      width: 18rem;
+      border: 0.0625rem solid $space-orange;
+      margin: 0.5rem;
+      color: $space-orange;
+      @include default-transition-base;
+
+      &:hover {
+        color: $space-gray;
+        background-color: $space-orange;
+      }
+    }
+  }
+}
