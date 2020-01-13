@@ -448,7 +448,7 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
   }
   
   refreshPurchasableAccomplishments(role: Role){
-    const nAccomplishmentsToDraw = 3 - this.purchasable.length;
+    const nAccomplishmentsToDraw = Math.min(3 - this.purchasable.length,this.deck.length);
     
     for(let i = 0; i < nAccomplishmentsToDraw; i++) {
       const id = this.deck.shift();
@@ -689,7 +689,7 @@ export class Player extends Schema implements PlayerData {
       legacy: - accomplishment.legacy,
       science: - accomplishment.science
     };
-    this.contributedUpkeep -= accomplishment.upkeep;
+    this.contributedUpkeep -= Math.abs(accomplishment.upkeep);
     this.victoryPoints += accomplishment.victoryPoints;
     this.inventory.update(inv)
   }
