@@ -13,12 +13,11 @@ export default class Master extends Vue {
   onKeyDown(e: any) {
     if (e.key === 'r') {
       this.$api.setNextPhase();
-    } else if (e.key === ',') {
-      this.$root.$emit('openEvent');
-    } else if (e.key === '.') {
-      this.$root.$emit('closeEvent');
     } else if (e.key === 'q') {
       this.$api.resetGame();
+    } else if (e.key === '.') {
+      console.log('TOGGLE LOADING SCREEN');
+      this.$store.commit('TOGGLE_LOADING');
     } else if (e.key === 'm') {
       const dataPackage = {
         performedBy: this.$store.state.role,
@@ -28,19 +27,14 @@ export default class Master extends Vue {
       };
       this.$store.commit('ADD_TO_MARS_LOG', dataPackage);
     } else if (e.key === 'n') {
-      // this.$store.commit(
-      //   'CREATE_NOTIFICATION',
-      //   'this is just a little reminder that it will be alright!'
-      // );
+      this.$store.commit(
+        'CREATE_NOTIFICATION',
+        'this is just a little reminder that it will be alright!'
+      );
     } else if (e.key === ']') {
       this.$root.$emit('openModalServer', {
-        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vestibulum.'
-      });
-    } else if (e.key === '[') {
-      this.$root.$emit('openModalConfirmation', {
-        text: `Select 'Yes' if you want to draw another card.`,
-        type: 'discardAccomplishment',
-        actionData: 3
+        text:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vestibulum.'
       });
     }
   }
