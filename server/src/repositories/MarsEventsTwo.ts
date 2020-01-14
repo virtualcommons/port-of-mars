@@ -372,24 +372,6 @@ const marsEvents: Array<MarsEventDataTwo> = enumerate(
       },
       duration: 1
     },
-    // DUPLICATES?
-    {
-      name: 'Out of Comission',
-      copies: 1,
-      effectText: 'The Politician receives only 3 Time Blocks this round.',
-      flavorText: `The mental and physical health of all residents is critical to mission success. The absence of even one person can have rippling effects on the community.`,
-      effects: {
-        server: {
-          actions: [EventServerActions.PLAYER_MODIFY_TIMEBLOCKS_EQUALS_THREE]
-        },
-        client: {
-          view: [EventClientView.NO_CHANGE],
-          actions: []
-        }
-      },
-      duration: 1
-    },
-    // DUPLICATES?
     {
       name: 'Out of Commission',
       copies: 1,

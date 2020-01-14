@@ -166,13 +166,6 @@ const marsEvents: Array<MarsEventData> = enumerate(
       duration: 1
     },
     {
-      name: 'Out of Comission',
-      copies: 1,
-      effect: 'The Politician receives only 3 Time Blocks this round.',
-      flavorText: `The mental and physical health of all residents is critical to mission success. The absence of even one person can have rippling effects on the community.`,
-      duration: 1
-    },
-    {
       name: 'Out of Commission',
       copies: 1,
       effect: 'The Politician receives only 3 Time Blocks this round.',
