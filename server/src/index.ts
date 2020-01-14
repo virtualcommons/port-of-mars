@@ -19,19 +19,19 @@ function createApp(connection: any) {
     app.use(cors());
     app.use(express.json())
 
-    app.use('/', express.static(path.join(__dirname, 'static')))
-
     const server = http.createServer(app);
     const gameServer = new Server({
-    server,
-    express: app
+        server,
+        express: app
     });
 
-// register your room handlers
-gameServer.define('game', GameRoom);
-gameServer.define('tutorial', GameRoom);
-gameServer.define('waiting',WaitingRoom);
-gameServer.define('quiz', QuizRoom);
+    // register your room handlers
+    gameServer.define('game', GameRoom);
+    gameServer.define('tutorial', GameRoom);
+    gameServer.define('waiting',WaitingRoom);
+    gameServer.define('quiz', QuizRoom);
+
+    app.use(express.static('static'));
 
     gameServer.listen(port);
     console.log(`Listening on ws://localhost:${ port }`)
