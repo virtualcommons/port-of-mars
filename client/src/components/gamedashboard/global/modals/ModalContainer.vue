@@ -21,8 +21,8 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import ModalCard from '@/components/gamedashboard/global/modals/ModalCard.vue';
-import ModalConfirmation from '@/components/gamedashboard/global/modals/ModalConfirmation';
-import ModalServer from '@/components/gamedashboard/global/modals/ModalServer';
+import ModalConfirmation from '@/components/gamedashboard/global/modals/ModalConfirmation.vue';
+import ModalServer from '@/components/gamedashboard/global/modals/ModalServer.vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -49,19 +49,19 @@ export default class ModalContainer extends Vue {
       this.visible = true;
     });
 
-    this.$root.$on('openModalConfirmation', data => {
+    this.$root.$on('openModalConfirmation', (data: any) => {
       this.modalView = 'ModalConfirmation';
       this.modalData = data;
       this.visible = true;
     });
 
-    this.$root.$on('openModalServer', data => {
+    this.$root.$on('openModalServer', (data: any) => {
       this.modalView = 'ModalServer';
       this.modalData = data;
       this.visible = true;
     });
 
-    this.$root.$on('closeModal', data => {
+    this.$root.$on('closeModal', (data: any) => {
       this.visible = false;
     });
   }

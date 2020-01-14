@@ -21,7 +21,7 @@ import { GameRequestAPI } from '@/api/game/request';
 
 @Component({})
 export default class ModalConfirmation extends Vue {
-  @Prop({}) private modalData!: object;
+  @Prop({}) private modalData!: any;
 
   @Inject() readonly api!: GameRequestAPI;
 

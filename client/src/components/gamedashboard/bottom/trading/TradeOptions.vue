@@ -25,7 +25,8 @@ import * as _ from 'lodash';
 import { ResourceAmountData } from 'shared/types';
 @Component({})
 export default class TradeOptions extends Vue {
-  @Prop({ default: '' }) text;
+  @Prop({ default: '' }) text!: string;
+  @Prop() resourceReader!: any;
 
   private resources: ResourceAmountData = {
     science: 0,
@@ -39,8 +40,6 @@ export default class TradeOptions extends Vue {
     this.resourceReader(this.resources);
     return;
   }
-
-  @Prop() resourceReader;
 }
 </script>
 

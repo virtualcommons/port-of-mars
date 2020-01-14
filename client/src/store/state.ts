@@ -63,7 +63,7 @@ function defaultCostData(role: Role): ResourceCostData {
   };
 }
 
-function defaultInventory(role: Role): ResourceAmountData {
+export function defaultInventory(role?: Role): ResourceAmountData {
   return {
     science: 0,
     government: 0,

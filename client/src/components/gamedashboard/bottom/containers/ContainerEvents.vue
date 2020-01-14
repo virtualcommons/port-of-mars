@@ -1,3 +1,4 @@
+import {EventClientView} from "shared/types";
 <template>
   <div class="container-events">
     <div class="events-row">
@@ -18,7 +19,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import {Component, Vue} from 'vue-property-decorator';
 import EventContainer from '@/components/gamedashboard/bottom/events/EventContainer.vue';
 
 @Component({
@@ -30,16 +31,6 @@ export default class ContainerEvents extends Vue {
   private eventContentName: string = 'Out of Commission';
 
   private eventContentEffect: string = 'The Politician receives only 3 Time Blocks this round.';
-
-  get layout() {
-    console.log(`(${typeof this.$tstore.state.eventView}): ${this.$tstore.state.eventView}`);
-    switch (this.$tstore.state.eventView) {
-      case 'EVENT_TEST':
-        return 'EventTest';
-      default:
-        break;
-    }
-  }
 }
 </script>
 

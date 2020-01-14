@@ -16,6 +16,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
+import {MarsLogData} from "shared/types";
 
 @Component({})
 export default class MarsLog extends Vue {
@@ -32,7 +33,7 @@ export default class MarsLog extends Vue {
     return new Date(timestamp).toLocaleTimeString();
   }
 
-  marsLogColor(log: object) {
+  marsLogColor(log: MarsLogData) {
     switch (log.category) {
       case 'Reduce Upkeep':
         return { backgroundColor: 'var(--marslog-red)' };

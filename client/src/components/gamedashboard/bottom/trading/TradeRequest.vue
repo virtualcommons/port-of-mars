@@ -38,9 +38,10 @@
 <script lang="ts">
 import {Vue, Component, Prop, InjectReactive, Inject} from 'vue-property-decorator';
 import * as _ from 'lodash';
-import TradeOptions from './TradeOptions';
-import { TradeData, TradeAmountData, ResourceAmountData } from 'shared/types';
+import TradeOptions from './TradeOptions.vue';
+import {TradeData, TradeAmountData, ResourceAmountData, RESOURCES, Role} from 'shared/types';
 import { GameRequestAPI } from '@/api/game/request';
+import {defaultInventory} from "@/store/state";
 
 @Component({
   components: {
@@ -48,6 +49,12 @@ import { GameRequestAPI } from '@/api/game/request';
   }
 })
 export default class TradeRequest extends Vue {
+  @Inject()
+  readonly api!: GameRequestAPI;
+
+  sentResources: ResourceAmountData = defaultInventory();
+  exchangeResources: ResourceAmountData = defaultInventory();
+
   name = "";
 
   get otherPlayers(){
@@ -60,7 +67,7 @@ export default class TradeRequest extends Vue {
     const role = this.$store.state.role;
     const inventory = this.$store.state.players[role].inventory;
 
-    Object.keys(this.sentResources).forEach(item => {
+    RESOURCES.forEach(item => {
       if(this.sentResources[item] > inventory[item]){
         hasResourcesToSend = false;
       }
@@ -70,40 +77,34 @@ export default class TradeRequest extends Vue {
     return (this.name != "" && hasResourcesToSend && someGreaterThanZero);
   }
 
-  @Inject()
-  readonly api:GameRequestAPI;
-
-  sentResources:ResourceAmountData = {};
-  exchangeResources:ResourceAmountData = {};
-
-  handleSendResources(resources){
+  handleSendResources(resources: ResourceAmountData){
     this.sentResources = resources;
   }
 
-  handleReciveResources(resources){
+  handleReciveResources(resources: ResourceAmountData){
     this.exchangeResources = resources;
   }
 
-  handleChange(name){
+  handleChange(name: string){
     this.name = name;
   }
 
   handleTrade(){
     if(this.clientValidation){
       const fromPackage:TradeAmountData = {
-        role:this.$store.state.role,
-        resourceAmount:this.sentResources
-      }
+        role: this.$store.state.role,
+        resourceAmount: this.sentResources
+      };
 
-      const toPackage:TradeAmountData = {
-        role:this.name,
-        resourceAmount:this.exchangeResources
-      }
+      const toPackage: TradeAmountData = {
+        role: this.name as Role,
+        resourceAmount: this.exchangeResources
+      };
 
       const tradeDataPackage:TradeData = {
         from:fromPackage,
         to:toPackage
-      }
+      };
 
       this.api.sendTradeRequest(tradeDataPackage);
       this.name = "";

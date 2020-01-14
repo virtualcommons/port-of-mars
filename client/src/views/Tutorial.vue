@@ -319,7 +319,7 @@ export default class Tutorial extends Vue {
    *
    */
   showModal() {
-    this.$bvModal.show('bv-modal');
+    (<any>this).$bvModal.show('bv-modal');
   }
   /**
    * startTourOnHideModal() method
@@ -327,14 +327,14 @@ export default class Tutorial extends Vue {
    *
    */
   startTourOnHideModal() {
-    this.$tours.gameTour.start();
+    (<any>this).$tours.gameTour.start();
   }
   startTourCallback() {
     const currentStepElement = document.querySelector(this.steps[0].target);
     // add in-tour class to body
     document.body.classList.add(this.BODY_TOUR);
     // add active class for first step
-    currentStepElement.classList.add(this.TOUR_ACTIVE_CLASS);
+    currentStepElement!.classList.add(this.TOUR_ACTIVE_CLASS);
     // go to next events phase 5 seconds after tour starts
     setTimeout(() => {
       this.api.setNextPhase();
@@ -344,9 +344,9 @@ export default class Tutorial extends Vue {
     const currentStepElement = document.querySelector(this.steps[currentStep].target);
     const previousStepElement = document.querySelector(this.steps[currentStep - 1].target);
     // remove active step from current step
-    currentStepElement.classList.remove(this.TOUR_ACTIVE_CLASS);
+    currentStepElement!.classList.remove(this.TOUR_ACTIVE_CLASS);
     // add active class to previous step
-    previousStepElement.classList.add(this.TOUR_ACTIVE_CLASS);
+    previousStepElement!.classList.add(this.TOUR_ACTIVE_CLASS);
     console.log(`[Vue Tour] A custom previousStep callback has been called on step
                 ${currentStep + 1}`);
     if (currentStep === 6) {
@@ -357,9 +357,9 @@ export default class Tutorial extends Vue {
     const currentStepElement = document.querySelector(this.steps[currentStep].target);
     const nextStepElement = document.querySelector(this.steps[currentStep + 1].target);
     // remove active step from current step
-    currentStepElement.classList.remove(this.TOUR_ACTIVE_CLASS);
+    currentStepElement!.classList.remove(this.TOUR_ACTIVE_CLASS);
     // add active step to next step
-    nextStepElement.classList.add(this.TOUR_ACTIVE_CLASS);
+    nextStepElement!.classList.add(this.TOUR_ACTIVE_CLASS);
     console.log(`[Vue Tour] A custom nextStep callback has been called on step
                 ${currentStep + 1}`);
 
@@ -375,7 +375,7 @@ export default class Tutorial extends Vue {
     // remove in-tour from body
     document.body.classList.remove(this.BODY_TOUR);
     // remove active class from body
-    document.querySelector(`.${this.TOUR_ACTIVE_CLASS}`).classList.remove(this.TOUR_ACTIVE_CLASS);
+    document.querySelector(`.${this.TOUR_ACTIVE_CLASS}`)!.classList.remove(this.TOUR_ACTIVE_CLASS);
   }
   /**
    * mounted() method

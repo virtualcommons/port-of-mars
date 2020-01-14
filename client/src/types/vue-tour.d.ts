@@ -1,3 +1,1 @@
-declare module 'vue-tour' {
-  export default VueTour;
-}
+declare module 'vue-tour';

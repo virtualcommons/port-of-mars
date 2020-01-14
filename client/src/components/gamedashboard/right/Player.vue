@@ -15,9 +15,9 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 @Component({})
 export default class Player extends Vue {
-  @Prop() private role: string;
-  @Prop() private ready: boolean;
-  @Prop() private victoryPoints: number;
+  @Prop() private role!: string;
+  @Prop() private ready!: boolean;
+  @Prop() private victoryPoints!: number;
 }
 </script>
 

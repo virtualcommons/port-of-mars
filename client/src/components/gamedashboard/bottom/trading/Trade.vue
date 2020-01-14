@@ -47,13 +47,13 @@
 <script lang="ts">
 import {Vue, Component, Prop, InjectReactive, Inject} from 'vue-property-decorator';
 import { GameRequestAPI } from '@/api/game/request';
-import { TradeData,TradeAmountData  } from 'shared/types';
+import {TradeData, TradeAmountData, INVESTMENTS, RESOURCES} from 'shared/types';
 
 @Component({})
 export default class Trade extends Vue {
-  @Prop() private from: TradeAmountData;
-  @Prop() private to: TradeAmountData;
-  @Prop() private id: string;
+  @Prop() private from!: TradeAmountData;
+  @Prop() private to!: TradeAmountData;
+  @Prop() private id!: string;
 
   private role = this.$store.state.role;
 
@@ -63,7 +63,7 @@ export default class Trade extends Vue {
     let hasResourcesToSend = true;
     const inventory = this.$store.state.players[this.role].inventory;
 
-    Object.keys(inventory).forEach(item => {
+    RESOURCES.forEach(item => {
       if(this.to.resourceAmount[item] > inventory[item]){
         hasResourcesToSend = false;
       }

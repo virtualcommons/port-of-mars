@@ -8,6 +8,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import Player from '@/components/gamedashboard/right/Player.vue';
+import {ROLES} from "shared/types";
 
 @Component({
   components: {
@@ -21,7 +22,7 @@ export default class ContainerPlayers extends Vue {
 
   get playerInfo() {
     const allPlayers = this.$tstore.state.players;
-    return Object.keys(allPlayers).map(player => ({
+    return ROLES.map(player => ({
       role: player,
       ready: allPlayers[player].ready,
       victoryPoints: allPlayers[player].victoryPoints

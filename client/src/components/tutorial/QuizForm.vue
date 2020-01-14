@@ -13,7 +13,7 @@
         <div class="quiz-buttons">
           <button @click="name = -1" class="prev-button">Previous</button>
           <button @click="name = 1" class="next-button">Save Answer</button>
-          <button v-show="complete == true" @click="name = 2" class="next-button">
+          <button v-show="complete === true" @click="name = 2" class="next-button">
             Submit Quiz
           </button>
         </div>
@@ -30,20 +30,20 @@ export default class QuizForm extends Vue {
   optionSelected = -1;
   name = 0;
 
-  @Prop({ default: '' }) question;
+  @Prop({ default: '' }) question!: string;
 
-  @Prop({ default: () => [] }) options;
+  @Prop({ default: () => [] }) options!: Array<string>;
 
-  @Prop({ default: -1 }) index;
+  @Prop({ default: -1 }) index!: number;
 
   @Prop({
-    default: function(id, name) {
+    default: function(id: number, name: string) {
       return function() {};
     }
   })
-  handleUpdate;
+  handleUpdate!: Function;
 
-  @Prop({ default: false }) complete;
+  @Prop({ default: false }) complete!: boolean;
 }
 </script>
 

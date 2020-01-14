@@ -16,7 +16,7 @@ import ModalEvent from '@/components/gamedashboard/global/modals/views/ModalEven
   }
 })
 export default class ModalCard extends Vue {
-  @Prop({}) private modalData!: object;
+  @Prop({}) private modalData!: any;
 
   private setView(): string {
     switch (this.modalData.card) {

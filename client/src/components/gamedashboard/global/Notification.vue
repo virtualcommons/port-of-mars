@@ -24,9 +24,9 @@ export default class Notification extends Vue {
   @Prop({
     default: `you've been asleep for 20 years. this is the doctor's last way of contacting you from the outside. please wake up.`
   })
-  message: string;
-  @Prop({ default: 0 }) length: number;
-  @Prop({ default: -1 }) index: number;
+  message!: string;
+  @Prop({ default: 0 }) length!: number;
+  @Prop({ default: -1 }) index!: number;
 
   private hover: boolean = false;
   private inView: string = 'visible';

@@ -46,6 +46,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
+import {Resource, ResourceAmountData} from "shared/types";
 
 @Component({})
 export default class InfluencesSelect extends Vue {
@@ -89,7 +90,7 @@ export default class InfluencesSelect extends Vue {
     }));
   }
 
-  private handleSelectInfluence(investment: string): void {
+  private handleSelectInfluence(investment: Resource): void {
     // ACTUAL IMPLEMENTATION
     // if (this.selectedInvestmentsDataCount < 2) {
     //   if (this.selectedInvestmentsData[investment] + 1 <= this.$tstore.getters.player.inventory[investment]) {
@@ -107,7 +108,7 @@ export default class InfluencesSelect extends Vue {
     }
   }
 
-  private handleDeselectInfluences(investment: string): void {
+  private handleDeselectInfluences(investment: Resource): void {
     if (this.selectedInvestmentsData[investment] !== 0 && this.selectedInvestmentsDataCount !== 0) {
       this.selectedInvestmentsData[investment] -= 1;
       this.selectedInvestmentsDataCount -= 1;

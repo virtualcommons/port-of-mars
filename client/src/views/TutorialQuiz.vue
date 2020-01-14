@@ -43,20 +43,21 @@ import { QuizRequestAPI } from '@/api/quiz/request';
 import {applyQuizServerResponses} from "@/api/quiz/response";
 import store from "@/store";
 import {Client} from 'colyseus.js';
+import {QuizData, QuizQuestionData, QuizResultPackage} from "shared/types";
 @Component({
   components: {
     QuizForm
   }
 })
 export default class TutorialQuiz extends Vue {
-  private answersArray = [];
+  private answersArray: Array<number> = [];
   private index = 0;
   private complete = false;
   private submitted = false;
 
   @Inject() readonly $client!: Client;
 
-  api!: QuizRequestAPI = new QuizRequestAPI();
+  api: QuizRequestAPI = new QuizRequestAPI();
 
   async created() {
     const quizRoom = await this.$client.joinOrCreate('quiz');
@@ -64,14 +65,12 @@ export default class TutorialQuiz extends Vue {
     this.api.connect(quizRoom);
   }
 
-  get quizQuestions() {
-    const questions = this.$store.state.quizQuestions;
-    return questions;
+  get quizQuestions(): Array<QuizQuestionData> {
+    return this.$store.state.quizQuestions;
   }
 
-  get quizResults() {
-    const results = this.$store.state.quizResults;
-    return results;
+  get quizResults(): Array<QuizResultPackage> {
+    return this.$store.state.quizResults;
   }
 
   get quizData() {
@@ -84,12 +83,12 @@ export default class TutorialQuiz extends Vue {
     return info;
   }
 
-  handleUpdate(id, name) {
-    if (name == 1) this.answersArray.splice(this.index, 1, id);
+  handleUpdate(id: number, name: number) {
+    if (name === 1) this.answersArray.splice(this.index, 1, id);
 
     this.complete = this.answersArray.length == this.quizQuestions.length;
 
-    if (name != 2) {
+    if (name !== 2) {
       if (this.index + name != this.quizQuestions.length)
         this.index = (this.index + name) % this.quizQuestions.length;
       if (this.index <= -1) this.index = this.quizQuestions.length - 1;
@@ -106,7 +105,7 @@ export default class TutorialQuiz extends Vue {
     this.answersArray = [];
   }
 
-  handleQuestionSwitch(newIndex) {
+  handleQuestionSwitch(newIndex: number) {
     this.index = newIndex;
   }
 }

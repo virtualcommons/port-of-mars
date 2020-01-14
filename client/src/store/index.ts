@@ -2,7 +2,6 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import * as _ from 'lodash';
 
-import actions from './actionsFolder';
 import getters from './getters';
 import mutations from './mutationFolder';
 import { initialStoreState } from '@/store/state';
@@ -19,7 +18,5 @@ export default new Vuex.Store({
 
   mutations,
 
-  getters,
-
-  actions
+  getters
 });
