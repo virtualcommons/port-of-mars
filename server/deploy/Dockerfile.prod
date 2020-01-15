@@ -38,4 +38,6 @@ COPY --from=pom-client-builder-base /code/client/dist /code/server/static
 
 WORKDIR /code/server
 
+ENV NODE_ENV=production
+
 CMD ["yarn", "start:prod"]
