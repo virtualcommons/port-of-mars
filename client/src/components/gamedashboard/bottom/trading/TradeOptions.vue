@@ -11,11 +11,11 @@
       </div>
 
       <div>
-        <input type="number" min="0" v-model.number="resources[resource]" class="resource-amount" />
+        <input type="number" min="0" v-on:change='resourcesAmount()' v-model.number="resources[resource]" class="resource-amount" />
       </div>
     </div>
 
-    {{ resourcesAmount }}
+  
   </div>
 </template>
 

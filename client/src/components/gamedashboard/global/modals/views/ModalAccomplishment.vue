@@ -3,14 +3,16 @@
     <p class="title">{{ cardData.label }}</p>
     <p class="info">{{ cardData.flavorText }}</p>
     <div class="investments">
-      <div v-for="investment in accomplishmentCost" :key="investment + Math.random()">
+      <div v-for="investment in accomplishmentCost" :key="investment + Math.random()"
+      v-bind:class="{'unattainable-resource': shouldResourceBeGrayedOut(investment)}"
+      >
         <img :src="require(`@/assets/icons/${investment}.svg`)" alt="Investment" />
       </div>
     </div>
     <p class="cost">Cost</p>
-    <button class="purchase-button" @click="handlePurchase">
-      {{ buyButton }}
-    </button>
+    <p class="purchase-button">
+      {{ buyText }}
+    </p>
   </div>
 </template>
 
@@ -18,12 +20,10 @@
 import {Component, Vue, Prop,  InjectReactive, Inject} from 'vue-property-decorator';
 import { canPurchaseAccomplishment } from 'shared/validation';
 import { AccomplishmentData, INVESTMENTS, Resource } from 'shared/types';
-import { GameRequestAPI } from '@/api/game/request';
 import * as _ from 'lodash';
 
 @Component({})
 export default class ModalAccomplishment extends Vue {
-  @Inject() readonly api!: GameRequestAPI;
 
   @Prop({
     default: () => ({
@@ -53,17 +53,34 @@ export default class ModalAccomplishment extends Vue {
     return canPurchaseAccomplishment(this.cardData, this.$tstore.getters.player.inventory);
   }
 
-  get buyButton() {
-    const b = this.canBuy;
-    return b ? 'Purchase Accomplishment' : 'You cannot purchase this';
+  get playerInventory() {
+    return _.clone(this.$tstore.getters.player.inventory);
   }
 
-  private handlePurchase() {
-    this.api.purchaseAccomplishment(this.cardData);
+  shouldResourceBeGrayedOut(resource){
+    if(resource=='upkeep'){
+      return false;
+    }
+
+    if(this.playerInventory[resource] > 0){
+      this.playerInventory[resource]--;
+      return false;
+    }
+    return true
   }
+
+  get buyText() {
+    const b = this.canBuy;
+    return b ? 'You have the resources to purchase this' : 'You cannot purchase this';
+  }
+
 }
 </script>
 
 <style lang="scss" scoped>
 @import '@/stylesheets/gamedashboard/global/modals/views/ModalAccomplishment.scss';
+
+.unattainable-resource{
+  opacity: 30%;
+}
 </style>

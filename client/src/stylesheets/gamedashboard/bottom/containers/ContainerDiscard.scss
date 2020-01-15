@@ -17,6 +17,7 @@
     padding: 0;
     margin-right: 0.5rem;
     @include make-column-and-center;
+    width: 30%;
 
     .topbar {
       height: 10%;
@@ -59,26 +60,10 @@
 
   .actions {
     height: 100%;
+    width:70%;
     flex-grow: 1;
     padding: 0.5rem;
-    @include make-column-and-center;
-    @include text-overflow-ellipses;
+    @include make-column-and-top;
     background-color: $space-white-opaque-1;
-
-    button {
-      @include reset-button;
-      height: 3rem;
-      width: 12.5rem;
-      padding: 0 0.5rem;
-      border: 0.0625rem solid $space-orange;
-      margin: 0.5rem;
-      color: $space-orange;
-      @include default-transition-base;
-
-      &:hover {
-        // color: $space-gray;
-        // background-color: $space-orange;
-      }
-    }
   }
 }

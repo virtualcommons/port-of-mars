@@ -9,7 +9,9 @@
         <p>{{ accomplishment.victoryPoints }}</p>
       </div>
       <div class="cost">
-        <p v-for="investment in accomplishmentCost">
+        <p v-for="investment in accomplishmentCost" :key="investment+Math.random()"
+        v-bind:class="{'unattainable-resource': shouldResourceBeGrayedOut(investment)}"
+        >
           <img :src="require(`@/assets/icons/${investment}.svg`)" alt="Investment" />
         </p>
       </div>
@@ -54,9 +56,30 @@ export default class CardAccomplishment extends Vue {
       payload: this.accomplishment
     });
   }
+
+  get playerInventory() {
+    return _.clone(this.$tstore.getters.player.inventory);
+  }
+
+  shouldResourceBeGrayedOut(resource){
+    if(resource=='upkeep'){
+      return false;
+    }
+
+    if(this.playerInventory[resource] > 0){
+      this.playerInventory[resource]--;
+      return false;
+    }
+    return true
+  }
+
 }
 </script>
 
 <style lang="scss" scoped>
 @import '@/stylesheets/gamedashboard/global/cards/CardAccomplishment.scss';
+
+.unattainable-resource{
+  opacity: 30%;
+}
 </style>

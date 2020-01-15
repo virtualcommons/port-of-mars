@@ -24,12 +24,13 @@
           />
         </p>
       </div>
-      <div class="purchase">
+      <div class="discard">
         <button
-          :disabled="!canBuy"
-          @click="handlePurchase()"
+          @click="handleDiscardAccomplishment(accomplishment)"
+          type="button"
+          name="Discard Accomplishment"
         >
-          Purchase Accomplishment
+          Discard
         </button>
       </div>
     </div>
@@ -37,15 +38,15 @@
 </template>
 
 <script lang="ts">
-import {Vue, Component, Prop, InjectReactive, Inject} from 'vue-property-decorator';
+import { Vue, Component, Prop, Inject } from 'vue-property-decorator';
 import { AccomplishmentData, INVESTMENTS, Resource } from 'shared/types';
 import * as _ from 'lodash';
-import GameRequestAPI from '@/api/game/request';
+import GameRequestAPI from '../../../../api/game/request';
 import { canPurchaseAccomplishment } from 'shared/validation';
 
 @Component({})
-export default class BarAccomplishment extends Vue {
-  @Inject() readonly api!: GameRequestAPI;
+export default class BarDiscard extends Vue {
+  @Inject() readonly $api: GameRequestAPI;
 
   @Prop({
     default: () => ({
@@ -89,21 +90,18 @@ export default class BarAccomplishment extends Vue {
     return true
   }
 
-  get canBuy() {
-    return canPurchaseAccomplishment(this.accomplishment,this.$tstore.getters.player.inventory)
-  }
-
-
-  private handlePurchase() {
-    if (this.canBuy) {
-      this.api.purchaseAccomplishment(this.accomplishment);
-    }
+  private handleDiscardAccomplishment(a: any) {
+    this.$root.$emit('openModalConfirmation', {
+      text: `Selecting \"Yes\" will discard the accomplishment \"${a.label}\" and a new card will be drawn next round.`,
+      type: 'discardAccomplishment',
+      actionData: a.id
+    });
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/global/cards/BarAccomplishments.scss';
+@import '@/stylesheets/gamedashboard/global/cards/BarDiscard.scss';
 
 .unattainable-resource{
   opacity: 30%;

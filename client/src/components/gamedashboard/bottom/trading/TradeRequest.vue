@@ -1,15 +1,17 @@
 <template>
-  <div class="trade-request">
+  <div class="trade-r">
     <div class="trade-partner">
       <p>Who would you like to trade with?</p>
-      <div class="trade-person-icons" v-for="(player, index) in otherPlayers" :key="index">
-        <img
-          @click="handleChange(player)"
-          class="person-icons"
-          :src="require(`@/assets/characters/${player}.png`)"
-          v-bind:class="{ 'selected-player': name == player }"
-        />
-        <p>{{player}}</p>
+      <div class="person-wrapper">
+        <div class="trade-person-icons" v-for="(player, index) in otherPlayers" :key="index">
+          <img
+            @click="handleChange(player)"
+            class="person-icons"
+            :src="require(`@/assets/characters/${player}.png`)"
+            v-bind:class="{ 'selected-player': name == player }"
+          />
+          <p>{{player}}</p>
+        </div>
       </div>
     </div>
 
@@ -19,9 +21,6 @@
         text="You give up"
         class="options-block"
       />
-      <div class="options-block">
-        <i class="fas fa-exchange-alt fa-2x"></i>
-      </div>
       <TradeOptions
         :resourceReader="handleReciveResources"
         text="In exchange for"

@@ -5,7 +5,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: $space-white-opaque-1;
+  background-color: $space-gray;
+  color: $space-white;
+  overflow-x: scroll;
+  @include disable-scroll;
 }
 
 .trade:last-child {
@@ -119,7 +122,7 @@
 
 .trade-buttons button {
   height: 50%;
-  width: 4rem;
+  width:4rem;
   border: none;
   font-size: $font-small;
   background-color: $space-orange;
