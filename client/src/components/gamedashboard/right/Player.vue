@@ -47,13 +47,11 @@ export default class Player extends Vue {
   @Prop() private victoryPoints!: number;
   private hover: boolean = false;
 
-  // TODO: REFACTOR TO TYPESCRIPT
-  get layout(): any {
+  get layout(): string {
     return this.$tstore.state.eventView;
   }
 
-  // TODO: REFACTOR TO TYPESCRIPT
-  get auditInvestments(): any {
+  get auditInvestments(): object {
     const inventory = this.$store.state.players[this.role].inventory;
     return RESOURCES.map(name => ({
       name,
@@ -62,7 +60,7 @@ export default class Player extends Vue {
   }
 
   // TODO: REMOVE IF UNNECESSARY
-  private adjustHeight(): string {
+  private adjustHeight(): object {
     if (this.layout === 'AUDIT') {
       return { height: '3.25rem', cursor: 'pointer' };
     } else {

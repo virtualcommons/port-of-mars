@@ -1,23 +1,45 @@
 <template>
-  <div class="quiz-question-container">
-    <div class="quiz-question-title">
-      <p>{{ question }}</p>
+  <div class="quiz-form">
+    <div class="title">
+      <p class="number">Question {{ index + 1 }}</p>
+      <p class="question">{{ question }}</p>
     </div>
-    <div class="quiz-question-form-container">
-      <form class="quiz-question-form" v-on:submit.prevent="handleUpdate(optionSelected, name)">
-        <div class="quiz-questions" v-for="(option, index) in options" :key="index">
-          <input type="radio" v-model="optionSelected" name="optionSelected" :value="index" />{{
-            option
-          }}<br />
-        </div>
-        <div class="quiz-buttons">
-          <button @click="name = -1" class="prev-button">Previous</button>
-          <button @click="name = 1" class="next-button">Save Answer</button>
-          <button v-show="complete === true" @click="name = 2" class="next-button">
-            Submit Quiz
-          </button>
+
+    <div class="wrapper">
+      <form v-on:submit.prevent="">
+        <div class="questions" v-for="(option, index) in options" :key="index">
+          <button
+            @click="handleSelected(index)"
+            :style="handleSelectedStyle(index)"
+            type="button"
+          ></button>
+          <p>{{ option }}</p>
         </div>
       </form>
+    </div>
+
+    <div class="button-container">
+      <button
+        @click="navigationHandler(-1)"
+        class="prev-button"
+        :disabled="index === 0"
+      >
+        Previous
+      </button>
+      <button
+        @click="navigationHandler(1)"
+        :disabled="optionSelected === -1"
+        class="next-button"
+      >
+        Save Answer
+      </button>
+      <button
+        :disabled="answersComplete === false"
+        @click="navigationHandler(2)"
+        class="submit-button"
+      >
+        Submit Quiz
+      </button>
     </div>
   </div>
 </template>
@@ -27,23 +49,33 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 
 @Component({})
 export default class QuizForm extends Vue {
-  optionSelected = -1;
-  name = 0;
-
   @Prop({ default: '' }) question!: string;
-
   @Prop({ default: () => [] }) options!: Array<string>;
-
   @Prop({ default: -1 }) index!: number;
-
   @Prop({
-    default: function(id: number, name: string) {
+    default: function(id: number, navAction: string) {
       return function() {};
     }
   })
   handleUpdate!: Function;
+  @Prop({ default: false }) answersComplete!: boolean;
 
-  @Prop({ default: false }) complete!: boolean;
+  private optionSelected: number = -1;
+
+  private navigationHandler(navAction: number) {
+    this.handleUpdate(this.optionSelected, navAction);
+  }
+
+  private handleSelected(option: number): void {
+    this.optionSelected = option;
+  }
+
+  private handleSelectedStyle(option: number): object {
+    if (option === this.optionSelected) {
+      return { backgroundColor: 'var(--space-orange)' };
+    }
+    return {};
+  }
 }
 </script>
 
