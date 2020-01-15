@@ -14,7 +14,7 @@ module.exports = {
       .plugin('define-env')
       .use(webpack.DefinePlugin, [{
         'process.env.SERVER_URL':
-          JSON.stringify(['development', 'staging'].includes(NODE_ENV) ? 'ws://localhost:2567' : 'wss://portofmars.asu.edu')
+          JSON.stringify(['development', 'staging'].includes(NODE_ENV) ? 'ws://localhost:2567' : 'wss://portofmars.comses.net')
       }])
   }
 };
