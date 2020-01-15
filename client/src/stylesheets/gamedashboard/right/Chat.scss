@@ -117,25 +117,23 @@
 }
 
 .chat-disabled-container {
-  height: 50%;
+  flex-grow: 1;
   width: 100%;
   padding: 0.5rem;
-  border: 0.125rem solid $space-white-opaque-2;
-  margin-top: 2rem;
+  @include border-orange;
+  margin: 0.5rem 0 0 0;
 
   .chat-disabled {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include expand;
+    @include make-center;
     color: $space-white;
     background-color: $space-white-opaque-1;
 
     p {
+      margin-bottom: 0;
+      color: $space-white-opaque-2;
       font-size: $font-small;
       text-align: center;
-      margin-bottom: 0;
     }
   }
 }
