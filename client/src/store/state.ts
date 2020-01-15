@@ -117,7 +117,7 @@ export const initialStoreState: State = {
   loading: false,
 
   activeNotifications: [],
-  eventView: EventClientView.DISABLE_CHAT,
+  eventView: EventClientView.AUDIT,
   quizQuestions: [],
   quizResults: []
 };
