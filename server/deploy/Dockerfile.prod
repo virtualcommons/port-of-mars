@@ -9,6 +9,10 @@ RUN yarn install
 
 COPY ./client /code/client
 COPY ./shared /code/shared
+
+ARG NODE_ARG=production
+ENV NODE_ENV=${NODE_ARG}
+
 RUN yarn build
 
 
@@ -38,6 +42,7 @@ COPY --from=pom-client-builder-base /code/client/dist /code/server/static
 
 WORKDIR /code/server
 
-ENV NODE_ENV=production
+ARG NODE_ARG=production
+ENV NODE_ENV=${NODE_ARG}
 
 CMD ["yarn", "start:prod"]

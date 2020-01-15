@@ -1,21 +1,9 @@
 import Vue from 'vue';
-import VueSocketIOExt from 'vue-socket.io-extended';
-// import io from 'socket.io-client';
 import Vuex, { Store } from 'vuex';
 import * as Colyseus from 'colyseus.js';
-import { SendChatMessageData } from 'shared/requests';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-
-import { GameRequestAPI } from './api/game/request';
-import { applyGameServerResponses } from './api/game/response';
-
-import { WaitingRequestAPI } from './api/waitingLobby/request';
-import { applyWaitingServerResponses } from './api/waitingLobby/response';
-
-import { QuizRequestAPI } from './api/quiz/request';
-import { applyQuizServerResponses } from './api/quiz/response';
 
 import { State } from '@/store/state';
 import Getters from '@/store/getters';
@@ -47,7 +35,7 @@ Object.defineProperty(Vue.prototype, '$tstore', {
 
 Vue.config.productionTip = false;
 
-const $client = new Colyseus.Client('ws://localhost:2567');
+const $client = new Colyseus.Client(process.env.SERVER_URL);
 
 new Vue({
   router,

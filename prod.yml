@@ -1,20 +1,7 @@
-
 version: '3'
 services:
-  db: 
-    image: postgres:12
-    volumes:
-      - ./server/deploy/pom_db_password:/run/secrets/pom_db_password
-    environment:
-      POSTGRES_USER: marsmadness
-      POSTGRES_PASSWORD_FILE: /run/secrets/pom_db_password
-      POSTGRES_DB: port_of_mars
   server:
     build:
-      context: .
-      dockerfile: server/deploy/Dockerfile.prod
+      args:
+        NODE_ARG: production
     image: port-of-mars/server/prod:latest
-    depends_on:
-      - db
-    ports:
-      - '127.0.0.1:2567:2567'
