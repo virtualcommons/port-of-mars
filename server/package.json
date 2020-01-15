@@ -5,7 +5,7 @@
    "main": "lib/index.js",
    "scripts": {
       "build": "tsc -p .",
-      "start:prod": "node -r tsconfig-paths/register lib/server/src/index.js",
+      "start:prod": "node -r tsconfig-paths/register src/index.js",
       "start": "ts-node -r tsconfig-paths/register src/index.ts",
       "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
       "loadtest": "colyseus-loadtest loadtest/example.ts --room my_room --numClients 2",

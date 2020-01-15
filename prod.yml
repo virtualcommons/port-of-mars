@@ -1,17 +1,6 @@
 
 version: '3'
 services:
-  client:
-    build: client
-    restart: always
-    image: port-of-mars/client/dev:latest
-    volumes:
-      - ./client:/code/client
-      - ./shared:/code/shared
-      - /code/client/node_modules
-    command: './dev.sh'
-    ports:
-      - '8081:8080'
   db: 
     image: postgres:12
     volumes:
@@ -23,12 +12,11 @@ services:
       POSTGRES_PASSWORD_FILE: /run/secrets/pom_db_password
       POSTGRES_DB: port_of_mars
   server:
-    command: './dev.sh'
+    build:
+      context: .
+      dockerfile: server/deploy/Dockerfile.prod
+    image: port-of-mars/server/prod:latest
     depends_on:
       - db
     ports:
       - '2567:2567'
-    volumes:
-      - ./server:/code
-      - ./shared:/shared
-      - /code/node_modules
