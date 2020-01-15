@@ -11,7 +11,7 @@ services:
       - /code/client/node_modules
     command: './dev.sh'
     ports:
-      - '8081:8080'
+      - '127.0.0.1:8081:8080'
   db: 
     image: postgres:12
     volumes:
@@ -24,10 +24,12 @@ services:
       POSTGRES_DB: port_of_mars
   server:
     command: './dev.sh'
+    build:
+      dockerfile: deploy/Dockerfile.dev
     depends_on:
       - db
     ports:
-      - '2567:2567'
+      - '127.0.0.1:2567:2567'
     volumes:
       - ./server:/code
       - ./shared:/shared
