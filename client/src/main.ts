@@ -4,34 +4,10 @@ import * as Colyseus from 'colyseus.js';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-
-import { State } from '@/store/state';
-import Getters from '@/store/getters';
-import Mutations from '@/store/mutationFolder';
-
-declare module 'vue/types/vue' {
-  interface TStore {
-    state: State;
-    readonly getters: { [K in keyof typeof Getters]: ReturnType<typeof Getters[K]> };
-
-    commit<K extends keyof typeof Mutations>(
-      name: K,
-      payload: Parameters<typeof Mutations[K]>[1]
-    ): void;
-  }
-
-  interface Vue {
-    $tstore: TStore;
-  }
-}
+import {TypedStore} from "@/plugins/tstore";
 
 Vue.use(Vuex);
-
-Object.defineProperty(Vue.prototype, '$tstore', {
-  get: function(this: Vue & { $store: Store<any> }) {
-    return this.$store;
-  }
-});
+Vue.use(TypedStore);
 
 Vue.config.productionTip = false;
 

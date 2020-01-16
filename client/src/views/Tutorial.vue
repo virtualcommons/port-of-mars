@@ -319,7 +319,7 @@ export default class Tutorial extends Vue {
    *
    */
   showModal() {
-    (<any>this).$bvModal.show('bv-modal');
+    (this as any).$bvModal.show('bv-modal');
   }
   /**
    * startTourOnHideModal() method
@@ -327,7 +327,7 @@ export default class Tutorial extends Vue {
    *
    */
   startTourOnHideModal() {
-    (<any>this).$tours.gameTour.start();
+    (this as any).$tours.gameTour.start();
   }
   startTourCallback() {
     const currentStepElement = document.querySelector(this.steps[0].target);
