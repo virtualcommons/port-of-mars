@@ -23,14 +23,13 @@ services:
       POSTGRES_PASSWORD_FILE: /run/secrets/pom_db_password
       POSTGRES_DB: port_of_mars
   server:
-    command: './dev.sh'
     build:
-      dockerfile: deploy/Dockerfile.dev
+      dockerfile: server/deploy/Dockerfile.dev
     depends_on:
       - db
     ports:
       - '127.0.0.1:2567:2567'
     volumes:
-      - ./server:/code
-      - ./shared:/shared
+      - ./server:/code/server
+      - ./shared:/code/shared
       - /code/node_modules

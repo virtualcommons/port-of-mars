@@ -11,7 +11,6 @@ services:
       POSTGRES_DB: port_of_mars
   server:
     build:
-      context: .
       dockerfile: server/deploy/Dockerfile.prod
       args:
         NODE_ARG: staging

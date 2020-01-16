@@ -2,15 +2,14 @@ FROM node:13
 
 LABEL maintainer="Allen Lee <allen.lee@asu.edu>"
 
-EXPOSE 3000
+WORKDIR /code/server
 
-WORKDIR /code
-
-COPY ./deploy/wait-for-it.sh /code
-
-COPY package.json /code
+COPY ./server/package.json /code/server
 RUN yarn install
 
-COPY . /code
+COPY ./server /code/server
+COPY ./shared /code/shared
 
-CMD ["wait-for-it.sh", "yarn", "start"]
+ENV NODE_ENV=development
+
+CMD ["/code/server/deploy/dev.sh"]
