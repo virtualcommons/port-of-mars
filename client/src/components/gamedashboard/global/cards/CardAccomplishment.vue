@@ -9,8 +9,9 @@
         <p>{{ accomplishment.victoryPoints }}</p>
       </div>
       <div class="cost">
-        <p v-for="investment in accomplishmentCost" :key="investment+Math.random()"
-        v-bind:class="{'unattainable-resource': shouldResourceBeGrayedOut(investment)}"
+        <p v-for="(investment,i) in accomplishmentCost" :key="investment+Math.random()"
+
+        v-bind:class="{'unattainable-resource': investmentGrayStatus[i]}"
         >
           <img :src="require(`@/assets/icons/${investment}.svg`)" alt="Investment" />
         </p>
@@ -21,8 +22,9 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { AccomplishmentData, INVESTMENTS, Resource } from 'shared/types';
+import { AccomplishmentData, INVESTMENTS, Resource, ResourceAmountData } from 'shared/types';
 import * as _ from 'lodash';
+
 
 @Component({})
 export default class CardAccomplishment extends Vue {
@@ -57,21 +59,30 @@ export default class CardAccomplishment extends Vue {
     });
   }
 
-  get playerInventory() {
-    return _.clone(this.$tstore.getters.player.inventory);
-  }
+  get playerFullInventory(){
+    let totalInventory:ResourceAmountData = _.clone(this.$tstore.getters.player.inventory);
+    const pendingInventory:ResourceAmountData = this.$tstore.getters.player.pendingInvestments;
 
-  shouldResourceBeGrayedOut(resource){
-    if(resource=='upkeep'){
-      return false;
+    for(const [r,amount] of Object.entries(pendingInventory)){
+      totalInventory[r] += amount
     }
 
-    if(this.playerInventory[resource] > 0){
-      this.playerInventory[resource]--;
-      return false;
-    }
-    return true
+    return totalInventory;
   }
+
+  get investmentGrayStatus() {
+    let grayStatus = []
+    for(let investment of this.accomplishmentCost){
+      if(this.playerFullInventory[investment] > 0 || investment == 'upkeep'){
+        grayStatus.push(false)
+        this.playerFullInventory[investment]--;
+      }else{
+        grayStatus.push(true)
+      }
+    }
+    return grayStatus;
+  }
+
 
 }
 </script>

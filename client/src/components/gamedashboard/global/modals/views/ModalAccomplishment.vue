@@ -3,8 +3,8 @@
     <p class="title">{{ cardData.label }}</p>
     <p class="info">{{ cardData.flavorText }}</p>
     <div class="investments">
-      <div v-for="investment in accomplishmentCost" :key="investment + Math.random()"
-      v-bind:class="{'unattainable-resource': shouldResourceBeGrayedOut(investment)}"
+      <div v-for="(investment,i) in accomplishmentCost" :key="investment + Math.random()"
+      v-bind:class="{'unattainable-resource': investmentGrayStatus[i]}"
       >
         <img :src="require(`@/assets/icons/${investment}.svg`)" alt="Investment" />
       </div>
@@ -50,23 +50,33 @@ export default class ModalAccomplishment extends Vue {
   }
 
   get canBuy() {
-    return canPurchaseAccomplishment(this.cardData, this.$tstore.getters.player.inventory);
+    return canPurchaseAccomplishment(this.cardData, this.playerFullInventory);
   }
 
-  get playerInventory() {
-    return _.clone(this.$tstore.getters.player.inventory);
+
+  get playerFullInventory(){
+    let totalInventory = _.clone(this.$tstore.getters.player.inventory);
+    const pendingInventory = this.$tstore.getters.player.pendingInvestments;
+
+    for(const [r,amount] of Object.entries(pendingInventory)){
+      totalInventory[r] += amount
+    }
+
+    return totalInventory;
   }
 
-  shouldResourceBeGrayedOut(resource){
-    if(resource=='upkeep'){
-      return false;
+  get investmentGrayStatus() {
+    let grayStatus = []
+    let clonedInventory = _.clone(this.playerFullInventory);
+    for(let investment of this.accomplishmentCost){
+      if(clonedInventory[investment] > 0 || investment == 'upkeep'){
+        grayStatus.push(false)
+        clonedInventory[investment]--;
+      }else{
+        grayStatus.push(true)
+      }
     }
-
-    if(this.playerInventory[resource] > 0){
-      this.playerInventory[resource]--;
-      return false;
-    }
-    return true
+    return grayStatus;
   }
 
   get buyText() {

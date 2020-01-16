@@ -41,12 +41,12 @@
 import { Vue, Component, Prop, Inject } from 'vue-property-decorator';
 import { AccomplishmentData, INVESTMENTS, Resource } from 'shared/types';
 import * as _ from 'lodash';
-import GameRequestAPI from '../../../../api/game/request';
+import GameRequestAPI from '@/api/game/request';
 import { canPurchaseAccomplishment } from 'shared/validation';
 
 @Component({})
 export default class BarDiscard extends Vue {
-  @Inject() readonly $api: GameRequestAPI;
+  @Inject() readonly api: GameRequestAPI;
 
   @Prop({
     default: () => ({

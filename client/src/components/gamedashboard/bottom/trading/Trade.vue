@@ -18,7 +18,7 @@
         </div>
       </div>
       <div class="trade-icon">
-        <i class="fas fa-exchange-alt fa-2x"></i>
+        <font-awesome-icon :icon="['fas', 'exchange-alt']" size="lg" />
       </div>
       <div class="trade-profile-receiver-container">
         <div class="trade-profile-receiver">
@@ -48,6 +48,12 @@
 import {Vue, Component, Prop, InjectReactive, Inject} from 'vue-property-decorator';
 import { GameRequestAPI } from '@/api/game/request';
 import {TradeData, TradeAmountData, INVESTMENTS, RESOURCES} from 'shared/types';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faExchangeAlt} from '@fortawesome/free-solid-svg-icons/';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+library.add(faExchangeAlt);
+Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 @Component({})
 export default class Trade extends Vue {

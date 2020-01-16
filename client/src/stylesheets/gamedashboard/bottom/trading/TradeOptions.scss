@@ -1,18 +1,32 @@
 .trade-resources{
-  // @include expand;
-}
+  margin-bottom: 1rem;
 
-.resource-icon {
-  width: 2rem;
-  margin: 0rem 0.2rem 0.2rem 0.2rem;
-}
+  .type-text{
+    margin-left:0.5rem;
+  }
 
-.send-investments {
-  display: inline-block;
-  text-align: center;
-}
+  .resource-wrapper{
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: center;
 
-.resource-amount {
-  width: 3rem;
-  margin: 0.2rem;
+
+    .send-investments {
+      display: inline-block;
+      margin-right: 0.4rem;
+      
+      .resource-icon {
+        width: 2rem;
+        margin: 0.3rem 0.2rem 0.2rem 0.2rem;
+      }
+
+      .resource-amount {
+        width: 3.5rem;
+        //margin: 0.2rem;
+      }
+    }
+
+    
+
+  }
 }

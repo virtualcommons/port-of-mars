@@ -1,60 +1,76 @@
-.trade-r {
+.trade-r{
   background-color: $space-white-opaque-1;
   color: white;
-}
-
-.trade-request p {
-  border-bottom: 0.125rem solid $space-orange;
-}
-
-.trade-partner .p{
-  text-align: left;
-}
-
-
-.person-wrapper{
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  align-items: center;
   
-}
-
-.trade-person-icons {
-  display: inline-block;
-  text-align: center;
-  height: 100%;
-}
-
-.trade-send-options {
-  width: 100%;
-  margin-left:0.5rem;
-}
-
-.person-icons {
-  width: 7rem;
-  height: 100%;
+  .trade-partner p {
+    border-bottom: 0.125rem solid $space-orange;
+  }
   
-}
+  .person-wrapper{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: center;
+    
+    p{
+      border:none;
+    }
+    
+    .trade-person-icons {
+      display: inline-block;
+      text-align: center;
+      height: 100%;
+    }
 
-.selected-player {
-  border-style: solid;
-  border-color: red;
-}
+    
 
-.options-block {
-  // display: inline-block;
-  // margin-left: 0.4rem;
-  // margin-right: 0.4rem;
-  width: 100%;
+    .person-frame{
+      height: 5rem;
+      width: 5rem;
+      padding: 0.25rem;
+      border: 0.0625rem solid $space-orange;
+      border-radius: 50%;
+      margin: 0 1rem;
+      @include make-center;
+      @include default-transition-base;
+
+      &:hover {
+        @include default-scale-up;
+        cursor: pointer;
+      }
+    }
+
+    .person-icons {
+      width: 7rem;
+      height: 100%;
+      padding: 0.25rem;
+      
+    }
+
+    .selected-player {
+      background-color: $space-orange;
+      
+    }
+  }
   
-}
+  .trade-send-options {
+    width: 100%;
+    
 
-.trade-send {
-  margin-top:1rem;
-  margin-left: 0.5rem;
-}
+    .options-block {
+      width: 100%;
+      
+    }
+  }
 
-.trade-impossible{
-  opacity: 50%;
+  .trade-send {
+    margin-top:1rem;
+    margin-left: 0.5rem;
+
+    .trade-impossible{
+      opacity: 50%;
+    }
+  }
+  
+  
 }
