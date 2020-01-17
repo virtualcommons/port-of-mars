@@ -32,7 +32,7 @@
 import { Vue, Component } from 'vue-property-decorator';
 import Phase from '@/components/gamedashboard/top/Phase.vue';
 import CardEvent from '@/components/gamedashboard/global/cards/CardEvent.vue';
-import MarsLog from '@/components/gamedashboard/left/MarsLog.vue';
+import MarsLog from '@/components/gamedashboard/top/MarsLog.vue';
 
 @Component({
   components: {
