@@ -1,3 +1,4 @@
+import {Phase} from "shared/types";
 <template>
   <div class="tutorial-layout">
     <TourModal @hide="startTourOnHideModal" />
@@ -38,20 +39,24 @@
 </template>
 
 <script lang="ts">
-import {
-  Vue,
-  Component,
-  Inject,
-  Provide
-} from 'vue-property-decorator';
+import {Component, Provide, Vue} from 'vue-property-decorator';
 import VueTour from 'vue-tour';
 import TourModal from '@/components/tutorial/TourModal.vue';
-import { GameRequestAPI } from '@/api/game/request';
-import {applyGameServerResponses} from "@/api/game/response";
-import {Client} from 'colyseus.js'
+import {GameRequestAPI} from '@/api/game/request';
 import GameDashboard from "@/components/GameDashboard.vue";
+import {initialStoreState, State} from "@/store/state";
+import _ from "lodash";
+import {Phase} from "shared/types";
+import {Step} from "@/types/tutorial";
+
 require('vue-tour/dist/vue-tour.css');
 Vue.use(VueTour);
+
+const setPhase = (phase: Phase) => (s: State) => {
+    s.phase = phase;
+    return s;
+};
+
 @Component({
   name: 'tutorial',
   components: {
@@ -63,19 +68,17 @@ export default class Tutorial extends Vue {
   @Provide()
   api = new GameRequestAPI();
 
-  @Inject()
-  $client!: Client;
-
   hasApi = false;
 
   async created() {
-    await this.setupRoom();
+    this.setupRoom();
   }
 
-  async setupRoom() {
-    const gameRoom = await this.$client.joinOrCreate('tutorial');
-    applyGameServerResponses(gameRoom, this.$tstore);
-    this.api.connect(gameRoom);
+  setupRoom() {
+    this.api.connect({
+      send(data: any) {},
+      leave() {}
+    });
     this.hasApi = true;
   }
 
@@ -96,7 +99,7 @@ export default class Tutorial extends Vue {
   tourOptions = {
     // useKeyboardNavigation: false,
   };
-  steps = [
+  steps: Array<Step> = [
     {
       // gamedashboard > containers > ContainerUpkeep.vue
       target: '.v-step-0',
@@ -149,7 +152,8 @@ export default class Tutorial extends Vue {
         'that include voting. Mars is unpredictable; many different events can happen!',
       params: {
         placement: 'bottom'
-      }
+      },
+      stateTransform: setPhase(Phase.events),
     },
     // gamedashboard > containers > ContainerPhase.vue
     {
@@ -159,7 +163,8 @@ export default class Tutorial extends Vue {
         'will populate here.',
       params: {
         placement: 'left'
-      }
+      },
+      stateTransform: setPhase(Phase.events)
     },
     // gamedashboard > Notfication.vue
     {
@@ -168,8 +173,12 @@ export default class Tutorial extends Vue {
         'You will be notifed about events and changes in Upkeep via notifications ' +
         'that pop up here. Hover over then notification to close it.',
       params: {
-        placement: 'right'
-      }
+        placement: 'bottom'
+      },
+      stateTransform: _.flow([setPhase(Phase.events), s => {
+        s.activeNotifications = ['Welcome to port of mars', 'Dismiss me by clicking on me']
+        return s;
+      }])
     },
     // gamedashboard > containers > ContainerLeft.vue
     {
@@ -179,7 +188,8 @@ export default class Tutorial extends Vue {
         'for your reference.',
       params: {
         placement: 'right'
-      }
+      },
+      stateTransform: setPhase(Phase.events),
     },
     // gamedashboard > containers > ContainerProfile.vue
     {
@@ -190,7 +200,8 @@ export default class Tutorial extends Vue {
         'that you can purchase toward the end of a round.',
       params: {
         placement: 'bottom'
-      }
+      },
+      stateTransform: setPhase(Phase.events),
     },
     // gamedashboard > containers > ContainerPhase.vue
     {
@@ -200,7 +211,8 @@ export default class Tutorial extends Vue {
         'Upkeep or purchase Influence currency.',
       params: {
         placement: 'right'
-      }
+      },
+      stateTransform: setPhase(Phase.invest),
     },
     // gamedashboard > containers > ContainerInvestments.vue
     {
@@ -211,7 +223,8 @@ export default class Tutorial extends Vue {
         'Influence. Remember that you have 5 minutes to invest your timeblocks.',
       params: {
         placement: 'top'
-      }
+      },
+      stateTransform: setPhase(Phase.invest),
     },
     // gamedashboard > containers > ContainerInvestments.vue
     {
@@ -222,7 +235,8 @@ export default class Tutorial extends Vue {
         'with other players in the Trade phase.',
       params: {
         placement: 'right'
-      }
+      },
+      stateTransform: setPhase(Phase.invest),
     },
     // gamedashboard > containers > ContainerInvestments.vue
     {
@@ -232,7 +246,8 @@ export default class Tutorial extends Vue {
         'investing your timeblocks in Upkeep.',
       params: {
         placement: 'right'
-      }
+      },
+      stateTransform: setPhase(Phase.invest),
     },
     // gamedashboard > containers > ContainerInvestments.vue
     {
@@ -244,7 +259,8 @@ export default class Tutorial extends Vue {
         'that you have made.',
       params: {
         placement: 'right'
-      }
+      },
+      stateTransform: setPhase(Phase.invest),
     },
     // gamedashboard > cards > CardInvestment.vue
     {
@@ -254,7 +270,8 @@ export default class Tutorial extends Vue {
         'your timeblocks before the 5 minutes for the Investment Phase is up.',
       params: {
         placement: 'right'
-      }
+      },
+      stateTransform: setPhase(Phase.invest),
     },
     // gamedashboard > containers > ContainerLeft.vue
     {
@@ -262,7 +279,8 @@ export default class Tutorial extends Vue {
       content: 'After you finish investing your timeblocks, your inventory will update here.',
       params: {
         placement: 'right'
-      }
+      },
+      stateTransform: setPhase(Phase.invest),
     },
     // gamedashboard > Chat.vue
     {
@@ -272,17 +290,7 @@ export default class Tutorial extends Vue {
         'to plan and strategize.',
       params: {
         placement: 'left'
-      }
-    },
-    // gamedashboard > containers > ContainerPlayers.vue
-    {
-      target: '.v-step-17',
-      content:
-        'These are the other residents of Port of Mars. There are 5 roles in the game: ' +
-        'Researcher, Pioneer, Curator, Entrepreneur, and Politician.',
-      params: {
-        placement: 'left'
-      }
+      },
     },
     // gamedashboard > containers > ContainerPlayers.vue
     {
@@ -314,9 +322,16 @@ export default class Tutorial extends Vue {
         'accomplishments later in the game.',
       params: {
         placement: 'right'
-      }
+      },
+      stateTransform: setPhase(Phase.trade)
     }
   ];
+
+  replaceState(fn: (s: State) => State = id => id) {
+    const s = fn(_.cloneDeep(initialStoreState));
+    this.$store.replaceState(s);
+  }
+
   /**
    * showModal() method
    * Show tour modal to introduce tour.
@@ -339,43 +354,28 @@ export default class Tutorial extends Vue {
     this.$el.classList.add(this.BODY_TOUR);
     // add active class for first step
     currentStepElement!.classList.add(this.TOUR_ACTIVE_CLASS);
-    // go to next events phase 5 seconds after tour starts
-    setTimeout(() => {
-      this.api.setNextPhase();
-    }, 6500);
   }
-  previousStepCallback(currentStep: any) {
+  async previousStepCallback(currentStep: number) {
+    this.replaceState(this.steps[currentStep - 1].stateTransform || (id => id));
+    await this.$nextTick();
     const currentStepElement = this.$el.querySelector(this.steps[currentStep].target);
     const previousStepElement = this.$el.querySelector(this.steps[currentStep - 1].target);
     // remove active step from current step
     currentStepElement!.classList.remove(this.TOUR_ACTIVE_CLASS);
     // add active class to previous step
     previousStepElement!.classList.add(this.TOUR_ACTIVE_CLASS);
-    console.log(`[Vue Tour] A custom previousStep callback has been called on step
-                ${currentStep + 1}`);
-    if (currentStep === 6) {
-      this.$root.$emit('openEvent');
-    }
   }
-  nextStepCallback(currentStep: any) {
+  async nextStepCallback(currentStep: number) {
+    this.replaceState(this.steps[currentStep + 1].stateTransform || (id => id));
+    await this.$nextTick();
     const currentStepElement = this.$el.querySelector(this.steps[currentStep].target);
     const nextStepElement = this.$el.querySelector(this.steps[currentStep + 1].target);
     // remove active step from current step
     currentStepElement!.classList.remove(this.TOUR_ACTIVE_CLASS);
     // add active step to next step
     nextStepElement!.classList.add(this.TOUR_ACTIVE_CLASS);
-    console.log(`[Vue Tour] A custom nextStep callback has been called on step
-                ${currentStep + 1}`);
-
-    if (currentStep === 6) {
-      this.api.setNextPhase();
-    }
-
-    if (currentStep === 18) {
-      this.api.setNextPhase();
-    }
   }
-  stopTourCallback(currentStep: any) {
+  stopTourCallback(currentStep: number) {
     // remove in-tour from body
     this.$el.classList.remove(this.BODY_TOUR);
     // remove active class from body

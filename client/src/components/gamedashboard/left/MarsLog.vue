@@ -1,5 +1,5 @@
 <template>
-  <div class="marslog">
+  <div class="marslog v-step-7">
     <p class="title">Mars Log</p>
     <div class="log">
       <p v-if="logs.length === 0" class="empty">

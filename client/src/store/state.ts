@@ -18,6 +18,7 @@ import {
   QuizQuestionData,
   QuizResultPackage
 } from 'shared/types';
+import _ from "lodash";
 
 export interface PlayerClientData extends PlayerData {
   pendingInvestments: InvestmentData;
@@ -48,7 +49,7 @@ function defaultPlayerData(role: Role): PlayerClientData {
     timeBlocks: 10,
     victoryPoints: 0,
     pendingInvestments: defaultPendingInvestment(),
-    contributedUpkeep: 0
+    contributedUpkeep: 0,
   };
 }
 
@@ -120,3 +121,9 @@ export const initialStoreState: State = {
   quizQuestions: [],
   quizResults: []
 };
+
+function tutorialNotifications() {
+  const state = _.cloneDeep(initialStoreState);
+  state.activeNotifications = ['Welcome to Port of Mars', 'Notifications can be dismissed by clicking on them'];
+  return state;
+}

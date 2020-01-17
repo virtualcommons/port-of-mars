@@ -1,5 +1,5 @@
 <template>
-  <div class="container-players">
+  <div class="container-players v-step-17 v-step-18">
     <p class="topbar">Player Scores</p>
     <Player v-for="player in playerInfo" v-bind="player" :key="player.role"/>
   </div>

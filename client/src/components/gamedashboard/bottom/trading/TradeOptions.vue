@@ -9,13 +9,11 @@
           alt="Investment"
         />
       </div>
-
       <div>
-        <input type="number" min="0" v-model.number="resources[resource]" class="resource-amount" />
+        <input v-if="mode=='outgoing'" type="number" min="0" :max="playerInventory[resource]" @change='resourcesAmount' v-model.number="resources[resource]" class="resource-amount" />
+        <input v-else type="number" min="0" max="999" v-on:change='resourcesAmount()' v-model.number="resources[resource]" class="resource-amount" />
       </div>
     </div>
-
-    {{ resourcesAmount }}
   </div>
 </template>
 

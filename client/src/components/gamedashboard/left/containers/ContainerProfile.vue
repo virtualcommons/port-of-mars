@@ -1,5 +1,5 @@
 <template>
-  <div class="profile">
+  <div class="profile v-step-8">
     <div class="p-container">
       <div class="frame-outer">
         <div class="frame-inner">

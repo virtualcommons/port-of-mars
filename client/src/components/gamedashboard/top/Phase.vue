@@ -6,7 +6,7 @@
       <p class="current">{{ label }}</p>
       <div v-if="btnVisibility" class="buttons">
         <button
-          class="donebtn"
+          class="donebtn v-step-14"
           @click="submitDone"
           :disabled="btnDisabled"
           type="button"
