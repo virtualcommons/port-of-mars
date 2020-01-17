@@ -1,5 +1,5 @@
 <template>
-  <div class="container-bottom">
+  <div class="container-bottom v-step-4">
     <div class="b-row">
       <div class="view">
         <ContainerInvestments v-if="gamePhase == phase.invest" />

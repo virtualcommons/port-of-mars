@@ -69,6 +69,10 @@ export default class Tutorial extends Vue {
   hasApi = false;
 
   async created() {
+    await this.setupRoom();
+  }
+
+  async setupRoom() {
     const gameRoom = await this.$client.joinOrCreate('tutorial');
     applyGameServerResponses(gameRoom, this.$tstore);
     this.api.connect(gameRoom);
@@ -330,9 +334,9 @@ export default class Tutorial extends Vue {
     (this as any).$tours.gameTour.start();
   }
   startTourCallback() {
-    const currentStepElement = document.querySelector(this.steps[0].target);
+    const currentStepElement = this.$el.querySelector(this.steps[0].target);
     // add in-tour class to body
-    document.body.classList.add(this.BODY_TOUR);
+    this.$el.classList.add(this.BODY_TOUR);
     // add active class for first step
     currentStepElement!.classList.add(this.TOUR_ACTIVE_CLASS);
     // go to next events phase 5 seconds after tour starts
@@ -341,8 +345,8 @@ export default class Tutorial extends Vue {
     }, 6500);
   }
   previousStepCallback(currentStep: any) {
-    const currentStepElement = document.querySelector(this.steps[currentStep].target);
-    const previousStepElement = document.querySelector(this.steps[currentStep - 1].target);
+    const currentStepElement = this.$el.querySelector(this.steps[currentStep].target);
+    const previousStepElement = this.$el.querySelector(this.steps[currentStep - 1].target);
     // remove active step from current step
     currentStepElement!.classList.remove(this.TOUR_ACTIVE_CLASS);
     // add active class to previous step
@@ -354,8 +358,8 @@ export default class Tutorial extends Vue {
     }
   }
   nextStepCallback(currentStep: any) {
-    const currentStepElement = document.querySelector(this.steps[currentStep].target);
-    const nextStepElement = document.querySelector(this.steps[currentStep + 1].target);
+    const currentStepElement = this.$el.querySelector(this.steps[currentStep].target);
+    const nextStepElement = this.$el.querySelector(this.steps[currentStep + 1].target);
     // remove active step from current step
     currentStepElement!.classList.remove(this.TOUR_ACTIVE_CLASS);
     // add active step to next step
@@ -373,9 +377,9 @@ export default class Tutorial extends Vue {
   }
   stopTourCallback(currentStep: any) {
     // remove in-tour from body
-    document.body.classList.remove(this.BODY_TOUR);
+    this.$el.classList.remove(this.BODY_TOUR);
     // remove active class from body
-    document.querySelector(`.${this.TOUR_ACTIVE_CLASS}`)!.classList.remove(this.TOUR_ACTIVE_CLASS);
+    this.$el.querySelector(`.${this.TOUR_ACTIVE_CLASS}`)!.classList.remove(this.TOUR_ACTIVE_CLASS);
   }
   /**
    * mounted() method
