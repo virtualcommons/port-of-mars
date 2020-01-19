@@ -218,6 +218,7 @@ export type TradeSetData = { [uuid: string]: TradeData };
 export interface PlayerData {
   role: Role;
   costs: ResourceCostData;
+  specialty: Resource;
   accomplishment: AccomplishmentSetData;
   ready: boolean;
   timeBlocks: number;

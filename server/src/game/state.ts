@@ -14,7 +14,9 @@ import {
   PlayerData,
   PlayerSetData,
   POLITICIAN,
-  RESEARCHER, Resource,
+  RESEARCHER,
+  RESOURCES,
+  Resource,
   ResourceAmountData,
   ResourceCostData,
   Role,
@@ -233,6 +235,21 @@ class ResourceCosts extends Schema implements ResourceCostData {
         });
     }
 
+  }
+
+  static getSpecialty(role: Role): Resource {
+    switch(role) {
+      case CURATOR:
+        return 'culture';
+      case ENTREPRENEUR:
+        return 'finance';
+      case PIONEER:
+        return 'legacy';
+      case POLITICIAN:
+        return 'government';
+      case RESEARCHER:
+        return 'science';
+    }
   }
 
   @type('number')
@@ -564,6 +581,7 @@ export class MarsEventsDeck {
 export interface PlayerSerialized {
   role: Role
   costs: ResourceCostData
+  specialty: Resource
   accomplishment: AccomplishmentSetSerialized
   ready: boolean
   timeBlocks: number
@@ -643,11 +661,13 @@ export class Player extends Schema implements PlayerData {
     this.role = role;
     this.accomplishment = new AccomplishmentSet(role);
     this.costs = ResourceCosts.fromRole(role);
+    this.specialty = ResourceCosts.getSpecialty(role);
   }
 
   fromJSON(data: PlayerSerialized) {
     this.role = data.role;
     this.costs.fromJSON(data.costs);
+    this.specialty = data.specialty;
     this.accomplishment.fromJSON(data.accomplishment);
     this.ready = data.ready;
     this.timeBlocks = data.timeBlocks;
@@ -661,6 +681,7 @@ export class Player extends Schema implements PlayerData {
     return {
       role: this.role,
       costs: this.costs.toJSON(),
+      specialty: this.specialty,
       accomplishment: this.accomplishment.toJSON(),
       ready: this.ready,
       timeBlocks: this.timeBlocks,
@@ -676,6 +697,9 @@ export class Player extends Schema implements PlayerData {
 
   @type(ResourceCosts)
   costs: ResourceCosts;
+
+  @type("string")
+  specialty: Resource;
 
   @type(AccomplishmentSet)
   accomplishment: AccomplishmentSet;
