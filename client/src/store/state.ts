@@ -44,6 +44,7 @@ function defaultPlayerData(role: Role): PlayerClientData {
       purchasable: []
     },
     costs: defaultCostData(role),
+    specialty: 'science',
     inventory: defaultInventory(role),
     ready: false,
     timeBlocks: 10,
