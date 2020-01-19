@@ -32,6 +32,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
+import { AccomplishmentData, RESEARCHER } from 'shared/types';
 import CardAccomplishment from '@/components/gamedashboard/global/cards/CardAccomplishment.vue';
 
 @Component({
@@ -41,36 +42,44 @@ import CardAccomplishment from '@/components/gamedashboard/global/cards/CardAcco
 })
 export default class AccomplishmentsSelectPurchased extends Vue {
   private purchasedAccomplishmentsLength: number = -1;
-  private selectedPurchasedAccomplishment: object = {};
+  private selectedPurchasedAccomplishment: AccomplishmentData = {
+    id: -1,
+    role: RESEARCHER,
+    label: '',
+    flavorText: '',
+    science: 0,
+    government: 0,
+    legacy: 0,
+    finance: 0,
+    culture: 0,
+    upkeep: 0,
+    victoryPoints: 0,
+    effect: ''
+  };
+
+  // get purchasableAccomplishments() {
+  //   const purchasable = this.$store.getters.player.accomplishment.purchasable;
+  //   console.log('purchasableAccomplishments:', purchasable);
+  //   return purchasable;
+  // }
 
   get boughtAccomplishments() {
     const bought = this.$store.getters.player.accomplishment.bought;
 
     // TODO: There's definitely a better place to do this...
-    console.log('bought:', bought);
     this.purchasedAccomplishmentsLength = Object.keys(bought).length;
-    console.log(
-      'purchasedAccomplishmentsLength:',
-      this.purchasedAccomplishmentsLength
-    );
-
     return bought;
   }
 
   get completed() {
     if (
       this.purchasedAccomplishmentsLength === 0 ||
-      this.selectedPurchasedAccomplishment.id !== undefined
+      this.selectedPurchasedAccomplishment.id !== -1
     ) {
       return true;
     }
     return false;
   }
-
-  // get purchasableAccomplishments() {
-  //   const purchased = this.$store.getters.player.accomplishment.purchasable;
-  //   return purchased;
-  // }
 
   private handleDiscardAccomplishment(a: any) {
     // this.$root.$emit('openModalConfirmation', {
