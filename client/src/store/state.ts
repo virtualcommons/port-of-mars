@@ -97,6 +97,7 @@ export interface State extends GameData {
   eventView: EventClientView;
   quizQuestions: Array<QuizQuestionData>;
   quizResults: Array<QuizResultPackage>;
+  eventCardsVisible: Array<any>;
 }
 
 export const initialStoreState: State = {
@@ -118,9 +119,10 @@ export const initialStoreState: State = {
   loading: false,
 
   activeNotifications: [],
-  eventView: EventClientView.ACCOMPLISHMENT_SELECT_PURCHASED,
+  eventView: 'ACCOMPLISHMENT_SELECT_PURCHASED',
   quizQuestions: [],
-  quizResults: []
+  quizResults: [],
+  eventCardsVisible: []
 };
 
 function tutorialNotifications() {

@@ -188,27 +188,36 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
 
   apply(game: GameState): void {
     console.log('EnteredMarsEventPhase');
-    const log = new MarsLogMessage({
-      performedBy: CURATOR,
-      category: 'upkeep',
-      content: `upkeep decreased ${game.upkeep - game.nextRoundUpkeep()}`,
-      timestamp: this.dateCreated
-    });
+    // const log = new MarsLogMessage({
+    //   performedBy: CURATOR,
+    //   category: 'upkeep',
+    //   content: `upkeep decreased ${game.upkeep - game.nextRoundUpkeep()}`,
+    //   timestamp: this.dateCreated
+    // });
 
-    game.handleEventCompletion();
+    // game.handleEventCompletion();
     game.resetPlayerReadiness();
     game.refreshPlayerPurchasableAccomplisments();
+
     game.phase = Phase.events;
     game.round += 1;
     game.upkeep = game.nextRoundUpkeep();
+
     const cards = game.marsEventDeck.peek(game.upkeep);
+    console.log('cards: ', cards);
     const marsEvents = cards.map(e => new MarsEvent(e));
+    console.log('const marsEvents: ', marsEvents);
+
     game.phase = Phase.events;
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
+
+    console.log('game.marsEvents: ', game.marsEvents);
     game.marsEvents.splice(0, game.marsEvents.length, ...marsEvents);
+    console.log('game.marsEvents (after splice): ', game.marsEvents);
+
     game.marsEventsProcessed = GameState.DEFAULTS.marsEventsProcessed;
     game.marsEventDeck.updatePosition(game.marsEvents.length);
-    game.logs.push(log);
+    // game.logs.push(log);
 
     for (const player of game.players) {
       player.refreshPurchasableAccomplishments();
@@ -230,7 +239,7 @@ export class EnteredInvestmentPhase extends KindOnlyGameEvent {
   kind = 'entered-investment-phase';
 
   apply(game: GameState): void {
-    console.log('EnteredInvestmentPhase');
+    // console.log('EnteredInvestmentPhase');
     game.updateMarsEventsElapsed();
     game.resetPlayerReadiness();
     game.phase = Phase.invest;

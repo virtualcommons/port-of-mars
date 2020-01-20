@@ -48,7 +48,8 @@ export default class Player extends Vue {
   private hover: boolean = false;
 
   get layout(): string {
-    return this.$tstore.state.eventView;
+    const layout = this.$tstore.getters.currentEventView;
+    return layout;
   }
 
   get auditInvestments(): object {

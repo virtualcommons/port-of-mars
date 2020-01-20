@@ -24,7 +24,7 @@
       margin: 0 0 0.5rem 0;
       padding: 0.25rem 1rem;
       @include make-center;
-      background-color: $space-white;
+      background-color: $space-orange;
 
       p {
         margin: 0;
@@ -43,15 +43,20 @@
 
       p {
         margin: 0.5rem 0;
+        color: $space-orange;
+        font-size: $font-med;
         text-align: center;
       }
 
-      .name {
+      .name-wrapper,
+      .effect-wrapper {
+        margin: 0.5rem;
         font-size: $font-med;
-        color: $space-orange;
       }
 
+      .name,
       .effect {
+        color: $space-white;
         font-size: $font-small;
       }
     }

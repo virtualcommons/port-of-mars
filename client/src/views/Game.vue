@@ -39,7 +39,7 @@ export default class Game extends Vue {
   async created() {
     const gameRoom = await this.$client.joinOrCreate('game');
     applyGameServerResponses(gameRoom, this.$tstore);
-    console.log(this);
+    // console.log(this);
     this.api.connect(gameRoom);
     this.hasApi = true;
   }

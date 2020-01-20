@@ -66,7 +66,7 @@ export default class Chat extends Vue {
   private count: number = 0;
 
   get layout() {
-    return this.$tstore.state.eventView;
+    return this.$store.getters.currentEventView;
   }
 
   get messages() {

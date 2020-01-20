@@ -1,10 +1,10 @@
 <template>
-  <div @click="handleClick" class="card-event-component">
+  <div v-show="visible" @click="handleClick" class="card-event-component">
     <div class="name">
       <p>{{ event.name }}</p>
     </div>
     <div class="effect">
-      <p>{{ event.effect }}</p>
+      <p>{{ event.effect !== '' ? event.effect : 'No special effect' }}</p>
     </div>
     <div class="length">
       <p>
@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import {AccomplishmentData} from "shared/types";
+import { AccomplishmentData } from 'shared/types';
 
 @Component({})
 export default class CardEvent extends Vue {
@@ -34,17 +34,17 @@ export default class CardEvent extends Vue {
   })
   private event!: AccomplishmentData;
 
-  mounted() {
-    console.log('MOUNTED: ', this.event);
-    // console.log('ID: ', this.event.id);
-    // console.log('NAME: ', this.event.name);
+  get visible(): boolean {
+    const eventCardsVisible: any = this.$store.state.eventCardsVisible;
+    for (const [i, value] of eventCardsVisible.entries()) {
+      if (value.id === this.event.id) {
+        return value.visible === true;
+      }
+    }
+    return false;
   }
 
-  updated() {
-    console.log('UPDATED: ', this.event);
-  }
-
-  handleClick() {
+  private handleClick() {
     this.$root.$emit('openModalCard', {
       card: 'event',
       payload: this.event

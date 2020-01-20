@@ -17,7 +17,7 @@ import { ROLES } from 'shared/types';
 })
 export default class ContainerPlayers extends Vue {
   get topbarText(): string {
-    const layout = this.$tstore.state.eventView;
+    const layout = this.$tstore.getters.currentEventView;
     if (layout !== 'AUDIT') {
       return 'Player Scores';
     } else {

@@ -8,6 +8,9 @@ import {
   GameData, Investment,
   InvestmentData,
   MarsEventData,
+  EventServerAction,
+  EventClientAction,
+  EventClientView,
   MarsLogMessageData,
   Phase,
   PIONEER,
@@ -491,6 +494,9 @@ export class MarsEvent extends Schema implements MarsEventData {
     this.elapsed = 0;
     this.name = data.name;
     this.flavorText = data.flavorText;
+    this.serverActionHandler = data.serverActionHandler!;
+    this.clientViewHandler = data.clientViewHandler;
+    this.clientActionHandler = data.clientActionHandler!;
     this.effect = data.effect;
   }
 
@@ -539,6 +545,14 @@ export class MarsEvent extends Schema implements MarsEventData {
   @type('string')
   effect: string;
 
+  @type('string')
+  serverActionHandler: EventServerAction;
+
+  @type('string')
+  clientViewHandler: EventClientView;
+
+  @type('string')
+  clientActionHandler: EventClientAction;
 }
 
 interface MarsEventDeckSerialized {
@@ -895,27 +909,27 @@ export class GameState extends Schema implements GameData {
     this.maxRound = getRandomIntInclusive(8, 12);
     this.players = new PlayerSet();
 
-    this.tradeSet['123'] = new Trade(
-      {
-      role: 'Curator',
-      resourceAmount: {
-        science: 1,
-        government: 1,
-        legacy: 1,
-        finance: 1,
-        culture: 1
-      }
-    },
-    {
-      role: 'Researcher',
-      resourceAmount: {
-        science: 1,
-        government: 1,
-        legacy: 1,
-        finance: 1,
-        culture: 1
-      }
-    });
+    // this.tradeSet['123'] = new Trade(
+    //   {
+    //   role: 'Curator',
+    //   resourceAmount: {
+    //     science: 1,
+    //     government: 1,
+    //     legacy: 1,
+    //     finance: 1,
+    //     culture: 1
+    //   }
+    // },
+    // {
+    //   role: 'Researcher',
+    //   resourceAmount: {
+    //     science: 1,
+    //     government: 1,
+    //     legacy: 1,
+    //     finance: 1,
+    //     culture: 1
+    //   }
+    // });
   }
 
   static DEFAULTS = {
