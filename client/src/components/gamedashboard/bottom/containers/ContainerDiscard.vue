@@ -3,7 +3,7 @@
     <div class="discard-row">
       <div class="info">
         <div class="topbar">
-          <p>Information</p>
+          <p>Discard</p>
         </div>
         <div class="content">
           <p class="name">Discard Available Accomplishments (Optional)</p>

@@ -1,4 +1,3 @@
-import {EventClientView} from "shared/types";
 <template>
   <div class="container-events">
     <div class="events-row">
@@ -7,19 +6,32 @@ import {EventClientView} from "shared/types";
           <p>Event</p>
         </div>
         <div class="content">
-          <p class="name">{{ eventContentName }}</p>
-          <p class="effect">{{ eventContentEffect }}</p>
+          <div class="name-wrapper">
+            <p>Name</p>
+            <p class="name">{{ currentEventName }}</p>
+          </div>
+          <div class="effect-wrapper">
+            <p>Effect</p>
+            <p class="effect">
+              {{
+                currentEventEffect !== ''
+                  ? currentEventEffect
+                  : 'No special effect'
+              }}
+            </p>
+          </div>
         </div>
       </div>
       <div class="actions">
-        <EventContainer />
+        <EventContainer :event="currentEvent" />
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import {Component, Vue} from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
+import { MarsEventData, EventClientView } from 'shared/types';
 import EventContainer from '@/components/gamedashboard/bottom/events/EventContainer.vue';
 
 @Component({
@@ -28,9 +40,40 @@ import EventContainer from '@/components/gamedashboard/bottom/events/EventContai
   }
 })
 export default class ContainerEvents extends Vue {
-  private eventContentName: string = 'Out of Commission';
+  get currentEvent(): MarsEventData {
+    const current = this.$store.getters.currentEvent;
 
-  private eventContentEffect: string = 'The Politician receives only 3 Time Blocks this round.';
+    // TODO: Move code elsewhere?
+    const data = { id: current.id, visibility: true };
+    console.log('DATA PACKAGE: ', data);
+    this.$store.commit('SET_EVENT_VISIBILITY', data);
+
+    return current;
+  }
+
+  get currentEventName(): string {
+    const name = this.currentEvent.name;
+    if (name) {
+      return name;
+    }
+    return '';
+  }
+
+  get currentEventEffect(): string {
+    const effect = this.currentEvent.effect;
+    if (effect) {
+      return effect;
+    }
+    return '';
+  }
+
+  // get currentEventView(): EventClientView {
+  //   const view = this.currentEvent.clientViewHandler;
+  //   if(view) {
+  //     return view;
+  //   }
+  //   return 'NO_CHANGE';
+  // }
 }
 </script>
 

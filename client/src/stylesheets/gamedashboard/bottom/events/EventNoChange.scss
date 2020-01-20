@@ -1,0 +1,35 @@
+.event-no-change {
+  @include expand;
+  @include make-column-and-center;
+  justify-content: space-around;
+
+  .wrapper {
+    @include make-column-and-center;
+
+    .note {
+      font-size: $font-small;
+      color: $space-orange;
+    }
+
+    .event-text {
+      margin-bottom: 0;
+      color: $space-white;
+      font-size: $font-med;
+    }
+  }
+
+  button {
+    @include reset-button;
+    height: 3rem;
+    width: 12.5rem;
+    border: 0.0625rem solid $space-orange;
+    margin: 0.5rem;
+    color: $space-orange;
+    @include default-transition-base;
+
+    &:hover {
+      color: $space-gray;
+      background-color: $space-orange;
+    }
+  }
+}
