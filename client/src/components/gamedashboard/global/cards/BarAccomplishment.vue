@@ -25,11 +25,11 @@
           />
         </p>
       </div>
-      <div class="purchase">
-        <button :disabled="!canBuy" @click="handlePurchase()">
-          Purchase Accomplishment
-        </button>
-      </div>
+    </div>
+    <div class="purchase">
+      <button :disabled="!canBuy" @click="handlePurchase()">
+        Purchase Accomplishment
+      </button>
     </div>
   </div>
 </template>

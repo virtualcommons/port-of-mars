@@ -244,24 +244,6 @@ export class ResetGameCmd implements Command {
   }
 }
 
-// export class SetPlayerReadinessCmd implements Command {
-//   constructor(
-//     private ready: boolean,
-//     private game: Game,
-//     private player: Player
-//   ) {}
-//
-//   static fromReq(r: req.SetPlayerReadinessData, game: Game, client: Client) {
-//     const p = game.getPlayerByClient(client);
-//     return new SetPlayerReadinessCmd(r.value, game, p);
-//   }
-//
-//   execute(): Array<GameEvent> {
-//     const role = this.player.role;
-//     return [new SetPlayerReadiness({ value: this.ready, role: role })];
-//   }
-// }
-
 // EVENT REQUESTS :: START
 export class EventSendPollResultsCmd implements Command {
   constructor(
