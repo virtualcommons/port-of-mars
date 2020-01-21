@@ -14,8 +14,9 @@
       <div class="cost">
         <p
           v-for="investment in accomplishmentCost"
-          v-bind:class="{'unattainable-resource': shouldResourceBeGrayedOut(investment)}"
-
+          v-bind:class="{
+            'unattainable-resource': shouldResourceBeGrayedOut(investment)
+          }"
           :key="investment + Math.random()"
         >
           <img
@@ -25,10 +26,7 @@
         </p>
       </div>
       <div class="purchase">
-        <button
-          :disabled="!canBuy"
-          @click="handlePurchase()"
-        >
+        <button :disabled="!canBuy" @click="handlePurchase()">
           Purchase Accomplishment
         </button>
       </div>
@@ -37,8 +35,19 @@
 </template>
 
 <script lang="ts">
-import {Vue, Component, Prop, InjectReactive, Inject} from 'vue-property-decorator';
-import {AccomplishmentData, Investment, INVESTMENTS, Resource} from 'shared/types';
+import {
+  Vue,
+  Component,
+  Prop,
+  InjectReactive,
+  Inject
+} from 'vue-property-decorator';
+import {
+  AccomplishmentData,
+  Investment,
+  INVESTMENTS,
+  Resource
+} from 'shared/types';
 import * as _ from 'lodash';
 import { GameRequestAPI } from '@/api/game/request';
 import { canPurchaseAccomplishment } from 'shared/validation';
@@ -77,22 +86,24 @@ export default class BarAccomplishment extends Vue {
     return _.clone(this.$tstore.getters.player.inventory);
   }
 
-  shouldResourceBeGrayedOut(investment: Investment){
-    if (investment === 'upkeep'){
+  shouldResourceBeGrayedOut(investment: Investment) {
+    if (investment === 'upkeep') {
       return false;
     }
 
-    if (this.playerInventory[investment] > 0){
+    if (this.playerInventory[investment] > 0) {
       this.playerInventory[investment]--;
       return false;
     }
-    return true
+    return true;
   }
 
   get canBuy() {
-    return canPurchaseAccomplishment(this.accomplishment,this.$tstore.getters.player.inventory)
+    return canPurchaseAccomplishment(
+      this.accomplishment,
+      this.$tstore.getters.player.inventory
+    );
   }
-
 
   private handlePurchase() {
     if (this.canBuy) {
@@ -105,7 +116,7 @@ export default class BarAccomplishment extends Vue {
 <style lang="scss" scoped>
 @import '@/stylesheets/gamedashboard/global/cards/BarAccomplishments.scss';
 
-.unattainable-resource{
+.unattainable-resource {
   opacity: 30%;
 }
 </style>

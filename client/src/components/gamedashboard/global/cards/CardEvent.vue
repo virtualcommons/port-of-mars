@@ -44,7 +44,7 @@ export default class CardEvent extends Vue {
     return false;
   }
 
-  private handleClick() {
+  private handleClick(): void {
     this.$root.$emit('openModalCard', {
       card: 'event',
       payload: this.event

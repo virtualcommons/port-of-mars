@@ -43,17 +43,15 @@
       background-color: $space-white-opaque-1;
 
       p {
-        margin: 0.5rem 0;
+        margin: 0.5rem;
+        color: $space-white;
+        font-size: $font-small;
         text-align: center;
       }
 
-      .name {
-        font-size: $font-med;
+      .note {
         color: $space-orange;
-      }
-
-      .effect {
-        font-size: $font-small;
+        font-size: $font-med;
       }
     }
   }

@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import {Component, Inject, InjectReactive, Vue} from 'vue-property-decorator';
+import { Component, Inject, InjectReactive, Vue } from 'vue-property-decorator';
 import Round from '@/components/gamedashboard/top/Round.vue';
 import { PHASE_LABELS } from 'shared/types';
 import ModalConfirmation from '@/components/gamedashboard/global/modals/ModalConfirmation.vue';
@@ -51,9 +51,9 @@ export default class Phase extends Vue {
   @Inject() private api!: GameRequestAPI;
 
   get label() {
-    const lbl = PHASE_LABELS[this.$tstore.state.phase];
+    // const lbl = PHASE_LABELS[this.$tstore.state.phase];
     if (this.$store.state.phase === s.Phase.events) {
-      return `${lbl} (${this.$tstore.state.marsEventsProcessed})`;
+      return `Event ${this.$tstore.state.marsEventsProcessed + 1}`;
     }
     return PHASE_LABELS[this.$tstore.state.phase];
   }
