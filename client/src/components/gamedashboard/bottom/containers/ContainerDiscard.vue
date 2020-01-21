@@ -6,20 +6,28 @@
           <p>Discard</p>
         </div>
         <div class="content">
-          <p class="name">Discard Available Accomplishments (Optional)</p>
-          <p class="effect">
-            Click on the title of the accomplishment(s) that you would like to
-            discard. The discarded accomplishments will be replaced with newly
-            drawn ones next round. This action is permanent.
+          <p class="note">Note</p>
+          <p>
+            This phase is optional.<br /><br />Click on the title of the
+            accomplishment(s) that you would like to discard.<br /><br />The
+            discarded accomplishments will be replaced with newly drawn ones
+            next round.
           </p>
         </div>
       </div>
       <div class="actions">
-        <BarDiscard v-for="accomplishment in purchasableAccomplishments"
+        <BarDiscard
+          v-for="accomplishment in purchasableAccomplishments"
           :key="accomplishment.id"
-          :accomplishment="accomplishment"/>
+          :accomplishment="accomplishment"
+        />
         <div class="info-text" v-show="purchasableAccomplishments.length != 3">
-          <p>{{`You will be delt ${3-purchasableAccomplishments.length} new card(s) next round`}}</p>
+          <p>
+            {{
+              `You will be delt ${3 -
+                purchasableAccomplishments.length} new card(s) next round`
+            }}
+          </p>
         </div>
       </div>
     </div>
@@ -31,7 +39,7 @@ import { Vue, Component } from 'vue-property-decorator';
 import BarDiscard from '@/components/gamedashboard/global/cards/BarDiscard.vue';
 
 @Component({
-  components:{
+  components: {
     BarDiscard
   }
 })
@@ -40,7 +48,6 @@ export default class ContainerDiscard extends Vue {
     let purchasable = this.$store.getters.player.accomplishment.purchasable;
     return purchasable;
   }
-
 }
 </script>
 

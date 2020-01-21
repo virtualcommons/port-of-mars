@@ -10,6 +10,11 @@
     @include make-column-and-center;
     justify-content: space-around;
 
+    p {
+      color: $space-white;
+      margin: 0.5rem 0.5rem 4rem 0.5rem;
+    }
+
     button {
       @include reset-button;
       height: 3rem;

@@ -1,11 +1,29 @@
 <template>
   <div class="container-purchase">
-    <div class="wrapper">
-      <BarAccomplishment
-        v-for="accomplishment in purchasableAccomplishments"
-        :key="accomplishment.label + 2"
-        :accomplishment="accomplishment"
-      />
+    <div class="purchase-row">
+      <div class="info">
+        <div class="topbar">
+          <p>Purchase</p>
+        </div>
+        <div class="content">
+          <p class="note">Note</p>
+          <p>
+            During this phase you can purchase any available accomplishments
+            with your current resource investments.
+          </p>
+        </div>
+      </div>
+      <div class="actions">
+        <div class="outer-wrapper">
+          <div class="wrapper">
+            <BarAccomplishment
+              v-for="accomplishment in purchasableAccomplishments"
+              :key="accomplishment.label + 2"
+              :accomplishment="accomplishment"
+            />
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>

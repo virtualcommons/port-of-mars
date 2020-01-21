@@ -102,7 +102,7 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
   // RESPONSES FOR EVENTS :: START
 
   room.state.marsEvents.onAdd = (e: Schemify<MarsEventData>, index: number) => {
-    console.log('RESPONSE (marsEvents.onAdd): ', deschemify(e));
+    // console.log('RESPONSE (marsEvents.onAdd): ', deschemify(e));
     store.commit('ADD_TO_EVENTS', deschemify(e));
   };
 
@@ -110,7 +110,7 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
     e: Schemify<MarsEventData>,
     index: number
   ) => {
-    console.log('RESPONSE (marsEvents.onRemove): ', deschemify(e));
+    // console.log('RESPONSE (marsEvents.onRemove): ', deschemify(e));
     store.commit('REMOVE_FROM_EVENTS', deschemify(e));
   };
 
@@ -118,10 +118,10 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
     event: Schemify<MarsEventData>,
     index: number
   ) => {
-    console.log('RESPONSE (marsEvents.onChange): ', {
-      event: deschemify(event),
-      index
-    });
+    // console.log('RESPONSE (marsEvents.onChange): ', {
+    //   event: deschemify(event),
+    //   index
+    // });
     store.commit('CHANGE_EVENT', { event: deschemify(event), index });
   };
 

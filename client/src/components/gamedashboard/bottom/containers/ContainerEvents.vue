@@ -3,7 +3,7 @@
     <div class="events-row">
       <div class="info">
         <div class="topbar">
-          <p>Event</p>
+          <p>Event {{ eventNumber }}</p>
         </div>
         <div class="content">
           <div class="name-wrapper">
@@ -23,7 +23,9 @@
         </div>
       </div>
       <div class="actions">
-        <EventContainer :event="currentEvent" />
+        <div class="outer-wrapper">
+          <EventContainer :event="currentEvent" />
+        </div>
       </div>
     </div>
   </div>
@@ -45,10 +47,14 @@ export default class ContainerEvents extends Vue {
 
     // TODO: Move code elsewhere?
     const data = { id: current.id, visibility: true };
-    console.log('DATA PACKAGE: ', data);
     this.$store.commit('SET_EVENT_VISIBILITY', data);
 
     return current;
+  }
+
+  get eventNumber(): number {
+    const eventNumber = this.$tstore.state.marsEventsProcessed + 1;
+    return eventNumber;
   }
 
   get currentEventName(): string {
