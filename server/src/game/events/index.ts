@@ -318,3 +318,41 @@ export class StateSnapshotTaken implements GameEvent {
     };
   }
 }
+
+// EVENT REQUESTS :: START
+export class EventSendPollResults extends GameEventWithData {
+  kind = 'event-send-poll-results';
+
+  constructor(public data: { results: object }) {
+    super();
+  }
+
+  apply(game: GameState): void {
+    console.log('EventSendPollResults: ', this.data.results);
+  }
+}
+
+export class EventModifyInfluences extends GameEventWithData {
+  kind = 'event-modify-influences';
+
+  constructor(public data: { results: object }) {
+    super();
+  }
+
+  apply(game: GameState): void {
+    console.log('EventModifyInfluences: ', this.data.results);
+  }
+}
+
+export class EventModifyAccomplishments extends GameEventWithData {
+  kind = 'event-modify-accomplishments';
+
+  constructor(public data: { results: object }) {
+    super();
+  }
+
+  apply(game: GameState): void {
+    console.log('EventModifyAccomplishments: ', this.data.results);
+  }
+}
+// EVENT REQUESTS :: END

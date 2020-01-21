@@ -1,50 +1,68 @@
-import * as req from "shared/requests";
-import {InvestmentData, Phase, TradeData, MarsLogMessageData} from "shared/types";
-import {MarsEvent, Player} from "@/game/state";
+import * as req from 'shared/requests';
+import {
+  InvestmentData,
+  Phase,
+  TradeData,
+  MarsLogMessageData
+} from 'shared/types';
+import { MarsEvent, Player } from '@/game/state';
 import {
   AcceptTradeRequest,
   BoughtAccomplishment,
   DiscardedAccomplishment,
   EnteredDefeatPhase,
   EnteredDiscardPhase,
-  EnteredInvestmentPhase, EnteredMarsEventPhase,
+  EnteredInvestmentPhase,
+  EnteredMarsEventPhase,
   EnteredPurchasePhase,
   EnteredTradePhase,
   EnteredVictoryPhase,
   ReenteredMarsEventPhase,
-  SentChatMessage, SentTradeRequest,
+  SentChatMessage,
+  SentTradeRequest,
   TimeInvested,
   RejectTradeRequest,
-  SetPlayerReadiness
-} from "@/game/events";
-import {getAccomplishmentByID} from "@/repositories/Accomplishment";
-import {Client} from "colyseus";
-import {Game} from "@/game/room/types";
-import {Command} from "@/game/commands/types";
-import {GameEvent} from "@/game/events/types";
+  SetPlayerReadiness,
+  EventSendPollResults,
+  EventModifyInfluences,
+  EventModifyAccomplishments
+} from '@/game/events';
+import { getAccomplishmentByID } from '@/repositories/Accomplishment';
+import { Client } from 'colyseus';
+import { Game } from '@/game/room/types';
+import { Command } from '@/game/commands/types';
+import { GameEvent } from '@/game/events/types';
 
 export class SendChatMessageCmd implements Command {
-  constructor(private message: string, private game: Game, private player: Player) {
-  }
+  constructor(
+    private message: string,
+    private game: Game,
+    private player: Player
+  ) {}
 
-  static fromReq(r: req.SendChatMessageData, game: Game, client: Client): SendChatMessageCmd {
+  static fromReq(
+    r: req.SendChatMessageData,
+    game: Game,
+    client: Client
+  ): SendChatMessageCmd {
     const p = game.getPlayerByClient(client);
     return new SendChatMessageCmd(r.message, game, p);
   }
 
   execute() {
-    return [new SentChatMessage({
-      message: this.message,
-      dateCreated: (new Date()).getTime(),
-      role: this.player.role,
-      round: this.game.state.round
-    })];
+    return [
+      new SentChatMessage({
+        message: this.message,
+        dateCreated: new Date().getTime(),
+        role: this.player.role,
+        round: this.game.state.round
+      })
+    ];
   }
 }
 
 export class BuyAccomplishmentCmd implements Command {
-  constructor(private id: number, private game: Game, private client: Client) {
-  }
+  constructor(private id: number, private game: Game, private client: Client) {}
 
   static fromReq(r: req.BuyAccomplishmentCardData, game: Game, client: Client) {
     return new BuyAccomplishmentCmd(r.id, game, client);
@@ -55,7 +73,7 @@ export class BuyAccomplishmentCmd implements Command {
     const role = p.role;
     const accomplishment = getAccomplishmentByID(role, this.id);
     if (p.isAccomplishmentPurchaseFeasible(accomplishment)) {
-      return [new BoughtAccomplishment({accomplishment, role})];
+      return [new BoughtAccomplishment({ accomplishment, role })];
     }
     return [];
   }
@@ -64,21 +82,27 @@ export class BuyAccomplishmentCmd implements Command {
 export class DiscardAccomplishmentCmd implements Command {
   constructor(private id: number, private game: Game, private client: Client) {}
 
-  static fromReq(r: req.DiscardAccomplishmentCardData, game: Game, client: Client) {
+  static fromReq(
+    r: req.DiscardAccomplishmentCardData,
+    game: Game,
+    client: Client
+  ) {
     return new DiscardAccomplishmentCmd(r.id, game, client);
   }
 
   execute(): Array<GameEvent> {
     const p = this.game.getPlayerByClient(this.client);
     const role = p.role;
-    return [new DiscardedAccomplishment({id: this.id, role})]
+    return [new DiscardedAccomplishment({ id: this.id, role })];
   }
 }
 
-
 export class TimeInvestmentCmd implements Command {
-  constructor(private data: InvestmentData, private game: Game, private player: Player) {
-  }
+  constructor(
+    private data: InvestmentData,
+    private game: Game,
+    private player: Player
+  ) {}
 
   static fromReq(r: req.SetTimeInvestmentData, game: Game, client: Client) {
     const p = game.getPlayerByClient(client);
@@ -89,13 +113,16 @@ export class TimeInvestmentCmd implements Command {
 
   execute(): Array<GameEvent> {
     const role = this.player.role;
-    return [new TimeInvested({ investment: this.data, role})];
+    return [new TimeInvested({ investment: this.data, role })];
   }
 }
 
 export class SetPlayerReadinessCmd implements Command {
-  constructor(private ready: boolean, private game: Game, private player: Player) {
-  }
+  constructor(
+    private ready: boolean,
+    private game: Game,
+    private player: Player
+  ) {}
 
   static fromReq(r: req.SetPlayerReadinessData, game: Game, client: Client) {
     const p = game.getPlayerByClient(client);
@@ -104,7 +131,7 @@ export class SetPlayerReadinessCmd implements Command {
 
   execute(): Array<GameEvent> {
     const role = this.player.role;
-    return [new SetPlayerReadiness({value: this.ready, role: role})];
+    return [new SetPlayerReadiness({ value: this.ready, role: role })];
   }
 }
 
@@ -117,25 +144,29 @@ export class AcceptTradeRequestCmd implements Command {
   }
 
   execute(): Array<GameEvent> {
-    return [new AcceptTradeRequest({id: this.id})];
+    return [new AcceptTradeRequest({ id: this.id })];
   }
 }
 
 export class RejectTradeRequestCmd implements Command {
-  constructor(private id: string, private game: Game, private player:Player){}
+  constructor(private id: string, private game: Game, private player: Player) {}
 
-  static fromReq(r: req.RejectTradeRquestData, game: Game, client: Client){
+  static fromReq(r: req.RejectTradeRquestData, game: Game, client: Client) {
     const p = game.getPlayerByClient(client);
     return new RejectTradeRequestCmd(r.id, game, p);
   }
 
   execute(): Array<GameEvent> {
-    return [new RejectTradeRequest({id:this.id})];
+    return [new RejectTradeRequest({ id: this.id })];
   }
 }
 
 export class SendTradeRequestCmd implements Command {
-  constructor(private trade: TradeData, private game: Game, private player: Player) {}
+  constructor(
+    private trade: TradeData,
+    private game: Game,
+    private player: Player
+  ) {}
 
   static fromReq(r: req.SendTradeRequestData, game: Game, client: Client) {
     const p = game.getPlayerByClient(client);
@@ -156,17 +187,24 @@ export class SetNextPhaseCmd implements Command {
 
   execute(): Array<GameEvent> {
     switch (this.game.state.phase) {
-      case Phase.defeat: return [];
+      case Phase.defeat:
+        return [];
       case Phase.events: {
-        if (this.game.state.marsEventsProcessed + 1 >= this.game.state.marsEvents.length) {
+        if (
+          this.game.state.marsEventsProcessed + 1 >=
+          this.game.state.marsEvents.length
+        ) {
           return [new EnteredInvestmentPhase()];
         } else {
           return [new ReenteredMarsEventPhase()];
         }
       }
-      case Phase.invest: return [new EnteredTradePhase()];
-      case Phase.trade: return [new EnteredPurchasePhase()];
-      case Phase.purchase: return [new EnteredDiscardPhase()];
+      case Phase.invest:
+        return [new EnteredTradePhase()];
+      case Phase.trade:
+        return [new EnteredPurchasePhase()];
+      case Phase.purchase:
+        return [new EnteredDiscardPhase()];
       case Phase.discard: {
         const game = this.game.state;
         const upkeep = game.nextRoundUpkeep();
@@ -184,15 +222,16 @@ export class SetNextPhaseCmd implements Command {
 
         return [new EnteredMarsEventPhase()];
       }
-      case Phase.pregame: return [new EnteredInvestmentPhase()];
-      case Phase.victory: return [];
+      case Phase.pregame:
+        return [new EnteredInvestmentPhase()];
+      case Phase.victory:
+        return [];
     }
   }
 }
 
 export class ResetGameCmd implements Command {
-  constructor(private game: Game) {
-  }
+  constructor(private game: Game) {}
 
   static fromReq(r: req.ResetGameData, game: Game) {
     return new ResetGameCmd(game);
@@ -204,3 +243,78 @@ export class ResetGameCmd implements Command {
     return [];
   }
 }
+
+// export class SetPlayerReadinessCmd implements Command {
+//   constructor(
+//     private ready: boolean,
+//     private game: Game,
+//     private player: Player
+//   ) {}
+//
+//   static fromReq(r: req.SetPlayerReadinessData, game: Game, client: Client) {
+//     const p = game.getPlayerByClient(client);
+//     return new SetPlayerReadinessCmd(r.value, game, p);
+//   }
+//
+//   execute(): Array<GameEvent> {
+//     const role = this.player.role;
+//     return [new SetPlayerReadiness({ value: this.ready, role: role })];
+//   }
+// }
+
+// EVENT REQUESTS :: START
+export class EventSendPollResultsCmd implements Command {
+  constructor(
+    private results: object,
+    private game: Game,
+    private player: Player
+  ) {}
+
+  static fromReq(r: req.EventSendPollResultsData, game: Game, client: Client) {
+    const p = game.getPlayerByClient(client);
+    return new EventSendPollResultsCmd(r.results, game, p);
+  }
+
+  execute(): Array<GameEvent> {
+    return [new EventSendPollResults({ results: this.results })];
+  }
+}
+
+export class EventModifyInfluencesCmd implements Command {
+  constructor(
+    private results: object,
+    private game: Game,
+    private player: Player
+  ) {}
+
+  static fromReq(r: req.EventModifyInfluencesData, game: Game, client: Client) {
+    const p = game.getPlayerByClient(client);
+    return new EventModifyInfluencesCmd(r.results, game, p);
+  }
+
+  execute(): Array<GameEvent> {
+    return [new EventModifyInfluences({ results: this.results })];
+  }
+}
+
+export class EventModifyAccomplishmentsCmd implements Command {
+  constructor(
+    private results: object,
+    private game: Game,
+    private player: Player
+  ) {}
+
+  static fromReq(
+    r: req.EventModifyAccomplishmentsData,
+    game: Game,
+    client: Client
+  ) {
+    const p = game.getPlayerByClient(client);
+    return new EventModifyAccomplishmentsCmd(r.results, game, p);
+  }
+
+  execute(): Array<GameEvent> {
+    return [new EventModifyAccomplishments({ results: this.results })];
+  }
+}
+// EVENT REQUESTS :: END

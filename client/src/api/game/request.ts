@@ -1,16 +1,19 @@
-import {Client, Room} from 'colyseus.js';
+import { Client, Room } from 'colyseus.js';
 import {
-  SendChatMessageData,
   Requests,
-  BuyAccomplishmentCardData,
-  SetTimeInvestmentData,
+  SendChatMessageData,
+  SetPlayerReadinessData,
   SetNextPhaseData,
   ResetGameData,
+  SetTimeInvestmentData,
+  BuyAccomplishmentCardData,
   DiscardAccomplishmentCardData,
   SendTradeRequestData,
   AcceptTradeRequestData,
   RejectTradeRquestData,
-  SetPlayerReadinessData
+  EventSendPollResultsData,
+  EventModifyInfluencesData,
+  EventModifyAccomplishmentsData
 } from 'shared/requests';
 import {
   AccomplishmentData,
@@ -18,7 +21,7 @@ import {
   TradeData,
   Role
 } from 'shared/types';
-import {MockRoom} from "@/types/tutorial";
+import { MockRoom } from '@/types/tutorial';
 
 export class GameRequestAPI {
   room!: Room | MockRoom;
@@ -89,4 +92,33 @@ export class GameRequestAPI {
     const msg: SetPlayerReadinessData = { kind: 'set-player-readiness', value };
     this.send(msg);
   }
+
+  // EVENT REQUESTS :: START
+  public eventSendPollResults(results: object) {
+    console.log('API: eventSendPollResults');
+    const msg: EventSendPollResultsData = {
+      kind: 'event-send-poll-results',
+      results
+    };
+    this.send(msg);
+  }
+
+  public eventModifyInfluences(results: object) {
+    console.log('API: eventModifyInfluences');
+    const msg: EventModifyInfluencesData = {
+      kind: 'event-modify-influences',
+      results
+    };
+    this.send(msg);
+  }
+
+  public eventModifyAccomplishments(results: object) {
+    console.log('API: eventModifyAccomplishments');
+    const msg: EventModifyAccomplishmentsData = {
+      kind: 'event-modify-accomplishments',
+      results
+    };
+    this.send(msg);
+  }
+  // EVENT REQUESTS :: END
 }
