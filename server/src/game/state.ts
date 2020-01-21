@@ -1067,20 +1067,17 @@ export class GameState extends Schema implements GameData {
 
   updateMarsEventsElapsed(): void {
     for(const event of this.marsEvents) {
-      // console.log("MARS EVENTS (CURRENT BEFORE): ", event.elapsed);
-      event.updateElapsed();
-      // console.log("MARS EVENTS (CURRENT AFTER): ", event.elapsed);
+      if(event.elapsed < event.duration) {
+        event.updateElapsed();
+        // console.log('EVENT UPDATED: ', event.id);
+      }
     }
   }
 
-  handleEventCompletion(): void {
-    for(const event of this.marsEvents) {
-      if(event.complete()) {
-        event.resetElapsed();
-      } else {
-        // TODO: KEEP INCOMPLETE CARDS
-      }
-    }
+  handleIncomplete(): void {
+    this.marsEvents = this.marsEvents.filter((event) => {
+      return !event.complete();
+    });
   }
 
   unsafeReset(): void {

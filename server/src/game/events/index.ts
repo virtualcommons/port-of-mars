@@ -187,7 +187,7 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
   kind = 'entered-mars-event-phase';
 
   apply(game: GameState): void {
-    console.log('EnteredMarsEventPhase');
+    // console.log('EnteredMarsEventPhase');
     // const log = new MarsLogMessage({
     //   performedBy: CURATOR,
     //   category: 'upkeep',
@@ -195,7 +195,6 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
     //   timestamp: this.dateCreated
     // });
 
-    // game.handleEventCompletion();
     game.resetPlayerReadiness();
     game.refreshPlayerPurchasableAccomplisments();
 
@@ -204,16 +203,14 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
     game.upkeep = game.nextRoundUpkeep();
 
     const cards = game.marsEventDeck.peek(game.upkeep);
-    console.log('cards: ', cards);
     const marsEvents = cards.map(e => new MarsEvent(e));
-    console.log('const marsEvents: ', marsEvents);
 
     game.phase = Phase.events;
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
 
-    console.log('game.marsEvents: ', game.marsEvents);
-    game.marsEvents.splice(0, game.marsEvents.length, ...marsEvents);
-    console.log('game.marsEvents (after splice): ', game.marsEvents);
+    game.handleIncomplete();
+    game.marsEvents.push(...marsEvents);
+    game.updateMarsEventsElapsed();
 
     game.marsEventsProcessed = GameState.DEFAULTS.marsEventsProcessed;
     game.marsEventDeck.updatePosition(game.marsEvents.length);
@@ -229,7 +226,7 @@ export class ReenteredMarsEventPhase extends KindOnlyGameEvent {
   kind = 'reentered-mars-event-phase';
 
   apply(game: GameState): void {
-    console.log('ReenteredMarsEventPhase');
+    // console.log('ReenteredMarsEventPhase');
     game.resetPlayerReadiness();
     game.marsEventsProcessed += 1;
   }
@@ -239,8 +236,6 @@ export class EnteredInvestmentPhase extends KindOnlyGameEvent {
   kind = 'entered-investment-phase';
 
   apply(game: GameState): void {
-    // console.log('EnteredInvestmentPhase');
-    game.updateMarsEventsElapsed();
     game.resetPlayerReadiness();
     game.phase = Phase.invest;
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
