@@ -2,9 +2,9 @@
   <div class="container-phase">
     <div class="phase-row">
       <div class="phase">
-        <Phase class="v-step-3 v-step-5 v-step-9 v-step-19" />
+        <Phase class="tour-phase" />
       </div>
-      <div class="events-container">
+      <div class="events-container tour-events-overview">
         <div class="outer">
           <p class="topbar">Events</p>
           <div class="inner">

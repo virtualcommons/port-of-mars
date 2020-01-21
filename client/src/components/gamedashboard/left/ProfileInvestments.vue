@@ -1,5 +1,5 @@
 <template>
-  <div class="profile-investments">
+  <div class="profile-investments tour-profile-investments">
     <p class="title">Your Investments</p>
     <div class="pi-container">
       <div v-for="investment in investments" :key="investment.name" class="profile-investment">

@@ -101,8 +101,7 @@ export default class Tutorial extends Vue {
   };
   steps: Array<Step> = [
     {
-      // gamedashboard > containers > ContainerUpkeep.vue
-      target: '.v-step-0',
+      target: '.tour-container-upkeep',
       content:
         'The game starts with Upkeep at 100. This represents the habitat at peak ' +
         'condition and maintenance. However, at the start of every round, the ' +
@@ -112,8 +111,7 @@ export default class Tutorial extends Vue {
       }
     },
     {
-      //  gamedashboard > containers > ContainerUpkeep.vue
-      target: '.v-step-1',
+      target: '.tour-container-upkeep',
       content:
         'At the start of a round, if Upkeep is lower than 65, reveal 2 events; ' +
         'and if Upkeep is lower than 35 reveal 3 events. Conditions on Mars ' +
@@ -122,9 +120,8 @@ export default class Tutorial extends Vue {
         placement: 'bottom'
       }
     },
-    // gamedashboard > Round.vue
     {
-      target: '.v-step-2',
+      target: '.tour-round',
       content:
         'The game progresses in rounds. There is an indefinite number ' +
         'of rounds per game. Therefore, the game can end at any time given ' +
@@ -133,9 +130,8 @@ export default class Tutorial extends Vue {
         placement: 'right'
       }
     },
-    // gamedashboard > containers > ContainerTop.vue
     {
-      target: '.v-step-3',
+      target: '.tour-container-top',
       content:
         'There are multiple phases in a round: Events, Invest, Trade, Purchase ' +
         ' and Discard. Each phase has a time limit of 5 minutes.',
@@ -143,9 +139,8 @@ export default class Tutorial extends Vue {
         placement: 'bottom'
       }
     },
-    // gamedashboard > containers > ContainerBottom.vue
     {
-      target: '.v-step-4',
+      target: '.tour-container-bottom',
       content:
         'Events are revealed at the beginning of every round during the events phase. ' +
         'Some events can be more involved and require players to fulfill tasks ' +
@@ -155,9 +150,8 @@ export default class Tutorial extends Vue {
       },
       stateTransform: setPhase(Phase.events),
     },
-    // gamedashboard > containers > ContainerPhase.vue
     {
-      target: '.v-step-5',
+      target: '.tour-phase',
       content:
         'Events persisting multiple rounds or relevant to the current round ' +
         'will populate here.',
@@ -166,9 +160,8 @@ export default class Tutorial extends Vue {
       },
       stateTransform: setPhase(Phase.events)
     },
-    // gamedashboard > Notfication.vue
     {
-      target: '.v-step-6',
+      target: '.tour-notification',
       content:
         'You will be notifed about events and changes in Upkeep via notifications ' +
         'that pop up here. Hover over then notification to close it.',
@@ -180,9 +173,8 @@ export default class Tutorial extends Vue {
         return s;
       }])
     },
-    // gamedashboard > containers > ContainerLeft.vue
     {
-      target: '.v-step-7',
+      target: '.tour-marslog',
       content:
         'Any events and changes in upkeep that occur will be recorded in the Mars Log ' +
         'for your reference.',
@@ -191,9 +183,8 @@ export default class Tutorial extends Vue {
       },
       stateTransform: setPhase(Phase.events),
     },
-    // gamedashboard > containers > ContainerProfile.vue
     {
-      target: '.v-step-8',
+      target: '.tour-profile',
       content:
         'This is your role and score during the game. Your role determines ' +
         'the investments in influence currency you can make and the accomplishments ' +
@@ -203,9 +194,8 @@ export default class Tutorial extends Vue {
       },
       stateTransform: setPhase(Phase.events),
     },
-    // gamedashboard > containers > ContainerPhase.vue
     {
-      target: '.v-step-9',
+      target: '.tour-investments',
       content:
         'During the Investment phase, you may invest your timeblocks into ' +
         'Upkeep or purchase Influence currency.',
@@ -214,9 +204,8 @@ export default class Tutorial extends Vue {
       },
       stateTransform: setPhase(Phase.invest),
     },
-    // gamedashboard > containers > ContainerInvestments.vue
     {
-      target: '.v-step-10',
+      target: '.tour-investments',
       content:
         'You are allocated 10 timeblocks (unless something says otherwise) to ' +
         'spend each round. You can spend timeblocks on Upkeep or on ' +
@@ -228,7 +217,7 @@ export default class Tutorial extends Vue {
     },
     // gamedashboard > containers > ContainerInvestments.vue
     {
-      target: '.v-step-11',
+      target: '.tour-investments',
       content:
         'During the Investment phase, you can invest your timeblocks to obtain ' +
         'influence currency and use your influence currency inventory to trade ' +
@@ -240,7 +229,7 @@ export default class Tutorial extends Vue {
     },
     // gamedashboard > containers > ContainerInvestments.vue
     {
-      target: '.v-step-12',
+      target: '.tour-investments',
       content:
         'You can also use your timeblocks to keep your habitat from collapsing by ' +
         'investing your timeblocks in Upkeep.',
@@ -251,7 +240,7 @@ export default class Tutorial extends Vue {
     },
     // gamedashboard > containers > ContainerInvestments.vue
     {
-      target: '.v-step-13',
+      target: '.tour-investments',
       content:
         'The cost of the card in timeblocks in located at the bottom right corner ' +
         'of the card. Use the increment (+) button on a card to invest your timeblocks or ' +
@@ -262,9 +251,8 @@ export default class Tutorial extends Vue {
       },
       stateTransform: setPhase(Phase.invest),
     },
-    // gamedashboard > cards > CardInvestment.vue
     {
-      target: '.v-step-14',
+      target: '.tour-donebtn',
       content:
         'You can hit the Done button to surrender your time if you have finished investing ' +
         'your timeblocks before the 5 minutes for the Investment Phase is up.',
@@ -273,18 +261,16 @@ export default class Tutorial extends Vue {
       },
       stateTransform: setPhase(Phase.invest),
     },
-    // gamedashboard > containers > ContainerLeft.vue
     {
-      target: '.v-step-15',
+      target: '.tour-profile-investments',
       content: 'After you finish investing your timeblocks, your inventory will update here.',
       params: {
         placement: 'right'
       },
       stateTransform: setPhase(Phase.invest),
     },
-    // gamedashboard > Chat.vue
     {
-      target: '.v-step-16',
+      target: '.tour-chat',
       content:
         'During gameplay, you can communicate with other players in your habitat ' +
         'to plan and strategize.',
@@ -292,9 +278,8 @@ export default class Tutorial extends Vue {
         placement: 'left'
       },
     },
-    // gamedashboard > containers > ContainerPlayers.vue
     {
-      target: '.v-step-17',
+      target: '.tour-players',
       content:
         'These are the other residents of Port of Mars. There are 5 roles in the game: ' +
         'Researcher, Pioneer, Curator, Entrepreneur, and Politician.',
@@ -302,9 +287,8 @@ export default class Tutorial extends Vue {
         placement: 'left'
       }
     },
-    // gamedashboard > containers > ContainerPlayers.vue
     {
-      target: '.v-step-18',
+      target: '.tour-players',
       content:
         'The player score is displayed on the far left; name in the middle; ' +
         'and character art on the right.',
@@ -314,7 +298,7 @@ export default class Tutorial extends Vue {
     },
     // gamedashboard > containers > ContainerPhase.vue
     {
-      target: '.v-step-19',
+      target: '.tour-trade',
       content:
         'During the Trade Phase, you can trade influence currency with other ' +
         'players. Trading allows you to obtain other influence currencies ' +

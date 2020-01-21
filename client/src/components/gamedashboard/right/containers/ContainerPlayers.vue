@@ -1,5 +1,5 @@
 <template>
-  <div class="container-players">
+  <div class="container-players tour-players">
     <p class="topbar">{{ topbarText }}</p>
     <Player v-for="player in playerInfo" v-bind="player" :key="player.role" />
   </div>

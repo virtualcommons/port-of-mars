@@ -4,7 +4,7 @@
     @mouseover="hover = true"
     @mouseleave="hover = false"
     :class="viewAnim()"
-    class="notification v-step-6"
+    class="notification tour-notification"
   >
     <p class="button-close" v-if="hover || inView === 'hide'">
       Dismiss Notification

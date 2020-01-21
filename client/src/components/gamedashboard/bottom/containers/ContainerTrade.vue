@@ -1,5 +1,5 @@
 <template>
-  <div class="container-trade">
+  <div class="container-trade tour-trade">
     <div class="trade-row">
       <div class="column-3 trade-options">
         <button
