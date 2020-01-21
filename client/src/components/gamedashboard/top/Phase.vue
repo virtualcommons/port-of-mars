@@ -8,7 +8,7 @@
         <button
           class="donebtn tour-donebtn"
           @click="submitDone"
-          :disabled="btnDisabled"
+          :disabled="playerReady"
           type="button"
           name="Phase Done Button"
         >
@@ -17,7 +17,7 @@
         <font-awesome-icon
           class="cancelbtn"
           @click="submitCancel"
-          v-if="playerReady == true && btnVisibility"
+          v-if="playerReady"
           :icon="['far', 'times-circle']"
           size="sm"
         />
@@ -50,8 +50,6 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 export default class Phase extends Vue {
   @Inject() private api!: GameRequestAPI;
 
-  private btnDisabled = false;
-
   get label() {
     const lbl = PHASE_LABELS[this.$tstore.state.phase];
     if (this.$store.state.phase === s.Phase.events) {
@@ -65,23 +63,15 @@ export default class Phase extends Vue {
   }
 
   get btnVisibility() {
-    switch (this.phase) {
-      case s.Phase.invest:
-        return true;
-      case s.Phase.trade:
-        return true;
-      case s.Phase.purchase:
-        return true;
-      case s.Phase.discard:
-        return true;
-      default:
-        return false;
+    if(this.phase == s.Phase.events){
+      return false;
     }
+
+    return true;
   }
 
   get playerReady() {
-    let ready = this.$tstore.state.players[this.$tstore.state.role].ready;
-    return ready;
+    return this.$store.getters.player.ready;
   }
 
   private submitDone() {
@@ -91,18 +81,15 @@ export default class Phase extends Vue {
           this.$tstore.getters.player.pendingInvestments
         );
       default:
-        this.btnDisabled = true;
         this.api.setPlayerReadiness(true);
     }
   }
 
   private submitCancel() {
-    // TODO: Need to handle cancellations (#156)
     switch (this.phase) {
       case s.Phase.invest:
-      // TODO: Un-invest timeblocks
+    
       default:
-        this.btnDisabled = false;
         this.api.setPlayerReadiness(false);
     }
   }

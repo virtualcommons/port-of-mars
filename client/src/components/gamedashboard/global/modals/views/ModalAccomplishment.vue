@@ -3,14 +3,16 @@
     <p class="title">{{ cardData.label }}</p>
     <p class="info">{{ cardData.flavorText }}</p>
     <div class="investments">
-      <div v-for="investment in accomplishmentCost" :key="investment + Math.random()">
+      <div v-for="(investment,i) in accomplishmentCost" :key="investment + Math.random()"
+      v-bind:class="{'unattainable-resource': investmentGrayStatus[i]}"
+      >
         <img :src="require(`@/assets/icons/${investment}.svg`)" alt="Investment" />
       </div>
     </div>
     <p class="cost">Cost</p>
-    <button class="purchase-button" @click="handlePurchase">
-      {{ buyButton }}
-    </button>
+    <p class="purchase-button">
+      {{ buyText }}
+    </p>
   </div>
 </template>
 
@@ -18,12 +20,10 @@
 import {Component, Vue, Prop,  InjectReactive, Inject} from 'vue-property-decorator';
 import { canPurchaseAccomplishment } from 'shared/validation';
 import { AccomplishmentData, INVESTMENTS, Resource } from 'shared/types';
-import { GameRequestAPI } from '@/api/game/request';
 import * as _ from 'lodash';
 
 @Component({})
 export default class ModalAccomplishment extends Vue {
-  @Inject() readonly api!: GameRequestAPI;
 
   @Prop({
     default: () => ({
@@ -50,20 +50,47 @@ export default class ModalAccomplishment extends Vue {
   }
 
   get canBuy() {
-    return canPurchaseAccomplishment(this.cardData, this.$tstore.getters.player.inventory);
+    return canPurchaseAccomplishment(this.cardData, this.playerFullInventory);
   }
 
-  get buyButton() {
+
+  get playerFullInventory(){
+    let totalInventory = _.clone(this.$tstore.getters.player.inventory);
+    const pendingInventory = this.$tstore.getters.player.pendingInvestments;
+
+    for(const [r,amount] of Object.entries(pendingInventory)){
+      totalInventory[r] += amount
+    }
+
+    return totalInventory;
+  }
+
+  get investmentGrayStatus() {
+    let grayStatus = []
+    let clonedInventory = _.clone(this.playerFullInventory);
+    for(let investment of this.accomplishmentCost){
+      if(clonedInventory[investment] > 0 || investment == 'upkeep'){
+        grayStatus.push(false)
+        clonedInventory[investment]--;
+      }else{
+        grayStatus.push(true)
+      }
+    }
+    return grayStatus;
+  }
+
+  get buyText() {
     const b = this.canBuy;
-    return b ? 'Purchase Accomplishment' : 'You cannot purchase this';
+    return b ? 'You have the resources to purchase this' : 'You cannot purchase this';
   }
 
-  private handlePurchase() {
-    this.api.purchaseAccomplishment(this.cardData);
-  }
 }
 </script>
 
 <style lang="scss" scoped>
 @import '@/stylesheets/gamedashboard/global/modals/views/ModalAccomplishment.scss';
+
+.unattainable-resource{
+  opacity: 30%;
+}
 </style>

@@ -10,20 +10,17 @@
           <p class="effect">
             Click on the title of the accomplishment(s) that you would like to
             discard. The discarded accomplishments will be replaced with newly
-            drawn ones next round.
+            drawn ones next round. This action is permanent.
           </p>
         </div>
       </div>
       <div class="actions">
-        <button
-          v-for="accomplishment in purchasableAccomplishments"
+        <BarDiscard v-for="accomplishment in purchasableAccomplishments"
           :key="accomplishment.id"
-          @click="handleDiscardAccomplishment(accomplishment)"
-          type="button"
-          name="Discard Accomplishment"
-        >
-          {{ accomplishment.label }}
-        </button>
+          :accomplishment="accomplishment"/>
+        <div class="info-text" v-show="purchasableAccomplishments.length != 3">
+          <p>{{`You will be delt ${3-purchasableAccomplishments.length} new card(s) next round`}}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -31,21 +28,19 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
+import BarDiscard from '@/components/gamedashboard/global/cards/BarDiscard.vue';
 
-@Component({})
+@Component({
+  components:{
+    BarDiscard
+  }
+})
 export default class ContainerDiscard extends Vue {
   get purchasableAccomplishments() {
     let purchasable = this.$store.getters.player.accomplishment.purchasable;
     return purchasable;
   }
 
-  private handleDiscardAccomplishment(a: any) {
-    this.$root.$emit('openModalConfirmation', {
-      text: `Selecting \"Yes\" will discard the accomplishment \"${a.label}\" and a new card will be drawn next round.`,
-      type: 'discardAccomplishment',
-      actionData: a.id
-    });
-  }
 }
 </script>
 

@@ -7,7 +7,8 @@
           class="statusbar"
           :setWidth="`${remainingTimeBlocks * 10}`"
           :colorOuter="'statusbar-outer-gray'"
-          :colorInner="'statusbar-inner-gray'"
+          :colorStart="'statusbar-inner-gray'"
+          :colorEnd="'statusbar-inner-green'"
         />
         <p class="status">{{ remainingTimeBlocks }}</p>
       </div>

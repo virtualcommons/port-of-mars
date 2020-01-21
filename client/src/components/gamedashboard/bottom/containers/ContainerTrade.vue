@@ -1,45 +1,21 @@
 <template>
-  <div class="container-trade tour-trade">
-    <div class="trade-row">
-      <div class="column-3 trade-options">
-        <button
-          type="button"
-          name="button"
-          @click="handleClick('incoming')"
-          :class="currentView === 'incoming' ? 'btn-active' : ''"
-        >
-          Incoming Trades
-        </button>
-        <button
-          type="button"
-          name="button"
-          @click="handleClick('request')"
-          :class="currentView === 'request' ? 'btn-active' : ''"
-        >
-          Your Trades
-        </button>
-      </div>
-      <div class="trade-incoming" v-if="currentView === 'incoming'">
-        <div class="trade-incoming-list-wrapper">
-          <div class="trade-incoming-list">
-            <!-- need to refactor key -->
-            <Trade v-for="trade in trades" v-bind="trade" :key="Math.random()" />
-          </div>
+    <div class="trade-container">
+        <div class="trade-request">
+            <div class="section-text">
+                <p>Request Trade</p>
+            </div>
+            <TradeRequest/>
         </div>
-      </div>
-      <div class="trade-request" v-if="currentView === 'request'">
-        <div class="trade-request-list-wrapper">
-          <div class="trade-request-list">
-            <!-- need to refactor key -->
-            <Trade v-for="trade in trades" v-bind="trade" :key="Math.random()" />
-          </div>
+
+        <div class="trade-list">
+            <div class="section-text">
+                <p>Active Trade List</p>
+            </div>
+            <div class="trades-wrapper">
+              <Trade v-for="trade in trades" v-bind="trade" :key="Math.random()" />
+            </div>
         </div>
-        <div class="trade-request-make">
-          <TradeRequest />
-        </div>
-      </div>
     </div>
-  </div>
 </template>
 
 <script lang="ts">
@@ -54,7 +30,6 @@ import TradeRequest from '@/components/gamedashboard/bottom/trading/TradeRequest
   }
 })
 export default class ContainerTrade extends Vue {
-  private currentView: string = 'incoming';
 
   get trades() {
     const tradeSet = this.$tstore.state.tradeSet;
@@ -63,10 +38,6 @@ export default class ContainerTrade extends Vue {
       from: tradeSet[id].from,
       to: tradeSet[id].to
     }));
-  }
-
-  private handleClick(view: string) {
-    this.currentView = view;
   }
 }
 </script>
