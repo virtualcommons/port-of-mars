@@ -19,11 +19,6 @@ export interface SetTimeInvestmentData extends InvestmentData {
   kind: 'set-time-investment';
 }
 
-export interface SetPlayerReadinessData {
-  kind: 'set-player-readiness';
-  value: boolean;
-}
-
 export interface SetNextPhaseData {
   kind: 'set-next-phase';
 }
@@ -48,6 +43,27 @@ export interface RejectTradeRquestData {
   id: string;
 }
 
+// LORENZO CHANGES
+export interface SetPlayerReadinessData {
+  kind: 'set-player-readiness';
+  value: boolean;
+}
+
+export interface EventSendPollResultsData {
+  kind: 'event-send-poll-results';
+  results: object;
+}
+
+export interface EventModifyInfluencesData {
+  kind: 'event-modify-influences';
+  results: object;
+}
+
+export interface EventModifyAccomplishmentsData {
+  kind: 'event-modify-accomplishments';
+  results: object;
+}
+
 export type Requests =
   | SendChatMessageData
   | SetPlayerReadinessData
@@ -58,4 +74,7 @@ export type Requests =
   | DiscardAccomplishmentCardData
   | SendTradeRequestData
   | AcceptTradeRequestData
-  | RejectTradeRquestData;
+  | RejectTradeRquestData
+  | EventSendPollResultsData
+  | EventModifyInfluencesData
+  | EventModifyAccomplishmentsData;
