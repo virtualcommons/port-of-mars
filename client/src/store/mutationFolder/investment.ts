@@ -19,6 +19,9 @@ export default {
   SET_INVESTMENT_COSTS(state: State, payload: { data: ResourceCostData; role: Role }) {
     state.players[payload.role].costs = payload.data;
   },
+  SET_SPECIALTY(state: State, payload: { data: Resource; role: Role }) {
+    state.players[payload.role].specialty = payload.data;
+  },
   SET_INVENTORY(state: State, payload: { data: InvestmentData; role: Role }) {
     for (const resource of RESOURCES) {
       state.players[payload.role].inventory[resource] = payload.data[resource];

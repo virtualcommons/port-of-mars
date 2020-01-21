@@ -2,9 +2,9 @@
   <div class="container-phase">
     <div class="phase-row">
       <div class="phase">
-        <Phase class="v-step-3" />
+        <Phase class="tour-phase" />
       </div>
-      <div class="events-container">
+      <div class="events-container tour-events-overview">
         <div class="outer">
           <p class="topbar">Events</p>
           <div class="inner">
@@ -32,7 +32,7 @@
 import { Vue, Component } from 'vue-property-decorator';
 import Phase from '@/components/gamedashboard/top/Phase.vue';
 import CardEvent from '@/components/gamedashboard/global/cards/CardEvent.vue';
-import MarsLog from '@/components/gamedashboard/left/MarsLog.vue';
+import MarsLog from '@/components/gamedashboard/top/MarsLog.vue';
 
 @Component({
   components: {

@@ -12,7 +12,11 @@ build() {
 }
 
 build_template() {
-  docker-compose -f base.yml -f "$1.yml" config > docker-compose.yml
+  case "$1" in
+    dev|staging) docker-compose -f base.yml -f "$1.yml" config > docker-compose.yml;;
+    prod) docker-compose -f base.yml -f staging.yml -f prod.yml config > docker-compose.yml;;
+    *) echo "invalid environment. must be either dev, staging or prod" 1>&2; exit 1;;
+  esac
 }
 
 set_secrets() {

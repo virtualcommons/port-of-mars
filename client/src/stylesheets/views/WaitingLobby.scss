@@ -88,6 +88,11 @@
         @include make-column-and-center;
         align-items: flex-start;
 
+        a {
+          color: $space-white;
+          text-decoration: none !important;
+        }
+
         .progress-text {
           margin: 0 4rem 0 0;
           font-size: 6rem;

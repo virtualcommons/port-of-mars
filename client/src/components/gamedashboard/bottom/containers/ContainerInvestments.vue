@@ -1,5 +1,5 @@
 <template>
-  <div class="container-investments">
+  <div class="container-investments tour-investments">
     <div class="wrapper">
       <div class="topbar">
         <p class="title">Time Investments</p>

@@ -30,6 +30,9 @@ function applyPlayerResponses(player: any, store: TStore) {
         case 'costs':
           store.commit('SET_INVESTMENT_COSTS', payload);
           break;
+        case 'specialty':
+          store.commit('SET_SPECIALTY', payload);
+          break;
         case 'timeBlocks':
           store.commit('SET_TIME_BLOCKS', payload);
           break;

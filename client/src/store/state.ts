@@ -18,6 +18,7 @@ import {
   QuizQuestionData,
   QuizResultPackage
 } from 'shared/types';
+import _ from 'lodash';
 
 export interface PlayerClientData extends PlayerData {
   pendingInvestments: InvestmentData;
@@ -43,6 +44,7 @@ function defaultPlayerData(role: Role): PlayerClientData {
       purchasable: []
     },
     costs: defaultCostData(role),
+    specialty: 'science',
     inventory: defaultInventory(role),
     ready: false,
     timeBlocks: 10,
@@ -116,7 +118,16 @@ export const initialStoreState: State = {
   loading: false,
 
   activeNotifications: [],
-  eventView: EventClientView.VOTE_FOR_PLAYER_HERO_PARIAH,
+  eventView: EventClientView.ACCOMPLISHMENT_SELECT_PURCHASED,
   quizQuestions: [],
   quizResults: []
 };
+
+function tutorialNotifications() {
+  const state = _.cloneDeep(initialStoreState);
+  state.activeNotifications = [
+    'Welcome to Port of Mars',
+    'Notifications can be dismissed by clicking on them'
+  ];
+  return state;
+}

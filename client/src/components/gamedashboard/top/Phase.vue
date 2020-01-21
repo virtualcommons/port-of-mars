@@ -6,7 +6,7 @@
       <p class="current">{{ label }}</p>
       <div v-if="btnVisibility" class="buttons">
         <button
-          class="donebtn"
+          class="donebtn tour-donebtn"
           @click="submitDone"
           :disabled="playerReady"
           type="button"

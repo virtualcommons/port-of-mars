@@ -1,44 +1,54 @@
 <template>
-  <div class="chat" v-if="layout !== 'DISABLE_CHAT'">
-    <p class="chat-title">Chat</p>
-    <div class="chat-chat">
-      <div class="chat-chat-container">
-        <p v-if="messages.length === 0" class="chat-empty">
+  <div v-if="layout !== 'DISABLE_CHAT'" class="chat tour-chat">
+    <p class="title">Chat</p>
+
+    <div class="messages-view">
+      <div class="wrapper">
+        <p v-if="messages.length === 0" class="empty">
           No Messages
         </p>
-        <div class="chat-message" v-for="message in messages" :key="message.dateCreated">
-          <p class="chat-message-member">
+        <div
+          class="message"
+          v-for="message in messages"
+          :key="message.dateCreated"
+        >
+          <p class="member">
             {{ message.role }}
           </p>
-          <p class="chat-message-content">
+          <p class="content">
             {{ message.message }}
           </p>
-          <p class="chat-message-time">
+          <p class="time">
             <span>[ </span>{{ toDate(message.dateCreated) }}<span> ]</span>
           </p>
         </div>
       </div>
     </div>
-    <div class="chat-input-frame">
+
+    <div class="input-frame">
       <input
         class="chat-input"
-        type="text"
         @keydown.enter="submitToChat"
         v-model="pendingMessage"
+        type="text"
         placeholder="send a message"
       />
-      <font-awesome-icon class="chat-input-sendbtn" :icon="['far', 'paper-plane']" size="lg" />
+      <font-awesome-icon
+        :icon="['far', 'paper-plane']"
+        class="chat-input-sendbtn"
+        size="lg"
+      />
     </div>
   </div>
-  <div class="chat-disabled-container" v-else-if="layout === 'DISABLE_CHAT'">
-    <div class="chat-disabled">
+  <div v-else-if="layout === 'DISABLE_CHAT'" class="chat-disabled">
+    <div class="wrapper">
       <p>Chat is disabled this round.</p>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import {Vue, Component, InjectReactive, Inject} from 'vue-property-decorator';
+import { Vue, Component, InjectReactive, Inject } from 'vue-property-decorator';
 import { GameRequestAPI } from '@/api/game/request';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons/faPaperPlane';
@@ -65,7 +75,7 @@ export default class Chat extends Vue {
 
   private updated() {
     if (this.layout !== 'DISABLE_CHAT') {
-      const elem = this.$el.querySelector('.chat-chat');
+      const elem = this.$el.querySelector('.messages-view');
       elem!.scrollTop = elem!.scrollHeight;
     }
   }

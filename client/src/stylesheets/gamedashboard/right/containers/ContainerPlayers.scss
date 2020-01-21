@@ -1,5 +1,5 @@
 .container-players {
-  height: auto;
+  flex-shrink: 0;
   width: 100%;
   padding: 0.5rem;
   @include make-column-and-top;

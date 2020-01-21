@@ -18,11 +18,12 @@ import {
   TradeData,
   Role
 } from 'shared/types';
+import {MockRoom} from "@/types/tutorial";
 
 export class GameRequestAPI {
-  room!: Room;
+  room!: Room | MockRoom;
 
-  public connect(room: Room) {
+  public connect(room: Room | MockRoom) {
     this.room = room;
   }
 
