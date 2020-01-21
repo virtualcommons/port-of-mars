@@ -15,7 +15,7 @@
         <p
           v-for="investment in accomplishmentCost"
           v-bind:class="{'unattainable-resource': shouldResourceBeGrayedOut(investment)}"
-          
+
           :key="investment + Math.random()"
         >
           <img
@@ -38,9 +38,9 @@
 
 <script lang="ts">
 import {Vue, Component, Prop, InjectReactive, Inject} from 'vue-property-decorator';
-import { AccomplishmentData, INVESTMENTS, Resource } from 'shared/types';
+import {AccomplishmentData, Investment, INVESTMENTS, Resource} from 'shared/types';
 import * as _ from 'lodash';
-import GameRequestAPI from '@/api/game/request';
+import { GameRequestAPI } from '@/api/game/request';
 import { canPurchaseAccomplishment } from 'shared/validation';
 
 @Component({})
@@ -77,13 +77,13 @@ export default class BarAccomplishment extends Vue {
     return _.clone(this.$tstore.getters.player.inventory);
   }
 
-  shouldResourceBeGrayedOut(resource){
-    if(resource=='upkeep'){
+  shouldResourceBeGrayedOut(investment: Investment){
+    if (investment === 'upkeep'){
       return false;
     }
 
-    if(this.playerInventory[resource] > 0){
-      this.playerInventory[resource]--;
+    if (this.playerInventory[investment] > 0){
+      this.playerInventory[investment]--;
       return false;
     }
     return true

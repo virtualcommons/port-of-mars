@@ -22,7 +22,13 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { AccomplishmentData, INVESTMENTS, Resource, ResourceAmountData } from 'shared/types';
+import {
+  AccomplishmentData,
+  INVESTMENTS,
+  Resource,
+  ResourceAmountData,
+  RESOURCES
+} from 'shared/types';
 import * as _ from 'lodash';
 
 
@@ -60,23 +66,25 @@ export default class CardAccomplishment extends Vue {
   }
 
   get playerFullInventory(){
-    let totalInventory:ResourceAmountData = _.clone(this.$tstore.getters.player.inventory);
-    const pendingInventory:ResourceAmountData = this.$tstore.getters.player.pendingInvestments;
+    let totalInventory: ResourceAmountData = _.clone(this.$tstore.getters.player.inventory);
+    const pendingInventory: ResourceAmountData = this.$tstore.getters.player.pendingInvestments;
 
-    for(const [r,amount] of Object.entries(pendingInventory)){
-      totalInventory[r] += amount
+    for(const r of RESOURCES){
+      totalInventory[r] += pendingInventory[r];
     }
 
     return totalInventory;
   }
 
   get investmentGrayStatus() {
-    let grayStatus = []
+    let grayStatus = [];
     for(let investment of this.accomplishmentCost){
-      if(this.playerFullInventory[investment] > 0 || investment == 'upkeep'){
-        grayStatus.push(false)
+      if (investment === 'upkeep') {
+        grayStatus.push(false);
+      } else if(this.playerFullInventory[investment] > 0) {
+        grayStatus.push(false);
         this.playerFullInventory[investment]--;
-      }else{
+      } else {
         grayStatus.push(true)
       }
     }

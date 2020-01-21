@@ -13,7 +13,7 @@ export function canPurchaseAccomplishment(accomplishment: AccomplishmentData, in
 
 //might move to TradeOptions.vue
 export function makeTradeSafe(resources:ResourceAmountData){
-  for(const resource of Object.keys(resources)){
+  for(const resource of RESOURCES){
     if(typeof resources[resource] == "string"){
       resources[resource] = 0;
     }

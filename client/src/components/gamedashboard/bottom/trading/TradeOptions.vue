@@ -27,7 +27,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import * as _ from 'lodash';
-import { ResourceAmountData } from 'shared/types';
+import {Resource, ResourceAmountData} from 'shared/types';
 import { makeTradeSafe } from 'shared/validation';
 @Component({})
 export default class TradeOptions extends Vue {
@@ -44,9 +44,9 @@ export default class TradeOptions extends Vue {
   };
 
   resourcesAmount() {
-    
+
     makeTradeSafe(this.resources)
-    
+
     this.resourceReader(this.resources);
     return;
   }
@@ -55,7 +55,7 @@ export default class TradeOptions extends Vue {
     return this.$store.getters.player.inventory;
   }
 
-  impossibleTrade(resource){
+  impossibleTrade(resource: Resource){
     if(this.resources[resource] > this.playerInventory[resource] && this.mode=="outgoing"){
       return true;
     }
@@ -63,7 +63,7 @@ export default class TradeOptions extends Vue {
   }
 
 
-  grayOutResources(resource){
+  grayOutResources(resource: Resource){
     if(this.playerInventory[resource] == 0 && this.mode=="outgoing"){
       return true;
     }

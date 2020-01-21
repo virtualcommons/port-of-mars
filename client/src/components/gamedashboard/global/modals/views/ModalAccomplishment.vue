@@ -19,7 +19,7 @@
 <script lang="ts">
 import {Component, Vue, Prop,  InjectReactive, Inject} from 'vue-property-decorator';
 import { canPurchaseAccomplishment } from 'shared/validation';
-import { AccomplishmentData, INVESTMENTS, Resource } from 'shared/types';
+import {AccomplishmentData, Investment, INVESTMENTS, Resource, RESOURCES} from 'shared/types';
 import * as _ from 'lodash';
 
 @Component({})
@@ -43,7 +43,7 @@ export default class ModalAccomplishment extends Vue {
   })
   private cardData!: AccomplishmentData;
 
-  get accomplishmentCost() {
+  get accomplishmentCost(): Array<Investment> {
     return INVESTMENTS.filter(investment => this.cardData[investment] !== 0).flatMap(investment =>
       _.fill(Array(Math.abs(this.cardData[investment])), investment)
     );
@@ -58,21 +58,23 @@ export default class ModalAccomplishment extends Vue {
     let totalInventory = _.clone(this.$tstore.getters.player.inventory);
     const pendingInventory = this.$tstore.getters.player.pendingInvestments;
 
-    for(const [r,amount] of Object.entries(pendingInventory)){
-      totalInventory[r] += amount
+    for(const resource of RESOURCES){
+      totalInventory[resource] += pendingInventory[resource]
     }
 
     return totalInventory;
   }
 
   get investmentGrayStatus() {
-    let grayStatus = []
-    let clonedInventory = _.clone(this.playerFullInventory);
+    let grayStatus = [];
+    let inventory = _.clone(this.playerFullInventory);
     for(let investment of this.accomplishmentCost){
-      if(clonedInventory[investment] > 0 || investment == 'upkeep'){
-        grayStatus.push(false)
-        clonedInventory[investment]--;
-      }else{
+      if (investment === 'upkeep') {
+        grayStatus.push(false);
+      } else if (inventory[investment] > 0) {
+        grayStatus.push(false);
+        inventory[investment]--;
+      } else {
         grayStatus.push(true)
       }
     }
