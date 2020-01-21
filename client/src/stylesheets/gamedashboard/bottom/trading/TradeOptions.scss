@@ -14,6 +14,7 @@
     .send-investments {
       display: inline-block;
       margin-right: 0.4rem;
+      text-align: center;
       
       .resource-icon {
         width: 2rem;
@@ -24,9 +25,27 @@
         width: 3.5rem;
         //margin: 0.2rem;
       }
+
+
+      /* Firefox */
+      input[type=number] {
+        -moz-appearance:textfield;
+
+        /*Chrome, safari, opera*/ 
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+      }
     }
 
     
 
   }
+}
+
+
+.impossible-resource{
+  opacity: 50%;
 }

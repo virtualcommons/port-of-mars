@@ -1,7 +1,9 @@
 .trade-r{
   background-color: $space-white-opaque-1;
   color: white;
-  
+  flex: 1;
+  justify-content: center;  
+
   .trade-partner p {
     border-bottom: 0.125rem solid $space-orange;
   }
@@ -25,8 +27,8 @@
     
 
     .person-frame{
-      height: 5rem;
-      width: 5rem;
+      height: 3rem;
+      width: 3rem;
       padding: 0.25rem;
       border: 0.0625rem solid $space-orange;
       border-radius: 50%;
@@ -41,7 +43,7 @@
     }
 
     .person-icons {
-      width: 7rem;
+      width: 5rem;
       height: 100%;
       padding: 0.25rem;
       
@@ -71,6 +73,9 @@
       opacity: 50%;
     }
   }
-  
-  
+
+}
+
+.inactive-action{
+  opacity: 50%;
 }

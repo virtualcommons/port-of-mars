@@ -2,7 +2,9 @@
   <div class="trade-resources">
     <p class="type-text">{{ text }}</p>
     <div class="resource-wrapper">
-      <div class="send-investments" v-for="(value, resource) in resources" :key="resource + 1">
+      <div class="send-investments" v-for="(value, resource) in resources" :key="resource + 1"
+        v-bind:class="{'impossible-resource': grayOutResources(resource)}"
+      >
         <div>
           <img
             class="resource-icon"
@@ -11,9 +13,11 @@
           />
         </div>
 
-        <div>
-          <input v-if="mode=='outgoing'" type="number" min="0" :max="playerInventory[resource]" @change='resourcesAmount()' v-model.number="resources[resource]" class="resource-amount" />
-          <input v-else type="number" min="0" max="999" v-on:change='resourcesAmount()' v-model.number="resources[resource]" class="resource-amount" />
+        <div
+        v-bind:class="{'impossible-resource': impossibleTrade(resource)}"
+        >
+          <input v-if="mode=='outgoing'" :disabled="playerInventory[resource]==0" type="number" min="0" :max="playerInventory[resource]" @change='resourcesAmount()' v-model.number="resources[resource]" class="resource-amount"/>
+          <input v-else type="number" min="0" max="999" v-on:change='resourcesAmount()' v-model.number="resources[resource]" class="resource-amount"/>
         </div>
       </div>
     </div>
@@ -26,6 +30,7 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import * as _ from 'lodash';
 import { ResourceAmountData } from 'shared/types';
+import { makeTradeSafe } from 'shared/validation';
 @Component({})
 export default class TradeOptions extends Vue {
   @Prop({ default: '' }) text!: string;
@@ -40,7 +45,10 @@ export default class TradeOptions extends Vue {
     culture: 0
   };
 
-  get resourcesAmount() {
+  resourcesAmount() {
+    
+    makeTradeSafe(this.resources)
+    
     this.resourceReader(this.resources);
     return;
   }
@@ -48,6 +56,22 @@ export default class TradeOptions extends Vue {
   get playerInventory(){
     return this.$store.getters.player.inventory;
   }
+
+  impossibleTrade(resource){
+    if(this.resources[resource] > this.playerInventory[resource] && this.mode=="outgoing"){
+      return true;
+    }
+    return false;
+  }
+
+
+  grayOutResources(resource){
+    if(this.playerInventory[resource] == 0 && this.mode=="outgoing"){
+      return true;
+    }
+    return false;
+  }
+
 }
 </script>
 

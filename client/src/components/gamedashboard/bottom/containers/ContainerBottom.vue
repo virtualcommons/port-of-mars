@@ -19,7 +19,7 @@ import { Vue, Component } from 'vue-property-decorator';
 import ContainerEvents from '@/components/gamedashboard/bottom/containers/ContainerEvents.vue';
 import ContainerInvestments from '@/components/gamedashboard/bottom/containers/ContainerInvestments.vue';
 import ContainerDefault from '@/components/gamedashboard/bottom/containers/ContainerDefault.vue';
-import ContainerTrade from '@/components/gamedashboard/bottom/containers/ContainerTradeAlt.vue';
+import ContainerTrade from '@/components/gamedashboard/bottom/containers/ContainerTrade.vue';
 import ContainerPurchase from '@/components/gamedashboard/bottom/containers/ContainerPurchase.vue';
 import ContainerDiscard from '@/components/gamedashboard/bottom/containers/ContainerDiscard.vue';
 import { Phase } from 'shared/types';

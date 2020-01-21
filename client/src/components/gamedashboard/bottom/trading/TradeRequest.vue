@@ -25,12 +25,14 @@
         text="You give up"
         mode="outgoing"
         class="options-block"
+        v-bind:class="{'inactive-action': !name}"
       />
       <TradeOptions
         :resourceReader="handleReciveResources"
         text="In exchange for"
         mode="incoming"
         class="options-block"
+        v-bind:class="{'inactive-action': !name}"
       />
     </div>
 
@@ -45,6 +47,7 @@ import {Vue, Component, Prop, InjectReactive, Inject} from 'vue-property-decorat
 import * as _ from 'lodash';
 import TradeOptions from './TradeOptions.vue';
 import {TradeData, TradeAmountData, ResourceAmountData, RESOURCES, Role} from 'shared/types';
+import { canPlayerMakeTrade } from 'shared/validation';
 import { GameRequestAPI } from '@/api/game/request';
 import {defaultInventory} from "@/store/state";
 
@@ -67,19 +70,10 @@ export default class TradeRequest extends Vue {
   }
 
   get clientValidation(){
-    let hasResourcesToSend = true;
-    let someGreaterThanZero = false;
-    const role = this.$store.state.role;
-    const inventory = this.$store.state.players[role].inventory;
+    const inventory = this.$store.getters.player.inventory;
 
-    RESOURCES.forEach(item => {
-      if(this.sentResources[item] > inventory[item]){
-        hasResourcesToSend = false;
-      }
-      if(this.sentResources[item] > 0) someGreaterThanZero = true;
-    });
-
-    return (this.name != "" && hasResourcesToSend && someGreaterThanZero);
+    return (this.name != "" && canPlayerMakeTrade(this.sentResources,inventory));
+  
   }
 
   handleSendResources(resources: ResourceAmountData){
@@ -91,7 +85,8 @@ export default class TradeRequest extends Vue {
   }
 
   handleChange(name: string){
-    this.name = name;
+    if(name == this.name){this.name = "";}
+    else{ this.name = name;}
   }
 
   handleTrade(){
