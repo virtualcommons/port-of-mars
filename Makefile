@@ -8,24 +8,25 @@ build: docker-compose.yml $(SECRETS)
 	docker-compose pull db
 	docker-compose build --pull
 
-.ONESHELL:
 $(DB_PASSWORD_PATH):
-	DB_PASSWORD=$$(head /dev/urandom | tr -dc '[:alnum:]' | head -c42)
-	TODAY=$$(date +%Y-%m-%d-%H:%M:%S)
-	if [[ -f $(DB_PASSWORD_PATH) ]]; then
-	  cp "$(DB_PASSWORD_PATH)" "$DB_PASSWORD_PATH_$$TODAY"
-	fi
+	DB_PASSWORD=$$(head /dev/urandom | tr -dc '[:alnum:]' | head -c42); \
+	TODAY=$$(date +%Y-%m-%d-%H:%M:%S); \
+	if [[ -f $(DB_PASSWORD_PATH) ]]; \
+	then \
+	  cp "$(DB_PASSWORD_PATH)" "$DB_PASSWORD_PATH_$$TODAY"; \
+	fi; \
 	echo $${DB_PASSWORD} > $(DB_PASSWORD_PATH)
 
-.ONESHELL:
 server/ormconfig.json: server/ormconfig.template.json $(DB_PASSWORD_PATH)
-	DB_PASSWORD=$$(cat $(DB_PASSWORD_PATH))
+	DB_PASSWORD=$$(cat $(DB_PASSWORD_PATH)); \
 	sed "s|DB_PASSWORD|$$DB_PASSWORD|g" server/ormconfig.template.json > server/ormconfig.json
 
-.ONESHELL:
 server/deploy/.pgpass: $(DB_PASSWORD_PATH) server/deploy/pgpass.template
-	DB_PASSWORD=$$(cat $(DB_PASSWORD_PATH))
+	DB_PASSWORD=$$(cat $(DB_PASSWORD_PATH)); \
 	sed "s|DB_PASSWORD|$$DB_PASSWORD|g" server/deploy/pgpass.template > server/deploy/.pgpass
+
+.PHONY: secrets
+secrets: $(SECRETS)
 
 $(SECRETS): $(DB_PASSWORD_PATH) server/ormconfig.json server/deploy/.pgpass
 	touch $(SECRETS)
