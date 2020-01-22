@@ -104,4 +104,5 @@ venv.bak/
 .mypy_cache/
 
 docker-compose.yml
+config.mk
 .DS_Store
