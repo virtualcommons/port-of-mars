@@ -8,6 +8,7 @@ import {
   Phase,
   Role,
   ROLES,
+  Resource,
   TradeData,
   CURATOR
 } from 'shared/types';
@@ -233,8 +234,8 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
 
     game.handleIncomplete();
     game.marsEvents.push(...marsEvents);
-    game.updateMarsEventsElapsed();
 
+    game.updateMarsEventsElapsed();
     game.marsEventsProcessed = GameState.DEFAULTS.marsEventsProcessed;
     game.marsEventDeck.updatePosition(game.marsEvents.length);
     // game.logs.push(log);
@@ -242,6 +243,8 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
     for (const player of game.players) {
       player.refreshPurchasableAccomplishments();
     }
+
+    // TODO: HANDLE CURRENT EVENT USING MARSEVENTSPROCESSED
   }
 }
 
@@ -374,3 +377,90 @@ export class EventModifyAccomplishments extends GameEventWithData {
   }
 }
 // EVENT REQUESTS :: END
+
+// handleEvent(marsEvent: any): void {
+//   if(this.allPlayersAreReady) {
+//     switch(marsEvent.kind) {
+//       case 'event-event-add-two': return; // DONE
+//       case 'event-poll-yes-no': return;
+//       case 'event-poll-single': return;
+//       case 'event-poll-hero-pariah': return;
+//       case 'event-phase-skip-trading': return;
+//       case 'event-upkeep-minus-five': return; // DONE
+//       case 'event-upkeep-minus-seven': return; // DONE
+//       case 'event-upkeep-minus-ten': return; // DONE
+//       case 'event-upkeep-minus-twenty': return; // DONE
+//       case 'event-player-investments-specialty-block': return; // DONE
+//       case 'event-player-investments-disabled-three': return; // IN-PROGRESS
+//       case 'event-player-timeblocks-minus-five': return;
+//       case 'event-player-timeblocks-equals-three': return;
+//     }
+//   }
+// }
+
+export class EventEventAddTwo extends KindOnlyGameEvent {
+  kind = 'event-event-add-two';
+
+  apply(game: GameState): void {
+    const cards = game.marsEventDeck.drawAmount(2);
+    const marsEvents = cards.map(e => new MarsEvent(e));
+    game.marsEvents.push(...marsEvents);
+    game.marsEventDeck.updatePosition(game.marsEvents.length);
+  }
+}
+
+// TODO: REFACTOR EventUpkeepMinus* INTO ONE
+export class EventUpkeepMinusFive extends KindOnlyGameEvent {
+  kind = 'event-upkeep-minus-five';
+
+  apply(game: GameState): void {
+    game.subtractUpkeep(5);
+  }
+}
+
+export class EventUpkeepMinusSeven extends KindOnlyGameEvent {
+  kind = 'event-upkeep-minus-seven';
+
+  apply(game: GameState): void {
+    game.subtractUpkeep(7);
+  }
+}
+
+export class EventUpkeepMinusTen extends KindOnlyGameEvent {
+  kind = 'event-upkeep-minus-ten';
+
+  apply(game: GameState): void {
+    game.subtractUpkeep(10);
+  }
+}
+
+export class EventUpkeepMinusTwenty extends KindOnlyGameEvent {
+  kind = 'event-upkeep-minus-twenty';
+
+  apply(game: GameState): void {
+    game.subtractUpkeep(20);
+  }
+}
+
+export class EventPlayerInvestmentsSpecialtyBlock extends GameEventWithData {
+  kind = 'event-player-investments-specialty-block';
+
+  constructor(public data: { role: Role }) {
+    super();
+  }
+
+  apply(game: GameState) {
+    const specialty: Resource = game.players[this.data.role].specialty;
+    game.players[this.data.role].costs[specialty] = Infinity;
+  }
+}
+
+export class EventPlayerInvestmentsDisabledThree extends GameEventWithData {
+  kind = 'event-player-investments-disabled-three';
+
+  constructor(public data: any) {
+    super();
+  }
+
+  apply(game: GameState) {}
+}

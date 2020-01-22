@@ -590,6 +590,11 @@ export class MarsEventsDeck {
     const cardsInds = _.map(_.range(this.position, this.position + nCardsToDraw), ind => ind % this.deck.length);
     return _.map(cardsInds, ind => new MarsEvent(this.deck[ind]));
   }
+
+  public drawAmount(amount: number): Array<MarsEvent> {
+    const cardsInds = _.map(_.range(this.position, this.position + amount), ind => ind % this.deck.length);
+    return _.map(cardsInds, ind => new MarsEvent(this.deck[ind]));
+  }
 }
 
 export interface PlayerSerialized {
@@ -1101,6 +1106,15 @@ export class GameState extends Schema implements GameData {
     return this.upkeep + contributedUpkeep - 25;
   }
 
+  subtractUpkeep(amount: number): void {
+    const current = this.upkeep;
+    if((current - amount) >= 0) {
+      this.upkeep = current - amount;
+    } else {
+      this.upkeep = 0;
+    }
+  }
+
   applyMany(event: Array<GameEvent>): void {
     event.forEach(e => e.apply(this));
   }
@@ -1108,4 +1122,8 @@ export class GameState extends Schema implements GameData {
   apply(event: GameEvent): void {
     event.apply(this);
   }
+
+  // EVENT REQUESTS :: START
+
+  // EVENT REQUESTS :: END
 }
