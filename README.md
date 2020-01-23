@@ -23,6 +23,12 @@ docker-compose up -d
 
 and you should have a working development environment.
 
+Tests for the project can be run with
+
+```
+make test
+```
+
 ### Staging Setup
 
 ```bash
