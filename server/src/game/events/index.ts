@@ -130,12 +130,35 @@ export class AcceptTradeRequest extends GameEventWithData {
 
   constructor(public data: { id: string }) {
     super();
+    this.dateCreated = new Date().getTime();
   }
 
   apply(game: GameState): void {
+    let toMsg:Array<string> = []
+    for(const [resource,amount] of Object.entries(game.tradeSet[this.data.id].to.resourceAmount) as any){
+      if(amount > 0){
+        toMsg.push(`${amount} ${resource}`)
+      }
+    }
+
+    let fromMsg:Array<string> = []
+    for(const [resource,amount] of Object.entries(game.tradeSet[this.data.id].from.resourceAmount) as any){
+      if(amount > 0){
+        fromMsg.push(`${amount} ${resource}`)
+      }
+    }
+    
+    const log = new MarsLogMessage({
+      performedBy: game.tradeSet[this.data.id].from.role,
+      category: 'Trade',
+      content: `The ${game.tradeSet[this.data.id].from.role} has traded ${fromMsg.join(", ")} in exchange for ${toMsg.join(", ")} from the ${game.tradeSet[this.data.id].to.role}`,
+      timestamp: this.dateCreated
+    });
+
     const trade: Trade = game.tradeSet[this.data.id];
     trade.apply(game);
     delete game.tradeSet[this.data.id];
+    game.logs.push(log);
   }
 }
 

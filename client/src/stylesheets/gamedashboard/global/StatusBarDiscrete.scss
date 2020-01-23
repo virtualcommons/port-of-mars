@@ -1,0 +1,43 @@
+.status-o{
+    position: relative;
+    display:flex;
+    justify-content: space-between;
+    background-color: $space-white;
+    width: 100%;
+    border-radius: 15px;
+    overflow: hidden;
+    border-style: solid;
+    border-color: $space-gray;
+    
+
+    .progress{
+        width: 100%;
+        border-radius: 0;
+        margin:0.1rem 0.1rem;
+        background-color: $space-gray;
+        display: inline-block;
+    }
+
+    .progress:first-child{
+        border-top-left-radius:10px;
+        border-bottom-left-radius:10px;
+        
+    }
+
+    .progress:nth-child(10){
+        border-top-right-radius:10px;
+        border-bottom-right-radius:10px;
+        
+    }
+
+    .fader{
+        transition: all 0.4s ease-in-out;
+        position: absolute;
+        width: 0%;
+        right:0;
+        height: 4rem;
+        background-color: $space-white;
+        
+    }
+}
+

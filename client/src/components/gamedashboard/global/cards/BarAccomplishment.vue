@@ -1,6 +1,6 @@
 <template>
-  <div class="card-accomplishment">
-    <div class="title">
+  <div class="card-accomplishment" v-bind:class="{'unpurchasable':!canBuy, 'purchasable':canBuy}">
+    <div class="title" >
       <p>{{ accomplishment.label }}</p>
     </div>
     <div class="info">

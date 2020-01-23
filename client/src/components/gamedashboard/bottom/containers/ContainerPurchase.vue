@@ -31,6 +31,8 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import BarAccomplishment from '@/components/gamedashboard/global/cards/BarAccomplishment.vue';
+import { canPurchaseAccomplishment } from 'shared/validation';
+
 @Component({
   components: {
     BarAccomplishment
@@ -38,7 +40,10 @@ import BarAccomplishment from '@/components/gamedashboard/global/cards/BarAccomp
 })
 export default class ContainerPurchase extends Vue {
   get purchasableAccomplishments() {
-    return this.$store.getters.player.accomplishment.purchasable;
+    return this.$store.getters.player.accomplishment.purchasable.slice().sort((a,b) => {
+      return canPurchaseAccomplishment(b,this.$store.getters.player.inventory) - canPurchaseAccomplishment(a,this.$store.getters.player.inventory);
+    });
+    
   }
 }
 </script>
