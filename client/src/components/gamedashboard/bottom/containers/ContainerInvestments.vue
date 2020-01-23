@@ -2,7 +2,7 @@
   <div class="container-investments tour-investments">
     <div class="wrapper">
       <div class="topbar">
-        <p class="title">Time Investments</p>
+        <p class="title">Time Blocks</p>
         <!-- <StatusBar
           class="statusbar"
           :setWidth="`${remainingTimeBlocks * 10}`"
