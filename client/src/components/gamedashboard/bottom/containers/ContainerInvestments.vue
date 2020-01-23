@@ -2,15 +2,7 @@
   <div class="container-investments tour-investments">
     <div class="wrapper">
       <div class="topbar">
-        <p class="title">Time Blocks</p>
-        <!-- <StatusBar
-          class="statusbar"
-          :setWidth="`${remainingTimeBlocks * 10}`"
-          :colorOuter="'statusbar-outer-gray'"
-          :colorStart="'statusbar-inner-gray'"
-          :colorEnd="'statusbar-inner-green'"
-        /> -->
-       
+        <p class="title">Time Blocks</p>       
         <DiscreteStatusBar class="discrete-bar" :setWidth="`${100-(remainingTimeBlocks * 10)}`"/>
         
         <p class="status">{{ remainingTimeBlocks }}</p>
