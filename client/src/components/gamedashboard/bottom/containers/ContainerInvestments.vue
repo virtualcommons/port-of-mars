@@ -3,13 +3,16 @@
     <div class="wrapper">
       <div class="topbar">
         <p class="title">Time Investments</p>
-        <StatusBar
+        <!-- <StatusBar
           class="statusbar"
           :setWidth="`${remainingTimeBlocks * 10}`"
           :colorOuter="'statusbar-outer-gray'"
           :colorStart="'statusbar-inner-gray'"
           :colorEnd="'statusbar-inner-green'"
-        />
+        /> -->
+       
+        <DiscreteStatusBar class="discrete-bar" :setWidth="`${100-(remainingTimeBlocks * 10)}`"/>
+        
         <p class="status">{{ remainingTimeBlocks }}</p>
       </div>
 
@@ -29,12 +32,14 @@
 import { Vue, Component } from 'vue-property-decorator';
 import { INVESTMENTS, Resource, ResourceCostData } from 'shared/types';
 import StatusBar from '@/components/gamedashboard/global/StatusBar.vue';
+import DiscreteStatusBar from '@/components/gamedashboard/global/DiscreteStatusBar.vue';
 import CardInvestment from '@/components/gamedashboard/global/cards/CardInvestment.vue';
 import * as _ from 'lodash';
 
 @Component({
   components: {
     StatusBar,
+    DiscreteStatusBar,
     CardInvestment
   }
 })

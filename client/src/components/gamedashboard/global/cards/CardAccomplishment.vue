@@ -1,5 +1,5 @@
 <template>
-  <div class="card-accomplishment" @click="handleClick">
+  <div class="card-accomplishment" @click="handleClick" v-bind:class="{'unpurchasable':!canBuy,'purchasable':canBuy}">
     <div class="title">
       <p>{{ accomplishment.label }}</p>
     </div>
@@ -29,6 +29,7 @@ import {
   ResourceAmountData,
   RESOURCES
 } from 'shared/types';
+import { canPurchaseAccomplishment } from 'shared/validation';
 import * as _ from 'lodash';
 
 
@@ -74,6 +75,11 @@ export default class CardAccomplishment extends Vue {
     }
 
     return totalInventory;
+  }
+
+  get canBuy(){
+    
+    return canPurchaseAccomplishment(this.accomplishment,this.playerFullInventory);
   }
 
   get investmentGrayStatus() {
