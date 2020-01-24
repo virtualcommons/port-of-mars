@@ -1,4 +1,5 @@
 import { Room, Client, matchMaker } from "colyseus";
+import schedule from "node-schedule";
 
 interface MatchmakingGroup {
   stats: ClientStat[],
@@ -22,7 +23,7 @@ export class RankedLobbyRoom extends Room {
    * Distribute clients into groups at this interval
    * 15 minutes
    */
-  evaluateGroupsInterval = 15 * 60 * 1000;
+  evaluateAtEveryMinute = 15;
 
   /**
    * Groups of players per iteration
@@ -48,7 +49,7 @@ export class RankedLobbyRoom extends Room {
     /**
      * Redistribute clients into groups at every interval
      */
-    this.setSimulationInterval(() => this.redistributeGroups(), this.evaluateGroupsInterval);
+    schedule.scheduleJob(`*/${this.evaluateAtEveryMinute} * * * *`, () => this.redistributeGroups());
   }
 
   async onAuth() {
