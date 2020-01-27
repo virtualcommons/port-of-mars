@@ -23,7 +23,7 @@
         />
       </div>
       <div class="round-info-modal">
-        <p>Round {{phaseNumbers}} of 5</p>
+        <p>Phase {{phaseNumbers}} of 5</p>
       </div>
     </div>
     <p class="transition" :class="{'blink-timer': this.$store.state.timeRemaining < 60,'time':this.$store.state.timeRemaining >= 60}">{{ timeRemaining }}</p>
