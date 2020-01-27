@@ -20,10 +20,17 @@ export default class StatusBar extends Vue {
   @Prop({ default: 'statusbar-inner-red' }) private colorEnd!:string;
 
   styleWidth(): object {
-    return { width: `${this.setWidth}%` };
+    return {
+      
+      width: `${this.setWidth}%`,
+
+      };
   }
 
   styleOuter(): string {
+    if (this.setWidth <= 64) {
+      return 'statusbar-outer-low';
+    }
     return this.colorOuter;
   }
 

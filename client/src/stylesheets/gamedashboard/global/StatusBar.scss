@@ -1,19 +1,17 @@
 .statusbar-outer {
-  height: 1rem !important;
-  border-radius: 0.5rem;
+  border: 0.125rem solid $space-white-opaque-2;
+  height: 2rem !important;
+  border-radius: 1.5rem;
   @include make-left;
 
   .statusbar-inner {
-    height: 0.5rem !important;
-    margin: 0.125rem;
-    border-radius: 0.25rem;
+    height: 1rem !important;
+    margin: 0.35rem;
+    border-radius: 1.5rem;
     transition: all 0.4s ease-in-out;
   }
 }
 
-.statusbar-outer-white {
-  border: 0.125rem solid $space-white-opaque-2;
-}
 
 .statusbar-outer-gray {
   border: 0.125rem solid $space-gray;
@@ -21,6 +19,7 @@
 
 .statusbar-inner-white {
   background-color: $space-white;
+  
 }
 
 .statusbar-inner-gray {
@@ -33,8 +32,17 @@
 
 .statusbar-inner-yellow {
   background-color: $status-yellow;
+  
 }
 
 .statusbar-inner-red {
+  
   background-color: $status-red;
+  animation: blinker 1.5s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
 }
