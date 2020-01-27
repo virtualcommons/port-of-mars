@@ -3,6 +3,7 @@
     <div class="wrapper">
       <div class="topbar">
         <p class="title">Time Blocks</p>       
+        
         <DiscreteStatusBar class="discrete-bar" :setWidth="`${100-(remainingTimeBlocks * 10)}`"/>
         
         <p class="status">{{ remainingTimeBlocks }}</p>

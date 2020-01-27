@@ -4,10 +4,12 @@
   padding: 0 0.5rem 0.5rem 0.5rem;
   @include make-center;
   color: $space-white;
+  flex: 1 1 0;
 
   p {
-    margin: 0 0.5rem;
-    font-size: $font-small;
+    margin: 0rem 0.3rem;
+    
+    font-size: $font-med;
     text-align: center;
   }
 
@@ -16,7 +18,7 @@
   }
 
   .title {
-    color: $space-white-opaque-2;
+    color: $space-white;
   }
 
   .statusbar {

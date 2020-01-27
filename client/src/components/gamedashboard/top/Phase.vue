@@ -1,9 +1,9 @@
 <template>
   <div class="phase-component">
     <Round />
-    <div>
-      <p class="title">Current Phase</p>
-      <p class="current">{{ label }}</p>
+    <div class="phase-wrapper">
+      <p class="current">Current Phase</p>
+      <p class="title">{{ label }}</p>
       <div v-if="btnVisibility" class="buttons">
         <button
           class="donebtn tour-donebtn"
@@ -22,8 +22,11 @@
           size="sm"
         />
       </div>
+      <div class="round-info-modal">
+        <p>Round {{phaseNumbers}} of 5</p>
+      </div>
     </div>
-    <p class="time">{{ timeRemaining }}</p>
+    <p class="transition" :class="{'blink-timer': this.$store.state.timeRemaining < 60,'time':this.$store.state.timeRemaining >= 60}">{{ timeRemaining }}</p>
   </div>
 </template>
 
@@ -60,6 +63,10 @@ export default class Phase extends Vue {
 
   get phase() {
     return this.$tstore.state.phase;
+  }
+
+  get phaseNumbers(){
+    return this.$store.state.phase;
   }
 
   get btnVisibility() {

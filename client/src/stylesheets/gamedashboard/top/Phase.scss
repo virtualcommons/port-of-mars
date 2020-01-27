@@ -10,12 +10,12 @@
 
   .title {
     font-size: $font-large;
-    color: $space-white;
+    color: $space-orange;
   }
 
   .current {
     font-size: $font-med;
-    color: $space-orange;
+    color: $space-white;
   }
 
   .buttons {
@@ -58,9 +58,22 @@
       }
     }
   }
+  
+
+  .transition{
+    transition: all 0.4s ease-in-out;
+  }
+
+  .round-info-modal{
+    color:$space-white;
+    transition: all 0.2s ease-in-out;
+    text-align: center;
+    opacity: 0%;
+  }
 
   .time {
     font-size: $font-large;
+    
     color: $space-orange;
 
     span {
@@ -68,3 +81,25 @@
     }
   }
 }
+
+.current:hover ~ .round-info-modal{
+  opacity: 100%;
+} 
+
+.title:hover ~ .round-info-modal{
+  opacity: 100%;
+}
+
+.blink-timer{
+  animation: blinker 0.5s linear 5;
+  font-size: 3rem;
+  color: $status-red;
+}
+
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
