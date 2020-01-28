@@ -2,7 +2,26 @@
   <div class="modal-confirmation">
     <div class="content">
       <p class="header">Are you sure?</p>
-      <p class="details">{{ modalData.text }}</p>
+      <div class="details">
+        <p>{{ modalData.text }}</p>
+        <div v-if="modalData.type == 'discardAccomplishment'">
+          <p>This card is worth {{modalData.victoryPoints}} points</p>
+          <p>Cost</p>
+          <div class="cost">
+            <p
+            v-for="investment in modalData.cost"
+            
+
+            :key="investment + Math.random()"
+          >
+            <img
+              :src="require(`@/assets/icons/${investment}.svg`)"
+              alt="Investment"
+            />
+          </p>
+          </div>
+        </div>
+      </div>
     </div>
     <button
       class="confirm"
@@ -13,6 +32,8 @@
       Yes
     </button>
   </div>
+
+  
 </template>
 
 <script lang="ts">

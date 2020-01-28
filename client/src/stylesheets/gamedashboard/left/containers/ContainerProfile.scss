@@ -5,10 +5,10 @@
 
   .p-container {
     @include make-column-and-center;
-
+    
     .frame-outer {
-      height: 5rem;
-      width: 5rem;
+      height: 8rem;
+      width: 8rem;
       padding: 0.25rem;
       @include border-orange;
       border-radius: 50%;
@@ -18,7 +18,6 @@
         @include expand;
         border-radius: 50%;
         @include make-center;
-        background-color: $space-white-opaque-1;
 
         img {
           height: 80%;

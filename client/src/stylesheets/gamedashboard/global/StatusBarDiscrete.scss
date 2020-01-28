@@ -24,7 +24,7 @@
         
     }
 
-    .progress:nth-child(10){
+    .progress:nth-last-child(2){
         border-top-right-radius:10px;
         border-bottom-right-radius:10px;
         
@@ -36,7 +36,7 @@
         width: 0%;
         right:0;
         height: 4rem;
-        background-color: $space-white;
+        background-color: $space-orange;
         
     }
 }

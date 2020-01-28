@@ -1,7 +1,7 @@
 <template>
     <div class="status-o">
-        <div class="progress" v-for="n in 10" :key="n"/>
-        <div class="fader" :style="{width:`${setWidth}%`}"/>
+        <div class="progress" v-for="n in timeBlockTotal" :key="n"/>
+        <div class="fader" :style="{width:`${100-((100/timeBlockTotal)*usedTimeBlocks)}%`}"/>
     </div>
 
 </template>
@@ -12,8 +12,11 @@ import { Vue, Component,Prop } from 'vue-property-decorator';
 
 @Component({})
 export default class DiscreteStatusBar extends Vue{
-    @Prop({default:0}) private setWidth!:number;
+    @Prop({default:0}) private usedTimeBlocks!:number;
     
+    get timeBlockTotal(){
+        return this.$store.getters.player.timeBlocks;
+    }
 
 }
 </script>
