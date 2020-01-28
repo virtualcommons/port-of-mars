@@ -2,7 +2,7 @@
   <div class="profile tour-profile">
     <div class="p-container">
       <div class="frame-outer">
-        <div class="frame-inner">
+        <div  class="frame-inner" :style="{'backgroundColor':`var(--color-${playerRole})`}">
           <img :src="playerRoleImg" alt="Player" />
         </div>
       </div>
@@ -16,6 +16,9 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 
 @Component({})
 export default class ContainerProfile extends Vue {
+
+
+
   get playerRole() {
     return this.$tstore.state.role;
   }
@@ -28,4 +31,5 @@ export default class ContainerProfile extends Vue {
 
 <style lang="scss" scoped>
 @import '@/stylesheets/gamedashboard/left/containers/ContainerProfile.scss';
+
 </style>

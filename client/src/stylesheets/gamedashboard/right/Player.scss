@@ -1,10 +1,13 @@
 .player {
   // height: 3rem;
   width: 100%;
+  min-height: 0;
+  flex: 1 1 0;
   margin-bottom: 0.5rem;
   display: flex;
   // TODO: FIX TRANSITIONS (TOO FAST)
   @include default-transition-base;
+  overflow:hidden;
 
   &:last-child {
     margin-bottom: 0;
@@ -20,7 +23,6 @@
   .p-container {
     height: 100%;
     flex-grow: 1;
-    padding: 0.25rem;
     @include make-center;
     justify-content: space-between;
     @include default-transition-base;
@@ -42,6 +44,8 @@
     }
 
     img {
+      padding:0;
+      margin:0;
       height: 100%;
     }
   }

@@ -55,9 +55,12 @@ export default class Phase extends Vue {
 
   get label() {
     // const lbl = PHASE_LABELS[this.$tstore.state.phase];
+    this.$root.$emit('closeModal');
+    console.log('ran!'); 
     if (this.$store.state.phase === s.Phase.events) {
       return `Event ${this.$tstore.state.marsEventsProcessed + 1}`;
     }
+    
     return PHASE_LABELS[this.$tstore.state.phase];
   }
 
