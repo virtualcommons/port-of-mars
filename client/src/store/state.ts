@@ -50,7 +50,7 @@ function defaultPlayerData(role: Role): PlayerClientData {
     timeBlocks: 10,
     victoryPoints: 0,
     pendingInvestments: defaultPendingInvestment(),
-    contributedUpkeep: 0
+    contributedUpkeep: 0,
   };
 }
 
@@ -98,6 +98,7 @@ export interface State extends GameData {
   quizQuestions: Array<QuizQuestionData>;
   quizResults: Array<QuizResultPackage>;
   eventCardsVisible: Array<any>;
+  username: string;
 }
 
 export const initialStoreState: State = {
@@ -122,7 +123,8 @@ export const initialStoreState: State = {
   eventView: 'ACCOMPLISHMENT_SELECT_PURCHASED',
   quizQuestions: [],
   quizResults: [],
-  eventCardsVisible: []
+  eventCardsVisible: [],
+  username: ''
 };
 
 function tutorialNotifications() {

@@ -77,6 +77,13 @@ function SET_EVENT_VISIBILITY(
   }
 }
 
+function SET_USERNAME(
+  state: State,
+  payload: { username: string }
+) {
+  state.username = payload.username;
+}
+
 // MUTATIONS FOR EVENTS :: END
 
 function SET_TIME_REMAINING(state: State, timeRemaining: number) {
@@ -100,5 +107,6 @@ export default {
   SET_EVENT_VISIBILITY,
   SET_TIME_REMAINING,
   SET_MARS_EVENTS_PROCESSED,
+  SET_USERNAME,
   TOGGLE_LOADING
 };

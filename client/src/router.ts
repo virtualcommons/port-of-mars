@@ -9,37 +9,60 @@ import Tutorial from "@/views/Tutorial.vue";
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'Home',
-      component: Home
-    },
-    {
-      path: '/login',
       name: 'Login',
       component: Login
     },
     {
       path: '/lobby',
       name: 'WaitingLobby',
-      component: WaitingLobby
+      component: WaitingLobby,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/game',
       name: 'Game',
-      component: Game
+      component: Game,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/quiz',
       name: 'TutorialQuiz',
-      component: TutorialQuiz
+      component: TutorialQuiz,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/tutorial',
       name: 'Tutorial',
-      component: Tutorial
+      component: Tutorial,
+      meta: {
+        requiresAuth: true
+      }
     }
   ]
 });
+
+router.beforeEach((to, from, next) => {
+  if (to.meta && to.meta.requiresAuth) {
+    if (localStorage.getItem('jwt')) {
+      next()
+    } else {
+      next({
+        name: 'Login'
+      })
+    }
+  } else {
+    next()
+  }
+});
+
+export default router;

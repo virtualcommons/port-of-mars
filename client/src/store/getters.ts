@@ -30,7 +30,7 @@ export default {
     return op;
   },
 
-  currentEvent(state: State) {
+  currentEvent(state: State): MarsEventData | undefined {
     const marsEvents = state.marsEvents;
     const marsEventsProcessed = state.marsEventsProcessed;
     const current = marsEvents[marsEventsProcessed];

@@ -11,7 +11,7 @@ Vue.use(TypedStore);
 
 Vue.config.productionTip = false;
 
-const $client = new Colyseus.Client(process.env.SERVER_URL);
+const $client = new Colyseus.Client(process.env.SERVER_URL_WS);
 
 new Vue({
   router,

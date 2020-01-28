@@ -22,9 +22,18 @@ import { CURATOR, Phase, Role, ROLES } from 'shared/types';
 import { Command } from '@/game/commands/types';
 import { PlayerJoined, StateSnapshotTaken } from '@/game/events';
 import { GameEvent } from '@/game/events/types';
+import {getRepository} from "typeorm";
+import {User} from "@/entity/User";
+import {verify} from "@/login";
 
 export class GameRoom extends Room<GameState> implements Game {
   maxClients = 5;
+
+  onAuth(client: Client, options: any) {
+    const userRepo = getRepository(User);
+    const user = verify(userRepo, options.token);
+    return user ? user : false;
+  }
 
   onCreate(options: any) {
     this.setState(new GameState());
