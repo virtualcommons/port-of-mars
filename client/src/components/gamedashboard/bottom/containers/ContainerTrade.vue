@@ -1,5 +1,5 @@
 <template>
-    <div class="trade-container">
+    <div class="trade-container tour-trade">
         <div class="trade-request">
             <div class="section-text">
                 <p>Request Trade</p>
