@@ -16,6 +16,7 @@ before_install:
   - sudo sysctl -w vm.max_map_count=262144
 install:
   - docker --version
+  - ./configure
 script:
   - make test
   - make buildprod
