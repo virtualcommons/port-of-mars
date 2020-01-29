@@ -1,3 +1,4 @@
+import {Phase} from "shared/types";
 <template>
   <div class="container-phase">
     <div class="phase-row">
@@ -13,9 +14,9 @@
                 No Active Events
               </p>
               <CardEvent
-                v-for="event in eventsForTheRound"
+                v-for="(event, eventInd) in eventsForTheRound"
                 :event="event"
-                :key="event.id"
+                :visible="visible(eventInd)"
               />
             </div>
           </div>
@@ -29,12 +30,13 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
-import Phase from '@/components/gamedashboard/top/Phase.vue';
-import CardEvent from '@/components/gamedashboard/global/cards/CardEvent.vue';
-import MarsLog from '@/components/gamedashboard/top/MarsLog.vue';
+  import {Component, Vue} from 'vue-property-decorator';
+  import Phase from '@/components/gamedashboard/top/Phase.vue';
+  import CardEvent from '@/components/gamedashboard/global/cards/CardEvent.vue';
+  import MarsLog from '@/components/gamedashboard/top/MarsLog.vue';
+  import * as shared from 'shared/types'
 
-@Component({
+  @Component({
   components: {
     Phase,
     CardEvent,
@@ -47,6 +49,14 @@ export default class ContainerPhase extends Vue {
     if (scrollElement) {
       scrollElement.addEventListener('wheel', this.handleScroll);
     }
+  }
+
+  get eventsProcessed(): number {
+    return this.$tstore.state.marsEventsProcessed;
+  }
+
+  visible(ind: number) {
+    return this.$tstore.state.phase !== shared.Phase.events || ind <= this.eventsProcessed;
   }
 
   handleScroll(e: WheelEvent) {

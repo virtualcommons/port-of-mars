@@ -79,6 +79,7 @@ export default class Tutorial extends Vue {
       send(data: any) {},
       leave() {}
     });
+    this.replaceState(s => s);
     this.hasApi = true;
   }
 
@@ -312,7 +313,18 @@ export default class Tutorial extends Vue {
   ];
 
   replaceState(fn: (s: State) => State = id => id) {
-    const s = fn(_.cloneDeep(initialStoreState));
+    const data = _.cloneDeep(initialStoreState);
+    data.marsEvents.push(    {
+      id: 0,
+      name: 'Changing Tides',
+      effect: `Each player discards all their Accomplishment cards and draws 1 new Accomplishment card. (They still draw up to a total of three cards at the end of this round.)`,
+      flavorText: `Create contingencies for your contingencies and contingencies for those contingencies. Then prepare to improvise.`,
+      serverActionHandler: undefined,
+      clientViewHandler: 'NO_CHANGE' as const,
+      clientActionHandler: undefined,
+      duration: 1
+    });
+    const s = fn(data);
     this.$store.replaceState(s);
   }
 
