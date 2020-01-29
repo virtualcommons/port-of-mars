@@ -13,18 +13,16 @@ import {
   SetPlayerReadinessCmd,
   TimeInvestmentCmd,
   RejectTradeRequestCmd,
-  EventSendPollResultsCmd,
-  EventModifyInfluencesCmd,
-  EventModifyAccomplishmentsCmd
+  PersonalGainCmd
 } from '@/game/commands';
 import { Game, PlayerReadiness } from '@/game/room/types';
 import { CURATOR, Phase, Role, ROLES } from 'shared/types';
 import { Command } from '@/game/commands/types';
 import { StateSnapshotTaken } from '@/game/events';
 import { GameEvent } from '@/game/events/types';
-import {getRepository} from "typeorm";
-import {User} from "@/entity/User";
-import {verify} from "@/login";
+import { getRepository } from 'typeorm';
+import { User } from '@/entity/User';
+import { verify } from '@/login';
 
 export class GameRoom extends Room<GameState> implements Game {
   maxClients = 5;
@@ -80,12 +78,8 @@ export class GameRoom extends Room<GameState> implements Game {
         return RejectTradeRequestCmd.fromReq(r, this, client);
       case 'send-trade-request':
         return SendTradeRequestCmd.fromReq(r, this, client);
-      case 'event-send-poll-results':
-        return EventSendPollResultsCmd.fromReq(r, this, client);
-      case 'event-modify-influences':
-        return EventModifyInfluencesCmd.fromReq(r, this, client);
-      case 'event-modify-accomplishments':
-        return EventModifyAccomplishmentsCmd.fromReq(r, this, client);
+      case 'personal-gain':
+        return PersonalGainCmd.fromReq(r, this, client);
     }
   }
 
