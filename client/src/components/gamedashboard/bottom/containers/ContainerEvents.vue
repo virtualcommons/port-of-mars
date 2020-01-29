@@ -43,7 +43,7 @@ import EventContainer from '@/components/gamedashboard/bottom/events/EventContai
 })
 export default class ContainerEvents extends Vue {
   get currentEvent(): MarsEventData {
-    const current = this.$store.getters.currentEvent;
+    const current: MarsEventData = this.$store.getters.currentEvent;
 
     const data = { id: current.id, visibility: true };
     this.$store.commit('SET_EVENT_VISIBILITY', data);
