@@ -17,7 +17,7 @@
         <div class="outer-wrapper">
           <div class="wrapper">
             <BarAccomplishment
-              v-for="accomplishment in purchasableAccomplishments"
+              v-for="accomplishment in sortedPurchasableAccomplishments"
               :key="accomplishment.label + 2"
               :accomplishment="accomplishment"
             />
@@ -40,7 +40,7 @@ import { AccomplishmentData } from "shared/types";
   }
 })
 export default class ContainerPurchase extends Vue {
-  get purchasableAccomplishments() {
+  get sortedPurchasableAccomplishments() {
     return this.$store.getters.player.accomplishment.purchasable.slice().sort((a:AccomplishmentData,b:AccomplishmentData) => {
       return Number(canPurchaseAccomplishment(b,this.$store.getters.player.inventory)) - Number(canPurchaseAccomplishment(a,this.$store.getters.player.inventory));
     });
