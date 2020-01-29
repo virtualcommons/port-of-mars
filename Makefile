@@ -40,7 +40,7 @@ docker-compose.yml: $(ENVIR).yml
 
 .PHONY: test
 test: docker-compose.yml
-	docker-compose run --rm client yarn build test:unit
+	docker-compose run --rm client yarn test:unit
 	docker-compose run --rm server yarn test
 
 .PHONY: deploy
