@@ -23,6 +23,13 @@ docker-compose up -d
 
 and you should have a working development environment.
 
+In order to login fixtures for the project need to be loaded. This can be done with
+
+```
+docker-compose exec server bash
+yarn load-fixtures
+```
+
 Tests for the project can be run with
 
 ```
