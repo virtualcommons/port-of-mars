@@ -10,10 +10,7 @@ import {
   DiscardAccomplishmentCardData,
   SendTradeRequestData,
   AcceptTradeRequestData,
-  RejectTradeRquestData,
-  EventSendPollResultsData,
-  EventModifyInfluencesData,
-  EventModifyAccomplishmentsData
+  RejectTradeRquestData
 } from 'shared/requests';
 import {
   AccomplishmentData,

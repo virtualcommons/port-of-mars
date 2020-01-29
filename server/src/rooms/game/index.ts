@@ -81,12 +81,8 @@ export class GameRoom extends Room<GameState> implements Game {
         return RejectTradeRequestCmd.fromReq(r, this, client);
       case 'send-trade-request':
         return SendTradeRequestCmd.fromReq(r, this, client);
-      case 'event-send-poll-results':
-        return EventSendPollResultsCmd.fromReq(r, this, client);
-      case 'event-modify-influences':
-        return EventModifyInfluencesCmd.fromReq(r, this, client);
-      case 'event-modify-accomplishments':
-        return EventModifyAccomplishmentsCmd.fromReq(r, this, client);
+      case 'personal-gain':
+        return PersonalGainCmd.fromReq(r, this, client);
     }
   }
 

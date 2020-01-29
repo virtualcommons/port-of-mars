@@ -49,19 +49,19 @@ export interface SetPlayerReadinessData {
   value: boolean;
 }
 
-export interface EventSendPollResultsData {
-  kind: 'event-send-poll-results';
-  results: object;
-}
+// export interface EventSendPollResultsData {
+//   kind: 'event-send-poll-results';
+//   results: object;
+// }
+//
+// export interface EventModifyInfluencesData {
+//   kind: 'event-modify-influences';
+//   results: object;
+// }
 
-export interface EventModifyInfluencesData {
-  kind: 'event-modify-influences';
-  results: object;
-}
-
-export interface EventModifyAccomplishmentsData {
-  kind: 'event-modify-accomplishments';
-  results: object;
+export interface PersonalGainCmdData {
+  kind: 'personal-gain';
+  value: boolean;
 }
 
 export type Requests =
@@ -75,6 +75,4 @@ export type Requests =
   | SendTradeRequestData
   | AcceptTradeRequestData
   | RejectTradeRquestData
-  | EventSendPollResultsData
-  | EventModifyInfluencesData
-  | EventModifyAccomplishmentsData;
+  | PersonalGainCmdData;

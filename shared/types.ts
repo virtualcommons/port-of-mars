@@ -103,8 +103,8 @@ export type EventServerAction =
   // INVESTMENTS
   | 'PLAYER_MODIFY_SPECIALTY_COST_BLOCKED'
   | 'PLAYER_MODIFY_DISABLED_COST_THREE'
-  | 'PLAYER_MODIFY_TIMEBLOCKS_MINUS_FIVE'
   // TIMEBLOCKS
+  | 'PLAYER_MODIFY_TIMEBLOCKS_MINUS_FIVE'
   | 'PLAYER_MODIFY_TIMEBLOCKS_EQUALS_THREE';
 
 export type EventClientAction =
@@ -147,6 +147,10 @@ export interface MarsEventData {
   clientViewHandler: EventClientView;
   clientActionHandler?: EventClientAction;
   duration: number;
+}
+
+export interface MarsEventDataDeckItem extends MarsEventData {
+  copies: number;
 }
 
 export interface MarsLogMessageData {
