@@ -5,12 +5,9 @@ import {
   ChatMessageData,
   CURATOR,
   ENTREPRENEUR,
-  GameData, Investment,
+  GameData,
   InvestmentData,
-  MarsEventData,
-  EventServerAction,
-  EventClientAction,
-  EventClientView,
+  MarsEventSerialized,
   MarsLogMessageData,
   Phase,
   PIONEER,
@@ -18,19 +15,21 @@ import {
   PlayerSetData,
   POLITICIAN,
   RESEARCHER,
-  RESOURCES,
   Resource,
   ResourceAmountData,
   ResourceCostData,
   Role,
-  ROLES, TradeAmountData, TradeData, TradeSetData
+  ROLES,
+  TradeAmountData,
+  TradeData,
+  TradeSetData
 } from "shared/types";
 import _ from "lodash";
 import {getRandomIntInclusive} from "@/util";
 import {getAccomplishmentByID, getAccomplishmentIDs} from "@/data/Accomplishment";
-import {getAllMarsEvents, getMarsEventByID} from "@/data/MarsEvents";
 import {GameEvent} from "@/rooms/game/events/types";
-import {Game, GameOpts} from "@/rooms/game/types";
+import {GameOpts} from "@/rooms/game/types";
+import {MarsEvent, MarsEventsDeck} from '@/data/MarsEvents';
 
 export class ChatMessage extends Schema implements ChatMessageData {
   constructor(msg: ChatMessageData) {
@@ -486,110 +485,9 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
   }
 }
 
-export class MarsEvent extends Schema implements MarsEventData {
-  constructor(data: MarsEventData) {
-    super();
-    this.id = data.id;
-    this.duration = data.duration;
-    this.elapsed = 0;
-    this.name = data.name;
-    this.flavorText = data.flavorText;
-    this.serverActionHandler = data.serverActionHandler!;
-    this.clientViewHandler = data.clientViewHandler;
-    this.clientActionHandler = data.clientActionHandler!;
-    this.effect = data.effect;
-  }
-
-  static fromID(id: number) {
-    const me = getMarsEventByID(id)!;
-    return new MarsEvent(me);
-  }
-
-  updateElapsed():void {
-    this.elapsed++;
-  }
-
-  resetElapsed():void {
-    this.elapsed = 0;
-  }
-
-  complete():boolean {
-    if(this.elapsed === this.duration) {
-      // console.log('EVENT COMPLETE');
-      return true;
-    } else {
-      // console.log('EVENT INCOMPLETE');
-      return false;
-    }
-  }
-
-  toJSON(): number {
-    return this.id;
-  }
-
-  @type('number')
-  id: number;
-
-  @type('number')
-  duration: number;
-
-  @type('number')
-  elapsed: number;
-
-  @type('string')
-  name: string;
-
-  @type('string')
-  flavorText: string;
-
-  @type('string')
-  effect: string;
-
-  @type('string')
-  serverActionHandler: EventServerAction;
-
-  @type('string')
-  clientViewHandler: EventClientView;
-
-  @type('string')
-  clientActionHandler: EventClientAction;
-}
-
-interface MarsEventDeckSerialized {
+export interface MarsEventDeckSerialized {
+  deck: Array<MarsEventSerialized>
   position: number
-  deck: Array<MarsEventData>
-}
-
-export class MarsEventsDeck {
-  constructor(data: Partial<MarsEventDeckSerialized> = {}) {
-    this.deck = data.deck ? data.deck : _.shuffle(_.clone(getAllMarsEvents()));
-    this.position = data.position ? data.position : 0;
-  }
-
-  fromJSON(data: MarsEventDeckSerialized) {
-    this.deck.splice(0, this.deck.length, ...data.deck);
-    this.position = data.position;
-  }
-
-  toJSON(): { position: number, deck: Array<MarsEventData> } {
-    return {
-      deck: this.deck,
-      position: this.position
-    }
-  }
-
-  position: number;
-  deck: Array<MarsEventData>;
-
-  updatePosition(cardsUsed: number): void {
-    this.position = (this.position + cardsUsed) % this.deck.length;
-  }
-
-  public peek(upkeep: number): Array<MarsEvent> {
-    const nCardsToDraw = upkeep < 33 ? 3 : upkeep < 67 ? 2 : 1;
-    const cardsInds = _.map(_.range(this.position, this.position + nCardsToDraw), ind => ind % this.deck.length);
-    return _.map(cardsInds, ind => new MarsEvent(this.deck[ind]));
-  }
 }
 
 export interface PlayerSerialized {
@@ -787,8 +685,8 @@ export class Player extends Schema implements PlayerData {
       }
 
       while(leftOvers < 10){
-        leftOverInvestments.upkeep +=1
-        leftOvers+=1
+        leftOverInvestments.upkeep += 1
+        leftOvers += 1
       }
     }
 
@@ -797,13 +695,12 @@ export class Player extends Schema implements PlayerData {
 
   invest(investment?: InvestmentData,leftOverInvestments?: InvestmentData) {
 
-    investment = investment ?? this.pendingInvestments;
+    investment = investment ?? this.pendingInvestments
     leftOverInvestments = leftOverInvestments ?? PendingInvestment.defaults()
 
     for (const [k,v] of Object.entries(investment)){
       (investment as any)[k] += (leftOverInvestments as any)[k]
     }
-
 
     this.contributedUpkeep = investment.upkeep;
     this.inventory.update(investment);
@@ -894,7 +791,7 @@ interface GameSerialized {
   upkeep: number
   logs: Array<MarsLogMessageData>
   messages: Array<ChatMessageData>
-  marsEvents: Array<number>
+  marsEvents: Array<MarsEventSerialized>
   marsEventsProcessed: number
   marsEventDeck: MarsEventDeckSerialized
   tradeSet: TradeSetData
@@ -934,7 +831,7 @@ export class GameState extends Schema implements GameData {
     const chatMessages = _.map(data.messages, m => new ChatMessage(m));
     this.messages.splice(0, this.messages.length, ...chatMessages);
 
-    const marsEvents = _.map(data.marsEvents, _id => MarsEvent.fromID(_id));
+    const marsEvents = _.map(data.marsEvents, e => new MarsEvent(e));
     this.marsEvents.splice(0, this.marsEvents.length, ...marsEvents);
 
     this.marsEventsProcessed = data.marsEventsProcessed;
@@ -1041,16 +938,13 @@ export class GameState extends Schema implements GameData {
 
   updateMarsEventsElapsed(): void {
     for(const event of this.marsEvents) {
-      if(event.elapsed < event.duration) {
-        event.updateElapsed();
-        // console.log('EVENT UPDATED: ', event.id);
-      }
+      event.updateElapsed();
     }
   }
 
   handleIncomplete(): void {
     this.marsEvents = this.marsEvents.filter((event) => {
-      return !event.complete();
+      return !event.complete;
     });
   }
 
@@ -1075,6 +969,15 @@ export class GameState extends Schema implements GameData {
     return this.upkeep + contributedUpkeep - 25;
   }
 
+  subtractUpkeep(amount: number): void {
+    const current = this.upkeep;
+    if((current - amount) >= 0) {
+      this.upkeep = current - amount;
+    } else {
+      this.upkeep = 0;
+    }
+  }
+
   applyMany(event: Array<GameEvent>): void {
     event.forEach(e => e.apply(this));
   }
@@ -1082,4 +985,9 @@ export class GameState extends Schema implements GameData {
   apply(event: GameEvent): void {
     event.apply(this);
   }
+
+  get currentEvent() {
+    return this.marsEvents[this.marsEventsProcessed];
+  }
+
 }

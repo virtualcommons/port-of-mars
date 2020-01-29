@@ -97,14 +97,12 @@ describe('a game state snapshot', () => {
   })
 });
 
-describe('an Event model', () => {
-  it('can draw events based on upkeep level', () => {
-
+describe('a personal gain event', () => {
+  const gameState = new GameState(mockGameInitOpts(new ConsolePersister()).userRoles);
+  it('gets players who voted yes', () => {
+    
   });
-});
 
-describe('an Effect', () => {
-  it('can impact the game', () => {
-
-  });
-});
+  // check upkeep 
+  // votes associated with roles and timeblocks affecedl.
+})

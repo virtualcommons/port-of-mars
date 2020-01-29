@@ -3,9 +3,9 @@ import {
   InvestmentData,
   Phase,
   TradeData,
-  MarsLogMessageData
+  Role
 } from 'shared/types';
-import { MarsEvent, Player } from '@/rooms/game/state';
+import { Player } from '@/rooms/game/state';
 import {
   AcceptTradeRequest,
   BoughtAccomplishment,
@@ -23,15 +23,14 @@ import {
   TimeInvested,
   RejectTradeRequest,
   SetPlayerReadiness,
-  EventSendPollResults,
-  EventModifyInfluences,
-  EventModifyAccomplishments
+  PersonalGainVoted
 } from '@/rooms/game/events';
 import { getAccomplishmentByID } from '@/data/Accomplishment';
 import { Client } from 'colyseus';
 import { Game } from '@/rooms/game/types';
 import { Command } from '@/rooms/game/commands/types';
 import { GameEvent } from '@/rooms/game/events/types';
+import {MarsEvent} from "@/data/MarsEvents";
 
 export class SendChatMessageCmd implements Command {
   constructor(
@@ -153,7 +152,7 @@ export class AcceptTradeRequestCmd implements Command {
 export class RejectTradeRequestCmd implements Command {
   constructor(private id: string, private game: Game, private player: Player) {}
 
-  static fromReq(r: req.RejectTradeRquestData, game: Game, client: Client) {
+  static fromReq(r: req.RejectTradeRequestData, game: Game, client: Client) {
     const p = game.getPlayerByClient(client);
     return new RejectTradeRequestCmd(r.id, game, p);
   }
@@ -246,59 +245,19 @@ export class ResetGameCmd implements Command {
   }
 }
 
-// EVENT REQUESTS :: START
-export class EventSendPollResultsCmd implements Command {
+export class PersonalGainVotes implements Command {
   constructor(
-    private results: object,
+    private results: Role,
     private game: Game,
     private player: Player
   ) {}
 
-  static fromReq(r: req.EventSendPollResultsData, game: Game, client: Client) {
+  static fromReq(r: req.PersonalGainVotesData, game: Game, client: Client) {
     const p = game.getPlayerByClient(client);
-    return new EventSendPollResultsCmd(r.results, game, p);
+    return new PersonalGainVotes(r.value, game, p);
   }
 
   execute(): Array<GameEvent> {
-    return [new EventSendPollResults({ results: this.results })];
+    return [new PersonalGainVoted({ results: this.results })];
   }
 }
-
-export class EventModifyInfluencesCmd implements Command {
-  constructor(
-    private results: object,
-    private game: Game,
-    private player: Player
-  ) {}
-
-  static fromReq(r: req.EventModifyInfluencesData, game: Game, client: Client) {
-    const p = game.getPlayerByClient(client);
-    return new EventModifyInfluencesCmd(r.results, game, p);
-  }
-
-  execute(): Array<GameEvent> {
-    return [new EventModifyInfluences({ results: this.results })];
-  }
-}
-
-export class EventModifyAccomplishmentsCmd implements Command {
-  constructor(
-    private results: object,
-    private game: Game,
-    private player: Player
-  ) {}
-
-  static fromReq(
-    r: req.EventModifyAccomplishmentsData,
-    game: Game,
-    client: Client
-  ) {
-    const p = game.getPlayerByClient(client);
-    return new EventModifyAccomplishmentsCmd(r.results, game, p);
-  }
-
-  execute(): Array<GameEvent> {
-    return [new EventModifyAccomplishments({ results: this.results })];
-  }
-}
-// EVENT REQUESTS :: END

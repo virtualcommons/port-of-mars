@@ -10,10 +10,7 @@ import {
   DiscardAccomplishmentCardData,
   SendTradeRequestData,
   AcceptTradeRequestData,
-  RejectTradeRquestData,
-  EventSendPollResultsData,
-  EventModifyInfluencesData,
-  EventModifyAccomplishmentsData
+  RejectTradeRequestData
 } from 'shared/requests';
 import {
   AccomplishmentData,
@@ -86,7 +83,7 @@ export class GameRequestAPI {
   }
 
   public rejectTradeRequest(id: string) {
-    const msg: RejectTradeRquestData = { kind: 'reject-trade-request', id };
+    const msg: RejectTradeRequestData = { kind: 'reject-trade-request', id };
     this.send(msg);
   }
 
@@ -94,33 +91,4 @@ export class GameRequestAPI {
     const msg: SetPlayerReadinessData = { kind: 'set-player-readiness', value };
     this.send(msg);
   }
-
-  // EVENT REQUESTS :: START
-  public eventSendPollResults(results: object) {
-    console.log('API: eventSendPollResults');
-    const msg: EventSendPollResultsData = {
-      kind: 'event-send-poll-results',
-      results
-    };
-    this.send(msg);
-  }
-
-  public eventModifyInfluences(results: object) {
-    console.log('API: eventModifyInfluences');
-    const msg: EventModifyInfluencesData = {
-      kind: 'event-modify-influences',
-      results
-    };
-    this.send(msg);
-  }
-
-  public eventModifyAccomplishments(results: object) {
-    console.log('API: eventModifyAccomplishments');
-    const msg: EventModifyAccomplishmentsData = {
-      kind: 'event-modify-accomplishments',
-      results
-    };
-    this.send(msg);
-  }
-  // EVENT REQUESTS :: END
 }

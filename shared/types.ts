@@ -83,46 +83,6 @@ export const PHASE_LABELS: { [k in Phase]: string } = {
   [Phase.defeat]: 'Defeat!'
 };
 
-export type EventServerAction =
-  // EVENT
-  | 'ADD_EVENT_TWO'
-  // VOTING
-  | 'START_POLL_YES_NO'
-  | 'START_POLL_SINGLE'
-  | 'START_POLL_HERO_PARIAH'
-  | 'ACTIONS_POLL_YES_NO'
-  | 'ACTIONS_POLL_SINGLE'
-  | 'ACTIONS_POLL_HERO_PARIAH'
-  // PHASE
-  | 'SKIP_PHASE_TRADING'
-  // UPKEEP
-  | 'GLOBAL_MODIFY_UPKEEP_MINUS_FIVE'
-  | 'GLOBAL_MODIFY_UPKEEP_MINUS_SEVEN'
-  | 'GLOBAL_MODIFY_UPKEEP_MINUS_TEN'
-  | 'GLOBAL_MODIFY_UPKEEP_MINUS_TWENTY'
-  // INVESTMENTS
-  | 'PLAYER_MODIFY_SPECIALTY_COST_BLOCKED'
-  | 'PLAYER_MODIFY_DISABLED_COST_THREE'
-  | 'PLAYER_MODIFY_TIMEBLOCKS_MINUS_FIVE'
-  // TIMEBLOCKS
-  | 'PLAYER_MODIFY_TIMEBLOCKS_EQUALS_THREE';
-
-export type EventClientAction =
-  // CARDS
-  | 'PLAYER_SELECT_INFLUENCE_CARD_TWO'
-  | 'PLAYER_DISCARD_INFLUENCE_CARD_ALL'
-  | 'PLAYER_DRAW_INFLUENCE_CARD_ONE'
-  | 'PLAYER_DRAW_ACCOMPLISHMENT_CARD_ONE'
-  | 'PLAYER_DISCARD_ACCOMPLISHMENT_CARD_ALL'
-  | 'PLAYER_DISCARD_PURCHASED_ACCOMPLISHMENT_CARD_ONE'
-  // VOTING
-  | 'PLAYER_COLLECT_VOTE'
-  | 'PLAYER_SEND_VOTE'
-  // DOCK
-  | 'ADD_TO_EVENT_DOCK'
-  // SERVER
-  | 'UPDATE_SERVER';
-
 export type EventClientView =
   // EventNoChange (TODO)
   | 'NO_CHANGE'
@@ -139,13 +99,11 @@ export type EventClientView =
   | 'ACCOMPLISHMENT_SELECT_PURCHASED';
 
 export interface MarsEventData {
-  id: number;
+  id: string;
   name: string;
   effect: string;
   flavorText: string;
-  serverActionHandler?: EventServerAction;
   clientViewHandler: EventClientView;
-  clientActionHandler?: EventClientAction;
   duration: number;
 }
 
@@ -210,7 +168,7 @@ export interface GameData {
   phase: Phase;
   upkeep: number;
   messages: Array<ChatMessageData>;
-  marsEvents: Array<MarsEventData>;
+  marsEvents: Array<MarsEventSerialized>;
   logs: Array<MarsLogMessageData>;
   marsEventsProcessed: number;
   tradeSet: TradeSetData;
@@ -234,4 +192,8 @@ export interface QuizResultPackage {
   userAnswer: number;
   correctAnswer: number;
   correct: boolean;
+}
+
+export interface MarsEventSerialized extends MarsEventData {
+  id: string;
 }

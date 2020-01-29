@@ -13,9 +13,7 @@ import {
   SetPlayerReadinessCmd,
   TimeInvestmentCmd,
   RejectTradeRequestCmd,
-  EventSendPollResultsCmd,
-  EventModifyInfluencesCmd,
-  EventModifyAccomplishmentsCmd
+  PersonalGainVotes
 } from '@/rooms/game/commands';
 import {Game, GameOpts, Persister} from '@/rooms/game/types';
 import { Command } from '@/rooms/game/commands/types';
@@ -60,6 +58,7 @@ export class GameRoom extends Room<GameState> implements Game {
   }
 
   prepareRequest(r: Requests, client: Client): Command {
+    console.log({r});
     switch (r.kind) {
       case 'send-chat-message':
         return SendChatMessageCmd.fromReq(r, this, client);
@@ -81,12 +80,8 @@ export class GameRoom extends Room<GameState> implements Game {
         return RejectTradeRequestCmd.fromReq(r, this, client);
       case 'send-trade-request':
         return SendTradeRequestCmd.fromReq(r, this, client);
-      case 'event-send-poll-results':
-        return EventSendPollResultsCmd.fromReq(r, this, client);
-      case 'event-modify-influences':
-        return EventModifyInfluencesCmd.fromReq(r, this, client);
-      case 'event-modify-accomplishments':
-        return EventModifyAccomplishmentsCmd.fromReq(r, this, client);
+      case 'personal-gain':
+        return PersonalGainVotes.fromReq(r, this, client);
     }
   }
 
