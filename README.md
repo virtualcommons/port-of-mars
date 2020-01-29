@@ -30,6 +30,8 @@ docker-compose exec server bash
 yarn load-fixtures
 ```
 
+Now you should be able to login using the usernames in the `fixtures/User.yml` file.
+
 Tests for the project can be run with
 
 ```
