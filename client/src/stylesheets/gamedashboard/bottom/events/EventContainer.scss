@@ -1,14 +1,5 @@
 .event-view {
-  @include expand;
+  min-height: 100%;
+  width: 100%;
   @include make-center;
-
-  .event-no-change {
-    @include expand;
-    @include make-center;
-    color: $space-white;
-
-    p {
-      margin-bottom: 0;
-    }
-  }
 }

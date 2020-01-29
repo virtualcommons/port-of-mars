@@ -1,5 +1,5 @@
 <template>
-  <div class="marslog">
+  <div class="marslog tour-marslog">
     <p class="title">Mars Log</p>
     <div class="log">
       <p v-if="logs.length === 0" class="empty">
@@ -16,6 +16,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
+import {MarsLogData} from "shared/types";
 
 @Component({})
 export default class MarsLog extends Vue {
@@ -32,9 +33,10 @@ export default class MarsLog extends Vue {
     return new Date(timestamp).toLocaleTimeString();
   }
 
-  marsLogColor(log: object) {
+  marsLogColor(log: MarsLogData) {
+    console.log(log.category)
     switch (log.category) {
-      case 'Reduce Upkeep':
+      case 'upkeep':
         return { backgroundColor: 'var(--marslog-red)' };
       case 'Trade':
         return { backgroundColor: 'var(--marslog-purple)' };

@@ -1,0 +1,51 @@
+# vi: ft=dockerfile
+
+FROM node:13 AS pom-client-builder-base
+
+WORKDIR /code/client
+
+COPY ./client/package.json /code/client
+RUN yarn install
+
+COPY ./client /code/client
+COPY ./shared /code/shared
+
+ARG NODE_ARG=production
+ENV NODE_ENV=${NODE_ARG}
+
+RUN yarn build
+
+
+FROM node:13 AS pom-server-base
+
+WORKDIR /code/server
+
+COPY ./server/package.json /code/server
+RUN yarn install
+
+COPY ./server /code/server
+COPY ./shared /code/shared
+
+RUN yarn build \
+  && cp tsconfig.json package.json ormconfig.json lib/server/
+
+
+FROM node:13
+
+LABEL maintainer="Allen Lee <allen.lee@asu.edu>"
+
+COPY ./server/fixtures /code/server/fixtures
+COPY ./server/deploy/prod.sh /code/server
+COPY ./server/deploy/wait-for-it.sh /code/server
+COPY --from=pom-server-base /code/server/lib /code
+COPY --from=pom-server-base /code/server/node_modules /code/server/node_modules
+COPY --from=pom-client-builder-base /code/client/dist /code/server/static
+
+WORKDIR /code/server
+
+RUN chmod u+x prod.sh wait-for-it.sh
+
+ARG NODE_ARG=production
+ENV NODE_ENV=${NODE_ARG}
+
+CMD ["/code/server/prod.sh"]

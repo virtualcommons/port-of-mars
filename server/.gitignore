@@ -5,4 +5,6 @@ build/
 tmp/
 temp/
 deploy/pom_db_password*
+deploy/.pgpass
+deploy/.secrets
 ormconfig.json

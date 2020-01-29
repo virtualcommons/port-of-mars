@@ -3,22 +3,37 @@
     <div class="events-row">
       <div class="info">
         <div class="topbar">
-          <p>Event</p>
+          <p>Event {{ eventNumber }}</p>
         </div>
         <div class="content">
-          <p class="name">{{ eventContentName }}</p>
-          <p class="effect">{{ eventContentEffect }}</p>
+          <div class="name-wrapper">
+            <p>Name</p>
+            <p class="name">{{ currentEventName }}</p>
+          </div>
+          <div class="effect-wrapper">
+            <p>Effect</p>
+            <p class="effect">
+              {{
+                currentEventEffect !== ''
+                  ? currentEventEffect
+                  : 'No special effect'
+              }}
+            </p>
+          </div>
         </div>
       </div>
       <div class="actions">
-        <EventContainer />
+        <div class="outer-wrapper">
+          <EventContainer :event="currentEvent" />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
+import { MarsEventData, EventClientView } from 'shared/types';
 import EventContainer from '@/components/gamedashboard/bottom/events/EventContainer.vue';
 
 @Component({
@@ -27,19 +42,42 @@ import EventContainer from '@/components/gamedashboard/bottom/events/EventContai
   }
 })
 export default class ContainerEvents extends Vue {
-  private eventContentName: string = 'Out of Commission';
+  get currentEvent(): MarsEventData {
+    const current = this.$store.getters.currentEvent;
 
-  private eventContentEffect: string = 'The Politician receives only 3 Time Blocks this round.';
-
-  get layout() {
-    console.log(`(${typeof this.$tstore.state.eventView}): ${this.$tstore.state.eventView}`);
-    switch (this.$tstore.state.eventView) {
-      case 'EVENT_TEST':
-        return 'EventTest';
-      default:
-        break;
-    }
+    const data = { id: current.id, visibility: true };
+    this.$store.commit('SET_EVENT_VISIBILITY', data);
+    return current;
   }
+
+  get eventNumber(): number {
+    const eventNumber = this.$tstore.state.marsEventsProcessed + 1;
+    return eventNumber;
+  }
+
+  get currentEventName(): string {
+    const name = this.currentEvent.name;
+    if (name) {
+      return name;
+    }
+    return '';
+  }
+
+  get currentEventEffect(): string {
+    const effect = this.currentEvent.effect;
+    if (effect) {
+      return effect;
+    }
+    return '';
+  }
+
+  // get currentEventView(): EventClientView {
+  //   const view = this.currentEvent.clientViewHandler;
+  //   if(view) {
+  //     return view;
+  //   }
+  //   return 'NO_CHANGE';
+  // }
 }
 </script>
 

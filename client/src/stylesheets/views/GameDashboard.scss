@@ -3,8 +3,8 @@
 .game-dashboard-victory {
   height: 100vh !important;
   width: 100vw !important;
-  max-width: none !important;
-  @include reset-padding-margin;
+  // max-width: none !important;
+  // @include reset-padding-margin;
   @include make-center;
   background-color: $space-gray;
 }

@@ -8,13 +8,18 @@ import {
   GameData, Investment,
   InvestmentData,
   MarsEventData,
+  EventServerAction,
+  EventClientAction,
+  EventClientView,
   MarsLogMessageData,
   Phase,
   PIONEER,
   PlayerData,
   PlayerSetData,
   POLITICIAN,
-  RESEARCHER, Resource,
+  RESEARCHER,
+  RESOURCES,
+  Resource,
   ResourceAmountData,
   ResourceCostData,
   Role,
@@ -233,6 +238,21 @@ class ResourceCosts extends Schema implements ResourceCostData {
         });
     }
 
+  }
+
+  static getSpecialty(role: Role): Resource {
+    switch(role) {
+      case CURATOR:
+        return 'culture';
+      case ENTREPRENEUR:
+        return 'finance';
+      case PIONEER:
+        return 'legacy';
+      case POLITICIAN:
+        return 'government';
+      case RESEARCHER:
+        return 'science';
+    }
   }
 
   @type('number')
@@ -474,6 +494,9 @@ export class MarsEvent extends Schema implements MarsEventData {
     this.elapsed = 0;
     this.name = data.name;
     this.flavorText = data.flavorText;
+    this.serverActionHandler = data.serverActionHandler!;
+    this.clientViewHandler = data.clientViewHandler;
+    this.clientActionHandler = data.clientActionHandler!;
     this.effect = data.effect;
   }
 
@@ -522,6 +545,14 @@ export class MarsEvent extends Schema implements MarsEventData {
   @type('string')
   effect: string;
 
+  @type('string')
+  serverActionHandler: EventServerAction;
+
+  @type('string')
+  clientViewHandler: EventClientView;
+
+  @type('string')
+  clientActionHandler: EventClientAction;
 }
 
 interface MarsEventDeckSerialized {
@@ -564,6 +595,7 @@ export class MarsEventsDeck {
 export interface PlayerSerialized {
   role: Role
   costs: ResourceCostData
+  specialty: Resource
   accomplishment: AccomplishmentSetSerialized
   ready: boolean
   timeBlocks: number
@@ -643,11 +675,13 @@ export class Player extends Schema implements PlayerData {
     this.role = role;
     this.accomplishment = new AccomplishmentSet(role);
     this.costs = ResourceCosts.fromRole(role);
+    this.specialty = ResourceCosts.getSpecialty(role);
   }
 
   fromJSON(data: PlayerSerialized) {
     this.role = data.role;
     this.costs.fromJSON(data.costs);
+    this.specialty = data.specialty;
     this.accomplishment.fromJSON(data.accomplishment);
     this.ready = data.ready;
     this.timeBlocks = data.timeBlocks;
@@ -661,6 +695,7 @@ export class Player extends Schema implements PlayerData {
     return {
       role: this.role,
       costs: this.costs.toJSON(),
+      specialty: this.specialty,
       accomplishment: this.accomplishment.toJSON(),
       ready: this.ready,
       timeBlocks: this.timeBlocks,
@@ -676,6 +711,9 @@ export class Player extends Schema implements PlayerData {
 
   @type(ResourceCosts)
   costs: ResourceCosts;
+
+  @type("string")
+  specialty: Resource;
 
   @type(AccomplishmentSet)
   accomplishment: AccomplishmentSet;
@@ -871,27 +909,27 @@ export class GameState extends Schema implements GameData {
     this.maxRound = getRandomIntInclusive(8, 12);
     this.players = new PlayerSet();
 
-    this.tradeSet['123'] = new Trade(
-      {
-      role: 'Curator',
-      resourceAmount: {
-        science: 1,
-        government: 1,
-        legacy: 1,
-        finance: 1,
-        culture: 1
-      }
-    },
-    {
-      role: 'Researcher',
-      resourceAmount: {
-        science: 1,
-        government: 1,
-        legacy: 1,
-        finance: 1,
-        culture: 1
-      }
-    });
+    // this.tradeSet['123'] = new Trade(
+    //   {
+    //   role: 'Curator',
+    //   resourceAmount: {
+    //     science: 1,
+    //     government: 1,
+    //     legacy: 1,
+    //     finance: 1,
+    //     culture: 1
+    //   }
+    // },
+    // {
+    //   role: 'Researcher',
+    //   resourceAmount: {
+    //     science: 1,
+    //     government: 1,
+    //     legacy: 1,
+    //     finance: 1,
+    //     culture: 1
+    //   }
+    // });
   }
 
   static DEFAULTS = {
@@ -1029,20 +1067,17 @@ export class GameState extends Schema implements GameData {
 
   updateMarsEventsElapsed(): void {
     for(const event of this.marsEvents) {
-      // console.log("MARS EVENTS (CURRENT BEFORE): ", event.elapsed);
-      event.updateElapsed();
-      // console.log("MARS EVENTS (CURRENT AFTER): ", event.elapsed);
+      if(event.elapsed < event.duration) {
+        event.updateElapsed();
+        // console.log('EVENT UPDATED: ', event.id);
+      }
     }
   }
 
-  handleEventCompletion(): void {
-    for(const event of this.marsEvents) {
-      if(event.complete()) {
-        event.resetElapsed();
-      } else {
-        // TODO: KEEP INCOMPLETE CARDS
-      }
-    }
+  handleIncomplete(): void {
+    this.marsEvents = this.marsEvents.filter((event) => {
+      return !event.complete();
+    });
   }
 
   unsafeReset(): void {

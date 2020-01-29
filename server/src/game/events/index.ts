@@ -130,12 +130,35 @@ export class AcceptTradeRequest extends GameEventWithData {
 
   constructor(public data: { id: string }) {
     super();
+    this.dateCreated = new Date().getTime();
   }
 
   apply(game: GameState): void {
+    let toMsg:Array<string> = []
+    for(const [resource,amount] of Object.entries(game.tradeSet[this.data.id].to.resourceAmount) as any){
+      if(amount > 0){
+        toMsg.push(`${amount} ${resource}`)
+      }
+    }
+
+    let fromMsg:Array<string> = []
+    for(const [resource,amount] of Object.entries(game.tradeSet[this.data.id].from.resourceAmount) as any){
+      if(amount > 0){
+        fromMsg.push(`${amount} ${resource}`)
+      }
+    }
+    
+    const log = new MarsLogMessage({
+      performedBy: game.tradeSet[this.data.id].from.role,
+      category: 'Trade',
+      content: `The ${game.tradeSet[this.data.id].from.role} has traded ${fromMsg.join(", ")} in exchange for ${toMsg.join(", ")} from the ${game.tradeSet[this.data.id].to.role}`,
+      timestamp: this.dateCreated
+    });
+
     const trade: Trade = game.tradeSet[this.data.id];
     trade.apply(game);
     delete game.tradeSet[this.data.id];
+    game.logs.push(log);
   }
 }
 
@@ -187,28 +210,34 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
   kind = 'entered-mars-event-phase';
 
   apply(game: GameState): void {
-    console.log('EnteredMarsEventPhase');
-    const log = new MarsLogMessage({
-      performedBy: CURATOR,
-      category: 'upkeep',
-      content: `upkeep decreased ${game.upkeep - game.nextRoundUpkeep()}`,
-      timestamp: this.dateCreated
-    });
+    // console.log('EnteredMarsEventPhase');
+    // const log = new MarsLogMessage({
+    //   performedBy: CURATOR,
+    //   category: 'upkeep',
+    //   content: `upkeep decreased ${game.upkeep - game.nextRoundUpkeep()}`,
+    //   timestamp: this.dateCreated
+    // });
 
-    game.handleEventCompletion();
     game.resetPlayerReadiness();
     game.refreshPlayerPurchasableAccomplisments();
+
     game.phase = Phase.events;
     game.round += 1;
     game.upkeep = game.nextRoundUpkeep();
+
     const cards = game.marsEventDeck.peek(game.upkeep);
     const marsEvents = cards.map(e => new MarsEvent(e));
+
     game.phase = Phase.events;
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
-    game.marsEvents.splice(0, game.marsEvents.length, ...marsEvents);
+
+    game.handleIncomplete();
+    game.marsEvents.push(...marsEvents);
+    game.updateMarsEventsElapsed();
+
     game.marsEventsProcessed = GameState.DEFAULTS.marsEventsProcessed;
     game.marsEventDeck.updatePosition(game.marsEvents.length);
-    game.logs.push(log);
+    // game.logs.push(log);
 
     for (const player of game.players) {
       player.refreshPurchasableAccomplishments();
@@ -220,7 +249,7 @@ export class ReenteredMarsEventPhase extends KindOnlyGameEvent {
   kind = 'reentered-mars-event-phase';
 
   apply(game: GameState): void {
-    console.log('ReenteredMarsEventPhase');
+    // console.log('ReenteredMarsEventPhase');
     game.resetPlayerReadiness();
     game.marsEventsProcessed += 1;
   }
@@ -230,8 +259,6 @@ export class EnteredInvestmentPhase extends KindOnlyGameEvent {
   kind = 'entered-investment-phase';
 
   apply(game: GameState): void {
-    console.log('EnteredInvestmentPhase');
-    game.updateMarsEventsElapsed();
     game.resetPlayerReadiness();
     game.phase = Phase.invest;
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
@@ -309,3 +336,41 @@ export class StateSnapshotTaken implements GameEvent {
     };
   }
 }
+
+// EVENT REQUESTS :: START
+export class EventSendPollResults extends GameEventWithData {
+  kind = 'event-send-poll-results';
+
+  constructor(public data: { results: object }) {
+    super();
+  }
+
+  apply(game: GameState): void {
+    console.log('EventSendPollResults: ', this.data.results);
+  }
+}
+
+export class EventModifyInfluences extends GameEventWithData {
+  kind = 'event-modify-influences';
+
+  constructor(public data: { results: object }) {
+    super();
+  }
+
+  apply(game: GameState): void {
+    console.log('EventModifyInfluences: ', this.data.results);
+  }
+}
+
+export class EventModifyAccomplishments extends GameEventWithData {
+  kind = 'event-modify-accomplishments';
+
+  constructor(public data: { results: object }) {
+    super();
+  }
+
+  apply(game: GameState): void {
+    console.log('EventModifyAccomplishments: ', this.data.results);
+  }
+}
+// EVENT REQUESTS :: END

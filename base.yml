@@ -1,10 +1,7 @@
 version: '3'
 services:
   server:
-    build: server
+    build:
+      context: .
     restart: always
     image: port-of-mars/server/dev:latest
-    volumes:
-      - ./server:/code
-      - ./shared:/shared
-      - /code/node_modules

@@ -1,6 +1,6 @@
 <template>
-  <div class="card-accomplishment">
-    <div class="title">
+  <div class="card-accomplishment" v-bind:class="{'unpurchasable':!canBuy, 'purchasable':canBuy}">
+    <div class="title" >
       <p>{{ accomplishment.label }}</p>
     </div>
     <div class="info">
@@ -14,6 +14,9 @@
       <div class="cost">
         <p
           v-for="investment in accomplishmentCost"
+          v-bind:class="{
+            'unattainable-resource': shouldResourceBeGrayedOut(investment)
+          }"
           :key="investment + Math.random()"
         >
           <img
@@ -22,23 +25,32 @@
           />
         </p>
       </div>
-      <div class="purchase">
-        <button
-          :disabled="!canPurchaseAccomplishment"
-          @click="handlePurchase()"
-        >
-          Purchase Accomplishment
-        </button>
-      </div>
+    </div>
+    <div class="purchase">
+      <button :disabled="!canBuy" @click="handlePurchase()">
+        Purchase Accomplishment
+      </button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import {Vue, Component, Prop, InjectReactive, Inject} from 'vue-property-decorator';
-import { AccomplishmentData, INVESTMENTS, Resource } from 'shared/types';
+import {
+  Vue,
+  Component,
+  Prop,
+  InjectReactive,
+  Inject
+} from 'vue-property-decorator';
+import {
+  AccomplishmentData,
+  Investment,
+  INVESTMENTS,
+  Resource
+} from 'shared/types';
 import * as _ from 'lodash';
-import {GameRequestAPI} from '@/api/game/request';
+import { GameRequestAPI } from '@/api/game/request';
+import { canPurchaseAccomplishment } from 'shared/validation';
 
 @Component({})
 export default class BarAccomplishment extends Vue {
@@ -70,21 +82,31 @@ export default class BarAccomplishment extends Vue {
     );
   }
 
-  get canPurchaseAccomplishment() {
-    let canPurchase = true;
-    let currentInvestments = this.$store.getters.player.inventory;
+  get playerInventory() {
+    return _.clone(this.$tstore.getters.player.inventory);
+  }
 
-    INVESTMENTS.forEach(investment => {
-      if (currentInvestments[investment] < this.accomplishment[investment]) {
-        canPurchase = false;
-      }
-    });
+  shouldResourceBeGrayedOut(investment: Investment) {
+    if (investment === 'upkeep') {
+      return false;
+    }
 
-    return canPurchase;
+    if (this.playerInventory[investment] > 0) {
+      this.playerInventory[investment]--;
+      return false;
+    }
+    return true;
+  }
+
+  get canBuy() {
+    return canPurchaseAccomplishment(
+      this.accomplishment,
+      this.$tstore.getters.player.inventory
+    );
   }
 
   private handlePurchase() {
-    if (this.canPurchaseAccomplishment) {
+    if (this.canBuy) {
       this.api.purchaseAccomplishment(this.accomplishment);
     }
   }
@@ -93,4 +115,8 @@ export default class BarAccomplishment extends Vue {
 
 <style lang="scss" scoped>
 @import '@/stylesheets/gamedashboard/global/cards/BarAccomplishments.scss';
+
+.unattainable-resource {
+  opacity: 30%;
+}
 </style>

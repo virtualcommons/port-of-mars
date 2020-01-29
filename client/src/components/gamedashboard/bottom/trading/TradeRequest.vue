@@ -1,15 +1,21 @@
 <template>
-  <div class="trade-request">
+  <div class="trade-r">
     <div class="trade-partner">
       <p>Who would you like to trade with?</p>
-      <div class="trade-person-icons" v-for="(player, index) in otherPlayers" :key="index">
-        <img
-          @click="handleChange(player)"
-          class="person-icons"
-          :src="require(`@/assets/characters/${player}.png`)"
-          v-bind:class="{ 'selected-player': name == player }"
-        />
-        <p>{{player}}</p>
+      <div class="person-wrapper">
+        <div class="trade-person-icons" v-for="(player, index) in otherPlayers" :key="index">
+          <div class="person-frame"
+            v-bind:class="{ 'selected-player': name == player }"
+          >
+            <img
+              @click="handleChange(player)"
+              class="person-icons"
+              :src="require(`@/assets/characters/${player}.png`)"
+              
+            />
+          </div>
+          <p>{{player}}</p>
+        </div>
       </div>
     </div>
 
@@ -17,15 +23,16 @@
       <TradeOptions
         :resourceReader="handleSendResources"
         text="You give up"
+        mode="outgoing"
         class="options-block"
+        v-bind:class="{'inactive-action': !name}"
       />
-      <div class="options-block">
-        <i class="fas fa-exchange-alt fa-2x"></i>
-      </div>
       <TradeOptions
         :resourceReader="handleReciveResources"
         text="In exchange for"
+        mode="incoming"
         class="options-block"
+        v-bind:class="{'inactive-action': !name}"
       />
     </div>
 
@@ -38,9 +45,11 @@
 <script lang="ts">
 import {Vue, Component, Prop, InjectReactive, Inject} from 'vue-property-decorator';
 import * as _ from 'lodash';
-import TradeOptions from './TradeOptions';
-import { TradeData, TradeAmountData, ResourceAmountData } from 'shared/types';
+import TradeOptions from './TradeOptions.vue';
+import {TradeData, TradeAmountData, ResourceAmountData, RESOURCES, Role} from 'shared/types';
+import { canPlayerMakeTrade } from 'shared/validation';
 import { GameRequestAPI } from '@/api/game/request';
+import {defaultInventory} from "@/store/state";
 
 @Component({
   components: {
@@ -48,6 +57,12 @@ import { GameRequestAPI } from '@/api/game/request';
   }
 })
 export default class TradeRequest extends Vue {
+  @Inject()
+  readonly api!: GameRequestAPI;
+
+  sentResources: ResourceAmountData = defaultInventory();
+  exchangeResources: ResourceAmountData = defaultInventory();
+
   name = "";
 
   get otherPlayers(){
@@ -55,55 +70,41 @@ export default class TradeRequest extends Vue {
   }
 
   get clientValidation(){
-    let hasResourcesToSend = true;
-    let someGreaterThanZero = false;
-    const role = this.$store.state.role;
-    const inventory = this.$store.state.players[role].inventory;
+    const inventory = this.$store.getters.player.inventory;
 
-    Object.keys(this.sentResources).forEach(item => {
-      if(this.sentResources[item] > inventory[item]){
-        hasResourcesToSend = false;
-      }
-      if(this.sentResources[item] > 0) someGreaterThanZero = true;
-    });
-
-    return (this.name != "" && hasResourcesToSend && someGreaterThanZero);
+    return (this.name != "" && canPlayerMakeTrade(this.sentResources,inventory));
+  
   }
 
-  @Inject()
-  readonly api:GameRequestAPI;
-
-  sentResources:ResourceAmountData = {};
-  exchangeResources:ResourceAmountData = {};
-
-  handleSendResources(resources){
+  handleSendResources(resources: ResourceAmountData){
     this.sentResources = resources;
   }
 
-  handleReciveResources(resources){
+  handleReciveResources(resources: ResourceAmountData){
     this.exchangeResources = resources;
   }
 
-  handleChange(name){
-    this.name = name;
+  handleChange(name: string){
+    if(name == this.name){this.name = "";}
+    else{ this.name = name;}
   }
 
   handleTrade(){
     if(this.clientValidation){
       const fromPackage:TradeAmountData = {
-        role:this.$store.state.role,
-        resourceAmount:this.sentResources
-      }
+        role: this.$store.state.role,
+        resourceAmount: this.sentResources
+      };
 
-      const toPackage:TradeAmountData = {
-        role:this.name,
-        resourceAmount:this.exchangeResources
-      }
+      const toPackage: TradeAmountData = {
+        role: this.name as Role,
+        resourceAmount: this.exchangeResources
+      };
 
       const tradeDataPackage:TradeData = {
         from:fromPackage,
         to:toPackage
-      }
+      };
 
       this.api.sendTradeRequest(tradeDataPackage);
       this.name = "";

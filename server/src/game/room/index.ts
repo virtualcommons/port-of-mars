@@ -1,36 +1,48 @@
-import {Client, Room} from "colyseus";
-import {Requests} from "shared/requests"
-import {Responses} from "shared/responses"
-import {GameState, Player} from "@/game/state";
+import { Client, Room } from 'colyseus';
+import { Requests } from 'shared/requests';
+import { Responses } from 'shared/responses';
+import { GameState, Player } from '@/game/state';
 import {
   AcceptTradeRequestCmd,
-  BuyAccomplishmentCmd, DiscardAccomplishmentCmd,
+  BuyAccomplishmentCmd,
+  DiscardAccomplishmentCmd,
   ResetGameCmd,
-  SendChatMessageCmd, SendTradeRequestCmd,
+  SendChatMessageCmd,
+  SendTradeRequestCmd,
   SetNextPhaseCmd,
   SetPlayerReadinessCmd,
   TimeInvestmentCmd,
-  RejectTradeRequestCmd
-} from "@/game/commands";
-import {Game, PlayerReadiness} from "@/game/room/types";
-import {CURATOR, Phase, Role, ROLES} from "shared/types";
-import {Command} from "@/game/commands/types";
-import {
-  PlayerJoined, StateSnapshotTaken
-} from "@/game/events";
-import {GameEvent} from "@/game/events/types";
+  RejectTradeRequestCmd,
+  EventSendPollResultsCmd,
+  EventModifyInfluencesCmd,
+  EventModifyAccomplishmentsCmd
+} from '@/game/commands';
+import { Game, PlayerReadiness } from '@/game/room/types';
+import { CURATOR, Phase, Role, ROLES } from 'shared/types';
+import { Command } from '@/game/commands/types';
+import { PlayerJoined, StateSnapshotTaken } from '@/game/events';
+import { GameEvent } from '@/game/events/types';
+import {getRepository} from "typeorm";
+import {User} from "@/entity/User";
+import {verify} from "@/login";
 
 export class GameRoom extends Room<GameState> implements Game {
   maxClients = 5;
 
-  onCreate (options: any) {
+  onAuth(client: Client, options: any) {
+    const userRepo = getRepository(User);
+    const user = verify(userRepo, options.token);
+    return user ? user : false;
+  }
+
+  onCreate(options: any) {
     this.setState(new GameState());
     const snapshot = this.state.toJSON();
     const event = new StateSnapshotTaken(snapshot);
     this.clock.setInterval(this.gameLoop.bind(this), 1000);
   }
 
-  onJoin (client: Client, options: any) {
+  onJoin(client: Client, options: any) {
     this.createPlayer(client);
   }
 
@@ -41,12 +53,15 @@ export class GameRoom extends Room<GameState> implements Game {
   createPlayer(client: Client) {
     const role = this.state.availableRoles.pop();
     if (role === undefined) {
-      this.safeSend(client, { kind: 'error', message: 'Player create failed. Out of sessions'});
+      this.safeSend(client, {
+        kind: 'error',
+        message: 'Player create failed. Out of sessions'
+      });
       return;
     }
     const e = new PlayerJoined(client.sessionId, role);
     this.state.apply(e);
-    this.safeSend(client, { kind: 'set-player-role', role })
+    this.safeSend(client, { kind: 'set-player-role', role });
   }
 
   getPlayerByClient(client: Client): Player {
@@ -55,16 +70,32 @@ export class GameRoom extends Room<GameState> implements Game {
 
   prepareRequest(r: Requests, client: Client): Command {
     switch (r.kind) {
-      case "send-chat-message": return SendChatMessageCmd.fromReq(r, this, client);
-      case "set-next-phase": return SetNextPhaseCmd.fromReq(this);
-      case "set-player-readiness": return SetPlayerReadinessCmd.fromReq(r, this, client);
-      case "reset-game": return ResetGameCmd.fromReq(r, this);
-      case "set-time-investment": return TimeInvestmentCmd.fromReq(r, this, client);
-      case "buy-accomplishment-card": return BuyAccomplishmentCmd.fromReq(r, this, client);
-      case "discard-accomplishment-card": return DiscardAccomplishmentCmd.fromReq(r, this, client);
-      case "accept-trade-request": return AcceptTradeRequestCmd.fromReq(r, this, client);
-      case "reject-trade-request": return RejectTradeRequestCmd.fromReq(r,this,client);
-      case "send-trade-request": return SendTradeRequestCmd.fromReq(r, this, client);
+      case 'send-chat-message':
+        return SendChatMessageCmd.fromReq(r, this, client);
+      case 'set-next-phase':
+        return SetNextPhaseCmd.fromReq(this);
+      case 'set-player-readiness':
+        return SetPlayerReadinessCmd.fromReq(r, this, client);
+      case 'reset-game':
+        return ResetGameCmd.fromReq(r, this);
+      case 'set-time-investment':
+        return TimeInvestmentCmd.fromReq(r, this, client);
+      case 'buy-accomplishment-card':
+        return BuyAccomplishmentCmd.fromReq(r, this, client);
+      case 'discard-accomplishment-card':
+        return DiscardAccomplishmentCmd.fromReq(r, this, client);
+      case 'accept-trade-request':
+        return AcceptTradeRequestCmd.fromReq(r, this, client);
+      case 'reject-trade-request':
+        return RejectTradeRequestCmd.fromReq(r, this, client);
+      case 'send-trade-request':
+        return SendTradeRequestCmd.fromReq(r, this, client);
+      case 'event-send-poll-results':
+        return EventSendPollResultsCmd.fromReq(r, this, client);
+      case 'event-modify-influences':
+        return EventModifyInfluencesCmd.fromReq(r, this, client);
+      case 'event-modify-accomplishments':
+        return EventModifyAccomplishmentsCmd.fromReq(r, this, client);
     }
   }
 
@@ -77,12 +108,11 @@ export class GameRoom extends Room<GameState> implements Game {
     }
   }
 
-  onMessage (client: Client, message: Requests) {
+  onMessage(client: Client, message: Requests) {
     const cmd = this.prepareRequest(message, client);
     const events = cmd.execute();
     this.state.applyMany(events);
   }
-  onLeave (client: Client, consented: boolean) {}
+  onLeave(client: Client, consented: boolean) {}
   onDispose() {}
 }
-

@@ -6,7 +6,6 @@
 
   .wrapper {
     height: 100%;
-    height: 60%;
     /* SET MAX SIZE OF SCREEN */
     max-height: $max-screen-height;
     max-width: $max-screen-width;
@@ -43,8 +42,8 @@
 
       .input-username,
       .input-password {
-        margin: 1rem 0;
-        padding: 0.5rem;
+        margin: 1em 0;
+        padding: 0.5em;
         @include make-column-and-center;
 
         label {
@@ -54,14 +53,15 @@
           margin-bottom: 0;
           text-align: left;
           color: $space-white-opaque-2;
+          font-size: 20px;
         }
 
         .input-wrapper {
-          height: 3.5rem;
-          width: 18rem;
-          padding: 0.5rem;
-          border: 0.0625rem solid $space-orange-opaque-2;
-          margin-top: 0.5rem;
+          height: 5em;
+          width: 25em;
+          padding: 0.5em;
+          border: 0.0625em solid $space-orange-opaque-2;
+          margin-top: 0.5em;
           @include make-center;
 
           input {
@@ -82,38 +82,44 @@
           }
         }
       }
-
-      .submit {
-        margin: 1rem 0;
-        @include make-center;
-
-        input {
-          height: 3rem;
-          width: 12.5rem;
-          border: 0.0625rem solid $space-orange;
-          margin: 0.5rem;
-          background-color: transparent;
-          color: $space-orange;
-          @include default-transition-base;
-
-          &:disabled,
-          &:disabled:hover {
-            border: 0.0625rem solid $space-orange-opaque-2;
-            background: transparent;
-            color: $space-orange-opaque-2;
-          }
-
-          &:hover {
-            color: $space-gray;
-            background-color: $space-orange;
-          }
-
-          &:focus,
-          &:active {
-            outline: none;
-          }
-        }
-      }
     }
   }
+}
+
+.submit {
+  margin: 1rem 0;
+  @include make-center;
+
+  input {
+    height: 3rem;
+    width: 12.5rem;
+    border: 0.0625rem solid $space-orange;
+    margin: 0.5rem;
+    background-color: transparent;
+    color: $space-orange;
+    @include default-transition-base;
+
+    &:disabled,
+    &:disabled:hover {
+      border: 0.0625rem solid $space-orange-opaque-2;
+      background: transparent;
+      color: $space-orange-opaque-2;
+    }
+
+    &:hover {
+      color: $space-gray;
+      background-color: $space-orange;
+    }
+
+    &:focus,
+    &:active {
+      outline: none;
+    }
+  }
+}
+
+.error {
+  @include make-center;
+  color: #f00;
+  font-size: 2rem;
 }

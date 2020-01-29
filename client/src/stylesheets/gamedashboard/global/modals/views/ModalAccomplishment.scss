@@ -21,6 +21,7 @@
 
   .investments {
     margin: 0 1rem;
+    flex-wrap: wrap;
     @include make-center;
 
     img {

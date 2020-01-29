@@ -1,6 +1,6 @@
 <template>
-  <div class="round">
-    <p class="v-step-2">
+  <div class="round tour-round">
+    <p>
       Round <span>{{ roundNumber }}</span>
     </p>
   </div>

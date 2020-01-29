@@ -1,11 +1,18 @@
 .trade {
-  width: 100%;
+  max-width: 100%;
   height: 4rem;
   margin-bottom: 0.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: $space-white-opaque-1;
+  background-color: $space-gray;
+  color: $space-white;
+
+  
+  min-height: 0;
+  min-width: 0;
+  flex: 1 1 0;
+  flex-wrap: wrap;
 }
 
 .trade:last-child {
@@ -13,20 +20,17 @@
 }
 
 .trade-icon {
-  margin: 0 0.5rem;
+  margin-left: -0.6rem;
+  margin-right: 0.1rem;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.trade-icon i {
-  color: $space-white;
-}
 
 .trade-profile-sender-container,
 .trade-profile-receiver-container {
   height: 100%;
-  margin-left: 0.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -50,25 +54,29 @@
 
 .trade-send-receive {
   height: 100%;
-  flex-grow: 1;
   display: flex;
+  min-width: 0;
+  min-height: 0;
+  flex: 1 1 0;
   justify-content: space-around;
 }
 
 .send,
 .receive {
   height: 100%;
-  flex-grow: 1;
-  max-width: 18rem;
+  max-width: 15rem;
   margin: 0 0.5rem;
   display: flex;
+  min-width: 0;
+  min-height: 0;
+  flex: 1 1 0;
   flex-direction: column;
 }
 
 .send-sender,
 .receive-receiver {
   height: 50%;
-  padding: 0.25rem 0.5rem;
+  padding: 0.0rem 0.5rem;
   display: flex;
   align-items: center;
 }
@@ -90,6 +98,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  min-width: 0;
+  min-height: 0;
+  flex: 1 1 0;
 }
 
 .send-investments,
@@ -97,6 +108,8 @@
   height: 100%;
   display: flex;
   align-items: center;
+  min-width: 2.5rem;
+  flex: 1 1 0;
 }
 
 .send-investments img,
@@ -119,7 +132,7 @@
 
 .trade-buttons button {
   height: 50%;
-  width: 4rem;
+  width:4rem;
   border: none;
   font-size: $font-small;
   background-color: $space-orange;

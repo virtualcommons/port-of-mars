@@ -1,55 +1,95 @@
-.quiz-question-container {
-  background-color: $space-white;
-  border-radius: 0.5rem;
-  height: 27rem;
-  color: black;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.quiz-question-title {
-  text-align: center;
+.quiz-form {
+  height: 100%;
   width: 100%;
-  height: auto;
-  align-self: flex-start;
-  font-size: 1.4rem;
-  font-weight: bold;
-  margin-top: 1rem;
-}
-
-.quiz-question-form-container {
-  width: 100%;
-  height: auto;
-  align-self: flex-end;
-}
-
-.quiz-questions {
-  width: 95%;
-  margin: auto;
-  margin-top: 1rem;
-}
-
-.quiz-buttons {
-  margin-top: 4rem;
-  display: flex;
-  justify-content: space-between;
-}
-
-button {
-  border: none;
-  background: none;
-}
-
-.next-button {
   padding: 0.5rem;
-  border-top-left-radius: 0.5rem;
-  background-color: rgb(105, 224, 105);
-}
+  border: 0.0625rem solid $space-orange-opaque-2;
+  @include make-column-and-expand;
+  color: $space-white;
 
-.prev-button {
-  padding: 0.5rem;
-  border-top-right-radius: 0.5rem;
-  background-color: rgb(224, 105, 105);
+  .title {
+    padding: 0.5rem;
+    width: 100%;
+
+    p {
+      width: 100%;
+      margin-bottom: 0;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .number {
+      font-size: $font-med;
+    }
+
+    .question {
+      font-size: $font-large;
+    }
+  }
+
+  .wrapper {
+    height: 50%;
+    width: 100%;
+    padding: 0.5rem;
+    margin: 0.5rem;
+
+    form {
+      @include expand;
+      @include make-column-and-expand;
+
+      .questions {
+        flex-grow: 1;
+        width: 100%;
+        padding: 0.5rem;
+        @include make-left;
+
+        button {
+          @include reset-button;
+          height: 1.5rem;
+          width: 1.5rem;
+          padding: 0;
+          border: 0.0625rem solid $space-orange-opaque-2;
+          margin: 0 0.5rem;
+          @include default-transition-base;
+
+          &:hover {
+            color: $space-gray;
+            background-color: $space-orange-opaque-2;
+          }
+        }
+
+        p {
+          margin: 0 0.5rem;
+          font-size: $font-med;
+        }
+      }
+    }
+  }
+
+  .button-container {
+    width: 100%;
+    padding: 0.5rem;
+    @include make-horizontal-expand;
+    justify-content: space-between;
+
+    button {
+      @include reset-button;
+      height: 3rem;
+      width: 12.5rem;
+      border: 0.0625rem solid $space-orange;
+      color: $space-orange;
+      @include default-transition-base;
+
+      &:disabled,
+      &:disabled:hover {
+        border: 0.0625rem solid $space-orange-opaque-2;
+        background: transparent;
+        color: $space-orange-opaque-2;
+      }
+
+      &:hover {
+        color: $space-gray;
+        background-color: $space-orange;
+      }
+    }
+  }
 }

@@ -4,10 +4,13 @@
 
 ## Setup
 
+### Development Setup
+
 To create a development environment for your client and server run
 
 ```bash
-./build.sh init dev
+./configure dev
+make
 ```
 
 This creates secrets for the database, creates a `docker-compose.yml` file and builds the `client` and `server` docker images.
@@ -20,10 +23,31 @@ docker-compose up -d
 
 and you should have a working development environment.
 
-Subsequent builds should use
+In order to login fixtures for the project need to be loaded. This can be done with
 
 ```
-./build.sh build dev
+docker-compose exec server bash
+yarn load-fixtures
 ```
 
-because secrets only need to be generated once.
+Tests for the project can be run with
+
+```
+make test
+```
+
+### Staging Setup
+
+```bash
+./configure staging
+make
+docker-compose up -d
+```
+
+### Production Setup
+
+```bash
+./configure prod
+make
+docker-compose up -d
+```

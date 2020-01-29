@@ -20,7 +20,7 @@
       width: calc(100% / 3);
       padding: 0.5rem 0.25rem;
       @include make-horizontal-expand;
-      background-color: $space-white-opaque-1;
+
 
       img {
         height: 1.5rem;
@@ -30,9 +30,10 @@
 
       p {
         margin: 0 0.5rem;
-        font-size: $font-small;
+        font-size: $font-med;
         color: $space-white;
       }
+
     }
   }
 }

@@ -1,5 +1,5 @@
 import { PlayerClientSet, State } from '@/store/state';
-import { ROLES } from 'shared/types';
+import { ROLES,MarsEventData,EventClientView } from 'shared/types';
 
 export default {
   /**
@@ -28,5 +28,26 @@ export default {
       }
     }
     return op;
-  }
+  },
+
+  currentEvent(state: State): MarsEventData | undefined {
+    const marsEvents = state.marsEvents;
+    const marsEventsProcessed = state.marsEventsProcessed;
+    const current = marsEvents[marsEventsProcessed];
+    if(current) {
+      return current;
+    }
+    return undefined;
+  },
+
+  currentEventView(state: State): EventClientView {
+    const marsEvents = state.marsEvents;
+    const marsEventsProcessed = state.marsEventsProcessed;
+    const current = marsEvents[marsEventsProcessed];
+    if(current) {
+      const view = current.clientViewHandler;
+      return view;
+    }
+    return 'NO_CHANGE';
+  },
 };

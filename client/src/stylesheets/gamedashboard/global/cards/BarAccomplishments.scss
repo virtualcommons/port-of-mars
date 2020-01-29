@@ -1,46 +1,41 @@
 .card-accomplishment {
-  height: auto;
-  min-height: 7rem;
+  min-height: 10rem;
   width: 100%;
   margin-bottom: 0.5rem;
   @include make-column-and-center;
-  overflow: hidden;
-  @include default-transition-base;
 
   &:last-child {
     margin-bottom: 0;
   }
 
   .title {
-    height: 30%;
     width: 100%;
-    padding: 0.25rem 0.5rem;
-    margin: 0 0 0.5rem 0;
-    @include make-center;
-    background-color: $space-white;
+    margin-bottom: 0.5rem;
+    color: $space-gray;
+    //background-color: $space-white;
 
     p {
-      margin: 0;
+      width: 100%;
+      padding: 0.25rem 0.5rem;
+      margin-bottom: 0;
       text-align: center;
-      text-transform: capitalize;
-      color: $space-gray;
+      @include text-overflow-ellipses;
     }
   }
 
   .info {
-    height: 70%;
+    min-height: 50%;
     width: 100%;
     padding: 0.5rem;
     @include make-horizontal-expand;
     background-color: $space-gray;
 
     .points {
-      width: 5%;
       margin-right: 0.5rem;
       @include make-column-and-center;
 
       p {
-        margin: 0;
+        margin-bottom: 0;
         color: $space-white;
       }
     }
@@ -55,7 +50,7 @@
     }
 
     .cost {
-      width: 20%;
+      max-width: 20%;
       @include make-center;
       flex-wrap: wrap;
 
@@ -66,34 +61,47 @@
         padding: 0;
       }
     }
+  }
 
-    .purchase {
-      width: 20%;
+  .purchase {
+    width: 100%;
+    padding: 0.5rem;
+    @include make-center;
+    background-color: $space-gray;
 
-      button {
-        @include reset-button;
-        height: 3rem;
-        width: 12.5rem;
-        border: 0.0625rem solid $space-orange;
-        margin: 0.5rem;
+    button {
+      @include reset-button;
+      height: 3rem;
+      width: 12.5rem;
+      border: 0.0625rem solid $space-orange;
+      margin: 0.5rem;
+      color: $space-orange;
+      @include default-transition-base;
+      font-size: $font-small;
+
+      &:hover {
+        color: $space-gray;
+        background-color: $space-orange;
+      }
+
+      &:disabled {
+        opacity: 50%;
+      }
+
+      &:disabled:hover {
         color: $space-orange;
-        @include default-transition-base;
-        font-size: $font-small;
-
-        &:hover {
-          color: $space-gray;
-          background-color: $space-orange;
-        }
-
-        &:disabled {
-          opacity: 50%;
-        }
-
-        &:disabled:hover {
-          color: $space-orange;
-          background-color: transparent;
-        }
+        background-color: transparent;
       }
     }
   }
+}
+
+.unpurchasable{
+  background-color: $space-white;
+  opacity: 50%;
+}
+
+.purchasable{
+  background-color: $space-orange;
+  
 }

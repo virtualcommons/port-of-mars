@@ -18,6 +18,7 @@ import {
   QuizQuestionData,
   QuizResultPackage
 } from 'shared/types';
+import _ from 'lodash';
 
 export interface PlayerClientData extends PlayerData {
   pendingInvestments: InvestmentData;
@@ -43,12 +44,13 @@ function defaultPlayerData(role: Role): PlayerClientData {
       purchasable: []
     },
     costs: defaultCostData(role),
+    specialty: 'science',
     inventory: defaultInventory(role),
     ready: false,
     timeBlocks: 10,
     victoryPoints: 0,
     pendingInvestments: defaultPendingInvestment(),
-    contributedUpkeep: 0
+    contributedUpkeep: 0,
   };
 }
 
@@ -63,7 +65,7 @@ function defaultCostData(role: Role): ResourceCostData {
   };
 }
 
-function defaultInventory(role: Role): ResourceAmountData {
+export function defaultInventory(role?: Role): ResourceAmountData {
   return {
     science: 0,
     government: 0,
@@ -95,6 +97,8 @@ export interface State extends GameData {
   eventView: EventClientView;
   quizQuestions: Array<QuizQuestionData>;
   quizResults: Array<QuizResultPackage>;
+  eventCardsVisible: Array<any>;
+  username: string;
 }
 
 export const initialStoreState: State = {
@@ -116,7 +120,18 @@ export const initialStoreState: State = {
   loading: false,
 
   activeNotifications: [],
-  eventView: EventClientView.VOTE_FOR_PLAYER_HERO_PARIAH,
+  eventView: 'ACCOMPLISHMENT_SELECT_PURCHASED',
   quizQuestions: [],
-  quizResults: []
+  quizResults: [],
+  eventCardsVisible: [],
+  username: ''
 };
+
+function tutorialNotifications() {
+  const state = _.cloneDeep(initialStoreState);
+  state.activeNotifications = [
+    'Welcome to Port of Mars',
+    'Notifications can be dismissed by clicking on them'
+  ];
+  return state;
+}

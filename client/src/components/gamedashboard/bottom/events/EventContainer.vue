@@ -1,49 +1,60 @@
 <template>
   <div class="event-view">
-    <div v-if="layout === 'NO_CHANGE'" class="event-no-change">
-      <p>Nothing to see here!</p>
-    </div>
-    <component v-else-if="layout !== 'NO_CHANGE'" :is="eventView" :eventView="layout"></component>
+    <component :is="eventView" :eventView="layout"></component>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Prop } from 'vue-property-decorator';
+import { MarsEventData, EventClientView } from 'shared/types';
 import EventVote from '@/components/gamedashboard/bottom/events/EventVote.vue';
 import EventInfluences from '@/components/gamedashboard/bottom/events/EventInfluences.vue';
 import EventAccomplishments from '@/components/gamedashboard/bottom/events/EventAccomplishments.vue';
+import EventNoChange from '@/components/gamedashboard/bottom/events/EventNoChange.vue';
 
 @Component({
   components: {
     EventVote,
     EventInfluences,
-    EventAccomplishments
+    EventAccomplishments,
+    EventNoChange
   }
 })
 export default class EventContainer extends Vue {
-  private eventVoteViews: Array<string> = [
+  @Prop() private event!: MarsEventData;
+
+  private eventVoteViews: Array<EventClientView> = [
     'VOTE_YES_NO',
     'VOTE_FOR_PLAYER_SINGLE',
     'VOTE_FOR_PLAYER_HERO_PARIAH'
   ];
-  private eventInfluencesViews: Array<string> = ['INFLUENCES_SELECT', 'INFLUENCES_DRAW'];
-  private eventAccomplishmentsViews: Array<string> = ['ACCOMPLISHMENT_SELECT_PURCHASED'];
+  private eventInfluencesViews: Array<EventClientView> = [
+    'INFLUENCES_SELECT',
+    'INFLUENCES_DRAW'
+  ];
+  private eventAccomplishmentsViews: Array<EventClientView> = [
+    'ACCOMPLISHMENT_SELECT_PURCHASED'
+  ];
+  private eventNoChangeViews: Array<EventClientView> = [
+    'NO_CHANGE',
+    'AUDIT',
+    'DISABLE_CHAT'
+  ];
 
   get layout() {
-    return this.$tstore.state.eventView;
+    return this.event.clientViewHandler;
   }
 
   get eventView(): string {
-    // TODO: AUDIT
-    // TODO: DISABLE_CHAT
-    // TODO: Complete ACCOMPLISHMENT_SELECT_PURCHASED
-
+    // TODO: NO_CHANGE VIEW (MAYBE)
     if (this.eventVoteViews.includes(this.layout)) {
       return 'EventVote';
     } else if (this.eventInfluencesViews.includes(this.layout)) {
       return 'EventInfluences';
     } else if (this.eventAccomplishmentsViews.includes(this.layout)) {
       return 'EventAccomplishments';
+    } else if (this.eventNoChangeViews.includes(this.layout)) {
+      return 'EventNoChange';
     }
     return '';
   }
@@ -51,5 +62,6 @@ export default class EventContainer extends Vue {
 </script>
 
 <style lang="scss" scoped>
+@import '~animate.css/source/attention_seekers/pulse.css';
 @import '@/stylesheets/gamedashboard/bottom/events/EventContainer.scss';
 </style>

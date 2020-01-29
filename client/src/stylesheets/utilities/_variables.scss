@@ -23,10 +23,13 @@ $color-Politician: rgba(170, 42, 41, 0.2);
 $color-Upkeep: rgba(45, 143, 68, 0.2);
 
 $status-green: rgba(45, 143, 68, 1);
+$status-green-dark: rgb(11, 77, 26);
 $status-yellow: rgba(199, 168, 40, 1);
 $status-red: rgba(170, 42, 41, 1);
 
 $marslog-red: rgba(170, 42, 41, 0.05);
 $marslog-purple: rgba(111, 36, 134, 0.05);
 
+// BORDERS
 $border-white: 0.125rem solid $space-white;
+$border-white-opaque-2: 0.125rem solid $space-white-opaque-2;

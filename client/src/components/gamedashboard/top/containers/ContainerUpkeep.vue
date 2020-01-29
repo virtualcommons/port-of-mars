@@ -1,5 +1,5 @@
 <template>
-  <div class="container-upkeep v-step-0 v-step-1">
+  <div class="container-upkeep tour-container-upkeep">
     <p class="title">Upkeep</p>
     <StatusBar class="statusbar" :setWidth="`${upkeepStatus}`" />
     <p>{{ upkeepStatus }}<span> %</span></p>

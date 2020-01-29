@@ -30,6 +30,9 @@ function applyPlayerResponses(player: any, store: TStore) {
         case 'costs':
           store.commit('SET_INVESTMENT_COSTS', payload);
           break;
+        case 'specialty':
+          store.commit('SET_SPECIALTY', payload);
+          break;
         case 'timeBlocks':
           store.commit('SET_TIME_BLOCKS', payload);
           break;
@@ -75,35 +78,63 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
     store.commit('ADD_TO_CHAT', deschemify(msg));
   };
 
-  room.state.messages.onRemove = (msg: Schemify<ChatMessageData>, index: number) => {
+  room.state.messages.onRemove = (
+    msg: Schemify<ChatMessageData>,
+    index: number
+  ) => {
     store.commit('REMOVE_FROM_CHAT', deschemify(msg));
   };
 
-  room.state.logs.onAdd = (logMsg: Schemify<MarsLogMessageData>, index: number) => {
+  room.state.logs.onAdd = (
+    logMsg: Schemify<MarsLogMessageData>,
+    index: number
+  ) => {
     store.commit('ADD_TO_MARS_LOG', deschemify(logMsg));
   };
 
-  room.state.logs.onRemove = (logMsg: Schemify<MarsLogMessageData>, index: number) => {
+  room.state.logs.onRemove = (
+    logMsg: Schemify<MarsLogMessageData>,
+    index: number
+  ) => {
     store.commit('REMOVE_FROM_MARS_LOG', deschemify(logMsg));
   };
 
+  // RESPONSES FOR EVENTS :: START
+
   room.state.marsEvents.onAdd = (e: Schemify<MarsEventData>, index: number) => {
+    // console.log('RESPONSE (marsEvents.onAdd): ', deschemify(e));
     store.commit('ADD_TO_EVENTS', deschemify(e));
   };
 
-  room.state.marsEvents.onRemove = (e: Schemify<MarsEventData>, index: number) => {
+  room.state.marsEvents.onRemove = (
+    e: Schemify<MarsEventData>,
+    index: number
+  ) => {
+    // console.log('RESPONSE (marsEvents.onRemove): ', deschemify(e));
     store.commit('REMOVE_FROM_EVENTS', deschemify(e));
   };
 
-  room.state.marsEvents.onChange = (event: Schemify<MarsEventData>, index: number) => {
+  room.state.marsEvents.onChange = (
+    event: Schemify<MarsEventData>,
+    index: number
+  ) => {
+    // console.log('RESPONSE (marsEvents.onChange): ', {
+    //   event: deschemify(event),
+    //   index
+    // });
     store.commit('CHANGE_EVENT', { event: deschemify(event), index });
   };
 
+  // RESPONSES FOR EVENTS :: END
+
   room.state.tradeSet.onAdd = (event: Schemify<TradeData>, id: string) => {
-    const rawEvent:TradeData = deschemify(event);
-    store.commit('ADD_TO_TRADES', { trade: rawEvent, id })
-    if(rawEvent.to.role == store.state.role){
-      store.commit('CREATE_NOTIFICATION',`The ${rawEvent.from.role} would like to trade!`)
+    const rawEvent: TradeData = deschemify(event);
+    store.commit('ADD_TO_TRADES', { trade: rawEvent, id });
+    if (rawEvent.to.role == store.state.role) {
+      store.commit(
+        'CREATE_NOTIFICATION',
+        `The ${rawEvent.from.role} would like to trade!`
+      );
     }
   };
 

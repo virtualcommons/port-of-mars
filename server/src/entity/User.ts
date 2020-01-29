@@ -18,7 +18,7 @@ export class User {
     email!: string;
 
     @OneToMany(type => Player, player => player.user)
-    players!: Array<Player>
+    players!: Array<Player>;
 }
 
 

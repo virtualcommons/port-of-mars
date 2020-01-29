@@ -1,5 +1,5 @@
 <template>
-  <div class="card-accomplishment" @click="handleClick">
+  <div class="card-accomplishment" @click="handleClick" v-bind:class="{'unpurchasable':!canBuy,'purchasable':canBuy}">
     <div class="title">
       <p>{{ accomplishment.label }}</p>
     </div>
@@ -9,7 +9,10 @@
         <p>{{ accomplishment.victoryPoints }}</p>
       </div>
       <div class="cost">
-        <p v-for="investment in accomplishmentCost">
+        <p v-for="(investment,i) in accomplishmentCost" :key="investment+Math.random()"
+
+        v-bind:class="{'unattainable-resource': investmentGrayStatus[i]}"
+        >
           <img :src="require(`@/assets/icons/${investment}.svg`)" alt="Investment" />
         </p>
       </div>
@@ -19,8 +22,16 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { AccomplishmentData, INVESTMENTS, Resource } from 'shared/types';
+import {
+  AccomplishmentData,
+  INVESTMENTS,
+  Resource,
+  ResourceAmountData,
+  RESOURCES
+} from 'shared/types';
+import { canPurchaseAccomplishment } from 'shared/validation';
 import * as _ from 'lodash';
+
 
 @Component({})
 export default class CardAccomplishment extends Vue {
@@ -54,9 +65,46 @@ export default class CardAccomplishment extends Vue {
       payload: this.accomplishment
     });
   }
+
+  get playerFullInventory(){
+    let totalInventory: ResourceAmountData = _.clone(this.$tstore.getters.player.inventory);
+    const pendingInventory: ResourceAmountData = this.$tstore.getters.player.pendingInvestments;
+
+    for(const r of RESOURCES){
+      totalInventory[r] += pendingInventory[r];
+    }
+
+    return totalInventory;
+  }
+
+  get canBuy(){
+    
+    return canPurchaseAccomplishment(this.accomplishment,this.playerFullInventory);
+  }
+
+  get investmentGrayStatus() {
+    let grayStatus = [];
+    for(let investment of this.accomplishmentCost){
+      if (investment === 'upkeep') {
+        grayStatus.push(false);
+      } else if(this.playerFullInventory[investment] > 0) {
+        grayStatus.push(false);
+        this.playerFullInventory[investment]--;
+      } else {
+        grayStatus.push(true)
+      }
+    }
+    return grayStatus;
+  }
+
+
 }
 </script>
 
 <style lang="scss" scoped>
 @import '@/stylesheets/gamedashboard/global/cards/CardAccomplishment.scss';
+
+.unattainable-resource{
+  opacity: 30%;
+}
 </style>

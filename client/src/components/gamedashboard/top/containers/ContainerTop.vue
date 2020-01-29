@@ -1,5 +1,5 @@
 <template>
-  <div class="container-top">
+  <div class="container-top tour-container-top">
     <ContainerUpkeep />
     <ContainerPhase />
   </div>

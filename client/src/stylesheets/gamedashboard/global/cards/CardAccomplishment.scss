@@ -22,7 +22,7 @@
     padding: 0.25rem 0.5rem;
     margin: 0 0 0.5rem 0;
     @include make-center;
-    background-color: $space-white;
+    //background-color: $space-white;
 
     p {
       margin: 0;
@@ -61,4 +61,15 @@
       }
     }
   }
+}
+
+
+.unpurchasable{
+  background-color: $space-white;
+  
+}
+
+.purchasable{
+  background-color: $space-orange;
+  
 }

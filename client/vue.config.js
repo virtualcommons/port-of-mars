@@ -1,4 +1,7 @@
+const webpack = require('webpack');
 const path = require('path');
+
+const NODE_ENV = process.env.NODE_ENV || 'production';
 
 module.exports = {
   chainWebpack: config => {
@@ -6,6 +9,15 @@ module.exports = {
 
     const types = ['vue-modules', 'vue', 'normal-modules', 'normal'];
     types.forEach(type => addStyleResource(config.module.rule('scss').oneOf(type)));
+
+    config
+      .plugin('define-env')
+      .use(webpack.DefinePlugin, [{
+        'process.env.SERVER_URL_WS':
+          JSON.stringify(['development', 'staging'].includes(NODE_ENV) ? 'ws://localhost:2567' : 'wss://portofmars.comses.net'),
+        'process.env.SERVER_URL_HTTP':
+          JSON.stringify(['development', 'staging'].includes(NODE_ENV) ? 'http://localhost:2567' : 'https://portofmars.comses.net'),
+      }])
   }
 };
 

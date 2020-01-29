@@ -1,62 +1,70 @@
 <template>
-  <div class="quiz-container">
-    <div class="quiz-title">
-      <h1>QUIZ</h1>
-    </div>
-
-    <div v-show="submitted == false" class="quiz-form">
-      <QuizForm
-        v-for="(question, i) in quizQuestions"
-        :key="question.id"
-        v-show="index == i"
-        v-bind="quizQuestions[index]"
-        :index="index"
-        :handleUpdate="handleUpdate"
-        :complete="complete"
-      />
-      <div class="questions-container">
-        <button
-          class="question-nav"
-          v-for="n in quizQuestions.length"
-          :key="n.id"
-          @click="handleQuestionSwitch(n - 1)"
-        >
-          <!-- <p class="question-num">{{n}}</p> -->
-          {{ n }}
-        </button>
+  <div class="tutorial-quiz">
+    <div class="wrapper">
+      <div class="title">
+        <h1>QUIZ</h1>
       </div>
-    </div>
 
-    <div v-show="submitted == true">
-      <h2>You got {{ quizData.correct }} questions correct!</h2>
-      <p>Would you like to take the quiz again?</p>
-      <br />
-      <button @click="handleReset()">Restart Quiz</button>
+      <div v-show="submittedQuiz == false" class="quiz-container">
+        <QuizForm
+          v-for="(question, i) in quizQuestions"
+          v-show="index === i"
+          v-bind="quizQuestions[index]"
+          :key="`${question.id} - attempt ${attempts}`"
+          :index="index"
+          :handleUpdate="handleUpdate"
+          :answersComplete="answersComplete"
+        />
+      </div>
+
+      <div v-show="submittedQuiz == false" class="button-container">
+        <div
+          v-for="n in quizQuestions.length"
+          :key="n"
+          :style="frameStyle(n - 1)"
+          class="frame"
+        >
+          <button
+            @click="handleQuestionSwitch(n - 1)"
+            :style="buttonStyle(n - 1)"
+          >
+            {{ n }}
+          </button>
+        </div>
+      </div>
+
+      <div v-if="submittedQuiz == true" class="submission">
+        <h2>You got {{ quizData }} questions correct.</h2>
+        <p>Would you like to take the quiz again?</p>
+        <button @click="handleReset()">Restart Quiz</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import {Component, Vue, InjectReactive, Inject} from 'vue-property-decorator';
+import { Component, Vue, InjectReactive, Inject } from 'vue-property-decorator';
 import QuizForm from '@/components/tutorial/QuizForm.vue';
 import { QuizRequestAPI } from '@/api/quiz/request';
-import {applyQuizServerResponses} from "@/api/quiz/response";
-import store from "@/store";
-import {Client} from 'colyseus.js';
+import { applyQuizServerResponses } from '@/api/quiz/response';
+import store from '@/store';
+import { Client } from 'colyseus.js';
+import { QuizData, QuizQuestionData, QuizResultPackage } from 'shared/types';
 @Component({
   components: {
     QuizForm
   }
 })
 export default class TutorialQuiz extends Vue {
-  private answersArray = [];
-  private index = 0;
-  private complete = false;
-  private submitted = false;
+  private index: number = 0;
+  private answersArray: Array<number> = [];
+  private answersComplete: boolean = false;
+  private submittedQuiz: boolean = false;
+  private attempts: number = 0;
+
+  private api: QuizRequestAPI = new QuizRequestAPI();
 
   @Inject() readonly $client!: Client;
-
-  api!: QuizRequestAPI = new QuizRequestAPI();
 
   async created() {
     const quizRoom = await this.$client.joinOrCreate('quiz');
@@ -64,50 +72,81 @@ export default class TutorialQuiz extends Vue {
     this.api.connect(quizRoom);
   }
 
-  get quizQuestions() {
+
+  get quizQuestions(): Array<QuizQuestionData> {
     const questions = this.$store.state.quizQuestions;
+
+    // TODO: There's definitely a better place to do this...
+    const length = Object.keys(this.quizQuestions).length;
+    this.answersArray = new Array(length).fill(-1);
+
     return questions;
   }
 
-  get quizResults() {
-    const results = this.$store.state.quizResults;
-    return results;
+  get quizResults(): Array<QuizResultPackage> {
+    return this.$store.state.quizResults;
   }
 
-  get quizData() {
-    let info = { correct: 0 };
+  private handleQuestionSwitch(newIndex: number): void {
+    this.index = newIndex;
+  }
+
+  get quizData(): number {
+    let info: number = 0;
 
     this.quizResults.forEach(question => {
-      if (question.correct) info.correct++;
+      if (question.correct) info++;
     });
 
     return info;
   }
 
-  handleUpdate(id, name) {
-    if (name == 1) this.answersArray.splice(this.index, 1, id);
-
-    this.complete = this.answersArray.length == this.quizQuestions.length;
-
-    if (name != 2) {
-      if (this.index + name != this.quizQuestions.length)
-        this.index = (this.index + name) % this.quizQuestions.length;
-      if (this.index <= -1) this.index = this.quizQuestions.length - 1;
-    } else {
-      this.api.submitQuiz(this.answersArray);
-      this.submitted = true;
+  private isComplete(): void {
+    if (!this.answersArray.includes(-1)) {
+      this.answersComplete = true;
     }
   }
 
-  handleReset() {
-    this.submitted = false;
-    this.index = 0;
-    this.complete = false;
-    this.answersArray = [];
+  private handleUpdate(optionSelected: number, navAction: number): void {
+    console.log(this.answersArray)
+    if (navAction === 2) {
+      this.api.submitQuiz(this.answersArray);
+      this.submittedQuiz = true;
+    } else {
+      if (navAction === 1) {
+        this.answersArray.splice(this.index, 1, optionSelected);
+        this.isComplete();
+      }
+      if (this.index === 0 && navAction === -1) {
+        this.index = this.index;
+      } else if (this.index + navAction !== this.quizQuestions.length) {
+        this.index = (this.index + navAction) % this.quizQuestions.length;
+      } else {
+        this.index = 0;
+      }
+    }
   }
 
-  handleQuestionSwitch(newIndex) {
-    this.index = newIndex;
+  private handleReset(): void {
+    this.answersComplete = false;
+    this.submittedQuiz = false;
+    this.answersArray.fill(-1);
+    this.attempts++;
+    this.index = 0;
+  }
+
+  private buttonStyle(index: number): object {
+    if (index === this.index) {
+      return { backgroundColor: 'var(--space-orange)' };
+    }
+    return {};
+  }
+
+  private frameStyle(index: number): object {
+    if (this.answersArray[index] !== -1) {
+      return { border: '0.0625rem solid var(--space-orange)' };
+    }
+    return { border: '0.0625rem solid var(--space-orange-opaque-2)' };
   }
 }
 </script>

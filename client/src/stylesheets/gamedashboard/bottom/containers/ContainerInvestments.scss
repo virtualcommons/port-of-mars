@@ -14,6 +14,11 @@
       @include make-center;
       background-color: $space-orange;
 
+      .discrete-bar {
+        margin: 0 1rem;
+        flex: 1;
+      }
+
       .title {
         margin: 0;
         font-size: $font-med;
@@ -27,6 +32,7 @@
 
       .status {
         margin: 0;
+        width: 1rem;
         font-size: $font-med;
         color: $space-gray;
       }
