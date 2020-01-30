@@ -31,10 +31,10 @@ services:
     ports:
       - '127.0.0.1:2567:2567'
     volumes:
-      - ./server/deploy/.pgpass:/root/.pgpass:ro
       - ./server:/code/server
       - ./shared:/code/shared
-      - /code/node_modules
+      - ./server/deploy/.pgpass:/root/.pgpass:ro
+      - /code/server/node_modules
 volumes:
   data:
     driver: local
