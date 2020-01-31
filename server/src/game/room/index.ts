@@ -20,7 +20,7 @@ import {
 import { Game, PlayerReadiness } from '@/game/room/types';
 import { CURATOR, Phase, Role, ROLES } from 'shared/types';
 import { Command } from '@/game/commands/types';
-import { PlayerJoined, StateSnapshotTaken } from '@/game/events';
+import { StateSnapshotTaken } from '@/game/events';
 import { GameEvent } from '@/game/events/types';
 import {getRepository} from "typeorm";
 import {User} from "@/entity/User";
@@ -29,39 +29,29 @@ import {verify} from "@/login";
 export class GameRoom extends Room<GameState> implements Game {
   maxClients = 5;
 
-  onAuth(client: Client, options: any) {
+  async onAuth(client: Client, options: any) {
     const userRepo = getRepository(User);
-    const user = verify(userRepo, options.token);
-    return user ? user : false;
+    const user = await verify(userRepo, options.token);
+    if (user && Object.keys(this.state.connections).includes(user.username)) {
+      return user;
+    }
+    return false;
   }
 
-  onCreate(options: any) {
-    this.setState(new GameState());
+  onCreate(options: { [username: string]: Role }) {
+    this.setState(new GameState(options));
     const snapshot = this.state.toJSON();
     const event = new StateSnapshotTaken(snapshot);
     this.clock.setInterval(this.gameLoop.bind(this), 1000);
   }
 
-  onJoin(client: Client, options: any) {
-    this.createPlayer(client);
+  onJoin(client: Client, options: any, auth: User) {
+    const role = this.state.connections[auth.username];
+    this.safeSend(client, { kind: 'set-player-role', role });
   }
 
   safeSend(client: Client, msg: Responses) {
     this.send(client, msg);
-  }
-
-  createPlayer(client: Client) {
-    const role = this.state.availableRoles.pop();
-    if (role === undefined) {
-      this.safeSend(client, {
-        kind: 'error',
-        message: 'Player create failed. Out of sessions'
-      });
-      return;
-    }
-    const e = new PlayerJoined(client.sessionId, role);
-    this.state.apply(e);
-    this.safeSend(client, { kind: 'set-player-role', role });
   }
 
   getPlayerByClient(client: Client): Player {
