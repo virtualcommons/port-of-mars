@@ -41,8 +41,8 @@ import { AccomplishmentData } from "shared/types";
 })
 export default class ContainerPurchase extends Vue {
   get sortedPurchasableAccomplishments() {
-    return this.$store.getters.player.accomplishment.purchasable.slice().sort((a:AccomplishmentData,b:AccomplishmentData) => {
-      return Number(canPurchaseAccomplishment(b,this.$store.getters.player.inventory)) - Number(canPurchaseAccomplishment(a,this.$store.getters.player.inventory));
+    return this.$store.getters.player.accomplishment.purchasable.slice().sort((a: AccomplishmentData,b: AccomplishmentData) => {
+      return Number(canPurchaseAccomplishment(b, this.$store.getters.player.inventory)) - Number(canPurchaseAccomplishment(a, this.$store.getters.player.inventory));
     });
     
   }

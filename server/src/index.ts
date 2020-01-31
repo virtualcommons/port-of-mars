@@ -10,6 +10,7 @@ import {WaitingRoom} from "@/waitingLobby/room";
 import { QuizRoom } from "@/quiz/room";
 import {User} from "@/entity/User";
 import jwt from 'jsonwebtoken';
+import {mockGameInitOpts} from "@/util";
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
@@ -46,8 +47,7 @@ function createApp(connection: Connection) {
     });
 
     // register your room handlers
-    gameServer.define('game', GameRoom);
-    gameServer.define('tutorial', GameRoom);
+    gameServer.define('game', GameRoom, mockGameInitOpts());
     gameServer.define('waiting',WaitingRoom);
     gameServer.define('quiz', QuizRoom);
 

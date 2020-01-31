@@ -34,15 +34,8 @@ export default class CardEvent extends Vue {
   })
   private event!: AccomplishmentData;
 
-  get visible(): boolean {
-    const eventCardsVisible: any = this.$store.state.eventCardsVisible;
-    for (const [i, value] of eventCardsVisible.entries()) {
-      if (value.id === this.event.id) {
-        return value.visible === true;
-      }
-    }
-    return false;
-  }
+  @Prop()
+  visible!: boolean;
 
   private handleClick(): void {
     this.$root.$emit('openModalCard', {

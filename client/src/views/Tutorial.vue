@@ -72,6 +72,10 @@ export default class Tutorial extends Vue {
     this.api.connect(this.$store);
   }
 
+  async destroyed(){
+    this.api.leave();
+  }
+
   // class for the active step element
   TOUR_ACTIVE_CLASS: string = 'tour-active';
   // class to show tour is active for click events

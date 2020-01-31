@@ -2,6 +2,7 @@ import {GameState, AccomplishmentSet, Player} from "@/game/state";
 import {CURATOR, PIONEER, RESEARCHER} from "shared/types";
 import {getAccomplishmentByID, getAccomplishmentIDs} from "@/repositories/Accomplishment";
 import * as _ from 'lodash'
+import {mockGameInitOpts} from "@/util";
 
 describe('a Researcher Player Accomplishment', () => {
   const repo = new AccomplishmentSet(RESEARCHER);
@@ -69,8 +70,8 @@ describe('a player snaphot', () => {
 });
 
 describe('a game state snapshot', () => {
-  const g1 = new GameState();
-  const g2 = new GameState();
+  const g1 = new GameState(mockGameInitOpts());
+  const g2 = new GameState(mockGameInitOpts());
   it('can be round tripped', () => {
     g2.fromJSON(g1.toJSON());
     expect(_.isEqual(g1, g2)).toBeTruthy();

@@ -6,7 +6,6 @@
         <h2>Sign In</h2>
       </div>
       <div class="submit" v-if="isLoggedIn">
-
         <input type="button" @click="logout" :value="logoutText">
       </div>
       <form

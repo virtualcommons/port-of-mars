@@ -43,25 +43,6 @@ abstract class GameEventWithData implements GameEvent {
   }
 }
 
-export class PlayerJoined extends GameEventWithData {
-  kind = 'player-joined';
-
-  constructor(public sessionId: string, public role: Role) {
-    super();
-  }
-
-  get data() {
-    return {
-      sessionId: this.sessionId,
-      role: this.role
-    };
-  }
-
-  apply(game: GameState) {
-    game.connections[this.sessionId] = this.role;
-  }
-}
-
 export class SetPlayerReadiness extends GameEventWithData {
   kind = 'set-player-readiness';
 
