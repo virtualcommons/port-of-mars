@@ -45,10 +45,9 @@ import {TutorialAPI} from '@/api/tutorial/request';
 import GameDashboard from "@/components/GameDashboard.vue";
 import {initialStoreState, State} from "@/store/state";
 import _ from "lodash";
-import {Phase,Researcher, Curator} from "shared/types";
+import {Phase,RESEARCHER, CURATOR} from "shared/types";
 import {Step} from "@/types/tutorial";
 import { MockRoom } from '../types/tutorial';
-import { CURATOR } from '../../../shared/types';
 
 require('vue-tour/dist/vue-tour.css');
 Vue.use(VueTour);
@@ -67,14 +66,13 @@ export default class Tutorial extends Vue {
   api: TutorialAPI = new TutorialAPI();
 
   async created(){
-    const s = _.cloneDeep(initialStoreState);
-    this.$store.replaceState(s);
+    // const s = _.cloneDeep(initialStoreState);
+    // this.$store.replaceState(s);
     this.api.connect(this.$store);
   }
 
-  async destroyed(){
-    this.api.leave();
-  }
+
+
 
   // class for the active step element
   TOUR_ACTIVE_CLASS: string = 'tour-active';
@@ -148,8 +146,8 @@ export default class Tutorial extends Vue {
           serverActionHandler: undefined,
           clientViewHandler: 'NO_CHANGE' as const,
           clientActionHandler: undefined,
-          duration: 1}
-      }
+          duration: 1},
+      } as any,
     },
     {
       target: '.tour-phase',
@@ -171,7 +169,7 @@ export default class Tutorial extends Vue {
       },
       stateTransform: {
         CREATE_NOTIFICATION:`Notifcations can be removed by clicking on them!`,
-      }
+      } as any,
     },
     {
       target: '.tour-marslog',
@@ -185,12 +183,12 @@ export default class Tutorial extends Vue {
       stateTransform: {
         
         ADD_TO_MARS_LOG:{
-          preformedBy: Researcher,
+          preformedBy: RESEARCHER,
           category:'Event',
           content: `This event is important!`,
           timestamp:new Date().getTime(),
         }
-      }
+      } as any,
     },
     {
       target: '.tour-profile',
@@ -223,7 +221,7 @@ export default class Tutorial extends Vue {
           upkeep: 1
         }, role: this.$store.getters.player.role},
 
-      }
+      } as any,
     },
     {
       target: '.tour-investments',
@@ -305,7 +303,7 @@ export default class Tutorial extends Vue {
             dateCreated:new Date().getTime(),
             round:0,
         }
-      }
+      } as any,
     },
     {
       target: '.tour-players',
@@ -374,7 +372,7 @@ export default class Tutorial extends Vue {
             }
           }
         }
-      }
+      } as any,
 
     }
   ];
