@@ -11,6 +11,9 @@ import { QuizRoom } from "@/quiz/room";
 import {User} from "@/entity/User";
 import jwt from 'jsonwebtoken';
 import {mockGameInitOpts} from "@/util";
+import {DBPersistenceAPI} from "@/repositories/Game";
+import Clock from "@gamestdio/clock";
+import {ClockTimer} from "@gamestdio/timer/lib/ClockTimer";
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
@@ -46,8 +49,18 @@ function createApp(connection: Connection) {
         express: app
     });
 
+    const persister = new DBPersistenceAPI(connection);
+    const clock = new ClockTimer();
+    clock.setInterval(async () => persister.sync(), 5000);
+    clock.start(true);
+    gameServer.onShutdown(async () => {
+        console.log('syncing events');
+        await persister.sync();
+        console.log('events synced');
+    });
+
     // register your room handlers
-    gameServer.define('game', GameRoom, mockGameInitOpts());
+    gameServer.define('game', GameRoom, mockGameInitOpts(persister));
     gameServer.define('waiting',WaitingRoom);
     gameServer.define('quiz', QuizRoom);
 

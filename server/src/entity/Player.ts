@@ -1,6 +1,7 @@
-import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {Role, ROLES} from "shared/types";
 import {User} from "./User";
+import {Game} from "@/entity/Game";
 
 @Entity()
 export class Player {
@@ -14,5 +15,16 @@ export class Player {
     role!: Role;
 
     @ManyToOne(type => User, user => user.players, { nullable: false })
-    user!: User
+    @JoinColumn()
+    user!: User;
+
+    @Column()
+    userId!: number;
+
+    @ManyToOne(type => Game, game => game.players, { nullable: false })
+    @JoinColumn()
+    game!: Game;
+
+    @Column()
+    gameId!: number;
 }

@@ -30,6 +30,7 @@ import {getRandomIntInclusive} from "@/util";
 import {getAccomplishmentByID, getAccomplishmentIDs} from "@/repositories/Accomplishment";
 import {getAllMarsEvents, getMarsEventByID} from "@/repositories/MarsEvents";
 import {GameEvent} from "@/game/events/types";
+import {Game, GameOpts} from "@/game/room/types";
 
 export class ChatMessage extends Schema implements ChatMessageData {
   constructor(msg: ChatMessageData) {
@@ -902,7 +903,7 @@ interface GameSerialized {
 export class GameState extends Schema implements GameData {
   constructor(userRoles: { [username: string]: Role }) {
     super();
-    this.connections = userRoles;
+    this.userRoles = userRoles;
     this.marsEventDeck = new MarsEventsDeck();
     this.lastTimePolled = new Date();
     this.maxRound = getRandomIntInclusive(8, 12);
@@ -919,7 +920,7 @@ export class GameState extends Schema implements GameData {
 
   fromJSON(data: GameSerialized): GameState {
     this.players.fromJSON(data.players);
-    this.connections = data.connections;
+    this.userRoles = data.connections;
     this.maxRound = data.maxRound;
     this.lastTimePolled = new Date(data.lastTimePolled);
     this.timeRemaining = data.timeRemaining;
@@ -949,7 +950,7 @@ export class GameState extends Schema implements GameData {
   toJSON(): GameSerialized {
     return {
       players: this.players.toJSON(),
-      connections: this.connections,
+      connections: this.userRoles,
       maxRound: this.maxRound,
       lastTimePolled: this.lastTimePolled.getTime(),
       timeRemaining: this.timeRemaining,
@@ -968,7 +969,7 @@ export class GameState extends Schema implements GameData {
   @type(PlayerSet)
   players: PlayerSet;
 
-  connections: { [username: string]: Role } = {};
+  userRoles: GameOpts['userRoles'] = {};
 
   maxRound: number;
   lastTimePolled: Date;

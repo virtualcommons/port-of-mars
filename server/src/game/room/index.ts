@@ -1,4 +1,4 @@
-import { Client, Room } from 'colyseus';
+import {Client, Delayed, Room} from 'colyseus';
 import { Requests } from 'shared/requests';
 import { Responses } from 'shared/responses';
 import { GameState, Player } from '@/game/state';
@@ -17,36 +17,40 @@ import {
   EventModifyInfluencesCmd,
   EventModifyAccomplishmentsCmd
 } from '@/game/commands';
-import { Game, PlayerReadiness } from '@/game/room/types';
-import { CURATOR, Phase, Role, ROLES } from 'shared/types';
+import {Game, GameOpts, PersistenceAPI} from '@/game/room/types';
+import { Role } from 'shared/types';
 import { Command } from '@/game/commands/types';
 import { StateSnapshotTaken } from '@/game/events';
-import { GameEvent } from '@/game/events/types';
 import {getRepository} from "typeorm";
 import {User} from "@/entity/User";
 import {verify} from "@/login";
 
 export class GameRoom extends Room<GameState> implements Game {
   maxClients = 5;
+  persister!: PersistenceAPI;
+  gameId!: number;
 
   async onAuth(client: Client, options: any) {
     const userRepo = getRepository(User);
     const user = await verify(userRepo, options.token);
-    if (user && Object.keys(this.state.connections).includes(user.username)) {
+    if (user && Object.keys(this.state.userRoles).includes(user.username)) {
       return user;
     }
     return false;
   }
 
-  onCreate(options: { [username: string]: Role }) {
-    this.setState(new GameState(options));
+  async onCreate(options: GameOpts) {
+    this.setState(new GameState(options.userRoles));
+    this.persister = options.persister;
+    this.gameId = await this.persister.initialize(options);
     const snapshot = this.state.toJSON();
     const event = new StateSnapshotTaken(snapshot);
+    this.persister.applyMany(this.gameId, [event]);
     this.clock.setInterval(this.gameLoop.bind(this), 1000);
   }
 
   onJoin(client: Client, options: any, auth: User) {
-    const role = this.state.connections[auth.username];
+    const role = this.state.userRoles[auth.username];
     this.safeSend(client, { kind: 'set-player-role', role });
   }
 
@@ -55,7 +59,7 @@ export class GameRoom extends Room<GameState> implements Game {
   }
 
   getPlayerByClient(client: Client): Player {
-    return this.state.players[this.state.connections[client.sessionId]];
+    return this.state.players[this.state.userRoles[client.auth.username]];
   }
 
   prepareRequest(r: Requests, client: Client): Command {
@@ -95,6 +99,7 @@ export class GameRoom extends Room<GameState> implements Game {
       const cmd = new SetNextPhaseCmd(this);
       const events = cmd.execute();
       this.state.applyMany(events);
+      this.persister.applyMany(this.gameId, events);
     }
   }
 
@@ -102,7 +107,10 @@ export class GameRoom extends Room<GameState> implements Game {
     const cmd = this.prepareRequest(message, client);
     const events = cmd.execute();
     this.state.applyMany(events);
+    this.persister.applyMany(this.gameId, events);
   }
   onLeave(client: Client, consented: boolean) {}
-  onDispose() {}
+
+  async onDispose() {
+  }
 }
