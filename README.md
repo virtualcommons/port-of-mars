@@ -30,6 +30,16 @@ docker-compose exec server bash
 yarn load-fixtures
 ```
 
+Since the project hasn't been released yet there are no DB migrations. If a schema change occurs then
+you can update the schema of your development DB with `yarn typeorm schema:sync`. If that doesn't work
+it's best to start from scratch
+
+```
+yarn typeorm schema:drop
+yarn typeorm schema:sync
+yarn load-fixtures
+```
+
 Now you should be able to login using the usernames in the `fixtures/User.yml` file.
 
 Tests for the project can be run with
