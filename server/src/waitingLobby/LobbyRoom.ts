@@ -1,5 +1,10 @@
 import { Room, Client, matchMaker } from "colyseus";
 import schedule from "node-schedule";
+import {ROLES} from "shared/types";
+import _ from "lodash";
+import {buildGameOpts} from "@/util";
+import {verify} from "@/login";
+import {getRepository} from "typeorm";
 
 interface MatchmakingGroup {
   stats: ClientStat[],
@@ -53,10 +58,7 @@ export class RankedLobbyRoom extends Room {
   }
 
   async onAuth() {
-    /**
-     * Validate CAS authentication here.
-     */
-    return new Promise((resolve) => resolve(true));
+    verify();
   }
 
   onJoin(client: Client, options: any) {
@@ -137,10 +139,11 @@ export class RankedLobbyRoom extends Room {
             group.ready = true;
             group.confirmed = 0;
 
+            const userRoles = buildGameOpts(group.stats.map(s => s.client.auth.username));
             /**
              * Create room instance in the server.
              */
-            const room = await matchMaker.createRoom(this.roomToCreate, {});
+            const room = await matchMaker.createRoom(this.roomToCreate, userRoles);
 
             await Promise.all(group.stats.map(async (client) => {
               const matchData = await matchMaker.reserveSeatFor(room, client.options);

@@ -12,10 +12,10 @@ import {User} from "@/entity/User";
 import jwt from 'jsonwebtoken';
 import {mockGameInitOpts} from "@/util";
 import {DBPersistenceAPI} from "@/repositories/Game";
-import Clock from "@gamestdio/clock";
 import {ClockTimer} from "@gamestdio/timer/lib/ClockTimer";
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
+const CONNECTION_NAME = NODE_ENV === 'test' ? 'test': 'default';
 
 function createApp(connection: Connection) {
     const userRepo = connection.getRepository(User);
@@ -72,8 +72,8 @@ function createApp(connection: Connection) {
     gameServer.listen(port);
 }
 
-createConnection().then(async connection => {
+createConnection(CONNECTION_NAME).then(async connection => {
 
     createApp(connection);
 
-}).catch(error => console.log(error));
+}).catch(error => console.error(error));
