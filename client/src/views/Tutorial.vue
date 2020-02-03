@@ -1,4 +1,3 @@
-import {Phase} from "shared/types";
 <template>
   <div class="tutorial-layout">
     <TourModal @hide="startTourOnHideModal" />
@@ -42,20 +41,17 @@ import {Phase} from "shared/types";
 import {Component, Provide, Vue} from 'vue-property-decorator';
 import VueTour from 'vue-tour';
 import TourModal from '@/components/tutorial/TourModal.vue';
-import {GameRequestAPI} from '@/api/game/request';
+import {TutorialAPI} from '@/api/tutorial/request';
 import GameDashboard from "@/components/GameDashboard.vue";
 import {initialStoreState, State} from "@/store/state";
 import _ from "lodash";
-import {Phase} from "shared/types";
+import {Phase,RESEARCHER, CURATOR} from "shared/types";
 import {Step} from "@/types/tutorial";
+import { MockRoom } from '../types/tutorial';
 
 require('vue-tour/dist/vue-tour.css');
 Vue.use(VueTour);
 
-const setPhase = (phase: Phase) => (s: State) => {
-    s.phase = phase;
-    return s;
-};
 
 @Component({
   name: 'tutorial',
@@ -65,27 +61,18 @@ const setPhase = (phase: Phase) => (s: State) => {
   }
 })
 export default class Tutorial extends Vue {
+ 
   @Provide()
-  api = new GameRequestAPI();
+  api: TutorialAPI = new TutorialAPI();
 
-  hasApi = false;
-
-  async created() {
-    this.setupRoom();
+  async created(){
+    // const s = _.cloneDeep(initialStoreState);
+    // this.$store.replaceState(s);
+    this.api.connect(this.$store);
   }
 
-  setupRoom() {
-    this.api.connect({
-      send(data: any) {},
-      leave() {}
-    });
-    this.replaceState(s => s);
-    this.hasApi = true;
-  }
 
-  destroyed() {
-    this.api.room.leave();
-  }
+
 
   // class for the active step element
   TOUR_ACTIVE_CLASS: string = 'tour-active';
@@ -149,7 +136,18 @@ export default class Tutorial extends Vue {
       params: {
         placement: 'bottom'
       },
-      stateTransform: setPhase(Phase.events),
+      stateTransform: {
+        SET_GAME_PHASE:Phase.events,
+        ADD_TO_EVENTS:{
+          id: 0,
+          name: 'Changing Tides',
+          effect: `Each player discards all their Accomplishment cards and draws 1 new Accomplishment card. (They still draw up to a total of three cards at the end of this round.)`,
+          flavorText: `Create contingencies for your contingencies and contingencies for those contingencies. Then prepare to improvise.`,
+          serverActionHandler: undefined,
+          clientViewHandler: 'NO_CHANGE' as const,
+          clientActionHandler: undefined,
+          duration: 1},
+      } as any,
     },
     {
       target: '.tour-phase',
@@ -159,7 +157,7 @@ export default class Tutorial extends Vue {
       params: {
         placement: 'left'
       },
-      stateTransform: setPhase(Phase.events)
+      
     },
     {
       target: '.tour-notification',
@@ -169,10 +167,9 @@ export default class Tutorial extends Vue {
       params: {
         placement: 'bottom'
       },
-      stateTransform: _.flow([setPhase(Phase.events), s => {
-        s.activeNotifications = ['Welcome to port of mars', 'Dismiss me by clicking on me']
-        return s;
-      }])
+      stateTransform: {
+        CREATE_NOTIFICATION:`Notifcations can be removed by clicking on them!`,
+      } as any,
     },
     {
       target: '.tour-marslog',
@@ -182,7 +179,16 @@ export default class Tutorial extends Vue {
       params: {
         placement: 'right'
       },
-      stateTransform: setPhase(Phase.events),
+      
+      stateTransform: {
+        
+        ADD_TO_MARS_LOG:{
+          preformedBy: RESEARCHER,
+          category:'Event',
+          content: `This event is important!`,
+          timestamp:new Date().getTime(),
+        }
+      } as any,
     },
     {
       target: '.tour-profile',
@@ -193,7 +199,7 @@ export default class Tutorial extends Vue {
       params: {
         placement: 'bottom'
       },
-      stateTransform: setPhase(Phase.events),
+     
     },
     {
       target: '.tour-investments',
@@ -203,7 +209,19 @@ export default class Tutorial extends Vue {
       params: {
         placement: 'right'
       },
-      stateTransform: setPhase(Phase.invest),
+     
+      stateTransform: {
+        SET_GAME_PHASE:Phase.invest,
+        SET_INVESTMENT_COSTS:{data:{
+          culture: 1001,
+          finance: 1001,
+          government: 3,
+          legacy: 3,
+          science: 2,
+          upkeep: 1
+        }, role: this.$store.getters.player.role},
+
+      } as any,
     },
     {
       target: '.tour-investments',
@@ -214,7 +232,7 @@ export default class Tutorial extends Vue {
       params: {
         placement: 'top'
       },
-      stateTransform: setPhase(Phase.invest),
+      
     },
     // gamedashboard > containers > ContainerInvestments.vue
     {
@@ -226,7 +244,7 @@ export default class Tutorial extends Vue {
       params: {
         placement: 'right'
       },
-      stateTransform: setPhase(Phase.invest),
+      
     },
     // gamedashboard > containers > ContainerInvestments.vue
     {
@@ -237,7 +255,7 @@ export default class Tutorial extends Vue {
       params: {
         placement: 'right'
       },
-      stateTransform: setPhase(Phase.invest),
+     
     },
     // gamedashboard > containers > ContainerInvestments.vue
     {
@@ -250,7 +268,7 @@ export default class Tutorial extends Vue {
       params: {
         placement: 'right'
       },
-      stateTransform: setPhase(Phase.invest),
+      
     },
     {
       target: '.tour-donebtn',
@@ -260,7 +278,7 @@ export default class Tutorial extends Vue {
       params: {
         placement: 'right'
       },
-      stateTransform: setPhase(Phase.invest),
+      
     },
     {
       target: '.tour-profile-investments',
@@ -268,7 +286,7 @@ export default class Tutorial extends Vue {
       params: {
         placement: 'right'
       },
-      stateTransform: setPhase(Phase.invest),
+      
     },
     {
       target: '.tour-chat',
@@ -278,6 +296,14 @@ export default class Tutorial extends Vue {
       params: {
         placement: 'left'
       },
+      stateTransform:{
+        ADD_TO_CHAT:{
+            message:'Welcome to the port of mars!',
+            role:CURATOR,
+            dateCreated:new Date().getTime(),
+            round:0,
+        }
+      } as any,
     },
     {
       target: '.tour-players',
@@ -308,25 +334,49 @@ export default class Tutorial extends Vue {
       params: {
         placement: 'right'
       },
-      stateTransform: setPhase(Phase.trade)
+      
+      stateTransform:{
+        SET_GAME_PHASE:Phase.trade,
+        SET_INVENTORY:{
+          data:{
+            culture: 0,
+            finance: 5,
+            government: 5,
+            legacy: 0,
+            science: 5,
+          },
+          role:this.$store.getters.player.role,
+        },
+        ADD_TO_TRADES:{
+          id:'mock-trade',
+          trade:{
+            from:{
+              role:CURATOR,
+              resourceAmount:{
+                culture: 1,
+                finance: 1,
+                government: 1,
+                legacy: 1,
+                science: 1,
+              }
+            },
+            to:{
+              role:this.$store.getters.player.role,
+              resourceAmount:{
+                culture: 1,
+                finance: 1,
+                government: 1,
+                legacy: 1,
+                science: 1,
+              }
+            }
+          }
+        }
+      } as any,
+
     }
   ];
 
-  replaceState(fn: (s: State) => State = id => id) {
-    const data = _.cloneDeep(initialStoreState);
-    data.marsEvents.push(    {
-      id: 0,
-      name: 'Changing Tides',
-      effect: `Each player discards all their Accomplishment cards and draws 1 new Accomplishment card. (They still draw up to a total of three cards at the end of this round.)`,
-      flavorText: `Create contingencies for your contingencies and contingencies for those contingencies. Then prepare to improvise.`,
-      serverActionHandler: undefined,
-      clientViewHandler: 'NO_CHANGE' as const,
-      clientActionHandler: undefined,
-      duration: 1
-    });
-    const s = fn(data);
-    this.$store.replaceState(s);
-  }
 
   /**
    * showModal() method
@@ -352,23 +402,31 @@ export default class Tutorial extends Vue {
     currentStepElement!.classList.add(this.TOUR_ACTIVE_CLASS);
   }
   async previousStepCallback(currentStep: number) {
-    this.replaceState(this.steps[currentStep - 1].stateTransform || (id => id));
-    await this.$nextTick();
+    
+    if(this.steps[currentStep].stateTransform != undefined){
+      this.api.statePop(1);
+      await this.$nextTick();
+    }
+    
     const currentStepElement = this.$el.querySelector(this.steps[currentStep].target);
     const previousStepElement = this.$el.querySelector(this.steps[currentStep - 1].target);
-    // remove active step from current step
+    // // remove active step from current step
     currentStepElement!.classList.remove(this.TOUR_ACTIVE_CLASS);
-    // add active class to previous step
+    // // add active class to previous step
     previousStepElement!.classList.add(this.TOUR_ACTIVE_CLASS);
   }
   async nextStepCallback(currentStep: number) {
-    this.replaceState(this.steps[currentStep + 1].stateTransform || (id => id));
+  
+    
+    this.api.statePush(this.steps[currentStep+1].stateTransform);
     await this.$nextTick();
+    
+
     const currentStepElement = this.$el.querySelector(this.steps[currentStep].target);
     const nextStepElement = this.$el.querySelector(this.steps[currentStep + 1].target);
-    // remove active step from current step
+    // // remove active step from current step
     currentStepElement!.classList.remove(this.TOUR_ACTIVE_CLASS);
-    // add active step to next step
+    // // add active step to next step
     nextStepElement!.classList.add(this.TOUR_ACTIVE_CLASS);
   }
   stopTourCallback(currentStep: number) {
