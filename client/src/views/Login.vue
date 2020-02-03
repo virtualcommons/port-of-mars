@@ -52,12 +52,12 @@ export default class Login extends Vue {
   }
 
   get logoutText() {
-    return `Logout (${this.$tstore.state.username})`;
+    return `Logout (${this.$tstore.state.user.username})`;
   }
 
   logout() {
     localStorage.removeItem("jwt");
-    this.$tstore.commit('SET_USERNAME', { username: ''});
+    this.$tstore.commit('SET_USER', { username: '', passedQuiz: false });
     this.isLoggedIn = false;
   }
 
@@ -77,8 +77,9 @@ export default class Login extends Vue {
     });
     if (response.status === 200) {
       const resData = await response.json();
+      const { username, passedQuiz } = resData;
       localStorage.setItem('jwt', resData.token);
-      this.$tstore.commit('SET_USERNAME', { username: resData.username });
+      this.$tstore.commit('SET_USER', { username, passedQuiz });
       this.$router.push({ name: 'Game' });
     } else {
       this.error = await response.json();

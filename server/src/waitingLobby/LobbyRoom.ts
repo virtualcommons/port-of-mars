@@ -58,7 +58,7 @@ export class RankedLobbyRoom extends Room {
   }
 
   async onAuth() {
-    verify();
+
   }
 
   onJoin(client: Client, options: any) {

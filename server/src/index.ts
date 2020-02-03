@@ -33,9 +33,11 @@ function createApp(connection: Connection) {
     app.post('/login', async (req, res, next) => {
         let user = await userRepo.findOne({ username: req.body.username });
         if (user) {
+            const { username, passedQuiz } = user;
             res.json({ 
-                token: jwt.sign({ username: user.username }, 'secret', { expiresIn: '1h'}),
-                username: user.username
+                token: jwt.sign({ username }, 'secret', { expiresIn: '1h'}),
+                username,
+                passedQuiz
             });
         } else {
             res.status(403).json(`user account with username ${req.body.username} not found`);

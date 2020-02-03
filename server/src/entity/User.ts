@@ -19,6 +19,9 @@ export class User {
 
     @OneToMany(type => Player, player => player.user)
     players!: Array<Player>;
+
+    @Column({ default: false })
+    passedQuiz!: boolean;
 }
 
 

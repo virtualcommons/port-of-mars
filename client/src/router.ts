@@ -52,14 +52,11 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.meta && to.meta.requiresAuth) {
-    if (localStorage.getItem('jwt')) {
-      next()
-    } else {
-      next({
-        name: 'Login'
-      })
-    }
+  const jwt = localStorage.getItem('jwt');
+  if (to.meta && to.meta.requiresAuth && !jwt) {
+    next({
+      name: 'Login'
+    })
   } else {
     next()
   }
