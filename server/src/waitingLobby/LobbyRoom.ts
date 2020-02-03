@@ -3,8 +3,8 @@ import schedule from "node-schedule";
 import {ROLES} from "shared/types";
 import _ from "lodash";
 import {buildGameOpts} from "@/util";
-import {verify} from "@/login";
 import {getRepository} from "typeorm";
+import {verify} from "@/services/Auth";
 
 interface MatchmakingGroup {
   stats: ClientStat[],

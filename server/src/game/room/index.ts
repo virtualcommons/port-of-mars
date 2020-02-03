@@ -17,22 +17,19 @@ import {
   EventModifyInfluencesCmd,
   EventModifyAccomplishmentsCmd
 } from '@/game/commands';
-import {Game, GameOpts, PersistenceAPI} from '@/game/room/types';
-import { Role } from 'shared/types';
+import {Game, GameOpts, Persister} from '@/game/room/types';
 import { Command } from '@/game/commands/types';
 import { StateSnapshotTaken } from '@/game/events';
-import {getRepository} from "typeorm";
 import {User} from "@/entity/User";
-import {verify} from "@/login";
+import {verify} from "@/services/auth";
 
 export class GameRoom extends Room<GameState> implements Game {
   maxClients = 5;
-  persister!: PersistenceAPI;
+  persister!: Persister;
   gameId!: number;
 
   async onAuth(client: Client, options: any) {
-    const userRepo = getRepository(User);
-    const user = await verify(userRepo, options.token);
+    const user = await verify(options.token);
     if (user && Object.keys(this.state.userRoles).includes(user.username)) {
       return user;
     }

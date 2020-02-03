@@ -1,7 +1,5 @@
 import {User} from "@/entity/User";
-import {Connection, getRepository, Repository} from "typeorm";
-import jwt, {JsonWebTokenError} from 'jsonwebtoken'
-import {Request, Response} from "express";
+import {Repository} from "typeorm";
 
 interface AuthFail {
   message: string
@@ -15,12 +13,6 @@ interface UserData {
 
 function randomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-export async function verify(userRepo: Repository<User>, token: string): Promise<User | undefined> {
-  const decoded = await jwt.verify(token, 'secret');
-  const username = (decoded as any).username;
-  return await userRepo.findOne({username});
 }
 
 export const authenticate =

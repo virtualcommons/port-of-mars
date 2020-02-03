@@ -3,7 +3,7 @@ import {CURATOR, PIONEER, RESEARCHER} from "shared/types";
 import {getAccomplishmentByID, getAccomplishmentIDs} from "@/repositories/Accomplishment";
 import * as _ from 'lodash'
 import {mockGameInitOpts} from "@/util";
-import {ConsolePersistenceAPI} from "@/repositories/Game";
+import {ConsolePersister} from "@/services/Game";
 import {Connection, createConnection} from "typeorm";
 import shell from "shelljs";
 
@@ -81,7 +81,7 @@ describe('a game state snapshot', () => {
   });
 
   it('can be round tripped', async () => {
-    const persister = new ConsolePersistenceAPI(conn);
+    const persister = new ConsolePersister(conn);
     const userRoles = mockGameInitOpts(persister).userRoles;
     const g1 = new GameState(userRoles);
     const g2 = new GameState(userRoles);

@@ -13,17 +13,17 @@ export interface Game extends Room<GameState> {
 }
 
 export interface PersistenceAPIConstructor {
-  new (connection: any): PersistenceAPI
+  new (connection: any): Persister
 }
 
-export interface PersistenceAPI {
+export interface Persister {
   initialize(options: GameOpts): Promise<number>
   applyMany(gameId: number, events: Array<ge.GameEvent>): void
   sync(): Promise<void>
 }
 
 export type GameOpts = {
-  persister: PersistenceAPI,
+  persister: Persister,
   userRoles: { [username: string]: Role }
   tournamentId: number
 }

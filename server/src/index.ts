@@ -10,16 +10,14 @@ import {WaitingRoom} from "@/waitingLobby/room";
 import { QuizRoom } from "@/quiz/room";
 import {User} from "@/entity/User";
 import jwt from 'jsonwebtoken';
-import {mockGameInitOpts} from "@/util";
-import {DBPersistenceAPI} from "@/repositories/Game";
+import {getConnection, mockGameInitOpts} from "@/util";
+import {DBPersister} from "@/services/persistence";
 import {ClockTimer} from "@gamestdio/timer/lib/ClockTimer";
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const CONNECTION_NAME = NODE_ENV === 'test' ? 'test': 'default';
 
-function createApp(connection: Connection) {
-    const userRepo = connection.getRepository(User);
-
+function createApp() {
     const port = Number(process.env.PORT || 2567);
     const app = express();
 
@@ -31,7 +29,7 @@ function createApp(connection: Connection) {
     app.use(express.json());
 
     app.post('/login', async (req, res, next) => {
-        let user = await userRepo.findOne({ username: req.body.username });
+        let user = await getConnection().getRepository(User).findOne({ username: req.body.username });
         if (user) {
             const { username, passedQuiz } = user;
             res.json({ 
@@ -51,7 +49,7 @@ function createApp(connection: Connection) {
         express: app
     });
 
-    const persister = new DBPersistenceAPI(connection);
+    const persister = new DBPersister();
     const clock = new ClockTimer();
     clock.setInterval(async () => persister.sync(), 5000);
     clock.start(true);
@@ -76,6 +74,6 @@ function createApp(connection: Connection) {
 
 createConnection(CONNECTION_NAME).then(async connection => {
 
-    createApp(connection);
+    createApp();
 
 }).catch(error => console.error(error));
