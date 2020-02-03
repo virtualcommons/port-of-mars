@@ -109,7 +109,7 @@ import { Component, Provide, Vue } from 'vue-property-decorator';
 import VueTour from 'vue-tour';
 import TourModal from '@/components/tutorial/TourModal.vue';
 import GameDashboard from '@/components/GameDashboard.vue';
-import { TutorialAPI } from '@/api/tutorial/request';
+import { TutorialAPI } from '@/api/tutorial';
 import { TutorialSteps } from '@/repositories/tutorial';
 import { Step } from '@/types/tutorial';
 import {CURATOR, Phase, QuizQuestionData, RESEARCHER} from 'shared/types';

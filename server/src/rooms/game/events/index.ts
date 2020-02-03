@@ -3,7 +3,6 @@ import {
   AccomplishmentData,
   ChatMessageData,
   InvestmentData,
-  // MarsEventData,
   MarsLogMessageData,
   Phase,
   Role,
@@ -22,7 +21,6 @@ import {
   MarsLogMessage
 } from '@/rooms/game/state';
 import { GameEvent } from '@/rooms/game/events/types';
-import { getAccomplishmentByID } from '@/data/Accomplishment';
 
 abstract class GameEventWithData implements GameEvent {
   abstract kind: string;
@@ -216,7 +214,7 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
     game.upkeep = game.nextRoundUpkeep();
 
     const cards = game.marsEventDeck.peek(game.upkeep);
-    const marsEvents = cards.map(e => new MarsEvent(e));
+    const marsEvents = cards.map(e => e);
 
     game.phase = Phase.events;
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
@@ -329,107 +327,17 @@ export class StateSnapshotTaken implements GameEvent {
   }
 }
 
-// EVENT REQUESTS :: START
-export class EventSendPollResults extends GameEventWithData {
-  kind = 'event-send-poll-results';
+// export class EventEventAddTwo extends KindOnlyGameEvent {
+//   kind = 'event-event-add-two';
 
-  constructor(public data: { results: object }) {
-    super();
-  }
-
-  apply(game: GameState): void {
-    console.log('EventSendPollResults: ', this.data.results);
-  }
-}
-
-export class EventModifyInfluences extends GameEventWithData {
-  kind = 'event-modify-influences';
-
-  constructor(public data: { results: object }) {
-    super();
-  }
-
-  apply(game: GameState): void {
-    console.log('EventModifyInfluences: ', this.data.results);
-  }
-}
-
-export class EventModifyAccomplishments extends GameEventWithData {
-  kind = 'event-modify-accomplishments';
-
-  constructor(public data: { results: object }) {
-    super();
-  }
-
-  apply(game: GameState): void {
-    console.log('EventModifyAccomplishments: ', this.data.results);
-  }
-}
-// EVENT REQUESTS :: END
-
-// handleEvent(marsEvent: any): void {
-//   if(this.allPlayersAreReady) {
-//     switch(marsEvent.kind) {
-//       case 'event-event-add-two': return; // DONE
-//       case 'event-poll-yes-no': return;
-//       case 'event-poll-single': return;
-//       case 'event-poll-hero-pariah': return;
-//       case 'event-phase-skip-trading': return;
-//       case 'event-upkeep-minus-five': return; // DONE
-//       case 'event-upkeep-minus-seven': return; // DONE
-//       case 'event-upkeep-minus-ten': return; // DONE
-//       case 'event-upkeep-minus-twenty': return; // DONE
-//       case 'event-player-investments-specialty-block': return; // DONE
-//       case 'event-player-investments-disabled-three': return; // IN-PROGRESS
-//       case 'event-player-timeblocks-minus-five': return;
-//       case 'event-player-timeblocks-equals-three': return;
-//     }
+//   apply(game: GameState): void {
+//     const cards = game.marsEventDeck.drawAmount(2);
+//     const marsEvents = cards.map(e => new MarsEvent(e));
+//     game.marsEvents.push(...marsEvents);
+//     game.marsEventDeck.updatePosition(game.marsEvents.length);
 //   }
 // }
 
-export class EventEventAddTwo extends KindOnlyGameEvent {
-  kind = 'event-event-add-two';
-
-  apply(game: GameState): void {
-    const cards = game.marsEventDeck.drawAmount(2);
-    const marsEvents = cards.map(e => new MarsEvent(e));
-    game.marsEvents.push(...marsEvents);
-    game.marsEventDeck.updatePosition(game.marsEvents.length);
-  }
-}
-
-// TODO: REFACTOR EventUpkeepMinus* INTO ONE
-export class EventUpkeepMinusFive extends KindOnlyGameEvent {
-  kind = 'event-upkeep-minus-five';
-
-  apply(game: GameState): void {
-    game.subtractUpkeep(5);
-  }
-}
-
-export class EventUpkeepMinusSeven extends KindOnlyGameEvent {
-  kind = 'event-upkeep-minus-seven';
-
-  apply(game: GameState): void {
-    game.subtractUpkeep(7);
-  }
-}
-
-export class EventUpkeepMinusTen extends KindOnlyGameEvent {
-  kind = 'event-upkeep-minus-ten';
-
-  apply(game: GameState): void {
-    game.subtractUpkeep(10);
-  }
-}
-
-export class EventUpkeepMinusTwenty extends KindOnlyGameEvent {
-  kind = 'event-upkeep-minus-twenty';
-
-  apply(game: GameState): void {
-    game.subtractUpkeep(20);
-  }
-}
 
 export class EventPlayerInvestmentsSpecialtyBlock extends GameEventWithData {
   kind = 'event-player-investments-specialty-block';

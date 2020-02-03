@@ -8,8 +8,6 @@ import {
   GameData, Investment,
   InvestmentData,
   MarsEventData,
-  EventServerAction,
-  EventClientAction,
   EventClientView,
   MarsLogMessageData,
   Phase,
@@ -29,9 +27,9 @@ import {
 import _ from "lodash";
 import {getRandomIntInclusive} from "@/util";
 import {getAccomplishmentByID, getAccomplishmentIDs} from "@/data/Accomplishment";
-import {getAllMarsEvents, getMarsEventByID} from "@/data/MarsEvents";
 import {GameEvent} from "@/rooms/game/events/types";
 import {Game, GameOpts} from "@/rooms/game/types";
+import {MarsEventsDeck} from '@/data/MarsEvents';
 
 export class ChatMessage extends Schema implements ChatMessageData {
   constructor(msg: ChatMessageData) {
@@ -488,81 +486,18 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
 }
 
 export interface MarsEvent extends Schema {
-  finalize(game: GameState): void
-}
+  deckItem: MarsEventDataDeckItem;
+  
+  finalize(game: GameState): void;
+  toJSON(): any;
+  updateElapsed(): void;
+  resetElapsed(): void;
+  complete(): boolean;
+};
 
-// export class MarsEvent extends Schema implements MarsEventData {
-//   constructor(data: MarsEventData) {
-//     super();
-//     this.id = data.id;
-//     this.duration = data.duration;
-//     this.elapsed = 0;
-//     this.name = data.name;
-//     this.flavorText = data.flavorText;
-//     this.serverActionHandler = data.serverActionHandler!;
-//     this.clientViewHandler = data.clientViewHandler;
-//     this.clientActionHandler = data.clientActionHandler!;
-//     this.effect = data.effect;
-//   }
-//
-//   static fromID(id: number) {
-//     const me = getMarsEventByID(id)!;
-//     return new MarsEvent(me);
-//   }
-//
-//   updateElapsed():void {
-//     this.elapsed++;
-//   }
-//
-//   resetElapsed():void {
-//     this.elapsed = 0;
-//   }
-//
-//   complete():boolean {
-//     if(this.elapsed === this.duration) {
-//       // console.log('EVENT COMPLETE');
-//       return true;
-//     } else {
-//       // console.log('EVENT INCOMPLETE');
-//       return false;
-//     }
-//   }
-//
-//   toJSON(): number {
-//     return this.id;
-//   }
-//
-//   @type('number')
-//   id: number;
-//
-//   @type('number')
-//   duration: number;
-//
-//   @type('number')
-//   elapsed: number;
-//
-//   @type('string')
-//   name: string;
-//
-//   @type('string')
-//   flavorText: string;
-//
-//   @type('string')
-//   effect: string;
-//
-//   @type('string')
-//   serverActionHandler: EventServerAction;
-//
-//   @type('string')
-//   clientViewHandler: EventClientView;
-//
-//   @type('string')
-//   clientActionHandler: EventClientAction;
-// }
-
-interface MarsEventDeckSerialized {
+export interface MarsEventDeckSerialized {
+  deck: Array<MarsEvent>
   position: number
-  deck: Array<MarsEventData>
 }
 
 export interface PlayerSerialized {
@@ -770,13 +705,12 @@ export class Player extends Schema implements PlayerData {
 
   invest(investment?: InvestmentData,leftOverInvestments?: InvestmentData) {
 
-    investment = investment ?? this.pendingInvestments;
+    investment = investment ?? this.pendingInvestments
     leftOverInvestments = leftOverInvestments ?? PendingInvestment.defaults()
 
     for (const [k,v] of Object.entries(investment)){
       (investment as any)[k] += (leftOverInvestments as any)[k]
     }
-
 
     this.contributedUpkeep = investment.upkeep;
     this.inventory.update(investment);
@@ -867,7 +801,7 @@ interface GameSerialized {
   upkeep: number
   logs: Array<MarsLogMessageData>
   messages: Array<ChatMessageData>
-  marsEvents: Array<number>
+  marsEvents: Array<MarsEvent>
   marsEventsProcessed: number
   marsEventDeck: MarsEventDeckSerialized
   tradeSet: TradeSetData
@@ -907,7 +841,7 @@ export class GameState extends Schema implements GameData {
     const chatMessages = _.map(data.messages, m => new ChatMessage(m));
     this.messages.splice(0, this.messages.length, ...chatMessages);
 
-    const marsEvents = _.map(data.marsEvents, _id => MarsEvent.fromID(_id));
+    const marsEvents = _.map(data.marsEvents, e => e);
     this.marsEvents.splice(0, this.marsEvents.length, ...marsEvents);
 
     this.marsEventsProcessed = data.marsEventsProcessed;
@@ -965,7 +899,7 @@ export class GameState extends Schema implements GameData {
   @type([ChatMessage])
   messages = new ArraySchema<ChatMessage>();
 
-  @type([MarsEvent])
+  // @type([MarsEventDataset])
   marsEvents = new ArraySchema<MarsEvent>();
 
   @type("number")
@@ -1014,9 +948,9 @@ export class GameState extends Schema implements GameData {
 
   updateMarsEventsElapsed(): void {
     for(const event of this.marsEvents) {
-      if(event.elapsed < event.duration) {
+      if(event.deckItem.elapsed < event.deckItem.duration) {
         event.updateElapsed();
-        // console.log('EVENT UPDATED: ', event.id);
+        console.log('EVENT UPDATED: ', event.deckItem.name);
       }
     }
   }
@@ -1069,7 +1003,4 @@ export class GameState extends Schema implements GameData {
     return this.marsEvents[this.marsEventsProcessed];
   }
 
-  // EVENT REQUESTS :: START
-
-  // EVENT REQUESTS :: END
 }

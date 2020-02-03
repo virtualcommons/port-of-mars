@@ -13,9 +13,7 @@ import {
   SetPlayerReadinessCmd,
   TimeInvestmentCmd,
   RejectTradeRequestCmd,
-  EventSendPollResultsCmd,
-  EventModifyInfluencesCmd,
-  EventModifyAccomplishmentsCmd
+  PersonalGainCmd
 } from '@/rooms/game/commands';
 import {Game, GameOpts, Persister} from '@/rooms/game/types';
 import { Command } from '@/rooms/game/commands/types';

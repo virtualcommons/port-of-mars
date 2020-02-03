@@ -1,4 +1,5 @@
 import { InvestmentData, TradeData } from './types';
+import { PersonalGain } from '@/data/MarsEvents';
 
 export interface SendChatMessageData {
   kind: 'send-chat-message';
@@ -37,31 +38,19 @@ export interface AcceptTradeRequestData {
   id: string;
 }
 
-//NICK CHANGES
-export interface RejectTradeRquestData {
+export interface RejectTradeRequestData {
   kind: 'reject-trade-request';
   id: string;
 }
 
-// LORENZO CHANGES
 export interface SetPlayerReadinessData {
   kind: 'set-player-readiness';
   value: boolean;
 }
 
-// export interface EventSendPollResultsData {
-//   kind: 'event-send-poll-results';
-//   results: object;
-// }
-//
-// export interface EventModifyInfluencesData {
-//   kind: 'event-modify-influences';
-//   results: object;
-// }
-
 export interface PersonalGainCmdData {
   kind: 'personal-gain';
-  value: boolean;
+  value: PersonalGain;
 }
 
 export type Requests =
@@ -74,5 +63,5 @@ export type Requests =
   | DiscardAccomplishmentCardData
   | SendTradeRequestData
   | AcceptTradeRequestData
-  | RejectTradeRquestData
+  | RejectTradeRequestData
   | PersonalGainCmdData;

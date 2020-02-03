@@ -45,7 +45,7 @@ export default class ContainerEvents extends Vue {
   get currentEvent(): MarsEventData {
     const current: MarsEventData = this.$store.getters.currentEvent;
 
-    const data = { id: current.id, visibility: true };
+    const data = { name: current.name, visibility: true };
     this.$store.commit('SET_EVENT_VISIBILITY', data);
     return current;
   }
