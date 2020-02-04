@@ -1,12 +1,18 @@
+// SIZE
+
 $max-screen-height: 62.5625rem;
 $max-screen-width: 120rem;
 $min-screen-height: 48rem;
 $min-screen-width: 64rem;
 
+// FONT
+
 $font-family-default: 'Maven Pro', sans-serif;
 $font-small: 0.75rem;
 $font-med: 1rem;
 $font-large: 1.5rem;
+
+// COLOR
 
 $space-gray: #1e2223;
 $space-orange: #c67b5c;
@@ -33,3 +39,7 @@ $marslog-purple: rgba(111, 36, 134, 0.05);
 // BORDERS
 $border-white: 0.125rem solid $space-white;
 $border-white-opaque-2: 0.125rem solid $space-white-opaque-2;
+
+// NEW: TBD
+$new-space-orange: rgba(221, 168, 119, 1);
+$new-space-orange-opaque-025: rgba(221, 168, 119, 0.25);

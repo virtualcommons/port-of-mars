@@ -1,81 +1,77 @@
-.trade-r{
-  background-color: $space-white-opaque-1;
-  color: white;
+.trade-r {
+  padding: 0.5rem;
   flex: 1;
-  justify-content: center;  
+  justify-content: center;
+  color: white;
+  background-color: $space-white-opaque-1;
 
-  .trade-partner p {
-    border-bottom: 0.125rem solid $space-orange;
-  }
-  
-  .person-wrapper{
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    align-items: center;
-    
-    p{
-      border:none;
-    }
-    
-    .trade-person-icons {
-      display: inline-block;
+  .trade-partner {
+    background-color: green;
+
+    .title {
+      padding: 0.5rem;
+      margin-bottom: 0;
       text-align: center;
-      height: 100%;
+      background-color: purple !important;
+      // border-bottom: 0.125rem solid $space-orange;
     }
+  }
 
-    
+  .person-wrapper {
+    padding: 0.5rem;
+    @include make-center;
+    flex-wrap: wrap;
+    background-color: blue;
 
-    .person-frame{
-      height: 3rem;
-      width: 3rem;
-      padding: 0.25rem;
-      border: 0.0625rem solid $space-orange;
-      border-radius: 50%;
-      margin: 0 1rem;
-      @include make-center;
-      @include default-transition-base;
+    .trade-person-icons {
+      background-color: pink;
 
-      &:hover {
-        @include default-scale-up;
-        cursor: pointer;
+      .person-frame {
+        height: 3rem;
+        width: 3rem;
+        padding: 0.25rem;
+        border: 0.0625rem solid $space-orange;
+        border-radius: 50%;
+        margin: 0 1rem;
+        @include make-center;
+        @include default-transition-base;
+
+        &:hover {
+          @include default-scale-up;
+          cursor: pointer;
+        }
+
+        .person-icons {
+          width: 5rem;
+          height: 100%;
+          padding: 0.25rem;
+        }
+      }
+
+      .selected-player {
+        background-color: $space-orange;
       }
     }
-
-    .person-icons {
-      width: 5rem;
-      height: 100%;
-      padding: 0.25rem;
-      
-    }
-
-    .selected-player {
-      background-color: $space-orange;
-      
-    }
   }
-  
+
   .trade-send-options {
     width: 100%;
-    
 
     .options-block {
       width: 100%;
-      
     }
   }
 
   .trade-send {
-    margin-top:1rem;
+    margin-top: 1rem;
     margin-left: 0.5rem;
 
-    .trade-impossible{
+    .trade-impossible {
       opacity: 50%;
     }
   }
-
 }
 
-.inactive-action{
+.inactive-action {
   opacity: 50%;
 }

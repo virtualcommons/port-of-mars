@@ -8,19 +8,24 @@
           No Messages
         </p>
         <div
-          class="message"
           v-for="message in messages"
           :key="message.dateCreated"
+          :style="getMessageColor(message)"
+          class="message"
         >
-          <p class="member">
-            {{ message.role }}
-          </p>
-          <p class="content">
-            {{ message.message }}
-          </p>
-          <p class="time">
-            <span>[ </span>{{ toDate(message.dateCreated) }}<span> ]</span>
-          </p>
+          <div class="top">
+            <p class="member">
+              {{ message.role }}
+            </p>
+            <p class="time">
+              <span>[ </span>{{ toDate(message.dateCreated) }}<span> ]</span>
+            </p>
+          </div>
+          <div class="bottom">
+            <p class="content">
+              {{ message.message }}
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -65,30 +70,38 @@ export default class Chat extends Vue {
 
   private count: number = 0;
 
-  get layout() {
+  get layout(): any {
     return this.$store.getters.currentEventView;
   }
 
-  get messages() {
+  get messages(): any {
     return this.$tstore.state.messages;
   }
 
-  private updated() {
+  private updated(): any {
     if (this.layout !== 'DISABLE_CHAT') {
       const elem = this.$el.querySelector('.messages-view');
       elem!.scrollTop = elem!.scrollHeight;
     }
   }
 
-  private toDate(unixTimestamp: number) {
+  private toDate(unixTimestamp: number): any {
     return new Date(unixTimestamp).toLocaleTimeString();
   }
 
-  private submitToChat() {
+  private submitToChat(): void {
     if (this.pendingMessage !== '') {
       this.api.sendChatMessage(this.pendingMessage);
       this.pendingMessage = '';
     }
+  }
+
+  private getMessageColor(message: object): object {
+    return (
+      { backgroundColor: `var(--color-${message.role})` } || {
+        backgroundColor: 'var(--space-white-opaque-1)'
+      }
+    );
   }
 }
 </script>

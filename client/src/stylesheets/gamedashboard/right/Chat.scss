@@ -2,7 +2,7 @@
   flex-grow: 1;
   width: 100%;
   padding: 0.5rem;
-  @include border-orange;
+  @include new-border-orange;
   margin-top: 0.5rem;
   @include make-column-and-center;
   overflow: hidden;
@@ -14,7 +14,7 @@
     margin-bottom: 0.5rem;
     font-size: $font-med;
     text-align: right;
-    color: $space-white-opaque-2;
+    color: $new-space-orange;
   }
 
   .messages-view {
@@ -52,21 +52,28 @@
           margin-bottom: 0;
         }
 
-        .member {
-          margin: 0;
-          color: $space-orange;
+        .top {
+          @include make-horizontal-expand;
+          justify-content: space-between;
+
+          .member {
+            margin-bottom: 0;
+            color: $new-space-orange;
+          }
+
+          .time {
+            margin-bottom: 0;
+
+            span {
+              color: $new-space-orange;
+            }
+          }
         }
 
-        .content {
-          margin: 0.5rem 0;
-          word-wrap: break-word;
-        }
-
-        .time {
-          margin: 0;
-
-          span {
-            color: $space-orange;
+        .bottom {
+          .content {
+            margin: 0.5rem 0;
+            word-wrap: break-word;
           }
         }
       }
@@ -103,12 +110,13 @@
 
     .chat-input-sendbtn {
       margin: 0 0.5rem;
-      color: $space-orange-opaque-2;
+      color: $new-space-orange-opaque-025;
+      // color: $new-space-orange;
       @include default-transition-base;
       cursor: pointer;
 
       &:hover {
-        color: $space-orange;
+        color: $new-space-orange;
         @include default-scale-up;
       }
     }

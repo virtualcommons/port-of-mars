@@ -2,8 +2,9 @@
   height: auto;
   min-height: 7rem;
   width: 100%;
+  padding-bottom: 0.5rem;
   margin-bottom: 0.5rem;
-  @include make-column-and-center;
+  @include make-column-and-expand;
   overflow: hidden;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
@@ -20,12 +21,12 @@
     height: 30%;
     width: 100%;
     padding: 0.25rem 0.5rem;
-    margin: 0 0 0.5rem 0;
+    // margin: 0 0 0.5rem 0;
     @include make-center;
     //background-color: $space-white;
 
     p {
-      margin: 0;
+      margin-bottom: 0;
       text-align: center;
       text-transform: capitalize;
       color: $space-gray;
@@ -33,7 +34,8 @@
   }
 
   .info {
-    height: 70%;
+    // height: 70%;
+    flex-grow: 1;
     width: 100%;
     padding: 0.5rem;
     @include make-horizontal-expand;
@@ -63,13 +65,10 @@
   }
 }
 
-
-.unpurchasable{
+.unpurchasable {
   background-color: $space-white;
-  
 }
 
-.purchasable{
-  background-color: $space-orange;
-  
+.purchasable {
+  background-color: $new-space-orange;
 }

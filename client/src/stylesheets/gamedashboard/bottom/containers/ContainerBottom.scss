@@ -7,7 +7,7 @@
     @include expand;
     @include reset-padding-margin;
     @include row;
-    @include border-orange;
+    @include new-border-orange;
 
     .view {
       height: 100%;
