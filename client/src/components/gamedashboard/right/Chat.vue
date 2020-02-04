@@ -58,6 +58,7 @@ import { GameRequestAPI } from '@/api/game/request';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons/faPaperPlane';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { ChatMessageData } from 'shared/types';
 
 library.add(faPaperPlane);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
@@ -69,6 +70,12 @@ export default class Chat extends Vue {
   private pendingMessage: string = '';
 
   private count: number = 0;
+
+  mounted() {
+    if (this.messages) {
+      console.log(this.messages);
+    }
+  }
 
   get layout(): any {
     return this.$store.getters.currentEventView;
@@ -90,18 +97,19 @@ export default class Chat extends Vue {
   }
 
   private submitToChat(): void {
-    if (this.pendingMessage !== '') {
+    console.log('MESSAGE: ', this.pendingMessage);
+    if (this.pendingMessage && this.pendingMessage !== '') {
+      console.log('MESSAGE: NOT EMPTY');
       this.api.sendChatMessage(this.pendingMessage);
       this.pendingMessage = '';
     }
   }
 
-  private getMessageColor(message: object): object {
-    return (
-      { backgroundColor: `var(--color-${message.role})` } || {
-        backgroundColor: 'var(--space-white-opaque-1)'
-      }
-    );
+  private getMessageColor(message: ChatMessageData): object {
+    if (message.role) {
+      return { backgroundColor: `var(--color-${message.role})` };
+    }
+    return { backgroundColor: 'var(--space-white-opaque-1)' };
   }
 }
 </script>

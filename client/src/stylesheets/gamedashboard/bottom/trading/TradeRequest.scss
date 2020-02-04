@@ -16,7 +16,7 @@
       text-transform: uppercase;
 
       span {
-        color: $space-orange;
+        color: $new-space-orange;
       }
 
       .none {
@@ -38,14 +38,14 @@
       .person-frame {
         @include expand;
         padding: 0.25rem;
-        border: 0.0625rem solid $space-orange;
+        border: 0.0625rem solid $new-space-orange;
         border-radius: 50%;
         @include make-center;
         @include default-transition-base;
 
         &:hover {
           @include default-scale-up;
-          background-color: $space-orange;
+          background-color: $new-space-orange;
           cursor: pointer;
         }
 
@@ -55,7 +55,7 @@
       }
 
       .selected-player {
-        background-color: $space-orange;
+        background-color: $new-space-orange;
       }
     }
   }
@@ -67,10 +67,6 @@
     .options-block {
       width: 100%;
     }
-
-    .inactive-action {
-      opacity: 50%;
-    }
   }
 
   .trade-send {
@@ -81,18 +77,18 @@
       @include reset-button;
       height: 2.25rem;
       width: 9.375rem;
-      border: 0.0625rem solid $space-orange;
-      color: $space-orange;
+      border: 0.0625rem solid $new-space-orange;
+      color: $new-space-orange;
       @include default-transition-base;
 
-      &:hover {
-        color: $space-gray;
-        background-color: $space-orange;
+      &:disabled {
+        opacity: 50%;
       }
-    }
 
-    .trade-impossible {
-      opacity: 50%;
+      &:hover:not(:disabled) {
+        color: $space-gray;
+        background-color: $new-space-orange;
+      }
     }
   }
 }

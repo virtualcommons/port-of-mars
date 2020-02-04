@@ -18,22 +18,24 @@
 
     .profile-investment {
       width: calc(100% / 3);
-      padding: 0.5rem 0.25rem;
+      padding: 0.5rem 0.125rem;
       @include make-horizontal-expand;
-
 
       img {
         height: 1.5rem;
         width: 1.5rem;
-        margin: 0 0.5rem;
+        margin: 0 0.25rem;
       }
 
       p {
-        margin: 0 0.5rem;
+        margin: 0 0.25rem;
         font-size: $font-med;
         color: $space-white;
-      }
 
+        sup {
+          font-size: $font-small;
+        }
+      }
     }
   }
 }

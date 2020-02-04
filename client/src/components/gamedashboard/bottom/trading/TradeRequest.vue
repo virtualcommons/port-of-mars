@@ -33,22 +33,19 @@
         text="You give up"
         mode="outgoing"
         class="options-block"
-        v-bind:class="{ 'inactive-action': !name }"
+        v-show="name"
       />
       <TradeOptions
         :resourceReader="handleReciveResources"
         text="In exchange for"
         mode="incoming"
         class="options-block"
-        v-bind:class="{ 'inactive-action': !name }"
+        v-show="name"
       />
     </div>
 
     <div class="trade-send">
-      <button
-        v-bind:class="{ 'trade-impossible': !clientValidation }"
-        @click="handleTrade"
-      >
+      <button v-show="name" :disabled="!clientValidation" @click="handleTrade">
         Send Trade
       </button>
     </div>
