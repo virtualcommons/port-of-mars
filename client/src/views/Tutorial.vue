@@ -2,7 +2,12 @@
   <div class="tutorial-layout">
     <TourModal @hide="startTourOnHideModal" />
     <GameDashboard />
-    <v-tour name="gameTour" :steps="steps" :callbacks="tourCallbacks" :options="tourOptions">
+    <v-tour
+      name="gameTour"
+      :steps="steps"
+      :callbacks="tourCallbacks"
+      :options="tourOptions"
+    >
       <template v-slot="tour">
         <transition name="fade">
           <v-step
@@ -19,13 +24,25 @@
           >
             <template>
               <div slot="actions">
-                <button v-if="!tour.isFirst" @click="tour.previousStep" class="btn btn-dark">
+                <button
+                  v-if="!tour.isFirst"
+                  @click="tour.previousStep"
+                  class="btn btn-dark"
+                >
                   Previous
                 </button>
-                <button v-if="!tour.isLast" @click="tour.nextStep" class="btn btn-dark">
+                <button
+                  v-if="!tour.isLast"
+                  @click="tour.nextStep"
+                  class="btn btn-dark"
+                >
                   Next
                 </button>
-                <button v-else-if="tour.isLast" @click="tour.stop" class="btn btn-dark">
+                <button
+                  v-else-if="tour.isLast"
+                  @click="tour.stop"
+                  class="btn btn-dark"
+                >
                   Finish
                 </button>
               </div>
@@ -38,20 +55,19 @@
 </template>
 
 <script lang="ts">
-import {Component, Provide, Vue} from 'vue-property-decorator';
+import { Component, Provide, Vue } from 'vue-property-decorator';
 import VueTour from 'vue-tour';
 import TourModal from '@/components/tutorial/TourModal.vue';
-import {TutorialAPI} from '@/api/tutorial/request';
-import GameDashboard from "@/components/GameDashboard.vue";
-import {initialStoreState, State} from "@/store/state";
-import _ from "lodash";
-import {Phase,RESEARCHER, CURATOR} from "shared/types";
-import {Step} from "@/types/tutorial";
+import { TutorialAPI } from '@/api/tutorial/request';
+import GameDashboard from '@/components/GameDashboard.vue';
+import { initialStoreState, State } from '@/store/state';
+import _ from 'lodash';
+import { Phase, RESEARCHER, CURATOR } from 'shared/types';
+import { Step } from '@/types/tutorial';
 import { MockRoom } from '../types/tutorial';
 
 require('vue-tour/dist/vue-tour.css');
 Vue.use(VueTour);
-
 
 @Component({
   name: 'tutorial',
@@ -61,18 +77,14 @@ Vue.use(VueTour);
   }
 })
 export default class Tutorial extends Vue {
- 
   @Provide()
   api: TutorialAPI = new TutorialAPI();
 
-  async created(){
+  async created() {
     // const s = _.cloneDeep(initialStoreState);
     // this.$store.replaceState(s);
     this.api.connect(this.$store);
   }
-
-
-
 
   // class for the active step element
   TOUR_ACTIVE_CLASS: string = 'tour-active';
@@ -137,8 +149,8 @@ export default class Tutorial extends Vue {
         placement: 'bottom'
       },
       stateTransform: {
-        SET_GAME_PHASE:Phase.events,
-        ADD_TO_EVENTS:{
+        SET_GAME_PHASE: Phase.events,
+        ADD_TO_EVENTS: {
           id: 0,
           name: 'Changing Tides',
           effect: `Each player discards all their Accomplishment cards and draws 1 new Accomplishment card. (They still draw up to a total of three cards at the end of this round.)`,
@@ -146,8 +158,9 @@ export default class Tutorial extends Vue {
           serverActionHandler: undefined,
           clientViewHandler: 'NO_CHANGE' as const,
           clientActionHandler: undefined,
-          duration: 1},
-      } as any,
+          duration: 1
+        }
+      } as any
     },
     {
       target: '.tour-phase',
@@ -156,8 +169,7 @@ export default class Tutorial extends Vue {
         'will populate here.',
       params: {
         placement: 'left'
-      },
-      
+      }
     },
     {
       target: '.tour-notification',
@@ -168,8 +180,8 @@ export default class Tutorial extends Vue {
         placement: 'bottom'
       },
       stateTransform: {
-        CREATE_NOTIFICATION:`Notifcations can be removed by clicking on them!`,
-      } as any,
+        CREATE_NOTIFICATION: `Notifcations can be removed by clicking on them!`
+      } as any
     },
     {
       target: '.tour-marslog',
@@ -179,16 +191,15 @@ export default class Tutorial extends Vue {
       params: {
         placement: 'right'
       },
-      
+
       stateTransform: {
-        
-        ADD_TO_MARS_LOG:{
+        ADD_TO_MARS_LOG: {
           preformedBy: RESEARCHER,
-          category:'Event',
+          category: 'Event',
           content: `This event is important!`,
-          timestamp:new Date().getTime(),
+          timestamp: new Date().getTime()
         }
-      } as any,
+      } as any
     },
     {
       target: '.tour-profile',
@@ -198,8 +209,7 @@ export default class Tutorial extends Vue {
         'that you can purchase toward the end of a round.',
       params: {
         placement: 'bottom'
-      },
-     
+      }
     },
     {
       target: '.tour-investments',
@@ -209,19 +219,21 @@ export default class Tutorial extends Vue {
       params: {
         placement: 'right'
       },
-     
-      stateTransform: {
-        SET_GAME_PHASE:Phase.invest,
-        SET_INVESTMENT_COSTS:{data:{
-          culture: 1001,
-          finance: 1001,
-          government: 3,
-          legacy: 3,
-          science: 2,
-          upkeep: 1
-        }, role: this.$store.getters.player.role},
 
-      } as any,
+      stateTransform: {
+        SET_GAME_PHASE: Phase.invest,
+        SET_INVESTMENT_COSTS: {
+          data: {
+            culture: 1001,
+            finance: 1001,
+            government: 3,
+            legacy: 3,
+            science: 2,
+            upkeep: 1
+          },
+          role: this.$store.getters.player.role
+        }
+      } as any
     },
     {
       target: '.tour-investments',
@@ -231,8 +243,7 @@ export default class Tutorial extends Vue {
         'Influence. Remember that you have 5 minutes to invest your timeblocks.',
       params: {
         placement: 'top'
-      },
-      
+      }
     },
     // gamedashboard > containers > ContainerInvestments.vue
     {
@@ -243,8 +254,7 @@ export default class Tutorial extends Vue {
         'with other players in the Trade phase.',
       params: {
         placement: 'right'
-      },
-      
+      }
     },
     // gamedashboard > containers > ContainerInvestments.vue
     {
@@ -254,8 +264,7 @@ export default class Tutorial extends Vue {
         'investing your timeblocks in Upkeep.',
       params: {
         placement: 'right'
-      },
-     
+      }
     },
     // gamedashboard > containers > ContainerInvestments.vue
     {
@@ -267,8 +276,7 @@ export default class Tutorial extends Vue {
         'that you have made.',
       params: {
         placement: 'right'
-      },
-      
+      }
     },
     {
       target: '.tour-donebtn',
@@ -277,16 +285,15 @@ export default class Tutorial extends Vue {
         'your timeblocks before the 5 minutes for the Investment Phase is up.',
       params: {
         placement: 'right'
-      },
-      
+      }
     },
     {
       target: '.tour-profile-investments',
-      content: 'After you finish investing your timeblocks, your inventory will update here.',
+      content:
+        'After you finish investing your timeblocks, your inventory will update here.',
       params: {
         placement: 'right'
-      },
-      
+      }
     },
     {
       target: '.tour-chat',
@@ -296,14 +303,14 @@ export default class Tutorial extends Vue {
       params: {
         placement: 'left'
       },
-      stateTransform:{
-        ADD_TO_CHAT:{
-            message:'Welcome to the port of mars!',
-            role:CURATOR,
-            dateCreated:new Date().getTime(),
-            round:0,
+      stateTransform: {
+        ADD_TO_CHAT: {
+          message: 'Welcome to the port of mars!',
+          role: CURATOR,
+          dateCreated: new Date().getTime(),
+          round: 0
         }
-      } as any,
+      } as any
     },
     {
       target: '.tour-players',
@@ -334,49 +341,47 @@ export default class Tutorial extends Vue {
       params: {
         placement: 'right'
       },
-      
-      stateTransform:{
-        SET_GAME_PHASE:Phase.trade,
-        SET_INVENTORY:{
-          data:{
+
+      stateTransform: {
+        SET_GAME_PHASE: Phase.trade,
+        SET_INVENTORY: {
+          data: {
             culture: 0,
             finance: 5,
             government: 5,
             legacy: 0,
-            science: 5,
+            science: 5
           },
-          role:this.$store.getters.player.role,
+          role: this.$store.getters.player.role
         },
-        ADD_TO_TRADES:{
-          id:'mock-trade',
-          trade:{
-            from:{
-              role:CURATOR,
-              resourceAmount:{
+        ADD_TO_TRADES: {
+          id: 'mock-trade',
+          trade: {
+            from: {
+              role: CURATOR,
+              resourceAmount: {
                 culture: 1,
                 finance: 1,
                 government: 1,
                 legacy: 1,
-                science: 1,
+                science: 1
               }
             },
-            to:{
-              role:this.$store.getters.player.role,
-              resourceAmount:{
+            to: {
+              role: this.$store.getters.player.role,
+              resourceAmount: {
                 culture: 1,
                 finance: 1,
                 government: 1,
                 legacy: 1,
-                science: 1,
+                science: 1
               }
             }
           }
         }
-      } as any,
-
+      } as any
     }
   ];
-
 
   /**
    * showModal() method
@@ -402,38 +407,48 @@ export default class Tutorial extends Vue {
     currentStepElement!.classList.add(this.TOUR_ACTIVE_CLASS);
   }
   async previousStepCallback(currentStep: number) {
-    
-    if(this.steps[currentStep].stateTransform != undefined){
+    if (this.steps[currentStep].stateTransform != undefined) {
       this.api.statePop(1);
       await this.$nextTick();
     }
-    
-    const currentStepElement = this.$el.querySelector(this.steps[currentStep].target);
-    const previousStepElement = this.$el.querySelector(this.steps[currentStep - 1].target);
+
+    const currentStepElement = this.$el.querySelector(
+      this.steps[currentStep].target
+    );
+    const previousStepElement = this.$el.querySelector(
+      this.steps[currentStep - 1].target
+    );
     // // remove active step from current step
     currentStepElement!.classList.remove(this.TOUR_ACTIVE_CLASS);
     // // add active class to previous step
     previousStepElement!.classList.add(this.TOUR_ACTIVE_CLASS);
   }
   async nextStepCallback(currentStep: number) {
-  
-    
-    this.api.statePush(this.steps[currentStep+1].stateTransform);
+    this.api.statePush(this.steps[currentStep + 1].stateTransform);
     await this.$nextTick();
-    
 
-    const currentStepElement = this.$el.querySelector(this.steps[currentStep].target);
-    const nextStepElement = this.$el.querySelector(this.steps[currentStep + 1].target);
+    const currentStepElement = this.$el.querySelector(
+      this.steps[currentStep].target
+    );
+    const nextStepElement = this.$el.querySelector(
+      this.steps[currentStep + 1].target
+    );
     // // remove active step from current step
     currentStepElement!.classList.remove(this.TOUR_ACTIVE_CLASS);
     // // add active step to next step
     nextStepElement!.classList.add(this.TOUR_ACTIVE_CLASS);
   }
-  stopTourCallback(currentStep: number) {
+  async stopTourCallback(currentStep: number) {
     // remove in-tour from body
-    this.$el.classList.remove(this.BODY_TOUR);
+    await this.$el.classList.remove(this.BODY_TOUR);
     // remove active class from body
-    this.$el.querySelector(`.${this.TOUR_ACTIVE_CLASS}`)!.classList.remove(this.TOUR_ACTIVE_CLASS);
+    await this.$el
+      .querySelector(`.${this.TOUR_ACTIVE_CLASS}`)!
+      .classList.remove(this.TOUR_ACTIVE_CLASS);
+
+    // TODO: NAVIGATE TO QUIZ
+    console.log('TOUR FINISHED, NAVIGATE TO QUIZ');
+    this.navigateToQuiz();
   }
   /**
    * mounted() method
@@ -442,6 +457,15 @@ export default class Tutorial extends Vue {
    */
   mounted() {
     this.showModal();
+  }
+
+  // NEW CHANGES: NAVIGATE TO QUIZ
+  get urlPrefix() {
+    return `${process.env.SERVER_URL_HTTP}/`;
+  }
+
+  private async navigateToQuiz() {
+    this.$router.push({ name: 'TutorialQuiz' });
   }
 }
 </script>

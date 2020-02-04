@@ -72,12 +72,11 @@ export default class TutorialQuiz extends Vue {
     this.api.connect(quizRoom);
   }
 
-
   get quizQuestions(): Array<QuizQuestionData> {
     const questions = this.$store.state.quizQuestions;
 
     // TODO: There's definitely a better place to do this...
-    const length = Object.keys(this.quizQuestions).length;
+    const length = Object.keys(questions).length;
     this.answersArray = new Array(length).fill(-1);
 
     return questions;
@@ -108,7 +107,7 @@ export default class TutorialQuiz extends Vue {
   }
 
   private handleUpdate(optionSelected: number, navAction: number): void {
-    console.log(this.answersArray)
+    console.log(this.answersArray);
     if (navAction === 2) {
       this.api.submitQuiz(this.answersArray);
       this.submittedQuiz = true;
