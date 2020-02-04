@@ -21,16 +21,16 @@
 
   .name {
     width: 100%;
-    margin-bottom: 0.5rem;
+    // margin-bottom: 0.5rem;
     color: $space-gray;
-    background-color: $space-white;
+    background-color: $new-space-orange;
 
     p {
       width: 100%;
       padding: 0.25rem 0.5rem;
       margin-bottom: 0;
+      text-transform: uppercase;
       text-align: center;
-      text-transform: capitalize;
       @include text-overflow-ellipses;
     }
   }
@@ -54,7 +54,7 @@
 
   .length {
     width: 100%;
-    border-top: 0.0625rem solid $space-orange-opaque-2;
+    // border-top: 0.0625rem solid $new-space-orange-opaque-025;
     color: $space-white;
     background-color: $space-gray;
 
