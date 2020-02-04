@@ -1,8 +1,13 @@
 <template>
-  <div class="trade-r">
+  <div class="trade-request-component">
     <div class="trade-partner">
-      <p class="title">Who would you like to trade with?</p>
-      <div class="person-wrapper">
+      <p class="trade-title">
+        Trade With:
+        <span :class="{ none: name === '' }">{{
+          name !== '' ? name : 'None Selected'
+        }}</span>
+      </p>
+      <div class="wrapper">
         <div
           class="trade-person-icons"
           v-for="(player, index) in otherPlayers"
@@ -20,7 +25,6 @@
           </div>
         </div>
       </div>
-      <p class="chosen">{{ name !== '' ? name : 'None Selected' }}</p>
     </div>
 
     <div class="trade-send-options">

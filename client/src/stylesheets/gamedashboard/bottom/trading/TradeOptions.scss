@@ -1,37 +1,57 @@
-.trade-resources{
+.trade-options {
   margin-bottom: 1rem;
 
-  .type-text{
-    margin-left:0.5rem;
+  &:last-child {
+    margin-bottom: 0;
   }
 
-  .resource-wrapper{
-    display:flex;
+  .type-text {
+    margin: 0.25rem 0.5rem;
+    font-size: $font-small;
+    text-align: left;
+    text-transform: uppercase;
+  }
+
+  .wrapper {
+    margin: 0.25rem 0.5rem;
+    display: flex;
     flex-wrap: wrap;
-    justify-content: center;
 
+    .investments {
+      width: calc(100 / 2 * 1%);
+      @include make-horizontal-expand;
 
-    .send-investments {
-      display: inline-block;
-      margin-right: 0.4rem;
-      text-align: center;
-      
-      .resource-icon {
-        width: 2rem;
-        margin: 0.3rem 0.2rem 0.2rem 0.2rem;
+      .icon {
+        height: 1.5rem;
+        width: 1.5rem;
+        margin: 0.25rem;
       }
 
-      .resource-amount {
-        width: 3.5rem;
-        //margin: 0.2rem;
+      .outgoing-amount,
+      .incoming-amount {
+        height: 100%;
+        width: 4rem;
+        margin: 0 0.25rem;
       }
 
+      .impossible-resource {
+        opacity: 50%;
+      }
 
       /* Firefox */
-      input[type=number] {
-        -moz-appearance:textfield;
+      input[type='number'] {
+        padding: 0.25rem;
+        border: 0.0625rem solid $space-orange;
+        text-align: center;
+        color: $space-gray !important;
+        -moz-appearance: textfield;
 
-        /*Chrome, safari, opera*/ 
+        &:focus,
+        &:active {
+          outline: none;
+        }
+
+        /*Chrome, safari, opera*/
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button {
           -webkit-appearance: none;
@@ -39,13 +59,5 @@
         }
       }
     }
-
-    
-
   }
-}
-
-
-.impossible-resource{
-  opacity: 50%;
 }
