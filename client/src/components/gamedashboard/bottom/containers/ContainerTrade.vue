@@ -1,21 +1,23 @@
 <template>
-    <div class="trade-container tour-trade">
-        <div class="trade-request">
-            <div class="section-text">
-                <p>Request Trade</p>
-            </div>
-            <TradeRequest/>
-        </div>
-
-        <div class="trade-list">
-            <div class="section-text">
-                <p>Active Trade List</p>
-            </div>
-            <div class="trades-wrapper">
-              <Trade v-for="trade in trades" v-bind="trade" :key="Math.random()" />
-            </div>
-        </div>
+  <div class="trade-container tour-trade">
+    <div class="trade-request">
+      <div class="section-text">
+        <p>Request Trade</p>
+      </div>
+      <div class="wrapper">
+        <TradeRequest />
+      </div>
     </div>
+
+    <div class="trade-list">
+      <div class="section-text">
+        <p>Active Trade List</p>
+      </div>
+      <div class="trades-wrapper">
+        <Trade v-for="trade in trades" v-bind="trade" :key="Math.random()" />
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -30,7 +32,6 @@ import TradeRequest from '@/components/gamedashboard/bottom/trading/TradeRequest
   }
 })
 export default class ContainerTrade extends Vue {
-
   get trades() {
     const tradeSet = this.$tstore.state.tradeSet;
     return Object.keys(tradeSet).map(id => ({
