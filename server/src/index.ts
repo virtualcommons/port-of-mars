@@ -8,15 +8,16 @@ import { Server } from "colyseus";
 import {GameRoom} from "@/game/room";
 import {WaitingRoom} from "@/waitingLobby/room";
 import { QuizRoom } from "@/quiz/room";
-import {User} from "@/entity/User";
 import jwt from 'jsonwebtoken';
 import {mockGameInitOpts} from "@/util";
+import {DBPersister} from "@/services/persistence";
+import {ClockTimer} from "@gamestdio/timer/lib/ClockTimer";
+import {getUserByUsername} from "@/services/account";
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
+const CONNECTION_NAME = NODE_ENV === 'test' ? 'test': 'default';
 
-function createApp(connection: Connection) {
-    const userRepo = connection.getRepository(User);
-
+function createApp() {
     const port = Number(process.env.PORT || 2567);
     const app = express();
 
@@ -28,11 +29,13 @@ function createApp(connection: Connection) {
     app.use(express.json());
 
     app.post('/login', async (req, res, next) => {
-        let user = await userRepo.findOne({ username: req.body.username });
+        let user = await getUserByUsername(req.body.username);
         if (user) {
+            const { username, passedQuiz } = user;
             res.json({ 
-                token: jwt.sign({ username: user.username }, 'secret', { expiresIn: '1h'}),
-                username: user.username
+                token: jwt.sign({ username }, 'secret', { expiresIn: '1h'}),
+                username,
+                passedQuiz
             });
         } else {
             res.status(403).json(`user account with username ${req.body.username} not found`);
@@ -46,8 +49,18 @@ function createApp(connection: Connection) {
         express: app
     });
 
+    const persister = new DBPersister();
+    const clock = new ClockTimer();
+    clock.setInterval(async () => persister.sync(), 5000);
+    clock.start(true);
+    gameServer.onShutdown(async () => {
+        console.log('syncing events');
+        await persister.sync();
+        console.log('events synced');
+    });
+
     // register your room handlers
-    gameServer.define('game', GameRoom, mockGameInitOpts());
+    gameServer.define('game', GameRoom, mockGameInitOpts(persister));
     gameServer.define('waiting',WaitingRoom);
     gameServer.define('quiz', QuizRoom);
 
@@ -59,8 +72,8 @@ function createApp(connection: Connection) {
     gameServer.listen(port);
 }
 
-createConnection().then(async connection => {
+createConnection(CONNECTION_NAME).then(async connection => {
 
-    createApp(connection);
+    createApp();
 
-}).catch(error => console.log(error));
+}).catch(error => console.error(error));

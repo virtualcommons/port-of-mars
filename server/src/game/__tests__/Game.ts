@@ -3,6 +3,9 @@ import {CURATOR, PIONEER, RESEARCHER} from "shared/types";
 import {getAccomplishmentByID, getAccomplishmentIDs} from "@/repositories/Accomplishment";
 import * as _ from 'lodash'
 import {mockGameInitOpts} from "@/util";
+import {ConsolePersister} from "@/services/persistence";
+import {Connection, createConnection} from "typeorm";
+import shell from "shelljs";
 
 describe('a Researcher Player Accomplishment', () => {
   const repo = new AccomplishmentSet(RESEARCHER);
@@ -52,7 +55,7 @@ describe('a Researcher Player Accomplishment', () => {
   });
 
   it('trying to replenish after all cards are bought is handled without error', () => {
-    p.accomplishment.deck = []
+    p.accomplishment.deck = [];
     const purchasableSize = p.accomplishment.purchasable.length;
     p.refreshPurchasableAccomplishments();
     expect(p.accomplishment.purchasable.length).toBe(purchasableSize);
@@ -70,14 +73,28 @@ describe('a player snaphot', () => {
 });
 
 describe('a game state snapshot', () => {
-  const g1 = new GameState(mockGameInitOpts());
-  const g2 = new GameState(mockGameInitOpts());
-  it('can be round tripped', () => {
+  let conn !: Connection;
+
+  beforeAll(async () => {
+    shell.exec(`createdb -w -U marsmadness -h db pom_testing`);
+    conn = await createConnection('test');
+  });
+
+  it('can be round tripped', async () => {
+    const persister = new ConsolePersister();
+    const userRoles = mockGameInitOpts(persister).userRoles;
+    const g1 = new GameState(userRoles);
+    const g2 = new GameState(userRoles);
+
     g2.fromJSON(g1.toJSON());
     expect(_.isEqual(g1, g2)).toBeTruthy();
     g2.maxRound = g1.maxRound + 1;
     expect(_.isEqual(g1, g2)).toBeFalsy()
   });
+
+  afterAll(async () => {
+    await conn.close()
+  })
 });
 
 describe('an Event model', () => {

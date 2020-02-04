@@ -4,6 +4,7 @@ items:
     username: 'bob'
     name: 'Bob Smith'
     email: 'bob@gmail.com'
+    passedQuiz: true
   frank:
     username: 'frank'
     name: 'Frank Smith'
@@ -12,7 +13,7 @@ items:
     username: 'amanda'
     name: 'Amanda Smith'
     email: 'amanda@b.com'
-  syndey:
+  sydney:
     username: 'sydney'
     name: 'Sydney Smith'
     email: 'sydney@yahoo.com'

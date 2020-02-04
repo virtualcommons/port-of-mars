@@ -86,6 +86,11 @@ export function defaultPendingInvestment(): ResourceCostData {
   };
 }
 
+export interface User {
+  username: string
+  passedQuiz: boolean
+}
+
 export interface State extends GameData {
   role: Role;
   logs: Array<MarsLogMessageData>;
@@ -98,7 +103,7 @@ export interface State extends GameData {
   quizQuestions: Array<QuizQuestionData>;
   quizResults: Array<QuizResultPackage>;
   eventCardsVisible: Array<any>;
-  username: string;
+  user: User
 }
 
 export const initialStoreState: State = {
@@ -124,7 +129,10 @@ export const initialStoreState: State = {
   quizQuestions: [],
   quizResults: [],
   eventCardsVisible: [],
-  username: ''
+  user: {
+    username: '',
+    passedQuiz: false
+  },
 };
 
 function tutorialNotifications() {
