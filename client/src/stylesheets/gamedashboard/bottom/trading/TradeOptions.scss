@@ -18,7 +18,10 @@
     flex-wrap: wrap;
 
     .investments {
+      // background-color: white;
+      height: 3rem;
       width: calc(100 / 2 * 1%);
+      padding: 0.25rem;
       @include make-horizontal-expand;
 
       .icon {
@@ -27,35 +30,66 @@
         margin: 0.25rem;
       }
 
-      .outgoing-amount,
-      .incoming-amount {
-        height: 100%;
-        width: 4rem;
-        margin: 0 0.25rem;
-      }
+      .input-wrapper {
+        height: 2.5rem;
+        @include make-center;
+        // background-color: green;
 
-      .impossible-resource {
-        opacity: 50%;
-      }
-
-      /* Firefox */
-      input[type='number'] {
-        padding: 0.25rem;
-        border: 0.0625rem solid $space-orange;
-        text-align: center;
-        color: $space-gray !important;
-        -moz-appearance: textfield;
-
-        &:focus,
-        &:active {
-          outline: none;
+        .outgoing-amount,
+        .incoming-amount {
+          height: 2.5rem;
+          width: 4rem;
+          // margin: 0 0.25rem;
         }
 
-        /*Chrome, safari, opera*/
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-          -webkit-appearance: none;
-          margin: 0;
+        .impossible-resource {
+          opacity: 50%;
+        }
+
+        /* Firefox */
+        input[type='number'] {
+          // height: 3rem;
+          padding: 0.25rem;
+          border: 0.0625rem solid $new-space-orange;
+          border-right: none;
+          text-align: center;
+          color: $new-space-orange;
+          background-color: transparent;
+          -moz-appearance: textfield;
+
+          &:focus,
+          &:active {
+            outline: none;
+          }
+
+          /*Chrome, safari, opera*/
+          &::-webkit-outer-spin-button,
+          &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+          }
+        }
+
+        .button-container {
+          height: 100%;
+          border: 0.0625rem solid $new-space-orange;
+          @include make-column-and-center;
+
+          button {
+            @include reset-button;
+            height: 50%;
+            width: 1.5rem;
+            padding: 0;
+            color: $space-gray;
+            background-color: $new-space-orange;
+            font-size: 0.75rem;
+            @include default-transition-base;
+
+            &:hover:not(:disabled) {
+              color: $new-space-orange;
+              background-color: transparent;
+            }
+          }
         }
       }
     }

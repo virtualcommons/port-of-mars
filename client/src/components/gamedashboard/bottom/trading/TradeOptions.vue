@@ -16,28 +16,42 @@
           />
         </div>
 
-        <div
-          v-bind:class="{ 'impossible-resource': impossibleTrade(resource) }"
-        >
-          <input
-            v-if="mode == 'outgoing'"
-            :disabled="playerInventory[resource] == 0"
-            type="number"
-            min="0"
-            :max="playerInventory[resource]"
-            @change="resourcesAmount()"
-            v-model.number="resources[resource]"
-            class="outgoing-amount"
-          />
-          <input
-            v-else
-            type="number"
-            min="0"
-            max="999"
-            v-on:change="resourcesAmount()"
-            v-model.number="resources[resource]"
-            class="incoming-amount"
-          />
+        <div class="input-wrapper">
+          <div
+            v-bind:class="{ 'impossible-resource': impossibleTrade(resource) }"
+          >
+            <input
+              v-if="mode == 'outgoing'"
+              :disabled="playerInventory[resource] == 0"
+              type="number"
+              v-model.number="resources[resource]"
+              class="outgoing-amount"
+            />
+            <input
+              v-else
+              type="number"
+              v-model.number="resources[resource]"
+              class="incoming-amount"
+            />
+          </div>
+          <div class="button-container">
+            <button
+              @click="increaseNum(resource)"
+              :disabled="mode == 'outgoing' && playerInventory[resource] == 0"
+              type="button"
+              name="button"
+            >
+              +
+            </button>
+            <button
+              @click="decreaseNum(resource)"
+              :disabled="mode == 'outgoing' && playerInventory[resource] == 0"
+              type="button"
+              name="button"
+            >
+              -
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -63,12 +77,12 @@ export default class TradeOptions extends Vue {
     culture: 0
   };
 
-  resourcesAmount() {
-    makeTradeSafe(this.resources);
-
-    this.resourceReader(this.resources);
-    return;
-  }
+  // resourcesAmount() {
+  //   makeTradeSafe(this.resources);
+  //
+  //   this.resourceReader(this.resources);
+  //   return;
+  // }
 
   get playerInventory() {
     return this.$store.getters.player.inventory;
@@ -89,6 +103,38 @@ export default class TradeOptions extends Vue {
       return true;
     }
     return false;
+  }
+
+  private increaseNum(resource: Resource): void {
+    let max: number;
+
+    if (this.mode === 'outgoing') {
+      max = this.playerInventory[resource];
+    } else {
+      max = 999;
+    }
+
+    if (this.resources[resource] < max) {
+      this.resources[resource]++;
+    } else {
+      this.resources[resource] = max;
+    }
+
+    makeTradeSafe(this.resources);
+    this.resourceReader(this.resources);
+  }
+
+  private decreaseNum(resource: Resource): void {
+    const min: number = 0;
+
+    if (this.resources[resource] > min) {
+      this.resources[resource]--;
+    } else {
+      this.resources[resource] = min;
+    }
+
+    makeTradeSafe(this.resources);
+    this.resourceReader(this.resources);
   }
 }
 </script>

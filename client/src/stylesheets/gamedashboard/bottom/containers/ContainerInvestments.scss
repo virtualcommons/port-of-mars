@@ -12,7 +12,7 @@
       padding: 0.25rem 1rem;
       margin-bottom: 0.5rem;
       @include make-center;
-      background-color: $space-orange;
+      background-color: $new-space-orange;
 
       .discrete-bar {
         margin: 0 1rem;
@@ -31,10 +31,10 @@
       }
 
       .status {
-        margin: 0;
-        width: 1rem;
-        font-size: $font-med;
+        margin-bottom: 0;
         color: $space-gray;
+        font-size: $font-med;
+        text-align: center;
       }
     }
 
