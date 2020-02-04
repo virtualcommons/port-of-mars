@@ -21,7 +21,7 @@ import {Game, GameOpts, Persister} from '@/game/room/types';
 import { Command } from '@/game/commands/types';
 import { StateSnapshotTaken } from '@/game/events';
 import {User} from "@/entity/User";
-import {verify} from "@/services/auth";
+import {getUserByJWT} from "@/services/account";
 
 export class GameRoom extends Room<GameState> implements Game {
   maxClients = 5;
@@ -29,7 +29,7 @@ export class GameRoom extends Room<GameState> implements Game {
   gameId!: number;
 
   async onAuth(client: Client, options: any) {
-    const user = await verify(options.token);
+    const user = await getUserByJWT(options.token);
     if (user && Object.keys(this.state.userRoles).includes(user.username)) {
       return user;
     }
@@ -109,5 +109,6 @@ export class GameRoom extends Room<GameState> implements Game {
   onLeave(client: Client, consented: boolean) {}
 
   async onDispose() {
+
   }
 }

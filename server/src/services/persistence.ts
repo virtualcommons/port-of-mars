@@ -11,6 +11,9 @@ import {ClockTimer} from "@gamestdio/timer/lib/ClockTimer";
 import {Tournament} from "@/entity/Tournament";
 import _ from "lodash";
 import {getConnection} from "@/util";
+import {GameState} from "@/game/state";
+import {getGameById} from "@/services/game";
+import {Phase} from "shared/types";
 
 export class ConsolePersister implements Persister {
   clock: ClockTimer = new ClockTimer();
@@ -107,7 +110,6 @@ export class DBPersister implements Persister {
     await this.lock.runExclusive(async () => {
       for (const rawEvent of rawGameEvents) {
         this.pendingEvents.push(rawEvent);
-        console.log({ eventLength: this.pendingEvents.length});
       }
     });
   }

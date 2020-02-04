@@ -8,11 +8,11 @@ import { Server } from "colyseus";
 import {GameRoom} from "@/game/room";
 import {WaitingRoom} from "@/waitingLobby/room";
 import { QuizRoom } from "@/quiz/room";
-import {User} from "@/entity/User";
 import jwt from 'jsonwebtoken';
-import {getConnection, mockGameInitOpts} from "@/util";
+import {mockGameInitOpts} from "@/util";
 import {DBPersister} from "@/services/persistence";
 import {ClockTimer} from "@gamestdio/timer/lib/ClockTimer";
+import {getUserByUsername} from "@/services/account";
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const CONNECTION_NAME = NODE_ENV === 'test' ? 'test': 'default';
@@ -29,7 +29,7 @@ function createApp() {
     app.use(express.json());
 
     app.post('/login', async (req, res, next) => {
-        let user = await getConnection().getRepository(User).findOne({ username: req.body.username });
+        let user = await getUserByUsername(req.body.username);
         if (user) {
             const { username, passedQuiz } = user;
             res.json({ 
