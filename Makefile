@@ -24,6 +24,7 @@ server/ormconfig.json: server/ormconfig.template.json $(DB_PASSWORD_PATH)
 server/deploy/.pgpass: $(DB_PASSWORD_PATH) server/deploy/pgpass.template
 	DB_PASSWORD=$$(cat $(DB_PASSWORD_PATH)); \
 	sed "s|DB_PASSWORD|$$DB_PASSWORD|g" server/deploy/pgpass.template > server/deploy/.pgpass
+	chmod 0600 server/deploy/.pgpass
 
 .PHONY: secrets
 secrets: $(SECRETS)
