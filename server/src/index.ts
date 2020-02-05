@@ -7,12 +7,11 @@ import cors from "cors";
 import { Server } from "colyseus";
 import {GameRoom} from "@/rooms/game";
 import {WaitingRoom} from "@/rooms/waitingLobby";
-import jwt from 'jsonwebtoken';
 import {mockGameInitOpts} from "@/util";
 import {DBPersister} from "@/services/persistence";
 import {ClockTimer} from "@gamestdio/timer/lib/ClockTimer";
-import {getUserByUsername, getUserByJWT} from "@/services/account";
-import {getQuizQuestions} from '@/services/quiz';
+import {login} from "@/routes/login";
+import {quizRouter} from "@/routes/quiz";
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const CONNECTION_NAME = NODE_ENV === 'test' ? 'test': 'default';
@@ -28,32 +27,10 @@ function createApp() {
     }
     app.use(express.json());
 
-    app.post('/login', async (req, res, next) => {
-        let user = await getUserByUsername(req.body.username);
-        if (user) {
-            const { username, passedQuiz } = user;
-            res.json({ 
-                token: jwt.sign({ username }, 'secret', { expiresIn: '1h'}),
-                username,
-                passedQuiz
-            });
-        } else {
-            res.status(403).json(`user account with username ${req.body.username} not found`);
-        }
-    });
-
-    // app.listen(port);
-
-    app.post('/quiz/:id', async (req, res, next) => {
-        // let user = await getUserByJWT()
-        console.log(req.headers);
-    });
+    app.post('/login', login);
     
     // retrieve list of quiz q's from somewhere
-    app.get('/quiz', async (req, res, next) => {
-        let questions = getQuizQuestions();
-        res.json(questions);
-    });
+    app.use(quizRouter);
 
     const server = http.createServer(app);
     const gameServer = new Server({
