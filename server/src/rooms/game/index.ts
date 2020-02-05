@@ -1,7 +1,7 @@
 import {Client, Delayed, Room} from 'colyseus';
 import { Requests } from 'shared/requests';
 import { Responses } from 'shared/responses';
-import { GameState, Player } from '@/game/state';
+import { GameState, Player } from '@/rooms/game/state';
 import {
   AcceptTradeRequestCmd,
   BuyAccomplishmentCmd,
@@ -16,10 +16,10 @@ import {
   EventSendPollResultsCmd,
   EventModifyInfluencesCmd,
   EventModifyAccomplishmentsCmd
-} from '@/game/commands';
-import {Game, GameOpts, Persister} from '@/game/room/types';
-import { Command } from '@/game/commands/types';
-import { StateSnapshotTaken } from '@/game/events';
+} from '@/rooms/game/commands';
+import {Game, GameOpts, Persister} from '@/rooms/game/types';
+import { Command } from '@/rooms/game/commands/types';
+import { StateSnapshotTaken } from '@/rooms/game/events';
 import {User} from "@/entity/User";
 import {getUserByJWT} from "@/services/account";
 

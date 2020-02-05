@@ -29,8 +29,8 @@ import _ from "lodash";
 import {getRandomIntInclusive} from "@/util";
 import {getAccomplishmentByID, getAccomplishmentIDs} from "@/repositories/Accomplishment";
 import {getAllMarsEvents, getMarsEventByID} from "@/repositories/MarsEvents";
-import {GameEvent} from "@/game/events/types";
-import {Game, GameOpts} from "@/game/room/types";
+import {GameEvent} from "@/rooms/game/events/types";
+import {Game, GameOpts} from "@/rooms/game/types";
 
 export class ChatMessage extends Schema implements ChatMessageData {
   constructor(msg: ChatMessageData) {

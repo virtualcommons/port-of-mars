@@ -2,7 +2,7 @@ import {Loader, Resolver} from "typeorm-fixtures-cli/dist";
 import path from "path";
 import _ from "lodash";
 import {Role, ROLES} from "shared/types";
-import {GameOpts, Persister} from "@/game/room/types";
+import {GameOpts, Persister} from "@/rooms/game/types";
 import * as assert from "assert";
 import {ConsolePersister} from "@/services/persistence";
 import * as to from "typeorm";

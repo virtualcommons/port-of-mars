@@ -1,4 +1,4 @@
-import {GameState} from "@/game/state";
+import {GameState} from "@/rooms/game/state";
 
 export interface GameEvent {
   dateCreated: number

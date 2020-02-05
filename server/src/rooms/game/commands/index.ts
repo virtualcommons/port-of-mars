@@ -5,7 +5,7 @@ import {
   TradeData,
   MarsLogMessageData
 } from 'shared/types';
-import { MarsEvent, Player } from '@/game/state';
+import { MarsEvent, Player } from '@/rooms/game/state';
 import {
   AcceptTradeRequest,
   BoughtAccomplishment,
@@ -26,12 +26,12 @@ import {
   EventSendPollResults,
   EventModifyInfluences,
   EventModifyAccomplishments
-} from '@/game/events';
+} from '@/rooms/game/events';
 import { getAccomplishmentByID } from '@/repositories/Accomplishment';
 import { Client } from 'colyseus';
-import { Game } from '@/game/room/types';
-import { Command } from '@/game/commands/types';
-import { GameEvent } from '@/game/events/types';
+import { Game } from '@/rooms/game/types';
+import { Command } from '@/rooms/game/commands/types';
+import { GameEvent } from '@/rooms/game/events/types';
 
 export class SendChatMessageCmd implements Command {
   constructor(

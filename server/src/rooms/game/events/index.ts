@@ -19,8 +19,8 @@ import {
   Player,
   Trade,
   MarsLogMessage
-} from '@/game/state';
-import { GameEvent } from '@/game/events/types';
+} from '@/rooms/game/state';
+import { GameEvent } from '@/rooms/game/events/types';
 import { getAccomplishmentByID } from '@/repositories/Accomplishment';
 
 abstract class GameEventWithData implements GameEvent {
