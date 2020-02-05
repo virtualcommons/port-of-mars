@@ -7,7 +7,6 @@ import cors from "cors";
 import { Server } from "colyseus";
 import {GameRoom} from "@/rooms/game";
 import {WaitingRoom} from "@/rooms/waitingLobby";
-import { QuizRoom } from "@/quiz/room";
 import jwt from 'jsonwebtoken';
 import {mockGameInitOpts} from "@/util";
 import {DBPersister} from "@/services/persistence";
@@ -75,7 +74,6 @@ function createApp() {
     // register your room handlers
     gameServer.define('game', GameRoom, mockGameInitOpts(persister));
     gameServer.define('waiting',WaitingRoom);
-    gameServer.define('quiz', QuizRoom);
 
     app.use(express.static('static'));
     app.use((err: any, req: any, res: Response, next: any) => {
