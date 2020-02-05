@@ -27,7 +27,7 @@ import {
   EventModifyInfluences,
   EventModifyAccomplishments
 } from '@/rooms/game/events';
-import { getAccomplishmentByID } from '@/repositories/Accomplishment';
+import { getAccomplishmentByID } from '@/data/Accomplishment';
 import { Client } from 'colyseus';
 import { Game } from '@/rooms/game/types';
 import { Command } from '@/rooms/game/commands/types';

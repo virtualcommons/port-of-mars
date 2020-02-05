@@ -21,7 +21,7 @@ import {
   MarsLogMessage
 } from '@/rooms/game/state';
 import { GameEvent } from '@/rooms/game/events/types';
-import { getAccomplishmentByID } from '@/repositories/Accomplishment';
+import { getAccomplishmentByID } from '@/data/Accomplishment';
 
 abstract class GameEventWithData implements GameEvent {
   abstract kind: string;

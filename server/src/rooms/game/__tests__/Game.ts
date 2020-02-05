@@ -1,6 +1,6 @@
 import {GameState, AccomplishmentSet, Player} from "@/rooms/game/state";
 import {CURATOR, PIONEER, RESEARCHER} from "shared/types";
-import {getAccomplishmentByID, getAccomplishmentIDs} from "@/repositories/Accomplishment";
+import {getAccomplishmentByID, getAccomplishmentIDs} from "@/data/Accomplishment";
 import * as _ from 'lodash'
 import {mockGameInitOpts} from "@/util";
 import {ConsolePersister} from "@/services/persistence";

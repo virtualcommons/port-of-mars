@@ -1,4 +1,4 @@
-import {QuizQuestions} from '@/repositories/QuizQuestions'
+import {QuizQuestions} from '@/data/QuizQuestions'
 import { QuizQuestionData } from 'shared/types';
 
 // REFACTOR: db lookup

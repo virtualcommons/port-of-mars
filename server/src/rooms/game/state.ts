@@ -27,8 +27,8 @@ import {
 } from "shared/types";
 import _ from "lodash";
 import {getRandomIntInclusive} from "@/util";
-import {getAccomplishmentByID, getAccomplishmentIDs} from "@/repositories/Accomplishment";
-import {getAllMarsEvents, getMarsEventByID} from "@/repositories/MarsEvents";
+import {getAccomplishmentByID, getAccomplishmentIDs} from "@/data/Accomplishment";
+import {getAllMarsEvents, getMarsEventByID} from "@/data/MarsEvents";
 import {GameEvent} from "@/rooms/game/events/types";
 import {Game, GameOpts} from "@/rooms/game/types";
 
