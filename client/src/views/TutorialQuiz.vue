@@ -36,7 +36,10 @@
       <div v-if="submittedQuiz == true" class="submission">
         <h2>You got {{ quizData }} questions correct.</h2>
         <p>Would you like to take the quiz again?</p>
-        <button @click="handleReset()">Restart Quiz</button>
+        <button @click="handleReset">Restart Quiz</button>
+        <button @click="sendResults" type="button" name="button">
+          Continue
+        </button>
       </div>
     </div>
   </div>
@@ -72,12 +75,11 @@ export default class TutorialQuiz extends Vue {
     this.api.connect(quizRoom);
   }
 
-
   get quizQuestions(): Array<QuizQuestionData> {
     const questions = this.$store.state.quizQuestions;
 
     // TODO: There's definitely a better place to do this...
-    const length = Object.keys(this.quizQuestions).length;
+    const length = Object.keys(questions).length;
     this.answersArray = new Array(length).fill(-1);
 
     return questions;
@@ -85,6 +87,40 @@ export default class TutorialQuiz extends Vue {
 
   get quizResults(): Array<QuizResultPackage> {
     return this.$store.state.quizResults;
+  }
+
+  // TODO: Send results to server
+
+  async sendResults(): Promise<void> {
+    // TODO: Send quiz answers for grading
+    const answers = JSON.stringify(this.answersArray);
+    // TODO: Evaluate quiz answers on server
+    // TODO: Send quiz results to client
+    // TODO: Evaluate passing
+    // TODO: Save to local storage
+
+    const user: string = this.$store.state.user.username;
+    const data: any = { user: user, answers: answers };
+
+    const quizUrl: string = `${process.env.SERVER_URL_HTTP}/quiz`;
+    const response = await fetch(quizUrl, {
+      method: 'POST',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify(data)
+    });
+
+    if (response.status === 200) {
+      const resData = await response.json();
+      // TODO: Save passed data to local storage?
+    } else {
+      const error = await response.json();
+      console.log('SUBMIT QUIZ ERROR: ', error);
+    }
   }
 
   private handleQuestionSwitch(newIndex: number): void {
@@ -108,7 +144,7 @@ export default class TutorialQuiz extends Vue {
   }
 
   private handleUpdate(optionSelected: number, navAction: number): void {
-    console.log(this.answersArray)
+    console.log(this.answersArray);
     if (navAction === 2) {
       this.api.submitQuiz(this.answersArray);
       this.submittedQuiz = true;
