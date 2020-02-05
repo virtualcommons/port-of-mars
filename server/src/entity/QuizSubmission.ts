@@ -1,6 +1,7 @@
-import {Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {User} from "@/entity/User";
 import {Quiz} from "./Quiz";
+import {QuestionResponse} from "@/entity/QuestionResponse";
 
 @Entity()
 export class QuizSubmission {
@@ -23,4 +24,7 @@ export class QuizSubmission {
 
   @Column()
   quizId!: number;
+
+  @OneToMany(type => QuestionResponse, questionResponse => questionResponse)
+  responses!: Array<QuestionResponse>;
 }

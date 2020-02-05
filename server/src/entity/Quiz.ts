@@ -1,5 +1,6 @@
 import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
-import {QuizQuestion} from "@/entity/QuizQuestion";
+import {Question} from "@/entity/Question";
+import {QuizSubmission} from "@/entity/QuizSubmission";
 
 
 @Entity()
@@ -10,6 +11,9 @@ export class Quiz {
   @Column()
   name!: string;
 
-  @OneToMany(type => QuizQuestion, quizQuestion => quizQuestion.quiz)
-  quizQuestions!: Array<QuizQuestion>;
+  @OneToMany(type => Question, question => question.quiz)
+  questions!: Array<Question>;
+
+  @OneToMany(type => QuizSubmission, quizSubmission => quizSubmission.quiz)
+  submissions!: Array<QuizSubmission>;
 }
