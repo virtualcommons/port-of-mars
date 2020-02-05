@@ -10,13 +10,13 @@
     "synchronize": true,
     "logging": false,
     "entities": [
-       "src/entity/**/*.ts"
+       "src/entity/**/*.{js,ts}"
     ],
     "migrations": [
-       "src/migration/**/*.ts"
+       "src/migration/**/*.{js,ts}"
     ],
     "subscribers": [
-       "src/subscriber/**/*.ts"
+       "src/subscriber/**/*.{js,ts}"
     ],
     "cli": {
        "entitiesDir": "src/entity",
@@ -36,13 +36,13 @@
     "logging": false,
     "dropSchema": true,
     "entities": [
-       "src/entity/**/*.ts"
+       "src/entity/**/*.{js,ts}"
     ],
     "migrations": [
-       "src/migration/**/*.ts"
+       "src/migration/**/*.{js,ts}"
     ],
     "subscribers": [
-       "src/subscriber/**/*.ts"
+       "src/subscriber/**/*.{js,ts}"
     ],
     "cli": {
        "entitiesDir": "src/entity",
