@@ -8,3 +8,5 @@ deploy/pom_db_password*
 deploy/.pgpass
 deploy/.secrets
 ormconfig.json
+lib/
+static/
