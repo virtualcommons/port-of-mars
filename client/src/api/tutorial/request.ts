@@ -82,4 +82,6 @@ export class TutorialAPI extends GameRequestAPI {
         });
     }
 
+    public investTimeBlocks():void {};
+    public setPlayerReadiness(): void {};
 }

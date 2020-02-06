@@ -115,6 +115,8 @@ import { Step } from '@/types/tutorial';
 import { CURATOR, Phase, QuizQuestionData, RESEARCHER } from 'shared/types';
 import * as _ from 'lodash';
 
+import Steps from '@/api/tutorial/tutorialSteps';
+
 require('vue-tour/dist/vue-tour.css');
 Vue.use(VueTour);
 
