@@ -11,5 +11,10 @@ export default {
   },
   CREATE_NOTIFICATION(state: State, payload: string) {
     state.activeNotifications.push(payload);
+  },
+  CLEAR_NOTIFICATION(state: State, payload:number){
+    if(state.activeNotifications){
+      state.activeNotifications = [];
+    }
   }
 };

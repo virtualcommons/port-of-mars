@@ -2,10 +2,15 @@ import {TradeData} from "shared/types";
 import { initialStoreState } from '@/store/state';
 import { GameRequestAPI } from "@/api/game/request";
 import * as _ from "lodash";
+import {Store} from 'vuex/types/index';
+import {State} from '@/store/state';
+import {StateTransform} from '@/types/tutorial';
+
 
 export class TutorialAPI extends GameRequestAPI {
-    private store!:any;
-    private stateStack:Array<any> = []
+    private store!:Store<State>;
+    private stateStack:Array<StateTransform> = []
+
 
     constructor(){
         super();
@@ -27,25 +32,21 @@ export class TutorialAPI extends GameRequestAPI {
     }
 
 
-    public statePush(state:any){
+    public statePush(state:StateTransform|undefined){
        if(state != undefined){
             
             for(const [command,value] of Object.entries(state)){
                 this.store.commit(command,value);
             }
 
-            //delete state.CREATE_NOTIFICATION;
             this.stateStack.push(state);
        }
 
        
     }
 
-    public statePop(count:any){
-        
-        for(let i = 0; i < count; i++){
-            this.stateStack.pop();
-        }
+    public statePop(){
+        this.stateStack.pop();
         
         this.apply();
     }

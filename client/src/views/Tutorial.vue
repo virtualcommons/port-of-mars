@@ -66,11 +66,8 @@ export default class Tutorial extends Vue {
   api: TutorialAPI = new TutorialAPI();
 
   async created(){
-    // const s = _.cloneDeep(initialStoreState);
-    // this.$store.replaceState(s);
     this.api.connect(this.$store);
   }
-
 
 
 
@@ -147,7 +144,7 @@ export default class Tutorial extends Vue {
           clientViewHandler: 'NO_CHANGE' as const,
           clientActionHandler: undefined,
           duration: 1},
-      } as any,
+      },
     },
     {
       target: '.tour-phase',
@@ -157,6 +154,7 @@ export default class Tutorial extends Vue {
       params: {
         placement: 'left'
       },
+      
       
     },
     {
@@ -169,7 +167,7 @@ export default class Tutorial extends Vue {
       },
       stateTransform: {
         CREATE_NOTIFICATION:`Notifcations can be removed by clicking on them!`,
-      } as any,
+      },
     },
     {
       target: '.tour-marslog',
@@ -181,14 +179,13 @@ export default class Tutorial extends Vue {
       },
       
       stateTransform: {
-        
         ADD_TO_MARS_LOG:{
-          preformedBy: RESEARCHER,
+          performedBy: RESEARCHER,
           category:'Event',
           content: `This event is important!`,
           timestamp:new Date().getTime(),
-        }
-      } as any,
+        },
+      },
     },
     {
       target: '.tour-profile',
@@ -199,6 +196,9 @@ export default class Tutorial extends Vue {
       params: {
         placement: 'bottom'
       },
+      stateTransform: {
+        CLEAR_NOTIFICATION:1,
+      }
      
     },
     {
@@ -221,7 +221,7 @@ export default class Tutorial extends Vue {
           upkeep: 1
         }, role: this.$store.getters.player.role},
 
-      } as any,
+      },
     },
     {
       target: '.tour-investments',
@@ -303,7 +303,7 @@ export default class Tutorial extends Vue {
             dateCreated:new Date().getTime(),
             round:0,
         }
-      } as any,
+      },
     },
     {
       target: '.tour-players',
@@ -344,6 +344,7 @@ export default class Tutorial extends Vue {
             government: 5,
             legacy: 0,
             science: 5,
+            upkeep: 0,
           },
           role:this.$store.getters.player.role,
         },
@@ -372,7 +373,7 @@ export default class Tutorial extends Vue {
             }
           }
         }
-      } as any,
+      },
 
     }
   ];
@@ -389,7 +390,7 @@ export default class Tutorial extends Vue {
   /**
    * startTourOnHideModal() method
    * Start tutorial when user closes intro tour modal.
-   *
+   
    */
   startTourOnHideModal() {
     (this as any).$tours.gameTour.start();
@@ -401,18 +402,19 @@ export default class Tutorial extends Vue {
     // add active class for first step
     currentStepElement!.classList.add(this.TOUR_ACTIVE_CLASS);
   }
-  async previousStepCallback(currentStep: number) {
-    
-    if(this.steps[currentStep].stateTransform != undefined){
-      this.api.statePop(1);
-      await this.$nextTick();
-    }
-    
+  async previousStepCallback(currentStep: number) {    
     const currentStepElement = this.$el.querySelector(this.steps[currentStep].target);
     const previousStepElement = this.$el.querySelector(this.steps[currentStep - 1].target);
     // // remove active step from current step
     currentStepElement!.classList.remove(this.TOUR_ACTIVE_CLASS);
     // // add active class to previous step
+    
+    if(this.steps[currentStep].stateTransform != undefined){
+      
+      this.api.statePop();
+      await this.$nextTick(); 
+    }
+    
     previousStepElement!.classList.add(this.TOUR_ACTIVE_CLASS);
   }
   async nextStepCallback(currentStep: number) {
@@ -420,7 +422,7 @@ export default class Tutorial extends Vue {
     
     this.api.statePush(this.steps[currentStep+1].stateTransform);
     await this.$nextTick();
-    
+    await this.$nextTick();
 
     const currentStepElement = this.$el.querySelector(this.steps[currentStep].target);
     const nextStepElement = this.$el.querySelector(this.steps[currentStep + 1].target);
