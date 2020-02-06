@@ -46,7 +46,6 @@ import ContainerRight from '@/components/gamedashboard/right/containers/Containe
 })
 export default class ContainerBoard extends Vue {
   get notifications() {
-    console.log('ran!');
     return this.$store.state.activeNotifications;
   }
 }
