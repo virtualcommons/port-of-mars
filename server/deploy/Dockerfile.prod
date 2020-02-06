@@ -27,7 +27,7 @@ COPY ./server /code/server
 COPY ./shared /code/shared
 
 RUN yarn build \
-  && cp tsconfig.json package.json ormconfig.json lib/server/
+  && cp tsconfig.json package.json lib/server/
 
 
 FROM node:13
