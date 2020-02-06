@@ -142,8 +142,13 @@ export default class Tutorial extends Vue {
     onStop: this.stopTourCallback
   };
 
+
+  steps: Array<Step> = Steps;
+  
+  
+
   private dataFetched: boolean = false;
-  private steps: Array<Step> = [];
+  //private steps: Array<Step> = [];
   private quizQuestions: Array<QuizQuestionData> = [];
   private currentTutorialElementId: string = '';
 
