@@ -4,7 +4,7 @@ services:
   db: 
     image: postgres:12
     volumes:
-      - ./server/deploy/pom_db_password:/run/secrets/pom_db_password
+      - ./keys/pom_db_password:/run/secrets/pom_db_password
     environment:
       POSTGRES_USER: marsmadness
       POSTGRES_PASSWORD_FILE: /run/secrets/pom_db_password

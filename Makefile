@@ -1,38 +1,46 @@
 include config.mk
 
-SECRETS=server/deploy/.secrets
-DB_PASSWORD_PATH=server/deploy/pom_db_password
+DB_PASSWORD_PATH=keys/pom_db_password
+JWT_SECRET_PATH=keys/jwt
+ORMCONFIG_PATH=keys/ormconfig.json
+PGPASS_PATH=keys/.pgpass
+SECRETS=$(DB_PASSWORD_PATH) $(JWT_SECRET_PATH) $(ORMCONFIG_PATH) $(PGPASS_PATH)
 
 .PHONY: build
 build: docker-compose.yml $(SECRETS)
 	docker-compose pull db
 	docker-compose build --pull
 
-$(DB_PASSWORD_PATH):
+keys:
+	mkdir -p keys
+
+$(DB_PASSWORD_PATH): keys
 	DB_PASSWORD=$$(head /dev/urandom | tr -dc '[:alnum:]' | head -c42); \
 	TODAY=$$(date +%Y-%m-%d-%H:%M:%S); \
 	if [[ -f $(DB_PASSWORD_PATH) ]]; \
 	then \
-	  cp "$(DB_PASSWORD_PATH)" "$DB_PASSWORD_PATH_$$TODAY"; \
+	  cp "$(DB_PASSWORD_PATH)" "$(DB_PASSWORD_PATH)_$$TODAY"; \
 	fi; \
 	echo $${DB_PASSWORD} > $(DB_PASSWORD_PATH)
 
-server/ormconfig.json: server/ormconfig.template.json $(DB_PASSWORD_PATH)
-	DB_PASSWORD=$$(cat $(DB_PASSWORD_PATH)); \
-	sed "s|DB_PASSWORD|$$DB_PASSWORD|g" server/ormconfig.template.json > server/ormconfig.json
+$(JWT_SECRET_PATH): keys
+	JWT_SECRET=$$(head /dev/urandom | tr -dc '[:alnum:]' | head -c42); \
+	echo $${JWT_SECRET} > $(JWT_SECRET_PATH)
 
-server/deploy/.pgpass: $(DB_PASSWORD_PATH) server/deploy/pgpass.template
+$(ORMCONFIG_PATH): server/ormconfig.template.json $(DB_PASSWORD_PATH) keys
 	DB_PASSWORD=$$(cat $(DB_PASSWORD_PATH)); \
-	sed "s|DB_PASSWORD|$$DB_PASSWORD|g" server/deploy/pgpass.template > server/deploy/.pgpass
-	chmod 0600 server/deploy/.pgpass
+	sed "s|DB_PASSWORD|$$DB_PASSWORD|g" server/ormconfig.template.json > $(ORMCONFIG_PATH)
+	
+$(PGPASS_PATH): $(DB_PASSWORD_PATH) server/deploy/pgpass.template keys
+	DB_PASSWORD=$$(cat $(DB_PASSWORD_PATH)); \
+	sed "s|DB_PASSWORD|$$DB_PASSWORD|g" server/deploy/pgpass.template > $(PGPASS_PATH)
+	chmod 0600 $(PGPASS_PATH)
+
 
 .PHONY: secrets
 secrets: $(SECRETS)
 
-$(SECRETS): $(DB_PASSWORD_PATH) server/ormconfig.json server/deploy/.pgpass
-	touch $(SECRETS)
-
-docker-compose.yml: $(ENVIR).yml
+docker-compose.yml: base.yml $(ENVIR).yml config.mk
 	case "$(ENVIR)" in \
 	  dev|staging) docker-compose -f base.yml -f "$(ENVIR).yml" config > docker-compose.yml;; \
 	  prod) docker-compose -f base.yml -f staging.yml -f prod.yml config > docker-compose.yml;; \

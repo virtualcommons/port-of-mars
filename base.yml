@@ -5,3 +5,15 @@ services:
       context: .
     restart: always
     image: port-of-mars/server/dev:latest
+    volumes:
+      - ./keys/ormconfig.json:/code/server/ormconfig.json
+      - ./keys/.pgpass:/root/.pgpass
+      - ./keys/jwt:/run/secrets/jwt
+  db:
+    image: postgres:12
+    environment:
+      POSTGRES_USER: marsmadness
+      POSTGRES_PASSWORD_FILE: /run/secrets/pom_db_password
+      POSTGRES_DB: port_of_mars
+    volumes:
+      - ./keys/pom_db_password:/run/secrets/pom_db_password:ro

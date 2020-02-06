@@ -12,16 +12,10 @@ services:
     command: './dev.sh'
     ports:
       - '127.0.0.1:8081:8080'
-  db: 
-    image: postgres:12
+  db:
     ports:
       - '127.0.0.1:5432:5432'
-    environment:
-      POSTGRES_USER: marsmadness
-      POSTGRES_PASSWORD_FILE: /run/secrets/pom_db_password
-      POSTGRES_DB: port_of_mars
     volumes:
-      - ./server/deploy/pom_db_password:/run/secrets/pom_db_password
       - data:/var/lib/postgresql/data
   server:
     build:
@@ -33,7 +27,6 @@ services:
     volumes:
       - ./server:/code/server
       - ./shared:/code/shared
-      - ./server/deploy/.pgpass:/root/.pgpass:ro
       - /code/server/node_modules
 volumes:
   data:
