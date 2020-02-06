@@ -16,7 +16,7 @@ import {Phase} from "shared/types";
               <CardEvent
                 v-for="(event, eventInd) in eventsForTheRound"
                 :event="event"
-                :visible="visible(eventInd)"
+                :visible="visible(eventInd)" :key="eventInd"
               />
             </div>
           </div>

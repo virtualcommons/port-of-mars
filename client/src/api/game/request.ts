@@ -36,6 +36,7 @@ export class GameRequestAPI {
 
   public sendChatMessage(message: string) {
     const msg: SendChatMessageData = { message, kind: 'send-chat-message' };
+    console.log(msg);
     this.send(msg);
   }
 
