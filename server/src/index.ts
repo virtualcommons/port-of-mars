@@ -30,7 +30,7 @@ function createApp() {
     app.post('/login', login);
     
     // retrieve list of quiz q's from somewhere
-    app.use(quizRouter);
+    app.use('/quiz', quizRouter);
 
     const server = http.createServer(app);
     const gameServer = new Server({
