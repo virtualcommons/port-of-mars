@@ -1,4 +1,4 @@
-import {getUserByUsername} from "@/services/account";
+import {getUserByUsername, JWT_SECRET} from "@/services/account";
 import jwt from "jsonwebtoken";
 import {NextFunction, Request, Response} from "express";
 
@@ -8,7 +8,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
     if (user) {
       const {username, passedQuiz} = user;
       res.json({
-        token: jwt.sign({username}, 'secret', {expiresIn: '1h'}),
+        token: jwt.sign({username}, JWT_SECRET, {expiresIn: '1h'}),
         username,
         passedQuiz
       });
