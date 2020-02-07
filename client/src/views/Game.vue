@@ -5,19 +5,14 @@
 </template>
 
 <script lang="ts">
-import {
-    Vue,
-    Component,
-    Inject,
-    Provide,
-  } from 'vue-property-decorator';
-import {Client} from "colyseus.js";
-import {applyGameServerResponses} from "@/api/game/response";
-import {GameRequestAPI} from "@/api/game/request";
-import MasterComponent from "@/components/MasterComponent.vue";
-import ModalContainer from "@/components/gamedashboard/global/modals/ModalContainer.vue";
-import ContainerBoard from "@/components/gamedashboard/global/containers/ContainerBoard.vue";
-import GameDashboard from "@/components/GameDashboard.vue";
+import { Vue, Component, Inject, Provide } from 'vue-property-decorator';
+import { Client } from 'colyseus.js';
+import { applyGameServerResponses } from '@/api/game/response';
+import { GameRequestAPI } from '@/api/game/request';
+import MasterComponent from '@/components/MasterComponent.vue';
+import ModalContainer from '@/components/gamedashboard/global/modals/ModalContainer.vue';
+import ContainerBoard from '@/components/gamedashboard/global/containers/ContainerBoard.vue';
+import GameDashboard from '@/components/GameDashboard.vue';
 
 @Component({
   name: 'game',
@@ -25,7 +20,7 @@ import GameDashboard from "@/components/GameDashboard.vue";
     GameDashboard,
     MasterComponent,
     ModalContainer,
-    ContainerBoard,
+    ContainerBoard
   }
 })
 export default class Game extends Vue {
@@ -42,7 +37,9 @@ export default class Game extends Vue {
       return;
     }
 
-    const gameRoom = await this.$client.joinOrCreate('game', { token: localStorage.getItem('jwt')});
+    const gameRoom = await this.$client.joinOrCreate('game', {
+      token: localStorage.getItem('jwt')
+    });
     applyGameServerResponses(gameRoom, this.$tstore);
     this.api.connect(gameRoom);
     this.hasApi = true;
@@ -50,7 +47,9 @@ export default class Game extends Vue {
 
   destroyed() {
     console.log('leaving game');
-    this.api.room.leave();
+    if (this.api.room) {
+      this.api.room.leave();
+    }
   }
 }
 </script>

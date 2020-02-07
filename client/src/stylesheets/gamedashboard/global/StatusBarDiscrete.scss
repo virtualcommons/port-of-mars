@@ -1,43 +1,32 @@
-.status-o{
-    position: relative;
-    display:flex;
-    justify-content: space-between;
-    background-color: $space-white;
+.status-o {
+  height: 0.75rem;
+  // width: 100%;
+  flex-grow: 1;
+  // padding: 0.125rem 0;
+  // border: 0.125rem solid $space-gray;
+  position: relative;
+  @include make-center;
+  justify-content: space-between;
+  // background-color: $space-white;
+  // overflow: hidden;
+
+  .progress {
+    height: 100%;
     width: 100%;
-    border-radius: 15px;
-    overflow: hidden;
-    border-style: solid;
-    border-color: $space-gray;
-    
+    margin: 0 0.125rem;
+    background-color: $space-gray;
+    // display: inline-block;
+    border-radius: 0;
+  }
 
-    .progress{
-        width: 100%;
-        border-radius: 0;
-        margin:0.1rem 0.1rem;
-        background-color: $space-gray;
-        display: inline-block;
-    }
-
-    .progress:first-child{
-        border-top-left-radius:10px;
-        border-bottom-left-radius:10px;
-        
-    }
-
-    .progress:nth-last-child(2){
-        border-top-right-radius:10px;
-        border-bottom-right-radius:10px;
-        
-    }
-
-    .fader{
-        transition: all 0.4s ease-in-out;
-        position: absolute;
-        width: 0%;
-        right:0;
-        height: 4rem;
-        background-color: $space-white;
-        
-    }
+  .fader {
+    height: 100%;
+    width: 0%;
+    margin: 0 0.125rem;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: $new-space-orange;
+    transition: all 0.4s ease-in-out;
+  }
 }
-

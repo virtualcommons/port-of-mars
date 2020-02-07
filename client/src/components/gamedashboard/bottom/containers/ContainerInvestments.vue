@@ -2,11 +2,14 @@
   <div class="container-investments tour-investments">
     <div class="wrapper">
       <div class="topbar">
-        <p class="title">Time Blocks</p>       
-        
-        <DiscreteStatusBar class="discrete-bar" :usedTimeBlocks="remainingTimeBlocks"/>
-        
-        <p class="status">{{ remainingTimeBlocks }}</p>
+        <p class="title">Time Blocks</p>
+
+        <DiscreteStatusBar
+          class="discrete-bar"
+          :usedTimeBlocks="remainingTimeBlocks"
+        />
+
+        <p class="status">[ {{ remainingTimeBlocks }} ]</p>
       </div>
 
       <div class="cards">
@@ -40,14 +43,17 @@ export default class ContainerBottom extends Vue {
   get costs(): any {
     const p = this.$tstore.getters.player;
     const investmentData = Object.keys(p.costs)
-      .reduce((prev, name) => {
-        const k: keyof ResourceCostData = name as keyof ResourceCostData;
-        const cost = p.costs[k];
-        let pendingInvestment: number;
-        pendingInvestment = p.pendingInvestments[k];
-        prev.push({ name, cost, pendingInvestment });
-        return prev;
-      }, [] as Array<{ name: string; cost: number; pendingInvestment: number }>)
+      .reduce(
+        (prev, name) => {
+          const k: keyof ResourceCostData = name as keyof ResourceCostData;
+          const cost = p.costs[k];
+          let pendingInvestment: number;
+          pendingInvestment = p.pendingInvestments[k];
+          prev.push({ name, cost, pendingInvestment });
+          return prev;
+        },
+        [] as Array<{ name: string; cost: number; pendingInvestment: number }>
+      )
       .sort((a, b) => a.cost - b.cost);
 
     return investmentData;

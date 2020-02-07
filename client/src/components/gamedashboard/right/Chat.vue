@@ -8,19 +8,24 @@
           No Messages
         </p>
         <div
-          class="message"
           v-for="message in messages"
           :key="message.dateCreated"
+          :style="getMessageColor(message)"
+          class="message"
         >
-          <p class="member">
-            {{ message.role }}
-          </p>
-          <p class="content">
-            {{ message.message }}
-          </p>
-          <p class="time">
-            <span>[ </span>{{ toDate(message.dateCreated) }}<span> ]</span>
-          </p>
+          <div class="top">
+            <p class="member">
+              {{ message.role }}
+            </p>
+            <p class="time">
+              <span>[ </span>{{ toDate(message.dateCreated) }}<span> ]</span>
+            </p>
+          </div>
+          <div class="bottom">
+            <p class="content">
+              {{ message.message }}
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -53,6 +58,7 @@ import { GameRequestAPI } from '@/api/game/request';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons/faPaperPlane';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { ChatMessageData } from 'shared/types';
 
 library.add(faPaperPlane);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
@@ -65,30 +71,45 @@ export default class Chat extends Vue {
 
   private count: number = 0;
 
-  get layout() {
+  mounted() {
+    if (this.messages) {
+      // console.log(this.messages);
+    }
+  }
+
+  get layout(): any {
     return this.$store.getters.currentEventView;
   }
 
-  get messages() {
+  get messages(): any {
     return this.$tstore.state.messages;
   }
 
-  private updated() {
+  private updated(): any {
     if (this.layout !== 'DISABLE_CHAT') {
       const elem = this.$el.querySelector('.messages-view');
       elem!.scrollTop = elem!.scrollHeight;
     }
   }
 
-  private toDate(unixTimestamp: number) {
+  private toDate(unixTimestamp: number): any {
     return new Date(unixTimestamp).toLocaleTimeString();
   }
 
-  private submitToChat() {
-    if (this.pendingMessage !== '') {
+  private submitToChat(): void {
+    console.log('MESSAGE: ', this.pendingMessage);
+    if (this.pendingMessage && this.pendingMessage !== '') {
+      console.log('MESSAGE: NOT EMPTY');
       this.api.sendChatMessage(this.pendingMessage);
       this.pendingMessage = '';
     }
+  }
+
+  private getMessageColor(message: ChatMessageData): object {
+    if (message.role) {
+      return { backgroundColor: `var(--color-${message.role})` };
+    }
+    return { backgroundColor: 'var(--space-white-opaque-1)' };
   }
 }
 </script>

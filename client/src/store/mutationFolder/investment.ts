@@ -7,16 +7,19 @@ import {
   RESOURCES,
   Role
 } from 'shared/types';
-import { Vue } from 'vue-property-decorator';
 
 export default {
   SET_PENDING_INVESTMENT_AMOUNT(
     state: State,
     payload: { investment: Investment; units: number; role: Role }
   ) {
-    state.players[payload.role].pendingInvestments[payload.investment] = payload.units;
+    state.players[payload.role].pendingInvestments[payload.investment] =
+      payload.units;
   },
-  SET_INVESTMENT_COSTS(state: State, payload: { data: ResourceCostData; role: Role }) {
+  SET_INVESTMENT_COSTS(
+    state: State,
+    payload: { data: ResourceCostData; role: Role }
+  ) {
     state.players[payload.role].costs = payload.data;
   },
   SET_SPECIALTY(state: State, payload: { data: Resource; role: Role }) {

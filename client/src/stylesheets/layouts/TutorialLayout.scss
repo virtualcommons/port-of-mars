@@ -28,3 +28,52 @@ body .in-tour {
 .v-tour {
   pointer-events: auto;
 }
+
+.v-step {
+  border: 0.125rem solid $new-space-orange-opaque-025;
+  border-radius: 0 !important;
+  background-color: $space-gray !important;
+
+  .v-step__arrow {
+    // border-left-color: $new-space-orange-opaque-025 !important;
+    display: none !important;
+  }
+
+  .status {
+    margin: 0.5rem 0;
+    color: $new-space-orange;
+    font-size: $font-small;
+  }
+
+  button {
+    @include reset-button;
+    padding: 0.5rem !important;
+    border: 0.0625rem solid $new-space-orange !important;
+    border-radius: 0 !important;
+    margin: 0.5rem;
+    color: $new-space-orange;
+    @include default-transition-base;
+
+    &:hover {
+      @include default-scale-up;
+      color: $space-gray;
+      background-color: $new-space-orange;
+      outline: none !important;
+    }
+  }
+
+  .option {
+    margin: 0.5rem 0;
+    // background-color: green;
+
+    p {
+      margin-bottom: 0;
+    }
+
+    .question-selection {
+      height: 1.5rem;
+      width: 1.5rem;
+      padding: 0 !important;
+    }
+  }
+}
