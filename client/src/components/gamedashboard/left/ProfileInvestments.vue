@@ -2,23 +2,38 @@
   <div class="profile-investments tour-profile-investments">
     <p class="title">Your Investments</p>
     <div class="pi-container">
-      <div v-for="investment in investments" :key="investment.name" class="profile-investment"
-        v-bind:class="{'pending-is-active':investment.pendingUnits > 0,'pending-is-inactive':investment.pendingUnits <= 0}">
-        <img :src="require(`@/assets/icons/${investment.name}.svg`)" alt="Investment" />
+      <div
+        v-for="investment in investments"
+        :key="investment.name"
+        class="profile-investment"
+        v-bind:class="{
+          'pending-is-active': investment.pendingUnits > 0,
+          'pending-is-inactive': investment.pendingUnits <= 0
+        }"
+      >
+        <img
+          :src="require(`@/assets/icons/${investment.name}.svg`)"
+          alt="Investment"
+        />
         <p>
           {{ investment.units
-          }}<span v-show="investment.pendingUnits > 0"
-            >+<span >{{ investment.pendingUnits }}</span></span
+          }}<sup v-show="investment.pendingUnits > 0">
+            +<span>{{ investment.pendingUnits }}</span></sup
           >
         </p>
       </div>
-      <div class="profile-investment"
-      v-bind:class="{'pending-is-active':upkeep.pendingUnits > 0,'pending-is-inactive':upkeep.pendingUnits <= 0}">
+      <div
+        class="profile-investment"
+        v-bind:class="{
+          'pending-is-active': upkeep.pendingUnits > 0,
+          'pending-is-inactive': upkeep.pendingUnits <= 0
+        }"
+      >
         <img :src="require(`@/assets/icons/upkeep.svg`)" alt="Investment" />
         <p>
           {{ upkeep.units
-          }}<span v-show="upkeep.pendingUnits > 0"
-            >+<span>{{ upkeep.pendingUnits }}</span></span
+          }}<sup v-show="upkeep.pendingUnits > 0">
+            +<span>{{ upkeep.pendingUnits }}</span></sup
           >
         </p>
       </div>
@@ -54,7 +69,7 @@ export default class ProfileInvestments extends Vue {
 
   style(inventory: { units: number; pendingUnits: number }): string {
     return inventory.units < inventory.units + inventory.pendingUnits
-      ? 'color: var(--status-green)'
+      ? 'color: var(--color-Upkeep-opaque-2)'
       : '';
   }
 }
@@ -63,11 +78,11 @@ export default class ProfileInvestments extends Vue {
 <style lang="scss" scoped>
 @import '@/stylesheets/gamedashboard/left/ProfileInvestments.scss';
 
-.pending-is-active{
-  background-color: $status-green-dark;
+.pending-is-active {
+  background-color: $color-Upkeep-opaque-2;
 }
 
-.pending-is-inactive{
+.pending-is-inactive {
   background-color: $space-white-opaque-1;
 }
 </style>

@@ -24,9 +24,11 @@
       <p>
         You are 1 of 5 residents at <code><b>Port of Mars</b></code
         >, the first long-term habitat on Mars. Your mission is to
-        <code><b>stay alive</b></code> and <code><b>achieve the accomplishments</b></code
-        >. Each round, you have <code><b>10 timeblocks</b></code> that you can invest in the
-        maintenance of the shared infrastructure called <code><b>Upkeep</b></code> or buying
+        <code><b>stay alive</b></code> and
+        <code><b>achieve the accomplishments</b></code
+        >. Each round, you have <code><b>10 timeblocks</b></code> that you can
+        invest in the maintenance of the shared infrastructure called
+        <code><b>Upkeep</b></code> or buying
         <code><b>influence</b></code> currency in specific disciplines.
       </p>
 
@@ -35,7 +37,8 @@
       </p>
 
       <p>
-        <code><b>Influence</b></code> is what you use to buy <code><b>Accomplishments</b></code
+        <code><b>Influence</b></code> is what you use to buy
+        <code><b>Accomplishments</b></code
         >, which is how you win the game.
       </p>
 
@@ -44,8 +47,8 @@
       <h4><b>OBJECTIVES</b></h4>
       <ul>
         <li>
-          Keep <code><b>Upkeep</b></code> from reaching zero! If that happens, the habitat
-          collapses, everyone dies, and the game is over.
+          Keep <code><b>Upkeep</b></code> from reaching zero! If that happens,
+          the habitat collapses, everyone dies, and the game is over.
         </li>
         <li>
           Earn points by achieving <code><b>Accomplishments</b></code
@@ -66,7 +69,16 @@ import { BModal } from 'bootstrap-vue';
   }
 })
 export default class TourModal extends Vue {
-  variants = ['primary', 'secondary', 'success', 'warning', 'danger', 'info', 'light', 'dark'];
+  variants = [
+    'primary',
+    'secondary',
+    'success',
+    'warning',
+    'danger',
+    'info',
+    'light',
+    'dark'
+  ];
 
   headerBgVariant: string = 'dark';
   headerTextVariant: string = 'light';

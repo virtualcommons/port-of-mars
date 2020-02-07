@@ -1,12 +1,18 @@
+// SIZE
+
 $max-screen-height: 62.5625rem;
 $max-screen-width: 120rem;
 $min-screen-height: 48rem;
 $min-screen-width: 64rem;
 
+// FONT
+
 $font-family-default: 'Maven Pro', sans-serif;
 $font-small: 0.75rem;
 $font-med: 1rem;
 $font-large: 1.5rem;
+
+// COLOR
 
 $space-gray: #1e2223;
 $space-orange: #c67b5c;
@@ -21,6 +27,7 @@ $color-Curator: rgba(103, 65, 29, 0.2);
 $color-Entrepreneur: rgba(199, 168, 40, 0.2);
 $color-Politician: rgba(170, 42, 41, 0.2);
 $color-Upkeep: rgba(45, 143, 68, 0.2);
+$color-Upkeep-opaque-2: rgba(45, 143, 68, 0.25);
 
 $status-green: rgba(45, 143, 68, 1);
 $status-green-dark: rgb(11, 77, 26);
@@ -33,3 +40,7 @@ $marslog-purple: rgba(111, 36, 134, 0.05);
 // BORDERS
 $border-white: 0.125rem solid $space-white;
 $border-white-opaque-2: 0.125rem solid $space-white-opaque-2;
+
+// NEW: TBD
+$new-space-orange: rgba(221, 168, 119, 1);
+$new-space-orange-opaque-025: rgba(221, 168, 119, 0.25);

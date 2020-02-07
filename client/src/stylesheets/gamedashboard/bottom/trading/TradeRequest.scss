@@ -1,81 +1,94 @@
-.trade-r{
+.trade-request-component {
+  min-height: 100%;
+  padding: 0.5rem;
+  // flex: 1;
+  color: $space-white;
   background-color: $space-white-opaque-1;
-  color: white;
-  flex: 1;
-  justify-content: center;  
 
-  .trade-partner p {
-    border-bottom: 0.125rem solid $space-orange;
-  }
-  
-  .person-wrapper{
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    align-items: center;
-    
-    p{
-      border:none;
-    }
-    
-    .trade-person-icons {
-      display: inline-block;
+  .trade-partner {
+    margin-bottom: 1rem;
+
+    .trade-title {
+      padding: 0.25rem 0.5rem;
+      margin-bottom: 0.5rem;
+      font-size: $font-med;
       text-align: center;
-      height: 100%;
-    }
+      text-transform: uppercase;
 
-    
+      span {
+        color: $new-space-orange;
+      }
 
-    .person-frame{
-      height: 3rem;
-      width: 3rem;
-      padding: 0.25rem;
-      border: 0.0625rem solid $space-orange;
-      border-radius: 50%;
-      margin: 0 1rem;
-      @include make-center;
-      @include default-transition-base;
-
-      &:hover {
-        @include default-scale-up;
-        cursor: pointer;
+      .none {
+        color: $space-white-opaque-2;
       }
     }
 
-    .person-icons {
-      width: 5rem;
-      height: 100%;
-      padding: 0.25rem;
-      
-    }
+    .wrapper {
+      @include make-center;
+      justify-content: space-around;
+      flex-wrap: wrap;
 
-    .selected-player {
-      background-color: $space-orange;
-      
+      .trade-person-icons {
+        height: 4rem;
+        width: 4rem;
+        margin: 0.25rem;
+      }
+
+      .person-frame {
+        @include expand;
+        padding: 0.25rem;
+        border: 0.0625rem solid $new-space-orange;
+        border-radius: 50%;
+        @include make-center;
+        @include default-transition-base;
+
+        &:hover {
+          @include default-scale-up;
+          background-color: $new-space-orange;
+          cursor: pointer;
+        }
+
+        .person-icons {
+          height: 80%;
+        }
+      }
+
+      .selected-player {
+        background-color: $new-space-orange;
+      }
     }
   }
-  
+
   .trade-send-options {
     width: 100%;
-    
+    margin-bottom: 1rem;
 
     .options-block {
       width: 100%;
-      
     }
   }
 
   .trade-send {
-    margin-top:1rem;
-    margin-left: 0.5rem;
+    padding: 0.25rem;
+    @include make-center;
 
-    .trade-impossible{
-      opacity: 50%;
+    button {
+      @include reset-button;
+      height: 2.25rem;
+      width: 9.375rem;
+      border: 0.0625rem solid $new-space-orange;
+      color: $new-space-orange;
+      @include default-transition-base;
+
+      &:disabled {
+        opacity: 50%;
+      }
+
+      &:hover:not(:disabled) {
+        color: $space-gray;
+        background-color: $new-space-orange;
+      }
     }
   }
-
-}
-
-.inactive-action{
-  opacity: 50%;
 }

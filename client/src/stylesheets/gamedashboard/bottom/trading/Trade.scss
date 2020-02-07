@@ -8,7 +8,6 @@
   background-color: $space-gray;
   color: $space-white;
 
-  
   min-height: 0;
   min-width: 0;
   flex: 1 1 0;
@@ -26,7 +25,6 @@
   justify-content: center;
   align-items: center;
 }
-
 
 .trade-profile-sender-container,
 .trade-profile-receiver-container {
@@ -76,7 +74,7 @@
 .send-sender,
 .receive-receiver {
   height: 50%;
-  padding: 0.0rem 0.5rem;
+  padding: 0rem 0.5rem;
   display: flex;
   align-items: center;
 }
@@ -88,7 +86,7 @@
   font-size: $font-small;
   text-align: center;
   color: $space-gray;
-  background-color: $space-orange;
+  background-color: $new-space-orange;
 }
 
 .send-investments-container,
@@ -132,10 +130,10 @@
 
 .trade-buttons button {
   height: 50%;
-  width:4rem;
+  width: 4rem;
   border: none;
   font-size: $font-small;
-  background-color: $space-orange;
+  background-color: $new-space-orange;
   transition: all 0.2s ease-in-out;
 }
 
@@ -143,6 +141,6 @@
   transform: scale(1.1);
 }
 
-.accept-trade{
+.accept-trade {
   opacity: 75%;
 }

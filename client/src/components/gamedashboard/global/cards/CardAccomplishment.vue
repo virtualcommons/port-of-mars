@@ -1,5 +1,9 @@
 <template>
-  <div class="card-accomplishment" @click="handleClick" v-bind:class="{'unpurchasable':!canBuy,'purchasable':canBuy}">
+  <div
+    class="card-accomplishment"
+    @click="handleClick"
+    v-bind:class="{ unpurchasable: !canBuy, purchasable: canBuy }"
+  >
     <div class="title">
       <p>{{ accomplishment.label }}</p>
     </div>
@@ -9,11 +13,15 @@
         <p>{{ accomplishment.victoryPoints }}</p>
       </div>
       <div class="cost">
-        <p v-for="(investment,i) in accomplishmentCost" :key="investment+Math.random()"
-
-        v-bind:class="{'unattainable-resource': investmentGrayStatus[i]}"
+        <p
+          v-for="(investment, i) in accomplishmentCost"
+          :key="investment + Math.random()"
+          v-bind:class="{ 'unattainable-resource': investmentGrayStatus[i] }"
         >
-          <img :src="require(`@/assets/icons/${investment}.svg`)" alt="Investment" />
+          <img
+            :src="require(`@/assets/icons/${investment}.svg`)"
+            alt="Investment"
+          />
         </p>
       </div>
     </div>
@@ -31,7 +39,6 @@ import {
 } from 'shared/types';
 import { canPurchaseAccomplishment } from 'shared/validation';
 import * as _ from 'lodash';
-
 
 @Component({})
 export default class CardAccomplishment extends Vue {
@@ -56,7 +63,9 @@ export default class CardAccomplishment extends Vue {
   get accomplishmentCost() {
     return INVESTMENTS.filter(
       investment => this.accomplishment[investment] !== 0
-    ).flatMap(investment => _.fill(Array(Math.abs(this.accomplishment[investment])), investment));
+    ).flatMap(investment =>
+      _.fill(Array(Math.abs(this.accomplishment[investment])), investment)
+    );
   }
 
   private handleClick() {
@@ -66,45 +75,48 @@ export default class CardAccomplishment extends Vue {
     });
   }
 
-  get playerFullInventory(){
-    let totalInventory: ResourceAmountData = _.clone(this.$tstore.getters.player.inventory);
-    const pendingInventory: ResourceAmountData = this.$tstore.getters.player.pendingInvestments;
+  get playerFullInventory() {
+    let totalInventory: ResourceAmountData = _.clone(
+      this.$tstore.getters.player.inventory
+    );
+    const pendingInventory: ResourceAmountData = this.$tstore.getters.player
+      .pendingInvestments;
 
-    for(const r of RESOURCES){
+    for (const r of RESOURCES) {
       totalInventory[r] += pendingInventory[r];
     }
 
     return totalInventory;
   }
 
-  get canBuy(){
-    
-    return canPurchaseAccomplishment(this.accomplishment,this.playerFullInventory);
+  get canBuy() {
+    return canPurchaseAccomplishment(
+      this.accomplishment,
+      this.playerFullInventory
+    );
   }
 
   get investmentGrayStatus() {
     let grayStatus = [];
-    for(let investment of this.accomplishmentCost){
+    for (let investment of this.accomplishmentCost) {
       if (investment === 'upkeep') {
         grayStatus.push(false);
-      } else if(this.playerFullInventory[investment] > 0) {
+      } else if (this.playerFullInventory[investment] > 0) {
         grayStatus.push(false);
         this.playerFullInventory[investment]--;
       } else {
-        grayStatus.push(true)
+        grayStatus.push(true);
       }
     }
     return grayStatus;
   }
-
-
 }
 </script>
 
 <style lang="scss" scoped>
 @import '@/stylesheets/gamedashboard/global/cards/CardAccomplishment.scss';
 
-.unattainable-resource{
+.unattainable-resource {
   opacity: 30%;
 }
 </style>

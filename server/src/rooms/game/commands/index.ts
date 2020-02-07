@@ -46,10 +46,12 @@ export class SendChatMessageCmd implements Command {
     client: Client
   ): SendChatMessageCmd {
     const p = game.getPlayerByClient(client);
+    console.log('PLAYER TROUBLESHOOT: ', p);
     return new SendChatMessageCmd(r.message, game, p);
   }
 
   execute() {
+    console.log(`MESSAGE: ${this.message}\nPLAYER: ${this.player}`);
     return [
       new SentChatMessage({
         message: this.message,
