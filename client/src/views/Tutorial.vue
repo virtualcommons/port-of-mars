@@ -582,11 +582,16 @@ export default class Tutorial extends Vue {
   private async getQuizQuestions(): Promise<boolean> {
     const quizUrl = `${process.env.SERVER_URL_HTTP}/quiz`;
     const data: any = { username: 'bob' };
+    const jwt = localStorage.getItem('jwt');
+    if (!jwt) {
+      return false;
+    }
     const response = await fetch(quizUrl, {
       method: 'POST',
       cache: 'no-cache',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwt}`
       },
       redirect: 'follow',
       referrerPolicy: 'no-referrer',

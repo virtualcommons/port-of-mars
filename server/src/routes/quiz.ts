@@ -5,15 +5,18 @@ import {
   createQuizSubmission,
   getQuizQuestionsbyQuizId
 } from '@/services/quiz';
-import { getUserByUsername } from '@/services/account';
+import {getUserByJWT, getUserByUsername} from '@/services/account';
+import {auth} from "@/routes/middleware";
 
 export const quizRouter = Router();
 
-quizRouter.post('/', async (req, res, next) => {
+const DEFAULT_QUIZ = 'TutorialQuiz';
+
+quizRouter.post('/', auth, async (req, res, next) => {
   try {
-    // NOTE: authenticate user
-    let user = await getUserByUsername(req.body.username);
-    let quiz = await getQuizByName('TutorialQuiz');
+    const token: string = (req as any).token;
+    let user = await getUserByJWT(token);
+    let quiz = await getQuizByName(DEFAULT_QUIZ);
 
     if (user && quiz) {
       // NOTE: create quiz submission
@@ -26,7 +29,7 @@ quizRouter.post('/', async (req, res, next) => {
     } else {
       res
         .status(403)
-        .json(`User account with username ${req.body.username} not found.`);
+        .json(`User account with username ${req} not found.`);
     }
   } catch (e) {
     next(e);
@@ -35,7 +38,7 @@ quizRouter.post('/', async (req, res, next) => {
 
 quizRouter.get('/questions', async (req, res, next) => {
   try {
-    let quiz = await getQuizByName('TutorialQuiz');
+    let quiz = await getQuizByName(DEFAULT_QUIZ);
     if (quiz) {
       const { id } = quiz;
       const questions = await getQuizQuestionsbyQuizId(id);
