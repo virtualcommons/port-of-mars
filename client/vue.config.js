@@ -1,7 +1,13 @@
 const webpack = require('webpack');
 const path = require('path');
+const fs = require('fs');
 
 const NODE_ENV = process.env.NODE_ENV || 'production';
+
+let SENTRY_DSN = '';
+if (fs.existsSync('/run/secrets/sentry_dsn')) {
+  SENTRY_DSN = fs.readFileSync('/run/secrets/sentry_dsn', 'utf8').trim();
+}
 
 module.exports = {
   chainWebpack: config => {
@@ -17,6 +23,7 @@ module.exports = {
           JSON.stringify(['development', 'staging'].includes(NODE_ENV) ? 'ws://localhost:2567' : 'wss://portofmars.comses.net'),
         'process.env.SERVER_URL_HTTP':
           JSON.stringify(['development', 'staging'].includes(NODE_ENV) ? 'http://localhost:2567' : 'https://portofmars.comses.net'),
+        'process.env.SENTRY_DSN': JSON.stringify(SENTRY_DSN),
       }])
   }
 };

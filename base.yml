@@ -9,6 +9,7 @@ services:
       - ./keys/ormconfig.json:/code/server/ormconfig.json
       - ./keys/.pgpass:/root/.pgpass
       - ./keys/jwt:/run/secrets/jwt
+      - ./keys/sentry_dsn:/run/secrets/sentry_dsn
   db:
     image: postgres:12
     environment:

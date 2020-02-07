@@ -58,6 +58,8 @@ docker-compose up -d
 
 ### Production Setup
 
+Copy the Sentry DSN url into `keys/sentry_dsn`. Then 
+
 ```bash
 ./configure prod
 make

@@ -4,7 +4,8 @@ DB_PASSWORD_PATH=keys/pom_db_password
 JWT_SECRET_PATH=keys/jwt
 ORMCONFIG_PATH=keys/ormconfig.json
 PGPASS_PATH=keys/.pgpass
-SECRETS=$(DB_PASSWORD_PATH) $(JWT_SECRET_PATH) $(ORMCONFIG_PATH) $(PGPASS_PATH)
+SENTRY_DSN_PATH=keys/sentry_dsn
+SECRETS=$(DB_PASSWORD_PATH) $(JWT_SECRET_PATH) $(ORMCONFIG_PATH) $(PGPASS_PATH) $(SENTRY_DSN_PATH)
 
 .PHONY: build
 build: docker-compose.yml $(SECRETS)
@@ -36,6 +37,8 @@ $(PGPASS_PATH): $(DB_PASSWORD_PATH) server/deploy/pgpass.template keys
 	sed "s|DB_PASSWORD|$$DB_PASSWORD|g" server/deploy/pgpass.template > $(PGPASS_PATH)
 	chmod 0600 $(PGPASS_PATH)
 
+$(SENTRY_DSN_PATH): keys
+	touch "$(SENTRY_DSN_PATH)"
 
 .PHONY: secrets
 secrets: $(SECRETS)

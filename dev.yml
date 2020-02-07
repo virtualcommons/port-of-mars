@@ -7,6 +7,7 @@ services:
     image: port-of-mars/client/dev:latest
     volumes:
       - ./client:/code/client
+      - ./keys/sentry_dsn:/run/secrets/sentry_dsn
       - ./shared:/code/shared
       - /code/client/node_modules
     command: './dev.sh'
