@@ -36,13 +36,13 @@ quizRouter.post('/', auth, async (req, res, next) => {
   }
 });
 
-quizRouter.get('/questions', async (req, res, next) => {
+quizRouter.get('/', async (req, res, next) => {
   try {
     let quiz = await getQuizByName(DEFAULT_QUIZ);
     if (quiz) {
       const { id } = quiz;
       const questions = await getQuizQuestionsbyQuizId(id);
-      res.json({ questions });
+      res.json(questions);
     } else {
       res.status(403).json(`Quiz not located in the database.`);
     }
