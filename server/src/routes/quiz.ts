@@ -51,13 +51,14 @@ quizRouter.get('/', async (req, res, next) => {
   }
 });
 
-quizRouter.post('/:id/:optionSubmitted', (req, res, next) => {
+quizRouter.post('/:id', (req, res, next) => {
   // console.log(req.headers);
   // let user = await getUserByJWT()
 
-  const { id, optionSubmitted } = req.params;
+  const { id } = req.params;
+  const { choice } = req.body;
   const idAsInt: number = parseInt(id);
-  const optionSubmittedAsInt: number = parseInt(optionSubmitted);
-  const correct = checkQuizQuestion(idAsInt, optionSubmittedAsInt);
+  const choiceAsInt: number = parseInt(choice);
+  const correct = checkQuizQuestion(idAsInt, choiceAsInt);
   res.json(correct);
 });
