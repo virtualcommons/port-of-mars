@@ -5,9 +5,11 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import {TypedStore} from "@/plugins/tstore";
+import {Ajax} from "@/plugins/ajax";
 
 Vue.use(Vuex);
 Vue.use(TypedStore);
+Vue.use(Ajax);
 
 Vue.config.productionTip = false;
 
