@@ -600,18 +600,10 @@ export default class Tutorial extends Vue {
 
   private async checkQuizQuestion(
     id: number,
-    optionSubmitted: number
+    choice: number
   ): Promise<boolean> {
-    const quizUrl = `${process.env.SERVER_URL_HTTP}/quiz/${id}/${optionSubmitted}`;
-    const response = await fetch(quizUrl, {
-      method: 'POST',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer'
-    });
+    const quizUrl = `${process.env.SERVER_URL_HTTP}/quiz/${id}`;
+    const response = await this.$ajax.post(quizUrl, { choice });
     if (response.status === 200) {
       const data = await response.json();
       return data;
