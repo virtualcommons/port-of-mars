@@ -586,17 +586,7 @@ export default class Tutorial extends Vue {
     if (!jwt) {
       return false;
     }
-    const response = await fetch(quizUrl, {
-      method: 'POST',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${jwt}`
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-      body: JSON.stringify(data)
-    });
+    const response = await this.$ajax.get(quizUrl);
     if (response.status === 200) {
       const data: Array<QuizQuestionData> = await response.json();
       this.quizQuestions = data;
