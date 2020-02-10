@@ -33,14 +33,14 @@
                   Previous
                 </button>
                 <button
-                  v-if="!tour.isLast"
+                  v-if="!tour.isLast && api.forcePause"
                   @click="tour.nextStep"
                   class="btn btn-dark"
                 >
                   Next
                 </button>
                 <button
-                  v-else-if="tour.isLast"
+                  v-else-if="tour.isLast && api.forcePause"
                   @click="tour.stop"
                   class="btn btn-dark"
                 >
@@ -80,7 +80,7 @@
                   Check Answer
                 </button>
                 <button
-                  v-if="quizQuestionStatus && !tour.isLast"
+                  v-if="quizQuestionStatus && !tour.isLast && api.forcePause"
                   @click="tour.nextStep"
                   class="btn btn-dark"
                   type="button"
@@ -89,7 +89,7 @@
                   Next
                 </button>
                 <button
-                  v-if="quizQuestionStatus && tour.isLast"
+                  v-if="quizQuestionStatus && tour.isLast && api.forcePause"
                   @click="tour.stop"
                   class="btn btn-dark"
                 >
