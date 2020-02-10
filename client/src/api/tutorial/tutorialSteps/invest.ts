@@ -4,15 +4,13 @@ import { Phase,RESEARCHER } from "shared/types";
 const steps:Array<Step> = [
     {
       target: '.tour-investments',
-      content:
-        'During the Investment phase, you may invest your timeblocks into ' +
-        'Upkeep or purchase Influence currency.',
+      content: `The second phase is the Investment phase!`,
       params: {
         placement: 'right'
       },
      
-      stateTransform: {
-        SET_GAME_PHASE:Phase.invest,
+      stateTransform: [
+        {SET_GAME_PHASE:Phase.invest,
         SET_INVESTMENT_COSTS:{data:{
           culture: 1001,
           finance: 1001,
@@ -22,7 +20,7 @@ const steps:Array<Step> = [
           upkeep: 1
         }, role: RESEARCHER},
 
-      },
+      }],
     },
     {
       target: '.tour-investments',
@@ -35,30 +33,6 @@ const steps:Array<Step> = [
       },
       
     },
-    // gamedashboard > containers > ContainerInvestments.vue
-    {
-      target: '.tour-investments',
-      content:
-        'During the Investment phase, you can invest your timeblocks to obtain ' +
-        'influence currency and use your influence currency inventory to trade ' +
-        'with other players in the Trade phase.',
-      params: {
-        placement: 'right'
-      },
-      
-    },
-    // gamedashboard > containers > ContainerInvestments.vue
-    {
-      target: '.tour-investments',
-      content:
-        'You can also use your timeblocks to keep your habitat from collapsing by ' +
-        'investing your timeblocks in Upkeep.',
-      params: {
-        placement: 'right'
-      },
-     
-    },
-    // gamedashboard > containers > ContainerInvestments.vue
     {
       target: '.tour-investments',
       content:
@@ -81,6 +55,22 @@ const steps:Array<Step> = [
       },
       
     },
+    {
+      target: '.tour-investments',
+      content: `Note that there are some influences that you cannot purchase on your own (for the researcher, they are Culture and Finance)
+      However, you will need those resources to buy certain Accomplishment cards!`,
+      params:{
+        placement: 'top'
+      }
+    },
+    {
+      target: '.tour-accomplishments',
+      content: `For example, this accomplishment card requires 1 culture, which you cannot create. To get that resource, you must trade!`,
+      params: {
+        placement:'right'
+      }
+    },
+    // gamedashboard > containers > ContainerInvestments.vue
 
 ]
 

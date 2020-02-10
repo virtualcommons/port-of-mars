@@ -14,8 +14,8 @@ const steps:Array<Step> = [
     {
       target: '.tour-container-upkeep',
       content:
-        'At the start of a round, if Upkeep is lower than 65, reveal 2 events; ' +
-        'and if Upkeep is lower than 35 reveal 3 events. Conditions on Mars ' +
+        'At the start of a round, if Upkeep is lower than 65, 2 events will occur in the round; ' +
+        'if Upkeep is lower than 35, there will be 3 events. Conditions on Mars ' +
         'are tough!',
       params: {
         placement: 'bottom'

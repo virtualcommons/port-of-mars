@@ -49,7 +49,7 @@ export default class ModalContainer extends Vue {
       this.visible = true;
     });
 
-    this.$root.$on('openModalConfirmation', (data: any) => {
+    this.$root.$on('openmodalconfirmation', (data: any) => {
       this.modalView = 'ModalConfirmation';
       this.modalData = data;
       this.visible = true;

@@ -9,13 +9,14 @@
       </div>
     </div>
 
-    <div class="trade-list">
-      <div class="section-text">
-        <p>Active Trade List</p>
-      </div>
-      <div class="trades-wrapper">
-        <Trade v-for="trade in trades" v-bind="trade" :key="Math.random()" />
-      </div>
+        <div class="trade-list tour-trade-item">
+            <div class="section-text">
+                <p>Active Trade List</p>
+            </div>
+            <div class="trades-wrapper">
+              <Trade v-for="trade in trades" v-bind="trade" :key="Math.random()" />
+            </div>
+        </div>
     </div>
   </div>
 </template>

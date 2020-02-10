@@ -1,11 +1,11 @@
 <template>
-  <div class="container-purchase">
+  <div class="container-purchase tour-purchase">
     <div class="purchase-row">
       <div class="info">
         <div class="topbar">
           <p>Purchase</p>
         </div>
-        <div class="content">
+        <div class="content tour-purchase-header">
           <p class="note">Note</p>
           <p>
             During this phase you can purchase any available accomplishments
@@ -17,7 +17,7 @@
         <div class="outer-wrapper">
           <div class="wrapper">
             <BarAccomplishment
-              v-for="accomplishment in purchasableAccomplishments"
+              v-for="accomplishment in sortedPurchasableAccomplishments"
               :key="accomplishment.label + 2"
               :accomplishment="accomplishment"
             />

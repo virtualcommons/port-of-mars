@@ -25,18 +25,19 @@ const steps:Array<Step> = [
         target: '.tour-chat',
         content:
           'During gameplay, you can communicate with other players in your habitat ' +
-          'to plan and strategize.',
+          'to plan and strategize. Try sending a message!',
         params: {
           placement: 'left'
         },
-        stateTransform:{
-          ADD_TO_CHAT:{
+        stateTransform:[
+          {ADD_TO_CHAT:{
               message:'Welcome to the port of mars!',
               role:CURATOR,
               dateCreated:new Date().getTime(),
               round:0,
-          }
-        },
+          },
+          required: true,
+        }],
       },
 ]
 

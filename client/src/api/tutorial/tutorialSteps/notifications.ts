@@ -1,5 +1,5 @@
 import {Step} from "@/types/tutorial";
-import {RESEARCHER} from 'shared/types';
+import {RESEARCHER, Phase} from 'shared/types';
 
 const steps:Array<Step> = [
     {
@@ -10,9 +10,11 @@ const steps:Array<Step> = [
       params: {
         placement: 'bottom'
       },
-      stateTransform: {
-        CREATE_NOTIFICATION:`Notifcations can be removed by clicking on them!`,
-      },
+      stateTransform: [
+        {
+          SET_GAME_PHASE:Phase.pregame,
+          CREATE_NOTIFICATION:`Notifcations can be removed by clicking on them!`,
+      }],
     },
     {
       target: '.tour-marslog',
@@ -23,14 +25,14 @@ const steps:Array<Step> = [
         placement: 'right'
       },
       
-      stateTransform: {
-        ADD_TO_MARS_LOG:{
+      stateTransform: [
+        {ADD_TO_MARS_LOG:{
           performedBy: RESEARCHER,
           category:'Event',
           content: `This event is important!`,
           timestamp:new Date().getTime(),
         },
-      },
+      }],
     },
 ]
 
