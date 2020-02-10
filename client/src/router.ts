@@ -4,8 +4,7 @@ import Home from '@/views/Home.vue';
 import Login from '@/views/Login.vue';
 import WaitingLobby from '@/views/WaitingLobby.vue';
 import Game from '@/views/Game.vue';
-import TutorialQuiz from '@/views/TutorialQuiz.vue';
-import Tutorial from "@/views/Tutorial.vue";
+import Tutorial from '@/views/Tutorial.vue';
 
 Vue.use(Router);
 
@@ -34,14 +33,6 @@ const router = new Router({
       }
     },
     {
-      path: '/quiz',
-      name: 'TutorialQuiz',
-      component: TutorialQuiz,
-      meta: {
-        requiresAuth: true
-      }
-    },
-    {
       path: '/tutorial',
       name: 'Tutorial',
       component: Tutorial,
@@ -57,9 +48,9 @@ router.beforeEach((to, from, next) => {
   if (to.meta && to.meta.requiresAuth && !jwt) {
     next({
       name: 'Login'
-    })
+    });
   } else {
-    next()
+    next();
   }
 });
 

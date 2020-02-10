@@ -188,10 +188,3 @@ export interface QuizQuestionData {
   question: string;
   options: Array<String>;
 }
-
-export interface QuizResultPackage {
-  id: number;
-  userAnswer: number;
-  correctAnswer: number;
-  correct: boolean;
-}
