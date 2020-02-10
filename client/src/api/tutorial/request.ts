@@ -1,4 +1,4 @@
-import {TradeData} from "shared/types";
+import {TradeData, AccomplishmentData} from "shared/types";
 import { initialStoreState } from '@/store/state';
 import { GameRequestAPI } from "@/api/game/request";
 import * as _ from "lodash";
@@ -9,8 +9,8 @@ import {StateTransform} from '@/types/tutorial';
 
 export class TutorialAPI extends GameRequestAPI {
     private store!:Store<State>;
-    private stateStack:Array<StateTransform> = []
-
+    private stateStack:Array<StateTransform[]> = []
+    private isTaskComplete = true;
 
     constructor(){
         super();
@@ -22,24 +22,58 @@ export class TutorialAPI extends GameRequestAPI {
 
     public apply(){
         this.store.replaceState(_.cloneDeep(initialStoreState));
+
+        if(this.stateStack.length == 0){
+            this.isTaskComplete = true;
+        }
         
         for(const state of this.stateStack){
-            for(const [command,value] of Object.entries(state)){
-                this.store.commit(command,value);
-                
+            
+            for(const commandSet of state){
+                for(const [command,value] of Object.entries(commandSet)){
+                    if(command=='required'){
+                        this.isTaskComplete = !value;
+                    }
+                    else{
+                        this.isTaskComplete = true;
+                        this.store.commit(command,value);
+                    }
+                }
             }
         }
     }
 
+    get forceSkip(){
+        return this.isTaskComplete;
+    }
 
-    public statePush(state:StateTransform|undefined){
+    get forcePause(){
+        return this.isTaskComplete;
+    }
+
+    public forceUnpause(){
+        this.isTaskComplete = true; 
+    }
+
+
+    public statePush(state:Array<StateTransform>|undefined){
        if(state != undefined){
             
-            for(const [command,value] of Object.entries(state)){
-                this.store.commit(command,value);
+        
+            for(const commandSet of state){
+                for(const [command,value] of Object.entries(commandSet)){
+                    
+                    if(command=='required'){
+                        this.isTaskComplete = !value;
+                    }
+                    else{
+                        this.store.commit(command,value);
+                    }
+                }
             }
 
             this.stateStack.push(state);
+            
        }
 
        
@@ -58,7 +92,8 @@ export class TutorialAPI extends GameRequestAPI {
             role:this.store.state.role,
             dateCreated: new Date().getTime(),
             round:0
-        })
+        });
+        this.isTaskComplete = true;
     }
 
     count:number= 1;
@@ -68,6 +103,8 @@ export class TutorialAPI extends GameRequestAPI {
             trade:tradePackage,
         })
         this.count++;
+
+        this.isTaskComplete = true;
     }
 
     public acceptTradeRequest(id:string){
@@ -82,4 +119,23 @@ export class TutorialAPI extends GameRequestAPI {
         });
     }
 
+    public purchaseAccomplishment(accomplishment:AccomplishmentData){
+        this.store.commit('DISCARD_ACCOMPLISHMENT',{
+            id:accomplishment.id,
+            role:accomplishment.role
+        });
+        this.isTaskComplete = true;
+    }
+
+    public discardAccomplishment(id: number){
+        this.store.commit('DISCARD_ACCOMPLISHMENT',{
+            id,
+            role:'Researcher'
+        });
+
+        this.isTaskComplete = true;
+    }
+
+    public investTimeBlocks():void {};
+    public setPlayerReadiness(): void {};
 }

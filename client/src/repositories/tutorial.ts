@@ -13,7 +13,7 @@ export class TutorialSteps {
         content: 'Quiz Question',
         params: {
           placement: 'right',
-          quizQuestionId: 1
+          tutorialElementId: 'gameEnd'
         }
       },
       {
@@ -31,7 +31,7 @@ export class TutorialSteps {
         content: 'Quiz Question',
         params: {
           placement: 'right',
-          quizQuestionId: 9
+          tutorialElementId: 'upkeep25'
         }
       },
       {
@@ -49,7 +49,7 @@ export class TutorialSteps {
         content: 'Quiz Question',
         params: {
           placement: 'right',
-          quizQuestionId: 4
+          tutorialElementId: 'upkeep65'
         }
       },
       {
@@ -57,7 +57,7 @@ export class TutorialSteps {
         content: 'Quiz Question',
         params: {
           placement: 'right',
-          quizQuestionId: 8
+          tutorialElementId: 'upkeep35'
         }
       },
       {
@@ -211,7 +211,7 @@ export class TutorialSteps {
         content: 'Quiz Question',
         params: {
           placement: 'right',
-          quizQuestionId: 7
+          tutorialElementId: 'timeblocks'
         }
       },
       // gamedashboard > containers > ContainerInvestments.vue
@@ -265,7 +265,7 @@ export class TutorialSteps {
         content: 'Quiz Question',
         params: {
           placement: 'right',
-          quizQuestionId: 2
+          tutorialElementId: 'chat'
         }
       },
       {
@@ -342,7 +342,7 @@ export class TutorialSteps {
         content: 'Quiz Question',
         params: {
           placement: 'right',
-          quizQuestionId: 5
+          tutorialElementId: 'accCardInfluence'
         }
       },
       {
@@ -350,7 +350,7 @@ export class TutorialSteps {
         content: 'Quiz Question',
         params: {
           placement: 'right',
-          quizQuestionId: 6
+          tutorialElementId: 'accCardUpkeep'
         }
       },
       {
@@ -358,7 +358,7 @@ export class TutorialSteps {
         content: 'Quiz Question',
         params: {
           placement: 'right',
-          quizQuestionId: 3
+          tutorialElementId: 'trade'
         }
       }
     ];
@@ -371,7 +371,7 @@ export class TutorialSteps {
         content: step.content,
         params: {
           placement: step.params.placement,
-          quizQuestionId: step.params.quizQuestionId
+          tutorialElementId: step.params.tutorialElementId
         },
         stateTransform: step.stateTransform
       };

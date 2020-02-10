@@ -33,14 +33,14 @@
                   Previous
                 </button>
                 <button
-                  v-if="!tour.isLast"
+                  v-if="!tour.isLast && api.forcePause"
                   @click="tour.nextStep"
                   class="btn btn-dark"
                 >
                   Next
                 </button>
                 <button
-                  v-else-if="tour.isLast"
+                  v-else-if="tour.isLast && api.forcePause"
                   @click="tour.stop"
                   class="btn btn-dark"
                 >
@@ -69,6 +69,15 @@
                   <p class="status">{{ quizQuestionStatusMessage }}</p>
                 </div>
                 <button
+                  v-if="!tour.isFirst"
+                  @click="tour.previousStep"
+                  class="btn btn-dark"
+                  type="button"
+                  name="button"
+                >
+                  Previous
+                </button>
+                <button
                   v-if="
                     currentQuizQuestionSelection !== -1 &&
                       quizQuestionStatus === false
@@ -80,7 +89,7 @@
                   Check Answer
                 </button>
                 <button
-                  v-if="quizQuestionStatus && !tour.isLast"
+                  v-if="quizQuestionStatus && !tour.isLast && api.forcePause"
                   @click="tour.nextStep"
                   class="btn btn-dark"
                   type="button"
@@ -89,7 +98,7 @@
                   Next
                 </button>
                 <button
-                  v-if="quizQuestionStatus && tour.isLast"
+                  v-if="quizQuestionStatus && tour.isLast && api.forcePause"
                   @click="tour.stop"
                   class="btn btn-dark"
                 >
@@ -112,8 +121,10 @@ import GameDashboard from '@/components/GameDashboard.vue';
 import { TutorialAPI } from '@/api/tutorial/request';
 import { TutorialSteps } from '@/repositories/tutorial';
 import { Step } from '@/types/tutorial';
-import {CURATOR, Phase, QuizQuestionData, RESEARCHER} from 'shared/types';
+import { CURATOR, Phase, QuizQuestionData, RESEARCHER } from 'shared/types';
 import * as _ from 'lodash';
+
+import Steps from '@/api/tutorial/tutorialSteps';
 
 require('vue-tour/dist/vue-tour.css');
 Vue.use(VueTour);
@@ -140,301 +151,15 @@ export default class Tutorial extends Vue {
     onStop: this.stopTourCallback
   };
 
-  steps: Array<Step> = [
-    {
-      target: '.tour-container-upkeep',
-      content:
-        'The game starts with Upkeep at 100. This represents the habitat at peak ' +
-        'condition and maintenance. However, at the start of every round, the ' +
-        'community loses 25 Upkeep.',
-      params: {
-        placement: 'bottom'
-      }
-    },
-    {
-      target: '.tour-container-upkeep',
-      content:
-        'At the start of a round, if Upkeep is lower than 65, reveal 2 events; ' +
-        'and if Upkeep is lower than 35 reveal 3 events. Conditions on Mars ' +
-        'are tough!',
-      params: {
-        placement: 'bottom'
-      }
-    },
-    {
-      target: '.tour-round',
-      content:
-        'The game progresses in rounds. There is an indefinite number ' +
-        'of rounds per game. Therefore, the game can end at any time given ' +
-        'that Upkeep does not decline to zero.',
-      params: {
-        placement: 'right'
-      }
-    },
-    {
-      target: '.tour-container-top',
-      content:
-        'There are multiple phases in a round: Events, Invest, Trade, Purchase ' +
-        ' and Discard. Each phase has a time limit of 5 minutes.',
-      params: {
-        placement: 'bottom'
-      }
-    },
-    {
-      target: '.tour-container-bottom',
-      content:
-        'Events are revealed at the beginning of every round during the events phase. ' +
-        'Some events can be more involved and require players to fulfill tasks ' +
-        'that include voting. Mars is unpredictable; many different events can happen!',
-      params: {
-        placement: 'bottom'
-      },
-      stateTransform: {
-        SET_GAME_PHASE: Phase.events,
-        ADD_TO_EVENTS:{
-          id: 'changingTides',
-          name: 'Changing Tides',
-          effect: `Each player discards all their Accomplishment cards and draws 1 new Accomplishment card. (They still draw up to a total of three cards at the end of this round.)`,
-          flavorText: `Create contingencies for your contingencies and contingencies for those contingencies. Then prepare to improvise.`,
-          clientViewHandler: 'NO_CHANGE' as const,
-          duration: 1},
-      },
-    },
-    {
-      target: '.tour-phase',
-      content:
-        'Events persisting multiple rounds or relevant to the current round ' +
-        'will populate here.',
-      params: {
-        placement: 'left'
-      },
 
-
-    },
-    {
-      target: '.tour-notification',
-      content:
-        'You will be notifed about events and changes in Upkeep via notifications ' +
-        'that pop up here. Hover over then notification to close it.',
-      params: {
-        placement: 'bottom'
-      },
-      stateTransform: {
-        CREATE_NOTIFICATION:`Notifcations can be removed by clicking on them!`,
-      },
-    },
-    {
-      target: '.tour-marslog',
-      content:
-        'Any events and changes in upkeep that occur will be recorded in the Mars Log ' +
-        'for your reference.',
-      params: {
-        placement: 'right'
-      },
-
-      stateTransform: {
-        ADD_TO_MARS_LOG:{
-          performedBy: RESEARCHER,
-          category:'Event',
-          content: `This event is important!`,
-          timestamp:new Date().getTime(),
-        },
-      },
-    },
-    {
-      target: '.tour-profile',
-      content:
-        'This is your role and score during the game. Your role determines ' +
-        'the investments in influence currency you can make and the accomplishments ' +
-        'that you can purchase toward the end of a round.',
-      params: {
-        placement: 'bottom'
-      },
-      stateTransform: {
-        CLEAR_NOTIFICATION:1,
-      }
-
-    },
-    {
-      target: '.tour-investments',
-      content:
-        'During the Investment phase, you may invest your timeblocks into ' +
-        'Upkeep or purchase Influence currency.',
-      params: {
-        placement: 'right'
-      },
-
-      stateTransform: {
-        SET_GAME_PHASE:Phase.invest,
-        SET_INVESTMENT_COSTS:{data:{
-          culture: 1001,
-          finance: 1001,
-          government: 3,
-          legacy: 3,
-          science: 2,
-          upkeep: 1
-        }, role: this.$store.getters.player.role},
-
-      },
-    },
-    {
-      target: '.tour-investments',
-      content:
-        'You are allocated 10 timeblocks (unless something says otherwise) to ' +
-        'spend each round. You can spend timeblocks on Upkeep or on ' +
-        'Influence. Remember that you have 5 minutes to invest your timeblocks.',
-      params: {
-        placement: 'top'
-      },
-
-    },
-    // gamedashboard > containers > ContainerInvestments.vue
-    {
-      target: '.tour-investments',
-      content:
-        'During the Investment phase, you can invest your timeblocks to obtain ' +
-        'influence currency and use your influence currency inventory to trade ' +
-        'with other players in the Trade phase.',
-      params: {
-        placement: 'right'
-      },
-
-    },
-    // gamedashboard > containers > ContainerInvestments.vue
-    {
-      target: '.tour-investments',
-      content:
-        'You can also use your timeblocks to keep your habitat from collapsing by ' +
-        'investing your timeblocks in Upkeep.',
-      params: {
-        placement: 'right'
-      },
-
-    },
-    // gamedashboard > containers > ContainerInvestments.vue
-    {
-      target: '.tour-investments',
-      content:
-        'The cost of the card in timeblocks in located at the bottom right corner ' +
-        'of the card. Use the increment (+) button on a card to invest your timeblocks or ' +
-        'the decrement (-) button to remove timeblocks from an investment ' +
-        'that you have made.',
-      params: {
-        placement: 'right'
-      },
-
-    },
-    {
-      target: '.tour-donebtn',
-      content:
-        'You can hit the Done button to surrender your time if you have finished investing ' +
-        'your timeblocks before the 5 minutes for the Investment Phase is up.',
-      params: {
-        placement: 'right'
-      },
-
-    },
-    {
-      target: '.tour-profile-investments',
-      content: 'After you finish investing your timeblocks, your inventory will update here.',
-      params: {
-        placement: 'right'
-      },
-
-    },
-    {
-      target: '.tour-chat',
-      content:
-        'During gameplay, you can communicate with other players in your habitat ' +
-        'to plan and strategize.',
-      params: {
-        placement: 'left'
-      },
-      stateTransform:{
-        ADD_TO_CHAT:{
-            message:'Welcome to the port of mars!',
-            role: CURATOR,
-            dateCreated:new Date().getTime(),
-            round:0,
-        }
-      },
-    },
-    {
-      target: '.tour-players',
-      content:
-        'These are the other residents of Port of Mars. There are 5 roles in the game: ' +
-        'Researcher, Pioneer, Curator, Entrepreneur, and Politician.',
-      params: {
-        placement: 'left'
-      }
-    },
-    {
-      target: '.tour-players',
-      content:
-        'The player score is displayed on the far left; name in the middle; ' +
-        'and character art on the right.',
-      params: {
-        placement: 'left'
-      }
-    },
-    // gamedashboard > containers > ContainerPhase.vue
-    {
-      target: '.tour-trade',
-      content:
-        'During the Trade Phase, you can trade influence currency with other ' +
-        'players. Trading allows you to obtain other influence currencies ' +
-        'that you yourself cannnot invest in so that you can purchase ' +
-        'accomplishments later in the game.',
-      params: {
-        placement: 'right'
-      },
-
-      stateTransform: {
-        SET_GAME_PHASE: Phase.trade,
-        SET_INVENTORY: {
-          data: {
-            culture: 0,
-            finance: 5,
-            government: 5,
-            legacy: 0,
-            science: 5,
-            upkeep: 0,
-          },
-          role: this.$store.getters.player.role,
-        },
-        ADD_TO_TRADES: {
-          id: 'mock-trade',
-          trade: {
-            from: {
-              role: CURATOR,
-              resourceAmount: {
-                culture: 1,
-                finance: 1,
-                government: 1,
-                legacy: 1,
-                science: 1,
-              }
-            },
-            to: {
-              role: this.$store.getters.player.role,
-              resourceAmount: {
-                culture: 1,
-                finance: 1,
-                government: 1,
-                legacy: 1,
-                science: 1,
-              }
-            }
-          }
-        }
-      },
-    }
-  ];
-
+  steps: Array<Step> = Steps;
+  
+  
 
   private dataFetched: boolean = false;
+  //private steps: Array<Step> = [];
   private quizQuestions: Array<QuizQuestionData> = [];
-  private currentQuizQuestionId: number = -1;
+  private currentTutorialElementId: string = '';
 
   // TODO: Need to reset
   private currentQuizQuestionSelection: number = -1;
@@ -445,18 +170,20 @@ export default class Tutorial extends Vue {
 
   created() {
     this.api.connect(this.$store);
-    this.steps = new TutorialSteps(this.playerRole).steps;
+    //this.steps = new TutorialSteps(this.playerRole).steps;
     // console.log(this.steps);
   }
 
   async mounted() {
-    this.dataFetched = await this.getQuizQuestions();
-    console.log('DATA FETCHED (true/false): ', this.dataFetched);
-    if (this.dataFetched) {
-      this.showModal();
-    } else {
-      // TODO: Handle server error
+    if(process.env.NODE_ENV != 'test'){
+      this.dataFetched = await this.getQuizQuestions();
+      if (this.dataFetched) {
+        this.showModal();
+      } else {
+        // TODO: Handle server error
+      }
     }
+    
   }
 
   // NOTE: Initialize
@@ -517,44 +244,35 @@ export default class Tutorial extends Vue {
     await this.$el
       .querySelector(`.${this.TOUR_ACTIVE_CLASS}`)!
       .classList.remove(this.TOUR_ACTIVE_CLASS);
-
-    // TODO: NAVIGATE TO QUIZ
-    console.log('TOUR FINISHED, NAVIGATE TO QUIZ');
-    this.navigateToQuiz();
   }
 
   // NOTE: Integrate Quiz
 
   private isQuizQuestion(currentStep: number): boolean {
-    console.log('CURRENT STEP: ', currentStep);
-    console.log('CURRENT STEP: ', this.steps[currentStep]);
-    if (this.steps[currentStep].params.quizQuestionId !== undefined) {
-      this.currentQuizQuestionId = this.steps[
+    if (this.steps[currentStep].params.tutorialElementId !== undefined) {
+      this.currentTutorialElementId = this.steps[
         currentStep
-      ].params.quizQuestionId!;
-      console.log('QUIZ QUESTION ID: ', this.currentQuizQuestionId);
+      ].params.tutorialElementId!;
       return true;
     }
-    console.log('NOT A QUIZ QUESTION');
     return false;
   }
 
   get currentQuizQuestion() {
     const index = _.findIndex(this.quizQuestions, [
-      'id',
-      this.currentQuizQuestionId
+      'tutorialElementId',
+      this.currentTutorialElementId
     ]);
     return this.quizQuestions[index];
   }
 
   private handleQuizQuestionSelection(index: number): void {
     this.currentQuizQuestionSelection = index;
-    console.log('CURRENT SELECTION: ', this.currentQuizQuestionSelection);
   }
 
   async handleCheckQuizQuestion() {
     const result = await this.checkQuizQuestion(
-      this.currentQuizQuestionId,
+      this.currentQuizQuestion.id,
       this.currentQuizQuestionSelection
     );
     if (result) {
@@ -563,7 +281,6 @@ export default class Tutorial extends Vue {
     } else {
       this.quizQuestionStatusMessage = 'Incorrect, please try again.';
     }
-    console.log(this.quizQuestionStatusMessage);
   }
 
   private selectionStyle(index: number) {
@@ -573,21 +290,51 @@ export default class Tutorial extends Vue {
     return {};
   }
 
-  private async navigateToQuiz() {
-    // this.$router.push({ name: 'TutorialQuiz' });
+  // NOTE: Server Fetches
+
+  private async registerUser(): Promise<boolean> {
+    const quizUrl = `${process.env.SERVER_URL_HTTP}/quiz`;
+    
+    
+    const jwt = localStorage.getItem('jwt');
+    if (!jwt) {
+      const error = 'No user token found.';
+      this.notifyUserOfError(error);
+      return false;
+    }
+
+    const data: object = { token: jwt };
+    const response = await fetch(quizUrl, {
+      method: 'POST',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify(data)
+    });
+    if (response.status === 200) {
+      return true;
+    } else {
+      const error = await response.json();
+      this.notifyUserOfError(error);
+    }
+    return false;
   }
 
   private async getQuizQuestions(): Promise<boolean> {
     const quizUrl = `${process.env.SERVER_URL_HTTP}/quiz`;
-    const data: any = { username: 'bob' };
-    const jwt = localStorage.getItem('jwt');
-    if (!jwt) {
+
+    if (!this.registerUser()) {
       return false;
     }
+
     const response = await this.$ajax.get(quizUrl);
     if (response.status === 200) {
       const data: Array<QuizQuestionData> = await response.json();
       this.quizQuestions = data;
+      // console.log(this.quizQuestions);
       return true;
     } else {
       const error = await response.json();
@@ -597,11 +344,25 @@ export default class Tutorial extends Vue {
   }
 
   private async checkQuizQuestion(
-    id: number,
-    choice: number
+    questionId: number,
+    answer: number
   ): Promise<boolean> {
-    const quizUrl = `${process.env.SERVER_URL_HTTP}/quiz/${id}`;
-    const response = await this.$ajax.post(quizUrl, { choice });
+    const quizUrl = `${process.env.SERVER_URL_HTTP}/quiz/${questionId}`;
+    const jwt = localStorage.getItem('jwt');
+    // const response = await this.$ajax.post(quizUrl, { choice });
+
+    const data: object = { token: jwt, answer: answer };
+    const response = await fetch(quizUrl, {
+      method: 'POST',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify(data)
+    });
+
     if (response.status === 200) {
       const data = await response.json();
       return data;

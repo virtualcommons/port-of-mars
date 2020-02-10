@@ -1,9 +1,9 @@
 import Mutations from '@/store/mutationFolder';
 import { State } from '@/store/state';
 
-export type MockRoom = { send: (data: any) => void; leave: () => void };
+export type MockRoom = { send: (data: any) => void, leave: () => void }
 
-export type StateTransform = {[K in keyof typeof Mutations]?: Parameters<typeof Mutations[K]>[1]}
+export type StateTransform = {[K in keyof typeof Mutations]?: Parameters<typeof Mutations[K]>[1] } | {'required':boolean }
 
 
 export interface Step {
@@ -11,7 +11,7 @@ export interface Step {
   content: string;
   params: {
     placement: string;
-    quizQuestionId?: number;
+    tutorialElementId?: string;
   };
-  stateTransform?: StateTransform;
+  stateTransform?: Array<StateTransform> ;
 }
