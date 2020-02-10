@@ -12,8 +12,7 @@ import {
   PIONEER,
   GameData,
   MarsLogMessageData,
-  QuizQuestionData,
-  QuizResultPackage
+  QuizQuestionData
 } from 'shared/types';
 import _ from 'lodash';
 
@@ -84,8 +83,8 @@ export function defaultPendingInvestment(): ResourceCostData {
 }
 
 export interface User {
-  username: string
-  passedQuiz: boolean
+  username: string;
+  passedQuiz: boolean;
 }
 
 export interface State extends GameData {
@@ -97,9 +96,8 @@ export interface State extends GameData {
   loading: boolean;
   activeNotifications: Array<String>;
   quizQuestions: Array<QuizQuestionData>;
-  quizResults: Array<QuizResultPackage>;
   eventCardsVisible: Array<any>;
-  user: User
+  user: User;
 }
 
 export const initialStoreState: State = {
@@ -123,12 +121,11 @@ export const initialStoreState: State = {
   activeNotifications: [],
   // eventView: 'ACCOMPLISHMENT_SELECT_PURCHASED',
   quizQuestions: [],
-  quizResults: [],
   eventCardsVisible: [],
   user: {
     username: '',
     passedQuiz: false
-  },
+  }
 };
 
 function tutorialNotifications() {

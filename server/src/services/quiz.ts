@@ -1,5 +1,4 @@
 import { QuizQuestions, QuizQuestionAnswers } from '@/data/QuizQuestions';
-import { QuizQuestionData } from 'shared/types';
 import { QuizSubmission } from '@/entity/QuizSubmission';
 import { Quiz } from '@/entity/Quiz';
 import { Question } from '@/entity/Question';
