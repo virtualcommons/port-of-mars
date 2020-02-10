@@ -1,6 +1,6 @@
 <template>
   <div class="trade-r">
-    <div class="trade-partner">
+    <div class="trade-partner tour-trade-partner">
       <p>Who would you like to trade with?</p>
       <div class="person-wrapper">
         <div class="trade-person-icons" v-for="(player, index) in otherPlayers" :key="index">
@@ -24,14 +24,14 @@
         :resourceReader="handleSendResources"
         text="You give up"
         mode="outgoing"
-        class="options-block"
+        class="options-block tour-give-up"
         v-bind:class="{'inactive-action': !name}"
       />
-      <TradeOptions
+      <TradeOptions 
         :resourceReader="handleReciveResources"
         text="In exchange for"
         mode="incoming"
-        class="options-block"
+        class="options-block tour-get-in-return"
         v-bind:class="{'inactive-action': !name}"
       />
     </div>

@@ -22,10 +22,10 @@
                 <button v-if="!tour.isFirst" @click="tour.previousStep" class="btn btn-dark">
                   Previous
                 </button>
-                <button v-if="!tour.isLast" @click="tour.nextStep" class="btn btn-dark">
+                <button v-if="!tour.isLast && api.forcePause" @click="tour.nextStep" ref="sadSol" class="btn btn-dark nextButton">
                   Next
                 </button>
-                <button v-else-if="tour.isLast" @click="tour.stop" class="btn btn-dark">
+                <button v-else-if="tour.isLast && api.forcePause" @click="tour.stop" class="btn btn-dark">
                   Finish
                 </button>
               </div>
@@ -67,12 +67,11 @@ export default class Tutorial extends Vue {
   @Provide()
   api: TutorialAPI = new TutorialAPI();
 
+  
+
   async created(){
     this.api.connect(this.$store);
-    
   }
-
-
 
   // class for the active step element
   TOUR_ACTIVE_CLASS: string = 'tour-active';
@@ -109,6 +108,7 @@ export default class Tutorial extends Vue {
     (this as any).$tours.gameTour.start();
   }
   startTourCallback() {
+    
     const currentStepElement = this.$el.querySelector(this.steps[0].target);
     // add in-tour class to body
     this.$el.classList.add(this.BODY_TOUR);
@@ -130,9 +130,7 @@ export default class Tutorial extends Vue {
     
     previousStepElement!.classList.add(this.TOUR_ACTIVE_CLASS);
   }
-  async nextStepCallback(currentStep: number) {
-  
-    
+  async nextStepCallback(currentStep: number){
     this.api.statePush(this.steps[currentStep+1].stateTransform);
     await this.$nextTick();
     await this.$nextTick();

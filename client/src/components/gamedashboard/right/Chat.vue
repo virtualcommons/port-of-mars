@@ -10,7 +10,7 @@
         <div
           class="message"
           v-for="message in messages"
-          :key="message.dateCreated"
+          :key="message.dateCreated + Math.random()"
         >
           <p class="member">
             {{ message.role }}

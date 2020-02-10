@@ -17,7 +17,7 @@ describe('Tutorial.vue', () => {
 
   it.each(steps.map(s => [s.target, s.stateTransform]))
     (`attribute with className %s exists`, async (target, transform) => {
-      api.statePush(transform as StateTransform|undefined);
+      api.statePush(transform as Array<StateTransform> |undefined);
       await Vue.nextTick();
 
       const el = wrapper.vm.$el.querySelector(target as string);

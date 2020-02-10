@@ -1,5 +1,5 @@
 <template>
-  <div class="modal-confirmation">
+  <div class="modal-confirmation tour-confirmation">
     <div class="content">
       <p class="header">Are you sure?</p>
       <div class="details">

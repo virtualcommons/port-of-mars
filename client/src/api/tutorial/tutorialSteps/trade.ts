@@ -5,16 +5,13 @@ const steps:Array<Step> = [
     {
       target: '.tour-trade',
       content:
-        'During the Trade Phase, you can trade influence currency with other ' +
-        'players. Trading allows you to obtain other influence currencies ' +
-        'that you yourself cannnot invest in so that you can purchase ' +
-        'accomplishments later in the game.',
+        `The next phase is the trading phase! Here you will trade for resources that you need to purchase accomplishment cards!`,
       params: {
         placement: 'right'
       },
       
-      stateTransform:{
-        SET_GAME_PHASE:Phase.trade,
+      stateTransform:[
+        {SET_GAME_PHASE:Phase.trade,
         SET_INVENTORY:{
           data:{
             culture: 0,
@@ -50,10 +47,80 @@ const steps:Array<Step> = [
               }
             }
           }
-        }
+        }}
+      ],
+    },
+    {
+      target: '.tour-trade-item',
+      content: `All active trades are listed here. If you are on the reciving end of a trade, you will have the option to either 
+      accept or decline the trade.
+      If you are the sender of a trade, you only have the option to cancel the request.`,
+      params:{
+        placement: 'top',
+      }
+    },
+    {
+      target: '.tour-chat',
+      content:`Before making trade requests, you should talk about your plans in chat!`,
+      params: {
+        placement: 'left'
       },
+      stateTransform:[
+        {ADD_TO_CHAT:{
+            message:'Hey Researcher, can I have 2 science in exchange for 1 legacy?',
+            role:`Pioneer`,
+            dateCreated:new Date().getTime(),
+            round:0,
+        }},
+        {ADD_TO_CHAT:{
+          message:'Sure, let me make that trade right now!',
+          role:`Researcher`,
+          dateCreated:new Date().getTime(),
+          round:0,
+      }},
+      ],
+    },
+    {
+      target: '.tour-trade-partner',
+      content: `To request a trade, you must first select a person to trade with.`,
+      params:{
+        placement:'bottom',
+      }
+    },
+    {
+      target: '.tour-give-up',
+      content: `Then, you select the amount of each resource you are willing to give up.
+      You cannot send more resources than you currently have.`,
+      params:{
+        placement:'bottom',
+      }
+    },
+    {
+      target: '.tour-give-up',
+      content: `Then, you select the amount of each resource you are willing to give up.
+      You cannot send more resources than you currently have.`,
+      params:{
+        placement:'bottom',
+      }
+    },
+    {
+      target: '.tour-get-in-return',
+      content: `Finally, you choose how much of any resource that you want.`,
+      params:{
+        placement:'bottom',
+      }
+    },
+    {
+      target: '.tour-container-bottom',
+      content: `Hit send to see your trade in action!`,
+      params:{
+        placement:'left'
+      },
+      stateTransform:[
+        {required:true}
+      ]
+    },
 
-    }
 ]
 
 export default steps; 
