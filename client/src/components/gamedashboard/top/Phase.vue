@@ -58,6 +58,7 @@ export default class Phase extends Vue {
     this.$root.$emit('closeModal');
     
     if (this.$store.state.phase === s.Phase.events) {
+      
       return `Event ${this.$tstore.state.marsEventsProcessed + 1}`;
     }
     

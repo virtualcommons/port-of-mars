@@ -5,14 +5,12 @@ const steps:Array<Step> = [
     {
       target: '.tour-container-bottom',
       content:
-        'Events are revealed at the beginning of every round during the events phase. ' +
-        'Some events can be more involved and require players to fulfill tasks ' +
-        'that include voting. Mars is unpredictable; many different events can happen!',
+        `The first phase in a round is the Events phase! This is where the events of the round will be revealed.`,
       params: {
         placement: 'bottom'
       },
-      stateTransform: {
-        SET_GAME_PHASE:Phase.events,
+      stateTransform: [
+        {SET_GAME_PHASE:Phase.events,
         ADD_TO_EVENTS:{
           id: 0,
           name: 'Changing Tides',
@@ -22,7 +20,22 @@ const steps:Array<Step> = [
           clientViewHandler: 'NO_CHANGE' as const,
           clientActionHandler: undefined,
           duration: 1},
-      },
+      }],
+    },
+    {
+      target: '.tour-container-bottom',
+      content: 'Some events can be more involved and require players to fulfill tasks ' +
+      'that include voting. Mars is unpredictable; many different events can happen!',
+      params:{
+        placement: 'bottom'
+      }
+    },
+    {
+      target: '.tour-container-upkeep',
+      content: `Keep in mind that as upkeep drops, the amount of events occur will increase!`,
+      params:{
+        placement:'bottom'
+      }
     },
     {
         target: '.tour-phase',

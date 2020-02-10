@@ -1,6 +1,6 @@
 <template>
   <div class="trade-request-component">
-    <div class="trade-partner">
+    <div class="trade-partner tour-trade-partner">
       <p class="trade-title">
         Trade With:
         <span :class="{ none: name === '' }">{{
@@ -32,14 +32,14 @@
         :resourceReader="handleSendResources"
         text="You give up"
         mode="outgoing"
-        class="options-block"
+        class="options-block tour-give-up"
         v-show="name"
       />
-      <TradeOptions
+      <TradeOptions 
         :resourceReader="handleReciveResources"
         text="In exchange for"
         mode="incoming"
-        class="options-block"
+        class="options-block tour-get-in-return"
         v-show="name"
       />
     </div>

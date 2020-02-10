@@ -80,7 +80,7 @@
                   Check Answer
                 </button>
                 <button
-                  v-if="quizQuestionStatus && !tour.isLast"
+                  v-if="quizQuestionStatus && !tour.isLast && api.forcePause"
                   @click="tour.nextStep"
                   class="btn btn-dark"
                   type="button"
@@ -89,7 +89,7 @@
                   Next
                 </button>
                 <button
-                  v-if="quizQuestionStatus && tour.isLast"
+                  v-if="quizQuestionStatus && tour.isLast && api.forcePause"
                   @click="tour.stop"
                   class="btn btn-dark"
                 >
@@ -116,6 +116,7 @@ import {CURATOR, Phase, QuizQuestionData, RESEARCHER} from 'shared/types';
 import * as _ from 'lodash';
 
 import Steps from '@/api/tutorial/tutorialSteps';
+
 
 require('vue-tour/dist/vue-tour.css');
 Vue.use(VueTour);

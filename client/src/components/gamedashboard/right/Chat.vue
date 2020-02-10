@@ -9,7 +9,7 @@
         </p>
         <div
           v-for="message in messages"
-          :key="message.dateCreated"
+          :key="message.dateCreated + Math.random()"
           :style="getMessageColor(message)"
           class="message"
         >

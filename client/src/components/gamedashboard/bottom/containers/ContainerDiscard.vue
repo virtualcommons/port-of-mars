@@ -15,7 +15,7 @@
           </p>
         </div>
       </div>
-      <div class="actions">
+      <div class="actions tour-discard">
         <BarDiscard
           v-for="accomplishment in purchasableAccomplishments"
           :key="accomplishment.id"

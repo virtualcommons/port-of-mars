@@ -1,5 +1,5 @@
 <template>
-  <div class="container-accomplishments">
+  <div class="container-accomplishments tour-accomplishments">
     <div class="topbar">
       <p class="title">Your Accomplishments</p>
       <div class="buttons">

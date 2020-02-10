@@ -9,7 +9,7 @@
       </div>
     </div>
 
-    <div class="trade-list">
+    <div class="trade-list tour-trade-item">
       <div class="section-text">
         <p>Active Trade List</p>
       </div>
