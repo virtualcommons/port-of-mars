@@ -272,18 +272,48 @@ export default class Tutorial extends Vue {
 
   // NOTE: Server Fetches
 
-  private async getQuizQuestions(): Promise<boolean> {
+  private async registerUser(): Promise<boolean> {
     const quizUrl = `${process.env.SERVER_URL_HTTP}/quiz`;
-    const data: any = { username: 'bob' };
     const jwt = localStorage.getItem('jwt');
+
     if (!jwt) {
+      const error = 'No user token found.';
+      this.notifyUserOfError(error);
       return false;
     }
+
+    const data: object = { token: jwt };
+    const response = await fetch(quizUrl, {
+      method: 'POST',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify(data)
+    });
+    if (response.status === 200) {
+      return true;
+    } else {
+      const error = await response.json();
+      this.notifyUserOfError(error);
+    }
+    return false;
+  }
+
+  private async getQuizQuestions(): Promise<boolean> {
+    const quizUrl = `${process.env.SERVER_URL_HTTP}/quiz`;
+
+    if (!this.registerUser()) {
+      return false;
+    }
+
     const response = await this.$ajax.get(quizUrl);
     if (response.status === 200) {
       const data: Array<QuizQuestionData> = await response.json();
       this.quizQuestions = data;
-      console.log(this.quizQuestions);
+      // console.log(this.quizQuestions);
       return true;
     } else {
       const error = await response.json();
@@ -293,11 +323,25 @@ export default class Tutorial extends Vue {
   }
 
   private async checkQuizQuestion(
-    id: number,
-    choice: number
+    questionId: number,
+    answer: number
   ): Promise<boolean> {
-    const quizUrl = `${process.env.SERVER_URL_HTTP}/quiz/${id}`;
-    const response = await this.$ajax.post(quizUrl, { choice });
+    const quizUrl = `${process.env.SERVER_URL_HTTP}/quiz/${questionId}`;
+    const jwt = localStorage.getItem('jwt');
+    // const response = await this.$ajax.post(quizUrl, { choice });
+
+    const data: object = { token: jwt, answer: answer };
+    const response = await fetch(quizUrl, {
+      method: 'POST',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify(data)
+    });
+
     if (response.status === 200) {
       const data = await response.json();
       return data;

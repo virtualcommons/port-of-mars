@@ -1,12 +1,14 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import {
-  checkQuizQuestion,
+  checkQuestionResponse,
   getQuizByName,
   createQuizSubmission,
-  getQuizQuestionsbyQuizId
+  getQuizQuestionsbyQuizId,
+  getRecentQuizSubmission,
+  createQuestionResponse
 } from '@/services/quiz';
-import {getUserByJWT, getUserByUsername} from '@/services/account';
-import {auth} from "@/routes/middleware";
+import { getUserByJWT, getUserByUsername } from '@/services/account';
+import { auth } from '@/routes/middleware';
 
 export const quizRouter = Router();
 
@@ -14,22 +16,16 @@ const DEFAULT_QUIZ = 'TutorialQuiz';
 
 quizRouter.post('/', auth, async (req, res, next) => {
   try {
-    const token: string = (req as any).token;
+    const token: string = (req as any).body.token;
     let user = await getUserByJWT(token);
     let quiz = await getQuizByName(DEFAULT_QUIZ);
 
     if (user && quiz) {
-      // NOTE: create quiz submission
       const userId = user.id;
       const quizId = quiz.id;
-
-      // TODO: Check if quiz submission exists (within 30 minutes);
       const submission = await createQuizSubmission(userId, quizId);
-      console.log(submission);
     } else {
-      res
-        .status(403)
-        .json(`User account with username ${req} not found.`);
+      res.status(403).json(`User not found.`);
     }
   } catch (e) {
     next(e);
@@ -51,14 +47,34 @@ quizRouter.get('/', async (req, res, next) => {
   }
 });
 
-quizRouter.post('/:id', (req, res, next) => {
-  // console.log(req.headers);
-  // let user = await getUserByJWT()
+quizRouter.post('/:questionId', async (req, res, next) => {
+  try {
+    const token: string = (req as any).body.token;
+    const user = await getUserByJWT(token);
 
-  const { id } = req.params;
-  const { choice } = req.body;
-  const idAsInt: number = parseInt(id);
-  const choiceAsInt: number = parseInt(choice);
-  const correct = checkQuizQuestion(idAsInt, choiceAsInt);
-  res.json(correct);
+    if (user) {
+      const questionId = parseInt(req.params.questionId);
+      const userId = user.id;
+      const submission = await getRecentQuizSubmission(userId);
+      // console.log('SUBMISSION: ', submission);
+      const submissionId = submission!.id;
+      const answer = parseInt(req.body.answer);
+      const questionResponse = await createQuestionResponse(
+        questionId,
+        submissionId,
+        answer
+      );
+      // console.log('QUESTION RESPONSE: ', questionResponse);
+
+      const quiz = await getQuizByName(DEFAULT_QUIZ);
+      const quizId = quiz!.id;
+
+      const correct = await checkQuestionResponse(questionResponse, quizId);
+      res.json(correct);
+    } else {
+      res.status(403).json(`User not found.`);
+    }
+  } catch (e) {
+    next(e);
+  }
 });
