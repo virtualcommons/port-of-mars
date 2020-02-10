@@ -22,7 +22,7 @@
                 <button v-if="!tour.isFirst" @click="tour.previousStep" class="btn btn-dark">
                   Previous
                 </button>
-                <button v-if="!tour.isLast && api.forcePause" @click="tour.nextStep" ref="sadSol" class="btn btn-dark nextButton">
+                <button v-if="!tour.isLast && api.forcePause" @click="tour.nextStep" class="btn btn-dark nextButton">
                   Next
                 </button>
                 <button v-else-if="tour.isLast && api.forcePause" @click="tour.stop" class="btn btn-dark">
