@@ -1,24 +1,45 @@
-import { QuizQuestions, QuizQuestionAnswers } from '@/data/QuizQuestions';
 import { QuizSubmission } from '@/entity/QuizSubmission';
 import { Quiz } from '@/entity/Quiz';
 import { Question } from '@/entity/Question';
+import { QuestionResponse } from '@/entity/QuestionResponse';
 import { getConnection } from '@/util';
-import { getUserByUsername } from '@/services/account';
 import { Equal } from 'typeorm';
-
 import * as _ from 'lodash';
 
-export function checkQuizQuestion(
-  id: number,
-  optionSubmitted: number
-): boolean {
-  const questionIndex = _.findIndex(QuizQuestionAnswers, ['id', id]);
-  const correctAnswer = QuizQuestionAnswers[questionIndex].correct;
+export async function checkQuestionResponse(
+  questionResponse: QuestionResponse,
+  quizId: number
+): Promise<boolean> {
+  const answer = questionResponse.answer;
+  const questionId = questionResponse.questionId;
 
-  if (optionSubmitted === correctAnswer) {
+  const question = await getConnection()
+    .getRepository(Question)
+    .createQueryBuilder('question')
+    .where('question.quizId = :quizId AND question.id = :id', {
+      quizId: quizId,
+      id: questionId
+    })
+    .getOne();
+
+  if (answer === question!.correctAnswer) {
     return true;
   }
   return false;
+}
+
+export async function createQuestionResponse(
+  questionId: number,
+  submissionId: number,
+  answer: number
+): Promise<QuestionResponse> {
+  const questionResponse = new QuestionResponse();
+  questionResponse.questionId = questionId;
+  questionResponse.submissionId = submissionId;
+  questionResponse.answer = answer;
+  return await getConnection()
+    .getRepository(QuestionResponse)
+    .save(questionResponse);
 }
 
 export async function createQuizSubmission(
@@ -49,5 +70,13 @@ export async function getQuizQuestionsbyQuizId(
     });
 }
 
-// GET: authenticate user -> get user id -> get quiz id -> create quiz submission -> send quiz questions
-// POST: authenticate user? -> create question response -> save question response into quiz submission
+// TODO: Get most recent submission
+export async function getRecentQuizSubmission(
+  userId: number
+): Promise<QuizSubmission | undefined> {
+  return await getConnection()
+    .getRepository(QuizSubmission)
+    .findOne({
+      userId: Equal(userId)
+    });
+}
