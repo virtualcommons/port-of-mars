@@ -1,5 +1,3 @@
-import { MarsEvent } from '@/rooms/game/state'
-
 export const RESEARCHER: 'Researcher' = 'Researcher';
 export const CURATOR: 'Curator' = 'Curator';
 export const PIONEER: 'Pioneer' = 'Pioneer';
@@ -110,7 +108,6 @@ export interface MarsEventData {
 
 export interface MarsEventDataDeckItem extends MarsEventData {
   copies: number;
-  elapsed: number;
 }
 
 export interface MarsLogMessageData {
@@ -174,7 +171,7 @@ export interface GameData {
   phase: Phase;
   upkeep: number;
   messages: Array<ChatMessageData>;
-  marsEvents: Array<MarsEvent>;
+  marsEvents: Array<MarsEventData>;
   logs: Array<MarsLogMessageData>;
   marsEventsProcessed: number;
   tradeSet: TradeSetData;

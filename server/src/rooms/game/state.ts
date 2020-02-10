@@ -485,14 +485,16 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
   }
 }
 
-export interface MarsEvent extends Schema {
-  deckItem: MarsEventDataDeckItem;
+export interface MarsEvent extends Schema, MarsEventData {
+  copies: number;
+  elapsed: number = 0;
+  duration: number;
   
   finalize(game: GameState): void;
-  toJSON(): any;
-  updateElapsed(): void;
-  resetElapsed(): void;
-  complete(): boolean;
+  toJSON(): MarsEvent;
+  updateElapsed(elapsed: number): void;
+  resetElapsed(elapsed: number): void;
+  complete(elapsed: number): boolean;
 };
 
 export interface MarsEventDeckSerialized {
@@ -899,7 +901,6 @@ export class GameState extends Schema implements GameData {
   @type([ChatMessage])
   messages = new ArraySchema<ChatMessage>();
 
-  // @type([MarsEventDataset])
   marsEvents = new ArraySchema<MarsEvent>();
 
   @type("number")
@@ -948,16 +949,16 @@ export class GameState extends Schema implements GameData {
 
   updateMarsEventsElapsed(): void {
     for(const event of this.marsEvents) {
-      if(event.deckItem.elapsed < event.deckItem.duration) {
-        event.updateElapsed();
-        console.log('EVENT UPDATED: ', event.deckItem.name);
+      if(event.elapsed < event.duration) {
+        event.updateElapsed(event.elapsed);
+        console.log('EVENT UPDATED: ', event.name);
       }
     }
   }
 
   handleIncomplete(): void {
     this.marsEvents = this.marsEvents.filter((event) => {
-      return !event.complete();
+      return !event.complete(event.elapsed);
     });
   }
 

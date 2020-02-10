@@ -20,21 +20,27 @@ export function getAllMarsEvents() {
 
 const expandCopies = (marsEventsCollection: Array<MarsEvent>) =>
   _.flatMap(marsEventsCollection, (event: MarsEvent) => {
-    const copies = event.deckItem.copies;
+    const copies = event.copies;
     return _.map(_.range(copies), i => _.cloneDeep(event));
-
   });
 
 class PersonalGain extends Schema implements MarsEvent {
-  private static eventData = {
+  public static eventData = {
     name: 'Personal Gain',
     copies: 5,
     effect: `Each player secretly chooses Yes or No. Then, simultaneously, players reveal their choice. Players who chose yes gain 6 extra Time Blocks this round, but destroy 6 Upkeep.`,
     flavorText: `It's easy to take risks when others are incurring the costs.`,
     clientViewHandler: 'VOTE_YES_NO' as const,
-    duration: 1,
-    elapsed: 0
+    duration: 1
   };
+
+  // Mars Event properties
+  name = PersonalGain.eventData.name;
+  copies = PersonalGain.eventData.copies;
+  effect = PersonalGain.eventData.effect;
+  flavorText = PersonalGain.eventData.flavorText;
+  clientViewHandler = PersonalGain.eventData.clientViewHandler;
+  duration = PersonalGain.eventData.duration;
 
   private static defaultResponse: boolean = true;
 
@@ -47,17 +53,18 @@ class PersonalGain extends Schema implements MarsEvent {
   };
 
   deckItem = PersonalGain.eventData;
+  elapsed = 0;
 
-  updateElapsed(): void {
-    this.deckItem.elapsed++;
+  updateElapsed(elapsed: number): void {
+    elapsed += 1;
   }
 
-  resetElapsed(): void {
-    this.deckItem.elapsed = 0;
+  resetElapsed(elapsed: number): void {
+    elapsed = 0;
   }
 
-  complete(): boolean {
-    if(this.deckItem.elapsed === this.deckItem.duration) {
+  complete(elapsed: number): boolean {
+    if(elapsed === this.duration) {
       return true;
     } else {
       return false;
@@ -75,6 +82,10 @@ class PersonalGain extends Schema implements MarsEvent {
     game.subtractUpkeep(subtractedUpkeep);
     // create new MarsLogMessage
     // game.logs.push(message)
+  }
+
+  toJSON(): MarsEvent {
+    return new PersonalGain();
   }
 }
 
