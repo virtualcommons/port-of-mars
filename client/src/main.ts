@@ -15,7 +15,6 @@ Vue.use(Ajax);
 
 Vue.config.productionTip = false;
 
-console.log({SENTRY_DSN: process.env.SENTRY_DSN});
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   integrations: [new Integrations.Vue({Vue, attachProps: true})],

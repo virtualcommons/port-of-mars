@@ -46,6 +46,7 @@
    "dependencies": {
       "@colyseus/monitor": "^0.11.7",
       "@colyseus/social": "^0.11.6",
+      "@sentry/node": "^5.12.3",
       "async-mutex": "^0.1.4",
       "bcryptjs": "^2.4.3",
       "colyseus": "^0.11.22",
