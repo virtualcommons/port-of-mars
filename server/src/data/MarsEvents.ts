@@ -279,16 +279,24 @@ const _marsEvents: Array<[MarsEventData, number]> = [
   }, 1]
 ];
 
+type PersonalGainData = { [role in Role]: boolean };
+
 class PersonalGain {
+  constructor(votes?: PersonalGainData) {
+    this.votes = votes ?? _.cloneDeep(PersonalGain.defaultVotes);
+  }
+
   private static defaultResponse: boolean = true;
 
-  private votes: { [role in Role]: boolean } = {
+  private static defaultVotes: PersonalGainData = {
     [CURATOR]: PersonalGain.defaultResponse,
     [ENTREPRENEUR]: PersonalGain.defaultResponse,
     [PIONEER]: PersonalGain.defaultResponse,
     [POLITICIAN]: PersonalGain.defaultResponse,
     [RESEARCHER]: PersonalGain.defaultResponse
   };
+
+  private votes: PersonalGainData;
 
   finalize(game: GameState) {
     let subtractedUpkeep = 0;
