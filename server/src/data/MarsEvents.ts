@@ -45,11 +45,12 @@ export class MarsEvent extends Schema implements MarsEventData {
   @type('number')
   duration: number;
 
-  state: { finalize(gameState: GameState): void };
+  state: { finalize(gameState: GameState): void, toJSON(): object };
 
-  toJSON(): MarsEventData {
+  toJSON(): MarsEventData & { elapsed: number, state: any } {
+    const {id, name, effect, flavorText, clientViewHandler, elapsed, duration} = this;
     return {
-      ...this
+      id, name, effect, flavorText, clientViewHandler, elapsed, duration, state: this.state.toJSON()
     }
   }
 
@@ -279,36 +280,6 @@ const _marsEvents: Array<[MarsEventData, number]> = [
 ];
 
 class PersonalGain {
-  public static eventData: MarsEventData = {
-    id: 'PersonalGain',
-    name: 'Personal Gain',
-    effect: `Each player secretly chooses Yes or No. Then, simultaneously, players reveal their choice. Players who chose yes gain 6 extra Time Blocks this round, but destroy 6 Upkeep.`,
-    flavorText: `It's easy to take risks when others are incurring the costs.`,
-    clientViewHandler: 'VOTE_YES_NO' as const,
-    duration: 1
-  };
-
-  @type('string')
-  id = PersonalGain.eventData.id;
-
-  @type('string')
-  name = PersonalGain.eventData.name;
-
-  @type('string')
-  effect = PersonalGain.eventData.effect;
-
-  @type('string')
-  flavorText = PersonalGain.eventData.flavorText;
-
-  @type('string')
-  clientViewHandler = PersonalGain.eventData.clientViewHandler;
-
-  @type('number')
-  duration = PersonalGain.eventData.duration;
-
-  @type('number')
-  elapsed = 0;
-
   private static defaultResponse: boolean = true;
 
   private votes: { [role in Role]: boolean } = {
@@ -318,18 +289,6 @@ class PersonalGain {
     [POLITICIAN]: PersonalGain.defaultResponse,
     [RESEARCHER]: PersonalGain.defaultResponse
   };
-
-  updateElapsed(elapsed: number): void {
-    elapsed += 1;
-  }
-
-  resetElapsed(elapsed: number): void {
-    elapsed = 0;
-  }
-
-  complete(elapsed: number): boolean {
-    return elapsed === this.duration;
-  }
 
   finalize(game: GameState) {
     let subtractedUpkeep = 0;
@@ -344,8 +303,8 @@ class PersonalGain {
     // game.logs.push(message)
   }
 
-  toJSON(): MarsEventData {
-    return {id: this.id, ...PersonalGain.eventData};
+  toJSON(): { [role in Role]: boolean } {
+    return this.votes;
   }
 }
 
