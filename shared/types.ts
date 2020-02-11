@@ -84,7 +84,7 @@ export const PHASE_LABELS: { [k in Phase]: string } = {
 };
 
 export type EventClientView =
-  // EventNoChange (TODO)
+// EventNoChange (TODO)
   | 'NO_CHANGE'
   | 'AUDIT'
   | 'DISABLE_CHAT'
@@ -168,7 +168,7 @@ export interface GameData {
   phase: Phase;
   upkeep: number;
   messages: Array<ChatMessageData>;
-  marsEvents: Array<MarsEventSerialized>;
+  marsEvents: Array<MarsEventData>;
   logs: Array<MarsLogMessageData>;
   marsEventsProcessed: number;
   tradeSet: TradeSetData;
@@ -192,8 +192,4 @@ export interface QuizResultPackage {
   userAnswer: number;
   correctAnswer: number;
   correct: boolean;
-}
-
-export interface MarsEventSerialized extends MarsEventData {
-  id: string;
 }

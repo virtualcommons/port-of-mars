@@ -7,7 +7,7 @@ import {
   ENTREPRENEUR,
   GameData,
   InvestmentData,
-  MarsEventSerialized,
+  MarsEventData,
   MarsLogMessageData,
   Phase,
   PIONEER,
@@ -486,7 +486,7 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
 }
 
 export interface MarsEventDeckSerialized {
-  deck: Array<MarsEventSerialized>
+  deck: Array<MarsEventData>
   position: number
 }
 
@@ -791,7 +791,7 @@ interface GameSerialized {
   upkeep: number
   logs: Array<MarsLogMessageData>
   messages: Array<ChatMessageData>
-  marsEvents: Array<MarsEventSerialized>
+  marsEvents: Array<MarsEventData>
   marsEventsProcessed: number
   marsEventDeck: MarsEventDeckSerialized
   tradeSet: TradeSetData

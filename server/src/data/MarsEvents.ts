@@ -3,7 +3,6 @@ import {
   CURATOR,
   ENTREPRENEUR, EventClientView,
   MarsEventData,
-  MarsEventSerialized,
   PIONEER,
   POLITICIAN,
   RESEARCHER,
@@ -14,7 +13,7 @@ import {GameState, MarsEventDeckSerialized} from '@/rooms/game/state';
 import {ArraySchema, Schema, type} from '@colyseus/schema';
 
 export class MarsEvent extends Schema implements MarsEventData {
-  constructor(data: MarsEventSerialized) {
+  constructor(data: MarsEventData) {
     super();
     this.id = data.id;
     this.name = data.name;
@@ -48,7 +47,7 @@ export class MarsEvent extends Schema implements MarsEventData {
 
   state: { finalize(gameState: GameState): void };
 
-  toJSON(): MarsEventSerialized {
+  toJSON(): MarsEventData {
     return {
       ...this
     }
@@ -67,12 +66,12 @@ export class MarsEvent extends Schema implements MarsEventData {
   };
 }
 
-export function getAllMarsEvents(): Array<[MarsEventSerialized, number]> {
+export function getAllMarsEvents(): Array<[MarsEventData, number]> {
   return marsEvents;
 }
 
-const expandCopies = (marsEventsCollection: Array<[MarsEventSerialized, number]>) =>
-  _.flatMap(marsEventsCollection, ([event, copies]: [MarsEventSerialized, number]) => {
+const expandCopies = (marsEventsCollection: Array<[MarsEventData, number]>) =>
+  _.flatMap(marsEventsCollection, ([event, copies]: [MarsEventData, number]) => {
     return _.map(_.range(copies), i => _.cloneDeep(event));
   });
 
@@ -83,13 +82,13 @@ const expandCopies = (marsEventsCollection: Array<[MarsEventSerialized, number]>
 //   console.log({map: _map});
 //   _map[constructor.constructor.name] = constructor;
 // }
-// export function constructMarsEvent(data: MarsEventSerialized): MarsEvent {
+// export function constructMarsEvent(data: MarsEventData): MarsEvent {
 //   return new _map[data.id];
 // }
 //
 // @addDispatch
 class PersonalGain {
-  public static eventData: MarsEventSerialized = {
+  public static eventData: MarsEventData = {
     id: 'PersonalGain',
     name: 'Personal Gain',
     effect: `Each player secretly chooses Yes or No. Then, simultaneously, players reveal their choice. Players who chose yes gain 6 extra Time Blocks this round, but destroy 6 Upkeep.`,
@@ -154,13 +153,13 @@ class PersonalGain {
     // game.logs.push(message)
   }
 
-  toJSON(): MarsEventSerialized {
+  toJSON(): MarsEventData {
     return { id: this.id, ...PersonalGain.eventData };
   }
 }
 
 class MarsEventsDeck {
-  deck: Array<MarsEventSerialized>;
+  deck: Array<MarsEventData>;
   position: number;
 
   constructor() {
@@ -173,7 +172,7 @@ class MarsEventsDeck {
     this.position = data.position;
   }
 
-  toJSON(): {deck: Array<MarsEventSerialized>, position: number} {
+  toJSON(): {deck: Array<MarsEventData>, position: number} {
     return {
       deck: this.deck,
       position: this.position
@@ -191,6 +190,6 @@ class MarsEventsDeck {
   }
 }
 
-const marsEvents: Array<[MarsEventSerialized, number]> = [[PersonalGain.eventData, 5]];
+const marsEvents: Array<[MarsEventData, number]> = [[PersonalGain.eventData, 5]];
 
 export { PersonalGain, MarsEventsDeck };
