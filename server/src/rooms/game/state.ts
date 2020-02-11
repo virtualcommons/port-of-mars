@@ -938,11 +938,7 @@ export class GameState extends Schema implements GameData {
 
   updateMarsEventsElapsed(): void {
     for(const event of this.marsEvents) {
-      const elapsed = event.elapsed ?? 0;
-      if(elapsed ?? 0 < event.duration) {
-        event.updateElapsed();
-        console.log('EVENT UPDATED: ', event.name);
-      }
+      event.updateElapsed();
     }
   }
 

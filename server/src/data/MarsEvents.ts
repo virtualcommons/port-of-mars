@@ -189,10 +189,6 @@ class MarsEventsDeck {
     const cardsInds = _.map(_.range(this.position, this.position + nCardsToDraw), ind => ind % this.deck.length);
     return _.map(cardsInds, ind => this.deck[ind]);
   }
-
-  public drawAmount(amount: number): Array<MarsEvent> | undefined {
-    return undefined;
-  }
 }
 
 const marsEvents: Array<[MarsEventSerialized, number]> = [[PersonalGain.eventData, 5]];
