@@ -14,9 +14,9 @@ import {GameState, MarsEventDeckSerialized} from '@/rooms/game/state';
 import {ArraySchema, Schema, type} from '@colyseus/schema';
 
 export class MarsEvent extends Schema implements MarsEventData {
-  constructor(data: MarsEventData) {
+  constructor(data: MarsEventSerialized) {
     super();
-    this.id = this.constructor.name;
+    this.id = data.id;
     this.name = data.name;
     this.effect = data.effect;
     this.flavorText = data.flavorText;
