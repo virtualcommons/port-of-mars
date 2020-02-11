@@ -98,7 +98,7 @@ describe('a game state snapshot', () => {
 });
 
 describe('a personal gain event', () => {
-  const gameState = new GameState(mockGameInitOpts());
+  const gameState = new GameState(mockGameInitOpts(new ConsolePersister()).userRoles);
   it('gets players who voted yes', () => {
     
   });

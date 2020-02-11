@@ -3,7 +3,7 @@ import {
   InvestmentData,
   Phase,
   TradeData,
-  MarsLogMessageData
+  Role
 } from 'shared/types';
 import { MarsEvent, Player } from '@/rooms/game/state';
 import {
@@ -244,16 +244,16 @@ export class ResetGameCmd implements Command {
   }
 }
 
-export class PersonalGainCmd implements Command {
+export class PersonalGainVotes implements Command {
   constructor(
-    private results: object,
+    private results: Role,
     private game: Game,
     private player: Player
   ) {}
 
-  static fromReq(r: req.PersonalGainCmdData, game: Game, client: Client) {
+  static fromReq(r: req.PersonalGainVotesData, game: Game, client: Client) {
     const p = game.getPlayerByClient(client);
-    return new PersonalGainCmd(r.value, game, p);
+    return new PersonalGainVotes(r.value, game, p);
   }
 
   execute(): Array<GameEvent> {

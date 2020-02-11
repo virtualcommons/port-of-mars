@@ -1,5 +1,4 @@
-import { InvestmentData, TradeData } from './types';
-import { PersonalGain } from '@/data/MarsEvents';
+import { InvestmentData, TradeData, Role } from './types';
 
 export interface SendChatMessageData {
   kind: 'send-chat-message';
@@ -48,9 +47,9 @@ export interface SetPlayerReadinessData {
   value: boolean;
 }
 
-export interface PersonalGainCmdData {
+export interface PersonalGainVotesData {
   kind: 'personal-gain';
-  value: PersonalGain;
+  value: Role;
 }
 
 export type Requests =
@@ -64,4 +63,4 @@ export type Requests =
   | SendTradeRequestData
   | AcceptTradeRequestData
   | RejectTradeRequestData
-  | PersonalGainCmdData;
+  | PersonalGainVotesData;

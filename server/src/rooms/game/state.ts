@@ -487,7 +487,7 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
 
 export interface MarsEvent extends Schema, MarsEventData {
   copies: number;
-  elapsed: number = 0;
+  elapsed?: number;
   duration: number;
   
   finalize(game: GameState): void;
@@ -697,8 +697,8 @@ export class Player extends Schema implements PlayerData {
       }
 
       while(leftOvers < 10){
-        leftOverInvestments.upkeep +=1
-        leftOvers+=1
+        leftOverInvestments.upkeep += 1
+        leftOvers += 1
       }
     }
 

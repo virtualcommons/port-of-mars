@@ -13,7 +13,7 @@ import {
   SetPlayerReadinessCmd,
   TimeInvestmentCmd,
   RejectTradeRequestCmd,
-  PersonalGainCmd
+  PersonalGainVotes
 } from '@/rooms/game/commands';
 import {Game, GameOpts, Persister} from '@/rooms/game/types';
 import { Command } from '@/rooms/game/commands/types';
@@ -80,7 +80,7 @@ export class GameRoom extends Room<GameState> implements Game {
       case 'send-trade-request':
         return SendTradeRequestCmd.fromReq(r, this, client);
       case 'personal-gain':
-        return PersonalGainCmd.fromReq(r, this, client);
+        return PersonalGainVotes.fromReq(r, this, client);
     }
   }
 

@@ -219,6 +219,7 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
     game.phase = Phase.events;
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
 
+    // handle incomplete events 
     game.handleIncomplete();
     game.marsEvents.push(...marsEvents);
 
