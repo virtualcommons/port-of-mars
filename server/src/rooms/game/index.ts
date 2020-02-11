@@ -58,6 +58,7 @@ export class GameRoom extends Room<GameState> implements Game {
   }
 
   prepareRequest(r: Requests, client: Client): Command {
+    console.log({r});
     switch (r.kind) {
       case 'send-chat-message':
         return SendChatMessageCmd.fromReq(r, this, client);

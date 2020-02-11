@@ -15,12 +15,12 @@ import {
   Accomplishment,
   ChatMessage,
   GameState,
-  MarsEvent,
   Player,
   Trade,
   MarsLogMessage
 } from '@/rooms/game/state';
 import { GameEvent } from '@/rooms/game/events/types';
+import {MarsEvent} from "@/data/MarsEvents";
 
 abstract class GameEventWithData implements GameEvent {
   abstract kind: string;
@@ -214,7 +214,7 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
     game.upkeep = game.nextRoundUpkeep();
 
     const cards = game.marsEventDeck.peek(game.upkeep);
-    const marsEvents = cards.map(e => e);
+    const marsEvents = cards.map(e => new MarsEvent(e));
 
     game.phase = Phase.events;
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
@@ -371,6 +371,6 @@ export class PersonalGainVoted extends GameEventWithData {
   }
 
   apply(game: GameState) {
-    game.currentEvent.finalize(game);
+    game.currentEvent.state.finalize(game);
   }
 }

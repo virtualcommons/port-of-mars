@@ -99,15 +99,12 @@ export type EventClientView =
   | 'ACCOMPLISHMENT_SELECT_PURCHASED';
 
 export interface MarsEventData {
+  id: string;
   name: string;
   effect: string;
   flavorText: string;
   clientViewHandler: EventClientView;
   duration: number;
-}
-
-export interface MarsEventDataDeckItem extends MarsEventData {
-  copies: number;
 }
 
 export interface MarsLogMessageData {
@@ -171,7 +168,7 @@ export interface GameData {
   phase: Phase;
   upkeep: number;
   messages: Array<ChatMessageData>;
-  marsEvents: Array<MarsEventData>;
+  marsEvents: Array<MarsEventSerialized>;
   logs: Array<MarsLogMessageData>;
   marsEventsProcessed: number;
   tradeSet: TradeSetData;
@@ -195,4 +192,8 @@ export interface QuizResultPackage {
   userAnswer: number;
   correctAnswer: number;
   correct: boolean;
+}
+
+export interface MarsEventSerialized extends MarsEventData {
+  id: string;
 }

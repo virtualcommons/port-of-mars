@@ -1,45 +1,123 @@
 import * as _ from 'lodash';
 import {
-  Role,
-  ROLES,
   CURATOR,
-  ENTREPRENEUR,
+  ENTREPRENEUR, EventClientView,
+  MarsEventData,
+  MarsEventSerialized,
   PIONEER,
   POLITICIAN,
-  RESEARCHER
+  RESEARCHER,
+  Role,
+  ROLES
 } from 'shared/types';
-import { MarsEvent, MarsEventDeckSerialized, GameState } from '@/rooms/game/state';
-import { Schema } from '@colyseus/schema';
-import { eventNames } from 'cluster';
-import { mediumaquamarine } from 'color-name';
-import { Game } from '@/entity/Game';
+import {GameState, MarsEventDeckSerialized} from '@/rooms/game/state';
+import {ArraySchema, Schema, type} from '@colyseus/schema';
 
-export function getAllMarsEvents() {
+export class MarsEvent extends Schema implements MarsEventData {
+  constructor(data: MarsEventData) {
+    super();
+    this.id = this.constructor.name;
+    this.name = data.name;
+    this.effect = data.effect;
+    this.flavorText = data.flavorText;
+    this.clientViewHandler = data.clientViewHandler;
+    this.duration = data.duration;
+    this.state = new PersonalGain();
+  }
+
+  @type('string')
+  id: string;
+
+  @type('string')
+  name: string;
+
+  @type('string')
+  effect: string;
+
+  @type('string')
+  flavorText: string;
+
+  @type('string')
+  clientViewHandler: EventClientView;
+
+  @type('number')
+  elapsed: number = 0;
+
+  @type('number')
+  duration: number;
+
+  state: { finalize(gameState: GameState): void };
+
+  toJSON(): MarsEventSerialized {
+    return {
+      ...this
+    }
+  }
+
+  updateElapsed(): void {
+    this.elapsed += 1;
+  }
+
+  resetElapsed(): void {
+    this.elapsed = 0;
+  };
+
+  get complete(): boolean {
+    return this.elapsed >= this.duration;
+  };
+}
+
+export function getAllMarsEvents(): Array<[MarsEventSerialized, number]> {
   return marsEvents;
 }
 
-const expandCopies = (marsEventsCollection: Array<MarsEvent>) =>
-  _.flatMap(marsEventsCollection, (event: MarsEvent) => {
-    const copies = event.copies;
+const expandCopies = (marsEventsCollection: Array<[MarsEventSerialized, number]>) =>
+  _.flatMap(marsEventsCollection, ([event, copies]: [MarsEventSerialized, number]) => {
     return _.map(_.range(copies), i => _.cloneDeep(event));
   });
 
-class PersonalGain extends Schema implements MarsEvent {
-  public static eventData = {
+
+// const _map: { [id: string]: { new(): MarsEvent } } = {};
+// function addDispatch(constructor: { new(): MarsEvent } & Function) {
+//   console.log({constructor});
+//   console.log({map: _map});
+//   _map[constructor.constructor.name] = constructor;
+// }
+// export function constructMarsEvent(data: MarsEventSerialized): MarsEvent {
+//   return new _map[data.id];
+// }
+//
+// @addDispatch
+class PersonalGain {
+  public static eventData: MarsEventSerialized = {
+    id: 'PersonalGain',
     name: 'Personal Gain',
-    copies: 5,
     effect: `Each player secretly chooses Yes or No. Then, simultaneously, players reveal their choice. Players who chose yes gain 6 extra Time Blocks this round, but destroy 6 Upkeep.`,
     flavorText: `It's easy to take risks when others are incurring the costs.`,
     clientViewHandler: 'VOTE_YES_NO' as const,
     duration: 1
   };
 
+  @type('string')
+  id = PersonalGain.eventData.id;
+
+  @type('string')
   name = PersonalGain.eventData.name;
-  copies = PersonalGain.eventData.copies;
+
+  @type('string')
   effect = PersonalGain.eventData.effect;
+
+  @type('string')
   flavorText = PersonalGain.eventData.flavorText;
+
+  @type('string')
   clientViewHandler = PersonalGain.eventData.clientViewHandler;
+
+  @type('number')
   duration = PersonalGain.eventData.duration;
+
+  @type('number')
+  elapsed = 0;
 
   private static defaultResponse: boolean = true;
 
@@ -60,11 +138,7 @@ class PersonalGain extends Schema implements MarsEvent {
   }
 
   complete(elapsed: number): boolean {
-    if(elapsed === this.duration) {
-      return true;
-    } else {
-      return false;
-    }
+    return elapsed === this.duration;
   }
 
   finalize(game: GameState) {
@@ -80,13 +154,13 @@ class PersonalGain extends Schema implements MarsEvent {
     // game.logs.push(message)
   }
 
-  toJSON(): MarsEvent {
-    return new PersonalGain();
+  toJSON(): MarsEventSerialized {
+    return { id: this.id, ...PersonalGain.eventData };
   }
 }
 
 class MarsEventsDeck {
-  deck: Array<MarsEvent>;
+  deck: Array<MarsEventSerialized>;
   position: number;
 
   constructor() {
@@ -99,7 +173,7 @@ class MarsEventsDeck {
     this.position = data.position;
   }
 
-  toJSON(): {deck: Array<MarsEvent>, position: number} {
+  toJSON(): {deck: Array<MarsEventSerialized>, position: number} {
     return {
       deck: this.deck,
       position: this.position
@@ -110,7 +184,7 @@ class MarsEventsDeck {
     this.position = (this.position + cardsUsed) % this.deck.length;
   }
 
-  public peek(upkeep: number): Array<MarsEvent> {
+  public peek(upkeep: number): Array<MarsEventData> {
     const nCardsToDraw = upkeep < 33 ? 3 : upkeep < 67 ? 2 : 1;
     const cardsInds = _.map(_.range(this.position, this.position + nCardsToDraw), ind => ind % this.deck.length);
     return _.map(cardsInds, ind => this.deck[ind]);
@@ -121,6 +195,6 @@ class MarsEventsDeck {
   }
 }
 
-const marsEvents = [new PersonalGain()];
+const marsEvents: Array<[MarsEventSerialized, number]> = [[PersonalGain.eventData, 5]];
 
 export { PersonalGain, MarsEventsDeck };

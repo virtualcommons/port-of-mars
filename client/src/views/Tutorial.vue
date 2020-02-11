@@ -109,7 +109,7 @@ import { Component, Provide, Vue } from 'vue-property-decorator';
 import VueTour from 'vue-tour';
 import TourModal from '@/components/tutorial/TourModal.vue';
 import GameDashboard from '@/components/GameDashboard.vue';
-import { TutorialAPI } from '@/api/tutorial';
+import { TutorialAPI } from '@/api/tutorial/request';
 import { TutorialSteps } from '@/repositories/tutorial';
 import { Step } from '@/types/tutorial';
 import {CURATOR, Phase, QuizQuestionData, RESEARCHER} from 'shared/types';
@@ -192,13 +192,11 @@ export default class Tutorial extends Vue {
       stateTransform: {
         SET_GAME_PHASE: Phase.events,
         ADD_TO_EVENTS:{
-          id: 0,
+          id: 'changingTides',
           name: 'Changing Tides',
           effect: `Each player discards all their Accomplishment cards and draws 1 new Accomplishment card. (They still draw up to a total of three cards at the end of this round.)`,
           flavorText: `Create contingencies for your contingencies and contingencies for those contingencies. Then prepare to improvise.`,
-          serverActionHandler: undefined,
           clientViewHandler: 'NO_CHANGE' as const,
-          clientActionHandler: undefined,
           duration: 1},
       },
     },

@@ -5,10 +5,9 @@ import {
   ChatMessageData,
   CURATOR,
   ENTREPRENEUR,
-  GameData, Investment,
+  GameData,
   InvestmentData,
-  MarsEventData,
-  EventClientView,
+  MarsEventSerialized,
   MarsLogMessageData,
   Phase,
   PIONEER,
@@ -16,20 +15,21 @@ import {
   PlayerSetData,
   POLITICIAN,
   RESEARCHER,
-  RESOURCES,
   Resource,
   ResourceAmountData,
   ResourceCostData,
   Role,
-  ROLES, TradeAmountData, TradeData, TradeSetData,
-  MarsEventDataDeckItem
+  ROLES,
+  TradeAmountData,
+  TradeData,
+  TradeSetData
 } from "shared/types";
 import _ from "lodash";
 import {getRandomIntInclusive} from "@/util";
 import {getAccomplishmentByID, getAccomplishmentIDs} from "@/data/Accomplishment";
 import {GameEvent} from "@/rooms/game/events/types";
-import {Game, GameOpts} from "@/rooms/game/types";
-import {MarsEventsDeck} from '@/data/MarsEvents';
+import {GameOpts} from "@/rooms/game/types";
+import {MarsEvent, MarsEventsDeck} from '@/data/MarsEvents';
 
 export class ChatMessage extends Schema implements ChatMessageData {
   constructor(msg: ChatMessageData) {
@@ -485,20 +485,8 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
   }
 }
 
-export interface MarsEvent extends Schema, MarsEventData {
-  copies: number;
-  elapsed?: number;
-  duration: number;
-  
-  finalize(game: GameState): void;
-  toJSON(): MarsEvent;
-  updateElapsed(elapsed: number): void;
-  resetElapsed(elapsed: number): void;
-  complete(elapsed: number): boolean;
-};
-
 export interface MarsEventDeckSerialized {
-  deck: Array<MarsEvent>
+  deck: Array<MarsEventSerialized>
   position: number
 }
 
@@ -803,7 +791,7 @@ interface GameSerialized {
   upkeep: number
   logs: Array<MarsLogMessageData>
   messages: Array<ChatMessageData>
-  marsEvents: Array<MarsEvent>
+  marsEvents: Array<MarsEventSerialized>
   marsEventsProcessed: number
   marsEventDeck: MarsEventDeckSerialized
   tradeSet: TradeSetData
@@ -843,7 +831,7 @@ export class GameState extends Schema implements GameData {
     const chatMessages = _.map(data.messages, m => new ChatMessage(m));
     this.messages.splice(0, this.messages.length, ...chatMessages);
 
-    const marsEvents = _.map(data.marsEvents, e => e);
+    const marsEvents = _.map(data.marsEvents, e => new MarsEvent(e));
     this.marsEvents.splice(0, this.marsEvents.length, ...marsEvents);
 
     this.marsEventsProcessed = data.marsEventsProcessed;
@@ -901,6 +889,7 @@ export class GameState extends Schema implements GameData {
   @type([ChatMessage])
   messages = new ArraySchema<ChatMessage>();
 
+  @type([MarsEvent])
   marsEvents = new ArraySchema<MarsEvent>();
 
   @type("number")
@@ -949,8 +938,9 @@ export class GameState extends Schema implements GameData {
 
   updateMarsEventsElapsed(): void {
     for(const event of this.marsEvents) {
-      if(event.elapsed < event.duration) {
-        event.updateElapsed(event.elapsed);
+      const elapsed = event.elapsed ?? 0;
+      if(elapsed ?? 0 < event.duration) {
+        event.updateElapsed();
         console.log('EVENT UPDATED: ', event.name);
       }
     }
@@ -958,7 +948,7 @@ export class GameState extends Schema implements GameData {
 
   handleIncomplete(): void {
     this.marsEvents = this.marsEvents.filter((event) => {
-      return !event.complete(event.elapsed);
+      return !event.complete;
     });
   }
 

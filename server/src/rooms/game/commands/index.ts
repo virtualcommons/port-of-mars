@@ -5,7 +5,7 @@ import {
   TradeData,
   Role
 } from 'shared/types';
-import { MarsEvent, Player } from '@/rooms/game/state';
+import { Player } from '@/rooms/game/state';
 import {
   AcceptTradeRequest,
   BoughtAccomplishment,
@@ -30,6 +30,7 @@ import { Client } from 'colyseus';
 import { Game } from '@/rooms/game/types';
 import { Command } from '@/rooms/game/commands/types';
 import { GameEvent } from '@/rooms/game/events/types';
+import {MarsEvent} from "@/data/MarsEvents";
 
 export class SendChatMessageCmd implements Command {
   constructor(
