@@ -75,18 +75,6 @@ const expandCopies = (marsEventsCollection: Array<[MarsEventData, number]>) =>
     return _.map(_.range(copies), i => _.cloneDeep(event));
   });
 
-
-// const _map: { [id: string]: { new(): MarsEvent } } = {};
-// function addDispatch(constructor: { new(): MarsEvent } & Function) {
-//   console.log({constructor});
-//   console.log({map: _map});
-//   _map[constructor.constructor.name] = constructor;
-// }
-// export function constructMarsEvent(data: MarsEventData): MarsEvent {
-//   return new _map[data.id];
-// }
-//
-// @addDispatch
 class PersonalGain {
   public static eventData: MarsEventData = {
     id: 'PersonalGain',
