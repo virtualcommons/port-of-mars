@@ -34,7 +34,6 @@ class PersonalGain extends Schema implements MarsEvent {
     duration: 1
   };
 
-  // Mars Event properties
   name = PersonalGain.eventData.name;
   copies = PersonalGain.eventData.copies;
   effect = PersonalGain.eventData.effect;
@@ -51,9 +50,6 @@ class PersonalGain extends Schema implements MarsEvent {
     [POLITICIAN]: PersonalGain.defaultResponse,
     [RESEARCHER]: PersonalGain.defaultResponse
   };
-
-  deckItem = PersonalGain.eventData;
-  elapsed = 0;
 
   updateElapsed(elapsed: number): void {
     elapsed += 1;
