@@ -21,7 +21,7 @@ export class MarsEvent extends Schema implements MarsEventData {
     this.flavorText = data.flavorText;
     this.clientViewHandler = data.clientViewHandler;
     this.duration = data.duration;
-    this.state = new PersonalGain();
+    this.state = constructState(data.id);
   }
 
   @type('string')
@@ -45,7 +45,7 @@ export class MarsEvent extends Schema implements MarsEventData {
   @type('number')
   duration: number;
 
-  state: { finalize(gameState: GameState): void, toJSON(): object };
+  state: MarsEventState;
 
   toJSON(): MarsEventData & { elapsed: number, state: any } {
     const {id, name, effect, flavorText, clientViewHandler, elapsed, duration} = this;
@@ -279,9 +279,35 @@ const _marsEvents: Array<[MarsEventData, number]> = [
   }, 1]
 ];
 
+interface MarsEventStateConstructor {
+  new(data?: any): MarsEventState
+}
+
+interface MarsEventState {
+  finalize(game: GameState): void
+
+  toJSON(): any
+}
+
 type PersonalGainData = { [role in Role]: boolean };
 
-class PersonalGain {
+const _dispatch: { [id: string]: MarsEventStateConstructor } = {};
+
+function assocEventId(constructor: MarsEventStateConstructor) {
+  _dispatch[_.camelCase(constructor.name)] = constructor;
+}
+
+function constructState(id: string) {
+  const constructor = _dispatch[id];
+  if (constructor) {
+    return new constructor();
+  } else {
+    throw Error(`${id} does not have a corresponding state class`)
+  }
+}
+
+@assocEventId
+class PersonalGain implements MarsEventState {
   constructor(votes?: PersonalGainData) {
     this.votes = votes ?? _.cloneDeep(PersonalGain.defaultVotes);
   }
