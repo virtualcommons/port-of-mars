@@ -1,6 +1,4 @@
 import {
-  ChatMessageData,
-  MarsEventData,
   Phase,
   RESEARCHER,
   Role,
@@ -13,7 +11,6 @@ import {
   POLITICIAN,
   PIONEER,
   GameData,
-  EventClientView,
   MarsLogMessageData,
   QuizQuestionData,
   QuizResultPackage
@@ -99,7 +96,6 @@ export interface State extends GameData {
   layout: string;
   loading: boolean;
   activeNotifications: Array<String>;
-  // eventView: EventClientView;
   quizQuestions: Array<QuizQuestionData>;
   quizResults: Array<QuizResultPackage>;
   eventCardsVisible: Array<any>;
