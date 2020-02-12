@@ -49,7 +49,7 @@ export interface SetPlayerReadinessData {
 
 export interface PersonalGainVotesData {
   kind: 'personal-gain';
-  value: Role;
+  value: { role: Role, vote: boolean };
 }
 
 export type Requests =

@@ -17,7 +17,7 @@
         <div class="outer-wrapper">
           <div class="wrapper">
             <BarAccomplishment
-              v-for="accomplishment in sortedPurchasableAccomplishments"
+              v-for="accomplishment in purchasableAccomplishments"
               :key="accomplishment.label + 2"
               :accomplishment="accomplishment"
             />

@@ -10,7 +10,8 @@ import {
   DiscardAccomplishmentCardData,
   SendTradeRequestData,
   AcceptTradeRequestData,
-  RejectTradeRequestData
+  RejectTradeRequestData,
+  PersonalGainVotesData
 } from 'shared/requests';
 import {
   AccomplishmentData,
@@ -89,6 +90,11 @@ export class GameRequestAPI {
 
   public setPlayerReadiness(value: boolean) {
     const msg: SetPlayerReadinessData = { kind: 'set-player-readiness', value };
+    this.send(msg);
+  }
+
+  public savePersonalGainVote(value: { role: Role, vote: boolean }) {
+    const msg: PersonalGainVotesData = { kind: 'personal-gain', value };
     this.send(msg);
   }
 }

@@ -55,7 +55,7 @@ export class PersonalGain implements MarsEventState {
     this.votes = votes ?? _.cloneDeep(PersonalGain.defaultVotes);
   }
 
-  private static defaultResponse: boolean = true;
+  private static defaultResponse: boolean = false;
 
   private static defaultVotes: PersonalGainData = {
     [CURATOR]: PersonalGain.defaultResponse,
@@ -66,6 +66,10 @@ export class PersonalGain implements MarsEventState {
   };
 
   private votes: PersonalGainData;
+
+  updateVotes(player: Role, vote: boolean) {
+    this.votes[player] = vote;
+  }
 
   finalize(game: GameState) {
     let subtractedUpkeep = 0;

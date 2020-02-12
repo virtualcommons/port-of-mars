@@ -9,26 +9,21 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, InjectReactive, Inject } from 'vue-property-decorator';
 import { Role, ROLES, CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER } from 'shared/types';
+import { GameRequestAPI } from '@/api/game/request';
 
 @Component({})
 export default class VoteYesNo extends Vue {
-  private defaultVote: boolean = true;
-  private voteResults: { [role in Role]: boolean} = {
-    [CURATOR]: this.defaultVote,
-    [ENTREPRENEUR]: this.defaultVote,
-    [PIONEER]: this.defaultVote,
-    [POLITICIAN]: this.defaultVote,
-    [RESEARCHER]: this.defaultVote
-  };
+  @Inject() api!: GameRequestAPI;
 
   get playerRole() {
       return this.$tstore.state.role;
   }
 
   private handleVote(selection: boolean): void {
-    this.voteResults[this.playerRole] = selection; 
+    const voteResults = { role: this.playerRole, vote: selection }
+    this.api.savePersonalGainVote(voteResults);
   }
   
 }

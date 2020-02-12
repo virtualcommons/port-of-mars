@@ -9,7 +9,8 @@ import {
   ROLES,
   Resource,
   TradeData,
-  CURATOR
+  CURATOR,
+  ENTREPRENEUR
 } from 'shared/types';
 import {
   Accomplishment,
@@ -20,7 +21,9 @@ import {
   MarsLogMessage
 } from '@/rooms/game/state';
 import { GameEvent } from '@/rooms/game/events/types';
-import {MarsEvent} from "@/rooms/game/state/marsEvents/MarsEvent";
+import {MarsEvent} from '@/rooms/game/state/marsEvents/MarsEvent';
+import {PersonalGain} from '@/rooms/game/state/marsEvents/state';
+
 
 abstract class GameEventWithData implements GameEvent {
   abstract kind: string;
@@ -331,11 +334,13 @@ export class StateSnapshotTaken implements GameEvent {
 export class PersonalGainVoted extends GameEventWithData {
   kind = 'personal-gain-voted';
 
-  constructor(public data: any) {
+  constructor(public data: { role: Role, vote: boolean }) {
     super();
   }
 
   apply(game: GameState) {
-    game.currentEvent.state.finalize(game);
+    const event = new PersonalGain();
+    event.updateVotes(this.data.role, this.data.vote);
+    game.players[this.data.role].updateReadiness(true);
   }
 }
