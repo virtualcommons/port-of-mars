@@ -17,3 +17,5 @@ export const expandCopies = (marsEventsCollection: Array<[MarsEventData, number]
   _.flatMap(marsEventsCollection, ([event, copies]: [MarsEventData, number]) => {
     return _.map(_.range(copies), i => _.cloneDeep(event));
   });
+
+export const getEventName = (cls: {new(): any} | Function) => _.camelCase(cls.name);

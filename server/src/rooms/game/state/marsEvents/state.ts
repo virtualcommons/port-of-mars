@@ -1,37 +1,51 @@
 import {
+  getEventName,
   MarsEventState,
   MarsEventStateConstructor,
 } from "@/rooms/game/state/marsEvents/common";
-import {GameState} from "@/rooms/game/state";
+import {GameState, MarsLogMessage} from "@/rooms/game/state";
 import * as _ from "lodash";
-import {CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER, Role, ROLES} from "shared/types";
+import {CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER, Role, ROLES, SERVER} from "shared/types";
 
 export type PersonalGainData = { [role in Role]: boolean };
 
 const _dispatch: { [id: string]: MarsEventStateConstructor } = {};
 
 export function assocEventId(constructor: MarsEventStateConstructor) {
-  _dispatch[_.camelCase(constructor.name)] = constructor;
+  _dispatch[getEventName(constructor)] = constructor;
 }
 
-export function constructState(id: string) {
+export function constructState(id: string, data?: any) {
   const constructor = _dispatch[id];
   if (constructor) {
-    return new constructor();
+    return new constructor(data);
   } else {
     throw Error(`${id} does not have a corresponding state class in dispatch ${JSON.stringify(_dispatch)}`)
   }
 }
 
+export interface MarsEventSerialized {
+  id: string;
+  data?: any;
+}
 
 @assocEventId
 export class Sandstorm implements MarsEventState {
   finalize(game: GameState): void {
     game.upkeep -= 10;
-    game.logs.push();
+    const msg = new MarsLogMessage({
+      performedBy: SERVER,
+      category: 'Mars Event',
+      content: 'Sandstorm decreased upkeep by 10',
+      timestamp: (new Date()).getTime()
+    });
+    game.logs.push(msg);
   }
 
-  toJSON(): any {
+  toJSON(): MarsEventSerialized {
+    return {
+      id: getEventName(this.constructor)
+    }
   }
 }
 

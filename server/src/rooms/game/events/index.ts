@@ -240,7 +240,7 @@ export class ReenteredMarsEventPhase extends KindOnlyGameEvent {
   kind = 'reentered-mars-event-phase';
 
   apply(game: GameState): void {
-    // console.log('ReenteredMarsEventPhase');
+    game.currentEvent.state.finalize(game);
     game.resetPlayerReadiness();
     game.marsEventsProcessed += 1;
   }
@@ -326,29 +326,6 @@ export class StateSnapshotTaken implements GameEvent {
       dateCreated: new Date().getTime()
     };
   }
-}
-
-export class EventPlayerInvestmentsSpecialtyBlock extends GameEventWithData {
-  kind = 'event-player-investments-specialty-block';
-
-  constructor(public data: { role: Role }) {
-    super();
-  }
-
-  apply(game: GameState) {
-    const specialty: Resource = game.players[this.data.role].specialty;
-    game.players[this.data.role].costs[specialty] = Infinity;
-  }
-}
-
-export class EventPlayerInvestmentsDisabledThree extends GameEventWithData {
-  kind = 'event-player-investments-disabled-three';
-
-  constructor(public data: any) {
-    super();
-  }
-
-  apply(game: GameState) {}
 }
 
 export class PersonalGainVoted extends GameEventWithData {

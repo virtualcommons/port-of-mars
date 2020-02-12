@@ -19,7 +19,7 @@ import {
   ResourceAmountData,
   ResourceCostData,
   Role,
-  ROLES,
+  ROLES, ServerRole,
   TradeAmountData,
   TradeData,
   TradeSetData
@@ -151,7 +151,7 @@ export class MarsLogMessage extends Schema implements MarsLogMessageData {
   }
 
   @type("string")
-  performedBy: Role;
+  performedBy: Role | ServerRole;
 
   @type("string")
   category: string;
