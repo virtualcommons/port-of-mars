@@ -328,18 +328,6 @@ export class StateSnapshotTaken implements GameEvent {
   }
 }
 
-// export class EventEventAddTwo extends KindOnlyGameEvent {
-//   kind = 'event-event-add-two';
-
-//   apply(game: GameState): void {
-//     const cards = game.marsEventDeck.drawAmount(2);
-//     const marsEvents = cards.map(e => new MarsEvent(e));
-//     game.marsEvents.push(...marsEvents);
-//     game.marsEventDeck.updatePosition(game.marsEvents.length);
-//   }
-// }
-
-
 export class EventPlayerInvestmentsSpecialtyBlock extends GameEventWithData {
   kind = 'event-player-investments-specialty-block';
 
