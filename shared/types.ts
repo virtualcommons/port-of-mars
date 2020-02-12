@@ -3,6 +3,7 @@ export const CURATOR: 'Curator' = 'Curator';
 export const PIONEER: 'Pioneer' = 'Pioneer';
 export const ENTREPRENEUR: 'Entrepreneur' = 'Entrepreneur';
 export const POLITICIAN: 'Politician' = 'Politician';
+export const SERVER: 'Server' = 'Server';
 export const ROLES: Array<Role> = [
   CURATOR,
   ENTREPRENEUR,
@@ -16,6 +17,7 @@ export type Role =
   | 'Pioneer'
   | 'Entrepreneur'
   | 'Politician';
+export type ServerRole = 'Server';
 
 export interface ChatMessageData {
   message: string;
@@ -108,7 +110,7 @@ export interface MarsEventData {
 }
 
 export interface MarsLogMessageData {
-  performedBy: Role;
+  performedBy: Role | ServerRole;
   category: string;
   content: string;
   timestamp: number;
