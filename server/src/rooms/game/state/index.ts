@@ -29,7 +29,8 @@ import {getRandomIntInclusive} from "@/util";
 import {getAccomplishmentByID, getAccomplishmentIDs} from "@/data/Accomplishment";
 import {GameEvent} from "@/rooms/game/events/types";
 import {GameOpts} from "@/rooms/game/types";
-import {MarsEvent, MarsEventsDeck} from '@/data/MarsEvents';
+import {MarsEventsDeck} from "@/rooms/game/state/marsEvents/MarsEventDeck";
+import {MarsEvent} from "@/rooms/game/state/marsEvents/MarsEvent";
 
 export class ChatMessage extends Schema implements ChatMessageData {
   constructor(msg: ChatMessageData) {

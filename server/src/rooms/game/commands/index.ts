@@ -30,7 +30,7 @@ import { Client } from 'colyseus';
 import { Game } from '@/rooms/game/types';
 import { Command } from '@/rooms/game/commands/types';
 import { GameEvent } from '@/rooms/game/events/types';
-import {MarsEvent} from "@/data/MarsEvents";
+import {MarsEvent} from "@/rooms/game/state/marsEvents/MarsEvent";
 
 export class SendChatMessageCmd implements Command {
   constructor(

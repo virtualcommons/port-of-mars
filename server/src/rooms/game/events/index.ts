@@ -20,7 +20,7 @@ import {
   MarsLogMessage
 } from '@/rooms/game/state';
 import { GameEvent } from '@/rooms/game/events/types';
-import {MarsEvent} from "@/data/MarsEvents";
+import {MarsEvent} from "@/rooms/game/state/marsEvents/MarsEvent";
 
 abstract class GameEventWithData implements GameEvent {
   abstract kind: string;
