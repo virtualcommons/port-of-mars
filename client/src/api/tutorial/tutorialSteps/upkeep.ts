@@ -8,7 +8,15 @@ const steps:Array<Step> = [
         'condition and maintenance. However, at the start of every round, the ' +
         'community loses 25 Upkeep.',
       params: {
-        placement: 'bottom'
+        placement: 'bottom',
+      }
+    },
+    {
+      target: '.tour-container-upkeep',
+      content: 'Quiz Question',
+      params: {
+        placement: 'right',
+        tutorialElementId: 'upkeep25'
       }
     },
     {
@@ -21,7 +29,22 @@ const steps:Array<Step> = [
         placement: 'bottom'
       }
     },
-
+    {
+      target: '.tour-container-upkeep',
+      content: 'Quiz Question',
+      params: {
+        placement: 'right',
+        tutorialElementId: 'upkeep65'
+      }
+    },
+    {
+      target: '.tour-container-upkeep',
+      content: 'Quiz Question',
+      params: {
+        placement: 'right',
+        tutorialElementId: 'upkeep35'
+      }
+    },
 ]
 
 export default steps;

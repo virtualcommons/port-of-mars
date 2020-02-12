@@ -46,6 +46,14 @@ const steps:Array<Step> = [
       
     },
     {
+      target: '.tour-investments',
+      content: 'Quiz Question',
+      params: {
+        placement: 'bottom',
+        tutorialElementId: 'timeblocks'
+      }
+    },
+    {
       target: '.tour-donebtn',
       content:
         'You can hit the Done button to surrender your time if you have finished investing ' +

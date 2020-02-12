@@ -69,6 +69,15 @@
                   <p class="status">{{ quizQuestionStatusMessage }}</p>
                 </div>
                 <button
+                  v-if="!tour.isFirst"
+                  @click="tour.previousStep"
+                  class="btn btn-dark"
+                  type="button"
+                  name="button"
+                >
+                  Previous
+                </button>
+                <button
                   v-if="
                     currentQuizQuestionSelection !== -1 &&
                       quizQuestionStatus === false
@@ -161,16 +170,20 @@ export default class Tutorial extends Vue {
 
   created() {
     this.api.connect(this.$store);
-    this.steps = new TutorialSteps(this.playerRole).steps;
+    //this.steps = new TutorialSteps(this.playerRole).steps;
+    // console.log(this.steps);
   }
 
   async mounted() {
-    this.dataFetched = await this.getQuizQuestions();
-    if (this.dataFetched) {
-      this.showModal();
-    } else {
-      // TODO: Handle server error
+    if(process.env.NODE_ENV != 'test'){
+      this.dataFetched = await this.getQuizQuestions();
+      if (this.dataFetched) {
+        this.showModal();
+      } else {
+        // TODO: Handle server error
+      }
     }
+    
   }
 
   // NOTE: Initialize
@@ -281,8 +294,9 @@ export default class Tutorial extends Vue {
 
   private async registerUser(): Promise<boolean> {
     const quizUrl = `${process.env.SERVER_URL_HTTP}/quiz`;
+    
+    
     const jwt = localStorage.getItem('jwt');
-
     if (!jwt) {
       const error = 'No user token found.';
       this.notifyUserOfError(error);

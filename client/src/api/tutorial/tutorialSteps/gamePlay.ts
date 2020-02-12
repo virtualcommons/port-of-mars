@@ -25,7 +25,7 @@ const steps:Array<Step> = [
         target: '.tour-chat',
         content:
           'During gameplay, you can communicate with other players in your habitat ' +
-          'to plan and strategize. Try sending a message!',
+          'to plan and strategize. You can do this at any time during the game! Try sending a message!',
         params: {
           placement: 'left'
         },
@@ -38,6 +38,14 @@ const steps:Array<Step> = [
           },
           required: true,
         }],
+      },
+      {
+        target: '.tour-chat',
+        content: 'Quiz Question',
+        params: {
+          placement: 'bottom',
+          tutorialElementId: 'chat'
+        }
       },
 ]
 

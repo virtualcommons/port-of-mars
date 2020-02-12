@@ -120,6 +120,14 @@ const steps:Array<Step> = [
         {required:true}
       ]
     },
+    {
+      target: '.tour-container-bottom',
+      content: 'Quiz Question',
+      params: {
+        placement: 'bottom',
+        tutorialElementId: 'trade'
+      }
+    }
 
 ]
 

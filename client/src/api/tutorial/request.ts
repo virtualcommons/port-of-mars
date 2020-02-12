@@ -59,6 +59,7 @@ export class TutorialAPI extends GameRequestAPI {
     public statePush(state:Array<StateTransform>|undefined){
        if(state != undefined){
             
+        
             for(const commandSet of state){
                 for(const [command,value] of Object.entries(commandSet)){
                     
