@@ -81,7 +81,14 @@ export class PersonalGain implements MarsEventState {
     }
     game.subtractUpkeep(subtractedUpkeep);
     // create new MarsLogMessage
-    // game.logs.push(message)
+
+    const msg = new MarsLogMessage({
+      performedBy: SERVER,
+      category: 'Mars Event',
+      content: 'Personal Gain decreased upkeep',
+      timestamp: (new Date()).getTime()
+    });
+    game.logs.push(msg);
   }
 
   toJSON(): { [role in Role]: boolean } {
