@@ -1,0 +1,25 @@
+.user-header {
+  height: 2rem;
+  width: 100%;
+  padding: 0 1rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+
+  p {
+    padding: 0.125rem 0.5rem;
+    margin: 0 0.5rem;
+    font-size: $font-small;
+    color: $space-white;
+    @include default-transition-base;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $new-space-orange-opaque-025;
+    }
+  }
+}

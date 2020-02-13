@@ -1,4 +1,4 @@
-import {Step} from '@/types/tutorial';
+import { Step } from '@/types/tutorial';
 import events from './events';
 import gamePlay from './gamePlay';
 import invest from './invest';
@@ -9,7 +9,13 @@ import upkeep from './upkeep';
 import purchase from './purchase';
 import discard from './discard';
 
-
-const steps:Array<Step> = gamePlay.concat(upkeep,player,events,invest,trade,purchase,discard,notifcations)
-
-export default steps;
+export const tutorialSteps: Array<Step> = gamePlay.concat(
+  upkeep,
+  player,
+  events,
+  invest,
+  trade,
+  purchase,
+  discard,
+  notifcations
+);

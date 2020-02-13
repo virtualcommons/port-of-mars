@@ -43,7 +43,7 @@ export default class Game extends Vue {
     applyGameServerResponses(gameRoom, this.$tstore);
     this.api.connect(gameRoom);
     this.hasApi = true;
-    this.$store.commit("SET_LAYOUT",'game')
+    this.$store.commit('SET_LAYOUT', 'game');
   }
 
   destroyed() {

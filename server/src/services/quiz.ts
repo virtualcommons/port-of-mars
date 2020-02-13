@@ -6,6 +6,62 @@ import { getConnection } from '@/util';
 import { Equal } from 'typeorm';
 import * as _ from 'lodash';
 
+export async function checkQuizCompletion(userId: number): Promise<boolean> {
+  // TODO: Set constants
+  const DEFAULT_QUIZ = 'TutorialQuiz';
+  let error = '';
+
+  // TODO: Get QuizSubmission
+  const quizSubmission: QuizSubmission | undefined = await getConnection()
+    .getRepository(QuizSubmission)
+    .findOne({
+      userId: Equal(userId)
+    });
+  // console.log('QUIZ SUBMISSION: ', quizSubmission);
+  if (quizSubmission === undefined) return false;
+  const submissionId = quizSubmission.id;
+
+  // TODO: Get Quiz
+  const quiz: Quiz | undefined = await getConnection()
+    .getRepository(Quiz)
+    .findOne({
+      name: Equal(DEFAULT_QUIZ)
+    });
+  // console.log('QUIZ: ', quiz);
+  if (quiz === undefined) return false;
+  const quizId = quiz.id;
+
+  // TODO: Get number of questions from quiz
+  const quizQuestions: Array<Question> | undefined = await getConnection()
+    .getRepository(Question)
+    .find({
+      quizId: Equal(quizId)
+    });
+  // console.log('QUIZ QUESTIONS: ', quizQuestions);
+  if (quizQuestions === undefined) return false;
+  const quizQuestionsLength = quizQuestions.length;
+
+  // TODO: Get relevant QuestionResponses
+  const questionResponses:
+    | Array<QuestionResponse>
+    | undefined = await getConnection()
+    .getRepository(QuestionResponse)
+    .find({
+      submissionId: Equal(submissionId)
+    });
+  // console.log('QUESTION RESPONSES: ', questionResponses);
+  if (questionResponses === undefined) return false;
+  const questionResponsesLength = questionResponses.length;
+
+  // TODO: Check that all QuestionResponses are correct for all questions
+  if (questionResponsesLength < quizQuestionsLength) return false;
+
+  // CONTINUE
+
+  // TODO: Return true/false
+  return false;
+}
+
 export async function checkQuestionResponse(
   questionResponse: QuestionResponse,
   quizId: number

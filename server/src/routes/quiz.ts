@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import {
+  checkQuizCompletion,
   checkQuestionResponse,
   getQuizByName,
   createQuizSubmission,
@@ -16,23 +17,31 @@ const DEFAULT_QUIZ = 'TutorialQuiz';
 
 quizRouter.post('/', auth, async (req, res, next) => {
   try {
-    const token: string = (req as any).body.token;
+    const token: string = (req as any).token;
     let user = await getUserByJWT(token);
     let quiz = await getQuizByName(DEFAULT_QUIZ);
 
     if (user && quiz) {
       const userId = user.id;
       const quizId = quiz.id;
-      const submission = await createQuizSubmission(userId, quizId);
+      const TEST = await checkQuizCompletion(userId);
+      if (TEST) {
+        // TODO: handle quiz completion in response
+        res.json({ userComplete: TEST });
+      } else {
+        const submission = await createQuizSubmission(userId, quizId);
+        // TODO: return submission id
+        res.json({ userComplete: TEST });
+      }
     } else {
-      res.status(403).json(`User not found.`);
+      res.status(403).json(`User account with username ${req} not found.`);
     }
   } catch (e) {
     next(e);
   }
 });
 
-quizRouter.get('/', async (req, res, next) => {
+quizRouter.get('/', auth, async (req, res, next) => {
   try {
     let quiz = await getQuizByName(DEFAULT_QUIZ);
     if (quiz) {
@@ -40,6 +49,7 @@ quizRouter.get('/', async (req, res, next) => {
       const questions = await getQuizQuestionsbyQuizId(id);
       res.json(questions);
     } else {
+      // TODO: Use correct status
       res.status(403).json(`Quiz not located in the database.`);
     }
   } catch (e) {
@@ -47,10 +57,13 @@ quizRouter.get('/', async (req, res, next) => {
   }
 });
 
-quizRouter.post('/:questionId', async (req, res, next) => {
+// quiz/:submissionId/:quizId
+// TODO: save submission id in localstorage/jwt
+
+quizRouter.post('/:questionId', auth, async (req, res, next) => {
   try {
-    const token: string = (req as any).body.token;
-    const user = await getUserByJWT(token);
+    const token: string = (req as any).token;
+    let user = await getUserByJWT(token);
 
     if (user) {
       const questionId = parseInt(req.params.questionId);
@@ -72,7 +85,7 @@ quizRouter.post('/:questionId', async (req, res, next) => {
       const correct = await checkQuestionResponse(questionResponse, quizId);
       res.json(correct);
     } else {
-      res.status(403).json(`User not found.`);
+      res.status(403).json(`User account with username ${req} not found.`);
     }
   } catch (e) {
     next(e);

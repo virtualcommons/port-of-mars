@@ -5,20 +5,18 @@
       <div class="details">
         <p>{{ modalData.text }}</p>
         <div v-if="modalData.type == 'discardAccomplishment'">
-          <p>This card is worth {{modalData.victoryPoints}} points</p>
+          <p>This card is worth {{ modalData.victoryPoints }} points</p>
           <p>Cost</p>
           <div class="cost">
             <p
-            v-for="investment in modalData.cost"
-            
-
-            :key="investment + Math.random()"
-          >
-            <img
-              :src="require(`@/assets/icons/${investment}.svg`)"
-              alt="Investment"
-            />
-          </p>
+              v-for="investment in modalData.cost"
+              :key="investment + Math.random()"
+            >
+              <img
+                :src="require(`@/assets/icons/${investment}.svg`)"
+                alt="Investment"
+              />
+            </p>
           </div>
         </div>
       </div>
@@ -32,12 +30,16 @@
       Yes
     </button>
   </div>
-
-  
 </template>
 
 <script lang="ts">
-import {Component, Vue, Prop, InjectReactive, Inject} from 'vue-property-decorator';
+import {
+  Component,
+  Vue,
+  Prop,
+  InjectReactive,
+  Inject
+} from 'vue-property-decorator';
 import { GameRequestAPI } from '@/api/game/request';
 
 @Component({})

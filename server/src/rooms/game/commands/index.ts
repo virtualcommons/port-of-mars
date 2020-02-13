@@ -1,10 +1,5 @@
 import * as req from 'shared/requests';
-import {
-  InvestmentData,
-  Phase,
-  TradeData,
-  Role
-} from 'shared/types';
+import { InvestmentData, Phase, TradeData, Role } from 'shared/types';
 import { Player } from '@/rooms/game/state';
 import {
   AcceptTradeRequest,
@@ -30,7 +25,7 @@ import { Client } from 'colyseus';
 import { Game } from '@/rooms/game/types';
 import { Command } from '@/rooms/game/commands/types';
 import { GameEvent } from '@/rooms/game/events/types';
-import {MarsEvent} from "@/rooms/game/state/marsEvents/MarsEvent";
+import { MarsEvent } from '@/rooms/game/state/marsEvents/MarsEvent';
 
 export class SendChatMessageCmd implements Command {
   constructor(

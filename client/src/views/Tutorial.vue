@@ -124,7 +124,7 @@ import { Step } from '@/types/tutorial';
 import { CURATOR, Phase, QuizQuestionData, RESEARCHER } from 'shared/types';
 import * as _ from 'lodash';
 
-import Steps from '@/api/tutorial/tutorialSteps';
+import { tutorialSteps } from '@/api/tutorial/tutorialSteps';
 
 require('vue-tour/dist/vue-tour.css');
 Vue.use(VueTour);
@@ -151,10 +151,7 @@ export default class Tutorial extends Vue {
     onStop: this.stopTourCallback
   };
 
-
-  steps: Array<Step> = Steps;
-  
-  
+  steps: Array<Step> = tutorialSteps;
 
   private dataFetched: boolean = false;
   //private steps: Array<Step> = [];
@@ -175,7 +172,7 @@ export default class Tutorial extends Vue {
   }
 
   async mounted() {
-    if(process.env.NODE_ENV != 'test'){
+    if (process.env.NODE_ENV != 'test') {
       this.dataFetched = await this.getQuizQuestions();
       if (this.dataFetched) {
         this.showModal();
@@ -183,7 +180,6 @@ export default class Tutorial extends Vue {
         // TODO: Handle server error
       }
     }
-    
   }
 
   // NOTE: Initialize
@@ -294,31 +290,29 @@ export default class Tutorial extends Vue {
 
   private async registerUser(): Promise<boolean> {
     const quizUrl = `${process.env.SERVER_URL_HTTP}/quiz`;
-    
-    
     const jwt = localStorage.getItem('jwt');
+
     if (!jwt) {
       const error = 'No user token found.';
-      this.notifyUserOfError(error);
+      this.notifyUserOfError('registerUser (jwt check): ' + error);
       return false;
     }
 
-    const data: object = { token: jwt };
     const response = await fetch(quizUrl, {
       method: 'POST',
       cache: 'no-cache',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwt}`
       },
       redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-      body: JSON.stringify(data)
+      referrerPolicy: 'no-referrer'
     });
     if (response.status === 200) {
       return true;
     } else {
       const error = await response.json();
-      this.notifyUserOfError(error);
+      this.notifyUserOfError('registerUser (response): ' + error);
     }
     return false;
   }
@@ -330,7 +324,21 @@ export default class Tutorial extends Vue {
       return false;
     }
 
-    const response = await this.$ajax.get(quizUrl);
+    const jwt = localStorage.getItem('jwt');
+
+    // const response = await this.$ajax.get(quizUrl);
+
+    const response = await fetch(quizUrl, {
+      method: 'GET',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwt}`
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer'
+    });
+
     if (response.status === 200) {
       const data: Array<QuizQuestionData> = await response.json();
       this.quizQuestions = data;
@@ -338,7 +346,7 @@ export default class Tutorial extends Vue {
       return true;
     } else {
       const error = await response.json();
-      this.notifyUserOfError(error);
+      this.notifyUserOfError('getQuizQuestions (response): ' + error);
     }
     return false;
   }
@@ -349,14 +357,21 @@ export default class Tutorial extends Vue {
   ): Promise<boolean> {
     const quizUrl = `${process.env.SERVER_URL_HTTP}/quiz/${questionId}`;
     const jwt = localStorage.getItem('jwt');
-    // const response = await this.$ajax.post(quizUrl, { choice });
 
-    const data: object = { token: jwt, answer: answer };
+    if (!jwt) {
+      const error = 'No user token found.';
+      this.notifyUserOfError('checkQuizQuestion (jwt check): ' + error);
+      return false;
+    }
+
+    const data: object = { answer: answer };
+    // const response = await this.$ajax.post(quizUrl, { choice });
     const response = await fetch(quizUrl, {
       method: 'POST',
       cache: 'no-cache',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwt}`
       },
       redirect: 'follow',
       referrerPolicy: 'no-referrer',
@@ -368,7 +383,7 @@ export default class Tutorial extends Vue {
       return data;
     } else {
       const error = await response.json();
-      this.notifyUserOfError(error);
+      this.notifyUserOfError('checkQuizQuestion (response): ' + error);
     }
     return false;
   }

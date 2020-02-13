@@ -14,8 +14,9 @@
       <div class="cost">
         <p
           v-for="investment in accomplishmentCost"
-          v-bind:class="{'unattainable-resource': shouldResourceBeGrayedOut(investment)}"
-
+          v-bind:class="{
+            'unattainable-resource': shouldResourceBeGrayedOut(investment)
+          }"
           :key="investment + Math.random()"
         >
           <img
@@ -39,7 +40,12 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Inject } from 'vue-property-decorator';
-import {AccomplishmentData, Investment, INVESTMENTS, Resource} from 'shared/types';
+import {
+  AccomplishmentData,
+  Investment,
+  INVESTMENTS,
+  Resource
+} from 'shared/types';
 import * as _ from 'lodash';
 import { GameRequestAPI } from '@/api/game/request';
 import { canPurchaseAccomplishment } from 'shared/validation';
@@ -78,37 +84,32 @@ export default class BarDiscard extends Vue {
     return _.clone(this.$tstore.getters.player.inventory);
   }
 
-  shouldResourceBeGrayedOut(investment: Investment){
-    if(investment === 'upkeep'){
+  shouldResourceBeGrayedOut(investment: Investment) {
+    if (investment === 'upkeep') {
       return false;
     }
 
-    if(this.playerInventory[investment] > 0){
+    if (this.playerInventory[investment] > 0) {
       this.playerInventory[investment]--;
       return false;
     }
-    return true
+    return true;
   }
 
   private handleDiscardAccomplishment(a: any) {
-
-
     console.log(this.$store.getters.layout);
-    if(this.$store.getters.layout == 'tutorial'){
+    if (this.$store.getters.layout == 'tutorial') {
       this.api.discardAccomplishment(a.id);
-    }
-
-    else{
+    } else {
       this.$root.$emit('openmodalconfirmation', {
-      text: `Selecting \"Yes\" will discard the accomplishment \"${a.label}\" and a new card will be drawn next round.`,
-      victoryPoints: a.victoryPoints,
-      cost:this.accomplishmentCost,
-      phaseOpened:this.$store.state.phase,
-      type: 'discardAccomplishment',
-      actionData: a.id
-    });
+        text: `Selecting \"Yes\" will discard the accomplishment \"${a.label}\" and a new card will be drawn next round.`,
+        victoryPoints: a.victoryPoints,
+        cost: this.accomplishmentCost,
+        phaseOpened: this.$store.state.phase,
+        type: 'discardAccomplishment',
+        actionData: a.id
+      });
     }
-    
   }
 }
 </script>
@@ -116,7 +117,7 @@ export default class BarDiscard extends Vue {
 <style lang="scss" scoped>
 @import '@/stylesheets/gamedashboard/global/cards/BarDiscard.scss';
 
-.unattainable-resource{
+.unattainable-resource {
   opacity: 30%;
 }
 </style>

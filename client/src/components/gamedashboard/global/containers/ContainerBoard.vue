@@ -1,5 +1,6 @@
 <template>
   <div class="container-board">
+    <UserHeader />
     <Notification
       v-for="(notification, index) in notifications"
       :index="index"
@@ -7,7 +8,7 @@
       :key="index"
       :message="notification"
     />
-    <div class="tour-notification"/>
+    <div class="tour-notification" />
     <div class="left">
       <ContainerLeft />
     </div>
@@ -29,6 +30,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
+import UserHeader from '@/components/global/UserHeader.vue';
 import Notification from '@/components/gamedashboard/global/Notification.vue';
 import ContainerLeft from '@/components/gamedashboard/left/containers/ContainerLeft.vue';
 import ContainerTop from '@/components/gamedashboard/top/containers/ContainerTop.vue';
@@ -37,6 +39,7 @@ import ContainerRight from '@/components/gamedashboard/right/containers/Containe
 
 @Component({
   components: {
+    UserHeader,
     Notification,
     ContainerLeft,
     ContainerTop,
