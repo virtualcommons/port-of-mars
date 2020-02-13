@@ -91,7 +91,68 @@ export class PersonalGain implements MarsEventState {
     game.logs.push(msg);
   }
 
-  toJSON(): { [role in Role]: boolean } {
-    return this.votes;
+  toJSON(): MarsEventSerialized {
+    return {
+      id: getEventName(this.constructor),
+      data: _.cloneDeep(this.votes)
+    };
+  }
+}
+
+type CompulsivePhilanthropyData = { [role in Role]: Role }
+
+@assocEventId
+export class CompulsivePhilanthropy implements MarsEventState {
+  constructor(data?: { votes: CompulsivePhilanthropyData, order: Array<Role> }) {
+    this.votes = data?.votes ?? {
+      [CURATOR]: CURATOR,
+      [ENTREPRENEUR]: ENTREPRENEUR,
+      [PIONEER]: PIONEER,
+      [POLITICIAN]: POLITICIAN,
+      [RESEARCHER]: RESEARCHER
+    };
+    this.order = data?.order ?? _.shuffle(_.cloneDeep(ROLES));
+  }
+
+  votes: CompulsivePhilanthropyData;
+  order: Array<Role>;
+
+  voteForPlayer(voter: Role, philanthropist: Role) {
+    this.votes[voter] = philanthropist;
+  }
+
+  finalize(game: GameState): void {
+    const voteCounts: { [role in Role]: number } = {
+      [CURATOR]: 0,
+      [ENTREPRENEUR]: 0,
+      [PIONEER]: 0,
+      [POLITICIAN]: 0,
+      [RESEARCHER]: 0
+    };
+
+    for (const philanthropist of Object.values(this.votes)) {
+      voteCounts[philanthropist] += 1;
+    }
+
+    let [winners, count]: [Array<Role>, number] = [[], 0];
+    for (const potentialWinner of ROLES) {
+      if (voteCounts[potentialWinner] > count) {
+        winners.splice(0, winners.length, potentialWinner);
+        count = voteCounts[potentialWinner];
+      } else if (voteCounts[potentialWinner] === count) {
+        winners.push(potentialWinner)
+      }
+    }
+
+    const winner = _.find(this.order, w => winners.includes(w)) || this.order[0];
+    game.upkeep += game.players[winner].timeBlocks;
+    game.players[winner].timeBlocks = 0;
+  }
+
+  toJSON(): MarsEventSerialized {
+    return {
+      id: getEventName(this.constructor),
+      data: _.cloneDeep({ votes: this.votes, order: this.order })
+    };
   }
 }

@@ -11,7 +11,7 @@ import {
   SendTradeRequestData,
   AcceptTradeRequestData,
   RejectTradeRequestData,
-  PersonalGainVotesData
+  PersonalGainVotesData, VoteForPhilanthropistData
 } from 'shared/requests';
 import {
   AccomplishmentData,
@@ -95,6 +95,11 @@ export class GameRequestAPI {
 
   public savePersonalGainVote(value: { role: Role, vote: boolean }) {
     const msg: PersonalGainVotesData = { kind: 'personal-gain', value };
+    this.send(msg);
+  }
+
+  public voteForPhilanthropist(vote: Role) {
+    const msg: VoteForPhilanthropistData = { kind: 'vote-for-philanthropist', vote };
     this.send(msg);
   }
 }

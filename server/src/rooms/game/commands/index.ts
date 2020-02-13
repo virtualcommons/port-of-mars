@@ -18,7 +18,7 @@ import {
   TimeInvested,
   RejectTradeRequest,
   SetPlayerReadiness,
-  PersonalGainVoted
+  PersonalGainVoted, VotedForPhilanthropist, MarsEventFinalized
 } from '@/rooms/game/events';
 import { getAccomplishmentByID } from '@/data/Accomplishment';
 import { Client } from 'colyseus';
@@ -186,14 +186,19 @@ export class SetNextPhaseCmd implements Command {
       case Phase.defeat:
         return [];
       case Phase.events: {
+        const events = [];
+        if (this.game.state.currentEvent) {
+          events.push(new MarsEventFinalized())
+        }
         if (
           this.game.state.marsEventsProcessed + 1 >=
           this.game.state.marsEvents.length
         ) {
-          return [new EnteredInvestmentPhase()];
+          events.push(new EnteredInvestmentPhase());
         } else {
-          return [new ReenteredMarsEventPhase()];
+          events.push(new ReenteredMarsEventPhase());
         }
+        return events;
       }
       case Phase.invest:
         return [new EnteredTradePhase()];
@@ -254,5 +259,22 @@ export class PersonalGainVotes implements Command {
 
   execute(): Array<GameEvent> {
     return [new PersonalGainVoted(this.results.value)];
+  }
+}
+
+export class VoteForPhilanthropistCmd implements Command {
+  constructor(
+    private voteData: req.VoteForPhilanthropistData,
+    private game: Game,
+    private player: Player
+  ) {}
+
+  static fromReq(r: req.VoteForPhilanthropistData, game: Game, client: Client) {
+    const p = game.getPlayerByClient(client);
+    return new VoteForPhilanthropistCmd(r, game, p);
+  }
+
+  execute(): Array<GameEvent> {
+    return [new VotedForPhilanthropist({ voter: this.player.role, vote: this.voteData.vote })];
   }
 }

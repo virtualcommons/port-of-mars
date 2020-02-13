@@ -52,6 +52,11 @@ export interface PersonalGainVotesData {
   value: { role: Role; vote: boolean };
 }
 
+export interface VoteForPhilanthropistData {
+  kind: 'vote-for-philanthropist';
+  vote: Role
+}
+
 export type Requests =
   | SendChatMessageData
   | SetPlayerReadinessData
@@ -63,4 +68,5 @@ export type Requests =
   | SendTradeRequestData
   | AcceptTradeRequestData
   | RejectTradeRequestData
-  | PersonalGainVotesData;
+  | PersonalGainVotesData
+  | VoteForPhilanthropistData;

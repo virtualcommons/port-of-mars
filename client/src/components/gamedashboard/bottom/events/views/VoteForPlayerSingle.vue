@@ -5,7 +5,7 @@
       <div
         v-for="member in members"
         class="player-frame"
-        v-bind:class="{ 'selected-background': member == selectedPlayer }"
+        v-bind:class="{ 'selected-background': member === selectedPlayer }"
         :key="member + 1"
       >
         <img
@@ -21,38 +21,43 @@
     >
       {{ selectedPlayer }}
     </p>
-    <button type="button" name="Submit Button" @click="submitSelectedPlayer">Done</button>
+    <button type="button" name="Submit Button" :disabled="selectedPlayer === null"
+            @click="submitSelectedPlayer">Done
+    </button>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
-import { Role } from 'shared/types';
+  import {Vue, Component, Inject} from 'vue-property-decorator';
+  import {Role, ROLES} from 'shared/types';
+  import {GameRequestAPI} from "@/api/game/request";
+  import _ from "lodash";
 
-@Component({})
-export default class VoteForPlayerSingle extends Vue {
-  private selectedPlayer = 'None Selected';
+  @Component({})
+  export default class VoteForPlayerSingle extends Vue {
+    private selectedPlayer: Role | null = null;
 
-  get members(): Array<string> {
-    // if (this.$store.state.role !== '') {
-    //   return ['Researcher', 'Pioneer', 'Curator', 'Entrepreneur', 'Politician'].filter(
-    //     name => name !== this.$store.state.role
-    //   );
-    // }
-    return ['Researcher', 'Pioneer', 'Curator', 'Entrepreneur', 'Politician'];
+    @Inject()
+    api!: GameRequestAPI;
+
+    get members(): Array<Role> {
+      return ROLES;
+    }
+
+    private handleSelectPlayer(member: Role): void {
+      this.selectedPlayer = member;
+      console.log('MEMBER: ', this.selectedPlayer);
+    }
+
+    private submitSelectedPlayer(): void {
+      if (!_.isNull(this.selectedPlayer)) {
+        console.log('SUBMIT MEMBER: ', this.selectedPlayer);
+        this.api.voteForPhilanthropist(this.selectedPlayer);
+      }
+    }
   }
-
-  private handleSelectPlayer(member: Role): void {
-    this.selectedPlayer = member;
-    console.log('MEMBER: ', this.selectedPlayer);
-  }
-
-  private submitSelectedPlayer(): void {
-    console.log('SUBMIT MEMBER: ', this.selectedPlayer);
-  }
-}
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/bottom/events/views/VoteForPlayerSingle.scss';
+  @import '@/stylesheets/gamedashboard/bottom/events/views/VoteForPlayerSingle.scss';
 </style>

@@ -21,8 +21,8 @@ import {
   MarsLogMessage
 } from '@/rooms/game/state';
 import { GameEvent } from '@/rooms/game/events/types';
-import { MarsEvent } from '@/rooms/game/state/marsEvents/MarsEvent';
-import { PersonalGain } from '@/rooms/game/state/marsEvents/state';
+import {MarsEvent} from '@/rooms/game/state/marsEvents/MarsEvent';
+import {CompulsivePhilanthropy, PersonalGain} from '@/rooms/game/state/marsEvents/state';
 
 abstract class GameEventWithData implements GameEvent {
   abstract kind: string;
@@ -196,6 +196,14 @@ abstract class KindOnlyGameEvent implements GameEvent {
   }
 }
 
+export class MarsEventFinalized extends KindOnlyGameEvent {
+  kind = 'mars-event-finalized';
+
+  apply(game: GameState): void {
+    game.currentEvent.state.finalize(game);
+  }
+}
+
 export class EnteredMarsEventPhase extends KindOnlyGameEvent {
   kind = 'entered-mars-event-phase';
 
@@ -232,6 +240,7 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
 
     for (const player of game.players) {
       player.refreshPurchasableAccomplishments();
+      player.resetTimeBlocks();
     }
 
     // TODO: HANDLE CURRENT EVENT USING MARSEVENTSPROCESSED
@@ -242,7 +251,6 @@ export class ReenteredMarsEventPhase extends KindOnlyGameEvent {
   kind = 'reentered-mars-event-phase';
 
   apply(game: GameState): void {
-    game.currentEvent.state.finalize(game);
     game.resetPlayerReadiness();
     game.marsEventsProcessed += 1;
   }
@@ -341,5 +349,25 @@ export class PersonalGainVoted extends GameEventWithData {
     const event = new PersonalGain();
     event.updateVotes(this.data.role, this.data.vote);
     game.players[this.data.role].updateReadiness(true);
+  }
+}
+
+export class VotedForPhilanthropist extends GameEventWithData {
+  kind = 'voted-for-philanthropist';
+
+  constructor(public data: { voter: Role, vote: Role }) {
+    super();
+  }
+
+  apply(game: GameState): void {
+    let state: CompulsivePhilanthropy;
+    if (game.currentEvent.state instanceof CompulsivePhilanthropy) {
+      state = game.currentEvent.state;
+    } else {
+      return;
+    }
+
+    state.voteForPlayer(this.data.voter, this.data.vote);
+    game.players[this.data.voter].updateReadiness(true);
   }
 }

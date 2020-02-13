@@ -605,6 +605,10 @@ export class Player extends Schema implements PlayerData {
     };
   }
 
+  static defaults = {
+    timeBlocks: 10
+  };
+
   @type("string")
   role: Role;
 
@@ -621,7 +625,7 @@ export class Player extends Schema implements PlayerData {
   ready: boolean = false;
 
   @type("number")
-  timeBlocks: number = 10;
+  timeBlocks: number = Player.defaults.timeBlocks;
 
   @type("number")
   contributedUpkeep: number = 0;
@@ -659,6 +663,10 @@ export class Player extends Schema implements PlayerData {
 
   refreshPurchasableAccomplishments(){
     this.accomplishment.refreshPurchasableAccomplishments(this.role);
+  }
+
+  resetTimeBlocks() {
+    this.timeBlocks = Player.defaults.timeBlocks;
   }
 
   getLeftOverInvestments(){
