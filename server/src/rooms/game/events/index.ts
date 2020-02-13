@@ -346,9 +346,11 @@ export class PersonalGainVoted extends GameEventWithData {
   }
 
   apply(game: GameState) {
-    const event = new PersonalGain();
-    event.updateVotes(this.data.role, this.data.vote);
-    game.players[this.data.role].updateReadiness(true);
+    if (game.currentEvent.state instanceof PersonalGain) {
+      const state = game.currentEvent.state;
+      state.updateVotes(this.data.role, this.data.vote);
+      game.players[this.data.role].updateReadiness(true);
+    }
   }
 }
 
