@@ -6,7 +6,7 @@
   /* SET MIN SIZE OF SCREEN */
   min-height: $min-screen-height;
   min-width: $min-screen-width;
-  padding: 1rem;
+  padding: 2rem 1rem 1rem 1rem;
   margin: 0;
   position: relative;
   @include row;

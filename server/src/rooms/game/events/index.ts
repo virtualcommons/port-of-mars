@@ -21,9 +21,8 @@ import {
   MarsLogMessage
 } from '@/rooms/game/state';
 import { GameEvent } from '@/rooms/game/events/types';
-import {MarsEvent} from '@/rooms/game/state/marsEvents/MarsEvent';
-import {PersonalGain} from '@/rooms/game/state/marsEvents/state';
-
+import { MarsEvent } from '@/rooms/game/state/marsEvents/MarsEvent';
+import { PersonalGain } from '@/rooms/game/state/marsEvents/state';
 
 abstract class GameEventWithData implements GameEvent {
   abstract kind: string;
@@ -222,7 +221,7 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
     game.phase = Phase.events;
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
 
-    // handle incomplete events 
+    // handle incomplete events
     game.handleIncomplete();
     game.marsEvents.push(...marsEvents);
 
@@ -334,7 +333,7 @@ export class StateSnapshotTaken implements GameEvent {
 export class PersonalGainVoted extends GameEventWithData {
   kind = 'personal-gain-voted';
 
-  constructor(public data: { role: Role, vote: boolean }) {
+  constructor(public data: { role: Role; vote: boolean }) {
     super();
   }
 

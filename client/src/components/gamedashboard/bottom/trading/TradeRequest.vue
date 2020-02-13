@@ -35,7 +35,7 @@
         class="options-block tour-give-up"
         v-show="name"
       />
-      <TradeOptions 
+      <TradeOptions
         :resourceReader="handleReciveResources"
         text="In exchange for"
         mode="incoming"
