@@ -6,6 +6,7 @@ import {
 import {GameState, MarsLogMessage} from "@/rooms/game/state";
 import * as _ from "lodash";
 import {CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER, Role, ROLES, SERVER} from "shared/types";
+import { PersonalGainVotesData } from "shared/requests";
 
 export type PersonalGainData = { [role in Role]: boolean };
 
@@ -71,6 +72,27 @@ export class PersonalGain implements MarsEventState {
     this.votes[player] = vote;
   }
 
+  subtractedUpkeepTotal(upkeep: number) {
+    return upkeep;
+  }
+
+  playersVoteYes(voteResults: PersonalGainData): string  {
+    var player: string = '';
+    var playerYesVotes: Array<String> = [];
+    var formattedPlayerList: string = '';
+
+    for (const role of ROLES) {
+      if (voteResults[role]) {
+        player = role.toString();
+        playerYesVotes.push(player);
+      }
+    }
+
+    formattedPlayerList = playerYesVotes.toString();
+
+    return formattedPlayerList;
+  }
+
   finalize(game: GameState) {
     let subtractedUpkeep = 0;
     for (const role of ROLES) {
@@ -85,7 +107,8 @@ export class PersonalGain implements MarsEventState {
     const msg = new MarsLogMessage({
       performedBy: SERVER,
       category: 'Mars Event',
-      content: 'Personal Gain decreased upkeep',
+      content: 'Upkeep decreased by ' + this.subtractedUpkeepTotal(subtractedUpkeep) + 
+                '. The following players voted yes: ' + this.playersVoteYes(this.votes),
       timestamp: (new Date()).getTime()
     });
     game.logs.push(msg);
