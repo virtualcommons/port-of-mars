@@ -324,25 +324,11 @@ export default class Tutorial extends Vue {
       return false;
     }
 
-    const jwt = localStorage.getItem('jwt');
-
-    // const response = await this.$ajax.get(quizUrl);
-
-    const response = await fetch(quizUrl, {
-      method: 'GET',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${jwt}`
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer'
-    });
+    const response = await this.$ajax.get(quizUrl);
 
     if (response.status === 200) {
       const data: Array<QuizQuestionData> = await response.json();
       this.quizQuestions = data;
-      // console.log(this.quizQuestions);
       return true;
     } else {
       const error = await response.json();
@@ -356,27 +342,9 @@ export default class Tutorial extends Vue {
     answer: number
   ): Promise<boolean> {
     const quizUrl = `${process.env.SERVER_URL_HTTP}/quiz/${questionId}`;
-    const jwt = localStorage.getItem('jwt');
-
-    if (!jwt) {
-      const error = 'No user token found.';
-      this.notifyUserOfError('checkQuizQuestion (jwt check): ' + error);
-      return false;
-    }
 
     const data: object = { answer: answer };
-    // const response = await this.$ajax.post(quizUrl, { choice });
-    const response = await fetch(quizUrl, {
-      method: 'POST',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${jwt}`
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-      body: JSON.stringify(data)
-    });
+    const response = await this.$ajax.post(quizUrl, data);
 
     if (response.status === 200) {
       const data = await response.json();
