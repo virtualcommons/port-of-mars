@@ -19,7 +19,7 @@ export default class UserHeader extends Vue {
   private prependedText: string = 'Logged in as ';
 
   mounted() {
-    const jwt = localStorage.getItem('jwt');
+    const jwt = this.$ajax.loginCreds?.token;
     if (!jwt) {
       console.log('No user token found. Redirecting to Login...');
       this.$router.push({ name: 'Login' });
@@ -40,9 +40,7 @@ export default class UserHeader extends Vue {
   }
 
   private logoutUser(): void {
-    localStorage.removeItem('jwt');
-    this.$tstore.commit('SET_USER', { username: '', passedQuiz: false });
-
+    this.$ajax.forgetLoginCreds();
     // TODO: Fully handle re-routing
     this.$router.push({ name: 'Login' });
   }

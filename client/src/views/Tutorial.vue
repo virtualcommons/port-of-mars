@@ -290,7 +290,7 @@ export default class Tutorial extends Vue {
 
   private async registerUser(): Promise<boolean> {
     const quizUrl = `${process.env.SERVER_URL_HTTP}/quiz`;
-    const jwt = localStorage.getItem('jwt');
+    const jwt = this.$ajax.loginCreds?.token;
 
     if (!jwt) {
       const error = 'No user token found.';

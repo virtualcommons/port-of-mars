@@ -1,4 +1,7 @@
 import Vue, {VueConstructor} from 'vue'
+import _ from "lodash";
+import {VueRouter} from "vue-router/types/router";
+import {TStore} from "@/plugins/tstore";
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -6,9 +9,41 @@ declare module 'vue/types/vue' {
   }
 }
 
-class AjaxRequest {
+const LOGIN_CREDS = 'loginCreds';
+
+interface LoginCreds {
+  token: string
+  username: string
+  passedQuiz: boolean
+}
+
+export class AjaxRequest {
+  constructor(private router: VueRouter, private store: TStore) {}
+
+  get loginCreds(): LoginCreds | null {
+    const d = localStorage.getItem(LOGIN_CREDS);
+    if (_.isNull(d)) {
+      return null;
+    }
+    const data = JSON.parse(d);
+    if (!this.store.state.user.username) {
+      this.store.commit('SET_USER', { username: data.username, passedQuiz: data.passedQuiz });
+    }
+    return data;
+  }
+
+  setLoginCreds(data: LoginCreds) {
+    localStorage.setItem(LOGIN_CREDS, JSON.stringify(data));
+    this.store.commit('SET_USER', { username: data.username, passedQuiz: data.passedQuiz });
+  }
+
+  forgetLoginCreds() {
+    localStorage.removeItem(LOGIN_CREDS);
+    this.store.commit('SET_USER', { username: '', passedQuiz: false });
+  }
+
   async post(path: string, data?: any) {
-    const jwt = localStorage.getItem('jwt');
+    const jwt = this.loginCreds?.token;
     if (!jwt) {
       throw new Error('must have jwt');
     }
@@ -48,7 +83,7 @@ class AjaxRequest {
     const headers: { [key: string]: string } = {
       'Content-Type': 'application/json'
     };
-    const jwt = localStorage.getItem('jwt');
+    const jwt = this.loginCreds?.token;
     if (jwt) {
       headers['Authorization'] = `Bearer ${jwt}`
     }
@@ -65,7 +100,7 @@ class AjaxRequest {
 }
 
 export const Ajax = {
-  install(instance: VueConstructor<Vue>, options: any) {
-    instance.prototype.$ajax = new AjaxRequest();
+  install(instance: VueConstructor<Vue>, options: { router: VueRouter, store: TStore }) {
+    instance.prototype.$ajax = new AjaxRequest(options.router, options.store);
   }
 };

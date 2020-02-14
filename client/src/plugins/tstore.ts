@@ -4,16 +4,17 @@ import Mutations from "@/store/mutationFolder";
 import Vue, {VueConstructor} from 'vue';
 import {Store} from "vuex";
 
-declare module 'vue/types/vue' {
-  interface TStore {
-    state: State;
-    readonly getters: { [K in keyof typeof Getters]: ReturnType<typeof Getters[K]> };
+export interface TStore {
+  state: State;
+  readonly getters: { [K in keyof typeof Getters]: ReturnType<typeof Getters[K]> };
 
-    commit<K extends keyof typeof Mutations>(
-      name: K,
-      payload: Parameters<typeof Mutations[K]>[1]
-    ): void;
-  }
+  commit<K extends keyof typeof Mutations>(
+    name: K,
+    payload: Parameters<typeof Mutations[K]>[1]
+  ): void;
+}
+
+declare module 'vue/types/vue' {
 
   interface Vue {
     $tstore: TStore;

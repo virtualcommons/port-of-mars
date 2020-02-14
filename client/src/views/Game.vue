@@ -32,13 +32,21 @@ export default class Game extends Vue {
   hasApi: boolean = false;
 
   async created() {
+    const jwt = this.$ajax.loginCreds?.token;
+
+    if (!jwt) {
+      this.$ajax.forgetLoginCreds();
+      await this.$router.push({ name: 'Login' });
+      return;
+    }
+
     if (!this.$tstore.state.user.passedQuiz) {
       await this.$router.push({ name: 'Tutorial' });
       return;
     }
 
     const gameRoom = await this.$client.joinOrCreate('game', {
-      token: localStorage.getItem('jwt')
+      token: jwt
     });
     applyGameServerResponses(gameRoom, this.$tstore);
     this.api.connect(gameRoom);

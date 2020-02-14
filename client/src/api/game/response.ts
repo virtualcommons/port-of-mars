@@ -11,7 +11,7 @@ import {
 } from 'shared/types';
 import { Responses } from 'shared/responses';
 import { DataChange, Schema } from '@colyseus/schema';
-import { TStore } from 'vue/types/vue';
+import { TStore } from '@/plugins/tstore';
 import { rootCertificates } from 'tls';
 
 type Schemify<T> = T & Schema;

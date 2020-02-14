@@ -11,7 +11,7 @@ import {Ajax} from "@/plugins/ajax";
 
 Vue.use(Vuex);
 Vue.use(TypedStore);
-Vue.use(Ajax);
+Vue.use(Ajax, { router, store });
 
 Vue.config.productionTip = false;
 

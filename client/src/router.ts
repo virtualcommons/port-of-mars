@@ -5,6 +5,8 @@ import Login from '@/views/Login.vue';
 import WaitingLobby from '@/views/WaitingLobby.vue';
 import Game from '@/views/Game.vue';
 import Tutorial from '@/views/Tutorial.vue';
+import store from '@/store'
+import {AjaxRequest} from "@/plugins/ajax";
 
 Vue.use(Router);
 
@@ -44,8 +46,9 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  const jwt = localStorage.getItem('jwt');
-  if (to.meta && to.meta.requiresAuth && !jwt) {
+  const $ajax = new AjaxRequest(router, store);
+  const jwt = $ajax.loginCreds?.token;
+  if (to.meta?.requiresAuth && !jwt) {
     next({
       name: 'Login'
     });

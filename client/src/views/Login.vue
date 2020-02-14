@@ -44,7 +44,7 @@ export default class Login extends Vue {
   error: string = '';
 
   created() {
-    this.isLoggedIn = !!localStorage.jwt
+    this.isLoggedIn = !!this.$ajax.loginCreds
   }
 
   get submitDisabled() {
@@ -56,8 +56,7 @@ export default class Login extends Vue {
   }
 
   logout() {
-    localStorage.removeItem("jwt");
-    this.$tstore.commit('SET_USER', { username: '', passedQuiz: false });
+    this.$ajax.forgetLoginCreds();
     this.isLoggedIn = false;
   }
 
@@ -65,22 +64,11 @@ export default class Login extends Vue {
     e.preventDefault();
     const fd = new FormData((e as any).target.form);
     const data: any = { username: fd.get('username')};
-    const response = await fetch(this.loginUrl, {
-      method: 'POST',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-      body: JSON.stringify(data)
-    });
+    const response = await this.$ajax.postNoToken(this.loginUrl, data);
     if (response.status === 200) {
       const resData = await response.json();
-      const { username, passedQuiz } = resData;
-      localStorage.setItem('jwt', resData.token);
-      this.$tstore.commit('SET_USER', { username, passedQuiz });
-      this.$router.push({ name: 'Game' });
+      this.$ajax.setLoginCreds(resData);
+      await this.$router.push({ name: 'Game' });
     } else {
       this.error = await response.json();
     }

@@ -1,4 +1,4 @@
-import {TypedStore} from "@/plugins/tstore";
+import {TStore, TypedStore} from "@/plugins/tstore";
 
 import {
   createLocalVue as _createLocalVue,
@@ -16,12 +16,17 @@ import BootstrapVue from "bootstrap-vue";
 import router from "@/router";
 import * as Colyseus from 'colyseus.js';
 import {Room} from "colyseus.js";
+import {Ajax} from "@/plugins/ajax";
+import {VueRouter} from "vue-router/types/router";
 
-export function createLocalVue() {
+export function createLocalVue(options?: { router: VueRouter, store: TStore }) {
   const localVue = _createLocalVue();
   localVue.use(BootstrapVue);
   localVue.use(Vuex);
   localVue.use(TypedStore);
+  if (options) {
+    localVue.use(Ajax, options);
+  }
   return localVue
 }
 
@@ -53,8 +58,8 @@ export function mockRoomSetup() {
 }
 
 export function mountPOM<V extends Vue>(component: VueClass<V>, options: ThisTypedMountOptions<V> = {}) {
-  const localVue = createLocalVue();
   const store = createStore();
+  const localVue = createLocalVue({router, store});
   return mount(component, {
     localVue,
     store,
@@ -64,8 +69,8 @@ export function mountPOM<V extends Vue>(component: VueClass<V>, options: ThisTyp
 }
 
 export function shallowMountPOM<V extends Vue>(component: VueClass<V>, options: ThisTypedMountOptions<V> = {}) {
-  const localVue = createLocalVue();
   const store = createStore();
+  const localVue = createLocalVue({router, store});
   return shallowMount(component, {
     localVue,
     store,
