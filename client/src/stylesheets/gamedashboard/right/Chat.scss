@@ -115,7 +115,8 @@
       @include default-transition-base;
       cursor: pointer;
 
-      &:hover {
+      &--ready {
+        @extend .chat-input-sendbtn;
         color: $new-space-orange;
         @include default-scale-up;
       }

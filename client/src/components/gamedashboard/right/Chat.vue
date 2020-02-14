@@ -40,7 +40,8 @@
       />
       <font-awesome-icon
         :icon="['far', 'paper-plane']"
-        class="chat-input-sendbtn"
+        :class="sendBtnClass"
+        @click="submitToChat"
         size="lg"
       />
     </div>
@@ -75,6 +76,10 @@ export default class Chat extends Vue {
     if (this.messages) {
       // console.log(this.messages);
     }
+  }
+
+  get sendBtnClass(): string {
+    return this.pendingMessage.length === 0 ? 'chat-input-sendbtn' : 'chat-input-sendbtn--ready';
   }
 
   get layout(): any {
