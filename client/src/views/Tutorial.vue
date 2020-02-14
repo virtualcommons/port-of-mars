@@ -53,17 +53,13 @@
                 <p>{{ currentQuizQuestion.question }}</p>
                 <div
                   class="option"
-                  v-for="(option, index) in currentQuizQuestion.options"
+                  v-for="(option, optionIndex) in currentQuizQuestion.options"
                   :key="index"
                 >
-                  <button
-                    @click="handleQuizQuestionSelection(index)"
-                    type="button"
-                    name="button"
-                    :style="selectionStyle(index)"
-                    class="question-selection"
-                  ></button>
-                  <p>{{ option }}</p>
+                  <input type="radio" :id="`${index}.${optionIndex}`"
+                         :value="optionIndex"
+                         v-model="currentOptionIndex" class="question-selection">
+                  <label :for="`${index}.${optionIndex}`">{{ option }}</label>
                 </div>
                 <div>
                   <p class="status">{{ quizQuestionStatusMessage }}</p>
@@ -79,7 +75,7 @@
                 </button>
                 <button
                   v-if="
-                    currentQuizQuestionSelection !== -1 &&
+                    currentOptionIndex !== -1 &&
                       quizQuestionStatus === false
                   "
                   @click="handleCheckQuizQuestion"
@@ -159,7 +155,7 @@ export default class Tutorial extends Vue {
   private currentTutorialElementId: string = '';
 
   // TODO: Need to reset
-  private currentQuizQuestionSelection: number = -1;
+  private currentOptionIndex: number = -1;
   private quizQuestionStatusMessage: string = '';
   private quizQuestionStatus: boolean = false;
 
@@ -220,7 +216,7 @@ export default class Tutorial extends Vue {
   }
 
   async nextStepCallback(currentStep: number) {
-    this.currentQuizQuestionSelection = -1;
+    this.currentOptionIndex = -1;
     this.quizQuestionStatusMessage = '';
     this.quizQuestionStatus = false;
     this.api.statePush(this.steps[currentStep + 1].stateTransform);
@@ -263,13 +259,13 @@ export default class Tutorial extends Vue {
   }
 
   private handleQuizQuestionSelection(index: number): void {
-    this.currentQuizQuestionSelection = index;
+    this.currentOptionIndex = index;
   }
 
   async handleCheckQuizQuestion() {
     const result = await this.checkQuizQuestion(
       this.currentQuizQuestion.id,
-      this.currentQuizQuestionSelection
+      this.currentOptionIndex
     );
     if (result) {
       this.quizQuestionStatusMessage = 'Correct! Please click next.';
@@ -280,7 +276,7 @@ export default class Tutorial extends Vue {
   }
 
   private selectionStyle(index: number) {
-    if (index === this.currentQuizQuestionSelection) {
+    if (index === this.currentOptionIndex) {
       return { backgroundColor: 'var(--new-space-orange)' };
     }
     return {};
