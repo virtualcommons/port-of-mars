@@ -138,6 +138,12 @@ $screen-xxl: 1680px;
   flex-wrap: wrap;
 }
 
+@mixin column-1 {
+  flex: 0 0 8.333333%;
+  max-width: 8.333333%;
+  width: 100%;
+}
+
 @mixin column-2 {
   flex: 0 0 16.666667%;
   max-width: 16.666667%;
@@ -165,6 +171,12 @@ $screen-xxl: 1680px;
 @mixin column-9 {
   flex: 0 0 75%;
   max-width: 75%;
+  width: 100%;
+}
+
+@mixin column-11 {
+  flex: 0 0 91.666667%;
+  max-width: 91.666667%;
   width: 100%;
 }
 

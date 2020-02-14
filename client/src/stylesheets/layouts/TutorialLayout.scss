@@ -63,14 +63,19 @@ body .in-tour {
   }
 
   .option {
+    @include row;
+    text-align: left;
     margin: 0.5rem 0;
     // background-color: green;
 
-    p {
+    label {
+      padding-left: 0.5rem;
+      @include column-11;
       margin-bottom: 0;
     }
 
     .question-selection {
+      @include column-1;
       height: 1.5rem;
       width: 1.5rem;
       padding: 0 !important;
