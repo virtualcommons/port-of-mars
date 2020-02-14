@@ -7,6 +7,10 @@
     margin-bottom: 2rem;
   }
 
+  .selected-button-text {
+    margin-top: 2rem;
+  }
+
   .buttons {
     display: flex;
 
@@ -23,6 +27,12 @@
         color: $space-gray;
         background-color: $space-orange;
       }
+
+      &:focus {
+        color: $space-gray;
+        background-color: $space-orange;
+      }
+
     }
   }
 }
