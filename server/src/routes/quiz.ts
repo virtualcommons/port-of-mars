@@ -1,93 +1,165 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import {
-  checkQuizCompletion,
-  checkQuestionResponse,
-  getQuizByName,
   createQuizSubmission,
-  getQuizQuestionsbyQuizId,
-  getRecentQuizSubmission,
-  createQuestionResponse
+  createQuestionResponse,
+  getQuizByName,
+  getQuizQuestionsByQuizId,
+  setUserQuizCompletion,
+  checkQuestionResponse,
+  checkQuizCompletion
 } from '@/services/quiz';
-import { getUserByJWT, getUserByUsername } from '@/services/account';
+import { getUserByJWT } from '@/services/account';
 import { auth } from '@/routes/middleware';
 
 export const quizRouter = Router();
 
 const DEFAULT_QUIZ = 'TutorialQuiz';
 
-quizRouter.post('/', auth, async (req, res, next) => {
-  try {
-    const token: string = (req as any).token;
-    let user = await getUserByJWT(token);
-    let quiz = await getQuizByName(DEFAULT_QUIZ);
+// NOTE: ROUTE FOR CREATING A QUIZ SUBMISSION
 
-    if (user && quiz) {
-      const userId = user.id;
-      const quizId = quiz.id;
-      const TEST = await checkQuizCompletion(userId);
-      if (TEST) {
-        // TODO: handle quiz completion in response
-        res.json({ userComplete: TEST });
-      } else {
-        const submission = await createQuizSubmission(userId, quizId);
-        // TODO: return submission id
-        res.json({ userComplete: TEST });
-      }
-    } else {
-      res.status(403).json(`User account with username ${req} not found.`);
-    }
-  } catch (e) {
-    next(e);
-  }
-});
+quizRouter.post(
+  '/create',
+  auth,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      // NOTE: Get User ID
+      const token: string = (req as any).token;
+      const user = await getUserByJWT(token);
+      if (user === undefined)
+        return res.status(401).send(`User not found with provided JWT.`);
+      const userId = user!.id;
 
-quizRouter.get('/', auth, async (req, res, next) => {
-  try {
-    let quiz = await getQuizByName(DEFAULT_QUIZ);
-    if (quiz) {
-      const { id } = quiz;
-      const questions = await getQuizQuestionsbyQuizId(id);
-      res.json(questions);
-    } else {
-      // TODO: Use correct status
-      res.status(403).json(`Quiz not located in the database.`);
-    }
-  } catch (e) {
-    next(e);
-  }
-});
+      // NOTE: Get Quiz ID
+      const quiz = await getQuizByName(DEFAULT_QUIZ);
+      if (quiz === undefined)
+        return res.status(500).send('Database Failure: Failed to get Quiz.');
+      const quizId = quiz!.id;
 
-// quiz/:submissionId/:quizId
-// TODO: save submission id in localstorage/jwt
-
-quizRouter.post('/:questionId', auth, async (req, res, next) => {
-  try {
-    const token: string = (req as any).token;
-    let user = await getUserByJWT(token);
-
-    if (user) {
-      const questionId = parseInt(req.params.questionId);
-      const userId = user.id;
-      const submission = await getRecentQuizSubmission(userId);
-      // console.log('SUBMISSION: ', submission);
+      // NOTE: Create QuizSubmission
+      const submission = await createQuizSubmission(userId, quizId);
+      if (submission === undefined)
+        return res
+          .status(500)
+          .send('Database Failure: Failed to create QuizSubmission.');
       const submissionId = submission!.id;
+
+      // NOTE: Send Submission Information
+      res.status(201).send({ submissionId });
+    } catch (e) {
+      next(e);
+    }
+  }
+);
+
+// NOTE: ROUTE FOR GETTING QUIZ QUESTIONS
+
+quizRouter.get(
+  '/questions',
+  auth,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      // NOTE: Get Quiz ID
+      const quiz = await getQuizByName(DEFAULT_QUIZ);
+      if (quiz === undefined)
+        return res.status(500).send('Database Failure: Failed to get Quiz.');
+      const quizId = quiz!.id;
+
+      // NOTE: Get Quiz Questions
+      const quizQuestions = await getQuizQuestionsByQuizId(quizId);
+      if (quizQuestions === undefined)
+        return res
+          .status(500)
+          .send('Database Failure: Failed to get Quiz Questions.');
+
+      // NOTE: Send Quiz Questions
+      res.status(200).send(quizQuestions);
+    } catch (e) {
+      next(e);
+    }
+  }
+);
+
+// NOTE: ROUTE FOR CREATING/CHECKING QUESTION RESPONSES
+
+quizRouter.post(
+  '/:submissionId/:questionId',
+  auth,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      // NOTE: Get Submission ID from Params
+      const submissionId = parseInt(req.params.submissionId);
+      if (isNaN(submissionId))
+        return res
+          .status(400)
+          .send('Question ID (in params) must be an integer.');
+
+      // NOTE: Get Question ID from Params
+      const questionId = parseInt(req.params.questionId);
+      if (isNaN(questionId))
+        return res
+          .status(400)
+          .send('Question ID (in params) must be an integer.');
+
+      // NOTE: Get Answer from Body
       const answer = parseInt(req.body.answer);
+      if (isNaN(answer))
+        return res.status(400).send('Answer (in body) must be an integer.');
+
+      // NOTE: Create Question Response
       const questionResponse = await createQuestionResponse(
         questionId,
         submissionId,
         answer
       );
-      // console.log('QUESTION RESPONSE: ', questionResponse);
+      if (questionResponse === undefined)
+        return res
+          .status(500)
+          .send('Database Failure: Failed to create Question Response.');
 
+      // NOTE: Get Quiz ID
       const quiz = await getQuizByName(DEFAULT_QUIZ);
+      if (quiz === undefined)
+        return res.status(500).send('Database Failure: Failed to get Quiz.');
       const quizId = quiz!.id;
 
-      const correct = await checkQuestionResponse(questionResponse, quizId);
-      res.json(correct);
-    } else {
-      res.status(403).json(`User account with username ${req} not found.`);
+      // NOTE: Check Question Response
+      const correct = await checkQuestionResponse(questionResponse!, quizId);
+
+      // NOTE: Send Question Reponse Result
+      res.status(200).send(correct);
+    } catch (e) {
+      next(e);
     }
-  } catch (e) {
-    next(e);
   }
-});
+);
+
+// NOTE: ROUTE FOR CHECKING QUIZ COMPLETION
+
+quizRouter.get(
+  '/complete',
+  auth,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      // NOTE: Get User
+      const token: string = (req as any).token;
+      const user = await getUserByJWT(token);
+      if (user === undefined)
+        return res.status(401).send(`User not found with provided JWT.`);
+
+      // NOTE: Check Database for Completion First
+      if (user!.passedQuiz) return res.status(200).send(true);
+
+      // NOTE: Check Quiz Completion
+      const userId = user!.id;
+      const complete = await checkQuizCompletion(userId, DEFAULT_QUIZ);
+
+      // NOTE: Set User Completion in DB
+      await setUserQuizCompletion(userId, complete);
+
+      // NOTE: Send Quiz Completion Status
+      res.status(200).send(complete);
+    } catch (e) {
+      next(e);
+    }
+  }
+);

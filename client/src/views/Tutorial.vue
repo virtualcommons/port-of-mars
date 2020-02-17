@@ -56,9 +56,13 @@
                   v-for="(option, optionIndex) in currentQuizQuestion.options"
                   :key="index"
                 >
-                  <input type="radio" :id="`${index}.${optionIndex}`"
-                         :value="optionIndex"
-                         v-model="currentOptionIndex" class="question-selection">
+                  <input
+                    type="radio"
+                    :id="`${index}.${optionIndex}`"
+                    :value="optionIndex"
+                    v-model="currentOptionIndex"
+                    class="question-selection"
+                  />
                   <label :for="`${index}.${optionIndex}`">{{ option }}</label>
                 </div>
                 <div>
@@ -75,8 +79,7 @@
                 </button>
                 <button
                   v-if="
-                    currentOptionIndex !== -1 &&
-                      quizQuestionStatus === false
+                    currentOptionIndex !== -1 && quizQuestionStatus === false
                   "
                   @click="handleCheckQuizQuestion"
                   type="button"
@@ -147,10 +150,9 @@ export default class Tutorial extends Vue {
     onStop: this.stopTourCallback
   };
 
-  steps: Array<Step> = tutorialSteps;
-
+  private steps: Array<Step> = tutorialSteps;
+  private submissionId: any = null;
   private dataFetched: boolean = false;
-  //private steps: Array<Step> = [];
   private quizQuestions: Array<QuizQuestionData> = [];
   private currentTutorialElementId: string = '';
 
@@ -163,8 +165,6 @@ export default class Tutorial extends Vue {
 
   created() {
     this.api.connect(this.$store);
-    //this.steps = new TutorialSteps(this.playerRole).steps;
-    // console.log(this.steps);
   }
 
   async mounted() {
@@ -236,6 +236,9 @@ export default class Tutorial extends Vue {
     await this.$el
       .querySelector(`.${this.TOUR_ACTIVE_CLASS}`)!
       .classList.remove(this.TOUR_ACTIVE_CLASS);
+    const complete = await this.checkQuizCompletion();
+    this.$ajax.setQuizCompletion(complete);
+    console.log('USER HAS COMPLETED QUIZ:', complete);
   }
 
   // NOTE: Integrate Quiz
@@ -284,51 +287,48 @@ export default class Tutorial extends Vue {
 
   // NOTE: Server Fetches
 
-  private async registerUser(): Promise<boolean> {
-    const quizUrl = `${process.env.SERVER_URL_HTTP}/quiz`;
-    const jwt = this.$ajax.loginCreds?.token;
+  private async getSubmissionId(): Promise<boolean> {
+    const submissionId = this.$ajax.submissionId;
 
-    if (!jwt) {
-      const error = 'No user token found.';
-      this.notifyUserOfError('registerUser (jwt check): ' + error);
-      return false;
-    }
-
-    const response = await fetch(quizUrl, {
-      method: 'POST',
-      cache: 'no-cache',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${jwt}`
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer'
-    });
-    if (response.status === 200) {
+    if (submissionId) {
+      this.submissionId = submissionId;
       return true;
     } else {
-      const error = await response.json();
-      this.notifyUserOfError('registerUser (response): ' + error);
+      const quizUrl = `${process.env.SERVER_URL_HTTP}/quiz/create`;
+      const response = await this.$ajax.post(quizUrl);
+
+      if (response.status === 201) {
+        const d = await response.json();
+        const data = parseInt(d.submissionId);
+        if (isNaN(data)) return false;
+        this.submissionId = data;
+        this.$ajax.setSubmissionId(data);
+        return true;
+      } else {
+        const error = await response.json();
+        this.notifyUserOfError('registerUser (response)', error);
+        return false;
+      }
     }
+
     return false;
   }
 
   private async getQuizQuestions(): Promise<boolean> {
-    const quizUrl = `${process.env.SERVER_URL_HTTP}/quiz`;
-
-    if (!this.registerUser()) {
+    if (!this.getSubmissionId()) {
       return false;
     }
 
+    const quizUrl = `${process.env.SERVER_URL_HTTP}/quiz/questions`;
     const response = await this.$ajax.get(quizUrl);
 
     if (response.status === 200) {
-      const data: Array<QuizQuestionData> = await response.json();
-      this.quizQuestions = data;
+      this.quizQuestions = await response.json();
       return true;
     } else {
       const error = await response.json();
-      this.notifyUserOfError('getQuizQuestions (response): ' + error);
+      this.notifyUserOfError('getQuizQuestions (response)', error);
+      return false;
     }
     return false;
   }
@@ -337,24 +337,37 @@ export default class Tutorial extends Vue {
     questionId: number,
     answer: number
   ): Promise<boolean> {
-    const quizUrl = `${process.env.SERVER_URL_HTTP}/quiz/${questionId}`;
-
-    const data: object = { answer: answer };
-    const response = await this.$ajax.post(quizUrl, data);
+    const quizUrl = `${process.env.SERVER_URL_HTTP}/quiz/${this.submissionId}/${questionId}`;
+    const response = await this.$ajax.post(quizUrl, { answer: answer });
 
     if (response.status === 200) {
       const data = await response.json();
       return data;
     } else {
       const error = await response.json();
-      this.notifyUserOfError('checkQuizQuestion (response): ' + error);
+      this.notifyUserOfError('checkQuizQuestion (response)', error);
     }
     return false;
   }
 
-  private notifyUserOfError(error: string): void {
+  private async checkQuizCompletion(): Promise<boolean> {
+    const quizUrl = `${process.env.SERVER_URL_HTTP}/quiz/complete`;
+    const response = await this.$ajax.get(quizUrl);
+
+    if (response.status === 200) {
+      const data = await response.json();
+      return data;
+    } else {
+      const error = await response.json();
+      this.notifyUserOfError('checkQuizCompletion (response)', error);
+    }
+    return false;
+  }
+
+  private notifyUserOfError(call: string, error: any): void {
     // TODO: Show server error modal
-    console.log('ERROR FETCHING DATA: ', error);
+    console.log(`ERROR FETCHING DATA AT ${call}!`);
+    console.log('RESPONSE FROM SERVER: ', error);
   }
 }
 </script>

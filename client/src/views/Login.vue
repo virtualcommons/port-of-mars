@@ -6,12 +6,9 @@
         <h2>Sign In</h2>
       </div>
       <div class="submit" v-if="isLoggedIn">
-        <input type="button" @click="logout" :value="logoutText">
+        <input type="button" @click="logout" :value="logoutText" />
       </div>
-      <form
-        class="login-form"
-        v-else
-      >
+      <form class="login-form" v-else>
         <div class="input-username">
           <label for="username">ASURITE ID</label>
           <div class="input-wrapper">
@@ -24,7 +21,12 @@
           </div>
         </div>
         <div class="submit">
-          <input :disabled="submitDisabled" type="submit" @click="login" value="Login" />
+          <input
+            :disabled="submitDisabled"
+            type="submit"
+            @click="login"
+            value="Login"
+          />
         </div>
         <p class="error" v-if="error">
           {{ error }}
@@ -57,6 +59,7 @@ export default class Login extends Vue {
 
   logout() {
     this.$ajax.forgetLoginCreds();
+    this.$ajax.forgetSubmissionId();
     this.isLoggedIn = false;
   }
 

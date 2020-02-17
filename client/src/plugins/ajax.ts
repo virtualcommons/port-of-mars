@@ -10,6 +10,7 @@ declare module 'vue/types/vue' {
 }
 
 const LOGIN_CREDS = 'loginCreds';
+const SUBMISSION_ID = 'submissionId';
 
 interface LoginCreds {
   token: string
@@ -25,7 +26,7 @@ export class AjaxRequest {
     if (_.isNull(d)) {
       return null;
     }
-    const data = JSON.parse(d);
+    const data = JSON.parse(d!);
     if (!this.store.state.user.username) {
       this.store.commit('SET_USER', { username: data.username, passedQuiz: data.passedQuiz });
     }
@@ -37,9 +38,35 @@ export class AjaxRequest {
     this.store.commit('SET_USER', { username: data.username, passedQuiz: data.passedQuiz });
   }
 
+  setQuizCompletion(complete: boolean) {
+    const loginCreds = this.loginCreds;
+    if (!loginCreds) {
+      throw new Error('loginCreds not found');
+    }
+    loginCreds.passedQuiz = complete;
+    localStorage.setItem(LOGIN_CREDS, JSON.stringify(loginCreds));
+    this.store.commit('SET_USER', { username: loginCreds.username, passedQuiz: loginCreds.passedQuiz });
+  }
+
   forgetLoginCreds() {
     localStorage.removeItem(LOGIN_CREDS);
     this.store.commit('SET_USER', { username: '', passedQuiz: false });
+  }
+
+  get submissionId(): number | null {
+    const d = localStorage.getItem(SUBMISSION_ID);
+    if (_.isNull(d)) return null;
+    const data = parseInt(d!);
+    if (isNaN(data)) return null;
+    return data;
+  }
+
+  setSubmissionId(data: number) {
+    localStorage.setItem(SUBMISSION_ID, JSON.stringify(data));
+  }
+
+  forgetSubmissionId() {
+    localStorage.removeItem(SUBMISSION_ID);
   }
 
   async post(path: string, data?: any) {
