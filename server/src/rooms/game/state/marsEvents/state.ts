@@ -56,7 +56,7 @@ export class Sandstorm implements MarsEventState {
   }
 }
 
-////////////////////////// PersonaGain //////////////////////////
+////////////////////////// PersonalGain //////////////////////////
 
 export type PersonalGainData = { [role in Role]: boolean };
 
@@ -244,6 +244,34 @@ export class OutOfCommissionCurator extends OutOfCommission {
       content: 'Curator has 3 timeblocks to invest during this round.',
       timestamp: (new Date()).getTime()
     });
+    game.logs.push(msg);
+  }
+
+  toJSON(): MarsEventSerialized {
+    return {
+      id: getEventName(this.constructor),
+      data: _.cloneDeep({ roles: this.roles })
+    };
+  }
+}
+
+// Politician
+@assocEventId
+export class OutOfCommissionPolitician extends OutOfCommission {
+  constructor() {
+    super();
+  }
+
+  finalize(game: GameState): void {
+    var player: Role = this.playerOutOfCommission(POLITICIAN);
+    game.players[player].timeBlocks = 3;
+
+    const msg = new MarsLogMessage ({
+      performedBy: SERVER,
+      category: 'Mars Event',
+      content: 'Politician has 3 timeblocks to invest during this round.',
+      timestamp: (new Date()).getTime()
+    })
     game.logs.push(msg);
   }
 

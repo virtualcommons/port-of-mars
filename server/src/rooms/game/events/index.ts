@@ -25,7 +25,7 @@ import {
 } from '@/rooms/game/state';
 import { GameEvent } from '@/rooms/game/events/types';
 import {MarsEvent} from '@/rooms/game/state/marsEvents/MarsEvent';
-import {CompulsivePhilanthropy, PersonalGain, OutOfCommissionCurator} 
+import {CompulsivePhilanthropy, PersonalGain, OutOfCommissionCurator, OutOfCommissionPolitician} 
         from '@/rooms/game/state/marsEvents/state';
 import e = require('express');
 import { Game } from '@/entity/Game';
@@ -390,6 +390,26 @@ export class CommissionCurator extends GameEventWithData {
   apply(game: GameState): void {
     let state: OutOfCommissionCurator;
     if (game.currentEvent.state instanceof OutOfCommissionCurator) {
+      state = game.currentEvent.state;
+    } else {
+      return;
+    }
+
+    state.playerOutOfCommission(this.data.role);
+    game.players[this.data.role].updateReadiness(true);
+  }
+}
+
+export class CommissionPolitician extends GameEventWithData {
+  kind = 'commission-politician';
+
+  constructor(public data: {role: Role}) {
+    super();
+  }
+
+  apply(game: GameState): void {
+    let state: OutOfCommissionPolitician;
+    if (game.currentEvent.state instanceof OutOfCommissionPolitician) {
       state = game.currentEvent.state;
     } else {
       return;
