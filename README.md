@@ -48,6 +48,8 @@ Tests for the project can be run with
 make test
 ```
 
+You should be able to go to a game instance by logging in as 'bob' on the login page. You should be taken to a game instance.
+
 ### Staging Setup
 
 ```bash
