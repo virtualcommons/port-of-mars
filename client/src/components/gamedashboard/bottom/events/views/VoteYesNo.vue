@@ -10,7 +10,7 @@
       </button>
     </div>
 
-    <p :style="!playerVote ? 'color: rgba(0, 0, 0, 0); padding-top: 2rem' : ''" 
+    <p :style="!playerVote ? 'color: rgba(0, 0, 0, 0); padding-top: 2rem' : ''"
         v-bind:class="{'selected-button-text': playerVote }"
         >
       You have selected {{ playerVote }}.

@@ -118,6 +118,6 @@ export default class BarDiscard extends Vue {
 @import '@/stylesheets/gamedashboard/global/cards/BarDiscard.scss';
 
 .unattainable-resource {
-  opacity: 30%;
+  opacity: 0.3;
 }
 </style>

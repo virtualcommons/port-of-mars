@@ -1,16 +1,16 @@
 entity: Question
 items:
-  gameEnd:
-    quiz: '@tutorialquiz'
-    question: 'When does the game end?'
-    correctAnswer: 2
-    options:
-      - 'When upkeep reaches 0'
-      - 'After an unknown number of rounds'
-      - 'After an unknown number of rounds, or earlier if Upkeep reaches 0'
-      - 'When one of the players reaches 20 points'
-    order: 1
-    tutorialElementId: 'gameEnd'
+  # gameEnd:
+  #   quiz: '@tutorialquiz'
+  #   question: 'When does the game end?'
+  #   correctAnswer: 2
+  #   options:
+  #     - 'When upkeep reaches 0'
+  #     - 'After an unknown number of rounds'
+  #     - 'After an unknown number of rounds, or earlier if Upkeep reaches 0'
+  #     - 'When one of the players reaches 20 points'
+  #   order: 1
+  #   tutorialElementId: 'gameEnd'
   chat:
     quiz: '@tutorialquiz'
     question: 'Can you chat with other participants?'
@@ -44,28 +44,28 @@ items:
       - 'You get an extra accomplishment card.'
     order: 4
     tutorialElementId: 'upkeep65'
-  accCardInfluence:
-    quiz: '@tutorialquiz'
-    question: 'The following card is a special accomplishment card [image screwcard]. What does this card do?'
-    correctAnswer: 3
-    options:
-      - 'It costs x influence cards, y influence cards , and ..'
-      - 'You earn x points'
-      - 'You can only buy this card if you have the required influence cards'
-      - 'All above three answers are correctAnswer'
-    order: 5
-    tutorialElementId: 'accCardInfluence'
-  accCardUpkeep:
-    quiz: '@tutorialquiz'
-    question: 'The following card is a special accomplishment card [image screwcard]. What does this card do?'
-    correctAnswer: 3
-    options:
-      - 'It cost the player nothing individually'
-      - 'The Upkeep level of the group will be reduced with x points'
-      - 'The individual player will earn x points'
-      - 'All above three answers are correctAnswer'
-    order: 6
-    tutorialElementId: 'accCardUpkeep'
+  # accCardInfluence:
+  #   quiz: '@tutorialquiz'
+  #   question: 'The following card is a special accomplishment card [image screwcard]. What does this card do?'
+  #   correctAnswer: 3
+  #   options:
+  #     - 'It costs x influence cards, y influence cards , and ..'
+  #     - 'You earn x points'
+  #     - 'You can only buy this card if you have the required influence cards'
+  #     - 'All above three answers are correctAnswer'
+  #   order: 5
+  #   tutorialElementId: 'accCardInfluence'
+  # accCardUpkeep:
+  #   quiz: '@tutorialquiz'
+  #   question: 'The following card is a special accomplishment card [image screwcard]. What does this card do?'
+  #   correctAnswer: 3
+  #   options:
+  #     - 'It cost the player nothing individually'
+  #     - 'The Upkeep level of the group will be reduced with x points'
+  #     - 'The individual player will earn x points'
+  #     - 'All above three answers are correctAnswer'
+  #   order: 6
+  #   tutorialElementId: 'accCardUpkeep'
   timeblocks:
     quiz: '@tutorialquiz'
     question: 'You get each round 10 time blocks? Which of the following statements is incorrectAnswer:'

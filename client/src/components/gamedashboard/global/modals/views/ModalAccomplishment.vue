@@ -93,6 +93,7 @@ export default class ModalAccomplishment extends Vue {
 @import '@/stylesheets/gamedashboard/global/modals/views/ModalAccomplishment.scss';
 
 .unattainable-resource{
-  opacity: 30%;
+  // Percentage produce 1% opacity in production for some reason
+  opacity: 0.3;
 }
 </style>

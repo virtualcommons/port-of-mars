@@ -114,7 +114,7 @@ export class PersonalGain implements MarsEventState {
     const msg = new MarsLogMessage({
       performedBy: SERVER,
       category: 'Mars Event',
-      content: 'Upkeep decreased by ' + this.subtractedUpkeepTotal(subtractedUpkeep) + 
+      content: 'Upkeep decreased by ' + this.subtractedUpkeepTotal(subtractedUpkeep) +
                 '. The following players voted yes: ' + this.playersVoteYes(this.votes),
       timestamp: (new Date()).getTime()
     });
@@ -177,6 +177,14 @@ export class CompulsivePhilanthropy implements MarsEventState {
     }
 
     const winner = _.find(this.order, w => winners.includes(w)) || this.order[0];
+
+    game.logs.push(new MarsLogMessage({
+      performedBy: SERVER,
+      category: 'Mars Event',
+      content: `${winner} voted to be compulsive philanthropist`,
+      timestamp: (new Date()).getTime()
+    }));
+
     game.upkeep += game.players[winner].timeBlocks;
     game.players[winner].timeBlocks = 0;
   }

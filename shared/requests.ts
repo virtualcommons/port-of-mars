@@ -54,7 +54,12 @@ export interface PersonalGainVotesData {
 
 export interface VoteForPhilanthropistData {
   kind: 'vote-for-philanthropist';
-  vote: Role
+  vote: Role;
+}
+
+export interface OutOfCommissionCuratorData {
+  kind: 'out-of-commission-curator';
+  value: Role;
 }
 
 export interface OutOfCommissionCuratorData {

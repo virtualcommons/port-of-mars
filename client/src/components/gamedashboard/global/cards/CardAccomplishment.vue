@@ -117,6 +117,6 @@ export default class CardAccomplishment extends Vue {
 @import '@/stylesheets/gamedashboard/global/cards/CardAccomplishment.scss';
 
 .unattainable-resource {
-  opacity: 30%;
+  opacity: 0.3;
 }
 </style>
