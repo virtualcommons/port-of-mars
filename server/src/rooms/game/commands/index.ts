@@ -16,7 +16,7 @@ import {
   SentChatMessage,
   SentTradeRequest,
   TimeInvested,
-  RejectTradeRequest,
+  DeleteNotification,
   SetPlayerReadiness,
   PersonalGainVoted, VotedForPhilanthropist, MarsEventFinalized, 
   CommissionCurator, CommissionPolitician, CommissionResearcher
@@ -28,6 +28,7 @@ import { Command } from '@/rooms/game/commands/types';
 import { GameEvent } from '@/rooms/game/events/types';
 import { MarsEvent } from '@/rooms/game/state/marsEvents/MarsEvent';
 import { OutOfCommissionCurator } from '../state/marsEvents/state';
+import {tradeIsValid, tradeCanBeCompleted} from "shared/validation";
 
 export class SendChatMessageCmd implements Command {
   constructor(
@@ -138,24 +139,13 @@ export class AcceptTradeRequestCmd implements Command {
 
   static fromReq(r: req.AcceptTradeRequestData, game: Game, client: Client) {
     const p = game.getPlayerByClient(client);
-    return new AcceptTradeRequestCmd(r.id, game, p);
+
+      return new AcceptTradeRequestCmd(r.id, game, p);
+    
   }
 
   execute(): Array<GameEvent> {
     return [new AcceptTradeRequest({ id: this.id })];
-  }
-}
-
-export class RejectTradeRequestCmd implements Command {
-  constructor(private id: string, private game: Game, private player: Player) {}
-
-  static fromReq(r: req.RejectTradeRequestData, game: Game, client: Client) {
-    const p = game.getPlayerByClient(client);
-    return new RejectTradeRequestCmd(r.id, game, p);
-  }
-
-  execute(): Array<GameEvent> {
-    return [new RejectTradeRequest({ id: this.id })];
   }
 }
 
@@ -172,7 +162,12 @@ export class SendTradeRequestCmd implements Command {
   }
 
   execute(): Array<GameEvent> {
-    return [new SentTradeRequest(this.trade)];
+    if(tradeIsValid(this.player,this.trade.from.resourceAmount)){
+      return [new SentTradeRequest(this.trade)];
+    } else{
+      return [];
+    }
+    
   }
 }
 
@@ -230,6 +225,19 @@ export class SetNextPhaseCmd implements Command {
       case Phase.victory:
         return [];
     }
+  }
+}
+
+export class DeleteNotificationCmd implements Command {
+  constructor(public index: number, game: Game, public player: Player){}
+
+  static fromReq(r: req.DeleteNotificationData, game: Game, client: Client){
+    const p = game.getPlayerByClient(client);
+    return new DeleteNotificationCmd(r.index, game, p);
+  }
+
+  execute(){
+    return [new DeleteNotification({index:this.index, player:this.player})];
   }
 }
 

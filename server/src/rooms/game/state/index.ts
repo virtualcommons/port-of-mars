@@ -22,7 +22,8 @@ import {
   ROLES, ServerRole,
   TradeAmountData,
   TradeData,
-  TradeSetData
+  TradeSetData,
+  notifcation
 } from "shared/types";
 import _ from "lodash";
 import {getRandomIntInclusive} from "@/util";
@@ -107,6 +108,23 @@ class PendingInvestment extends Schema implements InvestmentData {
       science: this.science,
       upkeep: this.upkeep
     }
+  }
+
+  rollback(data: InvestmentData){
+    this.culture -= data.culture;
+    this.finance -= data.finance;
+    this.government -= data.government;
+    this.legacy -= data.legacy;
+    this.science -= data.science;
+  }
+
+  add(data: InvestmentData){
+    this.culture += data.culture;
+    this.finance += data.finance;
+    this.government += data.government;
+    this.legacy += data.legacy;
+    this.science += data.science;
+    this.upkeep += data.upkeep;
   }
 
   @type('number')
@@ -502,6 +520,7 @@ export interface PlayerSerialized {
   victoryPoints: number
   inventory: ResourceAmountData
   pendingInvestments: InvestmentData
+  notifications: Array<String>
 }
 
 export class TradeAmount extends Schema {
@@ -563,6 +582,8 @@ export class Trade extends Schema {
 
     pFrom.inventory.update(_.mapValues(this.from.resourceAmount, r => -r!));
     pFrom.inventory.update(this.to.resourceAmount);
+    //pFrom.pendingInvestments.rollback({...this.from.resourceAmount,upkeep:0});
+
     pTo.inventory.update(_.mapValues(this.to.resourceAmount, r => -r!));
     pTo.inventory.update(this.from.resourceAmount);
   }
@@ -587,6 +608,9 @@ export class Player extends Schema implements PlayerData {
     this.contributedUpkeep = data.contributedUpkeep;
     this.victoryPoints = data.victoryPoints;
     this.inventory.fromJSON(data.inventory);
+    
+    const notifcations = _.map(data.notifications, n => n);
+    this.notifications.splice(0, this.notifications.length, ...notifcations);
     return this;
   }
 
@@ -601,7 +625,8 @@ export class Player extends Schema implements PlayerData {
       contributedUpkeep: this.contributedUpkeep,
       victoryPoints: this.victoryPoints,
       inventory: this.inventory.toJSON(),
-      pendingInvestments: this.pendingInvestments.toJSON()
+      pendingInvestments: this.pendingInvestments.toJSON(),
+      notifications: _.map(this.notifications, x => JSON.stringify(x)),
     };
   }
 
@@ -638,6 +663,9 @@ export class Player extends Schema implements PlayerData {
 
   @type("number")
   victoryPoints: number = 0;
+
+  @type(["string"])
+  notifications = new ArraySchema<String>();
 
   isInvestmentFeasible(investment: InvestmentData) {
     return this.costs.investmentWithinBudget(investment, this.timeBlocks);
@@ -718,6 +746,14 @@ export class Player extends Schema implements PlayerData {
 
   updateReadiness(ready: boolean): void {
     this.ready = ready;
+  }
+
+  sendNotifcation(message:String):void {
+    this.notifications.push(message);
+  }
+
+  deleteNotifcation(index:number):void{
+    this.notifications.splice(index,1);
   }
 }
 
@@ -985,6 +1021,10 @@ export class GameState extends Schema implements GameData {
     } else {
       this.upkeep = 0;
     }
+  }
+
+  clearTrades(){
+    Object.keys(this.tradeSet).forEach(trade => delete this.tradeSet[trade]);
   }
 
   applyMany(event: Array<GameEvent>): void {

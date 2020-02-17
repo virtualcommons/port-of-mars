@@ -37,6 +37,7 @@ import ContainerTop from '@/components/gamedashboard/top/containers/ContainerTop
 import ContainerBottom from '@/components/gamedashboard/bottom/containers/ContainerBottom.vue';
 import ContainerRight from '@/components/gamedashboard/right/containers/ContainerRight.vue';
 
+
 @Component({
   components: {
     UserHeader,
@@ -49,7 +50,7 @@ import ContainerRight from '@/components/gamedashboard/right/containers/Containe
 })
 export default class ContainerBoard extends Vue {
   get notifications() {
-    return this.$store.state.activeNotifications;
+    return this.$store.getters.player.notifications;
   }
 }
 </script>

@@ -34,16 +34,21 @@
         mode="outgoing"
         class="options-block tour-give-up"
         v-show="name"
+        :key="count"
       />
-      <TradeOptions
+      <TradeOptions 
         :resourceReader="handleReciveResources"
         text="In exchange for"
         mode="incoming"
         class="options-block tour-get-in-return"
         v-show="name"
+        :key="count + Math.random()"
       />
     </div>
 
+    <!-- <div v-show="name != ''" class="error-messages">
+      <p class="locked-trade" v-bind:class="{'show-error':!isTradeValid && name != '', 'hide-error':isTradeValid && name != ''}">You do not have enough free resources to make this trade.</p>
+    </div> -->
     <div class="trade-send">
       <button v-show="name" :disabled="!clientValidation" @click="handleTrade">
         Send Trade
@@ -69,7 +74,7 @@ import {
   RESOURCES,
   Role
 } from 'shared/types';
-import { canPlayerMakeTrade } from 'shared/validation';
+import { canPlayerMakeTrade} from 'shared/validation';
 import { GameRequestAPI } from '@/api/game/request';
 import { defaultInventory } from '@/store/state';
 
@@ -86,6 +91,7 @@ export default class TradeRequest extends Vue {
   exchangeResources: ResourceAmountData = defaultInventory();
 
   name = '';
+  count = 0;
 
   get otherPlayers() {
     return Object.keys(this.$store.getters.otherPlayers);
@@ -96,6 +102,7 @@ export default class TradeRequest extends Vue {
 
     return this.name != '' && canPlayerMakeTrade(this.sentResources, inventory);
   }
+
 
   handleSendResources(resources: ResourceAmountData) {
     this.sentResources = resources;
@@ -132,6 +139,8 @@ export default class TradeRequest extends Vue {
 
       this.api.sendTradeRequest(tradeDataPackage);
       this.name = '';
+      this.count+=1;
+
     }
   }
 }

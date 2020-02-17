@@ -17,10 +17,13 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, Inject } from 'vue-property-decorator';
+import { GameRequestAPI } from '@/api/game/request';
 
 @Component({})
 export default class Notification extends Vue {
+  @Inject() readonly api!: GameRequestAPI;
+
   @Prop({
     default: `you've been asleep for 20 years. this is the doctor's last way of contacting you from the outside. please wake up.`
   })
@@ -34,9 +37,9 @@ export default class Notification extends Vue {
   private hideNotif(): void {
     this.inView = 'hide';
 
-    setTimeout(() => {
-      this.$store.state.activeNotifications.splice(this.index, 1);
-    }, 1000);
+
+      this.api.deleteNotification(this.index);
+
   }
 
   private viewAnim(): string {

@@ -13,7 +13,9 @@ import {
   SetPlayerReadinessCmd,
   TimeInvestmentCmd,
   RejectTradeRequestCmd,
-  PersonalGainVotes, VoteForPhilanthropistCmd, OutOfCommissionCuratorCmd, OutOfCommissionPoliticianCmd, OutOfCommissionResearcherCmd
+  PersonalGainVotes, VoteForPhilanthropistCmd, OutOfCommissionCuratorCmd, OutOfCommissionPoliticianCmd, OutOfCommissionResearcherCmd,
+  DeleteNotificationCmd,
+
 } from '@/rooms/game/commands';
 import {Game, GameOpts, Persister} from '@/rooms/game/types';
 import { Command } from '@/rooms/game/commands/types';
@@ -82,14 +84,22 @@ export class GameRoom extends Room<GameState> implements Game {
         return SendTradeRequestCmd.fromReq(r, this, client);
       case 'personal-gain':
         return PersonalGainVotes.fromReq(r, this, client);
+<<<<<<< Updated upstream
       case 'vote-for-philanthropist':
         return VoteForPhilanthropistCmd.fromReq(r, this, client);
       case 'out-of-commission-curator':
         return OutOfCommissionCuratorCmd.fromReq(r, this, client);
+<<<<<<< HEAD
       case 'out-of-commission-politician':
         return OutOfCommissionPoliticianCmd.fromReq(r, this, client);
       case 'out-of-commission-researcher':
         return OutOfCommissionResearcherCmd.fromReq(r, this, client);
+=======
+=======
+        case 'delete-notification':
+          return DeleteNotificationCmd.fromReq(r, this, client);
+>>>>>>> Stashed changes
+>>>>>>> [feat]Trading validation
     }
   }
 

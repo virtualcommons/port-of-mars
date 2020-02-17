@@ -97,19 +97,24 @@ export default class BarDiscard extends Vue {
   }
 
   private handleDiscardAccomplishment(a: any) {
+
+
     console.log(this.$store.getters.layout);
-    if (this.$store.getters.layout == 'tutorial') {
+    if(this.$store.getters.layout == 'tutorial'){
       this.api.discardAccomplishment(a.id);
-    } else {
-      this.$root.$emit('openmodalconfirmation', {
-        text: `Selecting \"Yes\" will discard the accomplishment \"${a.label}\" and a new card will be drawn next round.`,
-        victoryPoints: a.victoryPoints,
-        cost: this.accomplishmentCost,
-        phaseOpened: this.$store.state.phase,
-        type: 'discardAccomplishment',
-        actionData: a.id
-      });
     }
+
+    else{
+      this.$root.$emit('openmodalconfirmation', {
+      text: `Selecting \"Yes\" will discard the accomplishment \"${a.label}\" and a new card will be drawn next round.`,
+      victoryPoints: a.victoryPoints,
+      cost:this.accomplishmentCost,
+      phaseOpened:this.$store.state.phase,
+      type: 'discardAccomplishment',
+      actionData: a.id
+    });
+    }
+    
   }
 }
 </script>

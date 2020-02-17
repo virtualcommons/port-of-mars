@@ -12,7 +12,8 @@ import {
   AcceptTradeRequestData,
   RejectTradeRequestData,
   PersonalGainVotesData, VoteForPhilanthropistData, 
-  OutOfCommissionCuratorData
+  OutOfCommissionCuratorData,
+  DeleteNotificationData
 } from 'shared/requests';
 import {
   AccomplishmentData,
@@ -104,4 +105,8 @@ export class GameRequestAPI {
     this.send(msg);
   }
 
+  public deleteNotification(index: number){
+    const msg: DeleteNotificationData = {kind: 'delete-notification', index};
+    this.send(msg);
+  }
 }

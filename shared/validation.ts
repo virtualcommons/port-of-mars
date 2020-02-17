@@ -1,4 +1,4 @@
-import {AccomplishmentData, Resource, ResourceAmountData, ResourceCostData, RESOURCES} from "./types";
+import {AccomplishmentData, Resource, ResourceAmountData, ResourceCostData, RESOURCES, PlayerData} from "./types";
 
 export function canPurchaseAccomplishment(accomplishment: AccomplishmentData, inventory: ResourceAmountData) {
   for (const k of Object.keys(inventory)) {
@@ -34,4 +34,23 @@ export function canPlayerMakeTrade(resources:ResourceAmountData,inventory:Resour
   }
 
   return canMakeTrade && isTradingSomething;
+}
+
+export function tradeIsValid(playerData:PlayerData, tradeAmount: ResourceAmountData){
+  let avaliableResources:ResourceAmountData = {...playerData.inventory};
+  for(const resource of RESOURCES){
+    avaliableResources[resource] -= playerData.pendingInvestments[resource];
+    if(tradeAmount[resource] > avaliableResources[resource]){return false}
+  }
+  return true;
+
+}
+
+export function tradeCanBeCompleted(playerInventory: ResourceAmountData, tradeResources: ResourceAmountData){
+  let avaliableResources:ResourceAmountData = {...playerInventory};
+  for(const resource of RESOURCES){
+    avaliableResources[resource] -=  tradeResources[resource];
+    if(avaliableResources[resource] < 0 ){return false}
+  }
+  return true;
 }

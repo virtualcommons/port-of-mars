@@ -76,6 +76,10 @@ export interface OutOfCommissionResearcherData {
   kind: 'out-of-commission-researcher';
   value: Role;
 }
+export interface DeleteNotificationData {
+  kind: 'delete-notification';
+  index: number;
+}
 
 export type Requests =
   | SendChatMessageData
@@ -92,4 +96,5 @@ export type Requests =
   | VoteForPhilanthropistData
   | OutOfCommissionCuratorData
   | OutOfCommissionPoliticianData
-  | OutOfCommissionResearcherData;
+  | OutOfCommissionResearcherData
+  | DeleteNotificationData;
