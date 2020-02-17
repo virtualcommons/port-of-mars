@@ -7,7 +7,7 @@ import cors from 'cors';
 import * as Sentry from '@sentry/node';
 import { Server } from 'colyseus';
 import { GameRoom } from '@/rooms/game';
-import { WaitingRoom } from '@/rooms/waitingLobby';
+import { RankedLobbyRoom } from '@/rooms/waitingLobby';
 import { mockGameInitOpts } from '@/util';
 import { DBPersister } from '@/services/persistence';
 import { ClockTimer } from '@gamestdio/timer/lib/ClockTimer';
@@ -59,7 +59,7 @@ function createApp() {
 
   // register your room handlers
   gameServer.define('game', GameRoom, mockGameInitOpts(persister));
-  gameServer.define('waiting', WaitingRoom);
+  gameServer.define('waiting', RankedLobbyRoom);
 
   app.use(express.static('static'));
 

@@ -56,6 +56,7 @@ import {WaitingRequestAPI} from "@/api/waitingLobby/request";
 export default class WaitingLobby extends Vue {
   @Inject() $client!: Client;
 
+  lobbyAPI: WaitingRequestAPI = new WaitingRequestAPI();
   private hint: string = '';
   private hintCount: number = 0;
   private hints: Array<string> = [
@@ -65,6 +66,16 @@ export default class WaitingLobby extends Vue {
     'Morbi at tellus convallis quam viverra sodales. Praesent tincidunt felis semper ipsum maximus rhoncus. Suspendisse potenti. Duis viverra nisi lectus, vel porta nisl varius vitae. Ut quis magna eget quam.',
     'Etiam porta commodo neque, eu faucibus purus. Donec quis dui maximus, volutpat erat vitae, laoreet ligula. Pellentesque accumsan laoreet justo id vehicula. Nullam consectetur, enim eu tincidunt sagittis, mi odio.'
   ];
+
+  async created() {
+    console.log('created')
+    const room = await this.$client.joinOrCreate('waiting', { token: this.$ajax.loginCreds?.token });
+    this.lobbyAPI.connect(room)
+  }
+
+  async destroyed() {
+    this.lobbyAPI.room.leave();
+  }
 
   mounted() {
     this.hint = this.hints[this.hintCount];
