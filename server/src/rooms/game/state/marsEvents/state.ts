@@ -11,6 +11,8 @@ import { RsaPrivateKey } from "crypto";
 import { Game } from "@/entity/Game";
 import { GameEvent } from "@/entity/GameEvent";
 import { EntityRepository } from "typeorm";
+import { get } from "mongoose";
+import { OutOfCommissionCuratorCmd } from "../../commands";
 
 const _dispatch: { [id: string]: MarsEventStateConstructor } = {};
 
@@ -202,11 +204,9 @@ export class CompulsivePhilanthropy implements MarsEventState {
 
 type OutOfCommissionData = { [role in Role]: Role }
 
-// Curator
-@assocEventId
-export class OutOfCommissionCurator implements MarsEventState {
-  constructor(data?: { roles: OutOfCommissionData }) {
-    this.roles = data?.roles ?? {
+abstract class OutOfCommission implements MarsEventState {
+  constructor(public data?: { roles: OutOfCommissionData }) {
+      this.roles = data?.roles ?? {
       [CURATOR]: CURATOR,
       [ENTREPRENEUR]: ENTREPRENEUR,
       [PIONEER]: PIONEER,
@@ -218,8 +218,20 @@ export class OutOfCommissionCurator implements MarsEventState {
   roles: OutOfCommissionData;
 
   playerOutOfCommission(outOfCommission: Role): Role {
-    var player: Role = this.roles[outOfCommission] 
+    var player: Role = this.roles[outOfCommission];
     return player;
+  }
+  
+  abstract finalize(game: GameState): void;
+
+  abstract toJSON(): MarsEventSerialized;
+}
+
+// Curator
+@assocEventId
+export class OutOfCommissionCurator extends OutOfCommission {
+  constructor() {
+    super();
   }
 
   finalize(game: GameState): void {

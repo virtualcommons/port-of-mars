@@ -17,7 +17,7 @@ import {
 } from '@/rooms/game/commands';
 import {Game, GameOpts, Persister} from '@/rooms/game/types';
 import { Command } from '@/rooms/game/commands/types';
-import { StateSnapshotTaken, CommissionCurator } from '@/rooms/game/events';
+import { StateSnapshotTaken } from '@/rooms/game/events';
 import {User} from "@/entity/User";
 import {getUserByJWT} from "@/services/account";
 
