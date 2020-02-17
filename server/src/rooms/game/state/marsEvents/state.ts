@@ -7,8 +7,10 @@ import {GameState, MarsLogMessage} from "@/rooms/game/state";
 import * as _ from "lodash";
 import {CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER, Role, ROLES, SERVER} from "shared/types";
 import { PersonalGainVotesData } from "shared/requests";
-
-export type PersonalGainData = { [role in Role]: boolean };
+import { RsaPrivateKey } from "crypto";
+import { Game } from "@/entity/Game";
+import { GameEvent } from "@/entity/GameEvent";
+import { EntityRepository } from "typeorm";
 
 const _dispatch: { [id: string]: MarsEventStateConstructor } = {};
 
@@ -30,6 +32,8 @@ export interface MarsEventSerialized {
   data?: any;
 }
 
+////////////////////////// Sandstorm //////////////////////////
+
 @assocEventId
 export class Sandstorm implements MarsEventState {
   finalize(game: GameState): void {
@@ -50,13 +54,17 @@ export class Sandstorm implements MarsEventState {
   }
 }
 
+////////////////////////// PersonaGain //////////////////////////
+
+export type PersonalGainData = { [role in Role]: boolean };
+
 @assocEventId
 export class PersonalGain implements MarsEventState {
   constructor(votes?: PersonalGainData) {
     this.votes = votes ?? _.cloneDeep(PersonalGain.defaultVotes);
   }
 
-  private static defaultResponse: boolean = false;
+  private static defaultResponse: boolean = true;
 
   private static defaultVotes: PersonalGainData = {
     [CURATOR]: PersonalGain.defaultResponse,
@@ -102,7 +110,6 @@ export class PersonalGain implements MarsEventState {
       }
     }
     game.subtractUpkeep(subtractedUpkeep);
-    // create new MarsLogMessage
 
     const msg = new MarsLogMessage({
       performedBy: SERVER,
@@ -121,6 +128,8 @@ export class PersonalGain implements MarsEventState {
     };
   }
 }
+
+////////////////////////// Compulsive Philanthropy //////////////////////////
 
 type CompulsivePhilanthropyData = { [role in Role]: Role }
 
@@ -176,6 +185,52 @@ export class CompulsivePhilanthropy implements MarsEventState {
     return {
       id: getEventName(this.constructor),
       data: _.cloneDeep({ votes: this.votes, order: this.order })
+    };
+  }
+}
+
+
+////////////////////////// Out of Commission //////////////////////////
+
+type OutOfCommissionData = { [role in Role]: Role }
+
+// Curator
+@assocEventId
+export class OutOfCommissionCurator implements MarsEventState {
+  constructor(data?: { roles: OutOfCommissionData }) {
+    this.roles = data?.roles ?? {
+      [CURATOR]: CURATOR,
+      [ENTREPRENEUR]: ENTREPRENEUR,
+      [PIONEER]: PIONEER,
+      [POLITICIAN]: POLITICIAN,
+      [RESEARCHER]: RESEARCHER
+    };
+  }
+
+  roles: OutOfCommissionData;
+
+  playerOutOfCommission(outOfCommission: Role): Role {
+    var player: Role = this.roles[outOfCommission] 
+    return player;
+  }
+
+  finalize(game: GameState): void {
+    var player: Role = this.playerOutOfCommission(CURATOR);
+    game.players[player].timeBlocks = 3;
+
+    const msg = new MarsLogMessage({
+      performedBy: SERVER,
+      category: 'Mars Event',
+      content: 'Curator has 3 timeblocks to invest during this round.',
+      timestamp: (new Date()).getTime()
+    });
+    game.logs.push(msg);
+  }
+
+  toJSON(): MarsEventSerialized {
+    return {
+      id: getEventName(this.constructor),
+      data: _.cloneDeep({ roles: this.roles })
     };
   }
 }

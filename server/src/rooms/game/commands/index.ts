@@ -18,7 +18,7 @@ import {
   TimeInvested,
   RejectTradeRequest,
   SetPlayerReadiness,
-  PersonalGainVoted, VotedForPhilanthropist, MarsEventFinalized
+  PersonalGainVoted, VotedForPhilanthropist, MarsEventFinalized, CommissionCurator
 } from '@/rooms/game/events';
 import { getAccomplishmentByID } from '@/data/Accomplishment';
 import { Client } from 'colyseus';
@@ -26,6 +26,7 @@ import { Game } from '@/rooms/game/types';
 import { Command } from '@/rooms/game/commands/types';
 import { GameEvent } from '@/rooms/game/events/types';
 import { MarsEvent } from '@/rooms/game/state/marsEvents/MarsEvent';
+import { OutOfCommissionCurator } from '../state/marsEvents/state';
 
 export class SendChatMessageCmd implements Command {
   constructor(
@@ -276,5 +277,22 @@ export class VoteForPhilanthropistCmd implements Command {
 
   execute(): Array<GameEvent> {
     return [new VotedForPhilanthropist({ voter: this.player.role, vote: this.voteData.vote })];
+  }
+}
+
+export class OutOfCommissionCuratorCmd implements Command {
+  constructor(
+    private data: req.OutOfCommissionCuratorData,
+    private game: Game,
+    private player: Player
+  ) {}
+
+  static fromReq(r: req.OutOfCommissionCuratorData, game: Game, client: Client) {
+    const p = game.getPlayerByClient(client);
+    return new OutOfCommissionCuratorCmd(r, game, p);
+  }
+
+  execute(): Array<GameEvent> {
+    return [new CommissionCurator({ role: this.player.role })]
   }
 }

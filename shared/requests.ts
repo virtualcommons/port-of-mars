@@ -57,6 +57,11 @@ export interface VoteForPhilanthropistData {
   vote: Role
 }
 
+export interface OutOfCommissionCuratorData {
+  kind: 'out-of-commission-curator';
+  value: Role;
+}
+
 export type Requests =
   | SendChatMessageData
   | SetPlayerReadinessData
@@ -69,4 +74,5 @@ export type Requests =
   | AcceptTradeRequestData
   | RejectTradeRequestData
   | PersonalGainVotesData
-  | VoteForPhilanthropistData;
+  | VoteForPhilanthropistData
+  | OutOfCommissionCuratorData;

@@ -10,7 +10,10 @@ import {
   Resource,
   TradeData,
   CURATOR,
-  ENTREPRENEUR
+  ENTREPRENEUR,
+  PIONEER,
+  POLITICIAN,
+  RESEARCHER
 } from 'shared/types';
 import {
   Accomplishment,
@@ -22,7 +25,10 @@ import {
 } from '@/rooms/game/state';
 import { GameEvent } from '@/rooms/game/events/types';
 import {MarsEvent} from '@/rooms/game/state/marsEvents/MarsEvent';
-import {CompulsivePhilanthropy, PersonalGain} from '@/rooms/game/state/marsEvents/state';
+import {CompulsivePhilanthropy, PersonalGain, OutOfCommissionCurator} 
+        from '@/rooms/game/state/marsEvents/state';
+import e = require('express');
+import { Game } from '@/entity/Game';
 
 abstract class GameEventWithData implements GameEvent {
   abstract kind: string;
@@ -371,5 +377,25 @@ export class VotedForPhilanthropist extends GameEventWithData {
 
     state.voteForPlayer(this.data.voter, this.data.vote);
     game.players[this.data.voter].updateReadiness(true);
+  }
+}
+
+export class CommissionCurator extends GameEventWithData {
+  kind = 'commission-curator';
+
+  constructor(public data: {role: Role}) {
+    super();
+  }
+
+  apply(game: GameState): void {
+    let state: OutOfCommissionCurator;
+    if (game.currentEvent.state instanceof OutOfCommissionCurator) {
+      state = game.currentEvent.state;
+    } else {
+      return;
+    }
+
+    state.playerOutOfCommission(this.data.role);
+    game.players[this.data.role].updateReadiness(true);
   }
 }

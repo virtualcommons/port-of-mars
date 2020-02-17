@@ -210,8 +210,9 @@ const _marsEvents: Array<[MarsEventData, number]> = [
 
 
 const marsEvents: Array<[MarsEventData, number]> = [
-  [_.find(_marsEvents, e => e[0].id === 'personalGain')![0], 3],
-  [_.find(_marsEvents, e => e[0].id === 'sandstorm')![0], 3],
-  [_.find(_marsEvents, e => e[0].id === 'compulsivePhilanthropy')![0], 3]
+  [_.find(_marsEvents, e => e[0].id === 'personalGain')![0], 4],
+  [_.find(_marsEvents, e => e[0].id === 'sandstorm')![0], 4],
+  [_.find(_marsEvents, e => e[0].id === 'compulsivePhilanthropy')![0], 4],
+  [_.find(_marsEvents, e => e[0].id === 'outOfCommissionCurator')![0], 4]
 ];
 

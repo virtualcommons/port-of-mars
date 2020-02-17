@@ -31,6 +31,7 @@ export default {
     }
   },
   SET_TIME_BLOCKS(state: State, payload: { data: number; role: Role }) {
+    console.log('timeblocks', payload);
     state.players[payload.role].timeBlocks = payload.data;
   }
 };

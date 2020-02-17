@@ -126,8 +126,6 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
     store.commit('CHANGE_EVENT', { event: deschemify(event), index });
   };
 
-  // RESPONSES FOR EVENTS :: END
-
   room.state.tradeSet.onAdd = (event: Schemify<TradeData>, id: string) => {
     const rawEvent: TradeData = deschemify(event);
     store.commit('ADD_TO_TRADES', { trade: rawEvent, id });
