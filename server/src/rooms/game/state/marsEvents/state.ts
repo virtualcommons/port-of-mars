@@ -337,3 +337,31 @@ export class OutOfCommissionPioneer extends OutOfCommission {
     }
   }
 }
+
+// Entrepreneur
+@assocEventId
+export class OutOfCommissionEntrepreneur extends OutOfCommission {
+  constructor() {
+    super();
+  }
+
+  finalize(game: GameState): void {
+    var player: Role = this.playerOutOfCommission(ENTREPRENEUR);
+    game.players[player].timeBlocks = 3;
+    
+    const msg = new MarsLogMessage ({
+      performedBy: SERVER,
+      category: 'Mars Event',
+      content: 'Entrepreneur has 3 timeblocks to invest during this round.',
+      timestamp: (new Date()).getTime()
+    })
+    game.logs.push(msg);
+  }
+
+  toJSON(): MarsEventSerialized {
+    return {
+      id: getEventName(this.constructor),
+      data: _.cloneDeep({ role: this.roles })
+    }
+  }
+}

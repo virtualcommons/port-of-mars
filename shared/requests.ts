@@ -82,6 +82,11 @@ export interface OutOfCommissionPioneerData {
   value: Role;
 }
 
+export interface OutOfCommissionEntrepreneurData {
+  kind: 'out-of-commission-entrepreneur';
+  value: Role;
+}
+
 export type Requests =
   | SendChatMessageData
   | SetPlayerReadinessData
@@ -98,4 +103,5 @@ export type Requests =
   | OutOfCommissionCuratorData
   | OutOfCommissionPoliticianData
   | OutOfCommissionResearcherData
-  | OutOfCommissionPioneerData;
+  | OutOfCommissionPioneerData
+  | OutOfCommissionEntrepreneurData;

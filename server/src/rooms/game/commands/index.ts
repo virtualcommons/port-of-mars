@@ -21,7 +21,7 @@ import {
   PersonalGainVoted, VotedForPhilanthropist, 
   MarsEventFinalized, CommissionCurator, 
   CommissionPolitician, CommissionResearcher, 
-  CommissionPioneer
+  CommissionPioneer, CommissionEntrepreneur
 } from '@/rooms/game/events';
 import { getAccomplishmentByID } from '@/data/Accomplishment';
 import { Client } from 'colyseus';
@@ -29,7 +29,7 @@ import { Game } from '@/rooms/game/types';
 import { Command } from '@/rooms/game/commands/types';
 import { GameEvent } from '@/rooms/game/events/types';
 import { MarsEvent } from '@/rooms/game/state/marsEvents/MarsEvent';
-import { OutOfCommissionCurator, OutOfCommissionPioneer } from '../state/marsEvents/state';
+import { OutOfCommissionCurator, OutOfCommissionPioneer, OutOfCommissionEntrepreneur } from '../state/marsEvents/state';
 
 export class SendChatMessageCmd implements Command {
   constructor(
@@ -348,5 +348,22 @@ export class OutOfCommissionPioneerCmd implements Command {
 
   execute(): Array<GameEvent> {
     return [new CommissionPioneer({ role: this.player.role })]
+  }
+}
+
+export class OutOfCommissionEntrepreneurCmd implements Command {
+  constructor(
+    private data: req.OutOfCommissionEntrepreneurData,
+    private game: Game,
+    private player: Player
+  ) {}
+
+  static fromReq(r: req.OutOfCommissionEntrepreneurData, game: Game, client: Client) {
+    const p = game.getPlayerByClient(client);
+    return new OutOfCommissionEntrepreneurCmd(r, game, p);
+  }
+
+  execute(): Array<GameEvent> {
+    return [new CommissionEntrepreneur({ role: this.player.role })]
   }
 }
