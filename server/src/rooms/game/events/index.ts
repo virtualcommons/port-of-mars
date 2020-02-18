@@ -24,8 +24,11 @@ import {
   MarsLogMessage
 } from '@/rooms/game/state';
 import { GameEvent } from '@/rooms/game/events/types';
-import {MarsEvent} from '@/rooms/game/state/marsEvents/MarsEvent';
-import {CompulsivePhilanthropy, PersonalGain, OutOfCommissionCurator, OutOfCommissionPolitician, OutOfCommissionResearcher} 
+import { MarsEvent } from '@/rooms/game/state/marsEvents/MarsEvent';
+import { CompulsivePhilanthropy, PersonalGain, 
+        OutOfCommissionCurator, OutOfCommissionPolitician, 
+        OutOfCommissionResearcher, OutOfCommissionPioneer
+       } 
         from '@/rooms/game/state/marsEvents/state';
 import e = require('express');
 import { Game } from '@/entity/Game';
@@ -430,6 +433,26 @@ export class CommissionResearcher extends GameEventWithData {
   apply(game: GameState): void {
     let state: OutOfCommissionResearcher;
     if (game.currentEvent.state instanceof OutOfCommissionResearcher) {
+      state = game.currentEvent.state;
+    } else {
+      return;
+    }
+
+    state.playerOutOfCommission(this.data.role);
+    game.players[this.data.role].updateReadiness(true);
+  }
+}
+
+export class CommissionPioneer extends GameEventWithData {
+  kind = 'commission-pioneer';
+
+  constructor(public data: {role: Role}) {
+    super();
+  }
+
+  apply(game: GameState): void {
+    let state: OutOfCommissionPioneer;
+    if (game.currentEvent.state instanceof OutOfCommissionPioneer) {
       state = game.currentEvent.state;
     } else {
       return;

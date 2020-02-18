@@ -12,7 +12,6 @@ import { Game } from "@/entity/Game";
 import { GameEvent } from "@/entity/GameEvent";
 import { EntityRepository } from "typeorm";
 import { get } from "mongoose";
-import { OutOfCommissionCuratorCmd } from "../../commands";
 
 const _dispatch: { [id: string]: MarsEventStateConstructor } = {};
 
@@ -307,6 +306,34 @@ export class OutOfCommissionResearcher extends OutOfCommission {
     return {
       id: getEventName(this.constructor),
       data: _.cloneDeep({ roles: this.roles })
+    }
+  }
+}
+
+// Pioneer
+@assocEventId
+export class OutOfCommissionPioneer extends OutOfCommission {
+  constructor() {
+    super();
+  }
+
+  finalize(game: GameState): void {
+    var player: Role = this.playerOutOfCommission(PIONEER);
+    game.players[player].timeBlocks = 3;
+    
+    const msg = new MarsLogMessage ({
+      performedBy: SERVER,
+      category: 'Mars Event',
+      content: 'Pioneer has 3 timeblocks to invest during this round.',
+      timestamp: (new Date()).getTime()
+    })
+    game.logs.push(msg);
+  }
+
+  toJSON(): MarsEventSerialized {
+    return {
+      id: getEventName(this.constructor),
+      data: _.cloneDeep({ role: this.roles })
     }
   }
 }
