@@ -17,6 +17,10 @@
     display: flex;
     flex-wrap: wrap;
 
+    .impossible-resource {
+      opacity: 0.5;
+    }
+
     .investments {
       // background-color: white;
       height: 3rem;
@@ -40,10 +44,6 @@
           height: 2.5rem;
           width: 4rem;
           // margin: 0 0.25rem;
-        }
-
-        .impossible-resource {
-          opacity: 0.5;
         }
 
         /* Firefox */
