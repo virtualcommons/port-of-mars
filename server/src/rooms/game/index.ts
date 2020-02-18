@@ -16,6 +16,7 @@ import {
   PersonalGainVotes, VoteForPhilanthropistCmd, 
   OutOfCommissionCuratorCmd, OutOfCommissionPoliticianCmd, 
   OutOfCommissionResearcherCmd, OutOfCommissionPioneerCmd,
+  DeleteNotificationCmd,
   OutOfCommissionEntrepreneurCmd
 } from '@/rooms/game/commands';
 import {Game, GameOpts, Persister} from '@/rooms/game/types';
@@ -95,6 +96,8 @@ export class GameRoom extends Room<GameState> implements Game {
         return OutOfCommissionResearcherCmd.fromReq(r, this, client);
       case 'out-of-commission-pioneer':
         return OutOfCommissionPioneerCmd.fromReq(r, this, client);
+      case 'delete-notification':
+        return DeleteNotificationCmd.fromReq(r, this, client);
       case 'out-of-commission-entrepreneur':
         return OutOfCommissionEntrepreneurCmd.fromReq(r, this, client);
     }

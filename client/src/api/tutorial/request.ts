@@ -136,6 +136,13 @@ export class TutorialAPI extends GameRequestAPI {
         this.isTaskComplete = true;
     }
 
+    public deleteNotification(id: number){
+        this.store.commit('CLEAR_NOTIFICATION',{
+            data:id,
+            role:`Researcher`,
+        })
+    }
+
     public investTimeBlocks():void {};
     public setPlayerReadiness(): void {};
 }

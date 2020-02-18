@@ -13,7 +13,10 @@ const steps:Array<Step> = [
       stateTransform: [
         {
           SET_GAME_PHASE:Phase.pregame,
-          CREATE_NOTIFICATION:`Notifcations can be removed by clicking on them!`,
+          CREATE_NOTIFICATION:{
+            data:`Notifcations can be removed by clicking on them!`,
+            role: `Researcher`,
+          },
       }],
     },
     {

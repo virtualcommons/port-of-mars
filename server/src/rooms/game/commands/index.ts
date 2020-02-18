@@ -16,6 +16,7 @@ import {
   SentChatMessage,
   SentTradeRequest,
   TimeInvested,
+  DeleteNotification,
   RejectTradeRequest,
   SetPlayerReadiness,
   PersonalGainVoted, VotedForPhilanthropist, 
@@ -29,7 +30,7 @@ import { Game } from '@/rooms/game/types';
 import { Command } from '@/rooms/game/commands/types';
 import { GameEvent } from '@/rooms/game/events/types';
 import { MarsEvent } from '@/rooms/game/state/marsEvents/MarsEvent';
-import { OutOfCommissionCurator, OutOfCommissionPioneer, OutOfCommissionEntrepreneur } from '../state/marsEvents/state';
+import {tradeIsValid} from "shared/validation";
 
 export class SendChatMessageCmd implements Command {
   constructor(
@@ -140,7 +141,9 @@ export class AcceptTradeRequestCmd implements Command {
 
   static fromReq(r: req.AcceptTradeRequestData, game: Game, client: Client) {
     const p = game.getPlayerByClient(client);
-    return new AcceptTradeRequestCmd(r.id, game, p);
+
+      return new AcceptTradeRequestCmd(r.id, game, p);
+    
   }
 
   execute(): Array<GameEvent> {
@@ -174,7 +177,12 @@ export class SendTradeRequestCmd implements Command {
   }
 
   execute(): Array<GameEvent> {
-    return [new SentTradeRequest(this.trade)];
+    if(tradeIsValid(this.player,this.trade.from.resourceAmount)){
+      return [new SentTradeRequest(this.trade)];
+    } else{
+      return [];
+    }
+    
   }
 }
 
@@ -232,6 +240,19 @@ export class SetNextPhaseCmd implements Command {
       case Phase.victory:
         return [];
     }
+  }
+}
+
+export class DeleteNotificationCmd implements Command {
+  constructor(public index: number, game: Game, public player: Player){}
+
+  static fromReq(r: req.DeleteNotificationData, game: Game, client: Client){
+    const p = game.getPlayerByClient(client);
+    return new DeleteNotificationCmd(r.index, game, p);
+  }
+
+  execute(){
+    return [new DeleteNotification({index:this.index, player:this.player})];
   }
 }
 

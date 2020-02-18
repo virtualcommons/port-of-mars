@@ -10,4 +10,5 @@ export interface SetError {
     message: string
 }
 
+
 export type Responses = SetPlayerRole | SetError;

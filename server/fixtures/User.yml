@@ -9,6 +9,7 @@ items:
     username: 'frank'
     name: 'Frank Smith'
     email: 'frank@a.com'
+    passedQuiz: true
   amanda:
     username: 'amanda'
     name: 'Amanda Smith'

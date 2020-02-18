@@ -87,6 +87,11 @@ export interface OutOfCommissionEntrepreneurData {
   value: Role;
 }
 
+export interface DeleteNotificationData {
+  kind: 'delete-notification';
+  index: number;
+}
+
 export type Requests =
   | SendChatMessageData
   | SetPlayerReadinessData
@@ -104,4 +109,5 @@ export type Requests =
   | OutOfCommissionPoliticianData
   | OutOfCommissionResearcherData
   | OutOfCommissionPioneerData
-  | OutOfCommissionEntrepreneurData;
+  | OutOfCommissionEntrepreneurData
+  | DeleteNotificationData;

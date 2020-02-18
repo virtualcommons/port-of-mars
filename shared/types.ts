@@ -45,6 +45,8 @@ export interface InvestmentData extends ResourceAmountData {
 
 export type ResourceCostData = InvestmentData;
 
+export type notifcation = string;
+
 export type Resource = keyof ResourceAmountData;
 export type Investment = keyof InvestmentData;
 export const INVESTMENTS: Array<Investment> = [
@@ -159,6 +161,7 @@ export interface PlayerData {
   victoryPoints: number;
   inventory: ResourceAmountData;
   pendingInvestments: ResourceAmountData;
+  notifications:Array<String>;
 }
 
 export type PlayerSetData = { [role in Role]: PlayerData };

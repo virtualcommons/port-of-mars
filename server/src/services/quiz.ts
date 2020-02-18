@@ -9,6 +9,20 @@ import * as _ from 'lodash';
 
 // NOTE: FUNCTIONS TO CREATE AND SAVE TO DATABASE
 
+export async function createQuestionResponse(
+  questionId: number,
+  submissionId: number,
+  answer: number
+): Promise<QuestionResponse> {
+  const questionResponse = new QuestionResponse();
+  questionResponse.questionId = questionId;
+  questionResponse.submissionId = submissionId;
+  questionResponse.answer = answer;
+  return await getConnection()
+    .getRepository(QuestionResponse)
+    .save(questionResponse);
+}
+
 export async function createQuizSubmission(
   userId: number,
   quizId: number
@@ -19,20 +33,6 @@ export async function createQuizSubmission(
   return await getConnection()
     .getRepository(QuizSubmission)
     .save(quizSubmission);
-}
-
-export async function createQuestionResponse(
-  questionId: number,
-  submissionId: number,
-  answer: number
-): Promise<QuestionResponse | undefined> {
-  const questionResponse = new QuestionResponse();
-  questionResponse.questionId = questionId;
-  questionResponse.submissionId = submissionId;
-  questionResponse.answer = answer;
-  return await getConnection()
-    .getRepository(QuestionResponse)
-    .save(questionResponse);
 }
 
 // FUNCTIONS TO GET FROM DATABASE

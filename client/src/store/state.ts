@@ -46,7 +46,8 @@ function defaultPlayerData(role: Role): PlayerClientData {
     timeBlocks: 10,
     victoryPoints: 0,
     pendingInvestments: defaultPendingInvestment(),
-    contributedUpkeep: 0
+    contributedUpkeep: 0,
+    notifications: []
   };
 }
 
@@ -94,7 +95,6 @@ export interface State extends GameData {
   phase: Phase;
   layout: string;
   loading: boolean;
-  activeNotifications: Array<String>;
   quizQuestions: Array<QuizQuestionData>;
   eventCardsVisible: Array<any>;
   user: User;
@@ -118,7 +118,6 @@ export const initialStoreState: State = {
   layout: 'game',
   loading: false,
 
-  activeNotifications: [],
   // eventView: 'ACCOMPLISHMENT_SELECT_PURCHASED',
   quizQuestions: [],
   eventCardsVisible: [],
@@ -128,11 +127,3 @@ export const initialStoreState: State = {
   }
 };
 
-function tutorialNotifications() {
-  const state = _.cloneDeep(initialStoreState);
-  state.activeNotifications = [
-    'Welcome to Port of Mars',
-    'Notifications can be dismissed by clicking on them'
-  ];
-  return state;
-}

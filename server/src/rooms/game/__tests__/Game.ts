@@ -1,11 +1,13 @@
-import {GameState, AccomplishmentSet, Player} from "@/rooms/game/state";
-import {CURATOR, PIONEER, RESEARCHER} from "shared/types";
+import {GameState, AccomplishmentSet, Player, Trade} from "@/rooms/game/state";
+import {CURATOR, PIONEER, RESEARCHER, ENTREPRENEUR, TradeData, Role} from "shared/types";
 import {getAccomplishmentByID, getAccomplishmentIDs} from "@/data/Accomplishment";
 import * as _ from 'lodash'
 import {mockGameInitOpts} from "@/util";
 import {ConsolePersister} from "@/services/persistence";
 import {Connection, createConnection} from "typeorm";
 import shell from "shelljs";
+import {tradeCanBeCompleted} from "shared/validation";
+
 
 describe('a Researcher Player Accomplishment', () => {
   const repo = new AccomplishmentSet(RESEARCHER);
@@ -105,4 +107,86 @@ describe('a personal gain event', () => {
 
   // check upkeep 
   // votes associated with roles and timeblocks affecedl.
-})
+});
+
+describe('trading validations', () => {
+  const g = new GameState({'bob':"Curator", "frank":"Entrepreneur", 'sydney':"Researcher"});
+  g.players['Curator'].inventory.update({
+    finance:0,
+    culture:3,
+    science:0,
+    legacy:0,
+    government:0,
+  });
+
+  g.players['Entrepreneur'].inventory.update({
+    finance:3,
+    culture:1,
+    science:0,
+    legacy:0,
+    government:0,
+  });
+
+  g.tradeSet['123'] = new Trade(
+    {
+    role: 'Curator',
+    resourceAmount: {
+      science: 0,
+      government: 0,
+      legacy: 0,
+      finance: 0,
+      culture: 3
+    }
+  },
+  {
+    role: 'Entrepreneur',
+    resourceAmount: {
+      science: 0,
+      government: 0,
+      legacy: 0,
+      finance: 2,
+      culture: 0
+    }
+  });
+
+  g.tradeSet['456'] = new Trade(
+    {
+    role: 'Entrepreneur',
+    resourceAmount: {
+      science: 0,
+      government: 0,
+      legacy: 0,
+      finance: 1,
+      culture: 0
+      }
+    },
+    {
+    role: 'Curator',
+    resourceAmount: {
+      science: 0,
+      government: 0,
+      legacy: 0,
+      finance: 0,
+      culture: 3
+    }
+  });
+
+  let t1:Trade = g.tradeSet['123'];
+  let t2:Trade = g.tradeSet['456'];
+
+  t2.apply(g);
+  it('does not allow resource values below 0', () => {
+
+    expect(tradeCanBeCompleted(g.players[g.tradeSet['123'].from.role as Role].inventory, g.tradeSet['123'].from.resourceAmount)).toBe(false);
+  });
+
+  it('does not send a notifcation to everyone', () => {
+    g.players['Curator'].sendNotifcation('test');
+    g.players['Curator'].sendNotifcation('notif 2');
+    expect(g.players['Curator'].notifications.length).toBe(2);
+
+    g.players['Curator'].deleteNotifcation(1);
+    expect(g.players['Curator'].notifications.length).toBe(1);
+    expect(g.players['Entrepreneur'].notifications.length).toBe(0);
+  });
+});
