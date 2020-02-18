@@ -153,6 +153,7 @@ export default class Tutorial extends Vue {
   private steps: Array<Step> = tutorialSteps;
   private submissionId: any = null;
   private dataFetched: boolean = false;
+  //private steps: Array<Step> = [];
   private quizQuestions: Array<QuizQuestionData> = [];
   private currentTutorialElementId: string = '';
 
@@ -176,6 +177,7 @@ export default class Tutorial extends Vue {
         // TODO: Handle server error
       }
     }
+    
   }
 
   // NOTE: Initialize

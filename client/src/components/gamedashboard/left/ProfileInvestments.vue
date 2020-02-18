@@ -7,18 +7,27 @@
         :key="investment.name"
         class="profile-investment"
         v-bind:class="{
-          'pending-is-active': investment.pendingUnits > 0,
-          'pending-is-inactive': investment.pendingUnits <= 0
+          'pending-is-active': gamePhase==phases.invest && investment.pendingUnits > 0,
+          'pending-is-inactive': investment.pendingUnits <= 0,
+          'locked-from-trade': gamePhase==phases.trade && investment.pendingUnits > 0
         }"
       >
         <img
           :src="require(`@/assets/icons/${investment.name}.svg`)"
           alt="Investment"
         />
-        <p>
+        <p v-if="gamePhase==phases.invest">
           {{ investment.units
           }}<sup v-show="investment.pendingUnits > 0">
-            +<span>{{ investment.pendingUnits }}</span></sup
+            +
+            <span>{{ investment.pendingUnits }}</span></sup
+          >
+        </p>
+        <p v-else>
+          {{ investment.units
+          }}<sup v-show="investment.pendingUnits > 0">
+            -
+            <span>{{ investment.pendingUnits }}</span></sup
           >
         </p>
       </div>
@@ -43,10 +52,18 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { Resource, RESOURCES } from 'shared/types';
+import { Resource, RESOURCES, Phase } from 'shared/types';
 
 @Component({})
 export default class ProfileInvestments extends Vue {
+  get gamePhase() {
+    return this.$store.state.phase;
+  }
+
+  get phases(){
+    return Phase;
+  }
+
   get investments() {
     const p = this.$tstore.getters.player;
     const inventory = p.inventory;
@@ -84,5 +101,9 @@ export default class ProfileInvestments extends Vue {
 
 .pending-is-inactive {
   background-color: $space-white-opaque-1;
+}
+
+.locked-from-trade{
+  background-color: $status-red;
 }
 </style>

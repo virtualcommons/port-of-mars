@@ -1,5 +1,5 @@
 import { State } from '@/store/state';
-import { MarsLogMessageData } from 'shared/types';
+import { MarsLogMessageData, Role } from 'shared/types';
 
 export default {
   ADD_TO_MARS_LOG(state: State, payload: MarsLogMessageData) {
@@ -9,12 +9,11 @@ export default {
     const index = state.logs.findIndex(log => log.content == payload.content);
     state.logs.splice(index, 1);
   },
-  CREATE_NOTIFICATION(state: State, payload: string) {
-    state.activeNotifications.push(payload);
+  CREATE_NOTIFICATION(state: State, payload: {data:any, role:any}) {
+    state.players[payload.role as Role].notifications.push(payload.data);
+    
   },
-  CLEAR_NOTIFICATION(state: State, payload:number){
-    if(state.activeNotifications){
-      state.activeNotifications = [];
-    }
+  CLEAR_NOTIFICATION(state: State, payload:{data:number,role:any}){
+    state.players[payload.role as Role].notifications.splice(payload.data,1);
   }
 };

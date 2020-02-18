@@ -33,6 +33,8 @@ import { CompulsivePhilanthropy, PersonalGain,
         from '@/rooms/game/state/marsEvents/state';
 import e = require('express');
 import { Game } from '@/entity/Game';
+import { Client } from 'colyseus';
+import {tradeCanBeCompleted} from "shared/validation";
 
 abstract class GameEventWithData implements GameEvent {
   abstract kind: string;
@@ -126,39 +128,45 @@ export class AcceptTradeRequest extends GameEventWithData {
   }
 
   apply(game: GameState): void {
-    let toMsg: Array<string> = [];
-    for (const [resource, amount] of Object.entries(
-      game.tradeSet[this.data.id].to.resourceAmount
-    ) as any) {
-      if (amount > 0) {
-        toMsg.push(`${amount} ${resource}`);
+    if(tradeCanBeCompleted(game.players[game.tradeSet[this.data.id].from.role as Role].inventory,game.tradeSet[this.data.id].from.resourceAmount)){
+      let toMsg: Array<string> = [];
+      for (const [resource, amount] of Object.entries(
+        game.tradeSet[this.data.id].to.resourceAmount
+      ) as any) {
+        if (amount > 0) {
+          toMsg.push(`${amount} ${resource}`);
+        }
       }
-    }
-
-    let fromMsg: Array<string> = [];
-    for (const [resource, amount] of Object.entries(
-      game.tradeSet[this.data.id].from.resourceAmount
-    ) as any) {
-      if (amount > 0) {
-        fromMsg.push(`${amount} ${resource}`);
+  
+      let fromMsg: Array<string> = [];
+      for (const [resource, amount] of Object.entries(
+        game.tradeSet[this.data.id].from.resourceAmount
+      ) as any) {
+        if (amount > 0) {
+          fromMsg.push(`${amount} ${resource}`);
+        }
       }
+  
+      const log = new MarsLogMessage({
+        performedBy: game.tradeSet[this.data.id].from.role,
+        category: 'Trade',
+        content: `The ${
+          game.tradeSet[this.data.id].from.role
+        } has traded ${fromMsg.join(', ')} in exchange for ${toMsg.join(
+          ', '
+        )} from the ${game.tradeSet[this.data.id].to.role}`,
+        timestamp: this.dateCreated
+      });
+  
+      const trade: Trade = game.tradeSet[this.data.id];
+      trade.apply(game);
+      game.logs.push(log);
     }
-
-    const log = new MarsLogMessage({
-      performedBy: game.tradeSet[this.data.id].from.role,
-      category: 'Trade',
-      content: `The ${
-        game.tradeSet[this.data.id].from.role
-      } has traded ${fromMsg.join(', ')} in exchange for ${toMsg.join(
-        ', '
-      )} from the ${game.tradeSet[this.data.id].to.role}`,
-      timestamp: this.dateCreated
-    });
-
-    const trade: Trade = game.tradeSet[this.data.id];
-    trade.apply(game);
+    else{
+      game.players[game.tradeSet[this.data.id].to.role as Role].sendNotifcation('Trade partner cannot fulful trade.');
+      game.players[game.tradeSet[this.data.id].from.role as Role].sendNotifcation('A trade you cannot fulful has been deleted.');
+    }
     delete game.tradeSet[this.data.id];
-    game.logs.push(log);
   }
 }
 
@@ -170,7 +178,11 @@ export class RejectTradeRequest extends GameEventWithData {
   }
 
   apply(game: GameState): void {
+    
+    //game.players[game.tradeSet[this.data.id].from.role as Role].pendingInvestments.rollback(game.tradeSet[this.data.id].from.resourceAmount);
+
     delete game.tradeSet[this.data.id];
+
   }
 }
 
@@ -184,6 +196,20 @@ export class SentTradeRequest extends GameEventWithData {
   apply(game: GameState): void {
     const id = uuid();
     game.tradeSet[id] = new Trade(this.data.from, this.data.to);
+
+    game.players[this.data.to.role as Role].sendNotifcation(`The ${this.data.from.role} would like to trade!`);
+    game.players[this.data.from.role as Role].sendNotifcation(`Your trade to ${this.data.to.role} has been recived!`);
+    //game.players[this.data.from.role].pendingInvestments.add({...this.data.from.resourceAmount,upkeep:0});
+  }
+}
+
+export class DeleteNotification extends GameEventWithData {
+  kind = 'delete-notifcation';
+
+  constructor(public data: {index:number, player:Player}){super();}
+
+  apply(game: GameState): void {
+    this.data.player.deleteNotifcation(this.data.index);
   }
 }
 
@@ -300,6 +326,10 @@ export class EnteredPurchasePhase extends KindOnlyGameEvent {
     game.resetPlayerReadiness();
     game.phase = Phase.purchase;
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
+    game.clearTrades();
+    for (const player of game.players) {
+      player.pendingInvestments.reset();
+    }
   }
 }
 

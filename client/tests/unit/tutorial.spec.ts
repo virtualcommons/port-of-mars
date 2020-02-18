@@ -6,6 +6,7 @@ import { State } from '@/store/state';
 import { TutorialAPI } from '@/api/tutorial/request';
 import Vue from 'vue';
 
+
 describe('Tutorial.vue', () => {
   const wrapper = mountPOM(Tutorial, {
     ...mockRoomSetup(),
@@ -29,3 +30,5 @@ describe('Tutorial.vue', () => {
     }
   );
 });
+
+
