@@ -80,12 +80,12 @@
     .show-error{
       color: $status-red;
       margin-left: 0.5rem;
-      opacity: 100%;
+      opacity: 1;
       transition: all 0.4s ease-in-out;
     }
 
     .hide-error{
-      opacity: 0%;
+      opacity: 0;
       transition: all 0.4s ease-in-out;
     }
   
@@ -103,7 +103,7 @@
       @include default-transition-base;
 
       &:disabled {
-        opacity: 50%;
+        opacity: 0.5;
       }
 
       &:hover:not(:disabled) {

@@ -85,7 +85,7 @@
       }
 
       &:disabled {
-        opacity: 50%;
+        opacity: 0.5;
       }
 
       &:disabled:hover {
@@ -98,7 +98,7 @@
 
 .unpurchasable{
   background-color: $space-white;
-  opacity: 50%;
+  opacity: 0.5;
 }
 
 .purchasable{
