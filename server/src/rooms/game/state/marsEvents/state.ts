@@ -214,6 +214,7 @@ abstract class OutOfCommission implements MarsEventState {
     };
   }
 
+  player: Role = CURATOR;
   roles: OutOfCommissionData;
 
   playerOutOfCommission(outOfCommission: Role): Role {
@@ -221,9 +222,25 @@ abstract class OutOfCommission implements MarsEventState {
     return player;
   }
   
-  abstract finalize(game: GameState): void;
+  finalize(game: GameState): void {
+    var role: Role = this.playerOutOfCommission(this.player);
+    game.players[role].timeBlocks = 3;
 
-  abstract toJSON(): MarsEventSerialized;
+    const msg = new MarsLogMessage({
+      performedBy: SERVER,
+      category: 'Mars Event',
+      content: this.player + ' has 3 timeblocks to invest during this round.',
+      timestamp: (new Date()).getTime()
+    });
+    game.logs.push(msg);
+  };
+
+  toJSON(): MarsEventSerialized {
+    return {
+      id: getEventName(this.constructor),
+      data: _.cloneDeep({ roles: this.roles })
+    }
+  };
 }
 
 // Curator
@@ -232,26 +249,7 @@ export class OutOfCommissionCurator extends OutOfCommission {
   constructor() {
     super();
   }
-
-  finalize(game: GameState): void {
-    var player: Role = this.playerOutOfCommission(CURATOR);
-    game.players[player].timeBlocks = 3;
-
-    const msg = new MarsLogMessage({
-      performedBy: SERVER,
-      category: 'Mars Event',
-      content: 'Curator has 3 timeblocks to invest during this round.',
-      timestamp: (new Date()).getTime()
-    });
-    game.logs.push(msg);
-  }
-
-  toJSON(): MarsEventSerialized {
-    return {
-      id: getEventName(this.constructor),
-      data: _.cloneDeep({ roles: this.roles })
-    };
-  }
+  player: Role = this.roles.Curator;
 }
 
 // Politician
@@ -260,26 +258,7 @@ export class OutOfCommissionPolitician extends OutOfCommission {
   constructor() {
     super();
   }
-
-  finalize(game: GameState): void {
-    var player: Role = this.playerOutOfCommission(POLITICIAN);
-    game.players[player].timeBlocks = 3;
-
-    const msg = new MarsLogMessage ({
-      performedBy: SERVER,
-      category: 'Mars Event',
-      content: 'Politician has 3 timeblocks to invest during this round.',
-      timestamp: (new Date()).getTime()
-    })
-    game.logs.push(msg);
-  }
-
-  toJSON(): MarsEventSerialized {
-    return {
-      id: getEventName(this.constructor),
-      data: _.cloneDeep({ roles: this.roles })
-    };
-  }
+  player: Role = this.roles.Politician;
 }
 
 // Researcher
@@ -288,26 +267,7 @@ export class OutOfCommissionResearcher extends OutOfCommission {
   constructor() {
     super();
   }
-
-  finalize(game: GameState): void {
-    var player: Role = this.playerOutOfCommission(RESEARCHER);
-    game.players[player].timeBlocks = 3;
-
-    const msg = new MarsLogMessage ({
-      performedBy: SERVER,
-      category: 'Mars Event',
-      content: 'Researcher has 3 timeblocks to invest during this round.',
-      timestamp: (new Date()).getTime()
-    })
-    game.logs.push(msg);
-  }
-
-  toJSON(): MarsEventSerialized {
-    return {
-      id: getEventName(this.constructor),
-      data: _.cloneDeep({ roles: this.roles })
-    }
-  }
+  player: Role = this.roles.Researcher;
 }
 
 // Pioneer
@@ -317,25 +277,7 @@ export class OutOfCommissionPioneer extends OutOfCommission {
     super();
   }
 
-  finalize(game: GameState): void {
-    var player: Role = this.playerOutOfCommission(PIONEER);
-    game.players[player].timeBlocks = 3;
-    
-    const msg = new MarsLogMessage ({
-      performedBy: SERVER,
-      category: 'Mars Event',
-      content: 'Pioneer has 3 timeblocks to invest during this round.',
-      timestamp: (new Date()).getTime()
-    })
-    game.logs.push(msg);
-  }
-
-  toJSON(): MarsEventSerialized {
-    return {
-      id: getEventName(this.constructor),
-      data: _.cloneDeep({ role: this.roles })
-    }
-  }
+  player: Role = this.roles.Pioneer;
 }
 
 // Entrepreneur
@@ -344,24 +286,5 @@ export class OutOfCommissionEntrepreneur extends OutOfCommission {
   constructor() {
     super();
   }
-
-  finalize(game: GameState): void {
-    var player: Role = this.playerOutOfCommission(ENTREPRENEUR);
-    game.players[player].timeBlocks = 3;
-    
-    const msg = new MarsLogMessage ({
-      performedBy: SERVER,
-      category: 'Mars Event',
-      content: 'Entrepreneur has 3 timeblocks to invest during this round.',
-      timestamp: (new Date()).getTime()
-    })
-    game.logs.push(msg);
-  }
-
-  toJSON(): MarsEventSerialized {
-    return {
-      id: getEventName(this.constructor),
-      data: _.cloneDeep({ role: this.roles })
-    }
-  }
+  player: Role = this.roles.Entrepreneur;
 }
