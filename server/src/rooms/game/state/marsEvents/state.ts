@@ -282,3 +282,31 @@ export class OutOfCommissionPolitician extends OutOfCommission {
     };
   }
 }
+
+// Researcher
+@assocEventId
+export class OutOfCommissionResearcher extends OutOfCommission {
+  constructor() {
+    super();
+  }
+
+  finalize(game: GameState): void {
+    var player: Role = this.playerOutOfCommission(RESEARCHER);
+    game.players[player].timeBlocks = 3;
+
+    const msg = new MarsLogMessage ({
+      performedBy: SERVER,
+      category: 'Mars Event',
+      content: 'Researcher has 3 timeblocks to invest during this round.',
+      timestamp: (new Date()).getTime()
+    })
+    game.logs.push(msg);
+  }
+
+  toJSON(): MarsEventSerialized {
+    return {
+      id: getEventName(this.constructor),
+      data: _.cloneDeep({ roles: this.roles })
+    }
+  }
+}

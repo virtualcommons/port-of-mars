@@ -13,7 +13,7 @@ import {
   SetPlayerReadinessCmd,
   TimeInvestmentCmd,
   RejectTradeRequestCmd,
-  PersonalGainVotes, VoteForPhilanthropistCmd, OutOfCommissionCuratorCmd, OutOfCommissionPoliticianCmd
+  PersonalGainVotes, VoteForPhilanthropistCmd, OutOfCommissionCuratorCmd, OutOfCommissionPoliticianCmd, OutOfCommissionResearcherCmd
 } from '@/rooms/game/commands';
 import {Game, GameOpts, Persister} from '@/rooms/game/types';
 import { Command } from '@/rooms/game/commands/types';
@@ -88,6 +88,8 @@ export class GameRoom extends Room<GameState> implements Game {
         return OutOfCommissionCuratorCmd.fromReq(r, this, client);
       case 'out-of-commission-politician':
         return OutOfCommissionPoliticianCmd.fromReq(r, this, client);
+      case 'out-of-commission-researcher':
+        return OutOfCommissionResearcherCmd.fromReq(r, this, client);
     }
   }
 

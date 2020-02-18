@@ -72,6 +72,11 @@ export interface OutOfCommissionPoliticianData {
   value: Role;
 }
 
+export interface OutOfCommissionResearcherData {
+  kind: 'out-of-commission-researcher';
+  value: Role;
+}
+
 export type Requests =
   | SendChatMessageData
   | SetPlayerReadinessData
@@ -86,4 +91,5 @@ export type Requests =
   | PersonalGainVotesData
   | VoteForPhilanthropistData
   | OutOfCommissionCuratorData
-  | OutOfCommissionPoliticianData;
+  | OutOfCommissionPoliticianData
+  | OutOfCommissionResearcherData;
