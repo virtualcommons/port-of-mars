@@ -2,39 +2,12 @@ import { QuizSubmission } from '@/entity/QuizSubmission';
 import { Quiz } from '@/entity/Quiz';
 import { Question } from '@/entity/Question';
 import { QuestionResponse } from '@/entity/QuestionResponse';
-<<<<<<< Updated upstream
 import { User } from '@/entity/User';
-=======
->>>>>>> Stashed changes
 import { getConnection } from '@/util';
 import { Equal } from 'typeorm';
 import * as _ from 'lodash';
 
-<<<<<<< Updated upstream
 // NOTE: FUNCTIONS TO CREATE AND SAVE TO DATABASE
-=======
-export async function checkQuestionResponse(
-  questionResponse: QuestionResponse,
-  quizId: number
-): Promise<boolean> {
-  const answer = questionResponse.answer;
-  const questionId = questionResponse.questionId;
-
-  const question = await getConnection()
-    .getRepository(Question)
-    .createQueryBuilder('question')
-    .where('question.quizId = :quizId AND question.id = :id', {
-      quizId: quizId,
-      id: questionId
-    })
-    .getOne();
-
-  if (answer === question!.correctAnswer) {
-    return true;
-  }
-  return false;
-}
->>>>>>> Stashed changes
 
 export async function createQuestionResponse(
   questionId: number,
@@ -62,19 +35,6 @@ export async function createQuizSubmission(
     .save(quizSubmission);
 }
 
-export async function createQuestionResponse(
-  questionId: number,
-  submissionId: number,
-  answer: number
-): Promise<QuestionResponse | undefined> {
-  const questionResponse = new QuestionResponse();
-  questionResponse.questionId = questionId;
-  questionResponse.submissionId = submissionId;
-  questionResponse.answer = answer;
-  return await getConnection()
-    .getRepository(QuestionResponse)
-    .save(questionResponse);
-}
 
 // FUNCTIONS TO GET FROM DATABASE
 
@@ -96,7 +56,6 @@ export async function getQuizQuestionsByQuizId(
     });
 }
 
-<<<<<<< Updated upstream
 export async function getRecentQuizSubmission(
   userId: number,
   selectedQuiz: string
@@ -213,15 +172,3 @@ export async function checkQuizCompletion(
 
   return true;
 }
-=======
-// TODO: Get most recent submission
-export async function getRecentQuizSubmission(
-  userId: number
-): Promise<QuizSubmission | undefined> {
-  return await getConnection()
-    .getRepository(QuizSubmission)
-    .findOne({
-      userId: Equal(userId)
-    });
-}
->>>>>>> Stashed changes

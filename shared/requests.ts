@@ -91,7 +91,6 @@ export type Requests =
   | DiscardAccomplishmentCardData
   | SendTradeRequestData
   | AcceptTradeRequestData
-  | RejectTradeRequestData
   | PersonalGainVotesData
   | VoteForPhilanthropistData
   | OutOfCommissionCuratorData
