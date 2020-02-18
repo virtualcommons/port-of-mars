@@ -19,12 +19,14 @@ export default class UserHeader extends Vue {
   private prependedText: string = 'Logged in as ';
 
   mounted() {
-    const jwt = this.$ajax.loginCreds?.token;
-    if (!jwt) {
-      console.log('No user token found. Redirecting to Login...');
-      this.$router.push({ name: 'Login' });
+    if (process.env.NODE_ENV != 'test') {
+      const jwt = this.$ajax.loginCreds?.token;
+      if (!jwt) {
+        console.log('No user token found. Redirecting to Login...');
+        this.$router.push({ name: 'Login' });
+      }
+      // TODO: Get data from token if refreshed (?)
     }
-    // TODO: Get data from token if refreshed (?)
   }
 
   get username(): string {
