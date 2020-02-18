@@ -13,7 +13,7 @@ import { DBPersister } from '@/services/persistence';
 import { ClockTimer } from '@gamestdio/timer/lib/ClockTimer';
 import { login } from '@/routes/login';
 import { quizRouter } from '@/routes/quiz';
-import * as fs from "fs";
+import * as fs from 'fs';
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const CONNECTION_NAME = NODE_ENV === 'test' ? 'test' : 'default';
@@ -24,7 +24,9 @@ function applyInStagingOrProd(f: Function) {
   }
 }
 
-applyInStagingOrProd(() => Sentry.init({dsn: fs.readFileSync('/run/secrets/sentry_dsn', 'utf-8')}));
+applyInStagingOrProd(() =>
+  Sentry.init({ dsn: fs.readFileSync('/run/secrets/sentry_dsn', 'utf-8') })
+);
 
 function createApp() {
   const port = Number(process.env.PORT || 2567);
@@ -59,7 +61,7 @@ function createApp() {
 
   // register your room handlers
   gameServer.define('game', GameRoom, mockGameInitOpts(persister));
-  gameServer.define('waiting', RankedLobbyRoom);
+  gameServer.define('waiting', RankedLobbyRoom, { dev: true });
 
   app.use(express.static('static'));
 

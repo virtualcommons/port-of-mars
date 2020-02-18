@@ -1,6 +1,11 @@
-export interface SwitchRooms {
-    kind: 'switch-rooms'
-    room:string
+export interface AcceptInvitation {
+  kind: 'accept-invitation';
+  data?: any;
 }
 
-export type WaitingRequests = SwitchRooms
+export interface SwitchRooms {
+  kind: 'switch-rooms';
+  room: string;
+}
+
+export type WaitingRequests = SwitchRooms | AcceptInvitation;
