@@ -98,6 +98,10 @@ export interface State extends GameData {
   quizQuestions: Array<QuizQuestionData>;
   eventCardsVisible: Array<any>;
   user: User;
+  lobbyNextAssignmentTime: number;
+  lobbyWaitingUsers: number;
+  lobbyClientJoinedQueue: boolean;
+  lobbyReceivedInvitation: boolean;
 }
 
 export const initialStoreState: State = {
@@ -124,6 +128,11 @@ export const initialStoreState: State = {
   user: {
     username: '',
     passedQuiz: false
-  }
-};
+  },
 
+  // NOTE: Waiting Lobby
+  lobbyNextAssignmentTime: 0,
+  lobbyWaitingUsers: 0,
+  lobbyClientJoinedQueue: false,
+  lobbyReceivedInvitation: false
+};

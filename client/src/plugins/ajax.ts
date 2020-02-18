@@ -11,11 +11,17 @@ declare module 'vue/types/vue' {
 
 const LOGIN_CREDS = 'loginCreds';
 const SUBMISSION_ID = 'submissionId';
+const GAME_DATA = "gameData";
 
 interface LoginCreds {
   token: string
   username: string
   passedQuiz: boolean
+}
+
+interface GameData {
+  roomId: string;
+  sessionId: string;
 }
 
 export class AjaxRequest {
@@ -67,6 +73,21 @@ export class AjaxRequest {
 
   forgetSubmissionId() {
     localStorage.removeItem(SUBMISSION_ID);
+  }
+
+  get gameData(): GameData | null {
+    const d = localStorage.getItem(GAME_DATA);
+    if (_.isNull(d)) return null;
+    const data = JSON.parse(d!);
+    return data;
+  }
+
+  setGameData(data: GameData) {
+    localStorage.setItem(GAME_DATA, JSON.stringify(data));
+  }
+
+  forgetGameData() {
+    localStorage.removeItem(GAME_DATA);
   }
 
   async post(path: string, data?: any) {

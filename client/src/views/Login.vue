@@ -46,7 +46,7 @@ export default class Login extends Vue {
   error: string = '';
 
   created() {
-    this.isLoggedIn = !!this.$ajax.loginCreds
+    this.isLoggedIn = !!this.$ajax.loginCreds;
   }
 
   get submitDisabled() {
@@ -66,12 +66,14 @@ export default class Login extends Vue {
   async login(e: Event) {
     e.preventDefault();
     const fd = new FormData((e as any).target.form);
-    const data: any = { username: fd.get('username')};
+    const data: any = { username: fd.get('username') };
     const response = await this.$ajax.postNoToken(this.loginUrl, data);
     if (response.status === 200) {
       const resData = await response.json();
       this.$ajax.setLoginCreds(resData);
-      await this.$router.push({ name: 'Game' });
+      if (resData && resData.passedQuiz)
+        await this.$router.push({ name: 'WaitingLobby' });
+      else await this.$router.push({ name: 'Tutorial' });
     } else {
       this.error = await response.json();
     }

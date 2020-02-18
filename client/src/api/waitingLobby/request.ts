@@ -1,5 +1,9 @@
 import { Room, Client } from 'colyseus.js';
-import { WaitingRequests, SwitchRooms } from 'shared/waitingLobby/requests';
+import {
+  WaitingRequests,
+  AcceptInvitation,
+  SwitchRooms
+} from 'shared/waitingLobby/requests';
 
 export class WaitingRequestAPI {
   room!: Room;
@@ -12,12 +16,13 @@ export class WaitingRequestAPI {
     this.room.send(req);
   }
 
-  public joinRoom(room: string) {
-    const msg: SwitchRooms = { kind: 'switch-rooms', room };
+  public acceptInvitation() {
+    const msg: AcceptInvitation = { kind: 'accept-invitation' };
     this.send(msg);
   }
 
-  public setNextPhase() {
-    console.log('this shouldnt run...');
+  public joinRoom(room: string) {
+    const msg: SwitchRooms = { kind: 'switch-rooms', room };
+    this.send(msg);
   }
 }
