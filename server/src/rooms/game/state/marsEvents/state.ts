@@ -288,3 +288,26 @@ export class OutOfCommissionEntrepreneur extends OutOfCommission {
   }
   player: Role = this.roles.Entrepreneur;
 }
+
+////////////////////////// Audit //////////////////////////
+
+@assocEventId
+export class Audit implements MarsEventState {
+  finalize(game: GameState) {
+
+    // generate mars log message
+    const msg = new MarsLogMessage({
+        performedBy: SERVER,
+        category: 'Mars Event',
+        content: 'You will be able to view other players\' resources.',
+        timestamp: (new Date()).getTime()
+      });
+    game.logs.push(msg);
+  }
+
+  toJSON(): MarsEventSerialized {
+    return {
+      id: getEventName(this.constructor)
+    }
+  }
+}

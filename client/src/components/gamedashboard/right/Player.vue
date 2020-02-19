@@ -6,8 +6,9 @@
     class="player"
   >
     <div class="ready" v-if="ready"></div>
+
+    <!-- if audit event is not drawn, show only score and role -->
     <div
-      v-if="layout !== 'AUDIT' || (layout === 'AUDIT' && hover === false)"
       class="p-container"
       :style="{ 'background-color': `var(--color-${role})` }"
     >
@@ -17,7 +18,10 @@
       </div>
       <img :src="require(`@/assets/characters/${role}.png`)" alt="Player" />
     </div>
-    <div class="audit-view" v-if="layout === 'AUDIT' && hover">
+
+
+    <!-- if audit event is drawn, show resources in addition to score and role -->
+    <div class="audit-view" v-if="isUnderAudit && hover">
       <div class="audit-investment">
         <p>Totals</p>
       </div>
@@ -47,8 +51,8 @@ export default class Player extends Vue {
   @Prop() private victoryPoints!: number;
   private hover: boolean = false;
 
-  get layout(): string {
-    const layout = this.$tstore.getters.currentEventView;
+  get isUnderAudit(): boolean {
+    const layout = this.$tstore.getters.isUnderAudit;
     return layout;
   }
 
@@ -60,9 +64,8 @@ export default class Player extends Vue {
     }));
   }
 
-  // TODO: REMOVE IF UNNECESSARY
   private adjustHeight(): object {
-    if (this.layout === 'AUDIT') {
+    if (this.isUnderAudit) {
       return { height: '3.25rem', cursor: 'pointer' };
     } else {
       return { height: '3rem' };

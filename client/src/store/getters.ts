@@ -1,5 +1,6 @@
 import { PlayerClientSet, State } from '@/store/state';
 import { ROLES,MarsEventData,EventClientView } from 'shared/types';
+import _ from 'lodash';
 
 export default {
   /**
@@ -50,4 +51,11 @@ export default {
     }
     return 'NO_CHANGE';
   },
+  
+  isUnderAudit(state: State) {
+    const marsEvents = state.marsEvents;
+    const eventProcessedIndex = state.marsEventsProcessed;
+    const auditEventIndex = marsEvents.findIndex(event => event.id === 'audit');
+    return auditEventIndex !== -1 && auditEventIndex <= eventProcessedIndex;
+  }
 };
