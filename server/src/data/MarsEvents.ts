@@ -210,13 +210,14 @@ const _marsEvents: Array<[MarsEventData, number]> = [
 
 
 const marsEvents: Array<[MarsEventData, number]> = [
-  [_.find(_marsEvents, e => e[0].id === 'personalGain')![0], 3],
-  [_.find(_marsEvents, e => e[0].id === 'sandstorm')![0], 3],
-  [_.find(_marsEvents, e => e[0].id === 'compulsivePhilanthropy')![0], 3],
-  [_.find(_marsEvents, e => e[0].id === 'outOfCommissionCurator')![0], 3],
-  [_.find(_marsEvents, e => e[0].id === 'outOfCommissionPolitician')![0], 3],
-  [_.find(_marsEvents, e => e[0].id === 'outOfCommissionResearcher')![0], 3],
-  [_.find(_marsEvents, e => e[0].id === 'outOfCommissionPioneer')![0], 3],
-  [_.find(_marsEvents, e => e[0].id === 'outOfCommissionEntrepreneur')![0], 3]
+  // [_.find(_marsEvents, e => e[0].id === 'personalGain')![0], 3],
+  // [_.find(_marsEvents, e => e[0].id === 'sandstorm')![0], 3],
+  // [_.find(_marsEvents, e => e[0].id === 'compulsivePhilanthropy')![0], 3],
+  // [_.find(_marsEvents, e => e[0].id === 'outOfCommissionCurator')![0], 3],
+  // [_.find(_marsEvents, e => e[0].id === 'outOfCommissionPolitician')![0], 3],
+  // [_.find(_marsEvents, e => e[0].id === 'outOfCommissionResearcher')![0], 3],
+  // [_.find(_marsEvents, e => e[0].id === 'outOfCommissionPioneer')![0], 3],
+  // [_.find(_marsEvents, e => e[0].id === 'outOfCommissionEntrepreneur')![0], 3],
+  [_.find(_marsEvents, e => e[0].id === 'audit')![0], 1],
 ];
 
