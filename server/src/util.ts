@@ -18,12 +18,16 @@ export function getRandomIntInclusive(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
 }
 
-export function mockGameInitOpts(persister: Persister): GameOpts {
+export function mockGameStateInitOpts(): { [username: string]: Role} {
   const loader = new Loader();
   loader.load(path.resolve(__dirname, '../fixtures'));
   const fixtures = new Resolver().resolve(loader.fixtureConfigs);
+  return _.zipObject(fixtures.filter(f => f.entity === 'User').map(f => f.data.username), ROLES);
+}
+
+export function mockGameInitOpts(persister: Persister): GameOpts {
   return {
-    userRoles: _.zipObject(fixtures.filter(f => f.entity === 'User').map(f => f.data.username), ROLES),
+    userRoles: mockGameStateInitOpts(),
     tournamentId: 1,
     persister
   };
