@@ -1,5 +1,5 @@
 <template>
-  <div class="card-investment v-step-15" :style="setOpacity()">
+  <div class="card-investment v-step-15" :style="opacity">
     <div class="ci-container">
       <div class="type">
         <p class="name">{{ name }}</p>
@@ -64,10 +64,8 @@ export default class CardInvestment extends Vue {
     });
   }
 
-  private setOpacity(): object {
-    if (this.disabled) {
-      return { opacity: '50%' };
-    }
+  get opacity(): object {
+    return this.disabled ? { opacity: '0.5' } : {};
   }
 }
 </script>
