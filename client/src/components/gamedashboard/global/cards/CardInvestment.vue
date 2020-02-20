@@ -1,5 +1,5 @@
 <template>
-  <div class="card-investment v-step-15">
+  <div class="card-investment v-step-15" :style="opacity">
     <div class="ci-container">
       <div class="type">
         <p class="name">{{ name }}</p>
@@ -36,7 +36,13 @@
 </template>
 
 <script lang="ts">
-import {Vue, Component, Prop, InjectReactive, Inject} from 'vue-property-decorator';
+import {
+  Vue,
+  Component,
+  Prop,
+  InjectReactive,
+  Inject
+} from 'vue-property-decorator';
 import { Phase, Resource, Role } from 'shared/types';
 import { GameRequestAPI } from '@/api/game/request';
 
@@ -46,12 +52,20 @@ export default class CardInvestment extends Vue {
   @Prop() private cost!: number;
   @Prop() private pendingInvestment!: number;
 
-  get disabled() {
-    return this.cost === -1;
+  get disabled(): boolean {
+    return this.cost === Number.MAX_SAFE_INTEGER;
   }
 
-  setInvestmentAmount(diff: number) {
-    this.$emit('input', { name: this.name, units: this.pendingInvestment + diff, cost: this.cost });
+  private setInvestmentAmount(diff: number): void {
+    this.$emit('input', {
+      name: this.name,
+      units: this.pendingInvestment + diff,
+      cost: this.cost
+    });
+  }
+
+  get opacity(): object {
+    return this.disabled ? { opacity: '0.5' } : {};
   }
 }
 </script>
