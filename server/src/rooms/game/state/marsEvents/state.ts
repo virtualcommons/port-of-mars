@@ -5,7 +5,7 @@ import {
 } from "@/rooms/game/state/marsEvents/common";
 import {GameState, MarsLogMessage} from "@/rooms/game/state";
 import * as _ from "lodash";
-import {CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER, Role, ServerRole, ROLES, SERVER} from "shared/types";
+import {CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER, Role, ServerRole, ROLES} from "shared/types";
 import { PersonalGainVotesData } from "shared/requests";
 import { RsaPrivateKey } from "crypto";
 import { Game } from "@/entity/Game";
@@ -39,7 +39,7 @@ export abstract class BaseEvent implements MarsEventState {
 
 
   getData() {
-    // FIXME: override
+    // override in subtypes to add custom data to persist
     return {};
   }
 
@@ -47,8 +47,9 @@ export abstract class BaseEvent implements MarsEventState {
     const json:MarsEventSerialized = {
       id: getEventName(this.constructor)
     }
-    if (this.getData()) {
-      json.data = _.cloneDeep(this.getData());
+    const extraData = this.getData();
+    if (extraData) {
+      json.data = _.cloneDeep(extraData);
     }
     return json;
   }
