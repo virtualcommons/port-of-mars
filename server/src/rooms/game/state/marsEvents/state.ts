@@ -5,13 +5,7 @@ import {
 } from "@/rooms/game/state/marsEvents/common";
 import {GameState, MarsLogMessage} from "@/rooms/game/state";
 import * as _ from "lodash";
-import {CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER, Role, ServerRole, ROLES} from "shared/types";
-import { PersonalGainVotesData } from "shared/requests";
-import { RsaPrivateKey } from "crypto";
-import { Game } from "@/entity/Game";
-import { GameEvent } from "@/entity/GameEvent";
-import { EntityRepository } from "typeorm";
-import { get } from "mongoose";
+import {CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER, Role, ROLES} from "shared/types";
 
 const _dispatch: { [id: string]: MarsEventStateConstructor } = {};
 
@@ -33,23 +27,19 @@ export interface MarsEventSerialized {
   data?: any;
 }
 
+export interface BaseEvent {
+  getData?(): object;
+}
 export abstract class BaseEvent implements MarsEventState {
 
   abstract finalize(game: GameState): void;
 
-
-  getData() {
-    // override in subtypes to add custom data to persist
-    return {};
-  }
-
   toJSON(): MarsEventSerialized {
     const json:MarsEventSerialized = {
       id: getEventName(this.constructor)
-    }
-    const extraData = this.getData();
-    if (extraData) {
-      json.data = _.cloneDeep(extraData);
+    };
+    if (this.getData) {
+      json.data = _.cloneDeep(this.getData());
     }
     return json;
   }
