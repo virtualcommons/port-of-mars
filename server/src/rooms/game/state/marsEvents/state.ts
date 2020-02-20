@@ -5,7 +5,7 @@ import {
 } from "@/rooms/game/state/marsEvents/common";
 import {GameState, MarsLogMessage} from "@/rooms/game/state";
 import * as _ from "lodash";
-import {CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER, Role, ROLES, SERVER} from "shared/types";
+import {CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER, Role, ServerRole, ROLES, SERVER} from "shared/types";
 import { PersonalGainVotesData } from "shared/requests";
 import { RsaPrivateKey } from "crypto";
 import { Game } from "@/entity/Game";
@@ -33,25 +33,45 @@ export interface MarsEventSerialized {
   data?: any;
 }
 
-////////////////////////// Sandstorm //////////////////////////
+export abstract class BaseEvent implements MarsEventState {
 
-@assocEventId
-export class Sandstorm implements MarsEventState {
-  finalize(game: GameState): void {
-    game.upkeep -= 10;
+  abstract finalize(game: GameState): void;
+
+  log(state: GameState, message: string, category:string='Mars Event', performedBy:Role|ServerRole=SERVER): MarsLogMessage {
     const msg = new MarsLogMessage({
-      performedBy: SERVER,
-      category: 'Mars Event',
-      content: 'Sandstorm decreased upkeep by 10',
+      performedBy,
+      category,
+      content: message,
       timestamp: (new Date()).getTime()
-    });
-    game.logs.push(msg);
+    })
+    state.logs.push(msg);
+    return msg;
+  }
+
+  getData() {
+    // FIXME: override
+    return {};
   }
 
   toJSON(): MarsEventSerialized {
-    return {
+    const json:MarsEventSerialized = {
       id: getEventName(this.constructor)
     }
+    if (this.getData()) {
+      json.data = _.cloneDeep(this.getData());
+    }
+    return json;
+  }
+
+}
+
+////////////////////////// Sandstorm //////////////////////////
+
+@assocEventId
+export class Sandstorm extends BaseEvent {
+  finalize(game: GameState): void {
+    game.upkeep -= 10;
+    this.log(game, 'A sandstorm has decreased system health by 10.');
   }
 }
 
@@ -60,10 +80,7 @@ export class Sandstorm implements MarsEventState {
 export type PersonalGainData = { [role in Role]: boolean };
 
 @assocEventId
-export class PersonalGain implements MarsEventState {
-  constructor(votes?: PersonalGainData) {
-    this.votes = votes ?? _.cloneDeep(PersonalGain.defaultVotes);
-  }
+export class PersonalGain extends BaseEvent {
 
   private static defaultResponse: boolean = true;
 
@@ -76,6 +93,11 @@ export class PersonalGain implements MarsEventState {
   };
 
   private votes: PersonalGainData;
+
+  constructor(votes?: PersonalGainData) {
+    super();
+    this.votes = votes ?? _.cloneDeep(PersonalGain.defaultVotes);
+  }
 
   updateVotes(player: Role, vote: boolean) {
     this.votes[player] = vote;
@@ -112,21 +134,12 @@ export class PersonalGain implements MarsEventState {
     }
     game.subtractUpkeep(subtractedUpkeep);
 
-    const msg = new MarsLogMessage({
-      performedBy: SERVER,
-      category: 'Mars Event',
-      content: 'Upkeep decreased by ' + this.subtractedUpkeepTotal(subtractedUpkeep) +
-                '. The following players voted yes: ' + this.playersVoteYes(this.votes),
-      timestamp: (new Date()).getTime()
-    });
-    game.logs.push(msg);
+    const message = `System health decreased by ${this.subtractedUpkeepTotal(subtractedUpkeep)}. The following players voted yes: ${this.playersVoteYes(this.votes)}`;
+    this.log(game, message);
   }
 
-  toJSON(): MarsEventSerialized {
-    return {
-      id: getEventName(this.constructor),
-      data: _.cloneDeep(this.votes)
-    };
+  getData() {
+    return this.votes;
   }
 }
 
@@ -135,8 +148,13 @@ export class PersonalGain implements MarsEventState {
 type CompulsivePhilanthropyData = { [role in Role]: Role }
 
 @assocEventId
-export class CompulsivePhilanthropy implements MarsEventState {
+export class CompulsivePhilanthropy extends BaseEvent {
+
+  votes: CompulsivePhilanthropyData;
+  order: Array<Role>;
+
   constructor(data?: { votes: CompulsivePhilanthropyData, order: Array<Role> }) {
+    super();
     this.votes = data?.votes ?? {
       [CURATOR]: CURATOR,
       [ENTREPRENEUR]: ENTREPRENEUR,
@@ -146,9 +164,6 @@ export class CompulsivePhilanthropy implements MarsEventState {
     };
     this.order = data?.order ?? _.shuffle(_.cloneDeep(ROLES));
   }
-
-  votes: CompulsivePhilanthropyData;
-  order: Array<Role>;
 
   voteForPlayer(voter: Role, philanthropist: Role) {
     this.votes[voter] = philanthropist;
@@ -177,24 +192,14 @@ export class CompulsivePhilanthropy implements MarsEventState {
       }
     }
 
-    const winner = _.find(this.order, w => winners.includes(w)) || this.order[0];
-
-    game.logs.push(new MarsLogMessage({
-      performedBy: SERVER,
-      category: 'Mars Event',
-      content: `${winner} voted to be compulsive philanthropist`,
-      timestamp: (new Date()).getTime()
-    }));
-
+    const winner:Role = _.find(this.order, (w:Role) => winners.includes(w)) || this.order[0];
     game.upkeep += game.players[winner].timeBlocks;
     game.players[winner].timeBlocks = 0;
+    this.log(game, `${winner} voted to be compulsive philanthropist`);
   }
 
-  toJSON(): MarsEventSerialized {
-    return {
-      id: getEventName(this.constructor),
-      data: _.cloneDeep({ votes: this.votes, order: this.order })
-    };
+  getData() {
+    return { votes: this.votes, order: this.order };
   }
 }
 
@@ -203,9 +208,13 @@ export class CompulsivePhilanthropy implements MarsEventState {
 
 type OutOfCommissionData = { [role in Role]: Role }
 
-abstract class OutOfCommission implements MarsEventState {
+abstract class OutOfCommission extends BaseEvent {
+  player: Role = CURATOR;
+  roles: OutOfCommissionData;
+
   constructor(public data?: { roles: OutOfCommissionData }) {
-      this.roles = data?.roles ?? {
+    super();
+    this.roles = data?.roles ?? {
       [CURATOR]: CURATOR,
       [ENTREPRENEUR]: ENTREPRENEUR,
       [PIONEER]: PIONEER,
@@ -214,8 +223,6 @@ abstract class OutOfCommission implements MarsEventState {
     };
   }
 
-  player: Role = CURATOR;
-  roles: OutOfCommissionData;
 
   playerOutOfCommission(outOfCommission: Role): Role {
     var player: Role = this.roles[outOfCommission];
@@ -225,22 +232,12 @@ abstract class OutOfCommission implements MarsEventState {
   finalize(game: GameState): void {
     var role: Role = this.playerOutOfCommission(this.player);
     game.players[role].timeBlocks = 3;
+    this.log(game, `${this.player} has 3 timeblocks to invest during this round.`);
+  }
 
-    const msg = new MarsLogMessage({
-      performedBy: SERVER,
-      category: 'Mars Event',
-      content: this.player + ' has 3 timeblocks to invest during this round.',
-      timestamp: (new Date()).getTime()
-    });
-    game.logs.push(msg);
-  };
-
-  toJSON(): MarsEventSerialized {
-    return {
-      id: getEventName(this.constructor),
-      data: _.cloneDeep({ roles: this.roles })
-    }
-  };
+  getData() {
+    return { roles: this.roles };
+  }
 }
 
 // Curator
@@ -292,22 +289,8 @@ export class OutOfCommissionEntrepreneur extends OutOfCommission {
 ////////////////////////// Audit //////////////////////////
 
 @assocEventId
-export class Audit implements MarsEventState {
+export class Audit extends BaseEvent {
   finalize(game: GameState) {
-
-    // generate mars log message
-    const msg = new MarsLogMessage({
-        performedBy: SERVER,
-        category: 'Mars Event',
-        content: 'You will be able to view other players\' resources.',
-        timestamp: (new Date()).getTime()
-      });
-    game.logs.push(msg);
-  }
-
-  toJSON(): MarsEventSerialized {
-    return {
-      id: getEventName(this.constructor)
-    }
+    this.log(game, `You will be able to view other players' resources.`);
   }
 }
