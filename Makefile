@@ -12,6 +12,15 @@ build: docker-compose.yml $(SECRETS)
 	docker-compose pull db
 	docker-compose build --pull
 
+.PHONY: browser
+browser:
+	firefox --new-tab --url 'ext+container:name=Bob&url=http://localhost:8081/#/game' \
+		--new-tab --url 'ext+container:name=Amanda&url=http://localhost:8081/#/game' \
+		--new-tab --url 'ext+container:name=Frank&url=http://localhost:8081/#/game' \
+		--new-tab --url 'ext+container:name=Sydney&url=http://localhost:8081/#/game' \
+		--new-tab --url 'ext+container:name=Adison&url=http://localhost:8081/#/game' \
+		--new-tab --url 'ext+container:name=Bob2&url=http://localhost:8081/#/game'
+
 keys:
 	mkdir -p keys
 
