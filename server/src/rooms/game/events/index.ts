@@ -16,7 +16,6 @@ import {
   RESEARCHER
 } from 'shared/types';
 import {
-  Accomplishment,
   ChatMessage,
   GameState,
   Player,
@@ -31,13 +30,25 @@ import { CompulsivePhilanthropy, PersonalGain,
         OutOfCommissionEntrepreneur
        } 
         from '@/rooms/game/state/marsEvents/state';
-import e = require('express');
-import { Game } from '@/entity/Game';
-import { Client } from 'colyseus';
+import * as entities from '@/entity/GameEvent';
 import {tradeCanBeCompleted} from "shared/validation";
+import _ from "lodash";
+
+class GameEventDeserializer {
+  protected lookups: { [classname: string]: { new(data?: any): GameEvent }} = {};
+
+  register(event: { new(data: any): GameEvent }) {
+    this.lookups[_.kebabCase(event.name)] = event;
+  }
+
+  deserialize(ge: entities.GameEvent) {
+    const constructor = this.lookups[ge.type];
+    return new constructor(ge.payload);
+  }
+}
+export const gameEventDeserializer = new GameEventDeserializer();
 
 abstract class GameEventWithData implements GameEvent {
-  abstract kind: string;
   abstract data: object;
   dateCreated: number;
 
@@ -46,6 +57,10 @@ abstract class GameEventWithData implements GameEvent {
   }
 
   abstract apply(game: GameState): void;
+
+  get kind() {
+    return _.kebabCase(this.constructor.name);
+  }
 
   serialize() {
     return {
@@ -57,8 +72,6 @@ abstract class GameEventWithData implements GameEvent {
 }
 
 export class SetPlayerReadiness extends GameEventWithData {
-  kind = 'set-player-readiness';
-
   constructor(public data: { value: boolean; role: Role }) {
     super();
   }
@@ -67,10 +80,9 @@ export class SetPlayerReadiness extends GameEventWithData {
     game.players[this.data.role].updateReadiness(this.data.value);
   }
 }
+gameEventDeserializer.register(SetPlayerReadiness);
 
 export class SentChatMessage extends GameEventWithData {
-  kind = 'sent-chat-message';
-
   constructor(public data: ChatMessageData) {
     super();
   }
@@ -79,10 +91,9 @@ export class SentChatMessage extends GameEventWithData {
     game.messages.push(new ChatMessage(this.data));
   }
 }
+gameEventDeserializer.register(SentChatMessage);
 
 export class BoughtAccomplishment extends GameEventWithData {
-  kind = 'bought-accomplishment';
-
   constructor(public data: { accomplishment: AccomplishmentData; role: Role }) {
     super();
   }
@@ -91,10 +102,9 @@ export class BoughtAccomplishment extends GameEventWithData {
     game.players[this.data.role].buyAccomplishment(this.data.accomplishment);
   }
 }
+gameEventDeserializer.register(BoughtAccomplishment);
 
 export class DiscardedAccomplishment extends GameEventWithData {
-  kind = 'dicarded-accomplishment';
-
   constructor(public data: { id: number; role: Role }) {
     super();
   }
@@ -104,10 +114,9 @@ export class DiscardedAccomplishment extends GameEventWithData {
     accomplishmentData.discard(this.data.id);
   }
 }
+gameEventDeserializer.register(DiscardedAccomplishment);
 
 export class TimeInvested extends GameEventWithData {
-  kind = 'time-blocks-invested';
-
   constructor(public data: { investment: InvestmentData; role: Role }) {
     super();
   }
@@ -118,10 +127,9 @@ export class TimeInvested extends GameEventWithData {
     );
   }
 }
+gameEventDeserializer.register(TimeInvested);
 
 export class AcceptTradeRequest extends GameEventWithData {
-  kind = 'accept-trade-request';
-
   constructor(public data: { id: string }) {
     super();
     this.dateCreated = new Date().getTime();
@@ -169,10 +177,9 @@ export class AcceptTradeRequest extends GameEventWithData {
     delete game.tradeSet[this.data.id];
   }
 }
+gameEventDeserializer.register(AcceptTradeRequest);
 
 export class RejectTradeRequest extends GameEventWithData {
-  kind = 'reject-trade-request';
-
   constructor(public data: { id: string }) {
     super();
   }
@@ -185,10 +192,9 @@ export class RejectTradeRequest extends GameEventWithData {
 
   }
 }
+gameEventDeserializer.register(RejectTradeRequest);
 
 export class SentTradeRequest extends GameEventWithData {
-  kind = 'sent-trade-request';
-
   constructor(public data: TradeData) {
     super();
   }
@@ -202,27 +208,30 @@ export class SentTradeRequest extends GameEventWithData {
     //game.players[this.data.from.role].pendingInvestments.add({...this.data.from.resourceAmount,upkeep:0});
   }
 }
+gameEventDeserializer.register(SentTradeRequest);
 
 export class DeleteNotification extends GameEventWithData {
-  kind = 'delete-notifcation';
-
   constructor(public data: {index:number, player:Player}){super();}
 
   apply(game: GameState): void {
     this.data.player.deleteNotifcation(this.data.index);
   }
 }
+gameEventDeserializer.register(DeleteNotification);
 
 /*
  Phase Events
  */
 
 abstract class KindOnlyGameEvent implements GameEvent {
-  abstract kind: string;
   dateCreated: number;
 
-  constructor() {
+  constructor(data?: any) {
     this.dateCreated = new Date().getTime();
+  }
+
+  get kind(): string {
+    return _.kebabCase(this.constructor.name);
   }
 
   abstract apply(game: GameState): void;
@@ -233,25 +242,15 @@ abstract class KindOnlyGameEvent implements GameEvent {
 }
 
 export class MarsEventFinalized extends KindOnlyGameEvent {
-  kind = 'mars-event-finalized';
-
   apply(game: GameState): void {
     game.currentEvent.state.finalize(game);
   }
 }
+gameEventDeserializer.register(MarsEventFinalized);
 
 export class EnteredMarsEventPhase extends KindOnlyGameEvent {
-  kind = 'entered-mars-event-phase';
 
   apply(game: GameState): void {
-    // console.log('EnteredMarsEventPhase');
-    // const log = new MarsLogMessage({
-    //   performedBy: CURATOR,
-    //   category: 'upkeep',
-    //   content: `upkeep decreased ${game.upkeep - game.nextRoundUpkeep()}`,
-    //   timestamp: this.dateCreated
-    // });
-
     game.resetPlayerReadiness();
     game.refreshPlayerPurchasableAccomplisments();
 
@@ -282,29 +281,26 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
     // TODO: HANDLE CURRENT EVENT USING MARSEVENTSPROCESSED
   }
 }
+gameEventDeserializer.register(EnteredMarsEventPhase);
 
 export class ReenteredMarsEventPhase extends KindOnlyGameEvent {
-  kind = 'reentered-mars-event-phase';
-
   apply(game: GameState): void {
     game.resetPlayerReadiness();
     game.marsEventsProcessed += 1;
   }
 }
+gameEventDeserializer.register(ReenteredMarsEventPhase);
 
 export class EnteredInvestmentPhase extends KindOnlyGameEvent {
-  kind = 'entered-investment-phase';
-
   apply(game: GameState): void {
     game.resetPlayerReadiness();
     game.phase = Phase.invest;
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
   }
 }
+gameEventDeserializer.register(EnteredInvestmentPhase);
 
 export class EnteredTradePhase extends KindOnlyGameEvent {
-  kind = 'entered-trade-phase';
-
   apply(game: GameState) {
     game.resetPlayerReadiness();
     game.phase = Phase.trade;
@@ -318,10 +314,9 @@ export class EnteredTradePhase extends KindOnlyGameEvent {
     }
   }
 }
+gameEventDeserializer.register(EnteredTradePhase);
 
 export class EnteredPurchasePhase extends KindOnlyGameEvent {
-  kind = 'entered-purchase-phase';
-
   apply(game: GameState): void {
     game.resetPlayerReadiness();
     game.phase = Phase.purchase;
@@ -332,32 +327,30 @@ export class EnteredPurchasePhase extends KindOnlyGameEvent {
     }
   }
 }
+gameEventDeserializer.register(EnteredPurchasePhase);
 
 export class EnteredDiscardPhase extends KindOnlyGameEvent {
-  kind = 'entered-discard-phase';
-
   apply(game: GameState): void {
     game.resetPlayerReadiness();
     game.phase = Phase.discard;
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
   }
 }
+gameEventDeserializer.register(EnteredDiscardPhase);
 
 export class EnteredDefeatPhase extends KindOnlyGameEvent {
-  kind = 'entered-defeat-phase';
-
   apply(game: GameState): void {
     game.phase = Phase.defeat;
   }
 }
+gameEventDeserializer.register(EnteredDefeatPhase);
 
 export class EnteredVictoryPhase extends KindOnlyGameEvent {
-  kind = 'entered-victory-phase';
-
   apply(game: GameState): void {
     game.phase = Phase.victory;
   }
 }
+gameEventDeserializer.register(EnteredVictoryPhase);
 
 export class StateSnapshotTaken implements GameEvent {
   kind = 'state-snapshot-taken';
@@ -377,10 +370,9 @@ export class StateSnapshotTaken implements GameEvent {
     };
   }
 }
+gameEventDeserializer.register(StateSnapshotTaken);
 
 export class PersonalGainVoted extends GameEventWithData {
-  kind = 'personal-gain-voted';
-
   constructor(public data: { role: Role; vote: boolean }) {
     super();
   }
@@ -393,10 +385,9 @@ export class PersonalGainVoted extends GameEventWithData {
     }
   }
 }
+gameEventDeserializer.register(PersonalGainVoted);
 
 export class VotedForPhilanthropist extends GameEventWithData {
-  kind = 'voted-for-philanthropist';
-
   constructor(public data: { voter: Role, vote: Role }) {
     super();
   }
@@ -413,10 +404,9 @@ export class VotedForPhilanthropist extends GameEventWithData {
     game.players[this.data.voter].updateReadiness(true);
   }
 }
+gameEventDeserializer.register(VotedForPhilanthropist);
 
 export class CommissionCurator extends GameEventWithData {
-  kind = 'commission-curator';
-
   constructor(public data: {role: Role}) {
     super();
   }
@@ -433,10 +423,9 @@ export class CommissionCurator extends GameEventWithData {
     game.players[this.data.role].updateReadiness(true);
   }
 }
+gameEventDeserializer.register(CommissionCurator);
 
 export class CommissionPolitician extends GameEventWithData {
-  kind = 'commission-politician';
-
   constructor(public data: {role: Role}) {
     super();
   }
@@ -453,10 +442,9 @@ export class CommissionPolitician extends GameEventWithData {
     game.players[this.data.role].updateReadiness(true);
   }
 }
+gameEventDeserializer.register(CommissionPolitician);
 
 export class CommissionResearcher extends GameEventWithData {
-  kind = 'commission-researcher';
-
   constructor(public data: {role: Role}) {
     super();
   }
@@ -473,10 +461,9 @@ export class CommissionResearcher extends GameEventWithData {
     game.players[this.data.role].updateReadiness(true);
   }
 }
+gameEventDeserializer.register(CommissionResearcher);
 
 export class CommissionPioneer extends GameEventWithData {
-  kind = 'commission-pioneer';
-
   constructor(public data: {role: Role}) {
     super();
   }
@@ -493,10 +480,9 @@ export class CommissionPioneer extends GameEventWithData {
     game.players[this.data.role].updateReadiness(true);
   }
 }
+gameEventDeserializer.register(CommissionPioneer);
 
 export class CommissionEntrepreneur extends GameEventWithData {
-  kind = 'commission-entrepreneur';
-
   constructor(public data: {role: Role}) {
     super();
   }
@@ -513,3 +499,4 @@ export class CommissionEntrepreneur extends GameEventWithData {
     game.players[this.data.role].updateReadiness(true);
   }
 }
+gameEventDeserializer.register(CommissionEntrepreneur);
