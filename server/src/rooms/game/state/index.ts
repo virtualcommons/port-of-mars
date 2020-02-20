@@ -1035,6 +1035,17 @@ export class GameState extends Schema implements GameData {
     event.apply(this);
   }
 
+  log(message: string, category:string='Mars Event', performedBy:Role|ServerRole=SERVER): MarsLogMessage {
+    const msg = new MarsLogMessage({
+      performedBy,
+      category,
+      content: message,
+      timestamp: (new Date()).getTime()
+    })
+    this.logs.push(msg);
+    return msg;
+  }
+
   get currentEvent() {
     return this.marsEvents[this.marsEventsProcessed];
   }

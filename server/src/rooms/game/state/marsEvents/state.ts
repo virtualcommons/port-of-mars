@@ -37,16 +37,6 @@ export abstract class BaseEvent implements MarsEventState {
 
   abstract finalize(game: GameState): void;
 
-  log(state: GameState, message: string, category:string='Mars Event', performedBy:Role|ServerRole=SERVER): MarsLogMessage {
-    const msg = new MarsLogMessage({
-      performedBy,
-      category,
-      content: message,
-      timestamp: (new Date()).getTime()
-    })
-    state.logs.push(msg);
-    return msg;
-  }
 
   getData() {
     // FIXME: override
@@ -71,7 +61,7 @@ export abstract class BaseEvent implements MarsEventState {
 export class Sandstorm extends BaseEvent {
   finalize(game: GameState): void {
     game.upkeep -= 10;
-    this.log(game, 'A sandstorm has decreased system health by 10.');
+    game.log('A sandstorm has decreased system health by 10.');
   }
 }
 
@@ -135,7 +125,7 @@ export class PersonalGain extends BaseEvent {
     game.subtractUpkeep(subtractedUpkeep);
 
     const message = `System health decreased by ${this.subtractedUpkeepTotal(subtractedUpkeep)}. The following players voted yes: ${this.playersVoteYes(this.votes)}`;
-    this.log(game, message);
+    game.log(message);
   }
 
   getData() {
@@ -195,7 +185,7 @@ export class CompulsivePhilanthropy extends BaseEvent {
     const winner:Role = _.find(this.order, (w:Role) => winners.includes(w)) || this.order[0];
     game.upkeep += game.players[winner].timeBlocks;
     game.players[winner].timeBlocks = 0;
-    this.log(game, `${winner} voted to be compulsive philanthropist`);
+    game.log(`${winner} voted to be compulsive philanthropist`);
   }
 
   getData() {
@@ -232,7 +222,7 @@ abstract class OutOfCommission extends BaseEvent {
   finalize(game: GameState): void {
     var role: Role = this.playerOutOfCommission(this.player);
     game.players[role].timeBlocks = 3;
-    this.log(game, `${this.player} has 3 timeblocks to invest during this round.`);
+    game.log(`${this.player} has 3 timeblocks to invest during this round.`);
   }
 
   getData() {
@@ -291,6 +281,6 @@ export class OutOfCommissionEntrepreneur extends OutOfCommission {
 @assocEventId
 export class Audit extends BaseEvent {
   finalize(game: GameState) {
-    this.log(game, `You will be able to view other players' resources.`);
+    game.log(`You will be able to view other players' resources.`);
   }
 }
