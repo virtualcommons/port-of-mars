@@ -13,7 +13,8 @@ import {
   ENTREPRENEUR,
   PIONEER,
   POLITICIAN,
-  RESEARCHER
+  RESEARCHER,
+  Investment
 } from 'shared/types';
 import {
   ChatMessage,
@@ -27,7 +28,7 @@ import { MarsEvent } from '@/rooms/game/state/marsEvents/MarsEvent';
 import { CompulsivePhilanthropy, PersonalGain, 
         OutOfCommissionCurator, OutOfCommissionPolitician, 
         OutOfCommissionResearcher, OutOfCommissionPioneer,
-        OutOfCommissionEntrepreneur
+        OutOfCommissionEntrepreneur, BondingThroughAdversity
        } 
         from '@/rooms/game/state/marsEvents/state';
 import * as entities from '@/entity/GameEvent';
@@ -500,3 +501,24 @@ export class CommissionEntrepreneur extends GameEventWithData {
   }
 }
 gameEventDeserializer.register(CommissionEntrepreneur);
+
+export class SelectedInfluence extends GameEventWithData {
+  kind = 'selected-influence';
+  
+  constructor(public data: {role: Role, influence: Investment}) {
+    super();
+  }
+
+  apply(game: GameState): void {
+    let state: BondingThroughAdversity;
+    if (game.currentEvent.state instanceof BondingThroughAdversity) {
+      state = game.currentEvent.state;
+    } else {
+      return;
+    }
+
+    game.players[this.data.role].updateReadiness(true);
+  }
+}
+
+

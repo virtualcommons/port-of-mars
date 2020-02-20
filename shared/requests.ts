@@ -1,4 +1,5 @@
-import { InvestmentData, TradeData, Role } from './types';
+import { InvestmentData, TradeData, Role, Investment } from './types';
+import { BondingThroughAdversity } from '@/rooms/game/state/marsEvents/state';
 
 export interface SendChatMessageData {
   kind: 'send-chat-message';
@@ -92,6 +93,11 @@ export interface DeleteNotificationData {
   index: number;
 }
 
+export interface BondingThroughAdversityData {
+  kind: 'bonding-through-adversity';
+  select: { role: Role; influence: Investment };
+}
+
 export type Requests =
   | SendChatMessageData
   | SetPlayerReadinessData
@@ -110,4 +116,5 @@ export type Requests =
   | OutOfCommissionResearcherData
   | OutOfCommissionPioneerData
   | OutOfCommissionEntrepreneurData
-  | DeleteNotificationData;
+  | DeleteNotificationData
+  | BondingThroughAdversityData;

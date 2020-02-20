@@ -1,5 +1,5 @@
 import * as req from 'shared/requests';
-import { InvestmentData, Phase, TradeData, Role } from 'shared/types';
+import { InvestmentData, Phase, TradeData, Role, INVESTMENTS } from 'shared/types';
 import { Player } from '@/rooms/game/state';
 import {
   AcceptTradeRequest,
@@ -22,7 +22,7 @@ import {
   PersonalGainVoted, VotedForPhilanthropist, 
   MarsEventFinalized, CommissionCurator, 
   CommissionPolitician, CommissionResearcher, 
-  CommissionPioneer, CommissionEntrepreneur
+  CommissionPioneer, CommissionEntrepreneur, SelectedInfluence
 } from '@/rooms/game/events';
 import { getAccomplishmentByID } from '@/data/Accomplishment';
 import { Client } from 'colyseus';
@@ -386,5 +386,22 @@ export class OutOfCommissionEntrepreneurCmd implements Command {
 
   execute(): Array<GameEvent> {
     return [new CommissionEntrepreneur({ role: this.player.role })]
+  }
+}
+
+export class BondingThroughAdversityCmd implements Command {
+  constructor(
+    private data: req.BondingThroughAdversityData,
+    private game: Game,
+    private player: Player
+  ) {}
+
+  static fromReq(r: req.BondingThroughAdversityData, game: Game, client: Client) {
+    const p = game.getPlayerByClient(client);
+    return new BondingThroughAdversityCmd(r, game, p);
+  }
+
+  execute(): Array<GameEvent> {
+    return [new SelectedInfluence({role: this.player.role, influence: this.data.select.influence }) ]
   }
 }

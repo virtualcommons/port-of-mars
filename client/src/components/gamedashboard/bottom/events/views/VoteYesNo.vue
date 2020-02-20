@@ -27,7 +27,7 @@ import {
   ENTREPRENEUR,
   PIONEER,
   POLITICIAN,
-  RESEARCHER
+  RESEARCHER,
 } from 'shared/types';
 import { GameRequestAPI } from '@/api/game/request';
 
