@@ -13,13 +13,15 @@ import {
   RejectTradeRequestData,
   PersonalGainVotesData, VoteForPhilanthropistData, 
   OutOfCommissionCuratorData,
-  DeleteNotificationData
+  DeleteNotificationData,
+  BondingThroughAdversityData
 } from 'shared/requests';
 import {
   AccomplishmentData,
   InvestmentData,
   TradeData,
-  Role
+  Role,
+  Investment
 } from 'shared/types';
 import { MockRoom } from '@/types/tutorial';
 
@@ -107,6 +109,11 @@ export class GameRequestAPI {
 
   public deleteNotification(index: number){
     const msg: DeleteNotificationData = {kind: 'delete-notification', index};
+    this.send(msg);
+  }
+
+  public saveBondingThroughAdversitySelection(select: { role: Role, influence: Investment }) {
+    const msg: BondingThroughAdversityData = { kind: 'bonding-through-adversity', influence };
     this.send(msg);
   }
 }

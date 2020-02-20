@@ -17,7 +17,8 @@ import {
   OutOfCommissionCuratorCmd, OutOfCommissionPoliticianCmd, 
   OutOfCommissionResearcherCmd, OutOfCommissionPioneerCmd,
   DeleteNotificationCmd,
-  OutOfCommissionEntrepreneurCmd
+  OutOfCommissionEntrepreneurCmd,
+  BondingThroughAdversityCmd
 } from '@/rooms/game/commands';
 import {Game, GameOpts, Persister} from '@/rooms/game/types';
 import { Command } from '@/rooms/game/commands/types';
@@ -100,6 +101,8 @@ export class GameRoom extends Room<GameState> implements Game {
         return DeleteNotificationCmd.fromReq(r, this, client);
       case 'out-of-commission-entrepreneur':
         return OutOfCommissionEntrepreneurCmd.fromReq(r, this, client);
+      case 'bonding-through-adversity':
+        return BondingThroughAdversityCmd.fromReq(r, this, client);
     }
   }
 

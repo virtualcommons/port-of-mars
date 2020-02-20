@@ -38,17 +38,25 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Inject, InjectReactive } from 'vue-property-decorator';
+import { Role, ROLES, Investment } from 'shared/types';
+import { GameRequestAPI } from '@/api/game/request';
 
 @Component({})
 export default class InfluencesDraw extends Vue {
-  private drawnInfluence: string = 'None Selected';
+  private drawnInfluence: Investment = 'science';
 
-  get availableInfluences(): Array<string> {
+  @Inject() api!: GameRequestAPI;
+
+  get playerRole() {
+    return this.$tstore.state.role;
+  }
+
+  get availableInfluences(): Array<Investment> {
     return ['science', 'government', 'legacy', 'finance', 'culture'];
   }
 
-  private handleDrawInfluence(influence: string): void {
+  private handleDrawInfluence(influence: Investment): void {
     this.drawnInfluence = influence;
     console.log('DRAW (type): ', typeof influence);
     console.log('DRAW: ', influence);
@@ -58,7 +66,9 @@ export default class InfluencesDraw extends Vue {
     this.drawnInfluence = 'None Selected';
   }
 
-  private submitDrawnInfluence(): void {
+  private submitDrawnInfluence(choice: Investment): void {
+    const selectResults = { role: this.playerRole, influence: choice };
+    this.api.saveBondingThroughAdversitySelection(selectResults);
     console.log('SUBMIT DRAWN INFLUENCE: ', this.drawnInfluence);
   }
 }
