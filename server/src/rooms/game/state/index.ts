@@ -825,7 +825,7 @@ class PlayerSet extends Schema implements PlayerSetData {
   }
 }
 
-interface GameSerialized {
+export interface GameSerialized {
   players: PlayerSetSerialized
   connections: { [sessionId: string]: Role }
   maxRound: number

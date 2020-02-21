@@ -15,6 +15,23 @@ import {GameState} from "@/rooms/game/state";
 import {getGameById} from "@/services/game";
 import {Phase} from "shared/types";
 
+function toDBRawGameEvent(gameId: number, gameEvent: ge.GameEvent) {
+  const ev = gameEvent.serialize();
+  return {
+    gameId,
+    type: ev.kind,
+    payload: ev.data ?? {},
+    dateCreated: new Date(ev.dateCreated)
+  }
+}
+
+export function toDBGameEvent(gameId: number, gameEvent: ge.GameEvent) {
+  const dbRawGameEvent = toDBRawGameEvent(gameId, gameEvent);
+  const dbGameEvent = new GameEvent();
+  Object.assign(dbGameEvent, dbRawGameEvent);
+  return dbGameEvent
+}
+
 export class ConsolePersister implements Persister {
   clock: ClockTimer = new ClockTimer();
 
@@ -97,15 +114,7 @@ export class DBPersister implements Persister {
   }
 
   async applyMany(gameId: number, events: Array<ge.GameEvent>) {
-    const rawGameEvents = events.map(ge => {
-      const ev = ge.serialize();
-      return {
-        gameId,
-        type: ev.kind,
-        payload: ev.data ?? {},
-        dateCreated: new Date(ev.dateCreated)
-      }
-    });
+    const rawGameEvents = events.map(ge => toDBRawGameEvent(gameId, ge));
     console.log(rawGameEvents);
     await this.lock.runExclusive(async () => {
       for (const rawEvent of rawGameEvents) {
