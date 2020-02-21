@@ -28,21 +28,23 @@
                 <button
                   v-if="!tour.isFirst"
                   @click="tour.previousStep"
-                  class="btn btn-dark"
+                  class="btn btn-dark button-active"
                 >
                   Previous
                 </button>
                 <button
-                  v-if="!tour.isLast && api.forcePause"
-                  @click="tour.nextStep"
+                  v-if="!tour.isLast"
+                  v-on="{click: api.forcePause ? tour.nextStep : ()=>{}}"
                   class="btn btn-dark"
+                  v-bind="{class: api.forcePause ? 'button-active' : 'button-inactive'}"
                 >
                   Next
                 </button>
                 <button
-                  v-else-if="tour.isLast && api.forcePause"
-                  @click="tour.stop"
+                  v-else-if="tour.isLast"
+                  v-on="{click: api.forcePause ? tour.stop : ()=>{}}"
                   class="btn btn-dark"
+                  v-bind="{class: api.forcePause ? 'button-active' : 'button-inactive'}"
                 >
                   Finish
                 </button>
@@ -54,24 +56,24 @@
                 <div
                   class="option"
                   v-for="(option, optionIndex) in currentQuizQuestion.options"
-                  :key="index"
+                  :key="index + Math.random()"
                 >
-                  <input
-                    type="radio"
+                  <label>
+                    <input type="radio"
                     :id="`${index}.${optionIndex}`"
                     :value="optionIndex"
-                    v-model="currentOptionIndex"
-                    class="question-selection"
-                  />
-                  <label :for="`${index}.${optionIndex}`">{{ option }}</label>
+                    v-model="currentOptionIndex">
+
+                    <span>{{option}} </span>
+                  </label>
                 </div>
                 <div>
-                  <p class="status">{{ quizQuestionStatusMessage }}</p>
+                  <p v-bind="{class: quizQuestionStatus ? 'status-correct' : 'status-wrong'}">{{ quizQuestionStatusMessage }}</p>
                 </div>
                 <button
                   v-if="!tour.isFirst"
                   @click="tour.previousStep"
-                  class="btn btn-dark"
+                  class="btn btn-dark button-active"
                   type="button"
                   name="button"
                 >
@@ -88,16 +90,16 @@
                   Check Answer
                 </button>
                 <button
-                  v-if="quizQuestionStatus && !tour.isLast && api.forcePause"
+                  v-if="quizQuestionStatus && !tour.isLast"
                   @click="tour.nextStep"
-                  class="btn btn-dark"
+                  class="btn btn-dark button-active"
                   type="button"
                   name="button"
                 >
                   Next
                 </button>
                 <button
-                  v-if="quizQuestionStatus && tour.isLast && api.forcePause"
+                  v-if="quizQuestionStatus && tour.isLast"
                   @click="tour.stop"
                   class="btn btn-dark"
                 >

@@ -55,6 +55,10 @@
           >! Be the player with the most points at the end of the game to win.
         </li>
       </ul>
+
+      <button @click="$bvModal.hide('bv-modal')" type="button" name="button">
+          Next
+      </button>
     </div>
   </BModal>
 </template>

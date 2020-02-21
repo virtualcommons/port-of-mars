@@ -124,6 +124,6 @@ export const initialStoreState: State = {
   user: {
     username: '',
     passedQuiz: false
-  }
+  },
 };
 

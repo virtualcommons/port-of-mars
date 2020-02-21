@@ -1,3 +1,34 @@
-code {
-  color: #4af626;
-}
+#bv-modal___BV_modal_content_ {
+  border: 0.0625rem solid $new-space-orange !important;
+  color: blue !important;
+  font-family: $font-family-default !important;  code {
+    color: $new-space-orange !important;
+  }  
+  
+  ul{
+    margin:0rem 1rem;
+    padding:0rem 0rem;
+    
+
+    li{
+      list-style-type: none;
+    }
+  }
+
+  button {
+    @include reset-button;
+    padding: 0.5rem !important;
+    border: 0.0625rem solid $new-space-orange !important;
+    border-radius: 0 !important;
+    margin: 0.5rem;
+    color: $new-space-orange;
+    @include default-transition-base;    
+    
+    &:hover {
+      @include default-scale-up;
+      color: $space-gray;
+      background-color: $new-space-orange;
+      outline: none !important;
+    }
+  }
+} 
