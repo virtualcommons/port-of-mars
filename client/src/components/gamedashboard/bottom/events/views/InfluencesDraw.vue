@@ -43,32 +43,58 @@ import { Role, ROLES, Investment } from 'shared/types';
 import { GameRequestAPI } from '@/api/game/request';
 
 @Component({})
-export default class InfluencesDraw extends Vue {
-  private drawnInfluence: Investment = 'science';
 
+export default class InfluencesDraw extends Vue {
+
+  private drawnInfluence: string = 'None Selected';
   @Inject() api!: GameRequestAPI;
 
-  get playerRole() {
+  /**
+   * Gets the state of the current Player's role.
+   * @return The Role.
+   *
+   */
+  get playerRole(): Role {
     return this.$tstore.state.role;
   }
-
-  get availableInfluences(): Array<Investment> {
+  
+  /**
+   * Gets the influence categories from which a player can choose.
+   * @return String array of influences
+   *
+   */  
+  get availableInfluences(): Array<string> {
     return ['science', 'government', 'legacy', 'finance', 'culture'];
   }
 
-  private handleDrawInfluence(influence: Investment): void {
+  /**
+   * Changes the influence that the Player selected.
+   * @param influence The influence that the Player votes for.
+   *
+   */
+  private handleDrawInfluence(influence: string): void {
     this.drawnInfluence = influence;
     console.log('DRAW (type): ', typeof influence);
     console.log('DRAW: ', influence);
   }
 
+  /**
+   * Sets default influence if the Player has not selected an 
+   * influence category.
+   *
+   */
   private handleUndrawInfluence(): void {
     this.drawnInfluence = 'None Selected';
   }
 
-  private submitDrawnInfluence(choice: Investment): void {
-    const selectResults = { role: this.playerRole, influence: choice };
-    this.api.saveBondingThroughAdversitySelection(selectResults);
+  /**
+   * Passes the influence that the Player selected to a request api.
+   *
+   */
+  private submitDrawnInfluence(): void {
+    const influenceChoice: Investment = this.drawnInfluence as Investment;
+    const influenceVoteResults = { role: this.playerRole, influence: influenceChoice };
+    this.api.saveBondingThroughAdversitySelection(influenceVoteResults);
     console.log('SUBMIT DRAWN INFLUENCE: ', this.drawnInfluence);
   }
 }

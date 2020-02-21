@@ -401,6 +401,6 @@ export class BondingThroughAdversityCmd implements Command {
   }
 
   execute(): Array<GameEvent> {
-    return [new SelectedInfluence({role: this.player.role, influence: this.data.select.influence }) ]
+    return [new SelectedInfluence({role: this.player.role, influence: this.data.influenceVoteData.influence }) ]
   }
 }

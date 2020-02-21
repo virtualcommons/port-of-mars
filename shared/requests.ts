@@ -94,7 +94,7 @@ export interface DeleteNotificationData {
 
 export interface BondingThroughAdversityData {
   kind: 'bonding-through-adversity';
-  select: { role: Role; influence: Investment };
+  influenceVoteData: { role: Role; influence: Investment };
 }
 
 export type Requests =
