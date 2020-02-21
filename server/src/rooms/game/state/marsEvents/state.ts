@@ -282,9 +282,10 @@ type BondingThroughAdversityData = { [role in Role]: Resource}
 
 @assocEventId
 export class BondingThroughAdversity extends BaseEvent {
-  
+  // The Player's default Influence vote
   private static defaultInfluenceVote: Resource;
 
+  // Default Influence votes associated with each Role
   private static defaultInfluenceVotes: BondingThroughAdversityData = {
     [CURATOR]: BondingThroughAdversity.defaultInfluenceVote,
     [ENTREPRENEUR]: BondingThroughAdversity.defaultInfluenceVote,
@@ -293,17 +294,31 @@ export class BondingThroughAdversity extends BaseEvent {
     [RESEARCHER]: BondingThroughAdversity.defaultInfluenceVote,
   };
 
+  // Map Influence votes to Roles
   private votes: BondingThroughAdversityData;
 
+  // Clone Default Influence votes
   constructor(votes?: BondingThroughAdversityData) {
     super();
     this.votes = votes ?? _.cloneDeep(BondingThroughAdversity.defaultInfluenceVotes);
   }
-
-  updateVotes(player: Role, vote: Resource) {
+  
+  /**
+   * Change Influence votes associated with each Role after a Player votes.
+   * @param player The Role
+   * @param vote The Influence the Player voted for 
+   * 
+   */
+  updateVotes(player: Role, vote: Resource): void {
     this.votes[player] = vote;
   }
 
+  /**
+   * Change each Player's resource inventory with their Influence vote via game state and
+   * push a message to the mars log.
+   * @param game The current Game State 
+   * 
+   */
   finalize(game: GameState): void {
     for (const role of ROLES) {
       game.players[role].inventory[this.votes[role]] += 1;
@@ -313,7 +328,12 @@ export class BondingThroughAdversity extends BaseEvent {
     game.log(message);
   }
 
-  getData() {
+  /**
+   * Retrieve Role and Influence vote associated with each Player.
+   * @return Role and Influence votes associated with each Role.
+   * 
+   */
+  getData(): BondingThroughAdversityData {
     return this.votes;
   }
 }
