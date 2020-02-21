@@ -111,8 +111,8 @@ export class GameRequestAPI {
     this.send(msg);
   }
 
-  public saveBondingThroughAdversitySelection(select: { role: Role, influence: Investment }) {
-    const msg: BondingThroughAdversityData = { kind: 'bonding-through-adversity', influence };
+  public saveBondingThroughAdversitySelection(influenceVoteData: { role: Role, influence: Investment }) {
+    const msg: BondingThroughAdversityData = { kind: 'bonding-through-adversity', influenceVoteData };
     this.send(msg);
   }
 }
