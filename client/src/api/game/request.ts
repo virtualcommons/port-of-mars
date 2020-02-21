@@ -12,7 +12,6 @@ import {
   AcceptTradeRequestData,
   RejectTradeRequestData,
   PersonalGainVotesData, VoteForPhilanthropistData, 
-  OutOfCommissionCuratorData,
   DeleteNotificationData,
   BondingThroughAdversityData
 } from 'shared/requests';

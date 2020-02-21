@@ -3,17 +3,9 @@ import {
   AccomplishmentData,
   ChatMessageData,
   InvestmentData,
-  MarsLogMessageData,
   Phase,
   Role,
-  ROLES,
-  Resource,
   TradeData,
-  CURATOR,
-  ENTREPRENEUR,
-  PIONEER,
-  POLITICIAN,
-  RESEARCHER,
   Investment
 } from 'shared/types';
 import {
@@ -521,4 +513,5 @@ export class SelectedInfluence extends GameEventWithData {
   }
 }
 
+gameEventDeserializer.register(SelectedInfluence);
 

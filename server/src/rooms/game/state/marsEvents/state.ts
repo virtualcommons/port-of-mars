@@ -6,12 +6,7 @@ import {
 import {GameState, MarsLogMessage} from "@/rooms/game/state";
 import * as _ from "lodash";
 import {CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER, Role, ROLES, SERVER, Investment} from "shared/types";
-import { PersonalGainVotesData } from "shared/requests";
-import { RsaPrivateKey } from "crypto";
-import { Game } from "@/entity/Game";
-import { GameEvent } from "@/entity/GameEvent";
-import { EntityRepository } from "typeorm";
-import { get } from "mongoose";
+
 
 const _dispatch: { [id: string]: MarsEventStateConstructor } = {};
 
@@ -286,27 +281,8 @@ export class Audit extends BaseEvent {
 type BondingThroughAdversityData = { [role in Role]: Investment}
 
 @assocEventId
-export class BondingThroughAdversity implements MarsEventState {
-  constructor(public data: { playerInfluenceSelect: BondingThroughAdversityData }) {
-    this.playerInfluenceSelect = data?.playerInfluenceSelect ?? {
-      [CURATOR]: 'culture',
-      [ENTREPRENEUR]: 'finance',
-      [PIONEER]: 'legacy',
-      [POLITICIAN]: 'government',
-      [RESEARCHER]: 'science'
-    };
-  }
-
-  playerInfluenceSelect: BondingThroughAdversityData;
-
+export class BondingThroughAdversity extends BaseEvent {
   finalize(game: GameState): void {
 
-  }
-
-  toJSON(): MarsEventSerialized {
-    return {
-      id: getEventName(this.constructor),
-      data: _.cloneDeep({ playerInfluenceSelect: this.playerInfluenceSelect })
-    }
   }
 }

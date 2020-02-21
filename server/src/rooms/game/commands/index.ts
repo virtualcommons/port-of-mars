@@ -29,7 +29,6 @@ import { Client } from 'colyseus';
 import { Game } from '@/rooms/game/types';
 import { Command } from '@/rooms/game/commands/types';
 import { GameEvent } from '@/rooms/game/events/types';
-import { MarsEvent } from '@/rooms/game/state/marsEvents/MarsEvent';
 import {tradeIsValid} from "shared/validation";
 
 export class SendChatMessageCmd implements Command {
