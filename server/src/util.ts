@@ -1,14 +1,16 @@
 import {Loader, Resolver} from "typeorm-fixtures-cli/dist";
 import path from "path";
 import _ from "lodash";
-import {Role, ROLES} from "shared/types";
-import {GameOpts, Persister} from "@/rooms/game/types";
+import {MarsEventData, ROLES} from "shared/types";
+import {GameOpts, GameStateOpts, Persister} from "@/rooms/game/types";
 import * as assert from "assert";
 import {ConsolePersister} from "@/services/persistence";
 import * as to from "typeorm";
+import {expandCopies} from "@/rooms/game/state/marsEvents/common";
+import {getAllMarsEvents} from "@/data/MarsEvents";
 
 export function getConnection(): to.Connection {
-  const connection_name = process.env.NODE_ENV === 'test' ? 'test': 'default';
+  const connection_name = process.env.NODE_ENV === 'test' ? 'test' : 'default';
   return to.getConnection(connection_name)
 }
 
@@ -18,16 +20,29 @@ export function getRandomIntInclusive(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
 }
 
-export function mockGameStateInitOpts(): { [username: string]: Role} {
+function getMarsEventData(): Array<MarsEventData> {
+  return _.clone(expandCopies(getAllMarsEvents()));
+}
+
+export function mockGameStateInitOpts(
+  deckStrategy: (events: Array<MarsEventData>) => Array<MarsEventData> = x => x,
+  nRoundStrategy: () => number = () => getRandomIntInclusive(8, 12)): GameStateOpts {
   const loader = new Loader();
   loader.load(path.resolve(__dirname, '../fixtures'));
   const fixtures = new Resolver().resolve(loader.fixtureConfigs);
-  return _.zipObject(fixtures.filter(f => f.entity === 'User').map(f => f.data.username), ROLES);
+  const deck = deckStrategy(_.clone(expandCopies(getAllMarsEvents())));
+  const round = nRoundStrategy();
+
+  return {
+    userRoles: _.zipObject(fixtures.filter(f => f.entity === 'User').map(f => f.data.username), ROLES),
+    deck,
+    round
+  };
 }
 
 export function mockGameInitOpts(persister: Persister): GameOpts {
   return {
-    userRoles: mockGameStateInitOpts(),
+    ...mockGameStateInitOpts(),
     tournamentId: 1,
     persister
   };
@@ -37,6 +52,8 @@ export function buildGameOpts(usernames: Array<string>): GameOpts {
   assert.equal(usernames.length, ROLES.length);
   return {
     userRoles: _.zipObject(usernames, ROLES),
+    deck: _.shuffle(getMarsEventData()),
+    round: getRandomIntInclusive(8, 12),
     tournamentId: 1,
     persister: new ConsolePersister()
   };

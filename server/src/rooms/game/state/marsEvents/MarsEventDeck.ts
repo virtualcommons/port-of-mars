@@ -5,11 +5,9 @@ import {getAllMarsEvents} from "@/data/MarsEvents";
 import {expandCopies} from "@/rooms/game/state/marsEvents/common";
 
 class MarsEventsDeck {
-  deck: Array<MarsEventData>;
   position: number;
 
-  constructor() {
-    this.deck = _.shuffle(_.clone(expandCopies(getAllMarsEvents())));
+  constructor(public deck: Array<MarsEventData>) {
     this.position = 0;
   }
 

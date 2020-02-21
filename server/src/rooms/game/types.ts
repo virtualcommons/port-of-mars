@@ -1,7 +1,7 @@
 import {Client, Room} from "colyseus";
 import {GameState, Player} from "@/rooms/game/state";
 import {Responses} from "shared/responses";
-import {Role} from "shared/types";
+import {MarsEventData, Role} from "shared/types";
 import * as ge from "@/rooms/game/events/types";
 
 export type PlayerReadiness = { [role in Role]: boolean }
@@ -22,8 +22,13 @@ export interface Persister {
   sync(): Promise<void>
 }
 
-export type GameOpts = {
-  persister: Persister,
-  userRoles: { [username: string]: Role }
+export interface GameOpts extends GameStateOpts {
+  persister: Persister
   tournamentId: number
+}
+
+export interface GameStateOpts {
+  userRoles: { [username: string]: Role }
+  deck: Array<MarsEventData>
+  round: number
 }

@@ -29,7 +29,7 @@ import _ from "lodash";
 import {getRandomIntInclusive} from "@/util";
 import {getAccomplishmentByID, getAccomplishmentIDs} from "@/data/Accomplishment";
 import {GameEvent} from "@/rooms/game/events/types";
-import {GameOpts} from "@/rooms/game/types";
+import {GameOpts, GameStateOpts} from "@/rooms/game/types";
 import {MarsEventsDeck} from "@/rooms/game/state/marsEvents/MarsEventDeck";
 import {MarsEvent} from "@/rooms/game/state/marsEvents/MarsEvent";
 
@@ -843,12 +843,12 @@ interface GameSerialized {
 }
 
 export class GameState extends Schema implements GameData {
-  constructor(userRoles: { [username: string]: Role }) {
+  constructor(data: GameStateOpts) {
     super();
-    this.userRoles = userRoles;
-    this.marsEventDeck = new MarsEventsDeck();
+    this.userRoles = data.userRoles;
+    this.marsEventDeck = new MarsEventsDeck(data.deck);
     this.lastTimePolled = new Date();
-    this.maxRound = getRandomIntInclusive(8, 12);
+    this.maxRound = data.round;
     this.players = new PlayerSet();
   }
 
@@ -1003,7 +1003,7 @@ export class GameState extends Schema implements GameData {
     this.marsEvents.splice(0, this.marsEvents.length);
     this.messages.splice(0, this.messages.length);
     this.players.fromJSON((new PlayerSet()).toJSON());
-    this.marsEventDeck = new MarsEventsDeck();
+    this.marsEventDeck = new MarsEventsDeck(_.shuffle(this.marsEventDeck.deck));
   }
 
   nextRoundUpkeep(): number {

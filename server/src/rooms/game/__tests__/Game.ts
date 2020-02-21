@@ -2,7 +2,7 @@ import {GameState, AccomplishmentSet, Player, Trade} from "@/rooms/game/state";
 import {CURATOR, PIONEER, RESEARCHER, ENTREPRENEUR, TradeData, Role} from "shared/types";
 import {getAccomplishmentByID, getAccomplishmentIDs} from "@/data/Accomplishment";
 import * as _ from 'lodash'
-import {mockGameInitOpts} from "@/util";
+import {mockGameInitOpts, mockGameStateInitOpts} from "@/util";
 import {ConsolePersister} from "@/services/persistence";
 import {Connection, createConnection} from "typeorm";
 import shell from "shelljs";
@@ -84,9 +84,9 @@ describe('a game state snapshot', () => {
 
   it('can be round tripped', async () => {
     const persister = new ConsolePersister();
-    const userRoles = mockGameInitOpts(persister).userRoles;
-    const g1 = new GameState(userRoles);
-    const g2 = new GameState(userRoles);
+    const options = mockGameStateInitOpts(x => x, () => 10);
+    const g1 = new GameState(options);
+    const g2 = new GameState(options);
 
     g2.fromJSON(g1.toJSON());
     expect(_.isEqual(g1, g2)).toBeTruthy();
@@ -100,7 +100,7 @@ describe('a game state snapshot', () => {
 });
 
 describe('a personal gain event', () => {
-  const gameState = new GameState(mockGameInitOpts(new ConsolePersister()).userRoles);
+  const gameState = new GameState(mockGameStateInitOpts(x => x, () => 10));
   it('gets players who voted yes', () => {
     
   });
@@ -110,7 +110,7 @@ describe('a personal gain event', () => {
 });
 
 describe('trading validations', () => {
-  const g = new GameState({'bob':"Curator", "frank":"Entrepreneur", 'sydney':"Researcher"});
+  const g = new GameState(mockGameStateInitOpts(x => x, () => 10));
   g.players['Curator'].inventory.update({
     finance:0,
     culture:3,
