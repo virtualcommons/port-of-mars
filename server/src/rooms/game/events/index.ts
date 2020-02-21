@@ -6,7 +6,7 @@ import {
   Phase,
   Role,
   TradeData,
-  Investment
+  Resource
 } from 'shared/types';
 import {
   ChatMessage,
@@ -495,9 +495,7 @@ export class CommissionEntrepreneur extends GameEventWithData {
 gameEventDeserializer.register(CommissionEntrepreneur);
 
 export class SelectedInfluence extends GameEventWithData {
-  kind = 'selected-influence';
-  
-  constructor(public data: {role: Role, influence: Investment}) {
+  constructor(public data: {role: Role, influence: Resource}) {
     super();
   }
 
@@ -505,11 +503,9 @@ export class SelectedInfluence extends GameEventWithData {
     let state: BondingThroughAdversity;
     if (game.currentEvent.state instanceof BondingThroughAdversity) {
       state = game.currentEvent.state;
-    } else {
-      return;
+      state.updateVotes(this.data.role, this.data.influence);
+      game.players[this.data.role].updateReadiness(true);
     }
-
-    game.players[this.data.role].updateReadiness(true);
   }
 }
 

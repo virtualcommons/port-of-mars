@@ -3,9 +3,9 @@ import {
   MarsEventState,
   MarsEventStateConstructor,
 } from "@/rooms/game/state/marsEvents/common";
-import {GameState, MarsLogMessage} from "@/rooms/game/state";
+import {GameState} from "@/rooms/game/state";
 import * as _ from "lodash";
-import {CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER, Role, ROLES, SERVER, Investment} from "shared/types";
+import {CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER, Role, ROLES, Resource} from "shared/types";
 
 
 const _dispatch: { [id: string]: MarsEventStateConstructor } = {};
@@ -278,11 +278,42 @@ export class Audit extends BaseEvent {
 
 ////////////////////////// Bonding Through Adversity //////////////////////////
 
-type BondingThroughAdversityData = { [role in Role]: Investment}
+type BondingThroughAdversityData = { [role in Role]: Resource}
 
 @assocEventId
 export class BondingThroughAdversity extends BaseEvent {
-  finalize(game: GameState): void {
+  
+  private static defaultInfluenceVote: Resource;
 
+  private static defaultInfluenceVotes: BondingThroughAdversityData = {
+    [CURATOR]: BondingThroughAdversity.defaultInfluenceVote,
+    [ENTREPRENEUR]: BondingThroughAdversity.defaultInfluenceVote,
+    [PIONEER]: BondingThroughAdversity.defaultInfluenceVote,
+    [POLITICIAN]: BondingThroughAdversity.defaultInfluenceVote,
+    [RESEARCHER]: BondingThroughAdversity.defaultInfluenceVote,
+  };
+
+  private votes: BondingThroughAdversityData;
+
+  constructor(votes?: BondingThroughAdversityData) {
+    super();
+    this.votes = votes ?? _.cloneDeep(BondingThroughAdversity.defaultInfluenceVotes);
+  }
+
+  updateVotes(player: Role, vote: Resource) {
+    this.votes[player] = vote;
+  }
+
+  finalize(game: GameState): void {
+    for (const role of ROLES) {
+      game.players[role].inventory[this.votes[role]] += 1;
+
+    }
+    const message = `Players have gained one influence currency of their choice.`
+    game.log(message);
+  }
+
+  getData() {
+    return this.votes;
   }
 }
