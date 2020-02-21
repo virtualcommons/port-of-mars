@@ -72,7 +72,7 @@ export default class Login extends Vue {
       const resData = await response.json();
       this.$ajax.setLoginCreds(resData);
       if (resData && resData.passedQuiz)
-        await this.$router.push({ name: 'WaitingLobby' });
+        await this.$router.push({ name: 'Game' }); // Go directly to the game until lobby done
       else await this.$router.push({ name: 'Tutorial' });
     } else {
       this.error = await response.json();
