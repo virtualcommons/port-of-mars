@@ -16,8 +16,6 @@ services:
   db:
     ports:
       - '127.0.0.1:5432:5432'
-    volumes:
-      - data:/var/lib/postgresql/data
   server:
     build:
       dockerfile: server/deploy/Dockerfile.dev
@@ -29,6 +27,3 @@ services:
       - ./server:/code/server
       - ./shared:/code/shared
       - /code/server/node_modules
-volumes:
-  data:
-    driver: local

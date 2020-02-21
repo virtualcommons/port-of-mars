@@ -16,5 +16,7 @@ services:
       POSTGRES_USER: marsmadness
       POSTGRES_PASSWORD_FILE: /run/secrets/pom_db_password
       POSTGRES_DB: port_of_mars
+      PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
       - ./keys/pom_db_password:/run/secrets/pom_db_password:ro
+      - ./docker/data:/var/lib/postgresql/data/pgdata

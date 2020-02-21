@@ -1,5 +1,6 @@
 include config.mk
 
+DB_DATA_PATH=docker/data
 DB_PASSWORD_PATH=keys/pom_db_password
 JWT_SECRET_PATH=keys/jwt
 ORMCONFIG_PATH=keys/ormconfig.json
@@ -49,10 +50,13 @@ $(PGPASS_PATH): $(DB_PASSWORD_PATH) server/deploy/pgpass.template keys
 $(SENTRY_DSN_PATH): keys
 	touch "$(SENTRY_DSN_PATH)"
 
+$(DB_DATA_PATH):
+	mkdir -p "$(DB_DATA_PATH)"
+
 .PHONY: secrets
 secrets: $(SECRETS)
 
-docker-compose.yml: base.yml $(ENVIR).yml config.mk
+docker-compose.yml: base.yml $(ENVIR).yml config.mk $(DB_DATA_PATH)
 	case "$(ENVIR)" in \
 	  dev|staging) docker-compose -f base.yml -f "$(ENVIR).yml" config > docker-compose.yml;; \
 	  prod) docker-compose -f base.yml -f staging.yml -f prod.yml config > docker-compose.yml;; \

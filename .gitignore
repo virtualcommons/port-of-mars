@@ -117,6 +117,7 @@ docker-compose.yml
 config.mk
 .DS_Store
 keys
+docker
 
 # backup files
 *~
