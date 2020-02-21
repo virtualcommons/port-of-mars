@@ -39,7 +39,7 @@
 
 <script lang="ts">
 import { Vue, Component, Inject, InjectReactive } from 'vue-property-decorator';
-import { Role, ROLES, Investment } from 'shared/types';
+import { Role, ROLES, Resource } from 'shared/types';
 import { GameRequestAPI } from '@/api/game/request';
 
 @Component({})
@@ -92,7 +92,7 @@ export default class InfluencesDraw extends Vue {
    *
    */
   private submitDrawnInfluence(): void {
-    const influenceChoice: Investment = this.drawnInfluence as Investment;
+    const influenceChoice: Resource = this.drawnInfluence as Resource;
     const influenceVoteResults = { role: this.playerRole, influence: influenceChoice };
     this.api.saveBondingThroughAdversitySelection(influenceVoteResults);
     console.log('SUBMIT DRAWN INFLUENCE: ', this.drawnInfluence);

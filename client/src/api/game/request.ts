@@ -20,7 +20,7 @@ import {
   InvestmentData,
   TradeData,
   Role,
-  Investment
+  Resource
 } from 'shared/types';
 import { MockRoom } from '@/types/tutorial';
 
@@ -111,7 +111,7 @@ export class GameRequestAPI {
     this.send(msg);
   }
 
-  public saveBondingThroughAdversitySelection(influenceVoteData: { role: Role, influence: Investment }) {
+  public saveBondingThroughAdversitySelection(influenceVoteData: { role: Role, influence: Resource }) {
     const msg: BondingThroughAdversityData = { kind: 'bonding-through-adversity', influenceVoteData };
     this.send(msg);
   }
