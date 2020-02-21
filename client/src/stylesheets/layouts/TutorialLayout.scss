@@ -39,10 +39,16 @@ body .in-tour {
     display: none !important;
   }
 
-  .status {
+  .status-correct {
     margin: 0.5rem 0;
-    color: $new-space-orange;
-    font-size: $font-small;
+    color: $status-green;
+    font-size: $font-med;
+  }
+
+  .status-wrong{
+    margin: 0.5rem 0;
+    color: $status-red;
+    font-size: $font-large;
   }
 
   button {
@@ -53,7 +59,14 @@ body .in-tour {
     margin: 0.5rem;
     color: $new-space-orange;
     @include default-transition-base;
+  }
 
+  .button-inactive{
+    opacity: 25%;
+  }
+
+  .button-active{
+    opacity: 100%;
     &:hover {
       @include default-scale-up;
       color: $space-gray;
@@ -66,19 +79,56 @@ body .in-tour {
     @include row;
     text-align: left;
     margin: 0.5rem 0;
-    // background-color: green;
+  
+    input {
+      display: none;
+    }
 
     label {
       padding-left: 0.5rem;
-      @include column-11;
+      display: flex;
+      justify-content: space-between;
       margin-bottom: 0;
+      font-size: $font-med;
+
+      padding: 0.1rem 0.5rem;
+      cursor: pointer;
     }
 
-    .question-selection {
-      @include column-1;
-      height: 1.5rem;
-      width: 1.5rem;
-      padding: 0 !important;
+    label span {
+      position: relative;
     }
+
+    label span:before,
+    label span:after {
+        content: '';
+    }
+
+    label span:before {
+      border: 1px solid $new-space-orange;
+      width: 1.5rem;
+      height: 1.5rem;
+      margin-right: 0.5rem;
+      display: inline-block;
+      vertical-align: top;
+      border-radius: 5px;
+    }
+    
+    label span:after {
+      background: $new-space-orange;
+      width: 0.9rem;
+      height: 0.9rem;
+      position: absolute;
+      top: 0.3rem;
+      left: 0.3rem;
+      opacity: 0;
+      border-radius: 2px;
+      
+    }
+
+    label input:checked+span:after {
+      opacity: 1;
+    }
+
   }
 }

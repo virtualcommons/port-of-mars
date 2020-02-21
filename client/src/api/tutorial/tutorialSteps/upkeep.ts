@@ -1,4 +1,4 @@
-import {Step} from "@/types/tutorial";
+import {Step, LEFT} from "@/types/tutorial";
 
 const steps:Array<Step> = [
     {
@@ -15,15 +15,15 @@ const steps:Array<Step> = [
       target: '.tour-container-upkeep',
       content: 'Quiz Question',
       params: {
-        placement: 'right',
+        placement: LEFT,
         tutorialElementId: 'upkeep25'
       }
     },
     {
       target: '.tour-container-upkeep',
       content:
-        'At the start of a round, if Upkeep is lower than 65, 2 events will occur in the round; ' +
-        'if Upkeep is lower than 35, there will be 3 events. Conditions on Mars ' +
+        'At the start of a round, if Upkeep is lower than 65, 2 Events will occur in the round; ' +
+        'if Upkeep is lower than 35, 3 Events will occur. Conditions on Mars ' +
         'are tough!',
       params: {
         placement: 'bottom'
@@ -33,7 +33,7 @@ const steps:Array<Step> = [
       target: '.tour-container-upkeep',
       content: 'Quiz Question',
       params: {
-        placement: 'right',
+        placement: LEFT,
         tutorialElementId: 'upkeep65'
       }
     },
@@ -41,7 +41,7 @@ const steps:Array<Step> = [
       target: '.tour-container-upkeep',
       content: 'Quiz Question',
       params: {
-        placement: 'right',
+        placement: LEFT,
         tutorialElementId: 'upkeep35'
       }
     },

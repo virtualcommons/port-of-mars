@@ -1,5 +1,5 @@
 <template>
-  <div class="trade-request-component">
+  <div class="trade-request-component tour-trade-component">
     <div class="trade-partner tour-trade-partner">
       <p class="trade-title">
         Trade With:
@@ -33,7 +33,7 @@
         text="You give up"
         mode="outgoing"
         class="options-block tour-give-up"
-        v-show="name"
+        v-show="name || isInTutorial"
         :key="count"
       />
       <TradeOptions 
@@ -41,7 +41,7 @@
         text="In exchange for"
         mode="incoming"
         class="options-block tour-get-in-return"
-        v-show="name"
+        v-show="name || isInTutorial"
         :key="count + Math.random()"
       />
     </div>
@@ -103,13 +103,31 @@ export default class TradeRequest extends Vue {
     return this.name != '' && canPlayerMakeTrade(this.sentResources, inventory);
   }
 
+  get isInTutorial(){
+    if(this.$store.getters.layout == 'tutorial'){
+      return true;
+    }
+    return false;
+  }
+
+
+  tutorialValidation(){
+    if(this.isInTutorial){
+      this.api.resetGame();
+    }
+  }
+
 
   handleSendResources(resources: ResourceAmountData) {
     this.sentResources = resources;
+
+    this.tutorialValidation();
   }
 
   handleReciveResources(resources: ResourceAmountData) {
     this.exchangeResources = resources;
+
+    this.tutorialValidation();
   }
 
   handleChange(name: string) {
@@ -117,7 +135,9 @@ export default class TradeRequest extends Vue {
       this.name = '';
     } else {
       this.name = name;
+      this.tutorialValidation();
     }
+    
   }
 
   handleTrade() {

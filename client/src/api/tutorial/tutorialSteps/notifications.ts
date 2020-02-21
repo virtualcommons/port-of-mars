@@ -5,8 +5,8 @@ const steps:Array<Step> = [
     {
       target: '.tour-notification',
       content:
-        'You will be notifed about events and changes in Upkeep via notifications ' +
-        'that pop up here. Hover over then notification to close it.',
+        'You will be notifed about trades and other things relevant to you via Notifications ' +
+        'that pop up here.',
       params: {
         placement: 'bottom'
       },
@@ -22,8 +22,8 @@ const steps:Array<Step> = [
     {
       target: '.tour-marslog',
       content:
-        'Any events and changes in upkeep that occur will be recorded in the Mars Log ' +
-        'for your reference.',
+        `Items that are relevent to the group like Upkeep dropping and new Events are displayed here.
+        These logs will persist through the entirety of the game`,
       params: {
         placement: 'right'
       },
@@ -35,6 +35,7 @@ const steps:Array<Step> = [
           content: `This event is important!`,
           timestamp:new Date().getTime(),
         },
+        required:false,
       }],
     },
 ]

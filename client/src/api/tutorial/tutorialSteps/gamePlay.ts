@@ -1,13 +1,12 @@
-import {Step} from "@/types/tutorial";
+import {Step, TOP} from "@/types/tutorial";
 import {CURATOR} from "shared/types";
 
 const steps:Array<Step> = [
     {
       target: '.tour-round',
       content:
-        'The game progresses in rounds. There is an indefinite number ' +
-        'of rounds per game. Therefore, the game can end at any time given ' +
-        'that Upkeep does not decline to zero.',
+        `The game progresses in rounds. The number of rounds changes from game to game, so the game could
+        end at any time`,
       params: {
         placement: 'right'
       }
@@ -24,13 +23,17 @@ const steps:Array<Step> = [
     {
         target: '.tour-chat',
         content:
-          'During gameplay, you can communicate with other players in your habitat ' +
-          'to plan and strategize. You can do this at any time during the game! Try sending a message!',
+          `During gameplay, you can communicate with other players in your habitat 
+          to plan and strategize. You can do this at any time during the game.
+          Keep in mind that all chat is public and there are no private messages!
+          Try sending a message!`,
         params: {
           placement: 'left'
         },
         stateTransform:[
-          {ADD_TO_CHAT:{
+          {
+            SET_LAYOUT: 'tutorial',
+            ADD_TO_CHAT:{
               message:'Welcome to the port of mars!',
               role:CURATOR,
               dateCreated:new Date().getTime(),
@@ -43,7 +46,7 @@ const steps:Array<Step> = [
         target: '.tour-chat',
         content: 'Quiz Question',
         params: {
-          placement: 'bottom',
+          placement: TOP,
           tutorialElementId: 'chat'
         }
       },

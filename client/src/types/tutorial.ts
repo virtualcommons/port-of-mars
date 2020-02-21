@@ -16,3 +16,10 @@ export interface Step {
   };
   stateTransform?: Array<StateTransform>;
 }
+
+//sometimes the placement is inverted in vue tour.
+//the ones that are tagged with caps are the inverted ones.
+export const TOP:string = 'bottom';
+export const BOTTOM:string = 'top';
+export const LEFT:string = 'right';
+export const RIGHT:string = 'left';

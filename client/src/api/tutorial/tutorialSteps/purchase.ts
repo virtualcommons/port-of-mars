@@ -1,10 +1,10 @@
-import {Step} from "@/types/tutorial";
+import {Step, TOP} from "@/types/tutorial";
 import { Phase } from 'shared/types';
 
 const steps:Array<Step> = [
     {
-        target: `.tour-purchase-header`,
-        content: `Ok, so now we've invested and traded our investments! It's finally time to purchase accomplishments!`,
+        target: `.tour-container-bottom`,
+        content: `Ok, so now we've invested and traded our Investments! It's finally time to purchase Accomplishments!`,
         params:{
             placement: 'top'
         },
@@ -13,11 +13,11 @@ const steps:Array<Step> = [
                 SET_GAME_PHASE:Phase.purchase,
                 SET_INVENTORY:{
                     data:{
-                      culture: 0,
-                      finance: 5,
-                      government: 5,
-                      legacy: 0,
-                      science: 5,
+                      culture: 10,
+                      finance: 10,
+                      government: 0,
+                      legacy: 10,
+                      science: 10,
                       upkeep: 0,
                     },
                     role:`Researcher`,
@@ -47,15 +47,36 @@ const steps:Array<Step> = [
         content: `Accomplishments that you can buy have an orange header and are moved to the top!
         Try buying one now!`,
         params:{
-            placement: 'bottom'
+            placement: TOP,
         },
         stateTransform:[
-            {required:true}
+        {
+            
+            SET_ACTIVE_ACCOMPLISHMENTS:{
+                data:{
+                    id: 2,
+                    role: "Researcher",
+                    label: "Mars Helicopter",
+                    flavorText: "Your invention of a low gravity, low atmosphere, low-flying vehicle enables greater exploration of the Martian surface.",
+                    science: 2,
+                    government: 0,
+                    legacy: 0,
+                    finance: 1,
+                    culture: 1,
+                    upkeep: 0,
+                    victoryPoints: 3,
+                    effect: ""
+                },
+                role:'Researcher'
+            },
+            required:true
+        }
+
         ]
     },
     {
         target: '.tour-accomplishments',
-        content: `After you buy one, it appears in the purchased section!`,
+        content: `After you buy one, it appears in the Purchased section!`,
         params:{
             placement: 'right'
         },

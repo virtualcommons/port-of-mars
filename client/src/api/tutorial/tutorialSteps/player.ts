@@ -23,16 +23,16 @@ const steps:Array<Step> = [
     {
         target: '.tour-players',
         content:
-          `These are the other four residents of the port of mars. During some events, you will be able to interact with their icons here.
-          The player score is displayed on the far left; name in the middle; ' +
-          'and character art on the right.`,
+          `These are the other four residents of the Port of Mars. During some events, you will be able to interact with their icons here.
+          The player score is displayed on the far left; name in the middle;
+          and character avatar on the right.`,
         params: {
           placement: 'left'
         }
     },
     {
         target: '.tour-profile-investments',
-        content: 'As you purchase time blocks during the invest phase, your inventory will update here.',
+        content: 'As you purchase Timeblocks during the invest phase, your inventory will update here.',
         params: {
           placement: 'right'
         },
@@ -40,7 +40,7 @@ const steps:Array<Step> = [
     },
     {
       target: '.tour-accomplishments',
-      content: `here, you can see what accomplishments are avaliable to you this round. As you buy them, you will be given new ones.
+      content: `Here, you can see what Accomplishments are avaliable to you this round. As you buy them, you will be given new ones.
       Once you purchase them, they will move to the purchased section.`,
       params: {
         placement: `right`
