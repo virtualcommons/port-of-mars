@@ -5,7 +5,7 @@ const steps:Array<Step> = [
     {
         target: `.tour-container-bottom`,
         content: `The last phase in a round is the discard phase!
-        Here, you can get new accomplishment cards to replace any card you may not like.
+        Here, you can get new Accomplishment cards to replace any card you may not like.
         Check it out!`,
         params: {
             placement: 'top',

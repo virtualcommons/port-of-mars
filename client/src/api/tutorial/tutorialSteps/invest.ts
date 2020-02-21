@@ -1,4 +1,4 @@
-import {Step} from "@/types/tutorial";
+import { Step, LEFT, TOP } from "@/types/tutorial";
 import { Phase,RESEARCHER } from "shared/types";
 
 const steps:Array<Step> = [
@@ -6,7 +6,7 @@ const steps:Array<Step> = [
       target: '.tour-investments',
       content: `The second phase is the Investment phase!`,
       params: {
-        placement: 'right'
+        placement: LEFT
       },
      
       stateTransform: [
@@ -25,9 +25,17 @@ const steps:Array<Step> = [
     {
       target: '.tour-investments',
       content:
-        'You are allocated 10 timeblocks (unless something says otherwise) to ' +
-        'spend each round. You can spend timeblocks on Upkeep or on ' +
-        'Influence. Remember that you have 5 minutes to invest your timeblocks.',
+        'You are allocated 10 Timeblocks (unless something says otherwise) to ' +
+        'spend each round. You can spend Timeblocks on Upkeep or on ' +
+        'Influence. Remember that you have 5 minutes to invest your Timeblocks.',
+      params: {
+        placement: 'top'
+      },
+      
+    },
+    {
+      target: '.tour-investments',
+      content: `You cannot recycle Timeblocks between rounds, so you should spend all of them, each round!`,
       params: {
         placement: 'top'
       },
@@ -36,10 +44,8 @@ const steps:Array<Step> = [
     {
       target: '.tour-investments',
       content:
-        'The cost of the card in timeblocks in located at the bottom right corner ' +
-        'of the card. Use the increment (+) button on a card to invest your timeblocks or ' +
-        'the decrement (-) button to remove timeblocks from an investment ' +
-        'that you have made.',
+        `The cost for each Influence is in the bottom right hand corner. Provided you have enough Timeblocks,
+        you can purchase them by pressing the '+' button. If you decide against the purchase later, you can drop it by pressing '-'.`,
       params: {
         placement: 'right'
       },
@@ -49,7 +55,7 @@ const steps:Array<Step> = [
       target: '.tour-investments',
       content: 'Quiz Question',
       params: {
-        placement: 'bottom',
+        placement: TOP,
         tutorialElementId: 'timeblocks'
       }
     },
@@ -57,7 +63,7 @@ const steps:Array<Step> = [
       target: '.tour-donebtn',
       content:
         'You can hit the Done button to surrender your time if you have finished investing ' +
-        'your timeblocks before the 5 minutes for the Investment Phase is up.',
+        'your Timeblocks before the 5 minutes for the Investment Phase is up.',
       params: {
         placement: 'right'
       },
@@ -65,7 +71,7 @@ const steps:Array<Step> = [
     },
     {
       target: '.tour-investments',
-      content: `Note that there are some influences that you cannot purchase on your own (for the researcher, they are Culture and Finance)
+      content: `Note that there are some Influences that you cannot purchase on your own (for the Researcher, they are Culture and Finance)
       However, you will need those resources to buy certain Accomplishment cards!`,
       params:{
         placement: 'top'
@@ -73,7 +79,7 @@ const steps:Array<Step> = [
     },
     {
       target: '.tour-accomplishments',
-      content: `For example, this accomplishment card requires 1 culture, which you cannot create. To get that resource, you must trade!`,
+      content: `For example, this Accomplishment card requires 1 Culture, which you cannot create. To get that resource, you must trade!`,
       params: {
         placement:'right'
       }

@@ -43,15 +43,11 @@ export class TutorialAPI extends GameRequestAPI {
         }
     }
 
-    get forceSkip(){
-        return this.isTaskComplete;
-    }
-
     get forcePause(){
         return this.isTaskComplete;
     }
 
-    public forceUnpause(){
+    public resetGame(){
         this.isTaskComplete = true; 
     }
 
@@ -77,13 +73,13 @@ export class TutorialAPI extends GameRequestAPI {
        }
 
        
-    }
+    };
 
     public statePop(){
         this.stateStack.pop();
         
         this.apply();
-    }
+    };
 
 
     public sendChatMessage(message:String){
@@ -94,7 +90,7 @@ export class TutorialAPI extends GameRequestAPI {
             round:0
         });
         this.isTaskComplete = true;
-    }
+    };
 
     count:number= 1;
     public sendTradeRequest(tradePackage:TradeData){
@@ -105,19 +101,19 @@ export class TutorialAPI extends GameRequestAPI {
         this.count++;
 
         this.isTaskComplete = true;
-    }
+    };
 
     public acceptTradeRequest(id:string){
         this.store.commit('REMOVE_FROM_TRADES',{
             id,
         });
-    }
+    };
 
     public rejectTradeRequest(id:string){
         this.store.commit('REMOVE_FROM_TRADES',{
             id,
         });
-    }
+    };
 
     public purchaseAccomplishment(accomplishment:AccomplishmentData){
         this.store.commit('DISCARD_ACCOMPLISHMENT',{
@@ -125,7 +121,7 @@ export class TutorialAPI extends GameRequestAPI {
             role:accomplishment.role
         });
         this.isTaskComplete = true;
-    }
+    };
 
     public discardAccomplishment(id: number){
         this.store.commit('DISCARD_ACCOMPLISHMENT',{
@@ -134,14 +130,14 @@ export class TutorialAPI extends GameRequestAPI {
         });
 
         this.isTaskComplete = true;
-    }
+    };
 
     public deleteNotification(id: number){
         this.store.commit('CLEAR_NOTIFICATION',{
             data:id,
             role:`Researcher`,
         })
-    }
+    };
 
     public investTimeBlocks():void {};
     public setPlayerReadiness(): void {};

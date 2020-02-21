@@ -1,13 +1,13 @@
-import {Step} from "@/types/tutorial";
+import {Step, LEFT, TOP} from "@/types/tutorial";
 import { Phase,RESEARCHER,CURATOR } from "shared/types";
 
 const steps:Array<Step> = [
     {
       target: '.tour-trade',
       content:
-        `The next phase is the trading phase! Here you will trade for resources that you need to purchase accomplishment cards!`,
+        `The next phase is the Trading Phase! Here you will trade for resources that you need to purchase Accomplishment cards!`,
       params: {
-        placement: 'right'
+        placement: LEFT,
       },
       
       stateTransform:[
@@ -52,7 +52,7 @@ const steps:Array<Step> = [
     },
     {
       target: '.tour-trade-item',
-      content: `All active trades are listed here. If you are on the reciving end of a trade, you will have the option to either 
+      content: `All active trades are listed here. If you are on the receiving end of a trade, you will have the option to either 
       accept or decline the trade.
       If you are the sender of a trade, you only have the option to cancel the request.`,
       params:{
@@ -81,52 +81,69 @@ const steps:Array<Step> = [
       ],
     },
     {
-      target: '.tour-trade-partner',
+      target: '.tour-trade-request',
       content: `To request a trade, you must first select a person to trade with.`,
       params:{
-        placement:'bottom',
-      }
-    },
-    {
-      target: '.tour-give-up',
-      content: `Then, you select the amount of each resource you are willing to give up.
-      You cannot send more resources than you currently have.`,
-      params:{
-        placement:'bottom',
-      }
-    },
-    {
-      target: '.tour-give-up',
-      content: `Then, you select the amount of each resource you are willing to give up.
-      You cannot send more resources than you currently have.`,
-      params:{
-        placement:'bottom',
-      }
-    },
-    {
-      target: '.tour-get-in-return',
-      content: `Finally, you choose how much of any resource that you want.`,
-      params:{
-        placement:'bottom',
-      }
-    },
-    {
-      target: '.tour-container-bottom',
-      content: `Hit send to see your trade in action!`,
-      params:{
-        placement:'left'
+        placement:'top',
       },
       stateTransform:[
-        {required:true}
+        {
+          required: true,
+        }
+      ]
+    },
+    {
+      target: '.tour-trade-request',
+      content: `Then, you select the amount of each resource you are willing to give up.
+      You cannot send more resources than you currently have.`,
+      params:{
+        placement:'top',
+      },
+      stateTransform:[
+        {
+          required: true,
+        }
+      ]
+    },
+    {
+      target: '.tour-trade-request',
+      content: `Finally, you choose how much of any resource that you want.`,
+      params:{
+        placement:'top',
+      },
+      stateTransform:[
+        {
+          required: true,
+        }
+      ]
+    },
+    {
+      target: '.tour-trade',
+      content: `Hit send to see your trade in action!
+      (you may have to scroll to see the button)`,
+      params:{
+        placement: LEFT 
+      },
+      stateTransform:[
+        {
+          required:true,
+        }
+
       ]
     },
     {
       target: '.tour-container-bottom',
       content: 'Quiz Question',
       params: {
-        placement: 'bottom',
+        placement: TOP,
         tutorialElementId: 'trade'
-      }
+      },
+      stateTransform:[
+        {
+          required:false,
+        }
+
+      ]
     }
 
 ]

@@ -1,13 +1,13 @@
-import { Step } from "@/types/tutorial";
-import { Phase } from "shared/types";
+import { Step, TOP } from "@/types/tutorial";
+import { Phase, } from "shared/types";
 
 const steps:Array<Step> = [
     {
       target: '.tour-container-bottom',
       content:
-        `The first phase in a round is the Events phase! This is where the events of the round will be revealed.`,
+        `The first phase in a round is the Events phase! This is where the Events of the round will be revealed.`,
       params: {
-        placement: 'bottom'
+        placement: TOP
       },
       stateTransform: [
         {SET_GAME_PHASE:Phase.events,
@@ -26,12 +26,12 @@ const steps:Array<Step> = [
       content: 'Some events can be more involved and require players to fulfill tasks ' +
       'that include voting. Mars is unpredictable; many different events can happen!',
       params:{
-        placement: 'bottom'
+        placement: TOP,
       }
     },
     {
       target: '.tour-container-upkeep',
-      content: `Keep in mind that as upkeep drops, the amount of events occur will increase!`,
+      content: `Keep in mind that as Upkeep drops, the number of Events will increase!`,
       params:{
         placement:'bottom'
       }
