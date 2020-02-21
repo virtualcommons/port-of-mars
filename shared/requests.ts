@@ -1,4 +1,4 @@
-import { InvestmentData, TradeData, Role, Investment } from './types';
+import { InvestmentData, TradeData, Role, Resource } from './types';
 
 export interface SendChatMessageData {
   kind: 'send-chat-message';
@@ -94,7 +94,7 @@ export interface DeleteNotificationData {
 
 export interface BondingThroughAdversityData {
   kind: 'bonding-through-adversity';
-  influenceVoteData: { role: Role; influence: Investment };
+  influenceVoteData: { role: Role; influence: Resource };
 }
 
 export type Requests =
