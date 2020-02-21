@@ -54,17 +54,18 @@
               <div slot="actions">
                 <p>{{ currentQuizQuestion.question }}</p>
                 <div
-                  class="option"
+                  class="option-container">
+                  <label class="options"
                   v-for="(option, optionIndex) in currentQuizQuestion.options"
-                  :key="index + Math.random()"
-                >
-                  <label>
+                  :key="optionIndex + Math.random()"
+                  >
                     <input type="radio"
-                    :id="`${index}.${optionIndex}`"
                     :value="optionIndex"
-                    v-model="currentOptionIndex">
-
-                    <span>{{option}} </span>
+                    v-model="currentOptionIndex"
+                    @change="handleCheckQuizQuestion(optionIndex)"
+                    
+                    >
+                    <span> {{option}} </span>
                   </label>
                 </div>
                 <div>
@@ -80,28 +81,20 @@
                   Previous
                 </button>
                 <button
-                  v-if="
-                    currentOptionIndex !== -1 && quizQuestionStatus === false
-                  "
-                  @click="handleCheckQuizQuestion"
-                  type="button"
-                  name="button"
-                >
-                  Check Answer
-                </button>
-                <button
-                  v-if="quizQuestionStatus && !tour.isLast"
-                  @click="tour.nextStep"
-                  class="btn btn-dark button-active"
+                  v-if="!tour.isLast"
+                  v-on="{click: quizQuestionStatus ? tour.nextStep : ()=>{}}"
+                  class="btn btn-dark"
+                  v-bind="{class: quizQuestionStatus ? 'button-active' : 'button-inactive'}"
                   type="button"
                   name="button"
                 >
                   Next
                 </button>
                 <button
-                  v-if="quizQuestionStatus && tour.isLast"
-                  @click="tour.stop"
+                  v-if="tour.isLast"
+                  v-on="{click: quizQuestionStatus ? tour.stop : ()=>{}}"
                   class="btn btn-dark"
+                  v-bind="{class: quizQuestionStatus ? 'button-active' : 'button-inactive'}"
                 >
                   Finish
                 </button>
@@ -265,14 +258,11 @@ export default class Tutorial extends Vue {
     return this.quizQuestions[index];
   }
 
-  private handleQuizQuestionSelection(index: number): void {
-    this.currentOptionIndex = index;
-  }
 
-  async handleCheckQuizQuestion() {
+  async handleCheckQuizQuestion(value:number) {
     const result = await this.checkQuizQuestion(
       this.currentQuizQuestion.id,
-      this.currentOptionIndex
+      value
     );
     if (result) {
       this.quizQuestionStatusMessage = 'Correct! Please click next.';
@@ -280,13 +270,6 @@ export default class Tutorial extends Vue {
     } else {
       this.quizQuestionStatusMessage = 'Incorrect, please try again.';
     }
-  }
-
-  private selectionStyle(index: number) {
-    if (index === this.currentOptionIndex) {
-      return { backgroundColor: 'var(--new-space-orange)' };
-    }
-    return {};
   }
 
   // NOTE: Server Fetches
