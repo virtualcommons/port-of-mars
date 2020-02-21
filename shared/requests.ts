@@ -1,5 +1,4 @@
 import { InvestmentData, TradeData, Role, Investment } from './types';
-import { BondingThroughAdversity } from '@/rooms/game/state/marsEvents/state';
 
 export interface SendChatMessageData {
   kind: 'send-chat-message';
