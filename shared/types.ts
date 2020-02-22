@@ -43,9 +43,11 @@ export interface InvestmentData extends ResourceAmountData {
   upkeep: number;
 }
 
-export type ResourceCostData = InvestmentData;
+export interface ResourceCostData extends InvestmentData {
+  specialty: Resource;
+}
 
-export type notifcation = string;
+export type notification = string;
 
 export type Resource = keyof ResourceAmountData;
 export type Investment = keyof InvestmentData;
@@ -154,7 +156,7 @@ export interface PlayerData {
   role: Role;
   costs: ResourceCostData;
   specialty: Resource;
-  accomplishment: AccomplishmentSetData;
+  accomplishments: AccomplishmentSetData;
   ready: boolean;
   timeBlocks: number;
   contributedUpkeep: number;

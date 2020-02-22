@@ -103,7 +103,7 @@ export class DiscardedAccomplishment extends GameEventWithData {
   }
 
   apply(game: GameState): void {
-    const accomplishmentData = game.players[this.data.role].accomplishment;
+    const accomplishmentData = game.players[this.data.role].accomplishments;
     accomplishmentData.discard(this.data.id);
   }
 }

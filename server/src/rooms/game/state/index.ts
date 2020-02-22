@@ -23,9 +23,10 @@ import {
   TradeAmountData,
   TradeData,
   TradeSetData,
-  notifcation
+  notification
 } from "shared/types";
 import _ from "lodash";
+import * as assert from "assert";
 import {getRandomIntInclusive} from "@/util";
 import {getAccomplishmentByID, getAccomplishmentIDs} from "@/data/Accomplishment";
 import {GameEvent} from "@/rooms/game/events/types";
@@ -190,6 +191,7 @@ class ResourceCosts extends Schema implements ResourceCostData {
     this.legacy = costs.legacy;
     this.science = costs.science;
     this.upkeep = costs.upkeep;
+    this.specialty = costs.specialty;
   }
 
   fromJSON(data: ResourceCostData) {
@@ -203,7 +205,8 @@ class ResourceCosts extends Schema implements ResourceCostData {
       government: this.government,
       legacy: this.legacy,
       science: this.science,
-      upkeep: this.upkeep
+      upkeep: this.upkeep,
+      specialty: this.specialty
     }
   }
 
@@ -216,7 +219,8 @@ class ResourceCosts extends Schema implements ResourceCostData {
           government: Infinity,
           legacy: 3,
           science: Infinity,
-          upkeep: 1
+          upkeep: 1,
+          specialty: 'culture'
         });
       case ENTREPRENEUR:
         return new ResourceCosts({
@@ -225,7 +229,8 @@ class ResourceCosts extends Schema implements ResourceCostData {
           government: 3,
           legacy: Infinity,
           science: Infinity,
-          upkeep: 1
+          upkeep: 1,
+          specialty: 'finance'
         });
       case PIONEER:
         return new ResourceCosts({
@@ -234,7 +239,8 @@ class ResourceCosts extends Schema implements ResourceCostData {
           government: Infinity,
           legacy: 2,
           science: 3,
-          upkeep: 1
+          upkeep: 1,
+          specialty: 'legacy'
         });
       case POLITICIAN:
         return new ResourceCosts({
@@ -243,7 +249,8 @@ class ResourceCosts extends Schema implements ResourceCostData {
           government: 2,
           legacy: Infinity,
           science: 3,
-          upkeep: 1
+          upkeep: 1,
+          specialty: 'government'
         });
       case RESEARCHER:
         return new ResourceCosts({
@@ -252,7 +259,8 @@ class ResourceCosts extends Schema implements ResourceCostData {
           government: 3,
           legacy: 3,
           science: 2,
-          upkeep: 1
+          upkeep: 1,
+          specialty: 'science'
         });
     }
 
@@ -290,6 +298,9 @@ class ResourceCosts extends Schema implements ResourceCostData {
 
   @type('number')
   upkeep: number;
+
+  @type('Resource')
+  specialty: Resource;
 
   investmentWithinBudget(investment: InvestmentData, budget: number) {
     return this.culture*investment.culture +
@@ -424,6 +435,7 @@ export class Accomplishment extends Schema implements AccomplishmentData {
 
 interface AccomplishmentSetSerialized {
   role: Role
+  // FIXME: consider renaming to purchased to match purchasable
   bought: Array<number>
   purchasable: Array<number>
   remaining: Array<number>
@@ -469,15 +481,20 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
   deck: Array<number>;
 
   buy(accomplishment: AccomplishmentData) {
-    if (this.purchasable.filter(a => a.id === accomplishment.id).length > 0) {
+    const accomplishmentIndex = this.purchasable.findIndex((acc: Accomplishment) => acc.id === accomplishment.id)
+    if (accomplishmentIndex > -1) {
       this.bought.push(new Accomplishment(accomplishment));
-      const index = this.purchasable.findIndex(acc => acc.id === accomplishment.id);
-      this.purchasable.splice(index, 1);
+      this.purchasable.splice(accomplishmentIndex, 1);
     }
   }
 
+  discardAll(): void {
+    this.deck.push(...this.purchasable.map((card: Accomplishment) => card.id));
+    this.purchasable.splice(0, this.purchasable.length);
+  }
+
   discard(id: number) {
-    const index = this.purchasable.findIndex(acc => acc.id === id);
+    const index = this.purchasable.findIndex((card: Accomplishment) => card.id === id);
     if (index < 0) {
        return;
     }
@@ -485,14 +502,18 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
     this.deck.push(id);
   }
 
-  refreshPurchasableAccomplishments(role: Role){
-    const nAccomplishmentsToDraw = Math.min(3 - this.purchasable.length,this.deck.length);
-
-    for(let i = 0; i < nAccomplishmentsToDraw; i++) {
+  draw(numberOfCards: number) {
+    for (let i = 0; i < numberOfCards; i++) {
       const id = this.deck.shift();
-      const newAccomplishment = new Accomplishment(getAccomplishmentByID(role, id!));
+      const newAccomplishment = new Accomplishment(getAccomplishmentByID(this.role, id!));
       this.purchasable.push(newAccomplishment);
     }
+    assert.assert(this.purchasable.length <= 3, "Should never have more than 3 cards");
+  }
+
+  refreshPurchasableAccomplishments(role: Role){
+    const numberOfAccomplishmentsToDraw = Math.min(3 - this.purchasable.length, this.deck.length);
+    this.draw(numberOfAccomplishmentsToDraw);
   }
 
   peek(): number {
@@ -593,24 +614,27 @@ export class Player extends Schema implements PlayerData {
   constructor(role: Role) {
     super();
     this.role = role;
-    this.accomplishment = new AccomplishmentSet(role);
+    this.accomplishments = new AccomplishmentSet(role);
     this.costs = ResourceCosts.fromRole(role);
-    this.specialty = ResourceCosts.getSpecialty(role);
+    this.specialty = this.costs.specialty;
+    // FIXME: this.specialty should just be this.costs.specialty
+    // this.specialty = ResourceCosts.getSpecialty(role);
   }
 
   fromJSON(data: PlayerSerialized) {
     this.role = data.role;
     this.costs.fromJSON(data.costs);
     this.specialty = data.specialty;
-    this.accomplishment.fromJSON(data.accomplishment);
+    this.accomplishments.fromJSON(data.accomplishment);
     this.ready = data.ready;
     this.timeBlocks = data.timeBlocks;
     this.contributedUpkeep = data.contributedUpkeep;
     this.victoryPoints = data.victoryPoints;
     this.inventory.fromJSON(data.inventory);
     
-    const notifcations = _.map(data.notifications, n => n);
-    this.notifications.splice(0, this.notifications.length, ...notifcations);
+    // FIXME: mapping the identity function seems pretty pointless, is this just to create a list from data.notifications?
+    const notifications = _.map(data.notifications, n => n);
+    this.notifications.splice(0, this.notifications.length, ...notifications);
     return this;
   }
 
@@ -619,7 +643,7 @@ export class Player extends Schema implements PlayerData {
       role: this.role,
       costs: this.costs.toJSON(),
       specialty: this.specialty,
-      accomplishment: this.accomplishment.toJSON(),
+      accomplishment: this.accomplishments.toJSON(),
       ready: this.ready,
       timeBlocks: this.timeBlocks,
       contributedUpkeep: this.contributedUpkeep,
@@ -644,7 +668,7 @@ export class Player extends Schema implements PlayerData {
   specialty: Resource;
 
   @type(AccomplishmentSet)
-  accomplishment: AccomplishmentSet;
+  accomplishments: AccomplishmentSet;
 
   @type("boolean")
   ready: boolean = false;
@@ -672,11 +696,11 @@ export class Player extends Schema implements PlayerData {
   }
 
   isAccomplishmentPurchaseFeasible(accomplishment: AccomplishmentData) {
-    return this.accomplishment.isPurchasable(accomplishment) && this.inventory.canAfford(accomplishment);
+    return this.accomplishments.isPurchasable(accomplishment) && this.inventory.canAfford(accomplishment);
   }
 
   buyAccomplishment(accomplishment: AccomplishmentData) {
-    this.accomplishment.buy(accomplishment);
+    this.accomplishments.buy(accomplishment);
     const inv: ResourceAmountData = {
       culture: - accomplishment.culture,
       finance: - accomplishment.finance,
@@ -690,7 +714,7 @@ export class Player extends Schema implements PlayerData {
   }
 
   refreshPurchasableAccomplishments(){
-    this.accomplishment.refreshPurchasableAccomplishments(this.role);
+    this.accomplishments.refreshPurchasableAccomplishments(this.role);
   }
 
   resetTimeBlocks() {

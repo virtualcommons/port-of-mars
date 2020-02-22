@@ -30,10 +30,10 @@ export interface MarsEventSerialized {
 
 export interface BaseEvent {
   getData?(): object;
+  finalize(game: GameState): void;
 }
 export abstract class BaseEvent implements MarsEventState {
 
-  abstract finalize(game: GameState): void;
 
   toJSON(): MarsEventSerialized {
     const json:MarsEventSerialized = {
@@ -335,5 +335,16 @@ export class BondingThroughAdversity extends BaseEvent {
    */
   getData(): BondingThroughAdversityData {
     return this.votes;
+  }
+}
+
+export class ChangingTides extends BaseEvent {
+  finalize(game: GameState): void {
+    for (const role of ROLES) {
+      const player = game.players[role];
+      player.accomplishments.discardAll();
+      player.accomplishments.draw(1);
+    }
+    game.log('Each player discards their current Accomplishments and draws one new Accomplishment.');
   }
 }

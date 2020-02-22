@@ -27,7 +27,7 @@ describe('a Researcher Player Accomplishment', () => {
 
   it('replenish returns correct amount of accomplishments', () => {
     p.refreshPurchasableAccomplishments();
-    expect(p.accomplishment.purchasable.length).toBe(3);
+    expect(p.accomplishments.purchasable.length).toBe(3);
   });
 
   it('screw cards handle contributed upkeep correctly', () => {  
@@ -39,28 +39,28 @@ describe('a Researcher Player Accomplishment', () => {
 
   it('cards in hand are removed from the deck of possible cards', () =>{
     //from the beginning
-    const id = p.accomplishment.purchasable[0].id;
-    expect(p.accomplishment.deck.includes(id)).toBe(false);
+    const id = p.accomplishments.purchasable[0].id;
+    expect(p.accomplishments.deck.includes(id)).toBe(false);
 
     //after calling refreshPurchasableAccomplishments()
-    p.buyAccomplishment(p.accomplishment.purchasable[0]);
+    p.buyAccomplishment(p.accomplishments.purchasable[0]);
     p.refreshPurchasableAccomplishments();
-    for(const a of p.accomplishment.purchasable){
-      expect(p.accomplishment.deck.includes(a.id)).toBe(false);
+    for(const a of p.accomplishments.purchasable){
+      expect(p.accomplishments.deck.includes(a.id)).toBe(false);
     }
   });
 
   it('buying cards removes them from purchasable', () => {
-    expect(p.accomplishment.purchasable.length).toBe(3);
-    p.buyAccomplishment(p.accomplishment.purchasable[0]);
-    expect(p.accomplishment.purchasable.length).toBe(2);
+    expect(p.accomplishments.purchasable.length).toBe(3);
+    p.buyAccomplishment(p.accomplishments.purchasable[0]);
+    expect(p.accomplishments.purchasable.length).toBe(2);
   });
 
   it('trying to replenish after all cards are bought is handled without error', () => {
-    p.accomplishment.deck = [];
-    const purchasableSize = p.accomplishment.purchasable.length;
+    p.accomplishments.deck = [];
+    const purchasableSize = p.accomplishments.purchasable.length;
     p.refreshPurchasableAccomplishments();
-    expect(p.accomplishment.purchasable.length).toBe(purchasableSize);
+    expect(p.accomplishments.purchasable.length).toBe(purchasableSize);
   });
 
 });
