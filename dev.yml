@@ -13,9 +13,6 @@ services:
     command: './dev.sh'
     ports:
       - '127.0.0.1:8081:8080'
-  db:
-    ports:
-      - '127.0.0.1:5432:5432'
   server:
     build:
       dockerfile: server/deploy/Dockerfile.dev
