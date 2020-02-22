@@ -28,11 +28,11 @@ keys:
 $(DB_PASSWORD_PATH): keys
 	DB_PASSWORD=$$(head /dev/urandom | tr -dc '[:alnum:]' | head -c42); \
 	TODAY=$$(date +%Y-%m-%d-%H:%M:%S); \
-	if [[ -f $(DB_PASSWORD_PATH) ]]; \
+	if [ -f $(DB_PASSWORD_PATH) ]; \
 	then \
 	  cp "$(DB_PASSWORD_PATH)" "$(DB_PASSWORD_PATH)_$$TODAY"; \
 	fi; \
-	echo $${DB_PASSWORD} > $(DB_PASSWORD_PATH)
+	echo "$${DB_PASSWORD}" > $(DB_PASSWORD_PATH)
 
 $(JWT_SECRET_PATH): keys
 	JWT_SECRET=$$(head /dev/urandom | tr -dc '[:alnum:]' | head -c42); \
