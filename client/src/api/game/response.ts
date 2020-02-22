@@ -40,7 +40,7 @@ function applyPlayerResponses(player: any, store: TStore) {
         case 'ready':
           store.commit('SET_READINESS', payload);
           break;
-        case 'accomplishment':
+        case 'accomplishments':
           store.commit('SET_ACCOMPLISHMENTS', payload);
           break;
         case 'victoryPoints':

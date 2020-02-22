@@ -68,11 +68,11 @@ export default class ContainerAccomplishments extends Vue {
   private setWidth: string = '100%';
 
   get purchasableAccomplishments() {
-    return this.$store.getters.player.accomplishment.purchasable;
+    return this.$store.getters.player.accomplishments.purchasable;
   }
 
   get boughtAccomplishments() {
-    return this.$store.getters.player.accomplishment.bought;
+    return this.$store.getters.player.accomplishments.bought;
   }
 
   private handleClick(view: string) {

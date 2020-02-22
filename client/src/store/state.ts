@@ -35,7 +35,7 @@ function defaultPlayerClientSet(): PlayerClientSet {
 function defaultPlayerData(role: Role): PlayerClientData {
   return {
     role,
-    accomplishment: {
+    accomplishments: {
       bought: [],
       purchasable: []
     },
@@ -58,7 +58,7 @@ function defaultCostData(role: Role): ResourceCostData {
     legacy: 0,
     finance: 0,
     culture: 0,
-    upkeep: 0
+    upkeep: 0,
   };
 }
 
@@ -79,7 +79,7 @@ export function defaultPendingInvestment(): ResourceCostData {
     legacy: 0,
     finance: 0,
     culture: 0,
-    upkeep: 0
+    upkeep: 0,
   };
 }
 

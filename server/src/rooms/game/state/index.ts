@@ -191,7 +191,6 @@ class ResourceCosts extends Schema implements ResourceCostData {
     this.legacy = costs.legacy;
     this.science = costs.science;
     this.upkeep = costs.upkeep;
-    this.specialty = costs.specialty;
   }
 
   fromJSON(data: ResourceCostData) {
@@ -205,8 +204,7 @@ class ResourceCosts extends Schema implements ResourceCostData {
       government: this.government,
       legacy: this.legacy,
       science: this.science,
-      upkeep: this.upkeep,
-      specialty: this.specialty
+      upkeep: this.upkeep
     }
   }
 
@@ -220,7 +218,7 @@ class ResourceCosts extends Schema implements ResourceCostData {
           legacy: 3,
           science: Infinity,
           upkeep: 1,
-          specialty: 'culture'
+          // specialty: 'culture'
         });
       case ENTREPRENEUR:
         return new ResourceCosts({
@@ -230,7 +228,7 @@ class ResourceCosts extends Schema implements ResourceCostData {
           legacy: Infinity,
           science: Infinity,
           upkeep: 1,
-          specialty: 'finance'
+          // specialty: 'finance'
         });
       case PIONEER:
         return new ResourceCosts({
@@ -240,7 +238,7 @@ class ResourceCosts extends Schema implements ResourceCostData {
           legacy: 2,
           science: 3,
           upkeep: 1,
-          specialty: 'legacy'
+          // specialty: 'legacy'
         });
       case POLITICIAN:
         return new ResourceCosts({
@@ -250,7 +248,7 @@ class ResourceCosts extends Schema implements ResourceCostData {
           legacy: Infinity,
           science: 3,
           upkeep: 1,
-          specialty: 'government'
+          // specialty: 'government'
         });
       case RESEARCHER:
         return new ResourceCosts({
@@ -260,7 +258,7 @@ class ResourceCosts extends Schema implements ResourceCostData {
           legacy: 3,
           science: 2,
           upkeep: 1,
-          specialty: 'science'
+          // specialty: 'science'
         });
     }
 
@@ -298,9 +296,6 @@ class ResourceCosts extends Schema implements ResourceCostData {
 
   @type('number')
   upkeep: number;
-
-  @type('Resource')
-  specialty: Resource;
 
   investmentWithinBudget(investment: InvestmentData, budget: number) {
     return this.culture*investment.culture +
@@ -508,7 +503,7 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
       const newAccomplishment = new Accomplishment(getAccomplishmentByID(this.role, id!));
       this.purchasable.push(newAccomplishment);
     }
-    assert.assert(this.purchasable.length <= 3, "Should never have more than 3 cards");
+    assert.ok(this.purchasable.length <= 3, "Should never have more than 3 cards");
   }
 
   refreshPurchasableAccomplishments(role: Role){
@@ -616,9 +611,9 @@ export class Player extends Schema implements PlayerData {
     this.role = role;
     this.accomplishments = new AccomplishmentSet(role);
     this.costs = ResourceCosts.fromRole(role);
-    this.specialty = this.costs.specialty;
-    // FIXME: this.specialty should just be this.costs.specialty
-    // this.specialty = ResourceCosts.getSpecialty(role);
+    // FIXME: it'd be nice to bind the specialty to the ResourceCosts e.g., this.specialty = this.costs.specialty 
+    // but this change cascades quite a bit into the client. revisit later
+    this.specialty = ResourceCosts.getSpecialty(role);
   }
 
   fromJSON(data: PlayerSerialized) {

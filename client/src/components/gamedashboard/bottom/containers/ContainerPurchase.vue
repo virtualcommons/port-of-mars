@@ -41,7 +41,7 @@ import { AccomplishmentData } from 'shared/types';
 })
 export default class ContainerPurchase extends Vue {
   get purchasableAccomplishments() {
-    return this.$store.getters.player.accomplishment.purchasable
+    return this.$store.getters.player.accomplishments.purchasable
       .slice()
       .sort((a: AccomplishmentData, b: AccomplishmentData) => {
         return (

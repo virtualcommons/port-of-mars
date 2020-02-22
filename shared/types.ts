@@ -43,9 +43,7 @@ export interface InvestmentData extends ResourceAmountData {
   upkeep: number;
 }
 
-export interface ResourceCostData extends InvestmentData {
-  specialty: Resource;
-}
+export type ResourceCostData = InvestmentData;
 
 export type notification = string;
 

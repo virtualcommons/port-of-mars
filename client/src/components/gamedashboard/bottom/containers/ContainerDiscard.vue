@@ -24,8 +24,7 @@
         <div class="info-text" v-show="purchasableAccomplishments.length != 3">
           <p>
             {{
-              `You will be delt ${3 -
-                purchasableAccomplishments.length} new card(s) next round`
+              `You will draw ${3 - purchasableAccomplishments.length} new card(s) next round`
             }}
           </p>
         </div>
@@ -45,8 +44,7 @@ import BarDiscard from '@/components/gamedashboard/global/cards/BarDiscard.vue';
 })
 export default class ContainerDiscard extends Vue {
   get purchasableAccomplishments() {
-    let purchasable = this.$store.getters.player.accomplishment.purchasable;
-    return purchasable;
+    return this.$store.getters.player.accomplishments.purchasable;
   }
 }
 </script>
