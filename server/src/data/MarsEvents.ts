@@ -60,7 +60,8 @@ const _marsEvents: Array<[MarsEventData, number]> = [
     effect: `For the next round, players play with dividers down. (Players can see how each other player allocates their time.)`,
     flavorText: `"Of course we trust everyone to be truthful. But it doesn't hurt to check now and again." - The Politician`,
     clientViewHandler: 'AUDIT' as const,
-    duration: 1
+    duration: 1,
+    timeDuration:10,
   }, 1],
   [{
     id: 'effortsWasted',
@@ -76,7 +77,8 @@ const _marsEvents: Array<[MarsEventData, number]> = [
     effect: `Players may not trade Influences this round.`,
     flavorText: `"Trust is difficult to build and easy to break. Yet without it, this community would fall apart." - The Curator`,
     clientViewHandler: 'NO_CHANGE' as const,
-    duration: 1
+    duration: 1,
+    timeDuration: 10,
   }, 1],
   [{
     id: 'lifeAsUsual',
@@ -84,7 +86,8 @@ const _marsEvents: Array<[MarsEventData, number]> = [
     effect: 'No special effect',
     flavorText: `As the first human outpost on Mars, having a "usual" day is pretty unusual.`,
     clientViewHandler: 'NO_CHANGE' as const,
-    duration: 1
+    duration: 1,
+    timeDuration: 10,
   }, 12],
   [{
     id: 'stymied',
@@ -92,7 +95,8 @@ const _marsEvents: Array<[MarsEventData, number]> = [
     effect: `Players may not earn their specialty Influence this round. (Culture for Curator, Business for Entrepreneur, Government for Politician, Science for researcher, Legacy for Pioneer)`,
     flavorText: `"That's very nice that you have three PhD's. Now pick up this toothbrush and help with cleaning our solar panel cells."`,
     clientViewHandler: 'NO_CHANGE' as const,
-    duration: 1
+    duration: 1,
+    timeDuration:10,
   }, 1],
   [{
     id: 'lostTime',
@@ -100,7 +104,8 @@ const _marsEvents: Array<[MarsEventData, number]> = [
     effect: `Each player has 5 fewer Time Blocks to spend this round.`,
     flavorText: `Time flies when you're trying to stay alive.`,
     clientViewHandler: 'NO_CHANGE' as const,
-    duration: 1
+    duration: 1,
+    timeDuration:10,
   }, 1],
   [{
     id: 'murphysLaw',
@@ -108,7 +113,8 @@ const _marsEvents: Array<[MarsEventData, number]> = [
     effect: `Reveal 2 more events. They're both in effect.`,
     flavorText: `Residents at Port of Mars know better than to ask, "what ELSE could go wrong?"`,
     clientViewHandler: 'NO_CHANGE' as const,
-    duration: 1
+    duration: 1,
+    timeDuration: 10,
   }, 1],
   [{
     id: 'sandstorm',
@@ -116,7 +122,8 @@ const _marsEvents: Array<[MarsEventData, number]> = [
     effect: `For the next 3 rounds, destroy an additional 10 Upkeep at the start of the round.`,
     flavorText: `Buckle in - things are about to get rough. And coarse. And irritating.`,
     clientViewHandler: 'NO_CHANGE' as const,
-    duration: 3
+    duration: 3,
+    timeDuration:10,
   }, 1],
   [{
     id: 'cropFailure',
@@ -124,7 +131,8 @@ const _marsEvents: Array<[MarsEventData, number]> = [
     effect: `Destroy 20 Upkeep.`,
     flavorText: `"The good news is we're not eating any more potatoes this cycle! The bad news is we're not sure what we're eating." - The researcher`,
     clientViewHandler: 'NO_CHANGE' as const,
-    duration: 1
+    duration: 1,
+    timeDuration: 10,
   }, 1],
   [{
     id: 'hullBreach',
@@ -132,7 +140,8 @@ const _marsEvents: Array<[MarsEventData, number]> = [
     effect: `Destroy 7 Upkeep.`,
     flavorText: `"Accidents happen. It's unavoidable. Our job is to do our best to avoid them all the same."`,
     clientViewHandler: 'NO_CHANGE' as const,
-    duration: 1
+    duration: 1,
+    timeDuration: 10,
   }, 1],
   [{
     id: 'solarFlare',
@@ -140,7 +149,8 @@ const _marsEvents: Array<[MarsEventData, number]> = [
     effect: `Destroy 5 Upkeep. Skip the discussion and trading phases this turn. (Players may not discuss how they allocate their time and may not trade Influences.)`,
     flavorText: `Solar flares pose a far greater threat on Mars, where a thin atmosphere and non-existent magnetic field leaves settlers more vulnerable. `,
     clientViewHandler: 'DISABLE_CHAT' as const,
-    duration: 1
+    duration: 1,
+    timeDuration: 10,
   }, 1],
   [{
     id: 'interdisciplinary',
@@ -148,7 +158,8 @@ const _marsEvents: Array<[MarsEventData, number]> = [
     effect: `For this round, each player can spend 3 Time Blocks to earn an Influence in either of the 2 Influences they normally can't create.`,
     flavorText: `"Everyone knows the saying, 'Jack of all trades, master of none.' Few remember the second part: 'still better than a master of one.'" - The Pioneer`,
     clientViewHandler: 'NO_CHANGE' as const,
-    duration: 1
+    duration: 1,
+    timeDuration: 10,
   }, 1],
   [{
     id: 'itBegins',
@@ -156,7 +167,8 @@ const _marsEvents: Array<[MarsEventData, number]> = [
     effect: ``,
     flavorText: `Welcome to Port of Mars. Space is now open.`,
     clientViewHandler: 'NO_CHANGE' as const,
-    duration: 1
+    duration: 1,
+    timeDuration: 10,
   }, 1],
   [{
     id: 'outOfCommissionPolitician',
@@ -164,7 +176,8 @@ const _marsEvents: Array<[MarsEventData, number]> = [
     effect: 'The Politician receives only 3 Time Blocks this round.',
     flavorText: `The mental and physical health of all residents is critical to mission success. The absence of even one person can have rippling effects on the community.`,
     clientViewHandler: 'NO_CHANGE' as const,
-    duration: 1
+    duration: 1,
+    timeDuration: 15,
   }, 1],
   [{
     id: 'outOfCommissionCurator',
@@ -172,7 +185,8 @@ const _marsEvents: Array<[MarsEventData, number]> = [
     effect: 'The Curator receives only 3 Time Blocks this round.',
     flavorText: `The mental and physical health of all residents is critical to mission success. The absence of even one person can have rippling effects on the community.`,
     clientViewHandler: 'NO_CHANGE' as const,
-    duration: 1
+    duration: 1,
+    timeDuration: 15,
   }, 1],
   [{
     id: 'outOfCommissionResearcher',
@@ -180,7 +194,8 @@ const _marsEvents: Array<[MarsEventData, number]> = [
     effect: 'The Researcher receives only 3 Time Blocks this round.',
     flavorText: `The mental and physical health of all residents is critical to mission success. The absence of even one person can have rippling effects on the community.`,
     clientViewHandler: 'NO_CHANGE' as const,
-    duration: 1
+    duration: 1,
+    timeDuration: 15,
   }, 1],
   [{
     id: 'outOfCommissionPioneer',
@@ -188,7 +203,8 @@ const _marsEvents: Array<[MarsEventData, number]> = [
     effect: 'The Pioneer receives only 3 Time Blocks this round.',
     flavorText: `The mental and physical health of all residents is critical to mission success. The absence of even one person can have rippling effects on the community.`,
     clientViewHandler: 'NO_CHANGE' as const,
-    duration: 1
+    duration: 1,
+    timeDuration: 15,
   }, 1],
   [{
     id: 'outOfCommissionEntrepreneur',
@@ -196,7 +212,8 @@ const _marsEvents: Array<[MarsEventData, number]> = [
     effect: 'The Entrepreneur receives only 3 Time Blocks this round.',
     flavorText: `The mental and physical health of all residents is critical to mission success. The absence of even one person can have rippling effects on the community.`,
     clientViewHandler: 'NO_CHANGE' as const,
-    duration: 1
+    duration: 1,
+    timeDuration: 15,
   }, 1],
   [{
     id: 'difficultConditions',
@@ -204,7 +221,8 @@ const _marsEvents: Array<[MarsEventData, number]> = [
     effect: `Upkeep costs twice as many Time Blocks as usual this round.`,
     flavorText: `When one component breaks, it puts a strain on the rest of the system. Small failures often snowball into critical ones.`,
     clientViewHandler: 'NO_CHANGE' as const,
-    duration: 1
+    duration: 1,
+    timeDuration: 15,
   }, 1]
 ];
 

@@ -2,6 +2,7 @@ import {Schema, type} from "@colyseus/schema";
 import {EventClientView, MarsEventData} from "shared/types";
 import {MarsEventState} from "@/rooms/game/state/marsEvents/common";
 import {constructState} from "@/rooms/game/state/marsEvents/state";
+import {GameState} from "@/rooms/game/state";
 
 export class MarsEvent extends Schema implements MarsEventData {
   constructor(data: MarsEventData) {
@@ -13,6 +14,9 @@ export class MarsEvent extends Schema implements MarsEventData {
     this.clientViewHandler = data.clientViewHandler;
     this.duration = data.duration;
     this.state = constructState(data.id);
+
+    //NICK EDIT
+    this.timeDuration = data.timeDuration ? data.timeDuration : GameState.DEFAULTS.timeRemaining;
   }
 
   @type('string')
@@ -35,6 +39,9 @@ export class MarsEvent extends Schema implements MarsEventData {
 
   @type('number')
   duration: number;
+
+  @type('number')
+  timeDuration:number;
 
   state: MarsEventState;
 
