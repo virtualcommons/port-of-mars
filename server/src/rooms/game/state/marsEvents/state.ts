@@ -29,11 +29,11 @@ export interface MarsEventSerialized {
 }
 
 export interface BaseEvent {
-  getData?(): object;
   finalize(game: GameState): void;
+  getData?(): object;
+  toJSON(): MarsEventSerialized;
 }
 export abstract class BaseEvent implements MarsEventState {
-
 
   toJSON(): MarsEventSerialized {
     const json:MarsEventSerialized = {

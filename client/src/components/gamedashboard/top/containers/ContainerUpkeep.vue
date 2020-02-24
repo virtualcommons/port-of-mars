@@ -1,6 +1,6 @@
 <template>
   <div class="container-upkeep tour-container-upkeep">
-    <p class="title">Colony Health</p>
+    <p class="title">System Health</p>
     <StatusBar class="statusbar" :setWidth="`${upkeepStatus}`" />
     <p>{{ upkeepStatus }}<span> %</span></p>
   </div>
