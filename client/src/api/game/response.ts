@@ -7,7 +7,8 @@ import {
   PlayerData,
   MarsLogMessageData,
   ROLES,
-  TradeData
+  TradeData,
+  Role
 } from 'shared/types';
 import { Responses } from 'shared/responses';
 import { DataChange, Schema } from '@colyseus/schema';
@@ -58,13 +59,13 @@ function applyPlayerResponses(player: any, store: TStore) {
   player.triggerAll();
 
   console.log(player);
-  player._notifications.onAdd = (msg:any) => {
-    store.commit('CREATE_NOTIFICATION',{data:msg,role:player.role});
+  player._notifications.onAdd = (msg: any) => {
+    store.commit('CREATE_NOTIFICATION', { data: msg, role: player.role });
   };
 
-  player._notifications.onRemove = (msg:any, key:number) => {
-    store.commit('CLEAR_NOTIFICATION',{data:key,role:player.role});
-  }
+  player._notifications.onRemove = (msg: any, key: number) => {
+    store.commit('CLEAR_NOTIFICATION', { data: key, role: player.role });
+  };
 }
 
 export function applyGameServerResponses<T>(room: Room, store: TStore) {
@@ -164,6 +165,10 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
       if (change.field === 'upkeep') {
         const upkeep: number = change.value;
         store.commit('SET_UPKEEP', upkeep);
+      }
+      if (change.field === 'winners') {
+        const winners: Array<Role> = change.value;
+        store.commit('SET_WINNERS', winners);
       }
     });
   };

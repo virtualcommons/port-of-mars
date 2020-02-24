@@ -178,6 +178,7 @@ export interface GameData {
   logs: Array<MarsLogMessageData>;
   marsEventsProcessed: number;
   tradeSet: TradeSetData;
+  winners: Array<Role>;
 }
 
 export interface QuizData {

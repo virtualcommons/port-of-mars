@@ -1,4 +1,4 @@
-import {ArraySchema, MapSchema, Schema, type} from "@colyseus/schema";
+import { ArraySchema, MapSchema, Schema, type } from '@colyseus/schema';
 import {
   AccomplishmentData,
   AccomplishmentSetData,
@@ -18,21 +18,26 @@ import {
   Resource,
   ResourceAmountData,
   ResourceCostData,
-  Role, ROLES,
-  SERVER, ServerRole,
+  Role,
+  ROLES,
+  SERVER,
+  ServerRole,
   TradeAmountData,
   TradeData,
   TradeSetData,
   notification
-} from "shared/types";
-import _ from "lodash";
-import * as assert from "assert";
-import {getRandomIntInclusive} from "@/util";
-import {getAccomplishmentByID, getAccomplishmentIDs} from "@/data/Accomplishment";
-import {GameEvent} from "@/rooms/game/events/types";
-import {GameOpts, GameStateOpts} from "@/rooms/game/types";
-import {MarsEventsDeck} from "@/rooms/game/state/marsEvents/MarsEventDeck";
-import {MarsEvent} from "@/rooms/game/state/marsEvents/MarsEvent";
+} from 'shared/types';
+import _ from 'lodash';
+import * as assert from 'assert';
+import { getRandomIntInclusive } from '@/util';
+import {
+  getAccomplishmentByID,
+  getAccomplishmentIDs
+} from '@/data/Accomplishment';
+import { GameEvent } from '@/rooms/game/events/types';
+import { GameOpts, GameStateOpts } from '@/rooms/game/types';
+import { MarsEventsDeck } from '@/rooms/game/state/marsEvents/MarsEventDeck';
+import { MarsEvent } from '@/rooms/game/state/marsEvents/MarsEvent';
 
 export class ChatMessage extends Schema implements ChatMessageData {
   constructor(msg: ChatMessageData) {
@@ -53,13 +58,13 @@ export class ChatMessage extends Schema implements ChatMessageData {
       message: this.message,
       dateCreated: this.dateCreated,
       round: this.round
-    }
+    };
   }
 
-  @type("string")
+  @type('string')
   role: string;
 
-  @type("string")
+  @type('string')
   message: string;
 
   @type('number')
@@ -89,7 +94,7 @@ class PendingInvestment extends Schema implements InvestmentData {
       legacy: 0,
       science: 0,
       upkeep: 0
-    }
+    };
   }
 
   reset() {
@@ -108,10 +113,10 @@ class PendingInvestment extends Schema implements InvestmentData {
       legacy: this.legacy,
       science: this.science,
       upkeep: this.upkeep
-    }
+    };
   }
 
-  rollback(data: InvestmentData){
+  rollback(data: InvestmentData) {
     this.culture -= data.culture;
     this.finance -= data.finance;
     this.government -= data.government;
@@ -119,7 +124,7 @@ class PendingInvestment extends Schema implements InvestmentData {
     this.science -= data.science;
   }
 
-  add(data: InvestmentData){
+  add(data: InvestmentData) {
     this.culture += data.culture;
     this.finance += data.finance;
     this.government += data.government;
@@ -160,25 +165,25 @@ export class MarsLogMessage extends Schema implements MarsLogMessageData {
     Object.assign(this, data);
   }
 
-  toJSON(): MarsLogMessageData  {
+  toJSON(): MarsLogMessageData {
     return {
       performedBy: this.performedBy,
       category: this.category,
       content: this.content,
-      timestamp: this.timestamp,
-    }
+      timestamp: this.timestamp
+    };
   }
 
-  @type("string")
+  @type('string')
   performedBy: Role | ServerRole;
 
-  @type("string")
+  @type('string')
   category: string;
 
-  @type("string")
+  @type('string')
   content: string;
 
-  @type("number")
+  @type('number')
   timestamp: number;
 }
 
@@ -205,7 +210,7 @@ class ResourceCosts extends Schema implements ResourceCostData {
       legacy: this.legacy,
       science: this.science,
       upkeep: this.upkeep
-    }
+    };
   }
 
   static fromRole(role: Role): ResourceCosts {
@@ -217,7 +222,7 @@ class ResourceCosts extends Schema implements ResourceCostData {
           government: Infinity,
           legacy: 3,
           science: Infinity,
-          upkeep: 1,
+          upkeep: 1
           // specialty: 'culture'
         });
       case ENTREPRENEUR:
@@ -227,7 +232,7 @@ class ResourceCosts extends Schema implements ResourceCostData {
           government: 3,
           legacy: Infinity,
           science: Infinity,
-          upkeep: 1,
+          upkeep: 1
           // specialty: 'finance'
         });
       case PIONEER:
@@ -237,7 +242,7 @@ class ResourceCosts extends Schema implements ResourceCostData {
           government: Infinity,
           legacy: 2,
           science: 3,
-          upkeep: 1,
+          upkeep: 1
           // specialty: 'legacy'
         });
       case POLITICIAN:
@@ -247,7 +252,7 @@ class ResourceCosts extends Schema implements ResourceCostData {
           government: 2,
           legacy: Infinity,
           science: 3,
-          upkeep: 1,
+          upkeep: 1
           // specialty: 'government'
         });
       case RESEARCHER:
@@ -257,15 +262,14 @@ class ResourceCosts extends Schema implements ResourceCostData {
           government: 3,
           legacy: 3,
           science: 2,
-          upkeep: 1,
+          upkeep: 1
           // specialty: 'science'
         });
     }
-
   }
 
   static getSpecialty(role: Role): Resource {
-    switch(role) {
+    switch (role) {
       case CURATOR:
         return 'culture';
       case ENTREPRENEUR:
@@ -298,12 +302,15 @@ class ResourceCosts extends Schema implements ResourceCostData {
   upkeep: number;
 
   investmentWithinBudget(investment: InvestmentData, budget: number) {
-    return this.culture*investment.culture +
-      this.finance*investment.finance +
-      this.government*investment.government +
-      this.legacy*investment.legacy +
-      this.science*investment.science +
-      this.upkeep*investment.upkeep <= budget;
+    return (
+      this.culture * investment.culture +
+        this.finance * investment.finance +
+        this.government * investment.government +
+        this.legacy * investment.legacy +
+        this.science * investment.science +
+        this.upkeep * investment.upkeep <=
+      budget
+    );
   }
 }
 
@@ -328,7 +335,7 @@ class ResourceInventory extends Schema implements ResourceAmountData {
       government: this.government,
       legacy: this.legacy,
       science: this.science
-    }
+    };
   }
 
   @type('number')
@@ -382,12 +389,12 @@ export class Accomplishment extends Schema implements AccomplishmentData {
     this.effect = data.effect;
   }
 
-  fromJSON(data: {role: Role, id: number}) {
+  fromJSON(data: { role: Role; id: number }) {
     Object.assign(this, getAccomplishmentByID(data.role, data.id));
   }
 
   toJSON() {
-    return {role: this.role, id: this.id};
+    return { role: this.role, id: this.id };
   }
 
   @type('number')
@@ -425,15 +432,14 @@ export class Accomplishment extends Schema implements AccomplishmentData {
 
   @type('string')
   effect: string;
-
 }
 
 interface AccomplishmentSetSerialized {
-  role: Role
+  role: Role;
   // FIXME: consider renaming to purchased to match purchasable
-  bought: Array<number>
-  purchasable: Array<number>
-  remaining: Array<number>
+  bought: Array<number>;
+  purchasable: Array<number>;
+  remaining: Array<number>;
 }
 
 export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
@@ -443,26 +449,39 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
     this.bought = new ArraySchema<Accomplishment>();
     const deck = _.shuffle(getAccomplishmentIDs(role));
     const purchasableInds: Array<number> = deck.slice(0, 3);
-    this.purchasable = new ArraySchema<Accomplishment>(...purchasableInds.map(id => new Accomplishment(getAccomplishmentByID(role, id))));
+    this.purchasable = new ArraySchema<Accomplishment>(
+      ...purchasableInds.map(
+        id => new Accomplishment(getAccomplishmentByID(role, id))
+      )
+    );
     this.deck = deck.slice(3);
   }
 
   fromJSON(data: AccomplishmentSetSerialized) {
     this.role = data.role;
-    const bought = _.map(data.bought, _id => new Accomplishment(getAccomplishmentByID(this.role, _id)));
-    const purchasable = _.map(data.purchasable, _id => new Accomplishment(getAccomplishmentByID(this.role, _id)));
+    const bought = _.map(
+      data.bought,
+      _id => new Accomplishment(getAccomplishmentByID(this.role, _id))
+    );
+    const purchasable = _.map(
+      data.purchasable,
+      _id => new Accomplishment(getAccomplishmentByID(this.role, _id))
+    );
     this.bought.splice(0, this.bought.length, ...bought);
     this.purchasable.splice(0, this.purchasable.length, ...purchasable);
-    this.deck =  _.cloneDeep(data.remaining);
+    this.deck = _.cloneDeep(data.remaining);
   }
 
   toJSON(): AccomplishmentSetSerialized {
     return {
-      bought: _.map(this.bought.map(a => a.id), x => x),
+      bought: _.map(
+        this.bought.map(a => a.id),
+        x => x
+      ),
       purchasable: _.map(this.purchasable, a => a.id),
       remaining: this.deck,
       role: this.role
-    }
+    };
   }
 
   role: Role;
@@ -476,7 +495,9 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
   deck: Array<number>;
 
   buy(accomplishment: AccomplishmentData) {
-    const accomplishmentIndex = this.purchasable.findIndex((acc: Accomplishment) => acc.id === accomplishment.id)
+    const accomplishmentIndex = this.purchasable.findIndex(
+      (acc: Accomplishment) => acc.id === accomplishment.id
+    );
     if (accomplishmentIndex > -1) {
       this.bought.push(new Accomplishment(accomplishment));
       this.purchasable.splice(accomplishmentIndex, 1);
@@ -489,9 +510,11 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
   }
 
   discard(id: number) {
-    const index = this.purchasable.findIndex((card: Accomplishment) => card.id === id);
+    const index = this.purchasable.findIndex(
+      (card: Accomplishment) => card.id === id
+    );
     if (index < 0) {
-       return;
+      return;
     }
     this.purchasable.splice(index, 1);
     this.deck.push(id);
@@ -500,14 +523,22 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
   draw(numberOfCards: number) {
     for (let i = 0; i < numberOfCards; i++) {
       const id = this.deck.shift();
-      const newAccomplishment = new Accomplishment(getAccomplishmentByID(this.role, id!));
+      const newAccomplishment = new Accomplishment(
+        getAccomplishmentByID(this.role, id!)
+      );
       this.purchasable.push(newAccomplishment);
     }
-    assert.ok(this.purchasable.length <= 3, "Should never have more than 3 cards");
+    assert.ok(
+      this.purchasable.length <= 3,
+      'Should never have more than 3 cards'
+    );
   }
 
-  refreshPurchasableAccomplishments(role: Role){
-    const numberOfAccomplishmentsToDraw = Math.min(3 - this.purchasable.length, this.deck.length);
+  refreshPurchasableAccomplishments(role: Role) {
+    const numberOfAccomplishmentsToDraw = Math.min(
+      3 - this.purchasable.length,
+      this.deck.length
+    );
     this.draw(numberOfAccomplishmentsToDraw);
   }
 
@@ -521,22 +552,22 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
 }
 
 export interface MarsEventDeckSerialized {
-  deck: Array<MarsEventData>
-  position: number
+  deck: Array<MarsEventData>;
+  position: number;
 }
 
 export interface PlayerSerialized {
-  role: Role
-  costs: ResourceCostData
-  specialty: Resource
-  accomplishment: AccomplishmentSetSerialized
-  ready: boolean
-  timeBlocks: number
-  contributedUpkeep: number
-  victoryPoints: number
-  inventory: ResourceAmountData
-  pendingInvestments: InvestmentData
-  notifications: Array<String>
+  role: Role;
+  costs: ResourceCostData;
+  specialty: Resource;
+  accomplishment: AccomplishmentSetSerialized;
+  ready: boolean;
+  timeBlocks: number;
+  contributedUpkeep: number;
+  victoryPoints: number;
+  inventory: ResourceAmountData;
+  pendingInvestments: InvestmentData;
+  notifications: Array<String>;
 }
 
 export class TradeAmount extends Schema {
@@ -556,7 +587,7 @@ export class TradeAmount extends Schema {
     return {
       role: this.role,
       resourceAmount: this.resourceAmount
-    }
+    };
   }
 
   @type('string')
@@ -578,12 +609,11 @@ export class Trade extends Schema {
     this.to.fromJSON(data.to);
   }
 
-
   toJSON(): TradeData {
     return {
       from: this.from.toJSON(),
       to: this.to.toJSON()
-    }
+    };
   }
 
   @type(TradeAmount)
@@ -611,7 +641,7 @@ export class Player extends Schema implements PlayerData {
     this.role = role;
     this.accomplishments = new AccomplishmentSet(role);
     this.costs = ResourceCosts.fromRole(role);
-    // FIXME: it'd be nice to bind the specialty to the ResourceCosts e.g., this.specialty = this.costs.specialty 
+    // FIXME: it'd be nice to bind the specialty to the ResourceCosts e.g., this.specialty = this.costs.specialty
     // but this change cascades quite a bit into the client. revisit later
     this.specialty = ResourceCosts.getSpecialty(role);
   }
@@ -626,7 +656,7 @@ export class Player extends Schema implements PlayerData {
     this.contributedUpkeep = data.contributedUpkeep;
     this.victoryPoints = data.victoryPoints;
     this.inventory.fromJSON(data.inventory);
-    
+
     // FIXME: mapping the identity function seems pretty pointless, is this just to create a list from data.notifications?
     const notifications = _.map(data.notifications, n => n);
     this.notifications.splice(0, this.notifications.length, ...notifications);
@@ -645,7 +675,7 @@ export class Player extends Schema implements PlayerData {
       victoryPoints: this.victoryPoints,
       inventory: this.inventory.toJSON(),
       pendingInvestments: this.pendingInvestments.toJSON(),
-      notifications: _.map(this.notifications, x => JSON.stringify(x)),
+      notifications: _.map(this.notifications, x => JSON.stringify(x))
     };
   }
 
@@ -653,25 +683,25 @@ export class Player extends Schema implements PlayerData {
     timeBlocks: 10
   };
 
-  @type("string")
+  @type('string')
   role: Role;
 
   @type(ResourceCosts)
   costs: ResourceCosts;
 
-  @type("string")
+  @type('string')
   specialty: Resource;
 
   @type(AccomplishmentSet)
   accomplishments: AccomplishmentSet;
 
-  @type("boolean")
+  @type('boolean')
   ready: boolean = false;
 
-  @type("number")
+  @type('number')
   timeBlocks: number = Player.defaults.timeBlocks;
 
-  @type("number")
+  @type('number')
   contributedUpkeep: number = 0;
 
   @type(ResourceInventory)
@@ -680,10 +710,10 @@ export class Player extends Schema implements PlayerData {
   @type(PendingInvestment)
   pendingInvestments = new PendingInvestment();
 
-  @type("number")
+  @type('number')
   victoryPoints: number = 0;
 
-  @type(["string"])
+  @type(['string'])
   notifications = new ArraySchema<String>();
 
   isInvestmentFeasible(investment: InvestmentData) {
@@ -691,24 +721,27 @@ export class Player extends Schema implements PlayerData {
   }
 
   isAccomplishmentPurchaseFeasible(accomplishment: AccomplishmentData) {
-    return this.accomplishments.isPurchasable(accomplishment) && this.inventory.canAfford(accomplishment);
+    return (
+      this.accomplishments.isPurchasable(accomplishment) &&
+      this.inventory.canAfford(accomplishment)
+    );
   }
 
   buyAccomplishment(accomplishment: AccomplishmentData) {
     this.accomplishments.buy(accomplishment);
     const inv: ResourceAmountData = {
-      culture: - accomplishment.culture,
-      finance: - accomplishment.finance,
-      government: - accomplishment.government,
-      legacy: - accomplishment.legacy,
-      science: - accomplishment.science
+      culture: -accomplishment.culture,
+      finance: -accomplishment.finance,
+      government: -accomplishment.government,
+      legacy: -accomplishment.legacy,
+      science: -accomplishment.science
     };
     this.contributedUpkeep -= Math.abs(accomplishment.upkeep);
     this.victoryPoints += accomplishment.victoryPoints;
-    this.inventory.update(inv)
+    this.inventory.update(inv);
   }
 
-  refreshPurchasableAccomplishments(){
+  refreshPurchasableAccomplishments() {
     this.accomplishments.refreshPurchasableAccomplishments(this.role);
   }
 
@@ -716,46 +749,45 @@ export class Player extends Schema implements PlayerData {
     this.timeBlocks = Player.defaults.timeBlocks;
   }
 
-  getLeftOverInvestments(){
+  getLeftOverInvestments() {
     const investment = _.cloneDeep(this.pendingInvestments);
 
-    let leftOvers:number = 0
-    let minCostResource:string = ''
-    let minCost:number = Infinity
-    let leftOverInvestments:InvestmentData = PendingInvestment.defaults()
+    let leftOvers: number = 0;
+    let minCostResource: string = '';
+    let minCost: number = Infinity;
+    let leftOverInvestments: InvestmentData = PendingInvestment.defaults();
 
     for (const [k, v] of Object.entries(this.costs)) {
-      if(v != Infinity){
-        leftOvers += ((investment as any)[k] * v)
+      if (v != Infinity) {
+        leftOvers += (investment as any)[k] * v;
       }
-      if(minCost > v && k != 'upkeep'){
-        minCost = v
-        minCostResource = k
+      if (minCost > v && k != 'upkeep') {
+        minCost = v;
+        minCostResource = k;
       }
     }
 
-    if(leftOvers == 0){
-      while(leftOvers+minCost <= 6){
-        (leftOverInvestments as any)[minCostResource] += 1
-        leftOvers+=minCost
+    if (leftOvers == 0) {
+      while (leftOvers + minCost <= 6) {
+        (leftOverInvestments as any)[minCostResource] += 1;
+        leftOvers += minCost;
       }
 
-      while(leftOvers < 10){
-        leftOverInvestments.upkeep += 1
-        leftOvers += 1
+      while (leftOvers < 10) {
+        leftOverInvestments.upkeep += 1;
+        leftOvers += 1;
       }
     }
 
     return leftOverInvestments;
   }
 
-  invest(investment?: InvestmentData,leftOverInvestments?: InvestmentData) {
+  invest(investment?: InvestmentData, leftOverInvestments?: InvestmentData) {
+    investment = investment ?? this.pendingInvestments;
+    leftOverInvestments = leftOverInvestments ?? PendingInvestment.defaults();
 
-    investment = investment ?? this.pendingInvestments
-    leftOverInvestments = leftOverInvestments ?? PendingInvestment.defaults()
-
-    for (const [k,v] of Object.entries(investment)){
-      (investment as any)[k] += (leftOverInvestments as any)[k]
+    for (const [k, v] of Object.entries(investment)) {
+      (investment as any)[k] += (leftOverInvestments as any)[k];
     }
 
     this.contributedUpkeep = investment.upkeep;
@@ -767,16 +799,16 @@ export class Player extends Schema implements PlayerData {
     this.ready = ready;
   }
 
-  sendNotifcation(message:String):void {
+  sendNotifcation(message: String): void {
     this.notifications.push(message);
   }
 
-  deleteNotifcation(index:number):void{
-    this.notifications.splice(index,1);
+  deleteNotifcation(index: number): void {
+    this.notifications.splice(index, 1);
   }
 }
 
-type PlayerSetSerialized = { [role in Role]: PlayerSerialized }
+type PlayerSetSerialized = { [role in Role]: PlayerSerialized };
 
 class PlayerSet extends Schema implements PlayerSetData {
   constructor() {
@@ -810,7 +842,7 @@ class PlayerSet extends Schema implements PlayerSetData {
       Pioneer: this.Pioneer.toJSON(),
       Politician: this.Politician.toJSON(),
       Researcher: this.Researcher.toJSON()
-    }
+    };
   }
 
   fromJSON(data: PlayerSetSerialized) {
@@ -832,33 +864,34 @@ class PlayerSet extends Schema implements PlayerSetData {
           return {
             done: false,
             value: self[role]
-          }
+          };
         } else {
           return {
             done: true,
             value: null
-          }
+          };
         }
       }
-    }
+    };
   }
 }
 
 export interface GameSerialized {
-  players: PlayerSetSerialized
-  connections: { [sessionId: string]: Role }
-  maxRound: number
-  lastTimePolled: number
-  timeRemaining: number
-  round: number
-  phase: Phase
-  upkeep: number
-  logs: Array<MarsLogMessageData>
-  messages: Array<ChatMessageData>
-  marsEvents: Array<MarsEventData>
-  marsEventsProcessed: number
-  marsEventDeck: MarsEventDeckSerialized
-  tradeSet: TradeSetData
+  players: PlayerSetSerialized;
+  connections: { [sessionId: string]: Role };
+  maxRound: number;
+  lastTimePolled: number;
+  timeRemaining: number;
+  round: number;
+  phase: Phase;
+  upkeep: number;
+  logs: Array<MarsLogMessageData>;
+  messages: Array<ChatMessageData>;
+  marsEvents: Array<MarsEventData>;
+  marsEventsProcessed: number;
+  marsEventDeck: MarsEventDeckSerialized;
+  tradeSet: TradeSetData;
+  winners: Array<Role>;
 }
 
 export class GameState extends Schema implements GameData {
@@ -905,6 +938,10 @@ export class GameState extends Schema implements GameData {
       const tradeData: TradeData = data.tradeSet[k];
       this.tradeSet[k] = new Trade(tradeData.from, tradeData.to);
     });
+
+    const winners = _.map(data.winners, w => w);
+    this.winners.splice(0, this.winners.length, ...winners);
+
     return this;
   }
 
@@ -923,7 +960,8 @@ export class GameState extends Schema implements GameData {
       marsEvents: _.map(this.marsEvents, e => e.toJSON()),
       marsEventsProcessed: this.marsEventsProcessed,
       marsEventDeck: this.marsEventDeck.toJSON(),
-      tradeSet: this.tradeSet.toJSON()
+      tradeSet: this.tradeSet.toJSON(),
+      winners: _.map(this.winners, w => w)
     };
   }
 
@@ -935,16 +973,16 @@ export class GameState extends Schema implements GameData {
   maxRound: number;
   lastTimePolled: Date;
 
-  @type("number")
+  @type('number')
   timeRemaining: number = GameState.DEFAULTS.timeRemaining;
 
-  @type("number")
+  @type('number')
   round: number = GameState.DEFAULTS.round;
 
-  @type("number")
+  @type('number')
   phase: Phase = GameState.DEFAULTS.phase;
 
-  @type("number")
+  @type('number')
   upkeep: number = GameState.DEFAULTS.upkeep;
 
   @type([MarsLogMessage])
@@ -956,18 +994,21 @@ export class GameState extends Schema implements GameData {
   @type([MarsEvent])
   marsEvents = new ArraySchema<MarsEvent>();
 
-  @type("number")
+  @type('number')
   marsEventsProcessed = GameState.DEFAULTS.marsEventsProcessed;
 
   marsEventDeck: MarsEventsDeck;
 
-  @type({ map: Trade})
+  @type({ map: Trade })
   tradeSet = new MapSchema<Trade>();
+
+  @type(['string'])
+  winners = new ArraySchema<Role>();
 
   invest(role: Role, investment: InvestmentData) {
     const player = this.players[role];
     player.invest(investment);
-    player.contributedUpkeep = investment.upkeep
+    player.contributedUpkeep = investment.upkeep;
   }
 
   get allPlayersAreReady(): boolean {
@@ -1001,13 +1042,13 @@ export class GameState extends Schema implements GameData {
   }
 
   updateMarsEventsElapsed(): void {
-    for(const event of this.marsEvents) {
+    for (const event of this.marsEvents) {
       event.updateElapsed();
     }
   }
 
   handleIncomplete(): void {
-    this.marsEvents = this.marsEvents.filter((event) => {
+    this.marsEvents = this.marsEvents.filter(event => {
       return !event.complete;
     });
   }
@@ -1021,8 +1062,9 @@ export class GameState extends Schema implements GameData {
     this.logs.splice(0, this.logs.length);
     this.marsEvents.splice(0, this.marsEvents.length);
     this.messages.splice(0, this.messages.length);
-    this.players.fromJSON((new PlayerSet()).toJSON());
+    this.players.fromJSON(new PlayerSet().toJSON());
     this.marsEventDeck = new MarsEventsDeck(_.shuffle(this.marsEventDeck.deck));
+    this.winners.splice(0, this.winners.length);
   }
 
   nextRoundUpkeep(): number {
@@ -1035,14 +1077,14 @@ export class GameState extends Schema implements GameData {
 
   subtractUpkeep(amount: number): void {
     const current = this.upkeep;
-    if((current - amount) >= 0) {
+    if (current - amount >= 0) {
       this.upkeep = current - amount;
     } else {
       this.upkeep = 0;
     }
   }
 
-  clearTrades(){
+  clearTrades() {
     Object.keys(this.tradeSet).forEach(trade => delete this.tradeSet[trade]);
   }
 
@@ -1054,13 +1096,17 @@ export class GameState extends Schema implements GameData {
     event.apply(this);
   }
 
-  log(message: string, category:string='Mars Event', performedBy:Role|ServerRole=SERVER): MarsLogMessage {
+  log(
+    message: string,
+    category: string = 'Mars Event',
+    performedBy: Role | ServerRole = SERVER
+  ): MarsLogMessage {
     const msg = new MarsLogMessage({
       performedBy,
       category,
       content: message,
-      timestamp: (new Date()).getTime()
-    })
+      timestamp: new Date().getTime()
+    });
     this.logs.push(msg);
     return msg;
   }
@@ -1069,4 +1115,23 @@ export class GameState extends Schema implements GameData {
     return this.marsEvents[this.marsEventsProcessed];
   }
 
+  evaluateGameWinners() {
+    let playerScores: Array<[Role, Number]> = [];
+    let winners: Array<Role> = [];
+    
+    for(const p of this.players) {
+      playerScores.push([p.role, p.victoryPoints]);
+    }
+
+    const sorted = _.reverse(_.sortBy(playerScores, [1]));
+    sorted.forEach((s: [Role, Number]) => {
+      if(s[1] === sorted[0][1]) winners.push(s[0]);
+    })
+    
+    this.winners = winners;
+  }
+
+  addGameWinner(winner: Role) {
+    this.winners.push(winner);
+  }
 }
