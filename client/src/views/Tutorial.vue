@@ -1,6 +1,7 @@
 <template>
   <div class="tutorial-layout">
     <TourModal @hide="startTourOnHideModal" />
+    <CompletedQuizModal v-if="tourIsOver" />
     <GameDashboard />
     <v-tour
       v-if="dataFetched"
@@ -104,6 +105,7 @@
         </transition>
       </template>
     </v-tour>
+
   </div>
 </template>
 
@@ -111,6 +113,7 @@
 import { Component, Provide, Vue } from 'vue-property-decorator';
 import VueTour from 'vue-tour';
 import TourModal from '@/components/tutorial/TourModal.vue';
+import CompletedQuizModal from '@/components/tutorial/CompletedQuizModal.vue';
 import GameDashboard from '@/components/GameDashboard.vue';
 import { TutorialAPI } from '@/api/tutorial/request';
 import { TutorialSteps } from '@/repositories/tutorial';
@@ -127,6 +130,7 @@ Vue.use(VueTour);
   name: 'tutorial',
   components: {
     GameDashboard,
+    CompletedQuizModal,
     TourModal
   }
 })
@@ -146,9 +150,10 @@ export default class Tutorial extends Vue {
   };
 
   private steps: Array<Step> = tutorialSteps;
+  private tourIsOver:boolean = false;
+
   private submissionId: any = null;
   private dataFetched: boolean = false;
-  //private steps: Array<Step> = [];
   private quizQuestions: Array<QuizQuestionData> = [];
   private currentTutorialElementId: string = '';
 
@@ -236,6 +241,8 @@ export default class Tutorial extends Vue {
     const complete = await this.checkQuizCompletion();
     this.$ajax.setQuizCompletion(complete);
     console.log('USER HAS COMPLETED QUIZ:', complete);
+
+    this.tourIsOver = true;
   }
 
   // NOTE: Integrate Quiz
