@@ -343,6 +343,7 @@ gameEventDeserializer.register(EnteredDefeatPhase);
 export class EnteredVictoryPhase extends KindOnlyGameEvent {
   apply(game: GameState): void {
     game.phase = Phase.victory;
+    game.evaluateGameWinners();
   }
 }
 gameEventDeserializer.register(EnteredVictoryPhase);

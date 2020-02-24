@@ -8,6 +8,12 @@
       </p>
       <p>Thank you for playing.</p>
     </div>
+    <div class="winners">
+      <p class="title">Winners</p>
+      <div v-for="winner in winners" class="winner">
+        <p>{{ winner }}</p>
+      </div>
+    </div>
     <div class="buttons">
       <button @click="handleRestart">Restart the Game</button>
       <button @click="handleExit">Exit</button>
@@ -16,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import {Vue, Component, InjectReactive, Inject} from 'vue-property-decorator';
+import { Vue, Component, InjectReactive, Inject } from 'vue-property-decorator';
 import { GameRequestAPI } from '@/api/game/request';
 
 @Component({})
@@ -29,6 +35,10 @@ export default class ContainerVictory extends Vue {
 
   private handleExit() {
     console.log('EXIT GAME');
+  }
+
+  get winners() {
+    return this.$tstore.state.winners;
   }
 }
 </script>
