@@ -79,6 +79,14 @@ export default class WaitingLobby extends Vue {
 
   async created() {
     // TODO: Temporary Implementation
+
+    const jwt = this.$ajax.loginCreds?.token;
+
+    if (!this.$tstore.state.user.passedQuiz) {
+      await this.$router.push({ name: 'Tutorial' });
+      return;
+    }
+
     this.$ajax.forgetGameData();
     if (this.$ajax.gameData === null) {
       const room = await this.$client.joinOrCreate('waiting', {
