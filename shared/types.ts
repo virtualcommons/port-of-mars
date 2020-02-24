@@ -109,6 +109,7 @@ export interface MarsEventData {
   flavorText: string;
   clientViewHandler: EventClientView;
   duration: number;
+  timeDuration?: number;
 }
 
 export interface MarsLogMessageData {

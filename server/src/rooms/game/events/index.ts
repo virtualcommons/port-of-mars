@@ -255,7 +255,8 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
     const marsEvents = cards.map(e => new MarsEvent(e));
 
     game.phase = Phase.events;
-    game.timeRemaining = GameState.DEFAULTS.timeRemaining;
+    
+    game.timeRemaining = marsEvents[0].timeDuration;
 
     // handle incomplete events
     game.handleIncomplete();
@@ -280,6 +281,7 @@ export class ReenteredMarsEventPhase extends KindOnlyGameEvent {
   apply(game: GameState): void {
     game.resetPlayerReadiness();
     game.marsEventsProcessed += 1;
+    game.timeRemaining = game.marsEvents[game.marsEventsProcessed].timeDuration;
   }
 }
 gameEventDeserializer.register(ReenteredMarsEventPhase);
