@@ -14,8 +14,6 @@ export class MarsEvent extends Schema implements MarsEventData {
     this.clientViewHandler = data.clientViewHandler;
     this.duration = data.duration;
     this.state = constructState(data.id);
-
-    //NICK EDIT
     this.timeDuration = data.timeDuration ? data.timeDuration : GameState.DEFAULTS.timeRemaining;
   }
 
