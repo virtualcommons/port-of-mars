@@ -116,6 +116,7 @@ export const initialStoreState: State = {
   logs: [],
   marsEventsProcessed: 0,
   tradeSet: {},
+  winners: [],
 
   // State
   role: RESEARCHER,

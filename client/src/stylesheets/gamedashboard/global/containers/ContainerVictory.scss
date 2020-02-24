@@ -26,6 +26,26 @@
     }
   }
 
+  .winners {
+    color: $space-white;
+    // background-color: pink;
+    @include make-column-and-center;
+
+    .title {
+      font-size: $font-large;
+      margin: 0.5rem;
+    }
+
+    .winner {
+      margin: 0.5rem;
+
+      p {
+        font-size: $font-med;
+        margin: 0;
+      }
+    }
+  }
+
   .buttons {
     @include make-center;
 

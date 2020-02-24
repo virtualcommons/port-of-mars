@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div v-if="gamePhase != phase.defeat" class="game-dashboard">
+    <div
+      v-if="gamePhase != phase.defeat && gamePhase != phase.victory"
+      class="game-dashboard"
+    >
       <MasterComponent />
       <ModalContainer />
       <ContainerBoard />

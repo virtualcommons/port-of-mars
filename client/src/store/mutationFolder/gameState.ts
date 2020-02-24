@@ -13,7 +13,8 @@ import * as _ from 'lodash';
 import {
   defaultPendingInvestment,
   PlayerClientData,
-  State, User
+  State,
+  User
 } from '@/store/state';
 
 function SET_GAME_PHASE(state: State, payload: Phase) {
@@ -77,12 +78,13 @@ function SET_EVENT_VISIBILITY(
   }
 }
 
-function SET_USER(
-  state: State,
-  payload: User
-) {
+function SET_USER(state: State, payload: User) {
   state.user.username = payload.username;
   state.user.passedQuiz = payload.passedQuiz;
+}
+
+function SET_WINNERS(state: State, payload: Array<Role>) {
+  state.winners = payload;
 }
 
 // MUTATIONS FOR EVENTS :: END
@@ -109,5 +111,6 @@ export default {
   SET_TIME_REMAINING,
   SET_MARS_EVENTS_PROCESSED,
   SET_USER,
+  SET_WINNERS,
   TOGGLE_LOADING
 };
