@@ -1,0 +1,80 @@
+.modal-problem {
+  height: 25rem;
+  width: 35rem;
+  padding: 1rem 2rem;
+  border: 0.125rem solid $space-white-opaque-2;
+  @include make-column-and-center;
+  justify-content: space-around;
+  color: $space-white;
+  background-color: $space-gray;
+  overflow: hidden;
+
+  .title {
+    margin: 1rem;
+    text-align: center;
+    font-size: 2rem;
+    text-transform: capitalize;
+    color: $new-space-orange;
+
+    span {
+      color: $status-red;
+    }
+  }
+
+  .instructions {
+    color: $space-white;
+    text-align: center;
+    font-size: $font-med;
+  }
+
+  .submission,
+  .confirmation {
+    flex-grow: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .submission {
+    // background-color: green;
+
+    textarea {
+      flex-grow: 1;
+      width: 100%;
+      padding: 0.5rem;
+      border: 0.0625rem solid $new-space-orange;
+      margin-bottom: 1rem;
+      color: $space-white;
+      background-color: $space-gray;
+      font-size: $font-med;
+      resize: none;
+      outline: none;
+    }
+
+    button {
+      @include reset-button;
+      height: 3rem;
+      width: 12.5rem;
+      border: 0.0625rem solid $new-space-orange;
+      margin: 0.5rem;
+      color: $new-space-orange;
+      @include default-transition-base;
+
+      &:hover {
+        color: $space-gray;
+        background-color: $new-space-orange;
+      }
+    }
+  }
+
+  .confirmation {
+    // background-color: pink;
+    justify-content: center;
+
+    p {
+      color: $new-space-orange;
+      font-size: $font-med;
+    }
+  }
+}
