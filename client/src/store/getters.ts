@@ -1,27 +1,44 @@
-import { PlayerClientSet, State } from '@/store/state';
-import { ROLES,MarsEventData,EventClientView } from 'shared/types';
+import { PlayerClientSet, State, PlayerClientData } from '@/store/state';
+import { ROLES, MarsEventData, EventClientView, MarsLogMessageData } from 'shared/types';
 import _ from 'lodash';
 
 export default {
   /**
-   * layout() getter
    * Gets the state out of state variable layout.
-   * @return The state of layout.
+   * @returns The string value of the current layout.
    *
    */
-  layout(state: State) {
+  layout(state: State): string {
     return state.layout;
   },
 
-  player(state: State) {
+  /**
+   * Gets the current player by the current role.
+   * @param state The current state of the game.
+   * @returns The current player.
+   * 
+   */
+  player(state: State): PlayerClientData {
     return state.players[state.role];
   },
 
-  logs(state: State) {
+  /**
+   * Gets mars log messages.
+   * @param state The current state of the game.
+   * @returns The array containing mars log messages.
+   * 
+   */
+  logs(state: State): MarsLogMessageData[] {
     return state.logs;
   },
 
-  otherPlayers(state: State) {
+  /**
+   * Gets set of players that do not include the user's player.
+   * @param state The current state of the game.
+   * @returns A set of 4 players.
+   * 
+   */
+  otherPlayers(state: State): Partial<PlayerClientSet> {
     let op: Partial<PlayerClientSet> = {};
     for (const role of ROLES) {
       if (role !== state.role) {
@@ -31,6 +48,12 @@ export default {
     return op;
   },
 
+  /**
+   * Gets the current event.
+   * @param state The current state of the game.
+   * @returns The current event in effect.
+   * 
+   */
   currentEvent(state: State): MarsEventData | undefined {
     const marsEvents = state.marsEvents;
     const marsEventsProcessed = state.marsEventsProcessed;
@@ -41,6 +64,13 @@ export default {
     return undefined;
   },
 
+
+  /**
+   * During events phase, gets current view of the center bottom container.
+   * @param state The current state of the game.
+   * @returns The current event view.
+   * 
+   */
   currentEventView(state: State): EventClientView {
     const marsEvents = state.marsEvents;
     const marsEventsProcessed = state.marsEventsProcessed;
@@ -52,7 +82,13 @@ export default {
     return 'NO_CHANGE';
   },
   
-  isUnderAudit(state: State) {
+  /**
+   * Gets Audit event if it has been drawn for a given round.
+   * @param state The current state of the game.
+   * @returns The boolean value that determines if an audit event exists 
+   * 
+   */
+  isUnderAudit(state: State): boolean {
     const marsEvents = state.marsEvents;
     const eventProcessedIndex = state.marsEventsProcessed;
     const auditEventIndex = marsEvents.findIndex(event => event.id === 'audit');
