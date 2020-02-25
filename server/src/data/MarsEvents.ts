@@ -72,7 +72,7 @@ const _marsEvents: Array<[MarsEventData, number]> = [
     duration: 1
   }, 1],
   [{
-    id: 'marketClosed',
+    id: 'marketsClosed',
     name: 'Markets Closed',
     effect: `Players may not trade Influences this round.`,
     flavorText: `"Trust is difficult to build and easy to break. Yet without it, this community would fall apart." - The Curator`,
