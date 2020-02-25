@@ -29,7 +29,7 @@ import { Client } from 'colyseus';
 import { Game } from '@/rooms/game/types';
 import { Command } from '@/rooms/game/commands/types';
 import { GameEvent } from '@/rooms/game/events/types';
-import {tradeIsValid} from "shared/validation";
+import { tradeIsValid } from "shared/validation";
 
 export class SendChatMessageCmd implements Command {
   constructor(
@@ -188,8 +188,22 @@ export class SendTradeRequestCmd implements Command {
 export class SetNextPhaseCmd implements Command {
   constructor(private game: Game) {}
 
+  upkeep: number = this.game.state.nextRoundUpkeep();
+
   static fromReq(game: Game) {
     return new SetNextPhaseCmd(game);
+  }
+
+  /**
+   * Ends game if upkeep is less than or equal to 0;
+   * @param upkeep The number value of upkeep.
+   * 
+   */
+  gameOver(upkeep: number) {
+    if (upkeep <= 0) {
+      this.game.state.phase = Phase.defeat;
+      return [new EnteredDefeatPhase()];
+    }
   }
 
   execute(): Array<GameEvent> {
@@ -206,9 +220,12 @@ export class SetNextPhaseCmd implements Command {
           this.game.state.marsEvents.length
         ) {
           events.push(new EnteredInvestmentPhase());
+          this.gameOver(this.upkeep);
         } else {
           events.push(new ReenteredMarsEventPhase());
+          this.gameOver(this.upkeep);
         }
+
         return events;
       }
       case Phase.invest:
@@ -216,16 +233,13 @@ export class SetNextPhaseCmd implements Command {
       case Phase.trade:
         return [new EnteredPurchasePhase()];
       case Phase.purchase:
+        this.gameOver(this.upkeep);
         return [new EnteredDiscardPhase()];
       case Phase.discard: {
         const game = this.game.state;
-        const upkeep = game.nextRoundUpkeep();
         const round = game.round + 1;
 
-        if (upkeep <= 0) {
-          game.phase = Phase.defeat;
-          return [new EnteredDefeatPhase()];
-        }
+        this.gameOver(this.upkeep);
 
         if (round >= game.maxRound) {
           game.phase = Phase.victory;
