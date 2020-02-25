@@ -13,6 +13,7 @@ import { DBPersister } from '@/services/persistence';
 import { ClockTimer } from '@gamestdio/timer/lib/ClockTimer';
 import { login } from '@/routes/login';
 import { quizRouter } from '@/routes/quiz';
+import { issueRouter } from '@/routes/issue';
 import * as fs from 'fs';
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
@@ -42,6 +43,7 @@ function createApp() {
 
   app.post('/login', login);
   app.use('/quiz', quizRouter);
+  app.use('/issue', issueRouter);
 
   const server = http.createServer(app);
   const gameServer = new Server({

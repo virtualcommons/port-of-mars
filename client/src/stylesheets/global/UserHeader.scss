@@ -6,20 +6,28 @@
   top: 0;
   left: 0;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-end;
+  justify-content: space-between;
+  align-items: center;
+  // background-color: blue;
 
-  p {
-    padding: 0.125rem 0.5rem;
-    margin: 0 0.5rem;
-    font-size: $font-small;
-    color: $space-white;
-    @include default-transition-base;
-    cursor: pointer;
+  .problem,
+  .logout {
+    height: 100%;
+    display: flex;
+    align-items: center;
 
-    &:hover {
-      background-color: $new-space-orange-opaque-025;
+    button {
+      @include reset-button;
+      flex-grow: 1;
+      margin: 0.25rem 0;
+      color: $new-space-orange;
+      font-size: $font-small;
+      @include default-transition-base;
+  
+      &:hover {
+        color: $space-gray;
+        background-color: $new-space-orange;
+      }
     }
   }
 }

@@ -1,13 +1,18 @@
 <template>
   <div class="user-header">
-    <p
-      @click="logoutUser"
-      @mouseover="handleHover(true)"
-      @mouseleave="handleHover(false)"
-    >
-      <span>{{ prependedText }}</span
-      >{{ username }}
-    </p>
+    <div class="problem">
+      <button @click="openModalProblem">BETA: Report a Problem</button>
+    </div>
+    <div class="logout">
+      <button
+        @click="logoutUser"
+        @mouseover="handleHover(true)"
+        @mouseleave="handleHover(false)"
+      >
+        <span>{{ prependedText }}</span
+        >{{ username }}
+      </button>
+    </div>
   </div>
 </template>
 
@@ -19,7 +24,7 @@ export default class UserHeader extends Vue {
   private prependedText: string = 'Logged in as ';
 
   mounted() {
-    if(process.env.NODE_ENV != 'test'){
+    if (process.env.NODE_ENV != 'test') {
       const jwt = this.$ajax.loginCreds?.token;
       if (!jwt) {
         console.log('No user token found. Redirecting to Login...');
@@ -39,6 +44,10 @@ export default class UserHeader extends Vue {
     } else {
       this.prependedText = 'Logged in as ';
     }
+  }
+
+  private openModalProblem(): void {
+    this.$root.$emit('openModalProblem');
   }
 
   private logoutUser(): void {
