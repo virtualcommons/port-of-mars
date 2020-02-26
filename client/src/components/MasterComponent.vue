@@ -3,52 +3,57 @@
 </template>
 
 <script lang="ts">
-import {Component, Inject, InjectReactive, Vue} from 'vue-property-decorator';
+import { Component, Inject, InjectReactive, Vue } from 'vue-property-decorator';
 import { GameRequestAPI } from '@/api/game/request';
 
 @Component({})
 export default class Master extends Vue {
   @Inject() readonly api!: GameRequestAPI;
 
-  onKeyDown(e: any) {
-    if (e.key === 'r') {
-      this.api.setNextPhase();
-    } else if (e.key === 'q') {
-      this.api.resetGame();
-    } else if (e.key === '.') {
-      console.log('TOGGLE LOADING SCREEN');
-      this.$store.commit('TOGGLE_LOADING');
-    } else if (e.key === 'm') {
-      const dataPackage = {
-        performedBy: this.$store.state.role,
-        category: 'justforfun',
-        content: 'just a fun little reminder!',
-        timestamp: new Date().getTime()
-      };
-      this.$store.commit('ADD_TO_MARS_LOG', dataPackage);
-    } else if (e.key === 'n') {
-      this.$store.commit(
-        'CREATE_NOTIFICATION',
-        'this is just a little reminder that it will be alright!'
-      );
-    } else if (e.key === ']') {
-      this.$root.$emit('openModalServer', {
-        text:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vestibulum.'
-      });
-    }
-  }
+  private logMessage: object = {
+    performedBy: this.$tstore.state.role,
+    category: 'test',
+    content: 'TEST LOG MESSAGE',
+    timestamp: new Date().getTime()
+  };
+
+  private notification: string = 'TEST NOTIFICATION';
+
+  private serverMessage: object = {
+    text: 'TEST SERVER MESSAGE'
+  };
 
   mounted() {
     document.onkeydown = this.onKeyDown;
-
-    this.$root.$on('nextRound', () => {
-      this.phaseRunner();
-    });
   }
 
-  phaseRunner() {
-    this.api.setNextPhase();
+  beforeDestroy() {
+    if (document && document.onkeydown) document.onkeydown = null;
+  }
+
+  onKeyDown(e: any) {
+    switch (e.key) {
+      case 'r':
+        this.api.setNextPhase();
+        break;
+      case 'q':
+        this.api.resetGame();
+        break;
+      case '.':
+        this.$store.commit('TOGGLE_LOADING');
+        break;
+      case 'm':
+        this.$store.commit('ADD_TO_MARS_LOG', this.logMessage);
+        break;
+      case 'n':
+        this.$store.commit('CREATE_NOTIFICATION', this.notification);
+        break;
+      case ']':
+        this.$root.$emit('openModalServer', this.serverMessage);
+        break;
+      default:
+        break;
+    }
   }
 }
 </script>

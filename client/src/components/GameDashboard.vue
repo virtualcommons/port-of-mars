@@ -4,7 +4,7 @@
       v-if="gamePhase != phase.defeat && gamePhase != phase.victory"
       class="game-dashboard"
     >
-      <MasterComponent />
+      <MasterComponent v-if="inDevelopment && devToolsEnabled" />
       <ModalContainer />
       <ContainerBoard />
     </div>
@@ -41,7 +41,15 @@ export default class GameDashboard extends Vue {
   }
 
   get gamePhase() {
-    return this.$store.state.phase;
+    return this.$tstore.state.phase;
+  }
+
+  get inDevelopment(): boolean {
+    return this.$tstore.state.inDevelopment;
+  }
+
+  get devToolsEnabled(): boolean {
+    return this.$tstore.state.devToolsEnabled;
   }
 }
 </script>

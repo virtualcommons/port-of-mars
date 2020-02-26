@@ -7,6 +7,7 @@ import notifications from './notifications';
 import player from './player';
 import trading from './trading';
 import lobby from './lobby';
+import developer from './developer';
 
 export default {
   SET_LAYOUT(state: any, newLayout: string) {
@@ -21,5 +22,6 @@ export default {
   ...notifications,
   ...player,
   ...trading,
-  ...lobby
+  ...lobby,
+  ...developer
 };

@@ -11,10 +11,37 @@
   // background-color: blue;
 
   .problem,
-  .logout {
+  .logout,
+  .switch {
     height: 100%;
     display: flex;
     align-items: center;
+  }
+
+  .problem,
+  .logout {
+    button {
+      @include reset-button;
+      flex-grow: 1;
+      margin: 0.25rem 0;
+      color: $new-space-orange;
+      font-size: $font-small;
+      @include default-transition-base;
+
+      &:hover {
+        color: $space-gray;
+        background-color: $new-space-orange;
+      }
+    }
+  }
+
+  .switch {
+    color: $space-white;
+
+    p {
+      margin: 0 0.5rem 0 0;
+      font-size: $font-small;
+    }
 
     button {
       @include reset-button;
@@ -23,11 +50,11 @@
       color: $new-space-orange;
       font-size: $font-small;
       @include default-transition-base;
-  
-      &:hover {
-        color: $space-gray;
-        background-color: $new-space-orange;
-      }
+    }
+
+    .selected {
+      color: $space-gray;
+      background-color: $new-space-orange;
     }
   }
 }
