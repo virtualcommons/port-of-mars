@@ -20,7 +20,7 @@ Sentry.init({
   integrations: [new Integrations.Vue({Vue, attachProps: true})],
 });
 
-const $client = new Colyseus.Client(process.env.SERVER_URL_WS);
+const $client = new Colyseus.Client(process.env.SERVER_URL_WS || undefined);
 
 new Vue({
   router,
