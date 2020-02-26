@@ -20,9 +20,9 @@ module.exports = {
       .plugin('define-env')
       .use(webpack.DefinePlugin, [{
         'process.env.SERVER_URL_WS':
-          JSON.stringify(['development', 'staging'].includes(NODE_ENV) ? 'ws://localhost:2567' : 'wss://portofmars.comses.net'),
+          JSON.stringify(['development', 'staging'].includes(NODE_ENV) ? 'ws://localhost:2567' : ''),
         'process.env.SERVER_URL_HTTP':
-          JSON.stringify(['development', 'staging'].includes(NODE_ENV) ? 'http://localhost:2567' : 'https://portofmars.comses.net'),
+          JSON.stringify(['development', 'staging'].includes(NODE_ENV) ? 'http://localhost:2567' : ''),
         'process.env.SENTRY_DSN': JSON.stringify(SENTRY_DSN),
       }])
   }
