@@ -102,6 +102,8 @@ export interface State extends GameData {
   lobbyWaitingUsers: number;
   lobbyClientJoinedQueue: boolean;
   lobbyReceivedInvitation: boolean;
+  inDevelopment: boolean;
+  devToolsEnabled: boolean;
 }
 
 export const initialStoreState: State = {
@@ -135,5 +137,9 @@ export const initialStoreState: State = {
   lobbyNextAssignmentTime: 0,
   lobbyWaitingUsers: 0,
   lobbyClientJoinedQueue: false,
-  lobbyReceivedInvitation: false
+  lobbyReceivedInvitation: false,
+
+  // NOTE: Development Tools
+  inDevelopment: true,
+  devToolsEnabled: false,
 };
