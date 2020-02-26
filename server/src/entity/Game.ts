@@ -2,6 +2,7 @@ import {Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, Prim
 import {GameEvent} from "./GameEvent";
 import {Tournament} from "@/entity/Tournament";
 import {Player} from "@/entity/Player";
+import { TournamentRound } from "./TournamentRound";
 
 @Entity()
 export class Game {
@@ -14,9 +15,8 @@ export class Game {
   @CreateDateColumn()
   dateCreated!: Date;
 
-  @ManyToOne(type => Tournament, tournament => tournament.games)
-  @JoinColumn()
-  tournament!: Tournament;
+  @ManyToOne(type => TournamentRound, tournamentRound => tournamentRound.games)
+  tournamentRound!: TournamentRound;
 
   @Column()
   tournamentId!: number;
