@@ -62,11 +62,11 @@ body .in-tour {
   }
 
   .button-inactive{
-    opacity: 25%;
+    opacity: 0.25;
   }
 
   .button-active{
-    opacity: 100%;
+    opacity: 1;
     &:hover {
       @include default-scale-up;
       color: $space-gray;
