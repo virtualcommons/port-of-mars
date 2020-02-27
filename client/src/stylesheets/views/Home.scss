@@ -17,7 +17,7 @@
     letter-spacing: 0.25rem;
     font-size: 11rem;
     font-weight: 700;
-    color: $space-orange;
+    color: $new-space-orange;
   }
 
   .buttons {
@@ -27,14 +27,14 @@
       @include reset-button;
       height: 3.5rem;
       width: 18rem;
-      border: 0.0625rem solid $space-orange;
+      border: 0.0625rem solid $new-space-orange;
       margin: 0.5rem;
-      color: $space-orange;
+      color: $new-space-orange;
       @include default-transition-base;
 
       &:hover {
         color: $space-gray;
-        background-color: $space-orange;
+        background-color: $new-space-orange;
       }
     }
   }

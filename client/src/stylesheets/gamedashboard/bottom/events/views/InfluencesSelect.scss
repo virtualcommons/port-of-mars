@@ -10,14 +10,14 @@
     @include reset-button;
     height: 3rem;
     width: 12rem;
-    border: 0.0625rem solid $space-orange;
+    border: 0.0625rem solid $new-space-orange;
     margin-top: 2rem;
-    color: $space-orange;
+    color: $new-space-orange;
     @include default-transition-base;
 
     &:hover {
       color: $space-gray;
-      background-color: $space-orange;
+      background-color: $new-space-orange;
     }
   }
 

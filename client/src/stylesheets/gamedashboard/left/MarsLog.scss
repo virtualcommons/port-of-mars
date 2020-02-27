@@ -29,7 +29,7 @@
       max-width: 100%;
       padding: 0.5rem;
       margin-bottom: 0.5rem;
-      font-size: $font-med;
+      font-size: $font-small;
       color: $space-white;
       overflow: auto;
 
@@ -40,7 +40,7 @@
       .category {
         margin: 0;
         text-transform: capitalize;
-        color: $space-orange;
+        color: $new-space-orange;
       }
 
       .content {
@@ -52,7 +52,7 @@
         margin: 0;
 
         span {
-          color: $space-orange;
+          color: $new-space-orange;
         }
       }
     }

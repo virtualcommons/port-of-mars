@@ -3,12 +3,12 @@
   @include make-column-and-center;
 
   .selected-background {
-    background-color: $space-orange;
+    background-color: $new-space-orange;
   }
 
   .hero-title,
   .pariah-title {
-    border-bottom: 0.125rem solid $space-orange;
+    border-bottom: 0.125rem solid $new-space-orange;
     color: $space-white;
     font-size: $font-large;
   }
@@ -26,7 +26,7 @@
       height: 5rem;
       width: 5rem;
       padding: 0.25rem;
-      border: 0.0625rem solid $space-orange;
+      border: 0.0625rem solid $new-space-orange;
       border-radius: 50%;
       margin: 0 1rem;
       @include make-center;
@@ -47,14 +47,14 @@
     @include reset-button;
     height: 3rem;
     width: 12rem;
-    border: 0.0625rem solid $space-orange;
+    border: 0.0625rem solid $new-space-orange;
     margin: 0 0.5rem;
-    color: $space-orange;
+    color: $new-space-orange;
     @include default-transition-base;
 
     &:hover {
       color: $space-gray;
-      background-color: $space-orange;
+      background-color: $new-space-orange;
     }
   }
 }

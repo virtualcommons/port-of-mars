@@ -25,7 +25,7 @@
       margin: 0 0 0.5rem 0;
       padding: 0.25rem 1rem;
       @include make-center;
-      background-color: $space-orange;
+      background-color: $new-space-orange;
 
       p {
         margin: 0;
@@ -50,7 +50,7 @@
       }
 
       .note {
-        color: $space-orange;
+        color: $new-space-orange;
         font-size: $font-med;
       }
     }

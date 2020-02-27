@@ -11,7 +11,7 @@
     font-size: 2rem;
     text-align: center;
     text-transform: capitalize;
-    color: $space-orange;
+    color: $new-space-orange;
   }
 
   .info {
@@ -33,12 +33,12 @@
   .cost {
     margin: 1rem 0 0 0;
     font-size: $font-small;
-    color: $space-orange;
+    color: $new-space-orange;
   }
 
   .purchase-button {
     @include reset-button;
-    border-bottom: 0.125rem solid $space-orange;
+    border-bottom: 0.125rem solid $new-space-orange;
     margin-top: 1rem;
     color: $space-white;
   }

@@ -74,15 +74,15 @@
           @include reset-button;
           height: 2rem;
           width: 6rem;
-          border: 0.0625rem solid $space-orange;
+          border: 0.0625rem solid $new-space-orange;
           margin: 0.5rem;
-          color: $space-orange;
+          color: $new-space-orange;
           @include default-transition-base;
           font-size: $font-small;
   
           &:hover {
             color: $space-gray;
-            background-color: $space-orange;
+            background-color: $new-space-orange;
           }
         }
       }

@@ -100,7 +100,7 @@ export default class AccomplishmentsSelectPurchased extends Vue {
   private handleAccomplishmentStyle(a: any) {
     if (a.id === this.selectedPurchasedAccomplishment.id) {
       return {
-        backgroundColor: 'var(--space-orange)',
+        backgroundColor: 'var(--new-space-orange)',
         color: 'var(--space-gray)'
       };
     }

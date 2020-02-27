@@ -9,7 +9,7 @@
   top: 4rem;
   @include make-column-and-expand;
   align-items: flex-start;
-  background-color: $space-orange;
+  background-color: $new-space-orange;
   cursor: pointer;
   @include default-transition-base;
 

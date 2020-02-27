@@ -20,22 +20,22 @@
       height: 3rem;
       width: 12.5rem;
       padding: 0 0.5rem;
-      border: 0.0625rem solid $space-orange;
+      border: 0.0625rem solid $new-space-orange;
       margin: 0.5rem;
-      color: $space-orange;
+      color: $new-space-orange;
       @include default-transition-base;
       @include text-overflow-ellipses;
 
       &:disabled,
       &:disabled:hover {
-        border: 0.0625rem solid $space-orange-opaque-2;
+        border: 0.0625rem solid $new-space-orange-opaque-025;
         background: transparent;
-        color: $space-orange-opaque-2;
+        color: $new-space-orange-opaque-025;
       }
 
       &:hover {
         // color: $space-gray;
-        // background-color: $space-orange;
+        // background-color: $new-space-orange;
       }
     }
   }
@@ -51,15 +51,15 @@
       height: 3rem;
       width: 12.5rem;
       padding: 0 0.5rem;
-      border: 0.0625rem solid $space-orange;
+      border: 0.0625rem solid $new-space-orange;
       margin: 0.5rem;
-      color: $space-orange;
+      color: $new-space-orange;
       @include default-transition-base;
       @include text-overflow-ellipses;
 
       &:hover {
         // color: $space-gray;
-        // background-color: $space-orange;
+        // background-color: $new-space-orange;
       }
     }
   }

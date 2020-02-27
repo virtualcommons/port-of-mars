@@ -1,7 +1,7 @@
 <template>
   <div class="user-header">
     <div class="problem">
-      <button @click="openModalProblem">BETA: Report a Problem</button>
+      <button @click="openModalProblem">[ <span>BETA</span> ] <span>Report a Problem</span></button>
     </div>
     <div v-if="inDevelopment" class="switch">
       <p>Enable DevTools</p>
