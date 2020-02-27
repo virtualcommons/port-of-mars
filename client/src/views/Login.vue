@@ -38,6 +38,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
+import {GAME_PAGE} from "shared/routes";
 
 @Component({})
 export default class Login extends Vue {
@@ -67,13 +68,9 @@ export default class Login extends Vue {
     e.preventDefault();
     const fd = new FormData((e as any).target.form);
     const data: any = { username: fd.get('username') };
-    const response = await this.$ajax.postNoToken(this.loginUrl, data);
+    const response = await this.$ajax.post(this.loginUrl, data);
     if (response.status === 200) {
-      const resData = await response.json();
-      this.$ajax.setLoginCreds(resData);
-      if (resData && resData.passedQuiz)
-        await this.$router.push({ name: 'Game' }); // Go directly to the game until lobby done
-      else await this.$router.push({ name: 'Tutorial' });
+      this.$router.push(GAME_PAGE);
     } else {
       this.error = await response.json();
     }

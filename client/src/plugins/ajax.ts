@@ -91,27 +91,6 @@ export class AjaxRequest {
   }
 
   async post(path: string, data?: any) {
-    const jwt = this.loginCreds?.token;
-    if (!jwt) {
-      throw new Error('must have jwt');
-    }
-    return await fetch(
-      path,
-      {
-        method: 'POST',
-        cache: 'no-cache',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${jwt}`,
-        },
-        redirect: 'follow',
-        referrerPolicy: "no-referrer",
-        body: JSON.stringify(data)
-      }
-    )
-  }
-
-  async postNoToken(path: string, data?: any) {
     return await fetch(
       path,
       {
@@ -128,18 +107,13 @@ export class AjaxRequest {
   }
 
   async get(path: string) {
-    const headers: { [key: string]: string } = {
-      'Content-Type': 'application/json'
-    };
-    const jwt = this.loginCreds?.token;
-    if (jwt) {
-      headers['Authorization'] = `Bearer ${jwt}`
-    }
     return await fetch(
       path,
       {
         method: 'GET',
-        headers,
+        headers: {
+          'Content-Type': 'application/json',
+        },
         redirect: 'follow',
         referrerPolicy: "no-referrer",
       }

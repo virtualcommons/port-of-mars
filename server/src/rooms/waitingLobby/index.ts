@@ -192,7 +192,7 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
           group.ready = true;
           group.confirmed = 0;
 
-          const userRoles = buildGameOpts(
+          const userRoles = await buildGameOpts(
             group.stats.map(s => s.client.auth.username)
           );
           /**

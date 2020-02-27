@@ -3,6 +3,7 @@ import { Connection, createConnection } from 'typeorm';
 import http from 'http';
 import express, { Response } from 'express';
 import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import * as Sentry from '@sentry/node';
 import { Server } from 'colyseus';
@@ -11,10 +12,11 @@ import { RankedLobbyRoom } from '@/rooms/waitingLobby';
 import { mockGameInitOpts } from '@/util';
 import { DBPersister } from '@/services/persistence';
 import { ClockTimer } from '@gamestdio/timer/lib/ClockTimer';
-import { login } from '@/routes/login';
+import {login, nextPage} from '@/routes/login';
 import { quizRouter } from '@/routes/quiz';
 import { issueRouter } from '@/routes/issue';
 import * as fs from 'fs';
+import {auth} from "@/routes/middleware";
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const CONNECTION_NAME = NODE_ENV === 'test' ? 'test' : 'default';
@@ -40,7 +42,9 @@ async function createApp() {
     app.use(cors());
   }
   app.use(express.json());
+  app.use(cookieParser());
 
+  app.get('/next-page/:pageName', auth, nextPage);
   app.post('/login', login);
   app.use('/quiz', quizRouter);
   app.use('/issue', issueRouter);

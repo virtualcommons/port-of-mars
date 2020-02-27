@@ -50,13 +50,14 @@ export async function mockGameInitOpts(persister: Persister): Promise<GameOpts> 
   };
 }
 
-export function buildGameOpts(usernames: Array<string>): GameOpts {
+export async function buildGameOpts(usernames: Array<string>): Promise<GameOpts> {
   assert.equal(usernames.length, ROLES.length);
+  const tr = await getConnection().getRepository(TournamentRound).findOneOrFail();
   return {
     userRoles: _.zipObject(usernames, ROLES),
     deck: _.shuffle(getMarsEventData()),
     round: getRandomIntInclusive(8, 12),
-    tournamentRoundId: 1,
+    tournamentRoundId: tr.id,
     persister: new ConsolePersister()
   };
 }
