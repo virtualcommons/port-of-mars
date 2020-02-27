@@ -86,7 +86,7 @@ export function defaultPendingInvestment(): ResourceCostData {
 
 export interface User {
   username: string;
-  passedQuiz: boolean;
+  passedQuiz?: boolean;
 }
 
 

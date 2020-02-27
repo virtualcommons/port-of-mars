@@ -23,17 +23,6 @@ import { Vue, Component } from 'vue-property-decorator';
 export default class UserHeader extends Vue {
   private prependedText: string = 'Logged in as ';
 
-  mounted() {
-    if (process.env.NODE_ENV != 'test') {
-      const jwt = this.$ajax.loginCreds?.token;
-      if (!jwt) {
-        console.log('No user token found. Redirecting to Login...');
-        this.$router.push({ name: 'Login' });
-      }
-    }
-    // TODO: Get data from token if refreshed (?)
-  }
-
   // NOTE :: VIEW & LOGOUT USER
 
   get username(): string {

@@ -65,7 +65,7 @@
                     :value="optionIndex"
                     v-model="currentOptionIndex"
                     @change="handleCheckQuizQuestion(optionIndex)"
-                    
+
                     >
                     <span> {{option}} </span>
                   </label>

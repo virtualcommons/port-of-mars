@@ -3,8 +3,11 @@ import schedule from 'node-schedule';
 import { ROLES } from 'shared/types';
 import _ from 'lodash';
 import { buildGameOpts } from '@/util';
-import { getUserByJWT } from '@/services/account';
+import { getUserByJWT } from '@/services/auth';
 import { RoomGameState } from '@/rooms/waitingLobby/state';
+import {settings} from "@/settings";
+
+const logger = settings.logging.getLogger(__filename);
 
 interface MatchmakingGroup {
   stats: ClientStat[];
@@ -60,7 +63,6 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
   scheduler: any = undefined;
 
   onCreate(options: any) {
-    console.log('WAITING LOBBY: onCreate');
     this.setState(new RoomGameState());
     this.dev = options.dev;
     /**
@@ -69,7 +71,7 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
     this.scheduler = schedule.scheduleJob(
       `*/${this.evaluateAtEveryMinute} * * * *`,
       () => {
-        console.log('SCHEDULED JOB: REDISTRIBUTE GROUPS');
+        logger.trace('SCHEDULED JOB: REDISTRIBUTE GROUPS');
         this.redistributeGroups();
         this.updateLobbyNextAssignmentTime();
       }
@@ -88,7 +90,6 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
   }
 
   async onAuth(client: Client, options: { token: string }) {
-    console.log('WAITING LOBBY: onAuth');
     // TODO: Handle Authentication
 
     // const user = await getUserByJWT(options.token);
@@ -101,7 +102,6 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
   }
 
   onJoin(client: Client, options: any) {
-    console.log('WAITING LOBBY: onJoin');
     const stat = {
       client: client,
       rank: options.rank,
@@ -118,10 +118,9 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
   }
 
   onMessage(client: Client, message: any) {
-    console.log('WAITING LOBBY: onMessage');
-    console.log('WAITING LOBBY: onMessage - message', message);
+    logger.trace('WAITING LOBBY: onMessage - message', message);
     if (message.kind === 'accept-invitation') {
-      console.log('CLIENT ACCEPTED INVITATION');
+      logger.trace('CLIENT ACCEPTED INVITATION');
       const stat = this.stats.find(stat => stat.client === client);
 
       if (stat && stat.group && typeof stat.group.confirmed === 'number') {
@@ -146,14 +145,14 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
   }
 
   createGroup() {
-    console.log('WAITING LOBBY: createGroup');
+    logger.trace('WAITING LOBBY: createGroup');
     let group: MatchmakingGroup = { stats: [] };
     this.groups.push(group);
     return group;
   }
 
   redistributeGroups() {
-    console.log('WAITING LOBBY: redistributeGroups');
+    logger.trace('WAITING LOBBY: redistributeGroups');
     // Re-set all groups
     this.groups = [];
 
@@ -185,14 +184,14 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
   }
 
   async checkGroupsReady() {
-    console.log('WAITING LOBBY: checkGroupsReady');
+    logger.trace('WAITING LOBBY: checkGroupsReady');
     await Promise.all(
       this.groups.map(async group => {
         if (group.ready || group.stats.length === this.numClientsToMatch) {
           group.ready = true;
           group.confirmed = 0;
 
-          const userRoles = buildGameOpts(
+          const userRoles = await buildGameOpts(
             group.stats.map(s => s.client.auth.username)
           );
           /**
@@ -232,7 +231,7 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
   }
 
   removeClientStat(client: Client) {
-    console.log('WAITING LOBBY: removeClientStat');
+    logger.trace('WAITING LOBBY: removeClientStat');
     const index = this.stats.findIndex(stat => stat.client === client);
     if (index !== -1) {
       this.stats.splice(index, 1);
@@ -241,11 +240,11 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
   }
 
   onLeave(client: Client, consented: boolean) {
-    console.log('WAITING LOBBY: onLeave');
+    logger.trace('WAITING LOBBY: onLeave');
     this.removeClientStat(client);
   }
 
   onDispose() {
-    console.log('WAITING LOBBY: onDispose');
+    logger.trace('WAITING LOBBY: onDispose');
   }
 }

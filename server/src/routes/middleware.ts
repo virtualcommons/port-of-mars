@@ -1,11 +1,21 @@
 import { Request, Response } from 'express';
 import { NextFunction } from 'connect';
+import {settings} from '@/settings';
+import _ from 'lodash';
+import { toUrl } from '@/util';
+import { LOGIN_PAGE } from 'shared/routes';
+
+const logger = settings.logging.getLogger(__filename);
 
 export function auth(req: Request, res: Response, next: NextFunction) {
-  const bearer = req.headers.authorization;
-  const parts: Array<string> = bearer ? bearer.split(' ') : [];
-  if (bearer && parts.length === 2 && parts[0] === 'Bearer') {
-    (req as any).token = parts[1];
+  if (_.isUndefined(req.user)) {
+    const loginUrl = toUrl(LOGIN_PAGE);
+    logger.trace('no user on the request, redirecting to login page: ', loginUrl)
+    res.status(404).send();
+
+    // res.redirect(loginUrl);
   }
-  next();
+  else {
+    next();
+  }
 }

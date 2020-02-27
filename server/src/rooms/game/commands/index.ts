@@ -30,6 +30,9 @@ import { Game } from '@/rooms/game/types';
 import { Command } from '@/rooms/game/commands/types';
 import { GameEvent } from '@/rooms/game/events/types';
 import { tradeIsValid } from "shared/validation";
+import {settings} from "@/settings";
+
+const logger = settings.logging.getLogger(__filename);
 
 export class SendChatMessageCmd implements Command {
   constructor(
@@ -44,12 +47,12 @@ export class SendChatMessageCmd implements Command {
     client: Client
   ): SendChatMessageCmd {
     const p = game.getPlayerByClient(client);
-    console.log('PLAYER TROUBLESHOOT: ', p);
+    logger.trace('PLAYER TROUBLESHOOT: ', p);
     return new SendChatMessageCmd(r.message, game, p);
   }
 
   execute() {
-    console.log(`MESSAGE: ${this.message}\nPLAYER: ${this.player}`);
+    logger.trace(`MESSAGE: ${this.message}\nPLAYER: ${this.player}`);
     return [
       new SentChatMessage({
         message: this.message,
@@ -107,7 +110,6 @@ export class TimeInvestmentCmd implements Command {
   static fromReq(r: req.SetTimeInvestmentData, game: Game, client: Client) {
     const p = game.getPlayerByClient(client);
     delete r.kind;
-    //console.log({r});
     return new TimeInvestmentCmd(r, game, p);
   }
 

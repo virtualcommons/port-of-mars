@@ -25,15 +25,23 @@ import {Game, GameOpts, Persister} from '@/rooms/game/types';
 import { Command } from '@/rooms/game/commands/types';
 import { StateSnapshotTaken } from '@/rooms/game/events';
 import {User} from "@/entity/User";
-import {getUserByJWT} from "@/services/account";
+import {getUserByJWT, JWT_SECRET} from "@/services/auth";
+import http from "http";
+import cookie from 'cookie'
+import {settings} from "@/settings";
+import {getConnection} from "@/util";
+import cookieParser from "cookie-parser";
+import {findUserById} from "@/services/account";
+
+const logger = settings.logging.getLogger(__filename);
 
 export class GameRoom extends Room<GameState> implements Game {
   maxClients = 5;
   persister!: Persister;
   gameId!: number;
 
-  async onAuth(client: Client, options: any) {
-    const user = await getUserByJWT(options.token);
+  async onAuth(client: Client, options: any, request?: http.IncomingMessage) {
+    const user = await findUserById((request as any).session.passport.user);
     if (user && Object.keys(this.state.userRoles).includes(user.username)) {
       return user;
     }
@@ -64,7 +72,7 @@ export class GameRoom extends Room<GameState> implements Game {
   }
 
   prepareRequest(r: Requests, client: Client): Command {
-    console.log({r});
+    logger.trace({r});
     switch (r.kind) {
       case 'send-chat-message':
         return SendChatMessageCmd.fromReq(r, this, client);

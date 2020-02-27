@@ -1,5 +1,10 @@
 version: '3'
 services:
+  redis:
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+    volumes:
+      - ./server/deploy/redis.conf:/usr/local/etc/redis/redis.conf:ro
+      - ./docker/redis:/data
   server:
     build:
       args:

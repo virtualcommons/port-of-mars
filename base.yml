@@ -5,11 +5,16 @@ services:
       context: .
     restart: always
     image: port-of-mars/server/dev:latest
+    depends_on:
+      - redis
+      - db
     volumes:
       - ./keys/ormconfig.json:/code/server/ormconfig.json
       - ./keys/.pgpass:/root/.pgpass
-      - ./keys/jwt:/run/secrets/jwt
-      - ./keys/sentry_dsn:/run/secrets/sentry_dsn
+      - ./keys:/run/secrets
+  redis:
+    image: redis:5
+    restart: always
   db:
     image: postgres:12
     environment:

@@ -8,10 +8,12 @@ import {
   checkQuestionResponse,
   checkQuizCompletion
 } from '@/services/quiz';
-import { getUserByJWT } from '@/services/account';
-import { auth } from '@/routes/middleware';
+import { User } from "@/entity/User";
+import { settings } from '@/settings';
 
 export const quizRouter = Router();
+
+const logger = settings.logging.getLogger(__filename);
 
 const DEFAULT_QUIZ = 'TutorialQuiz';
 
@@ -19,14 +21,14 @@ const DEFAULT_QUIZ = 'TutorialQuiz';
 
 quizRouter.post(
   '/create',
-  auth,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       // NOTE: Get User ID
-      const token: string = (req as any).token;
-      const user = await getUserByJWT(token);
-      if (user === undefined)
-        return res.status(401).send(`User not found with provided JWT.`);
+      const user = req.user as User | undefined;
+      if (! user) {
+        logger.fatal('No user found on request with session id: ', req.sessionID);
+        return res.status(500).send(`User not found with provided JWT.`);
+      }
       const userId = user!.id;
 
       // NOTE: Get Quiz ID
@@ -55,7 +57,6 @@ quizRouter.post(
 
 quizRouter.get(
   '/questions',
-  auth,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       // NOTE: Get Quiz ID
@@ -83,7 +84,6 @@ quizRouter.get(
 
 quizRouter.post(
   '/:submissionId/:questionId',
-  auth,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       // NOTE: Get Submission ID from Params
@@ -137,20 +137,18 @@ quizRouter.post(
 
 quizRouter.get(
   '/complete',
-  auth,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       // NOTE: Get User
-      const token: string = (req as any).token;
-      const user = await getUserByJWT(token);
-      if (user === undefined)
+      const user = req.user as User | undefined;
+      if (!user)
         return res.status(401).send(`User not found with provided JWT.`);
 
       // NOTE: Check Database for Completion First
-      if (user!.passedQuiz) return res.status(200).send(true);
+      if (user.passedQuiz) return res.status(200).send(true);
 
       // NOTE: Check Quiz Completion
-      const userId = user!.id;
+      const userId = user.id;
       const complete = await checkQuizCompletion(userId, DEFAULT_QUIZ);
 
       // NOTE: Set User Completion in DB

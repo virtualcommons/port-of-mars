@@ -38,6 +38,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
+import {GAME_PAGE} from "shared/routes";
 
 @Component({})
 export default class Login extends Vue {
@@ -46,7 +47,7 @@ export default class Login extends Vue {
   error: string = '';
 
   created() {
-    this.isLoggedIn = !!this.$ajax.loginCreds;
+    this.isLoggedIn = !!this.$ajax.username;
   }
 
   get submitDisabled() {
@@ -66,14 +67,11 @@ export default class Login extends Vue {
   async login(e: Event) {
     e.preventDefault();
     const fd = new FormData((e as any).target.form);
-    const data: any = { username: fd.get('username') };
-    const response = await this.$ajax.postNoToken(this.loginUrl, data);
+    const data: any = { username: fd.get('username'), password: 'testing' };
+    const response = await this.$ajax.post(this.loginUrl, data);
+    await this.$ajax.setLoginCreds(response);
     if (response.status === 200) {
-      const resData = await response.json();
-      this.$ajax.setLoginCreds(resData);
-      if (resData && resData.passedQuiz)
-        await this.$router.push({ name: 'Game' }); // Go directly to the game until lobby done
-      else await this.$router.push({ name: 'Tutorial' });
+      this.$router.push(GAME_PAGE);
     } else {
       this.error = await response.json();
     }

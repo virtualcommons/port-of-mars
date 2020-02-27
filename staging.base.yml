@@ -14,5 +14,3 @@ services:
       args:
         NODE_ARG: staging
     image: port-of-mars/server/staging:latest
-    depends_on:
-      - db

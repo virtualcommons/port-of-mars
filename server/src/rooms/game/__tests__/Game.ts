@@ -75,15 +75,8 @@ describe('a player snaphot', () => {
 });
 
 describe('a game state snapshot', () => {
-  let conn !: Connection;
-
-  beforeAll(async () => {
-    shell.exec(`createdb -w -U marsmadness -h db pom_testing`);
-    conn = await createConnection('test');
-  });
 
   it('can be round tripped', async () => {
-    const persister = new ConsolePersister();
     const options = mockGameStateInitOpts(x => x, () => 10);
     const g1 = new GameState(options);
     const g2 = new GameState(options);
@@ -93,10 +86,6 @@ describe('a game state snapshot', () => {
     g2.maxRound = g1.maxRound + 1;
     expect(_.isEqual(g1, g2)).toBeFalsy()
   });
-
-  afterAll(async () => {
-    await conn.close()
-  })
 });
 
 describe('a personal gain event', () => {

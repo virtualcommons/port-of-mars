@@ -1,7 +1,8 @@
-import Vue, {VueConstructor} from 'vue'
+import Vue, { VueConstructor } from 'vue'
 import _ from "lodash";
-import {VueRouter} from "vue-router/types/router";
-import {TStore} from "@/plugins/tstore";
+import { VueRouter } from "vue-router/types/router";
+import { TStore } from "@/plugins/tstore";
+import { isDev } from 'shared/settings';
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -14,9 +15,8 @@ const SUBMISSION_ID = 'submissionId';
 const GAME_DATA = "gameData";
 
 interface LoginCreds {
-  token: string
+  sessionCookie: string
   username: string
-  passedQuiz: boolean
 }
 
 interface GameData {
@@ -25,37 +25,29 @@ interface GameData {
 }
 
 export class AjaxRequest {
-  constructor(private router: VueRouter, private store: TStore) {}
+  constructor(private router: VueRouter, private store: TStore) { }
 
-  get loginCreds(): LoginCreds | null {
-    const d = localStorage.getItem(LOGIN_CREDS);
-    if (_.isNull(d)) {
-      return null;
+  async setLoginCreds(response: Response) {
+    const data: LoginCreds = await response.json();
+    if (isDev()) {
+      const sessionCookie = data.sessionCookie;
+      if (!document.cookie.includes('connect.sid=')) {
+        document.cookie = sessionCookie;
+      }
     }
-    const data = JSON.parse(d!);
-    if (!this.store.state.user.username) {
-      this.store.commit('SET_USER', { username: data.username, passedQuiz: data.passedQuiz });
-    }
-    return data;
+    this.store.commit('SET_USER', { username: data.username });
   }
 
-  setLoginCreds(data: LoginCreds) {
-    localStorage.setItem(LOGIN_CREDS, JSON.stringify(data));
-    this.store.commit('SET_USER', { username: data.username, passedQuiz: data.passedQuiz });
+  get username(): string {
+    return this.store.state.user.username;
   }
 
-  setQuizCompletion(complete: boolean) {
-    const loginCreds = this.loginCreds;
-    if (!loginCreds) {
-      throw new Error('loginCreds not found');
-    }
-    loginCreds.passedQuiz = complete;
-    localStorage.setItem(LOGIN_CREDS, JSON.stringify(loginCreds));
-    this.store.commit('SET_USER', { username: loginCreds.username, passedQuiz: loginCreds.passedQuiz });
+  setQuizCompletion(passedQuiz: boolean) {
+    this.store.commit('SET_USER', { username: this.username, passedQuiz });
   }
 
   forgetLoginCreds() {
-    localStorage.removeItem(LOGIN_CREDS);
+    document.cookie = "connect.sid= ;expires=Thu, 01 Jan 1970 00:00:00 GMT";
     this.store.commit('SET_USER', { username: '', passedQuiz: false });
   }
 
@@ -91,27 +83,6 @@ export class AjaxRequest {
   }
 
   async post(path: string, data?: any) {
-    const jwt = this.loginCreds?.token;
-    if (!jwt) {
-      throw new Error('must have jwt');
-    }
-    return await fetch(
-      path,
-      {
-        method: 'POST',
-        cache: 'no-cache',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${jwt}`,
-        },
-        redirect: 'follow',
-        referrerPolicy: "no-referrer",
-        body: JSON.stringify(data)
-      }
-    )
-  }
-
-  async postNoToken(path: string, data?: any) {
     return await fetch(
       path,
       {
@@ -120,6 +91,7 @@ export class AjaxRequest {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         redirect: 'follow',
         referrerPolicy: "no-referrer",
         body: JSON.stringify(data)
@@ -128,18 +100,14 @@ export class AjaxRequest {
   }
 
   async get(path: string) {
-    const headers: { [key: string]: string } = {
-      'Content-Type': 'application/json'
-    };
-    const jwt = this.loginCreds?.token;
-    if (jwt) {
-      headers['Authorization'] = `Bearer ${jwt}`
-    }
     return await fetch(
       path,
       {
         method: 'GET',
-        headers,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         redirect: 'follow',
         referrerPolicy: "no-referrer",
       }

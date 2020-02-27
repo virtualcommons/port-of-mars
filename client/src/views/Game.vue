@@ -34,22 +34,7 @@ export default class Game extends Vue {
   env: EnvironmentMode = new EnvironmentMode;
 
   async created() {
-    const jwt = this.$ajax.loginCreds?.token;
-
-    if (!jwt) {
-      this.$ajax.forgetLoginCreds();
-      await this.$router.push({ name: 'Login' });
-      return;
-    }
-
-    if (!this.$tstore.state.user.passedQuiz) {
-      await this.$router.push({ name: 'Tutorial' });
-      return;
-    }
-
-    const gameRoom = await this.$client.joinOrCreate('game', {
-      token: jwt
-    });
+    const gameRoom = await this.$client.joinOrCreate('game');
     applyGameServerResponses(gameRoom, this.$tstore);
     this.api.connect(gameRoom);
     this.hasApi = true;

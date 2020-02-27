@@ -7,54 +7,27 @@ import Game from '@/views/Game.vue';
 import Tutorial from '@/views/Tutorial.vue';
 import store from '@/store'
 import {AjaxRequest} from "@/plugins/ajax";
+import {
+  GAME_PAGE,
+  LOBBY_PAGE,
+  LOGIN_PAGE,
+  PAGE_META,
+  REGISTER_PAGE,
+  TUTORIAL_PAGE
+} from "shared/routes";
+import Register from "@/views/Register.vue";
 
 Vue.use(Router);
 
 const router = new Router({
   mode: 'hash',
   routes: [
-    {
-      path: '/',
-      name: 'Login',
-      component: Login
-    },
-    {
-      path: '/lobby',
-      name: 'WaitingLobby',
-      component: WaitingLobby,
-      meta: {
-        requiresAuth: true
-      }
-    },
-    {
-      path: '/game',
-      name: 'Game',
-      component: Game,
-      meta: {
-        requiresAuth: true
-      }
-    },
-    {
-      path: '/tutorial',
-      name: 'Tutorial',
-      component: Tutorial,
-      meta: {
-        requiresAuth: true
-      }
-    }
+    { ...PAGE_META[LOGIN_PAGE], component: Login },
+    { ...PAGE_META[LOBBY_PAGE], component: WaitingLobby },
+    { ...PAGE_META[GAME_PAGE], component: Game },
+    { ...PAGE_META[TUTORIAL_PAGE], component: Tutorial },
+    { ...PAGE_META[REGISTER_PAGE], component: Register }
   ]
-});
-
-router.beforeEach((to, from, next) => {
-  const $ajax = new AjaxRequest(router, store);
-  const jwt = $ajax.loginCreds?.token;
-  if (to.meta?.requiresAuth && !jwt) {
-    next({
-      name: 'Login'
-    });
-  } else {
-    next();
-  }
 });
 
 export default router;
