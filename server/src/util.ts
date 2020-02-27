@@ -8,6 +8,7 @@ import {ConsolePersister} from "@/services/persistence";
 import * as to from "typeorm";
 import {expandCopies} from "@/rooms/game/state/marsEvents/common";
 import {getAllMarsEvents} from "@/data/MarsEvents";
+import {TournamentRound} from "@/entity/TournamentRound";
 
 export function getConnection(): to.Connection {
   const connection_name = process.env.NODE_ENV === 'test' ? 'test' : 'default';
@@ -40,10 +41,11 @@ export function mockGameStateInitOpts(
   };
 }
 
-export function mockGameInitOpts(persister: Persister): GameOpts {
+export async function mockGameInitOpts(persister: Persister): Promise<GameOpts> {
+  const tr = await getConnection().getRepository(TournamentRound).findOneOrFail();
   return {
     ...mockGameStateInitOpts(),
-    tournamentId: 1,
+    tournamentRoundId: tr.id,
     persister
   };
 }
@@ -54,7 +56,7 @@ export function buildGameOpts(usernames: Array<string>): GameOpts {
     userRoles: _.zipObject(usernames, ROLES),
     deck: _.shuffle(getMarsEventData()),
     round: getRandomIntInclusive(8, 12),
-    tournamentId: 1,
+    tournamentRoundId: 1,
     persister: new ConsolePersister()
   };
 }

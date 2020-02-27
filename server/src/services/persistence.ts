@@ -14,6 +14,7 @@ import {getConnection} from "@/util";
 import {GameState} from "@/rooms/game/state";
 import {getGameById} from "@/services/game";
 import {Phase} from "shared/types";
+import {TournamentRound} from "@/entity/TournamentRound";
 
 function toDBRawGameEvent(gameId: number, gameEvent: ge.GameEvent) {
   const ev = gameEvent.serialize();
@@ -61,15 +62,15 @@ export class DBPersister implements Persister {
     const g = new Game();
     const conn = getConnection();
     return await conn.transaction(async transact => {
-      const tournamentRepo = transact.getRepository(Tournament);
-      let tournamentId = (await tournamentRepo
-        .createQueryBuilder('tournament')
+      const tournRoundRepo = transact.getRepository(TournamentRound);
+      let tournamentRoundId = (await tournRoundRepo
+        .createQueryBuilder('tournamentRound')
         .select('MAX(id)')
         .getRawOne()).max;
-      if (_.isNull(tournamentId)) {
-        tournamentId = (await tournamentRepo.save(tournamentRepo.create())).id;
+      if (_.isNull(tournamentRoundId)) {
+        throw new Error('could find matching tournament round')
       }
-      g.tournamentId = tournamentId;
+      g.tournamentRoundId = tournamentRoundId;
 
       const userRepo = transact.getRepository(User);
       const usernames = Object.keys(options.userRoles);

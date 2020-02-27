@@ -1,0 +1,7 @@
+entity: TournamentRound
+items:
+  firstRound:
+    roundNumber: 1
+    tournament: '@tournament'
+    startDate: '2020-01-01'
+    endDate: '2020-04-01'

@@ -19,7 +19,7 @@ export class Game {
   tournamentRound!: TournamentRound;
 
   @Column()
-  tournamentId!: number;
+  tournamentRoundId!: number;
 
   @OneToMany(type => Player, player => player.game)
   players!: Array<Player>;

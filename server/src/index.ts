@@ -29,7 +29,7 @@ applyInStagingOrProd(() =>
   Sentry.init({ dsn: fs.readFileSync('/run/secrets/sentry_dsn', 'utf-8') })
 );
 
-function createApp() {
+async function createApp() {
   const port = Number(process.env.PORT || 2567);
   const app = express();
 
@@ -62,7 +62,7 @@ function createApp() {
   });
 
   // register your room handlers
-  gameServer.define('game', GameRoom, mockGameInitOpts(persister));
+  gameServer.define('game', GameRoom, await mockGameInitOpts(persister));
   gameServer.define('waiting', RankedLobbyRoom, { dev: true });
 
   app.use(express.static('static'));
@@ -77,6 +77,6 @@ function createApp() {
 
 createConnection(CONNECTION_NAME)
   .then(async connection => {
-    createApp();
+    await createApp();
   })
   .catch(error => console.error(error));

@@ -1,0 +1,5 @@
+entity: Tournament
+items:
+  tournament:
+    name: 'main'
+    active: true
