@@ -3,7 +3,7 @@ import schedule from 'node-schedule';
 import { ROLES } from 'shared/types';
 import _ from 'lodash';
 import { buildGameOpts } from '@/util';
-import { getUserByJWT } from '@/services/account';
+import { getUserByJWT } from '@/services/auth';
 import { RoomGameState } from '@/rooms/waitingLobby/state';
 
 interface MatchmakingGroup {

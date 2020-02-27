@@ -1,16 +1,17 @@
-import {getUserByJWT, getUserByUsername, JWT_SECRET} from '@/services/account';
-import jwt from 'jsonwebtoken';
+import {getUserByUsername} from '@/services/account';
+import {getUserByJWT, setJWTCookie} from '@/services/auth';
 import { NextFunction, Request, Response } from 'express';
 import {isPage, LOGIN_PAGE, Page, PAGE_DEFAULT, PAGE_META, PAGES} from "shared/routes";
 
 export const JWT_TOKEN_NAME = 'jwt';
 
 export async function login(req: Request, res: Response, next: NextFunction) {
+  // FIXME: only allow this when config.devMode = true
   try {
     let user = await getUserByUsername(req.body.username);
     if (user) {
       const { username, passedQuiz } = user;
-      res.cookie(JWT_TOKEN_NAME, jwt.sign({ username }, JWT_SECRET, { expiresIn: '12h' }), { httpOnly: true });
+      setJWTCookie(res, username);
       res.send();
     } else {
       res
@@ -23,7 +24,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
 }
 
 export async function nextPage(req: Request, res: Response, next: NextFunction) {
-  const pageName = req.params.page;
+  const pageName = req.params.pageName;
   const resJson: { page: Page } = {page: LOGIN_PAGE};
   if (!isPage(pageName)) {
     res.json(resJson);

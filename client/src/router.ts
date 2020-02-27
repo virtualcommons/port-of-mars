@@ -23,9 +23,14 @@ const router = new Router({
 
 router.beforeEach(async (to, from, next) => {
   const $ajax = new AjaxRequest(router, store);
-  const res = await $ajax.get(`${process.env.SERVER_URL_HTTP}/next-page/${to.name}`);
+  const res = await $ajax.post(`${process.env.SERVER_URL_HTTP}/next-page/${to.name}`);
   const data = await res.json();
-  next();
+  if (data.page === to.name) {
+    next();
+  }
+  else {
+    next({ name: data.page });
+  }
 });
 
 export default router;

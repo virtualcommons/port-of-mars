@@ -8,7 +8,7 @@ import {
   checkQuestionResponse,
   checkQuizCompletion
 } from '@/services/quiz';
-import { getUserByJWT } from '@/services/account';
+import { getUserByJWT } from '@/services/auth';
 import { auth } from '@/routes/middleware';
 
 export const quizRouter = Router();

@@ -1,16 +1,26 @@
 import {User} from "@/entity/User";
-import jwt from "jsonwebtoken";
 import {getConnection} from "@/util";
-import * as fs from "fs";
+import {Repository} from "typeorm"
 
-export const JWT_SECRET: string = fs.readFileSync('/run/secrets/jwt', 'utf8').trim();
-
-export async function getUserByJWT(token: string): Promise<User | undefined> {
-  const decoded = await jwt.verify(token, JWT_SECRET);
-  const username = (decoded as any).username;
-  return getUserByUsername(username);
+export function getRepository(): Repository<User> {
+  return getConnection().getRepository(User);
 }
 
 export async function getUserByUsername(username: string): Promise<User | undefined> {
-  return await getConnection().getRepository(User).findOne({username})
+  return await getRepository().findOne({username})
+}
+
+export async function findOrCreateUser(username: string, profile: object): Promise<User | undefined> {
+  const repository = getRepository();
+  let user = await repository.findOne({username});
+  let created = false;
+  if (! user) {
+    user = repository.create({username});
+    created = true;
+  }
+  // FIXME: update user with profile fields after we figure out what ASU CAS gives us
+  console.log(profile);
+
+  await repository.save(user);
+  return user;
 }

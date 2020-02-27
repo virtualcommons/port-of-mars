@@ -24,7 +24,7 @@ import {Game, GameOpts, Persister} from '@/rooms/game/types';
 import { Command } from '@/rooms/game/commands/types';
 import { StateSnapshotTaken } from '@/rooms/game/events';
 import {User} from "@/entity/User";
-import {getUserByJWT} from "@/services/account";
+import {getUserByJWT} from "@/services/auth";
 
 export class GameRoom extends Room<GameState> implements Game {
   maxClients = 5;

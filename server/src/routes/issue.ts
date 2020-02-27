@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import { getUserByJWT } from '@/services/account';
+import { getUserByJWT } from '@/services/auth';
 import { auth } from '@/routes/middleware';
 import { sendIssue } from '@/services/email';
 

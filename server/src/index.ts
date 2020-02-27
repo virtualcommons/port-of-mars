@@ -5,11 +5,14 @@ import express, { Response } from 'express';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import passport from 'passport'
 import * as Sentry from '@sentry/node';
 import { Server } from 'colyseus';
 import { GameRoom } from '@/rooms/game';
 import { RankedLobbyRoom } from '@/rooms/waitingLobby';
 import { mockGameInitOpts } from '@/util';
+import { generateJWT, setJWTCookie } from '@/services/auth';
+import { findOrCreateUser } from '@/services/account';
 import { DBPersister } from '@/services/persistence';
 import { ClockTimer } from '@gamestdio/timer/lib/ClockTimer';
 import {login, nextPage} from '@/routes/login';
@@ -17,9 +20,25 @@ import { quizRouter } from '@/routes/quiz';
 import { issueRouter } from '@/routes/issue';
 import * as fs from 'fs';
 import {auth} from "@/routes/middleware";
+import { resolveTxt } from 'dns';
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const CONNECTION_NAME = NODE_ENV === 'test' ? 'test' : 'default';
+
+// FIXME: set up a typescript type for this
+const CasStrategy = require('passport-cas2').Strategy;
+
+passport.use(new CasStrategy(
+  {
+    casURL: 'https://weblogin.asu.edu/cas'
+  },
+  // verify callback
+  async function (username: string, profile: object, done: Function) {
+    const user = await findOrCreateUser(username, profile);
+    // FIXME: done should probably be threaded into the findOrCreateUser
+    done({}, user);
+  }
+));
 
 function applyInStagingOrProd(f: Function) {
   if (['staging', 'production'].includes(NODE_ENV)) {
@@ -44,10 +63,19 @@ async function createApp() {
   app.use(express.json());
   app.use(cookieParser());
 
-  app.get('/next-page/:pageName', auth, nextPage);
+  app.post('/next-page/:pageName', auth, nextPage);
   app.post('/login', login);
   app.use('/quiz', quizRouter);
   app.use('/issue', issueRouter);
+
+  app.get('/asulogin',
+  passport.authenticate('cas', { failureRedirect: '/'}),
+  function(req, res) {
+    // successful authentication, set JWT token cookie and redirect to server nexus
+    setJWTCookie(res, req.body.username);
+    res.redirect('/');
+  }
+  )
 
   const server = http.createServer(app);
   const gameServer = new Server({
