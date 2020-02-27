@@ -72,14 +72,13 @@ export default class Chat extends Vue {
 
   private count: number = 0;
 
-  mounted() {
-    if (this.messages) {
-      // console.log(this.messages);
-    }
+  get pendingMessageCleaned(): string {
+    // TODO: CAN ADD MORE CLEANING AS NECESSARY
+    return this.pendingMessage.trim();
   }
 
   get sendBtnClass(): string {
-    return this.pendingMessage.length === 0 ? 'chat-input-sendbtn' : 'chat-input-sendbtn--ready';
+    return this.pendingMessageCleaned.length === 0 ? 'chat-input-sendbtn' : 'chat-input-sendbtn--ready';
   }
 
   get layout(): any {
@@ -102,10 +101,8 @@ export default class Chat extends Vue {
   }
 
   private submitToChat(): void {
-    console.log('MESSAGE: ', this.pendingMessage);
-    if (this.pendingMessage && this.pendingMessage !== '') {
-      console.log('MESSAGE: NOT EMPTY');
-      this.api.sendChatMessage(this.pendingMessage);
+    if (this.pendingMessageCleaned && this.pendingMessageCleaned !== '') {
+      this.api.sendChatMessage(this.pendingMessageCleaned);
       this.pendingMessage = '';
     }
   }
