@@ -33,7 +33,7 @@
     padding: 40% 0;
     border-radius: 50%;
     position: relative;
-    background-color: $space-orange;
+    background-color: $new-space-orange;
 
     .image {
       height: 110%;
@@ -66,7 +66,7 @@
         height: 7.5rem;
         width: 87.5%;
         margin-right: -1rem;
-        border-bottom: 0.5rem solid $space-orange;
+        border-bottom: 0.5rem solid $new-space-orange;
         border-radius: 0 0 0 0.5rem;
         display: flex;
 
@@ -96,7 +96,7 @@
         .progress-text {
           margin: 0 4rem 0 0;
           font-size: 6rem;
-          color: $space-orange;
+          color: $new-space-orange;
 
           span {
             color: $space-white;

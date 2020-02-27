@@ -80,7 +80,7 @@ export default class ContainerAccomplishments extends Vue {
   }
 
   private handleStyle(view: string) {
-    return this.activeView == view ? { color: 'var(--space-orange)' } : '';
+    return this.activeView == view ? { color: 'var(--new-space-orange)' } : '';
   }
 }
 </script>

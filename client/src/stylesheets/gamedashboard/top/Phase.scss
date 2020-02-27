@@ -10,7 +10,7 @@
 
   .title {
     font-size: $font-large;
-    color: $space-orange;
+    color: $new-space-orange;
   }
 
   .current {
@@ -49,7 +49,7 @@
     }
 
     .cancelbtn {
-      color: $space-orange;
+      color: $new-space-orange;
       @include default-transition-base;
       cursor: pointer;
 
@@ -74,7 +74,7 @@
   .time {
     font-size: $font-large;
     
-    color: $space-orange;
+    color: $new-space-orange;
 
     span {
       color: $space-white;
