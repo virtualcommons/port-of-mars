@@ -41,7 +41,6 @@ export default class EventNoChange extends Vue {
       default:
         return 'This event requires no interaction.';
     }
-    return 'This event requires no interaction.';
   }
 
   private handleContinue(): void {
