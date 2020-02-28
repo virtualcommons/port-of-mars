@@ -5,3 +5,5 @@ services:
       args:
         NODE_ARG: production
     image: port-of-mars/server/prod:latest
+    ports:
+      - '2567:2567'

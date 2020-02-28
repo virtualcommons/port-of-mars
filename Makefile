@@ -56,10 +56,10 @@ $(DB_DATA_PATH):
 .PHONY: secrets
 secrets: $(SECRETS)
 
-docker-compose.yml: base.yml $(ENVIR).yml config.mk $(DB_DATA_PATH)
+docker-compose.yml: base.yml staging.base.yml $(ENVIR).yml config.mk $(DB_DATA_PATH)
 	case "$(ENVIR)" in \
-	  dev|staging) docker-compose -f base.yml -f "$(ENVIR).yml" config > docker-compose.yml;; \
-	  prod) docker-compose -f base.yml -f staging.yml -f prod.yml config > docker-compose.yml;; \
+	  dev) docker-compose -f base.yml -f "$(ENVIR).yml" config > docker-compose.yml;; \
+	  staging|prod) docker-compose -f base.yml -f staging.base.yml -f "$(ENVIR).yml" config > docker-compose.yml;; \
 	  *) echo "invalid environment. must be either dev, staging or prod" 1>&2; exit 1;; \
 	esac
 
