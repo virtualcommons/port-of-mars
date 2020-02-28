@@ -244,12 +244,13 @@ gameEventDeserializer.register(MarsEventFinalized);
 export class EnteredMarsEventPhase extends KindOnlyGameEvent {
 
   apply(game: GameState): void {
-    game.resetPlayerReadiness();
-    game.refreshPlayerPurchasableAccomplisments();
-
     game.phase = Phase.events;
     game.round += 1;
     game.upkeep = game.nextRoundUpkeep();
+
+    game.resetPlayerReadiness();
+    game.resetPlayerContributedUpkeep();
+    game.refreshPlayerPurchasableAccomplisments();
 
     const cards = game.marsEventDeck.peek(game.upkeep);
     const marsEvents = cards.map(e => new MarsEvent(e));
