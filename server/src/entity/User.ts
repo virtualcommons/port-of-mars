@@ -1,9 +1,10 @@
-import {Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique} from "typeorm";
+import {Column, Entity, Generated, OneToMany, PrimaryGeneratedColumn, Unique} from "typeorm";
 import {Player} from "@/entity/Player";
 
 @Entity()
 @Unique(['username'])
 @Unique(['email'])
+@Unique(['registrationToken'])
 export class User {
     @PrimaryGeneratedColumn()
     id!: number;
@@ -14,14 +15,21 @@ export class User {
     @Column()
     username!: string;
 
-    @Column()
-    email!: string;
+    @Column({ nullable: true })
+    email?: string;
 
     @OneToMany(type => Player, player => player.user)
     players!: Array<Player>;
 
     @Column({ default: false })
     passedQuiz!: boolean;
+
+    @Column()
+    @Generated("uuid")
+    registrationToken!: string;
+
+    @Column({ default: false })
+    isVerified!: boolean;
 }
 
 
