@@ -66,7 +66,6 @@ export const RESOURCES: Array<Resource> = [
 ];
 
 export enum Phase {
-  pregame,
   events,
   invest,
   trade,
@@ -77,7 +76,6 @@ export enum Phase {
 }
 
 export const PHASE_LABELS: { [k in Phase]: string } = {
-  [Phase.pregame]: 'Pre-Game',
   [Phase.events]: 'Events',
   [Phase.invest]: 'Investment',
   [Phase.trade]: 'Trade',

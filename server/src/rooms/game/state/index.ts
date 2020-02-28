@@ -908,7 +908,7 @@ export class GameState extends Schema implements GameData {
     timeRemaining: 300,
     marsEventsProcessed: 0,
     round: 1,
-    phase: Phase.pregame,
+    phase: Phase.invest,
     upkeep: 100
   };
 

@@ -248,8 +248,6 @@ export class SetNextPhaseCmd implements Command {
 
         return [new EnteredMarsEventPhase()];
       }
-      case Phase.pregame:
-        return [new EnteredInvestmentPhase()];
       case Phase.victory:
         return [];
     }

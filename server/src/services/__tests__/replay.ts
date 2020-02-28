@@ -15,7 +15,6 @@ describe('a game replay', () => {
   const gs = new GameState(mockGameStateInitOpts());
   const ge = [
     new StateSnapshotTaken(gs.toJSON()),
-    new EnteredInvestmentPhase(),
     new TimeInvested({ role: CURATOR, investment: { upkeep: 2, culture: 2, finance: 0, government: 0, legacy: 0, science: 0}}),
     new EnteredTradePhase(),
     new EnteredPurchasePhase()
@@ -25,7 +24,6 @@ describe('a game replay', () => {
   it('should preserve all data of the original game play through', () => {
     const data = gr.summarize(g => ({ phase: g.phase, culture: g.players.Curator.inventory.culture }), g => g.phase);
     expect(data).toEqual([
-      { phase: Phase.pregame, culture: 0 },
       { phase: Phase.invest, culture: 0 },
       { phase: Phase.trade, culture: 2 },
       { phase: Phase.purchase, culture: 2}

@@ -111,7 +111,7 @@ export const initialStoreState: State = {
   players: defaultPlayerClientSet(),
   timeRemaining: 300,
   round: 1,
-  phase: Phase.pregame,
+  phase: Phase.invest,
   upkeep: 100,
   messages: [],
   marsEvents: [],
