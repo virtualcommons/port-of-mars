@@ -16,8 +16,6 @@ services:
   server:
     build:
       dockerfile: server/deploy/Dockerfile.dev
-    depends_on:
-      - db
     ports:
       - '127.0.0.1:2567:2567'
     volumes:
