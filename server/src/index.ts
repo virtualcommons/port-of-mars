@@ -5,21 +5,22 @@ import express, { Response } from 'express';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import passport from 'passport'
+import passport from 'passport';
+import session from 'express-session';
 import * as Sentry from '@sentry/node';
 import { Server } from 'colyseus';
 import { GameRoom } from '@/rooms/game';
 import { RankedLobbyRoom } from '@/rooms/waitingLobby';
 import { mockGameInitOpts } from '@/util';
-import { generateJWT, setJWTCookie } from '@/services/auth';
+import { JWT_SECRET, generateJWT, setJWTCookie } from '@/services/auth';
 import { findOrCreateUser } from '@/services/account';
 import { DBPersister } from '@/services/persistence';
 import { ClockTimer } from '@gamestdio/timer/lib/ClockTimer';
-import {login, nextPage} from '@/routes/login';
+import { login, nextPage } from '@/routes/login';
 import { quizRouter } from '@/routes/quiz';
 import { issueRouter } from '@/routes/issue';
 import * as fs from 'fs';
-import {auth} from "@/routes/middleware";
+import { auth } from "@/routes/middleware";
 import { resolveTxt } from 'dns';
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
@@ -61,7 +62,10 @@ async function createApp() {
     app.use(cors());
   }
   app.use(express.json());
-  app.use(cookieParser());
+  app.use(cookieParser(JWT_SECRET));
+  app.use(session({ secret: JWT_SECRET }));
+  app.use(passport.initialize());
+  app.use(passport.session());
 
   app.post('/next-page/:pageName', auth, nextPage);
   app.post('/login', login);
@@ -69,12 +73,12 @@ async function createApp() {
   app.use('/issue', issueRouter);
 
   app.get('/asulogin',
-  passport.authenticate('cas', { failureRedirect: '/'}),
-  function(req, res) {
-    // successful authentication, set JWT token cookie and redirect to server nexus
-    setJWTCookie(res, req.body.username);
-    res.redirect('/');
-  }
+    passport.authenticate('cas', { failureRedirect: '/' }),
+    function (req, res) {
+      // successful authentication, set JWT token cookie and redirect to server nexus
+      setJWTCookie(res, req.body.username);
+      res.redirect('/');
+    }
   )
 
   const server = http.createServer(app);
