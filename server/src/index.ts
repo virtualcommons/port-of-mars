@@ -21,7 +21,6 @@ import { DBPersister } from '@/services/persistence';
 import { ClockTimer } from '@gamestdio/timer/lib/ClockTimer';
 import { login, nextPage } from '@/routes/login';
 import { quizRouter } from '@/routes/quiz';
-import { issueRouter } from '@/routes/issue';
 import * as fs from 'fs';
 import { auth } from "@/routes/middleware";
 
@@ -84,7 +83,6 @@ async function createApp() {
   app.post('/next-page/:pageName', auth, nextPage);
   app.post('/login', login);
   app.use('/quiz', quizRouter);
-  app.use('/issue', issueRouter);
 
   app.get('/asulogin',
     passport.authenticate('cas', { failureRedirect: '/' }),
