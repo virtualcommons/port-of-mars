@@ -46,8 +46,7 @@ export default class EventNoChange extends Vue {
 
   private handleContinue(): void {
     console.log('EVENT (CONTINUE)');
-    // TODO: Remove this once functionality is implemented on server
-    this.api.setNextPhase();
+    this.api.setPlayerReadiness(true);
   }
 }
 </script>
