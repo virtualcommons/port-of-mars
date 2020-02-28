@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { Connection, createConnection } from 'typeorm';
+import { createConnection } from 'typeorm';
 import http from 'http';
 import express, { Response } from 'express';
 import helmet from 'helmet';
@@ -8,13 +8,13 @@ import cors from 'cors';
 import passport from 'passport';
 import session from 'express-session';
 import redis from 'redis';
+import connectRedis = require('connect-redis');
 import * as Sentry from '@sentry/node';
-import { RedisStore } from 'connect-redis';
 import { Server } from 'colyseus';
 import { GameRoom } from '@/rooms/game';
 import { RankedLobbyRoom } from '@/rooms/waitingLobby';
 import { mockGameInitOpts } from '@/util';
-import { JWT_SECRET, generateJWT, setJWTCookie } from '@/services/auth';
+import { JWT_SECRET, setJWTCookie } from '@/services/auth';
 import { findOrCreateUser, findById } from '@/services/account';
 import { User } from '@/entity/User';
 import { DBPersister } from '@/services/persistence';
@@ -24,13 +24,13 @@ import { quizRouter } from '@/routes/quiz';
 import { issueRouter } from '@/routes/issue';
 import * as fs from 'fs';
 import { auth } from "@/routes/middleware";
-import { resolveTxt } from 'dns';
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const CONNECTION_NAME = NODE_ENV === 'test' ? 'test' : 'default';
 
 // FIXME: set up a typescript type for this
 const CasStrategy = require('passport-cas2').Strategy;
+const RedisStore = connectRedis(session);
 
 
 passport.use(new CasStrategy(
@@ -67,7 +67,7 @@ applyInStagingOrProd(() =>
 async function createApp() {
   const port = Number(process.env.PORT || 2567);
   const app = express();
-  const redisStore = new RedisStore({ client: redis.createClient() });
+  const store = new RedisStore({ host: 'redis', client: redis.createClient() });
 
   applyInStagingOrProd(() => app.use(Sentry.Handlers.requestHandler()));
   if (NODE_ENV !== 'development') {
@@ -77,7 +77,7 @@ async function createApp() {
   }
   app.use(express.json());
   app.use(cookieParser(JWT_SECRET));
-  app.use(session({ store: redisStore, secret: JWT_SECRET, saveUninitialized: false, resave: false }));
+  app.use(session({ store: store, secret: JWT_SECRET, saveUninitialized: false, resave: false }));
   app.use(passport.initialize());
   app.use(passport.session());
 
