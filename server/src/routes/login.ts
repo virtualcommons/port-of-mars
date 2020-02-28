@@ -1,4 +1,4 @@
-import {getUserByUsername} from '@/services/account';
+import {findByUsername} from '@/services/account';
 import {getUserByJWT, setJWTCookie} from '@/services/auth';
 import { NextFunction, Request, Response } from 'express';
 import {isPage, LOGIN_PAGE, Page, PAGE_DEFAULT, PAGE_META, PAGES} from "shared/routes";
@@ -8,7 +8,7 @@ export const JWT_TOKEN_NAME = 'jwt';
 export async function login(req: Request, res: Response, next: NextFunction) {
   // FIXME: only allow this when config.devMode = true
   try {
-    let user = await getUserByUsername(req.body.username);
+    let user = await findByUsername(req.body.username);
     if (user) {
       const { username, passedQuiz } = user;
       setJWTCookie(res, username);

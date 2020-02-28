@@ -13,7 +13,8 @@ import { GameRoom } from '@/rooms/game';
 import { RankedLobbyRoom } from '@/rooms/waitingLobby';
 import { mockGameInitOpts } from '@/util';
 import { JWT_SECRET, generateJWT, setJWTCookie } from '@/services/auth';
-import { findOrCreateUser } from '@/services/account';
+import { findOrCreateUser, findById } from '@/services/account';
+import { User } from '@/entity/User';
 import { DBPersister } from '@/services/persistence';
 import { ClockTimer } from '@gamestdio/timer/lib/ClockTimer';
 import { login, nextPage } from '@/routes/login';
@@ -37,9 +38,18 @@ passport.use(new CasStrategy(
   async function (username: string, profile: object, done: Function) {
     const user = await findOrCreateUser(username, profile);
     // FIXME: done should probably be threaded into the findOrCreateUser
-    done({}, user);
+    done(null, user);
   }
 ));
+
+passport.serializeUser(function(user: User, done: Function) {
+  done(null, user.id);
+})
+
+passport.deserializeUser(function(id: number, done: Function) {
+  const user = findById(id);
+  done(null, user);
+});
 
 function applyInStagingOrProd(f: Function) {
   if (['staging', 'production'].includes(NODE_ENV)) {
@@ -63,7 +73,7 @@ async function createApp() {
   }
   app.use(express.json());
   app.use(cookieParser(JWT_SECRET));
-  app.use(session({ secret: JWT_SECRET }));
+  app.use(session({ secret: JWT_SECRET, saveUninitialized: false, resave: false }));
   app.use(passport.initialize());
   app.use(passport.session());
 

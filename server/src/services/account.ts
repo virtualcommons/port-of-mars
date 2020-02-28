@@ -6,8 +6,12 @@ export function getRepository(): Repository<User> {
   return getConnection().getRepository(User);
 }
 
-export async function getUserByUsername(username: string): Promise<User | undefined> {
+export async function findByUsername(username: string): Promise<User | undefined> {
   return await getRepository().findOne({username})
+}
+
+export async function findById(id: number): Promise<User | undefined> {
+  return await getRepository().findOne(id);
 }
 
 export async function findOrCreateUser(username: string, profile: object): Promise<User | undefined> {
@@ -20,7 +24,6 @@ export async function findOrCreateUser(username: string, profile: object): Promi
   }
   // FIXME: update user with profile fields after we figure out what ASU CAS gives us
   console.log(profile);
-
   await repository.save(user);
   return user;
 }

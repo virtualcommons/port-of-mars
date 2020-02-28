@@ -1,6 +1,6 @@
 import {User} from "@/entity/User";
 import jwt from "jsonwebtoken";
-import {getUserByUsername} from "@/services/account"
+import {findByUsername} from "@/services/account"
 import * as fs from "fs";
 import { Response } from "express";
 
@@ -9,7 +9,7 @@ export const JWT_SECRET: string = fs.readFileSync('/run/secrets/jwt', 'utf8').tr
 export async function getUserByJWT(token: string): Promise<User | undefined> {
   const decoded = await jwt.verify(token, JWT_SECRET);
   const username = (decoded as any).username;
-  return getUserByUsername(username);
+  return findByUsername(username);
 }
 
 export function authenticate(username: string): Promise<User | undefined> {
