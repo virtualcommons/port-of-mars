@@ -12,7 +12,7 @@ export default class Master extends Vue {
 
   // mars log message object
   private logMessage: object = {
-    performedBy: this.$tstore.state.role,
+    performedBy: this.$store.state.role,
     category: 'test',
     content: 'TEST LOG MESSAGE',
     timestamp: new Date().getTime()
