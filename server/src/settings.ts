@@ -1,4 +1,4 @@
-import {ConsoleEmailer, Emailer} from "@/services/email/emailers";
+import {MemoryEmailer, Emailer} from "@/services/email/emailers";
 
 export interface AppSettings {
   emailer: Emailer
@@ -6,17 +6,17 @@ export interface AppSettings {
 }
 
 const dev: AppSettings = {
-  emailer: new ConsoleEmailer(),
+  emailer: new MemoryEmailer(),
   host: 'http://localhost:8081'
 };
 
 const staging = {
-  emailer: new ConsoleEmailer(),
+  emailer: new MemoryEmailer(),
   host: 'http://localhost:8081'
 };
 
 const prod = {
-  emailer: new ConsoleEmailer(),
+  emailer: new MemoryEmailer(),
   host: 'https://portofmars.asu.edu'
 };
 

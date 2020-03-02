@@ -23,6 +23,8 @@ import { login, nextPage } from '@/routes/login';
 import { quizRouter } from '@/routes/quiz';
 import * as fs from 'fs';
 import { auth } from "@/routes/middleware";
+import {initRegistration} from "@/services/registration";
+import {registrationRouter} from "@/routes/registration";
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const CONNECTION_NAME = NODE_ENV === 'test' ? 'test' : 'default';
@@ -31,14 +33,13 @@ const CONNECTION_NAME = NODE_ENV === 'test' ? 'test' : 'default';
 const CasStrategy = require('passport-cas2').Strategy;
 const RedisStore = connectRedis(session);
 
-
 passport.use(new CasStrategy(
   {
     casURL: 'https://weblogin.asu.edu/cas'
   },
   // verify callback
   async function (username: string, profile: object, done: Function) {
-    const user = await findOrCreateUser(username, profile);
+    const user = await initRegistration(username);
     // FIXME: done should probably be threaded into the findOrCreateUser
     done(null, user);
   }
@@ -46,7 +47,7 @@ passport.use(new CasStrategy(
 
 passport.serializeUser(function (user: User, done: Function) {
   done(null, user.id);
-})
+});
 
 passport.deserializeUser(function (id: number, done: Function) {
   const user = findById(id);
@@ -83,6 +84,7 @@ async function createApp() {
   app.post('/next-page/:pageName', auth, nextPage);
   app.post('/login', login);
   app.use('/quiz', quizRouter);
+  app.use('/registration', registrationRouter);
 
   app.get('/asulogin',
     passport.authenticate('cas', { failureRedirect: '/' }),
@@ -91,7 +93,7 @@ async function createApp() {
       setJWTCookie(res, req.body.username);
       res.redirect('/');
     }
-  )
+  );
 
   const server = http.createServer(app);
   const gameServer = new Server({

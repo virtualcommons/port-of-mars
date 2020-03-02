@@ -19,7 +19,7 @@ export async function findOrCreateUser(username: string, profile: object): Promi
   let user = await repository.findOne({username});
   let created = false;
   if (! user) {
-    user = repository.create({username});
+    user = repository.create({username, name: ''});
     created = true;
   }
   // FIXME: update user with profile fields after we figure out what ASU CAS gives us
