@@ -9,9 +9,11 @@ import { Vue, Component, Inject, Provide } from 'vue-property-decorator';
 import { Client } from 'colyseus.js';
 import { applyGameServerResponses } from '@/api/game/response';
 import { GameRequestAPI } from '@/api/game/request';
+import { EnvironmentMode } from '../settings';
 import ModalContainer from '@/components/gamedashboard/global/modals/ModalContainer.vue';
 import ContainerBoard from '@/components/gamedashboard/global/containers/ContainerBoard.vue';
 import GameDashboard from '@/components/GameDashboard.vue';
+import environment from '../store/mutationFolder/environment';
 
 @Component({
   name: 'game',
@@ -28,6 +30,8 @@ export default class Game extends Vue {
   api: GameRequestAPI = new GameRequestAPI();
 
   hasApi: boolean = false;
+
+  env: EnvironmentMode = new EnvironmentMode;
 
   async created() {
     const jwt = this.$ajax.loginCreds?.token;
@@ -50,6 +54,7 @@ export default class Game extends Vue {
     this.api.connect(gameRoom);
     this.hasApi = true;
     this.$store.commit('SET_LAYOUT', 'game');
+    this.$store.commit('SET_ENVIRONMENT', this.env.environment);
   }
 
   destroyed() {

@@ -13,6 +13,10 @@ export default {
     state.layout = newLayout;
   },
 
+  SET_ENVIRONMENT(state: any, newEnvironment: string) {
+    state.environment = newEnvironment;
+  },
+
   ...accomplishments,
   ...chat,
   ...gameState,
