@@ -22,9 +22,9 @@ function SET_GAME_PHASE(state: State, payload: Phase) {
 }
 function SET_ROUND(state: State, round: number) {
   state.round = round;
-  for (const role of ROLES) {
-    state.players[role].pendingInvestments = defaultPendingInvestment();
-  }
+  // for (const role of ROLES) {
+  //   state.players[role].pendingInvestments = defaultPendingInvestment();
+  // }
 }
 function SET_UPKEEP(state: State, upkeep: number) {
   state.upkeep = upkeep;

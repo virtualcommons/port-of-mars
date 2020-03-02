@@ -5,7 +5,7 @@ import {
 } from "@/rooms/game/state/marsEvents/common";
 import {GameState} from "@/rooms/game/state";
 import * as _ from "lodash";
-import {CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER, Role, ROLES, Resource} from "shared/types";
+import {CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER, Role, ROLES, Resource, InvestmentData} from "shared/types";
 
 
 const _dispatch: { [id: string]: MarsEventStateConstructor } = {};
@@ -29,6 +29,7 @@ export interface MarsEventSerialized {
 }
 
 export interface BaseEvent {
+  initialize?(game: GameState): void;
   finalize(game: GameState): void;
   getData?(): object;
   toJSON(): MarsEventSerialized;
@@ -54,6 +55,39 @@ export class Sandstorm extends BaseEvent {
   finalize(game: GameState): void {
     game.upkeep -= 10;
     game.log('A sandstorm has decreased system health by 10.');
+  }
+}
+
+////////////////////////// LifeAsUsual //////////////////////////
+
+@assocEventId
+export class LifeAsUsual extends BaseEvent {
+  finalize(game: GameState): void {}
+}
+
+////////////////////////// BreakdownOfTrust //////////////////////////
+
+export type BreakdownOfTrustData = { [role in Role] : InvestmentData}
+
+@assocEventId
+export class BreakdownOfTrust extends BaseEvent {
+
+  initialize(game: GameState){
+    for(const player of game.players){
+      player.invertPendingInventory();
+      player.setTimeBlocks(2);
+    }
+  }
+
+  updateSavedResources(player: Role, game:GameState, updatedInventory: InvestmentData){
+    game.players[player].pendingInvestments.add(updatedInventory);
+  }
+
+  finalize(game: GameState): void {
+    for(const player of game.players){
+      player.mergePendingAndInventory();
+      player.resetTimeBlocks();
+    }
   }
 }
 

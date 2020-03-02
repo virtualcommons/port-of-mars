@@ -7,11 +7,9 @@
         :key="investment.name"
         class="profile-investment"
         v-bind:class="{
-          'pending-is-active':
-            gamePhase == phases.invest && investment.pendingUnits > 0,
-          'pending-is-inactive': investment.pendingUnits <= 0,
-          'locked-from-trade':
-            gamePhase == phases.trade && investment.pendingUnits > 0
+          'pending-is-active': investment.pendingUnits > 0,
+          'pending-is-inactive': investment.pendingUnits == 0,
+          'locked-from-trade': investment.pendingUnits < 0
         }"
         v-b-tooltip.hover="investment.name"
       >
@@ -21,20 +19,17 @@
             alt="Investment"
           />
           <!-- <p class="cost">{{ formatCost(investment.cost) }}</p> -->
-          <p v-if="gamePhase == phases.invest">
-            {{ investment.units
-            }}<sup v-show="investment.pendingUnits > 0">
-              +
-              <span>{{ investment.pendingUnits }}</span></sup
-            >
-          </p>
-          <p v-else>
-            {{ investment.units
-            }}<sup v-show="investment.pendingUnits > 0">
-              -
-              <span>{{ investment.pendingUnits }}</span></sup
-            >
-          </p>
+          <p>
+          {{ investment.units}}
+          <sup v-show="investment.pendingUnits > 0">
+            +
+            <span>{{ investment.pendingUnits }}</span>
+          </sup>
+          <sup v-show="investment.pendingUnits < 0">
+            -
+            <span>{{ investment.pendingUnits*-1 }}</span>
+          </sup>
+        </p>
         </div>
         <div class="cost">
           <p>
@@ -75,6 +70,7 @@ import { Resource, RESOURCES, Phase } from 'shared/types';
 
 @Component({})
 export default class ProfileInvestments extends Vue {
+  count = 0;
   get gamePhase() {
     return this.$store.state.phase;
   }
@@ -134,3 +130,6 @@ export default class ProfileInvestments extends Vue {
   background-color: $status-red;
 }
 </style>
+
+
+

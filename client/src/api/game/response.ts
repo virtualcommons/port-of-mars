@@ -25,6 +25,7 @@ function applyPlayerResponses(player: any, store: TStore) {
   player.onChange = (changes: Array<any>) => {
     changes.forEach(change => {
       const payload = { role: player.role, data: change.value };
+      
       switch (change.field as keyof PlayerData) {
         case 'inventory':
           store.commit('SET_INVENTORY', payload);
@@ -57,8 +58,6 @@ function applyPlayerResponses(player: any, store: TStore) {
     });
   };
   player.triggerAll();
-
-  console.log(player);
   player._notifications.onAdd = (msg: any) => {
     store.commit('CREATE_NOTIFICATION', { data: msg, role: player.role });
   };

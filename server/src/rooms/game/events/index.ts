@@ -20,7 +20,7 @@ import { MarsEvent } from '@/rooms/game/state/marsEvents/MarsEvent';
 import { CompulsivePhilanthropy, PersonalGain, 
         OutOfCommissionCurator, OutOfCommissionPolitician, 
         OutOfCommissionResearcher, OutOfCommissionPioneer,
-        OutOfCommissionEntrepreneur, BondingThroughAdversity
+        OutOfCommissionEntrepreneur, BondingThroughAdversity, BreakdownOfTrust
        } 
         from '@/rooms/game/state/marsEvents/state';
 import * as entities from '@/entity/GameEvent';
@@ -240,6 +240,15 @@ export class MarsEventFinalized extends KindOnlyGameEvent {
   }
 }
 gameEventDeserializer.register(MarsEventFinalized);
+
+export class MarsEventInitialized extends KindOnlyGameEvent {
+  apply(game: GameState): void {
+    if(game.currentEvent.state.initialize){
+      game.currentEvent.state.initialize(game);
+    }
+    
+  }
+}
 
 export class EnteredMarsEventPhase extends KindOnlyGameEvent {
 
@@ -514,4 +523,23 @@ export class SelectedInfluence extends GameEventWithData {
 }
 
 gameEventDeserializer.register(SelectedInfluence);
+
+export class SaveResources extends GameEventWithData {
+  constructor(public data: {role: Role, savedResources: InvestmentData}){
+    super();
+  }
+
+  apply(game: GameState): void {
+    let state: BreakdownOfTrust;
+    if(game.currentEvent.state instanceof BreakdownOfTrust){
+      state= game.currentEvent.state;
+    } else{
+      return;
+    }
+    state.updateSavedResources(this.data.role, game, this.data.savedResources);
+    game.players[this.data.role].updateReadiness(true);
+  }
+}
+
+gameEventDeserializer.register(SaveResources);
 

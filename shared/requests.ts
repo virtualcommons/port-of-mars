@@ -97,6 +97,11 @@ export interface BondingThroughAdversityData {
   influenceVoteData: { role: Role; influence: Resource };
 }
 
+export interface BreakdownOfTrustData {
+  kind: 'breakdown-of-trust';
+  savedResources: InvestmentData;
+}
+
 export type Requests =
   | SendChatMessageData
   | SetPlayerReadinessData
@@ -116,4 +121,5 @@ export type Requests =
   | OutOfCommissionPioneerData
   | OutOfCommissionEntrepreneurData
   | DeleteNotificationData
-  | BondingThroughAdversityData;
+  | BondingThroughAdversityData
+  | BreakdownOfTrustData;

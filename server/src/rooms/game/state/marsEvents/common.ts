@@ -9,6 +9,7 @@ export interface MarsEventStateConstructor {
 
 export interface MarsEventState {
   finalize(game: GameState): void
+  initialize?(game:GameState): void;
 
   toJSON(): any
 }

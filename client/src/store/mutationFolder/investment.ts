@@ -27,6 +27,7 @@ export default {
   },
   SET_INVENTORY(state: State, payload: { data: InvestmentData; role: Role }) {
     for (const resource of RESOURCES) {
+      
       state.players[payload.role].inventory[resource] = payload.data[resource];
     }
   },

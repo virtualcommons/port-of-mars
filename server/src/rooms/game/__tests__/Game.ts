@@ -190,3 +190,23 @@ describe('trading validations', () => {
     expect(g.players['Entrepreneur'].notifications.length).toBe(0);
   });
 });
+
+
+describe('inverting pending inventory', () => {
+  const g = new GameState(mockGameStateInitOpts(x => x, () => 10));
+  g.players['Curator'].inventory.update({
+    finance:0,
+    culture:3,
+    science:0,
+    legacy:0,
+    government:0,
+  });
+
+  
+
+  it('sets the pending investments to the inverted inventory while preserving the inventory', () => {
+    g.players['Curator'].invertPendingInventory();
+    expect(g.players['Curator'].pendingInvestments.culture).toBe(-3);
+    expect(g.players['Curator'].inventory.culture).toBe(3);
+  });
+});
