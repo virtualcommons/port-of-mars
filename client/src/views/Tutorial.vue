@@ -116,7 +116,6 @@ import TourModal from '@/components/tutorial/TourModal.vue';
 import CompletedQuizModal from '@/components/tutorial/CompletedQuizModal.vue';
 import GameDashboard from '@/components/GameDashboard.vue';
 import { TutorialAPI } from '@/api/tutorial/request';
-import { TutorialSteps } from '@/repositories/tutorial';
 import { Step } from '@/types/tutorial';
 import { CURATOR, Phase, QuizQuestionData, RESEARCHER } from 'shared/types';
 import * as _ from 'lodash';
