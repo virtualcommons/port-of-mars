@@ -102,6 +102,7 @@ export interface State extends GameData {
   lobbyWaitingUsers: number;
   lobbyClientJoinedQueue: boolean;
   lobbyReceivedInvitation: boolean;
+  environment: string;
 }
 
 export const initialStoreState: State = {
@@ -122,6 +123,7 @@ export const initialStoreState: State = {
   role: RESEARCHER,
   layout: 'game',
   loading: false,
+  environment: 'development',
 
   // eventView: 'ACCOMPLISHMENT_SELECT_PURCHASED',
   quizQuestions: [],

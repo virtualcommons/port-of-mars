@@ -4,7 +4,7 @@
       v-if="gamePhase != phase.defeat && gamePhase != phase.victory"
       class="game-dashboard"
     >
-      <MasterComponent v-if="environment = 'development'" />
+      <MasterComponent v-if="environment == 'development'" />
       <ModalContainer />
       <ContainerBoard />
     </div>
@@ -26,6 +26,7 @@ import ModalContainer from '@/components/gamedashboard/global/modals/ModalContai
 import ContainerBoard from '@/components/gamedashboard/global/containers/ContainerBoard.vue';
 import ContainerDefeat from '@/components/gamedashboard/global/containers/ContainerDefeat.vue';
 import ContainerVictory from '@/components/gamedashboard/global/containers/ContainerVictory.vue';
+import environment from '../store/mutationFolder/environment';
 
 @Component({
   components: {
@@ -36,13 +37,18 @@ import ContainerVictory from '@/components/gamedashboard/global/containers/Conta
     ContainerVictory
   }
 })
+
 export default class GameDashboard extends Vue {
   env: EnvironmentMode = new EnvironmentMode;
 
   get phase() {
     return Phase;
   }
-
+  
+  /**
+   * Gets the current phase of the game.
+   * @returns The current phase.
+   */
   get gamePhase() {
     return this.$tstore.state.phase;
   }
@@ -55,7 +61,6 @@ export default class GameDashboard extends Vue {
   get environment() {
     return this.env.environment;
   }
-
 }
 </script>
 
