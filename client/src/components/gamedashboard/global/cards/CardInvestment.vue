@@ -1,6 +1,6 @@
 <template>
-  <div class="card-investment v-step-15" :style="opacity">
-    <div class="ci-container">
+  <div class="card-investment v-step-15">
+    <div class="ci-container" :style="opacity">
       <div class="type">
         <p class="name">{{ name }}</p>
         <img :src="require(`@/assets/icons/${name}.svg`)" alt="Player" />
