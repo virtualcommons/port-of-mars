@@ -19,9 +19,9 @@ export class TutorialSteps {
       {
         target: '.tour-container-upkeep',
         content:
-          'The game starts with Upkeep at 100. This represents the habitat at peak ' +
+          'The game starts with System Health at 100. This represents the habitat at peak ' +
           'condition and maintenance. However, at the start of every round, the ' +
-          'community loses 25 Upkeep.',
+          'community loses 25 System Health.',
         params: {
           placement: 'bottom'
         }
@@ -37,8 +37,8 @@ export class TutorialSteps {
       {
         target: '.tour-container-upkeep',
         content:
-          'At the start of a round, if Upkeep is lower than 65, reveal 2 events; ' +
-          'and if Upkeep is lower than 35 reveal 3 events. Conditions on Mars ' +
+          'At the start of a round, if System Health is lower than 65, reveal 2 events; ' +
+          'and if System Health is lower than 35 reveal 3 events. Conditions on Mars ' +
           'are tough!',
         params: {
           placement: 'bottom'
@@ -63,9 +63,9 @@ export class TutorialSteps {
       {
         target: '.tour-round',
         content:
-          'The game progresses in rounds. There is an indefinite number ' +
-          'of rounds per game. Therefore, the game can end at any time given ' +
-          'that Upkeep does not decline to zero.',
+          'The game progresses in rounds. There is an unknown number ' +
+          'of rounds per game. Therefore, the game can end at any time or whenever ' +
+          'System Health declines to zero. Be prepared!',
         params: {
           placement: 'right'
         }
@@ -114,19 +114,19 @@ export class TutorialSteps {
       {
         target: '.tour-notification',
         content:
-          'You will be notifed about events and changes in Upkeep via notifications ' +
-          'that pop up here. Hover over then notification to close it.',
+          'You will be notifed about events and changes in System Health via notifications ' +
+          'that pop up here. Click on the notification to dismiss it.',
         params: {
           placement: 'bottom'
         },
         stateTransform: {
-          CREATE_NOTIFICATION: `Notifcations can be removed by clicking on them!`
+          CREATE_NOTIFICATION: `Notifications can be dismissed by clicking on them.`
         } as any
       },
       {
         target: '.tour-marslog',
         content:
-          'Any events and changes in upkeep that occur will be recorded in the Mars Log ' +
+          'All events and changes to System Health will be recorded in the Mars Log ' +
           'for your reference.',
         params: {
           placement: 'right'
@@ -145,8 +145,8 @@ export class TutorialSteps {
         target: '.tour-profile',
         content:
           'This is your role and score during the game. Your role determines ' +
-          'the investments in influence currency you can make and the accomplishments ' +
-          'that you can purchase toward the end of a round.',
+          'the investments you can make in influence currency and the accomplishments ' +
+          'that you can purchase at the end of a round.',
         params: {
           placement: 'bottom'
         }
@@ -155,7 +155,7 @@ export class TutorialSteps {
         target: '.tour-investments',
         content:
           'During the Investment phase, you may invest your timeblocks into ' +
-          'Upkeep or purchase Influence currency.',
+          'System Health or purchase Influence currency.',
         params: {
           placement: 'right'
         },
@@ -178,8 +178,8 @@ export class TutorialSteps {
       {
         target: '.tour-investments',
         content:
-          'You are allocated 10 timeblocks (unless something says otherwise) to ' +
-          'spend each round. You can spend timeblocks on Upkeep or on ' +
+          'You are allocated 10 timeblocks (unless otherwise instructed) to ' +
+          'spend each round. You can spend timeblocks on System Health or on ' +
           'Influence. Remember that you have 5 minutes to invest your timeblocks.',
         params: {
           placement: 'top'
@@ -201,7 +201,7 @@ export class TutorialSteps {
         target: '.tour-investments',
         content:
           'You can also use your timeblocks to keep your habitat from collapsing by ' +
-          'investing your timeblocks in Upkeep.',
+          'investing your timeblocks in System Health.',
         params: {
           placement: 'right'
         }
