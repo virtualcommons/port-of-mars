@@ -22,7 +22,7 @@ const steps:Array<Step> = [
     {
       target: '.tour-marslog',
       content:
-        `Items that are relevent to the group like Upkeep dropping and new Events are displayed here.
+        `Items that are relevent to the group like System Health dropping and new Events are displayed here.
         These logs will persist through the entirety of the game`,
       params: {
         placement: 'right'

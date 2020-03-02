@@ -22,24 +22,22 @@
         <code><b>WELCOME TO PORT OF MARS!</b></code>
       </h2>
       <p>
-        You are 1 of 5 residents at <code><b>Port of Mars</b></code
-        >, the first long-term habitat on Mars. Your mission is to
-        <code><b>stay alive</b></code> and
-        <code><b>achieve the accomplishments</b></code
-        >. Each round, you have <code><b>10 timeblocks</b></code> that you can
-        invest in the maintenance of the shared infrastructure called
-        <code><b>Upkeep</b></code> or buying
-        <code><b>influence</b></code> currency in specific disciplines.
+        You are 1 of 5 members of Generation Zero at <code><b>Port of Mars</b></code>, the first long-term human
+        community on Mars. Your mission is to <code><b>keep the community alive</b></code> while earning individual
+        points by <code><b>achieving Accomplishments</b></code> that make up the future legacy of Mars. Each round, you
+        have <code><b>10 timeblocks</b></code> that you can invest in the maintenance of the shared infrastructure
+        called <code><b>System Health</b></code> or purchasing <code><b>influence</b></code> currency in specific
+        disciplines: <b>Culture, Legacy, Science, Governament, Finance</b>.
       </p>
 
       <p>
-        <code><b>Upkeep</b></code> is needed to keep everyone alive.
+        <code><b>System Health</b></code> is needed to keep everyone alive.
       </p>
 
       <p>
-        <code><b>Influence</b></code> is what you use to buy
-        <code><b>Accomplishments</b></code
-        >, which is how you win the game.
+        <code><b>Influence</b></code> resources are used to purchase <code><b>Accomplishments</b></code>, which is how you win
+        the game. Each <code><b>Accomplishment</b></code> you purchase gives you Victory Points. The player with the
+        most points at the end of the game wins.
       </p>
 
       <br />
@@ -47,7 +45,7 @@
       <h4><b>OBJECTIVES</b></h4>
       <ul>
         <li>
-          Keep <code><b>Upkeep</b></code> from reaching zero! If that happens,
+          Keep <code><b>System Health</b></code> from reaching zero! If that happens,
           the habitat collapses, everyone dies, and the game is over.
         </li>
         <li>
