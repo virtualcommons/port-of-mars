@@ -13,6 +13,7 @@
           'locked-from-trade':
             gamePhase == phases.trade && investment.pendingUnits > 0
         }"
+        v-b-tooltip.hover="investment.name"
       >
         <div class="main">
           <img
@@ -47,6 +48,7 @@
           'pending-is-active': upkeep.pendingUnits > 0,
           'pending-is-inactive': upkeep.pendingUnits <= 0
         }"
+        v-b-tooltip.hover="'upkeep'"
       >
         <div class="main">
           <img :src="require(`@/assets/icons/upkeep.svg`)" alt="Investment" />
