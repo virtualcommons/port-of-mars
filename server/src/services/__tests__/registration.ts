@@ -9,12 +9,14 @@ import {getConnection} from "@/util";
 import {User} from "@/entity/User";
 import {settings} from "@/settings";
 import {Connection, createConnection} from "typeorm";
+import shell from "shelljs";
 
 describe('a potential user', () => {
   const username = 'ahacker';
   let conn: Connection;
 
   beforeAll(async () => {
+    shell.exec(`createdb -w -U marsmadness -h db pom_testing`);
     conn = await createConnection('test');
   });
 
@@ -49,5 +51,6 @@ describe('a potential user', () => {
 
   afterAll(async () => {
     await conn.close();
+    shell.exec(`dropdb -w -U marsmadness -h db pom_testing`)
   })
 });
