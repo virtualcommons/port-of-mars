@@ -64,7 +64,7 @@
                     :value="optionIndex"
                     v-model="currentOptionIndex"
                     @change="handleCheckQuizQuestion(optionIndex)"
-                    
+
                     >
                     <span> {{option}} </span>
                   </label>
@@ -177,7 +177,7 @@ export default class Tutorial extends Vue {
         // TODO: Handle server error
       }
     }
-    
+
   }
 
   // NOTE: Initialize

@@ -7,7 +7,15 @@ import Game from '@/views/Game.vue';
 import Tutorial from '@/views/Tutorial.vue';
 import store from '@/store'
 import {AjaxRequest} from "@/plugins/ajax";
-import {GAME_PAGE, LOBBY_PAGE, LOGIN_PAGE, PAGE_META, TUTORIAL_PAGE} from "shared/routes";
+import {
+  GAME_PAGE,
+  LOBBY_PAGE,
+  LOGIN_PAGE,
+  PAGE_META,
+  REGISTER_PAGE,
+  TUTORIAL_PAGE
+} from "shared/routes";
+import Register from "@/views/Register.vue";
 
 Vue.use(Router);
 
@@ -18,6 +26,7 @@ const router = new Router({
     { ...PAGE_META[LOBBY_PAGE], component: WaitingLobby },
     { ...PAGE_META[GAME_PAGE], component: Game },
     { ...PAGE_META[TUTORIAL_PAGE], component: Tutorial },
+    { ...PAGE_META[REGISTER_PAGE], component: Register }
   ]
 });
 

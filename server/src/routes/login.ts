@@ -36,5 +36,8 @@ export async function nextPage(req: Request, res: Response, next: NextFunction) 
   if (page.meta.requiresAuth && user?.passedQuiz) {
     resJson.page = pageName;
   }
+  if (!page.meta.requiresAuth) {
+    resJson.page = pageName;
+  }
   res.json(resJson);
 }
