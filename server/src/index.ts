@@ -8,7 +8,7 @@ import cors from 'cors';
 import passport from 'passport';
 import session from 'express-session';
 import redis from 'redis';
-import connectRedis = require('connect-redis');
+import connectRedis from 'connect-redis';
 import * as Sentry from '@sentry/node';
 import { Server } from 'colyseus';
 import { GameRoom } from '@/rooms/game';
@@ -67,7 +67,7 @@ applyInStagingOrProd(() =>
 async function createApp() {
   const port = Number(process.env.PORT || 2567);
   const app = express();
-  const store = new RedisStore({ host: 'redis', client: redis.createClient() });
+  const store = new RedisStore({ host: 'redis', client: redis.createClient({ host: 'redis' }) });
 
   applyInStagingOrProd(() => app.use(Sentry.Handlers.requestHandler()));
   if (NODE_ENV !== 'development') {
