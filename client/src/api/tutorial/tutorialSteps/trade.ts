@@ -13,6 +13,8 @@ const steps: Array<Step> = [
     stateTransform: [
       {
         SET_GAME_PHASE: Phase.trade,
+      },
+      {
         SET_INVENTORY: {
           data: {
             culture: 0,
@@ -24,6 +26,8 @@ const steps: Array<Step> = [
           },
           role: RESEARCHER,
         },
+      },
+      {
         ADD_TO_TRADES: {
           id: 'mock-trade',
           trade: {
