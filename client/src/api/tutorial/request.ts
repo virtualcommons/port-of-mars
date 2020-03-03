@@ -1,5 +1,5 @@
-import {TradeData, AccomplishmentData} from "shared/types";
-import { initialStoreState } from '@/store/state';
+import {TradeData, AccomplishmentData, ResourceAmountData, Resource} from "shared/types";
+import { initialStoreState, defaultInventory } from '@/store/state';
 import { GameRequestAPI } from "@/api/game/request";
 import * as _ from "lodash";
 import {Store} from 'vuex/types/index';
@@ -138,6 +138,42 @@ export class TutorialAPI extends GameRequestAPI {
             role:`Researcher`,
         })
     };
+
+
+    public saveGiveResources(resources: ResourceAmountData){
+        // this.store.commit('SET_GIVE_RESOURCES', resources);
+        const correctGive = defaultInventory();
+        correctGive.science =2;
+        correctGive.government = 1;
+
+        for(const [resource, amt] of Object.entries(resources)){
+            if(correctGive[resource as Resource] != amt) return false;
+        }
+
+        this.isTaskComplete = true;
+        return true;
+    }
+
+    public saveGetResources(resources: ResourceAmountData){
+        //this.store.commit('SET_GET_RESOURCES', resources);
+        const correctGet = defaultInventory();
+        correctGet.culture =3;
+
+        for(const [resource, amt] of Object.entries(resources)){
+            if(correctGet[resource as Resource] != amt) return false;
+        }
+
+        this.isTaskComplete = true;
+        return true;
+    }
+
+    public saveTradePartner(name: string){
+        if(name == 'Curator') {
+            this.isTaskComplete = true;
+            return true;
+        }
+        return false;
+    }
 
     public investTimeBlocks():void {};
     public setPlayerReadiness(): void {};

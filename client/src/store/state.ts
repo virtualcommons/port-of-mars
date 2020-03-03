@@ -103,6 +103,10 @@ export interface State extends GameData {
   lobbyClientJoinedQueue: boolean;
   lobbyReceivedInvitation: boolean;
   environment: string;
+
+  tutorialTradePartner: string;
+  tutorialTradeGive: ResourceAmountData;
+  tutorialTradeGet: ResourceAmountData;
 }
 
 export const initialStoreState: State = {
@@ -138,4 +142,9 @@ export const initialStoreState: State = {
   lobbyWaitingUsers: 0,
   lobbyClientJoinedQueue: false,
   lobbyReceivedInvitation: false,
-};
+
+  //TUTORIAL TRADING
+  tutorialTradePartner: '',
+  tutorialTradeGive: defaultInventory(),
+  tutorialTradeGet: defaultInventory(),
+}

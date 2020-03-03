@@ -35,6 +35,7 @@
         class="options-block tour-give-up"
         v-show="name || isInTutorial"
         :key="count"
+        :resources="sentResources"
       />
       <TradeOptions 
         :resourceReader="handleReciveResources"
@@ -42,7 +43,8 @@
         mode="incoming"
         class="options-block tour-get-in-return"
         v-show="name || isInTutorial"
-        :key="count + Math.random()"
+        :key="count + 'get'"
+        :resources="exchangeResources"
       />
     </div>
 
@@ -77,6 +79,7 @@ import {
 import { canPlayerMakeTrade} from 'shared/validation';
 import { GameRequestAPI } from '@/api/game/request';
 import { defaultInventory } from '@/store/state';
+import { TutorialAPI } from '../../../../api/tutorial/request';
 
 @Component({
   components: {
@@ -85,13 +88,29 @@ import { defaultInventory } from '@/store/state';
 })
 export default class TradeRequest extends Vue {
   @Inject()
-  readonly api!: GameRequestAPI;
+  readonly api!: GameRequestAPI & TutorialAPI;
 
-  sentResources: ResourceAmountData = defaultInventory();
-  exchangeResources: ResourceAmountData = defaultInventory();
+  sentResources: ResourceAmountData = this.defaultGiveResources;
+  exchangeResources: ResourceAmountData = this.defaultGetResources;
 
-  name = '';
+  name = this.defaultTradePartner;
   count = 0;
+
+
+  get defaultTradePartner(): string{
+    
+    return this.$tstore.state.tutorialTradePartner;
+  }
+
+  get defaultGiveResources(): ResourceAmountData{
+    
+    return this.$tstore.state.tutorialTradeGive;
+  }
+
+  get defaultGetResources(): ResourceAmountData{
+    console.log(this.$tstore.state.tutorialTradeGet);
+    return this.$tstore.state.tutorialTradeGet;
+  }
 
   get otherPlayers() {
     return Object.keys(this.$store.getters.otherPlayers);
@@ -99,7 +118,6 @@ export default class TradeRequest extends Vue {
 
   get clientValidation() {
     const inventory = this.$store.getters.player.inventory;
-
     return this.name != '' && canPlayerMakeTrade(this.sentResources, inventory);
   }
 
@@ -111,9 +129,22 @@ export default class TradeRequest extends Vue {
   }
 
 
-  tutorialValidation(){
+  tutorialValidation(type:string){
     if(this.isInTutorial){
-      this.api.resetGame();
+
+      switch(type){
+        case 'give':
+          this.api.saveGiveResources(this.sentResources)
+          break;
+        case 'get':
+          this.api.saveGetResources(this.exchangeResources)
+          break;
+        case 'partner':
+          this.api.saveTradePartner(this.name)
+          break;
+        default:
+          break;
+      }
     }
   }
 
@@ -121,13 +152,13 @@ export default class TradeRequest extends Vue {
   handleSendResources(resources: ResourceAmountData) {
     this.sentResources = resources;
 
-    this.tutorialValidation();
+    this.tutorialValidation('give');
   }
 
   handleReciveResources(resources: ResourceAmountData) {
     this.exchangeResources = resources;
 
-    this.tutorialValidation();
+    this.tutorialValidation('get');
   }
 
   handleChange(name: string) {
@@ -135,7 +166,7 @@ export default class TradeRequest extends Vue {
       this.name = '';
     } else {
       this.name = name;
-      this.tutorialValidation();
+      this.tutorialValidation('partner');
     }
     
   }
@@ -158,9 +189,13 @@ export default class TradeRequest extends Vue {
       };
 
       this.api.sendTradeRequest(tradeDataPackage);
-      this.name = '';
+      if (!this.isInTutorial){
+        this.name = '';
+        this.sentResources = defaultInventory();
+        this.exchangeResources = defaultInventory();
+      } 
       this.count+=1;
-
+      
     }
   }
 }
