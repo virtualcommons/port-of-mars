@@ -42,7 +42,7 @@ const quizQuestionsRaw: Array<QuizData> = [
       options:["You can no longer chat with your group.",
       "Two events will occur in this round.",
       "You get an additional four timeblocks.",
-      "You get an extra accomplishment card.",]
+      "You get an extra Accomplishment card.",]
     },
     {
       id: 5,
