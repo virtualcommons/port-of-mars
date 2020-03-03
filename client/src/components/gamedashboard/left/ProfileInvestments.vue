@@ -48,7 +48,7 @@
           'pending-is-active': upkeep.pendingUnits > 0,
           'pending-is-inactive': upkeep.pendingUnits <= 0
         }"
-        v-b-tooltip.hover="'upkeep'"
+        v-b-tooltip.hover="'system health'"
       >
         <div class="main">
           <img :src="require(`@/assets/icons/upkeep.svg`)" alt="Investment" />
