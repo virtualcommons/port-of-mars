@@ -1,23 +1,12 @@
 entity: Question
 items:
-  # gameEnd:
-  #   quiz: '@tutorialquiz'
-  #   question: 'When does the game end?'
-  #   correctAnswer: 2
-  #   options:
-  #     - 'When upkeep reaches 0'
-  #     - 'After an unknown number of rounds'
-  #     - 'After an unknown number of rounds, or earlier if Upkeep reaches 0'
-  #     - 'When one of the players reaches 20 points'
-  #   order: 1
-  #   tutorialElementId: 'gameEnd'
   chat:
     quiz: '@tutorialquiz'
     question: 'Can you chat with other participants?'
     correctAnswer: 1
     options:
       - 'No, communication is not possible in this game.'
-      - 'Yes, in the chat box for the entire game.'
+      - 'Yes, in the chat box for the duration of the entire game.'
       - 'Yes, in the chat box but only during specially designated phases.'
       - 'Yes, as long as System Health is greater than 35.'
     order: 2
@@ -27,9 +16,9 @@ items:
     question: 'How do you trade Influence Resources with others?'
     correctAnswer: 2
     options:
-      - "During the trading phase, say what Influence Resources you want and then you'll receive them.",
-      - "By communicating your trade preferences in the chat box.",
-      - "Discuss potential trades with the other members of your group in the chat and then issue Trade Requests during the trading phase to execute a Trade.",
+      - "During the trading phase, say what Influence Resources you want and then you'll receive them."
+      - "By communicating your trade preferences in the chat box."
+      - "Discuss potential trades with the other members of your group in the chat and then issue Trade Requests during the trading phase to execute a Trade."
       - 'By investing your timeblocks.'
     order: 3
     tutorialElementId: 'trade'
