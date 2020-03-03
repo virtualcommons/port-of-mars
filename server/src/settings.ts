@@ -1,5 +1,6 @@
-import {MemoryEmailer, Emailer} from "@/services/email/emailers";
+import {MemoryEmailer, Emailer, MailgunEmailer} from "@/services/email/emailers";
 import {DevLogging, Logging, LogService} from "@/services/logging";
+import * as fs from 'fs';
 
 export interface AppSettings {
   emailer: Emailer
@@ -19,10 +20,14 @@ const staging: () => AppSettings = () => ({
   logging: new DevLogging()
 });
 
-const prod: () => AppSettings = () => ({
-  emailer: new MemoryEmailer(),
-  host: 'https://portofmars.asu.edu',
-  logging: new DevLogging()
+const prod: () => AppSettings = () => (
+  const api_key = fs.readFileSync('/run/secrets/mail_api_key', 'utf-8').trim();
+  const domain = 'mg.comses.net';
+  return {
+    emailer: new MailgunEmailer({ api_key, domain}),
+    host: 'https://portofmars.asu.edu'
+    logging: new DevLogging()
+  };
 });
 
 const env = process.env.NODE_ENV;
