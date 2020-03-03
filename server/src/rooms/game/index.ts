@@ -25,13 +25,18 @@ import { Command } from '@/rooms/game/commands/types';
 import { StateSnapshotTaken } from '@/rooms/game/events';
 import {User} from "@/entity/User";
 import {getUserByJWT} from "@/services/auth";
+import http from "http";
+import cookie from 'cookie'
+import {settings} from "@/settings";
+
+const logger = settings.logging.getLogger(__filename);
 
 export class GameRoom extends Room<GameState> implements Game {
   maxClients = 5;
   persister!: Persister;
   gameId!: number;
 
-  async onAuth(client: Client, options: any) {
+  async onAuth(client: Client, options: any, request?: http.IncomingMessage) {
     const user = await getUserByJWT(options.token);
     if (user && Object.keys(this.state.userRoles).includes(user.username)) {
       return user;
@@ -63,7 +68,7 @@ export class GameRoom extends Room<GameState> implements Game {
   }
 
   prepareRequest(r: Requests, client: Client): Command {
-    console.log({r});
+    logger.trace({r});
     switch (r.kind) {
       case 'send-chat-message':
         return SendChatMessageCmd.fromReq(r, this, client);

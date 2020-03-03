@@ -25,7 +25,9 @@ import * as fs from 'fs';
 import { auth } from "@/routes/middleware";
 import {initRegistration} from "@/services/registration";
 import {registrationRouter} from "@/routes/registration";
+import {settings} from "@/settings";
 
+const logger = settings.logging.getLogger(__filename);
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const CONNECTION_NAME = NODE_ENV === 'test' ? 'test' : 'default';
 
@@ -106,9 +108,9 @@ async function createApp() {
   clock.setInterval(async () => persister.sync(), 5000);
   clock.start(true);
   gameServer.onShutdown(async () => {
-    console.log('syncing events');
+    logger.info('syncing events');
     await persister.sync();
-    console.log('events synced');
+    logger.info('events synced');
   });
 
   // register your room handlers
