@@ -74,9 +74,9 @@ export default class Phase extends Vue {
   }
 
   get btnVisibility() {
-    if(this.phase == s.Phase.events){
-      return false;
-    }
+    // if(this.phase == s.Phase.events){
+    //   return false;
+    // }
 
     return true;
   }
@@ -87,6 +87,14 @@ export default class Phase extends Vue {
 
   private submitDone() {
     switch (this.phase) {
+      case s.Phase.events:
+        if(this.$tstore.getters.currentEvent != undefined && 
+          this.$tstore.getters.currentEvent.id == 'breakdownOfTrust'
+          ){
+          this.api.saveResourcesSelection(
+            this.$tstore.getters.player.pendingInvestments
+          );
+        }
       case s.Phase.invest:
         this.api.investTimeBlocks(
           this.$tstore.getters.player.pendingInvestments

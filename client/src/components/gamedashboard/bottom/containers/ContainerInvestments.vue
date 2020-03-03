@@ -7,6 +7,7 @@
         <DiscreteStatusBar
           class="discrete-bar"
           :usedTimeBlocks="remainingTimeBlocks"
+          :totalTimeBlocks="timeBlockTotal"
         />
 
         <p class="status">[ {{ remainingTimeBlocks }} ]</p>
@@ -99,6 +100,10 @@ export default class ContainerBottom extends Vue {
         role: this.$tstore.state.role
       });
     }
+  }
+
+  get timeBlockTotal() {
+    return this.$store.getters.player.timeBlocks;
   }
 }
 </script>

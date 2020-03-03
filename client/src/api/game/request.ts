@@ -13,7 +13,8 @@ import {
   RejectTradeRequestData,
   PersonalGainVotesData, VoteForPhilanthropistData, 
   DeleteNotificationData,
-  BondingThroughAdversityData
+  BondingThroughAdversityData,
+  BreakdownOfTrustData,
 } from 'shared/requests';
 import {
   AccomplishmentData,
@@ -113,6 +114,11 @@ export class GameRequestAPI {
 
   public saveBondingThroughAdversitySelection(influenceVoteData: { role: Role, influence: Resource }) {
     const msg: BondingThroughAdversityData = { kind: 'bonding-through-adversity', influenceVoteData };
+    this.send(msg);
+  }
+
+  public saveResourcesSelection(savedResources: InvestmentData){
+    const msg: BreakdownOfTrustData = {kind: 'breakdown-of-trust', savedResources};
     this.send(msg);
   }
 }
