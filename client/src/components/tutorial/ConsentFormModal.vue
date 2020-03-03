@@ -72,6 +72,9 @@
 
             <p>By clicking below you are giving consent to participate in the above study.</p>
 
+            <button @click="$emit('grant-consent')">Grant Consent</button>
+            <button @click="$emit('deny-consent')">Deny Consent</button>
+
             <p>This research has been reviewed and approved by the Social Behavioral IRB. You may talk to them at 
                (480) 965-6788 or by email at research.integrity@asu.edu if: 
                <ul>
@@ -83,7 +86,6 @@
                </ul>
             </p>
         </div>
-
     </BModal>
 </template>
 
@@ -114,13 +116,19 @@ export default class ConsentFormModal extends Vue {
     bodyBgVariant: string = 'dark';
     bodyTextVariant: string = 'light';
 
-    consentGranted: boolean = false;
+    consentGranted: string = '';
 
     async getConsent() {}
 
-    async giveConsent() {}
+    async grantConsent() {
+        alert('You granted consent.');
+        this.$emit('grant-consent');
+    }
 
-    async denyConsent() {}
+    async denyConsent() {
+        alert('You denied consent.');
+        this.$emit('deny-consent')
+    }
 
 }
 
