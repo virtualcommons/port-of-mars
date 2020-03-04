@@ -20,15 +20,15 @@ const staging: () => AppSettings = () => ({
   logging: new DevLogging()
 });
 
-const prod: () => AppSettings = () => (
+const prod: () => AppSettings = () => {
   const api_key = fs.readFileSync('/run/secrets/mail_api_key', 'utf-8').trim();
   const domain = 'mg.comses.net';
   return {
     emailer: new MailgunEmailer({ api_key, domain}),
-    host: 'https://portofmars.asu.edu'
+    host: 'https://portofmars.asu.edu',
     logging: new DevLogging()
   };
-});
+};
 
 const env = process.env.NODE_ENV;
 
