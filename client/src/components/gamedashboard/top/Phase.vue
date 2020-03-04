@@ -6,11 +6,12 @@
       <p class="title">{{ label }}</p>
       <div v-if="btnVisibility" class="buttons">
         <button
-          class="donebtn tour-donebtn"
           @click="submitDone"
           :disabled="playerReady"
           type="button"
           name="Phase Done Button"
+          class="donebtn tour-donebtn pulse infinite"
+          :class="{ animated: !playerReady }"
         >
           Done
         </button>
@@ -127,5 +128,6 @@ export default class Phase extends Vue {
 </script>
 
 <style lang="scss" scoped>
+@import '~animate.css/source/attention_seekers/pulse.css';
 @import '@/stylesheets/gamedashboard/top/Phase.scss';
 </style>
