@@ -37,7 +37,7 @@
         :key="count"
         :resources="sentResources"
       />
-      <TradeOptions 
+      <TradeOptions
         :resourceReader="handleReciveResources"
         text="In exchange for"
         mode="incoming"
@@ -90,34 +90,36 @@ export default class TradeRequest extends Vue {
   @Inject()
   readonly api!: GameRequestAPI & TutorialAPI;
 
-  sentResources: ResourceAmountData = this.defaultGiveResources;
-  exchangeResources: ResourceAmountData = this.defaultGetResources;
+  sentResources!: ResourceAmountData;
+  exchangeResources!: ResourceAmountData;
 
-  name = this.defaultTradePartner;
+  name!: string;
   count = 0;
 
+  created() {
+    this.sentResources = this.defaultGiveResources;
+    this.exchangeResources = this.defaultGetResources;
+    this.name = this.defaultTradePartner;
+  }
 
   get defaultTradePartner(): string{
-    
-    return this.$store.state.tutorialTradePartner;
+    return this.$tstore.state.tutorialTradePartner;
   }
 
   get defaultGiveResources(): ResourceAmountData{
-    
-    return this.$store.state.tutorialTradeGive;
+    return this.$tstore.state.tutorialTradeGive;
   }
 
   get defaultGetResources(): ResourceAmountData{
-    
-    return this.$store.state.tutorialTradeGet;
+    return this.$tstore.state.tutorialTradeGet;
   }
 
   get otherPlayers() {
-    return Object.keys(this.$store.getters.otherPlayers);
+    return Object.keys(this.$tstore.getters.otherPlayers);
   }
 
   get clientValidation() {
-    const inventory = this.$store.getters.player.inventory;
+    const inventory = this.$tstore.getters.player.inventory;
     return this.name != '' && canPlayerMakeTrade(this.sentResources, inventory);
   }
 
@@ -126,15 +128,12 @@ export default class TradeRequest extends Vue {
       return true;
     }
 
-    if(this.$store.getters.layout == 'tutorial'){
-      return true;
-    }
-    return false;
+    return this.$tstore.getters.layout === 'tutorial';
   }
 
 
   tutorialValidation(type:string){
-    if(this.isInTutorial){
+    if (this.isInTutorial) {
 
       switch(type){
         case 'give':
@@ -172,13 +171,13 @@ export default class TradeRequest extends Vue {
       this.name = name;
       this.tutorialValidation('partner');
     }
-    
+
   }
 
   handleTrade() {
     if (this.clientValidation) {
       const fromPackage: TradeAmountData = {
-        role: this.$store.state.role,
+        role: this.$tstore.state.role,
         resourceAmount: this.sentResources
       };
 
@@ -197,9 +196,9 @@ export default class TradeRequest extends Vue {
         this.name = '';
         this.sentResources = defaultInventory();
         this.exchangeResources = defaultInventory();
-      } 
+      }
       this.count+=1;
-      
+
     }
   }
 }
