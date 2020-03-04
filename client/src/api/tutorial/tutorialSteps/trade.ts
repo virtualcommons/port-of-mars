@@ -158,8 +158,7 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-trade',
-    content: `Hit send to see your trade in action!
-      (you may have to scroll to see the button)`,
+    content: `Hit send to see your trade in action!`,
     params: {
       placement: LEFT
     },
