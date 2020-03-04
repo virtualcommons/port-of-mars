@@ -3,6 +3,9 @@ import jwt from "jsonwebtoken";
 import { findByUsername } from "@/services/account"
 import * as fs from "fs";
 import { Response } from "express";
+import { settings } from '@/settings';
+
+const logger = settings.logging.getLogger(__filename);
 
 export const JWT_SECRET: string = fs.readFileSync('/run/secrets/jwt', 'utf8').trim();
 
@@ -22,7 +25,9 @@ export function generateJWT(username: string): string {
 
 export function setJWTCookie(res: Response, username: string): any {
     const expiration = 604800000;
-    return res.cookie('jwt', generateJWT(username), {
+    const token = generateJWT(username);
+    logger.trace('jwt token is: ', token)
+    return res.cookie('jwt', token, {
         expires: new Date(Date.now() + expiration),
         secure: true,
         httpOnly: false,

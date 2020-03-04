@@ -92,6 +92,7 @@ async function createApp() {
     passport.authenticate('cas', { failureRedirect: '/' }),
     function (req, res) {
       // successful authentication, set JWT token cookie and redirect to server nexus
+      logger.info("Successfully authenticated: ", req);
       setJWTCookie(res, req.body.username);
       res.redirect('/');
     }
