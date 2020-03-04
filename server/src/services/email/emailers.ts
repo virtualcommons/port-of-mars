@@ -22,7 +22,7 @@ export class MemoryEmailer implements Emailer {
 
 export class MailgunEmailer implements Emailer {
 
-  opts: object;
+  opts: any;
   transport: any;
 
   constructor(auth: { api_key: string, domain: string }) {
