@@ -12,18 +12,19 @@
         <p>{{ accomplishment.flavorText }}</p>
       </div>
       <div class="cost">
-        <p
+        <div
           v-for="investment in accomplishmentCost"
           v-bind:class="{
             'unattainable-resource': shouldResourceBeGrayedOut(investment)
           }"
           :key="investment + Math.random()"
+          class="container"
         >
           <img
             :src="require(`@/assets/icons/${investment}.svg`)"
             alt="Investment"
           />
-        </p>
+        </div>
       </div>
       <div class="discard">
         <button
@@ -84,7 +85,7 @@ export default class BarDiscard extends Vue {
     return _.clone(this.$tstore.getters.player.inventory);
   }
 
-  shouldResourceBeGrayedOut(investment: Investment) {
+  private shouldResourceBeGrayedOut(investment: Investment) {
     if (investment === 'upkeep') {
       return false;
     }
@@ -97,32 +98,23 @@ export default class BarDiscard extends Vue {
   }
 
   private handleDiscardAccomplishment(a: any) {
-
-
-    console.log(this.$store.getters.layout);
-    if(this.$store.getters.layout == 'tutorial'){
+    // console.log(this.$store.getters.layout);
+    if (this.$store.getters.layout == 'tutorial') {
       this.api.discardAccomplishment(a.id);
-    }
-
-    else{
+    } else {
       this.$root.$emit('openmodalconfirmation', {
-      text: `Selecting \"Yes\" will discard the accomplishment \"${a.label}\" and a new card will be drawn next round.`,
-      victoryPoints: a.victoryPoints,
-      cost:this.accomplishmentCost,
-      phaseOpened:this.$store.state.phase,
-      type: 'discardAccomplishment',
-      actionData: a.id
-    });
+        text: `Selecting \"Yes\" will discard the accomplishment \"${a.label}\" and a new card will be drawn next round.`,
+        victoryPoints: a.victoryPoints,
+        cost: this.accomplishmentCost,
+        phaseOpened: this.$store.state.phase,
+        type: 'discardAccomplishment',
+        actionData: a.id
+      });
     }
-    
   }
 }
 </script>
 
 <style lang="scss" scoped>
 @import '@/stylesheets/gamedashboard/global/cards/BarDiscard.scss';
-
-.unattainable-resource {
-  opacity: 0.3;
-}
 </style>
