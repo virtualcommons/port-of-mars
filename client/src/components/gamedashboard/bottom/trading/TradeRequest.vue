@@ -99,17 +99,17 @@ export default class TradeRequest extends Vue {
 
   get defaultTradePartner(): string{
     
-    return this.$tstore.state.tutorialTradePartner;
+    return this.$store.state.tutorialTradePartner;
   }
 
   get defaultGiveResources(): ResourceAmountData{
     
-    return this.$tstore.state.tutorialTradeGive;
+    return this.$store.state.tutorialTradeGive;
   }
 
   get defaultGetResources(): ResourceAmountData{
-    console.log(this.$tstore.state.tutorialTradeGet);
-    return this.$tstore.state.tutorialTradeGet;
+    
+    return this.$store.state.tutorialTradeGet;
   }
 
   get otherPlayers() {
@@ -122,6 +122,10 @@ export default class TradeRequest extends Vue {
   }
 
   get isInTutorial(){
+    if(process.env.NODE_ENV == 'test'){
+      return true;
+    }
+
     if(this.$store.getters.layout == 'tutorial'){
       return true;
     }

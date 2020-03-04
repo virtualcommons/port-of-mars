@@ -10,10 +10,10 @@ import purchase from './purchase';
 import discard from './discard';
 
 export const tutorialSteps: Array<Step> = gamePlay.concat(
-  // upkeep,
-  // player,
-  // events,
-  // invest,
+  upkeep,
+  player,
+  events,
+  invest,
   trade,
   purchase,
   discard,
