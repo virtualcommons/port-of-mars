@@ -2,14 +2,6 @@ import {User} from "@/entity/User";
 import {getConnection} from "@/util";
 import {settings} from "@/settings";
 
-export async function initRegistration(username: string): Promise<User> {
-  const u = new User();
-  u.name = '';
-  u.username = username;
-  await getConnection().getRepository(User).save(u);
-  return u;
-}
-
 export function createRegistrationURL(registrationLink: string) {
   return `${settings.host}/${registrationLink}`;
 }

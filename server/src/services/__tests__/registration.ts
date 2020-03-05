@@ -1,6 +1,5 @@
 import {
   createRegistrationURL,
-  initRegistration,
   sendEmailVerification,
   submitRegistrationMetadata,
   verifyUnregisteredUser
@@ -10,6 +9,7 @@ import {User} from "@/entity/User";
 import {settings} from "@/settings";
 import {Connection, createConnection} from "typeorm";
 import shell from "shelljs";
+import {getOrCreateUser} from "@/services/account";
 
 describe('a potential user', () => {
   const username = 'ahacker';
@@ -21,7 +21,7 @@ describe('a potential user', () => {
   });
 
   it('can begin registration', async () => {
-    const u = await initRegistration(username);
+    const u = await getOrCreateUser(username);
     expect(u.username).toEqual(username);
   });
 

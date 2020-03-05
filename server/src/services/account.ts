@@ -27,3 +27,16 @@ export async function findOrCreateUser(username: string, profile: object): Promi
   await repository.save(user);
   return user;
 }
+
+export async function getOrCreateUser(username: string): Promise<User> {
+  const user = await getConnection().getRepository(User).findOne({username});
+  if (user) {
+    return user;
+  }
+
+  const u = new User();
+  u.name = '';
+  u.username = username;
+  await getConnection().getRepository(User).save(u);
+  return u;
+}

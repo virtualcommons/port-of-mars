@@ -15,7 +15,7 @@ import { GameRoom } from '@/rooms/game';
 import { RankedLobbyRoom } from '@/rooms/waitingLobby';
 import { mockGameInitOpts } from '@/util';
 import { JWT_SECRET, setJWTCookie } from '@/services/auth';
-import { findOrCreateUser, findById } from '@/services/account';
+import {findOrCreateUser, findById, getOrCreateUser} from '@/services/account';
 import { User } from '@/entity/User';
 import { DBPersister } from '@/services/persistence';
 import { ClockTimer } from '@gamestdio/timer/lib/ClockTimer';
@@ -23,7 +23,6 @@ import { login, nextPage } from '@/routes/login';
 import { quizRouter } from '@/routes/quiz';
 import * as fs from 'fs';
 import { auth } from "@/routes/middleware";
-import {initRegistration} from "@/services/registration";
 import {registrationRouter} from "@/routes/registration";
 import {settings} from "@/settings";
 
@@ -41,7 +40,8 @@ passport.use(new CasStrategy(
   },
   // verify callback
   async function (username: string, profile: object, done: Function) {
-    const user = await initRegistration(username);
+
+    const user = await getOrCreateUser(username);
     // FIXME: done should probably be threaded into the findOrCreateUser
     done(null, user);
   }
@@ -92,7 +92,7 @@ async function createApp() {
     passport.authenticate('cas', { failureRedirect: '/' }),
     function (req, res) {
       // successful authentication, set JWT token cookie and redirect to server nexus
-      logger.info("Successfully authenticated: ", req);
+      console.log({user: req.user, body: req.body, headers: req.headers});
       setJWTCookie(res, req.body.username);
       res.redirect('/');
     }
