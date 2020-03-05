@@ -12,6 +12,7 @@
     :body-text-variant="bodyTextVariant"
     :no-close-on-backdrop="false"
     :no-close-on-esc="false"
+    :hide-header-close="true"
     @hide="hideModal"
   >
     <template v-slot:modal-title>
