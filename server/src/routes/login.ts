@@ -12,7 +12,10 @@ export async function login(req: Request, res: Response, next: NextFunction) {
     let user = await findByUsername(req.body.username);
     if (user) {
       const expiration = 604800000;
-      res.json({ cookie: cookie.serialize('jwt', generateJWT(req.body.username), {path: '/', expires: new Date(Date.now() + expiration)})});
+      res.json({
+        cookie: cookie.serialize('jwt', generateJWT(req.body.username), {path: '/', expires: new Date(Date.now() + expiration)}),
+        username: user.username
+      });
     } else {
       res
         .status(403)

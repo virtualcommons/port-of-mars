@@ -2,6 +2,7 @@ import Vue, {VueConstructor} from 'vue'
 import _ from "lodash";
 import {VueRouter} from "vue-router/types/router";
 import {TStore} from "@/plugins/tstore";
+import {Page} from "shared/routes";
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -14,9 +15,8 @@ const SUBMISSION_ID = 'submissionId';
 const GAME_DATA = "gameData";
 
 interface LoginCreds {
-  token: string
+  cookie: string
   username: string
-  passedQuiz: boolean
 }
 
 interface GameData {
@@ -27,44 +27,27 @@ interface GameData {
 export class AjaxRequest {
   constructor(private router: VueRouter, private store: TStore) {}
 
-  async setCookie(response: Response) {
+  async setLoginCreds(response: Response) {
+    const data: LoginCreds = await response.json();
     if (process.env.NODE_ENV === 'development') {
-      const cookie = (await response.json()).cookie;
+      const cookie = data.cookie;
       if (!document.cookie.includes('jwt=')) {
         document.cookie = cookie;
       }
     }
+    this.store.commit('SET_USER', { username: data.username });
   }
 
-  get loginCreds(): LoginCreds | null {
-    const d = localStorage.getItem(LOGIN_CREDS);
-    if (_.isNull(d)) {
-      return null;
-    }
-    const data = JSON.parse(d!);
-    if (!this.store.state.user.username) {
-      this.store.commit('SET_USER', { username: data.username, passedQuiz: data.passedQuiz });
-    }
-    return data;
+  get username(): string {
+    return this.store.state.user.username;
   }
 
-  setLoginCreds(data: LoginCreds) {
-    localStorage.setItem(LOGIN_CREDS, JSON.stringify(data));
-    this.store.commit('SET_USER', { username: data.username, passedQuiz: data.passedQuiz });
-  }
-
-  setQuizCompletion(complete: boolean) {
-    const loginCreds = this.loginCreds;
-    if (!loginCreds) {
-      throw new Error('loginCreds not found');
-    }
-    loginCreds.passedQuiz = complete;
-    localStorage.setItem(LOGIN_CREDS, JSON.stringify(loginCreds));
-    this.store.commit('SET_USER', { username: loginCreds.username, passedQuiz: loginCreds.passedQuiz });
+  setQuizCompletion(passedQuiz: boolean) {
+    this.store.commit('SET_USER', { username: this.username, passedQuiz });
   }
 
   forgetLoginCreds() {
-    localStorage.removeItem(LOGIN_CREDS);
+    document.cookie = "jwt= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
     this.store.commit('SET_USER', { username: '', passedQuiz: false });
   }
 

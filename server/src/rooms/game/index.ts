@@ -28,6 +28,7 @@ import {getUserByJWT} from "@/services/auth";
 import http from "http";
 import cookie from 'cookie'
 import {settings} from "@/settings";
+import {getConnection} from "@/util";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -37,7 +38,9 @@ export class GameRoom extends Room<GameState> implements Game {
   gameId!: number;
 
   async onAuth(client: Client, options: any, request?: http.IncomingMessage) {
-    const user = await getUserByJWT(options.token);
+    // const user = await getUserByJWT(options.token);
+    const token = cookie.parse(request?.headers.cookie ?? '').jwt;
+    const user = await getUserByJWT(token);
     if (user && Object.keys(this.state.userRoles).includes(user.username)) {
       return user;
     }
