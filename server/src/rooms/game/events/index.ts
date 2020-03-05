@@ -197,7 +197,7 @@ export class SentTradeRequest extends GameEventWithData {
     game.tradeSet[id] = new Trade(this.data.from, this.data.to);
 
     game.players[this.data.to.role as Role].sendNotifcation(`The ${this.data.from.role} would like to trade!`);
-    game.players[this.data.from.role as Role].sendNotifcation(`Your trade to ${this.data.to.role} has been recived!`);
+    game.players[this.data.from.role as Role].sendNotifcation(`Your trade to ${this.data.to.role} has been received!`);
     //game.players[this.data.from.role].pendingInvestments.add({...this.data.from.resourceAmount,upkeep:0});
   }
 }
