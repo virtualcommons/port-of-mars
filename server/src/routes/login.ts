@@ -1,7 +1,8 @@
 import {findByUsername} from '@/services/account';
-import {getUserByJWT, setJWTCookie} from '@/services/auth';
+import {generateJWT, getUserByJWT, setJWTCookie} from '@/services/auth';
 import { NextFunction, Request, Response } from 'express';
 import {isPage, LOGIN_PAGE, Page, PAGE_DEFAULT, PAGE_META, PAGES} from "shared/routes";
+import cookie from 'cookie';
 
 export const JWT_TOKEN_NAME = 'jwt';
 
@@ -10,9 +11,8 @@ export async function login(req: Request, res: Response, next: NextFunction) {
   try {
     let user = await findByUsername(req.body.username);
     if (user) {
-      const { username, passedQuiz } = user;
-      setJWTCookie(res, username);
-      res.send();
+      const expiration = 604800000;
+      res.json({ cookie: cookie.serialize('jwt', generateJWT(req.body.username), {path: '/', expires: new Date(Date.now() + expiration)})});
     } else {
       res
         .status(403)

@@ -27,6 +27,15 @@ interface GameData {
 export class AjaxRequest {
   constructor(private router: VueRouter, private store: TStore) {}
 
+  async setCookie(response: Response) {
+    if (process.env.NODE_ENV === 'development') {
+      const cookie = (await response.json()).cookie;
+      if (!document.cookie.includes('jwt=')) {
+        document.cookie = cookie;
+      }
+    }
+  }
+
   get loginCreds(): LoginCreds | null {
     const d = localStorage.getItem(LOGIN_CREDS);
     if (_.isNull(d)) {

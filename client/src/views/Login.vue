@@ -69,6 +69,7 @@ export default class Login extends Vue {
     const fd = new FormData((e as any).target.form);
     const data: any = { username: fd.get('username') };
     const response = await this.$ajax.post(this.loginUrl, data);
+    this.$ajax.setCookie(response);
     if (response.status === 200) {
       this.$router.push(GAME_PAGE);
     } else {
