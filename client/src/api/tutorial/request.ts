@@ -12,6 +12,7 @@ export class TutorialAPI extends GameRequestAPI {
     private stateStack:Array<StateTransform[]> = []
     private isTaskComplete = true;
     private validationObject:any = {};
+    private requiredObject!:StateTransform;
 
     constructor(){
         super();
@@ -23,7 +24,7 @@ export class TutorialAPI extends GameRequestAPI {
 
     public apply(){
         this.store.replaceState(_.cloneDeep(initialStoreState));
-
+        
         if(this.stateStack.length == 0){
             this.isTaskComplete = true;
         }
@@ -34,6 +35,7 @@ export class TutorialAPI extends GameRequestAPI {
                 for(const [command,value] of Object.entries(commandSet)){
                     
                     if(command=='required'){
+                        
                         this.isTaskComplete = !value;
                     }
                     
@@ -42,13 +44,13 @@ export class TutorialAPI extends GameRequestAPI {
                     }
 
                     else{
-                        
                         this.isTaskComplete = true;
                         this.store.commit(command,value);
                     }
                 }
             }
         }
+        
     }
 
     get forcePause(){
@@ -65,10 +67,13 @@ export class TutorialAPI extends GameRequestAPI {
             
         
             for(const commandSet of state){
+                
                 for(const [command,value] of Object.entries(commandSet)){
                     
                     if(command=='required'){
                         this.isTaskComplete = !value;
+                        //this passes the command set object to the required object by reference
+                        this.requiredObject = commandSet;
                     }
 
                     else if(command=='validationObject'){
@@ -81,7 +86,7 @@ export class TutorialAPI extends GameRequestAPI {
                     }
                 }
             }
-
+            
             this.stateStack.push(state);
             
        }
@@ -95,7 +100,7 @@ export class TutorialAPI extends GameRequestAPI {
         this.apply();
     };
 
-
+    
     public sendChatMessage(message:String){
         this.store.commit('ADD_TO_CHAT',{
             message,
@@ -104,6 +109,9 @@ export class TutorialAPI extends GameRequestAPI {
             round:0
         });
         this.isTaskComplete = true;
+        
+        //since they are tied by reference, this change will be reflected in the step array object
+        this.requiredObject.required = false;
     };
 
     count:number= 1;
@@ -115,6 +123,7 @@ export class TutorialAPI extends GameRequestAPI {
         this.count++;
 
         this.isTaskComplete = true;
+        this.requiredObject.required = false;
     };
 
     public acceptTradeRequest(id:string){
@@ -135,6 +144,7 @@ export class TutorialAPI extends GameRequestAPI {
             role:accomplishment.role
         });
         this.isTaskComplete = true;
+        this.requiredObject.required = false;
     };
 
     public discardAccomplishment(id: number){
@@ -144,6 +154,7 @@ export class TutorialAPI extends GameRequestAPI {
         });
 
         this.isTaskComplete = true;
+        this.requiredObject.required = false;
     };
 
     public deleteNotification(id: number){
@@ -166,6 +177,7 @@ export class TutorialAPI extends GameRequestAPI {
         }
 
         this.isTaskComplete = true;
+        this.requiredObject.required = false;
         //this.store.commit('TUTORIAL_SET_GIVE_RESOURCES', resources)
         return true;
     }
@@ -180,6 +192,7 @@ export class TutorialAPI extends GameRequestAPI {
         }
 
         this.isTaskComplete = true;
+        this.requiredObject.required = false;
         //this.store.commit('TUTORIAL_SET_GET_RESOURCES', resources);
         return true;
     }
@@ -188,11 +201,20 @@ export class TutorialAPI extends GameRequestAPI {
         if(this.validationObject.name == name) {
             this.isTaskComplete = true;
             //this.store.commit('TUTORIAL_SET_TRADE_PARTNER_NAME', name);
+            this.requiredObject.required = false;
             return true;
         }
         return false;
     }
 
-    public investTimeBlocks():void {};
+    public investTimeBlocks(){
+        const pendingInventory = this.store.getters.player.pendingInvestments;
+        for(const [resource, amt] of Object.entries(pendingInventory)){
+            if(this.validationObject[resource as Resource] != amt) return false;
+        }
+        this.isTaskComplete = true;
+        this.requiredObject.required = false;
+        return true;
+    };
     public setPlayerReadiness(): void {};
 }

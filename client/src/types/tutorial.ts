@@ -5,8 +5,8 @@ import { ResourceAmountData } from 'shared/types';
 export type MockRoom = { send: (data: any) => void, leave: () => void }
 
 export type StateTransform =
-  | { [K in keyof typeof Mutations]?: Parameters<typeof Mutations[K]>[1] }
-  | { required: boolean, validationObject?:any };
+   { [K in keyof typeof Mutations]?: Parameters<typeof Mutations[K]>[1] }
+  & { required?: boolean, validationObject?:any };
 
 export interface Step {
   target: string;

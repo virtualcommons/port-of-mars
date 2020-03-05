@@ -274,6 +274,7 @@ export default class Tutorial extends Vue {
     if (result) {
       this.quizQuestionStatusMessage = 'Correct! Please click next.';
       this.quizQuestionStatus = true;
+      
     } else {
       this.quizQuestionStatusMessage = 'Incorrect, please try again.';
     }
