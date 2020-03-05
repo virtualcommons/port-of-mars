@@ -26,12 +26,13 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Inject } from 'vue-property-decorator';
 import { INVESTMENTS, Resource, ResourceCostData } from 'shared/types';
 import StatusBar from '@/components/gamedashboard/global/StatusBar.vue';
 import DiscreteStatusBar from '@/components/gamedashboard/global/DiscreteStatusBar.vue';
 import CardInvestment from '@/components/gamedashboard/global/cards/CardInvestment.vue';
 import * as _ from 'lodash';
+import { TutorialAPI } from '@/api/tutorial/request';
 
 @Component({
   components: {
@@ -41,6 +42,9 @@ import * as _ from 'lodash';
   }
 })
 export default class ContainerBottom extends Vue {
+  @Inject()
+  readonly api!: TutorialAPI;
+
   get costs(): any {
     const p = this.$tstore.getters.player;
     const investmentData = Object.keys(p.costs)
@@ -81,6 +85,10 @@ export default class ContainerBottom extends Vue {
     );
   }
 
+  get isInTutorial(){
+    return this.$tstore.getters.layout === 'tutorial';
+  }
+
   private setInvestmentAmount(msg: {
     name: Resource;
     units: number;
@@ -99,6 +107,10 @@ export default class ContainerBottom extends Vue {
         units: msg.units,
         role: this.$tstore.state.role
       });
+    }
+
+    if(this.isInTutorial){
+      this.api.investTimeBlocks();
     }
   }
 

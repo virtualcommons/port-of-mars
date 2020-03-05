@@ -21,7 +21,11 @@ const steps:Array<Step> = [
           // specialty: 'science'
         }, role: RESEARCHER},
 
-      }],
+      },
+      {
+        required: false,
+      }
+    ],
     },
     {
       target: '.tour-investments',
@@ -54,6 +58,27 @@ const steps:Array<Step> = [
       },
       
     },
+    {
+      target: '.tour-investments',
+      content: `To try it out, purchase 2 science and 2 government!`,
+      params:{
+        placement: 'top'
+      },
+      stateTransform: [
+        {
+          required:true,
+          validationObject:{
+            science:2,
+            government:2,
+            legacy:0,
+            culture:0,
+            finance:0,
+            upkeep:0,
+          }
+        }
+      ]
+    },
+
     {
       target: '.tour-investments',
       content: 'Quiz Question',
