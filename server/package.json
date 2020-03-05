@@ -5,6 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc -p .",
+    "build:deploy": "yarn build && rm -rf /code/server/src /code/shared && mv lib/server/src /code/server/src && mv lib/shared /code/shared",
     "start:prod": "node -r tsconfig-paths/register src/index.js",
     "start": "ts-node-dev -r tsconfig-paths/register src/index.ts",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
