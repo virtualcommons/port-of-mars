@@ -11,6 +11,7 @@ export class TutorialAPI extends GameRequestAPI {
     private store!:Store<State>;
     private stateStack:Array<StateTransform[]> = []
     private isTaskComplete = true;
+    private validationObject:any = {};
 
     constructor(){
         super();
@@ -31,10 +32,17 @@ export class TutorialAPI extends GameRequestAPI {
             
             for(const commandSet of state){
                 for(const [command,value] of Object.entries(commandSet)){
+                    
                     if(command=='required'){
                         this.isTaskComplete = !value;
                     }
+                    
+                    else if(command=='validationObject'){
+                        this.validationObject = value;
+                    }
+
                     else{
+                        
                         this.isTaskComplete = true;
                         this.store.commit(command,value);
                     }
@@ -62,6 +70,12 @@ export class TutorialAPI extends GameRequestAPI {
                     if(command=='required'){
                         this.isTaskComplete = !value;
                     }
+
+                    else if(command=='validationObject'){
+                        this.validationObject = value;
+                    }
+
+
                     else{
                         this.store.commit(command,value);
                     }
@@ -141,35 +155,39 @@ export class TutorialAPI extends GameRequestAPI {
 
 
     public saveGiveResources(resources: ResourceAmountData){
-        // this.store.commit('SET_GIVE_RESOURCES', resources);
-        const correctGive = defaultInventory();
-        correctGive.science =2;
-        correctGive.government = 1;
+        //;
+        // const correctGive = defaultInventory();
+        // correctGive.science =2;
+        // correctGive.government = 1;
+
 
         for(const [resource, amt] of Object.entries(resources)){
-            if(correctGive[resource as Resource] != amt) return false;
+            if(this.validationObject[resource as Resource] != amt) return false;
         }
 
         this.isTaskComplete = true;
+        //this.store.commit('TUTORIAL_SET_GIVE_RESOURCES', resources)
         return true;
     }
 
     public saveGetResources(resources: ResourceAmountData){
-        //this.store.commit('SET_GET_RESOURCES', resources);
-        const correctGet = defaultInventory();
-        correctGet.culture =3;
+        
+        // const correctGet = defaultInventory();
+        // correctGet.culture =3;
 
         for(const [resource, amt] of Object.entries(resources)){
-            if(correctGet[resource as Resource] != amt) return false;
+            if(this.validationObject[resource as Resource] != amt) return false;
         }
 
         this.isTaskComplete = true;
+        //this.store.commit('TUTORIAL_SET_GET_RESOURCES', resources);
         return true;
     }
 
     public saveTradePartner(name: string){
-        if(name == 'Curator') {
+        if(this.validationObject.name == name) {
             this.isTaskComplete = true;
+            //this.store.commit('TUTORIAL_SET_TRADE_PARTNER_NAME', name);
             return true;
         }
         return false;

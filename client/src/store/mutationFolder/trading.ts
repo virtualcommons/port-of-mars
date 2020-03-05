@@ -11,15 +11,21 @@ export default {
   },
 
   SET_GET_RESOURCES(state: State, payload: ResourceAmountData){
-    state.tutorialTradeGet = payload;
+    //state.tutorialTradeGet = payload;
+    state.ui.tradeData.from.resourceAmount = payload;
   },
 
-  SET_GIVE_RESOURCES(state: State, payload: ResourceAmountData){
-    state.tutorialTradeGive = payload;
+  SET_SEND_RESOURCES(state: State, payload: ResourceAmountData){
+    //state.tutorialTradeGive = payload;
+    state.ui.tradeData.to.resourceAmount = payload;
   },
 
-  SET_TRADE_PARTNER_NAME(state: State, payload: string){
-    state.tutorialTradePartner = payload;
+  SET_TRADE_PARTNER_NAME(state: State, payload: Role){
+    //state.tutorialTradePartner = payload;
+    state.ui.tradeData.to.role = payload;
+  },
 
+  SET_TRADE_PLAYER_NAME(state: State, payload: Role){
+    state.ui.tradeData.from.role = payload;
   }
 };

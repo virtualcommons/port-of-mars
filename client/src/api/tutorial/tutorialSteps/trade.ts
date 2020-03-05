@@ -99,6 +99,9 @@ const steps: Array<Step> = [
     stateTransform: [
       {
         required: true,
+        validationObject: {
+          name: 'Curator',
+        }
       }
     ]
   },
@@ -112,6 +115,13 @@ const steps: Array<Step> = [
     stateTransform: [
       {
         required: true,
+        validationObject: {
+          culture: 0,
+          finance: 0,
+          government: 1,
+          legacy: 0,
+          science: 2,
+        }
       },
       {
         SET_TRADE_PARTNER_NAME:'Curator',
@@ -127,9 +137,16 @@ const steps: Array<Step> = [
     stateTransform: [
       {
         required: true,
+        validationObject:{
+          culture: 3,
+          finance: 0,
+          government: 0,
+          legacy: 0,
+          science: 0,
+        }
       },
       {
-        SET_GIVE_RESOURCES:{
+        SET_SEND_RESOURCES:{
             culture: 0,
             finance: 0,
             government: 1,
