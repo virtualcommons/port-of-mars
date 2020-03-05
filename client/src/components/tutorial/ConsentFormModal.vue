@@ -156,12 +156,6 @@ export default class ConsentFormModal extends Vue {
 
 </script>
 
-<style scoped>
-.button-consent {
-    margin-right: 16px;
-}
-
-.button-consent :last-child {
-    margin-right: 0px;
-}
+<style lang="scss" scoped>
+@import '@/stylesheets/tutorial/ConsentFormModal.scss';
 </style>
