@@ -44,17 +44,13 @@ export default class ContainerBottom extends Vue {
   get costs(): any {
     const p = this.$tstore.getters.player;
     const investmentData = Object.keys(p.costs)
-      .reduce(
-        (prev, name) => {
-          const k: keyof ResourceCostData = name as keyof ResourceCostData;
-          const cost = p.costs[k];
-          let pendingInvestment: number;
-          pendingInvestment = p.pendingInvestments[k];
-          prev.push({ name, cost, pendingInvestment });
-          return prev;
-        },
-        [] as Array<{ name: string; cost: number; pendingInvestment: number }>
-      )
+      .reduce((prev, name) => {
+        const k: keyof ResourceCostData = name as keyof ResourceCostData;
+        const cost = p.costs[k];
+        let pendingInvestment = p.pendingInvestments[k];
+        prev.push({ name, cost, pendingInvestment });
+        return prev;
+      }, [] as Array<{ name: string; cost: number; pendingInvestment: number }>)
       .sort((a, b) => a.cost - b.cost);
 
     return investmentData;

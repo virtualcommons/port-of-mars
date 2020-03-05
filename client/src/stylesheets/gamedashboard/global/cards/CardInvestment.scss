@@ -34,7 +34,19 @@
 
     .data {
       width: 100%;
-      @include make-right;
+      @include make-horizontal-between;
+
+      .investment {
+        height: 2rem;
+        @include make-center;
+
+        p {
+          margin: 0 0.5rem;
+          font-size: $font-med;
+          text-align: center;
+          color: $space-gray;
+        }
+      }
 
       .cost {
         border-radius: 50%;
