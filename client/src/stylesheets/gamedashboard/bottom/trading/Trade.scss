@@ -1,146 +1,187 @@
 .trade {
-  max-width: 100%;
+  width: 100%;
   height: 4rem;
   margin-bottom: 0.5rem;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
   background-color: $space-gray;
   color: $space-white;
+  overflow-x: hidden;
 
-  min-height: 0;
-  min-width: 0;
-  flex: 1 1 0;
-  flex-wrap: wrap;
-}
+  &:last-child {
+    margin-bottom: 0;
+  }
 
-.trade:last-child {
-  margin-bottom: 0;
-}
+  .trade-send-receive {
+    height: 100%;
+    flex: 1;
+    @include make-horizontal-expand;
 
-.trade-icon {
-  margin-left: -0.6rem;
-  margin-right: 0.1rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+    .sending {
+      height: 100%;
+      @include make-center;
+      flex: 1;
 
-.trade-profile-sender-container,
-.trade-profile-receiver-container {
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+      .trade-profile-sender-container {
+        height: 100%;
+        margin: 0 0.25rem;
+        @include make-center;
+        overflow-x: hidden;
 
-.trade-profile-sender,
-.trade-profile-receiver {
-  height: 3rem;
-  width: 3rem;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: $space-white;
-}
+        .trade-profile-sender {
+          height: 3rem;
+          width: 3rem;
+          border-radius: 50%;
+          @include make-center;
+          background-color: $space-white;
 
-.trade-profile-sender img,
-.trade-profile-receiver img {
-  height: 100%;
-}
+          img {
+            height: 100%;
+          }
+        }
+      }
 
-.trade-send-receive {
-  height: 100%;
-  display: flex;
-  min-width: 0;
-  min-height: 0;
-  flex: 1 1 0;
-  justify-content: space-around;
-}
+      .send {
+        height: 100%;
+        flex: 1;
+        @include make-column-and-center;
 
-.send,
-.receive {
-  height: 100%;
-  max-width: 15rem;
-  margin: 0 0.5rem;
-  display: flex;
-  min-width: 0;
-  min-height: 0;
-  flex: 1 1 0;
-  flex-direction: column;
-}
+        .send-sender {
+          height: 50%;
+          width: 100%;
+          padding: 0rem 0.5rem;
+          @include make-center;
 
-.send-sender,
-.receive-receiver {
-  height: 50%;
-  padding: 0rem 0.5rem;
-  display: flex;
-  align-items: center;
-}
+          p {
+            width: 100%;
+            margin: 0;
+            font-size: $font-small;
+            text-align: center;
+            color: $space-gray;
+            background-color: $new-space-orange;
+          }
+        }
 
-.send-sender p,
-.receive-receiver p {
-  width: 100%;
-  margin: 0;
-  font-size: $font-small;
-  text-align: center;
-  color: $space-gray;
-  background-color: $new-space-orange;
-}
+        .send-investments-container {
+          height: 50%;
+          padding: 0.25rem 0.5rem;
+          @include make-center;
 
-.send-investments-container,
-.receive-investments-container {
-  height: 50%;
-  padding: 0.25rem 0.5rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-width: 0;
-  min-height: 0;
-  flex: 1 1 0;
-}
+          .send-investments {
+            height: 100%;
+            @include make-center;
+            min-width: 2.5rem;
 
-.send-investments,
-.receive-investments {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  min-width: 2.5rem;
-  flex: 1 1 0;
-}
+            img {
+              height: 1.5rem;
+              width: 1.5rem;
+            }
 
-.send-investments img,
-.receive-investments img {
-  height: 1.5rem;
-  width: 1.5rem;
-}
+            p {
+              margin: 0 0.5rem;
+              font-size: $font-small;
+            }
+          }
+        }
+      }
+    }
 
-.send-investments p,
-.receive-investments p {
-  margin: 0 0.5rem;
-  font-size: $font-small;
-}
+    .trade-icon {
+      margin: 0.5rem;
+      @include make-center;
+    }
 
-.trade-buttons {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
+    .receiving {
+      height: 100%;
+      flex: 1;
+      @include make-center;
 
-.trade-buttons button {
-  height: 50%;
-  width: 4rem;
-  border: none;
-  font-size: $font-small;
-  background-color: $new-space-orange;
-  transition: all 0.2s ease-in-out;
-}
+      .trade-profile-receiver-container {
+        height: 100%;
+        margin: 0 0.25rem;
+        @include make-center;
 
-.trade-buttons button:hover {
-  transform: scale(1.1);
-}
+        .trade-profile-receiver {
+          height: 3rem;
+          width: 3rem;
+          border-radius: 50%;
+          @include make-center;
+          background-color: $space-white;
 
-.accept-trade {
-  opacity: 0.75;
+          img {
+            height: 100%;
+          }
+        }
+      }
+
+      .receive {
+        height: 100%;
+        flex: 1;
+        @include make-column-and-center;
+
+        .receive-receiver {
+          height: 50%;
+          width: 100%;
+          padding: 0rem 0.5rem;
+          @include make-center;
+
+          p {
+            width: 100%;
+            margin: 0;
+            font-size: $font-small;
+            text-align: center;
+            color: $space-gray;
+            background-color: $new-space-orange;
+          }
+        }
+
+        .receive-investments-container {
+          height: 50%;
+          padding: 0.25rem 0.5rem;
+          @include make-center;
+
+          .receive-investments {
+            height: 100%;
+            @include make-center;
+            min-width: 2.5rem;
+
+            img {
+              height: 1.5rem;
+              width: 1.5rem;
+            }
+
+            p {
+              margin: 0 0.5rem;
+              font-size: $font-small;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .trade-buttons {
+    height: 100%;
+    min-width: 4rem;
+
+    button {
+      height: 50%;
+      width: 100%;
+      border: none;
+      font-size: $font-small;
+      background-color: $new-space-orange;
+      transition: all 0.2s ease-in-out;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+
+    .accept-trade {
+      opacity: 0.75;
+    }
+
+    .cancel-trade {
+      height: 100%;
+    }
+  }
 }

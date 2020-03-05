@@ -33,12 +33,17 @@
   }
 
   .trade-list {
+    margin-left: 0.5rem;
     height: 100%;
-    overflow-y: scroll;
-    @include disable-scroll;
-    background-color: $space-white-opaque-1;
     min-height: 0;
     flex: 1 1 0;
-    margin-left: 0.5rem;
+    background-color: $space-white-opaque-1;
+    overflow-y: scroll;
+    @include disable-scroll;
+
+    .trades-wrapper {
+      margin: 0 0.5rem;
+      background-color: blue;
+    }
   }
 }

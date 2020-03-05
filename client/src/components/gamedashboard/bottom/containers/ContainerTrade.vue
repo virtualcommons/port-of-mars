@@ -9,14 +9,13 @@
       </div>
     </div>
 
-        <div class="trade-list tour-trade-item">
-            <div class="section-text">
-                <p>Active Trade List</p>
-            </div>
-            <div class="trades-wrapper">
-              <Trade v-for="trade in trades" v-bind="trade" :key="Math.random()" />
-            </div>
-        </div>
+    <div class="trade-list tour-trade-item">
+      <div class="section-text">
+        <p>Active Trade List</p>
+      </div>
+      <div class="trades-wrapper">
+        <Trade v-for="trade in trades" v-bind="trade" :key="trade.id" />
+      </div>
     </div>
   </div>
 </template>
@@ -35,11 +34,13 @@ import TradeRequest from '@/components/gamedashboard/bottom/trading/TradeRequest
 export default class ContainerTrade extends Vue {
   get trades() {
     const tradeSet = this.$tstore.state.tradeSet;
-    return Object.keys(tradeSet).map(id => ({
+    const trades = Object.keys(tradeSet).map(id => ({
       id,
       from: tradeSet[id].from,
       to: tradeSet[id].to
     }));
+    console.log(trades);
+    return trades;
   }
 }
 </script>
