@@ -92,9 +92,19 @@ async function createApp() {
     passport.authenticate('cas', { failureRedirect: '/' }),
     function (req, res) {
       // successful authentication, set JWT token cookie and redirect to server nexus
-      console.log({user: req.user, body: req.body, headers: req.headers});
-      setJWTCookie(res, req.body.username);
-      res.redirect('/');
+      if (req.user) {
+        const username: string = (req.user as User).username;
+        if (username?.length > 0) {
+          setJWTCookie(res, (req.user as any).username);
+          res.redirect('/');
+          return;
+        }
+        logger.warn('no username attached to', req);
+        res.redirect('/');
+      } else {
+        logger.warn('no user attached to', req);
+        res.redirect('/')
+      }
     }
   );
 
