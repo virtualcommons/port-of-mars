@@ -13,6 +13,7 @@
           Available
         </button>
         <button
+      
           @click="handleClick('purchased')"
           :style="handleStyle('purchased')"
           class="purchased"
@@ -53,9 +54,11 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Inject } from 'vue-property-decorator';
 import CardAccomplishment from '@/components/gamedashboard/global/cards/CardAccomplishment.vue';
 import { Phase } from 'shared/types';
+import { TutorialAPI } from '@/api/tutorial/request';
+
 
 @Component({
   components: {
@@ -63,9 +66,14 @@ import { Phase } from 'shared/types';
   }
 })
 export default class ContainerAccomplishments extends Vue {
+  @Inject()
+  readonly api!: TutorialAPI;
+
   private activeView: string = 'available';
   private isActive: boolean = true;
   private setWidth: string = '100%';
+
+  
 
   get purchasableAccomplishments() {
     return this.$store.getters.player.accomplishments.purchasable;
@@ -75,8 +83,16 @@ export default class ContainerAccomplishments extends Vue {
     return this.$store.getters.player.accomplishments.bought;
   }
 
+  get isInTutorial(){
+    return this.$store.getters.layout == 'tutorial';
+  }
+
   private handleClick(view: string) {
     this.activeView = view;
+
+    if(this.isInTutorial){
+      this.api.completedGeneralClick();
+    }
   }
 
   private handleStyle(view: string) {

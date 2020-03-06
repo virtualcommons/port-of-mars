@@ -76,7 +76,7 @@ const steps:Array<Step> = [
     },
     {
         target: '.tour-accomplishments',
-        content: `After you buy one, it appears in the Purchased section!`,
+        content: `After you buy one, it appears in the Purchased section! Try hitting 'Purchased' to see!`,
         params:{
             placement: 'right'
         },
@@ -99,7 +99,7 @@ const steps:Array<Step> = [
                 },
                 role:`Researcher`
               },
-              
+              required: true,
             },
         ]
     }
