@@ -207,7 +207,13 @@ export default class Tutorial extends Vue {
 
   private denyConsent() {
     this.consent = this.$tstore.state.consent;
+    this.forceLogoutUser();
     console.log('updated consent: ', this.consent)
+  }
+
+  private forceLogoutUser(): void {
+    this.$ajax.forgetLoginCreds();
+    this.$router.push({ name: 'Login' });
   }
 
   // NOTE: Callbacks
