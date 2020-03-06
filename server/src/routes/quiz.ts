@@ -8,11 +8,12 @@ import {
   checkQuestionResponse,
   checkQuizCompletion
 } from '@/services/quiz';
-import { getUserByJWT } from '@/services/auth';
-import { auth } from '@/routes/middleware';
-import {User} from "@/entity/User";
+import { User } from "@/entity/User";
+import { settings } from '@/settings';
 
 export const quizRouter = Router();
+
+const logger = settings.logging.getLogger(__filename);
 
 const DEFAULT_QUIZ = 'TutorialQuiz';
 
@@ -24,8 +25,10 @@ quizRouter.post(
     try {
       // NOTE: Get User ID
       const user = req.user as User | undefined;
-      if (user === undefined)
-        return res.status(401).send(`User not found with provided JWT.`);
+      if (! user) {
+        logger.fatal('No user found on request: ', req);
+        return res.status(500).send(`User not found with provided JWT.`);
+      }
       const userId = user!.id;
 
       // NOTE: Get Quiz ID

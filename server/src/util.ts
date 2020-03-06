@@ -1,18 +1,25 @@
-import {Loader, Resolver} from "typeorm-fixtures-cli/dist";
+import { Loader, Resolver } from "typeorm-fixtures-cli/dist";
 import path from "path";
 import _ from "lodash";
-import {MarsEventData, ROLES} from "shared/types";
-import {GameOpts, GameStateOpts, Persister} from "@/rooms/game/types";
+import { MarsEventData, ROLES } from "shared/types";
+import { GameOpts, GameStateOpts, Persister } from "@/rooms/game/types";
 import * as assert from "assert";
-import {ConsolePersister} from "@/services/persistence";
+import { ConsolePersister } from "@/services/persistence";
 import * as to from "typeorm";
-import {expandCopies} from "@/rooms/game/state/marsEvents/common";
-import {getAllMarsEvents} from "@/data/MarsEvents";
-import {TournamentRound} from "@/entity/TournamentRound";
+import { expandCopies } from "@/rooms/game/state/marsEvents/common";
+import { getAllMarsEvents } from "@/data/MarsEvents";
+import { TournamentRound } from "@/entity/TournamentRound";
+import { Page, PAGE_META } from "shared/routes";
+import { settings } from "@/settings";
 
 export function getConnection(): to.Connection {
   const connection_name = process.env.NODE_ENV === 'test' ? 'test' : 'default';
   return to.getConnection(connection_name)
+}
+
+export function toUrl(page: Page): string {
+  const page_metadata = PAGE_META[page];
+  return `${settings.host}/#${page_metadata.path}`
 }
 
 export function getRandomIntInclusive(min: number, max: number) {

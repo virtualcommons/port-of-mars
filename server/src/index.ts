@@ -14,8 +14,8 @@ import { Server } from 'colyseus';
 import { GameRoom } from '@/rooms/game';
 import { RankedLobbyRoom } from '@/rooms/waitingLobby';
 import { mockGameInitOpts } from '@/util';
-import { JWT_SECRET, setJWTCookie } from '@/services/auth';
-import {findOrCreateUser, findUserById, getOrCreateUser} from '@/services/account';
+import { JWT_SECRET, generateJWT, setJWTCookie } from '@/services/auth';
+import { findByUsername, findById, getOrCreateUser } from '@/services/account';
 import { User } from '@/entity/User';
 import { DBPersister } from '@/services/persistence';
 import { ClockTimer } from '@gamestdio/timer/lib/ClockTimer';
@@ -23,15 +23,19 @@ import { login, nextPage } from '@/routes/login';
 import { quizRouter } from '@/routes/quiz';
 import * as fs from 'fs';
 import { auth } from "@/routes/middleware";
-import {registrationRouter} from "@/routes/registration";
-import {settings} from "@/settings";
+import { registrationRouter } from "@/routes/registration";
+import { settings } from "@/settings";
+import { isDev } from 'shared/settings';
+import cookie from 'cookie';
 
 const logger = settings.logging.getLogger(__filename);
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const CONNECTION_NAME = NODE_ENV === 'test' ? 'test' : 'default';
 
-// FIXME: set up a typescript type for this
+// FIXME: set up typescript types for these
 const CasStrategy = require('passport-cas2').Strategy;
+const LocalStrategy = require('passport-local').Strategy;
+
 const RedisStore = connectRedis(session);
 
 passport.use(new CasStrategy(
@@ -46,8 +50,20 @@ passport.use(new CasStrategy(
     done(null, user);
   }
 ));
+// make this conditional on isDev()
+passport.use(new LocalStrategy(
+  async function (username: string, password: string, done: Function) {
+    logger.info('trying to local auth for user: ', username);
+    let user = await findByUsername(username);
+    if (!user) {
+      return done(null, false, { message: `No user ${username}.` });
+    }
+    return done(null, user);
+  }
+));
 
 passport.serializeUser(function (user: User, done: Function) {
+  logger.info('serializing user: ', user.id);
   done(null, user.id);
 });
 
@@ -73,10 +89,11 @@ async function createApp() {
   const store = new RedisStore({ host: 'redis', client: redis.createClient({ host: 'redis' }) });
 
   applyInStagingOrProd(() => app.use(Sentry.Handlers.requestHandler()));
-  if (NODE_ENV !== 'development') {
-    app.use(helmet());
-  } else {
+  if (isDev()) {
+    logger.info('starting server up in dev mode');
     app.use(cors());
+  } else {
+    app.use(helmet());
   }
   app.use(function(req, res, next) {
     logger.info('req user: ', req.user);
@@ -84,13 +101,18 @@ async function createApp() {
     logger.info('req sessionID', req.sessionID);
     next();
   });
+  app.use(express.static('static'));
   app.use(express.json());
   app.use(cookieParser(JWT_SECRET));
   app.use(session({ store: store, secret: JWT_SECRET, saveUninitialized: false, resave: false }));
   app.use(passport.initialize());
   app.use(passport.session());
 
-  app.post('/login', passport.authenticate('local', { failureRedirect: '/' }));
+  // make this conditional on isDev()
+  app.post('/login', passport.authenticate('local'), function(req, res) {
+    logger.info('successful authentication for user: ', req.user);
+    res.json({username: req.user.username, sessionID: req.sessionID });
+  });
   app.use('/quiz', quizRouter);
   app.use('/registration', registrationRouter);
 
@@ -101,7 +123,7 @@ async function createApp() {
       if (req.user) {
         const username: string = (req.user as User).username;
         if (username?.length > 0) {
-          setJWTCookie(res, (req.user as any).username);
+          setJWTCookie(res, username);
           res.redirect('/');
           return;
         }
@@ -134,7 +156,6 @@ async function createApp() {
   gameServer.define('game', GameRoom, await mockGameInitOpts(persister));
   gameServer.define('waiting', RankedLobbyRoom, { dev: true });
 
-  app.use(express.static('static'));
 
   applyInStagingOrProd(() => app.use(Sentry.Handlers.errorHandler()));
   app.use((err: any, req: any, res: Response, next: any) => {

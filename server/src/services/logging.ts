@@ -16,7 +16,7 @@ export class DevLogging implements Logging {
   logger: Logger;
 
   constructor() {
-    this.logger = pino();
+    this.logger = pino({level: 'trace'});
   }
 
   getLogger(filename: string): LogService {

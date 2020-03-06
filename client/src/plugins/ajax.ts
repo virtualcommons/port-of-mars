@@ -1,8 +1,8 @@
-import Vue, {VueConstructor} from 'vue'
+import Vue, { VueConstructor } from 'vue'
 import _ from "lodash";
-import {VueRouter} from "vue-router/types/router";
-import {TStore} from "@/plugins/tstore";
-import {Page} from "shared/routes";
+import { VueRouter } from "vue-router/types/router";
+import { TStore } from "@/plugins/tstore";
+import { isDev } from 'shared/settings';
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -25,14 +25,14 @@ interface GameData {
 }
 
 export class AjaxRequest {
-  constructor(private router: VueRouter, private store: TStore) {}
+  constructor(private router: VueRouter, private store: TStore) { }
 
   async setLoginCreds(response: Response) {
     const data: LoginCreds = await response.json();
-    if (process.env.NODE_ENV === 'development') {
-      const cookie = data.cookie;
-      if (!document.cookie.includes('jwt=')) {
-        document.cookie = cookie;
+    if (isDev()) {
+      const sessionID = data.sessionID;
+      if (!document.cookie.includes('connect.sid=')) {
+        document.cookie = `connect.sid=${sessionID};max-age=${60*60*24}`;
       }
     }
     this.store.commit('SET_USER', { username: data.username });
@@ -47,7 +47,7 @@ export class AjaxRequest {
   }
 
   forgetLoginCreds() {
-    document.cookie = "jwt= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+    document.cookie = "connect.sid= ;expires=Thu, 01 Jan 1970 00:00:00 GMT";
     this.store.commit('SET_USER', { username: '', passedQuiz: false });
   }
 

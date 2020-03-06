@@ -67,7 +67,7 @@ export default class Login extends Vue {
   async login(e: Event) {
     e.preventDefault();
     const fd = new FormData((e as any).target.form);
-    const data: any = { username: fd.get('username') };
+    const data: any = { username: fd.get('username'), password: 'testing' };
     const response = await this.$ajax.post(this.loginUrl, data);
     await this.$ajax.setLoginCreds(response);
     if (response.status === 200) {
