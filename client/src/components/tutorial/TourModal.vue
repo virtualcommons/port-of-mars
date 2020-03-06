@@ -1,19 +1,20 @@
 <template>
   <BModal
-    class="LMAOOO"
     size="lg"
     id="bv-modal"
     centered
     title="Port of Mars Tutorial"
+    no-stacking
     hide-footer
     :header-bg-variant="headerBgVariant"
     :header-text-variant="headerTextVariant"
     :body-bg-variant="bodyBgVariant"
     :body-text-variant="bodyTextVariant"
-    :no-close-on-backdrop="false"
-    :no-close-on-esc="false"
+    :no-close-on-backdrop="true"
+    :no-close-on-esc="true"
     :hide-header-close="true"
     @hide="hideModal"
+    @show="showModal"
   >
     <template v-slot:modal-title>
       <code><b>TUTORIAL</b></code>
@@ -54,20 +55,21 @@
         </li>
       </ul>
 
-      <button @click="$bvModal.hide('bv-modal')" type="button" name="button">
+      <BButton @click="$bvModal.hide('bv-modal')" type="button" name="button">
           Next
-      </button>
+      </BButton>
     </div>
   </BModal>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Emit } from 'vue-property-decorator';
-import { BModal } from 'bootstrap-vue';
+import { BModal, BButton } from 'bootstrap-vue';
 
 @Component({
   components: {
-    BModal
+    BModal,
+    BButton
   }
 })
 export default class TourModal extends Vue {
@@ -90,8 +92,14 @@ export default class TourModal extends Vue {
   /**
    * Emits a custom event on hide.
    */
+  @Emit('hide')
   hideModal() {
     this.$emit('hide');
+  }
+
+  @Emit('show')
+  showModal() {
+    this.$emit('show-modal');
   }
 }
 </script>
