@@ -15,8 +15,6 @@
         :no-close-on-backdrop="false"
         :no-close-on-esc="false"
         :hide-header-close="true"
-        @hide="getConsent"
-        
     >
         <template v-slot:modal-title>
             <code><b>CONSENT FORM</b></code>
@@ -86,8 +84,8 @@
             <br/><br/>
 
             <div>
-                <b-button class="button-consent" variant="success" @click="$bvModal.hide('bv-modal')">Grant Consent</b-button>
-                <b-button class="button-consent" variant="danger" @click="$bvModal.hide('bv-modal')">Deny Consent</b-button>
+                <b-button class="button-consent" variant="success" @click="grantConsent">Grant Consent</b-button>
+                <b-button class="button-consent" variant="danger" @click="denyConsent">Deny Consent</b-button>
             </div>
         </div>
         <template v-slot:modal-footer>
@@ -107,7 +105,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Emit } from 'vue-property-decorator';
 import { BModal, BButton } from 'bootstrap-vue';
 
 @Component({
@@ -136,20 +134,18 @@ export default class ConsentFormModal extends Vue {
     footerBgVariant: string = 'danger';
     footerTextVariant: string = 'light';
 
-    consentGranted: boolean = true;
+    @Emit('grant-consent')
+    grantConsent() {
+        this.$store.state.consent = true;
+        this.$bvModal.hide('bv-modal');
+        console.log('consent: ', this.$store.state.consent);
+    }
 
-    /**
-     * Emits custom event on hide.
-     */
-    getConsent() {
-        if (this.consentGranted) {
-            console.log('consent: ', this.consentGranted);
-            return this.$emit('grant-consent', this.consentGranted);
-        }
-        else {
-            console.log('consent: ', this.consentGranted);
-            return this.$emit('deny-consent', this.consentGranted)
-        }
+    @Emit('deny-consent')
+    denyConsent() {
+        this.$store.state.consent = false;
+        this.$bvModal.hide('bv-modal');
+        console.log('consent: ', this.$store.state.consent);
     }
 
 }
