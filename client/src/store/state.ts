@@ -111,6 +111,7 @@ export interface State extends GameData {
   lobbyClientJoinedQueue: boolean;
   lobbyReceivedInvitation: boolean;
   environment: string;
+  consent: boolean;
 
   tutorialTradePartner: string;
   tutorialTradeGive: ResourceAmountData;
@@ -138,6 +139,7 @@ export const initialStoreState: State = {
   layout: 'game',
   loading: false,
   environment: 'development',
+  consent: false,
 
   // eventView: 'ACCOMPLISHMENT_SELECT_PURCHASED',
   quizQuestions: [],
