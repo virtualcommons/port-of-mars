@@ -1,13 +1,18 @@
 <template>
   <div class="trade-request-component tour-trade-component">
     <div class="trade-partner tour-trade-partner">
-      <p class="trade-title">
-        Trade With:
-        <span :class="{ none: tradePartnerName == '' }">{{
-          tradePartnerName != '' ? tradePartnerName : 'None Selected'
-        }}</span>
-      </p>
-      <div class="wrapper">
+      <div class="wrapper trade-send">
+        <p class="trade-title">
+          Trade With:
+          <span :class="{ none: name === '' }">{{
+            name !== '' ? name : 'None Selected'
+          }}</span>
+        </p>
+        <button :disabled="!clientValidation" @click="handleTrade">
+          Send
+        </button>
+      </div>
+      <div class="bottom-wrapper">
         <div
           class="trade-person-icons"
           v-for="(player, index) in otherPlayers"
@@ -38,7 +43,7 @@
         :resources="sentResources"
       />
       <TradeOptions
-        :resourceReader="handleReciveResources"
+        :resourceReader="handleReceiveResources"
         text="In exchange for"
         mode="incoming"
         class="options-block tour-get-in-return"
@@ -46,15 +51,6 @@
         :key="count + 'get'"
         :resources="exchangeResources"
       />
-    </div>
-
-    <!-- <div v-show="name != ''" class="error-messages">
-      <p class="locked-trade" v-bind:class="{'show-error':!isTradeValid && name != '', 'hide-error':isTradeValid && name != ''}">You do not have enough free resources to make this trade.</p>
-    </div> -->
-    <div class="trade-send">
-      <button v-show="tradePartnerName" :disabled="!clientValidation" @click="handleTrade">
-        Send Trade
-      </button>
     </div>
   </div>
 </template>
@@ -76,7 +72,7 @@ import {
   RESOURCES,
   Role
 } from 'shared/types';
-import { canPlayerMakeTrade} from 'shared/validation';
+import { canPlayerMakeTrade } from 'shared/validation';
 import { GameRequestAPI } from '@/api/game/request';
 import { defaultInventory } from '@/store/state';
 import { TutorialAPI } from '../../../../api/tutorial/request';
@@ -90,24 +86,11 @@ export default class TradeRequest extends Vue {
   @Inject()
   readonly api!: GameRequestAPI & TutorialAPI;
 
-  // sentResources!: ResourceAmountData;
-  // exchangeResources!: ResourceAmountData;
-
-  //name:string = '';
   count = 0;
 
   created() {
-    // this.name = this.uiDefaultTradeData.to.role;
-    // this.sentResources = this.uiDefaultTradeData.to.resourceAmount;
-    // this.exchangeResources = this.uiDefaultTradeData.from.resourceAmount;
     this.$tstore.commit('SET_TRADE_PLAYER_NAME',this.$tstore.getters.player.role);
   }
-
-  // updated(){
-  //   this.name = this.uiDefaultTradeData.to.role;
-  //   this.sentResources = this.uiDefaultTradeData.to.resourceAmount;
-  //   this.exchangeResources = this.uiDefaultTradeData.from.resourceAmount;
-  // }
 
   get tradePartnerName(){
     console.log(this.$tstore.state.ui.tradeData.to.role)
@@ -138,18 +121,13 @@ export default class TradeRequest extends Vue {
   }
 
   get isInTutorial(){
-    if(process.env.NODE_ENV == 'test'){
-      return true;
-    }
-
     return this.$tstore.getters.layout === 'tutorial';
   }
 
-
-  tutorialValidation(type:string){
+  tutorialValidation(type:string) {
     if (this.isInTutorial) {
-      
-      switch(type){
+
+      switch (type) {
         case 'give':
           this.api.saveGiveResources(this.sentResources)
           break;
@@ -165,7 +143,6 @@ export default class TradeRequest extends Vue {
     }
   }
 
-
   handleSendResources(resources: ResourceAmountData) {
     //this.sentResources = resources;
     this.$tstore.commit('SET_SEND_RESOURCES', resources);
@@ -173,7 +150,7 @@ export default class TradeRequest extends Vue {
     this.tutorialValidation('give');
   }
 
-  handleReciveResources(resources: ResourceAmountData) {
+  handleReceiveResources(resources: ResourceAmountData) {
     //this.exchangeResources = resources;
     this.$tstore.commit('SET_GET_RESOURCES', resources);
 
@@ -210,18 +187,13 @@ export default class TradeRequest extends Vue {
       };
 
       this.api.sendTradeRequest(tradeDataPackage);
-      // console.log(this.$tstore.state.ui.tradeData);
 
       if (!this.isInTutorial){
-        // this.name = '';
-        // this.sentResources = defaultInventory();
-        // this.exchangeResources = defaultInventory();
         this.$tstore.commit('SET_TRADE_PARTNER_NAME','' as Role);
         this.$tstore.commit('SET_GET_RESOURCES', defaultInventory());
         this.$tstore.commit('SET_GET_RESOURCES', defaultInventory());
       }
       this.count+=1;
-
     }
   }
 }
