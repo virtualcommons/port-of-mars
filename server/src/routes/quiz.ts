@@ -26,7 +26,7 @@ quizRouter.post(
       // NOTE: Get User ID
       const user = req.user as User | undefined;
       if (! user) {
-        logger.fatal('No user found on request: ', req);
+        logger.fatal('No user found on request with session id: ', req.sessionID);
         return res.status(500).send(`User not found with provided JWT.`);
       }
       const userId = user!.id;

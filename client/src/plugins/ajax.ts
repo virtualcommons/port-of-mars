@@ -30,9 +30,9 @@ export class AjaxRequest {
   async setLoginCreds(response: Response) {
     const data: LoginCreds = await response.json();
     if (isDev()) {
-      const sessionID = data.sessionID;
+      const sessionCookie = data.sessionCookie;
       if (!document.cookie.includes('connect.sid=')) {
-        document.cookie = `connect.sid=${sessionID};max-age=${60*60*24}`;
+        document.cookie = sessionCookie;
       }
     }
     this.store.commit('SET_USER', { username: data.username });
@@ -91,6 +91,7 @@ export class AjaxRequest {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         redirect: 'follow',
         referrerPolicy: "no-referrer",
         body: JSON.stringify(data)
@@ -103,6 +104,7 @@ export class AjaxRequest {
       path,
       {
         method: 'GET',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
