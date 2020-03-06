@@ -10,7 +10,7 @@ export async function findByUsername(username: string): Promise<User | undefined
   return await getRepository().findOne({username})
 }
 
-export async function findById(id: number): Promise<User | undefined> {
+export async function findUserById(id: number): Promise<User | undefined> {
   return await getRepository().findOne(id);
 }
 

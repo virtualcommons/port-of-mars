@@ -15,7 +15,7 @@ import { GameRoom } from '@/rooms/game';
 import { RankedLobbyRoom } from '@/rooms/waitingLobby';
 import { mockGameInitOpts } from '@/util';
 import { JWT_SECRET, setJWTCookie } from '@/services/auth';
-import {findOrCreateUser, findById, getOrCreateUser} from '@/services/account';
+import {findOrCreateUser, findUserById, getOrCreateUser} from '@/services/account';
 import { User } from '@/entity/User';
 import { DBPersister } from '@/services/persistence';
 import { ClockTimer } from '@gamestdio/timer/lib/ClockTimer';
@@ -53,7 +53,7 @@ passport.serializeUser(function (user: User, done: Function) {
 
 passport.deserializeUser(async function (id: number, done: Function) {
   logger.warn(`entered deserialize ${id}`);
-  const user = await findById(id);
+  const user = await findUserById(id);
   done(null, user);
 });
 
@@ -78,16 +78,21 @@ async function createApp() {
   } else {
     app.use(cors());
   }
+  app.use(function(req, res, next) {
+    logger.info('req user: ', req.user);
+    logger.info('req session: ', req.session);
+    logger.info('req sessionID', req.sessionID);
+    next();
+  });
   app.use(express.json());
   app.use(cookieParser(JWT_SECRET));
   app.use(session({ store: store, secret: JWT_SECRET, saveUninitialized: false, resave: false }));
   app.use(passport.initialize());
   app.use(passport.session());
 
-  app.post('/next-page/:pageName', auth, nextPage);
-  app.post('/login', login);
+  app.post('/login', passport.authenticate('local', { failureRedirect: '/' }));
   app.use('/quiz', quizRouter);
-  app.use('/registration', passport.authenticate('local', { failureRedirect: '/'}), registrationRouter);
+  app.use('/registration', registrationRouter);
 
   app.get('/asulogin',
     passport.authenticate('cas', { failureRedirect: '/' }),
