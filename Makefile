@@ -9,7 +9,7 @@ SENTRY_DSN_PATH=keys/sentry_dsn
 SECRETS=$(DB_PASSWORD_PATH) $(JWT_SECRET_PATH) $(ORMCONFIG_PATH) $(PGPASS_PATH) $(SENTRY_DSN_PATH)
 
 .PHONY: build
-build: docker-compose.yml $(SECRETS)
+build: docker-compose.yml
 	docker-compose pull db
 	docker-compose build --pull
 
