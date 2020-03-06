@@ -4,8 +4,8 @@
       <div class="wrapper trade-send">
         <p class="trade-title">
           Trade With:
-          <span :class="{ none: name === '' }">{{
-            name !== '' ? name : 'None Selected'
+          <span :class="{ none: tradePartnerName === '' }">{{
+          tradePartnerName !== '' ? tradePartnerName : 'None Selected'
           }}</span>
         </p>
         <button :disabled="!clientValidation" @click="handleTrade">
@@ -75,7 +75,7 @@ import {
 import { canPlayerMakeTrade } from 'shared/validation';
 import { GameRequestAPI } from '@/api/game/request';
 import { defaultInventory } from '@/store/state';
-import { TutorialAPI } from '../../../../api/tutorial/request';
+import { TutorialAPI } from '@/api/tutorial/request';
 
 @Component({
   components: {

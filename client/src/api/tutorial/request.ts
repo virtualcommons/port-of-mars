@@ -33,19 +33,18 @@ export class TutorialAPI extends GameRequestAPI {
             
             for(const commandSet of state){
                 for(const [command,value] of Object.entries(commandSet)){
-                    
-                    if(command=='required'){
-                        
-                        this.isTaskComplete = !value;
-                    }
-                    
-                    else if(command=='validationObject'){
-                        this.validationObject = value;
-                    }
 
-                    else{
-                        this.isTaskComplete = true;
-                        this.store.commit(command,value);
+                    switch(command){
+                        case 'required':
+                            this.isTaskComplete = !value;
+                            break;
+                        case 'validationObject':
+                            this.validationObject = value;
+                            break;
+                        default:
+                            this.isTaskComplete = true;
+                            this.store.commit(command,value);
+                            break;
                     }
                 }
             }
@@ -69,20 +68,18 @@ export class TutorialAPI extends GameRequestAPI {
             for(const commandSet of state){
                 
                 for(const [command,value] of Object.entries(commandSet)){
-                    
-                    if(command=='required'){
-                        this.isTaskComplete = !value;
-                        //this passes the command set object to the required object by reference
-                        this.requiredObject = commandSet;
-                    }
 
-                    else if(command=='validationObject'){
-                        this.validationObject = value;
-                    }
-
-
-                    else{
-                        this.store.commit(command,value);
+                    switch(command){
+                        case 'required':
+                            this.isTaskComplete = !value;
+                            this.requiredObject = commandSet;
+                            break;
+                        case 'validationObject':
+                            this.validationObject = value;
+                            break;
+                        default:
+                            this.store.commit(command,value);
+                            break;
                     }
                 }
             }
@@ -100,6 +97,11 @@ export class TutorialAPI extends GameRequestAPI {
         this.apply();
     };
 
+    public completedGeneralClick(){
+        this.isTaskComplete = true;
+        this.requiredObject.required = false;
+    }
+
     
     public sendChatMessage(message:String){
         this.store.commit('ADD_TO_CHAT',{
@@ -112,6 +114,7 @@ export class TutorialAPI extends GameRequestAPI {
         
         //since they are tied by reference, this change will be reflected in the step array object
         this.requiredObject.required = false;
+        
     };
 
     count:number= 1;
