@@ -1,7 +1,7 @@
 <template>
   <div class="tutorial-layout">
     <ConsentFormModal @grant-consent="grantConsent" @deny-consent="denyConsent" />
-    <TourModal v-if="consent" @hide="startTourOnHideModal" />
+    <TourModal @show="showTour" @hide="startTourOnHideModal" />
     <CompletedQuizModal v-if="tourIsOver" />
     <GameDashboard />
     <v-tour
@@ -192,17 +192,22 @@ export default class Tutorial extends Vue {
     (this as any).$bvModal.show('bv-modal');
   }
 
+  private showTour() {
+    if (this.consent) this.showModal();
+  }
+
   private startTourOnHideModal() {
     (this as any).$tours.gameTour.start();
   }
 
   private grantConsent() {
-    this.consent = this.$store.state.consent;
+    this.consent = this.$tstore.state.consent;
     console.log('updated consent: ', this.consent)
   }
 
   private denyConsent() {
-    this.consent = this.$store.state.consent;
+    this.consent = this.$tstore.state.consent;
+    console.log('updated consent: ', this.consent)
   }
 
   // NOTE: Callbacks

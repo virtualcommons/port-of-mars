@@ -12,8 +12,8 @@
         :body-text-variant="bodyTextVariant"
         :footer-bg-variant="footerBgVariant"
         :footer-text-variant="footerTextVariant"
-        :no-close-on-backdrop="false"
-        :no-close-on-esc="false"
+        :no-close-on-backdrop="true"
+        :no-close-on-esc="true"
         :hide-header-close="true"
     >
         <template v-slot:modal-title>
@@ -84,8 +84,8 @@
             <br/><br/>
 
             <div>
-                <b-button class="button-consent" variant="success" @click="grantConsent">Grant Consent</b-button>
-                <b-button class="button-consent" variant="danger" @click="denyConsent">Deny Consent</b-button>
+                <BButton class="button-consent" variant="success" @click="grantConsent">Grant Consent</BButton>
+                <BButton class="button-consent" variant="danger" @click="denyConsent">Deny Consent</BButton>
             </div>
         </div>
         <template v-slot:modal-footer>
@@ -138,14 +138,14 @@ export default class ConsentFormModal extends Vue {
     grantConsent() {
         this.$store.state.consent = true;
         this.$bvModal.hide('bv-modal');
-        console.log('consent: ', this.$store.state.consent);
+        console.log('consent: ', this.$tstore.state.consent);
     }
 
     @Emit('deny-consent')
     denyConsent() {
         this.$store.state.consent = false;
         this.$bvModal.hide('bv-modal');
-        console.log('consent: ', this.$store.state.consent);
+        console.log('consent: ', this.$tstore.state.consent);
     }
 
 }
