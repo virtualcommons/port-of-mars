@@ -1,8 +1,6 @@
 import Tutorial from '@/views/Tutorial.vue';
-import App from '@/App.vue';
 import { mockRoomSetup, mountPOM, provideClient } from './common';
 import { Step, StateTransform } from '@/types/tutorial';
-import { State } from '@/store/state';
 import { TutorialAPI } from '@/api/tutorial/request';
 import Vue from 'vue';
 

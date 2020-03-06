@@ -69,20 +69,8 @@ export default class TradeOptions extends Vue {
   @Prop({ default: '' }) mode!: string;
   @Prop() resourceReader!: any;
 
-  private resources: ResourceAmountData = {
-    science: 0,
-    government: 0,
-    legacy: 0,
-    finance: 0,
-    culture: 0
-  };
+  @Prop() resources!:ResourceAmountData
 
-  // resourcesAmount() {
-  //   makeTradeSafe(this.resources);
-  //
-  //   this.resourceReader(this.resources);
-  //   return;
-  // }
 
   get playerInventory() {
     return this.$store.getters.player.inventory;

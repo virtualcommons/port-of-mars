@@ -1,5 +1,5 @@
-import {TradeData, AccomplishmentData} from "shared/types";
-import { initialStoreState } from '@/store/state';
+import {TradeData, AccomplishmentData, ResourceAmountData, Resource} from "shared/types";
+import { initialStoreState, defaultInventory } from '@/store/state';
 import { GameRequestAPI } from "@/api/game/request";
 import * as _ from "lodash";
 import {Store} from 'vuex/types/index';
@@ -11,6 +11,8 @@ export class TutorialAPI extends GameRequestAPI {
     private store!:Store<State>;
     private stateStack:Array<StateTransform[]> = []
     private isTaskComplete = true;
+    private validationObject:any = {};
+    private requiredObject!:StateTransform;
 
     constructor(){
         super();
@@ -22,7 +24,7 @@ export class TutorialAPI extends GameRequestAPI {
 
     public apply(){
         this.store.replaceState(_.cloneDeep(initialStoreState));
-
+        
         if(this.stateStack.length == 0){
             this.isTaskComplete = true;
         }
@@ -31,9 +33,16 @@ export class TutorialAPI extends GameRequestAPI {
             
             for(const commandSet of state){
                 for(const [command,value] of Object.entries(commandSet)){
+                    
                     if(command=='required'){
+                        
                         this.isTaskComplete = !value;
                     }
+                    
+                    else if(command=='validationObject'){
+                        this.validationObject = value;
+                    }
+
                     else{
                         this.isTaskComplete = true;
                         this.store.commit(command,value);
@@ -41,6 +50,7 @@ export class TutorialAPI extends GameRequestAPI {
                 }
             }
         }
+        
     }
 
     get forcePause(){
@@ -57,17 +67,26 @@ export class TutorialAPI extends GameRequestAPI {
             
         
             for(const commandSet of state){
+                
                 for(const [command,value] of Object.entries(commandSet)){
                     
                     if(command=='required'){
                         this.isTaskComplete = !value;
+                        //this passes the command set object to the required object by reference
+                        this.requiredObject = commandSet;
                     }
+
+                    else if(command=='validationObject'){
+                        this.validationObject = value;
+                    }
+
+
                     else{
                         this.store.commit(command,value);
                     }
                 }
             }
-
+            
             this.stateStack.push(state);
             
        }
@@ -81,7 +100,7 @@ export class TutorialAPI extends GameRequestAPI {
         this.apply();
     };
 
-
+    
     public sendChatMessage(message:String){
         this.store.commit('ADD_TO_CHAT',{
             message,
@@ -90,6 +109,9 @@ export class TutorialAPI extends GameRequestAPI {
             round:0
         });
         this.isTaskComplete = true;
+        
+        //since they are tied by reference, this change will be reflected in the step array object
+        this.requiredObject.required = false;
     };
 
     count:number= 1;
@@ -101,6 +123,7 @@ export class TutorialAPI extends GameRequestAPI {
         this.count++;
 
         this.isTaskComplete = true;
+        this.requiredObject.required = false;
     };
 
     public acceptTradeRequest(id:string){
@@ -121,6 +144,7 @@ export class TutorialAPI extends GameRequestAPI {
             role:accomplishment.role
         });
         this.isTaskComplete = true;
+        this.requiredObject.required = false;
     };
 
     public discardAccomplishment(id: number){
@@ -130,6 +154,7 @@ export class TutorialAPI extends GameRequestAPI {
         });
 
         this.isTaskComplete = true;
+        this.requiredObject.required = false;
     };
 
     public deleteNotification(id: number){
@@ -139,6 +164,57 @@ export class TutorialAPI extends GameRequestAPI {
         })
     };
 
-    public investTimeBlocks():void {};
+
+    public saveGiveResources(resources: ResourceAmountData){
+        //;
+        // const correctGive = defaultInventory();
+        // correctGive.science =2;
+        // correctGive.government = 1;
+
+
+        for(const [resource, amt] of Object.entries(resources)){
+            if(this.validationObject[resource as Resource] != amt) return false;
+        }
+
+        this.isTaskComplete = true;
+        this.requiredObject.required = false;
+        //this.store.commit('TUTORIAL_SET_GIVE_RESOURCES', resources)
+        return true;
+    }
+
+    public saveGetResources(resources: ResourceAmountData){
+        
+        // const correctGet = defaultInventory();
+        // correctGet.culture =3;
+
+        for(const [resource, amt] of Object.entries(resources)){
+            if(this.validationObject[resource as Resource] != amt) return false;
+        }
+
+        this.isTaskComplete = true;
+        this.requiredObject.required = false;
+        //this.store.commit('TUTORIAL_SET_GET_RESOURCES', resources);
+        return true;
+    }
+
+    public saveTradePartner(name: string){
+        if(this.validationObject.name == name) {
+            this.isTaskComplete = true;
+            //this.store.commit('TUTORIAL_SET_TRADE_PARTNER_NAME', name);
+            this.requiredObject.required = false;
+            return true;
+        }
+        return false;
+    }
+
+    public investTimeBlocks(){
+        const pendingInventory = this.store.getters.player.pendingInvestments;
+        for(const [resource, amt] of Object.entries(pendingInventory)){
+            if(this.validationObject[resource as Resource] != amt) return false;
+        }
+        this.isTaskComplete = true;
+        this.requiredObject.required = false;
+        return true;
+    };
     public setPlayerReadiness(): void {};
 }

@@ -12,7 +12,8 @@ import {
   PIONEER,
   GameData,
   MarsLogMessageData,
-  QuizQuestionData
+  QuizQuestionData,
+  TradeDataWithNull
 } from 'shared/types';
 import _ from 'lodash';
 
@@ -88,6 +89,13 @@ export interface User {
   passedQuiz: boolean;
 }
 
+
+export interface uiVars {
+  tradeData:TradeDataWithNull<''|Role>;
+}
+
+
+
 export interface State extends GameData {
   role: Role;
   logs: Array<MarsLogMessageData>;
@@ -103,6 +111,12 @@ export interface State extends GameData {
   lobbyClientJoinedQueue: boolean;
   lobbyReceivedInvitation: boolean;
   environment: string;
+
+  tutorialTradePartner: string;
+  tutorialTradeGive: ResourceAmountData;
+  tutorialTradeGet: ResourceAmountData;
+
+  ui: uiVars;
 }
 
 export const initialStoreState: State = {
@@ -138,4 +152,26 @@ export const initialStoreState: State = {
   lobbyWaitingUsers: 0,
   lobbyClientJoinedQueue: false,
   lobbyReceivedInvitation: false,
-};
+
+  //TUTORIAL TRADING
+  tutorialTradePartner: '',
+  tutorialTradeGive: defaultInventory(),
+  tutorialTradeGet: defaultInventory(),
+
+
+  ui:{
+    tradeData:{
+      to: {
+        role: '',
+        resourceAmount: defaultInventory(),
+      },
+
+      from: {
+        role: 'Researcher',
+        resourceAmount: defaultInventory()
+      }
+    }
+  }
+
+  
+}

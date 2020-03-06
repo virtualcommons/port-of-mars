@@ -147,6 +147,18 @@ export interface TradeData {
   to: TradeAmountData;
 }
 
+export type NullPartner = '';
+
+export interface TradeAmountDataWithNull<R> {
+  role: R;
+  resourceAmount: ResourceAmountData;
+}
+
+export interface TradeDataWithNull<R=Role|NullPartner>{
+  from:TradeAmountDataWithNull<R>;
+  to: TradeAmountDataWithNull<R>;
+}
+
 export type TradeSetData = { [uuid: string]: TradeData };
 
 export interface PlayerData {

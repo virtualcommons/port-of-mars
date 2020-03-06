@@ -209,8 +209,9 @@ export default class Tutorial extends Vue {
     const currentStepElement = this.$el.querySelector(
       this.steps[currentStep].target
     );
+
     const previousStepElement = this.$el.querySelector(
-      this.steps[currentStep - 1].target
+      this.steps[currentStep -1].target
     );
     currentStepElement!.classList.remove(this.TOUR_ACTIVE_CLASS);
     previousStepElement!.classList.add(this.TOUR_ACTIVE_CLASS);
@@ -273,6 +274,7 @@ export default class Tutorial extends Vue {
     if (result) {
       this.quizQuestionStatusMessage = 'Correct! Please click next.';
       this.quizQuestionStatus = true;
+      
     } else {
       this.quizQuestionStatusMessage = 'Incorrect, please try again.';
     }

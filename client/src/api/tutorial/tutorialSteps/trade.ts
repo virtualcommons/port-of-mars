@@ -74,8 +74,8 @@ const steps: Array<Step> = [
     stateTransform: [
       {
         ADD_TO_CHAT: {
-          message: 'Hey Researcher, can I have 2 science in exchange for 1 legacy?',
-          role: `Pioneer`,
+          message: 'Hey Researcher, can I have 2 Science and 1 Government in exchange for 3 Culture?',
+          role: `Curator`,
           dateCreated: new Date().getTime(),
           round: 0,
         }
@@ -91,41 +91,70 @@ const steps: Array<Step> = [
     ],
   },
   {
-    target: '.tour-trade-request',
-    content: `To request a trade, you must first select a person to trade with.`,
+    target: '.tour-trade-partner',
+    content: `To request a trade, you must first select a person to trade with. Try clicking the curator!`,
     params: {
       placement: 'top',
     },
     stateTransform: [
       {
         required: true,
+        validationObject: {
+          name: 'Curator',
+        }
       }
     ]
   },
   {
-    target: '.tour-trade-request',
+    target: '.tour-give-up',
     content: `Then, you select the amount of each resource you are willing to give up.
-      You cannot send more resources than you currently have.`,
+      You cannot send more resources than you currently have. Increment Science to 2 and Government to 1!`,
     params: {
       placement: 'top',
     },
     stateTransform: [
       {
         required: true,
+        validationObject: {
+          culture: 0,
+          finance: 0,
+          government: 1,
+          legacy: 0,
+          science: 2,
+        }
+      },
+      {
+        SET_TRADE_PARTNER_NAME:'Curator',
       }
     ]
   },
   {
-    target: '.tour-trade-request',
-    content: `Finally, you choose how much of any resource that you want.`,
+    target: '.tour-get-in-return',
+    content: `Finally, you choose how much of any resource that you want. Ask for 3 culture!`,
     params: {
       placement: 'top',
     },
     stateTransform: [
       {
         required: true,
+        validationObject:{
+          culture: 3,
+          finance: 0,
+          government: 0,
+          legacy: 0,
+          science: 0,
+        }
+      },
+      {
+        SET_SEND_RESOURCES:{
+            culture: 0,
+            finance: 0,
+            government: 1,
+            legacy: 0,
+            science: 2,
+        }
       }
-    ]
+    ],
   },
   {
     target: '.tour-trade',
@@ -137,9 +166,18 @@ const steps: Array<Step> = [
     stateTransform: [
       {
         required: true,
+      },
+      {
+        SET_GET_RESOURCES:{
+            culture: 3,
+            finance: 0,
+            government: 0,
+            legacy: 0,
+            science: 0,
+        }
       }
 
-    ]
+    ],
   },
   {
     target: '.tour-container-bottom',
@@ -153,7 +191,7 @@ const steps: Array<Step> = [
         required: false,
       }
 
-    ]
+    ],
   }
 
 ]
