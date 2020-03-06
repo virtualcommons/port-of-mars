@@ -1,7 +1,7 @@
 <template>
   <div class="tutorial-layout">
-    <ConsentFormModal />
-    <!-- <TourModal @hide="startTourOnHideModal" /> -->
+    <ConsentFormModal @grant-consent="grantConsent" @deny-consent="denyConsent" />
+    <TourModal v-if="consent" @hide="startTourOnHideModal" />
     <CompletedQuizModal v-if="tourIsOver" />
     <GameDashboard />
     <v-tour
@@ -153,6 +153,7 @@ export default class Tutorial extends Vue {
 
   private steps: Array<Step> = tutorialSteps;
   private tourIsOver: boolean = false;
+  private consent: boolean = false;
 
   private submissionId: any = null;
   private dataFetched: boolean = false;
@@ -179,7 +180,6 @@ export default class Tutorial extends Vue {
         // TODO: Handle server error
       }
     }
-    
   }
 
   // NOTE: Initialize
@@ -194,6 +194,15 @@ export default class Tutorial extends Vue {
 
   private startTourOnHideModal() {
     (this as any).$tours.gameTour.start();
+  }
+
+  private grantConsent() {
+    this.consent = this.$store.state.consent;
+    console.log('updated consent: ', this.consent)
+  }
+
+  private denyConsent() {
+    this.consent = this.$store.state.consent;
   }
 
   // NOTE: Callbacks
@@ -212,9 +221,8 @@ export default class Tutorial extends Vue {
     const currentStepElement = this.$el.querySelector(
       this.steps[currentStep].target
     );
-
     const previousStepElement = this.$el.querySelector(
-      this.steps[currentStep -1].target
+      this.steps[currentStep - 1].target
     );
     currentStepElement!.classList.remove(this.TOUR_ACTIVE_CLASS);
     previousStepElement!.classList.add(this.TOUR_ACTIVE_CLASS);
@@ -277,7 +285,6 @@ export default class Tutorial extends Vue {
     if (result) {
       this.quizQuestionStatusMessage = 'Correct! Please click next.';
       this.quizQuestionStatus = true;
-      
     } else {
       this.quizQuestionStatusMessage = 'Incorrect, please try again.';
     }
