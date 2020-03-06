@@ -122,9 +122,9 @@ async function createApp() {
     const _sessionId = req.sessionID;
     logger.info(`successful authentication for ${req.user}, setting session id ${_sessionId}`);
     res.cookie('connect.sid', _sessionId, { signed: true });
-    const sessionCookie = res.getHeaders()['set-cookie'];
+    const sessionCookie: any = res.getHeaders()['set-cookie'];
     logger.info(sessionCookie);
-    res.json({username: req.user.username, sessionCookie });
+    res.json({username: (req.user as User).username, sessionCookie });
   });
   app.use('/quiz', quizRouter);
   app.use('/registration', registrationRouter);

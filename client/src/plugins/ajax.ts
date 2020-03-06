@@ -15,7 +15,7 @@ const SUBMISSION_ID = 'submissionId';
 const GAME_DATA = "gameData";
 
 interface LoginCreds {
-  cookie: string
+  sessionCookie: string
   username: string
 }
 
