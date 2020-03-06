@@ -208,10 +208,10 @@ export class CompulsivePhilanthropy extends BaseEvent {
       }
     }
 
-    const winner:Role = _.find(this.order, (w:Role) => winners.includes(w)) || this.order[0];
+    const winner: Role = _.find(this.order, (w:Role) => winners.includes(w)) || this.order[0];
     game.upkeep += game.players[winner].timeBlocks;
     game.players[winner].timeBlocks = 0;
-    game.log(`${winner} voted to be compulsive philanthropist`);
+    game.log(`${winner} voted to be compulsive philanthropist.`);
   }
 
   getData() {
@@ -306,7 +306,7 @@ export class OutOfCommissionEntrepreneur extends OutOfCommission {
 @assocEventId
 export class Audit extends BaseEvent {
   finalize(game: GameState) {
-    game.log(`You will be able to view other players' resources.`);
+    game.log(`You will be able to view other players' resources. Hover over each player tab on the right to reveal their inventory.`);
   }
 }
 
