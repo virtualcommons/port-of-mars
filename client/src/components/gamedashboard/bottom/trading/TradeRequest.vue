@@ -43,7 +43,7 @@
         :resources="sentResources"
       />
       <TradeOptions
-        :resourceReader="handleReciveResources"
+        :resourceReader="handleReceiveResources"
         text="In exchange for"
         mode="incoming"
         class="options-block tour-get-in-return"
@@ -51,11 +51,6 @@
         :key="count + 'get'"
         :resources="exchangeResources"
       />
-    </div>
-    <div class="trade-send">
-      <button v-show="tradePartnerName" :disabled="!clientValidation" @click="handleTrade">
-        Send Trade
-      </button>
     </div>
   </div>
 </template>
@@ -155,7 +150,7 @@ export default class TradeRequest extends Vue {
     this.tutorialValidation('give');
   }
 
-  handleReciveResources(resources: ResourceAmountData) {
+  handleReceiveResources(resources: ResourceAmountData) {
     //this.exchangeResources = resources;
     this.$tstore.commit('SET_GET_RESOURCES', resources);
 
