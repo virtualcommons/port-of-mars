@@ -51,8 +51,9 @@ passport.serializeUser(function (user: User, done: Function) {
   done(null, user.id);
 });
 
-passport.deserializeUser(function (id: number, done: Function) {
-  const user = findById(id);
+passport.deserializeUser(async function (id: number, done: Function) {
+  logger.warn(`entered deserialize ${id}`);
+  const user = await findById(id);
   done(null, user);
 });
 
@@ -86,7 +87,7 @@ async function createApp() {
   app.post('/next-page/:pageName', auth, nextPage);
   app.post('/login', login);
   app.use('/quiz', quizRouter);
-  app.use('/registration', registrationRouter);
+  app.use('/registration', passport.authenticate('local', { failureRedirect: '/'}), registrationRouter);
 
   app.get('/asulogin',
     passport.authenticate('cas', { failureRedirect: '/' }),
@@ -132,7 +133,8 @@ async function createApp() {
 
   applyInStagingOrProd(() => app.use(Sentry.Handlers.errorHandler()));
   app.use((err: any, req: any, res: Response, next: any) => {
-    res.status(err.statusCode || 500).json({ error: err.message });
+    res.status(err.statusCode || 500).json({ error: 'Unhandled server error' });
+    logger.fatal(err);
   });
 
   gameServer.listen(port);
