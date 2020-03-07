@@ -18,6 +18,4 @@ install:
   - docker --version
   - ./configure
 script:
-  - make
-  - make test
-  - make buildprod
+  - make secrets buildprod test
