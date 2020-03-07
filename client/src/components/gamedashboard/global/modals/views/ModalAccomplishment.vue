@@ -3,10 +3,16 @@
     <p class="title">{{ cardData.label }}</p>
     <p class="info">{{ cardData.flavorText }}</p>
     <div class="investments">
-      <div v-for="(investment,i) in accomplishmentCost" :key="investment + Math.random()"
-      v-bind:class="{'unattainable-resource': investmentGrayStatus[i]}"
+      <div
+        v-for="(investment, i) in accomplishmentCost"
+        :key="investment + Math.random()"
+        :class="{ 'unattainable-resource': investmentGrayStatus[i] }"
+        class="container"
       >
-        <img :src="require(`@/assets/icons/${investment}.svg`)" alt="Investment" />
+        <img
+          :src="require(`@/assets/icons/${investment}.svg`)"
+          alt="Investment"
+        />
       </div>
     </div>
     <p class="cost">Cost</p>
@@ -17,14 +23,25 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue, Prop,  InjectReactive, Inject} from 'vue-property-decorator';
+import {
+  Component,
+  Vue,
+  Prop,
+  InjectReactive,
+  Inject
+} from 'vue-property-decorator';
 import { canPurchaseAccomplishment } from 'shared/validation';
-import {AccomplishmentData, Investment, INVESTMENTS, Resource, RESOURCES} from 'shared/types';
+import {
+  AccomplishmentData,
+  Investment,
+  INVESTMENTS,
+  Resource,
+  RESOURCES
+} from 'shared/types';
 import * as _ from 'lodash';
 
 @Component({})
 export default class ModalAccomplishment extends Vue {
-
   @Prop({
     default: () => ({
       id: undefined,
@@ -44,7 +61,9 @@ export default class ModalAccomplishment extends Vue {
   private cardData!: AccomplishmentData;
 
   get accomplishmentCost(): Array<Investment> {
-    return INVESTMENTS.filter(investment => this.cardData[investment] !== 0).flatMap(investment =>
+    return INVESTMENTS.filter(
+      investment => this.cardData[investment] !== 0
+    ).flatMap(investment =>
       _.fill(Array(Math.abs(this.cardData[investment])), investment)
     );
   }
@@ -53,13 +72,12 @@ export default class ModalAccomplishment extends Vue {
     return canPurchaseAccomplishment(this.cardData, this.playerFullInventory);
   }
 
-
-  get playerFullInventory(){
+  get playerFullInventory() {
     let totalInventory = _.clone(this.$tstore.getters.player.inventory);
     const pendingInventory = this.$tstore.getters.player.pendingInvestments;
 
-    for(const resource of RESOURCES){
-      totalInventory[resource] += pendingInventory[resource]
+    for (const resource of RESOURCES) {
+      totalInventory[resource] += pendingInventory[resource];
     }
 
     return totalInventory;
@@ -68,14 +86,14 @@ export default class ModalAccomplishment extends Vue {
   get investmentGrayStatus() {
     let grayStatus = [];
     let inventory = _.clone(this.playerFullInventory);
-    for(let investment of this.accomplishmentCost){
+    for (let investment of this.accomplishmentCost) {
       if (investment === 'upkeep') {
         grayStatus.push(false);
       } else if (inventory[investment] > 0) {
         grayStatus.push(false);
         inventory[investment]--;
       } else {
-        grayStatus.push(true)
+        grayStatus.push(true);
       }
     }
     return grayStatus;
@@ -83,17 +101,18 @@ export default class ModalAccomplishment extends Vue {
 
   get buyText() {
     const b = this.canBuy;
-    return b ? 'You have the resources to purchase this' : 'You cannot purchase this';
+    return b
+      ? 'You have the resources to purchase this'
+      : 'You cannot purchase this';
   }
-
 }
 </script>
 
 <style lang="scss" scoped>
 @import '@/stylesheets/gamedashboard/global/modals/views/ModalAccomplishment.scss';
 
-.unattainable-resource{
-  // Percentage produce 1% opacity in production for some reason
-  opacity: 0.3;
-}
+// .unattainable-resource{
+//   // Percentage produce 1% opacity in production for some reason
+//   opacity: 0.3;
+// }
 </style>

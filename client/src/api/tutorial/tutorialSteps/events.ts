@@ -23,7 +23,7 @@ const steps:Array<Step> = [
     },
     {
       target: '.tour-container-bottom',
-      content: 'Some events can be more involved and require players to fulfill tasks ' +
+      content: 'Some Events can be more involved and require players to fulfill tasks ' +
       'that include voting. Mars is unpredictable; many different events can happen!',
       params:{
         placement: TOP,
@@ -31,7 +31,7 @@ const steps:Array<Step> = [
     },
     {
       target: '.tour-container-upkeep',
-      content: `Keep in mind that as Upkeep drops, the number of Events will increase!`,
+      content: `Keep in mind that as System Health drops, the number of Events you will encounter will increase.`,
       params:{
         placement:'bottom'
       }
@@ -40,7 +40,7 @@ const steps:Array<Step> = [
         target: '.tour-phase',
         content:
           'Events persisting multiple rounds or relevant to the current round ' +
-          'will populate here.',
+          'will be shown here.',
         params: {
           placement: 'left'
         },

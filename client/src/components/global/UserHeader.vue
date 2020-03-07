@@ -3,21 +3,6 @@
     <div class="problem">
       <button @click="openModalProblem">[ <span>BETA</span> ] <span>Report a Problem</span></button>
     </div>
-    <div v-if="inDevelopment" class="switch">
-      <p>Enable DevTools</p>
-      <button
-        @click="toggleDevTools(true)"
-        :class="{ selected: devToolsEnabled }"
-      >
-        On
-      </button>
-      <button
-        @click="toggleDevTools(false)"
-        :class="{ selected: !devToolsEnabled }"
-      >
-        Off
-      </button>
-    </div>
     <div class="logout">
       <button
         @click="logoutUser"
@@ -62,20 +47,6 @@ export default class UserHeader extends Vue {
 
   private openModalProblem(): void {
     this.$root.$emit('openModalProblem');
-  }
-
-  // NOTE :: TOGGLE DEV TOOLS
-
-  get inDevelopment(): boolean {
-    return this.$tstore.state.inDevelopment;
-  }
-
-  get devToolsEnabled(): boolean {
-    return this.$tstore.state.devToolsEnabled;
-  }
-
-  private toggleDevTools(option: boolean): void {
-    this.$store.commit('TOGGLE_DEV_TOOLS', option);
   }
 }
 </script>

@@ -4,7 +4,7 @@
       v-if="gamePhase != phase.defeat && gamePhase != phase.victory"
       class="game-dashboard"
     >
-      <MasterComponent v-if="inDevelopment && devToolsEnabled" />
+      <MasterComponent v-if="environment == 'development'" />
       <ModalContainer />
       <ContainerBoard />
     </div>
@@ -20,11 +20,13 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { Phase } from 'shared/types';
+import { EnvironmentMode } from '@/settings';
 import MasterComponent from '@/components/MasterComponent.vue';
 import ModalContainer from '@/components/gamedashboard/global/modals/ModalContainer.vue';
 import ContainerBoard from '@/components/gamedashboard/global/containers/ContainerBoard.vue';
 import ContainerDefeat from '@/components/gamedashboard/global/containers/ContainerDefeat.vue';
 import ContainerVictory from '@/components/gamedashboard/global/containers/ContainerVictory.vue';
+import environment from '../store/mutationFolder/environment';
 
 @Component({
   components: {
@@ -35,21 +37,29 @@ import ContainerVictory from '@/components/gamedashboard/global/containers/Conta
     ContainerVictory
   }
 })
+
 export default class GameDashboard extends Vue {
+  env: EnvironmentMode = new EnvironmentMode;
+
   get phase() {
     return Phase;
   }
-
+  
+  /**
+   * Gets the current phase of the game.
+   * @returns The current phase.
+   */
   get gamePhase() {
     return this.$tstore.state.phase;
   }
 
-  get inDevelopment(): boolean {
-    return this.$tstore.state.inDevelopment;
-  }
-
-  get devToolsEnabled(): boolean {
-    return this.$tstore.state.devToolsEnabled;
+  /**
+   * Gets the string value of the current environment.
+   * @return The environment.
+   * 
+   */
+  get environment() {
+    return this.env.environment;
   }
 }
 </script>

@@ -45,34 +45,6 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     effect: ""
   },
   {
-    id: 3,
-    role: "Researcher",
-    label: "Celebrity Scientist",
-    flavorText: "You've become a famous science personality both on Mars and Earth.",
-    science: 0,
-    government: 1,
-    legacy: 2,
-    finance: 0,
-    culture: 0,
-    upkeep: 0,
-    victoryPoints: 1,
-    effect: "You gain 3 Science Influences. These may ONLY be traded to other players. (You may not spend them to buy any accomplishments.)"
-  },
-  {
-    id: 4,
-    role: "Researcher",
-    label: "Research Focused",
-    flavorText: "You get long-term commitment from the current leader of the community that scientific research will always remain a priority of Port of Mars.",
-    science: 0,
-    government: 2,
-    legacy: 1,
-    finance: 0,
-    culture: 0,
-    upkeep: 0,
-    victoryPoints: 1,
-    effect: "Whenever a \"Life as Usual\" event is revealed, you gain a Science Influence."
-  },
-  {
     id: 5,
     role: "Researcher",
     label: "Fully Funded",
@@ -85,20 +57,6 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     upkeep: 0,
     victoryPoints: 4,
     effect: ""
-  },
-  {
-    id: 6,
-    role: "Researcher",
-    label: "Highly Specialized",
-    flavorText: "You're solely focused on your research, to the exclusion of all other pursuits.",
-    science: 3,
-    government: 0,
-    legacy: 0,
-    finance: 0,
-    culture: 0,
-    upkeep: 0,
-    victoryPoints: 1,
-    effect: "You can no longer make Politics or Legacy Influence. Science Influence only costs 1 Time Block to make."
   },
   {
     id: 7,
@@ -255,48 +213,6 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     effect: ""
   },
   {
-    id: 18,
-    role: "Researcher",
-    label: "Changing Minds",
-    flavorText: "Through your lobbying and dedication, you sway public opinion on a key science policy.",
-    science: 0,
-    government: 3,
-    legacy: 0,
-    finance: 0,
-    culture: 0,
-    upkeep: 0,
-    victoryPoints: 1,
-    effect: "Whenever a player trades with you, you both gain an additional Time Block next round."
-  },
-  {
-    id: 19,
-    role: "Researcher",
-    label: "Innovation",
-    flavorText: "Your work across disciplines give you unique insights into many fields.",
-    science: 0,
-    government: 0,
-    legacy: 3,
-    finance: 0,
-    culture: 0,
-    upkeep: 0,
-    victoryPoints: 1,
-    effect: "Every round, after the event, you may turn in 2 Science Influence for 1 Influence of your choice."
-  },
-  {
-    id: 20,
-    role: "Researcher",
-    label: "Community Upgrades",
-    flavorText: "With your sharp eye, you've helped improve security and safety, making equipment run better and last longer.",
-    science: 5,
-    government: 0,
-    legacy: 0,
-    finance: 0,
-    culture: 0,
-    upkeep: 0,
-    victoryPoints: 1,
-    effect: "Every round, upkeep goes down by 20 instead of 25."
-  },
-  {
     id: 21,
     role: "Pioneer",
     label: "Jack of All Trades",
@@ -325,34 +241,6 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     effect: ""
   },
   {
-    id: 23,
-    role: "Pioneer",
-    label: "Natural Naming",
-    flavorText: "Your nickname for a nearby geological feature has caught on. Now, everyone refers to that particular formation by the name you coined.",
-    science: 0,
-    government: 1,
-    legacy: 2,
-    finance: 0,
-    culture: 0,
-    upkeep: 0,
-    victoryPoints: 1,
-    effect: "Whenever a \"Life as Usual\" event is revealed, gain a Legacy Influence."
-  },
-  {
-    id: 24,
-    role: "Pioneer",
-    label: "Martian Novelist",
-    flavorText: "Your memoirs and travel journal of your time heading to Mars becomes an overnight bestseller.",
-    science: 0,
-    government: 2,
-    legacy: 1,
-    finance: 0,
-    culture: 0,
-    upkeep: 0,
-    victoryPoints: 1,
-    effect: "You gain three Legacy Influences. These may ONLY be traded to other players. (You may not spend them to buy any accomplishments.)"
-  },
-  {
     id: 25,
     role: "Pioneer",
     label: "First Martian Business",
@@ -365,20 +253,6 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     upkeep: 0,
     victoryPoints: 4,
     effect: ""
-  },
-  {
-    id: 26,
-    role: "Pioneer",
-    label: "First Family in Space",
-    flavorText: "Your child is the first child to be born in space!",
-    science: 3,
-    government: 0,
-    legacy: 0,
-    finance: 0,
-    culture: 0,
-    upkeep: 0,
-    victoryPoints: 1,
-    effect: "Every round, after the event, you get an Influence of your choice.\nEvery round, you only get six Time Blocks."
   },
   {
     id: 27,
@@ -535,48 +409,6 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     effect: ""
   },
   {
-    id: 38,
-    role: "Pioneer",
-    label: "Community Collaborator",
-    flavorText: "Some deride you as a glory seeker, ironically unaware of all the ways you contribute and give back to the Port of Mars community.",
-    science: 0,
-    government: 3,
-    legacy: 0,
-    finance: 0,
-    culture: 0,
-    upkeep: 0,
-    victoryPoints: 1,
-    effect: "At the end of each round, for each player that traded with you that round, gain 1 upkeep."
-  },
-  {
-    id: 39,
-    role: "Pioneer",
-    label: "Technology Upgrade",
-    flavorText: "You invest in the latest tech to help you in your dream of pushing the bounds of what humankind can achieve.",
-    science: 0,
-    government: 0,
-    legacy: 3,
-    finance: 0,
-    culture: 0,
-    upkeep: 0,
-    victoryPoints: 1,
-    effect: "For the next three rounds, you gain your choice of one Government or Business Influence at the start of that round."
-  },
-  {
-    id: 40,
-    role: "Pioneer",
-    label: "Always New Adventures",
-    flavorText: "Each day at Port of Mars is filled with new wonder. Each day you live your life to the fullest, tempting fate and picking fights with lady luck.",
-    science: 5,
-    government: 0,
-    legacy: 0,
-    finance: 0,
-    culture: 0,
-    upkeep: 0,
-    victoryPoints: 1,
-    effect: "Every round, when the event card is revealed, you may choose to discard that card instead of having it take effect. Reveal a new event card. That event takes effect instead."
-  },
-  {
     id: 41,
     role: "Entrepreneur",
     label: "Diversified Investor",
@@ -605,34 +437,6 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     effect: ""
   },
   {
-    id: 43,
-    role: "Entrepreneur",
-    label: "MarsChat",
-    flavorText: "You create the social media and communication platforms used by most settlers throughout Port of Mars.",
-    science: 0,
-    government: 1,
-    legacy: 2,
-    finance: 0,
-    culture: 0,
-    upkeep: 0,
-    victoryPoints: 1,
-    effect: "Whenever a \"Life as Usual\" event is revealed, gain a Finance Influence."
-  },
-  {
-    id: 44,
-    role: "Entrepreneur",
-    label: "Government Funding",
-    flavorText: "You talk to the right people at the right events to secure seed funding for your space business dreams.",
-    science: 0,
-    government: 2,
-    legacy: 1,
-    finance: 0,
-    culture: 0,
-    upkeep: 0,
-    victoryPoints: 1,
-    effect: "You gain 3 Finance Influences. These may ONLY be traded to other players. (You may not spend them to buy any accomplishments)."
-  },
-  {
     id: 45,
     role: "Entrepreneur",
     label: "Dividends",
@@ -645,20 +449,6 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     upkeep: 0,
     victoryPoints: 4,
     effect: ""
-  },
-  {
-    id: 46,
-    role: "Entrepreneur",
-    label: "Operating in the Red",
-    flavorText: "Business is booming at Port of Mars, but isn't profitable yet. Its operation is a burden on the community, but you�re certain it will all pay off soon�.",
-    science: 3,
-    government: 0,
-    legacy: 0,
-    finance: 0,
-    culture: 0,
-    upkeep: 0,
-    victoryPoints: 1,
-    effect: "Every round, after the event, you may destroy 3 Upkeep. If you do, gain 1 Influence of your choice."
   },
   {
     id: 47,
@@ -815,48 +605,6 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     effect: ""
   },
   {
-    id: 58,
-    role: "Entrepreneur",
-    label: "Favorable Laws",
-    flavorText: "As a major investor in the settlement, you put your weight behind laws that spur innovation - and opportunities for your ventures, of course.",
-    science: 0,
-    government: 3,
-    legacy: 0,
-    finance: 0,
-    culture: 0,
-    upkeep: 0,
-    victoryPoints: 1,
-    effect: "Each other player may gain a Government Influence. For each player who does, you gain an Influence of your choice."
-  },
-  {
-    id: 59,
-    role: "Entrepreneur",
-    label: "Martian Patron",
-    flavorText: "Your keen interest in art pays off as a painter you sponsor becomes wildly popular in both the Port of Mars and Earth art worlds.",
-    science: 0,
-    government: 0,
-    legacy: 3,
-    finance: 0,
-    culture: 0,
-    upkeep: 0,
-    victoryPoints: 1,
-    effect: "Each player may gain a Culture Influence. For each player who does, you gain an Influence of your choice."
-  },
-  {
-    id: 60,
-    role: "Entrepreneur",
-    label: "Incubator",
-    flavorText: "You leverage your business acumen to create a start up incubator for Port of Mars, opening the door to new opportunities for ambitious Martians.",
-    science: 5,
-    government: 0,
-    legacy: 0,
-    finance: 0,
-    culture: 0,
-    upkeep: 0,
-    victoryPoints: 1,
-    effect: "Every round, all players may reveal an additional AccomplishmentSet card."
-  },
-  {
     id: 61,
     role: "Politician",
     label: "Know Your Constituents",
@@ -885,34 +633,6 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     effect: ""
   },
   {
-    id: 63,
-    role: "Politician",
-    label: "Why Not Both?",
-    flavorText: "You manage to balance the needs of government and research, earning the support of researchers and entrepreneurs alike.",
-    science: 0,
-    government: 1,
-    legacy: 2,
-    finance: 0,
-    culture: 0,
-    upkeep: 0,
-    victoryPoints: 1,
-    effect: "You gain 3 Government Influences. These may ONLY be traded to other players. (You may not spend them to buy any accomplishments.)"
-  },
-  {
-    id: 64,
-    role: "Politician",
-    label: "Faith in Government",
-    flavorText: "Your steady hand and informed decision making inspires high confidence among people in the government's ability to run and improve things.",
-    science: 0,
-    government: 2,
-    legacy: 1,
-    finance: 0,
-    culture: 0,
-    upkeep: 0,
-    victoryPoints: 1,
-    effect: "Whenever a \"Life as Usual\" event is revealed, gain a Government Influence."
-  },
-  {
     id: 65,
     role: "Politician",
     label: "Cultural Legacy",
@@ -925,20 +645,6 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     upkeep: 0,
     victoryPoints: 4,
     effect: ""
-  },
-  {
-    id: 66,
-    role: "Politician",
-    label: "Census",
-    flavorText: "You call it collecting data. Some worry it's an overreach of governmental surveillance. You quietly note which folks say it's the latter.",
-    science: 3,
-    government: 0,
-    legacy: 0,
-    finance: 0,
-    culture: 0,
-    upkeep: 0,
-    victoryPoints: 1,
-    effect: "Every round, after the event, you may choose a player. That player must truthfully disclose how they allocated their time last round."
   },
   {
     id: 67,
@@ -1095,48 +801,6 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     effect: ""
   },
   {
-    id: 78,
-    role: "Politician",
-    label: "Emergency System",
-    flavorText: "You vote to build a better emergency alert and response system for Port of Mars, hoping you will never have to use it.",
-    science: 0,
-    government: 3,
-    legacy: 0,
-    finance: 0,
-    culture: 0,
-    upkeep: 0,
-    victoryPoints: 1,
-    effect: "One time this game, you may compel all players use all Time Blocks they have that round for Upkeep."
-  },
-  {
-    id: 79,
-    role: "Politician",
-    label: "Disaster Preparations",
-    flavorText: "Tightening the belt is never fun, but you call for mandatory preparations for some major planetary events predicted by your scientists.",
-    science: 0,
-    government: 0,
-    legacy: 3,
-    finance: 0,
-    culture: 0,
-    upkeep: 0,
-    victoryPoints: 1,
-    effect: "Next round, each player gets 2 fewer Time Blocks. Add 20 upkeep."
-  },
-  {
-    id: 80,
-    role: "Politician",
-    label: "Functional Government",
-    flavorText: "You've accomplished what never seems to happen on Earth: the government of Port of Mars is humming along, a portrait of productivity.",
-    science: 5,
-    government: 0,
-    legacy: 0,
-    finance: 0,
-    culture: 0,
-    upkeep: 0,
-    victoryPoints: 1,
-    effect: "Every round, after the Event, each player gains an Influence of their choice."
-  },
-  {
     id: 81,
     role: "Curator",
     label: "A Little Bit of Everything",
@@ -1165,34 +829,6 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     effect: ""
   },
   {
-    id: 83,
-    role: "Curator",
-    label: "Artist Grants",
-    flavorText: "You establish a grant that sponsors artists to create Martian artwork, solidifying the arts as a cornerstone of Port of Mars life.",
-    science: 0,
-    government: 1,
-    legacy: 2,
-    finance: 0,
-    culture: 0,
-    upkeep: 0,
-    victoryPoints: 1,
-    effect: "You gain 3 Culture Influences. These may ONLY be traded to other players (you may not spend them to buy any accomplishments)."
-  },
-  {
-    id: 84,
-    role: "Curator",
-    label: "Art Installation",
-    flavorText: "You commission a beautiful sculpture garden that is a beloved gathering place, sure to last for generations. Or at least until the first hull breach.",
-    science: 0,
-    government: 2,
-    legacy: 1,
-    finance: 0,
-    culture: 0,
-    upkeep: 0,
-    victoryPoints: 1,
-    effect: "Whenever a \"Life as Usual\" event is revealed, gain a Culture Influence."
-  },
-  {
     id: 85,
     role: "Curator",
     label: "SNN",
@@ -1205,20 +841,6 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     upkeep: 0,
     victoryPoints: 4,
     effect: ""
-  },
-  {
-    id: 86,
-    role: "Curator",
-    label: "You're Famous!",
-    flavorText: "You're kind of a big deal.",
-    science: 3,
-    government: 0,
-    legacy: 0,
-    finance: 0,
-    culture: 0,
-    upkeep: 0,
-    victoryPoints: 1,
-    effect: "Every round, after the event, other players must give you 1 Time Block."
   },
   {
     id: 87,
@@ -1373,47 +995,5 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     upkeep: 0,
     victoryPoints: 3,
     effect: ""
-  },
-  {
-    id: 98,
-    role: "Curator",
-    label: "Cultural Icon",
-    flavorText: "You've firmly established yourself as a founding figure in creating Port of Mars' cultural and artistic identity.",
-    science: 0,
-    government: 3,
-    legacy: 0,
-    finance: 0,
-    culture: 0,
-    upkeep: 0,
-    victoryPoints: 1,
-    effect: "One time during this game, you may add 10 Upkeep."
-  },
-  {
-    id: 99,
-    role: "Curator",
-    label: "Marsball Empire",
-    flavorText: "Your promotion of Marsball has exploded its popularity on Earth and Mars, gaining the attention of researchers and politicians alike.",
-    science: 0,
-    government: 0,
-    legacy: 3,
-    finance: 0,
-    culture: 0,
-    upkeep: 0,
-    victoryPoints: 1,
-    effect: "For the next 3 rounds, you gain your choice of one Government or Science Influence at the start of that round."
-  },
-  {
-    id: 100,
-    role: "Curator",
-    label: "Innovation!",
-    flavorText: "Having established their own unique identities, Martian music, art, and entertainment are now hugely influential on Earth tastes and trends.",
-    science: 5,
-    government: 0,
-    legacy: 0,
-    finance: 0,
-    culture: 0,
-    upkeep: 0,
-    victoryPoints: 1,
-    effect: "Every round, all players gain 1 additional Time Block."
   }
 ], 'role');

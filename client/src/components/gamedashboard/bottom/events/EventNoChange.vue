@@ -41,13 +41,11 @@ export default class EventNoChange extends Vue {
       default:
         return 'This event requires no interaction.';
     }
-    return 'This event requires no interaction.';
   }
 
   private handleContinue(): void {
     console.log('EVENT (CONTINUE)');
-    // TODO: Remove this once functionality is implemented on server
-    this.api.setNextPhase();
+    this.api.setPlayerReadiness(true);
   }
 }
 </script>

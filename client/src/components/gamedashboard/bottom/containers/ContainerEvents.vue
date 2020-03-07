@@ -24,7 +24,7 @@
       </div>
       <div class="actions">
         <div class="outer-wrapper">
-          <EventContainer :event="currentEvent" />
+          <EventContainer :event="currentEvent" :key="eventNumber"/>
         </div>
       </div>
     </div>

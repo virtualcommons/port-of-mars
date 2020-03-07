@@ -22,7 +22,7 @@ import {
   PersonalGainVoted, VotedForPhilanthropist, 
   MarsEventFinalized, CommissionCurator, 
   CommissionPolitician, CommissionResearcher, 
-  CommissionPioneer, CommissionEntrepreneur, SelectedInfluence
+  CommissionPioneer, CommissionEntrepreneur, SelectedInfluence, SaveResources, MarsEventInitialized
 } from '@/rooms/game/events';
 import { getAccomplishmentByID } from '@/data/Accomplishment';
 import { Client } from 'colyseus';
@@ -225,6 +225,7 @@ export class SetNextPhaseCmd implements Command {
           this.gameOver(this.upkeep);
         } else {
           events.push(new ReenteredMarsEventPhase());
+          events.push(new MarsEventInitialized());
           this.gameOver(this.upkeep);
         }
 
@@ -248,10 +249,8 @@ export class SetNextPhaseCmd implements Command {
           return [new EnteredVictoryPhase()];
         }
 
-        return [new EnteredMarsEventPhase()];
+        return [new EnteredMarsEventPhase(), new MarsEventInitialized()];
       }
-      case Phase.pregame:
-        return [new EnteredInvestmentPhase()];
       case Phase.victory:
         return [];
     }
@@ -418,5 +417,22 @@ export class BondingThroughAdversityCmd implements Command {
 
   execute(): Array<GameEvent> {
     return [new SelectedInfluence({role: this.player.role, influence: this.data.influenceVoteData.influence }) ]
+  }
+}
+
+export class BreakdownOfTrustCmd implements Command {
+  constructor(
+    private data: req.BreakdownOfTrustData,
+    private game: Game,
+    private player: Player,
+  ){}
+
+  static fromReq(r: req.BreakdownOfTrustData, game: Game, client: Client){
+    const p = game.getPlayerByClient(client);
+    return new BreakdownOfTrustCmd(r, game, p);
+  }
+
+  execute(): Array<GameEvent> {
+    return [new SaveResources({role: this.player.role, savedResources: this.data.savedResources})];
   }
 }

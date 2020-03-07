@@ -13,16 +13,17 @@
         <p>{{ accomplishment.victoryPoints }}</p>
       </div>
       <div class="cost">
-        <p
+        <div
           v-for="(investment, i) in accomplishmentCost"
           :key="investment + Math.random()"
-          v-bind:class="{ 'unattainable-resource': investmentGrayStatus[i] }"
+          :class="{ 'unattainable-resource': isUnattainable[i] }"
+          class="container"
         >
           <img
             :src="require(`@/assets/icons/${investment}.svg`)"
             alt="Investment"
           />
-        </p>
+        </div>
       </div>
     </div>
   </div>
@@ -96,7 +97,7 @@ export default class CardAccomplishment extends Vue {
     );
   }
 
-  get investmentGrayStatus() {
+  get isUnattainable() {
     let grayStatus = [];
     for (let investment of this.accomplishmentCost) {
       if (investment === 'upkeep') {
@@ -115,8 +116,4 @@ export default class CardAccomplishment extends Vue {
 
 <style lang="scss" scoped>
 @import '@/stylesheets/gamedashboard/global/cards/CardAccomplishment.scss';
-
-.unattainable-resource {
-  opacity: 0.3;
-}
 </style>

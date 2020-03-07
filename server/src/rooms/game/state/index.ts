@@ -25,7 +25,8 @@ import {
   TradeAmountData,
   TradeData,
   TradeSetData,
-  notification
+  notification,
+  RESOURCES
 } from 'shared/types';
 import _ from 'lodash';
 import * as assert from 'assert';
@@ -369,6 +370,10 @@ class ResourceInventory extends Schema implements ResourceAmountData {
     this.government += newResources.government;
     this.legacy += newResources.legacy;
     this.science += newResources.science;
+  }
+
+  setToZero(resource: Resource){
+    this[resource] = 0;
   }
 }
 
@@ -749,6 +754,10 @@ export class Player extends Schema implements PlayerData {
     this.timeBlocks = Player.defaults.timeBlocks;
   }
 
+  setTimeBlocks(amount: number){
+    this.timeBlocks = amount;
+  }
+
   getLeftOverInvestments() {
     const investment = _.cloneDeep(this.pendingInvestments);
 
@@ -793,6 +802,21 @@ export class Player extends Schema implements PlayerData {
     this.contributedUpkeep = investment.upkeep;
     this.inventory.update(investment);
     // console.log(this.inventory.toJSON())
+  }
+
+
+  invertPendingInventory(){
+    let invertedInventory = PendingInvestment.defaults();
+    for(const resource of RESOURCES){
+      invertedInventory[resource as Resource] = this.inventory[resource as Resource]*-1;
+    }
+
+    this.pendingInvestments.add({...invertedInventory, upkeep:0});
+  }
+
+  mergePendingAndInventory(){
+    this.inventory.update(this.pendingInvestments);
+    this.pendingInvestments.reset();
   }
 
   updateReadiness(ready: boolean): void {
@@ -908,7 +932,7 @@ export class GameState extends Schema implements GameData {
     timeRemaining: 300,
     marsEventsProcessed: 0,
     round: 1,
-    phase: Phase.pregame,
+    phase: Phase.invest,
     upkeep: 100
   };
 

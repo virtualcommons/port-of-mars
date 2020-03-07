@@ -133,6 +133,12 @@ $screen-xxl: 1680px;
   align-items: center;
 }
 
+@mixin make-horizontal-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 @mixin row {
   display: flex;
   flex-wrap: wrap;

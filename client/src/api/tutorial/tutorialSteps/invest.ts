@@ -21,14 +21,18 @@ const steps:Array<Step> = [
           // specialty: 'science'
         }, role: RESEARCHER},
 
-      }],
+      },
+      {
+        required: false,
+      }
+    ],
     },
     {
       target: '.tour-investments',
       content:
-        'You are allocated 10 Timeblocks (unless something says otherwise) to ' +
-        'spend each round. You can spend Timeblocks on Upkeep or on ' +
-        'Influence. Remember that you have 5 minutes to invest your Timeblocks.',
+        'You have 10 timeblocks to spend each round unless otherwise instructed.' +
+        'You can spend these timeblocks on System Health or on Influence. ' +
+        'Remember that you have 5 minutes to decide how to invest your timeblocks.',
       params: {
         placement: 'top'
       },
@@ -36,7 +40,7 @@ const steps:Array<Step> = [
     },
     {
       target: '.tour-investments',
-      content: `You cannot recycle Timeblocks between rounds, so you should spend all of them, each round!`,
+      content: `You cannot recycle timeblocks between rounds, so you should spend all of them, each round.`,
       params: {
         placement: 'top'
       },
@@ -45,13 +49,36 @@ const steps:Array<Step> = [
     {
       target: '.tour-investments',
       content:
-        `The cost for each Influence is in the bottom right hand corner. Provided you have enough Timeblocks,
-        you can purchase them by pressing the '+' button. If you decide against the purchase later, you can drop it by pressing '-'.`,
+        `The timeblock cost for each Influence can be seen in the bottom right hand corner. If you have enough
+        timeblocks, you can earn Influence by pressing the '+' button. If you change your mind and decide not to invest
+        your timeblocks into that particular resource you can reduce the number of timeblocks you have spent by pressing
+        the '-' button next to that Influence resource.`,
       params: {
         placement: 'right'
       },
       
     },
+    {
+      target: '.tour-investments',
+      content: `To try it out, purchase 2 science and 2 government!`,
+      params:{
+        placement: 'top'
+      },
+      stateTransform: [
+        {
+          required:true,
+          validationObject:{
+            science:2,
+            government:2,
+            legacy:0,
+            culture:0,
+            finance:0,
+            upkeep:0,
+          }
+        }
+      ]
+    },
+
     {
       target: '.tour-investments',
       content: 'Quiz Question',
@@ -63,8 +90,8 @@ const steps:Array<Step> = [
     {
       target: '.tour-donebtn',
       content:
-        'You can hit the Done button to surrender your time if you have finished investing ' +
-        'your Timeblocks before the 5 minutes for the Investment Phase is up.',
+        'Click the Done button when you have finished investing your timeblocks. ' +
+        'The Investment Phase will end as soon as all members of your group have finished investing.',
       params: {
         placement: 'right'
       },
@@ -72,21 +99,18 @@ const steps:Array<Step> = [
     },
     {
       target: '.tour-investments',
-      content: `Note that there are some Influences that you cannot purchase on your own (for the Researcher, they are Culture and Finance)
-      However, you will need those resources to buy certain Accomplishment cards!`,
+      content: `Note that there are some Influences that you cannot earn on your own. For example, the Researcher cannot earn Culture or Finance Resources by investing their timeblocks. However, you may need these resources to buy certain Accomplishment cards.`,
       params:{
         placement: 'top'
       }
     },
     {
       target: '.tour-accomplishments',
-      content: `For example, this Accomplishment card requires 1 Culture, which you cannot create. To get that resource, you must trade!`,
+      content: `For example, this Accomplishment card requires 1 Culture, which you cannot earn. To get this Resource, you must trade with someone who has 1 Culture.`,
       params: {
         placement:'right'
       }
-    },
-    // gamedashboard > containers > ContainerInvestments.vue
-
+    }
 ]
 
 export default steps;

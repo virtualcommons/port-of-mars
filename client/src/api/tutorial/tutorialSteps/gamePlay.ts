@@ -6,7 +6,7 @@ const steps:Array<Step> = [
       target: '.tour-round',
       content:
         `The game progresses in rounds. The number of rounds changes from game to game, so the game could
-        end at any time`,
+        end at any time.`,
       params: {
         placement: 'right'
       }
@@ -23,10 +23,10 @@ const steps:Array<Step> = [
     {
         target: '.tour-chat',
         content:
-          `During gameplay, you can communicate with other players in your habitat 
-          to plan and strategize. You can do this at any time during the game.
-          Keep in mind that all chat is public and there are no private messages!
-          Try sending a message!`,
+          `During the game, you can communicate with the other players in your habitat to plan and strategize. You can
+          do this at any time during the game. Keep in mind that all chat is public and logged and there are no private
+          messages. Also, please adhere to the Port of Mars Code of Conduct in your communications. Try sending a
+          message!`,
         params: {
           placement: 'left'
         },
@@ -34,7 +34,7 @@ const steps:Array<Step> = [
           {
             SET_LAYOUT: 'tutorial',
             ADD_TO_CHAT:{
-              message:'Welcome to the port of mars!',
+              message:'Welcome to the Port of Mars!',
               role:CURATOR,
               dateCreated:new Date().getTime(),
               round:0,

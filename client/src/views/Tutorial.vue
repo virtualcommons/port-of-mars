@@ -1,6 +1,7 @@
 <template>
   <div class="tutorial-layout">
-    <TourModal @hide="startTourOnHideModal" />
+    <ConsentFormModal @grant-consent="grantConsent" @deny-consent="denyConsent" />
+    <TourModal @show="showTour" @hide="startTourOnHideModal" />
     <CompletedQuizModal v-if="tourIsOver" />
     <GameDashboard />
     <v-tour
@@ -35,17 +36,17 @@
                 </button>
                 <button
                   v-if="!tour.isLast"
-                  v-on="{click: api.forcePause ? tour.nextStep : ()=>{}}"
+                  v-on="{ click: api.forcePause ? tour.nextStep : () => {} }"
                   class="btn btn-dark"
-                  v-bind="{class: api.forcePause ? 'button-active' : 'button-inactive'}"
+                  v-bind="{ class: api.forcePause ? 'button-active' : 'button-inactive' }"
                 >
                   Next
                 </button>
                 <button
                   v-else-if="tour.isLast"
-                  v-on="{click: api.forcePause ? tour.stop : ()=>{}}"
+                  v-on="{ click: api.forcePause ? tour.stop : () => {} }"
                   class="btn btn-dark"
-                  v-bind="{class: api.forcePause ? 'button-active' : 'button-inactive'}"
+                  v-bind="{ class: api.forcePause ? 'button-active' : 'button-inactive' }"
                 >
                   Finish
                 </button>
@@ -112,11 +113,11 @@
 <script lang="ts">
 import { Component, Provide, Vue } from 'vue-property-decorator';
 import VueTour from 'vue-tour';
+import ConsentFormModal from '@/components/tutorial/ConsentFormModal.vue';
 import TourModal from '@/components/tutorial/TourModal.vue';
 import CompletedQuizModal from '@/components/tutorial/CompletedQuizModal.vue';
 import GameDashboard from '@/components/GameDashboard.vue';
 import { TutorialAPI } from '@/api/tutorial/request';
-import { TutorialSteps } from '@/repositories/tutorial';
 import { Step } from '@/types/tutorial';
 import { CURATOR, Phase, QuizQuestionData, RESEARCHER } from 'shared/types';
 import * as _ from 'lodash';
@@ -131,7 +132,8 @@ Vue.use(VueTour);
   components: {
     GameDashboard,
     CompletedQuizModal,
-    TourModal
+    TourModal,
+    ConsentFormModal
   }
 })
 export default class Tutorial extends Vue {
@@ -150,7 +152,8 @@ export default class Tutorial extends Vue {
   };
 
   private steps: Array<Step> = tutorialSteps;
-  private tourIsOver:boolean = false;
+  private tourIsOver: boolean = false;
+  private consent: boolean = false;
 
   private submissionId: any = null;
   private dataFetched: boolean = false;
@@ -177,7 +180,6 @@ export default class Tutorial extends Vue {
         // TODO: Handle server error
       }
     }
-
   }
 
   // NOTE: Initialize
@@ -190,8 +192,28 @@ export default class Tutorial extends Vue {
     (this as any).$bvModal.show('bv-modal');
   }
 
+  private showTour() {
+    if (this.consent) this.showModal();
+  }
+
   private startTourOnHideModal() {
     (this as any).$tours.gameTour.start();
+  }
+
+  private grantConsent() {
+    this.consent = this.$tstore.state.consent;
+    console.log('updated consent: ', this.consent)
+  }
+
+  private denyConsent() {
+    this.consent = this.$tstore.state.consent;
+    this.forceLogoutUser();
+    console.log('updated consent: ', this.consent)
+  }
+
+  private forceLogoutUser(): void {
+    this.$ajax.forgetLoginCreds();
+    this.$router.push({ name: 'Login' });
   }
 
   // NOTE: Callbacks

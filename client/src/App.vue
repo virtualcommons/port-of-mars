@@ -19,7 +19,6 @@ Vue.use(BootstrapVue);
 })
 export default class Home extends Vue {
   /**
-   * getLayout() computed property
    * Gets the value of the layout from the vuex store
    * @return the value of layout
    *

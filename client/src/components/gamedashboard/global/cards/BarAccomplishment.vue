@@ -1,6 +1,9 @@
 <template>
-  <div class="card-accomplishment" v-bind:class="{'unpurchasable':!canBuy, 'purchasable':canBuy}">
-    <div class="title" >
+  <div
+    class="card-accomplishment"
+    v-bind:class="{ unpurchasable: !canBuy, purchasable: canBuy }"
+  >
+    <div class="title">
       <p>{{ accomplishment.label }}</p>
     </div>
     <div class="info">
@@ -12,18 +15,19 @@
         <p>{{ accomplishment.flavorText }}</p>
       </div>
       <div class="cost">
-        <p
+        <div
           v-for="investment in accomplishmentCost"
-          v-bind:class="{
+          :class="{
             'unattainable-resource': shouldResourceBeGrayedOut(investment)
           }"
           :key="investment + Math.random()"
+          class="container"
         >
           <img
             :src="require(`@/assets/icons/${investment}.svg`)"
             alt="Investment"
           />
-        </p>
+        </div>
       </div>
     </div>
     <div class="purchase">
@@ -86,7 +90,7 @@ export default class BarAccomplishment extends Vue {
     return _.clone(this.$tstore.getters.player.inventory);
   }
 
-  shouldResourceBeGrayedOut(investment: Investment) {
+  private shouldResourceBeGrayedOut(investment: Investment) {
     if (investment === 'upkeep') {
       return false;
     }
@@ -115,8 +119,4 @@ export default class BarAccomplishment extends Vue {
 
 <style lang="scss" scoped>
 @import '@/stylesheets/gamedashboard/global/cards/BarAccomplishments.scss';
-
-.unattainable-resource {
-  opacity: 0.3;
-}
 </style>

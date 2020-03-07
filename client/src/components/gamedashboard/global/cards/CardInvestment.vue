@@ -1,13 +1,24 @@
 <template>
-  <div class="card-investment v-step-15" :style="opacity">
-    <div class="ci-container">
+  <div class="card-investment v-step-15">
+    <div class="ci-container" :style="opacity">
       <div class="type">
         <p class="name">{{ name }}</p>
         <img :src="require(`@/assets/icons/${name}.svg`)" alt="Player" />
         <div class="data">
-          <div class="cost">
+          <div
+            class="investment"
+            :style="{
+              visibility: !disabled && pendingUnits !== 0 ? 'visible' : 'hidden'
+            }"
+          >
+            <p><span>+</span>{{ pendingUnits }}</p>
+          </div>
+          <div
+            class="cost"
+            :style="{ visibility: !disabled ? 'visible' : 'hidden' }"
+          >
             <p>
-              {{ cost <= 1000 ? cost : 'X' }}
+              {{ !disabled ? cost : 'X' }}
             </p>
           </div>
         </div>
@@ -56,16 +67,24 @@ export default class CardInvestment extends Vue {
     return this.cost === Number.MAX_SAFE_INTEGER;
   }
 
+  get opacity(): object {
+    return this.disabled ? { opacity: '0.5' } : {};
+  }
+
+  get pendingUnits() {
+    const pendingUnits = this.$tstore.getters.player.pendingInvestments[
+      this.name
+    ];
+    if (pendingUnits) return pendingUnits;
+    return 0;
+  }
+
   private setInvestmentAmount(diff: number): void {
     this.$emit('input', {
       name: this.name,
       units: this.pendingInvestment + diff,
       cost: this.cost
     });
-  }
-
-  get opacity(): object {
-    return this.disabled ? { opacity: '0.5' } : {};
   }
 }
 </script>

@@ -1,55 +1,116 @@
 <template>
   <div class="trade">
     <div class="trade-send-receive">
-      <div class="trade-profile-sender-container">
-        <div class="trade-profile-sender">
-          <img :src="require(`@/assets/characters/${from.role}.png`)" alt="Sender" />
+      <div class="sending">
+        <div class="trade-profile-sender-container">
+          <div class="trade-profile-sender">
+            <img
+              :src="require(`@/assets/characters/${from.role}.png`)"
+              alt="Sender"
+            />
+          </div>
         </div>
-      </div>
-      <div class="send">
-        <div class="send-sender">
-          <p>{{ from.role }}</p>
-        </div>
-        <div class="send-investments-container">
-          <div class="send-investments" v-for="(value, name) in from.resourceAmount" :key="name+3">
-            <img v-if="value !== 0" :src="require(`@/assets/icons/${name}.svg`)" alt="Investment" />
-            <p v-if="value !== 0">{{ value }}</p>
+        <div class="send">
+          <div class="send-sender">
+            <p>{{ from.role }}</p>
+          </div>
+          <div class="send-investments-container">
+            <div
+              class="send-investments"
+              v-for="(value, name) in from.resourceAmount"
+              :key="name + 3"
+            >
+              <img
+                v-if="value !== 0"
+                :src="require(`@/assets/icons/${name}.svg`)"
+                alt="Investment"
+              />
+              <p v-if="value !== 0">{{ value }}</p>
+            </div>
           </div>
         </div>
       </div>
       <div class="trade-icon">
         <font-awesome-icon :icon="['fas', 'exchange-alt']" size="lg" />
       </div>
-      <div class="trade-profile-receiver-container">
-        <div class="trade-profile-receiver">
-          <img :src="require(`@/assets/characters/${to.role}.png`)" alt="Receiver" />
+      <div class="receiving">
+        <div class="trade-profile-receiver-container">
+          <div class="trade-profile-receiver">
+            <img
+              :src="require(`@/assets/characters/${to.role}.png`)"
+              alt="Receiver"
+            />
+          </div>
         </div>
-      </div>
-      <div class="receive">
-        <div class="receive-receiver">
-          <p>{{ to.role }}</p>
-        </div>
-        <div class="receive-investments-container">
-          <div class="receive-investments" v-for="(value, name) in to.resourceAmount" :key="name+2">
-            <img v-if="value !== 0" :src="require(`@/assets/icons/${name}.svg`)" alt="Investment" />
-            <p v-if="value !== 0">{{ value }}</p>
+        <div class="receive">
+          <div class="receive-receiver">
+            <p>{{ to.role }}</p>
+          </div>
+          <div class="receive-investments-container">
+            <div
+              class="receive-investments"
+              v-for="(value, name) in to.resourceAmount"
+              :key="name + 2"
+            >
+              <img
+                v-if="value !== 0"
+                :src="require(`@/assets/icons/${name}.svg`)"
+                alt="Investment"
+              />
+              <p v-if="value !== 0">{{ value }}</p>
+            </div>
           </div>
         </div>
       </div>
     </div>
     <div class="trade-buttons">
-       <button v-bind:class="{'accept-trade':!clientValidation}" v-show="role == to.role" type="button" name="button" @click="handleAcceptTrade">Accept</button>
-      <button v-show="(role==from.role) || (role ==to.role)" type="button" name="button" @click="handleTradeReject">Decline</button>
+      <button
+        v-if="role === to.role && role !== from.role"
+        @click="handleAcceptTrade"
+        :class="{ 'accept-trade': !clientValidation }"
+        type="button"
+        name="button"
+      >
+        Accept
+      </button>
+      <button
+        v-if="role === to.role && role !== from.role"
+        @click="handleTradeReject"
+        type="button"
+        name="button"
+      >
+        Decline
+      </button>
+      <button
+        v-if="role === from.role && role !== to.role"
+        @click="handleTradeReject"
+        type="button"
+        name="button"
+        class="cancel-trade"
+      >
+        Cancel
+      </button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import {Vue, Component, Prop, InjectReactive, Inject} from 'vue-property-decorator';
+import {
+  Vue,
+  Component,
+  Prop,
+  InjectReactive,
+  Inject
+} from 'vue-property-decorator';
 import { GameRequestAPI } from '@/api/game/request';
-import {TradeData, TradeAmountData, INVESTMENTS, RESOURCES} from 'shared/types';
+import {
+  TradeData,
+  TradeAmountData,
+  INVESTMENTS,
+  RESOURCES
+} from 'shared/types';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faExchangeAlt} from '@fortawesome/free-solid-svg-icons/';
+import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons/';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 library.add(faExchangeAlt);
@@ -65,12 +126,12 @@ export default class Trade extends Vue {
 
   @Inject() api!: GameRequestAPI;
 
-  get clientValidation(){
+  get clientValidation() {
     let hasResourcesToSend = true;
     const inventory = this.$store.state.players[this.role].inventory;
 
     RESOURCES.forEach(item => {
-      if(this.to.resourceAmount[item] > inventory[item]){
+      if (this.to.resourceAmount[item] > inventory[item]) {
         hasResourcesToSend = false;
       }
     });
@@ -78,14 +139,13 @@ export default class Trade extends Vue {
     return hasResourcesToSend;
   }
 
-
   handleAcceptTrade() {
-    if(this.clientValidation){
+    if (this.clientValidation) {
       this.api.acceptTradeRequest(this.id);
     }
   }
 
-  handleTradeReject(){
+  handleTradeReject() {
     this.api.rejectTradeRequest(this.id);
   }
 }

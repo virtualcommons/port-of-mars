@@ -3,8 +3,8 @@
     <h1 class="animated pulse slower infinite">Game Over</h1>
     <div class="text">
       <p>
-        Upkeep has reached zero. However, your efforts will inspire a new
-        generation to continue your legacy on planet Mars.
+        System Health has reached zero. However, your efforts will inspire a new
+        generation to continue your legacy on Mars.
       </p>
       <p>Thank you for playing.</p>
     </div>

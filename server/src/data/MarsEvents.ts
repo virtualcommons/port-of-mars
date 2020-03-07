@@ -17,7 +17,7 @@ const _marsEvents: Array<[MarsEventData, number]> = [
   [{
     id: 'personalGain',
     name: 'Personal Gain',
-    effect: `Each player secretly chooses Yes or No. Then, simultaneously, players reveal their choice. Players who chose yes gain 6 extra Time Blocks this round, but destroy 6 Upkeep.`,
+    effect: `Each player secretly chooses Yes or No. Then, simultaneously, players reveal their choice. Players who chose yes gain 6 extra Time Blocks this round, but destroy 6 System Health.`,
     flavorText: `It's easy to take risks when others are incurring the costs.`,
     clientViewHandler: 'VOTE_YES_NO' as const,
     duration: 1
@@ -41,7 +41,7 @@ const _marsEvents: Array<[MarsEventData, number]> = [
   [{
     id: 'compulsivePhilanthropy',
     name: 'Compulsive Philanthropy',
-    effect: `Players must vote for one player to put all their Time Blocks into Upkeep this round.`,
+    effect: `Players must vote for one player to put all their Time Blocks into System Health this round.`,
     flavorText: `There's nothing quite like being volun-told for the greater good.`,
     clientViewHandler: 'VOTE_FOR_PLAYER_SINGLE' as const,
     duration: 1
@@ -119,7 +119,7 @@ const _marsEvents: Array<[MarsEventData, number]> = [
   [{
     id: 'sandstorm',
     name: 'Sandstorm',
-    effect: `For the next 3 rounds, destroy an additional 10 Upkeep at the start of the round.`,
+    effect: `For the next 3 rounds, destroy an additional 10 System Health at the start of the round.`,
     flavorText: `Buckle in - things are about to get rough. And coarse. And irritating.`,
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 3,
@@ -128,7 +128,7 @@ const _marsEvents: Array<[MarsEventData, number]> = [
   [{
     id: 'cropFailure',
     name: 'Crop Failure',
-    effect: `Destroy 20 Upkeep.`,
+    effect: `Destroy 20 System Health.`,
     flavorText: `"The good news is we're not eating any more potatoes this cycle! The bad news is we're not sure what we're eating." - The researcher`,
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 1,
@@ -137,7 +137,7 @@ const _marsEvents: Array<[MarsEventData, number]> = [
   [{
     id: 'hullBreach',
     name: 'Hull Breach',
-    effect: `Destroy 7 Upkeep.`,
+    effect: `Destroy 7 System Health.`,
     flavorText: `"Accidents happen. It's unavoidable. Our job is to do our best to avoid them all the same."`,
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 1,
@@ -146,7 +146,7 @@ const _marsEvents: Array<[MarsEventData, number]> = [
   [{
     id: 'solarFlare',
     name: 'Solar Flare',
-    effect: `Destroy 5 Upkeep. Skip the discussion and trading phases this turn. (Players may not discuss how they allocate their time and may not trade Influences.)`,
+    effect: `Destroy 5 System Health. Skip the discussion and trading phases this turn. (Players may not discuss how they allocate their time and may not trade Influences.)`,
     flavorText: `Solar flares pose a far greater threat on Mars, where a thin atmosphere and non-existent magnetic field leaves settlers more vulnerable. `,
     clientViewHandler: 'DISABLE_CHAT' as const,
     duration: 1,
@@ -218,7 +218,7 @@ const _marsEvents: Array<[MarsEventData, number]> = [
   [{
     id: 'difficultConditions',
     name: 'Difficult Conditions',
-    effect: `Upkeep costs twice as many Time Blocks as usual this round.`,
+    effect: `System Health costs twice as many Time Blocks as usual this round.`,
     flavorText: `When one component breaks, it puts a strain on the rest of the system. Small failures often snowball into critical ones.`,
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 1,
@@ -237,6 +237,8 @@ const marsEvents: Array<[MarsEventData, number]> = [
   [_.find(_marsEvents, e => e[0].id === 'outOfCommissionPioneer')![0], 1],
   [_.find(_marsEvents, e => e[0].id === 'outOfCommissionEntrepreneur')![0], 1],
   [_.find(_marsEvents, e => e[0].id === 'audit')![0], 1],
-  [_.find(_marsEvents, e => e[0].id === 'bondingThroughAdversity')![0], 1]
+  [_.find(_marsEvents, e => e[0].id === 'bondingThroughAdversity')![0], 1],
+  [_.find(_marsEvents, e => e[0].id === 'lifeAsUsual')![0], 1],
+  [_.find(_marsEvents, e => e[0].id === 'breakdownOfTrust')![0], 1],
 ];
 

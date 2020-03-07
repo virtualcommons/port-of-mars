@@ -7,11 +7,14 @@ import notifications from './notifications';
 import player from './player';
 import trading from './trading';
 import lobby from './lobby';
-import developer from './developer';
 
 export default {
   SET_LAYOUT(state: any, newLayout: string) {
     state.layout = newLayout;
+  },
+
+  SET_ENVIRONMENT(state: any, newEnvironment: string) {
+    state.environment = newEnvironment;
   },
 
   ...accomplishments,
@@ -23,5 +26,4 @@ export default {
   ...player,
   ...trading,
   ...lobby,
-  ...developer
 };

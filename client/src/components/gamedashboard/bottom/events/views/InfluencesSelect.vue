@@ -1,122 +1,104 @@
 <template>
-  <div class="event-select-influences">
-    <p>Please select up to two available influences:</p>
+  <div class="event-select-resources">
+    <div class="wrapper">
+      <div class="topbar">
+        <p class="title">Resources you can save</p>
 
-    <div class="event-select-influences-select">
-      <div
-        class="event-select-influences-select-influence"
-        v-if="investment.units > 0"
-        v-for="investment in investments"
-        :key="investment.name"
-      >
-        <img
-          @click="handleSelectInfluence(investment.name)"
-          :src="require(`@/assets/icons/${investment.name}.svg`)"
-          alt="Investment"
+        <DiscreteStatusBar
+          class="discrete-bar"
+          :usedTimeBlocks="remainingTime"
+          :totalTimeBlocks="timeBlockTotal"
         />
-        <!-- <p>{{ investment.units }}</p> -->
+
+        <p class="status">[ {{ remainingTime }} ]</p>
       </div>
-    </div>
 
-    <p>Chosen</p>
-
-    <div v-if="selectedInvestmentsDataCount === 0" class="selected-placeholder">
-      <p>None Selected</p>
-    </div>
-
-    <div class="event-select-influences-selected">
-      <div
-        class="event-select-influences-selected-influence"
-        v-if="selectedInvestment.units > 0"
-        v-for="selectedInvestment in selectedInvestments"
-        :key="selectedInvestment.name"
-      >
-        <img
-          v-for="unit in selectedInvestment.units"
-          @click="handleDeselectInfluences(selectedInvestment.name)"
-          :src="require(`@/assets/icons/${selectedInvestment.name}.svg`)"
-          alt="Investment"
+      <div class="cards">
+        <CardInvestment class="card"
+          v-for="investment in investments"
+          v-bind="investment"
+          :key="investment.name"
+          @input="setInvestmentAmount"
         />
       </div>
     </div>
-
-    <button type="button" name="button" @click="submitSelectedInfluences">Done</button>
   </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
-import {Resource, ResourceAmountData} from "shared/types";
 
-@Component({})
+
+<script lang="ts">
+import { Vue, Component, Inject } from 'vue-property-decorator';
+import {Resource, ResourceAmountData, RESOURCES, INVESTMENTS, ResourceCostData, Investment } from "shared/types";
+import { GameRequestAPI } from '@/api/game/request';
+import DiscreteStatusBar from '@/components/gamedashboard/global/DiscreteStatusBar.vue';
+import CardInvestment from '@/components/gamedashboard/global/cards/CardInvestment.vue';
+import * as _ from 'lodash';
+
+@Component({
+  components: {
+    DiscreteStatusBar,
+    CardInvestment
+  }
+})
 export default class InfluencesSelect extends Vue {
-  private investmentsTest: ResourceAmountData = {
-    science: 1,
-    government: 2,
-    legacy: 0,
-    finance: 1,
-    culture: 0
-  };
+  private origPending = _.cloneDeep(this.$tstore.getters.player.pendingInvestments);
 
   get investments(): any {
-    // ACTUAL IMPLEMENTATION
-    // const inventory = this.$tstore.getters.player.inventory;
-    // return Object.keys(inventory).map(name => ({
-    //   name,
-    //   units: inventory[name as Resource]
-    // }));
-
-    // TEST IMPLEMENTATION
-    return Object.keys(this.investmentsTest).map(name => ({
-      name,
-      units: this.investmentsTest[name as Resource]
-    }));
-  }
-
-  private selectedInvestmentsData: ResourceAmountData = {
-    science: 0,
-    government: 0,
-    legacy: 0,
-    finance: 0,
-    culture: 0
-  };
-
-  private selectedInvestmentsDataCount: number = 0;
-
-  get selectedInvestments(): any {
-    return Object.keys(this.selectedInvestmentsData).map(name => ({
-      name,
-      units: this.selectedInvestmentsData[name as Resource]
-    }));
-  }
-
-  private handleSelectInfluence(investment: Resource): void {
-    // ACTUAL IMPLEMENTATION
-    // if (this.selectedInvestmentsDataCount < 2) {
-    //   if (this.selectedInvestmentsData[investment] + 1 <= this.$tstore.getters.player.inventory[investment]) {
-    //     this.selectedInvestmentsData[investment] += 1;
-    //     this.selectedInvestmentsDataCount += 1;
-    //   }
-    // }
-
-    // TEST IMPLEMENTATION
-    if (this.selectedInvestmentsDataCount < 2) {
-      if (this.selectedInvestmentsData[investment] + 1 <= this.investmentsTest[investment]) {
-        this.selectedInvestmentsData[investment] += 1;
-        this.selectedInvestmentsDataCount += 1;
+    const p = this.$tstore.getters.player
+    return Object.keys(this.origPending).map((investment) => {
+      return {
+        name:investment,
+        cost: this.origPending[investment as Investment] < 0 ? 1 : Number.MAX_SAFE_INTEGER,
+        pendingInvestment: p.pendingInvestments[investment as Investment],
       }
+    });
+  }
+
+  get remainingTime() {
+    const p = this.$tstore.getters.player;
+    const pendingInvestments = p.pendingInvestments;
+    return this.getRemainingTimeBlocks(pendingInvestments);
+  }
+
+  private getRemainingTimeBlocks(pendingInvestment: ResourceCostData) {
+    const timeBlocks = this.$tstore.getters.player.timeBlocks;
+    return (
+      timeBlocks -
+      _.reduce(INVESTMENTS,(tot, investment) =>
+          tot + (this.origPending[investment]*-1 - pendingInvestment[investment]*-1),
+        0)
+    );
+
+  }
+
+
+  private setInvestmentAmount(msg: {
+    name: Resource;
+    units: number;
+    cost: number;
+  }) {
+    
+   
+    const pendingInvestments = _.clone(
+      this.$tstore.getters.player.pendingInvestments
+    );
+    
+    pendingInvestments[msg.name] = msg.units;
+    if (
+      msg.units >=  this.origPending[msg.name] &&
+      this.getRemainingTimeBlocks(pendingInvestments) >= 0
+    ) {
+      this.$tstore.commit('SET_PENDING_INVESTMENT_AMOUNT', {
+        investment: msg.name,
+        units: msg.units,
+        role: this.$tstore.state.role
+      });
     }
   }
 
-  private handleDeselectInfluences(investment: Resource): void {
-    if (this.selectedInvestmentsData[investment] !== 0 && this.selectedInvestmentsDataCount !== 0) {
-      this.selectedInvestmentsData[investment] -= 1;
-      this.selectedInvestmentsDataCount -= 1;
-    }
-  }
-
-  private submitSelectedInfluences(): void {
-    console.log(this.selectedInvestmentsData);
+    get timeBlockTotal() {
+    return this.$store.getters.player.timeBlocks;
   }
 }
 </script>

@@ -14,8 +14,6 @@ import _ from "lodash";
 import {initialStoreState} from "@/store/state";
 import BootstrapVue from "bootstrap-vue";
 import router from "@/router";
-import * as Colyseus from 'colyseus.js';
-import {Room} from "colyseus.js";
 import {Ajax} from "@/plugins/ajax";
 import {VueRouter} from "vue-router/types/router";
 

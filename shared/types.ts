@@ -66,7 +66,6 @@ export const RESOURCES: Array<Resource> = [
 ];
 
 export enum Phase {
-  pregame,
   events,
   invest,
   trade,
@@ -77,7 +76,6 @@ export enum Phase {
 }
 
 export const PHASE_LABELS: { [k in Phase]: string } = {
-  [Phase.pregame]: 'Pre-Game',
   [Phase.events]: 'Events',
   [Phase.invest]: 'Investment',
   [Phase.trade]: 'Trade',
@@ -147,6 +145,18 @@ export interface TradeAmountData {
 export interface TradeData {
   from: TradeAmountData;
   to: TradeAmountData;
+}
+
+export type NullPartner = '';
+
+export interface TradeAmountDataWithNull<R> {
+  role: R;
+  resourceAmount: ResourceAmountData;
+}
+
+export interface TradeDataWithNull<R=Role|NullPartner>{
+  from:TradeAmountDataWithNull<R>;
+  to: TradeAmountDataWithNull<R>;
 }
 
 export type TradeSetData = { [uuid: string]: TradeData };

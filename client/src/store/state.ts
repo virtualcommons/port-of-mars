@@ -12,7 +12,8 @@ import {
   PIONEER,
   GameData,
   MarsLogMessageData,
-  QuizQuestionData
+  QuizQuestionData,
+  TradeDataWithNull
 } from 'shared/types';
 import _ from 'lodash';
 
@@ -88,6 +89,13 @@ export interface User {
   passedQuiz?: boolean;
 }
 
+
+export interface uiVars {
+  tradeData:TradeDataWithNull<''|Role>;
+}
+
+
+
 export interface State extends GameData {
   role: Role;
   logs: Array<MarsLogMessageData>;
@@ -102,8 +110,14 @@ export interface State extends GameData {
   lobbyWaitingUsers: number;
   lobbyClientJoinedQueue: boolean;
   lobbyReceivedInvitation: boolean;
-  inDevelopment: boolean;
-  devToolsEnabled: boolean;
+  environment: string;
+  consent: boolean;
+
+  tutorialTradePartner: string;
+  tutorialTradeGive: ResourceAmountData;
+  tutorialTradeGet: ResourceAmountData;
+
+  ui: uiVars;
 }
 
 export const initialStoreState: State = {
@@ -111,7 +125,7 @@ export const initialStoreState: State = {
   players: defaultPlayerClientSet(),
   timeRemaining: 300,
   round: 1,
-  phase: Phase.pregame,
+  phase: Phase.invest,
   upkeep: 100,
   messages: [],
   marsEvents: [],
@@ -124,6 +138,8 @@ export const initialStoreState: State = {
   role: RESEARCHER,
   layout: 'game',
   loading: false,
+  environment: 'development',
+  consent: false,
 
   // eventView: 'ACCOMPLISHMENT_SELECT_PURCHASED',
   quizQuestions: [],
@@ -139,7 +155,25 @@ export const initialStoreState: State = {
   lobbyClientJoinedQueue: false,
   lobbyReceivedInvitation: false,
 
-  // NOTE: Development Tools
-  inDevelopment: true,
-  devToolsEnabled: false,
-};
+  //TUTORIAL TRADING
+  tutorialTradePartner: '',
+  tutorialTradeGive: defaultInventory(),
+  tutorialTradeGet: defaultInventory(),
+
+
+  ui:{
+    tradeData:{
+      to: {
+        role: '',
+        resourceAmount: defaultInventory(),
+      },
+
+      from: {
+        role: 'Researcher',
+        resourceAmount: defaultInventory()
+      }
+    }
+  }
+
+  
+}
