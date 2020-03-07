@@ -17,15 +17,12 @@ import router from "@/router";
 import {Ajax} from "@/plugins/ajax";
 import {VueRouter} from "vue-router/types/router";
 
-export function createLocalVue(options?: { router: VueRouter, store: TStore }) {
+export function createLocalVue() {
   const localVue = _createLocalVue();
   localVue.use(BootstrapVue);
   localVue.use(Vuex);
   localVue.use(TypedStore);
-  if (options) {
-    localVue.use(Ajax, options);
-  }
-  return localVue
+  return localVue;
 }
 
 export function createStore() {
@@ -56,8 +53,9 @@ export function mockRoomSetup() {
 }
 
 export function mountPOM<V extends Vue>(component: VueClass<V>, options: ThisTypedMountOptions<V> = {}) {
+  const localVue = createLocalVue();
   const store = createStore();
-  const localVue = createLocalVue({router, store});
+  localVue.use(Ajax, {router, store});
   return mount(component, {
     localVue,
     store,
@@ -67,8 +65,9 @@ export function mountPOM<V extends Vue>(component: VueClass<V>, options: ThisTyp
 }
 
 export function shallowMountPOM<V extends Vue>(component: VueClass<V>, options: ThisTypedMountOptions<V> = {}) {
+  const localVue = createLocalVue();
   const store = createStore();
-  const localVue = createLocalVue({router, store});
+  localVue.use(Ajax, {router, store});
   return shallowMount(component, {
     localVue,
     store,

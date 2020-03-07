@@ -26,10 +26,13 @@ export class MailgunEmailer implements Emailer {
   transport: any;
 
   constructor(auth: { api_key: string, domain: string }) {
+    if (!auth.api_key || !auth.domain) {
+      auth.api_key = 'invalid-api-key';
+      auth.domain = 'example.com';
+    }
     this.opts = { auth }
-    this.transport = nodemailer.createTransport(mailgunTransport(this.opts));
+    this.transport = nodemailer.createTransport(mailgunTransport({ auth }));
   }
-
 
   sendMail(content: Mail.Options) {
     this.transport.sendMail(content);
