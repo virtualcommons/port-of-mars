@@ -958,7 +958,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     id: 95,
     role: "Curator",
     label: "Ambitious Sculpture",
-    flavorText: "The ambitious sculpture project will be a memorable and visible landmark on Mars�if Port of Mars survives the resulting material shortage.",
+    flavorText: "The ambitious sculpture project will be a memorable and visible landmark on Mars if Port of Mars survives the resulting material shortage.",
     science: 0,
     government: 0,
     legacy: 0,
