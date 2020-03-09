@@ -83,7 +83,7 @@ export class AjaxRequest {
   }
 
   async post(path: string, data?: any) {
-    return await fetch(
+    const response = await fetch(
       path,
       {
         method: 'POST',
@@ -97,10 +97,17 @@ export class AjaxRequest {
         body: JSON.stringify(data)
       }
     )
+    switch (response.status) {
+      case 401:
+        this.router.push({ name: 'Login' });
+        return;
+      default:
+        return await response.json();
+    }
   }
 
   async get(path: string) {
-    return await fetch(
+    const response = await fetch(
       path,
       {
         method: 'GET',
@@ -112,6 +119,13 @@ export class AjaxRequest {
         referrerPolicy: "no-referrer",
       }
     )
+    switch (response.status) {
+      case 401:
+        this.router.push({ name: 'Login' });
+        return;
+      default:
+        return await response.json();
+    }
   }
 }
 

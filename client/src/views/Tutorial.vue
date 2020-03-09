@@ -341,7 +341,11 @@ export default class Tutorial extends Vue {
     if (response.status === 200) {
       this.quizQuestions = await response.json();
       return true;
-    } else {
+    } 
+    else if (response.status === 401) {
+      this.$router.push({name: 'Login'});
+    }
+    else {
       const error = await response.json();
       this.notifyUserOfError('getQuizQuestions (response)', error);
       return false;

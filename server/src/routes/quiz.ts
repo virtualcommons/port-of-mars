@@ -58,6 +58,10 @@ quizRouter.post(
 quizRouter.get(
   '/questions',
   async (req: Request, res: Response, next: NextFunction) => {
+    if (! req.user) {
+      res.status(401).json({error: 'Please sign in before continuing.'});
+      return;
+    }
     try {
       // NOTE: Get Quiz ID
       const quiz = await getQuizByName(DEFAULT_QUIZ);
