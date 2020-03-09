@@ -41,7 +41,7 @@ export class GameRoom extends Room<GameState> implements Game {
   gameId!: number;
 
   async onAuth(client: Client, options: any, request?: http.IncomingMessage) {
-    const user = await findUserById(request.session.passport.user);
+    const user = await findUserById((request as any).session.passport.user);
     if (user && Object.keys(this.state.userRoles).includes(user.username)) {
       return user;
     }
