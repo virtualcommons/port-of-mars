@@ -38,8 +38,11 @@ export class TournamentRound {
   )
   invitations!: Array<TournamentRoundInvite>;
 
-  @Column("text", { nullable: true })
-  surveyURL!: string | null;
+  @Column({ nullable: true })
+  introSurveyUrl?: string;
+
+  @Column({ nullable: true })
+  exitSurveyUrl?: string;
 
   @CreateDateColumn()
   dateCreated!: Date;

@@ -57,17 +57,6 @@ passport.use(new CasStrategy(
     done(null, user);
   }
 ));
-// make this conditional on isDev()
-passport.use(new LocalStrategy(
-  async function (username: string, password: string, done: Function) {
-    logger.info('trying to local auth for user: ', username);
-    let user = await findByUsername(username);
-    if (!user) {
-      return done(null, false, { message: `No user ${username}.` });
-    }
-    return done(null, user);
-  }
-));
 
 passport.serializeUser(function (user: User, done: Function) {
   logger.info('serializing user: ', user.id);
@@ -98,6 +87,16 @@ async function createApp() {
   applyInStagingOrProd(() => app.use(Sentry.Handlers.requestHandler()));
   if (isDev()) {
     logger.info('starting server up in dev mode');
+    passport.use(new LocalStrategy(
+      async function (username: string, password: string, done: Function) {
+        logger.info('trying to local auth for user: ', username);
+        let user = await getOrCreateUser(username);
+        if (!user) {
+          return done(null, false, { message: `No user ${username}.` });
+        }
+        return done(null, user);
+      }
+    ));
     app.use(cors({
        origin: ['http://localhost:2567', 'http://localhost:8081', 'https://portofmars.asu.edu'],
        credentials: true

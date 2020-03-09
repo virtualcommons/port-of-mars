@@ -28,6 +28,10 @@ export class User {
     @Generated("uuid")
     registrationToken!: string;
 
+    @Column()
+    @Generated('uuid')
+    participantId!: string;
+
     @Column({ default: false })
     isVerified!: boolean;
 }

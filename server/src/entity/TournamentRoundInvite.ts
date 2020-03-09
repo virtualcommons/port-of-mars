@@ -32,7 +32,13 @@ export class TournamentRoundInvite {
   user!: User;
 
   @Column()
-  hasParticipated!: boolean;
+  hasParticipated: boolean = false;
+
+  @Column()
+  hasCompletedIntroSurvey: boolean = false;
+
+  @Column()
+  hasCompletedExitSurvey: boolean = false;
 
   @CreateDateColumn()
   dateCreated!: Date;
