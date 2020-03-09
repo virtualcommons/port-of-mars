@@ -164,8 +164,8 @@ export class AcceptTradeRequest extends GameEventWithData {
       game.logs.push(log);
     }
     else{
-      game.players[game.tradeSet[this.data.id].to.role as Role].sendNotifcation('Trade partner cannot fulful trade.');
-      game.players[game.tradeSet[this.data.id].from.role as Role].sendNotifcation('A trade you cannot fulful has been deleted.');
+      game.players[game.tradeSet[this.data.id].to.role as Role].sendNotifcation('Trade partner cannot fulfill trade.');
+      game.players[game.tradeSet[this.data.id].from.role as Role].sendNotifcation('A trade you cannot fulfill has been deleted.');
     }
     delete game.tradeSet[this.data.id];
   }
@@ -181,8 +181,11 @@ export class RejectTradeRequest extends GameEventWithData {
     
     //game.players[game.tradeSet[this.data.id].from.role as Role].pendingInvestments.rollback(game.tradeSet[this.data.id].from.resourceAmount);
 
+    const toRole: Role = game.tradeSet[this.data.id].to.role;
+    const fromRole: Role = game.tradeSet[this.data.id].from.role;
+    
     delete game.tradeSet[this.data.id];
-
+    game.players[fromRole].sendNotifcation(`The ${toRole} has declined your trade request.`);
   }
 }
 gameEventDeserializer.register(RejectTradeRequest);
