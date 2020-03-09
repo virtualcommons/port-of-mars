@@ -25,7 +25,7 @@ function applyPlayerResponses(player: any, store: TStore) {
   player.onChange = (changes: Array<any>) => {
     changes.forEach(change => {
       const payload = { role: player.role, data: change.value };
-      
+
       switch (change.field as keyof PlayerData) {
         case 'inventory':
           store.commit('SET_INVENTORY', payload);

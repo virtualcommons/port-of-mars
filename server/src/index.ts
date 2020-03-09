@@ -190,7 +190,7 @@ async function createApp() {
   });
 
   // register your room handlers
-  gameServer.define('game', GameRoom, await mockGameInitOpts(persister));
+  gameServer.define('game', GameRoom);
   gameServer.define('waiting', RankedLobbyRoom, { dev: true });
 
 

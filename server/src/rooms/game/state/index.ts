@@ -902,7 +902,7 @@ class PlayerSet extends Schema implements PlayerSetData {
 
 export interface GameSerialized {
   players: PlayerSetSerialized;
-  connections: { [sessionId: string]: Role };
+  userRoles: { [sessionId: string]: Role };
   maxRound: number;
   lastTimePolled: number;
   timeRemaining: number;
@@ -921,6 +921,7 @@ export interface GameSerialized {
 export class GameState extends Schema implements GameData {
   constructor(data: GameStateOpts) {
     super();
+    assert.equal(Object.keys(data.userRoles).length, ROLES.length, 'Must have five players');
     this.userRoles = data.userRoles;
     this.marsEventDeck = new MarsEventsDeck(data.deck);
     this.lastTimePolled = new Date();
@@ -938,7 +939,7 @@ export class GameState extends Schema implements GameData {
 
   fromJSON(data: GameSerialized): GameState {
     this.players.fromJSON(data.players);
-    this.userRoles = data.connections;
+    this.userRoles = data.userRoles;
     this.maxRound = data.maxRound;
     this.lastTimePolled = new Date(data.lastTimePolled);
     this.timeRemaining = data.timeRemaining;
@@ -972,7 +973,7 @@ export class GameState extends Schema implements GameData {
   toJSON(): GameSerialized {
     return {
       players: this.players.toJSON(),
-      connections: this.userRoles,
+      userRoles: this.userRoles,
       maxRound: this.maxRound,
       lastTimePolled: this.lastTimePolled.getTime(),
       timeRemaining: this.timeRemaining,

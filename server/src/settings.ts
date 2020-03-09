@@ -9,20 +9,27 @@ export interface AppSettings {
   host: string
   logging: Logging
   secret: string
+  lobby: LobbySettings
+}
+
+export class LobbySettings {
+  constructor(public   evaluateAtEveryMinute: number = 15) {}
 }
 
 const dev: () => AppSettings = () => ({
   emailer: new MemoryEmailer(),
   host: 'http://localhost:8081',
   logging: new DevLogging(),
-  secret: SECRET_KEY
+  secret: SECRET_KEY,
+  lobby: new LobbySettings(1)
 });
 
 const staging: () => AppSettings = () => ({
   emailer: new MemoryEmailer(),
   host: 'http://localhost:8081',
   logging: new DevLogging(),
-  secret: SECRET_KEY
+  secret: SECRET_KEY,
+  lobby: new LobbySettings()
 });
 
 const prod: () => AppSettings = () => {
@@ -32,7 +39,8 @@ const prod: () => AppSettings = () => {
     emailer: new MailgunEmailer({ api_key, domain}),
     host: 'https://portofmars.asu.edu',
     logging: new DevLogging(),
-    secret: SECRET_KEY
+    secret: SECRET_KEY,
+    lobby: new LobbySettings()
   };
 };
 

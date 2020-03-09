@@ -1,8 +1,29 @@
-import Vue, { VueConstructor } from 'vue'
+import Vue, {VueConstructor} from 'vue'
 import _ from "lodash";
-import { VueRouter } from "vue-router/types/router";
-import { TStore } from "@/plugins/tstore";
-import { isDev } from 'shared/settings';
+import {VueRouter} from "vue-router/types/router";
+import {TStore} from "@/plugins/tstore";
+
+interface RoomListingData<Metadata = any> {
+  clients: number;
+  locked: boolean;
+  private: boolean;
+  maxClients: number;
+  metadata: Metadata;
+  name: string;
+  processId: string;
+  roomId: string;
+
+  updateOne(operations: any): any;
+
+  save(): any;
+
+  remove(): any;
+}
+
+type Reservation = {
+  room: RoomListingData<any>;
+  sessionId: string;
+}
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -12,7 +33,6 @@ declare module 'vue/types/vue' {
 
 const LOGIN_CREDS = 'loginCreds';
 const SUBMISSION_ID = 'submissionId';
-const GAME_DATA = "gameData";
 
 interface LoginCreds {
   sessionCookie: string
@@ -25,17 +45,14 @@ interface GameData {
 }
 
 export class AjaxRequest {
-  constructor(private router: VueRouter, private store: TStore) { }
+  constructor(private router: VueRouter, private store: TStore) {
+  }
+
+  reservation!: Reservation;
 
   async setLoginCreds(response: Response) {
     const data: LoginCreds = await response.json();
-    if (isDev()) {
-      const sessionCookie = data.sessionCookie;
-      if (!document.cookie.includes('connect.sid=')) {
-        document.cookie = sessionCookie;
-      }
-    }
-    this.store.commit('SET_USER', { username: data.username });
+    this.store.commit('SET_USER', {username: data.username});
   }
 
   get username(): string {
@@ -43,12 +60,12 @@ export class AjaxRequest {
   }
 
   setQuizCompletion(passedQuiz: boolean) {
-    this.store.commit('SET_USER', { username: this.username, passedQuiz });
+    this.store.commit('SET_USER', {username: this.username, passedQuiz});
   }
 
   forgetLoginCreds() {
     document.cookie = "connect.sid= ;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-    this.store.commit('SET_USER', { username: '', passedQuiz: false });
+    this.store.commit('SET_USER', {username: '', passedQuiz: false});
   }
 
   get submissionId(): number | null {
@@ -65,21 +82,6 @@ export class AjaxRequest {
 
   forgetSubmissionId() {
     localStorage.removeItem(SUBMISSION_ID);
-  }
-
-  get gameData(): GameData | null {
-    const d = localStorage.getItem(GAME_DATA);
-    if (_.isNull(d)) return null;
-    const data = JSON.parse(d!);
-    return data;
-  }
-
-  setGameData(data: GameData) {
-    localStorage.setItem(GAME_DATA, JSON.stringify(data));
-  }
-
-  forgetGameData() {
-    localStorage.removeItem(GAME_DATA);
   }
 
   async post(path: string, data?: any) {
@@ -99,7 +101,7 @@ export class AjaxRequest {
     )
     switch (response.status) {
       case 401:
-        this.router.push({ name: 'Login' });
+        this.router.push({name: 'Login'});
       default:
         return response;
     }
@@ -120,7 +122,7 @@ export class AjaxRequest {
     )
     switch (response.status) {
       case 401:
-        this.router.push({ name: 'Login' });
+        this.router.push({name: 'Login'});
       default:
         return response;
     }

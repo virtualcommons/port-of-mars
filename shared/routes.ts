@@ -10,7 +10,7 @@ export function isPage(pageName: string): pageName is Page {
   return PAGES.includes(pageName as Page);
 }
 
-export const PAGE_META: { [p in Page]: { path: string, name: string, meta: { requiresAuth: boolean} }} = {
+export const PAGE_META: { [p in Page]: { path: string, name: string, props?: boolean, meta: { requiresAuth: boolean} }} = {
   [LOGIN_PAGE]: {
     path: '/',
     name: LOGIN_PAGE,

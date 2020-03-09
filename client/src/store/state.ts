@@ -106,10 +106,6 @@ export interface State extends GameData {
   quizQuestions: Array<QuizQuestionData>;
   eventCardsVisible: Array<any>;
   user: User;
-  lobbyNextAssignmentTime: number;
-  lobbyWaitingUsers: number;
-  lobbyClientJoinedQueue: boolean;
-  lobbyReceivedInvitation: boolean;
   environment: string;
   consent: boolean;
 
@@ -149,12 +145,6 @@ export const initialStoreState: State = {
     passedQuiz: false
   },
 
-  // NOTE: Waiting Lobby
-  lobbyNextAssignmentTime: 0,
-  lobbyWaitingUsers: 0,
-  lobbyClientJoinedQueue: false,
-  lobbyReceivedInvitation: false,
-
   //TUTORIAL TRADING
   tutorialTradePartner: '',
   tutorialTradeGive: defaultInventory(),
@@ -175,7 +165,7 @@ export const initialStoreState: State = {
     }
   }
 
-  
+
 }
 
 export const getInitialStoreState = (): State => _.cloneDeep(initialStoreState);

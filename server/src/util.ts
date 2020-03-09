@@ -1,16 +1,16 @@
-import { Loader, Resolver } from "typeorm-fixtures-cli/dist";
+import {Loader, Resolver} from "typeorm-fixtures-cli/dist";
 import path from "path";
 import _ from "lodash";
-import { MarsEventData, ROLES } from "shared/types";
-import { GameOpts, GameStateOpts, Persister } from "@/rooms/game/types";
+import {MarsEventData, ROLES} from "shared/types";
+import {GameOpts, GameStateOpts, Persister} from "@/rooms/game/types";
 import * as assert from "assert";
-import { ConsolePersister } from "@/services/persistence";
+import {ConsolePersister} from "@/services/persistence";
 import * as to from "typeorm";
-import { expandCopies } from "@/rooms/game/state/marsEvents/common";
-import { getAllMarsEvents } from "@/data/MarsEvents";
-import { TournamentRound } from "@/entity/TournamentRound";
-import { Page, PAGE_META } from "shared/routes";
-import { settings } from "@/settings";
+import {expandCopies} from "@/rooms/game/state/marsEvents/common";
+import {getAllMarsEvents} from "@/data/MarsEvents";
+import {TournamentRound} from "@/entity/TournamentRound";
+import {Page, PAGE_META} from "shared/routes";
+import {settings} from "@/settings";
 
 export function getConnection(): to.Connection {
   const connection_name = process.env.NODE_ENV === 'test' ? 'test' : 'default';
@@ -40,9 +40,13 @@ export function mockGameStateInitOpts(
   const fixtures = new Resolver().resolve(loader.fixtureConfigs);
   const deck = deckStrategy(_.clone(expandCopies(getAllMarsEvents())));
   const round = nRoundStrategy();
+  const userRoles = _.zipObject(
+    fixtures.filter(f => f.entity === 'User')
+      .map(f => f.data.username)
+      .filter((name: string) => name.includes('bob')), ROLES);
 
   return {
-    userRoles: _.zipObject(fixtures.filter(f => f.entity === 'User').map(f => f.data.username), ROLES),
+    userRoles,
     deck,
     round
   };

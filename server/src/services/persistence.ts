@@ -8,12 +8,8 @@ import * as assert from "assert";
 import {GameEvent} from "@/entity/GameEvent";
 import Mutex from "async-mutex/lib/Mutex";
 import {ClockTimer} from "@gamestdio/timer/lib/ClockTimer";
-import {Tournament} from "@/entity/Tournament";
 import _ from "lodash";
 import {getConnection} from "@/util";
-import {GameState} from "@/rooms/game/state";
-import {getGameById} from "@/services/game";
-import {Phase} from "shared/types";
 import {TournamentRound} from "@/entity/TournamentRound";
 
 function toDBRawGameEvent(gameId: number, gameEvent: ge.GameEvent) {

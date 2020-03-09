@@ -2,7 +2,7 @@ import { Room, Client } from 'colyseus.js';
 import {
   WaitingRequests,
   AcceptInvitation,
-  SwitchRooms
+  DistributeGroups
 } from 'shared/waitingLobby/requests';
 
 export class WaitingRequestAPI {
@@ -21,8 +21,8 @@ export class WaitingRequestAPI {
     this.send(msg);
   }
 
-  public joinRoom(room: string) {
-    const msg: SwitchRooms = { kind: 'switch-rooms', room };
+  public distributeGroups() {
+    const msg: DistributeGroups = { kind: 'distribute-groups' };
     this.send(msg);
   }
 }

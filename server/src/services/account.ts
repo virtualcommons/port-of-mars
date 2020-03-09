@@ -14,7 +14,7 @@ export async function findUserById(id: number): Promise<User | undefined> {
   return await getRepository().findOne(id);
 }
 
-export async function findOrCreateUser(username: string, profile: object): Promise<User | undefined> {
+export async function findOrCreateUser(username: string): Promise<[boolean, User]> {
   const repository = getRepository();
   let user = await repository.findOne({username});
   let created = false;
@@ -22,10 +22,7 @@ export async function findOrCreateUser(username: string, profile: object): Promi
     user = repository.create({username, name: ''});
     created = true;
   }
-  // FIXME: update user with profile fields after we figure out what ASU CAS gives us
-  console.log(profile);
-  await repository.save(user);
-  return user;
+  return [created, user];
 }
 
 export async function getOrCreateUser(username: string): Promise<User> {

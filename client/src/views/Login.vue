@@ -38,7 +38,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import {GAME_PAGE} from "shared/routes";
+import {GAME_PAGE, LOBBY_PAGE, LOGIN_PAGE} from "shared/routes";
 
 @Component({})
 export default class Login extends Vue {
@@ -71,7 +71,7 @@ export default class Login extends Vue {
     const response = await this.$ajax.post(this.loginUrl, data);
     await this.$ajax.setLoginCreds(response);
     if (response.status === 200) {
-      this.$router.push(GAME_PAGE);
+      this.$router.push({name: LOBBY_PAGE});
     } else {
       this.error = await response.json();
     }

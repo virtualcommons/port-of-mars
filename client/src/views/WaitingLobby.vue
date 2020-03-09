@@ -24,16 +24,16 @@
               <span class="continue">Continue to Game</span>
             </router-link>
           </div>
-          <p>Next Assignment Time: {{ lobbyNextAssignmentTime }}</p>
-          <p>Currently Waiting: {{ lobbyWaitingUsers }}</p>
-          <p>{{ lobbyClientJoinedQueue }}</p>
+          <p>Next Assignment Time: {{ nextAssignmentTimeString }}</p>
+          <p>Currently Waiting: {{ waitingUserCount }}</p>
+          <p>{{ joinedText }}</p>
           <button
-            v-if="lobbyReceivedInvitation"
-            @click="handleAcceptInvitation"
+            v-if="isDev"
+            @click="distributeGroups"
             type="button"
             name="button"
           >
-            Start Game
+              Distribute Groups
           </button>
         </div>
       </div>
@@ -54,17 +54,21 @@
 </template>
 
 <script lang="ts">
+import {isDev} from 'shared/settings';
 import { Vue, Component, Inject } from 'vue-property-decorator';
 import { ROLES } from 'shared/types';
 import { Client } from 'colyseus.js';
 import { applyWaitingServerResponses } from '@/api/waitingLobby/response';
-import store from '@/store';
 import { WaitingRequestAPI } from '@/api/waitingLobby/request';
 import moment from 'moment';
 
 @Component({})
 export default class WaitingLobby extends Vue {
   @Inject() $client!: Client;
+
+  waitingUserCount: number = 0;
+  joinedQueue: boolean = false;
+  nextAssignmentTime: number = (new Date()).getTime();
 
   private lobbyAPI: WaitingRequestAPI = new WaitingRequestAPI();
   private hint: string = '';
@@ -78,17 +82,13 @@ export default class WaitingLobby extends Vue {
   ];
 
   async created() {
-    this.$ajax.forgetGameData();
-    if (this.$ajax.gameData === null) {
-      const room = await this.$client.joinOrCreate('waiting');
-      applyWaitingServerResponses(room, this.$tstore);
-      this.lobbyAPI.connect(room);
-    } else {
-      // GO TO GAME
-    }
+    const room = await this.$client.joinOrCreate('waiting');
+    applyWaitingServerResponses(room, this);
+    this.lobbyAPI.connect(room);
   }
 
   async destroyed() {
+    console.log('leaving lobby');
     this.lobbyAPI.room.leave();
   }
 
@@ -104,6 +104,10 @@ export default class WaitingLobby extends Vue {
     }, 8000);
   }
 
+  isDev() {
+    return isDev();
+  }
+
   get playerRole() {
     return this.$tstore.state.role;
   }
@@ -113,34 +117,22 @@ export default class WaitingLobby extends Vue {
     return ROLES.filter(role => role !== pr);
   }
 
-  get lobbyNextAssignmentTime(): string {
-    const unformatted = this.$tstore.state.lobbyNextAssignmentTime;
+  get nextAssignmentTimeString(): string {
+    const unformatted = this.nextAssignmentTime;
     const formatted = moment(unformatted).format('LLL');
     return formatted;
   }
 
-  get lobbyWaitingUsers(): number {
-    return this.$tstore.state.lobbyWaitingUsers;
-  }
-
-  get lobbyClientJoinedQueue(): string {
-    const lobbyClientJoinedQueue = this.$tstore.state.lobbyClientJoinedQueue;
+  get joinedText(): string {
+    const lobbyClientJoinedQueue = this.joinedQueue;
     if (lobbyClientJoinedQueue) {
       return 'You are currently in line for a game';
     }
     return 'You have not yet been added to the game queue.';
   }
 
-  get lobbyReceivedInvitation() {
-    // TODO: CHECK LOCAL STORAGE IF NOT IN STATE
-    const lobbyReceivedInvitation = this.$tstore.state.lobbyReceivedInvitation;
-    console.log('lobbyReceivedInvitation: ', lobbyReceivedInvitation);
-    return lobbyReceivedInvitation;
-  }
-
-  handleAcceptInvitation() {
-    console.log('RECEIVED INVITATION: Start Game');
-    this.lobbyAPI.acceptInvitation();
+  distributeGroups() {
+    this.lobbyAPI.distributeGroups();
   }
 
   private animations(el: string): string {

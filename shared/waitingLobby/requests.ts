@@ -3,9 +3,8 @@ export interface AcceptInvitation {
   data?: any;
 }
 
-export interface SwitchRooms {
-  kind: 'switch-rooms';
-  room: string;
+export interface DistributeGroups {
+  kind: 'distribute-groups';
 }
 
-export type WaitingRequests = SwitchRooms | AcceptInvitation;
+export type WaitingRequests = AcceptInvitation | DistributeGroups;

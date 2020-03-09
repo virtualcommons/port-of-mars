@@ -2,6 +2,9 @@ import { Room } from 'colyseus.js';
 import { WaitingResponses } from 'shared/waitingLobby/responses';
 import { Schema } from '@colyseus/schema';
 import { TStore } from '@/plugins/tstore';
+import {VueRouter} from "vue-router/types/router";
+import {GAME_PAGE, LOGIN_PAGE} from "shared/routes";
+import WaitingLobby from "@/views/WaitingLobby.vue";
 
 // TODO: Temporary Implementation
 const GAME_DATA = 'gameData';
@@ -15,32 +18,23 @@ function setGameData(data: GameData) {
   localStorage.setItem(GAME_DATA, JSON.stringify(data));
 }
 
-export function applyWaitingServerResponses<T>(room: Room, store: TStore) {
+export function applyWaitingServerResponses<T>(room: Room, component: WaitingLobby) {
+  const store = component.$tstore;
+  const router = component.$router;
   room.onMessage((msg: WaitingResponses) => {
     console.log('MESSAGE RECEIVED FROM SERVER!', msg);
     switch (msg.kind) {
-      case 'client-joined-queue':
-        const lobbyClientJoinedQueue: boolean = msg.value;
-        store.commit('SET_LOBBY_CLIENT_JOINED_QUEUE', lobbyClientJoinedQueue);
+      case 'joined-client-queue':
+        (component as any).joinedQueue = msg.value;
         break;
-      case 'send-invitation':
+      case 'sent-invitation':
         const matchData: any = msg.matchData;
-        const gameData: any = {
-          roomId: matchData.room.roomId,
-          sessionId: matchData.sessionId
-        };
-        // TODO: Temporary Implementation
-        setGameData(gameData);
-        store.commit('SET_LOBBY_RECEIVED_INVITATION', true);
+        component.$ajax.reservation = matchData;
+        router.push({ name: GAME_PAGE });
+        room.send({ kind: 'accept-invitation'});
         break;
-      case 'client-remove-from-lobby':
+      case 'removed-client-from-lobby':
         // TODO: HANDLE WAITING LOBBY DISCONNECT
-        break;
-      case 'waiting-lobby':
-        break;
-      case 'switch-rooms':
-        break;
-      default:
         break;
     }
   });
@@ -49,18 +43,11 @@ export function applyWaitingServerResponses<T>(room: Room, store: TStore) {
     changes.forEach(change => {
       console.log('WAITING LOBBY EVENT CHANGE: ', change);
       switch (change.field) {
-        case 'lobbyNextAssignmentTime':
-          const lobbyNextAssignmentTime: number = change.value;
-          store.commit(
-            'SET_LOBBY_NEXT_ASSIGNMENT_TIME',
-            lobbyNextAssignmentTime
-          );
+        case 'nextAssignmentTime':
+          (component as any).nextAssignmentTime = change.value;
           break;
-        case 'lobbyWaitingUsers':
-          const lobbyWaitingUsers: number = change.value;
-          store.commit('SET_LOBBY_WAITING_USERS', lobbyWaitingUsers);
-          break;
-        default:
+        case 'waitingUserCount':
+          (component as any).waitingUserCount = change.value;
           break;
       }
     });

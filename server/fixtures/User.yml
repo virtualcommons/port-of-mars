@@ -1,24 +1,24 @@
 entity: User
 items:
-  bob:
-    username: 'bob'
-    name: 'Bob Smith'
-    email: 'bob@gmail.com'
+  bob{1..5}:
+    username: 'bob($current)'
+    name: 'Bob Smith ($current)'
+    email: 'bob($current)@gmail.com'
     passedQuiz: true
-  frank:
-    username: 'frank'
-    name: 'Frank Smith'
-    email: 'frank@a.com'
+  frank{1..5}:
+    username: 'frank($current)'
+    name: 'Frank Smith ($current)'
+    email: 'frank($current)@a.com'
     passedQuiz: true
-  amanda:
-    username: 'amanda'
-    name: 'Amanda Smith'
-    email: 'amanda@b.com'
-  sydney:
-    username: 'sydney'
-    name: 'Sydney Smith'
-    email: 'sydney@yahoo.com'
-  adison:
-    username: 'adison'
-    name: 'Adison Smith'
-    email: 'adison@b.com'
+  amanda{1..5}:
+    username: 'amanda($current)'
+    name: 'Amanda Smith ($current)'
+    email: 'amanda($current)@b.com'
+  sydney{1..5}:
+    username: 'sydney($current)'
+    name: 'Sydney Smith ($current)'
+    email: 'sydney($current)@yahoo.com'
+  adison{1..5}:
+    username: 'adison($current)'
+    name: 'Adison Smith ($current)'
+    email: 'adison($current)@b.com'

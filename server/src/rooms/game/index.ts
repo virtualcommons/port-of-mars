@@ -25,12 +25,8 @@ import {Game, GameOpts, Persister} from '@/rooms/game/types';
 import { Command } from '@/rooms/game/commands/types';
 import { StateSnapshotTaken } from '@/rooms/game/events';
 import {User} from "@/entity/User";
-import {getUserByJWT, JWT_SECRET} from "@/services/auth";
 import http from "http";
-import cookie from 'cookie'
 import {settings} from "@/settings";
-import {getConnection} from "@/util";
-import cookieParser from "cookie-parser";
 import {findUserById} from "@/services/account";
 
 const logger = settings.logging.getLogger(__filename);
@@ -61,6 +57,10 @@ export class GameRoom extends Room<GameState> implements Game {
   onJoin(client: Client, options: any, auth: User) {
     const role = this.state.userRoles[auth.username];
     this.safeSend(client, { kind: 'set-player-role', role });
+  }
+
+  async onDispose() {
+    logger.info('Disposing of room', this.roomId)
   }
 
   safeSend(client: Client, msg: Responses) {
@@ -134,8 +134,4 @@ export class GameRoom extends Room<GameState> implements Game {
     this.persister.applyMany(this.gameId, events);
   }
   onLeave(client: Client, consented: boolean) {}
-
-  async onDispose() {
-
-  }
 }

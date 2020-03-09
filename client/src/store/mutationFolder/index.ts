@@ -6,7 +6,6 @@ import layout from './layout';
 import notifications from './notifications';
 import player from './player';
 import trading from './trading';
-import lobby from './lobby';
 import { State, getInitialStoreState } from '@/store/state';
 
 export default {
@@ -30,5 +29,4 @@ export default {
   ...notifications,
   ...player,
   ...trading,
-  ...lobby
 };

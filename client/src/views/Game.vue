@@ -5,15 +5,15 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Inject, Provide } from 'vue-property-decorator';
+import {Vue, Component, Inject, Provide, Prop} from 'vue-property-decorator';
 import { Client } from 'colyseus.js';
 import { applyGameServerResponses } from '@/api/game/response';
 import { GameRequestAPI } from '@/api/game/request';
-import { EnvironmentMode } from '../settings';
+import { EnvironmentMode } from '@/settings';
 import ModalContainer from '@/components/gamedashboard/global/modals/ModalContainer.vue';
 import ContainerBoard from '@/components/gamedashboard/global/containers/ContainerBoard.vue';
 import GameDashboard from '@/components/GameDashboard.vue';
-import environment from '../store/mutationFolder/environment';
+import _ from "lodash";
 
 @Component({
   name: 'game',
@@ -30,7 +30,9 @@ export default class Game extends Vue {
   private env: EnvironmentMode = new EnvironmentMode;
 
   async created() {
-    const gameRoom = await this.$client.joinOrCreate('game');
+    this.api.room?.leave();
+    console.log({reservation: this.$ajax.reservation});
+    const gameRoom = await this.$client.consumeSeatReservation(this.$ajax.reservation);
     applyGameServerResponses(gameRoom, this.$tstore);
     this.api.connect(gameRoom);
     this.hasApi = true;

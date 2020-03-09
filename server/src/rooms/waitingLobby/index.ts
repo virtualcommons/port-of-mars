@@ -5,7 +5,13 @@ import _ from 'lodash';
 import { buildGameOpts } from '@/util';
 import { getUserByJWT } from '@/services/auth';
 import { RoomGameState } from '@/rooms/waitingLobby/state';
-import {settings} from "@/settings";
+import {LobbySettings, settings} from "@/settings";
+import {findUserById} from "@/services/account";
+import * as http from "http";
+import {WaitingRequests} from "shared/waitingLobby/requests";
+import {isDev} from "shared/settings";
+import {WaitingResponses} from "shared/waitingLobby/responses";
+import {is} from "@babel/types";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -26,6 +32,7 @@ interface ClientStat {
 }
 
 export class RankedLobbyRoom extends Room<RoomGameState> {
+
   /**
    * Distribute clients into groups at this interval
    * 15 minutes
@@ -65,6 +72,7 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
   onCreate(options: any) {
     this.setState(new RoomGameState());
     this.dev = options.dev;
+    this.evaluateAtEveryMinute = settings.lobby.evaluateAtEveryMinute;
     /**
      * Redistribute clients into groups at every interval
      */
@@ -85,20 +93,13 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
         .nextInvocation()
         .toDate()
         .getTime();
-      this.state.lobbyNextAssignmentTime = nextInvocation;
+      this.state.nextAssignmentTime = nextInvocation;
     }
   }
 
-  async onAuth(client: Client, options: { token: string }) {
-    // TODO: Handle Authentication
-
-    // const user = await getUserByJWT(options.token);
-    // if (user && Object.keys(this.state.userRoles).includes(user.username)) {
-    //   return user;
-    // }
-    // return false;
-
-    return true;
+  async onAuth(client: Client, options: { token: string }, request?: http.IncomingMessage) {
+    const user = await findUserById((request as any).session.passport.user);
+    return user;
   }
 
   onJoin(client: Client, options: any) {
@@ -109,7 +110,7 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
       options
     };
     this.stats.push(stat);
-    this.state.lobbyWaitingUsers = this.stats.length;
+    this.state.waitingUserCount = this.stats.length;
     this.send(client, { kind: 'client-joined-queue', value: true });
 
     if (this.dev && this.stats.length === this.numClientsToMatch) {
@@ -117,7 +118,7 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
     }
   }
 
-  onMessage(client: Client, message: any) {
+  async onMessage(client: Client, message: WaitingRequests) {
     logger.trace('WAITING LOBBY: onMessage - message', message);
     if (message.kind === 'accept-invitation') {
       logger.trace('CLIENT ACCEPTED INVITATION');
@@ -136,11 +137,14 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
           // stat.group.cancelConfirmationTimeout!.clear();
           stat.group.stats.forEach(stat => {
             this.removeClientStat(stat.client);
-            this.send(stat.client, { kind: 'client-remove-from-lobby' });
+            this.sendSafe(stat.client, { kind: 'removed-client-from-lobby' });
             stat.client.close();
           });
         }
       }
+    } else if (message.kind === 'distribute-groups') {
+      this.redistributeGroups();
+      await this.checkGroupsReady();
     }
   }
 
@@ -156,7 +160,6 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
     // Re-set all groups
     this.groups = [];
 
-    // const stats = this.stats.sort((a, b) => a.rank - b.rank);
     const stats = this.stats;
 
     let currentGroup: MatchmakingGroup = this.createGroup();
@@ -183,17 +186,34 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
     this.checkGroupsReady();
   }
 
+  checkGroupIsReady(group: MatchmakingGroup): boolean {
+    return group.ready || group.stats.length === this.numClientsToMatch || isDev()
+  }
+
+  sendSafe(client: Client, msg: WaitingResponses) {
+    this.send(client, msg);
+  }
+
+  fillUsernames(usernames: Array<string>) {
+    if (usernames.length < ROLES.length && isDev()) {
+      const newUsernames = ['bob1', 'amanda1', 'adison1', 'sydney1', 'frank1'].filter(u => !usernames.includes(u));
+      return usernames.concat(newUsernames).slice(0, this.numClientsToMatch);
+    }
+
+    return usernames;
+  }
+
   async checkGroupsReady() {
     logger.trace('WAITING LOBBY: checkGroupsReady');
     await Promise.all(
       this.groups.map(async group => {
-        if (group.ready || group.stats.length === this.numClientsToMatch) {
+        if (this.checkGroupIsReady(group)) {
+          logger.debug('WAITING LOBBY: group is ready', group);
           group.ready = true;
           group.confirmed = 0;
 
-          const userRoles = await buildGameOpts(
-            group.stats.map(s => s.client.auth.username)
-          );
+          const usernames = this.fillUsernames(group.stats.map(s => s.client.auth.username));
+          const userRoles = await buildGameOpts(usernames);
           /**
            * Create room instance in the server.
            */
@@ -212,19 +232,12 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
               /**
                * Send room data for new WebSocket connection!
                */
-              this.send(client.client, {
-                kind: 'send-invitation',
+              this.sendSafe(client.client, {
+                kind: 'sent-invitation',
                 matchData: matchData
               });
             })
           );
-        } else {
-          /**
-           * Notify all clients within the group on how many players are in the queue
-           */
-          // group.stats.forEach(client =>
-          //   this.send(client.client, group.stats.length)
-          // );
         }
       })
     );
@@ -235,7 +248,7 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
     const index = this.stats.findIndex(stat => stat.client === client);
     if (index !== -1) {
       this.stats.splice(index, 1);
-      this.state.lobbyWaitingUsers = this.stats.length;
+      this.state.waitingUserCount = this.stats.length;
     }
   }
 
