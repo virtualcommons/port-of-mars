@@ -25,11 +25,13 @@ import {Game, GameOpts, Persister} from '@/rooms/game/types';
 import { Command } from '@/rooms/game/commands/types';
 import { StateSnapshotTaken } from '@/rooms/game/events';
 import {User} from "@/entity/User";
-import {getUserByJWT} from "@/services/auth";
+import {getUserByJWT, JWT_SECRET} from "@/services/auth";
 import http from "http";
 import cookie from 'cookie'
 import {settings} from "@/settings";
 import {getConnection} from "@/util";
+import cookieParser from "cookie-parser";
+import {findUserById} from "@/services/account";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -39,9 +41,7 @@ export class GameRoom extends Room<GameState> implements Game {
   gameId!: number;
 
   async onAuth(client: Client, options: any, request?: http.IncomingMessage) {
-    // const user = await getUserByJWT(options.token);
-    const token = cookie.parse(request?.headers.cookie ?? '').jwt;
-    const user = await getUserByJWT(token);
+    const user = await findUserById(request.session.passport.user);
     if (user && Object.keys(this.state.userRoles).includes(user.username)) {
       return user;
     }

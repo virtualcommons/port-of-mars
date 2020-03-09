@@ -37,6 +37,13 @@ const CasStrategy = require('passport-cas2').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
 
 const RedisStore = connectRedis(session);
+const store = new RedisStore({ host: 'redis', client: redis.createClient({ host: 'redis' }) });
+const sessionParser = session({
+  resave: false,
+  saveUninitialized: false,
+  secret: JWT_SECRET,
+  store,
+});
 
 passport.use(new CasStrategy(
   {
@@ -86,7 +93,7 @@ applyInStagingOrProd(() =>
 async function createApp() {
   const port = Number(process.env.PORT || 2567);
   const app = express();
-  const store = new RedisStore({ host: 'redis', client: redis.createClient({ host: 'redis' }) });
+
 
   applyInStagingOrProd(() => app.use(Sentry.Handlers.requestHandler()));
   if (isDev()) {
@@ -101,12 +108,7 @@ async function createApp() {
   app.use(express.static('static'));
   app.use(express.json());
   app.use(cookieParser(JWT_SECRET));
-  app.use(session({ 
-    store,
-    secret: JWT_SECRET,
-    saveUninitialized: false,
-    resave: false
-  }));
+  app.use(sessionParser);
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(function(req, res, next) {
@@ -136,7 +138,6 @@ async function createApp() {
       if (req.user) {
         const username: string = (req.user as User).username;
         if (username?.length > 0) {
-          setJWTCookie(res, username);
           res.redirect('/');
           return;
         }
@@ -152,7 +153,10 @@ async function createApp() {
   const server = http.createServer(app);
   const gameServer = new Server({
     server,
-    express: app
+    express: app,
+    verifyClient(info, next) {
+      sessionParser(info.req as any, {} as any, () => next(true))
+    }
   });
 
   const persister = new DBPersister();
