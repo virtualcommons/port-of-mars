@@ -93,6 +93,20 @@ export class BoughtAccomplishment extends GameEventWithData {
 
   apply(game: GameState): void {
     game.players[this.data.role].buyAccomplishment(this.data.accomplishment);
+    const {
+      role,
+      label,
+      science,
+      government,
+      legacy,
+      finance,
+      culture,
+      upkeep,
+      victoryPoints
+    } = this.data.accomplishment;
+    const message: string = `The ${role} purchased an accomplishment: ${label}. Science: ${science}, Government: ${government}, Legacy: ${legacy}, Finance: ${finance}, Culture: ${culture}, System Health: ${upkeep}. This added ${victoryPoints} points to their score.`;
+    const category: string = 'Bought Accomplishment';
+    game.log(message, category);
   }
 }
 gameEventDeserializer.register(BoughtAccomplishment);

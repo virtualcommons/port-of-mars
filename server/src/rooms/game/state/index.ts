@@ -1121,9 +1121,11 @@ export class GameState extends Schema implements GameData {
     event.apply(this);
   }
 
+  // REFACTOR: DEFAULT CATEGORY
+  
   log(
     message: string,
-    category: string = 'Mars Event',
+    category: string | string = 'Mars Event',
     performedBy: Role | ServerRole = SERVER
   ): MarsLogMessage {
     const msg = new MarsLogMessage({
