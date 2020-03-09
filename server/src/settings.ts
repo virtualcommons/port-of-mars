@@ -32,6 +32,6 @@ const prod: () => AppSettings = () => {
 
 const env = process.env.NODE_ENV;
 
-export const settings: AppSettings = env === 'development' ?
+export const settings: AppSettings = ['development', 'test'].includes(env || '') ?
   dev() : env === 'staging' ?
     staging() : prod();
