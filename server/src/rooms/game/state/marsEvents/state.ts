@@ -211,7 +211,7 @@ export class CompulsivePhilanthropy extends BaseEvent {
     const winner: Role = _.find(this.order, (w:Role) => winners.includes(w)) || this.order[0];
     game.upkeep += game.players[winner].timeBlocks;
     game.players[winner].timeBlocks = 0;
-    game.log(`${winner} voted to be compulsive philanthropist.`);
+    game.log(`${winner} was voted to be Compulsive Philanthropist. The ${winner} invested all of their timeblocks into System Health.`);
   }
 
   getData() {
