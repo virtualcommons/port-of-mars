@@ -79,7 +79,20 @@
             <p align="justify">Sincerely,</p>
             <p align="justify">Dr. Marco Janssen</p>
 
-            <code><b>By clicking below, you are giving consent to participate in the above study.</b></code>
+            <code><b>By signing with your preferred email and clicking below, you are giving consent to participate in the above study.</b></code>
+
+            <br/><br/>
+
+            <BContainer fluid>
+                <BRow class="my-1">
+                    <!-- <BCol>
+                        <BIcon icon="envelope"/>
+                    </BCol> -->
+                    <BCol>
+                        <BFormInput v-model="email" placeholder="Enter your email address" required />
+                    </BCol>
+                </BRow>
+            </BContainer>
 
             <br/><br/>
 
@@ -106,12 +119,18 @@
 
 <script lang="ts">
 import { Component, Vue, Emit } from 'vue-property-decorator';
-import { BModal, BButton } from 'bootstrap-vue';
+import { BModal, BButton, BootstrapVueIcons, BFormInput, BContainer, BRow, BCol } from 'bootstrap-vue';
+
+Vue.use(BootstrapVueIcons)
 
 @Component({
     components: {
+        BContainer,
+        BRow,
+        BCol,
         BModal,
-        BButton
+        BButton,
+        BFormInput
     }
 })
 
@@ -133,6 +152,8 @@ export default class ConsentFormModal extends Vue {
     bodyTextVariant: string = 'light';
     footerBgVariant: string = 'danger';
     footerTextVariant: string = 'light';
+
+    email: string = '';
 
     @Emit('grant-consent')
     grantConsent() {
