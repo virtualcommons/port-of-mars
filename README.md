@@ -10,6 +10,7 @@ To create a development environment for your client and server run
 
 ```bash
 ./configure dev
+make secrets
 make
 ```
 
@@ -50,10 +51,13 @@ make test
 
 You should be able to go to a game instance by logging in as 'bob' on the login page. You should be taken to a game instance.
 
+If you just want to update the `docker-compose.yml` you can run `make docker-compose.yml`.
+
 ### Staging Setup
 
 ```bash
 ./configure staging
+make secrets
 make
 docker-compose up -d
 ```
@@ -64,6 +68,7 @@ Copy the Sentry DSN url into `keys/sentry_dsn`. Then
 
 ```bash
 ./configure prod
+make secrets
 make
 docker-compose up -d
 ```
