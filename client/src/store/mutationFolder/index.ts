@@ -7,8 +7,13 @@ import notifications from './notifications';
 import player from './player';
 import trading from './trading';
 import lobby from './lobby';
+import { State, getInitialStoreState } from '@/store/state';
 
 export default {
+  RESET_STATE(state: State, options?: any) {
+    Object.assign(state, getInitialStoreState());
+  },
+
   SET_LAYOUT(state: any, newLayout: string) {
     state.layout = newLayout;
   },
@@ -25,5 +30,5 @@ export default {
   ...notifications,
   ...player,
   ...trading,
-  ...lobby,
+  ...lobby
 };

@@ -25,13 +25,9 @@ import environment from '../store/mutationFolder/environment';
 })
 export default class Game extends Vue {
   @Inject() readonly $client!: Client;
-
-  @Provide()
-  api: GameRequestAPI = new GameRequestAPI();
-
-  hasApi: boolean = false;
-
-  env: EnvironmentMode = new EnvironmentMode;
+  @Provide() private api: GameRequestAPI = new GameRequestAPI();
+  private hasApi: boolean = false;
+  private env: EnvironmentMode = new EnvironmentMode;
 
   async created() {
     const gameRoom = await this.$client.joinOrCreate('game');
@@ -44,9 +40,8 @@ export default class Game extends Vue {
 
   destroyed() {
     console.log('leaving game');
-    if (this.api.room) {
-      this.api.room.leave();
-    }
+    if (this.api.room) this.api.room.leave();
+    this.$tstore.commit('RESET_STATE', {});
   }
 }
 </script>
