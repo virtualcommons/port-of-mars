@@ -79,15 +79,13 @@
             <p align="justify">Sincerely,</p>
             <p align="justify">Dr. Marco Janssen</p>
 
-            <code><b>By signing with your preferred email and clicking below, you are giving consent to participate in the above study.</b></code>
+            <code><b>By signing with an email that you check regularly and clicking below, you are giving consent to participate in the above study.</b></code>
 
             <br/><br/>
 
             <BContainer fluid>
                 <BRow class="my-1">
-                    <!-- <BCol>
-                        <BIcon icon="envelope"/>
-                    </BCol> -->
+                    <BIcon class="h4 my-2" icon="envelope-fill" lg />
                     <BCol>
                         <div role="group">
                             <BFormInput 
@@ -95,12 +93,12 @@
                                 v-model="email" 
                                 :state="emailState()" 
                                 aria-describedby="input-live-help input-live-feedback"
-                                placeholder="Enter your email address" 
+                                placeholder="me@example.com" 
                                 required 
                                 trim
                             />
                             <BFormInvalidFeedback id="input-live-feedback">
-                                Enter the correct email format.
+                                Enter an email in the correct format.
                             </BFormInvalidFeedback>
                             <BFormText id="input-live-help">Your email.</BFormText>
                         </div>
@@ -182,12 +180,6 @@ export default class ConsentFormModal extends Vue {
         else {
             return false;
         }
-        
-        // if (this.email.length > 4) {
-        //     const result = pattern.test(this.email) ? true : false;
-        //     console.log('email result validation: ', result)
-        //     return result;
-        // }
     }
 
     @Emit('grant-consent')
