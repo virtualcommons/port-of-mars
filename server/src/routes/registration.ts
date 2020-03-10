@@ -28,7 +28,7 @@ registrationRouter.post('/verify', async (req: Request, res: Response, next: Nex
 
 registrationRouter.post('/tutorial', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const data = {email: req.body.email, ...{username: (req.user as User).username}};
+    const data = {...req.body, ...{username: (req.user as User).username}};
     await submitRegistrationMetadata(data);
     sendEmailVerification(req.user as User);
     res.json();
