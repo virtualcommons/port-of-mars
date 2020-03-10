@@ -89,15 +89,30 @@
                         <BIcon icon="envelope"/>
                     </BCol> -->
                     <BCol>
-                        <BFormInput v-model="email" placeholder="Enter your email address" required />
+                        <div role="group">
+                            <BFormInput 
+                                id="input-live"
+                                v-model="email" 
+                                :state="emailState()" 
+                                aria-describedby="input-live-help input-live-feedback"
+                                placeholder="Enter your email address" 
+                                required 
+                                trim
+                            />
+                            <BFormInvalidFeedback id="input-live-feedback">
+                                Enter the correct email format.
+                            </BFormInvalidFeedback>
+                            <BFormText id="input-live-help">Your email.</BFormText>
+                        </div>
                     </BCol>
+                        
                 </BRow>
             </BContainer>
 
             <br/><br/>
 
             <div>
-                <BButton class="button-consent" variant="success" @click="grantConsent">Grant Consent</BButton>
+                <BButton class="button-consent" variant="success" :disabled="!emailState()" @click="grantConsent">Grant Consent</BButton>
                 <BButton class="button-consent" variant="danger" @click="denyConsent">Deny Consent</BButton>
             </div>
         </div>
@@ -119,7 +134,9 @@
 
 <script lang="ts">
 import { Component, Vue, Emit } from 'vue-property-decorator';
-import { BModal, BButton, BootstrapVueIcons, BFormInput, BContainer, BRow, BCol } from 'bootstrap-vue';
+import { BModal, BButton, BootstrapVueIcons, 
+         BFormInput, BContainer, BRow, BCol, 
+         BFormInvalidFeedback, BFormText } from 'bootstrap-vue';
 
 Vue.use(BootstrapVueIcons)
 
@@ -130,7 +147,9 @@ Vue.use(BootstrapVueIcons)
         BCol,
         BModal,
         BButton,
-        BFormInput
+        BFormInput,
+        BFormInvalidFeedback,
+        BFormText
     }
 })
 
@@ -154,6 +173,22 @@ export default class ConsentFormModal extends Vue {
     footerTextVariant: string = 'light';
 
     email: string = '';
+    pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    emailState() {
+        if ((this.email !== null || this.email !== '') && this.pattern.test(this.email)) {
+            return true
+        }
+        else {
+            return false;
+        }
+        
+        // if (this.email.length > 4) {
+        //     const result = pattern.test(this.email) ? true : false;
+        //     console.log('email result validation: ', result)
+        //     return result;
+        // }
+    }
 
     @Emit('grant-consent')
     async grantConsent() {
