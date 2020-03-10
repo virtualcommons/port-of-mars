@@ -107,11 +107,11 @@
                 </BRow>
             </BContainer>
 
-            <br/><br/>
+            <br/>
 
             <div>
-                <BButton class="button-consent" variant="success" :disabled="!emailState()" @click="grantConsent">Grant Consent</BButton>
-                <BButton class="button-consent" variant="danger" @click="denyConsent">Deny Consent</BButton>
+                <BButton squared class="button-consent" variant="success" :disabled="!emailState()" @click="grantConsent">Grant Consent</BButton>
+                <BButton squared class="button-consent" variant="danger" @click="denyConsent">Deny Consent</BButton>
             </div>
         </div>
         <template v-slot:modal-footer>
