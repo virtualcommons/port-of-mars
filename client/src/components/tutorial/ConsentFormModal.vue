@@ -156,17 +156,20 @@ export default class ConsentFormModal extends Vue {
     email: string = '';
 
     @Emit('grant-consent')
-    grantConsent() {
+    async grantConsent() {
         this.$store.state.consent = true;
         this.$bvModal.hide('bv-modal');
-        console.log('consent: ', this.$tstore.state.consent);
+        this.$ajax.post(`${process.env.SERVER_URL_HTTP}/registration/tutorial`);
+        const response = this.$ajax.post(`${process.env.SERVER_URL_HTTP}/registration/tutorial`);
+        // console.log('consent: ', this.$tstore.state.consent);
+        // console.log('email: ', this.email);
     }
 
     @Emit('deny-consent')
     denyConsent() {
         this.$store.state.consent = false;
         this.$bvModal.hide('bv-modal');
-        console.log('consent: ', this.$tstore.state.consent);
+        // console.log('consent: ', this.$tstore.state.consent);
     }
 
 }
