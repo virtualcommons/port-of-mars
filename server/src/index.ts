@@ -66,7 +66,12 @@ passport.serializeUser(function (user: User, done: Function) {
 passport.deserializeUser(async function (id: number, done: Function) {
   logger.warn(`entered deserialize ${id}`);
   const user = await findUserById(id);
-  done(null, user);
+  if (user) {
+    done(null, user);
+  }
+  else {
+    done(new Error(`Could not find user with ${id}`), null);
+  }
 });
 
 function applyInStagingOrProd(f: Function) {
@@ -115,7 +120,6 @@ async function createApp() {
     logger.info('req cookies: ', req.cookies);
     logger.info('req session: ', req.session);
     logger.info('req sessionID', req.sessionID);
-    next();
   });
 
   // make this conditional on isDev()
@@ -133,7 +137,7 @@ async function createApp() {
   app.get('/asulogin',
     passport.authenticate('cas', { failureRedirect: '/' }),
     function (req, res) {
-      // successful authentication, set JWT token cookie and redirect to server nexus
+      // successful authentication
       if (req.user) {
         const username: string = (req.user as User).username;
         if (username?.length > 0) {
@@ -148,6 +152,25 @@ async function createApp() {
       }
     }
   );
+
+  /* may need to look into setting up a global error handler to deal with the possibility of 
+  errors in deserializeUser
+  https://stackoverflow.com/questions/41069593/how-do-i-handle-errors-in-passport-deserializeuser
+  app.use(function (err, req, res, next) {
+    if (err) {
+      req.logout();
+      if (req.originalUrl === '/') {
+        next();
+      }
+      else {
+        res.redirect('/');
+      }
+    }
+    else {
+      next();
+    }
+  });
+  */
 
   const server = http.createServer(app);
   const gameServer = new Server({

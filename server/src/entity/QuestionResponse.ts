@@ -28,7 +28,6 @@ export class QuestionResponse {
     quizSubmission => quizSubmission.responses,
     { nullable: false }
   )
-  @JoinColumn()
   submission!: QuizSubmission;
 
   @Column()

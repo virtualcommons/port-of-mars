@@ -173,12 +173,8 @@ export default class Tutorial extends Vue {
 
   async mounted() {
     if (process.env.NODE_ENV != 'test') {
-      this.dataFetched = await this.getQuizQuestions();
-      if (this.dataFetched) {
-        this.showModal();
-      } else {
-        // TODO: Handle server error
-      }
+      await this.initalizeQuiz();
+      this.showModal();
     }
   }
 
@@ -301,87 +297,54 @@ export default class Tutorial extends Vue {
     }
   }
 
-  // NOTE: Server Fetches
-
-  private async getSubmissionId(): Promise<boolean> {
-    const submissionId = this.$ajax.submissionId;
-
-    if (submissionId) {
-      this.submissionId = submissionId;
-      return true;
-    } else {
-      const quizUrl = `${process.env.SERVER_URL_HTTP}/quiz/create`;
-      const response = await this.$ajax.post(quizUrl);
-
-      if (response.status === 201) {
-        const d = await response.json();
-        const data = parseInt(d.submissionId);
-        if (isNaN(data)) return false;
-        this.submissionId = data;
-        this.$ajax.setSubmissionId(data);
-        return true;
-      } else {
-        const error = await response.json();
-        this.notifyUserOfError('registerUser (response)', error);
-        return false;
-      }
-    }
-
-    return false;
+  get quizSubmissionEndpoint() {
+    return `${process.env.SERVER_URL_HTTP}/quiz/submission`;
   }
 
-  private async getQuizQuestions(): Promise<boolean> {
-    if (!this.getSubmissionId()) {
-      return false;
-    }
+  private setSubmissionId(submissionId: number) {
+    this.$ajax.setSubmissionId(submissionId);
+    this.submissionId = submissionId;
+  }
 
-    const quizUrl = `${process.env.SERVER_URL_HTTP}/quiz/questions`;
-    const response = await this.$ajax.get(quizUrl);
 
-    if (response.status === 200) {
-      this.quizQuestions = await response.json();
-      return true;
-    } 
-    else if (response.status === 401) {
-      this.$router.push({name: 'Login'});
+  // NOTE: Server Fetches
+  private async initalizeQuiz() {
+    let submissionId = this.$ajax.submissionId;
+    let response;
+    if (submissionId) {
+      const retrieveSubmissionUrl = `${this.quizSubmissionEndpoint}/${submissionId}`;
+      response = await this.$ajax.get(retrieveSubmissionUrl);
+      console.log(`retrieving submission with id ${submissionId}`);
     }
     else {
-      const error = await response.json();
-      this.notifyUserOfError('getQuizQuestions (response)', error);
-      return false;
+      const createQuizSubmissionUrl = this.quizSubmissionEndpoint;
+      response = await this.$ajax.post(createQuizSubmissionUrl);
+      console.log('creating new submission');
     }
-    return false;
+    const jsonData = await response.json();
+    console.log(jsonData);
+    this.setSubmissionId(jsonData.submissionId);
+    this.quizQuestions = jsonData.quizQuestions;
+    this.dataFetched = true;
   }
 
-  private async checkQuizQuestion(
-    questionId: number,
-    answer: number
-  ): Promise<boolean> {
-    const quizUrl = `${process.env.SERVER_URL_HTTP}/quiz/${this.submissionId}/${questionId}`;
-    const response = await this.$ajax.post(quizUrl, { answer: answer });
-
-    if (response.status === 200) {
-      const data = await response.json();
-      return data;
-    } else {
-      const error = await response.json();
-      this.notifyUserOfError('checkQuizQuestion (response)', error);
-    }
-    return false;
+  private async checkQuizQuestion(questionId: number, answer: number): Promise<boolean> {
+    const submitResponseUrl = `${this.quizSubmissionEndpoint}/${this.submissionId}/${questionId}`;
+    const response = await this.$ajax.post(submitResponseUrl, { answer: answer });
+    return await response.json();
   }
 
   private async checkQuizCompletion(): Promise<boolean> {
-    const quizUrl = `${process.env.SERVER_URL_HTTP}/quiz/complete`;
-    const response = await this.$ajax.get(quizUrl);
-
+    const quizCompletionUrl = `${process.env.SERVER_URL_HTTP}/quiz/complete`;
+    const response = await this.$ajax.get(quizCompletionUrl);
     if (response.status === 200) {
       const data = await response.json();
       return data;
     } else {
       const error = await response.json();
       this.notifyUserOfError('checkQuizCompletion (response)', error);
+      return false;
     }
-    return false;
   }
 
   private notifyUserOfError(call: string, error: any): void {

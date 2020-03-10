@@ -100,9 +100,8 @@ export class AjaxRequest {
     switch (response.status) {
       case 401:
         this.router.push({ name: 'Login' });
-        return;
       default:
-        return await response.json();
+        return response;
     }
   }
 
@@ -122,9 +121,8 @@ export class AjaxRequest {
     switch (response.status) {
       case 401:
         this.router.push({ name: 'Login' });
-        return;
       default:
-        return await response.json();
+        return response;
     }
   }
 }

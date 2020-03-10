@@ -4,10 +4,7 @@ import { Question } from '@/entity/Question';
 import { QuestionResponse } from '@/entity/QuestionResponse';
 import { User } from '@/entity/User';
 import { getConnection } from '@/util';
-import { Equal } from 'typeorm';
 import * as _ from 'lodash';
-
-// NOTE: FUNCTIONS TO CREATE AND SAVE TO DATABASE
 
 export async function createQuestionResponse(
   questionId: number,
@@ -26,7 +23,7 @@ export async function createQuestionResponse(
 export async function createQuizSubmission(
   userId: number,
   quizId: number
-): Promise<QuizSubmission | undefined> {
+): Promise<QuizSubmission> {
   const quizSubmission = new QuizSubmission();
   quizSubmission.userId = userId;
   quizSubmission.quizId = quizId;
@@ -35,46 +32,41 @@ export async function createQuizSubmission(
     .save(quizSubmission);
 }
 
-// FUNCTIONS TO GET FROM DATABASE
-
-export async function getQuizByName(name: string): Promise<Quiz | undefined> {
-  return await getConnection()
-    .getRepository(Quiz)
-    .findOne({
-      name: Equal(name)
-    });
+export async function findQuizSubmission(id: number, opts?: Partial<{ relations: Array<string>, where: object }>): Promise<QuizSubmission | undefined> {
+  return getConnection().getRepository(QuizSubmission).findOne({ id, ...opts });
 }
 
-export async function getQuizQuestionsByQuizId(
-  quizId: number
-): Promise<Array<Question> | undefined> {
+// FUNCTIONS TO GET FROM DATABASE
+export async function getDefaultQuiz(opts?: Partial<{ relations: Array<string>, where: object }>): Promise<Quiz> {
+  const DEFAULT_QUIZ_NAME = 'TutorialQuiz';
+  return await getQuizByName(DEFAULT_QUIZ_NAME, opts);
+}
+
+export async function getQuizById(id: number, opts?: Partial<{ relations: Array<string>, where: object }>) {
+  return await getConnection().getRepository(Quiz).findOneOrFail({ id, ...opts });
+}
+
+export async function getQuizByName(name: string, opts?: Partial<{ relations: Array<string>, where: object }>): Promise<Quiz> {
+  return await getConnection()
+    .getRepository(Quiz)
+    .findOneOrFail({ name, ...opts });
+}
+
+export async function getQuizQuestionsByQuizId(quizId: number): Promise<Array<Question> | undefined> {
   return await getConnection()
     .getRepository(Question)
-    .find({
-      quizId: Equal(quizId)
-    });
+    .find({ quizId });
 }
 
 export async function getRecentQuizSubmission(
   userId: number,
-  selectedQuiz: string
+  quizId: number,
+  opts: Partial<{ relations: Array<string>, where: object, order: object }>={}
 ): Promise<QuizSubmission | undefined> {
-  const quiz = await getQuizByName(selectedQuiz);
-  if (quiz === undefined) return undefined;
-  const quizId = quiz.id;
-
+  opts = { order: { dateCreated: 'DESC'}, ...opts };
   return await getConnection()
     .getRepository(QuizSubmission)
-    .createQueryBuilder('quizSubmission')
-    .where(
-      'quizSubmission.quizId = :quizId AND quizSubmission.userId = :userId',
-      {
-        quizId: quizId,
-        userId: userId
-      }
-    )
-    .orderBy('quizSubmission.id', 'DESC')
-    .getOne();
+    .findOne({ quizId, userId, ...opts });
 }
 
 export async function getQuestionResponsesBySubmissionId(
@@ -82,9 +74,7 @@ export async function getQuestionResponsesBySubmissionId(
 ): Promise<Array<QuestionResponse> | undefined> {
   return await getConnection()
     .getRepository(QuestionResponse)
-    .find({
-      submissionId: Equal(submissionId)
-    });
+    .find({ submissionId });
 }
 
 // FUNCTIONS TO UPDATE DATABASE
@@ -129,33 +119,21 @@ export async function checkQuestionResponse(
 
 export async function checkQuizCompletion(
   userId: number,
-  selectedQuiz: string
+  quizId?: number
 ): Promise<boolean> {
-  // NOTE: Get QuizSubmission (Recent)
-  const quizSubmission = await getRecentQuizSubmission(userId, selectedQuiz);
-  if (quizSubmission === undefined) return false;
-  const submissionId = quizSubmission.id;
 
-  // NOTE: Get Quiz
-  const quiz = await getQuizByName(selectedQuiz);
-  if (quiz === undefined) return false;
-  const quizId = quiz.id;
+  let quiz: Quiz = (quizId) ? await getQuizById(quizId, { relations: ['questions'] }) : await getDefaultQuiz();
+  const quizSubmission = await getRecentQuizSubmission(userId, quiz.id, { relations: ['responses'] });
+  if (!quizSubmission?.responses) return false;
 
-  // NOTE: Get QuizQuestions
-  const quizQuestions = await getQuizQuestionsByQuizId(quizId);
-  if (quizQuestions === undefined) return false;
+  const questions = quiz.questions;
+  const responses = quizSubmission.responses;
 
-  // NOTE: Get QuestionResponses
-  const questionResponses = await getQuestionResponsesBySubmissionId(
-    submissionId
-  );
-  if (questionResponses === undefined) return false;
-
-  // NOTE: Check if Correct
-  if (questionResponses.length < quizQuestions.length) return false;
-  for (const question of quizQuestions) {
+  // check if responses are same length as number of questions
+  if (responses.length < questions.length) return false;
+  for (const question of questions) {
     const correctResponses = _.filter(
-      questionResponses,
+      responses,
       (response: QuestionResponse) => {
         return (
           response.questionId === question.id &&
@@ -163,11 +141,9 @@ export async function checkQuizCompletion(
         );
       }
     );
-
     if (correctResponses.length === 0) {
       return false;
     }
   }
-
   return true;
 }

@@ -2,82 +2,73 @@ import { NextFunction, Request, Response, Router } from 'express';
 import {
   createQuizSubmission,
   createQuestionResponse,
-  getQuizByName,
-  getQuizQuestionsByQuizId,
+  getDefaultQuiz,
+  findQuizSubmission,
   setUserQuizCompletion,
   checkQuestionResponse,
   checkQuizCompletion
 } from '@/services/quiz';
-import { User } from "@/entity/User";
+import { User } from '@/entity/User';
+import { QuizSubmission } from '@/entity/QuizSubmission';
 import { settings } from '@/settings';
 
 export const quizRouter = Router();
 
 const logger = settings.logging.getLogger(__filename);
 
-const DEFAULT_QUIZ = 'TutorialQuiz';
+// quiz manipulation routes
+// endpoints for (1) creating a QuizSubmission and (2) retrieving all quiz questions and the Quiz container 
+// that organizes all QuizSubmissions for a particular user
 
-// NOTE: ROUTE FOR CREATING A QUIZ SUBMISSION
+function checkUser(req: Request, res: Response) {
+  const user = req.user as User | undefined;
+  if (!user) {
+    logger.debug('No user found on the session: ', req.session);
+    res.status(401).json({ error: 'Please login before attempting the tutorial and quiz.' });
+    return false;
+  }
+  return user;
+}
 
-quizRouter.post(
-  '/create',
+quizRouter.get(
+  '/submission/:id',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      // NOTE: Get User ID
-      const user = req.user as User | undefined;
-      if (! user) {
-        logger.fatal('No user found on request with session id: ', req.sessionID);
-        return res.status(500).send(`User not found with provided JWT.`);
+      const user = checkUser(req, res);
+      if (user) {
+        // FIXME: should have an optional quizId parameter for multiple quiz types
+        const id = parseInt(req.params.id);
+        let submission = await findQuizSubmission(id, { where: { userId: user.id }, relations: ['quiz', 'quiz.questions'] });
+        let quiz = submission?.quiz;
+        let statusCode = 200;
+        if (!submission) {
+          quiz = await getDefaultQuiz({ relations: ['questions'] });
+          logger.debug('created new submission after looking up id ', id);
+          submission = await createQuizSubmission(user.id, quiz.id);
+          statusCode = 201;
+        }
+        res.status(statusCode).json({ submissionId: submission.id, quizQuestions: quiz!.questions });
       }
-      const userId = user!.id;
-
-      // NOTE: Get Quiz ID
-      const quiz = await getQuizByName(DEFAULT_QUIZ);
-      if (quiz === undefined)
-        return res.status(500).send('Database Failure: Failed to get Quiz.');
-      const quizId = quiz!.id;
-
-      // NOTE: Create QuizSubmission
-      const submission = await createQuizSubmission(userId, quizId);
-      if (submission === undefined)
-        return res
-          .status(500)
-          .send('Database Failure: Failed to create QuizSubmission.');
-      const submissionId = submission!.id;
-
-      // NOTE: Send Submission Information
-      res.status(201).send({ submissionId });
     } catch (e) {
       next(e);
     }
   }
 );
 
-// NOTE: ROUTE FOR GETTING QUIZ QUESTIONS
-
-quizRouter.get(
-  '/questions',
+quizRouter.post(
+  '/submission',
   async (req: Request, res: Response, next: NextFunction) => {
-    if (! req.user) {
-      res.status(401).json({error: 'Please sign in before continuing.'});
-      return;
-    }
     try {
-      // NOTE: Get Quiz ID
-      const quiz = await getQuizByName(DEFAULT_QUIZ);
-      if (quiz === undefined)
-        return res.status(500).send('Database Failure: Failed to get Quiz.');
-      const quizId = quiz!.id;
-
-      // NOTE: Get Quiz Questions
-      const quizQuestions = await getQuizQuestionsByQuizId(quizId);
-      if (quizQuestions === undefined)
-        return res
-          .status(500)
-          .send('Database Failure: Failed to get Quiz Questions.');
-
-      // NOTE: Send Quiz Questions
-      res.status(200).send(quizQuestions);
+      const user = checkUser(req, res);
+      if (user) {
+        const userId = user!.id;
+        const quiz = await getDefaultQuiz({ relations: ['questions'] });
+        const quizId = quiz!.id;
+        const quizQuestions = quiz.questions;
+        const submission = await createQuizSubmission(userId, quizId);
+        const submissionId = submission.id;
+        res.status(201).json({ submissionId, quizQuestions });
+      }
     } catch (e) {
       next(e);
     }
@@ -85,29 +76,27 @@ quizRouter.get(
 );
 
 // NOTE: ROUTE FOR CREATING/CHECKING QUESTION RESPONSES
-
 quizRouter.post(
-  '/:submissionId/:questionId',
+  '/submission/:submissionId/:questionId',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      // NOTE: Get Submission ID from Params
       const submissionId = parseInt(req.params.submissionId);
       if (isNaN(submissionId))
         return res
           .status(400)
-          .send('Question ID (in params) must be an integer.');
+          .json({ error: `Invalid submission ID ${req.params.submissionId}` });
 
       // NOTE: Get Question ID from Params
       const questionId = parseInt(req.params.questionId);
       if (isNaN(questionId))
         return res
           .status(400)
-          .send('Question ID (in params) must be an integer.');
+          .json({ error: `Invalid question ID ${req.params.questionId}` });
 
       // NOTE: Get Answer from Body
       const answer = parseInt(req.body.answer);
       if (isNaN(answer))
-        return res.status(400).send('Answer (in body) must be an integer.');
+        return res.status(400).json({ error: `Invalid quiz response ${req.body.answer}: should have been an integer.` });
 
       // NOTE: Create Question Response
       const questionResponse = await createQuestionResponse(
@@ -115,23 +104,15 @@ quizRouter.post(
         submissionId,
         answer
       );
-      if (questionResponse === undefined)
-        return res
-          .status(500)
-          .send('Database Failure: Failed to create Question Response.');
-
       // NOTE: Get Quiz ID
-      const quiz = await getQuizByName(DEFAULT_QUIZ);
-      if (quiz === undefined)
-        return res.status(500).send('Database Failure: Failed to get Quiz.');
+      const quiz = await getDefaultQuiz();
       const quizId = quiz!.id;
-
       // NOTE: Check Question Response
       const correct = await checkQuestionResponse(questionResponse!, quizId);
-
-      // NOTE: Send Question Reponse Result
-      res.status(200).send(correct);
-    } catch (e) {
+      // notify the client of the quiz response validation 
+      res.status(200).json(correct);
+    }
+    catch (e) {
       next(e);
     }
   }
@@ -146,14 +127,14 @@ quizRouter.get(
       // NOTE: Get User
       const user = req.user as User | undefined;
       if (!user)
-        return res.status(401).send(`User not found with provided JWT.`);
+        return res.status(401).json({ error: `User not found in session.` });
 
       // NOTE: Check Database for Completion First
       if (user.passedQuiz) return res.status(200).send(true);
 
       // NOTE: Check Quiz Completion
       const userId = user.id;
-      const complete = await checkQuizCompletion(userId, DEFAULT_QUIZ);
+      const complete = await checkQuizCompletion(userId);
 
       // NOTE: Set User Completion in DB
       await setUserQuizCompletion(userId, complete);
