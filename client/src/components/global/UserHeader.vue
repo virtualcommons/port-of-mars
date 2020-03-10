@@ -1,7 +1,7 @@
 <template>
   <div class="user-header">
     <div class="problem">
-      <button @click="openModalProblem">[ <span>BETA</span> ] <span>Report a Problem</span></button>
+      <a href="mailto:sender@example.com?subject=New Issue Submission">[ <span>BETA</span> ] <span>Report a Problem</span></a>
     </div>
     <div class="logout">
       <button
@@ -41,12 +41,6 @@ export default class UserHeader extends Vue {
     this.$ajax.forgetLoginCreds();
     // TODO: Fully handle re-routing
     this.$router.push({ name: 'Login' });
-  }
-
-  // NOTE :: SUBMIT ISSUE
-
-  private openModalProblem(): void {
-    this.$root.$emit('openModalProblem');
   }
 }
 </script>

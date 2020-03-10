@@ -23,7 +23,6 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import ModalCard from '@/components/gamedashboard/global/modals/ModalCard.vue';
 import ModalConfirmation from '@/components/gamedashboard/global/modals/ModalConfirmation.vue';
 import ModalServer from '@/components/gamedashboard/global/modals/ModalServer.vue';
-import ModalProblem from '@/components/gamedashboard/global/modals/ModalProblem.vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -35,8 +34,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
   components: {
     ModalCard,
     ModalConfirmation,
-    ModalServer,
-    ModalProblem
+    ModalServer
   }
 })
 export default class ModalContainer extends Vue {
@@ -59,12 +57,6 @@ export default class ModalContainer extends Vue {
 
     this.$root.$on('openModalServer', (data: any) => {
       this.modalView = 'ModalServer';
-      this.modalData = data;
-      this.visible = true;
-    });
-
-    this.$root.$on('openModalProblem', (data: any) => {
-      this.modalView = 'ModalProblem';
       this.modalData = data;
       this.visible = true;
     });
