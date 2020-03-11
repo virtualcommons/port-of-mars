@@ -1,23 +1,34 @@
 <template>
   <div class="container-defeat">
-    <h1 class="animated pulse slower infinite">Game Over</h1>
-    <div class="text">
-      <p>
-        System Health has reached zero. However, your efforts will inspire a new
-        generation to continue your legacy on Mars.
-      </p>
-      <p>Thank you for playing.</p>
+    <h1 class="animated pulse slower infinite gameOver-text">Game Over</h1>
+    <div class="transmission-info">
+      <h3>Replaying Logs before death...</h3>
+      
+      <div class="message-container">
+        <div v-for="log in marsLogEvents" :style="marsLogColor(log)"  class="message" :key="log.timestamp">
+          <p class="category">{{ log.category }}</p>
+          <p class="content">{{ log.content }}</p>
+          <p class="time"><span>[ </span>{{ marsLogTime(log.timestamp) }}<span> ]</span></p>
+        </div>
+      </div>
+      <h4 class="death-text">Final Game State:<span class="death"><i>Death</i></span></h4>
     </div>
-    <div class="buttons">
-      <button @click="handleRestart">Restart the Game</button>
-      <button @click="handleExit">Exit</button>
+
+    <div class="thanks">
+      <p>Thank you for playing</p>
+      <div class="buttons">
+        <button @click="handleRestart">Restart the Game</button>
+        <button @click="handleExit">Exit</button>
+      </div>
     </div>
   </div>
+
 </template>
 
 <script lang="ts">
 import {Vue, Component, InjectReactive, Inject} from 'vue-property-decorator';
 import { GameRequestAPI } from '@/api/game/request';
+import {MarsLogData} from 'shared/types';
 
 @Component({})
 export default class ContainerDefeat extends Vue {
@@ -27,8 +38,31 @@ export default class ContainerDefeat extends Vue {
     this.api.resetGame();
   }
 
+  get marsLogEvents(){
+    console.log(this.$store.getters.marsLogEvents);
+    return this.$store.getters.logs; 
+  }
+
+  marsLogTime(timestamp: number) {
+    return new Date(timestamp).toLocaleTimeString();
+  }
+
   private handleExit() {
     console.log('EXIT GAME');
+  }
+
+  marsLogColor(log: MarsLogData) {
+    console.log(log.category)
+    switch (log.category) {
+      case 'System Health: Drop':
+        return { backgroundColor: 'var(--marslog-red)' };
+      case 'System Health: Gain':
+        return { backgroundColor: 'var(--marslog-green)' };
+      case 'Trade':
+        return { backgroundColor: 'var(--marslog-purple)' };
+      default:
+        return { backgroundColor: 'var(--space-white-opaque-1)' };
+    }
   }
 }
 </script>

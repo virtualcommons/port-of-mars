@@ -36,7 +36,9 @@ export default class MarsLog extends Vue {
   marsLogColor(log: MarsLogData) {
     console.log(log.category)
     switch (log.category) {
-      case 'upkeep':
+      case 'System Health: Gain':
+        return { backgroundColor: 'var(--marslog-green)' };
+      case 'System Health: Drop':
         return { backgroundColor: 'var(--marslog-red)' };
       case 'Trade':
         return { backgroundColor: 'var(--marslog-purple)' };

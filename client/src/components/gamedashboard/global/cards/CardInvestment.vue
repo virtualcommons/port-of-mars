@@ -81,7 +81,7 @@ export default class CardInvestment extends Vue {
 
 
   get returnName(){
-    return this.name == 'upkeep' ? 'System Health' : this.name;
+    return this.name == ('upkeep' as any) ? 'System Health' : this.name;
   }
 
   private setInvestmentAmount(diff: number): void {

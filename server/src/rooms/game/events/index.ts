@@ -255,7 +255,19 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
   apply(game: GameState): void {
     game.phase = Phase.events;
     game.round += 1;
+
+    const oldUpkeep = game.upkeep;
     game.upkeep = game.nextRoundUpkeep();
+
+    const log = new MarsLogMessage({
+      performedBy: 'Server',
+      category: `System Health: ${oldUpkeep-game.upkeep > 0 ? 'Drop' : 'Gain'}`,
+      content: `Upkeep is now at ${game.upkeep}%, a ${Math.abs(oldUpkeep-game.upkeep)}% ${oldUpkeep-game.upkeep > 0 ? 'drop' : 'gain'} 
+      from last round`,
+      timestamp: this.dateCreated
+    });
+
+    game.logs.push(log);
 
     game.resetPlayerReadiness();
     game.resetPlayerContributedUpkeep();
@@ -345,7 +357,18 @@ gameEventDeserializer.register(EnteredDiscardPhase);
 
 export class EnteredDefeatPhase extends KindOnlyGameEvent {
   apply(game: GameState): void {
-    game.phase = Phase.defeat;
+    if(game.upkeep <= 0){
+      game.phase = Phase.defeat;
+      const log = new MarsLogMessage({
+        performedBy: 'Server',
+        category: 'System Health',
+        content: `System health has reached zero.`,
+        timestamp: this.dateCreated
+      });
+
+      game.logs.push(log);
+    }
+
   }
 }
 gameEventDeserializer.register(EnteredDefeatPhase);
