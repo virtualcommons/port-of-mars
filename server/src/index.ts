@@ -14,15 +14,12 @@ import { Server } from 'colyseus';
 import { GameRoom } from '@/rooms/game';
 import { RankedLobbyRoom } from '@/rooms/waitingLobby';
 import { mockGameInitOpts } from '@/util';
-import { JWT_SECRET, generateJWT, setJWTCookie } from '@/services/auth';
-import { findByUsername, findUserById, getOrCreateUser } from '@/services/account';
+import { findUserById, getOrCreateUser } from '@/services/account';
 import { User } from '@/entity/User';
 import { DBPersister } from '@/services/persistence';
 import { ClockTimer } from '@gamestdio/timer/lib/ClockTimer';
-import { login, nextPage } from '@/routes/login';
 import { quizRouter } from '@/routes/quiz';
 import * as fs from 'fs';
-import { auth } from "@/routes/middleware";
 import { registrationRouter } from "@/routes/registration";
 import { settings } from "@/settings";
 import { isDev } from 'shared/settings';
@@ -41,7 +38,7 @@ const store = new RedisStore({ host: 'redis', client: redis.createClient({ host:
 const sessionParser = session({
   resave: false,
   saveUninitialized: false,
-  secret: JWT_SECRET,
+  secret: settings.secret,
   store,
 });
 
@@ -87,8 +84,6 @@ applyInStagingOrProd(() =>
 async function createApp() {
   const port = Number(process.env.PORT || 2567);
   const app = express();
-
-
   applyInStagingOrProd(() => app.use(Sentry.Handlers.requestHandler()));
   if (isDev()) {
     logger.info('starting server up in dev mode');
@@ -103,33 +98,36 @@ async function createApp() {
       }
     ));
     app.use(cors({
-       origin: ['http://localhost:2567', 'http://localhost:8081', 'https://portofmars.asu.edu'],
-       credentials: true
+      origin: true,
+      methods: ['GET', 'POST', 'PUT', 'DELETE'],
+      // origin: ['http://localhost:2567', 'http://localhost:8081', 'https://portofmars.asu.edu'],
+      credentials: true
     }));
   } else {
     app.use(helmet());
   }
   app.use(express.static('static'));
   app.use(express.json());
-  app.use(cookieParser(JWT_SECRET));
+  app.use(cookieParser(settings.secret));
   app.use(sessionParser);
   app.use(passport.initialize());
   app.use(passport.session());
-  app.use(function(req, res, next) {
+  app.use(function (req, res, next) {
     logger.info('req user: ', req.user);
     logger.info('req cookies: ', req.cookies);
     logger.info('req session: ', req.session);
     logger.info('req sessionID', req.sessionID);
+    next();
   });
 
   // make this conditional on isDev()
-  app.post('/login', passport.authenticate('local'), function(req, res) {
+  app.post('/login', passport.authenticate('local'), function (req, res) {
     const _sessionId = req.sessionID;
     logger.info(`successful authentication for ${req.user}, setting session id ${_sessionId}`);
     res.cookie('connect.sid', _sessionId, { signed: true });
     const sessionCookie: any = res.getHeaders()['set-cookie'];
     logger.info(sessionCookie);
-    res.json({username: (req.user as User).username, sessionCookie });
+    res.json({ username: (req.user as User).username, sessionCookie });
   });
   app.use('/quiz', quizRouter);
   app.use('/registration', registrationRouter);
