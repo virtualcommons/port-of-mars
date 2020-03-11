@@ -1,39 +1,40 @@
-import {Column, Entity, Generated, OneToMany, PrimaryGeneratedColumn, Unique} from "typeorm";
-import {Player} from "@/entity/Player";
+import { Column, Entity, Generated, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Player } from "@/entity/Player";
+import { TournamentRoundInvite } from "./TournamentRoundInvite";
 
 @Entity()
-@Unique(['username'])
-@Unique(['email'])
-@Unique(['registrationToken'])
 export class User {
-    @PrimaryGeneratedColumn()
-    id!: number;
+  @PrimaryGeneratedColumn()
+  id!: number;
 
-    @Column()
-    name!: string;
+  @Column()
+  name!: string;
 
-    @Column()
-    username!: string;
+  @Column({ unique: true })
+  username!: string;
 
-    @Column({ nullable: true })
-    email?: string;
+  @Column({ unique: true, nullable: true })
+  email?: string;
 
-    @OneToMany(type => Player, player => player.user)
-    players!: Array<Player>;
+  @OneToMany(type => Player, player => player.user)
+  players!: Array<Player>;
 
-    @Column({ default: false })
-    passedQuiz!: boolean;
+  @OneToMany(type => TournamentRoundInvite, invite => invite.user)
+  invites!: Array<TournamentRoundInvite>
 
-    @Column()
-    @Generated("uuid")
-    registrationToken!: string;
+  @Column({ default: false })
+  passedQuiz!: boolean;
 
-    @Column()
-    @Generated('uuid')
-    participantId!: string;
+  @Column()
+  @Generated("uuid")
+  registrationToken!: string;
 
-    @Column({ default: false })
-    isVerified!: boolean;
+  @Column()
+  @Generated('uuid')
+  participantId!: string;
+
+  @Column({ default: false })
+  isVerified!: boolean;
 }
 
 

@@ -1,24 +1,19 @@
 import {
-  Check,
   Column,
   Entity,
-  JoinColumn,
-  JoinTable,
-  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn
 } from "typeorm";
-import {Quiz} from "@/entity/Quiz";
-import {QuestionResponse} from "@/entity/QuestionResponse";
+import { Quiz } from "@/entity/Quiz";
+import { QuestionResponse } from "@/entity/QuestionResponse";
 
 @Entity()
 export class Question {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @ManyToOne(type => Quiz, quiz => quiz.questions, {nullable: false})
-  @JoinColumn()
+  @ManyToOne(type => Quiz, quiz => quiz.questions, { nullable: false })
   quiz!: Quiz;
 
   @Column()

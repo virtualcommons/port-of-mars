@@ -14,20 +14,13 @@ export class QuestionResponse {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @ManyToOne(type => Question, question => question.responses, {
-    nullable: false
-  })
-  @JoinColumn()
+  @ManyToOne(type => Question, question => question.responses, { nullable: false })
   question!: Question;
 
   @Column()
   questionId!: number;
 
-  @ManyToOne(
-    type => QuizSubmission,
-    quizSubmission => quizSubmission.responses,
-    { nullable: false }
-  )
+  @ManyToOne(type => QuizSubmission, quizSubmission => quizSubmission.responses, { nullable: false })
   submission!: QuizSubmission;
 
   @Column()

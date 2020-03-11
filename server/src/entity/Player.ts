@@ -1,4 +1,4 @@
-import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {Role, ROLES} from "shared/types";
 import {User} from "./User";
 import {Game} from "@/entity/Game";
@@ -19,7 +19,6 @@ export class Player {
     user => user.players,
     { nullable: false }
   )
-  @JoinColumn()
   user!: User;
 
   @Column()
@@ -30,7 +29,6 @@ export class Player {
     game => game.players,
     { nullable: false }
   )
-  @JoinColumn()
   game!: Game;
 
   @Column()

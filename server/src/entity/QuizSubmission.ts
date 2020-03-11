@@ -1,15 +1,14 @@
-import {Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
-import {User} from "@/entity/User";
-import {Quiz} from "./Quiz";
-import {QuestionResponse} from "@/entity/QuestionResponse";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "@/entity/User";
+import { Quiz } from "./Quiz";
+import { QuestionResponse } from "@/entity/QuestionResponse";
 
 @Entity()
 export class QuizSubmission {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @ManyToOne(type => User, {nullable: false})
-  @JoinColumn()
+  @ManyToOne(type => User, { nullable: false })
   user!: User;
 
   @Column()
@@ -18,13 +17,12 @@ export class QuizSubmission {
   @CreateDateColumn()
   dateCreated!: Date;
 
-  @ManyToOne(type => Quiz, {nullable: false})
-  @JoinColumn()
+  @ManyToOne(type => Quiz, { nullable: false })
   quiz!: Quiz;
 
   @Column()
   quizId!: number;
 
-  @OneToMany(type => QuestionResponse, questionResponse => questionResponse)
+  @OneToMany(type => QuestionResponse, questionResponse => questionResponse.submission)
   responses!: Array<QuestionResponse>;
 }

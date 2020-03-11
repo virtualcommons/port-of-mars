@@ -1,6 +1,6 @@
-import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
-import {Question} from "@/entity/Question";
-import {QuizSubmission} from "@/entity/QuizSubmission";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Question } from "@/entity/Question";
+import { QuizSubmission } from "@/entity/QuizSubmission";
 
 
 @Entity()

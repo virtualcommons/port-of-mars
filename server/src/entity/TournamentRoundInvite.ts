@@ -1,12 +1,9 @@
 import {
   Column,
   Entity,
-  JoinColumn,
   ManyToOne,
-  OneToMany,
   CreateDateColumn,
   PrimaryGeneratedColumn,
-  Unique
 } from 'typeorm';
 import { TournamentRound } from '@/entity/TournamentRound';
 import { User } from '@/entity/User';
@@ -28,7 +25,7 @@ export class TournamentRoundInvite {
   @Column()
   userId!: number;
 
-  @ManyToOne(type => User)
+  @ManyToOne(type => User, user => user.invites)
   user!: User;
 
   @Column()

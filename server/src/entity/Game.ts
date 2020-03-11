@@ -1,7 +1,6 @@
-import {Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
-import {GameEvent} from "./GameEvent";
-import {Tournament} from "@/entity/Tournament";
-import {Player} from "@/entity/Player";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { GameEvent } from "./GameEvent";
+import { Player } from "@/entity/Player";
 import { TournamentRound } from "./TournamentRound";
 
 @Entity()
@@ -23,4 +22,7 @@ export class Game {
 
   @OneToMany(type => Player, player => player.game)
   players!: Array<Player>;
+
+  @Column()
+  completed: boolean = false;
 }

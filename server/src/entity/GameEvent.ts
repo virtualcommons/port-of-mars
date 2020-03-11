@@ -1,4 +1,4 @@
-import {Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {Game} from "./Game";
 
 @Entity()
@@ -7,7 +7,6 @@ export class GameEvent {
   id!: number;
 
   @ManyToOne(type => Game, game => game.events, { nullable: false })
-  @JoinColumn()
   game!: Game;
 
   @Column()
