@@ -25,7 +25,8 @@ browser:
 		--new-tab --url 'ext+container:name=Amanda2&url=http://localhost:8081/#/game' \
 		--new-tab --url 'ext+container:name=Frank2&url=http://localhost:8081/#/game' \
 		--new-tab --url 'ext+container:name=Sydney2&url=http://localhost:8081/#/game' \
-		--new-tab --url 'ext+container:name=Adison2&url=http://localhost:8081/#/game' \
+		--new-tab --url 'ext+container:name=Adison2&url=http://localhost:8081/#/game'
+
 keys:
 	mkdir -p keys
 
