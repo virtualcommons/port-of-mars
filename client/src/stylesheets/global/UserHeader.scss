@@ -18,8 +18,33 @@
     align-items: center;
   }
 
-  .problem,
-  .logout {
+  .problem {
+    a {
+      @include reset-button;
+      flex-grow: 1;
+      padding: 1px 7px 2px 7px;
+      margin: 0.25rem 0;
+      color: $new-space-orange;
+      font-size: $font-small;
+      text-decoration: none;
+      @include default-transition-base;
+
+      &:hover {
+        color: $space-gray;
+        background-color: $new-space-orange;
+
+        span {
+          color: $space-gray;
+        }
+      }
+
+      span {
+        color: $space-white;
+      }
+    }
+  }
+
+    .logout {
     button {
       @include reset-button;
       flex-grow: 1;
