@@ -95,20 +95,17 @@ quizRouter.post(
 
       // NOTE: Get Answer from Body
       const answer = parseInt(req.body.answer);
-      if (isNaN(answer))
+      if (isNaN(answer)) {
         return res.status(400).json({ error: `Invalid quiz response ${req.body.answer}: should have been an integer.` });
-
+      }
       // NOTE: Create Question Response
       const questionResponse = await createQuestionResponse(
         questionId,
         submissionId,
         answer
       );
-      // NOTE: Get Quiz ID
-      const quiz = await getDefaultQuiz();
-      const quizId = quiz!.id;
       // NOTE: Check Question Response
-      const correct = await checkQuestionResponse(questionResponse!, quizId);
+      const correct = await checkQuestionResponse(questionResponse);
       // notify the client of the quiz response validation 
       res.status(200).json(correct);
     }

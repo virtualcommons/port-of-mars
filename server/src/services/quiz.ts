@@ -61,9 +61,9 @@ export async function getQuizQuestionsByQuizId(quizId: number): Promise<Array<Qu
 export async function getRecentQuizSubmission(
   userId: number,
   quizId: number,
-  opts: Partial<{ relations: Array<string>, where: object, order: object }>={}
+  opts: Partial<{ relations: Array<string>, where: object, order: object }> = {}
 ): Promise<QuizSubmission | undefined> {
-  opts = { order: { dateCreated: 'DESC'}, ...opts };
+  opts = { order: { dateCreated: 'DESC' }, ...opts };
   return await getConnection()
     .getRepository(QuizSubmission)
     .findOne({ quizId, userId, ...opts });
@@ -93,28 +93,16 @@ export async function setUserQuizCompletion(
 
 // NOTE: FUNCTIONS TO CHECK FROM DATABASE
 
-export async function checkQuestionResponse(
-  questionResponse: QuestionResponse,
-  quizId: number
-): Promise<boolean> {
+export async function findQuestion(id: number): Promise<Question | undefined> {
+  return await getConnection().getRepository(Question).findOne({id});
+}
+
+export async function checkQuestionResponse(questionResponse: QuestionResponse): Promise<boolean> {
   const answer = questionResponse.answer;
   const questionId = questionResponse.questionId;
-
-  const question: Question | undefined = await getConnection()
-    .getRepository(Question)
-    .createQueryBuilder('question')
-    .where('question.quizId = :quizId AND question.id = :id', {
-      quizId: quizId,
-      id: questionId
-    })
-    .getOne();
-
+  const question = await findQuestion(questionId);
   if (question === undefined) return false;
-
-  if (answer === question!.correctAnswer) {
-    return true;
-  }
-  return false;
+  return answer === question.correctAnswer;
 }
 
 export async function checkQuizCompletion(
