@@ -177,3 +177,5 @@ export const initialStoreState: State = {
 
   
 }
+
+export const getInitialStoreState = (): State => _.cloneDeep(initialStoreState);
