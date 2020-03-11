@@ -37,7 +37,7 @@ function defaultPlayerData(role: Role): PlayerClientData {
   return {
     role,
     accomplishments: {
-      bought: [],
+      purchased: [],
       purchasable: []
     },
     costs: defaultCostData(role),

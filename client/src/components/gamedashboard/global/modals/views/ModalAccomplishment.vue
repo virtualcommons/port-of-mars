@@ -17,7 +17,7 @@
     </div>
     <p class="cost">Cost</p>
     <p class="purchase-button">
-      {{ buyText }}
+      {{ purchaseText }}
     </p>
   </div>
 </template>
@@ -68,7 +68,7 @@ export default class ModalAccomplishment extends Vue {
     );
   }
 
-  get canBuy() {
+  get canPurchase() {
     return canPurchaseAccomplishment(this.cardData, this.playerFullInventory);
   }
 
@@ -99,8 +99,8 @@ export default class ModalAccomplishment extends Vue {
     return grayStatus;
   }
 
-  get buyText() {
-    const b = this.canBuy;
+  get purchaseText() {
+    const b = this.canPurchase;
     return b
       ? 'You have the resources to purchase this'
       : 'You cannot purchase this';

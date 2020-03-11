@@ -3,7 +3,7 @@ import { InvestmentData, Phase, TradeData, Role, INVESTMENTS } from 'shared/type
 import { Player } from '@/rooms/game/state';
 import {
   AcceptTradeRequest,
-  BoughtAccomplishment,
+  PurchasedAccomplishment,
   DiscardedAccomplishment,
   EnteredDefeatPhase,
   EnteredDiscardPhase,
@@ -64,11 +64,11 @@ export class SendChatMessageCmd implements Command {
   }
 }
 
-export class BuyAccomplishmentCmd implements Command {
+export class PurchaseAccomplishmentCmd implements Command {
   constructor(private id: number, private game: Game, private client: Client) {}
 
-  static fromReq(r: req.BuyAccomplishmentCardData, game: Game, client: Client) {
-    return new BuyAccomplishmentCmd(r.id, game, client);
+  static fromReq(r: req.PurchaseAccomplishmentCardData, game: Game, client: Client) {
+    return new PurchaseAccomplishmentCmd(r.id, game, client);
   }
 
   execute() {
@@ -76,7 +76,7 @@ export class BuyAccomplishmentCmd implements Command {
     const role = p.role;
     const accomplishment = getAccomplishmentByID(role, this.id);
     if (p.isAccomplishmentPurchaseFeasible(accomplishment)) {
-      return [new BoughtAccomplishment({ accomplishment, role })];
+      return [new PurchasedAccomplishment({ accomplishment, role })];
     }
     return [];
   }

@@ -99,7 +99,7 @@ const steps:Array<Step> = [
     },
     {
       target: '.tour-investments',
-      content: `Note that there are some Influences that you cannot earn on your own. For example, the Researcher cannot earn Culture or Finance Resources by investing their timeblocks. However, you may need these resources to buy certain Accomplishment cards.`,
+      content: `Note that there are some Influences that you cannot earn on your own. For example, the Researcher cannot earn Culture or Finance Resources by investing their timeblocks. However, you may need these resources to purchase certain Accomplishment cards.`,
       params:{
         placement: 'top'
       }

@@ -86,13 +86,13 @@ export class SentChatMessage extends GameEventWithData {
 }
 gameEventDeserializer.register(SentChatMessage);
 
-export class BoughtAccomplishment extends GameEventWithData {
+export class PurchasedAccomplishment extends GameEventWithData {
   constructor(public data: { accomplishment: AccomplishmentData; role: Role }) {
     super();
   }
 
   apply(game: GameState): void {
-    game.players[this.data.role].buyAccomplishment(this.data.accomplishment);
+    game.players[this.data.role].purchaseAccomplishment(this.data.accomplishment);
     const {
       role,
       label,
@@ -105,11 +105,11 @@ export class BoughtAccomplishment extends GameEventWithData {
       victoryPoints
     } = this.data.accomplishment;
     const message: string = `The ${role} purchased an accomplishment: ${label}. Science: ${science}, Government: ${government}, Legacy: ${legacy}, Finance: ${finance}, Culture: ${culture}, System Health: ${upkeep}. This added ${victoryPoints} points to their score.`;
-    const category: string = 'Bought Accomplishment';
+    const category: string = 'Purchased Accomplishment';
     game.log(message, category);
   }
 }
-gameEventDeserializer.register(BoughtAccomplishment);
+gameEventDeserializer.register(PurchasedAccomplishment);
 
 export class DiscardedAccomplishment extends GameEventWithData {
   constructor(public data: { id: number; role: Role }) {

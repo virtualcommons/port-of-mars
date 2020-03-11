@@ -15,6 +15,6 @@ export default {
     state.players[payload.role].accomplishments.purchasable.splice(index, 1);
   },
   PURCHASE_ACCOMPLISHMENT(state: State, payload: { data: AccomplishmentData; role: Role }) {
-    state.players[payload.role].accomplishments.bought.push(payload.data);
+    state.players[payload.role].accomplishments.purchased.push(payload.data);
   }
 };

@@ -6,7 +6,7 @@ import {
   SetNextPhaseData,
   ResetGameData,
   SetTimeInvestmentData,
-  BuyAccomplishmentCardData,
+  PurchaseAccomplishmentCardData,
   DiscardAccomplishmentCardData,
   SendTradeRequestData,
   AcceptTradeRequestData,
@@ -61,8 +61,8 @@ export class GameRequestAPI {
   }
 
   public purchaseAccomplishment(accomplishment: AccomplishmentData) {
-    const msg: BuyAccomplishmentCardData = {
-      kind: 'buy-accomplishment-card',
+    const msg: PurchaseAccomplishmentCardData = {
+      kind: 'purchase-accomplishment-card',
       id: accomplishment.id
     };
     this.send(msg);

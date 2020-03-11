@@ -40,7 +40,7 @@ items:
   #   options:
   #     - 'It costs x influence cards, y influence cards , and ..'
   #     - 'You earn x points'
-  #     - 'You can only buy this card if you have the required influence cards'
+  #     - 'You can only purchase this card if you have the required influence cards'
   #     - 'All above three answers are correctAnswer'
   #   order: 5
   #   tutorialElementId: 'accCardInfluence'

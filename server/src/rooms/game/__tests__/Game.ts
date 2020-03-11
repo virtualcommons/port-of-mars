@@ -12,14 +12,14 @@ import {tradeCanBeCompleted} from "shared/validation";
 describe('a Researcher Player Accomplishment', () => {
   const repo = new AccomplishmentSet(RESEARCHER);
   const p = new Player(RESEARCHER);
-  it('can be bought if their role matches', () => {
+  it('can be purchased if their role matches', () => {
     const accomplishment = getAccomplishmentByID(RESEARCHER, 1);
-    p.buyAccomplishment(accomplishment);
+    p.purchaseAccomplishment(accomplishment);
     expect(p.inventory.science).toBe(-accomplishment.science);
     expect(p.victoryPoints).toBe(accomplishment.victoryPoints);
   });
 
-  it('cannot be bought if their roles do not match', () => {
+  it('cannot be purchased if their roles do not match', () => {
     const accomplishment = getAccomplishmentByID(PIONEER, 21);
     const possibleAccomplishments = getAccomplishmentIDs(RESEARCHER);
     expect(possibleAccomplishments.includes(accomplishment.id)).toBe(false);
@@ -33,7 +33,7 @@ describe('a Researcher Player Accomplishment', () => {
   it('screw cards handle contributed upkeep correctly', () => {  
     const grantFunkAccomplishment = getAccomplishmentByID(RESEARCHER,14); 
     expect(p.contributedUpkeep).toBe(0);
-    p.buyAccomplishment(grantFunkAccomplishment);
+    p.purchaseAccomplishment(grantFunkAccomplishment);
     expect(p.contributedUpkeep).toBe(-6);
   });
 
@@ -43,20 +43,20 @@ describe('a Researcher Player Accomplishment', () => {
     expect(p.accomplishments.deck.includes(id)).toBe(false);
 
     //after calling refreshPurchasableAccomplishments()
-    p.buyAccomplishment(p.accomplishments.purchasable[0]);
+    p.purchaseAccomplishment(p.accomplishments.purchasable[0]);
     p.refreshPurchasableAccomplishments();
     for(const a of p.accomplishments.purchasable){
       expect(p.accomplishments.deck.includes(a.id)).toBe(false);
     }
   });
 
-  it('buying cards removes them from purchasable', () => {
+  it('purchasing cards removes them from purchasable', () => {
     expect(p.accomplishments.purchasable.length).toBe(3);
-    p.buyAccomplishment(p.accomplishments.purchasable[0]);
+    p.purchaseAccomplishment(p.accomplishments.purchasable[0]);
     expect(p.accomplishments.purchasable.length).toBe(2);
   });
 
-  it('trying to replenish after all cards are bought is handled without error', () => {
+  it('trying to replenish after all cards are purchased is handled without error', () => {
     p.accomplishments.deck = [];
     const purchasableSize = p.accomplishments.purchasable.length;
     p.refreshPurchasableAccomplishments();

@@ -133,7 +133,7 @@ export interface AccomplishmentData {
 }
 
 export interface AccomplishmentSetData {
-  bought: Array<AccomplishmentData>;
+  purchased: Array<AccomplishmentData>;
   purchasable: Array<AccomplishmentData>;
 }
 

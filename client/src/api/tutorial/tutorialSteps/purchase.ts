@@ -44,8 +44,8 @@ const steps:Array<Step> = [
     },
     {
         target: `.tour-purchase`,
-        content: `Accomplishments that you can buy have an orange header and are moved to the top!
-        Try buying one now!`,
+        content: `Accomplishments that you can purchase have an orange header and are moved to the top!
+        Try purchasing one now!`,
         params:{
             placement: TOP,
         },
@@ -76,7 +76,7 @@ const steps:Array<Step> = [
     },
     {
         target: '.tour-accomplishments',
-        content: `After you buy one, it appears in the Purchased section! Try hitting 'Purchased' to see!`,
+        content: `After you purchase one, it appears in the Purchased section! Try hitting 'Purchased' to see!`,
         params:{
             placement: 'right'
         },
