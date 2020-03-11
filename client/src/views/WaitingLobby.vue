@@ -28,7 +28,6 @@
           <p>Currently Waiting: {{ waitingUserCount }}</p>
           <p>{{ joinedText }}</p>
           <button
-            v-if="isDev"
             @click="distributeGroups"
             type="button"
             name="button"
