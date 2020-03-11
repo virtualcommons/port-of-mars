@@ -23,6 +23,6 @@ export class Game {
   @OneToMany(type => Player, player => player.game)
   players!: Array<Player>;
 
-  @Column()
+  @Column({ default: false })
   completed: boolean = false;
 }
