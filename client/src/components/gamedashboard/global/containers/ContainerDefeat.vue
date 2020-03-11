@@ -11,7 +11,7 @@
           <p class="time"><span>[ </span>{{ marsLogTime(log.timestamp) }}<span> ]</span></p>
         </div>
       </div>
-      <h4 class="death-text">Final Game State:<span class="death"><i>Death</i></span></h4>
+      <h4 class="death-text">Final Game State:<span class="death"><i>System Health reached zero</i></span></h4>
     </div>
 
     <div class="thanks">

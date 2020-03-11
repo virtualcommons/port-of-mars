@@ -2,7 +2,7 @@
   <div class="card-investment v-step-15">
     <div class="ci-container" :style="opacity">
       <div class="type">
-        <p class="name">{{ returnName }}</p>
+        <p class="name">{{ lable }}</p>
         <img :src="require(`@/assets/icons/${name}.svg`)" alt="Player" />
         <div class="data">
           <div
@@ -80,7 +80,7 @@ export default class CardInvestment extends Vue {
   }
 
 
-  get returnName(){
+  get lable(){
     return this.name == ('upkeep' as any) ? 'System Health' : this.name;
   }
 
