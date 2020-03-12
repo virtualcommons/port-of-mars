@@ -191,7 +191,7 @@ async function createApp() {
 
   // register your room handlers
   gameServer.define('game', GameRoom);
-  gameServer.define('waiting', RankedLobbyRoom, { dev: true });
+  gameServer.define('waiting', RankedLobbyRoom, { dev: true, persister });
 
 
   applyInStagingOrProd(() => app.use(Sentry.Handlers.errorHandler()));

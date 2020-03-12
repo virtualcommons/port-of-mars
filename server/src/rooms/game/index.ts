@@ -47,7 +47,7 @@ export class GameRoom extends Room<GameState> implements Game {
   async onCreate(options: GameOpts) {
     this.setState(new GameState(options));
     this.persister = options.persister;
-    this.gameId = await this.persister.initialize(options);
+    this.gameId = await this.persister.initialize(options, this.roomId);
     const snapshot = this.state.toJSON();
     const event = new StateSnapshotTaken(snapshot);
     this.persister.applyMany(this.gameId, [event]);

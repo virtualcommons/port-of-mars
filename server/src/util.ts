@@ -4,7 +4,7 @@ import _ from "lodash";
 import {MarsEventData, ROLES} from "shared/types";
 import {GameOpts, GameStateOpts, Persister} from "@/rooms/game/types";
 import * as assert from "assert";
-import {ConsolePersister} from "@/services/persistence";
+import {ConsolePersister, DBPersister} from "@/services/persistence";
 import * as to from "typeorm";
 import {expandCopies} from "@/rooms/game/state/marsEvents/common";
 import {getAllMarsEvents} from "@/data/MarsEvents";
@@ -61,7 +61,7 @@ export async function mockGameInitOpts(persister: Persister): Promise<GameOpts> 
   };
 }
 
-export async function buildGameOpts(usernames: Array<string>): Promise<GameOpts> {
+export async function buildGameOpts(usernames: Array<string>, persister: Persister): Promise<GameOpts> {
   assert.equal(usernames.length, ROLES.length);
   const tr = await getConnection().getRepository(TournamentRound).findOneOrFail();
   return {
@@ -69,6 +69,6 @@ export async function buildGameOpts(usernames: Array<string>): Promise<GameOpts>
     deck: _.shuffle(getMarsEventData()),
     round: getRandomIntInclusive(8, 12),
     tournamentRoundId: tr.id,
-    persister: new ConsolePersister()
+    persister
   };
 }

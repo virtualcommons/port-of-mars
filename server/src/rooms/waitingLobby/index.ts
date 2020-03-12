@@ -12,6 +12,8 @@ import {WaitingRequests} from "shared/waitingLobby/requests";
 import {isDev} from "shared/settings";
 import {WaitingResponses} from "shared/waitingLobby/responses";
 import {is} from "@babel/types";
+import {DBPersister} from "@/services/persistence";
+import {Persister} from "@/rooms/game/types";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -64,6 +66,8 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
    */
   dev: boolean = false;
 
+  persister!: Persister;
+
   /**
    * holds data for cron date
    */
@@ -72,7 +76,9 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
   onCreate(options: any) {
     this.setState(new RoomGameState());
     this.dev = options.dev;
+    this.persister = options.persister;
     this.evaluateAtEveryMinute = settings.lobby.evaluateAtEveryMinute;
+
     /**
      * Redistribute clients into groups at every interval
      */
@@ -148,6 +154,11 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
     }
   }
 
+  onLeave(client: Client, consented: boolean) {
+    logger.trace('WAITING LOBBY: onLeave');
+    this.removeClientStat(client);
+  }
+
   createGroup() {
     logger.trace('WAITING LOBBY: createGroup');
     let group: MatchmakingGroup = { stats: [] };
@@ -213,13 +224,13 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
           group.confirmed = 0;
 
           const usernames = this.fillUsernames(group.stats.map(s => s.client.auth.username));
-          const userRoles = await buildGameOpts(usernames);
+          const gameOpts = await buildGameOpts(usernames, this.persister);
           /**
            * Create room instance in the server.
            */
           const room = await matchMaker.createRoom(
             this.roomToCreate,
-            userRoles
+            gameOpts
           );
 
           await Promise.all(
@@ -250,14 +261,5 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
       this.stats.splice(index, 1);
       this.state.waitingUserCount = this.stats.length;
     }
-  }
-
-  onLeave(client: Client, consented: boolean) {
-    logger.trace('WAITING LOBBY: onLeave');
-    this.removeClientStat(client);
-  }
-
-  onDispose() {
-    logger.trace('WAITING LOBBY: onDispose');
   }
 }

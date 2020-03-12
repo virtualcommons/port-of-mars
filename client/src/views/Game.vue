@@ -31,7 +31,10 @@ export default class Game extends Vue {
 
   async created() {
     this.api.room?.leave();
-    console.log({reservation: this.$ajax.reservation});
+    const rooms = await this.$client.getAvailableRooms('game');
+    for (const room of rooms) {
+      console.log({room});
+    }
     const gameRoom = await this.$client.consumeSeatReservation(this.$ajax.reservation);
     applyGameServerResponses(gameRoom, this.$tstore);
     this.api.connect(gameRoom);

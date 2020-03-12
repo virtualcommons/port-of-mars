@@ -36,7 +36,7 @@ export class ConsolePersister implements Persister {
     this.clock.setInterval(this.sync.bind(this), time)
   }
 
-  initialize(options: GameOpts): Promise<number> {
+  initialize(options: GameOpts, roomId: string): Promise<number> {
     return Promise.resolve(1);
   }
 
@@ -54,7 +54,7 @@ export class DBPersister implements Persister {
   pendingEvents: Array<Omit<{ [k in keyof GameEvent]: GameEvent[k] }, 'id' | 'game'>> = [];
   lock: Mutex = new Mutex();
 
-  async initialize(options: GameOpts) {
+  async initialize(options: GameOpts, roomId: string) {
     const g = new Game();
     const conn = getConnection();
     return await conn.transaction(async transact => {
@@ -67,6 +67,7 @@ export class DBPersister implements Persister {
         throw new Error('could find matching tournament round')
       }
       g.tournamentRoundId = tournamentRoundId;
+      g.roomId = roomId;
 
       const userRepo = transact.getRepository(User);
       const usernames = Object.keys(options.userRoles);

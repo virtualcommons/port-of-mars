@@ -8,6 +8,9 @@ export class Game {
   @PrimaryGeneratedColumn()
   id!: number;
 
+  @Column()
+  roomId!: string;
+
   @OneToMany(type => GameEvent, event => event.game)
   events!: Array<GameEvent>;
 
