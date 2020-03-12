@@ -169,12 +169,12 @@ describe('trading validations', () => {
     expect(tradeCanBeCompleted(g.players[g.tradeSet['123'].from.role as Role].inventory, g.tradeSet['123'].from.resourceAmount)).toBe(false);
   });
 
-  it('does not send a notifcation to everyone', () => {
-    g.players['Curator'].sendNotifcation('test');
-    g.players['Curator'].sendNotifcation('notif 2');
+  it('does not send a notification to everyone', () => {
+    g.players['Curator'].sendNotification('test');
+    g.players['Curator'].sendNotification('notif 2');
     expect(g.players['Curator'].notifications.length).toBe(2);
 
-    g.players['Curator'].deleteNotifcation(1);
+    g.players['Curator'].deleteNotification(1);
     expect(g.players['Curator'].notifications.length).toBe(1);
     expect(g.players['Entrepreneur'].notifications.length).toBe(0);
   });

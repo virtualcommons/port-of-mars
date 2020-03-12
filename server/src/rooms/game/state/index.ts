@@ -823,11 +823,11 @@ export class Player extends Schema implements PlayerData {
     this.ready = ready;
   }
 
-  sendNotifcation(message: String): void {
+  sendNotification(message: String): void {
     this.notifications.push(message);
   }
 
-  deleteNotifcation(index: number): void {
+  deleteNotification(index: number): void {
     this.notifications.splice(index, 1);
   }
 }

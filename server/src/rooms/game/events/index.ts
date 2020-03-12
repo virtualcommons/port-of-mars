@@ -164,8 +164,8 @@ export class AcceptTradeRequest extends GameEventWithData {
       game.logs.push(log);
     }
     else{
-      game.players[game.tradeSet[this.data.id].to.role as Role].sendNotifcation('Trade partner cannot fulfill trade.');
-      game.players[game.tradeSet[this.data.id].from.role as Role].sendNotifcation('A trade you cannot fulfill has been deleted.');
+      game.players[game.tradeSet[this.data.id].to.role as Role].sendNotification('Trade partner cannot fulfill trade.');
+      game.players[game.tradeSet[this.data.id].from.role as Role].sendNotification('A trade you cannot fulfill has been removed.');
     }
     delete game.tradeSet[this.data.id];
   }
@@ -185,7 +185,7 @@ export class RejectTradeRequest extends GameEventWithData {
     const fromRole: Role = game.tradeSet[this.data.id].from.role;
     
     delete game.tradeSet[this.data.id];
-    game.players[fromRole].sendNotifcation(`The ${toRole} has declined your trade request.`);
+    game.players[fromRole].sendNotification(`The ${toRole} has declined your trade request.`);
   }
 }
 gameEventDeserializer.register(RejectTradeRequest);
@@ -199,8 +199,8 @@ export class SentTradeRequest extends GameEventWithData {
     const id = uuid();
     game.tradeSet[id] = new Trade(this.data.from, this.data.to);
 
-    game.players[this.data.to.role as Role].sendNotifcation(`The ${this.data.from.role} would like to trade!`);
-    game.players[this.data.from.role as Role].sendNotifcation(`Your trade to ${this.data.to.role} has been received!`);
+    game.players[this.data.to.role as Role].sendNotification(`The ${this.data.from.role} would like to trade!`);
+    game.players[this.data.from.role as Role].sendNotification(`Your trade to ${this.data.to.role} has been received!`);
     //game.players[this.data.from.role].pendingInvestments.add({...this.data.from.resourceAmount,upkeep:0});
   }
 }
@@ -210,7 +210,7 @@ export class DeleteNotification extends GameEventWithData {
   constructor(public data: {index:number, player:Player}){super();}
 
   apply(game: GameState): void {
-    this.data.player.deleteNotifcation(this.data.index);
+    this.data.player.deleteNotification(this.data.index);
   }
 }
 gameEventDeserializer.register(DeleteNotification);

@@ -14,7 +14,7 @@ const steps:Array<Step> = [
         {
           SET_GAME_PHASE:Phase.invest,
           CREATE_NOTIFICATION:{
-            data:`Notifcations can be removed by clicking on them!`,
+            data:`Notifications can be removed by clicking on them!`,
             role: `Researcher`,
           },
       }],

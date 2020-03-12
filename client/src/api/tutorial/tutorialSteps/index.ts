@@ -2,7 +2,7 @@ import { Step } from '@/types/tutorial';
 import events from './events';
 import gamePlay from './gamePlay';
 import invest from './invest';
-import notifcations from './notifications';
+import notifications from './notifications';
 import player from './player';
 import trade from './trade';
 import upkeep from './upkeep';
@@ -17,6 +17,6 @@ export const tutorialSteps: Array<Step> = gamePlay.concat(
   trade,
   purchase,
   discard,
-  notifcations
+  notifications
 );
 
