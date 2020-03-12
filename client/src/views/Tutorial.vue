@@ -169,6 +169,7 @@ export default class Tutorial extends Vue {
 
   created() {
     this.api.connect(this.$store);
+    this.api.resetState();
   }
 
   async mounted() {
@@ -261,6 +262,8 @@ export default class Tutorial extends Vue {
     console.log('USER HAS COMPLETED QUIZ:', complete);
 
     this.tourIsOver = true;
+
+    this.api.resetState();
   }
 
   // NOTE: Integrate Quiz
