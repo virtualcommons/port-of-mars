@@ -2,7 +2,13 @@
 
 [![Build Status](https://travis-ci.com/virtualcommons/port-of-mars.svg?token=Axd1f7q98op1tRxrKi92&branch=master)](https://travis-ci.com/virtualcommons/port-of-mars)
 
-## Setup
+## About
+
+[Port of Mars](https://interplanetary.asu.edu/port-of-mars) is an interdisciplinary research project sponsored by [Arizona State University's](https://www.asu.edu) [Interplanetary Initiative](https://interplanetary.asu.edu/). Its original incarnation was designed and implemented as a physical card game for 5 players. We are now a developing digital version of the Port of Mars card game to serve as a scalable research testbed for studying collective action.
+
+If you'd like to get involved, please [let us know!](https://complexity.asu.edu/contact)
+
+## Build the Codebase
 
 ### Development Setup
 
