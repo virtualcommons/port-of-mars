@@ -28,7 +28,7 @@ class MarsEventsDeck {
   }
 
   public peek(upkeep: number): Array<MarsEventData> {
-    const nCardsToDraw = upkeep < 33 ? 3 : upkeep < 67 ? 2 : 1;
+    const nCardsToDraw = upkeep < 35 ? 3 : upkeep < 65 ? 2 : 1;
     const cardsInds = _.map(_.range(this.position, this.position + nCardsToDraw), ind => ind % this.deck.length);
     return _.map(cardsInds, ind => this.deck[ind]);
   }
