@@ -56,8 +56,9 @@ export class TutorialAPI extends GameRequestAPI {
         return this.isTaskComplete;
     }
 
-    public resetGame(){
-        this.isTaskComplete = true; 
+    public resetState(){
+        this.stateStack = [];
+        this.apply();
     }
 
 
