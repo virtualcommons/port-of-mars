@@ -271,7 +271,11 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
     game.round += 1;
 
     const oldUpkeep = game.upkeep;
+    const contributedUpkeep = game.nextRoundUpkeep() + 25 - oldUpkeep;
+    
     game.upkeep = game.nextRoundUpkeep();
+
+    game.log(`All players collectively contributed ${contributedUpkeep}% to System Health by the end of the previous round.`, `System Health Contribution`);
 
     game.log(`System Health is now at ${game.upkeep}%, a ${Math.abs(oldUpkeep-game.upkeep)}% ${oldUpkeep-game.upkeep > 0 ? 'drop' : 'gain'} 
     from last round`, `System Health: ${oldUpkeep-game.upkeep > 0 ? 'Drop' : 'Gain'}`, `Server`);
