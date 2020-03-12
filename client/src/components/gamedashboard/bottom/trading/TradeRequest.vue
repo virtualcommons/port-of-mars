@@ -196,6 +196,12 @@ export default class TradeRequest extends Vue {
       }
     }
   }
+
+  destroyed() {
+    this.$tstore.commit('SET_TRADE_PARTNER_NAME', '' as Role);
+    this.$tstore.commit('SET_SEND_RESOURCES', defaultInventory());
+    this.$tstore.commit('SET_GET_RESOURCES', defaultInventory());
+  }
 }
 </script>
 
