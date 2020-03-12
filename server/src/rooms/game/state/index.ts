@@ -442,7 +442,7 @@ export class Accomplishment extends Schema implements AccomplishmentData {
 interface AccomplishmentSetSerialized {
   role: Role;
   // FIXME: consider renaming to purchased to match purchasable
-  bought: Array<number>;
+  purchased: Array<number>;
   purchasable: Array<number>;
   remaining: Array<number>;
 }
@@ -451,7 +451,7 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
   constructor(role: Role) {
     super();
     this.role = role;
-    this.bought = new ArraySchema<Accomplishment>();
+    this.purchased = new ArraySchema<Accomplishment>();
     const deck = _.shuffle(getAccomplishmentIDs(role));
     const purchasableInds: Array<number> = deck.slice(0, 3);
     this.purchasable = new ArraySchema<Accomplishment>(
@@ -464,23 +464,23 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
 
   fromJSON(data: AccomplishmentSetSerialized) {
     this.role = data.role;
-    const bought = _.map(
-      data.bought,
+    const purchased = _.map(
+      data.purchased,
       _id => new Accomplishment(getAccomplishmentByID(this.role, _id))
     );
     const purchasable = _.map(
       data.purchasable,
       _id => new Accomplishment(getAccomplishmentByID(this.role, _id))
     );
-    this.bought.splice(0, this.bought.length, ...bought);
+    this.purchased.splice(0, this.purchased.length, ...purchased);
     this.purchasable.splice(0, this.purchasable.length, ...purchasable);
     this.deck = _.cloneDeep(data.remaining);
   }
 
   toJSON(): AccomplishmentSetSerialized {
     return {
-      bought: _.map(
-        this.bought.map(a => a.id),
+      purchased: _.map(
+        this.purchased.map(a => a.id),
         x => x
       ),
       purchasable: _.map(this.purchasable, a => a.id),
@@ -492,19 +492,19 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
   role: Role;
 
   @type([Accomplishment])
-  bought: ArraySchema<Accomplishment>;
+  purchased: ArraySchema<Accomplishment>;
 
   @type([Accomplishment])
   purchasable: ArraySchema<Accomplishment>;
 
   deck: Array<number>;
 
-  buy(accomplishment: AccomplishmentData) {
+  purchase(accomplishment: AccomplishmentData) {
     const accomplishmentIndex = this.purchasable.findIndex(
       (acc: Accomplishment) => acc.id === accomplishment.id
     );
     if (accomplishmentIndex > -1) {
-      this.bought.push(new Accomplishment(accomplishment));
+      this.purchased.push(new Accomplishment(accomplishment));
       this.purchasable.splice(accomplishmentIndex, 1);
     }
   }
@@ -732,8 +732,8 @@ export class Player extends Schema implements PlayerData {
     );
   }
 
-  buyAccomplishment(accomplishment: AccomplishmentData) {
-    this.accomplishments.buy(accomplishment);
+  purchaseAccomplishment(accomplishment: AccomplishmentData) {
+    this.accomplishments.purchase(accomplishment);
     const inv: ResourceAmountData = {
       culture: -accomplishment.culture,
       finance: -accomplishment.finance,
@@ -1121,9 +1121,11 @@ export class GameState extends Schema implements GameData {
     event.apply(this);
   }
 
+  // REFACTOR: DEFAULT CATEGORY
+  
   log(
     message: string,
-    category: string = 'Mars Event',
+    category: string,
     performedBy: Role | ServerRole = SERVER
   ): MarsLogMessage {
     const msg = new MarsLogMessage({

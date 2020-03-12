@@ -2,7 +2,7 @@
   <div
     class="card-accomplishment"
     @click="handleClick"
-    v-bind:class="{ unpurchasable: !canBuy, purchasable: canBuy }"
+    v-bind:class="{ unpurchasable: !canPurchase, purchasable: canPurchase }"
   >
     <div class="title">
       <p>{{ accomplishment.label }}</p>
@@ -90,7 +90,7 @@ export default class CardAccomplishment extends Vue {
     return totalInventory;
   }
 
-  get canBuy() {
+  get canPurchase() {
     return canPurchaseAccomplishment(
       this.accomplishment,
       this.playerFullInventory

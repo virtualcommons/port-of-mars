@@ -40,11 +40,11 @@
       </div>
 
       <div class="purchased" v-if="activeView == 'purchased'">
-        <p v-if="boughtAccomplishments.length === 0" class="purchased-empty">
+        <p v-if="purchasedAccomplishments.length === 0" class="purchased-empty">
           No Purchased Accomplishments
         </p>
         <CardAccomplishment
-          v-for="accomplishment in boughtAccomplishments"
+          v-for="accomplishment in purchasedAccomplishments"
           :key="accomplishment.id"
           :accomplishment="accomplishment"
         />
@@ -79,8 +79,8 @@ export default class ContainerAccomplishments extends Vue {
     return this.$store.getters.player.accomplishments.purchasable;
   }
 
-  get boughtAccomplishments() {
-    return this.$store.getters.player.accomplishments.bought;
+  get purchasedAccomplishments() {
+    return this.$store.getters.player.accomplishments.purchased;
   }
 
   get isInTutorial(){

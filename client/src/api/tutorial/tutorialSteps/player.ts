@@ -40,7 +40,7 @@ const steps:Array<Step> = [
     },
     {
       target: '.tour-accomplishments',
-      content: `Here, you can see what Accomplishments are avaliable to you this round. As you buy them, you will be given new ones.
+      content: `Here, you can see what Accomplishments are avaliable to you this round. As you purchase them, you will be given new ones.
       Once you purchase them, they will move to the purchased section.`,
       params: {
         placement: `right`

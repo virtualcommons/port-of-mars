@@ -1,7 +1,7 @@
 <template>
   <div
     class="card-accomplishment"
-    v-bind:class="{ unpurchasable: !canBuy, purchasable: canBuy }"
+    v-bind:class="{ unpurchasable: !canPurchase, purchasable: canPurchase }"
   >
     <div class="title">
       <p>{{ accomplishment.label }}</p>
@@ -31,7 +31,7 @@
       </div>
     </div>
     <div class="purchase">
-      <button :disabled="!canBuy" @click="handlePurchase()">
+      <button :disabled="!canPurchase" @click="handlePurchase()">
         Purchase Accomplishment
       </button>
     </div>
@@ -102,7 +102,7 @@ export default class BarAccomplishment extends Vue {
     return true;
   }
 
-  get canBuy() {
+  get canPurchase() {
     return canPurchaseAccomplishment(
       this.accomplishment,
       this.$tstore.getters.player.inventory
@@ -110,7 +110,7 @@ export default class BarAccomplishment extends Vue {
   }
 
   private handlePurchase() {
-    if (this.canBuy) {
+    if (this.canPurchase) {
       this.api.purchaseAccomplishment(this.accomplishment);
     }
   }

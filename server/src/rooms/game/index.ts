@@ -4,7 +4,7 @@ import { Responses } from 'shared/responses';
 import { GameState, Player } from '@/rooms/game/state';
 import {
   AcceptTradeRequestCmd,
-  BuyAccomplishmentCmd,
+  PurchaseAccomplishmentCmd,
   DiscardAccomplishmentCmd,
   ResetGameCmd,
   SendChatMessageCmd,
@@ -84,8 +84,8 @@ export class GameRoom extends Room<GameState> implements Game {
         return ResetGameCmd.fromReq(r, this);
       case 'set-time-investment':
         return TimeInvestmentCmd.fromReq(r, this, client);
-      case 'buy-accomplishment-card':
-        return BuyAccomplishmentCmd.fromReq(r, this, client);
+      case 'purchase-accomplishment-card':
+        return PurchaseAccomplishmentCmd.fromReq(r, this, client);
       case 'discard-accomplishment-card':
         return DiscardAccomplishmentCmd.fromReq(r, this, client);
       case 'accept-trade-request':

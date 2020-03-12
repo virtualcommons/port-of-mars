@@ -5,8 +5,8 @@ export interface SendChatMessageData {
   message: string;
 }
 
-export interface BuyAccomplishmentCardData {
-  kind: 'buy-accomplishment-card';
+export interface PurchaseAccomplishmentCardData {
+  kind: 'purchase-accomplishment-card';
   id: number;
 }
 
@@ -108,7 +108,7 @@ export type Requests =
   | SetNextPhaseData
   | ResetGameData
   | SetTimeInvestmentData
-  | BuyAccomplishmentCardData
+  | PurchaseAccomplishmentCardData
   | DiscardAccomplishmentCardData
   | SendTradeRequestData
   | AcceptTradeRequestData

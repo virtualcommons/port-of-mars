@@ -3,10 +3,10 @@
     <div class="actions">
       <div>
         <p v-if="purchasedAccomplishmentsLength === 0">
-          No Bought Accomplishments. Please click 'Continue'.
+          No Purchased Accomplishments. Please click 'Continue'.
         </p>
         <button
-          v-for="accomplishment in boughtAccomplishments"
+          v-for="accomplishment in purchasedAccomplishments"
           :key="accomplishment.id"
           @click="handleDiscardAccomplishment(accomplishment)"
           :style="handleAccomplishmentStyle(accomplishment)"
@@ -63,12 +63,12 @@ export default class AccomplishmentsSelectPurchased extends Vue {
   //   return purchasable;
   // }
 
-  get boughtAccomplishments() {
-    const bought = this.$store.getters.player.accomplishment.bought;
+  get purchasedAccomplishments() {
+    const purchased = this.$store.getters.player.accomplishment.purchased;
 
     // TODO: There's definitely a better place to do this...
-    this.purchasedAccomplishmentsLength = Object.keys(bought).length;
-    return bought;
+    this.purchasedAccomplishmentsLength = Object.keys(purchased).length;
+    return purchased;
   }
 
   get completed() {

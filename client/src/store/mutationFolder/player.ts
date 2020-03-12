@@ -11,7 +11,7 @@ function SET_READINESS(state: State, payload: { data: boolean; role: Role }) {
 function SET_ACCOMPLISHMENTS(state: State, payload: { data: AccomplishmentSetData; role: Role }) {
   const p = state.players[payload.role];
   Vue.set(p.accomplishments, 'purchasable', payload.data.purchasable);
-  Vue.set(p.accomplishments, 'bought', payload.data.bought);
+  Vue.set(p.accomplishments, 'purchased', payload.data.purchased);
 }
 function SET_VICTORY_POINTS(state: State, payload: { data: number; role: Role }) {
   state.players[payload.role].victoryPoints = payload.data;
