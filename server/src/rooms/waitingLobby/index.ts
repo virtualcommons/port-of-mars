@@ -1,18 +1,14 @@
 import { Room, Client, matchMaker } from 'colyseus';
 import schedule from 'node-schedule';
 import { ROLES } from 'shared/types';
-import _ from 'lodash';
 import { buildGameOpts } from '@/util';
-import { getUserByJWT } from '@/services/auth';
 import { RoomGameState } from '@/rooms/waitingLobby/state';
-import {LobbySettings, settings} from "@/settings";
+import {settings} from "@/settings";
 import {findUserById} from "@/services/account";
 import * as http from "http";
 import {WaitingRequests} from "shared/waitingLobby/requests";
 import {isDev} from "shared/settings";
 import {WaitingResponses} from "shared/waitingLobby/responses";
-import {is} from "@babel/types";
-import {DBPersister} from "@/services/persistence";
 import {Persister} from "@/rooms/game/types";
 
 const logger = settings.logging.getLogger(__filename);
