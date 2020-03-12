@@ -18,7 +18,7 @@
       .trade-title {
         flex: 1;
         align-items: center;
-        margin: 0 0.125rem;
+        margin: 0 0.5rem;
         font-size: $font-med;
         text-align: left;
         text-transform: uppercase;
@@ -29,23 +29,6 @@
 
         .none {
           color: $space-white-opaque-2;
-        }
-      }
-
-      button {
-        @include reset-button;
-        border: 0.0625rem solid $new-space-orange;
-        margin: 0 0.125rem;
-        color: $new-space-orange;
-        @include default-transition-base;
-
-        &:disabled {
-          opacity: 0.5;
-        }
-
-        &:hover:not(:disabled) {
-          color: $space-gray;
-          background-color: $new-space-orange;
         }
       }
     }
@@ -88,9 +71,29 @@
 
   .trade-send-options {
     width: 100%;
+    @include make-column-and-top;
 
     .options-block {
       width: 100%;
+    }
+
+    button {
+      @include reset-button;
+      height: 3rem;
+      width: 12.5rem;
+      border: 0.0625rem solid $new-space-orange;
+      margin: 0 0.125rem;
+      color: $new-space-orange;
+      @include default-transition-base;
+
+      &:disabled {
+        opacity: 0.5;
+      }
+
+      &:hover:not(:disabled) {
+        color: $space-gray;
+        background-color: $new-space-orange;
+      }
     }
   }
 
