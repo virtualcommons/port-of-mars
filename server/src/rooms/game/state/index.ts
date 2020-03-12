@@ -1159,4 +1159,11 @@ export class GameState extends Schema implements GameData {
   addGameWinner(winner: Role) {
     this.winners.push(winner);
   }
+
+  removeTrade(id: string, reason?: string): void {
+    switch(reason) {
+      default:
+        delete this.tradeSet[id]; break;
+    }
+  }
 }
