@@ -28,7 +28,6 @@
 <script lang="ts">
 import { Vue, Component, Inject } from 'vue-property-decorator';
 import { INVESTMENTS, Resource, ResourceCostData } from 'shared/types';
-import StatusBar from '@/components/gamedashboard/global/StatusBar.vue';
 import DiscreteStatusBar from '@/components/gamedashboard/global/DiscreteStatusBar.vue';
 import CardInvestment from '@/components/gamedashboard/global/cards/CardInvestment.vue';
 import * as _ from 'lodash';
@@ -36,7 +35,6 @@ import { TutorialAPI } from '@/api/tutorial/request';
 
 @Component({
   components: {
-    StatusBar,
     DiscreteStatusBar,
     CardInvestment
   }

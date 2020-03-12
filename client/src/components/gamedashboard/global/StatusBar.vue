@@ -1,6 +1,10 @@
 <template>
   <div class="statusbar-outer" :class="styleOuter()">
-    <div class="statusbar-inner" :class="styleInner()" :style="styleWidth()"></div>
+    <div
+      class="statusbar-inner"
+      :class="styleInner()"
+      :style="styleWidth()"
+    ></div>
   </div>
 </template>
 
@@ -17,14 +21,12 @@ export default class StatusBar extends Vue {
 
   @Prop({ default: 'statusbar-inner-yellow' }) private colorMiddle!: string;
 
-  @Prop({ default: 'statusbar-inner-red' }) private colorEnd!:string;
+  @Prop({ default: 'statusbar-inner-red' }) private colorEnd!: string;
 
   styleWidth(): object {
     return {
-      
-      width: `${this.setWidth}%`,
-
-      };
+      width: `${this.setWidth}%`
+    };
   }
 
   styleOuter(): string {

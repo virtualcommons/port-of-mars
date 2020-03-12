@@ -1,8 +1,8 @@
 <template>
   <div class="container-upkeep tour-container-upkeep">
     <p class="title">System Health</p>
-    <StatusBar class="statusbar" :setWidth="`${upkeepStatus}`" />
-    <p>{{ upkeepStatus }}<span> %</span></p>
+    <StatusBar class="statusbar" :setWidth="`${systemHealthStatus}`" />
+    <p class="status">{{ systemHealthStatus }}<span> %</span></p>
   </div>
 </template>
 
@@ -16,7 +16,7 @@ import StatusBar from '@/components/gamedashboard/global/StatusBar.vue';
   }
 })
 export default class ContainerUpkeep extends Vue {
-  get upkeepStatus() {
+  get systemHealthStatus() {
     return this.$tstore.state.upkeep;
   }
 }
