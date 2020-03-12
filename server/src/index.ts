@@ -47,11 +47,14 @@ passport.use(new CasStrategy(
     casURL: 'https://weblogin.asu.edu/cas'
   },
   // verify callback
-  async function (username: string, profile: object, done: Function) {
-
-    const user = await getOrCreateUser(username);
-    // FIXME: done should probably be threaded into the findOrCreateUser
-    done(null, user);
+  function (username: string, profile: object, done: Function) {
+    getOrCreateUser(username).then(user => done(null, user));
+  }
+));
+passport.use(new LocalStrategy(
+  function (username: string, password: string, done: Function) {
+    logger.warn('***** DO NOT ALLOW IN PRODUCTION! running local auth for user: ', username);
+    getOrCreateUser(username).then(user => done(null, user));
   }
 ));
 
@@ -60,15 +63,14 @@ passport.serializeUser(function (user: User, done: Function) {
   done(null, user.id);
 });
 
-passport.deserializeUser(async function (id: number, done: Function) {
-  logger.warn(`entered deserialize ${id}`);
-  const user = await findUserById(id);
-  if (user) {
-    done(null, user);
-  }
-  else {
-    done(new Error(`Could not find user with ${id}`), null);
-  }
+passport.deserializeUser(function (id: number, done: Function) {
+  logger.warn(`deserializing ${id}`);
+  findUserById(id)
+    .then(user => done(null, user))
+    .catch((e) => {
+      logger.fatal(`Could not find user with ${id}: `, e);
+      done(e, null);
+    });
 });
 
 function applyInStagingOrProd(f: Function) {
@@ -87,20 +89,9 @@ async function createApp() {
   applyInStagingOrProd(() => app.use(Sentry.Handlers.requestHandler()));
   if (isDev()) {
     logger.info('starting server up in dev mode');
-    passport.use(new LocalStrategy(
-      async function (username: string, password: string, done: Function) {
-        logger.info('trying to local auth for user: ', username);
-        let user = await getOrCreateUser(username);
-        if (!user) {
-          return done(null, false, { message: `No user ${username}.` });
-        }
-        return done(null, user);
-      }
-    ));
     app.use(cors({
       origin: true,
       methods: ['GET', 'POST', 'PUT', 'DELETE'],
-      // origin: ['http://localhost:2567', 'http://localhost:8081', 'https://portofmars.asu.edu'],
       credentials: true
     }));
   } else {
