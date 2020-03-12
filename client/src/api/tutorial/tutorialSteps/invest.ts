@@ -12,8 +12,8 @@ const steps:Array<Step> = [
       stateTransform: [
         {SET_GAME_PHASE:Phase.invest,
         SET_INVESTMENT_COSTS:{data:{
-          culture: 1001,
-          finance: 1001,
+          culture: Number.MAX_SAFE_INTEGER,
+          finance: Number.MAX_SAFE_INTEGER,
           government: 3,
           legacy: 3,
           science: 2,
