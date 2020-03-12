@@ -289,11 +289,15 @@ export default class Tutorial extends Vue {
       this.currentQuizQuestion.id,
       value
     );
-    if (result) {
-      this.quizQuestionStatusMessage = 'Correct! Please click next.';
-      this.quizQuestionStatus = true;
-    } else {
-      this.quizQuestionStatusMessage = 'Incorrect, please try again.';
+    if(!this.quizQuestionStatus){
+      if (result) {
+        this.quizQuestionStatusMessage = 'Correct! Please click next.';
+        this.quizQuestionStatus = true;
+      } else {
+        this.quizQuestionStatusMessage = 'Incorrect, please try again.';
+      }
+    } else{
+      this.quizQuestionStatusMessage = 'You already answered correctly. Please click next.';
     }
   }
 

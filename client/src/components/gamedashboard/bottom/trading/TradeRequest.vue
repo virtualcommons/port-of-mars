@@ -39,7 +39,6 @@
         mode="outgoing"
         class="options-block tour-give-up"
         v-show="tradePartnerName || isInTutorial"
-        :key="count"
         :resources="sentResources"
       />
       <TradeOptions
@@ -48,7 +47,6 @@
         mode="incoming"
         class="options-block tour-get-in-return"
         v-show="tradePartnerName || isInTutorial"
-        :key="count + 'get'"
         :resources="exchangeResources"
       />
     </div>
@@ -103,12 +101,6 @@ export default class TradeRequest extends Vue {
 
   get exchangeResources(){
     return this.$tstore.state.ui.tradeData.from.resourceAmount;
-  }
-
-
-  get uiDefaultTradeData(){
-    console.log(this.$tstore.state.ui.tradeData);
-    return this.$tstore.state.ui.tradeData;
   }
 
   get otherPlayers() {
@@ -190,10 +182,10 @@ export default class TradeRequest extends Vue {
 
       if (!this.isInTutorial){
         this.$tstore.commit('SET_TRADE_PARTNER_NAME','' as Role);
-        this.$tstore.commit('SET_GET_RESOURCES', defaultInventory());
+        this.$tstore.commit('SET_SEND_RESOURCES', defaultInventory());
         this.$tstore.commit('SET_GET_RESOURCES', defaultInventory());
       }
-      this.count+=1;
+      
     }
   }
 }

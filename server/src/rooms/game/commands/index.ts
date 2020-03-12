@@ -190,7 +190,7 @@ export class SendTradeRequestCmd implements Command {
 export class SetNextPhaseCmd implements Command {
   constructor(private game: Game) {}
 
-  upkeep: number = this.game.state.nextRoundUpkeep();
+  upkeep:number = this.game.state.upkeep;
 
   static fromReq(game: Game) {
     return new SetNextPhaseCmd(game);
@@ -203,8 +203,12 @@ export class SetNextPhaseCmd implements Command {
    */
   gameOver(upkeep: number) {
     if (upkeep <= 0) {
-      this.game.state.phase = Phase.defeat;
+      //this.game.state.phase = Phase.defeat;
+      console.log('Upkeep is now,', upkeep);
       return [new EnteredDefeatPhase()];
+    }
+    else{
+      return [];
     }
   }
 
@@ -215,20 +219,22 @@ export class SetNextPhaseCmd implements Command {
       case Phase.events: {
         const events = [];
         if (this.game.state.currentEvent) {
-          events.push(new MarsEventFinalized())
+          events.push(new MarsEventFinalized());
         }
         if (
           this.game.state.marsEventsProcessed + 1 >=
           this.game.state.marsEvents.length
         ) {
           events.push(new EnteredInvestmentPhase());
-          this.gameOver(this.upkeep);
+          console.log(this.game.state.upkeep);
+          
         } else {
           events.push(new ReenteredMarsEventPhase());
           events.push(new MarsEventInitialized());
-          this.gameOver(this.upkeep);
+          
         }
 
+        events.push(new EnteredDefeatPhase());
         return events;
       }
       case Phase.invest:
@@ -236,20 +242,21 @@ export class SetNextPhaseCmd implements Command {
       case Phase.trade:
         return [new EnteredPurchasePhase()];
       case Phase.purchase:
-        this.gameOver(this.upkeep);
-        return [new EnteredDiscardPhase()];
+        
+        
+        return [new EnteredDiscardPhase(), new EnteredDefeatPhase()];
+
       case Phase.discard: {
         const game = this.game.state;
         const round = game.round + 1;
-
-        this.gameOver(this.upkeep);
 
         if (round >= game.maxRound) {
           game.phase = Phase.victory;
           return [new EnteredVictoryPhase()];
         }
 
-        return [new EnteredMarsEventPhase(), new MarsEventInitialized()];
+        
+        return [new EnteredMarsEventPhase(), new MarsEventInitialized(), new EnteredDefeatPhase()];
       }
       case Phase.victory:
         return [];

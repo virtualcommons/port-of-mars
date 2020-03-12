@@ -269,7 +269,12 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
   apply(game: GameState): void {
     game.phase = Phase.events;
     game.round += 1;
+
+    const oldUpkeep = game.upkeep;
     game.upkeep = game.nextRoundUpkeep();
+
+    game.log(`System Health is now at ${game.upkeep}%, a ${Math.abs(oldUpkeep-game.upkeep)}% ${oldUpkeep-game.upkeep > 0 ? 'drop' : 'gain'} 
+    from last round`, `System Health: ${oldUpkeep-game.upkeep > 0 ? 'Drop' : 'Gain'}`, `Server`);
 
     game.resetPlayerReadiness();
     game.resetPlayerContributedUpkeep();
@@ -359,7 +364,12 @@ gameEventDeserializer.register(EnteredDiscardPhase);
 
 export class EnteredDefeatPhase extends KindOnlyGameEvent {
   apply(game: GameState): void {
-    game.phase = Phase.defeat;
+    if(game.upkeep <= 0){
+      game.phase = Phase.defeat;
+      
+      game.log(`System Health has reached zero.`, 'System Health', 'Server');
+    }
+
   }
 }
 gameEventDeserializer.register(EnteredDefeatPhase);
