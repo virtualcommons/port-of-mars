@@ -26,7 +26,7 @@ const dev: () => AppSettings = () => ({
 
 const staging: () => AppSettings = () => ({
   emailer: new MemoryEmailer(),
-  host: 'http://localhost:8081',
+  host: 'https://alpha.portofmars.asu.edu',
   logging: new DevLogging(),
   secret: SECRET_KEY,
   lobby: new LobbySettings()
