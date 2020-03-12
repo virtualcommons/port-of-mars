@@ -14,6 +14,7 @@ import ModalContainer from '@port-of-mars/client/components/gamedashboard/global
 import ContainerBoard from '@port-of-mars/client/components/gamedashboard/global/containers/ContainerBoard.vue';
 import GameDashboard from '@port-of-mars/client/components/GameDashboard.vue';
 import _ from "lodash";
+import {LOBBY_PAGE} from "shared/routes";
 
 @Component({
   name: 'game',
@@ -31,11 +32,15 @@ export default class Game extends Vue {
 
   async created() {
     this.api.room?.leave();
-    const rooms = await this.$client.getAvailableRooms('game');
-    for (const room of rooms) {
-      console.log({room});
+    let gameRoom: Room;
+    if (this.$ajax.reservation) {
+      gameRoom = await this.$client.consumeSeatReservation(this.$ajax.reservation);
+    } else if (this.$ajax.gameConnInfo) {
+      gameRoom = await this.$client.reconnect(this.$ajax.gameConnInfo.roomId, this.$ajax.gameConnInfo.sessionId);
+    } else {
+      console.log('an error occured');
+      return;
     }
-    const gameRoom = await this.$client.consumeSeatReservation(this.$ajax.reservation);
     applyGameServerResponses(gameRoom, this.$tstore);
     this.api.connect(gameRoom);
     this.hasApi = true;

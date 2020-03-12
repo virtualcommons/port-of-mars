@@ -1,3 +1,4 @@
+import http from "http";
 import {Client, Delayed, Room} from 'colyseus';
 import {Requests} from '@port-of-mars/shared/game/requests';
 import {Responses} from '@port-of-mars/shared/game/responses';
@@ -21,13 +22,12 @@ import {
   BondingThroughAdversityCmd,
   BreakdownOfTrustCmd
 } from '@port-of-mars/server/rooms/game/commands';
-import {Game, GameOpts, Metadata, Persister} from '@port-of-mars/server/rooms/game/types';
+import { Game, GameOpts, Metadata, Persister } from '@port-of-mars/server/rooms/game/types';
 import { Command } from '@port-of-mars/server/rooms/game/commands/types';
 import { TakenStateSnapshot } from '@port-of-mars/server/rooms/game/events';
-import {User} from "@port-of-mars/server/entity/User";
-import http from "http";
-import {settings} from "@port-of-mars/server/settings";
-import {findUserById} from "@port-of-mars/server/services/account";
+import { User } from "@port-of-mars/server/entity/User";
+import { settings } from "@port-of-mars/server/settings";
+import { findUserById } from "@port-of-mars/server/services/account";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -56,7 +56,29 @@ export class GameRoom extends Room<GameState> implements Game {
 
   onJoin(client: Client, options: any, auth: User) {
     const role = this.state.userRoles[auth.username];
-    this.safeSend(client, { kind: 'set-player-role', role });
+    this.safeSend(client, {kind: 'set-player-role', role});
+  }
+
+  onMessage(client: Client, message: Requests) {
+    const cmd = this.prepareRequest(message, client);
+    const events = cmd.execute();
+    this.state.applyMany(events);
+    this.persister.applyMany(this.gameId, events);
+  }
+
+  async onLeave(client: Client, consented: boolean) {
+    const player = this.state.getPlayer(client.auth.username);
+    logger.info('player left: ', player);
+    try {
+      if (consented) {
+        logger.info('player closed the window or left manually');
+      }
+      await this.allowReconnection(client, 60*4);
+      logger.info("player reconnected!");
+      this.safeSend(client, { kind: "set-player-role", role: player.role });
+    } catch (e) {
+      logger.info(e);
+    }
   }
 
   async onDispose() {
@@ -76,7 +98,7 @@ export class GameRoom extends Room<GameState> implements Game {
   }
 
   getPlayerByClient(client: Client): Player {
-    return this.state.players[this.state.userRoles[client.auth.username]];
+    return this.state.getPlayer(client.auth.username);
   }
 
   prepareRequest(r: Requests, client: Client): Command {

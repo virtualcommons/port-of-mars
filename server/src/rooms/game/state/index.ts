@@ -1024,6 +1024,10 @@ export class GameState extends Schema implements GameData {
     player.contributedUpkeep = investment.upkeep;
   }
 
+  getPlayer(username: string) {
+    return this.players[this.userRoles[username]];
+  }
+
   get allPlayersAreReady(): boolean {
     for (const r of ROLES) {
       const p = this.players[r];
