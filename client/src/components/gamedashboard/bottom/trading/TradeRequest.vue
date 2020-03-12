@@ -5,12 +5,9 @@
         <p class="trade-title">
           Trade With:
           <span :class="{ none: tradePartnerName === '' }">{{
-          tradePartnerName !== '' ? tradePartnerName : 'None Selected'
+            tradePartnerName !== '' ? tradePartnerName : 'None Selected'
           }}</span>
         </p>
-        <button :disabled="!clientValidation" @click="handleTrade">
-          Send
-        </button>
       </div>
       <div class="bottom-wrapper">
         <div
@@ -49,6 +46,13 @@
         v-show="tradePartnerName || isInTutorial"
         :resources="exchangeResources"
       />
+      <button
+        v-show="tradePartnerName || isInTutorial"
+        :disabled="!clientValidation"
+        @click="handleTrade"
+      >
+        Send
+      </button>
     </div>
   </div>
 </template>
@@ -87,19 +91,22 @@ export default class TradeRequest extends Vue {
   count = 0;
 
   created() {
-    this.$tstore.commit('SET_TRADE_PLAYER_NAME',this.$tstore.getters.player.role);
+    this.$tstore.commit(
+      'SET_TRADE_PLAYER_NAME',
+      this.$tstore.getters.player.role
+    );
   }
 
-  get tradePartnerName(){
-    console.log(this.$tstore.state.ui.tradeData.to.role)
+  get tradePartnerName() {
+    console.log(this.$tstore.state.ui.tradeData.to.role);
     return this.$tstore.state.ui.tradeData.to.role;
   }
 
-  get sentResources(){
+  get sentResources() {
     return this.$tstore.state.ui.tradeData.to.resourceAmount;
   }
 
-  get exchangeResources(){
+  get exchangeResources() {
     return this.$tstore.state.ui.tradeData.from.resourceAmount;
   }
 
@@ -109,25 +116,27 @@ export default class TradeRequest extends Vue {
 
   get clientValidation() {
     const inventory = this.$tstore.getters.player.inventory;
-    return this.tradePartnerName != '' && canPlayerMakeTrade(this.sentResources, inventory);
+    return (
+      this.tradePartnerName != '' &&
+      canPlayerMakeTrade(this.sentResources, inventory)
+    );
   }
 
-  get isInTutorial(){
+  get isInTutorial() {
     return this.$tstore.getters.layout === 'tutorial';
   }
 
-  tutorialValidation(type:string) {
+  tutorialValidation(type: string) {
     if (this.isInTutorial) {
-
       switch (type) {
         case 'give':
-          this.api.saveGiveResources(this.sentResources)
+          this.api.saveGiveResources(this.sentResources);
           break;
         case 'get':
-          this.api.saveGetResources(this.exchangeResources)
+          this.api.saveGetResources(this.exchangeResources);
           break;
         case 'partner':
-          this.api.saveTradePartner(this.tradePartnerName)
+          this.api.saveTradePartner(this.tradePartnerName);
           break;
         default:
           break;
@@ -152,11 +161,11 @@ export default class TradeRequest extends Vue {
   handleChange(name: string) {
     console.log(name);
     if (name == this.tradePartnerName) {
-      this.$tstore.commit('SET_TRADE_PARTNER_NAME','' as Role);
+      this.$tstore.commit('SET_TRADE_PARTNER_NAME', '' as Role);
       //this.name = '';
     } else {
       //this.name = name;
-      this.$tstore.commit('SET_TRADE_PARTNER_NAME',name as Role);
+      this.$tstore.commit('SET_TRADE_PARTNER_NAME', name as Role);
       this.tutorialValidation('partner');
     }
   }
@@ -180,12 +189,11 @@ export default class TradeRequest extends Vue {
 
       this.api.sendTradeRequest(tradeDataPackage);
 
-      if (!this.isInTutorial){
-        this.$tstore.commit('SET_TRADE_PARTNER_NAME','' as Role);
+      if (!this.isInTutorial) {
+        this.$tstore.commit('SET_TRADE_PARTNER_NAME', '' as Role);
         this.$tstore.commit('SET_SEND_RESOURCES', defaultInventory());
         this.$tstore.commit('SET_GET_RESOURCES', defaultInventory());
       }
-      
     }
   }
 }
