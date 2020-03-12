@@ -6,22 +6,24 @@
   color: $space-white;
   flex: 1 1 0;
 
-  p {
-    margin: 0rem 0.3rem;
-    
-    font-size: $font-med;
-    text-align: center;
+  .statusbar {
+    width: 80%;
   }
 
-  span {
-    color: $new-space-orange;
+  p {
+    margin: 0rem 0.5rem;
+    // background-color: $new-space-orange;
+    font-size: $font-med;
+    text-align: center;
   }
 
   .title {
     color: $space-white;
   }
 
-  .statusbar {
-    width: 80%;
+  .status {
+    span {
+      color: $new-space-orange;
+    }
   }
 }

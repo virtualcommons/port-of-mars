@@ -1,21 +1,15 @@
 .status-o {
   height: 0.75rem;
-  // width: 100%;
   flex-grow: 1;
-  // padding: 0.125rem 0;
-  // border: 0.125rem solid $space-gray;
   position: relative;
   @include make-center;
   justify-content: space-between;
-  // background-color: $space-white;
-  // overflow: hidden;
 
   .progress {
     height: 100%;
     width: 100%;
     margin: 0 0.125rem;
     background-color: $space-gray;
-    // display: inline-block;
     border-radius: 0;
   }
 

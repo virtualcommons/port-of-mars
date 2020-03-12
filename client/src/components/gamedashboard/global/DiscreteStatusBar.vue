@@ -13,14 +13,11 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 
 @Component({})
 export default class DiscreteStatusBar extends Vue {
-  
-
   @Prop({ default: 0 }) private usedTimeBlocks!: number;
-  @Prop({default: 10 }) private totalTimeBlocks!: number;
-  
+  @Prop({ default: 10 }) private totalTimeBlocks!: number;
 }
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/global/StatusBarDiscrete.scss';
+@import '@/stylesheets/gamedashboard/global/DiscreteStatusBar.scss';
 </style>
