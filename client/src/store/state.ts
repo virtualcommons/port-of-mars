@@ -48,7 +48,6 @@ function defaultPlayerData(role: Role): PlayerClientData {
     victoryPoints: 0,
     pendingInvestments: defaultPendingInvestment(),
     contributedUpkeep: 0,
-    notifications: []
   };
 }
 

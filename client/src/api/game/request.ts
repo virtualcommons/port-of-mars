@@ -12,7 +12,6 @@ import {
   AcceptTradeRequestData,
   RejectTradeRequestData,
   PersonalGainVotesData, VoteForPhilanthropistData,
-  DeleteNotificationData,
   BondingThroughAdversityData,
   BreakdownOfTrustData,
 } from '@port-of-mars/shared/game/requests';
@@ -103,11 +102,6 @@ export class GameRequestAPI {
 
   public voteForPhilanthropist(vote: Role) {
     const msg: VoteForPhilanthropistData = { kind: 'vote-for-philanthropist', vote };
-    this.send(msg);
-  }
-
-  public deleteNotification(index: number){
-    const msg: DeleteNotificationData = {kind: 'delete-notification', index};
     this.send(msg);
   }
 

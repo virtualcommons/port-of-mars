@@ -18,9 +18,6 @@ export default class Master extends Vue {
     timestamp: new Date().getTime()
   };
 
-  // notification string
-  private notification: string = 'TEST NOTIFICATION';
-
   // server message object
   private serverMessage: object = {
     text: 'TEST SERVER MESSAGE'
@@ -49,7 +46,6 @@ export default class Master extends Vue {
     * q : reset game
     * . : toggle loading
     * m : generate Mars Log message
-    * n : generate notification message
     * ] : generates server message
     *
     */
@@ -66,9 +62,6 @@ export default class Master extends Vue {
         break;
       case 'm':
         this.$store.commit('ADD_TO_MARS_LOG', this.logMessage);
-        break;
-      case 'n':
-        this.$store.commit('CREATE_NOTIFICATION', this.notification);
         break;
       case ']':
         this.$root.$emit('openModalServer', this.serverMessage);

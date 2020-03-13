@@ -25,7 +25,6 @@ import {
   TradeAmountData,
   TradeData,
   TradeSetData,
-  notification,
   RESOURCES
 } from '@port-of-mars/shared/types';
 import _ from 'lodash';
@@ -572,7 +571,6 @@ export interface PlayerSerialized {
   victoryPoints: number;
   inventory: ResourceAmountData;
   pendingInvestments: InvestmentData;
-  notifications: Array<String>;
 }
 
 export class TradeAmount extends Schema {
@@ -663,8 +661,8 @@ export class Player extends Schema implements PlayerData {
     this.inventory.fromJSON(data.inventory);
 
     // FIXME: mapping the identity function seems pretty pointless, is this just to create a list from data.notifications?
-    const notifications = _.map(data.notifications, n => n);
-    this.notifications.splice(0, this.notifications.length, ...notifications);
+    // const notifications = _.map(data.notifications, n => n);
+    // this.notifications.splice(0, this.notifications.length, ...notifications);
     return this;
   }
 
@@ -680,7 +678,6 @@ export class Player extends Schema implements PlayerData {
       victoryPoints: this.victoryPoints,
       inventory: this.inventory.toJSON(),
       pendingInvestments: this.pendingInvestments.toJSON(),
-      notifications: _.map(this.notifications, x => JSON.stringify(x))
     };
   }
 
@@ -717,9 +714,6 @@ export class Player extends Schema implements PlayerData {
 
   @type('number')
   victoryPoints: number = 0;
-
-  @type(['string'])
-  notifications = new ArraySchema<String>();
 
   isInvestmentFeasible(investment: InvestmentData) {
     return this.costs.investmentWithinBudget(investment, this.timeBlocks);
@@ -821,14 +815,6 @@ export class Player extends Schema implements PlayerData {
 
   updateReadiness(ready: boolean): void {
     this.ready = ready;
-  }
-
-  sendNotifcation(message: String): void {
-    this.notifications.push(message);
-  }
-
-  deleteNotifcation(index: number): void {
-    this.notifications.splice(index, 1);
   }
 }
 

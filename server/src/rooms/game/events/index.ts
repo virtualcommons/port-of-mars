@@ -178,8 +178,12 @@ export class AcceptTradeRequest extends GameEventWithData {
       game.logs.push(log);
     }
     else{
-      game.players[game.tradeSet[this.data.id].to.role as Role].sendNotifcation('Trade partner cannot fulful trade.');
-      game.players[game.tradeSet[this.data.id].from.role as Role].sendNotifcation('A trade you cannot fulful has been deleted.');
+      /////////////////////// TODO: Replace with Mars Log Message ///////////////////////
+
+      // game.players[game.tradeSet[this.data.id].to.role as Role].sendNotifcation('Trade partner cannot fulful trade.');
+      // game.players[game.tradeSet[this.data.id].from.role as Role].sendNotifcation('A trade you cannot fulful has been deleted.');
+
+      //////////////////////////////////// END TODO ////////////////////////////////////
     }
     delete game.tradeSet[this.data.id];
   }
@@ -210,21 +214,17 @@ export class SentTradeRequest extends GameEventWithData {
     const id = uuid();
     game.tradeSet[id] = new Trade(this.data.from, this.data.to);
 
-    game.players[this.data.to.role as Role].sendNotifcation(`The ${this.data.from.role} would like to trade!`);
-    game.players[this.data.from.role as Role].sendNotifcation(`Your trade to ${this.data.to.role} has been received!`);
+    /////////////////////// TODO: Replace with Mars Log Message ///////////////////////
+    
+    // game.players[this.data.to.role as Role].sendNotifcation(`The ${this.data.from.role} would like to trade!`);
+    // game.players[this.data.from.role as Role].sendNotifcation(`Your trade to ${this.data.to.role} has been received!`);
+
+    //////////////////////////////////// END TODO ////////////////////////////////////
+
     //game.players[this.data.from.role].pendingInvestments.add({...this.data.from.resourceAmount,upkeep:0});
   }
 }
 gameEventDeserializer.register(SentTradeRequest);
-
-export class DeleteNotification extends GameEventWithData {
-  constructor(public data: {index:number, player:Player}){super();}
-
-  apply(game: GameState): void {
-    this.data.player.deleteNotifcation(this.data.index);
-  }
-}
-gameEventDeserializer.register(DeleteNotification);
 
 /*
  Phase Events

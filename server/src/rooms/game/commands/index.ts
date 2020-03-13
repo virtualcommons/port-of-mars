@@ -16,7 +16,6 @@ import {
   SentChatMessage,
   SentTradeRequest,
   TimeInvested,
-  DeleteNotification,
   RejectTradeRequest,
   SetPlayerReadiness,
   PersonalGainVoted, VotedForPhilanthropist, 
@@ -261,19 +260,6 @@ export class SetNextPhaseCmd implements Command {
       case Phase.victory:
         return [];
     }
-  }
-}
-
-export class DeleteNotificationCmd implements Command {
-  constructor(public index: number, game: Game, public player: Player){}
-
-  static fromReq(r: req.DeleteNotificationData, game: Game, client: Client){
-    const p = game.getPlayerByClient(client);
-    return new DeleteNotificationCmd(r.index, game, p);
-  }
-
-  execute(){
-    return [new DeleteNotification({index:this.index, player:this.player})];
   }
 }
 

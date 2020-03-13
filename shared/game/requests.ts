@@ -87,11 +87,6 @@ export interface OutOfCommissionEntrepreneurData {
   value: Role;
 }
 
-export interface DeleteNotificationData {
-  kind: 'delete-notification';
-  index: number;
-}
-
 export interface BondingThroughAdversityData {
   kind: 'bonding-through-adversity';
   influenceVoteData: { role: Role; influence: Resource };
@@ -120,6 +115,5 @@ export type Requests =
   | OutOfCommissionResearcherData
   | OutOfCommissionPioneerData
   | OutOfCommissionEntrepreneurData
-  | DeleteNotificationData
   | BondingThroughAdversityData
   | BreakdownOfTrustData;
