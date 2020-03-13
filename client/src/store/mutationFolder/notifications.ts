@@ -1,4 +1,4 @@
-import { State } from '@/store/state';
+import { State } from '@port-of-mars/client/store/state';
 import { MarsLogMessageData, Role } from '@port-of-mars/shared/types';
 
 export default {

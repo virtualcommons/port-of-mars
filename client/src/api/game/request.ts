@@ -23,7 +23,7 @@ import {
   Role,
   Resource
 } from '@port-of-mars/shared/types';
-import { MockRoom } from '@/types/tutorial';
+import { MockRoom } from '@port-of-mars/client/types/tutorial';
 
 export class GameRequestAPI {
   room!: Room | MockRoom;

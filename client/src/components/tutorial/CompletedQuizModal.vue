@@ -10,7 +10,7 @@
                 <div class="p-container">
                 <div class="frame-outer">
                     <div  class="frame-inner">
-                        <img src="@/assets/characters-large/Researcher.png" alt="Player" />
+                        <img src="@port-of-mars/client/assets/characters-large/Researcher.png" alt="Player" />
                     </div>
                 </div>
                 </div>
@@ -38,5 +38,5 @@ export default class CompletedQuizModal extends Vue{
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/tutorial/CompletedQuizModal.scss';
+@import '@port-of-mars/client/stylesheets/tutorial/CompletedQuizModal.scss';
 </style>

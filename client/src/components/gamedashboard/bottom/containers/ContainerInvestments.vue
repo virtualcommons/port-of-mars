@@ -28,10 +28,10 @@
 <script lang="ts">
 import { Vue, Component, Inject } from 'vue-property-decorator';
 import { INVESTMENTS, Resource, ResourceCostData } from '@port-of-mars/shared/types';
-import DiscreteStatusBar from '@/components/gamedashboard/global/DiscreteStatusBar.vue';
-import CardInvestment from '@/components/gamedashboard/global/cards/CardInvestment.vue';
+import DiscreteStatusBar from '@port-of-mars/client/components/gamedashboard/global/DiscreteStatusBar.vue';
+import CardInvestment from '@port-of-mars/client/components/gamedashboard/global/cards/CardInvestment.vue';
 import * as _ from 'lodash';
-import { TutorialAPI } from '@/api/tutorial/request';
+import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
 
 @Component({
   components: {
@@ -115,5 +115,5 @@ export default class ContainerBottom extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/bottom/containers/ContainerInvestments.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/bottom/containers/ContainerInvestments.scss';
 </style>

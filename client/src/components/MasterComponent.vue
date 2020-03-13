@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { Component, Inject, InjectReactive, Vue } from 'vue-property-decorator';
-import { GameRequestAPI } from '@/api/game/request';
+import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 
 @Component({})
 export default class Master extends Vue {
@@ -28,15 +28,15 @@ export default class Master extends Vue {
 
  /**
    * Gets keydown after Vue instance is mounted.
-   * 
-   */  
+   *
+   */
   mounted() {
     document.onkeydown = this.onKeyDown;
   }
 
   /**
     * Reset keydown to null right before Vue instance is destroyed.
-    * 
+    *
     */
   beforeDestroy() {
     if (document && document.onkeydown) document.onkeydown = null;
@@ -51,7 +51,7 @@ export default class Master extends Vue {
     * m : generate Mars Log message
     * n : generate notification message
     * ] : generates server message
-    * 
+    *
     */
   onKeyDown(e: any) {
     switch (e.key) {

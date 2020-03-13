@@ -17,7 +17,7 @@
         <p class="score">{{ victoryPoints }}</p>
         <p>{{ role }}</p>
       </div>
-      <img :src="require(`@/assets/characters/${role}.png`)" alt="Player" />
+      <img :src="require(`@port-of-mars/client/assets/characters/${role}.png`)" alt="Player" />
     </div>
 
     <!-- if audit event is drawn, show resources in addition to score and role -->
@@ -31,7 +31,7 @@
         class="audit-investment"
       >
         <img
-          :src="require(`@/assets/icons/${investment.name}.svg`)"
+          :src="require(`@port-of-mars/client/assets/icons/${investment.name}.svg`)"
           alt="Investment"
         />
         <p>{{ investment.units }}</p>
@@ -74,5 +74,5 @@ export default class Player extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/right/Player.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/right/Player.scss';
 </style>

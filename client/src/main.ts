@@ -6,8 +6,8 @@ import * as Colyseus from 'colyseus.js';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import {TypedStore} from "@/plugins/tstore";
-import {Ajax} from "@/plugins/ajax";
+import {TypedStore} from "@port-of-mars/client/plugins/tstore";
+import {Ajax} from "@port-of-mars/client/plugins/ajax";
 
 Vue.use(Vuex);
 Vue.use(TypedStore);

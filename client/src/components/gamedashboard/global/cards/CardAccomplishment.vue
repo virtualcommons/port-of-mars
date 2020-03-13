@@ -20,7 +20,7 @@
           class="container"
         >
           <img
-            :src="require(`@/assets/icons/${investment}.svg`)"
+            :src="require(`@port-of-mars/client/assets/icons/${investment}.svg`)"
             alt="Investment"
           />
         </div>
@@ -115,5 +115,5 @@ export default class CardAccomplishment extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/global/cards/CardAccomplishment.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/global/cards/CardAccomplishment.scss';
 </style>

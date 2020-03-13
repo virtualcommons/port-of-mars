@@ -15,5 +15,5 @@ export default class ModalServer extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/global/modals/ModalServer.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/global/modals/ModalServer.scss';
 </style>

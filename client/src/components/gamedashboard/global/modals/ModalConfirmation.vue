@@ -13,7 +13,7 @@
               :key="investment + Math.random()"
             >
               <img
-                :src="require(`@/assets/icons/${investment}.svg`)"
+                :src="require(`@port-of-mars/client/assets/icons/${investment}.svg`)"
                 alt="Investment"
               />
             </p>
@@ -40,7 +40,7 @@ import {
   InjectReactive,
   Inject
 } from 'vue-property-decorator';
-import { GameRequestAPI } from '@/api/game/request';
+import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 
 @Component({})
 export default class ModalConfirmation extends Vue {
@@ -60,5 +60,5 @@ export default class ModalConfirmation extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/global/modals/ModalConfirmation.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/global/modals/ModalConfirmation.scss';
 </style>

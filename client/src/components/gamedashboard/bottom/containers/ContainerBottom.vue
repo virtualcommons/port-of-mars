@@ -16,12 +16,12 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import ContainerEvents from '@/components/gamedashboard/bottom/containers/ContainerEvents.vue';
-import ContainerInvestments from '@/components/gamedashboard/bottom/containers/ContainerInvestments.vue';
-import ContainerDefault from '@/components/gamedashboard/bottom/containers/ContainerDefault.vue';
-import ContainerTrade from '@/components/gamedashboard/bottom/containers/ContainerTrade.vue';
-import ContainerPurchase from '@/components/gamedashboard/bottom/containers/ContainerPurchase.vue';
-import ContainerDiscard from '@/components/gamedashboard/bottom/containers/ContainerDiscard.vue';
+import ContainerEvents from '@port-of-mars/client/components/gamedashboard/bottom/containers/ContainerEvents.vue';
+import ContainerInvestments from '@port-of-mars/client/components/gamedashboard/bottom/containers/ContainerInvestments.vue';
+import ContainerDefault from '@port-of-mars/client/components/gamedashboard/bottom/containers/ContainerDefault.vue';
+import ContainerTrade from '@port-of-mars/client/components/gamedashboard/bottom/containers/ContainerTrade.vue';
+import ContainerPurchase from '@port-of-mars/client/components/gamedashboard/bottom/containers/ContainerPurchase.vue';
+import ContainerDiscard from '@port-of-mars/client/components/gamedashboard/bottom/containers/ContainerDiscard.vue';
 import { Phase } from '@port-of-mars/shared/types';
 
 @Component({
@@ -46,5 +46,5 @@ export default class ContainerBottom extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/bottom/containers/ContainerBottom.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/bottom/containers/ContainerBottom.scss';
 </style>

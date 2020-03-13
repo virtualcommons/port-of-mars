@@ -12,7 +12,7 @@ import {
 } from '@port-of-mars/shared/types';
 import { Responses } from '@port-of-mars/shared/game/responses';
 import { DataChange, Schema } from '@colyseus/schema';
-import { TStore } from '@/plugins/tstore';
+import { TStore } from '@port-of-mars/client/plugins/tstore';
 import { rootCertificates } from 'tls';
 
 type Schemify<T> = T & Schema;

@@ -6,7 +6,7 @@
           <div :class="animations('frame')" class="frame">
             <img
               class="image"
-              :src="require(`@/assets/characters-large/${this.playerRole}.png`)"
+              :src="require(`@port-of-mars/client/assets/characters-large/${this.playerRole}.png`)"
               alt="Player"
             />
           </div>
@@ -41,7 +41,7 @@
           <div class="frame">
             <img
               class="image"
-              :src="require(`@/assets/characters-large/${role}.png`)"
+              :src="require(`@port-of-mars/client/assets/characters-large/${role}.png`)"
               alt="Player"
             />
           </div>
@@ -57,8 +57,8 @@ import {isDev} from '@port-of-mars/shared/settings';
 import { Vue, Component, Inject } from 'vue-property-decorator';
 import { ROLES } from '@port-of-mars/shared/types';
 import { Client } from 'colyseus.js';
-import { applyWaitingServerResponses } from '@/api/waitingLobby/response';
-import { WaitingRequestAPI } from '@/api/waitingLobby/request';
+import { applyWaitingServerResponses } from '@port-of-mars/client/api/waitingLobby/response';
+import { WaitingRequestAPI } from '@port-of-mars/client/api/waitingLobby/request';
 import moment from 'moment';
 
 @Component({})
@@ -153,5 +153,5 @@ export default class WaitingLobby extends Vue {
 <style lang="scss" scoped>
 @import '~animate.css/source/fading_entrances/fadeInDown.css';
 @import '~animate.css/source/attention_seekers/pulse.css';
-@import '@/stylesheets/views/WaitingLobby.scss';
+@import '@port-of-mars/client/stylesheets/views/WaitingLobby.scss';
 </style>

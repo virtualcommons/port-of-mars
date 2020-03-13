@@ -22,8 +22,8 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import Trade from '@/components/gamedashboard/bottom/trading/Trade.vue';
-import TradeRequest from '@/components/gamedashboard/bottom/trading/TradeRequest.vue';
+import Trade from '@port-of-mars/client/components/gamedashboard/bottom/trading/Trade.vue';
+import TradeRequest from '@port-of-mars/client/components/gamedashboard/bottom/trading/TradeRequest.vue';
 
 @Component({
   components: {
@@ -46,5 +46,5 @@ export default class ContainerTrade extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/bottom/containers/ContainerTrade.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/bottom/containers/ContainerTrade.scss';
 </style>

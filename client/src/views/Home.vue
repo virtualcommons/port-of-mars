@@ -23,5 +23,5 @@ export default class Home extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/views/Home.scss';
+@import '@port-of-mars/client/stylesheets/views/Home.scss';
 </style>

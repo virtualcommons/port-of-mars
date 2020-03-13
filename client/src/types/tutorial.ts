@@ -1,5 +1,5 @@
-import Mutations from '@/store/mutationFolder';
-import { State } from '@/store/state';
+import Mutations from '@port-of-mars/client/store/mutationFolder';
+import { State } from '@port-of-mars/client/store/state';
 import { ResourceAmountData } from '@port-of-mars/shared/types';
 
 export type MockRoom = { send: (data: any) => void, leave: () => void }

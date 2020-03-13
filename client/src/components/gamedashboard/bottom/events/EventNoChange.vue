@@ -23,7 +23,7 @@ import {
   Inject,
   InjectReactive
 } from 'vue-property-decorator';
-import { GameRequestAPI } from '@/api/game/request';
+import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 
 @Component({})
 export default class EventNoChange extends Vue {
@@ -51,5 +51,5 @@ export default class EventNoChange extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/bottom/events/EventNoChange.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/bottom/events/EventNoChange.scss';
 </style>

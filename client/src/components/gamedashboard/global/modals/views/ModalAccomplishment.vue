@@ -10,7 +10,7 @@
         class="container"
       >
         <img
-          :src="require(`@/assets/icons/${investment}.svg`)"
+          :src="require(`@port-of-mars/client/assets/icons/${investment}.svg`)"
           alt="Investment"
         />
       </div>
@@ -109,7 +109,7 @@ export default class ModalAccomplishment extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/global/modals/views/ModalAccomplishment.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/global/modals/views/ModalAccomplishment.scss';
 
 // .unattainable-resource{
 //   // Percentage produce 1% opacity in production for some reason

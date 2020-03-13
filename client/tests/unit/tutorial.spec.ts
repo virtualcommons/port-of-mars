@@ -1,7 +1,7 @@
-import Tutorial from '@/views/Tutorial.vue';
+import Tutorial from '@port-of-mars/client/views/Tutorial.vue';
 import { mockRoomSetup, mountPOM, provideClient } from './common';
-import { Step, StateTransform } from '@/types/tutorial';
-import { TutorialAPI } from '@/api/tutorial/request';
+import { Step, StateTransform } from '@port-of-mars/client/types/tutorial';
+import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
 import Vue from 'vue';
 
 

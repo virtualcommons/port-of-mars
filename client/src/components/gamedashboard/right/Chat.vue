@@ -55,7 +55,7 @@
 
 <script lang="ts">
 import { Vue, Component, InjectReactive, Inject } from 'vue-property-decorator';
-import { GameRequestAPI } from '@/api/game/request';
+import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons/faPaperPlane';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -117,5 +117,5 @@ export default class Chat extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/right/Chat.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/right/Chat.scss';
 </style>

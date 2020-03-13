@@ -29,7 +29,7 @@ import {
   POLITICIAN,
   RESEARCHER,
 } from '@port-of-mars/shared/types';
-import { GameRequestAPI } from '@/api/game/request';
+import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 
 @Component({})
 export default class VoteYesNo extends Vue {
@@ -54,5 +54,5 @@ export default class VoteYesNo extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/bottom/events/views/VoteYesNo.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/bottom/events/views/VoteYesNo.scss';
 </style>

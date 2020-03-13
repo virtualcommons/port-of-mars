@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Inject } from 'vue-property-decorator';
-import { GameRequestAPI } from '@/api/game/request';
+import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 
 @Component({})
 export default class Notification extends Vue {
@@ -57,5 +57,5 @@ export default class Notification extends Vue {
 <style lang="scss" scoped>
 @import '~animate.css/source/fading_entrances/fadeInLeft.css';
 @import '~animate.css/source/fading_exits/fadeOutLeft.css';
-@import '@/stylesheets/gamedashboard/global/Notification.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/global/Notification.scss';
 </style>

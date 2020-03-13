@@ -4,9 +4,9 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import VoteYesNo from '@/components/gamedashboard/bottom/events/views/VoteYesNo.vue';
-import VoteForPlayerSingle from '@/components/gamedashboard/bottom/events/views/VoteForPlayerSingle.vue';
-import VoteForPlayerHeroPariah from '@/components/gamedashboard/bottom/events/views/VoteForPlayerHeroPariah.vue';
+import VoteYesNo from '@port-of-mars/client/components/gamedashboard/bottom/events/views/VoteYesNo.vue';
+import VoteForPlayerSingle from '@port-of-mars/client/components/gamedashboard/bottom/events/views/VoteForPlayerSingle.vue';
+import VoteForPlayerHeroPariah from '@port-of-mars/client/components/gamedashboard/bottom/events/views/VoteForPlayerHeroPariah.vue';
 
 @Component({
   components: {
@@ -35,5 +35,5 @@ export default class EventVote extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/bottom/events/EventVote.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/bottom/events/EventVote.scss';
 </style>

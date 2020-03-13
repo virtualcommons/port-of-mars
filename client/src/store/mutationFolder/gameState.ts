@@ -15,7 +15,7 @@ import {
   PlayerClientData,
   State,
   User
-} from '@/store/state';
+} from '@port-of-mars/client/store/state';
 
 function SET_GAME_PHASE(state: State, payload: Phase) {
   state.phase = payload;

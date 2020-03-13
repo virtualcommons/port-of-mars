@@ -22,7 +22,7 @@
             <img
               @click="handleChange(player)"
               class="person-icons"
-              :src="require(`@/assets/characters/${player}.png`)"
+              :src="require(`@port-of-mars/client/assets/characters/${player}.png`)"
             />
           </div>
         </div>
@@ -75,9 +75,9 @@ import {
   Role
 } from '@port-of-mars/shared/types';
 import { canPlayerMakeTrade } from '@port-of-mars/shared/validation';
-import { GameRequestAPI } from '@/api/game/request';
-import { defaultInventory } from '@/store/state';
-import { TutorialAPI } from '@/api/tutorial/request';
+import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
+import { defaultInventory } from '@port-of-mars/client/store/state';
+import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
 
 @Component({
   components: {
@@ -206,5 +206,5 @@ export default class TradeRequest extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/bottom/trading/TradeRequest.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/bottom/trading/TradeRequest.scss';
 </style>

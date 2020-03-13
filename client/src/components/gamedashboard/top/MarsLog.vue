@@ -50,5 +50,5 @@ export default class MarsLog extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/left/MarsLog.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/left/MarsLog.scss';
 </style>

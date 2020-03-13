@@ -1,6 +1,6 @@
 import { ChatMessageData } from '@port-of-mars/shared/types';
 import * as _ from 'lodash';
-import { State } from '@/store/state';
+import { State } from '@port-of-mars/client/store/state';
 
 export default {
   ADD_TO_CHAT(state: State, payload: ChatMessageData) {

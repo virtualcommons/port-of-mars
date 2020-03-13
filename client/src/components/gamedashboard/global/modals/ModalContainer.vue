@@ -20,9 +20,9 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import ModalCard from '@/components/gamedashboard/global/modals/ModalCard.vue';
-import ModalConfirmation from '@/components/gamedashboard/global/modals/ModalConfirmation.vue';
-import ModalServer from '@/components/gamedashboard/global/modals/ModalServer.vue';
+import ModalCard from '@port-of-mars/client/components/gamedashboard/global/modals/ModalCard.vue';
+import ModalConfirmation from '@port-of-mars/client/components/gamedashboard/global/modals/ModalConfirmation.vue';
+import ModalServer from '@port-of-mars/client/components/gamedashboard/global/modals/ModalServer.vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -73,5 +73,5 @@ export default class ModalContainer extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/global/modals/ModalContainer.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/global/modals/ModalContainer.scss';
 </style>

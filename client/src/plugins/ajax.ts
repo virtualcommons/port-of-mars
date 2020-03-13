@@ -1,7 +1,7 @@
 import Vue, {VueConstructor} from 'vue'
 import _ from "lodash";
 import {VueRouter} from "vue-router/types/router";
-import {TStore} from "@/plugins/tstore";
+import {TStore} from "@port-of-mars/client/plugins/tstore";
 
 interface RoomListingData<Metadata = any> {
   clients: number;

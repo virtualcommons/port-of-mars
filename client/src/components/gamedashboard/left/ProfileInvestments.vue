@@ -15,7 +15,7 @@
       >
         <div class="main">
           <img
-            :src="require(`@/assets/icons/${investment.name}.svg`)"
+            :src="require(`@port-of-mars/client/assets/icons/${investment.name}.svg`)"
             alt="Investment"
           />
           <!-- <p class="cost">{{ formatCost(investment.cost) }}</p> -->
@@ -46,7 +46,7 @@
         v-b-tooltip.hover="'system health'"
       >
         <div class="main">
-          <img :src="require(`@/assets/icons/upkeep.svg`)" alt="Investment" />
+          <img :src="require(`@port-of-mars/client/assets/icons/upkeep.svg`)" alt="Investment" />
           <p>
             {{ upkeep.units
             }}<sup v-show="upkeep.pendingUnits > 0">
@@ -116,7 +116,7 @@ export default class ProfileInvestments extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/left/ProfileInvestments.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/left/ProfileInvestments.scss';
 
 .pending-is-active {
   background-color: $color-Upkeep-opaque-2;

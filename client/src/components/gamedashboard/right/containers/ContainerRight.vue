@@ -7,8 +7,8 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import ContainerPlayers from '@/components/gamedashboard/right/containers/ContainerPlayers.vue';
-import Chat from '@/components/gamedashboard/right/Chat.vue';
+import ContainerPlayers from '@port-of-mars/client/components/gamedashboard/right/containers/ContainerPlayers.vue';
+import Chat from '@port-of-mars/client/components/gamedashboard/right/Chat.vue';
 
 @Component({
   components: {
@@ -20,5 +20,5 @@ export default class ContainerRight extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/right/containers/ContainerRight.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/right/containers/ContainerRight.scss';
 </style>

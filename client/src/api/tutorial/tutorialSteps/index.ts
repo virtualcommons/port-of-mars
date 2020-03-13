@@ -1,4 +1,4 @@
-import { Step } from '@/types/tutorial';
+import { Step } from '@port-of-mars/client/types/tutorial';
 import events from './events';
 import gamePlay from './gamePlay';
 import invest from './invest';

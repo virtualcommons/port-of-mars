@@ -1,4 +1,4 @@
-import {Step, LEFT} from "@/types/tutorial";
+import {Step, LEFT} from "@port-of-mars/client/types/tutorial";
 
 const steps:Array<Step> = [
     {

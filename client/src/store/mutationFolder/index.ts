@@ -6,7 +6,7 @@ import layout from './layout';
 import notifications from './notifications';
 import player from './player';
 import trading from './trading';
-import { State, getInitialStoreState } from '@/store/state';
+import { State, getInitialStoreState } from '@port-of-mars/client/store/state';
 
 export default {
   RESET_STATE(state: State, options?: any) {

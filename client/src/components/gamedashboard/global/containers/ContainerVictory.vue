@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import { Vue, Component, InjectReactive, Inject } from 'vue-property-decorator';
-import { GameRequestAPI } from '@/api/game/request';
+import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 
 @Component({})
 export default class ContainerVictory extends Vue {
@@ -45,5 +45,5 @@ export default class ContainerVictory extends Vue {
 
 <style lang="scss" scoped>
 @import '~animate.css/source/attention_seekers/pulse.css';
-@import '@/stylesheets/gamedashboard/global/containers/ContainerVictory.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/global/containers/ContainerVictory.scss';
 </style>

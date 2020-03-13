@@ -5,7 +5,7 @@
         <div class="trade-profile-sender-container">
           <div class="trade-profile-sender">
             <img
-              :src="require(`@/assets/characters/${from.role}.png`)"
+              :src="require(`@port-of-mars/client/assets/characters/${from.role}.png`)"
               alt="Sender"
             />
           </div>
@@ -22,7 +22,7 @@
             >
               <img
                 v-if="value !== 0"
-                :src="require(`@/assets/icons/${name}.svg`)"
+                :src="require(`@port-of-mars/client/assets/icons/${name}.svg`)"
                 alt="Investment"
               />
               <p v-if="value !== 0">{{ value }}</p>
@@ -37,7 +37,7 @@
         <div class="trade-profile-receiver-container">
           <div class="trade-profile-receiver">
             <img
-              :src="require(`@/assets/characters/${to.role}.png`)"
+              :src="require(`@port-of-mars/client/assets/characters/${to.role}.png`)"
               alt="Receiver"
             />
           </div>
@@ -54,7 +54,7 @@
             >
               <img
                 v-if="value !== 0"
-                :src="require(`@/assets/icons/${name}.svg`)"
+                :src="require(`@port-of-mars/client/assets/icons/${name}.svg`)"
                 alt="Investment"
               />
               <p v-if="value !== 0">{{ value }}</p>
@@ -102,7 +102,7 @@ import {
   InjectReactive,
   Inject
 } from 'vue-property-decorator';
-import { GameRequestAPI } from '@/api/game/request';
+import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 import {
   TradeData,
   TradeAmountData,
@@ -152,5 +152,5 @@ export default class Trade extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/bottom/trading/Trade.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/bottom/trading/Trade.scss';
 </style>

@@ -113,16 +113,16 @@
 <script lang="ts">
 import { Component, Provide, Vue } from 'vue-property-decorator';
 import VueTour from 'vue-tour';
-import ConsentFormModal from '@/components/tutorial/ConsentFormModal.vue';
-import TourModal from '@/components/tutorial/TourModal.vue';
-import CompletedQuizModal from '@/components/tutorial/CompletedQuizModal.vue';
-import GameDashboard from '@/components/GameDashboard.vue';
-import { TutorialAPI } from '@/api/tutorial/request';
-import { Step } from '@/types/tutorial';
+import ConsentFormModal from '@port-of-mars/client/components/tutorial/ConsentFormModal.vue';
+import TourModal from '@port-of-mars/client/components/tutorial/TourModal.vue';
+import CompletedQuizModal from '@port-of-mars/client/components/tutorial/CompletedQuizModal.vue';
+import GameDashboard from '@port-of-mars/client/components/GameDashboard.vue';
+import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
+import { Step } from '@port-of-mars/client/types/tutorial';
 import { CURATOR, Phase, QuizQuestionData, RESEARCHER } from '@port-of-mars/shared/types';
 import * as _ from 'lodash';
 
-import { tutorialSteps } from '@/api/tutorial/tutorialSteps';
+import { tutorialSteps } from '@port-of-mars/client/api/tutorial/tutorialSteps';
 
 require('vue-tour/dist/vue-tour.css');
 Vue.use(VueTour);
@@ -363,5 +363,5 @@ export default class Tutorial extends Vue {
 </script>
 
 <style lang="scss">
-@import '@/stylesheets/layouts/TutorialLayout.scss';
+@import '@port-of-mars/client/stylesheets/layouts/TutorialLayout.scss';
 </style>

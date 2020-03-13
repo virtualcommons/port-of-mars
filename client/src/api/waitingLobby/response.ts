@@ -1,10 +1,10 @@
 import { Room } from 'colyseus.js';
 import { WaitingResponses } from '@port-of-mars/shared/waitingLobby/responses';
 import { Schema } from '@colyseus/schema';
-import { TStore } from '@/plugins/tstore';
+import { TStore } from '@port-of-mars/client/plugins/tstore';
 import {VueRouter} from "vue-router/types/router";
 import {GAME_PAGE, LOGIN_PAGE} from "@port-of-mars/shared/routes";
-import WaitingLobby from "@/views/WaitingLobby.vue";
+import WaitingLobby from "@port-of-mars/client/views/WaitingLobby.vue";
 
 // TODO: Temporary Implementation
 const GAME_DATA = 'gameData';

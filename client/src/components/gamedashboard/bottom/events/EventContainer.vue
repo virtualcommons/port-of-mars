@@ -7,10 +7,10 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { MarsEventData, EventClientView } from '@port-of-mars/shared/types';
-import EventVote from '@/components/gamedashboard/bottom/events/EventVote.vue';
-import EventInfluences from '@/components/gamedashboard/bottom/events/EventInfluences.vue';
-import EventAccomplishments from '@/components/gamedashboard/bottom/events/EventAccomplishments.vue';
-import EventNoChange from '@/components/gamedashboard/bottom/events/EventNoChange.vue';
+import EventVote from '@port-of-mars/client/components/gamedashboard/bottom/events/EventVote.vue';
+import EventInfluences from '@port-of-mars/client/components/gamedashboard/bottom/events/EventInfluences.vue';
+import EventAccomplishments from '@port-of-mars/client/components/gamedashboard/bottom/events/EventAccomplishments.vue';
+import EventNoChange from '@port-of-mars/client/components/gamedashboard/bottom/events/EventNoChange.vue';
 
 @Component({
   components: {
@@ -63,5 +63,5 @@ export default class EventContainer extends Vue {
 
 <style lang="scss" scoped>
 @import '~animate.css/source/attention_seekers/pulse.css';
-@import '@/stylesheets/gamedashboard/bottom/events/EventContainer.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/bottom/events/EventContainer.scss';
 </style>

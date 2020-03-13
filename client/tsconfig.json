@@ -17,7 +17,7 @@
       "../types"
     ],
     "paths": {
-      "@/*": [
+      "@port-of-mars/client/*": [
         "src/*"
       ],
       "@port-of-mars/shared/*": [

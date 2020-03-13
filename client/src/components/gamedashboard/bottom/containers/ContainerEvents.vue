@@ -34,7 +34,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { MarsEventData, EventClientView } from '@port-of-mars/shared/types';
-import EventContainer from '@/components/gamedashboard/bottom/events/EventContainer.vue';
+import EventContainer from '@port-of-mars/client/components/gamedashboard/bottom/events/EventContainer.vue';
 
 @Component({
   components: {
@@ -82,5 +82,5 @@ export default class ContainerEvents extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/bottom/containers/ContainerEvents.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/bottom/containers/ContainerEvents.scss';
 </style>

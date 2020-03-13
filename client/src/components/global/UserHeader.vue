@@ -46,5 +46,5 @@ export default class UserHeader extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/global/UserHeader.scss';
+@import '@port-of-mars/client/stylesheets/global/UserHeader.scss';
 </style>

@@ -30,12 +30,12 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import UserHeader from '@/components/global/UserHeader.vue';
-import Notification from '@/components/gamedashboard/global/Notification.vue';
-import ContainerLeft from '@/components/gamedashboard/left/containers/ContainerLeft.vue';
-import ContainerTop from '@/components/gamedashboard/top/containers/ContainerTop.vue';
-import ContainerBottom from '@/components/gamedashboard/bottom/containers/ContainerBottom.vue';
-import ContainerRight from '@/components/gamedashboard/right/containers/ContainerRight.vue';
+import UserHeader from '@port-of-mars/client/components/global/UserHeader.vue';
+import Notification from '@port-of-mars/client/components/gamedashboard/global/Notification.vue';
+import ContainerLeft from '@port-of-mars/client/components/gamedashboard/left/containers/ContainerLeft.vue';
+import ContainerTop from '@port-of-mars/client/components/gamedashboard/top/containers/ContainerTop.vue';
+import ContainerBottom from '@port-of-mars/client/components/gamedashboard/bottom/containers/ContainerBottom.vue';
+import ContainerRight from '@port-of-mars/client/components/gamedashboard/right/containers/ContainerRight.vue';
 
 
 @Component({
@@ -56,5 +56,5 @@ export default class ContainerBoard extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/global/containers/ContainerBoard.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/global/containers/ContainerBoard.scss';
 </style>

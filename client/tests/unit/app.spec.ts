@@ -1,5 +1,5 @@
 import {createLocalVue, shallowMountPOM} from "./common";
-import App from '@/App.vue';
+import App from '@port-of-mars/client/App.vue';
 
 describe('App.vue', () => {
   it('renders', () => {

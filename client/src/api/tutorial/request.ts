@@ -1,10 +1,10 @@
 import {TradeData, AccomplishmentData, ResourceAmountData, Resource} from "@port-of-mars/shared/types";
-import { initialStoreState, defaultInventory } from '@/store/state';
-import { GameRequestAPI } from "@/api/game/request";
+import { initialStoreState, defaultInventory } from '@port-of-mars/client/store/state';
+import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 import * as _ from "lodash";
 import {Store} from 'vuex/types/index';
-import {State} from '@/store/state';
-import {StateTransform} from '@/types/tutorial';
+import {State} from '@port-of-mars/client/store/state';
+import {StateTransform} from '@port-of-mars/client/types/tutorial';
 
 
 export class TutorialAPI extends GameRequestAPI {

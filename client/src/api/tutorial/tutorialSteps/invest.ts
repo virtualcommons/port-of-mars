@@ -1,4 +1,4 @@
-import { Step, LEFT, TOP } from "@/types/tutorial";
+import { Step, LEFT, TOP } from "@port-of-mars/client/types/tutorial";
 import { Phase,RESEARCHER } from "@port-of-mars/shared/types";
 
 const steps:Array<Step> = [

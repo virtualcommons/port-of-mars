@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import BarAccomplishment from '@/components/gamedashboard/global/cards/BarAccomplishment.vue';
+import BarAccomplishment from '@port-of-mars/client/components/gamedashboard/global/cards/BarAccomplishment.vue';
 import { canPurchaseAccomplishment } from '@port-of-mars/shared/validation';
 import { AccomplishmentData } from '@port-of-mars/shared/types';
 
@@ -58,5 +58,5 @@ export default class ContainerPurchase extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/bottom/containers/ContainerPurchase.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/bottom/containers/ContainerPurchase.scss';
 </style>

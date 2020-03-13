@@ -79,5 +79,5 @@ export default class Register extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/views/Login.scss';
+@import '@port-of-mars/client/stylesheets/views/Login.scss';
 </style>

@@ -19,5 +19,5 @@ export default class DiscreteStatusBar extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/global/DiscreteStatusBar.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/global/DiscreteStatusBar.scss';
 </style>

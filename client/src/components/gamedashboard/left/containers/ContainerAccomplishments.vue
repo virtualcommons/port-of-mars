@@ -55,9 +55,9 @@
 
 <script lang="ts">
 import { Vue, Component, Inject } from 'vue-property-decorator';
-import CardAccomplishment from '@/components/gamedashboard/global/cards/CardAccomplishment.vue';
+import CardAccomplishment from '@port-of-mars/client/components/gamedashboard/global/cards/CardAccomplishment.vue';
 import { Phase } from '@port-of-mars/shared/types';
-import { TutorialAPI } from '@/api/tutorial/request';
+import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
 
 
 @Component({
@@ -102,5 +102,5 @@ export default class ContainerAccomplishments extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/left/containers/ContainerAccomplishments.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/left/containers/ContainerAccomplishments.scss';
 </style>

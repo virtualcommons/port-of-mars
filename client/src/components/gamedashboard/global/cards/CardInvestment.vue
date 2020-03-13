@@ -3,7 +3,7 @@
     <div class="ci-container" :style="opacity">
       <div class="type">
         <p class="name">{{ label }}</p>
-        <img :src="require(`@/assets/icons/${name}.svg`)" alt="Player" />
+        <img :src="require(`@port-of-mars/client/assets/icons/${name}.svg`)" alt="Player" />
         <div class="data">
           <div
             class="investment"
@@ -55,7 +55,7 @@ import {
   Inject
 } from 'vue-property-decorator';
 import { Phase, Resource, Role } from '@port-of-mars/shared/types';
-import { GameRequestAPI } from '@/api/game/request';
+import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 
 @Component({})
 export default class CardInvestment extends Vue {
@@ -95,5 +95,5 @@ export default class CardInvestment extends Vue {
 </script>
 ,
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/global/cards/CardInvestment.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/global/cards/CardInvestment.scss';
 </style>

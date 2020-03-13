@@ -6,8 +6,8 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import Game from '@/views/Game.vue';
-import Tutorial from '@/views/Tutorial.vue';
+import Game from '@port-of-mars/client/views/Game.vue';
+import Tutorial from '@port-of-mars/client/views/Tutorial.vue';
 import BootstrapVue from 'bootstrap-vue';
 Vue.use(BootstrapVue);
 

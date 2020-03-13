@@ -8,9 +8,9 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import ContainerProfile from '@/components/gamedashboard/left/containers/ContainerProfile.vue';
-import ProfileInvestments from '@/components/gamedashboard/left/ProfileInvestments.vue';
-import ContainerAccomplishments from '@/components/gamedashboard/left/containers/ContainerAccomplishments.vue';
+import ContainerProfile from '@port-of-mars/client/components/gamedashboard/left/containers/ContainerProfile.vue';
+import ProfileInvestments from '@port-of-mars/client/components/gamedashboard/left/ProfileInvestments.vue';
+import ContainerAccomplishments from '@port-of-mars/client/components/gamedashboard/left/containers/ContainerAccomplishments.vue';
 
 @Component({
   components: {
@@ -23,5 +23,5 @@ export default class ContainerLeft extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/left/containers/ContainerLeft.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/left/containers/ContainerLeft.scss';
 </style>

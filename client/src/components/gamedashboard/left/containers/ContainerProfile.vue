@@ -24,12 +24,12 @@ export default class ContainerProfile extends Vue {
   }
 
   get playerRoleImg(): string {
-    return require(`@/assets/characters/${this.playerRole}.png`);
+    return require(`@port-of-mars/client/assets/characters/${this.playerRole}.png`);
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/left/containers/ContainerProfile.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/left/containers/ContainerProfile.scss';
 
 </style>

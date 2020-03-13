@@ -12,5 +12,5 @@ export default class ContainerDefault extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/bottom/containers/ContainerDefault.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/bottom/containers/ContainerDefault.scss';
 </style>

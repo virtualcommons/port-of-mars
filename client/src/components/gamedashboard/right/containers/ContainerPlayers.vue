@@ -7,7 +7,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import Player from '@/components/gamedashboard/right/Player.vue';
+import Player from '@port-of-mars/client/components/gamedashboard/right/Player.vue';
 import { ROLES } from '@port-of-mars/shared/types';
 
 @Component({
@@ -41,5 +41,5 @@ export default class ContainerPlayers extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/right/containers/ContainerPlayers.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/right/containers/ContainerPlayers.scss';
 </style>

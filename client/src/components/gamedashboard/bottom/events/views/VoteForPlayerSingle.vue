@@ -10,7 +10,7 @@
       >
         <img
           @click="handleSelectPlayer(member)"
-          :src="require(`@/assets/characters/${member}.png`)"
+          :src="require(`@port-of-mars/client/assets/characters/${member}.png`)"
           alt="Player"
         />
       </div>
@@ -30,7 +30,7 @@
 <script lang="ts">
   import {Vue, Component, Inject} from 'vue-property-decorator';
   import {Role, ROLES} from '@port-of-mars/shared/types';
-  import {GameRequestAPI} from "@/api/game/request";
+  import {GameRequestAPI} from "@port-of-mars/client/api/game/request";
   import _ from "lodash";
 
   @Component({})
@@ -59,5 +59,5 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '@/stylesheets/gamedashboard/bottom/events/views/VoteForPlayerSingle.scss';
+  @import '@port-of-mars/client/stylesheets/gamedashboard/bottom/events/views/VoteForPlayerSingle.scss';
 </style>

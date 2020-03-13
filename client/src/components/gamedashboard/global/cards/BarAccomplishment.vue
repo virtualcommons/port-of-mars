@@ -24,7 +24,7 @@
           class="container"
         >
           <img
-            :src="require(`@/assets/icons/${investment}.svg`)"
+            :src="require(`@port-of-mars/client/assets/icons/${investment}.svg`)"
             alt="Investment"
           />
         </div>
@@ -53,7 +53,7 @@ import {
   Resource
 } from '@port-of-mars/shared/types';
 import * as _ from 'lodash';
-import { GameRequestAPI } from '@/api/game/request';
+import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 import { canPurchaseAccomplishment } from '@port-of-mars/shared/validation';
 
 @Component({})
@@ -118,5 +118,5 @@ export default class BarAccomplishment extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/global/cards/BarAccomplishments.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/global/cards/BarAccomplishments.scss';
 </style>

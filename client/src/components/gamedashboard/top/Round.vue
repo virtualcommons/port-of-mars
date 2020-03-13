@@ -27,5 +27,5 @@ export default class Round extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/top/Round.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/top/Round.scss';
 </style>

@@ -11,7 +11,7 @@
         <div>
           <img
             class="icon"
-            :src="require(`@/assets/icons/${resource}.svg`)"
+            :src="require(`@port-of-mars/client/assets/icons/${resource}.svg`)"
             alt="Investment"
           />
         </div>
@@ -128,5 +128,5 @@ export default class TradeOptions extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/bottom/trading/TradeOptions.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/bottom/trading/TradeOptions.scss';
 </style>

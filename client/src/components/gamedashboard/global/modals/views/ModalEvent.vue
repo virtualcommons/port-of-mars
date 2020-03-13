@@ -25,5 +25,5 @@ export default class ModalEvent extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/global/modals/views/ModalEvent.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/global/modals/views/ModalEvent.scss';
 </style>

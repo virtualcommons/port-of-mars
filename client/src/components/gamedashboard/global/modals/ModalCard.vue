@@ -6,8 +6,8 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import ModalAccomplishment from '@/components/gamedashboard/global/modals/views/ModalAccomplishment.vue';
-import ModalEvent from '@/components/gamedashboard/global/modals/views/ModalEvent.vue';
+import ModalAccomplishment from '@port-of-mars/client/components/gamedashboard/global/modals/views/ModalAccomplishment.vue';
+import ModalEvent from '@port-of-mars/client/components/gamedashboard/global/modals/views/ModalEvent.vue';
 
 @Component({
   components: {
@@ -34,5 +34,5 @@ export default class ModalCard extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/global/modals/ModalCard.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/global/modals/ModalCard.scss';
 </style>

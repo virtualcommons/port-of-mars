@@ -14,5 +14,5 @@ export default class LoadingScreen extends Vue {}
 
 <style lang="scss" scoped>
 @import '~animate.css/source/attention_seekers/pulse.css';
-@import '@/stylesheets/global/LoadingScreen.scss';
+@import '@port-of-mars/client/stylesheets/global/LoadingScreen.scss';
 </style>

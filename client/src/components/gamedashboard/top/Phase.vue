@@ -33,11 +33,11 @@
 
 <script lang="ts">
 import { Component, Inject, InjectReactive, Vue } from 'vue-property-decorator';
-import Round from '@/components/gamedashboard/top/Round.vue';
+import Round from '@port-of-mars/client/components/gamedashboard/top/Round.vue';
 import { PHASE_LABELS } from '@port-of-mars/shared/types';
-import ModalConfirmation from '@/components/gamedashboard/global/modals/ModalConfirmation.vue';
+import ModalConfirmation from '@port-of-mars/client/components/gamedashboard/global/modals/ModalConfirmation.vue';
 import * as s from '@port-of-mars/shared/types';
-import { GameRequestAPI } from '@/api/game/request';
+import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faTimesCircle } from '@fortawesome/free-regular-svg-icons/faTimesCircle';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -129,5 +129,5 @@ export default class Phase extends Vue {
 
 <style lang="scss" scoped>
 @import '~animate.css/source/attention_seekers/pulse.css';
-@import '@/stylesheets/gamedashboard/top/Phase.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/top/Phase.scss';
 </style>

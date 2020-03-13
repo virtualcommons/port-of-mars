@@ -1,4 +1,4 @@
-import {Step} from '@/types/tutorial';
+import {Step} from '@port-of-mars/client/types/tutorial';
 
 const steps:Array<Step> = [
     {
@@ -19,7 +19,7 @@ const steps:Array<Step> = [
           placement: 'bottom'
         }
     },
-    
+
     {
         target: '.tour-players',
         content:
@@ -36,7 +36,7 @@ const steps:Array<Step> = [
         params: {
           placement: 'right'
         },
-        
+
     },
     {
       target: '.tour-accomplishments',
@@ -82,7 +82,7 @@ const steps:Array<Step> = [
         },
       }]
     }
-    
+
 ]
 
 export default steps;

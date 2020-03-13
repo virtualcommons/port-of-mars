@@ -11,7 +11,7 @@
       >
         <img
           @click="selectHero(member)"
-          :src="require(`@/assets/characters/${member}.png`)"
+          :src="require(`@port-of-mars/client/assets/characters/${member}.png`)"
           alt="Player"
         />
       </div>
@@ -35,7 +35,7 @@
       >
         <img
           @click="selectPariah(member)"
-          :src="require(`@/assets/characters/${member}.png`)"
+          :src="require(`@port-of-mars/client/assets/characters/${member}.png`)"
           alt="Player"
         />
       </div>
@@ -89,5 +89,5 @@ export default class VoteForPlayerHeroPariah extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/bottom/events/views/VoteForPlayerHeroPariah.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/bottom/events/views/VoteForPlayerHeroPariah.scss';
 </style>

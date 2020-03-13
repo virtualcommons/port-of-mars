@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import StatusBar from '@/components/gamedashboard/global/StatusBar.vue';
+import StatusBar from '@port-of-mars/client/components/gamedashboard/global/StatusBar.vue';
 
 @Component({
   components: {
@@ -23,5 +23,5 @@ export default class ContainerUpkeep extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/top/containers/ContainerUpkeep.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/top/containers/ContainerUpkeep.scss';
 </style>

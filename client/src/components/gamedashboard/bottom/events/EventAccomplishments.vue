@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import AccomplishmentsSelectPurchased from '@/components/gamedashboard/bottom/events/views/AccomplishmentsSelectPurchased.vue';
+import AccomplishmentsSelectPurchased from '@port-of-mars/client/components/gamedashboard/bottom/events/views/AccomplishmentsSelectPurchased.vue';
 
 @Component({
   components: {
@@ -27,5 +27,5 @@ export default class EventAccomplishments extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/bottom/events/EventAccomplishments.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/bottom/events/EventAccomplishments.scss';
 </style>

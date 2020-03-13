@@ -25,7 +25,7 @@ export default class StatusBar extends Vue {
 
   styleWidth(): object {
     return {
-      width: `${this.setWidth}%`
+      width: `${this.setWidth}%`,
     };
   }
 
@@ -50,5 +50,5 @@ export default class StatusBar extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/global/StatusBar.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/global/StatusBar.scss';
 </style>

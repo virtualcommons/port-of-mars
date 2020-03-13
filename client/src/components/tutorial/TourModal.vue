@@ -105,5 +105,5 @@ export default class TourModal extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/tutorial/TourModal.scss';
+@import '@port-of-mars/client/stylesheets/tutorial/TourModal.scss';
 </style>

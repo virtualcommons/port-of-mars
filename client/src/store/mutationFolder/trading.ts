@@ -1,4 +1,4 @@
-import { State } from '@/store/state';
+import { State } from '@port-of-mars/client/store/state';
 import { Role, TradeData, ResourceAmountData } from '@port-of-mars/shared/types';
 import { Vue } from 'vue-property-decorator';
 

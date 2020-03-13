@@ -30,9 +30,9 @@
 <script lang="ts">
 import { Vue, Component, Inject } from 'vue-property-decorator';
 import {Resource, ResourceAmountData, RESOURCES, INVESTMENTS, ResourceCostData, Investment } from "@port-of-mars/shared/types";
-import { GameRequestAPI } from '@/api/game/request';
-import DiscreteStatusBar from '@/components/gamedashboard/global/DiscreteStatusBar.vue';
-import CardInvestment from '@/components/gamedashboard/global/cards/CardInvestment.vue';
+import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
+import DiscreteStatusBar from '@port-of-mars/client/components/gamedashboard/global/DiscreteStatusBar.vue';
+import CardInvestment from '@port-of-mars/client/components/gamedashboard/global/cards/CardInvestment.vue';
 import * as _ from 'lodash';
 
 @Component({
@@ -104,5 +104,5 @@ export default class InfluencesSelect extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/bottom/events/views/InfluencesSelect.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/bottom/events/views/InfluencesSelect.scss';
 </style>

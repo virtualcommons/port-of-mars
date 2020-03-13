@@ -33,7 +33,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { AccomplishmentData, RESEARCHER } from '@port-of-mars/shared/types';
-import CardAccomplishment from '@/components/gamedashboard/global/cards/CardAccomplishment.vue';
+import CardAccomplishment from '@port-of-mars/client/components/gamedashboard/global/cards/CardAccomplishment.vue';
 
 @Component({
   components: {
@@ -110,5 +110,5 @@ export default class AccomplishmentsSelectPurchased extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/bottom/events/views/AccomplishmentsSelectPurchased.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/bottom/events/views/AccomplishmentsSelectPurchased.scss';
 </style>

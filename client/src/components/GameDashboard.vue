@@ -20,12 +20,12 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { Phase } from '@port-of-mars/shared/types';
-import { EnvironmentMode } from '@/settings';
-import MasterComponent from '@/components/MasterComponent.vue';
-import ModalContainer from '@/components/gamedashboard/global/modals/ModalContainer.vue';
-import ContainerBoard from '@/components/gamedashboard/global/containers/ContainerBoard.vue';
-import ContainerDefeat from '@/components/gamedashboard/global/containers/ContainerDefeat.vue';
-import ContainerVictory from '@/components/gamedashboard/global/containers/ContainerVictory.vue';
+import { EnvironmentMode } from '@port-of-mars/client/settings';
+import MasterComponent from '@port-of-mars/client/components/MasterComponent.vue';
+import ModalContainer from '@port-of-mars/client/components/gamedashboard/global/modals/ModalContainer.vue';
+import ContainerBoard from '@port-of-mars/client/components/gamedashboard/global/containers/ContainerBoard.vue';
+import ContainerDefeat from '@port-of-mars/client/components/gamedashboard/global/containers/ContainerDefeat.vue';
+import ContainerVictory from '@port-of-mars/client/components/gamedashboard/global/containers/ContainerVictory.vue';
 import environment from '../store/mutationFolder/environment';
 
 @Component({
@@ -65,5 +65,5 @@ export default class GameDashboard extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/views/GameDashboard.scss';
+@import '@port-of-mars/client/stylesheets/views/GameDashboard.scss';
 </style>

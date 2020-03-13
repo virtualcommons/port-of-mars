@@ -7,12 +7,12 @@
 <script lang="ts">
 import {Vue, Component, Inject, Provide, Prop} from 'vue-property-decorator';
 import { Client } from 'colyseus.js';
-import { applyGameServerResponses } from '@/api/game/response';
-import { GameRequestAPI } from '@/api/game/request';
-import { EnvironmentMode } from '@/settings';
-import ModalContainer from '@/components/gamedashboard/global/modals/ModalContainer.vue';
-import ContainerBoard from '@/components/gamedashboard/global/containers/ContainerBoard.vue';
-import GameDashboard from '@/components/GameDashboard.vue';
+import { applyGameServerResponses } from '@port-of-mars/client/api/game/response';
+import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
+import { EnvironmentMode } from '@port-of-mars/client/settings';
+import ModalContainer from '@port-of-mars/client/components/gamedashboard/global/modals/ModalContainer.vue';
+import ContainerBoard from '@port-of-mars/client/components/gamedashboard/global/containers/ContainerBoard.vue';
+import GameDashboard from '@port-of-mars/client/components/GameDashboard.vue';
 import _ from "lodash";
 
 @Component({
@@ -52,5 +52,5 @@ export default class Game extends Vue {
 </script>
 
 <style lang="scss">
-@import '@/stylesheets/layouts/DefaultLayout.scss';
+@import '@port-of-mars/client/stylesheets/layouts/DefaultLayout.scss';
 </style>

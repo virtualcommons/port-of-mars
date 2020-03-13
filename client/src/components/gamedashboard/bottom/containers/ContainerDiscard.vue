@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import BarDiscard from '@/components/gamedashboard/global/cards/BarDiscard.vue';
+import BarDiscard from '@port-of-mars/client/components/gamedashboard/global/cards/BarDiscard.vue';
 
 @Component({
   components: {
@@ -50,5 +50,5 @@ export default class ContainerDiscard extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/gamedashboard/bottom/containers/ContainerDiscard.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/bottom/containers/ContainerDiscard.scss';
 </style>

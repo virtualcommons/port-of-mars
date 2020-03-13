@@ -23,17 +23,17 @@
             <p align="justify">Dear Participant,</p>
 
             <p align="justify">
-                I am a professor in the School of Sustainability at Arizona State University. 
+                I am a professor in the School of Sustainability at Arizona State University.
                 I am conducting experiments that investigate how people think, act, and make decisions.
                 This research is part of the Interplanetary Research Initiative at Arizona State University.
             </p>
 
             <p align="justify">
-                I am requesting your participation, which will involve participating in a game tournament. 
+                I am requesting your participation, which will involve participating in a game tournament.
                 The game will take a maximum of 60 minutes. The tournament has 4 rounds to determine the Mars Madness
-                champion, and if you qualify for another round, such a game will take another hour at a later day with a 
-                special invitation. Your participation in this study is voluntary. <code><b>You must be 18 or older to participate 
-                in the study.</b></code> If you choose not to participate or to withdraw from the study at any time, there will be 
+                champion, and if you qualify for another round, such a game will take another hour at a later day with a
+                special invitation. Your participation in this study is voluntary. <code><b>You must be 18 or older to participate
+                in the study.</b></code> If you choose not to participate or to withdraw from the study at any time, there will be
                 no penalty; it will not affect your compensation for participation up to that point.
             </p>
 
@@ -46,36 +46,36 @@
             </p>
 
             <p align="justify">
-                For participation in this study you may receive extra credit if your instructor of one of the 
-                participating classes has made the participation in this event an extra credit opportunity. Those 
+                For participation in this study you may receive extra credit if your instructor of one of the
+                participating classes has made the participation in this event an extra credit opportunity. Those
                 who qualify for the championship round will be invited to have lunch with astronaut in residence,
-                Catherine Coleman. The winner of the Mars Madness championship round will be able to create an 
+                Catherine Coleman. The winner of the Mars Madness championship round will be able to create an
                 event card for the next edition of Mars Madness.
             </p>
 
             <p align="justify">
-                Society may benefit from this research because an understanding of how people make decisions can 
-                help us to design regulations that sustain the use of shared resources, in this experiment in a 
-                colony on Mars.  You may benefit from this experience because you learn something about how an 
-                experiment is designed and conducted, what issues are of interest to social scientists and space 
-                research, and how your own cognitive abilities come into play in decision making situations. 
+                Society may benefit from this research because an understanding of how people make decisions can
+                help us to design regulations that sustain the use of shared resources, in this experiment in a
+                colony on Mars.  You may benefit from this experience because you learn something about how an
+                experiment is designed and conducted, what issues are of interest to social scientists and space
+                research, and how your own cognitive abilities come into play in decision making situations.
                 There are no foreseeable risks or discomforts to your participation.
             </p>
 
             <p align="justify">
-                The results of the research study may be published, but your name will not be used. Your 
-                responses will be confidential. However, due to the group nature of this study, complete 
-                confidentiality cannot be guaranteed. We contact your instructor that you have participated, 
-                if your instructor asked us to do so for an extra credit assignment. We also keep track who 
-                moves to next rounds. We delete personal information such as your email address from our database 
+                The results of the research study may be published, but your name will not be used. Your
+                responses will be confidential. However, due to the group nature of this study, complete
+                confidentiality cannot be guaranteed. We contact your instructor that you have participated,
+                if your instructor asked us to do so for an extra credit assignment. We also keep track who
+                moves to next rounds. We delete personal information such as your email address from our database
                 after the tournament is completed.
             </p>
 
             <p align="justify">
-                If you have any questions concerning the research study, contact me at 
+                If you have any questions concerning the research study, contact me at
                 <a href="mailto:Marco.Janssen@asu.edu">Marco.Janssen@asu.edu</a>.
             </p>
-            
+
             <p align="justify">Sincerely,</p>
             <p align="justify">Dr. Marco Janssen</p>
 
@@ -88,13 +88,13 @@
                     <BIcon class="h4 my-2" icon="envelope-fill" lg />
                     <BCol>
                         <div role="group">
-                            <BFormInput 
+                            <BFormInput
                                 id="input-live"
-                                v-model="email" 
-                                :state="emailState()" 
+                                v-model="email"
+                                :state="emailState()"
                                 aria-describedby="input-live-help input-live-feedback"
-                                placeholder="me@example.com" 
-                                required 
+                                placeholder="me@example.com"
+                                required
                                 trim
                             />
                             <BFormInvalidFeedback id="input-live-feedback">
@@ -103,7 +103,7 @@
                             <BFormText id="input-live-help">Your email.</BFormText>
                         </div>
                     </BCol>
-                        
+
                 </BRow>
             </BContainer>
 
@@ -115,8 +115,8 @@
             </div>
         </div>
         <template v-slot:modal-footer>
-            <p align="justify">This research has been reviewed and approved by the Social Behavioral IRB. You may talk to them at 
-               <b>(480) 965-6788</b> or by email at <a href="mailto:research.integrity@asu.edu">research.integrity@asu.edu</a> if: 
+            <p align="justify">This research has been reviewed and approved by the Social Behavioral IRB. You may talk to them at
+               <b>(480) 965-6788</b> or by email at <a href="mailto:research.integrity@asu.edu">research.integrity@asu.edu</a> if:
                <br/><br/>
                <ul>
                    <li>Your questions, concerns, or complaints are not being answered by the research team.</li>
@@ -132,8 +132,8 @@
 
 <script lang="ts">
 import { Component, Vue, Emit } from 'vue-property-decorator';
-import { BModal, BButton, BootstrapVueIcons, 
-         BFormInput, BContainer, BRow, BCol, 
+import { BModal, BButton, BootstrapVueIcons,
+         BFormInput, BContainer, BRow, BCol,
          BFormInvalidFeedback, BFormText } from 'bootstrap-vue';
 
 Vue.use(BootstrapVueIcons)
@@ -204,5 +204,5 @@ export default class ConsentFormModal extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@/stylesheets/tutorial/ConsentFormModal.scss';
+@import '@port-of-mars/client/stylesheets/tutorial/ConsentFormModal.scss';
 </style>
