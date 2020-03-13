@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import {AccomplishmentData} from "shared/types";
+import {AccomplishmentData} from "@port-of-mars/shared/types";
 
 @Component({})
 export default class ModalEvent extends Vue {

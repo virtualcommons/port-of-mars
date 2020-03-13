@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import { Vue, Component, Inject } from 'vue-property-decorator';
-import { INVESTMENTS, Resource, ResourceCostData } from 'shared/types';
+import { INVESTMENTS, Resource, ResourceCostData } from '@port-of-mars/shared/types';
 import DiscreteStatusBar from '@/components/gamedashboard/global/DiscreteStatusBar.vue';
 import CardInvestment from '@/components/gamedashboard/global/cards/CardInvestment.vue';
 import * as _ from 'lodash';

@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import { Vue, Component, Inject } from 'vue-property-decorator';
-import {Resource, ResourceAmountData, RESOURCES, INVESTMENTS, ResourceCostData, Investment } from "shared/types";
+import {Resource, ResourceAmountData, RESOURCES, INVESTMENTS, ResourceCostData, Investment } from "@port-of-mars/shared/types";
 import { GameRequestAPI } from '@/api/game/request';
 import DiscreteStatusBar from '@/components/gamedashboard/global/DiscreteStatusBar.vue';
 import CardInvestment from '@/components/gamedashboard/global/cards/CardInvestment.vue';
@@ -78,12 +78,12 @@ export default class InfluencesSelect extends Vue {
     units: number;
     cost: number;
   }) {
-    
-   
+
+
     const pendingInvestments = _.clone(
       this.$tstore.getters.player.pendingInvestments
     );
-    
+
     pendingInvestments[msg.name] = msg.units;
     if (
       msg.units >=  this.origPending[msg.name] &&

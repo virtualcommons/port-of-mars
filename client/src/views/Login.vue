@@ -38,7 +38,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import {GAME_PAGE, LOBBY_PAGE, LOGIN_PAGE} from "shared/routes";
+import {GAME_PAGE, LOBBY_PAGE, LOGIN_PAGE} from "@port-of-mars/shared/routes";
 
 @Component({})
 export default class Login extends Vue {

@@ -1,5 +1,5 @@
 import { Step, LEFT, TOP } from "@/types/tutorial";
-import { Phase,RESEARCHER } from "shared/types";
+import { Phase,RESEARCHER } from "@port-of-mars/shared/types";
 
 const steps:Array<Step> = [
     {
@@ -8,7 +8,7 @@ const steps:Array<Step> = [
       params: {
         placement: LEFT
       },
-     
+
       stateTransform: [
         {SET_GAME_PHASE:Phase.invest,
         SET_INVESTMENT_COSTS:{data:{
@@ -36,7 +36,7 @@ const steps:Array<Step> = [
       params: {
         placement: 'top'
       },
-      
+
     },
     {
       target: '.tour-investments',
@@ -44,7 +44,7 @@ const steps:Array<Step> = [
       params: {
         placement: 'top'
       },
-      
+
     },
     {
       target: '.tour-investments',
@@ -56,7 +56,7 @@ const steps:Array<Step> = [
       params: {
         placement: 'right'
       },
-      
+
     },
     {
       target: '.tour-investments',
@@ -95,7 +95,7 @@ const steps:Array<Step> = [
       params: {
         placement: 'right'
       },
-      
+
     },
     {
       target: '.tour-investments',

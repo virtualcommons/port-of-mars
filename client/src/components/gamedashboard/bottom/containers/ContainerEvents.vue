@@ -33,7 +33,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { MarsEventData, EventClientView } from 'shared/types';
+import { MarsEventData, EventClientView } from '@port-of-mars/shared/types';
 import EventContainer from '@/components/gamedashboard/bottom/events/EventContainer.vue';
 
 @Component({

@@ -1,4 +1,4 @@
-import { ChatMessageData } from 'shared/types';
+import { ChatMessageData } from '@port-of-mars/shared/types';
 import * as _ from 'lodash';
 import { State } from '@/store/state';
 

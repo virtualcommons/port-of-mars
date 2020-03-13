@@ -34,9 +34,9 @@
 <script lang="ts">
 import { Component, Inject, InjectReactive, Vue } from 'vue-property-decorator';
 import Round from '@/components/gamedashboard/top/Round.vue';
-import { PHASE_LABELS } from 'shared/types';
+import { PHASE_LABELS } from '@port-of-mars/shared/types';
 import ModalConfirmation from '@/components/gamedashboard/global/modals/ModalConfirmation.vue';
-import * as s from 'shared/types';
+import * as s from '@port-of-mars/shared/types';
 import { GameRequestAPI } from '@/api/game/request';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faTimesCircle } from '@fortawesome/free-regular-svg-icons/faTimesCircle';
@@ -57,12 +57,12 @@ export default class Phase extends Vue {
   get label() {
     // const lbl = PHASE_LABELS[this.$tstore.state.phase];
     this.$root.$emit('closeModal');
-    
+
     if (this.$store.state.phase === s.Phase.events) {
-      
+
       return `Event ${this.$tstore.state.marsEventsProcessed + 1}`;
     }
-    
+
     return PHASE_LABELS[this.$tstore.state.phase];
   }
 
@@ -89,7 +89,7 @@ export default class Phase extends Vue {
   private submitDone() {
     switch (this.phase) {
       case s.Phase.events:
-        if(this.$tstore.getters.currentEvent != undefined && 
+        if(this.$tstore.getters.currentEvent != undefined &&
           this.$tstore.getters.currentEvent.id == 'breakdownOfTrust'
           ){
           this.api.saveResourcesSelection(
@@ -108,7 +108,7 @@ export default class Phase extends Vue {
   private submitCancel() {
     switch (this.phase) {
       case s.Phase.invest:
-    
+
       default:
         this.api.setPlayerReadiness(false);
     }

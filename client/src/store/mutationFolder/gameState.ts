@@ -7,7 +7,7 @@ import {
   PlayerSetData,
   Role,
   ROLES
-} from 'shared/types';
+} from '@port-of-mars/shared/types';
 import { Vue } from 'vue-property-decorator';
 import * as _ from 'lodash';
 import {

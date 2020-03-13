@@ -66,7 +66,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { Resource, RESOURCES, Phase } from 'shared/types';
+import { Resource, RESOURCES, Phase } from '@port-of-mars/shared/types';
 
 @Component({})
 export default class ProfileInvestments extends Vue {

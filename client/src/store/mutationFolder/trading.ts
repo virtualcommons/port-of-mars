@@ -1,5 +1,5 @@
 import { State } from '@/store/state';
-import { Role, TradeData, ResourceAmountData } from 'shared/types';
+import { Role, TradeData, ResourceAmountData } from '@port-of-mars/shared/types';
 import { Vue } from 'vue-property-decorator';
 
 export default {

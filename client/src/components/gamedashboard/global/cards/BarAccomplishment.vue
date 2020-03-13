@@ -51,10 +51,10 @@ import {
   Investment,
   INVESTMENTS,
   Resource
-} from 'shared/types';
+} from '@port-of-mars/shared/types';
 import * as _ from 'lodash';
 import { GameRequestAPI } from '@/api/game/request';
-import { canPurchaseAccomplishment } from 'shared/validation';
+import { canPurchaseAccomplishment } from '@port-of-mars/shared/validation';
 
 @Component({})
 export default class BarAccomplishment extends Vue {

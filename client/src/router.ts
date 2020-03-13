@@ -14,7 +14,7 @@ import {
   PAGE_META,
   REGISTER_PAGE,
   TUTORIAL_PAGE
-} from "shared/routes";
+} from "@port-of-mars/shared/routes";
 import Register from "@/views/Register.vue";
 
 Vue.use(Router);

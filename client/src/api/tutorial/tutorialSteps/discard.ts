@@ -1,5 +1,5 @@
 import { Step } from "@/types/tutorial";
-import { Phase } from "shared/types";
+import { Phase } from "@port-of-mars/shared/types";
 
 const steps:Array<Step> = [
     {
@@ -20,4 +20,4 @@ const steps:Array<Step> = [
     },
 ]
 
-export default steps; 
+export default steps;

@@ -42,7 +42,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { Resource, RESOURCES } from 'shared/types';
+import { Resource, RESOURCES } from '@port-of-mars/shared/types';
 
 @Component({})
 export default class Player extends Vue {

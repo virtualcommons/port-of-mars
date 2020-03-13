@@ -54,7 +54,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { Role } from 'shared/types';
+import { Role } from '@port-of-mars/shared/types';
 
 @Component({})
 export default class VoteForPlayerHeroPariah extends Vue {

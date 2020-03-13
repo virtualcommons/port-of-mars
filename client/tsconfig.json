@@ -20,7 +20,7 @@
       "@/*": [
         "src/*"
       ],
-      "shared/*": [
+      "@port-of-mars/shared/*": [
         "../shared/*"
       ]
     },

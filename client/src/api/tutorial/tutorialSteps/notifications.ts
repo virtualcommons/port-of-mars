@@ -1,5 +1,5 @@
 import {Step} from "@/types/tutorial";
-import {RESEARCHER, Phase} from 'shared/types';
+import {RESEARCHER, Phase} from '@port-of-mars/shared/types';
 
 const steps:Array<Step> = [
     {

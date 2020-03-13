@@ -1,4 +1,4 @@
-import {TradeData, AccomplishmentData, ResourceAmountData, Resource} from "shared/types";
+import {TradeData, AccomplishmentData, ResourceAmountData, Resource} from "@port-of-mars/shared/types";
 import { initialStoreState, defaultInventory } from '@/store/state';
 import { GameRequestAPI } from "@/api/game/request";
 import * as _ from "lodash";
@@ -24,13 +24,13 @@ export class TutorialAPI extends GameRequestAPI {
 
     public apply(){
         this.store.replaceState(_.cloneDeep(initialStoreState));
-        
+
         if(this.stateStack.length == 0){
             this.isTaskComplete = true;
         }
-        
+
         for(const state of this.stateStack){
-            
+
             for(const commandSet of state){
                 for(const [command,value] of Object.entries(commandSet)){
 
@@ -49,7 +49,7 @@ export class TutorialAPI extends GameRequestAPI {
                 }
             }
         }
-        
+
     }
 
     get forcePause(){
@@ -64,10 +64,10 @@ export class TutorialAPI extends GameRequestAPI {
 
     public statePush(state:Array<StateTransform>|undefined){
        if(state != undefined){
-            
-        
+
+
             for(const commandSet of state){
-                
+
                 for(const [command,value] of Object.entries(commandSet)){
 
                     switch(command){
@@ -84,17 +84,17 @@ export class TutorialAPI extends GameRequestAPI {
                     }
                 }
             }
-            
+
             this.stateStack.push(state);
-            
+
        }
 
-       
+
     };
 
     public statePop(){
         this.stateStack.pop();
-        
+
         this.apply();
     };
 
@@ -103,7 +103,7 @@ export class TutorialAPI extends GameRequestAPI {
         this.requiredObject.required = false;
     }
 
-    
+
     public sendChatMessage(message:String){
         this.store.commit('ADD_TO_CHAT',{
             message,
@@ -112,10 +112,10 @@ export class TutorialAPI extends GameRequestAPI {
             round:0
         });
         this.isTaskComplete = true;
-        
+
         //since they are tied by reference, this change will be reflected in the step array object
         this.requiredObject.required = false;
-        
+
     };
 
     count:number= 1;
@@ -187,7 +187,7 @@ export class TutorialAPI extends GameRequestAPI {
     }
 
     public saveGetResources(resources: ResourceAmountData){
-        
+
         // const correctGet = defaultInventory();
         // correctGet.culture =3;
 

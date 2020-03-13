@@ -39,7 +39,7 @@
 
 <script lang="ts">
 import { Vue, Component, Inject, InjectReactive } from 'vue-property-decorator';
-import { Role, ROLES, Resource } from 'shared/types';
+import { Role, ROLES, Resource } from '@port-of-mars/shared/types';
 import { GameRequestAPI } from '@/api/game/request';
 
 @Component({})
@@ -57,12 +57,12 @@ export default class InfluencesDraw extends Vue {
   get playerRole(): Role {
     return this.$tstore.state.role;
   }
-  
+
   /**
    * Gets the influence categories from which a player can choose.
    * @return String array of influences
    *
-   */  
+   */
   get availableInfluences(): Array<string> {
     return ['science', 'government', 'legacy', 'finance', 'culture'];
   }
@@ -79,7 +79,7 @@ export default class InfluencesDraw extends Vue {
   }
 
   /**
-   * Sets default influence if the Player has not selected an 
+   * Sets default influence if the Player has not selected an
    * influence category.
    *
    */

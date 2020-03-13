@@ -1,9 +1,9 @@
 import { Room } from 'colyseus.js';
-import { WaitingResponses } from 'shared/waitingLobby/responses';
+import { WaitingResponses } from '@port-of-mars/shared/waitingLobby/responses';
 import { Schema } from '@colyseus/schema';
 import { TStore } from '@/plugins/tstore';
 import {VueRouter} from "vue-router/types/router";
-import {GAME_PAGE, LOGIN_PAGE} from "shared/routes";
+import {GAME_PAGE, LOGIN_PAGE} from "@port-of-mars/shared/routes";
 import WaitingLobby from "@/views/WaitingLobby.vue";
 
 // TODO: Temporary Implementation

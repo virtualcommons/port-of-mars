@@ -29,7 +29,7 @@
 
 <script lang="ts">
   import {Vue, Component, Inject} from 'vue-property-decorator';
-  import {Role, ROLES} from 'shared/types';
+  import {Role, ROLES} from '@port-of-mars/shared/types';
   import {GameRequestAPI} from "@/api/game/request";
   import _ from "lodash";
 

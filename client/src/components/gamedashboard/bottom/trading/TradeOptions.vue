@@ -61,8 +61,8 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import * as _ from 'lodash';
-import { Resource, ResourceAmountData } from 'shared/types';
-import { makeTradeSafe } from 'shared/validation';
+import { Resource, ResourceAmountData } from '@port-of-mars/shared/types';
+import { makeTradeSafe } from '@port-of-mars/shared/validation';
 @Component({})
 export default class TradeOptions extends Vue {
   @Prop({ default: '' }) text!: string;

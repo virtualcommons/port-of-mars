@@ -3,7 +3,7 @@ import {
   WaitingRequests,
   AcceptInvitation,
   DistributeGroups
-} from 'shared/waitingLobby/requests';
+} from '@port-of-mars/shared/waitingLobby/requests';
 
 export class WaitingRequestAPI {
   room!: Room;

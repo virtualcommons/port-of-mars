@@ -1,5 +1,5 @@
 import {Step, LEFT, TOP} from "@/types/tutorial";
-import {Phase, RESEARCHER, CURATOR} from "shared/types";
+import {Phase, RESEARCHER, CURATOR} from "@port-of-mars/shared/types";
 
 const steps: Array<Step> = [
   {

@@ -46,7 +46,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import {GAME_PAGE} from "shared/routes";
+import {GAME_PAGE} from "@port-of-mars/shared/routes";
 
 @Component({})
 export default class Register extends Vue {

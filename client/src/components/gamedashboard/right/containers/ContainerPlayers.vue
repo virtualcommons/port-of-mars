@@ -8,7 +8,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import Player from '@/components/gamedashboard/right/Player.vue';
-import { ROLES } from 'shared/types';
+import { ROLES } from '@port-of-mars/shared/types';
 
 @Component({
   components: {

@@ -14,7 +14,7 @@ import {
   MarsLogMessageData,
   QuizQuestionData,
   TradeDataWithNull
-} from 'shared/types';
+} from '@port-of-mars/shared/types';
 import _ from 'lodash';
 
 export interface PlayerClientData extends PlayerData {

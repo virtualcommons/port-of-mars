@@ -3,7 +3,7 @@
     <h1 class="animated pulse slower infinite gameOver-text">Game Over</h1>
     <div class="transmission-info">
       <h3>Replaying Logs before death...</h3>
-      
+
       <div class="message-container">
         <div v-for="log in marsLogEvents" :style="marsLogColor(log)"  class="message" :key="log.timestamp">
           <p class="category">{{ log.category }}</p>
@@ -28,7 +28,7 @@
 <script lang="ts">
 import {Vue, Component, InjectReactive, Inject} from 'vue-property-decorator';
 import { GameRequestAPI } from '@/api/game/request';
-import {MarsLogData} from 'shared/types';
+import {MarsLogData} from '@port-of-mars/shared/types';
 
 @Component({})
 export default class ContainerDefeat extends Vue {
@@ -40,7 +40,7 @@ export default class ContainerDefeat extends Vue {
 
   get marsLogEvents(){
     console.log(this.$store.getters.marsLogEvents);
-    return this.$store.getters.logs; 
+    return this.$store.getters.logs;
   }
 
   marsLogTime(timestamp: number) {

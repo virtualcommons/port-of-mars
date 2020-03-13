@@ -13,7 +13,7 @@
           Available
         </button>
         <button
-      
+
           @click="handleClick('purchased')"
           :style="handleStyle('purchased')"
           class="purchased"
@@ -56,7 +56,7 @@
 <script lang="ts">
 import { Vue, Component, Inject } from 'vue-property-decorator';
 import CardAccomplishment from '@/components/gamedashboard/global/cards/CardAccomplishment.vue';
-import { Phase } from 'shared/types';
+import { Phase } from '@port-of-mars/shared/types';
 import { TutorialAPI } from '@/api/tutorial/request';
 
 
@@ -73,7 +73,7 @@ export default class ContainerAccomplishments extends Vue {
   private isActive: boolean = true;
   private setWidth: string = '100%';
 
-  
+
 
   get purchasableAccomplishments() {
     return this.$store.getters.player.accomplishments.purchasable;

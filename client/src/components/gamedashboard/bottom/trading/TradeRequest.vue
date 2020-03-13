@@ -73,8 +73,8 @@ import {
   ResourceAmountData,
   RESOURCES,
   Role
-} from 'shared/types';
-import { canPlayerMakeTrade } from 'shared/validation';
+} from '@port-of-mars/shared/types';
+import { canPlayerMakeTrade } from '@port-of-mars/shared/validation';
 import { GameRequestAPI } from '@/api/game/request';
 import { defaultInventory } from '@/store/state';
 import { TutorialAPI } from '@/api/tutorial/request';

@@ -15,14 +15,14 @@ import {
   DeleteNotificationData,
   BondingThroughAdversityData,
   BreakdownOfTrustData,
-} from 'shared/game/requests';
+} from '@port-of-mars/shared/game/requests';
 import {
   AccomplishmentData,
   InvestmentData,
   TradeData,
   Role,
   Resource
-} from 'shared/types';
+} from '@port-of-mars/shared/types';
 import { MockRoom } from '@/types/tutorial';
 
 export class GameRequestAPI {

@@ -6,7 +6,7 @@ import {
   ResourceCostData,
   RESOURCES,
   Role
-} from 'shared/types';
+} from '@port-of-mars/shared/types';
 
 export default {
   SET_PENDING_INVESTMENT_AMOUNT(
@@ -27,7 +27,7 @@ export default {
   },
   SET_INVENTORY(state: State, payload: { data: InvestmentData; role: Role }) {
     for (const resource of RESOURCES) {
-      
+
       state.players[payload.role].inventory[resource] = payload.data[resource];
     }
   },

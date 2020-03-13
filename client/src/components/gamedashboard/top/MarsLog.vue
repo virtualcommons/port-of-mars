@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import {MarsLogData} from "shared/types";
+import {MarsLogData} from "@port-of-mars/shared/types";
 
 @Component({})
 export default class MarsLog extends Vue {

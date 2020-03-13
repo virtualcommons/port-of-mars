@@ -22,7 +22,7 @@ import ContainerDefault from '@/components/gamedashboard/bottom/containers/Conta
 import ContainerTrade from '@/components/gamedashboard/bottom/containers/ContainerTrade.vue';
 import ContainerPurchase from '@/components/gamedashboard/bottom/containers/ContainerPurchase.vue';
 import ContainerDiscard from '@/components/gamedashboard/bottom/containers/ContainerDiscard.vue';
-import { Phase } from 'shared/types';
+import { Phase } from '@port-of-mars/shared/types';
 
 @Component({
   components: {

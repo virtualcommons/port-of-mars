@@ -28,7 +28,7 @@ import {
   PIONEER,
   POLITICIAN,
   RESEARCHER,
-} from 'shared/types';
+} from '@port-of-mars/shared/types';
 import { GameRequestAPI } from '@/api/game/request';
 
 @Component({})

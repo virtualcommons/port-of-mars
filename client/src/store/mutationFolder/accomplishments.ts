@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import { State } from '@/store/state';
 import { getRole } from '@/store/mutationFolder/util';
-import { AccomplishmentData, Role } from 'shared/types';
+import { AccomplishmentData, Role } from '@port-of-mars/shared/types';
 
 export default {
   SET_ACTIVE_ACCOMPLISHMENTS(state: State, payload: { data: AccomplishmentData; role: Role }) {

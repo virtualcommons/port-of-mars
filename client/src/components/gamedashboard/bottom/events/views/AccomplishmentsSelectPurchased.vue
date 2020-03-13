@@ -32,7 +32,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { AccomplishmentData, RESEARCHER } from 'shared/types';
+import { AccomplishmentData, RESEARCHER } from '@port-of-mars/shared/types';
 import CardAccomplishment from '@/components/gamedashboard/global/cards/CardAccomplishment.vue';
 
 @Component({

@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { AccomplishmentData } from 'shared/types';
+import { AccomplishmentData } from '@port-of-mars/shared/types';
 
 @Component({})
 export default class CardEvent extends Vue {

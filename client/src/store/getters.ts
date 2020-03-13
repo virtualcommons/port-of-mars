@@ -1,5 +1,5 @@
 import { PlayerClientSet, State, PlayerClientData } from '@/store/state';
-import { ROLES, MarsEventData, EventClientView, MarsLogMessageData } from 'shared/types';
+import { ROLES, MarsEventData, EventClientView, MarsLogMessageData } from '@port-of-mars/shared/types';
 import _ from 'lodash';
 
 export default {
@@ -16,7 +16,7 @@ export default {
    * Gets the current player by the current role.
    * @param state The current state of the game.
    * @returns The current player.
-   * 
+   *
    */
   player(state: State): PlayerClientData {
     return state.players[state.role];
@@ -26,7 +26,7 @@ export default {
    * Gets mars log messages.
    * @param state The current state of the game.
    * @returns The array containing mars log messages.
-   * 
+   *
    */
   logs(state: State): MarsLogMessageData[] {
     return state.logs;
@@ -36,7 +36,7 @@ export default {
    * Gets set of players that do not include the user's player.
    * @param state The current state of the game.
    * @returns A set of 4 players.
-   * 
+   *
    */
   otherPlayers(state: State): Partial<PlayerClientSet> {
     let op: Partial<PlayerClientSet> = {};
@@ -52,7 +52,7 @@ export default {
    * Gets the current event.
    * @param state The current state of the game.
    * @returns The current event in effect.
-   * 
+   *
    */
   currentEvent(state: State): MarsEventData | undefined {
     const marsEvents = state.marsEvents;
@@ -69,7 +69,7 @@ export default {
    * During events phase, gets current view of the center bottom container.
    * @param state The current state of the game.
    * @returns The current event view.
-   * 
+   *
    */
   currentEventView(state: State): EventClientView {
     const marsEvents = state.marsEvents;
@@ -81,12 +81,12 @@ export default {
     }
     return 'NO_CHANGE';
   },
-  
+
   /**
    * Gets Audit event if it has been drawn for a given round.
    * @param state The current state of the game.
-   * @returns The boolean value that determines if an audit event exists 
-   * 
+   * @returns The boolean value that determines if an audit event exists
+   *
    */
   isUnderAudit(state: State): boolean {
     const marsEvents = state.marsEvents;

@@ -119,7 +119,7 @@ import CompletedQuizModal from '@/components/tutorial/CompletedQuizModal.vue';
 import GameDashboard from '@/components/GameDashboard.vue';
 import { TutorialAPI } from '@/api/tutorial/request';
 import { Step } from '@/types/tutorial';
-import { CURATOR, Phase, QuizQuestionData, RESEARCHER } from 'shared/types';
+import { CURATOR, Phase, QuizQuestionData, RESEARCHER } from '@port-of-mars/shared/types';
 import * as _ from 'lodash';
 
 import { tutorialSteps } from '@/api/tutorial/tutorialSteps';

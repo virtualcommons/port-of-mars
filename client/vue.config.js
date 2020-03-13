@@ -11,7 +11,7 @@ if (fs.existsSync('/run/secrets/sentry_dsn')) {
 
 module.exports = {
   chainWebpack: config => {
-    config.resolve.alias.set('shared', path.resolve('../shared'));
+    config.resolve.alias.set('@port-of-mars/shared', path.resolve('../shared'));
 
     const types = ['vue-modules', 'vue', 'normal-modules', 'normal'];
     types.forEach(type => addStyleResource(config.module.rule('scss').oneOf(type)));

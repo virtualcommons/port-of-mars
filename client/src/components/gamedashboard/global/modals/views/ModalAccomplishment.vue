@@ -30,14 +30,14 @@ import {
   InjectReactive,
   Inject
 } from 'vue-property-decorator';
-import { canPurchaseAccomplishment } from 'shared/validation';
+import { canPurchaseAccomplishment } from '@port-of-mars/shared/validation';
 import {
   AccomplishmentData,
   Investment,
   INVESTMENTS,
   Resource,
   RESOURCES
-} from 'shared/types';
+} from '@port-of-mars/shared/types';
 import * as _ from 'lodash';
 
 @Component({})

@@ -59,7 +59,7 @@ import { GameRequestAPI } from '@/api/game/request';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons/faPaperPlane';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { ChatMessageData } from 'shared/types';
+import { ChatMessageData } from '@port-of-mars/shared/types';
 
 library.add(faPaperPlane);
 Vue.component('font-awesome-icon', FontAwesomeIcon);

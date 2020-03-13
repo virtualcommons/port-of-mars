@@ -1,4 +1,4 @@
-import {Phase} from "shared/types";
+import {Phase} from "@port-of-mars/shared/types";
 <template>
   <div class="container-phase">
     <div class="phase-row">
@@ -34,7 +34,7 @@ import {Phase} from "shared/types";
   import Phase from '@/components/gamedashboard/top/Phase.vue';
   import CardEvent from '@/components/gamedashboard/global/cards/CardEvent.vue';
   import MarsLog from '@/components/gamedashboard/top/MarsLog.vue';
-  import * as shared from 'shared/types'
+  import * as shared from '@port-of-mars/shared/types'
 
   @Component({
   components: {

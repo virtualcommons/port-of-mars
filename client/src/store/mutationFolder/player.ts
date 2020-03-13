@@ -1,5 +1,5 @@
 import { State } from '@/store/state';
-import { AccomplishmentSetData, InvestmentData, INVESTMENTS, Role } from 'shared/types';
+import { AccomplishmentSetData, InvestmentData, INVESTMENTS, Role } from '@port-of-mars/shared/types';
 import { Vue } from 'vue-property-decorator';
 
 function SET_PLAYER_ROLE(state: State, payload: Role) {

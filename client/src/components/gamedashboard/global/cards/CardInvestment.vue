@@ -54,7 +54,7 @@ import {
   InjectReactive,
   Inject
 } from 'vue-property-decorator';
-import { Phase, Resource, Role } from 'shared/types';
+import { Phase, Resource, Role } from '@port-of-mars/shared/types';
 import { GameRequestAPI } from '@/api/game/request';
 
 @Component({})

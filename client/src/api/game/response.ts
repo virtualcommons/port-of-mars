@@ -9,8 +9,8 @@ import {
   ROLES,
   TradeData,
   Role
-} from 'shared/types';
-import { Responses } from 'shared/game/responses';
+} from '@port-of-mars/shared/types';
+import { Responses } from '@port-of-mars/shared/game/responses';
 import { DataChange, Schema } from '@colyseus/schema';
 import { TStore } from '@/plugins/tstore';
 import { rootCertificates } from 'tls';

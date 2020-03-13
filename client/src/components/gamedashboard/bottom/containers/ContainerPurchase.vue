@@ -31,8 +31,8 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import BarAccomplishment from '@/components/gamedashboard/global/cards/BarAccomplishment.vue';
-import { canPurchaseAccomplishment } from 'shared/validation';
-import { AccomplishmentData } from 'shared/types';
+import { canPurchaseAccomplishment } from '@port-of-mars/shared/validation';
+import { AccomplishmentData } from '@port-of-mars/shared/types';
 
 @Component({
   components: {

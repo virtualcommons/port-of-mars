@@ -53,9 +53,9 @@
 </template>
 
 <script lang="ts">
-import {isDev} from 'shared/settings';
+import {isDev} from '@port-of-mars/shared/settings';
 import { Vue, Component, Inject } from 'vue-property-decorator';
-import { ROLES } from 'shared/types';
+import { ROLES } from '@port-of-mars/shared/types';
 import { Client } from 'colyseus.js';
 import { applyWaitingServerResponses } from '@/api/waitingLobby/response';
 import { WaitingRequestAPI } from '@/api/waitingLobby/request';

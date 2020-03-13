@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { Phase } from 'shared/types';
+import { Phase } from '@port-of-mars/shared/types';
 import { EnvironmentMode } from '@/settings';
 import MasterComponent from '@/components/MasterComponent.vue';
 import ModalContainer from '@/components/gamedashboard/global/modals/ModalContainer.vue';
@@ -44,7 +44,7 @@ export default class GameDashboard extends Vue {
   get phase() {
     return Phase;
   }
-  
+
   /**
    * Gets the current phase of the game.
    * @returns The current phase.
@@ -56,7 +56,7 @@ export default class GameDashboard extends Vue {
   /**
    * Gets the string value of the current environment.
    * @return The environment.
-   * 
+   *
    */
   get environment() {
     return this.env.environment;

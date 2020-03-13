@@ -37,8 +37,8 @@ import {
   Resource,
   ResourceAmountData,
   RESOURCES
-} from 'shared/types';
-import { canPurchaseAccomplishment } from 'shared/validation';
+} from '@port-of-mars/shared/types';
+import { canPurchaseAccomplishment } from '@port-of-mars/shared/validation';
 import * as _ from 'lodash';
 
 @Component({})

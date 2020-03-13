@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { MarsEventData, EventClientView } from 'shared/types';
+import { MarsEventData, EventClientView } from '@port-of-mars/shared/types';
 import EventVote from '@/components/gamedashboard/bottom/events/EventVote.vue';
 import EventInfluences from '@/components/gamedashboard/bottom/events/EventInfluences.vue';
 import EventAccomplishments from '@/components/gamedashboard/bottom/events/EventAccomplishments.vue';
