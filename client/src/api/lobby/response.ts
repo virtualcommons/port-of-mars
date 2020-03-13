@@ -1,9 +1,6 @@
 import { Room } from 'colyseus.js';
-import { WaitingResponses } from '@port-of-mars/shared/waitingLobby/responses';
-import { Schema } from '@colyseus/schema';
-import { TStore } from '@port-of-mars/client/plugins/tstore';
-import {VueRouter} from "vue-router/types/router";
-import {GAME_PAGE, LOGIN_PAGE} from "@port-of-mars/shared/routes";
+import { WaitingResponses } from '@port-of-mars/shared/lobby/responses';
+import { GAME_PAGE, LOGIN_PAGE } from "@port-of-mars/shared/routes";
 import WaitingLobby from "@port-of-mars/client/views/WaitingLobby.vue";
 
 // TODO: Temporary Implementation
@@ -31,7 +28,7 @@ export function applyWaitingServerResponses<T>(room: Room, component: WaitingLob
         const matchData: any = msg.matchData;
         component.$ajax.reservation = matchData;
         router.push({ name: GAME_PAGE });
-        room.send({ kind: 'accept-invitation'});
+        room.send({ kind: 'accept-invitation' });
         break;
       case 'removed-client-from-lobby':
         // TODO: HANDLE WAITING LOBBY DISCONNECT

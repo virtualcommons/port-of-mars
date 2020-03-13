@@ -12,7 +12,7 @@ import connectRedis from 'connect-redis';
 import * as Sentry from '@sentry/node';
 import { Server } from 'colyseus';
 import { GameRoom } from '@port-of-mars/server/rooms/game';
-import { RankedLobbyRoom } from '@port-of-mars/server/rooms/waitingLobby';
+import { RankedLobbyRoom } from '@port-of-mars/server/rooms/lobby';
 import { findUserById, getOrCreateUser } from '@port-of-mars/server/services/account';
 import { User } from '@port-of-mars/server/entity/User';
 import { DBPersister } from '@port-of-mars/server/services/persistence';

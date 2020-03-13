@@ -1,4 +1,4 @@
-import { Client, Room } from 'colyseus.js';
+import { Room } from 'colyseus.js';
 import {
   Requests,
   SendChatMessageData,
@@ -110,8 +110,8 @@ export class GameRequestAPI {
     this.send(msg);
   }
 
-  public saveResourcesSelection(savedResources: InvestmentData){
-    const msg: BreakdownOfTrustData = {kind: 'breakdown-of-trust', savedResources};
+  public saveResourcesSelection(savedResources: InvestmentData) {
+    const msg: BreakdownOfTrustData = { kind: 'breakdown-of-trust', savedResources };
     this.send(msg);
   }
 }

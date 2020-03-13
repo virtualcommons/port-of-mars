@@ -53,12 +53,11 @@
 </template>
 
 <script lang="ts">
-import {isDev} from '@port-of-mars/shared/settings';
 import { Vue, Component, Inject } from 'vue-property-decorator';
 import { ROLES } from '@port-of-mars/shared/types';
 import { Client } from 'colyseus.js';
-import { applyWaitingServerResponses } from '@port-of-mars/client/api/waitingLobby/response';
-import { WaitingRequestAPI } from '@port-of-mars/client/api/waitingLobby/request';
+import { applyWaitingServerResponses } from '@port-of-mars/client/api/lobby/response';
+import { WaitingRequestAPI } from '@port-of-mars/client/api/lobby/request';
 import moment from 'moment';
 
 @Component({})
@@ -103,11 +102,7 @@ export default class WaitingLobby extends Vue {
     }, 8000);
   }
 
-  isDev() {
-    return isDev();
-  }
-
-  get playerRole() {
+   playerRole() {
     return this.$tstore.state.role;
   }
 
