@@ -36,6 +36,8 @@ export class GameRoom extends Room<GameState> implements Game {
   persister!: Persister;
   gameId!: number;
 
+  autoDispose = false;
+
   async onAuth(client: Client, options: any, request?: http.IncomingMessage) {
     const user = await findUserById((request as any).session.passport.user);
     if (user && Object.keys(this.state.userRoles).includes(user.username)) {
@@ -52,37 +54,6 @@ export class GameRoom extends Room<GameState> implements Game {
     const event = new TakenStateSnapshot(snapshot);
     this.persister.applyMany([event], this.getMetadata());
     this.clock.setInterval(this.gameLoop.bind(this), 1000);
-  }
-
-  onJoin(client: Client, options: any, auth: User) {
-    const role = this.state.userRoles[auth.username];
-    this.safeSend(client, {kind: 'set-player-role', role});
-  }
-
-  onMessage(client: Client, message: Requests) {
-    const cmd = this.prepareRequest(message, client);
-    const events = cmd.execute();
-    this.state.applyMany(events);
-    this.persister.applyMany(this.gameId, events);
-  }
-
-  async onLeave(client: Client, consented: boolean) {
-    const player = this.state.getPlayer(client.auth.username);
-    logger.info('player left: ', player);
-    try {
-      if (consented) {
-        logger.info('player closed the window or left manually');
-      }
-      await this.allowReconnection(client, 60*4);
-      logger.info("player reconnected!");
-      this.safeSend(client, { kind: "set-player-role", role: player.role });
-    } catch (e) {
-      logger.info(e);
-    }
-  }
-
-  async onDispose() {
-    logger.info('Disposing of room', this.roomId)
   }
 
   safeSend(client: Client, msg: Responses) {
@@ -163,5 +134,26 @@ export class GameRoom extends Room<GameState> implements Game {
     this.state.applyMany(events);
     this.persister.applyMany(events, this.getMetadata());
   }
-  onLeave(client: Client, consented: boolean) {}
+
+  async onLeave(client: Client, consented: boolean) {
+    const player = this.state.getPlayer(client.auth.username);
+    logger.info('player left:', player);
+    try {
+      await this.allowReconnection(client);
+      logger.info("player reconnected to", this.roomId);
+    } catch (e) {
+      logger.fatal(e);
+    }
+  }
+
+  onJoin(client: Client, options: any, auth: User) {
+    logger.info('joined game', this.roomId);
+    const role = this.state.userRoles[auth.username];
+    this.safeSend(client, {kind: 'set-player-role', role});
+  }
+
+  async onDispose() {
+    logger.info('Disposing of room', this.roomId)
+  }
+
 }
