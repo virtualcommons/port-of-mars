@@ -108,6 +108,13 @@ export interface MarsEventData {
   timeDuration?: number;
 }
 
+export enum MarsLogCategory {
+  systemHealth,
+  event,
+  trade,
+  accomplishment
+}
+
 export interface MarsLogMessageData {
   performedBy: Role | ServerRole;
   category: string;
