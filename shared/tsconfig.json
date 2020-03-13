@@ -2,21 +2,14 @@
   "compilerOptions": {
     "outDir": "lib",
     "lib": ["es6"],
+    "declaration": true,
     "target": "es6",
     "module": "commonjs",
     "strict": true,
     "emitDecoratorMetadata": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
-    "baseUrl": ".",
-    "paths": {
-      "@port-of-mars/server/*": [
-        "src/*"
-      ],
-      "@port-of-mars/shared/*": [
-        "../shared/src/*"
-      ]
-    }
+    "baseUrl": "./src"
   },
   "include": [
       "**/*.ts"

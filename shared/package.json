@@ -1,0 +1,10 @@
+{
+  "name": "@port-of-mars/shared",
+  "license": "AGPL-3.0-or-later",
+  "scripts": {
+    "build": "tsc -p ."
+  },
+  "devDependencies": {
+    "@types/node": "^13.9.1"
+  }
+}

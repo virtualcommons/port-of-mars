@@ -5,6 +5,6 @@ module.exports = {
   moduleNameMapper: {
     '\\.(css|less)$': '<rootDir>/tests/styleMock.ts',
     '^@port-of-mars/client/(.*)$': '<rootDir>/src/$1',
-    '^@port-of-mars/shared/(.*)$': '/code/shared/$1'
+    '^@port-of-mars/shared/(.*)$': '/code/shared/src/$1'
   },
 };

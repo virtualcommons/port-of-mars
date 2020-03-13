@@ -21,7 +21,7 @@
         "src/*"
       ],
       "@port-of-mars/shared/*": [
-        "../shared/*"
+        "../shared/src/*"
       ]
     },
     "lib": [
