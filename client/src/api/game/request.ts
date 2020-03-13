@@ -15,7 +15,7 @@ import {
   DeleteNotificationData,
   BondingThroughAdversityData,
   BreakdownOfTrustData,
-} from 'shared/requests';
+} from 'shared/game/requests';
 import {
   AccomplishmentData,
   InvestmentData,

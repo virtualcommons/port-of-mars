@@ -1,4 +1,4 @@
-import {Role} from "./types";
+import {Role} from "../types";
 
 export interface SetPlayerRole {
     kind: 'set-player-role'

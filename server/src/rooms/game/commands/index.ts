@@ -1,4 +1,4 @@
-import * as req from 'shared/requests';
+import * as req from 'shared/game/requests';
 import { InvestmentData, Phase, TradeData, Role, INVESTMENTS } from 'shared/types';
 import { Player } from '@/rooms/game/state';
 import {

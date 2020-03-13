@@ -1,4 +1,4 @@
-import { InvestmentData, TradeData, Role, Resource } from './types';
+import { InvestmentData, TradeData, Role, Resource } from '../types';
 
 export interface SendChatMessageData {
   kind: 'send-chat-message';

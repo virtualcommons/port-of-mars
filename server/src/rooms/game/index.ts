@@ -1,7 +1,7 @@
 import {Client, Delayed, Room} from 'colyseus';
-import { Requests } from 'shared/requests';
-import { Responses } from 'shared/responses';
-import { GameState, Player } from '@/rooms/game/state';
+import {Requests} from 'shared/game/requests';
+import {Responses} from 'shared/game/responses';
+import {GameState, Player} from '@/rooms/game/state';
 import {
   AcceptTradeRequestCmd,
   PurchaseAccomplishmentCmd,

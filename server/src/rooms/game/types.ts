@@ -1,6 +1,6 @@
 import {Client, Room} from "colyseus";
 import {GameState, Player} from "@/rooms/game/state";
-import {Responses} from "shared/responses";
+import {Responses} from "shared/game/responses";
 import {MarsEventData, Role} from "shared/types";
 import * as ge from "@/rooms/game/events/types";
 

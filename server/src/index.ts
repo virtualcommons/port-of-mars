@@ -13,7 +13,6 @@ import * as Sentry from '@sentry/node';
 import { Server } from 'colyseus';
 import { GameRoom } from '@/rooms/game';
 import { RankedLobbyRoom } from '@/rooms/waitingLobby';
-import { mockGameInitOpts } from '@/util';
 import { findUserById, getOrCreateUser } from '@/services/account';
 import { User } from '@/entity/User';
 import { DBPersister } from '@/services/persistence';
@@ -23,7 +22,6 @@ import * as fs from 'fs';
 import { registrationRouter } from "@/routes/registration";
 import { settings } from "@/settings";
 import { isDev } from 'shared/settings';
-import cookie from 'cookie';
 
 const logger = settings.logging.getLogger(__filename);
 const NODE_ENV = process.env.NODE_ENV || 'development';
