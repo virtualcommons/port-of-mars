@@ -1,4 +1,4 @@
-import {MarsEventData} from "shared/types";
+import {MarsEventData} from "@port-of-mars/shared/types";
 import * as _ from "lodash";
 import {MarsEventDeckSerialized} from "@port-of-mars/server/rooms/game/state";
 import {getAllMarsEvents} from "@port-of-mars/server/data/MarsEvents";

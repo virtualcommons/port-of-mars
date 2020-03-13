@@ -7,7 +7,7 @@ import {
   StateSnapshotTaken,
   TimeInvested
 } from "@port-of-mars/server/rooms/game/events";
-import {CURATOR, Phase} from "shared/types";
+import {CURATOR, Phase} from "@port-of-mars/shared/types";
 import {toDBGameEvent} from "@port-of-mars/server/services/persistence";
 import {GameReplayer} from "@port-of-mars/server/services/replay";
 

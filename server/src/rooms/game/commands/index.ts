@@ -1,5 +1,5 @@
-import * as req from 'shared/game/requests';
-import { InvestmentData, Phase, TradeData, Role, INVESTMENTS } from 'shared/types';
+import * as req from '@port-of-mars/shared/game/requests';
+import { InvestmentData, Phase, TradeData, Role, INVESTMENTS } from '@port-of-mars/shared/types';
 import { Player } from '@port-of-mars/server/rooms/game/state';
 import {
   AcceptTradeRequest,
@@ -29,7 +29,7 @@ import { Client } from 'colyseus';
 import { Game } from '@port-of-mars/server/rooms/game/types';
 import { Command } from '@port-of-mars/server/rooms/game/commands/types';
 import { GameEvent } from '@port-of-mars/server/rooms/game/events/types';
-import { tradeIsValid } from "shared/validation";
+import { tradeIsValid } from "@port-of-mars/shared/validation";
 import {settings} from "@port-of-mars/server/settings";
 
 const logger = settings.logging.getLogger(__filename);

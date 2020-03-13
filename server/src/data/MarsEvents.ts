@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import {MarsEventData} from 'shared/types';
+import {MarsEventData} from '@port-of-mars/shared/types';
 
 export function getAllMarsEvents(): Array<[MarsEventData, number]> {
   return marsEvents;

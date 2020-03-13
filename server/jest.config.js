@@ -8,6 +8,6 @@ module.exports = {
   },
   moduleNameMapper: {
     '^@port-of-mars/server/(.*)$': '<rootDir>/src/$1',
-    '^shared/(.*)$': '<rootDir>/../shared/$1'
+    '^@port-of-mars/shared/(.*)$': '<rootDir>/../shared/$1'
   },
 };

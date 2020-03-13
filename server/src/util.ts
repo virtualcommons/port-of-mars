@@ -1,7 +1,7 @@
 import {Loader, Resolver} from "typeorm-fixtures-cli/dist";
 import path from "path";
 import _ from "lodash";
-import {MarsEventData, ROLES} from "shared/types";
+import {MarsEventData, ROLES} from "@port-of-mars/shared/types";
 import {GameOpts, GameStateOpts, Persister} from "@port-of-mars/server/rooms/game/types";
 import * as assert from "assert";
 import {ConsolePersister, DBPersister} from "@port-of-mars/server/services/persistence";
@@ -9,7 +9,7 @@ import * as to from "typeorm";
 import {expandCopies} from "@port-of-mars/server/rooms/game/state/marsEvents/common";
 import {getAllMarsEvents} from "@port-of-mars/server/data/MarsEvents";
 import {TournamentRound} from "@port-of-mars/server/entity/TournamentRound";
-import {Page, PAGE_META} from "shared/routes";
+import {Page, PAGE_META} from "@port-of-mars/shared/routes";
 import {settings} from "@port-of-mars/server/settings";
 
 export function getConnection(): to.Connection {

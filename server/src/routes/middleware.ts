@@ -3,7 +3,7 @@ import { NextFunction } from 'connect';
 import {settings} from '@port-of-mars/server/settings';
 import _ from 'lodash';
 import { toUrl } from '@port-of-mars/server/util';
-import { LOGIN_PAGE } from 'shared/routes';
+import { LOGIN_PAGE } from '@port-of-mars/shared/routes';
 
 const logger = settings.logging.getLogger(__filename);
 

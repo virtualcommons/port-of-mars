@@ -5,7 +5,7 @@ import {
 } from "@port-of-mars/server/rooms/game/state/marsEvents/common";
 import {GameState} from "@port-of-mars/server/rooms/game/state";
 import * as _ from "lodash";
-import {CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER, Role, ROLES, Resource, InvestmentData} from "shared/types";
+import {CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER, Role, ROLES, Resource, InvestmentData} from "@port-of-mars/shared/types";
 
 
 const _dispatch: { [id: string]: MarsEventStateConstructor } = {};

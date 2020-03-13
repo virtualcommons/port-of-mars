@@ -13,7 +13,7 @@
       "@port-of-mars/server/*": [
         "src/*"
       ],
-      "shared/*": [
+      "@port-of-mars/shared/*": [
         "../shared/*"
       ]
     }

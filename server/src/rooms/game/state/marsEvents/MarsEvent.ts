@@ -1,5 +1,5 @@
 import {Schema, type} from "@colyseus/schema";
-import {EventClientView, MarsEventData} from "shared/types";
+import {EventClientView, MarsEventData} from "@port-of-mars/shared/types";
 import {MarsEventState} from "@port-of-mars/server/rooms/game/state/marsEvents/common";
 import {constructState} from "@port-of-mars/server/rooms/game/state/marsEvents/state";
 import {GameState} from "@port-of-mars/server/rooms/game/state";

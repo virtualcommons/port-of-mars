@@ -1,5 +1,5 @@
 import * as _ from 'lodash'
-import {AccomplishmentData, Role} from 'shared/types';
+import {AccomplishmentData, Role} from '@port-of-mars/shared/types';
 
 type AccomplishmentPartitioned = { [role: string]: Array<AccomplishmentData> }
 

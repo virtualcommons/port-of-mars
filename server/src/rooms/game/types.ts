@@ -1,7 +1,7 @@
 import {Client, Room} from "colyseus";
 import {GameState, Player} from "@port-of-mars/server/rooms/game/state";
-import {Responses} from "shared/game/responses";
-import {MarsEventData, Role} from "shared/types";
+import {Responses} from "@port-of-mars/shared/game/responses";
+import {MarsEventData, Role} from "@port-of-mars/shared/types";
 import * as ge from "@port-of-mars/server/rooms/game/events/types";
 
 export type PlayerReadiness = { [role in Role]: boolean }

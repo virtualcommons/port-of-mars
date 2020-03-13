@@ -1,6 +1,6 @@
 import {Client, Delayed, Room} from 'colyseus';
-import {Requests} from 'shared/game/requests';
-import {Responses} from 'shared/game/responses';
+import {Requests} from '@port-of-mars/shared/game/requests';
+import {Responses} from '@port-of-mars/shared/game/responses';
 import {GameState, Player} from '@port-of-mars/server/rooms/game/state';
 import {
   AcceptTradeRequestCmd,

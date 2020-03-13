@@ -1,14 +1,14 @@
 import { Room, Client, matchMaker } from 'colyseus';
 import schedule from 'node-schedule';
-import { ROLES } from 'shared/types';
+import { ROLES } from '@port-of-mars/shared/types';
 import { buildGameOpts } from '@port-of-mars/server/util';
 import { RoomGameState } from '@port-of-mars/server/rooms/waitingLobby/state';
 import {settings} from "@port-of-mars/server/settings";
 import {findUserById} from "@port-of-mars/server/services/account";
 import * as http from "http";
-import {WaitingRequests} from "shared/waitingLobby/requests";
-import {isDev} from "shared/settings";
-import {WaitingResponses} from "shared/waitingLobby/responses";
+import {WaitingRequests} from "@port-of-mars/shared/waitingLobby/requests";
+import {isDev} from "@port-of-mars/shared/settings";
+import {WaitingResponses} from "@port-of-mars/shared/waitingLobby/responses";
 import {Persister} from "@port-of-mars/server/rooms/game/types";
 
 const logger = settings.logging.getLogger(__filename);

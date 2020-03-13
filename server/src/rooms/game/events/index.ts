@@ -7,7 +7,7 @@ import {
   Role,
   TradeData,
   Resource
-} from 'shared/types';
+} from '@port-of-mars/shared/types';
 import {
   ChatMessage,
   GameState,
@@ -24,7 +24,7 @@ import { CompulsivePhilanthropy, PersonalGain,
        } 
         from '@port-of-mars/server/rooms/game/state/marsEvents/state';
 import * as entities from '@port-of-mars/server/entity/GameEvent';
-import {tradeCanBeCompleted} from "shared/validation";
+import {tradeCanBeCompleted} from "@port-of-mars/shared/validation";
 import _ from "lodash";
 
 class GameEventDeserializer {

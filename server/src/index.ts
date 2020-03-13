@@ -21,7 +21,7 @@ import { quizRouter } from '@port-of-mars/server/routes/quiz';
 import * as fs from 'fs';
 import { registrationRouter } from "@port-of-mars/server/routes/registration";
 import { settings } from "@port-of-mars/server/settings";
-import { isDev } from 'shared/settings';
+import { isDev } from '@port-of-mars/shared/settings';
 
 const logger = settings.logging.getLogger(__filename);
 const NODE_ENV = process.env.NODE_ENV || 'development';

@@ -27,7 +27,7 @@ import {
   TradeSetData,
   notification,
   RESOURCES
-} from 'shared/types';
+} from '@port-of-mars/shared/types';
 import _ from 'lodash';
 import * as assert from 'assert';
 import { getRandomIntInclusive } from '@port-of-mars/server/util';
