@@ -6,8 +6,8 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn
 } from 'typeorm';
-import { Question } from '@/entity/Question';
-import { QuizSubmission } from '@/entity/QuizSubmission';
+import { Question } from '@port-of-mars/server/entity/Question';
+import { QuizSubmission } from '@port-of-mars/server/entity/QuizSubmission';
 
 @Entity()
 export class QuestionResponse {

@@ -1,7 +1,7 @@
 import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {Role, ROLES} from "shared/types";
 import {User} from "./User";
-import {Game} from "@/entity/Game";
+import {Game} from "@port-of-mars/server/entity/Game";
 
 @Entity()
 export class Player {

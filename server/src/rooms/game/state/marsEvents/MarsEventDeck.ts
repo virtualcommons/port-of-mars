@@ -1,8 +1,8 @@
 import {MarsEventData} from "shared/types";
 import * as _ from "lodash";
-import {MarsEventDeckSerialized} from "@/rooms/game/state";
-import {getAllMarsEvents} from "@/data/MarsEvents";
-import {expandCopies} from "@/rooms/game/state/marsEvents/common";
+import {MarsEventDeckSerialized} from "@port-of-mars/server/rooms/game/state";
+import {getAllMarsEvents} from "@port-of-mars/server/data/MarsEvents";
+import {expandCopies} from "@port-of-mars/server/rooms/game/state/marsEvents/common";
 
 class MarsEventsDeck {
   position: number;

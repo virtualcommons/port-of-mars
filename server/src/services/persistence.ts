@@ -1,16 +1,16 @@
 import {Connection, Repository} from "typeorm";
-import {Game} from "@/entity/Game";
-import {User} from "@/entity/User";
-import {Player} from "@/entity/Player";
-import * as ge from "@/rooms/game/events/types";
-import {GameOpts, Persister} from "@/rooms/game/types";
+import {Game} from "@port-of-mars/server/entity/Game";
+import {User} from "@port-of-mars/server/entity/User";
+import {Player} from "@port-of-mars/server/entity/Player";
+import * as ge from "@port-of-mars/server/rooms/game/events/types";
+import {GameOpts, Persister} from "@port-of-mars/server/rooms/game/types";
 import * as assert from "assert";
-import {GameEvent} from "@/entity/GameEvent";
+import {GameEvent} from "@port-of-mars/server/entity/GameEvent";
 import Mutex from "async-mutex/lib/Mutex";
 import {ClockTimer} from "@gamestdio/timer/lib/ClockTimer";
 import _ from "lodash";
-import {getConnection} from "@/util";
-import {TournamentRound} from "@/entity/TournamentRound";
+import {getConnection} from "@port-of-mars/server/util";
+import {TournamentRound} from "@port-of-mars/server/entity/TournamentRound";
 
 function toDBRawGameEvent(gameId: number, gameEvent: ge.GameEvent) {
   const ev = gameEvent.serialize();

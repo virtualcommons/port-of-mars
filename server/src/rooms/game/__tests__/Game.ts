@@ -1,9 +1,9 @@
-import {GameState, AccomplishmentSet, Player, Trade} from "@/rooms/game/state";
+import {GameState, AccomplishmentSet, Player, Trade} from "@port-of-mars/server/rooms/game/state";
 import {CURATOR, PIONEER, RESEARCHER, ENTREPRENEUR, TradeData, Role} from "shared/types";
-import {getAccomplishmentByID, getAccomplishmentIDs} from "@/data/Accomplishment";
+import {getAccomplishmentByID, getAccomplishmentIDs} from "@port-of-mars/server/data/Accomplishment";
 import * as _ from 'lodash'
-import {mockGameInitOpts, mockGameStateInitOpts} from "@/util";
-import {ConsolePersister} from "@/services/persistence";
+import {mockGameInitOpts, mockGameStateInitOpts} from "@port-of-mars/server/util";
+import {ConsolePersister} from "@port-of-mars/server/services/persistence";
 import {Connection, createConnection} from "typeorm";
 import shell from "shelljs";
 import {tradeCanBeCompleted} from "shared/validation";

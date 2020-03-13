@@ -1,15 +1,15 @@
-import {GameState} from "@/rooms/game/state";
-import {mockGameStateInitOpts} from "@/util";
+import {GameState} from "@port-of-mars/server/rooms/game/state";
+import {mockGameStateInitOpts} from "@port-of-mars/server/util";
 import {
   EnteredInvestmentPhase,
   EnteredPurchasePhase,
   EnteredTradePhase,
   StateSnapshotTaken,
   TimeInvested
-} from "@/rooms/game/events";
+} from "@port-of-mars/server/rooms/game/events";
 import {CURATOR, Phase} from "shared/types";
-import {toDBGameEvent} from "@/services/persistence";
-import {GameReplayer} from "@/services/replay";
+import {toDBGameEvent} from "@port-of-mars/server/services/persistence";
+import {GameReplayer} from "@port-of-mars/server/services/replay";
 
 describe('a game replay', () => {
   const gs = new GameState(mockGameStateInitOpts());

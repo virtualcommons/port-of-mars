@@ -1,6 +1,6 @@
-import {User} from "@/entity/User";
-import {getConnection} from "@/util";
-import {settings} from "@/settings";
+import {User} from "@port-of-mars/server/entity/User";
+import {getConnection} from "@port-of-mars/server/util";
+import {settings} from "@port-of-mars/server/settings";
 
 export function createRegistrationURL(registrationLink: string) {
   return `${settings.host}/${registrationLink}`;

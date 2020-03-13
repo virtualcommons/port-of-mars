@@ -3,13 +3,13 @@ import {
   sendEmailVerification,
   submitRegistrationMetadata,
   verifyUnregisteredUser
-} from "@/services/registration";
-import {getConnection} from "@/util";
-import {User} from "@/entity/User";
-import {settings} from "@/settings";
+} from "@port-of-mars/server/services/registration";
+import {getConnection} from "@port-of-mars/server/util";
+import {User} from "@port-of-mars/server/entity/User";
+import {settings} from "@port-of-mars/server/settings";
 import {Connection, createConnection} from "typeorm";
 import shell from "shelljs";
-import {getOrCreateUser} from "@/services/account";
+import {getOrCreateUser} from "@port-of-mars/server/services/account";
 
 describe('a potential user', () => {
   const username = 'ahacker';

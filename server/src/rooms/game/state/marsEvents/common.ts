@@ -1,6 +1,6 @@
 import {MarsEventData} from "shared/types";
 import * as _ from "lodash";
-import {GameState} from "@/rooms/game/state";
+import {GameState} from "@port-of-mars/server/rooms/game/state";
 
 
 export interface MarsEventStateConstructor {

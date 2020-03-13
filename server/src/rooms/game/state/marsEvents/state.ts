@@ -2,8 +2,8 @@ import {
   getEventName,
   MarsEventState,
   MarsEventStateConstructor,
-} from "@/rooms/game/state/marsEvents/common";
-import {GameState} from "@/rooms/game/state";
+} from "@port-of-mars/server/rooms/game/state/marsEvents/common";
+import {GameState} from "@port-of-mars/server/rooms/game/state";
 import * as _ from "lodash";
 import {CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER, Role, ROLES, Resource, InvestmentData} from "shared/types";
 

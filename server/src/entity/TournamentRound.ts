@@ -8,8 +8,8 @@ import {
   PrimaryGeneratedColumn,
   Unique
 } from 'typeorm';
-import { Game } from '@/entity/Game';
-import { TournamentRoundInvite } from '@/entity/TournamentRoundInvite';
+import { Game } from '@port-of-mars/server/entity/Game';
+import { TournamentRoundInvite } from '@port-of-mars/server/entity/TournamentRoundInvite';
 import { Tournament } from './Tournament';
 
 @Entity()

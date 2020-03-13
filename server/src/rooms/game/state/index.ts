@@ -30,15 +30,15 @@ import {
 } from 'shared/types';
 import _ from 'lodash';
 import * as assert from 'assert';
-import { getRandomIntInclusive } from '@/util';
+import { getRandomIntInclusive } from '@port-of-mars/server/util';
 import {
   getAccomplishmentByID,
   getAccomplishmentIDs
-} from '@/data/Accomplishment';
-import { GameEvent } from '@/rooms/game/events/types';
-import { GameOpts, GameStateOpts } from '@/rooms/game/types';
-import { MarsEventsDeck } from '@/rooms/game/state/marsEvents/MarsEventDeck';
-import { MarsEvent } from '@/rooms/game/state/marsEvents/MarsEvent';
+} from '@port-of-mars/server/data/Accomplishment';
+import { GameEvent } from '@port-of-mars/server/rooms/game/events/types';
+import { GameOpts, GameStateOpts } from '@port-of-mars/server/rooms/game/types';
+import { MarsEventsDeck } from '@port-of-mars/server/rooms/game/state/marsEvents/MarsEventDeck';
+import { MarsEvent } from '@port-of-mars/server/rooms/game/state/marsEvents/MarsEvent';
 
 export class ChatMessage extends Schema implements ChatMessageData {
   constructor(msg: ChatMessageData) {

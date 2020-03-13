@@ -1,5 +1,5 @@
 import { Column, Entity, Generated, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Player } from "@/entity/Player";
+import { Player } from "@port-of-mars/server/entity/Player";
 import { TournamentRoundInvite } from "./TournamentRoundInvite";
 
 @Entity()

@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response, Router} from "express";
-import {sendEmailVerification, submitRegistrationMetadata, verifyUnregisteredUser} from "@/services/registration";
-import {User} from "@/entity/User";
+import {sendEmailVerification, submitRegistrationMetadata, verifyUnregisteredUser} from "@port-of-mars/server/services/registration";
+import {User} from "@port-of-mars/server/entity/User";
 
 export const registrationRouter = Router();
 

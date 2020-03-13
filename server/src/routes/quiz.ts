@@ -7,10 +7,10 @@ import {
   setUserQuizCompletion,
   checkQuestionResponse,
   checkQuizCompletion
-} from '@/services/quiz';
-import { User } from '@/entity/User';
-import { QuizSubmission } from '@/entity/QuizSubmission';
-import { settings } from '@/settings';
+} from '@port-of-mars/server/services/quiz';
+import { User } from '@port-of-mars/server/entity/User';
+import { QuizSubmission } from '@port-of-mars/server/entity/QuizSubmission';
+import { settings } from '@port-of-mars/server/settings';
 
 export const quizRouter = Router();
 

@@ -7,7 +7,7 @@ module.exports = {
     "^.+\\.tsx?$": "ts-jest"
   },
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',
+    '^@port-of-mars/server/(.*)$': '<rootDir>/src/$1',
     '^shared/(.*)$': '<rootDir>/../shared/$1'
   },
 };

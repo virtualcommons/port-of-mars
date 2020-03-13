@@ -1,5 +1,5 @@
-import {MemoryEmailer, Emailer, MailgunEmailer} from "@/services/email/emailers";
-import {DevLogging, Logging, LogService} from "@/services/logging";
+import {MemoryEmailer, Emailer, MailgunEmailer} from "@port-of-mars/server/services/email/emailers";
+import {DevLogging, Logging, LogService} from "@port-of-mars/server/services/logging";
 import * as fs from 'fs';
 
 export const SECRET_KEY: string = fs.readFileSync('/run/secrets/jwt', 'utf8').trim();

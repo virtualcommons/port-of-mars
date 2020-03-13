@@ -1,4 +1,4 @@
-import {settings} from "@/settings";
+import {settings} from "@port-of-mars/server/settings";
 
 export async function sendIssue(
   issueText: string,

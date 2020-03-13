@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import { NextFunction } from 'connect';
-import {settings} from '@/settings';
+import {settings} from '@port-of-mars/server/settings';
 import _ from 'lodash';
-import { toUrl } from '@/util';
+import { toUrl } from '@port-of-mars/server/util';
 import { LOGIN_PAGE } from 'shared/routes';
 
 const logger = settings.logging.getLogger(__filename);

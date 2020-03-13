@@ -1,8 +1,8 @@
 import {Schema, type} from "@colyseus/schema";
 import {EventClientView, MarsEventData} from "shared/types";
-import {MarsEventState} from "@/rooms/game/state/marsEvents/common";
-import {constructState} from "@/rooms/game/state/marsEvents/state";
-import {GameState} from "@/rooms/game/state";
+import {MarsEventState} from "@port-of-mars/server/rooms/game/state/marsEvents/common";
+import {constructState} from "@port-of-mars/server/rooms/game/state/marsEvents/state";
+import {GameState} from "@port-of-mars/server/rooms/game/state";
 
 export class MarsEvent extends Schema implements MarsEventData {
   constructor(data: MarsEventData) {

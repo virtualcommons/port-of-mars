@@ -1,5 +1,5 @@
-import {User} from "@/entity/User";
-import {getConnection} from "@/util";
+import {User} from "@port-of-mars/server/entity/User";
+import {getConnection} from "@port-of-mars/server/util";
 import {Repository} from "typeorm"
 
 export function getRepository(): Repository<User> {

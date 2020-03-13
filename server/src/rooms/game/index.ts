@@ -1,7 +1,7 @@
 import {Client, Delayed, Room} from 'colyseus';
 import {Requests} from 'shared/game/requests';
 import {Responses} from 'shared/game/responses';
-import {GameState, Player} from '@/rooms/game/state';
+import {GameState, Player} from '@port-of-mars/server/rooms/game/state';
 import {
   AcceptTradeRequestCmd,
   PurchaseAccomplishmentCmd,
@@ -20,14 +20,14 @@ import {
   OutOfCommissionEntrepreneurCmd,
   BondingThroughAdversityCmd,
   BreakdownOfTrustCmd
-} from '@/rooms/game/commands';
-import {Game, GameOpts, Persister} from '@/rooms/game/types';
-import { Command } from '@/rooms/game/commands/types';
-import { StateSnapshotTaken } from '@/rooms/game/events';
-import {User} from "@/entity/User";
+} from '@port-of-mars/server/rooms/game/commands';
+import {Game, GameOpts, Persister} from '@port-of-mars/server/rooms/game/types';
+import { Command } from '@port-of-mars/server/rooms/game/commands/types';
+import { StateSnapshotTaken } from '@port-of-mars/server/rooms/game/events';
+import {User} from "@port-of-mars/server/entity/User";
 import http from "http";
-import {settings} from "@/settings";
-import {findUserById} from "@/services/account";
+import {settings} from "@port-of-mars/server/settings";
+import {findUserById} from "@port-of-mars/server/services/account";
 
 const logger = settings.logging.getLogger(__filename);
 

@@ -5,8 +5,8 @@ import {
   CreateDateColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { TournamentRound } from '@/entity/TournamentRound';
-import { User } from '@/entity/User';
+import { TournamentRound } from '@port-of-mars/server/entity/TournamentRound';
+import { User } from '@port-of-mars/server/entity/User';
 
 @Entity()
 export class TournamentRoundInvite {

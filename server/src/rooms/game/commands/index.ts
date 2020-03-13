@@ -1,6 +1,6 @@
 import * as req from 'shared/game/requests';
 import { InvestmentData, Phase, TradeData, Role, INVESTMENTS } from 'shared/types';
-import { Player } from '@/rooms/game/state';
+import { Player } from '@port-of-mars/server/rooms/game/state';
 import {
   AcceptTradeRequest,
   PurchasedAccomplishment,
@@ -23,14 +23,14 @@ import {
   MarsEventFinalized, CommissionCurator, 
   CommissionPolitician, CommissionResearcher, 
   CommissionPioneer, CommissionEntrepreneur, SelectedInfluence, SaveResources, MarsEventInitialized
-} from '@/rooms/game/events';
-import { getAccomplishmentByID } from '@/data/Accomplishment';
+} from '@port-of-mars/server/rooms/game/events';
+import { getAccomplishmentByID } from '@port-of-mars/server/data/Accomplishment';
 import { Client } from 'colyseus';
-import { Game } from '@/rooms/game/types';
-import { Command } from '@/rooms/game/commands/types';
-import { GameEvent } from '@/rooms/game/events/types';
+import { Game } from '@port-of-mars/server/rooms/game/types';
+import { Command } from '@port-of-mars/server/rooms/game/commands/types';
+import { GameEvent } from '@port-of-mars/server/rooms/game/events/types';
 import { tradeIsValid } from "shared/validation";
-import {settings} from "@/settings";
+import {settings} from "@port-of-mars/server/settings";
 
 const logger = settings.logging.getLogger(__filename);
 

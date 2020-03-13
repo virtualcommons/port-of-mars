@@ -1,9 +1,9 @@
-import { QuizSubmission } from '@/entity/QuizSubmission';
-import { Quiz } from '@/entity/Quiz';
-import { Question } from '@/entity/Question';
-import { QuestionResponse } from '@/entity/QuestionResponse';
-import { User } from '@/entity/User';
-import { getConnection } from '@/util';
+import { QuizSubmission } from '@port-of-mars/server/entity/QuizSubmission';
+import { Quiz } from '@port-of-mars/server/entity/Quiz';
+import { Question } from '@port-of-mars/server/entity/Question';
+import { QuestionResponse } from '@port-of-mars/server/entity/QuestionResponse';
+import { User } from '@port-of-mars/server/entity/User';
+import { getConnection } from '@port-of-mars/server/util';
 import * as _ from 'lodash';
 
 export async function createQuestionResponse(

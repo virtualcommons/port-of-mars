@@ -1,9 +1,9 @@
-import { User } from "@/entity/User";
+import { User } from "@port-of-mars/server/entity/User";
 import jwt from "jsonwebtoken";
-import { findByUsername } from "@/services/account"
+import { findByUsername } from "@port-of-mars/server/services/account"
 import * as fs from "fs";
 import {CookieOptions, Response} from "express";
-import { settings } from '@/settings';
+import { settings } from '@port-of-mars/server/settings';
 
 const logger = settings.logging.getLogger(__filename);
 

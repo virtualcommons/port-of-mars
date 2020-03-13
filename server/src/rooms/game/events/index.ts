@@ -14,16 +14,16 @@ import {
   Player,
   Trade,
   MarsLogMessage
-} from '@/rooms/game/state';
-import { GameEvent } from '@/rooms/game/events/types';
-import { MarsEvent } from '@/rooms/game/state/marsEvents/MarsEvent';
+} from '@port-of-mars/server/rooms/game/state';
+import { GameEvent } from '@port-of-mars/server/rooms/game/events/types';
+import { MarsEvent } from '@port-of-mars/server/rooms/game/state/marsEvents/MarsEvent';
 import { CompulsivePhilanthropy, PersonalGain, 
         OutOfCommissionCurator, OutOfCommissionPolitician, 
         OutOfCommissionResearcher, OutOfCommissionPioneer,
         OutOfCommissionEntrepreneur, BondingThroughAdversity, BreakdownOfTrust
        } 
-        from '@/rooms/game/state/marsEvents/state';
-import * as entities from '@/entity/GameEvent';
+        from '@port-of-mars/server/rooms/game/state/marsEvents/state';
+import * as entities from '@port-of-mars/server/entity/GameEvent';
 import {tradeCanBeCompleted} from "shared/validation";
 import _ from "lodash";
 

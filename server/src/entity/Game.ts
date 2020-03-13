@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { GameEvent } from "./GameEvent";
-import { Player } from "@/entity/Player";
+import { Player } from "@port-of-mars/server/entity/Player";
 import { TournamentRound } from "./TournamentRound";
 
 @Entity()

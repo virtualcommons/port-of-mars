@@ -1,7 +1,7 @@
-import {GameSerialized, GameState} from "@/rooms/game/state";
-import {mockGameStateInitOpts} from "@/util";
-import {GameEvent} from "@/entity/GameEvent";
-import {gameEventDeserializer} from "@/rooms/game/events";
+import {GameSerialized, GameState} from "@port-of-mars/server/rooms/game/state";
+import {mockGameStateInitOpts} from "@port-of-mars/server/util";
+import {GameEvent} from "@port-of-mars/server/entity/GameEvent";
+import {gameEventDeserializer} from "@port-of-mars/server/rooms/game/events";
 import _ from "lodash";
 
 function loadSnapshot(data: GameSerialized): GameState {
