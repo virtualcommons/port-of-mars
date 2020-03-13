@@ -161,13 +161,6 @@ export class TutorialAPI extends GameRequestAPI {
         this.requiredObject.required = false;
     };
 
-    public deleteNotification(id: number){
-        this.store.commit('CLEAR_NOTIFICATION',{
-            data:id,
-            role:`Researcher`,
-        })
-    };
-
 
     public saveGiveResources(resources: ResourceAmountData){
         //;

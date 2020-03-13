@@ -58,13 +58,6 @@ function applyPlayerResponses(player: any, store: TStore) {
     });
   };
   player.triggerAll();
-  player._notifications.onAdd = (msg: any) => {
-    store.commit('CREATE_NOTIFICATION', { data: msg, role: player.role });
-  };
-
-  player._notifications.onRemove = (msg: any, key: number) => {
-    store.commit('CLEAR_NOTIFICATION', { data: key, role: player.role });
-  };
 }
 
 export function applyGameServerResponses<T>(room: Room, store: TStore) {
