@@ -54,7 +54,7 @@
 
 <script lang="ts">
 import { Vue, Component, Inject } from 'vue-property-decorator';
-import { ROLES } from '@port-of-mars/shared/types';
+import { Role, ROLES } from '@port-of-mars/shared/types';
 import { Client } from 'colyseus.js';
 import { applyWaitingServerResponses } from '@port-of-mars/client/api/lobby/response';
 import { WaitingRequestAPI } from '@port-of-mars/client/api/lobby/request';
@@ -102,11 +102,11 @@ export default class WaitingLobby extends Vue {
     }, 8000);
   }
 
-   playerRole() {
+  get playerRole(): Role {
     return this.$tstore.state.role;
   }
 
-  get otherRoles() {
+  get otherRoles(): Array<Role> {
     const pr = this.playerRole;
     return ROLES.filter(role => role !== pr);
   }
