@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/virtualcommons/port-of-mars#readme",
   "devDependencies": {
-    "@colyseus/loadtest": "^0.11.3",
+    "@colyseus/loadtest": "^0.12.0",
     "@types/bcryptjs": "^2.4.2",
     "@types/connect-redis": "^0.0.13",
     "@types/cookie": "^0.3.3",
@@ -57,12 +57,12 @@
     "yamljs": "^0.3.0"
   },
   "dependencies": {
-    "@colyseus/monitor": "^0.11.7",
+    "@colyseus/monitor": "^0.12.1",
     "@colyseus/social": "^0.11.6",
     "@sentry/node": "~5.13.2",
     "async-mutex": "^0.1.4",
     "bcryptjs": "^2.4.3",
-    "colyseus": "^0.11.22",
+    "colyseus": "^0.12.3",
     "connect-redis": "^4.0.4",
     "cookie": "^0.4.0",
     "cookie-parser": "^1.4.4",
