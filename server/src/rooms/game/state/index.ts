@@ -25,11 +25,13 @@ import {
   TradeAmountData,
   TradeData,
   TradeSetData,
-  RESOURCES
+  RESOURCES,
+  MarsLogCategory
 } from '@port-of-mars/shared/types';
+import { tradeCanBeCompleted } from '@port-of-mars/shared/validation';
 import _ from 'lodash';
 import * as assert from 'assert';
-import { getRandomIntInclusive } from '@port-of-mars/server/util';
+import { uuid } from 'uuidv4';
 import {
   getAccomplishmentByID,
   getAccomplishmentIDs
@@ -1147,4 +1149,120 @@ export class GameState extends Schema implements GameData {
   addGameWinner(winner: Role) {
     this.winners.push(winner);
   }
+
+  // NOTE :: NEW CHANGES
+  addChat(message: ChatMessageData): void {
+    this.messages.push(new ChatMessage(message));
+  }
+
+  investTime(role: Role, investment: InvestmentData): void {
+    this.players[role].pendingInvestments.fromJSON(investment);
+  }
+
+  setPlayerReadiness(role: Role, ready: boolean): void {
+    this.players[role].updateReadiness(ready);
+  }
+
+  addTrade(trade: TradeData, reason?: string): void {
+    let message: string;
+    let category: string;
+    const performedBy: ServerRole = SERVER;
+    const toRole: Role = trade.to.role;
+    const fromRole: Role = trade.from.role;
+    const id = uuid();
+
+    this.tradeSet[id] = new Trade(trade.from, trade.to);
+
+    switch(reason) {
+      case 'sent-trade-request':
+        message = `The ${fromRole} sent a trade request to the ${toRole}.`;
+        category = MarsLogCategory.sentTrade;
+        this.log(message, category, performedBy);
+        break;
+      default:
+        break;
+    }
+  }
+
+  removeTrade(id: string, reason?: string): void {
+    let message: string;
+    let category: string;
+    const performedBy: ServerRole = SERVER;
+    const toRole: Role = this.tradeSet[id].to.role;
+    const fromRole: Role = this.tradeSet[id].from.role;
+    
+    delete this.tradeSet[id];
+
+    switch(reason) {
+      case 'reject-trade-request':
+        message = `The ${toRole} rejected a trade request from the ${fromRole}.`;
+        category = MarsLogCategory.rejectTrade;
+        this.log(message, category, performedBy);
+        break;
+      case 'cancel-trade-request':
+        message = `The ${fromRole} canceled a trade request sent to the ${toRole}.`;
+        category = MarsLogCategory.cancelTrade;
+        this.log(message, category, performedBy);
+        break;
+      default:
+        break;
+    }
+  }
+
+  acceptTrade(id: string): void {
+    let message: string;
+    let category: string;
+    const performedBy: ServerRole = SERVER;
+    
+    const trade: Trade = this.tradeSet[id];
+    const toRole: Role = trade.to.role;
+    const fromRole: Role = trade.from.role;
+    const fromRoleInventory: ResourceAmountData = this.players[fromRole].inventory;
+    const fromTradeResources: ResourceAmountData = trade.from.resourceAmount;
+    
+    if (tradeCanBeCompleted(fromRoleInventory, fromTradeResources)) {
+      let toMsg: Array<string> = [];
+      let fromMsg: Array<string> = [];
+
+      const toTradeResources: ResourceAmountData = trade.to.resourceAmount;
+
+      this.tradeSet[id].apply;
+
+      for (const [resource, amount] of Object.entries(toTradeResources)) {
+        if (amount > 0) {
+          const resourceFormatted = resource.charAt(0).toUpperCase() + resource.slice(1);
+          toMsg.push(`${resourceFormatted}: ${amount}`);
+        }
+      }
+      for (const [resource, amount] of Object.entries(fromTradeResources)) {
+        if (amount > 0) {
+          const resourceFormatted = resource.charAt(0).toUpperCase() + resource.slice(1);
+          toMsg.push(`${resourceFormatted}: ${amount}`);
+        }
+      }
+      message = `The ${fromRole} has traded ${fromMsg.join(', ')} in exchange for ${toMsg.join(', ')} from the ${toRole}.`;
+      category = MarsLogCategory.acceptTrade;
+      this.log(message, category, performedBy);
+    } else {
+      message = `The ${fromRole} is unable to fulfill a trade request previously sent to the ${toRole}. The trade will be removed.`;
+      category = MarsLogCategory.invalidTrade;
+      this.log(message, category, performedBy);
+    }
+    delete this.tradeSet[id];
+  }
+
+  purchaseAccomplishment(role: Role, accomplishment: AccomplishmentData): void {
+    const { label, science, government, legacy, finance, culture, upkeep, victoryPoints } = accomplishment;
+    const message: string = `The ${role} purchased an accomplishment: ${label}. Science: ${science}, Government: ${government}, Legacy: ${legacy}, Finance: ${finance}, Culture: ${culture}, System Health: ${upkeep}. This added ${victoryPoints} points to their score.`;
+    const category: string = MarsLogCategory.purchaseAccomplishment;
+    const performedBy: ServerRole = SERVER;
+
+    this.players[role].purchaseAccomplishment(accomplishment);
+    this.log(message, category, performedBy);
+  }
+
+  discardAccomplishment(role: Role, id: number): void {
+    this.players[role].accomplishments.discard(id);
+  }
+  // NOTE :: END NEW CHANGES
 }
