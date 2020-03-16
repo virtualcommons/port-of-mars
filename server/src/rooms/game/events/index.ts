@@ -1,4 +1,3 @@
-import { uuid } from 'uuidv4';
 import {
   AccomplishmentData,
   ChatMessageData,
@@ -6,7 +5,8 @@ import {
   Phase,
   Role,
   TradeData,
-  Resource
+  Resource,
+  ResourceAmountData
 } from '@port-of-mars/shared/types';
 import {
   ChatMessage,
@@ -24,7 +24,6 @@ import { CompulsivePhilanthropy, PersonalGain,
        } 
         from '@port-of-mars/server/rooms/game/state/marsEvents/state';
 import * as entities from '@port-of-mars/server/entity/GameEvent';
-import {tradeCanBeCompleted} from "@port-of-mars/shared/validation";
 import _ from "lodash";
 
 class GameEventDeserializer {
@@ -70,7 +69,7 @@ export class SetPlayerReadiness extends GameEventWithData {
   }
 
   apply(game: GameState): void {
-    game.players[this.data.role].updateReadiness(this.data.value);
+    game.setPlayerReadiness(this.data.role, this.data.value);
   }
 }
 gameEventDeserializer.register(SetPlayerReadiness);
@@ -81,7 +80,7 @@ export class SentChatMessage extends GameEventWithData {
   }
 
   apply(game: GameState) {
-    game.messages.push(new ChatMessage(this.data));
+    game.addChat(this.data);
   }
 }
 gameEventDeserializer.register(SentChatMessage);
@@ -92,21 +91,7 @@ export class PurchasedAccomplishment extends GameEventWithData {
   }
 
   apply(game: GameState): void {
-    game.players[this.data.role].purchaseAccomplishment(this.data.accomplishment);
-    const {
-      role,
-      label,
-      science,
-      government,
-      legacy,
-      finance,
-      culture,
-      upkeep,
-      victoryPoints
-    } = this.data.accomplishment;
-    const message: string = `The ${role} purchased an accomplishment: ${label}. Science: ${science}, Government: ${government}, Legacy: ${legacy}, Finance: ${finance}, Culture: ${culture}, System Health: ${upkeep}. This added ${victoryPoints} points to their score.`;
-    const category: string = 'Purchased Accomplishment';
-    game.log(message, category);
+    game.purchaseAccomplishment(this.data.role, this.data.accomplishment);
   }
 }
 gameEventDeserializer.register(PurchasedAccomplishment);
@@ -117,8 +102,7 @@ export class DiscardedAccomplishment extends GameEventWithData {
   }
 
   apply(game: GameState): void {
-    const accomplishmentData = game.players[this.data.role].accomplishments;
-    accomplishmentData.discard(this.data.id);
+    game.discardAccomplishment(this.data.role, this.data.id);
   }
 }
 gameEventDeserializer.register(DiscardedAccomplishment);
@@ -129,9 +113,7 @@ export class TimeInvested extends GameEventWithData {
   }
 
   apply(game: GameState): void {
-    game.players[this.data.role].pendingInvestments.fromJSON(
-      this.data.investment
-    );
+    game.investTime(this.data.role, this.data.investment);
   }
 }
 gameEventDeserializer.register(TimeInvested);
@@ -139,53 +121,10 @@ gameEventDeserializer.register(TimeInvested);
 export class AcceptTradeRequest extends GameEventWithData {
   constructor(public data: { id: string }) {
     super();
-    this.dateCreated = new Date().getTime();
   }
 
   apply(game: GameState): void {
-    if(tradeCanBeCompleted(game.players[game.tradeSet[this.data.id].from.role as Role].inventory,game.tradeSet[this.data.id].from.resourceAmount)){
-      let toMsg: Array<string> = [];
-      for (const [resource, amount] of Object.entries(
-        game.tradeSet[this.data.id].to.resourceAmount
-      ) as any) {
-        if (amount > 0) {
-          toMsg.push(`${amount} ${resource}`);
-        }
-      }
-  
-      let fromMsg: Array<string> = [];
-      for (const [resource, amount] of Object.entries(
-        game.tradeSet[this.data.id].from.resourceAmount
-      ) as any) {
-        if (amount > 0) {
-          fromMsg.push(`${amount} ${resource}`);
-        }
-      }
-  
-      const log = new MarsLogMessage({
-        performedBy: game.tradeSet[this.data.id].from.role,
-        category: 'Trade',
-        content: `The ${
-          game.tradeSet[this.data.id].from.role
-        } has traded ${fromMsg.join(', ')} in exchange for ${toMsg.join(
-          ', '
-        )} from the ${game.tradeSet[this.data.id].to.role}`,
-        timestamp: this.dateCreated
-      });
-  
-      const trade: Trade = game.tradeSet[this.data.id];
-      trade.apply(game);
-      game.logs.push(log);
-    }
-    else{
-      /////////////////////// TODO: Replace with Mars Log Message ///////////////////////
-
-      // game.players[game.tradeSet[this.data.id].to.role as Role].sendNotifcation('Trade partner cannot fulful trade.');
-      // game.players[game.tradeSet[this.data.id].from.role as Role].sendNotifcation('A trade you cannot fulful has been deleted.');
-
-      //////////////////////////////////// END TODO ////////////////////////////////////
-    }
-    delete game.tradeSet[this.data.id];
+    game.acceptTrade(this.data.id);
   }
 }
 gameEventDeserializer.register(AcceptTradeRequest);
@@ -196,11 +135,7 @@ export class RejectTradeRequest extends GameEventWithData {
   }
 
   apply(game: GameState): void {
-    
-    //game.players[game.tradeSet[this.data.id].from.role as Role].pendingInvestments.rollback(game.tradeSet[this.data.id].from.resourceAmount);
-
-    delete game.tradeSet[this.data.id];
-
+    game.removeTrade(this.data.id, 'reject-trade-request');
   }
 }
 gameEventDeserializer.register(RejectTradeRequest);
@@ -211,17 +146,7 @@ export class SentTradeRequest extends GameEventWithData {
   }
 
   apply(game: GameState): void {
-    const id = uuid();
-    game.tradeSet[id] = new Trade(this.data.from, this.data.to);
-
-    /////////////////////// TODO: Replace with Mars Log Message ///////////////////////
-    
-    // game.players[this.data.to.role as Role].sendNotifcation(`The ${this.data.from.role} would like to trade!`);
-    // game.players[this.data.from.role as Role].sendNotifcation(`Your trade to ${this.data.to.role} has been received!`);
-
-    //////////////////////////////////// END TODO ////////////////////////////////////
-
-    //game.players[this.data.from.role].pendingInvestments.add({...this.data.from.resourceAmount,upkeep:0});
+    game.addTrade(this.data, 'sent-trade-request');
   }
 }
 gameEventDeserializer.register(SentTradeRequest);
