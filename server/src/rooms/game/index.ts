@@ -13,6 +13,7 @@ import {
   SetPlayerReadinessCmd,
   TimeInvestmentCmd,
   RejectTradeRequestCmd,
+  CancelTradeRequestCmd,
   PersonalGainVotes, VoteForPhilanthropistCmd, 
   OutOfCommissionCuratorCmd, OutOfCommissionPoliticianCmd, 
   OutOfCommissionResearcherCmd, OutOfCommissionPioneerCmd,
@@ -91,6 +92,8 @@ export class GameRoom extends Room<GameState> implements Game {
         return AcceptTradeRequestCmd.fromReq(r, this, client);
       case 'reject-trade-request':
         return RejectTradeRequestCmd.fromReq(r, this, client);
+      case 'cancel-trade-request':
+        return CancelTradeRequestCmd.fromReq(r, this, client);
       case 'send-trade-request':
         return SendTradeRequestCmd.fromReq(r, this, client);
       case 'personal-gain':

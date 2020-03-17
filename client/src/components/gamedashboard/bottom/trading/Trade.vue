@@ -83,7 +83,7 @@
       </button>
       <button
         v-if="role === from.role && role !== to.role"
-        @click="handleTradeReject"
+        @click="handleTradeCancel"
         type="button"
         name="button"
         class="cancel-trade"
@@ -147,6 +147,10 @@ export default class Trade extends Vue {
 
   handleTradeReject() {
     this.api.rejectTradeRequest(this.id);
+  }
+
+  handleTradeCancel() {
+    this.api.cancelTradeRequest(this.id);
   }
 }
 </script>

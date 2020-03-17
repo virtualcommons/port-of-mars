@@ -17,6 +17,7 @@ import {
   SentTradeRequest,
   TimeInvested,
   RejectTradeRequest,
+  CancelTradeRequest,
   SetPlayerReadiness,
   PersonalGainVoted, VotedForPhilanthropist, 
   MarsEventFinalized, CommissionCurator, 
@@ -161,6 +162,19 @@ export class RejectTradeRequestCmd implements Command {
 
   execute(): Array<GameEvent> {
     return [new RejectTradeRequest({ id: this.id })];
+  }
+}
+
+export class CancelTradeRequestCmd implements Command {
+  constructor(private id: string, private game: Game, private player: Player) {}
+
+  static fromReq(r: req.CancelTradeRequestData, game: Game, client: Client) {
+    const p = game.getPlayerByClient(client);
+    return new CancelTradeRequestCmd(r.id, game, p);
+  }
+
+  execute(): Array<GameEvent> {
+    return [new CancelTradeRequest({ id: this.id })];
   }
 }
 
