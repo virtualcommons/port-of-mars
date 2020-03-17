@@ -142,6 +142,12 @@ export class TutorialAPI extends GameRequestAPI {
         });
     };
 
+    public cancelTradeRequest(id:string){
+        this.store.commit('REMOVE_FROM_TRADES',{
+            id,
+        });
+    };
+
     public purchaseAccomplishment(accomplishment:AccomplishmentData){
         this.store.commit('DISCARD_ACCOMPLISHMENT',{
             id:accomplishment.id,

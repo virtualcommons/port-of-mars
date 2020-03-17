@@ -140,6 +140,17 @@ export class RejectTradeRequest extends GameEventWithData {
 }
 gameEventDeserializer.register(RejectTradeRequest);
 
+export class CancelTradeRequest extends GameEventWithData {
+  constructor(public data: { id: string }) {
+    super();
+  }
+
+  apply(game: GameState): void {
+    game.removeTrade(this.data.id, 'cancel-trade-request');
+  }
+}
+gameEventDeserializer.register(CancelTradeRequest);
+
 export class SentTradeRequest extends GameEventWithData {
   constructor(public data: TradeData) {
     super();

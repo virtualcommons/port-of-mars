@@ -11,6 +11,7 @@ import {
   SendTradeRequestData,
   AcceptTradeRequestData,
   RejectTradeRequestData,
+  CancelTradeRequestData,
   PersonalGainVotesData, VoteForPhilanthropistData,
   BondingThroughAdversityData,
   BreakdownOfTrustData,
@@ -87,6 +88,11 @@ export class GameRequestAPI {
 
   public rejectTradeRequest(id: string) {
     const msg: RejectTradeRequestData = { kind: 'reject-trade-request', id };
+    this.send(msg);
+  }
+
+  public cancelTradeRequest(id: string) {
+    const msg: CancelTradeRequestData = { kind: 'cancel-trade-request', id };
     this.send(msg);
   }
 

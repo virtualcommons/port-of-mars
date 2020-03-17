@@ -42,6 +42,11 @@ export interface RejectTradeRequestData {
   id: string;
 }
 
+export interface CancelTradeRequestData {
+  kind: 'cancel-trade-request';
+  id: string;
+}
+
 export interface SetPlayerReadinessData {
   kind: 'set-player-readiness';
   value: boolean;
@@ -108,6 +113,7 @@ export type Requests =
   | SendTradeRequestData
   | AcceptTradeRequestData
   | RejectTradeRequestData
+  | CancelTradeRequestData
   | PersonalGainVotesData
   | VoteForPhilanthropistData
   | OutOfCommissionCuratorData
