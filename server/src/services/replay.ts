@@ -13,18 +13,21 @@ function loadSnapshot(data: GameSerialized): GameState {
 export class GameReplayer {
   constructor(public events: Array<GameEvent>) {}
 
-  summarize<T>(summarizer: (g: GameState) => T, iterState: (g: GameState) => any): Array<T> {
+  summarize<T>(summarizer: (g: GameState) => T): Array<T> {
     const g = loadSnapshot(this.events[0].payload as GameSerialized);
-    const summary: Array<T> = [summarizer((g))];
+    const summaries: Array<T> = [];
+    let timeToNextTransition = g.timeRemaining;
     for (const event of this.events.slice(1)) {
-      const s1 = iterState(g);
+      const summary = summarizer(g);
+      const phase = g.phase;
       const e = gameEventDeserializer.deserialize(event);
       g.applyMany([e]);
-      const s2 = iterState(g);
-      if (!_.isEqual(s1, s2)) {
-        summary.push(summarizer(g))
+      if (!_.isEqual(phase, g.phase)) {
+        summaries.push({ ...summary, duration: timeToNextTransition - event.timeRemaining});
+        timeToNextTransition = g.timeRemaining;
       }
     }
-    return summary;
+    summaries.push({ ...summarizer(g), duration: 0 });
+    return summaries;
   }
 }

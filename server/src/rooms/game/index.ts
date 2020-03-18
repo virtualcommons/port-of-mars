@@ -49,7 +49,7 @@ export class GameRoom extends Room<GameState> implements Game {
     this.persister = options.persister;
     this.gameId = await this.persister.initialize(options, this.roomId);
     const snapshot = this.state.toJSON();
-    const event = new StateSnapshotTaken(snapshot);
+    const event = new StateSnapshotTaken(this.state.timeRemaining, snapshot);
     this.persister.applyMany(this.gameId, [event]);
     this.clock.setInterval(this.gameLoop.bind(this), 1000);
   }

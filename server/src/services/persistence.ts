@@ -18,7 +18,8 @@ function toDBRawGameEvent(gameId: number, gameEvent: ge.GameEvent) {
     gameId,
     type: ev.kind,
     payload: ev.data ?? {},
-    dateCreated: new Date(ev.dateCreated)
+    dateCreated: new Date(ev.dateCreated),
+    timeRemaining: ev.timeRemaining
   }
 }
 

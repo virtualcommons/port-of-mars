@@ -20,4 +20,7 @@ export class GameEvent {
 
   @Column()
   dateCreated!: Date;
+
+  @Column()
+  timeRemaining!: number;
 }
