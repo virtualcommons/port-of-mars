@@ -16,7 +16,8 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import {MarsLogData} from "@port-of-mars/shared/types";
+import { MarsLogMessageData } from '@port-of-mars/shared/types';
+import { MarsLogMessageData } from '../../../../../shared/types';
 
 @Component({})
 export default class MarsLog extends Vue {
@@ -33,15 +34,34 @@ export default class MarsLog extends Vue {
     return new Date(timestamp).toLocaleTimeString();
   }
 
-  marsLogColor(log: MarsLogData) {
+  marsLogColor(log: MarsLogMessageData) {
     console.log(log.category)
     switch (log.category) {
-      case 'System Health: Gain':
-        return { backgroundColor: 'var(--marslog-green)' };
-      case 'System Health: Drop':
+      // case 'System Health':
+      //   return { backgroundColor: 'var(--marslog-green)' };
+      // case 'System Health':
+      //   return { backgroundColor: 'var(--marslog-red)' };
+      // case 'Trade':
+      //   return { backgroundColor: 'var(--marslog-purple)' };
+      // default:
+      //   return { backgroundColor: 'var(--space-white-opaque-1)' };
+
+      case 'System Health':
         return { backgroundColor: 'var(--marslog-red)' };
-      case 'Trade':
+      case 'Event':
+        return { backgroundColor: 'var(--marslog-orange)' };
+      case 'Purchase Accomplishment':
+        return { backgroundColor: 'var(--marslog-blue)' };
+      case 'New Trade':
         return { backgroundColor: 'var(--marslog-purple)' };
+      case 'Sent Trade':
+        return { backgroundColor: 'var(--marslog-purple)' };
+      case 'Accept Trade':
+        return { backgroundColor: 'var(--marslog-green)' };
+      case 'Reject Trade':
+        return { backgroundColor: 'var(--marslog-purple-1)' };
+      case 'Cancel Trade':
+        return { backgroundColor: 'var(--marslog-grey)' };
       default:
         return { backgroundColor: 'var(--space-white-opaque-1)' };
     }

@@ -122,7 +122,7 @@ export enum MarsLogCategory {
 
 export interface MarsLogMessageData {
   performedBy: Role | ServerRole;
-  category: string;
+  category: MarsLogCategory;
   content: string;
   timestamp: number;
 }
