@@ -4,7 +4,7 @@ import {
   EnteredInvestmentPhase,
   EnteredPurchasePhase,
   EnteredTradePhase,
-  StateSnapshotTaken,
+  TakenStateSnapshot,
   TimeInvested
 } from "@port-of-mars/server/rooms/game/events";
 import {CURATOR, Phase} from "@port-of-mars/shared/types";
@@ -14,7 +14,7 @@ import {GameReplayer} from "@port-of-mars/server/services/replay";
 describe('a game replay', () => {
   const gs = new GameState(mockGameStateInitOpts());
   const ge = [
-    new StateSnapshotTaken(300, gs.toJSON()),
+    new TakenStateSnapshot(300, gs.toJSON()),
     new TimeInvested(200, { role: CURATOR, investment: { upkeep: 2, culture: 2, finance: 0, government: 0, legacy: 0, science: 0}}),
     new EnteredTradePhase(10),
     new EnteredPurchasePhase(5)

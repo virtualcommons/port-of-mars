@@ -23,7 +23,7 @@ import {
 } from '@port-of-mars/server/rooms/game/commands';
 import {Game, GameOpts, Persister} from '@port-of-mars/server/rooms/game/types';
 import { Command } from '@port-of-mars/server/rooms/game/commands/types';
-import { StateSnapshotTaken } from '@port-of-mars/server/rooms/game/events';
+import { TakenStateSnapshot } from '@port-of-mars/server/rooms/game/events';
 import {User} from "@port-of-mars/server/entity/User";
 import http from "http";
 import {settings} from "@port-of-mars/server/settings";
@@ -49,7 +49,7 @@ export class GameRoom extends Room<GameState> implements Game {
     this.persister = options.persister;
     this.gameId = await this.persister.initialize(options, this.roomId);
     const snapshot = this.state.toJSON();
-    const event = new StateSnapshotTaken(this.state.timeRemaining, snapshot);
+    const event = new TakenStateSnapshot(this.state.timeRemaining, snapshot);
     this.persister.applyMany(this.gameId, [event]);
     this.clock.setInterval(this.gameLoop.bind(this), 1000);
   }

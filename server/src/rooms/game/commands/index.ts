@@ -2,7 +2,7 @@ import * as req from '@port-of-mars/shared/game/requests';
 import { InvestmentData, Phase, TradeData, Role, INVESTMENTS } from '@port-of-mars/shared/types';
 import { Player } from '@port-of-mars/server/rooms/game/state';
 import {
-  AcceptTradeRequest,
+  AcceptedTradeRequest,
   PurchasedAccomplishment,
   DiscardedAccomplishment,
   EnteredDefeatPhase,
@@ -16,13 +16,13 @@ import {
   SentChatMessage,
   SentTradeRequest,
   TimeInvested,
-  RejectTradeRequest,
-  CancelTradeRequest,
+  RejectedTradeRequest,
+  CanceledTradeRequest,
   SetPlayerReadiness,
-  PersonalGainVoted, VotedForPhilanthropist,
-  MarsEventFinalized, CommissionCurator,
-  CommissionPolitician, CommissionResearcher,
-  CommissionPioneer, CommissionEntrepreneur, SelectedInfluence, SaveResources, MarsEventInitialized
+  VotedForPersonalGain, VotedForPhilanthropist,
+  FinalizedMarsEvent, OutOfCommissionedCurator,
+  OutOfCommissionedPoliician, OutOfComissionedResearcher,
+  OutOfCommissionedPioneer, OutOfCommissionedEntrepreneur, SelectedInfluence, KeptResources, InitializedMarsEvent
 } from '@port-of-mars/server/rooms/game/events';
 import { getAccomplishmentByID } from '@port-of-mars/server/data/Accomplishment';
 import { Client } from 'colyseus';
@@ -148,7 +148,7 @@ export class AcceptTradeRequestCmd implements Command {
   }
 
   execute(): Array<GameEvent> {
-    return [new AcceptTradeRequest(this.game.state.timeRemaining, { id: this.id })];
+    return [new AcceptedTradeRequest(this.game.state.timeRemaining, { id: this.id })];
   }
 }
 
@@ -161,7 +161,7 @@ export class RejectTradeRequestCmd implements Command {
   }
 
   execute(): Array<GameEvent> {
-    return [new RejectTradeRequest(this.game.state.timeRemaining,{ id: this.id })];
+    return [new RejectedTradeRequest(this.game.state.timeRemaining,{ id: this.id })];
   }
 }
 
@@ -174,7 +174,7 @@ export class CancelTradeRequestCmd implements Command {
   }
 
   execute(): Array<GameEvent> {
-    return [new CancelTradeRequest(this.game.state.timeRemaining, { id: this.id })];
+    return [new CanceledTradeRequest(this.game.state.timeRemaining, { id: this.id })];
   }
 }
 
@@ -232,7 +232,7 @@ export class SetNextPhaseCmd implements Command {
       case Phase.events: {
         const events = [];
         if (this.game.state.currentEvent) {
-          events.push(new MarsEventFinalized(this.game.state.timeRemaining));
+          events.push(new FinalizedMarsEvent(this.game.state.timeRemaining));
         }
         if (
           this.game.state.marsEventsProcessed + 1 >=
@@ -243,7 +243,7 @@ export class SetNextPhaseCmd implements Command {
 
         } else {
           events.push(new ReenteredMarsEventPhase(this.game.state.timeRemaining));
-          events.push(new MarsEventInitialized(this.game.state.timeRemaining));
+          events.push(new InitializedMarsEvent(this.game.state.timeRemaining));
 
         }
 
@@ -267,7 +267,7 @@ export class SetNextPhaseCmd implements Command {
           game.phase = Phase.victory;
           return [new EnteredVictoryPhase(this.game.state.timeRemaining)];
         }
-        return [new EnteredMarsEventPhase(this.game.state.timeRemaining), new MarsEventInitialized(this.game.state.timeRemaining), new EnteredDefeatPhase(this.game.state.timeRemaining)];
+        return [new EnteredMarsEventPhase(this.game.state.timeRemaining), new InitializedMarsEvent(this.game.state.timeRemaining), new EnteredDefeatPhase(this.game.state.timeRemaining)];
       }
       case Phase.victory:
         return [];
@@ -302,7 +302,7 @@ export class PersonalGainVotes implements Command {
   }
 
   execute(): Array<GameEvent> {
-    return [new PersonalGainVoted(this.game.state.timeRemaining, this.results.value)];
+    return [new VotedForPersonalGain(this.game.state.timeRemaining, this.results.value)];
   }
 }
 
@@ -336,7 +336,7 @@ export class OutOfCommissionCuratorCmd implements Command {
   }
 
   execute(): Array<GameEvent> {
-    return [new CommissionCurator(this.game.state.timeRemaining, { role: this.player.role })]
+    return [new OutOfCommissionedCurator(this.game.state.timeRemaining, { role: this.player.role })]
   }
 }
 
@@ -353,7 +353,7 @@ export class OutOfCommissionPoliticianCmd implements Command {
   }
 
   execute(): Array<GameEvent> {
-    return [new CommissionPolitician(this.game.state.timeRemaining, { role: this.player.role })]
+    return [new OutOfCommissionedPoliician(this.game.state.timeRemaining, { role: this.player.role })]
   }
 }
 
@@ -370,7 +370,7 @@ export class OutOfCommissionResearcherCmd implements Command {
   }
 
   execute(): Array<GameEvent> {
-    return [new CommissionResearcher(this.game.state.timeRemaining, { role: this.player.role })]
+    return [new OutOfComissionedResearcher(this.game.state.timeRemaining, { role: this.player.role })]
   }
 }
 
@@ -387,7 +387,7 @@ export class OutOfCommissionPioneerCmd implements Command {
   }
 
   execute(): Array<GameEvent> {
-    return [new CommissionPioneer(this.game.state.timeRemaining,{ role: this.player.role })]
+    return [new OutOfCommissionedPioneer(this.game.state.timeRemaining,{ role: this.player.role })]
   }
 }
 
@@ -404,7 +404,7 @@ export class OutOfCommissionEntrepreneurCmd implements Command {
   }
 
   execute(): Array<GameEvent> {
-    return [new CommissionEntrepreneur(this.game.state.timeRemaining, { role: this.player.role })]
+    return [new OutOfCommissionedEntrepreneur(this.game.state.timeRemaining, { role: this.player.role })]
   }
 }
 
@@ -438,6 +438,6 @@ export class BreakdownOfTrustCmd implements Command {
   }
 
   execute(): Array<GameEvent> {
-    return [new SaveResources(this.game.state.timeRemaining, {role: this.player.role, savedResources: this.data.savedResources})];
+    return [new KeptResources(this.game.state.timeRemaining, {role: this.player.role, savedResources: this.data.savedResources})];
   }
 }

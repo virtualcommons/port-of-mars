@@ -119,7 +119,7 @@ export class TimeInvested extends GameEventWithData {
 }
 gameEventDeserializer.register(TimeInvested);
 
-export class AcceptTradeRequest extends GameEventWithData {
+export class AcceptedTradeRequest extends GameEventWithData {
   constructor(timeRemaining: number, public data: { id: string }) {
     super(timeRemaining);
   }
@@ -128,9 +128,9 @@ export class AcceptTradeRequest extends GameEventWithData {
     game.acceptTrade(this.data.id);
   }
 }
-gameEventDeserializer.register(AcceptTradeRequest);
+gameEventDeserializer.register(AcceptedTradeRequest);
 
-export class RejectTradeRequest extends GameEventWithData {
+export class RejectedTradeRequest extends GameEventWithData {
   constructor(timeRemaining: number, public data: { id: string }) {
     super(timeRemaining);
   }
@@ -139,9 +139,9 @@ export class RejectTradeRequest extends GameEventWithData {
     game.removeTrade(this.data.id, 'reject-trade-request');
   }
 }
-gameEventDeserializer.register(RejectTradeRequest);
+gameEventDeserializer.register(RejectedTradeRequest);
 
-export class CancelTradeRequest extends GameEventWithData {
+export class CanceledTradeRequest extends GameEventWithData {
   constructor(timeRemaining: number, public data: { id: string }) {
     super(timeRemaining);
   }
@@ -150,7 +150,7 @@ export class CancelTradeRequest extends GameEventWithData {
     game.removeTrade(this.data.id, 'cancel-trade-request');
   }
 }
-gameEventDeserializer.register(CancelTradeRequest);
+gameEventDeserializer.register(CanceledTradeRequest);
 
 export class SentTradeRequest extends GameEventWithData {
   constructor(timeRemaining: number, public data: TradeData) {
@@ -185,19 +185,19 @@ abstract class KindOnlyGameEvent implements GameEvent {
   }
 }
 
-export class MarsEventFinalized extends KindOnlyGameEvent {
+export class FinalizedMarsEvent extends KindOnlyGameEvent {
   apply(game: GameState): void {
     game.currentEvent.state.finalize(game);
   }
 }
-gameEventDeserializer.register(MarsEventFinalized);
+gameEventDeserializer.register(FinalizedMarsEvent);
 
-export class MarsEventInitialized extends KindOnlyGameEvent {
+export class InitializedMarsEvent extends KindOnlyGameEvent {
   apply(game: GameState): void {
     if(game.currentEvent.state.initialize){
       game.currentEvent.state.initialize(game);
     }
-    
+
   }
 }
 
@@ -327,8 +327,8 @@ export class EnteredVictoryPhase extends KindOnlyGameEvent {
 }
 gameEventDeserializer.register(EnteredVictoryPhase);
 
-export class StateSnapshotTaken implements GameEvent {
-  kind = 'state-snapshot-taken';
+export class TakenStateSnapshot implements GameEvent {
+  kind = 'taken-state-snapshot';
   dateCreated: number;
 
   constructor(public timeRemaining: number, public data: object) {
@@ -346,9 +346,9 @@ export class StateSnapshotTaken implements GameEvent {
     };
   }
 }
-gameEventDeserializer.register(StateSnapshotTaken);
+gameEventDeserializer.register(TakenStateSnapshot);
 
-export class PersonalGainVoted extends GameEventWithData {
+export class VotedForPersonalGain extends GameEventWithData {
   constructor(timeRemaining: number, public data: { role: Role; vote: boolean }) {
     super(timeRemaining);
   }
@@ -361,7 +361,7 @@ export class PersonalGainVoted extends GameEventWithData {
     }
   }
 }
-gameEventDeserializer.register(PersonalGainVoted);
+gameEventDeserializer.register(VotedForPersonalGain);
 
 export class VotedForPhilanthropist extends GameEventWithData {
   constructor(timeRemaining: number, public data: { voter: Role, vote: Role }) {
@@ -382,7 +382,7 @@ export class VotedForPhilanthropist extends GameEventWithData {
 }
 gameEventDeserializer.register(VotedForPhilanthropist);
 
-export class CommissionCurator extends GameEventWithData {
+export class OutOfCommissionedCurator extends GameEventWithData {
   constructor(timeRemaining: number, public data: {role: Role}) {
     super(timeRemaining);
   }
@@ -399,9 +399,9 @@ export class CommissionCurator extends GameEventWithData {
     game.players[this.data.role].updateReadiness(true);
   }
 }
-gameEventDeserializer.register(CommissionCurator);
+gameEventDeserializer.register(OutOfCommissionedCurator);
 
-export class CommissionPolitician extends GameEventWithData {
+export class OutOfCommissionedPoliician extends GameEventWithData {
   constructor(timeRemaining: number, public data: {role: Role}) {
     super(timeRemaining);
   }
@@ -418,9 +418,9 @@ export class CommissionPolitician extends GameEventWithData {
     game.players[this.data.role].updateReadiness(true);
   }
 }
-gameEventDeserializer.register(CommissionPolitician);
+gameEventDeserializer.register(OutOfCommissionedPoliician);
 
-export class CommissionResearcher extends GameEventWithData {
+export class OutOfComissionedResearcher extends GameEventWithData {
   constructor(timeRemaining: number, public data: {role: Role}) {
     super(timeRemaining);
   }
@@ -437,9 +437,9 @@ export class CommissionResearcher extends GameEventWithData {
     game.players[this.data.role].updateReadiness(true);
   }
 }
-gameEventDeserializer.register(CommissionResearcher);
+gameEventDeserializer.register(OutOfComissionedResearcher);
 
-export class CommissionPioneer extends GameEventWithData {
+export class OutOfCommissionedPioneer extends GameEventWithData {
   constructor(timeRemaining: number, public data: {role: Role}) {
     super(timeRemaining);
   }
@@ -456,9 +456,9 @@ export class CommissionPioneer extends GameEventWithData {
     game.players[this.data.role].updateReadiness(true);
   }
 }
-gameEventDeserializer.register(CommissionPioneer);
+gameEventDeserializer.register(OutOfCommissionedPioneer);
 
-export class CommissionEntrepreneur extends GameEventWithData {
+export class OutOfCommissionedEntrepreneur extends GameEventWithData {
   constructor(timeRemaining: number, public data: {role: Role}) {
     super(timeRemaining);
   }
@@ -475,7 +475,7 @@ export class CommissionEntrepreneur extends GameEventWithData {
     game.players[this.data.role].updateReadiness(true);
   }
 }
-gameEventDeserializer.register(CommissionEntrepreneur);
+gameEventDeserializer.register(OutOfCommissionedEntrepreneur);
 
 export class SelectedInfluence extends GameEventWithData {
   constructor(timeRemaining: number, public data: {role: Role, influence: Resource}) {
@@ -494,7 +494,7 @@ export class SelectedInfluence extends GameEventWithData {
 
 gameEventDeserializer.register(SelectedInfluence);
 
-export class SaveResources extends GameEventWithData {
+export class KeptResources extends GameEventWithData {
   constructor(timeRemaining: number, public data: {role: Role, savedResources: InvestmentData}){
     super(timeRemaining);
   }
@@ -511,5 +511,5 @@ export class SaveResources extends GameEventWithData {
   }
 }
 
-gameEventDeserializer.register(SaveResources);
+gameEventDeserializer.register(KeptResources);
 
