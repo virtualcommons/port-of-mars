@@ -26,7 +26,7 @@ import { Command } from '@port-of-mars/server/rooms/game/commands/types';
 import { TakenStateSnapshot } from '@port-of-mars/server/rooms/game/events';
 import { User } from "@port-of-mars/server/entity/User";
 import { settings } from "@port-of-mars/server/settings";
-import { findUserById } from "@port-of-mars/server/services/account";
+import { getServices } from "@port-of-mars/server/services";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -40,7 +40,7 @@ export class GameRoom extends Room<GameState> implements Game {
   async onAuth(client: Client, options: any, request: http.IncomingMessage) {
     try {
       logger.debug('GameRoom.onAuth for client:', client.id);
-      const user = await findUserById((request as any).session.passport.user);
+      const user = await getServices().account.findUserById((request as any).session.passport.user);
       logger.debug('GameRoom.onAuth found user:', user);
       if (this.state.hasUser(user?.username)) {
         return user;
@@ -60,7 +60,7 @@ export class GameRoom extends Room<GameState> implements Game {
     this.gameId = await this.persister.initialize(options, this.roomId);
     const snapshot = this.state.toJSON();
     const event = new TakenStateSnapshot(snapshot);
-    this.persister.applyMany([event], this.getMetadata());
+    this.persister.persist([event], this.getMetadata());
     this.clock.setInterval(this.gameLoop.bind(this), 1000);
   }
 
@@ -134,8 +134,7 @@ export class GameRoom extends Room<GameState> implements Game {
       const cmd = new SetNextPhaseCmd(this.state);
       const events = cmd.execute();
       this.state.applyMany(events);
-      // post phase cleanup
-      this.persister.applyMany(events, this.getMetadata());
+      this.persister.persist(events, this.getMetadata());
     }
   }
 
@@ -143,7 +142,7 @@ export class GameRoom extends Room<GameState> implements Game {
     const cmd = this.prepareRequest(message, client);
     const events = cmd.execute();
     this.state.applyMany(events);
-    this.persister.applyMany(events, this.getMetadata());
+    this.persister.persist(events, this.getMetadata());
   }
 
   async onLeave(client: Client, consented: boolean) {

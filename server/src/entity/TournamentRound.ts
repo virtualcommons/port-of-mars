@@ -29,6 +29,9 @@ export class TournamentRound {
   )
   games!: Array<Game>;
 
+  @Column()
+  tournamentId!: number;
+
   @ManyToOne(
     type => Tournament,
     tournament => tournament.rounds

@@ -1,56 +1,59 @@
 import {
-  createRegistrationURL,
-  sendEmailVerification,
-  submitRegistrationMetadata,
-  verifyUnregisteredUser
+  RegistrationService,
 } from "@port-of-mars/server/services/registration";
-import {getConnection} from "@port-of-mars/server/util";
 import {User} from "@port-of-mars/server/entity/User";
 import {settings} from "@port-of-mars/server/settings";
-import {Connection, createConnection} from "typeorm";
-import shell from "shelljs";
-import {getOrCreateUser} from "@port-of-mars/server/services/account";
+import {Connection, createConnection, QueryRunner} from "typeorm";
+import {AccountService} from "@port-of-mars/server/services/account";
 
 describe('a potential user', () => {
   const username = 'ahacker';
   let conn: Connection;
+  let qr: QueryRunner;
+  let accountService: AccountService;
+  let registrationService: RegistrationService;
 
   beforeAll(async () => {
-    shell.exec(`createdb -w -U marsmadness -h db pom_testing`);
     conn = await createConnection('test');
+    qr = conn.createQueryRunner();
+    accountService = new AccountService(qr.manager);
+    registrationService = new RegistrationService(qr.manager);
+    await qr.connect();
+    await qr.startTransaction();
   });
 
   it('can begin registration', async () => {
-    const u = await getOrCreateUser(username);
-    expect(u.username).toEqual(username);
+      const u = await accountService.getOrCreateUser(username);
+      expect(u.username).toEqual(username);
   });
 
   it('can submit their registration information', async () => {
     const email = 'a@foo.bar';
     const name = 'Alyssa P Hacker';
-    await submitRegistrationMetadata({ username, email, name });
-    const u = await getConnection().getRepository(User).findOneOrFail({username});
+    await registrationService.submitRegistrationMetadata({ username, email, name });
+    const u = await qr.manager.getRepository(User).findOneOrFail({username});
     expect(u.email).toBe(email);
     expect(u.name).toBe(name);
   });
 
   it('can be sent an email verification email', async () => {
-    const u = await getConnection().getRepository(User).findOneOrFail({username});
-    await sendEmailVerification(u);
+    const u = await qr.manager.getRepository(User).findOneOrFail({username});
+    await registrationService.sendEmailVerification(u);
     expect(settings.emailer.lastEmail?.from).toBe('Port of Mars <portmars@asu.edu>');
-    expect(settings.emailer.lastEmail?.text).toContain(createRegistrationURL(u.registrationToken));
-    expect(settings.emailer.lastEmail?.html).toContain(createRegistrationURL(u.registrationToken));
+    expect(settings.emailer.lastEmail?.text).toContain(registrationService.createRegistrationURL(u.registrationToken));
+    expect(settings.emailer.lastEmail?.html).toContain(registrationService.createRegistrationURL(u.registrationToken));
   });
 
   it('can verify their email using a verification token', async () => {
-    let u = await getConnection().getRepository(User).findOneOrFail({username});
-    await verifyUnregisteredUser(u);
-    u = await getConnection().getRepository(User).findOneOrFail({username});
+    let u = await qr.manager.getRepository(User).findOneOrFail({username});
+    await registrationService.verifyUnregisteredUser(u);
+    u = await qr.manager.getRepository(User).findOneOrFail({username});
     expect(u.isVerified).toBeTruthy();
   });
 
   afterAll(async () => {
+    await qr.rollbackTransaction();
+    await qr.release();
     await conn.close();
-    shell.exec(`dropdb -w -U marsmadness -h db pom_testing`)
   })
 });

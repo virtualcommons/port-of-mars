@@ -1,39 +1,50 @@
 import {User} from "@port-of-mars/server/entity/User";
 import {getConnection} from "@port-of-mars/server/util";
-import {Repository} from "typeorm"
+import {EntityManager, Repository} from "typeorm"
 
-export function getRepository(): Repository<User> {
-  return getConnection().getRepository(User);
-}
+export class AccountService {
+  em: EntityManager;
 
-export async function findByUsername(username: string): Promise<User | undefined> {
-  return await getRepository().findOne({username})
-}
-
-export async function findUserById(id: number): Promise<User | undefined> {
-  return await getRepository().findOne(id);
-}
-
-export async function findOrCreateUser(username: string): Promise<[boolean, User]> {
-  const repository = getRepository();
-  let user = await repository.findOne({username});
-  let created = false;
-  if (! user) {
-    user = repository.create({username, name: ''});
-    created = true;
-  }
-  return [created, user];
-}
-
-export async function getOrCreateUser(username: string): Promise<User> {
-  const user = await getConnection().getRepository(User).findOne({username});
-  if (user) {
-    return user;
+  constructor(em?: EntityManager) {
+    if (!em) {
+      em = getConnection().manager;
+    }
+    this.em = em;
   }
 
-  const u = new User();
-  u.name = '';
-  u.username = username;
-  await getConnection().getRepository(User).save(u);
-  return u;
+  getRepository(): Repository<User> {
+    return this.em.getRepository(User);
+  }
+
+  async findByUsername(username: string): Promise<User | undefined> {
+    return await this.getRepository().findOne({username})
+  }
+
+  async findUserById(id: number): Promise<User | undefined> {
+    return await this.getRepository().findOne(id);
+  }
+
+  async findOrCreateUser(username: string): Promise<[boolean, User]> {
+    const repository = this.getRepository();
+    let user = await repository.findOne({username});
+    let created = false;
+    if (!user) {
+      user = repository.create({username, name: ''});
+      created = true;
+    }
+    return [created, user];
+  }
+
+  async getOrCreateUser(username: string): Promise<User> {
+    const user = await this.getRepository().findOne({username});
+    if (user) {
+      return user;
+    }
+
+    const u = new User();
+    u.name = '';
+    u.username = username;
+    await getConnection().getRepository(User).save(u);
+    return u;
+  }
 }

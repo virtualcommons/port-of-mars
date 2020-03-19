@@ -1,6 +1,8 @@
 import {GameState} from "@port-of-mars/server/rooms/game/state";
 import {mockGameStateInitOpts} from "@port-of-mars/server/util";
 import {
+  EnteredDefeatPhase,
+  EnteredDiscardPhase,
   EnteredInvestmentPhase,
   EnteredPurchasePhase,
   EnteredTradePhase,
@@ -18,7 +20,9 @@ describe('a game replay', () => {
     [300, new TakenStateSnapshot(gs.toJSON())],
     [200, new TimeInvested({ role: CURATOR, investment: { upkeep: 2, culture: 2, finance: 0, government: 0, legacy: 0, science: 0}})],
     [ 10, new EnteredTradePhase()],
-    [  5, new EnteredPurchasePhase()]
+    [  5, new EnteredPurchasePhase()],
+    [ 15, new EnteredDiscardPhase()],
+    [ 60, new EnteredDefeatPhase()]
   ];
   const gr = new GameReplayer(ge.map(([timeRemaining, e]) =>
     toDBGameEvent(e, { gameId: 1, timeRemaining, dateCreated: new Date()})));
@@ -28,7 +32,8 @@ describe('a game replay', () => {
     expect(data).toEqual([
       { phase: Phase.invest, culture: 0, duration: 290 },
       { phase: Phase.trade, culture: 2, duration: 295 },
-      { phase: Phase.purchase, culture: 2, duration: 0 },
+      { phase: Phase.purchase, culture: 2, duration: 285 },
+      { phase: Phase.discard, culture: 2, duration: 0 },
     ]);
   });
 });

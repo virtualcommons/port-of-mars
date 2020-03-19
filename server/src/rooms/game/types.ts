@@ -18,7 +18,7 @@ export interface PersistenceAPIConstructor {
 
 export interface Persister {
   initialize(options: GameOpts, roomId: string): Promise<number>
-  applyMany(events: Array<ge.GameEvent>, metadata: Metadata): void
+  persist(events: Array<ge.GameEvent>, metadata: Metadata): void
   sync(): Promise<void>
 }
 

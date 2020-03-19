@@ -7,7 +7,7 @@
     "username": "marsmadness",
     "database": "port_of_mars",
     "password": "DB_PASSWORD",
-    "synchronize": true,
+    "synchronize": false,
     "logging": false,
     "entities": [
        "src/entity/**/*.{js,ts}"
@@ -32,9 +32,8 @@
     "username": "marsmadness",
     "database": "pom_testing",
     "password": "DB_PASSWORD",
-    "synchronize": true,
+    "synchronize": false,
     "logging": false,
-    "dropSchema": true,
     "entities": [
        "src/entity/**/*.{js,ts}"
     ],

@@ -13,7 +13,13 @@ export interface RemovedClientFromLobby {
   data?: any;
 }
 
+export interface JoinFailure {
+  kind: 'join-failure'
+  reason: string
+}
+
 export type WaitingResponses =
   | JoinedClientQueue
   | SentInvitation
-  | RemovedClientFromLobby;
+  | RemovedClientFromLobby
+  | JoinFailure;

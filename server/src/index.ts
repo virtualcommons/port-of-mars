@@ -13,7 +13,7 @@ import * as Sentry from '@sentry/node';
 import { Server } from 'colyseus';
 import { GameRoom } from '@port-of-mars/server/rooms/game';
 import { RankedLobbyRoom } from '@port-of-mars/server/rooms/lobby';
-import { findUserById, getOrCreateUser } from '@port-of-mars/server/services/account';
+import { AccountService } from '@port-of-mars/server/services/account';
 import { User } from '@port-of-mars/server/entity/User';
 import { DBPersister } from '@port-of-mars/server/services/persistence';
 import { ClockTimer } from '@gamestdio/timer/lib/ClockTimer';
@@ -46,13 +46,13 @@ passport.use(new CasStrategy(
   },
   // verify callback
   function (username: string, profile: object, done: Function) {
-    getOrCreateUser(username).then(user => done(null, user));
+    new AccountService().getOrCreateUser(username).then(user => done(null, user));
   }
 ));
 passport.use(new LocalStrategy(
   function (username: string, password: string, done: Function) {
     logger.warn('***** DO NOT ALLOW IN PRODUCTION! running local auth for user: ', username);
-    getOrCreateUser(username).then(user => done(null, user));
+    new AccountService().getOrCreateUser(username).then(user => done(null, user));
   }
 ));
 
@@ -63,7 +63,7 @@ passport.serializeUser(function (user: User, done: Function) {
 
 passport.deserializeUser(function (id: number, done: Function) {
   logger.warn(`deserializing ${id}`);
-  findUserById(id)
+  new AccountService().findUserById(id)
     .then(user => done(null, user))
     .catch((e) => {
       logger.fatal(`Could not find user with ${id}: `, e);

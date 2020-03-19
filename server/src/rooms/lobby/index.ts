@@ -5,7 +5,7 @@ import { buildGameOpts } from '@port-of-mars/server/util';
 import { GameRoom } from '@port-of-mars/server/rooms/game';
 import { LobbyRoomState } from '@port-of-mars/server/rooms/lobby/state';
 import { settings } from "@port-of-mars/server/settings";
-import { findUserById } from "@port-of-mars/server/services/account";
+import { getServices } from "@port-of-mars/server/services";
 import _ from "lodash";
 import * as http from "http";
 import { WaitingRequests, WaitingResponses, LOBBY_NAME } from "@port-of-mars/shared/lobby";
@@ -104,10 +104,9 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
     }
   }
 
-  async onAuth(client: Client, options: any, request: http.IncomingMessage) {
-    const userId = (request as any).session.passport.user;
-    logger.info("LOBBY OnAuth: current session has user id ", userId);
-    return await findUserById(userId);
+  async onAuth(client: Client, options: { token: string }, request?: http.IncomingMessage) {
+    const user = await getServices().account.findUserById((request as any).session.passport.user);
+    return user;
   }
 
   onJoin(client: Client, options: any) {

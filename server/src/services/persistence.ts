@@ -42,7 +42,7 @@ export class ConsolePersister implements Persister {
     console.log('synced');
   }
 
-  async applyMany(events: Array<ge.GameEvent>, metadata: Metadata): Promise<void> {
+  async persist(events: Array<ge.GameEvent>, metadata: Metadata): Promise<void> {
     await this.sync();
   }
 }
@@ -103,7 +103,7 @@ export class DBPersister implements Persister {
     })
   }
 
-  async applyMany(events: Array<ge.GameEvent>, metadata: Metadata) {
+  async persist(events: Array<ge.GameEvent>, metadata: Metadata) {
     const rawGameEvents = events.map(ge => toDBRawGameEvent(ge, metadata));
     console.log(rawGameEvents);
     await this.lock.runExclusive(async () => {
