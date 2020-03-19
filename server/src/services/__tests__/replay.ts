@@ -10,16 +10,18 @@ import {
 import {CURATOR, Phase} from "@port-of-mars/shared/types";
 import {toDBGameEvent} from "@port-of-mars/server/services/persistence";
 import {GameReplayer} from "@port-of-mars/server/services/replay";
+import {GameEvent} from "@port-of-mars/server/rooms/game/events/types";
 
 describe('a game replay', () => {
   const gs = new GameState(mockGameStateInitOpts());
-  const ge = [
-    new TakenStateSnapshot(300, gs.toJSON()),
-    new TimeInvested(200, { role: CURATOR, investment: { upkeep: 2, culture: 2, finance: 0, government: 0, legacy: 0, science: 0}}),
-    new EnteredTradePhase(10),
-    new EnteredPurchasePhase(5)
-  ].map(e => toDBGameEvent(1, e));
-  const gr = new GameReplayer(ge);
+  const ge: Array<[number, GameEvent]> = [
+    [300, new TakenStateSnapshot(gs.toJSON())],
+    [200, new TimeInvested({ role: CURATOR, investment: { upkeep: 2, culture: 2, finance: 0, government: 0, legacy: 0, science: 0}})],
+    [ 10, new EnteredTradePhase()],
+    [  5, new EnteredPurchasePhase()]
+  ];
+  const gr = new GameReplayer(ge.map(([timeRemaining, e]) =>
+    toDBGameEvent(e, { gameId: 1, timeRemaining, dateCreated: new Date()})));
 
   it('should preserve all data of the original game play through', () => {
     const data = gr.summarize(g => ({ phase: g.phase, culture: g.players.Curator.inventory.culture }));

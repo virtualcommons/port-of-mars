@@ -1,9 +1,8 @@
-import {Connection, Repository} from "typeorm";
 import {Game} from "@port-of-mars/server/entity/Game";
 import {User} from "@port-of-mars/server/entity/User";
 import {Player} from "@port-of-mars/server/entity/Player";
 import * as ge from "@port-of-mars/server/rooms/game/events/types";
-import {GameOpts, Persister} from "@port-of-mars/server/rooms/game/types";
+import {GameOpts, Metadata, Persister} from "@port-of-mars/server/rooms/game/types";
 import * as assert from "assert";
 import {GameEvent} from "@port-of-mars/server/entity/GameEvent";
 import Mutex from "async-mutex/lib/Mutex";
@@ -12,19 +11,17 @@ import _ from "lodash";
 import {getConnection} from "@port-of-mars/server/util";
 import {TournamentRound} from "@port-of-mars/server/entity/TournamentRound";
 
-function toDBRawGameEvent(gameId: number, gameEvent: ge.GameEvent) {
+function toDBRawGameEvent(gameEvent: ge.GameEvent, metadata: Metadata) {
   const ev = gameEvent.serialize();
   return {
-    gameId,
+    ...metadata,
     type: ev.kind,
     payload: ev.data ?? {},
-    dateCreated: new Date(ev.dateCreated),
-    timeRemaining: ev.timeRemaining
   }
 }
 
-export function toDBGameEvent(gameId: number, gameEvent: ge.GameEvent) {
-  const dbRawGameEvent = toDBRawGameEvent(gameId, gameEvent);
+export function toDBGameEvent(gameEvent: ge.GameEvent, metadata: Metadata) {
+  const dbRawGameEvent = toDBRawGameEvent(gameEvent, metadata);
   const dbGameEvent = new GameEvent();
   Object.assign(dbGameEvent, dbRawGameEvent);
   return dbGameEvent
@@ -45,8 +42,7 @@ export class ConsolePersister implements Persister {
     console.log('synced');
   }
 
-  async applyMany(gameId: number, events: Array<ge.GameEvent>): Promise<void> {
-    console.log(events.map(e => e.serialize().kind));
+  async applyMany(events: Array<ge.GameEvent>, metadata: Metadata): Promise<void> {
     await this.sync();
   }
 }
@@ -112,8 +108,8 @@ export class DBPersister implements Persister {
     })
   }
 
-  async applyMany(gameId: number, events: Array<ge.GameEvent>) {
-    const rawGameEvents = events.map(ge => toDBRawGameEvent(gameId, ge));
+  async applyMany(events: Array<ge.GameEvent>, metadata: Metadata) {
+    const rawGameEvents = events.map(ge => toDBRawGameEvent(ge, metadata));
     console.log(rawGameEvents);
     await this.lock.runExclusive(async () => {
       for (const rawEvent of rawGameEvents) {

@@ -27,26 +27,21 @@ import * as entities from '@port-of-mars/server/entity/GameEvent';
 import _ from "lodash";
 
 class GameEventDeserializer {
-  protected lookups: { [classname: string]: { new(timeRemaining: number, data?: any): GameEvent }} = {};
+  protected lookups: { [classname: string]: { new(data?: any): GameEvent }} = {};
 
-  register(event: { new (timeRemaining: number, data: any): GameEvent }) {
+  register(event: { new (data: any): GameEvent }) {
     this.lookups[_.kebabCase(event.name)] = event;
   }
 
   deserialize(ge: entities.GameEvent) {
     const constructor = this.lookups[ge.type];
-    return new constructor(ge.timeRemaining, ge.payload);
+    return new constructor(ge.payload);
   }
 }
 export const gameEventDeserializer = new GameEventDeserializer();
 
 abstract class GameEventWithData implements GameEvent {
   abstract data: object;
-  dateCreated: number;
-
-  constructor(public timeRemaining: number) {
-    this.dateCreated = new Date().getTime();
-  }
 
   abstract apply(game: GameState): void;
 
@@ -58,15 +53,13 @@ abstract class GameEventWithData implements GameEvent {
     return {
       kind: this.kind,
       data: this.data,
-      dateCreated: this.dateCreated,
-      timeRemaining: this.timeRemaining
     };
   }
 }
 
 export class SetPlayerReadiness extends GameEventWithData {
-  constructor(timeRemaining: number, public data: { value: boolean; role: Role }) {
-    super(timeRemaining);
+  constructor(public data: { value: boolean; role: Role }) {
+    super();
   }
 
   apply(game: GameState): void {
@@ -76,8 +69,8 @@ export class SetPlayerReadiness extends GameEventWithData {
 gameEventDeserializer.register(SetPlayerReadiness);
 
 export class SentChatMessage extends GameEventWithData {
-  constructor(timeRemaining: number, public data: ChatMessageData) {
-    super(timeRemaining);
+  constructor(public data: ChatMessageData) {
+    super();
   }
 
   apply(game: GameState) {
@@ -87,8 +80,8 @@ export class SentChatMessage extends GameEventWithData {
 gameEventDeserializer.register(SentChatMessage);
 
 export class PurchasedAccomplishment extends GameEventWithData {
-  constructor(timeRemaining: number, public data: { accomplishment: AccomplishmentData; role: Role }) {
-    super(timeRemaining);
+  constructor(public data: { accomplishment: AccomplishmentData; role: Role }) {
+    super();
   }
 
   apply(game: GameState): void {
@@ -98,8 +91,8 @@ export class PurchasedAccomplishment extends GameEventWithData {
 gameEventDeserializer.register(PurchasedAccomplishment);
 
 export class DiscardedAccomplishment extends GameEventWithData {
-  constructor(timeRemaining: number, public data: { id: number; role: Role }) {
-    super(timeRemaining);
+  constructor(public data: { id: number; role: Role }) {
+    super();
   }
 
   apply(game: GameState): void {
@@ -109,8 +102,8 @@ export class DiscardedAccomplishment extends GameEventWithData {
 gameEventDeserializer.register(DiscardedAccomplishment);
 
 export class TimeInvested extends GameEventWithData {
-  constructor(timeRemaining: number, public data: { investment: InvestmentData; role: Role }) {
-    super(timeRemaining);
+  constructor(public data: { investment: InvestmentData; role: Role }) {
+    super();
   }
 
   apply(game: GameState): void {
@@ -120,8 +113,8 @@ export class TimeInvested extends GameEventWithData {
 gameEventDeserializer.register(TimeInvested);
 
 export class AcceptedTradeRequest extends GameEventWithData {
-  constructor(timeRemaining: number, public data: { id: string }) {
-    super(timeRemaining);
+  constructor(public data: { id: string }) {
+    super();
   }
 
   apply(game: GameState): void {
@@ -131,8 +124,8 @@ export class AcceptedTradeRequest extends GameEventWithData {
 gameEventDeserializer.register(AcceptedTradeRequest);
 
 export class RejectedTradeRequest extends GameEventWithData {
-  constructor(timeRemaining: number, public data: { id: string }) {
-    super(timeRemaining);
+  constructor(public data: { id: string }) {
+    super();
   }
 
   apply(game: GameState): void {
@@ -142,8 +135,8 @@ export class RejectedTradeRequest extends GameEventWithData {
 gameEventDeserializer.register(RejectedTradeRequest);
 
 export class CanceledTradeRequest extends GameEventWithData {
-  constructor(timeRemaining: number, public data: { id: string }) {
-    super(timeRemaining);
+  constructor(public data: { id: string }) {
+    super();
   }
 
   apply(game: GameState): void {
@@ -153,8 +146,8 @@ export class CanceledTradeRequest extends GameEventWithData {
 gameEventDeserializer.register(CanceledTradeRequest);
 
 export class SentTradeRequest extends GameEventWithData {
-  constructor(timeRemaining: number, public data: TradeData) {
-    super(timeRemaining);
+  constructor(public data: TradeData) {
+    super();
   }
 
   apply(game: GameState): void {
@@ -168,11 +161,8 @@ gameEventDeserializer.register(SentTradeRequest);
  */
 
 abstract class KindOnlyGameEvent implements GameEvent {
-  dateCreated: number;
 
-  constructor(public timeRemaining: number, data?: any) {
-    this.dateCreated = new Date().getTime();
-  }
+  constructor(data?: any) {}
 
   get kind(): string {
     return _.kebabCase(this.constructor.name);
@@ -181,7 +171,7 @@ abstract class KindOnlyGameEvent implements GameEvent {
   abstract apply(game: GameState): void;
 
   serialize() {
-    return { kind: this.kind, dateCreated: new Date().getTime(), timeRemaining: this.timeRemaining };
+    return { kind: this.kind, dateCreated: new Date().getTime() };
   }
 }
 
@@ -200,6 +190,7 @@ export class InitializedMarsEvent extends KindOnlyGameEvent {
 
   }
 }
+gameEventDeserializer.register(InitializedMarsEvent);
 
 export class EnteredMarsEventPhase extends KindOnlyGameEvent {
 
@@ -329,10 +320,8 @@ gameEventDeserializer.register(EnteredVictoryPhase);
 
 export class TakenStateSnapshot implements GameEvent {
   kind = 'taken-state-snapshot';
-  dateCreated: number;
 
-  constructor(public timeRemaining: number, public data: object) {
-    this.dateCreated = new Date().getTime();
+  constructor(public data: object) {
   }
 
   apply(game: GameState): void {}
@@ -340,17 +329,15 @@ export class TakenStateSnapshot implements GameEvent {
   serialize() {
     return {
       kind: this.kind,
-      data: this.data,
-      dateCreated: new Date().getTime(),
-      timeRemaining: this.timeRemaining
+      data: this.data
     };
   }
 }
 gameEventDeserializer.register(TakenStateSnapshot);
 
 export class VotedForPersonalGain extends GameEventWithData {
-  constructor(timeRemaining: number, public data: { role: Role; vote: boolean }) {
-    super(timeRemaining);
+  constructor(public data: { role: Role; vote: boolean }) {
+    super();
   }
 
   apply(game: GameState) {
@@ -364,8 +351,8 @@ export class VotedForPersonalGain extends GameEventWithData {
 gameEventDeserializer.register(VotedForPersonalGain);
 
 export class VotedForPhilanthropist extends GameEventWithData {
-  constructor(timeRemaining: number, public data: { voter: Role, vote: Role }) {
-    super(timeRemaining);
+  constructor(public data: { voter: Role, vote: Role }) {
+    super();
   }
 
   apply(game: GameState): void {
@@ -383,8 +370,8 @@ export class VotedForPhilanthropist extends GameEventWithData {
 gameEventDeserializer.register(VotedForPhilanthropist);
 
 export class OutOfCommissionedCurator extends GameEventWithData {
-  constructor(timeRemaining: number, public data: {role: Role}) {
-    super(timeRemaining);
+  constructor(public data: {role: Role}) {
+    super();
   }
 
   apply(game: GameState): void {
@@ -402,8 +389,8 @@ export class OutOfCommissionedCurator extends GameEventWithData {
 gameEventDeserializer.register(OutOfCommissionedCurator);
 
 export class OutOfCommissionedPoliician extends GameEventWithData {
-  constructor(timeRemaining: number, public data: {role: Role}) {
-    super(timeRemaining);
+  constructor(public data: {role: Role}) {
+    super();
   }
 
   apply(game: GameState): void {
@@ -421,8 +408,8 @@ export class OutOfCommissionedPoliician extends GameEventWithData {
 gameEventDeserializer.register(OutOfCommissionedPoliician);
 
 export class OutOfComissionedResearcher extends GameEventWithData {
-  constructor(timeRemaining: number, public data: {role: Role}) {
-    super(timeRemaining);
+  constructor(public data: {role: Role}) {
+    super();
   }
 
   apply(game: GameState): void {
@@ -440,8 +427,8 @@ export class OutOfComissionedResearcher extends GameEventWithData {
 gameEventDeserializer.register(OutOfComissionedResearcher);
 
 export class OutOfCommissionedPioneer extends GameEventWithData {
-  constructor(timeRemaining: number, public data: {role: Role}) {
-    super(timeRemaining);
+  constructor(public data: {role: Role}) {
+    super();
   }
 
   apply(game: GameState): void {
@@ -459,8 +446,8 @@ export class OutOfCommissionedPioneer extends GameEventWithData {
 gameEventDeserializer.register(OutOfCommissionedPioneer);
 
 export class OutOfCommissionedEntrepreneur extends GameEventWithData {
-  constructor(timeRemaining: number, public data: {role: Role}) {
-    super(timeRemaining);
+  constructor(public data: {role: Role}) {
+    super();
   }
 
   apply(game: GameState): void {
@@ -478,8 +465,8 @@ export class OutOfCommissionedEntrepreneur extends GameEventWithData {
 gameEventDeserializer.register(OutOfCommissionedEntrepreneur);
 
 export class SelectedInfluence extends GameEventWithData {
-  constructor(timeRemaining: number, public data: {role: Role, influence: Resource}) {
-    super(timeRemaining);
+  constructor(public data: {role: Role, influence: Resource}) {
+    super();
   }
 
   apply(game: GameState): void {
@@ -491,12 +478,11 @@ export class SelectedInfluence extends GameEventWithData {
     }
   }
 }
-
 gameEventDeserializer.register(SelectedInfluence);
 
 export class KeptResources extends GameEventWithData {
-  constructor(timeRemaining: number, public data: {role: Role, savedResources: InvestmentData}){
-    super(timeRemaining);
+  constructor(public data: {role: Role, savedResources: InvestmentData}){
+    super();
   }
 
   apply(game: GameState): void {
@@ -510,6 +496,5 @@ export class KeptResources extends GameEventWithData {
     game.players[this.data.role].updateReadiness(true);
   }
 }
-
 gameEventDeserializer.register(KeptResources);
 

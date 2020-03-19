@@ -21,7 +21,7 @@ import {
   BondingThroughAdversityCmd,
   BreakdownOfTrustCmd
 } from '@port-of-mars/server/rooms/game/commands';
-import {Game, GameOpts, Persister} from '@port-of-mars/server/rooms/game/types';
+import {Game, GameOpts, Metadata, Persister} from '@port-of-mars/server/rooms/game/types';
 import { Command } from '@port-of-mars/server/rooms/game/commands/types';
 import { TakenStateSnapshot } from '@port-of-mars/server/rooms/game/events';
 import {User} from "@port-of-mars/server/entity/User";
@@ -49,8 +49,8 @@ export class GameRoom extends Room<GameState> implements Game {
     this.persister = options.persister;
     this.gameId = await this.persister.initialize(options, this.roomId);
     const snapshot = this.state.toJSON();
-    const event = new TakenStateSnapshot(this.state.timeRemaining, snapshot);
-    this.persister.applyMany(this.gameId, [event]);
+    const event = new TakenStateSnapshot(snapshot);
+    this.persister.applyMany([event], this.getMetadata());
     this.clock.setInterval(this.gameLoop.bind(this), 1000);
   }
 
@@ -65,6 +65,14 @@ export class GameRoom extends Room<GameState> implements Game {
 
   safeSend(client: Client, msg: Responses) {
     this.send(client, msg);
+  }
+
+  getMetadata(): Metadata {
+    return {
+      gameId: this.gameId,
+      dateCreated: new Date(),
+      timeRemaining: this.state.timeRemaining
+    }
   }
 
   getPlayerByClient(client: Client): Player {
@@ -123,7 +131,7 @@ export class GameRoom extends Room<GameState> implements Game {
       const cmd = new SetNextPhaseCmd(this);
       const events = cmd.execute();
       this.state.applyMany(events);
-      this.persister.applyMany(this.gameId, events);
+      this.persister.applyMany(events, this.getMetadata());
     }
   }
 
@@ -131,7 +139,7 @@ export class GameRoom extends Room<GameState> implements Game {
     const cmd = this.prepareRequest(message, client);
     const events = cmd.execute();
     this.state.applyMany(events);
-    this.persister.applyMany(this.gameId, events);
+    this.persister.applyMany(events, this.getMetadata());
   }
   onLeave(client: Client, consented: boolean) {}
 }

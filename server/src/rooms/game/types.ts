@@ -3,6 +3,7 @@ import {GameState, Player} from "@port-of-mars/server/rooms/game/state";
 import {Responses} from "@port-of-mars/shared/game/responses";
 import {MarsEventData, Role} from "@port-of-mars/shared/types";
 import * as ge from "@port-of-mars/server/rooms/game/events/types";
+import {GameEvent} from "@port-of-mars/server/entity/GameEvent";
 
 export type PlayerReadiness = { [role in Role]: boolean }
 
@@ -18,7 +19,7 @@ export interface PersistenceAPIConstructor {
 
 export interface Persister {
   initialize(options: GameOpts, roomId: string): Promise<number>
-  applyMany(gameId: number, events: Array<ge.GameEvent>): void
+  applyMany(events: Array<ge.GameEvent>, metadata: Metadata): void
   sync(): Promise<void>
 }
 
@@ -32,3 +33,5 @@ export interface GameStateOpts {
   deck: Array<MarsEventData>
   round: number
 }
+
+export type Metadata = Pick<GameEvent, 'dateCreated' | 'timeRemaining' | 'gameId'>
