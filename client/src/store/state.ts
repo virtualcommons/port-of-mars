@@ -88,9 +88,17 @@ export interface User {
   passedQuiz?: boolean;
 }
 
+export interface PlayerInfoModal{
+  role:Role;
+  visible:boolean;
+}
+
 
 export interface uiVars {
   tradeData:TradeDataWithNull<''|Role>;
+  modalViews:{
+    playerInfoModal:PlayerInfoModal
+  };
 }
 
 
@@ -160,6 +168,13 @@ export const initialStoreState: State = {
       from: {
         role: 'Researcher',
         resourceAmount: defaultInventory()
+      }
+    },
+
+    modalViews:{
+      playerInfoModal:{
+        role: 'Researcher',
+        visible: false,
       }
     }
   }

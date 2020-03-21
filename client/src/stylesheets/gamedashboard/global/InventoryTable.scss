@@ -1,0 +1,35 @@
+.table{
+    width: 100%;
+    text-align: center;
+
+    table, tbody, thead, tr, td, th{
+        color: $space-white;
+        border: 0;
+        padding: 0 0 0.4rem 0rem;
+    }
+
+    th:first-child{
+        text-align: left;
+    }
+
+    .header{
+        color: $new-space-orange;
+        
+    }
+
+
+    .data{
+       .resource-name-data{
+           text-align: left;
+           text-transform: capitalize;
+            .icon{
+                width: 2rem;
+                height: 2rem;
+            }
+       }
+        
+    }
+    
+
+
+}
