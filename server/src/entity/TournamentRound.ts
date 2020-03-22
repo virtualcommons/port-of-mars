@@ -20,6 +20,9 @@ export class TournamentRound {
   @Column()
   roundNumber!: number;
 
+  @Column()
+  numberOfGameRounds: number = 12;
+
   @OneToMany(
     type => Game,
     game => game.tournamentRound

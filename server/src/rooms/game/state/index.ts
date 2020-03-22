@@ -913,7 +913,7 @@ export class GameState extends Schema implements GameData {
     this.userRoles = data.userRoles;
     this.marsEventDeck = new MarsEventsDeck(data.deck);
     this.lastTimePolled = new Date();
-    this.maxRound = data.round;
+    this.maxRound = data.numberOfGameRounds;
     this.players = new PlayerSet();
   }
 

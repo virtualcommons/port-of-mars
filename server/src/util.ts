@@ -1,16 +1,15 @@
-import {Loader, Resolver} from "typeorm-fixtures-cli/dist";
+import { Loader, Resolver } from "typeorm-fixtures-cli/dist";
 import path from "path";
 import _ from "lodash";
-import {MarsEventData, ROLES} from "@port-of-mars/shared/types";
-import {GameOpts, GameStateOpts, Persister} from "@port-of-mars/server/rooms/game/types";
+import { MarsEventData, ROLES } from "@port-of-mars/shared/types";
+import { GameOpts, GameStateOpts, Persister } from "@port-of-mars/server/rooms/game/types";
 import * as assert from "assert";
-import {ConsolePersister, DBPersister} from "@port-of-mars/server/services/persistence";
 import * as to from "typeorm";
-import {expandCopies} from "@port-of-mars/server/rooms/game/state/marsEvents/common";
-import {getAllMarsEvents} from "@port-of-mars/server/data/MarsEvents";
-import {TournamentRound} from "@port-of-mars/server/entity/TournamentRound";
-import {Page, PAGE_META} from "@port-of-mars/shared/routes";
-import {settings} from "@port-of-mars/server/settings";
+import { expandCopies } from "@port-of-mars/server/rooms/game/state/marsEvents/common";
+import { getAllMarsEvents } from "@port-of-mars/server/data/MarsEvents";
+import { TournamentRound } from "@port-of-mars/server/entity/TournamentRound";
+import { Page, PAGE_META } from "@port-of-mars/shared/routes";
+import { settings } from "@port-of-mars/server/settings";
 
 export function getConnection(): to.Connection {
   const connection_name = process.env.NODE_ENV === 'test' ? 'test' : 'default';
@@ -63,12 +62,12 @@ export async function mockGameInitOpts(persister: Persister): Promise<GameOpts> 
 
 export async function buildGameOpts(usernames: Array<string>, persister: Persister): Promise<GameOpts> {
   assert.equal(usernames.length, ROLES.length);
-  const tr = await getConnection().getRepository(TournamentRound).findOneOrFail();
+  const currentTournamentRound = await getConnection().getRepository(TournamentRound).findOneOrFail();
   return {
     userRoles: _.zipObject(usernames, ROLES),
     deck: _.shuffle(getMarsEventData()),
-    round: getRandomIntInclusive(8, 12),
-    tournamentRoundId: tr.id,
+    round: currentTournamentRound.numberOfGameRounds,
+    tournamentRoundId: currentTournamentRound.id,
     persister
   };
 }

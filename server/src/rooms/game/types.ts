@@ -1,9 +1,9 @@
-import {Client, Room} from "colyseus";
-import {GameState, Player} from "@port-of-mars/server/rooms/game/state";
-import {Responses} from "@port-of-mars/shared/game/responses";
-import {MarsEventData, Role} from "@port-of-mars/shared/types";
+import { Client, Room } from "colyseus";
+import { GameState, Player } from "@port-of-mars/server/rooms/game/state";
+import { Responses } from "@port-of-mars/shared/game/responses";
+import { MarsEventData, Role } from "@port-of-mars/shared/types";
 import * as ge from "@port-of-mars/server/rooms/game/events/types";
-import {GameEvent} from "@port-of-mars/server/entity/GameEvent";
+import { GameEvent } from "@port-of-mars/server/entity/GameEvent";
 
 export type PlayerReadiness = { [role in Role]: boolean }
 
@@ -14,7 +14,7 @@ export interface Game extends Room<GameState> {
 }
 
 export interface PersistenceAPIConstructor {
-  new (connection: any): Persister
+  new(connection: any): Persister
 }
 
 export interface Persister {
@@ -31,7 +31,7 @@ export interface GameOpts extends GameStateOpts {
 export interface GameStateOpts {
   userRoles: { [username: string]: Role }
   deck: Array<MarsEventData>
-  round: number
+  numberOfGameRounds: number
 }
 
 export type Metadata = Pick<GameEvent, 'dateCreated' | 'timeRemaining' | 'gameId'>

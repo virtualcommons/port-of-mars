@@ -1,15 +1,15 @@
-import {Game} from "@port-of-mars/server/entity/Game";
-import {User} from "@port-of-mars/server/entity/User";
-import {Player} from "@port-of-mars/server/entity/Player";
+import { Game } from "@port-of-mars/server/entity/Game";
+import { User } from "@port-of-mars/server/entity/User";
+import { Player } from "@port-of-mars/server/entity/Player";
 import * as ge from "@port-of-mars/server/rooms/game/events/types";
-import {GameOpts, Metadata, Persister} from "@port-of-mars/server/rooms/game/types";
+import { GameOpts, Metadata, Persister } from "@port-of-mars/server/rooms/game/types";
 import * as assert from "assert";
-import {GameEvent} from "@port-of-mars/server/entity/GameEvent";
+import { GameEvent } from "@port-of-mars/server/entity/GameEvent";
 import Mutex from "async-mutex/lib/Mutex";
-import {ClockTimer} from "@gamestdio/timer/lib/ClockTimer";
+import { ClockTimer } from "@gamestdio/timer/lib/ClockTimer";
 import _ from "lodash";
-import {getConnection} from "@port-of-mars/server/util";
-import {TournamentRound} from "@port-of-mars/server/entity/TournamentRound";
+import { getConnection } from "@port-of-mars/server/util";
+import { TournamentRound } from "@port-of-mars/server/entity/TournamentRound";
 
 function toDBRawGameEvent(gameEvent: ge.GameEvent, metadata: Metadata) {
   const ev = gameEvent.serialize();
@@ -54,28 +54,23 @@ export class DBPersister implements Persister {
   async initialize(options: GameOpts, roomId: string) {
     const g = new Game();
     const conn = getConnection();
-    return await conn.transaction(async transact => {
-      const tournRoundRepo = transact.getRepository(TournamentRound);
-      let tournamentRoundId = (await tournRoundRepo
-        .createQueryBuilder('tournamentRound')
-        .select('MAX(id)')
-        .getRawOne()).max;
-      if (_.isNull(tournamentRoundId)) {
-        throw new Error('could find matching tournament round')
+    return await conn.transaction(async transaction => {
+      if (_.isNull(options.tournamentRoundId)) {
+        throw new Error('could not find matching tournament round')
       }
-      g.tournamentRoundId = tournamentRoundId;
+      g.tournamentRoundId = options.tournamentRoundId;
       g.roomId = roomId;
 
-      const userRepo = transact.getRepository(User);
+      const userRepo = transaction.getRepository(User);
       const usernames = Object.keys(options.userRoles);
       const q = await userRepo.createQueryBuilder('user')
         .select('id')
         .addSelect('username')
-        .where('user.username IN (:...usernames)', {usernames});
+        .where('user.username IN (:...usernames)', { usernames });
       const rawUsers = await q.getRawMany();
       assert.equal(rawUsers.length, usernames.length);
 
-      await transact.save(g);
+      await transaction.save(g);
 
       const players = [];
       for (const rawUser of rawUsers) {
@@ -86,7 +81,7 @@ export class DBPersister implements Persister {
         };
         players.push(p);
       }
-      await transact.getRepository(Player).createQueryBuilder()
+      await transaction.getRepository(Player).createQueryBuilder()
         .insert()
         .values(players)
         .execute();
