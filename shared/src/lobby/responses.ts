@@ -6,7 +6,7 @@ export interface JoinedClientQueue {
 
 export interface SentInvitation {
   kind: 'sent-invitation';
-  matchData: object;
+  reservation: object;
 }
 
 export interface RemovedClientFromLobby {

@@ -231,7 +231,7 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
 
           await Promise.all(
             group.stats.map(async client => {
-              const matchData = await matchMaker.reserveSeatFor(
+              const reservation = await matchMaker.reserveSeatFor(
                 room,
                 client.options
               );
@@ -241,7 +241,7 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
                */
               this.sendSafe(client.client, {
                 kind: 'sent-invitation',
-                matchData: matchData
+                reservation: reservation
               });
             })
           );
@@ -258,4 +258,5 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
       this.state.waitingUserCount = this.stats.length;
     }
   }
+
 }

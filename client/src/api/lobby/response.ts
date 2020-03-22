@@ -25,8 +25,8 @@ export function applyWaitingServerResponses<T>(room: Room, component: WaitingLob
         (component as any).joinedQueue = msg.value;
         break;
       case 'sent-invitation':
-        const matchData: any = msg.matchData;
-        component.$ajax.reservation = matchData;
+        const reservation: any = msg.reservation;
+        component.$ajax.reservation = reservation;
         router.push({ name: GAME_PAGE });
         room.send({ kind: 'accept-invitation' });
         break;
