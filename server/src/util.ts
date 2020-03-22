@@ -38,7 +38,7 @@ export function mockGameStateInitOpts(
   loader.load(path.resolve(__dirname, '../fixtures'));
   const fixtures = new Resolver().resolve(loader.fixtureConfigs);
   const deck = deckStrategy(_.clone(expandCopies(getAllMarsEvents())));
-  const round = nRoundStrategy();
+  const numberOfGameRounds = nRoundStrategy();
   const userRoles = _.zipObject(
     fixtures.filter(f => f.entity === 'User')
       .map(f => f.data.username)
@@ -47,26 +47,28 @@ export function mockGameStateInitOpts(
   return {
     userRoles,
     deck,
-    round
+    numberOfGameRounds
   };
 }
 
 export async function mockGameInitOpts(persister: Persister): Promise<GameOpts> {
-  const tr = await getConnection().getRepository(TournamentRound).findOneOrFail();
+  // FIXME: this should be retrieving the tournament round via TournamentService.getCurrentRound() or equivalent
+  const currentTournamentRound = await getConnection().getRepository(TournamentRound).findOneOrFail();
   return {
     ...mockGameStateInitOpts(),
-    tournamentRoundId: tr.id,
+    tournamentRoundId: currentTournamentRound.id,
     persister
   };
 }
 
 export async function buildGameOpts(usernames: Array<string>, persister: Persister): Promise<GameOpts> {
   assert.equal(usernames.length, ROLES.length);
+  // FIXME: this should be retrieving the tournament round via TournamentService.getCurrentRound() or equivalent
   const currentTournamentRound = await getConnection().getRepository(TournamentRound).findOneOrFail();
   return {
     userRoles: _.zipObject(usernames, ROLES),
     deck: _.shuffle(getMarsEventData()),
-    round: currentTournamentRound.numberOfGameRounds,
+    numberOfGameRounds: currentTournamentRound.numberOfGameRounds,
     tournamentRoundId: currentTournamentRound.id,
     persister
   };
