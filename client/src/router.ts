@@ -5,6 +5,7 @@ import Login from '@port-of-mars/client/views/Login.vue';
 import WaitingLobby from '@port-of-mars/client/views/WaitingLobby.vue';
 import Game from '@port-of-mars/client/views/Game.vue';
 import Tutorial from '@port-of-mars/client/views/Tutorial.vue';
+import PlayerDashboard from '@port-of-mars/client/views/PlayerDashboard.vue';
 import store from '@port-of-mars/client/store'
 import {AjaxRequest} from "@port-of-mars/client/plugins/ajax";
 import {
@@ -13,7 +14,8 @@ import {
   LOGIN_PAGE,
   PAGE_META,
   REGISTER_PAGE,
-  TUTORIAL_PAGE
+  TUTORIAL_PAGE,
+  PLAYER_DASHBOARD
 } from "@port-of-mars/shared/routes";
 import Register from "@port-of-mars/client/views/Register.vue";
 
@@ -26,7 +28,9 @@ const router = new Router({
     { ...PAGE_META[LOBBY_PAGE], component: WaitingLobby },
     { ...PAGE_META[GAME_PAGE], component: Game },
     { ...PAGE_META[TUTORIAL_PAGE], component: Tutorial },
-    { ...PAGE_META[REGISTER_PAGE], component: Register }
+    { ...PAGE_META[REGISTER_PAGE], component: Register },
+    { ...PAGE_META[PLAYER_DASHBOARD], component: PlayerDashboard },
+
   ]
 });
 
