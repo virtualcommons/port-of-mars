@@ -2,13 +2,13 @@ import { Room, Client, matchMaker } from 'colyseus';
 import schedule from 'node-schedule';
 import { ROLES } from '@port-of-mars/shared/types';
 import { buildGameOpts } from '@port-of-mars/server/util';
+import { GameRoom } from '@port-of-mars/server/rooms/game';
 import { LobbyRoomState } from '@port-of-mars/server/rooms/lobby/state';
 import { settings } from "@port-of-mars/server/settings";
 import { findUserById } from "@port-of-mars/server/services/account";
 import _ from "lodash";
 import * as http from "http";
-import { WaitingRequests } from "@port-of-mars/shared/lobby/requests";
-import { WaitingResponses } from "@port-of-mars/shared/lobby/responses";
+import { WaitingRequests, WaitingResponses, LOBBY_NAME } from "@port-of-mars/shared/lobby";
 import { Persister } from "@port-of-mars/server/rooms/game/types";
 
 const logger = settings.logging.getLogger(__filename);
@@ -39,6 +39,8 @@ interface ClientStat {
 
 export class RankedLobbyRoom extends Room<LobbyRoomState> {
 
+  public static get NAME(): string { return LOBBY_NAME };
+
   /**
    * Distribute clients into groups at this interval
    * currently set to 15 minutes
@@ -49,11 +51,6 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
    * Groups of players per iteration
    */
   groups: Array<MatchmakingGroup> = [];
-
-  /**
-   * name of the room to create
-   */
-  roomToCreateName = 'port_of_mars_game';
 
   /**
    * number of players in each game
@@ -232,7 +229,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
         const gameOpts = await buildGameOpts(usernames, this.persister);
         // Create room instance in the server.
         const room = await matchMaker.createRoom(
-          this.roomToCreateName,
+          GameRoom.NAME,
           gameOpts
         );
         logger.debug('WAITING LOBBY: created room ', room);

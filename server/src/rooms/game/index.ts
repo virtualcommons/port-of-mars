@@ -1,7 +1,6 @@
 import http from "http";
-import { Client, Delayed, Room } from 'colyseus';
-import { Requests } from '@port-of-mars/shared/game/requests';
-import { Responses } from '@port-of-mars/shared/game/responses';
+import { Client, Room } from 'colyseus';
+import { Requests, Responses } from '@port-of-mars/shared/game';
 import { GameState, Player } from '@port-of-mars/server/rooms/game/state';
 import {
   AcceptTradeRequestCmd,
@@ -32,6 +31,7 @@ import { findUserById } from "@port-of-mars/server/services/account";
 const logger = settings.logging.getLogger(__filename);
 
 export class GameRoom extends Room<GameState> implements Game {
+  public static get NAME(): string { return 'port_of_mars_game_room' };
   maxClients = 5;
   autoDispose = false;
   persister!: Persister;
