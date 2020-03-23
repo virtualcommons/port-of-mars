@@ -1,4 +1,5 @@
-.containerboard {
+.gameboardcontainer {
+  position: relative;
   @include expand;
   /* SET MAX SIZE OF SCREEN */
   max-height: $max-screen-height;

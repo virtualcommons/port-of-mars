@@ -1,5 +1,6 @@
 <template>
-  <div class="containerboard container">
+  <div class="gameboardcontainer container">
+    <ProfileMenu />
     <div class="gameboardtop row">top</div>
     <div class="gameboardbottom row">
       <NewGameBoardBottom />
@@ -10,10 +11,12 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import NewGameBoardBottom from '@port-of-mars/client/components/gamedashboard/bottom/containers/NewGameBoardBottom.vue';
+import ProfileMenu from '@port-of-mars/client/components/gamedashboard/global/ProfileMenu.vue';
 
 @Component({
   components: {
-    NewGameBoardBottom
+    NewGameBoardBottom,
+    ProfileMenu
   }
 })
 export default class NewGameBoardContainer extends Vue {}
