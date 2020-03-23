@@ -1,0 +1,12 @@
+.c-phasecontainer {
+  @include expand;
+  @include new-border-orange;
+  padding: 0.5rem;
+  margin: 0;
+  //   background-color: purple;
+
+  .content {
+    @include expand;
+    background-color: green;
+  }
+}
