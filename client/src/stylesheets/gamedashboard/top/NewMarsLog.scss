@@ -1,0 +1,57 @@
+.c-marslog {
+  @include expand;
+  @include make-column-and-center;
+  // background-color: cadetblue;
+
+  .wrapper {
+    @include expand;
+    overflow-y: scroll;
+    @include disable-scroll;
+
+    .empty {
+      margin-bottom: 0;
+      font-size: $font-med;
+      text-align: center;
+      color: $space-white-opaque-2;
+    }
+
+    .message {
+      height: auto;
+      max-width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 0.5rem;
+      font-size: $font-med;
+      color: $space-white;
+      overflow: auto;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .category {
+        margin: 0;
+        text-transform: capitalize;
+        color: $new-space-orange;
+        font-weight: $font-weight-maven-pro-bold;
+      }
+
+      .content,
+      .time {
+        font-weight: $font-weight-maven-pro-regular;
+      }
+
+      .content {
+        margin: 0.5rem 0;
+        word-wrap: break-word;
+      }
+
+      .time {
+        margin: 0;
+
+        span {
+          color: $new-space-orange;
+        }
+      }
+    }
+  }
+}

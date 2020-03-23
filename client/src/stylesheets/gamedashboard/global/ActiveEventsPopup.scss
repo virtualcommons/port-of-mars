@@ -1,0 +1,35 @@
+.c-activeeventspopup {
+  position: absolute;
+  left: 4rem;
+  width: 24rem;
+  height: 48rem;
+  border: 0.125rem solid $new-space-orange;
+  border-top-left-radius: 0.75rem;
+  border-top-right-radius: 0.75rem;
+  @include make-column-and-top;
+  justify-content: space-between;
+  background-color: $new-space-orange;
+  z-index: 1;
+
+  .toggle {
+    height: 3rem;
+    width: 100%;
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
+    @include reset-button;
+    background-color: $new-space-orange;
+    color: $space-gray;
+    font-size: $font-med;
+    font-weight: $font-weight-maven-pro-medium;
+
+    span {
+      margin-right: 1rem;
+    }
+  }
+
+  .wrapper {
+    width: 100%;
+    height: 44.625rem;
+    background-color: $space-gray;
+  }
+}
