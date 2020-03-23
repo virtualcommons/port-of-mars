@@ -84,6 +84,10 @@ $screen-xxl: 1680px;
   transition: all 0.2s ease-in-out;
 }
 
+@mixin default-transition-button {
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
 @mixin default-scale-up {
   transform: scale(1.1);
 }
