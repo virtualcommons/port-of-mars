@@ -107,9 +107,9 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
     }
   }
 
-  async onAuth(client: Client, options: { token: string }, request?: http.IncomingMessage) {
+  async onAuth(client: Client, options: any, request: http.IncomingMessage) {
     logger.info("trying to authenticate client", client);
-    const userId = request.session.passport.user;
+    const userId = (request as any).session.passport.user;
     logger.info("current session has user id ", userId);
     return await findUserById(userId);
   }

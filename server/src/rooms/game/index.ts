@@ -37,8 +37,9 @@ export class GameRoom extends Room<GameState> implements Game {
   persister!: Persister;
   gameId!: number;
 
-  async onAuth(client: Client, options: any, request?: http.IncomingMessage) {
+  async onAuth(client: Client, options: any, request: http.IncomingMessage) {
     try {
+      logger.debug("game room onAuth: ", client);
       const user = await findUserById((request as any).session.passport.user);
       if (this.state.hasUser(user?.username)) {
         return user;

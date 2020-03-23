@@ -1059,8 +1059,11 @@ export class GameState extends Schema implements GameData {
     return this.players.asArray();
   }
 
-  hasUser(username: string): boolean {
-    return Object.keys(this.userRoles).includes(username);
+  hasUser(username: string | undefined): boolean {
+    if (username) {
+      return Object.keys(this.userRoles).includes(username);
+    }
+    return false;
   }
 
   get allPlayersAreReady(): boolean {
