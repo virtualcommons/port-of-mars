@@ -1,0 +1,63 @@
+.c-otherplayers {
+  height: 25%;
+  width: 100%;
+  padding: 0;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $space-white-opaque-1;
+  }
+
+  .wrapper {
+    @include expand;
+    margin: 0;
+
+    .picture,
+    .information {
+      height: 100%;
+      padding: 0;
+    }
+
+    .picture {
+      overflow: hidden;
+      @include make-center;
+
+      .indicator {
+        height: 5rem;
+        width: 5rem;
+        padding: 0.25rem;
+        border-radius: 50%;
+
+        .frame {
+          @include expand;
+          border-radius: 50%;
+          @include make-center;
+
+          img {
+            object-fit: cover;
+            height: 60%;
+          }
+        }
+      }
+    }
+
+    .information {
+      @include make-column-and-center;
+      align-items: flex-start;
+
+      .role {
+        margin-bottom: 0.25rem;
+        color: $space-white;
+        font-size: $font-large;
+        font-weight: $font-weight-maven-pro-bold;
+      }
+
+      .score {
+        margin-bottom: 0;
+        color: $space-white;
+        font-size: $font-med;
+        font-weight: $font-weight-maven-pro-medium;
+      }
+    }
+  }
+}
