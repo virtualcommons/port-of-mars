@@ -36,9 +36,9 @@ export default class Game extends Vue {
     if (this.$ajax.reservation) {
       console.log('consuming reservation');
       gameRoom = await this.$client.consumeSeatReservation(this.$ajax.reservation);
-    } else if (this.$ajax.gameConnInfo) {
-      console.log('reconnecting reservation')
-      gameRoom = await this.$client.reconnect(this.$ajax.gameConnInfo.roomId, this.$ajax.gameConnInfo.sessionId);
+    } else if (this.$ajax.gameConnectionInfo) {
+      console.log('reconnecting reservation to ', this.$ajax.gameConnectionInfo);
+      gameRoom = await this.$client.reconnect(this.$ajax.gameConnectionInfo.roomId, this.$ajax.gameConnectionInfo.sessionId);
     } else {
       console.log('an error occured');
       return;

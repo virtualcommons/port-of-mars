@@ -50,18 +50,18 @@ export class AjaxRequest {
 
   _reservation?: Reservation;
 
-  get gameConnInfo(): { roomId: string, sessionId: string } | null {
+  get gameConnectionInfo(): { roomId: string, sessionId: string } | null {
     const c = localStorage.getItem('room');
     return c ? JSON.parse(c) : null;
   }
 
-  set gameConnInfo(info: { roomId: string, sessionId: string } | null) {
+  set gameConnectionInfo(info: { roomId: string, sessionId: string } | null) {
     localStorage.setItem('room', JSON.stringify(info))
   }
 
   set reservation(r: Reservation | undefined) {
     if (r) {
-      this.gameConnInfo = { roomId: r.room.roomId, sessionId: r.sessionId };
+      this.gameConnectionInfo = { roomId: r.room.roomId, sessionId: r.sessionId };
     }
     this._reservation = r;
   }
@@ -71,8 +71,7 @@ export class AjaxRequest {
   }
 
   async setLoginCreds(response: Response) {
-    const data: LoginCreds = await response.json();
-    this.store.commit('SET_USER', {username: data.username});
+    response.json().then(loginCredentials => this.store.commit('SET_USER', { username: loginCredentials.username }));
   }
 
   get username(): string {

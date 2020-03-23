@@ -1,8 +1,8 @@
 import http from "http";
-import {Client, Delayed, Room} from 'colyseus';
-import {Requests} from '@port-of-mars/shared/game/requests';
-import {Responses} from '@port-of-mars/shared/game/responses';
-import {GameState, Player} from '@port-of-mars/server/rooms/game/state';
+import { Client, Delayed, Room } from 'colyseus';
+import { Requests } from '@port-of-mars/shared/game/requests';
+import { Responses } from '@port-of-mars/shared/game/responses';
+import { GameState, Player } from '@port-of-mars/server/rooms/game/state';
 import {
   AcceptTradeRequestCmd,
   PurchaseAccomplishmentCmd,
@@ -15,8 +15,8 @@ import {
   TimeInvestmentCmd,
   RejectTradeRequestCmd,
   CancelTradeRequestCmd,
-  PersonalGainVotes, VoteForPhilanthropistCmd, 
-  OutOfCommissionCuratorCmd, OutOfCommissionPoliticianCmd, 
+  PersonalGainVotes, VoteForPhilanthropistCmd,
+  OutOfCommissionCuratorCmd, OutOfCommissionPoliticianCmd,
   OutOfCommissionResearcherCmd, OutOfCommissionPioneerCmd,
   OutOfCommissionEntrepreneurCmd,
   BondingThroughAdversityCmd,
@@ -33,21 +33,27 @@ const logger = settings.logging.getLogger(__filename);
 
 export class GameRoom extends Room<GameState> implements Game {
   maxClients = 5;
+  autoDispose = false;
   persister!: Persister;
   gameId!: number;
 
-  autoDispose = false;
-
   async onAuth(client: Client, options: any, request?: http.IncomingMessage) {
-    const user = await findUserById((request as any).session.passport.user);
-    if (user && Object.keys(this.state.userRoles).includes(user.username)) {
-      return user;
+    try {
+      const user = await findUserById((request as any).session.passport.user);
+      if (this.state.hasUser(user?.username)) {
+        return user;
+      }
+      return false;
     }
-    return false;
+    catch (e) {
+      logger.fatal(e);
+      return false;
+    }
   }
 
   async onCreate(options: GameOpts) {
     this.setState(new GameState(options));
+    this.setPrivate(true);
     this.persister = options.persister;
     this.gameId = await this.persister.initialize(options, this.roomId);
     const snapshot = this.state.toJSON();
@@ -68,12 +74,16 @@ export class GameRoom extends Room<GameState> implements Game {
     }
   }
 
+  getPlayers(): Array<Player> {
+    return this.state.getPlayers();
+  }
+
   getPlayerByClient(client: Client): Player {
     return this.state.getPlayer(client.auth.username);
   }
 
   prepareRequest(r: Requests, client: Client): Command {
-    logger.trace({r});
+    logger.trace({ r });
     switch (r.kind) {
       case 'send-chat-message':
         return SendChatMessageCmd.fromReq(r, this, client);
@@ -136,20 +146,23 @@ export class GameRoom extends Room<GameState> implements Game {
   }
 
   async onLeave(client: Client, consented: boolean) {
-    const player = this.state.getPlayer(client.auth.username);
+    const player = this.getPlayerByClient(client);
     logger.info('player left:', player);
     try {
-      await this.allowReconnection(client);
+      const reconnection = this.allowReconnection(client);
+      player.setReconnecting(reconnection);
+      await reconnection;
       logger.info("player reconnected to", this.roomId);
+      player.reconnected();
     } catch (e) {
       logger.fatal(e);
     }
   }
 
   onJoin(client: Client, options: any, auth: User) {
-    logger.info('joined game', this.roomId);
-    const role = this.state.userRoles[auth.username];
-    this.safeSend(client, {kind: 'set-player-role', role});
+    logger.info('client joined game', client, this.roomId);
+    const player = this.getPlayerByClient(client);
+    this.safeSend(client, { kind: 'set-player-role', role: player.role });
   }
 
   async onDispose() {
