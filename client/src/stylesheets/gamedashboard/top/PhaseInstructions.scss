@@ -1,0 +1,44 @@
+.c-phaseinstructions {
+  @include expand;
+  padding: 1rem;
+
+  .wrapper {
+    @include expand;
+    @include make-column-and-center;
+    overflow-y: scroll;
+
+    .title {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 0.5rem;
+      color: $space-gray;
+      background-color: $new-space-orange;
+      font-size: $font-med;
+      font-weight: $font-weight-maven-pro-bold;
+      text-align: center;
+    }
+
+    .instructions {
+      flex-grow: 1;
+      width: 100%;
+      padding: 0.5rem;
+      margin: 0;
+      overflow-y: scroll;
+      background-color: $space-white-opaque-1;
+
+      .text {
+        min-height: 100%;
+        width: 100%;
+        margin: 0;
+        @include make-column-and-top;
+
+        p {
+          margin-bottom: 0;
+          color: $space-white;
+          font-size: $font-med;
+          font-weight: $font-weight-maven-pro-regular;
+        }
+      }
+    }
+  }
+}

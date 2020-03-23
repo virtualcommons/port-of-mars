@@ -5,30 +5,30 @@
 </template>
 
 <script lang="ts">
-import {Vue, Component, Inject, Provide, Prop} from 'vue-property-decorator';
+import { Vue, Component, Inject, Provide, Prop } from 'vue-property-decorator';
 import { Client, Room } from 'colyseus.js';
 import { applyGameServerResponses } from '@port-of-mars/client/api/game/response';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 import { EnvironmentMode } from '@port-of-mars/client/settings';
-import ModalContainer from '@port-of-mars/client/components/gamedashboard/global/modals/ModalContainer.vue';
-import ContainerBoard from '@port-of-mars/client/components/gamedashboard/global/containers/ContainerBoard.vue';
 import GameDashboard from '@port-of-mars/client/components/GameDashboard.vue';
+<<<<<<< HEAD
 import _ from "lodash";
 import { LOBBY_PAGE } from "@port-of-mars/shared/routes";
+=======
+import _ from 'lodash';
+>>>>>>> feat: initial game board redesign work
 
 @Component({
   name: 'game',
   components: {
-    GameDashboard,
-    ModalContainer,
-    ContainerBoard
+    GameDashboard
   }
 })
 export default class Game extends Vue {
   @Inject() readonly $client!: Client;
   @Provide() private api: GameRequestAPI = new GameRequestAPI();
   private hasApi: boolean = false;
-  private env: EnvironmentMode = new EnvironmentMode;
+  private env: EnvironmentMode = new EnvironmentMode();
 
   async created() {
     this.api.room?.leave();
