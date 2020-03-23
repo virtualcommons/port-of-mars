@@ -1,0 +1,26 @@
+.gameboardcontainer {
+  position: relative;
+  @include expand;
+  /* SET MAX SIZE OF SCREEN */
+  max-height: $max-screen-height;
+  max-width: $max-screen-width;
+  /* SET MIN SIZE OF SCREEN */
+  min-height: $min-screen-height;
+  min-width: $min-screen-width;
+  padding: 1rem;
+  margin: 0;
+  overflow: hidden;
+  z-index: 0;
+
+  .gameboardtop {
+    height: calc(calc(5 / 12) * 100%);
+    @include reset-padding-margin;
+    // background-color: green;
+  }
+
+  .gameboardbottom {
+    height: calc(calc(7 / 12) * 100%);
+    @include reset-padding-margin;
+    // background-color: blue;
+  }
+}
