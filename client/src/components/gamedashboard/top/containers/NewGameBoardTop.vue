@@ -37,7 +37,9 @@
 
       <!-- REFACTOR :: MarsLogContainer -->
       <div class="marslog col-4">
-        <div class="wrapper"></div>
+        <div class="wrapper">
+          <NewMarsLog />
+        </div>
       </div>
     </div>
   </div>
@@ -50,6 +52,7 @@ import Player from '@port-of-mars/client/components/gamedashboard/top/Player.vue
 import OtherPlayers from '@port-of-mars/client/components/gamedashboard/top/OtherPlayers.vue';
 import GameInformation from '@port-of-mars/client/components/gamedashboard/top/GameInformation.vue';
 import PhaseInstructions from '@port-of-mars/client/components/gamedashboard/top/PhaseInstructions.vue';
+import NewMarsLog from '@port-of-mars/client/components/gamedashboard/top/NewMarsLog.vue';
 
 @Component({
   components: {
@@ -57,7 +60,8 @@ import PhaseInstructions from '@port-of-mars/client/components/gamedashboard/top
     Player,
     OtherPlayers,
     GameInformation,
-    PhaseInstructions
+    PhaseInstructions,
+    NewMarsLog
   }
 })
 export default class NewGameBoardTop extends Vue {}

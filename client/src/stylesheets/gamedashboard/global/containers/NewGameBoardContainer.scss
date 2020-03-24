@@ -9,7 +9,6 @@
   min-width: $min-screen-width;
   padding: 1rem;
   margin: 0;
-  // background-color: pink;
   overflow: hidden;
   z-index: 0;
 
@@ -22,6 +21,6 @@
   .gameboardbottom {
     height: calc(calc(7 / 12) * 100%);
     @include reset-padding-margin;
-    background-color: blue;
+    // background-color: blue;
   }
 }

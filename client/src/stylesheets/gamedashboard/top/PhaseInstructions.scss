@@ -1,12 +1,10 @@
 .c-phaseinstructions {
   @include expand;
   padding: 1rem;
-  //   background-color: skyblue;
 
   .wrapper {
     @include expand;
     @include make-column-and-center;
-    // background-color: gray;
     overflow-y: scroll;
 
     .title {
@@ -27,7 +25,7 @@
       margin: 0;
       overflow-y: scroll;
       background-color: $space-white-opaque-1;
-      //   background-color: blue;
+
       .text {
         min-height: 100%;
         width: 100%;
@@ -35,6 +33,7 @@
         @include make-column-and-top;
 
         p {
+          margin-bottom: 0;
           color: $space-white;
           font-size: $font-med;
         }
