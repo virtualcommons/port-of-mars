@@ -2,8 +2,11 @@
   height: 25%;
   width: 100%;
   padding: 0;
-  //   border: 1px solid black;
-  //   background-color: blue;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $space-white-opaque-1;
+  }
 
   .wrapper {
     @include expand;
@@ -16,7 +19,6 @@
     }
 
     .picture {
-      //   background-color: red;
       overflow: hidden;
       @include make-center;
 
@@ -25,12 +27,15 @@
         width: 5rem;
         border-radius: 50%;
         @include make-center;
-        background-color: blue;
+
+        img {
+          object-fit: cover;
+          height: 60%;
+        }
       }
     }
 
     .information {
-      //   background-color: orange;
       @include make-column-and-center;
       align-items: flex-start;
 

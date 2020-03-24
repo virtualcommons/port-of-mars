@@ -4,13 +4,15 @@
   top: 0;
   height: 100%;
   width: 0rem;
+  padding: 0.5rem;
   background-color: $new-space-orange;
-  // transition: 0.125s;
+  transition: width 0.3s ease-in-out;
   z-index: 2;
 
   .wrapper {
-    @include expand;
     position: relative;
+    @include expand;
+    // background-color: black;
   }
 
   .toggle {

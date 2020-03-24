@@ -1,8 +1,9 @@
 <template>
   <div class="c-profilemenu" :style="width">
-    <div class="wrapper">
-      <button @click="toggle" class="toggle"></button>
-      <!-- <button>Option One</button> -->
+    <button @click="toggle" class="toggle"></button>
+    <div class="wrapper" v-show="visible">
+      <!-- <p>Logged in as User</p> -->
+      <!-- <button>Log Out</button> -->
       <!-- <button>Option One</button> -->
       <!-- <button>Option One</button> -->
       <!-- <button>Option One</button> -->
@@ -24,7 +25,9 @@ export default class ProfileMenu extends Vue {
   }
 
   get width() {
-    return this.visible ? { width: '20rem' } : { width: '0rem' };
+    return this.visible
+      ? { width: '20rem', padding: '2rem' }
+      : { width: '0rem', padding: '0rem' };
   }
 }
 </script>

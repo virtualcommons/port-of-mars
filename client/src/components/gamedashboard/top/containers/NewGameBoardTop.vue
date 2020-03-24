@@ -11,10 +11,11 @@
               <Player />
             </div>
             <div class="others col-7">
-              <OtherPlayers />
-              <OtherPlayers />
-              <OtherPlayers />
-              <OtherPlayers />
+              <OtherPlayers
+                v-for="player in otherPlayers"
+                v-bind="player"
+                :key="player.role"
+              />
             </div>
           </div>
         </div>
@@ -53,6 +54,7 @@ import OtherPlayers from '@port-of-mars/client/components/gamedashboard/top/Othe
 import GameInformation from '@port-of-mars/client/components/gamedashboard/top/GameInformation.vue';
 import PhaseInstructions from '@port-of-mars/client/components/gamedashboard/top/PhaseInstructions.vue';
 import NewMarsLog from '@port-of-mars/client/components/gamedashboard/top/NewMarsLog.vue';
+import { ROLES, Role } from '@port-of-mars/shared/types';
 
 @Component({
   components: {
@@ -64,7 +66,19 @@ import NewMarsLog from '@port-of-mars/client/components/gamedashboard/top/NewMar
     NewMarsLog
   }
 })
-export default class NewGameBoardTop extends Vue {}
+export default class NewGameBoardTop extends Vue {
+  get otherPlayers(): any {
+    const otherPlayers = this.$tstore.getters.otherPlayers;
+    console.log('otherPlayers: ', otherPlayers);
+    return Object.keys(otherPlayers).reduce((prev, player) => {
+      const role = player;
+      const ready = otherPlayers[player].ready;
+      const victoryPoints: number = otherPlayers[player].victoryPoints;
+      prev.push({ role, ready, victoryPoints });
+      return prev;
+    }, [] as Array<{ role: Role; ready: boolean; victoryPoints: number }>);
+  }
+}
 </script>
 
 <style lang="scss" scoped>

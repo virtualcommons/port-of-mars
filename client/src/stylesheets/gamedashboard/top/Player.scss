@@ -1,14 +1,18 @@
 .c-player {
   @include expand;
   @include make-column-and-center;
-  //   background-color: black;
 
   .picture {
     height: 10rem;
     width: 10rem;
     border-radius: 50%;
     margin-bottom: 1rem;
-    background-color: blue;
+    @include make-center;
+
+    img {
+      object-fit: cover;
+      height: 80%;
+    }
   }
 
   .information {
