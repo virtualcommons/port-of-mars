@@ -24,11 +24,11 @@
       <div class="gamestatus col-4">
         <div class="wrapper container">
           <div class="row">
-            <div class="information">
-              <!-- <GameInformation /> -->
+            <div class="information col-5">
+              <GameInformation />
             </div>
-            <div class="instructions">
-              <!-- <PhaseInstructions /> -->
+            <div class="instructions col-7">
+              <PhaseInstructions />
             </div>
           </div>
           <GameStatus />
@@ -48,12 +48,16 @@ import { Vue, Component } from 'vue-property-decorator';
 import StatusBar from '@port-of-mars/client/components/gamedashboard/global/StatusBar.vue';
 import Player from '@port-of-mars/client/components/gamedashboard/top/Player.vue';
 import OtherPlayers from '@port-of-mars/client/components/gamedashboard/top/OtherPlayers.vue';
+import GameInformation from '@port-of-mars/client/components/gamedashboard/top/GameInformation.vue';
+import PhaseInstructions from '@port-of-mars/client/components/gamedashboard/top/PhaseInstructions.vue';
 
 @Component({
   components: {
     StatusBar,
     Player,
-    OtherPlayers
+    OtherPlayers,
+    GameInformation,
+    PhaseInstructions
   }
 })
 export default class NewGameBoardTop extends Vue {}

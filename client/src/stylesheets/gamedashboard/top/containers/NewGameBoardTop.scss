@@ -8,18 +8,19 @@
   .row {
     @include expand;
     margin: 0;
-    // background-color: red;
+    background-color: red;
 
     .players,
     .gamestatus,
     .marslog {
-      //   border: 1px solid black;
+      height: 100%;
       padding: 0.5rem;
+      border: 1px solid black;
 
       .wrapper {
         @include expand;
         padding: 0;
-        // background-color: palegoldenrod;
+        background-color: palegoldenrod;
       }
     }
 
@@ -29,15 +30,30 @@
 
       .player,
       .others {
+        height: 100%;
         padding: 0;
       }
 
       .player {
-        // background-color: plum;
+        background-color: plum;
       }
 
       .others {
-        // background-color: rebeccapurple;
+        background-color: rebeccapurple;
+      }
+    }
+
+    .gamestatus {
+      .information,
+      .instructions {
+        height: 100%;
+        padding: 0;
+      }
+
+      .information {
+      }
+
+      .instructions {
       }
     }
   }
