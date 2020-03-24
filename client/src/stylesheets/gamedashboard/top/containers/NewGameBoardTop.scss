@@ -1,0 +1,44 @@
+.c-gameboardtop {
+  @include expand;
+  max-width: none;
+  //   padding: 2rem 0 0 0;
+  padding: 0;
+  margin: 0;
+
+  .row {
+    @include expand;
+    margin: 0;
+    // background-color: red;
+
+    .players,
+    .gamestatus,
+    .marslog {
+      //   border: 1px solid black;
+      padding: 0.5rem;
+
+      .wrapper {
+        @include expand;
+        padding: 0;
+        // background-color: palegoldenrod;
+      }
+    }
+
+    .players {
+      border-left: 0.125rem solid $new-space-orange-opaque-025;
+      border-right: 0.125rem solid $new-space-orange-opaque-025;
+
+      .player,
+      .others {
+        padding: 0;
+      }
+
+      .player {
+        // background-color: plum;
+      }
+
+      .others {
+        // background-color: rebeccapurple;
+      }
+    }
+  }
+}

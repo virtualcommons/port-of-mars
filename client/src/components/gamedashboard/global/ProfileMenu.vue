@@ -1,5 +1,5 @@
 <template>
-  <div class="profilemenu" :style="width">
+  <div class="c-profilemenu" :style="width">
     <div class="wrapper">
       <button @click="toggle" class="toggle"></button>
       <!-- <button>Option One</button> -->
@@ -30,5 +30,5 @@ export default class ProfileMenu extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets//gamedashboard/global/ProfileMenu.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/global/ProfileMenu.scss';
 </style>

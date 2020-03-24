@@ -1,0 +1,27 @@
+.c-inventorypopup {
+  position: absolute;
+  left: 32rem;
+  width: 24rem;
+  height: 48rem;
+  border: 0.125rem solid $new-space-orange;
+  border-top-left-radius: 0.75rem;
+  border-top-right-radius: 0.75rem;
+  @include make-column-and-top;
+  background-color: $new-space-orange;
+  z-index: 1;
+
+  .toggle {
+    height: 3rem;
+    width: 100%;
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
+    @include reset-button;
+    background-color: $new-space-orange;
+  }
+
+  .wrapper {
+    width: 100%;
+    flex-grow: 1;
+    background-color: $space-gray;
+  }
+}

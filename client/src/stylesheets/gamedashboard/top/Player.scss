@@ -1,0 +1,42 @@
+.c-player {
+  @include expand;
+  @include make-column-and-center;
+  //   background-color: black;
+
+  .picture {
+    height: 10rem;
+    width: 10rem;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+    background-color: blue;
+  }
+
+  .information {
+    .title,
+    .role,
+    .score {
+      text-align: center;
+    }
+
+    .title {
+      margin-bottom: 0.125rem;
+      color: $new-space-orange;
+      font-size: $font-med;
+      font-weight: $font-weight-maven-pro-bold;
+    }
+
+    .role {
+      margin-bottom: 0.125rem;
+      color: $space-white;
+      font-size: $font-large;
+      font-weight: $font-weight-maven-pro-bold;
+    }
+
+    .score {
+      margin-bottom: 0;
+      color: $space-white;
+      font-size: $font-med;
+      font-weight: $font-weight-maven-pro-medium;
+    }
+  }
+}

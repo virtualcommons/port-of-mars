@@ -1,11 +1,12 @@
-.profilemenu {
+.c-profilemenu {
   position: absolute;
   left: 0;
   top: 0;
   height: 100%;
   width: 0rem;
   background-color: $new-space-orange;
-  transition: 0.125s;
+  // transition: 0.125s;
+  z-index: 2;
 
   .wrapper {
     @include expand;
