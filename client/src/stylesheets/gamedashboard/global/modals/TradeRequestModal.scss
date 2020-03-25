@@ -1,0 +1,70 @@
+.trade-request-modal{
+    width: 70rem;
+    height: 40rem;
+    background-color: #1e2223;
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+    margin:0;
+    transform: translate(-50%, 10%);
+    color: $space-white;
+
+    display: flex;
+    justify-content: space-between;
+
+    .header{
+        width: 100%;
+        background-color: $new-space-orange;
+        color: black;
+        text-align: center;
+        padding: 0.2rem 0rem;
+        margin-top: 0.5rem;
+        h5{
+            font-weight: bold;
+        }
+    }
+
+    .trade-request-container{
+        width: 60%;
+        margin:0rem 0.5rem;
+
+        .actions{
+            height: 35rem;
+            margin-top:1rem;
+            overflow: hidden;
+        }
+    }
+
+    .active-accomplishments-container{
+        width: 40%;
+        margin: 0rem 0.5rem;
+
+        .exit{
+            .exit-button{
+                align-self: right;
+                text-align: right;
+                @include reset-button;
+                height: 3rem;
+                width: 3rem;
+                position: absolute;
+                right:0.5rem;
+        
+                .close-icon {
+                    height: 80%;
+                    width: 80%;
+                    color:$new-space-orange;
+                }
+            }
+        }
+
+        .header{
+            margin-top: 4rem;
+        }
+
+        .active-accomplishments{
+            margin-top: 1rem;
+            height: 31.5rem;
+        }
+    }
+}

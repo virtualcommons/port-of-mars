@@ -66,6 +66,8 @@ export default class Master extends Vue {
       case ']':
         this.$root.$emit('openModalServer', this.serverMessage);
         break;
+      case 't':
+        this.$tstore.commit('SET_TRADE_REQUEST_MODAL_VISIBILITY', true);
       default:
         break;
     }
