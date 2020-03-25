@@ -28,60 +28,20 @@ import { MarsLogData } from '@port-of-mars/shared/types';
   components: {}
 })
 export default class NewMarsLog extends Vue {
-  private logs: Array<MarsLogData> = [
-    {
-      category: 'test',
-      content: 'TEST LOG MESSAGE 1',
-      performedBy: 'Researcher',
-      timestamp: 1585072487970
-    },
-    {
-      category: 'test',
-      content: 'TEST LOG MESSAGE 2',
-      performedBy: 'Researcher',
-      timestamp: 1585072487970
-    },
-    {
-      category: 'test',
-      content: 'TEST LOG MESSAGE 3',
-      performedBy: 'Researcher',
-      timestamp: 1585072487970
-    },
-    {
-      category: 'test',
-      content: 'TEST LOG MESSAGE 4',
-      performedBy: 'Researcher',
-      timestamp: 1585072487970
-    },
-    {
-      category: 'test',
-      content: 'TEST LOG MESSAGE 5',
-      performedBy: 'Researcher',
-      timestamp: 1585072487970
-    },
-    {
-      category: 'test',
-      content: 'TEST LOG MESSAGE 6',
-      performedBy: 'Researcher',
-      timestamp: 1585072487970
-    }
-  ];
-
   updated() {
     const elem = this.$el.querySelector('.wrapper');
     elem!.scrollTop = elem!.scrollHeight;
   }
 
-  //   get logs() {
-  //     return this.$tstore.getters.logs;
-  //   }
+  get logs() {
+    return this.$tstore.getters.logs;
+  }
 
   marsLogTime(timestamp: number) {
     return new Date(timestamp).toLocaleTimeString();
   }
 
   marsLogColor(log: MarsLogData) {
-    console.log(log.category);
     switch (log.category) {
       case 'System Health: Gain':
         return { backgroundColor: 'var(--marslog-green)' };

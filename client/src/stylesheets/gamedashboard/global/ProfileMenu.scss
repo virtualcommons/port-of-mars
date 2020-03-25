@@ -1,6 +1,5 @@
 .c-profilemenu {
   position: absolute;
-  // left: 0;
   top: 0;
   height: 100%;
   width: 20rem;
@@ -25,7 +24,6 @@
   .wrapper {
     position: relative;
     @include expand;
-    // background-color: black;
 
     p,
     a,
@@ -56,7 +54,6 @@
     button {
       @include reset-button;
       padding: 0;
-      // background-color: black;
     }
   }
 }
