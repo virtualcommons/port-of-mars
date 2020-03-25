@@ -1,18 +1,50 @@
 <template>
-  <div class="c-profilemenu" :style="width">
-    <button @click="toggle" class="toggle"></button>
+  <div class="c-profilemenu" :style="position">
+    <button @click="toggle" class="toggle">
+      <font-awesome-icon
+        v-if="!visible"
+        :icon="['fas', 'caret-right']"
+        size="lg"
+      />
+      <font-awesome-icon
+        v-if="visible"
+        :icon="['fas', 'caret-left']"
+        size="lg"
+      />
+    </button>
     <div class="wrapper" v-show="visible">
-      <!-- <p>Logged in as User</p> -->
-      <!-- <button>Log Out</button> -->
-      <!-- <button>Option One</button> -->
-      <!-- <button>Option One</button> -->
-      <!-- <button>Option One</button> -->
+      <p>Logged in as {{ username }}</p>
+      <button @click="logoutUser">
+        <font-awesome-icon :icon="['fas', 'sign-out-alt']" size="md" /><span
+          >Log Out</span
+        >
+      </button>
+      <a
+        href="mailto:portmars@asu.edu?subject=[port-of-mars] New Issue Submission"
+        target="_blank"
+        ><font-awesome-icon
+          :icon="['fas', 'exclamation-triangle']"
+          size="md"
+        /><span>Report a Problem</span></a
+      >
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faCaretRight } from '@fortawesome/free-solid-svg-icons/faCaretRight';
+import { faCaretLeft } from '@fortawesome/free-solid-svg-icons/faCaretLeft';
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons/faSignOutAlt';
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons/faExclamationTriangle';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+library.add(faCaretRight);
+library.add(faCaretLeft);
+library.add(faSignOutAlt);
+library.add(faExclamationTriangle);
+Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 @Component({
   components: {}
@@ -24,10 +56,17 @@ export default class ProfileMenu extends Vue {
     this.visible = !this.visible;
   }
 
-  get width() {
-    return this.visible
-      ? { width: '20rem', padding: '2rem' }
-      : { width: '0rem', padding: '0rem' };
+  get position() {
+    return this.visible ? { left: '0rem' } : { left: '-20rem' };
+  }
+
+  get username(): string {
+    return this.$tstore.state.user.username;
+  }
+
+  private logoutUser(): void {
+    this.$ajax.forgetLoginCreds();
+    this.$router.push({ name: 'Login' });
   }
 }
 </script>

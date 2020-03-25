@@ -1,19 +1,13 @@
 .c-profilemenu {
   position: absolute;
-  left: 0;
+  // left: 0;
   top: 0;
   height: 100%;
-  width: 0rem;
-  padding: 0.5rem;
+  width: 20rem;
+  padding: 2rem;
   background-color: $new-space-orange;
-  transition: width 0.3s ease-in-out;
+  transition: position 0.3s ease-in;
   z-index: 2;
-
-  .wrapper {
-    position: relative;
-    @include expand;
-    // background-color: black;
-  }
 
   .toggle {
     position: absolute;
@@ -22,8 +16,47 @@
     @include reset-button;
     height: 4rem;
     width: 2rem;
+    padding: 0.5rem;
     border-bottom-right-radius: 4rem;
     border-top-right-radius: 4rem;
     background-color: $new-space-orange;
+  }
+
+  .wrapper {
+    position: relative;
+    @include expand;
+    // background-color: black;
+
+    p,
+    a,
+    button {
+      color: $space-gray;
+      font-size: $font-med;
+    }
+
+    a,
+    button {
+      margin-bottom: 0.5rem;
+      font-weight: $font-weight-maven-pro-medium;
+
+      span {
+        margin-left: 0.5rem;
+      }
+    }
+
+    p {
+      font-weight: $font-weight-maven-pro-bold;
+    }
+
+    a {
+      display: block;
+      text-decoration: none;
+    }
+
+    button {
+      @include reset-button;
+      padding: 0;
+      // background-color: black;
+    }
   }
 }
