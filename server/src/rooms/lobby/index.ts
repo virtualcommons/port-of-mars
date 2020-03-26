@@ -105,9 +105,8 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
   }
 
   async onAuth(client: Client, options: any, request: http.IncomingMessage) {
-    logger.info("trying to authenticate client", client);
     const userId = (request as any).session.passport.user;
-    logger.info("current session has user id ", userId);
+    logger.info("LOBBY OnAuth: current session has user id ", userId);
     return await findUserById(userId);
   }
 
@@ -150,12 +149,19 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
             this.sendSafe(client, { kind: 'removed-client-from-lobby' });
             client.close();
           });
+          // now remove this group from the list of groups maintained by the Lobby
+          this.removeGroup(group);
         }
       }
     }
     else if (message.kind === 'distribute-groups') {
       await this.redistributeGroups();
     }
+  }
+
+  removeGroup(group: MatchmakingGroup) {
+    const groupIndex = this.groups.indexOf(group);
+    this.groups.splice(groupIndex, 1);
   }
 
   onLeave(client: Client, consented: boolean) {
@@ -171,11 +177,15 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
   }
 
   async redistributeGroups() {
-    logger.trace('WAITING LOBBY: allocating connected clients to groups', this.clientStats);
+    logger.trace('WAITING LOBBY:redistributeGroups: allocating connected clients to groups', this.clientStats);
+    if (this.clientStats.length === 0) {
+      logger.trace("WAITING LOBBY: not redistributing groups, no connected clients")
+      return;
+    }
     // Re-set all groups
+    const shuffledClientStats = _.shuffle(this.clientStats);
     this.groups = [];
     let currentGroup = this.createGroup();
-    const shuffledClientStats = _.shuffle(this.clientStats);
     for (const clientStat of shuffledClientStats) {
       clientStat.waitingTime += this.clock.deltaTime;
       /**
@@ -252,9 +262,9 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
   }
 
   removeClientStat(client: Client) {
-    logger.trace('WAITING LOBBY: removing client stat ', client);
     const index = this.clientStats.findIndex(stat => stat.client === client);
-    if (index !== -1) {
+    if (index > -1) {
+      logger.trace('WAITING LOBBY: removing client stat ', client.id);
       this.clientStats.splice(index, 1);
       this.state.waitingUserCount = this.clientStats.length;
     }

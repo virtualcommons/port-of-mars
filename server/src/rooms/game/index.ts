@@ -39,15 +39,15 @@ export class GameRoom extends Room<GameState> implements Game {
 
   async onAuth(client: Client, options: any, request: http.IncomingMessage) {
     try {
-      logger.debug("game room onAuth: ", client);
       const user = await findUserById((request as any).session.passport.user);
+      logger.debug('GameRoom.onAuth user: ', user);
       if (this.state.hasUser(user?.username)) {
         return user;
       }
       return false;
     }
     catch (e) {
-      logger.fatal(e);
+      logger.fatal('GameRoom.onAuth exception: ', e);
       return false;
     }
   }
@@ -132,9 +132,11 @@ export class GameRoom extends Room<GameState> implements Game {
   gameLoop() {
     this.state.timeRemaining -= 1;
     if (this.state.allPlayersAreReady || this.state.timeRemaining <= 0) {
+      // phase initialization
       const cmd = new SetNextPhaseCmd(this);
       const events = cmd.execute();
       this.state.applyMany(events);
+      // post phase cleanup
       this.persister.applyMany(events, this.getMetadata());
     }
   }
