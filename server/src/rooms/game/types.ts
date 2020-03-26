@@ -9,8 +9,7 @@ export type PlayerReadiness = { [role in Role]: boolean }
 
 export interface Game extends Room<GameState> {
   safeSend(client: Client, msg: Responses): void
-
-  getPlayerByClient(client: Client): Player
+  getPlayer(client: Client): Player
 }
 
 export interface PersistenceAPIConstructor {

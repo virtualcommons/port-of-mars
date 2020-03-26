@@ -37,10 +37,13 @@ import {
   getAccomplishmentIDs
 } from '@port-of-mars/server/data/Accomplishment';
 import { isProduction } from '@port-of-mars/shared/settings';
+import { settings } from '@port-of-mars/server/settings';
 import { GameEvent } from '@port-of-mars/server/rooms/game/events/types';
 import { GameOpts, GameStateOpts } from '@port-of-mars/server/rooms/game/types';
 import { MarsEventsDeck } from '@port-of-mars/server/rooms/game/state/marsEvents/MarsEventDeck';
 import { MarsEvent } from '@port-of-mars/server/rooms/game/state/marsEvents/MarsEvent';
+
+const logger = settings.logging.getLogger(__filename);
 
 export class ChatMessage extends Schema implements ChatMessageData {
   constructor(msg: ChatMessageData) {
@@ -718,8 +721,7 @@ export class Player extends Schema implements PlayerData {
   @type('number')
   victoryPoints: number = 0;
 
-  _reconnection: any;
-  _connected: boolean = true;
+  connected: boolean = true;
 
   isInvestmentFeasible(investment: InvestmentData) {
     return this.costs.investmentWithinBudget(investment, this.timeBlocks);
@@ -756,20 +758,6 @@ export class Player extends Schema implements PlayerData {
 
   setTimeBlocks(amount: number) {
     this.timeBlocks = amount;
-  }
-
-  setReconnecting(reconnection: any) {
-    this._reconnection = reconnection;
-    this._connected = false;
-  }
-
-  getReconnection(): any {
-    return this._reconnection;
-  }
-
-  reconnected() {
-    this._connected = true;
-    this._reconnection = null;
   }
 
   getLeftOverInvestments() {
@@ -932,6 +920,7 @@ export interface GameSerialized {
 }
 
 export class GameState extends Schema implements GameData {
+
   constructor(data: GameStateOpts) {
     super();
     if (isProduction()) {
@@ -1051,8 +1040,11 @@ export class GameState extends Schema implements GameData {
     player.contributedUpkeep = investment.upkeep;
   }
 
-  getPlayer(username: string) {
-    return this.players[this.userRoles[username]];
+  getPlayer(username: string): Player | undefined {
+    if (this.hasUser(username)) {
+      return this.players[this.userRoles[username]];
+    }
+    logger.debug("GameState.getPlayer: Unable to find player with username", username);
   }
 
   getPlayers(): Array<Player> {
@@ -1303,5 +1295,4 @@ export class GameState extends Schema implements GameData {
   discardAccomplishment(role: Role, id: number): void {
     this.players[role].accomplishments.discard(id);
   }
-  // NOTE :: END NEW CHANGES
 }

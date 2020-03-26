@@ -39,8 +39,9 @@ export class GameRoom extends Room<GameState> implements Game {
 
   async onAuth(client: Client, options: any, request: http.IncomingMessage) {
     try {
+      logger.debug('GameRoom.onAuth for client:', client.id);
       const user = await findUserById((request as any).session.passport.user);
-      logger.debug('GameRoom.onAuth user: ', user);
+      logger.debug('GameRoom.onAuth found user:', user);
       if (this.state.hasUser(user?.username)) {
         return user;
       }
@@ -75,57 +76,54 @@ export class GameRoom extends Room<GameState> implements Game {
     }
   }
 
-  getPlayers(): Array<Player> {
-    return this.state.getPlayers();
-  }
-
-  getPlayerByClient(client: Client): Player {
+  getPlayer(client: Client): Player {
     return this.state.getPlayer(client.auth.username);
   }
 
   prepareRequest(r: Requests, client: Client): Command {
-    logger.trace({ r });
+    logger.trace('prepareRequest from', client.id, ':', { r });
+    const player = this.getPlayer(client);
     switch (r.kind) {
       case 'send-chat-message':
-        return SendChatMessageCmd.fromReq(r, this, client);
+        return SendChatMessageCmd.fromReq(r, this.state, player);
       case 'set-next-phase':
-        return SetNextPhaseCmd.fromReq(this);
+        return SetNextPhaseCmd.fromReq(this.state);
       case 'set-player-readiness':
-        return SetPlayerReadinessCmd.fromReq(r, this, client);
+        return SetPlayerReadinessCmd.fromReq(r, player);
       case 'reset-game':
-        return ResetGameCmd.fromReq(r, this);
+        return ResetGameCmd.fromReq(r, this.state);
       case 'set-time-investment':
-        return TimeInvestmentCmd.fromReq(r, this, client);
+        return TimeInvestmentCmd.fromReq(r, player);
       case 'purchase-accomplishment-card':
-        return PurchaseAccomplishmentCmd.fromReq(r, this, client);
+        return PurchaseAccomplishmentCmd.fromReq(r, player);
       case 'discard-accomplishment-card':
-        return DiscardAccomplishmentCmd.fromReq(r, this, client);
+        return DiscardAccomplishmentCmd.fromReq(r, player);
       case 'accept-trade-request':
-        return AcceptTradeRequestCmd.fromReq(r, this, client);
+        return AcceptTradeRequestCmd.fromReq(r, player);
       case 'reject-trade-request':
-        return RejectTradeRequestCmd.fromReq(r, this, client);
+        return RejectTradeRequestCmd.fromReq(r, player);
       case 'cancel-trade-request':
-        return CancelTradeRequestCmd.fromReq(r, this, client);
+        return CancelTradeRequestCmd.fromReq(r, player);
       case 'send-trade-request':
-        return SendTradeRequestCmd.fromReq(r, this, client);
+        return SendTradeRequestCmd.fromReq(r, player);
       case 'personal-gain':
-        return PersonalGainVotes.fromReq(r, this, client);
+        return PersonalGainVotes.fromReq(r);
       case 'vote-for-philanthropist':
-        return VoteForPhilanthropistCmd.fromReq(r, this, client);
+        return VoteForPhilanthropistCmd.fromReq(r, player);
       case 'out-of-commission-curator':
-        return OutOfCommissionCuratorCmd.fromReq(r, this, client);
+        return OutOfCommissionCuratorCmd.fromReq(r, player);
       case 'out-of-commission-politician':
-        return OutOfCommissionPoliticianCmd.fromReq(r, this, client);
+        return OutOfCommissionPoliticianCmd.fromReq(r, player);
       case 'out-of-commission-researcher':
-        return OutOfCommissionResearcherCmd.fromReq(r, this, client);
+        return OutOfCommissionResearcherCmd.fromReq(r, player);
       case 'out-of-commission-pioneer':
-        return OutOfCommissionPioneerCmd.fromReq(r, this, client);
+        return OutOfCommissionPioneerCmd.fromReq(r, player);
       case 'out-of-commission-entrepreneur':
-        return OutOfCommissionEntrepreneurCmd.fromReq(r, this, client);
+        return OutOfCommissionEntrepreneurCmd.fromReq(r, player);
       case 'bonding-through-adversity':
-        return BondingThroughAdversityCmd.fromReq(r, this, client);
+        return BondingThroughAdversityCmd.fromReq(r, player);
       case 'breakdown-of-trust':
-        return BreakdownOfTrustCmd.fromReq(r, this, client);
+        return BreakdownOfTrustCmd.fromReq(r, player);
     }
   }
 
@@ -149,22 +147,21 @@ export class GameRoom extends Room<GameState> implements Game {
   }
 
   async onLeave(client: Client, consented: boolean) {
-    const player = this.getPlayerByClient(client);
-    logger.info('player left:', player);
+    const player = this.getPlayer(client);
+    logger.info('player left:', client.id);
     try {
-      const reconnection = this.allowReconnection(client);
-      player.setReconnecting(reconnection);
-      await reconnection;
-      logger.info("player reconnected to", this.roomId);
-      player.reconnected();
+      player.connected = false;
+      await this.allowReconnection(client);
+      logger.info("player", client.id, "reconnected to", this.roomId);
+      player.connected = true;
     } catch (e) {
       logger.fatal(e);
     }
   }
 
   onJoin(client: Client, options: any, auth: User) {
-    logger.info('client joined game', client, this.roomId);
-    const player = this.getPlayerByClient(client);
+    logger.info(`client ${client.id} joined game ${this.roomId} ${auth}`);
+    const player = this.getPlayer(client);
     this.safeSend(client, { kind: 'set-player-role', role: player.role });
   }
 
