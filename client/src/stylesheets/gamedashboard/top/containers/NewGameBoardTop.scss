@@ -3,9 +3,41 @@
   max-width: none;
   padding: 0;
   margin: 0;
+  @include make-column-and-top;
 
-  .row {
-    @include expand;
+  .top {
+    height: 2rem;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    @include make-center;
+
+    p {
+      margin-bottom: 0.125rem;
+    }
+
+    .title {
+      margin-right: 1rem;
+      color: $space-white;
+      font-size: $font-med;
+      font-weight: $font-weight-maven-pro-bold;
+    }
+
+    .status {
+      margin-left: 1rem;
+      color: $space-white;
+      font-size: $font-med;
+      font-weight: $font-weight-maven-pro-bold;
+
+      span {
+        margin-left: 0.25rem;
+        color: $new-space-orange;
+      }
+    }
+  }
+
+  .bottom {
+    height: calc(100% - 2.5rem);
+    width: 100%;
     margin: 0;
 
     .players,
@@ -17,6 +49,11 @@
       .wrapper {
         @include expand;
         padding: 0;
+
+        .row {
+          height: 100%;
+          margin: 0;
+        }
       }
     }
 

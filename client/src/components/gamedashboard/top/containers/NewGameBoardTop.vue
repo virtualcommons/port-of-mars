@@ -1,8 +1,12 @@
 <template>
   <div class="c-gameboardtop container">
     <!-- REFACTOR :: SystemHealthContainer -->
-    <!-- <StatusBar :setWidth="80" /> -->
-    <div class="row">
+    <div class="top row">
+      <p class="title">System Health</p>
+      <StatusBar class="statusbar" :setWidth="`${systemHealthStatus}`" />
+      <p class="status">{{ systemHealthStatus }}<span>%</span></p>
+    </div>
+    <div class="bottom row">
       <!-- REFACTOR :: PlayerContainer -->
       <div class="players col-4">
         <div class="wrapper container">
@@ -66,6 +70,10 @@ import { ROLES, Role } from '@port-of-mars/shared/types';
   }
 })
 export default class NewGameBoardTop extends Vue {
+  get systemHealthStatus() {
+    return this.$tstore.state.upkeep;
+  }
+
   get otherPlayers(): any {
     const otherPlayers = this.$tstore.getters.otherPlayers;
     return Object.keys(otherPlayers).reduce((prev, player) => {
