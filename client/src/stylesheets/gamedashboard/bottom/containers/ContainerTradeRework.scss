@@ -1,0 +1,71 @@
+.trade-container {
+  @include row;
+  @include expand;
+  margin: 0;
+  justify-content: space-between;
+
+  .section-text {
+    height: 10%;
+    width: 100%;
+    @include make-center;
+    background-color: $new-space-orange;
+
+    p {
+      margin-bottom: 0;
+      font-weight: bold;
+    }
+  }
+
+  .trade-list {
+    height: 100%;
+    width:76%;
+    min-height: 0;
+    
+    
+    background-color: $space-white-opaque-1;
+    overflow-y: scroll;
+    @include disable-scroll;
+
+    .header{
+      display: flex;
+      .section-text{
+        height: 2.6rem;
+        width: 80%;
+      }
+
+      .request-trade-button{
+        @include reset-button;
+        @include default-transition-base;
+        color: $new-space-orange;
+        padding: 0.5rem 1rem;
+        border: solid 0.025rem $new-space-orange;
+        width: 20%;
+        opacity: 75%;
+
+        &:hover{
+          opacity: 100%;
+        }
+      }
+
+      
+    }
+
+    .trades-wrapper {
+      margin: 0 0.5rem
+    }
+  }
+
+  .trade-chat{
+    width: 23%;
+    min-height: 100%;
+
+    .chat-container{
+      height:90%;
+
+      max-height: fit-content;
+      background-color: $space-white-opaque-1;
+      position: relative;
+      overflow:hidden;
+    }
+  }
+}

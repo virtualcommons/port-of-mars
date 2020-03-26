@@ -2,15 +2,24 @@
   <div class="c-phasecontainer row">
     <div class="content">
       <!-- THIS IS WHERE WE SWAP BOARD BASED ON PHASE -->
+
+      <!-- <ContainerTrade /> -->
+      <ContainerPurchase />
+
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
+import ContainerTrade from './ContainerTradeRework.vue';
+import ContainerPurchase from './ContainerPurchaseRework.vue';
 
 @Component({
-  components: {}
+  components: {
+    ContainerTrade,
+    ContainerPurchase,
+  }
 })
 export default class NewPhaseContainer extends Vue {}
 </script>

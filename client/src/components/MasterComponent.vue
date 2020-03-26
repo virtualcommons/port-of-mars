@@ -5,6 +5,7 @@
 <script lang="ts">
 import { Component, Inject, InjectReactive, Vue } from 'vue-property-decorator';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
+import { TradeData } from '../../../shared/types';
 
 @Component({})
 export default class Master extends Vue {
@@ -66,9 +67,42 @@ export default class Master extends Vue {
       case ']':
         this.$root.$emit('openModalServer', this.serverMessage);
         break;
+      
+      case 'w':
+        this.$tstore.commit('ADD_TO_TRADES',trade());
+        break;
       default:
         break;
     }
   }
+}
+
+function trade(){
+  return {
+      id:'adf' +Math.random(),
+      trade:{
+        to: {
+        role: 'Curator',
+        resourceAmount: {
+          science: 1,
+          government: 1,
+          legacy: 1,
+          finance: 1,
+          culture: 1
+        }
+      },
+
+      from: {
+        role: 'Researcher',
+        resourceAmount: {
+          science: 1,
+          government: 1,
+          legacy: 1,
+          finance: 1,
+          culture: 1
+        }
+      }
+      }
+    }
 }
 </script>
