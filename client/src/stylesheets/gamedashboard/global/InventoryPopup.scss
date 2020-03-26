@@ -7,6 +7,7 @@
   border-top-left-radius: 0.75rem;
   border-top-right-radius: 0.75rem;
   @include make-column-and-top;
+  justify-content: space-between;
   background-color: $new-space-orange;
   z-index: 1;
 
@@ -17,11 +18,58 @@
     border-top-right-radius: 0.75rem;
     @include reset-button;
     background-color: $new-space-orange;
+    color: $space-gray;
+    font-size: $font-med;
+    font-weight: $font-weight-maven-pro-medium;
+
+    span {
+      margin-right: 1rem;
+    }
   }
 
   .wrapper {
     width: 100%;
-    flex-grow: 1;
+    height: 44.625rem;
+    padding: 0.5rem;
     background-color: $space-gray;
+
+    .investment {
+      height: 4rem;
+      width: 100%;
+      padding: 0.5rem 1rem;
+      margin-bottom: 0.5rem;
+      @include make-horizontal-between;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .left {
+        @include make-center;
+
+        img {
+          height: 2rem;
+          width: 2rem;
+        }
+
+        p {
+          margin: 0 0 0 1rem;
+          color: $space-white;
+          font-size: $font-med;
+          font-weight: $font-weight-maven-pro-medium;
+          text-transform: capitalize;
+        }
+      }
+
+      .right {
+        .units {
+          margin: 0 0 0 1rem;
+          color: $space-white;
+          font-size: $font-large;
+          font-weight: $font-weight-maven-pro-bold;
+          text-transform: capitalize;
+        }
+      }
+    }
   }
 }
