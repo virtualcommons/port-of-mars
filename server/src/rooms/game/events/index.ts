@@ -210,7 +210,7 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
     game.log(`Standard wear and tear reduced System Health by 25.`, `SYSTEM HEALTH`);
 
     // current system health
-    game.log(`System Health is currently ~${game.upkeep}`,`SYSTEM HEALTH`);
+    game.log(`System Health is currently ${game.upkeep}.`,`SYSTEM HEALTH`);
 
     game.resetPlayerReadiness();
     game.resetPlayerContributedUpkeep();
