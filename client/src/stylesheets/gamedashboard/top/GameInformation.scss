@@ -54,8 +54,9 @@
 
   .blink-timer {
     animation: blinker 0.5s linear 5;
-    // font-size: 3rem;
     color: $status-red;
+    font-size: $font-large;
+    font-weight: $font-weight-maven-pro-bold;
   }
 
   @keyframes blinker {

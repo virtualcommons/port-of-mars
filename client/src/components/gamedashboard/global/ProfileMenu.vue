@@ -15,7 +15,7 @@
     <div class="wrapper" v-show="visible">
       <p>Logged in as {{ username }}</p>
       <button @click="logoutUser">
-        <font-awesome-icon :icon="['fas', 'sign-out-alt']" size="md" /><span
+        <font-awesome-icon :icon="['fas', 'sign-out-alt']" size="sm" /><span
           >Log Out</span
         >
       </button>
@@ -24,7 +24,7 @@
         target="_blank"
         ><font-awesome-icon
           :icon="['fas', 'exclamation-triangle']"
-          size="md"
+          size="sm"
         /><span>Report a Problem</span></a
       >
     </div>

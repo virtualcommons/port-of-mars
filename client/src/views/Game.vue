@@ -5,37 +5,35 @@
 </template>
 
 <script lang="ts">
-import {Vue, Component, Inject, Provide, Prop} from 'vue-property-decorator';
+import { Vue, Component, Inject, Provide, Prop } from 'vue-property-decorator';
 import { Client } from 'colyseus.js';
 import { applyGameServerResponses } from '@port-of-mars/client/api/game/response';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 import { EnvironmentMode } from '@port-of-mars/client/settings';
-import ModalContainer from '@port-of-mars/client/components/gamedashboard/global/modals/ModalContainer.vue';
-import ContainerBoard from '@port-of-mars/client/components/gamedashboard/global/containers/ContainerBoard.vue';
 import GameDashboard from '@port-of-mars/client/components/GameDashboard.vue';
-import _ from "lodash";
+import _ from 'lodash';
 
 @Component({
   name: 'game',
   components: {
-    GameDashboard,
-    ModalContainer,
-    ContainerBoard
+    GameDashboard
   }
 })
 export default class Game extends Vue {
   @Inject() readonly $client!: Client;
   @Provide() private api: GameRequestAPI = new GameRequestAPI();
   private hasApi: boolean = false;
-  private env: EnvironmentMode = new EnvironmentMode;
+  private env: EnvironmentMode = new EnvironmentMode();
 
   async created() {
     this.api.room?.leave();
     const rooms = await this.$client.getAvailableRooms('game');
     for (const room of rooms) {
-      console.log({room});
+      console.log({ room });
     }
-    const gameRoom = await this.$client.consumeSeatReservation(this.$ajax.reservation);
+    const gameRoom = await this.$client.consumeSeatReservation(
+      this.$ajax.reservation
+    );
     applyGameServerResponses(gameRoom, this.$tstore);
     this.api.connect(gameRoom);
     this.hasApi = true;

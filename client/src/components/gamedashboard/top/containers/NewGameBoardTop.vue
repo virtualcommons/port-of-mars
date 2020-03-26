@@ -32,7 +32,6 @@
               <PhaseInstructions />
             </div>
           </div>
-          <GameStatus />
         </div>
       </div>
 
@@ -69,7 +68,6 @@ import { ROLES, Role } from '@port-of-mars/shared/types';
 export default class NewGameBoardTop extends Vue {
   get otherPlayers(): any {
     const otherPlayers = this.$tstore.getters.otherPlayers;
-    console.log('otherPlayers: ', otherPlayers);
     return Object.keys(otherPlayers).reduce((prev, player) => {
       const role = player;
       const ready = otherPlayers[player].ready;

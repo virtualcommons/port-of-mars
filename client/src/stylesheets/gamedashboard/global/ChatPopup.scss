@@ -7,6 +7,7 @@
   border-top-left-radius: 0.75rem;
   border-top-right-radius: 0.75rem;
   @include make-column-and-top;
+  justify-content: space-between;
   background-color: $new-space-orange;
   z-index: 1;
 
@@ -17,11 +18,18 @@
     border-top-right-radius: 0.75rem;
     @include reset-button;
     background-color: $new-space-orange;
+    color: $space-gray;
+    font-size: $font-med;
+    font-weight: $font-weight-maven-pro-medium;
+
+    span {
+      margin-right: 1rem;
+    }
   }
 
   .wrapper {
     width: 100%;
-    flex-grow: 1;
+    height: 44.625rem;
     background-color: $space-gray;
   }
 }

@@ -7,7 +7,7 @@
       <div
         v-for="log in logs"
         :style="marsLogColor(log)"
-        :key="log.timestamp"
+        :key="log.timestamp + Math.random()"
         class="message"
       >
         <p class="category">{{ log.category }}</p>
