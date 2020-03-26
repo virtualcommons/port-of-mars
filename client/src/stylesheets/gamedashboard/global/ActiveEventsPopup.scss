@@ -30,6 +30,16 @@
   .wrapper {
     width: 100%;
     height: 44.625rem;
+    padding: 0.5rem;
+    @include make-column-and-top;
     background-color: $space-gray;
+    overflow-y: scroll;
+
+    .empty {
+      margin-bottom: 0;
+      font-size: $font-med;
+      text-align: center;
+      color: $space-white-opaque-2;
+    }
   }
 }
