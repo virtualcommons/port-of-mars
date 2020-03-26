@@ -1,7 +1,7 @@
 <template>
   <div class="profile tour-profile">
     <div class="p-container">
-      <div class="frame-outer">
+      <div class="frame-outer" @click="handleOpenModal">
         <div  class="frame-inner" :style="{'backgroundColor':`var(--color-${playerRole})`}">
           <img :src="playerRoleImg" alt="Player" />
         </div>
@@ -26,6 +26,14 @@ export default class ContainerProfile extends Vue {
   get playerRoleImg(): string {
     return require(`@port-of-mars/client/assets/characters/${this.playerRole}.png`);
   }
+
+  handleOpenModal(){
+    this.$tstore.commit('SET_PLAYER_INFO_MODAL_VISIBILITY',{
+      role:this.playerRole,
+      visible:true
+    });
+  }
+
 }
 </script>
 
