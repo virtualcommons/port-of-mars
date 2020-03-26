@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import {Vue, Component, Inject, Provide, Prop} from 'vue-property-decorator';
-import { Client } from 'colyseus.js';
+import { Client, Room } from 'colyseus.js';
 import { applyGameServerResponses } from '@port-of-mars/client/api/game/response';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 import { EnvironmentMode } from '@port-of-mars/client/settings';
@@ -14,6 +14,7 @@ import ModalContainer from '@port-of-mars/client/components/gamedashboard/global
 import ContainerBoard from '@port-of-mars/client/components/gamedashboard/global/containers/ContainerBoard.vue';
 import GameDashboard from '@port-of-mars/client/components/GameDashboard.vue';
 import _ from "lodash";
+import { LOBBY_PAGE } from "@port-of-mars/shared/routes";
 
 @Component({
   name: 'game',
@@ -31,11 +32,17 @@ export default class Game extends Vue {
 
   async created() {
     this.api.room?.leave();
-    const rooms = await this.$client.getAvailableRooms('game');
-    for (const room of rooms) {
-      console.log({room});
+    let gameRoom: Room;
+    if (this.$ajax.reservation) {
+      console.log('consuming reservation');
+      gameRoom = await this.$client.consumeSeatReservation(this.$ajax.reservation);
+    } else if (this.$ajax.gameConnectionInfo) {
+      console.log('reconnecting reservation to ', this.$ajax.gameConnectionInfo);
+      gameRoom = await this.$client.reconnect(this.$ajax.gameConnectionInfo.roomId, this.$ajax.gameConnectionInfo.sessionId);
+    } else {
+      console.log('an error occured');
+      return;
     }
-    const gameRoom = await this.$client.consumeSeatReservation(this.$ajax.reservation);
     applyGameServerResponses(gameRoom, this.$tstore);
     this.api.connect(gameRoom);
     this.hasApi = true;

@@ -48,11 +48,30 @@ export class AjaxRequest {
   constructor(private router: VueRouter, private store: TStore) {
   }
 
-  reservation!: Reservation;
+  _reservation?: Reservation;
+
+  get gameConnectionInfo(): { roomId: string, sessionId: string } | null {
+    const c = localStorage.getItem('room');
+    return c ? JSON.parse(c) : null;
+  }
+
+  set gameConnectionInfo(info: { roomId: string, sessionId: string } | null) {
+    localStorage.setItem('room', JSON.stringify(info))
+  }
+
+  set reservation(r: Reservation | undefined) {
+    if (r) {
+      this.gameConnectionInfo = { roomId: r.room.roomId, sessionId: r.sessionId };
+    }
+    this._reservation = r;
+  }
+
+  get reservation() {
+    return this._reservation
+  }
 
   async setLoginCreds(response: Response) {
-    const data: LoginCreds = await response.json();
-    this.store.commit('SET_USER', {username: data.username});
+    response.json().then(loginCredentials => this.store.commit('SET_USER', { username: loginCredentials.username }));
   }
 
   get username(): string {

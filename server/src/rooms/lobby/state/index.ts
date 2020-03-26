@@ -1,6 +1,6 @@
 import { Schema, type } from '@colyseus/schema';
 
-export class RoomGameState extends Schema {
+export class LobbyRoomState extends Schema {
   constructor() {
     super();
     this.nextAssignmentTime = 0;

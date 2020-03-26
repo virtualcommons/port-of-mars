@@ -163,6 +163,7 @@ async function createApp() {
   const gameServer = new Server({
     server,
     express: app,
+    // put express session into websocket onAuth requests
     verifyClient(info, next) {
       sessionParser(info.req as any, {} as any, () => next(true))
     }
@@ -179,8 +180,9 @@ async function createApp() {
   });
 
   // register your room handlers
-  gameServer.define('game', GameRoom);
-  gameServer.define('waiting', RankedLobbyRoom, { dev: true, persister });
+  gameServer.define(GameRoom.NAME, GameRoom);
+  // FIXME: at some point we should refactor how we inject isDev() into the various classes that need them
+  gameServer.define(RankedLobbyRoom.NAME, RankedLobbyRoom, { dev: isDev(), persister });
 
 
   applyInStagingOrProd(() => app.use(Sentry.Handlers.errorHandler()));

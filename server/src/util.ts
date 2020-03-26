@@ -16,6 +16,7 @@ export function getConnection(): to.Connection {
   return to.getConnection(connection_name)
 }
 
+// FIXME: seems like this method should live in shared/routes instead since it's operating on all of the things that shared/routes is responsible for.
 export function toUrl(page: Page): string {
   const page_metadata = PAGE_META[page];
   return `${settings.host}/#${page_metadata.path}`
