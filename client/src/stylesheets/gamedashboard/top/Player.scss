@@ -7,16 +7,22 @@
     background-color: $space-white-opaque-1;
   }
 
-  .picture {
+  .indicator {
     height: 10rem;
     width: 10rem;
+    padding: 0.25rem;
     border-radius: 50%;
     margin-bottom: 1rem;
-    @include make-center;
 
-    img {
-      object-fit: cover;
-      height: 80%;
+    .frame {
+      @include expand;
+      border-radius: 50%;
+      @include make-center;
+
+      img {
+        object-fit: cover;
+        height: 80%;
+      }
     }
   }
 

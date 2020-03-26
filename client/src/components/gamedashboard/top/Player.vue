@@ -1,7 +1,9 @@
 <template>
   <div @click="handleModal" class="c-player">
-    <div class="picture" :style="frameColor">
-      <img :src="playerRoleImage" alt="Player Image" />
+    <div class="indicator" :style="indicatorStyle">
+      <div class="frame" :style="frameColor">
+        <img :src="playerRoleImage" alt="Player Image" />
+      </div>
     </div>
     <div class="information">
       <p class="title">Your Role</p>
@@ -29,10 +31,20 @@ export default class Player extends Vue {
       : 0;
   }
 
+  get playerReady() {
+    return this.$store.getters.player.ready;
+  }
+
   get frameColor(): object {
     return this.playerRole
       ? { backgroundColor: `var(--color-${this.playerRole})` }
       : { backgroundColor: `var(--color-Researcher)` };
+  }
+
+  get indicatorStyle() {
+    return !this.playerReady
+      ? { border: `0.125rem solid var(--color-${this.playerRole})` }
+      : { border: `0.125rem solid var(--status-green)` };
   }
 
   get playerRoleImage(): any {
