@@ -10,6 +10,7 @@
         v-if="visible"
         :icon="['fas', 'caret-left']"
         size="lg"
+        class="left"
       />
     </button>
     <div class="wrapper" v-show="visible">

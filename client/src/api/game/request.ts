@@ -12,9 +12,10 @@ import {
   AcceptTradeRequestData,
   RejectTradeRequestData,
   CancelTradeRequestData,
-  PersonalGainVotesData, VoteForPhilanthropistData,
+  PersonalGainVotesData,
+  VoteForPhilanthropistData,
   BondingThroughAdversityData,
-  BreakdownOfTrustData,
+  BreakdownOfTrustData
 } from '@port-of-mars/shared/game/requests';
 import {
   AccomplishmentData,
@@ -37,7 +38,7 @@ export class GameRequestAPI {
   }
 
   public sendChatMessage(message: string) {
-    console.log('SEND CHAT MESSAGE: ', message);
+    // console.log('SEND CHAT MESSAGE: ', message);
     const msg: SendChatMessageData = { message, kind: 'send-chat-message' };
     this.send(msg);
   }
@@ -101,23 +102,35 @@ export class GameRequestAPI {
     this.send(msg);
   }
 
-  public savePersonalGainVote(value: { role: Role, vote: boolean }) {
+  public savePersonalGainVote(value: { role: Role; vote: boolean }) {
     const msg: PersonalGainVotesData = { kind: 'personal-gain', value };
     this.send(msg);
   }
 
   public voteForPhilanthropist(vote: Role) {
-    const msg: VoteForPhilanthropistData = { kind: 'vote-for-philanthropist', vote };
+    const msg: VoteForPhilanthropistData = {
+      kind: 'vote-for-philanthropist',
+      vote
+    };
     this.send(msg);
   }
 
-  public saveBondingThroughAdversitySelection(influenceVoteData: { role: Role, influence: Resource }) {
-    const msg: BondingThroughAdversityData = { kind: 'bonding-through-adversity', influenceVoteData };
+  public saveBondingThroughAdversitySelection(influenceVoteData: {
+    role: Role;
+    influence: Resource;
+  }) {
+    const msg: BondingThroughAdversityData = {
+      kind: 'bonding-through-adversity',
+      influenceVoteData
+    };
     this.send(msg);
   }
 
   public saveResourcesSelection(savedResources: InvestmentData) {
-    const msg: BreakdownOfTrustData = { kind: 'breakdown-of-trust', savedResources };
+    const msg: BreakdownOfTrustData = {
+      kind: 'breakdown-of-trust',
+      savedResources
+    };
     this.send(msg);
   }
 }
