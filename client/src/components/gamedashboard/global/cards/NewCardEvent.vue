@@ -1,5 +1,5 @@
 <template>
-  <div v-show="visible" @click="handleClick" class="card-event-component">
+  <div @click="handleClick" class="card-event-component">
     <div class="name">
       <p>{{ event.name }}</p>
     </div>
@@ -34,8 +34,6 @@ export default class CardEvent extends Vue {
   })
   private event!: AccomplishmentData;
 
-  @Prop() visible!: boolean;
-
   private handleClick(): void {
     this.$root.$emit('openModalCard', {
       card: 'event',
@@ -46,5 +44,5 @@ export default class CardEvent extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/gamedashboard/global/cards/CardEvent.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/global/cards/NewCardEvent.scss';
 </style>
