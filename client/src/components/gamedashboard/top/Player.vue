@@ -1,5 +1,5 @@
 <template>
-  <div class="c-player">
+  <div @click="handleModal" class="c-player">
     <div class="picture" :style="frameColor">
       <img :src="playerRoleImage" alt="Player Image" />
     </div>
@@ -39,6 +39,10 @@ export default class Player extends Vue {
     return this.playerRole
       ? require(`@port-of-mars/client/assets/characters/${this.playerRole}.png`)
       : require(`@port-of-mars/client/assets/characters/Researcher.png`);
+  }
+
+  private handleModal(): void {
+    console.log(`OPEN OTHER PLAYER MODAL: ${this.playerRole}`);
   }
 }
 </script>

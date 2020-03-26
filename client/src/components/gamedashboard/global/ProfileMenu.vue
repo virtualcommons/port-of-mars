@@ -62,7 +62,8 @@ export default class ProfileMenu extends Vue {
   }
 
   get username(): string {
-    return this.$tstore.state.user.username;
+    const username = this.$tstore.state.user.username;
+    return username ? username : 'Username';
   }
 
   private logoutUser(): void {

@@ -1,6 +1,11 @@
 .c-player {
   @include expand;
   @include make-column-and-center;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $space-white-opaque-1;
+  }
 
   .picture {
     height: 10rem;
