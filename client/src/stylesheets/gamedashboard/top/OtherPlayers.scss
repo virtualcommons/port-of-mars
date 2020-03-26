@@ -22,15 +22,21 @@
       overflow: hidden;
       @include make-center;
 
-      .frame {
+      .indicator {
         height: 5rem;
         width: 5rem;
+        padding: 0.25rem;
         border-radius: 50%;
-        @include make-center;
 
-        img {
-          object-fit: cover;
-          height: 60%;
+        .frame {
+          @include expand;
+          border-radius: 50%;
+          @include make-center;
+
+          img {
+            object-fit: cover;
+            height: 60%;
+          }
         }
       }
     }

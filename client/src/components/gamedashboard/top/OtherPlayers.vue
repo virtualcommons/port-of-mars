@@ -2,8 +2,10 @@
   <div @click="handleModal" class="c-otherplayers container">
     <div class="wrapper row">
       <div class="picture col-4">
-        <div class="frame" :style="frameColor">
-          <img :src="playerRoleImage" alt="Player Image" />
+        <div class="indicator" :style="indicatorStyle">
+          <div class="frame" :style="frameColor">
+            <img :src="playerRoleImage" alt="Player Image" />
+          </div>
         </div>
       </div>
       <div class="information col-8">
@@ -29,6 +31,12 @@ export default class OtherPlayers extends Vue {
     return this.role
       ? { backgroundColor: `var(--color-${this.role})` }
       : { backgroundColor: `var(--color-Researcher)` };
+  }
+
+  get indicatorStyle() {
+    return !this.ready
+      ? { border: `0.125rem solid var(--color-${this.role})` }
+      : { border: `0.125rem solid var(--status-green)` };
   }
 
   get playerRoleImage(): any {
