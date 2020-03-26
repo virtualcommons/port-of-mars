@@ -99,9 +99,9 @@ export class GameRoom extends Room<GameState> implements Game {
       case 'discard-accomplishment-card':
         return DiscardAccomplishmentCmd.fromReq(r, player);
       case 'accept-trade-request':
-        return AcceptTradeRequestCmd.fromReq(r, player);
+        return AcceptTradeRequestCmd.fromReq(r);
       case 'reject-trade-request':
-        return RejectTradeRequestCmd.fromReq(r, player);
+        return RejectTradeRequestCmd.fromReq(r);
       case 'cancel-trade-request':
         return CancelTradeRequestCmd.fromReq(r, player);
       case 'send-trade-request':
@@ -131,7 +131,7 @@ export class GameRoom extends Room<GameState> implements Game {
     this.state.timeRemaining -= 1;
     if (this.state.allPlayersAreReady || this.state.timeRemaining <= 0) {
       // phase initialization
-      const cmd = new SetNextPhaseCmd(this);
+      const cmd = new SetNextPhaseCmd(this.state);
       const events = cmd.execute();
       this.state.applyMany(events);
       // post phase cleanup

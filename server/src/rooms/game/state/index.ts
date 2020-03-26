@@ -1040,11 +1040,12 @@ export class GameState extends Schema implements GameData {
     player.contributedUpkeep = investment.upkeep;
   }
 
-  getPlayer(username: string): Player | undefined {
+  getPlayer(username: string): Player {
     if (this.hasUser(username)) {
       return this.players[this.userRoles[username]];
     }
-    logger.debug("GameState.getPlayer: Unable to find player with username", username);
+    logger.fatal("GameState.getPlayer: Unable to find player with username", username);
+    throw new Error(`No player found with ${username}`);
   }
 
   getPlayers(): Array<Player> {

@@ -130,10 +130,10 @@ export class SetPlayerReadinessCmd implements Command {
 }
 
 export class AcceptTradeRequestCmd implements Command {
-  constructor(private id: string, private player: Player) { }
+  constructor(private id: string) { }
 
-  static fromReq(r: req.AcceptTradeRequestData, player: Player) {
-    return new AcceptTradeRequestCmd(r.id, player);
+  static fromReq(r: req.AcceptTradeRequestData) {
+    return new AcceptTradeRequestCmd(r.id);
   }
 
   execute(): Array<GameEvent> {
@@ -142,10 +142,10 @@ export class AcceptTradeRequestCmd implements Command {
 }
 
 export class RejectTradeRequestCmd implements Command {
-  constructor(private id: string, private player: Player) { }
+  constructor(private id: string) { }
 
-  static fromReq(r: req.RejectTradeRequestData, player: Player) {
-    return new RejectTradeRequestCmd(r.id, this.player);
+  static fromReq(r: req.RejectTradeRequestData) {
+    return new RejectTradeRequestCmd(r.id);
   }
 
   execute(): Array<GameEvent> {
