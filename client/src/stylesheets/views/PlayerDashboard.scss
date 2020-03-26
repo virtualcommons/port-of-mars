@@ -1,0 +1,122 @@
+.player-dashboard {
+    @include expand;
+    /* SET MAX SIZE OF SCREEN */
+    max-height: $max-screen-height;
+    max-width: $max-screen-width;
+    /* SET MIN SIZE OF SCREEN */
+    min-height: $min-screen-height;
+    min-width: $min-screen-width;
+    padding: 2rem 1rem 1rem 1rem;
+    margin: 0;
+    position: relative;
+    @include row;
+    // background-color: $space-gray;
+
+    /* TEXT STYLING */
+    font-size: $font-med;
+
+    h1 {
+        text-transform: uppercase;
+        letter-spacing: 0.25rem;
+        font-size: 4rem;
+        font-weight: 700;
+    }
+
+    h2 {
+        @include make-center;
+        margin-bottom: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.25rem;
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: $space-white;
+    }
+
+    p {
+        color: $new-space-orange;
+        @include make-center;
+    }
+
+    .button {
+        text-transform: uppercase;
+        color: $space-gray;
+        border-color: $new-space-orange;
+        background-color: $new-space-orange;
+    }
+    
+    :disabled {
+        color: $new-space-orange;
+        border-color: $new-space-orange;
+        background-color: $space-gray;
+    }
+
+    /* END TEXT STYLING */
+  
+    .left,
+    .right {
+      height: 100%;
+      @include column-2;
+      @include reset-padding-margin;
+      position: relative;
+      padding-top: 15rem;
+
+      h2 {
+          padding: 0 0 0.75rem 0;
+      }
+
+      .top {
+        height: 40%;
+      }
+  
+      .bottom {
+        height: 500%;
+      }
+
+      .upcoming-game-item, .player-stat-item {
+        @include reset-padding-margin;
+        @include new-border-orange;
+        width: 20rem;
+        margin-top: 1.5rem;
+        padding: 0.75rem 0 0.75rem 0;
+        text-align: center;
+      }
+
+      .player-stat-item p {
+          @include reset-padding-margin;
+      }
+
+      .player-stat-item-header {
+          font-weight: bolder;
+          text-transform: uppercase;
+      }
+    }
+  
+    .middle {
+      height: 100%;
+      @include column-8;
+      @include reset-padding-margin;
+      @include make-center;
+      @include make-column-and-center;
+      
+      .top {
+        height: 90%;
+
+        h1, h2 {
+            color: $new-space-orange;
+        }
+      }
+  
+      .bottom {
+        height: 125rem;
+      }
+
+      .action-item {
+        @include reset-padding-margin;
+        @include new-border-orange;
+        width: 30rem;
+        margin-top: 1.5rem;
+        padding: 0.75rem 0 0.75rem 0;
+        text-align: center;
+      }
+    }
+  }
