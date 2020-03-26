@@ -1,0 +1,69 @@
+.card-event-component {
+  width: 100%;
+  border: 0.125rem solid $space-white;
+  margin-bottom: 0.5rem;
+  flex: 0 0 auto;
+  @include make-column-and-center;
+  cursor: pointer;
+  @include default-transition-base;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &:hover {
+    // transform: scale(1.1);
+  }
+
+  .name {
+    width: 100%;
+    color: $space-gray;
+    background-color: $space-white;
+
+    p {
+      width: 100%;
+      padding: 0.25rem 0.5rem;
+      margin-bottom: 0;
+      font-size: $font-med;
+      font-weight: $font-weight-maven-pro-medium;
+      text-transform: uppercase;
+      text-align: center;
+      @include text-overflow-ellipses;
+    }
+  }
+
+  .effect {
+    flex-grow: 1;
+    width: 100%;
+    padding: 0.5rem;
+    background-color: $space-white-opaque-1;
+    overflow-y: scroll;
+    @include disable-scroll;
+
+    p {
+      width: 100%;
+      margin-bottom: 0;
+      color: $space-white;
+      font-size: $font-med;
+      font-weight: $font-weight-maven-pro-regular;
+      text-align: center;
+    }
+  }
+
+  .length {
+    width: 100%;
+    color: $space-white;
+    background-color: $space-white-opaque-1;
+
+    p {
+      width: 100%;
+      margin: 0.5rem 0;
+      color: $space-white;
+      font-size: $font-med;
+      font-weight: $font-weight-maven-pro-regular;
+      text-align: center;
+      text-transform: capitalize;
+      @include text-overflow-ellipses;
+    }
+  }
+}
