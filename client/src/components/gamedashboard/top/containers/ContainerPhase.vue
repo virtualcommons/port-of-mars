@@ -1,4 +1,3 @@
-import {Phase} from "@port-of-mars/shared/types";
 <template>
   <div class="container-phase">
     <div class="phase-row">
@@ -16,7 +15,8 @@ import {Phase} from "@port-of-mars/shared/types";
               <CardEvent
                 v-for="(event, eventInd) in eventsForTheRound"
                 :event="event"
-                :visible="visible(eventInd)" :key="eventInd"
+                :visible="visible(eventInd)"
+                :key="eventInd"
               />
             </div>
           </div>
@@ -30,13 +30,13 @@ import {Phase} from "@port-of-mars/shared/types";
 </template>
 
 <script lang="ts">
-  import {Component, Vue} from 'vue-property-decorator';
-  import Phase from '@port-of-mars/client/components/gamedashboard/top/Phase.vue';
-  import CardEvent from '@port-of-mars/client/components/gamedashboard/global/cards/CardEvent.vue';
-  import MarsLog from '@port-of-mars/client/components/gamedashboard/top/MarsLog.vue';
-  import * as shared from '@port-of-mars/shared/types'
+import { Component, Vue } from 'vue-property-decorator';
+import Phase from '@port-of-mars/client/components/gamedashboard/top/Phase.vue';
+import CardEvent from '@port-of-mars/client/components/gamedashboard/global/cards/CardEvent.vue';
+import MarsLog from '@port-of-mars/client/components/gamedashboard/top/MarsLog.vue';
+import * as shared from '@port-of-mars/shared/types';
 
-  @Component({
+@Component({
   components: {
     Phase,
     CardEvent,
@@ -56,7 +56,10 @@ export default class ContainerPhase extends Vue {
   }
 
   visible(ind: number) {
-    return this.$tstore.state.phase !== shared.Phase.events || ind <= this.eventsProcessed;
+    return (
+      this.$tstore.state.phase !== shared.Phase.events ||
+      ind <= this.eventsProcessed
+    );
   }
 
   handleScroll(e: WheelEvent) {
