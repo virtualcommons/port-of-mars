@@ -4,26 +4,7 @@
       <p class="title">Phase Instructions</p>
       <div class="instructions">
         <div class="text">
-          <p>
-            Integer vitae dignissim lorem. Integer orci lorem, pellentesque
-            bibendum imperdiet eu, finibus eu ante. Vestibulum egestas quam
-            vitae porta auctor. Aliquam id felis et sem auctor pulvinar. In
-            pharetra facilisis justo vitae posuere. Nunc et rhoncus diam, at
-            scelerisque arcu. Ut ante nunc, porta mattis sodales et, cursus a
-            magna. Pellentesque lectus est, condimentum non pretium ut,
-            vulputate sed nibh. Aliquam finibus nisl lacinia metus aliquam
-            lobortis. Mauris et dolor malesuada, convallis dolor id, bibendum
-            magna. Nulla facilisis porttitor arcu, sit amet ullamcorper dolor
-            varius non. Quisque bibendum erat non velit sagittis auctor. Aliquam
-            in ante semper, fringilla mi vehicula, fringilla metus. Interdum et
-            malesuada fames ac ante ipsum primis in faucibus. Donec dictum
-            congue magna. Sed eu placerat orci, at elementum lectus. Proin
-            vehicula, enim vel pellentesque mollis, diam dolor aliquet dolor,
-            sed finibus mi libero eget mauris. Vestibulum tellus erat, facilisis
-            a ipsum eget, ultrices viverra purus. Mauris laoreet leo sapien, et
-            dictum nisi luctus in. Proin scelerisque lorem id ex rutrum, sed
-            fringilla sapien rutrum.
-          </p>
+          <p>{{ phaseInstructions }}</p>
         </div>
       </div>
     </div>
@@ -32,11 +13,46 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Phase, PHASE_LABELS } from '@port-of-mars/shared/types';
+import { phaseInstructions } from '@port-of-mars/client/repo/instructions.ts';
 
 @Component({
   components: {}
 })
-export default class PhaseInstructions extends Vue {}
+export default class PhaseInstructions extends Vue {
+  get phaseNumber() {
+    const phaseNumber = this.$store.state.phase;
+    return phaseNumber ? phaseNumber : 0;
+  }
+
+  get phaseInstructions() {
+    switch (this.phaseNumber) {
+      case Phase.events:
+        return phaseInstructions.events;
+        break;
+      case Phase.invest:
+        return phaseInstructions.invest;
+        break;
+      case Phase.trade:
+        return phaseInstructions.trade;
+        break;
+      case Phase.purchase:
+        return phaseInstructions.purchase;
+        break;
+      case Phase.discard:
+        return phaseInstructions.discard;
+        break;
+      case Phase.victory:
+        return phaseInstructions.victory;
+        break;
+      case Phase.defeat:
+        return phaseInstructions.defeat;
+        break;
+      default:
+        return 'No instructions for this phase.';
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

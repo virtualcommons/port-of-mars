@@ -51,4 +51,16 @@
   .countdown {
     transition: all 0.4s ease-in-out;
   }
+
+  .blink-timer {
+    animation: blinker 0.5s linear 5;
+    // font-size: 3rem;
+    color: $status-red;
+  }
+
+  @keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+  }
 }

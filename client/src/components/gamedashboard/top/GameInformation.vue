@@ -7,11 +7,11 @@
     <div class="section">
       <p class="title">Current Phase</p>
       <p class="number">{{ phaseNumber }} of 5</p>
-      <p class="phase">{{ phase }}</p>
+      <p class="phase">{{ phaseText }}</p>
     </div>
     <div class="section">
       <p class="title">Phase Countdown</p>
-      <p class="countdown" :class="countdownStyling">{{ timeRemaining }}</p>
+      <p :class="countdownStyling">{{ timeRemaining }}</p>
     </div>
     <div class="section">
       <button @click="submitDone" v-if="!playerReady">Ready to Advance</button>
@@ -47,7 +47,7 @@ export default class GameInformation extends Vue {
     return phaseNumber ? phaseNumber : 0;
   }
 
-  get phase() {
+  get phaseText() {
     return this.phaseNumber !== Phase.events
       ? PHASE_LABELS[this.phaseNumber]
       : `Event ${this.$tstore.state.marsEventsProcessed + 1}`;
@@ -68,12 +68,12 @@ export default class GameInformation extends Vue {
   }
 
   get countdownStyling() {
-    return this.$store.state.timeRemaining < 60 ? 'blink-timer' : 'time';
+    return this.$store.state.timeRemaining < 60 ? 'blink-timer' : 'countdown';
   }
 
   private submitDone() {
     let pendingInvestments;
-    switch (this.phase) {
+    switch (this.phaseNumber) {
       case Phase.events:
         const currentEvent = this.$tstore.getters.currentEvent;
         pendingInvestments = this.$tstore.getters.player.pendingInvestments;
