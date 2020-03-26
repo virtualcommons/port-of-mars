@@ -31,7 +31,7 @@
 
       .empty {
         margin-bottom: 0;
-        font-size: $font-small;
+        font-size: $font-med;
         text-align: center;
         color: $space-white-opaque-2;
       }
@@ -43,7 +43,7 @@
         margin-bottom: 0.5rem;
         color: $space-white;
         background-color: $space-white-opaque-1;
-        font-size: $font-small;
+        font-size: $font-med;
         overflow: auto;
 
         &:last-child {
@@ -57,6 +57,7 @@
           .member {
             margin-bottom: 0;
             color: $new-space-orange;
+            font-weight: $font-weight-maven-pro-medium;
           }
 
           .time {
@@ -94,7 +95,7 @@
       flex: 1;
       color: $space-white;
       background-color: transparent;
-      font-size: $font-small;
+      font-size: $font-med;
 
       &:focus,
       &:active {
@@ -138,7 +139,7 @@
     p {
       margin-bottom: 0;
       color: $space-white-opaque-2;
-      font-size: $font-small;
+      font-size: $font-med;
       text-align: center;
     }
   }
