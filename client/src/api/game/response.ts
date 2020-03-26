@@ -11,9 +11,8 @@ import {
   Role
 } from '@port-of-mars/shared/types';
 import { Responses } from '@port-of-mars/shared/game/responses';
-import { DataChange, Schema } from '@colyseus/schema';
+import { Schema } from '@colyseus/schema';
 import { TStore } from '@port-of-mars/client/plugins/tstore';
-import { rootCertificates } from 'tls';
 
 type Schemify<T> = T & Schema;
 

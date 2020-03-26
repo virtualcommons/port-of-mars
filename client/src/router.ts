@@ -1,13 +1,10 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-// import Home from '@port-of-mars/client/views/Home.vue';
 import Login from '@port-of-mars/client/views/Login.vue';
 import WaitingLobby from '@port-of-mars/client/views/WaitingLobby.vue';
 import Game from '@port-of-mars/client/views/Game.vue';
 import Tutorial from '@port-of-mars/client/views/Tutorial.vue';
 import PlayerDashboard from '@port-of-mars/client/views/PlayerDashboard.vue';
-// import store from '@port-of-mars/client/store'
-// import {AjaxRequest} from "@port-of-mars/client/plugins/ajax";
 import {
   GAME_PAGE,
   LOBBY_PAGE,
@@ -30,7 +27,6 @@ const router = new Router({
     { ...PAGE_META[TUTORIAL_PAGE], component: Tutorial },
     { ...PAGE_META[REGISTER_PAGE], component: Register },
     { ...PAGE_META[PLAYER_DASHBOARD], component: PlayerDashboard },
-
   ]
 });
 

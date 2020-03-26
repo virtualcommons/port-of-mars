@@ -2,26 +2,34 @@ import { Room, Client, matchMaker } from 'colyseus';
 import schedule from 'node-schedule';
 import { ROLES } from '@port-of-mars/shared/types';
 import { buildGameOpts } from '@port-of-mars/server/util';
-import { RoomGameState } from '@port-of-mars/server/rooms/lobby/state';
+import { GameRoom } from '@port-of-mars/server/rooms/game';
+import { LobbyRoomState } from '@port-of-mars/server/rooms/lobby/state';
 import { settings } from "@port-of-mars/server/settings";
 import { findUserById } from "@port-of-mars/server/services/account";
+import _ from "lodash";
 import * as http from "http";
-import { WaitingRequests } from "@port-of-mars/shared/lobby/requests";
-import { isDev } from "@port-of-mars/shared/settings";
-import { WaitingResponses } from "@port-of-mars/shared/lobby/responses";
+import { WaitingRequests, WaitingResponses, LOBBY_NAME } from "@port-of-mars/shared/lobby";
 import { Persister } from "@port-of-mars/server/rooms/game/types";
 
 const logger = settings.logging.getLogger(__filename);
 
-interface MatchmakingGroup {
-  stats: ClientStat[];
-  priority?: boolean;
-  ready?: boolean;
-  confirmed?: number;
+class MatchmakingGroup {
+  clientStats: Array<ClientStat> = [];
+  ready: boolean = false;
+  confirmed: number = 0;
+
+  isFull(maxClients: number): boolean {
+    return this.clientStats.length >= maxClients;
+  }
+
+  hasConfirmedAllClients() {
+    return this.confirmed === this.clientStats.length;
+  }
 }
 
 interface ClientStat {
   client: Client;
+  priority?: boolean;
   waitingTime: number;
   options?: any;
   group?: MatchmakingGroup;
@@ -29,38 +37,35 @@ interface ClientStat {
   confirmed?: boolean;
 }
 
-export class RankedLobbyRoom extends Room<RoomGameState> {
+export class RankedLobbyRoom extends Room<LobbyRoomState> {
+
+  public static get NAME(): string { return LOBBY_NAME };
 
   /**
    * Distribute clients into groups at this interval
-   * 15 minutes
+   * currently set to 15 minutes
    */
   evaluateAtEveryMinute = 15;
 
   /**
    * Groups of players per iteration
    */
-  groups: MatchmakingGroup[] = [];
+  groups: Array<MatchmakingGroup> = [];
 
   /**
-   * name of the room to create
-   */
-  roomToCreate = 'game';
-
-  /**
-   * number of players on each match
+   * number of players in each game
    */
   numClientsToMatch = 5;
 
   /**
-   * rank and group cache per-player
+   * connected clients with additional priority, wait time, and confirmation metadata
    */
-  stats: ClientStat[] = [];
+  clientStats: Array<ClientStat> = [];
 
   /**
    * determine if lobby should force group assignment
    */
-  dev: boolean = false;
+  dev = false;
 
   persister!: Persister;
 
@@ -70,7 +75,7 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
   scheduler: any = undefined;
 
   onCreate(options: any) {
-    this.setState(new RoomGameState());
+    this.setState(new LobbyRoomState());
     this.dev = options.dev;
     this.persister = options.persister;
     this.evaluateAtEveryMinute = settings.lobby.evaluateAtEveryMinute;
@@ -99,23 +104,23 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
     }
   }
 
-  async onAuth(client: Client, options: { token: string }, request?: http.IncomingMessage) {
-    const user = await findUserById((request as any).session.passport.user);
-    return user;
+  async onAuth(client: Client, options: any, request: http.IncomingMessage) {
+    const userId = (request as any).session.passport.user;
+    logger.info("LOBBY OnAuth: current session has user id ", userId);
+    return await findUserById(userId);
   }
 
   onJoin(client: Client, options: any) {
-    const stat = {
+    const clientStat = {
       client: client,
       rank: options.rank,
       waitingTime: 0,
       options
     };
-    this.stats.push(stat);
-    this.state.waitingUserCount = this.stats.length;
-    this.send(client, { kind: 'client-joined-queue', value: true });
-
-    if (this.dev && this.stats.length === this.numClientsToMatch) {
+    this.clientStats.push(clientStat);
+    this.state.waitingUserCount = this.clientStats.length;
+    this.sendSafe(client, { kind: 'joined-client-queue', value: true });
+    if (this.dev && this.clientStats.length === this.numClientsToMatch) {
       this.redistributeGroups();
     }
   }
@@ -124,30 +129,39 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
     logger.trace('WAITING LOBBY: onMessage - message', message);
     if (message.kind === 'accept-invitation') {
       logger.trace('CLIENT ACCEPTED INVITATION');
-      const stat = this.stats.find(stat => stat.client === client);
-
-      if (stat && stat.group && typeof stat.group.confirmed === 'number') {
-        if (!stat.confirmed) {
-          stat.confirmed = true;
-          stat.group.confirmed++;
+      const clientStat = this.clientStats.find(stat => stat.client === client);
+      if (clientStat?.group) {
+        const group = clientStat.group;
+        if (!clientStat.confirmed) {
+          clientStat.confirmed = true;
+          group.confirmed++;
         }
-
         /**
-         * All clients confirmed, let's disconnect them!
+         * check if this group's confirmed count matches the total number of clients it is managing
          */
-        if (stat.group.confirmed === stat.group.stats.length) {
+        if (group.hasConfirmedAllClients()) {
+          // if so, let's disconnect all clients from this lobby room so they can connect to their
+          // unique game instance
           // stat.group.cancelConfirmationTimeout!.clear();
-          stat.group.stats.forEach(stat => {
-            this.removeClientStat(stat.client);
-            this.sendSafe(stat.client, { kind: 'removed-client-from-lobby' });
-            stat.client.close();
+          group.clientStats.forEach(clientStat => {
+            const client = clientStat.client;
+            this.removeClientStat(client);
+            this.sendSafe(client, { kind: 'removed-client-from-lobby' });
+            client.close();
           });
+          // now remove this group from the list of groups maintained by the Lobby
+          this.removeGroup(group);
         }
       }
-    } else if (message.kind === 'distribute-groups') {
-      this.redistributeGroups();
-      await this.checkGroupsReady();
     }
+    else if (message.kind === 'distribute-groups') {
+      await this.redistributeGroups();
+    }
+  }
+
+  removeGroup(group: MatchmakingGroup) {
+    const groupIndex = this.groups.indexOf(group);
+    this.groups.splice(groupIndex, 1);
   }
 
   onLeave(client: Client, consented: boolean) {
@@ -157,44 +171,40 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
 
   createGroup() {
     logger.trace('WAITING LOBBY: createGroup');
-    let group: MatchmakingGroup = { stats: [] };
+    const group = new MatchmakingGroup();
     this.groups.push(group);
     return group;
   }
 
-  redistributeGroups() {
-    logger.trace('WAITING LOBBY: redistributeGroups');
+  async redistributeGroups() {
+    logger.trace('WAITING LOBBY:redistributeGroups: allocating connected clients to groups', this.clientStats);
+    if (this.clientStats.length === 0) {
+      logger.trace("WAITING LOBBY: not redistributing groups, no connected clients")
+      return;
+    }
     // Re-set all groups
+    const shuffledClientStats = _.shuffle(this.clientStats);
     this.groups = [];
-
-    const stats = this.stats;
-
-    let currentGroup: MatchmakingGroup = this.createGroup();
-
-    for (let i = 0, l = stats.length; i < l; i++) {
-      const stat = stats[i];
-      stat.waitingTime += this.clock.deltaTime;
-
+    let currentGroup = this.createGroup();
+    for (const clientStat of shuffledClientStats) {
+      clientStat.waitingTime += this.clock.deltaTime;
       /**
        * do not attempt to re-assign groups for clients inside "ready" groups
        */
-      if (stat.group && stat.group.ready) {
+      if (clientStat.group && clientStat.group.ready) {
         continue;
       }
-
-      if (currentGroup.stats.length === this.numClientsToMatch) {
+      /**
+       * Create a new group if the current group is full.
+       */
+      if (currentGroup.isFull(this.numClientsToMatch)) {
         currentGroup = this.createGroup();
       }
-
-      stat.group = currentGroup;
-      currentGroup.stats.push(stat);
+      // register this ClientStat with the current MatchmakingGroup
+      clientStat.group = currentGroup;
+      currentGroup.clientStats.push(clientStat);
     }
-
-    this.checkGroupsReady();
-  }
-
-  checkGroupIsReady(group: MatchmakingGroup): boolean {
-    return group.ready || group.stats.length === this.numClientsToMatch || isDev()
+    await this.checkGroupsReady();
   }
 
   sendSafe(client: Client, msg: WaitingResponses) {
@@ -202,7 +212,8 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
   }
 
   fillUsernames(usernames: Array<string>) {
-    if (usernames.length < ROLES.length && isDev()) {
+    // in development mode, allow for less than 5 usernames and fill in 
+    if (usernames.length < ROLES.length && this.dev) {
       const newUsernames = ['bob1', 'amanda1', 'adison1', 'sydney1', 'frank1'].filter(u => !usernames.includes(u));
       return usernames.concat(newUsernames).slice(0, this.numClientsToMatch);
     }
@@ -210,52 +221,52 @@ export class RankedLobbyRoom extends Room<RoomGameState> {
     return usernames;
   }
 
+  isGroupReady(group: MatchmakingGroup): boolean {
+    return group.ready || group.clientStats.length === this.numClientsToMatch || this.dev;
+  }
+
   async checkGroupsReady() {
-    logger.trace('WAITING LOBBY: checkGroupsReady');
-    await Promise.all(
-      this.groups.map(async group => {
-        if (this.checkGroupIsReady(group)) {
-          logger.debug('WAITING LOBBY: group is ready', group);
-          group.ready = true;
-          group.confirmed = 0;
-
-          const usernames = this.fillUsernames(group.stats.map(s => s.client.auth.username));
-          const gameOpts = await buildGameOpts(usernames, this.persister);
-          /**
-           * Create room instance in the server.
-           */
-          const room = await matchMaker.createRoom(
-            this.roomToCreate,
-            gameOpts
-          );
-
-          await Promise.all(
-            group.stats.map(async client => {
-              const reservation = await matchMaker.reserveSeatFor(
-                room,
-                client.options
-              );
-
-              /**
-               * Send room data for new WebSocket connection!
-               */
-              this.sendSafe(client.client, {
-                kind: 'sent-invitation',
-                reservation: reservation
-              });
-            })
-          );
-        }
-      })
-    );
+    for (const group of this.groups) {
+      logger.trace('WAITING LOBBY: checking group ', group)
+      if (this.isGroupReady(group)) {
+        logger.debug('WAITING LOBBY: group was ready, creating room');
+        group.ready = true;
+        group.confirmed = 0;
+        // FIXME: for dev mode, make sure there are at least 5 valid usernames after taking into account
+        // connected usernames
+        const usernames = this.fillUsernames(group.clientStats.map(s => s.client.auth.username));
+        // build game options to register the usernames and persister with a newly created room
+        const gameOpts = await buildGameOpts(usernames, this.persister);
+        // Create room instance in the server.
+        const room = await matchMaker.createRoom(
+          GameRoom.NAME,
+          gameOpts
+        );
+        logger.debug('WAITING LOBBY: created room ', room);
+        await Promise.all(
+          group.clientStats.map(async client => {
+            const reservation = await matchMaker.reserveSeatFor(
+              room,
+              client.options
+            );
+            logger.debug("created reservation for client ", reservation);
+            // Send room data for new WebSocket connection
+            this.sendSafe(client.client, {
+              kind: 'sent-invitation',
+              reservation: reservation
+            });
+          })
+        );
+      }
+    }
   }
 
   removeClientStat(client: Client) {
-    logger.trace('WAITING LOBBY: removeClientStat');
-    const index = this.stats.findIndex(stat => stat.client === client);
-    if (index !== -1) {
-      this.stats.splice(index, 1);
-      this.state.waitingUserCount = this.stats.length;
+    const index = this.clientStats.findIndex(stat => stat.client === client);
+    if (index > -1) {
+      logger.trace('WAITING LOBBY: removing client stat ', client.id);
+      this.clientStats.splice(index, 1);
+      this.state.waitingUserCount = this.clientStats.length;
     }
   }
 

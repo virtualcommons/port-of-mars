@@ -1,4 +1,3 @@
-///NICK CHANGES
 export interface JoinedClientQueue {
   kind: 'joined-client-queue';
   value: boolean;
@@ -6,7 +5,7 @@ export interface JoinedClientQueue {
 
 export interface SentInvitation {
   kind: 'sent-invitation';
-  reservation: object;
+  reservation: any;
 }
 
 export interface RemovedClientFromLobby {

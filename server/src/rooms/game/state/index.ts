@@ -36,10 +36,14 @@ import {
   getAccomplishmentByID,
   getAccomplishmentIDs
 } from '@port-of-mars/server/data/Accomplishment';
+import { isProduction } from '@port-of-mars/shared/settings';
+import { settings } from '@port-of-mars/server/settings';
 import { GameEvent } from '@port-of-mars/server/rooms/game/events/types';
 import { GameOpts, GameStateOpts } from '@port-of-mars/server/rooms/game/types';
 import { MarsEventsDeck } from '@port-of-mars/server/rooms/game/state/marsEvents/MarsEventDeck';
 import { MarsEvent } from '@port-of-mars/server/rooms/game/state/marsEvents/MarsEvent';
+
+const logger = settings.logging.getLogger(__filename);
 
 export class ChatMessage extends Schema implements ChatMessageData {
   constructor(msg: ChatMessageData) {
@@ -306,11 +310,11 @@ class ResourceCosts extends Schema implements ResourceCostData {
   investmentWithinBudget(investment: InvestmentData, budget: number) {
     return (
       this.culture * investment.culture +
-        this.finance * investment.finance +
-        this.government * investment.government +
-        this.legacy * investment.legacy +
-        this.science * investment.science +
-        this.upkeep * investment.upkeep <=
+      this.finance * investment.finance +
+      this.government * investment.government +
+      this.legacy * investment.legacy +
+      this.science * investment.science +
+      this.upkeep * investment.upkeep <=
       budget
     );
   }
@@ -373,7 +377,7 @@ class ResourceInventory extends Schema implements ResourceAmountData {
     this.science += newResources.science;
   }
 
-  setToZero(resource: Resource){
+  setToZero(resource: Resource) {
     this[resource] = 0;
   }
 }
@@ -717,6 +721,8 @@ export class Player extends Schema implements PlayerData {
   @type('number')
   victoryPoints: number = 0;
 
+  connected: boolean = true;
+
   isInvestmentFeasible(investment: InvestmentData) {
     return this.costs.investmentWithinBudget(investment, this.timeBlocks);
   }
@@ -750,7 +756,7 @@ export class Player extends Schema implements PlayerData {
     this.timeBlocks = Player.defaults.timeBlocks;
   }
 
-  setTimeBlocks(amount: number){
+  setTimeBlocks(amount: number) {
     this.timeBlocks = amount;
   }
 
@@ -801,16 +807,16 @@ export class Player extends Schema implements PlayerData {
   }
 
 
-  invertPendingInventory(){
+  invertPendingInventory() {
     let invertedInventory = PendingInvestment.defaults();
-    for(const resource of RESOURCES){
-      invertedInventory[resource as Resource] = this.inventory[resource as Resource]*-1;
+    for (const resource of RESOURCES) {
+      invertedInventory[resource as Resource] = this.inventory[resource as Resource] * -1;
     }
 
-    this.pendingInvestments.add({...invertedInventory, upkeep:0});
+    this.pendingInvestments.add({ ...invertedInventory, upkeep: 0 });
   }
 
-  mergePendingAndInventory(){
+  mergePendingAndInventory() {
     this.inventory.update(this.pendingInvestments);
     this.pendingInvestments.reset();
   }
@@ -865,7 +871,13 @@ class PlayerSet extends Schema implements PlayerSetData {
     this.Researcher.fromJSON(data.Researcher);
   }
 
+  asArray(): Array<Player> {
+    return [this.Curator, this.Entrepreneur, this.Pioneer, this.Politician, this.Researcher];
+  }
+
   [Symbol.iterator](): Iterator<Player> {
+    return this.asArray()[Symbol.iterator]();
+    /*
     let index = 0;
     const self = this;
     return {
@@ -885,6 +897,7 @@ class PlayerSet extends Schema implements PlayerSetData {
         }
       }
     };
+    */
   }
 }
 
@@ -907,9 +920,12 @@ export interface GameSerialized {
 }
 
 export class GameState extends Schema implements GameData {
+
   constructor(data: GameStateOpts) {
     super();
-    assert.equal(Object.keys(data.userRoles).length, ROLES.length, 'Must have five players');
+    if (isProduction()) {
+      assert.equal(Object.keys(data.userRoles).length, ROLES.length, 'Must have five players');
+    }
     this.userRoles = data.userRoles;
     this.marsEventDeck = new MarsEventsDeck(data.deck);
     this.lastTimePolled = new Date();
@@ -1024,10 +1040,28 @@ export class GameState extends Schema implements GameData {
     player.contributedUpkeep = investment.upkeep;
   }
 
+  getPlayer(username: string): Player {
+    if (this.hasUser(username)) {
+      return this.players[this.userRoles[username]];
+    }
+    logger.fatal("GameState.getPlayer: Unable to find player with username", username);
+    throw new Error(`No player found with ${username}`);
+  }
+
+  getPlayers(): Array<Player> {
+    return this.players.asArray();
+  }
+
+  hasUser(username: string | undefined): boolean {
+    if (username) {
+      return Object.keys(this.userRoles).includes(username);
+    }
+    return false;
+  }
+
   get allPlayersAreReady(): boolean {
-    for (const r of ROLES) {
-      const p = this.players[r];
-      if (!p.ready) {
+    for (const player of this.players) {
+      if (!player.ready) {
         return false;
       }
     }
@@ -1041,16 +1075,14 @@ export class GameState extends Schema implements GameData {
   }
 
   resetPlayerReadiness(): void {
-    for (const r of ROLES) {
-      const p = this.players[r];
-      p.ready = false;
+    for (const player of this.players) {
+      player.ready = false;
     }
   }
 
   resetPlayerContributedUpkeep(): void {
-    for (const r of ROLES) {
-      const p = this.players[r];
-      p.contributedUpkeep = 0;
+    for (const player of this.players) {
+      player.contributedUpkeep = 0;
     }
   }
 
@@ -1110,7 +1142,7 @@ export class GameState extends Schema implements GameData {
   }
 
   // REFACTOR: DEFAULT CATEGORY
-  
+
   log(
     message: string,
     category: string,
@@ -1131,18 +1163,18 @@ export class GameState extends Schema implements GameData {
   }
 
   evaluateGameWinners() {
-    let playerScores: Array<[Role, Number]> = [];
+    let playerScores: Array<[Role, Number]> = this.players.asArray().map(p => [p.role, p.victoryPoints]);
     let winners: Array<Role> = [];
-    
-    for(const p of this.players) {
+
+    for (const p of this.players) {
       playerScores.push([p.role, p.victoryPoints]);
     }
 
     const sorted = _.reverse(_.sortBy(playerScores, [1]));
     sorted.forEach((s: [Role, Number]) => {
-      if(s[1] === sorted[0][1]) winners.push(s[0]);
+      if (s[1] === sorted[0][1]) winners.push(s[0]);
     })
-    
+
     this.winners.push(...winners);
   }
 
@@ -1173,7 +1205,7 @@ export class GameState extends Schema implements GameData {
 
     this.tradeSet[id] = new Trade(trade.from, trade.to);
 
-    switch(reason) {
+    switch (reason) {
       case 'sent-trade-request':
         message = `The ${fromRole} sent a trade request to the ${toRole}.`;
         category = MarsLogCategory.sentTrade;
@@ -1190,10 +1222,10 @@ export class GameState extends Schema implements GameData {
     const performedBy: ServerRole = SERVER;
     const toRole: Role = this.tradeSet[id].to.role;
     const fromRole: Role = this.tradeSet[id].from.role;
-    
+
     delete this.tradeSet[id];
 
-    switch(reason) {
+    switch (reason) {
       case 'reject-trade-request':
         message = `The ${toRole} rejected a trade request from the ${fromRole}.`;
         category = MarsLogCategory.rejectTrade;
@@ -1213,13 +1245,13 @@ export class GameState extends Schema implements GameData {
     let message: string;
     let category: string;
     const performedBy: ServerRole = SERVER;
-    
+
     const trade: Trade = this.tradeSet[id];
     const toRole: Role = trade.to.role;
     const fromRole: Role = trade.from.role;
     const fromRoleInventory: ResourceAmountData = this.players[fromRole].inventory;
     const fromTradeResources: ResourceAmountData = trade.from.resourceAmount;
-    
+
     if (tradeCanBeCompleted(fromRoleInventory, fromTradeResources)) {
       let toMsg: Array<string> = [];
       let fromMsg: Array<string> = [];
@@ -1264,5 +1296,4 @@ export class GameState extends Schema implements GameData {
   discardAccomplishment(role: Role, id: number): void {
     this.players[role].accomplishments.discard(id);
   }
-  // NOTE :: END NEW CHANGES
 }

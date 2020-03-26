@@ -55,6 +55,7 @@
 <script lang="ts">
 import { Vue, Component, Inject } from 'vue-property-decorator';
 import { Role, ROLES } from '@port-of-mars/shared/types';
+import { LOBBY_NAME } from '@port-of-mars/shared/lobby';
 import { Client } from 'colyseus.js';
 import { applyWaitingServerResponses } from '@port-of-mars/client/api/lobby/response';
 import { WaitingRequestAPI } from '@port-of-mars/client/api/lobby/request';
@@ -80,7 +81,7 @@ export default class WaitingLobby extends Vue {
   ];
 
   async created() {
-    const room = await this.$client.joinOrCreate('waiting');
+    const room = await this.$client.joinOrCreate(LOBBY_NAME);
     applyWaitingServerResponses(room, this);
     this.lobbyAPI.connect(room);
   }
