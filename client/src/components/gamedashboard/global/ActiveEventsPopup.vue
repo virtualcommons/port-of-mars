@@ -13,7 +13,6 @@
         size="lg"
       />
     </button>
-<<<<<<< HEAD
     <div class="wrapper">
       <p class="empty" v-if="eventsForTheRound.length === 0">
         No Active Events
@@ -25,9 +24,6 @@
         :key="index"
       />
     </div>
-=======
-    <div class="wrapper"></div>
->>>>>>> feat: initial game board redesign work
   </div>
 </template>
 
@@ -37,24 +33,17 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCaretUp } from '@fortawesome/free-solid-svg-icons/faCaretUp';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons/faCaretDown';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-<<<<<<< HEAD
 import NewCardEvent from '@port-of-mars/client/components/gamedashboard/global/cards/NewCardEvent.vue';
 import { Phase } from '@port-of-mars/shared/types';
-=======
->>>>>>> feat: initial game board redesign work
 
 library.add(faCaretUp);
 library.add(faCaretDown);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 @Component({
-<<<<<<< HEAD
   components: {
     NewCardEvent
   }
-=======
-  components: {}
->>>>>>> feat: initial game board redesign work
 })
 export default class ActiveEventsPopup extends Vue {
   private visible: boolean = false;
@@ -66,7 +55,6 @@ export default class ActiveEventsPopup extends Vue {
   get position() {
     return this.visible ? { bottom: '0rem' } : { bottom: '-45rem' };
   }
-<<<<<<< HEAD
 
   get eventsForTheRound() {
     return this.$tstore.state.marsEvents;
@@ -81,8 +69,6 @@ export default class ActiveEventsPopup extends Vue {
       this.$tstore.state.phase !== Phase.events || index <= this.eventsProcessed
     );
   }
-=======
->>>>>>> feat: initial game board redesign work
 }
 </script>
 
