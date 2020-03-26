@@ -42,7 +42,7 @@ export default class GameInformation extends Vue {
     }
   }
 
-  get phaseNumber() {
+  get phaseNumber(): Phase {
     const phaseNumber = this.$store.state.phase;
     return phaseNumber ? phaseNumber : 0;
   }

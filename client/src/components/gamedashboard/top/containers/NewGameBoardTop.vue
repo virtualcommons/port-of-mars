@@ -58,6 +58,7 @@ import GameInformation from '@port-of-mars/client/components/gamedashboard/top/G
 import PhaseInstructions from '@port-of-mars/client/components/gamedashboard/top/PhaseInstructions.vue';
 import NewMarsLog from '@port-of-mars/client/components/gamedashboard/top/NewMarsLog.vue';
 import { ROLES, Role } from '@port-of-mars/shared/types';
+import { PlayerClientSet } from '@port-of-mars/client/store/state';
 
 @Component({
   components: {
@@ -75,11 +76,12 @@ export default class NewGameBoardTop extends Vue {
   }
 
   get otherPlayers(): any {
-    const otherPlayers = this.$tstore.getters.otherPlayers;
+    const otherPlayers: Partial<PlayerClientSet> = this.$tstore.getters
+      .otherPlayers;
     return Object.keys(otherPlayers).reduce((prev, player) => {
-      const role = player;
-      const ready = otherPlayers[player].ready;
-      const victoryPoints: number = otherPlayers[player].victoryPoints;
+      const role: Role = player as Role;
+      const ready: boolean = otherPlayers[role]!.ready;
+      const victoryPoints: number = otherPlayers[role]!.victoryPoints;
       prev.push({ role, ready, victoryPoints });
       return prev;
     }, [] as Array<{ role: Role; ready: boolean; victoryPoints: number }>);
