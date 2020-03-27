@@ -15,12 +15,12 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import NewGameBoardTop from '@port-of-mars/client/components/gamedashboard/top/containers/NewGameBoardTop.vue';
-import NewGameBoardBottom from '@port-of-mars/client/components/gamedashboard/bottom/containers/NewGameBoardBottom.vue';
-import ProfileMenu from '@port-of-mars/client/components/gamedashboard/global/ProfileMenu.vue';
-import ActiveEventsPopup from '@port-of-mars/client/components/gamedashboard/global/ActiveEventsPopup.vue';
-import InventoryPopup from '@port-of-mars/client/components/gamedashboard/global/InventoryPopup.vue';
-import ChatPopup from '@port-of-mars/client/components/gamedashboard/global/ChatPopup.vue';
+import NewGameBoardTop from '@port-of-mars/client/components/newGameDashboard/top/containers/NewGameBoardTop.vue';
+import NewGameBoardBottom from '@port-of-mars/client/components/newGameDashboard/bottom/containers/NewGameBoardBottom.vue';
+import ProfileMenu from '@port-of-mars/client/components/newGameDashboard/global/ProfileMenu.vue';
+import ActiveEventsPopup from '@port-of-mars/client/components/newGameDashboard/global/ActiveEventsPopup.vue';
+import InventoryPopup from '@port-of-mars/client/components/newGameDashboard/global/InventoryPopup.vue';
+import ChatPopup from '@port-of-mars/client/components/newGameDashboard/global/ChatPopup.vue';
 
 @Component({
   components: {
