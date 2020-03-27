@@ -7,8 +7,9 @@
       <!-- <ContainerPurchase /> -->
       <!-- <ContainerDiscard/> -->
       <!-- <ContainerEvents /> -->
-
+      
       <ContainerEvents v-if="gamePhase == phase.events"  />
+      <ContainerInvestments v-if="gamePhase == phase.invest" />
       <ContainerTrade v-else-if="gamePhase == phase.trade" />
       <ContainerPurchase v-else-if="gamePhase == phase.purchase" />
       <ContainerDiscard v-else-if="gamePhase == phase.discard" />
@@ -19,6 +20,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
+import ContainerInvestments from './ContainerInvestments.vue'
 import ContainerTrade from './ContainerTradeRework.vue';
 import ContainerPurchase from './ContainerPurchaseRework.vue';
 import ContainerDiscard from './ContainerDiscardRework.vue';
@@ -32,6 +34,7 @@ import { Phase } from '@port-of-mars/shared/types';
     ContainerPurchase,
     ContainerDiscard,
     ContainerEvents,
+    ContainerInvestments,
     ContainerDefault,
   }
 })
