@@ -2,7 +2,7 @@
   <div class="c-chatpopup" :style="position">
     <BButton @click="toggle" class="toggle">
       <span>Chat</span>
-      <BBadge variant="dark">10 <span class="sr-only">unread messages</span></BBadge>
+      <BBadge variant="dark" v-if="!visible">{{ unreadChatMessagesCount }}<span class="sr-only">unread messages</span></BBadge>
       <font-awesome-icon
         v-if="!visible"
         :icon="['fas', 'caret-up']"
@@ -40,11 +40,17 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 })
 export default class ChatPopup extends Vue {
   private visible: boolean = false;
+
   private toggle() {
     this.visible = !this.visible;
   }
+
   get position() {
     return this.visible ? { bottom: '0rem' } : { bottom: '-45rem' };
+  }
+
+  get unreadChatMessagesCount() {
+    return this.$tstore.getters.unreadChatMessages;
   }
 }
 </script>

@@ -93,5 +93,10 @@ export default {
     const eventProcessedIndex = state.marsEventsProcessed;
     const auditEventIndex = marsEvents.findIndex(event => event.id === 'audit');
     return auditEventIndex !== -1 && auditEventIndex <= eventProcessedIndex;
+  },
+
+  unreadChatMessages(state: State): number {
+    const chatMessages = state.messages.length;
+    return chatMessages;
   }
 };

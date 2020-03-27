@@ -6,6 +6,7 @@ export default {
   ADD_TO_CHAT(state: State, payload: ChatMessageData) {
     state.messages.push(payload);
   },
+  
   REMOVE_FROM_CHAT(state: State, message: ChatMessageData) {
     const index = _.findIndex(
       state.messages,
