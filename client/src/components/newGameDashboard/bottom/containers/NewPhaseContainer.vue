@@ -1,13 +1,6 @@
 <template>
   <div class="c-phasecontainer row">
     <div class="content">
-      <!-- THIS IS WHERE WE SWAP BOARD BASED ON PHASE -->
-
-      <!-- <ContainerTrade /> -->
-      <!-- <ContainerPurchase /> -->
-      <!-- <ContainerDiscard/> -->
-      <!-- <ContainerEvents /> -->
-      
       <ContainerEvents v-if="gamePhase == phase.events"  />
       <ContainerInvestments v-if="gamePhase == phase.invest" />
       <ContainerTrade v-else-if="gamePhase == phase.trade" />
