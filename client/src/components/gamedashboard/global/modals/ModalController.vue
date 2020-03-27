@@ -4,6 +4,10 @@
             <PlayerInfoModal :role='playerModalVisibility.role' />
         </div>
 
+        <div class="trade-request-modal-wrapper" v-show="tradeRequestModalVisibility.visible">
+            <TradeRequestModal/>
+        </div>
+
     </div>
 </template>
 
@@ -11,19 +15,25 @@
 
 import { Component, Vue } from 'vue-property-decorator';
 import PlayerInfoModal from './PlayerInfoModal.vue';
+import TradeRequestModal from './TradeRequestModal.vue';
 @Component({
     components:{
-        PlayerInfoModal
+        PlayerInfoModal,
+        TradeRequestModal
     }
 })
 export default class ModalConroller extends Vue{
 
     get showAnyModal(){
-        return this.playerModalVisibility.visible;
+        return this.playerModalVisibility.visible || this.tradeRequestModalVisibility.visible;
     }
 
     get playerModalVisibility(){
         return this.$tstore.state.ui.modalViews.playerInfoModal;
+    }
+
+    get tradeRequestModalVisibility(){
+        return this.$tstore.state.ui.modalViews.tradeRequestModal;
     }
 }
 

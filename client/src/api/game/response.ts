@@ -142,6 +142,7 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
       if (change.field === 'phase') {
         const phase: Phase = change.value;
         store.commit('SET_GAME_PHASE', phase);
+        store.commit('CLOSE_ALL_MODALS','data');
       }
       if (change.field === 'round') {
         const round: number = change.value;

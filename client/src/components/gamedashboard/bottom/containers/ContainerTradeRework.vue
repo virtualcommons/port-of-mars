@@ -5,7 +5,7 @@
         <div class="section-text">
           <p>Active Trade List</p>
         </div>
-        <button class="request-trade-button">Request a trade </button>
+        <button class="request-trade-button" @click="handleOpenTradeRequest()">Request a trade </button>
       </div>
 
       <div class="trades-wrapper">
@@ -45,6 +45,10 @@ export default class ContainerTrade extends Vue {
     }));
     console.log(trades);
     return trades;
+  }
+
+  handleOpenTradeRequest(){
+    this.$tstore.commit('SET_TRADE_REQUEST_MODAL_VISIBILITY', true);
   }
 }
 </script>

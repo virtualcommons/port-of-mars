@@ -1,15 +1,27 @@
 .table{
     width: 100%;
     text-align: center;
+    margin:0;
+    border-collapse: collapse;
+    padding: 0;
 
     table, tbody, thead, tr, td, th{
         color: $space-white;
         border: 0;
         padding: 0 0 0.4rem 0rem;
+        
+        
     }
 
     th:first-child{
         text-align: left;
+        width: 50%;
+        
+    }
+
+    th:last-of-type{
+       width:10%;
+        
     }
 
     .header{
@@ -27,6 +39,7 @@
                 height: 2rem;
             }
        }
+
         
     }
     

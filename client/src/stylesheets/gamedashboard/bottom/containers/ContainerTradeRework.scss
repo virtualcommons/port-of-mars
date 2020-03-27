@@ -5,7 +5,7 @@
   justify-content: space-between;
 
   .section-text {
-    height: 10%;
+    padding: 0.5rem 0rem;
     width: 100%;
     @include make-center;
     background-color: $new-space-orange;
@@ -18,7 +18,8 @@
 
   .trade-list {
     height: 100%;
-    width:76%;
+    flex: 1 1 0;
+    margin-right:0.5rem;
     min-height: 0;
     
     
@@ -28,10 +29,6 @@
 
     .header{
       display: flex;
-      .section-text{
-        height: 2.6rem;
-        width: 80%;
-      }
 
       .request-trade-button{
         @include reset-button;
@@ -56,11 +53,15 @@
   }
 
   .trade-chat{
-    width: 23%;
+    @include column-3;
     min-height: 100%;
 
+    .section-text{
+      padding: 0.55rem 0;
+    }
+
     .chat-container{
-      height:90%;
+      height:91.5%;
 
       max-height: fit-content;
       background-color: $space-white-opaque-1;

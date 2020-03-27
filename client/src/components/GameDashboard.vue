@@ -6,9 +6,10 @@
     >
       <MasterComponent v-if="environment == 'development'" />
       <ModalContainer />
-      <NewGameBoardContainer />
       <ModalController/>
-      <ContainerBoard />
+      <NewGameBoardContainer />
+      
+      <!-- <ContainerBoard /> -->
     </div>
     <div v-else-if="gamePhase == phase.defeat" class="game-dashboard-defeat">
       <ContainerDefeat />
@@ -37,10 +38,9 @@ import environment from '../store/mutationFolder/environment';
   components: {
     MasterComponent,
     ModalContainer,
-    // ContainerBoard,
+    ContainerBoard,
     NewGameBoardContainer,
     ModalController,
-    ContainerBoard,
     ContainerDefeat,
     ContainerVictory
   }

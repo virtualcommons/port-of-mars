@@ -12,11 +12,11 @@
 
       <div class="actions">
         <div class="section-text">
-          <p>Purchasable Accomplishments</p>
+          <p>Discardable Accomplishments</p>
         </div>
         <div class="outer-wrapper">
           <div class="wrapper">
-            <BarAccomplishment
+            <BarDiscard
               v-for="accomplishment in purchasableAccomplishments"
               :key="accomplishment.label + 2"
               :accomplishment="accomplishment"
@@ -39,7 +39,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import BarAccomplishment from '@port-of-mars/client/components/gamedashboard/global/cards/BarAccomplishment.vue';
+import BarDiscard from '@port-of-mars/client/components/gamedashboard/global/cards/BarDiscard.vue';
 import InventoryTable from '@port-of-mars/client/components/gamedashboard/global/InventoryTable.vue';
 import Chat from '@port-of-mars/client/components/gamedashboard/right/ChatRework.vue';
 import { canPurchaseAccomplishment } from '@port-of-mars/shared/validation';
@@ -47,12 +47,12 @@ import { AccomplishmentData } from '@port-of-mars/shared/types';
 
 @Component({
   components: {
-    BarAccomplishment,
+    BarDiscard,
     Chat,
     InventoryTable,
   }
 })
-export default class ContainerPurchase extends Vue {
+export default class ContainerDiscard extends Vue {
   get purchasableAccomplishments() {
     return this.$store.getters.player.accomplishments.purchasable
       .slice()
@@ -78,5 +78,5 @@ export default class ContainerPurchase extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/gamedashboard/bottom/containers/ContainerPurchaseRework.scss';
+@import '@port-of-mars/client/stylesheets/gamedashboard/bottom/containers/ContainerDiscardRework.scss';
 </style>

@@ -4,8 +4,15 @@
       <!-- THIS IS WHERE WE SWAP BOARD BASED ON PHASE -->
 
       <!-- <ContainerTrade /> -->
-      <ContainerPurchase />
+      <!-- <ContainerPurchase /> -->
+      <!-- <ContainerDiscard/> -->
+      <!-- <ContainerEvents /> -->
 
+      <ContainerEvents v-if="gamePhase == phase.events"  />
+      <ContainerTrade v-else-if="gamePhase == phase.trade" />
+      <ContainerPurchase v-else-if="gamePhase == phase.purchase" />
+      <ContainerDiscard v-else-if="gamePhase == phase.discard" />
+      <ContainerDefault v-else />
     </div>
   </div>
 </template>
@@ -14,14 +21,30 @@
 import { Vue, Component } from 'vue-property-decorator';
 import ContainerTrade from './ContainerTradeRework.vue';
 import ContainerPurchase from './ContainerPurchaseRework.vue';
+import ContainerDiscard from './ContainerDiscardRework.vue';
+import ContainerEvents from './ContainerEventsRework.vue';
+import ContainerDefault from './/ContainerDefault.vue';
 
+import { Phase } from '@port-of-mars/shared/types';
 @Component({
   components: {
     ContainerTrade,
     ContainerPurchase,
+    ContainerDiscard,
+    ContainerEvents,
+    ContainerDefault,
   }
 })
-export default class NewPhaseContainer extends Vue {}
+export default class NewPhaseContainer extends Vue {
+  get phase() {
+    return Phase;
+  }
+
+  get gamePhase() {
+    return this.$store.state.phase;
+  }
+
+}
 </script>
 
 <style lang="scss" scoped>

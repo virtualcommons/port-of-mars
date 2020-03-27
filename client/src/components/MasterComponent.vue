@@ -68,41 +68,9 @@ export default class Master extends Vue {
         this.$root.$emit('openModalServer', this.serverMessage);
         break;
       
-      case 'w':
-        this.$tstore.commit('ADD_TO_TRADES',trade());
-        break;
       default:
         break;
     }
   }
-}
-
-function trade(){
-  return {
-      id:'adf' +Math.random(),
-      trade:{
-        to: {
-        role: 'Curator',
-        resourceAmount: {
-          science: 1,
-          government: 1,
-          legacy: 1,
-          finance: 1,
-          culture: 1
-        }
-      },
-
-      from: {
-        role: 'Researcher',
-        resourceAmount: {
-          science: 1,
-          government: 1,
-          legacy: 1,
-          finance: 1,
-          culture: 1
-        }
-      }
-      }
-    }
 }
 </script>
