@@ -20,9 +20,9 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import ModalCard from '@port-of-mars/client/components/gamedashboard/global/modals/ModalCard.vue';
-import ModalConfirmation from '@port-of-mars/client/components/gamedashboard/global/modals/ModalConfirmation.vue';
-import ModalServer from '@port-of-mars/client/components/gamedashboard/global/modals/ModalServer.vue';
+import ModalCard from '@port-of-mars/client/components/newGameDashboard/global/modals/ModalCard.vue';
+import ModalConfirmation from '@port-of-mars/client/components/newGameDashboard/global/modals/ModalConfirmation.vue';
+import ModalServer from '@port-of-mars/client/components/newGameDashboard/global/modals/ModalServer.vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
