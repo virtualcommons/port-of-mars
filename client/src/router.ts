@@ -16,7 +16,7 @@ import {
   REGISTER_PAGE,
   TUTORIAL_PAGE,
   PLAYER_DASHBOARD,
-  REFACTOR_UI
+  // REFACTOR_UI
 } from "@port-of-mars/shared/routes";
 import Register from "@port-of-mars/client/views/Register.vue";
 
@@ -31,7 +31,7 @@ const router = new Router({
     { ...PAGE_META[TUTORIAL_PAGE], component: Tutorial },
     { ...PAGE_META[REGISTER_PAGE], component: Register },
     { ...PAGE_META[PLAYER_DASHBOARD], component: PlayerDashboard },
-    { ...PAGE_META[REFACTOR_UI], component: NewGame},
+    // { ...PAGE_META[REFACTOR_UI], component: NewGame},
   ]
 });
 
