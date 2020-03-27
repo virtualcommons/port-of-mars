@@ -65,6 +65,7 @@ import * as shared from '@port-of-mars/shared/types'
 export default class NewPhaseContainer extends Vue {
 
     get eventsForTheRound() {
+        console.log(this.$tstore.state.marsEvents);
         return this.$tstore.state.marsEvents;
     }
 
@@ -93,10 +94,10 @@ export default class NewPhaseContainer extends Vue {
         return this.$tstore.state.phase === shared.Phase.events && ind == this.eventsProcessed;
     }
 
-    private updated(): any {
-      const elem = this.$el.querySelector('.event-deck-container');
-      elem!.scrollTop = elem!.scrollHeight;
-  }
+    // private updated(): any {
+    //   const elem = this.$el.querySelector('.event-deck-container');
+    //   elem!.scrollTop = elem!.scrollHeight;
+    // }
 
 }
 </script>

@@ -21,7 +21,6 @@ import ProfileMenu from '@port-of-mars/client/components/gamedashboard/global/Pr
 import ActiveEventsPopup from '@port-of-mars/client/components/gamedashboard/global/ActiveEventsPopup.vue';
 import InventoryPopup from '@port-of-mars/client/components/gamedashboard/global/InventoryPopup.vue';
 import ChatPopup from '@port-of-mars/client/components/gamedashboard/global/ChatPopup.vue';
-
 @Component({
   components: {
     NewGameBoardTop,
@@ -32,7 +31,11 @@ import ChatPopup from '@port-of-mars/client/components/gamedashboard/global/Chat
     ChatPopup
   }
 })
-export default class NewGameBoardContainer extends Vue {}
+export default class NewGameBoardContainer extends Vue {
+
+  
+
+}
 </script>
 
 <style lang="scss" scoped>

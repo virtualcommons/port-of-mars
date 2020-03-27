@@ -7,9 +7,9 @@
     <div class="gameboardbottom row">
       <NewGameBoardBottom />
     </div>
-    <ActiveEventsPopup />
+    <ActiveEventsPopup v-show="shouldShowEvents"/>
     <InventoryPopup />
-    <ChatPopup />
+    <ChatPopup v-show="shouldShowChat"  />
   </div>
 </template>
 
@@ -21,6 +21,7 @@ import ProfileMenu from '@port-of-mars/client/components/newGameDashboard/global
 import ActiveEventsPopup from '@port-of-mars/client/components/newGameDashboard/global/ActiveEventsPopup.vue';
 import InventoryPopup from '@port-of-mars/client/components/newGameDashboard/global/InventoryPopup.vue';
 import ChatPopup from '@port-of-mars/client/components/newGameDashboard/global/ChatPopup.vue';
+import { Phase } from '@port-of-mars/shared/types';
 
 @Component({
   components: {
@@ -32,7 +33,23 @@ import ChatPopup from '@port-of-mars/client/components/newGameDashboard/global/C
     ChatPopup
   }
 })
-export default class NewGameBoardContainer extends Vue {}
+export default class NewGameBoardContainer extends Vue {
+
+  get gamePhase(){
+    return this.$tstore.state.phase;
+  }
+
+  get phase(){
+    return Phase;
+  }
+  get shouldShowChat(){
+    return this.gamePhase === this.phase.invest;
+  }
+
+  get shouldShowEvents(){
+    return this.gamePhase != this.phase.events;
+  }
+}
 </script>
 
 <style lang="scss" scoped>
