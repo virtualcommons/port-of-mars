@@ -31,9 +31,9 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import Phase from '@port-of-mars/client/components/gamedashboard/top/Phase.vue';
-import CardEvent from '@port-of-mars/client/components/gamedashboard/global/cards/CardEvent.vue';
-import MarsLog from '@port-of-mars/client/components/gamedashboard/top/MarsLog.vue';
+import Phase from '@port-of-mars/client/components/newGameDashboard/top/Phase.vue';
+import CardEvent from '@port-of-mars/client/components/newGameDashboard/global/cards/CardEvent.vue';
+import MarsLog from '@port-of-mars/client/components/newGameDashboard/top/MarsLog.vue';
 import * as shared from '@port-of-mars/shared/types';
 
 @Component({

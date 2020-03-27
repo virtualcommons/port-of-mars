@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import BarDiscard from '@port-of-mars/client/components/gamedashboard/global/cards/BarDiscard.vue';
+import BarDiscard from '@port-of-mars/client/components/newGameDashboard/global/cards/BarDiscard.vue';
 
 @Component({
   components: {

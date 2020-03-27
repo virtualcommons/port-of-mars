@@ -6,6 +6,7 @@ import layout from './layout';
 import notifications from './notifications';
 import player from './player';
 import trading from './trading';
+import ui from './ui';
 import { State, getInitialStoreState } from '@port-of-mars/client/store/state';
 
 export default {
@@ -29,4 +30,5 @@ export default {
   ...notifications,
   ...player,
   ...trading,
+  ...ui,
 };

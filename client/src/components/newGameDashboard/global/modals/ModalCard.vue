@@ -6,8 +6,8 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import ModalAccomplishment from '@port-of-mars/client/components/gamedashboard/global/modals/views/ModalAccomplishment.vue';
-import ModalEvent from '@port-of-mars/client/components/gamedashboard/global/modals/views/ModalEvent.vue';
+import ModalAccomplishment from '@port-of-mars/client/components/newGameDashboard/global/modals/views/ModalAccomplishment.vue';
+import ModalEvent from '@port-of-mars/client/components/newGameDashboard/global/modals/views/ModalEvent.vue';
 
 @Component({
   components: {
