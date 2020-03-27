@@ -1,6 +1,6 @@
 <template>
   <div class="c-activeeventspopup" :style="position">
-    <button @click="toggle" class="toggle">
+    <BButton @click="toggle" class="toggle">
       <span>Active Events</span>
       <font-awesome-icon
         v-if="!visible"
@@ -12,7 +12,7 @@
         :icon="['fas', 'caret-down']"
         size="lg"
       />
-    </button>
+    </BButton>
     <div class="wrapper">
       <p class="empty" v-if="eventsForTheRound.length === 0">
         No Active Events
@@ -29,6 +29,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
+import { BButton } from 'bootstrap-vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCaretUp } from '@fortawesome/free-solid-svg-icons/faCaretUp';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons/faCaretDown';
@@ -42,6 +43,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 @Component({
   components: {
+    BButton,
     NewCardEvent
   }
 })

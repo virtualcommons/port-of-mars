@@ -1,6 +1,6 @@
 <template>
   <div class="c-inventorypopup" :style="position">
-    <button @click="toggle" class="toggle">
+    <BButton @click="toggle" class="toggle">
       <span>Inventory</span>
       <font-awesome-icon
         v-if="!visible"
@@ -12,7 +12,7 @@
         :icon="['fas', 'caret-down']"
         size="lg"
       />
-    </button>
+    </BButton>
     <div class="wrapper">
       <div
         v-for="investment in investments"
@@ -55,6 +55,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCaretUp } from '@fortawesome/free-solid-svg-icons/faCaretUp';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons/faCaretDown';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { BButton } from 'bootstrap-vue';
 import {
   Investment,
   Resource,
@@ -67,7 +68,9 @@ library.add(faCaretDown);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 @Component({
-  components: {}
+  components: {
+    BButton
+  }
 })
 export default class InventoryPopup extends Vue {
   private visible: boolean = false;
