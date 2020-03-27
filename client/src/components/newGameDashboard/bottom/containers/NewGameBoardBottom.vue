@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import NewPhaseContainer from '@port-of-mars/client/components/gamedashboard/bottom/containers/NewPhaseContainer.vue';
+import NewPhaseContainer from '@port-of-mars/client/components/newGameDashboard/bottom/containers/NewPhaseContainer.vue';
 
 @Component({
   components: {
