@@ -20,13 +20,15 @@
           </div>
           <div class="loading-progress">
             <p class="progress-text">86<span>%</span></p>
-            <router-link :to="'game'">
-              <span class="continue">Continue to Game</span>
-            </router-link>
           </div>
           <p>Next Assignment Time: {{ nextAssignmentTimeString }}</p>
           <p>Currently Waiting: {{ waitingUserCount }}</p>
           <p>{{ joinedText }}</p>
+          <p>
+            <router-link :to="'tutorial'">
+              <span class='continue'>Take the tutorial</span>
+            </router-link>
+          </p>
           <button
             @click="distributeGroups"
             type="button"
