@@ -4,9 +4,9 @@ export const GAME_PAGE: 'Game' = 'Game';
 export const TUTORIAL_PAGE: 'Tutorial' = 'Tutorial';
 export const REGISTER_PAGE: 'Register' = 'Register';
 export const PLAYER_DASHBOARD: 'Dashboard' = 'Dashboard';
-export const REFACTOR_UI: 'Refactor' = 'Refactor';
-export type Page = 'Login' | 'WaitingLobby' | 'Game' | 'Tutorial' | 'Register' | 'Dashboard'| 'Refactor';
-export const PAGES: Array<Page> = [LOGIN_PAGE, LOBBY_PAGE, GAME_PAGE, TUTORIAL_PAGE, REGISTER_PAGE, PLAYER_DASHBOARD, REFACTOR_UI];
+// export const REFACTOR_UI: 'Refactor' = 'Refactor';
+export type Page = 'Login' | 'WaitingLobby' | 'Game' | 'Tutorial' | 'Register' | 'Dashboard';
+export const PAGES: Array<Page> = [ LOGIN_PAGE, LOBBY_PAGE, GAME_PAGE, TUTORIAL_PAGE, REGISTER_PAGE, PLAYER_DASHBOARD ];
 
 export function isPage(pageName: string): pageName is Page {
   return PAGES.includes(pageName as Page);
@@ -56,13 +56,13 @@ export const PAGE_META: { [p in Page]: { path: string, name: string, props?: boo
       requiresAuth: true
     }
   },
-  [REFACTOR_UI]: {
-    path: '/refactor',
-    name: REFACTOR_UI,
-    meta: {
-      requiresAuth: true
-    }
-  }
+  // [REFACTOR_UI]: {
+  //   path: '/refactor',
+  //   name: REFACTOR_UI,
+  //   meta: {
+  //     requiresAuth: true
+  //   }
+  // }
 };
 
 export const PAGE_DEFAULT = PAGE_META[LOGIN_PAGE];
