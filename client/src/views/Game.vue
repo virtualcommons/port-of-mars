@@ -11,12 +11,8 @@ import { applyGameServerResponses } from '@port-of-mars/client/api/game/response
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 import { EnvironmentMode } from '@port-of-mars/client/settings';
 import GameDashboard from '@port-of-mars/client/components/GameDashboard.vue';
-<<<<<<< HEAD
 import _ from "lodash";
 import { LOBBY_PAGE } from "@port-of-mars/shared/routes";
-=======
-import _ from 'lodash';
->>>>>>> feat: initial game board redesign work
 
 @Component({
   name: 'game',
