@@ -1,5 +1,5 @@
 <template>
-  <div @click="handleModal" class="c-otherplayers container">
+  <div @click="handleModal()" class="c-otherplayers container">
     <div class="wrapper row">
       <div class="picture col-4">
         <div class="indicator" :style="indicatorStyle">
@@ -18,6 +18,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Role } from '@port-of-mars/shared/types';
 
 @Component({
   components: {}
@@ -46,7 +47,10 @@ export default class OtherPlayers extends Vue {
   }
 
   private handleModal(): void {
-    console.log(`OPEN OTHER PLAYER MODAL: ${this.role}`);
+    this.$tstore.commit('SET_PLAYER_INFO_MODAL_VISIBILITY',{
+      role:this.role as Role,
+      visible:true
+    });
   }
 }
 </script>

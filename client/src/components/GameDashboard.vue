@@ -8,6 +8,8 @@
       <ModalContainer />
       <ModalController/>
       <ContainerBoard />
+      
+      <!-- <ContainerBoard /> -->
     </div>
     <div v-else-if="gamePhase == phase.defeat" class="game-dashboard-defeat">
       <ContainerDefeat />
@@ -24,7 +26,9 @@ import { Phase } from '@port-of-mars/shared/types';
 import { EnvironmentMode } from '@port-of-mars/client/settings';
 import MasterComponent from '@port-of-mars/client/components/MasterComponent.vue';
 import ModalContainer from '@port-of-mars/client/components/gamedashboard/global/modals/ModalContainer.vue';
-import ModalController from '@port-of-mars/client/components/gamedashboard/global/modals/ModalController.vue';
+// import ContainerBoard from '@port-of-mars/client/components/gamedashboard/global/containers/ContainerBoard.vue';
+import NewGameBoardContainer from '@port-of-mars/client/components/gamedashboard/global/containers/NewGameBoardContainer.vue';
+import ModalController from '@port-of-mars/client/components/newGameDashboard/global/modals/ModalController.vue';
 import ContainerBoard from '@port-of-mars/client/components/gamedashboard/global/containers/ContainerBoard.vue';
 import ContainerDefeat from '@port-of-mars/client/components/gamedashboard/global/containers/ContainerDefeat.vue';
 import ContainerVictory from '@port-of-mars/client/components/gamedashboard/global/containers/ContainerVictory.vue';
@@ -36,6 +40,7 @@ import environment from '../store/mutationFolder/environment';
     ModalContainer,
     ModalController,
     ContainerBoard,
+    NewGameBoardContainer,
     ContainerDefeat,
     ContainerVictory
   }

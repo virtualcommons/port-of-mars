@@ -33,7 +33,7 @@
                         <h5 class="place">Ranking: <span class="color-mod">{{ranking}}/5</span></h5>
                     </div>
 
-                    <div class="request-trade">
+                    <div class="request-trade" v-show="!playerData.isSelf">
                         <button v-bind="{class: playerData.isSelf ? 'trade-button-unavailable' : 
                             gamePhase == phase.trade ? 'trade-button-available' : 'trade-button-unavailable' }"
                             @click="handleRequestTrade"
@@ -78,8 +78,8 @@
 
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Role, Phase } from '@port-of-mars/shared/types';
-import InventoryTable from '../InventoryTable.vue';
-import ContainerAccomplishmentsGeneral from '../../left/containers/ContainerAccomplishmentsGeneral.vue';
+import InventoryTable from './InventoryTable.vue';
+import ContainerAccomplishmentsGeneral from '@port-of-mars/client/components/gamedashboard/left/containers/ContainerAccomplishmentsGeneral.vue';
 
 
 @Component({
@@ -141,6 +141,7 @@ export default class ModalConroller extends Vue{
                 role:'Researcher',
                 visible:false
             });
+            this.$tstore.commit('OPEN_TRADE_MODAL_WARM',{role:this.role});
         } else {
             this.errorMessageActive = true;
         }

@@ -1,0 +1,112 @@
+.trade-options {
+  margin-bottom: 0.4rem;
+  width: 100%;
+  
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .type-text {
+    margin: 0.25rem 0.5rem;
+    font-size: $font-small;
+    text-align: left;
+    text-transform: uppercase;
+  }
+
+  .wrapper {
+    margin: 0.25rem 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    .impossible-resource {
+      opacity: 0.5;
+    }
+
+    .investments {
+      padding: 0.25rem;
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+
+      .icon {
+        height: 3rem;
+        width: 3rem;
+        margin: 0.5rem;
+      }
+
+      .input-wrapper {
+        height: 2.5rem;
+        @include make-center;
+        // background-color: green;
+
+        .outgoing-amount,
+        .incoming-amount {
+          height: 2.5rem;
+          width: 4rem;
+          // margin: 0 0.25rem;
+        }
+
+        /* Firefox */
+        input[type='number'] {
+          // height: 3rem;
+          padding: 0.25rem;
+          border: 0.0625rem solid $new-space-orange;
+          border-right: none;
+          text-align: center;
+          color: $new-space-orange;
+          background-color: transparent;
+          -moz-appearance: textfield;
+
+          &:focus,
+          &:active {
+            outline: none;
+          }
+
+          /*Chrome, safari, opera*/
+          &::-webkit-outer-spin-button,
+          &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+          }
+        }
+
+        .button-container {
+          height: 100%;
+          border: 0.0625rem solid $new-space-orange;
+          @include make-column-and-center;
+
+          button {
+            @include reset-button;
+            height: 50%;
+            width: 1.5rem;
+            padding: 0;
+            color: $space-gray;
+            background-color: $new-space-orange;
+            font-size: 0.75rem;
+            @include default-transition-base;
+
+            &:hover:not(:disabled) {
+              color: $new-space-orange;
+              background-color: transparent;
+            }
+          }
+        }
+        .out-of{
+          margin-left:0.25rem;
+          margin-top: 1rem;
+          font-size: $font-med;
+
+          .incoming{
+            opacity:0%;
+          }
+
+          .greater-than-zero{
+            color: $new-space-orange;
+          }
+        }
+      }
+    }
+  }
+}

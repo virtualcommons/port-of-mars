@@ -27,9 +27,6 @@ function SET_CONTRIBUTED_UPKEEP(state: State, payload: { data: number; role: Rol
   p.contributedUpkeep = payload.data;
 }
 
-function SET_PLAYER_INFO_MODAL_VISIBILITY(state: State, payload: {role:Role, visible:boolean}){
-  state.ui.modalViews.playerInfoModal = payload;
-}
 
 export default {
   SET_PLAYER_ROLE,
@@ -38,5 +35,4 @@ export default {
   SET_VICTORY_POINTS,
   SET_PENDING_INVESTMENTS,
   SET_CONTRIBUTED_UPKEEP,
-  SET_PLAYER_INFO_MODAL_VISIBILITY
 };

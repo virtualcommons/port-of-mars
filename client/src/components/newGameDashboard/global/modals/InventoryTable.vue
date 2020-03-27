@@ -43,9 +43,7 @@ export default class InventoryTable extends Vue{
     @Prop() isVisible!:boolean;
 
     get headers(){
-        return ['Resource', 'Cost', `Amount ${this.isVisible ? 
-        this.playerData.isSelf ? 'you' : 'they' 
-            : 'they'} own`];
+        return ['Resource', 'Cost', `Inventory`];
     }
 
     get resourceNames(){
