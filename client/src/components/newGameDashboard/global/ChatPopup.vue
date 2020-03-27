@@ -2,7 +2,7 @@
   <div class="c-chatpopup" :style="position">
     <BButton @click="toggle" class="toggle">
       <span>Chat</span>
-      <BBadge variant="dark">10<span class="sr-only">unread messages</span></BBadge>
+      <BBadge variant="dark">10 <span class="sr-only">unread messages</span></BBadge>
       <font-awesome-icon
         v-if="!visible"
         :icon="['fas', 'caret-up']"
