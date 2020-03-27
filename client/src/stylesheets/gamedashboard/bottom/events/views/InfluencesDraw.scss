@@ -1,9 +1,10 @@
 .event-select-influences {
   @include expand;
   @include make-column-and-center;
+  flex: 1 1 0;
 
   p {
-    margin: 2rem 0;
+    margin: 0.5rem 0;
   }
 
   button {
@@ -23,7 +24,8 @@
 
   .event-select-influences-select {
     display: flex;
-
+    flex: 1 1 0;
+    
     .event-select-influences-select-influence {
       margin: 0 1rem;
 

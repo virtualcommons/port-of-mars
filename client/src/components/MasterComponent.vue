@@ -5,6 +5,7 @@
 <script lang="ts">
 import { Component, Inject, InjectReactive, Vue } from 'vue-property-decorator';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
+import { TradeData } from '../../../shared/types';
 
 @Component({})
 export default class Master extends Vue {
@@ -66,6 +67,7 @@ export default class Master extends Vue {
       case ']':
         this.$root.$emit('openModalServer', this.serverMessage);
         break;
+      
       default:
         break;
     }

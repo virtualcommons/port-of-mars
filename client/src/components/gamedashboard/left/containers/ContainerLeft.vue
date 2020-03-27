@@ -8,9 +8,9 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import ContainerProfile from '@port-of-mars/client/components/gamedashboard/left/containers/ContainerProfile.vue';
-import ProfileInvestments from '@port-of-mars/client/components/gamedashboard/left/ProfileInvestments.vue';
-import ContainerAccomplishments from '@port-of-mars/client/components/gamedashboard/left/containers/ContainerAccomplishments.vue';
+import ContainerProfile from '@port-of-mars/client/components/newGameDashboard/left/containers/ContainerProfile.vue';
+import ProfileInvestments from '@port-of-mars/client/components/newGameDashboard/left/ProfileInvestments.vue';
+import ContainerAccomplishments from '@port-of-mars/client/components/newGameDashboard/left/containers/ContainerAccomplishments.vue';
 
 @Component({
   components: {
