@@ -51,12 +51,12 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import StatusBar from '@port-of-mars/client/components/gamedashboard/global/StatusBar.vue';
-import Player from '@port-of-mars/client/components/gamedashboard/top/Player.vue';
-import OtherPlayers from '@port-of-mars/client/components/gamedashboard/top/OtherPlayers.vue';
-import GameInformation from '@port-of-mars/client/components/gamedashboard/top/GameInformation.vue';
-import PhaseInstructions from '@port-of-mars/client/components/gamedashboard/top/PhaseInstructions.vue';
-import NewMarsLog from '@port-of-mars/client/components/gamedashboard/top/NewMarsLog.vue';
+import StatusBar from '@port-of-mars/client/components/newGameDashboard/global/StatusBar.vue';
+import Player from '@port-of-mars/client/components/newGameDashboard/top/Player.vue';
+import OtherPlayers from '@port-of-mars/client/components/newGameDashboard/top/OtherPlayers.vue';
+import GameInformation from '@port-of-mars/client/components/newGameDashboard/top/GameInformation.vue';
+import PhaseInstructions from '@port-of-mars/client/components/newGameDashboard/top/PhaseInstructions.vue';
+import NewMarsLog from '@port-of-mars/client/components/newGameDashboard/top/NewMarsLog.vue';
 import { ROLES, Role } from '@port-of-mars/shared/types';
 import { PlayerClientSet } from '@port-of-mars/client/store/state';
 

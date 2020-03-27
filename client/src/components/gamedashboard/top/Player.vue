@@ -1,5 +1,5 @@
 <template>
-  <div @click="handleModal" class="c-player">
+  <div @click="handleOpenModal()" class="c-player">
     <div class="indicator" :style="indicatorStyle">
       <div class="frame" :style="frameColor">
         <img :src="playerRoleImage" alt="Player Image" />
@@ -53,8 +53,11 @@ export default class Player extends Vue {
       : require(`@port-of-mars/client/assets/characters/Researcher.png`);
   }
 
-  private handleModal(): void {
-    console.log(`OPEN OTHER PLAYER MODAL: ${this.playerRole}`);
+  handleOpenModal(){
+    this.$tstore.commit('SET_PLAYER_INFO_MODAL_VISIBILITY',{
+      role:this.playerRole,
+      visible:true
+    });
   }
 }
 </script>

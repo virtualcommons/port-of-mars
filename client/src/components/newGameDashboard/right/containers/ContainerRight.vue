@@ -7,8 +7,8 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import ContainerPlayers from '@port-of-mars/client/components/gamedashboard/right/containers/ContainerPlayers.vue';
-import Chat from '@port-of-mars/client/components/gamedashboard/right/Chat.vue';
+import ContainerPlayers from '@port-of-mars/client/components/newGameDashboard/right/containers/ContainerPlayers.vue';
+import Chat from '@port-of-mars/client/components/newGameDashboard/right/Chat.vue';
 
 @Component({
   components: {

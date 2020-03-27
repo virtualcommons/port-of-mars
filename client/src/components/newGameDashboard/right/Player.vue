@@ -4,6 +4,7 @@
     @mouseleave="hover = false"
     :style="adjustHeight()"
     class="player"
+    @click="handleOpenModal"
   >
     <div class="ready" v-if="ready"></div>
 
@@ -42,7 +43,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { Resource, RESOURCES } from '@port-of-mars/shared/types';
+import { Resource, RESOURCES, Role } from '@port-of-mars/shared/types';
 
 @Component({})
 export default class Player extends Vue {
@@ -69,6 +70,13 @@ export default class Player extends Vue {
     } else {
       return { height: '3rem' };
     }
+  }
+
+  handleOpenModal(){
+    this.$tstore.commit('SET_PLAYER_INFO_MODAL_VISIBILITY',{
+      role:this.role as Role,
+      visible:true
+    });
   }
 }
 </script>

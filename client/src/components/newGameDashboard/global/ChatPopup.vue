@@ -1,8 +1,7 @@
 <template>
   <div class="c-chatpopup" :style="position">
-    <BButton @click="toggle" class="toggle">
+    <button @click="toggle" class="toggle">
       <span>Chat</span>
-      <BBadge variant="dark">10<span class="sr-only">unread messages</span></BBadge>
       <font-awesome-icon
         v-if="!visible"
         :icon="['fas', 'caret-up']"
@@ -13,7 +12,7 @@
         :icon="['fas', 'caret-down']"
         size="lg"
       />
-    </BButton>
+    </button>
     <div class="wrapper">
       <NewChat />
     </div>
@@ -22,7 +21,6 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { BBadge, BButton } from 'bootstrap-vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCaretUp } from '@fortawesome/free-solid-svg-icons/faCaretUp';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons/faCaretDown';
@@ -35,8 +33,6 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 @Component({
   components: {
-    BBadge,
-    BButton,
     NewChat
   }
 })

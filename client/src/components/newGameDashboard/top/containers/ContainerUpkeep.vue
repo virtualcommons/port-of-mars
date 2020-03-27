@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import StatusBar from '@port-of-mars/client/components/gamedashboard/global/StatusBar.vue';
+import StatusBar from '@port-of-mars/client/components/newGameDashboard/global/StatusBar.vue';
 
 @Component({
   components: {
