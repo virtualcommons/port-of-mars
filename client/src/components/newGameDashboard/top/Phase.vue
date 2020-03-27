@@ -35,7 +35,7 @@
 import { Component, Inject, InjectReactive, Vue } from 'vue-property-decorator';
 import Round from '@port-of-mars/client/components/gamedashboard/top/Round.vue';
 import { PHASE_LABELS } from '@port-of-mars/shared/types';
-import ModalConfirmation from '@port-of-mars/client/components/gamedashboard/global/modals/ModalConfirmation.vue';
+import ModalConfirmation from '@port-of-mars/client/components/newGameDashboard/global/modals/ModalConfirmation.vue';
 import * as s from '@port-of-mars/shared/types';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 import { library } from '@fortawesome/fontawesome-svg-core';

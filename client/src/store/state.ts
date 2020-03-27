@@ -83,14 +83,45 @@ export function defaultPendingInvestment(): ResourceCostData {
   };
 }
 
+export function defaultTradeData():TradeDataWithNull<''|Role> {
+  return {
+    to: {
+      role: '',
+      resourceAmount: defaultInventory(),
+    },
+
+    from: {
+      role: 'Researcher',
+      resourceAmount: defaultInventory()
+    }
+  }
+}
+
 export interface User {
   username: string;
   passedQuiz?: boolean;
 }
 
+export interface Visible{
+  visible:boolean;
+}
+
+export interface PlayerInfoModal extends Visible{
+  role:Role;
+}
+
+export interface TradeRequestModal extends Visible{}
+
+export interface Modals{
+  [name:string]:PlayerInfoModal|TradeRequestModal;
+  playerInfoModal:PlayerInfoModal;
+  tradeRequestModal:TradeRequestModal;
+}
+
 
 export interface uiVars {
   tradeData:TradeDataWithNull<''|Role>;
+  modalViews:Modals;
 }
 
 
@@ -151,17 +182,17 @@ export const initialStoreState: State = {
 
 
   ui:{
-    tradeData:{
-      to: {
-        role: '',
-        resourceAmount: defaultInventory(),
-      },
+    tradeData:defaultTradeData(),
 
-      from: {
+    modalViews:{
+      playerInfoModal:{
         role: 'Researcher',
-        resourceAmount: defaultInventory()
+        visible: false,
+      },
+      tradeRequestModal:{
+        visible: false,
       }
-    }
+    },
   }
 
 

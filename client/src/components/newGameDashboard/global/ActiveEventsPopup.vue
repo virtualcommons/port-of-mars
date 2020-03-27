@@ -33,7 +33,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCaretUp } from '@fortawesome/free-solid-svg-icons/faCaretUp';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons/faCaretDown';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import NewCardEvent from '@port-of-mars/client/components/gamedashboard/global/cards/NewCardEvent.vue';
+import NewCardEvent from '@port-of-mars/client/components/newGameDashboard/global/cards/NewCardEvent.vue';
 import { Phase } from '@port-of-mars/shared/types';
 
 library.add(faCaretUp);

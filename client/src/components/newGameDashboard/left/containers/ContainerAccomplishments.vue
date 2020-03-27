@@ -55,7 +55,7 @@
 
 <script lang="ts">
 import { Vue, Component, Inject } from 'vue-property-decorator';
-import CardAccomplishment from '@port-of-mars/client/components/gamedashboard/global/cards/CardAccomplishment.vue';
+import CardAccomplishment from '@port-of-mars/client/components/newGameDashboard/global/cards/CardAccomplishment.vue';
 import { Phase } from '@port-of-mars/shared/types';
 import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
 

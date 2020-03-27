@@ -1,0 +1,138 @@
+.chat {
+  height: 100%;
+  flex: 1 1 0;
+  width: 100%;
+  @include make-column-and-center;
+  overflow: hidden;
+  
+  .messages-view {
+    flex: 1 1 0;
+    width: 100%;
+    padding: 0.5rem 0.5rem;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    @include disable-scroll;
+
+    .wrapper {
+      min-height: 100%;
+      width: 100%;
+      display: flex;
+      flex-flow: column;
+      flex: 1 1 0;
+      overflow: hidden;
+      .empty {
+        margin-bottom: 0;
+        font-size: $font-small;
+        text-align: center;
+        color: $space-white-opaque-2;
+      }
+
+      .message {
+        height: auto;
+        max-width: 100%;
+        padding: 0.5rem;
+        margin-bottom: 0.5rem;
+        color: $space-white;
+        
+        font-size: $font-small;
+        overflow: auto;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        .top {
+          @include make-horizontal-expand;
+          justify-content: space-between;
+
+          .member {
+            margin-bottom: 0;
+            color: $new-space-orange;
+          }
+
+          .time {
+            margin-bottom: 0;
+
+            span {
+              color: $new-space-orange;
+            }
+          }
+        }
+
+        .bottom {
+          .content {
+            margin: 0.5rem 0;
+            word-wrap: break-word;
+          }
+        }
+      }
+    }
+  }
+
+  .input-frame {
+    
+    height: 3rem;
+    width: 100%;
+    padding-top: 0.5rem;
+    border-top: $border-white-opaque-2;
+    margin-top: 0.5rem;
+    padding-left:0.5rem;
+    @include make-center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    
+
+    .chat-input {
+      height: 100%;
+      border: none;
+      flex: 1;
+      color: $space-white;
+      background-color: transparent;
+      font-size: $font-small;
+
+      &:focus,
+      &:active {
+        outline: none;
+      }
+
+      &::placeholder {
+        color: $space-white-opaque-2;
+      }
+    }
+
+    .chat-input-sendbtn {
+      margin: 0 0.5rem;
+      color: $new-space-orange-opaque-025;
+      // color: $new-space-orange;
+      @include default-transition-base;
+      cursor: pointer;
+
+      &--ready {
+        @extend .chat-input-sendbtn;
+        color: $new-space-orange;
+        @include default-scale-up;
+      }
+    }
+  }
+}
+
+.chat-disabled {
+  flex-grow: 1;
+  width: 100%;
+  padding: 0.5rem;
+  @include border-orange;
+  margin-top: 0.5rem;
+
+  .wrapper {
+    @include expand;
+    @include make-center;
+    color: $space-white;
+
+    p {
+      margin-bottom: 0;
+      color: $space-white-opaque-2;
+      font-size: $font-small;
+      text-align: center;
+    }
+  }
+}
