@@ -12,7 +12,6 @@ export interface StoreState {
 }
 
 Vue.use(Vuex);
-
 const store = new Vuex.Store({
   state: _.cloneDeep(initialStoreState),
   mutations,

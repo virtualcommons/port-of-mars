@@ -1,16 +1,25 @@
 <template>
   <div class="gameboardcontainer container">
-    <ProfileMenu />
-    <div class="gameboardtop row">
-      <NewGameBoardTop />
+    <div class="gameboardstatusbar row">
+      <NewSystemHealth />
     </div>
-    <div class="gameboardbottom row">
-      <NewGameBoardBottom />
+    <div class="gameboardcontainerrow row no-gutters">
+      <div class="gameboard-wrapper col-9">
+        <ProfileMenu />
+        <div class="gameboardtop row">
+          <NewGameBoardTop />
+        </div>
+        <div class="gameboardbottom row">
+          <NewGameBoardBottom />
+        </div>
+        <ActiveEventsPopup />
+        <InventoryPopup />
+      </div>
+      <div class="chatwrapper col-3">
+        <NewChat/>
+      </div>
     </div>
-    <ActiveEventsPopup />
-    <InventoryPopup />
-    <ChatPopup />
-  </div>
+</div>
 </template>
 
 <script lang="ts">
@@ -20,7 +29,8 @@ import NewGameBoardBottom from '@port-of-mars/client/components/newGameDashboard
 import ProfileMenu from '@port-of-mars/client/components/newGameDashboard/global/ProfileMenu.vue';
 import ActiveEventsPopup from '@port-of-mars/client/components/newGameDashboard/global/ActiveEventsPopup.vue';
 import InventoryPopup from '@port-of-mars/client/components/newGameDashboard/global/InventoryPopup.vue';
-import ChatPopup from '@port-of-mars/client/components/newGameDashboard/global/ChatPopup.vue';
+import NewChat from '@port-of-mars/client/components/newGameDashboard/right/NewChat.vue'
+import NewSystemHealth from '@port-of-mars/client/components/newGameDashboard/top/containers/NewSystemHealh.vue';
 
 @Component({
   components: {
@@ -29,7 +39,8 @@ import ChatPopup from '@port-of-mars/client/components/newGameDashboard/global/C
     ProfileMenu,
     ActiveEventsPopup,
     InventoryPopup,
-    ChatPopup
+    NewChat,
+    NewSystemHealth,
   }
 })
 export default class NewGameBoardContainer extends Vue {}
