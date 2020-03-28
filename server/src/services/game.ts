@@ -7,7 +7,8 @@ import {TournamentRoundInvite} from "@port-of-mars/server/entity/TournamentRound
 import {TournamentRound} from "@port-of-mars/server/entity/TournamentRound";
 
 export class GameService {
-  constructor(public em: EntityManager) {}
+  constructor(public em: EntityManager) {
+  }
 
   async findById(id: number): Promise<Game> {
     return await this.em.getRepository(Game).findOneOrFail({id});
@@ -31,21 +32,22 @@ export class GameService {
     game.completed = true;
     return await Promise.all([this.em.save(game), this.em.save(players), this.em.save(invites)]);
   }
-}
-export async function getLatestActiveGameByUserId(userId: number): Promise<string | undefined> {
-  const g = await getConnection().getRepository(Game).findOne({
-      where: {
-        players: {
-          user: {
-            id: userId
-          }
+
+  async getLatestActiveGameByUserId(userId: number): Promise<string | undefined> {
+    const g = await this.em.getRepository(Game).findOne({
+        where: {
+          players: {
+            user: {
+              id: userId
+            }
+          },
+          completed: false
         },
-        completed: false
-      },
-     order: {
-        dateCreated: 'DESC'
-     }
-    }
-  );
-  return g?.roomId;
+        order: {
+          dateCreated: 'DESC'
+        }
+      }
+    );
+    return g?.roomId;
+  }
 }
