@@ -71,6 +71,11 @@ docker-compose.yml: base.yml staging.base.yml $(ENVIR).yml config.mk $(DB_DATA_P
 	  *) echo "invalid environment. must be either dev, staging or prod" 1>&2; exit 1;; \
 	esac
 
+.PHONY: test-setup
+test-setup: docker-compose.yml
+	docker-compose run --rm server createdb -h db -U marsmadness pom_testing
+	docker-compose run --rm server yarn typeorm schema:sync -c test
+
 .PHONY: test
 test: docker-compose.yml
 	docker-compose run --rm client yarn test:unit

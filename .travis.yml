@@ -18,4 +18,4 @@ install:
   - docker --version
   - ./configure
 script:
-  - make secrets buildprod test
+  - make secrets buildprod test-setup test
