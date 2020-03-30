@@ -49,6 +49,14 @@ yarn load-fixtures
 
 Now you should be able to login using the usernames in the `fixtures/User.yml` file.
 
+Tests for the project must be setup before they are run. Be sure to run
+
+```
+make test-setup
+```
+
+before trying to run and tests.
+
 Tests for the project can be run with
 
 ```
