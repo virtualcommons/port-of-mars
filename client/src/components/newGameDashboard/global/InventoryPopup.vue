@@ -80,7 +80,7 @@ export default class InventoryPopup extends Vue {
   }
 
   get position() {
-    return this.visible ? { bottom: '0rem' } : { bottom: '-45rem' };
+    return this.visible ? { bottom: '0rem' } : { bottom: '-46rem' };
   }
 
   get investments() {

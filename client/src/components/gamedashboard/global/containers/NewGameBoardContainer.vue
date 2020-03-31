@@ -5,7 +5,7 @@
       <NewGameBoardTop />
     </div>
     <div class="gameboardbottom row">
-      <NewGameBoardBottom />
+      <NewGameBoardBottom  />
     </div>
     <ActiveEventsPopup />
     <InventoryPopup />

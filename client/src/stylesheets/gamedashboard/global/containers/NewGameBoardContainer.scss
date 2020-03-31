@@ -1,6 +1,15 @@
+
+
+
 .gameboardcontainer {
   position: relative;
-  @include expand;
+  height:100%;
+  /* SET MAX SIZE OF SCREEN */
+  max-height: $max-screen-height;
+  max-width: $max-screen-width;
+  /* SET MIN SIZE OF SCREEN */
+  min-height: $min-screen-height;
+  min-width: $min-screen-width;
   /* SET MAX SIZE OF SCREEN */
   max-height: $max-screen-height;
   max-width: $max-screen-width;
@@ -12,15 +21,37 @@
   overflow: hidden;
   z-index: 0;
 
-  .gameboardtop {
-    height: calc(calc(5 / 12) * 100%);
-    @include reset-padding-margin;
-    // background-color: green;
-  }
+  
+    .gameboardcontainerrow{
+      padding: 0;
+      margin: 0;
+      width: 100%;
+      height:96%;
+      
+      .gameboard-wrapper{
+        @include expand;
 
-  .gameboardbottom {
-    height: calc(calc(7 / 12) * 100%);
-    @include reset-padding-margin;
-    // background-color: blue;
-  }
+        .gameboardtop {
+          @include expand;
+          height: calc(calc(5 / 12) * 100%);
+          @include reset-padding-margin;
+          // background-color: green;
+        }
+      
+        .gameboardbottom {
+          @include expand;
+          height: calc(calc(7/ 12) * 100%);
+          @include reset-padding-margin;
+          
+          // background-color: blue;
+        }
+      }
+
+      .chatwrapper{
+        height:100%;
+        padding-left:0.5rem;
+      }
+
+    }
+      
 }

@@ -13,26 +13,15 @@
         <Trade v-for="trade in trades" v-bind="trade" :key="trade.id" />
       </div>
     </div>
-
-    <div class="trade-chat">
-      <div class="section-text">
-        <p>Chat</p>
-      </div>
-      <div class="chat-container">
-        <Chat/>
-      </div>
-    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import Trade from '@port-of-mars/client/components/newGameDashboard/bottom/trading/Trade.vue';
-import Chat from '@port-of-mars/client/components/newGameDashboard/right/ChatRework.vue';
 @Component({
   components: {
     Trade,
-    Chat,
   }
 })
 export default class ContainerTrade extends Vue {
