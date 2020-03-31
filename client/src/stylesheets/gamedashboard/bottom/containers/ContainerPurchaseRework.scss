@@ -62,19 +62,5 @@
         }
       }
     }
-
-    .chat-container{
-      @include column-3;
-      background-color: $space-white-opaque-1;
-      min-height: 100%;
-      
-      .chat{
-        height: 95%;
-        
-        max-height: fit-content;
-        position: relative;
-        overflow:hidden;
-      }
-    }
   }
 }

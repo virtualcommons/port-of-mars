@@ -35,29 +35,17 @@
 
         </div>
 
-        <div class="chat-container">
-            <div class="section-text">
-                <p>Chat</p>
-            </div>
-
-            <div class="chat-holder">
-                <Chat/>
-            </div>
-        </div>
-
     </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import Chat from '@port-of-mars/client/components/newGameDashboard/right/ChatRework.vue';
 import CardEvent from '@port-of-mars/client/components/newGameDashboard/global/cards/CardEventRework.vue';
 import EventContainer from '@port-of-mars/client/components/newGameDashboard/bottom/events/EventContainer.vue';
 import * as shared from '@port-of-mars/shared/types'
 
 @Component({
   components: {
-      Chat,
       CardEvent,
       EventContainer
   }
