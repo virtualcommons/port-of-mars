@@ -73,8 +73,7 @@ docker-compose.yml: base.yml staging.base.yml $(ENVIR).yml config.mk $(DB_DATA_P
 
 .PHONY: test-setup
 test-setup: docker-compose.yml
-	docker-compose run --rm server createdb -h db -U marsmadness pom_testing
-	docker-compose run --rm server yarn typeorm schema:sync -c test
+	docker-compose run --rm server bash -c "dropdb --if-exists -h db -U marsmadness pom_testing && createdb -h db -U marsmadness pom_testing && yarn typeorm schema:sync -c test"
 
 .PHONY: test
 test: docker-compose.yml
@@ -90,3 +89,7 @@ deploy: docker-compose.yml
 buildprod: docker-compose.yml
 	docker-compose run --rm client yarn build
 	docker-compose run --rm server yarn build
+
+.PHONY: clean
+clean:
+	docker-compose run --rm server dropdb -h db -U marsmadness pom_testing
