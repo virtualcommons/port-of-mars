@@ -87,6 +87,8 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
     store.commit('REMOVE_FROM_CHAT', deschemify(msg));
   };
 
+  room.state.messages.triggerAll();
+
   room.state.logs.onAdd = (
     logMsg: Schemify<MarsLogMessageData>,
     index: number
@@ -100,6 +102,8 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
   ) => {
     store.commit('REMOVE_FROM_MARS_LOG', deschemify(logMsg));
   };
+
+  room.state.logs.triggerAll();
 
   // RESPONSES FOR EVENTS :: START
 
@@ -127,6 +131,8 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
     store.commit('CHANGE_EVENT', { event: deschemify(event), index });
   };
 
+  room.state.marsEvents.triggerAll();
+
   room.state.tradeSet.onAdd = (event: Schemify<TradeData>, id: string) => {
     const rawEvent: TradeData = deschemify(event);
     store.commit('ADD_TO_TRADES', { trade: rawEvent, id });
@@ -135,6 +141,8 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
   room.state.tradeSet.onRemove = (event: Schemify<TradeData>, id: string) => {
     store.commit('REMOVE_FROM_TRADES', { id });
   };
+
+  room.state.tradeSet.triggerAll();
 
   room.state.onChange = (changes: Array<any>) => {
     changes.forEach(change => {
@@ -163,4 +171,6 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
       }
     });
   };
+
+  room.state.triggerAll();
 }
