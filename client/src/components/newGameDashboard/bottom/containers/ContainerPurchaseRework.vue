@@ -24,15 +24,6 @@
           </div>
         </div>
       </div>
-
-      <div class="chat-container">
-        <div class="section-text">
-          <p>Chat</p>
-        </div>
-        <div class="chat">
-          <Chat/>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -41,14 +32,12 @@
 import { Vue, Component } from 'vue-property-decorator';
 import BarAccomplishment from '@port-of-mars/client/components/newGameDashboard/global/cards/BarAccomplishment.vue';
 import InventoryTable from '@port-of-mars/client/components/newGameDashboard/global/modals/InventoryTable.vue';
-import Chat from '@port-of-mars/client/components/newGameDashboard/right/ChatRework.vue';
 import { canPurchaseAccomplishment } from '@port-of-mars/shared/validation';
 import { AccomplishmentData } from '@port-of-mars/shared/types';
 
 @Component({
   components: {
     BarAccomplishment,
-    Chat,
     InventoryTable,
   }
 })
