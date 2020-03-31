@@ -65,15 +65,4 @@
 
     }
 
-    .chat-container{
-        @include column-3;
-        height: 100%;
-        background-color: $space-white-opaque-1;
-        
-        .chat-holder{
-            height:90%;
-            
-        }
-    }
-
 }

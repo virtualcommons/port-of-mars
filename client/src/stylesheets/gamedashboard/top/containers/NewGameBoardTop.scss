@@ -5,38 +5,8 @@
   margin: 0;
   @include make-column-and-top;
 
-  .top {
-    height: 2rem;
-    width: 100%;
-    margin-bottom: 0.5rem;
-    @include make-center;
-
-    p {
-      margin-bottom: 0.125rem;
-    }
-
-    .title {
-      margin-right: 1rem;
-      color: $space-white;
-      font-size: $font-med;
-      font-weight: $font-weight-maven-pro-bold;
-    }
-
-    .status {
-      margin-left: 1rem;
-      color: $space-white;
-      font-size: $font-med;
-      font-weight: $font-weight-maven-pro-bold;
-
-      span {
-        margin-left: 0.25rem;
-        color: $new-space-orange;
-      }
-    }
-  }
-
   .bottom {
-    height: calc(100% - 2.5rem);
+    height: calc(100% - 1rem);
     width: 100%;
     margin: 0;
 
@@ -44,7 +14,7 @@
     .gamestatus,
     .marslog {
       height: 100%;
-      padding: 0.5rem;
+      padding: 0.5rem 0rem;
 
       .wrapper {
         @include expand;
@@ -88,7 +58,7 @@
       }
     }
 
-    .marslog {
+    .chat {
       border-left: 0.125rem solid $new-space-orange-opaque-025;
       border-right: 0.125rem solid $new-space-orange-opaque-025;
     }

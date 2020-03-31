@@ -1,14 +1,8 @@
 <template>
   <div class="c-gameboardtop container">
-    <!-- REFACTOR :: SystemHealthContainer -->
-    <div class="top row">
-      <p class="title">System Health</p>
-      <StatusBar class="statusbar" :setWidth="`${systemHealthStatus}`" />
-      <p class="status">{{ systemHealthStatus }}<span>%</span></p>
-    </div>
     <div class="bottom row">
       <!-- REFACTOR :: PlayerContainer -->
-      <div class="players col-4">
+      <div class="players col-6">
         <div class="wrapper container">
           <div class="row">
             <div class="player col-5">
@@ -26,7 +20,7 @@
       </div>
 
       <!-- REFACTOR :: GameStatusContainer -->
-      <div class="gamestatus col-4">
+      <div class="gamestatus col-6">
         <div class="wrapper container">
           <div class="row">
             <div class="information col-5">
@@ -39,12 +33,12 @@
         </div>
       </div>
 
-      <!-- REFACTOR :: MarsLogContainer -->
-      <div class="marslog col-4">
+      <!-- REFACTOR :: Chat -->
+      <!-- <div class="marslog col-3">
         <div class="wrapper">
           <NewMarsLog />
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

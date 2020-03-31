@@ -35,7 +35,7 @@
 
         </div>
 
-        <div class="chat-container">
+        <!-- <div class="chat-container">
             <div class="section-text">
                 <p>Chat</p>
             </div>
@@ -43,7 +43,7 @@
             <div class="chat-holder">
                 <Chat/>
             </div>
-        </div>
+        </div> -->
 
     </div>
 </template>

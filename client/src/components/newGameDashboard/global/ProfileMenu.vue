@@ -58,7 +58,7 @@ export default class ProfileMenu extends Vue {
   }
 
   get position() {
-    return this.visible ? { left: '0rem' } : { left: '-20rem' };
+    return this.visible ? { left: '0rem' } : { left: '-21rem' };
   }
 
   get username(): string {
