@@ -4,26 +4,26 @@ import {
 import {User} from "@port-of-mars/server/entity/User";
 import {settings} from "@port-of-mars/server/settings";
 import {Connection, createConnection, QueryRunner} from "typeorm";
-import {AccountService} from "@port-of-mars/server/services/account";
+import {ServiceProvider} from "@port-of-mars/server/services";
 
 describe('a potential user', () => {
   const username = 'ahacker';
   let conn: Connection;
   let qr: QueryRunner;
-  let accountService: AccountService;
+  let sp: ServiceProvider;
   let registrationService: RegistrationService;
 
   beforeAll(async () => {
     conn = await createConnection('test');
     qr = conn.createQueryRunner();
-    accountService = new AccountService(qr.manager);
+    sp = new ServiceProvider(qr.manager);
     registrationService = new RegistrationService(qr.manager);
     await qr.connect();
     await qr.startTransaction();
   });
 
   it('can begin registration', async () => {
-      const u = await accountService.getOrCreateUser(username);
+      const u = await sp.account.getOrCreateUser(username);
       expect(u.username).toEqual(username);
   });
 

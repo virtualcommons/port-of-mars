@@ -204,7 +204,7 @@ export class SetNextPhaseCmd implements Command {
     if (upkeep <= 0) {
       //this.game.state.phase = Phase.defeat;
       logger.info('SetNextPhaseCmd: upkeep reached 0', upkeep);
-      return [new EnteredDefeatPhase()];
+      return [new EnteredDefeatPhase(this.state.playerScores)];
     }
     else {
       return [];
@@ -212,6 +212,10 @@ export class SetNextPhaseCmd implements Command {
   }
 
   execute(): Array<GameEvent> {
+    if (this.state.upkeep <= 0) {
+      return [new EnteredDefeatPhase(this.state.playerScores)];
+    }
+
     switch (this.state.phase) {
       case Phase.defeat:
         return [];
@@ -231,8 +235,6 @@ export class SetNextPhaseCmd implements Command {
           events.push(new ReenteredMarsEventPhase());
           events.push(new InitializedMarsEvent());
         }
-
-        events.push(new EnteredDefeatPhase());
         return events;
       }
       case Phase.invest:
@@ -240,19 +242,15 @@ export class SetNextPhaseCmd implements Command {
       case Phase.trade:
         return [new EnteredPurchasePhase()];
       case Phase.purchase:
-
-
-        return [new EnteredDiscardPhase(), new EnteredDefeatPhase()];
-
+        return [new EnteredDiscardPhase()];
       case Phase.discard: {
         const state = this.state;
         const round = state.round + 1;
 
         if (round >= state.maxRound) {
-          state.phase = Phase.victory;
-          return [new EnteredVictoryPhase(state.timeRemaining)];
+          return [new EnteredVictoryPhase(this.state.playerScores)];
         }
-        return [new EnteredMarsEventPhase(), new InitializedMarsEvent(), new EnteredDefeatPhase()];
+        return [new EnteredMarsEventPhase(), new InitializedMarsEvent()];
       }
       case Phase.victory:
         return [];

@@ -10,13 +10,13 @@ import { ClockTimer } from "@gamestdio/timer/lib/ClockTimer";
 import _ from "lodash";
 import { getConnection } from "@port-of-mars/server/util";
 import { TournamentRound } from "@port-of-mars/server/entity/TournamentRound";
+import {EntityManager} from "typeorm";
 
 function toDBRawGameEvent(gameEvent: ge.GameEvent, metadata: Metadata) {
   const ev = gameEvent.serialize();
   return {
-    ...metadata,
-    type: ev.kind,
-    payload: ev.data ?? {},
+    ...ev,
+    ...metadata
   }
 }
 
@@ -51,17 +51,22 @@ export class DBPersister implements Persister {
   pendingEvents: Array<Omit<{ [k in keyof GameEvent]: GameEvent[k] }, 'id' | 'game'>> = [];
   lock: Mutex = new Mutex();
 
-  async initialize(options: GameOpts, roomId: string) {
+  constructor(public _em?: EntityManager) {}
+
+  get em() {
+    return this._em ?? getConnection().manager;
+  }
+
+  async initialize(options: GameOpts, roomId: string): Promise<number> {
     const g = new Game();
-    const conn = getConnection();
-    return await conn.transaction(async transaction => {
+    const f = async (em: EntityManager) => {
       if (_.isNull(options.tournamentRoundId)) {
         throw new Error('could not find matching tournament round')
       }
       g.tournamentRoundId = options.tournamentRoundId;
       g.roomId = roomId;
 
-      const userRepo = transaction.getRepository(User);
+      const userRepo = em.getRepository(User);
       const usernames = Object.keys(options.userRoles);
       const q = await userRepo.createQueryBuilder('user')
         .select('id')
@@ -70,7 +75,7 @@ export class DBPersister implements Persister {
       const rawUsers = await q.getRawMany();
       assert.equal(rawUsers.length, usernames.length);
 
-      await transaction.save(g);
+      await em.save(g);
 
       const players = [];
       for (const rawUser of rawUsers) {
@@ -81,19 +86,24 @@ export class DBPersister implements Persister {
         };
         players.push(p);
       }
-      await transaction.getRepository(Player).createQueryBuilder()
+      await em.getRepository(Player).createQueryBuilder()
         .insert()
         .values(players)
         .execute();
 
       return g.id;
-    });
+    };
+    if (this.em.queryRunner?.isTransactionActive) {
+      return f(this.em);
+    } else {
+      return this.em.transaction(f);
+    }
   }
 
   async sync() {
     await this.lock.runExclusive(async () => {
       if (this.pendingEvents.length > 0) {
-        await getConnection().getRepository(GameEvent)
+        await this.em.getRepository(GameEvent)
           .createQueryBuilder()
           .insert()
           .values(this.pendingEvents)
@@ -105,7 +115,6 @@ export class DBPersister implements Persister {
 
   async persist(events: Array<ge.GameEvent>, metadata: Metadata) {
     const rawGameEvents = events.map(ge => toDBRawGameEvent(ge, metadata));
-    console.log(rawGameEvents);
     await this.lock.runExclusive(async () => {
       for (const rawEvent of rawGameEvents) {
         this.pendingEvents.push(rawEvent);

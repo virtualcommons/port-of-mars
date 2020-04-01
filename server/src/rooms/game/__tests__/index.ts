@@ -4,6 +4,8 @@ import {getAccomplishmentByID, getAccomplishmentIDs} from "@port-of-mars/server/
 import * as _ from 'lodash'
 import {mockGameStateInitOpts} from "@port-of-mars/server/util";
 import {tradeCanBeCompleted} from "@port-of-mars/shared/validation";
+import {Connection, getConnection, QueryRunner} from "typeorm";
+import {ServiceProvider} from "@port-of-mars/server/services";
 
 
 describe('a Researcher Player Accomplishment', () => {

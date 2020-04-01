@@ -1158,6 +1158,14 @@ export class GameState extends Schema implements GameData {
     return msg;
   }
 
+  get playerScores(): { [role in Role]: number } {
+    const scores: { [role in Role]: number } = {} as any;
+    for (const r of ROLES) {
+      scores[r] = this.players[r].victoryPoints;
+    }
+    return scores;
+  }
+
   get currentEvent() {
     return this.marsEvents[this.marsEventsProcessed];
   }

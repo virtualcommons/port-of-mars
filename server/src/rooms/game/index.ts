@@ -1,32 +1,36 @@
 import http from "http";
-import { Client, Room } from 'colyseus';
-import { Requests, Responses } from '@port-of-mars/shared/game';
-import { GameState, Player } from '@port-of-mars/server/rooms/game/state';
+import {Client, Room} from 'colyseus';
+import {Requests, Responses} from '@port-of-mars/shared/game';
+import {GameState, Player} from '@port-of-mars/server/rooms/game/state';
 import {
   AcceptTradeRequestCmd,
-  PurchaseAccomplishmentCmd,
+  BondingThroughAdversityCmd,
+  BreakdownOfTrustCmd,
+  CancelTradeRequestCmd,
   DiscardAccomplishmentCmd,
+  OutOfCommissionCuratorCmd,
+  OutOfCommissionEntrepreneurCmd,
+  OutOfCommissionPioneerCmd,
+  OutOfCommissionPoliticianCmd,
+  OutOfCommissionResearcherCmd,
+  PersonalGainVotes,
+  PurchaseAccomplishmentCmd,
+  RejectTradeRequestCmd,
   ResetGameCmd,
   SendChatMessageCmd,
   SendTradeRequestCmd,
   SetNextPhaseCmd,
   SetPlayerReadinessCmd,
   TimeInvestmentCmd,
-  RejectTradeRequestCmd,
-  CancelTradeRequestCmd,
-  PersonalGainVotes, VoteForPhilanthropistCmd,
-  OutOfCommissionCuratorCmd, OutOfCommissionPoliticianCmd,
-  OutOfCommissionResearcherCmd, OutOfCommissionPioneerCmd,
-  OutOfCommissionEntrepreneurCmd,
-  BondingThroughAdversityCmd,
-  BreakdownOfTrustCmd
+  VoteForPhilanthropistCmd
 } from '@port-of-mars/server/rooms/game/commands';
-import { Game, GameOpts, Metadata, Persister } from '@port-of-mars/server/rooms/game/types';
-import { Command } from '@port-of-mars/server/rooms/game/commands/types';
-import { TakenStateSnapshot } from '@port-of-mars/server/rooms/game/events';
-import { User } from "@port-of-mars/server/entity/User";
-import { settings } from "@port-of-mars/server/settings";
-import { getServices } from "@port-of-mars/server/services";
+import {Game, GameOpts, Metadata, Persister} from '@port-of-mars/server/rooms/game/types';
+import {Command} from '@port-of-mars/server/rooms/game/commands/types';
+import {TakenStateSnapshot} from '@port-of-mars/server/rooms/game/events';
+import {User} from "@port-of-mars/server/entity/User";
+import {settings} from "@port-of-mars/server/settings";
+import {getServices} from "@port-of-mars/server/services";
+import {Phase} from "@port-of-mars/shared/types";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -129,8 +133,9 @@ export class GameRoom extends Room<GameState> implements Game {
 
   gameLoop() {
     this.state.timeRemaining -= 1;
-    if (this.state.allPlayersAreReady || this.state.timeRemaining <= 0) {
-      // phase initialization
+    if (this.state.allPlayersAreReady
+      || this.state.timeRemaining <= 0
+      || (this.state.upkeep <= 0 && ![Phase.defeat, Phase.victory].includes(this.state.phase))) {
       const cmd = new SetNextPhaseCmd(this.state);
       const events = cmd.execute();
       this.state.applyMany(events);
