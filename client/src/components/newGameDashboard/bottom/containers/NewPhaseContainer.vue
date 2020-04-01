@@ -1,7 +1,7 @@
 <template>
   <div class="c-phasecontainer row">
-    <div class="content">
-      <ContainerEvents v-if="gamePhase == phase.events"  />
+    <div class="content col-12">
+      <ContainerEvents v-if="gamePhase == phase.events" />
       <ContainerInvestments v-if="gamePhase == phase.invest" />
       <ContainerTrade v-else-if="gamePhase == phase.trade" />
       <ContainerPurchase v-else-if="gamePhase == phase.purchase" />
@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import ContainerInvestments from './ContainerInvestments.vue'
+import ContainerInvestments from './ContainerInvestments.vue';
 import ContainerTrade from './ContainerTradeRework.vue';
 import ContainerPurchase from './ContainerPurchaseRework.vue';
 import ContainerDiscard from './ContainerDiscardRework.vue';
@@ -28,7 +28,7 @@ import { Phase } from '@port-of-mars/shared/types';
     ContainerDiscard,
     ContainerEvents,
     ContainerInvestments,
-    ContainerDefault,
+    ContainerDefault
   }
 })
 export default class NewPhaseContainer extends Vue {
@@ -37,9 +37,9 @@ export default class NewPhaseContainer extends Vue {
   }
 
   get gamePhase() {
-    return this.$store.state.phase;
+    return this.phase.invest;
+    // return this.$store.state.phase;
   }
-
 }
 </script>
 

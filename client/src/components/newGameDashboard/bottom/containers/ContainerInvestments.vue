@@ -1,25 +1,42 @@
 <template>
-  <div class="container-investments tour-investments">
-    <div class="wrapper">
-      <div class="topbar">
-        <p class="title">Time Blocks</p>
+  <div class="c-containerinvestments tour-investments container">
+    <div class="wrapper row">
+      <div class="timeblockinvestments col-8">
+        <div class="topbar">
+          <p class="title">Time Blocks</p>
+          <DiscreteStatusBar
+            class="discretestatusbar"
+            :usedTimeBlocks="remainingTimeBlocks"
+            :totalTimeBlocks="timeBlockTotal"
+          />
+          <p class="status">{{ remainingTimeBlocks }}</p>
+          <font-awesome-icon :icon="['fas', 'clock']" size="lg" class="icon" />
+        </div>
 
-        <DiscreteStatusBar
-          class="discrete-bar"
-          :usedTimeBlocks="remainingTimeBlocks"
-          :totalTimeBlocks="timeBlockTotal"
-        />
-
-        <p class="status">[ {{ remainingTimeBlocks }} ]</p>
+        <div class="cards">
+          <CardInvestment
+            v-for="cost in costs"
+            v-bind="cost"
+            :key="cost.name"
+            @input="setInvestmentAmount"
+          />
+        </div>
       </div>
-
-      <div class="cards">
-        <CardInvestment
-          v-for="cost in costs"
-          v-bind="cost"
-          :key="cost.name"
-          @input="setInvestmentAmount"
-        />
+      <div class="availableaccomplishments col-4">
+        <div class="topbar">
+          <p class="title">Purchasable Accomplishments</p>
+        </div>
+        <div class="outer-wrapper">
+          <div class="wrapper">
+            <BarAccomplishment
+              v-for="accomplishment in purchasableAccomplishments"
+              :accomplishment="accomplishment"
+              :purchase="false"
+              :discard="false"
+              :key="accomplishment.label + Math.random()"
+            />
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -27,16 +44,30 @@
 
 <script lang="ts">
 import { Vue, Component, Inject } from 'vue-property-decorator';
-import { INVESTMENTS, Resource, ResourceCostData } from '@port-of-mars/shared/types';
+import {
+  INVESTMENTS,
+  Resource,
+  ResourceCostData,
+  AccomplishmentData
+} from '@port-of-mars/shared/types';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faClock } from '@fortawesome/free-solid-svg-icons/faClock';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import DiscreteStatusBar from '@port-of-mars/client/components/gamedashboard/global/DiscreteStatusBar.vue';
-import CardInvestment from '@port-of-mars/client/components/gamedashboard/global/cards/CardInvestment.vue';
-import * as _ from 'lodash';
+import CardInvestment from '@port-of-mars/client/components/newGameDashboard/global/cards/CardInvestment.vue';
+import BarAccomplishment from '@port-of-mars/client/components/newGameDashboard/global/cards/BarAccomplishment.vue';
 import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
+import { canPurchaseAccomplishment } from '@port-of-mars/shared/validation';
+import * as _ from 'lodash';
+
+library.add(faClock);
+Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 @Component({
   components: {
     DiscreteStatusBar,
-    CardInvestment
+    CardInvestment,
+    BarAccomplishment
   }
 })
 export default class ContainerBottom extends Vue {
@@ -79,7 +110,7 @@ export default class ContainerBottom extends Vue {
     );
   }
 
-  get isInTutorial(){
+  get isInTutorial() {
     return this.$tstore.getters.layout === 'tutorial';
   }
 
@@ -103,13 +134,28 @@ export default class ContainerBottom extends Vue {
       });
     }
 
-    if(this.isInTutorial){
+    if (this.isInTutorial) {
       this.api.investTimeBlocks();
     }
   }
 
   get timeBlockTotal() {
     return this.$store.getters.player.timeBlocks;
+  }
+
+  get purchasableAccomplishments() {
+    return this.$store.getters.player.accomplishments.purchasable
+      .slice()
+      .sort((a: AccomplishmentData, b: AccomplishmentData) => {
+        return (
+          Number(
+            canPurchaseAccomplishment(b, this.$store.getters.player.inventory)
+          ) -
+          Number(
+            canPurchaseAccomplishment(a, this.$store.getters.player.inventory)
+          )
+        );
+      });
   }
 }
 </script>

@@ -24,13 +24,15 @@
           class="container"
         >
           <img
-            :src="require(`@port-of-mars/client/assets/icons/${investment}.svg`)"
+            :src="
+              require(`@port-of-mars/client/assets/icons/${investment}.svg`)
+            "
             alt="Investment"
           />
         </div>
       </div>
     </div>
-    <div class="purchase">
+    <div v-if="purchase" class="purchase">
       <button :disabled="!canPurchase" @click="handlePurchase()">
         Purchase Accomplishment
       </button>
@@ -58,7 +60,8 @@ import { canPurchaseAccomplishment } from '@port-of-mars/shared/validation';
 
 @Component({})
 export default class BarAccomplishment extends Vue {
-  @Inject() readonly api!: GameRequestAPI;
+  @Prop({ default: false }) private purchase!: boolean;
+  @Prop({ default: false }) private discard!: boolean;
 
   @Prop({
     default: () => ({
@@ -77,6 +80,8 @@ export default class BarAccomplishment extends Vue {
     })
   })
   private accomplishment!: AccomplishmentData;
+
+  @Inject() readonly api!: GameRequestAPI;
 
   get accomplishmentCost() {
     return INVESTMENTS.filter(

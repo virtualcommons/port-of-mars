@@ -1,5 +1,4 @@
 .card-accomplishment {
-  min-height: 10rem;
   width: 100%;
   margin-bottom: 0.5rem;
   @include make-column-and-center;
@@ -10,19 +9,20 @@
 
   .title {
     width: 100%;
-    color: $space-gray;
 
     p {
       width: 100%;
-      padding: 0.25rem 0.5rem;
+      padding: 0.5rem;
       margin-bottom: 0;
+      color: $space-gray;
+      background-color: $space-white;
+      font-size: $font-med;
+      font-weight: $font-weight-maven-pro-medium;
       text-align: center;
-      @include text-overflow-ellipses;
     }
   }
 
   .info {
-    min-height: 50%;
     width: 100%;
     padding: 0.5rem;
     @include make-horizontal-expand;
@@ -35,6 +35,8 @@
       p {
         margin-bottom: 0;
         color: $space-white;
+        font-size: $font-med;
+        font-weight: $font-weight-maven-pro-regular;
       }
     }
 
@@ -44,6 +46,8 @@
       p {
         margin: 0.5rem 0;
         color: $space-white;
+        font-size: $font-med;
+        font-weight: $font-weight-maven-pro-regular;
       }
     }
 

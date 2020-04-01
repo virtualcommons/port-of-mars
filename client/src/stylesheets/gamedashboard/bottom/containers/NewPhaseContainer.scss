@@ -3,10 +3,9 @@
   @include new-border-orange;
   padding: 0.5rem;
   margin: 0;
-  //   background-color: purple;
 
   .content {
-    @include expand;
-    
+    height: 100%;
+    padding: 0;
   }
 }
