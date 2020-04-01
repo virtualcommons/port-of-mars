@@ -129,8 +129,7 @@ export class GameRoom extends Room<GameState> implements Game {
 
   gameLoop() {
     this.state.timeRemaining -= 1;
-    if (this.state.allPlayersAreReady || this.state.timeRemaining <= 0) {
-      // phase initialization
+    if (this.state.allPlayersAreReady || this.state.timeRemaining <= 0 || this.state.upkeep <= 0) {
       const cmd = new SetNextPhaseCmd(this.state);
       const events = cmd.execute();
       this.state.applyMany(events);

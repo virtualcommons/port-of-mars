@@ -5,6 +5,7 @@ import {AccountService} from "@port-of-mars/server/services/account";
 import {TournamentService} from "@port-of-mars/server/services/tournament";
 import {QuizService} from "@port-of-mars/server/services/quiz";
 import {getConnection} from "@port-of-mars/server/util";
+import {GameService} from "@port-of-mars/server/services/game";
 
 export class ServiceProvider {
   constructor(public em: EntityManager) {}
@@ -23,6 +24,14 @@ export class ServiceProvider {
       this._account = new AccountService(this.em);
     }
     return this._account;
+  }
+
+  private _game?: GameService;
+  get game(): GameService {
+    if (!this._game) {
+      this._game = new GameService(this.em);
+    }
+    return this._game;
   }
 
   private _quiz?: QuizService;

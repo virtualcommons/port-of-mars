@@ -18,7 +18,7 @@ export class AuthService {
       .from(User, 'user')
       .innerJoin('user.invites', 'invite')
       .innerJoin('invite.tournamentRound', 'round')
-      .where(`user.id = :userId and round.id = :tournamentRoundId and not invite.hasParticipated`, {userId, tournamentRoundId})
+      .where(`user.id = :userId and round.id = :tournamentRoundId and not invite.hasParticipated and user.passedQuiz`, {userId, tournamentRoundId})
       .select('count(*) > 0', 'n')
       .getRawOne();
     return r?.n ? r.n : false;

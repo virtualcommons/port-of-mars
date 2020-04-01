@@ -15,11 +15,11 @@ export class GameService {
   }
 
   async finalize(gameId: number): Promise<[Game, Array<Player>, Array<TournamentRoundInvite>]> {
-    const event = await this.em.getRepository(GameEvent).findOneOrFail({gameId}, {order: {dateCreated: "DESC"}});
+    const event = await this.em.getRepository(GameEvent).findOneOrFail({gameId}, {order: {id: "DESC", dateCreated: "DESC"}});
     const game = await this.em.getRepository(Game).findOneOrFail({id: gameId});
     const players = await this.em.getRepository(Player).find({gameId});
     for (const p of players) {
-      p.points = (event.payload as any).players[p.role].victoryPoints;
+      p.points = (event.payload as any)[p.role];
     }
     const invites = await this.em.createQueryBuilder()
       .from(TournamentRoundInvite, 'invite')
@@ -29,7 +29,7 @@ export class GameService {
     for (const invite of invites) {
       invite.hasParticipated = true;
     }
-    game.completed = true;
+    game.status = event.type === 'entered-defeat-phase' ? 'defeat' : 'victory';
     return await Promise.all([this.em.save(game), this.em.save(players), this.em.save(invites)]);
   }
 

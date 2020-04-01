@@ -26,6 +26,6 @@ export class Game {
   @OneToMany(type => Player, player => player.game)
   players!: Array<Player>;
 
-  @Column({ default: false })
-  completed: boolean = false;
+  @Column({ default: 'incomplete',  })
+  status: 'incomplete' | 'defeat' | 'victory' = 'incomplete';
 }

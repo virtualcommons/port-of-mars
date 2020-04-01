@@ -13,7 +13,7 @@ export interface AppSettings {
 }
 
 export class LobbySettings {
-  constructor(public   evaluateAtEveryMinute: number = 15) {}
+  constructor(public evaluateAtEveryMinute: number = 15) {}
 }
 
 const dev: () => AppSettings = () => ({

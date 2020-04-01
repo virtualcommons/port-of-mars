@@ -6,8 +6,9 @@ import {
   Role,
   TradeData,
   Resource,
-  ResourceAmountData
+  ResourceAmountData, ROLES
 } from '@port-of-mars/shared/types';
+import {GameEvent as DBGameEvent} from '@port-of-mars/server/entity'
 import {
   ChatMessage,
   GameState,
@@ -15,21 +16,23 @@ import {
   Trade,
   MarsLogMessage
 } from '@port-of-mars/server/rooms/game/state';
-import { GameEvent } from '@port-of-mars/server/rooms/game/events/types';
-import { MarsEvent } from '@port-of-mars/server/rooms/game/state/marsEvents/MarsEvent';
-import { CompulsivePhilanthropy, PersonalGain, 
-        OutOfCommissionCurator, OutOfCommissionPolitician, 
-        OutOfCommissionResearcher, OutOfCommissionPioneer,
-        OutOfCommissionEntrepreneur, BondingThroughAdversity, BreakdownOfTrust
-       } 
-        from '@port-of-mars/server/rooms/game/state/marsEvents/state';
+import {GameEvent, Json} from '@port-of-mars/server/rooms/game/events/types';
+import {MarsEvent} from '@port-of-mars/server/rooms/game/state/marsEvents/MarsEvent';
+import {
+  CompulsivePhilanthropy, PersonalGain,
+  OutOfCommissionCurator, OutOfCommissionPolitician,
+  OutOfCommissionResearcher, OutOfCommissionPioneer,
+  OutOfCommissionEntrepreneur, BondingThroughAdversity, BreakdownOfTrust
+}
+  from '@port-of-mars/server/rooms/game/state/marsEvents/state';
 import * as entities from '@port-of-mars/server/entity/GameEvent';
 import _ from "lodash";
+import {GameRoom} from "@port-of-mars/server/rooms/game";
 
 class GameEventDeserializer {
-  protected lookups: { [classname: string]: { new(data?: any): GameEvent }} = {};
+  protected lookups: { [classname: string]: { new(data?: any): GameEvent } } = {};
 
-  register(event: { new (data: any): GameEvent }) {
+  register(event: { new(data: any): GameEvent }) {
     this.lookups[_.kebabCase(event.name)] = event;
   }
 
@@ -51,8 +54,8 @@ abstract class GameEventWithData implements GameEvent {
 
   serialize() {
     return {
-      kind: this.kind,
-      data: this.data,
+      type: this.kind,
+      payload: this.data,
     };
   }
 }
@@ -162,7 +165,8 @@ gameEventDeserializer.register(SentTradeRequest);
 
 abstract class KindOnlyGameEvent implements GameEvent {
 
-  constructor(data?: any) {}
+  constructor(data?: any) {
+  }
 
   get kind(): string {
     return _.kebabCase(this.constructor.name);
@@ -171,7 +175,7 @@ abstract class KindOnlyGameEvent implements GameEvent {
   abstract apply(game: GameState): void;
 
   serialize() {
-    return { kind: this.kind, dateCreated: new Date().getTime() };
+    return {type: this.kind, dateCreated: new Date().getTime(), payload: {}};
   }
 }
 
@@ -184,7 +188,7 @@ gameEventDeserializer.register(FinalizedMarsEvent);
 
 export class InitializedMarsEvent extends KindOnlyGameEvent {
   apply(game: GameState): void {
-    if(game.currentEvent.state.initialize){
+    if (game.currentEvent.state.initialize) {
       game.currentEvent.state.initialize(game);
     }
 
@@ -200,7 +204,7 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
 
     const oldUpkeep = game.upkeep;
     const contributedUpkeep = game.nextRoundUpkeep() + 25 - oldUpkeep;
-    
+
     game.upkeep = game.nextRoundUpkeep();
 
     // system health - contributed upkeep
@@ -210,7 +214,7 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
     game.log(`Standard wear and tear reduced System Health by 25.`, `SYSTEM HEALTH`);
 
     // current system health
-    game.log(`System Health is currently ~${game.upkeep}`,`SYSTEM HEALTH`);
+    game.log(`System Health is currently ~${game.upkeep}`, `SYSTEM HEALTH`);
 
     game.resetPlayerReadiness();
     game.resetPlayerContributedUpkeep();
@@ -220,7 +224,7 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
     const marsEvents = cards.map(e => new MarsEvent(e));
 
     game.phase = Phase.events;
-    
+
     game.timeRemaining = marsEvents[0].timeDuration;
 
     // handle incomplete events
@@ -266,9 +270,6 @@ export class EnteredTradePhase extends KindOnlyGameEvent {
     game.phase = Phase.trade;
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
     for (const player of game.players) {
-      //if you want the default action:
-      //player.invest(undefined,player.getLeftOverInvestments());
-
       player.invest();
       player.pendingInvestments.reset();
     }
@@ -298,19 +299,23 @@ export class EnteredDiscardPhase extends KindOnlyGameEvent {
 }
 gameEventDeserializer.register(EnteredDiscardPhase);
 
-export class EnteredDefeatPhase extends KindOnlyGameEvent {
-  apply(game: GameState): void {
-    if(game.upkeep <= 0){
-      game.phase = Phase.defeat;
-      
-      game.log(`System Health has reached zero.`, 'System Health', 'Server');
-    }
+export class EnteredDefeatPhase extends GameEventWithData {
+  constructor(public data: { [r in Role]: number }) {
+    super();
+  }
 
+  apply(game: GameState): void {
+    game.phase = Phase.defeat;
+    game.log(`System Health has reached zero.`, 'System Health', 'Server');
   }
 }
 gameEventDeserializer.register(EnteredDefeatPhase);
 
-export class EnteredVictoryPhase extends KindOnlyGameEvent {
+export class EnteredVictoryPhase extends GameEventWithData {
+  constructor(public data: { [r in Role]: number }) {
+    super();
+  }
+
   apply(game: GameState): void {
     game.phase = Phase.victory;
     game.evaluateGameWinners();
@@ -324,12 +329,13 @@ export class TakenStateSnapshot implements GameEvent {
   constructor(public data: object) {
   }
 
-  apply(game: GameState): void {}
+  apply(game: GameState): void {
+  }
 
   serialize() {
     return {
-      kind: this.kind,
-      data: this.data
+      type: this.kind,
+      payload: this.data
     };
   }
 }
@@ -370,7 +376,7 @@ export class VotedForPhilanthropist extends GameEventWithData {
 gameEventDeserializer.register(VotedForPhilanthropist);
 
 export class OutOfCommissionedCurator extends GameEventWithData {
-  constructor(public data: {role: Role}) {
+  constructor(public data: { role: Role }) {
     super();
   }
 
@@ -389,7 +395,7 @@ export class OutOfCommissionedCurator extends GameEventWithData {
 gameEventDeserializer.register(OutOfCommissionedCurator);
 
 export class OutOfCommissionedPoliician extends GameEventWithData {
-  constructor(public data: {role: Role}) {
+  constructor(public data: { role: Role }) {
     super();
   }
 
@@ -405,10 +411,11 @@ export class OutOfCommissionedPoliician extends GameEventWithData {
     game.players[this.data.role].updateReadiness(true);
   }
 }
+
 gameEventDeserializer.register(OutOfCommissionedPoliician);
 
 export class OutOfComissionedResearcher extends GameEventWithData {
-  constructor(public data: {role: Role}) {
+  constructor(public data: { role: Role }) {
     super();
   }
 
@@ -427,7 +434,7 @@ export class OutOfComissionedResearcher extends GameEventWithData {
 gameEventDeserializer.register(OutOfComissionedResearcher);
 
 export class OutOfCommissionedPioneer extends GameEventWithData {
-  constructor(public data: {role: Role}) {
+  constructor(public data: { role: Role }) {
     super();
   }
 
@@ -446,7 +453,7 @@ export class OutOfCommissionedPioneer extends GameEventWithData {
 gameEventDeserializer.register(OutOfCommissionedPioneer);
 
 export class OutOfCommissionedEntrepreneur extends GameEventWithData {
-  constructor(public data: {role: Role}) {
+  constructor(public data: { role: Role }) {
     super();
   }
 
@@ -465,7 +472,7 @@ export class OutOfCommissionedEntrepreneur extends GameEventWithData {
 gameEventDeserializer.register(OutOfCommissionedEntrepreneur);
 
 export class SelectedInfluence extends GameEventWithData {
-  constructor(public data: {role: Role, influence: Resource}) {
+  constructor(public data: { role: Role, influence: Resource }) {
     super();
   }
 
@@ -481,15 +488,15 @@ export class SelectedInfluence extends GameEventWithData {
 gameEventDeserializer.register(SelectedInfluence);
 
 export class KeptResources extends GameEventWithData {
-  constructor(public data: {role: Role, savedResources: InvestmentData}){
+  constructor(public data: { role: Role, savedResources: InvestmentData }) {
     super();
   }
 
   apply(game: GameState): void {
     let state: BreakdownOfTrust;
-    if(game.currentEvent.state instanceof BreakdownOfTrust){
-      state= game.currentEvent.state;
-    } else{
+    if (game.currentEvent.state instanceof BreakdownOfTrust) {
+      state = game.currentEvent.state;
+    } else {
       return;
     }
     state.updateSavedResources(this.data.role, game, this.data.savedResources);
