@@ -9,7 +9,8 @@
     </div>
     <ActiveEventsPopup />
     <InventoryPopup />
-    <ChatPopup />
+    <!-- <ChatPopup /> -->
+    <MarsLogPopup />
   </div>
 </template>
 
@@ -20,7 +21,8 @@ import NewGameBoardBottom from '@port-of-mars/client/components/newGameDashboard
 import ProfileMenu from '@port-of-mars/client/components/newGameDashboard/global/ProfileMenu.vue';
 import ActiveEventsPopup from '@port-of-mars/client/components/newGameDashboard/global/ActiveEventsPopup.vue';
 import InventoryPopup from '@port-of-mars/client/components/newGameDashboard/global/InventoryPopup.vue';
-import ChatPopup from '@port-of-mars/client/components/newGameDashboard/global/ChatPopup.vue';
+// import ChatPopup from '@port-of-mars/client/components/newGameDashboard/global/ChatPopup.vue';
+import MarsLogPopup from '@port-of-mars/client/components/newGameDashboard/global/MarsLogPopup.vue';
 
 @Component({
   components: {
@@ -29,7 +31,8 @@ import ChatPopup from '@port-of-mars/client/components/newGameDashboard/global/C
     ProfileMenu,
     ActiveEventsPopup,
     InventoryPopup,
-    ChatPopup
+    // ChatPopup,
+    MarsLogPopup
   }
 })
 export default class NewGameBoardContainer extends Vue {}
