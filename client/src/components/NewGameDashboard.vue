@@ -23,11 +23,11 @@ import { Vue, Component } from 'vue-property-decorator';
 import { Phase } from '@port-of-mars/shared/types';
 import { EnvironmentMode } from '@port-of-mars/client/settings';
 import MasterComponent from '@port-of-mars/client/components/MasterComponent.vue';
-import ModalContainer from '@port-of-mars/client/components/generalComponents/modals/ModalContainer.vue';
-import ModalController from '@port-of-mars/client/components/generalComponents/modals/ModalController.vue';
-import GameboardContainer from '@port-of-mars/client/components/rootContainers/GameboardContainer.vue';
-import ContainerDefeat from '@port-of-mars/client/components/rootContainers/ContainerDefeat.vue';
-import ContainerVictory from '@port-of-mars/client/components/rootContainers/ContainerVictory.vue';
+import ModalContainer from '@port-of-mars/client/components/reusables/modals/ModalContainer.vue';
+import ModalController from '@port-of-mars/client/components/reusables/modals/ModalController.vue';
+import GameboardContainer from '@port-of-mars/client/components/root/GameboardContainer.vue';
+import ContainerDefeat from '@port-of-mars/client/components/root/ContainerDefeat.vue';
+import ContainerVictory from '@port-of-mars/client/components/root/ContainerVictory.vue';
 import environment from '../store/mutationFolder/environment';
 
 @Component({
