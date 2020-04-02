@@ -1,0 +1,66 @@
+.c-gameboardtop {
+  @include expand;
+  max-width: none;
+  padding: 0;
+  margin: 0;
+  @include make-column-and-top;
+
+  .bottom {
+    height: calc(100% - 1rem);
+    width: 100%;
+    margin: 0;
+
+    .players,
+    .gamestatus,
+    .marslog {
+      height: 100%;
+      padding: 0.5rem 0rem;
+
+      .wrapper {
+        @include expand;
+        padding: 0;
+
+        .row {
+          height: 100%;
+          margin: 0;
+        }
+      }
+    }
+
+    .players {
+      border-left: 0.125rem solid $new-space-orange-opaque-025;
+      border-right: 0.125rem solid $new-space-orange-opaque-025;
+
+      .player,
+      .others {
+        height: 100%;
+        padding: 0;
+      }
+
+      .player {
+      }
+
+      .others {
+      }
+    }
+
+    .gamestatus {
+      .information,
+      .instructions {
+        height: 100%;
+        padding: 0;
+      }
+
+      .information {
+      }
+
+      .instructions {
+      }
+    }
+
+    .chat {
+      border-left: 0.125rem solid $new-space-orange-opaque-025;
+      border-right: 0.125rem solid $new-space-orange-opaque-025;
+    }
+  }
+}
