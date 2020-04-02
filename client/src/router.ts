@@ -6,7 +6,6 @@ import Game from '@port-of-mars/client/views/Game.vue';
 import Tutorial from '@port-of-mars/client/views/Tutorial.vue';
 import PlayerDashboard from '@port-of-mars/client/views/PlayerDashboard.vue';
 
-import NewGame from '@port-of-mars/client/views/NewGame.vue';
 
 import {
   GAME_PAGE,
@@ -31,7 +30,7 @@ const router = new Router({
     { ...PAGE_META[TUTORIAL_PAGE], component: Tutorial },
     { ...PAGE_META[REGISTER_PAGE], component: Register },
     { ...PAGE_META[PLAYER_DASHBOARD], component: PlayerDashboard },
-    // { ...PAGE_META[REFACTOR_UI], component: NewGame},
+    // { ...PAGE_META[REFACTOR_UI], component: Game},
   ]
 });
 

@@ -1,7 +1,6 @@
 <template>
   <div class="default-layout">
-    <NewGameDashboard />
-    <!-- <NewGameDashboard /> -->
+    <GameDashboard />
   </div>
 </template>
 
@@ -12,15 +11,13 @@ import { applyGameServerResponses } from '@port-of-mars/client/api/game/response
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 import { EnvironmentMode } from '@port-of-mars/client/settings';
 import GameDashboard from '@port-of-mars/client/components/GameDashboard.vue';
-import NewGameDashboard from '@port-of-mars/client/components/NewGameDashboard.vue';
 import _ from "lodash";
 import { LOBBY_PAGE } from "@port-of-mars/shared/routes";
 
 @Component({
   name: 'game',
   components: {
-    GameDashboard,
-    NewGameDashboard
+    GameDashboard
   }
 })
 export default class Game extends Vue {
