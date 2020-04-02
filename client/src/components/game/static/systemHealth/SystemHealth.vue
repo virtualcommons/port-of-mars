@@ -15,7 +15,7 @@ import StatusBar from './StatusBar.vue';
     StatusBar,
   }
 })
-export default class NewSystemHealth extends Vue {
+export default class SystemHealth extends Vue {
   get systemHealthStatus() {
     return this.$tstore.state.upkeep;
   }
@@ -23,5 +23,5 @@ export default class NewSystemHealth extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/static/systemHealth/NewSystemHealth.scss';
+@import '@port-of-mars/client/stylesheets/game/static/systemHealth/SystemHealth.scss';
 </style>

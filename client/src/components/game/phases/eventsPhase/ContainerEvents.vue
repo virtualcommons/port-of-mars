@@ -1,83 +1,91 @@
 <template>
-  <div class="container-events">
-    <div class="events-row">
-      <div class="info">
-        <div class="topbar">
-          <p>Event {{ eventNumber }}</p>
+    <div class="events-container">
+        <div class="event-deck-container">
+            <div class="section-text">
+                <p>Event Deck</p>
+            </div>
+            <div class="events">
+                <CardEvent
+                    class="event-container"
+                    v-for="(event, eventInd) in eventsForTheRound"
+                    :event="event"
+                    :visible="visible(eventInd)" :key="eventInd"
+                    :active="active(eventInd)"
+                />
+            </div>
+
         </div>
-        <div class="content">
-          <div class="name-wrapper">
-            <p>Name</p>
-            <p class="name">{{ currentEventName }}</p>
-          </div>
-          <div class="effect-wrapper">
-            <p>Effect</p>
-            <p class="effect">
-              {{
-                currentEventEffect !== ''
-                  ? currentEventEffect
-                  : 'No special effect'
-              }}
-            </p>
-          </div>
+
+        <div class="active-event-container">
+            <div class="section-text">
+                <p>Active Events</p>
+            </div>
+
+            <div class="event-holder">
+                <div class="event-info">
+                    <div class="event-title">
+                        <p>Event #{{eventsProcessed+1}}- {{currentEvent.name}}</p>
+                    </div>
+                </div>
+
+                <div class="event-action-wrapper">
+                    <EventContainer :event="currentEvent" :key="eventNumber"/>
+                </div>
+            </div>
+
         </div>
-      </div>
-      <div class="actions">
-        <div class="outer-wrapper">
-          <EventContainer :event="currentEvent" :key="eventNumber"/>
-        </div>
-      </div>
+
     </div>
-  </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import { MarsEventData, EventClientView } from '@port-of-mars/shared/types';
+import { Vue, Component } from 'vue-property-decorator';
+import CardEvent from './CardEvent.vue';
 import EventContainer from './events/EventContainer.vue';
+import * as shared from '@port-of-mars/shared/types'
 
 @Component({
   components: {
-    EventContainer
+      CardEvent,
+      EventContainer
   }
 })
-export default class ContainerEvents extends Vue {
-  get currentEvent(): MarsEventData {
-    const current: MarsEventData = this.$store.getters.currentEvent;
+export default class PhaseContainer extends Vue {
 
-    const data = { name: current.name, visibility: true };
-    this.$store.commit('SET_EVENT_VISIBILITY', data);
-    return current;
-  }
-
-  get eventNumber(): number {
-    const eventNumber = this.$tstore.state.marsEventsProcessed + 1;
-    return eventNumber;
-  }
-
-  get currentEventName(): string {
-    const name = this.currentEvent.name;
-    if (name) {
-      return name;
+    get eventsForTheRound() {
+        return this.$tstore.state.marsEvents;
     }
-    return '';
-  }
 
-  get currentEventEffect(): string {
-    const effect = this.currentEvent.effect;
-    if (effect) {
-      return effect;
+    get eventsProcessed(): number {
+        return this.$tstore.state.marsEventsProcessed;
     }
-    return '';
+
+    get currentEvent(): shared.MarsEventData {
+        const current: shared.MarsEventData = this.$store.getters.currentEvent;
+
+        const data = { name: current.name, visibility: true };
+        //this.$store.commit('SET_EVENT_VISIBILITY', data);
+        return current;
+    }
+
+    get eventNumber(): number {
+        const eventNumber = this.$tstore.state.marsEventsProcessed + 1;
+        return eventNumber;
+    }
+
+    visible(ind: number) {
+        return this.$tstore.state.phase !== shared.Phase.events || ind < this.eventsProcessed;
+    }
+
+    active(ind:number){
+        return this.$tstore.state.phase === shared.Phase.events && ind == this.eventsProcessed;
+    }
+
+    private updated(): any {
+      const elem = this.$el.querySelector('.event-deck-container');
+      elem!.scrollTop = elem!.scrollHeight;
   }
 
-  // get currentEventView(): EventClientView {
-  //   const view = this.currentEvent.clientViewHandler;
-  //   if(view) {
-  //     return view;
-  //   }
-  //   return 'NO_CHANGE';
-  // }
 }
 </script>
 

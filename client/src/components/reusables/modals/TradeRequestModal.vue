@@ -40,7 +40,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import TradeRequest from '@port-of-mars/client/components/game/phases/tradePhase/TradeRequestRework.vue'
+import TradeRequest from '@port-of-mars/client/components/game/phases/tradePhase/TradeRequest.vue'
 import ContainerAccomplishmentsGeneral from '@port-of-mars/client/components/reusables/accomplishments/ContainerAccomplishmentsGeneral.vue';
 
 @Component({

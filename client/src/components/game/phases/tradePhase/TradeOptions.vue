@@ -135,5 +135,5 @@ export default class TradeOptions extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/tradePhase/TradeOptionsRework.scss';
+@import '@port-of-mars/client/stylesheets/game/phases/tradePhase/TradeOptions.scss';
 </style>

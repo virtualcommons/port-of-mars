@@ -14,10 +14,10 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import ContainerInvestments from './investmentPhase/ContainerInvestments.vue'
-import ContainerTrade from './tradePhase/ContainerTradeRework.vue';
-import ContainerPurchase from './purchasePhase/ContainerPurchaseRework.vue';
-import ContainerDiscard from './discardPhase/ContainerDiscardRework.vue';
-import ContainerEvents from './eventsPhase/ContainerEventsRework.vue';
+import ContainerTrade from './tradePhase/ContainerTrade.vue';
+import ContainerPurchase from './purchasePhase/ContainerPurchase.vue';
+import ContainerDiscard from './discardPhase/ContainerDiscard.vue';
+import ContainerEvents from './eventsPhase/ContainerEvents.vue';
 import ContainerDefault from './default/ContainerDefault.vue';
 
 import { Phase } from '@port-of-mars/shared/types';
@@ -31,7 +31,7 @@ import { Phase } from '@port-of-mars/shared/types';
     ContainerDefault,
   }
 })
-export default class NewPhaseContainer extends Vue {
+export default class PhaseContainer extends Vue {
   get phase() {
     return Phase;
   }
@@ -44,5 +44,5 @@ export default class NewPhaseContainer extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/NewPhaseContainer.scss';
+@import '@port-of-mars/client/stylesheets/game/phases/PhaseContainer.scss';
 </style>

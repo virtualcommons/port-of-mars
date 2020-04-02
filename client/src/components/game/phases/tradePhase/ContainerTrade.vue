@@ -43,5 +43,5 @@ export default class ContainerTrade extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/tradePhase/ContainerTradeRework.scss';
+@import '@port-of-mars/client/stylesheets/game/phases/tradePhase/ContainerTrade.scss';
 </style>

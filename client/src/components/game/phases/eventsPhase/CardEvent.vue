@@ -74,5 +74,5 @@ export default class CardEvent extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/eventsPhase/CardEventRework.scss';
+@import '@port-of-mars/client/stylesheets/game/phases/eventsPhase/CardEvent.scss';
 </style>

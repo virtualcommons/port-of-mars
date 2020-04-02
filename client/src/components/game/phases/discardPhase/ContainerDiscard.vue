@@ -12,11 +12,11 @@
 
       <div class="actions">
         <div class="section-text">
-          <p>Purchasable Accomplishments</p>
+          <p>Discardable Accomplishments</p>
         </div>
         <div class="outer-wrapper">
           <div class="wrapper">
-            <BarAccomplishment
+            <BarDiscard
               v-for="accomplishment in purchasableAccomplishments"
               :key="accomplishment.label + 2"
               :accomplishment="accomplishment"
@@ -30,18 +30,18 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import BarAccomplishment from './BarAccomplishment.vue';
+import BarDiscard from './BarDiscard.vue';
 import InventoryTable from '@port-of-mars/client/components/reusables/InventoryTable.vue';
 import { canPurchaseAccomplishment } from '@port-of-mars/shared/validation';
 import { AccomplishmentData } from '@port-of-mars/shared/types';
 
 @Component({
   components: {
-    BarAccomplishment,
+    BarDiscard,
     InventoryTable,
   }
 })
-export default class ContainerPurchase extends Vue {
+export default class ContainerDiscard extends Vue {
   get purchasableAccomplishments() {
     return this.$store.getters.player.accomplishments.purchasable
       .slice()
@@ -67,5 +67,5 @@ export default class ContainerPurchase extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/purchasePhase/ContainerPurchaseRework.scss';
+@import '@port-of-mars/client/stylesheets/game/phases/discardPhase/ContainerDiscard.scss';
 </style>

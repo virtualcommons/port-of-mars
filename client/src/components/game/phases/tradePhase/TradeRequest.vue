@@ -63,7 +63,7 @@ import {
   Inject
 } from 'vue-property-decorator';
 import * as _ from 'lodash';
-import TradeOptions from './TradeOptionsRework.vue';
+import TradeOptions from './TradeOptions.vue';
 import {
   TradeData,
   TradeAmountData,
@@ -200,5 +200,5 @@ export default class TradeRequest extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/tradePhase/TradeRequestRework.scss';
+@import '@port-of-mars/client/stylesheets/game/phases/tradePhase/TradeRequest.scss';
 </style>

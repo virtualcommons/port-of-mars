@@ -40,7 +40,7 @@ import environment from '../store/mutationFolder/environment';
     ContainerVictory
   }
 })
-export default class NewGameDashboard extends Vue {
+export default class GameDashboard extends Vue {
   env: EnvironmentMode = new EnvironmentMode();
 
   get phase() {

@@ -119,5 +119,5 @@ export default class Chat extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/static/chat/NewChat.scss';
+@import '@port-of-mars/client/stylesheets/game/static/chat/Chat.scss';
 </style>

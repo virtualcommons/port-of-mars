@@ -21,7 +21,7 @@
         >
       </button>
       <a
-        href="mailto:portmars@asu.edu?subject=[port-of-mars] New Issue Submission"
+        href="mailto:portmars@asu.edu?subject=[port-of-mars]  Issue Submission"
         target="_blank"
         ><font-awesome-icon
           :icon="['fas', 'exclamation-triangle']"
