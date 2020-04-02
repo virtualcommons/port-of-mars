@@ -1,0 +1,21 @@
+
+
+.c-gameboardbottom {
+  @include expand;
+  max-width: none;
+  padding: 1rem 0 0 0;
+  margin: 0;
+
+  .c-phasecontainer {
+    @include expand;
+    @include new-border-orange;
+    padding: 0.5rem;
+    margin: 0;
+    //   background-color: purple;
+  
+    .content {
+      @include expand;
+      
+    }
+  }
+}
