@@ -1,25 +1,24 @@
 <template>
-  <div class="trade-container tour-trade">
-    <div class="trade-list tour-trade-item">
-      <div class=header>
-        <div class="section-text">
-          <p>Active Trade List</p>
+  <div class="trade-container tour-trade container">
+    <div class="wrapper row">
+      <div class="trade-list tour-trade-item col-12">
+        <div class="content container">
+          <div class="header row">
+            <div class="title col-10">
+              <p>Active Trade List</p>
+            </div>
+            <div class="requesttradebutton col-2">
+              <button @click="handleOpenTradeRequest()">
+                Request a Trade
+              </button>
+            </div>
+          </div>
+          <div class="trades row">
+            <div class="wrapper">
+              <Trade v-for="trade in trades" v-bind="trade" :key="trade.id" />
+            </div>
+          </div>
         </div>
-        <button class="request-trade-button" @click="handleOpenTradeRequest()">Request a trade </button>
-      </div>
-
-      <div class="trades-wrapper">
-
-        <Trade v-for="trade in trades" v-bind="trade" :key="trade.id" />
-      </div>
-    </div>
-
-    <div class="trade-chat">
-      <div class="section-text">
-        <p>Chat</p>
-      </div>
-      <div class="chat-container">
-        <Chat/>
       </div>
     </div>
   </div>
@@ -32,7 +31,7 @@ import Chat from '@port-of-mars/client/components/newGameDashboard/right/ChatRew
 @Component({
   components: {
     Trade,
-    Chat,
+    Chat
   }
 })
 export default class ContainerTrade extends Vue {
@@ -47,7 +46,7 @@ export default class ContainerTrade extends Vue {
     return trades;
   }
 
-  handleOpenTradeRequest(){
+  handleOpenTradeRequest() {
     this.$tstore.commit('SET_TRADE_REQUEST_MODAL_VISIBILITY', true);
   }
 }

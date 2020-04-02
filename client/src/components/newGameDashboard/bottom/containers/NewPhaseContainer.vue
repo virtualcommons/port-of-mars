@@ -37,8 +37,8 @@ export default class NewPhaseContainer extends Vue {
   }
 
   get gamePhase() {
-    return this.phase.invest;
-    // return this.$store.state.phase;
+    // return this.phase.trade;
+    return this.$store.state.phase;
   }
 }
 </script>
