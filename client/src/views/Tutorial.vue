@@ -3,7 +3,7 @@
     <ConsentFormModal @grant-consent="grantConsent" @deny-consent="denyConsent" />
     <TourModal @show="showTour" @hide="startTourOnHideModal" />
     <CompletedQuizModal v-if="tourIsOver" />
-    <GameDashboard />
+    <!-- <GameDashboard /> -->
     <v-tour
       v-if="dataFetched"
       name="gameTour"
@@ -116,7 +116,7 @@ import VueTour from 'vue-tour';
 import ConsentFormModal from '@port-of-mars/client/components/tutorial/ConsentFormModal.vue';
 import TourModal from '@port-of-mars/client/components/tutorial/TourModal.vue';
 import CompletedQuizModal from '@port-of-mars/client/components/tutorial/CompletedQuizModal.vue';
-import GameDashboard from '@port-of-mars/client/components/GameDashboard.vue';
+// import GameDashboard from '@port-of-mars/client/components/GameDashboard.vue';
 import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
 import { Step } from '@port-of-mars/client/types/tutorial';
 import { CURATOR, Phase, QuizQuestionData, RESEARCHER } from '@port-of-mars/shared/types';
@@ -130,7 +130,7 @@ Vue.use(VueTour);
 @Component({
   name: 'tutorial',
   components: {
-    GameDashboard,
+    // GameDashboard,
     CompletedQuizModal,
     TourModal,
     ConsentFormModal
