@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="card-accomplishment"
-    v-bind:class="{ unpurchasable: !canPurchase, purchasable: canPurchase }"
-  >
+  <div class="card-accomplishment" :class="cardStyling">
     <div class="title">
       <p>{{ accomplishment.label }}</p>
     </div>
@@ -93,6 +90,16 @@ export default class BarAccomplishment extends Vue {
 
   get playerInventory() {
     return _.clone(this.$tstore.getters.player.inventory);
+  }
+
+  get cardStyling() {
+    if (this.purchase && this.canPurchase) {
+      return 'purchasable';
+    } else if (this.purchase && !this.canPurchase) {
+      return 'unpurchasable';
+    } else {
+      return 'default';
+    }
   }
 
   private shouldResourceBeGrayedOut(investment: Investment) {

@@ -6,7 +6,11 @@
           <p>Inventory</p>
         </div>
         <div class="inventory">
-          <InventoryTable class="inventory-table" :playerData="playerInfo" :isVisible="true"/>
+          <InventoryTable
+            class="inventory-table"
+            :playerData="playerInfo"
+            :isVisible="true"
+          />
         </div>
       </div>
 
@@ -18,8 +22,9 @@
           <div class="wrapper">
             <BarAccomplishment
               v-for="accomplishment in purchasableAccomplishments"
-              :key="accomplishment.label + 2"
               :accomplishment="accomplishment"
+              :purchase="true"
+              :key="accomplishment.label + 2"
             />
           </div>
         </div>
@@ -30,7 +35,7 @@
           <p>Chat</p>
         </div>
         <div class="chat">
-          <Chat/>
+          <Chat />
         </div>
       </div>
     </div>
@@ -49,7 +54,7 @@ import { AccomplishmentData } from '@port-of-mars/shared/types';
   components: {
     BarAccomplishment,
     Chat,
-    InventoryTable,
+    InventoryTable
   }
 })
 export default class ContainerPurchase extends Vue {
@@ -68,11 +73,11 @@ export default class ContainerPurchase extends Vue {
       });
   }
 
-  get playerInfo(){
+  get playerInfo() {
     return {
       info: this.$tstore.getters.player,
-      isSelf:true,
-    }
+      isSelf: true
+    };
   }
 }
 </script>

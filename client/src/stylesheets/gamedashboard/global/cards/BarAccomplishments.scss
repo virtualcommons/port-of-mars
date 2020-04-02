@@ -109,11 +109,20 @@
   }
 }
 
-.unpurchasable {
+.default {
   background-color: $space-white;
-  opacity: 0.5;
+  border: 0.125rem solid $space-white;
+  opacity: 1;
 }
 
 .purchasable {
   background-color: $new-space-orange;
+  border: 0.125rem solid $new-space-orange;
+  opacity: 1;
+}
+
+.unpurchasable {
+  background-color: $space-white;
+  border: 0.125rem solid $space-white;
+  opacity: 0.5;
 }
