@@ -5,7 +5,6 @@
       class="game-dashboard"
     >
       <MasterComponent v-if="environment == 'development'" />
-      <ModalContainer />
       <ModalController/>
       <GameboardContainer />
     </div>
@@ -23,7 +22,6 @@ import { Vue, Component } from 'vue-property-decorator';
 import { Phase } from '@port-of-mars/shared/types';
 import { EnvironmentMode } from '@port-of-mars/client/settings';
 import MasterComponent from '@port-of-mars/client/components/MasterComponent.vue';
-import ModalContainer from '@port-of-mars/client/components/game/modals/ModalContainer.vue';
 import ModalController from '@port-of-mars/client/components/game/modals/ModalController.vue';
 import GameboardContainer from '@port-of-mars/client/components/root/GameboardContainer.vue';
 import ContainerDefeat from '@port-of-mars/client/components/root/ContainerDefeat.vue';
@@ -33,7 +31,6 @@ import environment from '../store/mutationFolder/environment';
 @Component({
   components: {
     MasterComponent,
-    ModalContainer,
     ModalController,
     GameboardContainer,
     ContainerDefeat,

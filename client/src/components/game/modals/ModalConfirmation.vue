@@ -53,7 +53,7 @@ export default class ModalConfirmation extends Vue {
       case 'discardAccomplishment':
         this.api.discardAccomplishment(this.modalData.actionData);
       default:
-        this.$root.$emit('closeModal');
+        break;
     }
   }
 }
