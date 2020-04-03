@@ -1,13 +1,28 @@
 <template>
     <BRow class="player-dashboard">
-        <UserHeader />
         <BCol class="left">
             <!-- onboarding -->
             <div class="top">
                 <h2>Onboarding</h2>
-                <p>Pass Tutorial Quiz</p>
-                <p>Take Introduction Survey</p>
-                <p>Take Exit Survey</p>
+
+                <div class="onboarding-item">
+                    <BButton squared class="button" variant="dark" :to="'tutorial'">
+                        Tutorial
+                    </BButton>
+                </div>
+
+                <div class="onboarding-item">
+                    <BButton squared class="button" variant="dark">
+                        Introduction Survey
+                    </BButton>
+                </div>
+                
+                <div class="onboarding-item">
+                    <BButton squared class="button" variant="dark">
+                        Exit Survey
+                    </BButton>
+                </div>
+                
             </div>
 
             <!-- player stats -->
@@ -34,10 +49,13 @@
                 <h2>Action Items</h2>
                 <div class="action-item">
                     <p>Connect to Current Game </p>
-                    <BButton squared class="button" variant="dark">Go</BButton>
+
+                    <!-- TODO: check if there is a game currently taking place-->
+                    <BButton squared class="button" variant="dark" :to="'/game'">Go</BButton>
                 </div>
                 <div class="action-item">
                     <p>Take Exit Survey</p>
+                    <!--TODO: check if user completed exit survey -->
                     <BButton squared class="button" variant="dark">Go</BButton>
                 </div>
             </div>
@@ -56,15 +74,14 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import UserHeader from '@port-of-mars/client/components/global/UserHeader.vue';
-import { BRow, BCol, BButton } from 'bootstrap-vue';
+import { BRow, BCol, BButton, BLink } from 'bootstrap-vue';
 
 @Component({
     components: {
         BButton,
+        BLink,
         BRow,
-        BCol,
-        UserHeader
+        BCol
     }
 })
 export default class PlayerDashboard extends Vue {}
