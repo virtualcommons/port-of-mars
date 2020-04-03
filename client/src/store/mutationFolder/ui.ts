@@ -2,7 +2,6 @@ import { State, defaultTradeData } from '@port-of-mars/client/store/state';
 import { Role, ResourceAmountData } from '@port-of-mars/shared/types';
 
 function SET_PLAYER_INFO_MODAL_VISIBILITY(state: State, payload: {role:Role, visible:boolean}){
-    console.log('adf');
     state.ui.modalViews.playerInfoModal = payload;
 }
 
@@ -11,6 +10,10 @@ function SET_TRADE_REQUEST_MODAL_VISIBILITY(state: State,payload:boolean){
     if(payload == false){
         state.ui.tradeData = defaultTradeData();
     }
+}
+
+function SET_CARD_MODAL_VISIBILITY(state: State, payload: {visible:boolean, data:{type:string, info:any}}){
+    state.ui.modalViews.cardModal = payload;
 }
 
 function CLOSE_ALL_MODALS(state: State, payload:any){
@@ -46,9 +49,12 @@ function RESET_TRADE_MODAL(state: State, payload: any){
 
 
 
+
+
 export default {
     SET_PLAYER_INFO_MODAL_VISIBILITY,
     SET_TRADE_REQUEST_MODAL_VISIBILITY,
+    SET_CARD_MODAL_VISIBILITY,
     SET_GET_RESOURCES,
     SET_SEND_RESOURCES,
     SET_TRADE_PARTNER_NAME,

@@ -1,11 +1,15 @@
 <template>
     <div class="modal-wrapper" v-show="showAnyModal">
-        <div class="player-info-modal-wrapper" v-show="playerModalVisibility.visible">
-            <PlayerInfoModal :role='playerModalVisibility.role' />
+        <div class="player-info-modal-wrapper" v-show="playerModal.visible">
+            <PlayerInfoModal :role='playerModal.role' />
         </div>
 
-        <div class="trade-request-modal-wrapper" v-show="tradeRequestModalVisibility.visible">
+        <div class="trade-request-modal-wrapper" v-show="tradeRequestModal.visible">
             <TradeRequestModal/>
+        </div>
+
+        <div class="card-modal-wrapper" v-show="cardModal.visible">
+            <ModalContainer :modalView="cardModal.data.type" :modalData="cardModal.data.info"/>
         </div>
 
     </div>
@@ -16,24 +20,32 @@
 import { Component, Vue } from 'vue-property-decorator';
 import PlayerInfoModal from './PlayerInfoModal.vue';
 import TradeRequestModal from './TradeRequestModal.vue';
+import ModalContainer from './ModalContainer.vue';
 @Component({
     components:{
         PlayerInfoModal,
-        TradeRequestModal
+        TradeRequestModal,
+        ModalContainer,
     }
 })
 export default class ModalController extends Vue{
 
     get showAnyModal(){
-        return this.playerModalVisibility.visible || this.tradeRequestModalVisibility.visible;
+        return this.playerModal.visible 
+        || this.tradeRequestModal.visible
+        || this.cardModal.visible;
     }
 
-    get playerModalVisibility(){
+    get playerModal(){
         return this.$tstore.state.ui.modalViews.playerInfoModal;
     }
 
-    get tradeRequestModalVisibility(){
+    get tradeRequestModal(){
         return this.$tstore.state.ui.modalViews.tradeRequestModal;
+    }
+
+    get cardModal(){
+        return this.$tstore.state.ui.modalViews.cardModal;
     }
 }
 

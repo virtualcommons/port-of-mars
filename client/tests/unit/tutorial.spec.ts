@@ -5,7 +5,7 @@ import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
 import Vue from 'vue';
 
 
-describe('Tutorial.vue', () => {
+describe.skip('Tutorial.vue', () => {
   const wrapper = mountPOM(Tutorial, {
     ...mockRoomSetup(),
     ...provideClient()

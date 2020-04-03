@@ -65,7 +65,13 @@ export default class Master extends Vue {
         this.$store.commit('ADD_TO_MARS_LOG', this.logMessage);
         break;
       case ']':
-        this.$root.$emit('openModalServer', this.serverMessage);
+        this.$tstore.commit('SET_CARD_MODAL_VISIBILITY', {
+          visible: true,
+          data:{
+            type:'ModalServer',
+            info:this.serverMessage
+          }
+        })
         break;
       
       default:
