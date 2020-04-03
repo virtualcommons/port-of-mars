@@ -60,7 +60,7 @@
     "@sentry/node": "~5.15.4",
     "async-mutex": "^0.1.4",
     "bcryptjs": "^2.4.3",
-    "colyseus": "^0.12.5",
+    "colyseus": "0.12.4",
     "connect-redis": "^4.0.4",
     "cookie": "^0.4.0",
     "cookie-parser": "^1.4.5",
