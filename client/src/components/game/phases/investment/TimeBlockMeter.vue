@@ -12,12 +12,12 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 
 @Component({})
-export default class DiscreteStatusBar extends Vue {
+export default class TimeBlockMeter extends Vue {
   @Prop({ default: 0 }) private usedTimeBlocks!: number;
   @Prop({ default: 10 }) private totalTimeBlocks!: number;
 }
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/investment/DiscreteStatusBar.scss';
+@import '@port-of-mars/client/stylesheets/game/phases/investment/TimeBlockMeter.scss';
 </style>

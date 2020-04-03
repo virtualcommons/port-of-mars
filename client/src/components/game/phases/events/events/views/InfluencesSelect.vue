@@ -4,7 +4,7 @@
       <div class="topbar">
         <p class="title">Resources you can save</p>
 
-        <DiscreteStatusBar
+        <TimeBlockMeter
           class="discrete-bar"
           :usedTimeBlocks="remainingTime"
           :totalTimeBlocks="timeBlockTotal"
@@ -31,13 +31,13 @@
 import { Vue, Component, Inject } from 'vue-property-decorator';
 import {Resource, ResourceAmountData, RESOURCES, INVESTMENTS, ResourceCostData, Investment } from "@port-of-mars/shared/types";
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
-import DiscreteStatusBar from '@port-of-mars/client/components/game/phases/investment/DiscreteStatusBar.vue';
+import TimeBlockMeter from '@port-of-mars/client/components/game/phases/investment/TimeBlockMeter.vue';
 import CardInvestment from '@port-of-mars/client/components/game/phases/investment/CardInvestment.vue';
 import * as _ from 'lodash';
 
 @Component({
   components: {
-    DiscreteStatusBar,
+    TimeBlockMeter,
     CardInvestment
   }
 })

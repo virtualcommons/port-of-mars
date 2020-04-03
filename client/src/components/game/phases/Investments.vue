@@ -4,7 +4,7 @@
       <div class="topbar">
         <p class="title">Time Blocks</p>
 
-        <DiscreteStatusBar
+        <TimeBlockMeter
           class="discrete-bar"
           :usedTimeBlocks="remainingTimeBlocks"
           :totalTimeBlocks="timeBlockTotal"
@@ -28,14 +28,14 @@
 <script lang="ts">
 import { Vue, Component, Inject } from 'vue-property-decorator';
 import { INVESTMENTS, Resource, ResourceCostData } from '@port-of-mars/shared/types';
-import DiscreteStatusBar from './investment/DiscreteStatusBar.vue';
+import TimeBlockMeter from './investment/TimeBlockMeter.vue';
 import CardInvestment from './investment/CardInvestment.vue';
 import * as _ from 'lodash';
 import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
 
 @Component({
   components: {
-    DiscreteStatusBar,
+    TimeBlockMeter,
     CardInvestment
   }
 })

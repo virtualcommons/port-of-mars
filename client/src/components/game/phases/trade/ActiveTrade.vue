@@ -117,7 +117,7 @@ library.add(faExchangeAlt);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 @Component({})
-export default class Trade extends Vue {
+export default class ActiveTrade extends Vue {
   @Prop() private from!: TradeAmountData;
   @Prop() private to!: TradeAmountData;
   @Prop() private id!: string;
@@ -156,5 +156,5 @@ export default class Trade extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/trade/Trade.scss';
+@import '@port-of-mars/client/stylesheets/game/phases/trade/ActiveTrade.scss';
 </style>

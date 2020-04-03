@@ -10,7 +10,7 @@
 
       <div class="trades-wrapper">
 
-        <Trade v-for="trade in trades" v-bind="trade" :key="trade.id" />
+        <ActiveTrade v-for="trade in trades" v-bind="trade" :key="trade.id" />
       </div>
     </div>
   </div>
@@ -18,10 +18,10 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import Trade from './trade/Trade.vue';
+import ActiveTrade from './trade/ActiveTrade.vue';
 @Component({
   components: {
-    Trade,
+    ActiveTrade,
   }
 })
 export default class Trades extends Vue {
