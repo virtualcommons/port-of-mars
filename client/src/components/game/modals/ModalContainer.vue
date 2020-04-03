@@ -1,7 +1,8 @@
 <template>
-  <div class="modal-container" v-if="visible">
+  <div class="modal-container">
     <div class="wrapper">
       <component :is="modalView" :modalData="modalData"></component>
+      
       <button
         @click="handleClose"
         type="button"
@@ -38,36 +39,22 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
   }
 })
 export default class ModalContainer extends Vue {
-  private visible: boolean = false;
-  private modalView: string = 'ModalCard';
-  private modalData: object = {};
-
-  mounted() {
-    this.$root.$on('openModalCard', (data: any) => {
-      this.modalView = 'ModalCard';
-      this.modalData = data;
-      this.visible = true;
-    });
-
-    this.$root.$on('openmodalconfirmation', (data: any) => {
-      this.modalView = 'ModalConfirmation';
-      this.modalData = data;
-      this.visible = true;
-    });
-
-    this.$root.$on('openModalServer', (data: any) => {
-      this.modalView = 'ModalServer';
-      this.modalData = data;
-      this.visible = true;
-    });
-
-    this.$root.$on('closeModal', (data: any) => {
-      this.visible = false;
-    });
-  }
+  
+  @Prop() modalView!:string;
+  @Prop() modalData!:object;
 
   private handleClose(): void {
-    this.visible = false;
+    //this.visible = false;
+    this.$tstore.commit('SET_CARD_MODAL_VISIBILITY', {
+      visible: false,
+      data:{
+        type:'',
+        info:{
+            card:'',
+            payload:null
+          },
+      }
+    })
   }
 }
 </script>

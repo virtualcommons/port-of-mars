@@ -82,11 +82,6 @@ export default class AccomplishmentsSelectPurchased extends Vue {
   }
 
   private handleDiscardAccomplishment(a: any) {
-    // this.$root.$emit('openModalConfirmation', {
-    //   text: `Selecting \"Yes\" will discard the accomplishment \"${a.label}\" and a new card will be drawn next round.`,
-    //   type: 'discardAccomplishment',
-    //   actionData: a.id
-    // });
     this.selectedPurchasedAccomplishment = a;
   }
 

@@ -110,12 +110,20 @@ export interface PlayerInfoModal extends Visible{
   role:Role;
 }
 
+export interface CardModal extends Visible{
+  data:{
+    type:string,
+    info:any
+  };
+}
+
 export interface TradeRequestModal extends Visible{}
 
 export interface Modals{
-  [name:string]:PlayerInfoModal|TradeRequestModal;
+  [name:string]:PlayerInfoModal|TradeRequestModal|CardModal;
   playerInfoModal:PlayerInfoModal;
   tradeRequestModal:TradeRequestModal;
+  cardModal:CardModal;
 }
 
 
@@ -191,6 +199,13 @@ export const initialStoreState: State = {
       },
       tradeRequestModal:{
         visible: false,
+      },
+      cardModal:{
+        visible: false,
+        data:{
+          type:'',
+          info:null
+        },
       }
     },
   }
