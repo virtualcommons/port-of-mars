@@ -53,7 +53,7 @@ import { PlayerClientSet } from '@port-of-mars/client/store/state';
     PhaseInstructions,
   }
 })
-export default class GameBoardGameInformation extends Vue {
+export default class HUD extends Vue {
   get systemHealthStatus() {
     return this.$tstore.state.upkeep;
   }
@@ -73,5 +73,5 @@ export default class GameBoardGameInformation extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/GameBoardGameInformation.scss';
+@import '@port-of-mars/client/stylesheets/game/HUD.scss';
 </style>

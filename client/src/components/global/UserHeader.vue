@@ -20,7 +20,7 @@
 import { Vue, Component } from 'vue-property-decorator';
 
 @Component({})
-export default class UserGameBoardGameInformation extends Vue {
+export default class UserHUD extends Vue {
   private prependedText: string = 'Logged in as ';
 
   // NOTE :: VIEW & LOGOUT USER
