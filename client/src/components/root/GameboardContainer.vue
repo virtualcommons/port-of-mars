@@ -7,10 +7,10 @@
       <div class="gameboard-wrapper col-9">
         <ProfileMenu />
         <div class="gameboardtop row">
-          <GameBoardTop />
+          <Header />
         </div>
         <div class="gameboardbottom row">
-          <GameBoardBottom />
+          <GameBoardRoot />
         </div>
         <ActiveEventsPopup />
         <InventoryPopup />
@@ -24,18 +24,18 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import GameBoardTop from '@port-of-mars/client/components/game/static/GameBoardTop.vue';
-import GameBoardBottom from '@port-of-mars/client/components/game/phases/GameBoardBottom.vue';
+import Header from '@port-of-mars/client/components/game/static/Header.vue';
+import GameBoardRoot from '@port-of-mars/client/components/game/phases/GameBoardRoot.vue';
 import ProfileMenu from '@port-of-mars/client/components/game/static/popups/ProfileMenu.vue';
 import ActiveEventsPopup from '@port-of-mars/client/components/game/static/popups/ActiveEventsPopup.vue';
 import InventoryPopup from '@port-of-mars/client/components/game/static/popups/InventoryPopup.vue';
 import Chat from '@port-of-mars/client/components/game/static/chat/Chat.vue'
-import SystemHealth from '@port-of-mars/client/components/game/static/systemHealth/SystemHealth.vue';
+import SystemHealth from '@port-of-mars/client/components/game/static/systemhealth/SystemHealth.vue';
 
 @Component({
   components: {
-    GameBoardTop,
-    GameBoardBottom,
+    Header,
+    GameBoardRoot,
     ProfileMenu,
     ActiveEventsPopup,
     InventoryPopup,
