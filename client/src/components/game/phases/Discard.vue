@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import Accomplishment from './Accomplishment.vue';
+import Accomplishment from './discard/Accomplishment.vue';
 import InventoryTable from '@port-of-mars/client/components/game/InventoryTable.vue';
 import { canPurchaseAccomplishment } from '@port-of-mars/shared/validation';
 import { AccomplishmentData } from '@port-of-mars/shared/types';
@@ -41,7 +41,7 @@ import { AccomplishmentData } from '@port-of-mars/shared/types';
     InventoryTable,
   }
 })
-export default class ContainerDiscard extends Vue {
+export default class Discard extends Vue {
   get purchasableAccomplishments() {
     return this.$store.getters.player.accomplishments.purchasable
       .slice()
@@ -67,5 +67,5 @@ export default class ContainerDiscard extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/discard/ContainerDiscard.scss';
+@import '@port-of-mars/client/stylesheets/game/phases/Discard.scss';
 </style>

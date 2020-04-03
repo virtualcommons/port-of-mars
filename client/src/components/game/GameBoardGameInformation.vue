@@ -38,10 +38,10 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import Player from './panels/Player.vue';
-import OtherPlayers from './panels/OtherPlayers.vue';
-import GameInformation from './panels/GameInformation.vue';
-import PhaseInstructions from './panels/PhaseInstructions.vue';
+import Player from './static/panels/Player.vue';
+import OtherPlayers from './static/panels/OtherPlayers.vue';
+import GameInformation from './static/panels/GameInformation.vue';
+import PhaseInstructions from './static/panels/PhaseInstructions.vue';
 import { ROLES, Role } from '@port-of-mars/shared/types';
 import { PlayerClientSet } from '@port-of-mars/client/store/state';
 
@@ -53,7 +53,7 @@ import { PlayerClientSet } from '@port-of-mars/client/store/state';
     PhaseInstructions,
   }
 })
-export default class Header extends Vue {
+export default class GameBoardGameInformation extends Vue {
   get systemHealthStatus() {
     return this.$tstore.state.upkeep;
   }
@@ -73,5 +73,5 @@ export default class Header extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/static/Header.scss';
+@import '@port-of-mars/client/stylesheets/game/GameBoardGameInformation.scss';
 </style>

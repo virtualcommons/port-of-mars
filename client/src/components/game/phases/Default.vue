@@ -8,9 +8,9 @@
 import { Vue, Component } from 'vue-property-decorator';
 
 @Component({})
-export default class ContainerDefault extends Vue {}
+export default class Default extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/default/ContainerDefault.scss';
+@import '@port-of-mars/client/stylesheets/game/phases/Default.scss';
 </style>

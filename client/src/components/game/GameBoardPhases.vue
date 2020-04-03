@@ -1,21 +1,21 @@
 <template>
   <div class="c-gameboardbottom container">
-    <ContainerPhase />
+    <Phases />
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import ContainerPhase from './ContainerPhase.vue';
+import Phases from './phases/Phases.vue';
 
 @Component({
   components: {
-    ContainerPhase
+    Phases
   }
 })
-export default class GameBoardRoot extends Vue {}
+export default class GameBoardPhases extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/GameBoardRoot.scss';
+@import '@port-of-mars/client/stylesheets/game/GameBoardPhases.scss';
 </style>

@@ -18,13 +18,13 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import Trade from './Trade.vue';
+import Trade from './trade/Trade.vue';
 @Component({
   components: {
     Trade,
   }
 })
-export default class ContainerTrade extends Vue {
+export default class Trades extends Vue {
   get trades() {
     const tradeSet = this.$tstore.state.tradeSet;
     const trades = Object.keys(tradeSet).map(id => ({
@@ -43,5 +43,5 @@ export default class ContainerTrade extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/trade/ContainerTrade.scss';
+@import '@port-of-mars/client/stylesheets/game/phases/Trades.scss';
 </style>

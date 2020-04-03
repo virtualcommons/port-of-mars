@@ -28,8 +28,8 @@
 <script lang="ts">
 import { Vue, Component, Inject } from 'vue-property-decorator';
 import { INVESTMENTS, Resource, ResourceCostData } from '@port-of-mars/shared/types';
-import DiscreteStatusBar from './DiscreteStatusBar.vue';
-import CardInvestment from './CardInvestment.vue';
+import DiscreteStatusBar from './investment/DiscreteStatusBar.vue';
+import CardInvestment from './investment/CardInvestment.vue';
 import * as _ from 'lodash';
 import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
 
@@ -39,7 +39,7 @@ import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
     CardInvestment
   }
 })
-export default class ContainerBottom extends Vue {
+export default class Investments extends Vue {
   @Inject()
   readonly api!: TutorialAPI;
 
@@ -115,5 +115,5 @@ export default class ContainerBottom extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/investment/ContainerInvestments.scss';
+@import '@port-of-mars/client/stylesheets/game/phases/Investments.scss';
 </style>

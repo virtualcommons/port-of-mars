@@ -40,8 +40,8 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import CardEvent from './CardEvent.vue';
-import EventContainer from './events/EventContainer.vue';
+import CardEvent from './events/CardEvent.vue';
+import EventContainer from './events/events/EventContainer.vue';
 import * as shared from '@port-of-mars/shared/types'
 
 @Component({
@@ -50,7 +50,7 @@ import * as shared from '@port-of-mars/shared/types'
       EventContainer
   }
 })
-export default class ContainerPhase extends Vue {
+export default class Phase extends Vue {
 
     get eventsForTheRound() {
         return this.$tstore.state.marsEvents;
@@ -90,5 +90,5 @@ export default class ContainerPhase extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/events/ContainerEvents.scss';
+@import '@port-of-mars/client/stylesheets/game/phases/Events.scss';
 </style>
