@@ -1,6 +1,6 @@
 <template>
-  <div class="c-gameboardtop container">
-    <div class="bottom row">
+  <div class="c-hud container">
+    <div class="wrapper row">
       <!-- REFACTOR :: PlayerContainer -->
       <div class="players col-6 tour-profile">
         <div class="wrapper container">
@@ -51,7 +51,7 @@ import { PlayerClientSet } from '@port-of-mars/client/store/state';
     OtherPlayers,
     GameInformation,
     PhaseInstructions,
-  }
+  },
 })
 export default class HUD extends Vue {
   get systemHealthStatus() {

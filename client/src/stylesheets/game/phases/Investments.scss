@@ -1,64 +1,96 @@
-.container-investments {
+.c-investments {
   @include expand;
+  max-width: none;
+  @include reset-padding-margin;
 
   .wrapper {
     @include expand;
-    padding: 0.5rem;
-    @include make-column-and-center;
+    max-width: none;
+    @include reset-padding-margin;
 
-    .header-text {
-      color: $new-space-orange;
-      font-weight: bold;
-      border-bottom: solid 1px;
-      border-color: $space-white;
-      padding-right: 6rem;
-    }
+    .timeblockinvestments {
+      height: 100%;
+      padding: 0 0.5rem 0 0;
+      @include make-column-and-top;
 
-    .topbar {
-      height: 10%;
-      width: 100%;
-      padding: 0.25rem 1rem;
-      margin-bottom: 0.5rem;
-      @include make-center;
-      background-color: $new-space-orange;
+      .topbar {
+        height: 10%;
+        flex-shrink: 0;
+        width: 100%;
+        padding: 0.25rem 1rem;
+        margin-bottom: 0.5rem;
+        @include make-center;
+        background-color: $new-space-orange;
 
-      .discrete-bar {
-        margin: 0 1rem;
-        flex: 1;
-        overflow-x: hidden;
+        .title {
+          margin: 0 1rem 0 0;
+          font-size: $font-med;
+          font-weight: $font-weight-maven-pro-bold;
+          color: $space-gray;
+        }
+
+        .timeblockmeter {
+          flex: 1;
+          overflow-x: hidden;
+        }
+
+        .status {
+          margin: 0 0 0 1rem;
+          font-size: $font-large;
+          font-weight: $font-weight-maven-pro-bold;
+          color: $space-gray;
+          text-align: center;
+        }
+
+        .icon {
+          margin-left: 0.5rem;
+        }
       }
 
-      .title {
+      .cards {
+        flex-grow: 1;
+        width: 100%;
         margin: 0;
-        font-size: $font-med;
-        color: $space-gray;
-      }
-
-      .statusbar {
-        margin: 0 1rem;
-        flex: 1;
-      }
-
-      .status {
-        margin-bottom: 0;
-        color: $space-gray;
-        font-size: $font-med;
-        text-align: center;
+        display: flex;
+        flex-wrap: wrap;
       }
     }
 
-    .action-container {
-      @include expand;
-      display: flex;
-      // align-items: flex-start;
-      align-items: stretch;
-    }
+    .purchasableaccomplishments {
+      height: 100%;
+      padding: 0;
+      @include make-column-and-top;
 
-    .cards {
-      height: 90%;
-      width: 100%;
-      display: flex;
-      flex-wrap: wrap;
+      .topbar {
+        height: 10%;
+        flex-shrink: 0;
+        width: 100%;
+        padding: 0.25rem 1rem;
+        margin-bottom: 0.5rem;
+        @include make-center;
+        background-color: $new-space-orange;
+
+        .title {
+          margin-bottom: 0;
+          color: $space-gray;
+          font-size: $font-med;
+          font-weight: $font-weight-maven-pro-bold;
+        }
+      }
+
+      .outer-wrapper {
+        flex-grow: 1;
+        width: 100%;
+        padding: 0.5rem;
+        background-color: $space-white-opaque-1;
+        overflow-y: scroll;
+
+        .wrapper {
+          width: 100%;
+          @include make-column-and-top;
+          overflow-y: scroll;
+        }
+      }
     }
 
     .player-accomplishments {

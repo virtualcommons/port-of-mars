@@ -5,7 +5,9 @@
         <div class="trade-profile-sender-container">
           <div class="trade-profile-sender">
             <img
-              :src="require(`@port-of-mars/client/assets/characters/${from.role}.png`)"
+              :src="
+                require(`@port-of-mars/client/assets/characters/${from.role}.png`)
+              "
               alt="Sender"
             />
           </div>
@@ -37,7 +39,9 @@
         <div class="trade-profile-receiver-container">
           <div class="trade-profile-receiver">
             <img
-              :src="require(`@port-of-mars/client/assets/characters/${to.role}.png`)"
+              :src="
+                require(`@port-of-mars/client/assets/characters/${to.role}.png`)
+              "
               alt="Receiver"
             />
           </div>
@@ -100,14 +104,14 @@ import {
   Component,
   Prop,
   InjectReactive,
-  Inject
+  Inject,
 } from 'vue-property-decorator';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 import {
   TradeData,
   TradeAmountData,
   INVESTMENTS,
-  RESOURCES
+  RESOURCES,
 } from '@port-of-mars/shared/types';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons/';
@@ -130,7 +134,7 @@ export default class ActiveTrade extends Vue {
     let hasResourcesToSend = true;
     const inventory = this.$store.state.players[this.role].inventory;
 
-    RESOURCES.forEach(item => {
+    RESOURCES.forEach((item) => {
       if (this.to.resourceAmount[item] > inventory[item]) {
         hasResourcesToSend = false;
       }

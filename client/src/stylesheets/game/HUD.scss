@@ -1,20 +1,17 @@
-.c-gameboardtop {
+.c-hud {
   @include expand;
   max-width: none;
-  padding: 0;
-  margin: 0;
+  @include reset-padding-margin;
   @include make-column-and-top;
 
-  .bottom {
-    height: calc(100% - 1rem);
-    width: 100%;
-    margin: 0;
+  .wrapper {
+    @include expand;
+    @include reset-padding-margin;
 
     .players,
     .gamestatus,
     .marslog {
       height: 100%;
-      padding: 0.5rem 0rem;
 
       .wrapper {
         @include expand;
@@ -28,6 +25,7 @@
     }
 
     .players {
+      padding: 0.5rem 1rem;
       border-left: 0.125rem solid $new-space-orange-opaque-025;
       border-right: 0.125rem solid $new-space-orange-opaque-025;
 
@@ -36,25 +34,16 @@
         height: 100%;
         padding: 0;
       }
-
-      .player {
-      }
-
-      .others {
-      }
     }
 
     .gamestatus {
+      padding: 0.5rem 1rem;
+      border-right: 0.125rem solid $new-space-orange-opaque-025;
+
       .information,
       .instructions {
         height: 100%;
-        padding: 0;
-      }
-
-      .information {
-      }
-
-      .instructions {
+        padding: 0 1rem;
       }
     }
 

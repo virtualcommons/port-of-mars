@@ -39,7 +39,6 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { BButton } from 'bootstrap-vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons/faCaretRight';
 import { faCaretLeft } from '@fortawesome/free-solid-svg-icons/faCaretLeft';
@@ -54,9 +53,7 @@ library.add(faExclamationTriangle);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 @Component({
-  components: {
-    BButton
-  }
+  components: {},
 })
 export default class ProfileMenu extends Vue {
   private visible: boolean = false;
@@ -66,7 +63,7 @@ export default class ProfileMenu extends Vue {
   }
 
   get position() {
-    return this.visible ? { left: '0rem' } : { left: '-21rem' };
+    return this.visible ? { left: '0rem' } : { left: '-20rem' };
   }
 
   get username(): string {

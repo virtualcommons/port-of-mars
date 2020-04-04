@@ -6,7 +6,9 @@
           <div :class="animations('frame')" class="frame">
             <img
               class="image"
-              :src="require(`@port-of-mars/client/assets/characters-large/${this.playerRole}.png`)"
+              :src="
+                require(`@port-of-mars/client/assets/characters-large/${this.playerRole}.png`)
+              "
               alt="Player"
             />
           </div>
@@ -26,15 +28,11 @@
           <p>{{ joinedText }}</p>
           <p>
             <router-link :to="'tutorial'">
-              <span class='continue'>Take the tutorial</span>
+              <span class="continue">Take the tutorial</span>
             </router-link>
           </p>
-          <button
-            @click="distributeGroups"
-            type="button"
-            name="button"
-          >
-              Distribute Groups
+          <button @click="distributeGroups" type="button" name="button">
+            Distribute Groups
           </button>
         </div>
       </div>
@@ -43,7 +41,9 @@
           <div class="frame">
             <img
               class="image"
-              :src="require(`@port-of-mars/client/assets/characters-large/${role}.png`)"
+              :src="
+                require(`@port-of-mars/client/assets/characters-large/${role}.png`)
+              "
               alt="Player"
             />
           </div>
@@ -69,7 +69,7 @@ export default class WaitingLobby extends Vue {
 
   waitingUserCount: number = 0;
   joinedQueue: boolean = false;
-  nextAssignmentTime: number = (new Date()).getTime();
+  nextAssignmentTime: number = new Date().getTime();
 
   private lobbyAPI: WaitingRequestAPI = new WaitingRequestAPI();
   private hint: string = '';
@@ -79,7 +79,7 @@ export default class WaitingLobby extends Vue {
     'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean vel quam vitae risus interdum auctor vel in mi. Sed sem velit, sollicitudin eu risus ut.',
     'Fusce tempor porta rhoncus. In molestie elit at porttitor faucibus. Sed vel tortor sed ipsum tincidunt sagittis. Nunc vestibulum lacinia rhoncus. Ut sodales consequat ipsum, eu luctus ipsum luctus non.',
     'Morbi at tellus convallis quam viverra sodales. Praesent tincidunt felis semper ipsum maximus rhoncus. Suspendisse potenti. Duis viverra nisi lectus, vel porta nisl varius vitae. Ut quis magna eget quam.',
-    'Etiam porta commodo neque, eu faucibus purus. Donec quis dui maximus, volutpat erat vitae, laoreet ligula. Pellentesque accumsan laoreet justo id vehicula. Nullam consectetur, enim eu tincidunt sagittis, mi odio.'
+    'Etiam porta commodo neque, eu faucibus purus. Donec quis dui maximus, volutpat erat vitae, laoreet ligula. Pellentesque accumsan laoreet justo id vehicula. Nullam consectetur, enim eu tincidunt sagittis, mi odio.',
   ];
 
   async created() {
@@ -89,7 +89,6 @@ export default class WaitingLobby extends Vue {
   }
 
   async destroyed() {
-    console.log('leaving lobby');
     this.lobbyAPI.room.leave();
   }
 
@@ -111,7 +110,7 @@ export default class WaitingLobby extends Vue {
 
   get otherRoles(): Array<Role> {
     const pr = this.playerRole;
-    return ROLES.filter(role => role !== pr);
+    return ROLES.filter((role) => role !== pr);
   }
 
   get nextAssignmentTimeString(): string {
