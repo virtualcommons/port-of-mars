@@ -1,7 +1,7 @@
 import { Room } from 'colyseus.js';
 import { WaitingResponses } from '@port-of-mars/shared/lobby/responses';
-import { GAME_PAGE, LOGIN_PAGE } from "@port-of-mars/shared/routes";
-import WaitingLobby from "@port-of-mars/client/views/WaitingLobby.vue";
+import { GAME_PAGE, LOGIN_PAGE } from '@port-of-mars/shared/routes';
+import WaitingLobby from '@port-of-mars/client/views/WaitingLobby.vue';
 
 // TODO: Temporary Implementation
 const GAME_DATA = 'gameData';
@@ -15,11 +15,13 @@ function setGameData(data: GameData) {
   localStorage.setItem(GAME_DATA, JSON.stringify(data));
 }
 
-export function applyWaitingServerResponses<T>(room: Room, component: WaitingLobby) {
+export function applyWaitingServerResponses<T>(
+  room: Room,
+  component: WaitingLobby
+) {
   const store = component.$tstore;
   const router = component.$router;
   room.onMessage((msg: WaitingResponses) => {
-    console.log('MESSAGE RECEIVED FROM SERVER!', msg);
     switch (msg.kind) {
       case 'joined-client-queue':
         (component as any).joinedQueue = msg.value;
@@ -37,8 +39,7 @@ export function applyWaitingServerResponses<T>(room: Room, component: WaitingLob
   });
 
   room.state.onChange = (changes: Array<any>) => {
-    changes.forEach(change => {
-      console.log('WAITING LOBBY EVENT CHANGE: ', change);
+    changes.forEach((change) => {
       switch (change.field) {
         case 'nextAssignmentTime':
           (component as any).nextAssignmentTime = change.value;

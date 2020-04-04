@@ -2,6 +2,7 @@
   @include expand;
   @include make-column-and-center;
   cursor: pointer;
+  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
 
   &:hover {
     background-color: $space-white-opaque-1;

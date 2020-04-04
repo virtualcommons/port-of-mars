@@ -46,7 +46,7 @@ export default class MarsLogPopup extends Vue {
   }
 
   get position() {
-    return this.visible ? { bottom: '0rem' } : { bottom: '-46rem' };
+    return this.visible ? { bottom: '0rem' } : { bottom: '-45rem' };
   }
 }
 </script>

@@ -1,6 +1,5 @@
 .c-gameinformation {
   @include expand;
-  padding: 0 1rem;
   @include make-column-and-center;
   align-items: flex-start;
   color: $space-gray;
@@ -11,20 +10,7 @@
     }
 
     button {
-      @include reset-button;
-      height: 2.5rem;
-      padding: 0.125rem 0.5rem;
-      border: 0.0625rem solid $new-space-orange;
-      margin-top: 0.5rem;
-      color: $new-space-orange;
-      font-size: $font-med;
-      @include text-overflow-ellipses;
-      @include default-transition-button;
-
-      &:hover {
-        color: $space-gray;
-        background-color: $new-space-orange;
-      }
+      @include space-button;
     }
   }
 

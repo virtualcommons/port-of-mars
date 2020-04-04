@@ -1,22 +1,22 @@
 <template>
   <div class="gameboardcontainer container">
+    <ProfileMenu />
+    <ActiveEventsPopup />
+    <InventoryPopup />
+    <MarsLogPopup />
     <div class="gameboardstatusbar row">
       <SystemHealth />
     </div>
-    <div class="gameboardcontainerrow row no-gutters">
-      <div class="gameboard-wrapper col-9">
-        <ProfileMenu />
-        <div class="gameboardtop row">
+    <div class="gameboard row">
+      <div class="left col-9">
+        <div class="hud row">
           <HUD />
         </div>
         <div class="gameboardbottom row">
           <PhaseSwitcher />
         </div>
-        <ActiveEventsPopup />
-        <InventoryPopup />
-        <MarsLogPopup />
       </div>
-      <div class="chatwrapper col-3">
+      <div class="right col-3">
         <Chat />
       </div>
     </div>

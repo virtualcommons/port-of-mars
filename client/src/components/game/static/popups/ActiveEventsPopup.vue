@@ -42,8 +42,8 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 @Component({
   components: {
-    CardEvent
-  }
+    CardEvent,
+  },
 })
 export default class ActiveEventsPopup extends Vue {
   private visible: boolean = false;
@@ -53,7 +53,7 @@ export default class ActiveEventsPopup extends Vue {
   }
 
   get position() {
-    return this.visible ? { bottom: '0rem' } : { bottom: '-46rem' };
+    return this.visible ? { bottom: '0rem' } : { bottom: '-45rem' };
   }
 
   get eventsForTheRound() {
