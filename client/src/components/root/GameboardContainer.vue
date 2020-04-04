@@ -14,12 +14,13 @@
         </div>
         <ActiveEventsPopup />
         <InventoryPopup />
+        <MarsLogPopup />
       </div>
       <div class="chatwrapper col-3">
         <Chat />
       </div>
     </div>
-</div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -29,7 +30,8 @@ import PhaseSwitcher from '@port-of-mars/client/components/game/PhaseSwitcher.vu
 import ProfileMenu from '@port-of-mars/client/components/game/static/popups/ProfileMenu.vue';
 import ActiveEventsPopup from '@port-of-mars/client/components/game/static/popups/ActiveEventsPopup.vue';
 import InventoryPopup from '@port-of-mars/client/components/game/static/popups/InventoryPopup.vue';
-import Chat from '@port-of-mars/client/components/game/static/chat/Chat.vue'
+import MarsLogPopup from '@port-of-mars/client/components/game/static/popups/MarsLogPopup.vue';
+import Chat from '@port-of-mars/client/components/game/static/chat/Chat.vue';
 import SystemHealth from '@port-of-mars/client/components/game/static/systemhealth/SystemHealth.vue';
 
 @Component({
@@ -39,9 +41,10 @@ import SystemHealth from '@port-of-mars/client/components/game/static/systemheal
     ProfileMenu,
     ActiveEventsPopup,
     InventoryPopup,
+    MarsLogPopup,
     Chat,
     SystemHealth,
-  }
+  },
 })
 export default class GameboardContainer extends Vue {}
 </script>
