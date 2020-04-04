@@ -1,0 +1,96 @@
+// NOTE :: Temporary File Used to Extend Default Bootstrap Styling
+
+// SECTION :: Utilities - Colors
+
+.text-space-orange {
+  color: $new-space-orange;
+}
+
+.text-space-white-025 {
+  color: $space-white-025;
+}
+
+.text-status-red {
+  color: $status-red;
+}
+
+// SECTION :: Utilities - Colors
+
+.border-space-orange {
+  border: 0.0625rem solid $new-space-orange;
+}
+
+.border-space-orange-025 {
+  border: 0.0625rem solid $new-space-orange-025;
+}
+
+// SECTION :: Components - Buttons
+
+.btn-space {
+  @include space-button-default;
+}
+
+.btn-space-lg {
+  @include space-button-default;
+  height: 3rem;
+  width: 12rem;
+}
+
+// SECTION :: Utilities - Text (Tailwind CSS)
+
+.text-xs {
+  font-size: 0.75rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+}
+
+.text-base {
+  font-size: 1rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+}
+
+.text-3xl {
+  font-size: 1.875rem;
+}
+
+.text-4xl {
+  font-size: 2.25rem;
+}
+
+.text-5xl {
+  font-size: 3rem;
+}
+
+.text-6xl {
+  font-size: 4rem;
+}
+
+// SECTION :: Bootstrap Reset (Customized Styles)
+
+.reset-text-input {
+  border: none;
+  background-color: transparent;
+  color: $space-white;
+
+  &:focus,
+  &:active {
+    outline: none;
+  }
+
+  &::placeholder {
+    color: $space-white-025;
+  }
+}

@@ -195,3 +195,28 @@ $screen-xxl: 1680px;
   max-width: 100%;
   width: 100%;
 }
+
+// NOTE :: NEW (04/06/2020)
+
+@mixin space-button-default {
+  border: 0.0625rem solid $new-space-orange;
+  border-radius: 0;
+  color: $new-space-orange;
+
+  &:disabled,
+  &:disabled:hover {
+    border: 0.0625rem solid $new-space-orange-opaque-025;
+    background: transparent;
+    color: $new-space-orange-opaque-025;
+  }
+
+  &:hover {
+    color: $space-gray;
+    background-color: $new-space-orange;
+  }
+
+  &:focus,
+  &:active {
+    outline: none;
+  }
+}

@@ -1,48 +1,28 @@
 <template>
-  <div>
-    <div
-      v-if="gamePhase != phase.defeat && gamePhase != phase.victory"
-      class="game-dashboard"
-    >
-      <MasterComponent v-if="environment == 'development'" />
-      <ModalContainer />
-      <ModalController/>
-      <GameboardContainer />
-    </div>
-    <div v-else-if="gamePhase == phase.defeat" class="game-dashboard-defeat">
-      <ContainerDefeat />
-    </div>
-    <div v-else-if="gamePhase == phase.victory" class="game-dashboard-victory">
-      <ContainerVictory />
-    </div>
+  <div class="w-100 h-100 d-flex justify-content-center align-items-center">
+    <ContainerGame
+      v-if="gamePhase !== phase.victory && gamePhase !== phase.defeat"
+    />
+    <ContainerVictory v-else-if="gamePhase === phase.victory" />
+    <ContainerDefeat v-else-if="gamePhase === phase.defeat" />
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { Phase } from '@port-of-mars/shared/types';
-import { EnvironmentMode } from '@port-of-mars/client/settings';
-import MasterComponent from '@port-of-mars/client/components/MasterComponent.vue';
-import ModalContainer from '@port-of-mars/client/components/game/modals/ModalContainer.vue';
-import ModalController from '@port-of-mars/client/components/game/modals/ModalController.vue';
-import GameboardContainer from '@port-of-mars/client/components/root/GameboardContainer.vue';
+import ContainerGame from '@port-of-mars/client/components/root/ContainerGame.vue';
 import ContainerDefeat from '@port-of-mars/client/components/root/ContainerDefeat.vue';
 import ContainerVictory from '@port-of-mars/client/components/root/ContainerVictory.vue';
-import environment from '../store/mutationFolder/environment';
 
 @Component({
   components: {
-    MasterComponent,
-    ModalContainer,
-    ModalController,
-    GameboardContainer,
+    ContainerGame,
     ContainerDefeat,
-    ContainerVictory
-  }
+    ContainerVictory,
+  },
 })
 export default class GameDashboard extends Vue {
-  env: EnvironmentMode = new EnvironmentMode();
-
   get phase() {
     return Phase;
   }
@@ -54,18 +34,7 @@ export default class GameDashboard extends Vue {
   get gamePhase() {
     return this.$tstore.state.phase;
   }
-
-  /**
-   * Gets the string value of the current environment.
-   * @return The environment.
-   *
-   */
-  get environment() {
-    return this.env.environment;
-  }
 }
 </script>
 
-<style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/views/GameDashboard.scss';
-</style>
+<style lang="scss" scoped></style>

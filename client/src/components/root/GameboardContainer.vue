@@ -1,5 +1,5 @@
 <template>
-  <div class="gameboardcontainer container">
+  <div class="gameboardcontainer container w-100 h-100">
     <div class="gameboardstatusbar row">
       <SystemHealth />
     </div>

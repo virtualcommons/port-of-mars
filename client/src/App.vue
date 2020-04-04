@@ -1,21 +1,21 @@
 <template>
-  <div id="app" class="game">
+  <div
+    id="app"
+    class="container p-0 border border-danger"
+    style="height: 712.5px;"
+  >
     <router-view :key="$route.path" />
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-// import Game from '@port-of-mars/client/views/Game.vue';
-// import Tutorial from '@port-of-mars/client/views/Tutorial.vue';
 import BootstrapVue from 'bootstrap-vue';
+
 Vue.use(BootstrapVue);
 
 @Component({
-  components: {
-    // Game,
-    // Tutorial
-  }
+  components: {},
 })
 export default class Home extends Vue {
   /**
@@ -23,7 +23,6 @@ export default class Home extends Vue {
    * @return the value of layout
    *
    */
-
   get layout() {
     return this.$tstore.getters.layout;
   }

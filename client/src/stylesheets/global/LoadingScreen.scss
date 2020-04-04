@@ -1,7 +1,7 @@
 .loadingscreen {
-  height: 100vh;
-  width: 100vw;
+  @include expand;
   @include make-column-and-center;
+  background-color: green;
 
   h1 {
     text-transform: uppercase;

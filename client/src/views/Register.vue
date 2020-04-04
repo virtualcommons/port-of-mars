@@ -9,23 +9,13 @@
         <div class="input-username">
           <label for="name">Name</label>
           <div class="input-wrapper">
-            <input
-              type="text"
-              id="name"
-              name="name"
-              v-model="name"
-            />
+            <input type="text" id="name" name="name" v-model="name" />
           </div>
         </div>
         <div class="input-username">
           <label for="email">Email</label>
           <div class="input-wrapper">
-            <input
-              type="email"
-              id="email"
-              name="email"
-              v-model="email"
-            />
+            <input type="email" id="email" name="email" v-model="email" />
           </div>
         </div>
         <div class="submit">
@@ -46,7 +36,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import {GAME_PAGE} from "@port-of-mars/shared/routes";
+import { GAME_PAGE } from '@port-of-mars/shared/routes';
 
 @Component({})
 export default class Register extends Vue {
@@ -79,5 +69,5 @@ export default class Register extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/views/Login.scss';
+// @import '@port-of-mars/client/stylesheets/views/Login.scss';
 </style>

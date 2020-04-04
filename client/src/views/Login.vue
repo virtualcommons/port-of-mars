@@ -1,22 +1,53 @@
 <template>
-  <div class="login">
-    <div class="wrapper">
-      <div class="text">
-        <h1>Port of Mars</h1>
-        <h2>Sign In</h2>
+  <div class="w-100 h-100 p-3">
+    <div
+      class="w-100 h-100 d-flex flex-column justify-content-around align-items-center"
+    >
+      <div class="d-flex flex-column justify-content-around align-items-center">
+        <h1 class="display-1 font-weight-bold text-uppercase text-space-orange">
+          Port of Mars
+        </h1>
+        <h1
+          class="display-4 font-weight-bold text-uppercase text-4xl text-space-orange"
+        >
+          Sign In
+        </h1>
       </div>
-      <div class="submit" v-if="isLoggedIn">
-        <input type="button" @click="logout" :value="logoutText" />
+      <div
+        class="my-3 d-flex justify-content-center align-items-center"
+        v-if="isLoggedIn"
+      >
+        <input
+          type="button"
+          @click="logout"
+          :value="logoutText"
+          class="btn btn-space-lg"
+        />
       </div>
-      <form class="login-form" v-else>
-        <div class="input-username">
-          <label for="username">ASURITE ID</label>
-          <div class="input-wrapper">
+      <form
+        class="d-flex flex-column justify-content-center align-items-center"
+        v-else
+      >
+        <div
+          class="p-2 my-3 d-flex flex-column justify-content-center align-items-center"
+        >
+          <label
+            for="username"
+            class="w-100 pb-2 text-xl text-center text-space-white-025"
+            style="border-bottom: 0.0625rem solid var(--space-white-opaque-2);"
+            >ASURITE ID</label
+          >
+          <div
+            class="p-2 border-space-orange-025 d-flex justify-content-center align-items-center"
+            style="height: 5rem; width: 25rem;"
+          >
             <input
               type="text"
               id="username"
               name="username"
+              autocomplete="off"
               v-model="username"
+              class="w-100 h-100 p-2 reset-text-input"
             />
           </div>
         </div>
@@ -26,9 +57,10 @@
             type="submit"
             @click="login"
             value="Login"
+            class="btn btn-space-lg mb-3"
           />
         </div>
-        <p class="error" v-if="error">
+        <p class="w-50 text-2xl text-center text-status-red" v-if="error">
           {{ error }}
         </p>
       </form>
@@ -38,13 +70,13 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import {GAME_PAGE, LOBBY_PAGE, LOGIN_PAGE} from "@port-of-mars/shared/routes";
+import { GAME_PAGE, LOBBY_PAGE, LOGIN_PAGE } from '@port-of-mars/shared/routes';
 
 @Component({})
 export default class Login extends Vue {
-  username: string = '';
-  isLoggedIn: boolean = false;
-  error: string = '';
+  private username: string = '';
+  private isLoggedIn: boolean = false;
+  private error: string = '';
 
   created() {
     this.isLoggedIn = !!this.$ajax.username;
@@ -58,7 +90,7 @@ export default class Login extends Vue {
     return `Logout (${this.$tstore.state.user.username})`;
   }
 
-  logout() {
+  private async logout() {
     this.$ajax.forgetLoginCreds();
     this.$ajax.forgetSubmissionId();
     this.isLoggedIn = false;
@@ -71,7 +103,7 @@ export default class Login extends Vue {
     const response = await this.$ajax.post(this.loginUrl, data);
     await this.$ajax.setLoginCreds(response);
     if (response.status === 200) {
-      this.$router.push({name: LOBBY_PAGE});
+      this.$router.push({ name: LOBBY_PAGE });
     } else {
       this.error = await response.json();
     }
@@ -83,6 +115,4 @@ export default class Login extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/views/Login.scss';
-</style>
+<style lang="scss" scoped></style>
