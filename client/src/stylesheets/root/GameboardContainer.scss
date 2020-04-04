@@ -1,15 +1,7 @@
-
-
-
 .gameboardcontainer {
   position: relative;
-  height:100%;
-  /* SET MAX SIZE OF SCREEN */
-  max-height: $max-screen-height;
-  max-width: $max-screen-width;
-  /* SET MIN SIZE OF SCREEN */
-  min-height: $min-screen-height;
-  min-width: $min-screen-width;
+  z-index: 0;
+  @include expand;
   /* SET MAX SIZE OF SCREEN */
   max-height: $max-screen-height;
   max-width: $max-screen-width;
@@ -17,41 +9,48 @@
   min-height: $min-screen-height;
   min-width: $min-screen-width;
   padding: 1rem;
+  // border-radius: 1.25rem;
   margin: 0;
   overflow: hidden;
-  z-index: 0;
+  @include make-column-and-top;
+  background-color: $space-gray;
+  filter: drop-shadow(0 0 0.75rem $new-space-orange);
 
-  
-    .gameboardcontainerrow{
-      padding: 0;
-      margin: 0;
-      width: 100%;
-      height:96%;
-      
-      .gameboard-wrapper{
-        @include expand;
+  .gameboardstatusbar {
+    width: 100%;
+    margin: 0 0 0.5rem 0;
+  }
 
-        .gameboardtop {
-          @include expand;
-          height: calc(calc(5 / 12) * 100%);
-          @include reset-padding-margin;
-          // background-color: green;
-        }
-      
-        .gameboardbottom {
-          @include expand;
-          height: calc(calc(7/ 12) * 100%);
-          @include reset-padding-margin;
-          
-          // background-color: blue;
-        }
+  .gameboard {
+    flex-grow: 1;
+    width: 100%;
+    padding: 0 0 2.5rem 0;
+    margin: 0;
+    overflow-y: hidden;
+
+    .left {
+      height: 100%;
+      padding: 0 0.5rem 0 0;
+
+      .hud {
+        height: calc(calc(5 / 12) * 100%);
+        width: 100%;
+        @include reset-padding-margin;
       }
 
-      .chatwrapper{
-        height:100%;
-        padding-left:0.5rem;
+      .gameboardbottom {
+        height: calc(calc(7 / 12) * 100%);
+        width: 100%;
+        padding: 0.5rem 0 0 0;
+        margin: 0;
       }
-
     }
-      
+
+    .right {
+      height: 100%;
+      padding: 0;
+      @include new-border-orange;
+      overflow-y: hidden;
+    }
+  }
 }

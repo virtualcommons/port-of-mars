@@ -1,15 +1,15 @@
 .card-investment {
+  height: 50%;
   width: calc(100% / 3);
+  padding: 0.5rem;
   @include make-center;
   background-color: $space-white-opaque-1;
 
-  .ci-container {
-    height: 80%;
-    width: 80%;
+  .wrapper {
+    @include expand;
     @include make-center;
     color: $space-gray;
     overflow: hidden;
-    margin: 1rem 0rem;
   }
 
   .type {
@@ -22,8 +22,10 @@
     background-color: $space-white;
 
     .name {
-      margin: 0;
+      margin-bottom: 0;
       font-size: $font-med;
+      font-weight: $font-weight-maven-pro-medium;
+      color: $space-gray;
       text-transform: capitalize;
     }
 
@@ -40,26 +42,34 @@
         height: 2rem;
         @include make-center;
 
-        p {
-          margin: 0 0.5rem;
-          font-size: $font-med;
-          text-align: center;
+        .icon {
+          margin-right: 0.5rem;
           color: $space-gray;
+        }
+
+        p {
+          margin-bottom: 0;
+          font-size: $font-large;
+          font-weight: $font-weight-maven-pro-medium;
+          text-align: center;
+          color: $status-green;
         }
       }
 
       .cost {
-        border-radius: 50%;
-        width: 2rem;
-        height: 2rem;
         @include make-center;
-        background-color: $space-gray;
+
+        .icon {
+          margin-right: 0.5rem;
+          color: $space-gray;
+        }
 
         p {
-          margin: 0;
-          font-size: $font-small;
+          margin-bottom: 0;
+          font-size: $font-large;
+          font-weight: $font-weight-maven-pro-medium;
           text-align: center;
-          color: $space-white;
+          color: $space-gray;
         }
       }
     }
@@ -77,6 +87,7 @@
       width: 100%;
       border: $border-white;
       font-size: $font-large;
+      font-weight: $font-weight-maven-pro-bold;
       color: $space-white;
       background: transparent;
       @include default-transition-base;

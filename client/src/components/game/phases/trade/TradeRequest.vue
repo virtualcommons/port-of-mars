@@ -22,7 +22,9 @@
             <img
               @click="handleChange(player)"
               class="person-icons"
-              :src="require(`@port-of-mars/client/assets/characters/${player}.png`)"
+              :src="
+                require(`@port-of-mars/client/assets/characters/${player}.png`)
+              "
             />
           </div>
         </div>
@@ -61,7 +63,7 @@ import {
   Component,
   Prop,
   InjectReactive,
-  Inject
+  Inject,
 } from 'vue-property-decorator';
 import * as _ from 'lodash';
 import TradeOptions from './TradeOptions.vue';
@@ -70,7 +72,7 @@ import {
   TradeAmountData,
   ResourceAmountData,
   RESOURCES,
-  Role
+  Role,
 } from '@port-of-mars/shared/types';
 import { canPlayerMakeTrade } from '@port-of-mars/shared/validation';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
@@ -79,8 +81,8 @@ import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
 
 @Component({
   components: {
-    TradeOptions
-  }
+    TradeOptions,
+  },
 })
 export default class TradeRequest extends Vue {
   @Inject()
@@ -96,7 +98,6 @@ export default class TradeRequest extends Vue {
   }
 
   get tradePartnerName() {
-    console.log(this.$tstore.state.ui.tradeData.to.role);
     return this.$tstore.state.ui.tradeData.to.role;
   }
 
@@ -157,7 +158,6 @@ export default class TradeRequest extends Vue {
   }
 
   handleChange(name: string) {
-    console.log(name);
     if (name == this.tradePartnerName) {
       this.$tstore.commit('SET_TRADE_PARTNER_NAME', '' as Role);
       //this.name = '';
@@ -172,17 +172,17 @@ export default class TradeRequest extends Vue {
     if (this.clientValidation) {
       const fromPackage: TradeAmountData = {
         role: this.$tstore.state.role,
-        resourceAmount: this.sentResources
+        resourceAmount: this.sentResources,
       };
 
       const toPackage: TradeAmountData = {
         role: this.tradePartnerName as Role,
-        resourceAmount: this.exchangeResources
+        resourceAmount: this.exchangeResources,
       };
 
       const tradeDataPackage: TradeData = {
         from: fromPackage,
-        to: toPackage
+        to: toPackage,
       };
 
       this.api.sendTradeRequest(tradeDataPackage);

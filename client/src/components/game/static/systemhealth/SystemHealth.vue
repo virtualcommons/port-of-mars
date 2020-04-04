@@ -1,9 +1,9 @@
 <template>
-    <div class="top tour-container-upkeep">
-      <p class="title">System Health</p>
-      <StatusBar class="statusbar" :setWidth="`${systemHealthStatus}`" />
-      <p class="status">{{ systemHealthStatus }}<span>%</span></p>
-    </div>
+  <div class="c-systemhealth">
+    <p class="title">System Health</p>
+    <StatusBar class="statusbar" :setWidth="`${systemHealthStatus}`" />
+    <p class="status">{{ systemHealthStatus }}<span>%</span></p>
+  </div>
 </template>
 
 <script lang="ts">
@@ -13,7 +13,7 @@ import StatusBar from './StatusBar.vue';
 @Component({
   components: {
     StatusBar,
-  }
+  },
 })
 export default class SystemHealth extends Vue {
   get systemHealthStatus() {

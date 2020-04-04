@@ -1,9 +1,7 @@
 .chat {
   @include expand;
   padding: 0.5rem;
-  background-color: $space-white-opaque-1;
   @include make-column-and-center;
-  overflow: hidden;
 
   .title {
     width: 100%;

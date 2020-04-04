@@ -6,7 +6,11 @@
           <p>Inventory</p>
         </div>
         <div class="inventory">
-          <InventoryTable class="inventory-table" :playerData="playerInfo" :isVisible="true"/>
+          <InventoryTable
+            class="inventory-table"
+            :playerData="playerInfo"
+            :isVisible="true"
+          />
         </div>
       </div>
 
@@ -16,10 +20,11 @@
         </div>
         <div class="outer-wrapper">
           <div class="wrapper">
-            <Accomplishment
+            <AccomplishmentCard
               v-for="accomplishment in purchasableAccomplishments"
               :key="accomplishment.label + 2"
               :accomplishment="accomplishment"
+              :type="cardType"
             />
           </div>
         </div>
@@ -30,16 +35,17 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import Accomplishment from './discard/Accomplishment.vue';
+import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
 import InventoryTable from '@port-of-mars/client/components/game/InventoryTable.vue';
 import { canPurchaseAccomplishment } from '@port-of-mars/shared/validation';
+import { AccomplishmentCardType } from '@port-of-mars/client/types/cards.ts';
 import { AccomplishmentData } from '@port-of-mars/shared/types';
 
 @Component({
   components: {
-    Accomplishment,
+    AccomplishmentCard,
     InventoryTable,
-  }
+  },
 })
 export default class Discard extends Vue {
   get purchasableAccomplishments() {
@@ -57,11 +63,15 @@ export default class Discard extends Vue {
       });
   }
 
-  get playerInfo(){
+  get playerInfo() {
     return {
       info: this.$tstore.getters.player,
-      isSelf:true,
-    }
+      isSelf: true,
+    };
+  }
+
+  get cardType() {
+    return AccomplishmentCardType.discard;
   }
 }
 </script>

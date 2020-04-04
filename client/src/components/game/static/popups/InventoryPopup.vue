@@ -59,7 +59,7 @@ import {
   Investment,
   Resource,
   RESOURCES,
-  Phase
+  Phase,
 } from '@port-of-mars/shared/types';
 
 library.add(faCaretUp);
@@ -67,7 +67,7 @@ library.add(faCaretDown);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 @Component({
-  components: {}
+  components: {},
 })
 export default class InventoryPopup extends Vue {
   private visible: boolean = false;
@@ -77,7 +77,7 @@ export default class InventoryPopup extends Vue {
   }
 
   get position() {
-    return this.visible ? { bottom: '0rem' } : { bottom: '-46rem' };
+    return this.visible ? { bottom: '0rem' } : { bottom: '-45rem' };
   }
 
   get investments() {
@@ -85,11 +85,11 @@ export default class InventoryPopup extends Vue {
     const inventory = p.inventory;
     const pendingInventory = p.pendingInvestments;
     const costs = p.costs;
-    return RESOURCES.map(name => ({
+    return RESOURCES.map((name) => ({
       name,
       units: inventory[name as Resource],
       pendingUnits: pendingInventory[name as Resource],
-      cost: costs[name as Resource]
+      cost: costs[name as Resource],
     }));
   }
 
@@ -101,7 +101,7 @@ export default class InventoryPopup extends Vue {
       name: 'System Health',
       units: p.contributedUpkeep,
       pendingUnits: pendingInvestment.upkeep,
-      cost: costs.upkeep
+      cost: costs.upkeep,
     };
   }
 

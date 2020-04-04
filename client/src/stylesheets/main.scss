@@ -22,7 +22,8 @@ html {
 
 body {
   font-family: $font-family-default !important;
-  background-color: $space-gray;
+  // background-color: $space-gray;
+  background-color: $space-gray-0975;
   overflow: hidden;
 
   --space-gray: #1e2223;

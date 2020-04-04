@@ -33,12 +33,12 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { AccomplishmentData, RESEARCHER } from '@port-of-mars/shared/types';
-import CardAccomplishment from '@port-of-mars/client/components/game/accomplishments/CardAccomplishment.vue';
+import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
 
 @Component({
   components: {
-    CardAccomplishment
-  }
+    AccomplishmentCard,
+  },
 })
 export default class AccomplishmentsSelectPurchased extends Vue {
   private purchasedAccomplishmentsLength: number = -1;
@@ -54,7 +54,7 @@ export default class AccomplishmentsSelectPurchased extends Vue {
     culture: 0,
     upkeep: 0,
     victoryPoints: 0,
-    effect: ''
+    effect: '',
   };
 
   // get purchasableAccomplishments() {
@@ -101,7 +101,7 @@ export default class AccomplishmentsSelectPurchased extends Vue {
     if (a.id === this.selectedPurchasedAccomplishment.id) {
       return {
         backgroundColor: 'var(--new-space-orange)',
-        color: 'var(--space-gray)'
+        color: 'var(--space-gray)',
       };
     }
     return {};

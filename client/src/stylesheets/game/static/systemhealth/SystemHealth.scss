@@ -1,9 +1,6 @@
-.top {
-  height: 2rem;
-  width: 98%;
-  margin: 0 auto;
-  margin-bottom: 0.5rem;
-  
+.c-systemhealth {
+  width: 100%;
+  padding-bottom: 0.5rem;
   @include make-center;
 
   p {
@@ -29,4 +26,3 @@
     }
   }
 }
-
