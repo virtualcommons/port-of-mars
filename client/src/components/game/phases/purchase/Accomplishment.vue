@@ -18,13 +18,15 @@
         <div
           v-for="investment in accomplishmentCost"
           :class="{
-            'unattainable-resource': shouldResourceBeGrayedOut(investment)
+            'unattainable-resource': shouldResourceBeGrayedOut(investment),
           }"
           :key="investment + Math.random()"
           class="container"
         >
           <img
-            :src="require(`@port-of-mars/client/assets/icons/${investment}.svg`)"
+            :src="
+              require(`@port-of-mars/client/assets/icons/${investment}.svg`)
+            "
             alt="Investment"
           />
         </div>
@@ -44,13 +46,13 @@ import {
   Component,
   Prop,
   InjectReactive,
-  Inject
+  Inject,
 } from 'vue-property-decorator';
 import {
   AccomplishmentData,
   Investment,
   INVESTMENTS,
-  Resource
+  Resource,
 } from '@port-of-mars/shared/types';
 import * as _ from 'lodash';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
@@ -73,15 +75,15 @@ export default class Accomplishment extends Vue {
       culture: undefined,
       upkeep: undefined,
       victoryPoints: undefined,
-      effect: undefined
-    })
+      effect: undefined,
+    }),
   })
   private accomplishment!: AccomplishmentData;
 
   get accomplishmentCost() {
     return INVESTMENTS.filter(
-      investment => this.accomplishment[investment] !== 0
-    ).flatMap(investment =>
+      (investment) => this.accomplishment[investment] !== 0
+    ).flatMap((investment) =>
       _.fill(Array(Math.abs(this.accomplishment[investment])), investment)
     );
   }

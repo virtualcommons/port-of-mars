@@ -1,5 +1,51 @@
 <template>
-  <div class="container-investments tour-investments">
+  <div class="c-containerinvestments tour-investments container">
+    <div class="wrapper row">
+      <div class="timeblockinvestments col-8">
+        <div class="topbar">
+          <p class="title">Time Blocks</p>
+          <!-- <DiscreteStatusBar
+            class="discretestatusbar"
+            :usedTimeBlocks="remainingTimeBlocks"
+            :totalTimeBlocks="timeBlockTotal"
+          /> -->
+          <TimeBlockMeter
+            class="discretestatusbar"
+            :usedTimeBlocks="remainingTimeBlocks"
+            :totalTimeBlocks="timeBlockTotal"
+          />
+          <p class="status">{{ remainingTimeBlocks }}</p>
+          <font-awesome-icon :icon="['fas', 'clock']" size="lg" class="icon" />
+        </div>
+
+        <div class="cards">
+          <CardInvestment
+            v-for="cost in costs"
+            v-bind="cost"
+            :key="cost.name"
+            @input="setInvestmentAmount"
+          />
+        </div>
+      </div>
+      <div class="availableaccomplishments col-4">
+        <div class="topbar">
+          <p class="title">Purchasable Accomplishments</p>
+        </div>
+        <div class="outer-wrapper">
+          <div class="wrapper">
+            <!-- <BarAccomplishment
+              v-for="accomplishment in purchasableAccomplishments"
+              :accomplishment="accomplishment"
+              :purchase="false"
+              :discard="false"
+              :key="accomplishment.label + Math.random()"
+            /> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="container-investments tour-investments">
     <div class="wrapper">
       <div class="topbar">
         <p class="title">Time Blocks</p>
@@ -22,26 +68,37 @@
         />
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script lang="ts">
 import { Vue, Component, Inject } from 'vue-property-decorator';
-import { INVESTMENTS, Resource, ResourceCostData } from '@port-of-mars/shared/types';
+import {
+  INVESTMENTS,
+  Resource,
+  ResourceCostData,
+  AccomplishmentData,
+} from '@port-of-mars/shared/types';
+import { canPurchaseAccomplishment } from '@port-of-mars/shared/validation';
+import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
 import TimeBlockMeter from './investment/TimeBlockMeter.vue';
 import CardInvestment from './investment/CardInvestment.vue';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faClock } from '@fortawesome/free-solid-svg-icons/faClock';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import * as _ from 'lodash';
-import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
+
+library.add(faClock);
+Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 @Component({
   components: {
     TimeBlockMeter,
-    CardInvestment
-  }
+    CardInvestment,
+  },
 })
 export default class Investments extends Vue {
-  @Inject()
-  readonly api!: TutorialAPI;
+  @Inject() readonly api!: TutorialAPI;
 
   get costs(): any {
     const p = this.$tstore.getters.player;
@@ -79,7 +136,7 @@ export default class Investments extends Vue {
     );
   }
 
-  get isInTutorial(){
+  get isInTutorial() {
     return this.$tstore.getters.layout === 'tutorial';
   }
 
@@ -99,17 +156,32 @@ export default class Investments extends Vue {
       this.$tstore.commit('SET_PENDING_INVESTMENT_AMOUNT', {
         investment: msg.name,
         units: msg.units,
-        role: this.$tstore.state.role
+        role: this.$tstore.state.role,
       });
     }
 
-    if(this.isInTutorial){
+    if (this.isInTutorial) {
       this.api.investTimeBlocks();
     }
   }
 
   get timeBlockTotal() {
     return this.$store.getters.player.timeBlocks;
+  }
+
+  get purchasableAccomplishments() {
+    return this.$store.getters.player.accomplishments.purchasable
+      .slice()
+      .sort((a: AccomplishmentData, b: AccomplishmentData) => {
+        return (
+          Number(
+            canPurchaseAccomplishment(b, this.$store.getters.player.inventory)
+          ) -
+          Number(
+            canPurchaseAccomplishment(a, this.$store.getters.player.inventory)
+          )
+        );
+      });
   }
 }
 </script>
