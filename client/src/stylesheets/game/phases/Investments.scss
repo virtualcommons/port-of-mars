@@ -74,6 +74,7 @@
 
       .outer-wrapper {
         height: 90%;
+        // height: calc(90% - 0.5rem);
         width: 100%;
         padding: 0.5rem;
         background-color: $space-white-opaque-1;
