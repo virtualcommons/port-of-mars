@@ -30,10 +30,10 @@ const steps:Array<Step> = [
         params: {
           placement: 'left'
         },
-        stateTransform:[
+        stateTransform: [
           {
             SET_LAYOUT: 'tutorial',
-            ADD_TO_CHAT:{
+            ADD_TO_CHAT: {
               message:'Welcome to the Port of Mars!',
               role:CURATOR,
               dateCreated:new Date().getTime(),
