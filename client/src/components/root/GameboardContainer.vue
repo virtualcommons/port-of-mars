@@ -16,7 +16,7 @@
         <InventoryPopup />
       </div>
       <div class="chatwrapper col-3">
-        <Chat/>
+        <Chat />
       </div>
     </div>
 </div>
