@@ -1,5 +1,5 @@
 <template>
-    <div class="top">
+    <div class="top tour-container-upkeep">
       <p class="title">System Health</p>
       <StatusBar class="statusbar" :setWidth="`${systemHealthStatus}`" />
       <p class="status">{{ systemHealthStatus }}<span>%</span></p>

@@ -17,7 +17,7 @@ const steps:Array<Step> = [
         'There are multiple phases in a round: Events, Invest, Trade, Purchase ' +
         ' and Discard. Each phase has a time limit of 5 minutes.',
       params: {
-        placement: 'bottom'
+        placement: ''
       }
     },
     {
