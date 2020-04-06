@@ -15,6 +15,11 @@
     </button>
     <div class="wrapper" v-show="visible">
       <p>Logged in as {{ username }}</p>
+      <router-link :to="'dashboard'">
+        <button>
+          <span>Your Dashboard</span>
+        </button>
+      </router-link>
       <button @click="logoutUser">
         <font-awesome-icon :icon="['fas', 'sign-out-alt']" size="sm" /><span
           >Log Out</span
@@ -34,6 +39,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
+import { BButton } from 'bootstrap-vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons/faCaretRight';
 import { faCaretLeft } from '@fortawesome/free-solid-svg-icons/faCaretLeft';
@@ -48,7 +54,9 @@ library.add(faExclamationTriangle);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 @Component({
-  components: {}
+  components: {
+    BButton
+  }
 })
 export default class ProfileMenu extends Vue {
   private visible: boolean = false;
