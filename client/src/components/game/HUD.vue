@@ -2,13 +2,13 @@
   <div class="c-gameboardtop container">
     <div class="bottom row">
       <!-- REFACTOR :: PlayerContainer -->
-      <div class="players col-6">
+      <div class="players col-6 tour-profile">
         <div class="wrapper container">
           <div class="row">
-            <div class="player col-5">
+            <div class="player col- tour-profile-self">
               <Player />
             </div>
-            <div class="others col-7">
+            <div class="others col-7 tour-players">
               <OtherPlayers
                 v-for="player in otherPlayers"
                 v-bind="player"
