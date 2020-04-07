@@ -22,7 +22,7 @@ import TradeRequestModal from './TradeRequestModal.vue';
         TradeRequestModal
     }
 })
-export default class ModalConroller extends Vue{
+export default class ModalController extends Vue{
 
     get showAnyModal(){
         return this.playerModalVisibility.visible || this.tradeRequestModalVisibility.visible;
