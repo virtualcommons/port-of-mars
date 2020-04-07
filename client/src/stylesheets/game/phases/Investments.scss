@@ -6,6 +6,14 @@
     padding: 0.5rem;
     @include make-column-and-center;
 
+    .header-text {
+      color: $new-space-orange;
+      font-weight: bold;
+      border-bottom: solid 1px;
+      border-color: $space-white;
+      padding-right: 6rem;
+    }
+
     .topbar {
       height: 10%;
       width: 100%;
@@ -39,12 +47,43 @@
       }
     }
 
+    .action-container {
+      @include expand;
+      display: flex;
+      // align-items: flex-start;
+      align-items: stretch;
+    }
+
     .cards {
       height: 90%;
       width: 100%;
-      margin: 0;
       display: flex;
       flex-wrap: wrap;
+    }
+
+    .player-accomplishments {
+      width: 50%;
+
+      .active-text,
+      .purchased-text {
+        color: $new-space-orange;
+        font-weight: bold;
+      }
+
+      .accomplishment-wrapper {
+        display: flex;
+        min-height: 18rem;
+        max-height: 18rem;
+        flex: 1 1 0;
+
+        justify-content: space-between;
+        position: relative;
+
+        .active,
+        .purchased {
+          width: 48%;
+        }
+      }
     }
   }
 }

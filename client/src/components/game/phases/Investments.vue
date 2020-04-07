@@ -13,7 +13,8 @@
         <p class="status">[ {{ remainingTimeBlocks }} ]</p>
       </div>
 
-      <div class="cards">
+      <div class="action-container">
+        <div class="cards">
         <CardInvestment
           v-for="cost in costs"
           v-bind="cost"
@@ -21,27 +22,67 @@
           @input="setInvestmentAmount"
         />
       </div>
+      <div class="player-accomplishments">
+        <h4 class="header-text">Accomplishments</h4>
+        <div class="accomplishment-wrapper">
+          <div class="active">
+            <p class="active-text">Active</p>
+            <!-- <ContainerAccomplishmentsGeneral
+              :accomplishmentSet="activeAccomplishments"
+              :isVisible="playerData.isSelf"
+            /> -->
+          </div>
+          <div class="purchased">
+            <p class="purchased-text">Purchased</p>
+            <!-- <ContainerAccomplishmentsGeneral
+              :accomplishmentSet="purchasedAccomplishments"
+              :isVisible="playerData.isSelf"
+            /> -->
+          </div>
+        </div>
+      </div>
+
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Inject } from 'vue-property-decorator';
-import { INVESTMENTS, Resource, ResourceCostData } from '@port-of-mars/shared/types';
-import TimeBlockMeter from './investment/TimeBlockMeter.vue';
-import CardInvestment from './investment/CardInvestment.vue';
-import * as _ from 'lodash';
-import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
+import { Vue, Component, Prop, Inject } from "vue-property-decorator";
+import { INVESTMENTS, Resource, ResourceCostData, Role } from "@port-of-mars/shared/types";
+import ContainerAccomplishmentsGeneral from "@port-of-mars/client/components/game/accomplishments/ContainerAccomplishmentsGeneral.vue";
+import TimeBlockMeter from "./investment/TimeBlockMeter.vue";
+import CardInvestment from "./investment/CardInvestment.vue";
+import * as _ from "lodash";
+import { TutorialAPI } from "@port-of-mars/client/api/tutorial/request";
 
 @Component({
   components: {
     TimeBlockMeter,
-    CardInvestment
+    CardInvestment,
+    ContainerAccomplishmentsGeneral
   }
 })
 export default class Investments extends Vue {
   @Inject()
   readonly api!: TutorialAPI;
+
+  @Prop() role!: Role;
+
+  get playerData() {
+    return {
+      info: this.$tstore.state.players[this.role],
+      isSelf: this.role == this.$tstore.getters.player.role
+    };
+  }
+
+  get activeAccomplishments() {
+    return this.playerData.info.accomplishments.purchasable;
+  }
+
+  get purchasedAccomplishments() {
+    return this.playerData.info.accomplishments.purchased;
+  }
 
   get costs(): any {
     const p = this.$tstore.getters.player;
@@ -72,38 +113,28 @@ export default class Investments extends Vue {
       timeBlocks -
       _.reduce(
         INVESTMENTS,
-        (tot, investment) =>
-          tot + pendingInvestments[investment] * costs[investment],
+        (tot, investment) => tot + pendingInvestments[investment] * costs[investment],
         0
       )
     );
   }
 
-  get isInTutorial(){
-    return this.$tstore.getters.layout === 'tutorial';
+  get isInTutorial() {
+    return this.$tstore.getters.layout === "tutorial";
   }
 
-  private setInvestmentAmount(msg: {
-    name: Resource;
-    units: number;
-    cost: number;
-  }) {
-    const pendingInvestments = _.clone(
-      this.$tstore.getters.player.pendingInvestments
-    );
+  private setInvestmentAmount(msg: { name: Resource; units: number; cost: number }) {
+    const pendingInvestments = _.clone(this.$tstore.getters.player.pendingInvestments);
     pendingInvestments[msg.name] = msg.units;
-    if (
-      msg.units >= 0 &&
-      this.getRemainingTimeBlocks(pendingInvestments) >= 0
-    ) {
-      this.$tstore.commit('SET_PENDING_INVESTMENT_AMOUNT', {
+    if (msg.units >= 0 && this.getRemainingTimeBlocks(pendingInvestments) >= 0) {
+      this.$tstore.commit("SET_PENDING_INVESTMENT_AMOUNT", {
         investment: msg.name,
         units: msg.units,
         role: this.$tstore.state.role
       });
     }
 
-    if(this.isInTutorial){
+    if (this.isInTutorial) {
       this.api.investTimeBlocks();
     }
   }
@@ -115,5 +146,5 @@ export default class Investments extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/Investments.scss';
+@import "@port-of-mars/client/stylesheets/game/phases/Investments.scss";
 </style>
