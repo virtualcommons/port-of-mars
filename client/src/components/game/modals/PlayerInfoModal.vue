@@ -88,7 +88,7 @@ import ContainerAccomplishmentsGeneral from '@port-of-mars/client/components/gam
         ContainerAccomplishmentsGeneral
     }
 })
-export default class ModalConroller extends Vue{
+export default class ModalController extends Vue{
     @Prop() role!:Role;
     private errorMessageActive:boolean = false;
 
