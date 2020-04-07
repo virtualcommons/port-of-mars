@@ -1,6 +1,6 @@
 import { Game, GameEvent, Player, User } from "@port-of-mars/server/entity";
 import * as ge from "@port-of-mars/server/rooms/game/events/types";
-import { GameOpts, Metadata, Persister } from "@port-of-mars/server/rooms/game/types";
+import {GameOpts, Metadata, Persister} from "@port-of-mars/server/rooms/game/types";
 import * as assert from "assert";
 import Mutex from "async-mutex/lib/Mutex";
 import { ClockTimer } from "@gamestdio/timer/lib/ClockTimer";
@@ -53,6 +53,31 @@ export class DBPersister implements Persister {
     return this._em ?? getConnection().manager;
   }
 
+  async selectUsersByUsername(em: EntityManager, usernames: Array<string>) {
+    const userRepo = em.getRepository(User);
+    const q = await userRepo.createQueryBuilder('user')
+      .select('id')
+      .addSelect('username')
+      .where('user.username IN (:...usernames)', {usernames});
+    const rawUsers = await q.getRawMany();
+    assert.equal(rawUsers.length, usernames.length);
+    return rawUsers
+  }
+
+  async createPlayers(em: EntityManager, gameId: number, userRoles: GameOpts['userRoles'], rawUsers: Array<User>): Promise<Array<Player>> {
+    const players = [];
+    for (const ru of rawUsers) {
+      const p = {
+        userId: ru.id,
+        role: userRoles[ru.username],
+        gameId
+      };
+      players.push(p);
+    }
+    const pu = em.getRepository(Player);
+    return await pu.save(pu.create(players));
+  }
+
   async initialize(options: GameOpts, roomId: string): Promise<number> {
     const g = new Game();
     const f = async (em: EntityManager) => {
@@ -62,30 +87,9 @@ export class DBPersister implements Persister {
       g.tournamentRoundId = options.tournamentRoundId;
       g.roomId = roomId;
 
-      const userRepo = em.getRepository(User);
-      const usernames = Object.keys(options.userRoles);
-      const q = await userRepo.createQueryBuilder('user')
-        .select('id')
-        .addSelect('username')
-        .where('user.username IN (:...usernames)', { usernames });
-      const rawUsers = await q.getRawMany();
-      assert.equal(rawUsers.length, usernames.length);
-
+      const rawUsers = await this.selectUsersByUsername(em, Object.keys(options.userRoles));
       await em.save(g);
-
-      const players = [];
-      for (const rawUser of rawUsers) {
-        const p = {
-          userId: rawUser.id,
-          role: options.userRoles[rawUser.username],
-          gameId: g.id
-        };
-        players.push(p);
-      }
-      await em.getRepository(Player).createQueryBuilder()
-        .insert()
-        .values(players)
-        .execute();
+      await this.createPlayers(em, g.id, options.userRoles, rawUsers);
 
       return g.id;
     };

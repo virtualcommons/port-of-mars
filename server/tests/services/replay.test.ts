@@ -18,6 +18,7 @@ import {Persister} from "@port-of-mars/server/rooms/game/types";
 import {ServiceProvider} from "@port-of-mars/server/services";
 import {Player, Tournament, TournamentRound, User} from "@port-of-mars/server/entity";
 import {getAccomplishmentByID} from "@port-of-mars/server/data/Accomplishment";
+import {createRound, createTournament, createUsers, initTransaction, rollbackTransaction} from "./common";
 
 describe('a game', () => {
   const opts = mockGameStateInitOpts();
@@ -47,28 +48,13 @@ describe('a game', () => {
     let users: Array<User>;
 
     beforeAll(async () => {
-      conn = await createConnection('test');
-      qs = conn.createQueryRunner();
-      await qs.startTransaction();
-      manager = qs.manager;
+      [conn, qs, manager] = await initTransaction();
       persister = new DBPersister(manager);
       sp = new ServiceProvider(manager);
-      t = await sp.tournament.createTournament({name: 'First', active: true});
-      tr = await sp.tournament.createRound({
-        exitSurveyUrl: '',
-        introSurveyUrl: '',
-        startDate: new Date('1970 01 01'),
-        endDate: new Date('1970 01 03'),
-        roundNumber: 1,
-        tournamentId: t.id
-      });
-      const userRepo = manager.getRepository(User);
+      t = await createTournament(sp);
+      tr = await createRound(sp, {tournamentId: t.id});
       // mock game state init opts wants five users with bob in the username
-      users = await userRepo.save(userRepo.create([1, 2, 3, 4, 5].map(pk => ({
-        name: `Bob${pk}`,
-        username: `bob${pk}`,
-        email: `bob${pk}@bar.com`
-      }))));
+      users = await createUsers(manager, 'bob', [1,2,3,4,5]);
     });
 
     it('can be loaded into the database and finalized', async () => {
@@ -90,11 +76,7 @@ describe('a game', () => {
 
     });
 
-    afterAll(async () => {
-      await qs.rollbackTransaction();
-      await qs.release();
-      await conn.close();
-    });
+    afterAll(async () => rollbackTransaction(conn, qs));
   });
 
   it('should preserve all data of the original game play through', () => {
