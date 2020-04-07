@@ -24,17 +24,6 @@ export class AccountService {
     return await this.getRepository().findOne(id);
   }
 
-  async findOrCreateUser(username: string): Promise<[boolean, User]> {
-    const repository = this.getRepository();
-    let user = await repository.findOne({username});
-    let created = false;
-    if (!user) {
-      user = repository.create({username, name: ''});
-      created = true;
-    }
-    return [created, user];
-  }
-
   async getOrCreateUser(username: string): Promise<User> {
     const user = await this.getRepository().findOne({username});
     if (user) {
