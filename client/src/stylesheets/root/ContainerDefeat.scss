@@ -16,12 +16,28 @@
         flex-direction: column;
         height: 20rem;
         overflow-y: scroll;
-        //@include disable-scroll;
 
         .message{
             margin-bottom: 1rem;
             padding:0.4rem;
             
+            .header{
+                display: flex;
+                justify-content: space-between;
+                
+                .event-number{
+                    color: $new-space-orange;
+                    .final-log{
+                        color: white;
+                        font-style: italic;
+                        font-weight: bold;
+                    }
+
+                    .list{
+                        color: white;
+                    }
+                }
+            }
         }
 
         &:last-child {
