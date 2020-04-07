@@ -54,7 +54,7 @@ export abstract class BaseEvent implements MarsEventState {
 export class Sandstorm extends BaseEvent {
   finalize(game: GameState): void {
     game.upkeep -= 10;
-    game.log('A sandstorm has decreased system health by 10.', 'Mars Event');
+    game.log('A sandstorm has decreased system health by 10.', 'Mars Event- Sandstorm');
   }
 }
 
@@ -151,7 +151,7 @@ export class PersonalGain extends BaseEvent {
     game.subtractUpkeep(subtractedUpkeep);
 
     const message = `System health decreased by ${this.subtractedUpkeepTotal(subtractedUpkeep)}. The following players voted yes: ${this.playersVoteYes(this.votes)}`;
-    game.log(message, 'Mars Event');
+    game.log(message, 'Mars Event- Personal Gain');
   }
 
   getData() {
@@ -213,7 +213,7 @@ export class CompulsivePhilanthropy extends BaseEvent {
     game.players[winner].timeBlocks = 0;
     game.log(
       `The ${winner} was voted to be Compulsive Philanthropist with ${count} votes. The ${winner} invested all of their timeblocks into System Health.`,
-      'Mars Event'
+      'Mars Event- Complulsive Philanthropy'
     );
   }
 
@@ -252,7 +252,7 @@ abstract class OutOfCommission extends BaseEvent {
     game.players[role].timeBlocks = 3;
     game.log(
       `${this.player} has 3 timeblocks to invest during this round.`,
-      'Mars Event'
+      'Mars Event- Out Of Commission'
     );
   }
 
@@ -314,7 +314,7 @@ export class Audit extends BaseEvent {
   finalize(game: GameState) {
     game.log(
       `You will be able to view other players' resources. Hover over each player tab on the right to reveal their inventory.`,
-      'Mars Event'
+      'Mars Event- Audit'
     );
   }
 }
@@ -368,7 +368,7 @@ export class BondingThroughAdversity extends BaseEvent {
 
     }
     const message = `Players have gained one influence currency of their choice.`
-    game.log(message, 'Mars Event');
+    game.log(message, 'Mars Event- Bonding Through Adversity');
   }
 
   /**
@@ -390,7 +390,7 @@ export class ChangingTides extends BaseEvent {
     }
     game.log(
       'Each player discards their current Accomplishments and draws one new Accomplishment.',
-      'Mars Event'
+      'Mars Event- Changing Tides'
     );
   }
 }
