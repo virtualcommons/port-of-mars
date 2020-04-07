@@ -1,7 +1,5 @@
 import http from "http";
-import {Client, Room} from 'colyseus';
-import {Requests, Responses} from '@port-of-mars/shared/game';
-import {GameState, Player} from '@port-of-mars/server/rooms/game/state';
+import { Client, Room } from 'colyseus';
 import {
   AcceptTradeRequestCmd,
   BondingThroughAdversityCmd,
@@ -24,13 +22,15 @@ import {
   TimeInvestmentCmd,
   VoteForPhilanthropistCmd
 } from '@port-of-mars/server/rooms/game/commands';
-import {Game, GameOpts, Metadata, Persister} from '@port-of-mars/server/rooms/game/types';
-import {Command} from '@port-of-mars/server/rooms/game/commands/types';
-import {TakenStateSnapshot} from '@port-of-mars/server/rooms/game/events';
-import {User} from "@port-of-mars/server/entity/User";
-import {settings} from "@port-of-mars/server/settings";
-import {getServices} from "@port-of-mars/server/services";
-import {Phase} from "@port-of-mars/shared/types";
+import { User } from "@port-of-mars/server/entity";
+import { Command } from '@port-of-mars/server/rooms/game/commands/types';
+import { TakenStateSnapshot } from '@port-of-mars/server/rooms/game/events';
+import { GameState, Player } from '@port-of-mars/server/rooms/game/state';
+import { Game, GameOpts, Metadata, Persister } from '@port-of-mars/server/rooms/game/types';
+import { getServices } from "@port-of-mars/server/services";
+import { settings } from "@port-of-mars/server/settings";
+import { Requests, Responses } from '@port-of-mars/shared/game';
+import { Phase } from "@port-of-mars/shared/types";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -43,16 +43,21 @@ export class GameRoom extends Room<GameState> implements Game {
 
   async onAuth(client: Client, options: any, request: http.IncomingMessage) {
     try {
-      logger.debug('GameRoom.onAuth for client:', client.id);
-      const user = await getServices().account.findUserById((request as any).session.passport.user);
-      logger.debug('GameRoom.onAuth found user:', user);
-      if (this.state.hasUser(user?.username)) {
-        return user;
+      logger.debug(`GameRoom.onAuth: checking client ${client.id} in ${this.roomId}`);
+      const userId = (request as any).session.passport.user;
+      const user = await getServices().account.findUserById(userId);
+      if (user) {
+        const username = user.username;
+        logger.debug(`GameRoom.onAuth found user ${username}`);
+        if (this.state.hasUser(username)) {
+          return user;
+        }
       }
+      logger.debug(`GameRoom.onAuth: ${userId} not found or does not belong to this GameRoom`);
       return false;
     }
     catch (e) {
-      logger.fatal('GameRoom.onAuth exception: ', e);
+      logger.fatal(`GameRoom.onAuth exception: ${e}`);
       return false;
     }
   }
@@ -155,9 +160,10 @@ export class GameRoom extends Room<GameState> implements Game {
     logger.info('player left:', client.id);
     try {
       player.connected = false;
-      await this.allowReconnection(client);
-      logger.info("player", client.id, "reconnected to", this.roomId);
+      const reconnectedClient = await this.allowReconnection(client);
+      logger.info(`client ${reconnectedClient.id} reconnected to ${this.roomId}`)
       player.connected = true;
+      this.safeSend(reconnectedClient, { kind: 'set-player-role', role: player.role });
     } catch (e) {
       logger.fatal(e);
     }
@@ -170,7 +176,7 @@ export class GameRoom extends Room<GameState> implements Game {
   }
 
   async onDispose() {
-    logger.info('Disposing of room', this.roomId)
+    logger.info('Disposing of room', this.roomId);
   }
 
 }
