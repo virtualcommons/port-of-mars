@@ -3,11 +3,11 @@ import { Phase, } from "@port-of-mars/shared/types";
 
 const steps:Array<Step> = [
     {
-      target: '.tour-container-bottom',
+      target: '.tour-event-deck',
       content:
         `The first phase in a round is the Events phase! This is where the Events of the round will be revealed.`,
       params: {
-        placement: TOP
+        placement: 'right'
       },
       stateTransform: [
         {SET_GAME_PHASE:Phase.events,
@@ -22,11 +22,11 @@ const steps:Array<Step> = [
       }],
     },
     {
-      target: '.tour-container-bottom',
+      target: '.tour-active-events',
       content: 'Some Events can be more involved and require players to fulfill tasks ' +
       'that include voting. Mars is unpredictable; many different events can happen!',
       params:{
-        placement: TOP,
+        placement: 'right',
       }
     },
     {
@@ -37,15 +37,14 @@ const steps:Array<Step> = [
       }
     },
     {
-        target: '.tour-phase',
+        target: '.tour-event-deck',
         content:
           'Events persisting multiple rounds or relevant to the current round ' +
           'will be shown here.',
         params: {
-          placement: 'left'
+          placement: 'right'
         },
-
-
+        
       },
 ]
 

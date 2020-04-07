@@ -1,6 +1,6 @@
 <template>
     <div class="events-container">
-        <div class="event-deck-container">
+        <div class="event-deck-container tour-event-deck">
             <div class="section-text">
                 <p>Event Deck</p>
             </div>
@@ -16,7 +16,7 @@
 
         </div>
 
-        <div class="active-event-container">
+        <div class="active-event-container tour-active-events">
             <div class="section-text">
                 <p>Active Events</p>
             </div>
