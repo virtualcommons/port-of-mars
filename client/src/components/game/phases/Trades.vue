@@ -5,7 +5,7 @@
         <div class="section-text">
           <p>Active Trade List</p>
         </div>
-        <button class="request-trade-button" @click="handleOpenTradeRequest()">Request a trade </button>
+        <button class="request-trade-button tour-trade-partner" @click="handleOpenTradeRequest()">Request a trade </button>
       </div>
 
       <div class="trades-wrapper">

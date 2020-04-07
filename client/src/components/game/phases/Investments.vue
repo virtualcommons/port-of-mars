@@ -1,7 +1,7 @@
 <template>
   <div class="container-investments tour-investments">
     <div class="wrapper">
-      <div class="topbar">
+      <div class="topbar tour-time-blocks">
         <p class="title">Time Blocks</p>
 
         <TimeBlockMeter
@@ -22,21 +22,21 @@
           @input="setInvestmentAmount"
         />
       </div>
-      <div class="player-accomplishments">
+      <div class="player-accomplishments tour-accomplishments">
         <h4 class="header-text">Accomplishments</h4>
         <div class="accomplishment-wrapper">
           <div class="active">
             <p class="active-text">Active</p>
             <!-- <ContainerAccomplishmentsGeneral
               :accomplishmentSet="activeAccomplishments"
-              :isVisible="playerData.isSelf"
+              :isVisible="true"
             /> -->
           </div>
           <div class="purchased">
             <p class="purchased-text">Purchased</p>
             <!-- <ContainerAccomplishmentsGeneral
               :accomplishmentSet="purchasedAccomplishments"
-              :isVisible="playerData.isSelf"
+              :isVisible="true"
             /> -->
           </div>
         </div>
@@ -69,6 +69,9 @@ export default class Investments extends Vue {
 
   @Prop() role!: Role;
 
+  active = this.$tstore.state.players[this.role].accomplishments.purchasable;
+  purchased = this.$tstore.state.players[this.role].accomplishments.purchased;
+
   get playerData() {
     return {
       info: this.$tstore.state.players[this.role],
@@ -77,11 +80,11 @@ export default class Investments extends Vue {
   }
 
   get activeAccomplishments() {
-    return this.playerData.info.accomplishments.purchasable;
+    return this.active;
   }
 
   get purchasedAccomplishments() {
-    return this.playerData.info.accomplishments.purchased;
+    return this.purchased;
   }
 
   get costs(): any {
