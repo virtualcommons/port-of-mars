@@ -1,13 +1,13 @@
 import { Step, TOP } from "@port-of-mars/client/types/tutorial";
-import { Phase, } from "@port-of-mars/shared/types";
+import { Phase } from "@port-of-mars/shared/types";
 
 const steps:Array<Step> = [
     {
-      target: '.tour-event-deck',
+      target: '.tour-event',
       content:
         `The first phase in a round is the Events phase! This is where the Events of the round will be revealed.`,
       params: {
-        placement: 'right'
+        placement: TOP,
       },
       stateTransform: [
         {SET_GAME_PHASE:Phase.events,

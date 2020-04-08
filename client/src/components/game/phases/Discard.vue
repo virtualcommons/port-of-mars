@@ -1,5 +1,5 @@
 <template>
-  <div class="container-purchase tour-purchase">
+  <div class="container-purchase tour-discard">
     <div class="purchase-row">
       <div class="info">
         <div class="section-text">

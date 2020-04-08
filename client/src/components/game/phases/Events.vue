@@ -1,6 +1,6 @@
 <template>
-    <div class="events-container">
-        <div class="event-deck-container tour-event-deck">
+    <div class="events-container tour-event">
+        <div class="event-deck-container">
             <div class="section-text">
                 <p>Event Deck</p>
             </div>
