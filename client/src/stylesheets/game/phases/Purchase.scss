@@ -1,64 +1,80 @@
-.container-purchase {
+.c-purchase {
   @include expand;
+  max-width: none;
+  @include reset-padding-margin;
 
-  .purchase-row {
+  .wrapper {
     @include expand;
-    display: flex;
-    min-height: 100%;
-    justify-content: space-around;
+    max-width: none;
+    @include reset-padding-margin;
 
-    .section-text {
-      height: 10%;
-      width: 100%;
-      @include make-center;
-      background-color: $new-space-orange;
-  
-      p {
-        margin-bottom: 0;
-        font-weight: bold;
-      }
-    }
-
-    .info {
+    .inventory {
       height: 100%;
-      @include column-3;
-      @include make-column-and-center;
-      width: 100%;
-      background-color: $space-white-opaque-1;
+      padding: 0 0.5rem 0 0;
+      @include make-column-and-top;
 
-      .section-text{
-        padding:1rem 0;
-      }
+      .topbar {
+        height: 10%;
+        flex-shrink: 0;
+        width: 100%;
+        padding: 0.25rem 1rem;
+        margin-bottom: 0.5rem;
+        @include make-center;
+        background-color: $new-space-orange;
 
-      .inventory{
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        width: 95%;
-
-        .inventory-table{
-          margin: 0 auto;
+        .title {
+          margin: 0 1rem 0 0;
+          font-size: $font-med;
+          font-weight: $font-weight-maven-pro-bold;
+          color: $space-gray;
         }
       }
-      
+
+      .outer-wrapper {
+        flex-grow: 1;
+        width: 100%;
+        overflow-y: scroll;
+
+        .wrapper {
+          width: 100%;
+          overflow-y: scroll;
+        }
+      }
     }
 
-    .actions {
+    .purchasableaccomplishments {
       height: 100%;
-      flex-grow: 1;
-      margin: 0rem 0.5rem;
-      background-color: $space-white-opaque-1;
-      overflow-y: scroll;
-      @include disable-scroll;
-      
+      padding: 0;
+      @include make-column-and-top;
+
+      .topbar {
+        height: 10%;
+        flex-shrink: 0;
+        width: 100%;
+        padding: 0.25rem 1rem;
+        margin-bottom: 0.5rem;
+        @include make-center;
+        background-color: $new-space-orange;
+
+        .title {
+          margin-bottom: 0;
+          color: $space-gray;
+          font-size: $font-med;
+          font-weight: $font-weight-maven-pro-bold;
+        }
+      }
+
       .outer-wrapper {
-        margin: 1rem 0.5rem;
-        
+        flex-grow: 1;
+        width: 100%;
+        padding: 0.5rem;
+        background-color: $space-white-opaque-1;
+        overflow-y: scroll;
+
         .wrapper {
-          min-height: 100%;
           width: 100%;
           @include make-column-and-top;
-          
+          overflow-y: scroll;
         }
       }
     }

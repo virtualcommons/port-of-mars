@@ -1,22 +1,19 @@
 <template>
-  <div class="container-purchase tour-discard">
-    <div class="purchase-row">
-      <div class="info">
-        <div class="section-text">
-          <p>Inventory</p>
+  <div class="c-discard container tour-discard">
+    <div class="wrapper row">
+      <div class="inventory col-4">
+        <div class="topbar">
+          <p class="title">Inventory</p>
         </div>
-        <div class="inventory">
-          <InventoryTable
-            class="inventory-table"
-            :playerData="playerInfo"
-            :isVisible="true"
-          />
+        <div class="outer-wrapper">
+          <div class="wrapper">
+            <Inventory :displaySystemHealth="false" />
+          </div>
         </div>
       </div>
-
-      <div class="actions">
-        <div class="section-text">
-          <p>Discardable Accomplishments</p>
+      <div class="purchasableaccomplishments col-8">
+        <div class="topbar">
+          <p class="title">Discardable Accomplishments</p>
         </div>
         <div class="outer-wrapper">
           <div class="wrapper">
@@ -36,7 +33,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
-import InventoryTable from '@port-of-mars/client/components/game/InventoryTable.vue';
+import Inventory from '@port-of-mars/client/components/game/Inventory.vue';
 import { canPurchaseAccomplishment } from '@port-of-mars/shared/validation';
 import { AccomplishmentCardType } from '@port-of-mars/client/types/cards.ts';
 import { AccomplishmentData } from '@port-of-mars/shared/types';
@@ -44,10 +41,17 @@ import { AccomplishmentData } from '@port-of-mars/shared/types';
 @Component({
   components: {
     AccomplishmentCard,
-    InventoryTable,
+    Inventory,
   },
 })
 export default class Discard extends Vue {
+  get playerInfo() {
+    return {
+      info: this.$tstore.getters.player,
+      isSelf: true,
+    };
+  }
+
   get purchasableAccomplishments() {
     return this.$store.getters.player.accomplishments.purchasable
       .slice()
@@ -61,13 +65,6 @@ export default class Discard extends Vue {
           )
         );
       });
-  }
-
-  get playerInfo() {
-    return {
-      info: this.$tstore.getters.player,
-      isSelf: true,
-    };
   }
 
   get cardType() {

@@ -14,37 +14,7 @@
       />
     </button>
     <div class="wrapper">
-      <div
-        v-for="investment in investments"
-        :key="investment.name"
-        :style="backgroundColor(investment.name)"
-        class="investment"
-      >
-        <div class="left">
-          <img
-            :src="
-              require(`@port-of-mars/client/assets/icons/${investment.name}.svg`)
-            "
-            alt="Investment"
-          />
-          <p>{{ investment.name }}</p>
-        </div>
-        <div class="right">
-          <p class="units">{{ investment.units }}</p>
-        </div>
-      </div>
-      <div :style="backgroundColor('upkeep')" class="investment">
-        <div class="left">
-          <img
-            :src="require(`@port-of-mars/client/assets/icons/upkeep.svg`)"
-            alt="Investment"
-          />
-          <p>{{ contributedSystemHealth.name }}</p>
-        </div>
-        <div class="right">
-          <p class="units">{{ contributedSystemHealth.units }}</p>
-        </div>
-      </div>
+      <Inventory />
     </div>
   </div>
 </template>
@@ -55,6 +25,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCaretUp } from '@fortawesome/free-solid-svg-icons/faCaretUp';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons/faCaretDown';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import Inventory from '@port-of-mars/client/components/game/Inventory.vue';
 import {
   Investment,
   Resource,
@@ -67,7 +38,9 @@ library.add(faCaretDown);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 @Component({
-  components: {},
+  components: {
+    Inventory,
+  },
 })
 export default class InventoryPopup extends Vue {
   private visible: boolean = false;

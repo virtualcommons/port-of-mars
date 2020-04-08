@@ -5,41 +5,52 @@
       <h3>Replaying Logs before death...</h3>
 
       <div class="message-container">
-        <div v-for="log in marsLogEvents" :style="marsLogColor(log)"  class="message" :key="log.timestamp">
+        <div
+          v-for="log in marsLogEvents"
+          :style="marsLogColor(log)"
+          class="message"
+          :key="log.timestamp + Math.random()"
+        >
           <p class="category">{{ log.category }}</p>
           <p class="content">{{ log.content }}</p>
-          <p class="time"><span>[ </span>{{ marsLogTime(log.timestamp) }}<span> ]</span></p>
+          <p class="time">
+            <span>[ </span>{{ marsLogTime(log.timestamp) }}<span> ]</span>
+          </p>
         </div>
       </div>
-      <h4 class="death-text">Final Game State:<span class="death"><i>System Health reached zero</i></span></h4>
+      <h4 class="death-text">
+        Final Game State:<span class="death"
+          ><i>System Health reached zero</i></span
+        >
+      </h4>
     </div>
 
     <div class="thanks">
       <p>Thank you for playing</p>
       <div class="buttons">
-        <button @click="handleRestart">Restart the Game</button>
-        <button @click="handleExit">Exit</button>
+        <!-- <button @click="handleRestart">Restart the Game</button> -->
+        <router-link :to="'dashboard'">
+          <button>Exit</button>
+        </router-link>
       </div>
     </div>
   </div>
-
 </template>
 
 <script lang="ts">
-import {Vue, Component, InjectReactive, Inject} from 'vue-property-decorator';
+import { Vue, Component, InjectReactive, Inject } from 'vue-property-decorator';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
-import {MarsLogData} from '@port-of-mars/shared/types';
+import { MarsLogData } from '@port-of-mars/shared/types';
 
 @Component({})
 export default class ContainerDefeat extends Vue {
   @Inject() readonly api!: GameRequestAPI;
 
-  private handleRestart() {
-    this.api.resetGame();
-  }
+  // private handleRestart() {
+  //   this.api.resetGame();
+  // }
 
-  get marsLogEvents(){
-    console.log(this.$store.getters.marsLogEvents);
+  get marsLogEvents() {
     return this.$store.getters.logs;
   }
 
@@ -52,7 +63,6 @@ export default class ContainerDefeat extends Vue {
   }
 
   marsLogColor(log: MarsLogData) {
-    console.log(log.category)
     switch (log.category) {
       case 'System Health: Drop':
         return { backgroundColor: 'var(--marslog-red)' };

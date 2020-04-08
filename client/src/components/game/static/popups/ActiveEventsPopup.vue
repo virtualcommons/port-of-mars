@@ -17,11 +17,11 @@
       <p class="empty" v-if="eventsForTheRound.length === 0">
         No Active Events
       </p>
-      <CardEvent
+      <EventCard
         v-for="(event, index) in eventsForTheRound"
-        v-show="eventVisible(index)"
-        :event="event"
         :key="index"
+        :event="event"
+        :visible="eventVisible(index)"
       />
     </div>
   </div>
@@ -33,7 +33,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCaretUp } from '@fortawesome/free-solid-svg-icons/faCaretUp';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons/faCaretDown';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import CardEvent from '@port-of-mars/client/components/game/phases/events/CardEvent.vue';
+import EventCard from '@port-of-mars/client/components/game/phases/events/EventCard.vue';
 import { Phase } from '@port-of-mars/shared/types';
 
 library.add(faCaretUp);
@@ -42,7 +42,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 @Component({
   components: {
-    CardEvent,
+    EventCard,
   },
 })
 export default class ActiveEventsPopup extends Vue {
