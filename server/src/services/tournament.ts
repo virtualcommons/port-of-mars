@@ -1,13 +1,8 @@
-import {getConnection} from '@port-of-mars/server/util';
-import {Tournament} from '@port-of-mars/server/entity/Tournament.ts';
-import {TournamentRound} from '@port-of-mars/server/entity/TournamentRound.ts';
-import {TournamentRoundInvite} from '@port-of-mars/server/entity/TournamentRoundInvite.ts';
-import {Player} from '@port-of-mars/server/entity/Player.ts';
-import {Game} from '@port-of-mars/server/entity/Game.ts';
-import {Connection, EntityManager, Equal, SelectQueryBuilder} from 'typeorm';
+import { getConnection } from '@port-of-mars/server/util';
+import { Game, Player, Tournament, TournamentRound, TournamentRoundInvite } from '@port-of-mars/server/entity';
+import { EntityManager, Equal, SelectQueryBuilder } from 'typeorm';
 import * as _ from 'lodash';
-import {User} from "@port-of-mars/server/entity/User";
-import {settings} from "@port-of-mars/server/settings";
+import { settings } from "@port-of-mars/server/settings";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -37,7 +32,7 @@ export class TournamentService {
     return await this.em
       .getRepository(TournamentRound)
       .createQueryBuilder('tournamentRound')
-      .where('tournamentRound.tournamentId = :tournamentId', {tournamentId})
+      .where('tournamentRound.tournamentId = :tournamentId', { tournamentId })
       .orderBy('tournamentRound.roundNumber', 'DESC')
       .getOne();
   }
@@ -67,7 +62,7 @@ export class TournamentService {
 
   async createRound(data: Pick<TournamentRound, 'exitSurveyUrl' | 'introSurveyUrl' | 'startDate' | 'endDate' | 'roundNumber'> & { tournamentId?: number }): Promise<TournamentRound> {
     if (!data.tournamentId) {
-      data.tournamentId = (await this.em.getRepository(Tournament).createQueryBuilder('tournament').select('id').where({active: true}).getRawOne()).id;
+      data.tournamentId = (await this.em.getRepository(Tournament).createQueryBuilder('tournament').select('id').where({ active: true }).getRawOne()).id;
     }
 
     const tr = new TournamentRound();
@@ -92,7 +87,7 @@ export class TournamentService {
     // NOTE: Get Games
     const games: Array<Game> | undefined = await this.em
       .getRepository(Game)
-      .find({tournamentRoundId: Equal(tournamentRoundId)});
+      .find({ tournamentRoundId: Equal(tournamentRoundId) });
     if (games === undefined) {
       return undefined;
     }
@@ -139,7 +134,7 @@ export class TournamentService {
       .addSelect('game.id', 'gameId')
       .from(Player, 'player')
       .innerJoinAndSelect('player.game', 'game')
-      .where('game.tournamentRoundId = :tournamentRoundId', {tournamentRoundId})
+      .where('game.tournamentRoundId = :tournamentRoundId', { tournamentRoundId })
       .orderBy('u.rank', 'DESC')
       .addOrderBy('u.score', 'DESC');
   }
