@@ -45,6 +45,7 @@ export default class ModalController extends Vue{
     }
 
     get cardModal(){
+        console.log(this.$tstore.state.ui.modalViews.cardModal);
         return this.$tstore.state.ui.modalViews.cardModal;
     }
 }

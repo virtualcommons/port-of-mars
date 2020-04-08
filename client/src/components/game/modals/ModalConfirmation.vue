@@ -52,6 +52,16 @@ export default class ModalConfirmation extends Vue {
     switch (this.modalData.type) {
       case 'discardAccomplishment':
         this.api.discardAccomplishment(this.modalData.actionData);
+        this.$tstore.commit('SET_CARD_MODAL_VISIBILITY', {
+        visible: false,
+        data:{
+          type:'',
+          info:{
+              card:'',
+              payload:null
+            },
+        }
+      })
       default:
         break;
     }
