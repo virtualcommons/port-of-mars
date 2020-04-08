@@ -91,10 +91,27 @@ const steps: Array<Step> = [
     ],
   },
   {
-    target: '.tour-trade-partner',
-    content: `To request a trade, you must first select a person to trade with. Try clicking the curator!`,
+    target: '.tour-request-trade',
+    content: `To initiate a trade request with another player, click on the Request Trade button.`,
     params: {
       placement: 'top',
+    },
+    stateTransform: [
+      {
+        // required: true,
+        SET_LAYOUT: 'tutorial',
+        SET_TRADE_REQUEST_MODAL_VISIBILITY: true,
+        // validationObject: {
+        //   visible: true,
+        // }
+      },
+    ]
+  },
+  {
+    target: '.tour-request-trade-partner',
+    content: `To request a trade, you must first select a person to trade with. Try clicking the curator!`,
+    params: {
+      placement: 'top'
     },
     stateTransform: [
       {
@@ -106,7 +123,7 @@ const steps: Array<Step> = [
     ]
   },
   {
-    target: '.tour-give-up',
+    target: '.tour-offer-resources',
     content: `Then, you select the amount of each resource you are willing to give up.
       You cannot send more resources than you currently have. Increment Science to 2 and Government to 1!`,
     params: {
@@ -129,7 +146,7 @@ const steps: Array<Step> = [
     ]
   },
   {
-    target: '.tour-get-in-return',
+    target: '.tour-request-resources',
     content: `Finally, you choose how much of any resource that you want. Ask for 3 culture!`,
     params: {
       placement: 'top',
@@ -157,7 +174,7 @@ const steps: Array<Step> = [
     ],
   },
   {
-    target: '.tour-trade',
+    target: '.tour-send-trade',
     content: `Hit send to see your trade in action!`,
     params: {
       placement: LEFT
@@ -173,7 +190,7 @@ const steps: Array<Step> = [
             government: 0,
             legacy: 0,
             science: 0,
-        }
+        },
       }
 
     ],
@@ -188,6 +205,10 @@ const steps: Array<Step> = [
     stateTransform: [
       {
         required: false,
+      },
+
+      {
+        SET_TRADE_REQUEST_MODAL_VISIBILITY: false,
       }
 
     ],

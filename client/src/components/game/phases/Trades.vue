@@ -1,11 +1,11 @@
 <template>
   <div class="trade-container tour-trade">
     <div class="trade-list tour-trade-item">
-      <div class=header>
+      <div class="header">
         <div class="section-text">
           <p>Active Trade List</p>
         </div>
-        <button class="request-trade-button tour-trade-partner" @click="handleOpenTradeRequest()">Request a trade </button>
+        <button class="request-trade-button tour-request-trade" @click="handleOpenTradeRequest()">Request a trade </button>
       </div>
 
       <div class="trades-wrapper">

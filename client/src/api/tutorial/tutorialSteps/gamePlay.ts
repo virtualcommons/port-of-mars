@@ -38,8 +38,8 @@ const steps:Array<Step> = [
               role:CURATOR,
               dateCreated:new Date().getTime(),
               round:0,
-          },
-          required: true,
+            },
+            required: true,
         }],
       },
       {

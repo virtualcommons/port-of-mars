@@ -95,6 +95,12 @@ const steps:Array<Step> = [
       params: {
         placement: 'right'
       },
+      stateTransform: [
+        {
+          SET_LAYOUT: 'tutorial',
+          required: true,
+        }
+      ]
 
     },
     {
