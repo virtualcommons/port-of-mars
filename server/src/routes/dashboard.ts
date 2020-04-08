@@ -1,31 +1,33 @@
+import {Router, Request, Response} from 'express';
+import { getServices } from '@port-of-mars/server/services';
+import { User } from '@port-of-mars/server/entity/User';
+
 export const dashboardRouter = Router();
 
-interface ActionItem {
-  done: boolean
-  description: string
-  link: string
+function checkUser(req: Request, res: Response){
 }
 
-interface GameMeta {
-  time: number // unix timestamp
-  round: number
-  tournamentName: string
-}
+dashboardRouter.get('/', async (req, res, next) => {
 
-interface Stats {
-  games: Array<GameMeta & {points: number, winner: Role}>
-}
-
-interface DashboardData {
-  actionItems: Array<ActionItem>
-  upcomingGames: Array<GameMeta>
-  stats: Stats
-}
-
-dashboardRouter.get('', async (req, res, next) => {
-  res.json({
-    actionItems: [],
-    upcomingGames: [],
-    stats: [],
-  });
+  try{
+    const dashboard = getServices().dashboard;
+    const tournamnet = getServices().tournament;
+    
+    let tutorial = await dashboard.hasUserPassedTutorial(req.user as User);
+    
+    let currentTournamentRound = await tournamnet.getCurrentTournamentRound();
+    let introductionSurvey = await dashboard.getIntroSurveyUrl(currentTournamentRound);
+    let exitSurvey = await dashboard.getExitSurveyUrl(currentTournamentRound);
+    //let isInGame = await dashboard.isUserInGame(req.user as User);
+    
+    res.json({
+      actionItems: [tutorial, introductionSurvey, exitSurvey],
+      upcomingGames: [],
+      stats: [],
+    });
+  }
+  catch(e){
+    next(e);
+  }
+  
 });

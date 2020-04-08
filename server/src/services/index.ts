@@ -4,6 +4,7 @@ import {RegistrationService} from "@port-of-mars/server/services/registration";
 import {AccountService} from "@port-of-mars/server/services/account";
 import {TournamentService} from "@port-of-mars/server/services/tournament";
 import {QuizService} from "@port-of-mars/server/services/quiz";
+import {DashboardService} from "@port-of-mars/server/services/dashboard";
 import {getConnection} from "@port-of-mars/server/util";
 import {GameService} from "@port-of-mars/server/services/game";
 
@@ -56,6 +57,14 @@ export class ServiceProvider {
       this._tournament = new TournamentService(this.em);
     }
     return this._tournament;
+  }
+
+  private _dashboard?: DashboardService;
+  get dashboard(){
+    if(!this._dashboard){
+      this._dashboard = new DashboardService(this.em);
+    }
+    return this._dashboard;
   }
 }
 
