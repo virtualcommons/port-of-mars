@@ -5,12 +5,12 @@
         <div class="section-text">
           <p>Inventory</p>
         </div>
-        <div class="inventory">
+        <div class="inventory tour-inventory-section">
           <InventoryTable class="inventory-table" :playerData="playerInfo" :isVisible="true"/>
         </div>
       </div>
 
-      <div class="actions">
+      <div class="actions tour-purchase-section">
         <div class="section-text">
           <p>Purchasable Accomplishments</p>
         </div>
