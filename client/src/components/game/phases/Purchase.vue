@@ -1,22 +1,19 @@
 <template>
-  <div class="container-purchase tour-purchase">
-    <div class="purchase-row">
-      <div class="info">
-        <div class="section-text">
-          <p>Inventory</p>
+  <div class="c-purchase container tour-purchase">
+    <div class="wrapper row">
+      <div class="inventory col-4">
+        <div class="topbar">
+          <p class="title">Inventory</p>
         </div>
-        <div class="inventory tour-inventory-section">
-          <InventoryTable
-            class="inventory-table"
-            :playerData="playerInfo"
-            :isVisible="true"
-          />
+        <div class="outer-wrapper">
+          <div class="wrapper">
+            <Inventory :displaySystemHealth="false" />
+          </div>
         </div>
       </div>
-
-      <div class="actions tour-purchase-section">
-        <div class="section-text">
-          <p>Purchasable Accomplishments</p>
+      <div class="purchasableaccomplishments col-8">
+        <div class="topbar">
+          <p class="title">Purchasable Accomplishments</p>
         </div>
         <div class="outer-wrapper">
           <div class="wrapper">
@@ -36,7 +33,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
-import InventoryTable from '@port-of-mars/client/components/game/InventoryTable.vue';
+import Inventory from '@port-of-mars/client/components/game/Inventory.vue';
 import { canPurchaseAccomplishment } from '@port-of-mars/shared/validation';
 import { AccomplishmentCardType } from '@port-of-mars/client/types/cards.ts';
 import { AccomplishmentData } from '@port-of-mars/shared/types';
@@ -44,7 +41,7 @@ import { AccomplishmentData } from '@port-of-mars/shared/types';
 @Component({
   components: {
     AccomplishmentCard,
-    InventoryTable,
+    Inventory,
   },
 })
 export default class Purchase extends Vue {
