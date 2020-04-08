@@ -60,7 +60,7 @@ function CHANGE_EVENT(
   const initVisbilityObject = { name: payload.event.name, visible: false };
   state.eventCardsVisible.push(initVisbilityObject);
 
-  Vue.set(state.marsEvents, payhandleReceiveResouhandleReceiveResouhandleReceiveResouhandleReceiveResouload.index, payload.event);
+  Vue.set(state.marsEvents, payload.index, payload.event);
 }
 
 function SET_EVENTS_FOR_ROUND(state: State, payload: any) {
