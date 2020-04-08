@@ -3,6 +3,7 @@ export * from './GameEvent';
 export * from './Player';
 export * from './Question';
 export * from './QuestionResponse';
+export * from './Quiz';
 export * from './QuizSubmission';
 export * from './Tournament';
 export * from './TournamentRound';
