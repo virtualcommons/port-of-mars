@@ -28,7 +28,7 @@ const steps:Array<Step> = [
     ],
     },
     {
-      target: '.tour-investments',
+      target: '.tour-time-blocks',
       content:
         'You have 10 timeblocks to spend each round unless otherwise instructed.' +
         'You can spend these timeblocks on System Health or on Influence. ' +
@@ -88,13 +88,19 @@ const steps:Array<Step> = [
       }
     },
     {
-      target: '.tour-donebtn',
+      target: '.tour-ready-to-advance-button',
       content:
         'Click the Done button when you have finished investing your timeblocks. ' +
         'The Investment Phase will end as soon as all members of your group have finished investing.',
       params: {
         placement: 'right'
       },
+      stateTransform: [
+        {
+          SET_LAYOUT: 'tutorial',
+          required: true,
+        }
+      ]
 
     },
     {

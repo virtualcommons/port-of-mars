@@ -6,17 +6,17 @@ const steps:Array<Step> = [
       content: `
         There are 5 roles in the Port of Mars: Researcher, Pioneer, Curator, Entrepreneur, and Politician.`,
         params:{
-          placement: 'bottom'
+          placement: 'right'
         }
     },
     {
-        target: '.tour-profile',
+        target: '.tour-profile-self',
         content:
           'This is your role and score during the game. Your role determines ' +
           'the investments in influence currency you can make and the accomplishments ' +
           'that you can purchase toward the end of a round.',
         params: {
-          placement: 'bottom'
+          placement: 'right'
         }
     },
 
@@ -27,14 +27,14 @@ const steps:Array<Step> = [
           The player score is displayed on the far left; name in the middle;
           and character avatar on the right.`,
         params: {
-          placement: 'left'
+          placement: 'right'
         }
     },
     {
         target: '.tour-profile-investments',
         content: 'As you purchase Timeblocks during the invest phase, your inventory will update here.',
         params: {
-          placement: 'right'
+          placement: 'top'
         },
 
     },
@@ -43,7 +43,7 @@ const steps:Array<Step> = [
       content: `Here, you can see what Accomplishments are avaliable to you this round. As you purchase them, you will be given new ones.
       Once you purchase them, they will move to the purchased section.`,
       params: {
-        placement: `right`
+        placement: 'right',
       },
       stateTransform:[
         {SET_ACTIVE_ACCOMPLISHMENTS:{

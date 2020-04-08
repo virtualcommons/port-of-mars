@@ -1,0 +1,28 @@
+.c-systemhealth {
+  width: 100%;
+  padding-bottom: 0.5rem;
+  @include make-center;
+
+  p {
+    margin-bottom: 0.125rem;
+  }
+
+  .title {
+    margin-right: 1rem;
+    color: $space-white;
+    font-size: $font-med;
+    font-weight: $font-weight-maven-pro-bold;
+  }
+
+  .status {
+    margin-left: 1rem;
+    color: $space-white;
+    font-size: $font-med;
+    font-weight: $font-weight-maven-pro-bold;
+
+    span {
+      margin-left: 0.25rem;
+      color: $new-space-orange;
+    }
+  }
+}

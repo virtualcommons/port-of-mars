@@ -1,0 +1,53 @@
+.c-gameinformation {
+  @include expand;
+  @include make-column-and-center;
+  align-items: flex-start;
+  color: $space-gray;
+
+  .section {
+    p {
+      margin-bottom: 0;
+    }
+
+    button {
+      @include space-button;
+    }
+  }
+
+  .title {
+    color: $new-space-orange;
+    font-size: $font-med;
+    font-weight: $font-weight-maven-pro-bold;
+  }
+
+  .round,
+  .phase,
+  .countdown {
+    color: $space-white;
+    font-size: $font-large;
+    font-weight: $font-weight-maven-pro-bold;
+  }
+
+  .number {
+    color: $space-white;
+    font-size: $font-med;
+    font-weight: $font-weight-maven-pro-bold;
+  }
+
+  .countdown {
+    transition: all 0.4s ease-in-out;
+  }
+
+  .blink-timer {
+    animation: blinker 0.5s linear 5;
+    color: $status-red;
+    font-size: $font-large;
+    font-weight: $font-weight-maven-pro-bold;
+  }
+
+  @keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+  }
+}

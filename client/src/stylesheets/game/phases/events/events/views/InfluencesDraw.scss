@@ -1,0 +1,76 @@
+.event-select-influences {
+  @include expand;
+  @include make-column-and-center;
+  flex: 1 1 0;
+
+  p {
+    margin: 0.5rem 0;
+  }
+
+  button {
+    @include reset-button;
+    height: 3rem;
+    width: 12rem;
+    border: 0.0625rem solid $new-space-orange;
+    margin-top: 2rem;
+    color: $new-space-orange;
+    @include default-transition-base;
+
+    &:hover {
+      color: $space-gray;
+      background-color: $new-space-orange;
+    }
+  }
+
+  .event-select-influences-select {
+    display: flex;
+    flex: 1 1 0;
+    
+    .event-select-influences-select-influence {
+      margin: 0 1rem;
+
+      img {
+        height: 4rem;
+        width: 4rem;
+        @include default-transition-base;
+
+        &:hover {
+          @include default-scale-up;
+          cursor: pointer;
+        }
+      }
+
+      p {
+        margin-bottom: 0;
+        text-align: center;
+      }
+    }
+  }
+
+  .selected-placeholder {
+    height: 4rem;
+    @include make-center;
+    color: $space-white-opaque-2;
+  }
+
+  .event-select-influences-selected {
+    @include make-center;
+
+    .event-select-influences-selected-influence {
+      margin: 0 1rem;
+      display: flex;
+
+      img {
+        height: 4rem;
+        width: 4rem;
+        @include default-transition-base;
+
+        &:hover {
+          opacity: 0.5;
+          @include default-scale-up;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}

@@ -5,8 +5,8 @@
       class="game-dashboard"
     >
       <MasterComponent v-if="environment == 'development'" />
-      <ModalContainer />
-      <ContainerBoard />
+      <ModalController/>
+      <GameboardContainer />
     </div>
     <div v-else-if="gamePhase == phase.defeat" class="game-dashboard-defeat">
       <ContainerDefeat />
@@ -22,24 +22,23 @@ import { Vue, Component } from 'vue-property-decorator';
 import { Phase } from '@port-of-mars/shared/types';
 import { EnvironmentMode } from '@port-of-mars/client/settings';
 import MasterComponent from '@port-of-mars/client/components/MasterComponent.vue';
-import ModalContainer from '@port-of-mars/client/components/gamedashboard/global/modals/ModalContainer.vue';
-import ContainerBoard from '@port-of-mars/client/components/gamedashboard/global/containers/ContainerBoard.vue';
-import ContainerDefeat from '@port-of-mars/client/components/gamedashboard/global/containers/ContainerDefeat.vue';
-import ContainerVictory from '@port-of-mars/client/components/gamedashboard/global/containers/ContainerVictory.vue';
+import ModalController from '@port-of-mars/client/components/game/modals/ModalController.vue';
+import GameboardContainer from '@port-of-mars/client/components/root/GameboardContainer.vue';
+import ContainerDefeat from '@port-of-mars/client/components/root/ContainerDefeat.vue';
+import ContainerVictory from '@port-of-mars/client/components/root/ContainerVictory.vue';
 import environment from '../store/mutationFolder/environment';
 
 @Component({
   components: {
     MasterComponent,
-    ModalContainer,
-    ContainerBoard,
+    ModalController,
+    GameboardContainer,
     ContainerDefeat,
     ContainerVictory
   }
 })
-
 export default class GameDashboard extends Vue {
-  env: EnvironmentMode = new EnvironmentMode;
+  env: EnvironmentMode = new EnvironmentMode();
 
   get phase() {
     return Phase;

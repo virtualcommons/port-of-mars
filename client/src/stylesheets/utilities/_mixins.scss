@@ -58,6 +58,51 @@ $screen-xxl: 1680px;
   }
 }
 
+@mixin space-button-base {
+  @include reset-button;
+  padding: 0.5rem 0.75rem;
+  margin: 0.5rem 0;
+  font-size: $font-med;
+  font-weight: $font-weight-maven-pro-regular;
+  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+
+  &:disabled {
+    opacity: 0.5;
+  }
+}
+
+@mixin space-button {
+  @include space-button-base;
+  color: $new-space-orange;
+  border: 0.0625rem solid $new-space-orange;
+
+  &:hover {
+    color: $space-gray;
+    background-color: $new-space-orange;
+  }
+
+  &:disabled:hover {
+    color: $new-space-orange;
+    background-color: transparent;
+  }
+}
+
+@mixin space-button-white {
+  @include space-button-base;
+  color: $space-white;
+  border: 0.0625rem solid $space-white;
+
+  &:hover {
+    color: $space-gray;
+    background-color: $space-white;
+  }
+
+  &:disabled:hover {
+    color: $space-white;
+    background-color: transparent;
+  }
+}
+
 @mixin reset-padding-margin {
   padding: 0;
   margin: 0;
@@ -82,6 +127,10 @@ $screen-xxl: 1680px;
 
 @mixin default-transition-base {
   transition: all 0.2s ease-in-out;
+}
+
+@mixin default-transition-button {
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
 @mixin default-scale-up {

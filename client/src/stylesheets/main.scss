@@ -1,7 +1,7 @@
 @import './utilities/_mixins.scss';
 @import './utilities/_variables.scss';
 
-@import url('https://fonts.googleapis.com/css?family=Maven+Pro:400,700&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Maven+Pro:400,500,600,700&display=swap');
 
 html {
   @include xl {
@@ -22,7 +22,8 @@ html {
 
 body {
   font-family: $font-family-default !important;
-  background-color: $space-gray;
+  // background-color: $space-gray;
+  background-color: $space-gray-0975;
   overflow: hidden;
 
   --space-gray: #1e2223;
@@ -41,6 +42,9 @@ body {
   --status-green: rgba(45, 143, 68, 1);
   --marslog-red: rgba(170, 42, 41, 0.05);
   --marslog-purple: rgba(111, 36, 134, 0.05);
+  --marslog-orange: rgba(170, 111, 0, 0.05);
+  --marslog-green: rgba(9, 92, 41, 0.5);
+
 }
 
 p,

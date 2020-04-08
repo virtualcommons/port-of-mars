@@ -12,6 +12,11 @@ $font-small: 0.75rem;
 $font-med: 1rem;
 $font-large: 1.5rem;
 
+$font-weight-maven-pro-regular: 400;
+$font-weight-maven-pro-medium: 500;
+$font-weight-maven-pro-semibold: 600;
+$font-weight-maven-pro-bold: 700;
+
 // COLOR
 
 $space-gray: #1e2223;
@@ -37,11 +42,13 @@ $status-red: rgba(170, 42, 41, 1);
 $marslog-red: rgba(170, 42, 41, 0.05);
 $marslog-green: rgba(9, 92, 41, 0.5);
 $marslog-purple: rgba(111, 36, 134, 0.05);
+$marslog-orange: rgba(170, 111, 0, 0.05);
 
 // BORDERS
 $border-white: 0.125rem solid $space-white;
 $border-white-opaque-2: 0.125rem solid $space-white-opaque-2;
 
 // NEW: TBD
+$space-gray-0975: rgba(30, 34, 35, 0.975);
 $new-space-orange: rgba(221, 168, 119, 1);
 $new-space-orange-opaque-025: rgba(221, 168, 119, 0.25);

@@ -1,0 +1,68 @@
+.events-container{
+    display: flex;
+    justify-content: space-between;
+    min-height: 0;
+    height: 100%;
+
+    .section-text{
+        height: 3rem;
+        width: 100%;
+        @include make-column-and-center;
+        
+        
+        background-color: $new-space-orange;
+
+        p{
+            margin-top:0.65rem;
+            font-weight: bold;
+            color: black;
+            
+        }
+    }
+
+    .event-deck-container{
+        @include column-3;
+        background-color: $space-white-opaque-1;
+        overflow-y: scroll;
+        @include disable-scroll;
+        height: 100%;
+
+        .events{
+            height: 100%;
+            
+
+            .event-container{
+                width: 95%;
+                margin: 1rem auto;
+            }
+        }
+    }
+
+    .active-event-container{
+        flex: 1 1 0;
+        height: 100%;
+        margin: 0 0.5rem;
+        background-color: $space-white-opaque-1;
+        color:white;
+
+        .event-holder{
+
+            .event-info{
+                
+                .event-title{
+                    color: $new-space-orange;
+                    font-size: $font-large;
+                    font-style: italic;
+                    margin-left:0.5rem;
+                    p{
+                        width:35rem;
+                        border-bottom: solid 0.025rem white;
+                    }
+                }
+            }
+
+        }
+
+    }
+
+}

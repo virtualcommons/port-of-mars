@@ -1,0 +1,55 @@
+.c-hud {
+  @include expand;
+  max-width: none;
+  @include reset-padding-margin;
+  @include make-column-and-top;
+
+  .wrapper {
+    @include expand;
+    @include reset-padding-margin;
+
+    .players,
+    .gamestatus,
+    .marslog {
+      height: 100%;
+
+      .wrapper {
+        @include expand;
+        padding: 0;
+
+        .row {
+          height: 100%;
+          margin: 0;
+        }
+      }
+    }
+
+    .players {
+      padding: 0.5rem 1rem;
+      border-left: 0.125rem solid $new-space-orange-opaque-025;
+      border-right: 0.125rem solid $new-space-orange-opaque-025;
+
+      .player,
+      .others {
+        height: 100%;
+        padding: 0;
+      }
+    }
+
+    .gamestatus {
+      padding: 0.5rem 1rem;
+      border-right: 0.125rem solid $new-space-orange-opaque-025;
+
+      .information,
+      .instructions {
+        height: 100%;
+        padding: 0 1rem;
+      }
+    }
+
+    .chat {
+      border-left: 0.125rem solid $new-space-orange-opaque-025;
+      border-right: 0.125rem solid $new-space-orange-opaque-025;
+    }
+  }
+}

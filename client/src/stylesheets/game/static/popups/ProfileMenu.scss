@@ -1,0 +1,63 @@
+.c-profilemenu {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 20rem;
+  padding: 2rem;
+  background-color: $new-space-orange;
+  transition: position 0.3s ease-in;
+  z-index: 2;
+
+  .toggle {
+    position: absolute;
+    right: -2rem;
+    top: 4rem;
+    @include reset-button;
+    height: 4rem;
+    width: 2rem;
+    padding: 0.5rem;
+    border-bottom-right-radius: 4rem;
+    border-top-right-radius: 4rem;
+    background-color: $new-space-orange;
+
+    .left {
+      margin-right: 0.75rem;
+    }
+  }
+
+  .wrapper {
+    position: relative;
+    @include expand;
+
+    p,
+    a,
+    button {
+      color: $space-gray;
+      font-size: $font-med;
+    }
+
+    a,
+    button {
+      margin-bottom: 0.5rem;
+      font-weight: $font-weight-maven-pro-medium;
+
+      span {
+        margin-left: 0.5rem;
+      }
+    }
+
+    p {
+      font-weight: $font-weight-maven-pro-bold;
+    }
+
+    a {
+      display: block;
+      text-decoration: none;
+    }
+
+    button {
+      @include reset-button;
+      padding: 0;
+    }
+  }
+}

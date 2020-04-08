@@ -17,17 +17,7 @@ Vue.use(BootstrapVue);
     Tutorial
   }
 })
-export default class Home extends Vue {
-  /**
-   * Gets the value of the layout from the vuex store
-   * @return the value of layout
-   *
-   */
-
-  get layout() {
-    return this.$tstore.getters.layout;
-  }
-}
+export default class Home extends Vue {}
 </script>
 
 <style lang="scss">

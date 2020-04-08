@@ -1,0 +1,12 @@
+.c-phaseswitcher {
+  @include expand;
+  max-width: none;
+  @include reset-padding-margin;
+
+  .wrapper {
+    @include expand;
+    @include new-border-orange;
+    padding: 0.5rem;
+    margin: 0;
+  }
+}

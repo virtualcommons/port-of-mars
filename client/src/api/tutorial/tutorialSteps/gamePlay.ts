@@ -8,7 +8,7 @@ const steps:Array<Step> = [
         `The game progresses in rounds. The number of rounds changes from game to game, so the game could
         end at any time.`,
       params: {
-        placement: 'right'
+        placement: 'left'
       }
     },
     {
@@ -17,7 +17,7 @@ const steps:Array<Step> = [
         'There are multiple phases in a round: Events, Invest, Trade, Purchase ' +
         ' and Discard. Each phase has a time limit of 5 minutes.',
       params: {
-        placement: 'bottom'
+        placement: 'left'
       }
     },
     {
@@ -30,16 +30,16 @@ const steps:Array<Step> = [
         params: {
           placement: 'left'
         },
-        stateTransform:[
+        stateTransform: [
           {
             SET_LAYOUT: 'tutorial',
-            ADD_TO_CHAT:{
+            ADD_TO_CHAT: {
               message:'Welcome to the Port of Mars!',
               role:CURATOR,
               dateCreated:new Date().getTime(),
               round:0,
-          },
-          required: true,
+            },
+            required: true,
         }],
       },
       {

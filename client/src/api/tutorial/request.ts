@@ -210,6 +210,17 @@ export class TutorialAPI extends GameRequestAPI {
         return false;
     }
 
+    // TOUR TRADE
+
+    // public requestTrade(visible: boolean) {
+    //     if (this.validationObject.visible == visible) {
+    //         this.isTaskComplete = true;
+    //         this.requiredObject.required = false;
+    //         return true;
+    //     }
+    //     return false;
+    // }
+
     public investTimeBlocks(){
         const pendingInventory = this.store.getters.player.pendingInvestments;
         for(const [resource, amt] of Object.entries(pendingInventory)){

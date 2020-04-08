@@ -1,0 +1,85 @@
+.c-eventcard {
+  width: 100%;
+  padding: 0;
+  border: 0.125rem solid $space-white;
+  margin: 0 0 0.5rem 0;
+  @include make-column-and-center;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .title-wrapper,
+  .flavortext-wrapper,
+  .duration-wrapper {
+    width: 100%;
+    padding: 0.5rem;
+    margin: 0;
+  }
+
+  .title-wrapper {
+    background-color: $space-white;
+    .title {
+      padding: 0;
+      position: relative;
+
+      .icon {
+        position: absolute;
+        top: 0;
+        right: 0.5rem;
+        height: 1.5rem;
+        width: 1.5rem;
+        cursor: pointer;
+        @include default-transition-base;
+
+        &:hover {
+          @include default-scale-up;
+        }
+      }
+
+      p {
+        width: 100%;
+        margin-bottom: 0;
+        font-size: $font-med;
+        font-weight: $font-weight-maven-pro-medium;
+        color: $space-gray;
+        text-align: center;
+        @include text-overflow-ellipses;
+      }
+    }
+  }
+
+  .flavortext-wrapper {
+    background-color: $space-gray;
+
+    .flavortext {
+      padding: 0;
+
+      p {
+        width: 100%;
+        margin-bottom: 0;
+        font-size: $font-med;
+        font-weight: $font-weight-maven-pro-regular;
+        color: $space-white;
+        text-align: center;
+      }
+    }
+  }
+
+  .duration-wrapper {
+    background-color: $space-gray;
+
+    .duration {
+      padding: 0;
+
+      p {
+        width: 100%;
+        margin-bottom: 0;
+        font-size: $font-med;
+        font-weight: $font-weight-maven-pro-regular;
+        color: $space-white;
+        text-align: center;
+      }
+    }
+  }
+}
