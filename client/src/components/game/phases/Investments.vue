@@ -15,33 +15,32 @@
 
       <div class="action-container">
         <div class="cards">
-        <CardInvestment
-          v-for="cost in costs"
-          v-bind="cost"
-          :key="cost.name"
-          @input="setInvestmentAmount"
-        />
-      </div>
-      <div class="player-accomplishments tour-accomplishments">
-        <h4 class="header-text">Accomplishments</h4>
-        <div class="accomplishment-wrapper">
-          <div class="active">
-            <p class="active-text">Active</p>
-            <!-- <ContainerAccomplishmentsGeneral
-              :accomplishmentSet="activeAccomplishments"
-              :isVisible="true"
-            /> -->
-          </div>
-          <div class="purchased">
-            <p class="purchased-text">Purchased</p>
-            <!-- <ContainerAccomplishmentsGeneral
-              :accomplishmentSet="purchasedAccomplishments"
-              :isVisible="true"
-            /> -->
+          <CardInvestment
+            v-for="cost in costs"
+            v-bind="cost"
+            :key="cost.name"
+            @input="setInvestmentAmount"
+          />
+        </div>
+        <div class="player-accomplishments tour-accomplishments">
+          <h4 class="header-text">Accomplishments</h4>
+          <div class="accomplishment-wrapper">
+            <div class="active">
+              <p class="active-text">Active</p>
+              <ContainerAccomplishmentsGeneral
+                :accomplishmentSet="activeAccomplishments"
+                :isVisible="true"
+              />
+            </div>
+            <div class="purchased">
+              <p class="purchased-text">Purchased</p>
+              <ContainerAccomplishmentsGeneral
+                :accomplishmentSet="purchasedAccomplishments"
+                :isVisible="true"
+              />
+            </div>
           </div>
         </div>
-      </div>
-
       </div>
     </div>
   </div>
@@ -69,23 +68,13 @@ export default class Investments extends Vue {
 
   @Prop() role!: Role;
 
-  // active = this.$tstore.state.players[this.role].accomplishments.purchasable;
-  // purchased = this.$tstore.state.players[this.role].accomplishments.purchased;
+  get activeAccomplishments() {
+    return this.$tstore.getters.player.accomplishments.purchasable;
+  }
 
-  // get playerData() {
-  //   return {
-  //     info: this.$tstore.state.players[this.role],
-  //     isSelf: this.role == this.$tstore.getters.player.role
-  //   };
-  // }
-
-  // get activeAccomplishments() {
-  //   return this.active;
-  // }
-
-  // get purchasedAccomplishments() {
-  //   return this.purchased;
-  // }
+  get purchasedAccomplishments() {
+    return this.$tstore.getters.player.accomplishments.purchased;
+  }
 
   get costs(): any {
     const p = this.$tstore.getters.player;
