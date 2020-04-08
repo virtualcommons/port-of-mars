@@ -1,16 +1,12 @@
-import { Game } from "@port-of-mars/server/entity/Game";
-import { User } from "@port-of-mars/server/entity/User";
-import { Player } from "@port-of-mars/server/entity/Player";
+import { Game, GameEvent, Player, User } from "@port-of-mars/server/entity";
 import * as ge from "@port-of-mars/server/rooms/game/events/types";
 import { GameOpts, Metadata, Persister } from "@port-of-mars/server/rooms/game/types";
 import * as assert from "assert";
-import { GameEvent } from "@port-of-mars/server/entity/GameEvent";
 import Mutex from "async-mutex/lib/Mutex";
 import { ClockTimer } from "@gamestdio/timer/lib/ClockTimer";
-import _ from "lodash";
 import { getConnection } from "@port-of-mars/server/util";
-import { TournamentRound } from "@port-of-mars/server/entity/TournamentRound";
-import {EntityManager} from "typeorm";
+import { EntityManager } from "typeorm";
+import _ from "lodash";
 
 function toDBRawGameEvent(gameEvent: ge.GameEvent, metadata: Metadata) {
   const ev = gameEvent.serialize();
@@ -51,7 +47,7 @@ export class DBPersister implements Persister {
   pendingEvents: Array<Omit<{ [k in keyof GameEvent]: GameEvent[k] }, 'id' | 'game'>> = [];
   lock: Mutex = new Mutex();
 
-  constructor(public _em?: EntityManager) {}
+  constructor(public _em?: EntityManager) { }
 
   get em() {
     return this._em ?? getConnection().manager;

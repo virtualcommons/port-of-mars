@@ -1,6 +1,9 @@
-import {User} from "@port-of-mars/server/entity/User";
-import {getConnection} from "@port-of-mars/server/util";
-import {EntityManager, Repository} from "typeorm"
+import { User } from "@port-of-mars/server/entity";
+import { getConnection } from "@port-of-mars/server/util";
+import { EntityManager, Repository } from "typeorm"
+import { settings } from "@port-of-mars/server/settings";
+
+const logger = settings.logging.getLogger(__filename);
 
 export class AccountService {
   em: EntityManager;
@@ -17,23 +20,22 @@ export class AccountService {
   }
 
   async findByUsername(username: string): Promise<User | undefined> {
-    return await this.getRepository().findOne({username})
+    return await this.getRepository().findOne({ username })
   }
 
   async findUserById(id: number): Promise<User | undefined> {
     return await this.getRepository().findOne(id);
   }
 
-  async getOrCreateUser(username: string): Promise<User> {
-    const user = await this.getRepository().findOne({username});
-    if (user) {
-      return user;
+  async getOrCreateUser(username: string, profile?: any): Promise<User> {
+    let user = await this.getRepository().findOne({ username });
+    logger.info('getOrCreateUser profile: ', profile);
+    if (!user) {
+      user = new User();
+      user.name = '';
+      user.username = username;
+      await getConnection().getRepository(User).save(user);
     }
-
-    const u = new User();
-    u.name = '';
-    u.username = username;
-    await getConnection().getRepository(User).save(u);
-    return u;
+    return user;
   }
 }

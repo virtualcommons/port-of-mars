@@ -1,7 +1,7 @@
-import {GameSerialized, GameState} from "@port-of-mars/server/rooms/game/state";
-import {mockGameStateInitOpts} from "@port-of-mars/server/util";
-import {GameEvent} from "@port-of-mars/server/entity/GameEvent";
-import {gameEventDeserializer} from "@port-of-mars/server/rooms/game/events";
+import { GameSerialized, GameState } from "@port-of-mars/server/rooms/game/state";
+import { mockGameStateInitOpts } from "@port-of-mars/server/util";
+import { GameEvent } from "@port-of-mars/server/entity";
+import { gameEventDeserializer } from "@port-of-mars/server/rooms/game/events";
 import _ from "lodash";
 
 function loadSnapshot(data: GameSerialized): GameState {
@@ -11,7 +11,7 @@ function loadSnapshot(data: GameSerialized): GameState {
 }
 
 export class GameReplayer {
-  constructor(public events: Array<GameEvent>) {}
+  constructor(public events: Array<GameEvent>) { }
 
   summarize<T>(summarizer: (g: GameState) => T): Array<T> {
     const g = loadSnapshot(this.events[0].payload as GameSerialized);
@@ -23,7 +23,7 @@ export class GameReplayer {
       const e = gameEventDeserializer.deserialize(event);
       g.applyMany([e]);
       if (!_.isEqual(phase, g.phase)) {
-        summaries.push({ ...summary, duration: timeToNextTransition - event.timeRemaining});
+        summaries.push({ ...summary, duration: timeToNextTransition - event.timeRemaining });
         timeToNextTransition = g.timeRemaining;
       }
     }

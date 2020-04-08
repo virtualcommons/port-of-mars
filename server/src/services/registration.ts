@@ -1,8 +1,7 @@
-import {User} from "@port-of-mars/server/entity/User";
-import {getConnection} from "@port-of-mars/server/util";
-import {settings} from "@port-of-mars/server/settings";
-import {EntityManager} from "typeorm";
-import {TournamentRoundInvite} from "@port-of-mars/server/entity/TournamentRoundInvite";
+import { TournamentRoundInvite, User } from "@port-of-mars/server/entity";
+import { getConnection } from "@port-of-mars/server/util";
+import { settings } from "@port-of-mars/server/settings";
+import { EntityManager } from "typeorm";
 
 export class RegistrationService {
   em: EntityManager;
@@ -20,15 +19,15 @@ export class RegistrationService {
 
   async submitRegistrationMetadata(data: { username: string, email: string, name: string }) {
     const repo = this.em.getRepository(User);
-    await repo.update({username: data.username}, data);
+    await repo.update({ username: data.username }, data);
   }
 
   async findUnregisteredUserByRegistrationToken(registrationToken: string): Promise<User | undefined> {
-    return await this.em.getRepository(User).findOne({registrationToken})
+    return await this.em.getRepository(User).findOne({ registrationToken })
   }
 
   async createInvites(userIds: Array<number>, tournamentRoundId: number): Promise<Array<TournamentRoundInvite>> {
-    const invites = userIds.map(userId => this.em.getRepository(TournamentRoundInvite).create({userId, tournamentRoundId}));
+    const invites = userIds.map(userId => this.em.getRepository(TournamentRoundInvite).create({ userId, tournamentRoundId }));
     return await this.em.getRepository(TournamentRoundInvite).save(invites);
   }
 
@@ -45,7 +44,7 @@ export class RegistrationService {
   }
 
   async verifyUnregisteredUser(u: User) {
-    const r = await this.em.getRepository(User).update({username: u.username}, {isVerified: true});
+    const r = await this.em.getRepository(User).update({ username: u.username }, { isVerified: true });
     console.assert(r.affected === 1);
   }
 }

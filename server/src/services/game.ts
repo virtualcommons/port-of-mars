@@ -1,26 +1,21 @@
-import {Game} from "@port-of-mars/server/entity/Game";
-import {EntityManager, In} from "typeorm";
-import {Player} from "@port-of-mars/server/entity/Player";
-import {GameEvent} from "@port-of-mars/server/entity/GameEvent";
-import {ROLES} from "@port-of-mars/shared/types";
-import {TournamentRoundInvite} from "@port-of-mars/server/entity/TournamentRoundInvite";
-import {TournamentRound} from "@port-of-mars/server/entity/TournamentRound";
+import { Game, GameEvent, Player, TournamentRoundInvite } from "@port-of-mars/server/entity";
+import { EntityManager, In } from "typeorm";
 
 export class GameService {
   constructor(public em: EntityManager) {
   }
 
   async findById(id: number): Promise<Game> {
-    return await this.em.getRepository(Game).findOneOrFail({id});
+    return await this.em.getRepository(Game).findOneOrFail({ id });
   }
 
   async finalize(gameId: number): Promise<[Game, Array<Player>, Array<TournamentRoundInvite>]> {
-    const event = await this.em.getRepository(GameEvent).findOneOrFail( {
-      where: {type: In(['entered-defeat-phase', 'entered-victory-phase']), gameId},
-      order: {id: "DESC", dateCreated: "DESC"}
+    const event = await this.em.getRepository(GameEvent).findOneOrFail({
+      where: { type: In(['entered-defeat-phase', 'entered-victory-phase']), gameId },
+      order: { id: "DESC", dateCreated: "DESC" }
     });
-    const game = await this.em.getRepository(Game).findOneOrFail({id: gameId});
-    const players = await this.em.getRepository(Player).find({gameId});
+    const game = await this.em.getRepository(Game).findOneOrFail({ id: gameId });
+    const players = await this.em.getRepository(Player).find({ gameId });
     for (const p of players) {
       p.points = (event.payload as any)[p.role];
     }
@@ -38,18 +33,18 @@ export class GameService {
 
   async getLatestActiveGameByUserId(userId: number): Promise<string | undefined> {
     const g = await this.em.getRepository(Game).findOne({
-        where: {
-          players: {
-            user: {
-              id: userId
-            }
-          },
-          completed: false
+      where: {
+        players: {
+          user: {
+            id: userId
+          }
         },
-        order: {
-          dateCreated: 'DESC'
-        }
+        completed: false
+      },
+      order: {
+        dateCreated: 'DESC'
       }
+    }
     );
     return g?.roomId;
   }

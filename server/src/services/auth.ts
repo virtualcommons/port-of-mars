@@ -1,12 +1,12 @@
-import {settings} from '@port-of-mars/server/settings';
-import {EntityManager, getConnection} from "typeorm";
-import {User} from "@port-of-mars/server/entity/User";
-import {TournamentService} from "@port-of-mars/server/services/tournament";
+import { settings } from '@port-of-mars/server/settings';
+import { EntityManager } from "typeorm";
+import { User } from "@port-of-mars/server/entity";
+import { TournamentService } from "@port-of-mars/server/services/tournament";
 
 const logger = settings.logging.getLogger(__filename);
 
 export class AuthService {
-  constructor(public em: EntityManager) {}
+  constructor(public em: EntityManager) { }
 
   async checkUserCanPlayGame(userId: number, tournamentRoundId?: number): Promise<boolean | undefined> {
     if (!tournamentRoundId) {
@@ -18,7 +18,7 @@ export class AuthService {
       .from(User, 'user')
       .innerJoin('user.invites', 'invite')
       .innerJoin('invite.tournamentRound', 'round')
-      .where(`user.id = :userId and round.id = :tournamentRoundId and not invite.hasParticipated and user.passedQuiz`, {userId, tournamentRoundId})
+      .where(`user.id = :userId and round.id = :tournamentRoundId and not invite.hasParticipated and user.passedQuiz`, { userId, tournamentRoundId })
       .select('count(*) > 0', 'n')
       .getRawOne();
     return r?.n ? r.n : false;

@@ -1,11 +1,7 @@
-import {QuizSubmission} from '@port-of-mars/server/entity/QuizSubmission';
-import {Quiz} from '@port-of-mars/server/entity/Quiz';
-import {Question} from '@port-of-mars/server/entity/Question';
-import {QuestionResponse} from '@port-of-mars/server/entity/QuestionResponse';
-import {User} from '@port-of-mars/server/entity/User';
-import {getConnection} from '@port-of-mars/server/util';
+import { Question, QuestionResponse, Quiz, QuizSubmission, User } from '@port-of-mars/server/entity';
+import { getConnection } from '@port-of-mars/server/util';
+import { EntityManager } from "typeorm";
 import * as _ from 'lodash';
-import {EntityManager} from "typeorm";
 
 export class QuizService {
   constructor(public em: EntityManager) {
@@ -38,7 +34,7 @@ export class QuizService {
   }
 
   async findQuizSubmission(id: number, opts?: Partial<{ relations: Array<string>, where: object }>): Promise<QuizSubmission | undefined> {
-    return this.em.getRepository(QuizSubmission).findOne({id, ...opts});
+    return this.em.getRepository(QuizSubmission).findOne({ id, ...opts });
   }
 
   async getDefaultQuiz(opts?: Partial<{ relations: Array<string>, where: object }>): Promise<Quiz> {
@@ -47,19 +43,19 @@ export class QuizService {
   }
 
   async getQuizById(id: number, opts?: Partial<{ relations: Array<string>, where: object }>) {
-    return await this.em.getRepository(Quiz).findOneOrFail({id, ...opts});
+    return await this.em.getRepository(Quiz).findOneOrFail({ id, ...opts });
   }
 
   async getQuizByName(name: string, opts?: Partial<{ relations: Array<string>, where: object }>): Promise<Quiz> {
     return await getConnection()
       .getRepository(Quiz)
-      .findOneOrFail({name, ...opts});
+      .findOneOrFail({ name, ...opts });
   }
 
   async getQuizQuestionsByQuizId(quizId: number): Promise<Array<Question> | undefined> {
     return await this.em
       .getRepository(Question)
-      .find({quizId});
+      .find({ quizId });
   }
 
   async getRecentQuizSubmission(
@@ -67,10 +63,10 @@ export class QuizService {
     quizId: number,
     opts: Partial<{ relations: Array<string>, where: object, order: object }> = {}
   ): Promise<QuizSubmission | undefined> {
-    opts = {order: {dateCreated: 'DESC'}, ...opts};
+    opts = { order: { dateCreated: 'DESC' }, ...opts };
     return await this.em
       .getRepository(QuizSubmission)
-      .findOne({quizId, userId, ...opts});
+      .findOne({ quizId, userId, ...opts });
   }
 
   async setUserQuizCompletion(
@@ -80,13 +76,13 @@ export class QuizService {
     return await this.em
       .createQueryBuilder()
       .update(User)
-      .set({passedQuiz: complete})
-      .where('id = :id', {id: userId})
+      .set({ passedQuiz: complete })
+      .where('id = :id', { id: userId })
       .execute();
   }
 
   async findQuestion(id: number): Promise<Question | undefined> {
-    return await this.em.getRepository(Question).findOne({id});
+    return await this.em.getRepository(Question).findOne({ id });
   }
 
   async checkQuestionResponse(questionResponse: QuestionResponse): Promise<boolean> {
@@ -102,8 +98,8 @@ export class QuizService {
     quizId?: number
   ): Promise<boolean> {
 
-    let quiz: Quiz = (quizId) ? await this.getQuizById(quizId, {relations: ['questions']}) : await this.getDefaultQuiz();
-    const quizSubmission = await this.getRecentQuizSubmission(userId, quiz.id, {relations: ['responses']});
+    let quiz: Quiz = (quizId) ? await this.getQuizById(quizId, { relations: ['questions'] }) : await this.getDefaultQuiz();
+    const quizSubmission = await this.getRecentQuizSubmission(userId, quiz.id, { relations: ['responses'] });
     if (!quizSubmission?.responses) return false;
 
     const questions = quiz.questions;
