@@ -83,7 +83,8 @@ test: docker-compose.yml
 .PHONY: deploy
 deploy: docker-compose.yml
 	docker-compose pull db redis
-	docker-compose up --build -d 
+	docker-compose build --pull
+	docker-compose up -d 
 
 .PHONY: buildprod
 buildprod: docker-compose.yml
