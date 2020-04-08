@@ -43,20 +43,34 @@
             <div class="top">
                 <h1>Port of Mars</h1>
                 <h2>Player Dashboard</h2>
+                
             </div>
             
             <div class="bottom">
                 <h2>Action Items</h2>
-                <div class="action-item">
+                <!-- <div class="action-item">
                     <p>Connect to Current Game </p>
 
-                    <!-- TODO: check if there is a game currently taking place-->
+                    TODO: check if there is a game currently taking place
                     <BButton squared class="button" variant="dark" :to="'/game'">Go</BButton>
                 </div>
                 <div class="action-item">
                     <p>Take Exit Survey</p>
-                    <!--TODO: check if user completed exit survey -->
+                    TODO: check if user completed exit survey 
                     <BButton squared class="button" variant="dark">Go</BButton>
+                </div> -->
+
+                <div v-if="loading">
+                    <p>Action Items are loading...</p>
+                </div>
+
+                <div v-else>
+                    <div v-for="(item,index) in actionItems" :key="index" class="action-item">
+                        <p>{{item.description}}</p>
+                        <BButton squared class="button" variant="dark" :to="item.link">Go</BButton>
+                    </div>
+                </div>
+
                 </div>
             </div>
         </BCol>
@@ -73,8 +87,10 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Mixins } from 'vue-property-decorator';
 import { BRow, BCol, BButton, BLink } from 'bootstrap-vue';
+import DashboardAPI from '@port-of-mars/client/api/dashboard/dashboardAPI';
+
 
 @Component({
     components: {
@@ -82,9 +98,23 @@ import { BRow, BCol, BButton, BLink } from 'bootstrap-vue';
         BLink,
         BRow,
         BCol
-    }
+    },
 })
-export default class PlayerDashboard extends Vue {}
+export default class PlayerDashboard extends Mixins(Vue, DashboardAPI) {
+    private visible = false;
+    private loading = true;
+    private actionItems = [];
+
+    async mounted(){
+        await this.actionItemSet();
+    }
+
+    async actionItemSet(){
+        this.actionItems = await this.getActionItems();
+        this.loading = false;
+    }
+    
+}
 </script>
 
 <style lang="scss" scoped>
