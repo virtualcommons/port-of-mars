@@ -120,10 +120,16 @@ export default class AccomplishmentCard extends Vue {
   }
 
   private handleClick() {
-    this.$root.$emit('openModalCard', {
-      card: 'accomplishment',
-      payload: this.accomplishment,
-    });
+    this.$tstore.commit('SET_CARD_MODAL_VISIBILITY', {
+      visible: true,
+      data:{
+        type:'ModalCard',
+        info:{
+          card: 'accomplishment',
+          payload: this.accomplishment
+        },
+      }
+    })
   }
 
   get cardTypeStyling() {
@@ -183,18 +189,26 @@ export default class AccomplishmentCard extends Vue {
   private handleDiscard() {
     if (this.$store.getters.layout == 'tutorial') {
       this.api.discardAccomplishment(this.accomplishment.id);
+
     } else {
-      this.$root.$emit('openmodalconfirmation', {
-        text: `Selecting \"Yes\" will discard the accomplishment \"${this.accomplishment.label}\" and a new card will be drawn next round.`,
-        victoryPoints: this.accomplishment.victoryPoints,
-        cost: this.accomplishmentCost,
-        phaseOpened: this.$store.state.phase,
-        type: 'discardAccomplishment',
-        actionData: this.accomplishment.id,
-      });
+      this.$tstore.commit('SET_CARD_MODAL_VISIBILITY', {
+      visible: true,
+      data:{
+        type:'ModalConfirmation',
+        info:{
+          text: `Selecting \"Yes\" will discard the accomplishment \"${this.accomplishment.label}\" and a new card will be drawn next round.`,
+          victoryPoints: this.accomplishment.victoryPoints,
+          cost: this.accomplishmentCost,
+          phaseOpened: this.$store.state.phase,
+          type: 'discardAccomplishment',
+          actionData: this.accomplishment.id
+        },
+      }
+    })
+
+    }
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>
