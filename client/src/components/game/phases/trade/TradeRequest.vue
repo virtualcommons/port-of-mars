@@ -1,6 +1,6 @@
 <template>
-  <div class="trade-request-component tour-trade-component">
-    <div class="trade-partner tour-trade-partner">
+  <div class="trade-request-component">
+    <div class="trade-partner tour-request-trade-partner">
       <div class="wrapper trade-send">
         <p class="trade-title">
           Trade With:
@@ -32,20 +32,21 @@
     <div class="trade-send-options">
       <TradeOptions
         :resourceReader="handleSendResources"
-        text="You give up"
+        text="You offer"
         mode="outgoing"
-        class="options-block tour-give-up"
+        class="options-block tour-offer-resources"
         :resources="sentResources"
       />
       <TradeOptions
         :resourceReader="handleReceiveResources"
         text="In exchange for"
         mode="incoming"
-        class="options-block tour-get-in-return"
+        class="options-block tour-request-resources"
         :resources="exchangeResources"
       />
       <button
         :disabled="!clientValidation"
+        class="tour-send-trade"
         @click="handleTrade"
       >
         Send

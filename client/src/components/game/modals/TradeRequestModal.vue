@@ -39,9 +39,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Inject, Vue } from 'vue-property-decorator';
 import TradeRequest from '@port-of-mars/client/components/game/phases/trade/TradeRequest.vue'
 import ContainerAccomplishmentsGeneral from '@port-of-mars/client/components/game/accomplishments/ContainerAccomplishmentsGeneral.vue';
+import { TutorialAPI } from '../../../api/tutorial/request';
 
 @Component({
     components:{
@@ -49,7 +50,10 @@ import ContainerAccomplishmentsGeneral from '@port-of-mars/client/components/gam
         ContainerAccomplishmentsGeneral
     }
 })
-export default class TradeRequestModal extends Vue{
+export default class TradeRequestModal extends Vue {
+    @Inject()
+    readonly api!: TutorialAPI;
+
 
     get activeAccomplishments(){
         return this.$tstore.getters.player.accomplishments.purchasable;
@@ -58,6 +62,28 @@ export default class TradeRequestModal extends Vue{
     handleExit(){
         this.$tstore.commit('SET_TRADE_REQUEST_MODAL_VISIBILITY', false);
     }
+
+    // TOUR TRADE
+
+    // get requestTrade() {
+    //     this.tutorialValidation('request')
+    //     // this.$tstore.commit('SET_TRADE_REQUEST_MODAL_VISIBILITY', true);
+    //     return this.$tstore.state.SET_TRADE_REQUEST_MODAL_VISIBILITY;
+    // }
+
+    // get isInTutorial() {
+    //     return this.$tstore.getters.layout === 'tutorial';
+    // }
+
+    // tutorialValidation(type: string) {
+    //     if (this.isInTutorial) {
+    //         switch(type) {
+    //             case 'request':
+    //                 this.api.requestTrade(this.requestTrade);
+    //                 break;
+    //         }
+    //     }
+    // }
 }
 </script>
 

@@ -69,23 +69,23 @@ export default class Investments extends Vue {
 
   @Prop() role!: Role;
 
-  active = this.$tstore.state.players[this.role].accomplishments.purchasable;
-  purchased = this.$tstore.state.players[this.role].accomplishments.purchased;
+  // active = this.$tstore.state.players[this.role].accomplishments.purchasable;
+  // purchased = this.$tstore.state.players[this.role].accomplishments.purchased;
 
-  get playerData() {
-    return {
-      info: this.$tstore.state.players[this.role],
-      isSelf: this.role == this.$tstore.getters.player.role
-    };
-  }
+  // get playerData() {
+  //   return {
+  //     info: this.$tstore.state.players[this.role],
+  //     isSelf: this.role == this.$tstore.getters.player.role
+  //   };
+  // }
 
-  get activeAccomplishments() {
-    return this.active;
-  }
+  // get activeAccomplishments() {
+  //   return this.active;
+  // }
 
-  get purchasedAccomplishments() {
-    return this.purchased;
-  }
+  // get purchasedAccomplishments() {
+  //   return this.purchased;
+  // }
 
   get costs(): any {
     const p = this.$tstore.getters.player;
