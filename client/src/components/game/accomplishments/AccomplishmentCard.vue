@@ -177,7 +177,7 @@ export default class AccomplishmentCard extends Vue {
     let inventory = _.clone(this.$tstore.getters.player.inventory);
 
     Object.keys(inventory).forEach((resource) => {
-      inventory[resource]+= pendingInventory[resource];
+      inventory[resource as Resource]+= pendingInventory[resource as Resource];
     });
 
     return inventory;
