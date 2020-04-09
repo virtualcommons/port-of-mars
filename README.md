@@ -67,6 +67,8 @@ You should be able to go to a game instance by logging in as 'bob' on the login 
 
 If you just want to update the `docker-compose.yml` you can run `make docker-compose.yml`.
 
+To get `make browser` working you'll need to install an Firefox extension so that you open container tabs from the command line. See https://addons.mozilla.org/en-US/firefox/addon/open-url-in-container/
+
 ### Staging Setup
 
 ```bash
