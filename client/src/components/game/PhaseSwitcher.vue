@@ -2,7 +2,7 @@
   <div class="c-phaseswitcher container">
     <div class="wrapper row">
       <Events v-if="gamePhase == phase.events" />
-      <Investments v-if="gamePhase == phase.invest" />
+      <Investments v-else-if="gamePhase == phase.invest" />
       <Trades v-else-if="gamePhase == phase.trade" />
       <Purchase v-else-if="gamePhase == phase.purchase" />
       <Discard v-else-if="gamePhase == phase.discard" />
