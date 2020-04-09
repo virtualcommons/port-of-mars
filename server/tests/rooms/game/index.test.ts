@@ -167,6 +167,14 @@ describe('trading validations', () => {
 
     expect(tradeCanBeCompleted(g.players[g.tradeSet['123'].from.role as Role].inventory, g.tradeSet['123'].from.resourceAmount)).toBe(false);
   });
+
+  it('can be completed', () => {
+    g.acceptTrade('456');
+    expect(g.players.Curator.inventory.culture).toBe(0);
+    expect(g.players.Curator.inventory.finance).toBe(1);
+    expect(g.players.Entrepreneur.inventory.culture).toBe(4);
+    expect(g.players.Entrepreneur.inventory.finance).toBe(2);
+  })
 });
 
 
