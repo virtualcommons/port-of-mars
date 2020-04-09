@@ -13,11 +13,11 @@
     </div>
 
     <div class="info-wrapper row">
-      <div class="points col-3">
+      <div class="points" v-bind="{class: showDescription ? 'col-3' : 'col-12'}">
         <p>Points</p>
         <p>{{ accomplishment.victoryPoints }}</p>
       </div>
-      <div class="flavortext col-9">
+      <div class="flavortext col-9" v-if="showDescription">
         <p>{{ accomplishment.flavorText }}</p>
       </div>
     </div>
@@ -113,6 +113,9 @@ export default class AccomplishmentCard extends Vue {
   @Prop({ default: AccomplishmentCardType.default })
   private type!: AccomplishmentCardType;
 
+  @Prop({default: true})
+  private showDescription!:boolean;
+
   // NOTE :: All / Default Type
 
   get cardType() {
@@ -139,7 +142,8 @@ export default class AccomplishmentCard extends Vue {
       case AccomplishmentCardType.discard:
         return this.canPurchase ? 'purchasable' : 'default';
       case AccomplishmentCardType.default:
-        return 'default';
+        //return 'default';
+        return this.canPurchase ? 'purchasable' : 'unpurchasable';
       default:
         return 'default';
     }
@@ -158,7 +162,7 @@ export default class AccomplishmentCard extends Vue {
   get canPurchase() {
     return canPurchaseAccomplishment(
       this.accomplishment,
-      this.$tstore.getters.player.inventory
+      this.playerInventory
     );
   }
 
@@ -169,7 +173,14 @@ export default class AccomplishmentCard extends Vue {
   }
 
   get playerInventory() {
-    return _.clone(this.$tstore.getters.player.inventory);
+    let pendingInventory = _.clone(this.$tstore.getters.player.pendingInvestments);
+    let inventory = _.clone(this.$tstore.getters.player.inventory);
+
+    Object.keys(inventory).forEach((resource) => {
+      inventory[resource as Resource]+= pendingInventory[resource as Resource];
+    });
+
+    return inventory;
   }
 
   private shouldResourceBeGrayedOut(investment: Investment) {

@@ -13,6 +13,7 @@
           v-for="accomplishment in accomplishmentSet"
           :key="accomplishment.id"
           :accomplishment="accomplishment"
+          :showDescription="showDescription"
         />
       </div>
     </div>
@@ -33,6 +34,7 @@ import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
 export default class ContainerAccomplishmentsGeneral extends Vue {
   @Prop() accomplishmentSet!: any;
   @Prop({ default: false }) isVisible!: boolean;
+  @Prop({default: true})showDescription!:boolean; 
 }
 </script>
 

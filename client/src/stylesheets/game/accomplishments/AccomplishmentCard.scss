@@ -26,10 +26,11 @@
       .icon {
         position: absolute;
         top: 0;
-        right: 0.5rem;
+        right: 0rem;
         height: 1.5rem;
         width: 1.5rem;
         cursor: pointer;
+        color:black;
         @include default-transition-base;
 
         &:hover {
@@ -150,7 +151,7 @@
 .unpurchasable {
   border: 0.125rem solid $space-white;
   background-color: $space-white;
-  opacity: 0.5;
+  //opacity: 0.5;
 
   .purchase button,
   .discard button {

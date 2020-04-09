@@ -14,7 +14,7 @@
       <p :class="countdownStyling">{{ timeRemaining }}</p>
     </div>
     <div class="section tour-ready-to-advance-button">
-      <button @click="submitDone" v-if="!playerReady">Ready to Advance</button>
+      <button @click="submitDone" class="ready-button" v-if="!playerReady">Ready to Advance</button>
       <button @click="submitCancel" v-if="playerReady">Cancel Readiness</button>
     </div>
   </div>
