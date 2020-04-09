@@ -1,4 +1,4 @@
-import pino, {LogFn, Logger} from 'pino'
+import pino, { LogFn, Logger } from 'pino';
 
 export interface LogService {
   trace: LogFn
