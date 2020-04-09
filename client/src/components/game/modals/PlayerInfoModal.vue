@@ -60,13 +60,15 @@
                         <p class="active-text">Active</p>
                         <ContainerAccomplishmentsGeneral
                             :accomplishmentSet="activeAccomplishments"
-                            :isVisible="playerData.isSelf || isUnderAudit"/>
+                            :isVisible="playerData.isSelf || isUnderAudit"
+                            :showDescription="false"/>
                     </div>
                     <div class="purchased">
                         <p class="purchased-text">Purchased</p>
                         <ContainerAccomplishmentsGeneral
                             :accomplishmentSet="purchasedAccomplishments"
-                            :isVisible="playerData.isSelf || isUnderAudit"/>
+                            :isVisible="playerData.isSelf || isUnderAudit"
+                            :showDescription="false"/>
                     </div>
                 </div>
             </div>
