@@ -2,4 +2,4 @@ version: '3'
 services:
   server:
     ports:
-      - '127.0.0.1:2567:2567'
+      - '2567:2567'
