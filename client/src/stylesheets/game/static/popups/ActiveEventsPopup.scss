@@ -33,7 +33,7 @@
     padding: 0.5rem;
     @include make-column-and-top;
     background-color: $space-gray;
-    overflow-y: scroll;
+    // overflow-y: hidden;
 
     .empty {
       margin-bottom: 0;

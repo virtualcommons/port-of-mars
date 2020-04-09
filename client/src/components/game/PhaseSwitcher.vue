@@ -37,7 +37,6 @@ export default class Phases extends Vue {
   }
 
   get gamePhase() {
-    // return this.phase.discard;
     return this.$store.state.phase;
   }
 }

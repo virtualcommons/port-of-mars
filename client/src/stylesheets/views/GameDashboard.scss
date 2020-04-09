@@ -1,11 +1,21 @@
+.game-dashboard-container {
+  position: fixed;
+}
+
 .game-dashboard,
 .game-dashboard-defeat,
 .game-dashboard-victory {
   height: 100vh !important;
   width: 100vw !important;
+  margin: 0;
   // max-width: none !important;
   // @include reset-padding-margin;
   @include make-center;
+  overflow: hidden;
   // background-color: $space-gray;
   // background-color: green;
 }
+
+  .gameboard-popups {
+    position: relative; 
+  }
