@@ -27,6 +27,7 @@
               "
             />
           </div>
+          <p class="player-name">{{player}}</p>
         </div>
       </div>
     </div>
