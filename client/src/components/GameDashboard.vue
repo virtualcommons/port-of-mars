@@ -1,8 +1,11 @@
 <template>
-  <div class="game-dashboard-container">
-    <div v-if="gamePhase != phase.defeat && gamePhase != phase.victory" class="game-dashboard">
-      <MasterComponent v-if="environment == 'development'" />
-      <ModalController />
+  <div>
+    <div
+      v-if="gamePhase != phase.defeat && gamePhase != phase.victory"
+      class="game-dashboard"
+    >
+      <MasterComponent v-if="isDevModeEnabled" />
+      <ModalController/>
       <GameboardContainer />
     </div>
     <div v-else-if="gamePhase == phase.defeat" class="game-dashboard-defeat">
@@ -20,18 +23,17 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
-import { Phase } from "@port-of-mars/shared/types";
-import { EnvironmentMode } from "@port-of-mars/client/settings";
-import MasterComponent from "@port-of-mars/client/components/MasterComponent.vue";
-import ModalController from "@port-of-mars/client/components/game/modals/ModalController.vue";
-import GameboardContainer from "@port-of-mars/client/components/root/GameboardContainer.vue";
-import ContainerDefeat from "@port-of-mars/client/components/root/ContainerDefeat.vue";
-import ContainerVictory from "@port-of-mars/client/components/root/ContainerVictory.vue";
-import environment from "../store/mutationFolder/environment";
+import { Vue, Component } from 'vue-property-decorator';
+import { Phase } from '@port-of-mars/shared/types';
+import { EnvironmentMode } from '@port-of-mars/client/settings';
+import MasterComponent from '@port-of-mars/client/components/MasterComponent.vue';
+import ModalController from '@port-of-mars/client/components/game/modals/ModalController.vue';
+import GameboardContainer from '@port-of-mars/client/components/root/GameboardContainer.vue';
+import ContainerDefeat from '@port-of-mars/client/components/root/ContainerDefeat.vue';
 import ActiveEventsPopup from "@port-of-mars/client/components/game/static/popups/ActiveEventsPopup.vue";
 import InventoryPopup from "@port-of-mars/client/components/game/static/popups/InventoryPopup.vue";
 import MarsLogPopup from "@port-of-mars/client/components/game/static/popups/MarsLogPopup.vue";
+import {isDev, isStaging} from "@port-of-mars/shared/settings";
 
 @Component({
   components: {
@@ -49,6 +51,10 @@ export default class GameDashboard extends Vue {
 
   get phase() {
     return Phase;
+  }
+
+  get isDevModeEnabled() {
+    return isDev() || isStaging();
   }
 
   /**
