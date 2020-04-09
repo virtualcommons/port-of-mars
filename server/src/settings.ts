@@ -13,7 +13,7 @@ export interface AppSettings {
 }
 
 export class LobbySettings {
-  constructor(public evaluateAtEveryMinute: number = 15) {}
+  constructor(public evaluateAtEveryMinute: number = 15, public devMode: boolean = true) {}
 }
 
 const dev: () => AppSettings = () => ({
@@ -29,7 +29,7 @@ const staging: () => AppSettings = () => ({
   host: 'https://alpha.portofmars.asu.edu',
   logging: new DevLogging(),
   secret: SECRET_KEY,
-  lobby: new LobbySettings()
+  lobby: new LobbySettings(2)
 });
 
 const prod: () => AppSettings = () => {
@@ -40,7 +40,7 @@ const prod: () => AppSettings = () => {
     host: 'https://portofmars.asu.edu',
     logging: new DevLogging(),
     secret: SECRET_KEY,
-    lobby: new LobbySettings()
+    lobby: new LobbySettings(15, false)
   };
 };
 

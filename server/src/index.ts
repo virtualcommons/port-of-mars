@@ -182,7 +182,7 @@ async function createApp() {
   // register your room handlers
   gameServer.define(GameRoom.NAME, GameRoom);
   // FIXME: at some point we should refactor how we inject isDev() into the various classes that need them
-  gameServer.define(RankedLobbyRoom.NAME, RankedLobbyRoom, { dev: isDev(), persister });
+  gameServer.define(RankedLobbyRoom.NAME, RankedLobbyRoom, { persister });
 
 
   applyInStagingOrProd(() => app.use(Sentry.Handlers.errorHandler()));

@@ -65,7 +65,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
   /**
    * determine if lobby should force group assignment
    */
-  dev = false;
+  devMode = false;
 
   persister!: Persister;
 
@@ -76,9 +76,9 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
 
   onCreate(options: any) {
     this.setState(new LobbyRoomState());
-    this.dev = options.dev;
     this.persister = options.persister;
     this.evaluateAtEveryMinute = settings.lobby.evaluateAtEveryMinute;
+    this.devMode = settings.lobby.devMode;
 
     /**
      * Redistribute clients into groups at every interval
@@ -119,7 +119,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
     this.clientStats.push(clientStat);
     this.state.waitingUserCount = this.clientStats.length;
     this.sendSafe(client, { kind: 'joined-client-queue', value: true });
-    if (this.dev && this.clientStats.length === this.numClientsToMatch) {
+    if (this.devMode && this.clientStats.length === this.numClientsToMatch) {
       this.redistributeGroups();
     }
   }
@@ -212,7 +212,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
 
   fillUsernames(usernames: Array<string>) {
     // in development mode, allow for less than 5 usernames and fill in 
-    if (usernames.length < ROLES.length && this.dev) {
+    if (usernames.length < ROLES.length && this.devMode) {
       const newUsernames = ['bob1', 'amanda1', 'adison1', 'sydney1', 'frank1'].filter(u => !usernames.includes(u));
       return usernames.concat(newUsernames).slice(0, this.numClientsToMatch);
     }
@@ -221,7 +221,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
   }
 
   isGroupReady(group: MatchmakingGroup): boolean {
-    return group.ready || group.clientStats.length === this.numClientsToMatch || this.dev;
+    return group.ready || group.clientStats.length === this.numClientsToMatch || this.devMode;
   }
 
   async checkGroupsReady() {
