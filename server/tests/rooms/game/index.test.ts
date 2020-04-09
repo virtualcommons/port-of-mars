@@ -3,9 +3,7 @@ import {CURATOR, PIONEER, RESEARCHER, ENTREPRENEUR, TradeData, Role} from "@port
 import {getAccomplishmentByID, getAccomplishmentIDs} from "@port-of-mars/server/data/Accomplishment";
 import * as _ from 'lodash'
 import {mockGameStateInitOpts} from "@port-of-mars/server/util";
-import {tradeCanBeCompleted} from "@port-of-mars/shared/validation";
-import {Connection, getConnection, QueryRunner} from "typeorm";
-import {ServiceProvider} from "@port-of-mars/server/services";
+import {canSendTradeRequest} from "@port-of-mars/shared/validation";
 
 
 describe('a Researcher Player Accomplishment', () => {
@@ -115,7 +113,7 @@ describe('trading validations', () => {
     government:0,
   });
 
-  g.tradeSet['123'] = new Trade(
+  g.tradeSet['invalid-request'] = new Trade(
     {
     role: 'Curator',
     resourceAmount: {
@@ -132,12 +130,12 @@ describe('trading validations', () => {
       science: 0,
       government: 0,
       legacy: 0,
-      finance: 2,
+      finance: 5,
       culture: 0
     }
   });
 
-  g.tradeSet['456'] = new Trade(
+  g.tradeSet['valid-request'] = new Trade(
     {
     role: 'Entrepreneur',
     resourceAmount: {
@@ -159,17 +157,25 @@ describe('trading validations', () => {
     }
   });
 
-  let t1:Trade = g.tradeSet['123'];
-  let t2:Trade = g.tradeSet['456'];
+  let invalidTrade:Trade = g.tradeSet['invalid-request'];
+  let validTrade:Trade = g.tradeSet['valid-request'];
 
-  t2.apply(g);
-  it('does not allow resource values below 0', () => {
+  it('Curator can send trade request that Entrepeneur cannot accept', () => {
+    expect(canSendTradeRequest(g.players[invalidTrade.from.role as Role], invalidTrade.from.resourceAmount)).toBe(true);
+  });
 
-    expect(tradeCanBeCompleted(g.players[g.tradeSet['123'].from.role as Role].inventory, g.tradeSet['123'].from.resourceAmount)).toBe(false);
+  it('Entrepeneur must have enough resources to complete trade request', () => {
+    expect(g.canCompleteTrade(g.players[invalidTrade.from.role], g.players[invalidTrade.to.role], invalidTrade));
+  })
+
+  it('Entrepeneur can send valid trade request', () => {
+    expect(canSendTradeRequest(g.players[validTrade.from.role as Role], validTrade.from.resourceAmount)).toBe(true);
   });
 
   it('can be completed', () => {
-    g.acceptTrade('456');
+    expect(g.players.Curator.inventory.finance).toBe(0);
+    expect(g.players.Curator.inventory.culture).toBe(3);
+    g.acceptTrade('valid-request');
     expect(g.players.Curator.inventory.culture).toBe(0);
     expect(g.players.Curator.inventory.finance).toBe(1);
     expect(g.players.Entrepreneur.inventory.culture).toBe(4);
@@ -187,8 +193,6 @@ describe('inverting pending inventory', () => {
     legacy:0,
     government:0,
   });
-
-  
 
   it('sets the pending investments to the inverted inventory while preserving the inventory', () => {
     g.players['Curator'].invertPendingInventory();

@@ -28,7 +28,7 @@ import { getAccomplishmentByID } from '@port-of-mars/server/data/Accomplishment'
 import { GameState } from '@port-of-mars/server/rooms/game/state';
 import { Command } from '@port-of-mars/server/rooms/game/commands/types';
 import { GameEvent } from '@port-of-mars/server/rooms/game/events/types';
-import { tradeIsValid } from "@port-of-mars/shared/validation";
+import { canSendTradeRequest } from "@port-of-mars/shared/validation";
 import { settings } from "@port-of-mars/server/settings";
 
 const logger = settings.logging.getLogger(__filename);
@@ -176,7 +176,7 @@ export class SendTradeRequestCmd implements Command {
   }
 
   execute(): Array<GameEvent> {
-    if (tradeIsValid(this.player, this.trade.from.resourceAmount)) {
+    if (canSendTradeRequest(this.player, this.trade.from.resourceAmount)) {
       return [new SentTradeRequest(this.trade)];
     }
     else {

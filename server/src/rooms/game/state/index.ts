@@ -28,7 +28,7 @@ import {
   RESOURCES,
   MarsLogCategory
 } from '@port-of-mars/shared/types';
-import { tradeCanBeCompleted } from '@port-of-mars/shared/validation';
+import { canSendTradeRequest } from '@port-of-mars/shared/validation';
 import _ from 'lodash';
 import * as assert from 'assert';
 import { uuid } from 'uuidv4';
@@ -631,9 +631,9 @@ export class Trade extends Schema {
   @type(TradeAmount)
   to: TradeAmount;
 
-  apply(game: GameState) {
-    const pFrom = game.players[this.from.role];
-    const pTo = game.players[this.to.role];
+  apply(state: GameState) {
+    const pFrom = state.players[this.from.role];
+    const pTo = state.players[this.to.role];
 
     pFrom.inventory.update(_.mapValues(this.from.resourceAmount, r => -r!));
     pFrom.inventory.update(this.to.resourceAmount);
@@ -1249,24 +1249,35 @@ export class GameState extends Schema implements GameData {
     }
   }
 
+  canCompleteTrade(fromPlayer: PlayerData, toPlayer: PlayerData, trade: Trade): boolean {
+    return canSendTradeRequest(fromPlayer, trade.from.resourceAmount) 
+      && canSendTradeRequest(toPlayer, trade.to.resourceAmount);
+  }
+
   acceptTrade(id: string): void {
     let message: string;
     let category: string;
     const performedBy: ServerRole = SERVER;
 
     const trade: Trade = this.tradeSet[id];
-    const toRole: Role = trade.to.role;
-    const fromRole: Role = trade.from.role;
-    const fromRoleInventory: ResourceAmountData = this.players[fromRole].inventory;
+    const fromRole = trade.from.role;
+    const toRole = trade.to.role;
+    const fromPlayer = this.players[fromRole];
+    const toPlayer = this.players[toRole];
     const fromTradeResources: ResourceAmountData = trade.from.resourceAmount;
 
-    if (tradeCanBeCompleted(fromRoleInventory, fromTradeResources)) {
+    if (this.canCompleteTrade(fromPlayer, toPlayer, trade)) {
       let toMsg: Array<string> = [];
       let fromMsg: Array<string> = [];
 
       const toTradeResources: ResourceAmountData = trade.to.resourceAmount;
 
-      this.tradeSet[id].apply;
+      // apply trade resources to fromPlayer's inventory
+      fromPlayer.inventory.update(_.mapValues(trade.from.resourceAmount, r => -r!));
+      fromPlayer.inventory.update(trade.to.resourceAmount);
+      // apply trade resources to toPlayer's inventory
+      toPlayer.inventory.update(_.mapValues(trade.to.resourceAmount, r => -r!));
+      toPlayer.inventory.update(trade.from.resourceAmount);
 
       for (const [resource, amount] of Object.entries(toTradeResources)) {
         if (amount > 0) {
