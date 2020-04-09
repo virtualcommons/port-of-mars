@@ -75,6 +75,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
   scheduler: any = undefined;
 
   onCreate(options: any) {
+    logger.info(`RankedLobbyRoom: new room ${this.roomId}`);
     this.setState(new LobbyRoomState());
     this.persister = options.persister;
     this.evaluateAtEveryMinute = settings.lobby.evaluateAtEveryMinute;
