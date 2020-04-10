@@ -1,32 +1,33 @@
 <template>
-  <div class="events-container tour-event">
-    <div class="event-deck-container">
-      <div class="section-text">
-        <p>Event Deck</p>
-      </div>
-      <div class="events">
-        <EventCard
-          class="event-container"
-          v-for="(event, index) in eventsForTheRound"
-          :key="index"
-          :event="event"
-          :visible="eventVisible(index)"
-          :active="eventActive(index)"
-        />
-      </div>
-    </div>
-    <div class="active-event-container tour-active-events">
-      <div class="section-text">
-        <p>Active Events</p>
-      </div>
-      <div class="event-holder">
-        <div class="event-info">
-          <div class="event-title">
-            <p>Event #{{ eventsProcessed + 1 }}- {{ currentEvent.name }}</p>
+  <div class="c-events container tour-event">
+    <div class="wrapper row">
+      <div class="event-deck col-4">
+        <div class="topbar">
+          <p class="title">Event Deck</p>
+        </div>
+        <div class="outer-wrapper">
+          <div class="wrapper event-scroll">
+            <EventCard
+              class="event-container"
+              v-for="(event, index) in eventsForTheRound"
+              :key="index"
+              :event="event"
+              :visible="eventVisible(index)"
+              :active="eventActive(index)"
+            />
           </div>
         </div>
-        <div class="event-action-wrapper">
-          <EventContainer :event="currentEvent" :key="eventNumber" />
+      </div>
+      <div class="active-events col-8 tour-active-events">
+        <div class="topbar">
+          <p class="title">
+            {{ eventTitle }}
+          </p>
+        </div>
+        <div class="outer-wrapper">
+          <div class="wrapper">
+            <EventContainer :event="currentEvent" :key="eventNumber" />
+          </div>
         </div>
       </div>
     </div>
@@ -54,17 +55,16 @@ export default class Events extends Vue {
     return this.$tstore.state.marsEventsProcessed;
   }
 
-  get currentEvent(): MarsEventData {
-    const current: MarsEventData = this.$store.getters.currentEvent;
-
-    const data = { name: current.name, visibility: true };
-    //this.$store.commit('SET_EVENT_VISIBILITY', data);
-    return current;
-  }
-
   get eventNumber(): number {
     const eventNumber = this.$tstore.state.marsEventsProcessed + 1;
     return eventNumber;
+  }
+
+  get currentEvent(): MarsEventData {
+    const current: MarsEventData = this.$store.getters.currentEvent;
+    // const data = { name: current.name, visibility: true };
+    //this.$store.commit('SET_EVENT_VISIBILITY', data);
+    return current;
   }
 
   private eventVisible(index: number) {
@@ -79,8 +79,17 @@ export default class Events extends Vue {
     );
   }
 
+  get eventTitle() {
+    if (this.eventsProcessed && this.currentEvent) {
+      return `Active Event #${this.eventsProcessed + 1}: ${
+        this.currentEvent.name
+      }`;
+    }
+    return `Active Event: None`;
+  }
+
   private updated(): any {
-    const elem = this.$el.querySelector('.event-deck-container');
+    const elem = this.$el.querySelector('.event-scroll');
     elem!.scrollTop = elem!.scrollHeight;
   }
 }

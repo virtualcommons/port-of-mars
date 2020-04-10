@@ -5,7 +5,7 @@
       <div class="players col-6 tour-profile">
         <div class="wrapper container">
           <div class="row">
-            <div class="player col- tour-profile-self">
+            <div class="player col-5 tour-profile-self">
               <Player />
             </div>
             <div class="others col-7 tour-players">

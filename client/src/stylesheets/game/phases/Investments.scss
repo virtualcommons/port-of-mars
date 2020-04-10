@@ -83,7 +83,7 @@
         width: 100%;
         padding: 0.5rem;
         background-color: $space-white-opaque-1;
-        overflow-y: scroll;
+        overflow-y: hidden;
 
         .wrapper {
           width: 100%;
@@ -93,29 +93,29 @@
       }
     }
 
-    .player-accomplishments {
-      width: 50%;
+    // .player-accomplishments {
+    //   width: 50%;
 
-      .active-text,
-      .purchased-text {
-        color: $new-space-orange;
-        font-weight: bold;
-      }
+    //   .active-text,
+    //   .purchased-text {
+    //     color: $new-space-orange;
+    //     font-weight: bold;
+    //   }
 
-      .accomplishment-wrapper {
-        display: flex;
-        min-height: 18rem;
-        max-height: 18rem;
-        flex: 1 1 0;
+    //   .accomplishment-wrapper {
+    //     display: flex;
+    //     min-height: 18rem;
+    //     max-height: 18rem;
+    //     flex: 1 1 0;
 
-        justify-content: space-between;
-        position: relative;
+    //     justify-content: space-between;
+    //     position: relative;
 
-        .active,
-        .purchased {
-          width: 48%;
-        }
-      }
-    }
+    //     .active,
+    //     .purchased {
+    //       width: 48%;
+    //     }
+    //   }
+    // }
   }
 }
