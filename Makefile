@@ -1,5 +1,7 @@
 include config.mk
 
+DB_USER=marsmadness
+TEST_DB_NAME=pom_testing
 DB_DATA_PATH=docker/data
 DB_PASSWORD_PATH=keys/pom_db_password
 JWT_SECRET_PATH=keys/jwt
@@ -73,7 +75,7 @@ docker-compose.yml: base.yml staging.base.yml $(ENVIR).yml config.mk $(DB_DATA_P
 
 .PHONY: test-setup
 test-setup: docker-compose.yml
-	docker-compose run --rm server bash -c "dropdb --if-exists -h db -U marsmadness pom_testing && createdb -h db -U marsmadness pom_testing && yarn typeorm schema:sync -c test"
+	docker-compose run --rm server bash -c "dropdb --if-exists -h db -U ${DB_USER} ${TEST_DB_NAME} && createdb -h db -U ${DB_USER} ${TEST_DB_NAME} && yarn typeorm schema:sync -c test"
 
 .PHONY: test
 test: docker-compose.yml
@@ -93,4 +95,4 @@ buildprod: docker-compose.yml
 
 .PHONY: clean
 clean:
-	docker-compose run --rm server dropdb -h db -U marsmadness pom_testing
+	docker-compose run --rm server dropdb -h db -U ${DB_USER} ${TEST_DB_NAME}
