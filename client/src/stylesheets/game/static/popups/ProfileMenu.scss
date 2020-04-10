@@ -29,6 +29,14 @@
     position: relative;
     @include expand;
 
+    .link {
+      margin-bottom: 1rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
     p,
     a,
     button {
@@ -38,7 +46,7 @@
 
     a,
     button {
-      margin-bottom: 0.5rem;
+      // margin-bottom: 0.5rem;
       font-weight: $font-weight-maven-pro-medium;
 
       span {

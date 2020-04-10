@@ -15,12 +15,14 @@
     </button>
     <div class="wrapper" v-show="visible">
       <p>Logged in as {{ username }}</p>
-      <router-link :to="'dashboard'">
+      <router-link :to="'dashboard'" class="link">
         <button>
-          <span>Your Dashboard</span>
+          <font-awesome-icon :icon="['fas', 'user-circle']" size="sm" /><span
+            >Your Dashboard</span
+          >
         </button>
       </router-link>
-      <button @click="logoutUser">
+      <button @click="logoutUser" class="link">
         <font-awesome-icon :icon="['fas', 'sign-out-alt']" size="sm" /><span
           >Log Out</span
         >
@@ -28,6 +30,7 @@
       <a
         href="mailto:portmars@asu.edu?subject=[port-of-mars]  Issue Submission"
         target="_blank"
+        class="link"
         ><font-awesome-icon
           :icon="['fas', 'exclamation-triangle']"
           size="sm"
@@ -42,12 +45,14 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons/faCaretRight';
 import { faCaretLeft } from '@fortawesome/free-solid-svg-icons/faCaretLeft';
+import { faUserCircle } from '@fortawesome/free-solid-svg-icons/faUserCircle';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons/faSignOutAlt';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons/faExclamationTriangle';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 library.add(faCaretRight);
 library.add(faCaretLeft);
+library.add(faUserCircle);
 library.add(faSignOutAlt);
 library.add(faExclamationTriangle);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
