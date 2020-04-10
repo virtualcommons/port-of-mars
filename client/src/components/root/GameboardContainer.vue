@@ -1,6 +1,9 @@
 <template>
   <div class="gameboardcontainer">
     <ProfileMenu />
+    <ActiveEventsPopup />
+    <InventoryPopup />
+    <MarsLogPopup />
     <div class="gameboardstatusbar row">
       <SystemHealth />
     </div>
@@ -16,11 +19,6 @@
       <div class="right col-3 tour-chat">
         <Chat />
       </div>
-    </div>
-    <div class="gameboard-popups">
-      <ActiveEventsPopup />
-      <InventoryPopup />
-      <MarsLogPopup />
     </div>
   </div>
 </template>
