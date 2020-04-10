@@ -4,7 +4,7 @@
   .wrapper {
     @include expand;
     @include make-column-and-center;
-    overflow-y: scroll;
+    overflow-y: hidden;
 
     .title {
       width: 100%;
