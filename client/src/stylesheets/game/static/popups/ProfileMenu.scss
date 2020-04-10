@@ -32,6 +32,7 @@
     p,
     a,
     button {
+      display: block;
       color: $space-gray;
       font-size: $font-med;
     }
@@ -51,7 +52,6 @@
     }
 
     a {
-      display: block;
       text-decoration: none;
     }
 

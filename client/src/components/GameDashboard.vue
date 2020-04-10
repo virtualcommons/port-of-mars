@@ -4,7 +4,6 @@
       v-if="gamePhase != phase.defeat && gamePhase != phase.victory"
       class="game-dashboard"
     >
-      <MasterComponent v-if="isDevModeEnabled" />
       <ModalController/>
       <GameboardContainer />
     </div>
@@ -26,7 +25,6 @@
 import { Vue, Component } from 'vue-property-decorator';
 import { Phase } from '@port-of-mars/shared/types';
 import { EnvironmentMode } from '@port-of-mars/client/settings';
-import MasterComponent from '@port-of-mars/client/components/MasterComponent.vue';
 import ModalController from '@port-of-mars/client/components/game/modals/ModalController.vue';
 import GameboardContainer from '@port-of-mars/client/components/root/GameboardContainer.vue';
 import ContainerDefeat from '@port-of-mars/client/components/root/ContainerDefeat.vue';
@@ -37,7 +35,6 @@ import {isDev, isStaging} from "@port-of-mars/shared/settings";
 
 @Component({
   components: {
-    MasterComponent,
     ModalController,
     GameboardContainer,
     ContainerDefeat,
