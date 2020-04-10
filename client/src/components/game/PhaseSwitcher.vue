@@ -1,5 +1,5 @@
 <template>
-  <div class="c-phaseswitcher container">
+  <div class="c-phaseswitcher">
     <div class="wrapper row">
       <Events v-if="gamePhase == phase.events" />
       <Investments v-else-if="gamePhase == phase.invest" />

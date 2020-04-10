@@ -1,6 +1,6 @@
 <template>
     <div class="modal-wrapper" v-show="showAnyModal">
-        <div class="player-info-modal-wrapper" v-show="playerModal.visible">
+        <div class="player-info-modal-wrapper tour-profile-self" v-show="playerModal.visible">
             <PlayerInfoModal :role='playerModal.role' />
         </div>
 

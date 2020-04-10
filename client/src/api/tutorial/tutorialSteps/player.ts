@@ -1,88 +1,83 @@
-import {Step} from '@port-of-mars/client/types/tutorial';
+import { Step, RIGHT, TOP, BOTTOM } from "@port-of-mars/client/types/tutorial";
 
-const steps:Array<Step> = [
-    {
-      target: '.tour-profile',
-      content: `
+const steps: Array<Step> = [
+  {
+    target: ".tour-profile",
+    content: `
         There are 5 roles in the Port of Mars: Researcher, Pioneer, Curator, Entrepreneur, and Politician.`,
-        params:{
-          placement: 'right'
-        }
+    params: {
+      placement: RIGHT
+    }
+  },
+  {
+    target: ".tour-player-self",
+    content:
+      "This is your role and score during the game. Your role determines " +
+      "the investments in influence currency you can make and the accomplishments " +
+      "that you can purchase toward the end of a round.",
+    params: {
+      placement: RIGHT
     },
-    {
-        target: '.tour-profile-self',
-        content:
-          'This is your role and score during the game. Your role determines ' +
-          'the investments in influence currency you can make and the accomplishments ' +
-          'that you can purchase toward the end of a round.',
-        params: {
-          placement: 'right'
-        }
-    },
-
-    {
-        target: '.tour-players',
-        content:
-          `These are the other four residents of the Port of Mars. During some events, you will be able to interact with their icons here.
+    stateTransform: [
+      {
+        SET_LAYOUT: `tutorial`,
+        // required: true,
+        // validationObject: {
+        //   SET_PLAYER_INFO_MODAL_VISIBILITY: true,
+        // }
+      }
+    ]
+  },
+  // {
+  //   target: ".tour-player-info-modal",
+  //   content:
+  //     `This will display all information related to your player.`,
+  //   params: {
+  //     placement: RIGHT
+  //   },
+  //   stateTransform: [
+  //     {
+  //       SET_LAYOUT: `tutorial`,
+  //       required: true,
+  //     }
+  //   ]
+  // },
+  {
+    target: ".tour-players",
+    content: `These are the other four residents of the Port of Mars. During some events, you will be able to interact with their icons here.
           The player score is displayed on the far left; name in the middle;
           and character avatar on the right.`,
-        params: {
-          placement: 'right'
-        }
-    },
-    {
-        target: '.tour-profile-investments',
-        content: 'As you purchase Timeblocks during the invest phase, your inventory will update here.',
-        params: {
-          placement: 'top'
-        },
-
-    },
-    {
-      target: '.tour-accomplishments',
-      content: `Here, you can see what Accomplishments are avaliable to you this round. As you purchase them, you will be given new ones.
-      Once you purchase them, they will move to the purchased section.`,
-      params: {
-        placement: 'right',
-      },
-      stateTransform:[
-        {SET_ACTIVE_ACCOMPLISHMENTS:{
-          data:{
-            id: 1,
-            role: "Researcher",
-            label: "Interdisciplinary",
-            flavorText: "You have more PhD's than most people have common sense.",
-            science: 2,
-            government: 1,
-            legacy: 1,
-            finance: 1,
-            culture: 1,
-            upkeep: 0,
-            victoryPoints: 5,
-            effect: ""
-          },
-          role:`Researcher`
-        },
-        PURCHASE_ACCOMPLISHMENT:{
-          data:{
-            id: 2,
-            role: "Researcher",
-            label: "Mars Helicopter",
-            flavorText: "Your invention of a low gravity, low atmosphere, low-flying vehicle enables greater exploration of the Martian surface.",
-            science: 2,
-            government: 0,
-            legacy: 0,
-            finance: 1,
-            culture: 1,
-            upkeep: 0,
-            victoryPoints: 3,
-            effect: ""
-          },
-          role:`Researcher`
-        },
-      }]
+    params: {
+      placement: RIGHT
     }
-
-]
+  },
+  {
+    target: ".tour-inventory-popup",
+    content: "When you purchase resources during the invest phase, your inventory will update here.",
+    params: {
+      placement: TOP
+    },
+    stateTransform: [
+      {
+        SET_LAYOUT: `tutorial`,
+        // required: true,
+      }
+    ]
+  },
+  {
+    target: ".tour-log-popup",
+    content: `You can click here to view the mars log, which displays a history of what has happened during the game.`
+              + ` Make sure you check this periodically!`,
+    params: {
+      placement: TOP
+    },
+    stateTransform: [
+      {
+        SET_LAYOUT: `tutorial`,
+        // required: true,
+      }
+    ]
+  },
+];
 
 export default steps;

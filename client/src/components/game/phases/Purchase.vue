@@ -1,7 +1,7 @@
 <template>
-  <div class="c-purchase container tour-purchase">
+  <div class="c-purchase container tour-purchase-action">
     <div class="wrapper row">
-      <div class="inventory col-4">
+      <div class="inventory col-4 tour-inventory">
         <div class="topbar">
           <p class="title">Inventory</p>
         </div>
@@ -11,7 +11,7 @@
           </div>
         </div>
       </div>
-      <div class="purchasableaccomplishments col-8">
+      <div class="purchasableaccomplishments col-8 tour-purchase">
         <div class="topbar">
           <p class="title">Purchasable Accomplishments</p>
         </div>

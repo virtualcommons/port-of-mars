@@ -1,8 +1,8 @@
 <template>
-  <div class="c-investments tour-investments container">
+  <div class="c-investments tour-invest-action">
     <div class="wrapper row">
-      <div class="timeblockinvestments col-8">
-        <div class="topbar tour-time-blocks">
+      <div class="timeblockinvestments col-8 tour-time-blocks">
+        <div class="topbar">
           <p class="title">Time Blocks</p>
           <TimeBlockMeter
             class="timeblockmeter"
@@ -13,7 +13,7 @@
           <font-awesome-icon :icon="['fas', 'clock']" size="lg" class="icon" />
         </div>
 
-        <div class="cards">
+        <div class="cards tour-invest">
           <CardInvestment
             v-for="cost in costs"
             v-bind="cost"
@@ -22,32 +22,6 @@
           />
         </div>
       </div>
-      <!-- <div class="action-container">
-<div class="cards">
-<CardInvestment
-v-for="cost in costs"
-v-bind="cost"
-:key="cost.name"
-@input="setInvestmentAmount"
-/>
-</div>
-<div class="player-accomplishments tour-accomplishments">
-<h4 class="header-text">Accomplishments</h4>
-<div class="accomplishment-wrapper">
-<div class="active">
-<p class="active-text">Active</p>
-<ContainerAccomplishmentsGeneral
-:accomplishmentSet="activeAccomplishments"
-:isVisible="true"
-/>
-</div>
-<div class="purchased">
-<p class="purchased-text">Purchased</p>
-<ContainerAccomplishmentsGeneral
-:accomplishmentSet="purchasedAccomplishments"
-:isVisible="true"
-/>
-</div> -->
       <div class="purchasableaccomplishments col-4 tour-accomplishments">
         <div class="topbar">
           <p class="title">Purchasable Accomplishments</p>

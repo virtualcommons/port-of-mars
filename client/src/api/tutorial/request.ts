@@ -103,7 +103,6 @@ export class TutorialAPI extends GameRequestAPI {
         this.requiredObject.required = false;
     }
 
-
     public sendChatMessage(message:String){
         this.store.commit('ADD_TO_CHAT',{
             message,
@@ -117,6 +116,15 @@ export class TutorialAPI extends GameRequestAPI {
         this.requiredObject.required = false;
 
     };
+
+    public openPlayerInfoModal() {
+        this.store.commit('SET_PLAYER_INFO_MODAL_VISIBILITY', {
+            visible: true,
+        });
+
+        this.isTaskComplete = true;
+        this.requiredObject.required = false;
+    }
 
     count:number= 1;
     public sendTradeRequest(tradePackage:TradeData){

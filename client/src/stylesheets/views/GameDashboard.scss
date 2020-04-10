@@ -1,11 +1,12 @@
-.game-dashboard-container {
-  position: fixed;
-}
+// .game-dashboard-container {
+//   position: absolute;
+// }
 
 .game-dashboard,
 .game-dashboard-defeat,
 .game-dashboard-victory {
-  height: 100vh !important;
+  position: absolute;
+  height: 100vh!important;
   width: 100vw !important;
   margin: 0;
   // max-width: none !important;
@@ -16,6 +17,8 @@
   // background-color: green;
 }
 
-  .gameboard-popups {
-    position: relative; 
-  }
+  // .gameboard-popups {
+  //   position: relative;
+  //   bottom: 0;
+  //   height: 55.5rem;
+  // }

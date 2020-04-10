@@ -1,5 +1,5 @@
 <template>
-  <div @click="handleOpenModal()" class="c-player">
+  <div @click="handleOpenModal()" class="c-player tour-player-self">
     <div class="indicator" :style="indicatorStyle">
       <div class="frame" :style="frameColor">
         <img :src="playerRoleImage" alt="Player Image" />

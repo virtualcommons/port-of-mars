@@ -1,6 +1,6 @@
 <template>
   <div class="tutorial-layout">
-    <ConsentFormModal @grant-consent="grantConsent" @deny-consent="denyConsent" />
+    <!-- <ConsentFormModal @grant-consent="grantConsent" @deny-consent="denyConsent" /> -->
     <TourModal @show="showTour" @hide="startTourOnHideModal" />
     <CompletedQuizModal v-if="tourIsOver" />
     <GameDashboard />

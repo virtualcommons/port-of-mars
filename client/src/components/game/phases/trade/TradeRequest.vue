@@ -1,5 +1,5 @@
 <template>
-  <div class="trade-request-component">
+  <div class="trade-request-component tour-trade-request">
     <div class="trade-partner tour-request-trade-partner">
       <div class="wrapper trade-send">
         <p class="trade-title">

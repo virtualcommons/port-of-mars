@@ -13,11 +13,6 @@
     <div v-else-if="gamePhase == phase.victory" class="game-dashboard-victory">
       <ContainerVictory />
     </div>
-    <div class="gameboard-popups">
-      <ActiveEventsPopup />
-      <InventoryPopup />
-      <MarsLogPopup />
-    </div>
   </div>
 </template>
 
@@ -28,9 +23,6 @@ import { EnvironmentMode } from '@port-of-mars/client/settings';
 import ModalController from '@port-of-mars/client/components/game/modals/ModalController.vue';
 import GameboardContainer from '@port-of-mars/client/components/root/GameboardContainer.vue';
 import ContainerDefeat from '@port-of-mars/client/components/root/ContainerDefeat.vue';
-import ActiveEventsPopup from "@port-of-mars/client/components/game/static/popups/ActiveEventsPopup.vue";
-import InventoryPopup from "@port-of-mars/client/components/game/static/popups/InventoryPopup.vue";
-import MarsLogPopup from "@port-of-mars/client/components/game/static/popups/MarsLogPopup.vue";
 import {isDev, isStaging} from "@port-of-mars/shared/settings";
 
 @Component({
@@ -38,9 +30,6 @@ import {isDev, isStaging} from "@port-of-mars/shared/settings";
     ModalController,
     GameboardContainer,
     ContainerDefeat,
-    ActiveEventsPopup,
-    InventoryPopup,
-    MarsLogPopup
   }
 })
 export default class GameDashboard extends Vue {

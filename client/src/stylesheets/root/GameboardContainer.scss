@@ -20,8 +20,15 @@
     width: 100%;
     margin: 0 0 0.5rem 0;
   }
+  .gameboard-popups {
+    position: absolute;
+    bottom: 0;
+    height: 100%;
+    padding: 0 125rem 0 0;
+  }
 
   .gameboard {
+    overflow-x: hidden;
     flex-grow: 1;
     width: 100%;
     padding: 0 0 2.5rem 0;

@@ -1,5 +1,5 @@
 <template>
-    <div class="player-info-modal">
+<div class="player-info-modal tour-player-info-modal">
         <button
         @click="handleExit"
         type="button"
