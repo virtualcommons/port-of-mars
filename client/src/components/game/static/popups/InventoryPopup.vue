@@ -14,7 +14,7 @@
       />
     </button>
     <div class="wrapper">
-      <Inventory />
+      <Inventory :isSelf="true" />
     </div>
   </div>
 </template>

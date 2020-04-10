@@ -169,11 +169,11 @@
       border: none;
       font-size: $font-small;
       background-color: $new-space-orange;
-      transition: all 0.2s ease-in-out;
+      transition: all 0.15s ease-in-out;
 
       &:hover {
         transform: scaleX(1.1);
-        overflow:hidden;
+        overflow: hidden;
       }
     }
 

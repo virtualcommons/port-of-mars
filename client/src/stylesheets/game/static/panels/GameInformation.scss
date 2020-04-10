@@ -9,7 +9,7 @@
       margin-bottom: 0;
     }
 
-    button{
+    button {
       @include space-button;
     }
 
@@ -17,7 +17,7 @@
       color: black;
       background-color: $new-space-orange;
       position: relative;
-      overflow:hidden;
+      overflow: hidden;
     }
 
     button.ready-button:after {
@@ -25,29 +25,35 @@
       //animation: name duration timing-function delay iteration-count direction fill-mode;
       content: '';
       position: absolute;
-      top:0;
+      top: 0;
       right: 0;
       bottom: 0;
       left: 0;
 
-      background: linear-gradient(to bottom, transparent,
-        rgba(240, 218, 177, 0.5), 50%, transparent);
+      background: linear-gradient(
+        to bottom,
+        transparent,
+        rgba(240, 218, 177, 0.5),
+        50%,
+        transparent
+      );
 
       transform: rotateZ(120deg) translate(-1em, 4em);
     }
 
     @keyframes glint {
-      10%, 100%{
+      10%,
+      100% {
         transform: rotateZ(120deg) translate(0, -5em);
       }
     }
 
-    .ready-text{
-      color:$status-green;
-      height:1.5rem;
+    .ready-text {
+      color: $status-green;
+      height: 1.5rem;
       @include default-transition-base;
 
-      p{
+      p {
         @include default-transition-base;
       }
     }
@@ -74,7 +80,7 @@
   }
 
   .countdown {
-    transition: all 0.4s ease-in-out;
+    transition: all 0.15s ease-in-out;
   }
 
   .blink-timer {
