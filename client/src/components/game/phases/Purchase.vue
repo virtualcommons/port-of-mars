@@ -31,13 +31,12 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component,Inject } from 'vue-property-decorator';
+import { Vue, Component } from 'vue-property-decorator';
 import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
 import Inventory from '@port-of-mars/client/components/game/Inventory.vue';
 import { canPurchaseAccomplishment } from '@port-of-mars/shared/validation';
 import { AccomplishmentCardType } from '@port-of-mars/client/types/cards.ts';
 import { AccomplishmentData } from '@port-of-mars/shared/types';
-import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 
 @Component({
   components: {
@@ -46,8 +45,6 @@ import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
   },
 })
 export default class Purchase extends Vue {
-  @Inject() readonly api!: GameRequestAPI;
-
   get playerInfo() {
     return {
       info: this.$tstore.getters.player,
@@ -70,10 +67,6 @@ export default class Purchase extends Vue {
           )
         );
       });
-
-      if(!canPurchaseAccomplishment(accomplishments[0], this.$store.getters.player.inventory)){
-        this.api.setPlayerReadiness(true);
-      }
 
       return accomplishments;
   }
