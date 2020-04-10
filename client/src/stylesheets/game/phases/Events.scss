@@ -8,7 +8,7 @@
     max-width: none;
     @include reset-padding-margin;
 
-    .eventdeck {
+    .event-deck {
       height: 100%;
       padding: 0;
       @include make-column-and-top;
@@ -45,7 +45,7 @@
       }
     }
 
-    .activeevents {
+    .active-events {
       height: 100%;
       padding: 0 0 0 0.5rem;
       @include make-column-and-top;

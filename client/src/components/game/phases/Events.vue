@@ -1,7 +1,7 @@
 <template>
   <div class="c-events container tour-event">
     <div class="wrapper row">
-      <div class="eventdeck col-4">
+      <div class="event-deck col-4">
         <div class="topbar">
           <p class="title">Event Deck</p>
         </div>
@@ -18,7 +18,7 @@
           </div>
         </div>
       </div>
-      <div class="activeevents col-8 tour-active-events">
+      <div class="active-events col-8 tour-active-events">
         <div class="topbar">
           <p class="title">
             {{ eventTitle }}
