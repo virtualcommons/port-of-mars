@@ -1,13 +1,13 @@
-import {Step, LEFT, TOP} from "@port-of-mars/client/types/tutorial";
+import {Step, LEFT, TOP, RIGHT} from "@port-of-mars/client/types/tutorial";
 import {Phase, RESEARCHER, CURATOR} from "@port-of-mars/shared/types";
 
 const steps: Array<Step> = [
   {
-    target: '.tour-trade',
+    target: '.tour-phase',
     content:
       `The next phase is the Trading Phase! Here you will trade for resources that you need to purchase Accomplishment cards!`,
     params: {
-      placement: LEFT,
+      placement: RIGHT
     },
 
     stateTransform: [
@@ -57,19 +57,19 @@ const steps: Array<Step> = [
     ],
   },
   {
-    target: '.tour-trade-item',
+    target: '.tour-trade-list',
     content: `All active trades are listed here. If you are on the receiving end of a trade, you will have the option to either
       accept or decline the trade.
       If you are the sender of a trade, you only have the option to cancel the request.`,
     params: {
-      placement: 'top',
+      placement: TOP,
     }
   },
   {
     target: '.tour-chat',
     content: `Before making trade requests, you should talk about your plans in chat!`,
     params: {
-      placement: 'left'
+      placement: LEFT
     },
     stateTransform: [
       {
@@ -94,13 +94,12 @@ const steps: Array<Step> = [
     target: '.tour-request-trade',
     content: `To initiate a trade request with another player, click on the Request Trade button.`,
     params: {
-      placement: 'top',
+      placement: TOP,
     },
     stateTransform: [
       {
+        SET_LAYOUT: `tutorial`,
         // required: true,
-        SET_LAYOUT: 'tutorial',
-        SET_TRADE_REQUEST_MODAL_VISIBILITY: true,
         // validationObject: {
         //   visible: true,
         // }
@@ -111,11 +110,12 @@ const steps: Array<Step> = [
     target: '.tour-request-trade-partner',
     content: `To request a trade, you must first select a person to trade with. Try clicking the curator!`,
     params: {
-      placement: 'top'
+      placement: TOP
     },
     stateTransform: [
       {
         required: true,
+        SET_TRADE_REQUEST_MODAL_VISIBILITY: true,
         validationObject: {
           name: 'Curator',
         }
@@ -127,7 +127,7 @@ const steps: Array<Step> = [
     content: `Then, you select the amount of each resource you are willing to give up.
       You cannot send more resources than you currently have. Increment Science to 2 and Government to 1!`,
     params: {
-      placement: 'top',
+      placement: TOP,
     },
     stateTransform: [
       {
@@ -149,7 +149,7 @@ const steps: Array<Step> = [
     target: '.tour-request-resources',
     content: `Finally, you choose how much of any resource that you want. Ask for 3 culture!`,
     params: {
-      placement: 'top',
+      placement: TOP,
     },
     stateTransform: [
       {
@@ -196,10 +196,10 @@ const steps: Array<Step> = [
     ],
   },
   {
-    target: '.tour-trade',
+    target: '.tour-trade-list',
     content: 'Quiz Question',
     params: {
-      placement: TOP,
+      placement: RIGHT,
       tutorialElementId: 'trade'
     },
     stateTransform: [

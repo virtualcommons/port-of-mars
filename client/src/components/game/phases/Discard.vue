@@ -1,5 +1,5 @@
 <template>
-  <div class="c-discard container tour-discard">
+  <div class="c-discard container tour-discard-action">
     <div class="wrapper row">
       <div class="inventory col-4">
         <div class="topbar">

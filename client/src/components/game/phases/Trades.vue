@@ -1,13 +1,13 @@
 <template>
-  <div class="trade-container tour-trade container">
+  <div class="trade-container container">
     <div class="wrapper row">
-      <div class="trade-list tour-trade-item col-12">
+      <div class="trade-list tour-trade-list col-12">
         <div class="content container">
           <div class="header row">
             <div class="title col-10">
               <p>Active Trade List</p>
             </div>
-            <div class="requesttradebutton col-2">
+            <div class="requesttradebutton col-2 tour-request-trade">
               <button @click="handleOpenTradeRequest()">
                 Request a Trade
               </button>

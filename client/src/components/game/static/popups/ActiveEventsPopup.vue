@@ -1,6 +1,6 @@
 <template>
   <div class="c-activeeventspopup" :style="position">
-    <button @click="toggle" class="toggle">
+    <button @click="toggle" class="toggle tour-event-popup">
       <span>Active Events</span>
       <font-awesome-icon
         v-if="!visible"

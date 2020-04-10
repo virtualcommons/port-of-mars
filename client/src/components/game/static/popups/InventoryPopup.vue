@@ -1,6 +1,6 @@
 <template>
-  <div class="c-inventorypopup tour-profile-investments" :style="position">
-    <button @click="toggle" class="toggle">
+  <div class="c-inventorypopup" :style="position">
+    <button @click="toggle" class="toggle tour-inventory-popup">
       <span>Inventory</span>
       <font-awesome-icon
         v-if="!visible"

@@ -1,9 +1,6 @@
 <template>
   <div class="gameboardcontainer">
-    <ProfileMenu /> 
-    <!-- <ActiveEventsPopup />
-    <InventoryPopup />
-    <MarsLogPopup /> -->
+    <ProfileMenu />
     <div class="gameboardstatusbar row">
       <SystemHealth />
     </div>
@@ -20,6 +17,11 @@
         <Chat />
       </div>
     </div>
+    <div class="gameboard-popups">
+      <ActiveEventsPopup />
+      <InventoryPopup />
+      <MarsLogPopup />
+    </div>
   </div>
 </template>
 
@@ -28,11 +30,11 @@ import { Vue, Component } from "vue-property-decorator";
 import HUD from "@port-of-mars/client/components/game/HUD.vue";
 import PhaseSwitcher from "@port-of-mars/client/components/game/PhaseSwitcher.vue";
 import ProfileMenu from "@port-of-mars/client/components/game/static/popups/ProfileMenu.vue";
-// import ActiveEventsPopup from "@port-of-mars/client/components/game/static/popups/ActiveEventsPopup.vue";
-// import InventoryPopup from "@port-of-mars/client/components/game/static/popups/InventoryPopup.vue";
-// import MarsLogPopup from "@port-of-mars/client/components/game/static/popups/MarsLogPopup.vue";
 import Chat from "@port-of-mars/client/components/game/static/chat/Chat.vue";
 import SystemHealth from "@port-of-mars/client/components/game/static/systemhealth/SystemHealth.vue";
+import ActiveEventsPopup from "@port-of-mars/client/components/game/static/popups/ActiveEventsPopup.vue";
+import InventoryPopup from "@port-of-mars/client/components/game/static/popups/InventoryPopup.vue";
+import MarsLogPopup from "@port-of-mars/client/components/game/static/popups/MarsLogPopup.vue";
 
 @Component({
   components: {
@@ -41,9 +43,9 @@ import SystemHealth from "@port-of-mars/client/components/game/static/systemheal
     ProfileMenu,
     Chat,
     SystemHealth,
-    // ActiveEventsPopup,
-    // InventoryPopup, 
-    // MarsLogPopup
+    ActiveEventsPopup,
+    InventoryPopup,
+    MarsLogPopup
   }
 })
 export default class GameboardContainer extends Vue {}

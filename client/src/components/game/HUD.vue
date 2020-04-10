@@ -26,7 +26,7 @@
             <div class="information col-5">
               <GameInformation />
             </div>
-            <div class="instructions col-7">
+            <div class="instructions col-7 tour-phase">
               <PhaseInstructions />
             </div>
           </div>
