@@ -7,7 +7,7 @@
         </div>
         <div class="outer-wrapper">
           <div class="wrapper">
-            <Inventory :displaySystemHealth="false" />
+            <Inventory :isSelf="true" :displaySystemHealth="false" />
           </div>
         </div>
       </div>
@@ -45,15 +45,6 @@ import { AccomplishmentData } from '@port-of-mars/shared/types';
   },
 })
 export default class Purchase extends Vue {
-  get playerInfo() {
-    return {
-      info: this.$tstore.getters.player,
-      isSelf: true,
-    };
-  }
-
-  
-
   get purchasableAccomplishments() {
     let accomplishments = this.$store.getters.player.accomplishments.purchasable
       .slice()
@@ -68,7 +59,7 @@ export default class Purchase extends Vue {
         );
       });
 
-      return accomplishments;
+    return accomplishments;
   }
 
   get cardType() {

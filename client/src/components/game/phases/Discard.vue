@@ -7,7 +7,7 @@
         </div>
         <div class="outer-wrapper">
           <div class="wrapper">
-            <Inventory :displaySystemHealth="false" />
+            <Inventory :isSelf="true" :displaySystemHealth="false" />
           </div>
         </div>
       </div>
@@ -45,13 +45,6 @@ import { AccomplishmentData } from '@port-of-mars/shared/types';
   },
 })
 export default class Discard extends Vue {
-  get playerInfo() {
-    return {
-      info: this.$tstore.getters.player,
-      isSelf: true,
-    };
-  }
-
   get purchasableAccomplishments() {
     return this.$store.getters.player.accomplishments.purchasable
       .slice()

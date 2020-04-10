@@ -64,7 +64,7 @@ $screen-xxl: 1680px;
   margin: 0.5rem 0;
   font-size: $font-med;
   font-weight: $font-weight-maven-pro-regular;
-  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
 
   &:disabled {
     opacity: 0.5;
@@ -126,11 +126,11 @@ $screen-xxl: 1680px;
 }
 
 @mixin default-transition-base {
-  transition: all 0.2s ease-in-out;
+  transition: all 0.15s ease-in-out;
 }
 
 @mixin default-transition-button {
-  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+  transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
 }
 
 @mixin default-scale-up {

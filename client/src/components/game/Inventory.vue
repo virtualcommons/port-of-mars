@@ -70,6 +70,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Role, RESEARCHER } from '@port-of-mars/shared/types';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faClock } from '@fortawesome/free-solid-svg-icons/faClock';
 import { faBriefcase } from '@fortawesome/free-solid-svg-icons/faBriefcase';
@@ -90,10 +91,18 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
   components: {},
 })
 export default class Inventory extends Vue {
+  @Prop({ default: true }) private isSelf!: boolean;
+  @Prop({ default: RESEARCHER }) private role!: Role;
   @Prop({ default: true }) private displaySystemHealth!: boolean;
 
+  get playerData() {
+    return this.isSelf
+      ? this.$tstore.getters.player
+      : this.$tstore.state.players[this.role];
+  }
+
   get investments() {
-    const p = this.$tstore.getters.player;
+    const p = this.playerData;
     const inventory = p.inventory;
     const pendingInventory = p.pendingInvestments;
     const costs = p.costs;
@@ -106,7 +115,7 @@ export default class Inventory extends Vue {
   }
 
   get contributedSystemHealth() {
-    const p = this.$tstore.getters.player;
+    const p = this.playerData;
     const pendingInvestment = p.pendingInvestments;
     const costs = p.costs;
     return {
