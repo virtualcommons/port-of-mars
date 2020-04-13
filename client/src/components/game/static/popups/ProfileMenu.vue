@@ -12,11 +12,19 @@
           <span>Your Dashboard</span>
         </button>
       </router-link>
-      <button @click="enableDevtools" v-if="!devtoolsEnabled && isDevModeEnabled">
+      <button
+        @click="enableDevtools"
+        v-if="!devtoolsEnabled && isDevModeEnabled"
+        class="link"
+      >
         <font-awesome-icon :icon="['far', 'window-close']" size="sm" />
         <span>Enable DevTools</span>
       </button>
-      <button @click="disableDevtools" v-if="devtoolsEnabled && isDevModeEnabled">
+      <button
+        @click="disableDevtools"
+        v-if="devtoolsEnabled && isDevModeEnabled"
+        class="link"
+      >
         <font-awesome-icon :icon="['fas', 'terminal']" size="sm" />
         <span>Disable Devtools</span>
       </button>
@@ -37,19 +45,18 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Inject } from "vue-property-decorator";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faCaretRight } from "@fortawesome/free-solid-svg-icons/faCaretRight";
-import { faCaretLeft } from "@fortawesome/free-solid-svg-icons/faCaretLeft";
-import { faUserCircle } from "@fortawesome/free-solid-svg-icons/faUserCircle";
-import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons/faSignOutAlt";
-import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons/faExclamationTriangle";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
-import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
-import { isDev, isStaging } from "@port-of-mars/shared/settings";
-import { faTerminal } from "@fortawesome/free-solid-svg-icons/faTerminal";
-import { faWindowClose } from "@fortawesome/free-regular-svg-icons/faWindowClose";
+import { Vue, Component, Prop, Inject } from 'vue-property-decorator';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faCaretRight } from '@fortawesome/free-solid-svg-icons/faCaretRight';
+import { faCaretLeft } from '@fortawesome/free-solid-svg-icons/faCaretLeft';
+import { faUserCircle } from '@fortawesome/free-solid-svg-icons/faUserCircle';
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons/faSignOutAlt';
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons/faExclamationTriangle';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
+import { isDev, isStaging } from '@port-of-mars/shared/settings';
+import { faTerminal } from '@fortawesome/free-solid-svg-icons/faTerminal';
+import { faWindowClose } from '@fortawesome/free-regular-svg-icons/faWindowClose';
 
 library.add(faCaretRight);
 library.add(faCaretLeft);
