@@ -122,7 +122,7 @@ import { Step } from '@port-of-mars/client/types/tutorial';
 import { CURATOR, Phase, QuizQuestionData, RESEARCHER } from '@port-of-mars/shared/types';
 import * as _ from 'lodash';
 
-import { tutorialSteps } from '@port-of-mars/client/api/tutorial/tutorialSteps';
+import { tutorialSteps } from '@port-of-mars/client/api/tutorial/steps';
 
 require('vue-tour/dist/vue-tour.css');
 Vue.use(VueTour);
