@@ -103,6 +103,22 @@ $screen-xxl: 1680px;
   }
 }
 
+@mixin space-button-modal {
+  @include space-button-base;
+  color: $space-lightgreen;
+  border: 0.0625rem solid $space-lightgreen;
+
+  &:hover {
+    color: $space-gray;
+    background-color: $space-lightgreen;
+  }
+
+  &:disabled:hover {
+    color: $space-lightgreen;
+    background-color: transparent;
+  }
+}
+
 @mixin reset-padding-margin {
   padding: 0;
   margin: 0;

@@ -11,7 +11,11 @@
             </div>
           </div>
           <div class="information col-6">
-            <p class="role">{{ playerData.isSelf ? `You (${role})` : role }}</p>
+            <p class="role">
+              {{
+                playerData.isSelf ? `You (${modalData.role})` : modalData.role
+              }}
+            </p>
             <p class="score">Score: {{ playerData.info.victoryPoints }}</p>
             <p class="ranking">Ranking: {{ ranking }} / 5</p>
           </div>
@@ -46,7 +50,7 @@
               >
                 <Inventory
                   :isSelf="false"
-                  :role="role"
+                  :role="modalData.role"
                   :displaySystemHealth="false"
                 />
               </div>
@@ -93,20 +97,13 @@
           </div>
         </div>
       </div>
-      <button
-        @click="handleExit"
-        type="button"
-        name="Close Button"
-        class="close"
-      >
-        <font-awesome-icon :icon="['fas', 'times']" size="lg" class="icon" />
-      </button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
+import { PlayerInfoModalData } from '@port-of-mars/client/types/modals';
 import { Role, Phase } from '@port-of-mars/shared/types';
 import Inventory from '@port-of-mars/client/components/game/Inventory.vue';
 import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
@@ -125,15 +122,15 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
     ContainerAccomplishmentsGeneral,
   },
 })
-export default class ModalController extends Vue {
-  @Prop() role!: Role;
-  private errorMessageActive: boolean = false;
+export default class PlayerInfoModal extends Vue {
+  @Prop({}) private modalData!: PlayerInfoModalData;
+  // private errorMessageActive: boolean = false;
   private accomplishmentType: string = 'active';
 
   get playerData() {
     return {
-      info: this.$tstore.state.players[this.role],
-      isSelf: this.role === this.$tstore.getters.player.role,
+      info: this.$tstore.state.players[this.modalData.role],
+      isSelf: this.modalData.role === this.$tstore.getters.player.role,
     };
   }
 
@@ -154,7 +151,7 @@ export default class ModalController extends Vue {
             this.$tstore.state.players[a as Role].victoryPoints
           );
         })
-        .indexOf(this.role) + 1
+        .indexOf(this.modalData.role) + 1
     );
   }
 
@@ -163,20 +160,20 @@ export default class ModalController extends Vue {
   }
 
   get playerRoleImage(): any {
-    return this.role
-      ? require(`@port-of-mars/client/assets/characters/${this.role}.png`)
+    return this.modalData.role
+      ? require(`@port-of-mars/client/assets/characters/${this.modalData.role}.png`)
       : require(`@port-of-mars/client/assets/characters/Researcher.png`);
   }
 
   get frameColor(): object {
-    return this.role
-      ? { backgroundColor: `var(--color-${this.role})` }
+    return this.modalData.role
+      ? { backgroundColor: `var(--color-${this.modalData.role})` }
       : { backgroundColor: `var(--color-Researcher)` };
   }
 
   get indicatorStyle() {
     return !this.playerData.info.ready
-      ? { border: `0.2rem solid var(--color-${this.role})` }
+      ? { border: `0.2rem solid var(--color-${this.modalData.role})` }
       : { border: `0.2rem solid var(--status-green)` };
   }
 
@@ -195,23 +192,17 @@ export default class ModalController extends Vue {
     }
   }
 
-  private handleExit() {
-    this.$tstore.commit('SET_PLAYER_INFO_MODAL_VISIBILITY', {
-      role: 'Researcher',
-      visible: false,
-    });
-    this.errorMessageActive = false;
-  }
-
   private handleRequestTrade() {
     if (!this.playerData.isSelf && this.gamePhase === this.phase.trade) {
-      this.$tstore.commit('SET_PLAYER_INFO_MODAL_VISIBILITY', {
-        role: 'Researcher',
-        visible: false,
+      // this.$tstore.commit('OPEN_TRADE_MODAL_WARM', {
+      //   role: this.modalData.role,
+      // });
+      this.$tstore.commit('SET_MODAL_VISIBLE', {
+        type: 'TradeRequestModal',
+        data: {},
       });
-      this.$tstore.commit('OPEN_TRADE_MODAL_WARM', { role: this.role });
     } else {
-      this.errorMessageActive = true;
+      // this.errorMessageActive = true;
     }
   }
 }
