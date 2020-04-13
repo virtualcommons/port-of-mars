@@ -1,51 +1,77 @@
 <template>
-  <div class="modal-wrapper" v-show="showAnyModal">
-    <div class="player-info-modal-wrapper" v-show="playerModal.visible">
-      <PlayerInfoModal :role="playerModal.role" />
-    </div>
-
-    <div class="trade-request-modal-wrapper" v-show="tradeRequestModal.visible">
-      <TradeRequestModal />
-    </div>
-
-    <div class="card-modal-wrapper" v-show="cardModal.visible">
-      <ModalContainer :modalView="cardModal.data.type" :modalData="cardModal.data.info" />
+  <div class="c-modal-controller" v-if="modalsVisible">
+    <div class="wrapper">
+      <component :is="modalType" :modalData="modalData"></component>
+      <button
+        @click="handleClose"
+        type="button"
+        name="Close Button"
+        class="modal-close"
+      >
+        <font-awesome-icon
+          :icon="['fas', 'times']"
+          size="lg"
+          class="close-icon"
+        />
+      </button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import PlayerInfoModal from "./PlayerInfoModal.vue";
-import TradeRequestModal from "./TradeRequestModal.vue";
-import ModalContainer from "./ModalContainer.vue";
+import { Component, Vue, Prop } from 'vue-property-decorator';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import GeneralModal from '@port-of-mars/client/components/game/modals/GeneralModal.vue';
+import CardModal from '@port-of-mars/client/components/game/modals/CardModal.vue';
+import PlayerInfoModal from '@port-of-mars/client/components/game/modals/PlayerInfoModal.vue';
+import TradeRequestModal from '@port-of-mars/client/components/game/modals/TradeRequestModal.vue';
+
+library.add(faTimes);
+Vue.component('font-awesome-icon', FontAwesomeIcon);
+
 @Component({
   components: {
+    GeneralModal,
+    CardModal,
     PlayerInfoModal,
     TradeRequestModal,
-    ModalContainer
-  }
+  },
 })
 export default class ModalController extends Vue {
-  get showAnyModal() {
-    return this.playerModal.visible || this.tradeRequestModal.visible || this.cardModal.visible;
+  get modalsVisible() {
+    return this.$tstore.state.userInterface.modalView.visible;
   }
 
-  get playerModal() {
-    return this.$tstore.state.ui.modalViews.playerInfoModal;
+  get modalType() {
+    const type = this.$tstore.state.userInterface.modalView.type;
+    if (type) {
+      return type;
+    } else {
+      return 'GeneralModal';
+    }
   }
 
-  get tradeRequestModal() {
-    return this.$tstore.state.ui.modalViews.tradeRequestModal;
+  get modalData() {
+    const data = this.$tstore.state.userInterface.modalView.data;
+    if (data) {
+      return data;
+    } else {
+      return {
+        activator: 'Default',
+        title: '',
+        content: '',
+      };
+    }
   }
 
-  get cardModal() {
-    console.log(this.$tstore.state.ui.modalViews.cardModal);
-    return this.$tstore.state.ui.modalViews.cardModal;
+  private handleClose(): void {
+    this.$tstore.commit('SET_MODAL_HIDDEN', null);
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import "@port-of-mars/client/stylesheets/game/modals/ModalController.scss";
+@import '@port-of-mars/client/stylesheets/game/modals/ModalController.scss';
 </style>
