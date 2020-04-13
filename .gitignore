@@ -91,6 +91,9 @@ dist/
 .out
 .storybook-out
 
+# JetBrains directories
+./idea
+
 # vuepress build output
 .vuepress/dist
 
