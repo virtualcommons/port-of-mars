@@ -1,12 +1,12 @@
-import { Step, LEFT, TOP, RIGHT } from "@port-of-mars/client/types/tutorial";
-import { Phase, RESEARCHER, CURATOR } from "@port-of-mars/shared/types";
+import { Step, LEFT, TOP, RIGHT } from '@port-of-mars/client/types/tutorial';
+import { Phase, RESEARCHER, CURATOR } from '@port-of-mars/shared/types';
 
 const steps: Array<Step> = [
   {
-    target: ".tour-phase",
+    target: '.tour-phase',
     content: `The next phase is the Trading Phase! Here you will trade for resources that you need to purchase Accomplishment cards!`,
     params: {
-      placement: RIGHT
+      placement: RIGHT,
     },
 
     stateTransform: [
@@ -37,8 +37,8 @@ const steps: Array<Step> = [
                 finance: 1,
                 government: 1,
                 legacy: 1,
-                science: 1
-              }
+                science: 1,
+              },
             },
             to: {
               role: RESEARCHER,
@@ -47,13 +47,13 @@ const steps: Array<Step> = [
                 finance: 1,
                 government: 1,
                 legacy: 1,
-                science: 1
-              }
-            }
-          }
-        }
-      }
-    ]
+                science: 1,
+              },
+            },
+          },
+        },
+      },
+    ],
   },
   {
     target: ".tour-trade-list",
@@ -61,34 +61,34 @@ const steps: Array<Step> = [
       accept or decline the trade.
       If you are the sender of a trade, you only have the option to cancel the request.`,
     params: {
-      placement: TOP
-    }
+      placement: TOP,
+    },
   },
   {
     target: ".tour-chat",
     content: `Before making trade requests, you should talk about your plans in chat!`,
     params: {
-      placement: LEFT
+      placement: LEFT,
     },
     stateTransform: [
       {
         ADD_TO_CHAT: {
           message:
-            "Hey Researcher, can I have 2 Science and 1 Government in exchange for 3 Culture?",
+            'Hey Researcher, can I have 2 Science and 1 Government in exchange for 3 Culture?',
           role: `Curator`,
           dateCreated: new Date().getTime(),
-          round: 0
-        }
+          round: 0,
+        },
       },
       {
         ADD_TO_CHAT: {
           message: "Sure, let me make that trade right now!",
           role: `Researcher`,
           dateCreated: new Date().getTime(),
-          round: 0
-        }
-      }
-    ]
+          round: 0,
+        },
+      },
+    ],
   },
   {
     target: ".tour-request-trade",
@@ -98,25 +98,29 @@ const steps: Array<Step> = [
     },
     stateTransform: [
       {
-        required: true
-      }
-    ]
+        SET_LAYOUT: `tutorial`,
+        // required: true,
+        // validationObject: {
+        //   visible: true,
+        // }
+      },
+    ],
   },
   {
     target: ".tour-request-trade-partner",
     content: `To request a trade, you must first select a person to trade with. Try clicking the curator!`,
     params: {
-      placement: TOP
+      placement: TOP,
     },
     stateTransform: [
       {
         required: true,
-        SET_TRADE_REQUEST_MODAL_VISIBILITY: true,
+        // SET_TRADE_REQUEST_MODAL_VISIBILITY: true,
         validationObject: {
-          name: "Curator"
-        }
-      }
-    ]
+          name: 'Curator',
+        },
+      },
+    ],
   },
   {
     target: ".tour-offer-resources",
@@ -133,13 +137,13 @@ const steps: Array<Step> = [
           finance: 0,
           government: 1,
           legacy: 0,
-          science: 2
-        }
+          science: 2,
+        },
       },
       {
-        SET_TRADE_PARTNER_NAME: "Curator"
-      }
-    ]
+        SET_TRADE_PARTNER_NAME: 'Curator',
+      },
+    ],
   },
   {
     target: ".tour-request-resources",
@@ -155,8 +159,8 @@ const steps: Array<Step> = [
           finance: 0,
           government: 0,
           legacy: 0,
-          science: 0
-        }
+          science: 0,
+        },
       },
       {
         SET_SEND_RESOURCES: {
@@ -164,16 +168,16 @@ const steps: Array<Step> = [
           finance: 0,
           government: 1,
           legacy: 0,
-          science: 2
-        }
-      }
-    ]
+          science: 2,
+        },
+      },
+    ],
   },
   {
     target: ".tour-send-trade",
     content: `Hit send to see your trade in action!`,
     params: {
-      placement: LEFT
+      placement: LEFT,
     },
     stateTransform: [
       {
@@ -185,17 +189,17 @@ const steps: Array<Step> = [
           finance: 0,
           government: 0,
           legacy: 0,
-          science: 0
-        }
-      }
-    ]
+          science: 0,
+        },
+      },
+    ],
   },
   {
     target: ".tour-trade-list",
     content: "Quiz Question",
     params: {
       placement: RIGHT,
-      tutorialElementId: "trade"
+      tutorialElementId: 'trade',
     },
     stateTransform: [
       {
@@ -203,10 +207,10 @@ const steps: Array<Step> = [
       },
 
       {
-        SET_TRADE_REQUEST_MODAL_VISIBILITY: false
-      }
-    ]
-  }
+        // SET_TRADE_REQUEST_MODAL_VISIBILITY: false,
+      },
+    ],
+  },
 ];
 
 export default steps;

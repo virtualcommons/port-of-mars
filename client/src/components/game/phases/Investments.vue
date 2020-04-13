@@ -14,7 +14,7 @@
         </div>
 
         <div class="cards tour-invest">
-          <CardInvestment
+          <InvestmentCard
             v-for="cost in costs"
             v-bind="cost"
             :key="cost.name"
@@ -51,7 +51,7 @@ import {
 } from '@port-of-mars/shared/types';
 import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
 import TimeBlockMeter from './investment/TimeBlockMeter.vue';
-import CardInvestment from './investment/CardInvestment.vue';
+import InvestmentCard from './investment/InvestmentCard.vue';
 import { canPurchaseAccomplishment } from '@port-of-mars/shared/validation';
 import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -65,7 +65,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 @Component({
   components: {
     TimeBlockMeter,
-    CardInvestment,
+    InvestmentCard,
     AccomplishmentCard,
   },
 })

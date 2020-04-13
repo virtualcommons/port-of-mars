@@ -3,14 +3,9 @@
   height: 45rem;
   max-width: none;
   padding: 0.5rem;
+  border: 0.125rem solid $space-lightgreen;
   margin: 0;
   background-color: $space-gray;
-
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin: 0;
-  transform: translate(-50%, 15%);
 
   .topwrapper,
   .bottomwrapper {
@@ -103,32 +98,6 @@
     height: 75%;
     padding-top: 0.5rem;
 
-    .close {
-      position: absolute;
-      bottom: -6rem;
-      left: 50%;
-      z-index: 10;
-      @include reset-button;
-      height: 3rem;
-      width: 3rem;
-      padding: 0.5rem;
-      border-radius: 50%;
-      // margin-top: 2rem;
-      @include make-center;
-      background-color: $new-space-orange;
-      @include default-transition-base;
-
-      &:hover {
-        @include default-scale-up;
-      }
-
-      .icon {
-        height: 50%;
-        width: 50%;
-        color: $space-gray;
-      }
-    }
-
     .bottom {
       @include expand;
       max-width: none;
@@ -164,7 +133,7 @@
           .outer-wrapper {
             flex-grow: 1;
             width: 100%;
-            overflow-y: scroll;
+            overflow-y: hidden;
 
             .unavailable {
               @include expand;

@@ -2,16 +2,17 @@ import {
   TradeData,
   AccomplishmentData,
   ResourceAmountData,
-  Resource
-} from "@port-of-mars/shared/types";
-import { initialStoreState } from "@port-of-mars/client/store/state";
-import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
-import * as _ from "lodash";
-import { Store } from "vuex/types/index";
-import { State } from "@port-of-mars/client/store/state";
-import { StateTransform } from "@port-of-mars/client/types/tutorial";
-// import { string } from "@colyseus/schema/lib/encoding/decode";
-// import { PLAYER_DASHBOARD } from "@port-of-mars/shared/routes";
+  Resource,
+} from '@port-of-mars/shared/types';
+import {
+  initialStoreState,
+  defaultInventory,
+} from '@port-of-mars/client/store/state';
+import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
+import * as _ from 'lodash';
+import { Store } from 'vuex/types/index';
+import { State } from '@port-of-mars/client/store/state';
+import { StateTransform } from '@port-of-mars/client/types/tutorial';
 
 export class TutorialAPI extends GameRequestAPI {
   private store!: Store<State>;
@@ -39,10 +40,10 @@ export class TutorialAPI extends GameRequestAPI {
       for (const commandSet of state) {
         for (const [command, value] of Object.entries(commandSet)) {
           switch (command) {
-            case "required":
+            case 'required':
               this.isTaskComplete = !value;
               break;
-            case "validationObject":
+            case 'validationObject':
               this.validationObject = value;
               break;
             default:
@@ -69,11 +70,11 @@ export class TutorialAPI extends GameRequestAPI {
       for (const commandSet of state) {
         for (const [command, value] of Object.entries(commandSet)) {
           switch (command) {
-            case "required":
+            case 'required':
               this.isTaskComplete = !value;
               this.requiredObject = commandSet;
               break;
-            case "validationObject":
+            case 'validationObject':
               this.validationObject = value;
               break;
             default:
@@ -99,11 +100,11 @@ export class TutorialAPI extends GameRequestAPI {
   }
 
   public sendChatMessage(message: String) {
-    this.store.commit("ADD_TO_CHAT", {
+    this.store.commit('ADD_TO_CHAT', {
       message,
       role: this.store.state.role,
       dateCreated: new Date().getTime(),
-      round: 0
+      round: 0,
     });
     this.isTaskComplete = true;
 
@@ -111,11 +112,23 @@ export class TutorialAPI extends GameRequestAPI {
     this.requiredObject.required = false;
   }
 
+  public openPlayerInfoModal() {
+    this.store.commit('SET_MODAL_VISIBLE', {
+      type: 'PlayerInfoModal',
+      data: {
+        role: 'Researcher',
+      },
+    });
+
+    this.isTaskComplete = true;
+    this.requiredObject.required = false;
+  }
+
   count: number = 1;
   public sendTradeRequest(tradePackage: TradeData) {
-    this.store.commit("ADD_TO_TRADES", {
+    this.store.commit('ADD_TO_TRADES', {
       id: `mock-trade-${this.count}`,
-      trade: tradePackage
+      trade: tradePackage,
     });
     this.count++;
 
@@ -124,36 +137,36 @@ export class TutorialAPI extends GameRequestAPI {
   }
 
   public acceptTradeRequest(id: string) {
-    this.store.commit("REMOVE_FROM_TRADES", {
-      id
+    this.store.commit('REMOVE_FROM_TRADES', {
+      id,
     });
   }
 
   public rejectTradeRequest(id: string) {
-    this.store.commit("REMOVE_FROM_TRADES", {
-      id
+    this.store.commit('REMOVE_FROM_TRADES', {
+      id,
     });
   }
 
   public cancelTradeRequest(id: string) {
-    this.store.commit("REMOVE_FROM_TRADES", {
-      id
+    this.store.commit('REMOVE_FROM_TRADES', {
+      id,
     });
   }
 
   public purchaseAccomplishment(accomplishment: AccomplishmentData) {
-    this.store.commit("DISCARD_ACCOMPLISHMENT", {
+    this.store.commit('DISCARD_ACCOMPLISHMENT', {
       id: accomplishment.id,
-      role: accomplishment.role
+      role: accomplishment.role,
     });
     this.isTaskComplete = true;
     this.requiredObject.required = false;
   }
 
   public discardAccomplishment(id: number) {
-    this.store.commit("DISCARD_ACCOMPLISHMENT", {
+    this.store.commit('DISCARD_ACCOMPLISHMENT', {
       id,
-      role: "Researcher"
+      role: 'Researcher',
     });
 
     this.isTaskComplete = true;
@@ -161,36 +174,55 @@ export class TutorialAPI extends GameRequestAPI {
   }
 
   public saveGiveResources(resources: ResourceAmountData) {
+    //;
+    // const correctGive = defaultInventory();
+    // correctGive.science =2;
+    // correctGive.government = 1;
+
     for (const [resource, amt] of Object.entries(resources)) {
       if (this.validationObject[resource as Resource] != amt) return false;
     }
 
     this.isTaskComplete = true;
     this.requiredObject.required = false;
-
+    //this.store.commit('TUTORIAL_SET_GIVE_RESOURCES', resources)
     return true;
   }
 
   public saveGetResources(resources: ResourceAmountData) {
+    // const correctGet = defaultInventory();
+    // correctGet.culture =3;
+
     for (const [resource, amt] of Object.entries(resources)) {
       if (this.validationObject[resource as Resource] != amt) return false;
     }
 
     this.isTaskComplete = true;
     this.requiredObject.required = false;
-
+    //this.store.commit('TUTORIAL_SET_GET_RESOURCES', resources);
     return true;
   }
 
   public saveTradePartner(name: string) {
     if (this.validationObject.name == name) {
       this.isTaskComplete = true;
-
+      //this.store.commit('TUTORIAL_SET_TRADE_PARTNER_NAME', name);
       this.requiredObject.required = false;
       return true;
     }
     return false;
   }
+
+  // TOUR TRADE
+
+  // public requestTrade(visible: boolean) {
+  //     if (this.validationObject.visible == visible) {
+  //         this.isTaskComplete = true;
+  //         this.requiredObject.required = false;
+  //         return true;
+  //     }
+  //     return false;
+  // }
 
   public investTimeBlocks() {
     const pendingInventory = this.store.getters.player.pendingInvestments;
@@ -201,6 +233,5 @@ export class TutorialAPI extends GameRequestAPI {
     this.requiredObject.required = false;
     return true;
   }
-  
   public setPlayerReadiness(): void {}
 }

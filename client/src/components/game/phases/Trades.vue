@@ -59,9 +59,10 @@ export default class Trades extends Vue {
   }
 
   private handleOpenTradeRequest() {
-    this.$tstore.commit("SET_TRADE_REQUEST_MODAL_VISIBILITY", true);
-    
-    this.tutorialValidation();
+    this.$tstore.commit('SET_MODAL_VISIBLE', {
+      type: 'TradeRequestModal',
+      data: {},
+    });
   }
 }
 </script>

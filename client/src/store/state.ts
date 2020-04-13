@@ -15,6 +15,10 @@ import {
   Role,
   TradeDataWithNull
 } from '@port-of-mars/shared/types';
+import {
+  ModalViewType,
+  ModalDataType,
+} from '@port-of-mars/client/types/modals';
 import _ from 'lodash';
 
 export interface PlayerClientData extends PlayerData {
@@ -29,7 +33,7 @@ function defaultPlayerClientSet(): PlayerClientSet {
     Entrepreneur: defaultPlayerData(ENTREPRENEUR),
     Politician: defaultPlayerData(POLITICIAN),
     Pioneer: defaultPlayerData(PIONEER),
-    Researcher: defaultPlayerData(RESEARCHER)
+    Researcher: defaultPlayerData(RESEARCHER),
   };
 }
 
@@ -38,7 +42,7 @@ function defaultPlayerData(role: Role): PlayerClientData {
     role,
     accomplishments: {
       purchased: [],
-      purchasable: []
+      purchasable: [],
     },
     costs: defaultCostData(role),
     specialty: 'science',
@@ -68,7 +72,7 @@ export function defaultInventory(role?: Role): ResourceAmountData {
     government: 0,
     legacy: 0,
     finance: 0,
-    culture: 0
+    culture: 0,
   };
 }
 
@@ -92,9 +96,9 @@ export function defaultTradeData(): TradeDataWithNull<'' | Role> {
 
     from: {
       role: 'Researcher',
-      resourceAmount: defaultInventory()
-    }
-  }
+      resourceAmount: defaultInventory(),
+    },
+  };
 }
 
 export interface User {
@@ -102,36 +106,21 @@ export interface User {
   passedQuiz?: boolean;
 }
 
-export interface Visible {
-  visible: boolean;
+// NOTE :: State - userInterface
+
+export interface UserInterface {
+  modalView: ModalView;
 }
 
-export interface PlayerInfoModal extends Visible {
-  role: Role;
-}
-
-export interface CardModal extends Visible {
-  data: {
-    type: string,
-    info: any
-  };
-}
-
-export interface TradeRequestModal extends Visible {
-}
-
-export interface Modals {
-  playerInfoModal: PlayerInfoModal;
-  tradeRequestModal: TradeRequestModal;
-  cardModal: CardModal;
-
-  [name: string]: PlayerInfoModal | TradeRequestModal | CardModal;
-}
-
-
-export interface uiVars {
+export interface UserInterfaceTwo {
   tradeData: TradeDataWithNull<'' | Role>;
-  modalViews: Modals;
+  // modalViews: Modals;
+}
+
+export interface ModalView {
+  visible: boolean;
+  type: ModalViewType | null;
+  data: ModalDataType | null;
 }
 
 export interface State extends GameData {
@@ -150,8 +139,8 @@ export interface State extends GameData {
   tutorialTradePartner: string;
   tutorialTradeGive: ResourceAmountData;
   tutorialTradeGet: ResourceAmountData;
-
-  ui: uiVars;
+  userInterface: UserInterface;
+  ui: UserInterfaceTwo;
 }
 
 export const initialStoreState: State = {
@@ -180,7 +169,7 @@ export const initialStoreState: State = {
   eventCardsVisible: [],
   user: {
     username: '',
-    passedQuiz: false
+    passedQuiz: false,
   },
 
   //TUTORIAL TRADING
@@ -188,27 +177,18 @@ export const initialStoreState: State = {
   tutorialTradeGive: defaultInventory(),
   tutorialTradeGet: defaultInventory(),
 
+  userInterface: {
+    modalView: {
+      visible: false,
+      type: null,
+      data: null,
+    },
+  },
 
   ui: {
+    // TODO: Still needs to be refactored
     tradeData: defaultTradeData(),
-
-    modalViews: {
-      playerInfoModal: {
-        role: 'Researcher',
-        visible: false,
-      },
-      tradeRequestModal: {
-        visible: false,
-      },
-      cardModal: {
-        visible: false,
-        data: {
-          type: '',
-          info: null
-        },
-      }
-    },
-  }
-}
+  },
+};
 
 export const getInitialStoreState = (): State => _.cloneDeep(initialStoreState);
