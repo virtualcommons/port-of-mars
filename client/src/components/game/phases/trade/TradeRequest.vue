@@ -27,7 +27,7 @@
               "
             />
           </div>
-          <p class="player-name">{{player}}</p>
+          <p class="player-name">{{ player }}</p>
         </div>
       </div>
     </div>
@@ -185,8 +185,8 @@ export default class TradeRequest extends Vue {
       this.api.sendTradeRequest(tradeDataPackage);
 
       if (!this.isInTutorial) {
-        this.$tstore.commit('RESET_TRADE_MODAL', 'data');
-        this.$tstore.commit('SET_TRADE_REQUEST_MODAL_VISIBILITY', false);
+        // this.$tstore.commit('RESET_TRADE_MODAL', 'data');
+        this.$tstore.commit('SET_MODAL_HIDDEN', null);
       }
     }
   }

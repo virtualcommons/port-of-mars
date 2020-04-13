@@ -21,7 +21,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import { Role } from '@port-of-mars/shared/types';
 
 @Component({
-  components: {}
+  components: {},
 })
 export default class OtherPlayers extends Vue {
   @Prop() private role!: string;
@@ -47,9 +47,11 @@ export default class OtherPlayers extends Vue {
   }
 
   private handleModal(): void {
-    this.$tstore.commit('SET_PLAYER_INFO_MODAL_VISIBILITY',{
-      role:this.role as Role,
-      visible:true
+    this.$tstore.commit('SET_MODAL_VISIBLE', {
+      type: 'PlayerInfoModal',
+      data: {
+        role: this.role,
+      },
     });
   }
 }

@@ -58,9 +58,16 @@ export default class EventCard extends Vue {
   @Prop({ default: false }) private active!: boolean;
 
   private handleClick(): void {
-    this.$root.$emit('openModalCard', {
-      card: 'event',
-      payload: this.event,
+    this.$tstore.commit('SET_MODAL_VISIBLE', {
+      type: 'CardModal',
+      data: {
+        activator: 'User',
+        title: 'Event Card',
+        content: 'This is an event card.',
+        cardType: 'EventCard',
+        cardData: this.event,
+        confirmation: false,
+      },
     });
   }
 }

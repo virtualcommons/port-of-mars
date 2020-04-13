@@ -4,7 +4,7 @@
       v-if="gamePhase != phase.defeat && gamePhase != phase.victory"
       class="game-dashboard"
     >
-      <ModalController/>
+      <ModalController />
       <GameboardContainer />
     </div>
     <div v-else-if="gamePhase == phase.defeat" class="game-dashboard-defeat">
@@ -23,14 +23,14 @@ import { EnvironmentMode } from '@port-of-mars/client/settings';
 import ModalController from '@port-of-mars/client/components/game/modals/ModalController.vue';
 import GameboardContainer from '@port-of-mars/client/components/root/GameboardContainer.vue';
 import ContainerDefeat from '@port-of-mars/client/components/root/ContainerDefeat.vue';
-import {isDev, isStaging} from "@port-of-mars/shared/settings";
+import { isDev, isStaging } from '@port-of-mars/shared/settings';
 
 @Component({
   components: {
     ModalController,
     GameboardContainer,
     ContainerDefeat,
-  }
+  },
 })
 export default class GameDashboard extends Vue {
   env: EnvironmentMode = new EnvironmentMode();
@@ -63,5 +63,5 @@ export default class GameDashboard extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import "@port-of-mars/client/stylesheets/views/GameDashboard.scss";
+@import '@port-of-mars/client/stylesheets/views/GameDashboard.scss';
 </style>

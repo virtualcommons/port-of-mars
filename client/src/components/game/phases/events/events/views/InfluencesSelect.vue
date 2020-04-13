@@ -14,7 +14,8 @@
       </div>
 
       <div class="cards">
-        <CardInvestment class="card"
+        <InvestmentCard
+          class="card"
           v-for="investment in investments"
           v-bind="investment"
           :key="investment.name"
@@ -25,33 +26,43 @@
   </div>
 </template>
 
-
-
 <script lang="ts">
 import { Vue, Component, Inject } from 'vue-property-decorator';
-import {Resource, ResourceAmountData, RESOURCES, INVESTMENTS, ResourceCostData, Investment } from "@port-of-mars/shared/types";
+import {
+  Resource,
+  ResourceAmountData,
+  RESOURCES,
+  INVESTMENTS,
+  ResourceCostData,
+  Investment,
+} from '@port-of-mars/shared/types';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 import TimeBlockMeter from '@port-of-mars/client/components/game/phases/investment/TimeBlockMeter.vue';
-import CardInvestment from '@port-of-mars/client/components/game/phases/investment/CardInvestment.vue';
+import InvestmentCard from '@port-of-mars/client/components/game/phases/investment/InvestmentCard.vue';
 import * as _ from 'lodash';
 
 @Component({
   components: {
     TimeBlockMeter,
-    CardInvestment
-  }
+    InvestmentCard,
+  },
 })
 export default class InfluencesSelect extends Vue {
-  private origPending = _.cloneDeep(this.$tstore.getters.player.pendingInvestments);
+  private origPending = _.cloneDeep(
+    this.$tstore.getters.player.pendingInvestments
+  );
 
   get investments(): any {
-    const p = this.$tstore.getters.player
+    const p = this.$tstore.getters.player;
     return Object.keys(this.origPending).map((investment) => {
       return {
-        name:investment,
-        cost: this.origPending[investment as Investment] < 0 ? 1 : Number.MAX_SAFE_INTEGER,
+        name: investment,
+        cost:
+          this.origPending[investment as Investment] < 0
+            ? 1
+            : Number.MAX_SAFE_INTEGER,
         pendingInvestment: p.pendingInvestments[investment as Investment],
-      }
+      };
     });
   }
 
@@ -65,39 +76,40 @@ export default class InfluencesSelect extends Vue {
     const timeBlocks = this.$tstore.getters.player.timeBlocks;
     return (
       timeBlocks -
-      _.reduce(INVESTMENTS,(tot, investment) =>
-          tot + (this.origPending[investment]*-1 - pendingInvestment[investment]*-1),
-        0)
+      _.reduce(
+        INVESTMENTS,
+        (tot, investment) =>
+          tot +
+          (this.origPending[investment] * -1 -
+            pendingInvestment[investment] * -1),
+        0
+      )
     );
-
   }
-
 
   private setInvestmentAmount(msg: {
     name: Resource;
     units: number;
     cost: number;
   }) {
-
-
     const pendingInvestments = _.clone(
       this.$tstore.getters.player.pendingInvestments
     );
 
     pendingInvestments[msg.name] = msg.units;
     if (
-      msg.units >=  this.origPending[msg.name] &&
+      msg.units >= this.origPending[msg.name] &&
       this.getRemainingTimeBlocks(pendingInvestments) >= 0
     ) {
       this.$tstore.commit('SET_PENDING_INVESTMENT_AMOUNT', {
         investment: msg.name,
         units: msg.units,
-        role: this.$tstore.state.role
+        role: this.$tstore.state.role,
       });
     }
   }
 
-    get timeBlockTotal() {
+  get timeBlockTotal() {
     return this.$store.getters.player.timeBlocks;
   }
 }

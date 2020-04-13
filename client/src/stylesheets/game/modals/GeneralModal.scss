@@ -1,0 +1,55 @@
+.general-modal {
+  height: 25rem;
+  width: 35rem;
+  @include reset-padding-margin;
+  // border: 0.125rem solid $space-white;
+  border: 0.125rem solid $space-lightgreen;
+  @include make-column-and-top;
+  background-color: $space-gray;
+  // filter: drop-shadow(0 0 0.75rem $new-space-orange);
+
+  .title-wrapper,
+  .content-wrapper {
+    width: 100%;
+    padding: 0.5rem;
+    margin: 0;
+  }
+
+  .title-wrapper {
+    height: 4rem;
+    // background-color: $space-white;
+    background-color: $space-lightgreen;
+
+    .title {
+      height: 100%;
+      padding: 0;
+      @include make-center;
+
+      p {
+        margin-bottom: 0;
+        color: $space-gray;
+        font-size: $font-large;
+        font-weight: $font-weight-maven-pro-bold;
+      }
+    }
+  }
+
+  .content-wrapper {
+    flex-grow: 1;
+
+    .content {
+      height: 100%;
+      padding: 0;
+      @include make-center;
+
+      p {
+        width: 80%;
+        margin-bottom: 0;
+        color: $space-white;
+        font-size: $font-med;
+        font-weight: $font-weight-maven-pro-regular;
+        text-align: center;
+      }
+    }
+  }
+}

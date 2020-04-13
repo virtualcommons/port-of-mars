@@ -13,7 +13,10 @@
     </div>
 
     <div class="info-wrapper row">
-      <div class="points" v-bind="{class: showDescription ? 'col-3' : 'col-12'}">
+      <div
+        class="points"
+        v-bind="{ class: showDescription ? 'col-3' : 'col-12' }"
+      >
         <p>Points</p>
         <p>{{ accomplishment.victoryPoints }}</p>
       </div>
@@ -113,8 +116,8 @@ export default class AccomplishmentCard extends Vue {
   @Prop({ default: AccomplishmentCardType.default })
   private type!: AccomplishmentCardType;
 
-  @Prop({default: true})
-  private showDescription!:boolean;
+  @Prop({ default: true })
+  private showDescription!: boolean;
 
   // NOTE :: All / Default Type
 
@@ -123,16 +126,17 @@ export default class AccomplishmentCard extends Vue {
   }
 
   private handleClick() {
-    this.$tstore.commit('SET_CARD_MODAL_VISIBILITY', {
-      visible: true,
-      data:{
-        type:'ModalCard',
-        info:{
-          card: 'accomplishment',
-          payload: this.accomplishment
-        },
-      }
-    })
+    this.$tstore.commit('SET_MODAL_VISIBLE', {
+      type: 'CardModal',
+      data: {
+        activator: 'User',
+        title: 'Accomplishment Card',
+        content: 'This is an accomplishment card.',
+        cardType: 'AccomplishmentCard',
+        cardData: this.accomplishment,
+        confirmation: false,
+      },
+    });
   }
 
   get cardTypeStyling() {
@@ -160,10 +164,7 @@ export default class AccomplishmentCard extends Vue {
   // NOTE :: Purchase Type
 
   get canPurchase() {
-    return canPurchaseAccomplishment(
-      this.accomplishment,
-      this.playerInventory
-    );
+    return canPurchaseAccomplishment(this.accomplishment, this.playerInventory);
   }
 
   private handlePurchase() {
@@ -173,11 +174,13 @@ export default class AccomplishmentCard extends Vue {
   }
 
   get playerInventory() {
-    let pendingInventory = _.clone(this.$tstore.getters.player.pendingInvestments);
+    let pendingInventory = _.clone(
+      this.$tstore.getters.player.pendingInvestments
+    );
     let inventory = _.clone(this.$tstore.getters.player.inventory);
 
     Object.keys(inventory).forEach((resource) => {
-      inventory[resource as Resource]+= pendingInventory[resource as Resource];
+      inventory[resource as Resource] += pendingInventory[resource as Resource];
     });
 
     return inventory;
@@ -200,26 +203,22 @@ export default class AccomplishmentCard extends Vue {
   private handleDiscard() {
     if (this.$store.getters.layout == 'tutorial') {
       this.api.discardAccomplishment(this.accomplishment.id);
-
     } else {
-      this.$tstore.commit('SET_CARD_MODAL_VISIBILITY', {
-      visible: true,
-      data:{
-        type:'ModalConfirmation',
-        info:{
-          text: `Selecting \"Yes\" will discard the accomplishment \"${this.accomplishment.label}\" and a new card will be drawn next round.`,
-          victoryPoints: this.accomplishment.victoryPoints,
-          cost: this.accomplishmentCost,
-          phaseOpened: this.$store.state.phase,
-          type: 'discardAccomplishment',
-          actionData: this.accomplishment.id
+      this.$tstore.commit('SET_MODAL_VISIBLE', {
+        type: 'CardModal',
+        data: {
+          activator: 'User',
+          title: 'Discard Accomplishment Card',
+          content:
+            "Clicking 'Confirm' will discard this accomplishment. A new card will replace it next round.",
+          cardType: 'AccomplishmentCard',
+          cardData: this.accomplishment,
+          confirmation: true,
         },
-      }
-    })
-
-    }
+      });
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>

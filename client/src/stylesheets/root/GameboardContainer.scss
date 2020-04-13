@@ -14,7 +14,7 @@
   overflow-y: hidden;
   @include make-column-and-top;
   background-color: $space-gray;
-  filter: drop-shadow(0 0 0.75rem $new-space-orange);
+  // filter: drop-shadow(0 0 0.75rem $new-space-orange);
 
   .popups {
     position: absolute;

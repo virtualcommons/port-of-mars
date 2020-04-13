@@ -74,7 +74,7 @@ library.add(faBriefcase);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 @Component({})
-export default class CardInvestment extends Vue {
+export default class InvestmentCard extends Vue {
   @Prop() private name!: Resource;
   @Prop() private cost!: number;
   @Prop() private pendingInvestment!: number;
@@ -110,5 +110,5 @@ export default class CardInvestment extends Vue {
 </script>
 ,
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/investment/CardInvestment.scss';
+@import '@port-of-mars/client/stylesheets/game/phases/investment/InvestmentCard.scss';
 </style>

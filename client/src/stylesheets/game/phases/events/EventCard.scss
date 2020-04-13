@@ -30,6 +30,7 @@
         height: 1.5rem;
         width: 1.5rem;
         cursor: pointer;
+        color: $space-gray;
         @include default-transition-base;
 
         &:hover {

@@ -19,7 +19,7 @@ import { Role } from '@port-of-mars/shared/types';
 import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
 
 @Component({
-  components: {}
+  components: {},
 })
 
 export default class Player extends Vue {
@@ -66,10 +66,16 @@ export default class Player extends Vue {
     }
   }
 
+  // handleOpenModal() {
+    // this.$tstore.commit("SET_PLAYER_INFO_MODAL_VISIBILITY", {
+    //   role: this.playerRole,
+    //   visible: true
   handleOpenModal() {
-    this.$tstore.commit("SET_PLAYER_INFO_MODAL_VISIBILITY", {
-      role: this.playerRole,
-      visible: true
+    this.$tstore.commit('SET_MODAL_VISIBLE', {
+      type: 'PlayerInfoModal',
+      data: {
+        role: this.playerRole,
+      },
     });
 
     this.tutorialValidation();
