@@ -4,6 +4,12 @@
       <div class="title col-12">
         <p>{{ event.name }}</p>
         <font-awesome-icon
+          v-if="showActiveIndicator"
+          :icon="['far', 'dot-circle']"
+          size="lg"
+          class="icontwo animated pulse infinite"
+        />
+        <font-awesome-icon
           :icon="['fas', 'info-circle']"
           size="lg"
           @click="handleClick"
@@ -32,12 +38,14 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { AccomplishmentData } from '@port-of-mars/shared/types';
+import { AccomplishmentData, Phase } from '@port-of-mars/shared/types';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons/faInfoCircle';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons/faInfoCircle';
+import { faDotCircle } from '@fortawesome/free-regular-svg-icons/faDotCircle';
 
 library.add(faInfoCircle);
+library.add(faDotCircle);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 @Component({})
@@ -57,6 +65,18 @@ export default class EventCard extends Vue {
   @Prop({ default: false }) private visible!: boolean;
   @Prop({ default: false }) private active!: boolean;
 
+  get phase() {
+    return Phase;
+  }
+
+  get gamePhase() {
+    return this.$store.state.phase;
+  }
+
+  get showActiveIndicator() {
+    return this.active && this.gamePhase === this.phase.events;
+  }
+
   private handleClick(): void {
     this.$tstore.commit('SET_MODAL_VISIBLE', {
       type: 'CardModal',
@@ -75,4 +95,5 @@ export default class EventCard extends Vue {
 
 <style lang="scss" scoped>
 @import '@port-of-mars/client/stylesheets/game/phases/events/EventCard.scss';
+@import '~animate.css/source/attention_seekers/pulse.css';
 </style>
