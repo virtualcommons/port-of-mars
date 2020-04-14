@@ -1,12 +1,11 @@
 <template>
   <div class="gameboardcontainer container">
     <ProfileMenu />
-    <div class="popups">
-      <ActiveEventsPopup />
-      <InventoryPopup />
-      <MarsLogPopup />
-    </div>
-    <div class="status-bar row">
+    <!-- <div class="transparency" v-if="true"></div> -->
+    <ActiveEventsPopup />
+    <InventoryPopup />
+    <MarsLogPopup />
+    <div class="gameboardstatusbar row">
       <SystemHealth />
     </div>
     <div class="gameboard row">
@@ -26,15 +25,15 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
-import HUD from "@port-of-mars/client/components/game/HUD.vue";
-import PhaseSwitcher from "@port-of-mars/client/components/game/PhaseSwitcher.vue";
-import ProfileMenu from "@port-of-mars/client/components/game/static/popups/ProfileMenu.vue";
-import Chat from "@port-of-mars/client/components/game/static/chat/Chat.vue";
-import SystemHealth from "@port-of-mars/client/components/game/static/systemhealth/SystemHealth.vue";
-import ActiveEventsPopup from "@port-of-mars/client/components/game/static/popups/ActiveEventsPopup.vue";
-import InventoryPopup from "@port-of-mars/client/components/game/static/popups/InventoryPopup.vue";
-import MarsLogPopup from "@port-of-mars/client/components/game/static/popups/MarsLogPopup.vue";
+import { Vue, Component } from 'vue-property-decorator';
+import HUD from '@port-of-mars/client/components/game/HUD.vue';
+import PhaseSwitcher from '@port-of-mars/client/components/game/PhaseSwitcher.vue';
+import ProfileMenu from '@port-of-mars/client/components/game/static/popups/ProfileMenu.vue';
+import Chat from '@port-of-mars/client/components/game/static/chat/Chat.vue';
+import SystemHealth from '@port-of-mars/client/components/game/static/systemhealth/SystemHealth.vue';
+import ActiveEventsPopup from '@port-of-mars/client/components/game/static/popups/ActiveEventsPopup.vue';
+import InventoryPopup from '@port-of-mars/client/components/game/static/popups/InventoryPopup.vue';
+import MarsLogPopup from '@port-of-mars/client/components/game/static/popups/MarsLogPopup.vue';
 
 @Component({
   components: {
@@ -45,12 +44,12 @@ import MarsLogPopup from "@port-of-mars/client/components/game/static/popups/Mar
     SystemHealth,
     ActiveEventsPopup,
     InventoryPopup,
-    MarsLogPopup
-  }
+    MarsLogPopup,
+  },
 })
 export default class GameboardContainer extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-@import "@port-of-mars/client/stylesheets/root/GameboardContainer.scss";
+@import '@port-of-mars/client/stylesheets/root/GameboardContainer.scss';
 </style>
