@@ -25,7 +25,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import GeneralModal from '@port-of-mars/client/components/game/modals/GeneralModal.vue';
 import CardModal from '@port-of-mars/client/components/game/modals/CardModal.vue';
-import PlayerInfoModal from '@port-of-mars/client/components/game/modals/PlayerInfoModal.vue';
+import PlayerModal from '@port-of-mars/client/components/game/modals/PlayerModal.vue';
 import TradeRequestModal from '@port-of-mars/client/components/game/modals/TradeRequestModal.vue';
 
 library.add(faTimes);
@@ -35,7 +35,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
   components: {
     GeneralModal,
     CardModal,
-    PlayerInfoModal,
+    PlayerModal,
     TradeRequestModal,
   },
 })

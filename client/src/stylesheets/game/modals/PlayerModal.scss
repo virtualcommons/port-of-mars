@@ -1,4 +1,4 @@
-.c-playermodal {
+.c-player-modal {
   width: 65rem;
   height: 45rem;
   max-width: none;
@@ -7,14 +7,14 @@
   margin: 0;
   background-color: $space-gray;
 
-  .topwrapper,
-  .bottomwrapper {
+  .top-wrapper,
+  .bottom-wrapper {
     width: 100%;
     max-width: none;
     @include reset-padding-margin;
   }
 
-  .topwrapper {
+  .top-wrapper {
     height: 25%;
 
     .top {
@@ -93,7 +93,7 @@
     }
   }
 
-  .bottomwrapper {
+  .bottom-wrapper {
     position: relative;
     height: 75%;
     padding-top: 0.5rem;
@@ -153,7 +153,7 @@
           }
         }
 
-        .purchasableaccomplishments {
+        .purchasable-accomplishments {
           height: 100%;
           padding: 0;
           @include make-column-and-top;
