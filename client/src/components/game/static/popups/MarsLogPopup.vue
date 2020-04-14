@@ -3,12 +3,12 @@
     <BButton @click="toggle" class="toggle">
       <span>Mars Log</span>
       <font-awesome-icon
-        v-if="!visible"
+        v-if="!popupVisible"
         :icon="['fas', 'caret-up']"
         size="lg"
       />
       <font-awesome-icon
-        v-if="visible"
+        v-if="popupVisible"
         :icon="['fas', 'caret-down']"
         size="lg"
       />
@@ -39,14 +39,16 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
   },
 })
 export default class MarsLogPopup extends Vue {
-  private visible: boolean = false;
+  get popupVisible() {
+    return this.$tstore.state.userInterface.popupView.marsLogVisible;
+  }
 
   private toggle() {
-    this.visible = !this.visible;
+    this.$tstore.commit('SET_MARS_LOG_POPUP_VISIBILITY', !this.popupVisible);
   }
 
   get position() {
-    return this.visible ? { bottom: '0rem' } : { bottom: '-45rem' };
+    return this.popupVisible ? { bottom: '0rem' } : { bottom: '-45rem' };
   }
 }
 </script>

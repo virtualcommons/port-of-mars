@@ -110,6 +110,7 @@ export interface User {
 
 export interface UserInterface {
   profileMenuView: ProfileMenuView;
+  popupView: PopupView;
   modalView: ModalView;
 }
 
@@ -126,6 +127,12 @@ export interface ModalView {
 
 export interface ProfileMenuView {
   visible: boolean;
+}
+
+export interface PopupView {
+  activeEventsVisible: boolean;
+  inventoryVisible: boolean;
+  marsLogVisible: boolean;
 }
 
 export interface State extends GameData {
@@ -185,6 +192,11 @@ export const initialStoreState: State = {
   userInterface: {
     profileMenuView: {
       visible: false,
+    },
+    popupView: {
+      activeEventsVisible: false,
+      inventoryVisible: false,
+      marsLogVisible: false,
     },
     modalView: {
       visible: false,
