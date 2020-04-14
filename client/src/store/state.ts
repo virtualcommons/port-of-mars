@@ -109,6 +109,7 @@ export interface User {
 // NOTE :: State - userInterface
 
 export interface UserInterface {
+  profileMenuView: ProfileMenuView;
   modalView: ModalView;
 }
 
@@ -121,6 +122,10 @@ export interface ModalView {
   visible: boolean;
   type: ModalViewType | null;
   data: ModalDataType | null;
+}
+
+export interface ProfileMenuView {
+  visible: boolean;
 }
 
 export interface State extends GameData {
@@ -178,6 +183,9 @@ export const initialStoreState: State = {
   tutorialTradeGet: defaultInventory(),
 
   userInterface: {
+    profileMenuView: {
+      visible: false,
+    },
     modalView: {
       visible: false,
       type: null,
