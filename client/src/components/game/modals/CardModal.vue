@@ -28,12 +28,12 @@
         />
       </div>
     </div>
-    <div v-if="false" class="confirm-wrapper row">
+    <div v-if="modalData.confirmation" class="confirm-wrapper row">
       <div class="confirm col-12">
         <button @click="handleConfirmation">Confirm</button>
       </div>
     </div>
-    <div v-if="true" class="ghost-wrapper row"></div>
+    <div v-if="!modalData.confirmation" class="ghost-wrapper row"></div>
   </div>
 </template>
 
