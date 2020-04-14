@@ -183,11 +183,19 @@
             @include make-center;
 
             button {
+              @include reset-button;
               height: 100%;
               width: 50%;
-              @include space-button;
-              padding: 0 !important;
-              margin: 0 !important;
+              padding: 0;
+              margin: 0;
+              font-size: $font-med;
+              font-weight: $font-weight-maven-pro-regular;
+              color: $new-space-orange;
+              border: 0.0625rem solid $new-space-orange;
+
+              &:disabled {
+                opacity: 0.5;
+              }
             }
 
             .selected {
