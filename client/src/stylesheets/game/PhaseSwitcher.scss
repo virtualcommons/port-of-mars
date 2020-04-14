@@ -5,7 +5,8 @@
 
   .wrapper {
     @include expand;
-    @include new-border-orange;
+    // @include new-border-orange;
+    border: 0.125rem solid $space-lightgray-025;
     padding: 0.5rem;
     margin: 0;
   }

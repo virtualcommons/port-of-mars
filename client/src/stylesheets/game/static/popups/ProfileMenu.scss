@@ -4,9 +4,9 @@
   height: 100%;
   width: 20rem;
   padding: 2rem;
-  background-color: $new-space-orange;
+  background-color: $space-lightgray;
   transition: position 0.15s ease-in;
-  z-index: 2;
+  z-index: 3;
 
   .toggle {
     position: absolute;
@@ -18,7 +18,7 @@
     padding: 0.5rem;
     border-bottom-right-radius: 4rem;
     border-top-right-radius: 4rem;
-    background-color: $new-space-orange;
+    background-color: $space-lightgray;
 
     .left {
       margin-right: 0.75rem;
