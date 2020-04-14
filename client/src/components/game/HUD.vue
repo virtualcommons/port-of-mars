@@ -2,13 +2,13 @@
   <div class="c-hud container">
     <div class="wrapper row">
       <!-- REFACTOR :: PlayerContainer -->
-      <div class="players col-6 tour-profile">
+      <div class="players col-6 tour-profile tour-players">
         <div class="wrapper container">
           <div class="row">
-            <div class="player col-5 tour-profile-self">
+            <div class="player col-5 tour-player-self">
               <Player />
             </div>
-            <div class="others col-7 tour-players">
+            <div class="others col-7">
               <OtherPlayers
                 v-for="player in otherPlayers"
                 v-bind="player"
@@ -20,7 +20,7 @@
       </div>
 
       <!-- REFACTOR :: GameStatusContainer -->
-      <div class="gamestatus col-6">
+      <div class="gamestatus col-6 tour-round tour-phase-time tour-phase-instructions">
         <div class="wrapper container">
           <div class="row">
             <div class="information col-5">

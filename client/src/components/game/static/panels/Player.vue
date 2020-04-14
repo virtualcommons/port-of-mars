@@ -1,5 +1,5 @@
 <template>
-  <div @click="handleOpenModal()" class="c-player tour-player-self">
+  <div @click="handleOpenModal()" class="c-player">
     <div class="indicator" :style="indicatorStyle">
       <div class="frame" :style="frameColor">
         <img :src="playerRoleImage" alt="Player Image" />
@@ -14,21 +14,24 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Inject, Prop } from 'vue-property-decorator';
 import { Role } from '@port-of-mars/shared/types';
+import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
 
 @Component({
   components: {}
 })
+
 export default class Player extends Vue {
+  @Inject()
+  readonly api!: TutorialAPI;
+
   get playerRole(): Role {
     return this.$tstore.state.role;
   }
 
   get playerScore(): number {
-    return this.playerRole
-      ? this.$tstore.state.players[this.playerRole].victoryPoints
-      : 0;
+    return this.playerRole ? this.$tstore.state.players[this.playerRole].victoryPoints : 0;
   }
 
   get playerReady() {
@@ -53,15 +56,27 @@ export default class Player extends Vue {
       : require(`@port-of-mars/client/assets/characters/Researcher.png`);
   }
 
-  handleOpenModal(){
-    this.$tstore.commit('SET_PLAYER_INFO_MODAL_VISIBILITY',{
-      role:this.playerRole,
-      visible:true
+  get isInTutorial() {
+    return this.$tstore.getters.layout === "tutorial";
+  }
+
+  tutorialValidation() {
+    if (this.isInTutorial) {
+      this.api.completedGeneralClick();
+    }
+  }
+
+  handleOpenModal() {
+    this.$tstore.commit("SET_PLAYER_INFO_MODAL_VISIBILITY", {
+      role: this.playerRole,
+      visible: true
     });
+
+    this.tutorialValidation();
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/static/panels/Player.scss';
+@import "@port-of-mars/client/stylesheets/game/static/panels/Player.scss";
 </style>

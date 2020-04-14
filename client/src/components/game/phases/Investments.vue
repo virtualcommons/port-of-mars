@@ -1,5 +1,5 @@
 <template>
-  <div class="c-investments tour-invest-action">
+  <div class="c-investments container tour-invest-action">
     <div class="wrapper row">
       <div class="timeblockinvestments col-8 tour-time-blocks">
         <div class="topbar">
@@ -54,7 +54,6 @@ import TimeBlockMeter from './investment/TimeBlockMeter.vue';
 import CardInvestment from './investment/CardInvestment.vue';
 import { canPurchaseAccomplishment } from '@port-of-mars/shared/validation';
 import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
-// import ContainerAccomplishmentsGeneral from "@port-of-mars/client/components/game/accomplishments/ContainerAccomplishmentsGeneral.vue";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faClock } from '@fortawesome/free-solid-svg-icons/faClock';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';

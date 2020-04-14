@@ -1,5 +1,5 @@
 <template>
-  <div class="container-accomplishment">
+  <div class="container-accomplishment container">
     <div class="accomplishment-cards">
       <p v-if="isVisible && accomplishmentSet.length === 0" class="empty">
         No Available Accomplishments

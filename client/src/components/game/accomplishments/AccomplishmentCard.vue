@@ -1,5 +1,5 @@
 <template>
-  <div class="c-accomplishmentcard container" :class="cardTypeStyling">
+  <div class="c-accomplishmentcard" :class="cardTypeStyling">
     <div class="title-wrapper row">
       <div class="title col-12">
         <p>{{ accomplishment.label }}</p>
