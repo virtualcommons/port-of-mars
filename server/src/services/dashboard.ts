@@ -1,24 +1,8 @@
 import {EntityManager} from "typeorm";
 import {User} from '@port-of-mars/server/entity/User';
-import {Role} from "@port-of-mars/shared/types";
+import {Role, ActionItem, GameMeta, Stats } from "@port-of-mars/shared/types";
 import {TournamentRound} from "@port-of-mars/server/entity/TournamentRound";
-
-
-interface ActionItem {
-  done: boolean
-  description: string
-  link: string
-}
-
-interface GameMeta {
-  time: number // unix timestamp
-  round: number
-  tournamentName: string
-}
-
-interface Stats {
-  games: Array<GameMeta & {points: number, winner: Role}>
-}
+import { TournamentRoundInvite } from "../entity";
 
 interface DashboardData {
   actionItems: Array<ActionItem>
@@ -29,15 +13,7 @@ interface DashboardData {
 export class DashboardService {
   constructor(public em: EntityManager) {}
 
-  // async sendDashboardData(): Promise<DashboardData>{
-    
-    
-  //   return {
-
-  //   }
-  // }
-
-  async hasUserPassedTutorial(user: User): Promise<ActionItem> {
+  hasUserPassedTutorial(user: User): ActionItem {
     return {
       done: user.passedQuiz,
       description: 'Complete Tutorial',
@@ -45,39 +21,31 @@ export class DashboardService {
     }
   }
 
+  getUserSurveys(tournamentRound: TournamentRound | undefined,
+    inviteList: Array<TournamentRoundInvite> | undefined,
+    userId: number): Array<ActionItem | undefined>{
+      
+      if(!tournamentRound || !inviteList){
+        return [undefined, undefined]
+      }
 
-  async getIntroSurveyUrl(tournamentRound: TournamentRound | undefined): Promise<ActionItem | undefined>{
-    if(!tournamentRound){
-      return undefined;
-    }
-
-    if(!tournamentRound.introSurveyUrl){
-      return undefined;
-    }
-
-    return {
-      done: false,
-      description: 'Complete Introduction Survey',
-      link: tournamentRound.introSurveyUrl
-    }
-  }
-
-  async getExitSurveyUrl(tournamentRound: TournamentRound| undefined): Promise<ActionItem | undefined> {
-    if(!tournamentRound){
-      return undefined;
-    }
-
-    if(!tournamentRound.exitSurveyUrl){
-      return undefined;
-    }
-
-    return {
-      done: false,
-      description: 'Complete Exit Survey',
-      link: tournamentRound.exitSurveyUrl,
+      for(let invite of inviteList){
+        if(invite.userId == userId){
+          return [{
+            done: invite.hasCompletedIntroSurvey,
+            description: 'Complete the introduction survey',
+            link: tournamentRound.introSurveyUrl ? tournamentRound.introSurveyUrl : ''
+          },
+          {
+            done: invite.hasCompletedIntroSurvey,
+            description: 'Complete the exit survey',
+            link: tournamentRound.exitSurveyUrl ? tournamentRound.exitSurveyUrl : ''
+          }]
+        }
+      }    
+      return [undefined, undefined];
 
     }
-  }
 
 
 }
