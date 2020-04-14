@@ -1,5 +1,15 @@
 <template>
   <div class="c-inventory">
+    <div class="toggle">
+      <p>Toggle Investment Costs</p>
+      <button @click="toggleCosts" :class="costTogglerClass">
+        <font-awesome-icon
+          :icon="['fas', 'clock']"
+          size="sm"
+          class="timeblock"
+        />
+      </button>
+    </div>
     <div
       v-for="investment in investments"
       :key="investment.name"
@@ -17,11 +27,12 @@
       </div>
       <div class="right">
         <font-awesome-icon
+          v-if="costsVisible"
           :icon="['fas', 'clock']"
           size="lg"
           class="timeblock"
         />
-        <p class="cost">
+        <p v-if="costsVisible" class="cost">
           {{ canInvest(investment.cost) ? investment.cost : '-' }}
         </p>
         <font-awesome-icon
@@ -46,11 +57,12 @@
       </div>
       <div class="right">
         <font-awesome-icon
+          v-if="costsVisible"
           :icon="['fas', 'clock']"
           size="lg"
           class="timeblock"
         />
-        <p class="cost">
+        <p v-if="costsVisible" class="cost">
           {{
             canInvest(contributedSystemHealth.cost)
               ? contributedSystemHealth.cost
@@ -94,6 +106,7 @@ export default class Inventory extends Vue {
   @Prop({ default: true }) private isSelf!: boolean;
   @Prop({ default: RESEARCHER }) private role!: Role;
   @Prop({ default: true }) private displaySystemHealth!: boolean;
+  private costsVisible: boolean = false;
 
   get playerData() {
     return this.isSelf
@@ -128,6 +141,14 @@ export default class Inventory extends Vue {
 
   private canInvest(cost: number): boolean {
     return cost !== Number.MAX_SAFE_INTEGER;
+  }
+
+  private toggleCosts() {
+    this.costsVisible = !this.costsVisible;
+  }
+
+  get costTogglerClass() {
+    return this.costsVisible ? 'active' : 'inactive';
   }
 
   private backgroundColor(resource: Investment) {
