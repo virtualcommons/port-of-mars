@@ -35,7 +35,7 @@ export default class EventNoChange extends Vue {
       case 'NO_CHANGE':
         return 'This event requires no interaction.';
       case 'AUDIT':
-        return 'Hover over a player in the Player Scores area to view an overview of their investment inventory.';
+        return 'Click a player in the Player Scores area to view an overview of their investment inventory.';
       case 'DISABLE_CHAT':
         return 'This event requires no interaction.';
       default:

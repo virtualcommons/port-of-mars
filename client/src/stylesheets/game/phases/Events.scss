@@ -8,7 +8,9 @@
     max-width: none;
     @include reset-padding-margin;
 
-    .event-deck {
+    .event-deck,
+    .active-events,
+    .active-accomplishments {
       height: 100%;
       padding: 0;
       @include make-column-and-top;
@@ -45,41 +47,11 @@
       }
     }
 
-    .active-events {
-      height: 100%;
-      padding: 0 0 0 0.5rem;
-      @include make-column-and-top;
-
-      .topbar {
-        height: 10%;
-        flex-shrink: 0;
-        width: 100%;
-        padding: 0.25rem 1rem;
-        margin-bottom: 0.5rem;
-        @include make-center;
-        background-color: $new-space-orange;
-
-        .title {
-          margin-bottom: 0;
-          color: $space-gray;
-          font-size: $font-med;
-          font-weight: $font-weight-maven-pro-bold;
-        }
-      }
-
-      .outer-wrapper {
-        flex-grow: 1;
-        width: 100%;
-        padding: 0.5rem;
-        background-color: $space-white-opaque-1;
-        overflow-y: hidden;
-
-        .wrapper {
-          width: 100%;
-          @include make-column-and-top;
-          overflow-y: scroll;
-        }
-      }
+    .active-events-mid{
+      padding: 0 0.5rem;
+    }
+    .active-events-right{
+      padding-left: 0.5rem;
     }
   }
 }

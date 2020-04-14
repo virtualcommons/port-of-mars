@@ -1,7 +1,7 @@
 <template>
   <div class="c-events container tour-event">
     <div class="wrapper row">
-      <div class="event-deck col-4">
+      <div class="event-deck col-3">
         <div class="topbar">
           <p class="title">Event Deck</p>
         </div>
@@ -18,7 +18,10 @@
           </div>
         </div>
       </div>
-      <div class="active-events col-8 tour-active-events">
+      <div class="active-events tour-active-events"
+        v-bind="{class: currentEvent.clientViewHandler == 'INFLUENCES_SELECT' ||
+              currentEvent.clientViewHandler == 'INFLUENCES_DRAW' ? 
+                'col-6 active-events-mid' : 'col-9 active-events-right'}">
         <div class="topbar">
           <p class="title">
             {{ eventTitle }}
@@ -30,6 +33,24 @@
           </div>
         </div>
       </div>
+      <div class="active-accomplishments col-3" 
+        v-if="currentEvent.clientViewHandler == 'INFLUENCES_SELECT' ||
+              currentEvent.clientViewHandler == 'INFLUENCES_DRAW'">
+        <div class="topbar">
+          <p class="title">Accomplishments</p>
+        </div>
+        <div class="outer-wrapper">
+          <div class="wrapper event-scroll">
+            <AccomplishmentCard
+              class="cards"
+              v-for="accomplishment in accomplishmentCards"
+              :key="accomplishment.id"
+              :accomplishment="accomplishment"
+              :showDescription="false"
+            />
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -38,12 +59,14 @@
 import { Vue, Component } from 'vue-property-decorator';
 import EventCard from './events/EventCard.vue';
 import EventContainer from './events/events/EventContainer.vue';
+import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
 import { MarsEventData, Phase } from '@port-of-mars/shared/types';
 
 @Component({
   components: {
     EventCard,
     EventContainer,
+    AccomplishmentCard,
   },
 })
 export default class Events extends Vue {
@@ -91,6 +114,10 @@ export default class Events extends Vue {
   private updated(): any {
     const elem = this.$el.querySelector('.event-scroll');
     elem!.scrollTop = elem!.scrollHeight;
+  }
+
+  get accomplishmentCards(): any {
+      return this.$tstore.getters.player.accomplishments.purchasable;
   }
 }
 </script>
