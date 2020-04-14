@@ -1,5 +1,5 @@
 <template>
-  <div class="c-modal-controller" v-if="modalsVisible">
+  <div class="c-modal-controller" v-if="modalsVisible" @click="handleClose">
     <div class="wrapper">
       <component :is="modalType" :modalData="modalData"></component>
       <button
@@ -67,7 +67,9 @@ export default class ModalController extends Vue {
   }
 
   private handleClose(): void {
-    this.$tstore.commit('SET_MODAL_HIDDEN', null);
+    if (this.modalsVisible) {
+      this.$tstore.commit('SET_MODAL_HIDDEN', null);
+    }
   }
 }
 </script>
