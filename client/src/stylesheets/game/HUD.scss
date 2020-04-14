@@ -26,8 +26,10 @@
 
     .players {
       padding: 0.5rem 1rem;
-      border-left: 0.125rem solid $new-space-orange-opaque-025;
-      border-right: 0.125rem solid $new-space-orange-opaque-025;
+      // border-left: 0.125rem solid $new-space-orange-opaque-025;
+      border-left: 0.125rem solid $space-lightgray-025;
+      // border-right: 0.125rem solid $new-space-orange-opaque-025;
+      border-right: 0.125rem solid $space-lightgray-025;
 
       .player,
       .others {
@@ -38,18 +40,14 @@
 
     .gamestatus {
       padding: 0.5rem 1rem;
-      border-right: 0.125rem solid $new-space-orange-opaque-025;
+      // border-right: 0.125rem solid $new-space-orange-opaque-025;
+      border-right: 0.125rem solid $space-lightgray-025;
 
       .information,
       .instructions {
         height: 100%;
         padding: 0 1rem;
       }
-    }
-
-    .chat {
-      border-left: 0.125rem solid $new-space-orange-opaque-025;
-      border-right: 0.125rem solid $new-space-orange-opaque-025;
     }
   }
 }
