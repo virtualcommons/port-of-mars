@@ -10,7 +10,6 @@
 
   .wrapper {
     @include make-column-and-center;
-    color: white;
 
     .modal-close {
       @include reset-button;
