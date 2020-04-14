@@ -1,7 +1,7 @@
 <template>
-  <div class="c-playermodal container tour-player-info-modal">
-    <div class="topwrapper row">
-      <div class="top container tour-player-info-modal-stats">
+  <div class="c-player-modal container tour-player-info-modal">
+    <div class="top-wrapper row">
+      <div class="top container">
         <div class="wrapper row">
           <div class="picture col-2">
             <div class="indicator" :style="indicatorStyle">
@@ -30,7 +30,7 @@
         </div>
       </div>
     </div>
-    <div class="bottomwrapper row">
+    <div class="bottom-wrapper row">
       <div class="bottom container">
         <div class="wrapper row">
           <div class="inventory col-4 tour-player-info-modal-inventory">
@@ -56,7 +56,7 @@
               </div>
             </div>
           </div>
-          <div class="purchasableaccomplishments col-8 tour-player-info-modal-accomplishments">
+          <div class="purchasable-accomplishments col-8">
             <div class="topbar">
               <p class="title">Accomplishments</p>
             </div>
@@ -122,7 +122,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
     ContainerAccomplishmentsGeneral,
   },
 })
-export default class PlayerInfoModal extends Vue {
+export default class PlayerModal extends Vue {
   @Prop({}) private modalData!: PlayerInfoModalData;
   // private errorMessageActive: boolean = false;
   private accomplishmentType: string = 'active';
@@ -209,5 +209,5 @@ export default class PlayerInfoModal extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/modals/PlayerInfoModal.scss';
+@import '@port-of-mars/client/stylesheets/game/modals/PlayerModal.scss';
 </style>
