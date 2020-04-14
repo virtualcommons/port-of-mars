@@ -1,4 +1,4 @@
-FROM node:13
+FROM node:13-buster
 
 LABEL maintainer="Allen Lee <allen.lee@asu.edu>"
 

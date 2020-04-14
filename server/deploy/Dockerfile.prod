@@ -1,6 +1,6 @@
 # vi: ft=dockerfile
 
-FROM node:13 AS pom-client-builder-base
+FROM node:13-buster AS pom-client-builder-base
 
 WORKDIR /code/client
 
@@ -16,7 +16,7 @@ ENV NODE_ENV=${NODE_ARG}
 RUN yarn build
 
 
-FROM node:13 AS pom-server-base
+FROM node:13-buster AS pom-server-base
 
 WORKDIR /code/server
 
@@ -30,7 +30,7 @@ RUN yarn build \
   && cp tsconfig.json package.json lib/server/
 
 
-FROM node:13
+FROM node:13-buster
 
 LABEL maintainer="Allen Lee <allen.lee@asu.edu>"
 
