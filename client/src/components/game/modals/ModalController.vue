@@ -1,5 +1,5 @@
 <template>
-  <div class="c-modal-controller" v-if="modalsVisible" @click="handleClose">
+  <div class="c-modal-controller" v-if="modalsVisible">
     <div class="wrapper">
       <component :is="modalType" :modalData="modalData"></component>
       <button
