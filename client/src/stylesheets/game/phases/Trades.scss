@@ -31,13 +31,14 @@
             p {
               @include expand;
               padding: 0.5rem;
-              border: solid 0.025rem $new-space-orange;
+              border: solid 0.025rem $space-lightgray;
               margin-bottom: 0;
               font-size: $font-med;
               font-weight: $font-weight-maven-pro-bold;
               text-align: center;
               color: $space-gray;
-              background-color: $new-space-orange;
+              // background-color: $new-space-orange;
+              background-color: $space-lightgray;
             }
           }
 
