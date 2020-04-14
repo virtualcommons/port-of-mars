@@ -66,10 +66,17 @@
 
       .top {
         height: 40%;
+        text-align: center;
       }
   
       .bottom {
         height: 500%;
+        margin-top: 2rem;
+      }
+
+      .onboarding-item {
+        margin-top: 0.1rem;
+        padding: 0.75rem 0 0.75rem 0;
       }
 
       .upcoming-game-item, .player-stat-item {

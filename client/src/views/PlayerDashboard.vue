@@ -1,15 +1,6 @@
 <template>
     <BRow class="player-dashboard">
-        <UserHeader />
         <BCol class="left">
-            <!-- onboarding -->
-            <div class="top">
-                <h2>Onboarding</h2>
-                <p>Pass Tutorial Quiz</p>
-                <p>Take Introduction Survey</p>
-                <p>Take Exit Survey</p>
-            </div>
-
             <!-- player stats -->
             <div class="bottom">
                 <h2>Your Stats</h2>
@@ -28,17 +19,22 @@
             <div class="top">
                 <h1>Port of Mars</h1>
                 <h2>Player Dashboard</h2>
+                
             </div>
             
             <div class="bottom">
                 <h2>Action Items</h2>
-                <div class="action-item">
-                    <p>Connect to Current Game </p>
-                    <BButton squared class="button" variant="dark">Go</BButton>
+                <div v-if="loading">
+                    <p>Action Items are loading...</p>
                 </div>
-                <div class="action-item">
-                    <p>Take Exit Survey</p>
-                    <BButton squared class="button" variant="dark">Go</BButton>
+
+                <div v-else>
+                    <div v-for="(item,index) in actionItems" :key="index" class="action-item">
+                        <p>{{item.description}}</p>
+                        <BButton squared class="button" variant="dark" :to="item.link">Go</BButton>
+                    </div>
+                </div>
+
                 </div>
             </div>
         </BCol>
@@ -55,19 +51,38 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
-import UserHeader from '@port-of-mars/client/components/global/UserHeader.vue';
-import { BRow, BCol, BButton } from 'bootstrap-vue';
+import { Vue, Component, Mixins } from 'vue-property-decorator';
+import { BRow, BCol, BButton, BLink } from 'bootstrap-vue';
+import DashboardAPI from '@port-of-mars/client/api/dashboard/dashboardAPI';
+import { ActionItem } from '@port-of-mars/shared/types';
 
 @Component({
     components: {
         BButton,
+        BLink,
         BRow,
-        BCol,
-        UserHeader
-    }
+        BCol
+    },
 })
-export default class PlayerDashboard extends Vue {}
+export default class PlayerDashboard extends Mixins(Vue, DashboardAPI) {
+    private visible = false;
+    private loading = true;
+    private actionItems:Array<ActionItem> = [];
+
+    async mounted(){
+        await this.actionItemSet();
+    }
+
+    async actionItemSet(){
+        this.actionItems = await this.getActionItems();
+        this.actionItems.filter(item => {
+            return item.done == false;
+        })
+        
+        this.loading = false;
+    }
+    
+}
 </script>
 
 <style lang="scss" scoped>

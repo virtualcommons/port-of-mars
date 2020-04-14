@@ -18,6 +18,8 @@ import { User } from '@port-of-mars/server/entity/User';
 import { DBPersister } from '@port-of-mars/server/services/persistence';
 import { ClockTimer } from '@gamestdio/timer/lib/ClockTimer';
 import { quizRouter } from '@port-of-mars/server/routes/quiz';
+import { dashboardRouter } from '@port-of-mars/server/routes/dashboard';
+
 import * as fs from 'fs';
 import { registrationRouter } from "@port-of-mars/server/routes/registration";
 import { settings } from "@port-of-mars/server/settings";
@@ -119,6 +121,7 @@ async function createApp() {
     res.json({ username: (req.user as User).username, sessionCookie });
   });
   app.use('/quiz', quizRouter);
+  app.use('/dashboard', dashboardRouter);
   app.use('/registration', registrationRouter);
 
   app.get('/asulogin',
