@@ -1,12 +1,12 @@
 <template>
   <div class="c-gameinformation">
-    <div class="section">
+    <div class="section tour-round">
       <p class="title">Round</p>
       <p class="round">{{ roundNumber }}</p>
     </div>
-    <div class="section">
+    <div class="section tour-container-top">
       <p class="title">Current Phase</p>
-      <p class="number">{{ phaseNumber }} of 5</p>
+      <p class="number">{{ phaseNumber + 1 }} of 5</p>
       <p class="phase">{{ phaseText }}</p>
     </div>
     <div class="section">
@@ -14,7 +14,9 @@
       <p :class="countdownStyling">{{ timeRemaining }}</p>
     </div>
     <div class="section tour-ready-to-advance-button">
-      <button @click="submitDone" class="ready-button" v-if="!playerReady">Ready to Advance</button>
+      <button @click="submitDone" class="ready-button" v-if="!playerReady">
+        Ready to Advance
+      </button>
       <button @click="submitCancel" v-if="playerReady">Cancel Readiness</button>
     </div>
   </div>
@@ -27,7 +29,7 @@ import { Phase, PHASE_LABELS } from "@port-of-mars/shared/types";
 import { TutorialAPI } from "@port-of-mars/client/api/tutorial/request";
 
 @Component({
-  components: {}
+  components: {},
 })
 export default class GameInformation extends Vue {
   @Inject() private api!: GameRequestAPI & TutorialAPI;
@@ -61,8 +63,15 @@ export default class GameInformation extends Vue {
   get timeRemaining() {
     const fromState = this.$store.state.timeRemaining;
     const minutesRemaining = Math.floor(fromState / 60);
+<<<<<<< HEAD
     const minutesRemainingDisplay = `${minutesRemaining}`.padStart(2, "0");
     const secondsRemainingDisplay = `${fromState - minutesRemaining * 60}`.padStart(2, "0");
+=======
+    const minutesRemainingDisplay = `${minutesRemaining}`.padStart(2, '0');
+    const secondsRemainingDisplay = `${
+      fromState - minutesRemaining * 60
+    }`.padStart(2, '0');
+>>>>>>> fix: current phase (of 5) was 1 behind
     const timeRemaining = `${minutesRemainingDisplay}:${secondsRemainingDisplay}`;
     return timeRemaining ? timeRemaining : "00:00";
   }
