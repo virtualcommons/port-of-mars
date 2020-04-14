@@ -22,6 +22,12 @@ function SET_MODAL_HIDDEN(state: State, payload: any) {
   state.userInterface.modalView.data = null;
 }
 
+// NOTE :: CONTROL PROFILE MENU VISIBILITY
+
+function SET_PROFILE_MENU_VISIBILITY(state: State, payload: boolean) {
+  state.userInterface.profileMenuView.visible = payload;
+}
+
 // TODO :: Need to re-implement in tutorial
 
 // function SET_TRADE_REQUEST_MODAL_VISIBILITY(state: State, payload: boolean) {
@@ -63,6 +69,7 @@ function RESET_TRADE_MODAL(state: State, payload: any) {
 export default {
   SET_MODAL_VISIBLE,
   SET_MODAL_HIDDEN,
+  SET_PROFILE_MENU_VISIBILITY,
   SET_GET_RESOURCES,
   SET_SEND_RESOURCES,
   SET_TRADE_PARTNER_NAME,

@@ -1,10 +1,24 @@
 <template>
   <div class="c-profilemenu tour-profile-menu" :style="position">
     <button @click="toggle" class="toggle">
+<<<<<<< HEAD
       <font-awesome-icon v-if="!visible" :icon="['fas', 'caret-right']" size="lg" />
       <font-awesome-icon v-if="visible" :icon="['fas', 'caret-left']" size="lg" class="left" />
+=======
+      <font-awesome-icon
+        v-if="!profileMenuVisible"
+        :icon="['fas', 'caret-right']"
+        size="lg"
+      />
+      <font-awesome-icon
+        v-if="profileMenuVisible"
+        :icon="['fas', 'caret-left']"
+        size="lg"
+        class="left"
+      />
+>>>>>>> temp: add profile menu to store
     </button>
-    <div class="wrapper" v-show="visible">
+    <div class="wrapper" v-show="profileMenuVisible">
       <p>Logged in as {{ username }}</p>
       <router-link :to="'dashboard'" class="link">
         <button>
@@ -71,10 +85,12 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
   components: {}
 })
 export default class ProfileMenu extends Vue {
-  @Inject() readonly api!: GameRequestAPI & TutorialAPI;
+  @Inject() readonly api!: GameRequestAPI;
+  private devtoolsEnabled: boolean = false;
 
-  private visible: boolean = false;
-  devtoolsEnabled: boolean = false;
+  get profileMenuVisible() {
+    return this.$tstore.state.userInterface.profileMenuView.visible;
+  }
 
   get isInTutorial() {
     return this.$tstore.getters.layout === "tutorial";
@@ -88,13 +104,14 @@ export default class ProfileMenu extends Vue {
   }
 
   private toggle() {
-    this.visible = !this.visible;
-
-    // this.tutorialValidation();
+    this.$tstore.commit(
+      'SET_PROFILE_MENU_VISIBILITY',
+      !this.profileMenuVisible
+    );
   }
 
   get position() {
-    return this.visible ? { left: "0rem" } : { left: "-20rem" };
+    return this.profileMenuVisible ? { left: '0rem' } : { left: '-20rem' };
   }
 
   get username(): string {
