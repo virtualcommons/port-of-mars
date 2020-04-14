@@ -28,6 +28,26 @@ function SET_PROFILE_MENU_VISIBILITY(state: State, payload: boolean) {
   state.userInterface.profileMenuView.visible = payload;
 }
 
+// NOTE :: CONTROL POPUP VISIBILITY
+
+function SET_GROUP_POPUP_VISIBILITY(state: State, payload: boolean) {
+  state.userInterface.popupView.activeEventsVisible = payload;
+  state.userInterface.popupView.inventoryVisible = payload;
+  state.userInterface.popupView.marsLogVisible = payload;
+}
+
+function SET_ACTIVE_EVENTS_POPUP_VISIBILITY(state: State, payload: boolean) {
+  state.userInterface.popupView.activeEventsVisible = payload;
+}
+
+function SET_INVENTORY_POPUP_VISIBILITY(state: State, payload: boolean) {
+  state.userInterface.popupView.inventoryVisible = payload;
+}
+
+function SET_MARS_LOG_POPUP_VISIBILITY(state: State, payload: boolean) {
+  state.userInterface.popupView.marsLogVisible = payload;
+}
+
 // TODO :: Need to re-implement in tutorial
 
 // function SET_TRADE_REQUEST_MODAL_VISIBILITY(state: State, payload: boolean) {
@@ -70,6 +90,10 @@ export default {
   SET_MODAL_VISIBLE,
   SET_MODAL_HIDDEN,
   SET_PROFILE_MENU_VISIBILITY,
+  SET_GROUP_POPUP_VISIBILITY,
+  SET_ACTIVE_EVENTS_POPUP_VISIBILITY,
+  SET_INVENTORY_POPUP_VISIBILITY,
+  SET_MARS_LOG_POPUP_VISIBILITY,
   SET_GET_RESOURCES,
   SET_SEND_RESOURCES,
   SET_TRADE_PARTNER_NAME,
