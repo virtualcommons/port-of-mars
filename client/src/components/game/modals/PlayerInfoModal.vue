@@ -1,7 +1,7 @@
 <template>
   <div class="c-playermodal container tour-player-info-modal">
     <div class="topwrapper row">
-      <div class="top container">
+      <div class="top container tour-player-info-modal-stats">
         <div class="wrapper row">
           <div class="picture col-2">
             <div class="indicator" :style="indicatorStyle">
@@ -29,7 +29,7 @@
     <div class="bottomwrapper row">
       <div class="bottom container">
         <div class="wrapper row">
-          <div class="inventory col-4">
+          <div class="inventory col-4 tour-player-info-modal-inventory">
             <div class="topbar">
               <p class="title">Inventory</p>
             </div>
@@ -52,7 +52,7 @@
               </div>
             </div>
           </div>
-          <div class="purchasableaccomplishments col-8">
+          <div class="purchasableaccomplishments col-8 tour-player-info-modal-accomplishments">
             <div class="topbar">
               <p class="title">Accomplishments</p>
             </div>

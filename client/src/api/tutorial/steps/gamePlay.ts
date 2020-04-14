@@ -1,4 +1,4 @@
-import { Step, LEFT, RIGHT, BOTTOM } from "@port-of-mars/client/types/tutorial";
+import { Step, LEFT, RIGHT, BOTTOM} from "@port-of-mars/client/types/tutorial";
 import { CURATOR } from "@port-of-mars/shared/types";
 
 const steps: Array<Step> = [
@@ -11,12 +11,20 @@ const steps: Array<Step> = [
     }
   },
   {
-    target: ".tour-container-top",
+    target: ".tour-phase-time",
     content:
-      "There are multiple phases in a round: Events, Invest, Trade, Purchase " +
-      " and Discard. Each phase has a time limit of 5 minutes.",
+      `There are multiple phases in a round: Events, Invest, Trade, Purchase ` +
+      ` and Discard. Each phase has a time limit of 5 minutes.`,
     params: {
-      placement: RIGHT
+      placement: LEFT
+    }
+  },
+  {
+    target: ".tour-phase-instructions",
+    content:
+      `The insructions for the current phase are displayed on the right.`,
+    params: {
+      placement: LEFT
     }
   },
   {
