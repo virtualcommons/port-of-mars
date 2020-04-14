@@ -23,6 +23,16 @@
       padding: 0;
       position: relative;
 
+      .icontwo {
+        position: absolute;
+        top: 0;
+        right: 2.5rem;
+        height: 1.5rem;
+        width: 1.5rem;
+        cursor: pointer;
+        color: $status-green;
+      }
+
       .icon {
         position: absolute;
         top: 0;

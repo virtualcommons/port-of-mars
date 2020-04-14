@@ -24,7 +24,6 @@
           :key="modalData.cardData.id"
           :event="modalData.cardData"
           :visible="true"
-          :active="true"
         />
       </div>
     </div>

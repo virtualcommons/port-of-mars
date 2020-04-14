@@ -19,8 +19,8 @@ import Purchase from './phases/Purchase.vue';
 import Discard from './phases/Discard.vue';
 import Events from './phases/Events.vue';
 import Default from './phases/Default.vue';
-
 import { Phase } from '@port-of-mars/shared/types';
+
 @Component({
   components: {
     Trades,
