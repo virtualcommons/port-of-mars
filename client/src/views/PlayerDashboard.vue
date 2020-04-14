@@ -1,30 +1,6 @@
 <template>
     <BRow class="player-dashboard">
         <BCol class="left">
-            <!-- onboarding -->
-            <div class="top">
-                <h2>Onboarding</h2>
-
-                <div class="onboarding-item">
-                    <BButton squared class="button" variant="dark" :to="'tutorial'">
-                        Tutorial
-                    </BButton>
-                </div>
-
-                <div class="onboarding-item">
-                    <BButton squared class="button" variant="dark">
-                        Introduction Survey
-                    </BButton>
-                </div>
-                
-                <div class="onboarding-item">
-                    <BButton squared class="button" variant="dark">
-                        Exit Survey
-                    </BButton>
-                </div>
-                
-            </div>
-
             <!-- player stats -->
             <div class="bottom">
                 <h2>Your Stats</h2>
@@ -48,18 +24,6 @@
             
             <div class="bottom">
                 <h2>Action Items</h2>
-                <!-- <div class="action-item">
-                    <p>Connect to Current Game </p>
-
-                    TODO: check if there is a game currently taking place
-                    <BButton squared class="button" variant="dark" :to="'/game'">Go</BButton>
-                </div>
-                <div class="action-item">
-                    <p>Take Exit Survey</p>
-                    TODO: check if user completed exit survey 
-                    <BButton squared class="button" variant="dark">Go</BButton>
-                </div> -->
-
                 <div v-if="loading">
                     <p>Action Items are loading...</p>
                 </div>
@@ -90,7 +54,7 @@
 import { Vue, Component, Mixins } from 'vue-property-decorator';
 import { BRow, BCol, BButton, BLink } from 'bootstrap-vue';
 import DashboardAPI from '@port-of-mars/client/api/dashboard/dashboardAPI';
-
+import { ActionItem } from '@port-of-mars/shared/types';
 
 @Component({
     components: {
@@ -103,7 +67,7 @@ import DashboardAPI from '@port-of-mars/client/api/dashboard/dashboardAPI';
 export default class PlayerDashboard extends Mixins(Vue, DashboardAPI) {
     private visible = false;
     private loading = true;
-    private actionItems = [];
+    private actionItems:Array<ActionItem> = [];
 
     async mounted(){
         await this.actionItemSet();
@@ -111,6 +75,10 @@ export default class PlayerDashboard extends Mixins(Vue, DashboardAPI) {
 
     async actionItemSet(){
         this.actionItems = await this.getActionItems();
+        this.actionItems.filter(item => {
+            return item.done == false;
+        })
+        
         this.loading = false;
     }
     

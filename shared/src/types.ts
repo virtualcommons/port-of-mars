@@ -213,3 +213,19 @@ export interface QuizQuestionData {
   question: string;
   options: Array<String>;
 }
+
+export interface ActionItem {
+  done: boolean
+  description: string
+  link: string
+}
+
+export interface GameMeta {
+  time: number // unix timestamp
+  round: number
+  tournamentName: string
+}
+
+export interface Stats {
+  games: Array<GameMeta & {points: number, winner: Role}>
+}
