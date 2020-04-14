@@ -48,7 +48,7 @@ export default class OtherPlayers extends Vue {
 
   private handleModal(): void {
     this.$tstore.commit('SET_MODAL_VISIBLE', {
-      type: 'PlayerInfoModal',
+      type: 'PlayerModal',
       data: {
         role: this.role,
       },

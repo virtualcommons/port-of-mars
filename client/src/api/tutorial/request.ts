@@ -114,7 +114,7 @@ export class TutorialAPI extends GameRequestAPI {
 
   public openPlayerInfoModal() {
     this.store.commit('SET_MODAL_VISIBLE', {
-      type: 'PlayerInfoModal',
+      type: 'PlayerModal',
       data: {
         role: 'Researcher',
       },

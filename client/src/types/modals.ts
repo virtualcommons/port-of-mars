@@ -29,7 +29,7 @@ export interface TradeRequestModalData {}
 export type ModalViewType =
   | 'GeneralModal'
   | 'CardModal'
-  | 'PlayerInfoModal'
+  | 'PlayerModal'
   | 'TradeRequestModal';
 
 export type ModalDataType =
