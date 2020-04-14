@@ -1,10 +1,10 @@
 <template>
   <div class="c-gameinformation">
-    <div class="section tour-round">
-      <p class="title" >Round</p>
+    <div class="section">
+      <p class="title">Round</p>
       <p class="round">{{ roundNumber }}</p>
     </div>
-    <div class="section tour-container-top">
+    <div class="section">
       <p class="title" >Current Phase</p>
       <p class="number">{{ phaseNumber }} of 5</p>
       <p class="phase">{{ phaseText }}</p>

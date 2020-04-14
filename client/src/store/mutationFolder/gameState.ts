@@ -7,15 +7,15 @@ import {
   PlayerSetData,
   Role,
   ROLES
-} from '@port-of-mars/shared/types';
-import { Vue } from 'vue-property-decorator';
-import * as _ from 'lodash';
+} from "@port-of-mars/shared/types";
+import { Vue } from "vue-property-decorator";
+import * as _ from "lodash";
 import {
   defaultPendingInvestment,
   PlayerClientData,
   State,
   User
-} from '@port-of-mars/client/store/state';
+} from "@port-of-mars/client/store/state";
 
 function SET_GAME_PHASE(state: State, payload: Phase) {
   state.phase = payload;
@@ -45,17 +45,11 @@ function ADD_TO_EVENTS(state: State, event: MarsEventData) {
 }
 
 function REMOVE_FROM_EVENTS(state: State, event: MarsEventData) {
-  const index = _.findIndex(
-    state.marsEvents,
-    (el: MarsEventData) => el.name === event.name
-  );
+  const index = _.findIndex(state.marsEvents, (el: MarsEventData) => el.name === event.name);
   state.marsEvents.splice(index, 1);
 }
 
-function CHANGE_EVENT(
-  state: State,
-  payload: { event: MarsEventData; index: number }
-) {
+function CHANGE_EVENT(state: State, payload: { event: MarsEventData; index: number }) {
   // TODO: REMOVE AFTER REFACTOR
   const initVisbilityObject = { name: payload.event.name, visible: false };
   state.eventCardsVisible.push(initVisbilityObject);
@@ -67,10 +61,7 @@ function SET_EVENTS_FOR_ROUND(state: State, payload: any) {
   state.marsEvents = payload;
 }
 
-function SET_EVENT_VISIBILITY(
-  state: State,
-  payload: { id: number; visibility: boolean }
-) {
+function SET_EVENT_VISIBILITY(state: State, payload: { id: number; visibility: boolean }) {
   for (const [i, value] of state.eventCardsVisible.entries()) {
     if (value.id === payload.id) {
       state.eventCardsVisible[i].visible = payload.visibility;

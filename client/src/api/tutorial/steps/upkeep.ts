@@ -4,11 +4,11 @@ const steps:Array<Step> = [
     {
       target: '.tour-system-health',
       content:
-        'The game starts with System Health at 100. This represents the habitat at peak ' +
-        'condition and maintenance. However, at the start of every round, the ' +
-        'community loses 25 System Health.',
+        `The game starts with System Health at 100. This represents the habitat at peak ` +
+        `condition and maintenance. However, at the start of every round, the ` +
+        `community loses 25 System Health.`,
       params: {
-        placement: BOTTOM,
+        placement: 'bottom',
       }
     },
     {

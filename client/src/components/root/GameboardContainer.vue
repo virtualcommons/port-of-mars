@@ -1,10 +1,12 @@
 <template>
-  <div class="gameboardcontainer">
+  <div class="gameboardcontainer container">
     <ProfileMenu />
-    <ActiveEventsPopup />
-    <InventoryPopup />
-    <MarsLogPopup />
-    <div class="gameboardstatusbar row">
+    <div class="popups">
+      <ActiveEventsPopup />
+      <InventoryPopup />
+      <MarsLogPopup />
+    </div>
+    <div class="status-bar row">
       <SystemHealth />
     </div>
     <div class="gameboard row">
@@ -13,7 +15,7 @@
           <HUD />
         </div>
         <div class="gameboardbottom row">
-          <PhaseSwitcher />
+          <PhaseSwitcher /> 
         </div>
       </div>
       <div class="right col-3 tour-chat">

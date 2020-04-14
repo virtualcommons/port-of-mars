@@ -1,6 +1,7 @@
 import { PlayerClientSet, State, PlayerClientData } from '@port-of-mars/client/store/state';
 import { ROLES, MarsEventData, EventClientView, MarsLogMessageData } from '@port-of-mars/shared/types';
 import _ from 'lodash';
+import { createNamespacedHelpers } from 'vuex';
 
 export default {
   /**
@@ -95,8 +96,12 @@ export default {
     return auditEventIndex !== -1 && auditEventIndex <= eventProcessedIndex;
   },
 
-  unreadChatMessages(state: State): number {
-    const chatMessages = state.messages.length;
-    return chatMessages;
+  playerModalVisible(state: State): boolean {
+    return state.ui.modalViews.playerInfoModal.visible;
   }
+
+  // unreadChatMessages(state: State): number {
+  //   const chatMessages = state.messages.length;
+  //   return chatMessages;
+  // }
 };
