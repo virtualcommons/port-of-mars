@@ -61,7 +61,7 @@ $screen-xxl: 1680px;
 @mixin space-button-base {
   @include reset-button;
   padding: 0.5rem 0.75rem;
-  margin: 0.5rem 0;
+  // margin: 0.5rem 0;
   font-size: $font-med;
   font-weight: $font-weight-maven-pro-regular;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
