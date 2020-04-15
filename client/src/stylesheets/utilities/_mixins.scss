@@ -181,6 +181,13 @@ $screen-xxl: 1680px;
   align-items: center;
 }
 
+@mixin make-column-and-left {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
 @mixin make-center {
   display: flex;
   justify-content: center;

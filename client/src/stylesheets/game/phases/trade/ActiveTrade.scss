@@ -1,156 +1,132 @@
-.trade {
+.c-trade {
   width: 100%;
-  height: 4rem;
-  margin-bottom: 0.5rem;
-  display: flex;
+  max-width: none;
+  padding: 0;
+  margin: 0 0 0.5rem 0;
   background-color: $space-gray;
-  color: $space-white;
+  @include make-column-and-top;
+  border: 0.125rem solid $space-white;
 
   &:last-child {
-    margin-bottom: 0;
+    margin: 0;
   }
 
-  .trade-send-receive {
-    height: 100%;
-    flex: 1;
-    @include make-horizontal-expand;
+  .title-wrapper {
+    width: 100%;
+    max-width: none;
+    padding: 0.5rem;
+    margin: 0;
+    @include make-center;
+    background-color: $space-white;
 
-    .sending {
+    .title {
+      margin-bottom: 0;
+      font-size: $font-med;
+      font-weight: $font-weight-maven-pro-medium;
+      color: $space-gray;
+      text-align: center;
+    }
+  }
+
+  .trade-wrapper {
+    @include expand;
+    max-width: none;
+    @include reset-padding-margin;
+
+    .to-container,
+    .icon-container,
+    .from-container {
       height: 100%;
+      padding: 0.5rem;
+      margin: 0;
+    }
+
+    .icon-container {
       @include make-center;
-      flex: 1;
 
-      .trade-profile-sender-container {
-        height: 100%;
-        margin: 0 0.25rem;
-        @include make-center;
-        overflow-x: hidden;
-
-        .trade-profile-sender {
-          height: 3rem;
-          width: 3rem;
-          border-radius: 50%;
-          @include make-center;
-          background-color: $space-white;
-
-          img {
-            height: 100%;
-          }
-        }
-      }
-
-      .send {
-        height: 100%;
-        flex: 1;
-        @include make-column-and-center;
-
-        .send-sender {
-          height: 50%;
-          width: 100%;
-          padding: 0rem 0.5rem;
-          @include make-center;
-
-          p {
-            width: 100%;
-            margin: 0;
-            font-size: $font-small;
-            text-align: center;
-            color: $space-gray;
-            background-color: $new-space-orange;
-          }
-        }
-
-        .send-investments-container {
-          height: 50%;
-          padding: 0.25rem 0.5rem;
-          @include make-center;
-
-          .send-investments {
-            height: 100%;
-            @include make-center;
-            min-width: 2.5rem;
-
-            img {
-              height: 1.5rem;
-              width: 1.5rem;
-            }
-
-            p {
-              margin: 0 0.5rem;
-              font-size: $font-small;
-            }
-          }
-        }
+      .icon {
+        color: $space-white;
       }
     }
 
-    .trade-icon {
-      margin: 0.5rem;
-      @include make-center;
-    }
+    .to-container,
+    .from-container {
+      .inner-wrapper {
+        @include expand;
+        max-width: none;
+        @include reset-padding-margin;
 
-    .receiving {
-      height: 100%;
-      flex: 1;
-      @include make-center;
-
-      .trade-profile-receiver-container {
-        height: 100%;
-        margin: 0 0.25rem;
-        @include make-center;
-
-        .trade-profile-receiver {
-          height: 3rem;
-          width: 3rem;
-          border-radius: 50%;
+        .player {
+          height: 100%;
+          padding: 0;
           @include make-center;
-          background-color: $space-white;
 
-          img {
+          .outer-frame {
+            height: 4rem;
+            width: 4rem;
+            padding: 0.125rem;
+            border-radius: 50%;
+
+            .inner-frame {
+              @include expand;
+              @include make-center;
+              border-radius: 50%;
+
+              img {
+                object-fit: cover;
+                height: 80%;
+              }
+            }
+          }
+
+          .text {
             height: 100%;
+            flex-grow: 1;
+            padding: 0 0 0 0.5rem;
+            @include make-column-and-left;
+
+            p {
+              margin-bottom: 0;
+            }
+
+            .title {
+              margin: -0.5rem 0;
+              color: $new-space-orange;
+              font-size: $font-large;
+              font-weight: $font-weight-maven-pro-bold;
+            }
+
+            .player-text {
+              margin-bottom: 0;
+              color: $space-white;
+              font-size: $font-med;
+              font-weight: $font-weight-maven-pro-bold;
+            }
           }
         }
-      }
 
-      .receive {
-        height: 100%;
-        flex: 1;
-        @include make-column-and-center;
-
-        .receive-receiver {
-          height: 50%;
-          width: 100%;
-          padding: 0rem 0.5rem;
+        .investments {
+          height: 100%;
+          padding: 0;
           @include make-center;
 
-          p {
-            width: 100%;
-            margin: 0;
-            font-size: $font-small;
-            text-align: center;
-            color: $space-gray;
-            background-color: $new-space-orange;
-          }
-        }
-
-        .receive-investments-container {
-          height: 50%;
-          padding: 0.25rem 0.5rem;
-          @include make-center;
-
-          .receive-investments {
-            height: 100%;
+          .wrapper {
+            height: 2rem;
+            width: calc(100% / 5);
             @include make-center;
-            min-width: 2.5rem;
 
             img {
-              height: 1.5rem;
-              width: 1.5rem;
+              object-fit: cover;
+              height: 2rem;
+              width: 2rem;
             }
 
             p {
-              margin: 0 0.5rem;
-              font-size: $font-small;
+              margin-bottom: 0;
+              margin: 0 0 0 0.5rem;
+              color: $space-white;
+              font-size: $font-large;
+              font-weight: $font-weight-maven-pro-bold;
             }
           }
         }
@@ -158,30 +134,52 @@
     }
   }
 
-  .trade-buttons {
-    height: 100%;
-    min-width: 4rem;
+  .button-wrapper {
+    width: 100%;
+    max-width: none;
+    padding: 0.5rem;
+    margin: 0;
+    @include make-center;
 
-    button {
-      height: 50%;
-      width: 100%;
-      border: none;
-      font-size: $font-small;
-      background-color: $new-space-orange;
-      transition: all 0.15s ease-in-out;
+    .decline,
+    .accept,
+    .cancel {
+      @include reset-button;
+      height: 2rem;
+      width: 2rem;
+      padding: 0;
+      border-radius: 50%;
+      margin: 0 0.5rem;
+      @include make-center;
+      @include default-transition-base;
 
-      &:hover {
-        transform: scaleX(1.1);
-        overflow: hidden;
+      &:hover:not(:disabled) {
+        @include default-scale-up;
+      }
+
+      &:disabled {
+        opacity: 0.5;
+      }
+
+      .icon {
+        height: 50%;
+        width: 50%;
       }
     }
 
-    .accept-trade {
-      opacity: 0.75;
+    .decline {
+      background-color: $status-red;
+      color: $space-white;
     }
 
-    .cancel-trade {
-      height: 100%;
+    .accept {
+      background-color: $status-green;
+      color: $space-white;
+    }
+
+    .cancel {
+      background-color: $space-white;
+      color: $space-gray;
     }
   }
 }
