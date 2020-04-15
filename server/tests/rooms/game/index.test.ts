@@ -4,6 +4,8 @@ import {getAccomplishmentByID, getAccomplishmentIDs} from "@port-of-mars/server/
 import * as _ from 'lodash'
 import {mockGameStateInitOpts} from "@port-of-mars/server/util";
 import {canSendTradeRequest} from "@port-of-mars/shared/validation";
+import { MarsEvent } from "@port-of-mars/server/rooms/game/state/marsEvents/MarsEvent";
+import { getAllMarsEvents } from "@port-of-mars/server/data/MarsEvents";
 
 
 describe('a Researcher Player Accomplishment', () => {
@@ -200,3 +202,17 @@ describe('inverting pending inventory', () => {
     expect(g.players['Curator'].inventory.culture).toBe(3);
   });
 });
+
+describe('out of commission event', () => {
+  const g = new GameState(mockGameStateInitOpts(x => x, () => 10));
+  const outOfCommissionEntreprenuer = getAllMarsEvents()[7][0];
+  g.marsEvents.push(new MarsEvent(outOfCommissionEntreprenuer));
+
+
+  it('gives the entrepreneur 3 timeblocks', () => {
+    expect(g.players['Entrepreneur'].timeBlocks).toBe(10);
+    g.currentEvent.state.finalize(g);
+    expect(g.players['Entrepreneur'].timeBlocks).toBe(3);
+  })
+
+})
