@@ -19,8 +19,7 @@
         </div>
       </div>
       <div class="active-events tour-active-events"
-        v-bind="{class: currentEvent.clientViewHandler == 'INFLUENCES_SELECT' ||
-              currentEvent.clientViewHandler == 'INFLUENCES_DRAW' ? 
+        v-bind="{class: shouldShowAccomplishments ?
                 'col-6 active-events-mid' : 'col-9 active-events-right'}">
         <div class="topbar">
           <p class="title">
@@ -34,8 +33,7 @@
         </div>
       </div>
       <div class="active-accomplishments col-3" 
-        v-if="currentEvent.clientViewHandler == 'INFLUENCES_SELECT' ||
-              currentEvent.clientViewHandler == 'INFLUENCES_DRAW'">
+        v-if="shouldShowAccomplishments">
         <div class="topbar">
           <p class="title">Accomplishments</p>
         </div>
@@ -118,6 +116,11 @@ export default class Events extends Vue {
 
   get accomplishmentCards(): any {
       return this.$tstore.getters.player.accomplishments.purchasable;
+  }
+
+  get shouldShowAccomplishments(): boolean {
+    return this.currentEvent.clientViewHandler == 'INFLUENCES_SELECT' ||
+           this.currentEvent.clientViewHandler == 'INFLUENCES_DRAW';
   }
 }
 </script>
