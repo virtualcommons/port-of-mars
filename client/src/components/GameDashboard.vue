@@ -1,5 +1,8 @@
 <template>
   <div>
+    <!-- <div class="game-dashboard-defeat">
+      <ContainerDefeat />
+    </div> -->
     <div
       v-if="gamePhase != phase.defeat && gamePhase != phase.victory"
       class="game-dashboard"

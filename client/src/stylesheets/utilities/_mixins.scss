@@ -160,6 +160,13 @@ $screen-xxl: 1680px;
   align-items: center;
 }
 
+@mixin make-column-and-space-around {
+  display: flex;
+  flex-flow: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
 @mixin make-column-and-center {
   display: flex;
   flex-flow: column;

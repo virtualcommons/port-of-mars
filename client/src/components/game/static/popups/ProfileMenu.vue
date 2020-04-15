@@ -138,14 +138,6 @@ export default class ProfileMenu extends Vue {
     this.devtoolsEnabled = true;
   }
 
-  toggleDevtools() {
-    if (this.devtoolsEnabled) {
-      this.disableDevtools();
-    } else {
-      this.enableDevtools();
-    }
-  }
-
   /**
    * Map keystrokes to commands linked to game functionality.
    * @param e Event that is triggered by keystroke.
@@ -163,9 +155,6 @@ export default class ProfileMenu extends Vue {
         break;
       case "q":
         this.api.resetGame();
-        break;
-      case ".":
-        this.$store.commit("TOGGLE_LOADING");
         break;
       default:
         break;
