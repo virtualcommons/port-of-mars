@@ -1,123 +1,127 @@
 <template>
-  <div class="trade">
-    <div class="trade-send-receive">
-      <div class="sending">
-        <div class="trade-profile-sender-container">
-          <div class="trade-profile-sender">
-            <img
-              :src="
-                require(`@port-of-mars/client/assets/characters/${from.role}.png`)
-              "
-              alt="Sender"
-            />
+  <div class="c-trade container">
+    <div class="title-wrapper">
+      <p class="title">New Trade Request</p>
+    </div>
+    <div class="trade-wrapper row">
+      <div class="to-container col">
+        <div class="inner-wrapper row">
+          <div class="player col-4">
+            <div class="outer-frame" :style="borderStyle(to.role)">
+              <div class="inner-frame" :style="frameStyle(to.role)">
+                <img
+                  :src="
+                    require(`@port-of-mars/client/assets/characters/${to.role}.png`)
+                  "
+                  alt="Player To"
+                />
+              </div>
+            </div>
+            <div class="text">
+              <p class="title">Request</p>
+              <p class="player-text">{{ to.role }}</p>
+            </div>
           </div>
-        </div>
-        <div class="send">
-          <div class="send-sender">
-            <p>{{ from.role }}</p>
-          </div>
-          <div class="send-investments-container">
+          <div class="investments col-8">
             <div
-              class="send-investments"
-              v-for="(value, name) in from.resourceAmount"
-              :key="name + 3"
+              class="wrapper"
+              v-for="(value, name) in to.resourceAmount"
+              :key="name + Math.random()"
             >
               <img
-                v-if="value !== 0"
                 :src="require(`@port-of-mars/client/assets/icons/${name}.svg`)"
                 alt="Investment"
               />
               <p v-if="value !== 0">{{ value }}</p>
+              <p v-if="value === 0">-</p>
             </div>
           </div>
         </div>
       </div>
-      <div class="trade-icon">
-        <font-awesome-icon :icon="['fas', 'exchange-alt']" size="lg" />
+      <div class="icon-container col-1">
+        <font-awesome-icon
+          :icon="['fas', 'exchange-alt']"
+          size="lg"
+          class="icon"
+        />
       </div>
-      <div class="receiving">
-        <div class="trade-profile-receiver-container">
-          <div class="trade-profile-receiver">
-            <img
-              :src="
-                require(`@port-of-mars/client/assets/characters/${to.role}.png`)
-              "
-              alt="Receiver"
-            />
+      <div class="from-container col">
+        <div class="inner-wrapper row">
+          <div class="player col-4">
+            <div class="outer-frame" :style="borderStyle(from.role)">
+              <div class="inner-frame" :style="frameStyle(from.role)">
+                <img
+                  :src="
+                    require(`@port-of-mars/client/assets/characters/${from.role}.png`)
+                  "
+                  alt="Player To"
+                />
+              </div>
+            </div>
+            <div class="text">
+              <p class="title">Offer</p>
+              <p class="player-text">{{ from.role }}</p>
+            </div>
           </div>
-        </div>
-        <div class="receive">
-          <div class="receive-receiver">
-            <p>{{ to.role }}</p>
-          </div>
-          <div class="receive-investments-container">
+          <div class="investments col-8">
             <div
-              class="receive-investments"
-              v-for="(value, name) in to.resourceAmount"
-              :key="name + 2"
+              class="wrapper"
+              v-for="(value, name) in from.resourceAmount"
+              :key="name + Math.random()"
             >
               <img
-                v-if="value !== 0"
                 :src="require(`@port-of-mars/client/assets/icons/${name}.svg`)"
                 alt="Investment"
               />
               <p v-if="value !== 0">{{ value }}</p>
+              <p v-if="value === 0">-</p>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="trade-buttons">
-      <button
-        v-if="role === to.role && role !== from.role"
-        @click="handleAcceptTrade"
-        :class="{ 'accept-trade': !clientValidation }"
-        type="button"
-        name="button"
-      >
-        Accept
-      </button>
+    <div class="button-wrapper">
       <button
         v-if="role === to.role && role !== from.role"
         @click="handleTradeReject"
-        type="button"
-        name="button"
+        class="decline"
       >
-        Decline
+        <font-awesome-icon :icon="['fas', 'times']" size="sm" class="icon" />
+      </button>
+      <button
+        v-if="role === to.role && role !== from.role"
+        @click="handleAcceptTrade"
+        :disabled="!clientValidation"
+        class="accept"
+      >
+        <font-awesome-icon :icon="['fas', 'check']" size="sm" class="icon" />
       </button>
       <button
         v-if="role === from.role && role !== to.role"
         @click="handleTradeCancel"
-        type="button"
-        name="button"
-        class="cancel-trade"
+        class="cancel"
       >
-        Cancel
+        <font-awesome-icon :icon="['fas', 'undo']" size="sm" class="icon" />
       </button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import {
-  Vue,
-  Component,
-  Prop,
-  InjectReactive,
-  Inject,
-} from 'vue-property-decorator';
+import { Vue, Component, Prop, Inject } from 'vue-property-decorator';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
-import {
-  TradeData,
-  TradeAmountData,
-  INVESTMENTS,
-  RESOURCES,
-} from '@port-of-mars/shared/types';
+import { TradeAmountData, RESOURCES, Role } from '@port-of-mars/shared/types';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons/';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons/faExchangeAlt';
+import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
+import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
+import { faUndo } from '@fortawesome/free-solid-svg-icons/faUndo';
 
 library.add(faExchangeAlt);
+library.add(faTimes);
+library.add(faCheck);
+library.add(faUndo);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 @Component({})
@@ -125,36 +129,43 @@ export default class ActiveTrade extends Vue {
   @Prop() private from!: TradeAmountData;
   @Prop() private to!: TradeAmountData;
   @Prop() private id!: string;
-
-  private role = this.$store.state.role;
-
   @Inject() api!: GameRequestAPI;
+
+  get role() {
+    return this.$tstore.state.role;
+  }
 
   get clientValidation() {
     let hasResourcesToSend = true;
     const inventory = this.$store.state.players[this.role].inventory;
-
     RESOURCES.forEach((item) => {
       if (this.to.resourceAmount[item] > inventory[item]) {
         hasResourcesToSend = false;
       }
     });
-
     return hasResourcesToSend;
   }
 
-  handleAcceptTrade() {
+  private handleAcceptTrade() {
     if (this.clientValidation) {
       this.api.acceptTradeRequest(this.id);
     }
   }
 
-  handleTradeReject() {
+  private handleTradeReject() {
     this.api.rejectTradeRequest(this.id);
   }
 
-  handleTradeCancel() {
+  private handleTradeCancel() {
     this.api.cancelTradeRequest(this.id);
+  }
+
+  private borderStyle(role: Role) {
+    return { border: `0.2rem solid var(--color-${role})` };
+  }
+
+  private frameStyle(role: Role) {
+    return { backgroundColor: `var(--color-${role})` };
   }
 }
 </script>
