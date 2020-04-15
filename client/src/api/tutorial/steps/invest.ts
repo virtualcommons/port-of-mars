@@ -1,4 +1,4 @@
-import { Step, LEFT, TOP, RIGHT, BOTTOM } from "@port-of-mars/client/types/tutorial";
+import { Step, TOP, RIGHT, BOTTOM } from "@port-of-mars/client/types/tutorial";
 import { Phase, RESEARCHER } from "@port-of-mars/shared/types";
 
 const steps: Array<Step> = [
@@ -73,7 +73,7 @@ const steps: Array<Step> = [
             effect: ""
           },
           role: `Researcher`
-        },
+        }
       }
     ]
   },
@@ -84,7 +84,7 @@ const steps: Array<Step> = [
       "You can spend these timeblocks on System Health or on Influence. " +
       "Remember that you have 5 minutes to decide how to invest your timeblocks.",
     params: {
-      placement: TOP
+      placement: BOTTOM
     }
   },
   {
@@ -139,11 +139,11 @@ const steps: Array<Step> = [
       "Click the Ready to Advance button when you have finished investing your timeblocks. " +
       "The Investment Phase will end as soon as all members of your group have finished investing.",
     params: {
-      placement: BOTTOM
+      placement: "left"
     },
     stateTransform: [
       {
-        SET_LAYOUT: `tutorial`,
+        SET_LAYOUT: "tutorial",
         required: true
       }
     ]

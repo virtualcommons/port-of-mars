@@ -145,14 +145,12 @@ export default class TradeRequest extends Vue {
   }
 
   handleSendResources(resources: ResourceAmountData) {
-    //this.sentResources = resources;
     this.$tstore.commit('SET_SEND_RESOURCES', resources);
 
     this.tutorialValidation('give');
   }
 
   handleReceiveResources(resources: ResourceAmountData) {
-    //this.exchangeResources = resources;
     this.$tstore.commit('SET_GET_RESOURCES', resources);
 
     this.tutorialValidation('get');
@@ -161,9 +159,7 @@ export default class TradeRequest extends Vue {
   handleChange(name: string) {
     if (name == this.tradePartnerName) {
       this.$tstore.commit('SET_TRADE_PARTNER_NAME', '' as Role);
-      //this.name = '';
     } else {
-      //this.name = name;
       this.$tstore.commit('SET_TRADE_PARTNER_NAME', name as Role);
       this.tutorialValidation('partner');
     }

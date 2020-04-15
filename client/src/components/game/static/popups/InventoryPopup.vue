@@ -1,5 +1,5 @@
 <template>
-  <div class="c-inventorypopup tour-inventory-popup" :style="position">
+  <div class="c-inventorypopup" :style="position">
     <button @click="toggle" class="toggle">
       <span>Inventory</span>
       <font-awesome-icon

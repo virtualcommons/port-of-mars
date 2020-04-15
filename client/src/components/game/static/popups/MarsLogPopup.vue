@@ -1,6 +1,6 @@
 <template>
   <div class="c-marslogpopup" :style="position">
-    <BButton @click="toggle" class="toggle tour-log-popup">
+    <BButton @click="toggle" class="toggle">
       <span>Mars Log</span>
       <font-awesome-icon
         v-if="!visible"
