@@ -3,7 +3,7 @@ import { Phase } from "@port-of-mars/shared/types";
 
 const steps: Array<Step> = [
   {
-    target: `.tour-phase`,
+    target: '.tour-phase',
     content:
       `The last phase in a round is the discard phase! You` +
       `can draw new Accomplishment cards to replace any card ` +
@@ -13,21 +13,21 @@ const steps: Array<Step> = [
     },
     stateTransform: [
       {
-        SET_LAYOUT: `tutorial`,
+        SET_LAYOUT: 'tutorial',
         SET_GAME_PHASE: Phase.discard,
         required: true
       }
     ]
   },
   {
-    target: `.tour-discard-action`,
+    target: '.tour-discard-action',
     content: `Try discarding an Accomplishment card!`,
     params: {
       placement: TOP
     },
     stateTransform: [
       {
-        SET_LAYOUT: `tutorial`,
+        SET_LAYOUT: 'tutorial',
         SET_GAME_PHASE: Phase.discard,
         required: true
       }

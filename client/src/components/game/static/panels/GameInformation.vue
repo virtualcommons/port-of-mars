@@ -5,7 +5,7 @@
       <p class="round">{{ roundNumber }}</p>
     </div>
     <div class="section">
-      <p class="title" >Current Phase</p>
+      <p class="title">Current Phase</p>
       <p class="number">{{ phaseNumber }} of 5</p>
       <p class="phase">{{ phaseText }}</p>
     </div>
@@ -21,24 +21,25 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Inject } from 'vue-property-decorator';
-import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
-import { Phase, PHASE_LABELS } from '@port-of-mars/shared/types';
+import { Vue, Component, Prop, Inject } from "vue-property-decorator";
+import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
+import { Phase, PHASE_LABELS } from "@port-of-mars/shared/types";
+import { TutorialAPI } from "@port-of-mars/client/api/tutorial/request";
 
 @Component({
   components: {}
 })
 export default class GameInformation extends Vue {
-  @Inject() private api!: GameRequestAPI;
+  @Inject() private api!: GameRequestAPI & TutorialAPI;
 
   get roundNumber() {
     const { round, upkeep } = this.$store.state;
     if (round > 0 && upkeep > 0) {
       return round;
     } else if (upkeep <= 0) {
-      return 'Over';
+      return "Over";
     } else {
-      return 'Pregame';
+      return "Pregame";
     }
   }
 
@@ -60,24 +61,35 @@ export default class GameInformation extends Vue {
   get timeRemaining() {
     const fromState = this.$store.state.timeRemaining;
     const minutesRemaining = Math.floor(fromState / 60);
-    const minutesRemainingDisplay = `${minutesRemaining}`.padStart(2, '0');
-    const secondsRemainingDisplay = `${fromState -
-      minutesRemaining * 60}`.padStart(2, '0');
+    const minutesRemainingDisplay = `${minutesRemaining}`.padStart(2, "0");
+    const secondsRemainingDisplay = `${fromState - minutesRemaining * 60}`.padStart(2, "0");
     const timeRemaining = `${minutesRemainingDisplay}:${secondsRemainingDisplay}`;
-    return timeRemaining ? timeRemaining : '00:00';
+    return timeRemaining ? timeRemaining : "00:00";
   }
 
   get countdownStyling() {
-    return this.$store.state.timeRemaining < 60 ? 'blink-timer' : 'countdown';
+    return this.$store.state.timeRemaining < 60 ? "blink-timer" : "countdown";
+  }
+
+  get isInTutorial() {
+    return this.$tstore.getters.layout === "tutorial";
+  }
+
+  tutorialValidation() {
+    if (this.isInTutorial) {
+      this.api.completedGeneralClick();
+    }
   }
 
   private submitDone() {
     let pendingInvestments;
+    this.tutorialValidation();
+
     switch (this.phaseNumber) {
       case Phase.events:
         const currentEvent = this.$tstore.getters.currentEvent;
         pendingInvestments = this.$tstore.getters.player.pendingInvestments;
-        if (currentEvent && currentEvent.id === 'breakdownOfTrust') {
+        if (currentEvent && currentEvent.id === "breakdownOfTrust") {
           this.api.saveResourcesSelection(pendingInvestments);
         }
       case Phase.invest:
@@ -95,5 +107,5 @@ export default class GameInformation extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/static/panels/GameInformation.scss';
+@import "@port-of-mars/client/stylesheets/game/static/panels/GameInformation.scss";
 </style>

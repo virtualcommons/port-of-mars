@@ -42,7 +42,7 @@
 import { Component, Inject, Vue } from 'vue-property-decorator';
 import TradeRequest from '@port-of-mars/client/components/game/phases/trade/TradeRequest.vue'
 import ContainerAccomplishmentsGeneral from '@port-of-mars/client/components/game/accomplishments/ContainerAccomplishmentsGeneral.vue';
-import { TutorialAPI } from '../../../api/tutorial/request';
+import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
 
 @Component({
     components:{
