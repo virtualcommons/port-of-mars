@@ -240,11 +240,14 @@ export default class Tutorial extends Vue {
     this.currentOptionIndex = -1;
     this.quizQuestionStatusMessage = '';
     this.quizQuestionStatus = false;
-    this.api.statePush(this.steps[currentStep + 1].stateTransform);
-    await this.$nextTick();
+    
     const currentStepElement = this.$el.querySelector(
       this.steps[currentStep].target
     );
+
+    this.api.statePush(this.steps[currentStep + 1].stateTransform);
+    await this.$nextTick();
+
     const nextStepElement = this.$el.querySelector(
       this.steps[currentStep + 1].target
     );

@@ -15,7 +15,6 @@ const steps: Array<Step> = [
       {
         SET_LAYOUT: 'tutorial',
         SET_GAME_PHASE: Phase.discard,
-        required: true
       }
     ]
   },
