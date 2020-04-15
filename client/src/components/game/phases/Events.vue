@@ -1,7 +1,7 @@
 <template>
   <div class="c-events container tour-event">
     <div class="wrapper row">
-      <div class="event-deck col-4">
+      <div class="event-deck col-4 tour-event-deck">
         <div class="topbar">
           <p class="title">Event Deck</p>
         </div>

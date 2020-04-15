@@ -4,14 +4,14 @@ import {
   ResourceAmountData,
   Resource
 } from "@port-of-mars/shared/types";
-import { initialStoreState, defaultInventory } from "@port-of-mars/client/store/state";
+import { initialStoreState } from "@port-of-mars/client/store/state";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 import * as _ from "lodash";
 import { Store } from "vuex/types/index";
 import { State } from "@port-of-mars/client/store/state";
 import { StateTransform } from "@port-of-mars/client/types/tutorial";
-import { string } from "@colyseus/schema/lib/encoding/decode";
-import { PLAYER_DASHBOARD } from "@port-of-mars/shared/routes";
+// import { string } from "@colyseus/schema/lib/encoding/decode";
+// import { PLAYER_DASHBOARD } from "@port-of-mars/shared/routes";
 
 export class TutorialAPI extends GameRequestAPI {
   private store!: Store<State>;

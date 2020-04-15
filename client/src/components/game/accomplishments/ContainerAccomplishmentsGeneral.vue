@@ -24,7 +24,6 @@
 import { Vue, Component, Inject, Prop } from 'vue-property-decorator';
 import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
 import { Phase } from '@port-of-mars/shared/types';
-import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
 
 @Component({
   components: {

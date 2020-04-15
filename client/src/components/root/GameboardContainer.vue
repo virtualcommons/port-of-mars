@@ -15,7 +15,7 @@
           <HUD />
         </div>
         <div class="gameboardbottom row">
-          <PhaseSwitcher /> 
+          <PhaseSwitcher />
         </div>
       </div>
       <div class="right col-3 tour-chat">

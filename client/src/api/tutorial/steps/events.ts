@@ -1,4 +1,4 @@
-import { Step, TOP, RIGHT, LEFT, BOTTOM } from "@port-of-mars/client/types/tutorial";
+import { Step, LEFT, BOTTOM } from "@port-of-mars/client/types/tutorial";
 import { Phase } from "@port-of-mars/shared/types";
 
 const steps: Array<Step> = [
@@ -6,7 +6,7 @@ const steps: Array<Step> = [
     target: ".tour-phase",
     content: `The first phase in a round is the Events phase! This is where the Events of the round will be revealed.`,
     params: {
-      placement: RIGHT
+      placement: LEFT
     },
     stateTransform: [
       {
@@ -28,7 +28,7 @@ const steps: Array<Step> = [
       `Some Events can be more involved and require players to fulfill tasks ` +
       `that include voting. Mars is unpredictable; many different events can happen!`,
     params: {
-      placement: RIGHT
+      placement: "left"
     }
   },
   {
@@ -40,26 +40,25 @@ const steps: Array<Step> = [
   },
   {
     target: ".tour-event-deck",
-    content:
-      `Events persisting multiple rounds or relevant to the current round will be shown here.`,
+    content: `Events persisting multiple rounds or relevant to the current round will be shown here.`,
     params: {
-      placement: RIGHT
+      placement: LEFT
     }
-  },
-  {
-    target: ".tour-event-popup",
-    content:
-      `Thoughout the game, you can also access active events by clicking here.`,
-    params: {
-      placement: TOP
-    },
-    stateTransform: [
-      {
-        SET_LAYOUT: `tutorial`,
-        // required: true,
-      }
-    ]
   }
+  // {
+  //   target: ".tour-event-popup",
+  //   content:
+  //     `Thoughout the game, you can also access active events by clicking here.`,
+  //   params: {
+  //     placement: TOP
+  //   },
+  //   stateTransform: [
+  //     {
+  //       SET_LAYOUT: `tutorial`,
+  //       // required: true,
+  //     }
+  //   ]
+  // }
 ];
 
 export default steps;

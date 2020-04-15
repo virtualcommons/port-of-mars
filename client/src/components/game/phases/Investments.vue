@@ -1,8 +1,8 @@
 <template>
   <div class="c-investments container tour-invest-action">
     <div class="wrapper row">
-      <div class="timeblockinvestments col-8 tour-time-blocks">
-        <div class="topbar">
+      <div class="timeblockinvestments col-8">
+        <div class="topbar tour-time-blocks">
           <p class="title">Time Blocks</p>
           <TimeBlockMeter
             class="timeblockmeter"
