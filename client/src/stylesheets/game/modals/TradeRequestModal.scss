@@ -1,5 +1,5 @@
 .trade-request-modal {
-  width: 65rem;
+  width: 80rem;
   height: 45rem;
   max-width: none;
   padding: 0.5rem;
@@ -23,11 +23,12 @@
   }
 
   .trade-request-container {
+    height: 40rem;
     width: 60%;
     margin: 0rem 0.5rem;
 
     .actions {
-      height: 35rem;
+      height: 40rem;
       margin-top: 1rem;
       overflow: hidden;
     }
