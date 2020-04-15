@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .container-defeat {
   color: white;
 
@@ -64,10 +65,144 @@
     .death {
       color: $status-red;
       margin-left: 0.1rem;
+=======
+.c-gameview-defeat {
+  position: relative;
+  z-index: 0;
+  @include expand;
+  /* SET MAX SIZE OF SCREEN */
+  max-height: $max-screen-height;
+  max-width: $max-screen-width;
+  /* SET MIN SIZE OF SCREEN */
+  min-height: $min-screen-height;
+  min-width: $min-screen-width;
+  padding: 1rem;
+  margin: 0;
+  @include make-column-and-space-around;
+  background-color: $space-gray;
+
+  .title-wrapper,
+  .content-wrapper,
+  .marslog-wrapper,
+  .footnote-wrapper {
+    width: 100%;
+    padding: 1rem;
+    margin: 0;
+  }
+
+  .title-wrapper {
+    .title {
+      padding: 0;
+      @include make-column-and-center;
+
+      h1 {
+        text-transform: uppercase;
+        letter-spacing: 0.25rem;
+        font-size: 6rem;
+        font-weight: 700;
+        color: $new-space-orange;
+      }
+
+      h2 {
+        margin-bottom: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.25rem;
+        font-size: 2rem;
+        font-weight: 700;
+        color: $new-space-orange;
+      }
     }
   }
 
+  .content-wrapper {
+    .content {
+      padding: 0;
+      @include make-column-and-center;
 
+      h2 {
+        margin-bottom: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.25rem;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: $space-white;
+      }
+    }
+  }
+
+  .marslog-wrapper {
+    height: 40%;
+    @include make-center;
+
+    .marslog {
+      height: 100%;
+      padding: 0.5rem;
+      background-color: $space-white-opaque-1;
+      overflow-y: hidden;
+
+      .wrapper {
+        @include expand;
+        @include make-column-and-top;
+        overflow-y: scroll;
+
+        .message {
+          width: 100%;
+          padding: 0.5rem;
+          margin-bottom: 0.5rem;
+          font-size: $font-med;
+          color: $space-white;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+
+          .category {
+            margin: 0;
+            text-transform: capitalize;
+            color: $new-space-orange;
+            font-weight: $font-weight-maven-pro-bold;
+          }
+
+          .final-log,
+          .list {
+            font-weight: $font-weight-maven-pro-medium;
+          }
+
+          .content,
+          .time {
+            font-weight: $font-weight-maven-pro-regular;
+          }
+
+          .final-log,
+          .list {
+            margin: 0;
+            word-wrap: break-word;
+          }
+
+          .content {
+            margin: 0.5rem 0;
+            word-wrap: break-word;
+          }
+
+          .time {
+            margin: 0;
+
+            span {
+              color: $new-space-orange;
+            }
+          }
+        }
+      }
+>>>>>>> refactor: defeat screen styling
+    }
+  }
+
+  .footnote-wrapper {
+    .footnote {
+      padding: 0;
+      @include make-column-and-center;
+
+<<<<<<< HEAD
   .thanks {
     margin-top: 2rem;
     text-align: center;
@@ -87,6 +222,34 @@
         &:hover {
           color: $space-gray;
           background-color: $new-space-orange;
+=======
+      h2 {
+        margin-bottom: 1.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.25rem;
+        font-size: 2rem;
+        font-weight: 700;
+        color: $new-space-orange;
+      }
+
+      .buttons {
+        @include make-center;
+
+        .exit {
+          @include space-button;
+          border: 0.125rem solid $new-space-orange;
+        }
+
+        .restart {
+          @include space-button-white;
+          border: 0.125rem solid $space-white;
+          margin-left: 1rem;
+        }
+
+        button {
+          width: 12rem;
+          font-weight: $font-weight-maven-pro-medium !important;
+>>>>>>> refactor: defeat screen styling
         }
       }
     }
