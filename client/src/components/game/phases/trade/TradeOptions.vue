@@ -1,5 +1,41 @@
 <template>
-  <div class="trade-options">
+  <div class="c-trade-options container">
+    <div class="title-wrapper row">
+      <div class="title col-12">
+        <p>{{ text }}</p>
+      </div>
+    </div>
+    <div class="investment-wrapper row">
+      <div
+        v-for="(value, resource) in resources"
+        :key="resource + Math.random()"
+        class="investment col"
+      >
+        <div class="investment-input-wrapper">
+          <img
+            :src="require(`@port-of-mars/client/assets/icons/${resource}.svg`)"
+            alt="Investment"
+          />
+          <div class="input">
+            <input type="number" />
+          </div>
+        </div>
+        <div class="buttons-wrapper">
+          <button>
+            <font-awesome-icon
+              :icon="['fas', 'minus']"
+              size="sm"
+              class="icon"
+            />
+          </button>
+          <button>
+            <font-awesome-icon :icon="['fas', 'plus']" size="sm" class="icon" />
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="trade-options">
     <p class="type-text">{{ text }}</p>
     <div class="wrapper">
       <div
@@ -54,36 +90,49 @@
           </div>
           <div class="out-of">
             <p
-            v-bind="{class: mode=='outgoing' ? 
-            playerInventory[resource] > 0 ? 'greater-than-zero' : ''
-             : 'incoming'}"
-            > /{{playerInventory[resource]}} </p>
+              v-bind="{
+                class:
+                  mode == 'outgoing'
+                    ? playerInventory[resource] > 0
+                      ? 'greater-than-zero'
+                      : ''
+                    : 'incoming',
+              }"
+            >
+              /{{ playerInventory[resource] }}
+            </p>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import * as _ from 'lodash';
 import { Resource, ResourceAmountData } from '@port-of-mars/shared/types';
 import { makeTradeSafe } from '@port-of-mars/shared/validation';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
+import { faMinus } from '@fortawesome/free-solid-svg-icons/faMinus';
+
+library.add(faPlus);
+library.add(faMinus);
+Vue.component('font-awesome-icon', FontAwesomeIcon);
+
 @Component({})
 export default class TradeOptions extends Vue {
   @Prop({ default: '' }) text!: string;
   @Prop({ default: '' }) mode!: string;
   @Prop() resourceReader!: any;
-
-  @Prop() resources!:ResourceAmountData
-
+  @Prop() resources!: ResourceAmountData;
 
   get playerInventory() {
     return this.$store.getters.player.inventory;
   }
 
-  impossibleTrade(resource: Resource) {
+  private impossibleTrade(resource: Resource) {
     if (
       this.resources[resource] > this.playerInventory[resource] &&
       this.mode == 'outgoing'
@@ -93,7 +142,7 @@ export default class TradeOptions extends Vue {
     return false;
   }
 
-  grayOutResources(resource: Resource) {
+  private grayOutResources(resource: Resource) {
     if (this.playerInventory[resource] == 0 && this.mode == 'outgoing') {
       return true;
     }

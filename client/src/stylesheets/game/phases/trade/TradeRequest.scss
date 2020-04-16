@@ -44,31 +44,27 @@
         font-weight: $font-weight-maven-pro-medium;
         color: $space-white;
         text-align: center;
-
-        .none {
-          color: $space-white-opaque-2;
-        }
       }
     }
   }
 
   .request-wrapper {
-    background-color: black;
+    // background-color: black;
 
     .request {
       height: 100%;
-      background-color: white;
+      // background-color: white;
       @include reset-padding-margin;
       @include make-center;
     }
   }
 
   .offer-wrapper {
-    background-color: black;
+    // background-color: black;
 
     .offer {
       height: 100%;
-      background-color: white;
+      // background-color: white;
       @include reset-padding-margin;
       @include make-center;
     }

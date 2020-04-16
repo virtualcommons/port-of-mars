@@ -25,7 +25,7 @@
           :resourceReader="handleReceiveResources"
           :resources="exchangeResources"
           :mode="'incoming'"
-          :text="'In exchange for'"
+          :text="'Your Request'"
           class="tour-request-resources"
         />
       </div>
@@ -36,7 +36,7 @@
           :resourceReader="handleSendResources"
           :resources="sentResources"
           :mode="'outgoing'"
-          :text="'You offer'"
+          :text="'Your Offer'"
           class="tour-offer-resources"
         />
       </div>
