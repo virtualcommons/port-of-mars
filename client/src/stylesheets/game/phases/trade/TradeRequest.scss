@@ -1,7 +1,7 @@
 .c-trade-request {
   @include expand;
   @include reset-padding-margin;
-  @include make-column-and-space-around;
+  //@include make-column-and-space-around;
 
   .player-selection-wrapper,
   .request-wrapper,
