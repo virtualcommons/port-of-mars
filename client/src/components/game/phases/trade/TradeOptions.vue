@@ -10,6 +10,7 @@
         v-for="(value, resource) in resources"
         :key="resource + Math.random()"
         class="investment col"
+        :class="{ 'unvailable-investment': grayOutResources(resource) }"
       >
         <div class="investment-input-wrapper">
           <img
@@ -17,95 +18,36 @@
             alt="Investment"
           />
           <div class="input">
-            <input type="number" />
+            <input
+              v-if="mode === 'outgoing'"
+              type="number"
+              v-model.number="resources[resource]"
+              :disabled="playerInventory[resource] === 0"
+            />
+            <input v-else type="number" v-model.number="resources[resource]" />
           </div>
         </div>
         <div class="buttons-wrapper">
-          <button>
+          <button
+            @click="decreaseNum(resource)"
+            :disabled="mode === 'outgoing' && playerInventory[resource] === 0"
+          >
             <font-awesome-icon
               :icon="['fas', 'minus']"
               size="sm"
               class="icon"
             />
           </button>
-          <button>
+          <button
+            @click="increaseNum(resource)"
+            :disabled="mode === 'outgoing' && playerInventory[resource] === 0"
+          >
             <font-awesome-icon :icon="['fas', 'plus']" size="sm" class="icon" />
           </button>
         </div>
       </div>
     </div>
   </div>
-  <!-- <div class="trade-options">
-    <p class="type-text">{{ text }}</p>
-    <div class="wrapper">
-      <div
-        class="investments"
-        v-for="(value, resource) in resources"
-        :key="resource + 1"
-        v-bind:class="{ 'impossible-resource': grayOutResources(resource) }"
-      >
-        <div>
-          <img
-            class="icon"
-            :src="require(`@port-of-mars/client/assets/icons/${resource}.svg`)"
-            alt="Investment"
-          />
-        </div>
-
-        <div class="input-wrapper">
-          <div
-            v-bind:class="{ 'impossible-resource': impossibleTrade(resource) }"
-          >
-            <input
-              v-if="mode == 'outgoing'"
-              :disabled="playerInventory[resource] == 0"
-              type="number"
-              v-model.number="resources[resource]"
-              class="outgoing-amount"
-            />
-            <input
-              v-else
-              type="number"
-              v-model.number="resources[resource]"
-              class="incoming-amount"
-            />
-          </div>
-          <div class="button-container">
-            <button
-              @click="increaseNum(resource)"
-              :disabled="mode == 'outgoing' && playerInventory[resource] == 0"
-              type="button"
-              name="button"
-            >
-              +
-            </button>
-            <button
-              @click="decreaseNum(resource)"
-              :disabled="mode == 'outgoing' && playerInventory[resource] == 0"
-              type="button"
-              name="button"
-            >
-              -
-            </button>
-          </div>
-          <div class="out-of">
-            <p
-              v-bind="{
-                class:
-                  mode == 'outgoing'
-                    ? playerInventory[resource] > 0
-                      ? 'greater-than-zero'
-                      : ''
-                    : 'incoming',
-              }"
-            >
-              /{{ playerInventory[resource] }}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
 </template>
 
 <script lang="ts">

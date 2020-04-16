@@ -2,7 +2,6 @@
   @include expand;
   @include reset-padding-margin;
   @include make-column-and-top;
-  // background-color: orange;
 
   .title-wrapper,
   .investment-wrapper {
@@ -12,7 +11,6 @@
   }
 
   .title-wrapper {
-    // background-color: red;
     .title {
       height: 100%;
       @include reset-padding-margin;
@@ -29,21 +27,14 @@
   }
 
   .investment-wrapper {
-    // background-color: aqua;
-
     .investment {
-      // height: 100%;
-      // height: 4rem;
-      border: 0.125rem solid black;
       padding: 0;
       margin: 0 0.25rem;
-      // @include reset-padding-margin;
       @include make-column-and-top;
 
       .investment-input-wrapper {
         @include expand;
         margin-bottom: 1rem;
-        // background-color: blue;
         @include make-center;
 
         img {
@@ -54,20 +45,14 @@
         .input {
           height: 100%;
           flex-grow: 1;
-          padding: 0 0.5rem;
-          // background-color: orange;
+          padding: 0 0 0 0.5rem;
 
           /* Firefox */
           input[type='number'] {
-            // height: 3rem;
             @include expand;
             padding: 0.25rem;
-            // border: 0.0625rem solid $new-space-orange;
-            // border: 0.125rem solid $space-white;
             border: none;
-            // border-right: none;
             text-align: center;
-            // color: $new-space-orange;
             background-color: $space-white-opaque-1;
             -moz-appearance: textfield;
 
@@ -80,7 +65,7 @@
               outline: none;
             }
 
-            /*Chrome, safari, opera*/
+            /*Chrome, Safari, Opera*/
             &::-webkit-outer-spin-button,
             &::-webkit-inner-spin-button {
               -webkit-appearance: none;
@@ -93,7 +78,6 @@
       .buttons-wrapper {
         height: 2rem;
         width: 100%;
-        // background-color: purple;
         @include make-center;
 
         button {
@@ -123,116 +107,9 @@
         }
       }
     }
+
+    .unvailable-investment {
+      opacity: 0.5;
+    }
   }
 }
-// .trade-options {
-//   margin-bottom: 0.4rem;
-//   width: 100%;
-
-//   &:last-child {
-//     margin-bottom: 0;
-//   }
-
-//   .type-text {
-//     margin: 0.25rem 0.5rem;
-//     font-size: $font-small;
-//     text-align: left;
-//     text-transform: uppercase;
-//   }
-
-//   .wrapper {
-//     margin: 0.25rem 0.5rem;
-//     display: flex;
-//     flex-wrap: wrap;
-//     justify-content: space-between;
-
-//     .impossible-resource {
-//       opacity: 0.5;
-//     }
-
-//     .investments {
-//       padding: 0.25rem;
-//       display: flex;
-//       flex-direction: column;
-//       text-align: center;
-
-//       .icon {
-//         height: 3rem;
-//         width: 3rem;
-//         margin: 0.5rem;
-//       }
-
-//       .input-wrapper {
-//         height: 2.5rem;
-//         @include make-center;
-//         // background-color: green;
-
-//         .outgoing-amount,
-//         .incoming-amount {
-//           height: 2.5rem;
-//           width: 4rem;
-//           // margin: 0 0.25rem;
-//         }
-
-//         /* Firefox */
-//         input[type='number'] {
-//           // height: 3rem;
-//           padding: 0.25rem;
-//           border: 0.0625rem solid $new-space-orange;
-//           border-right: none;
-//           text-align: center;
-//           color: $new-space-orange;
-//           background-color: transparent;
-//           -moz-appearance: textfield;
-
-//           &:focus,
-//           &:active {
-//             outline: none;
-//           }
-
-//           /*Chrome, safari, opera*/
-//           &::-webkit-outer-spin-button,
-//           &::-webkit-inner-spin-button {
-//             -webkit-appearance: none;
-//             margin: 0;
-//           }
-//         }
-
-//         .button-container {
-//           height: 100%;
-//           border: 0.0625rem solid $new-space-orange;
-//           @include make-column-and-center;
-
-//           button {
-//             @include reset-button;
-//             height: 50%;
-//             width: 1.5rem;
-//             padding: 0;
-//             color: $space-gray;
-//             background-color: $new-space-orange;
-//             font-size: 0.75rem;
-//             @include default-transition-base;
-
-//             &:hover:not(:disabled) {
-//               color: $new-space-orange;
-//               background-color: transparent;
-//             }
-//           }
-//         }
-//         .out-of {
-//           margin-left: 0.25rem;
-//           margin-top: 1rem;
-//           font-size: $font-med;
-
-//           .incoming {
-//             opacity: 0%;
-//           }
-
-//           .greater-than-zero {
-//             color: $new-space-orange;
-//           }
-//         }
-//       }
-//     }
-//   }
-// }

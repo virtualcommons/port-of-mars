@@ -49,22 +49,16 @@
   }
 
   .request-wrapper {
-    // background-color: black;
-
     .request {
       height: 100%;
-      // background-color: white;
       @include reset-padding-margin;
       @include make-center;
     }
   }
 
   .offer-wrapper {
-    // background-color: black;
-
     .offer {
       height: 100%;
-      // background-color: white;
       @include reset-padding-margin;
       @include make-center;
     }
