@@ -24,7 +24,7 @@
         padding: 0.25rem 1rem;
         margin-bottom: 0.5rem;
         @include make-center;
-        background-color: $new-space-orange;
+        background-color: $space-lightgreen;
 
         .title {
           margin: 0 1rem 0 0;
@@ -39,6 +39,7 @@
         width: 100%;
         overflow-y: hidden;
         padding: 0.5rem;
+        // border: 0.125rem solid $space-lightgreen-025;
 
         .wrapper {
           width: 100%;
@@ -47,10 +48,39 @@
       }
     }
 
-    .cards {
+    .side-view {
       height: 100%;
       padding: 0;
       @include make-column-and-top;
+
+      .buttons {
+        height: 5%;
+        flex-shrink: 0;
+        width: 100%;
+        margin-bottom: 0.5rem;
+        @include make-center;
+
+        button {
+          @include reset-button;
+          height: 100%;
+          width: 50%;
+          padding: 0;
+          margin: 0;
+          font-size: $font-med;
+          font-weight: $font-weight-maven-pro-bold !important;
+          color: $space-lightgreen;
+          border: 0.125rem solid $space-lightgreen;
+
+          &:disabled {
+            opacity: 0.5;
+          }
+        }
+
+        .selected {
+          color: $space-gray;
+          background-color: $space-lightgreen;
+        }
+      }
 
       .topbar {
         height: 7.5%;
@@ -59,7 +89,7 @@
         padding: 0.25rem 1rem;
         margin-bottom: 0.5rem;
         @include make-center;
-        background-color: $new-space-orange;
+        background-color: $space-lightgreen;
 
         .title {
           margin: 0 1rem 0 0;
@@ -69,14 +99,27 @@
         }
       }
 
-      .outer-wrapper {
+      .inventory-wrapper {
+        flex-grow: 1;
+        width: 100%;
+        // padding: 0.5rem;
+        // border: 0.125rem solid $space-lightgreen-025;
+        overflow-y: hidden;
+
+        .inventory {
+          width: 100%;
+          overflow-y: scroll;
+        }
+      }
+
+      .accomplishment-cards-wrapper {
         flex-grow: 1;
         width: 100%;
         padding: 0.5rem;
         background-color: $space-white-opaque-1;
         overflow-y: hidden;
 
-        .wrapper {
+        .accomplishment-cards {
           width: 100%;
           @include make-column-and-top;
           overflow-y: scroll;
