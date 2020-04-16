@@ -1,16 +1,6 @@
 <template>
-  <div class="c-trade-request container">
-    <!-- <div class="title-wrapper row">
-      <div class="title col-12">
-        <p>
-          Trade With:
-          <span :class="tradePartnerName === '' ? 'none' : ''">{{
-            tradePartnerName !== '' ? tradePartnerName : 'None Selected'
-          }}</span>
-        </p>
-      </div>
-    </div> -->
-    <div class="player-selection-wrapper row">
+  <div class="c-trade-request container tour-trade-request">
+    <div class="player-selection-wrapper row tour-request-trade-partner">
       <div class="player col-3" v-for="player in otherPlayers" :key="player">
         <button
           @click="handleChange(player)"
@@ -29,67 +19,40 @@
         <p>{{ player }}</p>
       </div>
     </div>
-    <div class="request-wrapper row"></div>
-    <div class="offer-wrapper row"></div>
-    <div class="buttons-wrapper row"></div>
-  </div>
-  <!-- <div class="trade-request-component tour-trade-request">
-    <div class="trade-partner tour-request-trade-partner">
-      <div class="wrapper trade-send">
-        <p class="trade-title">
-          Trade With:
-          <span :class="{ none: tradePartnerName === '' }">{{
-            tradePartnerName !== '' ? tradePartnerName : 'None Selected'
-          }}</span>
-        </p>
+    <div class="request-wrapper row">
+      <div class="request col-12">
+        <TradeOptions
+          :resourceReader="handleReceiveResources"
+          :resources="exchangeResources"
+          :mode="'incoming'"
+          :text="'In exchange for'"
+          class="tour-request-resources"
+        />
       </div>
-      <div class="bottom-wrapper">
-        <div
-          class="trade-person-icons"
-          v-for="(player, index) in otherPlayers"
-          :key="index"
+    </div>
+    <div class="offer-wrapper row">
+      <div class="offer col-12">
+        <TradeOptions
+          :resourceReader="handleSendResources"
+          :resources="sentResources"
+          :mode="'outgoing'"
+          :text="'You offer'"
+          class="tour-offer-resources"
+        />
+      </div>
+    </div>
+    <div class="buttons-wrapper row">
+      <div class="buttons col-12">
+        <button
+          @click="handleTrade"
+          :disabled="!clientValidation"
+          class="tour-send-trade"
         >
-          <div
-            class="person-frame"
-            v-bind:class="{ 'selected-player': tradePartnerName == player }"
-          >
-            <img
-              @click="handleChange(player)"
-              class="person-icons"
-              :src="
-                require(`@port-of-mars/client/assets/characters/${player}.png`)
-              "
-            />
-          </div>
-          <p class="player-name">{{ player }}</p>
-        </div>
+          Send Trade
+        </button>
       </div>
     </div>
-
-    <div class="trade-send-options">
-      <TradeOptions
-        :resourceReader="handleSendResources"
-        text="You offer"
-        mode="outgoing"
-        class="options-block tour-offer-resources"
-        :resources="sentResources"
-      />
-      <TradeOptions
-        :resourceReader="handleReceiveResources"
-        text="In exchange for"
-        mode="incoming"
-        class="options-block tour-request-resources"
-        :resources="exchangeResources"
-      />
-      <button
-        :disabled="!clientValidation"
-        class="tour-send-trade"
-        @click="handleTrade"
-      >
-        Send
-      </button>
-    </div>
-  </div> -->
+  </div>
 </template>
 
 <script lang="ts">
