@@ -111,9 +111,7 @@ export default class TradeRequest extends Vue {
   private handleChange(name: string) {
     if (name == this.tradePartnerName) {
       this.$tstore.commit('SET_TRADE_PARTNER_NAME', '' as Role);
-      //this.name = '';
     } else {
-      //this.name = name;
       this.$tstore.commit('SET_TRADE_PARTNER_NAME', name as Role);
       this.tutorialValidation('partner');
     }
@@ -128,16 +126,12 @@ export default class TradeRequest extends Vue {
   }
 
   private handleSendResources(resources: ResourceAmountData) {
-    //this.sentResources = resources;
     this.$tstore.commit('SET_SEND_RESOURCES', resources);
-
     this.tutorialValidation('give');
   }
 
   private handleReceiveResources(resources: ResourceAmountData) {
-    //this.exchangeResources = resources;
     this.$tstore.commit('SET_GET_RESOURCES', resources);
-
     this.tutorialValidation('get');
   }
 
@@ -147,21 +141,16 @@ export default class TradeRequest extends Vue {
         role: this.$tstore.state.role,
         resourceAmount: this.sentResources,
       };
-
       const toPackage: TradeAmountData = {
         role: this.tradePartnerName as Role,
         resourceAmount: this.exchangeResources,
       };
-
       const tradeDataPackage: TradeData = {
         from: fromPackage,
         to: toPackage,
       };
-
       this.api.sendTradeRequest(tradeDataPackage);
-
       if (!this.isInTutorial) {
-        // this.$tstore.commit('RESET_TRADE_MODAL', 'data');
         this.$tstore.commit('SET_MODAL_HIDDEN', null);
       }
     }
