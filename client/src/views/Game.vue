@@ -30,7 +30,7 @@ export default class Game extends Vue {
   async created() {
     this.api.room?.leave();
     let gameRoom: Room;
-    let cachedRoomId = this.$ajax.roomId ?? this.$ajax.gameConnectionInfo;
+    let cachedRoomId = this.$ajax.roomId;
     let roomId: string;
     console.log({cachedRoomId});
     if (!cachedRoomId) {

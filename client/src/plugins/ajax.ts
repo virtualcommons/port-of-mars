@@ -46,19 +46,7 @@ export class AjaxRequest {
 
   _roomId?: RoomId;
 
-  get gameConnectionInfo(): RoomId | null {
-    const c = localStorage.getItem('room');
-    return c ? JSON.parse(c) : null;
-  }
-
-  set gameConnectionInfo(roomId: RoomId | null) {
-    localStorage.setItem('room', JSON.stringify(roomId))
-  }
-
   set roomId(r: RoomId | undefined) {
-    if (r) {
-      this.gameConnectionInfo = r;
-    }
     this._roomId = r;
   }
 
