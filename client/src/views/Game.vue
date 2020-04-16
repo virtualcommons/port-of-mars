@@ -13,6 +13,7 @@ import { EnvironmentMode } from '@port-of-mars/client/settings';
 import GameDashboard from '@port-of-mars/client/components/GameDashboard.vue';
 import _ from 'lodash';
 import { LOBBY_PAGE } from '@port-of-mars/shared/routes';
+import {url} from "@port-of-mars/client/util";
 
 @Component({
   name: 'game',
@@ -29,13 +30,19 @@ export default class Game extends Vue {
   async created() {
     this.api.room?.leave();
     let gameRoom: Room;
-    if (this.$ajax.roomId) {
-      gameRoom = await this.$client.joinById(this.$ajax.roomId);
-    } else if (this.$ajax.gameConnectionInfo) {
-      gameRoom = await this.$client.joinById(this.$ajax.gameConnectionInfo)
+    let cachedRoomId = this.$ajax.roomId ?? this.$ajax.gameConnectionInfo;
+    let roomId: string;
+    console.log({cachedRoomId});
+    if (!cachedRoomId) {
+      const res = await this.$ajax.get(url('/game/latest-active'));
+      console.log(res);
+      roomId = await res.json();
     } else {
-      return;
+      roomId = cachedRoomId;
     }
+    console.log({roomId});
+    gameRoom = await this.$client.joinById(roomId);
+
     applyGameServerResponses(gameRoom, this.$tstore);
     this.api.connect(gameRoom);
     this.hasApi = true;
