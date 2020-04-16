@@ -1,5 +1,39 @@
 <template>
-  <div class="trade-request-component tour-trade-request">
+  <div class="c-trade-request container">
+    <!-- <div class="title-wrapper row">
+      <div class="title col-12">
+        <p>
+          Trade With:
+          <span :class="tradePartnerName === '' ? 'none' : ''">{{
+            tradePartnerName !== '' ? tradePartnerName : 'None Selected'
+          }}</span>
+        </p>
+      </div>
+    </div> -->
+    <div class="player-selection-wrapper row">
+      <div class="player col-3" v-for="player in otherPlayers" :key="player">
+        <button
+          @click="handleChange(player)"
+          class="outer-frame"
+          :style="borderStyle(player)"
+        >
+          <div class="inner-frame" :style="frameStyle(player)">
+            <img
+              :src="
+                require(`@port-of-mars/client/assets/characters/${player}.png`)
+              "
+              alt="Player"
+            />
+          </div>
+        </button>
+        <p>{{ player }}</p>
+      </div>
+    </div>
+    <div class="request-wrapper row"></div>
+    <div class="offer-wrapper row"></div>
+    <div class="buttons-wrapper row"></div>
+  </div>
+  <!-- <div class="trade-request-component tour-trade-request">
     <div class="trade-partner tour-request-trade-partner">
       <div class="wrapper trade-send">
         <p class="trade-title">
@@ -55,7 +89,7 @@
         Send
       </button>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script lang="ts">
@@ -193,6 +227,19 @@ export default class TradeRequest extends Vue {
 
   destroyed() {
     this.$tstore.commit('RESET_TRADE_MODAL', 'data');
+  }
+
+  // NOTE :: NEW
+  private borderStyle(role: Role) {
+    return role === this.tradePartnerName
+      ? { border: `0.125rem solid var(--new-space-orange)` }
+      : { border: `0.125rem solid var(--color-${role})` };
+  }
+
+  private frameStyle(role: Role) {
+    return role === this.tradePartnerName
+      ? { backgroundColor: `var(--new-space-orange)` }
+      : { backgroundColor: `var(--color-${role})` };
   }
 }
 </script>
