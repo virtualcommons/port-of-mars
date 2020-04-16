@@ -17,7 +17,9 @@
       <button @click="submitDone" class="ready-button" v-if="!playerReady">
         Ready to Advance
       </button>
-      <button @click="submitCancel" v-if="playerReady">Cancel Readiness</button>
+      <button @click="submitCancel" v-if="playerReady" class="cancel-button">
+        Cancel Readiness
+      </button>
     </div>
   </div>
 </template>
