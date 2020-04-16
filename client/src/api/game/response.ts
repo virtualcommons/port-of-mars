@@ -37,7 +37,7 @@ function applyPlayerResponses(player: any, store: TStore) {
     changes.forEach(change => {
       const payload = { role: player.role, data: change.value };
 
-      // FIXME: this could just be a mapping of change.field: 'STRING_COMMAND' or some kind of predictable transformation 
+      // FIXME: this could just be a mapping of change.field: 'STRING_COMMAND' or some kind of predictable transformation
       // I'd prefer something like the responseMap defined above which can then
       // reduce the switch statement to store.commit(responseMap[change.field], payload) and we adjust the
       // mapping as needed.
@@ -94,6 +94,9 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
 
   room.onLeave((code: number) => {
     console.log(`client left the room: ${code}`);
+    if ([Phase.victory, Phase.defeat].includes(store.state.phase)) {
+      return;
+    }
     if (REFRESHABLE_WEBSOCKET_ERROR_CODES.includes(code)) {
       alert("your connection was interrupted, refreshing the browser")
       window.location.reload(false);

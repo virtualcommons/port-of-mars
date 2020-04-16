@@ -29,15 +29,10 @@ export default class Game extends Vue {
   async created() {
     this.api.room?.leave();
     let gameRoom: Room;
-    if (this.$ajax.reservation) {
-      gameRoom = await this.$client.consumeSeatReservation(
-        this.$ajax.reservation
-      );
+    if (this.$ajax.roomId) {
+      gameRoom = await this.$client.joinById(this.$ajax.roomId);
     } else if (this.$ajax.gameConnectionInfo) {
-      gameRoom = await this.$client.reconnect(
-        this.$ajax.gameConnectionInfo.roomId,
-        this.$ajax.gameConnectionInfo.sessionId
-      );
+      gameRoom = await this.$client.joinById(this.$ajax.gameConnectionInfo)
     } else {
       return;
     }

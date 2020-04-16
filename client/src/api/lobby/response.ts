@@ -28,7 +28,7 @@ export function applyWaitingServerResponses<T>(
         break;
       case 'sent-invitation':
         // store reservation details in ajax local storage
-        component.$ajax.reservation = msg.reservation;
+        component.$ajax.roomId = msg.roomId;
         router.push({ name: GAME_PAGE });
         room.send({ kind: 'accept-invitation' });
         break;

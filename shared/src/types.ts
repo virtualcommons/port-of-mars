@@ -235,3 +235,5 @@ export interface DashboardData {
   upcomingGames: Array<GameMeta>
   stats: Stats
 }
+
+export type RoomId = string;

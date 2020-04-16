@@ -245,15 +245,11 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
         logger.debug('WAITING LOBBY: created room ', room);
         await Promise.all(
           group.clientStats.map(async client => {
-            const reservation = await matchMaker.reserveSeatFor(
-              room,
-              client.options
-            );
-            logger.debug("created reservation for client ", reservation);
+            logger.debug('sending roomId', room.roomId, ' for client', client);
             // Send room data for new WebSocket connection
             this.sendSafe(client.client, {
               kind: 'sent-invitation',
-              reservation: reservation
+              roomId: room.roomId
             });
           })
         );

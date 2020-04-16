@@ -137,14 +137,19 @@ export class GameRoom extends Room<GameState> implements Game {
   }
 
   gameLoop() {
+    const inEndGame = [Phase.defeat, Phase.victory].includes(this.state.phase);
     this.state.timeRemaining -= 1;
     if (this.state.allPlayersAreReady
       || this.state.timeRemaining <= 0
-      || (this.state.upkeep <= 0 && ![Phase.defeat, Phase.victory].includes(this.state.phase))) {
+      || (this.state.upkeep <= 0 && !inEndGame)) {
       const cmd = new SetNextPhaseCmd(this.state);
       const events = cmd.execute();
       this.state.applyMany(events);
       this.persister.persist(events, this.getMetadata());
+    }
+
+    if (inEndGame) {
+      this.disconnect()
     }
   }
 

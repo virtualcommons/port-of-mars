@@ -5,7 +5,7 @@ export interface JoinedClientQueue {
 
 export interface SentInvitation {
   kind: 'sent-invitation';
-  reservation: any;
+  roomId: string;
 }
 
 export interface RemovedClientFromLobby {

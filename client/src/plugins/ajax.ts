@@ -2,6 +2,7 @@ import Vue, {VueConstructor} from 'vue'
 import _ from "lodash";
 import {VueRouter} from "vue-router/types/router";
 import {TStore} from "@port-of-mars/client/plugins/tstore";
+import {RoomId} from "@port-of-mars/shared/types";
 
 interface RoomListingData<Metadata = any> {
   clients: number;
@@ -39,35 +40,30 @@ interface LoginCreds {
   username: string
 }
 
-interface GameData {
-  roomId: string;
-  sessionId: string;
-}
-
 export class AjaxRequest {
   constructor(private router: VueRouter, private store: TStore) {
   }
 
-  _reservation?: Reservation;
+  _roomId?: RoomId;
 
-  get gameConnectionInfo(): { roomId: string, sessionId: string } | null {
+  get gameConnectionInfo(): RoomId | null {
     const c = localStorage.getItem('room');
     return c ? JSON.parse(c) : null;
   }
 
-  set gameConnectionInfo(info: { roomId: string, sessionId: string } | null) {
-    localStorage.setItem('room', JSON.stringify(info))
+  set gameConnectionInfo(roomId: RoomId | null) {
+    localStorage.setItem('room', JSON.stringify(roomId))
   }
 
-  set reservation(r: Reservation | undefined) {
+  set roomId(r: RoomId | undefined) {
     if (r) {
-      this.gameConnectionInfo = { roomId: r.room.roomId, sessionId: r.sessionId };
+      this.gameConnectionInfo = r;
     }
-    this._reservation = r;
+    this._roomId = r;
   }
 
-  get reservation() {
-    return this._reservation
+  get roomId() {
+    return this._roomId
   }
 
   async setLoginCreds(response: Response) {
