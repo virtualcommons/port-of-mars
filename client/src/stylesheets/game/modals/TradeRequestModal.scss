@@ -1,4 +1,4 @@
-.trade-request-modal {
+.c-trade-request-modal {
   width: 80rem;
   height: 45rem;
   max-width: none;
@@ -7,44 +7,124 @@
   margin: 0;
   background-color: $space-gray;
 
-  display: flex;
-  justify-content: space-between;
+  .wrapper {
+    @include expand;
+    max-width: none;
+    @include reset-padding-margin;
 
-  .header {
-    width: 100%;
-    background-color: $new-space-orange;
-    color: black;
-    text-align: center;
-    padding: 0.2rem 0rem;
-    margin-top: 0.5rem;
-    h5 {
-      font-weight: bold;
+    .trade-request {
+      height: 100%;
+      padding: 0 0.5rem 0 0;
+      @include make-column-and-top;
+
+      .topbar {
+        height: 7.5%;
+        flex-shrink: 0;
+        width: 100%;
+        padding: 0.25rem 1rem;
+        margin-bottom: 0.5rem;
+        @include make-center;
+        background-color: $space-lightgreen;
+
+        .title {
+          margin: 0 1rem 0 0;
+          font-size: $font-med;
+          font-weight: $font-weight-maven-pro-bold;
+          color: $space-gray;
+        }
+      }
+
+      .outer-wrapper {
+        flex-grow: 1;
+        width: 100%;
+        overflow-y: hidden;
+        padding: 0.5rem;
+        // border: 0.125rem solid $space-lightgreen-025;
+
+        .wrapper {
+          width: 100%;
+          overflow-y: scroll;
+        }
+      }
     }
-  }
 
-  .trade-request-container {
-    height: 40rem;
-    width: 60%;
-    margin: 0rem 0.5rem;
+    .side-view {
+      height: 100%;
+      padding: 0;
+      @include make-column-and-top;
 
-    .actions {
-      height: 40rem;
-      margin-top: 1rem;
-      overflow: hidden;
-    }
-  }
+      .buttons {
+        height: 5%;
+        flex-shrink: 0;
+        width: 100%;
+        margin-bottom: 0.5rem;
+        @include make-center;
 
-  .active-accomplishments-container {
-    width: 40%;
-    margin: 0rem 0.5rem;
+        button {
+          @include reset-button;
+          height: 100%;
+          width: 50%;
+          padding: 0;
+          margin: 0;
+          font-size: $font-med;
+          font-weight: $font-weight-maven-pro-bold !important;
+          color: $space-lightgreen;
+          border: 0.125rem solid $space-lightgreen;
 
-    .header {
-      margin-top: 4rem;
-    }
+          &:disabled {
+            opacity: 0.5;
+          }
+        }
 
-    .active-accomplishments {
-      margin-top: 1rem;
-      height: 31.5rem;
+        .selected {
+          color: $space-gray;
+          background-color: $space-lightgreen;
+        }
+      }
+
+      .topbar {
+        height: 7.5%;
+        flex-shrink: 0;
+        width: 100%;
+        padding: 0.25rem 1rem;
+        margin-bottom: 0.5rem;
+        @include make-center;
+        background-color: $space-lightgreen;
+
+        .title {
+          margin: 0 1rem 0 0;
+          font-size: $font-med;
+          font-weight: $font-weight-maven-pro-bold;
+          color: $space-gray;
+        }
+      }
+
+      .inventory-wrapper {
+        flex-grow: 1;
+        width: 100%;
+        // padding: 0.5rem;
+        // border: 0.125rem solid $space-lightgreen-025;
+        overflow-y: hidden;
+
+        .inventory {
+          width: 100%;
+          overflow-y: scroll;
+        }
+      }
+
+      .accomplishment-cards-wrapper {
+        flex-grow: 1;
+        width: 100%;
+        padding: 0.5rem;
+        background-color: $space-white-opaque-1;
+        overflow-y: hidden;
+
+        .accomplishment-cards {
+          width: 100%;
+          @include make-column-and-top;
+          overflow-y: scroll;
+        }
+      }
     }
   }
 }
