@@ -49,8 +49,8 @@ describe('a game', () => {
 
     beforeAll(async () => {
       [conn, qs, manager] = await initTransaction();
-      persister = new DBPersister(manager);
       sp = new ServiceProvider(manager);
+      persister = new DBPersister(sp);
       t = await createTournament(sp);
       tr = await createRound(sp, {tournamentId: t.id});
       // mock game state init opts wants five users with bob in the username
@@ -63,7 +63,6 @@ describe('a game', () => {
         await persister.persist([e], {gameId, dateCreated: new Date('1970 01 01'), timeRemaining: end_time})
       }
       await persister.sync();
-      await sp.game.finalize(gameId);
       const players = await manager.getRepository(Player).find({where: {gameId}});
       expect(players.length).toBe(5);
       for (const p of players) {

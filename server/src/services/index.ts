@@ -6,6 +6,7 @@ import {TournamentService} from "@port-of-mars/server/services/tournament";
 import {QuizService} from "@port-of-mars/server/services/quiz";
 import {DashboardService} from "@port-of-mars/server/services/dashboard";
 import {getConnection} from "@port-of-mars/server/util";
+import {TimeService} from "@port-of-mars/server/services/time";
 import {GameService} from "@port-of-mars/server/services/game";
 
 export class ServiceProvider {
@@ -14,7 +15,7 @@ export class ServiceProvider {
   private  _auth?: AuthService;
   get auth() {
     if (!this._auth) {
-      this._auth = new AuthService(this.em);
+      this._auth = new AuthService(this);
     }
     return this._auth;
   }
@@ -22,7 +23,7 @@ export class ServiceProvider {
   private _account?: AccountService;
   get account() {
     if (!this._account) {
-      this._account = new AccountService(this.em);
+      this._account = new AccountService(this);
     }
     return this._account;
   }
@@ -30,7 +31,7 @@ export class ServiceProvider {
   private _game?: GameService;
   get game(): GameService {
     if (!this._game) {
-      this._game = new GameService(this.em);
+      this._game = new GameService(this);
     }
     return this._game;
   }
@@ -38,7 +39,7 @@ export class ServiceProvider {
   private _quiz?: QuizService;
   get quiz() {
     if (!this._quiz) {
-      this._quiz = new QuizService(this.em);
+      this._quiz = new QuizService(this);
     }
     return this._quiz;
   }
@@ -46,15 +47,23 @@ export class ServiceProvider {
   private _registration?: RegistrationService;
   get registration() {
     if (!this._registration) {
-      this._registration = new RegistrationService(this.em)
+      this._registration = new RegistrationService(this)
     }
     return this._registration;
+  }
+
+  private _time?: TimeService;
+  get time() {
+    if (!this._time) {
+      this._time = new TimeService(this);
+    }
+    return this._time;
   }
 
   private _tournament?: TournamentService;
   get tournament() {
     if (!this._tournament) {
-      this._tournament = new TournamentService(this.em);
+      this._tournament = new TournamentService(this);
     }
     return this._tournament;
   }
@@ -62,7 +71,7 @@ export class ServiceProvider {
   private _dashboard?: DashboardService;
   get dashboard(){
     if(!this._dashboard){
-      this._dashboard = new DashboardService(this.em);
+      this._dashboard = new DashboardService(this);
     }
     return this._dashboard;
   }

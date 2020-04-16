@@ -3,23 +3,15 @@ import { Game, Player, Tournament, TournamentRound, TournamentRoundInvite } from
 import { EntityManager, Equal, SelectQueryBuilder } from 'typeorm';
 import * as _ from 'lodash';
 import { settings } from "@port-of-mars/server/settings";
+import {BaseService} from "@port-of-mars/server/services/db";
 
 const logger = settings.logging.getLogger(__filename);
 
-export class TournamentService {
-  em: EntityManager;
-
-  constructor(em?: EntityManager) {
-    if (!em) {
-      em = getConnection().manager
-    }
-    this.em = em;
-  }
-
-  async getActiveTournament(): Promise<Tournament | undefined> {
+export class TournamentService extends BaseService {
+  async getActiveTournament(): Promise<Tournament> {
     return await this.em
       .getRepository(Tournament)
-      .findOne({
+      .findOneOrFail({
         active: true
       });
   }
@@ -53,6 +45,15 @@ export class TournamentService {
       .find({
         tournamentRoundId: Equal(tournamentRoundId)
       });
+  }
+
+  async getActiveRoundInvite(userId: number, tournamentRoundId: number): Promise<TournamentRoundInvite> {
+    return this.em.getRepository(TournamentRoundInvite).findOneOrFail({
+      where: {
+        tournamentRoundId,
+        userId
+      }
+    })
   }
 
   async createTournament(data: Pick<Tournament, 'name' | 'active'>): Promise<Tournament> {

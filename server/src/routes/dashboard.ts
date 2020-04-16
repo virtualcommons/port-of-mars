@@ -9,25 +9,9 @@ function checkUser(req: Request, res: Response){
 
 dashboardRouter
 .get('/', async (req, res, next) => {
-
   try{
-    const dashboard = getServices().dashboard;
-    const tournament = getServices().tournament;
-    
-    let tutorial = dashboard.hasUserPassedTutorial(req.user as User);
-    
-    let currentTournamentRound = await tournament.getCurrentTournamentRound();
-    let roundInviteList = await tournament.getInviteList();
-
-    let surveys = dashboard.getUserSurveys(currentTournamentRound,roundInviteList,(req.user as User).id)
-    
-    res.json({
-      actionItems: [tutorial, ...surveys].filter(item => {
-        return item != undefined;
-      }),
-      upcomingGames: [],
-      stats: [],
-    });
+    const dashboard = await getServices().dashboard.getData(req.user as User);
+    res.json(dashboard);
   }
   catch(e){
     next(e);

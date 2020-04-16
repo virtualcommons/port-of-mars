@@ -17,6 +17,9 @@ export class Game {
   @CreateDateColumn()
   dateCreated!: Date;
 
+  @Column({ nullable: true })
+  dateFinalized?: Date;
+
   @ManyToOne(type => TournamentRound, tournamentRound => tournamentRound.games)
   tournamentRound!: TournamentRound;
 

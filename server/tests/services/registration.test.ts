@@ -17,7 +17,7 @@ describe('a potential user', () => {
     conn = await createConnection('test');
     qr = conn.createQueryRunner();
     sp = new ServiceProvider(qr.manager);
-    registrationService = new RegistrationService(qr.manager);
+    registrationService = sp.registration;
     await qr.connect();
     await qr.startTransaction();
   });

@@ -1,16 +1,13 @@
 import { settings } from '@port-of-mars/server/settings';
-import { EntityManager } from "typeorm";
 import { User } from "@port-of-mars/server/entity";
-import { TournamentService } from "@port-of-mars/server/services/tournament";
+import {BaseService} from "@port-of-mars/server/services/db";
 
 const logger = settings.logging.getLogger(__filename);
 
-export class AuthService {
-  constructor(public em: EntityManager) { }
-
+export class AuthService extends BaseService {
   async checkUserCanPlayGame(userId: number, tournamentRoundId?: number): Promise<boolean | undefined> {
     if (!tournamentRoundId) {
-      const ts = new TournamentService(this.em);
+      const ts = this.sp.tournament;
       tournamentRoundId = (await ts.getCurrentTournamentRound())?.id
     }
     const r = await this.em

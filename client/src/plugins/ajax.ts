@@ -138,7 +138,7 @@ export class AjaxRequest {
         redirect: 'follow',
         referrerPolicy: "no-referrer",
       }
-    )
+    );
     switch (response.status) {
       case 401:
         this.router.push({name: 'Login'});

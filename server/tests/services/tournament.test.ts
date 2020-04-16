@@ -83,7 +83,7 @@ describe('round round list', () => {
     tr2 = await createRound(services, {roundNumber: 2, tournamentId: t.id});
     g1users = await createUsers(manager, 'bob', [1,2,3,4,5]);
     g2users = await createUsers(manager, 'adison', [1,2,3,4,5]);
-    persister = new DBPersister(manager);
+    persister = new DBPersister(services);
   });
   
   afterAll(async () => rollbackTransaction(conn, qr));

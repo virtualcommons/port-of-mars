@@ -2,11 +2,9 @@ import { Question, QuestionResponse, Quiz, QuizSubmission, User } from '@port-of
 import { getConnection } from '@port-of-mars/server/util';
 import { EntityManager } from "typeorm";
 import * as _ from 'lodash';
+import {BaseService} from "@port-of-mars/server/services/db";
 
-export class QuizService {
-  constructor(public em: EntityManager) {
-  }
-
+export class QuizService extends BaseService {
   async createQuestionResponse(
     questionId: number,
     submissionId: number,

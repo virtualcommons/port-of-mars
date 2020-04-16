@@ -2,19 +2,11 @@ import { User } from "@port-of-mars/server/entity";
 import { getConnection } from "@port-of-mars/server/util";
 import { EntityManager, Repository } from "typeorm"
 import { settings } from "@port-of-mars/server/settings";
+import {BaseService} from "@port-of-mars/server/services/db";
 
 const logger = settings.logging.getLogger(__filename);
 
-export class AccountService {
-  em: EntityManager;
-
-  constructor(em?: EntityManager) {
-    if (!em) {
-      em = getConnection().manager;
-    }
-    this.em = em;
-  }
-
+export class AccountService extends BaseService {
   getRepository(): Repository<User> {
     return this.em.getRepository(User);
   }

@@ -4,24 +4,24 @@
             <!-- player stats -->
             <div class="bottom">
                 <h2>Your Stats</h2>
-                <p>Games Played: 1 (1 in progress)</p>
-                <div class="player-stat-item">
-                    <p class="player-stat-item-header">Game 1</p>
-                    <p class="player-stat-item-header">20 March 2020 @ 10:00 A.M.</p>
-                    <p>Status: Won</p>
-                    <p>Points: 10</p>
+                <p>Games Played: {{ gamesPlayedCount }}</p>
+                <div class="player-stat-item" v-for="gs in stats.games">
+                    <p class="player-stat-item-header">Tournament Name: {{ gs.tournamentName }}</p>
+                    <p class="player-stat-item-header">{{ new Date(gs.time).toDateString() }}</p>
+                    <p>Round: {{ gs.round }}</p>
+                    <p>Winner: {{ gs.winner }}</p>
+                    <p>Points: {{ gs.points }}</p>
                 </div>
             </div>
         </BCol>
-        
+
         <!-- action items -->
         <BCol class="middle">
             <div class="top">
                 <h1>Port of Mars</h1>
                 <h2>Player Dashboard</h2>
-                
             </div>
-            
+
             <div class="bottom">
                 <h2>Action Items</h2>
                 <div v-if="loading">
@@ -33,8 +33,6 @@
                         <p>{{item.description}}</p>
                         <BButton squared class="button" variant="dark" :to="item.link">Go</BButton>
                     </div>
-                </div>
-
                 </div>
             </div>
         </BCol>
@@ -53,8 +51,8 @@
 <script lang="ts">
 import { Vue, Component, Mixins } from 'vue-property-decorator';
 import { BRow, BCol, BButton, BLink } from 'bootstrap-vue';
-import DashboardAPI from '@port-of-mars/client/api/dashboard/dashboardAPI';
-import { ActionItem } from '@port-of-mars/shared/types';
+import {DashboardAPI} from '@port-of-mars/client/api/dashboard/request';
+import {ActionItem, DashboardData} from '@port-of-mars/shared/types';
 
 @Component({
     components: {
@@ -68,20 +66,23 @@ export default class PlayerDashboard extends Mixins(Vue, DashboardAPI) {
     private visible = false;
     private loading = true;
     private actionItems:Array<ActionItem> = [];
+    private stats: DashboardData['stats'] = {games: []};
 
     async mounted(){
-        await this.actionItemSet();
+        await this.initialize();
     }
 
-    async actionItemSet(){
-        this.actionItems = await this.getActionItems();
-        this.actionItems.filter(item => {
-            return item.done == false;
-        })
-        
-        this.loading = false;
+    async initialize() {
+      const data = await this.getData();
+      console.log(data);
+      this.actionItems = data.actionItems;
+      this.stats.games.splice(0, this.stats.games.length, ...data.stats.games);
+      this.loading = false;
     }
-    
+
+    get gamesPlayedCount() {
+      return this.stats.games.length;
+    }
 }
 </script>
 

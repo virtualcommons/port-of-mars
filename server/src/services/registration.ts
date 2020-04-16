@@ -2,17 +2,9 @@ import { TournamentRoundInvite, User } from "@port-of-mars/server/entity";
 import { getConnection } from "@port-of-mars/server/util";
 import { settings } from "@port-of-mars/server/settings";
 import { EntityManager } from "typeorm";
+import {BaseService} from "@port-of-mars/server/services/db";
 
-export class RegistrationService {
-  em: EntityManager;
-
-  constructor(em?: EntityManager) {
-    if (!em) {
-      em = getConnection().manager;
-    }
-    this.em = em;
-  }
-
+export class RegistrationService extends BaseService {
   createRegistrationURL(registrationLink: string) {
     return `${settings.host}/${registrationLink}`;
   }

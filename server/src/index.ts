@@ -24,6 +24,7 @@ import * as fs from 'fs';
 import { registrationRouter } from "@port-of-mars/server/routes/registration";
 import { settings } from "@port-of-mars/server/settings";
 import { isDev } from '@port-of-mars/shared/settings';
+import {getServices} from "@port-of-mars/server/services";
 
 const logger = settings.logging.getLogger(__filename);
 const NODE_ENV = process.env.NODE_ENV || 'development';
@@ -48,13 +49,13 @@ passport.use(new CasStrategy(
   },
   // verify callback
   function (username: string, profile: object, done: Function) {
-    new AccountService().getOrCreateUser(username).then(user => done(null, user));
+    getServices().account.getOrCreateUser(username).then(user => done(null, user));
   }
 ));
 passport.use(new LocalStrategy(
   function (username: string, password: string, done: Function) {
     logger.warn('***** DO NOT ALLOW IN PRODUCTION! running local auth for user: ', username);
-    new AccountService().getOrCreateUser(username).then(user => done(null, user));
+    getServices().account.getOrCreateUser(username).then(user => done(null, user));
   }
 ));
 
@@ -65,7 +66,7 @@ passport.serializeUser(function (user: User, done: Function) {
 
 passport.deserializeUser(function (id: number, done: Function) {
   logger.warn(`deserializing ${id}`);
-  new AccountService().findUserById(id)
+  getServices().account.findUserById(id)
     .then(user => done(null, user))
     .catch((e) => {
       logger.fatal(`Could not find user with ${id}: `, e);

@@ -229,3 +229,9 @@ export interface GameMeta {
 export interface Stats {
   games: Array<GameMeta & {points: number, winner: Role}>
 }
+
+export interface DashboardData {
+  actionItems: Array<ActionItem>
+  upcomingGames: Array<GameMeta>
+  stats: Stats
+}
