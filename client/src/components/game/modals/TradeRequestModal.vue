@@ -1,23 +1,51 @@
 <template>
-  <div class="trade-request-modal">
-    <div class="trade-request-container">
-      <div class="header">
-        <h5>Request A Trade</h5>
-      </div>
-      <TradeRequest class="actions" />
-    </div>
-
-    <div class="active-accomplishments-container">
-      <div class="active-accomplishments-section">
-        <div class="header">
-          <h5>Active Accomplishments</h5>
+  <div class="c-trade-request-modal">
+    <div class="wrapper row">
+      <div class="trade-request col-8">
+        <div class="topbar">
+          <p class="title">Request a Trade</p>
         </div>
-
-        <div class="active-accomplishments">
-          <ContainerAccomplishmentsGeneral
-            :accomplishmentSet="activeAccomplishments"
-            :isVisible="true"
-          />
+        <div class="outer-wrapper">
+          <div class="wrapper">
+            <TradeRequest />
+          </div>
+        </div>
+      </div>
+      <div class="side-view col-4">
+        <div class="buttons">
+          <button
+            @click="switchView('Inventory')"
+            :class="selectedView === 'Inventory' ? 'selected' : ''"
+          >
+            Inventory
+          </button>
+          <button
+            @click="switchView('Active Accomplishments')"
+            :class="selectedView === 'Active Accomplishments' ? 'selected' : ''"
+          >
+            Accomplishments
+          </button>
+        </div>
+        <div class="topbar">
+          <p class="title">{{ selectedView }}</p>
+        </div>
+        <div v-if="selectedView === 'Inventory'" class="inventory-wrapper">
+          <div class="inventory">
+            <Inventory :isSelf="true" :displaySystemHealth="false" />
+          </div>
+        </div>
+        <div
+          v-if="selectedView === 'Active Accomplishments'"
+          class="accomplishment-cards-wrapper"
+        >
+          <div class="accomplishment-cards">
+            <AccomplishmentCard
+              v-for="accomplishment in activeAccomplishments"
+              :key="accomplishment.id"
+              :accomplishment="accomplishment"
+              :showDescription="false"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -28,18 +56,25 @@
 import { Component, Inject, Vue, Prop } from 'vue-property-decorator';
 import { TradeRequestModalData } from '@port-of-mars/client/types/modals';
 import TradeRequest from '@port-of-mars/client/components/game/phases/trade/TradeRequest.vue';
-import ContainerAccomplishmentsGeneral from '@port-of-mars/client/components/game/accomplishments/ContainerAccomplishmentsGeneral.vue';
-import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
+import Inventory from '@port-of-mars/client/components/game/Inventory.vue';
+import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
+import { TutorialAPI } from '../../../api/tutorial/request';
 
 @Component({
   components: {
     TradeRequest,
-    ContainerAccomplishmentsGeneral,
+    Inventory,
+    AccomplishmentCard,
   },
 })
 export default class TradeRequestModal extends Vue {
   @Prop({}) private modalData!: TradeRequestModalData;
   @Inject() readonly api!: TutorialAPI;
+  private selectedView: string = 'Inventory';
+
+  private switchView(view: string) {
+    this.selectedView = view;
+  }
 
   get activeAccomplishments() {
     return this.$tstore.getters.player.accomplishments.purchasable;
