@@ -11,18 +11,33 @@
 
     button {
       @include space-button;
+      margin-top: 1rem;
+      font-size: $font-med;
+      font-weight: $font-weight-maven-pro-bold !important;
+    }
+
+    button.ready-button,
+    button.cancel-button {
+      position: relative;
+      overflow: hidden;
     }
 
     button.ready-button {
-      color: black;
+      border: 0.125rem solid $new-space-orange;
+      color: $space-gray;
       background-color: $new-space-orange;
-      position: relative;
-      overflow: hidden;
+    }
+
+    button.cancel-button {
+      border: 0.125rem solid $space-white;
+      color: $space-gray;
+      background-color: $space-white;
     }
 
     button.ready-button:after {
       animation: glint 5s linear 0s infinite forwards;
       //animation: name duration timing-function delay iteration-count direction fill-mode;
+
       content: '';
       position: absolute;
       top: 0;
@@ -37,14 +52,12 @@
         50%,
         transparent
       );
-
       transform: rotateZ(120deg) translate(-1em, 4em);
-    }
-
-    @keyframes glint {
-      10%,
-      100% {
-        transform: rotateZ(120deg) translate(0, -5em);
+      @keyframes glint {
+        10%,
+        100% {
+          transform: rotateZ(120deg) translate(0, -5em);
+        }
       }
     }
 
