@@ -86,7 +86,6 @@
                 v-else-if="playerData.isSelf || isUnderAudit"
               >
                 <AccomplishmentCard
-                  class="cards"
                   v-for="accomplishment in accomplishmentCards"
                   :key="accomplishment.id"
                   :accomplishment="accomplishment"
@@ -107,7 +106,7 @@ import { PlayerInfoModalData } from '@port-of-mars/client/types/modals';
 import { Role, Phase } from '@port-of-mars/shared/types';
 import Inventory from '@port-of-mars/client/components/game/Inventory.vue';
 import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
-import ContainerAccomplishmentsGeneral from '@port-of-mars/client/components/game/accomplishments/ContainerAccomplishmentsGeneral.vue';
+// import ContainerAccomplishmentsGeneral from '@port-of-mars/client/components/game/accomplishments/ContainerAccomplishmentsGeneral.vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -119,7 +118,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
   components: {
     Inventory,
     AccomplishmentCard,
-    ContainerAccomplishmentsGeneral,
+    // ContainerAccomplishmentsGeneral,
   },
 })
 export default class PlayerModal extends Vue {

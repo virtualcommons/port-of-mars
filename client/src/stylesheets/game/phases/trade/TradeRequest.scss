@@ -1,9 +1,7 @@
 .trade-request-component {
   @include expand;
-
   color: $space-white;
   background-color: $space-white-opaque-1;
-  // background-color: green;
 
   .trade-partner {
     margin-bottom: 1rem;

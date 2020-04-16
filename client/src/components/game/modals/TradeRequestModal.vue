@@ -1,23 +1,29 @@
 <template>
-  <div class="trade-request-modal">
-    <div class="trade-request-container">
-      <div class="header">
-        <h5>Request A Trade</h5>
-      </div>
-      <TradeRequest class="actions" />
-    </div>
-
-    <div class="active-accomplishments-container">
-      <div class="active-accomplishments-section">
-        <div class="header">
-          <h5>Active Accomplishments</h5>
+  <div class="c-trade-request-modal">
+    <div class="wrapper row">
+      <div class="trade-request col-8">
+        <div class="topbar">
+          <p class="title">Request a Trade</p>
         </div>
-
-        <div class="active-accomplishments">
-          <ContainerAccomplishmentsGeneral
-            :accomplishmentSet="activeAccomplishments"
-            :isVisible="true"
-          />
+        <div class="outer-wrapper">
+          <div class="wrapper">
+            <TradeRequest />
+          </div>
+        </div>
+      </div>
+      <div class="cards col-4">
+        <div class="topbar">
+          <p class="title">Active Accomplishments</p>
+        </div>
+        <div class="outer-wrapper">
+          <div class="wrapper">
+            <AccomplishmentCard
+              v-for="accomplishment in activeAccomplishments"
+              :key="accomplishment.id"
+              :accomplishment="accomplishment"
+              :showDescription="false"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -28,13 +34,13 @@
 import { Component, Inject, Vue, Prop } from 'vue-property-decorator';
 import { TradeRequestModalData } from '@port-of-mars/client/types/modals';
 import TradeRequest from '@port-of-mars/client/components/game/phases/trade/TradeRequest.vue';
-import ContainerAccomplishmentsGeneral from '@port-of-mars/client/components/game/accomplishments/ContainerAccomplishmentsGeneral.vue';
-import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
+import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
+import { TutorialAPI } from '../../../api/tutorial/request';
 
 @Component({
   components: {
     TradeRequest,
-    ContainerAccomplishmentsGeneral,
+    AccomplishmentCard,
   },
 })
 export default class TradeRequestModal extends Vue {
