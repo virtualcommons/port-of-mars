@@ -56,25 +56,16 @@
 </template>
 
 <script lang="ts">
-import {
-  Vue,
-  Component,
-  Prop,
-  InjectReactive,
-  Inject,
-} from 'vue-property-decorator';
-import * as _ from 'lodash';
-import TradeOptions from './TradeOptions.vue';
+import { Vue, Component, Inject } from 'vue-property-decorator';
+import TradeOptions from '@port-of-mars/client/components/game/phases/trade/TradeOptions.vue';
 import {
   TradeData,
   TradeAmountData,
   ResourceAmountData,
-  RESOURCES,
   Role,
 } from '@port-of-mars/shared/types';
 import { canPlayerMakeTrade } from '@port-of-mars/shared/validation';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
-import { defaultInventory } from '@port-of-mars/client/store/state';
 import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
 
 @Component({
@@ -83,10 +74,8 @@ import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
   },
 })
 export default class TradeRequest extends Vue {
-  @Inject()
-  readonly api!: GameRequestAPI & TutorialAPI;
-
-  count = 0;
+  @Inject() readonly api!: GameRequestAPI & TutorialAPI;
+  private count: number = 0;
 
   created() {
     this.$tstore.commit(
@@ -94,6 +83,12 @@ export default class TradeRequest extends Vue {
       this.$tstore.getters.player.role
     );
   }
+
+  destroyed() {
+    this.$tstore.commit('RESET_TRADE_MODAL', 'data');
+  }
+
+  // NOTE :: STATE GETTERS
 
   get tradePartnerName() {
     return this.$tstore.state.ui.tradeData.to.role;
@@ -111,6 +106,19 @@ export default class TradeRequest extends Vue {
     return Object.keys(this.$tstore.getters.otherPlayers);
   }
 
+  // NOTE :: HANDLE TRADE
+
+  private handleChange(name: string) {
+    if (name == this.tradePartnerName) {
+      this.$tstore.commit('SET_TRADE_PARTNER_NAME', '' as Role);
+      //this.name = '';
+    } else {
+      //this.name = name;
+      this.$tstore.commit('SET_TRADE_PARTNER_NAME', name as Role);
+      this.tutorialValidation('partner');
+    }
+  }
+
   get clientValidation() {
     const inventory = this.$tstore.getters.player.inventory;
     return (
@@ -119,50 +127,21 @@ export default class TradeRequest extends Vue {
     );
   }
 
-  get isInTutorial() {
-    return this.$tstore.getters.layout === 'tutorial';
-  }
-
-  tutorialValidation(type: string) {
-    if (this.isInTutorial) {
-      switch (type) {
-        case 'give':
-          this.api.saveGiveResources(this.sentResources);
-          break;
-        case 'get':
-          this.api.saveGetResources(this.exchangeResources);
-          break;
-        case 'partner':
-          this.api.saveTradePartner(this.tradePartnerName);
-          break;
-        default:
-          break;
-      }
-    }
-  }
-
-  handleSendResources(resources: ResourceAmountData) {
+  private handleSendResources(resources: ResourceAmountData) {
+    //this.sentResources = resources;
     this.$tstore.commit('SET_SEND_RESOURCES', resources);
 
     this.tutorialValidation('give');
   }
 
-  handleReceiveResources(resources: ResourceAmountData) {
+  private handleReceiveResources(resources: ResourceAmountData) {
+    //this.exchangeResources = resources;
     this.$tstore.commit('SET_GET_RESOURCES', resources);
 
     this.tutorialValidation('get');
   }
 
-  handleChange(name: string) {
-    if (name == this.tradePartnerName) {
-      this.$tstore.commit('SET_TRADE_PARTNER_NAME', '' as Role);
-    } else {
-      this.$tstore.commit('SET_TRADE_PARTNER_NAME', name as Role);
-      this.tutorialValidation('partner');
-    }
-  }
-
-  handleTrade() {
+  private handleTrade() {
     if (this.clientValidation) {
       const fromPackage: TradeAmountData = {
         role: this.$tstore.state.role,
@@ -188,11 +167,31 @@ export default class TradeRequest extends Vue {
     }
   }
 
-  destroyed() {
-    this.$tstore.commit('RESET_TRADE_MODAL', 'data');
+  // NOTE :: TUTORIAL
+
+  get isInTutorial() {
+    return this.$tstore.getters.layout === 'tutorial';
   }
 
-  // NOTE :: NEW
+  private tutorialValidation(type: string) {
+    if (this.isInTutorial) {
+      switch (type) {
+        case 'give':
+          this.api.saveGiveResources(this.sentResources);
+          break;
+        case 'get':
+          this.api.saveGetResources(this.exchangeResources);
+          break;
+        case 'partner':
+          this.api.saveTradePartner(this.tradePartnerName);
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
+  // NOTE :: STYLES
   private borderStyle(role: Role) {
     return role === this.tradePartnerName
       ? { border: `0.125rem solid var(--new-space-orange)` }
