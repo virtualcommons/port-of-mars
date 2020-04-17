@@ -4,7 +4,7 @@ FROM node:13-buster AS pom-client-builder-base
 
 WORKDIR /code/client
 
-COPY ./client/package.json /code/client
+COPY ./client/package.json ./client/yarn.lock /code/client/
 RUN yarn install
 
 COPY ./client /code/client
@@ -20,7 +20,7 @@ FROM node:13-buster AS pom-server-base
 
 WORKDIR /code/server
 
-COPY ./server/package.json /code/server
+COPY ./server/package.json ./server/yarn.lock /code/server/
 RUN yarn install
 
 COPY ./server /code/server
