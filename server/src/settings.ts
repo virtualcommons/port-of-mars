@@ -21,7 +21,7 @@ const dev: () => AppSettings = () => ({
   host: 'http://localhost:8081',
   logging: new DevLogging(),
   secret: SECRET_KEY,
-  lobby: new LobbySettings(1)
+  lobby: new LobbySettings(15)
 });
 
 const staging: () => AppSettings = () => ({
@@ -29,7 +29,7 @@ const staging: () => AppSettings = () => ({
   host: 'https://alpha.portofmars.asu.edu',
   logging: new DevLogging(),
   secret: SECRET_KEY,
-  lobby: new LobbySettings(2)
+  lobby: new LobbySettings(15)
 });
 
 const prod: () => AppSettings = () => {
