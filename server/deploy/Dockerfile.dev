@@ -12,7 +12,7 @@ ENV LANG=C.UTF-8
 
 WORKDIR /code/server
 
-COPY ./server/package.json /code/server
+COPY ./server/package.json ./server/yarn.lock /code/server/
 RUN yarn install
 
 COPY ./server /code/server
