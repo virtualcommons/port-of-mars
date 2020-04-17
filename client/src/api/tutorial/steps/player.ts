@@ -36,9 +36,13 @@ const steps: Array<Step> = [
     },
     stateTransform: [
       {
-        SET_PLAYER_INFO_MODAL_VISIBILITY: {
-          role: "Researcher",
-          visible: true
+        // SET_PLAYER_INFO_MODAL_VISIBILITY: {
+        //   role: "Researcher",
+        //   visible: true
+        // }
+        SET_MODAL_VISIBLE: {
+          type: 'PlayerModal',
+          data: {role: 'Researcher'}
         }
       }
     ]
@@ -51,14 +55,14 @@ const steps: Array<Step> = [
     params: {
       placement: "top"
     },
-    stateTransform: [
-      {
-        SET_PLAYER_INFO_MODAL_VISIBILITY: {
-          role: "Researcher",
-          visible: true
-        }
-      }
-    ]
+    // stateTransform: [
+    //   {
+    //     SET_PLAYER_INFO_MODAL_VISIBILITY: {
+    //       role: "Researcher",
+    //       visible: true
+    //     }
+    //   }
+    // ]
   },
   {
     target: ".tour-player-info-modal-inventory",
@@ -66,14 +70,14 @@ const steps: Array<Step> = [
     params: {
       placement: LEFT
     },
-    stateTransform: [
-      {
-        SET_PLAYER_INFO_MODAL_VISIBILITY: {
-          role: "Researcher",
-          visible: true
-        }
-      }
-    ]
+    // stateTransform: [
+    //   {
+    //     SET_PLAYER_INFO_MODAL_VISIBILITY: {
+    //       role: "Researcher",
+    //       visible: true
+    //     }
+    //   }
+    // ]
   },
   {
     target: ".tour-player-info-modal-accomplishments",
@@ -81,31 +85,32 @@ const steps: Array<Step> = [
     params: {
       placement: RIGHT
     },
+    // stateTransform: [
+    //   {
+    //     SET_PLAYER_INFO_MODAL_VISIBILITY: {
+    //       role: "Researcher",
+    //       visible: true
+    //     }
+    //   }
+    // ]
+  },
+  {
+    target: ".tour-profile-menu",
+    content: `Click here to reveal a menu that allows you to access your player dashboard and log out.`,
+    params: {
+      placement: RIGHT
+    },
     stateTransform: [
       {
-        SET_PLAYER_INFO_MODAL_VISIBILITY: {
-          role: "Researcher",
-          visible: true
-        }
+        required: true,
+        // SET_PLAYER_INFO_MODAL_VISIBILITY: {
+        //   role: 'Researcher',
+        //   visible: false
+        // }
+        SET_MODAL_HIDDEN: 'cool',
       }
     ]
   },
-  // {
-  //   target: ".tour-profile-menu",
-  //   content: `Click here to reveal a menu that allows you to access your player dashboard and log out.`,
-  //   params: {
-  //     placement: RIGHT
-  //   },
-  //   stateTransform: [
-  //     {
-  //       required: true,
-  //       SET_PLAYER_INFO_MODAL_VISIBILITY: {
-  //         role: 'Researcher',
-  //         visible: false
-  //       }
-  //     }
-  //   ]
-  // },
   {
     target: ".tour-players",
     content: `These are the other four residents of the Port of Mars. During some events, you will be able to interact with their icons here.
@@ -114,14 +119,14 @@ const steps: Array<Step> = [
     params: {
       placement: RIGHT
     },
-    stateTransform: [
-      {
-        SET_PLAYER_INFO_MODAL_VISIBILITY: {
-          role: "Researcher",
-          visible: false
-        }
-      }
-    ]
+    // stateTransform: [
+    //   {
+    //     SET_PLAYER_INFO_MODAL_VISIBILITY: {
+    //       role: "Researcher",
+    //       visible: false
+    //     }
+    //   }
+    // ]
   }
   // {
   //   target: ".tour-inventory-popup",
