@@ -65,15 +65,10 @@ export default class GameInformation extends Vue {
   get timeRemaining() {
     const fromState = this.$store.state.timeRemaining;
     const minutesRemaining = Math.floor(fromState / 60);
-<<<<<<< HEAD
-    const minutesRemainingDisplay = `${minutesRemaining}`.padStart(2, "0");
-    const secondsRemainingDisplay = `${fromState - minutesRemaining * 60}`.padStart(2, "0");
-=======
     const minutesRemainingDisplay = `${minutesRemaining}`.padStart(2, '0');
     const secondsRemainingDisplay = `${
       fromState - minutesRemaining * 60
     }`.padStart(2, '0');
->>>>>>> fix: current phase (of 5) was 1 behind
     const timeRemaining = `${minutesRemainingDisplay}:${secondsRemainingDisplay}`;
     return timeRemaining ? timeRemaining : "00:00";
   }

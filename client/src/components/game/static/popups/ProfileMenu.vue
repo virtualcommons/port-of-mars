@@ -1,10 +1,6 @@
 <template>
   <div class="c-profilemenu tour-profile-menu" :style="position">
     <button @click="toggle" class="toggle">
-<<<<<<< HEAD
-      <font-awesome-icon v-if="!visible" :icon="['fas', 'caret-right']" size="lg" />
-      <font-awesome-icon v-if="visible" :icon="['fas', 'caret-left']" size="lg" class="left" />
-=======
       <font-awesome-icon
         v-if="!profileMenuVisible"
         :icon="['fas', 'caret-right']"
@@ -16,7 +12,6 @@
         size="lg"
         class="left"
       />
->>>>>>> temp: add profile menu to store
     </button>
     <div class="wrapper" v-show="profileMenuVisible">
       <p>Logged in as {{ username }}</p>
@@ -68,6 +63,7 @@ import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons/faSignOutAlt';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons/faExclamationTriangle';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
+import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
 import { isDev, isStaging } from '@port-of-mars/shared/settings';
 import { faTerminal } from '@fortawesome/free-solid-svg-icons/faTerminal';
 import { faWindowClose } from '@fortawesome/free-regular-svg-icons/faWindowClose';
@@ -85,7 +81,7 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
   components: {}
 })
 export default class ProfileMenu extends Vue {
-  @Inject() readonly api!: GameRequestAPI;
+  @Inject() readonly api!: GameRequestAPI & TutorialAPI;
   private devtoolsEnabled: boolean = false;
 
   get profileMenuVisible() {
@@ -99,7 +95,7 @@ export default class ProfileMenu extends Vue {
   tutorialValidation() {
     if (this.isInTutorial) {
       this.api.completedGeneralClick();
-      this.api.resetGame
+      //this.api.resetGame()
     }
   }
 
@@ -108,6 +104,8 @@ export default class ProfileMenu extends Vue {
       'SET_PROFILE_MENU_VISIBILITY',
       !this.profileMenuVisible
     );
+
+    this.tutorialValidation();
   }
 
   get position() {

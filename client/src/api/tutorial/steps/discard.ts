@@ -13,9 +13,7 @@ const steps: Array<Step> = [
     },
     stateTransform: [
       {
-        SET_LAYOUT: 'tutorial',
         SET_GAME_PHASE: Phase.discard,
-        required: true
       }
     ]
   },
@@ -27,9 +25,26 @@ const steps: Array<Step> = [
     },
     stateTransform: [
       {
-        SET_LAYOUT: 'tutorial',
-        SET_GAME_PHASE: Phase.discard,
-        required: true
+        required: true,
+        SET_ACTIVE_ACCOMPLISHMENTS: {
+          data: {
+            id: 6,
+            role: 'Researcher',
+            label: 'Highly Specialized',
+            flavorText:
+              'You\'re solely focused on your research, to the exclusion of all other pursuits.',
+            science: 3,
+            government: 0,
+            legacy: 0,
+            finance: 0,
+            culture: 0,
+            upkeep: 0,
+            victoryPoints: 1,
+            effect:
+              'You can no longer make Politics or Legacy Influence. Science Influence only costs 1 Time Block to make.'
+          },
+          role: 'Researcher'
+        }
       }
     ]
   }

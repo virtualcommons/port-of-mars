@@ -1,5 +1,5 @@
 p<template>
-  <div class="c-activeeventspopup" :style="position">
+  <div class="c-activeeventspopup">
     <button @click="toggle" class="toggle tour-event-popup">
       <span>Active Events</span>
       <font-awesome-icon
@@ -13,7 +13,7 @@ p<template>
         size="lg"
       />
     </button>
-    <div class="wrapper">
+    <div class="wrapper" :style="position">
       <p class="empty" v-if="eventsForTheRound.length === 0">
         No Active Events
       </p>
@@ -58,7 +58,7 @@ export default class ActiveEventsPopup extends Vue {
   }
 
   get position() {
-    return this.popupVisible ? { bottom: '0rem' } : { bottom: '-45rem' };
+    return this.popupVisible ? { height: '48rem',padding: '0.5rem' } : { height: '0rem' };
   }
 
   get eventsForTheRound() {
