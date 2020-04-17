@@ -232,7 +232,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
 
   async checkGroupsReady() {
     for (const group of this.groups) {
-      logger.trace('WAITING LOBBY: checking group ', group)
+      logger.trace('WAITING LOBBY: checking group %o', group);
       if (this.isGroupReady(group)) {
         logger.debug('WAITING LOBBY: group was ready, creating room');
         group.ready = true;
@@ -247,7 +247,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
           GameRoom.NAME,
           gameOpts
         );
-        logger.debug('WAITING LOBBY: created room ', room);
+        logger.debug('WAITING LOBBY: created room %o', room);
         await Promise.all(
           group.clientStats.map(async client => {
             logger.debug('sending roomId', room.roomId, ' for client', client);
