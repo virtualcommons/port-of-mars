@@ -1,5 +1,5 @@
 <template>
-  <div class="c-marslogpopup" :style="position">
+  <div class="c-marslogpopup tour-log-popup">
     <BButton @click="toggle" class="toggle">
       <span>Mars Log</span>
       <font-awesome-icon
@@ -13,7 +13,7 @@
         size="lg"
       />
     </BButton>
-    <div class="wrapper">
+    <div class="wrapper" :style="position">
       <MarsLog />
     </div>
   </div>
@@ -48,8 +48,9 @@ export default class MarsLogPopup extends Vue {
   }
 
   get position() {
-    return this.popupVisible ? { bottom: '0rem' } : { bottom: '-45rem' };
+    return this.popupVisible ? { height: '48rem',padding: '0.5rem' } : { height: '0rem' };
   }
+
 }
 </script>
 

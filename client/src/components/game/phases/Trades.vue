@@ -1,7 +1,7 @@
 <template>
   <div class="c-trades container">
     <div class="wrapper row">
-      <div class="trade-list col-12 tour-trade-list">
+      <div class="trade-list col-12">
         <div class="topbar">
           <div class="title-wrapper">
             <div class="wrapper">
@@ -12,7 +12,7 @@
             Request a Trade
           </button>
         </div>
-        <div class="outer-wrapper">
+        <div class="outer-wrapper tour-trade-list">
           <div class="wrapper">
             <ActiveTrade
               v-for="trade in trades"
@@ -65,6 +65,8 @@ export default class Trades extends Vue {
       type: 'TradeRequestModal',
       data: {},
     });
+
+    this.tutorialValidation();
   }
 }
 </script>

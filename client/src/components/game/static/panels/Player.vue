@@ -17,7 +17,6 @@
 import { Vue, Component, Inject, Prop } from 'vue-property-decorator';
 import { Role } from '@port-of-mars/shared/types';
 import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
-
 @Component({
   components: {},
 })
