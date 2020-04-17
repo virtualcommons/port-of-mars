@@ -160,20 +160,6 @@ export class GameRoom extends Room<GameState> implements Game {
     this.persister.persist(events, this.getMetadata());
   }
 
-  async onLeave(client: Client, consented: boolean) {
-    const player = this.getPlayer(client);
-    logger.info('player left:', client.id);
-    try {
-      player.connected = false;
-      const reconnectedClient = await this.allowReconnection(client);
-      logger.info(`client ${reconnectedClient.id} reconnected to ${this.roomId}`)
-      player.connected = true;
-      this.safeSend(reconnectedClient, { kind: 'set-player-role', role: player.role });
-    } catch (e) {
-      logger.fatal(e);
-    }
-  }
-
   onJoin(client: Client, options: any, auth: User) {
     logger.info(`client ${client.id} joined game ${this.roomId} ${auth}`);
     const player = this.getPlayer(client);
