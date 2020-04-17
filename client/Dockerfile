@@ -6,7 +6,7 @@ EXPOSE 3000
 
 WORKDIR /code/client
 
-COPY package.json /code/client
+COPY package.json yarn.lock /code/client/ 
 RUN yarn install
 
 COPY . /code/client
