@@ -1,28 +1,25 @@
 <template>
   <div class="container-defeat">
-    <h1 class="game-over-text">Game Over</h1>
-    <!-- animated pulse slower infinite -->
+    <h1 class="game-over-text animated pulse slower infinite">Game Over</h1>
     <div class="transmission-info">
       <h3>Replaying Logs before death...</h3>
 
       <!-- mars log entries -->
       <div class="message-container">
         <div v-for="(log, index) in logs"
+             v-bind="{class:`animated fadeInLeft delay-${0.6*index}s`}"
              :style="logColor(log)"
              class="message"
         >
-          <!--v-bind="{class:`animated fadeInLeft delay-${0.6*index}s`}" -->
-
-          <!-- mars log entry -->
           <div class="header">
             <p class="category">{{ log.category }}</p>
             <div class="event-number">
               <p class="final-log" v-if="index===0">Final Log</p>
-              <p v-else>Log Entry <span class="list">#{{logs.length-index}}/{{logs.length}}</span>
+              <p v-else>Log Entry
+                <span class="list">#{{logs.length-index}}/{{logs.length}}</span>
               </p>
             </div>
           </div>
-          <!--  end mars log entry-->
           <p class="content">{{ log.content }}</p>
           <p class="time">
             <span>[ </span>{{ logTime(log.timestamp) }}<span> ]</span>
@@ -63,7 +60,6 @@
     // private handleRestart() {
     //   this.api.resetGame();
     // }
-
     get logs() {
       return this.$tstore.getters.logs.reverse();
     }
@@ -73,15 +69,6 @@
     }
 
     logColor(log: MarsLogData) {
-      if (log.category == 'SYSTEM HEALTH: DECREASE') return {backgroundColor: 'var(--marslog-red)'};
-      else if (log.category == 'SYSTEM HEALTH: INCREASE') return {backgroundColor: 'var(--marslog-green)'};
-      else if (log.category == 'TRADE') return {backgroundColor: 'var(--marslog-purple)'};
-      else if (log.category.includes('Mars Event')) return {backgroundColor: 'var(--marslog-orange)'};
-      else return {backgroundColor: 'var(--space-white-opaque-1)'}
-    }
-
-    marsLogColor(log: MarsLogData) {
-      console.log(log.category)
       if (log.category == 'SYSTEM HEALTH: DECREASE') return {backgroundColor: 'var(--marslog-red)'};
       else if (log.category == 'SYSTEM HEALTH: INCREASE') return {backgroundColor: 'var(--marslog-green)'};
       else if (log.category == 'TRADE') return {backgroundColor: 'var(--marslog-purple)'};

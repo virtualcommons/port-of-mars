@@ -121,6 +121,11 @@ export enum MarsLogCategory {
   cancelTrade = "Cancel Trade"
 }
 
+export interface MarsLogData {
+  category: string;
+  message: string;
+}
+
 export interface MarsLogMessageData {
   performedBy: Role | ServerRole;
   category: string;

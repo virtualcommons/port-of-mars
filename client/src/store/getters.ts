@@ -1,5 +1,10 @@
 import { PlayerClientSet, State, PlayerClientData } from '@port-of-mars/client/store/state';
-import { ROLES, MarsEventData, EventClientView, MarsLogMessageData } from '@port-of-mars/shared/types';
+import {
+  ROLES,
+  MarsEventData,
+  EventClientView,
+  MarsLogMessageData,
+} from '@port-of-mars/shared/types';
 import _ from 'lodash';
 
 export default {
