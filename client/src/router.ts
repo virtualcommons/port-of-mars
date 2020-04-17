@@ -4,7 +4,7 @@ import Login from '@port-of-mars/client/views/Login.vue';
 import WaitingLobby from '@port-of-mars/client/views/WaitingLobby.vue';
 import Game from '@port-of-mars/client/views/Game.vue';
 import Tutorial from '@port-of-mars/client/views/Tutorial.vue';
-import PlayerDashboard from '@port-of-mars/client/views/PlayerDashboard.vue';
+import PlayerDashboard from '@port-of-mars/client/views/Dashboard.vue';
 
 
 import {
@@ -14,7 +14,7 @@ import {
   PAGE_META,
   REGISTER_PAGE,
   TUTORIAL_PAGE,
-  PLAYER_DASHBOARD,
+  DASHBOARD_PAGE,
   // REFACTOR_UI
 } from "@port-of-mars/shared/routes";
 import Register from "@port-of-mars/client/views/Register.vue";
@@ -29,7 +29,7 @@ const router = new Router({
     { ...PAGE_META[GAME_PAGE], component: Game },
     { ...PAGE_META[TUTORIAL_PAGE], component: Tutorial },
     { ...PAGE_META[REGISTER_PAGE], component: Register },
-    { ...PAGE_META[PLAYER_DASHBOARD], component: PlayerDashboard },
+    { ...PAGE_META[DASHBOARD_PAGE], component: PlayerDashboard },
     // { ...PAGE_META[REFACTOR_UI], component: Game},
   ]
 });

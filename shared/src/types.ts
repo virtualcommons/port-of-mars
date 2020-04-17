@@ -217,7 +217,7 @@ export interface QuizQuestionData {
 export interface ActionItem {
   done: boolean
   description: string
-  link: string
+  link: { kind: 'internal', data: string } | { kind: 'external', data: string }
 }
 
 export interface GameMeta {

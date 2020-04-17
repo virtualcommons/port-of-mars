@@ -1,9 +1,10 @@
 import {User} from '@port-of-mars/server/entity/User';
 import {Role, ActionItem, GameMeta, Stats, RESEARCHER} from "@port-of-mars/shared/types";
 import {TournamentRound} from "@port-of-mars/server/entity/TournamentRound";
-import {Game, Player, TournamentRoundInvite} from "@port-of-mars/server/entity";
+import {Game, Player, Tournament, TournamentRoundInvite} from "@port-of-mars/server/entity";
 import {BaseService} from "@port-of-mars/server/services/db";
 import {IsNull, Not} from "typeorm";
+import {GAME_PAGE, TUTORIAL_PAGE} from "@port-of-mars/shared/routes";
 
 interface DashboardData {
   actionItems: Array<ActionItem>
@@ -16,7 +17,7 @@ export class DashboardService extends BaseService {
     return {
       done: user.passedQuiz,
       description: 'Complete Tutorial',
-      link: ''
+      link: {kind: 'internal', data: TUTORIAL_PAGE}
     }
   }
 
@@ -24,7 +25,7 @@ export class DashboardService extends BaseService {
     return {
       done: invite.hasCompletedIntroSurvey,
       description: 'Complete the introduction survey',
-      link: round.introSurveyUrl ?? ''
+      link: {kind: 'external', data: round.introSurveyUrl ?? ''}
     };
   }
 
@@ -32,7 +33,7 @@ export class DashboardService extends BaseService {
     return {
       done: invite.hasCompletedIntroSurvey,
       description: 'Complete the exit survey',
-      link: round.exitSurveyUrl ?? ''
+      link: {kind: 'external', data: round.exitSurveyUrl ?? ''}
     }
   }
 
@@ -44,12 +45,11 @@ export class DashboardService extends BaseService {
     return {
       done: false,
       description: 'Reenter the current game',
-      link: `/#/game/${roomId}`
+      link: {kind: 'internal', data: GAME_PAGE}
     };
   }
 
-  async getStats(user: User, tournamentRound: TournamentRound): Promise<Stats> {
-    const tournament = await this.sp.tournament.getActiveTournament();
+  async getStats(user: User, tournamentRound: TournamentRound, tournament: Tournament): Promise<Stats> {
     const games = await this.em.getRepository(Game)
       .find({
         where: {
@@ -103,12 +103,17 @@ export class DashboardService extends BaseService {
       }
       actionItems.push(this.getCompletedExitSurveyActionItem(round, invite));
     }
+    const tournament = await this.sp.tournament.getActiveTournament();
 
-    const stats = await this.getStats(user, round);
+    const stats = await this.getStats(user, round, tournament);
 
     return {
       actionItems,
-      upcomingGames: [],
+      upcomingGames: [{
+        time: this.sp.time.now().getTime(),
+        round: round.roundNumber,
+        tournamentName: tournament.name
+      }],
       stats
     }
 

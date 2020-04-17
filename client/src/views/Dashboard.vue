@@ -29,9 +29,10 @@
                 </div>
 
                 <div v-else>
-                    <div v-for="(item,index) in actionItems" :key="index" class="action-item">
-                        <p>{{item.description}}</p>
-                        <BButton squared class="button" variant="dark" :to="item.link">Go</BButton>
+                    <div v-for="(action,index) in actionItems" :key="index" class="action-item">
+                        <p>{{action.description}}</p>
+                        <BButton squared class="button" variant="dark" :to="action.link.data" v-if="isInternal(action.link)">Go</BButton>
+                        <BButton squared class="button" variant="dark" :href="action.link.data" v-else>Go</BButton>
                     </div>
                 </div>
             </div>
@@ -40,9 +41,9 @@
         <!-- upcoming games -->
         <BCol class="right">
             <h2>Upcoming Games</h2>
-            <div class="upcoming-game-item">
-                <p>April 1 @ 12:00 PM</p>
-                <BButton squared class="button" variant="dark" disabled>Join</BButton>
+            <div class="upcoming-game-item" v-for="game in upcomingGames">
+                <p>{{ toTimeString(game.time) }}</p>
+                <BButton squared class="button" variant="dark" disabled><router-link :to="joinLink">Join</router-link></BButton>
             </div>
         </BCol>
     </BRow>
@@ -52,7 +53,9 @@
 import { Vue, Component, Mixins } from 'vue-property-decorator';
 import { BRow, BCol, BButton, BLink } from 'bootstrap-vue';
 import {DashboardAPI} from '@port-of-mars/client/api/dashboard/request';
-import {ActionItem, DashboardData} from '@port-of-mars/shared/types';
+import {ActionItem, DashboardData, GameMeta} from '@port-of-mars/shared/types';
+import {LOBBY_NAME} from "@port-of-mars/shared/lobby";
+import {LOBBY_PAGE} from "@port-of-mars/shared/routes";
 
 @Component({
     components: {
@@ -67,6 +70,7 @@ export default class PlayerDashboard extends Mixins(Vue, DashboardAPI) {
     private loading = true;
     private actionItems:Array<ActionItem> = [];
     private stats: DashboardData['stats'] = {games: []};
+    private upcomingGames: Array<GameMeta> = [];
 
     async mounted(){
         await this.initialize();
@@ -77,15 +81,28 @@ export default class PlayerDashboard extends Mixins(Vue, DashboardAPI) {
       console.log(data);
       this.actionItems = data.actionItems;
       this.stats.games.splice(0, this.stats.games.length, ...data.stats.games);
+      this.upcomingGames.splice(0, this.upcomingGames.length, ...data.upcomingGames);
       this.loading = false;
+    }
+
+    get joinLink() {
+      return { name: LOBBY_PAGE };
     }
 
     get gamesPlayedCount() {
       return this.stats.games.length;
     }
+
+    isInternal(link: ActionItem['link']) {
+      return link.kind === 'internal';
+    }
+
+    toTimeString(unixtimestamp: number): string {
+      return new Date(unixtimestamp).toLocaleTimeString()
+    }
 }
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/views/PlayerDashboard.scss';
+@import '@port-of-mars/client/stylesheets/views/Dashboard.scss';
 </style>

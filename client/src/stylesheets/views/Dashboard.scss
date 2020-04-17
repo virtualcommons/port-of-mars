@@ -1,3 +1,11 @@
+a {
+  color: $new-space-orange;
+}
+
+a:hover {
+  color: lighten($new-space-orange, 15%);
+}
+
 .player-dashboard {
     @include expand;
     /* SET MAX SIZE OF SCREEN */

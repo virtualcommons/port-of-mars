@@ -39,7 +39,8 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { GAME_PAGE, LOBBY_PAGE, LOGIN_PAGE } from '@port-of-mars/shared/routes';
+import {DASHBOARD_PAGE, GAME_PAGE, LOBBY_PAGE, LOGIN_PAGE} from '@port-of-mars/shared/routes';
+import {url} from "@port-of-mars/client/util";
 
 @Component({})
 export default class Login extends Vue {
@@ -72,14 +73,14 @@ export default class Login extends Vue {
     const response = await this.$ajax.post(this.loginUrl, data);
     await this.$ajax.setLoginCreds(response);
     if (response.status === 200) {
-      this.$router.push({ name: LOBBY_PAGE });
+      this.$router.push({ name: DASHBOARD_PAGE });
     } else {
       this.error = await response.json();
     }
   }
 
   get loginUrl() {
-    return `${process.env.SERVER_URL_HTTP}/login`;
+    return url(`/login`);
   }
 }
 </script>
