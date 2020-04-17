@@ -1,18 +1,18 @@
 import {
-  Phase,
-  RESEARCHER,
-  Role,
-  ResourceCostData,
-  ResourceAmountData,
-  PlayerData,
-  InvestmentData,
   CURATOR,
   ENTREPRENEUR,
-  POLITICIAN,
-  PIONEER,
   GameData,
+  InvestmentData,
   MarsLogMessageData,
+  Phase,
+  PIONEER,
+  PlayerData,
+  POLITICIAN,
   QuizQuestionData,
+  RESEARCHER,
+  ResourceAmountData,
+  ResourceCostData,
+  Role,
   TradeDataWithNull
 } from '@port-of-mars/shared/types';
 import _ from 'lodash';
@@ -83,7 +83,7 @@ export function defaultPendingInvestment(): ResourceCostData {
   };
 }
 
-export function defaultTradeData():TradeDataWithNull<''|Role> {
+export function defaultTradeData(): TradeDataWithNull<'' | Role> {
   return {
     to: {
       role: '',
@@ -102,37 +102,37 @@ export interface User {
   passedQuiz?: boolean;
 }
 
-export interface Visible{
-  visible:boolean;
+export interface Visible {
+  visible: boolean;
 }
 
-export interface PlayerInfoModal extends Visible{
-  role:Role;
+export interface PlayerInfoModal extends Visible {
+  role: Role;
 }
 
-export interface CardModal extends Visible{
-  data:{
-    type:string,
-    info:any
+export interface CardModal extends Visible {
+  data: {
+    type: string,
+    info: any
   };
 }
 
-export interface TradeRequestModal extends Visible{}
+export interface TradeRequestModal extends Visible {
+}
 
-export interface Modals{
-  [name:string]:PlayerInfoModal|TradeRequestModal|CardModal;
-  playerInfoModal:PlayerInfoModal;
-  tradeRequestModal:TradeRequestModal;
-  cardModal:CardModal;
+export interface Modals {
+  playerInfoModal: PlayerInfoModal;
+  tradeRequestModal: TradeRequestModal;
+  cardModal: CardModal;
+
+  [name: string]: PlayerInfoModal | TradeRequestModal | CardModal;
 }
 
 
 export interface uiVars {
-  tradeData:TradeDataWithNull<''|Role>;
-  modalViews:Modals;
+  tradeData: TradeDataWithNull<'' | Role>;
+  modalViews: Modals;
 }
-
-
 
 export interface State extends GameData {
   role: Role;
@@ -189,28 +189,26 @@ export const initialStoreState: State = {
   tutorialTradeGet: defaultInventory(),
 
 
-  ui:{
-    tradeData:defaultTradeData(),
+  ui: {
+    tradeData: defaultTradeData(),
 
-    modalViews:{
-      playerInfoModal:{
+    modalViews: {
+      playerInfoModal: {
         role: 'Researcher',
         visible: false,
       },
-      tradeRequestModal:{
+      tradeRequestModal: {
         visible: false,
       },
-      cardModal:{
+      cardModal: {
         visible: false,
-        data:{
-          type:'',
-          info:null
+        data: {
+          type: '',
+          info: null
         },
       }
     },
   }
-
-
 }
 
 export const getInitialStoreState = (): State => _.cloneDeep(initialStoreState);

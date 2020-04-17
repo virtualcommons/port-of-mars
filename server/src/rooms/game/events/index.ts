@@ -310,6 +310,7 @@ export class EnteredDefeatPhase extends GameEventWithData {
 
   apply(game: GameState): void {
     game.phase = Phase.defeat;
+    game.timeRemaining = 9999999;
     game.log(`System Health has reached zero.`, 'System Health', 'Server');
   }
 }
@@ -322,6 +323,7 @@ export class EnteredVictoryPhase extends GameEventWithData {
 
   apply(game: GameState): void {
     game.phase = Phase.victory;
+    game.timeRemaining = 9999999;
     game.evaluateGameWinners();
   }
 }
