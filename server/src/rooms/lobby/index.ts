@@ -227,6 +227,8 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
   }
 
   isGroupReady(group: MatchmakingGroup): boolean {
+    logger.trace('WAITING LOBBY: isGroupReady %o',
+      {ready: group.ready, length: group.clientStats.length, devMode: this.devMode});
     return group.ready || group.clientStats.length === this.numClientsToMatch || this.devMode;
   }
 
