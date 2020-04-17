@@ -94,6 +94,7 @@ export class DBPersister implements Persister {
   }
 
   async initialize(options: GameOpts, roomId: string): Promise<number> {
+    logger.debug('initializing game %s', roomId);
     const g = new Game();
     const f = async (em: EntityManager) => {
       if (_.isNull(options.tournamentRoundId)) {
@@ -109,9 +110,9 @@ export class DBPersister implements Persister {
       return g.id;
     };
     if (this.em.queryRunner?.isTransactionActive) {
-      return f(this.em);
+      return await f(this.em);
     } else {
-      return this.em.transaction(f);
+      return await this.em.transaction(f);
     }
   }
 
@@ -150,15 +151,19 @@ export class DBPersister implements Persister {
   async sync() {
     await this.lock.runExclusive(async () => {
       const f = async (em: EntityManager) => {
-        const gameIds = this.pendingEvents
+        const gameIds = _.uniq(this.pendingEvents.map(e => e.gameId));
+        const gameIdsToFinalize = _.uniq(this.pendingEvents
           .filter(e => DBPersister.FINAL_EVENTS.includes(e.type))
-          .map(e => e.gameId);
+          .map(e => e.gameId));
 
+        const whereExpr: any = {
+          dateFinalized: IsNull()
+        };
+        if (gameIds) {
+          whereExpr.id = In(gameIds)
+        }
         const activeGameIds = await this.em.getRepository(Game).find({
-          where: {
-            id: In(gameIds),
-            dateFinalized: IsNull()
-          }
+          where: whereExpr
         }).then(rs => rs.map(r => r.id));
         const [activeGameEvents, inactiveGameEvents] = _.partition(this.pendingEvents, e => activeGameIds.includes(e.gameId));
         if (inactiveGameEvents) {
@@ -169,7 +174,7 @@ export class DBPersister implements Persister {
           .insert()
           .values(activeGameEvents)
           .execute();
-        await Promise.all(gameIds.map(gameId => this.finalize(gameId)));
+        await Promise.all(gameIdsToFinalize.map(gameId => this.finalize(gameId)));
         this.pendingEvents = [];
       };
       if (this.pendingEvents.length > 0) {

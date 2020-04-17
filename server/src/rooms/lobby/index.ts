@@ -106,8 +106,13 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
   }
 
   async onAuth(client: Client, options: { token: string }, request?: http.IncomingMessage) {
-    const user = await getServices().account.findUserById((request as any).session.passport.user);
-    return user;
+    try {
+      const user = await getServices().account.findUserById((request as any).session.passport.user);
+      return user;
+    } catch (e) {
+      logger.fatal(e);
+      return;
+    }
   }
 
   onJoin(client: Client, options: any) {
