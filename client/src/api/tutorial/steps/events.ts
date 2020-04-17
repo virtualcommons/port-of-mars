@@ -10,6 +10,7 @@ const steps: Array<Step> = [
     },
     stateTransform: [
       {
+        SET_MARS_LOG_POPUP_VISIBILITY: false,
         SET_GAME_PHASE: Phase.events,
         ADD_TO_EVENTS: {
           id: "changingTides",
@@ -44,21 +45,20 @@ const steps: Array<Step> = [
     params: {
       placement: LEFT
     }
+  },
+  {
+    target: ".tour-event-popup",
+    content:
+      `Thoughout the game, you can also access active here.`,
+    params: {
+      placement: LEFT,
+    },
+    stateTransform: [
+      {
+        SET_ACTIVE_EVENTS_POPUP_VISIBILITY: true,
+      }
+    ]
   }
-  // {
-  //   target: ".tour-event-popup",
-  //   content:
-  //     `Thoughout the game, you can also access active events by clicking here.`,
-  //   params: {
-  //     placement: TOP
-  //   },
-  //   stateTransform: [
-  //     {
-  //       SET_LAYOUT: `tutorial`,
-  //       // required: true,
-  //     }
-  //   ]
-  // }
 ];
 
 export default steps;

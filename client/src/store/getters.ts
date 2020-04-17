@@ -96,10 +96,6 @@ export default {
     return auditEventIndex !== -1 && auditEventIndex <= eventProcessedIndex;
   },
 
-  playerModalVisible(state: State): boolean {
-    return state.ui.modalViews.playerInfoModal.visible;
-  }
-
   // unreadChatMessages(state: State): number {
   //   const chatMessages = state.messages.length;
   //   return chatMessages;
