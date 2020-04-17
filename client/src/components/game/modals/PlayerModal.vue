@@ -1,6 +1,6 @@
 <template>
   <div class="c-player-modal container tour-player-info-modal">
-    <div class="top-wrapper row">
+    <div class="top-wrapper row tour-player-info-modal-stats">
       <div class="top container">
         <div class="wrapper row">
           <div class="picture col-2">
@@ -10,7 +10,7 @@
               </div>
             </div>
           </div>
-          <div class="information col-6">
+          <div class="information col-6 ">
             <p class="role">
               {{
                 playerData.isSelf ? `You (${modalData.role})` : modalData.role
@@ -56,7 +56,7 @@
               </div>
             </div>
           </div>
-          <div class="purchasable-accomplishments col-8">
+          <div class="purchasable-accomplishments col-8 tour-player-info-modal-accomplishments">
             <div class="topbar">
               <p class="title">Accomplishments</p>
             </div>

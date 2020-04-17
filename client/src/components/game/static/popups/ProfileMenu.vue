@@ -104,6 +104,8 @@ export default class ProfileMenu extends Vue {
       'SET_PROFILE_MENU_VISIBILITY',
       !this.profileMenuVisible
     );
+
+    this.tutorialValidation();
   }
 
   get position() {

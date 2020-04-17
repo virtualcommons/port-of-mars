@@ -11,6 +11,7 @@ const steps: Array<Step> = [
 
     stateTransform: [
       {
+        SET_ACTIVE_EVENTS_POPUP_VISIBILITY: false,
         SET_GAME_PHASE: Phase.invest,
         SET_INVESTMENT_COSTS: {
           data: {

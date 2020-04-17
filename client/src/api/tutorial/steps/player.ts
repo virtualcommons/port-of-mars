@@ -1,4 +1,4 @@
-import { Step, RIGHT, LEFT } from "@port-of-mars/client/types/tutorial";
+import { Step, RIGHT, LEFT, TOP } from "@port-of-mars/client/types/tutorial";
 
 const steps: Array<Step> = [
   {
@@ -98,15 +98,11 @@ const steps: Array<Step> = [
     target: ".tour-profile-menu",
     content: `Click here to reveal a menu that allows you to access your player dashboard and log out.`,
     params: {
-      placement: RIGHT
+      placement: 'right',
     },
     stateTransform: [
       {
         required: true,
-        // SET_PLAYER_INFO_MODAL_VISIBILITY: {
-        //   role: 'Researcher',
-        //   visible: false
-        // }
         SET_MODAL_HIDDEN: 'cool',
       }
     ]
@@ -119,42 +115,44 @@ const steps: Array<Step> = [
     params: {
       placement: RIGHT
     },
-    // stateTransform: [
-    //   {
-    //     SET_PLAYER_INFO_MODAL_VISIBILITY: {
-    //       role: "Researcher",
-    //       visible: false
-    //     }
-    //   }
-    // ]
+    stateTransform: [
+      {
+        // SET_PLAYER_INFO_MODAL_VISIBILITY: {
+        //   role: "Researcher",
+        //   visible: false
+        // }
+        SET_PROFILE_MENU_VISIBILITY: false,
+      }
+    ]
+  },
+  {
+    target: ".tour-inventory-popup",
+    content:
+      "When you purchase resources during the invest phase, your inventory will update here.",
+    params: {
+      placement: 'left',
+    },
+    stateTransform: [
+      {
+        SET_INVENTORY_POPUP_VISIBILITY: true,
+      }
+    ]
+  },
+  {
+    target: ".tour-log-popup",
+    content:
+      `You can click here to view the mars log, which displays a history of what has happened during the game.` +
+      ` Make sure you check this periodically!`,
+    params: {
+      placement: 'left',
+    },
+    stateTransform: [
+      {
+        SET_INVENTORY_POPUP_VISIBILITY: false,
+        SET_MARS_LOG_POPUP_VISIBILITY: true,
+      }
+    ]
   }
-  // {
-  //   target: ".tour-inventory-popup",
-  //   content:
-  //     "When you purchase resources during the invest phase, your inventory will update here.",
-  //   params: {
-  //     placement: TOP
-  //   },
-  //   // stateTransform: [
-  //   //   {
-  //   //   }
-  //   // ]
-  // },
-  // {
-  //   target: ".tour-log-popup",
-  //   content:
-  //     `You can click here to view the mars log, which displays a history of what has happened during the game.` +
-  //     ` Make sure you check this periodically!`,
-  //   params: {
-  //     placement: TOP
-  //   },
-  //   // stateTransform: [
-  //   //   {
-  //   //     SET_LAYOUT: `tutorial`
-  //   //     // required: true,
-  //   //   }
-  //   // ]
-  // }
 ];
 
 export default steps;

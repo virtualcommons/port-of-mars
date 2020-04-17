@@ -61,7 +61,7 @@ const steps: Array<Step> = [
       accept or decline the trade.
       If you are the sender of a trade, you only have the option to cancel the request.`,
     params: {
-      placement: TOP,
+      placement: RIGHT,
     },
   },
   {
@@ -98,11 +98,7 @@ const steps: Array<Step> = [
     },
     stateTransform: [
       {
-        SET_LAYOUT: `tutorial`,
-        // required: true,
-        // validationObject: {
-        //   visible: true,
-        // }
+        required: true,
       },
     ],
   },
@@ -115,7 +111,10 @@ const steps: Array<Step> = [
     stateTransform: [
       {
         required: true,
-        // SET_TRADE_REQUEST_MODAL_VISIBILITY: true,
+        SET_MODAL_VISIBLE: {
+          type: 'TradeRequestModal',
+          data: {},
+        },
         validationObject: {
           name: 'Curator',
         },
@@ -203,11 +202,7 @@ const steps: Array<Step> = [
     },
     stateTransform: [
       {
-        required: false
-      },
-
-      {
-        // SET_TRADE_REQUEST_MODAL_VISIBILITY: false,
+        SET_MODAL_HIDDEN:'cool',
       },
     ],
   },
