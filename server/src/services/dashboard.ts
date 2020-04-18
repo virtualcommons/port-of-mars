@@ -7,9 +7,9 @@ import {IsNull, Not} from "typeorm";
 import {GAME_PAGE, TUTORIAL_PAGE} from "@port-of-mars/shared/routes";
 
 interface DashboardData {
-  actionItems: Array<ActionItem>
-  upcomingGames: Array<GameMeta>
-  stats: Stats
+  actionItems: Array<ActionItem>;
+  upcomingGames: Array<GameMeta>;
+  stats: Stats;
 }
 
 export class DashboardService extends BaseService {
@@ -63,7 +63,7 @@ export class DashboardService extends BaseService {
       });
 
     const stats: Stats['games'] = games.map(g => {
-      const {points, winner} = g.players.reduce((d: { winner: Role, points: number }, player: Player) => {
+      const {points, winner} = g.players.reduce((d: { winner: Role; points: number }, player: Player) => {
         if (d.points < (player.points ?? 0)) {
           d.points = player.points ?? 0;
           d.winner = player.role;

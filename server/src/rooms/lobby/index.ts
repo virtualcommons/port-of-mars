@@ -15,8 +15,8 @@ const logger = settings.logging.getLogger(__filename);
 
 class MatchmakingGroup {
   clientStats: Array<ClientStat> = [];
-  ready: boolean = false;
-  confirmed: number = 0;
+  ready = false;
+  confirmed = 0;
 
   isFull(maxClients: number): boolean {
     return this.clientStats.length >= maxClients;
@@ -39,7 +39,7 @@ interface ClientStat {
 
 export class RankedLobbyRoom extends Room<LobbyRoomState> {
 
-  public static get NAME(): string { return LOBBY_NAME };
+  public static get NAME(): string { return LOBBY_NAME }
 
   /**
    * Distribute clients into groups at this interval

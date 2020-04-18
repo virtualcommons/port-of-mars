@@ -31,7 +31,7 @@ export function toDBGameEvent(gameEvent: ge.GameEvent, metadata: Metadata) {
 export class GameConsoleService implements Persister {
   clock: ClockTimer = new ClockTimer();
 
-  setSyncInterval(time: number = 5000) {
+  setSyncInterval(time = 5000) {
     this.clock.setInterval(this.sync.bind(this), time)
   }
 

@@ -55,10 +55,6 @@ describe('first round', () => {
     });
   });
 
-  it('can be finalized', async () => {
-
-  });
-
   afterAll(async () => rollbackTransaction(conn, qr));
 });
 

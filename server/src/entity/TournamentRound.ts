@@ -20,8 +20,8 @@ export class TournamentRound {
   @Column()
   roundNumber!: number;
 
-  @Column()
-  numberOfGameRounds: number = 12;
+  @Column({ default: 12})
+  numberOfGameRounds!: number;
 
   @OneToMany(
     type => Game,

@@ -28,14 +28,14 @@ export class TournamentRoundInvite {
   @ManyToOne(type => User, user => user.invites)
   user!: User;
 
-  @Column()
-  hasParticipated: boolean = false;
+  @Column( { default: false })
+  hasParticipated!: boolean;
 
-  @Column()
-  hasCompletedIntroSurvey: boolean = false;
+  @Column( { default: false })
+  hasCompletedIntroSurvey!: boolean;
 
-  @Column()
-  hasCompletedExitSurvey: boolean = false;
+  @Column( { default: false })
+  hasCompletedExitSurvey!: boolean;
 
   @CreateDateColumn()
   dateCreated!: Date;

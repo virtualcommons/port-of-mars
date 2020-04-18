@@ -94,7 +94,7 @@ export class TournamentService extends BaseService {
     }
 
     // NOTE: Get Winners from Games
-    let winnerIds: Array<number> = [];
+    const winnerIds: Array<number> = [];
 
     for (const game of games) {
       // NOTE: Get Players from Games
@@ -109,8 +109,8 @@ export class TournamentService extends BaseService {
       }
 
       // NOTE: Get Winners from Players
-      let playerPoints: Array<[number, number | null]> = [];
-      let winners: Array<number> = [];
+      const playerPoints: Array<[number, number | null]> = [];
+      const winners: Array<number> = [];
 
       for (const player of players) {
         playerPoints.push([player.userId, player.points]);

@@ -35,7 +35,7 @@ import { Phase } from "@port-of-mars/shared/types";
 const logger = settings.logging.getLogger(__filename);
 
 export class GameRoom extends Room<GameState> implements Game {
-  public static get NAME(): string { return 'port_of_mars_game_room' };
+  public static get NAME(): string { return 'port_of_mars_game_room' }
   maxClients = 5;
   autoDispose = false;
   persister!: Persister;

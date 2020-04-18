@@ -33,7 +33,7 @@ export async function createUsers(em: EntityManager, name: string, ids: Array<nu
   }))));
 }
 
-export async function createTournament(sp: ServiceProvider, data?: { name?: string, active?: boolean }): Promise<Tournament> {
+export async function createTournament(sp: ServiceProvider, data?: { name?: string; active?: boolean }): Promise<Tournament> {
   const d = {
     name: 'example',
     active: true,
@@ -42,7 +42,7 @@ export async function createTournament(sp: ServiceProvider, data?: { name?: stri
   return await sp.tournament.createTournament(d);
 }
 
-export async function createRound(sp: ServiceProvider, data: { roundNumber?: number, tournamentId: number }) {
+export async function createRound(sp: ServiceProvider, data: { roundNumber?: number; tournamentId: number }) {
   const d = {
     exitSurveyUrl: '',
     introSurveyUrl: '',

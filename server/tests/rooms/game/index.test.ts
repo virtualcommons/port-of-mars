@@ -88,15 +88,16 @@ describe('a game state snapshot', () => {
   });
 });
 
+/*
 describe('a personal gain event', () => {
   const gameState = new GameState(mockGameStateInitOpts(x => x, () => 10));
   it('gets players who voted yes', () => {
-
+    // check upkeep and
+    // votes associated with roles and timeblocks affected
   });
 
-  // check upkeep 
-  // votes associated with roles and timeblocks affecedl.
 });
+*/
 
 describe('trading validations', () => {
   const g = new GameState(mockGameStateInitOpts(x => x, () => 10));
@@ -160,8 +161,8 @@ describe('trading validations', () => {
       }
     });
 
-  let invalidTrade: Trade = g.tradeSet['invalid-request'];
-  let validTrade: Trade = g.tradeSet['valid-request'];
+  const invalidTrade: Trade = g.tradeSet['invalid-request'];
+  const validTrade: Trade = g.tradeSet['valid-request'];
 
   it('Curator can send trade request that Entrepeneur cannot accept', () => {
     expect(canSendTradeRequest(g.players[invalidTrade.from.role as Role], invalidTrade.from.resourceAmount)).toBe(true);

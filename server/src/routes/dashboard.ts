@@ -4,9 +4,6 @@ import { User } from '@port-of-mars/server/entity/User';
 
 export const dashboardRouter = Router();
 
-function checkUser(req: Request, res: Response){
-}
-
 dashboardRouter
 .get('/', async (req, res, next) => {
   try{

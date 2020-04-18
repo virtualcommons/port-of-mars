@@ -8,29 +8,29 @@ import { GameEvent } from "@port-of-mars/server/entity/GameEvent";
 export type PlayerReadiness = { [role in Role]: boolean }
 
 export interface Game extends Room<GameState> {
-  safeSend(client: Client, msg: Responses): void
-  getPlayer(client: Client): Player
+  safeSend(client: Client, msg: Responses): void;
+  getPlayer(client: Client): Player;
 }
 
 export interface PersistenceAPIConstructor {
-  new(connection: any): Persister
+  new(connection: any): Persister;
 }
 
 export interface Persister {
-  initialize(options: GameOpts, roomId: string): Promise<number>
-  persist(events: Array<ge.GameEvent>, metadata: Metadata): void
-  sync(): Promise<void>
+  initialize(options: GameOpts, roomId: string): Promise<number>;
+  persist(events: Array<ge.GameEvent>, metadata: Metadata): void;
+  sync(): Promise<void>;
 }
 
 export interface GameOpts extends GameStateOpts {
-  persister: Persister
-  tournamentRoundId: number
+  persister: Persister;
+  tournamentRoundId: number;
 }
 
 export interface GameStateOpts {
-  userRoles: { [username: string]: Role }
-  deck: Array<MarsEventData>
-  numberOfGameRounds: number
+  userRoles: { [username: string]: Role };
+  deck: Array<MarsEventData>;
+  numberOfGameRounds: number;
 }
 
 export type Metadata = Pick<GameEvent, 'dateCreated' | 'timeRemaining' | 'gameId'>

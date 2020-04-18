@@ -704,13 +704,13 @@ export class Player extends Schema implements PlayerData {
   accomplishments: AccomplishmentSet;
 
   @type('boolean')
-  ready: boolean = false;
+  ready = false;
 
   @type('number')
   timeBlocks: number = Player.defaults.timeBlocks;
 
   @type('number')
-  contributedUpkeep: number = 0;
+  contributedUpkeep = 0;
 
   @type(ResourceInventory)
   inventory = new ResourceInventory();
@@ -719,9 +719,9 @@ export class Player extends Schema implements PlayerData {
   pendingInvestments = new PendingInvestment();
 
   @type('number')
-  victoryPoints: number = 0;
+  victoryPoints = 0;
 
-  connected: boolean = true;
+  connected = true;
 
   isInvestmentFeasible(investment: InvestmentData) {
     return this.costs.investmentWithinBudget(investment, this.timeBlocks);
@@ -763,10 +763,10 @@ export class Player extends Schema implements PlayerData {
   getLeftOverInvestments() {
     const investment = _.cloneDeep(this.pendingInvestments);
 
-    let leftOvers: number = 0;
-    let minCostResource: string = '';
-    let minCost: number = Infinity;
-    let leftOverInvestments: InvestmentData = PendingInvestment.defaults();
+    let leftOvers = 0;
+    let minCostResource = '';
+    let minCost = Infinity;
+    const leftOverInvestments: InvestmentData = PendingInvestment.defaults();
 
     for (const [k, v] of Object.entries(this.costs)) {
       if (v != Infinity) {
@@ -808,7 +808,7 @@ export class Player extends Schema implements PlayerData {
 
 
   invertPendingInventory() {
-    let invertedInventory = PendingInvestment.defaults();
+    const invertedInventory = PendingInvestment.defaults();
     for (const resource of RESOURCES) {
       invertedInventory[resource as Resource] = this.inventory[resource as Resource] * -1;
     }
@@ -1171,15 +1171,15 @@ export class GameState extends Schema implements GameData {
   }
 
   evaluateGameWinners() {
-    let playerScores: Array<[Role, Number]> = this.players.asArray().map(p => [p.role, p.victoryPoints]);
-    let winners: Array<Role> = [];
+    const playerScores: Array<[Role, number]> = this.players.asArray().map(p => [p.role, p.victoryPoints]);
+    const winners: Array<Role> = [];
 
     for (const p of this.players) {
       playerScores.push([p.role, p.victoryPoints]);
     }
 
     const sorted = _.reverse(_.sortBy(playerScores, [1]));
-    sorted.forEach((s: [Role, Number]) => {
+    sorted.forEach((s: [Role, number]) => {
       if (s[1] === sorted[0][1]) winners.push(s[0]);
     })
 
@@ -1267,8 +1267,8 @@ export class GameState extends Schema implements GameData {
     const fromTradeResources: ResourceAmountData = trade.from.resourceAmount;
 
     if (this.canCompleteTrade(fromPlayer, toPlayer, trade)) {
-      let toMsg: Array<string> = [];
-      let fromMsg: Array<string> = [];
+      const toMsg: Array<string> = [];
+      const fromMsg: Array<string> = [];
 
       const toTradeResources: ResourceAmountData = trade.to.resourceAmount;
 
@@ -1304,7 +1304,7 @@ export class GameState extends Schema implements GameData {
 
   purchaseAccomplishment(role: Role, accomplishment: AccomplishmentData): void {
     const { label, science, government, legacy, finance, culture, upkeep, victoryPoints } = accomplishment;
-    const message: string = `The ${role} purchased an accomplishment: ${label}. Science: ${science}, Government: ${government}, Legacy: ${legacy}, Finance: ${finance}, Culture: ${culture}, System Health: ${upkeep}. This added ${victoryPoints} points to their score.`;
+    const message = `The ${role} purchased an accomplishment: ${label}. Science: ${science}, Government: ${government}, Legacy: ${legacy}, Finance: ${finance}, Culture: ${culture}, System Health: ${upkeep}. This added ${victoryPoints} points to their score.`;
     const category: string = MarsLogCategory.purchaseAccomplishment;
     const performedBy: ServerRole = SERVER;
 

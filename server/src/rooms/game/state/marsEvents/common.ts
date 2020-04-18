@@ -4,14 +4,14 @@ import {GameState} from "@port-of-mars/server/rooms/game/state";
 
 
 export interface MarsEventStateConstructor {
-  new(data?: any): MarsEventState
+  new(data?: any): MarsEventState;
 }
 
 export interface MarsEventState {
-  finalize(game: GameState): void
-  initialize?(game:GameState): void;
+  finalize(game: GameState): void;
+  initialize?(game: GameState): void;
 
-  toJSON(): any
+  toJSON(): any;
 }
 
 export const expandCopies = (marsEventsCollection: Array<[MarsEventData, number]>) =>

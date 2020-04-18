@@ -20,12 +20,13 @@ export class MemoryEmailer implements Emailer {
   }
 }
 
+/* eslint-disable @typescript-eslint/camelcase */
 export class MailgunEmailer implements Emailer {
 
   opts: any;
   transport: any;
 
-  constructor(auth: { api_key: string, domain: string }) {
+  constructor(auth: { api_key: string; domain: string }) {
     if (!auth.api_key || !auth.domain) {
       auth.api_key = 'invalid-api-key';
       auth.domain = 'example.com';

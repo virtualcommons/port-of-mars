@@ -33,17 +33,17 @@ export class MarsEvent extends Schema implements MarsEventData {
   clientViewHandler: EventClientView;
 
   @type('number')
-  elapsed: number = 0;
+  elapsed = 0;
 
   @type('number')
   duration: number;
 
   @type('number')
-  timeDuration:number;
+  timeDuration: number;
 
   state: MarsEventState;
 
-  toJSON(): MarsEventData & { elapsed: number, state: any } {
+  toJSON(): MarsEventData & { elapsed: number; state: any } {
     const {id, name, effect, flavorText, clientViewHandler, elapsed, duration} = this;
     return {
       id, name, effect, flavorText, clientViewHandler, elapsed, duration, state: this.state.toJSON()
@@ -56,9 +56,9 @@ export class MarsEvent extends Schema implements MarsEventData {
 
   resetElapsed(): void {
     this.elapsed = 0;
-  };
+  }
 
   get complete(): boolean {
     return this.elapsed >= this.duration;
-  };
+  }
 }

@@ -1,10 +1,6 @@
 import * as _ from 'lodash';
 import {MarsEventData} from '@port-of-mars/shared/types';
 
-export function getAllMarsEvents(): Array<[MarsEventData, number]> {
-  return marsEvents;
-}
-
 const _marsEvents: Array<[MarsEventData, number]> = [
   [{
     id: 'changingTides',
@@ -242,3 +238,6 @@ const marsEvents: Array<[MarsEventData, number]> = [
   [_.find(_marsEvents, e => e[0].id === 'breakdownOfTrust')![0], 1],
 ];
 
+export function getAllMarsEvents(): Array<[MarsEventData, number]> {
+  return marsEvents;
+}

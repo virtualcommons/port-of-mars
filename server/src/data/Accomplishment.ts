@@ -3,18 +3,6 @@ import {AccomplishmentData, Role} from '@port-of-mars/shared/types';
 
 type AccomplishmentPartitioned = { [role: string]: Array<AccomplishmentData> }
 
-export function getAccomplishmentIDs(role: Role) {
-  return _.map(accomplishments[role], a => a.id);
-}
-
-export function getAccomplishmentByID(role: Role, id: number): AccomplishmentData {
-  const v = _.find(accomplishments[role], a => a.id === id);
-  if (_.isUndefined(v)) {
-    throw new TypeError('accomplishment not found');
-  }
-  return v;
-}
-
 const accomplishments: AccomplishmentPartitioned = _.groupBy([
   {
     id: 1,
@@ -997,3 +985,16 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     effect: ""
   }
 ], 'role');
+
+export function getAccomplishmentIDs(role: Role) {
+  return _.map(accomplishments[role], a => a.id);
+}
+
+export function getAccomplishmentByID(role: Role, id: number): AccomplishmentData {
+  const v = _.find(accomplishments[role], a => a.id === id);
+  if (_.isUndefined(v)) {
+    throw new TypeError('accomplishment not found');
+  }
+  return v;
+}
+

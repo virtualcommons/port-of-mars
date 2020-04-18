@@ -1,11 +1,11 @@
 import pino, { LogFn, Logger } from 'pino';
 
 export interface LogService {
-  trace: LogFn
-  debug: LogFn
-  info: LogFn
-  warn: LogFn
-  fatal: LogFn
+  trace: LogFn;
+  debug: LogFn;
+  info: LogFn;
+  warn: LogFn;
+  fatal: LogFn;
 }
 
 export interface Logging {

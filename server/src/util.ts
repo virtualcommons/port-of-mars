@@ -12,14 +12,14 @@ import { Page, PAGE_META } from "@port-of-mars/shared/routes";
 import { settings } from "@port-of-mars/server/settings";
 
 export function getConnection(): to.Connection {
-  const connection_name = process.env.NODE_ENV === 'test' ? 'test' : 'default';
-  return to.getConnection(connection_name)
+  const connectionName = process.env.NODE_ENV === 'test' ? 'test' : 'default';
+  return to.getConnection(connectionName)
 }
 
 // FIXME: seems like this method should live in shared/routes instead since it's operating on all of the things that shared/routes is responsible for.
 export function toUrl(page: Page): string {
-  const page_metadata = PAGE_META[page];
-  return `${settings.host}/#${page_metadata.path}`
+  const pageMetadata = PAGE_META[page];
+  return `${settings.host}/#${pageMetadata.path}`
 }
 
 export function getRandomIntInclusive(min: number, max: number) {

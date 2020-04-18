@@ -16,7 +16,7 @@ class MarsEventsDeck {
     this.position = data.position;
   }
 
-  toJSON(): { deck: Array<MarsEventData>, position: number } {
+  toJSON(): { deck: Array<MarsEventData>; position: number } {
     return {
       deck: this.deck,
       position: this.position

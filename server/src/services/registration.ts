@@ -9,7 +9,7 @@ export class RegistrationService extends BaseService {
     return `${settings.host}/${registrationLink}`;
   }
 
-  async submitRegistrationMetadata(data: { username: string, email: string, name: string }) {
+  async submitRegistrationMetadata(data: { username: string; email: string; name: string }) {
     const repo = this.em.getRepository(User);
     await repo.update({ username: data.username }, data);
   }

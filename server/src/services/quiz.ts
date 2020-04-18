@@ -31,20 +31,20 @@ export class QuizService extends BaseService {
       .save(quizSubmission);
   }
 
-  async findQuizSubmission(id: number, opts?: Partial<{ relations: Array<string>, where: object }>): Promise<QuizSubmission | undefined> {
+  async findQuizSubmission(id: number, opts?: Partial<{ relations: Array<string>; where: object }>): Promise<QuizSubmission | undefined> {
     return this.em.getRepository(QuizSubmission).findOne({ id, ...opts });
   }
 
-  async getDefaultQuiz(opts?: Partial<{ relations: Array<string>, where: object }>): Promise<Quiz> {
+  async getDefaultQuiz(opts?: Partial<{ relations: Array<string>; where: object }>): Promise<Quiz> {
     const DEFAULT_QUIZ_NAME = 'TutorialQuiz';
     return await this.getQuizByName(DEFAULT_QUIZ_NAME, opts);
   }
 
-  async getQuizById(id: number, opts?: Partial<{ relations: Array<string>, where: object }>) {
+  async getQuizById(id: number, opts?: Partial<{ relations: Array<string>; where: object }>) {
     return await this.em.getRepository(Quiz).findOneOrFail({ id, ...opts });
   }
 
-  async getQuizByName(name: string, opts?: Partial<{ relations: Array<string>, where: object }>): Promise<Quiz> {
+  async getQuizByName(name: string, opts?: Partial<{ relations: Array<string>; where: object }>): Promise<Quiz> {
     return await getConnection()
       .getRepository(Quiz)
       .findOneOrFail({ name, ...opts });
@@ -59,7 +59,7 @@ export class QuizService extends BaseService {
   async getRecentQuizSubmission(
     userId: number,
     quizId: number,
-    opts: Partial<{ relations: Array<string>, where: object, order: object }> = {}
+    opts: Partial<{ relations: Array<string>; where: object; order: object }> = {}
   ): Promise<QuizSubmission | undefined> {
     opts = { order: { dateCreated: 'DESC' }, ...opts };
     return await this.em
@@ -96,7 +96,7 @@ export class QuizService extends BaseService {
     quizId?: number
   ): Promise<boolean> {
 
-    let quiz: Quiz = (quizId) ? await this.getQuizById(quizId, { relations: ['questions'] }) : await this.getDefaultQuiz();
+    const quiz: Quiz = (quizId) ? await this.getQuizById(quizId, { relations: ['questions'] }) : await this.getDefaultQuiz();
     const quizSubmission = await this.getRecentQuizSubmission(userId, quiz.id, { relations: ['responses'] });
     if (!quizSubmission?.responses) return false;
 

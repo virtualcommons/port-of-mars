@@ -37,7 +37,7 @@ export interface BaseEvent {
 export abstract class BaseEvent implements MarsEventState {
 
   toJSON(): MarsEventSerialized {
-    const json:MarsEventSerialized = {
+    const json: MarsEventSerialized = {
       id: getEventName(this.constructor)
     };
     if (this.getData) {
@@ -67,7 +67,7 @@ export class LifeAsUsual extends BaseEvent {
 
 ////////////////////////// BreakdownOfTrust //////////////////////////
 
-export type BreakdownOfTrustData = { [role in Role] : InvestmentData}
+export type BreakdownOfTrustData = { [role in Role]: InvestmentData}
 
 @assocEventId
 export class BreakdownOfTrust extends BaseEvent {
@@ -79,7 +79,7 @@ export class BreakdownOfTrust extends BaseEvent {
     }
   }
 
-  updateSavedResources(player: Role, game:GameState, updatedInventory: InvestmentData){
+  updateSavedResources(player: Role, game: GameState, updatedInventory: InvestmentData){
     game.players[player].pendingInvestments.add(updatedInventory);
   }
 
@@ -98,7 +98,7 @@ export type PersonalGainData = { [role in Role]: boolean };
 @assocEventId
 export class PersonalGain extends BaseEvent {
 
-  private static defaultResponse: boolean = true;
+  private static defaultResponse = true;
 
   private static defaultVotes: PersonalGainData = {
     [CURATOR]: PersonalGain.defaultResponse,
@@ -124,9 +124,9 @@ export class PersonalGain extends BaseEvent {
   }
 
   playersVoteYes(voteResults: PersonalGainData): string  {
-    var player: string = '';
-    var playerYesVotes: Array<String> = [];
-    var formattedPlayerList: string = '';
+    let player = '';
+    const playerYesVotes: Array<string> = [];
+    let formattedPlayerList = '';
 
     for (const role of ROLES) {
       if (voteResults[role]) {
@@ -169,7 +169,7 @@ export class CompulsivePhilanthropy extends BaseEvent {
   votes: CompulsivePhilanthropyData;
   order: Array<Role>;
 
-  constructor(data?: { votes: CompulsivePhilanthropyData, order: Array<Role> }) {
+  constructor(data?: { votes: CompulsivePhilanthropyData; order: Array<Role> }) {
     super();
     this.votes = data?.votes ?? {
       [CURATOR]: CURATOR,
@@ -198,7 +198,8 @@ export class CompulsivePhilanthropy extends BaseEvent {
       voteCounts[philanthropist] += 1;
     }
 
-    let [winners, count]: [Array<Role>, number] = [[], 0];
+    const winners: Array<Role> = []
+    let count = 0;
     for (const potentialWinner of ROLES) {
       if (voteCounts[potentialWinner] > count) {
         winners.splice(0, winners.length, potentialWinner);
@@ -243,12 +244,12 @@ abstract class OutOfCommission extends BaseEvent {
 
 
   playerOutOfCommission(outOfCommission: Role): Role {
-    var player: Role = this.roles[outOfCommission];
+    const player: Role = this.roles[outOfCommission];
     return player;
   }
   
   finalize(game: GameState): void {
-    var role: Role = this.playerOutOfCommission(this.player);
+    const role: Role = this.playerOutOfCommission(this.player);
     game.players[role].timeBlocks = 3;
     game.log(
       `${this.player} has 3 timeblocks to invest during this round.`,

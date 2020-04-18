@@ -363,7 +363,7 @@ export class VotedForPersonalGain extends GameEventWithData {
 gameEventDeserializer.register(VotedForPersonalGain);
 
 export class VotedForPhilanthropist extends GameEventWithData {
-  constructor(public data: { voter: Role, vote: Role }) {
+  constructor(public data: { voter: Role; vote: Role }) {
     super();
   }
 
@@ -478,7 +478,7 @@ export class OutOfCommissionedEntrepreneur extends GameEventWithData {
 gameEventDeserializer.register(OutOfCommissionedEntrepreneur);
 
 export class SelectedInfluence extends GameEventWithData {
-  constructor(public data: { role: Role, influence: Resource }) {
+  constructor(public data: { role: Role; influence: Resource }) {
     super();
   }
 
@@ -494,7 +494,7 @@ export class SelectedInfluence extends GameEventWithData {
 gameEventDeserializer.register(SelectedInfluence);
 
 export class KeptResources extends GameEventWithData {
-  constructor(public data: { role: Role, savedResources: InvestmentData }) {
+  constructor(public data: { role: Role; savedResources: InvestmentData }) {
     super();
   }
 
