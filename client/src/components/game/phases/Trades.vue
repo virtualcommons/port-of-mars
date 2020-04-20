@@ -1,5 +1,5 @@
 <template>
-  <div class="c-trades container">
+  <div class="c-trades container tour-trade-list">
     <div class="wrapper row">
       <div class="trade-list col-12">
         <div class="topbar">
@@ -12,7 +12,7 @@
             Request a Trade
           </button>
         </div>
-        <div class="outer-wrapper tour-trade-list">
+        <div class="outer-wrapper">
           <div class="wrapper">
             <ActiveTrade
               v-for="trade in trades"

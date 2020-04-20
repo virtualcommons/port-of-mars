@@ -1,7 +1,7 @@
 <template>
   <div class="c-investments container tour-invest-action">
     <div class="wrapper row">
-      <div class="timeblockinvestments col-8">
+      <div class="timeblockinvestments col-8 tour-invest">
         <div class="topbar tour-time-blocks">
           <p class="title">Time Blocks</p>
           <TimeBlockMeter
@@ -13,7 +13,7 @@
           <font-awesome-icon :icon="['fas', 'clock']" size="lg" class="icon" />
         </div>
 
-        <div class="cards tour-invest">
+        <div class="cards">
           <InvestmentCard
             v-for="cost in costs"
             v-bind="cost"

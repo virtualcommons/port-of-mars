@@ -1,12 +1,12 @@
-import { Step, TOP, RIGHT } from "@port-of-mars/client/types/tutorial";
-import { Phase } from "@port-of-mars/shared/types";
+import { Step, TOP, RIGHT } from '@port-of-mars/client/types/tutorial';
+import { Phase } from '@port-of-mars/shared/types';
 
 const steps: Array<Step> = [
   {
     target: '.tour-phase',
     content:
-      `The last phase in a round is the discard phase! You` +
-      `can draw new Accomplishment cards to replace any card ` +
+      `The last phase in a round is Discard! You can ` +
+      `draw new Accomplishment cards to replace any card ` +
       `you don't want to keep during the next round.`,
     params: {
       placement: RIGHT

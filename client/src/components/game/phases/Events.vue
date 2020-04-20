@@ -1,7 +1,7 @@
 <template>
   <div class="c-events container tour-event">
     <div class="wrapper row">
-      <div class="event-deck col-4 tour-event-deck">
+      <div class="event-deck col-3 tour-event-deck">
         <div class="topbar">
           <p class="title">Event Deck</p>
         </div>
@@ -32,7 +32,7 @@
           </div>
         </div>
       </div>
-      <div class="active-accomplishments col-3" 
+      <div class="active-accomplishments col-3"
         v-if="shouldShowAccomplishments">
         <div class="topbar">
           <p class="title">Accomplishments</p>
