@@ -22,7 +22,6 @@
         padding: 0.25rem 1rem;
         margin-bottom: 0.5rem;
         @include make-center;
-        // background-color: $new-space-orange;
         background-color: $space-lightgray;
 
         .title {
@@ -33,7 +32,37 @@
         }
       }
 
-      .outer-wrapper {
+      .buttons {
+        height: 10%;
+        flex-shrink: 0;
+        width: 100%;
+        margin-bottom: 0.5rem;
+        @include make-center;
+
+        button {
+          @include reset-button;
+          height: 100%;
+          width: 50%;
+          padding: 0;
+          margin: 0;
+          font-size: $font-med;
+          font-weight: $font-weight-maven-pro-bold !important;
+          color: $space-lightgray;
+          border: 0.125rem solid $space-lightgray;
+
+          &:disabled {
+            opacity: 0.5;
+          }
+        }
+
+        .selected {
+          color: $space-gray;
+          background-color: $space-lightgray;
+        }
+      }
+
+      .event-deck-wrapper,
+      .accomplishments-wrapper {
         flex-grow: 1;
         width: 100%;
         padding: 0.5rem;
@@ -61,7 +90,6 @@
         margin-bottom: 0.5rem;
         @include make-center;
         background-color: $new-space-orange;
-        //background-color: $space-lightgray;
 
         .title {
           margin-bottom: 0;

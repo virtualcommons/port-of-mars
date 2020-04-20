@@ -4,6 +4,7 @@
   border: 0.125rem solid $space-white;
   margin: 0 0 0.5rem 0;
   @include make-column-and-center;
+  flex-shrink: 0;
 
   &:last-child {
     margin-bottom: 0;
