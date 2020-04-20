@@ -5,6 +5,7 @@
   margin: 0 0 0.5rem 0;
   background-color: $space-gray;
   @include make-column-and-top;
+  flex-shrink: 0;
   border: 0.125rem solid $space-white;
 
   &:last-child {
@@ -167,7 +168,8 @@
       }
     }
 
-    .decline {
+    .decline,
+    .cancel {
       background-color: $status-red;
       color: $space-white;
     }
@@ -175,11 +177,6 @@
     .accept {
       background-color: $status-green;
       color: $space-white;
-    }
-
-    .cancel {
-      background-color: $space-white;
-      color: $space-gray;
     }
   }
 }

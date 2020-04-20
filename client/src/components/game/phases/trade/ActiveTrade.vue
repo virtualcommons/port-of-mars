@@ -101,7 +101,7 @@
         @click="handleTradeCancel"
         class="cancel"
       >
-        <font-awesome-icon :icon="['fas', 'undo']" size="sm" class="icon" />
+        <font-awesome-icon :icon="['fas', 'times']" size="sm" class="icon" />
       </button>
     </div>
   </div>
@@ -116,12 +116,10 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons/faExchangeAlt';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
-import { faUndo } from '@fortawesome/free-solid-svg-icons/faUndo';
 
 library.add(faExchangeAlt);
 library.add(faTimes);
 library.add(faCheck);
-library.add(faUndo);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 @Component({})
