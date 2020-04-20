@@ -47,7 +47,20 @@ const steps: Array<Step> = [
         }
       }
     ]
-  }
+  },
+  {
+    target: '.tour-ready-to-advance-button',
+    content: `Click the Ready to Advance button when you have finished discarding. `,
+    params: {
+      placement: 'left'
+    },
+    stateTransform: [
+      {
+        SET_LAYOUT: 'tutorial',
+        required: true
+      }
+    ]
+  },
 ];
 
 export default steps;

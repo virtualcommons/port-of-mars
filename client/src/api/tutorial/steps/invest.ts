@@ -123,7 +123,6 @@ const steps: Array<Step> = [
       }
     ]
   },
-
   {
     target: '.tour-invest-action',
     content: 'Quiz Question',
@@ -131,21 +130,6 @@ const steps: Array<Step> = [
       placement: RIGHT,
       tutorialElementId: 'timeblocks'
     }
-  },
-  {
-    target: '.tour-ready-to-advance-button',
-    content:
-      `Click the Ready to Advance button when you have finished investing your timeblocks. ` +
-      `The Investment Phase will end as soon as all members of your group have finished investing.`,
-    params: {
-      placement: 'left'
-    },
-    stateTransform: [
-      {
-        SET_LAYOUT: 'tutorial',
-        required: true
-      }
-    ]
   },
   {
     target: '.tour-invest',
@@ -163,7 +147,22 @@ const steps: Array<Step> = [
     params: {
       placement: RIGHT
     }
-  }
+  },
+  {
+    target: '.tour-ready-to-advance-button',
+    content:
+      `Click the Ready to Advance button when you have finished investing your timeblocks. ` +
+      `The Investment Phase ends as soon as all members of your habitat have finished investing.`,
+    params: {
+      placement: 'left'
+    },
+    stateTransform: [
+      {
+        SET_LAYOUT: 'tutorial',
+        required: true
+      }
+    ]
+  },
 ];
 
 export default steps;

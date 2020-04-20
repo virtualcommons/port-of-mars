@@ -90,7 +90,20 @@ const steps: Array<Step> = [
         required: true
       }
     ]
-  }
+  },
+  {
+    target: '.tour-ready-to-advance-button',
+    content: `Click the Ready to Advance button when you have finished purchasing Accomplishments. `,
+    params: {
+      placement: 'left'
+    },
+    stateTransform: [
+      {
+        SET_LAYOUT: 'tutorial',
+        required: true
+      }
+    ]
+  },
 ];
 
 export default steps;
