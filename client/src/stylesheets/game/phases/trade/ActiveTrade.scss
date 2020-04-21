@@ -1,4 +1,5 @@
 .c-trade {
+  @include default-transition-base;
   width: 100%;
   max-width: none;
   padding: 0;
@@ -6,25 +7,29 @@
   background-color: $space-gray;
   @include make-column-and-top;
   flex-shrink: 0;
-  border: 0.125rem solid $space-white;
+  border: 0.125rem solid;
 
   &:last-child {
     margin: 0;
   }
 
   .title-wrapper {
+    @include default-transition-base;
+
     width: 100%;
     max-width: none;
     padding: 0.5rem;
     margin: 0;
     @include make-center;
-    background-color: $space-white;
+    //background-color: $space-white;
 
     .title {
+    @include default-transition-base;
+
       margin-bottom: 0;
       font-size: $font-med;
       font-weight: $font-weight-maven-pro-medium;
-      color: $space-gray;
+      //color: $space-gray;
       text-align: center;
     }
   }
@@ -179,4 +184,25 @@
       color: $space-white;
     }
   }
+
+  .status-text{
+    font-size: $font-large;
+    font-weight: bold;
+  }
 }
+
+.hide-trade{
+  animation: hide 0.3s linear 1.5s 1 forwards;
+}
+
+@keyframes hide{
+  0% {
+    opacity: 100%;
+  }
+
+  100%{
+    opacity: 0%;
+    height:0;
+  }
+}
+

@@ -148,6 +148,7 @@ export default class TradeRequest extends Vue {
       const tradeDataPackage: TradeData = {
         from: fromPackage,
         to: toPackage,
+        status: 'Active',
       };
       this.api.sendTradeRequest(tradeDataPackage);
       if (!this.isInTutorial) {

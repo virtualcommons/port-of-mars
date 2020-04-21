@@ -137,7 +137,9 @@ describe('trading validations', () => {
         finance: 5,
         culture: 0
       }
-    });
+    },
+    'Active'
+    );
 
   g.tradeSet['valid-request'] = new Trade(
     {
@@ -159,7 +161,9 @@ describe('trading validations', () => {
         finance: 0,
         culture: 3
       }
-    });
+    },
+    'Active'
+    );
 
   const invalidTrade: Trade = g.tradeSet['invalid-request'];
   const validTrade: Trade = g.tradeSet['valid-request'];

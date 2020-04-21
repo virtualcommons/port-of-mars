@@ -1,7 +1,9 @@
 <template>
-  <div class="c-trade container">
-    <div class="title-wrapper">
-      <p class="title">New Trade Request</p>
+  <div class="c-trade container" :style="statusColor('borderColor')"
+    v-bind:class="{'hide-trade': !tradeIsActive}"
+    v-show="showTrade">
+    <div class="title-wrapper" :style="statusColor('backgroundColor')">
+      <p class="title" :style="textColor">New Trade Request</p>
     </div>
     <div class="trade-wrapper row">
       <div class="to-container col">
@@ -80,7 +82,7 @@
         </div>
       </div>
     </div>
-    <div class="button-wrapper">
+    <div class="button-wrapper" v-show="tradeIsActive">
       <button
         v-if="role === to.role && role !== from.role"
         @click="handleTradeReject"
@@ -104,13 +106,16 @@
         <font-awesome-icon :icon="['fas', 'times']" size="sm" class="icon" />
       </button>
     </div>
+    <div class="status-text" :style="statusColor('color')" v-show="!tradeIsActive">
+      <p>Trade Status: {{status}}</p>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Inject } from 'vue-property-decorator';
+import { Vue, Component, Prop, Inject, Watch } from 'vue-property-decorator';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
-import { TradeAmountData, RESOURCES, Role } from '@port-of-mars/shared/types';
+import { TradeAmountData, RESOURCES, Role, TradeStatus } from '@port-of-mars/shared/types';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons/faExchangeAlt';
@@ -127,7 +132,19 @@ export default class ActiveTrade extends Vue {
   @Prop() private from!: TradeAmountData;
   @Prop() private to!: TradeAmountData;
   @Prop() private id!: string;
+  @Prop() private status!:string;
   @Inject() api!: GameRequestAPI;
+
+  private showTrade = true;
+  private tradeIsActive = true;
+
+  @Watch('status', {immediate: true})
+  shouldShowTrade(status:string){
+    if(status != 'Active'){
+      this.tradeIsActive = false;
+      setTimeout(() => this.showTrade = false, 1900);
+    }
+  }
 
   get role() {
     return this.$tstore.state.role;
@@ -164,6 +181,26 @@ export default class ActiveTrade extends Vue {
 
   private frameStyle(role: Role) {
     return { backgroundColor: `var(--color-${role})` };
+  }
+
+  statusColor(type:string){
+    let color = 'white';
+    if(this.status == 'Accepted'){
+      color = 'var(--status-green)'
+    }
+    else if(this.status == 'Cancelled' || this.status == 'Rejected'){
+      color = 'var(--status-red)'
+    }
+    
+    return {[type]: color};
+    
+  }
+
+  get textColor(){
+    if(this.status != 'Active'){
+      return {color: 'white'}
+    }
+    return {color:'black'};
   }
 }
 </script>

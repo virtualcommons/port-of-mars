@@ -45,7 +45,8 @@ export default class Trades extends Vue {
     const trades = Object.keys(tradeSet).map(id => ({
       id,
       from: tradeSet[id].from,
-      to: tradeSet[id].to
+      to: tradeSet[id].to,
+      status: tradeSet[id].status
     }));
     return trades;
   }
