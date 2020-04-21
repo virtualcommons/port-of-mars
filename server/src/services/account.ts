@@ -11,6 +11,11 @@ export class AccountService extends BaseService {
     return this.em.getRepository(User);
   }
 
+   isRegisteredAndValid(user: User): boolean {
+    // FIXME: @cpritcha did this
+    return !!user.isVerified && !!user.email;
+  }
+
   async findByUsername(username: string): Promise<User | undefined> {
     return await this.getRepository().findOne({ username })
   }

@@ -13,7 +13,6 @@ import * as Sentry from '@sentry/node';
 import { Server } from 'colyseus';
 import { GameRoom } from '@port-of-mars/server/rooms/game';
 import { RankedLobbyRoom } from '@port-of-mars/server/rooms/lobby';
-import { AccountService } from '@port-of-mars/server/services/account';
 import { User } from '@port-of-mars/server/entity';
 import { DBPersister } from '@port-of-mars/server/services/persistence';
 import { ClockTimer } from '@gamestdio/timer/lib/ClockTimer';
@@ -134,7 +133,7 @@ async function createApp() {
       // successful authentication
       if (req.user) {
         const user = (req.user as User)
-        if (user.isRegisteredAndValid()) {
+        if (getServices().account.isRegisteredAndValid(user)) {
           res.redirect(getPagePath(DASHBOARD_PAGE));
         }
         else {

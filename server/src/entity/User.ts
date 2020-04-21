@@ -36,8 +36,4 @@ export class User {
   @Column({ default: false })
   isVerified!: boolean;
 
-  isRegisteredAndValid(): boolean {
-    // FIXME: @cpritcha did this
-    return !!this.isVerified && !!this.email;
-  }
 }
