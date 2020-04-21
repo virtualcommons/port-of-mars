@@ -13,7 +13,7 @@ export function isPage(pageName: string): pageName is Page {
 }
 
 export function getPagePath(page: Page): string {
-  return `/#/${PAGE_META[page].path}`;
+  return `/#${PAGE_META[page].path}`;
 }
 
 export const PAGE_META: { [p in Page]: { path: string, name: string, props?: boolean, meta: { requiresAuth: boolean} }} = {
