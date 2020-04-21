@@ -24,6 +24,7 @@ import {
   ServerRole,
   TradeAmountData,
   TradeData,
+  TradeStatus,
   TradeSetData,
   RESOURCES,
   MarsLogCategory
@@ -607,21 +608,24 @@ export class TradeAmount extends Schema {
 }
 
 export class Trade extends Schema {
-  constructor(from: TradeAmountData, to: TradeAmountData) {
+  constructor(from: TradeAmountData, to: TradeAmountData, status: TradeStatus) {
     super();
     this.from = new TradeAmount(from.role, from.resourceAmount);
     this.to = new TradeAmount(to.role, to.resourceAmount);
+    this.status = status;
   }
 
   fromJSON(data: TradeData) {
     this.from.fromJSON(data.from);
     this.to.fromJSON(data.to);
+    this.status = data.status;
   }
 
   toJSON(): TradeData {
     return {
       from: this.from.toJSON(),
-      to: this.to.toJSON()
+      to: this.to.toJSON(),
+      status: this.status
     };
   }
 
@@ -630,6 +634,9 @@ export class Trade extends Schema {
 
   @type(TradeAmount)
   to: TradeAmount;
+
+  @type('string')
+  status:TradeStatus
 
   apply(state: GameState) {
     const pFrom = state.players[this.from.role];
@@ -641,6 +648,8 @@ export class Trade extends Schema {
 
     pTo.inventory.update(_.mapValues(this.to.resourceAmount, r => -r!));
     pTo.inventory.update(this.from.resourceAmount);
+
+    this.status = 'Accepted';
   }
 }
 
@@ -965,7 +974,7 @@ export class GameState extends Schema implements GameData {
     Object.keys(this.tradeSet).forEach(k => delete this.tradeSet[k]);
     Object.keys(data.tradeSet).forEach(k => {
       const tradeData: TradeData = data.tradeSet[k];
-      this.tradeSet[k] = new Trade(tradeData.from, tradeData.to);
+      this.tradeSet[k] = new Trade(tradeData.from, tradeData.to, 'Active');
     });
 
     const winners = _.map(data.winners, w => w);
@@ -1211,7 +1220,7 @@ export class GameState extends Schema implements GameData {
     const fromRole: Role = trade.from.role;
     const id = uuid();
 
-    this.tradeSet[id] = new Trade(trade.from, trade.to);
+    this.tradeSet[id] = new Trade(trade.from, trade.to, 'Active');
 
     switch (reason) {
       case 'sent-trade-request':
@@ -1231,18 +1240,18 @@ export class GameState extends Schema implements GameData {
     const toRole: Role = this.tradeSet[id].to.role;
     const fromRole: Role = this.tradeSet[id].from.role;
 
-    delete this.tradeSet[id];
-
     switch (reason) {
       case 'reject-trade-request':
         message = `The ${toRole} rejected a trade request from the ${fromRole}.`;
         category = MarsLogCategory.rejectTrade;
         this.log(message, category, performedBy);
+        this.tradeSet[id].status = 'Rejected';
         break;
       case 'cancel-trade-request':
         message = `The ${fromRole} canceled a trade request sent to the ${toRole}.`;
         category = MarsLogCategory.cancelTrade;
         this.log(message, category, performedBy);
+        this.tradeSet[id].status = 'Cancelled';
         break;
       default:
         break;
@@ -1294,12 +1303,13 @@ export class GameState extends Schema implements GameData {
       message = `The ${fromRole} has traded ${fromMsg.join(', ')} in exchange for ${toMsg.join(', ')} from the ${toRole}.`;
       category = MarsLogCategory.acceptTrade;
       this.log(message, category, performedBy);
+      this.tradeSet[id].status = 'Accepted';
     } else {
       message = `The ${fromRole} is unable to fulfill a trade request previously sent to the ${toRole}. The trade will be removed.`;
       category = MarsLogCategory.invalidTrade;
       this.log(message, category, performedBy);
+      this.tradeSet[id].status = 'Cancelled';
     }
-    delete this.tradeSet[id];
   }
 
   purchaseAccomplishment(role: Role, accomplishment: AccomplishmentData): void {

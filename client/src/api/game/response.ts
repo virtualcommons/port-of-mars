@@ -196,6 +196,11 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
     store.commit('REMOVE_FROM_TRADES', { id });
   };
 
+  room.state.tradeSet.onChange = (event: Schemify<TradeData>, id: string) => {
+    const rawEvent: TradeData = deschemify(event);
+    store.commit('UPDATE_TRADE_STATUS', { id, status: rawEvent.status });
+  };
+
   room.state.onChange = (changes: Array<any>) => {
     changes.forEach((change) => {
       if (change.field === 'phase') {

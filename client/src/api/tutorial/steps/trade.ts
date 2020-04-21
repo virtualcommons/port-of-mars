@@ -50,6 +50,7 @@ const steps: Array<Step> = [
                 science: 1,
               },
             },
+            status: 'Active',
           },
         },
       },

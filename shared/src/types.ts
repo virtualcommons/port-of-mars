@@ -158,9 +158,13 @@ export interface TradeAmountData {
   resourceAmount: ResourceAmountData;
 }
 
+
+export type TradeStatus = 'Active' | 'Accepted' | 'Rejected' | 'Cancelled';
+
 export interface TradeData {
   from: TradeAmountData;
   to: TradeAmountData;
+  status: TradeStatus;
 }
 
 export type NullPartner = '';
