@@ -10,7 +10,7 @@
               </div>
             </div>
           </div>
-          <div class="information col-6 ">
+          <div class="information col-6">
             <p class="role">
               {{
                 playerData.isSelf ? `You (${modalData.role})` : modalData.role
@@ -48,15 +48,13 @@
                 class="wrapper"
                 v-else-if="playerData.isSelf || isUnderAudit"
               >
-                <Inventory
-                  :isSelf="false"
-                  :role="modalData.role"
-                  :displaySystemHealth="false"
-                />
+                <Inventory :isSelf="false" :role="modalData.role" />
               </div>
             </div>
           </div>
-          <div class="purchasable-accomplishments col-8 tour-player-info-modal-accomplishments">
+          <div
+            class="purchasable-accomplishments col-8 tour-player-info-modal-accomplishments"
+          >
             <div class="topbar">
               <p class="title">Accomplishments</p>
             </div>
