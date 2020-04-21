@@ -1,20 +1,17 @@
 <template>
   <div class="c-phaseswitcher">
     <div class="wrapper row">
-      <Events v-if="gamePhase == phase.events" />
-      <Investments v-else-if="gamePhase == phase.invest" />
-      <Trades v-else-if="gamePhase == phase.trade" />
-      <Purchase v-else-if="gamePhase == phase.purchase" />
-      <Discard v-else-if="gamePhase == phase.discard" />
-      <Default v-else />
+      <transition name="component-fade" mode="out-in">      
+        <component v-bind:is="phase[gamePhase]"></component>
+      </transition>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import Investments from './phases/Investments.vue';
-import Trades from './phases/Trades.vue';
+import Invest from './phases/Investments.vue';
+import Trade from './phases/Trades.vue';
 import Purchase from './phases/Purchase.vue';
 import Discard from './phases/Discard.vue';
 import Events from './phases/Events.vue';
@@ -23,11 +20,11 @@ import { Phase } from '@port-of-mars/shared/types';
 
 @Component({
   components: {
-    Trades,
+    Trade,
     Purchase,
     Discard,
     Events,
-    Investments,
+    Invest,
     Default,
   },
 })
@@ -37,7 +34,6 @@ export default class Phases extends Vue {
   }
 
   get gamePhase() {
-    // return this.phase.trade;
     return this.$store.state.phase;
   }
 }
