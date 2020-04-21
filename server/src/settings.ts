@@ -24,22 +24,23 @@ const dev: () => AppSettings = () => ({
   lobby: new LobbySettings(15)
 });
 
-const staging: () => AppSettings = () => ({
-  emailer: new MemoryEmailer(),
-  host: 'https://alpha.portofmars.asu.edu',
-  logging: new DevLogging(),
-  secret: SECRET_KEY,
-  lobby: new LobbySettings(15)
-});
-
-const prod: () => AppSettings = () => {
+const staging: () => AppSettings = () => {
   const apiKey = fs.readFileSync('/run/secrets/mail_api_key', 'utf-8').trim();
   const domain = 'mg.comses.net';
   return {
     emailer: new MailgunEmailer({ api_key: apiKey, domain }),
-    host: 'https://portofmars.asu.edu',
+    host: 'https://alpha.portofmars.asu.edu',
     logging: new DevLogging(),
     secret: SECRET_KEY,
+    lobby: new LobbySettings(15)
+  };
+};
+
+const prod: () => AppSettings = () => {
+  const stagingSettings = staging();
+  return {
+    ...stagingSettings,
+    host: 'https://portofmars.asu.edu',
     lobby: new LobbySettings(15, false)
   };
 };
