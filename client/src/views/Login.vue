@@ -8,52 +8,58 @@
       <div class="submit" v-if="isLoggedIn">
         <input type="button" @click="logout" :value="logoutText" />
       </div>
-      <form class="login-form" v-else>
-        <div class="input-username">
-          <label for="username">ASURITE ID</label>
-          <div class="input-wrapper">
-            <input
-              type="text"
-              id="username"
-              name="username"
-              autocomplete="off"
-              v-model="username"
-            />
+      <div v-else>
+        <BButton squared size="lg" variant="dark" :href="asuLoginUrl" class="button">
+        Sign In via ASU CAS
+        </BButton>
+        <form class="login-form" v-if="isDevLoginEnabled">
+          <div class="input-username">
+            <label for="username">Developer Login (TESTING ONLY)</label>
+            <div class="input-wrapper">
+              <input placeholder="Username" type="text" id="username" name="username" autocomplete="off" v-model="username" />
+            </div>
           </div>
-        </div>
-        <div class="submit">
-          <input
-            :disabled="submitDisabled"
-            type="submit"
-            @click="login"
-            value="Login"
-          />
-        </div>
-        <p class="error" v-if="error">
-          {{ error }}
-        </p>
-      </form>
+          <div class="submit">
+            <input :disabled="submitDisabled" type="submit" @click="login" value="Login" />
+          </div>
+          <p class="error" v-if="error">{{ error }}</p>
+        </form>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
-import {DASHBOARD_PAGE, GAME_PAGE, LOBBY_PAGE, LOGIN_PAGE} from '@port-of-mars/shared/routes';
-import {url} from "@port-of-mars/client/util";
+import { Vue, Component } from "vue-property-decorator";
+import {
+  DASHBOARD_PAGE,
+  GAME_PAGE,
+  LOBBY_PAGE,
+  LOGIN_PAGE
+} from "@port-of-mars/shared/routes";
+import { url } from "@port-of-mars/client/util";
+import { isDevOrStaging } from "@port-of-mars/shared/settings";
+import { BButton } from "bootstrap-vue";
+
 
 @Component({})
 export default class Login extends Vue {
-  username: string = '';
-  isLoggedIn: boolean = false;
-  error: string = '';
+  username = "";
+  isLoggedIn = false;
+  error = "";
+  isDevLoginEnabled = false;
 
   created() {
     this.isLoggedIn = !!this.$ajax.username;
+    this.isDevLoginEnabled = isDevOrStaging();
   }
 
   get submitDisabled() {
     return !this.username;
+  }
+
+  get asuLoginUrl() {
+    return url("/asulogin");
   }
 
   get logoutText() {
@@ -69,7 +75,7 @@ export default class Login extends Vue {
   async login(e: Event) {
     e.preventDefault();
     const fd = new FormData((e as any).target.form);
-    const data: any = { username: fd.get('username'), password: 'testing' };
+    const data: any = { username: fd.get("username"), password: "testing" };
     const response = await this.$ajax.post(this.loginUrl, data);
     await this.$ajax.setLoginCreds(response);
     if (response.status === 200) {
@@ -80,11 +86,11 @@ export default class Login extends Vue {
   }
 
   get loginUrl() {
-    return url(`/login`);
+    return url("/login");
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/views/Login.scss';
+@import "@port-of-mars/client/stylesheets/views/Login.scss";
 </style>
