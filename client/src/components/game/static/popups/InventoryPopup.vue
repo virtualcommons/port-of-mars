@@ -52,7 +52,9 @@ export default class InventoryPopup extends Vue {
   }
 
   get position() {
-    return this.popupVisible ? { height: '48rem',padding: '0.5rem' } : { height: '0rem' };
+    return this.popupVisible
+      ? { height: '48rem', padding: '0.5rem' }
+      : { height: '0rem' };
   }
 
   get investments() {

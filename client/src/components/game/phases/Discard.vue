@@ -7,7 +7,7 @@
         </div>
         <div class="outer-wrapper">
           <div class="wrapper">
-            <Inventory :isSelf="true" :displaySystemHealth="false" />
+            <Inventory :isSelf="true" />
           </div>
         </div>
       </div>

@@ -105,7 +105,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 export default class Inventory extends Vue {
   @Prop({ default: true }) private isSelf!: boolean;
   @Prop({ default: RESEARCHER }) private role!: Role;
-  @Prop({ default: true }) private displaySystemHealth!: boolean;
+  @Prop({ default: false }) private displaySystemHealth!: boolean;
   private costsVisible: boolean = false;
 
   get playerData() {

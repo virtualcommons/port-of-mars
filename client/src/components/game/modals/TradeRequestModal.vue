@@ -31,7 +31,7 @@
         </div>
         <div v-if="selectedView === 'Inventory'" class="inventory-wrapper">
           <div class="inventory">
-            <Inventory :isSelf="true" :displaySystemHealth="false" />
+            <Inventory :isSelf="true" />
           </div>
         </div>
         <div
