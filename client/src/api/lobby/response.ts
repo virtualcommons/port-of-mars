@@ -21,6 +21,16 @@ export function applyWaitingServerResponses<T>(
 ) {
   const store = component.$tstore;
   const router = component.$router;
+  room.onError((message: string) => {
+    console.log("Error occurred in room..");
+    console.log(message);
+    alert("sorry, we encountered an error, please try refreshing the page or contact us");
+  });
+
+  room.onLeave((code: number) => {
+    console.log(`client left the room: ${code}`);
+  });
+
   room.onMessage((msg: WaitingResponses) => {
     switch (msg.kind) {
       case 'joined-client-queue':

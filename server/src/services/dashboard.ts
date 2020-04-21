@@ -16,7 +16,7 @@ export class DashboardService extends BaseService {
   getPassedTutorialActionItem(user: User): ActionItem {
     return {
       done: user.passedQuiz,
-      description: 'Complete Tutorial',
+      description: 'Take Tutorial',
       link: {kind: 'internal', data: TUTORIAL_PAGE}
     }
   }
