@@ -26,7 +26,7 @@ export class AccountService extends BaseService {
 
   async getOrCreateUser(username: string, profile?: any): Promise<User> {
     let user = await this.getRepository().findOne({ username });
-    logger.info('getOrCreateUser profile: ', profile);
+    logger.info('getOrCreateUser profile: %o', profile);
     if (!user) {
       user = new User();
       user.name = '';
