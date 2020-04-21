@@ -12,6 +12,10 @@ export function isPage(pageName: string): pageName is Page {
   return PAGES.includes(pageName as Page);
 }
 
+export function getPagePath(page: Page): string {
+  return `/#/${PAGE_META[page].path}`;
+}
+
 export const PAGE_META: { [p in Page]: { path: string, name: string, props?: boolean, meta: { requiresAuth: boolean} }} = {
   [LOGIN_PAGE]: {
     path: '/',

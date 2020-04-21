@@ -14,18 +14,19 @@ import { Server } from 'colyseus';
 import { GameRoom } from '@port-of-mars/server/rooms/game';
 import { RankedLobbyRoom } from '@port-of-mars/server/rooms/lobby';
 import { AccountService } from '@port-of-mars/server/services/account';
-import { User } from '@port-of-mars/server/entity/User';
+import { User } from '@port-of-mars/server/entity';
 import { DBPersister } from '@port-of-mars/server/services/persistence';
 import { ClockTimer } from '@gamestdio/timer/lib/ClockTimer';
 import { quizRouter } from '@port-of-mars/server/routes/quiz';
 import { dashboardRouter } from '@port-of-mars/server/routes/dashboard';
+import { LOGIN_PAGE, REGISTER_PAGE, DASHBOARD_PAGE, getPagePath } from "@port-of-mars/shared/routes";
 
 import * as fs from 'fs';
 import { registrationRouter } from "@port-of-mars/server/routes/registration";
 import { settings } from "@port-of-mars/server/settings";
 import { isDev } from '@port-of-mars/shared/settings';
-import {getServices} from "@port-of-mars/server/services";
-import {gameRouter} from "@port-of-mars/server/routes/game";
+import { getServices } from "@port-of-mars/server/services";
+import { gameRouter } from "@port-of-mars/server/routes/game";
 
 const logger = settings.logging.getLogger(__filename);
 const NODE_ENV = process.env.NODE_ENV || 'development';
@@ -50,7 +51,7 @@ passport.use(new CasStrategy(
   },
   // verify callback
   function (username: string, profile: object, done: Function) {
-    getServices().account.getOrCreateUser(username).then(user => done(null, user));
+    getServices().account.getOrCreateUser(username, profile).then(user => done(null, user));
   }
 ));
 passport.use(new LocalStrategy(
@@ -132,16 +133,18 @@ async function createApp() {
     function (req, res) {
       // successful authentication
       if (req.user) {
-        const username: string = (req.user as User).username;
-        if (username?.length > 0) {
-          res.redirect('/');
-          return;
+        const user = (req.user as User)
+        if (user.isRegisteredAndValid()) {
+          res.redirect(getPagePath(DASHBOARD_PAGE));
         }
-        logger.warn('no username attached to', req);
-        res.redirect('/');
+        else {
+          logger.warn('invalid / unregistered user %o', user);
+          res.redirect(getPagePath(REGISTER_PAGE));
+        }
       } else {
-        logger.warn('no user attached to', req);
-        res.redirect('/')
+        const loginPath = getPagePath(LOGIN_PAGE);
+        logger.warn('no user on the request, returning to login %o', req);
+        res.redirect(loginPath)
       }
     }
   );
