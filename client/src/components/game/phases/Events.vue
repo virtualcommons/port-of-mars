@@ -1,10 +1,7 @@
 <template>
   <div class="c-events container tour-event">
     <div class="wrapper row">
-      <div
-        v-if="shouldShowAccomplishments"
-        class="event-deck col-4 tour-event-deck"
-      >
+      <div class="event-deck col-4 tour-event-deck">
         <div class="buttons">
           <button
             @click="switchView('Event Deck')"
@@ -46,22 +43,6 @@
           </div>
         </div>
       </div>
-      <div v-else class="event-deck col-4 tour-event-deck">
-        <div class="topbar">
-          <p class="title">Active Accomplishments</p>
-        </div>
-        <div class="accomplishments-wrapper">
-          <div class="wrapper">
-            <AccomplishmentCard
-              class="cards"
-              v-for="accomplishment in accomplishmentCards"
-              :key="accomplishment.id"
-              :accomplishment="accomplishment"
-              :showDescription="false"
-            />
-          </div>
-        </div>
-      </div>
       <div class="active-events tour-active-events col-8">
         <div class="topbar">
           <p class="title">
@@ -79,7 +60,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Watch } from 'vue-property-decorator';
 import EventCard from './events/EventCard.vue';
 import EventContainer from './events/events/EventContainer.vue';
 import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
@@ -95,29 +76,32 @@ import { MarsEventData, Phase } from '@port-of-mars/shared/types';
 export default class Events extends Vue {
   private selectedView: string = 'Event Deck';
 
-  // NOTE :: LIFECYCLE HOOKS
+  // NOTE :: LIFECYCLE HOOKS & WATCHERS
 
-  updated(): any {
-    const elem = this.$el.querySelector('.event-scroll');
+  updated() {
+    let elem = this.$el.querySelector('.event-scroll');
     if (elem) {
       elem!.scrollTop = elem!.scrollHeight;
+    }
+  }
+
+  @Watch('eventsProcessed')
+  onEventsProcessedChange(val: any, oldVal: any) {
+    if (this.selectedView === 'Active Accomplishments') {
+      this.selectedView = 'Event Deck';
     }
   }
 
   // NOTE :: EVENT SPECIFIC
 
   get currentEvent(): MarsEventData {
-    const current: MarsEventData = this.$store.getters.currentEvent;
-    return current;
+    return this.$store.getters.currentEvent;
   }
 
   get eventTitle() {
-    if (this.eventsProcessed && this.currentEvent) {
-      return `Active Event #${this.eventsProcessed + 1}: ${
-        this.currentEvent.name
-      }`;
-    }
-    return `Active Event: None`;
+    return this.currentEvent
+      ? `Active Event #${this.eventsProcessed + 1}: ${this.currentEvent.name}`
+      : `No Active Event`;
   }
 
   get eventsProcessed(): number {
@@ -125,21 +109,13 @@ export default class Events extends Vue {
   }
 
   get eventNumber(): number {
-    const eventNumber = this.$tstore.state.marsEventsProcessed + 1;
-    return eventNumber;
+    return this.$tstore.state.marsEventsProcessed + 1;
   }
 
   // NOTE :: VIEW HANDLING
 
   private switchView(view: string) {
     this.selectedView = view;
-  }
-
-  get shouldShowAccomplishments(): boolean {
-    return (
-      this.currentEvent.clientViewHandler == 'INFLUENCES_SELECT' ||
-      this.currentEvent.clientViewHandler == 'INFLUENCES_DRAW'
-    );
   }
 
   // NOTE :: EVENT CARDS
