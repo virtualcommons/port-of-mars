@@ -14,6 +14,25 @@ const steps: Array<Step> = [
     stateTransform: [
       {
         SET_GAME_PHASE: Phase.discard,
+        SET_ACTIVE_ACCOMPLISHMENTS: {
+          data: {
+            id: 6,
+            role: 'Researcher',
+            label: 'Card you cannot currently purchase',
+            flavorText:
+              'Dummy card that you should throw away!',
+            science: 3,
+            government: 1,
+            legacy: 0,
+            finance: 0,
+            culture: 0,
+            upkeep: 0,
+            victoryPoints: 1,
+            effect:
+              'none'
+          },
+          role: 'Researcher'
+        }
       }
     ]
   },
@@ -26,25 +45,6 @@ const steps: Array<Step> = [
     stateTransform: [
       {
         required: true,
-        SET_ACTIVE_ACCOMPLISHMENTS: {
-          data: {
-            id: 6,
-            role: 'Researcher',
-            label: 'Highly Specialized',
-            flavorText:
-              'You\'re solely focused on your research, to the exclusion of all other pursuits.',
-            science: 3,
-            government: 0,
-            legacy: 0,
-            finance: 0,
-            culture: 0,
-            upkeep: 0,
-            victoryPoints: 1,
-            effect:
-              'You can no longer make Politics or Legacy Influence. Science Influence only costs 1 Time Block to make.'
-          },
-          role: 'Researcher'
-        }
       }
     ]
   },
