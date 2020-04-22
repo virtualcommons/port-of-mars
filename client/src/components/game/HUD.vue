@@ -20,7 +20,7 @@
       </div>
 
       <!-- REFACTOR :: GameStatusContainer -->
-      <div class="gamestatus col-6 tour-round tour-phase-time tour-phase-instructions tour-phase">
+      <div class="gamestatus col-6 tour-phase">
         <div class="wrapper container">
           <div class="row">
             <div class="information col-5">

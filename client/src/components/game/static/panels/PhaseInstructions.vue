@@ -1,5 +1,5 @@
 <template>
-  <div class="c-phaseinstructions">
+  <div class="c-phaseinstructions tour-phase-instructions">
     <div class="wrapper">
       <p class="title">Phase Instructions</p>
       <div class="instructions">

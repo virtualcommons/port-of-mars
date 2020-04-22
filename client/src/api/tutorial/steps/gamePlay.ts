@@ -3,24 +3,46 @@ import { CURATOR } from '@port-of-mars/shared/types';
 
 const steps: Array<Step> = [
   {
-    target: '.tour-round',
-    content: `The game progresses in rounds. The number of rounds varies for every game so a ` +
-             `game can end at any time.`,
+    target: '.tour-phase',
+    content: `This is where you will find information about the current game state.`,
     params: {
       placement: LEFT
     }
   },
   {
-    target: '.tour-phase-time',
+    target: '.tour-round',
+    content: `The game progresses in rounds. The number of rounds varies for every game so a game can end at any time.`,
+    params: {
+      placement: LEFT
+    }
+  },
+  {
+    target: '.tour-current-phase',
     content: `There are multiple phases in a round: Events, Invest, Trade, Purchase ` +
-             `and Discard. Each phase has a time limit of 5 minutes.`,
+             `and Discard.`,
+    params: {
+      placement: LEFT
+    }
+  },
+  {
+    target: '.tour-time-remaining',
+    content: `Each phase has a time limit of 5 minutes. The timer will turn red and blink when 
+    there is a minute left in the round.`,
+    params: {
+      placement: LEFT
+    }
+  },
+  {
+    target: '.tour-ready-to-advance-button',
+    content: `If you are finished with your actions before the 5 minutes are up, click here to vote to advance the round.
+      If everyone votes to advance, the round will end.`,
     params: {
       placement: LEFT
     }
   },
   {
     target: '.tour-phase-instructions',
-    content: `The instructions for the current phase are displayed on the right.`,
+    content: `The instructions for the current phase are displayed here.`,
     params: {
       placement: LEFT
     }
