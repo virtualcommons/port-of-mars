@@ -4,12 +4,12 @@
       <p class="title">Round</p>
       <p class="round">{{ roundNumber }}</p>
     </div>
-    <div class="section tour-container-top">
+    <div class="section tour-current-phase">
       <p class="title">Current Phase</p>
       <p class="number">{{ phaseNumber + 1 }} of 5</p>
       <p class="phase">{{ phaseText }}</p>
     </div>
-    <div class="section">
+    <div class="section tour-time-remaining">
       <p class="title">Phase Countdown</p>
       <p :class="countdownStyling">{{ timeRemaining }}</p>
     </div>
