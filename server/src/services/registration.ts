@@ -5,8 +5,8 @@ import { EntityManager } from "typeorm";
 import {BaseService} from "@port-of-mars/server/services/db";
 
 export class RegistrationService extends BaseService {
-  createRegistrationURL(registrationLink: string) {
-    return `${settings.host}/${registrationLink}`;
+  createRegistrationURL(registrationToken: string) {
+    return `${settings.host}/#/verify/${registrationToken}`;
   }
 
   async submitRegistrationMetadata(data: { username: string; email: string; name: string }) {
