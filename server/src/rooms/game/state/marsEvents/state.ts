@@ -54,7 +54,7 @@ export abstract class BaseEvent implements MarsEventState {
 export class Sandstorm extends BaseEvent {
   finalize(game: GameState): void {
     game.upkeep -= 10;
-    game.log('A sandstorm has decreased system health by 10.', 'Mars Event- Sandstorm');
+    game.log(game.round,'A sandstorm has decreased system health by 10.', 'Mars Event- Sandstorm');
   }
 }
 
@@ -151,7 +151,7 @@ export class PersonalGain extends BaseEvent {
     game.subtractUpkeep(subtractedUpkeep);
 
     const message = `System health decreased by ${this.subtractedUpkeepTotal(subtractedUpkeep)}. The following players voted yes: ${this.playersVoteYes(this.votes)}`;
-    game.log(message, 'Mars Event- Personal Gain');
+    game.log(game.round, message, 'Mars Event- Personal Gain');
   }
 
   getData() {
@@ -213,6 +213,7 @@ export class CompulsivePhilanthropy extends BaseEvent {
     game.upkeep += game.players[winner].timeBlocks;
     game.players[winner].timeBlocks = 0;
     game.log(
+      game.round,
       `The ${winner} was voted to be Compulsive Philanthropist with ${count} votes. The ${winner} invested all of their timeblocks into System Health.`,
       'Mars Event- Complulsive Philanthropy'
     );
@@ -252,6 +253,7 @@ abstract class OutOfCommission extends BaseEvent {
     const role: Role = this.playerOutOfCommission(this.player);
     game.players[role].timeBlocks = 3;
     game.log(
+      game.round,
       `${this.player} has 3 timeblocks to invest during this round.`,
       'Mars Event- Out Of Commission'
     );
@@ -314,6 +316,7 @@ export class OutOfCommissionEntrepreneur extends OutOfCommission {
 export class Audit extends BaseEvent {
   finalize(game: GameState) {
     game.log(
+      game.round,
       `You will be able to view other players' resources. Hover over each player tab on the right to reveal their inventory.`,
       'Mars Event- Audit'
     );
@@ -369,7 +372,7 @@ export class BondingThroughAdversity extends BaseEvent {
 
     }
     const message = `Players have gained one influence currency of their choice.`
-    game.log(message, 'Mars Event- Bonding Through Adversity');
+    game.log(game.round, message, 'Mars Event- Bonding Through Adversity');
   }
 
   /**
@@ -390,6 +393,7 @@ export class ChangingTides extends BaseEvent {
       player.accomplishments.draw(1);
     }
     game.log(
+       game.round,
       'Each player discards their current Accomplishments and draws one new Accomplishment.',
       'Mars Event- Changing Tides'
     );

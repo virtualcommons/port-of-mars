@@ -130,6 +130,7 @@ export interface MarsLogMessageData {
   performedBy: Role | ServerRole;
   category: string;
   content: string;
+  round: number;
   timestamp: number;
 }
 

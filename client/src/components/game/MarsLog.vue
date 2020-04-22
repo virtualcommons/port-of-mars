@@ -15,6 +15,7 @@
         <p class="time">
           <span>[ </span>{{ marsLogTime(log.timestamp) }}<span> ]</span>
         </p>
+        <p>ROUND : {{ log.round }}</p>
       </div>
     </div>
   </div>
@@ -28,6 +29,7 @@ import { MarsLogData } from '@port-of-mars/shared/types';
   components: {},
 })
 export default class MarsLog extends Vue {
+
   updated() {
     const elem = this.$el.querySelector('.wrapper');
     elem!.scrollTop = elem!.scrollHeight;
