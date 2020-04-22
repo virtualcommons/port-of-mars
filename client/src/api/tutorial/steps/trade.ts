@@ -11,6 +11,19 @@ const steps: Array<Step> = [
 
     stateTransform: [
       {
+        SET_PENDING_INVESTMENTS: {
+          data: {
+            culture: 0,
+            finance: 0,
+            government: 0,
+            legacy: 0,
+            science: 0,
+            upkeep: 0
+          },
+          role: RESEARCHER
+        }
+      },
+      {
         SET_GAME_PHASE: Phase.trade
       },
       {
