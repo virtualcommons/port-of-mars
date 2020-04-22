@@ -1,137 +1,107 @@
-a {
-  color: $new-space-orange;
-}
+.c-player-dashboard {
+  position: absolute;
+  height: 100vh !important;
+  width: 100vw !important;
+  @include make-center;
 
-a:hover {
-  color: lighten($new-space-orange, 15%);
-}
-
-.player-dashboard {
+  .player-dashboard {
     @include expand;
-    /* SET MAX SIZE OF SCREEN */
     max-height: $max-screen-height;
     max-width: $max-screen-width;
-    /* SET MIN SIZE OF SCREEN */
     min-height: $min-screen-height;
     min-width: $min-screen-width;
-    padding: 2rem 1rem 1rem 1rem;
+    padding: 1rem;
     margin: 0;
-    position: relative;
-    @include row;
-    // background-color: $space-gray;
+    @include make-column-and-top;
+    background-color: $space-gray;
 
-    /* TEXT STYLING */
-    font-size: $font-med;
-
-    h1 {
-        text-transform: uppercase;
-        letter-spacing: 0.25rem;
-        font-size: 4rem;
-        font-weight: 700;
+    .title-wrapper,
+    .content-wrapper {
+      width: 100%;
+      padding: 1rem;
+      margin: 0;
     }
 
-    h2 {
-        @include make-center;
-        margin-bottom: 0;
-        text-transform: uppercase;
-        letter-spacing: 0.25rem;
-        font-size: 1.75rem;
-        font-weight: 700;
-        color: $space-white;
-    }
+    .title-wrapper {
+      .title {
+        height: 100%;
+        padding: 0;
+        @include make-column-and-center;
 
-    p {
-        color: $new-space-orange;
-        @include make-center;
-    }
-
-    .button {
-        text-transform: uppercase;
-        color: $space-gray;
-        border-color: $new-space-orange;
-        background-color: $new-space-orange;
-    }
-    
-    :disabled {
-        color: $new-space-orange;
-        border-color: $new-space-orange;
-        background-color: $space-gray;
-    }
-
-    /* END TEXT STYLING */
-  
-    .left,
-    .right {
-      height: 100%;
-      @include column-2;
-      @include reset-padding-margin;
-      position: relative;
-      padding-top: 15rem;
-
-      h2 {
-          padding: 0 0 0.75rem 0;
-      }
-
-      .top {
-        height: 40%;
-        text-align: center;
-      }
-  
-      .bottom {
-        height: 500%;
-        margin-top: 2rem;
-      }
-
-      .onboarding-item {
-        margin-top: 0.1rem;
-        padding: 0.75rem 0 0.75rem 0;
-      }
-
-      .upcoming-game-item, .player-stat-item {
-        @include reset-padding-margin;
-        @include new-border-orange;
-        width: 20rem;
-        margin-top: 1.5rem;
-        padding: 0.75rem 0 0.75rem 0;
-        text-align: center;
-      }
-
-      .player-stat-item p {
-          @include reset-padding-margin;
-      }
-
-      .player-stat-item-header {
-          font-weight: bolder;
+        h1 {
           text-transform: uppercase;
-      }
-    }
-  
-    .middle {
-      height: 100%;
-      @include column-8;
-      @include reset-padding-margin;
-      @include make-center;
-      @include make-column-and-center;
-      
-      .top {
-        height: 90%;
+          letter-spacing: 0.25rem;
+          font-size: 6rem;
+          font-weight: 700;
+          color: $new-space-orange;
+        }
 
-        h1, h2 {
-            color: $new-space-orange;
+        h2 {
+          margin-bottom: 0;
+          text-transform: uppercase;
+          letter-spacing: 0.25rem;
+          font-size: 2rem;
+          font-weight: 700;
+          color: $new-space-orange;
         }
       }
-  
-      .bottom {
-        height: 125rem;
+    }
+
+    .content-wrapper {
+      flex-grow: 1;
+      justify-content: space-around;
+      overflow: hidden;
+
+      .stats,
+      .action-items,
+      .upcoming-games {
+        height: 100%;
+        padding: 1rem;
+        @include make-column-and-top;
+
+        h2 {
+          width: 100%;
+          padding: 0.5rem;
+          margin-bottom: 1rem;
+          color: $space-white;
+          font-size: 2rem;
+          font-weight: 700;
+          text-align: center;
+        }
+
+        .outer-wrapper {
+          flex-grow: 1;
+          width: 100%;
+          padding: 0.5rem;
+          background-color: $space-white-opaque-1;
+          overflow-y: auto;
+
+          .wrapper {
+            width: 100%;
+            @include make-column-and-top;
+          }
+        }
       }
 
-      .action-item {
-        @include reset-padding-margin;
-        @include new-border-orange;
-        width: 30rem;
-        margin-top: 1.5rem;
-        padding: 0.75rem 0 0.75rem 0;
-        text-align: center;
+      .stats {
+        .information {
+          height: 4rem;
+          width: 100%;
+          padding: 0.5rem 1rem;
+          margin-bottom: 0.5rem;
+          @include make-horizontal-between;
+          background-color: $new-space-orange-005;
+
+          p {
+            width: 100%;
+            margin-bottom: 0;
+            color: $space-white;
+            font-size: $font-large;
+            font-weight: $font-weight-maven-pro-bold;
+            text-align: left;
+          }
+        }
       }
     }
   }
+}

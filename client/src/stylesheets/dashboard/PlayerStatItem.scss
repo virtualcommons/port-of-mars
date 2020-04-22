@@ -1,0 +1,70 @@
+.c-player-stat-item {
+  width: 100%;
+  padding: 0;
+  border: 0.125rem solid $space-white;
+  margin: 0 0 0.5rem 0;
+  @include make-column-and-center;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .title-wrapper,
+  .content-wrapper {
+    width: 100%;
+    padding: 0.5rem;
+    margin: 0;
+  }
+
+  .title-wrapper {
+    background-color: $space-white;
+
+    .title {
+      @include expand;
+      padding: 0;
+
+      p {
+        width: 100%;
+        margin-bottom: 0;
+        font-size: $font-med;
+        font-weight: $font-weight-maven-pro-medium;
+        color: $space-gray;
+        text-align: center;
+        @include text-overflow-ellipses;
+      }
+    }
+  }
+
+  .content-wrapper {
+    background-color: $space-gray;
+
+    .content {
+      @include expand;
+      padding: 0;
+      @include make-column-and-top;
+
+      .section {
+        width: 100%;
+        margin-bottom: 0.5rem;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        p {
+          width: 100%;
+          margin: 0 0.5rem;
+          font-size: $font-med;
+          font-weight: $font-weight-maven-pro-regular;
+          color: $space-white;
+          text-align: left;
+
+          span {
+            font-weight: $font-weight-maven-pro-medium;
+            color: $new-space-orange;
+          }
+        }
+      }
+    }
+  }
+}
