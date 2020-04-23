@@ -44,17 +44,19 @@ body .in-tour {
   }
 }
 
+.animate-current-step{
+  border: 0.25rem solid $space-lightgreen;
+  animation: border-pulse 1s 3 ease-in-out;
+}
+
 .v-step {
   // border: 0.125rem solid $new-space-orange-opaque-025;
-  border: 0.25rem solid $space-lightgreen;
+  border: 0.125rem solid $space-lightgreen;
   border-radius: 0 !important;
   background-color: $space-gray !important;
-  animation: border-pulse 1s infinite forwards;
+  
 
-  &:hover{
-    animation: none;
-  }
-
+  
   .v-step__arrow {
     // border-left-color: $new-space-orange-opaque-025 !important;
     display: none !important;
@@ -75,11 +77,29 @@ body .in-tour {
   button {
     @include reset-button;
     padding: 0.5rem !important;
-    border: 0.0625rem solid $new-space-orange !important;
+    border: 0.0625rem solid $space-lightgreen !important;
     border-radius: 0 !important;
     margin: 0.5rem;
-    color: $new-space-orange;
+    color: $space-lightgreen;
     @include default-transition-base;
+  }
+
+  .previous-button{
+    color: $space-lightgreen;
+    border: 0.0625rem solid $space-lightgreen !important;
+
+    &:hover{
+      background-color: $space-lightgreen;
+    }
+  }
+
+  .next-button{
+    color: $new-space-orange;
+    border: 0.0625rem solid $new-space-orange !important;
+
+    &:hover{
+      background-color: $new-space-orange;
+    }
   }
 
   .button-inactive{
@@ -91,7 +111,6 @@ body .in-tour {
     &:hover {
       @include default-scale-up;
       color: $space-gray;
-      background-color: $new-space-orange;
       outline: none !important;
     }
   }
