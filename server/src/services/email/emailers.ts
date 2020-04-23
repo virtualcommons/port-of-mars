@@ -32,7 +32,7 @@ export class MailgunEmailer implements Emailer {
       auth.domain = 'example.com';
     }
     this.opts = { auth }
-    this.transport = nodemailer.createTransport(mailgunTransport({ auth }));
+    this.transport = nodemailer.createTransport(mailgunTransport(this.opts));
   }
 
   sendMail(content: Mail.Options) {

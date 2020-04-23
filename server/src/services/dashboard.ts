@@ -38,7 +38,7 @@ export class DashboardService extends BaseService {
   }
 
   async getCurrentGameActionItem(user: User): Promise<ActionItem | undefined> {
-    const roomId = await this.sp.game.getLatestActiveGameByUserId(user.id);
+    const roomId = await this.sp.game.getActiveGameRoomId(user.id);
     if (!roomId) {
       return;
     }
