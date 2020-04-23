@@ -18,11 +18,6 @@ export class RegistrationService extends BaseService {
     return await this.em.getRepository(User).findOne({ registrationToken })
   }
 
-  async createInvites(userIds: Array<number>, tournamentRoundId: number): Promise<Array<TournamentRoundInvite>> {
-    const invites = userIds.map(userId => this.em.getRepository(TournamentRoundInvite).create({ userId, tournamentRoundId }));
-    return await this.em.getRepository(TournamentRoundInvite).save(invites);
-  }
-
   async sendEmailVerification(u: User): Promise<void> {
     const link = this.createRegistrationURL(u.registrationToken);
     settings.emailer.sendMail({

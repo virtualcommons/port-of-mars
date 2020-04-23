@@ -1,10 +1,10 @@
 import { getConnection } from '@port-of-mars/server/util';
 import { Game, Player, Tournament, TournamentRound, TournamentRoundInvite } from '@port-of-mars/server/entity';
-import { EntityManager, Equal, SelectQueryBuilder } from 'typeorm';
+import { Equal, SelectQueryBuilder } from 'typeorm';
 import * as _ from 'lodash';
 import { settings } from "@port-of-mars/server/settings";
 import {BaseService} from "@port-of-mars/server/services/db";
-
+import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 const logger = settings.logging.getLogger(__filename);
 
 export class TournamentService extends BaseService {
@@ -47,13 +47,34 @@ export class TournamentService extends BaseService {
       });
   }
 
-  async getActiveRoundInvite(userId: number, tournamentRoundId: number): Promise<TournamentRoundInvite> {
-    return this.em.getRepository(TournamentRoundInvite).findOneOrFail({
+  async createInvites(userIds: Array<number>, tournamentRoundId: number): Promise<Array<TournamentRoundInvite>> {
+    const invites = userIds.map(userId => this.em.getRepository(TournamentRoundInvite).create({ userId, tournamentRoundId }));
+    return await this.em.getRepository(TournamentRoundInvite).save(invites);
+  }
+
+  async createInvite(userId: number, tournamentRoundId: number): Promise<TournamentRoundInvite> {
+    const repository = this.em.getRepository(TournamentRoundInvite);
+    const invite = repository.create({ userId, tournamentRoundId});
+    return await repository.save(invite);
+  }
+
+
+  async getActiveRoundInvite(userId: number, tournamentRound: TournamentRound): Promise<TournamentRoundInvite> {
+    // special case for the first round of a tournament where everyone's invited 
+    const tournamentRoundId = tournamentRound.id;
+    let invite = await this.em.getRepository(TournamentRoundInvite).findOne({
       where: {
         tournamentRoundId,
         userId
       }
-    })
+    });
+    if (!invite && tournamentRound.roundNumber === 1) {
+      invite = await this.createInvite(userId, tournamentRoundId)
+    }
+    else {
+      throw new EntityNotFoundError(`User ${userId} does not have an invite for the current round ${tournamentRoundId}.`);
+    }
+    return invite;
   }
 
   async createTournament(data: Pick<Tournament, 'name' | 'active'>): Promise<Tournament> {
