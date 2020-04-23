@@ -30,10 +30,30 @@ body .in-tour {
   pointer-events: auto;
 }
 
+@keyframes border-pulse{
+  0% {
+    border-color: rgba(161, 211, 219, 1);
+  }
+
+  50%{
+    border-color: rgba(161, 211, 219, 0);
+  }
+
+  100% {
+    border-color:rgba(161, 211, 219, 1);
+  }
+}
+
 .v-step {
-  border: 0.125rem solid $new-space-orange-opaque-025;
+  // border: 0.125rem solid $new-space-orange-opaque-025;
+  border: 0.25rem solid $space-lightgreen;
   border-radius: 0 !important;
   background-color: $space-gray !important;
+  animation: border-pulse 1s infinite forwards;
+
+  &:hover{
+    animation: none;
+  }
 
   .v-step__arrow {
     // border-left-color: $new-space-orange-opaque-025 !important;
