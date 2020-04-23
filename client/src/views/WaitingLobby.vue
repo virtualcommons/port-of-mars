@@ -23,6 +23,7 @@ import { LOBBY_NAME } from '@port-of-mars/shared/lobby';
 import { Client } from 'colyseus.js';
 import { applyWaitingServerResponses } from '@port-of-mars/client/api/lobby/response';
 import { WaitingRequestAPI } from '@port-of-mars/client/api/lobby/request';
+import { DASHBOARD_PAGE } from '@port-of-mars/shared/routes';
 import moment from 'moment';
 
 @Component({})
@@ -34,13 +35,28 @@ export default class WaitingLobby extends Vue {
   private nextAssignmentTime: number = new Date().getTime();
 
   async created() {
-    const room = await this.$client.joinOrCreate(LOBBY_NAME);
-    applyWaitingServerResponses(room, this);
-    this.lobbyAPI.connect(room);
+    try {
+      const room = await this.$client.joinOrCreate(LOBBY_NAME);
+      applyWaitingServerResponses(room, this);
+      this.lobbyAPI.connect(room);
+    }
+    catch (e) {
+      /*
+      if (e instanceof MatchMakeError) {
+        this.$tstore.commit('SET_ERROR_MESSAGE', { message: `Couldn't join the lobby: ${e.message}` });
+      }
+      */
+      let errorMessage = e.message;
+      if (! errorMessage) {
+        errorMessage = 'Please complete all onboarding items on your dashboard before joining a game.';
+      }
+      this.$tstore.commit('SET_ERROR_MESSAGE', { message: errorMessage });
+      this.$router.push({ name: DASHBOARD_PAGE });
+    }
   }
 
   async destroyed() {
-    this.lobbyAPI.room.leave();
+    this.lobbyAPI.leave();
   }
 
   private distributeGroups() {

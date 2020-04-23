@@ -44,11 +44,7 @@ export default class Register extends Vue {
     const fd = new FormData((e as any).target.form);
     const data: any = { name: fd.get("name"), email: fd.get("email") };
     const response = await this.$ajax.post(this.registerUrl, data);
-    if (response.status === 200) {
-      this.$router.push(DASHBOARD_PAGE);
-    } else {
-      this.error = await response.json();
-    }
+    this.$router.push(DASHBOARD_PAGE);
   }
 
   get submitDisabled() {

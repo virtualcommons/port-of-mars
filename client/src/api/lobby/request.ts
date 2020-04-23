@@ -12,6 +12,12 @@ export class WaitingRequestAPI {
     this.room = room;
   }
 
+  public leave() {
+    if (this.room) {
+      this.room.leave();
+    }
+  }
+
   public send(req: WaitingRequests) {
     this.room.send(req);
   }

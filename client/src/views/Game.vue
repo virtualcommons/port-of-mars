@@ -5,21 +5,21 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Inject, Provide, Prop } from 'vue-property-decorator';
-import { Client, Room } from 'colyseus.js';
-import { applyGameServerResponses } from '@port-of-mars/client/api/game/response';
-import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
-import { EnvironmentMode } from '@port-of-mars/client/settings';
-import GameDashboard from '@port-of-mars/client/components/GameDashboard.vue';
-import _ from 'lodash';
-import { LOBBY_PAGE } from '@port-of-mars/shared/routes';
-import {url} from "@port-of-mars/client/util";
+import { Vue, Component, Inject, Provide, Prop } from "vue-property-decorator";
+import { Client, Room } from "colyseus.js";
+import { applyGameServerResponses } from "@port-of-mars/client/api/game/response";
+import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
+import { EnvironmentMode } from "@port-of-mars/client/settings";
+import GameDashboard from "@port-of-mars/client/components/GameDashboard.vue";
+import _ from "lodash";
+import { LOBBY_PAGE } from "@port-of-mars/shared/routes";
+import { url } from "@port-of-mars/client/util";
 
 @Component({
-  name: 'game',
+  name: "game",
   components: {
-    GameDashboard,
-  },
+    GameDashboard
+  }
 })
 export default class Game extends Vue {
   @Inject() readonly $client!: Client;
@@ -32,31 +32,33 @@ export default class Game extends Vue {
     let gameRoom: Room;
     let cachedRoomId = this.$ajax.roomId;
     let roomId: string;
-    console.log({cachedRoomId});
+    console.log({ cachedRoomId });
     if (!cachedRoomId) {
-      const res = await this.$ajax.get(url('/game/latest-active'));
+      const res = await this.$ajax.get(url("/game/latest-active"));
       console.log(res);
       roomId = await res.json();
     } else {
       roomId = cachedRoomId;
     }
-    console.log({roomId});
-    gameRoom = await this.$client.joinById(roomId);
+    console.log({ roomId });
+    if (roomId) {
+      gameRoom = await this.$client.joinById(roomId);
 
-    applyGameServerResponses(gameRoom, this.$tstore);
-    this.api.connect(gameRoom, this.$tstore);
-    this.hasApi = true;
-    this.$store.commit('SET_LAYOUT', 'game');
-    this.$store.commit('SET_ENVIRONMENT', this.env.environment);
+      applyGameServerResponses(gameRoom, this.$tstore);
+      this.api.connect(gameRoom);
+      this.hasApi = true;
+      this.$store.commit("SET_LAYOUT", "game");
+      this.$store.commit("SET_ENVIRONMENT", this.env.environment);
+    }
   }
 
   destroyed() {
     if (this.api.room) this.api.room.leave();
-    this.$tstore.commit('RESET_STATE', {});
+    this.$tstore.commit("RESET_STATE", {});
   }
 }
 </script>
 
 <style lang="scss">
-@import '@port-of-mars/client/stylesheets/layouts/DefaultLayout.scss';
+@import "@port-of-mars/client/stylesheets/layouts/DefaultLayout.scss";
 </style>

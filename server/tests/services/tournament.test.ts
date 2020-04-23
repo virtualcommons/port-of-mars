@@ -35,13 +35,13 @@ describe('first round', () => {
       await services.registration.submitRegistrationMetadata({username: 'bob', email: 'bob@foo.com', name: 'Bob'});
       expect(await services.auth.checkUserCanPlayGame(bob.id, tr.id)).toBeFalsy();
 
-      await services.registration.verifyUnregisteredUser(bob);
+      await services.registration.verifyUnregisteredUser(bob, bob.registrationToken);
       expect(await services.auth.checkUserCanPlayGame(bob.id, tr.id)).toBeFalsy();
 
       await services.quiz.setUserQuizCompletion(bob.id, true);
       expect(await services.auth.checkUserCanPlayGame(bob.id, tr.id)).toBeFalsy();
 
-      const invites = await services.registration.createInvites([bob.id], tr.id);
+      const invites = await services.tournament.createInvites([bob.id], tr.id);
       expect(await services.auth.checkUserCanPlayGame(bob.id, tr.id)).toBeTruthy();
 
       await services.quiz.setUserQuizCompletion(bob.id, true);

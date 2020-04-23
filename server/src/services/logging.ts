@@ -20,6 +20,6 @@ export class DevLogging implements Logging {
   }
 
   getLogger(filename: string): LogService {
-    return this.logger;
+    return this.logger.child({filename});
   }
 }

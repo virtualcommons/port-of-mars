@@ -26,6 +26,7 @@ import { settings } from "@port-of-mars/server/settings";
 import { isDev } from '@port-of-mars/shared/settings';
 import { getServices } from "@port-of-mars/server/services";
 import { gameRouter } from "@port-of-mars/server/routes/game";
+import { ServerError } from './util';
 
 const logger = settings.logging.getLogger(__filename);
 const NODE_ENV = process.env.NODE_ENV || 'development';
@@ -189,14 +190,20 @@ async function createApp() {
 
   // register your room handlers
   gameServer.define(GameRoom.NAME, GameRoom);
-  // FIXME: at some point we should refactor how we inject isDev() into the various classes that need them
   gameServer.define(RankedLobbyRoom.NAME, RankedLobbyRoom, { persister });
 
 
   applyInStagingOrProd(() => app.use(Sentry.Handlers.errorHandler()));
+  // Final error handling middleware
   app.use((err: any, req: any, res: Response, next: any) => {
-    res.status(err.statusCode || 500).json({ error: 'Unhandled server error' });
-    logger.fatal(err);
+    if (err instanceof ServerError) {
+      res.status(err.code).json(err.getDisplayMessage());
+      logger.warn(err);
+    }
+    else {
+      res.status(err.statusCode || 500).json({ error: 'Unhandled server error' });
+      logger.fatal(err);
+    }
   });
 
   gameServer.listen(port);

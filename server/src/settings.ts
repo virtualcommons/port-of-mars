@@ -1,5 +1,5 @@
 import { MemoryEmailer, Emailer, MailgunEmailer } from "@port-of-mars/server/services/email/emailers";
-import { DevLogging, Logging } from "@port-of-mars/server/services/logging";
+import { LogService, DevLogging, Logging } from "@port-of-mars/server/services/logging";
 import * as fs from 'fs';
 
 export const SECRET_KEY: string = fs.readFileSync('/run/secrets/jwt', 'utf8').trim();
@@ -50,3 +50,8 @@ const env = process.env.NODE_ENV;
 export const settings: AppSettings = ['development', 'test'].includes(env || '') ?
   dev() : env === 'staging' ?
     staging() : prod();
+
+
+export function getLogger(filename: string): LogService {
+  return settings.logging.getLogger(filename);
+}

@@ -108,11 +108,17 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
   async onAuth(client: Client, options: { token: string }, request?: http.IncomingMessage) {
     try {
       const user = await getServices().account.findUserById((request as any).session.passport.user);
-      return user;
+      logger.debug('checking if user %s can play the game', user.username);
+      if (await getServices().auth.checkUserCanPlayGame(user.id)) {
+        return user;
+      }
+      // FIXME: this won't work since we don't have any registered handlers to process this client-side
+      // this.sendSafe(client, { kind: 'join-failure', reason: 'Please complete all onboarding items on your dashboard before joining a game.' });
+      logger.debug('user should be redirected back to the dashboard');
     } catch (e) {
       logger.fatal(e);
-      return;
     }
+    return false;
   }
 
   onJoin(client: Client, options: any) {
@@ -228,7 +234,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
 
   isGroupReady(group: MatchmakingGroup): boolean {
     logger.trace('WAITING LOBBY: isGroupReady %o',
-      {ready: group.ready, length: group.clientStats.length, devMode: this.devMode});
+      { ready: group.ready, length: group.clientStats.length, devMode: this.devMode });
     return group.ready || group.clientStats.length === this.numClientsToMatch || this.devMode;
   }
 
