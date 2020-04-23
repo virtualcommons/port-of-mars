@@ -109,16 +109,16 @@ export interface MarsEventData {
 }
 
 export enum MarsLogCategory {
-  systemHealth = "System Health",
-  event = "Event",
-  trade = "Trade",
-  accomplishment = "Accomplishment",
-  purchaseAccomplishment = "Purchase Accomplishment",
-  sentTrade = "Sent Trade",
-  invalidTrade = "Invalid Trade",
-  acceptTrade = "Accept Trade",
-  rejectTrade = "Reject Trade",
-  cancelTrade = "Cancel Trade"
+  systemHealth = "SYSTEM HEALTH",
+  event = "EVENT",
+  trade = "TRADE",
+  accomplishment = "ACCOMPLISHMENT",
+  purchaseAccomplishment = "PURCHASE ACCOMPLISHMENT",
+  sentTrade = "SENT TRADE",
+  invalidTrade = "INVALID TRADE",
+  acceptTrade = "ACCEPT TRADE",
+  rejectTrade = "REJECT TRADE",
+  cancelTrade = "CANCELLED TRADE"
 }
 
 export interface MarsLogData {
