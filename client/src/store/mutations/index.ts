@@ -8,6 +8,7 @@ import player from './player';
 import trading from './trading';
 import ui from './ui';
 import { State, getInitialStoreState } from '@port-of-mars/client/store/state';
+import { ServerErrorMessage } from '@port-of-mars/shared/types';
 
 export default {
   RESET_STATE(state: State, options?: any) {
@@ -16,6 +17,14 @@ export default {
 
   SET_LAYOUT(state: any, newLayout: string) {
     state.layout = newLayout;
+  },
+
+  SET_ERROR_MESSAGE(state: any, payload: ServerErrorMessage) {
+    state.errors.push(payload);
+  },
+
+  DISMISS_ERROR_MESSAGE(state: any, index: number) {
+    state.errors.splice(index, 1);
   },
 
   SET_ENVIRONMENT(state: any, newEnvironment: string) {

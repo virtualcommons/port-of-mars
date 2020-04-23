@@ -24,12 +24,19 @@
 
             <div class="bottom">
                 <h2>Action Items</h2>
+                <div class="error-messages">
+                    <h3 v-if="errors.length > 0">
+                        Errors
+                    </h3>
+                    <b-alert v-for="(error, index) in errors" :key="error.message" @dismissed="dismissError(index)" variant="danger" dismissible>
+                        {{ error.message }}
+                    </b-alert>
+                </div>
                 <div v-if="loading">
                     <p>Action Items are loading...</p>
                 </div>
-
                 <div v-else>
-                    <div v-for="(action,index) in actionItems" :key="index" class="action-item">
+                    <div v-for="(action,index) in actionItems" :key="action.link" class="action-item">
                         <p>{{action.description}}</p>
                         <BButton squared class="button" variant="dark" :to="action.link.data" v-if="isInternal(action.link)">Go</BButton>
                         <BButton squared class="button" variant="dark" :href="action.link.data" v-else>Go</BButton>
@@ -73,7 +80,7 @@ export default class PlayerDashboard extends Mixins(Vue, DashboardAPI) {
     private upcomingGames: Array<GameMeta> = [];
 
     async mounted(){
-        await this.initialize();
+      await this.initialize();
     }
 
     async initialize() {
@@ -83,6 +90,14 @@ export default class PlayerDashboard extends Mixins(Vue, DashboardAPI) {
       this.stats.games.splice(0, this.stats.games.length, ...data.stats.games);
       this.upcomingGames.splice(0, this.upcomingGames.length, ...data.upcomingGames);
       this.loading = false;
+    }
+
+    get errors() {
+        return this.$tstore.state.errors;
+    }
+
+    dismissError(index: number) {
+        this.$tstore.commit('DISMISS_ERROR_MESSAGE', index);
     }
 
     get joinLink() {

@@ -1,8 +1,10 @@
-import Vue, {VueConstructor} from 'vue'
+import Vue, { VueConstructor } from 'vue'
 import _ from "lodash";
-import {VueRouter} from "vue-router/types/router";
-import {TStore} from "@port-of-mars/client/plugins/tstore";
-import {RoomId} from "@port-of-mars/shared/types";
+import { VueRouter } from "vue-router/types/router";
+import { TStore } from "@port-of-mars/client/plugins/tstore";
+import { RoomId } from "@port-of-mars/shared/types";
+import { LOGIN_PAGE, DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
+import { ServerErrorMessage } from "@port-of-mars/shared/types";
 
 interface RoomListingData<Metadata = any> {
   clients: number;
@@ -46,6 +48,12 @@ export class AjaxRequest {
 
   _roomId?: RoomId;
 
+  errorRoutes = {
+    401: LOGIN_PAGE,
+    403: DASHBOARD_PAGE,
+    404: DASHBOARD_PAGE
+  }
+
   set roomId(r: RoomId | undefined) {
     this._roomId = r;
   }
@@ -63,12 +71,12 @@ export class AjaxRequest {
   }
 
   setQuizCompletion(passedQuiz: boolean) {
-    this.store.commit('SET_USER', {username: this.username, passedQuiz});
+    this.store.commit('SET_USER', { username: this.username, passedQuiz });
   }
 
   forgetLoginCreds() {
     document.cookie = "connect.sid= ;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-    this.store.commit('SET_USER', {username: '', passedQuiz: false});
+    this.store.commit('SET_USER', { username: '', passedQuiz: false });
   }
 
   get submissionId(): number | null {
@@ -104,10 +112,14 @@ export class AjaxRequest {
     )
     switch (response.status) {
       case 401:
-        this.router.push({name: 'Login'});
-      default:
-        return response;
+      case 403:
+      case 404:
+        const payload = await response.json();
+        this.store.commit('SET_ERROR_MESSAGE', payload);
+        this.router.push({ name: this.errorRoutes[response.status] })
+        break;
     }
+    return response;
   }
 
   async get(path: string) {
@@ -125,10 +137,13 @@ export class AjaxRequest {
     );
     switch (response.status) {
       case 401:
-        this.router.push({name: 'Login'});
-      default:
-        return response;
+        this.router.push({ name: LOGIN_PAGE });
+        break;
+      case 403:
+        this.router.push({ name: DASHBOARD_PAGE });
+        break;
     }
+    return response;
   }
 }
 

@@ -245,4 +245,8 @@ export interface DashboardData {
   stats: Stats
 }
 
+export interface ServerErrorMessage {
+  message: string
+}
+
 export type RoomId = string;
