@@ -5,10 +5,16 @@ import {
 } from "@port-of-mars/server/rooms/game/state/marsEvents/common";
 import {GameState} from "@port-of-mars/server/rooms/game/state";
 import * as _ from "lodash";
-import {CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER, Role, ROLES, Resource, InvestmentData} from "@port-of-mars/shared/types";
+import {CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER, Role, ROLES, Resource, InvestmentData, MarsLogCategory} from "@port-of-mars/shared/types";
 
 
 const _dispatch: { [id: string]: MarsEventStateConstructor } = {};
+
+export function formatEventName(eventName: string): string {
+  return eventName.replace(/([A-Z])/g, ' $1').trim();
+  // eventName = eventName.replace(/([A-Z])/g, ' $1').trim();
+  // return [category.event].concat(eventName);
+}
 
 export function assocEventId(constructor: MarsEventStateConstructor) {
   _dispatch[getEventName(constructor)] = constructor;
@@ -54,7 +60,7 @@ export abstract class BaseEvent implements MarsEventState {
 export class Sandstorm extends BaseEvent {
   finalize(game: GameState): void {
     game.upkeep -= 10;
-    game.log(game.round,'A sandstorm has decreased system health by 10.', 'Mars Event- Sandstorm');
+    game.log(game.round,'A sandstorm has decreased system health by 10.', `MARS EVENT: ${ formatEventName(Sandstorm.name) }`);
   }
 }
 
@@ -62,7 +68,9 @@ export class Sandstorm extends BaseEvent {
 
 @assocEventId
 export class LifeAsUsual extends BaseEvent {
-  finalize(game: GameState): void {}
+  finalize(game: GameState): void {
+    game.log(game.round, `As the first human outpost on Mars, having a "usual" day is pretty unusual.`, `MARS EVENT: ${ formatEventName(LifeAsUsual.name) }`)
+  }
 }
 
 ////////////////////////// BreakdownOfTrust //////////////////////////
@@ -88,6 +96,8 @@ export class BreakdownOfTrust extends BaseEvent {
       player.mergePendingAndInventory();
       player.resetTimeBlocks();
     }
+
+    game.log(game.round, `Each player chooses up to 2 Influence cards they own, then discards the rest.`, `MARS EVENT: ${formatEventName(BreakdownOfTrust.name)}`)
   }
 }
 
@@ -151,7 +161,7 @@ export class PersonalGain extends BaseEvent {
     game.subtractUpkeep(subtractedUpkeep);
 
     const message = `System health decreased by ${this.subtractedUpkeepTotal(subtractedUpkeep)}. The following players voted yes: ${this.playersVoteYes(this.votes)}`;
-    game.log(game.round, message, 'Mars Event- Personal Gain');
+    game.log(game.round, message, `MARS EVENT: ${ formatEventName(PersonalGain.name) }`);
   }
 
   getData() {
@@ -215,7 +225,7 @@ export class CompulsivePhilanthropy extends BaseEvent {
     game.log(
       game.round,
       `The ${winner} was voted to be Compulsive Philanthropist with ${count} votes. The ${winner} invested all of their timeblocks into System Health.`,
-      'Mars Event- Complulsive Philanthropy'
+      `MARS EVENT: ${ formatEventName(CompulsivePhilanthropy.name) }`
     );
   }
 
@@ -254,8 +264,8 @@ abstract class OutOfCommission extends BaseEvent {
     game.players[role].timeBlocks = 3;
     game.log(
       game.round,
-      `${this.player} has 3 timeblocks to invest during this round.`,
-      'Mars Event- Out Of Commission'
+      `${this.player} has 3 time blocks to invest during this round.`,
+      `MARS EVENT: ${ formatEventName(OutOfCommission.name) }`
     );
   }
 
@@ -318,7 +328,7 @@ export class Audit extends BaseEvent {
     game.log(
       game.round,
       `You will be able to view other players' resources. Hover over each player tab on the right to reveal their inventory.`,
-      'Mars Event- Audit'
+      `MARS EVENT: ${ formatEventName(Audit.name) }`
     );
   }
 }
@@ -372,7 +382,7 @@ export class BondingThroughAdversity extends BaseEvent {
 
     }
     const message = `Players have gained one influence currency of their choice.`
-    game.log(game.round, message, 'Mars Event- Bonding Through Adversity');
+    game.log(game.round, message, `MARS EVENT: ${ formatEventName(BondingThroughAdversity.name) }`);
   }
 
   /**
@@ -395,7 +405,7 @@ export class ChangingTides extends BaseEvent {
     game.log(
        game.round,
       'Each player discards their current Accomplishments and draws one new Accomplishment.',
-      'Mars Event- Changing Tides'
+      `MARS EVENT: ${ formatEventName(ChangingTides.name) }`
     );
   }
 }
