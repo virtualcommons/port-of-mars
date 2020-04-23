@@ -14,26 +14,28 @@
     <div class="marslog-wrapper row">
       <div class="marslog col-6">
         <div class="wrapper">
+
           <div
             v-for="(log, index) in logs"
-            :style="marsLogColor(log)"
+            :style="logColor(log)"
             :key="log.timestamp + Math.random()"
             class="message"
           >
             <p class="category">{{ log.category }}</p>
             <p class="final-log" v-if="index === 0">Final Log</p>
             <p v-if="index !== 0" class="list">
-              <span
-                >N<sup>o.</sup> {{ logs.length - index }}/{{
-                  logs.length
-                }}</span
-              >
+              <span>
+                <sup>No.</sup> {{ logs.length - index }} / {{ logs.length }}
+              </span>
             </p>
             <p class="content">{{ log.content }}</p>
             <p class="time">
-              <span>[ </span>{{ marsLogTime(log.timestamp) }}<span> ]</span>
+              <span>[ </span>{{ logTime(log.timestamp) }}<span> ]</span>
             </p>
+            <span>ROUND: {{ log.round }}</span>
+            <p v-if="delineateRound(index, logs)"><b>ROUND MARKER</b></p>
           </div>
+
         </div>
       </div>
     </div>
@@ -60,7 +62,7 @@
 <script lang="ts">
 import { Vue, Component, InjectReactive, Inject } from 'vue-property-decorator';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
-import { MarsLogData, ROLES } from '@port-of-mars/shared/types';
+import {MarsLogData, MarsLogMessageData, ROLES} from '@port-of-mars/shared/types';
 import { isDev, isStaging } from '@port-of-mars/shared/settings';
 
   @Component({})
@@ -73,11 +75,30 @@ import { isDev, isStaging } from '@port-of-mars/shared/settings';
     return this.$store.getters.logs.reverse();
   }
 
-  private marsLogTime(timestamp: number) {
+  private delineateRound(index: number, logs: MarsLogMessageData[]): boolean {
+    let currentIndex = index;
+    let nextIndex: number = index + 1;
+
+    console.log('currentIndex ', currentIndex);
+
+    if (!logs[nextIndex]) {
+      console.log('undefined');
+      return false
+    }
+    else if (logs[currentIndex].round !== logs[nextIndex].round) {
+      console.log(`CURRENT ROUND: ${logs[currentIndex].round}`);
+      console.log(`PREVIOUS ROUND: ${logs[nextIndex].round}`);
+      return true;
+    }
+    else return false;
+
+  }
+
+  private logTime(timestamp: number) {
     return new Date(timestamp).toLocaleTimeString();
   }
 
-  private marsLogColor(log: MarsLogData) {
+  private logColor(log: MarsLogData) {
     console.log(log.category);
     if (log.category == 'SYSTEM HEALTH- DROP')
       return { backgroundColor: 'var(--marslog-red)' };
