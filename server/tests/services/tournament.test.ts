@@ -41,7 +41,7 @@ describe('first round', () => {
       await services.quiz.setUserQuizCompletion(bob.id, true);
       expect(await services.auth.checkUserCanPlayGame(bob.id, tr.id)).toBeFalsy();
 
-      const invites = await services.registration.createInvites([bob.id], tr.id);
+      const invites = await services.tournament.createInvites([bob.id], tr.id);
       expect(await services.auth.checkUserCanPlayGame(bob.id, tr.id)).toBeTruthy();
 
       await services.quiz.setUserQuizCompletion(bob.id, true);

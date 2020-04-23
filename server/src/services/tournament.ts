@@ -72,7 +72,7 @@ export class TournamentService extends BaseService {
       invite = await this.createInvite(userId, tournamentRoundId)
     }
     else {
-      throw new EntityNotFoundError(`User ${userId} does not have an invite for the current round ${tournamentRoundId}.`);
+      throw new EntityNotFoundError(TournamentRoundInvite, `User ${userId} does not have an invite for the current round ${tournamentRoundId}.`);
     }
     return invite;
   }
