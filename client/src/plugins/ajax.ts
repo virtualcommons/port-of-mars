@@ -95,7 +95,29 @@ export class AjaxRequest {
     localStorage.removeItem(SUBMISSION_ID);
   }
 
-  async post(path: string, data?: any) {
+  private async handleResponse(response: Response): Promise<Response> {
+    switch (response.status) {
+      case 401:
+      case 403:
+      case 404:
+        const serverErrorMessage = await response.json();
+        console.log("SOMETHING BAD HAPPENED, GOING BACK TO THE DASHBOARD");
+        console.log(serverErrorMessage);
+        this.store.commit('SET_ERROR_MESSAGE', serverErrorMessage);
+        await this.router.push({ name: this.errorRoutes[response.status] })
+        return response;
+    }
+    if (response.status >= 400) {
+      // something badwrong happened on the server side that we were not expecting.
+      // push the error onto the store and move on..
+      this.store.commit('SET_ERROR_MESSAGE', { message: `Unexpected server response: ${response.text}` });
+      // FIXME: should we be pushing back to the dashboard page again?
+      await this.router.push({ name: DASHBOARD_PAGE });
+    }
+    return response;
+  }
+
+  async post(path: string, data?: any): Promise<Response> {
     const response = await fetch(
       path,
       {
@@ -110,19 +132,10 @@ export class AjaxRequest {
         body: JSON.stringify(data)
       }
     )
-    switch (response.status) {
-      case 401:
-      case 403:
-      case 404:
-        const payload = await response.json();
-        this.store.commit('SET_ERROR_MESSAGE', payload);
-        this.router.push({ name: this.errorRoutes[response.status] })
-        break;
-    }
-    return response;
+    return await this.handleResponse(response);
   }
 
-  async get(path: string) {
+  async get(path: string): Promise<Response> {
     const response = await fetch(
       path,
       {
@@ -135,15 +148,7 @@ export class AjaxRequest {
         referrerPolicy: "no-referrer",
       }
     );
-    switch (response.status) {
-      case 401:
-        this.router.push({ name: LOGIN_PAGE });
-        break;
-      case 403:
-        this.router.push({ name: DASHBOARD_PAGE });
-        break;
-    }
-    return response;
+    return await this.handleResponse(response);
   }
 }
 

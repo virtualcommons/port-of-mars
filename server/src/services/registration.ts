@@ -1,8 +1,9 @@
-import { TournamentRoundInvite, User } from "@port-of-mars/server/entity";
-import { getConnection } from "@port-of-mars/server/util";
-import { settings } from "@port-of-mars/server/settings";
-import { EntityManager } from "typeorm";
+import {User} from "@port-of-mars/server/entity";
+import {settings} from "@port-of-mars/server/settings";
 import {BaseService} from "@port-of-mars/server/services/db";
+import {ServerError} from "@port-of-mars/server/util";
+import {UpdateResult} from "typeorm";
+import validator from "validator";
 
 export class RegistrationService extends BaseService {
   createRegistrationURL(registrationToken: string) {
@@ -11,11 +12,11 @@ export class RegistrationService extends BaseService {
 
   async submitRegistrationMetadata(data: { username: string; email: string; name: string }) {
     const repo = this.em.getRepository(User);
-    await repo.update({ username: data.username }, data);
+    await repo.update({username: data.username}, data);
   }
 
   async findUnregisteredUserByRegistrationToken(registrationToken: string): Promise<User | undefined> {
-    return await this.em.getRepository(User).findOne({ registrationToken })
+    return await this.em.getRepository(User).findOne({registrationToken})
   }
 
   async sendEmailVerification(u: User): Promise<void> {
@@ -30,8 +31,32 @@ export class RegistrationService extends BaseService {
     return;
   }
 
-  async verifyUnregisteredUser(u: User) {
-    const r = await this.em.getRepository(User).update({ username: u.username }, { isVerified: true });
-    console.assert(r.affected === 1);
+  async verifyUnregisteredUser(u: User, registrationToken: string): Promise<UpdateResult> {
+    let r: UpdateResult;
+    if (!validator.isUUID(registrationToken)) {
+      throw new ServerError({
+        code: 400,
+        message: `Invalid registration token ${registrationToken}`,
+        displayMessage: `Sorry, your registration token does not appear to be valid. Please try to verify your account again and contact us if this continues.`
+      })
+    }
+    try {
+      r = await this.em.getRepository(User).update({username: u.username, registrationToken}, {isVerified: true});
+    } catch (e) {
+      throw new ServerError({
+        code: 400,
+        error: e,
+        message: `Invalid user and registration token ${u.username}, ${registrationToken}`,
+        displayMessage: `Sorry, your registration token does not appear to be valid. Please try to verify your account again and contact us if this continues.`
+      });
+    }
+    if (r.affected !== 1) {
+      throw new ServerError({
+        code: 404,
+        message: `Invalid user and registration token ${u.username}, ${registrationToken}`,
+        displayMessage: `Sorry, your registration token does not appear to be valid. Please try to verify your account again and contact us if this continues.`
+      });
+    }
+    return r;
   }
 }

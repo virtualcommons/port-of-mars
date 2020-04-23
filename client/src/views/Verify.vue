@@ -43,7 +43,7 @@
     }
 
     get verifyUrl() {
-      return url("/registration/verify");
+      return url(`/registration/verify/${this.registrationToken}`);
     }
   }
 </script>

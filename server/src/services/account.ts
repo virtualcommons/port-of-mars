@@ -12,16 +12,15 @@ export class AccountService extends BaseService {
   }
 
    isRegisteredAndValid(user: User): boolean {
-    // FIXME: @cpritcha did this
     return !!user.isVerified && !!user.email;
   }
 
-  async findByUsername(username: string): Promise<User | undefined> {
-    return await this.getRepository().findOne({ username })
+  async findByUsername(username: string): Promise<User> {
+    return await this.getRepository().findOneOrFail({ username })
   }
 
-  async findUserById(id: number): Promise<User | undefined> {
-    return await this.getRepository().findOne(id);
+  async findUserById(id: number): Promise<User> {
+    return await this.getRepository().findOneOrFail(id);
   }
 
   async getOrCreateUser(username: string, profile?: any): Promise<User> {

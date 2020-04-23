@@ -16,17 +16,20 @@ export class TournamentService extends BaseService {
       });
   }
 
-  async getCurrentTournamentRound(): Promise<TournamentRound | undefined> {
+  async getCurrentTournamentRound(): Promise<TournamentRound> {
     const tournament = await this.getActiveTournament();
-    if (tournament === undefined) return undefined;
     const tournamentId = tournament.id;
 
     return await this.em
       .getRepository(TournamentRound)
-      .createQueryBuilder('tournamentRound')
-      .where('tournamentRound.tournamentId = :tournamentId', { tournamentId })
-      .orderBy('tournamentRound.roundNumber', 'DESC')
-      .getOne();
+      .findOneOrFail({
+        where: {
+          tournamentId
+        },
+        order: {
+          roundNumber: "DESC"
+        }
+      });
   }
 
   async getInviteList(
@@ -68,11 +71,13 @@ export class TournamentService extends BaseService {
         userId
       }
     });
+    if (invite) return invite;
+
     if (!invite && tournamentRound.roundNumber === 1) {
       invite = await this.createInvite(userId, tournamentRoundId)
     }
     else {
-      throw new EntityNotFoundError(`User ${userId} does not have an invite for the current round ${tournamentRoundId}.`);
+      throw new EntityNotFoundError(TournamentRoundInvite, `User ${userId} does not have an invite for the current round ${tournamentRoundId}.`);
     }
     return invite;
   }

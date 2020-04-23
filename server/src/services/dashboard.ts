@@ -94,7 +94,7 @@ export class DashboardService extends BaseService {
     if (!user.passedQuiz) {
       actionItems.push(this.getPassedTutorialActionItem(user));
     } else {
-      const invite = await this.sp.tournament.getActiveRoundInvite(user.id, round.id);
+      const invite = await this.sp.tournament.getActiveRoundInvite(user.id, round);
       actionItems.push(this.getCompletedIntroSurveyActionItem(round, invite));
 
       const gameActionItem = await this.getCurrentGameActionItem(user);
