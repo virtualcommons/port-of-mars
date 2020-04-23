@@ -1,6 +1,6 @@
 import { State } from "@port-of-mars/client/store/state";
 import Getters from "@port-of-mars/client/store/getters";
-import Mutations from "@port-of-mars/client/store/mutationFolder";
+import Mutations from "@port-of-mars/client/store/mutations";
 import { VueConstructor } from 'vue';
 import { Store } from "vuex";
 

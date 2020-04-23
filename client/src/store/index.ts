@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 import * as _ from 'lodash';
 
 import getters from './getters';
-import mutations from './mutationFolder';
+import mutations from './mutations';
 import { initialStoreState } from '@port-of-mars/client/store/state';
 
 export interface StoreState {
