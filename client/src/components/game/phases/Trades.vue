@@ -12,7 +12,7 @@
             Request a Trade
           </button>
         </div>
-        <div class="outer-wrapper">
+        <div class="outer-wrapper tour-active-trades-list">
           <div class="wrapper">
             <ActiveTrade
               v-for="trade in trades"

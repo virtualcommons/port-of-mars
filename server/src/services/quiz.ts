@@ -96,7 +96,7 @@ export class QuizService extends BaseService {
     quizId?: number
   ): Promise<boolean> {
 
-    const quiz: Quiz = (quizId) ? await this.getQuizById(quizId, { relations: ['questions'] }) : await this.getDefaultQuiz();
+    const quiz: Quiz = (quizId) ? await this.getQuizById(quizId, { relations: ['questions'] }) : await this.getDefaultQuiz({ relations: ['questions'] });
     const quizSubmission = await this.getRecentQuizSubmission(userId, quiz.id, { relations: ['responses'] });
     if (!quizSubmission?.responses) return false;
 

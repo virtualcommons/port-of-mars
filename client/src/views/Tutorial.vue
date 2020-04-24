@@ -30,14 +30,14 @@
                 <button
                   v-if="!tour.isFirst"
                   @click="tour.previousStep"
-                  class="btn btn-dark button-active"
+                  class="btn btn-dark button-active previous-button"
                 >
                   Previous
                 </button>
                 <button
                   v-if="!tour.isLast"
                   v-on="{ click: api.forcePause ? tour.nextStep : () => {} }"
-                  class="btn btn-dark"
+                  class="btn btn-dark next-button"
                   v-bind="{ class: api.forcePause ? 'button-active' : 'button-inactive' }"
                 >
                   Next
@@ -45,7 +45,7 @@
                 <button
                   v-else-if="tour.isLast"
                   v-on="{ click: api.forcePause ? tour.stop : () => {} }"
-                  class="btn btn-dark"
+                  class="btn btn-dark next-button"
                   v-bind="{ class: api.forcePause ? 'button-active' : 'button-inactive' }"
                 >
                   Finish
@@ -76,7 +76,7 @@
                 <button
                   v-if="!tour.isFirst"
                   @click="tour.previousStep"
-                  class="btn btn-dark button-active"
+                  class="btn btn-dark button-active previous-button"
                   type="button"
                   name="button"
                 >
@@ -85,7 +85,7 @@
                 <button
                   v-if="!tour.isLast"
                   v-on="{click: quizQuestionStatus ? tour.nextStep : ()=>{}}"
-                  class="btn btn-dark"
+                  class="btn btn-dark next-button"
                   v-bind="{class: quizQuestionStatus ? 'button-active' : 'button-inactive'}"
                   type="button"
                   name="button"
@@ -95,7 +95,7 @@
                 <button
                   v-if="tour.isLast"
                   v-on="{click: quizQuestionStatus ? tour.stop : ()=>{}}"
-                  class="btn btn-dark"
+                  class="btn btn-dark next-button"
                   v-bind="{class: quizQuestionStatus ? 'button-active' : 'button-inactive'}"
                 >
                   Finish
@@ -218,7 +218,7 @@ export default class Tutorial extends Vue {
   private startTourCallback() {
     const currentStepElement = this.$el.querySelector(this.steps[0].target);
     this.$el.classList.add(this.BODY_TOUR);
-    currentStepElement!.classList.add(this.TOUR_ACTIVE_CLASS);
+    currentStepElement!.classList.add(this.TOUR_ACTIVE_CLASS,'animate-current-step');
   }
 
   async previousStepCallback(currentStep: number) {
@@ -235,8 +235,8 @@ export default class Tutorial extends Vue {
     const previousStepElement = this.$el.querySelector(
       this.steps[currentStep - 1].target
     );
-    currentStepElement!.classList.remove(this.TOUR_ACTIVE_CLASS);
-    previousStepElement!.classList.add(this.TOUR_ACTIVE_CLASS);
+    currentStepElement!.classList.remove(this.TOUR_ACTIVE_CLASS,'animate-current-step');
+    previousStepElement!.classList.add(this.TOUR_ACTIVE_CLASS,'animate-current-step');
   }
 
   async nextStepCallback(currentStep: number) {
@@ -254,15 +254,15 @@ export default class Tutorial extends Vue {
     const nextStepElement = this.$el.querySelector(
       this.steps[currentStep + 1].target
     );
-    currentStepElement!.classList.remove(this.TOUR_ACTIVE_CLASS);
-    nextStepElement!.classList.add(this.TOUR_ACTIVE_CLASS);
+    currentStepElement!.classList.remove(this.TOUR_ACTIVE_CLASS,'animate-current-step');
+    nextStepElement!.classList.add(this.TOUR_ACTIVE_CLASS,'animate-current-step');
   }
 
   async stopTourCallback(currentStep: number) {
     await this.$el.classList.remove(this.BODY_TOUR);
     await this.$el
       .querySelector(`.${this.TOUR_ACTIVE_CLASS}`)!
-      .classList.remove(this.TOUR_ACTIVE_CLASS);
+      .classList.remove(this.TOUR_ACTIVE_CLASS,'animate-current-step');
     const complete = await this.checkQuizCompletion();
     this.$ajax.setQuizCompletion(complete);
     console.log('USER HAS COMPLETED QUIZ:', complete);

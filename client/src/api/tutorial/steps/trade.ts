@@ -70,11 +70,11 @@ const steps: Array<Step> = [
     ],
   },
   {
-    target: '.tour-trade-list',
+    target: '.tour-active-trades-list',
     content: `All active trades are listed here. If you receive a trade, you can accept or decline the trade. `
              + `When you send a trade, you only have the option to cancel the request.`,
     params: {
-      placement: TOP,
+      placement: LEFT,
     },
   },
   {
