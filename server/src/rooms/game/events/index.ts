@@ -211,18 +211,18 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
     game.upkeep = game.nextRoundUpkeep();
 
     // system health - last round
-    game.log(game.round,
+    game.log(
         `At the end of Round ${ game.round - 1}, System Health = ${ oldUpkeep }`,
         MarsLogCategory.systemHealth);
 
     // system health - contributed upkeep
-    game.log(game.round,
+    game.log(
         `During Round ${ game.round - 1 }, your group invested a total of ${ contributedUpkeep } into System Health.
         Updated System Health = ${ contributedUpkeep + oldUpkeep }`,
         MarsLogCategory.systemHealth);
 
     // system health - wear and tear
-    game.log(game.round,
+    game.log(
         `Standard wear and tear reduces System Health by 25.
         At the beginning of Round ${ game.round }, System Health = ${ game.upkeep }`,
         MarsLogCategory.systemHealth);
@@ -323,7 +323,7 @@ export class EnteredDefeatPhase extends GameEventWithData {
   apply(game: GameState): void {
     game.phase = Phase.defeat;
     game.timeRemaining = Number.MAX_SAFE_INTEGER; // set timeRemaining = infinite to prevent phase transitioning after game is over
-    game.log(game.round,`System Health has reached zero.`, MarsLogCategory.systemHealth, 'Server');
+    game.log(`System Health has reached zero.`, MarsLogCategory.systemHealth, 'Server');
   }
 }
 gameEventDeserializer.register(EnteredDefeatPhase);
