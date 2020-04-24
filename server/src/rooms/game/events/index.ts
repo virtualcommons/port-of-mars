@@ -322,7 +322,7 @@ export class EnteredDefeatPhase extends GameEventWithData {
 
   apply(game: GameState): void {
     game.phase = Phase.defeat;
-    game.timeRemaining = Number.MAX_SAFE_INTEGER; // set timeRemaining = infinite to prevent phase transitioning after game is over
+    game.timeRemaining = 10000; // set timeRemaining = infinite to prevent phase transitioning after game is over
     game.log(`System Health has reached zero.`, MarsLogCategory.systemHealth, 'Server');
   }
 }
@@ -335,7 +335,7 @@ export class EnteredVictoryPhase extends GameEventWithData {
 
   apply(game: GameState): void {
     game.phase = Phase.victory;
-    game.timeRemaining = Number.MAX_SAFE_INTEGER; // set timeRemaining = infinite to prevent phase transitioning after game is over
+    game.timeRemaining = 10000; // set timeRemaining = infinite to prevent phase transitioning after game is over
     game.evaluateGameWinners();
   }
 }
