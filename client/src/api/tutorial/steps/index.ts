@@ -10,10 +10,10 @@ import discard from './discard';
 
 // concatenate tutorial steps in order
 export const tutorialSteps: Array<Step> = gamePlay.concat(
-  // upkeep,
-  // player,
-  // events,
-  // invest,
+  upkeep,
+  player,
+  events,
+  invest,
   trade,
   purchase,
   discard
