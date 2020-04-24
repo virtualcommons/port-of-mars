@@ -1324,7 +1324,9 @@ export class GameState extends Schema implements GameData {
 
   purchaseAccomplishment(role: Role, accomplishment: AccomplishmentData): void {
     const { label, science, government, legacy, finance, culture, upkeep, victoryPoints } = accomplishment;
-    const message = `The ${role} purchased an accomplishment: ${label}. Science: ${science}, Government: ${government}, Legacy: ${legacy}, Finance: ${finance}, Culture: ${culture}, System Health: ${upkeep}. This added ${victoryPoints} points to their score.`;
+    const message = `The ${role} purchased an accomplishment: ${label}.
+    COST: System Health: ${upkeep}, Science: ${science}, Government: ${government}, Legacy: ${legacy}, Finance: ${finance}, Culture: ${culture}.
+    ${victoryPoints} points were added to the ${role}'s score.`;
     const category: string = MarsLogCategory.purchaseAccomplishment;
     const performedBy: ServerRole = SERVER;
     let round: number = this.round;
