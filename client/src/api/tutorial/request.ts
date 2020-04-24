@@ -20,6 +20,9 @@ export class TutorialAPI extends GameRequestAPI {
   private isTaskComplete = true;
   private validationObject: any = {};
   private requiredObject!: StateTransform;
+  
+  private storeSubscription!:any;
+  private modalIsOpen:boolean = false;
 
   constructor() {
     super();
@@ -27,6 +30,35 @@ export class TutorialAPI extends GameRequestAPI {
 
   connect(store: any) {
     this.store = store;
+  }
+
+  //we can watch the store for when it updates.
+  public activateStoreSubscription(ref:any){
+    this.storeSubscription = this.store.subscribe((mutation, state) => {
+      
+      if(mutation.type == 'SET_MODAL_VISIBLE'){
+        if(state.userInterface.modalView.visible && !this.modalIsOpen){
+          
+          this.completedGeneralClick();
+          
+        /*this is necessary because vue preforms dom updates asynchronously. Without it,
+          as far the the button is concerned, the above call to 'completedGeneralClick' hasn't run...*/
+          setTimeout(()=> ref.nextButton[0].click(), 0);
+          
+          this.modalIsOpen = true;
+        }
+      }
+
+      if(mutation.type == 'SET_MODAL_HIDDEN'){
+        if(this.modalIsOpen){
+          this.modalIsOpen = false;
+        }
+      }
+    });
+  }
+
+  public killSubscription(){
+    this.storeSubscription.unsubscribe();
   }
 
   public apply() {

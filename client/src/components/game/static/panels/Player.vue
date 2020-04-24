@@ -61,7 +61,7 @@ export default class Player extends Vue {
 
   tutorialValidation() {
     if (this.isInTutorial) {
-      this.api.completedGeneralClick();
+      //this.api.completedGeneralClick();
     }
   }
 
@@ -77,7 +77,7 @@ export default class Player extends Vue {
       },
     });
 
-    this.tutorialValidation();
+    //this.tutorialValidation();
   }
 }
 </script>

@@ -36,9 +36,11 @@
                 </button>
                 <button
                   v-if="!tour.isLast"
+                  ref="nextButton"
                   v-on="{ click: api.forcePause ? tour.nextStep : () => {} }"
                   class="btn btn-dark"
                   v-bind="{ class: api.forcePause ? 'button-active' : 'button-inactive' }"
+                  
                 >
                   Next
                 </button>
@@ -170,6 +172,11 @@ export default class Tutorial extends Vue {
   created() {
     this.api.connect(this.$store);
     this.api.resetState();
+    this.api.activateStoreSubscription(this.$refs);
+  }
+
+  beforeDestroy(){
+    this.api.killSubscription();
   }
 
   async mounted() {
