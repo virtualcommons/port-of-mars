@@ -210,15 +210,27 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
 
     game.upkeep = game.nextRoundUpkeep();
 
+    // system health - last round
+    game.log(game.round,
+        `At the end of Round ${ game.round - 1}, System Health = ${ oldUpkeep }`,
+        MarsLogCategory.systemHealth);
+
     // system health - contributed upkeep
-    game.log(game.round,`Your group invested a total of ${contributedUpkeep} into System Health during the last round.`, MarsLogCategory.systemHealth);
+    game.log(game.round,
+        `During Round ${ game.round - 1 }, your group invested a total of ${ contributedUpkeep } into System Health.
+        Updated System Health = ${ contributedUpkeep + oldUpkeep }`,
+        MarsLogCategory.systemHealth);
 
     // system health - wear and tear
-    game.log(game.round,`Standard wear and tear reduced System Health by 25.`, MarsLogCategory.systemHealth);
+    game.log(game.round,
+        `Standard wear and tear reduces System Health by 25.
+        At the beginning of Round ${ game.round }, System Health = ${ game.upkeep }`,
+        MarsLogCategory.systemHealth);
 
     // current system health
-    game.log(game.round,`System Health is currently ${game.upkeep}.`,
-    `${ MarsLogCategory.systemHealth }: ${oldUpkeep < game.upkeep ? 'GAIN' : 'DROP'}`);
+    // game.log(game.round,
+    //     `System Health is currently ${game.upkeep}.`,
+    // `${ MarsLogCategory.systemHealth }: ${oldUpkeep < game.upkeep ? 'INCREASE' : 'DECREASE'}`);
 
     game.resetPlayerReadiness();
     game.resetPlayerContributedUpkeep();
