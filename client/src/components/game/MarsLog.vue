@@ -15,7 +15,6 @@
         <p class="time">
           <span>[ </span>{{ marsLogTime(log.timestamp) }}<span> ]</span>
         </p>
-        <p>ROUND : {{ log.round }}</p>
       </div>
     </div>
   </div>
@@ -23,7 +22,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { MarsLogData } from '@port-of-mars/shared/types';
+import { MarsLogData, MarsLogCategory } from '@port-of-mars/shared/types';
 
 @Component({
   components: {},
@@ -45,9 +44,9 @@ export default class MarsLog extends Vue {
 
   marsLogColor(log: MarsLogData) {
     switch (log.category) {
-      case 'System Health: Gain':
+      case 'System Health- Gain':
         return { backgroundColor: 'var(--marslog-green)' };
-      case 'System Health: Drop':
+      case 'System Health- Drop':
         return { backgroundColor: 'var(--marslog-red)' };
       case 'Trade':
         return { backgroundColor: 'var(--marslog-purple)' };
