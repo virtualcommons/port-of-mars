@@ -13,6 +13,7 @@
         :class="{ 'unvailable-investment': grayOutResources(resource) }"
       >
         <div class="investment-input-wrapper">
+          <!-- TODO: add tooltip -->
           <img
             :src="require(`@port-of-mars/client/assets/icons/${resource}.svg`)"
             alt="Investment"
@@ -72,16 +73,6 @@ export default class TradeOptions extends Vue {
 
   get playerInventory() {
     return this.$store.getters.player.inventory;
-  }
-
-  private impossibleTrade(resource: Resource) {
-    if (
-      this.resources[resource] > this.playerInventory[resource] &&
-      this.mode == 'outgoing'
-    ) {
-      return true;
-    }
-    return false;
   }
 
   private grayOutResources(resource: Resource) {
