@@ -14,7 +14,6 @@
     <div class="marslog-wrapper row">
       <div class="marslog col-6">
         <div class="wrapper">
-
           <div
             v-for="(log, index) in logs"
             :style="logColor(log)"
@@ -25,18 +24,18 @@
             <p class="final-log" v-if="index === 0">Final Log</p>
             <p v-if="index !== 0" class="list">
               <span>
-                <sup>No.</sup> {{ logs.length - index }} / {{ logs.length }}
+                Log: {{ logs.length - index }} / {{ logs.length }}
               </span>
             </p>
             <p class="content">{{ log.content }}</p>
             <p class="time">
               <span>[ </span>{{ logTime(log.timestamp) }}<span> ]</span>
             </p>
-            <span>ROUND: {{ log.round }}</span>
-            <p v-if="delineateRound(index, logs)"><b>ROUND MARKER</b></p>
+<!--            <span>ROUND: {{ log.round }}</span>-->
+            <div v-if="delineateRound(index, logs)" class="round row"><b>Round {{ log.round - 1 }}</b></div>
           </div>
 
-        </div>
+        </div> <!--end wrapper-->
       </div>
     </div>
     <div class="footnote-wrapper row">
@@ -69,14 +68,24 @@ import { isDev, isStaging } from '@port-of-mars/shared/settings';
   export default class ContainerDefeat extends Vue {
     @Inject() readonly api!: GameRequestAPI;
 
-  // NOTE :: MODIFIED MARS LOG
+    eventName: string = '';
+
+    categoryColorMap = new Map([
+      ['SYSTEM HEALTH- GAIN', 'var(--marslog-green)'],
+      ['SYSTEM HEALTH- DROP', 'var(--marslog-red)'],
+      ['TRADE', 'var(--space-white-opaque-1)'],
+      [`MARS EVENT: ${ this.eventName }`, 'var(--space-white-opaque-1)']
+    ]);
+
+
+    // NOTE :: MODIFIED MARS LOG
 
   get logs() {
     return this.$store.getters.logs.reverse();
   }
 
   private delineateRound(index: number, logs: MarsLogMessageData[]): boolean {
-    let currentIndex = index;
+    let currentIndex: number  = index;
     let nextIndex: number = index + 1;
 
     console.log('currentIndex ', currentIndex);
@@ -91,7 +100,6 @@ import { isDev, isStaging } from '@port-of-mars/shared/settings';
       return true;
     }
     else return false;
-
   }
 
   private logTime(timestamp: number) {

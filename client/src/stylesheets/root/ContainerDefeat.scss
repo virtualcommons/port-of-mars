@@ -97,6 +97,7 @@
 
           .final-log,
           .list {
+            text-transform: uppercase;
             font-weight: $font-weight-maven-pro-medium;
           }
 
@@ -123,7 +124,23 @@
               color: $new-space-orange;
             }
           }
+
         }
+      }
+      .round {
+        @include make-center;
+        display: flex;
+        padding: 1rem;
+        margin: 1rem -0.5rem -0.5rem;
+
+        border-style: solid;
+        border-top-width: 0.75rem;
+        border-color: #292D2E;
+        background-color: $space-orange-opaque-2;
+
+        text-transform: uppercase;
+        letter-spacing: 0.25rem;
+        font-size: large;
       }
     }
   }
