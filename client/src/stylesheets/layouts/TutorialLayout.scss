@@ -82,25 +82,30 @@ body .in-tour {
     margin: 0.5rem;
     color: $space-lightgreen;
     @include default-transition-base;
-  }
-
-  .previous-button{
-    color: $space-lightgreen;
-    border: 0.0625rem solid $space-lightgreen !important;
 
     &:hover{
       background-color: $space-lightgreen;
     }
   }
 
-  .next-button{
-    color: $new-space-orange;
-    border: 0.0625rem solid $new-space-orange !important;
+  //leave this until we decide which design we want.
+  // .previous-button{
+  //   color: $space-lightgreen;
+  //   border: 0.0625rem solid $space-lightgreen !important;
 
-    &:hover{
-      background-color: $new-space-orange;
-    }
-  }
+  //   &:hover{
+  //     background-color: $space-lightgreen;
+  //   }
+  // }
+
+  // .next-button{
+  //   color: $new-space-orange;
+  //   border: 0.0625rem solid $new-space-orange !important;
+
+  //   &:hover{
+  //     background-color: $new-space-orange;
+  //   }
+  // }
 
   .button-inactive{
     opacity: 0.25;
