@@ -60,7 +60,7 @@ export abstract class BaseEvent implements MarsEventState {
 export class Sandstorm extends BaseEvent {
   finalize(game: GameState): void {
     game.upkeep -= 10;
-    game.log(game.round,'A sandstorm has decreased system health by 10.', `MARS EVENT: ${ formatEventName(Sandstorm.name) }`);
+    game.log('A sandstorm has decreased system health by 10.', `MARS EVENT: ${ formatEventName(Sandstorm.name) }`);
   }
 }
 
@@ -69,7 +69,7 @@ export class Sandstorm extends BaseEvent {
 @assocEventId
 export class LifeAsUsual extends BaseEvent {
   finalize(game: GameState): void {
-    game.log(game.round, `As the first human outpost on Mars, having a "usual" day is pretty unusual.`, `MARS EVENT: ${ formatEventName(LifeAsUsual.name) }`)
+    game.log(`As the first human outpost on Mars, having a "usual" day is pretty unusual.`, `MARS EVENT: ${ formatEventName(LifeAsUsual.name) }`)
   }
 }
 
@@ -97,7 +97,7 @@ export class BreakdownOfTrust extends BaseEvent {
       player.resetTimeBlocks();
     }
 
-    game.log(game.round, `Each player chooses up to 2 Influence cards they own, then discards the rest.`, `MARS EVENT: ${formatEventName(BreakdownOfTrust.name)}`)
+    game.log(`Each player chooses up to 2 Influence cards they own, then discards the rest.`, `MARS EVENT: ${formatEventName(BreakdownOfTrust.name)}`)
   }
 }
 
@@ -161,7 +161,7 @@ export class PersonalGain extends BaseEvent {
     game.subtractUpkeep(subtractedUpkeep);
 
     const message = `System health decreased by ${this.subtractedUpkeepTotal(subtractedUpkeep)}. The following players voted yes: ${this.playersVoteYes(this.votes)}`;
-    game.log(game.round, message, `MARS EVENT: ${ formatEventName(PersonalGain.name) }`);
+    game.log(message, `MARS EVENT: ${ formatEventName(PersonalGain.name) }`);
   }
 
   getData() {
@@ -223,7 +223,6 @@ export class CompulsivePhilanthropy extends BaseEvent {
     game.upkeep += game.players[winner].timeBlocks;
     game.players[winner].timeBlocks = 0;
     game.log(
-      game.round,
       `The ${winner} was voted to be Compulsive Philanthropist with ${count} votes. The ${winner} invested all of their timeblocks into System Health.`,
       `MARS EVENT: ${ formatEventName(CompulsivePhilanthropy.name) }`
     );
@@ -263,7 +262,6 @@ abstract class OutOfCommission extends BaseEvent {
     const role: Role = this.playerOutOfCommission(this.player);
     game.players[role].timeBlocks = 3;
     game.log(
-      game.round,
       `${this.player} has 3 time blocks to invest during this round.`,
       `MARS EVENT: ${ formatEventName(OutOfCommission.name) }`
     );
@@ -326,7 +324,6 @@ export class OutOfCommissionEntrepreneur extends OutOfCommission {
 export class Audit extends BaseEvent {
   finalize(game: GameState) {
     game.log(
-      game.round,
       `You will be able to view other players' resources. Hover over each player tab on the right to reveal their inventory.`,
       `MARS EVENT: ${ formatEventName(Audit.name) }`
     );
@@ -382,7 +379,7 @@ export class BondingThroughAdversity extends BaseEvent {
 
     }
     const message = `Players have gained one influence currency of their choice.`
-    game.log(game.round, message, `MARS EVENT: ${ formatEventName(BondingThroughAdversity.name) }`);
+    game.log(message, `MARS EVENT: ${ formatEventName(BondingThroughAdversity.name) }`);
   }
 
   /**
@@ -403,7 +400,6 @@ export class ChangingTides extends BaseEvent {
       player.accomplishments.draw(1);
     }
     game.log(
-       game.round,
       'Each player discards their current Accomplishments and draws one new Accomplishment.',
       `MARS EVENT: ${ formatEventName(ChangingTides.name) }`
     );

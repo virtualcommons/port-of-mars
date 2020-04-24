@@ -162,8 +162,8 @@ class PendingInvestment extends Schema implements InvestmentData {
 export class MarsLogMessage extends Schema implements MarsLogMessageData {
   constructor(msg: MarsLogMessageData) {
     super();
-    this.performedBy = msg.performedBy;
     this.round = msg.round;
+    this.performedBy = msg.performedBy;
     this.category = msg.category;
     this.content = msg.content;
     this.timestamp = msg.timestamp;
@@ -175,19 +175,19 @@ export class MarsLogMessage extends Schema implements MarsLogMessageData {
 
   toJSON(): MarsLogMessageData {
     return {
-      performedBy: this.performedBy,
       round: this.round,
+      performedBy: this.performedBy,
       category: this.category,
       content: this.content,
       timestamp: this.timestamp
     };
   }
 
-  @type('string')
-  performedBy: Role | ServerRole;
-
   @type('number')
   round: number;
+
+  @type('string')
+  performedBy: Role | ServerRole;
 
   @type('string')
   category: string;
@@ -1158,13 +1158,12 @@ export class GameState extends Schema implements GameData {
   // REFACTOR: DEFAULT CATEGORY
 
   log(
-    round: number,
     message: string,
     category: string,
     performedBy: Role | ServerRole = SERVER
   ): MarsLogMessage {
     const msg = new MarsLogMessage({
-      round,
+      round: this.round,
       performedBy,
       category,
       content: message,
@@ -1222,7 +1221,6 @@ export class GameState extends Schema implements GameData {
   addTrade(trade: TradeData, reason?: string): void {
     let message: string;
     let category: string;
-    let round: number = this.round;
     const performedBy: ServerRole = SERVER;
     const toRole: Role = trade.to.role;
     const fromRole: Role = trade.from.role;
@@ -1234,7 +1232,7 @@ export class GameState extends Schema implements GameData {
       case 'sent-trade-request':
         message = `The ${fromRole} sent a trade request to the ${toRole}.`;
         category = MarsLogCategory.sentTrade;
-        this.log(round, message, category, performedBy);
+        this.log(message, category, performedBy);
         break;
       default:
         break;
@@ -1244,7 +1242,6 @@ export class GameState extends Schema implements GameData {
   removeTrade(id: string, reason?: string): void {
     let message: string;
     let category: string;
-    let round: number = this.round;
     const performedBy: ServerRole = SERVER;
     const toRole: Role = this.tradeSet[id].to.role;
     const fromRole: Role = this.tradeSet[id].from.role;
@@ -1253,13 +1250,13 @@ export class GameState extends Schema implements GameData {
       case 'reject-trade-request':
         message = `The ${toRole} rejected a trade request from the ${fromRole}.`;
         category = MarsLogCategory.rejectTrade;
-        this.log(round, message, category, performedBy);
+        this.log(message, category, performedBy);
         this.tradeSet[id].status = 'Rejected';
         break;
       case 'cancel-trade-request':
         message = `The ${fromRole} canceled a trade request sent to the ${toRole}.`;
         category = MarsLogCategory.cancelTrade;
-        this.log(round, message, category, performedBy);
+        this.log(message, category, performedBy);
         this.tradeSet[id].status = 'Cancelled';
         break;
       default:
@@ -1275,7 +1272,6 @@ export class GameState extends Schema implements GameData {
   acceptTrade(id: string): void {
     let message: string;
     let category: string;
-    let round: number = this.round;
     const performedBy: ServerRole = SERVER;
 
     const trade: Trade = this.tradeSet[id];
@@ -1312,12 +1308,12 @@ export class GameState extends Schema implements GameData {
       }
       message = `The ${fromRole} has traded ${fromMsg.join(', ')} in exchange for ${toMsg.join(', ')} from the ${toRole}.`;
       category = MarsLogCategory.acceptTrade;
-      this.log(round, message, category, performedBy);
+      this.log(message, category, performedBy);
       this.tradeSet[id].status = 'Accepted';
     } else {
       message = `The ${fromRole} is unable to fulfill a trade request previously sent to the ${toRole}. The trade will be removed.`;
       category = MarsLogCategory.invalidTrade;
-      this.log(round, message, category, performedBy);
+      this.log(message, category, performedBy);
       this.tradeSet[id].status = 'Cancelled';
     }
   }
@@ -1329,10 +1325,8 @@ export class GameState extends Schema implements GameData {
     ${victoryPoints} points were added to the ${role}'s score.`;
     const category: string = MarsLogCategory.purchaseAccomplishment;
     const performedBy: ServerRole = SERVER;
-    let round: number = this.round;
-
     this.players[role].purchaseAccomplishment(accomplishment);
-    this.log(round, message, category, performedBy);
+    this.log(message, category, performedBy);
   }
 
   discardAccomplishment(role: Role, id: number): void {
