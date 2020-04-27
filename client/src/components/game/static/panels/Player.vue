@@ -55,29 +55,14 @@ export default class Player extends Vue {
       : require(`@port-of-mars/client/assets/characters/Researcher.png`);
   }
 
-  get isInTutorial() {
-    return this.$tstore.getters.layout === "tutorial";
-  }
-
-  tutorialValidation() {
-    if (this.isInTutorial) {
-      this.api.completedGeneralClick();
-    }
-  }
-
-  // handleOpenModal() {
-    // this.$tstore.commit("SET_PLAYER_INFO_MODAL_VISIBILITY", {
-    //   role: this.playerRole,
-    //   visible: true
   handleOpenModal() {
-    this.$tstore.commit('SET_MODAL_VISIBLE', {
+    let data = {
       type: 'PlayerModal',
       data: {
         role: this.playerRole,
       },
-    });
-
-    this.tutorialValidation();
+    }
+    this.api.setModalVisible(data)
   }
 }
 </script>

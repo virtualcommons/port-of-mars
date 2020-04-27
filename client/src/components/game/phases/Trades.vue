@@ -51,23 +51,9 @@ export default class Trades extends Vue {
     return trades;
   }
 
-  get isInTutorial() {
-    return this.$tstore.getters.layout === "tutorial";
-  }
-
-  tutorialValidation() {
-    if (this.isInTutorial) {
-      this.api.completedGeneralClick();
-    }
-  }
 
   private handleOpenTradeRequest() {
-    this.$tstore.commit('SET_MODAL_VISIBLE', {
-      type: 'TradeRequestModal',
-      data: {},
-    });
-
-    this.tutorialValidation();
+    this.api.setModalVisible({type: 'TradeRequestModal',data: {}});
   }
 }
 </script>

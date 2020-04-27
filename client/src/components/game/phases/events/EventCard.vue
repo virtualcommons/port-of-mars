@@ -37,12 +37,13 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, Inject } from 'vue-property-decorator';
 import { AccomplishmentData, Phase } from '@port-of-mars/shared/types';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons/faInfoCircle';
 import { faDotCircle } from '@fortawesome/free-regular-svg-icons/faDotCircle';
+import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 
 library.add(faInfoCircle);
 library.add(faDotCircle);
@@ -50,6 +51,8 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 @Component({})
 export default class EventCard extends Vue {
+  @Inject() readonly api!: GameRequestAPI;
+
   @Prop({
     default: () => ({
       id: undefined,
@@ -78,7 +81,7 @@ export default class EventCard extends Vue {
   }
 
   private handleClick(): void {
-    this.$tstore.commit('SET_MODAL_VISIBLE', {
+    this.api.setModalVisible({
       type: 'CardModal',
       data: {
         activator: 'User',

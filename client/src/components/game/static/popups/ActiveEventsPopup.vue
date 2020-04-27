@@ -28,13 +28,14 @@ p<template>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, Inject } from 'vue-property-decorator';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCaretUp } from '@fortawesome/free-solid-svg-icons/faCaretUp';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons/faCaretDown';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import EventCard from '@port-of-mars/client/components/game/phases/events/EventCard.vue';
 import { Phase } from '@port-of-mars/shared/types';
+import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 
 library.add(faCaretUp);
 library.add(faCaretDown);
@@ -46,15 +47,15 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
   },
 })
 export default class ActiveEventsPopup extends Vue {
+  @Inject()
+  readonly api!: GameRequestAPI;
+
   get popupVisible() {
     return this.$tstore.state.userInterface.popupView.activeEventsVisible;
   }
 
   private toggle() {
-    this.$tstore.commit(
-      'SET_ACTIVE_EVENTS_POPUP_VISIBILITY',
-      !this.popupVisible
-    );
+    this.api.toggleActiveEvents(this.popupVisible);
   }
 
   get position() {

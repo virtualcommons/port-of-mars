@@ -48,6 +48,8 @@ import * as _ from 'lodash';
   },
 })
 export default class InfluencesSelect extends Vue {
+  @Inject() readonly api!: GameRequestAPI
+
   private origPending = _.cloneDeep(
     this.$tstore.getters.player.pendingInvestments
   );
@@ -101,7 +103,7 @@ export default class InfluencesSelect extends Vue {
       msg.units >= this.origPending[msg.name] &&
       this.getRemainingTimeBlocks(pendingInvestments) >= 0
     ) {
-      this.$tstore.commit('SET_PENDING_INVESTMENT_AMOUNT', {
+      this.api.investPendingTimeBlocks({
         investment: msg.name,
         units: msg.units,
         role: this.$tstore.state.role,

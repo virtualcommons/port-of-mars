@@ -78,14 +78,11 @@ export default class TradeRequest extends Vue {
   private count: number = 0;
 
   created() {
-    this.$tstore.commit(
-      'SET_TRADE_PLAYER_NAME',
-      this.$tstore.getters.player.role
-    );
+    this.api.setTradePlayerName(this.$tstore.getters.player.role);
   }
 
   destroyed() {
-    this.$tstore.commit('RESET_TRADE_MODAL', 'data');
+    this.api.resetTradeModal();
   }
 
   // NOTE :: STATE GETTERS
@@ -110,10 +107,9 @@ export default class TradeRequest extends Vue {
 
   private handleChange(name: string) {
     if (name == this.tradePartnerName) {
-      this.$tstore.commit('SET_TRADE_PARTNER_NAME', '' as Role);
+      this.api.setTradePartnerName('');
     } else {
-      this.$tstore.commit('SET_TRADE_PARTNER_NAME', name as Role);
-      this.tutorialValidation('partner');
+      this.api.setTradePartnerName(name);      
     }
   }
 
@@ -126,13 +122,11 @@ export default class TradeRequest extends Vue {
   }
 
   private handleSendResources(resources: ResourceAmountData) {
-    this.$tstore.commit('SET_SEND_RESOURCES', resources);
-    this.tutorialValidation('give');
+    this.api.setTradeGiveResources(resources);
   }
 
   private handleReceiveResources(resources: ResourceAmountData) {
-    this.$tstore.commit('SET_GET_RESOURCES', resources);
-    this.tutorialValidation('get');
+    this.api.setTradeGetResources(resources);
   }
 
   private handleTrade() {
@@ -151,35 +145,10 @@ export default class TradeRequest extends Vue {
         status: 'Active',
       };
       this.api.sendTradeRequest(tradeDataPackage);
-      if (!this.isInTutorial) {
-        this.$tstore.commit('SET_MODAL_HIDDEN', null);
-      }
+      this.api.setModalHidden();
     }
   }
 
-  // NOTE :: TUTORIAL
-
-  get isInTutorial() {
-    return this.$tstore.getters.layout === 'tutorial';
-  }
-
-  private tutorialValidation(type: string) {
-    if (this.isInTutorial) {
-      switch (type) {
-        case 'give':
-          this.api.saveGiveResources(this.sentResources);
-          break;
-        case 'get':
-          this.api.saveGetResources(this.exchangeResources);
-          break;
-        case 'partner':
-          this.api.saveTradePartner(this.tradePartnerName);
-          break;
-        default:
-          break;
-      }
-    }
-  }
 
   // NOTE :: STYLES
   private borderStyle(role: Role) {
