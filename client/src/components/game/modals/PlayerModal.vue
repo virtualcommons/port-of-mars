@@ -99,7 +99,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop , Inject} from 'vue-property-decorator';
 import { PlayerInfoModalData } from '@port-of-mars/client/types/modals';
 import { Role, Phase } from '@port-of-mars/shared/types';
 import Inventory from '@port-of-mars/client/components/game/Inventory.vue';
@@ -108,6 +108,7 @@ import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishm
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 
 library.add(faTimes);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
@@ -120,6 +121,8 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
   },
 })
 export default class PlayerModal extends Vue {
+   @Inject() readonly api!: GameRequestAPI;
+
   @Prop({}) private modalData!: PlayerInfoModalData;
   // private errorMessageActive: boolean = false;
   private accomplishmentType: string = 'active';
@@ -191,10 +194,7 @@ export default class PlayerModal extends Vue {
 
   private handleRequestTrade() {
     if (!this.playerData.isSelf && this.gamePhase === this.phase.trade) {
-      // this.$tstore.commit('OPEN_TRADE_MODAL_WARM', {
-      //   role: this.modalData.role,
-      // });
-      this.$tstore.commit('SET_MODAL_VISIBLE', {
+      this.api.setModalVisible({
         type: 'TradeRequestModal',
         data: {},
       });

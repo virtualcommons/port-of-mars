@@ -77,19 +77,8 @@ export default class GameInformation extends Vue {
     return this.$store.state.timeRemaining < 60 ? "blink-timer" : "countdown";
   }
 
-  get isInTutorial() {
-    return this.$tstore.getters.layout === "tutorial";
-  }
-
-  tutorialValidation() {
-    if (this.isInTutorial) {
-      this.api.completedGeneralClick();
-    }
-  }
-
   private submitDone() {
     let pendingInvestments;
-    this.tutorialValidation();
 
     switch (this.phaseNumber) {
       case Phase.events:

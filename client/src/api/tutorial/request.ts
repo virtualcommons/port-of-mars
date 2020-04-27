@@ -3,6 +3,7 @@ import {
   AccomplishmentData,
   ResourceAmountData,
   Resource,
+  Role
 } from '@port-of-mars/shared/types';
 import {
   initialStoreState,
@@ -14,16 +15,12 @@ import { Store } from 'vuex/types/index';
 import { State } from '@port-of-mars/client/store/state';
 import { StateTransform } from '@port-of-mars/client/types/tutorial';
 
-export class TutorialAPI extends GameRequestAPI {
+export class TutorialAPI  {
   private store!: Store<State>;
   private stateStack: Array<StateTransform[]> = [];
   private isTaskComplete = true;
   private validationObject: any = {};
   private requiredObject!: StateTransform;
-
-  constructor() {
-    super();
-  }
 
   connect(store: any) {
     this.store = store;
@@ -163,9 +160,9 @@ export class TutorialAPI extends GameRequestAPI {
     this.requiredObject.required = false;
   }
 
-  public discardAccomplishment(id: number) {
+  public discardOption(cardInfo:any) {
     this.store.commit('DISCARD_ACCOMPLISHMENT', {
-      id,
+      id: cardInfo.data.cardData.id,
       role: 'Researcher',
     });
 
@@ -173,58 +170,10 @@ export class TutorialAPI extends GameRequestAPI {
     this.requiredObject.required = false;
   }
 
-  public saveGiveResources(resources: ResourceAmountData) {
-    //;
-    // const correctGive = defaultInventory();
-    // correctGive.science =2;
-    // correctGive.government = 1;
 
-    for (const [resource, amt] of Object.entries(resources)) {
-      if (this.validationObject[resource as Resource] != amt) return false;
-    }
+  public investPendingTimeBlocks(investment:any) {
+    this.store.commit('SET_PENDING_INVESTMENT_AMOUNT', investment);
 
-    this.isTaskComplete = true;
-    this.requiredObject.required = false;
-    //this.store.commit('TUTORIAL_SET_GIVE_RESOURCES', resources)
-    return true;
-  }
-
-  public saveGetResources(resources: ResourceAmountData) {
-    // const correctGet = defaultInventory();
-    // correctGet.culture =3;
-
-    for (const [resource, amt] of Object.entries(resources)) {
-      if (this.validationObject[resource as Resource] != amt) return false;
-    }
-
-    this.isTaskComplete = true;
-    this.requiredObject.required = false;
-    //this.store.commit('TUTORIAL_SET_GET_RESOURCES', resources);
-    return true;
-  }
-
-  public saveTradePartner(name: string) {
-    if (this.validationObject.name == name) {
-      this.isTaskComplete = true;
-      //this.store.commit('TUTORIAL_SET_TRADE_PARTNER_NAME', name);
-      this.requiredObject.required = false;
-      return true;
-    }
-    return false;
-  }
-
-  // TOUR TRADE
-
-  // public requestTrade(visible: boolean) {
-  //     if (this.validationObject.visible == visible) {
-  //         this.isTaskComplete = true;
-  //         this.requiredObject.required = false;
-  //         return true;
-  //     }
-  //     return false;
-  // }
-
-  public investTimeBlocks() {
     const pendingInventory = this.store.getters.player.pendingInvestments;
     for (const [resource, amt] of Object.entries(pendingInventory)) {
       if (this.validationObject[resource as Resource] != amt) return false;
@@ -233,5 +182,81 @@ export class TutorialAPI extends GameRequestAPI {
     this.requiredObject.required = false;
     return true;
   }
-  public setPlayerReadiness(): void {}
+
+
+  public investTimeBlocks(){}
+
+
+  public setPlayerReadiness(ready:boolean): void {
+    if(ready){
+      this.completedGeneralClick();
+    }
+  }
+
+
+  //REFACTOR OF THE API SYSTEM
+
+  //MODALS
+  public setModalVisible(data: any){
+    this.completedGeneralClick();
+    this.store.commit('SET_MODAL_VISIBLE',data);
+  }
+
+  public setModalHidden(){
+    this.store.commit('SET_MODAL_HIDDEN', null);
+  }
+
+  public toggleProfileMenu(currentlyVisble:boolean){
+    this.store.commit(
+      'SET_PROFILE_MENU_VISIBILITY',
+      !currentlyVisble
+    );
+    this.completedGeneralClick();
+  }
+
+  //TRADES
+  public setTradePlayerName(role: Role){
+    this.store.commit('SET_TRADE_PLAYER_NAME', role);
+  }
+
+  public setTradePartnerName(name:string){
+    this.store.commit('SET_TRADE_PARTNER_NAME', name as Role);
+
+    if (this.validationObject.name == name) {
+      this.isTaskComplete = true;
+      this.requiredObject.required = false;
+      return true;
+    }
+    return false;
+    
+  }
+
+  public setTradeGetResources(resources:ResourceAmountData){
+    this.store.commit('SET_GET_RESOURCES', resources);
+
+    for (const [resource, amt] of Object.entries(resources)) {
+      if (this.validationObject[resource as Resource] != amt) return false;
+    }
+
+    this.isTaskComplete = true;
+    this.requiredObject.required = false;
+    return true;
+  }
+
+  public setTradeGiveResources(resources: ResourceAmountData){
+    this.store.commit('SET_SEND_RESOURCES', resources);
+
+    for (const [resource, amt] of Object.entries(resources)) {
+      if (this.validationObject[resource as Resource] != amt) return false;
+    }
+
+    this.isTaskComplete = true;
+    this.requiredObject.required = false;
+    return true;
+  }
+
+
 }
+
+
+

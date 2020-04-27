@@ -126,7 +126,7 @@ export default class AccomplishmentCard extends Vue {
   }
 
   private handleClick() {
-    this.$tstore.commit('SET_MODAL_VISIBLE', {
+    let data = {
       type: 'CardModal',
       data: {
         activator: 'User',
@@ -136,7 +136,9 @@ export default class AccomplishmentCard extends Vue {
         cardData: this.accomplishment,
         confirmation: false,
       },
-    });
+    }
+
+    this.api.setModalVisible(data);
   }
 
   get cardTypeStyling() {
@@ -201,22 +203,20 @@ export default class AccomplishmentCard extends Vue {
   // NOTE :: Discard Type
 
   private handleDiscard() {
-    if (this.$store.getters.layout == 'tutorial') {
-      this.api.discardAccomplishment(this.accomplishment.id);
-    } else {
-      this.$tstore.commit('SET_MODAL_VISIBLE', {
-        type: 'CardModal',
-        data: {
-          activator: 'User',
-          title: 'Discard Accomplishment Card',
-          content:
-            "Clicking 'Confirm' will discard this accomplishment. A new card will replace it next round.",
-          cardType: 'AccomplishmentCard',
-          cardData: this.accomplishment,
-          confirmation: true,
-        },
-      });
-    }
+    let data = {
+      type: 'CardModal',
+      data: {
+        activator: 'User',
+        title: 'Discard Accomplishment Card',
+        content:
+          "Clicking 'Confirm' will discard this accomplishment. A new card will replace it next round.",
+        cardType: 'AccomplishmentCard',
+        cardData: this.accomplishment,
+        confirmation: true,
+      },
+    };
+    this.api.discardOption(data);
+
   }
 }
 </script>

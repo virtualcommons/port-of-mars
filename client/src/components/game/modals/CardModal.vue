@@ -77,7 +77,7 @@ export default class CardModal extends Vue {
     if (this.canDiscard) {
       this.api.discardAccomplishment(this.modalData.cardData.id as number);
     }
-    this.$tstore.commit('SET_MODAL_HIDDEN', null);
+    this.api.setModalHidden();
   }
 }
 </script>

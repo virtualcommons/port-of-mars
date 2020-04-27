@@ -22,15 +22,19 @@ import {
   InvestmentData,
   TradeData,
   Role,
-  Resource
+  Resource,
+  ResourceAmountData
 } from '@port-of-mars/shared/types';
 import { MockRoom } from '@port-of-mars/client/types/tutorial';
+import { TStore } from '@port-of-mars/client/plugins/tstore';
 
 export class GameRequestAPI {
   room!: Room | MockRoom;
+  private store!: TStore
 
-  public connect(room: Room | MockRoom) {
+  public connect(room: Room | MockRoom, store:TStore) {
     this.room = room;
+    this.store = store;
   }
 
   public send(req: Requests) {
@@ -132,5 +136,58 @@ export class GameRequestAPI {
       savedResources
     };
     this.send(msg);
+  }
+
+  //UI COMMANDS
+  public investPendingTimeBlocks(investment: any){
+    this.store.commit('SET_PENDING_INVESTMENT_AMOUNT', investment);
+  }
+
+  public setModalVisible(data: any){
+    this.store.commit('SET_MODAL_VISIBLE',data);
+  }
+
+  public setModalHidden(){
+    this.store.commit('SET_MODAL_HIDDEN', null);
+  }
+
+  public toggleProfileMenu(currentVisiblility:boolean){
+    this.store.commit('SET_PROFILE_MENU_VISIBILITY', !currentVisiblility);
+  }
+
+  public toggleMarsLogPopup(currentVisiblility:boolean){
+    this.store.commit('SET_MARS_LOG_POPUP_VISIBILITY', !currentVisiblility);
+  }
+
+  public toggleInventory(currentVisiblility:boolean){
+    this.store.commit('SET_INVENTORY_POPUP_VISIBILITY', !currentVisiblility);
+  }
+
+  public toggleActiveEvents(currentVisiblility:boolean){
+    this.store.commit('SET_ACTIVE_EVENTS_POPUP_VISIBILITY', !currentVisiblility);
+  }
+
+  public setTradePlayerName(role: Role){
+    this.store.commit('SET_TRADE_PLAYER_NAME', role);
+  }
+
+  public setTradePartnerName(name:string){
+    this.store.commit('SET_TRADE_PARTNER_NAME', name as Role);
+  }
+
+  public setTradeGetResources(resources:ResourceAmountData){
+    this.store.commit('SET_GET_RESOURCES', resources);
+  }
+
+  public setTradeGiveResources(resources: ResourceAmountData){
+    this.store.commit('SET_SEND_RESOURCES', resources);
+  }
+
+  public resetTradeModal(){
+    this.store.commit('RESET_TRADE_MODAL', null);
+  }
+
+  public discardOption(data:any){
+    this.setModalVisible(data);
   }
 }

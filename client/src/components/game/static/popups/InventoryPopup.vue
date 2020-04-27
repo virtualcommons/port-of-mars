@@ -20,12 +20,13 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, Inject } from 'vue-property-decorator';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCaretUp } from '@fortawesome/free-solid-svg-icons/faCaretUp';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons/faCaretDown';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import Inventory from '@port-of-mars/client/components/game/Inventory.vue';
+import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 import {
   Investment,
   Resource,
@@ -43,12 +44,15 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
   },
 })
 export default class InventoryPopup extends Vue {
+  @Inject()
+  readonly api!: GameRequestAPI;
+
   get popupVisible() {
     return this.$tstore.state.userInterface.popupView.inventoryVisible;
   }
 
   private toggle() {
-    this.$tstore.commit('SET_INVENTORY_POPUP_VISIBILITY', !this.popupVisible);
+    this.api.toggleInventory(this.popupVisible);
   }
 
   get position() {

@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue, Prop, Inject } from 'vue-property-decorator';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -27,6 +27,7 @@ import GeneralModal from '@port-of-mars/client/components/game/modals/GeneralMod
 import CardModal from '@port-of-mars/client/components/game/modals/CardModal.vue';
 import PlayerModal from '@port-of-mars/client/components/game/modals/PlayerModal.vue';
 import TradeRequestModal from '@port-of-mars/client/components/game/modals/TradeRequestModal.vue';
+import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 
 library.add(faTimes);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
@@ -40,6 +41,8 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
   },
 })
 export default class ModalController extends Vue {
+  @Inject() readonly api!: GameRequestAPI;
+
   get modalsVisible() {
     return this.$tstore.state.userInterface.modalView.visible;
   }
@@ -68,7 +71,7 @@ export default class ModalController extends Vue {
 
   private handleClose(): void {
     if (this.modalsVisible) {
-      this.$tstore.commit('SET_MODAL_HIDDEN', null);
+      this.api.setModalHidden();
     }
   }
 }

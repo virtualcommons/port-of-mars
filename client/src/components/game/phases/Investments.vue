@@ -118,10 +118,6 @@ export default class Investments extends Vue {
     );
   }
 
-  get isInTutorial() {
-    return this.$tstore.getters.layout === 'tutorial';
-  }
-
   private setInvestmentAmount(msg: {
     name: Resource;
     units: number;
@@ -135,15 +131,13 @@ export default class Investments extends Vue {
       msg.units >= 0 &&
       this.getRemainingTimeBlocks(pendingInvestments) >= 0
     ) {
-      this.$tstore.commit('SET_PENDING_INVESTMENT_AMOUNT', {
+      let data = {
         investment: msg.name,
         units: msg.units,
         role: this.$tstore.state.role,
-      });
-    }
+      }
 
-    if (this.isInTutorial) {
-      this.api.investTimeBlocks();
+      this.api.investPendingTimeBlocks(data)
     }
   }
 

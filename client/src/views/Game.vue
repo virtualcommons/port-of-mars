@@ -44,7 +44,7 @@ export default class Game extends Vue {
     gameRoom = await this.$client.joinById(roomId);
 
     applyGameServerResponses(gameRoom, this.$tstore);
-    this.api.connect(gameRoom);
+    this.api.connect(gameRoom, this.$tstore);
     this.hasApi = true;
     this.$store.commit('SET_LAYOUT', 'game');
     this.$store.commit('SET_ENVIRONMENT', this.env.environment);

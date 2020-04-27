@@ -17,13 +17,16 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, Inject } from 'vue-property-decorator';
 import { Role } from '@port-of-mars/shared/types';
+import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 
 @Component({
   components: {},
 })
 export default class OtherPlayers extends Vue {
+  @Inject() readonly api!: GameRequestAPI;
+
   @Prop() private role!: string;
   @Prop() private ready!: boolean;
   @Prop() private victoryPoints!: number;
@@ -47,7 +50,7 @@ export default class OtherPlayers extends Vue {
   }
 
   private handleModal(): void {
-    this.$tstore.commit('SET_MODAL_VISIBLE', {
+    this.api.setModalVisible({
       type: 'PlayerModal',
       data: {
         role: this.role,

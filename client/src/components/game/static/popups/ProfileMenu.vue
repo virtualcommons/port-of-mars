@@ -88,24 +88,8 @@ export default class ProfileMenu extends Vue {
     return this.$tstore.state.userInterface.profileMenuView.visible;
   }
 
-  get isInTutorial() {
-    return this.$tstore.getters.layout === "tutorial";
-  }
-
-  tutorialValidation() {
-    if (this.isInTutorial) {
-      this.api.completedGeneralClick();
-      //this.api.resetGame()
-    }
-  }
-
   private toggle() {
-    this.$tstore.commit(
-      'SET_PROFILE_MENU_VISIBILITY',
-      !this.profileMenuVisible
-    );
-
-    this.tutorialValidation();
+    this.api.toggleProfileMenu(this.profileMenuVisible);
   }
 
   get position() {
