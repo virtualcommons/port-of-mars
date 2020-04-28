@@ -20,13 +20,15 @@ export function canPurchaseAccomplishment(
   return true;
 }
 
-//might move to TradeOptions.vue
+//does not allow user to type in blank data
 export function makeTradeSafe(resources: ResourceAmountData) {
   for (const resource of RESOURCES) {
     if (typeof resources[resource] == 'string') {
       resources[resource] = 0;
     }
   }
+
+  return resources;
 }
 
 export function canPlayerMakeTrade(
