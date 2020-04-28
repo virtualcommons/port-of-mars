@@ -37,9 +37,11 @@
     registrationToken!: string;
 
     async submit() {
-      const res = await this.$ajax.post(this.verifyUrl);
-      console.log('email verified');
-      this.$router.push({ name: DASHBOARD_PAGE });
+      await this.$ajax.post(this.verifyUrl, ({data, status}) => {
+        // FIXME: these types of store commits should be abstracted away by a coherent store API that all Vue components talk to
+        this.$tstore.commit('SET_DASHBOARD_MESSAGE', { kind: 'success', message: 'Email successfully verified.' });
+        this.$router.push({ name: DASHBOARD_PAGE });
+      });
     }
 
     get verifyUrl() {

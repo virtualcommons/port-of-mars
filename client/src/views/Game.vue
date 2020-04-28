@@ -14,6 +14,8 @@ import GameDashboard from "@port-of-mars/client/components/GameDashboard.vue";
 import _ from "lodash";
 import { LOBBY_PAGE } from "@port-of-mars/shared/routes";
 import { url } from "@port-of-mars/client/util";
+import { AjaxResponseError } from "@port-of-mars/client/plugins/ajax";
+import { LOGIN_PAGE, DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
 
 @Component({
   name: "game",
@@ -27,28 +29,43 @@ export default class Game extends Vue {
   private hasApi: boolean = false;
   private env: EnvironmentMode = new EnvironmentMode();
 
+
+
   async created() {
     this.api.room?.leave();
     let gameRoom: Room;
     let cachedRoomId = this.$ajax.roomId;
-    let roomId: string;
+    let roomId: string = '';
     console.log({ cachedRoomId });
     if (!cachedRoomId) {
-      const res = await this.$ajax.get(url("/game/latest-active"));
-      console.log(res);
-      roomId = await res.json();
-    } else {
+      try {
+        await this.$ajax.get(url("/game/latest-active"), ({data, status}) => {
+          roomId = data;
+        });
+      }
+      catch (e) {
+        this.$tstore.commit('SET_DASHBOARD_MESSAGE', e.data);
+      }
+    } 
+    else {
       roomId = cachedRoomId;
     }
-    console.log({ roomId });
-    if (roomId) {
-      gameRoom = await this.$client.joinById(roomId);
-
-      applyGameServerResponses(gameRoom, this.$tstore);
-      this.api.connect(gameRoom);
-      this.hasApi = true;
-      this.$store.commit("SET_LAYOUT", "game");
-      this.$store.commit("SET_ENVIRONMENT", this.env.environment);
+    try {
+      console.log({ roomId });
+      if (roomId) {
+        gameRoom = await this.$client.joinById(roomId);
+        applyGameServerResponses(gameRoom, this.$tstore);
+        this.api.connect(gameRoom);
+        this.hasApi = true;
+        this.$tstore.commit("SET_LAYOUT", "game");
+        // FIXME: remove SET_ENVIRONMENT entirely in a later refactor
+        // this.$tstore.commit("SET_ENVIRONMENT", this.env.environment);
+      }
+    }
+    catch (e) {
+      console.error(e);
+      this.$tstore.commit('SET_DASHBOARD_MESSAGE', { kind: 'danger', message: e.message });
+      this.$router.push({ name: DASHBOARD_PAGE });
     }
   }
 

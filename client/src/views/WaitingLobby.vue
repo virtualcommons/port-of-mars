@@ -43,14 +43,14 @@ export default class WaitingLobby extends Vue {
     catch (e) {
       /*
       if (e instanceof MatchMakeError) {
-        this.$tstore.commit('SET_ERROR_MESSAGE', { message: `Couldn't join the lobby: ${e.message}` });
+        this.$tstore.commit('SET_DASHBOARD_MESSAGE', { kind: 'danger', message: `Couldn't join the lobby: ${e.message}` });
       }
       */
       let errorMessage = e.message;
       if (! errorMessage) {
         errorMessage = 'Please complete all onboarding items on your dashboard before joining a game.';
       }
-      this.$tstore.commit('SET_ERROR_MESSAGE', { message: errorMessage });
+      this.$tstore.commit('SET_DASHBOARD_MESSAGE', { kind: 'warning', message: errorMessage });
       this.$router.push({ name: DASHBOARD_PAGE });
     }
   }

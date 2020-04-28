@@ -36,4 +36,7 @@ export class User {
   @Column({ default: false })
   isVerified!: boolean;
 
+  @Column({ nullable: true })
+  dateConsented?: Date;
+
 }

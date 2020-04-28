@@ -246,7 +246,8 @@ export interface DashboardData {
   stats: Stats
 }
 
-export interface ServerErrorMessage {
+export interface DashboardMessage {
+  kind: 'success' | 'danger' | 'info' | 'warning'
   message: string
 }
 

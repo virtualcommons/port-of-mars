@@ -7,24 +7,32 @@ import notifications from './notifications';
 import player from './player';
 import trading from './trading';
 import ui from './ui';
+import Vue from 'vue';
 import { State, getInitialStoreState } from '@port-of-mars/client/store/state';
-import { ServerErrorMessage } from '@port-of-mars/shared/types';
+import { DashboardMessage } from '@port-of-mars/shared/types';
+import _ from 'lodash';
 
 export default {
   RESET_STATE(state: State, options?: any) {
     Object.assign(state, getInitialStoreState());
   },
 
-  SET_LAYOUT(state: any, newLayout: string) {
+  SET_LAYOUT(state: State, newLayout: string) {
     state.layout = newLayout;
   },
 
-  SET_ERROR_MESSAGE(state: any, payload: ServerErrorMessage) {
-    state.errors.push(payload);
+  SET_DASHBOARD_MESSAGE(state: State, payload: DashboardMessage) {
+    if (! _.some(state.dashboardMessages, payload)) {
+      state.dashboardMessages.push(payload);
+    }
   },
 
-  DISMISS_ERROR_MESSAGE(state: any, index: number) {
-    state.errors.splice(index, 1);
+  DISMISS_DASHBOARD_MESSAGE(state: State, message: string) {
+    Vue.set(state, 'dashboardMessages', state.dashboardMessages.filter(dm => dm.message !== message));
+  },
+
+  SET_CONSENT(state: State, consent: boolean) {
+    state.consent = consent;
   },
 
   SET_ENVIRONMENT(state: any, newEnvironment: string) {
