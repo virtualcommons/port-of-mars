@@ -111,7 +111,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Provide, Vue } from 'vue-property-decorator';
+import { Component, Provide, Vue, Mixins } from 'vue-property-decorator';
 import VueTour from 'vue-tour';
 import ConsentFormModal from '@port-of-mars/client/components/tutorial/ConsentFormModal.vue';
 import TourModal from '@port-of-mars/client/components/tutorial/TourModal.vue';
@@ -123,6 +123,8 @@ import { CURATOR, Phase, QuizQuestionData, RESEARCHER } from '@port-of-mars/shar
 import * as _ from 'lodash';
 
 import { tutorialSteps } from '@port-of-mars/client/api/tutorial/steps';
+
+import { QuizHandler } from '@port-of-mars/client/api/tutorial/quiz';
 
 require('vue-tour/dist/vue-tour.css');
 Vue.use(VueTour);
@@ -136,7 +138,7 @@ Vue.use(VueTour);
     ConsentFormModal
   }
 })
-export default class Tutorial extends Vue {
+export default class Tutorial extends Mixins(Vue, QuizHandler) {
   @Provide() api: TutorialAPI = new TutorialAPI();
 
   private TOUR_ACTIVE_CLASS: string = 'tour-active';
@@ -155,15 +157,15 @@ export default class Tutorial extends Vue {
   private tourIsOver: boolean = false;
   private consent: boolean = false;
 
-  private submissionId: any = null;
-  private dataFetched: boolean = false;
-  private quizQuestions: Array<QuizQuestionData> = [];
-  private currentTutorialElementId: string = '';
+  // private submissionId: any = null;
+  // private dataFetched: boolean = false;
+  // private quizQuestions: Array<QuizQuestionData> = [];
+  // private currentTutorialElementId: string = '';
 
-  // TODO: Need to reset
-  private currentOptionIndex: number = -1;
-  private quizQuestionStatusMessage: string = '';
-  private quizQuestionStatus: boolean = false;
+  // // TODO: Need to reset
+  // private currentOptionIndex: number = -1;
+  // private quizQuestionStatusMessage: string = '';
+  // private quizQuestionStatus: boolean = false;
 
   // NOTE: Lifecyle Hooks
 
@@ -240,9 +242,8 @@ export default class Tutorial extends Vue {
   }
 
   async nextStepCallback(currentStep: number) {
-    this.currentOptionIndex = -1;
-    this.quizQuestionStatusMessage = '';
-    this.quizQuestionStatus = false;
+
+    this.resetQuizProperties();
     
     const currentStepElement = this.$el.querySelector(
       this.steps[currentStep].target
@@ -263,10 +264,9 @@ export default class Tutorial extends Vue {
     await this.$el
       .querySelector(`.${this.TOUR_ACTIVE_CLASS}`)!
       .classList.remove(this.TOUR_ACTIVE_CLASS,'animate-current-step');
-    const complete = await this.checkQuizCompletion();
-    this.$ajax.setQuizCompletion(complete);
-    console.log('USER HAS COMPLETED QUIZ:', complete);
-
+    await this.completeQuiz();
+    
+  
     this.tourIsOver = true;
 
     this.api.resetState();
@@ -276,95 +276,95 @@ export default class Tutorial extends Vue {
 
   private isQuizQuestion(currentStep: number): boolean {
     if (this.steps[currentStep].params.tutorialElementId !== undefined) {
-      this.currentTutorialElementId = this.steps[
+      this.setCurrentTutorialElementId(this.steps[
         currentStep
-      ].params.tutorialElementId!;
+      ].params.tutorialElementId!);
       return true;
     }
     return false;
   }
 
-  get currentQuizQuestion() {
-    const index = _.findIndex(this.quizQuestions, [
-      'tutorialElementId',
-      this.currentTutorialElementId
-    ]);
-    return this.quizQuestions[index];
-  }
+  // get currentQuizQuestion() {
+  //   const index = _.findIndex(this.quizQuestions, [
+  //     'tutorialElementId',
+  //     this.currentTutorialElementId
+  //   ]);
+  //   return this.quizQuestions[index];
+  // }
 
 
-  async handleCheckQuizQuestion(value:number) {
-    const result = await this.checkQuizQuestion(
-      this.currentQuizQuestion.id,
-      value
-    );
-    if(!this.quizQuestionStatus){
-      if (result) {
-        this.quizQuestionStatusMessage = 'Correct! Please click next.';
-        this.quizQuestionStatus = true;
-      } else {
-        this.quizQuestionStatusMessage = 'Incorrect, please try again.';
-      }
-    } else{
-      this.quizQuestionStatusMessage = 'You already answered correctly. Please click next.';
-    }
-  }
+  // async handleCheckQuizQuestion(value:number) {
+  //   const result = await this.checkQuizQuestion(
+  //     this.currentQuizQuestion.id,
+  //     value
+  //   );
+  //   if(!this.quizQuestionStatus){
+  //     if (result) {
+  //       this.quizQuestionStatusMessage = 'Correct! Please click next.';
+  //       this.quizQuestionStatus = true;
+  //     } else {
+  //       this.quizQuestionStatusMessage = 'Incorrect, please try again.';
+  //     }
+  //   } else{
+  //     this.quizQuestionStatusMessage = 'You already answered correctly. Please click next.';
+  //   }
+  // }
 
-  get quizSubmissionEndpoint() {
-    return `${process.env.SERVER_URL_HTTP}/quiz/submission`;
-  }
+  // get quizSubmissionEndpoint() {
+  //   return `${process.env.SERVER_URL_HTTP}/quiz/submission`;
+  // }
 
-  private setSubmissionId(submissionId: number) {
-    this.$ajax.setSubmissionId(submissionId);
-    this.submissionId = submissionId;
-  }
+  // private setSubmissionId(submissionId: number) {
+  //   this.$ajax.setSubmissionId(submissionId);
+  //   this.submissionId = submissionId;
+  // }
 
 
-  // NOTE: Server Fetches
-  private async initalizeQuiz() {
-    let submissionId = this.$ajax.submissionId;
-    let response;
-    if (submissionId) {
-      const retrieveSubmissionUrl = `${this.quizSubmissionEndpoint}/${submissionId}`;
-      response = await this.$ajax.get(retrieveSubmissionUrl);
-      console.log(`retrieving submission with id ${submissionId}`);
-    }
-    else {
-      const createQuizSubmissionUrl = this.quizSubmissionEndpoint;
-      response = await this.$ajax.post(createQuizSubmissionUrl);
-      console.log('creating new submission');
-    }
-    const jsonData = await response.json();
-    console.log(jsonData);
-    this.setSubmissionId(jsonData.submissionId);
-    this.quizQuestions = jsonData.quizQuestions;
-    this.dataFetched = true;
-  }
+  // // NOTE: Server Fetches
+  // private async initalizeQuiz() {
+  //   let submissionId = this.$ajax.submissionId;
+  //   let response;
+  //   if (submissionId) {
+  //     const retrieveSubmissionUrl = `${this.quizSubmissionEndpoint}/${submissionId}`;
+  //     response = await this.$ajax.get(retrieveSubmissionUrl);
+  //     console.log(`retrieving submission with id ${submissionId}`);
+  //   }
+  //   else {
+  //     const createQuizSubmissionUrl = this.quizSubmissionEndpoint;
+  //     response = await this.$ajax.post(createQuizSubmissionUrl);
+  //     console.log('creating new submission');
+  //   }
+  //   const jsonData = await response.json();
+  //   console.log(jsonData);
+  //   this.setSubmissionId(jsonData.submissionId);
+  //   this.quizQuestions = jsonData.quizQuestions;
+  //   this.dataFetched = true;
+  // }
 
-  private async checkQuizQuestion(questionId: number, answer: number): Promise<boolean> {
-    const submitResponseUrl = `${this.quizSubmissionEndpoint}/${this.submissionId}/${questionId}`;
-    const response = await this.$ajax.post(submitResponseUrl, { answer: answer });
-    return await response.json();
-  }
+  // private async checkQuizQuestion(questionId: number, answer: number): Promise<boolean> {
+  //   const submitResponseUrl = `${this.quizSubmissionEndpoint}/${this.submissionId}/${questionId}`;
+  //   const response = await this.$ajax.post(submitResponseUrl, { answer: answer });
+  //   return await response.json();
+  // }
 
-  private async checkQuizCompletion(): Promise<boolean> {
-    const quizCompletionUrl = `${process.env.SERVER_URL_HTTP}/quiz/complete`;
-    const response = await this.$ajax.get(quizCompletionUrl);
-    if (response.status === 200) {
-      const data = await response.json();
-      return data;
-    } else {
-      const error = await response.json();
-      this.notifyUserOfError('checkQuizCompletion (response)', error);
-      return false;
-    }
-  }
+  // private async checkQuizCompletion(): Promise<boolean> {
+  //   const quizCompletionUrl = `${process.env.SERVER_URL_HTTP}/quiz/complete`;
+  //   const response = await this.$ajax.get(quizCompletionUrl);
+  //   if (response.status === 200) {
+  //     const data = await response.json();
+  //     return data;
+  //   } else {
+  //     const error = await response.json();
+  //     this.notifyUserOfError('checkQuizCompletion (response)', error);
+  //     return false;
+  //   }
+  // }
 
-  private notifyUserOfError(call: string, error: any): void {
-    // TODO: Show server error modal
-    console.log(`ERROR FETCHING DATA AT ${call}!`);
-    console.log('RESPONSE FROM SERVER: ', error);
-  }
+  // private notifyUserOfError(call: string, error: any): void {
+  //   // TODO: Show server error modal
+  //   console.log(`ERROR FETCHING DATA AT ${call}!`);
+  //   console.log('RESPONSE FROM SERVER: ', error);
+  // }
 }
 </script>
 
