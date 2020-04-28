@@ -20,7 +20,7 @@
             </div>
           </div>
           <div class="submit">
-            <input :disabled="submitDisabled" type="submit" @click="login" value="Login" />
+            <input :disabled="submitDisabled" type="submit" @click="devLogin" value="Login" />
           </div>
           <p class="error" v-if="error">{{ error }}</p>
         </form>
@@ -40,6 +40,7 @@ import {
 import { url } from "@port-of-mars/client/util";
 import { isDevOrStaging } from "@port-of-mars/shared/settings";
 import { BButton } from "bootstrap-vue";
+import { AjaxResponseError } from "../plugins/ajax";
 
 
 @Component({})
@@ -72,21 +73,16 @@ export default class Login extends Vue {
     this.isLoggedIn = false;
   }
 
-  async login(e: Event) {
+  async devLogin(e: Event) {
     e.preventDefault();
     const fd = new FormData((e as any).target.form);
-    const data: any = { username: fd.get("username"), password: "testing" };
-    const response = await this.$ajax.post(this.loginUrl, data);
-    await this.$ajax.setLoginCreds(response);
-    if (response.status === 200) {
-      this.$router.push({ name: DASHBOARD_PAGE });
-    } else {
-      this.error = await response.json();
+    const devLoginData: any = { username: fd.get("username"), password: "testing" };
+    try {
+      await this.$ajax.devLogin(devLoginData);
     }
-  }
-
-  get loginUrl() {
-    return url("/login");
+    catch (e) {
+      this.error = e.message;
+    }
   }
 }
 </script>

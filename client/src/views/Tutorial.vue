@@ -124,6 +124,7 @@ import { CURATOR, Phase, QuizQuestionData, RESEARCHER } from '@port-of-mars/shar
 import * as _ from 'lodash';
 
 import { tutorialSteps } from '@port-of-mars/client/api/tutorial/steps';
+import { AjaxResponseError } from '../plugins/ajax';
 
 require('vue-tour/dist/vue-tour.css');
 Vue.use(VueTour);
@@ -323,45 +324,53 @@ export default class Tutorial extends Vue {
     this.submissionId = submissionId;
   }
 
+  private setQuizSubmissionData(data: { submissionId: number, quizQuestions: any }) {
+    this.setSubmissionId(data.submissionId);
+    this.quizQuestions = data.quizQuestions;
+    this.dataFetched = true;
+  }
+
 
   // NOTE: Server Fetches
   private async initalizeQuiz() {
     let submissionId = this.$ajax.submissionId;
-    let response;
     if (submissionId) {
       const retrieveSubmissionUrl = `${this.quizSubmissionEndpoint}/${submissionId}`;
-      response = await this.$ajax.get(retrieveSubmissionUrl);
-      console.log(`retrieving submission with id ${submissionId}`);
+      console.log(`retrieving quiz submission with id ${submissionId}`);
+      await this.$ajax.get(retrieveSubmissionUrl, ({data, status}) => {
+        this.setQuizSubmissionData(data);
+      });
+      return;
     }
-    else {
-      const createQuizSubmissionUrl = this.quizSubmissionEndpoint;
-      response = await this.$ajax.post(createQuizSubmissionUrl);
-      console.log('creating new submission');
-    }
-    const jsonData = await response.json();
-    console.log(jsonData);
-    this.setSubmissionId(jsonData.submissionId);
-    this.quizQuestions = jsonData.quizQuestions;
-    this.dataFetched = true;
+    const createQuizSubmissionUrl = this.quizSubmissionEndpoint;
+    await this.$ajax.post(createQuizSubmissionUrl, ({data, status}) => {
+      console.log('creating new quiz submission');
+      this.setQuizSubmissionData(data);
+    });
   }
 
   private async checkQuizQuestion(questionId: number, answer: number): Promise<boolean> {
+    // FIXME: extract this and other URLs to shared/routes or elsewhere
     const submitResponseUrl = `${this.quizSubmissionEndpoint}/${this.submissionId}/${questionId}`;
-    const response = await this.$ajax.post(submitResponseUrl, { answer: answer });
-    return await response.json();
+    return await this.$ajax.post(submitResponseUrl, ({data, status}) => Promise.resolve(data), { answer: answer });
   }
 
   private async checkQuizCompletion(): Promise<boolean> {
+    // FIXME: extract this and other URLs to shared/routes
     const quizCompletionUrl = `${process.env.SERVER_URL_HTTP}/quiz/complete`;
-    const response = await this.$ajax.get(quizCompletionUrl);
-    if (response.status === 200) {
-      const data = await response.json();
-      return data;
-    } else {
-      const error = await response.json();
-      this.notifyUserOfError('checkQuizCompletion (response)', error);
-      return false;
+    // quiz completion endpoint returns true/false on 200
+    try {
+      await this.$ajax.get(quizCompletionUrl, ({data, status}) => {
+        return data;
+      });
     }
+    catch(e) {
+      if (e instanceof AjaxResponseError) {
+        const error = e.message
+        this.notifyUserOfError('checkQuizCompletion (response)', error);
+      }
+    }
+    return false;
   }
 
   private notifyUserOfError(call: string, error: any): void {

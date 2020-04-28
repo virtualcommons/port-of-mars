@@ -4,7 +4,8 @@ import { VueRouter } from "vue-router/types/router";
 import { TStore } from "@port-of-mars/client/plugins/tstore";
 import { RoomId } from "@port-of-mars/shared/types";
 import { LOGIN_PAGE, DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
-import { ServerErrorMessage } from "@port-of-mars/shared/types";
+import { DashboardMessage } from "@port-of-mars/shared/types";
+import { url } from "@port-of-mars/client/util";
 
 interface RoomListingData<Metadata = any> {
   clients: number;
@@ -23,23 +24,30 @@ interface RoomListingData<Metadata = any> {
   remove(): any;
 }
 
-type Reservation = {
-  room: RoomListingData<any>;
-  sessionId: string;
-}
-
 declare module 'vue/types/vue' {
   interface Vue {
     $ajax: AjaxRequest;
   }
 }
 
-const LOGIN_CREDS = 'loginCreds';
 const SUBMISSION_ID = 'submissionId';
 
 interface LoginCreds {
   sessionCookie: string
   username: string
+}
+
+interface ResponseData<T=any> {
+  data: T
+  status: number
+}
+
+export type AjaxResponse = Promise<any | void>;
+
+export class AjaxResponseError extends Error {
+  constructor(public data: DashboardMessage, public response: Response) {
+    super(data.message);
+  }
 }
 
 export class AjaxRequest {
@@ -62,8 +70,20 @@ export class AjaxRequest {
     return this._roomId
   }
 
-  async setLoginCreds(response: Response) {
-    response.json().then(loginCredentials => this.store.commit('SET_USER', { username: loginCredentials.username }));
+  setLoginCreds(loginCredentials: { username: string }) {
+    this.store.commit('SET_USER', loginCredentials);
+  }
+
+  async devLogin(formData: { username: string, password: string }) {
+    const devLoginUrl = url('/login');
+    await this.post(devLoginUrl, ({data, status}) => {
+      if (status === 200) {
+        this.setLoginCreds(data);
+        this.router.push({ name: DASHBOARD_PAGE });
+      } else {
+        return data;
+      }
+    }, formData);
   }
 
   get username(): string {
@@ -95,29 +115,30 @@ export class AjaxRequest {
     localStorage.removeItem(SUBMISSION_ID);
   }
 
-  private async handleResponse(response: Response): Promise<Response> {
+  private async handleResponse(response: Response): Promise<ResponseData> {
     switch (response.status) {
       case 401:
       case 403:
       case 404:
-        const serverErrorMessage = await response.json();
-        console.log("SOMETHING BAD HAPPENED, GOING BACK TO THE DASHBOARD");
+        const serverErrorMessage: DashboardMessage = await response.json();
         console.log(serverErrorMessage);
-        this.store.commit('SET_ERROR_MESSAGE', serverErrorMessage);
-        await this.router.push({ name: this.errorRoutes[response.status] })
-        return response;
+        this.store.commit('SET_DASHBOARD_MESSAGE', serverErrorMessage);
+        this.router.push({ name: this.errorRoutes[response.status] })
+        throw new AjaxResponseError(serverErrorMessage, response);
     }
     if (response.status >= 400) {
       // something badwrong happened on the server side that we were not expecting.
       // push the error onto the store and move on..
-      this.store.commit('SET_ERROR_MESSAGE', { message: `Unexpected server response: ${response.text}` });
+      const serverErrorMessage: DashboardMessage = { kind: 'danger', message: `Unexpected server response: ${response.text}` };
+      this.store.commit('SET_DASHBOARD_MESSAGE', serverErrorMessage);
       // FIXME: should we be pushing back to the dashboard page again?
-      await this.router.push({ name: DASHBOARD_PAGE });
+      this.router.push({ name: DASHBOARD_PAGE });
+      throw new AjaxResponseError(serverErrorMessage, response);
     }
-    return response;
+    return { data: await response.json(), status: response.status };
   }
 
-  async post(path: string, data?: any): Promise<Response> {
+  async post(path: string, done: (data: ResponseData) => Promise<any> | void, data?: any): AjaxResponse {
     const response = await fetch(
       path,
       {
@@ -131,11 +152,23 @@ export class AjaxRequest {
         referrerPolicy: "no-referrer",
         body: JSON.stringify(data)
       }
-    )
-    return await this.handleResponse(response);
+    );
+    // FIXME: duplicated across post/get
+    try {
+      const responseData = await this.handleResponse(response);
+      return done(responseData);
+    }
+    catch (e) {
+      if (e instanceof AjaxResponseError) {
+        throw e;
+      }
+      else {
+        throw new AjaxResponseError({ kind: 'danger', message: e.message }, response);
+      }
+    }
   }
 
-  async get(path: string): Promise<Response> {
+  async get(path: string, done: (data: ResponseData) => Promise<any> | void): AjaxResponse {
     const response = await fetch(
       path,
       {
@@ -148,7 +181,19 @@ export class AjaxRequest {
         referrerPolicy: "no-referrer",
       }
     );
-    return await this.handleResponse(response);
+    // FIXME: duplicated across post/get
+    try {
+      const responseData = await this.handleResponse(response);
+      return done(responseData);
+    }
+    catch (e) {
+      if (e instanceof AjaxResponseError) {
+        throw e;
+      }
+      else {
+        throw new AjaxResponseError({ kind: 'danger', message: e.message }, response);
+      }
+    }
   }
 }
 

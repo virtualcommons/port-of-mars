@@ -2,7 +2,7 @@ import { Router } from "express";
 import { getServices } from "@port-of-mars/server/services";
 import { User } from "@port-of-mars/server/entity";
 import { settings } from "@port-of-mars/server/settings";
-import { ServerErrorMessage } from "@port-of-mars/shared/types";
+import { DashboardMessage } from "@port-of-mars/shared/types";
 import { isVerified } from "@port-of-mars/server/routes/middleware";
 
 const logger = settings.logging.getLogger(__filename);
@@ -20,7 +20,7 @@ gameRouter.get('/latest-active', async (req, res, next) => {
       res.json(roomId);
     }
     else {
-      const message: ServerErrorMessage = { message: 'Did not find an active game.' }
+      const message: DashboardMessage = { kind: 'danger', message: 'Did not find an active game.' }
       logger.info('no game room for user %o', user);
       res.status(404).json(message);
     }

@@ -101,5 +101,5 @@ export default class PlayerDashboard extends Mixins(Vue, DashboardAPI) {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/views/Dashboard.scss';
+@import "@port-of-mars/client/stylesheets/views/Dashboard.scss";
 </style>

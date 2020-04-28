@@ -4,7 +4,7 @@ import { settings } from '@port-of-mars/server/settings';
 import _ from 'lodash';
 import { toUrl } from '@port-of-mars/server/util';
 import { LOGIN_PAGE } from '@port-of-mars/shared/routes';
-import { ServerErrorMessage } from '@port-of-mars/shared/types';
+import { DashboardMessage } from '@port-of-mars/shared/types';
 import { User } from '@port-of-mars/server/entity';
 
 const logger = settings.logging.getLogger(__filename);
@@ -32,7 +32,7 @@ export function isVerified(req: Request, res: Response, next: NextFunction) {
       return next();
     }
     else {
-      const message: ServerErrorMessage = { message: 'Please verify your account before proceeding.' };
+      const message: DashboardMessage = { kind: 'danger', message: 'Please verify your account before proceeding.' };
       return res.status(403).json(message);
     }
   }

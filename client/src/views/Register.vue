@@ -1,54 +1,155 @@
 <template>
-  <div class="login">
-    <div class="wrapper">
-      <div class="text">
-        <h1>Port of Mars</h1>
-        <h2>Register</h2>
-      </div>
-      <form class="login-form">
-        <div class="input-username">
-          <label for="name">Name</label>
-          <div class="input-wrapper">
-            <input type="text" id="name" name="name" v-model="name" />
-          </div>
-        </div>
-        <div class="input-username">
-          <label for="email">Email</label>
-          <div class="input-wrapper">
-            <input type="email" id="email" name="email" v-model="email" />
-          </div>
-        </div>
-        <div class="submit">
-          <input :disabled="submitDisabled" type="submit" @click="register" value="Register" />
-        </div>
-        <p class="error" v-if="error">{{ error }}</p>
-      </form>
-    </div>
-  </div>
+  <b-container>
+    <b-row>
+      <b-col>
+        <h1>Port of Mars Registration</h1>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-collapse visible id="consent-collapse">
+        <b-card>
+          <b-card-text>
+            <p>Dear Participant,</p>
+            <p>
+                I am a professor in the School of Sustainability at Arizona State University.
+                I am conducting experiments that investigate how people think, act, and make decisions.
+                This research is part of the Interplanetary Research Initiative at Arizona State University.
+            </p>
+            <p>
+                I am requesting your participation, which will involve participating in a game tournament.
+                The game will take a maximum of 60 minutes. The tournament has 4 rounds to determine the Mars Madness
+                champion, and if you qualify for another round, such a game will take another hour at a later day with a
+                special invitation. Your participation in this study is voluntary. <code><b>You must be 18 or older to participate
+                in the study.</b></code> If you choose not to participate or to withdraw from the study at any time, there will be
+                no penalty; it will not affect your compensation for participation up to that point.
+            </p>
+            <p>
+                During the game you can chat with other participants. By signing this consent form, you consent to:
+                <ul>
+                    <li>Abstain from personal attacks or harassment</li>
+                    <li>Will not use profanity or offensive language</li>
+                </ul>
+            </p>
+            <p>
+                For participation in this study you may receive extra credit if your instructor of one of the
+                participating classes has made the participation in this event an extra credit opportunity. Those
+                who qualify for the championship round will be invited to have lunch with astronaut in residence,
+                Catherine Coleman. The winner of the Mars Madness championship round will be able to create an
+                event card for the next edition of Mars Madness.
+            </p>
+            <p>
+                Society may benefit from this research because an understanding of how people make decisions can
+                help us to design regulations that sustain the use of shared resources, in this experiment in a
+                colony on Mars.  You may benefit from this experience because you learn something about how an
+                experiment is designed and conducted, what issues are of interest to social scientists and space
+                research, and how your own cognitive abilities come into play in decision making situations.
+                There are no foreseeable risks or discomforts to your participation.
+            </p>
+            <p>
+                The results of the research study may be published, but your name will not be used. Your
+                responses will be confidential. However, due to the group nature of this study, complete
+                confidentiality cannot be guaranteed. We contact your instructor that you have participated,
+                if your instructor asked us to do so for an extra credit assignment. We also keep track who
+                moves to next rounds. We delete personal information such as your email address from our database
+                after the tournament is completed.
+            </p>
+            <p>
+                If you have any questions concerning the research study, please contact
+                <a href="mailto:Marco.Janssen@asu.edu">Marco.Janssen@asu.edu</a>.
+            </p>
+
+            <p align="justify">Sincerely,</p>
+            <p align="justify">Dr. Marco Janssen</p>
+          </b-card-text>
+        </b-card>
+      </b-collapse>
+      <b-button-group>
+        <b-button v-b-toggle.consent-collapse variant="success">Grant Consent</b-button>
+        <b-button @click="gotoDashboard" variant="danger">Do Not Consent (return to dashboard)</b-button>
+      </b-button-group>
+    </b-row>
+    <b-row>
+      <b-col class="p-0 m-0">
+        <b-form @submit="register">
+          <b-form-group label='Name' label-for='name' description='Please enter your full name'>
+            <b-form-input
+            id='name'
+            v-model='name'
+            type='text'
+            required
+            placeholder='Enter your full name'>
+            </b-form-input>
+          </b-form-group>
+          <b-form-group label='Email' label-for='email' description='We will never share your email.'>
+            <b-form-input
+            id='email'
+            v-model='email'
+            type='email'
+            placeholder='Please enter a valid email address so we can contact you with additional information.'
+            required>
+            </b-form-input>
+          </b-form-group>
+          <b-form-group label='Verify Email' label-for='verifyEMail' description='Please verify your email.'>
+            <b-form-input
+            id='verifyEmail'
+            v-model='verifyEmail'
+            type='email'
+            placeholder='Please verify your email address'
+            required>
+            </b-form-input>
+          </b-form-group>
+          <b-alert variant="danger" dismissible v-if="error">
+            <b-icon icon="exclamation-triangle-fill" variant="danger"></b-icon> {{ error }}
+          </b-alert>
+          <b-button type="submit" variant="primary" :disabled="submitDisabled">Register</b-button>
+        </b-form>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import { url } from "@port-of-mars/client/util";
 import { DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
+import _ from 'lodash';
 
 @Component({})
 export default class Register extends Vue {
   username = "";
   name = "";
   email = "";
+  verifyEmail = "";
+  consented = false;
   error = "";
 
   async register(e: Event) {
     e.preventDefault();
-    const fd = new FormData((e as any).target.form);
-    const data: any = { name: fd.get("name"), email: fd.get("email") };
-    const response = await this.$ajax.post(this.registerUrl, data);
-    this.$router.push(DASHBOARD_PAGE);
+    if (this.emailsMatch && !_.isEmpty(this.email)) {
+      const formData = { name: this.name, email: this.email };
+      await this.$ajax.post(this.registerUrl, ({data, status}) => {
+        if (status === 200) {
+          this.gotoDashboard();
+        }
+        else {
+          console.error("Unexpected status code: " + status);
+          console.error(data);
+        }
+      }, formData);
+
+    }
+  }
+
+  gotoDashboard() {
+    this.$router.push({ name: DASHBOARD_PAGE});
+  }
+
+  get emailsMatch(): boolean {
+    return this.email === this.verifyEmail;
   }
 
   get submitDisabled() {
-    return this.name.length === 0 || this.email.length === 0;
+    return this.name.length === 0 || this.email.length === 0 || ! this.emailsMatch;
   }
 
   get registerUrl() {
@@ -56,7 +157,3 @@ export default class Register extends Vue {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-@import "@port-of-mars/client/stylesheets/views/Login.scss";
-</style>

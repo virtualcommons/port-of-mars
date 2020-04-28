@@ -5,17 +5,19 @@ import { DashboardData } from '@port-of-mars/shared/types';
 @Component({})
 export class DashboardAPI extends Vue {
   async getData(): Promise<DashboardData> {
-    let data = await this.$ajax.get(url('/dashboard/'));
-
-    if (data.status == 200) {
-      return data.json();
+    try {
+      return await this.$ajax.get(url('/dashboard/'), ({data, status}) => {
+        return data;
+      });
     }
-    return {
-      actionItems: [],
-      upcomingGames: [],
-      stats: {
-        games: [],
-      },
-    };
+    catch (e) {
+      return {
+        actionItems: [],
+        upcomingGames: [],
+        stats: {
+          games: []
+        }
+      };
+    }
   }
 }
