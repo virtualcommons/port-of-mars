@@ -36,17 +36,18 @@
                 </button>
                 <button
                   v-if="!tour.isLast"
-                  v-on="{ click: api.forcePause ? tour.nextStep : () => {} }"
+                  ref="nextButton"
+                  v-on="{ click: api.hasCompletedAction ? tour.nextStep : () => {} }"
                   class="btn btn-dark next-button"
-                  v-bind="{ class: api.forcePause ? 'button-active' : 'button-inactive' }"
+                  v-bind="{ class: api.hasCompletedAction ? 'button-active' : 'button-inactive' }"
                 >
                   Next
                 </button>
                 <button
                   v-else-if="tour.isLast"
-                  v-on="{ click: api.forcePause ? tour.stop : () => {} }"
+                  v-on="{ click: api.hasCompletedAction ? tour.stop : () => {} }"
                   class="btn btn-dark next-button"
-                  v-bind="{ class: api.forcePause ? 'button-active' : 'button-inactive' }"
+                  v-bind="{ class: api.hasCompletedAction ? 'button-active' : 'button-inactive' }"
                 >
                   Finish
                 </button>
@@ -170,13 +171,16 @@ export default class Tutorial extends Vue {
   created() {
     this.api.connect(this.$store);
     this.api.resetState();
+    
   }
 
   async mounted() {
+
     if (process.env.NODE_ENV != 'test') {
       await this.initalizeQuiz();
       this.showModal();
     }
+    
   }
 
   // NOTE: Initialize
@@ -219,6 +223,7 @@ export default class Tutorial extends Vue {
     const currentStepElement = this.$el.querySelector(this.steps[0].target);
     this.$el.classList.add(this.BODY_TOUR);
     currentStepElement!.classList.add(this.TOUR_ACTIVE_CLASS,'animate-current-step');
+    this.api.registerRef(this.$refs.nextButton);
   }
 
   async previousStepCallback(currentStep: number) {
@@ -243,7 +248,6 @@ export default class Tutorial extends Vue {
     this.currentOptionIndex = -1;
     this.quizQuestionStatusMessage = '';
     this.quizQuestionStatus = false;
-    
     const currentStepElement = this.$el.querySelector(
       this.steps[currentStep].target
     );

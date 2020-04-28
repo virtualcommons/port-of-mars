@@ -26,9 +26,6 @@ const steps: Array<Step> = [
           role: RESEARCHER
         }
       },
-      {
-        required: false
-      }
     ]
   },
   {
