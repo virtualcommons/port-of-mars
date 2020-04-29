@@ -1,0 +1,65 @@
+.c-action-item {
+  width: 100%;
+  padding: 0;
+  border: 0.125rem solid $space-white;
+  margin: 0 0 0.5rem 0;
+  @include make-column-and-center;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .title-wrapper,
+  .buttons-wrapper {
+    width: 100%;
+    padding: 0.5rem;
+    margin: 0;
+  }
+
+  .title-wrapper {
+    background-color: $space-white;
+
+    .title {
+      @include expand;
+      padding: 0;
+
+      p {
+        width: 100%;
+        margin-bottom: 0;
+        font-size: $font-med;
+        font-weight: $font-weight-maven-pro-medium;
+        color: $space-gray;
+        text-align: center;
+        @include text-overflow-ellipses;
+      }
+    }
+  }
+
+  .buttons-wrapper {
+    background-color: $space-gray;
+
+    .buttons {
+      @include expand;
+      padding: 0;
+      @include make-center;
+
+      .button {
+        @include reset-button;
+        @include default-transition-base;
+        padding: 0.5rem 1rem;
+        border: solid 0.125rem $new-space-orange;
+        border-radius: 0;
+        margin: 0.5rem;
+        font-size: $font-med;
+        font-weight: $font-weight-maven-pro-medium !important;
+        text-align: center;
+        color: $new-space-orange;
+
+        &:hover {
+          color: $space-gray;
+          background-color: $new-space-orange;
+        }
+      }
+    }
+  }
+}

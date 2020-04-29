@@ -2,12 +2,8 @@
 .game-dashboard-defeat,
 .game-dashboard-victory {
   position: absolute;
-  height: 100vh!important;
+  height: 100vh !important;
   width: 100vw !important;
   margin: 0;
-  // max-width: none !important;
-  // @include reset-padding-margin;
   @include make-center;
-  // background-color: $space-gray;
-  // background-color: green;
 }

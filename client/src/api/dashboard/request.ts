@@ -1,10 +1,9 @@
-import {Vue, Component} from 'vue-property-decorator';
-import {url} from "@port-of-mars/client/util";
-import {DashboardData} from "@port-of-mars/shared/types";
+import { Vue, Component } from 'vue-property-decorator';
+import { url } from '@port-of-mars/client/util';
+import { DashboardData } from '@port-of-mars/shared/types';
 
-@Component
+@Component({})
 export class DashboardAPI extends Vue {
-
   async getData(): Promise<DashboardData> {
     let data = await this.$ajax.get(url('/dashboard/'));
 
@@ -15,9 +14,8 @@ export class DashboardAPI extends Vue {
       actionItems: [],
       upcomingGames: [],
       stats: {
-        games: []
-      }
+        games: [],
+      },
     };
   }
-
 }
