@@ -13,14 +13,18 @@ import {
 import { Responses } from '@port-of-mars/shared/game/responses';
 import { Schema } from '@colyseus/schema';
 import { TStore } from '@port-of-mars/client/plugins/tstore';
-
+import Mutations from "@port-of-mars/client/store/mutations";
 type Schemify<T> = T & Schema;
 
 function deschemify<T>(s: Schemify<T>): T {
   return s.toJSON() as T;
 }
 
-const responseMap = {
+type serverResponse = {
+  [field in keyof PlayerData] : keyof typeof Mutations
+}
+
+const responseMap:serverResponse = {
   inventory: 'SET_INVENTORY',
   costs: 'SET_INVESTMENT_COSTS',
   specialty: 'SET_SPECIALTY',
@@ -30,6 +34,7 @@ const responseMap = {
   victoryPoints: 'SET_VICTORY_POINTS',
   pendingInvestments: 'SET_PENDING_INVESTMENTS',
   contributedUpkeep: 'SET_CONTRIBUTED_UPKEEP',
+  role:'UPDATE_PLAYER_ROLE',
 };
 
 function applyPlayerResponses(player: any, store: TStore) {
@@ -42,35 +47,8 @@ function applyPlayerResponses(player: any, store: TStore) {
       // reduce the switch statement to store.commit(responseMap[change.field], payload) and we adjust the
       // mapping as needed.
       // requires some TS chicanery that I don't know how to do to make it typesafe though
-      switch (change.field as keyof PlayerData) {
-        case 'inventory':
-          store.commit('SET_INVENTORY', payload);
-          break;
-        case 'costs':
-          store.commit('SET_INVESTMENT_COSTS', payload);
-          break;
-        case 'specialty':
-          store.commit('SET_SPECIALTY', payload);
-          break;
-        case 'timeBlocks':
-          store.commit('SET_TIME_BLOCKS', payload);
-          break;
-        case 'ready':
-          store.commit('SET_READINESS', payload);
-          break;
-        case 'accomplishments':
-          store.commit('SET_ACCOMPLISHMENTS', payload);
-          break;
-        case 'victoryPoints':
-          store.commit('SET_VICTORY_POINTS', payload);
-          break;
-        case 'pendingInvestments':
-          store.commit('SET_PENDING_INVESTMENTS', payload);
-          break;
-        case 'contributedUpkeep':
-          store.commit('SET_CONTRIBUTED_UPKEEP', payload);
-          break;
-      }
+      
+      store.commit(responseMap[change.field as keyof PlayerData], payload);
     });
   };
   player.triggerAll();
