@@ -61,7 +61,6 @@ $screen-xxl: 1680px;
 @mixin space-button-base {
   @include reset-button;
   padding: 0.5rem 0.75rem;
-  // margin: 0.5rem 0;
   font-size: $font-med;
   font-weight: $font-weight-maven-pro-regular;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
@@ -216,57 +215,4 @@ $screen-xxl: 1680px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-@mixin row {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-@mixin column-1 {
-  flex: 0 0 8.333333%;
-  max-width: 8.333333%;
-  width: 100%;
-}
-
-@mixin column-2 {
-  flex: 0 0 16.666667%;
-  max-width: 16.666667%;
-  width: 100%;
-}
-
-@mixin column-3 {
-  flex: 0 0 25%;
-  max-width: 25%;
-  width: 100%;
-}
-
-@mixin column-6 {
-  flex: 0 0 50%;
-  max-width: 50%;
-  width: 100%;
-}
-
-@mixin column-8 {
-  flex: 0 0 66.666667%;
-  max-width: 66.666667%;
-  width: 100%;
-}
-
-@mixin column-9 {
-  flex: 0 0 75%;
-  max-width: 75%;
-  width: 100%;
-}
-
-@mixin column-11 {
-  flex: 0 0 91.666667%;
-  max-width: 91.666667%;
-  width: 100%;
-}
-
-@mixin column-12 {
-  flex: 0 0 100%;
-  max-width: 100%;
-  width: 100%;
 }
