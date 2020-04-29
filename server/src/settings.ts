@@ -10,6 +10,7 @@ export interface AppSettings {
   logging: Logging;
   secret: string;
   lobby: LobbySettings;
+  allowInternalSurveyRoutes: boolean;
 }
 
 export class LobbySettings {
@@ -20,6 +21,7 @@ const dev: () => AppSettings = () => ({
   emailer: new MemoryEmailer(),
   host: 'http://localhost:8081',
   logging: new DevLogging(),
+  allowInternalSurveyRoutes: true,
   secret: SECRET_KEY,
   lobby: new LobbySettings(15)
 });
@@ -30,6 +32,7 @@ const staging: () => AppSettings = () => {
   return {
     emailer: new MailgunEmailer({ api_key: apiKey, domain }),
     host: 'https://alpha.portofmars.asu.edu',
+    allowInternalSurveyRoutes: true,
     logging: new DevLogging(),
     secret: SECRET_KEY,
     lobby: new LobbySettings(15)
@@ -40,6 +43,7 @@ const prod: () => AppSettings = () => {
   const stagingSettings = staging();
   return {
     ...stagingSettings,
+    allowInternalSurveyRoutes: false,
     host: 'https://portofmars.asu.edu',
     lobby: new LobbySettings(15, false)
   };
@@ -50,7 +54,6 @@ const env = process.env.NODE_ENV;
 export const settings: AppSettings = ['development', 'test'].includes(env || '') ?
   dev() : env === 'staging' ?
     staging() : prod();
-
 
 export function getLogger(filename: string): LogService {
   return settings.logging.getLogger(filename);

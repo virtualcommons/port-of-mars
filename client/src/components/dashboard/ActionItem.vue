@@ -7,13 +7,13 @@
     </div>
     <div class="buttons-wrapper row">
       <div class="buttons col-12">
-        <BButton
+        <b-button
           v-if="isInternal(actionItem.link)"
           :to="actionItem.link.data"
-          class="button"
-          >Go</BButton
-        >
-        <BButton v-else :href="actionItem.link.data" class="button">Go</BButton>
+          class="button">Go <b-icon icon="arrow-right"></b-icon></b-button>
+        <b-button v-else :href="actionItem.link.data" class="button">Go <b-icon icon="box-arrow-up-right"></b-icon></b-button>
+        <b-icon v-if="actionItem.done" icon="check-box" font-scale="3" variant="success"></b-icon>
+        <b-icon v-else icon="x-circle-fill" font-scale="3" variant="warning"></b-icon>
       </div>
     </div>
   </div>
