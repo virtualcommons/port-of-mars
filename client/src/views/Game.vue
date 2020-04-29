@@ -55,7 +55,7 @@ export default class Game extends Vue {
       if (roomId) {
         gameRoom = await this.$client.joinById(roomId);
         applyGameServerResponses(gameRoom, this.$tstore);
-        this.api.connect(gameRoom);
+        this.api.connect(gameRoom, this.$tstore);
         this.hasApi = true;
         this.$tstore.commit("SET_LAYOUT", "game");
         // FIXME: remove SET_ENVIRONMENT entirely in a later refactor

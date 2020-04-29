@@ -6,7 +6,7 @@
       </b-col>
     </b-row>
     <b-row>
-      <b-collapse visible id="consent-collapse">
+      <b-collapse :visible="showConsentForm" id="consent-collapse">
         <b-card>
           <b-card-text>
             <p>Dear Participant,</p>
@@ -64,45 +64,47 @@
         </b-card>
       </b-collapse>
       <b-button-group>
-        <b-button v-b-toggle.consent-collapse variant="success">Grant Consent</b-button>
+        <b-button @click="toggleConsent" variant="success">{{ consentLabel }}</b-button>
         <b-button @click="gotoDashboard" variant="danger">Do Not Consent (return to dashboard)</b-button>
       </b-button-group>
     </b-row>
     <b-row>
       <b-col class="p-0 m-0">
-        <b-form @submit="register">
-          <b-form-group label='Name' label-for='name' description='Please enter your full name'>
-            <b-form-input
-            id='name'
-            v-model='name'
-            type='text'
-            required
-            placeholder='Enter your full name'>
-            </b-form-input>
-          </b-form-group>
-          <b-form-group label='Email' label-for='email' description='We will never share your email.'>
-            <b-form-input
-            id='email'
-            v-model='email'
-            type='email'
-            placeholder='Please enter a valid email address so we can contact you with additional information.'
-            required>
-            </b-form-input>
-          </b-form-group>
-          <b-form-group label='Verify Email' label-for='verifyEMail' description='Please verify your email.'>
-            <b-form-input
-            id='verifyEmail'
-            v-model='verifyEmail'
-            type='email'
-            placeholder='Please verify your email address'
-            required>
-            </b-form-input>
-          </b-form-group>
-          <b-alert variant="danger" dismissible v-if="error">
-            <b-icon icon="exclamation-triangle-fill" variant="danger"></b-icon> {{ error }}
-          </b-alert>
-          <b-button type="submit" variant="primary" :disabled="submitDisabled">Register</b-button>
-        </b-form>
+        <b-collapse v-model="consented">
+          <b-form @submit="register">
+            <b-form-group label='Name' label-for='name' description='Please enter your full name'>
+              <b-form-input
+              id='name'
+              v-model='name'
+              type='text'
+              required
+              placeholder='Enter your full name'>
+              </b-form-input>
+            </b-form-group>
+            <b-form-group label='Email' label-for='email' description='We will never share your email.'>
+              <b-form-input
+              id='email'
+              v-model='email'
+              type='email'
+              placeholder='Please enter a valid email address so we can contact you with additional information.'
+              required>
+              </b-form-input>
+            </b-form-group>
+            <b-form-group label='Verify Email' label-for='verifyEMail' description='Please verify your email.'>
+              <b-form-input
+              id='verifyEmail'
+              v-model='verifyEmail'
+              type='email'
+              placeholder='Please verify your email address'
+              required>
+              </b-form-input>
+            </b-form-group>
+            <b-alert variant="danger" dismissible v-if="error">
+              <b-icon icon="exclamation-triangle-fill" variant="danger"></b-icon> {{ error }}
+            </b-alert>
+            <b-button type="submit" variant="primary" :disabled="submitDisabled">Grant Consent to Participate</b-button>
+          </b-form>
+        </b-collapse>
       </b-col>
     </b-row>
   </b-container>
@@ -138,6 +140,18 @@ export default class Register extends Vue {
       }, formData);
 
     }
+  }
+
+  get showConsentForm() {
+    return ! this.consented;
+  }
+  
+  get consentLabel() {
+    return this.consented ? "Show Consent Form" : "Grant Consent";
+  }
+
+  toggleConsent() {
+    this.consented = ! this.consented;
   }
 
   gotoDashboard() {
