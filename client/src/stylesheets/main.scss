@@ -1,6 +1,7 @@
 @import './utilities/_mixins.scss';
 @import './utilities/_variables.scss';
 
+// TODO :: Download Fonts Locally
 @import url('https://fonts.googleapis.com/css?family=Maven+Pro:400,500,600,700&display=swap');
 
 html {
@@ -45,7 +46,6 @@ body {
   --marslog-purple: rgba(111, 36, 134, 0.05);
   --marslog-orange: rgba(170, 111, 0, 0.05);
   --marslog-green: rgba(9, 92, 41, 0.5);
-
 }
 
 p,
@@ -58,50 +58,4 @@ button {
 .game {
   height: 100vh !important;
   width: 100vw !important;
-}
-
-.container {
-  width: 100%;
-  overflow-x: hidden;
-}
-
-.row {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.column-2 {
-  flex: 0 0 16.666667%;
-  max-width: 16.666667%;
-  width: 100%;
-}
-
-.column-3 {
-  flex: 0 0 25%;
-  max-width: 25%;
-  width: 100%;
-}
-
-.column-6 {
-  flex: 0 0 50%;
-  max-width: 50%;
-  width: 100%;
-}
-
-.column-8 {
-  flex: 0 0 66.666667%;
-  max-width: 66.666667%;
-  width: 100%;
-}
-
-.column-9 {
-  flex: 0 0 75%;
-  max-width: 75%;
-  width: 100%;
-}
-
-.column-12 {
-  flex: 0 0 100%;
-  max-width: 100%;
-  width: 100%;
 }
