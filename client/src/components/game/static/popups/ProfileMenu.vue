@@ -1,6 +1,6 @@
 <template>
   <div class="c-profilemenu tour-profile-menu" :style="position">
-    <button @click="toggle" class="toggle">
+    <button @click="toggle" class="toggle tour-profile-menu-toggle">
       <font-awesome-icon
         v-if="!profileMenuVisible"
         :icon="['fas', 'caret-right']"

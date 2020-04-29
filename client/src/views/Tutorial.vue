@@ -36,7 +36,7 @@
                 </button>
                 <button
                   v-if="!tour.isLast"
-                  ref="nextButton"
+                  ref="forwardButton"
                   v-on="{ click: api.hasCompletedAction ? tour.nextStep : () => {} }"
                   class="btn btn-dark next-button"
                   v-bind="{ class: api.hasCompletedAction ? 'button-active' : 'button-inactive' }"
@@ -48,6 +48,7 @@
                   v-on="{ click: api.hasCompletedAction ? tour.stop : () => {} }"
                   class="btn btn-dark next-button"
                   v-bind="{ class: api.hasCompletedAction ? 'button-active' : 'button-inactive' }"
+                  ref="forwardButton"
                 >
                   Finish
                 </button>
@@ -223,7 +224,6 @@ export default class Tutorial extends Vue {
     const currentStepElement = this.$el.querySelector(this.steps[0].target);
     this.$el.classList.add(this.BODY_TOUR);
     currentStepElement!.classList.add(this.TOUR_ACTIVE_CLASS,'animate-current-step');
-    this.api.registerRef(this.$refs.nextButton);
   }
 
   async previousStepCallback(currentStep: number) {
@@ -260,6 +260,9 @@ export default class Tutorial extends Vue {
     );
     currentStepElement!.classList.remove(this.TOUR_ACTIVE_CLASS,'animate-current-step');
     nextStepElement!.classList.add(this.TOUR_ACTIVE_CLASS,'animate-current-step');
+    
+    //this will set the forward button to the 'next' button, or the 'finish' button, depending on the context.
+    this.api.registerRef(this.$refs.forwardButton);
   }
 
   async stopTourCallback(currentStep: number) {

@@ -21,18 +21,18 @@ export class TutorialAPI  {
   private validationObject: any = {};
   private requiredObject!: StateTransform;
 
-  private nextButtonRef!:any;
+  private forwardButtonRef!:any;
 
   connect(store: any) {
     this.store = store
   }
 
-  registerRef(nextButtonRef:any){
-    this.nextButtonRef = nextButtonRef;
+  registerRef(forwardButtonRef:any){
+    this.forwardButtonRef = forwardButtonRef;
   }
 
   /*
-    This goes adds the sigular state transform it recived to the state
+    This adds the sigular state transform it received to the state
     and adds it to the state stack for later use
   */
   public statePush(state: Array<StateTransform> | undefined) {
@@ -78,7 +78,7 @@ export class TutorialAPI  {
           switch (command) {
             /*we decided that, once you complete a required action,
               you shouldn't have to do it again. therefore, we don't care about
-              the required tag or the vaildation tag.
+              the required tag or the vaildation object.
             */
             case 'required':
               break;
@@ -114,7 +114,7 @@ export class TutorialAPI  {
 
 
   //use this to verify that the user has completed the action
-  completedRequiredAction() {
+  private completedRequiredAction() {
     //we want to immediatly set the task to completed
     this.isTaskComplete = true;
 
@@ -125,10 +125,10 @@ export class TutorialAPI  {
 
 
   //use this to verify that the user has completed the action and to move the user forward a step.
-  completedActionWithImplictForward(){
+  private completedActionWithImplicitForward(){
     this.completedRequiredAction();
 
-    setTimeout(() => this.nextButtonRef[0].click(), 0);
+    setTimeout(() => this.forwardButtonRef[0].click(), 0);
   }
 
   //CHAT HANDLER
@@ -140,7 +140,7 @@ export class TutorialAPI  {
       round: 0,
     });
     
-    this.completedRequiredAction();
+    this.completedActionWithImplicitForward();
   }
 
   //PURCHASE HANDLER
@@ -150,7 +150,7 @@ export class TutorialAPI  {
       role: accomplishment.role,
     });
     
-    this.completedRequiredAction();
+    this.completedActionWithImplicitForward();
   }
 
   //DISCARD HANDLER
@@ -160,7 +160,7 @@ export class TutorialAPI  {
       role: 'Researcher',
     });
 
-    this.completedRequiredAction();
+    this.completedActionWithImplicitForward();
   }
 
 
@@ -173,7 +173,7 @@ export class TutorialAPI  {
       if (this.validationObject[resource as Resource] != amt) return false;
     }
     
-    this.completedRequiredAction();
+    this.completedActionWithImplicitForward();
     return true;
   }
 
@@ -183,14 +183,14 @@ export class TutorialAPI  {
   //PLAYER READINESS HANDLER
   public setPlayerReadiness(ready:boolean): void {
     if(ready){
-      this.completedActionWithImplictForward();
+      this.completedActionWithImplicitForward();
     }
   }
 
   //MODAL HANDLERS
   public setModalVisible(data: any){
     this.store.commit('SET_MODAL_VISIBLE',data);
-    this.completedActionWithImplictForward();
+    this.completedActionWithImplicitForward();
   }
 
   public setModalHidden(){
@@ -203,7 +203,7 @@ export class TutorialAPI  {
       !currentlyVisble
     );
 
-    this.completedRequiredAction();
+    this.completedActionWithImplicitForward();
   }
 
   //TRADES
@@ -215,7 +215,7 @@ export class TutorialAPI  {
     this.store.commit('SET_TRADE_PARTNER_NAME', name as Role);
 
     if (this.validationObject.name == name) {
-      this.completedActionWithImplictForward();
+      this.completedActionWithImplicitForward();
       return true;
     }
     return false;
@@ -229,7 +229,7 @@ export class TutorialAPI  {
       if (this.validationObject[resource as Resource] != amt) return false;
     }
 
-    this.completedActionWithImplictForward();
+    this.completedActionWithImplicitForward();
     return true;
   }
 
@@ -240,7 +240,7 @@ export class TutorialAPI  {
       if (this.validationObject[resource as Resource] != amt) return false;
     }
 
-    this.completedActionWithImplictForward();
+    this.completedActionWithImplicitForward();
     return true;
   }
 
@@ -252,7 +252,7 @@ export class TutorialAPI  {
     });
     this.count++;
 
-    this.completedActionWithImplictForward();
+    this.completedActionWithImplicitForward();
   }
 
   public acceptTradeRequest(id: string) {
