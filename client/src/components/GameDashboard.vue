@@ -20,7 +20,6 @@ import { Phase } from '@port-of-mars/shared/types';
     GameboardContainer,
     ContainerVictory,
     ContainerDefeat,
-    ContainerVictory,
   },
 })
 export default class GameDashboard extends Vue {

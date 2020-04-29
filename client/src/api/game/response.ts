@@ -13,7 +13,7 @@ import {
 import { SetPlayerRole, SetError } from '@port-of-mars/shared/game/responses';
 import { Schema } from '@colyseus/schema';
 import { TStore } from '@port-of-mars/client/plugins/tstore';
-import Mutations from "@port-of-mars/client/store/mutations";
+import Mutations from '@port-of-mars/client/store/mutations';
 type Schemify<T> = T & Schema;
 
 function deschemify<T>(s: Schemify<T>): T {
@@ -21,10 +21,10 @@ function deschemify<T>(s: Schemify<T>): T {
 }
 
 type serverResponse = {
-  [field in keyof Omit<PlayerData, 'role'>] : keyof typeof Mutations
-}
+  [field in keyof Omit<PlayerData, 'role'>]: keyof typeof Mutations;
+};
 
-const responseMap:serverResponse = {
+const responseMap: serverResponse = {
   inventory: 'SET_INVENTORY',
   costs: 'SET_INVESTMENT_COSTS',
   specialty: 'SET_SPECIALTY',
@@ -39,10 +39,15 @@ const responseMap:serverResponse = {
 function applyPlayerResponses(player: any, store: TStore) {
   player.onChange = (changes: Array<any>) => {
     //filtering out any changes that have to do with the role immediately
-    changes.filter(change => change.field != 'role').forEach((change) => {
-      const payload = { role: player.role, data: change.value };
-      store.commit(responseMap[change.field as keyof Omit<PlayerData, 'role'>], payload);
-    });
+    changes
+      .filter((change) => change.field != 'role')
+      .forEach((change) => {
+        const payload = { role: player.role, data: change.value };
+        store.commit(
+          responseMap[change.field as keyof Omit<PlayerData, 'role'>],
+          payload
+        );
+      });
   };
   player.triggerAll();
 }
@@ -73,7 +78,9 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
 
   room.onError((code: number, message?: string) => {
     console.log(`Error ${code} occurred in room: ${message}`);
-    alert('sorry, we encountered an error, please try refreshing the page or contact us');
+    alert(
+      'sorry, we encountered an error, please try refreshing the page or contact us'
+    );
   });
 
   room.onLeave((code: number) => {
@@ -95,8 +102,11 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
     store.commit('SET_PLAYER_ROLE', msg.role);
   });
   room.onMessage('set-error', (msg: SetError) => {
-    store.commit('SET_DASHBOARD_MESSAGE', { kind: 'warning', message: msg.message });
-  })
+    store.commit('SET_DASHBOARD_MESSAGE', {
+      kind: 'warning',
+      message: msg.message,
+    });
+  });
 
   // eslint-disable-next-line no-param-reassign
   room.state.messages.onAdd = (msg: Schemify<ChatMessageData>, key: number) => {

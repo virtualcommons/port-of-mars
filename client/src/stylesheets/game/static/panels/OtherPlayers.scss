@@ -7,7 +7,6 @@
 
   &:hover {
     background-color: $space-white-opaque-1;
-    // background-color: $space-lightgreen;
   }
 
   .wrapper {
@@ -25,8 +24,19 @@
       @include make-center;
 
       .indicator {
-        height: 5rem;
-        width: 5rem;
+        height: 4.5rem;
+        width: 4.5rem;
+
+        @include lg {
+          height: 4rem;
+          width: 4rem;
+        }
+
+        @include md {
+          height: 3.5rem;
+          width: 3.5rem;
+        }
+
         padding: 0.125rem;
         border-radius: 50%;
 

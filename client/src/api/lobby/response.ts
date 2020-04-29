@@ -1,5 +1,9 @@
 import { Room } from 'colyseus.js';
-import { JoinedClientQueue, SentInvitation, RemovedClientFromLobby } from '@port-of-mars/shared/lobby/responses';
+import {
+  JoinedClientQueue,
+  SentInvitation,
+  RemovedClientFromLobby,
+} from '@port-of-mars/shared/lobby/responses';
 import { GAME_PAGE, LOGIN_PAGE } from '@port-of-mars/shared/routes';
 import WaitingLobby from '@port-of-mars/client/views/WaitingLobby.vue';
 
@@ -23,7 +27,9 @@ export function applyWaitingServerResponses<T>(
   const router = component.$router;
   room.onError((code: number, message?: string) => {
     console.log(`Error ${code} occurred in room: ${message} `);
-    alert("sorry, we encountered an error, please try refreshing the page or contact us");
+    alert(
+      'sorry, we encountered an error, please try refreshing the page or contact us'
+    );
   });
 
   room.onLeave((code: number) => {
@@ -40,7 +46,7 @@ export function applyWaitingServerResponses<T>(
   });
   room.onMessage('removed-client-from-lobby', (msg: RemovedClientFromLobby) => {
     // TODO: HANDLE WAITING LOBBY DISCONNECT
-    console.log("Removed client from lobby (currently a NO-OP).");
+    console.log('Removed client from lobby (currently a NO-OP).');
   });
 
   room.state.onChange = (changes: Array<any>) => {

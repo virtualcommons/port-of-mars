@@ -12,6 +12,7 @@ import { applyGameServerResponses } from '@port-of-mars/client/api/game/response
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 import { EnvironmentMode } from '@port-of-mars/client/settings';
 import { url } from '@port-of-mars/client/util';
+import { DASHBOARD_PAGE } from '@port-of-mars/shared/routes';
 
 @Component({
   name: 'game',
@@ -71,4 +72,8 @@ export default class Game extends Vue {
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.default-layout {
+  @include expand;
+}
+</style>

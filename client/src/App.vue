@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="game">
     <router-view :key="$route.path" />
   </div>
 </template>
