@@ -55,4 +55,8 @@ export default class Game extends Vue {
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.default-layout {
+  @include expand;
+}
+</style>

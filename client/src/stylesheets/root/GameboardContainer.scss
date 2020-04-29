@@ -1,68 +1,38 @@
-.gameboardcontainer {
-  position: relative;
-  z-index: 0;
-  @include expand;
-  /* SET MAX SIZE OF SCREEN */
-  max-height: $max-screen-height;
-  max-width: $max-screen-width;
-  /* SET MIN SIZE OF SCREEN */
-  min-height: $min-screen-height;
-  min-width: $min-screen-width;
+.c-gameboard-container {
+  @include gameboard-constraints;
   padding: 1rem;
-  // border-radius: 1.25rem;
   margin: 0;
-  overflow-y: hidden;
+  position: absolute;
+  z-index: 0;
+  overflow: hidden;
   @include make-column-and-top;
   background-color: $space-gray;
-  // filter: drop-shadow(0 0 0.75rem $new-space-orange);
 
-  .transparency {
-    position: absolute;
-    top: 0;
-    left: 0;
-    @include expand;
-    background-color: rgba(30, 34, 35, 0.8);
-    z-index: 2;
-  }
-
-  .gameboardstatusbar {
-    width: 100%;
-    margin: 0 0 0.5rem 0;
-  }
-
-  .gameboard-popups {
-    position: absolute;
-    bottom: 0;
-    height: 100%;
-    padding: 0 125rem 0 0;
-    overflow-y: hidden;
-  }
-
-  .status-bar {
+  .system-health {
     width: 100%;
     margin: 0 0 0.5rem 0;
   }
 
   .gameboard {
-    overflow-x: hidden;
-    flex-grow: 1;
+    flex: 1;
     width: 100%;
     padding: 0 0 2.5rem 0;
     margin: 0;
-    overflow-y: hidden;
+    overflow: hidden;
 
     .left {
       height: 100%;
       padding: 0 0.5rem 0 0;
+      @include make-column-and-top;
 
       .hud {
-        height: calc(calc(5 / 12) * 100%);
+        height: 40%;
         width: 100%;
         @include reset-padding-margin;
       }
 
-      .gameboardbottom {
-        height: calc(calc(7 / 12) * 100%);
+      .phase-switcher {
+        height: 60%;
         width: 100%;
         padding: 0.5rem 0 0 0;
         margin: 0;
@@ -72,9 +42,7 @@
     .right {
       height: 100%;
       padding: 0;
-      // @include new-border-orange;
       border: 0.125rem solid $space-lightgray-025;
-      overflow-y: hidden;
     }
   }
 }

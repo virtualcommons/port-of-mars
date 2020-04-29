@@ -103,9 +103,9 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
   room.onError((message: string) => {
     console.log('Error occurred in room..');
     console.log(message);
-    alert(
-      'sorry, we encountered an error, please try refreshing the page or contact us'
-    );
+    // alert(
+    //   'sorry, we encountered an error, please try refreshing the page or contact us'
+    // );
   });
 
   room.onLeave((code: number) => {
@@ -114,12 +114,12 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
       return;
     }
     if (REFRESHABLE_WEBSOCKET_ERROR_CODES.includes(code)) {
-      alert('your connection was interrupted, refreshing the browser');
+      // alert('your connection was interrupted, refreshing the browser');
       window.location.reload(false);
     } else {
-      alert(
-        'your connection was interrupted, please try refreshing the page or contact us'
-      );
+      // alert(
+      //   'your connection was interrupted, please try refreshing the page or contact us'
+      // );
     }
   });
 

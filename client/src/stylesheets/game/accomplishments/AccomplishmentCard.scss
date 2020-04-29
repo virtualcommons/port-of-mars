@@ -3,6 +3,7 @@
   padding: 0;
   margin: 0 0 0.5rem 0;
   @include make-column-and-center;
+  flex-shrink: 0;
 
   &:last-child {
     margin-bottom: 0;
@@ -76,7 +77,6 @@
         font-size: $font-med;
         font-weight: $font-weight-maven-pro-regular;
         color: $space-white;
-        // text-align: center;
       }
     }
   }
@@ -151,7 +151,6 @@
 .unpurchasable {
   border: 0.125rem solid $space-white;
   background-color: $space-white;
-  //opacity: 0.5;
 
   .purchase button,
   .discard button {

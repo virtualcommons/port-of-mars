@@ -1,7 +1,6 @@
 .tutorial-layout {
   height: 100% !important;
   width: 100% !important;
-
 }
 
 @keyframes shadow-pulse {
@@ -29,21 +28,21 @@ body .in-tour {
   pointer-events: auto;
 }
 
-@keyframes border-pulse{
+@keyframes border-pulse {
   0% {
     border-color: rgba(161, 211, 219, 1);
   }
 
-  50%{
+  50% {
     border-color: rgba(161, 211, 219, 0);
   }
 
   100% {
-    border-color:rgba(161, 211, 219, 1);
+    border-color: rgba(161, 211, 219, 1);
   }
 }
 
-.animate-current-step{
+.animate-current-step {
   border: 0.25rem solid $space-lightgreen;
   animation: border-pulse 1s 3 ease-in-out;
 }
@@ -52,9 +51,7 @@ body .in-tour {
   border: 0.125rem solid $space-lightgreen;
   border-radius: 0 !important;
   background-color: $space-gray !important;
-  
 
-  
   .v-step__arrow {
     display: none !important;
   }
@@ -65,7 +62,7 @@ body .in-tour {
     font-size: $font-med;
   }
 
-  .status-wrong{
+  .status-wrong {
     margin: 0.5rem 0;
     color: $status-red;
     font-size: $font-large;
@@ -74,22 +71,22 @@ body .in-tour {
   button {
     @include reset-button;
     padding: 0.5rem !important;
-    border: 0.0625rem solid $space-lightgreen !important;
+    border: 0.125rem solid $space-lightgreen !important;
     border-radius: 0 !important;
     margin: 0.5rem;
     color: $space-lightgreen;
     @include default-transition-base;
 
-    &:hover{
+    &:hover {
       background-color: $space-lightgreen;
     }
   }
 
-  .button-inactive{
+  .button-inactive {
     opacity: 0.25;
   }
 
-  .button-active{
+  .button-active {
     opacity: 1;
     &:hover {
       @include default-scale-up;
@@ -101,7 +98,7 @@ body .in-tour {
   .option-container {
     text-align: left;
     margin: 0.5rem 0;
-  
+
     input {
       display: none;
     }
@@ -123,7 +120,7 @@ body .in-tour {
 
     label span:before,
     label span:after {
-        content: '';
+      content: '';
     }
 
     label span:before {
@@ -135,7 +132,7 @@ body .in-tour {
       vertical-align: top;
       border-radius: 5px;
     }
-    
+
     label span:after {
       background: $new-space-orange;
       width: 0.9rem;
@@ -145,12 +142,10 @@ body .in-tour {
       left: 0.3rem;
       opacity: 0;
       border-radius: 2px;
-      
     }
 
-    label input:checked+span:after {
+    label input:checked + span:after {
       opacity: 1;
     }
-
   }
 }

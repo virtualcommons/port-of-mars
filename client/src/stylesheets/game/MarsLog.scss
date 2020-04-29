@@ -1,7 +1,6 @@
 .c-marslog {
   @include expand;
   @include make-column-and-center;
-  // background-color: cadetblue;
 
   .wrapper {
     @include expand;
