@@ -1,4 +1,4 @@
-import {createLocalVue, shallowMountPOM} from "./common";
+import { createLocalVue, shallowMountPOM } from './common';
 import App from '@port-of-mars/client/App.vue';
 
 describe('App.vue', () => {

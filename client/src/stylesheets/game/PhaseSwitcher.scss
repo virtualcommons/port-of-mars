@@ -1,44 +1,43 @@
-.c-phaseswitcher {
+.c-phase-switcher {
   @include expand;
   max-width: none;
   @include reset-padding-margin;
 
   .wrapper {
     @include expand;
-    // @include new-border-orange;
     border: 0.125rem solid $space-lightgray-025;
     padding: 0.5rem;
     margin: 0;
   }
 }
 
-.component-fade-enter-active{
-  animation: fade-in .5s;
+.component-fade-enter-active {
+  animation: fade-in 0.5s;
 }
 
-.component-fade-leave-active{
-  animation: fade-out .5s;
+.component-fade-leave-active {
+  animation: fade-out 0.5s;
 }
 
-@keyframes fade-in{
-  0%{
+@keyframes fade-in {
+  0% {
     opacity: 0;
     transform: translateX(-20px);
   }
 
-  100%{
+  100% {
     opacity: 100%;
     transform: translateX(0);
   }
 }
 
-@keyframes fade-out{
-  0%{
+@keyframes fade-out {
+  0% {
     opacity: 100;
     transform: translateX(0px);
   }
 
-  100%{
+  100% {
     opacity: 0%;
     transform: translateX(20px);
   }

@@ -1,5 +1,5 @@
 <template>
-  <div class="container-default container">
+  <div class="c-default container">
     <p>Welcome to Port of Mars</p>
   </div>
 </template>

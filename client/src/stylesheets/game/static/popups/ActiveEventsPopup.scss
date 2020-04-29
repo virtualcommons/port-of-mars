@@ -2,16 +2,13 @@
   position: absolute;
   left: 4rem;
   width: 24rem;
-  //height: 48rem;
   bottom: 0;
-  // border: 0.125rem solid $new-space-orange;
   border: 0.125rem solid $space-lightgray;
   border-top-left-radius: 0.75rem;
   border-top-right-radius: 0.75rem;
   @include make-column-and-top;
   @include default-transition-base;
   justify-content: space-between;
-  // background-color: $new-space-orange;
   background-color: $space-lightgray;
   z-index: 1;
 
@@ -21,7 +18,6 @@
     border-top-left-radius: 0.75rem;
     border-top-right-radius: 0.75rem;
     @include reset-button;
-    // background-color: $new-space-orange;
     background-color: $space-lightgray;
     color: $space-gray;
     font-size: $font-med;
@@ -34,8 +30,6 @@
 
   .wrapper {
     width: 100%;
-    //height: 44.625rem;
-    //padding: 0.5rem;
     @include make-column-and-top;
     @include default-transition-base;
     background-color: $space-gray;

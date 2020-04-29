@@ -34,6 +34,15 @@ $screen-xxl: 1680px;
   }
 }
 
+@mixin gameboard-constraints {
+  height: 100%;
+  width: 100%;
+  max-width: calc(1440 / 16 * 1rem);
+  max-height: calc(914 / 16 * 1rem);
+  min-width: calc(1024 / 16 * 1rem);
+  min-height: calc(768 / 16 * 1rem);
+}
+
 @mixin text-overflow-ellipses {
   overflow: hidden;
   white-space: nowrap;
@@ -73,7 +82,7 @@ $screen-xxl: 1680px;
 @mixin space-button {
   @include space-button-base;
   color: $new-space-orange;
-  border: 0.0625rem solid $new-space-orange;
+  border: 0.125rem solid $new-space-orange;
 
   &:hover {
     color: $space-gray;
@@ -89,7 +98,7 @@ $screen-xxl: 1680px;
 @mixin space-button-white {
   @include space-button-base;
   color: $space-white;
-  border: 0.0625rem solid $space-white;
+  border: 0.125rem solid $space-white;
 
   &:hover {
     color: $space-gray;
@@ -105,7 +114,7 @@ $screen-xxl: 1680px;
 @mixin space-button-modal {
   @include space-button-base;
   color: $space-lightgreen;
-  border: 0.0625rem solid $space-lightgreen;
+  border: 0.125rem solid $space-lightgreen;
 
   &:hover {
     color: $space-gray;

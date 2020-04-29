@@ -1,12 +1,11 @@
 <template>
-  <div class="gameboardcontainer container">
+  <div class="c-gameboard-container container">
     <ModalController />
     <ProfileMenu />
-    <!-- <div class="transparency" v-if="true"></div> -->
     <ActiveEventsPopup />
     <InventoryPopup />
     <MarsLogPopup />
-    <div class="gameboardstatusbar row">
+    <div class="system-health row">
       <SystemHealth />
     </div>
     <div class="gameboard row">
@@ -14,7 +13,7 @@
         <div class="hud row">
           <HUD />
         </div>
-        <div class="gameboardbottom row">
+        <div class="phase-switcher row">
           <PhaseSwitcher />
         </div>
       </div>

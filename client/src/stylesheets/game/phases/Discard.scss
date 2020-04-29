@@ -20,7 +20,6 @@
         padding: 0.25rem 1rem;
         margin-bottom: 0.5rem;
         @include make-center;
-        // background-color: $new-space-orange;
         background-color: $space-lightgray;
 
         .title {
@@ -32,7 +31,7 @@
       }
 
       .outer-wrapper {
-        flex-grow: 1;
+        flex: 1;
         width: 100%;
         overflow-y: hidden;
 
@@ -55,7 +54,6 @@
         padding: 0.25rem 1rem;
         margin-bottom: 0.5rem;
         @include make-center;
-        // background-color: $new-space-orange;
         background-color: $space-lightgray;
 
         .title {
@@ -67,7 +65,7 @@
       }
 
       .outer-wrapper {
-        flex-grow: 1;
+        flex: 1;
         width: 100%;
         padding: 0.5rem;
         background-color: $space-white-opaque-1;

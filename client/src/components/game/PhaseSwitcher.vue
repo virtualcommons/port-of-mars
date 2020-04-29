@@ -1,7 +1,7 @@
 <template>
-  <div class="c-phaseswitcher">
+  <div class="c-phase-switcher">
     <div class="wrapper row">
-      <transition name="component-fade" mode="out-in">      
+      <transition name="component-fade" mode="out-in">
         <component v-bind:is="phase[gamePhase]"></component>
       </transition>
     </div>
