@@ -12,7 +12,7 @@ export class RegistrationService extends BaseService {
 
   async submitRegistrationMetadata(data: { username: string; email: string; name: string }) {
     const repo = this.em.getRepository(User);
-    await repo.update({username: data.username}, data);
+    await repo.update({username: data.username}, {dateConsented: new Date(), ...data});
   }
 
   async findUnregisteredUserByRegistrationToken(registrationToken: string): Promise<User | undefined> {

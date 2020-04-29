@@ -16,8 +16,9 @@ registrationRouter.post('/register', async (req: Request, res: Response, next: N
     const services = getServices();
     const data = { ...req.body, ...{ username: user.username } };
     await services.registration.submitRegistrationMetadata(data);
-    services.registration.sendEmailVerification(user);
-    res.json();
+    logger.debug("updated registration metadata for user %o", data);
+    await services.registration.sendEmailVerification(user);
+    res.json(true);
   } catch (e) {
     logger.warn("unable to process registration metadata for %s", user.username);
     next(e);
