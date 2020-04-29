@@ -3,7 +3,7 @@
   width: 100% !important;
 
 }
-/* custom tour css: highlight an element */
+
 @keyframes shadow-pulse {
   0% {
     box-shadow: 0 0 0 0px rgba(255, 255, 255, 0.2);
@@ -22,8 +22,7 @@ body .in-tour {
   position: relative;
   z-index: 999;
   background: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0 0 10000px rgba(0, 0, 0, 0.5); /* outer black */
-  /* animation: shadow-pulse 2s infinite; */
+  box-shadow: 0 0 0 10000px rgba(0, 0, 0, 0.5);
 }
 .tour-active,
 .v-tour {
@@ -50,7 +49,6 @@ body .in-tour {
 }
 
 .v-step {
-  // border: 0.125rem solid $new-space-orange-opaque-025;
   border: 0.125rem solid $space-lightgreen;
   border-radius: 0 !important;
   background-color: $space-gray !important;
@@ -58,7 +56,6 @@ body .in-tour {
 
   
   .v-step__arrow {
-    // border-left-color: $new-space-orange-opaque-025 !important;
     display: none !important;
   }
 
@@ -88,25 +85,6 @@ body .in-tour {
     }
   }
 
-  //leave this until we decide which design we want.
-  // .previous-button{
-  //   color: $space-lightgreen;
-  //   border: 0.0625rem solid $space-lightgreen !important;
-
-  //   &:hover{
-  //     background-color: $space-lightgreen;
-  //   }
-  // }
-
-  // .next-button{
-  //   color: $new-space-orange;
-  //   border: 0.0625rem solid $new-space-orange !important;
-
-  //   &:hover{
-  //     background-color: $new-space-orange;
-  //   }
-  // }
-
   .button-inactive{
     opacity: 0.25;
   }
@@ -121,7 +99,6 @@ body .in-tour {
   }
 
   .option-container {
-    @include row;
     text-align: left;
     margin: 0.5rem 0;
   

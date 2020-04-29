@@ -58,7 +58,7 @@
               <div slot="actions">
                 <p>{{ currentQuizQuestion.question }}</p>
                 <div
-                  class="option-container">
+                  class="option-container row">
                   <label class="options"
                   v-for="(option, optionIndex) in currentQuizQuestion.options"
                   :key="optionIndex + Math.random()"
