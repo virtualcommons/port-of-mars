@@ -1,3 +1,7 @@
+import { Page } from "@port-of-mars/shared/routes";
+
+export type Dictionary <T> = { [key: string]: T };
+
 export const RESEARCHER: 'Researcher' = 'Researcher';
 export const CURATOR: 'Curator' = 'Curator';
 export const PIONEER: 'Pioneer' = 'Pioneer';
@@ -227,7 +231,8 @@ export interface QuizQuestionData {
 export interface ActionItem {
   done: boolean
   description: string
-  link: { kind: 'internal', data: string } | { kind: 'external', data: string }
+  redoable: boolean
+  link: { kind: 'internal', data: { name: Page, params?: Dictionary<string> } } | { kind: 'external', data: string }
 }
 
 export interface GameMeta {

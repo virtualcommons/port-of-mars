@@ -1,11 +1,11 @@
-import { getConnection } from '@port-of-mars/server/util';
-import { Game, Player, Tournament, TournamentRound, TournamentRoundInvite } from '@port-of-mars/server/entity';
+import { Game, User, Player, Tournament, TournamentRound, TournamentRoundInvite } from '@port-of-mars/server/entity';
 import { Equal, SelectQueryBuilder } from 'typeorm';
 import * as _ from 'lodash';
-import { settings } from "@port-of-mars/server/settings";
-import {BaseService} from "@port-of-mars/server/services/db";
+import { getLogger } from "@port-of-mars/server/settings";
+import { BaseService } from "@port-of-mars/server/services/db";
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
-const logger = settings.logging.getLogger(__filename);
+
+const logger = getLogger(__filename);
 
 export class TournamentService extends BaseService {
   async getActiveTournament(): Promise<Tournament> {
@@ -23,6 +23,7 @@ export class TournamentService extends BaseService {
     return await this.em
       .getRepository(TournamentRound)
       .findOneOrFail({
+        relations: ['tournament'],
         where: {
           tournamentId
         },
@@ -31,6 +32,7 @@ export class TournamentService extends BaseService {
         }
       });
   }
+
 
   async getInviteList(
     roundId?: number
@@ -57,7 +59,7 @@ export class TournamentService extends BaseService {
 
   async createInvite(userId: number, tournamentRoundId: number): Promise<TournamentRoundInvite> {
     const repository = this.em.getRepository(TournamentRoundInvite);
-    const invite = repository.create({ userId, tournamentRoundId});
+    const invite = repository.create({ userId, tournamentRoundId });
     return await repository.save(invite);
   }
 
@@ -172,6 +174,16 @@ export class TournamentService extends BaseService {
       .distinctOn(['u.userId'])
       .limit(n)
       .select('u.userId', 'id');
+  }
+
+  async setSurveyComplete(data: { participantId: string, tournamentRoundId: number, surveyId: string }) {
+    const user = await this.em.getRepository(User).findOneOrFail({ where: { participantId: data.participantId } });
+    const tournamentRound = await this.getTournamentRoundById(data.tournamentRoundId);
+    // FIXME: WIP
+
+  }
+  async getTournamentRoundById(tournamentRoundId: number) {
+    return this.em.getRepository(TournamentRound).findOneOrFail({ where: { id: tournamentRoundId } });
   }
 }
 

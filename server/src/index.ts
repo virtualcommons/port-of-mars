@@ -57,7 +57,10 @@ passport.use(new CasStrategy(
 passport.use(new LocalStrategy(
   function (username: string, password: string, done: Function) {
     logger.warn('***** DO NOT ALLOW IN PRODUCTION! running local auth for user: ', username);
-    getServices().account.getOrCreateUser(username).then(user => done(null, user));
+    getServices().account.getOrCreateTestUser(username).then(user => {
+      // set all testing things on the user
+      done(null, user)
+    });
   }
 ));
 
