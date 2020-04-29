@@ -1,9 +1,5 @@
-.game-dashboard,
-.game-dashboard-defeat,
-.game-dashboard-victory {
-  position: absolute;
-  height: 100vh !important;
-  width: 100vw !important;
-  margin: 0;
+.c-game-dashboard {
+  @include expand;
   @include make-center;
+  position: absolute;
 }

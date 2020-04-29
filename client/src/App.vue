@@ -1,23 +1,15 @@
 <template>
-  <div id="app" class="game">
+  <div id="app">
     <router-view :key="$route.path" />
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
-import Game from '@port-of-mars/client/views/Game.vue';
-import Tutorial from '@port-of-mars/client/views/Tutorial.vue';
+import { Vue } from 'vue-property-decorator';
 import BootstrapVue from 'bootstrap-vue';
 Vue.use(BootstrapVue);
 
-@Component({
-  components: {
-    Game,
-    Tutorial
-  }
-})
-export default class Home extends Vue {}
+export default class App extends Vue {}
 </script>
 
 <style lang="scss">
