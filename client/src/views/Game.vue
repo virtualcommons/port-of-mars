@@ -5,15 +5,13 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Inject, Provide, Prop } from 'vue-property-decorator';
+import { Vue, Component, Inject, Provide } from 'vue-property-decorator';
+import GameDashboard from '@port-of-mars/client/components/GameDashboard.vue';
 import { Client, Room } from 'colyseus.js';
 import { applyGameServerResponses } from '@port-of-mars/client/api/game/response';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 import { EnvironmentMode } from '@port-of-mars/client/settings';
-import GameDashboard from '@port-of-mars/client/components/GameDashboard.vue';
-import _ from 'lodash';
-import { LOBBY_PAGE } from '@port-of-mars/shared/routes';
-import {url} from "@port-of-mars/client/util";
+import { url } from '@port-of-mars/client/util';
 
 @Component({
   name: 'game',
@@ -32,7 +30,7 @@ export default class Game extends Vue {
     let gameRoom: Room;
     let cachedRoomId = this.$ajax.roomId;
     let roomId: string;
-    console.log({cachedRoomId});
+    console.log({ cachedRoomId });
     if (!cachedRoomId) {
       const res = await this.$ajax.get(url('/game/latest-active'));
       console.log(res);
@@ -40,7 +38,7 @@ export default class Game extends Vue {
     } else {
       roomId = cachedRoomId;
     }
-    console.log({roomId});
+    console.log({ roomId });
     gameRoom = await this.$client.joinById(roomId);
 
     applyGameServerResponses(gameRoom, this.$tstore);
@@ -57,6 +55,4 @@ export default class Game extends Vue {
 }
 </script>
 
-<style lang="scss">
-@import '@port-of-mars/client/stylesheets/layouts/DefaultLayout.scss';
-</style>
+<style lang="scss"></style>

@@ -22,10 +22,15 @@ html {
 }
 
 body {
-  font-family: $font-family-default !important;
-  // background-color: $space-gray;
-  background-color: $space-gray-0975;
+  height: 100vh;
+  width: 100vw;
   overflow: hidden;
+  font-family: $font-family-default !important;
+  font-weight: $font-weight-maven-pro-regular !important;
+  color: $space-gray;
+  background-color: $space-gray-0975;
+
+  // NOTE :: CSS VARIABLES
 
   --space-gray: #1e2223;
   --space-orange: #c67b5c;
@@ -55,7 +60,6 @@ button {
   user-select: none !important;
 }
 
-.game {
-  height: 100vh !important;
-  width: 100vw !important;
+#app {
+  @include expand;
 }
