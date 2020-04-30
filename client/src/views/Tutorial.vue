@@ -122,9 +122,10 @@ import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
 import { Step } from '@port-of-mars/client/types/tutorial';
 import { CURATOR, Phase, QuizQuestionData, RESEARCHER } from '@port-of-mars/shared/types';
 import * as _ from 'lodash';
+import { url } from '@port-of-mars/client/util';
 
 import { tutorialSteps } from '@port-of-mars/client/api/tutorial/steps';
-import { AjaxResponseError } from '../plugins/ajax';
+import { AjaxResponseError } from '@port-of-mars/client/plugins/ajax';
 
 require('vue-tour/dist/vue-tour.css');
 Vue.use(VueTour);
@@ -316,7 +317,7 @@ export default class Tutorial extends Vue {
   }
 
   get quizSubmissionEndpoint() {
-    return `${process.env.SERVER_URL_HTTP}/quiz/submission`;
+    return url('/quiz/submission');
   }
 
   private setSubmissionId(submissionId: number) {
@@ -357,7 +358,7 @@ export default class Tutorial extends Vue {
 
   private async checkQuizCompletion(): Promise<boolean> {
     // FIXME: extract this and other URLs to shared/routes
-    const quizCompletionUrl = `${process.env.SERVER_URL_HTTP}/quiz/complete`;
+    const quizCompletionUrl = url('/quiz/complete');
     // quiz completion endpoint returns true/false on 200
     try {
       await this.$ajax.get(quizCompletionUrl, ({data, status}) => {

@@ -65,9 +65,8 @@ export class TournamentService extends BaseService {
 
 
   async getActiveRoundInvite(userId: number, tournamentRound: TournamentRound): Promise<TournamentRoundInvite> {
-    // special case for the first round of a tournament where everyone's invited 
     const tournamentRoundId = tournamentRound.id;
-    let invite = await this.em.getRepository(TournamentRoundInvite).findOne({
+    const invite = await this.em.getRepository(TournamentRoundInvite).findOne({
       where: {
         tournamentRoundId,
         userId
@@ -75,13 +74,13 @@ export class TournamentService extends BaseService {
     });
     if (invite) return invite;
 
+    // special case for the first round of a tournament where everyone's invited 
     if (!invite && tournamentRound.roundNumber === 1) {
-      invite = await this.createInvite(userId, tournamentRoundId)
+      return await this.createInvite(userId, tournamentRoundId);
     }
     else {
       throw new EntityNotFoundError(TournamentRoundInvite, `User ${userId} does not have an invite for the current round ${tournamentRoundId}.`);
     }
-    return invite;
   }
 
   async createTournament(data: Pick<Tournament, 'name' | 'active'>): Promise<Tournament> {
@@ -176,14 +175,28 @@ export class TournamentService extends BaseService {
       .select('u.userId', 'id');
   }
 
-  async setSurveyComplete(data: { participantId: string, tournamentRoundId: number, surveyId: string }) {
-    const user = await this.em.getRepository(User).findOneOrFail({ where: { participantId: data.participantId } });
-    const tournamentRound = await this.getTournamentRoundById(data.tournamentRoundId);
-    // FIXME: WIP
-
+  async getTournamentRoundInvite(id: number): Promise<TournamentRoundInvite> {
+    return this.em.getRepository(TournamentRoundInvite).findOneOrFail({ relations: ['user', 'tournamentRound'], where: { id } });
   }
-  async getTournamentRoundById(tournamentRoundId: number) {
-    return this.em.getRepository(TournamentRound).findOneOrFail({ where: { id: tournamentRoundId } });
+
+  async getTournamentRound(id: number): Promise<TournamentRound> {
+    return this.em.getRepository(TournamentRound).findOneOrFail({ where: { id } });
+  }
+
+  async setSurveyComplete(data: { inviteId: number; surveyId: string }) {
+    const invite = await this.getTournamentRoundInvite(data.inviteId);
+    const tournamentRound = invite.tournamentRound;
+    const introSurveyUrl = tournamentRound.introSurveyUrl;
+    const exitSurveyUrl = tournamentRound.exitSurveyUrl;
+    if (introSurveyUrl && introSurveyUrl.includes(data.surveyId)) {
+      invite.hasCompletedIntroSurvey = true;
+      logger.debug("participant %s completed intro survey %s", invite.user.username, introSurveyUrl);
+    }
+    else if (exitSurveyUrl && exitSurveyUrl.includes(data.surveyId)) {
+      invite.hasCompletedExitSurvey = true;
+      logger.debug("participant %s completed exit survey %s", invite.user.username, exitSurveyUrl);
+    }
+    this.em.save(invite);
   }
 }
 

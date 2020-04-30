@@ -133,6 +133,7 @@
 
 <script lang="ts">
 import { Component, Vue, Emit } from 'vue-property-decorator';
+import { url } from '@port-of-mars/client/util';
 import _ from 'lodash';
 import { BModal, BButton, BootstrapVueIcons,
          BFormInput, BContainer, BRow, BCol,
@@ -182,7 +183,7 @@ export default class ConsentFormModal extends Vue {
     async grantConsent() {
       this.$bvModal.hide('bv-modal');
       // FIXME: post to a new endpoint to store the user's consent and timestamp
-      await this.$ajax.post(`${process.env.SERVER_URL_HTTP}/registration/tutorial`, ({data, status}) => {
+      await this.$ajax.post(url('/registration/tutorial'), ({data, status}) => {
         // what should we do after this post? return to the dashboard after modifying consent granted
         // FIXME: run an api call to commit to the store instead of modifying state directly
         this.$tstore.commit('SET_CONSENT', true);

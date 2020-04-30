@@ -26,6 +26,7 @@ import { settings } from "@port-of-mars/server/settings";
 import { isDev } from '@port-of-mars/shared/settings';
 import { getServices } from "@port-of-mars/server/services";
 import { gameRouter } from "@port-of-mars/server/routes/game";
+import { surveyRouter } from "@port-of-mars/server/routes/survey";
 import { ServerError } from './util';
 
 const logger = settings.logging.getLogger(__filename);
@@ -126,6 +127,7 @@ async function createApp() {
     logger.info(sessionCookie);
     res.json({ username: (req.user as User).username, sessionCookie });
   });
+  app.use('/survey', surveyRouter);
   app.use('/game', gameRouter);
   app.use('/quiz', quizRouter);
   app.use('/dashboard', dashboardRouter);
