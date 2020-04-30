@@ -38,7 +38,7 @@ export class GameRequestAPI {
   }
 
   public send(req: Requests) {
-    this.room.send(req);
+    this.room.send(req.kind, req);
   }
 
   public sendChatMessage(message: string) {

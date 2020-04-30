@@ -8,7 +8,7 @@ import { settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
 import _ from "lodash";
 import * as http from "http";
-import { WaitingRequests, WaitingResponses, LOBBY_NAME } from "@port-of-mars/shared/lobby";
+import { DistributeGroups, WaitingResponses, LOBBY_NAME, AcceptInvitation } from "@port-of-mars/shared/lobby";
 import { Persister } from "@port-of-mars/server/rooms/game/types";
 
 const logger = settings.logging.getLogger(__filename);
@@ -80,6 +80,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
     this.persister = options.persister;
     this.evaluateAtEveryMinute = settings.lobby.evaluateAtEveryMinute;
     this.devMode = settings.lobby.devMode;
+    this.registerLobbyHandlers();
 
     /**
      * Redistribute clients into groups at every interval
@@ -136,9 +137,8 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
     }
   }
 
-  async onMessage(client: Client, message: WaitingRequests) {
-    logger.trace('WAITING LOBBY: onMessage - message', message);
-    if (message.kind === 'accept-invitation') {
+  registerLobbyHandlers() {
+    this.onMessage('accept-invitation', (client, message: AcceptInvitation) => {
       logger.trace('CLIENT ACCEPTED INVITATION');
       const clientStat = this.clientStats.find(stat => stat.client === client);
       if (clientStat?.group) {
@@ -164,10 +164,11 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
           this.removeGroup(group);
         }
       }
-    }
-    else if (message.kind === 'distribute-groups') {
-      await this.redistributeGroups();
-    }
+    });
+    this.onMessage('distribute-groups', (client: Client, message: DistributeGroups) => {
+      logger.debug("client %d requesting to force distribute groups");
+      this.redistributeGroups().then(() => logger.debug("Groups redistributed"));
+    });
   }
 
   removeGroup(group: MatchmakingGroup) {
@@ -219,7 +220,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
   }
 
   sendSafe(client: Client, msg: WaitingResponses) {
-    this.send(client, msg);
+    client.send(msg.kind, msg);
   }
 
   fillUsernames(usernames: Array<string>) {

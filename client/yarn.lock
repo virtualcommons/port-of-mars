@@ -3066,10 +3066,10 @@ color@^3.0.0:
     color-convert "^1.9.1"
     color-string "^1.5.2"
 
-colyseus.js@^0.12.0:
-  version "0.12.2"
-  resolved "https://registry.yarnpkg.com/colyseus.js/-/colyseus.js-0.12.2.tgz#250defb9a499640f2b6bc4717e5e67e7b4de2751"
-  integrity sha512-zcihLskSHYmBD1LZX8FqFRGhafmr3kc2Qesz6fSfTxJS2fjrwSKYqRBt7YFeoMC1tfOf+jf+YgVkjUwYCcq46w==
+colyseus.js@^0.13.0:
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/colyseus.js/-/colyseus.js-0.13.0.tgz#1a7821a1bbf86edd2855d913e88c1f04ba2b974f"
+  integrity sha512-3dn28MLzy4V8E/pkROXNvVac4zG+TemrVWkmDZaBBEKPb+Ra7xiyB1gbv9x62xdNkAbbWdYSQU55rw/Ssj1cbA==
   dependencies:
     "@colyseus/schema" "^0.5.5"
     "@gamestdio/signals" "^1.0.0"

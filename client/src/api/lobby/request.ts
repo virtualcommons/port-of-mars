@@ -19,7 +19,7 @@ export class WaitingRequestAPI {
   }
 
   public send(req: WaitingRequests) {
-    this.room.send(req);
+    this.room.send(req.kind, req);
   }
 
   public acceptInvitation() {

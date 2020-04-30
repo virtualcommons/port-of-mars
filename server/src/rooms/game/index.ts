@@ -65,6 +65,33 @@ export class GameRoom extends Room<GameState> implements Game {
   async onCreate(options: GameOpts) {
     this.setState(new GameState(options));
     this.setPrivate(true);
+    this.onMessage('*', (client, type, message) => {
+      // we can refactor this.prepareRequest to not run a billion long switch statement and instead have
+      // lots of small onMessages coupled with Commands that modify the state (within the Command itself, not here)
+      // something like this:
+      /*
+      this.onMessage('send-chat-message', (client, message) => {
+        this.dispatcher.dispatch(
+          new SendChatMessageCommand({ player: this.getPlayer(client), message });
+        );
+      });
+
+      SendChatMessageCommand extends BaseCommand<GameState, { player: Player, message: SendChatMessageData }> {
+        execute({player, message}) {
+          return [new SentChatMessage({
+            message: this.message,
+            dateCreated: new Date().getTime(),
+            role: this.player.role,
+            round: this.state.round
+          })];
+        }
+      }
+      */
+      const cmd = this.prepareRequest(message, client);
+      const events = cmd.execute();
+      this.state.applyMany(events);
+      this.persister.persist(events, this.getMetadata());
+    });
     this.persister = options.persister;
     this.gameId = await this.persister.initialize(options, this.roomId);
     const snapshot = this.state.toJSON();
@@ -74,7 +101,7 @@ export class GameRoom extends Room<GameState> implements Game {
   }
 
   safeSend(client: Client, msg: Responses) {
-    this.send(client, msg);
+    client.send(msg.kind, msg);
   }
 
   getMetadata(): Metadata {
@@ -151,13 +178,6 @@ export class GameRoom extends Room<GameState> implements Game {
     if (inEndGame) {
       this.disconnect()
     }
-  }
-
-  onMessage(client: Client, message: Requests) {
-    const cmd = this.prepareRequest(message, client);
-    const events = cmd.execute();
-    this.state.applyMany(events);
-    this.persister.persist(events, this.getMetadata());
   }
 
   onJoin(client: Client, options: any, auth: User) {

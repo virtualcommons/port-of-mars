@@ -10,7 +10,7 @@ import {
   TradeData,
   Role,
 } from '@port-of-mars/shared/types';
-import { Responses } from '@port-of-mars/shared/game/responses';
+import { SetPlayerRole, SetError } from '@port-of-mars/shared/game/responses';
 import { Schema } from '@colyseus/schema';
 import { TStore } from '@port-of-mars/client/plugins/tstore';
 
@@ -100,12 +100,9 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
     (state.players as any).triggerAll();
   });
 
-  room.onError((message: string) => {
-    console.log('Error occurred in room..');
-    console.log(message);
-    alert(
-      'sorry, we encountered an error, please try refreshing the page or contact us'
-    );
+  room.onError((code: number, message?: string) => {
+    console.log(`Error ${code} occurred in room: ${message}`);
+    alert('sorry, we encountered an error, please try refreshing the page or contact us');
   });
 
   room.onLeave((code: number) => {
@@ -123,17 +120,12 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
     }
   });
 
-  room.onMessage((msg: Responses) => {
-    switch (msg.kind) {
-      case 'set-player-role':
-        store.commit('SET_PLAYER_ROLE', msg.role);
-        break;
-      default:
-        console.log('room.onMessage received unexpected payload');
-        console.log(msg);
-        break;
-    }
+  room.onMessage('set-player-role', (msg: SetPlayerRole) => {
+    store.commit('SET_PLAYER_ROLE', msg.role);
   });
+  room.onMessage('set-error', (msg: SetError) => {
+    store.commit('SET_DASHBOARD_MESSAGE', { kind: 'warning', message: msg.message });
+  })
 
   // eslint-disable-next-line no-param-reassign
   room.state.messages.onAdd = (msg: Schemify<ChatMessageData>, key: number) => {
