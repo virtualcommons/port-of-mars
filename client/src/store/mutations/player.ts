@@ -11,10 +11,6 @@ function SET_PLAYER_ROLE(state: State, payload: Role) {
   state.role = payload;
 }
 
-function UPDATE_PLAYER_ROLE(state: State, payload: {data: Role, role: Role}) {
-  state.players[payload.role].role = payload.role;
-}
-
 function SET_READINESS(state: State, payload: { data: boolean; role: Role }) {
   state.players[payload.role].ready = payload.data;
 }
@@ -42,7 +38,6 @@ function SET_CONTRIBUTED_UPKEEP(state: State, payload: { data: number; role: Rol
 
 export default {
   SET_PLAYER_ROLE,
-  UPDATE_PLAYER_ROLE,
   SET_READINESS,
   SET_ACCOMPLISHMENTS,
   SET_VICTORY_POINTS,

@@ -21,7 +21,7 @@ function deschemify<T>(s: Schemify<T>): T {
 }
 
 type serverResponse = {
-  [field in keyof PlayerData] : keyof typeof Mutations
+  [field in keyof Omit<PlayerData, 'role'>] : keyof typeof Mutations
 }
 
 const responseMap:serverResponse = {
@@ -34,21 +34,14 @@ const responseMap:serverResponse = {
   victoryPoints: 'SET_VICTORY_POINTS',
   pendingInvestments: 'SET_PENDING_INVESTMENTS',
   contributedUpkeep: 'SET_CONTRIBUTED_UPKEEP',
-  role:'UPDATE_PLAYER_ROLE',
 };
 
 function applyPlayerResponses(player: any, store: TStore) {
   player.onChange = (changes: Array<any>) => {
-    changes.forEach((change) => {
+    //filtering out any changes that have to do with the role immediately
+    changes.filter(change => change.field != 'role').forEach((change) => {
       const payload = { role: player.role, data: change.value };
-
-      // FIXME: this could just be a mapping of change.field: 'STRING_COMMAND' or some kind of predictable transformation
-      // I'd prefer something like the responseMap defined above which can then
-      // reduce the switch statement to store.commit(responseMap[change.field], payload) and we adjust the
-      // mapping as needed.
-      // requires some TS chicanery that I don't know how to do to make it typesafe though
-      
-      store.commit(responseMap[change.field as keyof PlayerData], payload);
+      store.commit(responseMap[change.field as keyof Omit<PlayerData, 'role'>], payload);
     });
   };
   player.triggerAll();
