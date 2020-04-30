@@ -47,10 +47,6 @@ export default class MarsLog extends Vue {
     return new Date(timestamp).toLocaleTimeString();
   }
 
-  defaultStyle = {
-    backgroundColor: 'var(--marslog-orange)'
-  }
-
 }
 </script>
 

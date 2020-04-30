@@ -1,31 +1,32 @@
 <template>
-  <div class="container-victory">
-    <h1 class="animated pulse slower infinite">Victory</h1>
-    <div class="text">
-      <p>
-        Despite all doubts, you have done it. Thanks to you future generations
-        can flourish on planet Mars.
-      </p>
-      <p>Thank you for playing.</p>
+  <div class="c-gameview-victory container">
+    <div class="title-wrapper row">
+      <div class="title col-12">
+        <h1>Port of Mars</h1>
+        <h2 class="animated pulse slower infinite">Winners</h2>
+        <div v-for="winner in winners" class="winner">
+          <p>{{ winner }}</p>
+        </div>
+      </div>
     </div>
-    <div class="winners">
-      <p class="title">Winners</p>
-      <div v-for="winner in winners" class="winner">
-        <p>{{ winner }}</p>
+    <div class="content-wrapper row">
+      <div class="content col-12">
+        <h2>Despite all doubts, you have done it. Thanks to you future generations
+          can flourish on planet Mars.</h2>
       </div>
     </div>
     <div class="marslog-wrapper row">
       <div class="marslog col-6">
         <div class="wrapper">
           <div
-            v-for="(log, index) in logs"
-            :style="logColor(log)"
             :key="log.timestamp + Math.random()"
+            :style="{ backgroundColor: categoryColorMap.get(log.category) }"
             class="message"
+            v-for="(log, index) in logs"
           >
             <p class="category">{{ log.category }}</p>
             <p class="final-log" v-if="index === 0">Final Log</p>
-            <p v-if="index !== 0" class="list">
+            <p class="list" v-if="index !== 0">
               <span>
                 Log: {{ logs.length - index }} / {{ logs.length }}
               </span>
@@ -34,9 +35,9 @@
             <p class="time">
               <span>[ </span>{{ logTime(log.timestamp) }}<span> ]</span>
             </p>
-            <div v-if="delineateRound(index, logs)" class="round row"><b>Round {{ log.round - 1 }}</b></div>
+            <div class="round row" v-if="delineateRound(index, logs)"><b>Round {{ log.round - 1
+              }}</b></div>
           </div>
-
         </div> <!--end wrapper-->
       </div>
     </div>
@@ -56,23 +57,18 @@
 <script lang="ts">
 import { Vue, Component, InjectReactive, Inject } from 'vue-property-decorator';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
-import { MarsLogData, MarsLogMessageData } from "@port-of-mars/shared/types";
+import { MarsLogMessageData } from "@port-of-mars/shared/types";
 
 @Component({})
 export default class ContainerVictory extends Vue {
   @Inject() readonly api!: GameRequestAPI;
 
-  eventName: string = '';
-
-  categoryColorMap = new Map([
-    ['SYSTEM HEALTH- GAIN', 'var(--marslog-green)'],
-    ['SYSTEM HEALTH- DROP', 'var(--marslog-red)'],
-    ['TRADE', 'var(--space-white-opaque-1)'],
-    [`MARS EVENT: ${ this.eventName }`, 'var(--space-white-opaque-1)']
-  ]);
-
   get logs() {
     return this.$store.getters.logs.reverse();
+  }
+
+  get categoryColorMap() {
+    return this.$store.getters.categoryColorMap;
   }
 
   private delineateRound(index: number, logs: MarsLogMessageData[]): boolean {
@@ -95,19 +91,6 @@ export default class ContainerVictory extends Vue {
 
   private logTime(timestamp: number) {
     return new Date(timestamp).toLocaleTimeString();
-  }
-
-  private logColor(log: MarsLogData) {
-    console.log(log.category);
-    if (log.category == 'SYSTEM HEALTH- DROP')
-      return { backgroundColor: 'var(--marslog-red)' };
-    else if (log.category == 'SYSTEM HEALTH- GAIN')
-      return { backgroundColor: 'var(--marslog-green)' };
-    else if (log.category == 'TRADE')
-      return { backgroundColor: 'var(--marslog-purple)' };
-    else if (log.category.includes('Mars Event'))
-      return { backgroundColor: 'var(--marslog-orange)' };
-    else return { backgroundColor: 'var(--space-white-opaque-1)' };
   }
 
   get winners() {
