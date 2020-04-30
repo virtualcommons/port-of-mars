@@ -23,18 +23,18 @@
             <p class="category">{{ log.category }}</p>
             <p class="final-log" v-if="index === 0">Final Log</p>
             <p class="list" v-if="index !== 0">
-              <span>
-                Log: {{ logs.length - index }} / {{ logs.length }}
-              </span>
+              <span> Log: {{ logs.length - index }} / {{ logs.length }} </span>
             </p>
             <p class="content">{{ log.content }}</p>
             <p class="time">
               <span>[ </span>{{ logTime(log.timestamp) }}<span> ]</span>
             </p>
-            <div class="round row" v-if="delineateRound(index, logs)"><b>Round {{ log.round - 1
-              }}</b></div>
+            <div class="round row" v-if="delineateRound(index, logs)">
+              <b>Round {{ log.round - 1 }}</b>
+            </div>
           </div>
-        </div> <!--end wrapper-->
+        </div>
+        <!--end wrapper-->
       </div>
     </div>
     <div class="footnote-wrapper row">
@@ -51,46 +51,45 @@
 </template>
 
 <script lang="ts">
-  import {Component, Inject, Vue} from 'vue-property-decorator';
-  import {GameRequestAPI} from '@port-of-mars/client/api/game/request';
-  import {MarsLogMessageData} from '@port-of-mars/shared/types';
+import { Component, Inject, Vue } from 'vue-property-decorator';
+import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
+import { MarsLogMessageData } from '@port-of-mars/shared/types';
 
-  @Component({})
+@Component({})
+export default class ContainerDefeat extends Vue {
+  @Inject() readonly api!: GameRequestAPI;
 
-  export default class ContainerDefeat extends Vue {
-    @Inject() readonly api!: GameRequestAPI;
-
-    get logs() {
-      return this.$store.getters.logs.reverse();
-    }
-
-    get categoryColorMap() {
-      return this.$store.getters.categoryColorMap;
-    }
-
-    private logTime(timestamp: number) {
-      return new Date(timestamp).toLocaleTimeString();
-    }
-
-    private delineateRound(index: number, logs: MarsLogMessageData[]): boolean {
-      let currentIndex: number = index;
-      let nextIndex: number = index + 1;
-
-      console.log('currentIndex ', currentIndex);
-
-      if (!logs[nextIndex]) {
-        console.log('undefined');
-        return false
-      } else if (logs[currentIndex].round !== logs[nextIndex].round) {
-        console.log(`CURRENT ROUND: ${logs[currentIndex].round}`);
-        console.log(`PREVIOUS ROUND: ${logs[nextIndex].round}`);
-        return true;
-      } else return false;
-    }
+  get logs() {
+    return this.$store.getters.logs.reverse();
   }
+
+  get categoryColorMap() {
+    return this.$store.getters.categoryColorMap;
+  }
+
+  private logTime(timestamp: number) {
+    return new Date(timestamp).toLocaleTimeString();
+  }
+
+  private delineateRound(index: number, logs: MarsLogMessageData[]): boolean {
+    let currentIndex: number = index;
+    let nextIndex: number = index + 1;
+
+    console.log('currentIndex ', currentIndex);
+
+    if (!logs[nextIndex]) {
+      console.log('undefined');
+      return false;
+    } else if (logs[currentIndex].round !== logs[nextIndex].round) {
+      console.log(`CURRENT ROUND: ${logs[currentIndex].round}`);
+      console.log(`PREVIOUS ROUND: ${logs[nextIndex].round}`);
+      return true;
+    } else return false;
+  }
+}
 </script>
 
 <style lang="scss" scoped>
-  @import '~animate.css/source/attention_seekers/pulse.css';
-  @import '@port-of-mars/client/stylesheets/root/ContainerDefeat.scss';
+@import '~animate.css/source/attention_seekers/pulse.css';
+@import '@port-of-mars/client/stylesheets/root/ContainerDefeat.scss';
 </style>

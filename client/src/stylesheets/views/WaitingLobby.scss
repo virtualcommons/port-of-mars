@@ -6,11 +6,7 @@
   @include make-center;
 
   .wrapper {
-    @include expand;
-    max-height: $max-screen-height;
-    max-width: $max-screen-width;
-    min-height: $min-screen-height;
-    min-width: $min-screen-width;
+    @include gameboard-constraints;
     padding: 1rem;
     margin: 0;
     @include make-column-and-space-around;
