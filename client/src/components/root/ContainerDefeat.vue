@@ -53,7 +53,7 @@
 <script lang="ts">
   import {Component, Inject, Vue} from 'vue-property-decorator';
   import {GameRequestAPI} from '@port-of-mars/client/api/game/request';
-  import {MarsLogCategory, MarsLogMessageData} from '@port-of-mars/shared/types';
+  import {MarsLogMessageData} from '@port-of-mars/shared/types';
 
   @Component({})
 
