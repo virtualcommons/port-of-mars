@@ -14,13 +14,19 @@ interface DashboardData {
 }
 
 export class DashboardService extends BaseService {
-  getInternalSurveyActionItem(user: User, invite: TournamentRoundInvite): ActionItem {
+  getInternalSurveyActionItem(user: User, round: TournamentRound, invite: TournamentRoundInvite): ActionItem {
+    // https://asu.co1.qualtrics.com/jfe/form/SV_0c8tCMZkAUh4V8x
     // FIXME: generate the correct survey completion URL for the given user and tournament round invite
+    let surveyUrl = round.introSurveyUrl;
+    if (surveyUrl) {
+      const surveyId = surveyUrl.split('/').pop();
+      surveyUrl = `/survey/complete?pid=${user.participantId}&tid=${invite.id}&surveyId=${surveyId}`;
+    }
     return {
       redoable: true,
       done: invite.hasCompletedIntroSurvey,
       description: 'DEVMODE: Mark intro survey as completed',
-      link: { kind: 'external', data: '/survey/complete'}
+      link: { kind: 'external', data: surveyUrl ?? ''}
     };
   }
   getRegisterActionItem(user: User): ActionItem {
@@ -48,22 +54,36 @@ export class DashboardService extends BaseService {
     };
   }
 
-  getTakeIntroSurveyActionItem(round: TournamentRound, invite: TournamentRoundInvite): ActionItem {
+
+  /**
+   * generate a parameterized survey URL with pid=participantId and tid=tournamentRoundInvite.id
+   * @param round 
+   * @param invite 
+   */
+  getTakeIntroSurveyActionItem(user: User, round: TournamentRound, invite: TournamentRoundInvite): ActionItem {
+    let introSurveyUrl = round.introSurveyUrl;
+    if (introSurveyUrl) {
+      introSurveyUrl = `${round.introSurveyUrl}?pid=${user.participantId}&tid=${invite.id}`;
+    }
     return {
       redoable: true,
       done: invite.hasCompletedIntroSurvey,
       description: 'Complete an introductory survey',
-      link: { kind: 'external', data: round.introSurveyUrl ?? '' }
+      link: { kind: 'external', data: introSurveyUrl ?? '' }
     };
   }
 
-  getTakeExitSurveyActionItem(round: TournamentRound, invite: TournamentRoundInvite): ActionItem {
+  getTakeExitSurveyActionItem(user: User, round: TournamentRound, invite: TournamentRoundInvite): ActionItem {
+    let surveyUrl = round.exitSurveyUrl;
+    if (surveyUrl) {
+      surveyUrl = `${round.introSurveyUrl}?pid=${user.participantId}&tid=${invite.id}`;
+    }
     return {
       redoable: true,
       done: invite.hasCompletedExitSurvey,
       description: 'Complete an exit survey',
-      link: { kind: 'external', data: round.exitSurveyUrl ?? '' }
-    }
+      link: { kind: 'external', data: surveyUrl ?? '' }
+    };
   }
 
   async getCurrentGameActionItem(user: User): Promise<ActionItem | undefined> {
@@ -121,9 +141,9 @@ export class DashboardService extends BaseService {
       actionItems.push(this.getTakeTutorialActionItem(user));
       const invite = await this.sp.tournament.getActiveRoundInvite(user.id, round);
       if (settings.allowInternalSurveyRoutes) {
-        actionItems.push(this.getInternalSurveyActionItem(user, invite));
+        actionItems.push(this.getInternalSurveyActionItem(user, round, invite));
       }
-      actionItems.push(this.getTakeIntroSurveyActionItem(round, invite));
+      actionItems.push(this.getTakeIntroSurveyActionItem(user, round, invite));
       if (user.passedQuiz && invite.hasCompletedIntroSurvey) {
         const gameActionItem = await this.getCurrentGameActionItem(user);
         if (gameActionItem) {
@@ -131,7 +151,7 @@ export class DashboardService extends BaseService {
         }
         // if the player has completed a game for this round, offer the exit survey
         if (invite.hasParticipated) {
-          actionItems.push(this.getTakeExitSurveyActionItem(round, invite));
+          actionItems.push(this.getTakeExitSurveyActionItem(user, round, invite));
         }
       }
     }
