@@ -303,6 +303,14 @@ export class EnteredDiscardPhase extends KindOnlyGameEvent {
     game.resetPlayerReadiness();
     game.phase = Phase.discard;
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
+    
+    const contributedUpkeep = game.nextRoundUpkeep() + 25 - game.upkeep;
+
+    // system health - contributed upkeep
+    game.log(
+        `During Round ${ game.round }, your group invested a total of ${ contributedUpkeep } into System Health.
+        Updated System Health = ${ (contributedUpkeep + game.upkeep) <= 100 ? (contributedUpkeep + game.upkeep) : 100 }.`,
+        MarsLogCategory.systemHealth);
   }
 }
 gameEventDeserializer.register(EnteredDiscardPhase);
