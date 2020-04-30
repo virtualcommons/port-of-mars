@@ -1,7 +1,6 @@
 .c-marslog {
   @include expand;
   @include make-column-and-center;
-  // background-color: cadetblue;
 
   .wrapper {
     @include expand;
@@ -48,8 +47,12 @@
       .time {
         margin: 0;
 
-        span {
+        .timestamp {
           color: $new-space-orange;
+        }
+
+        .round {
+          margin-left: 10rem;
         }
       }
     }
