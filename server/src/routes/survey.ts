@@ -15,9 +15,9 @@ surveyRouter
   .get('/complete', async (req: Request, res: Response, next) => {
     logger.debug("trying to mark survey complete");
     try {
-      const participantId = req.query.pid;
+      const participantId = String(req.query.pid);
       const inviteId = Number(req.query.tid);
-      const surveyId = req.query.surveyId;
+      const surveyId = String(req.query.surveyId);
       logger.debug("marking survey %s completion for %s on %d", surveyId, participantId, inviteId);
       if (participantId && surveyId && inviteId) {
         await getServices().tournament.setSurveyComplete({inviteId, surveyId});

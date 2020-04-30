@@ -1,7 +1,6 @@
 import Mutations from "@port-of-mars/client/store/mutations";
-import Getters from "@port-of-mars/client/store/getters";
 
-export type MockRoom = { send: (data: any) => void; leave: () => void };
+export type MockRoom = { send: (type: string, data: any) => void; leave: () => void };
 
 export type StateTransform =
   { [K in keyof typeof Mutations]?: Parameters<typeof Mutations[K]>[1];} &
