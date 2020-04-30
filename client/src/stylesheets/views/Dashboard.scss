@@ -5,15 +5,23 @@
   @include make-center;
 
   .player-dashboard {
-    @include expand;
-    max-height: $max-screen-height;
-    max-width: $max-screen-width;
-    min-height: $min-screen-height;
-    min-width: $min-screen-width;
+    @include gameboard-constraints;
     padding: 1rem;
     margin: 0;
     @include make-column-and-top;
     background-color: $space-gray;
+    position: relative;
+    z-index: 0;
+    overflow: hidden;
+
+    .background-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: -1;
+      opacity: 0.0625;
+    }
 
     .title-wrapper,
     .content-wrapper {
@@ -27,6 +35,11 @@
         height: 100%;
         padding: 0;
         @include make-column-and-center;
+
+        a {
+          color: transparent;
+          text-decoration: none;
+        }
 
         h1 {
           text-transform: uppercase;

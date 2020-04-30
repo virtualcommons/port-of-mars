@@ -1,9 +1,16 @@
 <template>
   <div class="c-player-dashboard outer-container">
     <div class="player-dashboard container">
+      <img
+        :src="require(`@port-of-mars/client/assets/marsbg.jpg`)"
+        alt="Background Image"
+        class="background-image"
+      />
       <div class="title-wrapper row">
         <div class="title col-12">
-          <h1>Port of Mars</h1>
+          <router-link :to="'/'">
+            <h1>Port of Mars</h1>
+          </router-link>
           <h2>Player Dashboard</h2>
         </div>
       </div>

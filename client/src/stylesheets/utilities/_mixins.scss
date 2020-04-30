@@ -37,8 +37,8 @@ $screen-xxl: 1680px;
 @mixin gameboard-constraints {
   height: 100%;
   width: 100%;
-  max-width: calc(1440 / 16 * 1rem);
-  max-height: calc(914 / 16 * 1rem);
+  max-width: calc(1680 / 16 * 1rem);
+  max-height: calc(1050 / 16 * 1rem);
   min-width: calc(1024 / 16 * 1rem);
   min-height: calc(768 / 16 * 1rem);
 }
