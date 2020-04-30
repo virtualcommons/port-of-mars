@@ -6,7 +6,7 @@
       </p>
       <div
         v-for="log in logs"
-        :style="logColor(log)"
+        :style="{ backgroundColor: categoryColorMap.get(log.category) }"
         :key="log.timestamp + Math.random()"
         class="message"
       >
@@ -39,22 +39,18 @@ export default class MarsLog extends Vue {
     return this.$tstore.getters.logs;
   }
 
+  get categoryColorMap() {
+    return this.$store.getters.categoryColorMap;
+  }
+
   logTime(timestamp: number) {
     return new Date(timestamp).toLocaleTimeString();
   }
 
-  logColor(log: MarsLogData) {
-    switch (log.category) {
-      case 'System Health- Gain':
-        return { backgroundColor: 'var(--marslog-green)' };
-      case 'System Health- Drop':
-        return { backgroundColor: 'var(--marslog-red)' };
-      case 'Trade':
-        return { backgroundColor: 'var(--marslog-purple)' };
-      default:
-        return { backgroundColor: 'var(--space-white-opaque-1)' };
-    }
+  defaultStyle = {
+    backgroundColor: 'var(--marslog-orange)'
   }
+
 }
 </script>
 

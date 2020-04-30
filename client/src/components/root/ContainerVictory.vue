@@ -40,9 +40,15 @@
         </div> <!--end wrapper-->
       </div>
     </div>
-    <div class="buttons">
-      <button @click="handleRestart">Restart the Game</button>
-      <button @click="handleExit">Exit</button>
+    <div class="footnote-wrapper row">
+      <div class="footnote col-12">
+        <h2>Thank you for playing.</h2>
+        <div class="buttons">
+          <router-link :to="'dashboard'">
+            <button class="exit">Exit</button>
+          </router-link>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -102,14 +108,6 @@ export default class ContainerVictory extends Vue {
     else if (log.category.includes('Mars Event'))
       return { backgroundColor: 'var(--marslog-orange)' };
     else return { backgroundColor: 'var(--space-white-opaque-1)' };
-  }
-
-  private handleRestart() {
-    this.api.resetGame();
-  }
-
-  private handleExit() {
-    console.log('EXIT GAME');
   }
 
   get winners() {
