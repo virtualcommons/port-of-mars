@@ -63,7 +63,7 @@ export class DashboardService extends BaseService {
   getTakeIntroSurveyActionItem(user: User, round: TournamentRound, invite: TournamentRoundInvite): ActionItem {
     let introSurveyUrl = round.introSurveyUrl;
     if (introSurveyUrl) {
-      introSurveyUrl = `${round.introSurveyUrl}?pid=${user.participantId}&tid=${invite.id}`;
+      introSurveyUrl = `${round.introSurveyUrl}?pid=${user.participantId}&tid=${invite.id}&redirectHost=${encodeURIComponent(settings.host)}`;
     }
     return {
       redoable: true,
@@ -76,7 +76,7 @@ export class DashboardService extends BaseService {
   getTakeExitSurveyActionItem(user: User, round: TournamentRound, invite: TournamentRoundInvite): ActionItem {
     let surveyUrl = round.exitSurveyUrl;
     if (surveyUrl) {
-      surveyUrl = `${round.introSurveyUrl}?pid=${user.participantId}&tid=${invite.id}`;
+      surveyUrl = `${round.introSurveyUrl}?pid=${user.participantId}&tid=${invite.id}&redirectHost=${encodeURIComponent(settings.host)}`;
     }
     return {
       redoable: true,
