@@ -67,6 +67,7 @@ import {
 import { canPlayerMakeTrade } from '@port-of-mars/shared/validation';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
+import { makeTradeSafe } from '@port-of-mars/shared/validation';
 
 @Component({
   components: {
@@ -133,11 +134,11 @@ export default class TradeRequest extends Vue {
     if (this.clientValidation) {
       const fromPackage: TradeAmountData = {
         role: this.$tstore.state.role,
-        resourceAmount: this.sentResources,
+        resourceAmount: makeTradeSafe(this.sentResources),
       };
       const toPackage: TradeAmountData = {
         role: this.tradePartnerName as Role,
-        resourceAmount: this.exchangeResources,
+        resourceAmount: makeTradeSafe(this.exchangeResources),
       };
       const tradeDataPackage: TradeData = {
         from: fromPackage,
