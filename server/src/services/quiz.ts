@@ -2,7 +2,7 @@ import { Question, QuestionResponse, Quiz, QuizSubmission, User } from '@port-of
 import { getConnection } from '@port-of-mars/server/util';
 import { EntityManager } from "typeorm";
 import * as _ from 'lodash';
-import {BaseService} from "@port-of-mars/server/services/db";
+import { BaseService } from "@port-of-mars/server/services/db";
 
 export class QuizService extends BaseService {
   async createQuestionResponse(
@@ -14,9 +14,9 @@ export class QuizService extends BaseService {
     questionResponse.questionId = questionId;
     questionResponse.submissionId = submissionId;
     questionResponse.answer = answer;
-    return await this.em
-      .getRepository(QuestionResponse)
-      .save(questionResponse);
+    await this.em.getRepository(QuestionResponse).save(questionResponse);
+    questionResponse.question = await this.em.getRepository(Question).findOneOrFail({id: questionId})
+    return questionResponse;
   }
 
   async createQuizSubmission(
@@ -56,7 +56,7 @@ export class QuizService extends BaseService {
       .find({ quizId });
   }
 
-  async getRecentQuizSubmission(
+  async getLatestQuizSubmission(
     userId: number,
     quizId: number,
     opts: Partial<{ relations: Array<string>; where: object; order: object }> = {}
@@ -79,16 +79,17 @@ export class QuizService extends BaseService {
       .execute();
   }
 
-  async findQuestion(id: number): Promise<Question | undefined> {
-    return await this.em.getRepository(Question).findOne({ id });
+  async findQuestion(id: number): Promise<Question> {
+    return await this.em.getRepository(Question).findOneOrFail({ id });
   }
 
-  async checkQuestionResponse(questionResponse: QuestionResponse): Promise<boolean> {
-    const answer = questionResponse.answer;
-    const questionId = questionResponse.questionId;
-    const question = await this.findQuestion(questionId);
-    if (question === undefined) return false;
-    return answer === question.correctAnswer;
+  async isCorrect(questionResponse: QuestionResponse): Promise<boolean> {
+    if (! questionResponse.question) {
+      const questionId = questionResponse.questionId;
+      const question = await this.findQuestion(questionId);
+      questionResponse.question = question;
+    }
+    return questionResponse.answer === questionResponse.question.correctAnswer;
   }
 
   async checkQuizCompletion(
@@ -97,21 +98,34 @@ export class QuizService extends BaseService {
   ): Promise<boolean> {
 
     const quiz: Quiz = (quizId) ? await this.getQuizById(quizId, { relations: ['questions'] }) : await this.getDefaultQuiz({ relations: ['questions'] });
-    const quizSubmission = await this.getRecentQuizSubmission(userId, quiz.id, { relations: ['responses'] });
+    const quizSubmission = await this.getLatestQuizSubmission(userId, quiz.id, { relations: ['responses', 'responses.question'] });
     if (!quizSubmission?.responses) return false;
 
     const questions = quiz.questions;
     const responses = quizSubmission.responses;
 
-    // check if responses are same length as number of questions
+    // check if there are less responses than the total number of quiz questions
     if (responses.length < questions.length) return false;
+    // FIXME: this assumes that the client doesn't submit multiple correct responses after they've gotten the answer right.
+    const correctResponses = _.filter(responses, (response: QuestionResponse) => response.answer === response.question.correctAnswer);
+    if (correctResponses.length === questions.length) {
+      this.setUserQuizCompletion(userId, true);
+      return true;
+    }
+    return false;
+
+    /*
+    for (const response of responses) {
+      if (response.question
+    }
+    // otherwise iterate through all questions and check for correct responses
     for (const question of questions) {
       const correctResponses = _.filter(
         responses,
         (response: QuestionResponse) => {
           return (
-            response.questionId === question.id &&
-            response.answer === question.correctAnswer
+            response.questionId === question.id
+            && response.answer === question.correctAnswer
           );
         }
       );
@@ -119,20 +133,6 @@ export class QuizService extends BaseService {
         return false;
       }
     }
-    return true;
+    */
   }
-}
-
-export async function createQuestionResponse(
-  questionId: number,
-  submissionId: number,
-  answer: number
-): Promise<QuestionResponse> {
-  const questionResponse = new QuestionResponse();
-  questionResponse.questionId = questionId;
-  questionResponse.submissionId = submissionId;
-  questionResponse.answer = answer;
-  return await getConnection()
-    .getRepository(QuestionResponse)
-    .save(questionResponse);
 }

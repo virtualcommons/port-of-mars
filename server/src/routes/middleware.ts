@@ -13,7 +13,7 @@ export function isAuthenticated(req: Request, res: Response, next: NextFunction)
   if (_.isUndefined(req.user)) {
     const loginUrl = toUrl(LOGIN_PAGE);
     logger.trace('no user on the request, redirecting to login page: %s', loginUrl)
-    res.redirect(loginUrl);
+    return res.redirect(loginUrl);
   }
   else {
     next();

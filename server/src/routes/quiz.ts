@@ -3,10 +3,13 @@ import {
   getServices
 } from '@port-of-mars/server/services';
 import { User } from '@port-of-mars/server/entity/User';
-import { QuizSubmission } from '@port-of-mars/server/entity/QuizSubmission';
 import { settings } from '@port-of-mars/server/settings';
+import { ServerError } from '@port-of-mars/server/util';
+import { isAuthenticated } from '@port-of-mars/server/routes/middleware';
 
 export const quizRouter = Router();
+
+quizRouter.use(isAuthenticated);
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -14,22 +17,12 @@ const logger = settings.logging.getLogger(__filename);
 // endpoints for (1) creating a QuizSubmission and (2) retrieving all quiz questions and the Quiz container 
 // that organizes all QuizSubmissions for a particular user
 
-function checkUser(req: Request, res: Response) {
-  const user = req.user as User | undefined;
-  if (!user) {
-    logger.debug('No user found on the session: ', req.session);
-    res.status(401).json({ error: 'Please login before attempting the tutorial and quiz.' });
-    return false;
-  }
-  return user;
-}
-
 quizRouter.get(
   '/submission/:id',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const quizService = getServices().quiz;
-      const user = checkUser(req, res);
+      const user = req.user as User;
       if (user) {
         // FIXME: should have an optional quizId parameter for multiple quiz types
         const id = parseInt(req.params.id);
@@ -55,7 +48,7 @@ quizRouter.post(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const quizService = getServices().quiz;
-      const user = checkUser(req, res);
+      const user = req.user as User;
       if (user) {
         const userId = user!.id;
         const quiz = await quizService.getDefaultQuiz({ relations: ['questions'] });
@@ -78,32 +71,26 @@ quizRouter.post(
     try {
       const quizService = getServices().quiz;
       const submissionId = parseInt(req.params.submissionId);
-      if (isNaN(submissionId))
-        return res
-          .status(400)
-          .json({ error: `Invalid submission ID ${req.params.submissionId}` });
-
-      // NOTE: Get Question ID from Params
+      if (isNaN(submissionId)) {
+        throw new ServerError({ code: 400, message: `Invalid submission ID ${req.params.submissionId}` });
+      }
       const questionId = parseInt(req.params.questionId);
-      if (isNaN(questionId))
-        return res
-          .status(400)
-          .json({ error: `Invalid question ID ${req.params.questionId}` });
-
-      // NOTE: Get Answer from Body
+      if (isNaN(questionId)) {
+        throw new ServerError({ code: 400, message: `Invalid question ID ${req.params.questionId}` });
+      }
+      // check answer
       const answer = parseInt(req.body.answer);
       if (isNaN(answer)) {
-        return res.status(400).json({ error: `Invalid quiz response ${req.body.answer}: should have been an integer.` });
+        throw new ServerError({ code: 400, message: `Invalid quiz response ${req.body.answer}: should have been an integer.` });
       }
-      // NOTE: Create Question Response
+      // Create Question Response
       const questionResponse = await quizService.createQuestionResponse(
         questionId,
         submissionId,
         answer
       );
-      // NOTE: Check Question Response
-      const correct = await quizService.checkQuestionResponse(questionResponse);
-      // notify the client of the quiz response validation 
+      // check for correctness and notify the client
+      const correct = await quizService.isCorrect(questionResponse);
       res.status(200).json(correct);
     }
     catch (e) {
@@ -119,23 +106,15 @@ quizRouter.get(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const quizService = getServices().quiz;
-      // NOTE: Get User
-      const user = req.user as User | undefined;
-      if (!user)
-        return res.status(401).json({ error: `User not found in session.` });
+      const user = req.user as User;
+      // check if the user already passed the quiz
+      if (user.passedQuiz) {
+        return res.status(200).json(true);
+      }
 
-      // NOTE: Check Database for Completion First
-      if (user.passedQuiz) return res.status(200).send(true);
-
-      // NOTE: Check Quiz Completion
-      const userId = user.id;
-      const complete = await quizService.checkQuizCompletion(userId);
-
-      // NOTE: Set User Completion in DB
-      await quizService.setUserQuizCompletion(userId, complete);
-
-      // NOTE: Send Quiz Completion Status
-      res.status(200).send(complete);
+      // otherwise check for quiz completion and notify the client
+      const complete = await quizService.checkQuizCompletion(user.id);
+      return res.status(200).json(complete);
     } catch (e) {
       next(e);
     }

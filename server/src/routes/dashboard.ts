@@ -10,8 +10,8 @@ dashboardRouter.use(isAuthenticated);
 dashboardRouter
   .get('/', async (req: Request, res: Response, next) => {
     try {
-      const dashboard = await getServices().dashboard.getData(req.user as User);
-      res.json(dashboard);
+      const dashboardData = await getServices().dashboard.getData(req.user as User);
+      res.json(dashboardData);
     }
     catch (e) {
       next(e);
@@ -25,7 +25,7 @@ dashboardRouter
       //assuming the round number is 1
       await tournament.createInvites([(req.user as User).id], 1);
 
-      res.json({ "created invite for ": (req.user as User).id })
+      res.json({ message: "created invite for " + (req.user as User).id })
 
     }
     catch (e) {
