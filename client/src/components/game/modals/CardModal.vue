@@ -1,6 +1,6 @@
 <template>
   <div class="card-modal container">
-    <div class="title-wrapper row">
+    <!-- <div class="title-wrapper row">
       <div class="title col-12">
         <p>{{ modalData.title }}</p>
       </div>
@@ -9,7 +9,7 @@
       <div class="content col-12">
         <p>{{ modalData.content }}</p>
       </div>
-    </div>
+    </div> -->
     <div class="cards-wrapper row">
       <div class="cards col-12">
         <AccomplishmentCard
@@ -29,10 +29,11 @@
     </div>
     <div v-if="modalData.confirmation" class="confirm-wrapper row">
       <div class="confirm col-12">
+        <p class="confirm-text">Are you sure you want do proceed? </p>
         <button @click="handleConfirmation">Confirm</button>
       </div>
     </div>
-    <div v-if="!modalData.confirmation" class="ghost-wrapper row"></div>
+    <!-- <div v-if="!modalData.confirmation" class="ghost-wrapper row"></div> -->
   </div>
 </template>
 
