@@ -14,7 +14,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { Phase, PHASE_LABELS } from '@port-of-mars/shared/types';
-import { phaseInstructions } from '@port-of-mars/client/repo/instructions.ts';
+import { PHASE_INSTRUCTIONS } from '@port-of-mars/client/repo/instructions.ts';
 
 @Component({
   components: {}
@@ -28,26 +28,19 @@ export default class PhaseInstructions extends Vue {
   get phaseInstructions() {
     switch (this.phaseNumber) {
       case Phase.events:
-        return phaseInstructions.events;
-        break;
+        return PHASE_INSTRUCTIONS.events;
       case Phase.invest:
-        return phaseInstructions.invest;
-        break;
+        return PHASE_INSTRUCTIONS.invest;
       case Phase.trade:
-        return phaseInstructions.trade;
-        break;
+        return PHASE_INSTRUCTIONS.trade;
       case Phase.purchase:
-        return phaseInstructions.purchase;
-        break;
+        return PHASE_INSTRUCTIONS.purchase;
       case Phase.discard:
-        return phaseInstructions.discard;
-        break;
+        return PHASE_INSTRUCTIONS.discard;
       case Phase.victory:
-        return phaseInstructions.victory;
-        break;
+        return PHASE_INSTRUCTIONS.victory;
       case Phase.defeat:
-        return phaseInstructions.defeat;
-        break;
+        return PHASE_INSTRUCTIONS.defeat;
       default:
         return 'No instructions for this phase.';
     }
