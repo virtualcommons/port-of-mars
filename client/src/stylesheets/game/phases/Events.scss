@@ -63,7 +63,7 @@
 
       .event-deck-wrapper,
       .accomplishments-wrapper {
-        flex-grow: 1;
+        flex: 1;
         width: 100%;
         padding: 0.5rem;
         background-color: $space-white-opaque-1;
@@ -100,7 +100,7 @@
       }
 
       .outer-wrapper {
-        flex-grow: 1;
+        flex: 1;
         width: 100%;
         padding: 0.5rem;
         background-color: $space-white-opaque-1;

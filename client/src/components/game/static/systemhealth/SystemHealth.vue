@@ -1,5 +1,5 @@
 <template>
-  <div class="c-systemhealth tour-system-health">
+  <div class="c-system-health tour-system-health">
     <p class="title">System Health</p>
     <StatusBar class="statusbar" :setWidth="`${systemHealthStatus}`" />
     <p class="status">{{ systemHealthStatus }}<span>%</span></p>

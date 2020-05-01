@@ -7,9 +7,8 @@
     @include expand;
     max-width: none;
     @include reset-padding-margin;
-    overflow-y: hidden;
 
-    .timeblockinvestments {
+    .timeblock-investments {
       height: 100%;
       padding: 0 0.5rem 0 0;
       @include make-column-and-top;
@@ -22,7 +21,6 @@
         margin-bottom: 0.5rem;
         @include make-center;
         background-color: $new-space-orange;
-        //background-color: $space-lightgray;
 
         .title {
           margin: 0 1rem 0 0;
@@ -50,7 +48,7 @@
       }
 
       .cards {
-        flex-grow: 1;
+        flex: 1;
         width: 100%;
         margin: 0;
         display: flex;
@@ -58,7 +56,7 @@
       }
     }
 
-    .purchasableaccomplishments {
+    .purchasable-accomplishments {
       height: 100%;
       padding: 0;
       @include make-column-and-top;
@@ -70,7 +68,6 @@
         padding: 0.25rem 1rem;
         margin-bottom: 0.5rem;
         @include make-center;
-        // background-color: $new-space-orange;
         background-color: $space-lightgray;
 
         .title {
@@ -82,7 +79,7 @@
       }
 
       .outer-wrapper {
-        flex-grow: 1;
+        flex: 1;
         width: 100%;
         padding: 0.5rem;
         background-color: $space-white-opaque-1;
@@ -95,30 +92,5 @@
         }
       }
     }
-
-    // .player-accomplishments {
-    //   width: 50%;
-
-    //   .active-text,
-    //   .purchased-text {
-    //     color: $new-space-orange;
-    //     font-weight: bold;
-    //   }
-
-    //   .accomplishment-wrapper {
-    //     display: flex;
-    //     min-height: 18rem;
-    //     max-height: 18rem;
-    //     flex: 1 1 0;
-
-    //     justify-content: space-between;
-    //     position: relative;
-
-    //     .active,
-    //     .purchased {
-    //       width: 48%;
-    //     }
-    //   }
-    // }
   }
 }

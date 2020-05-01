@@ -1,11 +1,11 @@
 <template>
-  <div class="gameboardcontainer container">
+  <div class="c-gameboard-container container">
+    <ModalController />
     <ProfileMenu />
-    <!-- <div class="transparency" v-if="true"></div> -->
     <ActiveEventsPopup />
     <InventoryPopup />
     <MarsLogPopup />
-    <div class="gameboardstatusbar row">
+    <div class="system-health row">
       <SystemHealth />
     </div>
     <div class="gameboard row">
@@ -13,7 +13,7 @@
         <div class="hud row">
           <HUD />
         </div>
-        <div class="gameboardbottom row">
+        <div class="phase-switcher row">
           <PhaseSwitcher />
         </div>
       </div>
@@ -26,6 +26,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
+import ModalController from '@port-of-mars/client/components/game/modals/ModalController.vue';
 import HUD from '@port-of-mars/client/components/game/HUD.vue';
 import PhaseSwitcher from '@port-of-mars/client/components/game/PhaseSwitcher.vue';
 import ProfileMenu from '@port-of-mars/client/components/game/static/popups/ProfileMenu.vue';
@@ -37,6 +38,7 @@ import MarsLogPopup from '@port-of-mars/client/components/game/static/popups/Mar
 
 @Component({
   components: {
+    ModalController,
     HUD,
     PhaseSwitcher,
     ProfileMenu,

@@ -5,7 +5,7 @@
 
   .actions {
     height: 100%;
-    flex-grow: 1;
+    flex: 1;
     padding: 0.5rem;
     @include make-column-and-center;
     justify-content: space-around;
@@ -20,7 +20,7 @@
       height: 3rem;
       width: 12.5rem;
       padding: 0 0.5rem;
-      border: 0.0625rem solid $new-space-orange;
+      border: 0.125rem solid $new-space-orange;
       margin: 0.5rem;
       color: $new-space-orange;
       @include default-transition-base;
@@ -28,7 +28,7 @@
 
       &:disabled,
       &:disabled:hover {
-        border: 0.0625rem solid $new-space-orange-opaque-025;
+        border: 0.125rem solid $new-space-orange-opaque-025;
         background: transparent;
         color: $new-space-orange-opaque-025;
       }
@@ -42,7 +42,7 @@
 
   .continue {
     height: 100%;
-    flex-grow: 1;
+    flex: 1;
     padding: 0.5rem;
     @include make-column-and-center;
 
@@ -51,7 +51,7 @@
       height: 3rem;
       width: 12.5rem;
       padding: 0 0.5rem;
-      border: 0.0625rem solid $new-space-orange;
+      border: 0.125rem solid $new-space-orange;
       margin: 0.5rem;
       color: $new-space-orange;
       @include default-transition-base;
