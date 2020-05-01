@@ -183,20 +183,10 @@
           border: 0.125rem solid $space-white;
           margin-left: 1rem;
         }
-      }
 
-      button {
-        @include reset-button;
-        height: 3rem;
-        width: 12.5rem;
-        border: 0.125rem solid $new-space-orange;
-        margin: 0.5rem;
-        color: $new-space-orange;
-        @include default-transition-base;
-
-        &:hover {
-          color: $space-gray;
-          background-color: $new-space-orange;
+        button {
+          width: 12rem;
+          font-weight: $font-weight-maven-pro-bold !important;
         }
       }
     }

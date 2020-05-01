@@ -21,7 +21,7 @@
   .problem {
     a {
       @include reset-button;
-      flex: 1;
+      flex-grow: 1;
       padding: 1px 7px 2px 7px;
       margin: 0.25rem 0;
       color: $new-space-orange;
@@ -44,10 +44,10 @@
     }
   }
 
-  .logout {
+    .logout {
     button {
       @include reset-button;
-      flex: 1;
+      flex-grow: 1;
       margin: 0.25rem 0;
       color: $new-space-orange;
       font-size: $font-small;

@@ -60,7 +60,7 @@
           height: 5em;
           width: 25em;
           padding: 0.5em;
-          border: 0.125em solid $new-space-orange-opaque-025;
+          border: 0.0625em solid $new-space-orange-opaque-025;
           margin-top: 0.5em;
           @include make-center;
 
@@ -93,7 +93,7 @@
   input {
     height: 3rem;
     width: 12.5rem;
-    border: 0.125rem solid $new-space-orange;
+    border: 0.0625rem solid $new-space-orange;
     margin: 0.5rem;
     background-color: transparent;
     color: $new-space-orange;
@@ -101,7 +101,7 @@
 
     &:disabled,
     &:disabled:hover {
-      border: 0.125rem solid $new-space-orange-opaque-025;
+      border: 0.0625rem solid $new-space-orange-opaque-025;
       background: transparent;
       color: $new-space-orange-opaque-025;
     }

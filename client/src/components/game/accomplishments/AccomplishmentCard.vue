@@ -158,7 +158,7 @@ export default class AccomplishmentCard extends Vue {
         cardData: this.accomplishment,
         confirmation: false,
       },
-    };
+    }
 
     this.api.setModalVisible(data);
   }
@@ -254,6 +254,7 @@ export default class AccomplishmentCard extends Vue {
       },
     };
     this.api.discardOption(data);
+
   }
 }
 </script>

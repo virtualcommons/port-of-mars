@@ -20,13 +20,13 @@
 
 <script lang="ts">
 import { Component, Vue, Prop, Inject } from 'vue-property-decorator';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import GeneralModal from '@port-of-mars/client/components/game/modals/GeneralModal.vue';
 import CardModal from '@port-of-mars/client/components/game/modals/CardModal.vue';
 import PlayerModal from '@port-of-mars/client/components/game/modals/PlayerModal.vue';
 import TradeRequestModal from '@port-of-mars/client/components/game/modals/TradeRequestModal.vue';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 
 library.add(faTimes);
