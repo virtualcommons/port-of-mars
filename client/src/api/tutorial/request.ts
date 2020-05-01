@@ -273,6 +273,8 @@ export class TutorialAPI  {
     });
   }
 
+  public resetTradeModal(){};
+
 }
 
 
