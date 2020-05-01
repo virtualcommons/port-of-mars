@@ -90,7 +90,7 @@
               required>
               </b-form-input>
             </b-form-group>
-            <b-form-group label='Verify Email' label-for='verifyEMail' description='Please verify your email.'>
+            <b-form-group label='Verify Email' label-for='verifyEmail' description='Please verify your email.'>
               <b-form-input
               id='verifyEmail'
               v-model='verifyEmail'

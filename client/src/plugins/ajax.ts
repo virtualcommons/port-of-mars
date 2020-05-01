@@ -37,7 +37,7 @@ interface LoginCreds {
   username: string
 }
 
-interface ResponseData<T=any> {
+interface ResponseData<T = any> {
   data: T
   status: number
 }
@@ -56,12 +56,12 @@ export class AjaxRequest {
 
   _roomId?: RoomId;
 
-  errorRoutes = {
-    400: DASHBOARD_PAGE,
-    401: LOGIN_PAGE,
-    403: DASHBOARD_PAGE,
-    404: DASHBOARD_PAGE
-  }
+  errorRoutes: Map<number, string> = new Map([
+    [400, DASHBOARD_PAGE],
+    [401, LOGIN_PAGE],
+    [403, DASHBOARD_PAGE],
+    [404, DASHBOARD_PAGE],
+  ]);
 
   set roomId(r: RoomId | undefined) {
     this._roomId = r;
@@ -77,7 +77,7 @@ export class AjaxRequest {
 
   async devLogin(formData: { username: string, password: string }) {
     const devLoginUrl = url('/login');
-    await this.post(devLoginUrl, ({data, status}) => {
+    await this.post(devLoginUrl, ({ data, status }) => {
       if (status === 200) {
         this.setLoginCreds(data);
         this.router.push({ name: DASHBOARD_PAGE });
@@ -117,46 +117,40 @@ export class AjaxRequest {
   }
 
   private async handleResponse(response: Response): Promise<ResponseData> {
-    switch (response.status) {
-      case 400:
-      case 401:
-      case 403:
-      case 404:
-        const serverErrorMessage: DashboardMessage = await response.json();
-        console.log(serverErrorMessage);
-        this.store.commit('SET_DASHBOARD_MESSAGE', serverErrorMessage);
-        this.router.push({ name: this.errorRoutes[response.status] })
-        throw new AjaxResponseError(serverErrorMessage, response);
-    }
+    // ASSUMPTION we always receive JSON back from the server given an ajax request
+    console.log("RECEIVED RESPONSE: ")
+    console.log(response);
+    const data = await response.json();
     if (response.status >= 400) {
       // something badwrong happened on the server side that we were not expecting.
-      // push the error onto the store and move on..
-      const serverErrorMessage: DashboardMessage = { kind: 'danger', message: `Unexpected server response: ${response.text}` };
+      // push the error onto the store and move on.
+      const serverErrorMessage: DashboardMessage = data;
       this.store.commit('SET_DASHBOARD_MESSAGE', serverErrorMessage);
-      // FIXME: should we be pushing back to the dashboard page again?
-      this.router.push({ name: DASHBOARD_PAGE });
+      const destinationPage = this.errorRoutes.has(response.status) ? this.errorRoutes.get(response.status) : DASHBOARD_PAGE;
+      this.router.push({ name: destinationPage })
       throw new AjaxResponseError(serverErrorMessage, response);
     }
-    return { data: await response.json(), status: response.status };
+    return { data, status: response.status };
   }
 
   async post(path: string, done: (data: ResponseData) => Promise<any> | void, data?: any): AjaxResponse {
-    const response = await fetch(
-      path,
-      {
-        method: 'POST',
-        cache: 'no-cache',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        redirect: 'follow',
-        referrerPolicy: "no-referrer",
-        body: JSON.stringify(data)
-      }
-    );
     // FIXME: duplicated across post/get
+    let response;
     try {
+      response = await fetch(
+        path,
+        {
+          method: 'POST',
+          cache: 'no-cache',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          redirect: 'follow',
+          referrerPolicy: "no-referrer",
+          body: JSON.stringify(data)
+        }
+      );
       const responseData = await this.handleResponse(response);
       return done(responseData);
     }
@@ -165,26 +159,33 @@ export class AjaxRequest {
         throw e;
       }
       else {
-        throw new AjaxResponseError({ kind: 'danger', message: e.message }, response);
+        if (response) {
+          throw new AjaxResponseError({ kind: 'danger', message: e.message }, response);
+        }
+        else {
+          console.error("Unhandled error in request, returning to home screen");
+          this.router.push({ name: LOGIN_PAGE });
+        }
       }
     }
   }
 
   async get(path: string, done: (data: ResponseData) => Promise<any> | void): AjaxResponse {
-    const response = await fetch(
-      path,
-      {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        redirect: 'follow',
-        referrerPolicy: "no-referrer",
-      }
-    );
     // FIXME: duplicated across post/get
+    let response;
     try {
+      response = await fetch(
+        path,
+        {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          redirect: 'follow',
+          referrerPolicy: "no-referrer",
+        }
+      );
       const responseData = await this.handleResponse(response);
       return done(responseData);
     }
@@ -193,7 +194,13 @@ export class AjaxRequest {
         throw e;
       }
       else {
-        throw new AjaxResponseError({ kind: 'danger', message: e.message }, response);
+        if (response) {
+          throw new AjaxResponseError({ kind: 'danger', message: e.message }, response);
+        }
+        else {
+          console.error("Unhandled error in request, returning to home screen");
+          this.router.push({ name: LOGIN_PAGE });
+        }
       }
     }
   }

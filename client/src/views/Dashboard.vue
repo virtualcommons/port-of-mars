@@ -107,8 +107,6 @@ export default class PlayerDashboard extends Mixins(Vue, DashboardAPI) {
   }
 
   get dashboardMessages() {
-    console.log("dashboard messages");
-    console.log(this.$tstore.state.dashboardMessages);
     return this.$tstore.state.dashboardMessages;
   }
 

@@ -45,6 +45,7 @@ export default class Game extends Vue {
       }
       catch (e) {
         this.$tstore.commit('SET_DASHBOARD_MESSAGE', e.data);
+        console.error("Failed to get latest active game");
       }
     } 
     else {
