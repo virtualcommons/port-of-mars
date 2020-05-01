@@ -17,6 +17,7 @@
           class="accomplishment-card"
           :key="modalData.cardData.id"
           :accomplishment="modalData.cardData"
+          :isModal="true"
         />
         <EventCard
           v-else-if="modalData.cardType === 'EventCard'"

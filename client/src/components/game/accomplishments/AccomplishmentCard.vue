@@ -1,5 +1,5 @@
 <template>
-  <div class="c-accomplishmentcard" :class="cardTypeStyling" v-show="cardIsActive">
+  <div class="c-accomplishmentcard" :class="[cardTypeStyling, {'modal-view':isModal}]" v-show="cardIsActive">
     <div class="title-wrapper row">
       <div class="title col-12">
         <p :style="fontColor">{{ accomplishment.label }}</p>
@@ -134,6 +134,9 @@ export default class AccomplishmentCard extends Vue {
 
   private cardIsActive:boolean = true;
 
+  @Prop({default: false})
+  private isModal!:boolean;
+
   // NOTE :: All / Default Type
 
   @Watch('showCard', {immediate: true})
@@ -200,6 +203,7 @@ export default class AccomplishmentCard extends Vue {
 
     return {color: 'black'}
   }
+
 
   // NOTE :: Purchase Type
 
