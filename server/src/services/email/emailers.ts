@@ -5,8 +5,10 @@ import { settings } from "@port-of-mars/server/settings";
 import * as nodemailer from 'nodemailer';
 import mailgunTransport from 'nodemailer-mailgun-transport';
 
+type EmailCallback = (err: any, info: any) => void;
+
 export interface Emailer {
-  sendMail(content: Mail.Options, callback: (err, info) => void): void;
+  sendMail(content: Mail.Options, callback?: EmailCallback): void;
   lastEmail?: Mail.Options;
 }
 
@@ -40,7 +42,7 @@ export class MailgunEmailer implements Emailer {
     this.transport = nodemailer.createTransport(mailgunTransport(this.opts));
   }
 
-  sendMail(content: Mail.Options) {
-    this.transport.sendMail(content);
+  sendMail(content: Mail.Options, callback?: EmailCallback) {
+    this.transport.sendMail(content, callback);
   }
 }
