@@ -1,11 +1,15 @@
 .c-modal-controller {
-  @include expand;
+  height: 100vh;
+  width: 100vw;
+  // height: 50rem;
+  // width: 60rem;
+
   position: absolute;
   z-index: 4;
-  top: 0;
-  left: 0;
+  // top: 0;
+  // left: 0;
   @include make-center;
-  background-color: $space-gray-08;
+  background-color: rgba(30, 34, 35, 0.8);
 
   .wrapper {
     @include make-column-and-center;

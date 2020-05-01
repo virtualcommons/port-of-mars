@@ -1,8 +1,9 @@
 .tutorial-layout {
   height: 100% !important;
   width: 100% !important;
-}
 
+}
+/* custom tour css: highlight an element */
 @keyframes shadow-pulse {
   0% {
     box-shadow: 0 0 0 0px rgba(255, 255, 255, 0.2);
@@ -21,38 +22,43 @@ body .in-tour {
   position: relative;
   z-index: 999;
   background: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0 0 10000px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 0 10000px rgba(0, 0, 0, 0.5); /* outer black */
+  /* animation: shadow-pulse 2s infinite; */
 }
 .tour-active,
 .v-tour {
   pointer-events: auto;
 }
 
-@keyframes border-pulse {
+@keyframes border-pulse{
   0% {
     border-color: rgba(161, 211, 219, 1);
   }
 
-  50% {
+  50%{
     border-color: rgba(161, 211, 219, 0);
   }
 
   100% {
-    border-color: rgba(161, 211, 219, 1);
+    border-color:rgba(161, 211, 219, 1);
   }
 }
 
-.animate-current-step {
+.animate-current-step{
   border: 0.25rem solid $space-lightgreen;
   animation: border-pulse 1s 3 ease-in-out;
 }
 
 .v-step {
+  // border: 0.125rem solid $new-space-orange-opaque-025;
   border: 0.125rem solid $space-lightgreen;
   border-radius: 0 !important;
   background-color: $space-gray !important;
+  
 
+  
   .v-step__arrow {
+    // border-left-color: $new-space-orange-opaque-025 !important;
     display: none !important;
   }
 
@@ -62,7 +68,7 @@ body .in-tour {
     font-size: $font-med;
   }
 
-  .status-wrong {
+  .status-wrong{
     margin: 0.5rem 0;
     color: $status-red;
     font-size: $font-large;
@@ -71,22 +77,41 @@ body .in-tour {
   button {
     @include reset-button;
     padding: 0.5rem !important;
-    border: 0.125rem solid $space-lightgreen !important;
+    border: 0.0625rem solid $space-lightgreen !important;
     border-radius: 0 !important;
     margin: 0.5rem;
     color: $space-lightgreen;
     @include default-transition-base;
 
-    &:hover {
+    &:hover{
       background-color: $space-lightgreen;
     }
   }
 
-  .button-inactive {
+  //leave this until we decide which design we want.
+  // .previous-button{
+  //   color: $space-lightgreen;
+  //   border: 0.0625rem solid $space-lightgreen !important;
+
+  //   &:hover{
+  //     background-color: $space-lightgreen;
+  //   }
+  // }
+
+  // .next-button{
+  //   color: $new-space-orange;
+  //   border: 0.0625rem solid $new-space-orange !important;
+
+  //   &:hover{
+  //     background-color: $new-space-orange;
+  //   }
+  // }
+
+  .button-inactive{
     opacity: 0.25;
   }
 
-  .button-active {
+  .button-active{
     opacity: 1;
     &:hover {
       @include default-scale-up;
@@ -96,9 +121,10 @@ body .in-tour {
   }
 
   .option-container {
+    @include row;
     text-align: left;
     margin: 0.5rem 0;
-
+  
     input {
       display: none;
     }
@@ -120,7 +146,7 @@ body .in-tour {
 
     label span:before,
     label span:after {
-      content: '';
+        content: '';
     }
 
     label span:before {
@@ -132,7 +158,7 @@ body .in-tour {
       vertical-align: top;
       border-radius: 5px;
     }
-
+    
     label span:after {
       background: $new-space-orange;
       width: 0.9rem;
@@ -142,10 +168,12 @@ body .in-tour {
       left: 0.3rem;
       opacity: 0;
       border-radius: 2px;
+      
     }
 
-    label input:checked + span:after {
+    label input:checked+span:after {
       opacity: 1;
     }
+
   }
 }

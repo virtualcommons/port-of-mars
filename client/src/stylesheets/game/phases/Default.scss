@@ -1,7 +1,5 @@
-.c-default {
+.container-default {
   @include expand;
-  max-width: none;
-  @include reset-padding-margin;
   @include make-center;
 
   p {

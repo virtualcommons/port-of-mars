@@ -1,7 +1,7 @@
 <template>
   <div class="c-investments container tour-invest-action">
     <div class="wrapper row">
-      <div class="timeblock-investments col-8 tour-invest">
+      <div class="timeblockinvestments col-8 tour-invest">
         <div class="topbar tour-time-blocks">
           <p class="title">Time Blocks</p>
           <TimeBlockMeter
@@ -22,7 +22,7 @@
           />
         </div>
       </div>
-      <div class="purchasable-accomplishments col-4 tour-accomplishments">
+      <div class="purchasableaccomplishments col-4 tour-accomplishments">
         <div class="topbar">
           <p class="title">Purchasable Accomplishments</p>
         </div>
@@ -135,9 +135,9 @@ export default class Investments extends Vue {
         investment: msg.name,
         units: msg.units,
         role: this.$tstore.state.role,
-      };
+      }
 
-      this.api.investPendingTimeBlocks(data);
+      this.api.investPendingTimeBlocks(data)
     }
   }
 

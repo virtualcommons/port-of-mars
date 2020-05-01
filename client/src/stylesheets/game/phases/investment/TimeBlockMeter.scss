@@ -1,6 +1,6 @@
 .status-o {
   height: 0.75rem;
-  flex: 1;
+  flex-grow: 1;
   position: relative;
   @include make-center;
   justify-content: space-between;

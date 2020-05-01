@@ -6,6 +6,7 @@
   @include make-column-and-top;
   justify-content: space-between;
   background-color: $space-gray;
+  // filter: drop-shadow(0 0 0.75rem $new-space-orange);
 
   .title-wrapper,
   .content-wrapper,

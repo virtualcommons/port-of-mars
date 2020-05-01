@@ -1,5 +1,5 @@
 <template>
-  <div v-if="layout !== 'DISABLE_CHAT'" class="c-chat">
+  <div v-if="layout !== 'DISABLE_CHAT'" class="chat">
     <p class="title">Chat</p>
     <div class="messages-view">
       <div class="wrapper">

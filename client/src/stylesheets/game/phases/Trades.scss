@@ -22,7 +22,7 @@
 
         .title-wrapper {
           height: 100%;
-          flex: 1;
+          flex-grow: 1;
           padding-right: 0.5rem;
 
           .wrapper {
@@ -60,7 +60,7 @@
       }
 
       .outer-wrapper {
-        flex: 1;
+        flex-grow: 1;
         width: 100%;
         padding: 0.5rem;
         background-color: $space-white-opaque-1;

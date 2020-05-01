@@ -5,11 +5,19 @@
 </template>
 
 <script lang="ts">
-import { Vue } from 'vue-property-decorator';
+import { Vue, Component } from 'vue-property-decorator';
+import Game from '@port-of-mars/client/views/Game.vue';
+import Tutorial from '@port-of-mars/client/views/Tutorial.vue';
 import BootstrapVue from 'bootstrap-vue';
 Vue.use(BootstrapVue);
 
-export default class App extends Vue {}
+@Component({
+  components: {
+    Game,
+    Tutorial
+  }
+})
+export default class Home extends Vue {}
 </script>
 
 <style lang="scss">

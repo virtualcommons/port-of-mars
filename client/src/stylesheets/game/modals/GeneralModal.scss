@@ -2,9 +2,11 @@
   height: 25rem;
   width: 35rem;
   @include reset-padding-margin;
+  // border: 0.125rem solid $space-white;
   border: 0.125rem solid $space-lightgreen;
   @include make-column-and-top;
   background-color: $space-gray;
+  // filter: drop-shadow(0 0 0.75rem $new-space-orange);
 
   .title-wrapper,
   .content-wrapper {
@@ -15,6 +17,7 @@
 
   .title-wrapper {
     height: 4rem;
+    // background-color: $space-white;
     background-color: $space-lightgreen;
 
     .title {
@@ -32,7 +35,7 @@
   }
 
   .content-wrapper {
-    flex: 1;
+    flex-grow: 1;
 
     .content {
       height: 100%;

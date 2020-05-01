@@ -87,31 +87,7 @@
           @include make-column-and-center;
 
           button {
-            @include reset-button;
-            width: 12rem;
-            padding: 0.5rem 1rem;
-            margin: 0;
-            font-size: $font-med;
-            font-weight: $font-weight-maven-pro-bold !important;
-            text-align: center;
-            color: $space-lightgreen;
-            border: 0.125rem solid $space-lightgreen;
-            transition: color 0.15s ease-in-out,
-              background-color 0.15s ease-in-out;
-
-            &:disabled {
-              opacity: 0.5;
-            }
-
-            &:hover {
-              color: $space-gray;
-              background-color: $space-lightgreen;
-            }
-
-            &:disabled:hover {
-              color: $space-lightgreen;
-              background-color: transparent;
-            }
+            @include space-button;
           }
         }
       }
@@ -145,7 +121,7 @@
             padding: 0.25rem 1rem;
             margin-bottom: 0.5rem;
             @include make-center;
-            background-color: $space-lightgreen;
+            background-color: $new-space-orange;
 
             .title {
               margin: 0 1rem 0 0;
@@ -156,7 +132,7 @@
           }
 
           .outer-wrapper {
-            flex: 1;
+            flex-grow: 1;
             width: 100%;
             overflow-y: hidden;
 
@@ -190,7 +166,7 @@
             padding: 0.25rem 1rem;
             margin-bottom: 0.5rem;
             @include make-center;
-            background-color: $space-lightgreen;
+            background-color: $new-space-orange;
 
             .title {
               margin-bottom: 0;
@@ -201,7 +177,7 @@
           }
 
           .buttons {
-            height: 10%;
+            height: 7.5%;
             flex-shrink: 0;
             width: 100%;
             margin-bottom: 0.5rem;
@@ -211,13 +187,12 @@
               @include reset-button;
               height: 100%;
               width: 50%;
-              padding: 0.5rem 1rem;
+              padding: 0;
               margin: 0;
               font-size: $font-med;
-              font-weight: $font-weight-maven-pro-bold !important;
-              text-align: center;
-              color: $space-lightgreen;
-              border: 0.125rem solid $space-lightgreen;
+              font-weight: $font-weight-maven-pro-regular;
+              color: $new-space-orange;
+              border: 0.0625rem solid $new-space-orange;
 
               &:disabled {
                 opacity: 0.5;
@@ -226,12 +201,12 @@
 
             .selected {
               color: $space-gray;
-              background-color: $space-lightgreen;
+              background-color: $new-space-orange;
             }
           }
 
           .outer-wrapper {
-            flex: 1;
+            flex-grow: 1;
             width: 100%;
             padding: 0.5rem;
             background-color: $space-white-opaque-1;

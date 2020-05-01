@@ -24,7 +24,7 @@
     //background-color: $space-white;
 
     .title {
-      @include default-transition-base;
+    @include default-transition-base;
 
       margin-bottom: 0;
       font-size: $font-med;
@@ -87,7 +87,7 @@
 
           .text {
             height: 100%;
-            flex: 1;
+            flex-grow: 1;
             padding: 0 0 0 0.5rem;
             @include make-column-and-left;
 
@@ -185,23 +185,24 @@
     }
   }
 
-  .status-text {
+  .status-text{
     font-size: $font-large;
     font-weight: bold;
   }
 }
 
-.hide-trade {
+.hide-trade{
   animation: hide 0.3s linear 1.5s 1 forwards;
 }
 
-@keyframes hide {
+@keyframes hide{
   0% {
     opacity: 100%;
   }
 
-  100% {
+  100%{
     opacity: 0%;
-    height: 0;
+    height:0;
   }
 }
+
