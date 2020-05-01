@@ -1,6 +1,5 @@
 <template>
   <div class="tutorial-layout">
-    <!-- <ConsentFormModal @grant-consent="grantConsent" @deny-consent="denyConsent" /> -->
     <TourModal @show="showTour" @hide="startTourOnHideModal" />
     <CompletedQuizModal v-if="tourIsOver" />
     <GameDashboard />
@@ -171,7 +170,7 @@ export default class Tutorial extends Vue {
   private quizQuestionStatusMessage: string = '';
   private quizQuestionStatus: boolean = false;
 
-  // NOTE: Lifecyle Hooks
+  // NOTE: Lifecycle Hooks
 
   created() {
     this.api.connect(this.$store);
@@ -188,7 +187,7 @@ export default class Tutorial extends Vue {
       }
       this.showModal();
     }
-    
+
   }
 
   // NOTE: Initialize
@@ -209,17 +208,6 @@ export default class Tutorial extends Vue {
     (this as any).$tours.gameTour.start();
   }
 
-  private grantConsent() {
-    this.consent = this.$tstore.state.consent;
-    console.log('updated consent: ', this.consent)
-  }
-
-  private denyConsent() {
-    this.consent = this.$tstore.state.consent;
-    this.forceLogoutUser();
-    console.log('updated consent: ', this.consent)
-  }
-
   private forceLogoutUser(): void {
     this.$ajax.forgetLoginCreds();
     this.$router.push({ name: 'Login' });
@@ -234,7 +222,7 @@ export default class Tutorial extends Vue {
   }
 
   async previousStepCallback(currentStep: number) {
-  
+
     const currentStepElement = this.$el.querySelector(
       this.steps[currentStep].target
     );
@@ -243,7 +231,7 @@ export default class Tutorial extends Vue {
       this.api.statePop();
       await this.$nextTick();
     }
-    
+
     const previousStepElement = this.$el.querySelector(
       this.steps[currentStep - 1].target
     );
@@ -267,7 +255,7 @@ export default class Tutorial extends Vue {
     );
     currentStepElement!.classList.remove(this.TOUR_ACTIVE_CLASS,'animate-current-step');
     nextStepElement!.classList.add(this.TOUR_ACTIVE_CLASS,'animate-current-step');
-    
+
     //this will set the forward button to the 'next' button, or the 'finish' button, depending on the context.
     this.api.registerRef(this.$refs.forwardButton);
   }
