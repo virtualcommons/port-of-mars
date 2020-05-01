@@ -10,6 +10,7 @@ export interface AppSettings {
   logging: Logging;
   secret: string;
   lobby: LobbySettings;
+  supportEmail: string,
   allowInternalSurveyRoutes: boolean;
 }
 
@@ -23,6 +24,7 @@ const dev: () => AppSettings = () => ({
   logging: new DevLogging(),
   allowInternalSurveyRoutes: true,
   secret: SECRET_KEY,
+  supportEmail: 'portmars@asu.edu',
   lobby: new LobbySettings(15)
 });
 
@@ -35,6 +37,7 @@ const staging: () => AppSettings = () => {
     allowInternalSurveyRoutes: true,
     logging: new DevLogging(),
     secret: SECRET_KEY,
+    supportEmail: 'portmars@asu.edu',
     lobby: new LobbySettings(15)
   };
 };

@@ -6,9 +6,9 @@
       </div>
       <div>
         <div>
-          <BButton squared size="lg" variant="dark" class="button" @click="submit">
+          <b-button squared size="lg" variant="dark" class="button" @click="submit">
             Verify Email
-          </BButton>
+          </b-button>
         </div>
       </div>
     </div>
@@ -27,11 +27,7 @@
   import {BButton} from "bootstrap-vue";
 
 
-  @Component({
-    components: {
-      BButton
-    }
-  })
+  @Component({})
   export default class Verify extends Vue {
     @Prop()
     registrationToken!: string;

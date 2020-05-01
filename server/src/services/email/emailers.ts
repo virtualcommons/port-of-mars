@@ -6,7 +6,7 @@ import * as nodemailer from 'nodemailer';
 import mailgunTransport from 'nodemailer-mailgun-transport';
 
 export interface Emailer {
-  sendMail(content: Mail.Options): void;
+  sendMail(content: Mail.Options, callback: (err, info) => void): void;
   lastEmail?: Mail.Options;
 }
 
