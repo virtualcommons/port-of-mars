@@ -57,6 +57,7 @@ export class AjaxRequest {
   _roomId?: RoomId;
 
   errorRoutes = {
+    400: DASHBOARD_PAGE,
     401: LOGIN_PAGE,
     403: DASHBOARD_PAGE,
     404: DASHBOARD_PAGE
@@ -117,6 +118,7 @@ export class AjaxRequest {
 
   private async handleResponse(response: Response): Promise<ResponseData> {
     switch (response.status) {
+      case 400:
       case 401:
       case 403:
       case 404:

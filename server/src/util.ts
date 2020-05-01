@@ -1,7 +1,7 @@
 import { Loader, Resolver } from "typeorm-fixtures-cli/dist";
 import path from "path";
 import _ from "lodash";
-import { MarsEventData, ROLES } from "@port-of-mars/shared/types";
+import { MarsEventData, ROLES, DashboardMessage } from "@port-of-mars/shared/types";
 import { GameOpts, GameStateOpts, Persister } from "@port-of-mars/server/rooms/game/types";
 import * as assert from "assert";
 import * as to from "typeorm";
@@ -99,6 +99,10 @@ export class ServerError extends Error implements ServerErrorData {
   constructor(data: ServerErrorData) {
     super(data.message);
     Object.assign(this, data);
+  }
+
+  toDashboardMessage(): DashboardMessage {
+    return { kind: 'warning', message: this.getDisplayMessage() };
   }
 
   getDisplayMessage(): string {

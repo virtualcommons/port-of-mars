@@ -154,25 +154,6 @@ async function createApp() {
     }
   );
 
-  /* may need to look into setting up a global error handler to deal with the possibility of 
-  errors in deserializeUser
-  https://stackoverflow.com/questions/41069593/how-do-i-handle-errors-in-passport-deserializeuser
-  app.use(function (err, req, res, next) {
-    if (err) {
-      req.logout();
-      if (req.originalUrl === '/') {
-        next();
-      }
-      else {
-        res.redirect('/');
-      }
-    }
-    else {
-      next();
-    }
-  });
-  */
-
   const server = http.createServer(app);
   const gameServer = new Server({
     server,
@@ -202,12 +183,12 @@ async function createApp() {
   // Final error handling middleware
   app.use((err: any, req: any, res: Response, next: any) => {
     if (err instanceof ServerError) {
-      res.status(err.code).json(err.getDisplayMessage());
       logger.warn(err);
+      res.status(err.code).json(err.toDashboardMessage());
     }
     else {
-      res.status(err.statusCode || 500).json({ error: 'Unhandled server error' });
       logger.fatal(err);
+      res.status(err.statusCode || 500).json(err.toDashboardMessage());
     }
   });
 
