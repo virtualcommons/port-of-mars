@@ -41,8 +41,8 @@ describe('a potential user', () => {
     const u = await qr.manager.getRepository(User).findOneOrFail({username});
     await registrationService.sendEmailVerification(u);
     expect(settings.emailer.lastEmail?.from).toBe('Port of Mars <portmars@asu.edu>');
-    expect(settings.emailer.lastEmail?.text).toContain(registrationService.createRegistrationURL(u.registrationToken));
-    expect(settings.emailer.lastEmail?.html).toContain(registrationService.createRegistrationURL(u.registrationToken));
+    expect(settings.emailer.lastEmail?.text).toContain(registrationService.createVerificationUrl(u.registrationToken));
+    expect(settings.emailer.lastEmail?.html).toContain(registrationService.createVerificationUrl(u.registrationToken));
   });
 
   it('can verify their email using a valid verification token', async () => {
