@@ -15,6 +15,7 @@
     }
 
     .message {
+      background-color: var(--marslog-orange);
       height: auto;
       max-width: 100%;
       padding: 0.5rem;
@@ -47,8 +48,12 @@
       .time {
         margin: 0;
 
-        span {
+        .timestamp {
           color: $new-space-orange;
+        }
+
+        .round {
+          margin-left: 10rem;
         }
       }
     }

@@ -36,7 +36,7 @@
                 </button>
                 <button
                   v-if="!tour.isLast"
-                  ref="nextButton"
+                  ref="forwardButton"
                   v-on="{ click: api.hasCompletedAction ? tour.nextStep : () => {} }"
                   class="btn btn-dark next-button"
                   v-bind="{ class: api.hasCompletedAction ? 'button-active' : 'button-inactive' }"
@@ -48,6 +48,7 @@
                   v-on="{ click: api.hasCompletedAction ? tour.stop : () => {} }"
                   class="btn btn-dark next-button"
                   v-bind="{ class: api.hasCompletedAction ? 'button-active' : 'button-inactive' }"
+                  ref="forwardButton"
                 >
                   Finish
                 </button>
@@ -122,8 +123,10 @@ import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
 import { Step } from '@port-of-mars/client/types/tutorial';
 import { CURATOR, Phase, QuizQuestionData, RESEARCHER } from '@port-of-mars/shared/types';
 import * as _ from 'lodash';
+import { url } from '@port-of-mars/client/util';
 
 import { tutorialSteps } from '@port-of-mars/client/api/tutorial/steps';
+import { AjaxResponseError } from '@port-of-mars/client/plugins/ajax';
 
 require('vue-tour/dist/vue-tour.css');
 Vue.use(VueTour);
@@ -223,7 +226,6 @@ export default class Tutorial extends Vue {
     const currentStepElement = this.$el.querySelector(this.steps[0].target);
     this.$el.classList.add(this.BODY_TOUR);
     currentStepElement!.classList.add(this.TOUR_ACTIVE_CLASS,'animate-current-step');
-    this.api.registerRef(this.$refs.nextButton);
   }
 
   async previousStepCallback(currentStep: number) {
@@ -260,6 +262,9 @@ export default class Tutorial extends Vue {
     );
     currentStepElement!.classList.remove(this.TOUR_ACTIVE_CLASS,'animate-current-step');
     nextStepElement!.classList.add(this.TOUR_ACTIVE_CLASS,'animate-current-step');
+    
+    //this will set the forward button to the 'next' button, or the 'finish' button, depending on the context.
+    this.api.registerRef(this.$refs.forwardButton);
   }
 
   async stopTourCallback(currentStep: number) {
@@ -315,7 +320,7 @@ export default class Tutorial extends Vue {
   }
 
   get quizSubmissionEndpoint() {
-    return `${process.env.SERVER_URL_HTTP}/quiz/submission`;
+    return url('/quiz/submission');
   }
 
   private setSubmissionId(submissionId: number) {
@@ -323,45 +328,53 @@ export default class Tutorial extends Vue {
     this.submissionId = submissionId;
   }
 
+  private setQuizSubmissionData(data: { submissionId: number, quizQuestions: any }) {
+    this.setSubmissionId(data.submissionId);
+    this.quizQuestions = data.quizQuestions;
+    this.dataFetched = true;
+  }
+
 
   // NOTE: Server Fetches
   private async initalizeQuiz() {
     let submissionId = this.$ajax.submissionId;
-    let response;
     if (submissionId) {
       const retrieveSubmissionUrl = `${this.quizSubmissionEndpoint}/${submissionId}`;
-      response = await this.$ajax.get(retrieveSubmissionUrl);
-      console.log(`retrieving submission with id ${submissionId}`);
+      console.log(`retrieving quiz submission with id ${submissionId}`);
+      await this.$ajax.get(retrieveSubmissionUrl, ({data, status}) => {
+        this.setQuizSubmissionData(data);
+      });
+      return;
     }
-    else {
-      const createQuizSubmissionUrl = this.quizSubmissionEndpoint;
-      response = await this.$ajax.post(createQuizSubmissionUrl);
-      console.log('creating new submission');
-    }
-    const jsonData = await response.json();
-    console.log(jsonData);
-    this.setSubmissionId(jsonData.submissionId);
-    this.quizQuestions = jsonData.quizQuestions;
-    this.dataFetched = true;
+    const createQuizSubmissionUrl = this.quizSubmissionEndpoint;
+    await this.$ajax.post(createQuizSubmissionUrl, ({data, status}) => {
+      console.log('creating new quiz submission');
+      this.setQuizSubmissionData(data);
+    });
   }
 
   private async checkQuizQuestion(questionId: number, answer: number): Promise<boolean> {
+    // FIXME: extract this and other URLs to shared/routes or elsewhere
     const submitResponseUrl = `${this.quizSubmissionEndpoint}/${this.submissionId}/${questionId}`;
-    const response = await this.$ajax.post(submitResponseUrl, { answer: answer });
-    return await response.json();
+    return await this.$ajax.post(submitResponseUrl, ({data, status}) => Promise.resolve(data), { answer: answer });
   }
 
   private async checkQuizCompletion(): Promise<boolean> {
-    const quizCompletionUrl = `${process.env.SERVER_URL_HTTP}/quiz/complete`;
-    const response = await this.$ajax.get(quizCompletionUrl);
-    if (response.status === 200) {
-      const data = await response.json();
-      return data;
-    } else {
-      const error = await response.json();
-      this.notifyUserOfError('checkQuizCompletion (response)', error);
-      return false;
+    // FIXME: extract this and other URLs to shared/routes
+    const quizCompletionUrl = url('/quiz/complete');
+    // quiz completion endpoint returns true/false on 200
+    try {
+      await this.$ajax.get(quizCompletionUrl, ({data, status}) => {
+        return data;
+      });
     }
+    catch(e) {
+      if (e instanceof AjaxResponseError) {
+        const error = e.message
+        this.notifyUserOfError('checkQuizCompletion (response)', error);
+      }
+    }
+    return false;
   }
 
   private notifyUserOfError(call: string, error: any): void {

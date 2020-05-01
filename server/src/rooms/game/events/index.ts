@@ -210,27 +210,19 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
 
     game.upkeep = game.nextRoundUpkeep();
 
+    // round message
+    game.log(`Round ${ game.round } begins.`, MarsLogCategory.newRound)
+
     // system health - last round
     game.log(
-        `At the end of Round ${ game.round - 1}, System Health = ${ oldUpkeep }`,
-        MarsLogCategory.systemHealth);
-
-    // system health - contributed upkeep
-    game.log(
-        `During Round ${ game.round - 1 }, your group invested a total of ${ contributedUpkeep } into System Health.
-        Updated System Health = ${ contributedUpkeep + oldUpkeep }`,
+        `At the end of Round ${ game.round - 1}, System Health = ${ oldUpkeep }.`,
         MarsLogCategory.systemHealth);
 
     // system health - wear and tear
     game.log(
         `Standard wear and tear reduces System Health by 25.
-        At the beginning of Round ${ game.round }, System Health = ${ game.upkeep }`,
+        At the beginning of this round, System Health = ${ game.upkeep }.`,
         MarsLogCategory.systemHealth);
-
-    // current system health
-    // game.log(game.round,
-    //     `System Health is currently ${game.upkeep}.`,
-    // `${ MarsLogCategory.systemHealth }: ${oldUpkeep < game.upkeep ? 'INCREASE' : 'DECREASE'}`);
 
     game.resetPlayerReadiness();
     game.resetPlayerContributedUpkeep();
@@ -311,6 +303,14 @@ export class EnteredDiscardPhase extends KindOnlyGameEvent {
     game.resetPlayerReadiness();
     game.phase = Phase.discard;
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
+    
+    const contributedUpkeep = game.nextRoundUpkeep() + 25 - game.upkeep;
+
+    // system health - contributed upkeep
+    game.log(
+        `During Round ${ game.round }, your group invested a total of ${ contributedUpkeep } into System Health.
+        Updated System Health = ${ (contributedUpkeep + game.upkeep) <= 100 ? (contributedUpkeep + game.upkeep) : 100 }.`,
+        MarsLogCategory.systemHealth);
   }
 }
 gameEventDeserializer.register(EnteredDiscardPhase);

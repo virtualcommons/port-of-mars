@@ -1,22 +1,55 @@
 <template>
-  <div class="container-victory">
-    <h1 class="animated pulse slower infinite">Victory</h1>
-    <div class="text">
-      <p>
-        Despite all doubts, you have done it. Thanks to you future generations
-        can flourish on planet Mars.
-      </p>
-      <p>Thank you for playing.</p>
-    </div>
-    <div class="winners">
-      <p class="title">Winners</p>
-      <div v-for="winner in winners" class="winner">
-        <p>{{ winner }}</p>
+  <div class="c-gameview-victory container">
+    <div class="title-wrapper row">
+      <div class="title col-12">
+        <h1>Port of Mars</h1>
+        <h2 class="animated pulse slower infinite">Winners</h2>
+        <div v-for="winner in winners" class="winner">
+          <p>{{ winner }}</p>
+        </div>
       </div>
     </div>
-    <div class="buttons">
-      <button @click="handleRestart">Restart the Game</button>
-      <button @click="handleExit">Exit</button>
+    <div class="content-wrapper row">
+      <div class="content col-12">
+        <h2>Despite all doubts, you have done it. Thanks to you future generations
+          can flourish on planet Mars.</h2>
+      </div>
+    </div>
+    <div class="marslog-wrapper row">
+      <div class="marslog col-6">
+        <div class="wrapper">
+          <div
+            :key="log.timestamp + Math.random()"
+            :style="{ backgroundColor: categoryColorMap.get(log.category) }"
+            class="message"
+            v-for="(log, index) in logs"
+          >
+            <p class="category">{{ log.category }}</p>
+            <p class="final-log" v-if="index === 0">Final Log</p>
+            <p class="list" v-if="index !== 0">
+              <span>
+                Log: {{ logs.length - index }} / {{ logs.length }}
+              </span>
+            </p>
+            <p class="content">{{ log.content }}</p>
+            <p class="time">
+              <span>[ </span>{{ logTime(log.timestamp) }}<span> ]</span>
+            </p>
+            <div class="round row" v-if="delineateRound(index, logs)"><b>Round {{ log.round - 1
+              }}</b></div>
+          </div>
+        </div> <!--end wrapper-->
+      </div>
+    </div>
+    <div class="footnote-wrapper row">
+      <div class="footnote col-12">
+        <h2>Thank you for playing.</h2>
+        <div class="buttons">
+          <router-link :to="'dashboard'">
+            <button class="exit">Exit</button>
+          </router-link>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -24,17 +57,40 @@
 <script lang="ts">
 import { Vue, Component, InjectReactive, Inject } from 'vue-property-decorator';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
+import { MarsLogMessageData } from "@port-of-mars/shared/types";
 
 @Component({})
 export default class ContainerVictory extends Vue {
   @Inject() readonly api!: GameRequestAPI;
 
-  private handleRestart() {
-    this.api.resetGame();
+  get logs() {
+    return this.$store.getters.logs.reverse();
   }
 
-  private handleExit() {
-    console.log('EXIT GAME');
+  get categoryColorMap() {
+    return this.$store.getters.categoryColorMap;
+  }
+
+  private delineateRound(index: number, logs: MarsLogMessageData[]): boolean {
+    let currentIndex: number  = index;
+    let nextIndex: number = index + 1;
+
+    console.log('currentIndex ', currentIndex);
+
+    if (!logs[nextIndex]) {
+      console.log('undefined');
+      return false
+    }
+    else if (logs[currentIndex].round !== logs[nextIndex].round) {
+      console.log(`CURRENT ROUND: ${logs[currentIndex].round}`);
+      console.log(`PREVIOUS ROUND: ${logs[nextIndex].round}`);
+      return true;
+    }
+    else return false;
+  }
+
+  private logTime(timestamp: number) {
+    return new Date(timestamp).toLocaleTimeString();
   }
 
   get winners() {

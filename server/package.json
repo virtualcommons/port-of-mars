@@ -46,6 +46,7 @@
     "@types/passport-local": "^1.0.33",
     "@types/pino": "^5.15.5",
     "@types/shelljs": "^0.8.7",
+    "@types/validator": "^13.0.0",
     "@typescript-eslint/eslint-plugin": "^2.28.0",
     "@typescript-eslint/parser": "^2.28.0",
     "csvtojson": "^2.0.10",
@@ -65,7 +66,7 @@
     "@sentry/node": "~5.15.4",
     "async-mutex": "^0.1.4",
     "bcryptjs": "^2.4.3",
-    "colyseus": "0.12.4",
+    "colyseus": "^0.13.0",
     "connect-redis": "^4.0.4",
     "cookie": "^0.4.0",
     "cookie-parser": "^1.4.5",
@@ -91,6 +92,7 @@
     "reflect-metadata": "^0.1.10",
     "tinyqueue": "^2.0.3",
     "typeorm": "^0.2.21",
-    "uuidv4": "^6.0.7"
+    "uuidv4": "^6.0.7",
+    "validator": "^13.0.0"
   }
 }

@@ -26,6 +26,8 @@ import { settings } from "@port-of-mars/server/settings";
 import { isDev } from '@port-of-mars/shared/settings';
 import { getServices } from "@port-of-mars/server/services";
 import { gameRouter } from "@port-of-mars/server/routes/game";
+import { surveyRouter } from "@port-of-mars/server/routes/survey";
+import { ServerError } from './util';
 
 const logger = settings.logging.getLogger(__filename);
 const NODE_ENV = process.env.NODE_ENV || 'development';
@@ -56,7 +58,10 @@ passport.use(new CasStrategy(
 passport.use(new LocalStrategy(
   function (username: string, password: string, done: Function) {
     logger.warn('***** DO NOT ALLOW IN PRODUCTION! running local auth for user: ', username);
-    getServices().account.getOrCreateUser(username).then(user => done(null, user));
+    getServices().account.getOrCreateTestUser(username).then(user => {
+      // set all testing things on the user
+      done(null, user)
+    });
   }
 ));
 
@@ -122,6 +127,7 @@ async function createApp() {
     logger.info(sessionCookie);
     res.json({ username: (req.user as User).username, sessionCookie });
   });
+  app.use('/survey', surveyRouter);
   app.use('/game', gameRouter);
   app.use('/quiz', quizRouter);
   app.use('/dashboard', dashboardRouter);
@@ -148,25 +154,6 @@ async function createApp() {
     }
   );
 
-  /* may need to look into setting up a global error handler to deal with the possibility of 
-  errors in deserializeUser
-  https://stackoverflow.com/questions/41069593/how-do-i-handle-errors-in-passport-deserializeuser
-  app.use(function (err, req, res, next) {
-    if (err) {
-      req.logout();
-      if (req.originalUrl === '/') {
-        next();
-      }
-      else {
-        res.redirect('/');
-      }
-    }
-    else {
-      next();
-    }
-  });
-  */
-
   const server = http.createServer(app);
   const gameServer = new Server({
     server,
@@ -189,14 +176,20 @@ async function createApp() {
 
   // register your room handlers
   gameServer.define(GameRoom.NAME, GameRoom);
-  // FIXME: at some point we should refactor how we inject isDev() into the various classes that need them
   gameServer.define(RankedLobbyRoom.NAME, RankedLobbyRoom, { persister });
 
 
   applyInStagingOrProd(() => app.use(Sentry.Handlers.errorHandler()));
+  // Final error handling middleware
   app.use((err: any, req: any, res: Response, next: any) => {
-    res.status(err.statusCode || 500).json({ error: 'Unhandled server error' });
-    logger.fatal(err);
+    if (err instanceof ServerError) {
+      logger.warn(err);
+      res.status(err.code).json(err.toDashboardMessage());
+    }
+    else {
+      logger.fatal(err);
+      res.status(err.statusCode || 500).json(err.toDashboardMessage());
+    }
   });
 
   gameServer.listen(port);

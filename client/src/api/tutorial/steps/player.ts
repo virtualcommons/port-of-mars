@@ -62,8 +62,8 @@ const steps: Array<Step> = [
     },
   },
   {
-    target: '.tour-profile-menu',
-    content: `Click here to reveal a menu that allows you to access your player dashboard and log out.`,
+    target: '.tour-profile-menu-toggle',
+    content: `Click here to reveal your profile menu.`,
     params: {
       placement: 'right',
     },
@@ -73,6 +73,13 @@ const steps: Array<Step> = [
         SET_MODAL_HIDDEN: 'hide',
       }
     ]
+  },
+  {
+    target: '.tour-profile-menu',
+    content: `From here, you can access your player dashboard or log out.`,
+    params: {
+      placement: 'right',
+    },
   },
   {
     target: '.tour-players',

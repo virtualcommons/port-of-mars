@@ -77,6 +77,6 @@ export class ServiceProvider {
   }
 }
 
-export function getServices() {
-  return new ServiceProvider(getConnection().manager);
+export function getServices(em?: EntityManager) {
+  return new ServiceProvider(em ?? getConnection().manager);
 }

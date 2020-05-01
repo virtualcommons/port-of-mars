@@ -6,14 +6,15 @@
       </p>
       <div
         v-for="log in logs"
-        :style="marsLogColor(log)"
+        :style="{ backgroundColor: categoryColorMap.get(log.category) }"
         :key="log.timestamp + Math.random()"
         class="message"
       >
         <p class="category">{{ log.category }}</p>
         <p class="content">{{ log.content }}</p>
         <p class="time">
-          <span>[ </span>{{ marsLogTime(log.timestamp) }}<span> ]</span>
+          <span ><span class="timestamp"> [ </span>{{ logTime(log.timestamp) }}<span class="timestamp"> ]</span></span>
+          <span class="round">ROUND {{ log.round }}</span>
         </p>
       </div>
     </div>
@@ -38,22 +39,14 @@ export default class MarsLog extends Vue {
     return this.$tstore.getters.logs;
   }
 
-  marsLogTime(timestamp: number) {
+  get categoryColorMap() {
+    return this.$store.getters.categoryColorMap;
+  }
+
+  logTime(timestamp: number) {
     return new Date(timestamp).toLocaleTimeString();
   }
 
-  marsLogColor(log: MarsLogData) {
-    switch (log.category) {
-      case 'System Health- Gain':
-        return { backgroundColor: 'var(--marslog-green)' };
-      case 'System Health- Drop':
-        return { backgroundColor: 'var(--marslog-red)' };
-      case 'Trade':
-        return { backgroundColor: 'var(--marslog-purple)' };
-      default:
-        return { backgroundColor: 'var(--space-white-opaque-1)' };
-    }
-  }
 }
 </script>
 

@@ -1,8 +1,11 @@
-import Vue, {VueConstructor} from 'vue'
+import Vue, { VueConstructor } from 'vue'
 import _ from "lodash";
-import {VueRouter} from "vue-router/types/router";
-import {TStore} from "@port-of-mars/client/plugins/tstore";
-import {RoomId} from "@port-of-mars/shared/types";
+import { VueRouter } from "vue-router/types/router";
+import { TStore } from "@port-of-mars/client/plugins/tstore";
+import { RoomId } from "@port-of-mars/shared/types";
+import { LOGIN_PAGE, DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
+import { DashboardMessage } from "@port-of-mars/shared/types";
+import { url } from "@port-of-mars/client/util";
 
 interface RoomListingData<Metadata = any> {
   clients: number;
@@ -21,18 +24,12 @@ interface RoomListingData<Metadata = any> {
   remove(): any;
 }
 
-type Reservation = {
-  room: RoomListingData<any>;
-  sessionId: string;
-}
-
 declare module 'vue/types/vue' {
   interface Vue {
     $ajax: AjaxRequest;
   }
 }
 
-const LOGIN_CREDS = 'loginCreds';
 const SUBMISSION_ID = 'submissionId';
 
 interface LoginCreds {
@@ -40,11 +37,31 @@ interface LoginCreds {
   username: string
 }
 
+interface ResponseData<T = any> {
+  data: T
+  status: number
+}
+
+export type AjaxResponse = Promise<any | void>;
+
+export class AjaxResponseError extends Error {
+  constructor(public data: DashboardMessage, public response: Response) {
+    super(data.message);
+  }
+}
+
 export class AjaxRequest {
   constructor(private router: VueRouter, private store: TStore) {
   }
 
   _roomId?: RoomId;
+
+  errorRoutes: Map<number, string> = new Map([
+    [400, DASHBOARD_PAGE],
+    [401, LOGIN_PAGE],
+    [403, DASHBOARD_PAGE],
+    [404, DASHBOARD_PAGE],
+  ]);
 
   set roomId(r: RoomId | undefined) {
     this._roomId = r;
@@ -54,8 +71,20 @@ export class AjaxRequest {
     return this._roomId
   }
 
-  async setLoginCreds(response: Response) {
-    response.json().then(loginCredentials => this.store.commit('SET_USER', { username: loginCredentials.username }));
+  setLoginCreds(loginCredentials: { username: string }) {
+    this.store.commit('SET_USER', loginCredentials);
+  }
+
+  async devLogin(formData: { username: string, password: string }) {
+    const devLoginUrl = url('/login');
+    await this.post(devLoginUrl, ({ data, status }) => {
+      if (status === 200) {
+        this.setLoginCreds(data);
+        this.router.push({ name: DASHBOARD_PAGE });
+      } else {
+        return data;
+      }
+    }, formData);
   }
 
   get username(): string {
@@ -63,12 +92,12 @@ export class AjaxRequest {
   }
 
   setQuizCompletion(passedQuiz: boolean) {
-    this.store.commit('SET_USER', {username: this.username, passedQuiz});
+    this.store.commit('SET_USER', { username: this.username, passedQuiz });
   }
 
   forgetLoginCreds() {
     document.cookie = "connect.sid= ;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-    this.store.commit('SET_USER', {username: '', passedQuiz: false});
+    this.store.commit('SET_USER', { username: '', passedQuiz: false });
   }
 
   get submissionId(): number | null {
@@ -87,47 +116,92 @@ export class AjaxRequest {
     localStorage.removeItem(SUBMISSION_ID);
   }
 
-  async post(path: string, data?: any) {
-    const response = await fetch(
-      path,
-      {
-        method: 'POST',
-        cache: 'no-cache',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        redirect: 'follow',
-        referrerPolicy: "no-referrer",
-        body: JSON.stringify(data)
+  private async handleResponse(response: Response): Promise<ResponseData> {
+    // ASSUMPTION we always receive JSON back from the server given an ajax request
+    console.log("RECEIVED RESPONSE: ")
+    console.log(response);
+    const data = await response.json();
+    if (response.status >= 400) {
+      // something badwrong happened on the server side that we were not expecting.
+      // push the error onto the store and move on.
+      const serverErrorMessage: DashboardMessage = data;
+      this.store.commit('SET_DASHBOARD_MESSAGE', serverErrorMessage);
+      const destinationPage = this.errorRoutes.has(response.status) ? this.errorRoutes.get(response.status) : DASHBOARD_PAGE;
+      this.router.push({ name: destinationPage })
+      throw new AjaxResponseError(serverErrorMessage, response);
+    }
+    return { data, status: response.status };
+  }
+
+  async post(path: string, done: (data: ResponseData) => Promise<any> | void, data?: any): AjaxResponse {
+    // FIXME: duplicated across post/get
+    let response;
+    try {
+      response = await fetch(
+        path,
+        {
+          method: 'POST',
+          cache: 'no-cache',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          redirect: 'follow',
+          referrerPolicy: "no-referrer",
+          body: JSON.stringify(data)
+        }
+      );
+      const responseData = await this.handleResponse(response);
+      return done(responseData);
+    }
+    catch (e) {
+      if (e instanceof AjaxResponseError) {
+        throw e;
       }
-    )
-    switch (response.status) {
-      case 401:
-        this.router.push({name: 'Login'});
-      default:
-        return response;
+      else {
+        if (response) {
+          throw new AjaxResponseError({ kind: 'danger', message: e.message }, response);
+        }
+        else {
+          console.error("Unhandled error in request, returning to home screen");
+          this.router.push({ name: LOGIN_PAGE });
+        }
+      }
     }
   }
 
-  async get(path: string) {
-    const response = await fetch(
-      path,
-      {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        redirect: 'follow',
-        referrerPolicy: "no-referrer",
+  async get(path: string, done: (data: ResponseData) => Promise<any> | void): AjaxResponse {
+    // FIXME: duplicated across post/get
+    let response;
+    try {
+      response = await fetch(
+        path,
+        {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          redirect: 'follow',
+          referrerPolicy: "no-referrer",
+        }
+      );
+      const responseData = await this.handleResponse(response);
+      return done(responseData);
+    }
+    catch (e) {
+      if (e instanceof AjaxResponseError) {
+        throw e;
       }
-    );
-    switch (response.status) {
-      case 401:
-        this.router.push({name: 'Login'});
-      default:
-        return response;
+      else {
+        if (response) {
+          throw new AjaxResponseError({ kind: 'danger', message: e.message }, response);
+        }
+        else {
+          console.error("Unhandled error in request, returning to home screen");
+          this.router.push({ name: LOGIN_PAGE });
+        }
+      }
     }
   }
 }

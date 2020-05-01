@@ -641,7 +641,7 @@ export class Trade extends Schema {
   to: TradeAmount;
 
   @type('string')
-  status:TradeStatus
+  status: TradeStatus
 
   apply(state: GameState) {
     const pFrom = state.players[this.from.role];

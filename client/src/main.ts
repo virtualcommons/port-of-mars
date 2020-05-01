@@ -6,18 +6,21 @@ import * as Colyseus from 'colyseus.js';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import {TypedStore} from "@port-of-mars/client/plugins/tstore";
-import {Ajax} from "@port-of-mars/client/plugins/ajax";
+import { TypedStore } from "@port-of-mars/client/plugins/tstore";
+import { Ajax } from "@port-of-mars/client/plugins/ajax";
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 
 Vue.use(Vuex);
 Vue.use(TypedStore);
 Vue.use(Ajax, { router, store });
+Vue.use(BootstrapVue);
+Vue.use(IconsPlugin);
 
 Vue.config.productionTip = false;
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
-  integrations: [new Integrations.Vue({Vue, attachProps: true})],
+  integrations: [new Integrations.Vue({ Vue, attachProps: true })],
 });
 
 const $client = new Colyseus.Client(process.env.SERVER_URL_WS || undefined);

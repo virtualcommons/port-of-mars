@@ -1,8 +1,8 @@
 <template>
-  <div class="c-accomplishmentcard" :class="cardTypeStyling">
+  <div class="c-accomplishmentcard" :class="cardTypeStyling" v-show="cardIsActive">
     <div class="title-wrapper row">
       <div class="title col-12">
-        <p>{{ accomplishment.label }}</p>
+        <p :style="fontColor">{{ accomplishment.label }}</p>
         <font-awesome-icon
           :icon="['fas', 'info-circle']"
           size="lg"
@@ -45,7 +45,7 @@
       </div>
     </div>
 
-    <div v-if="type === cardType.purchase" class="purchase-wrapper row">
+    <div v-if="type === cardType.purchase && showCard" class="purchase-wrapper row">
       <div class="purchase col-12">
         <button :disabled="!canPurchase" @click="handlePurchase()">
           Purchase Accomplishment
@@ -53,11 +53,20 @@
       </div>
     </div>
 
-    <div v-if="type === cardType.discard" class="discard-wrapper row">
+    <div v-else-if="type === cardType.discard && showCard" class="discard-wrapper row">
       <div class="discard col-12">
         <button @click="handleDiscard()">
           Discard Accomplishment
         </button>
+      </div>
+    </div>
+
+    <div v-else class="status-text row">
+      <div v-if="type == cardType.discard" class="text col-12">
+        <p>Card Has Been Discarded</p>
+      </div>
+      <div v-if="type == cardType.purchase" class="text col-12">
+        <p>Card Has Been Purchased</p>
       </div>
     </div>
   </div>
@@ -70,6 +79,7 @@ import {
   Prop,
   InjectReactive,
   Inject,
+  Watch
 } from 'vue-property-decorator';
 import { AccomplishmentCardType } from '@port-of-mars/client/types/cards.ts';
 import {
@@ -119,7 +129,19 @@ export default class AccomplishmentCard extends Vue {
   @Prop({ default: true })
   private showDescription!: boolean;
 
+  @Prop({default: true})
+  private showCard!:boolean;
+
+  private cardIsActive:boolean = true;
+
   // NOTE :: All / Default Type
+
+  @Watch('showCard', {immediate: true})
+  shouldShowCard(showCard:boolean){
+    if(!showCard){
+      setTimeout(() => this.cardIsActive = false, 1900);
+    }
+  }
 
   get cardType() {
     return AccomplishmentCardType;
@@ -144,9 +166,17 @@ export default class AccomplishmentCard extends Vue {
   get cardTypeStyling() {
     switch (this.type) {
       case AccomplishmentCardType.purchase:
-        return this.canPurchase ? 'purchasable' : 'unpurchasable';
+        if(this.showCard){
+          return this.canPurchase ? 'purchasable' : 'unpurchasable';
+        } else {
+          return 'purchased hide-card'
+        }
       case AccomplishmentCardType.discard:
-        return this.canPurchase ? 'purchasable' : 'default';
+        if(this.showCard){
+          return this.canPurchase ? 'purchasable' : 'default';
+        } else {
+          return 'discarded hide-card';
+        }
       case AccomplishmentCardType.default:
         //return 'default';
         return this.canPurchase ? 'purchasable' : 'unpurchasable';
@@ -161,6 +191,14 @@ export default class AccomplishmentCard extends Vue {
     ).flatMap((investment) =>
       _.fill(Array(Math.abs(this.accomplishment[investment])), investment)
     );
+  }
+
+  get fontColor(){
+    if(!this.showCard){
+      return {color: 'white'}
+    }
+
+    return {color: 'black'}
   }
 
   // NOTE :: Purchase Type

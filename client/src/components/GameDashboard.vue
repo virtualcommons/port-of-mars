@@ -14,6 +14,7 @@ import GameboardContainer from '@port-of-mars/client/components/root/GameboardCo
 import ContainerVictory from '@port-of-mars/client/components/root/ContainerVictory.vue';
 import ContainerDefeat from '@port-of-mars/client/components/root/ContainerDefeat.vue';
 import { Phase } from '@port-of-mars/shared/types';
+import { isDev, isStaging } from '@port-of-mars/shared/settings';
 
 @Component({
   components: {

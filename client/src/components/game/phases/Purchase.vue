@@ -18,10 +18,11 @@
         <div class="outer-wrapper">
           <div class="wrapper">
             <AccomplishmentCard
-              v-for="accomplishment in purchasableAccomplishments"
+              v-for="accomplishment in staticAccomplishments"
               :key="accomplishment.label + 2"
               :accomplishment="accomplishment"
               :type="cardType"
+              :showCard="wasPurchased(accomplishment.id)"
             />
           </div>
         </div>
@@ -45,9 +46,7 @@ import { AccomplishmentData } from '@port-of-mars/shared/types';
   },
 })
 export default class Purchase extends Vue {
-  get purchasableAccomplishments() {
-    let accomplishments = this.$store.getters.player.accomplishments.purchasable
-      .slice()
+  private staticAccomplishments = this.$store.getters.player.accomplishments.purchasable.slice()
       .sort((a: AccomplishmentData, b: AccomplishmentData) => {
         return (
           Number(
@@ -59,7 +58,11 @@ export default class Purchase extends Vue {
         );
       });
 
-    return accomplishments;
+  wasPurchased(id: number){
+    console.log(this.$store.getters.player.accomplishments.purchasable)
+    return Boolean((this.$store.getters.player.accomplishments.purchasable as Array<AccomplishmentData>)
+      .slice()
+      .filter(accomplishment => accomplishment.id == id).length > 0);
   }
 
   get cardType() {

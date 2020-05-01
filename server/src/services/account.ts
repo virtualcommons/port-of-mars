@@ -1,8 +1,7 @@
 import { User } from "@port-of-mars/server/entity";
-import { getConnection } from "@port-of-mars/server/util";
-import { EntityManager, Repository } from "typeorm"
+import { Repository } from "typeorm"
 import { settings } from "@port-of-mars/server/settings";
-import {BaseService} from "@port-of-mars/server/services/db";
+import { BaseService } from "@port-of-mars/server/services/db";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -11,17 +10,30 @@ export class AccountService extends BaseService {
     return this.em.getRepository(User);
   }
 
-   isRegisteredAndValid(user: User): boolean {
-    // FIXME: @cpritcha did this
+  isRegisteredAndValid(user: User): boolean {
     return !!user.isVerified && !!user.email;
   }
 
-  async findByUsername(username: string): Promise<User | undefined> {
-    return await this.getRepository().findOne({ username })
+  async findByUsername(username: string): Promise<User> {
+    return await this.getRepository().findOneOrFail({ username })
   }
 
-  async findUserById(id: number): Promise<User | undefined> {
-    return await this.getRepository().findOne(id);
+  async findUserById(id: number): Promise<User> {
+    return await this.getRepository().findOneOrFail(id);
+  }
+
+  async getOrCreateTestUser(username: string): Promise<User> {
+    const user = await this.getOrCreateUser(username);
+    // test user, set fake data so they can immediately join a game
+    user.email = `${username}@mailinator.com`;
+    user.dateConsented = new Date();
+    user.isVerified = true;
+    user.passedQuiz = true;
+    user.name = `Test User ${username}`;
+    await this.getRepository().save(user);
+    // in subsequent tournament rounds should we create an TournamentRoundInvite for this year
+
+    return user;
   }
 
   async getOrCreateUser(username: string, profile?: any): Promise<User> {
@@ -31,7 +43,7 @@ export class AccountService extends BaseService {
       user = new User();
       user.name = '';
       user.username = username;
-      await getConnection().getRepository(User).save(user);
+      await this.getRepository().save(user);
     }
     return user;
   }

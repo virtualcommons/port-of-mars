@@ -20,6 +20,7 @@ import {
   ModalDataType,
 } from '@port-of-mars/client/types/modals';
 import _ from 'lodash';
+import { DashboardMessage } from '@port-of-mars/shared/types';
 
 export interface PlayerClientData extends PlayerData {
   pendingInvestments: InvestmentData;
@@ -138,6 +139,7 @@ export interface PopupView {
 export interface State extends GameData {
   role: Role;
   logs: Array<MarsLogMessageData>;
+  dashboardMessages: Array<DashboardMessage>;
   players: PlayerClientSet;
   phase: Phase;
   layout: string;
@@ -204,6 +206,8 @@ export const initialStoreState: State = {
       data: null,
     },
   },
+
+  dashboardMessages: [],
 
   ui: {
     // TODO: Still needs to be refactored

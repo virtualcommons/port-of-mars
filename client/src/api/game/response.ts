@@ -10,17 +10,21 @@ import {
   TradeData,
   Role,
 } from '@port-of-mars/shared/types';
-import { Responses } from '@port-of-mars/shared/game/responses';
+import { SetPlayerRole, SetError } from '@port-of-mars/shared/game/responses';
 import { Schema } from '@colyseus/schema';
 import { TStore } from '@port-of-mars/client/plugins/tstore';
-
+import Mutations from "@port-of-mars/client/store/mutations";
 type Schemify<T> = T & Schema;
 
 function deschemify<T>(s: Schemify<T>): T {
   return s.toJSON() as T;
 }
 
-const responseMap = {
+type serverResponse = {
+  [field in keyof Omit<PlayerData, 'role'>] : keyof typeof Mutations
+}
+
+const responseMap:serverResponse = {
   inventory: 'SET_INVENTORY',
   costs: 'SET_INVESTMENT_COSTS',
   specialty: 'SET_SPECIALTY',
@@ -34,43 +38,10 @@ const responseMap = {
 
 function applyPlayerResponses(player: any, store: TStore) {
   player.onChange = (changes: Array<any>) => {
-    changes.forEach((change) => {
+    //filtering out any changes that have to do with the role immediately
+    changes.filter(change => change.field != 'role').forEach((change) => {
       const payload = { role: player.role, data: change.value };
-
-      // FIXME: this could just be a mapping of change.field: 'STRING_COMMAND' or some kind of predictable transformation
-      // I'd prefer something like the responseMap defined above which can then
-      // reduce the switch statement to store.commit(responseMap[change.field], payload) and we adjust the
-      // mapping as needed.
-      // requires some TS chicanery that I don't know how to do to make it typesafe though
-      switch (change.field as keyof PlayerData) {
-        case 'inventory':
-          store.commit('SET_INVENTORY', payload);
-          break;
-        case 'costs':
-          store.commit('SET_INVESTMENT_COSTS', payload);
-          break;
-        case 'specialty':
-          store.commit('SET_SPECIALTY', payload);
-          break;
-        case 'timeBlocks':
-          store.commit('SET_TIME_BLOCKS', payload);
-          break;
-        case 'ready':
-          store.commit('SET_READINESS', payload);
-          break;
-        case 'accomplishments':
-          store.commit('SET_ACCOMPLISHMENTS', payload);
-          break;
-        case 'victoryPoints':
-          store.commit('SET_VICTORY_POINTS', payload);
-          break;
-        case 'pendingInvestments':
-          store.commit('SET_PENDING_INVESTMENTS', payload);
-          break;
-        case 'contributedUpkeep':
-          store.commit('SET_CONTRIBUTED_UPKEEP', payload);
-          break;
-      }
+      store.commit(responseMap[change.field as keyof Omit<PlayerData, 'role'>], payload);
     });
   };
   player.triggerAll();
@@ -100,12 +71,9 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
     (state.players as any).triggerAll();
   });
 
-  room.onError((message: string) => {
-    console.log('Error occurred in room..');
-    console.log(message);
-    // alert(
-    //   'sorry, we encountered an error, please try refreshing the page or contact us'
-    // );
+  room.onError((code: number, message?: string) => {
+    console.log(`Error ${code} occurred in room: ${message}`);
+    alert('sorry, we encountered an error, please try refreshing the page or contact us');
   });
 
   room.onLeave((code: number) => {
@@ -123,17 +91,12 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
     }
   });
 
-  room.onMessage((msg: Responses) => {
-    switch (msg.kind) {
-      case 'set-player-role':
-        store.commit('SET_PLAYER_ROLE', msg.role);
-        break;
-      default:
-        console.log('room.onMessage received unexpected payload');
-        console.log(msg);
-        break;
-    }
+  room.onMessage('set-player-role', (msg: SetPlayerRole) => {
+    store.commit('SET_PLAYER_ROLE', msg.role);
   });
+  room.onMessage('set-error', (msg: SetError) => {
+    store.commit('SET_DASHBOARD_MESSAGE', { kind: 'warning', message: msg.message });
+  })
 
   // eslint-disable-next-line no-param-reassign
   room.state.messages.onAdd = (msg: Schemify<ChatMessageData>, key: number) => {

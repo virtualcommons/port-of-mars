@@ -7,31 +7,43 @@
           <h2>Player Dashboard</h2>
         </div>
       </div>
-      <div class="content-wrapper row">
-        <div class="stats col-3">
-          <h2>Your Stats</h2>
-          <div class="information">
-            <p>Games Played: {{ gamesPlayedCount }}</p>
-          </div>
-          <div class="outer-wrapper">
-            <div class="wrapper">
-              <PlayerStatItem
-                v-for="playerStatItem in stats.games"
-                :playerStatItem="playerStatItem"
-                :key="playerStatItem.tournamentName + Math.random()"
-              />
-            </div>
-          </div>
-        </div>
+      <b-row class="content-wrapper">
+        <b-col cols="3" class="stats">
+          <b-row>
+            <b-col>
+              <h2>Messages</h2>
+              <b-alert v-for="dm in dashboardMessages" :key="dm.message" :variant="dm.kind" show dismissible>
+                {{ dm.message }}
+              </b-alert>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <h2>Your Stats</h2>
+              <div class="information">
+                <p>Games Played: {{ gamesPlayedCount }}</p>
+              </div>
+              <div class="outer-wrapper">
+                <div class="wrapper">
+                  <PlayerStatItem
+                    v-for="playerStatItem in stats.games"
+                    :playerStatItem="playerStatItem"
+                    :key="playerStatItem.time"
+                  />
+                </div>
+              </div>
+            </b-col>
+          </b-row>
+        </b-col>
         <div class="action-items col-4">
           <h2>Action Items</h2>
           <div class="outer-wrapper">
             <div class="wrapper">
               <p v-if="loading">Action Items are loading...</p>
               <ActionItemComponent
-                v-for="(actionItem, index) in actionItems"
+                v-for="actionItem in actionItems"
                 :actionItem="actionItem"
-                :key="index + Math.random()"
+                :key="actionItem.description"
               />
             </div>
           </div>
@@ -43,12 +55,12 @@
               <UpcomingGameItem
                 v-for="upcomingGame in upcomingGames"
                 :upcomingGame="upcomingGame"
-                :key="upcomingGame.tournamentName + Math.random()"
+                :key="upcomingGame.time"
               />
             </div>
           </div>
         </div>
-      </div>
+      </b-row>
     </div>
   </div>
 </template>
@@ -73,7 +85,7 @@ import {
   },
 })
 export default class PlayerDashboard extends Mixins(Vue, DashboardAPI) {
-  private loading: boolean = true;
+  private loading = true;
   private actionItems: Array<ActionItem> = [];
   private stats: DashboardData['stats'] = { games: [] };
   private upcomingGames: Array<GameMeta> = [];
@@ -94,6 +106,10 @@ export default class PlayerDashboard extends Mixins(Vue, DashboardAPI) {
     this.loading = false;
   }
 
+  get dashboardMessages() {
+    return this.$tstore.state.dashboardMessages;
+  }
+
   get gamesPlayedCount() {
     return this.stats.games.length;
   }
@@ -101,5 +117,5 @@ export default class PlayerDashboard extends Mixins(Vue, DashboardAPI) {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/views/Dashboard.scss';
+@import "@port-of-mars/client/stylesheets/views/Dashboard.scss";
 </style>

@@ -1,11 +1,11 @@
-import { getConnection } from '@port-of-mars/server/util';
-import { Game, Player, Tournament, TournamentRound, TournamentRoundInvite } from '@port-of-mars/server/entity';
-import { EntityManager, Equal, SelectQueryBuilder } from 'typeorm';
+import { Game, User, Player, Tournament, TournamentRound, TournamentRoundInvite } from '@port-of-mars/server/entity';
+import { Equal, SelectQueryBuilder } from 'typeorm';
 import * as _ from 'lodash';
-import { settings } from "@port-of-mars/server/settings";
-import {BaseService} from "@port-of-mars/server/services/db";
+import { getLogger } from "@port-of-mars/server/settings";
+import { BaseService } from "@port-of-mars/server/services/db";
+import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 
-const logger = settings.logging.getLogger(__filename);
+const logger = getLogger(__filename);
 
 export class TournamentService extends BaseService {
   async getActiveTournament(): Promise<Tournament> {
@@ -16,18 +16,23 @@ export class TournamentService extends BaseService {
       });
   }
 
-  async getCurrentTournamentRound(): Promise<TournamentRound | undefined> {
+  async getCurrentTournamentRound(): Promise<TournamentRound> {
     const tournament = await this.getActiveTournament();
-    if (tournament === undefined) return undefined;
     const tournamentId = tournament.id;
 
     return await this.em
       .getRepository(TournamentRound)
-      .createQueryBuilder('tournamentRound')
-      .where('tournamentRound.tournamentId = :tournamentId', { tournamentId })
-      .orderBy('tournamentRound.roundNumber', 'DESC')
-      .getOne();
+      .findOneOrFail({
+        relations: ['tournament'],
+        where: {
+          tournamentId
+        },
+        order: {
+          roundNumber: "DESC"
+        }
+      });
   }
+
 
   async getInviteList(
     roundId?: number
@@ -47,13 +52,35 @@ export class TournamentService extends BaseService {
       });
   }
 
-  async getActiveRoundInvite(userId: number, tournamentRoundId: number): Promise<TournamentRoundInvite> {
-    return this.em.getRepository(TournamentRoundInvite).findOneOrFail({
+  async createInvites(userIds: Array<number>, tournamentRoundId: number): Promise<Array<TournamentRoundInvite>> {
+    const invites = userIds.map(userId => this.em.getRepository(TournamentRoundInvite).create({ userId, tournamentRoundId }));
+    return await this.em.getRepository(TournamentRoundInvite).save(invites);
+  }
+
+  async createInvite(userId: number, tournamentRoundId: number): Promise<TournamentRoundInvite> {
+    const repository = this.em.getRepository(TournamentRoundInvite);
+    const invite = repository.create({ userId, tournamentRoundId });
+    return await repository.save(invite);
+  }
+
+
+  async getActiveRoundInvite(userId: number, tournamentRound: TournamentRound): Promise<TournamentRoundInvite> {
+    const tournamentRoundId = tournamentRound.id;
+    const invite = await this.em.getRepository(TournamentRoundInvite).findOne({
       where: {
         tournamentRoundId,
         userId
       }
-    })
+    });
+    if (invite) return invite;
+
+    // special case for the first round of a tournament where everyone's invited 
+    if (!invite && tournamentRound.roundNumber === 1) {
+      return await this.createInvite(userId, tournamentRoundId);
+    }
+    else {
+      throw new EntityNotFoundError(TournamentRoundInvite, `User ${userId} does not have an invite for the current round ${tournamentRoundId}.`);
+    }
   }
 
   async createTournament(data: Pick<Tournament, 'name' | 'active'>): Promise<Tournament> {
@@ -146,6 +173,30 @@ export class TournamentService extends BaseService {
       .distinctOn(['u.userId'])
       .limit(n)
       .select('u.userId', 'id');
+  }
+
+  async getTournamentRoundInvite(id: number): Promise<TournamentRoundInvite> {
+    return this.em.getRepository(TournamentRoundInvite).findOneOrFail({ relations: ['user', 'tournamentRound'], where: { id } });
+  }
+
+  async getTournamentRound(id: number): Promise<TournamentRound> {
+    return this.em.getRepository(TournamentRound).findOneOrFail({ where: { id } });
+  }
+
+  async setSurveyComplete(data: { inviteId: number; surveyId: string }) {
+    const invite = await this.getTournamentRoundInvite(data.inviteId);
+    const tournamentRound = invite.tournamentRound;
+    const introSurveyUrl = tournamentRound.introSurveyUrl;
+    const exitSurveyUrl = tournamentRound.exitSurveyUrl;
+    if (introSurveyUrl && introSurveyUrl.includes(data.surveyId)) {
+      invite.hasCompletedIntroSurvey = true;
+      logger.debug("participant %s completed intro survey %s", invite.user.username, introSurveyUrl);
+    }
+    else if (exitSurveyUrl && exitSurveyUrl.includes(data.surveyId)) {
+      invite.hasCompletedExitSurvey = true;
+      logger.debug("participant %s completed exit survey %s", invite.user.username, exitSurveyUrl);
+    }
+    this.em.save(invite);
   }
 }
 

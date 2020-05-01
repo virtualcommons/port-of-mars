@@ -54,7 +54,6 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { Resource, ResourceAmountData } from '@port-of-mars/shared/types';
-import { makeTradeSafe } from '@port-of-mars/shared/validation';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
@@ -97,7 +96,6 @@ export default class TradeOptions extends Vue {
       this.resources[resource] = max;
     }
 
-    makeTradeSafe(this.resources);
     this.resourceReader(this.resources);
   }
 
@@ -109,8 +107,6 @@ export default class TradeOptions extends Vue {
     } else {
       this.resources[resource] = min;
     }
-
-    makeTradeSafe(this.resources);
     this.resourceReader(this.resources);
   }
 }

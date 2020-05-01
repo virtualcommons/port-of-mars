@@ -13,7 +13,9 @@
   .info-wrapper,
   .cost-wrapper,
   .purchase-wrapper,
-  .discard-wrapper {
+  .discard-wrapper,
+  .status-text {
+    @include default-transition-base;
     width: 100%;
     padding: 0.5rem;
     margin: 0;
@@ -44,7 +46,7 @@
         margin-bottom: 0;
         font-size: $font-med;
         font-weight: $font-weight-maven-pro-medium;
-        color: $space-gray;
+        //color: $space-gray;
         text-align: center;
         @include text-overflow-ellipses;
       }
@@ -126,6 +128,11 @@
       @include make-center;
     }
   }
+
+  .status-text {
+    background-color: $space-gray;
+    text-align: center;
+  }
 }
 
 .default {
@@ -155,5 +162,44 @@
   .purchase button,
   .discard button {
     @include space-button-white;
+  }
+}
+
+.discarded {
+  @include default-transition-base;
+  border: 0.125rem solid $status-red;
+  background-color: $status-red;
+
+  .text{
+    color: $status-red;
+    font-size: $font-med;
+    font-weight: bold;
+  }
+}
+
+.purchased {
+  @include default-transition-base;
+  border: 0.125rem solid $status-green;
+  background-color: $status-green;
+
+  .text{
+    color: $status-green;
+    font-size: $font-med;
+    font-weight: bold;
+  }
+}
+
+.hide-card{
+  animation: hide 0.3s linear 1.5s 1 forwards;
+}
+
+@keyframes hide{
+  0%{
+    opacity: 100%;
+  }
+
+  100%{
+    opacity: 0;
+    height:0;
   }
 }

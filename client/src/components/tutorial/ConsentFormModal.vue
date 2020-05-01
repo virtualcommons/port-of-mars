@@ -94,6 +94,7 @@
                                 :state="emailState()"
                                 aria-describedby="input-live-help input-live-feedback"
                                 placeholder="me@example.com"
+                                type="email"
                                 required
                                 trim
                             />
@@ -132,9 +133,12 @@
 
 <script lang="ts">
 import { Component, Vue, Emit } from 'vue-property-decorator';
+import { url } from '@port-of-mars/client/util';
+import _ from 'lodash';
 import { BModal, BButton, BootstrapVueIcons,
          BFormInput, BContainer, BRow, BCol,
          BFormInvalidFeedback, BFormText } from 'bootstrap-vue';
+        
 
 Vue.use(BootstrapVueIcons)
 
@@ -171,32 +175,24 @@ export default class ConsentFormModal extends Vue {
     footerTextVariant: string = 'light';
 
     email: string = '';
-    pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     emailState() {
-        if ((this.email !== null || this.email !== '') && this.pattern.test(this.email)) {
-            return true
-        }
-        else {
-            return false;
-        }
+      return !_.isEmpty(this.email);
     }
 
-    @Emit('grant-consent')
     async grantConsent() {
-        this.$store.state.consent = true;
-        this.$bvModal.hide('bv-modal');
-        this.$ajax.post(`${process.env.SERVER_URL_HTTP}/registration/tutorial`);
-        const response = this.$ajax.post(`${process.env.SERVER_URL_HTTP}/registration/tutorial`);
-        // console.log('consent: ', this.$tstore.state.consent);
-        // console.log('email: ', this.email);
+      this.$bvModal.hide('bv-modal');
+      // FIXME: post to a new endpoint to store the user's consent and timestamp
+      await this.$ajax.post(url('/registration/tutorial'), ({data, status}) => {
+        // what should we do after this post? return to the dashboard after modifying consent granted
+        // FIXME: run an api call to commit to the store instead of modifying state directly
+        this.$tstore.commit('SET_CONSENT', true);
+      });
     }
 
-    @Emit('deny-consent')
     denyConsent() {
-        this.$store.state.consent = false;
-        this.$bvModal.hide('bv-modal');
-        // console.log('consent: ', this.$tstore.state.consent);
+      this.$bvModal.hide('bv-modal');
+      this.$tstore.commit('SET_CONSENT', false);
     }
 
 }

@@ -8,7 +8,7 @@ import { settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
 import _ from "lodash";
 import * as http from "http";
-import { WaitingRequests, WaitingResponses, LOBBY_NAME } from "@port-of-mars/shared/lobby";
+import { DistributeGroups, WaitingResponses, LOBBY_NAME, AcceptInvitation } from "@port-of-mars/shared/lobby";
 import { Persister } from "@port-of-mars/server/rooms/game/types";
 
 const logger = settings.logging.getLogger(__filename);
@@ -80,6 +80,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
     this.persister = options.persister;
     this.evaluateAtEveryMinute = settings.lobby.evaluateAtEveryMinute;
     this.devMode = settings.lobby.devMode;
+    this.registerLobbyHandlers();
 
     /**
      * Redistribute clients into groups at every interval
@@ -108,11 +109,17 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
   async onAuth(client: Client, options: { token: string }, request?: http.IncomingMessage) {
     try {
       const user = await getServices().account.findUserById((request as any).session.passport.user);
-      return user;
+      logger.debug('checking if user %s can play the game', user.username);
+      if (await getServices().auth.checkUserCanPlayGame(user.id)) {
+        return user;
+      }
+      // FIXME: this won't work since we don't have any registered handlers to process this client-side
+      // this.sendSafe(client, { kind: 'join-failure', reason: 'Please complete all onboarding items on your dashboard before joining a game.' });
+      logger.debug('user should be redirected back to the dashboard');
     } catch (e) {
       logger.fatal(e);
-      return;
     }
+    return false;
   }
 
   onJoin(client: Client, options: any) {
@@ -130,9 +137,8 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
     }
   }
 
-  async onMessage(client: Client, message: WaitingRequests) {
-    logger.trace('WAITING LOBBY: onMessage - message', message);
-    if (message.kind === 'accept-invitation') {
+  registerLobbyHandlers() {
+    this.onMessage('accept-invitation', (client, message: AcceptInvitation) => {
       logger.trace('CLIENT ACCEPTED INVITATION');
       const clientStat = this.clientStats.find(stat => stat.client === client);
       if (clientStat?.group) {
@@ -158,10 +164,11 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
           this.removeGroup(group);
         }
       }
-    }
-    else if (message.kind === 'distribute-groups') {
-      await this.redistributeGroups();
-    }
+    });
+    this.onMessage('distribute-groups', (client: Client, message: DistributeGroups) => {
+      logger.debug("client %d requesting to force distribute groups");
+      this.redistributeGroups().then(() => logger.debug("Groups redistributed"));
+    });
   }
 
   removeGroup(group: MatchmakingGroup) {
@@ -213,7 +220,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
   }
 
   sendSafe(client: Client, msg: WaitingResponses) {
-    this.send(client, msg);
+    client.send(msg.kind, msg);
   }
 
   fillUsernames(usernames: Array<string>) {
@@ -228,7 +235,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
 
   isGroupReady(group: MatchmakingGroup): boolean {
     logger.trace('WAITING LOBBY: isGroupReady %o',
-      {ready: group.ready, length: group.clientStats.length, devMode: this.devMode});
+      { ready: group.ready, length: group.clientStats.length, devMode: this.devMode });
     return group.ready || group.clientStats.length === this.numClientsToMatch || this.devMode;
   }
 

@@ -1,12 +1,11 @@
-import { PlayerClientSet, State, PlayerClientData } from '@port-of-mars/client/store/state';
+import {PlayerClientData, PlayerClientSet, State} from '@port-of-mars/client/store/state';
 import {
-  ROLES,
-  MarsEventData,
   EventClientView,
+  MarsEventData,
+  MarsLogCategory,
   MarsLogMessageData,
+  ROLES,
 } from '@port-of-mars/shared/types';
-import _ from 'lodash';
-import { createNamespacedHelpers } from 'vuex';
 
 export default {
   /**
@@ -101,8 +100,27 @@ export default {
     return auditEventIndex !== -1 && auditEventIndex <= eventProcessedIndex;
   },
 
-  // unreadChatMessages(state: State): number {
-  //   const chatMessages = state.messages.length;
-  //   return chatMessages;
-  // }
+  categoryColorMap(state: State): Map<string, string> {
+
+    return new Map([
+      // round
+      [MarsLogCategory.newRound, 'var(--space-white-opaque-1)'],
+
+      // system health
+      [MarsLogCategory.systemHealth, 'var(--marslog-red)'],
+
+      // trade
+      [MarsLogCategory.trade, 'var(--marslog-purple)'],
+      [MarsLogCategory.sentTrade, 'var(--marslog-purple)'],
+      [MarsLogCategory.acceptTrade, 'var(--marslog-purple)'],
+      [MarsLogCategory.rejectTrade, 'var(--marslog-purple)'],
+      [MarsLogCategory.cancelTrade, 'var(--marslog-purple)'],
+      [MarsLogCategory.invalidTrade, 'var(--marslog-purple)'],
+
+      // accomplishment
+      [MarsLogCategory.accomplishment, 'var(--marslog-green)'],
+      [MarsLogCategory.purchaseAccomplishment, 'var(--marslog-green)'],
+    ]);
+
+  }
 };

@@ -3,11 +3,11 @@ items:
   chat:
     quiz: '@tutorialquiz'
     question: 'Can you chat with other participants?'
-    correctAnswer: 1
+    correctAnswer: 2
     options:
       - 'No, communication is not possible in this game.'
-      - 'Yes, in the chat box for the duration of the entire game.'
       - 'Yes, in the chat box but only during specially designated phases.'
+      - 'Yes, in the chat box for the duration of the entire game.'
       - 'Yes, as long as System Health is greater than 35.'
     order: 2
     tutorialElementId: 'chat'
@@ -17,19 +17,19 @@ items:
     correctAnswer: 2
     options:
       - "During the trading phase, say what Influence Resources you want and then you'll receive them."
-      - "By communicating your trade preferences in the chat box."
-      - "Discuss potential trades with the other members of your group in the chat and then issue Trade Requests during the trading phase to execute a Trade."
+      - 'By communicating your trade preferences in the chat box.'
+      - 'Discuss potential trades with the other members of your group in the chat and then issue Trade Requests during the trading phase to execute a Trade.'
       - 'By investing your timeblocks.'
     order: 3
     tutorialElementId: 'trade'
   upkeep65:
     quiz: '@tutorialquiz'
     question: 'What happens if the System Health falls between 35 and 65?'
-    correctAnswer: 1
+    correctAnswer: 2
     options:
       - 'You can no longer chat with your group.'
-      - 'Two events will occur in this round.'
       - 'You get an additional four timeblocks.'
+      - 'Two events will occur in this round.'
       - 'You get an extra Accomplishment card.'
     order: 4
     tutorialElementId: 'upkeep65'
@@ -58,12 +58,12 @@ items:
   timeblocks:
     quiz: '@tutorialquiz'
     question: 'In each round you will have 10 timeblocks to invest (unless otherwise instructed). Which of the following statements is incorrect?'
-    correctAnswer: 1
+    correctAnswer: 3
     options:
       - 'You can spend as many timeblocks as you want.'
-      - 'Every timeblock you do not spend can be saved and used in the next round.'
       - 'Each player has unique skills that change the costs of specific Influence Resources.'
       - "Each timeblock invested in System Health increases your group's System Health by 1."
+      - 'Every timeblock you do not spend can be saved and used in the next round.'
     order: 7
     tutorialElementId: 'timeblocks'
   upkeep35:
@@ -80,11 +80,11 @@ items:
   upkeep25:
     quiz: '@tutorialquiz'
     question: 'At the start of each round, 25 units is subtracted from System Health. What does this represent?'
-    correctAnswer: 1
+    correctAnswer: 3
     options:
       - 'A lack of contributions from the other members of your group.'
-      - 'Standard wear and tear.'
       - 'Solar flares striking your habitat.'
       - 'The costs of trade.'
+      - 'Standard wear and tear.'
     order: 9
     tutorialElementId: 'upkeep25'
