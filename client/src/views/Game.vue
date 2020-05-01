@@ -1,5 +1,5 @@
 <template>
-  <div class="default-layout">
+  <div class="game-layout">
     <GameDashboard />
   </div>
 </template>
@@ -73,7 +73,7 @@ export default class Game extends Vue {
 </script>
 
 <style lang="scss">
-.default-layout {
+.game-layout {
   @include expand;
 }
 </style>
