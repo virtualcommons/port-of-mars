@@ -15,7 +15,7 @@ import {
   PersonalGainVotesData,
   VoteForPhilanthropistData,
   BondingThroughAdversityData,
-  BreakdownOfTrustData
+  BreakdownOfTrustData,
 } from '@port-of-mars/shared/game/requests';
 import {
   AccomplishmentData,
@@ -23,16 +23,17 @@ import {
   TradeData,
   Role,
   Resource,
-  ResourceAmountData
+  ResourceAmountData,
 } from '@port-of-mars/shared/types';
+import { ChatMarsLogView } from '@port-of-mars/client/types/panes.ts';
 import { MockRoom } from '@port-of-mars/client/types/tutorial';
 import { TStore } from '@port-of-mars/client/plugins/tstore';
 
 export class GameRequestAPI {
   room!: Room | MockRoom;
-  private store!: TStore
+  private store!: TStore;
 
-  public connect(room: Room | MockRoom, store:TStore) {
+  public connect(room: Room | MockRoom, store: TStore) {
     this.room = room;
     this.store = store;
   }
@@ -60,7 +61,7 @@ export class GameRequestAPI {
   public investTimeBlocks(investment: InvestmentData) {
     const msg: SetTimeInvestmentData = {
       ...investment,
-      kind: 'set-time-investment'
+      kind: 'set-time-investment',
     };
     this.send(msg);
   }
@@ -68,7 +69,7 @@ export class GameRequestAPI {
   public purchaseAccomplishment(accomplishment: AccomplishmentData) {
     const msg: PurchaseAccomplishmentCardData = {
       kind: 'purchase-accomplishment-card',
-      id: accomplishment.id
+      id: accomplishment.id,
     };
     this.send(msg);
   }
@@ -76,7 +77,7 @@ export class GameRequestAPI {
   public discardAccomplishment(id: number) {
     const msg: DiscardAccomplishmentCardData = {
       kind: 'discard-accomplishment-card',
-      id
+      id,
     };
     this.send(msg);
   }
@@ -114,7 +115,7 @@ export class GameRequestAPI {
   public voteForPhilanthropist(vote: Role) {
     const msg: VoteForPhilanthropistData = {
       kind: 'vote-for-philanthropist',
-      vote
+      vote,
     };
     this.send(msg);
   }
@@ -125,7 +126,7 @@ export class GameRequestAPI {
   }) {
     const msg: BondingThroughAdversityData = {
       kind: 'bonding-through-adversity',
-      influenceVoteData
+      influenceVoteData,
     };
     this.send(msg);
   }
@@ -133,61 +134,64 @@ export class GameRequestAPI {
   public saveResourcesSelection(savedResources: InvestmentData) {
     const msg: BreakdownOfTrustData = {
       kind: 'breakdown-of-trust',
-      savedResources
+      savedResources,
     };
     this.send(msg);
   }
 
   //UI COMMANDS
-  public investPendingTimeBlocks(investment: any){
+  public investPendingTimeBlocks(investment: any) {
     this.store.commit('SET_PENDING_INVESTMENT_AMOUNT', investment);
   }
 
-  public setModalVisible(data: any){
-    this.store.commit('SET_MODAL_VISIBLE',data);
+  public setModalVisible(data: any) {
+    this.store.commit('SET_MODAL_VISIBLE', data);
   }
 
-  public setModalHidden(){
+  public setModalHidden() {
     this.store.commit('SET_MODAL_HIDDEN', null);
   }
 
-  public toggleProfileMenu(currentVisiblility:boolean){
+  public toggleProfileMenu(currentVisiblility: boolean) {
     this.store.commit('SET_PROFILE_MENU_VISIBILITY', !currentVisiblility);
   }
 
-  public toggleMarsLogPopup(currentVisiblility:boolean){
-    this.store.commit('SET_MARS_LOG_POPUP_VISIBILITY', !currentVisiblility);
-  }
-
-  public toggleInventory(currentVisiblility:boolean){
+  public toggleInventory(currentVisiblility: boolean) {
     this.store.commit('SET_INVENTORY_POPUP_VISIBILITY', !currentVisiblility);
   }
 
-  public toggleActiveEvents(currentVisiblility:boolean){
-    this.store.commit('SET_ACTIVE_EVENTS_POPUP_VISIBILITY', !currentVisiblility);
+  public toggleActiveEvents(currentVisiblility: boolean) {
+    this.store.commit(
+      'SET_ACTIVE_EVENTS_POPUP_VISIBILITY',
+      !currentVisiblility
+    );
   }
 
-  public setTradePlayerName(role: Role){
+  public setChatMarsLogView(view: ChatMarsLogView) {
+    this.store.commit('SET_CHATMARSLOG_VIEW', view);
+  }
+
+  public setTradePlayerName(role: Role) {
     this.store.commit('SET_TRADE_PLAYER_NAME', role);
   }
 
-  public setTradePartnerName(name:string){
+  public setTradePartnerName(name: string) {
     this.store.commit('SET_TRADE_PARTNER_NAME', name as Role);
   }
 
-  public setTradeGetResources(resources:ResourceAmountData){
+  public setTradeGetResources(resources: ResourceAmountData) {
     this.store.commit('SET_GET_RESOURCES', resources);
   }
 
-  public setTradeGiveResources(resources: ResourceAmountData){
+  public setTradeGiveResources(resources: ResourceAmountData) {
     this.store.commit('SET_SEND_RESOURCES', resources);
   }
 
-  public resetTradeModal(){
+  public resetTradeModal() {
     this.store.commit('RESET_TRADE_MODAL', null);
   }
 
-  public discardOption(data:any){
+  public discardOption(data: any) {
     this.setModalVisible(data);
   }
 }

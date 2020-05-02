@@ -1,5 +1,12 @@
-import { Step, LEFT, TOP, RIGHT, BOTTOM } from '@port-of-mars/client/types/tutorial';
+import {
+  Step,
+  LEFT,
+  TOP,
+  RIGHT,
+  BOTTOM,
+} from '@port-of-mars/client/types/tutorial';
 import { Phase, RESEARCHER, CURATOR } from '@port-of-mars/shared/types';
+import { ChatMarsLogView } from '@port-of-mars/client/types/panes.ts';
 
 const steps: Array<Step> = [
   {
@@ -18,13 +25,13 @@ const steps: Array<Step> = [
             government: 0,
             legacy: 0,
             science: 0,
-            upkeep: 0
+            upkeep: 0,
           },
-          role: RESEARCHER
-        }
+          role: RESEARCHER,
+        },
       },
       {
-        SET_GAME_PHASE: Phase.trade
+        SET_GAME_PHASE: Phase.trade,
       },
       {
         SET_INVENTORY: {
@@ -34,10 +41,10 @@ const steps: Array<Step> = [
             government: 5,
             legacy: 0,
             science: 5,
-            upkeep: 0
+            upkeep: 0,
           },
-          role: RESEARCHER
-        }
+          role: RESEARCHER,
+        },
       },
       {
         ADD_TO_TRADES: {
@@ -71,8 +78,9 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-active-trades-list',
-    content: `All active trades are listed here. If you receive a trade, you can accept or decline the trade. `
-             + `When you send a trade, you only have the option to cancel the request.`,
+    content:
+      `All active trades are listed here. If you receive a trade, you can accept or decline the trade. ` +
+      `When you send a trade, you only have the option to cancel the request.`,
     params: {
       placement: LEFT,
     },
@@ -84,6 +92,7 @@ const steps: Array<Step> = [
       placement: LEFT,
     },
     stateTransform: [
+      { SET_CHATMARSLOG_VIEW: ChatMarsLogView.Chat },
       {
         ADD_TO_CHAT: {
           message:
@@ -107,7 +116,7 @@ const steps: Array<Step> = [
     target: '.tour-request-trade',
     content: `To initiate a trade request with another player, click on the Request Trade button.`,
     params: {
-      placement: TOP
+      placement: TOP,
     },
     stateTransform: [
       {
@@ -138,7 +147,7 @@ const steps: Array<Step> = [
     target: '.tour-request-resources',
     content: `Next, you choose the amount of any resource that you want. Ask for 3 culture!`,
     params: {
-      placement: TOP
+      placement: TOP,
     },
     stateTransform: [
       {
@@ -155,10 +164,11 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-offer-resources',
-    content: `Finally, select the amount of each resource you are willing to give up. You cannot send more `
-      + `resources than you currently have. Increment Science to 2 and Government to 1!`,
+    content:
+      `Finally, select the amount of each resource you are willing to give up. You cannot send more ` +
+      `resources than you currently have. Increment Science to 2 and Government to 1!`,
     params: {
-      placement: TOP
+      placement: TOP,
     },
     stateTransform: [
       {
@@ -193,7 +203,7 @@ const steps: Array<Step> = [
     },
     stateTransform: [
       {
-        required: true
+        required: true,
       },
       {
         SET_GET_RESOURCES: {
@@ -223,14 +233,14 @@ const steps: Array<Step> = [
     target: '.tour-ready-to-advance-button',
     content: `Click the Ready to Advance button when you have finished trading. `,
     params: {
-      placement: 'left'
+      placement: 'left',
     },
     stateTransform: [
       {
         SET_LAYOUT: 'tutorial',
-        required: true
-      }
-    ]
+        required: true,
+      },
+    ],
   },
 ];
 
