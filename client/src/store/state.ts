@@ -13,12 +13,13 @@ import {
   ResourceAmountData,
   ResourceCostData,
   Role,
-  TradeDataWithNull
+  TradeDataWithNull,
 } from '@port-of-mars/shared/types';
 import {
   ModalViewType,
   ModalDataType,
 } from '@port-of-mars/client/types/modals';
+import { ChatMarsLogView } from '@port-of-mars/client/types/panes.ts';
 import _ from 'lodash';
 import { DashboardMessage } from '@port-of-mars/shared/types';
 
@@ -111,6 +112,7 @@ export interface User {
 
 export interface UserInterface {
   profileMenuView: ProfileMenuView;
+  chatMarsLogView: ChatMarsLogView;
   popupView: PopupView;
   modalView: ModalView;
 }
@@ -133,7 +135,6 @@ export interface ProfileMenuView {
 export interface PopupView {
   activeEventsVisible: boolean;
   inventoryVisible: boolean;
-  marsLogVisible: boolean;
 }
 
 export interface State extends GameData {
@@ -195,10 +196,10 @@ export const initialStoreState: State = {
     profileMenuView: {
       visible: false,
     },
+    chatMarsLogView: ChatMarsLogView.Chat,
     popupView: {
       activeEventsVisible: false,
       inventoryVisible: false,
-      marsLogVisible: false,
     },
     modalView: {
       visible: false,

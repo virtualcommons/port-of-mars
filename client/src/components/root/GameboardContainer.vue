@@ -4,7 +4,6 @@
     <ProfileMenu />
     <ActiveEventsPopup />
     <InventoryPopup />
-    <MarsLogPopup />
     <div class="system-health row">
       <SystemHealth />
     </div>
@@ -17,8 +16,8 @@
           <PhaseSwitcher />
         </div>
       </div>
-      <div class="right col-3 tour-chat">
-        <Chat />
+      <div class="right col-3">
+        <ChatMarsLog />
       </div>
     </div>
   </div>
@@ -30,11 +29,10 @@ import ModalController from '@port-of-mars/client/components/game/modals/ModalCo
 import HUD from '@port-of-mars/client/components/game/HUD.vue';
 import PhaseSwitcher from '@port-of-mars/client/components/game/PhaseSwitcher.vue';
 import ProfileMenu from '@port-of-mars/client/components/game/static/popups/ProfileMenu.vue';
-import Chat from '@port-of-mars/client/components/game/static/chat/Chat.vue';
 import SystemHealth from '@port-of-mars/client/components/game/static/systemhealth/SystemHealth.vue';
 import ActiveEventsPopup from '@port-of-mars/client/components/game/static/popups/ActiveEventsPopup.vue';
 import InventoryPopup from '@port-of-mars/client/components/game/static/popups/InventoryPopup.vue';
-import MarsLogPopup from '@port-of-mars/client/components/game/static/popups/MarsLogPopup.vue';
+import ChatMarsLog from '@port-of-mars/client/components/game/ChatMarsLog.vue';
 
 @Component({
   components: {
@@ -42,11 +40,10 @@ import MarsLogPopup from '@port-of-mars/client/components/game/static/popups/Mar
     HUD,
     PhaseSwitcher,
     ProfileMenu,
-    Chat,
     SystemHealth,
     ActiveEventsPopup,
     InventoryPopup,
-    MarsLogPopup,
+    ChatMarsLog,
   },
 })
 export default class GameboardContainer extends Vue {}
