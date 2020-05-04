@@ -77,6 +77,7 @@
               id='name'
               v-model='name'
               type='text'
+              size='lg'
               required
               placeholder='Enter your full name'>
               </b-form-input>
@@ -86,6 +87,7 @@
               id='email'
               v-model='email'
               type='email'
+              size='lg'
               placeholder='Please enter a valid email address so we can contact you with additional information.'
               required>
               </b-form-input>
@@ -95,6 +97,7 @@
               id='verifyEmail'
               v-model='verifyEmail'
               type='email'
+              size='lg'
               placeholder='Please verify your email address'
               required>
               </b-form-input>
@@ -145,7 +148,7 @@ export default class Register extends Vue {
   get showConsentForm() {
     return ! this.consented;
   }
-  
+
   get consentLabel() {
     return this.consented ? "Show Consent Form" : "Grant Consent";
   }
