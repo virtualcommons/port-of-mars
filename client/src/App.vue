@@ -14,8 +14,9 @@ export default class App extends Vue {}
 
 <style lang="scss">
 /* IMPORT BOOTSTRAP */
-@import '~bootstrap/dist/css/bootstrap.min.css';
-@import '~bootstrap-vue/dist/bootstrap-vue.min.css';
+@import './stylesheets/bootstrap-customize';
+@import '~bootstrap/scss/bootstrap';
+@import '~bootstrap-vue/src/index';
 
 /* IMPORT ANIMATE.CSS (BASE) */
 @import '~animate.css/source/_base.css';
