@@ -6,3 +6,9 @@ $input-bg: transparent;
 $input-border-color: $space-orange;
 $input-color: $space-white;
 $input-padding-y: 0.75rem;
+
+// Colors
+
+$danger: mix($space-orange, #f00, 60);
+$primary: $space-orange;
+$success: rgba(45, 143, 68, 1);
