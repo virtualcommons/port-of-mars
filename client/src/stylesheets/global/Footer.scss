@@ -1,0 +1,21 @@
+.footer {
+  background-color: $new-space-orange;
+  position: absolute; // position footer relative to browser window
+  bottom: -9rem; // position at bottom
+  width: 100%; // footer width = width of screen
+  height: 12rem; // height of footer
+
+  font-size: $font-med;
+  font-weight: 400;
+
+  transition: 0.3s; // transition on hover
+}
+
+.footer-button {
+  z-index: 1;
+  position: absolute; // position footer relative to browser window
+  height: 3rem; // height of button
+  bottom: 1rem; // position button slightly outside footer
+  margin-left: 48vw; // position to middle of footer
+  transition: 0.3s;
+}
