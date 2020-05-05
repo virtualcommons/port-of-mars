@@ -204,9 +204,8 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
   apply(game: GameState): void {
     game.phase = Phase.events;
     game.round += 1;
-
-    const oldUpkeep = game.upkeep;
-    const contributedUpkeep = game.nextRoundUpkeep() + 25 - oldUpkeep;
+    
+    const contributedUpkeep = game.nextRoundUpkeep() - 25;
 
     game.upkeep = game.nextRoundUpkeep();
 
@@ -215,7 +214,7 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
 
     // system health - last round
     game.log(
-        `At the end of Round ${ game.round - 1}, System Health = ${ oldUpkeep }.`,
+        `At the end of Round ${ game.round - 1}, System Health = ${ contributedUpkeep }.`,
         MarsLogCategory.systemHealth);
 
     // system health - wear and tear
