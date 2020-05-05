@@ -120,13 +120,14 @@ import TourModal from '@port-of-mars/client/components/tutorial/TourModal.vue';
 import CompletedQuizModal from '@port-of-mars/client/components/tutorial/CompletedQuizModal.vue';
 import GameDashboard from '@port-of-mars/client/components/GameDashboard.vue';
 import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
+import { QuizAPI } from '@port-of-mars/client/api/tutorial/quiz';
 import { Step } from '@port-of-mars/client/types/tutorial';
 import { CURATOR, Phase, QuizQuestionData, RESEARCHER } from '@port-of-mars/shared/types';
 import * as _ from 'lodash';
 import { url } from '@port-of-mars/client/util';
 
 import { tutorialSteps } from '@port-of-mars/client/api/tutorial/steps';
-import { AjaxResponseError } from '@port-of-mars/client/plugins/ajax';
+
 
 require('vue-tour/dist/vue-tour.css');
 Vue.use(VueTour);
@@ -142,6 +143,8 @@ Vue.use(VueTour);
 })
 export default class Tutorial extends Vue {
   @Provide() api: TutorialAPI = new TutorialAPI();
+
+  readonly quiz:QuizAPI = new QuizAPI();
 
   private TOUR_ACTIVE_CLASS: string = 'tour-active';
   private BODY_TOUR: string = 'in-tour';
@@ -159,7 +162,6 @@ export default class Tutorial extends Vue {
   private tourIsOver: boolean = false;
   private consent: boolean = false;
 
-  private submissionId: any = null;
   private dataFetched: boolean = false;
   private quizQuestions: Array<QuizQuestionData> = [];
   private currentTutorialElementId: string = '';
@@ -173,14 +175,17 @@ export default class Tutorial extends Vue {
 
   created() {
     this.api.connect(this.$store);
+    this.quiz.connect(this.$ajax);
     this.api.resetState();
-    
   }
 
   async mounted() {
 
     if (process.env.NODE_ENV != 'test') {
-      await this.initalizeQuiz();
+      this.quizQuestions = await this.quiz.initalizeQuiz();
+      if(this.quizQuestions.length > 0){
+        this.dataFetched = true;
+      }
       this.showModal();
     }
     
@@ -272,12 +277,8 @@ export default class Tutorial extends Vue {
     await this.$el
       .querySelector(`.${this.TOUR_ACTIVE_CLASS}`)!
       .classList.remove(this.TOUR_ACTIVE_CLASS,'animate-current-step');
-    const complete = await this.checkQuizCompletion();
-    this.$ajax.setQuizCompletion(complete);
-    console.log('USER HAS COMPLETED QUIZ:', complete);
-
+    await this.quiz.checkQuizCompletion();
     this.tourIsOver = true;
-
     this.api.resetState();
   }
 
@@ -303,7 +304,7 @@ export default class Tutorial extends Vue {
 
 
   async handleCheckQuizQuestion(value:number) {
-    const result = await this.checkQuizQuestion(
+    const result = await this.quiz.checkQuizQuestion(
       this.currentQuizQuestion.id,
       value
     );
@@ -319,69 +320,6 @@ export default class Tutorial extends Vue {
     }
   }
 
-  get quizSubmissionEndpoint() {
-    return url('/quiz/submission');
-  }
-
-  private setSubmissionId(submissionId: number) {
-    this.$ajax.setSubmissionId(submissionId);
-    this.submissionId = submissionId;
-  }
-
-  private setQuizSubmissionData(data: { submissionId: number, quizQuestions: any }) {
-    this.setSubmissionId(data.submissionId);
-    this.quizQuestions = data.quizQuestions;
-    this.dataFetched = true;
-  }
-
-
-  // NOTE: Server Fetches
-  private async initalizeQuiz() {
-    let submissionId = this.$ajax.submissionId;
-    if (submissionId) {
-      const retrieveSubmissionUrl = `${this.quizSubmissionEndpoint}/${submissionId}`;
-      console.log(`retrieving quiz submission with id ${submissionId}`);
-      await this.$ajax.get(retrieveSubmissionUrl, ({data, status}) => {
-        this.setQuizSubmissionData(data);
-      });
-      return;
-    }
-    const createQuizSubmissionUrl = this.quizSubmissionEndpoint;
-    await this.$ajax.post(createQuizSubmissionUrl, ({data, status}) => {
-      console.log('creating new quiz submission');
-      this.setQuizSubmissionData(data);
-    });
-  }
-
-  private async checkQuizQuestion(questionId: number, answer: number): Promise<boolean> {
-    // FIXME: extract this and other URLs to shared/routes or elsewhere
-    const submitResponseUrl = `${this.quizSubmissionEndpoint}/${this.submissionId}/${questionId}`;
-    return await this.$ajax.post(submitResponseUrl, ({data, status}) => Promise.resolve(data), { answer: answer });
-  }
-
-  private async checkQuizCompletion(): Promise<boolean> {
-    // FIXME: extract this and other URLs to shared/routes
-    const quizCompletionUrl = url('/quiz/complete');
-    // quiz completion endpoint returns true/false on 200
-    try {
-      await this.$ajax.get(quizCompletionUrl, ({data, status}) => {
-        return data;
-      });
-    }
-    catch(e) {
-      if (e instanceof AjaxResponseError) {
-        const error = e.message
-        this.notifyUserOfError('checkQuizCompletion (response)', error);
-      }
-    }
-    return false;
-  }
-
-  private notifyUserOfError(call: string, error: any): void {
-    // TODO: Show server error modal
-    console.log(`ERROR FETCHING DATA AT ${call}!`);
-    console.log('RESPONSE FROM SERVER: ', error);
-  }
 }
 </script>
 
