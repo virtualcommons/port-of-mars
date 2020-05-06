@@ -18,6 +18,7 @@
               v-for="trade in trades"
               v-bind="trade"
               :key="trade.id"
+              :involved="amInvolved(trade)"
             />
           </div>
         </div>
@@ -48,7 +49,26 @@ export default class Trades extends Vue {
       to: tradeSet[id].to,
       status: tradeSet[id].status
     }));
-    return trades;
+    return trades.sort((a,b) => {
+      return this.amInvolved(a)-this.amInvolved(b);
+    });
+  }
+
+  get myRole(){
+    return this.$tstore.getters.player.role;
+  }
+
+  amInvolved(trade:any){
+    console.log(trade.to, this.myRole);
+    if(trade.to.role == this.myRole){
+      return 1;
+    }
+    else if (trade.from.role == this.myRole){
+      return 0;
+    }
+    else{
+      return -1;
+    }
   }
 
 
