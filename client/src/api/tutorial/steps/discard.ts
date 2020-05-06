@@ -6,7 +6,7 @@ const steps: Array<Step> = [
     target: '.tour-phase',
     content:
       `The last phase in a round is Discard! You can ` +
-      `draw new Accomplishment cards to replace any card ` +
+      `draw new Accomplishments to replace any Accomplishments ` +
       `you don't want to keep during the next round.`,
     params: {
       placement: RIGHT
@@ -18,9 +18,9 @@ const steps: Array<Step> = [
           data: {
             id: 6,
             role: 'Researcher',
-            label: 'Card you cannot currently purchase',
+            label: 'Accomplishment you cannot currently purchase',
             flavorText:
-              'Dummy card that you should throw away!',
+              'Dummy Accomplishment that you should throw away!',
             science: 3,
             government: 1,
             legacy: 0,
@@ -38,7 +38,7 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-discard-action',
-    content: `Try discarding an Accomplishment card!`,
+    content: `Try discarding an Accomplishment!`,
     params: {
       placement: TOP
     },

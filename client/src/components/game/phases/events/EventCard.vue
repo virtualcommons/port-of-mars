@@ -85,8 +85,8 @@ export default class EventCard extends Vue {
       type: 'CardModal',
       data: {
         activator: 'User',
-        title: 'Event Card',
-        content: 'This is an event card.',
+        title: 'Event',
+        content: 'This is a description of the Event.',
         cardType: 'EventCard',
         cardData: this.event,
         confirmation: false,

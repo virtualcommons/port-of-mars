@@ -92,10 +92,10 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-invest',
-    content: `The timeblock cost is located at the bottom right corner of a resource card. `
-             + `On the card, there are two buttons: '+' and '-'. You can press '+' to invest `
-             + `your available timeblocks into a resource. If you choose to reallocate your  `
-             + `timeblocks, press '-' to reduce your timeblock investment from a resource.`,
+    content: `The timeblock cost is located at the bottom right corner of an Influence. `
+             + `On the Influence, there are two buttons: '+' and '-'. You can press '+' to invest `
+             + `your available timeblocks into an Influence. If you choose to reallocate your  `
+             + `timeblocks, press '-' to reduce your timeblock investment from an Influence.`,
     params: {
       placement: RIGHT
     }
@@ -132,7 +132,7 @@ const steps: Array<Step> = [
     target: '.tour-invest',
     content: `There are some Resources that you cannot earn on your own. For example, ` +
              `the Researcher cannot earn Culture or Finance Resources by investing their timeblocks. ` +
-             `However, you may need these resources to purchase certain Accomplishment cards.`,
+             `However, you may need these resources to purchase certain Accomplishments.`,
     params: {
       placement: RIGHT
     }

@@ -5,7 +5,7 @@ const _marsEvents: Array<[MarsEventData, number]> = [
   [{
     id: 'changingTides',
     name: 'Changing Tides',
-    effect: `Each player discards all their Accomplishment cards and draws 1 new Accomplishment card. (They still draw up to a total of three cards at the end of this round.)`,
+    effect: `Each player discards all their Accomplishments and draws 1 new Accomplishment. (They still draw up to a total of three Accomplishments at the end of this round.)`,
     flavorText: `Create contingencies for your contingencies and contingencies for those contingencies. Then prepare to improvise.`,
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 1
@@ -21,7 +21,7 @@ const _marsEvents: Array<[MarsEventData, number]> = [
   [{
     id: 'breakdownOfTrust',
     name: 'Breakdown of Trust',
-    effect: `Each player chooses up to 2 Influence cards they own, then discards the rest.`,
+    effect: `Each player chooses up to 2 Influences they own, then discards the rest.`,
     flavorText: `Setbacks are inevitable, but no less painful each time.`,
     clientViewHandler: 'INFLUENCES_SELECT' as const,
     duration: 1
