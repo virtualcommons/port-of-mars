@@ -111,6 +111,24 @@ export class TimeInvested extends GameEventWithData {
 
   apply(game: GameState): void {
     game.investTime(this.data.role, this.data.investment);
+
+    if(game.marsEvents.filter(event => event.id == 'audit').length > 0){
+      const investmentString = Object.keys(this.data.investment)
+      .filter((investment) => {
+        return investment=='upkeep' || this.data.investment[investment as Resource] != 0;
+      })
+      .map((investment) =>{
+          return `${this.data.investment[investment as Resource]} ${investment}`;
+      }).join(', ');
+
+      const message:ChatMessageData = {
+        message: `The ${this.data.role} has purchased ${investmentString}`,
+        role:this.data.role,
+        dateCreated: new Date().getDate(),
+        round:game.round
+      }
+      game.addChat(message);
+    }
   }
 }
 gameEventDeserializer.register(TimeInvested);
