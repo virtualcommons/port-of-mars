@@ -133,6 +133,8 @@ export default class ActiveTrade extends Vue {
   @Prop() private to!: TradeAmountData;
   @Prop() private id!: string;
   @Prop() private status!:string;
+  @Prop() private involved!:number;
+
   @Inject() api!: GameRequestAPI;
 
   private showTrade = true;
@@ -185,6 +187,14 @@ export default class ActiveTrade extends Vue {
 
   statusColor(type:string){
     let color = 'white';
+
+    if(this.involved == 1){
+      color = 'var(--new-space-orange)';
+    }
+    else if(this.involved == 0){
+      color = 'var(--trade-request-blue)';
+    }
+
     if(this.status == 'Accepted'){
       color = 'var(--status-green)'
     }
@@ -197,9 +207,10 @@ export default class ActiveTrade extends Vue {
   }
 
   get textColor(){
-    if(this.status != 'Active'){
+    if(this.status != 'Active' || this.involved != -1){
       return {color: 'white'}
     }
+
     return {color:'black'};
   }
 }
