@@ -12,6 +12,4 @@ export const PHASE_INSTRUCTIONS = {
   discard: 'You can discard as many Accomplishments as you like in the Discardable Accomplishments section below. ' +
            'At the beginning of the next round you will receive up to 3 new Accomplishments to replace Accomplishments ' +
            'you have purchased or discarded. You start every round with a total of 3 available Accomplishments.',
-  victory: 'UNUSED: These are the instructions for the Victory phase.',
-  defeat: 'UNUSED: These are the instructions for the Defeat phase.'
 };

@@ -37,10 +37,6 @@ export default class PhaseInstructions extends Vue {
         return PHASE_INSTRUCTIONS.purchase;
       case Phase.discard:
         return PHASE_INSTRUCTIONS.discard;
-      case Phase.victory:
-        return PHASE_INSTRUCTIONS.victory;
-      case Phase.defeat:
-        return PHASE_INSTRUCTIONS.defeat;
       default:
         return 'No instructions for this phase.';
     }
