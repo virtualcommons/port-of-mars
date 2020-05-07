@@ -43,6 +43,7 @@ import { GameEvent } from '@port-of-mars/server/rooms/game/events/types';
 import { GameOpts, GameStateOpts } from '@port-of-mars/server/rooms/game/types';
 import { MarsEventsDeck } from '@port-of-mars/server/rooms/game/state/marsEvents/MarsEventDeck';
 import { MarsEvent } from '@port-of-mars/server/rooms/game/state/marsEvents/MarsEvent';
+import {SimpleBot} from "@port-of-mars/server/rooms/game/state/bot";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -658,10 +659,16 @@ export class Trade extends Schema {
   }
 }
 
+export interface Bot {
+  resetElapsed(): void
+  act(state: GameState, player: Player): Array<GameEvent>
+}
+
 export class Player extends Schema implements PlayerData {
-  constructor(role: Role) {
+  constructor(role: Role, bot: Bot) {
     super();
     this.role = role;
+    this.bot = bot;
     this.accomplishments = new AccomplishmentSet(role);
     this.costs = ResourceCosts.fromRole(role);
     // FIXME: it'd be nice to bind the specialty to the ResourceCosts e.g., this.specialty = this.costs.specialty
@@ -736,6 +743,16 @@ export class Player extends Schema implements PlayerData {
   victoryPoints = 0;
 
   connected = true;
+
+  bot: Bot;
+
+  act(state: GameState): Array<GameEvent> {
+    return this.bot.act(state, this);
+  }
+
+  resetElapsed() {
+    this.bot.resetElapsed();
+  }
 
   isInvestmentFeasible(investment: InvestmentData) {
     return this.costs.investmentWithinBudget(investment, this.timeBlocks);
@@ -845,11 +862,11 @@ type PlayerSetSerialized = { [role in Role]: PlayerSerialized };
 class PlayerSet extends Schema implements PlayerSetData {
   constructor() {
     super();
-    this.Curator = new Player(CURATOR);
-    this.Entrepreneur = new Player(ENTREPRENEUR);
-    this.Pioneer = new Player(PIONEER);
-    this.Politician = new Player(POLITICIAN);
-    this.Researcher = new Player(RESEARCHER);
+    this.Curator = new Player(CURATOR, SimpleBot.fromActor());
+    this.Entrepreneur = new Player(ENTREPRENEUR, SimpleBot.fromActor());
+    this.Pioneer = new Player(PIONEER, SimpleBot.fromActor());
+    this.Politician = new Player(POLITICIAN, SimpleBot.fromActor());
+    this.Researcher = new Player(RESEARCHER, SimpleBot.fromActor());
   }
 
   @type(Player)
@@ -1047,6 +1064,16 @@ export class GameState extends Schema implements GameData {
 
   @type(['string'])
   winners = new ArraySchema<Role>();
+
+  act(): Array<GameEvent> {
+    const events: Array<GameEvent> = [];
+    for (const player of this.players) {
+      const es = player.act(this);
+      this.applyMany(es);
+      events.concat(es);
+    }
+    return events;
+  }
 
   invest(role: Role, investment: InvestmentData) {
     const player = this.players[role];

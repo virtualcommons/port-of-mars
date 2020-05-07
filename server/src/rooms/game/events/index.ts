@@ -522,3 +522,24 @@ export class KeptResources extends GameEventWithData {
 }
 gameEventDeserializer.register(KeptResources);
 
+////////////////////////// Bot Related //////////////////////////
+
+export class BotControlTaken extends GameEventWithData {
+  constructor(public data: { role: Role }) {
+    super();
+  }
+
+  apply(game: GameState): void {
+
+  }
+}
+
+export class BotControlRelinquished extends GameEventWithData {
+  constructor(public data: {role: Role}) {
+    super();
+  }
+
+  apply(game: GameState): void {
+
+  }
+}

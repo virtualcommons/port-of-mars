@@ -156,23 +156,10 @@ export class DBPersister implements Persister {
           .filter(e => DBPersister.FINAL_EVENTS.includes(e.type))
           .map(e => e.gameId));
 
-        const whereExpr: any = {
-          dateFinalized: IsNull()
-        };
-        if (gameIds) {
-          whereExpr.id = In(gameIds)
-        }
-        const activeGameIds = await this.em.getRepository(Game).find({
-          where: whereExpr
-        }).then(rs => rs.map(r => r.id));
-        const [activeGameEvents, inactiveGameEvents] = _.partition(this.pendingEvents, e => activeGameIds.includes(e.gameId));
-        if (inactiveGameEvents) {
-          logger.warn('Events occurred after finalization. Ignoring.', inactiveGameEvents);
-        }
         await this.em.getRepository(GameEvent)
           .createQueryBuilder()
           .insert()
-          .values(activeGameEvents)
+          .values(this.pendingEvents)
           .execute();
         await Promise.all(gameIdsToFinalize.map(gameId => this.finalize(gameId)));
         this.pendingEvents = [];

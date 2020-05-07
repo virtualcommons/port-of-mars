@@ -31,6 +31,8 @@ import { getServices } from "@port-of-mars/server/services";
 import { settings } from "@port-of-mars/server/settings";
 import { Requests, Responses } from '@port-of-mars/shared/game';
 import { Phase } from "@port-of-mars/shared/types";
+import {GameEvent} from "@port-of-mars/server/rooms/game/events/types";
+import _ from "lodash";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -119,6 +121,7 @@ export class GameRoom extends Room<GameState> implements Game {
   prepareRequest(r: Requests, client: Client): Command {
     logger.trace('prepareRequest from', client.id, ':', { r });
     const player = this.getPlayer(client);
+    player.resetElapsed();
     switch (r.kind) {
       case 'send-chat-message':
         return SendChatMessageCmd.fromReq(r, this.state, player);
@@ -166,12 +169,18 @@ export class GameRoom extends Room<GameState> implements Game {
   gameLoop() {
     const inEndGame = [Phase.defeat, Phase.victory].includes(this.state.phase);
     this.state.timeRemaining -= 1;
+    const events = this.state.act();
+
     if (this.state.allPlayersAreReady
       || this.state.timeRemaining <= 0
       || (this.state.upkeep <= 0 && !inEndGame)) {
       const cmd = new SetNextPhaseCmd(this.state);
-      const events = cmd.execute();
-      this.state.applyMany(events);
+      const eventsCmd = cmd.execute();
+      this.state.applyMany(eventsCmd);
+      events.concat(eventsCmd);
+    }
+
+    if (!_.isEmpty(events)) {
       this.persister.persist(events, this.getMetadata());
     }
 
