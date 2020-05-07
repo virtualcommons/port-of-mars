@@ -774,6 +774,10 @@ export class Player extends Schema implements PlayerData {
     this.timeBlocks = amount;
   }
 
+  get currentTimeBlocksAmount(){
+    return this.timeBlocks;
+  }
+
   getLeftOverInvestments() {
     const investment = _.cloneDeep(this.pendingInvestments);
 
