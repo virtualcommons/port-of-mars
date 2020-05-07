@@ -660,8 +660,9 @@ export class Trade extends Schema {
 }
 
 export interface Bot {
-  resetElapsed(): void
-  act(state: GameState, player: Player): Array<GameEvent>
+  active: boolean;
+  resetElapsed(): void;
+  act(state: GameState, player: Player): Array<GameEvent>;
 }
 
 export class Player extends Schema implements PlayerData {

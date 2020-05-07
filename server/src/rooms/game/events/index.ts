@@ -530,7 +530,7 @@ export class BotControlTaken extends GameEventWithData {
   }
 
   apply(game: GameState): void {
-
+    game.players[this.data.role].bot.active = true;
   }
 }
 
@@ -540,6 +540,6 @@ export class BotControlRelinquished extends GameEventWithData {
   }
 
   apply(game: GameState): void {
-
+    game.players[this.data.role].bot.active = false;
   }
 }
