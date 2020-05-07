@@ -4,7 +4,7 @@ import { Phase, RESEARCHER, CURATOR } from '@port-of-mars/shared/types';
 const steps: Array<Step> = [
   {
     target: '.tour-phase',
-    content: `The next phase is Trade. Here, you will trade for resources that you need to purchase Accomplishment cards.`,
+    content: `The next phase is Trade. Here, you will trade for resources that you need to purchase Accomplishments.`,
     params: {
       placement: RIGHT,
     },

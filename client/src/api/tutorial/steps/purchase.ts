@@ -52,14 +52,6 @@ const steps: Array<Step> = [
       placement: RIGHT
     }
   },
-
-  {
-    target: '.tour-purchase',
-    content: `These are Accomplishments that are available to purchase.`,
-    params: {
-      placement: RIGHT
-    }
-  },
   {
     target: '.tour-purchase-action',
     content: `Accomplishments that you can purchase have an orange header and are moved to the top.
@@ -69,24 +61,6 @@ const steps: Array<Step> = [
     },
     stateTransform: [
       {
-        SET_ACTIVE_ACCOMPLISHMENTS: {
-          data: {
-            id: 2,
-            role: 'Researcher',
-            label: 'Mars Helicopter',
-            flavorText:
-              'Your invention of a low gravity, low atmosphere, low-flying vehicle enables greater exploration of the Martian surface.',
-            science: 2,
-            government: 0,
-            legacy: 0,
-            finance: 1,
-            culture: 1,
-            upkeep: 0,
-            victoryPoints: 3,
-            effect: ''
-          },
-          role: 'Researcher'
-        },
         required: true
       }
     ]

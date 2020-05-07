@@ -102,7 +102,36 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-invest-action',
-    content: `Try it out: purchase 2 science and 2 government!`,
+    content: `Try it out: purchase 1 science.
+    Note the '2' near the clock! That is the cost of this resource.`,
+    params: {
+      placement: TOP
+    },
+    stateTransform: [
+      {
+        required: true,
+        validationObject: {
+          science: 1,
+          government: 0,
+          legacy: 0,
+          culture: 0,
+          finance: 0,
+          upkeep: 0
+        }
+      }
+    ]
+  },
+  {
+    target: '.tour-time-blocks',
+    content: `As you can see, 2 timeblocks have been removed!`,
+    params: {
+      placement: TOP
+    }
+  },
+  {
+    target: '.tour-invest-action',
+    content: `Timeblocks cannot be recycled, so finish spending!
+      You should buy 1 more science and 2 government!`,
     params: {
       placement: TOP
     },
@@ -139,7 +168,7 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-accomplishments',
-    content: `For example, this Accomplishment card requires 1 Culture, which you cannot earn. ` +
+    content: `For example, this Accomplishment requires 1 Culture, which you cannot earn. ` +
              `To get this Resource, you must trade with someone who has 1 Culture.`,
     params: {
       placement: RIGHT

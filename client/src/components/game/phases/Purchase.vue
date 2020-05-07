@@ -59,7 +59,6 @@ export default class Purchase extends Vue {
       });
 
   wasPurchased(id: number){
-    console.log(this.$store.getters.player.accomplishments.purchasable)
     return Boolean((this.$store.getters.player.accomplishments.purchasable as Array<AccomplishmentData>)
       .slice()
       .filter(accomplishment => accomplishment.id == id).length > 0);

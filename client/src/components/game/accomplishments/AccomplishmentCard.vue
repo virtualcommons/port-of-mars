@@ -153,7 +153,7 @@ export default class AccomplishmentCard extends Vue {
       data: {
         activator: 'User',
         title: 'Accomplishment Card',
-        content: 'This is an accomplishment card.',
+        content: 'This is an accomplishment.',
         cardType: 'AccomplishmentCard',
         cardData: this.accomplishment,
         confirmation: false,
@@ -247,7 +247,7 @@ export default class AccomplishmentCard extends Vue {
         activator: 'User',
         title: 'Discard Accomplishment Card',
         content:
-          "Clicking 'Confirm' will discard this accomplishment. A new card will replace it next round.",
+          "Clicking 'Confirm' will discard this accomplishment. A new accomplishment will replace it next round.",
         cardType: 'AccomplishmentCard',
         cardData: this.accomplishment,
         confirmation: true,

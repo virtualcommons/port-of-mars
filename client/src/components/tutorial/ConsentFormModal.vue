@@ -49,8 +49,8 @@
                 For participation in this study you may receive extra credit if your instructor of one of the
                 participating classes has made the participation in this event an extra credit opportunity. Those
                 who qualify for the championship round will be invited to have lunch with astronaut in residence,
-                Catherine Coleman. The winner of the Mars Madness championship round will be able to create an
-                event card for the next edition of Mars Madness.
+                Catherine Coleman. The winner of the Mars Madness championship round will be able to create a new
+                event for the next edition of Mars Madness.
             </p>
 
             <p align="justify">
