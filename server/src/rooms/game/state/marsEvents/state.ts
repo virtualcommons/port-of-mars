@@ -75,14 +75,24 @@ export class LifeAsUsual extends BaseEvent {
 
 ////////////////////////// BreakdownOfTrust //////////////////////////
 
-export type BreakdownOfTrustData = { [role in Role]: InvestmentData}
+export type BreakdownOfTrustData = { [role in Role]: number}
 
 @assocEventId
 export class BreakdownOfTrust extends BaseEvent {
 
+  //converts the roles array into an object that looks like BreakdownOfTrustData
+  private savedtimeBlockAllocations:BreakdownOfTrustData = ROLES.reduce((obj,role)=>{
+    //these are placeholder values, they will be overridden.
+    obj[role] = 0;
+    return obj;
+  },{} as BreakdownOfTrustData);
+
   initialize(game: GameState){
     for(const player of game.players){
       player.invertPendingInventory();
+      //save the timeblock amount the player is allotted for the round
+      this.savedtimeBlockAllocations[player.role] = player.currentTimeBlocksAmount;
+      //set them to 2 for the event
       player.setTimeBlocks(2);
     }
   }
@@ -94,7 +104,8 @@ export class BreakdownOfTrust extends BaseEvent {
   finalize(game: GameState): void {
     for(const player of game.players){
       player.mergePendingAndInventory();
-      player.resetTimeBlocks();
+      //set that value back to the amount before the event
+      player.timeBlocks = this.savedtimeBlockAllocations[player.role];
     }
 
     game.log(`Each player chooses up to 2 Influence cards they own, then discards the rest.`, `${ MarsLogCategory.event }: ${formatEventName(BreakdownOfTrust.name)}`)
