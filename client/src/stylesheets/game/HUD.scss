@@ -8,9 +8,8 @@
     @include expand;
     @include reset-padding-margin;
 
-    .players,
-    .gamestatus,
-    .marslog {
+    .left,
+    .right {
       height: 100%;
 
       .wrapper {
@@ -24,27 +23,15 @@
       }
     }
 
-    .players {
-      padding: 0.5rem 1rem;
+    .left {
+      padding: 0 0.5rem;
       border-left: 0.125rem solid $space-lightgray-025;
       border-right: 0.125rem solid $space-lightgray-025;
-
-      .player,
-      .others {
-        height: 100%;
-        padding: 0;
-      }
     }
 
-    .gamestatus {
-      padding: 0.5rem 1rem;
+    .right {
+      padding: 0 0.5rem;
       border-right: 0.125rem solid $space-lightgray-025;
-
-      .information,
-      .instructions {
-        height: 100%;
-        padding: 0 1rem;
-      }
     }
   }
 }

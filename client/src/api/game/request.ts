@@ -25,7 +25,11 @@ import {
   Resource,
   ResourceAmountData,
 } from '@port-of-mars/shared/types';
-import { ChatMarsLogView } from '@port-of-mars/client/types/panes.ts';
+import {
+  ChatMarsLogView,
+  HUDLeftView,
+  HUDRightView,
+} from '@port-of-mars/client/types/panes.ts';
 import { MockRoom } from '@port-of-mars/client/types/tutorial';
 import { TStore } from '@port-of-mars/client/plugins/tstore';
 
@@ -44,7 +48,10 @@ export class GameRequestAPI {
 
   public sendChatMessage(message: string) {
     // console.log('SEND CHAT MESSAGE: ', message);
-    const msg: SendChatMessageData = { message, kind: 'send-chat-message' };
+    const msg: SendChatMessageData = {
+      message,
+      kind: 'send-chat-message',
+    };
     this.send(msg);
   }
 
@@ -83,27 +90,42 @@ export class GameRequestAPI {
   }
 
   public sendTradeRequest(trade: TradeData) {
-    const msg: SendTradeRequestData = { kind: 'send-trade-request', trade };
+    const msg: SendTradeRequestData = {
+      kind: 'send-trade-request',
+      trade,
+    };
     this.send(msg);
   }
 
   public acceptTradeRequest(id: string) {
-    const msg: AcceptTradeRequestData = { kind: 'accept-trade-request', id };
+    const msg: AcceptTradeRequestData = {
+      kind: 'accept-trade-request',
+      id,
+    };
     this.send(msg);
   }
 
   public rejectTradeRequest(id: string) {
-    const msg: RejectTradeRequestData = { kind: 'reject-trade-request', id };
+    const msg: RejectTradeRequestData = {
+      kind: 'reject-trade-request',
+      id,
+    };
     this.send(msg);
   }
 
   public cancelTradeRequest(id: string) {
-    const msg: CancelTradeRequestData = { kind: 'cancel-trade-request', id };
+    const msg: CancelTradeRequestData = {
+      kind: 'cancel-trade-request',
+      id,
+    };
     this.send(msg);
   }
 
   public setPlayerReadiness(value: boolean) {
-    const msg: SetPlayerReadinessData = { kind: 'set-player-readiness', value };
+    const msg: SetPlayerReadinessData = {
+      kind: 'set-player-readiness',
+      value,
+    };
     this.send(msg);
   }
 
@@ -156,19 +178,16 @@ export class GameRequestAPI {
     this.store.commit('SET_PROFILE_MENU_VISIBILITY', !currentVisiblility);
   }
 
-  public toggleInventory(currentVisiblility: boolean) {
-    this.store.commit('SET_INVENTORY_POPUP_VISIBILITY', !currentVisiblility);
-  }
-
-  public toggleActiveEvents(currentVisiblility: boolean) {
-    this.store.commit(
-      'SET_ACTIVE_EVENTS_POPUP_VISIBILITY',
-      !currentVisiblility
-    );
-  }
-
   public setChatMarsLogView(view: ChatMarsLogView) {
     this.store.commit('SET_CHATMARSLOG_VIEW', view);
+  }
+
+  public setHUDLeftView(view: HUDLeftView) {
+    this.store.commit('SET_HUDLEFT_VIEW', view);
+  }
+
+  public setHUDRightView(view: HUDRightView) {
+    this.store.commit('SET_HUDRIGHT_VIEW', view);
   }
 
   public setTradePlayerName(role: Role) {

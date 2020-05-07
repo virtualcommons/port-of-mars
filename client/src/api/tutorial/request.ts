@@ -3,31 +3,33 @@ import {
   AccomplishmentData,
   ResourceAmountData,
   Resource,
-  Role
+  Role,
 } from '@port-of-mars/shared/types';
+import { initialStoreState } from '@port-of-mars/client/store/state';
 import {
-  initialStoreState,
-  defaultInventory,
-} from '@port-of-mars/client/store/state';
+  ChatMarsLogView,
+  HUDLeftView,
+  HUDRightView,
+} from '@port-of-mars/client/types/panes.ts';
 import * as _ from 'lodash';
 import { Store } from 'vuex/types/index';
 import { State } from '@port-of-mars/client/store/state';
 import { StateTransform } from '@port-of-mars/client/types/tutorial';
 
-export class TutorialAPI  {
+export class TutorialAPI {
   private store!: Store<State>;
   private stateStack: Array<StateTransform[]> = [];
   private isTaskComplete = true;
   private validationObject: any = {};
   private requiredObject!: StateTransform;
 
-  private forwardButtonRef!:any;
+  private forwardButtonRef!: any;
 
   connect(store: any) {
-    this.store = store
+    this.store = store;
   }
 
-  registerRef(forwardButtonRef:any){
+  registerRef(forwardButtonRef: any) {
     this.forwardButtonRef = forwardButtonRef;
   }
 
@@ -112,7 +114,6 @@ export class TutorialAPI  {
     return this.isTaskComplete;
   }
 
-
   //use this to verify that the user has completed the action
   private completedRequiredAction() {
     //we want to immediatly set the task to completed
@@ -123,9 +124,8 @@ export class TutorialAPI  {
     this.requiredObject.required = false;
   }
 
-
   //use this to verify that the user has completed the action and to move the user forward a step.
-  private completedActionWithImplicitForward(){
+  private completedActionWithImplicitForward() {
     this.completedRequiredAction();
 
     setTimeout(() => this.forwardButtonRef[0].click(), 0);
@@ -139,7 +139,7 @@ export class TutorialAPI  {
       dateCreated: new Date().getTime(),
       round: 0,
     });
-    
+
     this.completedActionWithImplicitForward();
   }
 
@@ -149,12 +149,12 @@ export class TutorialAPI  {
       id: accomplishment.id,
       role: accomplishment.role,
     });
-    
+
     this.completedActionWithImplicitForward();
   }
 
   //DISCARD HANDLER
-  public discardOption(cardInfo:any) {
+  public discardOption(cardInfo: any) {
     this.store.commit('DISCARD_ACCOMPLISHMENT', {
       id: cardInfo.data.cardData.id,
       role: 'Researcher',
@@ -163,57 +163,66 @@ export class TutorialAPI  {
     this.completedActionWithImplicitForward();
   }
 
-
   //INVESTMENTS HANDLER
-  public investPendingTimeBlocks(investment:any) {
+  public investPendingTimeBlocks(investment: any) {
     this.store.commit('SET_PENDING_INVESTMENT_AMOUNT', investment);
 
     const pendingInventory = this.store.getters.player.pendingInvestments;
     for (const [resource, amt] of Object.entries(pendingInventory)) {
       if (this.validationObject[resource as Resource] != amt) return false;
     }
-    
+
     this.completedActionWithImplicitForward();
     return true;
   }
 
-  public investTimeBlocks(){}
-
+  public investTimeBlocks() {}
 
   //PLAYER READINESS HANDLER
-  public setPlayerReadiness(ready:boolean): void {
-    if(ready){
+  public setPlayerReadiness(ready: boolean): void {
+    if (ready) {
       this.completedActionWithImplicitForward();
     }
   }
 
   //MODAL HANDLERS
-  public setModalVisible(data: any){
-    if(data.data.activator != 'Server'){
-      this.store.commit('SET_MODAL_VISIBLE',data);
+  public setModalVisible(data: any) {
+    if (data.data.activator != 'Server') {
+      this.store.commit('SET_MODAL_VISIBLE', data);
       this.completedActionWithImplicitForward();
     }
   }
 
-  public setModalHidden(){
+  public setModalHidden() {
     this.store.commit('SET_MODAL_HIDDEN', null);
   }
 
-  public toggleProfileMenu(currentlyVisble:boolean){
-    this.store.commit(
-      'SET_PROFILE_MENU_VISIBILITY',
-      !currentlyVisble
-    );
+  public toggleProfileMenu(currentlyVisble: boolean) {
+    this.store.commit('SET_PROFILE_MENU_VISIBILITY', !currentlyVisble);
 
     this.completedActionWithImplicitForward();
   }
 
+  // OTHER UI
+
+  public setChatMarsLogView(view: ChatMarsLogView) {
+    this.store.commit('SET_CHATMARSLOG_VIEW', view);
+  }
+
+  public setHUDLeftView(view: HUDLeftView) {
+    this.store.commit('SET_HUDLEFT_VIEW', view);
+  }
+
+  public setHUDRightView(view: HUDRightView) {
+    this.store.commit('SET_HUDRIGHT_VIEW', view);
+  }
+
   //TRADES
-  public setTradePlayerName(role: Role){
+  public setTradePlayerName(role: Role) {
     this.store.commit('SET_TRADE_PLAYER_NAME', role);
   }
 
-  public setTradePartnerName(name:string){
+  public setTradePartnerName(name: string) {
     this.store.commit('SET_TRADE_PARTNER_NAME', name as Role);
 
     if (this.validationObject.name == name) {
@@ -221,10 +230,9 @@ export class TutorialAPI  {
       return true;
     }
     return false;
-    
   }
 
-  public setTradeGetResources(resources:ResourceAmountData){
+  public setTradeGetResources(resources: ResourceAmountData) {
     this.store.commit('SET_GET_RESOURCES', resources);
 
     for (const [resource, amt] of Object.entries(resources)) {
@@ -235,7 +243,7 @@ export class TutorialAPI  {
     return true;
   }
 
-  public setTradeGiveResources(resources: ResourceAmountData){
+  public setTradeGiveResources(resources: ResourceAmountData) {
     this.store.commit('SET_SEND_RESOURCES', resources);
 
     for (const [resource, amt] of Object.entries(resources)) {
@@ -275,9 +283,5 @@ export class TutorialAPI  {
     });
   }
 
-  public resetTradeModal(){};
-
+  public resetTradeModal() {}
 }
-
-
-

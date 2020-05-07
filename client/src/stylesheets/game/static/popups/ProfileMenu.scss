@@ -4,9 +4,11 @@
   height: 100%;
   width: 20rem;
   padding: 2rem;
-  background-color: $space-lightgray;
+  border-right: 0.125rem solid $space-gray;
+  background-color: $space-gray-0975;
   transition: position 0.15s ease-in;
   z-index: 3;
+  backdrop-filter: blur(2px);
 
   .toggle {
     position: absolute;
@@ -16,9 +18,12 @@
     height: 4rem;
     width: 2rem;
     padding: 0.5rem;
-    border-bottom-right-radius: 4rem;
+    border: 0.125rem solid $space-gray;
+    border-left: none;
     border-top-right-radius: 4rem;
-    background-color: $space-lightgray;
+    border-bottom-right-radius: 4rem;
+    color: $space-gray;
+    background-color: $space-white;
 
     .left {
       margin-right: 0.75rem;
@@ -41,13 +46,12 @@
     a,
     button {
       display: block;
-      color: $space-gray;
+      color: $space-white;
       font-size: $font-med;
     }
 
     a,
     button {
-      // margin-bottom: 0.5rem;
       font-weight: $font-weight-maven-pro-medium;
 
       span {

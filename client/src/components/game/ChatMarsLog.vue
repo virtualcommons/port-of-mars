@@ -27,13 +27,13 @@
       </div>
     </div>
     <div
-      v-if="currentView === view.MarsLog || currentView === view.Split"
-      class="mars-log-view row tour-log-popup"
+      v-show="currentView === view.MarsLog || currentView === view.Split"
+      class="mars-log-view row tour-log-view"
     >
       <MarsLog />
     </div>
     <div
-      v-if="currentView === view.Chat || currentView === view.Split"
+      v-show="currentView === view.Chat || currentView === view.Split"
       class="chat-view row tour-chat"
     >
       <Chat />
@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Inject } from 'vue-property-decorator';
+import { Vue, Component, Inject } from 'vue-property-decorator';
 import Chat from '@port-of-mars/client/components/game/static/chat/Chat.vue';
 import MarsLog from '@port-of-mars/client/components/game/MarsLog.vue';
 import { ChatMarsLogView } from '@port-of-mars/client/types/panes.ts';

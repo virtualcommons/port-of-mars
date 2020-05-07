@@ -1,14 +1,14 @@
 <template>
   <div @click="handleModal()" class="c-otherplayers container">
     <div class="wrapper row">
-      <div class="picture col-4">
+      <div class="picture col-3">
         <div class="indicator" :style="indicatorStyle">
           <div class="frame" :style="frameColor">
             <img :src="playerRoleImage" alt="Player Image" />
           </div>
         </div>
       </div>
-      <div class="information col-8">
+      <div class="information col-9">
         <p class="role">{{ role }}</p>
         <p class="score">Score: {{ victoryPoints }}</p>
       </div>

@@ -4,7 +4,11 @@ import {
   ModalViewType,
   ModalDataType,
 } from '@port-of-mars/client/types/modals';
-import { ChatMarsLogView } from '@port-of-mars/client/types/panes.ts';
+import {
+  ChatMarsLogView,
+  HUDLeftView,
+  HUDRightView,
+} from '@port-of-mars/client/types/panes.ts';
 
 // NOTE :: CONTROL MODAL VISIBILITY
 
@@ -29,25 +33,18 @@ function SET_PROFILE_MENU_VISIBILITY(state: State, payload: boolean) {
   state.userInterface.profileMenuView.visible = payload;
 }
 
-// NOTE :: CONTROL POPUP VISIBILITY
-
-function SET_GROUP_POPUP_VISIBILITY(state: State, payload: boolean) {
-  state.userInterface.popupView.activeEventsVisible = payload;
-  state.userInterface.popupView.inventoryVisible = payload;
-}
-
-function SET_ACTIVE_EVENTS_POPUP_VISIBILITY(state: State, payload: boolean) {
-  state.userInterface.popupView.activeEventsVisible = payload;
-}
-
-function SET_INVENTORY_POPUP_VISIBILITY(state: State, payload: boolean) {
-  state.userInterface.popupView.inventoryVisible = payload;
-}
-
 // NOTE :: CONTROL PANE VIEWS
 
 function SET_CHATMARSLOG_VIEW(state: State, payload: ChatMarsLogView) {
   state.userInterface.chatMarsLogView = payload;
+}
+
+function SET_HUDLEFT_VIEW(state: State, payload: HUDLeftView) {
+  state.userInterface.hudLeftView = payload;
+}
+
+function SET_HUDRIGHT_VIEW(state: State, payload: HUDRightView) {
+  state.userInterface.hudRightView = payload;
 }
 
 // TODO :: Need to re-implement in tutorial
@@ -92,10 +89,9 @@ export default {
   SET_MODAL_VISIBLE,
   SET_MODAL_HIDDEN,
   SET_PROFILE_MENU_VISIBILITY,
-  SET_GROUP_POPUP_VISIBILITY,
-  SET_ACTIVE_EVENTS_POPUP_VISIBILITY,
-  SET_INVENTORY_POPUP_VISIBILITY,
   SET_CHATMARSLOG_VIEW,
+  SET_HUDLEFT_VIEW,
+  SET_HUDRIGHT_VIEW,
   SET_GET_RESOURCES,
   SET_SEND_RESOURCES,
   SET_TRADE_PARTNER_NAME,

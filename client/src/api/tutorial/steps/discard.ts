@@ -1,4 +1,4 @@
-import { Step, TOP, RIGHT } from '@port-of-mars/client/types/tutorial';
+import { Step, TOP, RIGHT, LEFT } from '@port-of-mars/client/types/tutorial';
 import { Phase } from '@port-of-mars/shared/types';
 
 const steps: Array<Step> = [
@@ -9,7 +9,7 @@ const steps: Array<Step> = [
       `draw new Accomplishments to replace any Accomplishments ` +
       `you don't want to keep during the next round.`,
     params: {
-      placement: RIGHT
+      placement: RIGHT,
     },
     stateTransform: [
       {
@@ -19,8 +19,7 @@ const steps: Array<Step> = [
             id: 6,
             role: 'Researcher',
             label: 'Accomplishment you cannot currently purchase',
-            flavorText:
-              'Dummy Accomplishment that you should throw away!',
+            flavorText: 'Dummy Accomplishment that you should throw away!',
             science: 3,
             government: 1,
             legacy: 0,
@@ -28,38 +27,37 @@ const steps: Array<Step> = [
             culture: 0,
             upkeep: 0,
             victoryPoints: 1,
-            effect:
-              'none'
+            effect: 'none',
           },
-          role: 'Researcher'
-        }
-      }
-    ]
+          role: 'Researcher',
+        },
+      },
+    ],
   },
   {
     target: '.tour-discard-action',
     content: `Try discarding an Accomplishment!`,
     params: {
-      placement: TOP
+      placement: TOP,
     },
     stateTransform: [
       {
         required: true,
-      }
-    ]
+      },
+    ],
   },
   {
     target: '.tour-ready-to-advance-button',
     content: `Click the Ready to Advance button when you have finished discarding. `,
     params: {
-      placement: 'left'
+      placement: LEFT,
     },
     stateTransform: [
       {
         SET_LAYOUT: 'tutorial',
-        required: true
-      }
-    ]
+        required: true,
+      },
+    ],
   },
 ];
 

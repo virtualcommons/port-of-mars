@@ -21,6 +21,19 @@
           <span>Your Dashboard</span>
         </button>
       </router-link>
+      <button @click="logoutUser" class="link">
+        <font-awesome-icon :icon="['fas', 'sign-out-alt']" size="sm" />
+        <span>Log Out</span>
+      </button>
+      <a
+        href="mailto:portmars@asu.edu?subject=[port-of-mars]  Issue Submission"
+        target="_blank"
+        class="link"
+        ><font-awesome-icon
+          :icon="['fas', 'exclamation-triangle']"
+          size="sm"
+        /><span>Report a Problem</span></a
+      >
       <button
         @click="enableDevtools"
         v-if="!devtoolsEnabled && isDevModeEnabled"
@@ -37,18 +50,6 @@
         <font-awesome-icon :icon="['fas', 'terminal']" size="sm" />
         <span>Disable Devtools</span>
       </button>
-      <button @click="logoutUser" class="link">
-        <font-awesome-icon :icon="['fas', 'sign-out-alt']" size="sm" />
-        <span>Log Out</span>
-      </button>
-      <a
-        href="mailto:portmars@asu.edu?subject=[port-of-mars]  Issue Submission"
-        target="_blank"
-        class="link"
-        ><font-awesome-icon :icon="['fas', 'exclamation-triangle']" size="sm" /><span
-          >Report a Problem</span
-        ></a
-      >
     </div>
   </div>
 </template>
@@ -75,10 +76,10 @@ library.add(faSignOutAlt);
 library.add(faTerminal);
 library.add(faWindowClose);
 library.add(faExclamationTriangle);
-Vue.component("font-awesome-icon", FontAwesomeIcon);
+Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 @Component({
-  components: {}
+  components: {},
 })
 export default class ProfileMenu extends Vue {
   @Inject() readonly api!: GameRequestAPI & TutorialAPI;
@@ -98,12 +99,12 @@ export default class ProfileMenu extends Vue {
 
   get username(): string {
     const username = this.$tstore.state.user.username;
-    return username ? username : "Username";
+    return username ? username : 'Username';
   }
 
   private logoutUser(): void {
     this.$ajax.forgetLoginCreds();
-    this.$router.push({ name: "Login" });
+    this.$router.push({ name: 'Login' });
   }
 
   get isDevModeEnabled() {
@@ -132,10 +133,10 @@ export default class ProfileMenu extends Vue {
    */
   onKeyDown(e: any) {
     switch (e.key) {
-      case "r":
+      case 'r':
         this.api.setNextPhase();
         break;
-      case "q":
+      case 'q':
         this.api.resetGame();
         break;
       default:
@@ -146,5 +147,5 @@ export default class ProfileMenu extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import "@port-of-mars/client/stylesheets/game/static/popups/ProfileMenu.scss";
+@import '@port-of-mars/client/stylesheets/game/static/popups/ProfileMenu.scss';
 </style>

@@ -1,4 +1,10 @@
-import { Step, TOP, RIGHT, BOTTOM } from '@port-of-mars/client/types/tutorial';
+import {
+  Step,
+  TOP,
+  RIGHT,
+  BOTTOM,
+  LEFT,
+} from '@port-of-mars/client/types/tutorial';
 import { Phase, RESEARCHER } from '@port-of-mars/shared/types';
 
 const steps: Array<Step> = [
@@ -6,12 +12,11 @@ const steps: Array<Step> = [
     target: '.tour-phase',
     content: `The second phase is Investment!`,
     params: {
-      placement: RIGHT
+      placement: RIGHT,
     },
 
     stateTransform: [
       {
-        SET_ACTIVE_EVENTS_POPUP_VISIBILITY: false,
         SET_GAME_PHASE: Phase.invest,
         SET_INVESTMENT_COSTS: {
           data: {
@@ -20,19 +25,18 @@ const steps: Array<Step> = [
             government: 3,
             legacy: 3,
             science: 2,
-            upkeep: 1
-            // specialty: 'science'
+            upkeep: 1,
           },
-          role: RESEARCHER
-        }
+          role: RESEARCHER,
+        },
       },
-    ]
+    ],
   },
   {
     target: '.tour-accomplishments',
     content: `Here, you can see what Accomplishments are available to you this round.`,
     params: {
-      placement: RIGHT
+      placement: RIGHT,
     },
     stateTransform: [
       {
@@ -41,7 +45,8 @@ const steps: Array<Step> = [
             id: 1,
             role: 'Researcher',
             label: 'Interdisciplinary',
-            flavorText: 'You have more PhDs than most people have common sense.',
+            flavorText:
+              'You have more PhDs than most people have common sense.',
             science: 2,
             government: 1,
             legacy: 1,
@@ -49,9 +54,9 @@ const steps: Array<Step> = [
             culture: 1,
             upkeep: 0,
             victoryPoints: 5,
-            effect: ''
+            effect: '',
           },
-          role: `Researcher`
+          role: `Researcher`,
         },
         PURCHASE_ACCOMPLISHMENT: {
           data: {
@@ -67,45 +72,47 @@ const steps: Array<Step> = [
             culture: 1,
             upkeep: 0,
             victoryPoints: 3,
-            effect: ''
+            effect: '',
           },
-          role: `Researcher`
-        }
-      }
-    ]
+          role: `Researcher`,
+        },
+      },
+    ],
   },
   {
     target: '.tour-time-blocks',
-    content: `You have 10 timeblocks to spend each round unless otherwise instructed. ` +
-             `You can spend these timeblocks on System Health or on Influence. ` +
-             `Remember that you have 5 minutes to decide how to invest your timeblocks.`,
+    content:
+      `You have 10 timeblocks to spend each round unless otherwise instructed. ` +
+      `You can spend these timeblocks on System Health or on Influence. ` +
+      `Remember that you have 5 minutes to decide how to invest your timeblocks.`,
     params: {
-      placement: BOTTOM
-    }
+      placement: BOTTOM,
+    },
   },
   {
     target: '.tour-invest',
     content: `You cannot recycle timeblocks between rounds so you should spend all of them in each round.`,
     params: {
-      placement: RIGHT
-    }
+      placement: RIGHT,
+    },
   },
   {
     target: '.tour-invest',
-    content: `The timeblock cost is located at the bottom right corner of an Influence. `
-             + `On the Influence, there are two buttons: '+' and '-'. You can press '+' to invest `
-             + `your available timeblocks into an Influence. If you choose to reallocate your  `
-             + `timeblocks, press '-' to reduce your timeblock investment from an Influence.`,
+    content:
+      `The timeblock cost is located at the bottom right corner of an Influence. ` +
+      `On the Influence, there are two buttons: '+' and '-'. You can press '+' to invest ` +
+      `your available timeblocks into an Influence. If you choose to reallocate your  ` +
+      `timeblocks, press '-' to reduce your timeblock investment from an Influence.`,
     params: {
-      placement: RIGHT
-    }
+      placement: RIGHT,
+    },
   },
   {
     target: '.tour-invest-action',
     content: `Try it out: purchase 1 science.
     Note the '2' near the clock! That is the cost of this resource.`,
     params: {
-      placement: TOP
+      placement: TOP,
     },
     stateTransform: [
       {
@@ -116,24 +123,24 @@ const steps: Array<Step> = [
           legacy: 0,
           culture: 0,
           finance: 0,
-          upkeep: 0
-        }
-      }
-    ]
+          upkeep: 0,
+        },
+      },
+    ],
   },
   {
     target: '.tour-time-blocks',
     content: `As you can see, 2 timeblocks have been removed!`,
     params: {
-      placement: TOP
-    }
+      placement: TOP,
+    },
   },
   {
     target: '.tour-invest-action',
     content: `Timeblocks cannot be recycled, so finish spending!
       You should buy 1 more science and 2 government!`,
     params: {
-      placement: TOP
+      placement: TOP,
     },
     stateTransform: [
       {
@@ -144,35 +151,37 @@ const steps: Array<Step> = [
           legacy: 0,
           culture: 0,
           finance: 0,
-          upkeep: 0
-        }
-      }
-    ]
+          upkeep: 0,
+        },
+      },
+    ],
   },
   {
     target: '.tour-invest-action',
     content: 'Quiz Question',
     params: {
       placement: RIGHT,
-      tutorialElementId: 'timeblocks'
-    }
+      tutorialElementId: 'timeblocks',
+    },
   },
   {
     target: '.tour-invest',
-    content: `There are some Resources that you cannot earn on your own. For example, ` +
-             `the Researcher cannot earn Culture or Finance Resources by investing their timeblocks. ` +
-             `However, you may need these resources to purchase certain Accomplishments.`,
+    content:
+      `There are some Resources that you cannot earn on your own. For example, ` +
+      `the Researcher cannot earn Culture or Finance Resources by investing their timeblocks. ` +
+      `However, you may need these resources to purchase certain Accomplishments.`,
     params: {
-      placement: RIGHT
-    }
+      placement: RIGHT,
+    },
   },
   {
     target: '.tour-accomplishments',
-    content: `For example, this Accomplishment requires 1 Culture, which you cannot earn. ` +
-             `To get this Resource, you must trade with someone who has 1 Culture.`,
+    content:
+      `For example, this Accomplishment requires 1 Culture, which you cannot earn. ` +
+      `To get this Resource, you must trade with someone who has 1 Culture.`,
     params: {
-      placement: RIGHT
-    }
+      placement: RIGHT,
+    },
   },
   {
     target: '.tour-ready-to-advance-button',
@@ -180,14 +189,14 @@ const steps: Array<Step> = [
       `Click the Ready to Advance button when you have finished investing your timeblocks. ` +
       `The Investment Phase ends as soon as all members of your habitat have finished investing.`,
     params: {
-      placement: 'left'
+      placement: BOTTOM,
     },
     stateTransform: [
       {
         SET_LAYOUT: 'tutorial',
-        required: true
-      }
-    ]
+        required: true,
+      },
+    ],
   },
 ];
 

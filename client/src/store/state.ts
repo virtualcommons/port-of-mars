@@ -19,7 +19,11 @@ import {
   ModalViewType,
   ModalDataType,
 } from '@port-of-mars/client/types/modals';
-import { ChatMarsLogView } from '@port-of-mars/client/types/panes.ts';
+import {
+  ChatMarsLogView,
+  HUDLeftView,
+  HUDRightView,
+} from '@port-of-mars/client/types/panes.ts';
 import _ from 'lodash';
 import { DashboardMessage } from '@port-of-mars/shared/types';
 
@@ -113,7 +117,8 @@ export interface User {
 export interface UserInterface {
   profileMenuView: ProfileMenuView;
   chatMarsLogView: ChatMarsLogView;
-  popupView: PopupView;
+  hudLeftView: HUDLeftView;
+  hudRightView: HUDRightView;
   modalView: ModalView;
 }
 
@@ -130,11 +135,6 @@ export interface ModalView {
 
 export interface ProfileMenuView {
   visible: boolean;
-}
-
-export interface PopupView {
-  activeEventsVisible: boolean;
-  inventoryVisible: boolean;
 }
 
 export interface State extends GameData {
@@ -197,10 +197,8 @@ export const initialStoreState: State = {
       visible: false,
     },
     chatMarsLogView: ChatMarsLogView.Chat,
-    popupView: {
-      activeEventsVisible: false,
-      inventoryVisible: false,
-    },
+    hudLeftView: HUDLeftView.OtherPlayers,
+    hudRightView: HUDRightView.PhaseInformation,
     modalView: {
       visible: false,
       type: null,

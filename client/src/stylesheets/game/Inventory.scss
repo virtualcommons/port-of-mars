@@ -1,5 +1,6 @@
 .c-inventory {
   @include expand;
+  overflow-y: scroll;
 
   .toggle {
     height: 2rem;

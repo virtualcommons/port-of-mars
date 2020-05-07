@@ -1,0 +1,52 @@
+.c-hud-left-buttons {
+  width: 100%;
+  max-width: none;
+  @include reset-padding-margin;
+
+  .button-switchers {
+    @include expand;
+    max-width: none;
+    @include reset-padding-margin;
+    @include make-center;
+
+    .other-players,
+    .inventory,
+    .accomplishments {
+      padding: 0;
+      @include make-center;
+
+      button {
+        @include reset-button;
+        height: 3rem;
+        width: 3rem;
+        @include reset-padding-margin;
+        border-radius: 50%;
+        font-size: $font-med;
+        font-weight: $font-weight-maven-pro-bold !important;
+        text-align: center;
+        color: $space-white;
+        border: 0.125rem solid $space-white;
+        transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+
+        &:disabled {
+          opacity: 0.5;
+        }
+
+        &.selected {
+          color: $space-gray;
+          background-color: $space-white;
+
+          .icon {
+            color: $space-gray;
+          }
+        }
+
+        .icon {
+          height: 50%;
+          width: 50%;
+          color: $space-white;
+        }
+      }
+    }
+  }
+}
