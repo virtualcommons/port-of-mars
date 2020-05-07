@@ -166,7 +166,7 @@ export class GameRoom extends Room<GameState> implements Game {
     }
   }
 
-  gameLoop() {
+  gameLoop(): void {
     const inEndGame = [Phase.defeat, Phase.victory].includes(this.state.phase);
     this.state.timeRemaining -= 1;
     const events = this.state.act();
@@ -189,7 +189,7 @@ export class GameRoom extends Room<GameState> implements Game {
     }
   }
 
-  onJoin(client: Client, options: any, auth: User) {
+  onJoin(client: Client, options: any, auth: User): void {
     logger.info(`client ${client.id} joined game ${this.roomId} ${auth}`);
     const player = this.getPlayer(client);
     this.safeSend(client, { kind: 'set-player-role', role: player.role });
