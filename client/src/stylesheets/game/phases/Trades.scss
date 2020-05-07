@@ -27,7 +27,10 @@
 
           .wrapper {
             @include expand;
-            @include make-center;
+            display:flex;
+            justify-content: space-between;
+            align-items: center;
+            padding:0 1rem;
             // background-color: $new-space-orange;
             background-color: $space-lightgray;
 
@@ -37,6 +40,16 @@
               font-size: $font-med;
               font-weight: $font-weight-maven-pro-bold;
             }
+
+            .filter-options{
+              
+
+              .filter-option{
+                margin: 0 0.5rem;
+              }
+            }
+
+
           }
         }
 

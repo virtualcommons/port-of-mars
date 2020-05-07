@@ -129,11 +129,20 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 @Component({})
 export default class ActiveTrade extends Vue {
+  //who sent the trade
   @Prop() private from!: TradeAmountData;
+  
+  //who is receiving the trade
   @Prop() private to!: TradeAmountData;
+  
+  //id on the trade
   @Prop() private id!: string;
+  
+  //status of the trade -> 'Active' | 'Cancelled' | 'Rejected'
   @Prop() private status!:string;
-  @Prop() private involved!:number;
+  
+  //degree of participation -> 1 | 0 | -1
+  @Prop() private participant!:number;
 
   @Inject() api!: GameRequestAPI;
 
@@ -188,11 +197,8 @@ export default class ActiveTrade extends Vue {
   statusColor(type:string){
     let color = 'white';
 
-    if(this.involved == 1){
+    if(this.participant == 1 || this.participant == 0){
       color = 'var(--new-space-orange)';
-    }
-    else if(this.involved == 0){
-      color = 'var(--trade-request-blue)';
     }
 
     if(this.status == 'Accepted'){
@@ -207,7 +213,8 @@ export default class ActiveTrade extends Vue {
   }
 
   get textColor(){
-    if(this.status != 'Active' || this.involved != -1){
+    console.log(this.status);
+    if(this.status != 'Active'){
       return {color: 'white'}
     }
 
