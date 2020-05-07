@@ -40,6 +40,7 @@
     "vuex-class-component": "^2.0.4"
   },
   "devDependencies": {
+    "@fortawesome/free-brands-svg-icons": "^5.13.0",
     "@types/jest": "^24.0.19",
     "@types/lodash": "^4.14.144",
     "@types/socket.io-client": "^1.4.32",
