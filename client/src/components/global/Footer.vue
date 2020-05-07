@@ -15,17 +15,34 @@
     </b-button>
 
     <footer class="footer d-flex flex-row p-2" :style="show">
-      <div class="p-2 footer-build">
-        v2020.04.2-alpha
-      </div>
       <div class="p-2 footer-copyright">
-        Copyright © 2020 Global Biosocial Complexity Initiative
+        Copyright © 2020 Port of Mars
       </div>
-      <div class="p-2 footer-license">
-        <a href="https://github.com/virtualcommons/port-of-mars/blob/master/LICENSE" style="text-decoration: underline">License</a>
+      <div class="p-2 footer-build">
+        Build: v2020.04.2
       </div>
-      <div class="p-2 footer-github">
-        <a href="https://github.com/virtualcommons/port-of-mars/" style="text-decoration: underline">GitHub</a>
+      <div class="links d-flex">
+        <div class="p-2 footer-github">
+          <a href="https://github.com/virtualcommons/port-of-mars/" target="_blank">
+            <font-awesome-icon
+              :icon="['fab', 'github']"
+              size="lg"
+            />
+          </a>
+        </div>
+        <div class="p-2 footer-mail">
+          <a href="mailto:portmars@asu.edu">
+            <font-awesome-icon
+              :icon="['fas', 'envelope']"
+              size="lg"
+            />
+          </a>
+        </div>
+        <div class="p-2 footer-license">
+          <a href="https://github.com/virtualcommons/port-of-mars/blob/master/LICENSE" target="_blank">
+            GNU AGPL v3.0
+          </a>
+        </div>
       </div>
     </footer>
   </div>
@@ -37,11 +54,13 @@
 
   // FontAwesome icons
   import { library } from '@fortawesome/fontawesome-svg-core';
+  import { faGithub } from '@fortawesome/free-brands-svg-icons/faGithub';
+  import { faEnvelope} from "@fortawesome/free-solid-svg-icons";
   import { faChevronCircleUp } from '@fortawesome/free-solid-svg-icons/faChevronCircleUp';
   import { faChevronCircleDown } from '@fortawesome/free-solid-svg-icons/faChevronCircleDown';
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-  library.add(faChevronCircleUp, faChevronCircleDown);
+  library.add(faChevronCircleUp, faChevronCircleDown, faGithub, faEnvelope);
 
   Vue.use(BootstrapVue);
   Vue.component('font-awesome-icon', FontAwesomeIcon);

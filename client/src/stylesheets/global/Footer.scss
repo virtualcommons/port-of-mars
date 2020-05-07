@@ -1,5 +1,9 @@
+.c-footer {
+  @include make-center;
+}
+
 .footer {
-  background-color: $new-space-orange;
+  background-color: $space-white-opaque-1;
   position: absolute; // position footer relative to browser window
   bottom: -9rem; // position at bottom
   width: 100%; // footer width = width of screen
@@ -16,6 +20,24 @@
   position: absolute; // position footer relative to browser window
   height: 3rem; // height of button
   bottom: 1rem; // position button slightly outside footer
-  margin-left: 48vw; // position to middle of footer
   transition: 0.3s;
+}
+
+a {
+  color: whitesmoke;
+}
+
+
+.footer-copyright, .footer-license, .footer-build {
+  text-transform: uppercase;
+  font-size: smaller;
+  color: whitesmoke;
+}
+
+.footer-license {
+  text-decoration: underline;
+}
+
+.links {
+  margin-left: 70vw;
 }
