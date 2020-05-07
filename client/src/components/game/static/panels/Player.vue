@@ -1,5 +1,8 @@
 <template>
-  <div @click="handleOpenModal()" class="c-player">
+  <div
+    @click="handleOpenModal()"
+    class="c-player tour-profile tour-player-self"
+  >
     <div class="indicator" :style="indicatorStyle">
       <div class="frame" :style="frameColor">
         <img :src="playerRoleImage" alt="Player Image" />
@@ -20,7 +23,6 @@ import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
 @Component({
   components: {},
 })
-
 export default class Player extends Vue {
   @Inject()
   readonly api!: TutorialAPI;
@@ -30,7 +32,9 @@ export default class Player extends Vue {
   }
 
   get playerScore(): number {
-    return this.playerRole ? this.$tstore.state.players[this.playerRole].victoryPoints : 0;
+    return this.playerRole
+      ? this.$tstore.state.players[this.playerRole].victoryPoints
+      : 0;
   }
 
   get playerReady() {
@@ -61,12 +65,12 @@ export default class Player extends Vue {
       data: {
         role: this.playerRole,
       },
-    }
-    this.api.setModalVisible(data)
+    };
+    this.api.setModalVisible(data);
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import "@port-of-mars/client/stylesheets/game/static/panels/Player.scss";
+@import '@port-of-mars/client/stylesheets/game/static/panels/Player.scss';
 </style>

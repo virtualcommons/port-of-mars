@@ -1,5 +1,5 @@
 <template>
-  <div class="c-phaseinstructions tour-phase-instructions">
+  <div class="c-phaseinstructions">
     <div class="wrapper">
       <p class="title">Phase Instructions</p>
       <div class="instructions">
@@ -17,7 +17,7 @@ import { Phase, PHASE_LABELS } from '@port-of-mars/shared/types';
 import { PHASE_INSTRUCTIONS } from '@port-of-mars/client/repo/instructions.ts';
 
 @Component({
-  components: {}
+  components: {},
 })
 export default class PhaseInstructions extends Vue {
   get phaseNumber() {

@@ -2,8 +2,6 @@
   <div class="c-gameboard-container container">
     <ModalController />
     <ProfileMenu />
-    <ActiveEventsPopup />
-    <InventoryPopup />
     <div class="system-health row">
       <SystemHealth />
     </div>
@@ -30,8 +28,6 @@ import HUD from '@port-of-mars/client/components/game/HUD.vue';
 import PhaseSwitcher from '@port-of-mars/client/components/game/PhaseSwitcher.vue';
 import ProfileMenu from '@port-of-mars/client/components/game/static/popups/ProfileMenu.vue';
 import SystemHealth from '@port-of-mars/client/components/game/static/systemhealth/SystemHealth.vue';
-import ActiveEventsPopup from '@port-of-mars/client/components/game/static/popups/ActiveEventsPopup.vue';
-import InventoryPopup from '@port-of-mars/client/components/game/static/popups/InventoryPopup.vue';
 import ChatMarsLog from '@port-of-mars/client/components/game/ChatMarsLog.vue';
 
 @Component({
@@ -41,8 +37,6 @@ import ChatMarsLog from '@port-of-mars/client/components/game/ChatMarsLog.vue';
     PhaseSwitcher,
     ProfileMenu,
     SystemHealth,
-    ActiveEventsPopup,
-    InventoryPopup,
     ChatMarsLog,
   },
 })

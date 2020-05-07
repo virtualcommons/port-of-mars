@@ -1,4 +1,4 @@
-import { Step, LEFT } from '@port-of-mars/client/types/tutorial';
+import { Step, LEFT, TOP, BOTTOM } from '@port-of-mars/client/types/tutorial';
 import { CURATOR } from '@port-of-mars/shared/types';
 import { ChatMarsLogView } from '@port-of-mars/client/types/panes.ts';
 
@@ -14,7 +14,7 @@ const steps: Array<Step> = [
     target: '.tour-round',
     content: `The game progresses in rounds. The number of rounds varies for every game so a game can end at any time.`,
     params: {
-      placement: LEFT,
+      placement: BOTTOM,
     },
   },
   {
@@ -23,7 +23,7 @@ const steps: Array<Step> = [
       `There are multiple phases in a round: Events, Invest, Trade, Purchase ` +
       `and Discard.`,
     params: {
-      placement: LEFT,
+      placement: BOTTOM,
     },
   },
   {
@@ -31,7 +31,7 @@ const steps: Array<Step> = [
     content: `Each phase has a time limit of 5 minutes. The timer will turn red and blink when 
     there is a minute left in the round.`,
     params: {
-      placement: LEFT,
+      placement: TOP,
     },
   },
   {

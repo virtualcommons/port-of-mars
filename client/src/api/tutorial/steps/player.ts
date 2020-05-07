@@ -1,5 +1,8 @@
 import { Step, RIGHT, LEFT, TOP } from '@port-of-mars/client/types/tutorial';
-import { ChatMarsLogView } from '@port-of-mars/client/types/panes.ts';
+import {
+  ChatMarsLogView,
+  HUDLeftView,
+} from '@port-of-mars/client/types/panes.ts';
 
 const steps: Array<Step> = [
   {
@@ -100,21 +103,21 @@ const steps: Array<Step> = [
     ],
   },
   {
-    target: '.tour-inventory-popup',
+    target: '.tour-inventory-view',
     content:
       `When you invest timeblocks into Resources during the invest phase, ` +
       `your inventory updates.`,
     params: {
-      placement: 'left',
+      placement: 'right',
     },
     stateTransform: [
       {
-        SET_INVENTORY_POPUP_VISIBILITY: true,
+        SET_HUDLEFT_VIEW: HUDLeftView.Inventory,
       },
     ],
   },
   {
-    target: '.tour-log-popup',
+    target: '.tour-log-view',
     content:
       `This is the Mars Log, which details a history of what has happened ` +
       `during the game. Make sure you check this periodically!`,
@@ -123,7 +126,6 @@ const steps: Array<Step> = [
     },
     stateTransform: [
       {
-        SET_INVENTORY_POPUP_VISIBILITY: false,
         SET_CHATMARSLOG_VIEW: ChatMarsLogView.MarsLog,
       },
     ],

@@ -1,5 +1,6 @@
 import { Step, LEFT, BOTTOM } from '@port-of-mars/client/types/tutorial';
 import { Phase } from '@port-of-mars/shared/types';
+import { HUDRightView } from '@port-of-mars/client/types/panes.ts';
 
 const steps: Array<Step> = [
   {
@@ -46,14 +47,14 @@ const steps: Array<Step> = [
     },
   },
   {
-    target: '.tour-event-popup',
+    target: '.tour-event-view',
     content: `Throughout the game, you can also access the Active Events for a round in this menu.`,
     params: {
       placement: LEFT,
     },
     stateTransform: [
       {
-        SET_ACTIVE_EVENTS_POPUP_VISIBILITY: true,
+        SET_HUDRIGHT_VIEW: HUDRightView.ActiveEvents,
       },
     ],
   },

@@ -6,6 +6,7 @@
   left: 0;
   @include make-center;
   background-color: $space-gray-08;
+  backdrop-filter: blur(2px);
 
   .wrapper {
     @include make-column-and-center;

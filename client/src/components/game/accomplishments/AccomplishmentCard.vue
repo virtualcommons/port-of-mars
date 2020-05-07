@@ -1,9 +1,14 @@
 <template>
-  <div class="c-accomplishmentcard" :class="[cardTypeStyling, {'modal-view':isModal}]" v-show="cardIsActive">
+  <div
+    class="c-accomplishmentcard"
+    :class="[cardTypeStyling, { 'modal-view': isModal }]"
+    v-show="cardIsActive"
+  >
     <div class="title-wrapper row">
       <div class="title col-12">
         <p :style="fontColor">{{ accomplishment.label }}</p>
-        <font-awesome-icon v-if="!isModal"
+        <font-awesome-icon
+          v-if="!isModal"
           :icon="['fas', 'info-circle']"
           size="lg"
           @click="showInfo"
@@ -25,7 +30,7 @@
       </div>
     </div>
 
-    <div class="cost-wrapper row">
+    <div v-if="showCost" class="cost-wrapper row">
       <div class="cost col-12">
         <div
           v-for="investment in accomplishmentCost"
@@ -45,7 +50,10 @@
       </div>
     </div>
 
-    <div v-if="type === cardType.purchase && showCard" class="purchase-wrapper row">
+    <div
+      v-if="type === cardType.purchase && showCard"
+      class="purchase-wrapper row"
+    >
       <div class="purchase col-12">
         <button :disabled="!canPurchase" @click="handlePurchase()">
           Purchase Accomplishment
@@ -53,7 +61,10 @@
       </div>
     </div>
 
-    <div v-else-if="type === cardType.discard && showCard" class="discard-wrapper row">
+    <div
+      v-if="type === cardType.discard && showCard"
+      class="discard-wrapper row"
+    >
       <div class="discard col-12">
         <button @click="handleDiscard()">
           Discard Accomplishment
@@ -61,7 +72,12 @@
       </div>
     </div>
 
-    <div v-else class="status-text row">
+    <div
+      v-if="
+        showCard && (type === cardType.discard || type === cardType.purchase)
+      "
+      class="status-text row"
+    >
       <div v-if="type == cardType.discard" class="text col-12">
         <p>Card Has Been Discarded</p>
       </div>
@@ -79,7 +95,7 @@ import {
   Prop,
   InjectReactive,
   Inject,
-  Watch
+  Watch,
 } from 'vue-property-decorator';
 import { AccomplishmentCardType } from '@port-of-mars/client/types/cards.ts';
 import {
@@ -133,21 +149,24 @@ export default class AccomplishmentCard extends Vue {
     purchased or discarded
   */
   @Prop({default: true})
-  private showCard!:boolean;
+  private showCard!: boolean;
+  
+  @Prop({ default: true })
+  private showCost!: boolean;
 
-  private cardIsActive:boolean = true;
+  private cardIsActive: boolean = true;
 
   //we want a different view for the modals.
-  @Prop({default: false})
-  private isModal!:boolean;
+  @Prop({ default: false })
+  private isModal!: boolean;
 
   // NOTE :: All / Default Type
 
-  @Watch('showCard', {immediate: true})
-  shouldShowCard(showCard:boolean){
-    if(!showCard){
+  @Watch('showCard', { immediate: true })
+  shouldShowCard(showCard: boolean) {
+    if (!showCard) {
       //if the status changes, it's time to start to remove the card
-      setTimeout(() => this.cardIsActive = false, 1900);
+      setTimeout(() => (this.cardIsActive = false), 1900);
     }
   }
 
@@ -175,13 +194,13 @@ export default class AccomplishmentCard extends Vue {
   get cardTypeStyling() {
     switch (this.type) {
       case AccomplishmentCardType.purchase:
-        if(this.showCard){
+        if (this.showCard) {
           return this.canPurchase ? 'purchasable' : 'unpurchasable';
         } else {
-          return 'purchased hide-card'
+          return 'purchased hide-card';
         }
       case AccomplishmentCardType.discard:
-        if(this.showCard){
+        if (this.showCard) {
           return this.canPurchase ? 'purchasable' : 'default';
         } else {
           return 'discarded hide-card';
@@ -201,14 +220,13 @@ export default class AccomplishmentCard extends Vue {
     );
   }
 
-  get fontColor(){
-    if(!this.showCard){
-      return {color: 'white'}
+  get fontColor() {
+    if (!this.showCard) {
+      return { color: 'white' };
     }
 
-    return {color: 'black'}
+    return { color: 'black' };
   }
-
 
   // NOTE :: Purchase Type
 

@@ -99,7 +99,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop , Inject} from 'vue-property-decorator';
+import { Component, Vue, Prop, Inject } from 'vue-property-decorator';
 import { PlayerInfoModalData } from '@port-of-mars/client/types/modals';
 import { Role, Phase } from '@port-of-mars/shared/types';
 import Inventory from '@port-of-mars/client/components/game/Inventory.vue';
@@ -119,7 +119,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
   },
 })
 export default class PlayerModal extends Vue {
-   @Inject() readonly api!: GameRequestAPI;
+  @Inject() readonly api!: GameRequestAPI;
 
   @Prop({}) private modalData!: PlayerInfoModalData;
   private accomplishmentType: string = 'active';

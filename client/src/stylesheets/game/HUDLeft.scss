@@ -1,0 +1,45 @@
+.c-hud-left {
+  @include expand;
+  max-width: none;
+  @include reset-padding-margin;
+
+  .wrapper {
+    @include expand;
+    max-width: none;
+    @include reset-padding-margin;
+
+    .player,
+    .views {
+      height: 100%;
+      @include reset-padding-margin;
+    }
+
+    .player {
+      padding-right: 0.5rem;
+      @include make-column-and-space-around;
+    }
+
+    .views {
+      padding: 0;
+
+      .other-players-view,
+      .inventory-view,
+      .accomplishments-view {
+        @include expand;
+        @include reset-padding-margin;
+        overflow-y: hidden;
+      }
+
+      .accomplishments-view {
+        background-color: $space-white-opaque-1;
+        padding: 0.5rem;
+        @include make-column-and-top;
+
+        .wrapper {
+          width: 100%;
+          overflow-y: auto;
+        }
+      }
+    }
+  }
+}

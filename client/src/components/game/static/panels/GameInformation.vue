@@ -13,8 +13,12 @@
       <p class="title">Phase Countdown</p>
       <p :class="countdownStyling">{{ timeRemaining }}</p>
     </div>
-    <div class="section tour-ready-to-advance-button">
-      <button @click="submitDone" class="ready-button" v-if="!playerReady">
+    <div class="section">
+      <button
+        @click="submitDone"
+        class="ready-button tour-ready-to-advance-button"
+        v-if="!playerReady"
+      >
         Ready to Advance
       </button>
       <button @click="submitCancel" v-if="playerReady" class="cancel-button">
@@ -25,10 +29,10 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Inject } from "vue-property-decorator";
-import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
-import { Phase, PHASE_LABELS } from "@port-of-mars/shared/types";
-import { TutorialAPI } from "@port-of-mars/client/api/tutorial/request";
+import { Vue, Component, Prop, Inject } from 'vue-property-decorator';
+import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
+import { Phase, PHASE_LABELS } from '@port-of-mars/shared/types';
+import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
 
 @Component({
   components: {},
@@ -41,9 +45,9 @@ export default class GameInformation extends Vue {
     if (round > 0 && upkeep > 0) {
       return round;
     } else if (upkeep <= 0) {
-      return "Over";
+      return 'Over';
     } else {
-      return "Pregame";
+      return 'Pregame';
     }
   }
 
@@ -70,11 +74,11 @@ export default class GameInformation extends Vue {
       fromState - minutesRemaining * 60
     }`.padStart(2, '0');
     const timeRemaining = `${minutesRemainingDisplay}:${secondsRemainingDisplay}`;
-    return timeRemaining ? timeRemaining : "00:00";
+    return timeRemaining ? timeRemaining : '00:00';
   }
 
   get countdownStyling() {
-    return this.$store.state.timeRemaining < 60 ? "blink-timer" : "countdown";
+    return this.$store.state.timeRemaining < 60 ? 'blink-timer' : 'countdown';
   }
 
   private submitDone() {
@@ -84,7 +88,7 @@ export default class GameInformation extends Vue {
       case Phase.events:
         const currentEvent = this.$tstore.getters.currentEvent;
         pendingInvestments = this.$tstore.getters.player.pendingInvestments;
-        if (currentEvent && currentEvent.id === "breakdownOfTrust") {
+        if (currentEvent && currentEvent.id === 'breakdownOfTrust') {
           this.api.saveResourcesSelection(pendingInvestments);
         }
       case Phase.invest:
@@ -102,5 +106,5 @@ export default class GameInformation extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import "@port-of-mars/client/stylesheets/game/static/panels/GameInformation.scss";
+@import '@port-of-mars/client/stylesheets/game/static/panels/GameInformation.scss';
 </style>
