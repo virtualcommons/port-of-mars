@@ -46,20 +46,20 @@ import { AccomplishmentData } from '@port-of-mars/shared/types';
   },
 })
 export default class Discard extends Vue {
+  //sorts the accomplishments, showing the ones you cannot buy first.
   private staticAccomplishments = this.$store.getters.player.accomplishments.purchasable.slice()
       .sort((a: AccomplishmentData, b: AccomplishmentData) => {
         return (
           Number(
-            canPurchaseAccomplishment(b, this.$store.getters.player.inventory)
+            canPurchaseAccomplishment(a, this.$store.getters.player.inventory)
           ) -
           Number(
-            canPurchaseAccomplishment(a, this.$store.getters.player.inventory)
+            canPurchaseAccomplishment(b, this.$store.getters.player.inventory)
           )
         );
       });
 
   wasDiscarded(id: number){
-    console.log(this.$store.getters.player.accomplishments.purchasable)
     return Boolean((this.$store.getters.player.accomplishments.purchasable as Array<AccomplishmentData>)
       .slice()
       .filter(accomplishment => accomplishment.id == id).length > 0);

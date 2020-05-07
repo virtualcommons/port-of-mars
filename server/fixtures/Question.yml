@@ -30,7 +30,7 @@ items:
       - 'You can no longer chat with your group.'
       - 'You get an additional four timeblocks.'
       - 'Two events will occur in this round.'
-      - 'You get an extra Accomplishment card.'
+      - 'You get an extra Accomplishment.'
     order: 4
     tutorialElementId: 'upkeep65'
   # accCardInfluence:
