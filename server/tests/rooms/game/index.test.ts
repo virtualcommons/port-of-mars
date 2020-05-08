@@ -7,11 +7,12 @@ import { canSendTradeRequest } from "@port-of-mars/shared/validation";
 import {
   OutOfCommissionCurator, OutOfCommissionPioneer, OutOfCommissionResearcher, OutOfCommissionPolitician, OutOfCommissionEntrepreneur
 } from "@port-of-mars/server/rooms/game/state/marsEvents/state";
+import {SimpleBot} from "@port-of-mars/server/rooms/game/state/bot";
 
 
 describe('a Researcher Player Accomplishment', () => {
   const repo = new AccomplishmentSet(RESEARCHER);
-  const p = new Player(RESEARCHER);
+  const p = new Player(RESEARCHER, SimpleBot.fromActor());
   it('can be purchased if their role matches', () => {
     const accomplishment = getAccomplishmentByID(RESEARCHER, 1);
     p.purchaseAccomplishment(accomplishment);
@@ -66,8 +67,8 @@ describe('a Researcher Player Accomplishment', () => {
 });
 
 describe('a player snaphot', () => {
-  const p1 = new Player(RESEARCHER);
-  const p2 = new Player(CURATOR);
+  const p1 = new Player(RESEARCHER, SimpleBot.fromActor());
+  const p2 = new Player(CURATOR, SimpleBot.fromActor());
   it('can be round tripped', () => {
     p2.fromJSON(p1.toJSON());
     expect(_.isEqual(p1, p2)).toBeTruthy();
