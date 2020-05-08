@@ -1,7 +1,10 @@
-import * as _ from 'lodash';
+import _ from 'lodash';
 import { MarsEventData } from '@port-of-mars/shared/types';
+import { getLogger } from '@port-of-mars/server/settings';
 
 type MarsEventDeckItem = [MarsEventData, number];
+
+const logger = getLogger(__filename);
 
 const _marsEvents: Array<MarsEventDeckItem> = [
   [{
@@ -215,16 +218,21 @@ const _marsEvents: Array<MarsEventDeckItem> = [
   }, 1]
 ];
 
-export function getAllMarsEvents(): Array<[MarsEventData, number]> {
+export function getAllMarsEvents(): Array<MarsEventDeckItem> {
   const AVAILABLE_EVENTS = ['personalGain', 'sandstorm', 'compulsivePhilanthropy',
     'outOfCommissionCurator', 'outOfCommissionPolitician', 'outOfCommissionResearcher',
     'outOfCommissionPioneer', 'outOfCommissionEntrepeneur', 'audit', 'bondingThroughAdversity',
     'lifeAsUsual', 'breakdownOfTrust',
   ];
-  const availableEvents = []
-  for (const cardId in AVAILABLE_EVENTS) {
-    const marsEventDeckItem = _.find(_marsEvents, (c: MarsEventDeckItem) => c[0].id === cardId);
-    availableEvents.push(marsEventDeckItem[0], marsEventDeckItem[1]);
+  const availableEvents: Array<MarsEventDeckItem> = [];
+  for (const eventId in AVAILABLE_EVENTS) {
+    const marsEventDeckItem = _.find(_marsEvents, (e: MarsEventDeckItem) => e[0].id === eventId);
+    if (marsEventDeckItem) {
+      availableEvents.push(marsEventDeckItem);
+    }
+    else {
+      logger.warn("No event ID found in mars events: %s", eventId);
+    }
   }
   return availableEvents;
 }
