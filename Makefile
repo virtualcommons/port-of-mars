@@ -10,6 +10,7 @@ PGPASS_PATH=keys/.pgpass
 SENTRY_DSN_PATH=keys/sentry_dsn
 MAIL_API_KEY_PATH=keys/mail_api_key
 SECRETS=$(MAIL_API_KEY_PATH) $(DB_PASSWORD_PATH) $(JWT_SECRET_PATH) $(ORMCONFIG_PATH) $(PGPASS_PATH) $(SENTRY_DSN_PATH)
+BUILD_ID=$(shell git describe --tags --abbrev=1)
 
 .PHONY: build
 build: docker-compose.yml
@@ -97,6 +98,7 @@ test: docker-compose.yml
 
 .PHONY: deploy
 deploy: docker-compose.yml
+	echo "\"${BUILD_ID}\"" > client/src/assets/build-id.json
 	docker-compose pull db redis
 	docker-compose build --pull
 	docker-compose up -d 
