@@ -138,7 +138,7 @@ export default class ActiveTrade extends Vue {
   //id on the trade
   @Prop() private id!: string;
   
-  //status of the trade -> 'Active' | 'Cancelled' | 'Rejected'
+  //status of the trade -> 'Active' | 'Accepted' | 'Cancelled' | 'Rejected'
   @Prop() private status!:string;
   
   //degree of participation -> 1 | 0 | -1
@@ -146,20 +146,28 @@ export default class ActiveTrade extends Vue {
 
   @Inject() api!: GameRequestAPI;
 
+  //internal state for whether or not the trade should be shown
+  //showTrade is the root element dictates whether or not the trade should be shown
   private showTrade = true;
+
+  //tradeIsActive dictates what animation should be playing
   private tradeIsActive = true;
 
   mounted(){
     if(this.status != 'Active'){
+      //we want to immediately hide the trade if, as the trade mounts, it's already inactive
       this.tradeIsActive = false;
       this.showTrade = false;
     }
   }
 
+  //this watches to see when status changes
   @Watch('status', {immediate: true})
   shouldShowTrade(status:string){
     if(status != 'Active'){
+      //we want to immediatly start the hiding animation on the trade
       this.tradeIsActive = false;
+      //we want to set the trade to hidden, but only after 1900 seconds
       setTimeout(() => this.showTrade = false, 1900);
     }
   }
@@ -169,14 +177,14 @@ export default class ActiveTrade extends Vue {
   }
 
   get clientValidation() {
-    let hasResourcesToSend = true;
+    //this just makes sure that the local user can accept the trade.
     const inventory = this.$store.state.players[this.role].inventory;
     RESOURCES.forEach((item) => {
       if (this.to.resourceAmount[item] > inventory[item]) {
-        hasResourcesToSend = false;
+        return false;
       }
     });
-    return hasResourcesToSend;
+    return true;
   }
 
   private handleAcceptTrade() {
@@ -193,21 +201,27 @@ export default class ActiveTrade extends Vue {
     this.api.cancelTradeRequest(this.id);
   }
 
+  //the border on the player portait background
   private borderStyle(role: Role) {
     return { border: `0.2rem solid var(--color-${role})` };
   }
 
+  //the frame of the player portait background
   private frameStyle(role: Role) {
     return { backgroundColor: `var(--color-${role})` };
   }
 
+  //color of the trade header and trade background
   statusColor(type:string){
+    //default is white
     let color = 'white';
 
+    //if the player is involved with the trade, color it orange
     if(this.participant == 1 || this.participant == 0){
       color = 'var(--new-space-orange)';
     }
 
+    //alternate statuses supersede involvement
     if(this.status == 'Accepted'){
       color = 'var(--status-green)'
     }
@@ -215,10 +229,12 @@ export default class ActiveTrade extends Vue {
       color = 'var(--status-red)'
     }
     
+    //map to whatever type was passed in
     return {[type]: color};
     
   }
 
+  //text color handling
   get textColor(){
     console.log(this.status);
     if(this.status != 'Active'){

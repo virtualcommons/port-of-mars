@@ -10,7 +10,7 @@
         v-for="(value, resource) in resources"
         :key="resource + Math.random()"
         class="investment col"
-        :class="{ 'unvailable-investment': grayOutResources(resource) }"
+      :class="{ 'unavailable-investment': grayOutResources(resource) }"
       >
         <div class="investment-input-wrapper">
           <!-- TODO: add tooltip -->
@@ -65,9 +65,16 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 @Component({})
 export default class TradeOptions extends Vue {
+  //the text that displays what type of option set it is
   @Prop({ default: '' }) text!: string;
+
+  //mode -> 'incoming' | 'outgoing'
   @Prop({ default: '' }) mode!: string;
+
+  //the way the parent gets the updates from the child
   @Prop() resourceReader!: any;
+
+  //the starting values inherited from the parent
   @Prop() resources!: ResourceAmountData;
 
   get playerInventory() {

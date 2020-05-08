@@ -13,7 +13,7 @@
           v-if="!isModal"
           :icon="['fas', 'info-circle']"
           size="lg"
-          @click="handleClick"
+          @click="showInfo"
           class="icon"
         />
       </div>
@@ -78,8 +78,10 @@ export default class EventCard extends Vue {
   @Prop({ default: false }) private visible!: boolean;
   @Prop({ default: false }) private active!: boolean;
 
+  //if you're in a modal, show the modal view
   @Prop({default: false}) private isModal!:boolean;
 
+  //if the modal was spawned by the server, show the option buttons
   @Prop({default:false}) private wasSpawnedByServer!:boolean;
 
   get phase() {
@@ -94,6 +96,7 @@ export default class EventCard extends Vue {
     return this.active && this.gamePhase === this.phase.events;
   }
 
+  //determining which type of events require which interactions
   private eventNoChangeViews: Array<EventClientView> = [
     'NO_CHANGE',
     'AUDIT',
@@ -116,7 +119,7 @@ export default class EventCard extends Vue {
     this.api.setModalHidden();
   }
 
-  private handleClick(): void {
+  private showInfo(): void {
     this.api.setModalVisible({
       type: 'CardModal',
       data: {

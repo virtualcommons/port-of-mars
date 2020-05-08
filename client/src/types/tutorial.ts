@@ -16,6 +16,29 @@ export interface Step {
   stateTransform?: Array<StateTransform>;
 }
 
+
+//A blueprint for a step:
+/*
+{
+  target: '<css class you want to attach the step to>',
+  content: `<message on the step>`,
+  params: {
+    placement: <location>
+  },
+  stateTransform: [
+    {
+      <optional required tag>: <true | false>
+      NOTE: This requires some sort of check in the TutorialAPI
+      Having the required tag does not require you to have a validation object.
+
+      <optional validationObject>: <object requirements>
+
+      <optional mutation>:<mutation's data>
+    }
+  ]
+}
+*/
+
 //sometimes the placement is inverted in vue tour.
 //the ones that are tagged with caps are the inverted ones.
 export const TOP: string = "bottom";
