@@ -1,7 +1,9 @@
 import * as _ from 'lodash';
-import {MarsEventData} from '@port-of-mars/shared/types';
+import { MarsEventData } from '@port-of-mars/shared/types';
 
-const _marsEvents: Array<[MarsEventData, number]> = [
+type MarsEventDeckItem = [MarsEventData, number];
+
+const _marsEvents: Array<MarsEventDeckItem> = [
   [{
     id: 'changingTides',
     name: 'Changing Tides',
@@ -57,7 +59,7 @@ const _marsEvents: Array<[MarsEventData, number]> = [
     flavorText: `"Of course we trust everyone to be truthful. But it doesn't hurt to check now and again." - The Politician`,
     clientViewHandler: 'AUDIT' as const,
     duration: 1,
-    timeDuration:10,
+    timeDuration: 10,
   }, 1],
   [{
     id: 'effortsWasted',
@@ -92,7 +94,7 @@ const _marsEvents: Array<[MarsEventData, number]> = [
     flavorText: `"That's very nice that you have three PhD's. Now pick up this toothbrush and help with cleaning our solar panel cells."`,
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 1,
-    timeDuration:10,
+    timeDuration: 10,
   }, 1],
   [{
     id: 'lostTime',
@@ -101,7 +103,7 @@ const _marsEvents: Array<[MarsEventData, number]> = [
     flavorText: `Time flies when you're trying to stay alive.`,
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 1,
-    timeDuration:10,
+    timeDuration: 10,
   }, 1],
   [{
     id: 'murphysLaw',
@@ -119,7 +121,7 @@ const _marsEvents: Array<[MarsEventData, number]> = [
     flavorText: `Buckle in - things are about to get rough. And coarse. And irritating.`,
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 3,
-    timeDuration:10,
+    timeDuration: 10,
   }, 1],
   [{
     id: 'cropFailure',
@@ -153,15 +155,6 @@ const _marsEvents: Array<[MarsEventData, number]> = [
     name: 'Interdisciplinary',
     effect: `For this round, each player can spend 3 Time Blocks to earn an Influence in either of the 2 Influences they normally can't create.`,
     flavorText: `"Everyone knows the saying, 'Jack of all trades, master of none.' Few remember the second part: 'still better than a master of one.'" - The Pioneer`,
-    clientViewHandler: 'NO_CHANGE' as const,
-    duration: 1,
-    timeDuration: 10,
-  }, 1],
-  [{
-    id: 'itBegins',
-    name: 'It Begins',
-    effect: ``,
-    flavorText: `Welcome to Port of Mars. Space is now open.`,
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 1,
     timeDuration: 10,
@@ -222,22 +215,16 @@ const _marsEvents: Array<[MarsEventData, number]> = [
   }, 1]
 ];
 
-
-const marsEvents: Array<[MarsEventData, number]> = [
-  [_.find(_marsEvents, e => e[0].id === 'personalGain')![0], 1],
-  [_.find(_marsEvents, e => e[0].id === 'sandstorm')![0], 1],
-  [_.find(_marsEvents, e => e[0].id === 'compulsivePhilanthropy')![0], 1],
-  [_.find(_marsEvents, e => e[0].id === 'outOfCommissionCurator')![0], 1],
-  [_.find(_marsEvents, e => e[0].id === 'outOfCommissionPolitician')![0], 1],
-  [_.find(_marsEvents, e => e[0].id === 'outOfCommissionResearcher')![0], 1],
-  [_.find(_marsEvents, e => e[0].id === 'outOfCommissionPioneer')![0], 1],
-  [_.find(_marsEvents, e => e[0].id === 'outOfCommissionEntrepreneur')![0], 1],
-  [_.find(_marsEvents, e => e[0].id === 'audit')![0], 1],
-  [_.find(_marsEvents, e => e[0].id === 'bondingThroughAdversity')![0], 1],
-  [_.find(_marsEvents, e => e[0].id === 'lifeAsUsual')![0], 1],
-  [_.find(_marsEvents, e => e[0].id === 'breakdownOfTrust')![0], 1],
-];
-
 export function getAllMarsEvents(): Array<[MarsEventData, number]> {
-  return marsEvents;
+  const AVAILABLE_EVENTS = ['personalGain', 'sandstorm', 'compulsivePhilanthropy',
+    'outOfCommissionCurator', 'outOfCommissionPolitician', 'outOfCommissionResearcher',
+    'outOfCommissionPioneer', 'outOfCommissionEntrepeneur', 'audit', 'bondingThroughAdversity',
+    'lifeAsUsual', 'breakdownOfTrust',
+  ];
+  const availableEvents = []
+  for (const cardId in AVAILABLE_EVENTS) {
+    const marsEventDeckItem = _.find(_marsEvents, (c: MarsEventDeckItem) => c[0].id === cardId);
+    availableEvents.push(marsEventDeckItem[0], marsEventDeckItem[1]);
+  }
+  return availableEvents;
 }
