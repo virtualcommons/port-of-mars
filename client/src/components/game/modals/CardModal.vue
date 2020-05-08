@@ -26,7 +26,6 @@
         <button @click="handleConfirmation">Confirm</button>
       </div>
     </div>
-    <!-- <div v-if="!modalData.confirmation" class="ghost-wrapper row"></div> -->
   </div>
 </template>
 

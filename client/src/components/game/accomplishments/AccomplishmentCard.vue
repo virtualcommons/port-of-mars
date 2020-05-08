@@ -6,7 +6,7 @@
         <font-awesome-icon v-if="!isModal"
           :icon="['fas', 'info-circle']"
           size="lg"
-          @click="handleClick"
+          @click="showInfo"
           class="icon"
         />
       </div>
@@ -129,11 +129,15 @@ export default class AccomplishmentCard extends Vue {
   @Prop({ default: true })
   private showDescription!: boolean;
 
+  /* this is for handling whether or not the card has been
+    purchased or discarded
+  */
   @Prop({default: true})
   private showCard!:boolean;
 
   private cardIsActive:boolean = true;
 
+  //we want a different view for the modals.
   @Prop({default: false})
   private isModal!:boolean;
 
@@ -142,6 +146,7 @@ export default class AccomplishmentCard extends Vue {
   @Watch('showCard', {immediate: true})
   shouldShowCard(showCard:boolean){
     if(!showCard){
+      //if the status changes, it's time to start to remove the card
       setTimeout(() => this.cardIsActive = false, 1900);
     }
   }
@@ -150,7 +155,8 @@ export default class AccomplishmentCard extends Vue {
     return AccomplishmentCardType;
   }
 
-  private handleClick() {
+  //this is the click for the info
+  private showInfo() {
     let data = {
       type: 'CardModal',
       data: {
@@ -181,7 +187,6 @@ export default class AccomplishmentCard extends Vue {
           return 'discarded hide-card';
         }
       case AccomplishmentCardType.default:
-        //return 'default';
         return this.canPurchase ? 'purchasable' : 'unpurchasable';
       default:
         return 'default';

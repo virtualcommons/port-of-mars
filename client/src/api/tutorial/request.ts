@@ -7,8 +7,8 @@ import {
 } from '@port-of-mars/shared/types';
 import {
   initialStoreState,
-  defaultInventory,
 } from '@port-of-mars/client/store/state';
+import { ModalDataType } from '@port-of-mars/client/types/modals';
 import * as _ from 'lodash';
 import { Store } from 'vuex/types/index';
 import { State } from '@port-of-mars/client/store/state';
@@ -188,9 +188,9 @@ export class TutorialAPI  {
   }
 
   //MODAL HANDLERS
-  public setModalVisible(data: any){
-    if(data.data.activator != 'Server'){
-      this.store.commit('SET_MODAL_VISIBLE',data);
+  public setModalVisible(modalInfo: any){
+    if(modalInfo.data.activator != 'Server'){
+      this.store.commit('SET_MODAL_VISIBLE',modalInfo);
       this.completedActionWithImplicitForward();
     }
   }
@@ -224,6 +224,7 @@ export class TutorialAPI  {
     
   }
 
+  //validate against the validation object that's passed in.
   public setTradeGetResources(resources:ResourceAmountData){
     this.store.commit('SET_GET_RESOURCES', resources);
 
@@ -235,6 +236,7 @@ export class TutorialAPI  {
     return true;
   }
 
+  //validate against the validation object that's passed in.
   public setTradeGiveResources(resources: ResourceAmountData){
     this.store.commit('SET_SEND_RESOURCES', resources);
 

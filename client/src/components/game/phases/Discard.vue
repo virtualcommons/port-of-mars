@@ -47,6 +47,7 @@ import { AccomplishmentData } from '@port-of-mars/shared/types';
 })
 export default class Discard extends Vue {
   //sorts the accomplishments, showing the ones you cannot buy first.
+  //this is static and gets set as the component is created, but does not update with changes
   private staticAccomplishments = this.$store.getters.player.accomplishments.purchasable.slice()
       .sort((a: AccomplishmentData, b: AccomplishmentData) => {
         return (
@@ -59,10 +60,11 @@ export default class Discard extends Vue {
         );
       });
 
+  //this does update with changes, allowing us to change the status of the accomplishment asynchronously
   wasDiscarded(id: number){
     return Boolean((this.$store.getters.player.accomplishments.purchasable as Array<AccomplishmentData>)
       .slice()
-      .filter(accomplishment => accomplishment.id == id).length > 0);
+      .filter(accomplishment => accomplishment.id == id).length > 0);//if the id is not in the array, it must have been discarded.
   }
 
   get cardType() {

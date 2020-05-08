@@ -104,7 +104,6 @@ import { PlayerInfoModalData } from '@port-of-mars/client/types/modals';
 import { Role, Phase } from '@port-of-mars/shared/types';
 import Inventory from '@port-of-mars/client/components/game/Inventory.vue';
 import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
-// import ContainerAccomplishmentsGeneral from '@port-of-mars/client/components/game/accomplishments/ContainerAccomplishmentsGeneral.vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -117,14 +116,12 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
   components: {
     Inventory,
     AccomplishmentCard,
-    // ContainerAccomplishmentsGeneral,
   },
 })
 export default class PlayerModal extends Vue {
    @Inject() readonly api!: GameRequestAPI;
 
   @Prop({}) private modalData!: PlayerInfoModalData;
-  // private errorMessageActive: boolean = false;
   private accomplishmentType: string = 'active';
 
   get playerData() {
@@ -198,8 +195,6 @@ export default class PlayerModal extends Vue {
         type: 'TradeRequestModal',
         data: {},
       });
-    } else {
-      // this.errorMessageActive = true;
     }
   }
 }

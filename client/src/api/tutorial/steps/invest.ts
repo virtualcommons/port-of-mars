@@ -21,7 +21,6 @@ const steps: Array<Step> = [
             legacy: 3,
             science: 2,
             upkeep: 1
-            // specialty: 'science'
           },
           role: RESEARCHER
         }
