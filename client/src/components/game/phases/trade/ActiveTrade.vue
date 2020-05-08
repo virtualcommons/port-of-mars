@@ -149,6 +149,13 @@ export default class ActiveTrade extends Vue {
   private showTrade = true;
   private tradeIsActive = true;
 
+  mounted(){
+    if(this.status != 'Active'){
+      this.tradeIsActive = false;
+      this.showTrade = false;
+    }
+  }
+
   @Watch('status', {immediate: true})
   shouldShowTrade(status:string){
     if(status != 'Active'){
