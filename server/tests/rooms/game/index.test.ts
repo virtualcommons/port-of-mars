@@ -5,7 +5,7 @@ import * as _ from 'lodash'
 import { mockGameStateInitOpts } from "@port-of-mars/server/util";
 import { canSendTradeRequest } from "@port-of-mars/shared/validation";
 import {
-  OutOfCommissionCurator, OutOfCommissionPioneer, OutOfCommissionResearcher, OutOfCommissionPolitician, OutOfCommissionEntrepreneur
+  OutOfCommissionCurator, OutOfCommissionPioneer, OutOfCommissionResearcher, OutOfCommissionPolitician, OutOfCommissionEntrepreneur, BreakdownOfTrust
 } from "@port-of-mars/server/rooms/game/state/marsEvents/state";
 import {SimpleBot} from "@port-of-mars/server/rooms/game/state/bot";
 
@@ -225,5 +225,40 @@ describe('out of commission event reduces timeblocks for each role', () => {
     for (const p of g.players) {
       expect(p.timeBlocks).toBe(3);
     }
+  });
+});
+
+describe('Breakdown of trust saves timeBlocks', () => {
+  const g = new GameState(mockGameStateInitOpts(x => x, () => 10));
+
+  it('gives each role 10 timeblocks with no other events active', () => {
+    let breakdownOfTrust = new BreakdownOfTrust();
+    breakdownOfTrust.initialize(g);
+    breakdownOfTrust.finalize(g);
+
+    for (const p of g.players) {
+      expect(p.timeBlocks).toBe(10);
+    }
+  })
+
+  it('gives each role 3 timeblocks when paired with out of commission', () => {
+
+    for (const p of g.players) {
+      expect(p.timeBlocks).toBe(10);
+    }
+    new OutOfCommissionCurator().finalize(g);
+    new OutOfCommissionEntrepreneur().finalize(g);
+    new OutOfCommissionResearcher().finalize(g);
+    new OutOfCommissionPolitician().finalize(g);
+    new OutOfCommissionPioneer().finalize(g);
+
+    let breakdownOfTrust = new BreakdownOfTrust();
+    breakdownOfTrust.initialize(g);
+    breakdownOfTrust.finalize(g);
+
+    for (const p of g.players) {
+      expect(p.timeBlocks).toBe(3);
+    }
+
   });
 });
