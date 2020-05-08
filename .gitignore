@@ -124,3 +124,4 @@ docker
 
 # backup files
 *~
+build-id.json

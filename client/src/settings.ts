@@ -21,3 +21,15 @@ export class EnvironmentMode {
     this.environmentMode = newEnvironment;
   }
 }
+
+const DEFAULT_BUILD_ID = "v2020.05";
+
+export async function getBuildId() {
+  try {
+    const buildIdModule = await import("@port-of-mars/client/assets/build-id.json");
+    return buildIdModule.default;
+  }
+  catch (e) {
+    return DEFAULT_BUILD_ID;
+  }
+}

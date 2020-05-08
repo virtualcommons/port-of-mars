@@ -16,10 +16,10 @@
 
     <footer class="footer d-flex flex-row p-2" :style="show">
       <div class="p-2 footer-copyright">
-        Copyright © 2020 Port of Mars
+        &copy; 2020 <a target='_blank' href='https://www.azregents.edu/'>Arizona Board of Regents</a>
       </div>
       <div class="p-2 footer-build">
-        Build: v2020.04.2
+        Build: {{ buildId }}
       </div>
       <div class="links d-flex">
         <div class="p-2 footer-github">
@@ -52,6 +52,8 @@
   import { Vue, Component } from 'vue-property-decorator';
   import BootstrapVue from 'bootstrap-vue';
 
+  import { getBuildId } from '@port-of-mars/client/settings';
+
   // FontAwesome icons
   import { library } from '@fortawesome/fontawesome-svg-core';
   import { faGithub } from '@fortawesome/free-brands-svg-icons/faGithub';
@@ -67,24 +69,27 @@
 
   @Component({})
   export default class Footer extends Vue {
-    footer: boolean = false;
+    footer = false;
+    buildId = '';
+
+    async mounted() {
+      this.buildId = await getBuildId();
+    }
 
     private toggle() {
       this.footer = !this.footer;
-      console.log('toggle: ', this.footer);
-      return this.footer;
     }
 
     get show() {
-      return this.footer
-        ? { bottom: '0' }
-        : { bottom: '-9rem' };
+      return {
+        bottom: this.footer ? '0' : '-9rem'
+      };
     }
 
     get button() {
-      return this.footer
-      ? { bottom: '10rem' }
-      : { bottom: '1rem' };
+      return {
+        bottom: this.footer ? '10rem' : '1rem'
+      };
     }
   }
 </script>
