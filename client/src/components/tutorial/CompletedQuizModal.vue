@@ -24,7 +24,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { DASHBOARD_PAGE } from '@shared/routes';
+import { DASHBOARD_PAGE } from '@port-of-mars/shared/routes';
 
 @Component({
   name: 'tutorialComplete',
