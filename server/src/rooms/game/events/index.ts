@@ -202,9 +202,9 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
     game.phase = Phase.events;
     game.round += 1;
     
-    const contributedUpkeep = game.nextRoundUpkeep() - 25;
+    const contributedUpkeep = game.nextRoundUpkeep();
 
-    game.upkeep = game.nextRoundUpkeep();
+    game.upkeep = contributedUpkeep - 25;
 
     // round message
     game.log(`Round ${ game.round } begins.`, MarsLogCategory.newRound)

@@ -1163,7 +1163,7 @@ export class GameState extends Schema implements GameData {
     for (const p of this.players) {
       contributedUpkeep += p.contributedUpkeep;
     }
-    return this.upkeep + contributedUpkeep - 25;
+    return this.upkeep + contributedUpkeep;
   }
 
   subtractUpkeep(amount: number): void {
