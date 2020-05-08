@@ -98,4 +98,24 @@
       }
     }
   }
+
+  .interact-wrapper {
+    flex:1;
+    background-color: $space-gray;
+    margin-top:4rem;
+    
+    .interact {
+      padding: 0;
+      @include make-center;
+      
+      .button{
+        @include space-button;
+      }
+    }
+  }
+}
+
+.modal-view{
+  border:0;
+  background-color: $space-gray;
 }

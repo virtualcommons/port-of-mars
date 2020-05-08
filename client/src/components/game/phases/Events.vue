@@ -60,11 +60,12 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch } from 'vue-property-decorator';
+import { Vue, Component, Watch, Inject } from 'vue-property-decorator';
 import EventCard from './events/EventCard.vue';
 import EventContainer from './events/events/EventContainer.vue';
 import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
 import { MarsEventData, Phase } from '@port-of-mars/shared/types';
+import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 
 @Component({
   components: {
@@ -74,6 +75,8 @@ import { MarsEventData, Phase } from '@port-of-mars/shared/types';
   },
 })
 export default class Events extends Vue {
+  @Inject() readonly api!: GameRequestAPI;
+
   private selectedView: string = 'Event Deck';
 
   // NOTE :: LIFECYCLE HOOKS & WATCHERS
@@ -90,6 +93,22 @@ export default class Events extends Vue {
     if (this.selectedView === 'Active Accomplishments') {
       this.selectedView = 'Event Deck';
     }
+  }
+
+  //Open an event modal when a new card comes in
+  @Watch('currentEvent',{immediate:true})
+  onNewEvent(event:any){
+    this.api.setModalVisible({
+      type: 'CardModal',
+      data: {
+        activator: 'Server',
+        title: 'Event',
+        content: 'This is a description of the Event.',
+        cardType: 'EventCard',
+        cardData: event,
+        confirmation: false,
+      },
+    });
   }
 
   // NOTE :: EVENT SPECIFIC

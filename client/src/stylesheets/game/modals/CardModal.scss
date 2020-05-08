@@ -63,6 +63,7 @@
       overflow-y: scroll;
       @include disable-scroll;
       height:100%;
+      background-color: $space-gray;
     }
   }
 

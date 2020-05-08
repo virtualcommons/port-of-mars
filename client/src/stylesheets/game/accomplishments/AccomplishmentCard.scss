@@ -1,12 +1,11 @@
 .c-accomplishmentcard {
   width: 100%;
   padding: 0;
-  height: 100%;
+  //height: 100%;
   margin: 0 0 0.5rem 0;
   @include make-column-and-center;
-  //flex-shrink: 0;
-  align-items: stretch;
-  max-height: 17rem !important;
+  flex-shrink: 0;
+  //align-items: stretch;
   &:last-child {
     margin-bottom: 0;
   }
@@ -57,7 +56,7 @@
 
   .info-wrapper {
     background-color: $space-gray;
-    flex:1;
+    //flex:1;
 
     .points {
       padding: 0 0.5rem;
@@ -74,7 +73,7 @@
     }
 
     .flavortext {
-      flex:1;
+      //flex:1;
       padding: 0 0.5rem;
 
       p {
@@ -88,7 +87,7 @@
   }
 
   .cost-wrapper {
-    flex:1;
+    //flex:1;
     background-color: $space-gray;
 
     .cost {
@@ -196,6 +195,7 @@
 
 .modal-view{
   border:none;
+  max-height: 17rem !important;
 }
 
 .hide-card{

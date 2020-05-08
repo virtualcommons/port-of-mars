@@ -3,7 +3,7 @@
     <div class="title-wrapper row">
       <div class="title col-12">
         <p :style="fontColor">{{ accomplishment.label }}</p>
-        <font-awesome-icon
+        <font-awesome-icon v-if="!isModal"
           :icon="['fas', 'info-circle']"
           size="lg"
           @click="handleClick"

@@ -1,15 +1,5 @@
 <template>
   <div class="card-modal container">
-    <!-- <div class="title-wrapper row">
-      <div class="title col-12">
-        <p>{{ modalData.title }}</p>
-      </div>
-    </div>
-    <div class="content-wrapper row">
-      <div class="content col-12">
-        <p>{{ modalData.content }}</p>
-      </div>
-    </div> -->
     <div class="cards-wrapper row">
       <div class="cards col-12">
         <AccomplishmentCard
@@ -25,6 +15,8 @@
           :key="modalData.cardData.id"
           :event="modalData.cardData"
           :visible="true"
+          :isModal="true"
+          :wasSpawnedByServer="serverCreated(modalData.activator)"
         />
       </div>
     </div>
@@ -80,6 +72,10 @@ export default class CardModal extends Vue {
       this.api.discardAccomplishment(this.modalData.cardData.id as number);
     }
     this.api.setModalHidden();
+  }
+
+  private serverCreated(activator:string){
+    return activator == 'Server';
   }
 }
 </script>

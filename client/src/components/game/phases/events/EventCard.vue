@@ -1,5 +1,5 @@
 <template>
-  <div v-if="visible" class="c-eventcard container">
+  <div v-if="visible" class="c-eventcard container" :class="{'modal-view':isModal}">
     <div class="title-wrapper row">
       <div class="title col-12">
         <p>{{ event.name }}</p>
@@ -10,6 +10,7 @@
           class="icontwo animated pulse infinite"
         />
         <font-awesome-icon
+          v-if="!isModal"
           :icon="['fas', 'info-circle']"
           size="lg"
           @click="handleClick"
@@ -33,12 +34,21 @@
         </p>
       </div>
     </div>
+
+    <div v-if="wasSpawnedByServer" class="interact-wrapper row">
+      <div v-if="requiresInteraction" class="interact col-12">
+        <button class="button" @click="closeModal">Interact</button>
+      </div>
+      <div v-else class="interact col-12">
+        <button class="button" @click="readyUp">Continue</button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop, Inject } from 'vue-property-decorator';
-import { AccomplishmentData, Phase } from '@port-of-mars/shared/types';
+import { MarsEventData, Phase, EventClientView  } from '@port-of-mars/shared/types';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons/faInfoCircle';
@@ -63,10 +73,14 @@ export default class EventCard extends Vue {
       effect: undefined,
     }),
   })
-  private event!: AccomplishmentData;
+  private event!: MarsEventData;
 
   @Prop({ default: false }) private visible!: boolean;
   @Prop({ default: false }) private active!: boolean;
+
+  @Prop({default: false}) private isModal!:boolean;
+
+  @Prop({default:false}) private wasSpawnedByServer!:boolean;
 
   get phase() {
     return Phase;
@@ -78,6 +92,28 @@ export default class EventCard extends Vue {
 
   get showActiveIndicator() {
     return this.active && this.gamePhase === this.phase.events;
+  }
+
+  private eventNoChangeViews: Array<EventClientView> = [
+    'NO_CHANGE',
+    'AUDIT',
+    'DISABLE_CHAT'
+  ];
+
+  get requiresInteraction() {
+    if(!this.eventNoChangeViews.includes(this.event.clientViewHandler)){
+      return true;
+    }
+    return false;
+  }
+
+  closeModal(){
+    this.api.setModalHidden();
+  }
+
+  readyUp(){
+    this.api.setPlayerReadiness(true);
+    this.api.setModalHidden();
   }
 
   private handleClick(): void {
