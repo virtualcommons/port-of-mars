@@ -10,6 +10,7 @@ PGPASS_PATH=keys/.pgpass
 SENTRY_DSN_PATH=keys/sentry_dsn
 MAIL_API_KEY_PATH=keys/mail_api_key
 SECRETS=$(MAIL_API_KEY_PATH) $(DB_PASSWORD_PATH) $(JWT_SECRET_PATH) $(ORMCONFIG_PATH) $(PGPASS_PATH) $(SENTRY_DSN_PATH)
+BUILD_ID_PATH=client/src/assets/build-id.json
 BUILD_ID=$(shell git describe --tags --abbrev=1)
 
 .PHONY: build
@@ -80,7 +81,11 @@ $(DB_DATA_PATH):
 .PHONY: secrets
 secrets: $(SECRETS)
 
-docker-compose.yml: base.yml staging.base.yml $(ENVIR).yml config.mk $(DB_DATA_PATH)
+.PHONY: build-id
+build-id: 
+	echo "\"${BUILD_ID}\"" > $(BUILD_ID_PATH)
+
+docker-compose.yml: base.yml staging.base.yml $(ENVIR).yml config.mk $(DB_DATA_PATH) build-id
 	case "$(ENVIR)" in \
 	  dev) docker-compose -f base.yml -f "$(ENVIR).yml" config > docker-compose.yml;; \
 	  staging|prod) docker-compose -f base.yml -f staging.base.yml -f "$(ENVIR).yml" config > docker-compose.yml;; \
@@ -97,8 +102,7 @@ test: docker-compose.yml
 	docker-compose run --rm server yarn test
 
 .PHONY: deploy
-deploy: docker-compose.yml
-	echo "\"${BUILD_ID}\"" > client/src/assets/build-id.json
+deploy: docker-compose.yml build-id
 	docker-compose pull db redis
 	docker-compose build --pull
 	docker-compose up -d 
