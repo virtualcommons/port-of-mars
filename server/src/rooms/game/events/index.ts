@@ -8,13 +8,8 @@ import {
   Resource,
   MarsLogCategory
 } from '@port-of-mars/shared/types';
-import {GameEvent as DBGameEvent} from '@port-of-mars/server/entity'
 import {
-  ChatMessage,
   GameState,
-  Player,
-  Trade,
-  MarsLogMessage
 } from '@port-of-mars/server/rooms/game/state';
 import {GameEvent, Json} from '@port-of-mars/server/rooms/game/events/types';
 import {MarsEvent} from '@port-of-mars/server/rooms/game/state/marsEvents/MarsEvent';
@@ -27,7 +22,9 @@ import {
   from '@port-of-mars/server/rooms/game/state/marsEvents/state';
 import * as entities from '@port-of-mars/server/entity/GameEvent';
 import _ from "lodash";
-import {GameRoom} from "@port-of-mars/server/rooms/game";
+import {getLogger} from "@port-of-mars/server/settings";
+
+const logger = getLogger(__filename);
 
 class GameEventDeserializer {
   protected lookups: { [classname: string]: { new(data?: any): GameEvent } } = {};
@@ -494,11 +491,13 @@ export class SelectedInfluence extends GameEventWithData {
   }
 
   apply(game: GameState): void {
+    logger.warn('bonding through adversity %o %o', this, game.currentEvent.state);
     let state: BondingThroughAdversity;
     if (game.currentEvent.state instanceof BondingThroughAdversity) {
       state = game.currentEvent.state;
       state.updateVotes(this.data.role, this.data.influence);
       game.players[this.data.role].updateReadiness(true);
+      logger.warn('done bonding')
     }
   }
 }

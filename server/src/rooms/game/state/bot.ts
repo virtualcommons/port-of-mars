@@ -53,13 +53,13 @@ export class MarsEventVisitor implements AbstractMarsEventVisitor {
     // no corresponding mars event
     return [new SetPlayerReadiness({value: true, role: player.role})]
   }
-  INFLUENCES_DRAW(state: GameState, player: Player): Array<GameEvent> {
+  INFLUENCES_SELECT(state: GameState, player: Player): Array<GameEvent> {
     const savedResources: InvestmentData = {
-      culture: 0,
-      finance: 0,
-      government: 0,
-      legacy: 0,
-      science: 0,
+      culture: - player.inventory.culture,
+      finance: - player.inventory.finance,
+      government: - player.inventory.government,
+      legacy: - player.inventory.legacy,
+      science: - player.inventory.science,
       upkeep: 0
     };
 
@@ -71,14 +71,14 @@ export class MarsEventVisitor implements AbstractMarsEventVisitor {
       if (player.inventory[resource] > 0) {
         const resourceUnits = player.inventory[resource];
         const unitsToTake = Math.min(resourceUnits, unitsRemaining);
-        savedResources[resource] = - resourceUnits + unitsToTake;
+        savedResources[resource] += unitsToTake;
         unitsRemaining -= unitsToTake;
       }
     }
     logger.info('influences draw %o', savedResources);
     return [new KeptResources({role: player.role, savedResources})]
   }
-  INFLUENCES_SELECT(state: GameState, player: Player): Array<GameEvent> {
+  INFLUENCES_DRAW(state: GameState, player: Player): Array<GameEvent> {
     return [new SelectedInfluence({role: player.role, influence: 'culture'})]
   }
   ACCOMPLISHMENT_SELECT_PURCHASED(state: GameState, player: Player): Array<GameEvent> {
