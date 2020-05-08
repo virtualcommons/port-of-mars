@@ -1,10 +1,12 @@
 .c-eventcard {
   width: 100%;
   padding: 0;
+  //height:100%;
   border: 0.125rem solid $space-white;
   margin: 0 0 0.5rem 0;
   @include make-column-and-center;
   flex-shrink: 0;
+  align-items: stretch;
 
   &:last-child {
     margin-bottom: 0;
@@ -62,6 +64,7 @@
   }
 
   .flavortext-wrapper {
+    flex:1;
     background-color: $space-gray;
 
     .flavortext {
@@ -79,6 +82,7 @@
   }
 
   .duration-wrapper {
+    flex:1;
     background-color: $space-gray;
 
     .duration {
@@ -94,4 +98,24 @@
       }
     }
   }
+
+  .interact-wrapper {
+    flex:1;
+    background-color: $space-gray;
+    margin-top:4rem;
+    
+    .interact {
+      padding: 0;
+      @include make-center;
+      
+      .button{
+        @include space-button;
+      }
+    }
+  }
+}
+
+.modal-view{
+  border:0;
+  background-color: $space-gray;
 }

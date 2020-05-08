@@ -189,8 +189,10 @@ export class TutorialAPI  {
 
   //MODAL HANDLERS
   public setModalVisible(data: any){
-    this.store.commit('SET_MODAL_VISIBLE',data);
-    this.completedActionWithImplicitForward();
+    if(data.data.activator != 'Server'){
+      this.store.commit('SET_MODAL_VISIBLE',data);
+      this.completedActionWithImplicitForward();
+    }
   }
 
   public setModalHidden(){
