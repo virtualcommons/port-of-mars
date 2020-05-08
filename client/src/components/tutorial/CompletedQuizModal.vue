@@ -2,14 +2,14 @@
     <div class='go-to-lobby-modal'>
       <div class="content">
         <div class="text-content">
-            <p class="thank-you-text"><b>Thank you for completing the Tutorial!</b></p>
-            <p class="upcoming-text">You are now eligible to play in upcoming games!</p>
+            <p class="thank-you-text"><b>Congratulations, you have passed Port of Mars Mission Control Training!</b></p>
+            <p class="upcoming-text">Please return to the dashboard to complete any additional onboarding tasks and check for available games.</p>
         </div>
         <div class="image">
             <div class="profile">
                 <div class="p-container">
                 <div class="frame-outer">
-                    <div  class="frame-inner">
+                    <div class="frame-inner">
                         <img src="@port-of-mars/client/assets/characters-large/Researcher.png" alt="Player" />
                     </div>
                 </div>
@@ -17,21 +17,22 @@
             </div>
         </div>
       </div>
-      <button class="lobby-button" @click="goToLobby">Go to waiting lobby</button>
+      <button class="lobby-button" @click="gotoDashboard">Continue</button>
     </div>
 </template>
 
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import { DASHBOARD_PAGE } from '@shared/routes';
 
 @Component({
   name: 'tutorialComplete',
   components: {}
 })
 export default class CompletedQuizModal extends Vue{
-    async goToLobby(){
-        await this.$router.push({ name: 'WaitingLobby' });
+    async gotoDashboard(){
+        await this.$router.push({ name: DASHBOARD_PAGE });
         return;
     }
 }
