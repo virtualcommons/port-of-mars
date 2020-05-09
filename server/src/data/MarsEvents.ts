@@ -228,7 +228,7 @@ export function getAllMarsEvents(): Array<MarsEventDeckItem> {
   for (const eventId in AVAILABLE_EVENTS) {
     const marsEventDeckItem = _.find(_marsEvents, (e: MarsEventDeckItem) => e[0].id === eventId);
     if (marsEventDeckItem) {
-      availableEvents.push(marsEventDeckItem);
+      availableEvents.push(_.cloneDeep(marsEventDeckItem));
     }
     else {
       logger.warn("No event ID found in mars events: %s", eventId);
