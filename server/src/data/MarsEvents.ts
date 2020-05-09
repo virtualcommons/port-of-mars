@@ -225,8 +225,8 @@ export function getAllMarsEvents(): Array<MarsEventDeckItem> {
     'lifeAsUsual', 'breakdownOfTrust',
   ];
   const availableEvents: Array<MarsEventDeckItem> = [];
-  for (const eventId in AVAILABLE_EVENTS) {
-    const marsEventDeckItem = _.find(_marsEvents, (e: MarsEventDeckItem) => e[0].id === eventId);
+  for (const eventId of AVAILABLE_EVENTS) {
+    const marsEventDeckItem = _.find(_marsEvents, (ev: MarsEventDeckItem) => ev[0].id === eventId);
     if (marsEventDeckItem) {
       availableEvents.push(_.cloneDeep(marsEventDeckItem));
     }

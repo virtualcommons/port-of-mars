@@ -158,7 +158,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
             const client = clientStat.client;
             this.removeClientStat(client);
             this.sendSafe(client, { kind: 'removed-client-from-lobby' });
-            client.close();
+            client.leave();
           });
           // now remove this group from the list of groups maintained by the Lobby
           this.removeGroup(group);
