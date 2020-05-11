@@ -1,5 +1,6 @@
 @import './utilities/_mixins.scss';
 @import './utilities/_variables.scss';
+@import './utilities/color-palette.scss';
 
 // TODO :: Download Fonts Locally
 @import url('https://fonts.googleapis.com/css?family=Maven+Pro:400,500,600,700&display=swap');
@@ -51,8 +52,8 @@ body {
   --marslog-purple: rgba(111, 36, 134, 0.2);
   --marslog-orange: rgba(170, 111, 0, 0.2);
   --marslog-green: rgba(9, 92, 41, 0.2);
-  --new-space-orange:rgba(221, 168, 119, 1);
-  --trade-request-blue:#659be8;
+  --new-space-orange: rgba(221, 168, 119, 1);
+  --trade-request-blue: #659be8;
 }
 
 p,

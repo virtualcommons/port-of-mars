@@ -22,11 +22,11 @@
         padding: 0.25rem 1rem;
         margin-bottom: 0.5rem;
         @include make-center;
-        background-color: $space-lightgray;
+        background-color: $phase-topbar-background;
 
         .title {
           margin-bottom: 0;
-          color: $space-gray;
+          color: $phase-topbar-foreground;
           font-size: $font-med;
           font-weight: $font-weight-maven-pro-bold;
         }
@@ -47,8 +47,8 @@
           margin: 0;
           font-size: $font-med;
           font-weight: $font-weight-maven-pro-bold !important;
-          color: $space-lightgray;
-          border: 0.125rem solid $space-lightgray;
+          color: $phase-topbar-background;
+          border: 0.125rem solid $phase-topbar-background;
 
           &:disabled {
             opacity: 0.5;
@@ -56,8 +56,8 @@
         }
 
         .selected {
-          color: $space-gray;
-          background-color: $space-lightgray;
+          color: $phase-topbar-foreground;
+          background-color: $phase-topbar-background;
         }
       }
 
@@ -89,11 +89,11 @@
         padding: 0.25rem 1rem;
         margin-bottom: 0.5rem;
         @include make-center;
-        background-color: $new-space-orange;
+        background-color: $phase-topbar-background;
 
         .title {
           margin-bottom: 0;
-          color: $space-gray;
+          color: $phase-topbar-foreground;
           font-size: $font-med;
           font-weight: $font-weight-maven-pro-bold;
         }

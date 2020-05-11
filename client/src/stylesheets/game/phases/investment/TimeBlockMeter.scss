@@ -9,7 +9,7 @@
     height: 100%;
     width: 100%;
     margin: 0 0.125rem;
-    background-color: $space-gray;
+    background-color: $phase-topbar-foreground;
     border-radius: 0;
   }
 
@@ -20,7 +20,7 @@
     position: absolute;
     top: 0;
     right: 0;
-    background-color: $new-space-orange;
+    background-color: $phase-topbar-background;
     transition: all 0.15s ease-in-out;
   }
 }

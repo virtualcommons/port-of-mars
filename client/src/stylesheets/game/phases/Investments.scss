@@ -20,13 +20,13 @@
         padding: 0.25rem 1rem;
         margin-bottom: 0.5rem;
         @include make-center;
-        background-color: $new-space-orange;
+        background-color: $phase-topbar-background;
 
         .title {
           margin: 0 1rem 0 0;
           font-size: $font-med;
           font-weight: $font-weight-maven-pro-bold;
-          color: $space-gray;
+          color: $phase-topbar-foreground;
         }
 
         .timeblockmeter {
@@ -38,12 +38,13 @@
           margin: 0 0 0 1rem;
           font-size: $font-large;
           font-weight: $font-weight-maven-pro-bold;
-          color: $space-gray;
+          color: $phase-topbar-foreground;
           text-align: center;
         }
 
         .icon {
           margin-left: 0.5rem;
+          color: $phase-topbar-foreground;
         }
       }
 
@@ -68,7 +69,7 @@
         padding: 0.25rem 1rem;
         margin-bottom: 0.5rem;
         @include make-center;
-        background-color: $space-lightgray;
+        background-color: $phase-topbar-background;
 
         .title {
           margin-bottom: 0;

@@ -4,8 +4,7 @@
   height: 100%;
   width: 20rem;
   padding: 2rem;
-  border-right: 0.125rem solid $space-gray;
-  background-color: $space-gray-0975;
+  background-color: $profile-menu-background-default;
   transition: position 0.15s ease-in;
   z-index: 3;
   backdrop-filter: blur(2px);
@@ -18,12 +17,10 @@
     height: 4rem;
     width: 2rem;
     padding: 0.5rem;
-    border: 0.125rem solid $space-gray;
-    border-left: none;
     border-top-right-radius: 4rem;
     border-bottom-right-radius: 4rem;
-    color: $space-gray;
-    background-color: $space-white;
+    color: $profile-menu-foreground-default;
+    background-color: $profile-menu-background-default;
 
     .left {
       margin-right: 0.75rem;
@@ -46,7 +43,7 @@
     a,
     button {
       display: block;
-      color: $space-white;
+      color: $profile-menu-foreground-default;
       font-size: $font-med;
     }
 
