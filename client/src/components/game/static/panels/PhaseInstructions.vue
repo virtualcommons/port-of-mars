@@ -1,7 +1,6 @@
 <template>
   <div class="c-phaseinstructions">
     <div class="wrapper">
-      <p class="title">Phase Instructions</p>
       <div class="instructions">
         <div class="text">
           <p>{{ phaseInstructions }}</p>

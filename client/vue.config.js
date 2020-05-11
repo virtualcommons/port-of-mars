@@ -10,23 +10,30 @@ if (fs.existsSync('/run/secrets/sentry_dsn')) {
 }
 
 module.exports = {
-  chainWebpack: config => {
-    config.resolve.alias.set('@port-of-mars/shared', path.resolve('../shared/src'));
+  chainWebpack: (config) => {
+    config.resolve.alias.set(
+      '@port-of-mars/shared',
+      path.resolve('../shared/src')
+    );
     config.resolve.alias.set('@port-of-mars/client', path.resolve('./src'));
 
     const types = ['vue-modules', 'vue', 'normal-modules', 'normal'];
-    types.forEach(type => addStyleResource(config.module.rule('scss').oneOf(type)));
+    types.forEach((type) =>
+      addStyleResource(config.module.rule('scss').oneOf(type))
+    );
 
-    config
-      .plugin('define-env')
-      .use(webpack.DefinePlugin, [{
-        'process.env.SERVER_URL_WS':
-          JSON.stringify(['development'].includes(NODE_ENV) ? 'ws://localhost:2567' : ''),
-        'process.env.SERVER_URL_HTTP':
-          JSON.stringify(['development'].includes(NODE_ENV) ? 'http://localhost:2567' : ''),
+    config.plugin('define-env').use(webpack.DefinePlugin, [
+      {
+        'process.env.SERVER_URL_WS': JSON.stringify(
+          ['development'].includes(NODE_ENV) ? 'ws://localhost:2567' : ''
+        ),
+        'process.env.SERVER_URL_HTTP': JSON.stringify(
+          ['development'].includes(NODE_ENV) ? 'http://localhost:2567' : ''
+        ),
         'process.env.SENTRY_DSN': JSON.stringify(SENTRY_DSN),
-      }])
-  }
+      },
+    ]);
+  },
 };
 
 function addStyleResource(rule) {
@@ -36,7 +43,11 @@ function addStyleResource(rule) {
     .options({
       patterns: [
         path.resolve(__dirname, './src/stylesheets/utilities/_mixins.scss'),
-        path.resolve(__dirname, './src/stylesheets/utilities/_variables.scss')
-      ]
+        path.resolve(__dirname, './src/stylesheets/utilities/_variables.scss'),
+        path.resolve(
+          __dirname,
+          './src/stylesheets/utilities/color-palette.scss'
+        ),
+      ],
     });
 }

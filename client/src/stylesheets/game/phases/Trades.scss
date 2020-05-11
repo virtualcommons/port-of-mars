@@ -27,29 +27,24 @@
 
           .wrapper {
             @include expand;
-            display:flex;
+            display: flex;
             justify-content: space-between;
             align-items: center;
-            padding:0 1rem;
-            // background-color: $new-space-orange;
-            background-color: $space-lightgray;
+            padding: 0 1rem;
+            background-color: $phase-topbar-background;
 
             .title {
               margin-bottom: 0;
-              color: $space-gray;
+              color: $phase-topbar-foreground;
               font-size: $font-med;
               font-weight: $font-weight-maven-pro-bold;
             }
 
-            .filter-options{
-              
-
-              .filter-option{
+            .filter-options {
+              .filter-option {
                 margin: 0 0.5rem;
               }
             }
-
-
           }
         }
 
@@ -59,15 +54,15 @@
           @include reset-button;
           @include default-transition-base;
           padding: 0.5rem 1rem;
-          border: solid 0.125rem $new-space-orange;
+          border: solid 0.125rem $modal-background-default;
           font-size: $font-med;
           font-weight: $font-weight-maven-pro-bold !important;
           text-align: center;
-          color: $new-space-orange;
+          color: $modal-background-default;
 
           &:hover {
-            color: $space-gray;
-            background-color: $new-space-orange;
+            color: $modal-foreground-default;
+            background-color: $modal-background-default;
           }
         }
       }
