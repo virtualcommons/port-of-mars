@@ -150,7 +150,6 @@ export class DBPersister implements Persister {
 
   async sync() {
     await this.lock.runExclusive(async () => {
-      logger.debug('syncing to db')
       const f = async (em: EntityManager) => {
         const gameIds = _.uniq(this.pendingEvents.map(e => e.gameId));
         const gameIdsToFinalize = _.uniq(this.pendingEvents
@@ -166,13 +165,14 @@ export class DBPersister implements Persister {
         this.pendingEvents = [];
       };
       if (this.pendingEvents.length > 0) {
+        logger.debug('syncing to db')
         if (this.em.queryRunner?.isTransactionActive) {
           await f(this.em);
         } else {
           await this.em.transaction(f);
         }
+        logger.debug('synced to db')
       }
-      logger.debug('synced to db')
     })
   }
 
