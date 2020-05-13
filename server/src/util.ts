@@ -10,6 +10,7 @@ import { getAllMarsEvents } from "@port-of-mars/server/data/MarsEvents";
 import { TournamentRound } from "@port-of-mars/server/entity/TournamentRound";
 import { Page, getPagePath } from "@port-of-mars/shared/routes";
 import { getLogger, settings } from "@port-of-mars/server/settings";
+import {getServices} from "@port-of-mars/server/services";
 
 const logger = getLogger(__filename);
 
@@ -59,8 +60,7 @@ export function mockGameStateInitOpts(
 }
 
 export async function mockGameInitOpts(persister: Persister): Promise<GameOpts> {
-  // FIXME: this should be retrieving the tournament round via TournamentService.getCurrentRound() or equivalent
-  const currentTournamentRound = await getConnection().getRepository(TournamentRound).findOneOrFail();
+  const currentTournamentRound = await getServices().tournament.getActiveTournament();
   return {
     ...mockGameStateInitOpts(),
     tournamentRoundId: currentTournamentRound.id,
@@ -70,8 +70,7 @@ export async function mockGameInitOpts(persister: Persister): Promise<GameOpts> 
 
 export async function buildGameOpts(usernames: Array<string>, persister: Persister): Promise<GameOpts> {
   assert.equal(usernames.length, ROLES.length);
-  // FIXME: this should be retrieving the tournament round via TournamentService.getCurrentRound() or equivalent
-  const currentTournamentRound = await getConnection().getRepository(TournamentRound).findOneOrFail();
+  const currentTournamentRound = await getServices().tournament.getCurrentTournamentRound();
   logger.info("building game opts with current tournament round [%d]", currentTournamentRound.id);
   return {
     userRoles: _.zipObject(usernames, ROLES),
