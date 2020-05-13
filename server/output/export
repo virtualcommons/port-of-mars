@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-mkdir -p output
-
 psql -U marsmadness -h db port_of_mars <<E_O_SQL
 \copy game TO game.csv WITH (FORMAT csv, HEADER)
 \copy game_event TO game_event.csv WITH (FORMAT csv, HEADER)
