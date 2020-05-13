@@ -195,22 +195,6 @@ export class SetNextPhaseCmd implements Command {
     return new SetNextPhaseCmd(state);
   }
 
-  /**
-   * Ends game if upkeep is less than or equal to 0;
-   * @param upkeep The number value of upkeep.
-   *
-   */
-  gameOver(upkeep: number) {
-    if (upkeep <= 0) {
-      //this.game.state.phase = Phase.defeat;
-      logger.info('SetNextPhaseCmd: upkeep reached 0', upkeep);
-      return [new EnteredDefeatPhase(this.state.playerScores)];
-    }
-    else {
-      return [];
-    }
-  }
-
   execute(): Array<GameEvent> {
     if (this.state.upkeep <= 0) {
       return [new EnteredDefeatPhase(this.state.playerScores)];
@@ -229,8 +213,6 @@ export class SetNextPhaseCmd implements Command {
           this.state.marsEvents.length
         ) {
           events.push(new EnteredInvestmentPhase());
-          logger.info('enter investment phase:', this.state.upkeep);
-
         } else {
           events.push(new ReenteredMarsEventPhase());
           events.push(new InitializedMarsEvent());
