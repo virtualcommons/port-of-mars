@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+mkdir -p output
+
+psql -U marsmadness -h db port_of_mars <<E_O_SQL
+\copy game TO game.csv WITH (FORMAT csv, HEADER)
+\copy game_event TO game_event.csv WITH (FORMAT csv, HEADER)
+\copy player TO player.csv WITH (FORMAT csv, HEADER)
+\copy quiz TO quiz.csv WITH (FORMAT csv, HEADER)
+\copy quiz_submission TO quiz_submission.csv WITH (FORMAT csv, HEADER)
+\copy question TO question.csv WITH (FORMAT csv, HEADER)
+\copy question_response TO question_response.csv WITH (FORMAT csv, HEADER)
+E_O_SQL
