@@ -200,6 +200,7 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
 
   apply(game: GameState): void {
     game.phase = Phase.events;
+    logger.debug('phase: %s', Phase[game.phase]);
     game.round += 1;
     
     const contributedUpkeep = game.nextRoundUpkeep();
@@ -263,6 +264,7 @@ export class EnteredInvestmentPhase extends KindOnlyGameEvent {
   apply(game: GameState): void {
     game.resetPlayerReadiness();
     game.phase = Phase.invest;
+    logger.debug('phase: %s', Phase[game.phase]);
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
   }
 }
@@ -272,6 +274,7 @@ export class EnteredTradePhase extends KindOnlyGameEvent {
   apply(game: GameState) {
     game.resetPlayerReadiness();
     game.phase = Phase.trade;
+    logger.debug('phase: %s', Phase[game.phase]);
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
     for (const player of game.players) {
       player.invest();
@@ -285,6 +288,7 @@ export class EnteredPurchasePhase extends KindOnlyGameEvent {
   apply(game: GameState): void {
     game.resetPlayerReadiness();
     game.phase = Phase.purchase;
+    logger.debug('phase: %s', Phase[game.phase]);
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
     game.clearTrades();
     for (const player of game.players) {
@@ -298,6 +302,7 @@ export class EnteredDiscardPhase extends KindOnlyGameEvent {
   apply(game: GameState): void {
     game.resetPlayerReadiness();
     game.phase = Phase.discard;
+    logger.debug('phase: %s', Phase[game.phase]);
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
     
     const contributedUpkeep = game.nextRoundUpkeep() + 25 - game.upkeep;
@@ -318,6 +323,7 @@ export class EnteredDefeatPhase extends GameEventWithData {
 
   apply(game: GameState): void {
     game.phase = Phase.defeat;
+    logger.debug('phase: %s', Phase[game.phase]);
     game.timeRemaining = 10000; // set timeRemaining = infinite to prevent phase transitioning after game is over
     game.log(`System Health has reached zero.`, MarsLogCategory.systemHealth, 'Server');
   }
@@ -331,6 +337,7 @@ export class EnteredVictoryPhase extends GameEventWithData {
 
   apply(game: GameState): void {
     game.phase = Phase.victory;
+    logger.debug('phase: %s', Phase[game.phase]);
     game.timeRemaining = 10000; // set timeRemaining = infinite to prevent phase transitioning after game is over
     game.evaluateGameWinners();
   }
