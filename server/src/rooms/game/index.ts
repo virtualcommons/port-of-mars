@@ -33,6 +33,7 @@ import { Requests, Responses } from '@port-of-mars/shared/game';
 import { Phase } from "@port-of-mars/shared/types";
 import {GameEvent} from "@port-of-mars/server/rooms/game/events/types";
 import _ from "lodash";
+import {DBPersister} from "@port-of-mars/server/services/persistence";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -94,12 +95,13 @@ export class GameRoom extends Room<GameState> implements Game {
       this.state.applyMany(events);
       this.persister.persist(events, this.getMetadata());
     });
-    this.persister = options.persister;
+    this.persister = new DBPersister();
     this.gameId = await this.persister.initialize(options, this.roomId);
     const snapshot = this.state.toJSON();
     const event = new TakenStateSnapshot(snapshot);
     this.persister.persist([event], this.getMetadata());
     this.clock.setInterval(this.gameLoop.bind(this), 1000);
+    this.clock.setInterval(async () => await this.persister.sync(), 5000);
   }
 
   safeSend(client: Client, msg: Responses) {
@@ -175,9 +177,9 @@ export class GameRoom extends Room<GameState> implements Game {
       || this.state.timeRemaining <= 0
       || (this.state.upkeep <= 0 && !inEndGame)) {
       const cmd = new SetNextPhaseCmd(this.state);
-      const eventsCmd = cmd.execute();
-      this.state.applyMany(eventsCmd);
-      events.concat(eventsCmd);
+      const phaseEvents = cmd.execute();
+      this.state.applyMany(phaseEvents);
+      events.concat(phaseEvents);
     }
 
     if (!_.isEmpty(events)) {
@@ -195,8 +197,11 @@ export class GameRoom extends Room<GameState> implements Game {
     this.safeSend(client, { kind: 'set-player-role', role: player.role });
   }
 
-  async onDispose() {
+  async onDispose(): Promise<void> {
     logger.info('Disposing of room', this.roomId);
+    await this.persister.sync();
+    await this.persister.finalize(this.gameId);
+    logger.info('Disposed of room', this.roomId);
   }
 
 }

@@ -58,11 +58,12 @@ describe('a game', () => {
     });
 
     it('can be loaded into the database and finalized', async () => {
-      const gameId = await persister.initialize({persister, tournamentRoundId: tr.id, ...opts}, 'foo');
+      const gameId = await persister.initialize({tournamentRoundId: tr.id, ...opts}, 'foo');
       for (const [endTime, e] of ges) {
         await persister.persist([e], {gameId, dateCreated: new Date('1970 01 01'), timeRemaining: endTime})
       }
       await persister.sync();
+      await persister.finalize(gameId);
       const players = await manager.getRepository(Player).find({where: {gameId}});
       expect(players.length).toBe(5);
       for (const p of players) {

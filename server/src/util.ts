@@ -59,16 +59,15 @@ export function mockGameStateInitOpts(
   };
 }
 
-export async function mockGameInitOpts(persister: Persister): Promise<GameOpts> {
+export async function mockGameInitOpts(): Promise<GameOpts> {
   const currentTournamentRound = await getServices().tournament.getActiveTournament();
   return {
     ...mockGameStateInitOpts(),
     tournamentRoundId: currentTournamentRound.id,
-    persister
   };
 }
 
-export async function buildGameOpts(usernames: Array<string>, persister: Persister): Promise<GameOpts> {
+export async function buildGameOpts(usernames: Array<string>): Promise<GameOpts> {
   assert.equal(usernames.length, ROLES.length);
   const currentTournamentRound = await getServices().tournament.getCurrentTournamentRound();
   logger.info("building game opts with current tournament round [%d]", currentTournamentRound.id);
@@ -77,7 +76,6 @@ export async function buildGameOpts(usernames: Array<string>, persister: Persist
     deck: _.shuffle(getMarsEventData()),
     numberOfGameRounds: currentTournamentRound.numberOfGameRounds,
     tournamentRoundId: currentTournamentRound.id,
-    persister
   };
 }
 

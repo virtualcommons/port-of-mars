@@ -164,19 +164,9 @@ async function createApp() {
     }
   });
 
-  const persister = new DBPersister();
-  const clock = new ClockTimer();
-  clock.setInterval(async () => persister.sync(), 5000);
-  clock.start(true);
-  gameServer.onShutdown(async () => {
-    logger.info('syncing events');
-    await persister.sync();
-    logger.info('events synced');
-  });
-
   // register your room handlers
   gameServer.define(GameRoom.NAME, GameRoom);
-  gameServer.define(RankedLobbyRoom.NAME, RankedLobbyRoom, { persister });
+  gameServer.define(RankedLobbyRoom.NAME, RankedLobbyRoom);
 
 
   applyInStagingOrProd(() => app.use(Sentry.Handlers.errorHandler()));

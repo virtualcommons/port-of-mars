@@ -39,6 +39,10 @@ export class GameConsoleService implements Persister {
     return Promise.resolve(1);
   }
 
+  finalize(gameId: number): Promise<void> {
+    return Promise.resolve();
+  }
+
   async sync() {
     console.log('synced');
   }
@@ -120,6 +124,7 @@ export class DBPersister implements Persister {
 
   async finalize(gameId: number): Promise<[Game, Array<Player>, Array<TournamentRoundInvite>]> {
     const f = async (em: EntityManager) => {
+      logger.debug('finalizing game %s', gameId);
       const event = await em.getRepository(GameEvent).findOneOrFail({
         where: {type: In(DBPersister.FINAL_EVENTS), gameId},
         order: {id: "DESC", dateCreated: "DESC"}
@@ -139,7 +144,9 @@ export class DBPersister implements Persister {
       }
       game.status = event.type === 'entered-defeat-phase' ? 'defeat' : 'victory';
       game.dateFinalized = this.sp.time.now();
-      return await Promise.all([em.save(game), em.save(players), em.save(invites)]);
+      const res = await Promise.all([em.save(game), em.save(players), em.save(invites)]);
+      logger.debug('finalized game %s', gameId);
+      return res;
     };
     if (this.em.queryRunner?.isTransactionActive) {
       return f(this.em);
@@ -151,17 +158,11 @@ export class DBPersister implements Persister {
   async sync() {
     await this.lock.runExclusive(async () => {
       const f = async (em: EntityManager) => {
-        const gameIds = _.uniq(this.pendingEvents.map(e => e.gameId));
-        const gameIdsToFinalize = _.uniq(this.pendingEvents
-          .filter(e => DBPersister.FINAL_EVENTS.includes(e.type))
-          .map(e => e.gameId));
-
         await this.em.getRepository(GameEvent)
           .createQueryBuilder()
           .insert()
           .values(this.pendingEvents)
           .execute();
-        await Promise.all(gameIdsToFinalize.map(gameId => this.finalize(gameId)));
         this.pendingEvents = [];
       };
       if (this.pendingEvents.length > 0) {

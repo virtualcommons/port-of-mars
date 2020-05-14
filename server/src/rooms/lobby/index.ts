@@ -67,8 +67,6 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
    */
   devMode = false;
 
-  persister!: Persister;
-
   /**
    * holds data for cron date
    */
@@ -77,7 +75,6 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
   onCreate(options: any) {
     logger.info(`RankedLobbyRoom: new room ${this.roomId}`);
     this.setState(new LobbyRoomState());
-    this.persister = options.persister;
     this.evaluateAtEveryMinute = settings.lobby.evaluateAtEveryMinute;
     this.devMode = settings.lobby.devMode;
     this.registerLobbyHandlers();
@@ -250,7 +247,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
         // connected usernames
         const usernames = this.fillUsernames(group.clientStats.map(s => s.client.auth.username));
         // build game options to register the usernames and persister with a newly created room
-        const gameOpts = await buildGameOpts(usernames, this.persister);
+        const gameOpts = await buildGameOpts(usernames);
         // Create room instance in the server.
         const room = await matchMaker.createRoom(
           GameRoom.NAME,
