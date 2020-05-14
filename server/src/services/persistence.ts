@@ -178,6 +178,7 @@ export class DBPersister implements Persister {
   }
 
   async persist(events: Array<ge.GameEvent>, metadata: Metadata) {
+    logger.debug('events: %o', events);
     const rawGameEvents = events.map(ge => toDBRawGameEvent(ge, metadata));
     await this.lock.runExclusive(async () => {
       for (const rawEvent of rawGameEvents) {

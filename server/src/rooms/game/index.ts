@@ -172,6 +172,9 @@ export class GameRoom extends Room<GameState> implements Game {
     const inEndGame = [Phase.defeat, Phase.victory].includes(this.state.phase);
     this.state.timeRemaining -= 1;
     const events = this.state.act();
+    if (events.length > 0) {
+      logger.debug('bot events: %o', events)
+    }
 
     if (this.state.allPlayersAreReady
       || this.state.timeRemaining <= 0
@@ -179,7 +182,7 @@ export class GameRoom extends Room<GameState> implements Game {
       const cmd = new SetNextPhaseCmd(this.state);
       const phaseEvents = cmd.execute();
       this.state.applyMany(phaseEvents);
-      events.concat(phaseEvents);
+      events.splice(events.length, 0, ...phaseEvents);
     }
 
     if (!_.isEmpty(events)) {

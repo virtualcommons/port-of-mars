@@ -175,7 +175,7 @@ export class ActorRunner implements Actor {
 
 export class SimpleBot implements Bot {
   elapsed = 0;
-  maxInactivityTime = 60 * 6;
+  maxInactivityTime = 15;
   active = false;
 
   constructor(public actor: ActorRunner) {}
@@ -197,11 +197,13 @@ export class SimpleBot implements Bot {
   }
 
   act(state: GameState, player: Player): Array<GameEvent> {
-    // logger.info('act %s, active %d, should be %d', player.role, this.active, this.shouldBeActive);
+    logger.info('act %s, active %d, should be %d', player.role, this.active, this.shouldBeActive);
     this.incrementElapsed();
     if (this.active) {
       if (this.shouldBeActive) {
-        return this.actor[state.phase](state, player);
+        const events = this.actor[state.phase](state, player);
+        logger.debug('actor events performed: %o', events);
+        return events;
       } else {
         return [new BotControlRelinquished({role: player.role})]
       }
