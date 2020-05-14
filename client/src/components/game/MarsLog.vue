@@ -12,10 +12,10 @@
       >
         <p class="category">{{ log.category }}</p>
         <p class="content">{{ log.content }}</p>
-        <p class="time">
-          <span ><span class="timestamp"> [ </span>{{ logTime(log.timestamp) }}<span class="timestamp"> ]</span></span>
-          <span class="round">ROUND {{ log.round }}</span>
-        </p>
+        <div class="time">
+        <span class="timestamp-wrapper"><span class="timestamp"> [ </span>{{ logTime(log.timestamp) }}<span class="timestamp"> ]</span></span>
+          <span>ROUND {{ log.round }}</span>
+        </div>
       </div>
     </div>
   </div>
