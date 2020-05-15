@@ -3,118 +3,114 @@
   height: 100vh !important;
   width: 100vw !important;
   @include make-center;
+}
 
-  .player-dashboard {
-    @include gameboard-constraints;
-    padding: 1rem;
-    margin: 0;
+.player-dashboard {
+  @include gameboard-constraints;
+  padding: 1rem;
+  margin: 0;
+  @include make-column-and-top;
+  background-color: $space-gray;
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: -1;
+  opacity: 0.0625;
+}
+
+.title-wrapper,
+.content-wrapper {
+  width: 100%;
+  padding: 1rem;
+  margin: 0;
+}
+
+.title {
+  height: 100%;
+  padding: 0;
+  @include make-column-and-center;
+
+  a {
+    color: transparent;
+    text-decoration: none;
+  }
+
+  h1 {
+    text-transform: uppercase;
+    letter-spacing: 0.25rem;
+    font-size: 6rem;
+    font-weight: 700;
+    color: $new-space-orange;
+  }
+
+  h2 {
+    margin-bottom: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.25rem;
+    font-size: 2rem;
+    font-weight: 700;
+    color: $new-space-orange;
+  }
+}
+
+.content-wrapper {
+  flex: 1;
+  justify-content: space-around;
+  overflow: hidden;
+}
+
+.stats,
+.action-items,
+.upcoming-games {
+  height: 100%;
+  padding: 1rem;
+  @include make-column-and-top;
+
+  h2 {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    color: $space-white;
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+  }
+}
+
+.outer-wrapper {
+  flex: 1;
+  width: 100%;
+  padding: 0.5rem;
+  background-color: $space-white-opaque-1;
+  overflow-y: auto;
+
+  .wrapper {
+    width: 100%;
     @include make-column-and-top;
-    background-color: $space-gray;
-    position: relative;
-    z-index: 0;
-    overflow: hidden;
+  }
+}
 
-    .background-image {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: -1;
-      opacity: 0.0625;
-    }
+.information {
+  height: 4rem;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.5rem;
+  @include make-horizontal-between;
+  background-color: $new-space-orange-005;
 
-    .title-wrapper,
-    .content-wrapper {
-      width: 100%;
-      padding: 1rem;
-      margin: 0;
-    }
-
-    .title-wrapper {
-      .title {
-        height: 100%;
-        padding: 0;
-        @include make-column-and-center;
-
-        a {
-          color: transparent;
-          text-decoration: none;
-        }
-
-        h1 {
-          text-transform: uppercase;
-          letter-spacing: 0.25rem;
-          font-size: 6rem;
-          font-weight: 700;
-          color: $new-space-orange;
-        }
-
-        h2 {
-          margin-bottom: 0;
-          text-transform: uppercase;
-          letter-spacing: 0.25rem;
-          font-size: 2rem;
-          font-weight: 700;
-          color: $new-space-orange;
-        }
-      }
-    }
-
-    .content-wrapper {
-      flex: 1;
-      justify-content: space-around;
-      overflow: hidden;
-
-      .stats,
-      .action-items,
-      .upcoming-games {
-        height: 100%;
-        padding: 1rem;
-        @include make-column-and-top;
-
-        h2 {
-          width: 100%;
-          padding: 0.5rem;
-          margin-bottom: 1rem;
-          color: $space-white;
-          font-size: 2rem;
-          font-weight: 700;
-          text-align: center;
-        }
-
-        .outer-wrapper {
-          flex: 1;
-          width: 100%;
-          padding: 0.5rem;
-          background-color: $space-white-opaque-1;
-          overflow-y: auto;
-
-          .wrapper {
-            width: 100%;
-            @include make-column-and-top;
-          }
-        }
-      }
-
-      .stats {
-        .information {
-          height: 4rem;
-          width: 100%;
-          padding: 0.5rem 1rem;
-          margin-bottom: 0.5rem;
-          @include make-horizontal-between;
-          background-color: $new-space-orange-005;
-
-          p {
-            width: 100%;
-            margin-bottom: 0;
-            color: $space-white;
-            font-size: $font-large;
-            font-weight: $font-weight-maven-pro-bold;
-            text-align: left;
-          }
-        }
-      }
-    }
+  p {
+    width: 100%;
+    margin-bottom: 0;
+    color: $space-white;
+    font-size: $font-large;
+    font-weight: $font-weight-maven-pro-bold;
+    text-align: left;
   }
 }

@@ -11,31 +11,33 @@
   width: 100vw;
   @include make-column-and-center;
   justify-content: space-around;
+}
 
-  h1 {
-    text-transform: uppercase;
-    letter-spacing: 0.25rem;
-    font-size: 11rem;
-    font-weight: 700;
-    color: $new-space-orange;
-  }
+// HTML TEXT ELEMENTS
+h1 {
+  text-transform: uppercase;
+  letter-spacing: 0.25rem;
+  font-size: 11rem;
+  font-weight: 700;
+  color: $new-space-orange;
+}
 
-  .buttons {
-    @include make-center;
+// BUTTONS
+.buttons {
+  @include make-center;
+}
 
-    button {
-      @include reset-button;
-      height: 3.5rem;
-      width: 18rem;
-      border: 0.125rem solid $new-space-orange;
-      margin: 0.5rem;
-      color: $new-space-orange;
-      @include default-transition-base;
+button {
+  @include reset-button;
+  height: 3.5rem;
+  width: 18rem;
+  border: 0.125rem solid $new-space-orange;
+  margin: 0.5rem;
+  color: $new-space-orange;
+  @include default-transition-base;
 
-      &:hover {
-        color: $space-gray;
-        background-color: $new-space-orange;
-      }
-    }
+  &:hover {
+    color: $space-gray;
+    background-color: $new-space-orange;
   }
 }
