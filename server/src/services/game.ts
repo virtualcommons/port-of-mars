@@ -7,6 +7,10 @@ export class GameService extends BaseService {
     return await this.em.getRepository(Game).findOneOrFail({id});
   }
 
+  async findEventsByGameId(gameId: number): Promise<Array<GameEvent>> {
+    return await this.em.getRepository(GameEvent).find({where: {gameId}, order: {id: "ASC"}});
+  }
+
   async getActiveGameRoomId(userId: number): Promise<string | undefined> {
     const game = await this.em.getRepository(Game).findOne({
         where: {

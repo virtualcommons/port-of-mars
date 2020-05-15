@@ -271,7 +271,7 @@ export class EnteredInvestmentPhase extends KindOnlyGameEvent {
 gameEventDeserializer.register(EnteredInvestmentPhase);
 
 export class EnteredTradePhase extends KindOnlyGameEvent {
-  apply(game: GameState) {
+  apply(game: GameState): void {
     game.resetPlayerReadiness();
     game.phase = Phase.trade;
     logger.debug('phase: %s', Phase[game.phase]);

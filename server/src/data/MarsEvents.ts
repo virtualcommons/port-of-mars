@@ -221,7 +221,7 @@ const _marsEvents: Array<MarsEventDeckItem> = [
 export function getAllMarsEvents(): Array<MarsEventDeckItem> {
   const AVAILABLE_EVENTS = ['personalGain', 'sandstorm', 'compulsivePhilanthropy',
     'outOfCommissionCurator', 'outOfCommissionPolitician', 'outOfCommissionResearcher',
-    'outOfCommissionPioneer', 'outOfCommissionEntrepeneur', 'audit', 'bondingThroughAdversity',
+    'outOfCommissionPioneer', 'outOfCommissionEntrepreneur', 'audit', 'bondingThroughAdversity',
     'lifeAsUsual', 'breakdownOfTrust',
   ];
   const availableEvents: Array<MarsEventDeckItem> = [];

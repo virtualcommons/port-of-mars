@@ -3,6 +3,9 @@ import { mockGameStateInitOpts } from "@port-of-mars/server/util";
 import { GameEvent } from "@port-of-mars/server/entity";
 import { gameEventDeserializer } from "@port-of-mars/server/rooms/game/events";
 import _ from "lodash";
+import {getLogger} from "@port-of-mars/server/settings";
+
+const logger = getLogger(__filename);
 
 function loadSnapshot(data: GameSerialized): GameState {
   const g = new GameState(mockGameStateInitOpts());
@@ -12,6 +15,14 @@ function loadSnapshot(data: GameSerialized): GameState {
 
 export class GameReplayer {
   constructor(public events: Array<GameEvent>) { }
+
+  get endState(): GameState {
+    const events = this.events.slice(1).map(e => gameEventDeserializer.deserialize(e));
+    const g = loadSnapshot(this.events[0].payload as GameSerialized);
+    logger.info('events: %o', events);
+    g.applyMany(events)
+    return g;
+  }
 
   summarize<T>(summarizer: (g: GameState) => T): Array<T> {
     const g = loadSnapshot(this.events[0].payload as GameSerialized);

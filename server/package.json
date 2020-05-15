@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc -p .",
     "build:deploy": "yarn build && rm -rf /code/server/src /code/shared && mv lib/server/src /code/server/src && mv lib/shared /code/shared",
+    "cli": "ts-node -r tsconfig-paths/register src/cli.ts",
     "start:prod": "node -r tsconfig-paths/register src/index.js",
     "start": "ts-node-dev -r tsconfig-paths/register src/index.ts",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
@@ -26,6 +27,7 @@
   "devDependencies": {
     "@colyseus/loadtest": "^0.12.0",
     "@types/bcryptjs": "^2.4.2",
+    "@types/commander": "^2.12.2",
     "@types/connect-redis": "^0.0.13",
     "@types/cookie": "^0.3.3",
     "@types/cookie-parser": "^1.4.2",
@@ -67,6 +69,7 @@
     "async-mutex": "^0.1.4",
     "bcryptjs": "^2.4.3",
     "colyseus": "^0.13.0",
+    "commander": "^5.1.0",
     "connect-redis": "^4.0.4",
     "cookie": "^0.4.0",
     "cookie-parser": "^1.4.5",
