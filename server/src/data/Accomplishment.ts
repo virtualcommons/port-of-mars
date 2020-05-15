@@ -610,7 +610,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     id: 62,
     role: "Politician",
     label: "Favored Candidate",
-    flavorText: "You lead in the polls and are generally well liked by folks. Things look good this election cylce.",
+    flavorText: "You lead in the polls and are generally well liked by folks. Things look good this election cycle.",
     science: 2,
     government: 0,
     legacy: 0,
