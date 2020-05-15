@@ -43,7 +43,7 @@ import { GameEvent } from '@port-of-mars/server/rooms/game/events/types';
 import { GameOpts, GameStateOpts } from '@port-of-mars/server/rooms/game/types';
 import { MarsEventsDeck } from '@port-of-mars/server/rooms/game/state/marsEvents/MarsEventDeck';
 import { MarsEvent } from '@port-of-mars/server/rooms/game/state/marsEvents/MarsEvent';
-import {SimpleBot} from "@port-of-mars/server/rooms/game/state/bot";
+import { SimpleBot } from "@port-of-mars/server/rooms/game/state/bot";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -792,7 +792,7 @@ export class Player extends Schema implements PlayerData {
     this.timeBlocks = amount;
   }
 
-  get currentTimeBlocksAmount(){
+  get currentTimeBlocksAmount() {
     return this.timeBlocks;
   }
 
@@ -1169,16 +1169,12 @@ export class GameState extends Schema implements GameData {
     for (const p of this.players) {
       contributedUpkeep += p.contributedUpkeep;
     }
-    return this.upkeep + contributedUpkeep;
+    return _.clamp(this.upkeep + contributedUpkeep, 0, 100);
   }
 
   subtractUpkeep(amount: number): void {
     const current = this.upkeep;
-    if (current - amount >= 0) {
-      this.upkeep = current - amount;
-    } else {
-      this.upkeep = 0;
-    }
+    this.upkeep = _.clamp(current - amount, 0, 100);
   }
 
   clearTrades() {
@@ -1303,7 +1299,7 @@ export class GameState extends Schema implements GameData {
   }
 
   canCompleteTrade(fromPlayer: PlayerData, toPlayer: PlayerData, trade: Trade): boolean {
-    return canSendTradeRequest(fromPlayer, trade.from.resourceAmount) 
+    return canSendTradeRequest(fromPlayer, trade.from.resourceAmount)
       && canSendTradeRequest(toPlayer, trade.to.resourceAmount);
   }
 
