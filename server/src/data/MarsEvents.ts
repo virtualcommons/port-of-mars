@@ -58,7 +58,7 @@ const _marsEvents: Array<MarsEventDeckItem> = [
   [{
     id: 'audit',
     name: 'Audit',
-    effect: `For the next round, players play with dividers down. (Players can see how each other player allocates their time.)`,
+    effect: `In this round, players will be able to view each other's accomplishments, inventories, resources and investment decisions.`,
     flavorText: `"Of course we trust everyone to be truthful. But it doesn't hurt to check now and again." - The Politician`,
     clientViewHandler: 'AUDIT' as const,
     duration: 1,

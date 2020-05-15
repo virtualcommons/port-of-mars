@@ -32,17 +32,20 @@ export function makeTradeSafe(resources: ResourceAmountData) {
 }
 
 export function canPlayerMakeTrade(
-  resources: ResourceAmountData,
+  resourcesToTrade: ResourceAmountData,
   inventory: ResourceAmountData
 ) {
   let canMakeTrade = true;
   let isTradingSomething = false;
   for (const resource of RESOURCES) {
-    if (resources[resource] > inventory[resource]) {
+    if (resourcesToTrade[resource] > inventory[resource]) {
       canMakeTrade = false;
       break;
     }
-    if (resources[resource] >= 0) isTradingSomething = true;
+    if (resourcesToTrade[resource] >= 0) {
+      // make sure that at least one resource is being traded
+      isTradingSomething = true;
+    }
   }
   return canMakeTrade && isTradingSomething;
 }
