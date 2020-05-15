@@ -1,3 +1,5 @@
+// CONTAINERS, WRAPPERS
+
 .c-login {
   height: 100vh !important;
   width: 100vw !important;
@@ -5,12 +7,7 @@
 }
 
 .login {
-  @include gameboard-constraints;
-  padding: 1rem;
-  margin: 0;
-  @include make-column-and-top;
   background-color: $space-gray;
-  position: relative;
   z-index: 0;
   overflow: hidden;
 }
@@ -22,17 +19,21 @@
   margin: 0;
 }
 
+.content-wrapper {
+  flex: 1;
+  justify-content: space-around;
+  overflow: hidden;
+}
+
+// TITLE
+
 .title {
   height: 100%;
   padding: 0;
   @include make-column-and-center;
 }
 
-.content-wrapper {
-  flex: 1;
-  justify-content: space-around;
-  overflow: hidden;
-}
+// LOGIN
 
 .logged-in,
 .logged-out {
@@ -80,7 +81,67 @@
   }
 }
 
-// FORM
+// LOGIN :: BUTTONS
+
+.button-orange {
+  @include reset-button;
+  width: 12rem;
+  padding: 0.5rem 1rem;
+  margin: 0;
+  border-radius: 0;
+  font-size: $font-med;
+  font-weight: $font-weight-maven-pro-bold !important;
+  text-align: center;
+  color: $new-space-orange;
+  border: 0.125rem solid $new-space-orange;
+  transition: color 0.15s ease-in-out,
+  background-color 0.15s ease-in-out;
+
+  &:disabled {
+    opacity: 0.5;
+  }
+
+  &:hover {
+    color: $space-gray;
+    background-color: $new-space-orange;
+  }
+
+  &:disabled:hover {
+    color: $new-space-orange;
+    background-color: transparent;
+  }
+}
+
+.button-white {
+  @include reset-button;
+  width: 12rem;
+  padding: 0.5rem 1rem;
+  margin: 0;
+  border-radius: 0;
+  font-size: $font-med;
+  font-weight: $font-weight-maven-pro-bold !important;
+  text-align: center;
+  color: $space-white;
+  border: 0.125rem solid $space-white;
+  transition: color 0.15s ease-in-out,
+  background-color 0.15s ease-in-out;
+
+  &:disabled {
+    opacity: 0.5;
+  }
+
+  &:hover {
+    color: $space-gray;
+    background-color: $space-white;
+  }
+
+  &:disabled:hover {
+    color: $space-white;
+    background-color: transparent;
+  }
+}
+
+// LOGIN :: FORM
 
 form {
   padding: 0.5rem;
@@ -147,9 +208,9 @@ input[type='text'] {
 }
 
 .submit {
+  @include make-center;
   width: 100%;
   padding: 0.5rem;
-  @include make-center;
 }
 
 // HTML TEXT ELEMENTS
@@ -176,67 +237,6 @@ h2 {
   color: $new-space-orange;
 }
 
-
-// BUTTONS
-.button-orange {
-  @include reset-button;
-  width: 12rem;
-  padding: 0.5rem 1rem;
-  margin: 0;
-  border-radius: 0;
-  font-size: $font-med;
-  font-weight: $font-weight-maven-pro-bold !important;
-  text-align: center;
-  color: $new-space-orange;
-  border: 0.125rem solid $new-space-orange;
-  transition: color 0.15s ease-in-out,
-  background-color 0.15s ease-in-out;
-
-  &:disabled {
-    opacity: 0.5;
-  }
-
-  &:hover {
-    color: $space-gray;
-    background-color: $new-space-orange;
-  }
-
-  &:disabled:hover {
-    color: $new-space-orange;
-    background-color: transparent;
-  }
-}
-
-.button-white {
-  @include reset-button;
-  width: 12rem;
-  padding: 0.5rem 1rem;
-  margin: 0;
-  border-radius: 0;
-  font-size: $font-med;
-  font-weight: $font-weight-maven-pro-bold !important;
-  text-align: center;
-  color: $space-white;
-  border: 0.125rem solid $space-white;
-  transition: color 0.15s ease-in-out,
-  background-color 0.15s ease-in-out;
-
-  &:disabled {
-    opacity: 0.5;
-  }
-
-  &:hover {
-    color: $space-gray;
-    background-color: $space-white;
-  }
-
-  &:disabled:hover {
-    color: $space-white;
-    background-color: transparent;
-  }
-}
-
-
 // IMAGES
 
 .background-image {
@@ -248,18 +248,16 @@ h2 {
   opacity: 0.0625;
 }
 
-.player-image-one {
+.politician, .pioneer {
   position: absolute;
-  top: 55%;
-  left: 6.25%;
-  height: 50%;
-  transform: translateY(-50%);
+  height: 55vh;
+  top: 25vh;
 }
 
-.player-image-two {
-  position: absolute;
-  top: 55%;
-  right: 6.25%;
-  height: 50%;
-  transform: translateY(-50%);
+.politician {
+  left: 6.25vh;
+}
+
+.pioneer {
+  right: 3vw;
 }

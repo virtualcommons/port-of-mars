@@ -1,25 +1,33 @@
 <template>
   <div class="c-login outer-container">
-    <div class="login container">
+    <div class="container">
+
+      <!-- BACKGROUND -->
       <img
         :src="require(`@port-of-mars/client/assets/marsbg.jpg`)"
         alt="Background Image"
         class="background-image"
       />
-      <img
-        :src="
+
+      <!-- PLAYER IMAGES: POLITICIAN, PIONEER -->
+      <div class="d-flex">
+        <img
+          :src="
           require(`@port-of-mars/client/assets/characters-large/Politician.png`)
         "
-        alt="Player Image"
-        class="player-image-one"
-      />
-      <img
-        :src="
+          alt="Player Image"
+          class="politician"
+        />
+        <img
+          :src="
           require(`@port-of-mars/client/assets/characters-large/Pioneer.png`)
         "
-        alt="Player Image"
-        class="player-image-two"
-      />
+          alt="Player Image"
+          class="pioneer"
+        />
+      </div>
+
+      <!-- TITLE -->
       <div class="title-wrapper row">
         <div class="title col-12">
           <router-link :to="'/'">
@@ -28,6 +36,8 @@
           <h2>Welcome</h2>
         </div>
       </div>
+      
+      <!-- LOGIN -->
       <div class="content-wrapper row">
         <div v-if="isLoggedIn" class="logged-in col-12">
           <input
@@ -86,16 +96,8 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import {
-  DASHBOARD_PAGE,
-  GAME_PAGE,
-  LOBBY_PAGE,
-  LOGIN_PAGE,
-} from '@port-of-mars/shared/routes';
 import { url } from '@port-of-mars/client/util';
 import { isDevOrStaging } from '@port-of-mars/shared/settings';
-import { BButton } from 'bootstrap-vue';
-import { AjaxResponseError } from '../plugins/ajax';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faUserCog } from '@fortawesome/free-solid-svg-icons/faUserCog';
