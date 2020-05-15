@@ -1075,9 +1075,13 @@ export class GameState extends Schema implements GameData {
     for (const player of this.players) {
       const es = player.act(this);
       this.applyMany(es);
-      logger.debug('events to concat: %o', es);
+      if (es.length > 0) {
+        logger.debug('events to concat: %o', es);
+      }
       events.splice(events.length, 0, ...es);
-      logger.debug('events (all): %o', events);
+      if (es.length > 0) {
+        logger.debug('events (all): %o', events);
+      }
     }
     return events;
   }
