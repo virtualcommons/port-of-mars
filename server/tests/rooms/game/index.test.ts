@@ -119,6 +119,7 @@ describe('trading validations', () => {
   });
 
   g.tradeSet['invalid-request'] = new Trade(
+    'invalid-request',
     {
       role: 'Curator',
       resourceAmount: {
@@ -143,6 +144,7 @@ describe('trading validations', () => {
     );
 
   g.tradeSet['valid-request'] = new Trade(
+    'valid-request',
     {
       role: 'Entrepreneur',
       resourceAmount: {

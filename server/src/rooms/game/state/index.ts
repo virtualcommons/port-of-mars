@@ -614,7 +614,7 @@ export class TradeAmount extends Schema {
 }
 
 export class Trade extends Schema {
-  constructor(from: TradeAmountData, to: TradeAmountData, status: TradeStatus) {
+  constructor(public uuid: string, from: TradeAmountData, to: TradeAmountData, status: TradeStatus) {
     super();
     this.from = new TradeAmount(from.role, from.resourceAmount);
     this.to = new TradeAmount(to.role, to.resourceAmount);
@@ -622,6 +622,7 @@ export class Trade extends Schema {
   }
 
   fromJSON(data: TradeData) {
+    this.uuid = data.id;
     this.from.fromJSON(data.from);
     this.to.fromJSON(data.to);
     this.status = data.status;
@@ -629,6 +630,7 @@ export class Trade extends Schema {
 
   toJSON(): TradeData {
     return {
+      id: this.uuid,
       from: this.from.toJSON(),
       to: this.to.toJSON(),
       status: this.status
@@ -1001,7 +1003,7 @@ export class GameState extends Schema implements GameData {
     Object.keys(this.tradeSet).forEach(k => delete this.tradeSet[k]);
     Object.keys(data.tradeSet).forEach(k => {
       const tradeData: TradeData = data.tradeSet[k];
-      this.tradeSet[k] = new Trade(tradeData.from, tradeData.to, 'Active');
+      this.tradeSet[k] = new Trade(k, tradeData.from, tradeData.to, 'Active');
     });
 
     const winners = _.map(data.winners, w => w);
@@ -1258,9 +1260,8 @@ export class GameState extends Schema implements GameData {
     const performedBy: ServerRole = SERVER;
     const toRole: Role = trade.to.role;
     const fromRole: Role = trade.from.role;
-    const id = uuid();
 
-    this.tradeSet[id] = new Trade(trade.from, trade.to, 'Active');
+    this.tradeSet[trade.id] = new Trade(trade.id, trade.from, trade.to, 'Active');
 
     switch (reason) {
       case 'sent-trade-request':

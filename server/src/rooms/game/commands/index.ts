@@ -30,6 +30,7 @@ import { Command } from '@port-of-mars/server/rooms/game/commands/types';
 import { GameEvent } from '@port-of-mars/server/rooms/game/events/types';
 import { canSendTradeRequest } from "@port-of-mars/shared/validation";
 import { settings } from "@port-of-mars/server/settings";
+import {uuid} from "uuidv4";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -167,7 +168,7 @@ export class CancelTradeRequestCmd implements Command {
 
 export class SendTradeRequestCmd implements Command {
   constructor(
-    private trade: TradeData,
+    private trade: Omit<TradeData, 'id'>,
     private player: Player
   ) { }
 
@@ -177,7 +178,7 @@ export class SendTradeRequestCmd implements Command {
 
   execute(): Array<GameEvent> {
     if (canSendTradeRequest(this.player, this.trade.from.resourceAmount)) {
-      return [new SentTradeRequest(this.trade)];
+      return [new SentTradeRequest({...this.trade, id: uuid()})];
     }
     else {
       return [];

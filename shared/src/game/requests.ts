@@ -29,7 +29,7 @@ export interface ResetGameData {
 
 export interface SendTradeRequestData {
   kind: 'send-trade-request';
-  trade: TradeData;
+  trade: Omit<TradeData, 'id'>;
 }
 
 export interface AcceptTradeRequestData {

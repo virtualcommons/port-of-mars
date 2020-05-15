@@ -168,6 +168,7 @@ export interface TradeAmountData {
 export type TradeStatus = 'Active' | 'Accepted' | 'Rejected' | 'Cancelled';
 
 export interface TradeData {
+  id: string;
   from: TradeAmountData;
   to: TradeAmountData;
   status: TradeStatus;

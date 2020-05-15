@@ -71,6 +71,7 @@ const steps: Array<Step> = [
               },
             },
             status: 'Active',
+            id: 'mock-trade'
           },
         },
       },

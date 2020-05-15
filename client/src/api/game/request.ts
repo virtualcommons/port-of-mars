@@ -89,7 +89,7 @@ export class GameRequestAPI {
     this.send(msg);
   }
 
-  public sendTradeRequest(trade: TradeData) {
+  public sendTradeRequest(trade: SendTradeRequestData['trade']) {
     const msg: SendTradeRequestData = {
       kind: 'send-trade-request',
       trade,
