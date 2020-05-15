@@ -30,13 +30,13 @@ async function finalize(gameId: number) {
       console.log(`Phase: ${Phase[gameState.phase]}`);
       if (![Phase.defeat, Phase.victory].includes(gameState.phase)) {
         if (gameState.upkeep <= 0) {
-          console.log('game needs a entered defeat phase event')
+          console.log('game needs a entered defeat phase event. adding finalization event.')
           gameEvents.push(new EnteredDefeatPhase(gameState.playerScores));
         } else if (gameState.round >= gameState.maxRound) {
-          console.log('game needs a entered victory phase event')
+          console.log('game needs a entered victory phase event. adding finalization event.')
           gameEvents.push(new EnteredVictoryPhase(gameState.playerScores));
         } else {
-          console.error('game was not completed')
+          console.error('game was not completed. refusing to add finalize event.')
           process.exit(1);
         }
         await persister.persist(gameEvents, {gameId, dateCreated: new Date(), timeRemaining: gameState.timeRemaining})
