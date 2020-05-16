@@ -15,6 +15,30 @@
     </b-button>
 
     <footer :style="show" class="footer d-flex p-2">
+      <div class="sponsors flex flex-row">
+        <img
+          :src="
+          require(`@port-of-mars/client/assets/sponsors/compute_canada.png`)
+        "
+          alt="Compute Canada"
+          class="compute-canada"
+        />
+        <img
+          :src="
+          require(`@port-of-mars/client/assets/sponsors/asu_gbci.png`)
+        "
+          alt="ASU Global Biosocial Complexity Initiative"
+          class="gbci"
+        />
+        <img
+          :src="
+          require(`@port-of-mars/client/assets/sponsors/asu_interplanetary_initiative.png`)
+        "
+          alt="ASU Interplanetary Initative"
+          class="ii"
+        />
+      </div>
+
       <div class="p-2 footer-copyright">
         &copy; 2020 <a href='https://www.azregents.edu/' target='_blank'>Arizona Board of
         Regents</a>
@@ -73,13 +97,13 @@
 
     get show() {
       return {
-        bottom: this.footer ? '0' : '-9rem'
+        bottom: this.footer ? '0' : '-15rem'
       };
     }
 
     get button() {
       return {
-        bottom: this.footer ? '10rem' : '1rem'
+        bottom: this.footer ? '16rem' : '1rem'
       };
     }
 

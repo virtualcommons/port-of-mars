@@ -1,3 +1,5 @@
+// CONTAINERS AND WRAPPERS
+
 .c-footer {
   @include make-center;
 }
@@ -5,15 +7,18 @@
 .footer {
   background-color: $space-white-opaque-1;
   position: absolute; // position footer relative to browser window
-  bottom: -9rem; // position at bottom
+  //bottom: -15vh; // position at bottom
   width: 100%; // footer width = width of screen
-  height: 12rem; // height of footer
+  bottom: -15rem;
+  height: 18rem; // height of footer
 
   font-size: $font-med;
   font-weight: 400;
 
   transition: 0.3s; // transition on hover
 }
+
+// BUTTON
 
 .footer-button {
   z-index: 1;
@@ -23,11 +28,7 @@
   transition: 0.3s;
 }
 
-a {
-  color: whitesmoke;
-}
-
-
+// ELEMENTS
 .footer-copyright, .footer-license, .footer-build {
   text-transform: uppercase;
   font-size: smaller;
@@ -36,4 +37,29 @@ a {
 
 .footer-license {
   text-decoration: underline;
+}
+
+// HTML ELEMENTS
+
+a {
+  color: whitesmoke;
+}
+
+.compute-canada, .gbci, .ii {
+  position: absolute;
+}
+
+.compute-canada {
+  height: 20vh;
+  top: 10vh;
+}
+
+.gbci {
+  height: 5vh;
+  top: 10vh;
+}
+
+.ii {
+  height: 5vh;
+  top: 10vh;
 }
