@@ -23,7 +23,7 @@ export default class App extends Vue {
    * @param path
    */
   showFooter(path: string): boolean {
-    return !(path === `/game` || path === `/tutorial`);
+    return !(path === `/game` || path === `/tutorial` || path === `/dashboard`);
   }
 
 }
