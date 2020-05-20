@@ -12,7 +12,7 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-round',
-    content: `The game progresses in rounds. The number of rounds varies for every game so a game can end at any time.`,
+    content: `The game progresses in rounds. The total number of rounds can vary for each game so a game may end after any number of rounds.`,
     params: {
       placement: BOTTOM,
     },
@@ -29,22 +29,22 @@ const steps: Array<Step> = [
   {
     target: '.tour-time-remaining',
     content: `Each phase has a time limit of 5 minutes. The timer will turn red and blink when 
-    there is a minute left in the round.`,
+    there is a minute left in the phase.`,
     params: {
       placement: TOP,
     },
   },
   {
     target: '.tour-ready-to-advance-button',
-    content: `If you are finished with your actions before the 5 minutes are up, click here to vote to advance the round.
-      If everyone votes to advance, the round will end.`,
+    content: `If you are finished with your actions before the 5 minutes are up, click here to mark that you are ready to advance the phase.
+      Once everyone has signaled that they are ready to advance, the phase will end and you will all move on to the next phase.`,
     params: {
       placement: LEFT,
     },
   },
   {
     target: '.tour-phase-instructions',
-    content: `The instructions for the current phase are displayed here.`,
+    content: `Instructions for the current phase are displayed here.`,
     params: {
       placement: LEFT,
     },
@@ -54,7 +54,7 @@ const steps: Array<Step> = [
     content:
       `At any time during the game, you can communicate with the other players ` +
       `in your habitat to plan and strategize. Remember: all chat is public ` +
-      `and recorded; there are no private messages. Please adhere to the  Port of ` +
+      `and recorded; there are no private messages. Please adhere to the Port of ` +
       `Mars Code of Conduct in your communications. Try sending a message!`,
     params: {
       placement: LEFT,
