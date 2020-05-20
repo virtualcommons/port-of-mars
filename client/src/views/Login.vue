@@ -1,5 +1,5 @@
 <template>
-  <div class="c-login outer-container">
+  <div class="c-login">
     <div class="container">
 
       <!-- BACKGROUND -->
@@ -36,7 +36,7 @@
           <h2>Welcome</h2>
         </div>
       </div>
-      
+
       <!-- LOGIN -->
       <div class="content-wrapper row">
         <div v-if="isLoggedIn" class="logged-in col-12">

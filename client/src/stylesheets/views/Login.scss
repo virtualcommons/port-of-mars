@@ -6,12 +6,6 @@
   @include make-center;
 }
 
-.login {
-  background-color: $space-gray;
-  z-index: 0;
-  overflow: hidden;
-}
-
 .title-wrapper,
 .content-wrapper {
   width: 100%;
