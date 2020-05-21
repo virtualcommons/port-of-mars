@@ -3,22 +3,22 @@
     <GameboardContainer
       v-if="gamePhase !== phase.defeat && gamePhase !== phase.victory"
     />
-    <ContainerDefeat v-if="gamePhase === phase.defeat" />
-    <ContainerVictory v-if="gamePhase === phase.victory" />
+    <Defeat v-if="gamePhase === phase.defeat" />
+    <Victory v-if="gamePhase === phase.victory" />
   </div>
 </template>
 
 <script lang="ts">
   import { Vue, Component } from 'vue-property-decorator';
   import GameboardContainer from '@port-of-mars/client/components/root/GameboardContainer.vue';
-  import ContainerVictory from '@port-of-mars/client/components/root/ContainerVictory.vue';
-  import ContainerDefeat from '@port-of-mars/client/components/root/ContainerDefeat.vue';
+  import Victory from '@port-of-mars/client/components/root/Victory.vue';
+  import Defeat from '@port-of-mars/client/components/root/Defeat.vue';
   import { Phase } from '@port-of-mars/shared/types';
   @Component({
     components: {
       GameboardContainer,
-      ContainerVictory,
-      ContainerDefeat,
+      Victory,
+      Defeat,
     },
   })
   export default class GameDashboard extends Vue {

@@ -1,18 +1,14 @@
 <template>
-  <div class="c-gameview-victory container">
+  <div class="c-gameview-defeat container">
     <div class="title-wrapper row">
       <div class="title col-12">
         <h1>Port of Mars</h1>
-        <h2 class="animated pulse slower infinite">Winners</h2>
-        <div v-for="winner in winners" class="winner">
-          <p>{{ winner }}</p>
-        </div>
+        <h2 class="animated pulse slower infinite">Game Over</h2>
       </div>
     </div>
     <div class="content-wrapper row">
       <div class="content col-12">
-        <h2>Despite all doubts, you have done it. Thanks to you future generations
-          can flourish on planet Mars.</h2>
+        <h2>Your team has perished. See below for details.</h2>
       </div>
     </div>
     <div class="marslog-wrapper row">
@@ -27,18 +23,18 @@
             <p class="category">{{ log.category }}</p>
             <p class="final-log" v-if="index === 0">Final Log</p>
             <p class="list" v-if="index !== 0">
-              <span>
-                Log: {{ logs.length - index }} / {{ logs.length }}
-              </span>
+              <span> Log: {{ logs.length - index }} / {{ logs.length }} </span>
             </p>
             <p class="content">{{ log.content }}</p>
             <p class="time">
               <span>[ </span>{{ logTime(log.timestamp) }}<span> ]</span>
             </p>
-            <div class="round row" v-if="delineateRound(index, logs)"><b>Round {{ log.round - 1
-              }}</b></div>
+            <div class="round row" v-if="delineateRound(index, logs)">
+              <b>Round {{ log.round - 1 }}</b>
+            </div>
           </div>
-        </div> <!--end wrapper-->
+        </div>
+        <!--end wrapper-->
       </div>
     </div>
     <div class="footnote-wrapper row">
@@ -55,12 +51,12 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, InjectReactive, Inject } from 'vue-property-decorator';
+import { Component, Inject, Vue } from 'vue-property-decorator';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
-import { MarsLogMessageData } from "@port-of-mars/shared/types";
+import { MarsLogMessageData } from '@port-of-mars/shared/types';
 
 @Component({})
-export default class ContainerVictory extends Vue {
+export default class Defeat extends Vue {
   @Inject() readonly api!: GameRequestAPI;
 
   get logs() {
@@ -71,35 +67,29 @@ export default class ContainerVictory extends Vue {
     return this.$store.getters.categoryColorMap;
   }
 
+  private logTime(timestamp: number) {
+    return new Date(timestamp).toLocaleTimeString();
+  }
+
   private delineateRound(index: number, logs: MarsLogMessageData[]): boolean {
-    let currentIndex: number  = index;
+    let currentIndex: number = index;
     let nextIndex: number = index + 1;
 
     console.log('currentIndex ', currentIndex);
 
     if (!logs[nextIndex]) {
       console.log('undefined');
-      return false
-    }
-    else if (logs[currentIndex].round !== logs[nextIndex].round) {
+      return false;
+    } else if (logs[currentIndex].round !== logs[nextIndex].round) {
       console.log(`CURRENT ROUND: ${logs[currentIndex].round}`);
       console.log(`PREVIOUS ROUND: ${logs[nextIndex].round}`);
       return true;
-    }
-    else return false;
-  }
-
-  private logTime(timestamp: number) {
-    return new Date(timestamp).toLocaleTimeString();
-  }
-
-  get winners() {
-    return this.$tstore.state.winners;
+    } else return false;
   }
 }
 </script>
 
 <style lang="scss" scoped>
 @import '~animate.css/source/attention_seekers/pulse.css';
-@import '@port-of-mars/client/stylesheets/root/ContainerVictory.scss';
+@import '@port-of-mars/client/stylesheets/root/Defeat.scss';
 </style>
