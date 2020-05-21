@@ -63,7 +63,7 @@ export abstract class BaseEvent implements MarsEventState {
 @assocEventId
 export class Sandstorm extends BaseEvent {
   finalize(game: GameState): void {
-    game.upkeep -= 10;
+    game.decreaseSystemHealth(10);
     game.log('A sandstorm has decreased system health by 10.', `${MarsLogCategory.event}: ${formatEventName(Sandstorm.name)}`);
   }
 }
@@ -108,7 +108,7 @@ export class BreakdownOfTrust extends BaseEvent {
   finalize(game: GameState): void {
     for (const player of game.players) {
       player.mergePendingAndInventory();
-      //set that value back to the amount before the event
+      //set that value back to the preserved amount before the event
       player.timeBlocks = this.savedtimeBlockAllocations[player.role];
     }
 
@@ -166,14 +166,14 @@ export class PersonalGain extends BaseEvent {
   }
 
   finalize(game: GameState) {
-    let subtractedUpkeep = 0;
+    let systemHealthReduction = 0;
     for (const role of ROLES) {
       if (this.votes[role]) {
         game.players[role].timeBlocks += 6;
-        subtractedUpkeep += 6;
+        systemHealthReduction += 6;
       }
     }
-    game.subtractUpkeep(subtractedUpkeep);
+    game.decreaseSystemHealth(systemHealthReduction);
 
     const message = `System health decreased by ${this.subtractedUpkeepTotal(subtractedUpkeep)}. The following players voted yes: ${this.playersVoteYes(this.votes)}`;
     game.log(message, `${MarsLogCategory.event}: ${formatEventName(PersonalGain.name)}`);
@@ -235,7 +235,9 @@ export class CompulsivePhilanthropy extends BaseEvent {
     }
 
     const winner: Role = _.find(this.order, (w: Role) => winners.includes(w)) || this.order[0];
-    game.upkeep += game.players[winner].timeBlocks;
+    // FIXME: this needs to look up player's timeBlocks lazily or defer 
+    // this application to the very end, see https://github.com/virtualcommons/port-of-mars/issues/476
+    game.increaseSystemHealth(game.players[winner].timeBlocks);
     game.players[winner].timeBlocks = 0;
     game.log(
       `The ${winner} was voted to be Compulsive Philanthropist with ${count} votes. The ${winner} invested all of their timeblocks into System Health.`,
@@ -400,7 +402,6 @@ export class BondingThroughAdversity extends BaseEvent {
   /**
    * Retrieve Role and Influence vote associated with each Player.
    * @return Role and Influence votes associated with each Role.
-   * 
    */
   getData(): BondingThroughAdversityData {
     return this.votes;
@@ -425,7 +426,7 @@ export class ChangingTides extends BaseEvent {
 @assocEventId
 export class HullBreach extends BaseEvent {
   finalize(state: GameState): void {
-    state.upkeep -= 7;
+    state.decreaseSystemHealth(7);
     state.log(`A hull breach has destroyed 7 System Health.`, `${MarsLogCategory.event}: Hull Breach`);
   }
 }
@@ -433,8 +434,44 @@ export class HullBreach extends BaseEvent {
 @assocEventId
 export class CropFailure extends BaseEvent {
   finalize(state: GameState): void {
-    state.upkeep -= 20;
+    state.decreaseSystemHealth(20);
     state.log(`Crop failure has destroyed 20 system health.`, `${MarsLogCategory.event}: Crop Failure`);
   }
 }
 
+@assocEventId
+export class Interdisciplinary extends BaseEvent {
+  finalize(state: GameState): void {
+    // FIXME: I think this needs a new clientViewHandler
+    // to support additional investment options and costs
+    // reset player ResourceCosts
+    state.log(`In this round, each player can spend 3 time blocks to earn an influence in either of the 2 influences they normally can't create.`,
+      `${MarsLogCategory.event}: Interdisciplinary`
+    );
+  }
+}
+
+@assocEventId
+export class SolarFlare extends BaseEvent {
+  finalize(state: GameState): void {
+    state.decreaseSystemHealth(5);
+    // FIXME: DISABLE_CHAT clientViewHandler needs to be 
+    // set to DISABLE_CHAT_AND_TRADE along with client side 
+    // support
+    state.log(`A Solar Flare has destroyed 5 System Health. Chat and trade are not available in this round.`,
+      `${MarsLogCategory.event}: Solar Flare`
+    );
+  }
+}
+
+@assocEventId
+export class EffortsWasted extends BaseEvent {
+  finalize(state: GameState): void {
+    // at the moment will need to iterate across all players and
+    // decrement victoryPoints with the removed accomplishment (if any)
+    // and remove the accomplishment from player.accomplishments.purchased
+    state.log(`Each player must discard an Accomplishment card they have purchased.`,
+      `${MarsLogCategory.event}: Efforts Wasted`
+    )
+  }
+}

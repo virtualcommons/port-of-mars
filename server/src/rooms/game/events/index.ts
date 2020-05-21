@@ -200,7 +200,7 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
     game.phase = Phase.events;
     logger.debug('phase: %s', Phase[game.phase]);
     game.round += 1;
-    game.upkeep = game.nextRoundUpkeep();
+    game.updateNextRoundSystemHealth();
     // round message
     game.log(`Round ${game.round} begins.`, MarsLogCategory.newRound)
 
@@ -210,7 +210,7 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
       MarsLogCategory.systemHealth);
 
     // apply system health - wear and tear
-    game.upkeep -= 25;
+    game.decreaseSystemHealth(25);
 
     game.log(
       `Standard wear and tear reduces System Health by 25.
@@ -300,8 +300,8 @@ export class EnteredDiscardPhase extends KindOnlyGameEvent {
     logger.debug('phase: %s', Phase[game.phase]);
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
     game.log(
-      `During Round ${game.round}, your group invested a total of ${game.contributedUpkeep()} into System Health.
-        Updated System Health = ${game.nextRoundUpkeep()}.`,
+      `During Round ${game.round}, your group invested a total of ${game.contributedSystemHealth()} into System Health.
+        Updated System Health = ${game.nextRoundSystemHealth()}.`,
       MarsLogCategory.systemHealth);
   }
 }

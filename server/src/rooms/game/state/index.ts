@@ -778,6 +778,11 @@ export class Player extends Schema implements PlayerData {
       science: -accomplishment.science
     };
     this.contributedUpkeep -= Math.abs(accomplishment.upkeep);
+    // FIXME: victoryPoints should probably be a computed property
+    // that sums this.accomplishments.purchased.victoryPoints 
+    // and not a cached numerical value
+    // will this cause issues for the Schema though if 
+    // we convert it into a getter?
     this.victoryPoints += accomplishment.victoryPoints;
     this.inventory.update(inv);
   }
@@ -1166,21 +1171,36 @@ export class GameState extends Schema implements GameData {
     this.winners.splice(0, this.winners.length);
   }
 
-  nextRoundUpkeep(): number {
-    return _.clamp(this.upkeep + this.contributedUpkeep(), 0, 100);
+  get systemHealth(): number {
+    return this.upkeep;
   }
 
-  contributedUpkeep(): number {
-    let contributedUpkeep = 0;
+  updateNextRoundSystemHealth(): void {
+    this.upkeep = this.nextRoundSystemHealth();
+  }
+
+  nextRoundSystemHealth(): number {
+    return _.clamp(this.upkeep + this.contributedSystemHealth(), 0, 100);
+  }
+
+  contributedSystemHealth(): number {
+    let contributions = 0;
     for (const p of this.players) {
-      contributedUpkeep += p.contributedUpkeep;
+      contributions += p.contributedUpkeep;
     }
-    return contributedUpkeep;
+    return contributions;
   }
 
-  subtractUpkeep(amount: number): void {
+  increaseSystemHealth(amount: number): number {
+    const current = this.upkeep;
+    this.upkeep = _.clamp(current + amount, 0, 100);
+    return this.upkeep;
+  }
+
+  decreaseSystemHealth(amount: number): number {
     const current = this.upkeep;
     this.upkeep = _.clamp(current - amount, 0, 100);
+    return this.upkeep;
   }
 
   clearTrades() {
