@@ -200,34 +200,31 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
     game.phase = Phase.events;
     logger.debug('phase: %s', Phase[game.phase]);
     game.round += 1;
-
-    const contributedUpkeep = game.nextRoundUpkeep();
-
-    game.upkeep = contributedUpkeep - 25;
-
+    game.upkeep = game.nextRoundUpkeep();
     // round message
     game.log(`Round ${game.round} begins.`, MarsLogCategory.newRound)
 
     // system health - last round
     game.log(
-      `At the end of Round ${game.round - 1}, System Health = ${contributedUpkeep}.`,
+      `At the end of Round ${game.round - 1}, System Health = ${game.upkeep}.`,
       MarsLogCategory.systemHealth);
 
-    // system health - wear and tear
+    // apply system health - wear and tear
+    game.upkeep -= 25;
+
     game.log(
       `Standard wear and tear reduces System Health by 25.
-        At the beginning of this round, System Health = ${ game.upkeep}.`,
+        At the beginning of this round, System Health = ${game.upkeep}.`,
       MarsLogCategory.systemHealth);
 
     game.resetPlayerReadiness();
     game.resetPlayerContributedUpkeep();
     game.refreshPlayerPurchasableAccomplisments();
 
+    // process mars events
     const cards = game.marsEventDeck.peek(game.upkeep);
     const marsEvents = cards.map(e => new MarsEvent(e));
-
     game.phase = Phase.events;
-
     game.timeRemaining = marsEvents[0].timeDuration;
 
     // handle incomplete events
@@ -302,13 +299,9 @@ export class EnteredDiscardPhase extends KindOnlyGameEvent {
     game.phase = Phase.discard;
     logger.debug('phase: %s', Phase[game.phase]);
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
-
-    const contributedUpkeep = game.nextRoundUpkeep() + 25 - game.upkeep;
-
-    // system health - contributed upkeep
     game.log(
-      `During Round ${game.round}, your group invested a total of ${contributedUpkeep} into System Health.
-        Updated System Health = ${ (contributedUpkeep + game.upkeep) <= 100 ? (contributedUpkeep + game.upkeep) : 100}.`,
+      `During Round ${game.round}, your group invested a total of ${game.contributedUpkeep()} into System Health.
+        Updated System Health = ${game.nextRoundUpkeep()}.`,
       MarsLogCategory.systemHealth);
   }
 }

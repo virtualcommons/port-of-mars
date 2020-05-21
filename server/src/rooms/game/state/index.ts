@@ -1167,11 +1167,15 @@ export class GameState extends Schema implements GameData {
   }
 
   nextRoundUpkeep(): number {
+    return _.clamp(this.upkeep + this.contributedUpkeep(), 0, 100);
+  }
+
+  contributedUpkeep(): number {
     let contributedUpkeep = 0;
     for (const p of this.players) {
       contributedUpkeep += p.contributedUpkeep;
     }
-    return _.clamp(this.upkeep + contributedUpkeep, 0, 100);
+    return contributedUpkeep;
   }
 
   subtractUpkeep(amount: number): void {
