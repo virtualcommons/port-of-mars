@@ -6,7 +6,7 @@ import { mockGameStateInitOpts } from "@port-of-mars/server/util";
 import { canSendTradeRequest } from "@port-of-mars/shared/validation";
 import {
   OutOfCommissionCurator, OutOfCommissionPioneer, OutOfCommissionResearcher, OutOfCommissionPolitician, OutOfCommissionEntrepreneur, BreakdownOfTrust
-} from "@port-of-mars/server/rooms/game/state/marsEvents/state";
+} from "@port-of-mars/server/rooms/game/state/marsevents/state";
 import {SimpleBot} from "@port-of-mars/server/rooms/game/state/bot";
 
 

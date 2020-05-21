@@ -8,21 +8,19 @@ import {
   Resource,
   MarsLogCategory
 } from '@port-of-mars/shared/types';
-import {
-  GameState,
-} from '@port-of-mars/server/rooms/game/state';
-import {GameEvent, Json} from '@port-of-mars/server/rooms/game/events/types';
-import {MarsEvent} from '@port-of-mars/server/rooms/game/state/marsEvents/MarsEvent';
+import { GameState } from '@port-of-mars/server/rooms/game/state';
+import { GameEvent } from '@port-of-mars/server/rooms/game/events/types';
+import { MarsEvent } from '@port-of-mars/server/rooms/game/state/marsevents/MarsEvent';
 import {
   CompulsivePhilanthropy, PersonalGain,
   OutOfCommissionCurator, OutOfCommissionPolitician,
   OutOfCommissionResearcher, OutOfCommissionPioneer,
   OutOfCommissionEntrepreneur, BondingThroughAdversity, BreakdownOfTrust
 }
-  from '@port-of-mars/server/rooms/game/state/marsEvents/state';
+  from '@port-of-mars/server/rooms/game/state/marsevents/state';
 import * as entities from '@port-of-mars/server/entity/GameEvent';
+import { getLogger } from "@port-of-mars/server/settings";
 import _ from "lodash";
-import {getLogger} from "@port-of-mars/server/settings";
 
 const logger = getLogger(__filename);
 
@@ -172,7 +170,7 @@ abstract class KindOnlyGameEvent implements GameEvent {
   abstract apply(game: GameState): void;
 
   serialize() {
-    return {type: this.kind, dateCreated: new Date().getTime(), payload: {}};
+    return { type: this.kind, dateCreated: new Date().getTime(), payload: {} };
   }
 }
 
@@ -202,24 +200,24 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
     game.phase = Phase.events;
     logger.debug('phase: %s', Phase[game.phase]);
     game.round += 1;
-    
+
     const contributedUpkeep = game.nextRoundUpkeep();
 
     game.upkeep = contributedUpkeep - 25;
 
     // round message
-    game.log(`Round ${ game.round } begins.`, MarsLogCategory.newRound)
+    game.log(`Round ${game.round} begins.`, MarsLogCategory.newRound)
 
     // system health - last round
     game.log(
-        `At the end of Round ${ game.round - 1}, System Health = ${ contributedUpkeep }.`,
-        MarsLogCategory.systemHealth);
+      `At the end of Round ${game.round - 1}, System Health = ${contributedUpkeep}.`,
+      MarsLogCategory.systemHealth);
 
     // system health - wear and tear
     game.log(
-        `Standard wear and tear reduces System Health by 25.
-        At the beginning of this round, System Health = ${ game.upkeep }.`,
-        MarsLogCategory.systemHealth);
+      `Standard wear and tear reduces System Health by 25.
+        At the beginning of this round, System Health = ${ game.upkeep}.`,
+      MarsLogCategory.systemHealth);
 
     game.resetPlayerReadiness();
     game.resetPlayerContributedUpkeep();
@@ -304,14 +302,14 @@ export class EnteredDiscardPhase extends KindOnlyGameEvent {
     game.phase = Phase.discard;
     logger.debug('phase: %s', Phase[game.phase]);
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
-    
+
     const contributedUpkeep = game.nextRoundUpkeep() + 25 - game.upkeep;
 
     // system health - contributed upkeep
     game.log(
-        `During Round ${ game.round }, your group invested a total of ${ contributedUpkeep } into System Health.
-        Updated System Health = ${ (contributedUpkeep + game.upkeep) <= 100 ? (contributedUpkeep + game.upkeep) : 100 }.`,
-        MarsLogCategory.systemHealth);
+      `During Round ${game.round}, your group invested a total of ${contributedUpkeep} into System Health.
+        Updated System Health = ${ (contributedUpkeep + game.upkeep) <= 100 ? (contributedUpkeep + game.upkeep) : 100}.`,
+      MarsLogCategory.systemHealth);
   }
 }
 gameEventDeserializer.register(EnteredDiscardPhase);
@@ -541,7 +539,7 @@ export class BotControlTaken extends GameEventWithData {
 }
 
 export class BotControlRelinquished extends GameEventWithData {
-  constructor(public data: {role: Role}) {
+  constructor(public data: { role: Role }) {
     super();
   }
 

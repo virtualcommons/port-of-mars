@@ -97,7 +97,7 @@ test-setup: docker-compose.yml
 	docker-compose run --rm server bash -c "dropdb --if-exists -h db -U ${DB_USER} ${TEST_DB_NAME} && createdb -h db -U ${DB_USER} ${TEST_DB_NAME} && yarn typeorm schema:sync -c test"
 
 .PHONY: test
-test: docker-compose.yml
+test: test-setup
 	docker-compose run --rm client yarn test:unit
 	docker-compose run --rm server yarn test
 

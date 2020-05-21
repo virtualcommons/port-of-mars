@@ -1,4 +1,5 @@
 import {Connection, createConnection, EntityManager, QueryRunner} from "typeorm";
+import { getConnection } from "@port-of-mars/server/util";
 import {ServiceProvider} from "@port-of-mars/server/services";
 import {Tournament, TournamentRound, User} from "@port-of-mars/server/entity";
 import {DBPersister} from "@port-of-mars/server/services/persistence";

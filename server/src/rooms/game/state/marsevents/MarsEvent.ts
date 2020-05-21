@@ -1,8 +1,8 @@
-import {Schema, type} from "@colyseus/schema";
-import {EventClientView, MarsEventData} from "@port-of-mars/shared/types";
-import {MarsEventState} from "@port-of-mars/server/rooms/game/state/marsEvents/common";
-import {constructState} from "@port-of-mars/server/rooms/game/state/marsEvents/state";
-import {GameState} from "@port-of-mars/server/rooms/game/state";
+import { Schema, type } from "@colyseus/schema";
+import { EventClientView, MarsEventData } from "@port-of-mars/shared/types";
+import { GameState } from "@port-of-mars/server/rooms/game/state";
+import { MarsEventState } from "./common";
+import { constructState } from "./state";
 
 export class MarsEvent extends Schema implements MarsEventData {
   constructor(data: MarsEventData) {
@@ -44,7 +44,7 @@ export class MarsEvent extends Schema implements MarsEventData {
   state: MarsEventState;
 
   toJSON(): MarsEventData & { elapsed: number; state: any } {
-    const {id, name, effect, flavorText, clientViewHandler, elapsed, duration} = this;
+    const { id, name, effect, flavorText, clientViewHandler, elapsed, duration } = this;
     return {
       id, name, effect, flavorText, clientViewHandler, elapsed, duration, state: this.state.toJSON()
     }

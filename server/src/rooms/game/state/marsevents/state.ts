@@ -1,11 +1,14 @@
+import * as _ from "lodash";
 import {
   getEventName,
   MarsEventState,
   MarsEventStateConstructor,
-} from "@port-of-mars/server/rooms/game/state/marsEvents/common";
-import {GameState} from "@port-of-mars/server/rooms/game/state";
-import * as _ from "lodash";
-import {CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER, Role, ROLES, Resource, InvestmentData, MarsLogCategory} from "@port-of-mars/shared/types";
+} from "./common";
+import { GameState } from "@port-of-mars/server/rooms/game/state";
+import {
+  CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER,
+  Role, ROLES, Resource, InvestmentData, MarsLogCategory
+} from "@port-of-mars/shared/types";
 
 
 const _dispatch: { [id: string]: MarsEventStateConstructor } = {};
@@ -60,7 +63,7 @@ export abstract class BaseEvent implements MarsEventState {
 export class Sandstorm extends BaseEvent {
   finalize(game: GameState): void {
     game.upkeep -= 10;
-    game.log('A sandstorm has decreased system health by 10.', `${ MarsLogCategory.event }: ${ formatEventName(Sandstorm.name) }`);
+    game.log('A sandstorm has decreased system health by 10.', `${MarsLogCategory.event}: ${formatEventName(Sandstorm.name)}`);
   }
 }
 
@@ -69,26 +72,26 @@ export class Sandstorm extends BaseEvent {
 @assocEventId
 export class LifeAsUsual extends BaseEvent {
   finalize(game: GameState): void {
-    game.log(`As the first human outpost on Mars, having a "usual" day is pretty unusual.`, `${ MarsLogCategory.event }: ${ formatEventName(LifeAsUsual.name) }`)
+    game.log(`As the first human outpost on Mars, having a "usual" day is pretty unusual.`, `${MarsLogCategory.event}: ${formatEventName(LifeAsUsual.name)}`)
   }
 }
 
 ////////////////////////// BreakdownOfTrust //////////////////////////
 
-export type BreakdownOfTrustData = { [role in Role]: number}
+export type BreakdownOfTrustData = { [role in Role]: number }
 
 @assocEventId
 export class BreakdownOfTrust extends BaseEvent {
 
   //converts the roles array into an object that looks like BreakdownOfTrustData
-  private savedtimeBlockAllocations:BreakdownOfTrustData = ROLES.reduce((obj,role)=>{
+  private savedtimeBlockAllocations: BreakdownOfTrustData = ROLES.reduce((obj, role) => {
     //these are placeholder values, they will be overridden.
     obj[role] = 0;
     return obj;
-  },{} as BreakdownOfTrustData);
+  }, {} as BreakdownOfTrustData);
 
-  initialize(game: GameState){
-    for(const player of game.players){
+  initialize(game: GameState) {
+    for (const player of game.players) {
       player.invertPendingInventory();
       //save the timeblock amount the player is allotted for the round
       this.savedtimeBlockAllocations[player.role] = player.currentTimeBlocksAmount;
@@ -97,18 +100,18 @@ export class BreakdownOfTrust extends BaseEvent {
     }
   }
 
-  updateSavedResources(player: Role, game: GameState, updatedInventory: InvestmentData){
+  updateSavedResources(player: Role, game: GameState, updatedInventory: InvestmentData) {
     game.players[player].pendingInvestments.add(updatedInventory);
   }
 
   finalize(game: GameState): void {
-    for(const player of game.players){
+    for (const player of game.players) {
       player.mergePendingAndInventory();
       //set that value back to the amount before the event
       player.timeBlocks = this.savedtimeBlockAllocations[player.role];
     }
 
-    game.log(`Each player chooses up to 2 Influence cards they own, then discards the rest.`, `${ MarsLogCategory.event }: ${formatEventName(BreakdownOfTrust.name)}`)
+    game.log(`Each player chooses up to 2 Influence cards they own, then discards the rest.`, `${MarsLogCategory.event}: ${formatEventName(BreakdownOfTrust.name)}`)
   }
 }
 
@@ -144,7 +147,7 @@ export class PersonalGain extends BaseEvent {
     return upkeep;
   }
 
-  playersVoteYes(voteResults: PersonalGainData): string  {
+  playersVoteYes(voteResults: PersonalGainData): string {
     let player = '';
     const playerYesVotes: Array<string> = [];
     let formattedPlayerList = '';
@@ -172,7 +175,7 @@ export class PersonalGain extends BaseEvent {
     game.subtractUpkeep(subtractedUpkeep);
 
     const message = `System health decreased by ${this.subtractedUpkeepTotal(subtractedUpkeep)}. The following players voted yes: ${this.playersVoteYes(this.votes)}`;
-    game.log(message, `${ MarsLogCategory.event }: ${ formatEventName(PersonalGain.name) }`);
+    game.log(message, `${MarsLogCategory.event}: ${formatEventName(PersonalGain.name)}`);
   }
 
   getData() {
@@ -235,7 +238,7 @@ export class CompulsivePhilanthropy extends BaseEvent {
     game.players[winner].timeBlocks = 0;
     game.log(
       `The ${winner} was voted to be Compulsive Philanthropist with ${count} votes. The ${winner} invested all of their timeblocks into System Health.`,
-      `${ MarsLogCategory.event }: ${ formatEventName(CompulsivePhilanthropy.name) }`
+      `${MarsLogCategory.event}: ${formatEventName(CompulsivePhilanthropy.name)}`
     );
   }
 
@@ -268,13 +271,13 @@ abstract class OutOfCommission extends BaseEvent {
     const player: Role = this.roles[outOfCommission];
     return player;
   }
-  
+
   finalize(game: GameState): void {
     const role: Role = this.playerOutOfCommission(this.player);
     game.players[role].timeBlocks = 3;
     game.log(
       `${this.player} has 3 time blocks to invest during this round.`,
-      `${ MarsLogCategory.event }: ${ formatEventName(OutOfCommission.name) }`
+      `${MarsLogCategory.event}: ${formatEventName(OutOfCommission.name)}`
     );
   }
 
@@ -336,14 +339,14 @@ export class Audit extends BaseEvent {
   finalize(game: GameState) {
     game.log(
       `You will be able to view other players' resources. Hover over each player tab on the right to reveal their inventory.`,
-      `${ MarsLogCategory.event }: ${ formatEventName(Audit.name) }`
+      `${MarsLogCategory.event}: ${formatEventName(Audit.name)}`
     );
   }
 }
 
 ////////////////////////// Bonding Through Adversity //////////////////////////
 
-type BondingThroughAdversityData = { [role in Role]: Resource}
+type BondingThroughAdversityData = { [role in Role]: Resource }
 
 @assocEventId
 export class BondingThroughAdversity extends BaseEvent {
@@ -367,7 +370,7 @@ export class BondingThroughAdversity extends BaseEvent {
     super();
     this.votes = votes ?? _.cloneDeep(BondingThroughAdversity.defaultInfluenceVotes);
   }
-  
+
   /**
    * Change Influence votes associated with each Role after a Player votes.
    * @param player The Role
@@ -390,7 +393,7 @@ export class BondingThroughAdversity extends BaseEvent {
 
     }
     const message = `Players have gained one influence currency of their choice.`
-    game.log(message, `${ MarsLogCategory.event }: ${ formatEventName(BondingThroughAdversity.name) }`);
+    game.log(message, `${MarsLogCategory.event}: ${formatEventName(BondingThroughAdversity.name)}`);
   }
 
   /**
@@ -412,7 +415,7 @@ export class ChangingTides extends BaseEvent {
     }
     game.log(
       'Each player discards their current Accomplishments and draws one new Accomplishment.',
-      `${ MarsLogCategory.event }: ${ formatEventName(ChangingTides.name) }`
+      `${MarsLogCategory.event}: ${formatEventName(ChangingTides.name)}`
     );
   }
 }

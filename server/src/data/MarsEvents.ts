@@ -10,7 +10,7 @@ const _marsEvents: Array<MarsEventDeckItem> = [
   [{
     id: 'changingTides',
     name: 'Changing Tides',
-    effect: `Each player discards all their Accomplishments and draws 1 new Accomplishment. (They still draw up to a total of three Accomplishments at the end of this round.)`,
+    effect: `Each player discards all of their available Accomplishments and draws 1 new Accomplishment. You will be able to discard this Accomplishment at the end of this round and draw up to three new Accomplishments at the start of the next round (if this is not the final round).`,
     flavorText: `Create contingencies for your contingencies and contingencies for those contingencies. Then prepare to improvise.`,
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 1
@@ -147,7 +147,7 @@ const _marsEvents: Array<MarsEventDeckItem> = [
   [{
     id: 'solarFlare',
     name: 'Solar Flare',
-    effect: `Destroy 5 System Health. Skip the discussion and trading phases this turn. (Players may not discuss how they allocate their time and may not trade Influences.)`,
+    effect: `Destroy 5 System Health. Skip discussion and trading phases this turn. Players cannot chat or trade Influences.`,
     flavorText: `Solar flares pose a far greater threat on Mars, where a thin atmosphere and non-existent magnetic field leaves settlers more vulnerable. `,
     clientViewHandler: 'DISABLE_CHAT' as const,
     duration: 1,
@@ -222,7 +222,7 @@ export function getAllMarsEvents(): Array<MarsEventDeckItem> {
   const AVAILABLE_EVENTS = ['personalGain', 'sandstorm', 'compulsivePhilanthropy',
     'outOfCommissionCurator', 'outOfCommissionPolitician', 'outOfCommissionResearcher',
     'outOfCommissionPioneer', 'outOfCommissionEntrepreneur', 'audit', 'bondingThroughAdversity',
-    'lifeAsUsual', 'breakdownOfTrust',
+    'lifeAsUsual', 'breakdownOfTrust', 'changingTides'
   ];
   const availableEvents: Array<MarsEventDeckItem> = [];
   for (const eventId of AVAILABLE_EVENTS) {
