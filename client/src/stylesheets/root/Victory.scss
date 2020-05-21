@@ -1,8 +1,11 @@
-.container-victory {
-  @include gameboard-constraints;
-  padding: 1rem;
-  margin: 0;
-  @include make-column-and-space-around;
+.victory {
+  width: 100vw !important;
+  height: 100vh !important;
+  //z-index: 0;
+  //@include gameboard-constraints;
+  //padding: 1rem;
+  //margin: 0;
+  @include make-column-and-center;
   background-color: $space-gray;
 
   .title-wrapper,
@@ -22,7 +25,7 @@
       h1 {
         text-transform: uppercase;
         letter-spacing: 0.25rem;
-        font-size: 6rem;
+        font-size: 4.5rem;
         font-weight: 700;
         color: $new-space-orange;
       }
@@ -35,25 +38,27 @@
         font-weight: 700;
         color: $new-space-orange;
       }
-
-      .winners {
-        color: $space-white;
-        @include make-column-and-center;
-
-        .winner {
-          margin: 0.5rem;
-
-          p {
-            font-size: $font-med;
-            color: $space-white;
-            margin: 0;
-          }
-        }
-      }
     }
+
+    .winners {
+      color: $space-white;
+      @include make-column-and-center;
+    }
+
+    //.winner {
+    //  margin: 0.5rem;
+
+      p {
+        font-size: $font-med;
+        text-transform: uppercase;
+        color: $space-white;
+        margin: 0;
+      }
+    //}
   }
 
   .content-wrapper {
+    width: 90vw;
     .content {
       padding: 0;
       @include make-column-and-center;
@@ -61,6 +66,7 @@
       h2 {
         margin-bottom: 0;
         text-transform: uppercase;
+        text-align: center;
         letter-spacing: 0.25rem;
         font-size: 1.5rem;
         font-weight: 700;
@@ -143,7 +149,7 @@
         border-style: solid;
         border-top-width: 0.75rem;
         border-color: #292d2e;
-        background-color: $space-orange-opaque-2;
+        background-color: black;
 
         text-transform: uppercase;
         letter-spacing: 0.25rem;
@@ -182,4 +188,5 @@
       }
     }
   }
+
 }
