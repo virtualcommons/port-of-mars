@@ -426,6 +426,15 @@ export class ChangingTides extends BaseEvent {
 export class HullBreach extends BaseEvent {
   finalize(state: GameState): void {
     state.upkeep -= 7;
-    state.log(`A hull breach has destroyed 7 System Health.`, `${MarsLogCategory.event}: Hull Breach`)
+    state.log(`A hull breach has destroyed 7 System Health.`, `${MarsLogCategory.event}: Hull Breach`);
   }
 }
+
+@assocEventId
+export class CropFailure extends BaseEvent {
+  finalize(state: GameState): void {
+    state.upkeep -= 20;
+    state.log(`Crop failure has destroyed 20 system health.`, `${MarsLogCategory.event}: Crop Failure`);
+  }
+}
+

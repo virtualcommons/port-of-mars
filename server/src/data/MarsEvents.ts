@@ -222,7 +222,8 @@ export function getAllMarsEvents(): Array<MarsEventDeckItem> {
   const AVAILABLE_EVENTS = ['personalGain', 'sandstorm', 'compulsivePhilanthropy',
     'outOfCommissionCurator', 'outOfCommissionPolitician', 'outOfCommissionResearcher',
     'outOfCommissionPioneer', 'outOfCommissionEntrepreneur', 'audit', 'bondingThroughAdversity',
-    'lifeAsUsual', 'breakdownOfTrust', 'changingTides', 'hullBreach'
+    'lifeAsUsual', 'breakdownOfTrust', 'changingTides', 'hullBreach',
+    'cropFailure'
   ];
   const availableEvents: Array<MarsEventDeckItem> = [];
   for (const eventId of AVAILABLE_EVENTS) {
