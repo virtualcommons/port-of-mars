@@ -43,6 +43,7 @@ export interface BaseEvent {
   getData?(): object;
   toJSON(): MarsEventSerialized;
 }
+
 export abstract class BaseEvent implements MarsEventState {
 
   toJSON(): MarsEventSerialized {
@@ -406,6 +407,7 @@ export class BondingThroughAdversity extends BaseEvent {
   }
 }
 
+@assocEventId
 export class ChangingTides extends BaseEvent {
   finalize(game: GameState): void {
     for (const role of ROLES) {
@@ -417,5 +419,13 @@ export class ChangingTides extends BaseEvent {
       'Each player discards their current Accomplishments and draws one new Accomplishment.',
       `${MarsLogCategory.event}: ${formatEventName(ChangingTides.name)}`
     );
+  }
+}
+
+@assocEventId
+export class HullBreach extends BaseEvent {
+  finalize(state: GameState): void {
+    state.upkeep -= 7;
+    state.log(`A hull breach has destroyed 7 System Health.`, `${MarsLogCategory.event}: Hull Breach`)
   }
 }

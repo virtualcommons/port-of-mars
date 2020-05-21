@@ -26,7 +26,7 @@ const _marsEvents: Array<MarsEventDeckItem> = [
   [{
     id: 'breakdownOfTrust',
     name: 'Breakdown of Trust',
-    effect: `Each player chooses up to 2 Influences they own, then discards the rest.`,
+    effect: `Each player can choose to save up to 2 units of Influence that they already own. The rest will be lost.`,
     flavorText: `Setbacks are inevitable, but no less painful each time.`,
     clientViewHandler: 'INFLUENCES_SELECT' as const,
     duration: 1
@@ -34,7 +34,7 @@ const _marsEvents: Array<MarsEventDeckItem> = [
   [{
     id: 'bondingThroughAdversity',
     name: 'Bonding Through Adversity',
-    effect: 'Each player gains one Influence of their choice.',
+    effect: 'Each player gains one unit of Influence of their choice.',
     flavorText: 'Challenges brings communities together.',
     clientViewHandler: 'INFLUENCES_DRAW' as const,
     duration: 1
@@ -67,7 +67,7 @@ const _marsEvents: Array<MarsEventDeckItem> = [
   [{
     id: 'effortsWasted',
     name: 'Efforts Wasted',
-    effect: `Each player must discard an Accomplishment they purchased.`,
+    effect: `Each player must discard an Accomplishment that they have already purchased.`,
     flavorText: `"All markets are volatile. The trick is learning how to ride the waves." - The Entrepreneur`,
     clientViewHandler: 'ACCOMPLISHMENT_SELECT_PURCHASED' as const,
     duration: 1
@@ -130,7 +130,7 @@ const _marsEvents: Array<MarsEventDeckItem> = [
     id: 'cropFailure',
     name: 'Crop Failure',
     effect: `Destroy 20 System Health.`,
-    flavorText: `"The good news is we're not eating any more potatoes this cycle! The bad news is we're not sure what we're eating." - The researcher`,
+    flavorText: `"The good news is we're not eating any more potatoes this cycle! The bad news is we're not sure what we're eating." - The Researcher`,
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 1,
     timeDuration: 10,
@@ -222,7 +222,7 @@ export function getAllMarsEvents(): Array<MarsEventDeckItem> {
   const AVAILABLE_EVENTS = ['personalGain', 'sandstorm', 'compulsivePhilanthropy',
     'outOfCommissionCurator', 'outOfCommissionPolitician', 'outOfCommissionResearcher',
     'outOfCommissionPioneer', 'outOfCommissionEntrepreneur', 'audit', 'bondingThroughAdversity',
-    'lifeAsUsual', 'breakdownOfTrust', 'changingTides'
+    'lifeAsUsual', 'breakdownOfTrust', 'changingTides', 'hullBreach'
   ];
   const availableEvents: Array<MarsEventDeckItem> = [];
   for (const eventId of AVAILABLE_EVENTS) {
