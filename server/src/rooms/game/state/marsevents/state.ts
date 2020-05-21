@@ -144,10 +144,6 @@ export class PersonalGain extends BaseEvent {
     this.votes[player] = vote;
   }
 
-  subtractedUpkeepTotal(upkeep: number) {
-    return upkeep;
-  }
-
   playersVoteYes(voteResults: PersonalGainData): string {
     let player = '';
     const playerYesVotes: Array<string> = [];
@@ -174,8 +170,7 @@ export class PersonalGain extends BaseEvent {
       }
     }
     game.decreaseSystemHealth(systemHealthReduction);
-
-    const message = `System health decreased by ${this.subtractedUpkeepTotal(subtractedUpkeep)}. The following players voted yes: ${this.playersVoteYes(this.votes)}`;
+    const message = `System health decreased by ${systemHealthReduction}. The following players voted yes: ${this.playersVoteYes(this.votes)}`;
     game.log(message, `${MarsLogCategory.event}: ${formatEventName(PersonalGain.name)}`);
   }
 
