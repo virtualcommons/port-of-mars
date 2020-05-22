@@ -1,10 +1,10 @@
-.c-gameview-defeat {
+.defeat {
   position: relative;
   z-index: 0;
   @include gameboard-constraints;
   padding: 1rem;
   margin: 0;
-  @include make-column-and-space-around;
+  @include make-column-and-center;
   background-color: $space-gray;
 
   .title-wrapper,
@@ -130,7 +130,7 @@
         border-style: solid;
         border-top-width: 0.75rem;
         border-color: #292d2e;
-        background-color: $space-orange-opaque-2;
+        background-color: black;
 
         text-transform: uppercase;
         letter-spacing: 0.25rem;

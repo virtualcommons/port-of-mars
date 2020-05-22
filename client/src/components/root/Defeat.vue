@@ -1,5 +1,5 @@
 <template>
-  <div class="c-gameview-defeat container">
+  <div fliud class="defeat">
     <div class="title-wrapper row">
       <div class="title col-12">
         <h1>Port of Mars</h1>
