@@ -2,7 +2,7 @@ import {Game, GameEvent, Player, TournamentRoundInvite, User} from "@port-of-mar
 import * as ge from "@port-of-mars/server/rooms/game/events/types";
 import {GameOpts, Metadata, Persister} from "@port-of-mars/server/rooms/game/types";
 import * as assert from "assert";
-import Mutex from "async-mutex/lib/Mutex";
+import {Mutex} from "async-mutex";
 import {ClockTimer} from "@gamestdio/timer/lib/ClockTimer";
 import {getConnection} from "@port-of-mars/server/util";
 import {EntityManager, In, IsNull} from "typeorm";
