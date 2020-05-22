@@ -215,15 +215,18 @@ const _marsEvents: Array<MarsEventDeckItem> = [
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 1,
     timeDuration: 15,
-  }, 1]
+  }, 12]
 ];
 
 export function getAllMarsEvents(): Array<MarsEventDeckItem> {
-  const AVAILABLE_EVENTS = ['personalGain', 'sandstorm', 'compulsivePhilanthropy',
-    'outOfCommissionCurator', 'outOfCommissionPolitician', 'outOfCommissionResearcher',
-    'outOfCommissionPioneer', 'outOfCommissionEntrepreneur', 'audit', 'bondingThroughAdversity',
-    'lifeAsUsual', 'breakdownOfTrust', 'changingTides', 'hullBreach',
-    'cropFailure', 'difficultConditions',
+  const AVAILABLE_EVENTS = [
+    // 'personalGain', 'sandstorm', 'compulsivePhilanthropy',
+    // 'outOfCommissionCurator', 'outOfCommissionPolitician', 'outOfCommissionResearcher',
+    // 'outOfCommissionPioneer', 'outOfCommissionEntrepreneur', 'audit', 'bondingThroughAdversity',
+    'lifeAsUsual',
+    // 'breakdownOfTrust', 'changingTides', 'hullBreach',
+    // 'cropFailure',
+    'difficultConditions',
   ];
   const availableEvents: Array<MarsEventDeckItem> = [];
   for (const eventId of AVAILABLE_EVENTS) {

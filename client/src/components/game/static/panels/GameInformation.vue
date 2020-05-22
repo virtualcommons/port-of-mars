@@ -33,12 +33,13 @@ import { Vue, Component, Prop, Inject } from 'vue-property-decorator';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 import { Phase, PHASE_LABELS } from '@port-of-mars/shared/types';
 import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
+import {AbstractGameAPI} from "@port-of-mars/client/api/game/types";
 
 @Component({
   components: {},
 })
 export default class GameInformation extends Vue {
-  @Inject() private api!: GameRequestAPI & TutorialAPI;
+  @Inject() private api!: AbstractGameAPI;
 
   get roundNumber() {
     const { round, upkeep } = this.$store.state;

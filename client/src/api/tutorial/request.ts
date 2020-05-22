@@ -3,7 +3,7 @@ import {
   AccomplishmentData,
   ResourceAmountData,
   Resource,
-  Role,
+  Role, InvestmentData,
 } from '@port-of-mars/shared/types';
 import { initialStoreState } from '@port-of-mars/client/store/state';
 import {
@@ -15,8 +15,9 @@ import * as _ from 'lodash';
 import { Store } from 'vuex/types/index';
 import { State } from '@port-of-mars/client/store/state';
 import { StateTransform } from '@port-of-mars/client/types/tutorial';
+import {AbstractGameAPI} from "@port-of-mars/client/api/game/types";
 
-export class TutorialAPI {
+export class TutorialAPI implements AbstractGameAPI {
   private store!: Store<State>;
   private stateStack: Array<StateTransform[]> = [];
   private isTaskComplete = true;
@@ -31,6 +32,29 @@ export class TutorialAPI {
 
   registerRef(forwardButtonRef: any) {
     this.forwardButtonRef = forwardButtonRef;
+  }
+
+  // Stubbed API methods not used in tutorial
+
+  setNextPhase(): void {
+  }
+
+  resetGame(): void {
+  }
+
+  discardAccomplishment(id: number): void {
+  }
+
+  savePersonalGainVote(value: { role: Role; vote: boolean }): void {
+  }
+
+  voteForPhilanthropist(vote: Role): void {
+  }
+
+  saveBondingThroughAdversitySelection(influenceVoteData: { role: Role; influence: Resource }): void {
+  }
+
+  saveResourcesSelection(savedResources: InvestmentData): void {
   }
 
   /*

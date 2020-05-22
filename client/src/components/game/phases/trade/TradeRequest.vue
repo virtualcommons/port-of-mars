@@ -69,6 +69,7 @@ import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
 import { makeTradeSafe } from '@port-of-mars/shared/validation';
 import {SendTradeRequestData} from "@port-of-mars/shared/game";
+import {AbstractGameAPI} from "@port-of-mars/client/api/game/types";
 
 @Component({
   components: {
@@ -76,7 +77,7 @@ import {SendTradeRequestData} from "@port-of-mars/shared/game";
   },
 })
 export default class TradeRequest extends Vue {
-  @Inject() readonly api!: GameRequestAPI & TutorialAPI;
+  @Inject() readonly api!: AbstractGameAPI;
   private count: number = 0;
 
   created() {

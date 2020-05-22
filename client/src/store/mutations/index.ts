@@ -17,10 +17,6 @@ export default {
     Object.assign(state, getInitialStoreState());
   },
 
-  SET_LAYOUT(state: State, newLayout: string) {
-    state.layout = newLayout;
-  },
-
   SET_DASHBOARD_MESSAGE(state: State, payload: DashboardMessage) {
     if (! _.some(state.dashboardMessages, payload)) {
       state.dashboardMessages.push(payload);
