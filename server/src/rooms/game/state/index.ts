@@ -1128,7 +1128,7 @@ export class GameState extends Schema implements GameData {
   }
 
   hasMarsEventsToProcess() {
-    return this.marsEventsProcessed < this.marsEvents.length;
+    return this.marsEventsProcessed < this.marsEvents.length - 1;
   }
 
   hasUser(username: string | undefined): boolean {

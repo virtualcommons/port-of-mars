@@ -250,7 +250,7 @@ export class ReenteredMarsEventPhase extends KindOnlyGameEvent {
   apply(game: GameState): void {
     game.resetPlayerReadiness();
     game.marsEventsProcessed += 1;
-    game.timeRemaining = game.marsEvents[game.marsEventsProcessed].timeDuration;
+    game.timeRemaining = game.currentEvent.timeDuration;
   }
 }
 gameEventDeserializer.register(ReenteredMarsEventPhase);
