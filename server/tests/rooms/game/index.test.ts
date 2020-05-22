@@ -5,7 +5,7 @@ import * as _ from 'lodash'
 import { mockGameStateInitOpts } from "@port-of-mars/server/util";
 import { canSendTradeRequest } from "@port-of-mars/shared/validation";
 import {
-  OutOfCommissionCurator, OutOfCommissionPioneer, OutOfCommissionResearcher, OutOfCommissionPolitician, OutOfCommissionEntrepreneur, BreakdownOfTrust
+  OutOfCommissionCurator, OutOfCommissionPioneer, OutOfCommissionResearcher, OutOfCommissionPolitician, OutOfCommissionEntrepreneur, BreakdownOfTrust, PersonalGain
 } from "@port-of-mars/server/rooms/game/state/marsevents/state";
 import {SimpleBot} from "@port-of-mars/server/rooms/game/state/bot";
 
@@ -66,7 +66,7 @@ describe('a Researcher Player Accomplishment', () => {
 
 });
 
-describe('a player snaphot', () => {
+describe('a player snapshot', () => {
   const p1 = new Player(RESEARCHER, SimpleBot.fromActor());
   const p2 = new Player(CURATOR, SimpleBot.fromActor());
   it('can be round tripped', () => {
@@ -81,11 +81,12 @@ describe('a game state snapshot', () => {
     const options = mockGameStateInitOpts(x => x, () => 10);
     const g1 = new GameState(options);
     const g2 = new GameState(options);
-
     g2.fromJSON(g1.toJSON());
     expect(_.isEqual(g1, g2)).toBeTruthy();
     g2.maxRound = g1.maxRound + 1;
     expect(_.isEqual(g1, g2)).toBeFalsy()
+    g1.players[CURATOR].timeBlocks = 15;
+    expect(g2.players[CURATOR].timeBlocks).toBe(10);
   });
 });
 
@@ -224,9 +225,29 @@ describe('out of commission event reduces timeblocks for each role', () => {
     new OutOfCommissionResearcher().finalize(g);
     new OutOfCommissionPolitician().finalize(g);
     new OutOfCommissionPioneer().finalize(g);
+    g.applyPendingActions();
     for (const p of g.players) {
       expect(p.timeBlocks).toBe(3);
     }
+  });
+});
+
+describe('Pending Mars Events', () => {
+  const g = new GameState(mockGameStateInitOpts(x => x, () => 10));
+  const oppositeState = new GameState(mockGameStateInitOpts(x => x, () => 10));
+  oppositeState.fromJSON(g.toJSON());
+  it('are applied in the proper order', () => {
+    new OutOfCommissionCurator().finalize(g);
+    new PersonalGain({Curator: true, Entrepreneur: true, Pioneer: true, Politician: true, Researcher: true}).finalize(g);
+    expect(g.players[CURATOR].timeBlocks).toBe(10);
+    g.applyPendingActions();
+    expect(g.players[CURATOR].timeBlocks).toBe(3);
+
+    new PersonalGain({Curator: true, Entrepreneur: true, Pioneer: true, Politician: true, Researcher: true}).finalize(oppositeState);
+    new OutOfCommissionCurator().finalize(oppositeState);
+    expect(oppositeState.players[CURATOR].timeBlocks).toBe(10);
+    oppositeState.applyPendingActions();
+    expect(oppositeState.players[CURATOR].timeBlocks).toBe(3);
   });
 });
 
@@ -234,7 +255,7 @@ describe('Breakdown of trust saves timeBlocks', () => {
   const g = new GameState(mockGameStateInitOpts(x => x, () => 10));
 
   it('gives each role 10 timeblocks with no other events active', () => {
-    let breakdownOfTrust = new BreakdownOfTrust();
+    const breakdownOfTrust = new BreakdownOfTrust();
     breakdownOfTrust.initialize(g);
     breakdownOfTrust.finalize(g);
 
@@ -257,7 +278,7 @@ describe('Breakdown of trust saves timeBlocks', () => {
     let breakdownOfTrust = new BreakdownOfTrust();
     breakdownOfTrust.initialize(g);
     breakdownOfTrust.finalize(g);
-
+    g.applyPendingActions();
     for (const p of g.players) {
       expect(p.timeBlocks).toBe(3);
     }

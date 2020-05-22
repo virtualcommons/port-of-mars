@@ -9,6 +9,7 @@ import {
   EnteredDiscardPhase,
   EnteredInvestmentPhase,
   EnteredMarsEventPhase,
+  ExitedMarsEventPhase,
   EnteredPurchasePhase,
   EnteredTradePhase,
   EnteredVictoryPhase,
@@ -205,20 +206,20 @@ export class SetNextPhaseCmd implements Command {
       case Phase.defeat:
         return [];
       case Phase.events: {
-        const events = [];
+        const gameEvents = [];
         if (this.state.currentEvent) {
-          events.push(new FinalizedMarsEvent());
+          gameEvents.push(new FinalizedMarsEvent());
         }
-        if (
-          this.state.marsEventsProcessed + 1 >=
-          this.state.marsEvents.length
-        ) {
-          events.push(new EnteredInvestmentPhase());
-        } else {
-          events.push(new ReenteredMarsEventPhase());
-          events.push(new InitializedMarsEvent());
+        if (this.state.hasMarsEventsToProcess()) {
+          gameEvents.push(new ReenteredMarsEventPhase());
+          gameEvents.push(new InitializedMarsEvent());
         }
-        return events;
+        else {
+          // finished processing all events, finalize all pending mars events in priority order
+          gameEvents.push(new ExitedMarsEventPhase());
+          gameEvents.push(new EnteredInvestmentPhase());
+        } 
+        return gameEvents;
       }
       case Phase.invest:
         return [new EnteredTradePhase()];

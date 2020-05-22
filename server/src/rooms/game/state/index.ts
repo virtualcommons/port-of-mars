@@ -962,6 +962,20 @@ export interface GameSerialized {
   winners: Array<Role>;
 }
 
+export enum ActionOrdering {
+  // the pending action will be processed first in line alongside all other FIRSTs
+  FIRST = 1,
+  // pending actions to be processed after FIRSTs
+  MIDDLE = 10,
+  // final actions to be processed
+  LAST = 20
+}
+
+export interface PendingMarsEventAction {
+  ordering: ActionOrdering;
+  execute(state: GameState): void;
+}
+
 export class GameState extends Schema implements GameData {
 
   constructor(data: GameStateOpts) {
@@ -1077,6 +1091,8 @@ export class GameState extends Schema implements GameData {
   @type(['string'])
   winners = new ArraySchema<Role>();
 
+  pendingMarsEventActions: Array<PendingMarsEventAction> = [];
+
   act(): Array<GameEvent> {
     const events: Array<GameEvent> = [];
     for (const player of this.players) {
@@ -1109,6 +1125,10 @@ export class GameState extends Schema implements GameData {
 
   getPlayers(): Array<Player> {
     return this.players.asArray();
+  }
+
+  hasMarsEventsToProcess() {
+    return this.marsEventsProcessed < this.marsEvents.length;
   }
 
   hasUser(username: string | undefined): boolean {
@@ -1201,6 +1221,16 @@ export class GameState extends Schema implements GameData {
     const current = this.upkeep;
     this.upkeep = _.clamp(current - amount, 0, 100);
     return this.upkeep;
+  }
+
+  applyPendingActions() {
+    this.pendingMarsEventActions.sort((a, b) => {
+      return a.ordering - b.ordering;
+    });
+    for (const action of this.pendingMarsEventActions) {
+      action.execute(this);
+    }
+    this.pendingMarsEventActions = [];
   }
 
   clearTrades() {

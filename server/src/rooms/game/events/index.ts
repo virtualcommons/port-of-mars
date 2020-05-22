@@ -265,6 +265,12 @@ export class EnteredInvestmentPhase extends KindOnlyGameEvent {
 }
 gameEventDeserializer.register(EnteredInvestmentPhase);
 
+export class ExitedMarsEventPhase extends KindOnlyGameEvent {
+  apply(state: GameState): void {
+    state.applyPendingActions();
+  }
+}
+
 export class EnteredTradePhase extends KindOnlyGameEvent {
   apply(game: GameState): void {
     game.resetPlayerReadiness();

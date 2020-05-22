@@ -4,7 +4,7 @@ import {
   MarsEventState,
   MarsEventStateConstructor,
 } from "./common";
-import { GameState } from "@port-of-mars/server/rooms/game/state";
+import { GameState, ActionOrdering } from "@port-of-mars/server/rooms/game/state";
 import {
   CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER,
   Role, ROLES, Resource, InvestmentData, MarsLogCategory
@@ -111,8 +111,9 @@ export class BreakdownOfTrust extends BaseEvent {
       //set that value back to the preserved amount before the event
       player.timeBlocks = this.savedtimeBlockAllocations[player.role];
     }
-
-    game.log(`Each player chooses up to 2 Influence cards they own, then discards the rest.`, `${MarsLogCategory.event}: ${formatEventName(BreakdownOfTrust.name)}`)
+    game.log(`Each player can choose to save up to 2 units of Influence that they already own. The rest will be lost.`,
+      `${MarsLogCategory.event}: ${formatEventName(BreakdownOfTrust.name)}`
+    );
   }
 }
 
@@ -136,18 +137,19 @@ export class PersonalGain extends BaseEvent {
   private votes: PersonalGainData;
 
   constructor(votes?: PersonalGainData) {
+    // currently used when reconstructing from the DB
     super();
     this.votes = votes ?? _.cloneDeep(PersonalGain.defaultVotes);
   }
 
   updateVotes(player: Role, vote: boolean) {
+    // invoked by a player request -> command -> game event
     this.votes[player] = vote;
   }
 
-  playersVoteYes(voteResults: PersonalGainData): string {
+  playerVotingInfo(voteResults: PersonalGainData): string {
     let player = '';
     const playerYesVotes: Array<string> = [];
-    let formattedPlayerList = '';
 
     for (const role of ROLES) {
       if (voteResults[role]) {
@@ -155,23 +157,23 @@ export class PersonalGain extends BaseEvent {
         playerYesVotes.push(player);
       }
     }
-
-    formattedPlayerList = playerYesVotes.toString();
-
-    return formattedPlayerList;
+    return playerYesVotes.toString();
   }
 
   finalize(game: GameState) {
-    let systemHealthReduction = 0;
-    for (const role of ROLES) {
-      if (this.votes[role]) {
-        game.players[role].timeBlocks += 6;
-        systemHealthReduction += 6;
+    const playerVotingInfo = this.playerVotingInfo(this.votes);
+    game.pendingMarsEventActions.push({ordering: ActionOrdering.FIRST, execute: (state) => {
+      let systemHealthReduction = 0;
+      for (const role of ROLES) {
+        if (this.votes[role]) {
+          state.players[role].timeBlocks += 6;
+          systemHealthReduction += 6;
+        }
       }
-    }
-    game.decreaseSystemHealth(systemHealthReduction);
-    const message = `System health decreased by ${systemHealthReduction}. The following players voted yes: ${this.playersVoteYes(this.votes)}`;
-    game.log(message, `${MarsLogCategory.event}: ${formatEventName(PersonalGain.name)}`);
+      state.decreaseSystemHealth(systemHealthReduction);
+      const message = `System health decreased by ${systemHealthReduction}. The following players voted yes: ${playerVotingInfo}`;
+      state.log(message, `${MarsLogCategory.event}: ${formatEventName(PersonalGain.name)}`);
+    }});
   }
 
   getData() {
@@ -228,16 +230,15 @@ export class CompulsivePhilanthropy extends BaseEvent {
         winners.push(potentialWinner)
       }
     }
-
     const winner: Role = _.find(this.order, (w: Role) => winners.includes(w)) || this.order[0];
-    // FIXME: this needs to look up player's timeBlocks lazily or defer 
-    // this application to the very end, see https://github.com/virtualcommons/port-of-mars/issues/476
-    game.increaseSystemHealth(game.players[winner].timeBlocks);
-    game.players[winner].timeBlocks = 0;
     game.log(
       `The ${winner} was voted to be Compulsive Philanthropist with ${count} votes. The ${winner} invested all of their timeblocks into System Health.`,
       `${MarsLogCategory.event}: ${formatEventName(CompulsivePhilanthropy.name)}`
     );
+    game.pendingMarsEventActions.push({ordering: ActionOrdering.LAST, execute: (state) => {
+      state.increaseSystemHealth(state.players[winner].timeBlocks);
+      state.players[winner].timeBlocks = 0;
+    }});
   }
 
   getData() {
@@ -271,12 +272,14 @@ abstract class OutOfCommission extends BaseEvent {
   }
 
   finalize(game: GameState): void {
-    const role: Role = this.playerOutOfCommission(this.player);
-    game.players[role].timeBlocks = 3;
-    game.log(
-      `${this.player} has 3 time blocks to invest during this round.`,
-      `${MarsLogCategory.event}: ${formatEventName(OutOfCommission.name)}`
-    );
+    game.pendingMarsEventActions.push({ordering: ActionOrdering.MIDDLE, execute: (state) => {
+      const role: Role = this.playerOutOfCommission(this.player);
+      state.players[role].timeBlocks = 3;
+      state.log(
+        `${this.player} has 3 time blocks to invest during this round.`,
+        `${MarsLogCategory.event}: ${formatEventName(OutOfCommission.name)}`
+      );
+    }});
   }
 
   getData() {
@@ -453,6 +456,8 @@ export class SolarFlare extends BaseEvent {
     // FIXME: DISABLE_CHAT clientViewHandler needs to be 
     // set to DISABLE_CHAT_AND_TRADE along with client side 
     // support
+    // state.disableChat(1)
+    // state.disableTrade(1)
     state.log(`A Solar Flare has destroyed 5 System Health. Chat and trade are not available in this round.`,
       `${MarsLogCategory.event}: Solar Flare`
     );
