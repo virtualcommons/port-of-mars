@@ -11,16 +11,19 @@
 }
 
 .content-wrapper {
-  flex: 1;
-  height: 50%;
+  height: 70vh;
+  overflow-y: hidden;
   justify-content: space-around;
-  overflow: hidden;
+}
+
+.message-wrapper {
+  @include make-center;
 }
 
 // WRAPPER :: DASHBOARD ITEM GROUPS (STATS, ACTIONS, GAMES)
 
 .outer-wrapper {
-  height: 55vh;
+  max-height: 50vh;
   width: 100%;
   padding: 0.5rem;
   background-color: $space-white-opaque-1;
@@ -56,13 +59,23 @@
   padding: 1rem;
 }
 
-.games-played {
-  height: 4rem;
+.games-played, .next-game {
+  height: auto;
   width: 100%;
   padding: 0.5rem 1rem;
   margin-bottom: 0.5rem;
   @include make-horizontal-between;
+}
+
+.games-played {
   background-color: $new-space-orange-005;
+}
+
+.next-game {
+  //border-style: solid;
+  //border-width: 0.1rem;
+  background-color: $new-space-orange-005;
+  border-color: $new-space-orange;
 }
 
 // HTML TEXT ELEMENTS
@@ -75,7 +88,7 @@ a {
 h1 {
   text-transform: uppercase;
   letter-spacing: 0.25rem;
-  font-size: 6rem;
+  font-size: 4.5rem;
   font-weight: 700;
   color: $new-space-orange;
 }

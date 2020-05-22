@@ -1,17 +1,13 @@
 <template>
-  <div class="c-upcoming-game-item container">
-    <div class="title-wrapper row">
-      <div class="title col-12">
-        <p>Time: {{ toTimeString(upcomingGame.time) }}</p>
-      </div>
+  <div class="d-flex justify-content-between container wrapper">
+    <div>
+      <p class="next-game">Next Game at {{ toTimeString(upcomingGame.time) }}</p>
     </div>
-    <div class="buttons-wrapper row">
-      <div class="buttons col-12">
+<!--      <div class="buttons">-->
         <router-link :to="joinLink">
-          <BButton class="button">Join</BButton>
+          <b-button class="button px-4 py-1">Join</b-button>
         </router-link>
-      </div>
-    </div>
+<!--      </div>-->
   </div>
 </template>
 
@@ -19,13 +15,8 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { GameMeta } from '@port-of-mars/shared/types';
 import { LOBBY_PAGE } from '@port-of-mars/shared/routes';
-import { BButton } from 'bootstrap-vue';
 
-@Component({
-  components: {
-    BButton,
-  },
-})
+@Component({})
 export default class UpcomingGameItem extends Vue {
   @Prop() private upcomingGame!: GameMeta;
 

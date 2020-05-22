@@ -9,40 +9,32 @@
 
       <!-- HEADER -->
       <b-row class="title-wrapper">
-        <b-col class="title">
-          <router-link :to="'/'">
-            <h1>Port of Mars</h1>
-          </router-link>
+        <b-col class="title mt-5">
+          <h1>Player Dashboard</h1>
         </b-col>
-        <div class="w-100"></div>
-        <b-col class="title">
-          <h2>Player Dashboard</h2>
-        </b-col>
+      </b-row>
+
+      <b-row class="message-wrapper">
+        <!-- MESSAGES -->
+        <h2>Messages</h2>
+        <b-alert :key="dm.message" :variant="dm.kind" show dismissible fade
+                 v-for="dm in dashboardMessages">
+          {{ dm.message }}
+        </b-alert>
       </b-row>
 
       <!-- DASHBOARD ITEMS -->
       <b-row class="content-wrapper">
 
         <!-- STATS -->
-        <b-col align-self="stretch" class="stats" cols="3">
-          <!-- MESSAGES -->
-          <b-row>
-            <b-col>
-              <h2>Messages</h2>
-              <b-alert :key="dm.message" :variant="dm.kind" dismissible show
-                       v-for="dm in dashboardMessages">
-                {{ dm.message }}
-              </b-alert>
-            </b-col>
-          </b-row>
+        <b-col class="stats">
 
-          <!-- STATS -->
-          <b-row>
-            <b-col align-self="stretch">
               <h2>Your Stats</h2>
+
               <div class="games-played">
-                <p>Games Played: {{ gamesPlayedCount }}</p>
+                <p class="text-center">Games Played: {{ gamesPlayedCount }}</p>
               </div>
+
               <div class="outer-wrapper">
                 <PlayerStatItem
                   :key="playerStatItem.time"
@@ -50,14 +42,20 @@
                   v-for="playerStatItem in stats.games"
                 />
               </div>
-            </b-col>
-          </b-row>
+
         </b-col>
 
         <!-- ACTION ITEMS -->
-        <b-col align-self="stretch" class="action-items col-4">
+        <b-col class="action-items">
           <h2>Action Items</h2>
-          <div class="outer-wrapper">
+          <b-row class="next-game">
+            <UpcomingGameItem
+              :key="upcomingGame.time"
+              :upcomingGame="upcomingGame"
+              v-for="upcomingGame in upcomingGames"
+            />
+          </b-row>
+          <b-row class="outer-wrapper">
             <div class="wrapper">
               <p v-if="loading">Action Items are loading...</p>
               <ActionItemComponent
@@ -66,21 +64,7 @@
                 v-for="actionItem in actionItems"
               />
             </div>
-          </div>
-        </b-col>
-
-        <!-- UPCOMING GAMES -->
-        <b-col align-self="stretch" class="upcoming-games col-3">
-          <h2>Upcoming Games</h2>
-          <div class="outer-wrapper">
-            <div class="wrapper">
-              <UpcomingGameItem
-                :key="upcomingGame.time"
-                :upcomingGame="upcomingGame"
-                v-for="upcomingGame in upcomingGames"
-              />
-            </div>
-          </div>
+          </b-row>
         </b-col>
       </b-row>
     </div>
@@ -88,12 +72,13 @@
 </template>
 
 <script lang="ts">
-  import {Component, Mixins, Vue} from 'vue-property-decorator';
+  import {Component, Mixins, Prop, Vue} from 'vue-property-decorator';
   import ActionItemComponent from '@port-of-mars/client/components/dashboard/ActionItem.vue';
   import UpcomingGameItem from '@port-of-mars/client/components/dashboard/UpcomingGameItem.vue';
   import PlayerStatItem from '@port-of-mars/client/components/dashboard/PlayerStatItem.vue';
   import {DashboardAPI} from '@port-of-mars/client/api/dashboard/request';
   import {ActionItem, DashboardData, GameMeta,} from '@port-of-mars/shared/types';
+  import {LOBBY_PAGE} from "@port-of-mars/shared/routes";
 
   @Component({
     components: {
