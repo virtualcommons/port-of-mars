@@ -217,6 +217,7 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
         At the beginning of this round, System Health = ${game.upkeep}.`,
       MarsLogCategory.systemHealth);
 
+    game.resetPlayerCosts();
     game.resetPlayerReadiness();
     game.resetPlayerContributedUpkeep();
     game.refreshPlayerPurchasableAccomplisments();

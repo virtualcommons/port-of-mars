@@ -475,3 +475,12 @@ export class EffortsWasted extends BaseEvent {
     )
   }
 }
+
+@assocEventId
+export class DifficultConditions extends BaseEvent {
+  finalize(game: GameState): void {
+    for (const role of ROLES) {
+      game.players[role].costs.upkeep *= 2;
+    }
+  }
+}

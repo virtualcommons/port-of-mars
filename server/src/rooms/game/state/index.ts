@@ -226,59 +226,63 @@ class ResourceCosts extends Schema implements ResourceCostData {
     };
   }
 
+  static getCosts(role: Role): ResourceCostData {
+      switch (role) {
+        case CURATOR:
+          return {
+            culture: 2,
+            finance: 3,
+            government: Infinity,
+            legacy: 3,
+            science: Infinity,
+            upkeep: 1
+            // specialty: 'culture'
+          };
+        case ENTREPRENEUR:
+          return {
+            culture: 3,
+            finance: 2,
+            government: 3,
+            legacy: Infinity,
+            science: Infinity,
+            upkeep: 1
+            // specialty: 'finance'
+          };
+        case PIONEER:
+          return {
+            culture: 3,
+            finance: Infinity,
+            government: Infinity,
+            legacy: 2,
+            science: 3,
+            upkeep: 1
+            // specialty: 'legacy'
+          };
+        case POLITICIAN:
+          return {
+            culture: Infinity,
+            finance: 3,
+            government: 2,
+            legacy: Infinity,
+            science: 3,
+            upkeep: 1
+            // specialty: 'government'
+          };
+        case RESEARCHER:
+          return {
+            culture: Infinity,
+            finance: Infinity,
+            government: 3,
+            legacy: 3,
+            science: 2,
+            upkeep: 1
+            // specialty: 'science'
+          };
+      }
+  }
+
   static fromRole(role: Role): ResourceCosts {
-    switch (role) {
-      case CURATOR:
-        return new ResourceCosts({
-          culture: 2,
-          finance: 3,
-          government: Infinity,
-          legacy: 3,
-          science: Infinity,
-          upkeep: 1
-          // specialty: 'culture'
-        });
-      case ENTREPRENEUR:
-        return new ResourceCosts({
-          culture: 3,
-          finance: 2,
-          government: 3,
-          legacy: Infinity,
-          science: Infinity,
-          upkeep: 1
-          // specialty: 'finance'
-        });
-      case PIONEER:
-        return new ResourceCosts({
-          culture: 3,
-          finance: Infinity,
-          government: Infinity,
-          legacy: 2,
-          science: 3,
-          upkeep: 1
-          // specialty: 'legacy'
-        });
-      case POLITICIAN:
-        return new ResourceCosts({
-          culture: Infinity,
-          finance: 3,
-          government: 2,
-          legacy: Infinity,
-          science: 3,
-          upkeep: 1
-          // specialty: 'government'
-        });
-      case RESEARCHER:
-        return new ResourceCosts({
-          culture: Infinity,
-          finance: Infinity,
-          government: 3,
-          legacy: 3,
-          science: 2,
-          upkeep: 1
-          // specialty: 'science'
-        });
-    }
+    return new ResourceCosts(ResourceCosts.getCosts(role));
   }
 
   static getSpecialty(role: Role): Resource {
@@ -1150,6 +1154,12 @@ export class GameState extends Schema implements GameData {
   refreshPlayerPurchasableAccomplisments(): void {
     for (const player of this.players) {
       player.refreshPurchasableAccomplishments();
+    }
+  }
+
+  resetPlayerCosts(): void {
+    for (const player of this.players) {
+      player.costs.fromJSON(ResourceCosts.getCosts(player.role));
     }
   }
 

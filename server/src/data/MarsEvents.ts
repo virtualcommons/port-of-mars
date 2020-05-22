@@ -223,7 +223,7 @@ export function getAllMarsEvents(): Array<MarsEventDeckItem> {
     'outOfCommissionCurator', 'outOfCommissionPolitician', 'outOfCommissionResearcher',
     'outOfCommissionPioneer', 'outOfCommissionEntrepreneur', 'audit', 'bondingThroughAdversity',
     'lifeAsUsual', 'breakdownOfTrust', 'changingTides', 'hullBreach',
-    'cropFailure'
+    'cropFailure', 'difficultConditions',
   ];
   const availableEvents: Array<MarsEventDeckItem> = [];
   for (const eventId of AVAILABLE_EVENTS) {
