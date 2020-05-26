@@ -3,7 +3,7 @@ import {mockGameStateInitOpts} from "@port-of-mars/server/util";
 import {
   EnteredDefeatPhase,
   EnteredDiscardPhase,
-  EnteredInvestmentPhase, EnteredMarsEventPhase,
+  EnteredMarsEventPhase,
   EnteredPurchasePhase,
   EnteredTradePhase, PurchasedAccomplishment,
   TakenStateSnapshot,
@@ -13,7 +13,7 @@ import {CURATOR, Phase, RESEARCHER} from "@port-of-mars/shared/types";
 import {DBPersister, toDBGameEvent} from "@port-of-mars/server/services/persistence";
 import {GameReplayer} from "@port-of-mars/server/services/replay";
 import {GameEvent} from "@port-of-mars/server/rooms/game/events/types";
-import {Connection, createConnection, EntityManager, getConnection, QueryRunner} from "typeorm";
+import {Connection, EntityManager, QueryRunner} from "typeorm";
 import {Persister} from "@port-of-mars/server/rooms/game/types";
 import {ServiceProvider} from "@port-of-mars/server/services";
 import {Player, Tournament, TournamentRound, User} from "@port-of-mars/server/entity";
@@ -34,7 +34,7 @@ describe('a game', () => {
     [285, new PurchasedAccomplishment({accomplishment: getAccomplishmentByID(RESEARCHER, 1), role: RESEARCHER})],
     [15, new EnteredDiscardPhase()],
     [30, new EnteredMarsEventPhase()],
-    [60, new EnteredDefeatPhase({ ...gs.playerScores, Researcher: 5})]
+    [5, new EnteredDefeatPhase({ ...gs.playerScores, Researcher: 5})]
   ];
 
   describe('event stream', () => {
@@ -92,7 +92,8 @@ describe('a game', () => {
       {phase: Phase.trade, culture: 2, duration: 295, points: 0},
       {phase: Phase.purchase, culture: 2, duration: 285, points: 5},
       {phase: Phase.discard, culture: 2, duration: 270, points: 5},
-      {phase: Phase.events, culture: 2, duration: 240, points: 5},
+      // event phase duration is 10s and transition occurs 5s into phase
+      {phase: Phase.events, culture: 2, duration: 5, points: 5},
       {phase: Phase.defeat, culture: 2, duration: 0, points: 5}
     ]);
   });
