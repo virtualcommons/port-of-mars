@@ -413,7 +413,7 @@ export class OutOfCommissionedCurator extends GameEventWithData {
 }
 gameEventDeserializer.register(OutOfCommissionedCurator);
 
-export class OutOfCommissionedPoliician extends GameEventWithData {
+export class OutOfCommissionedPolitician extends GameEventWithData {
   constructor(public data: { role: Role }) {
     super();
   }
@@ -431,9 +431,9 @@ export class OutOfCommissionedPoliician extends GameEventWithData {
   }
 }
 
-gameEventDeserializer.register(OutOfCommissionedPoliician);
+gameEventDeserializer.register(OutOfCommissionedPolitician);
 
-export class OutOfComissionedResearcher extends GameEventWithData {
+export class OutOfCommissionedResearcher extends GameEventWithData {
   constructor(public data: { role: Role }) {
     super();
   }
@@ -450,7 +450,7 @@ export class OutOfComissionedResearcher extends GameEventWithData {
     game.players[this.data.role].updateReadiness(true);
   }
 }
-gameEventDeserializer.register(OutOfComissionedResearcher);
+gameEventDeserializer.register(OutOfCommissionedResearcher);
 
 export class OutOfCommissionedPioneer extends GameEventWithData {
   constructor(public data: { role: Role }) {

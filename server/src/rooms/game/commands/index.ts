@@ -22,7 +22,7 @@ import {
   SetPlayerReadiness,
   VotedForPersonalGain, VotedForPhilanthropist,
   FinalizedMarsEvent, OutOfCommissionedCurator,
-  OutOfCommissionedPoliician, OutOfComissionedResearcher,
+  OutOfCommissionedPolitician, OutOfCommissionedResearcher,
   OutOfCommissionedPioneer, OutOfCommissionedEntrepreneur, SelectedInfluence, KeptResources, InitializedMarsEvent
 } from '@port-of-mars/server/rooms/game/events';
 import { getAccomplishmentByID } from '@port-of-mars/server/data/Accomplishment';
@@ -311,7 +311,7 @@ export class OutOfCommissionPoliticianCmd implements Command {
   }
 
   execute(): Array<GameEvent> {
-    return [new OutOfCommissionedPoliician({ role: this.player.role })]
+    return [new OutOfCommissionedPolitician({ role: this.player.role })]
   }
 }
 
@@ -326,7 +326,7 @@ export class OutOfCommissionResearcherCmd implements Command {
   }
 
   execute(): Array<GameEvent> {
-    return [new OutOfComissionedResearcher({ role: this.player.role })]
+    return [new OutOfCommissionedResearcher({ role: this.player.role })]
   }
 }
 
