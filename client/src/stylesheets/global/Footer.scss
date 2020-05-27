@@ -39,16 +39,6 @@
   text-decoration: underline;
 }
 
-// HTML ELEMENTS
-
-a {
-  color: whitesmoke;
-}
-
-.compute-canada, .gbci, .ii {
-  position: absolute;
-}
-
 .compute-canada {
   height: 20vh;
   top: 10vh;
@@ -62,4 +52,10 @@ a {
 .ii {
   height: 5vh;
   top: 10vh;
+}
+
+// HTML ELEMENTS
+
+a {
+  color: whitesmoke;
 }

@@ -14,59 +14,69 @@
       />
     </b-button>
 
-    <footer :style="show" class="footer d-flex p-2">
-      <div class="sponsors flex flex-row">
-        <img
-          :src="
-          require(`@port-of-mars/client/assets/sponsors/compute_canada.png`)
-        "
-          alt="Compute Canada"
-          class="compute-canada"
-        />
-        <img
-          :src="
-          require(`@port-of-mars/client/assets/sponsors/asu_gbci.png`)
-        "
-          alt="ASU Global Biosocial Complexity Initiative"
-          class="gbci"
-        />
-        <img
-          :src="
-          require(`@port-of-mars/client/assets/sponsors/asu_interplanetary_initiative.png`)
-        "
-          alt="ASU Interplanetary Initative"
-          class="ii"
-        />
+    <footer :style="show" class="footer">
+      <!-- ROW 1 -->
+      <div class="d-flex flex-row p-2">
+        <div class="p-2 footer-copyright">
+          &copy; 2020 <a href='https://www.azregents.edu/' target='_blank'>Arizona Board of
+          Regents</a>
+        </div>
+        <div class="p-2 mr-auto footer-build">
+          Build: {{ buildId }}
+        </div>
+        <div class="p-2 footer-github">
+          <a href="https://github.com/virtualcommons/port-of-mars/" target="_blank">
+            <font-awesome-icon
+              :icon="['fab', 'github']"
+              size="lg"
+            />
+          </a>
+        </div>
+        <div class="p-2 footer-mail">
+          <a href="mailto:portmars@asu.edu">
+            <font-awesome-icon
+              :icon="['fas', 'envelope']"
+              size="lg"
+            />
+          </a>
+        </div>
+        <div class="p-2 footer-license">
+          <a href="https://github.com/virtualcommons/port-of-mars/blob/master/LICENSE"
+             target="_blank">
+            GNU AGPL v3.0
+          </a>
+        </div>
       </div>
 
-      <div class="p-2 footer-copyright">
-        &copy; 2020 <a href='https://www.azregents.edu/' target='_blank'>Arizona Board of
-        Regents</a>
-      </div>
-      <div class="p-2 mr-auto footer-build">
-        Build: {{ buildId }}
-      </div>
-      <div class="p-2 footer-github">
-        <a href="https://github.com/virtualcommons/port-of-mars/" target="_blank">
-          <font-awesome-icon
-            :icon="['fab', 'github']"
-            size="lg"
-          />
-        </a>
-      </div>
-      <div class="p-2 footer-mail">
-        <a href="mailto:portmars@asu.edu">
-          <font-awesome-icon
-            :icon="['fas', 'envelope']"
-            size="lg"
-          />
-        </a>
-      </div>
-      <div class="p-2 footer-license">
-        <a href="https://github.com/virtualcommons/port-of-mars/blob/master/LICENSE"
-           target="_blank">
-          GNU AGPL v3.0
-        </a>
+      <!-- ROW 2 -->
+      <div class="d-flex flex-row">
+          <div class="p-2 align-self-center">
+            <img
+              :src="
+          require(`@port-of-mars/client/assets/sponsors/compute_canada.png`)
+        "
+              alt="Compute Canada"
+              class="compute-canada"
+            />
+          </div>
+          <div class="p-2 align-self-center">
+            <img
+              :src="
+          require(`@port-of-mars/client/assets/sponsors/asu_gbci.png`)
+        "
+              alt="ASU Global Biosocial Complexity Initiative"
+              class="gbci"
+            />
+          </div>
+          <div class="p-2 align-self-center">
+            <img
+              :src="
+          require(`@port-of-mars/client/assets/sponsors/asu_interplanetary_initiative.png`)
+        "
+              alt="ASU Interplanetary Initative"
+              class="ii"
+            />
+          </div>
       </div>
     </footer>
   </div>
