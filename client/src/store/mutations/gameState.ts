@@ -75,6 +75,9 @@ function SET_USER(state: State, payload: User) {
 }
 
 function SET_WINNERS(state: State, payload: Array<Role>) {
+  // Set only lets you store unique values; therefore,
+  // when an array is passed in, Set removes any duplicate values
+  payload = [...new Set(payload)];
   state.winners = payload;
 }
 
