@@ -114,7 +114,6 @@
 <script lang="ts">
 import { Component, Provide, Vue } from 'vue-property-decorator';
 import VueTour from 'vue-tour';
-import ConsentFormModal from '@port-of-mars/client/components/tutorial/ConsentFormModal.vue';
 import TourModal from '@port-of-mars/client/components/tutorial/TourModal.vue';
 import CompletedQuizModal from '@port-of-mars/client/components/tutorial/CompletedQuizModal.vue';
 import GameDashboard from '@port-of-mars/client/components/GameDashboard.vue';
@@ -136,8 +135,7 @@ Vue.use(VueTour);
   components: {
     GameDashboard,
     CompletedQuizModal,
-    TourModal,
-    ConsentFormModal
+    TourModal
   }
 })
 export default class Tutorial extends Vue {

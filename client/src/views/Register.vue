@@ -1,6 +1,6 @@
 <template>
-  <b-container>
-    <b-row>
+  <b-container class="container registration">
+    <b-row class="p-3">
       <b-col>
         <h1>Port of Mars Registration</h1>
       </b-col>
@@ -8,7 +8,7 @@
     <b-row>
       <b-collapse :visible="showConsentForm" id="consent-collapse">
         <b-card>
-          <b-card-text>
+          <b-card-text class="form-text">
             <p>Dear Participant,</p>
             <p>
                 I am a professor in the School of Sustainability at Arizona State University.
@@ -23,13 +23,12 @@
                 in the study.</b></code> If you choose not to participate or to withdraw from the study at any time, there will be
                 no penalty; it will not affect your compensation for participation up to that point.
             </p>
-            <p>
-                During the game you can chat with other participants. By signing this consent form, you consent to:
+            <p>During the game you can chat with other participants. By signing this consent form, you consent to:</p>
                 <ul>
                     <li>Abstain from personal attacks or harassment</li>
                     <li>Will not use profanity or offensive language</li>
                 </ul>
-            </p>
+
             <p>
                 For participation in this study you may receive extra credit if your instructor of one of the
                 participating classes has made the participation in this event an extra credit opportunity. Those
@@ -63,16 +62,16 @@
           </b-card-text>
         </b-card>
       </b-collapse>
-      <b-button-group>
+      <b-button-group class="mt-2">
         <b-button @click="toggleConsent" variant="success">{{ consentLabel }}</b-button>
-        <b-button @click="gotoDashboard" variant="danger">Do Not Consent (return to dashboard)</b-button>
+        <b-button @click="gotoDashboard" variant="danger" class="ml-2">Do Not Consent (return to dashboard)</b-button>
       </b-button-group>
     </b-row>
     <b-row>
       <b-col class="p-0 m-0">
         <b-collapse v-model="consented">
           <b-form @submit="register">
-            <b-form-group label='Name' label-for='name' description='Please enter your full name'>
+            <b-form-group label='Name' label-for='name' description='Please enter your full name.'>
               <b-form-input
               id='name'
               v-model='name'
@@ -150,7 +149,7 @@ export default class Register extends Vue {
   }
 
   get consentLabel() {
-    return this.consented ? "Show Consent Form" : "Grant Consent";
+    return this.consented ? "Read Consent Form" : "Grant Consent";
   }
 
   toggleConsent() {
@@ -174,3 +173,7 @@ export default class Register extends Vue {
   }
 }
 </script>
+
+<style lang="scss">
+  @import '@port-of-mars/client/stylesheets/views/Register.scss';
+</style>
