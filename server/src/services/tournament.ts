@@ -16,6 +16,16 @@ export class TournamentService extends BaseService {
       });
   }
 
+  async getTournamentByName(name: string): Promise<Tournament> {
+    return await this.em
+      .getRepository(Tournament)
+      .findOneOrFail({
+        where: {
+          name
+        }
+      })
+  }
+
   async getCurrentTournamentRound(): Promise<TournamentRound> {
     const tournament = await this.getActiveTournament();
     const tournamentId = tournament.id;

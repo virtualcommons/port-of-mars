@@ -65,8 +65,6 @@ import {
   Role,
 } from '@port-of-mars/shared/types';
 import { canPlayerMakeTrade } from '@port-of-mars/shared/validation';
-import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
-import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
 import { makeTradeSafe } from '@port-of-mars/shared/validation';
 import {SendTradeRequestData} from "@port-of-mars/shared/game";
 import {AbstractGameAPI} from "@port-of-mars/client/api/game/types";
