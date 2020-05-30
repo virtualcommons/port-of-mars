@@ -7,7 +7,7 @@ import {
   Role,
   ROLES
 } from "@port-of-mars/shared/types";
-import {Bot, GameState, Player} from "@port-of-mars/server/rooms/game/state/index";
+import {Bot, GameState, Player, Trade} from "@port-of-mars/server/rooms/game/state/index";
 import {GameEvent} from "@port-of-mars/server/rooms/game/events/types";
 import {
   AcceptedTradeRequest, BotControlRelinquished, DiscardedAccomplishment, KeptResources,
@@ -134,8 +134,8 @@ export class ActorRunner implements Actor {
   [Phase.trade](state: GameState, player: Player): Array<GameEvent> {
     const events: Array<GameEvent> = [];
     for (const id of Object.keys(state.tradeSet)) {
-      const trade = state.tradeSet[id];
-      if (trade.to.role === player.role) {
+      const trade: Trade = state.tradeSet[id];
+      if (trade.status === 'Active' && trade.to.role === player.role) {
         events.push(new AcceptedTradeRequest({id}));
         break;
       }
