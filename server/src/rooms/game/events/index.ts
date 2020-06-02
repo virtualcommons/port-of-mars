@@ -199,28 +199,6 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
   apply(game: GameState): void {
     game.phase = Phase.events;
     logger.debug('phase: %s', Phase[game.phase]);
-    game.round += 1;
-    game.updateNextRoundSystemHealth();
-    // round message
-    game.log(`Round ${game.round} begins.`, MarsLogCategory.newRound)
-
-    // system health - last round
-    game.log(
-      `At the end of Round ${game.round - 1}, System Health = ${game.upkeep}.`,
-      MarsLogCategory.systemHealth);
-
-    // apply system health - wear and tear
-    game.decreaseSystemHealth(25);
-
-    game.log(
-      `Standard wear and tear reduces System Health by 25.
-        At the beginning of this round, System Health = ${game.upkeep}.`,
-      MarsLogCategory.systemHealth);
-
-    game.resetPlayerCosts();
-    game.resetPlayerReadiness();
-    game.resetPlayerContributedUpkeep();
-    game.refreshPlayerPurchasableAccomplisments();
 
     // process mars events
     const cards = game.marsEventDeck.peek(game.upkeep);
@@ -341,6 +319,48 @@ export class EnteredVictoryPhase extends GameEventWithData {
   }
 }
 gameEventDeserializer.register(EnteredVictoryPhase);
+
+export class EnteredBeginRoundPhase extends KindOnlyGameEvent {
+  apply(game: GameState): void {
+    game.phase = Phase.newRound;
+    game.round += 1;
+
+    // FIXME: game.resetRound to encompass resets
+    game.resetPlayerCosts();
+    game.resetPlayerReadiness();
+    game.refreshPlayerPurchasableAccomplisments();
+  }
+}
+
+gameEventDeserializer.register(EnteredBeginRoundPhase);
+
+// apply system health updates from previous round
+export class ExitedNewRoundPhase extends KindOnlyGameEvent {
+  apply(game: GameState): void {
+    // round message
+    game.log(`Round ${game.round} begins.`, MarsLogCategory.newRound);
+
+    if (!game.isFirstRound()) {
+      game.addPlayerContributions();
+      game.resetPlayerContributedUpkeep();
+
+      // system health - last round
+      game.log(
+          `At the end of Round ${game.round - 1}, System Health = ${game.upkeep}.`,
+          MarsLogCategory.systemHealth);
+    }
+
+    // apply system health - wear and tear
+    game.decreaseSystemHealth(25);
+
+    game.log(
+        `Standard wear and tear reduces System Health by 25.
+        At the beginning of this round, System Health = ${game.upkeep}.`,
+        MarsLogCategory.systemHealth);
+  }
+}
+
+gameEventDeserializer.register(ExitedNewRoundPhase);
 
 export class TakenStateSnapshot implements GameEvent {
   kind = 'taken-state-snapshot';

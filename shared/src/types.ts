@@ -68,6 +68,7 @@ export const RESOURCES: Array<Resource> = [
 ];
 
 export enum Phase {
+  newRound,
   events,
   invest,
   trade,
@@ -78,6 +79,7 @@ export enum Phase {
 }
 
 export const PHASE_LABELS: { [k in Phase]: string } = {
+  [Phase.newRound]: 'New Round',
   [Phase.events]: 'Events',
   [Phase.invest]: 'Investment',
   [Phase.trade]: 'Trade',

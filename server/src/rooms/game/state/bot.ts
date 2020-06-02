@@ -89,6 +89,15 @@ export class MarsEventVisitor implements AbstractMarsEventVisitor {
 export class ActorRunner implements Actor {
   marsEventVisitor = new MarsEventVisitor();
 
+  [Phase.newRound](state: GameState, player: Player): Array<GameEvent> {
+    if (player.ready) {
+      return [];
+    }
+    else {
+      return [new SetPlayerReadiness({value: true, role: player.role})];
+    }
+  }
+
   [Phase.events](state: GameState, player: Player): Array<GameEvent> {
     if (player.ready) {
       return [];

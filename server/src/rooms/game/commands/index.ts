@@ -14,6 +14,8 @@ import {
   EnteredTradePhase,
   EnteredVictoryPhase,
   ReenteredMarsEventPhase,
+    ExitedNewRoundPhase,
+    EnteredBeginRoundPhase,
   SentChatMessage,
   SentTradeRequest,
   TimeInvested,
@@ -191,8 +193,6 @@ export class SendTradeRequestCmd implements Command {
 export class SetNextPhaseCmd implements Command {
   constructor(private state: GameState) { }
 
-  upkeep: number = this.state.upkeep;
-
   static fromReq(state: GameState) {
     return new SetNextPhaseCmd(state);
   }
@@ -203,6 +203,8 @@ export class SetNextPhaseCmd implements Command {
     }
 
     switch (this.state.phase) {
+      case Phase.newRound:
+        return [new ExitedNewRoundPhase(), new EnteredMarsEventPhase(), new InitializedMarsEvent()];
       case Phase.defeat:
         return [];
       case Phase.events: {
@@ -234,7 +236,7 @@ export class SetNextPhaseCmd implements Command {
         if (round >= state.maxRound) {
           return [new EnteredVictoryPhase(this.state.playerScores)];
         }
-        return [new EnteredMarsEventPhase(), new InitializedMarsEvent()];
+        return [new EnteredBeginRoundPhase()];
       }
       case Phase.victory:
         return [];

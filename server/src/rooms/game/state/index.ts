@@ -998,7 +998,7 @@ export class GameState extends Schema implements GameData {
     timeRemaining: 300,
     marsEventsProcessed: 0,
     round: 1,
-    phase: Phase.invest,
+    phase: Phase.newRound,
     upkeep: 100
   };
 
@@ -1096,6 +1096,14 @@ export class GameState extends Schema implements GameData {
   winners = new ArraySchema<Role>();
 
   pendingMarsEventActions: Array<PendingMarsEventAction> = [];
+
+  isFirstRound() {
+    return this.round === GameState.DEFAULTS.round;
+  }
+
+  isLastRound() {
+    return this.round === this.maxRound;
+  }
 
   act(): Array<GameEvent> {
     const events: Array<GameEvent> = [];
@@ -1201,11 +1209,7 @@ export class GameState extends Schema implements GameData {
     this.winners.splice(0, this.winners.length);
   }
 
-  get systemHealth(): number {
-    return this.upkeep;
-  }
-
-  updateNextRoundSystemHealth(): void {
+  addPlayerContributions(): void {
     this.upkeep = this.nextRoundSystemHealth();
   }
 

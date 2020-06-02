@@ -1,8 +1,9 @@
 <template>
   <div class="c-game-dashboard">
     <GameboardContainer
-      v-if="gamePhase !== phase.defeat && gamePhase !== phase.victory"
+      v-if="shouldDisplayGame"
     />
+<!--    <NewRound v-if="gamePhase === phase.newRound" />-->
     <Defeat v-if="gamePhase === phase.defeat" />
     <Victory v-if="gamePhase === phase.victory" />
   </div>
@@ -13,12 +14,14 @@
   import GameboardContainer from '@port-of-mars/client/components/root/GameboardContainer.vue';
   import Victory from '@port-of-mars/client/components/root/Victory.vue';
   import Defeat from '@port-of-mars/client/components/root/Defeat.vue';
+  import NewRound from '@port-of-mars/client/components/game/phases/NewRound.vue';
   import { Phase } from '@port-of-mars/shared/types';
   @Component({
     components: {
       GameboardContainer,
       Victory,
       Defeat,
+      NewRound
     },
   })
   export default class GameDashboard extends Vue {
@@ -31,6 +34,10 @@
      */
     get gamePhase() {
       return this.$tstore.state.phase;
+    }
+
+    get shouldDisplayGame() {
+      return ![Phase.defeat, Phase.victory].includes(this.gamePhase)
     }
   }
 </script>
