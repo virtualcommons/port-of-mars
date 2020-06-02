@@ -36,4 +36,5 @@ export class Player {
 
   @Column("int", { nullable: true })
   points!: number | null;
+
 }

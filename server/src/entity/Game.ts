@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, JoinColumn, OneToOne } from "typeorm";
 import { GameEvent } from "./GameEvent";
 import { Player } from "@port-of-mars/server/entity/Player";
 import { TournamentRound } from "./TournamentRound";
@@ -31,4 +31,8 @@ export class Game {
 
   @Column({ default: 'incomplete',  })
   status: 'incomplete' | 'defeat' | 'victory' = 'incomplete';
+
+  @OneToOne(type => Player, { nullable: true })
+  @JoinColumn()
+  winner?: Player;
 }

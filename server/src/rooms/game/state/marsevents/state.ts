@@ -494,9 +494,9 @@ export class Stymied extends BaseEvent {
 
 @assocEventId
 export class DifficultConditions extends BaseEvent {
-  finalize(game: GameState): void {
-    for (const role of ROLES) {
-      game.players[role].costs.upkeep *= 2;
+  finalize(state: GameState): void {
+    for (const player of state.players) {
+      player.costs.upkeep *= 2;
     }
   }
 }
