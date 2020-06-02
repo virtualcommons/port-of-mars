@@ -245,8 +245,12 @@ export interface GameMeta {
   tournamentName: string
 }
 
+export type PlayerScores = Array<{ role: Role, points: number, winner: boolean }>
+
+export type PlayerStatItem = GameMeta & {playerScores: PlayerScores, victory: boolean}
+
 export interface Stats {
-  games: Array<GameMeta & {points: number, winner: Role}>
+  games: Array<PlayerStatItem>
 }
 
 export interface DashboardData {

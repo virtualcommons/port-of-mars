@@ -2,7 +2,7 @@
   <div class="c-player-stat-item container">
     <div class="title-wrapper row">
       <div class="title col-12">
-        <p>Tournament Name: {{ playerStatItem.tournamentName }}</p>
+        <p>{{ status }} Round {{ playerStatItem.round }}</p>
       </div>
     </div>
     <div class="content-wrapper row">
@@ -12,15 +12,13 @@
             <span>Date:&nbsp;</span>
             {{ new Date(playerStatItem.time).toDateString() }}
           </p>
-        </div>
-        <div class="section">
-          <p><span>Round:&nbsp;</span>{{ playerStatItem.round }}</p>
-        </div>
-        <div class="section">
-          <p><span>Winner:&nbsp;</span>{{ playerStatItem.winner }}</p>
-        </div>
-        <div class="section">
-          <p><span>Points:&nbsp;</span>{{ playerStatItem.points }}</p>
+
+          <b-list-group v-for="playerScore in playerStatItem.playerScores">
+            <b-list-group-item :active="playerScore.role === role" class="d-flex justify-content-between align-items-center">
+              {{ playerScore.role }}
+              <b-badge pill :variant="getVariant(playerStatItem.victory, playerScore.winner)">{{ playerScore.points }}</b-badge>
+            </b-list-group-item>
+          </b-list-group>
         </div>
       </div>
     </div>
@@ -28,15 +26,31 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
-import { GameMeta, Role } from '@port-of-mars/shared/types';
+  import {Vue, Component, Prop} from 'vue-property-decorator';
+  import * as types from '@port-of-mars/shared/types';
 
-@Component({})
-export default class PlayerStatItem extends Vue {
-  @Prop() private playerStatItem!: GameMeta & { points: number; winner: Role };
-}
+  @Component({})
+  export default class PlayerStatItem extends Vue {
+    @Prop() private playerStatItem!: types.PlayerStatItem;
+
+    get role() {
+      return this.$tstore.getters.player.role;
+    }
+
+    getActive(victory: boolean, winner: boolean) {
+      return victory && winner;
+    }
+
+    getVariant(victory: boolean, winner: boolean) {
+      return victory && winner ? 'success' : 'danger';
+    }
+
+    get status() {
+      return this.playerStatItem.victory ? 'Victory' : 'Defeat';
+    }
+  }
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/dashboard/PlayerStatItem.scss';
+  @import '@port-of-mars/client/stylesheets/dashboard/PlayerStatItem.scss';
 </style>

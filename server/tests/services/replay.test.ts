@@ -88,12 +88,12 @@ describe('a game', () => {
       points: g.players.Researcher.victoryPoints
     }));
     expect(data).toEqual([
-      {phase: Phase.invest, culture: 0, duration: 290, points: 0},
+      {phase: Phase.newRound, culture: 0, duration: 290, points: 0},
       {phase: Phase.trade, culture: 2, duration: 295, points: 0},
       {phase: Phase.purchase, culture: 2, duration: 285, points: 5},
       {phase: Phase.discard, culture: 2, duration: 270, points: 5},
       // event phase duration is 10s and transition occurs 5s into phase
-      {phase: Phase.events, culture: 2, duration: 295, points: 5},
+      {phase: Phase.events, culture: 2, duration: 5, points: 5},
       {phase: Phase.defeat, culture: 2, duration: 0, points: 5}
     ]);
   });

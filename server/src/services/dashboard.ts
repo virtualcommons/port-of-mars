@@ -1,9 +1,9 @@
 import { User } from '@port-of-mars/server/entity/User';
-import { Role, ActionItem, GameMeta, Stats, RESEARCHER } from "@port-of-mars/shared/types";
+import {Role, ActionItem, GameMeta, Stats, RESEARCHER, PlayerScores} from "@port-of-mars/shared/types";
 import { TournamentRound } from "@port-of-mars/server/entity/TournamentRound";
 import { Game, Player, Tournament, TournamentRoundInvite } from "@port-of-mars/server/entity";
 import { BaseService } from "@port-of-mars/server/services/db";
-import { IsNull, Not } from "typeorm";
+import {IsNull, Not, SelectQueryBuilder} from "typeorm";
 import { GAME_PAGE, TUTORIAL_PAGE, REGISTER_PAGE, VERIFY_PAGE } from "@port-of-mars/shared/routes";
 import { settings } from "@port-of-mars/server/settings";
 
@@ -103,7 +103,7 @@ export class DashboardService extends BaseService {
     const games = await this.em.getRepository(Game)
       .find({
         join: { alias: 'games', innerJoin: { players: 'games.players' }},
-        where: (qb) => {
+        where: (qb: SelectQueryBuilder<Game>) => {
           qb.where({tournamentRound, dateFinalized: Not(IsNull())})
             .andWhere('players.user.id = :userId', {userId: user.id})
         },
@@ -111,20 +111,25 @@ export class DashboardService extends BaseService {
       });
 
     const stats: Stats['games'] = games.map(g => {
-      const { points, winner } = g.players.reduce((d: { winner: Role; points: number }, player: Player) => {
-        if (d.points < (player.points ?? 0)) {
-          d.points = player.points ?? 0;
-          d.winner = player.role;
+      const maxScore = g.players.reduce((ms, player) => {
+        if (player.points ?? 0 > ms) {
+          return player.points ?? 0;
+        } else {
+          return ms;
         }
+      }, 0);
+      const playerScores = g.players.reduce((d: PlayerScores, player: Player) => {
+        d.push({role: player.role, points: player.points ?? 0, winner: player.points === maxScore})
         return d;
-      }, { winner: RESEARCHER, points: 0 });
+      }, []);
+      playerScores.sort((a, b) => b.points - a.points);
 
       return {
         time: g.dateCreated.getTime(),
         round: tournamentRound.id,
         tournamentName: tournamentRound.tournament.name,
-        points,
-        winner
+        playerScores,
+        victory: g.status === 'victory'
       }
     });
 
