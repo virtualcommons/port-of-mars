@@ -964,6 +964,7 @@ export interface GameSerialized {
   marsEventDeck: MarsEventDeckSerialized;
   tradeSet: TradeSetData;
   winners: Array<Role>;
+  tradingEnabled: boolean;
 }
 
 export enum ActionOrdering {
@@ -1011,6 +1012,7 @@ export class GameState extends Schema implements GameData {
     this.round = data.round;
     this.phase = data.phase;
     this.upkeep = data.upkeep;
+    this.tradingEnabled = data.tradingEnabled;
 
     const marsLogs = _.map(data.logs, m => new MarsLogMessage(m));
     this.logs.splice(0, this.logs.length, ...marsLogs);
@@ -1051,6 +1053,7 @@ export class GameState extends Schema implements GameData {
       marsEventsProcessed: this.marsEventsProcessed,
       marsEventDeck: this.marsEventDeck.toJSON(),
       tradeSet: this.tradeSet.toJSON(),
+      tradingEnabled: this.tradingEnabled,
       winners: _.map(this.winners, w => w)
     };
   }
@@ -1095,6 +1098,9 @@ export class GameState extends Schema implements GameData {
   @type(['string'])
   winners = new ArraySchema<Role>();
 
+  @type('boolean')
+  tradingEnabled: boolean = true;
+
   pendingMarsEventActions: Array<PendingMarsEventAction> = [];
 
   isFirstRound() {
@@ -1103,6 +1109,10 @@ export class GameState extends Schema implements GameData {
 
   isLastRound() {
     return this.round === this.maxRound;
+  }
+
+  disableTrading() {
+    this.tradingEnabled = false;
   }
 
   act(): Array<GameEvent> {
@@ -1165,7 +1175,16 @@ export class GameState extends Schema implements GameData {
     }
   }
 
+  resetRound(): void {
+    // FIXME: replace various resetXYZ with resetRound() / resetPhase()
+    this.tradingEnabled = true;
+    this.resetPlayerCosts();
+    this.resetPlayerReadiness();
+    this.refreshPlayerPurchasableAccomplisments();
+  }
+
   resetPlayerCosts(): void {
+    this.tradingEnabled = true;
     for (const player of this.players) {
       player.costs.fromJSON(ResourceCosts.getCosts(player.role));
     }

@@ -224,7 +224,9 @@ export class SetNextPhaseCmd implements Command {
         return gameEvents;
       }
       case Phase.invest:
-        return [new EnteredTradePhase()];
+        return this.state.tradingEnabled
+          ? [new EnteredTradePhase()]
+          : [new EnteredPurchasePhase()];
       case Phase.trade:
         return [new EnteredPurchasePhase()];
       case Phase.purchase:

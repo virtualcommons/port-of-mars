@@ -456,8 +456,7 @@ export class SolarFlare extends BaseEvent {
     // FIXME: DISABLE_CHAT clientViewHandler needs to be 
     // set to DISABLE_CHAT_AND_TRADE along with client side 
     // support
-    // state.disableChat(1)
-    // state.disableTrade(1)
+    state.disableTrading();
     state.log(`A Solar Flare has destroyed 5 System Health. Chat and trade are not available in this round.`,
       `${MarsLogCategory.event}: Solar Flare`
     );
