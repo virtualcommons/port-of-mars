@@ -453,12 +453,19 @@ export class Interdisciplinary extends BaseEvent {
 export class SolarFlare extends BaseEvent {
   finalize(state: GameState): void {
     state.decreaseSystemHealth(5);
-    // FIXME: DISABLE_CHAT clientViewHandler needs to be 
-    // set to DISABLE_CHAT_AND_TRADE along with client side 
-    // support
     state.disableTrading();
     state.log(`A Solar Flare has destroyed 5 System Health. Chat and trade are not available in this round.`,
       `${MarsLogCategory.event}: Solar Flare`
+    );
+  }
+}
+
+@assocEventId
+export class MarketsClosed extends BaseEvent {
+  finalize(state: GameState): void {
+    state.disableTrading();
+    state.log(`Markets Closed: Players may not trade Influences this round.`,
+      `${MarsLogCategory.event}: Markets Closed`
     );
   }
 }
