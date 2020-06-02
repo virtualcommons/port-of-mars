@@ -12,6 +12,7 @@ services:
       - ./keys/ormconfig.json:/code/server/ormconfig.json
       - ./keys/.pgpass:/root/.pgpass
       - ./keys:/run/secrets
+      - ./docker/dump:/dump
   redis:
     image: redis:5
     restart: always

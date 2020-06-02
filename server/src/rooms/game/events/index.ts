@@ -6,7 +6,7 @@ import {
   Role,
   TradeData,
   Resource,
-  MarsLogCategory
+  MarsLogCategory, SERVER, ServerRole
 } from '@port-of-mars/shared/types';
 import { GameState } from '@port-of-mars/server/rooms/game/state';
 import { GameEvent } from '@port-of-mars/server/rooms/game/events/types';
@@ -21,6 +21,7 @@ import {
 import * as entities from '@port-of-mars/server/entity/GameEvent';
 import { getLogger } from "@port-of-mars/server/settings";
 import _ from "lodash";
+import {getAccomplishmentByID} from "@port-of-mars/server/data/Accomplishment";
 
 const logger = getLogger(__filename);
 
@@ -33,6 +34,9 @@ class GameEventDeserializer {
 
   deserialize(ge: entities.GameEvent) {
     const constructor = this.lookups[ge.type];
+    if (!constructor) {
+      throw new Error(`${ge.type} not found. Cannot deserialize event`);
+    }
     return new constructor(ge.payload);
   }
 }
@@ -78,11 +82,25 @@ export class SentChatMessage extends GameEventWithData {
 gameEventDeserializer.register(SentChatMessage);
 
 export class PurchasedAccomplishment extends GameEventWithData {
-  constructor(public data: { accomplishment: AccomplishmentData; role: Role }) {
-    super();
+  data: { accomplishment: AccomplishmentData; role: Role }
+
+  isAccomplishmentData(ad: AccomplishmentData | {id: number}): ad is AccomplishmentData {
+    return (ad as AccomplishmentData).label !== undefined;
   }
 
+  constructor(data: { accomplishment: AccomplishmentData | { id: number }; role: Role }) {
+    super();
+    // to get around
+    if (!this.isAccomplishmentData(data.accomplishment)) {
+      this.data = { accomplishment: getAccomplishmentByID(data.role, data.accomplishment.id), role: data.role };
+    } else {
+      this.data = { accomplishment: data.accomplishment, role: data.role };
+    }
+  }
+
+
   apply(game: GameState): void {
+    logger.warn('accomplishment: %o', _.fromPairs(_.toPairs(this.data.accomplishment)));
     game.purchaseAccomplishment(this.data.role, this.data.accomplishment);
   }
 }
@@ -115,6 +133,10 @@ export class AcceptedTradeRequest extends GameEventWithData {
     super();
   }
 
+  getRole(game: GameState): Role | ServerRole {
+    return game.tradeSet[this.data.id]?.to?.role ?? SERVER;
+  }
+
   apply(game: GameState): void {
     game.acceptTrade(this.data.id);
   }
@@ -124,6 +146,10 @@ gameEventDeserializer.register(AcceptedTradeRequest);
 export class RejectedTradeRequest extends GameEventWithData {
   constructor(public data: { id: string }) {
     super();
+  }
+
+  getRole(game: GameState): Role | ServerRole {
+    return game.tradeSet[this.data.id]?.to?.role ?? SERVER;
   }
 
   apply(game: GameState): void {
@@ -137,6 +163,10 @@ export class CanceledTradeRequest extends GameEventWithData {
     super();
   }
 
+  getRole(game: GameState): Role | ServerRole {
+    return game.tradeSet[this.data.id]?.from?.role ?? SERVER;
+  }
+
   apply(game: GameState): void {
     game.removeTrade(this.data.id, 'cancel-trade-request');
   }
@@ -146,6 +176,10 @@ gameEventDeserializer.register(CanceledTradeRequest);
 export class SentTradeRequest extends GameEventWithData {
   constructor(public data: TradeData) {
     super();
+  }
+
+  getRole(game: GameState): Role | ServerRole {
+    return this.data.from.role;
   }
 
   apply(game: GameState): void {
@@ -229,6 +263,7 @@ export class ReenteredMarsEventPhase extends KindOnlyGameEvent {
   apply(game: GameState): void {
     game.resetPlayerReadiness();
     game.marsEventsProcessed += 1;
+    logger.warn('new mars event %d of %d: %o', game.marsEventsProcessed, game.marsEvents.length, game.marsEvents);
     game.timeRemaining = game.currentEvent.timeDuration;
   }
 }
@@ -249,6 +284,7 @@ export class ExitedMarsEventPhase extends KindOnlyGameEvent {
     state.applyPendingActions();
   }
 }
+gameEventDeserializer.register(ExitedMarsEventPhase);
 
 export class EnteredTradePhase extends KindOnlyGameEvent {
   apply(game: GameState): void {
@@ -557,6 +593,7 @@ export class BotControlTaken extends GameEventWithData {
     game.players[this.data.role].bot.active = true;
   }
 }
+gameEventDeserializer.register(BotControlTaken);
 
 export class BotControlRelinquished extends GameEventWithData {
   constructor(public data: { role: Role }) {
@@ -567,3 +604,4 @@ export class BotControlRelinquished extends GameEventWithData {
     game.players[this.data.role].bot.active = false;
   }
 }
+gameEventDeserializer.register(BotControlRelinquished);

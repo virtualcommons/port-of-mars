@@ -1,13 +1,21 @@
-import { GameState, AccomplishmentSet, Player, Trade } from "@port-of-mars/server/rooms/game/state";
-import { CURATOR, PIONEER, RESEARCHER, ENTREPRENEUR, TradeData, Role } from "@port-of-mars/shared/types";
-import { getAccomplishmentByID, getAccomplishmentIDs } from "@port-of-mars/server/data/Accomplishment";
+import {GameState, AccomplishmentSet, Player, Trade} from "@port-of-mars/server/rooms/game/state";
+import {CURATOR, PIONEER, RESEARCHER, ENTREPRENEUR, TradeData, Role} from "@port-of-mars/shared/types";
+import {getAccomplishmentByID, getAccomplishmentIDs} from "@port-of-mars/server/data/Accomplishment";
 import * as _ from 'lodash'
-import { mockGameStateInitOpts } from "@port-of-mars/server/util";
-import { canSendTradeRequest } from "@port-of-mars/shared/validation";
+import {getMarsEvent, mockGameStateInitOpts} from "@port-of-mars/server/util";
+import {canSendTradeRequest} from "@port-of-mars/shared/validation";
 import {
-  OutOfCommissionCurator, OutOfCommissionPioneer, OutOfCommissionResearcher, OutOfCommissionPolitician, OutOfCommissionEntrepreneur, BreakdownOfTrust, PersonalGain
+  OutOfCommissionCurator,
+  OutOfCommissionPioneer,
+  OutOfCommissionResearcher,
+  OutOfCommissionPolitician,
+  OutOfCommissionEntrepreneur,
+  BreakdownOfTrust,
+  PersonalGain
 } from "@port-of-mars/server/rooms/game/state/marsevents/state";
 import {SimpleBot} from "@port-of-mars/server/rooms/game/state/bot";
+import {GameEvent} from '@port-of-mars/server/rooms/game/events/types';
+import {MarsEvent} from "@port-of-mars/server/rooms/game/state/marsevents/MarsEvent";
 
 
 describe('a Researcher Player Accomplishment', () => {
@@ -90,6 +98,28 @@ describe('a game state snapshot', () => {
   });
 });
 
+describe('a mars event', () => {
+  describe('a personal gain event', () => {
+    it('can be serialized and deserialized', () => {
+      const me = getMarsEvent('personalGain');
+      const marsEvent = new MarsEvent(me);
+      const marsEvent2 = new MarsEvent(marsEvent.toJSON());
+      expect(_.isEqual(marsEvent, marsEvent2)).toBeTruthy();
+    })
+  })
+})
+
+describe('an accomplishment', () => {
+  it('can be serialized and deserialized', () => {
+    const accomplishments = new AccomplishmentSet(CURATOR);
+    const accomplishments2 = new AccomplishmentSet(CURATOR);
+    accomplishments2.fromJSON(accomplishments.toJSON());
+    expect(_.isEqual(accomplishments, accomplishments2)).toBeTruthy();
+    expect(accomplishments.purchasable[0].upkeep).toBe(accomplishments2.purchasable[0].upkeep)
+    expect(accomplishments.purchasable[0].upkeep).toBe(0);
+  })
+})
+
 /*
 describe('a personal gain event', () => {
   const gameState = new GameState(mockGameStateInitOpts(x => x, () => 10));
@@ -142,7 +172,7 @@ describe('trading validations', () => {
       }
     },
     'Active'
-    );
+  );
 
   g.tradeSet['valid-request'] = new Trade(
     'valid-request',
@@ -167,7 +197,7 @@ describe('trading validations', () => {
       }
     },
     'Active'
-    );
+  );
 
   const invalidTrade: Trade = g.tradeSet['invalid-request'];
   const validTrade: Trade = g.tradeSet['valid-request'];
@@ -238,12 +268,24 @@ describe('Pending Mars Events', () => {
   oppositeState.fromJSON(g.toJSON());
   it('are applied in the proper order', () => {
     new OutOfCommissionCurator().finalize(g);
-    new PersonalGain({Curator: true, Entrepreneur: true, Pioneer: true, Politician: true, Researcher: true}).finalize(g);
+    new PersonalGain({
+      Curator: true,
+      Entrepreneur: true,
+      Pioneer: true,
+      Politician: true,
+      Researcher: true
+    }).finalize(g);
     expect(g.players[CURATOR].timeBlocks).toBe(10);
     g.applyPendingActions();
     expect(g.players[CURATOR].timeBlocks).toBe(3);
 
-    new PersonalGain({Curator: true, Entrepreneur: true, Pioneer: true, Politician: true, Researcher: true}).finalize(oppositeState);
+    new PersonalGain({
+      Curator: true,
+      Entrepreneur: true,
+      Pioneer: true,
+      Politician: true,
+      Researcher: true
+    }).finalize(oppositeState);
     new OutOfCommissionCurator().finalize(oppositeState);
     expect(oppositeState.players[CURATOR].timeBlocks).toBe(10);
     oppositeState.applyPendingActions();
@@ -275,7 +317,7 @@ describe('Breakdown of trust saves timeBlocks', () => {
     new OutOfCommissionPolitician().finalize(g);
     new OutOfCommissionPioneer().finalize(g);
 
-    let breakdownOfTrust = new BreakdownOfTrust();
+    const breakdownOfTrust = new BreakdownOfTrust();
     breakdownOfTrust.initialize(g);
     breakdownOfTrust.finalize(g);
     g.applyPendingActions();

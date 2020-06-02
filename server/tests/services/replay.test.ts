@@ -93,7 +93,7 @@ describe('a game', () => {
       {phase: Phase.purchase, culture: 2, duration: 285, points: 5},
       {phase: Phase.discard, culture: 2, duration: 270, points: 5},
       // event phase duration is 10s and transition occurs 5s into phase
-      {phase: Phase.events, culture: 2, duration: 5, points: 5},
+      {phase: Phase.events, culture: 2, duration: 295, points: 5},
       {phase: Phase.defeat, culture: 2, duration: 0, points: 5}
     ]);
   });

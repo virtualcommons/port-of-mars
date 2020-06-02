@@ -414,6 +414,10 @@ export class Accomplishment extends Schema implements AccomplishmentData {
     Object.assign(this, getAccomplishmentByID(data.role, data.id));
   }
 
+  toString() {
+    return JSON.stringify(super.toJSON());
+  }
+
   toJSON() {
     return { role: this.role, id: this.id };
   }
@@ -478,7 +482,7 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
     this.deck = deck.slice(3);
   }
 
-  fromJSON(data: AccomplishmentSetSerialized) {
+  fromJSON(data: AccomplishmentSetSerialized): void {
     this.role = data.role;
     const purchased = _.map(
       data.purchased,
@@ -781,6 +785,8 @@ export class Player extends Schema implements PlayerData {
       legacy: -accomplishment.legacy,
       science: -accomplishment.science
     };
+    logger.trace('accomplishments: %o', JSON.stringify(this.accomplishments.purchasable.map(p => _.fromPairs(Object.entries(p)))));
+    logger.trace('accomplishment upkeep: %d [%s] (%o)', accomplishment.upkeep, accomplishment.label, _.fromPairs(_.toPairs(accomplishment)))
     this.contributedUpkeep -= Math.abs(accomplishment.upkeep);
     // FIXME: victoryPoints should probably be a computed property
     // that sums this.accomplishments.purchased.victoryPoints 
@@ -1365,6 +1371,11 @@ export class GameState extends Schema implements GameData {
     let message: string;
     let category: string;
     const performedBy: ServerRole = SERVER;
+    const trade: Trade | undefined = this.tradeSet[id];
+    if (!trade) {
+      logger.warn('Could not remove trade. Trade %s not found', id);
+      return;
+    }
     const toRole: Role = this.tradeSet[id].to.role;
     const fromRole: Role = this.tradeSet[id].from.role;
 
@@ -1396,7 +1407,11 @@ export class GameState extends Schema implements GameData {
     let category: string;
     const performedBy: ServerRole = SERVER;
 
-    const trade: Trade = this.tradeSet[id];
+    const trade: Trade | undefined = this.tradeSet[id];
+    if (!trade) {
+      logger.warn('Trade not accepted. Could not find %s', id);
+      return;
+    }
     const fromRole = trade.from.role;
     const toRole = trade.to.role;
     const fromPlayer = this.players[fromRole];

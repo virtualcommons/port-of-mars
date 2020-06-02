@@ -1,4 +1,4 @@
-import pino, { LogFn, Logger } from 'pino';
+import pino, {LogFn, Logger} from 'pino';
 
 export interface LogService {
   trace: LogFn;
@@ -13,13 +13,28 @@ export interface Logging {
 }
 
 export class DevLogging implements Logging {
-  logger: Logger;
+  logger = pino();
 
-  constructor() {
-    this.logger = pino({level: 'trace'});
+  paths = [
+    {
+      match: /\/code\/server\/src\/rooms\/game\/events\/.*/,
+      level: 'warn'
+    },
+    {
+      match: /.*/,
+      level: 'trace'
+    }]
+
+  findMatchingLogger(filename: string): LogService {
+    for (const path of this.paths) {
+      if (path.match.test(filename)) {
+        return this.logger.child({filename, level: path.level})
+      }
+    }
+    throw new Error(`couldn't find matching logger in ${this.paths}`);
   }
 
   getLogger(filename: string): LogService {
-    return this.logger.child({filename});
+    return this.findMatchingLogger(filename);
   }
 }

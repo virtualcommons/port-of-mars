@@ -14,7 +14,7 @@ export class MarsEvent extends Schema implements MarsEventData {
     this.clientViewHandler = data.clientViewHandler;
     this.duration = data.duration;
     this.state = constructState(data.id);
-    this.timeDuration = data.timeDuration ? data.timeDuration : GameState.DEFAULTS.timeRemaining;
+    this.timeDuration = data.timeDuration ?? GameState.DEFAULTS.timeRemaining;
   }
 
   @type('string')
@@ -44,9 +44,9 @@ export class MarsEvent extends Schema implements MarsEventData {
   state: MarsEventState;
 
   toJSON(): MarsEventData & { elapsed: number; state: any } {
-    const { id, name, effect, flavorText, clientViewHandler, elapsed, duration } = this;
+    const { id, name, effect, flavorText, clientViewHandler, elapsed, duration, timeDuration } = this;
     return {
-      id, name, effect, flavorText, clientViewHandler, elapsed, duration, state: this.state.toJSON()
+      id, name, effect, flavorText, clientViewHandler, elapsed, duration, state: this.state.toJSON(), timeDuration
     }
   }
 

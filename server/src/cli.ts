@@ -1,12 +1,17 @@
 import {program} from 'commander'
 import {Connection, createConnection, EntityManager} from "typeorm";
 import {getServices} from "@port-of-mars/server/services";
-import {GameReplayer} from "@port-of-mars/server/services/replay";
+import {
+  GameEventSummarizer,
+  GameReplayer, MarsEventSummarizer,
+  PlayerInvestmentSummarizer,
+  VictoryPointSummarizer
+} from "@port-of-mars/server/services/replay";
 import {DBPersister} from "@port-of-mars/server/services/persistence";
 import {EnteredDefeatPhase, EnteredVictoryPhase} from "@port-of-mars/server/rooms/game/events";
 import {Phase} from "@port-of-mars/shared/types";
 import {getLogger} from "@port-of-mars/server/settings";
-import {Tournament, TournamentRound} from "@port-of-mars/server/entity";
+import {GameEvent, Tournament, TournamentRound} from "@port-of-mars/server/entity";
 
 const logger = getLogger(__filename);
 
@@ -18,6 +23,15 @@ async function withConnection<T>(f: (em: EntityManager) => Promise<T>): Promise<
   } finally {
     await conn.close();
   }
+}
+
+async function exportData(em: EntityManager): Promise<void> {
+  const events = await em.getRepository(GameEvent).find({ order: { id: "ASC" }});
+  const gameEventSummarizer = new GameEventSummarizer(events, '/dump/gameEvent.csv');
+  const victoryPointSummarizer = new VictoryPointSummarizer(events, '/dump/victoryPoint.csv');
+  const playerInvestmentSummarizer = new PlayerInvestmentSummarizer(events, '/dump/playerInvestment.csv');
+  const marsEventSummarizer = new MarsEventSummarizer(events, '/dump/marsEvent.csv');
+  await Promise.all([gameEventSummarizer, victoryPointSummarizer, playerInvestmentSummarizer, marsEventSummarizer].map(s => s.save()))
 }
 
 async function finalize(em: EntityManager, gameId: number): Promise<void> {
@@ -114,6 +128,11 @@ program
             await withConnection((conn) => finalize(conn, gameId))
           })
       )
+  )
+  .addCommand(
+    program.createCommand('dump')
+      .description('dump db to csvs')
+      .action(async (cmd) => await withConnection(exportData))
   );
 
 async function main(argv: Array<string>): Promise<void> {

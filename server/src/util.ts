@@ -33,6 +33,15 @@ function getMarsEventData(): Array<MarsEventData> {
   return _.clone(expandCopies(getAllMarsEvents()));
 }
 
+export function getMarsEvent(id: string): MarsEventData {
+  const marsEvent = _.find(getAllMarsEvents(), e => e[0].id === id);
+  if (marsEvent) {
+    return marsEvent[0];
+  } else {
+    throw new Error(`${id} not found`)
+  }
+}
+
 /**
  * This function needs some documentation some day.
  * @param deckStrategy 
