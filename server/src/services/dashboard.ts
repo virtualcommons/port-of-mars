@@ -102,12 +102,10 @@ export class DashboardService extends BaseService {
   async getStats(user: User, tournamentRound: TournamentRound): Promise<Stats> {
     const games = await this.em.getRepository(Game)
       .find({
-        where: {
-          players: {
-            user
-          },
-          tournamentRound,
-          dateFinalized: Not(IsNull())
+        join: { alias: 'games', innerJoin: { players: 'games.players' }},
+        where: (qb) => {
+          qb.where({tournamentRound, dateFinalized: Not(IsNull())})
+            .andWhere('players.user.id = :userId', {userId: user.id})
         },
         relations: ['players']
       });
