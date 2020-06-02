@@ -17,6 +17,7 @@ services:
     restart: always
   db:
     image: postgres:12
+    restart: always
     environment:
       POSTGRES_USER: marsmadness
       POSTGRES_PASSWORD_FILE: /run/secrets/pom_db_password
