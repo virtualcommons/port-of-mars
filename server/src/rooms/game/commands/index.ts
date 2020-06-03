@@ -206,7 +206,7 @@ export class SetNextPhaseCmd implements Command {
       case Phase.newRound:
         // do not run mars events in the first round
         return this.state.isFirstRound()
-          ? [new ExitedNewRoundPhase()]
+          ? [new ExitedNewRoundPhase(), new EnteredInvestmentPhase()]
           : [new ExitedNewRoundPhase(), new EnteredMarsEventPhase(), new InitializedMarsEvent()];
       case Phase.defeat:
         return [];
