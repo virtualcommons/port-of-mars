@@ -1296,7 +1296,8 @@ export class GameState extends Schema implements GameData {
       performedBy,
       category,
       content: message,
-      timestamp: new Date().getTime()
+      timestamp: new Date().getTime(),
+      id: this.logs.length
     });
     this.logs.push(msg);
     return msg;

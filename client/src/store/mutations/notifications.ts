@@ -6,7 +6,7 @@ export default {
     state.logs.push(payload);
   },
   REMOVE_FROM_MARS_LOG(state: State, payload: MarsLogMessageData) {
-    const index = state.logs.findIndex(log => log.content == payload.content);
+    const index = state.logs.findIndex(log => log.id == payload.id);
     state.logs.splice(index, 1);
   },
 };

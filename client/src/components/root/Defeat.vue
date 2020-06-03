@@ -15,7 +15,7 @@
       <div class="marslog col-6">
         <div class="wrapper">
           <div
-            :key="log.timestamp"
+            :key="log.id"
             :style="{ backgroundColor: categoryColorMap.get(log.category) }"
             class="message"
             v-for="(log, index) in logs"
@@ -54,13 +54,14 @@
 import { Component, Inject, Vue } from 'vue-property-decorator';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 import { MarsLogMessageData } from '@port-of-mars/shared/types';
+import _ from "lodash";
 
 @Component({})
 export default class Defeat extends Vue {
   @Inject() readonly api!: GameRequestAPI;
 
   get logs() {
-    return this.$store.getters.logs.reverse();
+    return _.reverse(this.$store.getters.logs);
   }
 
   get categoryColorMap() {

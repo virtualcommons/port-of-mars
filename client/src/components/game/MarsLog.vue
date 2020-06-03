@@ -7,7 +7,7 @@
       <div
         v-for="log in logs"
         :style="{ backgroundColor: categoryColorMap.get(log.category) }"
-        :key="log.timestamp + Math.random()"
+        :key="log.id"
         class="message"
       >
         <p class="category">{{ log.category }}</p>

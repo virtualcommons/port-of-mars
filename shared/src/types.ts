@@ -139,6 +139,7 @@ export interface MarsLogMessageData {
   content: string;
   round: number;
   timestamp: number;
+  id: number;
 }
 
 export interface AccomplishmentData {
