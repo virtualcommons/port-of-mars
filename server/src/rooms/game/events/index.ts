@@ -360,6 +360,7 @@ export class EnteredBeginRoundPhase extends KindOnlyGameEvent {
   apply(game: GameState): void {
     game.phase = Phase.newRound;
     game.round += 1;
+    game.timeRemaining = 20;
 
     // FIXME: game.resetRound to encompass resets
     game.resetPlayerCosts();
