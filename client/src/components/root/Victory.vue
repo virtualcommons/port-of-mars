@@ -24,7 +24,7 @@
         <div class="marslog col-6">
           <div class="wrapper">
             <div
-              :key="log.timestamp + Math.random()"
+              :key="log.timestamp"
               :style="{ backgroundColor: categoryColorMap.get(log.category) }"
               class="message"
               v-for="(log, index) in logs"
