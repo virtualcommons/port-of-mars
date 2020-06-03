@@ -168,6 +168,7 @@ export class MarsLogMessage extends Schema implements MarsLogMessageData {
     this.category = msg.category;
     this.content = msg.content;
     this.timestamp = msg.timestamp;
+    this.id = msg.id;
   }
 
   fromJSON(data: MarsLogMessageData) {
@@ -180,7 +181,8 @@ export class MarsLogMessage extends Schema implements MarsLogMessageData {
       performedBy: this.performedBy,
       category: this.category,
       content: this.content,
-      timestamp: this.timestamp
+      timestamp: this.timestamp,
+      id: this.id,
     };
   }
 
@@ -198,6 +200,9 @@ export class MarsLogMessage extends Schema implements MarsLogMessageData {
 
   @type('number')
   timestamp: number;
+
+  @type('number')
+  id: number;
 }
 
 class ResourceCosts extends Schema implements ResourceCostData {
