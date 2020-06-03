@@ -1,0 +1,23 @@
+p {
+  color: white;
+}
+
+.report {
+  color: white;
+  height: 100%;
+  width: 100%;
+}
+
+.system-health {
+  border-right: .2rem solid;
+  border-color: $space-white-opaque-2;
+}
+
+.calc {
+  font-style: italic;
+}
+
+.events {
+  width: 100%;
+  text-align: center;
+}

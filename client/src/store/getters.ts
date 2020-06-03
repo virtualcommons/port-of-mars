@@ -121,6 +121,15 @@ export default {
       [MarsLogCategory.accomplishment, 'var(--marslog-green)'],
       [MarsLogCategory.purchaseAccomplishment, 'var(--marslog-green)'],
     ]);
+  },
 
-  }
-};
+  contributedSystemHealth(state: State): number {
+    let contributed = 0;
+
+    for (const role of ROLES) {
+      contributed += state.players[role].contributedUpkeep;
+    }
+
+    console.log('contributed: ', contributed);
+    return contributed;
+  }}
