@@ -61,7 +61,7 @@ export default class Defeat extends Vue {
   @Inject() readonly api!: GameRequestAPI;
 
   get logs() {
-    return _.reverse(this.$store.getters.logs);
+    return _.sortBy(this.$store.getters.logs, (ml) => - ml.id);
   }
 
   get categoryColorMap() {
