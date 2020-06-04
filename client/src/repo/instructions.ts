@@ -1,4 +1,5 @@
 export const PHASE_INSTRUCTIONS = {
+  newRound: 'System Health Report for the previous round. See report below for more details on your net contributions.',
   events: 'If System Health is less than 65, 2 Events will occur; ' +
           'if System Health is less than 35, 3 Events will occur. ' +
           'Some events will require that you perform additional actions in the Active Events section.',

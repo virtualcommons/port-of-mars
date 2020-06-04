@@ -24,7 +24,6 @@
       return this.$tstore.getters.contributedSystemHealth;
     }
   }
-
 </script>
 
 <style lang="scss" scoped>

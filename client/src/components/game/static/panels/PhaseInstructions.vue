@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { Phase, PHASE_LABELS } from '@port-of-mars/shared/types';
+import { Phase } from '@port-of-mars/shared/types';
 import { PHASE_INSTRUCTIONS } from '@port-of-mars/client/repo/instructions.ts';
 
 @Component({
@@ -26,6 +26,8 @@ export default class PhaseInstructions extends Vue {
 
   get phaseInstructions() {
     switch (this.phaseNumber) {
+      case Phase.newRound:
+        return PHASE_INSTRUCTIONS.newRound;
       case Phase.events:
         return PHASE_INSTRUCTIONS.events;
       case Phase.invest:
