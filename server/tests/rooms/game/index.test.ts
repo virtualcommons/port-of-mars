@@ -1,4 +1,4 @@
-import {GameState, AccomplishmentSet, Player, Trade} from "@port-of-mars/server/rooms/game/state";
+import {GameState, AccomplishmentSet, Player, Trade, Accomplishment} from "@port-of-mars/server/rooms/game/state";
 import {CURATOR, PIONEER, RESEARCHER, ENTREPRENEUR, TradeData, Role} from "@port-of-mars/shared/types";
 import {getAccomplishmentByID, getAccomplishmentIDs} from "@port-of-mars/server/data/Accomplishment";
 import * as _ from 'lodash'
@@ -111,12 +111,12 @@ describe('a mars event', () => {
 
 describe('an accomplishment', () => {
   it('can be serialized and deserialized', () => {
-    const accomplishments = new AccomplishmentSet(CURATOR);
-    const accomplishments2 = new AccomplishmentSet(CURATOR);
-    accomplishments2.fromJSON(accomplishments.toJSON());
-    expect(_.isEqual(accomplishments, accomplishments2)).toBeTruthy();
-    expect(accomplishments.purchasable[0].upkeep).toBe(accomplishments2.purchasable[0].upkeep)
-    expect(accomplishments.purchasable[0].upkeep).toBe(0);
+    const accomplishment = new Accomplishment(getAccomplishmentByID(CURATOR, 81));
+    const accomplishment2 = new Accomplishment(getAccomplishmentByID(CURATOR, 81));
+    accomplishment2.fromJSON(accomplishment.toJSON());
+    expect(_.isEqual(accomplishment, accomplishment2)).toBeTruthy();
+    expect(accomplishment.upkeep).toBe(accomplishment2.upkeep)
+    expect(accomplishment.upkeep).toBe(0);
   })
 })
 
