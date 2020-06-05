@@ -215,7 +215,7 @@ const _marsEvents: Array<MarsEventDeckItem> = [
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 1,
     timeDuration: 15,
-  }, 12]
+  }, 1]
 ];
 
 export function getAllMarsEvents(): Array<MarsEventDeckItem> {
