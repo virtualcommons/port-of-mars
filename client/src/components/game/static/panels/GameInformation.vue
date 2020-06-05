@@ -6,7 +6,7 @@
     </div>
     <div class="section tour-current-phase">
       <p class="title">Current Phase</p>
-      <p class="number">{{ phaseNumber + 1 }} of 5</p>
+      <p class="number">{{ phaseNumber + 1 }} of 6</p>
       <p class="phase">{{ phaseText }}</p>
     </div>
     <div class="section tour-time-remaining">
