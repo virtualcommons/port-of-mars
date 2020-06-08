@@ -50,7 +50,7 @@ const steps: Array<Step> = [
         ADD_TO_TRADES: {
           id: 'mock-trade',
           trade: {
-            from: {
+            sender: {
               role: CURATOR,
               resourceAmount: {
                 culture: 1,
@@ -60,7 +60,7 @@ const steps: Array<Step> = [
                 science: 1,
               },
             },
-            to: {
+            recipient: {
               role: RESEARCHER,
               resourceAmount: {
                 culture: 1,

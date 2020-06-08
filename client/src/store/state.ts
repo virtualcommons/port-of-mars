@@ -95,12 +95,12 @@ export function defaultPendingInvestment(): ResourceCostData {
 
 export function defaultTradeData(): TradeDataWithNull<'' | Role> {
   return {
-    to: {
+    recipient: {
       role: '',
       resourceAmount: defaultInventory(),
     },
 
-    from: {
+    sender: {
       role: 'Researcher',
       resourceAmount: defaultInventory(),
     },

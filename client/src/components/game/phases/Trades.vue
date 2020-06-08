@@ -62,8 +62,8 @@ export default class Trades extends Vue {
     //map the trades to something we can use
     const trades = Object.keys(tradeSet).map(id => ({
       id,
-      from: tradeSet[id].from,
-      to: tradeSet[id].to,
+      sender: tradeSet[id].sender,
+      recipient: tradeSet[id].recipient,
       status: tradeSet[id].status
     }));
 
@@ -84,8 +84,8 @@ export default class Trades extends Vue {
   //1 if the player is reciving the trade,
   //0 if the player sent the trade
   //-1 if the player has no interaction with trade
-  associatedWithTrade(trade:any){
-    return trade.to.role == this.myRole ? 1 : trade.from.role == this.myRole ? 0 : -1;
+  associatedWithTrade(trade: any){
+    return trade.recipient.role == this.myRole ? 1 : trade.sender.role == this.myRole ? 0 : -1;
   }
 
   //this is some extra validation on the checkboxes.
@@ -96,7 +96,7 @@ export default class Trades extends Vue {
   async checked(value:number){
     //finding if no filter is active
     const noFilter = this.activeFilters.indexOf(-1);
-    
+
     //if 'show all trades' is active and the input value is not -1, we want to remove
     //'show all trades' from the list of active filters.
     if(noFilter != -1 && value != -1){

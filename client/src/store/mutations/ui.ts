@@ -59,24 +59,24 @@ function SET_HUDRIGHT_VIEW(state: State, payload: HUDRightView) {
 // NOTE :: TRADE SPECIFIC
 
 function OPEN_TRADE_MODAL_WARM(state: State, payload: { role: Role }) {
-  state.ui.tradeData.to.role = payload.role;
+  state.ui.tradeData.recipient.role = payload.role;
   // state.ui.modalViews.tradeRequestModal.visible = true;
 }
 
 function SET_GET_RESOURCES(state: State, payload: ResourceAmountData) {
-  state.ui.tradeData.from.resourceAmount = payload;
+  state.ui.tradeData.sender.resourceAmount = payload;
 }
 
 function SET_SEND_RESOURCES(state: State, payload: ResourceAmountData) {
-  state.ui.tradeData.to.resourceAmount = payload;
+  state.ui.tradeData.recipient.resourceAmount = payload;
 }
 
 function SET_TRADE_PARTNER_NAME(state: State, payload: Role) {
-  state.ui.tradeData.to.role = payload;
+  state.ui.tradeData.recipient.role = payload;
 }
 
 function SET_TRADE_PLAYER_NAME(state: State, payload: Role) {
-  state.ui.tradeData.from.role = payload;
+  state.ui.tradeData.sender.role = payload;
 }
 
 function RESET_TRADE_MODAL(state: State, payload: any) {

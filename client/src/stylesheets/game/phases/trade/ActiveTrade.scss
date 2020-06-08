@@ -12,183 +12,183 @@
   &:last-child {
     margin: 0;
   }
+}
 
-  .title-wrapper {
-    @include default-transition-base;
+.title-wrapper {
+  @include default-transition-base;
 
-    width: 100%;
-    max-width: none;
-    padding: 0.5rem;
-    margin: 0;
-    @include make-center;
-    //background-color: $space-white;
+  width: 100%;
+  max-width: none;
+  padding: 0.5rem;
+  margin: 0;
+  @include make-center;
+  //background-color: $space-white;
+}
 
-    .title {
-      @include default-transition-base;
+.title {
+  @include default-transition-base;
 
-      margin-bottom: 0;
-      font-size: $font-med;
-      font-weight: $font-weight-maven-pro-medium;
-      //color: $space-gray;
-      text-align: center;
-    }
-  }
+  margin-bottom: 0;
+  font-size: $font-med;
+  font-weight: $font-weight-maven-pro-medium;
+  //color: $space-gray;
+  text-align: center;
+}
 
-  .trade-wrapper {
+.trade-wrapper {
+  @include expand;
+  max-width: none;
+  @include reset-padding-margin;
+}
+.to-container,
+.icon-container,
+.from-container {
+  height: 100%;
+  padding: 0.5rem;
+  margin: 0;
+}
+
+.icon-container {
+  @include make-center;
+}
+
+.icon {
+  color: $space-white;
+}
+
+.to-container,
+.from-container {
+  .inner-wrapper {
     @include expand;
     max-width: none;
     @include reset-padding-margin;
 
-    .to-container,
-    .icon-container,
-    .from-container {
+    .player {
       height: 100%;
-      padding: 0.5rem;
-      margin: 0;
-    }
-
-    .icon-container {
-      @include make-center;
-
-      .icon {
-        color: $space-white;
-      }
-    }
-
-    .to-container,
-    .from-container {
-      .inner-wrapper {
-        @include expand;
-        max-width: none;
-        @include reset-padding-margin;
-
-        .player {
-          height: 100%;
-          padding: 0;
-          @include make-center;
-
-          .outer-frame {
-            height: 4rem;
-            width: 4rem;
-            padding: 0.125rem;
-            border-radius: 50%;
-
-            .inner-frame {
-              @include expand;
-              @include make-center;
-              border-radius: 50%;
-
-              img {
-                object-fit: cover;
-                height: 80%;
-              }
-            }
-          }
-
-          .text {
-            height: 100%;
-            flex: 1;
-            padding: 0 0 0 0.5rem;
-            @include make-column-and-left;
-
-            p {
-              margin-bottom: 0;
-            }
-
-            .title {
-              margin: -0.5rem 0;
-              color: $new-space-orange;
-              font-size: $font-large;
-              font-weight: $font-weight-maven-pro-bold;
-            }
-
-            .player-text {
-              margin-bottom: 0;
-              color: $space-white;
-              font-size: $font-med;
-              font-weight: $font-weight-maven-pro-bold;
-            }
-          }
-        }
-
-        .investments {
-          height: 100%;
-          padding: 0;
-          @include make-center;
-
-          .wrapper {
-            height: 2rem;
-            width: calc(100% / 5);
-            @include make-center;
-
-            img {
-              object-fit: cover;
-              height: 2rem;
-              width: 2rem;
-            }
-
-            p {
-              margin-bottom: 0;
-              margin: 0 0 0 0.5rem;
-              color: $space-white;
-              font-size: $font-large;
-              font-weight: $font-weight-maven-pro-bold;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  .button-wrapper {
-    width: 100%;
-    max-width: none;
-    padding: 0.5rem;
-    margin: 0;
-    @include make-center;
-
-    .decline,
-    .accept,
-    .cancel {
-      @include reset-button;
-      height: 2rem;
-      width: 2rem;
       padding: 0;
-      border-radius: 50%;
-      margin: 0 0.5rem;
       @include make-center;
-      @include default-transition-base;
 
-      &:hover:not(:disabled) {
-        @include default-scale-up;
+      .outer-frame {
+        height: 4rem;
+        width: 4rem;
+        padding: 0.125rem;
+        border-radius: 50%;
+
+        .inner-frame {
+          @include expand;
+          @include make-center;
+          border-radius: 50%;
+
+          img {
+            object-fit: cover;
+            height: 80%;
+          }
+        }
       }
 
-      &:disabled {
-        opacity: 0.5;
-      }
+      .text {
+        height: 100%;
+        flex: 1;
+        padding: 0 0 0 0.5rem;
+        @include make-column-and-left;
 
-      .icon {
-        height: 50%;
-        width: 50%;
+        p {
+          margin-bottom: 0;
+        }
+
+        .title {
+          margin: -0.5rem 0;
+          color: $new-space-orange;
+          font-size: $font-large;
+          font-weight: $font-weight-maven-pro-bold;
+        }
+
+        .player-text {
+          margin-bottom: 0;
+          color: $space-white;
+          font-size: $font-med;
+          font-weight: $font-weight-maven-pro-bold;
+        }
       }
     }
 
-    .decline,
-    .cancel {
-      background-color: $status-red;
-      color: $space-white;
-    }
+    .investments {
+      height: 100%;
+      padding: 0;
+      @include make-center;
 
-    .accept {
-      background-color: $status-green;
-      color: $space-white;
+      .wrapper {
+        height: 2rem;
+        width: calc(100% / 5);
+        @include make-center;
+
+        img {
+          object-fit: cover;
+          height: 2rem;
+          width: 2rem;
+        }
+
+        p {
+          margin-bottom: 0;
+          margin: 0 0 0 0.5rem;
+          color: $space-white;
+          font-size: $font-large;
+          font-weight: $font-weight-maven-pro-bold;
+        }
+      }
     }
   }
+}
 
-  .status-text {
-    font-size: $font-large;
-    font-weight: bold;
+
+.button-wrapper {
+  width: 100%;
+  max-width: none;
+  padding: 0.5rem;
+  margin: 0;
+  @include make-center;
+}
+
+.decline,
+.accept,
+.cancel {
+  @include reset-button;
+  height: 2rem;
+  width: 2rem;
+  padding: 0;
+  border-radius: 50%;
+  margin: 0 0.5rem;
+  @include make-center;
+  @include default-transition-base;
+
+  &:hover:not(:disabled) {
+    @include default-scale-up;
   }
+
+  &:disabled {
+    opacity: 0.2;
+  }
+
+  .icon {
+    height: 50%;
+    width: 50%;
+  }
+}
+
+.decline,
+.cancel {
+  background-color: $status-red;
+  color: $space-white;
+}
+
+.accept {
+  background-color: $status-green;
+  color: $space-white;
+}
+
+.status-text {
+  font-size: $font-large;
+  font-weight: bold;
 }
 
 .hide-trade {

@@ -188,7 +188,7 @@ export class SendTradeRequestCmd implements Command {
   }
 
   execute(): Array<GameEvent> {
-    if (canSendTradeRequest(this.player, this.trade.from.resourceAmount)) {
+    if (canSendTradeRequest(this.player, this.trade.sender.resourceAmount)) {
       return [new SentTradeRequest({...this.trade, id: uuid()})];
     }
     else {

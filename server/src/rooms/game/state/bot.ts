@@ -23,6 +23,7 @@ const logger = getLogger(__filename);
 
 export type AbstractMarsEventVisitor ={[view in EventClientView]: (state: GameState, player: Player) => Array<GameEvent>};
 
+// bot actions: voting events
 export class MarsEventVisitor implements AbstractMarsEventVisitor {
   NO_CHANGE(state: GameState, player: Player): Array<GameEvent> {
     return [new SetPlayerReadiness({value: true, role: player.role})]
@@ -86,6 +87,7 @@ export class MarsEventVisitor implements AbstractMarsEventVisitor {
   }
 }
 
+// bot actions: per phase
 export class ActorRunner implements Actor {
   marsEventVisitor = new MarsEventVisitor();
 
@@ -135,7 +137,7 @@ export class ActorRunner implements Actor {
     const events: Array<GameEvent> = [];
     for (const id of Object.keys(state.tradeSet)) {
       const trade: Trade = state.tradeSet[id];
-      if (trade.status === 'Active' && trade.to.role === player.role) {
+      if (trade.status === 'Active' && trade.sender.role === player.role) {
         events.push(new AcceptedTradeRequest({id}));
         break;
       }

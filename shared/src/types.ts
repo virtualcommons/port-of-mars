@@ -172,8 +172,8 @@ export type TradeStatus = 'Active' | 'Accepted' | 'Rejected' | 'Cancelled';
 
 export interface TradeData {
   id: string;
-  from: TradeAmountData;
-  to: TradeAmountData;
+  sender: TradeAmountData;
+  recipient: TradeAmountData;
   status: TradeStatus;
 }
 
@@ -185,8 +185,8 @@ export interface TradeAmountDataWithNull<R> {
 }
 
 export interface TradeDataWithNull<R=Role|NullPartner>{
-  from:TradeAmountDataWithNull<R>;
-  to: TradeAmountDataWithNull<R>;
+  sender: TradeAmountDataWithNull<R>;
+  recipient: TradeAmountDataWithNull<R>;
 }
 
 export type TradeSetData = { [uuid: string]: TradeData };

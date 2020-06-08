@@ -89,15 +89,15 @@ export default class TradeRequest extends Vue {
   // NOTE :: STATE GETTERS
 
   get tradePartnerName() {
-    return this.$tstore.state.ui.tradeData.to.role;
+    return this.$tstore.state.ui.tradeData.recipient.role;
   }
 
   get sentResources() {
-    return this.$tstore.state.ui.tradeData.to.resourceAmount;
+    return this.$tstore.state.ui.tradeData.recipient.resourceAmount;
   }
 
   get exchangeResources() {
-    return this.$tstore.state.ui.tradeData.from.resourceAmount;
+    return this.$tstore.state.ui.tradeData.sender.resourceAmount;
   }
 
   get otherPlayers() {
@@ -141,8 +141,8 @@ export default class TradeRequest extends Vue {
         resourceAmount: makeTradeSafe(this.exchangeResources),
       };
       const tradeDataPackage: SendTradeRequestData['trade'] = {
-        from: fromPackage,
-        to: toPackage,
+        sender: fromPackage,
+        recipient: toPackage,
         status: 'Active',
       };
       this.api.sendTradeRequest(tradeDataPackage);

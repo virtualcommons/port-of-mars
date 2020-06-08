@@ -27,7 +27,7 @@ import {
   TradeStatus,
   TradeSetData,
   RESOURCES,
-  MarsLogCategory
+  MarsLogCategory,
 } from '@port-of-mars/shared/types';
 import { canSendTradeRequest } from '@port-of-mars/shared/validation';
 import _ from 'lodash';
@@ -286,7 +286,7 @@ class ResourceCosts extends Schema implements ResourceCostData {
       }
   }
 
-  static fromRole(role: Role): ResourceCosts {
+  static senderRole(role: Role): ResourceCosts {
     return new ResourceCosts(ResourceCosts.getCosts(role));
   }
 
@@ -627,48 +627,48 @@ export class TradeAmount extends Schema {
 }
 
 export class Trade extends Schema {
-  constructor(public uuid: string, from: TradeAmountData, to: TradeAmountData, status: TradeStatus) {
+  constructor(public uuid: string, sender: TradeAmountData, recipient: TradeAmountData, status: TradeStatus) {
     super();
-    this.from = new TradeAmount(from.role, from.resourceAmount);
-    this.to = new TradeAmount(to.role, to.resourceAmount);
+    this.sender = new TradeAmount(sender.role, sender.resourceAmount);
+    this.recipient = new TradeAmount(recipient.role, recipient.resourceAmount);
     this.status = status;
   }
 
   fromJSON(data: TradeData) {
     this.uuid = data.id;
-    this.from.fromJSON(data.from);
-    this.to.fromJSON(data.to);
+    this.sender.fromJSON(data.sender);
+    this.recipient.fromJSON(data.recipient);
     this.status = data.status;
   }
 
   toJSON(): TradeData {
     return {
       id: this.uuid,
-      from: this.from.toJSON(),
-      to: this.to.toJSON(),
+      sender: this.sender.toJSON(),
+      recipient: this.recipient.toJSON(),
       status: this.status
     };
   }
 
   @type(TradeAmount)
-  from: TradeAmount;
+  sender: TradeAmount;
 
   @type(TradeAmount)
-  to: TradeAmount;
+  recipient: TradeAmount;
 
   @type('string')
   status: TradeStatus
 
   apply(state: GameState) {
-    const pFrom = state.players[this.from.role];
-    const pTo = state.players[this.to.role];
+    const pFrom = state.players[this.sender.role];
+    const pTo = state.players[this.recipient.role];
 
-    pFrom.inventory.update(_.mapValues(this.from.resourceAmount, r => -r!));
-    pFrom.inventory.update(this.to.resourceAmount);
+    pFrom.inventory.update(_.mapValues(this.sender.resourceAmount, r => -r!));
+    pFrom.inventory.update(this.recipient.resourceAmount);
     //pFrom.pendingInvestments.rollback({...this.from.resourceAmount,upkeep:0});
 
-    pTo.inventory.update(_.mapValues(this.to.resourceAmount, r => -r!));
-    pTo.inventory.update(this.from.resourceAmount);
+    pTo.inventory.update(_.mapValues(this.recipient.resourceAmount, r => -r!));
+    pTo.inventory.update(this.sender.resourceAmount);
 
     this.status = 'Accepted';
   }
@@ -676,6 +676,7 @@ export class Trade extends Schema {
 
 export interface Bot {
   active: boolean;
+  // elapsed: number;
   resetElapsed(): void;
   act(state: GameState, player: Player): Array<GameEvent>;
 }
@@ -686,7 +687,7 @@ export class Player extends Schema implements PlayerData {
     this.role = role;
     this.bot = bot;
     this.accomplishments = new AccomplishmentSet(role);
-    this.costs = ResourceCosts.fromRole(role);
+    this.costs = ResourceCosts.senderRole(role);
     // FIXME: it'd be nice to bind the specialty to the ResourceCosts e.g., this.specialty = this.costs.specialty
     // but this change cascades quite a bit into the client. revisit later
     this.specialty = ResourceCosts.getSpecialty(role);
@@ -1039,7 +1040,7 @@ export class GameState extends Schema implements GameData {
     Object.keys(this.tradeSet).forEach(k => delete this.tradeSet[k]);
     Object.keys(data.tradeSet).forEach(k => {
       const tradeData: TradeData = data.tradeSet[k];
-      this.tradeSet[k] = new Trade(k, tradeData.from, tradeData.to, 'Active');
+      this.tradeSet[k] = new Trade(k, tradeData.sender, tradeData.recipient, 'Active');
     });
 
     const winners = _.map(data.winners, w => w);
@@ -1357,14 +1358,14 @@ export class GameState extends Schema implements GameData {
     let message: string;
     let category: string;
     const performedBy: ServerRole = SERVER;
-    const toRole: Role = trade.to.role;
-    const fromRole: Role = trade.from.role;
+    const recipientRole: Role = trade.recipient.role;
+    const senderRole: Role = trade.sender.role;
 
-    this.tradeSet[trade.id] = new Trade(trade.id, trade.from, trade.to, 'Active');
+    this.tradeSet[trade.id] = new Trade(trade.id, trade.sender, trade.recipient, 'Active');
 
     switch (reason) {
       case 'sent-trade-request':
-        message = `The ${fromRole} sent a trade request to the ${toRole}.`;
+        message = `The ${senderRole} sent a trade request to the ${recipientRole}.`;
         category = MarsLogCategory.sentTrade;
         this.log(message, category, performedBy);
         break;
@@ -1382,18 +1383,18 @@ export class GameState extends Schema implements GameData {
       logger.warn('Could not remove trade. Trade %s not found', id);
       return;
     }
-    const toRole: Role = this.tradeSet[id].to.role;
-    const fromRole: Role = this.tradeSet[id].from.role;
+    const recipientRole: Role = this.tradeSet[id].recipient.role;
+    const senderRole: Role = this.tradeSet[id].sender.role;
 
     switch (reason) {
       case 'reject-trade-request':
-        message = `The ${toRole} rejected a trade request from the ${fromRole}.`;
+        message = `The ${recipientRole} rejected a trade request from the ${senderRole}.`;
         category = MarsLogCategory.rejectTrade;
         this.log(message, category, performedBy);
         this.tradeSet[id].status = 'Rejected';
         break;
       case 'cancel-trade-request':
-        message = `The ${fromRole} canceled a trade request sent to the ${toRole}.`;
+        message = `The ${senderRole} canceled a trade request sent to the ${recipientRole}.`;
         category = MarsLogCategory.cancelTrade;
         this.log(message, category, performedBy);
         this.tradeSet[id].status = 'Cancelled';
@@ -1403,9 +1404,9 @@ export class GameState extends Schema implements GameData {
     }
   }
 
-  canCompleteTrade(fromPlayer: PlayerData, toPlayer: PlayerData, trade: Trade): boolean {
-    return canSendTradeRequest(fromPlayer, trade.from.resourceAmount)
-      && canSendTradeRequest(toPlayer, trade.to.resourceAmount);
+  canCompleteTrade(sender: PlayerData, recipient: PlayerData, trade: Trade): boolean {
+    return canSendTradeRequest(sender, trade.sender.resourceAmount)
+      && canSendTradeRequest(recipient, trade.recipient.resourceAmount);
   }
 
   acceptTrade(id: string): void {
@@ -1418,24 +1419,24 @@ export class GameState extends Schema implements GameData {
       logger.warn('Trade not accepted. Could not find %s', id);
       return;
     }
-    const fromRole = trade.from.role;
-    const toRole = trade.to.role;
-    const fromPlayer = this.players[fromRole];
-    const toPlayer = this.players[toRole];
-    const fromTradeResources: ResourceAmountData = trade.from.resourceAmount;
+    const senderRole = trade.sender.role;
+    const recipientRole = trade.recipient.role;
+    const sender = this.players[senderRole];
+    const recipient = this.players[recipientRole];
+    const fromTradeResources: ResourceAmountData = trade.sender.resourceAmount;
 
-    if (this.canCompleteTrade(fromPlayer, toPlayer, trade)) {
+    if (this.canCompleteTrade(sender, recipient, trade)) {
       const toMsg: Array<string> = [];
       const fromMsg: Array<string> = [];
 
-      const toTradeResources: ResourceAmountData = trade.to.resourceAmount;
+      const toTradeResources: ResourceAmountData = trade.recipient.resourceAmount;
 
-      // apply trade resources to fromPlayer's inventory
-      fromPlayer.inventory.update(_.mapValues(trade.from.resourceAmount, r => -r!));
-      fromPlayer.inventory.update(trade.to.resourceAmount);
-      // apply trade resources to toPlayer's inventory
-      toPlayer.inventory.update(_.mapValues(trade.to.resourceAmount, r => -r!));
-      toPlayer.inventory.update(trade.from.resourceAmount);
+      // apply trade resources to sender's inventory
+      sender.inventory.update(_.mapValues(trade.sender.resourceAmount, r => -r!));
+      sender.inventory.update(trade.recipient.resourceAmount);
+      // apply trade resources to recipient's inventory
+      recipient.inventory.update(_.mapValues(trade.recipient.resourceAmount, r => -r!));
+      recipient.inventory.update(trade.sender.resourceAmount);
 
       for (const [resource, amount] of Object.entries(toTradeResources)) {
         if (amount > 0) {
@@ -1449,12 +1450,12 @@ export class GameState extends Schema implements GameData {
           toMsg.push(`${resourceFormatted}: ${amount}`);
         }
       }
-      message = `The ${fromRole} has traded ${fromMsg.join(', ')} in exchange for ${toMsg.join(', ')} from the ${toRole}.`;
+      message = `The ${senderRole} has traded ${fromMsg.join(', ')} in exchange for ${toMsg.join(', ')} from the ${recipientRole}.`;
       category = MarsLogCategory.acceptTrade;
       this.log(message, category, performedBy);
       this.tradeSet[id].status = 'Accepted';
     } else {
-      message = `The ${fromRole} is unable to fulfill a trade request previously sent to the ${toRole}. The trade will be removed.`;
+      message = `The ${senderRole} is unable to fulfill a trade request previously sent to the ${recipientRole}. The trade will be removed.`;
       category = MarsLogCategory.invalidTrade;
       this.log(message, category, performedBy);
       this.tradeSet[id].status = 'Cancelled';
