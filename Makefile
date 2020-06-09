@@ -4,6 +4,7 @@ DB_USER=marsmadness
 TEST_DB_NAME=pom_testing
 DB_DATA_PATH=docker/data
 DATA_DUMP_PATH=docker/dump
+LOG_DATA_PATH=docker/logs
 DB_PASSWORD_PATH=keys/pom_db_password
 JWT_SECRET_PATH=keys/jwt
 ORMCONFIG_PATH=keys/ormconfig.json
@@ -57,6 +58,9 @@ $(DB_PASSWORD_PATH): keys
 	fi; \
 	echo "$${DB_PASSWORD}" > $(DB_PASSWORD_PATH)
 
+$(LOG_DATA_PATH):
+	mkdir -p $(LOG_DATA_PATH)
+
 $(DATA_DUMP_PATH):
 	mkdir -p $(DATA_DUMP_PATH)
 
@@ -89,7 +93,7 @@ secrets: $(SECRETS)
 build-id: 
 	echo "\"${BUILD_ID}\"" > $(BUILD_ID_PATH)
 
-docker-compose.yml: base.yml staging.base.yml $(ENVIR).yml config.mk $(DB_DATA_PATH) $(DATA_DUMP_PATH) build-id
+docker-compose.yml: base.yml staging.base.yml $(ENVIR).yml config.mk $(DB_DATA_PATH) $(DATA_DUMP_PATH) $(LOG_DATA_PATH) build-id
 	case "$(ENVIR)" in \
 	  dev) docker-compose -f base.yml -f "$(ENVIR).yml" config > docker-compose.yml;; \
 	  staging|prod) docker-compose -f base.yml -f staging.base.yml -f "$(ENVIR).yml" config > docker-compose.yml;; \

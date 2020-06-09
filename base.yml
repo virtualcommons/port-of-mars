@@ -13,6 +13,7 @@ services:
       - ./keys/.pgpass:/root/.pgpass
       - ./keys:/run/secrets
       - ./docker/dump:/dump
+      - ./docker/logs:/var/log/port-of-mars
   redis:
     image: redis:5
     restart: always

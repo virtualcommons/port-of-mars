@@ -1,4 +1,5 @@
 import pino, {LogFn, Logger} from 'pino';
+import stream from "stream";
 
 export interface LogService {
   trace: LogFn;
@@ -13,7 +14,7 @@ export interface Logging {
 }
 
 export class DevLogging implements Logging {
-  logger = pino();
+  logger = pino(pino.destination('/var/log/port-of-mars/index.log'));
 
   paths = [
     {
