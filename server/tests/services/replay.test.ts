@@ -88,7 +88,7 @@ describe('a game', () => {
       points: g.players.Researcher.victoryPoints
     }));
     expect(data).toEqual([
-      {phase: Phase.newRound, culture: 0, duration: 290, points: 0},
+      {phase: Phase.newRound, culture: 0, duration: 10, points: 0},
       {phase: Phase.trade, culture: 2, duration: 295, points: 0},
       {phase: Phase.purchase, culture: 2, duration: 285, points: 5},
       {phase: Phase.discard, culture: 2, duration: 270, points: 5},

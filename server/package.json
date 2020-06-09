@@ -66,6 +66,7 @@
   "dependencies": {
     "@colyseus/social": "^0.11.6",
     "@sentry/node": "~5.15.4",
+    "@vrbo/pino-rotating-file": "^1.1.0",
     "async-mutex": "^0.2.2",
     "bcryptjs": "^2.4.3",
     "colyseus": "^0.13.7",

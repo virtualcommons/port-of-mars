@@ -1078,7 +1078,7 @@ export class GameState extends Schema implements GameData {
   lastTimePolled: Date;
 
   @type('number')
-  timeRemaining: number = GameState.DEFAULTS.timeRemaining;
+  timeRemaining: number = 20;
 
   @type('number')
   round: number = GameState.DEFAULTS.round;
