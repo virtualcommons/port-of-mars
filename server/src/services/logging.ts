@@ -14,7 +14,7 @@ export interface Logging {
 }
 
 export class DevLogging implements Logging {
-  logger = pino(pino.destination('/var/log/port-of-mars/index.log'));
+  logger = pino();
 
   paths = [
     {
