@@ -7,6 +7,7 @@
     "build": "tsc -p .",
     "build:deploy": "yarn build && rm -rf /code/server/src /code/shared && mv lib/server/src /code/server/src && mv lib/shared /code/shared",
     "cli": "ts-node -r tsconfig-paths/register src/cli.ts",
+    "cli:prod": "node -r tsconfig-paths/register src/cli.js",
     "start:prod": "node -r tsconfig-paths/register src/index.js | tee -a /var/log/port-of-mars/index.log",
     "start": "ts-node-dev -r tsconfig-paths/register src/index.ts | tee -a /var/log/port-of-mars/index.log",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
