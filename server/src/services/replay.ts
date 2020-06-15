@@ -207,9 +207,8 @@ export interface PlayerInvestmentExport {
   gameId: number;
   role: Role;
   investment: Investment;
-  amount: number;
-  cost: number;
-  inventory: number;
+  name: string;
+  value: number;
 }
 
 export class PlayerInvestmentSummarizer extends Summarizer<PlayerInvestmentExport> {
@@ -222,18 +221,39 @@ export class PlayerInvestmentSummarizer extends Summarizer<PlayerInvestmentExpor
             gameId: event.gameId,
             role,
             investment,
-            amount: game.players[role].pendingInvestments[investment],
-            cost: game.players[role].costs[investment],
-            inventory: game.players[role].inventory[investment],
+            name: 'pendingInvestment',
+            value: game.players[role].pendingInvestments[investment],
           })),
           {
             gameId: event.gameId,
             role,
             investment: 'upkeep',
-            amount: game.players[role].contributedUpkeep,
-            cost: game.players[role].costs.upkeep,
-            inventory: game.upkeep
-          }
+            name: 'pendingInvestment',
+            value: game.players[role].contributedUpkeep,
+          },
+        ...RESOURCES.map(
+          (investment: Resource) => ({
+            gameId: event.gameId,
+            role,
+            investment,
+            name: 'cost',
+            value: game.players[role].costs[investment]
+          })),
+          {
+            gameId: event.gameId,
+            role,
+            investment: 'upkeep',
+            name: 'cost',
+            value: game.players[role].costs.upkeep
+          },
+          ...RESOURCES.map(
+            (investment: Resource) => ({
+              gameId: event.gameId,
+              role,
+              investment,
+              name: 'inventory',
+              value: game.players[role].inventory[investment],
+            })),
         ]);
   }
 
