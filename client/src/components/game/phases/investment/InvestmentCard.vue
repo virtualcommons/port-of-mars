@@ -80,7 +80,7 @@ export default class InvestmentCard extends Vue {
   @Prop() private pendingInvestment!: number;
 
   get disabled(): boolean {
-    return this.cost === Number.MAX_SAFE_INTEGER;
+    return this.cost >= 100;
   }
 
   get opacity(): object {

@@ -140,7 +140,7 @@ export default class Inventory extends Vue {
   }
 
   private canInvest(cost: number): boolean {
-    return cost !== Number.MAX_SAFE_INTEGER;
+    return cost < 100;
   }
 
   private toggleCosts() {

@@ -237,9 +237,9 @@ class ResourceCosts extends Schema implements ResourceCostData {
           return {
             culture: 2,
             finance: 3,
-            government: Infinity,
+            government: 1000,
             legacy: 3,
-            science: Infinity,
+            science: 1000,
             upkeep: 1
             // specialty: 'culture'
           };
@@ -248,16 +248,16 @@ class ResourceCosts extends Schema implements ResourceCostData {
             culture: 3,
             finance: 2,
             government: 3,
-            legacy: Infinity,
-            science: Infinity,
+            legacy: 1000,
+            science: 1000,
             upkeep: 1
             // specialty: 'finance'
           };
         case PIONEER:
           return {
             culture: 3,
-            finance: Infinity,
-            government: Infinity,
+            finance: 1000,
+            government: 1000,
             legacy: 2,
             science: 3,
             upkeep: 1
@@ -265,18 +265,18 @@ class ResourceCosts extends Schema implements ResourceCostData {
           };
         case POLITICIAN:
           return {
-            culture: Infinity,
+            culture: 1000,
             finance: 3,
             government: 2,
-            legacy: Infinity,
+            legacy: 1000,
             science: 3,
             upkeep: 1
             // specialty: 'government'
           };
         case RESEARCHER:
           return {
-            culture: Infinity,
-            finance: Infinity,
+            culture: 1000,
+            finance: 1000,
             government: 3,
             legacy: 3,
             science: 2,
