@@ -1009,7 +1009,7 @@ export class GameState extends Schema implements GameData {
   static DEFAULTS = {
     timeRemaining: 300,
     marsEventsProcessed: 0,
-    round: 1,
+    round: 0,
     phase: Phase.newRound,
     upkeep: 100
   };

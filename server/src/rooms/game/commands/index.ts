@@ -14,18 +14,26 @@ import {
   EnteredTradePhase,
   EnteredVictoryPhase,
   ReenteredMarsEventPhase,
-    ExitedNewRoundPhase,
-    EnteredBeginRoundPhase,
+  ExitedNewRoundPhase,
+  EnteredNewRoundPhase,
   SentChatMessage,
   SentTradeRequest,
   TimeInvested,
   RejectedTradeRequest,
   CanceledTradeRequest,
   SetPlayerReadiness,
-  VotedForPersonalGain, VotedForPhilanthropist,
-  FinalizedMarsEvent, OutOfCommissionedCurator,
-  OutOfCommissionedPolitician, OutOfCommissionedResearcher,
-  OutOfCommissionedPioneer, OutOfCommissionedEntrepreneur, SelectedInfluence, KeptResources, InitializedMarsEvent
+  VotedForPersonalGain,
+  VotedForPhilanthropist,
+  FinalizedMarsEvent,
+  OutOfCommissionedCurator,
+  OutOfCommissionedPolitician,
+  OutOfCommissionedResearcher,
+  OutOfCommissionedPioneer,
+  OutOfCommissionedEntrepreneur,
+  SelectedInfluence,
+  KeptResources,
+  InitializedMarsEvent,
+  AddedSystemHealthContributions, SubtractedSystemHealthWearAndTear
 } from '@port-of-mars/server/rooms/game/events';
 import { getAccomplishmentByID } from '@port-of-mars/server/data/Accomplishment';
 import { GameState } from '@port-of-mars/server/rooms/game/state';
@@ -206,8 +214,8 @@ export class SetNextPhaseCmd implements Command {
       case Phase.newRound:
         // do not run mars events in the first round
         return this.state.isFirstRound()
-          ? [new ExitedNewRoundPhase(), new EnteredInvestmentPhase()]
-          : [new ExitedNewRoundPhase(), new EnteredMarsEventPhase(), new InitializedMarsEvent()];
+          ? [new AddedSystemHealthContributions(), new ExitedNewRoundPhase(), new SubtractedSystemHealthWearAndTear(), new EnteredInvestmentPhase()]
+          : [new AddedSystemHealthContributions(), new ExitedNewRoundPhase(), new SubtractedSystemHealthWearAndTear(), new EnteredMarsEventPhase(), new InitializedMarsEvent()];
       case Phase.defeat:
         return [];
       case Phase.events: {
@@ -241,7 +249,7 @@ export class SetNextPhaseCmd implements Command {
         if (round >= state.maxRound) {
           return [new EnteredVictoryPhase(this.state.playerScores)];
         }
-        return [new EnteredBeginRoundPhase()];
+        return [new EnteredNewRoundPhase()];
       }
       case Phase.victory:
         return [];
