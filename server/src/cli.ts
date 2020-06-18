@@ -2,6 +2,7 @@ import {program} from 'commander'
 import {Connection, createConnection, EntityManager} from "typeorm";
 import {getServices} from "@port-of-mars/server/services";
 import {
+  AccomplishmentSummarizer,
   GameEventSummarizer,
   GameReplayer, MarsEventSummarizer,
   PlayerInvestmentSummarizer,
@@ -31,7 +32,8 @@ async function exportData(em: EntityManager): Promise<void> {
   const victoryPointSummarizer = new VictoryPointSummarizer(events, '/dump/victoryPoint.csv');
   const playerInvestmentSummarizer = new PlayerInvestmentSummarizer(events, '/dump/playerInvestment.csv');
   const marsEventSummarizer = new MarsEventSummarizer(events, '/dump/marsEvent.csv');
-  await Promise.all([gameEventSummarizer, victoryPointSummarizer, playerInvestmentSummarizer, marsEventSummarizer].map(s => s.save()))
+  const accomplishmentSummarizer = new AccomplishmentSummarizer('/dump/accomplishment.csv')
+  await Promise.all([gameEventSummarizer, victoryPointSummarizer, playerInvestmentSummarizer, marsEventSummarizer, accomplishmentSummarizer].map(s => s.save()))
 }
 
 async function finalize(em: EntityManager, gameId: number): Promise<void> {

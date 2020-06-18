@@ -18,6 +18,7 @@ import {
 import {createObjectCsvWriter} from "csv-writer";
 import {GameEvent} from "@port-of-mars/server/rooms/game/events/types";
 import * as jdiff from 'jsondiffpatch'
+import {getAccomplishmentIDs, getAllAccomplishments} from "@port-of-mars/server/data/Accomplishment";
 
 const logger = getLogger(__filename);
 
@@ -202,6 +203,17 @@ export class VictoryPointSummarizer extends Summarizer<VictoryPointExport> {
   }
 }
 
+export class AccomplishmentSummarizer {
+  constructor(public path: string) {}
+
+  async save() {
+    const accomplishements = getAllAccomplishments();
+    const header = Object.keys(accomplishements[0]).map(name => ({id: name, title: name}))
+    const writer = createObjectCsvWriter({path: this.path, header});
+    await writer.writeRecords(accomplishements);
+  }
+}
+
 export interface PlayerInvestmentExport {
   id: number;
   gameId: number;
@@ -216,14 +228,15 @@ export class PlayerInvestmentSummarizer extends Summarizer<PlayerInvestmentExpor
     return _.flatMap(
       ROLES,
       (role: Role) =>
-        [...RESOURCES.map(
-          (investment: Resource) => ({
-            gameId: event.gameId,
-            role,
-            investment,
-            name: 'pendingInvestment',
-            value: game.players[role].pendingInvestments[investment],
-          })),
+        [
+          ...RESOURCES.map(
+            (investment: Resource) => ({
+              gameId: event.gameId,
+              role,
+              investment,
+              name: 'pendingInvestment',
+              value: game.players[role].pendingInvestments[investment],
+            })),
           {
             gameId: event.gameId,
             role,
@@ -231,14 +244,14 @@ export class PlayerInvestmentSummarizer extends Summarizer<PlayerInvestmentExpor
             name: 'pendingInvestment',
             value: game.players[role].contributedUpkeep,
           },
-        ...RESOURCES.map(
-          (investment: Resource) => ({
-            gameId: event.gameId,
-            role,
-            investment,
-            name: 'cost',
-            value: game.players[role].costs[investment]
-          })),
+          ...RESOURCES.map(
+            (investment: Resource) => ({
+              gameId: event.gameId,
+              role,
+              investment,
+              name: 'cost',
+              value: game.players[role].costs[investment]
+            })),
           {
             gameId: event.gameId,
             role,

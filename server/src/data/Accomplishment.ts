@@ -1,5 +1,5 @@
 import * as _ from 'lodash'
-import {AccomplishmentData, Role} from '@port-of-mars/shared/types';
+import {AccomplishmentData, Role, ROLES} from '@port-of-mars/shared/types';
 
 type AccomplishmentPartitioned = { [role: string]: Array<AccomplishmentData> }
 
@@ -985,6 +985,14 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     effect: ""
   }
 ], 'role');
+
+export function getAllAccomplishments() {
+  const accs = [];
+  for (const role of ROLES) {
+    accs.push(...accomplishments[role])
+  }
+  return accs;
+}
 
 export function getAccomplishmentIDs(role: Role) {
   return _.map(accomplishments[role], a => a.id);
