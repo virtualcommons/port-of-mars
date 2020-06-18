@@ -486,7 +486,7 @@ export class EffortsWasted extends BaseEvent {
 export class Stymied extends BaseEvent {
   finalize(state: GameState): void {
     for (const player of state.players) {
-      player.costs[player.specialty] = Infinity
+      player.costs[player.specialty] = 1000;
     }
     state.log(`Players may not earn their specialty Influence this round.`, `${MarsLogCategory.event}: Stymied`)
   }
