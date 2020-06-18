@@ -132,17 +132,17 @@ export default class TradeRequest extends Vue {
 
   private handleTrade() {
     if (this.clientValidation) {
-      const fromPackage: TradeAmountData = {
+      const senderPackage: TradeAmountData = {
         role: this.$tstore.state.role,
         resourceAmount: makeTradeSafe(this.sentResources),
       };
-      const toPackage: TradeAmountData = {
+      const recipientPackage: TradeAmountData = {
         role: this.tradePartnerName as Role,
         resourceAmount: makeTradeSafe(this.exchangeResources),
       };
       const tradeDataPackage: SendTradeRequestData['trade'] = {
-        sender: fromPackage,
-        recipient: toPackage,
+        sender: senderPackage,
+        recipient: recipientPackage,
         status: 'Active',
       };
       this.api.sendTradeRequest(tradeDataPackage);

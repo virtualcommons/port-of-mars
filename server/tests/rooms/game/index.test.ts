@@ -203,15 +203,15 @@ describe('trading validations', () => {
   const validTrade: Trade = g.tradeSet['valid-request'];
 
   it('Curator can send trade request that Entrepeneur cannot accept', () => {
-    expect(canSendTradeRequest(g.players[invalidTrade.from.role as Role], invalidTrade.from.resourceAmount)).toBe(true);
+    expect(canSendTradeRequest(g.players[invalidTrade.sender.role as Role], invalidTrade.sender.resourceAmount)).toBe(true);
   });
 
   it('Entrepeneur must have enough resources to complete trade request', () => {
-    expect(g.canCompleteTrade(g.players[invalidTrade.from.role], g.players[invalidTrade.to.role], invalidTrade));
+    expect(g.canCompleteTrade(g.players[invalidTrade.sender.role], g.players[invalidTrade.recipient.role], invalidTrade));
   })
 
   it('Entrepeneur can send valid trade request', () => {
-    expect(canSendTradeRequest(g.players[validTrade.from.role as Role], validTrade.from.resourceAmount)).toBe(true);
+    expect(canSendTradeRequest(g.players[validTrade.sender.role as Role], validTrade.sender.resourceAmount)).toBe(true);
   });
 
   it('can be completed', () => {

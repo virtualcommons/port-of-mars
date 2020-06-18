@@ -179,7 +179,7 @@ export class SentTradeRequest extends GameEventWithData {
   }
 
   getRole(game: GameState): Role | ServerRole {
-    return this.data.from.role;
+    return this.data.sender.role;
   }
 
   apply(game: GameState): void {

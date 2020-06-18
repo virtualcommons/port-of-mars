@@ -173,10 +173,7 @@
     get hasSufficientResources() {
       // retrieve local player's inventory
       const inventory = this.$store.state.players[this.role].inventory;
-      // if (this.role === this.sender.role) {
-      //   console.log('canPlayerMakeTrade if you are sender: ', canPlayerMakeTrade(this.sender.resourceAmount, inventory));
-      //   return canPlayerMakeTrade(this.sender.resourceAmount, inventory);
-      // }
+
       if (this.role === this.recipient.role) {
         console.log('canPlayerMakeTrade if you are recipient: ', canPlayerMakeTrade(this.recipient.resourceAmount, inventory));
 
