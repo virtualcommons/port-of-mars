@@ -177,11 +177,6 @@
 
       if (this.role === this.recipient.role) {
         console.log('canPlayerMakeTrade if you are recipient: ', canPlayerMakeTrade(this.recipient.resourceAmount, inventory));
-        if (validTrade) {
-          this.status = 'Insufficient resources';
-          console.log(this.status);
-        }
-
         return validTrade;
       }
     }
