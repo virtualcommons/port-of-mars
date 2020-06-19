@@ -17,7 +17,7 @@ export default class StatusBar extends Vue {
 
   @Prop({ default: 'statusbar-outer-white' }) private colorOuter!: string;
 
-  @Prop({ default: 'statusbar-inner-white' }) private colorStart!: string;
+  @Prop({ default: 'statusbar-inner-green' }) private colorStart!: string;
 
   @Prop({ default: 'statusbar-inner-yellow' }) private colorMiddle!: string;
 

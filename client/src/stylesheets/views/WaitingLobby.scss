@@ -10,14 +10,14 @@
     padding: 1rem;
     margin: 0;
     @include make-column-and-space-around;
-    background-color: $space-gray;
+    background-color: $dark-shade;
 
     .content {
       @include reset-padding-margin;
       @include make-column-and-center;
 
       p {
-        color: $space-white;
+        color: $light-shade;
       }
 
       p,

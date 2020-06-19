@@ -2,7 +2,7 @@
   @include expand;
   @include make-column-and-center;
   align-items: flex-start;
-  color: $space-gray;
+  color: $dark-shade;
 
   .section {
     p {
@@ -13,7 +13,7 @@
       @include space-button;
       margin-top: 1rem;
       font-size: $font-med;
-      font-weight: $font-weight-maven-pro-bold !important;
+      font-weight: $bold !important;
     }
 
     button.ready-button,
@@ -23,15 +23,15 @@
     }
 
     button.ready-button {
-      border: 0.125rem solid $new-space-orange;
-      color: $space-gray;
-      background-color: $new-space-orange;
+      border: 0.125rem solid $light-accent;
+      color: $dark-shade;
+      background-color: $light-accent;
     }
 
     button.cancel-button {
-      border: 0.125rem solid $space-white;
-      color: $space-gray;
-      background-color: $space-white;
+      border: 0.125rem solid $light-shade;
+      color: $dark-shade;
+      background-color: $light-shade;
     }
 
     button.ready-button:after {
@@ -73,23 +73,23 @@
   }
 
   .title {
-    color: $space-lightgray;
+    color: $light-shade-5;
     font-size: $font-med;
-    font-weight: $font-weight-maven-pro-bold;
+    font-weight: $bold;
   }
 
   .round,
   .phase,
   .countdown {
-    color: $space-white;
+    color: $light-shade;
     font-size: $font-large;
-    font-weight: $font-weight-maven-pro-bold;
+    font-weight: $bold;
   }
 
   .number {
-    color: $space-white;
+    color: $light-shade;
     font-size: $font-med;
-    font-weight: $font-weight-maven-pro-bold;
+    font-weight: $bold;
   }
 
   .countdown {
@@ -100,7 +100,7 @@
     animation: blinker 0.5s linear 5;
     color: $status-red;
     font-size: $font-large;
-    font-weight: $font-weight-maven-pro-bold;
+    font-weight: $bold;
   }
 
   @keyframes blinker {

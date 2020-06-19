@@ -11,7 +11,7 @@
     justify-content: space-around;
 
     p {
-      color: $space-white;
+      color: $light-shade;
       margin: 0.5rem 0.5rem 4rem 0.5rem;
     }
 
@@ -20,17 +20,17 @@
       height: 3rem;
       width: 12.5rem;
       padding: 0 0.5rem;
-      border: 0.125rem solid $new-space-orange;
+      border: 0.125rem solid $light-accent;
       margin: 0.5rem;
-      color: $new-space-orange;
+      color: $light-accent;
       @include default-transition-base;
       @include text-overflow-ellipses;
 
       &:disabled,
       &:disabled:hover {
-        border: 0.125rem solid $new-space-orange-opaque-025;
+        border: 0.125rem solid $light-accent-25;
         background: transparent;
-        color: $new-space-orange-opaque-025;
+        color: $light-accent-25;
       }
 
       &:hover {
@@ -51,9 +51,9 @@
       height: 3rem;
       width: 12.5rem;
       padding: 0 0.5rem;
-      border: 0.125rem solid $new-space-orange;
+      border: 0.125rem solid $light-accent;
       margin: 0.5rem;
-      color: $new-space-orange;
+      color: $light-accent;
       @include default-transition-base;
       @include text-overflow-ellipses;
 

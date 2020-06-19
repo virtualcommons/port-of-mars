@@ -19,7 +19,7 @@
       padding: 0.25rem 1rem;
       margin-bottom: 0.5rem;
       @include make-center;
-      background-color: $new-space-orange;
+      background-color: $light-accent;
 
       .discrete-bar {
         margin: 0 1rem;
@@ -29,7 +29,7 @@
       .title {
         margin: 0;
         font-size: $font-med;
-        color: $space-gray;
+        color: $dark-shade;
       }
 
       .statusbar {
@@ -39,7 +39,7 @@
 
       .status {
         margin-bottom: 0;
-        color: $space-gray;
+        color: $dark-shade;
         font-size: $font-med;
         text-align: center;
       }

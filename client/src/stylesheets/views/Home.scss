@@ -19,7 +19,7 @@ h1 {
   letter-spacing: 0.25rem;
   font-size: 11rem;
   font-weight: 700;
-  color: $new-space-orange;
+  color: $light-accent;
 }
 
 // BUTTONS
@@ -31,13 +31,13 @@ button {
   @include reset-button;
   height: 3.5rem;
   width: 18rem;
-  border: 0.125rem solid $new-space-orange;
+  border: 0.125rem solid $light-accent;
   margin: 0.5rem;
-  color: $new-space-orange;
+  color: $light-accent;
   @include default-transition-base;
 
   &:hover {
-    color: $space-gray;
-    background-color: $new-space-orange;
+    color: $dark-shade;
+    background-color: $light-accent;
   }
 }

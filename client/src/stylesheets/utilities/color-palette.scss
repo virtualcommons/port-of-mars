@@ -1,14 +1,14 @@
 // PHASE CONTAINER COLORS
 
-$phase-topbar-background: rgba(188, 171, 174, 1);
-$phase-topbar-foreground: $space-gray;
+$phase-topbar-background: $main-brand;
+$phase-topbar-foreground: $dark-shade;
 
 // MODAL COLORS
 
-$modal-background-default: $space-lightgreen;
-$modal-foreground-default: $space-gray;
+$modal-background-default: $main-brand;
+$modal-foreground-default: $dark-shade;
 
 // PROFILE MENU COLORS
 // $profile-menu-background-default: rgba(43, 45, 66, 1);
-$profile-menu-background-default: rgba(95, 80, 107, 1);
-$profile-menu-foreground-default: $space-white;
+$profile-menu-background-default: $dark-accent;
+$profile-menu-foreground-default: $light-shade;

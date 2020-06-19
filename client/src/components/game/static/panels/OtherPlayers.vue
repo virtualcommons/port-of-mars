@@ -40,7 +40,7 @@ export default class OtherPlayers extends Vue {
   get indicatorStyle() {
     return !this.ready
       ? { border: `0.125rem solid var(--color-${this.role})` }
-      : { border: `0.125rem solid var(--status-green)` };
+      : { border: `0.125rem solid var(--green)` };
   }
 
   get playerRoleImage(): any {

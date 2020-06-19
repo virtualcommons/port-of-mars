@@ -29,7 +29,7 @@
 
         .active-events-view {
           @include expand;
-          background-color: $space-white-opaque-1;
+          background-color: $light-shade-05;
           padding: 0.5rem;
           @include make-column-and-top;
 
@@ -41,7 +41,7 @@
               margin-bottom: 0;
               font-size: $font-med;
               text-align: center;
-              color: $space-white-opaque-2;
+              color: $light-shade;
             }
           }
         }

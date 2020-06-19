@@ -9,12 +9,12 @@
 
     .note {
       font-size: $font-small;
-      color: $new-space-orange;
+      color: $light-accent;
     }
 
     .event-text {
       margin-bottom: 0;
-      color: $space-white;
+      color: $light-shade;
       font-size: $font-med;
     }
   }
@@ -23,14 +23,14 @@
     @include reset-button;
     height: 3rem;
     width: 12.5rem;
-    border: 0.125rem solid $new-space-orange;
+    border: 0.125rem solid $light-accent;
     margin: 0.5rem;
-    color: $new-space-orange;
+    color: $light-accent;
     @include default-transition-base;
 
     &:hover {
-      color: $space-gray;
-      background-color: $new-space-orange;
+      color: $dark-shade;
+      background-color: $light-accent;
     }
   }
 }

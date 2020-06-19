@@ -6,7 +6,7 @@
   z-index: 0;
   overflow: hidden;
   @include make-column-and-top;
-  background-color: $space-gray;
+  background-color: $dark-shade;
 
   .system-health {
     width: 100%;

@@ -1,5 +1,5 @@
 .go-to-lobby-modal {
-  border: 0.125rem solid $new-space-orange !important;
+  border: 0.125rem solid $light-accent !important;
   color: white;
   z-index: 999;
   background-color: #17191a;
@@ -26,7 +26,7 @@
 
     .text-content {
       .thank-you-text {
-        color: $new-space-orange;
+        color: $light-accent;
         font-size: $font-large;
       }
 
@@ -58,7 +58,7 @@
             @include expand;
             border-radius: 50%;
             @include make-center;
-            background-color: $new-space-orange;
+            background-color: $light-accent;
 
             img {
               height: 80%;
@@ -74,16 +74,16 @@
 
     @include reset-button;
     padding: 1rem !important;
-    border: 0.125rem solid $new-space-orange !important;
+    border: 0.125rem solid $light-accent !important;
     border-radius: 0 !important;
     margin: 0.5rem;
-    color: $new-space-orange;
+    color: $light-accent;
     @include default-transition-base;
 
     &:hover {
       @include default-scale-up;
-      color: $space-gray;
-      background-color: $new-space-orange;
+      color: $dark-shade;
+      background-color: $light-accent;
       outline: none !important;
     }
   }

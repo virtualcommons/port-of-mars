@@ -62,7 +62,7 @@ import {
   TradeData,
   TradeAmountData,
   ResourceAmountData,
-  Role,
+  Role, RESOURCES,
 } from '@port-of-mars/shared/types';
 import { canPlayerMakeTrade } from '@port-of-mars/shared/validation';
 import { makeTradeSafe } from '@port-of-mars/shared/validation';
@@ -114,6 +114,14 @@ export default class TradeRequest extends Vue {
     }
   }
 
+  // private validateTrade(offer: ResourceAmountData, request: ResourceAmountData) {
+  //   let valid: boolean = false;
+  //   for (const resource of RESOURCES) {
+  //     if (offer[resource] == 0 && request[resource] == 0) valid = false;
+  //   }
+  //   return valid;
+  // }
+
   get clientValidation() {
     const inventory = this.$tstore.getters.player.inventory;
     return (
@@ -154,13 +162,13 @@ export default class TradeRequest extends Vue {
   // NOTE :: STYLES
   private borderStyle(role: Role) {
     return role === this.tradePartnerName
-      ? { border: `0.125rem solid var(--new-space-orange)` }
+      ? { border: `0.125rem solid var(--light-accent)` }
       : { border: `0.125rem solid var(--color-${role})` };
   }
 
   private frameStyle(role: Role) {
     return role === this.tradePartnerName
-      ? { backgroundColor: `var(--new-space-orange)` }
+      ? { backgroundColor: `var(--light-accent)` }
       : { backgroundColor: `var(--color-${role})` };
   }
 }

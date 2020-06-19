@@ -25,7 +25,7 @@
         .title {
           margin: 0 1rem 0 0;
           font-size: $font-med;
-          font-weight: $font-weight-maven-pro-bold;
+          font-weight: $bold;
           color: $phase-topbar-foreground;
         }
       }
@@ -60,7 +60,7 @@
           margin-bottom: 0;
           color: $phase-topbar-foreground;
           font-size: $font-med;
-          font-weight: $font-weight-maven-pro-bold;
+          font-weight: $bold;
         }
       }
 
@@ -68,7 +68,7 @@
         flex: 1;
         width: 100%;
         padding: 0.5rem;
-        background-color: $space-white-opaque-1;
+        background-color: $light-shade-05;
         overflow-y: hidden;
 
         .wrapper {

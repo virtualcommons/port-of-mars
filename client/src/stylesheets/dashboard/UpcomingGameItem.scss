@@ -8,8 +8,8 @@ p {
   width: 100%;
   margin: 0;
   font-size: $font-large;
-  font-weight: $font-weight-maven-pro-bold;
-  color: $space-white;
+  font-weight: $bold;
+  color: $light-shade;
   @include text-overflow-ellipses;
 }
 
@@ -17,16 +17,16 @@ p {
   @include reset-button;
   @include default-transition-base;
   //padding: 0.5rem 1rem;
-  border: solid 0.125rem $new-space-orange;
+  border: solid 0.125rem $light-accent;
   border-radius: 0;
   //margin-left: 0.5rem;
-  color: $new-space-orange;
+  color: $light-accent;
   font-size: $font-med;
-  font-weight: $font-weight-maven-pro-medium !important;
+  font-weight: $medium !important;
   text-align: center;
 
   &:hover {
-    color: $space-gray;
-    background-color: $new-space-orange;
+    color: $dark-shade;
+    background-color: $light-accent;
   }
 }

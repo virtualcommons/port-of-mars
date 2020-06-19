@@ -71,7 +71,7 @@ $screen-xxl: 1680px;
   @include reset-button;
   padding: 0.5rem 0.75rem;
   font-size: $font-med;
-  font-weight: $font-weight-maven-pro-regular;
+  font-weight: $regular;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
 
   &:disabled {
@@ -81,48 +81,48 @@ $screen-xxl: 1680px;
 
 @mixin space-button {
   @include space-button-base;
-  color: $new-space-orange;
-  border: 0.125rem solid $new-space-orange;
+  color: $light-accent;
+  border: 0.125rem solid $light-accent;
 
   &:hover {
-    color: $space-gray;
-    background-color: $new-space-orange;
+    color: $dark-shade;
+    background-color: $light-accent;
   }
 
   &:disabled:hover {
-    color: $new-space-orange;
+    color: $light-accent;
     background-color: transparent;
   }
 }
 
 @mixin space-button-white {
   @include space-button-base;
-  color: $space-white;
-  border: 0.125rem solid $space-white;
+  color: $light-shade;
+  border: 0.125rem solid $light-shade;
 
   &:hover {
-    color: $space-gray;
-    background-color: $space-white;
+    color: $dark-shade;
+    background-color: $light-shade;
   }
 
   &:disabled:hover {
-    color: $space-white;
+    color: $light-shade;
     background-color: transparent;
   }
 }
 
 @mixin space-button-modal {
   @include space-button-base;
-  color: $space-lightgreen;
-  border: 0.125rem solid $space-lightgreen;
+  color: $dark-accent;
+  border: 0.125rem solid $dark-accent;
 
   &:hover {
-    color: $space-gray;
-    background-color: $space-lightgreen;
+    color: $dark-shade;
+    background-color: $dark-accent;
   }
 
   &:disabled:hover {
-    color: $space-lightgreen;
+    color: $dark-accent;
     background-color: transparent;
   }
 }
@@ -133,15 +133,15 @@ $screen-xxl: 1680px;
 }
 
 @mixin border-orange {
-  border: 0.125rem solid $new-space-orange-opaque-025;
+  border: 0.125rem solid $light-accent-25;
 }
 
 @mixin new-border-orange {
-  border: 0.125rem solid $new-space-orange-opaque-025;
+  border: 0.125rem solid $light-accent-25;
 }
 
 @mixin border-bottom-white {
-  border-bottom: 0.125rem solid $space-white-opaque-2;
+  border-bottom: 0.125rem solid $light-shade-25;
 }
 
 @mixin expand {

@@ -16,7 +16,7 @@
       </div>
     </div>
     <p
-      :style="selectedPlayer === 'None Selected' ? 'color: var(--space-white-opaque-2)' : ''"
+      :style="selectedPlayer === 'None Selected' ? 'color: var(--light-shade-25)' : ''"
       class="selected-player-text"
     >
       {{ selectedPlayer }}

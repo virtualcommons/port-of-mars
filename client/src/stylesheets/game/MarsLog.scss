@@ -13,7 +13,7 @@
   margin-bottom: 0;
   font-size: $font-med;
   text-align: center;
-  color: $space-white-opaque-2;
+  color: $light-shade-25;
 }
 
 .message {
@@ -23,7 +23,7 @@
   padding: 0.5rem;
   margin-bottom: 0.5rem;
   font-size: $font-med;
-  color: $space-white;
+  color: $light-shade;
   overflow: auto;
 
   &:last-child {
@@ -34,12 +34,12 @@
 .category {
   margin: 0;
   text-transform: capitalize;
-  color: $new-space-orange;
-  font-weight: $font-weight-maven-pro-bold;
+  color: $light-accent;
+  font-weight: $bold;
 }
 
 .content, .time {
-  font-weight: $font-weight-maven-pro-regular;
+  font-weight: $regular;
 }
 
 .content {
@@ -53,7 +53,7 @@
 }
 
 .timestamp {
-  color: $new-space-orange;
+  color: $light-accent;
 }
 
 .timestamp-wrapper {

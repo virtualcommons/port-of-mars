@@ -111,7 +111,7 @@ export default class Chat extends Vue {
     if (message.role) {
       return { backgroundColor: `var(--color-${message.role})` };
     }
-    return { backgroundColor: 'var(--space-white-opaque-1)' };
+    return { backgroundColor: 'var(--light-shade-05)' };
   }
 }
 </script>

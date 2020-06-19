@@ -104,7 +104,7 @@ export default {
 
     return new Map([
       // round
-      [MarsLogCategory.newRound, 'var(--space-white-opaque-1)'],
+      [MarsLogCategory.newRound, 'var(--light-shade-05)'],
 
       // system health
       [MarsLogCategory.systemHealth, 'var(--marslog-red)'],

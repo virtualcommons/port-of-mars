@@ -1,7 +1,7 @@
 .c-action-item {
   width: 100%;
   padding: 0;
-  border: 0.125rem solid $space-white;
+  border: 0.125rem solid $light-shade;
   margin: 0 0 0.5rem 0;
   @include make-column-and-center;
 
@@ -17,7 +17,7 @@
   }
 
   .title-wrapper {
-    background-color: $space-white;
+    background-color: $light-shade;
 
     .title {
       @include expand;
@@ -27,8 +27,8 @@
         width: 100%;
         margin-bottom: 0;
         font-size: $font-med;
-        font-weight: $font-weight-maven-pro-medium;
-        color: $space-gray;
+        font-weight: $medium;
+        color: $dark-shade;
         text-align: center;
         @include text-overflow-ellipses;
       }
@@ -36,7 +36,7 @@
   }
 
   .buttons-wrapper {
-    background-color: $space-gray;
+    background-color: $dark-shade;
 
     .buttons {
       @include expand;
@@ -47,17 +47,17 @@
         @include reset-button;
         @include default-transition-base;
         padding: 0.5rem 1rem;
-        border: solid 0.125rem $new-space-orange;
+        border: solid 0.125rem $light-accent;
         border-radius: 0;
         margin: 0.5rem;
         font-size: $font-med;
-        font-weight: $font-weight-maven-pro-medium !important;
+        font-weight: $medium !important;
         text-align: center;
-        color: $new-space-orange;
+        color: $light-accent;
 
         &:hover {
-          color: $space-gray;
-          background-color: $new-space-orange;
+          color: $dark-shade;
+          background-color: $light-accent;
         }
       }
     }

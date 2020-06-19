@@ -5,7 +5,7 @@
   top: 0;
   left: 0;
   @include make-center;
-  background-color: $space-gray-08;
+  background-color: $dark-shade-75;
   backdrop-filter: blur(2px);
 
   .wrapper {
@@ -19,7 +19,7 @@
       border-radius: 50%;
       margin-top: 2rem;
       @include make-center;
-      background-color: $space-lightgreen;
+      background-color: $dark-accent;
       @include default-transition-base;
 
       &:hover {
@@ -29,7 +29,7 @@
       .close-icon {
         height: 50%;
         width: 50%;
-        color: $space-gray;
+        color: $dark-shade;
       }
     }
   }

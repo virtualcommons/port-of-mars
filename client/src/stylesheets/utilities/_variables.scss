@@ -7,24 +7,48 @@ $min-screen-width: 64rem;
 
 // FONT
 
-$font-family-default: 'Maven Pro', sans-serif;
+$exo: 'Exo', sans-serif;
+$ruda: 'Ruda', sans-serif;
+$khula: 'Khula', sans-serif;
 $font-small: 0.75rem;
 $font-med: 1rem;
 $font-large: 1.5rem;
 
-$font-weight-maven-pro-regular: 400;
-$font-weight-maven-pro-medium: 500;
-$font-weight-maven-pro-semibold: 600;
-$font-weight-maven-pro-bold: 700;
+$regular: 400;
+$medium: 500;
+$semibold: 600;
+$bold: 700;
 
 // COLOR
 
-$space-gray: #1e2223;
-$space-orange: #c67b5c;
-$space-white: #f5f5f5;
-$space-white-opaque-1: rgba(245, 245, 245, 0.05);
-$space-white-opaque-2: rgba(245, 245, 245, 0.25);
-$space-orange-opaque-2: rgba(198, 123, 92, 0.25);
+$main-brand: rgb(156, 81, 71);
+$main-brand-5: rgba(156, 81, 71, .5);
+
+
+$dark-accent: #a49ca6; // accent - modal borders, hover,
+
+$dark-shade: rgb(34, 26, 27); // background color
+$dark-shade-9: rgba(34, 26, 27, .9);
+$dark-shade-75: rgba(34, 26, 27, .75);
+
+
+$light-accent: rgb(202, 166, 110);
+$light-accent-25: rgba(202, 166, 110, .25);
+
+$light-shade: rgb(241, 224, 197);
+$light-shade-05: rgba(241, 224, 197, .05);
+$light-shade-25: rgba(241, 224, 197, .25); // used for borders
+$light-shade-5: rgba(241, 224, 197, .5);
+
+// buttons
+
+$primary: rgba(140, 63, 64, 1);
+$info: rgba(35, 35, 36, 1);
+$success: rgba(95, 141, 75, 1);
+$warning: rgba(221, 125, 19, 1);
+$danger: rgba(244, 67, 54, 1);
+$light: rgba(242, 239, 233, 1);
+
 
 $color-Researcher: rgba(67, 124, 174, 0.2);
 $color-Pioneer: rgba(111, 36, 134, 0.2);
@@ -45,17 +69,10 @@ $marslog-purple: rgba(111, 36, 134, 0.05);
 $marslog-orange: rgba(170, 111, 0, 0.05);
 
 // BORDERS
-$border-white: 0.125rem solid $space-white;
-$border-white-opaque-2: 0.125rem solid $space-white-opaque-2;
+$border-white: 0.125rem solid $light-shade;
+$border-white-opaque-2: 0.125rem solid $light-shade-25;
 
 // NEW
-$space-lightgray: rgba(167, 167, 169, 1);
-// $space-lightgray: #343a40;
-$space-lightgray-025: rgba(167, 167, 169, 0.25);
-$space-lightgreen: rgba(161, 211, 219, 1);
-$space-lightgreen-025: rgba(161, 211, 219, 0.25);
-$space-gray-0975: rgba(30, 34, 35, 0.975);
-$space-gray-08: rgba(30, 34, 35, 0.8);
 $new-space-orange: rgba(221, 168, 119, 1);
 $new-space-orange-005: rgba(221, 168, 119, 0.05);
 $new-space-orange-opaque-025: rgba(221, 168, 119, 0.25);

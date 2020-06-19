@@ -174,7 +174,7 @@ export default class Inventory extends Vue {
         color = 'var(--color-Upkeep)';
         break;
       default:
-        color = 'var(--space-white-opaque-1)';
+        color = 'var(--light-shade-05)';
     }
     return { backgroundColor: color };
   }

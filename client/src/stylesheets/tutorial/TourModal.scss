@@ -1,9 +1,9 @@
 #bv-modal___BV_modal_content_ {
-  border: 0.125rem solid $new-space-orange !important;
+  border: 0.125rem solid $light-accent !important;
   color: blue !important;
-  font-family: $font-family-default !important;
+  font-family: $ruda !important;
   code {
-    color: $new-space-orange !important;
+    color: $light-accent !important;
   }
 
   ul {
@@ -18,16 +18,16 @@
   button {
     @include reset-button;
     padding: 0.5rem !important;
-    border: 0.125rem solid $new-space-orange !important;
+    border: 0.125rem solid $light-accent !important;
     border-radius: 0 !important;
     margin: 0.5rem;
-    color: $new-space-orange;
+    color: $light-accent;
     @include default-transition-base;
 
     &:hover {
       @include default-scale-up;
-      color: $space-gray;
-      background-color: $new-space-orange;
+      color: $dark-shade;
+      background-color: $light-accent;
       outline: none !important;
     }
   }

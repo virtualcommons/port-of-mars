@@ -43,14 +43,14 @@ body .in-tour {
 }
 
 .animate-current-step {
-  border: 0.25rem solid $space-lightgreen;
+  border: 0.25rem solid $dark-accent;
   animation: border-pulse 1s 3 ease-in-out;
 }
 
 .v-step {
-  border: 0.125rem solid $space-lightgreen;
+  border: 0.125rem solid $dark-accent;
   border-radius: 0 !important;
-  background-color: $space-gray !important;
+  background-color: $dark-shade !important;
 
   .v-step__arrow {
     display: none !important;
@@ -71,14 +71,14 @@ body .in-tour {
   button {
     @include reset-button;
     padding: 0.5rem !important;
-    border: 0.125rem solid $space-lightgreen !important;
+    border: 0.125rem solid $dark-accent !important;
     border-radius: 0 !important;
     margin: 0.5rem;
-    color: $space-lightgreen;
+    color: $dark-accent;
     @include default-transition-base;
 
     &:hover {
-      background-color: $space-lightgreen;
+      background-color: $dark-accent;
     }
   }
 
@@ -90,7 +90,7 @@ body .in-tour {
     opacity: 1;
     &:hover {
       @include default-scale-up;
-      color: $space-gray;
+      color: $dark-shade;
       outline: none !important;
     }
   }
@@ -124,7 +124,7 @@ body .in-tour {
     }
 
     label span:before {
-      border: 1px solid $new-space-orange;
+      border: 1px solid $light-accent;
       width: 1.5rem;
       height: 1.5rem;
       margin-right: 0.5rem;
@@ -134,7 +134,7 @@ body .in-tour {
     }
 
     label span:after {
-      background: $new-space-orange;
+      background: $light-accent;
       width: 0.9rem;
       height: 0.9rem;
       position: absolute;

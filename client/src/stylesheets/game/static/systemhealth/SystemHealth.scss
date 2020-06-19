@@ -8,20 +8,20 @@
 
   .title {
     margin-right: 1rem;
-    color: $space-white;
+    color: $light-shade;
     font-size: $font-med;
-    font-weight: $font-weight-maven-pro-bold;
+    font-weight: $bold;
   }
 
   .status {
     margin-left: 1rem;
-    color: $space-white;
+    color: $light-shade;
     font-size: $font-large;
-    font-weight: $font-weight-maven-pro-bold;
+    font-weight: $bold;
 
     span {
       margin-left: 0.25rem;
-      color: $new-space-orange;
+      color: $light-accent;
     }
   }
 }

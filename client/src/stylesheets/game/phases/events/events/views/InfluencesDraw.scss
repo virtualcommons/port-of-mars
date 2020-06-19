@@ -11,14 +11,14 @@
     @include reset-button;
     height: 3rem;
     width: 12rem;
-    border: 0.125rem solid $new-space-orange;
+    border: 0.125rem solid $light-accent;
     margin-top: 2rem;
-    color: $new-space-orange;
+    color: $light-accent;
     @include default-transition-base;
 
     &:hover {
-      color: $space-gray;
-      background-color: $new-space-orange;
+      color: $dark-shade;
+      background-color: $light-accent;
     }
   }
 
@@ -50,7 +50,7 @@
   .selected-placeholder {
     height: 4rem;
     @include make-center;
-    color: $space-white-opaque-2;
+    color: $light-shade-25;
   }
 
   .event-select-influences-selected {

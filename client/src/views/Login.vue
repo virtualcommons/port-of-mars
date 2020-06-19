@@ -39,53 +39,70 @@
 
       <!-- LOGIN -->
       <div class="content-wrapper row">
-        <div v-if="isLoggedIn" class="logged-in col-12">
-          <input
+        <div class="logged-in col-12" v-if="isLoggedIn">
+          <b-button
             @click="logout"
-            :value="logoutText"
-            type="button"
-            class="button-orange"
-          />
+            variant="outline-light"
+            class="m-4"
+            size="lg"
+          >
+            {{ logoutText }}
+          </b-button>
         </div>
-        <div v-else class="logged-out col-12">
-          <BButton :href="asuLoginUrl" class="button-orange">
+        <div class="logged-out col-12" v-else>
+          <b-button
+            :href="asuLoginUrl"
+            class="m-4"
+            size="lg"
+            variant="outline-light"
+          >
             Sign In via ASU CAS
-          </BButton>
-          <button
-            v-if="isDevLoginEnabled"
-            @click="toggleDevLogin"
+          </b-button>
+          <b-button
             :class="devLoginTogglerClass"
+            @click="toggleDevLogin"
             class="dev-login-toggler"
+            size="lg"
+            pill
+            variant="outline-light"
+            v-if="isDevLoginEnabled"
           >
             <font-awesome-icon
               :icon="['fas', 'user-cog']"
-              size="lg"
               class="icon"
+              size="lg"
             />
-          </button>
+          </b-button>
           <form class="login-form" v-if="isDevLoginEnabled && devLoginVisible">
             <div class="input-username">
               <label for="username">Developer Login (TESTING ONLY)</label>
               <div class="input-wrapper">
                 <input
-                  v-model="username"
-                  type="text"
-                  placeholder="Username"
                   autocomplete="off"
-                  name="username"
                   id="username"
+                  name="username"
+                  placeholder="Username"
+                  type="text"
+                  v-model="username"
                 />
               </div>
             </div>
-            <div class="submit">
-              <input
-                @click="devLogin"
-                :disabled="submitDisabled"
-                type="submit"
-                value="Login"
-                class="button-white"
-              />
-            </div>
+            <b-button
+              :disabled="submitDisabled"
+              variant="outline-light"
+              @click="devLogin"
+            >
+              Login
+            </b-button>
+<!--            <div class="submit">-->
+<!--              <input-->
+<!--                :disabled="submitDisabled"-->
+<!--                @click="devLogin"-->
+<!--                class="button-white"-->
+<!--                type="submit"-->
+<!--                value="Login"-->
+<!--              />-->
+<!--            </div>-->
             <p class="error" v-if="error">{{ error }}</p>
           </form>
         </div>
@@ -95,74 +112,74 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
-import { url } from '@port-of-mars/client/util';
-import { isDevOrStaging } from '@port-of-mars/shared/settings';
+  import {Component, Vue} from 'vue-property-decorator';
+  import {url} from '@port-of-mars/client/util';
+  import {isDevOrStaging} from '@port-of-mars/shared/settings';
 
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faUserCog } from '@fortawesome/free-solid-svg-icons/faUserCog';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+  import {library} from '@fortawesome/fontawesome-svg-core';
+  import {faUserCog} from '@fortawesome/free-solid-svg-icons/faUserCog';
+  import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 
-library.add(faUserCog);
+  library.add(faUserCog);
 
-Vue.component('font-awesome-icon', FontAwesomeIcon);
+  Vue.component('font-awesome-icon', FontAwesomeIcon);
 
-@Component({})
-export default class Login extends Vue {
-  private username: string = '';
-  private isLoggedIn: boolean = false;
-  private error: string = '';
-  private isDevLoginEnabled: boolean = false;
-  private devLoginVisible: boolean = false;
+  @Component({})
+  export default class Login extends Vue {
+    private username: string = '';
+    private isLoggedIn: boolean = false;
+    private error: string = '';
+    private isDevLoginEnabled: boolean = false;
+    private devLoginVisible: boolean = false;
 
-  created() {
-    this.isLoggedIn = !!this.$ajax.username;
-    this.isDevLoginEnabled = isDevOrStaging();
-  }
+    get devLoginTogglerClass() {
+      return this.devLoginVisible ? 'active' : 'inactive';
+    }
 
-  async devLogin(e: Event) {
-    e.preventDefault();
-    const fd = new FormData((e as any).target.form);
-    const devLoginData: any = {
-      username: fd.get('username'),
-      password: 'testing',
-    };
-    try {
-      await this.$ajax.devLogin(devLoginData);
-    } catch (e) {
-      this.error = e.message;
+    get submitDisabled() {
+      return !this.username;
+    }
+
+    get asuLoginUrl() {
+      return url('/asulogin');
+    }
+
+    get logoutText() {
+      const username = this.$tstore.state.user.username;
+      return username ? `Logout (${username})` : `Logout (Expired)`;
+    }
+
+    created() {
+      this.isLoggedIn = !!this.$ajax.username;
+      this.isDevLoginEnabled = isDevOrStaging();
+    }
+
+    async devLogin(e: Event) {
+      e.preventDefault();
+      const fd = new FormData((e as any).target.form);
+      const devLoginData: any = {
+        username: fd.get('username'),
+        password: 'testing',
+      };
+      try {
+        await this.$ajax.devLogin(devLoginData);
+      } catch (e) {
+        this.error = e.message;
+      }
+    }
+
+    private logout() {
+      this.$ajax.forgetLoginCreds();
+      this.$ajax.forgetSubmissionId();
+      this.isLoggedIn = false;
+    }
+
+    private toggleDevLogin() {
+      this.devLoginVisible = !this.devLoginVisible;
     }
   }
-
-  private logout() {
-    this.$ajax.forgetLoginCreds();
-    this.$ajax.forgetSubmissionId();
-    this.isLoggedIn = false;
-  }
-
-  get devLoginTogglerClass() {
-    return this.devLoginVisible ? 'active' : 'inactive';
-  }
-
-  private toggleDevLogin() {
-    this.devLoginVisible = !this.devLoginVisible;
-  }
-
-  get submitDisabled() {
-    return !this.username;
-  }
-
-  get asuLoginUrl() {
-    return url('/asulogin');
-  }
-
-  get logoutText() {
-    const username = this.$tstore.state.user.username;
-    return username ? `Logout (${username})` : `Logout (Expired)`;
-  }
-}
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/views/Login.scss';
+  @import '@port-of-mars/client/stylesheets/views/Login.scss';
 </style>

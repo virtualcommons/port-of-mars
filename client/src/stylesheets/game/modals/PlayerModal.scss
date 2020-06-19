@@ -4,9 +4,9 @@
   max-width: none;
   max-height: 75vh;
   padding: 0.5rem;
-  border: 0.125rem solid $space-lightgreen;
+  border: 0.125rem solid $dark-accent;
   margin: 0;
-  background-color: $space-gray;
+  background-color: $dark-shade;
 
   .top-wrapper,
   .bottom-wrapper {
@@ -63,23 +63,23 @@
 
           .role {
             margin-bottom: 0.25rem;
-            color: $space-white;
+            color: $light-shade;
             font-size: $font-large;
-            font-weight: $font-weight-maven-pro-bold;
+            font-weight: $bold;
           }
 
           .score {
             margin-bottom: 0.25rem;
-            color: $space-white;
+            color: $light-shade;
             font-size: $font-med;
-            font-weight: $font-weight-maven-pro-medium;
+            font-weight: $medium;
           }
 
           .ranking {
             margin-bottom: 0;
-            color: $space-white;
+            color: $light-shade;
             font-size: $font-med;
-            font-weight: $font-weight-maven-pro-medium;
+            font-weight: $medium;
           }
         }
 
@@ -92,10 +92,10 @@
             padding: 0.5rem 1rem;
             margin: 0;
             font-size: $font-med;
-            font-weight: $font-weight-maven-pro-bold !important;
+            font-weight: $bold !important;
             text-align: center;
-            color: $space-lightgreen;
-            border: 0.125rem solid $space-lightgreen;
+            color: $dark-accent;
+            border: 0.125rem solid $dark-accent;
             transition: color 0.15s ease-in-out,
               background-color 0.15s ease-in-out;
 
@@ -104,12 +104,12 @@
             }
 
             &:hover {
-              color: $space-gray;
-              background-color: $space-lightgreen;
+              color: $dark-shade;
+              background-color: $dark-accent;
             }
 
             &:disabled:hover {
-              color: $space-lightgreen;
+              color: $dark-accent;
               background-color: transparent;
             }
           }
@@ -145,13 +145,13 @@
             padding: 0.25rem 1rem;
             margin-bottom: 0.5rem;
             @include make-center;
-            background-color: $space-lightgreen;
+            background-color: $dark-accent;
 
             .title {
               margin: 0 1rem 0 0;
               font-size: $font-med;
-              font-weight: $font-weight-maven-pro-bold;
-              color: $space-gray;
+              font-weight: $bold;
+              color: $dark-shade;
             }
           }
 
@@ -166,8 +166,8 @@
 
               p {
                 font-size: $font-med;
-                font-weight: $font-weight-maven-pro-medium;
-                color: $space-white-opaque-2;
+                font-weight: $medium;
+                color: $light-shade-25;
               }
             }
 
@@ -190,13 +190,13 @@
             padding: 0.25rem 1rem;
             margin-bottom: 0.5rem;
             @include make-center;
-            background-color: $space-lightgreen;
+            background-color: $dark-accent;
 
             .title {
               margin-bottom: 0;
-              color: $space-gray;
+              color: $dark-shade;
               font-size: $font-med;
-              font-weight: $font-weight-maven-pro-bold;
+              font-weight: $bold;
             }
           }
 
@@ -214,10 +214,10 @@
               padding: 0.5rem 1rem;
               margin: 0;
               font-size: $font-med;
-              font-weight: $font-weight-maven-pro-bold !important;
+              font-weight: $bold !important;
               text-align: center;
-              color: $space-lightgreen;
-              border: 0.125rem solid $space-lightgreen;
+              color: $dark-accent;
+              border: 0.125rem solid $dark-accent;
 
               &:disabled {
                 opacity: 0.5;
@@ -225,8 +225,8 @@
             }
 
             .selected {
-              color: $space-gray;
-              background-color: $space-lightgreen;
+              color: $dark-shade;
+              background-color: $dark-accent;
             }
           }
 
@@ -234,7 +234,7 @@
             flex: 1;
             width: 100%;
             padding: 0.5rem;
-            background-color: $space-white-opaque-1;
+            background-color: $light-shade-05;
             overflow-y: hidden;
 
             .unavailable {
@@ -243,8 +243,8 @@
 
               p {
                 font-size: $font-med;
-                font-weight: $font-weight-maven-pro-medium;
-                color: $space-white-opaque-2;
+                font-weight: $medium;
+                color: $light-shade-25;
               }
             }
 

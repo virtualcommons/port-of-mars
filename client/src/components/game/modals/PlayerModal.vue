@@ -171,7 +171,7 @@ export default class PlayerModal extends Vue {
   get indicatorStyle() {
     return !this.playerData.info.ready
       ? { border: `0.2rem solid var(--color-${this.modalData.role})` }
-      : { border: `0.2rem solid var(--status-green)` };
+      : { border: `0.2rem solid var(--green)` };
   }
 
   private switchAccomplishmentType(type: string): void {

@@ -18,7 +18,7 @@
     </div>
 
     <p
-      :style="selectedHero === 'None Selected' ? 'color: var(--space-white-opaque-2)' : ''"
+      :style="selectedHero === 'None Selected' ? 'color: var(--light-shade-25)' : ''"
       class="selected-hero-text"
     >
       {{ selectedHero }}
@@ -42,7 +42,7 @@
     </div>
 
     <p
-      :style="selectedPariah === 'None Selected' ? 'color: var(--space-white-opaque-2)' : ''"
+      :style="selectedPariah === 'None Selected' ? 'color: var(--light-shade-25)' : ''"
       class="selected-pariah-text"
     >
       {{ selectedPariah }}

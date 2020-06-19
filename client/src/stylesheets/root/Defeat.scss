@@ -5,7 +5,7 @@
   padding: 1rem;
   margin: 0;
   @include make-column-and-center;
-  background-color: $space-gray;
+  background-color: $dark-shade;
 
   .title-wrapper,
   .content-wrapper,
@@ -26,7 +26,7 @@
         letter-spacing: 0.25rem;
         font-size: 6rem;
         font-weight: 700;
-        color: $new-space-orange;
+        color: $light-accent;
       }
 
       h2 {
@@ -35,7 +35,7 @@
         letter-spacing: 0.25rem;
         font-size: 2rem;
         font-weight: 700;
-        color: $new-space-orange;
+        color: $light-accent;
       }
     }
   }
@@ -51,7 +51,7 @@
         letter-spacing: 0.25rem;
         font-size: 1.5rem;
         font-weight: 700;
-        color: $space-white;
+        color: $light-shade;
       }
     }
   }
@@ -63,7 +63,7 @@
     .marslog {
       height: 100%;
       padding: 0.5rem;
-      background-color: $space-white-opaque-1;
+      background-color: $light-shade-05;
       overflow-y: hidden;
 
       .wrapper {
@@ -77,7 +77,7 @@
           padding: 0.5rem;
           margin-bottom: 0.5rem;
           font-size: $font-med;
-          color: $space-white;
+          color: $light-shade;
 
           &:last-child {
             margin-bottom: 0;
@@ -86,19 +86,19 @@
           .category {
             margin: 0;
             text-transform: capitalize;
-            color: $new-space-orange;
-            font-weight: $font-weight-maven-pro-bold;
+            color: $light-accent;
+            font-weight: $bold;
           }
 
           .final-log,
           .list {
             text-transform: uppercase;
-            font-weight: $font-weight-maven-pro-medium;
+            font-weight: $medium;
           }
 
           .content,
           .time {
-            font-weight: $font-weight-maven-pro-regular;
+            font-weight: $regular;
           }
 
           .final-log,
@@ -116,7 +116,7 @@
             margin: 0;
 
             span {
-              color: $new-space-orange;
+              color: $light-accent;
             }
           }
         }
@@ -150,7 +150,7 @@
         letter-spacing: 0.25rem;
         font-size: 2rem;
         font-weight: 700;
-        color: $new-space-orange;
+        color: $light-accent;
       }
 
       .buttons {
@@ -158,13 +158,13 @@
 
         .exit {
           @include space-button-white;
-          border: 0.125rem solid $space-white;
+          border: 0.125rem solid $light-shade;
           margin-left: 1rem;
         }
 
         button {
           width: 12rem;
-          font-weight: $font-weight-maven-pro-bold !important;
+          font-weight: $bold !important;
         }
       }
     }

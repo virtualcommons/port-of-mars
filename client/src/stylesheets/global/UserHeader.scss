@@ -24,22 +24,22 @@
       flex: 1;
       padding: 1px 7px 2px 7px;
       margin: 0.25rem 0;
-      color: $new-space-orange;
+      color: $light-accent;
       font-size: $font-small;
       text-decoration: none;
       @include default-transition-base;
 
       &:hover {
-        color: $space-gray;
-        background-color: $new-space-orange;
+        color: $dark-shade;
+        background-color: $light-accent;
 
         span {
-          color: $space-gray;
+          color: $dark-shade;
         }
       }
 
       span {
-        color: $space-white;
+        color: $light-shade;
       }
     }
   }
@@ -49,21 +49,21 @@
       @include reset-button;
       flex: 1;
       margin: 0.25rem 0;
-      color: $new-space-orange;
+      color: $light-accent;
       font-size: $font-small;
       @include default-transition-base;
 
       &:hover {
-        color: $space-gray;
-        background-color: $new-space-orange;
+        color: $dark-shade;
+        background-color: $light-accent;
 
         span {
-          color: $space-gray;
+          color: $dark-shade;
         }
       }
 
       span {
-        color: $space-white;
+        color: $light-shade;
       }
     }
   }

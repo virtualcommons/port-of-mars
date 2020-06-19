@@ -28,7 +28,7 @@
           margin-bottom: 0;
           color: $phase-topbar-foreground;
           font-size: $font-med;
-          font-weight: $font-weight-maven-pro-bold;
+          font-weight: $bold;
         }
       }
 
@@ -46,7 +46,7 @@
           padding: 0;
           margin: 0;
           font-size: $font-med;
-          font-weight: $font-weight-maven-pro-bold !important;
+          font-weight: $bold !important;
           color: $phase-topbar-background;
           border: 0.125rem solid $phase-topbar-background;
 
@@ -66,7 +66,7 @@
         flex: 1;
         width: 100%;
         padding: 0.5rem;
-        background-color: $space-white-opaque-1;
+        background-color: $light-shade-05;
         overflow-y: hidden;
 
         .wrapper {
@@ -95,7 +95,7 @@
           margin-bottom: 0;
           color: $phase-topbar-foreground;
           font-size: $font-med;
-          font-weight: $font-weight-maven-pro-bold;
+          font-weight: $bold;
         }
       }
 
@@ -103,7 +103,7 @@
         flex: 1;
         width: 100%;
         padding: 0.5rem;
-        background-color: $space-white-opaque-1;
+        background-color: $light-shade-05;
         overflow-y: hidden;
 
         .wrapper {

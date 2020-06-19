@@ -173,11 +173,16 @@
     get hasSufficientResources() {
       // retrieve local player's inventory
       const inventory = this.$store.state.players[this.role].inventory;
+      let validTrade: boolean = canPlayerMakeTrade(this.recipient.resourceAmount, inventory);
 
       if (this.role === this.recipient.role) {
         console.log('canPlayerMakeTrade if you are recipient: ', canPlayerMakeTrade(this.recipient.resourceAmount, inventory));
+        if (validTrade) {
+          this.status = 'Insufficient resources';
+          console.log(this.status);
+        }
 
-        return canPlayerMakeTrade(this.recipient.resourceAmount, inventory);
+        return validTrade;
       }
     }
 
@@ -218,14 +223,14 @@
 
       //if the player is involved with the trade, color it orange
       if (this.participant == 1 || this.participant == 0) {
-        color = 'var(--new-space-orange)';
+        color = 'var(--light-accent)';
       }
 
       //alternate statuses supersede involvement
       if (this.status == 'Accepted') {
-        color = 'var(--status-green)'
-      } else if (this.status == 'Cancelled' || this.status == 'Rejected') {
-        color = 'var(--status-red)'
+        color = 'var(--green)'
+      } else if (this.status == 'Cancelled' || this.status == 'Rejected' || this.status == 'Insufficient Resources') {
+        color = 'var(--red)'
       }
 
       //map to whatever type was passed in

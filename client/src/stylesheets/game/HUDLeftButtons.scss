@@ -22,10 +22,10 @@
         @include reset-padding-margin;
         border-radius: 50%;
         font-size: $font-med;
-        font-weight: $font-weight-maven-pro-bold !important;
+        font-weight: $bold !important;
         text-align: center;
-        color: $space-white;
-        border: 0.125rem solid $space-white;
+        color: $light-shade;
+        border: 0.125rem solid $light-shade;
         transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
 
         &:disabled {
@@ -33,18 +33,18 @@
         }
 
         &.selected {
-          color: $space-gray;
-          background-color: $space-white;
+          color: $dark-shade;
+          background-color: $light-shade;
 
           .icon {
-            color: $space-gray;
+            color: $dark-shade;
           }
         }
 
         .icon {
           height: 50%;
           width: 50%;
-          color: $space-white;
+          color: $light-shade;
         }
       }
     }

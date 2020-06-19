@@ -2,9 +2,9 @@
   height: 25rem;
   width: 35rem;
   @include reset-padding-margin;
-  border: 0.125rem solid $space-lightgreen;
+  border: 0.125rem solid $dark-accent;
   @include make-column-and-top;
-  background-color: $space-gray;
+  background-color: $dark-shade;
 
   .title-wrapper,
   .content-wrapper {
@@ -15,7 +15,7 @@
 
   .title-wrapper {
     height: 4rem;
-    background-color: $space-lightgreen;
+    background-color: $dark-accent;
 
     .title {
       height: 100%;
@@ -24,9 +24,9 @@
 
       p {
         margin-bottom: 0;
-        color: $space-gray;
+        color: $dark-shade;
         font-size: $font-large;
-        font-weight: $font-weight-maven-pro-bold;
+        font-weight: $bold;
       }
     }
   }
@@ -42,9 +42,9 @@
       p {
         width: 80%;
         margin-bottom: 0;
-        color: $space-white;
+        color: $light-shade;
         font-size: $font-med;
-        font-weight: $font-weight-maven-pro-regular;
+        font-weight: $regular;
         text-align: center;
       }
     }

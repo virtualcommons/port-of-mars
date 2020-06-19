@@ -6,8 +6,8 @@
 
   &:hover {
     .information .role {
-      color: $space-gray !important;
-      background-color: $space-lightgreen !important;
+      color: $dark-shade !important;
+      background-color: $dark-accent !important;
     }
   }
 
@@ -44,26 +44,26 @@
 
     .title {
       margin-bottom: 0.125rem;
-      color: $new-space-orange;
+      color: $light-accent;
       font-size: $font-med;
-      font-weight: $font-weight-maven-pro-bold;
+      font-weight: $bold;
     }
 
     .role {
       padding: 0.125rem 0.5rem;
       border-radius: 0.25rem;
       margin: 0;
-      color: $space-white;
+      color: $light-shade;
       font-size: $font-large;
-      font-weight: $font-weight-maven-pro-bold;
+      font-weight: $bold;
     }
 
     .score {
       padding-left: 0.5rem;
       margin-bottom: 0;
-      color: $space-white;
+      color: $light-shade;
       font-size: $font-med;
-      font-weight: $font-weight-maven-pro-bold;
+      font-weight: $bold;
     }
   }
 }

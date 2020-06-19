@@ -40,8 +40,8 @@
       p {
         margin-bottom: 0;
         font-size: $font-med;
-        font-weight: $font-weight-maven-pro-medium;
-        color: $space-white;
+        font-weight: $medium;
+        color: $light-shade;
         text-align: center;
       }
     }
@@ -75,19 +75,19 @@
         @include reset-button;
         @include default-transition-base;
         padding: 0.5rem 1rem;
-        border: solid 0.125rem $new-space-orange;
+        border: solid 0.125rem $light-accent;
         font-size: $font-med;
-        font-weight: $font-weight-maven-pro-bold !important;
+        font-weight: $bold !important;
         text-align: center;
-        color: $new-space-orange;
+        color: $light-accent;
 
         &:hover {
-          color: $space-gray;
-          background-color: $new-space-orange;
+          color: $dark-shade;
+          background-color: $light-accent;
         }
 
         &:disabled:hover {
-          color: $new-space-orange;
+          color: $light-accent;
           background-color: transparent;
         }
 

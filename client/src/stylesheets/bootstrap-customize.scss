@@ -6,18 +6,12 @@ $btn-disabled-opacity: 0.3;
 
 // Cards
 
-$card-bg: $space-gray;
-$card-color: $space-white;
+$card-bg: $dark-shade;
+$card-color: $light-shade;
 
 // Forms
 
 $input-bg: transparent;
-$input-border-color: $space-orange;
-$input-color: $space-white;
+$input-border-color: $light-accent;
+$input-color: $light-shade;
 $input-padding-y: 0.75rem;
-
-// Colors
-
-$danger: mix($space-orange, #f00, 60);
-$primary: $space-orange;
-$success: rgba(45, 143, 68, 1);

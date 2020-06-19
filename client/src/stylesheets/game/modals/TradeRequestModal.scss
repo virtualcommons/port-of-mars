@@ -4,9 +4,9 @@
   max-width: none;
   max-height: 80vh;
   padding: 0.5rem;
-  border: 0.125rem solid $space-lightgreen;
+  border: 0.125rem solid $dark-accent;
   margin: 0;
-  background-color: $space-gray;
+  background-color: $dark-shade;
 
   .wrapper {
     @include expand;
@@ -25,13 +25,13 @@
         padding: 0.25rem 1rem;
         margin-bottom: 0.5rem;
         @include make-center;
-        background-color: $space-lightgreen;
+        background-color: $dark-accent;
 
         .title {
           margin: 0 1rem 0 0;
           font-size: $font-med;
-          font-weight: $font-weight-maven-pro-bold;
-          color: $space-gray;
+          font-weight: $bold;
+          color: $dark-shade;
         }
       }
 
@@ -69,9 +69,9 @@
           padding: 0;
           margin: 0;
           font-size: $font-med;
-          font-weight: $font-weight-maven-pro-bold !important;
-          color: $space-lightgreen;
-          border: 0.125rem solid $space-lightgreen;
+          font-weight: $bold !important;
+          color: $dark-accent;
+          border: 0.125rem solid $dark-accent;
 
           &:disabled {
             opacity: 0.5;
@@ -79,8 +79,8 @@
         }
 
         .selected {
-          color: $space-gray;
-          background-color: $space-lightgreen;
+          color: $dark-shade;
+          background-color: $dark-accent;
         }
       }
 
@@ -91,13 +91,13 @@
         padding: 0.25rem 1rem;
         margin-bottom: 0.5rem;
         @include make-center;
-        background-color: $space-lightgreen;
+        background-color: $dark-accent;
 
         .title {
           margin: 0 1rem 0 0;
           font-size: $font-med;
-          font-weight: $font-weight-maven-pro-bold;
-          color: $space-gray;
+          font-weight: $bold;
+          color: $dark-shade;
         }
       }
 
@@ -116,7 +116,7 @@
         flex: 1;
         width: 100%;
         padding: 0.5rem;
-        background-color: $space-white-opaque-1;
+        background-color: $light-shade-05;
         overflow-y: hidden;
 
         .accomplishment-cards {

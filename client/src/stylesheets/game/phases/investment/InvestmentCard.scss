@@ -3,12 +3,12 @@
   width: calc(100% / 3);
   padding: 1rem 0.5rem;
   @include make-center;
-  background-color: $space-white-opaque-1;
+  background-color: $light-shade-05;
 
   .wrapper {
     @include expand;
     @include make-center;
-    color: $space-gray;
+    color: $dark-shade;
     overflow: hidden;
   }
 
@@ -19,13 +19,13 @@
     border: $border-white;
     position: relative;
     @include make-column-and-expand;
-    background-color: $space-white;
+    background-color: $light-shade;
 
     .name {
       margin-bottom: 0;
       font-size: $font-med;
-      font-weight: $font-weight-maven-pro-medium;
-      color: $space-gray;
+      font-weight: $medium;
+      color: $dark-shade;
       text-transform: capitalize;
     }
 
@@ -44,13 +44,13 @@
 
         .icon {
           margin-right: 0.5rem;
-          color: $space-gray;
+          color: $dark-shade;
         }
 
         p {
           margin-bottom: 0;
           font-size: $font-large;
-          font-weight: $font-weight-maven-pro-medium;
+          font-weight: $medium;
           text-align: center;
           color: $status-green;
         }
@@ -61,15 +61,15 @@
 
         .icon {
           margin-right: 0.5rem;
-          color: $space-gray;
+          color: $dark-shade;
         }
 
         p {
           margin-bottom: 0;
           font-size: $font-large;
-          font-weight: $font-weight-maven-pro-medium;
+          font-weight: $medium;
           text-align: center;
-          color: $space-gray;
+          color: $dark-shade;
         }
       }
     }
@@ -79,7 +79,7 @@
     height: 100%;
     width: 30%;
     @include make-column-and-center;
-    background-color: $space-gray;
+    background-color: $dark-shade;
 
     .increment,
     .decrement {
@@ -87,8 +87,8 @@
       width: 100%;
       border: $border-white;
       font-size: $font-large;
-      font-weight: $font-weight-maven-pro-bold;
-      color: $space-white;
+      font-weight: $bold;
+      color: $light-shade;
       background: transparent;
       @include default-transition-base;
 
@@ -98,8 +98,8 @@
       }
 
       &:hover {
-        color: $space-gray;
-        background-color: $new-space-orange;
+        color: $dark-shade;
+        background-color: $light-accent;
         cursor: pointer;
       }
     }
@@ -120,6 +120,6 @@
     width: 30%;
     border: $border-white;
     border-left: none;
-    background-color: $space-gray;
+    background-color: $dark-shade;
   }
 }
