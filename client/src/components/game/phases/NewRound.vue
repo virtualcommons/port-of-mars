@@ -109,7 +109,7 @@
     }
 
     get groupContributions() {
-      return _.sumBy(this.otherPlayerContributions, 'contribution');
+      return _.sumBy(this.otherPlayerContributions, 'value');
     }
 
     get totalSystemHealthContributions() {
