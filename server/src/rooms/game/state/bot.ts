@@ -186,7 +186,7 @@ export class ActorRunner implements Actor {
 
 export class SimpleBot implements Bot {
   elapsed = 0;
-  maxInactivityTime = 60;
+  maxInactivityTime = 300;
   active = false;
 
   constructor(public actor: ActorRunner) {}
