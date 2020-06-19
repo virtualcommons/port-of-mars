@@ -162,7 +162,7 @@ export const initialStoreState: State = {
   // GameData
   players: defaultPlayerClientSet(),
   timeRemaining: 300,
-  round: 0,
+  round: 1,
   phase: Phase.newRound,
   upkeep: 100,
   messages: [],

@@ -1010,7 +1010,7 @@ export class GameState extends Schema implements GameData {
   static DEFAULTS = {
     timeRemaining: 300,
     marsEventsProcessed: 0,
-    round: 0,
+    round: 1,
     phase: Phase.newRound,
     upkeep: 100
   };
@@ -1079,7 +1079,7 @@ export class GameState extends Schema implements GameData {
   lastTimePolled: Date;
 
   @type('number')
-  timeRemaining: number = 20;
+  timeRemaining: number = 60;
 
   @type('number')
   round: number = GameState.DEFAULTS.round;
@@ -1208,7 +1208,7 @@ export class GameState extends Schema implements GameData {
     }
   }
 
-  resetPlayerContributedUpkeep(): void {
+  resetPlayerContributions(): void {
     for (const player of this.players) {
       player.contributedUpkeep = 0;
     }

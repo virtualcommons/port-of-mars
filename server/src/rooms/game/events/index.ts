@@ -359,7 +359,9 @@ gameEventDeserializer.register(EnteredVictoryPhase);
 export class EnteredNewRoundPhase extends KindOnlyGameEvent {
   apply(game: GameState): void {
     game.phase = Phase.newRound;
-    game.timeRemaining = 20;
+    game.timeRemaining = 60;
+    game.round += 1;
+    game.log(`Round ${game.round} begins.`, MarsLogCategory.newRound);
 
     // FIXME: game.resetRound to encompass resets
     game.resetPlayerCosts();
@@ -372,7 +374,7 @@ gameEventDeserializer.register(EnteredNewRoundPhase);
 export class AddedSystemHealthContributions extends KindOnlyGameEvent {
   apply(game: GameState): void {
     game.addPlayerContributions();
-    game.resetPlayerContributedUpkeep();
+    // game.resetPlayerContributions();
 
     // system health - last round
     game.log(
@@ -386,7 +388,7 @@ export class SubtractedSystemHealthWearAndTear extends KindOnlyGameEvent {
   apply(game: GameState): void {
     // apply system health - wear and tear
     game.decreaseSystemHealth(25);
-
+    game.resetPlayerContributions();
     game.log(
       `Standard wear and tear reduces System Health by 25.
         At the beginning of this round, System Health = ${game.upkeep}.`,
@@ -396,14 +398,14 @@ export class SubtractedSystemHealthWearAndTear extends KindOnlyGameEvent {
 gameEventDeserializer.register(SubtractedSystemHealthWearAndTear);
 
 // apply system health updates from previous round
-export class ExitedNewRoundPhase extends KindOnlyGameEvent {
+export class BeganNewRound extends KindOnlyGameEvent {
   apply(game: GameState): void {
     // round message
     game.round += 1;
     game.log(`Round ${game.round} begins.`, MarsLogCategory.newRound);
   }
 }
-gameEventDeserializer.register(ExitedNewRoundPhase);
+gameEventDeserializer.register(BeganNewRound);
 
 export class TakenStateSnapshot implements GameEvent {
   kind = 'taken-state-snapshot';

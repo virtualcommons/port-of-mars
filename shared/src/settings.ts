@@ -19,3 +19,5 @@ export function isProduction(): boolean {
 }
 
 export const COST_INAFFORDABLE = 1000;
+
+export const SYSTEM_HEALTH_MAINTENANCE_COST = 25;

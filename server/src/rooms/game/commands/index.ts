@@ -14,7 +14,7 @@ import {
   EnteredTradePhase,
   EnteredVictoryPhase,
   ReenteredMarsEventPhase,
-  ExitedNewRoundPhase,
+  BeganNewRound,
   EnteredNewRoundPhase,
   SentChatMessage,
   SentTradeRequest,
@@ -214,8 +214,8 @@ export class SetNextPhaseCmd implements Command {
       case Phase.newRound:
         // do not run mars events in the first round
         return this.state.isFirstRound()
-          ? [new AddedSystemHealthContributions(), new ExitedNewRoundPhase(), new SubtractedSystemHealthWearAndTear(), new EnteredInvestmentPhase()]
-          : [new AddedSystemHealthContributions(), new ExitedNewRoundPhase(), new SubtractedSystemHealthWearAndTear(), new EnteredMarsEventPhase(), new InitializedMarsEvent()];
+          ? [new SubtractedSystemHealthWearAndTear(), new EnteredInvestmentPhase()]
+          : [new SubtractedSystemHealthWearAndTear(), new EnteredMarsEventPhase(), new InitializedMarsEvent()];
       case Phase.defeat:
         return [];
       case Phase.events: {
@@ -244,12 +244,10 @@ export class SetNextPhaseCmd implements Command {
         return [new EnteredDiscardPhase()];
       case Phase.discard: {
         const state = this.state;
-        const round = state.round + 1;
-
-        if (round >= state.maxRound) {
-          return [new EnteredVictoryPhase(this.state.playerScores)];
+        if (state.isLastRound()) {
+          return [new EnteredVictoryPhase(state.playerScores)];
         }
-        return [new EnteredNewRoundPhase()];
+        return [new AddedSystemHealthContributions(), new EnteredNewRoundPhase()];
       }
       case Phase.victory:
         return [];

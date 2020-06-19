@@ -123,13 +123,23 @@ export default {
     ]);
   },
 
-  contributedSystemHealth(state: State): number {
-    let contributed = 0;
+  systemHealth(state: State): number {
+    return state.upkeep;
+  },
 
+  isFirstRound(state: State): boolean {
+    return state.round === 1;
+  },
+
+  systemHealthContribution(state: State): number {
+    return state.players[state.role].contributedUpkeep;
+  },
+
+  totalSystemHealthContributions(state: State): number {
+    let contributed = 0;
     for (const role of ROLES) {
       contributed += state.players[role].contributedUpkeep;
     }
-
-    console.log('contributed: ', contributed);
     return contributed;
-  }}
+  }
+}
