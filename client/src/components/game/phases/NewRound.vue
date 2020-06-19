@@ -100,7 +100,7 @@
       return items;
     }
 
-    otherPlayerContributions() {
+    otherPlayerContributions(): Array<{label:string, value:number}> {
       const contributions = [];
       for (const [role, player] of Object.entries(this.$tstore.getters.otherPlayers)) {
         contributions.push({label: role, value: (player as PlayerClientData).contributedUpkeep});
@@ -109,7 +109,7 @@
     }
 
     get groupContributions() {
-      return _.sumBy(this.otherPlayerContributions, 'value');
+      return _.sumBy(this.otherPlayerContributions(), 'value');
     }
 
     get totalSystemHealthContributions() {
