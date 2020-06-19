@@ -9,6 +9,7 @@ import {
   CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER,
   Role, ROLES, Resource, InvestmentData, MarsLogCategory
 } from "@port-of-mars/shared/types";
+import {COST_INAFFORDABLE} from "@port-of-mars/shared/settings";
 
 
 const _dispatch: { [id: string]: MarsEventStateConstructor } = {};
@@ -486,7 +487,7 @@ export class EffortsWasted extends BaseEvent {
 export class Stymied extends BaseEvent {
   finalize(state: GameState): void {
     for (const player of state.players) {
-      player.costs[player.specialty] = 1000;
+      player.costs[player.specialty] = COST_INAFFORDABLE;
     }
     state.log(`Players may not earn their specialty Influence this round.`, `${MarsLogCategory.event}: Stymied`)
   }

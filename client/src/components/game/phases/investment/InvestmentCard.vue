@@ -68,6 +68,7 @@ import { faBriefcase } from '@fortawesome/free-solid-svg-icons/faBriefcase';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { Phase, Resource, Role } from '@port-of-mars/shared/types';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
+import {COST_INAFFORDABLE} from "@port-of-mars/shared/settings";
 
 library.add(faClock);
 library.add(faBriefcase);
@@ -80,7 +81,7 @@ export default class InvestmentCard extends Vue {
   @Prop() private pendingInvestment!: number;
 
   get disabled(): boolean {
-    return this.cost >= 100;
+    return this.cost >= COST_INAFFORDABLE;
   }
 
   get opacity(): object {

@@ -17,3 +17,5 @@ export function isStaging(): boolean {
 export function isProduction(): boolean {
   return process.env.NODE_ENV === 'production';
 }
+
+export const COST_INAFFORDABLE = 1000;

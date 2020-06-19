@@ -37,7 +37,7 @@ import {
   getAccomplishmentByID,
   getAccomplishmentIDs
 } from '@port-of-mars/server/data/Accomplishment';
-import { isProduction } from '@port-of-mars/shared/settings';
+import {COST_INAFFORDABLE, isProduction} from '@port-of-mars/shared/settings';
 import { settings } from '@port-of-mars/server/settings';
 import { GameEvent } from '@port-of-mars/server/rooms/game/events/types';
 import { GameOpts, GameStateOpts } from '@port-of-mars/server/rooms/game/types';
@@ -237,9 +237,9 @@ class ResourceCosts extends Schema implements ResourceCostData {
           return {
             culture: 2,
             finance: 3,
-            government: 1000,
+            government: COST_INAFFORDABLE,
             legacy: 3,
-            science: 1000,
+            science: COST_INAFFORDABLE,
             upkeep: 1
             // specialty: 'culture'
           };
@@ -248,16 +248,16 @@ class ResourceCosts extends Schema implements ResourceCostData {
             culture: 3,
             finance: 2,
             government: 3,
-            legacy: 1000,
-            science: 1000,
+            legacy: COST_INAFFORDABLE,
+            science: COST_INAFFORDABLE,
             upkeep: 1
             // specialty: 'finance'
           };
         case PIONEER:
           return {
             culture: 3,
-            finance: 1000,
-            government: 1000,
+            finance: COST_INAFFORDABLE,
+            government: COST_INAFFORDABLE,
             legacy: 2,
             science: 3,
             upkeep: 1
@@ -265,18 +265,18 @@ class ResourceCosts extends Schema implements ResourceCostData {
           };
         case POLITICIAN:
           return {
-            culture: 1000,
+            culture: COST_INAFFORDABLE,
             finance: 3,
             government: 2,
-            legacy: 1000,
+            legacy: COST_INAFFORDABLE,
             science: 3,
             upkeep: 1
             // specialty: 'government'
           };
         case RESEARCHER:
           return {
-            culture: 1000,
-            finance: 1000,
+            culture: COST_INAFFORDABLE,
+            finance: COST_INAFFORDABLE,
             government: 3,
             legacy: 3,
             science: 2,

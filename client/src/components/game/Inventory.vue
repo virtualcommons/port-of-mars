@@ -93,6 +93,7 @@ import {
   RESOURCES,
   Phase,
 } from '@port-of-mars/shared/types';
+import {COST_INAFFORDABLE} from "@port-of-mars/shared/settings";
 
 library.add(faClock);
 library.add(faBriefcase);
@@ -140,7 +141,7 @@ export default class Inventory extends Vue {
   }
 
   private canInvest(cost: number): boolean {
-    return cost < 100;
+    return cost < COST_INAFFORDABLE;
   }
 
   private toggleCosts() {
