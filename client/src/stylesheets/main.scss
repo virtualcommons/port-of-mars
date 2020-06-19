@@ -42,10 +42,11 @@ body {
   // CSS VARIABLES
 
   // color scheme
-  --light-accent: $light-accent;
-  --dark-shade: $dark-shade;
-  --light-shade-05: $light-shade-05;
-  --light-shade-25: $light-shade-25;
+  --light-accent: rgb(202, 166, 110);
+  --dark-shade: rgb(34, 26, 27);
+  --light-shade: rgb(241, 224, 197);
+  --light-shade-05: rgba(241, 224, 197, .05);
+  --light-shade-25: rgba(241, 224, 197, .25);
 
   // player colors
   --color-Researcher: rgba(67, 124, 174, 0.2);

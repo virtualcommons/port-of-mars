@@ -186,10 +186,10 @@
     get textColor() {
       console.log(this.status);
       if (this.status != 'Active') {
-        return {color: 'white'}
+        return {color: `var(--light-accent)`}
       }
 
-      return {color: 'black'};
+      return {color: `var(--dark-shade)`};
     }
 
     mounted() {
@@ -214,7 +214,7 @@
     //color of the trade header and trade background
     statusColor(type: string) {
       //default is white
-      let color = 'white';
+      let color: string = 'var(--light-shade)';
 
       //if the player is involved with the trade, color it orange
       if (this.participant == 1 || this.participant == 0) {
@@ -223,9 +223,9 @@
 
       //alternate statuses supersede involvement
       if (this.status == 'Accepted') {
-        color = 'var(--green)'
-      } else if (this.status == 'Cancelled' || this.status == 'Rejected' || this.status == 'Insufficient Resources') {
-        color = 'var(--red)'
+        color = 'var(--green)';
+      } else if (this.status == 'Cancelled' || this.status == 'Rejected') {
+        color = 'var(--red)';
       }
 
       //map to whatever type was passed in
