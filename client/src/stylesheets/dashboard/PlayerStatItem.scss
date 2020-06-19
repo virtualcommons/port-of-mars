@@ -1,69 +1,69 @@
 .c-player-stat-item {
   width: 100%;
   padding: 0;
-  border: 0.125rem solid $light-shade;
+  border: 0.125rem solid $light-accent;
   margin: 0 0 0.5rem 0;
   @include make-column-and-center;
 
   &:last-child {
     margin-bottom: 0;
   }
+}
 
-  .title-wrapper,
-  .content-wrapper {
+.title-wrapper,
+.content-wrapper {
+  width: 100%;
+  padding: 0.5rem;
+  margin: 0;
+}
+
+.title-wrapper {
+  background-color: $light-accent;
+}
+
+.title {
+  @include expand;
+  padding: 0;
+
+  p {
     width: 100%;
-    padding: 0.5rem;
-    margin: 0;
+    margin-bottom: 0;
+    font-size: $font-med;
+    font-weight: $medium;
+    color: $dark-shade;
+    text-align: center;
+    @include text-overflow-ellipses;
   }
+}
 
-  .title-wrapper {
-    background-color: $light-shade;
+.content-wrapper {
+  background-color: $dark-shade;
+}
 
-    .title {
-      @include expand;
-      padding: 0;
+.content {
+  @include expand;
+  padding: 0;
+  @include make-column-and-top;
 
-      p {
-        width: 100%;
-        margin-bottom: 0;
-        font-size: $font-med;
-        font-weight: $medium;
-        color: $dark-shade;
-        text-align: center;
-        @include text-overflow-ellipses;
-      }
+  .section {
+    width: 100%;
+    margin-bottom: 0.5rem;
+
+    &:last-child {
+      margin-bottom: 0;
     }
-  }
 
-  .content-wrapper {
-    background-color: $dark-shade;
+    p {
+      width: 100%;
+      margin: 0 0.5rem;
+      font-size: $font-med;
+      font-weight: $regular;
+      color: $light-shade;
+      text-align: left;
 
-    .content {
-      @include expand;
-      padding: 0;
-      @include make-column-and-top;
-
-      .section {
-        width: 100%;
-        margin-bottom: 0.5rem;
-
-        &:last-child {
-          margin-bottom: 0;
-        }
-
-        p {
-          width: 100%;
-          margin: 0 0.5rem;
-          font-size: $font-med;
-          font-weight: $regular;
-          color: $light-shade;
-          text-align: left;
-
-          span {
-            font-weight: $medium;
-            color: $light-accent;
-          }
-        }
+      span {
+        font-weight: $medium;
+        color: $light-shade;
       }
     }
   }

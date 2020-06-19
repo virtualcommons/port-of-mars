@@ -14,7 +14,7 @@
           </p>
 
           <b-list-group v-for="playerScore in playerStatItem.playerScores">
-            <b-list-group-item :active="playerScore.role === role" class="d-flex justify-content-between align-items-center">
+            <b-list-group-item :active="playerScore.role === role" class="d-flex justify-content-between align-items-center" variant="warning">
               {{ playerScore.role }}
               <b-badge pill :variant="getVariant(playerStatItem.victory, playerScore.winner)">{{ playerScore.points }}</b-badge>
             </b-list-group-item>

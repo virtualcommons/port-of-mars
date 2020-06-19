@@ -48,23 +48,23 @@
         <!-- ACTION ITEMS -->
         <b-col class="action-items">
           <h2>Action Items</h2>
-          <b-row class="next-game">
+          <div class="next-game">
             <UpcomingGameItem
               :key="upcomingGame.time"
               :upcomingGame="upcomingGame"
               v-for="upcomingGame in upcomingGames"
             />
-          </b-row>
-          <b-row class="outer-wrapper">
-            <div class="wrapper">
+          </div>
+          <div class="outer-wrapper">
+<!--            <div class="wrapper">-->
               <p v-if="loading">Action Items are loading...</p>
               <ActionItemComponent
                 :actionItem="actionItem"
                 :key="actionItem.description"
                 v-for="actionItem in actionItems"
               />
-            </div>
-          </b-row>
+<!--            </div>-->
+          </div>
         </b-col>
       </b-row>
     </div>

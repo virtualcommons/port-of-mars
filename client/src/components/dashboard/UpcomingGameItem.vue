@@ -3,11 +3,9 @@
     <div>
       <p class="next-game">Next Game at {{ toTimeString(upcomingGame.time) }}</p>
     </div>
-<!--      <div class="buttons">-->
         <router-link :to="joinLink">
-          <b-button class="button px-4 py-1">Join</b-button>
+          <b-button class="button px-4 py-1" variant="outline-light">Join</b-button>
         </router-link>
-<!--      </div>-->
   </div>
 </template>
 
