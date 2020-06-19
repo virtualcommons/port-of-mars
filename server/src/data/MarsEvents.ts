@@ -13,6 +13,7 @@ const _marsEvents: Array<MarsEventDeckItem> = [
     effect: `Each player discards all of their available Accomplishments and draws 1 new Accomplishment. You will be able to discard this Accomplishment at the end of this round and draw up to three new Accomplishments at the start of the next round (if this is not the final round).`,
     flavorText: `Create contingencies for your contingencies and contingencies for those contingencies. Then prepare to improvise.`,
     clientViewHandler: 'NO_CHANGE' as const,
+    timeDuration: 10,
     duration: 1
   }, 1],
   [{

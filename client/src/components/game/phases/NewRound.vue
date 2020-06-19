@@ -62,7 +62,7 @@
     }
 
     get systemHealth() {
-      return this.$tstore.getters.systemHealth;
+      return _.clamp(this.$tstore.getters.systemHealth - this.totalSystemHealthContributions, 0, 100);
     }
 
     get nextRoundSystemHealth() {
