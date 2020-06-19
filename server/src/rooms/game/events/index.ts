@@ -279,6 +279,16 @@ export class EnteredInvestmentPhase extends KindOnlyGameEvent {
 }
 gameEventDeserializer.register(EnteredInvestmentPhase);
 
+export class ExitedInvestmentPhase extends KindOnlyGameEvent {
+  apply(game: GameState): void {
+    for (const player of game.players) {
+      player.invest();
+      player.pendingInvestments.reset();
+    }
+  }
+}
+gameEventDeserializer.register(ExitedInvestmentPhase);
+
 export class ExitedMarsEventPhase extends KindOnlyGameEvent {
   apply(state: GameState): void {
     state.applyPendingActions();
@@ -292,10 +302,6 @@ export class EnteredTradePhase extends KindOnlyGameEvent {
     game.phase = Phase.trade;
     logger.debug('phase: %s', Phase[game.phase]);
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
-    for (const player of game.players) {
-      player.invest();
-      player.pendingInvestments.reset();
-    }
   }
 }
 gameEventDeserializer.register(EnteredTradePhase);

@@ -2,10 +2,10 @@ import {GameState} from "@port-of-mars/server/rooms/game/state";
 import {mockGameStateInitOpts} from "@port-of-mars/server/util";
 import {
   EnteredDefeatPhase,
-  EnteredDiscardPhase,
+  EnteredDiscardPhase, EnteredInvestmentPhase,
   EnteredMarsEventPhase,
   EnteredPurchasePhase,
-  EnteredTradePhase, PurchasedAccomplishment,
+  EnteredTradePhase, ExitedInvestmentPhase, PurchasedAccomplishment,
   TakenStateSnapshot,
   TimeInvested
 } from "@port-of-mars/server/rooms/game/events";
@@ -24,11 +24,13 @@ describe('a game', () => {
   const opts = mockGameStateInitOpts();
   const gs = new GameState(opts);
   const ges: Array<[number, GameEvent]> = [
-    [300, new TakenStateSnapshot(gs.toJSON())],
+    [60, new TakenStateSnapshot(gs.toJSON())],
+    [40, new EnteredInvestmentPhase()],
     [200, new TimeInvested({
       role: CURATOR,
       investment: {upkeep: 2, culture: 2, finance: 0, government: 0, legacy: 0, science: 0}
     })],
+    [200, new ExitedInvestmentPhase()],
     [10, new EnteredTradePhase()],
     [5, new EnteredPurchasePhase()],
     [285, new PurchasedAccomplishment({accomplishment: getAccomplishmentByID(RESEARCHER, 1), role: RESEARCHER})],
@@ -88,7 +90,8 @@ describe('a game', () => {
       points: g.players.Researcher.victoryPoints
     }));
     expect(data).toEqual([
-      {phase: Phase.newRound, culture: 0, duration: 50, points: 0},
+      {phase: Phase.newRound, culture: 0, duration: 20, points: 0},
+      {phase: Phase.invest, culture: 2, duration: 290, points: 0},
       {phase: Phase.trade, culture: 2, duration: 295, points: 0},
       {phase: Phase.purchase, culture: 2, duration: 285, points: 5},
       {phase: Phase.discard, culture: 2, duration: 270, points: 5},

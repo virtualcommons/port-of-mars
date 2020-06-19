@@ -33,7 +33,7 @@ import {
   SelectedInfluence,
   KeptResources,
   InitializedMarsEvent,
-  AddedSystemHealthContributions, SubtractedSystemHealthWearAndTear
+  AddedSystemHealthContributions, SubtractedSystemHealthWearAndTear, ExitedInvestmentPhase
 } from '@port-of-mars/server/rooms/game/events';
 import { getAccomplishmentByID } from '@port-of-mars/server/data/Accomplishment';
 import { GameState } from '@port-of-mars/server/rooms/game/state';
@@ -236,8 +236,8 @@ export class SetNextPhaseCmd implements Command {
       }
       case Phase.invest:
         return this.state.tradingEnabled
-          ? [new EnteredTradePhase()]
-          : [new EnteredPurchasePhase()];
+          ? [new ExitedInvestmentPhase(), new EnteredTradePhase()]
+          : [new ExitedInvestmentPhase(), new EnteredPurchasePhase()];
       case Phase.trade:
         return [new EnteredPurchasePhase()];
       case Phase.purchase:
