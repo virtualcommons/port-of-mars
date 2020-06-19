@@ -87,22 +87,22 @@
                 />
               </div>
             </div>
-            <b-button
-              :disabled="submitDisabled"
-              variant="outline-light"
-              @click="devLogin"
-            >
-              Login
-            </b-button>
-<!--            <div class="submit">-->
-<!--              <input-->
-<!--                :disabled="submitDisabled"-->
-<!--                @click="devLogin"-->
-<!--                class="button-white"-->
-<!--                type="submit"-->
-<!--                value="Login"-->
-<!--              />-->
-<!--            </div>-->
+<!--            <b-button-->
+<!--              :disabled="submitDisabled"-->
+<!--              variant="outline-light"-->
+<!--              @click="devLogin"-->
+<!--            >-->
+<!--              Login-->
+<!--            </b-button>-->
+            <div class="submit">
+              <input
+                :disabled="submitDisabled"
+                @click="devLogin"
+                class="button-white"
+                type="submit"
+                value="Login"
+              />
+            </div>
             <p class="error" v-if="error">{{ error }}</p>
           </form>
         </div>

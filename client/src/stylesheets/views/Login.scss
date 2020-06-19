@@ -77,63 +77,34 @@
 
 // LOGIN :: BUTTONS
 
-//.button-orange {
-//  @include reset-button;
-//  width: 12rem;
-//  padding: 0.5rem 1rem;
-//  margin: 0;
-//  //border-radius: 0;
-//  font-size: $font-med;
-//  font-weight: $bold !important;
-//  text-align: center;
-//  color: $light-shade;
-//  border: 0.125rem solid $light-shade;
-//  transition: color 0.15s ease-in-out,
-//  background-color 0.15s ease-in-out;
-//
-//  &:disabled {
-//    opacity: 0.5;
-//  }
-//
-//  &:hover {
-//    color: $dark-shade;
-//    background-color: $light-shade;
-//  }
-//
-//  &:disabled:hover {
-//    color: $light-shade;
-//    background-color: transparent;
-//  }
-//}
+.button-white {
+  @include reset-button;
+  width: 12rem;
+  padding: 0.5rem 1rem;
+  margin: 0;
+  border-radius: 0;
+  font-size: $font-med;
+  font-weight: $bold !important;
+  text-align: center;
+  color: $light-shade;
+  border: 0.125rem solid $light-shade;
+  transition: color 0.15s ease-in-out,
+  background-color 0.15s ease-in-out;
 
-//.button-white {
-//  @include reset-button;
-//  width: 12rem;
-//  padding: 0.5rem 1rem;
-//  margin: 0;
-//  border-radius: 0;
-//  font-size: $font-med;
-//  font-weight: $bold !important;
-//  text-align: center;
-//  color: $light-shade;
-//  border: 0.125rem solid $light-shade;
-//  transition: color 0.15s ease-in-out,
-//  background-color 0.15s ease-in-out;
-//
-//  &:disabled {
-//    opacity: 0.5;
-//  }
-//
-//  &:hover {
-//    color: $dark-shade;
-//    background-color: $light-shade;
-//  }
-//
-//  &:disabled:hover {
-//    color: $light-shade;
-//    background-color: transparent;
-//  }
-//}
+  &:disabled {
+    opacity: 0.5;
+  }
+
+  &:hover {
+    color: $dark-shade;
+    background-color: $light-shade;
+  }
+
+  &:disabled:hover {
+    color: $light-shade;
+    background-color: transparent;
+  }
+}
 
 // LOGIN :: FORM
 
