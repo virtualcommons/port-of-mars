@@ -7,10 +7,11 @@
     <div class="title-wrapper row">
       <div class="title col-12">
         <p :style="fontColor">{{ accomplishment.label }}</p>
-        <font-awesome-icon
+        <b-icon
+          icon="exclamation-circle-fill"
+          variant="dark"
+          circle
           v-if="!isModal"
-          :icon="['fas', 'info-circle']"
-          size="lg"
           @click="showInfo"
           class="icon"
         />
@@ -150,7 +151,7 @@ export default class AccomplishmentCard extends Vue {
   */
   @Prop({default: true})
   private showCard!: boolean;
-  
+
   @Prop({ default: true })
   private showCost!: boolean;
 
