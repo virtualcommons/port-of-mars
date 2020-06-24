@@ -24,12 +24,13 @@
           </div>
           <div
             class="cost"
+            id="tooltip-cost"
             :style="{ visibility: !disabled ? 'visible' : 'hidden' }"
           >
             <font-awesome-icon
               :icon="['fas', 'clock']"
               size="lg"
-              class="icon"
+              class="icon m-2"
             />
             <p>
               {{ !disabled ? cost : 'X' }}

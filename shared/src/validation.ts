@@ -31,6 +31,25 @@ export function makeTradeSafe(resources: ResourceAmountData) {
   return resources;
 }
 
+/**
+ * Prevent zero (0-0) trades
+ * @param offer Resources that the local player offers in a trade request.
+ * @param request Resources that the local player requests in a trade request.
+ */
+export function isZeroTrade(
+    offer: ResourceAmountData,
+    request: ResourceAmountData
+) {
+  
+  let zeroTrade = true;
+
+  for (const resource of RESOURCES) {
+    zeroTrade = offer[resource] == 0 && request[resource] == 0;
+  }
+
+  return zeroTrade;
+}
+
 export function canPlayerMakeTrade(
   resourcesToTrade: ResourceAmountData,
   inventory: ResourceAmountData

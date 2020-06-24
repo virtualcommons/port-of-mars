@@ -23,7 +23,7 @@
       <div class="request col-12">
         <TradeOptions
           :resourceReader="handleReceiveResources"
-          :resources="exchangeResources"
+          :resources="senderResources"
           :mode="'incoming'"
           :text="'Your Request'"
           class="tour-request-resources"
@@ -34,7 +34,7 @@
       <div class="offer col-12">
         <TradeOptions
           :resourceReader="handleSendResources"
-          :resources="sentResources"
+          :resources="recipientResources"
           :mode="'outgoing'"
           :text="'Your Offer'"
           class="tour-offer-resources"
@@ -64,7 +64,11 @@ import {
   ResourceAmountData,
   Role, RESOURCES,
 } from '@port-of-mars/shared/types';
-import { canPlayerMakeTrade } from '@port-of-mars/shared/validation';
+import {
+  canPlayerMakeTrade,
+  isZeroTrade,
+  validateTradeConditions
+} from '@port-of-mars/shared/validation';
 import { makeTradeSafe } from '@port-of-mars/shared/validation';
 import {SendTradeRequestData} from "@port-of-mars/shared/game";
 import {AbstractGameAPI} from "@port-of-mars/client/api/game/types";
@@ -92,11 +96,11 @@ export default class TradeRequest extends Vue {
     return this.$tstore.state.ui.tradeData.recipient.role;
   }
 
-  get sentResources() {
+  get recipientResources() {
     return this.$tstore.state.ui.tradeData.recipient.resourceAmount;
   }
 
-  get exchangeResources() {
+  get senderResources() {
     return this.$tstore.state.ui.tradeData.sender.resourceAmount;
   }
 
@@ -114,19 +118,12 @@ export default class TradeRequest extends Vue {
     }
   }
 
-  // private validateTrade(offer: ResourceAmountData, request: ResourceAmountData) {
-  //   let valid: boolean = false;
-  //   for (const resource of RESOURCES) {
-  //     if (offer[resource] == 0 && request[resource] == 0) valid = false;
-  //   }
-  //   return valid;
-  // }
-
   get clientValidation() {
     const inventory = this.$tstore.getters.player.inventory;
     return (
       this.tradePartnerName != '' &&
-      canPlayerMakeTrade(this.sentResources, inventory)
+      canPlayerMakeTrade(this.recipientResources, inventory) &&
+      !isZeroTrade(this.recipientResources, this.senderResources)
     );
   }
 
@@ -142,11 +139,11 @@ export default class TradeRequest extends Vue {
     if (this.clientValidation) {
       const senderPackage: TradeAmountData = {
         role: this.$tstore.state.role,
-        resourceAmount: makeTradeSafe(this.sentResources),
+        resourceAmount: makeTradeSafe(this.recipientResources),
       };
       const recipientPackage: TradeAmountData = {
         role: this.tradePartnerName as Role,
-        resourceAmount: makeTradeSafe(this.exchangeResources),
+        resourceAmount: makeTradeSafe(this.senderResources),
       };
       const tradeDataPackage: SendTradeRequestData['trade'] = {
         sender: senderPackage,
