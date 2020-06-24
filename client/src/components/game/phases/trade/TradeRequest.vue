@@ -77,6 +77,7 @@ import { makeTradeSafe } from '@port-of-mars/shared/validation';
 import {SendTradeRequestData} from "@port-of-mars/shared/game";
 import {AbstractGameAPI} from "@port-of-mars/client/api/game/types";
 
+
 @Component({
   components: {
     TradeOptions,

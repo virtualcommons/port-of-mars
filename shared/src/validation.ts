@@ -40,13 +40,11 @@ export function isZeroTrade(
     offer: ResourceAmountData,
     request: ResourceAmountData
 ) {
-  
-  let zeroTrade = true;
-
+  let zeroTrade: boolean = true;
   for (const resource of RESOURCES) {
-    zeroTrade = offer[resource] == 0 && request[resource] == 0;
+    zeroTrade = zeroTrade && (offer[resource] == 0 && request[resource] == 0);
   }
-
+  if (zeroTrade) console.log('this is a zero trade');
   return zeroTrade;
 }
 
