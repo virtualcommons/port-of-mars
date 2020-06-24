@@ -45,7 +45,7 @@
 import { Vue, Component, Inject } from 'vue-property-decorator';
 import Chat from '@port-of-mars/client/components/game/static/chat/Chat.vue';
 import MarsLog from '@port-of-mars/client/components/game/MarsLog.vue';
-import { ChatMarsLogView } from '@port-of-mars/client/types/panes.ts';
+import { ChatMarsLogView } from '@port-of-mars/shared/game/client/panes';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 
 @Component({

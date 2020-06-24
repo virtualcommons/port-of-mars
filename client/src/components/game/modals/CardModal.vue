@@ -32,7 +32,7 @@
 <script lang="ts">
 import { Component, Vue, Inject, Prop } from 'vue-property-decorator';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
-import { CardModalData } from '@port-of-mars/client/types/modals';
+import { CardModalData } from '@port-of-mars/shared/game/client/modals';
 import { Phase } from '@port-of-mars/shared/types';
 import EventCard from '@port-of-mars/client/components/game/phases/events/EventCard.vue';
 import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';

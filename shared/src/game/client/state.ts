@@ -14,18 +14,18 @@ import {
   ResourceCostData,
   Role,
   TradeDataWithNull,
-} from '@port-of-mars/shared/types';
+} from '../../types';
 import {
   ModalViewType,
   ModalDataType,
-} from '@port-of-mars/client/types/modals';
+} from './modals';
 import {
   ChatMarsLogView,
   HUDLeftView,
   HUDRightView,
-} from '@port-of-mars/client/types/panes.ts';
+} from './panes';
 import _ from 'lodash';
-import { DashboardMessage } from '@port-of-mars/shared/types';
+import { DashboardMessage } from '../../types';
 
 export interface PlayerClientData extends PlayerData {
   pendingInvestments: InvestmentData;

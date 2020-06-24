@@ -27,7 +27,7 @@
 import { Vue, Component, Inject } from 'vue-property-decorator';
 
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
-import { HUDRightView } from '@port-of-mars/client/types/panes.ts';
+import { HUDRightView } from '@port-of-mars/shared/game/client/panes';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faMeteor } from '@fortawesome/free-solid-svg-icons/faMeteor';

@@ -40,7 +40,7 @@
 import { Vue, Component, Inject } from 'vue-property-decorator';
 
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
-import { HUDLeftView } from '@port-of-mars/client/types/panes.ts';
+import { HUDLeftView } from '@port-of-mars/shared/game/client/panes';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faUsers } from '@fortawesome/free-solid-svg-icons/faUsers';

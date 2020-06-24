@@ -8,7 +8,7 @@ import player from './player';
 import trading from './trading';
 import ui from './ui';
 import Vue from 'vue';
-import { State, getInitialStoreState } from '@port-of-mars/client/store/state';
+import { State, getInitialStoreState } from '@port-of-mars/shared/game/client/state';
 import { DashboardMessage } from '@port-of-mars/shared/types';
 import _ from 'lodash';
 

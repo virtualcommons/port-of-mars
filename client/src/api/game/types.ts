@@ -8,7 +8,7 @@ import {
   ResourceAmountData,
   Role
 } from "@port-of-mars/shared/types";
-import {ChatMarsLogView, HUDLeftView, HUDRightView} from "@port-of-mars/client/types/panes";
+import {ChatMarsLogView, HUDLeftView, HUDRightView} from "@port-of-mars/shared/game/client/panes";
 import {TStore} from "@port-of-mars/client/plugins/tstore";
 
 export interface AbstractGameAPI {

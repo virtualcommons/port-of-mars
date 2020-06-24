@@ -100,7 +100,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop, Inject } from 'vue-property-decorator';
-import { PlayerInfoModalData } from '@port-of-mars/client/types/modals';
+import { PlayerInfoModalData } from '@port-of-mars/shared/game/client/modals';
 import { Role, Phase } from '@port-of-mars/shared/types';
 import Inventory from '@port-of-mars/client/components/game/Inventory.vue';
 import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
