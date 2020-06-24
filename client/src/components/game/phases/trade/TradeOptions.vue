@@ -82,10 +82,8 @@ export default class TradeOptions extends Vue {
   }
 
   private grayOutResources(resource: Resource) {
-    if (this.playerInventory[resource] == 0 && this.mode == 'outgoing') {
-      return true;
-    }
-    return false;
+    return this.playerInventory[resource] == 0 && this.mode == 'outgoing';
+
   }
 
   private increaseNum(resource: Resource): void {
