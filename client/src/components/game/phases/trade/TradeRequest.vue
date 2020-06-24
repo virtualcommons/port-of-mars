@@ -1,6 +1,8 @@
 <template>
   <div class="c-trade-request container tour-trade-request">
     <div class="player-selection-wrapper row tour-request-trade-partner">
+
+      <!-- select trade partner -->
       <div class="player col-3" v-for="player in otherPlayers" :key="player">
         <button
           @click="handleChange(player)"
@@ -19,6 +21,8 @@
         <p>{{ player }}</p>
       </div>
     </div>
+
+    <!-- request resources -->
     <div class="request-wrapper row">
       <div class="request col-12">
         <TradeOptions
@@ -30,6 +34,8 @@
         />
       </div>
     </div>
+
+    <!-- offer resources -->
     <div class="offer-wrapper row">
       <div class="offer col-12">
         <TradeOptions
@@ -45,7 +51,7 @@
       <div class="buttons col-12">
         <button
           @click="handleTrade"
-          :disabled="!clientValidation"
+          :disabled="!validateTrade"
           class="tour-send-trade"
         >
           Send Trade
@@ -59,15 +65,13 @@
 import { Vue, Component, Inject } from 'vue-property-decorator';
 import TradeOptions from '@port-of-mars/client/components/game/phases/trade/TradeOptions.vue';
 import {
-  TradeData,
   TradeAmountData,
   ResourceAmountData,
-  Role, RESOURCES,
+  Role,
 } from '@port-of-mars/shared/types';
 import {
   canPlayerMakeTrade,
-  isZeroTrade,
-  validateTradeConditions
+  isZeroTrade
 } from '@port-of-mars/shared/validation';
 import { makeTradeSafe } from '@port-of-mars/shared/validation';
 import {SendTradeRequestData} from "@port-of-mars/shared/game";
@@ -118,7 +122,7 @@ export default class TradeRequest extends Vue {
     }
   }
 
-  get clientValidation() {
+  validateTrade(): boolean {
     const inventory = this.$tstore.getters.player.inventory;
     return (
       this.tradePartnerName != '' &&
@@ -136,7 +140,8 @@ export default class TradeRequest extends Vue {
   }
 
   private handleTrade() {
-    if (this.clientValidation) {
+
+    if (this.validateTrade()) {
       const senderPackage: TradeAmountData = {
         role: this.$tstore.state.role,
         resourceAmount: makeTradeSafe(this.recipientResources),
