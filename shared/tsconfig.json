@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
     "outDir": "lib",
-    "lib": ["es6"],
+    "lib": [
+      "es6",
+      "dom"
+    ],
     "declaration": true,
     "target": "es6",
     "module": "commonjs",
