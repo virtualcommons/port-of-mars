@@ -31,7 +31,7 @@
     "socket.io-client": "^2.3.0",
     "vue": "^2.6.10",
     "vue-class-component": "^7.1.0",
-    "vue-property-decorator": "^8.2.2",
+    "vue-property-decorator": "^9.0.0",
     "vue-router": "^3.2.0",
     "vue-socket.io-extended": "^4.0.3",
     "vue-template-compiler": "^2.6.11",
@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "@fortawesome/free-brands-svg-icons": "^5.13.0",
-    "@types/jest": "^25.2.3",
+    "@types/jest": "^26.0.3",
     "@types/lodash": "^4.14.152",
     "@types/socket.io-client": "^1.4.33",
     "@vue/cli-plugin-babel": "^4.0.5",
