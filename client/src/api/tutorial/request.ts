@@ -5,15 +5,15 @@ import {
   Resource,
   Role, InvestmentData,
 } from '@port-of-mars/shared/types';
-import { initialStoreState } from '@port-of-mars/client/store/state';
+import { initialStoreState } from '@port-of-mars/shared/game/client/state';
 import {
   ChatMarsLogView,
   HUDLeftView,
   HUDRightView,
-} from '@port-of-mars/client/types/panes.ts';
+} from '@port-of-mars/shared/game/client/panes';
 import * as _ from 'lodash';
 import { Store } from 'vuex/types/index';
-import { State } from '@port-of-mars/client/store/state';
+import { State } from '@port-of-mars/shared/game/client/state';
 import { StateTransform } from '@port-of-mars/client/types/tutorial';
 import {AbstractGameAPI} from "@port-of-mars/client/api/game/types";
 

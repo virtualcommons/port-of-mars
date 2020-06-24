@@ -6,7 +6,7 @@ import {
   BOTTOM,
 } from '@port-of-mars/client/types/tutorial';
 import { Phase, RESEARCHER, CURATOR } from '@port-of-mars/shared/types';
-import { ChatMarsLogView } from '@port-of-mars/client/types/panes.ts';
+import { ChatMarsLogView } from '@port-of-mars/shared/game/client/panes';
 
 const steps: Array<Step> = [
   {

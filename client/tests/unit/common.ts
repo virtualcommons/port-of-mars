@@ -11,7 +11,7 @@ import Vuex from 'vuex';
 import getters from "@port-of-mars/client/store/getters";
 import mutations from "@port-of-mars/client/store/mutations";
 import _ from "lodash";
-import {initialStoreState} from "@port-of-mars/client/store/state";
+import {initialStoreState} from "@port-of-mars/shared/game/client/state";
 import BootstrapVue from "bootstrap-vue";
 import router from "@port-of-mars/client/router";
 import {Ajax} from "@port-of-mars/client/plugins/ajax";

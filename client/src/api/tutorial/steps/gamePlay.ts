@@ -1,6 +1,6 @@
 import { Step, LEFT, TOP, BOTTOM } from '@port-of-mars/client/types/tutorial';
 import { CURATOR } from '@port-of-mars/shared/types';
-import { ChatMarsLogView } from '@port-of-mars/client/types/panes.ts';
+import { ChatMarsLogView } from '@port-of-mars/shared/game/client/panes';
 
 const steps: Array<Step> = [
   {
@@ -28,7 +28,7 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-time-remaining',
-    content: `Each phase has a time limit of 5 minutes. The timer will turn red and blink when 
+    content: `Each phase has a time limit of 5 minutes. The timer will turn red and blink when
     there is a minute left in the phase.`,
     params: {
       placement: TOP,

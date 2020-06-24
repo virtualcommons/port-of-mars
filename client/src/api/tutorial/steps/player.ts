@@ -2,7 +2,7 @@ import { Step, RIGHT, LEFT, TOP } from '@port-of-mars/client/types/tutorial';
 import {
   ChatMarsLogView,
   HUDLeftView,
-} from '@port-of-mars/client/types/panes.ts';
+} from '@port-of-mars/shared/game/client/panes';
 
 const steps: Array<Step> = [
   {

@@ -1,4 +1,4 @@
-import { State } from "@port-of-mars/client/store/state";
+import { State } from "@port-of-mars/shared/game/client/state";
 import Getters from "@port-of-mars/client/store/getters";
 import Mutations from "@port-of-mars/client/store/mutations";
 import { VueConstructor } from 'vue';

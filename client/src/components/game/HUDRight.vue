@@ -40,7 +40,7 @@ import GameInformation from './static/panels/GameInformation.vue';
 import PhaseInstructions from './static/panels/PhaseInstructions.vue';
 import EventCard from '@port-of-mars/client/components/game/phases/events/EventCard.vue';
 import { Phase } from '@port-of-mars/shared/types';
-import { HUDRightView } from '@port-of-mars/client/types/panes.ts';
+import { HUDRightView } from '@port-of-mars/shared/game/client/panes';
 
 @Component({
   components: {

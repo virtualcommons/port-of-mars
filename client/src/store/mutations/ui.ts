@@ -1,14 +1,14 @@
-import { State, defaultTradeData } from '@port-of-mars/client/store/state';
+import { State, defaultTradeData } from '@port-of-mars/shared/game/client/state';
 import { Role, ResourceAmountData } from '@port-of-mars/shared/types';
 import {
   ModalViewType,
   ModalDataType,
-} from '@port-of-mars/client/types/modals';
+} from '@port-of-mars/shared/game/client/modals';
 import {
   ChatMarsLogView,
   HUDLeftView,
   HUDRightView,
-} from '@port-of-mars/client/types/panes.ts';
+} from '@port-of-mars/shared/game/client/panes';
 
 // NOTE :: CONTROL MODAL VISIBILITY
 

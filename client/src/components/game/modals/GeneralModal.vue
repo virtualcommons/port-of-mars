@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { GeneralModalData } from '@port-of-mars/client/types/modals';
+import { GeneralModalData } from '@port-of-mars/shared/game/client/modals';
 
 @Component({})
 export default class GeneralModal extends Vue {

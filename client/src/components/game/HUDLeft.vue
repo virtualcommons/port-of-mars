@@ -55,8 +55,8 @@ import OtherPlayers from './static/panels/OtherPlayers.vue';
 import Inventory from '@port-of-mars/client/components/game/Inventory.vue';
 import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
 
-import { HUDLeftView } from '@port-of-mars/client/types/panes.ts';
-import { PlayerClientSet } from '@port-of-mars/client/store/state';
+import { HUDLeftView } from '@port-of-mars/shared/game/client/panes';
+import { PlayerClientSet } from '@port-of-mars/shared/game/client/state';
 import { Role } from '@port-of-mars/shared/types';
 
 @Component({

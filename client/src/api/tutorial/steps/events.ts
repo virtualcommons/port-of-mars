@@ -1,6 +1,6 @@
 import { Step, LEFT, BOTTOM } from '@port-of-mars/client/types/tutorial';
 import { Phase } from '@port-of-mars/shared/types';
-import { HUDRightView } from '@port-of-mars/client/types/panes.ts';
+import { HUDRightView } from '@port-of-mars/shared/game/client/panes';
 
 const steps: Array<Step> = [
   {

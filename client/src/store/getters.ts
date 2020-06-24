@@ -1,4 +1,4 @@
-import {PlayerClientData, PlayerClientSet, State} from '@port-of-mars/client/store/state';
+import {PlayerClientData, PlayerClientSet, State} from '@port-of-mars/shared/game/client/state';
 import {
   EventClientView,
   MarsEventData,
