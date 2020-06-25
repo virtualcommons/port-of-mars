@@ -1,20 +1,21 @@
 <template>
   <div
-    class="c-accomplishmentcard"
+    class="c-accomplishment-card"
     :class="[cardTypeStyling, { 'modal-view': isModal }]"
     v-show="cardIsActive"
   >
-    <div class="title-wrapper row">
-      <div class="title col-12">
-        <p :style="fontColor">{{ accomplishment.label }}</p>
+    <div class="title-wrapper">
+      <div class="d-flex flex-row title col-12">
         <b-icon
           icon="exclamation-circle-fill"
           variant="dark"
           circle
           v-if="!isModal"
           @click="showInfo"
-          class="icon"
+          class="align-self-center"
         />
+        <p :style="fontColor">{{ accomplishment.label }}</p>
+
       </div>
     </div>
 
