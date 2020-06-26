@@ -860,7 +860,6 @@ export class Player extends Schema implements PlayerData {
       (investment as any)[k] += (leftOverInvestments as any)[k];
     }
 
-    this.contributedUpkeep = investment.upkeep;
     this.inventory.update(investment);
     // console.log(this.inventory.toJSON())
   }
@@ -936,33 +935,12 @@ class PlayerSet extends Schema implements PlayerSetData {
 
   [Symbol.iterator](): Iterator<Player> {
     return this.asArray()[Symbol.iterator]();
-    /*
-    let index = 0;
-    const self = this;
-    return {
-      next(): IteratorResult<Player> {
-        if (index < ROLES.length) {
-          const role = ROLES[index];
-          index += 1;
-          return {
-            done: false,
-            value: self[role]
-          };
-        } else {
-          return {
-            done: true,
-            value: null
-          };
-        }
-      }
-    };
-    */
   }
 }
 
 export interface GameSerialized {
   players: PlayerSetSerialized;
-  userRoles: { [sessionId: string]: Role };
+  userRoles: { [username: string]: Role };
   maxRound: number;
   lastTimePolled: number;
   timeRemaining: number;
@@ -997,7 +975,7 @@ export class GameState extends Schema implements GameData {
 
   constructor(data: GameStateOpts) {
     super();
-    if (isProduction()) {
+    if (isProduction() && data.userRoles) {
       assert.equal(Object.keys(data.userRoles).length, ROLES.length, 'Must have five players');
     }
     this.userRoles = data.userRoles;
@@ -1198,7 +1176,9 @@ export class GameState extends Schema implements GameData {
   resetPlayerCosts(): void {
     this.tradingEnabled = true;
     for (const player of this.players) {
+      logger.info('costs (before) [%s]: %o', player.role, player.costs.toJSON());
       player.costs.fromJSON(ResourceCosts.getCosts(player.role));
+      logger.info('costs (after) [%s]: %o', player.role, player.costs.toJSON());
     }
   }
 
@@ -1348,6 +1328,8 @@ export class GameState extends Schema implements GameData {
 
   investTime(role: Role, investment: InvestmentData): void {
     this.players[role].pendingInvestments.fromJSON(investment);
+    this.players[role].contributedUpkeep += investment.upkeep;
+    logger.info('contributedUpkeep (%s): %d', role, this.players[role].contributedUpkeep);
   }
 
   setPlayerReadiness(role: Role, ready: boolean): void {

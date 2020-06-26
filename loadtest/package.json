@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "loadtest": "ts-node -r tsconfig-paths/register src/loadtest.ts"
+  },
+  "dependencies": {
+    "@colyseus/loadtest": "^0.13.1",
+    "tsconfig-paths": "^3.9.0"
+  },
+  "devDependencies": {
+    "@types/blessed": "^0.1.17"
+  }
+}

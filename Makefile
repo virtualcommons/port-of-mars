@@ -35,16 +35,11 @@ browser:
 
 .PHONY: browser-staging
 browser-staging:
-	firefox --new-tab --url 'ext+container:name=Bob&url=http://alpha.portofmars.asu.edu/#/game' \
-		--new-tab --url 'ext+container:name=Amanda&url=http://alpha.portofmars.asu.edu/#/game' \
-		--new-tab --url 'ext+container:name=Frank&url=http://alpha.portofmars.asu.edu/#/game' \
-		--new-tab --url 'ext+container:name=Sydney&url=http://alpha.portofmars.asu.edu/#/game' \
-		--new-tab --url 'ext+container:name=Adison&url=http://alpha.portofmars.asu.edu/#/game' \
-		--new-tab --url 'ext+container:name=Bob2&url=http://alpha.portofmars.asu.edu/#/game' \
-		--new-tab --url 'ext+container:name=Amanda2&url=http://alpha.portofmars.asu.edu/#/game' \
-		--new-tab --url 'ext+container:name=Frank2&url=http://alpha.portofmars.asu.edu/#/game' \
-		--new-tab --url 'ext+container:name=Sydney2&url=http://alpha.portofmars.asu.edu/#/game' \
-		--new-tab --url 'ext+container:name=Adison2&url=http://alpha.portofmars.asu.edu/#/game'
+	firefox --new-tab --url 'ext+container:name=Bob&url=http://alpha.portofmars.asu.edu' \
+		--new-tab --url 'ext+container:name=Amanda&url=http://alpha.portofmars.asu.edu' \
+		--new-tab --url 'ext+container:name=Frank&url=http://alpha.portofmars.asu.edu' \
+		--new-tab --url 'ext+container:name=Sydney&url=http://alpha.portofmars.asu.edu' \
+		--new-tab --url 'ext+container:name=Adison&url=http://alpha.portofmars.asu.edu'
 
 keys:
 	mkdir -p keys

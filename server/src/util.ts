@@ -2,14 +2,14 @@ import path from "path";
 import _ from "lodash";
 import * as assert from "assert";
 import * as to from "typeorm";
-import { Loader, Resolver } from "typeorm-fixtures-cli/dist";
-import { MarsEventData, ROLES, DashboardMessage } from "@port-of-mars/shared/types";
-import { GameOpts, GameStateOpts, Persister } from "@port-of-mars/server/rooms/game/types";
-import { expandCopies } from "@port-of-mars/server/rooms/game/state/marsevents/common";
-import { getAllMarsEvents } from "@port-of-mars/server/data/MarsEvents";
-import { Page, getPagePath } from "@port-of-mars/shared/routes";
-import { getLogger, settings } from "@port-of-mars/server/settings";
-import { getServices } from "@port-of-mars/server/services";
+import {Loader, Resolver} from "typeorm-fixtures-cli/dist";
+import {MarsEventData, ROLES, DashboardMessage} from "@port-of-mars/shared/types";
+import {GameOpts, GameStateOpts, Persister} from "@port-of-mars/server/rooms/game/types";
+import {expandCopies} from "@port-of-mars/server/rooms/game/state/marsevents/common";
+import {getAllMarsEvents} from "@port-of-mars/server/data/MarsEvents";
+import {Page, getPagePath} from "@port-of-mars/shared/routes";
+import {getLogger, settings} from "@port-of-mars/server/settings";
+import {getServices} from "@port-of-mars/server/services";
 
 const logger = getLogger(__filename);
 
@@ -44,8 +44,8 @@ export function getMarsEvent(id: string): MarsEventData {
 
 /**
  * This function needs some documentation some day.
- * @param deckStrategy 
- * @param nRoundStrategy 
+ * @param deckStrategy
+ * @param nRoundStrategy
  */
 export function mockGameStateInitOpts(
   deckStrategy: (events: Array<MarsEventData>) => Array<MarsEventData> = x => x,
@@ -75,16 +75,26 @@ export async function mockGameInitOpts(): Promise<GameOpts> {
   };
 }
 
-export async function buildGameOpts(usernames: Array<string>): Promise<GameOpts> {
-  assert.equal(usernames.length, ROLES.length);
+export async function buildGameOpts(usernames?: Array<string>): Promise<GameOpts> {
   const currentTournamentRound = await getServices().tournament.getCurrentTournamentRound();
-  logger.info("building game opts with current tournament round [%d]", currentTournamentRound.id);
-  return {
-    userRoles: _.zipObject(usernames, ROLES),
-    deck: _.shuffle(getMarsEventData()),
-    numberOfGameRounds: currentTournamentRound.numberOfGameRounds,
-    tournamentRoundId: currentTournamentRound.id,
-  };
+  if (usernames) {
+    assert.equal(usernames.length, ROLES.length);
+    logger.info("building game opts with current tournament round [%d]", currentTournamentRound.id);
+    return {
+      userRoles: _.zipObject(usernames, ROLES),
+      deck: _.shuffle(getMarsEventData()),
+      numberOfGameRounds: currentTournamentRound.numberOfGameRounds,
+      tournamentRoundId: currentTournamentRound.id,
+    };
+  } else {
+    return {
+      userRoles: {},
+      deck: getMarsEventData(),
+      numberOfGameRounds: currentTournamentRound.numberOfGameRounds,
+      tournamentRoundId: currentTournamentRound.id
+    }
+  }
+
 }
 
 export interface ServerErrorData {
@@ -107,7 +117,7 @@ export class ServerError extends Error implements ServerErrorData {
   }
 
   toDashboardMessage(): DashboardMessage {
-    return { kind: 'warning', message: this.getDisplayMessage() };
+    return {kind: 'warning', message: this.getDisplayMessage()};
   }
 
   getDisplayMessage(): string {
