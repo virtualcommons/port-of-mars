@@ -89,7 +89,7 @@
       const items = [
         {label: 'Prior System Health', value: this.systemHealth},
         {label: 'Group Contributions', value: this.totalSystemHealthContributions},
-        {label: 'Wear and Tear', value: -this.systemHealthMaintenanceCost},
+        {label: 'Wear and Tear', value: this.systemHealthMaintenanceCost},
         {label: 'Upcoming System Health', value: this.nextRoundSystemHealth, _rowVariant: this.systemHealthBadgeVariant}
       ];
       const isUnderAudit = this.$tstore.getters.isUnderAudit;
