@@ -7,6 +7,9 @@ WORKDIR /code/client
 COPY ./client/package.json ./client/yarn.lock /code/client/
 RUN yarn install
 
+COPY ./shared/package.json ./shared/yarn.lock /code/shared/
+RUN cd /code/shared && yarn install
+
 COPY ./client /code/client
 COPY ./shared /code/shared
 
@@ -22,6 +25,9 @@ WORKDIR /code/server
 
 COPY ./server/package.json ./server/yarn.lock /code/server/
 RUN yarn install
+
+COPY ./shared/package.json ./shared/yarn.lock /code/shared/
+RUN cd /code/shared && yarn install
 
 COPY ./server /code/server
 COPY ./shared /code/shared

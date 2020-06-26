@@ -15,6 +15,9 @@ WORKDIR /code/server
 COPY ./server/package.json ./server/yarn.lock /code/server/
 RUN yarn install
 
+COPY ./shared/package.json ./shared/yarn.lock /code/shared/
+RUN cd /code/shared && yarn install
+
 COPY ./server /code/server
 COPY ./shared /code/shared
 

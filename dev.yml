@@ -2,13 +2,15 @@
 version: '3'
 services:
   client:
-    build: client
+    build:
+      dockerfile: client/Dockerfile
+      context: .
     restart: always
     image: port-of-mars/client/dev:latest
     volumes:
       - ./client:/code/client
       - ./keys/sentry_dsn:/run/secrets/sentry_dsn
-      - ./shared:/code/shared
+      - ./shared/src:/code/shared/src
       - /code/client/node_modules
     command: './dev.sh'
     ports:
