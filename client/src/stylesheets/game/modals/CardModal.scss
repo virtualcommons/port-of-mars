@@ -2,7 +2,7 @@
   height: 20rem;
   width: 50rem;
   @include reset-padding-margin;
-  border: 0.125rem solid $dark-accent;
+  border: 0.125rem solid $light-shade;
   @include make-column-and-top;
   justify-content: space-between;
   background-color: $dark-shade;
