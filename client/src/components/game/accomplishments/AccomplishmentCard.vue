@@ -27,12 +27,15 @@
         <p>Points</p>
         <p>{{ accomplishment.victoryPoints }}</p>
       </div>
-      <div class="flavortext col-9" v-if="showDescription">
+      <div
+        class="flavortext col-9"
+        v-if="showDescription"
+      >
         <p>{{ accomplishment.flavorText }}</p>
       </div>
     </div>
 
-    <div v-if="showCost" class="cost-wrapper row">
+    <div class="cost-wrapper row">
       <div class="cost col-12">
         <div
           v-for="investment in accomplishmentCost"
@@ -154,7 +157,6 @@ export default class AccomplishmentCard extends Vue {
   private showCard!: boolean;
 
   @Prop({ default: true })
-  private showCost!: boolean;
 
   private cardIsActive: boolean = true;
 
