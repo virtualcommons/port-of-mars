@@ -367,6 +367,7 @@ export class EnteredNewRoundPhase extends KindOnlyGameEvent {
     game.phase = Phase.newRound;
     game.timeRemaining = 60;
     game.round += 1;
+    game.roundIntroduction.addContribution(game.getPlayerContributions());
     game.log(`Round ${game.round} begins.`, MarsLogCategory.newRound);
 
     // FIXME: game.resetRound to encompass resets
@@ -395,6 +396,7 @@ export class SubtractedSystemHealthWearAndTear extends KindOnlyGameEvent {
     // apply system health - wear and tear
     game.decreaseSystemHealth(25);
     game.resetPlayerContributions();
+    game.roundIntroduction.reset();
     game.log(
       `Standard wear and tear reduces System Health by 25.
         At the beginning of this round, System Health = ${game.upkeep}.`,

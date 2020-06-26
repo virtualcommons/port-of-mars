@@ -26,6 +26,7 @@ import {
 } from './panes';
 import _ from 'lodash';
 import { DashboardMessage } from '../../types';
+import {SYSTEM_HEALTH_MAINTENANCE_COST} from "../../settings";
 
 export interface PlayerClientData extends PlayerData {
   pendingInvestments: InvestmentData;
@@ -169,6 +170,10 @@ export const initialStoreState: State = {
   marsEvents: [],
   logs: [],
   marsEventsProcessed: 0,
+  roundIntroduction: {
+    contributedSystemHealth: 0,
+    maintenanceSystemHealth: -SYSTEM_HEALTH_MAINTENANCE_COST
+  },
   tradeSet: {},
   winners: [],
 

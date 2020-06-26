@@ -27,7 +27,7 @@ import {
   TradeStatus,
   TradeSetData,
   RESOURCES,
-  MarsLogCategory,
+  MarsLogCategory, RoundIntroductionData,
 } from '@port-of-mars/shared/types';
 import { canSendTradeRequest } from '@port-of-mars/shared/validation';
 import _ from 'lodash';
@@ -37,7 +37,7 @@ import {
   getAccomplishmentByID,
   getAccomplishmentIDs
 } from '@port-of-mars/server/data/Accomplishment';
-import {COST_INAFFORDABLE, isProduction} from '@port-of-mars/shared/settings';
+import {COST_INAFFORDABLE, isProduction, SYSTEM_HEALTH_MAINTENANCE_COST} from '@port-of-mars/shared/settings';
 import { settings } from '@port-of-mars/server/settings';
 import { GameEvent } from '@port-of-mars/server/rooms/game/events/types';
 import { GameOpts, GameStateOpts } from '@port-of-mars/server/rooms/game/types';
@@ -46,6 +46,37 @@ import { MarsEvent } from '@port-of-mars/server/rooms/game/state/marsevents/Mars
 import { SimpleBot } from "@port-of-mars/server/rooms/game/state/bot";
 
 const logger = settings.logging.getLogger(__filename);
+
+export class RoundIntroduction extends Schema implements RoundIntroductionData {
+  constructor() {
+    super();
+  }
+
+  fromJSON(data: RoundIntroductionData) {
+    Object.assign(this, data);
+  }
+
+  toJSON(): RoundIntroductionData {
+    return {
+      contributedSystemHealth: this.contributedSystemHealth,
+      maintenanceSystemHealth: this.maintenanceSystemHealth,
+    }
+  }
+
+  @type('number')
+  maintenanceSystemHealth = -SYSTEM_HEALTH_MAINTENANCE_COST;
+
+  @type('number')
+  contributedSystemHealth = 0;
+
+  addContribution(systemHealth: number) {
+    this.contributedSystemHealth += systemHealth;
+  }
+
+  reset() {
+    this.contributedSystemHealth = 0;
+  }
+}
 
 export class ChatMessage extends Schema implements ChatMessageData {
   constructor(msg: ChatMessageData) {
@@ -974,6 +1005,7 @@ export interface GameSerialized {
   marsEvents: Array<MarsEventData>;
   marsEventsProcessed: number;
   marsEventDeck: MarsEventDeckSerialized;
+  roundIntroduction: RoundIntroductionData;
   tradeSet: TradeSetData;
   winners: Array<Role>;
   tradingEnabled: boolean;
@@ -1024,6 +1056,7 @@ export class GameState extends Schema implements GameData {
     this.round = data.round;
     this.phase = data.phase;
     this.upkeep = data.upkeep;
+    this.roundIntroduction.fromJSON(data.roundIntroduction);
     this.tradingEnabled = data.tradingEnabled;
 
     const marsLogs = _.map(data.logs, m => new MarsLogMessage(m));
@@ -1064,11 +1097,15 @@ export class GameState extends Schema implements GameData {
       marsEvents: _.map(this.marsEvents, e => e.toJSON()),
       marsEventsProcessed: this.marsEventsProcessed,
       marsEventDeck: this.marsEventDeck.toJSON(),
+      roundIntroduction: this.roundIntroduction.toJSON(),
       tradeSet: this.tradeSet.toJSON(),
       tradingEnabled: this.tradingEnabled,
       winners: _.map(this.winners, w => w)
     };
   }
+
+  @type(RoundIntroduction)
+  roundIntroduction: RoundIntroduction = new RoundIntroduction();
 
   @type(PlayerSet)
   players: PlayerSet;
@@ -1147,6 +1184,14 @@ export class GameState extends Schema implements GameData {
     const player = this.players[role];
     player.invest(investment);
     player.contributedUpkeep = investment.upkeep;
+  }
+
+  getPlayerContributions(): number {
+    let contributions = 0;
+    for (const p of this.players) {
+      contributions += p.contributedUpkeep;
+    }
+    return contributions;
   }
 
   getPlayer(username: string): Player {

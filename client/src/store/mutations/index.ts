@@ -5,6 +5,7 @@ import investment from './investment';
 import layout from './layout';
 import notifications from './notifications';
 import player from './player';
+import roundIntroduction from './roundIntroduction';
 import trading from './trading';
 import ui from './ui';
 import Vue from 'vue';
@@ -42,6 +43,7 @@ export default {
   ...layout,
   ...notifications,
   ...player,
+  ...roundIntroduction,
   ...trading,
   ...ui,
 };

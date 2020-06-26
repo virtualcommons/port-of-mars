@@ -8,7 +8,7 @@ import {
   MarsLogMessageData,
   ROLES,
   TradeData,
-  Role,
+  Role, RoundIntroductionData,
 } from '@port-of-mars/shared/types';
 import { SetPlayerRole, SetError } from '@port-of-mars/shared/game/responses';
 import { Schema } from '@colyseus/schema';
@@ -199,6 +199,10 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
       if (change.field === 'winners') {
         const winners: Array<Role> = change.value;
         store.commit('SET_WINNERS', winners);
+      }
+      if (change.field === 'roundIntroduction') {
+        const roundIntroduction: RoundIntroductionData = change.value;
+        store.commit('SET_ROUND_INTRODUCTION', roundIntroduction);
       }
     });
   };

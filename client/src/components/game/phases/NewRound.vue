@@ -10,7 +10,7 @@
         </div>
         <div v-else>
           <p>
-          In the previous round you invested <b>{{ systemHealthContribution }}</b> and the rest of your group invested 
+          In the previous round you invested <b>{{ systemHealthContribution }}</b> and the rest of your group invested
           <b>{{ groupContributions }}</b> in System Health for a total of {{ totalSystemHealthContributions }}.
            Your group's average investment was {{ averageContribution }}.
           </p>
@@ -31,7 +31,7 @@
 
 <script lang="ts">
   import { Vue } from 'vue-property-decorator';
-  import { PlayerClientData } from '@port-of-mars/client/store/state';
+  import { PlayerClientData } from '@port-of-mars/shared/game/client/state';
   import { SYSTEM_HEALTH_MAINTENANCE_COST } from '@port-of-mars/shared/settings';
   import _ from 'lodash';
 
@@ -57,8 +57,8 @@
       return this.$tstore.state.round;
     }
 
-    get systemHealthMaintenanceCost() {
-      return SYSTEM_HEALTH_MAINTENANCE_COST;
+    get systemHealthMaintenanceCost(): number {
+      return this.$tstore.state.roundIntroduction.maintenanceSystemHealth;
     }
 
     get systemHealth() {
@@ -66,7 +66,7 @@
     }
 
     get nextRoundSystemHealth() {
-       return _.clamp(this.systemHealth - this.systemHealthMaintenanceCost, 0, 100);
+       return _.clamp(this.systemHealth + this.totalSystemHealthContributions + this.systemHealthMaintenanceCost, 0, 100);
     }
 
     get isFirstRound() {
@@ -109,11 +109,11 @@
     }
 
     get groupContributions() {
-      return _.sumBy(this.otherPlayerContributions(), 'value');
+      return this.totalSystemHealthContributions - this.systemHealthContribution;
     }
 
     get totalSystemHealthContributions() {
-      return this.systemHealthContribution + this.groupContributions;
+      return this.$tstore.state.roundIntroduction.contributedSystemHealth;
     }
   }
 </script>
