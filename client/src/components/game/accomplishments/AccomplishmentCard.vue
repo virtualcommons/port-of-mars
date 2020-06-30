@@ -4,6 +4,7 @@
     :class="[cardTypeStyling, { 'modal-view': isModal }]"
     v-show="cardIsActive"
   >
+    <!-- title -->
     <div class="title-wrapper">
       <div class="d-flex flex-row title col-12">
         <b-icon
@@ -19,7 +20,9 @@
       </div>
     </div>
 
+    <!-- information: points, description -->
     <div class="info-wrapper row">
+      <!-- points -->
       <div
         class="points"
         v-bind="{ class: showDescription ? 'col-3' : 'col-12' }"
@@ -27,6 +30,8 @@
         <p>Points</p>
         <p>{{ accomplishment.victoryPoints }}</p>
       </div>
+
+      <!-- description -->
       <div
         class="flavortext col-9"
         v-if="showDescription"
@@ -35,6 +40,7 @@
       </div>
     </div>
 
+    <!-- cost -->
     <div class="cost-wrapper row">
       <div class="cost col-12">
         <div
@@ -55,6 +61,7 @@
       </div>
     </div>
 
+    <!-- in purchase phase, allow purchase if sufficient resources -->
     <div
       v-if="type === cardType.purchase && showCard"
       class="purchase-wrapper row"
@@ -66,6 +73,7 @@
       </div>
     </div>
 
+    <!-- in discard phase, allow discard -->
     <div
       v-if="type === cardType.discard && showCard"
       class="discard-wrapper row"
@@ -77,16 +85,17 @@
       </div>
     </div>
 
+    <!-- display status of card after it has been purchased or discarded -->
     <div
       v-if="
         showCard && (type === cardType.discard || type === cardType.purchase)
       "
       class="status-text row"
     >
-      <div v-if="type == cardType.discard" class="text col-12">
+      <div v-if="type === cardType.discard" class="text col-12">
         <p>Card Has Been Discarded</p>
       </div>
-      <div v-if="type == cardType.purchase" class="text col-12">
+      <div v-if="type === cardType.purchase" class="text col-12">
         <p>Card Has Been Purchased</p>
       </div>
     </div>
@@ -170,9 +179,14 @@ export default class AccomplishmentCard extends Vue {
   shouldShowCard(showCard: boolean) {
     if (!showCard) {
       //if the status changes, it's time to start to remove the card
-      setTimeout(() => (this.cardIsActive = false), 1900);
+      setTimeout(() => (this.cardIsActive = false), 5000);
     }
   }
+
+  // @Watch('showInfo', {immediate: false})
+  // expandCard(showInfo: boolean) {
+  //   return showInfo;
+  // }
 
   get cardType() {
     return AccomplishmentCardType;
@@ -191,6 +205,7 @@ export default class AccomplishmentCard extends Vue {
         confirmation: false,
       },
     };
+
 
     this.api.setModalVisible(data);
   }
