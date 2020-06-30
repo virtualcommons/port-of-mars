@@ -79,7 +79,7 @@
     "crypto-random-string": "^3.1.0",
     "csv-writer": "^1.6.0",
     "express": "^4.16.4",
-    "express-jwt": "^5.3.1",
+    "express-jwt": "^6.0.0",
     "express-session": "^1.17.0",
     "helmet": "^3.22.0",
     "jsondiffpatch": "^0.4.1",
