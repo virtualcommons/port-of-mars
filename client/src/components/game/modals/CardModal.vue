@@ -1,7 +1,7 @@
 <template>
-  <div class="card-modal container">
-    <div class="cards-wrapper row">
-      <div class="cards col-12">
+  <div class="card-modal">
+    <div class="d-flex flex-row cards-wrapper">
+      <div class="cards">
         <AccomplishmentCard
           v-if="modalData.cardType === 'AccomplishmentCard'"
           class="accomplishment-card"
@@ -20,7 +20,7 @@
         />
       </div>
     </div>
-    <div v-if="modalData.confirmation" class="confirm-wrapper row">
+    <div v-if="modalData.confirmation" class="d-flex flex-row confirm-wrapper">
       <div class="confirm col-12">
         <p class="confirm-text">Are you sure you want do proceed? </p>
         <button @click="handleConfirmation">Confirm</button>
@@ -56,14 +56,9 @@ export default class CardModal extends Vue {
   }
 
   get canDiscard() {
-    if (
-      this.gamePhase === this.phase.discard &&
+    return !!(this.gamePhase === this.phase.discard &&
       this.modalData.cardType === 'AccomplishmentCard' &&
-      this.modalData.cardData.id
-    ) {
-      return true;
-    }
-    return false;
+      this.modalData.cardData.id);
   }
 
   private handleConfirmation() {

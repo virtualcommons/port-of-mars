@@ -1,11 +1,11 @@
 .c-accomplishment-card {
   width: 100%;
   padding: 0;
-  //height: 100%;
   margin: 0 0 0.5rem 0;
   @include make-column-and-center;
   flex-shrink: 0;
-  //align-items: stretch;
+  align-items: stretch;
+
   &:last-child {
     margin-bottom: 0;
   }
@@ -22,57 +22,51 @@
     margin: 0;
   }
 
-  .title-wrapper {
-    .title {
-      padding: 0;
-      position: relative;
+  .title {
+    padding: 0;
+    position: relative;
 
-      p {
-        width: 100%;
-        margin-bottom: 0;
-        font-size: $font-med;
-        font-weight: $medium;
-        //color: $space-gray;
-        text-align: center;
-        @include text-overflow-ellipses;
-      }
+    p {
+      width: 100%;
+      margin-bottom: 0;
+      font-size: $font-med;
+      font-weight: $medium;
+      text-align: center;
+      @include text-overflow-ellipses;
     }
   }
 
   .info-wrapper {
     background-color: $dark-shade;
-    //flex:1;
+  }
 
-    .points {
-      padding: 0 0.5rem;
-      @include make-column-and-center;
+  .points {
+    padding: 0 0.5rem;
+    @include make-column-and-center;
 
-      p {
-        width: 100%;
-        margin-bottom: 0;
-        font-size: $font-med;
-        font-weight: $regular;
-        color: $light-shade;
-        text-align: center;
-      }
+    p {
+      width: 100%;
+      margin-bottom: 0;
+      font-size: $font-med;
+      font-weight: $regular;
+      color: $light-shade;
+      text-align: center;
     }
+  }
 
-    .flavortext {
-      //flex:1;
-      padding: 0 0.5rem;
+  .flavortext {
+    padding: 0 0.5rem;
 
-      p {
-        width: 100%;
-        margin-bottom: 0;
-        font-size: $font-med;
-        font-weight: $regular;
-        color: $light-shade;
-      }
+    p {
+      width: 100%;
+      margin-bottom: 0;
+      font-size: $font-med;
+      font-weight: $regular;
+      color: $light-shade;
     }
   }
 
   .cost-wrapper {
-    //flex:1;
     background-color: $dark-shade;
 
     .cost {
@@ -183,7 +177,7 @@
   max-height: 17rem !important;
 }
 
-.hide-card{
+.hide-card {
   animation: hide 0.3s linear 1.5s 1 forwards;
 }
 
