@@ -41,9 +41,9 @@ describe('a Researcher Player Accomplishment', () => {
 
   it('screw cards handle contributed upkeep correctly', () => {
     const grantFunkAccomplishment = getAccomplishmentByID(RESEARCHER, 14);
-    expect(p.contributedUpkeep).toBe(0);
+    expect(p.systemHealthChanges.netChange()).toBe(0);
     p.purchaseAccomplishment(grantFunkAccomplishment);
-    expect(p.contributedUpkeep).toBe(-6);
+    expect(p.systemHealthChanges.netChange()).toBe(-6);
   });
 
   it('cards in hand are removed from the deck of possible cards', () => {

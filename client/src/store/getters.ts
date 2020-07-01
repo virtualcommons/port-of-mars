@@ -132,14 +132,25 @@ export default {
   },
 
   systemHealthContribution(state: State): number {
-    return state.players[state.role].contributedUpkeep;
+    return state.players[state.role].systemHealthChanges.investment;
   },
 
   totalSystemHealthContributions(state: State): number {
     let contributed = 0;
     for (const role of ROLES) {
-      contributed += state.players[role].contributedUpkeep;
+      contributed += state.players[role].systemHealthChanges.investment;
     }
     return contributed;
+  },
+
+  purchaseSystemHealth(state: State): Array<{label: string; role: string; value: number}> {
+    const purchases: Array<{label: string; role: string; value: number}> = []
+    for (const role of ROLES) {
+      purchases.splice(
+        purchases.length,
+        0,
+        ...state.players[role].systemHealthChanges.purchases.map(p => ({ label: p.description, role, value: p.systemHealth})));
+    }
+    return purchases;
   }
 }

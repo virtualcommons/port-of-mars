@@ -208,7 +208,6 @@ export class SimpleBot implements Bot {
   }
 
   act(state: GameState, player: Player): Array<GameEvent> {
-    logger.info('act %s, active %d, should be %d', player.role, this.active, this.shouldBeActive);
     this.incrementElapsed();
     if (this.active) {
       if (this.shouldBeActive) {

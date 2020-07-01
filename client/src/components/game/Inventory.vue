@@ -134,7 +134,7 @@ export default class Inventory extends Vue {
     const costs = p.costs;
     return {
       name: 'System Health',
-      units: p.contributedUpkeep,
+      units: p.systemHealthChanges.investment,
       pendingUnits: pendingInvestment.upkeep,
       cost: costs.upkeep,
     };

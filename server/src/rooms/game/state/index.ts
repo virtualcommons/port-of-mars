@@ -27,7 +27,7 @@ import {
   TradeStatus,
   TradeSetData,
   RESOURCES,
-  MarsLogCategory, RoundIntroductionData,
+  MarsLogCategory, RoundIntroductionData, SystemHealthChangeData, PurchasedSystemHealthData,
 } from '@port-of-mars/shared/types';
 import { canSendTradeRequest } from '@port-of-mars/shared/validation';
 import _ from 'lodash';
@@ -624,7 +624,7 @@ export interface PlayerSerialized {
   accomplishment: AccomplishmentSetSerialized;
   ready: boolean;
   timeBlocks: number;
-  contributedUpkeep: number;
+  systemHealthChange: SystemHealthChangeData;
   victoryPoints: number;
   inventory: ResourceAmountData;
   pendingInvestments: InvestmentData;
@@ -712,6 +712,70 @@ export interface Bot {
   act(state: GameState, player: Player): Array<GameEvent>;
 }
 
+export class PurchasedSystemHealth extends Schema implements PurchasedSystemHealthData {
+  constructor(data: PurchasedSystemHealthData) {
+    super();
+    this.description = data.description;
+    this.systemHealth = data.systemHealth;
+  }
+
+  fromJSON(data: PurchasedSystemHealthData) {
+    this.description = data.description;
+    this.systemHealth = data.systemHealth;
+  }
+
+  toJSON(): PurchasedSystemHealthData {
+    return {
+      description: this.description,
+      systemHealth: this.systemHealth
+    }
+  }
+
+  @type('string')
+  description: string;
+
+  @type('number')
+  systemHealth: number;
+}
+
+export class SystemHealthChange extends Schema implements SystemHealthChangeData {
+
+  fromJSON(data: SystemHealthChangeData) {
+    this.investment = data.investment;
+    this.purchases.splice(this.purchases.length, 0, ...data.purchases.map(p => new PurchasedSystemHealth(p)));
+  }
+
+  toJSON(): SystemHealthChangeData {
+    return {
+      investment: this.investment,
+      purchases: this.purchases
+    };
+  }
+
+  addPurchase(purchase: PurchasedSystemHealth) {
+    this.purchases.push(purchase);
+  }
+
+  reset() {
+    this.investment = 0;
+    this.purchases.splice(0, this.purchases.length);
+  }
+
+  netChange() {
+    let netSystemChange = this.investment;
+    for (const purchase of this.purchases) {
+      netSystemChange += purchase.systemHealth;
+    }
+    return netSystemChange;
+  }
+
+  @type('number')
+  investment: number = 0;
+
+  @type([PurchasedSystemHealth])
+  purchases = new ArraySchema<PurchasedSystemHealth>();
+}
+
 export class Player extends Schema implements PlayerData {
   constructor(role: Role, bot: Bot) {
     super();
@@ -731,7 +795,6 @@ export class Player extends Schema implements PlayerData {
     this.accomplishments.fromJSON(data.accomplishment);
     this.ready = data.ready;
     this.timeBlocks = data.timeBlocks;
-    this.contributedUpkeep = data.contributedUpkeep;
     this.victoryPoints = data.victoryPoints;
     this.inventory.fromJSON(data.inventory);
 
@@ -749,10 +812,10 @@ export class Player extends Schema implements PlayerData {
       accomplishment: this.accomplishments.toJSON(),
       ready: this.ready,
       timeBlocks: this.timeBlocks,
-      contributedUpkeep: this.contributedUpkeep,
       victoryPoints: this.victoryPoints,
       inventory: this.inventory.toJSON(),
       pendingInvestments: this.pendingInvestments.toJSON(),
+      systemHealthChange: this.systemHealthChanges.toJSON(),
     };
   }
 
@@ -778,8 +841,8 @@ export class Player extends Schema implements PlayerData {
   @type('number')
   timeBlocks: number = Player.defaults.timeBlocks;
 
-  @type('number')
-  contributedUpkeep = 0;
+  @type(SystemHealthChange)
+  systemHealthChanges = new SystemHealthChange();
 
   @type(ResourceInventory)
   inventory = new ResourceInventory();
@@ -824,7 +887,8 @@ export class Player extends Schema implements PlayerData {
     };
     logger.trace('accomplishments: %o', JSON.stringify(this.accomplishments.purchasable.map(p => _.fromPairs(Object.entries(p)))));
     logger.trace('accomplishment upkeep: %d [%s] (%o)', accomplishment.upkeep, accomplishment.label, _.fromPairs(_.toPairs(accomplishment)))
-    this.contributedUpkeep -= Math.abs(accomplishment.upkeep);
+    this.systemHealthChanges.addPurchase(new PurchasedSystemHealth({description: `Purchase: ${accomplishment.label}`, systemHealth: accomplishment.upkeep}));
+    logger.trace('purchases: %o', this.systemHealthChanges.purchases);
     // FIXME: victoryPoints should probably be a computed property
     // that sums this.accomplishments.purchased.victoryPoints 
     // and not a cached numerical value
@@ -891,7 +955,7 @@ export class Player extends Schema implements PlayerData {
       (investment as any)[k] += (leftOverInvestments as any)[k];
     }
 
-    this.contributedUpkeep = investment.upkeep;
+    this.systemHealthChanges.investment = investment.upkeep;
     this.inventory.update(investment);
     // console.log(this.inventory.toJSON())
   }
@@ -1183,13 +1247,12 @@ export class GameState extends Schema implements GameData {
   invest(role: Role, investment: InvestmentData) {
     const player = this.players[role];
     player.invest(investment);
-    player.contributedUpkeep = investment.upkeep;
   }
 
   getPlayerContributions(): number {
     let contributions = 0;
     for (const p of this.players) {
-      contributions += p.contributedUpkeep;
+      contributions += p.systemHealthChanges.investment;
     }
     return contributions;
   }
@@ -1255,7 +1318,7 @@ export class GameState extends Schema implements GameData {
 
   resetPlayerContributions(): void {
     for (const player of this.players) {
-      player.contributedUpkeep = 0;
+      player.systemHealthChanges.reset()
     }
   }
 
@@ -1296,7 +1359,10 @@ export class GameState extends Schema implements GameData {
   contributedSystemHealth(): number {
     let contributions = 0;
     for (const p of this.players) {
-      contributions += p.contributedUpkeep;
+      contributions += p.systemHealthChanges.investment;
+      for (const purchase of p.systemHealthChanges.purchases) {
+        contributions += purchase.systemHealth;
+      }
     }
     return contributions;
   }

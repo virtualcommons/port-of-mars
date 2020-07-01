@@ -10,7 +10,7 @@ import trading from './trading';
 import ui from './ui';
 import Vue from 'vue';
 import { State, getInitialStoreState } from '@port-of-mars/shared/game/client/state';
-import { DashboardMessage } from '@port-of-mars/shared/types';
+import {DashboardMessage, Role, SystemHealthChangeData} from '@port-of-mars/shared/types';
 import _ from 'lodash';
 
 export default {
@@ -34,6 +34,11 @@ export default {
 
   SET_ENVIRONMENT(state: any, newEnvironment: string) {
     state.environment = newEnvironment;
+  },
+
+  SET_SYSTEM_HEALTH_CHANGES(state: State, payload: {role: Role, data: SystemHealthChangeData}) {
+    Vue.set(state.players[payload.role].systemHealthChanges, 'purchases', payload.data.purchases);
+    state.players[payload.role].systemHealthChanges.investment = payload.data.investment;
   },
 
   ...accomplishments,

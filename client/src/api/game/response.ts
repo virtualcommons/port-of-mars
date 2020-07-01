@@ -8,7 +8,7 @@ import {
   MarsLogMessageData,
   ROLES,
   TradeData,
-  Role, RoundIntroductionData,
+  Role, RoundIntroductionData, SystemHealthChangeData,
 } from '@port-of-mars/shared/types';
 import { SetPlayerRole, SetError } from '@port-of-mars/shared/game/responses';
 import { Schema } from '@colyseus/schema';
@@ -33,7 +33,7 @@ const responseMap: serverResponse = {
   accomplishments: 'SET_ACCOMPLISHMENTS',
   victoryPoints: 'SET_VICTORY_POINTS',
   pendingInvestments: 'SET_PENDING_INVESTMENTS',
-  contributedUpkeep: 'SET_CONTRIBUTED_UPKEEP',
+  systemHealthChanges: 'SET_SYSTEM_HEALTH_CHANGES',
 };
 
 function applyPlayerResponses(player: any, store: TStore) {

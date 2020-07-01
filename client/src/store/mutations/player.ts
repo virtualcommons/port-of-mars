@@ -31,16 +31,10 @@ function SET_PENDING_INVESTMENTS(state: State, payload: { data: InvestmentData; 
   }
 }
 
-function SET_CONTRIBUTED_UPKEEP(state: State, payload: { data: number; role: Role }) {
-  const p = state.players[payload.role];
-  p.contributedUpkeep = payload.data;
-}
-
 export default {
   SET_PLAYER_ROLE,
   SET_READINESS,
   SET_ACCOMPLISHMENTS,
   SET_VICTORY_POINTS,
   SET_PENDING_INVESTMENTS,
-  SET_CONTRIBUTED_UPKEEP
 };

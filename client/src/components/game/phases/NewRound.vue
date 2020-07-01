@@ -82,28 +82,33 @@
     }
 
     get tabularContributionFields() {
-      return [{key: 'label'}, {key: 'value', class: 'text-md-right'}];
+      return [{key: 'label'}, {key: 'role'}, {key: 'value', class: 'text-md-right'}];
     }
 
     get tabularContributions() {
       const items = [
-        {label: 'Prior System Health', value: this.systemHealth},
-        {label: 'Group Contributions', value: this.totalSystemHealthContributions},
-        {label: 'Wear and Tear', value: this.systemHealthMaintenanceCost},
-        {label: 'Upcoming System Health', value: this.nextRoundSystemHealth, _rowVariant: this.systemHealthBadgeVariant}
+        {label: 'Prior System Health', role: 'System', value: this.systemHealth},
+        {label: 'Group Contributions', role: 'System', value: this.totalSystemHealthContributions},
+        ...this.$tstore.getters.purchaseSystemHealth,
+        {label: 'Wear and Tear', role: 'System', value: this.systemHealthMaintenanceCost},
+        {label: 'Upcoming System Health', role: 'System', value: this.nextRoundSystemHealth, _rowVariant: this.systemHealthBadgeVariant}
       ];
       const isUnderAudit = this.$tstore.getters.isUnderAudit;
       if (isUnderAudit) {
-        items.splice(2, 0, ...this.otherPlayerContributions().concat({label: this.$tstore.getters.player.role, value: this.systemHealthContribution}));
+        items.splice(2, 0, ...this.otherPlayerContributions().concat({
+          label: 'System Health',
+          role: this.$tstore.getters.player.role,
+          value: this.systemHealthContribution
+        }));
       }
       // Next Round System Health = Previous System Health + Group Contributions - Wear and Tear
       return items;
     }
 
-    otherPlayerContributions(): Array<{label:string, value:number}> {
+    otherPlayerContributions(): Array<{label:string, role: string, value:number}> {
       const contributions = [];
       for (const [role, player] of Object.entries(this.$tstore.getters.otherPlayers)) {
-        contributions.push({label: role, value: (player as PlayerClientData).contributedUpkeep});
+        contributions.push({label: 'System Health', role, value: (player as PlayerClientData).systemHealthChanges.investment});
       }
       return contributions;
     }

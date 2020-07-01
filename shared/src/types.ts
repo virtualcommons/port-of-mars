@@ -196,6 +196,16 @@ export interface TradeDataWithNull<R=Role|NullPartner>{
 
 export type TradeSetData = { [uuid: string]: TradeData };
 
+export interface PurchasedSystemHealthData {
+  description: string;
+  systemHealth: number;
+}
+
+export interface SystemHealthChangeData {
+  investment: number;
+  purchases: Array<PurchasedSystemHealthData>
+}
+
 export interface PlayerData {
   role: Role;
   costs: ResourceCostData;
@@ -203,7 +213,7 @@ export interface PlayerData {
   accomplishments: AccomplishmentSetData;
   ready: boolean;
   timeBlocks: number;
-  contributedUpkeep: number;
+  systemHealthChanges: SystemHealthChangeData;
   victoryPoints: number;
   inventory: ResourceAmountData;
   pendingInvestments: ResourceAmountData;

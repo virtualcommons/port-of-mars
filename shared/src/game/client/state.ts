@@ -58,7 +58,10 @@ function defaultPlayerData(role: Role): PlayerClientData {
     timeBlocks: 10,
     victoryPoints: 0,
     pendingInvestments: defaultPendingInvestment(),
-    contributedUpkeep: 0,
+    systemHealthChanges: {
+      investment: 0,
+      purchases: []
+    }
   };
 }
 

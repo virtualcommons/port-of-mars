@@ -125,11 +125,11 @@ export class GameEventSummarizer extends Summarizer<GameEventSummary> {
 
   getPlayerUpkeep(game: GameState) {
     return {
-      [CURATOR]: game.players[CURATOR].contributedUpkeep,
-      [ENTREPRENEUR]: game.players[ENTREPRENEUR].contributedUpkeep,
-      [PIONEER]: game.players[PIONEER].contributedUpkeep,
-      [POLITICIAN]: game.players[POLITICIAN].contributedUpkeep,
-      [RESEARCHER]: game.players[RESEARCHER].contributedUpkeep,
+      [CURATOR]: game.players[CURATOR].systemHealthChanges.investment,
+      [ENTREPRENEUR]: game.players[ENTREPRENEUR].systemHealthChanges.investment,
+      [PIONEER]: game.players[PIONEER].systemHealthChanges.investment,
+      [POLITICIAN]: game.players[POLITICIAN].systemHealthChanges.investment,
+      [RESEARCHER]: game.players[RESEARCHER].systemHealthChanges.investment,
     }
   }
 
@@ -242,7 +242,7 @@ export class PlayerInvestmentSummarizer extends Summarizer<PlayerInvestmentExpor
             role,
             investment: 'upkeep',
             name: 'pendingInvestment',
-            value: game.players[role].contributedUpkeep,
+            value: game.players[role].systemHealthChanges.investment,
           },
           ...RESOURCES.map(
             (investment: Resource) => ({
