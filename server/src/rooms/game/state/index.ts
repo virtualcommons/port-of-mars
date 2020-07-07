@@ -32,7 +32,6 @@ import {
 import { canSendTradeRequest } from '@port-of-mars/shared/validation';
 import _ from 'lodash';
 import * as assert from 'assert';
-import { uuid } from 'uuidv4';
 import {
   getAccomplishmentByID,
   getAccomplishmentIDs
@@ -1348,7 +1347,7 @@ export class GameState extends Schema implements GameData {
     this.winners.splice(0, this.winners.length);
   }
 
-  addPlayerContributions(): void {
+  updateSystemHealth(): void {
     this.upkeep = this.nextRoundSystemHealth();
   }
 
@@ -1364,6 +1363,7 @@ export class GameState extends Schema implements GameData {
         contributions += purchase.systemHealth;
       }
     }
+    logger.trace('contributions: %d', contributions);
     return contributions;
   }
 

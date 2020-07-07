@@ -91,8 +91,9 @@ export class GameRoom extends Room<GameState> implements Game {
       */
       const cmd = this.prepareRequest(message, client);
       const events = cmd.execute();
+      const metadata = this.getMetadata()
       this.state.applyMany(events);
-      this.persister.persist(events, this.getMetadata());
+      this.persister.persist(events, metadata);
     });
     this.persister = new DBPersister();
     this.gameId = await this.persister.initialize(options, this.roomId);
@@ -171,6 +172,8 @@ export class GameRoom extends Room<GameState> implements Game {
     const inEndGame = [Phase.defeat, Phase.victory].includes(this.state.phase);
     this.state.timeRemaining -= 1;
     let events: Array<GameEvent>;
+    const metadata = this.getMetadata();
+    const timeRemaining = _.cloneDeep(metadata.timeRemaining);
     const botEvents = this.state.act();
     if (botEvents.length > 0) {
       logger.debug('bot events: %o', botEvents)
@@ -188,7 +191,7 @@ export class GameRoom extends Room<GameState> implements Game {
     }
 
     if (!_.isEmpty(events)) {
-      this.persister.persist(events, this.getMetadata());
+      this.persister.persist(events, metadata);
     }
 
     if (inEndGame) {

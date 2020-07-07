@@ -106,6 +106,7 @@ function extractAfter(g: GameState): { phaseFinalTimeRemaining: number; systemHe
 
 export class GameEventSummarizer extends Summarizer<GameEventSummary> {
   _summarizeEvent(game: GameState, event: entity.GameEvent): GameEventSummary {
+    game.timeRemaining = event.timeRemaining;
     const before = extractBefore(game);
     const e = gameEventDeserializer.deserialize(event);
     game.applyMany([e]);
@@ -158,17 +159,18 @@ export interface VictoryPointExport {
   gameId: number;
   role: Role;
   victoryPoints: number;
+  timeRemainingInitial: number;
 }
 
 export class VictoryPointSummarizer extends Summarizer<VictoryPointExport> {
   phase: Phase = Phase.invest;
 
-  _summarizeEvent(game: GameState, event: entity.GameEvent): Array<Omit<VictoryPointExport, 'id'>> {
+  _summarizeEvent(game: GameState, event: entity.GameEvent): Array<Omit<VictoryPointExport, 'id' | 'timeRemainingInitial'>> {
     return ROLES.map(role => {
       return {
         gameId: event.gameId,
         role,
-        victoryPoints: game.players[role].victoryPoints,
+        victoryPoints: game.players[role].victoryPoints
       }
     });
   }
@@ -177,16 +179,17 @@ export class VictoryPointSummarizer extends Summarizer<VictoryPointExport> {
     const game = loadSnapshot(events[0].payload as GameSerialized);
     let prev = this._summarizeEvent(game, events[0])
     for (const row of prev) {
-      yield {id: events[0].id, ...row, ...extractAfter(game)};
+      yield {id: events[0].id, ...row, timeRemainingInitial: events[0].timeRemaining, ...extractAfter(game)};
     }
 
     for (const event of events.slice(1)) {
       const e = gameEventDeserializer.deserialize(event);
+      game.timeRemaining = event.timeRemaining;
       game.applyMany([e]);
       const curr = this._summarizeEvent(game, event);
       for (const [row, prevrow] of _.zip(curr, prev)) {
         if (!_.isEqual(row, prevrow) && row) {
-          yield {id: event.id, ...row, ...extractAfter(game)};
+          yield {id: event.id, ...row, timeRemainingInitial: event.timeRemaining, ...extractAfter(game)};
         }
       }
       prev = curr;
@@ -221,10 +224,11 @@ export interface PlayerInvestmentExport {
   investment: Investment;
   name: string;
   value: number;
+  initialTimeRemaining: number;
 }
 
 export class PlayerInvestmentSummarizer extends Summarizer<PlayerInvestmentExport> {
-  _summarizeEvent(game: GameState, event: entity.GameEvent): Array<Omit<PlayerInvestmentExport, 'id'>> {
+  _summarizeEvent(game: GameState, event: entity.GameEvent): Array<Omit<PlayerInvestmentExport, 'id' | 'initialTimeRemaining'>> {
     return _.flatMap(
       ROLES,
       (role: Role) =>
@@ -274,16 +278,17 @@ export class PlayerInvestmentSummarizer extends Summarizer<PlayerInvestmentExpor
     const game = loadSnapshot(events[0].payload as GameSerialized);
     let prev = this._summarizeEvent(game, events[0]);
     for (const row of prev) {
-      yield {id: events[0].id, ...row, ...extractAfter(game)};
+      yield {id: events[0].id, ...row, initialTimeRemaining: events[0].timeRemaining, ...extractAfter(game)};
     }
 
     for (const event of events.slice(1)) {
       const e = gameEventDeserializer.deserialize(event);
+      game.timeRemaining = event.timeRemaining;
       game.applyMany([e]);
       const curr = this._summarizeEvent(game, event);
       for (const [row, prev_row] of _.zip(curr, prev)) {
         if (!_.isEqual(row, prev_row)) {
-          yield {id: event.id, ...row as Omit<PlayerInvestmentExport, 'id'>, ...extractAfter(game)};
+          yield {id: event.id, ...row as Omit<PlayerInvestmentExport, 'id'>, initialTimeRemaining: event.timeRemaining, ...extractAfter(game)};
         }
       }
       prev = curr;
@@ -307,10 +312,11 @@ export interface MarsEventExport {
   name: string;
   description: string;
   index: number;
+  initialTimeRemaining: number;
 }
 
 export class MarsEventSummarizer extends Summarizer<MarsEventExport> {
-  _summarizeEvent(game: GameState, event: entity.GameEvent): Array<Omit<MarsEventExport, 'id'>> {
+  _summarizeEvent(game: GameState, event: entity.GameEvent): Array<Omit<MarsEventExport, 'id' | 'initialTimeRemaining'>> {
     return game.marsEvents.map((marsEvent, index) => ({
       gameId: event.gameId,
       round: game.round,
@@ -324,16 +330,17 @@ export class MarsEventSummarizer extends Summarizer<MarsEventExport> {
     const game = loadSnapshot(events[0].payload as GameSerialized);
     let prev = this._summarizeEvent(game, events[0]);
     for (const row of prev) {
-      yield {id: events[0].id, ...row, ...extractBefore(game)};
+      yield {id: events[0].id, ...row, initialTimeRemaining: events[0].timeRemaining, ...extractBefore(game)};
     }
 
     for (const event of events.slice(1)) {
       const e = gameEventDeserializer.deserialize(event);
+      game.timeRemaining = event.timeRemaining;
       game.applyMany([e]);
       const curr = this._summarizeEvent(game, event);
       for (const [row, prevrow] of _.zip(curr, prev)) {
         if (!_.isEqual(row, prevrow) && row) {
-          yield {id: event.id, ...row, ...extractAfter(game)}
+          yield {id: event.id, ...row, initialTimeRemaining: event.timeRemaining, ...extractAfter(game)}
         }
       }
       prev = curr;

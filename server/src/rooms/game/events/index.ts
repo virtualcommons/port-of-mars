@@ -380,8 +380,7 @@ gameEventDeserializer.register(EnteredNewRoundPhase);
 
 export class AddedSystemHealthContributions extends KindOnlyGameEvent {
   apply(game: GameState): void {
-    game.addPlayerContributions();
-    // game.resetPlayerContributions();
+    game.updateSystemHealth();
 
     // system health - last round
     game.log(
