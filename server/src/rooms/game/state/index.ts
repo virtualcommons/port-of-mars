@@ -51,7 +51,7 @@ export class RoundIntroduction extends Schema implements RoundIntroductionData {
     super();
   }
 
-  fromJSON(data: RoundIntroductionData) {
+  fromJSON(data: RoundIntroductionData): void {
     Object.assign(this, data);
   }
 
@@ -68,11 +68,11 @@ export class RoundIntroduction extends Schema implements RoundIntroductionData {
   @type('number')
   contributedSystemHealth = 0;
 
-  addContribution(systemHealth: number) {
+  addContribution(systemHealth: number): void {
     this.contributedSystemHealth += systemHealth;
   }
 
-  reset() {
+  reset(): void {
     this.contributedSystemHealth = 0;
   }
 }
@@ -86,7 +86,7 @@ export class ChatMessage extends Schema implements ChatMessageData {
     this.round = msg.round;
   }
 
-  fromJSON(data: ChatMessageData) {
+  fromJSON(data: ChatMessageData): void {
     Object.assign(this, data);
   }
 
@@ -201,7 +201,7 @@ export class MarsLogMessage extends Schema implements MarsLogMessageData {
     this.id = msg.id;
   }
 
-  fromJSON(data: MarsLogMessageData) {
+  fromJSON(data: MarsLogMessageData): void {
     Object.assign(this, data);
   }
 
@@ -445,15 +445,15 @@ export class Accomplishment extends Schema implements AccomplishmentData {
     this.effect = data.effect;
   }
 
-  fromJSON(data: { role: Role; id: number }) {
+  fromJSON(data: { role: Role; id: number }): void {
     Object.assign(this, getAccomplishmentByID(data.role, data.id));
   }
 
-  toString() {
+  toString(): string {
     return JSON.stringify(super.toJSON());
   }
 
-  toJSON() {
+  toJSON(): { role: Role, id: number } {
     return { role: this.role, id: this.id };
   }
 
@@ -554,7 +554,7 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
 
   deck: Array<number>;
 
-  purchase(accomplishment: AccomplishmentData) {
+  purchase(accomplishment: AccomplishmentData): void {
     const accomplishmentIndex = this.purchasable.findIndex(
       (acc: Accomplishment) => acc.id === accomplishment.id
     );
@@ -569,7 +569,7 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
     this.purchasable.splice(0, this.purchasable.length);
   }
 
-  discard(id: number) {
+  discard(id: number): void {
     const index = this.purchasable.findIndex(
       (card: Accomplishment) => card.id === id
     );
@@ -580,7 +580,7 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
     this.deck.push(id);
   }
 
-  draw(numberOfCards: number) {
+  draw(numberOfCards: number): void {
     for (let i = 0; i < numberOfCards; i++) {
       const id = this.deck.shift();
       const newAccomplishment = new Accomplishment(
@@ -594,7 +594,7 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
     );
   }
 
-  refreshPurchasableAccomplishments(role: Role) {
+  refreshPurchasableAccomplishments(role: Role): void {
     const numberOfAccomplishmentsToDraw = Math.min(
       3 - this.purchasable.length,
       this.deck.length
@@ -606,8 +606,8 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
     return this.deck[0];
   }
 
-  isPurchasable(accomplishment: AccomplishmentData) {
-    return this.purchasable.find(a => a.id === accomplishment.id);
+  isPurchasable(accomplishment: AccomplishmentData): Accomplishment {
+    return this.purchasable.find(a => a.id === accomplishment.id)!;
   }
 }
 
@@ -637,7 +637,7 @@ export class TradeAmount extends Schema {
     this.resourceAmount.fromJSON(resourceAmount);
   }
 
-  fromJSON(data: TradeAmountData) {
+  fromJSON(data: TradeAmountData): void {
     this.role = data.role;
     this.resourceAmount.fromJSON(data.resourceAmount);
   }
@@ -664,7 +664,7 @@ export class Trade extends Schema {
     this.status = status;
   }
 
-  fromJSON(data: TradeData) {
+  fromJSON(data: TradeData): void {
     this.uuid = data.id;
     this.sender.fromJSON(data.sender);
     this.recipient.fromJSON(data.recipient);
@@ -689,7 +689,7 @@ export class Trade extends Schema {
   @type('string')
   status: TradeStatus
 
-  apply(state: GameState) {
+  apply(state: GameState): void {
     const pFrom = state.players[this.sender.role];
     const pTo = state.players[this.recipient.role];
 
@@ -718,7 +718,7 @@ export class PurchasedSystemHealth extends Schema implements PurchasedSystemHeal
     this.systemHealth = data.systemHealth;
   }
 
-  fromJSON(data: PurchasedSystemHealthData) {
+  fromJSON(data: PurchasedSystemHealthData): void {
     this.description = data.description;
     this.systemHealth = data.systemHealth;
   }
@@ -739,7 +739,7 @@ export class PurchasedSystemHealth extends Schema implements PurchasedSystemHeal
 
 export class SystemHealthChange extends Schema implements SystemHealthChangeData {
 
-  fromJSON(data: SystemHealthChangeData) {
+  fromJSON(data: SystemHealthChangeData): void {
     this.investment = data.investment;
     this.purchases.splice(this.purchases.length, 0, ...data.purchases.map(p => new PurchasedSystemHealth(p)));
   }
@@ -751,16 +751,16 @@ export class SystemHealthChange extends Schema implements SystemHealthChangeData
     };
   }
 
-  addPurchase(purchase: PurchasedSystemHealth) {
+  addPurchase(purchase: PurchasedSystemHealth): void {
     this.purchases.push(purchase);
   }
 
-  reset() {
+  reset(): void {
     this.investment = 0;
     this.purchases.splice(0, this.purchases.length);
   }
 
-  netChange() {
+  netChange(): number {
     let netSystemChange = this.investment;
     for (const purchase of this.purchases) {
       netSystemChange += purchase.systemHealth;
@@ -769,7 +769,7 @@ export class SystemHealthChange extends Schema implements SystemHealthChangeData
   }
 
   @type('number')
-  investment: number = 0;
+  investment = 0;
 
   @type([PurchasedSystemHealth])
   purchases = new ArraySchema<PurchasedSystemHealth>();
@@ -787,7 +787,7 @@ export class Player extends Schema implements PlayerData {
     this.specialty = ResourceCosts.getSpecialty(role);
   }
 
-  fromJSON(data: PlayerSerialized) {
+  fromJSON(data: PlayerSerialized): Player {
     this.role = data.role;
     this.costs.fromJSON(data.costs);
     this.specialty = data.specialty;
@@ -860,22 +860,22 @@ export class Player extends Schema implements PlayerData {
     return this.bot.act(state, this);
   }
 
-  resetElapsed() {
+  resetElapsed(): void {
     this.bot.resetElapsed();
   }
 
-  isInvestmentFeasible(investment: InvestmentData) {
+  isInvestmentFeasible(investment: InvestmentData): boolean {
     return this.costs.investmentWithinBudget(investment, this.timeBlocks);
   }
 
-  isAccomplishmentPurchaseFeasible(accomplishment: AccomplishmentData) {
+  isAccomplishmentPurchaseFeasible(accomplishment: AccomplishmentData): boolean {
     return (
       this.accomplishments.isPurchasable(accomplishment) &&
       this.inventory.canAfford(accomplishment)
-    );
+    ) ?? false;
   }
 
-  purchaseAccomplishment(accomplishment: AccomplishmentData) {
+  purchaseAccomplishment(accomplishment: AccomplishmentData): void {
     this.accomplishments.purchase(accomplishment);
     const inv: ResourceAmountData = {
       culture: -accomplishment.culture,
@@ -897,23 +897,23 @@ export class Player extends Schema implements PlayerData {
     this.inventory.update(inv);
   }
 
-  refreshPurchasableAccomplishments() {
+  refreshPurchasableAccomplishments(): void {
     this.accomplishments.refreshPurchasableAccomplishments(this.role);
   }
 
-  resetTimeBlocks() {
+  resetTimeBlocks(): void {
     this.timeBlocks = Player.defaults.timeBlocks;
   }
 
-  setTimeBlocks(amount: number) {
+  setTimeBlocks(amount: number): void {
     this.timeBlocks = amount;
   }
 
-  get currentTimeBlocksAmount() {
+  get currentTimeBlocksAmount(): number {
     return this.timeBlocks;
   }
 
-  getLeftOverInvestments() {
+  getLeftOverInvestments(): InvestmentData {
     const investment = _.cloneDeep(this.pendingInvestments);
 
     let leftOvers = 0;
@@ -946,7 +946,7 @@ export class Player extends Schema implements PlayerData {
     return leftOverInvestments;
   }
 
-  invest(investment?: InvestmentData, leftOverInvestments?: InvestmentData) {
+  invest(investment?: InvestmentData, leftOverInvestments?: InvestmentData): void {
     investment = investment ?? this.pendingInvestments;
     leftOverInvestments = leftOverInvestments ?? PendingInvestment.defaults();
 
@@ -960,7 +960,7 @@ export class Player extends Schema implements PlayerData {
   }
 
 
-  invertPendingInventory() {
+  invertPendingInventory(): void {
     const invertedInventory = PendingInvestment.defaults();
     for (const resource of RESOURCES) {
       invertedInventory[resource as Resource] = this.inventory[resource as Resource] * -1;
@@ -969,7 +969,7 @@ export class Player extends Schema implements PlayerData {
     this.pendingInvestments.add({ ...invertedInventory, upkeep: 0 });
   }
 
-  mergePendingAndInventory() {
+  mergePendingAndInventory(): void {
     this.inventory.update(this.pendingInvestments);
     this.pendingInvestments.reset();
   }
@@ -1030,33 +1030,12 @@ class PlayerSet extends Schema implements PlayerSetData {
 
   [Symbol.iterator](): Iterator<Player> {
     return this.asArray()[Symbol.iterator]();
-    /*
-    let index = 0;
-    const self = this;
-    return {
-      next(): IteratorResult<Player> {
-        if (index < ROLES.length) {
-          const role = ROLES[index];
-          index += 1;
-          return {
-            done: false,
-            value: self[role]
-          };
-        } else {
-          return {
-            done: true,
-            value: null
-          };
-        }
-      }
-    };
-    */
   }
 }
 
 export interface GameSerialized {
   players: PlayerSetSerialized;
-  userRoles: { [sessionId: string]: Role };
+  userRoles: { [username: string]: Role };
   maxRound: number;
   lastTimePolled: number;
   timeRemaining: number;
@@ -1092,7 +1071,7 @@ export class GameState extends Schema implements GameData {
 
   constructor(data: GameStateOpts) {
     super();
-    if (isProduction()) {
+    if (isProduction() && data.userRoles) {
       assert.equal(Object.keys(data.userRoles).length, ROLES.length, 'Must have five players');
     }
     this.userRoles = data.userRoles;
@@ -1179,7 +1158,7 @@ export class GameState extends Schema implements GameData {
   lastTimePolled: Date;
 
   @type('number')
-  timeRemaining: number = 60;
+  timeRemaining = 60;
 
   @type('number')
   round: number = GameState.DEFAULTS.round;
@@ -1211,19 +1190,19 @@ export class GameState extends Schema implements GameData {
   winners = new ArraySchema<Role>();
 
   @type('boolean')
-  tradingEnabled: boolean = true;
+  tradingEnabled = true;
 
   pendingMarsEventActions: Array<PendingMarsEventAction> = [];
 
-  isFirstRound() {
+  isFirstRound(): boolean {
     return this.round === GameState.DEFAULTS.round;
   }
 
-  isLastRound() {
+  isLastRound(): boolean {
     return this.round === this.maxRound;
   }
 
-  disableTrading() {
+  disableTrading(): void {
     this.tradingEnabled = false;
   }
 
@@ -1243,7 +1222,7 @@ export class GameState extends Schema implements GameData {
     return events;
   }
 
-  invest(role: Role, investment: InvestmentData) {
+  invest(role: Role, investment: InvestmentData): void {
     const player = this.players[role];
     player.invest(investment);
   }
@@ -1268,7 +1247,7 @@ export class GameState extends Schema implements GameData {
     return this.players.asArray();
   }
 
-  hasMarsEventsToProcess() {
+  hasMarsEventsToProcess(): boolean {
     return this.marsEventsProcessed < this.marsEvents.length - 1;
   }
 
@@ -1305,7 +1284,9 @@ export class GameState extends Schema implements GameData {
   resetPlayerCosts(): void {
     this.tradingEnabled = true;
     for (const player of this.players) {
+      logger.info('costs (before) [%s]: %o', player.role, player.costs.toJSON());
       player.costs.fromJSON(ResourceCosts.getCosts(player.role));
+      logger.info('costs (after) [%s]: %o', player.role, player.costs.toJSON());
     }
   }
 
@@ -1379,7 +1360,7 @@ export class GameState extends Schema implements GameData {
     return this.upkeep;
   }
 
-  applyPendingActions() {
+  applyPendingActions(): void {
     this.pendingMarsEventActions.sort((a, b) => {
       return a.ordering - b.ordering;
     });
@@ -1389,7 +1370,7 @@ export class GameState extends Schema implements GameData {
     this.pendingMarsEventActions = [];
   }
 
-  clearTrades() {
+  clearTrades(): void {
     Object.keys(this.tradeSet).forEach(trade => delete this.tradeSet[trade]);
   }
 
@@ -1432,7 +1413,7 @@ export class GameState extends Schema implements GameData {
     return this.marsEvents[this.marsEventsProcessed];
   }
 
-  evaluateGameWinners() {
+  evaluateGameWinners(): void {
     const playerScores: Array<[Role, number]> = this.players.asArray().map(p => [p.role, p.victoryPoints]);
     const winners: Array<Role> = [];
 
@@ -1448,7 +1429,7 @@ export class GameState extends Schema implements GameData {
     this.winners.push(...winners);
   }
 
-  addGameWinner(winner: Role) {
+  addGameWinner(winner: Role): void {
     this.winners.push(winner);
   }
 

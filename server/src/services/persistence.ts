@@ -97,7 +97,7 @@ export class DBPersister implements Persister {
     return await pu.save(pu.create(players));
   }
 
-  async initialize(options: GameOpts, roomId: string): Promise<number> {
+  async initialize(options: GameOpts, roomId: string, shouldCreatePlayers = true): Promise<number> {
     logger.debug('initializing game %s', roomId);
     const g = new Game();
     const f = async (em: EntityManager) => {
@@ -107,9 +107,11 @@ export class DBPersister implements Persister {
       g.tournamentRoundId = options.tournamentRoundId;
       g.roomId = roomId;
 
-      const rawUsers = await this.selectUsersByUsername(em, Object.keys(options.userRoles));
       await em.save(g);
-      await this.createPlayers(em, g.id, options.userRoles, rawUsers);
+      if (shouldCreatePlayers) {
+        const rawUsers = await this.selectUsersByUsername(em, Object.keys(options.userRoles));
+        await this.createPlayers(em, g.id, options.userRoles, rawUsers);
+      }
 
       return g.id;
     };

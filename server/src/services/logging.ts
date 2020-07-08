@@ -23,7 +23,7 @@ export class DevLogging implements Logging {
     },
     {
       match: /.*/,
-      level: 'trace'
+      level: 'info'
     }]
 
   findMatchingLogger(filename: string): LogService {

@@ -11,7 +11,7 @@ import redis from 'redis';
 import connectRedis from 'connect-redis';
 import * as Sentry from '@sentry/node';
 import { Server } from 'colyseus';
-import { GameRoom } from '@port-of-mars/server/rooms/game';
+import {GameRoom, LoadTestGameRoom} from '@port-of-mars/server/rooms/game';
 import { RankedLobbyRoom } from '@port-of-mars/server/rooms/lobby';
 import { User } from '@port-of-mars/server/entity';
 import { DBPersister } from '@port-of-mars/server/services/persistence';
@@ -166,6 +166,7 @@ async function createApp() {
 
   // register your room handlers
   gameServer.define(GameRoom.NAME, GameRoom);
+  gameServer.define('loadtest-game', LoadTestGameRoom);
   gameServer.define(RankedLobbyRoom.NAME, RankedLobbyRoom);
 
 
