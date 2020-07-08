@@ -51,7 +51,7 @@ passport.use(new CasStrategy(
     casURL: 'https://weblogin.asu.edu/cas'
   },
   // verify callback
-  function (username: string, profile: object, done: Function) {
+  function (username: string, profile: Record<string, unknown>, done: Function) {
     getServices().account.getOrCreateUser(username, profile).then(user => done(null, user));
   }
 ));

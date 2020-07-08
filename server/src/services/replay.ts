@@ -246,7 +246,7 @@ export class PlayerInvestmentSummarizer extends Summarizer<PlayerInvestmentExpor
             role,
             investment: 'upkeep',
             name: 'pendingInvestment',
-            value: game.players[role].systemHealthChanges.investment,
+            value: game.players[role].pendingInvestments['upkeep'],
           },
           ...RESOURCES.map(
             (investment: Resource) => ({
@@ -271,6 +271,13 @@ export class PlayerInvestmentSummarizer extends Summarizer<PlayerInvestmentExpor
               name: 'inventory',
               value: game.players[role].inventory[investment],
             })),
+          {
+            gameId: event.gameId,
+            role,
+            investment: 'upkeep',
+            name: 'inventory',
+            value: game.players[role].systemHealthChanges.investment,
+          }
         ]);
   }
 
