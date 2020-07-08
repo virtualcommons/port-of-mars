@@ -1,121 +1,120 @@
 .c-eventcard {
   width: 100%;
   padding: 0;
-  //height:100%;
-  border: 0.125rem solid $light-shade;
   margin: 0 0 0.5rem 0;
-  @include make-column-and-center;
-  flex-shrink: 0;
-  align-items: stretch;
+  //@include make-column-and-center;
+  //flex-shrink: 0;
+  //align-items: stretch;
 
   &:last-child {
     margin-bottom: 0;
   }
+}
 
-  .title-wrapper,
-  .flavortext-wrapper,
-  .duration-wrapper {
+.title-wrapper,
+.flavortext-wrapper,
+.duration-wrapper {
+  width: 100%;
+  padding: 0.5rem;
+  margin: 0;
+}
+
+.title-wrapper {
+  background-color: $light-shade;
+}
+
+.title {
+  padding: 0;
+  position: relative;
+
+  p {
     width: 100%;
-    padding: 0.5rem;
-    margin: 0;
-  }
-
-  .title-wrapper {
-    background-color: $light-shade;
-    .title {
-      padding: 0;
-      position: relative;
-
-      .icontwo {
-        position: absolute;
-        top: 0;
-        right: 2.5rem;
-        height: 1.5rem;
-        width: 1.5rem;
-        cursor: pointer;
-        color: $status-green;
-      }
-
-      .icon {
-        position: absolute;
-        top: 0;
-        right: 0.5rem;
-        height: 1.5rem;
-        width: 1.5rem;
-        cursor: pointer;
-        color: $dark-shade;
-        @include default-transition-base;
-
-        &:hover {
-          @include default-scale-up;
-        }
-      }
-
-      p {
-        width: 100%;
-        margin-bottom: 0;
-        font-size: $font-med;
-        font-weight: $medium;
-        color: $dark-shade;
-        text-align: center;
-        @include text-overflow-ellipses;
-      }
-    }
-  }
-
-  .flavortext-wrapper {
-    flex:1;
-    background-color: $dark-shade;
-
-    .flavortext {
-      padding: 0;
-
-      p {
-        width: 100%;
-        margin-bottom: 0;
-        font-size: $font-med;
-        font-weight: $regular;
-        color: $light-shade;
-        text-align: center;
-      }
-    }
-  }
-
-  .duration-wrapper {
-    flex:1;
-    background-color: $dark-shade;
-
-    .duration {
-      padding: 0;
-
-      p {
-        width: 100%;
-        margin-bottom: 0;
-        font-size: $font-med;
-        font-weight: $regular;
-        color: $light-shade;
-        text-align: center;
-      }
-    }
-  }
-
-  .interact-wrapper {
-    flex:1;
-    background-color: $dark-shade;
-    margin-top:4rem;
-    
-    .interact {
-      padding: 0;
-      @include make-center;
-      
-      .button{
-        @include space-button;
-      }
-    }
+    margin-bottom: 0;
+    font-size: $font-med;
+    font-weight: $medium;
+    color: $dark-shade;
+    text-align: center;
+    @include text-overflow-ellipses;
   }
 }
 
-.modal-view{
-  border:0;
+.icontwo {
+  position: absolute;
+  top: 0;
+  right: 2.5rem;
+  height: 1.5rem;
+  width: 1.5rem;
+  cursor: pointer;
+  color: $status-green;
+}
+
+.icon {
+  position: absolute;
+  top: 0;
+  right: 0.5rem;
+  height: 1.5rem;
+  width: 1.5rem;
+  cursor: pointer;
+  color: $dark-shade;
+  @include default-transition-base;
+
+  &:hover {
+    @include default-scale-up;
+  }
+}
+
+.flavortext-wrapper {
+  flex: 1;
+  background-color: $dark-shade;
+}
+
+.flavortext {
+  padding: 0;
+
+  p {
+    width: 100%;
+    margin-bottom: 0;
+    font-size: $font-med;
+    font-weight: $regular;
+    color: $light-shade;
+    text-align: center;
+  }
+}
+
+.duration-wrapper {
+  //flex: 1;
+  background-color: $dark-shade;
+}
+
+.duration {
+  padding: 0;
+
+  p {
+    width: 100%;
+    margin-bottom: 0;
+    font-size: $font-med;
+    font-weight: $regular;
+    color: $light-shade;
+    text-align: center;
+  }
+}
+
+.interact-wrapper {
+  //flex: 1;
+  background-color: $dark-shade;
+  margin-top:4rem;
+}
+
+.interact {
+  padding: 0;
+  @include make-center;
+
+  .button {
+    @include space-button;
+  }
+}
+
+.modal-view {
+  border: 0;
   background-color: $dark-shade;
 }

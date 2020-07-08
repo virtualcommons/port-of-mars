@@ -19,7 +19,6 @@
         <div v-if="selectedView === 'Event Deck'" class="event-deck-wrapper">
           <div class="wrapper event-scroll">
             <EventCard
-              class="event-container"
               v-for="(event, index) in eventsForTheRound"
               :key="index"
               :event="event"
@@ -34,7 +33,6 @@
         >
           <div class="wrapper">
             <AccomplishmentCard
-              class="cards"
               v-for="accomplishment in accomplishmentCards"
               :key="accomplishment.id"
               :accomplishment="accomplishment"

@@ -1,6 +1,6 @@
 <template>
   <div class="card-modal">
-    <div class="d-flex flex-row cards-wrapper">
+    <div class="cards-wrapper">
       <div class="cards">
         <AccomplishmentCard
           v-if="modalData.cardType === 'AccomplishmentCard'"

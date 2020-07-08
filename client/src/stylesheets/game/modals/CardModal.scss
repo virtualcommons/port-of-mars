@@ -11,13 +11,13 @@
 }
 
 .title {
-  //@include expand;
   padding: 0;
   @include make-center;
 
   p {
-    margin-bottom: 0; justify-content: center;
-  align-items: center;
+    margin-bottom: 0;
+    justify-content: center;
+    align-items: center;
     color: $dark-shade;
     font-size: $font-large;
     font-weight: $bold;

@@ -1,7 +1,19 @@
 <template>
-  <div v-if="visible" class="c-eventcard container" :class="{'modal-view':isModal}">
-    <div class="title-wrapper row">
-      <div class="title col-12">
+  <div
+    v-if="visible"
+    class="c-eventcard"
+    :class="{'modal-view': isModal}"
+  >
+    <div class="title-wrapper">
+      <div class="d-flex flex-row title">
+        <b-icon
+          icon="exclamation-circle-fill"
+          variant="dark"
+          circle
+          v-if="!isModal"
+          @click="showInfo"
+          class="align-self-center"
+        />
         <p>{{ event.name }}</p>
         <font-awesome-icon
           v-if="showActiveIndicator"
@@ -9,23 +21,16 @@
           size="lg"
           class="icontwo animated pulse infinite"
         />
-        <font-awesome-icon
-          v-if="!isModal"
-          :icon="['fas', 'info-circle']"
-          size="lg"
-          @click="showInfo"
-          class="icon"
-        />
       </div>
     </div>
 
-    <div class="flavortext-wrapper row">
+    <div class="d-flex flavortext-wrapper">
       <div class="flavortext col-12">
         <p>{{ event.effect !== '' ? event.effect : 'No special effect' }}</p>
       </div>
     </div>
 
-    <div class="duration-wrapper row">
+    <div class="d-flex duration-wrapper">
       <div class="duration col-12">
         <p>
           Duration:<span> {{ event.elapsed }} </span>of<span>
@@ -35,7 +40,7 @@
       </div>
     </div>
 
-    <div v-if="wasSpawnedByServer" class="interact-wrapper row">
+    <div v-if="wasSpawnedByServer" class="d-flex flex-row interact-wrapper">
       <div v-if="requiresInteraction" class="interact col-12">
         <button class="button" @click="closeModal">Interact</button>
       </div>
