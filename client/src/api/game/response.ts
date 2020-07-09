@@ -189,6 +189,11 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
         const timeRemaining: number = change.value;
         store.commit('SET_TIME_REMAINING', timeRemaining);
       }
+      if (change.field === 'botWarning') {
+        const botWarning: boolean = change.value;
+        store.commit('SET_BOT_WARNING', botWarning);
+        if (botWarning) alert('You have been inactive for 4 minutes. Bot will take over in 1 minute if no action is taken.');
+      }
       if (change.field === 'marsEventsProcessed') {
         store.commit('SET_MARS_EVENTS_PROCESSED', change.value);
       }

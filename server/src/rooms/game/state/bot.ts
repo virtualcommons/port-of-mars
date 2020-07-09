@@ -203,12 +203,18 @@ export class SimpleBot implements Bot {
     this.elapsed = 0;
   }
 
+  sendBotWarning(state: GameState): void {
+    if (this.elapsed === 240) state.botWarning = true;
+    else return;
+  }
+
   get shouldBeActive(): boolean {
     return this.elapsed >= this.maxInactivityTime;
   }
 
   act(state: GameState, player: Player): Array<GameEvent> {
     this.incrementElapsed();
+    this.sendBotWarning(state);
     if (this.active) {
       if (this.shouldBeActive) {
         const events = this.actor[state.phase](state, player);
