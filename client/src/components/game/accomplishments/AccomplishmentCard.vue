@@ -169,11 +169,6 @@
       return AccomplishmentCardType;
     }
 
-    // @Watch('showInfo', {immediate: false})
-    // expandCard(showInfo: boolean) {
-    //   return showInfo;
-    // }
-
     get cardTypeStyling() {
       switch (this.type) {
         case AccomplishmentCardType.purchase:
@@ -238,7 +233,7 @@
       }
     }
 
-    //this is the click for the info
+    // expand card into modal that displays accomplishment info
     private showInfo() {
       let data = {
         type: 'CardModal',
@@ -277,19 +272,7 @@
     // NOTE :: Discard Type
 
     private handleDiscard() {
-      let data = {
-        type: 'CardModal',
-        data: {
-          activator: 'User',
-          title: 'Discard Accomplishment Card',
-          content:
-            "Clicking 'Confirm' will discard this accomplishment. A new accomplishment will replace it next round.",
-          cardType: 'AccomplishmentCard',
-          cardData: this.accomplishment,
-          confirmation: true,
-        },
-      };
-      this.api.discardOption(data);
+        this.api.discardAccomplishment(this.accomplishment.id as number);
     }
   }
 </script>

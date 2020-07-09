@@ -1,7 +1,12 @@
 <template>
   <div class="card-modal">
+
+    <!-- card type -->
     <div class="cards-wrapper">
+      <!-- types of cards to display in modal -->
       <div class="cards">
+
+        <!-- accomplishment -->
         <AccomplishmentCard
           v-if="modalData.cardType === 'AccomplishmentCard'"
           class="accomplishment-card"
@@ -9,6 +14,8 @@
           :accomplishment="modalData.cardData"
           :isModal="true"
         />
+
+        <!-- event -->
         <EventCard
           v-else-if="modalData.cardType === 'EventCard'"
           class="event-card"
@@ -18,12 +25,6 @@
           :isModal="true"
           :wasSpawnedByServer="serverCreated(modalData.activator)"
         />
-      </div>
-    </div>
-    <div v-if="modalData.confirmation" class="d-flex flex-row confirm-wrapper">
-      <div class="confirm col-12">
-        <p class="confirm-text">Are you sure you want do proceed? </p>
-        <button @click="handleConfirmation">Confirm</button>
       </div>
     </div>
   </div>

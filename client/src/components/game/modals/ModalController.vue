@@ -1,7 +1,10 @@
 <template>
   <div class="c-modal-controller" v-if="modalsVisible">
     <div class="wrapper">
+      <!-- modal type: event, accomplishment -->
       <component :is="modalType" :modalData="modalData"></component>
+
+      <!-- close modal button -->
       <button
         @click="handleClose"
         type="button"
@@ -14,6 +17,7 @@
           class="close-icon"
         />
       </button>
+
     </div>
   </div>
 </template>
@@ -28,6 +32,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
+import { Phase } from '@port-of-mars/shared/types';
 
 library.add(faTimes);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
