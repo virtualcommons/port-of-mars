@@ -1,146 +1,145 @@
 <template>
   <div
-    v-if="visible"
-    class="c-eventcard"
     :class="{'modal-view': isModal}"
+    class="c-eventcard"
+    v-if="visible"
   >
     <div class="title-wrapper">
       <div class="d-flex flex-row title">
         <b-icon
-          icon="exclamation-circle-fill"
-          variant="dark"
-          circle
-          v-if="!isModal"
           @click="showInfo"
+          circle
           class="align-self-center"
+          icon="exclamation-circle-fill"
+          v-if="!isModal"
+          variant="dark"
         />
         <p>{{ event.name }}</p>
         <font-awesome-icon
-          v-if="showActiveIndicator"
           :icon="['far', 'dot-circle']"
-          size="lg"
           class="icontwo animated pulse infinite"
+          size="lg"
+          v-if="showActiveIndicator"
         />
       </div>
     </div>
 
-    <div class="d-flex flavortext-wrapper">
-      <div class="flavortext col-12">
+    <div class="d-flex justify-content-center flavortext-wrapper" v-bind="{ class: isModal ? 'py-5' : '' }">
+      <div class="flavortext">
         <p>{{ event.effect !== '' ? event.effect : 'No special effect' }}</p>
       </div>
     </div>
 
-    <div class="d-flex duration-wrapper">
-      <div class="duration col-12">
+    <div class="d-flex justify-content-center duration-wrapper" v-bind="{ class: isModal ? 'py-auto' : '' }">
+      <div class="duration">
         <p>
           Duration:<span> {{ event.elapsed }} </span>of<span>
             {{ event.duration }} </span
-          >Rounds
+        >Rounds
         </p>
       </div>
     </div>
 
-    <div v-if="wasSpawnedByServer" class="d-flex flex-row interact-wrapper">
-      <div v-if="requiresInteraction" class="interact col-12">
-        <button class="button" @click="closeModal">Interact</button>
+    <div class="d-flex flex-row interact-wrapper" v-if="wasSpawnedByServer">
+      <div class="interact col-12" v-if="requiresInteraction">
+        <button @click="closeModal" class="button">Interact</button>
       </div>
-      <div v-else class="interact col-12">
-        <button class="button" @click="readyUp">Continue</button>
+      <div class="interact col-12" v-else>
+        <button @click="readyUp" class="button">Continue</button>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Inject } from 'vue-property-decorator';
-import { MarsEventData, Phase, EventClientView  } from '@port-of-mars/shared/types';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons/faInfoCircle';
-import { faDotCircle } from '@fortawesome/free-regular-svg-icons/faDotCircle';
-import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
+  import {Component, Inject, Prop, Vue} from 'vue-property-decorator';
+  import {EventClientView, MarsEventData, Phase} from '@port-of-mars/shared/types';
+  import {library} from '@fortawesome/fontawesome-svg-core';
+  import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
+  import {faInfoCircle} from '@fortawesome/free-solid-svg-icons/faInfoCircle';
+  import {faDotCircle} from '@fortawesome/free-regular-svg-icons/faDotCircle';
+  import {GameRequestAPI} from '@port-of-mars/client/api/game/request';
 
-library.add(faInfoCircle);
-library.add(faDotCircle);
-Vue.component('font-awesome-icon', FontAwesomeIcon);
+  library.add(faInfoCircle);
+  library.add(faDotCircle);
+  Vue.component('font-awesome-icon', FontAwesomeIcon);
 
-@Component({})
-export default class EventCard extends Vue {
-  @Inject() readonly api!: GameRequestAPI;
+  @Component({})
+  export default class EventCard extends Vue {
+    @Inject() readonly api!: GameRequestAPI;
 
-  @Prop({
-    default: () => ({
-      id: undefined,
-      duration: undefined,
-      elapsed: undefined,
-      name: undefined,
-      flavorText: undefined,
-      effect: undefined,
-    }),
-  })
-  private event!: MarsEventData;
+    @Prop({
+      default: () => ({
+        id: undefined,
+        duration: undefined,
+        elapsed: undefined,
+        name: undefined,
+        flavorText: undefined,
+        effect: undefined,
+      }),
+    })
+    private event!: MarsEventData;
 
-  @Prop({ default: false }) private visible!: boolean;
-  @Prop({ default: false }) private active!: boolean;
+    @Prop({default: false}) private visible!: boolean;
+    @Prop({default: false}) private active!: boolean;
 
-  //if you're in a modal, show the modal view
-  @Prop({default: false}) private isModal!:boolean;
+    //if you're in a modal, show the modal view
+    @Prop({default: false}) private isModal!: boolean;
 
-  //if the modal was spawned by the server, show the option buttons
-  @Prop({default:false}) private wasSpawnedByServer!:boolean;
+    //if the modal was spawned by the server, show the option buttons
+    @Prop({default: false}) private wasSpawnedByServer!: boolean;
+    //determining which type of events require which interactions
+    private eventNoChangeViews: Array<EventClientView> = [
+      'NO_CHANGE',
+      'AUDIT',
+      'DISABLE_CHAT'
+    ];
 
-  get phase() {
-    return Phase;
-  }
-
-  get gamePhase() {
-    return this.$store.state.phase;
-  }
-
-  get showActiveIndicator() {
-    return this.active && this.gamePhase === this.phase.events;
-  }
-
-  //determining which type of events require which interactions
-  private eventNoChangeViews: Array<EventClientView> = [
-    'NO_CHANGE',
-    'AUDIT',
-    'DISABLE_CHAT'
-  ];
-
-  get requiresInteraction() {
-    if(!this.eventNoChangeViews.includes(this.event.clientViewHandler)){
-      return true;
+    get phase() {
+      return Phase;
     }
-    return false;
-  }
 
-  closeModal(){
-    this.api.setModalHidden();
-  }
+    get gamePhase() {
+      return this.$store.state.phase;
+    }
 
-  readyUp(){
-    this.api.setPlayerReadiness(true);
-    this.api.setModalHidden();
-  }
+    get showActiveIndicator() {
+      return this.active && this.gamePhase === this.phase.events;
+    }
 
-  private showInfo(): void {
-    this.api.setModalVisible({
-      type: 'CardModal',
-      data: {
-        activator: 'User',
-        title: 'Event',
-        content: 'This is a description of the Event.',
-        cardType: 'EventCard',
-        cardData: this.event,
-        confirmation: false,
-      },
-    });
+    get requiresInteraction() {
+      if (!this.eventNoChangeViews.includes(this.event.clientViewHandler)) {
+        return true;
+      }
+      return false;
+    }
+
+    closeModal() {
+      this.api.setModalHidden();
+    }
+
+    readyUp() {
+      this.api.setPlayerReadiness(true);
+      this.api.setModalHidden();
+    }
+
+    private showInfo(): void {
+      this.api.setModalVisible({
+        type: 'CardModal',
+        data: {
+          activator: 'User',
+          title: 'Event',
+          content: 'This is a description of the Event.',
+          cardType: 'EventCard',
+          cardData: this.event,
+          confirmation: false,
+        },
+      });
+    }
   }
-}
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/events/EventCard.scss';
-@import '~animate.css/source/attention_seekers/pulse.css';
+  @import '@port-of-mars/client/stylesheets/game/phases/events/EventCard.scss';
+  @import '~animate.css/source/attention_seekers/pulse.css';
 </style>
