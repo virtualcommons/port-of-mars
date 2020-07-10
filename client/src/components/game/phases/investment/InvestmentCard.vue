@@ -1,6 +1,6 @@
 <template>
   <div class="card-investment v-step-15">
-    <div class="wrapper" :style="opacity">
+    <div :style="opacity" class="wrapper">
       <div class="type">
         <p class="name">{{ label }}</p>
         <img
@@ -9,28 +9,28 @@
         />
         <div class="data">
           <div
-            class="investment"
             :style="{
               visibility:
                 !disabled && pendingUnits !== 0 ? 'visible' : 'hidden',
             }"
+            class="investment"
           >
             <font-awesome-icon
               :icon="['fas', 'briefcase']"
-              size="lg"
               class="icon"
+              size="lg"
             />
             <p><span>+</span>{{ pendingUnits }}</p>
           </div>
           <div
+            :style="{ visibility: !disabled ? 'visible' : 'hidden' }"
             class="cost"
             id="tooltip-cost"
-            :style="{ visibility: !disabled ? 'visible' : 'hidden' }"
           >
             <font-awesome-icon
               :icon="['fas', 'clock']"
-              size="lg"
               class="icon m-2"
+              size="lg"
             />
             <p>
               {{ !disabled ? cost : 'X' }}
@@ -38,20 +38,25 @@
           </div>
         </div>
       </div>
-      <div class="increment-decrement" v-if="!disabled">
+
+      <div v-bind="{ class: playerReady ? 'increment-decrement-disabled' : 'increment-decrement'}"
+           v-if="!disabled">
+        <!-- increment button -->
         <button
-          class="increment"
-          type="button"
-          name="Investment Increment"
           @click="setInvestmentAmount(1)"
+          class="increment"
+          name="Investment Increment"
+          type="button"
         >
           +
         </button>
+
+        <!-- decrement button -->
         <button
-          class="decrement"
-          type="button"
-          name="Investment Decrement"
           @click="setInvestmentAmount(-1)"
+          class="decrement"
+          name="Investment Decrement"
+          type="button"
         >
           -
         </button>
@@ -62,55 +67,58 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faClock } from '@fortawesome/free-solid-svg-icons/faClock';
-import { faBriefcase } from '@fortawesome/free-solid-svg-icons/faBriefcase';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { Phase, Resource, Role } from '@port-of-mars/shared/types';
-import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
-import {COST_INAFFORDABLE} from "@port-of-mars/shared/settings";
+  import {Component, Prop, Vue} from 'vue-property-decorator';
+  import {library} from '@fortawesome/fontawesome-svg-core';
+  import {faClock} from '@fortawesome/free-solid-svg-icons/faClock';
+  import {faBriefcase} from '@fortawesome/free-solid-svg-icons/faBriefcase';
+  import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
+  import {Resource} from '@port-of-mars/shared/types';
+  import {COST_INAFFORDABLE} from "@port-of-mars/shared/settings";
 
-library.add(faClock);
-library.add(faBriefcase);
-Vue.component('font-awesome-icon', FontAwesomeIcon);
+  library.add(faClock);
+  library.add(faBriefcase);
+  Vue.component('font-awesome-icon', FontAwesomeIcon);
 
-@Component({})
-export default class InvestmentCard extends Vue {
-  @Prop() private name!: Resource;
-  @Prop() private cost!: number;
-  @Prop() private pendingInvestment!: number;
+  @Component({})
+  export default class InvestmentCard extends Vue {
+    @Prop() private name!: Resource;
+    @Prop() private cost!: number;
+    @Prop() private pendingInvestment!: number;
 
-  get disabled(): boolean {
-    return this.cost >= COST_INAFFORDABLE;
+    get disabled(): boolean {
+      return this.cost >= COST_INAFFORDABLE || this.playerReady;
+    }
+
+    get opacity(): object {
+      return this.disabled ? {opacity: '0.5'} : {};
+    }
+
+    get pendingUnits() {
+      const pendingUnits = this.$tstore.getters.player.pendingInvestments[
+        this.name
+        ];
+      if (pendingUnits) return pendingUnits;
+      return 0;
+    }
+
+    get label() {
+      return this.name == ('upkeep' as any) ? 'System Health' : this.name;
+    }
+
+    get playerReady() {
+      return this.$tstore.getters.player.ready;
+    }
+
+    private setInvestmentAmount(diff: number): void {
+      this.$emit('input', {
+        name: this.name,
+        units: this.pendingInvestment + diff,
+        cost: this.cost,
+      });
+    }
   }
-
-  get opacity(): object {
-    return this.disabled ? { opacity: '0.5' } : {};
-  }
-
-  get pendingUnits() {
-    const pendingUnits = this.$tstore.getters.player.pendingInvestments[
-      this.name
-    ];
-    if (pendingUnits) return pendingUnits;
-    return 0;
-  }
-
-  get label() {
-    return this.name == ('upkeep' as any) ? 'System Health' : this.name;
-  }
-
-  private setInvestmentAmount(diff: number): void {
-    this.$emit('input', {
-      name: this.name,
-      units: this.pendingInvestment + diff,
-      cost: this.cost,
-    });
-  }
-}
 </script>
 ,
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/investment/InvestmentCard.scss';
+  @import '@port-of-mars/client/stylesheets/game/phases/investment/InvestmentCard.scss';
 </style>
