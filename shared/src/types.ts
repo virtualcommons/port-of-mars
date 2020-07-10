@@ -224,6 +224,7 @@ export type PlayerSetData = { [role in Role]: PlayerData };
 export interface GameData {
   players: PlayerSetData;
   timeRemaining: number;
+  botWarning: boolean;
   round: number;
   phase: Phase;
   upkeep: number;

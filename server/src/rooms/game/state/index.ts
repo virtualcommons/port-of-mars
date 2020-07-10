@@ -889,9 +889,9 @@ export class Player extends Schema implements PlayerData {
     this.systemHealthChanges.addPurchase(new PurchasedSystemHealth({description: `Purchase: ${accomplishment.label}`, systemHealth: accomplishment.upkeep}));
     logger.trace('purchases: %o', this.systemHealthChanges.purchases);
     // FIXME: victoryPoints should probably be a computed property
-    // that sums this.accomplishments.purchased.victoryPoints 
+    // that sums this.accomplishments.purchased.victoryPoints
     // and not a cached numerical value
-    // will this cause issues for the Schema though if 
+    // will this cause issues for the Schema though if
     // we convert it into a getter?
     this.victoryPoints += accomplishment.victoryPoints;
     this.inventory.update(inv);
@@ -1039,6 +1039,7 @@ export interface GameSerialized {
   maxRound: number;
   lastTimePolled: number;
   timeRemaining: number;
+  botWarning: boolean;
   round: number;
   phase: Phase;
   upkeep: number;
@@ -1082,6 +1083,7 @@ export class GameState extends Schema implements GameData {
   }
 
   static DEFAULTS = {
+    botWarning: false,
     timeRemaining: 300,
     marsEventsProcessed: 0,
     round: 1,
@@ -1094,6 +1096,7 @@ export class GameState extends Schema implements GameData {
     this.userRoles = data.userRoles;
     this.maxRound = data.maxRound;
     this.lastTimePolled = new Date(data.lastTimePolled);
+    this.botWarning = data.botWarning;
     this.timeRemaining = data.timeRemaining;
     this.round = data.round;
     this.phase = data.phase;
@@ -1130,6 +1133,7 @@ export class GameState extends Schema implements GameData {
       userRoles: this.userRoles,
       maxRound: this.maxRound,
       lastTimePolled: this.lastTimePolled.getTime(),
+      botWarning: this.botWarning,
       timeRemaining: this.timeRemaining,
       round: this.round,
       phase: this.phase,
@@ -1159,6 +1163,9 @@ export class GameState extends Schema implements GameData {
 
   @type('number')
   timeRemaining = 60;
+
+  @type('boolean')
+  botWarning: boolean = GameState.DEFAULTS.botWarning;
 
   @type('number')
   round: number = GameState.DEFAULTS.round;
@@ -1433,7 +1440,6 @@ export class GameState extends Schema implements GameData {
     this.winners.push(winner);
   }
 
-  // NOTE :: NEW CHANGES
   addChat(message: ChatMessageData): void {
     this.messages.push(new ChatMessage(message));
   }

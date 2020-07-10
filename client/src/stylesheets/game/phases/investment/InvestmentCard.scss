@@ -4,122 +4,122 @@
   padding: 1rem 0.5rem;
   @include make-center;
   background-color: $light-shade-05;
+}
 
-  .wrapper {
-    @include expand;
-    @include make-center;
+.wrapper {
+  @include expand;
+  @include make-center;
+  color: $dark-shade;
+  overflow: hidden;
+}
+
+.type {
+  height: 100%;
+  width: 70%;
+  padding: 0.5rem;
+  border: $border-white;
+  position: relative;
+  @include make-column-and-expand;
+  background-color: $light-shade;
+
+  .name {
+    margin-bottom: 0;
+    font-size: $font-med;
+    font-weight: $medium;
     color: $dark-shade;
-    overflow: hidden;
+    text-transform: capitalize;
   }
 
-  .type {
-    height: 100%;
-    width: 70%;
-    padding: 0.5rem;
-    border: $border-white;
-    position: relative;
-    @include make-column-and-expand;
-    background-color: $light-shade;
-
-    .name {
-      margin-bottom: 0;
-      font-size: $font-med;
-      font-weight: $medium;
-      color: $dark-shade;
-      text-transform: capitalize;
-    }
-
-    img {
-      height: 4.5rem;
-      width: 4.5rem;
-    }
-
-    .data {
-      width: 100%;
-      @include make-horizontal-between;
-
-      .investment {
-        height: 2rem;
-        @include make-center;
-
-        .icon {
-          margin-right: 0.5rem;
-          color: $dark-shade;
-        }
-
-        p {
-          margin-bottom: 0;
-          font-size: $font-large;
-          font-weight: $medium;
-          text-align: center;
-          color: $status-green;
-        }
-      }
-
-      .cost {
-        @include make-center;
-
-        .icon {
-          margin-right: 0.5rem;
-          color: $dark-shade;
-        }
-
-        p {
-          margin-bottom: 0;
-          font-size: $font-large;
-          font-weight: $medium;
-          text-align: center;
-          color: $dark-shade;
-        }
-      }
-    }
+  img {
+    height: 4.5rem;
+    width: 4.5rem;
   }
 
-  .increment-decrement {
-    height: 100%;
-    width: 30%;
-    @include make-column-and-center;
-    background-color: $dark-shade;
+  .data {
+    width: 100%;
+    @include make-horizontal-between;
 
-    .increment,
-    .decrement {
-      height: 50%;
-      width: 100%;
-      border: $border-white;
-      font-size: $font-large;
-      font-weight: $bold;
-      color: $light-shade;
-      background: transparent;
-      @include default-transition-base;
+    .investment {
+      height: 2rem;
+      @include make-center;
 
-      &:focus,
-      &:active {
-        outline: none;
-      }
-
-      &:hover {
+      .icon {
+        margin-right: 0.5rem;
         color: $dark-shade;
-        background-color: $light-accent;
-        cursor: pointer;
+      }
+
+      p {
+        margin-bottom: 0;
+        font-size: $font-large;
+        font-weight: $medium;
+        text-align: center;
+        color: $status-green;
       }
     }
 
-    .increment {
-      border-left: none;
-      border-bottom: none;
-    }
+    .cost {
+      @include make-center;
 
-    .decrement {
-      border-top: none;
-      border-left: none;
+      .icon {
+        margin-right: 0.5rem;
+        color: $dark-shade;
+      }
+
+      p {
+        margin-bottom: 0;
+        font-size: $font-large;
+        font-weight: $medium;
+        text-align: center;
+        color: $dark-shade;
+      }
     }
   }
+}
 
-  .increment-decrement-disabled {
-    height: 100%;
-    width: 30%;
+.increment-decrement {
+  height: 100%;
+  width: 30%;
+  @include make-column-and-center;
+  background-color: $dark-shade;
+
+  .increment,
+  .decrement {
+    height: 50%;
+    width: 100%;
     border: $border-white;
-    border-left: none;
-    background-color: $dark-shade;
+    font-size: $font-large;
+    font-weight: $bold;
+    color: $light-shade;
+    background: transparent;
+    @include default-transition-base;
+
+    &:focus,
+    &:active {
+      outline: none;
+    }
+
+    &:hover {
+      color: $dark-shade;
+      background-color: $light-accent;
+      cursor: pointer;
+    }
   }
+
+  .increment {
+    border-left: none;
+    border-bottom: none;
+  }
+
+  .decrement {
+    border-top: none;
+    border-left: none;
+  }
+}
+
+.increment-decrement-disabled {
+  height: 100%;
+  width: 30%;
+  border: $border-white;
+  border-left: none;
+  background-color: $dark-shade;
 }

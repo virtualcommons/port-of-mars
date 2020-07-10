@@ -85,6 +85,7 @@
     <div class="button-wrapper" v-show="active">
       <!-- REJECT TRADE -->
       <b-button
+        :disabled="playerReady"
         @click="handleTradeReject"
         class="decline"
         title="Reject trade"
@@ -98,7 +99,7 @@
 
       <!-- ACCEPT TRADE -->
       <b-button
-        :disabled="!hasSufficientResources"
+        :disabled="!hasSufficientResources || playerReady"
         @click="handleAcceptTrade"
         class="accept"
         title="Accept trade"
@@ -168,6 +169,10 @@
 
     get role() {
       return this.$tstore.state.role;
+    }
+
+    get playerReady() {
+      return this.$tstore.getters.player.ready;
     }
 
     get hasSufficientResources() {

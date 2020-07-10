@@ -1,93 +1,59 @@
 .card-modal {
-  height: 20rem;
-  width: 50rem;
-  @include reset-padding-margin;
   border: 0.125rem solid $light-shade;
-  @include make-column-and-top;
-  justify-content: space-between;
   background-color: $dark-shade;
+  width: 40rem;
+  height: 17rem;
+}
 
-  .title-wrapper,
-  .content-wrapper,
-  .cards-wrapper,
-  .confirm-wrapper,
-  .ghost-wrapper {
-    width: 100%;
-    //padding: 0.5rem;
-    margin: 0;
+.title-wrapper {
+  height: 4rem;
+  background-color: $dark-accent;
+}
+
+.title {
+  padding: 0;
+  @include make-center;
+
+  p {
+    margin-bottom: 0;
+    justify-content: center;
+    align-items: center;
+    color: $dark-shade;
+    font-size: $font-large;
+    font-weight: $bold;
   }
+}
 
-  .title-wrapper {
-    height: 4rem;
-    background-color: $dark-accent;
+.cards-wrapper {
+  background-color: $light-shade-05;
+  overflow-y: hidden;
+  height: 100%;
+}
 
-    .title {
-      @include expand;
-      padding: 0;
-      @include make-center;
+.cards {
+  padding: 0;
+  overflow-y: scroll;
+  @include disable-scroll;
+  height: 100%;
+  background-color: $dark-shade;
+}
 
-      p {
-        margin-bottom: 0;
-        color: $dark-shade;
-        font-size: $font-large;
-        font-weight: $bold;
-      }
-    }
-  }
+.confirm-wrapper {
+  padding: 1rem 0.5rem;
+}
 
-  .content-wrapper {
-    .content {
-      @include expand;
-      padding: 0;
-      @include make-center;
+.confirm {
+  @include expand;
+  padding: 0;
+  @include make-center;
+  flex-direction: column;
+}
 
-      p {
-        width: 80%;
-        margin-bottom: 0;
-        color: $light-shade;
-        font-size: $font-med;
-        font-weight: $regular;
-        text-align: center;
-      }
-    }
-  }
+.confirm-text {
+  color: $dark-accent;
+}
 
-  .cards-wrapper {
-    background-color: $light-shade-05;
-    overflow-y: hidden;
-    height:100%;
-
-    .cards {
-      @include expand;
-      padding: 0;
-      overflow-y: scroll;
-      @include disable-scroll;
-      height:100%;
-      background-color: $dark-shade;
-    }
-  }
-
-  .confirm-wrapper {
-    padding: 1rem 0.5rem;
-
-    .confirm {
-      @include expand;
-      padding: 0;
-      @include make-center;
-      flex-direction: column;
-
-      .confirm-text{
-        color: $dark-accent;
-      }
-
-      button {
-        @include space-button-modal;
-        margin: 0;
-      }
-    }
-  }
-
-  .ghost-wrapper {
-    padding: 1rem 0.5rem;
-  }
+button {
+  @include space-button-modal;
+  margin: 0;
 }
