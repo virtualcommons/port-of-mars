@@ -18,6 +18,7 @@ import {
 import {BotControlTaken} from "@port-of-mars/server/rooms/game/events";
 import {getLogger} from "@port-of-mars/server/settings";
 import _ from "lodash";
+import {Game} from "@port-of-mars/server/entity";
 
 const logger = getLogger(__filename);
 
@@ -203,9 +204,12 @@ export class SimpleBot implements Bot {
     this.elapsed = 0;
   }
 
+  /**
+   * Send warning that bot will take over if player has been inactive for 4 min.
+   * @param state The Game State
+   */
   sendBotWarning(state: GameState): void {
-    if (this.elapsed === 240) state.botWarning = true;
-    else return;
+    state.botWarning = this.elapsed >= 240;
   }
 
   get shouldBeActive(): boolean {
@@ -214,7 +218,6 @@ export class SimpleBot implements Bot {
 
   act(state: GameState, player: Player): Array<GameEvent> {
     this.incrementElapsed();
-    this.sendBotWarning(state);
     if (this.active) {
       if (this.shouldBeActive) {
         const events = this.actor[state.phase](state, player);
@@ -227,6 +230,7 @@ export class SimpleBot implements Bot {
       if (this.shouldBeActive) {
         return [new BotControlTaken({role: player.role})]
       } else {
+        this.sendBotWarning(state);
         return [];
       }
     }
