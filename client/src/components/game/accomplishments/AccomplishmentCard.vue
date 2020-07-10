@@ -69,7 +69,7 @@
       v-if="type === cardType.purchase && showCard"
     >
       <div class="purchase col-12">
-        <button :disabled="!canPurchase" @click="handlePurchase()">
+        <button :disabled="!canPurchase || playerReady" @click="handlePurchase()">
           Purchase Accomplishment
         </button>
       </div>
@@ -81,7 +81,7 @@
       v-if="type === cardType.discard && showCard"
     >
       <div class="discard col-12">
-        <button @click="handleDiscard()">
+        <button @click="handleDiscard()" :disabled="playerReady">
           Discard Accomplishment
         </button>
       </div>
@@ -164,6 +164,10 @@
     private isModal!: boolean;
 
     // NOTE :: All / Default Type
+
+    get playerReady() {
+      return this.$tstore.getters.player.ready;
+    }
 
     get cardType() {
       return AccomplishmentCardType;

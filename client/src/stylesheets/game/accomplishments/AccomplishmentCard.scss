@@ -9,113 +9,119 @@
   &:last-child {
     margin-bottom: 0;
   }
+}
 
-  .title-wrapper,
-  .info-wrapper,
-  .cost-wrapper,
-  .purchase-wrapper,
-  .discard-wrapper,
-  .status-text {
-    @include default-transition-base;
+button {
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.title-wrapper,
+.info-wrapper,
+.cost-wrapper,
+.purchase-wrapper,
+.discard-wrapper,
+.status-text {
+  @include default-transition-base;
+  width: 100%;
+  padding: 0.5rem;
+  margin: 0;
+}
+
+.title {
+  padding: 0;
+  position: relative;
+
+  p {
     width: 100%;
-    padding: 0.5rem;
-    margin: 0;
+    margin-bottom: 0;
+    font-size: $font-med;
+    font-weight: $medium;
+    text-align: center;
+    @include text-overflow-ellipses;
   }
+}
 
-  .title {
-    padding: 0;
-    position: relative;
+.info-wrapper {
+  background-color: $dark-shade;
+}
 
-    p {
-      width: 100%;
-      margin-bottom: 0;
-      font-size: $font-med;
-      font-weight: $medium;
-      text-align: center;
-      @include text-overflow-ellipses;
-    }
-  }
+.points {
+  padding: 0 0.5rem;
+  @include make-column-and-center;
 
-  .info-wrapper {
-    background-color: $dark-shade;
-  }
-
-  .points {
-    padding: 0 0.5rem;
-    @include make-column-and-center;
-
-    p {
-      width: 100%;
-      margin-bottom: 0;
-      font-size: $font-med;
-      font-weight: $regular;
-      color: $light-shade;
-      text-align: center;
-    }
-  }
-
-  .flavortext {
-    padding: 0 0.5rem;
-
-    p {
-      width: 100%;
-      margin-bottom: 0;
-      font-size: $font-med;
-      font-weight: $regular;
-      color: $light-shade;
-    }
-  }
-
-  .cost-wrapper {
-    background-color: $dark-shade;
-
-    .cost {
-      padding: 0;
-      @include make-center;
-      flex-wrap: wrap;
-
-      .container {
-        @include make-center;
-        height: 2rem;
-        width: 2rem;
-        padding: 0.25rem;
-        border-radius: 50%;
-        margin: 0.125rem;
-        background-color: $light-shade;
-
-        img {
-          @include expand;
-        }
-      }
-
-      .unattainable-resource {
-        background-color: $light-shade-25 !important;
-      }
-    }
-  }
-
-  .purchase-wrapper {
-    background-color: $dark-shade;
-
-    .purchase {
-      padding: 0;
-      @include make-center;
-    }
-  }
-
-  .discard-wrapper {
-    background-color: $dark-shade;
-
-    .discard {
-      padding: 0;
-      @include make-center;
-    }
-  }
-
-  .status-text {
-    background-color: $dark-shade;
+  p {
+    width: 100%;
+    margin-bottom: 0;
+    font-size: $font-med;
+    font-weight: $regular;
+    color: $light-shade;
     text-align: center;
   }
+}
+
+.flavortext {
+  padding: 0 0.5rem;
+
+  p {
+    width: 100%;
+    margin-bottom: 0;
+    font-size: $font-med;
+    font-weight: $regular;
+    color: $light-shade;
+  }
+}
+
+.cost-wrapper {
+  background-color: $dark-shade;
+
+  .cost {
+    padding: 0;
+    @include make-center;
+    flex-wrap: wrap;
+
+    .container {
+      @include make-center;
+      height: 2rem;
+      width: 2rem;
+      padding: 0.25rem;
+      border-radius: 50%;
+      margin: 0.125rem;
+      background-color: $light-shade;
+
+      img {
+        @include expand;
+      }
+    }
+
+    .unattainable-resource {
+      background-color: $light-shade-25 !important;
+    }
+  }
+}
+
+.purchase-wrapper {
+  background-color: $dark-shade;
+
+  .purchase {
+    padding: 0;
+    @include make-center;
+  }
+}
+
+.discard-wrapper {
+  background-color: $dark-shade;
+
+  .discard {
+    padding: 0;
+    @include make-center;
+  }
+}
+
+.status-text {
+  background-color: $dark-shade;
+  text-align: center;
 }
 
 .default {
