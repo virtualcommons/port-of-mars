@@ -22,7 +22,7 @@
     <!-- information: points, description -->
     <div
       class="d-flex flex-row info-wrapper"
-      v-bind="{ class: isModal ? 'p-4' : '' }"
+      v-bind="{ class: isModal ? 'p-4 p-lg-4' : '' }"
     >
       <!-- points -->
       <div

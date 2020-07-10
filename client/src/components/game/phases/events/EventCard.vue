@@ -1,7 +1,7 @@
 <template>
   <div
     :class="{'modal-view': isModal}"
-    class="c-eventcard"
+    class="c-eventcard d-flex flex-column justify-content-between justify-content-center"
     v-if="visible"
   >
     <div class="title-wrapper">
@@ -24,13 +24,13 @@
       </div>
     </div>
 
-    <div class="d-flex justify-content-center flavortext-wrapper" v-bind="{ class: isModal ? 'py-5' : '' }">
+    <div class="flavortext-wrapper w-100 h-100" v-bind="{ class: isModal ? 'pt-5' : '' }">
       <div class="flavortext">
         <p>{{ event.effect !== '' ? event.effect : 'No special effect' }}</p>
       </div>
     </div>
 
-    <div class="d-flex justify-content-center duration-wrapper" v-bind="{ class: isModal ? 'py-auto' : '' }">
+    <div class="duration-wrapper w-100 h-100" v-bind="{ class: isModal ? 'pt-1' : '' }">
       <div class="duration">
         <p>
           Duration:<span> {{ event.elapsed }} </span>of<span>
@@ -40,14 +40,16 @@
       </div>
     </div>
 
-    <div class="d-flex flex-row interact-wrapper" v-if="wasSpawnedByServer">
-      <div class="interact col-12" v-if="requiresInteraction">
+    <div class="w-100 h-100 pt-3" v-if="wasSpawnedByServer">
+      <div class="interact" v-if="requiresInteraction">
         <button @click="closeModal" class="button">Interact</button>
       </div>
-      <div class="interact col-12" v-else>
+      <div class="interact" v-else>
         <button @click="readyUp" class="button">Continue</button>
       </div>
     </div>
+
+
   </div>
 </template>
 
