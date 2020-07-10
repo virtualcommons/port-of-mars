@@ -124,7 +124,7 @@ export class DBPersister implements Persister {
 
   static FINAL_EVENTS = ['entered-defeat-phase', 'entered-victory-phase'];
 
-  async finalize(gameId: number): Promise<[Game, Array<Player>, Array<TournamentRoundInvite>]> {
+  async finalize(gameId: number, shouldFinalizePlayers: boolean): Promise<[Game, Array<Player>, Array<TournamentRoundInvite>]> {
     const f = async (em: EntityManager) => {
       logger.debug('finalizing game %s', gameId);
       const event = await em.getRepository(GameEvent).findOneOrFail({
@@ -132,6 +132,12 @@ export class DBPersister implements Persister {
         order: {id: "DESC", dateCreated: "DESC"}
       });
       const game = await em.getRepository(Game).findOneOrFail({id: gameId});
+      game.status = event.type === 'entered-defeat-phase' ? 'defeat' : 'victory';
+      game.dateFinalized = this.sp.time.now();
+      if (!shouldFinalizePlayers) {
+        const res: [Game, Array<Player>, Array<TournamentRoundInvite>] = [await em.save(game), [], []];
+        return res;
+      }
       const players = await em.getRepository(Player).find({gameId});
       for (const p of players) {
         p.points = (event.payload as any)[p.role];
@@ -144,8 +150,6 @@ export class DBPersister implements Persister {
       for (const invite of invites) {
         invite.hasParticipated = true;
       }
-      game.status = event.type === 'entered-defeat-phase' ? 'defeat' : 'victory';
-      game.dateFinalized = this.sp.time.now();
       const res = await Promise.all([em.save(game), em.save(players), em.save(invites)]);
       logger.debug('finalized game %s', gameId);
       return res;

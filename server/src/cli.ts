@@ -57,7 +57,7 @@ async function finalize(em: EntityManager, gameId: number): Promise<void> {
     }
     await persister.persist(gameEvents, {gameId, dateCreated: new Date(), timeRemaining: gameState.timeRemaining})
     await persister.sync();
-    await persister.finalize(gameId);
+    await persister.finalize(gameId, true);
   }
 }
 

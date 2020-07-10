@@ -35,7 +35,6 @@ import {GameEvent} from "@port-of-mars/server/rooms/game/events/types";
 import _ from "lodash";
 import {DBPersister} from "@port-of-mars/server/services/persistence";
 import {buildGameOpts} from "@port-of-mars/server/util";
-import {uuid} from "uuidv4";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -120,8 +119,8 @@ function prepareRequest(room: Room<GameState> & Game, r: Requests, client: Clien
   }
 }
 
-async function onCreate(room: GameRoomType, options?: GameOpts, shouldCreatePlayers?: boolean): Promise<void> {
-  shouldCreatePlayers = shouldCreatePlayers ?? false;
+async function onCreate(room: GameRoomType, options?: GameOpts, shouldEnableDb?: boolean): Promise<void> {
+  shouldEnableDb = shouldEnableDb ?? false;
   options = options ?? await buildGameOpts();
   room.setState(new GameState(options));
   room.setPrivate(true);
@@ -137,7 +136,7 @@ async function onCreate(room: GameRoomType, options?: GameOpts, shouldCreatePlay
   });
   room.persister = new DBPersister();
   logger.info('roomId: %s', room.roomId);
-  room.gameId = await room.persister.initialize(options, room.roomId, shouldCreatePlayers);
+  room.gameId = await room.persister.initialize(options, room.roomId, shouldEnableDb);
   const snapshot = room.state.toJSON();
   const event = new TakenStateSnapshot(snapshot);
   room.persister.persist([event], room.getMetadata());
@@ -237,7 +236,7 @@ export class GameRoom extends Room<GameState> implements Game {
   async onDispose(): Promise<void> {
     logger.info('Disposing of room', this.roomId);
     await this.persister.sync();
-    await this.persister.finalize(this.gameId);
+    await this.persister.finalize(this.gameId, true);
     logger.info('Disposed of room', this.roomId);
   }
 

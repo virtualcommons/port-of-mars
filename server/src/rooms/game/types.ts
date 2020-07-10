@@ -19,7 +19,7 @@ export interface PersistenceAPIConstructor {
 
 export interface Persister {
   initialize(options: GameOpts, roomId: string, shouldCreatePlayers: boolean): Promise<number>;
-  finalize(gameId: number): Promise<any>;
+  finalize(gameId: number, shouldFinalizePlayers: boolean): Promise<any>;
   persist(events: Array<ge.GameEvent>, metadata: Metadata): void;
   sync(): Promise<void>;
 }
