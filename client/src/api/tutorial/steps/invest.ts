@@ -14,6 +14,22 @@ const steps: Array<Step> = [
     params: {
       placement: RIGHT,
     },
+    stateTransform: [
+      {
+        SET_GAME_PHASE: Phase.invest,
+        SET_INVESTMENT_COSTS: {
+          data: {
+            culture: Number.MAX_SAFE_INTEGER,
+            finance: Number.MAX_SAFE_INTEGER,
+            government: 3,
+            legacy: 3,
+            science: 2,
+            upkeep: 1
+          },
+          role: RESEARCHER,
+        },
+      },
+    ],
   },
   {
     target: '.tour-accomplishments',
