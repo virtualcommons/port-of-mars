@@ -1,6 +1,9 @@
 <template>
   <div class="c-hud-left-buttons container">
+    <!-- button to switch between HUD Left Views -->
     <div class="button-switchers row">
+
+      <!-- view : other players -->
       <div class="other-players col-4">
         <button
           v-b-tooltip.hover.bottom="'Other Players'"
@@ -10,6 +13,8 @@
           <font-awesome-icon :icon="['fas', 'users']" size="lg" class="icon" />
         </button>
       </div>
+
+      <!-- inventory -->
       <div class="inventory col-4">
         <button
           v-b-tooltip.hover.bottom="'Inventory'"
@@ -23,6 +28,8 @@
           />
         </button>
       </div>
+
+      <!-- accomplishments -->
       <div class="accomplishments col-4">
         <button
           v-b-tooltip.hover.bottom="'Accomplishments'"
@@ -56,31 +63,59 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 export default class HUDLeftButtons extends Vue {
   @Inject() readonly api!: GameRequestAPI;
 
+  /**
+   * The current phase of the game state.
+   */
   get currentPhase() {
     return this.$tstore.state.phase;
   }
 
+  /**
+   * Phases: New Round, Events, Invest, Trade, Purchase, Discard
+   */
   get phase() {
     return Phase;
   }
 
+  /**
+   * HUD Left View: OtherPlayers, Inventory, Accomplishments
+   */
   get view() {
     return HUDLeftView;
   }
 
+  /**
+   * The current HUD Left View.
+   * If the current phase is Trade,
+   * autoset view to Accomplishments.
+   */
   get currentView() {
+    // if current phase = Trade
+    // set HUDLeftView = Accomplishments
+    // return the current state of HUDLeftView
     if (this.currentPhase === this.phase.trade) {
       this.api.setHUDLeftView(this.view.Accomplishments);
       return this.$tstore.state.userInterface.hudLeftView;
     }
+
+    // else return the current state of HUDLeftView (determined by button click)
     else return this.$tstore.state.userInterface.hudLeftView;
   }
 
-  private switchCurrentView(view: HUDLeftView) {
+  /**
+   * Change the current HUD Left View.
+   * @param view The type of view: OtherPlayers, Inventory, Accomplishments
+   */
+  private switchCurrentView(view: HUDLeftView): void {
     this.api.setHUDLeftView(view);
   }
 
-  private buttonClass(buttonViewOption: HUDLeftView) {
+  /**
+   * Apply conditional styling on a selected button.
+   * @param buttonViewOption The type of view: OtherPlayers, Inventory, Accomplishments
+   * @return SCSS class to style a selected button.
+   */
+  private buttonClass(buttonViewOption: HUDLeftView): string {
     return buttonViewOption === this.currentView ? 'selected' : '';
   }
 }
