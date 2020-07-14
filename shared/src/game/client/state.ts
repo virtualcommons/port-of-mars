@@ -176,7 +176,9 @@ export const initialStoreState: State = {
   marsEventsProcessed: 0,
   roundIntroduction: {
     contributedSystemHealth: 0,
-    maintenanceSystemHealth: -SYSTEM_HEALTH_MAINTENANCE_COST
+    maintenanceSystemHealth: -SYSTEM_HEALTH_MAINTENANCE_COST,
+    accomplishmentPurchases: [],
+    completedTrades: []
   },
   tradeSet: {},
   winners: [],

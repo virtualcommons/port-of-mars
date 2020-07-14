@@ -104,9 +104,16 @@ export type EventClientView =
   // EventAccomplishments
   | 'ACCOMPLISHMENT_SELECT_PURCHASED';
 
+export interface AccomplishmentPurchaseData {
+  name: string;
+  victoryPoints: number;
+}
+
 export interface RoundIntroductionData {
   contributedSystemHealth: number;
   maintenanceSystemHealth: number;
+  accomplishmentPurchases: Array<AccomplishmentPurchaseData>;
+  completedTrades: Array<TradeData>;
 }
 
 export interface MarsEventData {

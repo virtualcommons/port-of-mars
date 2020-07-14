@@ -27,7 +27,7 @@ import {
   TradeStatus,
   TradeSetData,
   RESOURCES,
-  MarsLogCategory, RoundIntroductionData, SystemHealthChangeData, PurchasedSystemHealthData,
+  MarsLogCategory, RoundIntroductionData, SystemHealthChangeData, PurchasedSystemHealthData, AccomplishmentPurchaseData,
 } from '@port-of-mars/shared/types';
 import { canSendTradeRequest } from '@port-of-mars/shared/validation';
 import _ from 'lodash';
@@ -46,19 +46,187 @@ import { SimpleBot } from "@port-of-mars/server/rooms/game/state/bot";
 
 const logger = settings.logging.getLogger(__filename);
 
+class ResourceInventory extends Schema implements ResourceAmountData {
+  constructor() {
+    super();
+    this.culture = 0;
+    this.finance = 0;
+    this.government = 0;
+    this.legacy = 0;
+    this.science = 0;
+  }
+
+  fromJSON(data: ResourceAmountData) {
+    Object.assign(this, data);
+  }
+
+  toJSON(): ResourceAmountData {
+    return {
+      culture: this.culture,
+      finance: this.finance,
+      government: this.government,
+      legacy: this.legacy,
+      science: this.science
+    };
+  }
+
+  @type('number')
+  culture: number;
+
+  @type('number')
+  finance: number;
+
+  @type('number')
+  government: number;
+
+  @type('number')
+  legacy: number;
+
+  @type('number')
+  science: number;
+
+  canAfford(inventory: ResourceAmountData): boolean {
+    for (const [k, v] of Object.entries(this)) {
+      const resourceRemaining: number = (v as any) - (inventory as any)[k];
+      if (resourceRemaining < 0) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  update(newResources: ResourceAmountData) {
+    this.culture += newResources.culture;
+    this.finance += newResources.finance;
+    this.government += newResources.government;
+    this.legacy += newResources.legacy;
+    this.science += newResources.science;
+  }
+
+  setToZero(resource: Resource) {
+    this[resource] = 0;
+  }
+}
+
+export class TradeAmount extends Schema {
+  constructor(role: Role, resourceAmount: ResourceAmountData) {
+    super();
+    this.role = role;
+    this.resourceAmount = new ResourceInventory();
+    this.resourceAmount.fromJSON(resourceAmount);
+  }
+
+  fromJSON(data: TradeAmountData): void {
+    this.role = data.role;
+    this.resourceAmount.fromJSON(data.resourceAmount);
+  }
+
+  toJSON(): TradeAmountData {
+    return {
+      role: this.role,
+      resourceAmount: this.resourceAmount
+    };
+  }
+
+  @type('string')
+  role: Role;
+
+  @type(ResourceInventory)
+  resourceAmount: ResourceInventory;
+}
+
+export class AccomplishmentPurchase extends Schema implements AccomplishmentPurchaseData {
+  constructor(data: AccomplishmentPurchaseData) {
+    super();
+    this.name = data.name;
+    this.victoryPoints = data.victoryPoints;
+  }
+
+  toJSON(): AccomplishmentPurchaseData {
+    return {name: this.name, victoryPoints: this.victoryPoints};
+  }
+
+  fromJSON(data: AccomplishmentPurchaseData) {
+    Object.assign(this, data);
+  }
+
+  @type('string')
+  name: string;
+
+  @type('number')
+  victoryPoints: number;
+}
+
+export class Trade extends Schema {
+  constructor(id: string, sender: TradeAmountData, recipient: TradeAmountData, status: TradeStatus) {
+    super();
+    this.id = id;
+    this.sender = new TradeAmount(sender.role, sender.resourceAmount);
+    this.recipient = new TradeAmount(recipient.role, recipient.resourceAmount);
+    this.status = status;
+  }
+
+  fromJSON(data: TradeData): void {
+    this.id = data.id;
+    this.sender.fromJSON(data.sender);
+    this.recipient.fromJSON(data.recipient);
+    this.status = data.status;
+  }
+
+  toJSON(): TradeData {
+    return {
+      id: this.id,
+      sender: this.sender.toJSON(),
+      recipient: this.recipient.toJSON(),
+      status: this.status
+    };
+  }
+
+  @type('string')
+  id: string;
+
+  @type(TradeAmount)
+  sender: TradeAmount;
+
+  @type(TradeAmount)
+  recipient: TradeAmount;
+
+  @type('string')
+  status: TradeStatus
+
+  apply(state: GameState): void {
+    const pFrom = state.players[this.sender.role];
+    const pTo = state.players[this.recipient.role];
+
+    pFrom.inventory.update(_.mapValues(this.sender.resourceAmount, r => -r!));
+    pFrom.inventory.update(this.recipient.resourceAmount);
+    //pFrom.pendingInvestments.rollback({...this.from.resourceAmount,upkeep:0});
+
+    pTo.inventory.update(_.mapValues(this.recipient.resourceAmount, r => -r!));
+    pTo.inventory.update(this.sender.resourceAmount);
+
+    this.status = 'Accepted';
+  }
+}
+
 export class RoundIntroduction extends Schema implements RoundIntroductionData {
   constructor() {
     super();
   }
 
   fromJSON(data: RoundIntroductionData): void {
-    Object.assign(this, data);
+    this.maintenanceSystemHealth = data.maintenanceSystemHealth;
+    this.contributedSystemHealth = data.contributedSystemHealth;
+    this.accomplishmentPurchases.splice(0, this.accomplishmentPurchases.length, ...data.accomplishmentPurchases.map(ap => new AccomplishmentPurchase(ap)));
+    this.completedTrades.splice(0, this.completedTrades.length, ...data.completedTrades.map(ct => new Trade(ct.id, ct.sender, ct.recipient, ct.status)));
   }
 
   toJSON(): RoundIntroductionData {
     return {
       contributedSystemHealth: this.contributedSystemHealth,
       maintenanceSystemHealth: this.maintenanceSystemHealth,
+      accomplishmentPurchases: this.accomplishmentPurchases.map(ap => ap.toJSON()),
+      completedTrades: this.completedTrades.map(ct => ct.toJSON())
     }
   }
 
@@ -68,12 +236,28 @@ export class RoundIntroduction extends Schema implements RoundIntroductionData {
   @type('number')
   contributedSystemHealth = 0;
 
+  @type([AccomplishmentPurchase])
+  accomplishmentPurchases = new ArraySchema<AccomplishmentPurchase>();
+
+  @type([Trade])
+  completedTrades = new ArraySchema<Trade>();
+
   addContribution(systemHealth: number): void {
     this.contributedSystemHealth += systemHealth;
   }
 
+  addAccomplishmentPurchase(accomplishment: AccomplishmentPurchase): void {
+    this.accomplishmentPurchases.push(accomplishment);
+  }
+
+  addCompletedTrade(trade: Trade) {
+    this.completedTrades.push(trade);
+  }
+
   reset(): void {
     this.contributedSystemHealth = 0;
+    this.accomplishmentPurchases.splice(0, this.accomplishmentPurchases.length);
+    this.completedTrades.splice(0, this.completedTrades.length);
   }
 }
 
@@ -366,68 +550,6 @@ class ResourceCosts extends Schema implements ResourceCostData {
   }
 }
 
-class ResourceInventory extends Schema implements ResourceAmountData {
-  constructor() {
-    super();
-    this.culture = 0;
-    this.finance = 0;
-    this.government = 0;
-    this.legacy = 0;
-    this.science = 0;
-  }
-
-  fromJSON(data: ResourceAmountData) {
-    Object.assign(this, data);
-  }
-
-  toJSON(): ResourceAmountData {
-    return {
-      culture: this.culture,
-      finance: this.finance,
-      government: this.government,
-      legacy: this.legacy,
-      science: this.science
-    };
-  }
-
-  @type('number')
-  culture: number;
-
-  @type('number')
-  finance: number;
-
-  @type('number')
-  government: number;
-
-  @type('number')
-  legacy: number;
-
-  @type('number')
-  science: number;
-
-  canAfford(inventory: ResourceAmountData): boolean {
-    for (const [k, v] of Object.entries(this)) {
-      const resourceRemaining: number = (v as any) - (inventory as any)[k];
-      if (resourceRemaining < 0) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  update(newResources: ResourceAmountData) {
-    this.culture += newResources.culture;
-    this.finance += newResources.finance;
-    this.government += newResources.government;
-    this.legacy += newResources.legacy;
-    this.science += newResources.science;
-  }
-
-  setToZero(resource: Resource) {
-    this[resource] = 0;
-  }
-}
-
 export class Accomplishment extends Schema implements AccomplishmentData {
   constructor(data: AccomplishmentData) {
     super();
@@ -627,81 +749,6 @@ export interface PlayerSerialized {
   victoryPoints: number;
   inventory: ResourceAmountData;
   pendingInvestments: InvestmentData;
-}
-
-export class TradeAmount extends Schema {
-  constructor(role: Role, resourceAmount: ResourceAmountData) {
-    super();
-    this.role = role;
-    this.resourceAmount = new ResourceInventory();
-    this.resourceAmount.fromJSON(resourceAmount);
-  }
-
-  fromJSON(data: TradeAmountData): void {
-    this.role = data.role;
-    this.resourceAmount.fromJSON(data.resourceAmount);
-  }
-
-  toJSON(): TradeAmountData {
-    return {
-      role: this.role,
-      resourceAmount: this.resourceAmount
-    };
-  }
-
-  @type('string')
-  role: Role;
-
-  @type(ResourceInventory)
-  resourceAmount: ResourceInventory;
-}
-
-export class Trade extends Schema {
-  constructor(public uuid: string, sender: TradeAmountData, recipient: TradeAmountData, status: TradeStatus) {
-    super();
-    this.sender = new TradeAmount(sender.role, sender.resourceAmount);
-    this.recipient = new TradeAmount(recipient.role, recipient.resourceAmount);
-    this.status = status;
-  }
-
-  fromJSON(data: TradeData): void {
-    this.uuid = data.id;
-    this.sender.fromJSON(data.sender);
-    this.recipient.fromJSON(data.recipient);
-    this.status = data.status;
-  }
-
-  toJSON(): TradeData {
-    return {
-      id: this.uuid,
-      sender: this.sender.toJSON(),
-      recipient: this.recipient.toJSON(),
-      status: this.status
-    };
-  }
-
-  @type(TradeAmount)
-  sender: TradeAmount;
-
-  @type(TradeAmount)
-  recipient: TradeAmount;
-
-  @type('string')
-  status: TradeStatus
-
-  apply(state: GameState): void {
-    const pFrom = state.players[this.sender.role];
-    const pTo = state.players[this.recipient.role];
-
-    pFrom.inventory.update(_.mapValues(this.sender.resourceAmount, r => -r!));
-    pFrom.inventory.update(this.recipient.resourceAmount);
-    //pFrom.pendingInvestments.rollback({...this.from.resourceAmount,upkeep:0});
-
-    pTo.inventory.update(_.mapValues(this.recipient.resourceAmount, r => -r!));
-    pTo.inventory.update(this.sender.resourceAmount);
-
-    this.status = 'Accepted';
-  }
 }
 
 export interface Bot {
@@ -1552,6 +1599,7 @@ export class GameState extends Schema implements GameData {
       category = MarsLogCategory.acceptTrade;
       this.log(message, category, performedBy);
       this.tradeSet[id].status = 'Accepted';
+      this.roundIntroduction.addCompletedTrade(this.tradeSet[id]);
     } else {
       message = `The ${senderRole} is unable to fulfill a trade request previously sent to the ${recipientRole}. The trade will be removed.`;
       category = MarsLogCategory.invalidTrade;
@@ -1568,6 +1616,8 @@ export class GameState extends Schema implements GameData {
     const category: string = MarsLogCategory.purchaseAccomplishment;
     const performedBy: ServerRole = SERVER;
     this.players[role].purchaseAccomplishment(accomplishment);
+    const ap = new AccomplishmentPurchase({name: label, victoryPoints});
+    this.roundIntroduction.addAccomplishmentPurchase(ap);
     this.log(message, category, performedBy);
   }
 
