@@ -11,9 +11,9 @@ import discard from './discard';
 
 // concatenate tutorial steps in order
 export const tutorialSteps: Array<Step> = gamePlay.concat(
-  newRound,
   upkeep,
   player,
+  newRound,
   events,
   invest,
   trade,
