@@ -37,30 +37,43 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Inject } from 'vue-property-decorator';
+  import {Component, Inject, Vue} from 'vue-property-decorator';
 
-import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
-import { HUDLeftView } from '@port-of-mars/shared/game/client/panes';
+  import {GameRequestAPI} from '@port-of-mars/client/api/game/request';
+  import {HUDLeftView} from '@port-of-mars/shared/game/client/panes';
+  import {Phase} from "@port-of-mars/shared/types";
 
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faUsers } from '@fortawesome/free-solid-svg-icons/faUsers';
-import { faBriefcase } from '@fortawesome/free-solid-svg-icons/faBriefcase';
-import { faStar } from '@fortawesome/free-solid-svg-icons/faStar';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+  import {library} from '@fortawesome/fontawesome-svg-core';
+  import {faUsers} from '@fortawesome/free-solid-svg-icons/faUsers';
+  import {faBriefcase} from '@fortawesome/free-solid-svg-icons/faBriefcase';
+  import {faStar} from '@fortawesome/free-solid-svg-icons/faStar';
+  import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 
-library.add(faUsers, faBriefcase, faStar);
+  library.add(faUsers, faBriefcase, faStar);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 @Component({})
 export default class HUDLeftButtons extends Vue {
   @Inject() readonly api!: GameRequestAPI;
 
+  get currentPhase() {
+    return this.$tstore.state.phase;
+  }
+
+  get phase() {
+    return Phase;
+  }
+
   get view() {
     return HUDLeftView;
   }
 
   get currentView() {
-    return this.$tstore.state.userInterface.hudLeftView;
+    if (this.currentPhase === this.phase.trade) {
+      this.api.setHUDLeftView(this.view.Accomplishments);
+      return this.$tstore.state.userInterface.hudLeftView;
+    }
+    else return this.$tstore.state.userInterface.hudLeftView;
   }
 
   private switchCurrentView(view: HUDLeftView) {
