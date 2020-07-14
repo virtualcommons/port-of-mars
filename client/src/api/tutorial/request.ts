@@ -221,8 +221,8 @@ export class TutorialAPI implements AbstractGameAPI {
     this.store.commit('SET_MODAL_HIDDEN', null);
   }
 
-  public toggleProfileMenu(currentlyVisble: boolean) {
-    this.store.commit('SET_PROFILE_MENU_VISIBILITY', !currentlyVisble);
+  public toggleProfileMenu(currentlyVisible: boolean) {
+    this.store.commit('SET_PROFILE_MENU_VISIBILITY', !currentlyVisible);
 
     this.completedActionWithImplicitForward();
   }
