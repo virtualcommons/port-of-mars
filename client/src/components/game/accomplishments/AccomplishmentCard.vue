@@ -78,7 +78,7 @@
     <!-- in discard phase, allow discard -->
     <div
       class="d-flex flex-row discard-wrapper"
-      v-if="type === cardType.discard && showCard"
+      v-else-if="type === cardType.discard && showCard"
     >
       <div class="discard col-12">
         <button @click="handleDiscard()" :disabled="playerReady">
@@ -90,15 +90,13 @@
     <!-- display status of card after it has been purchased or discarded -->
     <div
       class="d-flex flex-row status-text"
-      v-if="
-        showCard && (type === cardType.discard || type === cardType.purchase)
-      "
+      v-else
     >
       <div class="text col-12" v-if="type === cardType.discard">
-        <p>Card Has Been Discarded</p>
+        <p>Accomplishment Discarded</p>
       </div>
       <div class="text col-12" v-if="type === cardType.purchase">
-        <p>Card Has Been Purchased</p>
+        <p>Accomplishment Purchased</p>
       </div>
     </div>
   </div>
