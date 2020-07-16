@@ -6,7 +6,7 @@ const steps: Array<Step> = [
     content:
       `The game starts with System Health at 100. This represents the habitat at peak ` +
       `condition and maintenance. However, at the start of every round, the ` +
-      `community loses 25 System Health.`,
+      `community loses 25 System Health due to standard wear and tear.`,
     params: {
       placement: 'bottom'
     }

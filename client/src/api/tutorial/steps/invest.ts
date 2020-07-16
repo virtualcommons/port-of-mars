@@ -10,7 +10,7 @@ import { Phase, RESEARCHER } from '@port-of-mars/shared/types';
 const steps: Array<Step> = [
   {
     target: '.tour-phase',
-    content: `The second phase is Investment!`,
+    content: `The second phase is Investment.`,
     params: {
       placement: RIGHT,
     },
@@ -33,7 +33,7 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-accomplishments',
-    content: `Here, you can see what Accomplishments are available to you this round.`,
+    content: `Here, you can see what Accomplishments are available to you during a round.`,
     params: {
       placement: RIGHT,
     },
@@ -63,7 +63,8 @@ const steps: Array<Step> = [
             role: 'Researcher',
             label: 'Mars Helicopter',
             flavorText:
-              'Your invention of a low gravity, low atmosphere, low-flying vehicle enables greater exploration of the Martian surface.',
+              'Your invention of a low gravity, low atmosphere, low-flying vehicle enables ' +
+              'greater exploration of the Martian surface.',
             science: 2,
             government: 0,
             legacy: 0,
@@ -81,16 +82,17 @@ const steps: Array<Step> = [
   {
     target: '.tour-time-blocks',
     content:
-      `You have 10 timeblocks to spend each round unless otherwise instructed. ` +
-      `You can spend these timeblocks on System Health or on Influence. ` +
-      `Remember that you have 5 minutes to decide how to invest your timeblocks.`,
+      `You have 10 time blocks to spend each round unless otherwise instructed. ` +
+      `You can spend these time blocks on System Health or Resources. ` +
+      `Remember: you have 5 minutes to decide how to invest your time blocks.`,
     params: {
       placement: BOTTOM,
     },
   },
   {
     target: '.tour-invest',
-    content: `You cannot recycle timeblocks between rounds so you should spend all of them in each round.`,
+    content: `You cannot recycle time blocks between rounds so you should spend all of
+    them in each round.`,
     params: {
       placement: RIGHT,
     },
@@ -98,18 +100,18 @@ const steps: Array<Step> = [
   {
     target: '.tour-invest',
     content:
-      `The timeblock cost is located at the bottom right corner of an Influence. ` +
-      `On the Influence, there are two buttons: '+' and '-'. You can press '+' to invest ` +
-      `your available timeblocks into an Influence. If you choose to reallocate your  ` +
-      `timeblocks, press '-' to reduce your timeblock investment from an Influence.`,
+      `The time block cost is located at the bottom right corner of a Resource. ` +
+      `On the Resource, there are two buttons: '+' and '-'. Press '+' to invest ` +
+      `your available time blocks into a Resource. If you choose to reallocate your  ` +
+      `time blocks, press '-' to reduce your time block investment from a Resource.`,
     params: {
       placement: RIGHT,
     },
   },
   {
     target: '.tour-invest-action',
-    content: `Try it out: purchase 1 science.
-    Note the '2' near the clock! That is the cost of this resource.`,
+    content: `Try it out: purchase 1 science. Note the '2' near the clock! That is the
+    cost of this resource.`,
     params: {
       placement: TOP,
     },
@@ -129,14 +131,14 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-time-blocks',
-    content: `As you can see, 2 timeblocks have been removed!`,
+    content: `As you can see, 2 time blocks have been removed!`,
     params: {
       placement: TOP,
     },
   },
   {
     target: '.tour-invest-action',
-    content: `Timeblocks cannot be recycled, so finish spending!
+    content: `Time blocks cannot be recycled, so finish spending!
       You should buy 1 more science and 2 government!`,
     params: {
       placement: TOP,
@@ -167,7 +169,7 @@ const steps: Array<Step> = [
     target: '.tour-invest',
     content:
       `There are some Resources that you cannot earn on your own. For example, ` +
-      `the Researcher cannot earn Culture or Finance Resources by investing their timeblocks. ` +
+      `the Researcher cannot earn Culture or Finance Resources by investing their time blocks. ` +
       `However, you may need these resources to purchase certain Accomplishments.`,
     params: {
       placement: RIGHT,
@@ -185,7 +187,7 @@ const steps: Array<Step> = [
   {
     target: '.tour-ready-to-advance-button',
     content:
-      `Click the Ready to Advance button when you have finished investing your timeblocks. ` +
+      `Click Ready to Advance when you have finished investing your time blocks. ` +
       `The Investment Phase ends as soon as all members of your habitat have finished investing.`,
     params: {
       placement: BOTTOM,

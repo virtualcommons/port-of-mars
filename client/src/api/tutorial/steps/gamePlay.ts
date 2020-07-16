@@ -5,14 +5,15 @@ import { ChatMarsLogView } from '@port-of-mars/shared/game/client/panes';
 const steps: Array<Step> = [
   {
     target: '.tour-phase',
-    content: `This is where you will find information about the current game state.`,
+    content: `Information about the current game state is always displayed here.`,
     params: {
       placement: LEFT,
     },
   },
   {
     target: '.tour-round',
-    content: `The game progresses in rounds. The total number of rounds can vary for each game so a game may end after any number of rounds.`,
+    content: `The game progresses in rounds. The total number of rounds varies for each game
+    so a game may end after any number of rounds.`,
     params: {
       placement: BOTTOM,
     },
@@ -20,7 +21,7 @@ const steps: Array<Step> = [
   {
     target: '.tour-current-phase',
     content:
-      `There are multiple phases in a round: Events, Invest, Trade, Purchase ` +
+      `There are multiple phases in a round: New Round, Events, Invest, Trade, Purchase ` +
       `and Discard.`,
     params: {
       placement: BOTTOM,
@@ -28,23 +29,25 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-time-remaining',
-    content: `Each phase has a time limit of 5 minutes. The timer will turn red and blink when
-    there is a minute left in the phase.`,
+    content: `Each phase has a time limit of 5 minutes. The timer turns red and pulses ` +
+      `when 1 minute is left in the phase.`,
     params: {
       placement: TOP,
-    },
+    }
   },
   {
     target: '.tour-ready-to-advance-button',
-    content: `If you are finished with your actions before the 5 minutes are up, click here to mark that you are ready to advance the phase.
-      Once everyone has signaled that they are ready to advance, the phase will end and you will all move on to the next phase.`,
+    content: `If you are finished with your actions before the 5 minutes are up, click Ready ` +
+      `to Advance to lock in your choices. When every player has indicated that they are ` +
+      `ready, the phase will end, and all players will progress to the next phase.`,
     params: {
       placement: LEFT,
     },
   },
   {
     target: '.tour-phase-instructions',
-    content: `Instructions for the current phase are displayed here.`,
+    content: `These are instructions for the current phase. Refer to these instructions if ` +
+      `you aren't sure what to do during a phase.`,
     params: {
       placement: LEFT,
     },

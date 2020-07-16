@@ -4,7 +4,8 @@ import {
   HUDLeftView,
 } from '@port-of-mars/shared/game/client/panes';
 
-const steps: Array<Step> = [
+const
+  steps: Array<Step> = [
   {
     target: '.tour-profile',
     content:

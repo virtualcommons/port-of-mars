@@ -5,7 +5,7 @@ import { HUDRightView } from '@port-of-mars/shared/game/client/panes';
 const steps: Array<Step> = [
   {
     target: '.tour-phase',
-    content: `The first phase in a round is Events! This is where the Events of the round will be revealed.`,
+    content: `The first phase in a round is Events, where the Events of the round will be revealed.`,
     params: {
       placement: LEFT,
     },
@@ -15,8 +15,11 @@ const steps: Array<Step> = [
         ADD_TO_EVENTS: {
           id: 'changingTides',
           name: 'Changing Tides',
-          effect: `Each player discards all their Accomplishment cards and draws 1 new Accomplishment card. (They still draw up to a total of three cards at the end of this round.)`,
-          flavorText: `Create contingencies for your contingencies and contingencies for those contingencies. Then prepare to improvise.`,
+          effect: `Each player discards all their Accomplishment cards and draws 1 new
+          Accomplishment card. (They still draw up to a total of three cards at the end
+          of this round.)`,
+          flavorText: `Create contingencies for your contingencies and contingencies for
+          those contingencies. Then prepare to improvise.`,
           clientViewHandler: 'NO_CHANGE' as const,
           duration: 1,
         },

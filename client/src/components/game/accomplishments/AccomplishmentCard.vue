@@ -230,7 +230,7 @@
     @Watch('showCard', {immediate: true})
     shouldShowCard(showCard: boolean) {
       if (!showCard) {
-        //if the status changes, it's time to start to remove the card
+        // if Accomplishment status changes, remove card
         setTimeout(() => (this.cardIsActive = false), 5000);
       }
     }

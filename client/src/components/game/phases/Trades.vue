@@ -86,8 +86,8 @@
           return !this.checked || this.associatedWithTrade(trade) != -1;
         })
 
-        // sort the trades by association trades sent to local player will be at the top,
-        // followed by trades that local player has sent
+        // sort the trades by association
+        // trades sent to local player will be at the top, followed by trades that local player has sent
         .sort((a, b) => {
           return this.associatedWithTrade(b) - this.associatedWithTrade(a);
         });
