@@ -51,7 +51,7 @@ const _marsEvents: Array<MarsEventDeckItem> = [
   [{
     id: 'heroOrPariah',
     name: 'Hero or Pariah',
-    effect: `CHOOSE ONE:\n• Players must vote for 1 player to lose all Influence\n• Players must vote for 1 player to gain 4 of their specialty Influence`,
+    effect: `CHOOSE ONE:\n• Players must vote for 1 player to lose all Influence\n• Players must vote for 1 player to gain 4 of their Resource`,
     flavorText: `In a community as small as Port of Mars, some individuals always stand out - for better or worse.`,
     clientViewHandler: 'VOTE_FOR_PLAYER_HERO_PARIAH' as const,
     duration: 1
