@@ -153,8 +153,6 @@
     @Prop({default: true})
     private showCard!: boolean;
 
-    @Prop({default: true})
-
     private cardIsActive: boolean = true;
 
     //we want a different view for the modals.
@@ -171,6 +169,12 @@
       return AccomplishmentCardType;
     }
 
+    /**
+     * Determine card styling based on card type (purchase, discard, or default)
+     * and showCard to evaluate if card should be hidden based on purchase or
+     * discard status.
+     *
+     */
     get cardTypeStyling() {
       switch (this.type) {
         case AccomplishmentCardType.purchase:
