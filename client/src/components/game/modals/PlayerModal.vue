@@ -77,7 +77,8 @@
                 class="unavailable"
                 v-if="!playerData.isSelf && !isUnderAudit"
               >
-                <p>This information cannot be viewed at this time. Check back later... </p>
+                <p v-if="accomplishmentType==='active'">This information cannot be viewed at this time. Check back later... </p>
+                <p v-if="accomplishmentType==='purchased'">None</p>
               </div>
               <div
                 class="wrapper"
@@ -122,7 +123,7 @@ export default class PlayerModal extends Vue {
   @Inject() readonly api!: GameRequestAPI;
 
   @Prop({}) private modalData!: PlayerInfoModalData;
-  private accomplishmentType: string = 'active';
+  private accomplishmentType: string = 'purchased';
 
   get playerData() {
     return {
