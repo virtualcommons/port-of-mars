@@ -1599,7 +1599,6 @@ export class GameState extends Schema implements GameData {
       category = MarsLogCategory.acceptTrade;
       this.log(message, category, performedBy);
       this.tradeSet[id].status = 'Accepted';
-      this.roundIntroduction.addCompletedTrade(this.tradeSet[id]);
     } else {
       message = `The ${senderRole} is unable to fulfill a trade request previously sent to the ${recipientRole}. The trade will be removed.`;
       category = MarsLogCategory.invalidTrade;
