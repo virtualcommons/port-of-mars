@@ -113,6 +113,7 @@
 
       <!-- CANCEL TRADE -->
       <b-button
+        :disabled="playerReady"
         @click="handleTradeCancel"
         class="cancel"
         title="Cancel trade"
