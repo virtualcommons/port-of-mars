@@ -51,7 +51,7 @@ const _marsEvents: Array<MarsEventDeckItem> = [
   [{
     id: 'heroOrPariah',
     name: 'Hero or Pariah',
-    effect: `CHOOSE ONE:\n• Players must vote for 1 player to lose all Influence\n• Players must vote for 1 player to gain 4 of their Resource`,
+    effect: `CHOOSE ONE: Players must vote for 1 player to lose all Influence OR Players must vote for 1 player to gain 4 of their specialty Influence`,
     flavorText: `In a community as small as Port of Mars, some individuals always stand out - for better or worse.`,
     clientViewHandler: 'VOTE_FOR_PLAYER_HERO_PARIAH' as const,
     duration: 1
@@ -94,7 +94,7 @@ const _marsEvents: Array<MarsEventDeckItem> = [
   [{
     id: 'stymied',
     name: 'Stymied',
-    effect: `Players may not earn their Resource this round. (Culture for Curator, Finance for Entrepreneur, Government for Politician, Science for Researcher, Legacy for Pioneer)`,
+    effect: `Players may not earn their specialty Influence this round.`,
     flavorText: `"That's very nice that you have three PhD's. Now pick up this toothbrush and help with cleaning our solar panel cells."`,
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 1,
