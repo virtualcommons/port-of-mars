@@ -53,6 +53,24 @@ const steps: Array<Step> = [
     },
   },
   {
+    target: '.tour-split-chat-log',
+    content: `You can switch between the Chat or Mars Log view. If you want to view both, toggle ` +
+      `the Split view option.`,
+    params: {
+      placement: LEFT,
+    },
+    stateTransform: [
+      {
+        ADD_TO_CHAT: {
+          message: 'Welcome to the Port of Mars!',
+          role: CURATOR,
+          dateCreated: new Date().getTime(),
+          round: 0,
+        },
+      }
+    ]
+  },
+  {
     target: '.tour-chat',
     content:
       `At any time during the game, you can communicate with the other players ` +
@@ -66,12 +84,6 @@ const steps: Array<Step> = [
       {
         SET_LAYOUT: 'tutorial',
         SET_CHATMARSLOG_VIEW: ChatMarsLogView.Chat,
-        ADD_TO_CHAT: {
-          message: 'Welcome to the Port of Mars!',
-          role: CURATOR,
-          dateCreated: new Date().getTime(),
-          round: 0,
-        },
         required: true,
       },
     ],

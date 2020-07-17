@@ -1,5 +1,5 @@
 <template>
-  <div class="c-chat-mars-log container">
+  <div class="c-chat-mars-log container tour-split-chat-log">
     <div class="button-switchers row">
       <div class="chat col-4">
         <button
