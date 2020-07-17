@@ -67,7 +67,7 @@
           </div>
           <div class="investments col-8">
             <div
-              :key="name + Math.random()"
+              :key="name"
               class="wrapper"
               v-for="(value, name) in sender.resourceAmount"
             >
