@@ -43,6 +43,7 @@ export class TutorialAPI implements AbstractGameAPI {
   }
 
   discardAccomplishment(id: number): void {
+    this.store.commit('DISCARD_ACCOMPLISHMENT', { id, role: this.store.state.role});
   }
 
   savePersonalGainVote(value: { role: Role; vote: boolean }): void {
