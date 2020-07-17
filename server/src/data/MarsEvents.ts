@@ -94,7 +94,7 @@ const _marsEvents: Array<MarsEventDeckItem> = [
   [{
     id: 'stymied',
     name: 'Stymied',
-    effect: `Players may not earn their specialty Influence this round. (Culture for Curator, Business for Entrepreneur, Government for Politician, Science for researcher, Legacy for Pioneer)`,
+    effect: `Players may not earn their Resource this round. (Culture for Curator, Finance for Entrepreneur, Government for Politician, Science for Researcher, Legacy for Pioneer)`,
     flavorText: `"That's very nice that you have three PhD's. Now pick up this toothbrush and help with cleaning our solar panel cells."`,
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 1,
