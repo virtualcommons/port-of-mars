@@ -42,7 +42,7 @@
                 class="unavailable"
                 v-if="!playerData.isSelf && !isUnderAudit"
               >
-                <p>Unavailable</p>
+                <p>This information cannot be viewed at this time. Check back later...</p>
               </div>
               <div
                 class="wrapper"
@@ -77,7 +77,7 @@
                 class="unavailable"
                 v-if="!playerData.isSelf && !isUnderAudit"
               >
-                <p>Unavailable</p>
+                <p>This information cannot be viewed at this time. Check back later... </p>
               </div>
               <div
                 class="wrapper"
