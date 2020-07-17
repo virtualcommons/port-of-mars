@@ -14,16 +14,16 @@
       <div class="side-view col-4">
         <div class="buttons">
           <button
-            @click="switchView('Inventory')"
-            :class="selectedView === 'Inventory' ? 'selected' : ''"
-          >
-            Inventory
-          </button>
-          <button
             @click="switchView('Active Accomplishments')"
             :class="selectedView === 'Active Accomplishments' ? 'selected' : ''"
           >
             Accomplishments
+          </button>
+          <button
+            @click="switchView('Inventory')"
+            :class="selectedView === 'Inventory' ? 'selected' : ''"
+          >
+            Inventory
           </button>
         </div>
         <div class="topbar">
@@ -70,7 +70,7 @@ import { TutorialAPI } from '../../../api/tutorial/request';
 export default class TradeRequestModal extends Vue {
   @Prop({}) private modalData!: TradeRequestModalData;
   @Inject() readonly api!: TutorialAPI;
-  private selectedView: string = 'Inventory';
+  private selectedView: string = 'Active Accomplishments';
 
   private switchView(view: string) {
     this.selectedView = view;
