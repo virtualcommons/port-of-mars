@@ -31,8 +31,6 @@
           <b-table responsive sticky-header small dark bordered striped :items="purchases" v-if="purchases.length > 0"
                    :fields="purchaseFields">
           </b-table>
-          <b-table responsive sticky-header small dark bordered striped :items="trades" v-if="trades.length > 0">
-          </b-table>
         </div>
       </b-col>
       <b-col fluid cols="4" class="events m-auto tour-report-hint">
@@ -109,15 +107,10 @@
         }
       }
       return resources
-
     }
 
     get trades() {
-      return this.$tstore.state.roundIntroduction.completedTrades.map(t => {
-        const sender = this.getTradeAmount(t.sender)
-        const recipient =  this.getTradeAmount(t.recipient);
-        return {description: `${t.sender.role} traded ${sender.join(', ')} for ${recipient.join(', ')} with ${t.recipient.role}`}
-      });
+      return [];
     }
 
     get tabularContributionFields() {
