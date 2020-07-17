@@ -244,6 +244,7 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
     game.handleIncomplete();
     game.marsEvents.push(...marsEvents);
 
+    game.resetPlayerReadiness();
     game.updateMarsEventsElapsed();
     game.marsEventsProcessed = GameState.DEFAULTS.marsEventsProcessed;
     game.marsEventDeck.updatePosition(game.marsEvents.length);
