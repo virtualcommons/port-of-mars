@@ -62,31 +62,30 @@ p {
   height: 100%;
   @include reset-padding-margin;
   @include make-center;
+}
 
-  button {
-    height: 100%;
-    width: 12rem;
-    @include reset-button;
-    @include default-transition-base;
-    padding: 0.5rem 1rem;
-    border: solid 0.125rem $light-accent;
-    font-size: $font-med;
-    font-weight: $bold !important;
-    text-align: center;
-    color: $light-accent;
+button {
+  height: 100%;
+  width: 12rem;
+  @include reset-button;
+  @include default-transition-base;
+  padding: 0.5rem 1rem;
+  border: solid 0.125rem $light-accent;
+  font-size: $font-med;
+  font-weight: $bold !important;
+  text-align: center;
+  color: $light-accent;
 
-    &:hover {
-      color: $dark-shade;
-      background-color: $light-accent;
-    }
+  &:hover {
+    color: $dark-shade;
+    background-color: $light-accent;
+  }
 
-    &:disabled:hover {
-      color: $light-accent;
-      background-color: transparent;
-    }
-
-    &:disabled {
-      opacity: 0.5;
-    }
+  &:disabled {
+    border: solid 0.125rem $light-shade-25;
+    color: $light-shade-25;
+    background-color: $dark-shade;
+    cursor: not-allowed;
+    opacity: 90%;
   }
 }

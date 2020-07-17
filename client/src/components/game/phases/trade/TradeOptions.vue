@@ -5,12 +5,13 @@
         <p>{{ text }}</p>
       </div>
     </div>
+    <!-- FIXME: add better visual cues (e.g. tooltips) to guide players better in making trades -->
     <div class="investment-wrapper row">
       <div
         v-for="(value, resource) in resources"
         :key="resource + Math.random()"
         class="investment col"
-      :class="{ 'unavailable-investment': grayOutResources(resource) }"
+        :class="{ 'unavailable-investment': grayOutResources(resource) }"
       >
         <div class="investment-input-wrapper">
           <!-- TODO: add tooltip -->
@@ -77,12 +78,20 @@ export default class TradeOptions extends Vue {
   //the starting values inherited from the parent
   @Prop() resources!: ResourceAmountData;
 
+  get tradePartnerName() {
+    return this.$tstore.state.ui.tradeData.recipient.role;
+  }
+
+  private tradePartner() {
+    return this.tradePartnerName != '';
+  }
+
   get playerInventory() {
     return this.$store.getters.player.inventory;
   }
 
   private grayOutResources(resource: Resource) {
-    return this.playerInventory[resource] == 0 && this.mode == 'outgoing';
+    return (this.playerInventory[resource] == 0 && this.mode == 'outgoing') || !this.tradePartner();
 
   }
 

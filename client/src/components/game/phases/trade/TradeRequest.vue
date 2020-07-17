@@ -47,6 +47,8 @@
         />
       </div>
     </div>
+
+    <!-- FIXME: add disable button styling if trade is not valid -->
     <div class="buttons-wrapper row">
       <div class="buttons col-12">
         <button
@@ -125,6 +127,9 @@ export default class TradeRequest extends Vue {
 
   validateTrade(): boolean {
     const inventory = this.$tstore.getters.player.inventory;
+    console.log('validate trade: ', this.tradePartnerName != '' &&
+            canPlayerMakeTrade(this.recipientResources, inventory) &&
+            !isZeroTrade(this.recipientResources, this.senderResources))
     return (
       this.tradePartnerName != '' &&
       canPlayerMakeTrade(this.recipientResources, inventory) &&
