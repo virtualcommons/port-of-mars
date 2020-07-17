@@ -499,5 +499,6 @@ export class DifficultConditions extends BaseEvent {
     for (const player of state.players) {
       player.costs.upkeep *= 2;
     }
+    state.log(`System Health costs twice as many Time Blocks as usual this round.`, `${MarsLogCategory.event}: Difficult Conditions`)
   }
 }
