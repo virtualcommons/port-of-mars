@@ -8,7 +8,7 @@
               <p class="title">Active Trades</p>
               <b-form-checkbox
                 v-model="checked"
-                switcha
+                switch
                 class="tour-trade-filters"
               >
                 <span v-if="checked">Your Trades</span>
