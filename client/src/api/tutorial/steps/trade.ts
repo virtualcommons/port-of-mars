@@ -15,7 +15,6 @@ const steps: Array<Step> = [
     params: {
       placement: RIGHT,
     },
-
     stateTransform: [
       {
         SET_PENDING_INVESTMENTS: {
@@ -87,6 +86,23 @@ const steps: Array<Step> = [
     },
   },
   {
+    target: '.tour-active-accomplishments',
+    content: `During the Trade phase, Active Accomplishments will automatically toggle so you can ` +
+      `reference your available accomplishments and active trades simultaneously.`,
+    params: {
+      placement: RIGHT
+    }
+  },
+  {
+    target: '.tour-trade-filters',
+    content:
+      `Use this switch to toggle trade filters so you can easily view Your Trades (trades that ` +
+      `you have sent and received) and All Trades.`,
+    params: {
+      placement: LEFT,
+    },
+  },
+  {
     target: '.tour-chat',
     content: `Before making trade requests, you should talk about your plans in chat!`,
     params: {
@@ -124,6 +140,15 @@ const steps: Array<Step> = [
         required: true,
       },
     ],
+  },
+  {
+    target: '.tour-request-trade-accomplishments',
+    content: `Upon opening a Trade Request, you can easily reference your available ` +
+    `Accomplishments here while creating a Trade Request. You can also toggle the menu to view ` +
+    `your Inventory.`,
+    params: {
+      placement: RIGHT,
+    },
   },
   {
     target: '.tour-request-trade-partner',

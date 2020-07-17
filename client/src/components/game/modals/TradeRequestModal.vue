@@ -11,7 +11,7 @@
           </div>
         </div>
       </div>
-      <div class="side-view col-4">
+      <div class="side-view col-4 tour-request-trade-accomplishments">
         <div class="buttons">
           <button
             @click="switchView('Active Accomplishments')"

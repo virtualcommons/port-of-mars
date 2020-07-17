@@ -29,7 +29,7 @@
         <!-- Accomplishments View -->
         <div
           v-show="currentView === view.Accomplishments"
-          class="accomplishments-view"
+          class="accomplishments-view tour-active-accomplishments"
         >
           <div class="wrapper">
             <AccomplishmentCard
