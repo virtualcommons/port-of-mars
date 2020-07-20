@@ -14,6 +14,8 @@ import {TStore} from "@port-of-mars/client/plugins/tstore";
 export interface AbstractGameAPI {
   connect(room: Room | MockRoom, store: TStore): void
 
+  resetBotWarning(): void
+
   setNextPhase(): void
 
   resetGame(): void

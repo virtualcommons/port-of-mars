@@ -52,6 +52,7 @@ function defaultPlayerData(role: Role): PlayerClientData {
       purchasable: [],
     },
     costs: defaultCostData(role),
+    botWarning: false,
     specialty: 'science',
     inventory: defaultInventory(role),
     ready: false,
@@ -166,7 +167,6 @@ export const initialStoreState: State = {
   // GameData
   players: defaultPlayerClientSet(),
   timeRemaining: 300,
-  botWarning: false,
   round: 1,
   phase: Phase.newRound,
   upkeep: 100,

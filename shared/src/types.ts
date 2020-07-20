@@ -216,6 +216,7 @@ export interface SystemHealthChangeData {
 export interface PlayerData {
   role: Role;
   costs: ResourceCostData;
+  botWarning: boolean;
   specialty: Resource;
   accomplishments: AccomplishmentSetData;
   ready: boolean;
@@ -231,7 +232,6 @@ export type PlayerSetData = { [role in Role]: PlayerData };
 export interface GameData {
   players: PlayerSetData;
   timeRemaining: number;
-  botWarning: boolean;
   round: number;
   phase: Phase;
   upkeep: number;

@@ -251,7 +251,7 @@ export class RoundIntroduction extends Schema implements RoundIntroductionData {
   }
 
   addCompletedTrade(trade: Trade) {
-    this.completedTrades.push(trade);
+    // this.completedTrades.push(trade.clone());
   }
 
   reset(): void {
@@ -823,10 +823,10 @@ export class SystemHealthChange extends Schema implements SystemHealthChangeData
 }
 
 export class Player extends Schema implements PlayerData {
-  constructor(role: Role, bot: Bot) {
+  constructor(role: Role) {
     super();
     this.role = role;
-    this.bot = bot;
+    this.bot = SimpleBot.fromActor(this);
     this.accomplishments = new AccomplishmentSet(role);
     this.costs = ResourceCosts.senderRole(role);
     // FIXME: it'd be nice to bind the specialty to the ResourceCosts e.g., this.specialty = this.costs.specialty
@@ -874,6 +874,9 @@ export class Player extends Schema implements PlayerData {
 
   @type(ResourceCosts)
   costs: ResourceCosts;
+
+  @type('boolean')
+  botWarning = false;
 
   @type('string')
   specialty: Resource;
@@ -1031,11 +1034,11 @@ type PlayerSetSerialized = { [role in Role]: PlayerSerialized };
 class PlayerSet extends Schema implements PlayerSetData {
   constructor() {
     super();
-    this.Curator = new Player(CURATOR, SimpleBot.fromActor());
-    this.Entrepreneur = new Player(ENTREPRENEUR, SimpleBot.fromActor());
-    this.Pioneer = new Player(PIONEER, SimpleBot.fromActor());
-    this.Politician = new Player(POLITICIAN, SimpleBot.fromActor());
-    this.Researcher = new Player(RESEARCHER, SimpleBot.fromActor());
+    this.Curator = new Player(CURATOR);
+    this.Entrepreneur = new Player(ENTREPRENEUR);
+    this.Pioneer = new Player(PIONEER);
+    this.Politician = new Player(POLITICIAN);
+    this.Researcher = new Player(RESEARCHER);
   }
 
   @type(Player)
@@ -1597,6 +1600,7 @@ export class GameState extends Schema implements GameData {
       }
       message = `The ${senderRole} has traded ${fromMsg.join(', ')} in exchange for ${toMsg.join(', ')} from the ${recipientRole}.`;
       category = MarsLogCategory.acceptTrade;
+      this.roundIntroduction.addCompletedTrade(this.tradeSet[id]);
       this.log(message, category, performedBy);
       this.tradeSet[id].status = 'Accepted';
     } else {

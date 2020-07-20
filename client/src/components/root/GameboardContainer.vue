@@ -18,17 +18,22 @@
         <ChatMarsLog />
       </div>
     </div>
+    <b-modal title="Timeout Warning: Impending Bot Takeover" hide-header-close v-model="botWarning">
+      <p>You have been inactive for at least four minutes. After five minutes a bot will takeover your player.</p>
+      <b-button block @click="resetBotWarning" class="btn-primary">OK</b-button>
+    </b-modal>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+  import {Vue, Component, Inject} from 'vue-property-decorator';
 import ModalController from '@port-of-mars/client/components/game/modals/ModalController.vue';
 import HUD from '@port-of-mars/client/components/game/HUD.vue';
 import PhaseSwitcher from '@port-of-mars/client/components/game/PhaseSwitcher.vue';
 import ProfileMenu from '@port-of-mars/client/components/game/static/popups/ProfileMenu.vue';
 import SystemHealth from '@port-of-mars/client/components/game/static/systemhealth/SystemHealth.vue';
 import ChatMarsLog from '@port-of-mars/client/components/game/ChatMarsLog.vue';
+  import {GameRequestAPI} from "@port-of-mars/client/api/game/request";
 
 @Component({
   components: {
@@ -40,7 +45,18 @@ import ChatMarsLog from '@port-of-mars/client/components/game/ChatMarsLog.vue';
     ChatMarsLog,
   },
 })
-export default class GameboardContainer extends Vue {}
+export default class GameboardContainer extends Vue {
+  @Inject()
+  api!: GameRequestAPI;
+
+  get botWarning() {
+    return this.$tstore.getters.player.botWarning;
+  }
+
+  resetBotWarning() {
+    this.api.resetBotWarning();
+  }
+}
 </script>
 
 <style lang="scss" scoped>

@@ -13,7 +13,7 @@ import {
   OutOfCommissionResearcherCmd,
   PersonalGainVotes,
   PurchaseAccomplishmentCmd,
-  RejectTradeRequestCmd,
+  RejectTradeRequestCmd, ResetBotWarningCmd,
   ResetGameCmd,
   SendChatMessageCmd,
   SendTradeRequestCmd,
@@ -80,6 +80,8 @@ function prepareRequest(room: Room<GameState> & Game, r: Requests, client: Clien
       return SendChatMessageCmd.fromReq(r, room.state, player);
     case 'set-next-phase':
       return SetNextPhaseCmd.fromReq(room.state);
+    case 'reset-bot-warning':
+      return ResetBotWarningCmd.fromReq(player);
     case 'set-player-readiness':
       return SetPlayerReadinessCmd.fromReq(r, player);
     case 'reset-game':

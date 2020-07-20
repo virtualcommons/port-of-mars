@@ -1,6 +1,5 @@
 import * as _ from 'lodash';
 import { State } from '@port-of-mars/shared/game/client/state';
-import { getRole } from '@port-of-mars/client/store/mutations/util';
 import { AccomplishmentData, Role } from '@port-of-mars/shared/types';
 
 export default {

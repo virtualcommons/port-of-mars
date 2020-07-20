@@ -33,7 +33,7 @@ import {
   SelectedInfluence,
   KeptResources,
   InitializedMarsEvent,
-  AddedSystemHealthContributions, SubtractedSystemHealthWearAndTear, ExitedInvestmentPhase
+  AddedSystemHealthContributions, SubtractedSystemHealthWearAndTear, ExitedInvestmentPhase, BotWarningAcknowledged
 } from '@port-of-mars/server/rooms/game/events';
 import { getAccomplishmentByID } from '@port-of-mars/server/data/Accomplishment';
 import { GameState } from '@port-of-mars/server/rooms/game/state';
@@ -138,6 +138,24 @@ export class SetPlayerReadinessCmd implements Command {
   execute(): Array<GameEvent> {
     const role = this.player.role;
     return [new SetPlayerReadiness({ value: this.ready, role: role })];
+  }
+}
+
+/*
+ When a client clicks OK to the bot warning modal it issues this command
+ */
+export class ResetBotWarningCmd implements Command {
+  constructor(
+    private player: Player
+  ) { }
+
+  static fromReq(player: Player) {
+    return new ResetBotWarningCmd(player);
+  }
+
+  execute(): Array<GameEvent> {
+    const role = this.player.role;
+    return [new BotWarningAcknowledged({ role })];
   }
 }
 

@@ -36,14 +36,13 @@ export class TutorialAPI implements AbstractGameAPI {
 
   // Stubbed API methods not used in tutorial
 
+  resetBotWarning(): void {
+  }
+
   setNextPhase(): void {
   }
 
   resetGame(): void {
-  }
-
-  discardAccomplishment(id: number): void {
-    this.store.commit('DISCARD_ACCOMPLISHMENT', { id, role: this.store.state.role});
   }
 
   savePersonalGainVote(value: { role: Role; vote: boolean }): void {
@@ -120,6 +119,10 @@ export class TutorialAPI implements AbstractGameAPI {
     }
     //at the end, we always want to be able to move forward.
     this.isTaskComplete = true;
+  }
+
+  discardAccomplishment(id: number): void {
+    this.store.commit('DISCARD_ACCOMPLISHMENT', { id, role: this.store.state.role});
   }
 
   //To completely reset the state, we simply empty the state stack

@@ -31,9 +31,14 @@ function SET_PENDING_INVESTMENTS(state: State, payload: { data: InvestmentData; 
   }
 }
 
+function SET_BOT_WARNING(state: State, payload: { data: boolean, role: Role}) {
+  state.players[payload.role].botWarning = payload.data;
+}
+
 export default {
   SET_PLAYER_ROLE,
   SET_READINESS,
+  SET_BOT_WARNING,
   SET_ACCOMPLISHMENTS,
   SET_VICTORY_POINTS,
   SET_PENDING_INVESTMENTS,

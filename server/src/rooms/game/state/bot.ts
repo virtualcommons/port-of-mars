@@ -188,12 +188,13 @@ export class ActorRunner implements Actor {
 export class SimpleBot implements Bot {
   elapsed = 0;
   maxInactivityTime = 300;
+  warningTime = 240;
   active = false;
 
-  constructor(public actor: ActorRunner) {}
+  constructor(public actor: ActorRunner, public player: Player) {}
 
-  static fromActor(): SimpleBot {
-    return new SimpleBot(new ActorRunner());
+  static fromActor(player: Player): SimpleBot {
+    return new SimpleBot(new ActorRunner(), player);
   }
 
   incrementElapsed(): void {
@@ -202,35 +203,36 @@ export class SimpleBot implements Bot {
 
   resetElapsed(): void {
     this.elapsed = 0;
+    this.updateBotWarning();
   }
 
   /**
    * Send warning that bot will take over if player has been inactive for 4 min.
    * @param state The Game State
    */
-  sendBotWarning(state: GameState): void {
-    state.botWarning = this.elapsed >= 240;
+  updateBotWarning(): void {
+    this.player.botWarning = this.elapsed >= this.warningTime;
   }
 
   get shouldBeActive(): boolean {
     return this.elapsed >= this.maxInactivityTime;
   }
 
-  act(state: GameState, player: Player): Array<GameEvent> {
+  act(state: GameState): Array<GameEvent> {
     this.incrementElapsed();
     if (this.active) {
       if (this.shouldBeActive) {
-        const events = this.actor[state.phase](state, player);
+        const events = this.actor[state.phase](state, this.player);
         logger.debug('actor events performed: %o', events);
         return events;
       } else {
-        return [new BotControlRelinquished({role: player.role})]
+        return [new BotControlRelinquished({role: this.player.role})]
       }
     } else {
       if (this.shouldBeActive) {
-        return [new BotControlTaken({role: player.role})]
+        return [new BotControlTaken({role: this.player.role})]
       } else {
-        this.sendBotWarning(state);
+        this.updateBotWarning();
         return [];
       }
     }

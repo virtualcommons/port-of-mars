@@ -13,14 +13,12 @@ import {
   BreakdownOfTrust,
   PersonalGain
 } from "@port-of-mars/server/rooms/game/state/marsevents/state";
-import {SimpleBot} from "@port-of-mars/server/rooms/game/state/bot";
-import {GameEvent} from '@port-of-mars/server/rooms/game/events/types';
 import {MarsEvent} from "@port-of-mars/server/rooms/game/state/marsevents/MarsEvent";
 
 
 describe('a Researcher Player Accomplishment', () => {
   const repo = new AccomplishmentSet(RESEARCHER);
-  const p = new Player(RESEARCHER, SimpleBot.fromActor());
+  const p = new Player(RESEARCHER);
   it('can be purchased if their role matches', () => {
     const accomplishment = getAccomplishmentByID(RESEARCHER, 1);
     p.purchaseAccomplishment(accomplishment);
@@ -75,8 +73,8 @@ describe('a Researcher Player Accomplishment', () => {
 });
 
 describe('a player snapshot', () => {
-  const p1 = new Player(RESEARCHER, SimpleBot.fromActor());
-  const p2 = new Player(CURATOR, SimpleBot.fromActor());
+  const p1 = new Player(RESEARCHER);
+  const p2 = new Player(CURATOR);
   it('can be round tripped', () => {
     p2.fromJSON(p1.toJSON());
     expect(_.isEqual(p1, p2)).toBeTruthy();

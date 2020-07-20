@@ -5,6 +5,10 @@ export interface SendChatMessageData {
   message: string;
 }
 
+export interface ResetBotWarningData {
+  kind: 'reset-bot-warning';
+}
+
 export interface PurchaseAccomplishmentCardData {
   kind: 'purchase-accomplishment-card';
   id: number;
@@ -104,6 +108,7 @@ export interface BreakdownOfTrustData {
 
 export type Requests =
   | SendChatMessageData
+  | ResetBotWarningData
   | SetPlayerReadinessData
   | SetNextPhaseData
   | ResetGameData

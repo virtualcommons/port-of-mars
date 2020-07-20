@@ -209,6 +209,7 @@
     // watch for trade status changes
     @Watch('status', {immediate: true})
     watchTrade(status: string) {
+      console.log({status})
       if (status != 'Active') {
         // start hide animation on the trade
         this.active = false;

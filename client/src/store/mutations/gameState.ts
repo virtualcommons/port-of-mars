@@ -87,10 +87,6 @@ function SET_TIME_REMAINING(state: State, timeRemaining: number) {
   state.timeRemaining = timeRemaining;
 }
 
-function SET_BOT_WARNING(state: State, botWarning: boolean) {
-  state.botWarning = botWarning;
-}
-
 // TODO: REMOVE BEFORE DEPLOY
 function TOGGLE_LOADING(state: State) {
   const reverse = !state.loading;
@@ -110,6 +106,5 @@ export default {
   SET_MARS_EVENTS_PROCESSED,
   SET_USER,
   SET_WINNERS,
-  SET_BOT_WARNING,
   TOGGLE_LOADING
 };

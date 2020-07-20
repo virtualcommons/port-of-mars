@@ -15,7 +15,7 @@ import {
   PersonalGainVotesData,
   VoteForPhilanthropistData,
   BondingThroughAdversityData,
-  BreakdownOfTrustData,
+  BreakdownOfTrustData, ResetBotWarningData,
 } from '@port-of-mars/shared/game/requests';
 import {
   AccomplishmentData,
@@ -45,6 +45,11 @@ export class GameRequestAPI implements AbstractGameAPI {
 
   public send(req: Requests) {
     this.room.send(req.kind, req);
+  }
+
+  public resetBotWarning() {
+    const msg: ResetBotWarningData = { kind: 'reset-bot-warning' };
+    this.send(msg);
   }
 
   public sendChatMessage(message: string) {

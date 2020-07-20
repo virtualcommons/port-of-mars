@@ -622,3 +622,14 @@ export class BotControlRelinquished extends GameEventWithData {
   }
 }
 gameEventDeserializer.register(BotControlRelinquished);
+
+export class BotWarningAcknowledged extends GameEventWithData {
+  constructor(public data: {role: Role}) {
+    super();
+  }
+
+  apply(game: GameState) {
+    game.players[this.data.role].bot.resetElapsed();
+  }
+}
+gameEventDeserializer.register(BotWarningAcknowledged);
