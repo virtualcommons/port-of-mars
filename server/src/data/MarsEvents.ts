@@ -48,6 +48,7 @@ const _marsEvents: Array<MarsEventDeckItem> = [
     clientViewHandler: 'VOTE_FOR_PLAYER_SINGLE' as const,
     duration: 1
   }, 1],
+  // implement
   [{
     id: 'heroOrPariah',
     name: 'Hero or Pariah',
@@ -59,7 +60,7 @@ const _marsEvents: Array<MarsEventDeckItem> = [
   [{
     id: 'audit',
     name: 'Audit',
-    effect: `In this round, players will be able to view each other's accomplishments, inventories, resources and investment decisions.`,
+    effect: `In this round, players will be able to view each other's accomplishdoments, inventories, resources and investment decisions.`,
     flavorText: `"Of course we trust everyone to be truthful. But it doesn't hurt to check now and again." - The Politician`,
     clientViewHandler: 'AUDIT' as const,
     duration: 1,
@@ -100,6 +101,7 @@ const _marsEvents: Array<MarsEventDeckItem> = [
     duration: 1,
     timeDuration: 10,
   }, 1],
+  // implement
   [{
     id: 'lostTime',
     name: 'Lost Time',
@@ -109,6 +111,7 @@ const _marsEvents: Array<MarsEventDeckItem> = [
     duration: 1,
     timeDuration: 10,
   }, 1],
+  // implement
   [{
     id: 'murphysLaw',
     name: "Murphy's Law",
@@ -154,6 +157,7 @@ const _marsEvents: Array<MarsEventDeckItem> = [
     duration: 1,
     timeDuration: 10,
   }, 1],
+  // implement
   [{
     id: 'interdisciplinary',
     name: 'Interdisciplinary',
