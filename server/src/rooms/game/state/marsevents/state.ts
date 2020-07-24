@@ -59,22 +59,91 @@ export abstract class BaseEvent implements MarsEventState {
 
 }
 
-////////////////////////// Sandstorm //////////////////////////
+////////////////////////// Audit //////////////////////////
 
 @assocEventId
-export class Sandstorm extends BaseEvent {
-  finalize(game: GameState): void {
-    game.decreaseSystemHealth(10);
-    game.log('A sandstorm has decreased system health by 10.', `${MarsLogCategory.event}: ${formatEventName(Sandstorm.name)}`);
+export class Audit extends BaseEvent {
+  finalize(game: GameState) {
+    game.log(
+      `You will be able to view other players' resources. Hover over each player tab on the right to reveal their inventory.`,
+      `${MarsLogCategory.event}: ${formatEventName(Audit.name)}`
+    );
   }
 }
 
-////////////////////////// LifeAsUsual //////////////////////////
+////////////////////////// Bonding Through Adversity //////////////////////////
+
+type BondingThroughAdversityData = { [role in Role]: Resource }
 
 @assocEventId
-export class LifeAsUsual extends BaseEvent {
+export class BondingThroughAdversity extends BaseEvent {
+  // The Player's default Influence vote
+  private static defaultInfluenceVote: Resource;
+
+  // Default Influence votes associated with each Role
+  private static defaultInfluenceVotes: BondingThroughAdversityData = {
+    [CURATOR]: BondingThroughAdversity.defaultInfluenceVote,
+    [ENTREPRENEUR]: BondingThroughAdversity.defaultInfluenceVote,
+    [PIONEER]: BondingThroughAdversity.defaultInfluenceVote,
+    [POLITICIAN]: BondingThroughAdversity.defaultInfluenceVote,
+    [RESEARCHER]: BondingThroughAdversity.defaultInfluenceVote,
+  };
+
+  // Map Influence votes to Roles
+  private votes: BondingThroughAdversityData;
+
+  // Clone Default Influence votes
+  constructor(votes?: BondingThroughAdversityData) {
+    super();
+    this.votes = votes ?? _.cloneDeep(BondingThroughAdversity.defaultInfluenceVotes);
+  }
+
+  /**
+   * Change Influence votes associated with each Role after a Player votes.
+   * @param player The Role
+   * @param vote The Influence the Player voted for 
+   * 
+   */
+  updateVotes(player: Role, vote: Resource): void {
+    this.votes[player] = vote;
+  }
+
+  /**
+   * Change each Player's resource inventory with their Influence vote via game state and
+   * push a message to the mars log.
+   * @param game The current Game State 
+   * 
+   */
   finalize(game: GameState): void {
-    game.log(`As the first human outpost on Mars, having a "usual" day is pretty unusual.`, `${MarsLogCategory.event}: ${formatEventName(LifeAsUsual.name)}`)
+    for (const role of ROLES) {
+      game.players[role].inventory[this.votes[role]] += 1;
+
+    }
+    const message = `Players have gained one influence currency of their choice.`
+    game.log(message, `${MarsLogCategory.event}: ${formatEventName(BondingThroughAdversity.name)}`);
+  }
+
+  /**
+   * Retrieve Role and Influence vote associated with each Player.
+   * @return Role and Influence votes associated with each Role.
+   */
+  getData(): BondingThroughAdversityData {
+    return this.votes;
+  }
+}
+
+@assocEventId
+export class ChangingTides extends BaseEvent {
+  finalize(game: GameState): void {
+    for (const role of ROLES) {
+      const player = game.players[role];
+      player.accomplishments.discardAll();
+      player.accomplishments.draw(1);
+    }
+    game.log(
+      'Each player discards their current Accomplishments and draws one new Accomplishment.',
+      `${MarsLogCategory.event}: ${formatEventName(ChangingTides.name)}`
+    );
   }
 }
 
@@ -115,70 +184,6 @@ export class BreakdownOfTrust extends BaseEvent {
     game.log(`Each player can choose to save up to 2 units of Influence that they already own. The rest will be lost.`,
       `${MarsLogCategory.event}: ${formatEventName(BreakdownOfTrust.name)}`
     );
-  }
-}
-
-////////////////////////// PersonalGain //////////////////////////
-
-export type PersonalGainData = { [role in Role]: boolean };
-
-@assocEventId
-export class PersonalGain extends BaseEvent {
-
-  private static defaultResponse = true;
-
-  private static defaultVotes: PersonalGainData = {
-    [CURATOR]: PersonalGain.defaultResponse,
-    [ENTREPRENEUR]: PersonalGain.defaultResponse,
-    [PIONEER]: PersonalGain.defaultResponse,
-    [POLITICIAN]: PersonalGain.defaultResponse,
-    [RESEARCHER]: PersonalGain.defaultResponse
-  };
-
-  private votes: PersonalGainData;
-
-  constructor(votes?: PersonalGainData) {
-    // currently used when reconstructing from the DB
-    super();
-    this.votes = votes ?? _.cloneDeep(PersonalGain.defaultVotes);
-  }
-
-  updateVotes(player: Role, vote: boolean) {
-    // invoked by a player request -> command -> game event
-    this.votes[player] = vote;
-  }
-
-  playerVotingInfo(voteResults: PersonalGainData): string {
-    let player = '';
-    const playerYesVotes: Array<string> = [];
-
-    for (const role of ROLES) {
-      if (voteResults[role]) {
-        player = role.toString();
-        playerYesVotes.push(player);
-      }
-    }
-    return playerYesVotes.toString();
-  }
-
-  finalize(game: GameState) {
-    const playerVotingInfo = this.playerVotingInfo(this.votes);
-    game.pendingMarsEventActions.push({ordering: ActionOrdering.FIRST, execute: (state) => {
-      let systemHealthReduction = 0;
-      for (const role of ROLES) {
-        if (this.votes[role]) {
-          state.players[role].timeBlocks += 6;
-          systemHealthReduction += 6;
-        }
-      }
-      state.decreaseSystemHealth(systemHealthReduction);
-      const message = `System health decreased by ${systemHealthReduction}. The following players voted yes: ${playerVotingInfo}`;
-      state.log(message, `${MarsLogCategory.event}: ${formatEventName(PersonalGain.name)}`);
-    }});
-  }
-
-  getData() {
-    return this.votes;
   }
 }
 
@@ -244,6 +249,75 @@ export class CompulsivePhilanthropy extends BaseEvent {
 
   getData() {
     return { votes: this.votes, order: this.order };
+  }
+}
+
+@assocEventId
+export class CropFailure extends BaseEvent {
+  finalize(state: GameState): void {
+    state.decreaseSystemHealth(20);
+    state.log(`Crop failure has destroyed 20 system health.`, `${MarsLogCategory.event}: Crop Failure`);
+  }
+}
+
+@assocEventId
+export class DifficultConditions extends BaseEvent {
+  finalize(state: GameState): void {
+    for (const player of state.players) {
+      player.costs.upkeep *= 2;
+    }
+    state.log(`System Health costs twice as many Time Blocks as usual this round.`, `${MarsLogCategory.event}: Difficult Conditions`)
+  }
+}
+
+@assocEventId
+export class EffortsWasted extends BaseEvent {
+  finalize(state: GameState): void {
+    // at the moment will need to iterate across all players and
+    // decrement victoryPoints with the removed accomplishment (if any)
+    // and remove the accomplishment from player.accomplishments.purchased
+    state.log(`Each player must discard an Accomplishment card they have purchased.`,
+      `${MarsLogCategory.event}: Efforts Wasted`
+    )
+  }
+}
+
+@assocEventId
+export class HullBreach extends BaseEvent {
+  finalize(state: GameState): void {
+    state.decreaseSystemHealth(7);
+    state.log(`A hull breach has destroyed 7 System Health.`, `${MarsLogCategory.event}: Hull Breach`);
+  }
+}
+
+@assocEventId
+export class Interdisciplinary extends BaseEvent {
+  finalize(state: GameState): void {
+    // FIXME: I think this needs a new clientViewHandler
+    // to support additional investment options and costs
+    // reset player ResourceCosts
+    state.log(`In this round, each player can spend 3 time blocks to earn an influence in either of the 2 influences they normally can't create.`,
+      `${MarsLogCategory.event}: Interdisciplinary`
+    );
+  }
+}
+
+////////////////////////// LifeAsUsual //////////////////////////
+
+@assocEventId
+export class LifeAsUsual extends BaseEvent {
+  finalize(game: GameState): void {
+    game.log(`As the first human outpost on Mars, having a "usual" day is pretty unusual.`, `${MarsLogCategory.event}: ${formatEventName(LifeAsUsual.name)}`)
+  }
+}
+
+@assocEventId
+export class MarketsClosed extends BaseEvent {
+  finalize(state: GameState): void {
+    state.disableTrading();
+    state.log(`Markets Closed: Players may not trade Influences this round.`,
+      `${MarsLogCategory.event}: Markets Closed`
+    );
   }
 }
 
@@ -334,119 +408,77 @@ export class OutOfCommissionEntrepreneur extends OutOfCommission {
   player: Role = this.roles.Entrepreneur;
 }
 
-////////////////////////// Audit //////////////////////////
+////////////////////////// PersonalGain //////////////////////////
+
+export type PersonalGainData = { [role in Role]: boolean };
 
 @assocEventId
-export class Audit extends BaseEvent {
-  finalize(game: GameState) {
-    game.log(
-      `You will be able to view other players' resources. Hover over each player tab on the right to reveal their inventory.`,
-      `${MarsLogCategory.event}: ${formatEventName(Audit.name)}`
-    );
-  }
-}
+export class PersonalGain extends BaseEvent {
 
-////////////////////////// Bonding Through Adversity //////////////////////////
+  private static defaultResponse = true;
 
-type BondingThroughAdversityData = { [role in Role]: Resource }
-
-@assocEventId
-export class BondingThroughAdversity extends BaseEvent {
-  // The Player's default Influence vote
-  private static defaultInfluenceVote: Resource;
-
-  // Default Influence votes associated with each Role
-  private static defaultInfluenceVotes: BondingThroughAdversityData = {
-    [CURATOR]: BondingThroughAdversity.defaultInfluenceVote,
-    [ENTREPRENEUR]: BondingThroughAdversity.defaultInfluenceVote,
-    [PIONEER]: BondingThroughAdversity.defaultInfluenceVote,
-    [POLITICIAN]: BondingThroughAdversity.defaultInfluenceVote,
-    [RESEARCHER]: BondingThroughAdversity.defaultInfluenceVote,
+  private static defaultVotes: PersonalGainData = {
+    [CURATOR]: PersonalGain.defaultResponse,
+    [ENTREPRENEUR]: PersonalGain.defaultResponse,
+    [PIONEER]: PersonalGain.defaultResponse,
+    [POLITICIAN]: PersonalGain.defaultResponse,
+    [RESEARCHER]: PersonalGain.defaultResponse
   };
 
-  // Map Influence votes to Roles
-  private votes: BondingThroughAdversityData;
+  private votes: PersonalGainData;
 
-  // Clone Default Influence votes
-  constructor(votes?: BondingThroughAdversityData) {
+  constructor(votes?: PersonalGainData) {
+    // currently used when reconstructing from the DB
     super();
-    this.votes = votes ?? _.cloneDeep(BondingThroughAdversity.defaultInfluenceVotes);
+    this.votes = votes ?? _.cloneDeep(PersonalGain.defaultVotes);
   }
 
-  /**
-   * Change Influence votes associated with each Role after a Player votes.
-   * @param player The Role
-   * @param vote The Influence the Player voted for 
-   * 
-   */
-  updateVotes(player: Role, vote: Resource): void {
+  updateVotes(player: Role, vote: boolean) {
+    // invoked by a player request -> command -> game event
     this.votes[player] = vote;
   }
 
-  /**
-   * Change each Player's resource inventory with their Influence vote via game state and
-   * push a message to the mars log.
-   * @param game The current Game State 
-   * 
-   */
-  finalize(game: GameState): void {
-    for (const role of ROLES) {
-      game.players[role].inventory[this.votes[role]] += 1;
+  playerVotingInfo(voteResults: PersonalGainData): string {
+    let player = '';
+    const playerYesVotes: Array<string> = [];
 
+    for (const role of ROLES) {
+      if (voteResults[role]) {
+        player = role.toString();
+        playerYesVotes.push(player);
+      }
     }
-    const message = `Players have gained one influence currency of their choice.`
-    game.log(message, `${MarsLogCategory.event}: ${formatEventName(BondingThroughAdversity.name)}`);
+    return playerYesVotes.toString();
   }
 
-  /**
-   * Retrieve Role and Influence vote associated with each Player.
-   * @return Role and Influence votes associated with each Role.
-   */
-  getData(): BondingThroughAdversityData {
+  finalize(game: GameState) {
+    const playerVotingInfo = this.playerVotingInfo(this.votes);
+    game.pendingMarsEventActions.push({ordering: ActionOrdering.FIRST, execute: (state) => {
+      let systemHealthReduction = 0;
+      for (const role of ROLES) {
+        if (this.votes[role]) {
+          state.players[role].timeBlocks += 6;
+          systemHealthReduction += 6;
+        }
+      }
+      state.decreaseSystemHealth(systemHealthReduction);
+      const message = `System health decreased by ${systemHealthReduction}. The following players voted yes: ${playerVotingInfo}`;
+      state.log(message, `${MarsLogCategory.event}: ${formatEventName(PersonalGain.name)}`);
+    }});
+  }
+
+  getData() {
     return this.votes;
   }
 }
 
+////////////////////////// Sandstorm //////////////////////////
+
 @assocEventId
-export class ChangingTides extends BaseEvent {
+export class Sandstorm extends BaseEvent {
   finalize(game: GameState): void {
-    for (const role of ROLES) {
-      const player = game.players[role];
-      player.accomplishments.discardAll();
-      player.accomplishments.draw(1);
-    }
-    game.log(
-      'Each player discards their current Accomplishments and draws one new Accomplishment.',
-      `${MarsLogCategory.event}: ${formatEventName(ChangingTides.name)}`
-    );
-  }
-}
-
-@assocEventId
-export class HullBreach extends BaseEvent {
-  finalize(state: GameState): void {
-    state.decreaseSystemHealth(7);
-    state.log(`A hull breach has destroyed 7 System Health.`, `${MarsLogCategory.event}: Hull Breach`);
-  }
-}
-
-@assocEventId
-export class CropFailure extends BaseEvent {
-  finalize(state: GameState): void {
-    state.decreaseSystemHealth(20);
-    state.log(`Crop failure has destroyed 20 system health.`, `${MarsLogCategory.event}: Crop Failure`);
-  }
-}
-
-@assocEventId
-export class Interdisciplinary extends BaseEvent {
-  finalize(state: GameState): void {
-    // FIXME: I think this needs a new clientViewHandler
-    // to support additional investment options and costs
-    // reset player ResourceCosts
-    state.log(`In this round, each player can spend 3 time blocks to earn an influence in either of the 2 influences they normally can't create.`,
-      `${MarsLogCategory.event}: Interdisciplinary`
-    );
+    game.decreaseSystemHealth(10);
+    game.log('A sandstorm has decreased system health by 10.', `${MarsLogCategory.event}: ${formatEventName(Sandstorm.name)}`);
   }
 }
 
@@ -462,43 +494,11 @@ export class SolarFlare extends BaseEvent {
 }
 
 @assocEventId
-export class MarketsClosed extends BaseEvent {
-  finalize(state: GameState): void {
-    state.disableTrading();
-    state.log(`Markets Closed: Players may not trade Influences this round.`,
-      `${MarsLogCategory.event}: Markets Closed`
-    );
-  }
-}
-
-@assocEventId
-export class EffortsWasted extends BaseEvent {
-  finalize(state: GameState): void {
-    // at the moment will need to iterate across all players and
-    // decrement victoryPoints with the removed accomplishment (if any)
-    // and remove the accomplishment from player.accomplishments.purchased
-    state.log(`Each player must discard an Accomplishment card they have purchased.`,
-      `${MarsLogCategory.event}: Efforts Wasted`
-    )
-  }
-}
-
-@assocEventId
 export class Stymied extends BaseEvent {
   finalize(state: GameState): void {
     for (const player of state.players) {
       player.costs[player.specialty] = COST_INAFFORDABLE;
     }
     state.log(`Players may not earn their specialty Influence this round.`, `${MarsLogCategory.event}: Stymied`)
-  }
-}
-
-@assocEventId
-export class DifficultConditions extends BaseEvent {
-  finalize(state: GameState): void {
-    for (const player of state.players) {
-      player.costs.upkeep *= 2;
-    }
-    state.log(`System Health costs twice as many Time Blocks as usual this round.`, `${MarsLogCategory.event}: Difficult Conditions`)
   }
 }
