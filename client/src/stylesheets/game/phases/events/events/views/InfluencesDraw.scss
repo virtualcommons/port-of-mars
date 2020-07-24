@@ -2,74 +2,74 @@
   @include expand;
   @include make-column-and-center;
   flex: 1 1 0;
+}
 
-  p {
-    margin: 0.5rem 0;
+p {
+  margin: 0.5rem 0;
+}
+
+button {
+  @include reset-button;
+  height: 3rem;
+  width: 12rem;
+  border: 0.125rem solid $light-accent;
+  margin-top: 2rem;
+  color: $light-accent;
+  @include default-transition-base;
+
+  &:hover {
+    color: $dark-shade;
+    background-color: $light-accent;
   }
+}
 
-  button {
-    @include reset-button;
-    height: 3rem;
-    width: 12rem;
-    border: 0.125rem solid $light-accent;
-    margin-top: 2rem;
-    color: $light-accent;
-    @include default-transition-base;
+.event-select-influences-select {
+  display: flex;
+  flex: 1 1 0;
 
-    &:hover {
-      color: $dark-shade;
-      background-color: $light-accent;
+  .event-select-influences-select-influence {
+    margin: 0 1rem;
+
+    img {
+      height: 4rem;
+      width: 4rem;
+      @include default-transition-base;
+
+      &:hover {
+        @include default-scale-up;
+        cursor: pointer;
+      }
+    }
+
+    p {
+      margin-bottom: 0;
+      text-align: center;
     }
   }
+}
 
-  .event-select-influences-select {
+.selected-placeholder {
+  height: 4rem;
+  @include make-center;
+  color: $light-shade-25;
+}
+
+.event-select-influences-selected {
+  @include make-center;
+
+  .event-select-influences-selected-influence {
+    margin: 0 1rem;
     display: flex;
-    flex: 1 1 0;
 
-    .event-select-influences-select-influence {
-      margin: 0 1rem;
+    img {
+      height: 4rem;
+      width: 4rem;
+      @include default-transition-base;
 
-      img {
-        height: 4rem;
-        width: 4rem;
-        @include default-transition-base;
-
-        &:hover {
-          @include default-scale-up;
-          cursor: pointer;
-        }
-      }
-
-      p {
-        margin-bottom: 0;
-        text-align: center;
-      }
-    }
-  }
-
-  .selected-placeholder {
-    height: 4rem;
-    @include make-center;
-    color: $light-shade-25;
-  }
-
-  .event-select-influences-selected {
-    @include make-center;
-
-    .event-select-influences-selected-influence {
-      margin: 0 1rem;
-      display: flex;
-
-      img {
-        height: 4rem;
-        width: 4rem;
-        @include default-transition-base;
-
-        &:hover {
-          opacity: 0.5;
-          @include default-scale-up;
-          cursor: pointer;
-        }
+      &:hover {
+        opacity: 0.5;
+        @include default-scale-up;
+        cursor: pointer;
       }
     }
   }

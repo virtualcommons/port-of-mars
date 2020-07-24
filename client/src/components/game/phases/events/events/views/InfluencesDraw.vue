@@ -1,8 +1,8 @@
 <template>
-  <div class="event-select-influences">
-    <p>Please select one influence:</p>
+  <div class="event-select-influences py-4">
+    <p><strong>Select one resource:</strong></p>
 
-    <div class="event-select-influences-select">
+    <div class="event-select-influences-select pt-3">
       <div
         class="event-select-influences-select-influence"
         v-for="influence in availableInfluences"
@@ -12,14 +12,14 @@
           @click="handleDrawInfluence(influence)"
           :src="require(`@port-of-mars/client/assets/icons/${influence}.svg`)"
           alt="Investment"
+          v-b-tooltip.hover.bottom="influence"
         />
-        <!-- <p>{{ investment.units }}</p> -->
       </div>
     </div>
 
-    <p>Chosen</p>
+    <p><strong>You selected:</strong></p>
 
-    <div v-if="drawnInfluence === 'None Selected'" class="selected-placeholder">
+    <div v-if="drawnInfluence === 'None Selected'" class="selected-placeholder py-2">
       <p>None Selected</p>
     </div>
 
@@ -29,6 +29,7 @@
           @click="handleUndrawInfluence"
           :src="require(`@port-of-mars/client/assets/icons/${drawnInfluence}.svg`)"
           alt="Investment"
+          v-b-tooltip.hover.bottom="'Click to clear selection'"
         />
       </div>
     </div>
