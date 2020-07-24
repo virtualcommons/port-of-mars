@@ -1,7 +1,8 @@
 <template>
+  <!-- FIXME: refactor to b-form -->
   <div class="c-trade-request container tour-trade-request">
+    <p>Trade Partner</p>
     <div class="player-selection-wrapper row tour-request-trade-partner">
-
       <!-- select trade partner -->
       <div class="player col-3" v-for="player in otherPlayers" :key="player">
         <button

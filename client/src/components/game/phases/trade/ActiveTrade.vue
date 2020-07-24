@@ -241,6 +241,7 @@
     }
 
     private handleAcceptTrade() {
+      console.log('active: ', this.active);
       if (this.hasSufficientResources) {
         this.api.acceptTradeRequest(this.id);
       }
