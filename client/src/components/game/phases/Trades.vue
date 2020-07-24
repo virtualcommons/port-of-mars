@@ -118,8 +118,22 @@
      */
     private requestTrade() {
       this.api.setModalVisible({type: 'TradeRequestModal', data: {}});
+
+      if (this.$tstore.state.round < 3) this.makeToast();
     }
+
+    private makeToast() {
+      this.$bvToast.toast('To initiate a trade request, select a trade partner first. Then make your offer and request.', {
+        title: 'Remember!',
+        toaster: 'b-toaster-top-left',
+        variant: 'warning',
+        solid: true,
+        autoHideDelay: 10000,
+      });
+    }
+
   }
+
 </script>
 
 <style lang="scss" scoped>
