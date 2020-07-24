@@ -83,18 +83,13 @@ export default class Victory extends Vue {
     let currentIndex: number  = index;
     let nextIndex: number = index + 1;
 
-    console.log('currentIndex ', currentIndex);
+    // console.log('currentIndex ', currentIndex);
 
     if (!logs[nextIndex]) {
-      console.log('undefined');
+      // console.log('undefined');
       return false
     }
-    else if (logs[currentIndex].round !== logs[nextIndex].round) {
-      console.log(`CURRENT ROUND: ${logs[currentIndex].round}`);
-      console.log(`PREVIOUS ROUND: ${logs[nextIndex].round}`);
-      return true;
-    }
-    else return false;
+    else return logs[currentIndex].round !== logs[nextIndex].round;
   }
 
   private logTime(timestamp: number) {
