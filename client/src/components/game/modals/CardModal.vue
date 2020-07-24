@@ -56,19 +56,6 @@ export default class CardModal extends Vue {
     return Phase;
   }
 
-  get canDiscard() {
-    return !!(this.gamePhase === this.phase.discard &&
-      this.modalData.cardType === 'AccomplishmentCard' &&
-      this.modalData.cardData.id);
-  }
-
-  private handleConfirmation() {
-    if (this.canDiscard) {
-      this.api.discardAccomplishment(this.modalData.cardData.id as number);
-    }
-    this.api.setModalHidden();
-  }
-
   private serverCreated(activator:string){
     return activator == 'Server';
   }
