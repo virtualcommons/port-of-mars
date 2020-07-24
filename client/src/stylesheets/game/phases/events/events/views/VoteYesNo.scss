@@ -2,36 +2,38 @@
   @include expand;
   @include make-column-and-center;
   color: $light-shade;
-
-  p {
-    margin-bottom: 2rem;
-  }
-
-  .selected-button-text {
-    margin-top: 2rem;
-  }
-
-  .buttons {
-    display: flex;
-
-    button {
-      @include reset-button;
-      height: 3rem;
-      width: 12rem;
-      border: 0.125rem solid $light-accent;
-      margin: 0 0.5rem;
-      color: $light-accent;
-      @include default-transition-base;
-
-      &:hover {
-        color: $dark-shade;
-        background-color: $light-accent;
-      }
-
-      &:focus {
-        color: $dark-shade;
-        background-color: $light-accent;
-      }
-    }
-  }
 }
+
+p {
+  margin-bottom: 2rem;
+}
+
+.selected-button-text {
+  margin-top: 2rem;
+}
+//
+//.buttons {
+//  display: flex;
+//}
+
+//button {
+//  @include reset-button;
+//  height: 3rem;
+//  width: 12rem;
+//  border: 0.125rem solid $light-accent;
+//  margin: 0 0.5rem;
+//  color: $light-accent;
+//  @include default-transition-base;
+//
+//  &:hover {
+//    color: $dark-shade;
+//    background-color: $light-accent;
+//  }
+//
+//  &:focus {
+//    color: $dark-shade;
+//    background-color: $light-accent;
+//  }
+//
+//
+//}

@@ -1,58 +1,55 @@
 <template>
   <div class="vote-yes-no">
     <p>Please select an option:</p>
-    <div class="buttons">
-      <button @click="handleVote(true)" type="button" name="Yes Button">
-        Yes
-      </button>
-      <button @click="handleVote(false)" type="button" name="No Button">
-        No
-      </button>
-    </div>
+    <b-form>
+      <b-form-radio-group
+        :options="options"
+        @change="vote"
+        button-variant="outline-warning"
+        buttons
+        size="lg"
+        v-model="playerVote"
+      >
+      </b-form-radio-group>
+    </b-form>
 
     <p :style="!playerVote ? 'color: rgba(0, 0, 0, 0); padding-top: 2rem' : ''"
-        v-bind:class="{'selected-button-text': playerVote }"
-        >
-      You have selected {{ playerVote }}.
+       v-bind:class="{'selected-button-text': playerVote }"
+    >
+      You have selected <strong>{{ playerVote }}</strong>.
     </p>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, InjectReactive, Inject } from 'vue-property-decorator';
-import {
-  Role,
-  ROLES,
-  CURATOR,
-  ENTREPRENEUR,
-  PIONEER,
-  POLITICIAN,
-  RESEARCHER,
-} from '@port-of-mars/shared/types';
-import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
+  import {Component, Inject, Vue} from 'vue-property-decorator';
+  import {GameRequestAPI} from '@port-of-mars/client/api/game/request';
 
-@Component({})
-export default class VoteYesNo extends Vue {
-  @Inject() api!: GameRequestAPI;
-  playerVote: string = '';
-  selectedButton = document.activeElement;
+  @Component({})
+  export default class VoteYesNo extends Vue {
+    @Inject() api!: GameRequestAPI;
+    playerVote: string = '';
+    select!: boolean;
 
-  get playerRole() {
-    return this.$tstore.state.role;
-  }
+    options = [
+      {text: 'Yes', value: 'Yes'},
+      {text: 'No', value: 'No'}
+    ]
 
-  private handleVote(selection: boolean) {
-    const voteResults = { role: this.playerRole, vote: selection };
-    this.api.savePersonalGainVote(voteResults);
-    if (selection) {
-      this.playerVote = 'Yes';
-    } else {
-      this.playerVote = 'No';
+    get playerRole() {
+      return this.$tstore.state.role;
+    }
+
+
+    private vote() {
+      this.select = this.playerVote === 'Yes';
+      const voteResults = {role: this.playerRole, vote: this.select};
+      this.api.savePersonalGainVote(voteResults);
+
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/events/events/views/VoteYesNo.scss';
+  @import '@port-of-mars/client/stylesheets/game/phases/events/events/views/VoteYesNo.scss';
 </style>
