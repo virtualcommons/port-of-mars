@@ -7,7 +7,7 @@ import {
 import { GameState, ActionOrdering } from "@port-of-mars/server/rooms/game/state";
 import {
   CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER,
-  Role, ROLES, Resource, InvestmentData, MarsLogCategory
+  Role, ROLES, Resource, InvestmentData, MarsLogCategory, ResourceCostData, RESOURCES
 } from "@port-of-mars/shared/types";
 import {COST_INAFFORDABLE} from "@port-of-mars/shared/settings";
 
@@ -41,7 +41,7 @@ export interface MarsEventSerialized {
 export interface BaseEvent {
   initialize?(game: GameState): void;
   finalize(game: GameState): void;
-  getData?(): object;
+  getData?(): Record<string, unknown>;
   toJSON(): MarsEventSerialized;
 }
 
@@ -161,7 +161,7 @@ export class BreakdownOfTrust extends BaseEvent {
     return obj;
   }, {} as BreakdownOfTrustData);
 
-  initialize(game: GameState) {
+  initialize(game: GameState): void {
     for (const player of game.players) {
       player.invertPendingInventory();
       //save the timeblock amount the player is allotted for the round
@@ -171,7 +171,7 @@ export class BreakdownOfTrust extends BaseEvent {
     }
   }
 
-  updateSavedResources(player: Role, game: GameState, updatedInventory: InvestmentData) {
+  updateSavedResources(player: Role, game: GameState, updatedInventory: InvestmentData): void {
     game.players[player].pendingInvestments.add(updatedInventory);
   }
 
@@ -209,7 +209,7 @@ export class CompulsivePhilanthropy extends BaseEvent {
     this.order = data?.order ?? _.shuffle(_.cloneDeep(ROLES));
   }
 
-  voteForPlayer(voter: Role, philanthropist: Role) {
+  voteForPlayer(voter: Role, philanthropist: Role): void {
     this.votes[voter] = philanthropist;
   }
 
@@ -247,7 +247,7 @@ export class CompulsivePhilanthropy extends BaseEvent {
     }});
   }
 
-  getData() {
+  getData()  {
     return { votes: this.votes, order: this.order };
   }
 }
@@ -292,10 +292,20 @@ export class HullBreach extends BaseEvent {
 
 @assocEventId
 export class Interdisciplinary extends BaseEvent {
+  costs?: { [role in Role]: ResourceCostData }
+
+  makeResourcesAvailable(costs: ResourceCostData): void {
+    for (const resource of RESOURCES) {
+      if (costs[resource] === COST_INAFFORDABLE) {
+        costs[resource] = 3;
+      }
+    }
+  }
+
   finalize(state: GameState): void {
-    // FIXME: I think this needs a new clientViewHandler
-    // to support additional investment options and costs
-    // reset player ResourceCosts
+    for (const role of ROLES) {
+      this.makeResourcesAvailable(state.players[role].costs);
+    }
     state.log(`In this round, each player can spend 3 time blocks to earn an influence in either of the 2 influences they normally can't create.`,
       `${MarsLogCategory.event}: Interdisciplinary`
     );

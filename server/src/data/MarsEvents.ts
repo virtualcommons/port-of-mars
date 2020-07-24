@@ -166,7 +166,7 @@ const _marsEvents: Array<MarsEventDeckItem> = [
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 1,
     timeDuration: 10,
-  }, 1],
+  }, 6],
   [{
     id: 'outOfCommissionPolitician',
     name: 'Out of Commission',
@@ -233,6 +233,7 @@ export function getAllMarsEvents(): Array<MarsEventDeckItem> {
     'cropFailure',
     'difficultConditions',
     'hullBreach',
+    'interdisciplinary',
     'lifeAsUsual',
     'marketsClosed',
     'outOfCommissionCurator',
