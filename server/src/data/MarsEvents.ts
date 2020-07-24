@@ -118,7 +118,7 @@ const _marsEvents: Array<MarsEventDeckItem> = [
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 1,
     timeDuration: 10,
-  }, 1],
+  }, 6],
   [{
     id: 'marketsClosed',
     name: 'Markets Closed',
@@ -231,6 +231,7 @@ export function getAllMarsEvents(): Array<MarsEventDeckItem> {
     'hullBreach',
     'interdisciplinary',
     'lifeAsUsual',
+    'lostTime',
     'marketsClosed',
     'outOfCommissionCurator',
     'outOfCommissionEntrepreneur',

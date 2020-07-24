@@ -322,6 +322,22 @@ export class LifeAsUsual extends BaseEvent {
 }
 
 @assocEventId
+export class LostTime extends BaseEvent {
+  finalize(game: GameState) {
+    game.pendingMarsEventActions.push({ordering: ActionOrdering.LAST, execute: (state) => {
+      for (const role of ROLES) {
+        const timeBlocks = state.players[role].timeBlocks - 5;
+        state.players[role].timeBlocks = Math.max(0, timeBlocks);
+      }
+      state.log(
+        `All players have has 5 time fewer (or zero) blocks to invest during this round.`,
+        `${MarsLogCategory.event}: ${formatEventName(LostTime.name)}`
+      );
+    }});
+  }
+}
+
+@assocEventId
 export class MarketsClosed extends BaseEvent {
   finalize(state: GameState): void {
     state.disableTrading();
