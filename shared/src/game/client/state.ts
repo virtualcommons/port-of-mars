@@ -125,6 +125,7 @@ export interface UserInterface {
   hudLeftView: HUDLeftView;
   hudRightView: HUDRightView;
   modalView: ModalView;
+  toggleResourceCost: boolean;
 }
 
 export interface UserInterfaceTwo {
@@ -198,7 +199,7 @@ export const initialStoreState: State = {
     passedQuiz: false,
   },
 
-  //TUTORIAL TRADING
+  // TUTORIAL TRADING
   tutorialTradePartner: '',
   tutorialTradeGive: defaultInventory(),
   tutorialTradeGet: defaultInventory(),
@@ -215,6 +216,7 @@ export const initialStoreState: State = {
       type: null,
       data: null,
     },
+    toggleResourceCost: false
   },
 
   dashboardMessages: [],

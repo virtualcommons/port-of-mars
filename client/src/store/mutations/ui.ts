@@ -47,6 +47,10 @@ function SET_HUDRIGHT_VIEW(state: State, payload: HUDRightView) {
   state.userInterface.hudRightView = payload;
 }
 
+function SET_RESOURCE_COSTS_VISIBLE(state: State, payload: boolean) {
+  state.userInterface.toggleResourceCost = payload;
+}
+
 // TODO :: Need to re-implement in tutorial
 
 // function SET_TRADE_REQUEST_MODAL_VISIBILITY(state: State, payload: boolean) {
@@ -98,4 +102,5 @@ export default {
   SET_TRADE_PLAYER_NAME,
   OPEN_TRADE_MODAL_WARM,
   RESET_TRADE_MODAL,
+  SET_RESOURCE_COSTS_VISIBLE
 };

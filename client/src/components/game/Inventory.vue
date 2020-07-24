@@ -1,7 +1,7 @@
 <template>
   <div class="c-inventory">
     <div class="toggle">
-      <p>Toggle Investment Costs</p>
+      <p>Toggle Resource Costs</p>
       <button @click="toggleCosts" :class="costTogglerClass">
         <font-awesome-icon
           :icon="['fas', 'clock']"
@@ -17,6 +17,15 @@
       class="investment"
     >
       <div class="left">
+        <p v-if="costsVisible" class="cost mx-2" v-b-tooltip.hover.bottom title="Time Block Cost">
+          {{ canInvest(investment.cost) ? investment.cost : '-' }}
+        </p>
+        <font-awesome-icon
+          v-if="costsVisible"
+          :icon="['fas', 'clock']"
+          size="lg"
+          class="timeblock mr-3"
+        />
         <img
           :src="
             require(`@port-of-mars/client/assets/icons/${investment.name}.svg`)
@@ -27,22 +36,14 @@
       </div>
       <div class="right">
         <font-awesome-icon
-          v-if="costsVisible"
-          :icon="['fas', 'clock']"
-          size="lg"
-          class="timeblock"
-        />
-        <p v-if="costsVisible" class="cost">
-          {{ canInvest(investment.cost) ? investment.cost : '-' }}
-        </p>
-        <font-awesome-icon
           :icon="['fas', 'briefcase']"
           size="lg"
           class="inventory"
         />
-        <p class="units">{{ investment.units }}</p>
+        <p class="units" v-b-tooltip.hover.bottom title="Inventory Amount">{{ investment.units }}</p>
       </div>
     </div>
+
     <div
       v-if="displaySystemHealth"
       :style="backgroundColor('upkeep')"
@@ -107,7 +108,7 @@ export default class Inventory extends Vue {
   @Prop({ default: true }) private isSelf!: boolean;
   @Prop({ default: RESEARCHER }) private role!: Role;
   @Prop({ default: false }) private displaySystemHealth!: boolean;
-  private costsVisible: boolean = false;
+  private costsVisible: boolean = this.$tstore.state.userInterface.toggleResourceCost;
 
   get playerData() {
     return this.isSelf
@@ -145,7 +146,8 @@ export default class Inventory extends Vue {
   }
 
   private toggleCosts() {
-    this.costsVisible = !this.costsVisible;
+    this.$tstore.commit('SET_RESOURCE_COSTS_VISIBLE', !this.costsVisible);
+    this.costsVisible = this.$tstore.state.userInterface.toggleResourceCost;
   }
 
   get costTogglerClass() {
