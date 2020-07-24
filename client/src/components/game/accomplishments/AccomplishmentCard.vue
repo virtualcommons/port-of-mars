@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="[cardTypeStyling, { 'modal-view': isModal }]"
+    :class="[cardTypeStyling, { 'modal-view' : isModal }]"
     class="c-accomplishment-card"
     v-show="cardIsActive"
   >
@@ -27,7 +27,7 @@
       <!-- points -->
       <div
         class="points"
-        v-bind="{ class: showDescription ? 'col-3' : 'col-12' }"
+        v-bind="{ class: showDescription ? 'mt-3 col-3' : 'col-12' }"
       >
         <p>Points</p>
         <p>{{ accomplishment.victoryPoints }}</p>
@@ -37,6 +37,7 @@
       <div
         class="flavortext col-9"
         v-if="showDescription"
+        v-bind="{ class: showDescription ? 'mt-3' : '' }"
       >
         <p>{{ accomplishment.flavorText }}</p>
       </div>

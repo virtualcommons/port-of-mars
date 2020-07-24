@@ -24,7 +24,7 @@
       </div>
     </div>
 
-    <div class="flavortext-wrapper w-100 h-100" v-bind="{ class: isModal ? 'pt-5' : '' }">
+    <div class="flavortext-wrapper w-100 h-100" v-bind="{ class: isModal ? 'pt-4 px-3' : '' }">
       <div class="flavortext">
         <p>{{ event.effect !== '' ? event.effect : 'No special effect' }}</p>
       </div>
@@ -40,7 +40,7 @@
       </div>
     </div>
 
-    <div class="w-100 h-100 pt-3" v-if="wasSpawnedByServer">
+    <div class="w-100 h-100 pt-2" v-if="wasSpawnedByServer">
       <div class="interact" v-if="requiresInteraction">
         <button @click="closeModal" class="button">Interact</button>
       </div>
