@@ -347,6 +347,16 @@ export class MarketsClosed extends BaseEvent {
   }
 }
 
+@assocEventId
+export class MurphysLaw extends BaseEvent {
+  initialize(game: GameState): void {
+    game.drawMarsEvents(2);
+  }
+
+  finalize(game: GameState): void {
+  }
+}
+
 ////////////////////////// Out of Commission //////////////////////////
 
 type OutOfCommissionData = { [role in Role]: Role }
@@ -365,7 +375,6 @@ abstract class OutOfCommission extends BaseEvent {
       [RESEARCHER]: RESEARCHER
     };
   }
-
 
   playerOutOfCommission(outOfCommission: Role): Role {
     const player: Role = this.roles[outOfCommission];

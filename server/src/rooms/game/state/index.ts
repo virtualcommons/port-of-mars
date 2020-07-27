@@ -1305,6 +1305,11 @@ export class GameState extends Schema implements GameData {
   }
 
   hasMarsEventsToProcess(): boolean {
+    // // need to lookahead to see if there are any mars events that add to the event queue
+    // // could add side effect information to the mars event data
+    // if (this.currentEvent.id === 'murphysLaw') {
+    //   return true;
+    // }
     return this.marsEventsProcessed < this.marsEvents.length - 1;
   }
 
@@ -1626,5 +1631,17 @@ export class GameState extends Schema implements GameData {
 
   discardAccomplishment(role: Role, id: number): void {
     this.players[role].accomplishments.discard(id);
+  }
+
+  drawMarsEvents(nCards: number): void {
+    const cards = this.marsEventDeck.peek(nCards);
+    const marsEvents = cards.map(e => {
+      const me = new MarsEvent(e);
+      me.updateElapsed();
+      return me;
+    });
+    this.timeRemaining = marsEvents[0].timeDuration;
+    this.marsEvents.push(...marsEvents);
+    this.marsEventDeck.updatePosition(this.marsEvents.length);
   }
 }

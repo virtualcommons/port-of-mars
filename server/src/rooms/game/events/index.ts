@@ -6,11 +6,12 @@ import {
   Role,
   TradeData,
   Resource,
-  MarsLogCategory, SERVER, ServerRole
+  MarsLogCategory,
+  SERVER,
+  ServerRole
 } from '@port-of-mars/shared/types';
-import { GameState } from '@port-of-mars/server/rooms/game/state';
+import {GameSerialized, GameState} from '@port-of-mars/server/rooms/game/state';
 import { GameEvent } from '@port-of-mars/server/rooms/game/events/types';
-import { MarsEvent } from '@port-of-mars/server/rooms/game/state/marsevents/MarsEvent';
 import {
   CompulsivePhilanthropy, PersonalGain,
   OutOfCommissionCurator, OutOfCommissionPolitician,
@@ -234,21 +235,16 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
     game.phase = Phase.events;
     logger.debug('phase: %s', Phase[game.phase]);
 
-    // process mars events
-    const cards = game.marsEventDeck.peek(game.upkeep);
-    const marsEvents = cards.map(e => new MarsEvent(e));
-    game.phase = Phase.events;
-    game.timeRemaining = marsEvents[0].timeDuration;
-
     // handle incomplete events
     game.handleIncomplete();
-    game.marsEvents.push(...marsEvents);
 
-    game.resetPlayerReadiness();
+    // process mars events
+    const nCards = game.upkeep < 35 ? 3 : game.upkeep < 65 ? 2 : 1;
     game.updateMarsEventsElapsed();
     game.marsEventsProcessed = GameState.DEFAULTS.marsEventsProcessed;
-    game.marsEventDeck.updatePosition(game.marsEvents.length);
-    // game.logs.push(log);
+    game.drawMarsEvents(nCards);
+
+    game.resetPlayerReadiness();
 
     for (const player of game.players) {
       player.refreshPurchasableAccomplishments();
@@ -418,7 +414,7 @@ gameEventDeserializer.register(BeganNewRound);
 export class TakenStateSnapshot implements GameEvent {
   kind = 'taken-state-snapshot';
 
-  constructor(public data: object) {
+  constructor(public data: GameSerialized) {
   }
 
   apply(game: GameState): void {
