@@ -106,6 +106,11 @@ export interface BreakdownOfTrustData {
   savedResources: InvestmentData;
 }
 
+export interface StageDiscardOfPurchasedAccomplishmentCardData {
+  kind: 'stage-discard-of-purchased-accomplishment-card';
+  id: number;
+}
+
 export type Requests =
   | SendChatMessageData
   | ResetBotWarningData
@@ -115,6 +120,7 @@ export type Requests =
   | SetTimeInvestmentData
   | PurchaseAccomplishmentCardData
   | DiscardAccomplishmentCardData
+  | StageDiscardOfPurchasedAccomplishmentCardData
   | SendTradeRequestData
   | AcceptTradeRequestData
   | RejectTradeRequestData

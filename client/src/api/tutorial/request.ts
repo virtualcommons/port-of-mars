@@ -57,6 +57,8 @@ export class TutorialAPI implements AbstractGameAPI {
   saveResourcesSelection(savedResources: InvestmentData): void {
   }
 
+  stageDiscardOfPurchasedAccomplishment(id: number) {}
+
   /*
     This adds the sigular state transform it received to the state
     and adds it to the state stack for later use

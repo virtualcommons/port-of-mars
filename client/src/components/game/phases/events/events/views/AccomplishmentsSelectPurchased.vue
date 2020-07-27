@@ -16,24 +16,15 @@
           {{ accomplishment.label }}
         </button>
       </div>
-      <div>
-        <button
-          @click="handleContinue"
-          :disabled="completed === false"
-          type="button"
-          name="Continue Button"
-        >
-          Continue
-        </button>
-      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+  import {Vue, Component, Prop, Inject} from 'vue-property-decorator';
 import { AccomplishmentData, RESEARCHER } from '@port-of-mars/shared/types';
 import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
+  import {AbstractGameAPI} from "@port-of-mars/client/api/game/types";
 
 @Component({
   components: {
@@ -41,6 +32,9 @@ import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishm
   },
 })
 export default class AccomplishmentsSelectPurchased extends Vue {
+  @Inject()
+  api!: AbstractGameAPI;
+
   private purchasedAccomplishmentsLength: number = -1;
   private selectedPurchasedAccomplishment: AccomplishmentData = {
     id: -1,
@@ -57,14 +51,8 @@ export default class AccomplishmentsSelectPurchased extends Vue {
     effect: '',
   };
 
-  // get purchasableAccomplishments() {
-  //   const purchasable = this.$store.getters.player.accomplishment.purchasable;
-  //   console.log('purchasableAccomplishments:', purchasable);
-  //   return purchasable;
-  // }
-
   get purchasedAccomplishments() {
-    const purchased = this.$store.getters.player.accomplishment.purchased;
+    const purchased = this.$tstore.getters.player.accomplishments.purchased;
 
     // TODO: There's definitely a better place to do this...
     this.purchasedAccomplishmentsLength = Object.keys(purchased).length;
@@ -81,8 +69,9 @@ export default class AccomplishmentsSelectPurchased extends Vue {
     return false;
   }
 
-  private handleDiscardAccomplishment(a: any) {
-    this.selectedPurchasedAccomplishment = a;
+  private handleDiscardAccomplishment(accomplishment: AccomplishmentData) {
+    this.selectedPurchasedAccomplishment = accomplishment;
+    this.api.stageDiscardOfPurchasedAccomplishment(accomplishment.id);
   }
 
   private handleContinue() {

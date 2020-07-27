@@ -33,7 +33,11 @@ import {
   SelectedInfluence,
   KeptResources,
   InitializedMarsEvent,
-  AddedSystemHealthContributions, SubtractedSystemHealthWearAndTear, ExitedInvestmentPhase, BotWarningAcknowledged
+  AddedSystemHealthContributions,
+  SubtractedSystemHealthWearAndTear,
+  ExitedInvestmentPhase,
+  BotWarningAcknowledged,
+  StagedDiscardOfPurchasedAccomplishment
 } from '@port-of-mars/server/rooms/game/events';
 import { getAccomplishmentByID } from '@port-of-mars/server/data/Accomplishment';
 import { GameState } from '@port-of-mars/server/rooms/game/state';
@@ -104,6 +108,19 @@ export class DiscardAccomplishmentCmd implements Command {
   execute(): Array<GameEvent> {
     const role = this.player.role;
     return [new DiscardedAccomplishment({ id: this.id, role })];
+  }
+}
+
+export class StageDiscardOfPurchasedAccomplishmentCmd implements Command {
+  constructor(private id: number, private player: Player) {}
+
+  static fromReq(r: req.StageDiscardOfPurchasedAccomplishmentCardData, player: Player) {
+    return new StageDiscardOfPurchasedAccomplishmentCmd(r.id, player);
+  }
+
+  execute(): Array<GameEvent> {
+    const role = this.player.role;
+    return [new StagedDiscardOfPurchasedAccomplishment({ id: this.id, role })];
   }
 }
 

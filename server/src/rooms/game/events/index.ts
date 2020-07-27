@@ -16,7 +16,7 @@ import {
   CompulsivePhilanthropy, PersonalGain,
   OutOfCommissionCurator, OutOfCommissionPolitician,
   OutOfCommissionResearcher, OutOfCommissionPioneer,
-  OutOfCommissionEntrepreneur, BondingThroughAdversity, BreakdownOfTrust
+  OutOfCommissionEntrepreneur, BondingThroughAdversity, BreakdownOfTrust, EffortsWasted
 }
   from '@port-of-mars/server/rooms/game/state/marsevents/state';
 import * as entities from '@port-of-mars/server/entity/GameEvent';
@@ -594,6 +594,23 @@ export class KeptResources extends GameEventWithData {
   }
 }
 gameEventDeserializer.register(KeptResources);
+
+export class StagedDiscardOfPurchasedAccomplishment extends GameEventWithData {
+  constructor(public data: { id: number; role: Role }) {
+    super();
+  }
+
+  apply(game: GameState): void {
+    if (game.currentEvent.state instanceof EffortsWasted) {
+      const state = game.currentEvent.state;
+      state.discardAccomplishment(this.data.role, this.data.id);
+      game.setPlayerReadiness(this.data.role, true);
+    } else {
+      logger.warn('Event Mismatch: got %s expected %s', game.currentEvent.name, 'effortsWasted')
+    }
+  }
+}
+gameEventDeserializer.register(StagedDiscardOfPurchasedAccomplishment);
 
 ////////////////////////// Bot Related //////////////////////////
 

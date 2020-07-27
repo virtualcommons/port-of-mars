@@ -5,7 +5,7 @@ import {
   BondingThroughAdversityCmd,
   BreakdownOfTrustCmd,
   CancelTradeRequestCmd,
-  DiscardAccomplishmentCmd,
+  DiscardAccomplishmentCmd, StageDiscardOfPurchasedAccomplishmentCmd,
   OutOfCommissionCuratorCmd,
   OutOfCommissionEntrepreneurCmd,
   OutOfCommissionPioneerCmd,
@@ -92,6 +92,8 @@ function prepareRequest(room: Room<GameState> & Game, r: Requests, client: Clien
       return PurchaseAccomplishmentCmd.fromReq(r, player);
     case 'discard-accomplishment-card':
       return DiscardAccomplishmentCmd.fromReq(r, player);
+    case 'stage-discard-of-purchased-accomplishment-card':
+      return StageDiscardOfPurchasedAccomplishmentCmd.fromReq(r, player);
     case 'accept-trade-request':
       return AcceptTradeRequestCmd.fromReq(r);
     case 'reject-trade-request':

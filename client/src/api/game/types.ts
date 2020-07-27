@@ -26,6 +26,8 @@ export interface AbstractGameAPI {
 
   discardAccomplishment(id: number): void
 
+  stageDiscardOfPurchasedAccomplishment(id: number): void
+
   sendTradeRequest(trade: SendTradeRequestData['trade']): void
 
   acceptTradeRequest(id: string): void

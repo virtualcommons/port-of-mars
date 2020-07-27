@@ -15,7 +15,7 @@ import {
   PersonalGainVotesData,
   VoteForPhilanthropistData,
   BondingThroughAdversityData,
-  BreakdownOfTrustData, ResetBotWarningData,
+  BreakdownOfTrustData, ResetBotWarningData, StageDiscardOfPurchasedAccomplishmentCardData,
 } from '@port-of-mars/shared/game/requests';
 import {
   AccomplishmentData,
@@ -91,6 +91,14 @@ export class GameRequestAPI implements AbstractGameAPI {
     const msg: DiscardAccomplishmentCardData = {
       kind: 'discard-accomplishment-card',
       id,
+    };
+    this.send(msg);
+  }
+
+  public stageDiscardOfPurchasedAccomplishment(id: number) {
+    const msg: StageDiscardOfPurchasedAccomplishmentCardData = {
+      kind: 'stage-discard-of-purchased-accomplishment-card',
+      id
     };
     this.send(msg);
   }

@@ -686,6 +686,14 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData {
     }
   }
 
+  discardPurchased(id: number): void {
+    const ind = this.purchased.findIndex(acc => acc.id === id);
+    logger.info('Discarding purchase %d %d %o', ind, id, this.purchased);
+    if (ind >= 0) {
+      this.purchased.splice(ind, 1);
+    }
+  }
+
   discardAll(): void {
     this.deck.push(...this.purchasable.map((card: Accomplishment) => card.id));
     this.purchasable.splice(0, this.purchasable.length);
@@ -923,6 +931,14 @@ export class Player extends Schema implements PlayerData {
       this.accomplishments.isPurchasable(accomplishment) &&
       this.inventory.canAfford(accomplishment)
     ) ?? false;
+  }
+
+  discardAccomplishment(id: number): void {
+    this.accomplishments.discard(id);
+  }
+
+  discardPurchasedAccomplishment(id: number): void {
+    this.accomplishments.discardPurchased(id);
   }
 
   purchaseAccomplishment(accomplishment: AccomplishmentData): void {
@@ -1630,7 +1646,11 @@ export class GameState extends Schema implements GameData {
   }
 
   discardAccomplishment(role: Role, id: number): void {
-    this.players[role].accomplishments.discard(id);
+    this.players[role].discardAccomplishment(id);
+  }
+
+  discardPurchasedAccomplishment(role: Role, id: number): void {
+    this.players[role].discardPurchasedAccomplishment(id);
   }
 
   drawMarsEvents(nCards: number): void {

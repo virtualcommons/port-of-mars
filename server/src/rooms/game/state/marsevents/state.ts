@@ -10,7 +10,9 @@ import {
   Role, ROLES, Resource, InvestmentData, MarsLogCategory, ResourceCostData, RESOURCES
 } from "@port-of-mars/shared/types";
 import {COST_INAFFORDABLE} from "@port-of-mars/shared/settings";
+import {getLogger} from "@port-of-mars/server/settings";
 
+const logger = getLogger(__filename);
 
 const _dispatch: { [id: string]: MarsEventStateConstructor } = {};
 
@@ -272,11 +274,31 @@ export class DifficultConditions extends BaseEvent {
 
 @assocEventId
 export class EffortsWasted extends BaseEvent {
+  accomplishmentsToDiscard: Partial<{ [role in Role]: number }> = {};
+
+  discardAccomplishment(role: Role, id: number): void {
+    this.accomplishmentsToDiscard[role] = id;
+  }
+
+  fillAccomplishmentsToDiscard(state: GameState): void {
+    for (const role of ROLES) {
+      const purchased = state.players[role].accomplishments.purchased;
+      if (_.isUndefined(this.accomplishmentsToDiscard) && purchased.length > 0) {
+        this.discardAccomplishment(role, purchased[0].id);
+      }
+    }
+  }
+
   finalize(state: GameState): void {
-    // at the moment will need to iterate across all players and
-    // decrement victoryPoints with the removed accomplishment (if any)
-    // and remove the accomplishment from player.accomplishments.purchased
-    state.log(`Each player must discard an Accomplishment card they have purchased.`,
+    this.fillAccomplishmentsToDiscard(state);
+    logger.info('Efforts wasted %o', this.accomplishmentsToDiscard);
+    for (const role of ROLES) {
+      const id = this.accomplishmentsToDiscard[role];
+      if (!_.isUndefined(id)) {
+        state.players[role].discardPurchasedAccomplishment(id);
+      }
+    }
+    state.log(`Each player discarded an Accomplishment card they purchased.`,
       `${MarsLogCategory.event}: Efforts Wasted`
     )
   }
