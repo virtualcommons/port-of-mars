@@ -284,7 +284,7 @@ export class EffortsWasted extends BaseEvent {
   fillAccomplishmentsToDiscard(state: GameState): void {
     for (const role of ROLES) {
       const purchased = state.players[role].accomplishments.purchased;
-      if (_.isUndefined(this.accomplishmentsToDiscard) && purchased.length > 0) {
+      if (_.isUndefined(this.accomplishmentsToDiscard[role]) && purchased.length > 0) {
         this.discardAccomplishment(role, purchased[0].id);
       }
     }
