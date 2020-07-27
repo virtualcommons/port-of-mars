@@ -13,7 +13,7 @@
           type="button"
           name="Discard Accomplishment"
         >
-          {{ accomplishment.label }}
+          {{ accomplishment.label }} ({{ accomplishment.victoryPoints }} Points)
         </button>
       </div>
     </div>
