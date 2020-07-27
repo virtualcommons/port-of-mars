@@ -109,7 +109,7 @@ const _marsEvents: Array<MarsEventDeckItem> = [
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 1,
     timeDuration: 10,
-  }, 4],
+  }, 12],
   [{
     id: 'lostTime',
     name: 'Lost Time',
