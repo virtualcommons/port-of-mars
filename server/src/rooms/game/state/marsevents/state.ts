@@ -11,6 +11,7 @@ import {
 } from "@port-of-mars/shared/types";
 import {COST_INAFFORDABLE} from "@port-of-mars/shared/settings";
 import {getLogger} from "@port-of-mars/server/settings";
+import {getAccomplishmentByID} from "@port-of-mars/server/data/Accomplishment";
 
 const logger = getLogger(__filename);
 
@@ -292,13 +293,17 @@ export class EffortsWasted extends BaseEvent {
   finalize(state: GameState): void {
     this.fillAccomplishmentsToDiscard(state);
     logger.info('Efforts wasted %o', this.accomplishmentsToDiscard);
+    const discards: Array<string> = [];
     for (const role of ROLES) {
       const id = this.accomplishmentsToDiscard[role];
       if (!_.isUndefined(id)) {
+        const accomplishment = getAccomplishmentByID(role, id);
+        discards.push(`${role} discarded ${accomplishment.label} for ${accomplishment.victoryPoints}`);
         state.players[role].discardPurchasedAccomplishment(id);
+        state.players[role].victoryPoints -= accomplishment.victoryPoints;
       }
     }
-    state.log(`Each player discarded an Accomplishment card they purchased.`,
+    state.log(discards.join(', '),
       `${MarsLogCategory.event}: Efforts Wasted`
     )
   }
