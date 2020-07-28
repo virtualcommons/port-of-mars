@@ -306,15 +306,16 @@ export class ResetGameCmd implements Command {
 
 export class PersonalGainVotes implements Command {
   constructor(
-    private results: req.PersonalGainVotesData,
+    private vote: boolean,
+    private player: Player
   ) { }
 
-  static fromReq(r: req.PersonalGainVotesData) {
-    return new PersonalGainVotes(r);
+  static fromReq(r: req.PersonalGainVotesData, player: Player) {
+    return new PersonalGainVotes(r.vote, player);
   }
 
   execute(): Array<GameEvent> {
-    return [new VotedForPersonalGain(this.results.value)];
+    return [new VotedForPersonalGain({ vote: this.vote, role: this.player.role})];
   }
 }
 

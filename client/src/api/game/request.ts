@@ -143,8 +143,8 @@ export class GameRequestAPI implements AbstractGameAPI {
     this.send(msg);
   }
 
-  public savePersonalGainVote(value: { role: Role; vote: boolean }) {
-    const msg: PersonalGainVotesData = { kind: 'personal-gain', value };
+  public savePersonalGainVote(vote: boolean) {
+    const msg: PersonalGainVotesData = { kind: 'personal-gain', vote };
     this.send(msg);
   }
 

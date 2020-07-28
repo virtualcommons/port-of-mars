@@ -103,7 +103,7 @@ function prepareRequest(room: Room<GameState> & Game, r: Requests, client: Clien
     case 'send-trade-request':
       return SendTradeRequestCmd.fromReq(r, player);
     case 'personal-gain':
-      return PersonalGainVotes.fromReq(r);
+      return PersonalGainVotes.fromReq(r, player);
     case 'vote-for-philanthropist':
       return VoteForPhilanthropistCmd.fromReq(r, player);
     case 'out-of-commission-curator':

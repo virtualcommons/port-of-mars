@@ -38,7 +38,7 @@ export interface AbstractGameAPI {
 
   setPlayerReadiness(value: boolean): void
 
-  savePersonalGainVote(value: { role: Role, vote: boolean }): void
+  savePersonalGainVote(vote: boolean): void
 
   voteForPhilanthropist(vote: Role): void
 

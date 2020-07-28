@@ -14,9 +14,9 @@
     </b-form>
 
     <p :style="!playerVote ? 'color: rgba(0, 0, 0, 0); padding-top: 2rem' : ''"
-       v-bind:class="{'selected-button-text': playerVote }"
+       :class="{'selected-button-text': playerVote }" v-if="playerVote !== null"
     >
-      You have selected <strong>{{ playerVote }}</strong>.
+      You have selected <strong>{{ playerVote ? 'Yes' : 'No' }}</strong>.
     </p>
   </div>
 </template>
@@ -28,12 +28,11 @@
   @Component({})
   export default class VoteYesNo extends Vue {
     @Inject() api!: GameRequestAPI;
-    playerVote: string = '';
-    select!: boolean;
+    playerVote: boolean | null = null;
 
     options = [
-      {text: 'Yes', value: 'Yes'},
-      {text: 'No', value: 'No'}
+      {text: 'Yes', value: true},
+      {text: 'No', value: false}
     ]
 
     get playerRole() {
@@ -42,9 +41,7 @@
 
 
     private vote() {
-      this.select = this.playerVote === 'Yes';
-      const voteResults = {role: this.playerRole, vote: this.select};
-      this.api.savePersonalGainVote(voteResults);
+      this.api.savePersonalGainVote(this.playerVote ?? false);
 
     }
   }

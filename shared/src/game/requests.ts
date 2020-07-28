@@ -58,7 +58,7 @@ export interface SetPlayerReadinessData {
 
 export interface PersonalGainVotesData {
   kind: 'personal-gain';
-  value: { role: Role; vote: boolean };
+  vote: boolean;
 }
 
 export interface VoteForPhilanthropistData {
