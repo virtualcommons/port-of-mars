@@ -93,13 +93,14 @@ export default class HUDLeftButtons extends Vue {
     // if current phase = Trade
     // set HUDLeftView = Accomplishments
     // return the current state of HUDLeftView
-    if (this.currentPhase === this.phase.trade) {
-      this.api.setHUDLeftView(this.view.Accomplishments);
-      return this.$tstore.state.userInterface.hudLeftView;
-    }
+
+    // if (this.currentPhase === this.phase.trade) {
+    //   this.api.setHUDLeftView(this.view.Accomplishments);
+    //   return this.$tstore.state.userInterface.hudLeftView;
+    // }
 
     // else return the current state of HUDLeftView (determined by button click)
-    else return this.$tstore.state.userInterface.hudLeftView;
+    return this.$tstore.state.userInterface.hudLeftView;
   }
 
   /**
