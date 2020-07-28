@@ -152,6 +152,10 @@ export class ActorRunner implements Actor {
   [Phase.purchase](state: GameState, player: Player): Array<GameEvent> {
     for (const accomplishment of player.accomplishments.purchasable) {
       if (player.isAccomplishmentPurchaseFeasible(accomplishment)) {
+        // don't purchase screw cards if system health is low
+        if (state.upkeep <= 35 && accomplishment.upkeep < 0) {
+          return [];
+        }
         return [new PurchasedAccomplishment({accomplishment, role: player.role})]
       }
     }
