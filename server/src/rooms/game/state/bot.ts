@@ -154,7 +154,7 @@ export class ActorRunner implements Actor {
       if (player.isAccomplishmentPurchaseFeasible(accomplishment)) {
         // don't purchase screw cards if system health is low
         if (state.upkeep <= 35 && accomplishment.upkeep < 0) {
-          return [];
+          continue;
         }
         return [new PurchasedAccomplishment({accomplishment, role: player.role})]
       }
