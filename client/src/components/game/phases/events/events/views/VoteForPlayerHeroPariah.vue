@@ -1,7 +1,7 @@
 <template>
   <div class="event-vote-for-player-hero-pariah">
-    <!-- Select Hero or Pariah -->
-    <p class="hero-title">Select Hero or Pariah</p>
+    <!-- vote hero or pariah -->
+    <p v-if="!decidedHeroOrPariah" class="hero-title">Select Hero or Pariah</p>
     <b-form>
       <b-form-radio-group
         :options="options"
@@ -16,10 +16,14 @@
 
     <p v-if="voteHeroOrPariah">You voted for a {{ voteHeroOrPariah }}.</p>
     <p v-if="!decidedHeroOrPariah">Please wait while we collect
-      other players' votes.</p>
+      other players' votes. </p>
+    <b-spinner v-if="!decidedHeroOrPariah" small label="small spinner" />
 
-    <div v-if="voteHeroOrPariah">
-      <p class="pariah-title">Select a {{ decidedHeroOrPariah }}</p>
+    <p v-if="decidedHeroOrPariah" class="hero-title">Select a {{ decidedHeroOrPariah }}</p>
+
+    <!-- vote player to be hero or pariah -->
+    <div v-if="decidedHeroOrPariah">
+<!--      <p class="pariah-title">Select a {{ decidedHeroOrPariah }}</p>-->
 
       <div class="player-frame-container">
         <div
@@ -43,13 +47,11 @@
         {{ role }}
       </p>
     </div>
-
-    <!-- Vote for player -->
   </div>
 </template>
 
 <script lang="ts">
-  import {Component, Inject, Vue} from 'vue-property-decorator';
+  import {Component, Inject, Prop, Vue, Watch} from 'vue-property-decorator';
   import {Role, ROLES} from '@port-of-mars/shared/types';
   import {GameRequestAPI} from '@port-of-mars/client/api/game/request';
 

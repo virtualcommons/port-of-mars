@@ -1,19 +1,21 @@
-import { Room } from 'colyseus.js';
+import {Room} from 'colyseus.js';
 import {
   ChatMessageData,
   GameData,
   MarsEventData,
+  MarsLogMessageData,
   Phase,
   PlayerData,
-  MarsLogMessageData,
+  Role,
   ROLES,
-  TradeData,
-  Role, RoundIntroductionData, SystemHealthChangeData,
+  RoundIntroductionData,
+  TradeData
 } from '@port-of-mars/shared/types';
-import { SetPlayerRole, SetError } from '@port-of-mars/shared/game/responses';
-import { Schema } from '@colyseus/schema';
-import { TStore } from '@port-of-mars/client/plugins/tstore';
+import {SetError, SetPlayerRole} from '@port-of-mars/shared/game/responses';
+import {Schema} from '@colyseus/schema';
+import {TStore} from '@port-of-mars/client/plugins/tstore';
 import Mutations from '@port-of-mars/client/store/mutations';
+
 type Schemify<T> = T & Schema;
 
 function deschemify<T>(s: Schemify<T>): T {
@@ -43,7 +45,7 @@ function applyPlayerResponses(player: any, store: TStore) {
     changes
       .filter((change) => change.field != 'role')
       .forEach((change) => {
-        const payload = { role: player.role, data: change.value };
+        const payload = {role: player.role, data: change.value};
         store.commit(
           responseMap[change.field as keyof Omit<PlayerData, 'role'>],
           payload
@@ -158,21 +160,21 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
     //   event: deschemify(event),
     //   index
     // });
-    store.commit('CHANGE_EVENT', { event: deschemify(event), index });
+    store.commit('CHANGE_EVENT', {event: deschemify(event), index});
   };
 
   room.state.tradeSet.onAdd = (event: Schemify<TradeData>, id: string) => {
     const rawEvent: TradeData = deschemify(event);
-    store.commit('ADD_TO_TRADES', { trade: rawEvent, id });
+    store.commit('ADD_TO_TRADES', {trade: rawEvent, id});
   };
 
   room.state.tradeSet.onRemove = (event: Schemify<TradeData>, id: string) => {
-    store.commit('REMOVE_FROM_TRADES', { id });
+    store.commit('REMOVE_FROM_TRADES', {id});
   };
 
   room.state.tradeSet.onChange = (event: Schemify<TradeData>, id: string) => {
     const rawEvent: TradeData = deschemify(event);
-    store.commit('UPDATE_TRADE_STATUS', { id, status: rawEvent.status });
+    store.commit('UPDATE_TRADE_STATUS', {id, status: rawEvent.status});
   };
 
   room.state.onChange = (changes: Array<any>) => {
@@ -204,6 +206,10 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
       if (change.field === 'roundIntroduction') {
         const roundIntroduction: RoundIntroductionData = change.value;
         store.commit('SET_ROUND_INTRODUCTION', roundIntroduction);
+      }
+      if (change.field === 'heroOrPariah') {
+        const heroOrPariah: 'hero' | 'pariah' = change.value;
+        store.commit('SET_HERO_OR_PARIAH', heroOrPariah);
       }
     });
   };
