@@ -3,6 +3,14 @@
   @include make-column-and-center;
 }
 
+.fade-leave-active {
+  transition: opacity 1.5s ease-in-out;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
 .selected-background {
   background-color: $light-accent;
 }

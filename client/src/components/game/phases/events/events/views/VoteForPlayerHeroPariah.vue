@@ -1,48 +1,52 @@
 <template>
-  <div class="event-vote-for-player-hero-pariah">
+  <transition-group name="fade" mode="out-in">
     <!-- VOTE :: hero or pariah -->
-    <p class="title" v-if="!decidedHeroOrPariah">Select Hero or Pariah</p>
-    <b-form v-if="!decidedHeroOrPariah">
-      <b-form-radio-group
-        :options="options"
-        :value="voteHeroOrPariah"
-        @change="submitHeroOrPariah"
-        button-variant="outline-warning"
-        buttons
-        size="lg"
-      >
-      </b-form-radio-group>
-    </b-form>
-
-    <p class="voted m-4" v-if="!decidedHeroOrPariah && voteHeroOrPariah">You voted for a <strong>{{ voteHeroOrPariah
-      }}</strong>.</p>
-    <p class="voted m-3" v-if="!decidedHeroOrPariah && voteHeroOrPariah">Collecting other players'
-      votes... </p>
-    <b-spinner label="small spinner" small v-if="!decidedHeroOrPariah && voteHeroOrPariah"/>
-
-    <!-- VOTE :: player to be hero or pariah -->
-    <p v-if="decidedHeroOrPariah" class="title">Select a {{ decidedHeroOrPariah }}</p>
-
-    <!-- vote for player -->
-    <div v-if="decidedHeroOrPariah" class="m-4">
-      <div class="player-frame-container">
-        <div
-          :key="player"
-          class="player-frame"
-          v-bind:class="{ 'selected-background': player === role }"
-          v-for="player in roles"
+    <div class="event-vote-for-player-hero-pariah" v-if="!decidedHeroOrPariah" :key="!decidedHeroOrPariah">
+      <p class="title m-4">Select Hero or Pariah</p>
+      <b-form>
+        <b-form-radio-group
+          :options="options"
+          :value="voteHeroOrPariah"
+          @change="submitHeroOrPariah"
+          button-variant="outline-warning"
+          buttons
+          size="lg"
         >
-          <img
-            :src="require(`@port-of-mars/client/assets/characters/${player}.png`)"
-            @click="selectRole(player)"
-            alt="Player"
-          />
-        </div>
-      </div>
-      <p class="voted m-5" v-if="!role">No player selected.</p>
-      <p class="voted m-5" v-else><strong>{{ role }}</strong></p>
+        </b-form-radio-group>
+      </b-form>
+      <p class="voted m-4" v-if="!decidedHeroOrPariah && voteHeroOrPariah">You voted for a <strong>{{ voteHeroOrPariah
+        }}</strong>.</p>
+      <b-spinner label="small spinner" small v-if="!decidedHeroOrPariah && voteHeroOrPariah"/>
+      <p class="voted m-2" v-if="!decidedHeroOrPariah && voteHeroOrPariah">Processing votes... </p>
     </div>
-  </div>
+
+    <div class="event-vote-for-player-hero-pariah" v-if="decidedHeroOrPariah" :key="decidedHeroOrPariah">
+      <!-- VOTE :: player to be hero or pariah -->
+      <p class="title">Select a {{ decidedHeroOrPariah }}</p>
+
+      <!-- vote for player -->
+      <div class="m-4">
+        <div class="player-frame-container">
+          <div
+            :key="player"
+            class="player-frame"
+            v-bind:class="{ 'selected-background': player === role }"
+            v-for="player in roles"
+          >
+            <img
+              :src="require(`@port-of-mars/client/assets/characters/${player}.png`)"
+              @click="selectRole(player)"
+              alt="Player"
+            />
+          </div>
+        </div>
+        <p class="voted m-5" v-if="!role">No player selected.</p>
+        <p class="voted m-5" v-else><strong>{{ role }}</strong></p>
+      </div>
+    </div>
+
+
+  </transition-group>
 </template>
 
 <script lang="ts">
