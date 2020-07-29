@@ -1,8 +1,8 @@
 <template>
   <div class="event-vote-for-player-hero-pariah">
-    <!-- vote hero or pariah -->
-    <p v-if="!decidedHeroOrPariah" class="hero-title">Select Hero or Pariah</p>
-    <b-form>
+    <!-- VOTE :: hero or pariah -->
+    <p class="title" v-if="!decidedHeroOrPariah">Select Hero or Pariah</p>
+    <b-form v-if="!decidedHeroOrPariah">
       <b-form-radio-group
         :options="options"
         :value="voteHeroOrPariah"
@@ -14,17 +14,17 @@
       </b-form-radio-group>
     </b-form>
 
-    <p v-if="voteHeroOrPariah">You voted for a {{ voteHeroOrPariah }}.</p>
-    <p v-if="!decidedHeroOrPariah">Please wait while we collect
-      other players' votes. </p>
-    <b-spinner v-if="!decidedHeroOrPariah" small label="small spinner" />
+    <p class="voted m-4" v-if="!decidedHeroOrPariah && voteHeroOrPariah">You voted for a <strong>{{ voteHeroOrPariah
+      }}</strong>.</p>
+    <p class="voted m-3" v-if="!decidedHeroOrPariah && voteHeroOrPariah">Collecting other players'
+      votes... </p>
+    <b-spinner label="small spinner" small v-if="!decidedHeroOrPariah && voteHeroOrPariah"/>
 
-    <p v-if="decidedHeroOrPariah" class="hero-title">Select a {{ decidedHeroOrPariah }}</p>
+    <!-- VOTE :: player to be hero or pariah -->
+    <p v-if="decidedHeroOrPariah" class="title">Select a {{ decidedHeroOrPariah }}</p>
 
-    <!-- vote player to be hero or pariah -->
-    <div v-if="decidedHeroOrPariah">
-<!--      <p class="pariah-title">Select a {{ decidedHeroOrPariah }}</p>-->
-
+    <!-- vote for player -->
+    <div v-if="decidedHeroOrPariah" class="m-4">
       <div class="player-frame-container">
         <div
           :key="player"
@@ -39,19 +39,14 @@
           />
         </div>
       </div>
-
-      <p
-        :style="role === 'None Selected' ? 'color: var(--light-shade-25)' : ''"
-        class="selected-pariah-text"
-      >
-        {{ role }}
-      </p>
+      <p class="voted m-5" v-if="!role">No player selected.</p>
+      <p class="voted m-5" v-else><strong>{{ role }}</strong></p>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-  import {Component, Inject, Prop, Vue, Watch} from 'vue-property-decorator';
+  import {Component, Inject, Vue} from 'vue-property-decorator';
   import {Role, ROLES} from '@port-of-mars/shared/types';
   import {GameRequestAPI} from '@port-of-mars/client/api/game/request';
 
@@ -78,14 +73,12 @@
       this.voteHeroOrPariah = vote;
       if (this.voteHeroOrPariah) {
         this.api.saveHeroOrPariah(this.voteHeroOrPariah);
-        console.log('VOTED FOR: ', this.voteHeroOrPariah);
       }
     }
 
     private selectRole(member: Role): void {
       this.role = member;
       this.api.saveHeroOrPariahRole(this.role);
-      console.log('VOTED ROLE: ', this.role);
     }
 
   }

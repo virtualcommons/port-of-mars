@@ -7,17 +7,15 @@
   background-color: $light-accent;
 }
 
-.hero-title,
-.pariah-title {
+.title {
   border-bottom: 0.125rem solid $light-accent;
   color: $light-shade;
   font-size: $font-large;
 }
 
-.selected-hero-text,
-.selected-pariah-text {
-  margin: 1rem 0 2rem 0;
-  font-size: $font-small;
+.voted {
+  font-size: $font-med;
+  text-align: center;
 }
 
 .player-frame-container {
@@ -41,20 +39,5 @@
     img {
       height: 100%;
     }
-  }
-}
-
-button {
-  @include reset-button;
-  height: 3rem;
-  width: 12rem;
-  border: 0.125rem solid $light-accent;
-  margin: 0 0.5rem;
-  color: $light-accent;
-  @include default-transition-base;
-
-  &:hover {
-    color: $dark-shade;
-    background-color: $light-accent;
   }
 }
