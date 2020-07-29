@@ -111,6 +111,16 @@ export interface StageDiscardOfPurchasedAccomplishmentCardData {
   id: number;
 }
 
+export interface VoteHeroOrPariahData {
+  kind: 'vote-hero-or-pariah';
+  heroOrPariah: 'hero' | 'pariah';
+}
+
+export interface VoteHeroOrPariahRoleData {
+  kind: 'vote-hero-or-pariah-role';
+  vote: Role;
+}
+
 export type Requests =
   | SendChatMessageData
   | ResetBotWarningData
@@ -133,4 +143,6 @@ export type Requests =
   | OutOfCommissionPioneerData
   | OutOfCommissionEntrepreneurData
   | BondingThroughAdversityData
-  | BreakdownOfTrustData;
+  | BreakdownOfTrustData
+  | VoteHeroOrPariahData
+  | VoteHeroOrPariahRoleData  ;

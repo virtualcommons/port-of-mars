@@ -15,7 +15,8 @@ import {
   PersonalGainVotesData,
   VoteForPhilanthropistData,
   BondingThroughAdversityData,
-  BreakdownOfTrustData, ResetBotWarningData, StageDiscardOfPurchasedAccomplishmentCardData,
+  StageDiscardOfPurchasedAccomplishmentCardData,
+  BreakdownOfTrustData, ResetBotWarningData, VoteHeroOrPariahData, VoteHeroOrPariahRoleData,
 } from '@port-of-mars/shared/game/requests';
 import {
   AccomplishmentData,
@@ -174,6 +175,22 @@ export class GameRequestAPI implements AbstractGameAPI {
     };
     this.send(msg);
   }
+
+public saveHeroOrPariah(heroOrPariah: 'hero' | 'pariah') {
+    const msg: VoteHeroOrPariahData = {
+      kind: 'vote-hero-or-pariah',
+      heroOrPariah,
+    };
+    this.send(msg);
+}
+
+public saveHeroOrPariahRole(vote: Role) {
+    const msg: VoteHeroOrPariahRoleData = {
+      kind: 'vote-hero-or-pariah-role',
+      vote,
+    };
+    this.send(msg);
+}
 
   //UI COMMANDS
   public investPendingTimeBlocks(investment: any) {

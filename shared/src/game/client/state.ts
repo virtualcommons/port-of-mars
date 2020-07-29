@@ -126,6 +126,7 @@ export interface UserInterface {
   hudRightView: HUDRightView;
   modalView: ModalView;
   toggleResourceCost: boolean;
+  // toggleYourTrades: boolean;
 }
 
 export interface UserInterfaceTwo {
@@ -183,6 +184,7 @@ export const initialStoreState: State = {
   },
   tradeSet: {},
   winners: [],
+  heroOrPariah: '',
 
   // State
   role: RESEARCHER,
@@ -216,7 +218,8 @@ export const initialStoreState: State = {
       type: null,
       data: null,
     },
-    toggleResourceCost: false
+    toggleResourceCost: false,
+    // toggleYourTrades: false,
   },
 
   dashboardMessages: [],

@@ -1118,6 +1118,7 @@ export interface GameSerialized {
   tradeSet: TradeSetData;
   winners: Array<Role>;
   tradingEnabled: boolean;
+  heroOrPariah: '' | 'hero' | 'pariah';
 }
 
 export enum ActionOrdering {
@@ -1154,7 +1155,8 @@ export class GameState extends Schema implements GameData {
     marsEventsProcessed: 0,
     round: 1,
     phase: Phase.newRound,
-    upkeep: 100
+    upkeep: 100,
+    heroOrPariah: ''
   };
 
   fromJSON(data: GameSerialized): GameState {
@@ -1169,6 +1171,7 @@ export class GameState extends Schema implements GameData {
     this.upkeep = data.upkeep;
     this.roundIntroduction.fromJSON(data.roundIntroduction);
     this.tradingEnabled = data.tradingEnabled;
+    this.heroOrPariah = data.heroOrPariah;
 
     const marsLogs = _.map(data.logs, m => new MarsLogMessage(m));
     this.logs.splice(0, this.logs.length, ...marsLogs);
@@ -1212,7 +1215,8 @@ export class GameState extends Schema implements GameData {
       roundIntroduction: this.roundIntroduction.toJSON(),
       tradeSet: this.tradeSet.toJSON(),
       tradingEnabled: this.tradingEnabled,
-      winners: _.map(this.winners, w => w)
+      winners: _.map(this.winners, w => w),
+      heroOrPariah: this.heroOrPariah
     };
   }
 
@@ -1264,6 +1268,9 @@ export class GameState extends Schema implements GameData {
 
   @type('boolean')
   tradingEnabled = true;
+
+  @type('string')
+  heroOrPariah: '' | 'hero' | 'pariah' = '';
 
   pendingMarsEventActions: Array<PendingMarsEventAction> = [];
 
@@ -1357,6 +1364,7 @@ export class GameState extends Schema implements GameData {
     this.resetPlayerCosts();
     this.resetPlayerReadiness();
     this.refreshPlayerPurchasableAccomplisments();
+    this.resetHeroOrPariah();
   }
 
   resetPlayerCosts(): void {
@@ -1366,6 +1374,10 @@ export class GameState extends Schema implements GameData {
       player.costs.fromJSON(ResourceCosts.getCosts(player.role));
       logger.info('costs (after) [%s]: %o', player.role, player.costs.toJSON());
     }
+  }
+
+  resetHeroOrPariah(): void {
+    this.heroOrPariah = '';
   }
 
   resetPlayerReadiness(): void {
@@ -1404,6 +1416,7 @@ export class GameState extends Schema implements GameData {
     this.players.fromJSON(new PlayerSet().toJSON());
     this.marsEventDeck = new MarsEventsDeck(_.shuffle(this.marsEventDeck.deck));
     this.winners.splice(0, this.winners.length);
+    this.heroOrPariah = '';
   }
 
   updateSystemHealth(): void {

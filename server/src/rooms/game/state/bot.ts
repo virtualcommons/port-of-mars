@@ -1,43 +1,61 @@
-import {
-  CURATOR,
-  EventClientView,
-  InvestmentData, INVESTMENTS,
-  Phase,
-  ResourceAmountData, RESOURCES,
-  Role,
-  ROLES
-} from "@port-of-mars/shared/types";
+import {EventClientView, InvestmentData, Phase, RESOURCES, Role, ROLES} from "@port-of-mars/shared/types";
 import {Bot, GameState, Player, Trade} from "@port-of-mars/server/rooms/game/state/index";
 import {GameEvent} from "@port-of-mars/server/rooms/game/events/types";
 import {
-  AcceptedTradeRequest, BotControlRelinquished, DiscardedAccomplishment, KeptResources,
-  PurchasedAccomplishment, SelectedInfluence,
+  AcceptedTradeRequest,
+  BotControlRelinquished,
+  BotControlTaken,
+  DiscardedAccomplishment,
+  KeptResources,
+  PurchasedAccomplishment,
+  SelectedInfluence,
   SetPlayerReadiness,
-  TimeInvested, VotedForPersonalGain, VotedForPhilanthropist
+  TimeInvested,
+  VotedForPersonalGain,
+  VotedForPhilanthropist,
+  VoteHeroOrPariah,
+  VoteHeroOrPariahRole
 } from "@port-of-mars/server/rooms/game/events";
-import {BotControlTaken} from "@port-of-mars/server/rooms/game/events";
 import {getLogger} from "@port-of-mars/server/settings";
 import _ from "lodash";
-import {Game} from "@port-of-mars/server/entity";
+import {downCastEventState, HeroOrPariah} from "@port-of-mars/server/rooms/game/state/marsevents/state";
 
 const logger = getLogger(__filename);
 
-export type AbstractMarsEventVisitor ={[view in EventClientView]: (state: GameState, player: Player) => Array<GameEvent>};
+function getTopAdversary(state: GameState, player: Player): Player {
+  let maxVictoryPoints: number = -1;
+  let adversary!: Player;
+  for (const p of state.players) {
+    if (p.role != player.role) {
+      if (p.victoryPoints > maxVictoryPoints) {
+        maxVictoryPoints = p.victoryPoints;
+        adversary = p;
+      }
+    }
+  }
+  return adversary;
+}
+
+export type AbstractMarsEventVisitor = { [view in EventClientView]: (state: GameState, player: Player) => Array<GameEvent> };
 
 // bot actions: voting events
 export class MarsEventVisitor implements AbstractMarsEventVisitor {
   NO_CHANGE(state: GameState, player: Player): Array<GameEvent> {
     return [new SetPlayerReadiness({value: true, role: player.role})]
   }
+
   AUDIT(state: GameState, player: Player): Array<GameEvent> {
     return [new SetPlayerReadiness({value: true, role: player.role})]
   }
+
   DISABLE_CHAT(state: GameState, player: Player): Array<GameEvent> {
     return [new SetPlayerReadiness({value: true, role: player.role})]
   }
+
   VOTE_YES_NO(state: GameState, player: Player): Array<GameEvent> {
     return [new VotedForPersonalGain({vote: state.upkeep > 30, role: player.role})]
   }
+
   VOTE_FOR_PLAYER_SINGLE(state: GameState, player: Player): Array<GameEvent> {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const defaultRole: Role = _.find(ROLES, r => r !== player.role)!;
@@ -49,19 +67,42 @@ export class MarsEventVisitor implements AbstractMarsEventVisitor {
       return [r, p]
     }, [defaultRole, state.players[defaultRole].victoryPoints]);
 
-    return [new VotedForPhilanthropist({ voter: player.role, vote: role })]
+    return [new VotedForPhilanthropist({voter: player.role, vote: role})]
   }
+
   VOTE_FOR_PLAYER_HERO_PARIAH(state: GameState, player: Player): Array<GameEvent> {
-    // no corresponding mars event
-    return [new SetPlayerReadiness({value: true, role: player.role})]
+    // 1. check game state: has H or P been decided?
+    // if voting for hero or pariah, then local bot player (LBP) select another player randomly
+
+    switch (state.heroOrPariah) {
+        // if hero -> make preference for voting for LBP
+      case "hero":
+        return [new VoteHeroOrPariahRole({role: player.role, vote: player.role})];
+
+        // if pariah -> pick someone else that's not the LBP
+      case "pariah":
+        return [new VoteHeroOrPariahRole({role: player.role, vote: getTopAdversary(state, player).role})];
+
+        // 2. if not in hero or pariah voting phase 1, LBP submits vote for hero or pariah randomly
+      case "": {
+        return downCastEventState(HeroOrPariah, state, (eventState) => {
+          if (!eventState.hasVoted(player.role)) {
+            const choice = _.random(0, 1) ? 'hero' : 'pariah';
+            logger.debug('player %s choice %o', player.role, choice);
+            return [new VoteHeroOrPariah({role: player.role, heroOrPariah: choice})];
+          } else return [];
+        }) ?? [];
+      }
+    }
   }
+
   INFLUENCES_SELECT(state: GameState, player: Player): Array<GameEvent> {
     const savedResources: InvestmentData = {
-      culture: - player.inventory.culture,
-      finance: - player.inventory.finance,
-      government: - player.inventory.government,
-      legacy: - player.inventory.legacy,
-      science: - player.inventory.science,
+      culture: -player.inventory.culture,
+      finance: -player.inventory.finance,
+      government: -player.inventory.government,
+      legacy: -player.inventory.legacy,
+      science: -player.inventory.science,
       upkeep: 0
     };
 
@@ -80,9 +121,11 @@ export class MarsEventVisitor implements AbstractMarsEventVisitor {
     logger.info('influences draw %o', savedResources);
     return [new KeptResources({role: player.role, savedResources})]
   }
+
   INFLUENCES_DRAW(state: GameState, player: Player): Array<GameEvent> {
     return [new SelectedInfluence({role: player.role, influence: 'culture'})]
   }
+
   ACCOMPLISHMENT_SELECT_PURCHASED(state: GameState, player: Player): Array<GameEvent> {
     return [new SetPlayerReadiness({value: true, role: player.role})]
   }
@@ -95,8 +138,7 @@ export class ActorRunner implements Actor {
   [Phase.newRound](state: GameState, player: Player): Array<GameEvent> {
     if (player.ready) {
       return [];
-    }
-    else {
+    } else {
       return [new SetPlayerReadiness({value: true, role: player.role})];
     }
   }
@@ -118,7 +160,7 @@ export class ActorRunner implements Actor {
     const specialityCost = player.costs[speciality];
     const specialityUnits = Math.floor(tbs / specialityCost * 0.5);
     const upkeepCost = player.costs['upkeep'];
-    const upkeepUnits = Math.floor((tbs - specialityCost*specialityUnits)/upkeepCost);
+    const upkeepUnits = Math.floor((tbs - specialityCost * specialityUnits) / upkeepCost);
     const investment: InvestmentData = {
       culture: 0,
       finance: 0,
@@ -195,7 +237,12 @@ export class SimpleBot implements Bot {
   warningTime = 240;
   active = false;
 
-  constructor(public actor: ActorRunner, public player: Player) {}
+  constructor(public actor: ActorRunner, public player: Player) {
+  }
+
+  get shouldBeActive(): boolean {
+    return this.elapsed >= this.maxInactivityTime;
+  }
 
   static fromActor(player: Player): SimpleBot {
     return new SimpleBot(new ActorRunner(), player);
@@ -218,16 +265,12 @@ export class SimpleBot implements Bot {
     this.player.botWarning = this.elapsed >= this.warningTime;
   }
 
-  get shouldBeActive(): boolean {
-    return this.elapsed >= this.maxInactivityTime;
-  }
-
   act(state: GameState): Array<GameEvent> {
     this.incrementElapsed();
     if (this.active) {
       if (this.shouldBeActive) {
         const events = this.actor[state.phase](state, this.player);
-        logger.debug('actor events performed: %o', events);
+        if (events.length > 0) logger.debug('actor events performed: %o', events);
         return events;
       } else {
         return [new BotControlRelinquished({role: this.player.role})]

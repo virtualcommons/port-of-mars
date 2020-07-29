@@ -1,60 +1,60 @@
 .event-vote-for-player-hero-pariah {
   @include expand;
   @include make-column-and-center;
+}
 
-  .selected-background {
-    background-color: $light-accent;
-  }
+.selected-background {
+  background-color: $light-accent;
+}
 
-  .hero-title,
-  .pariah-title {
-    border-bottom: 0.125rem solid $light-accent;
-    color: $light-shade;
-    font-size: $font-large;
-  }
+.hero-title,
+.pariah-title {
+  border-bottom: 0.125rem solid $light-accent;
+  color: $light-shade;
+  font-size: $font-large;
+}
 
-  .selected-hero-text,
-  .selected-pariah-text {
-    margin: 1rem 0 2rem 0;
-    font-size: $font-small;
-  }
+.selected-hero-text,
+.selected-pariah-text {
+  margin: 1rem 0 2rem 0;
+  font-size: $font-small;
+}
 
-  .player-frame-container {
-    @include make-center;
+.player-frame-container {
+  @include make-center;
 
-    .player-frame {
-      height: 5rem;
-      width: 5rem;
-      padding: 0.25rem;
-      border: 0.125rem solid $light-accent;
-      border-radius: 50%;
-      margin: 0 1rem;
-      @include make-center;
-      @include default-transition-base;
-
-      &:hover {
-        @include default-scale-up;
-        cursor: pointer;
-      }
-
-      img {
-        height: 100%;
-      }
-    }
-  }
-
-  button {
-    @include reset-button;
-    height: 3rem;
-    width: 12rem;
+  .player-frame {
+    height: 5rem;
+    width: 5rem;
+    padding: 0.25rem;
     border: 0.125rem solid $light-accent;
-    margin: 0 0.5rem;
-    color: $light-accent;
+    border-radius: 50%;
+    margin: 0 1rem;
+    @include make-center;
     @include default-transition-base;
 
     &:hover {
-      color: $dark-shade;
-      background-color: $light-accent;
+      @include default-scale-up;
+      cursor: pointer;
     }
+
+    img {
+      height: 100%;
+    }
+  }
+}
+
+button {
+  @include reset-button;
+  height: 3rem;
+  width: 12rem;
+  border: 0.125rem solid $light-accent;
+  margin: 0 0.5rem;
+  color: $light-accent;
+  @include default-transition-base;
+
+  &:hover {
+    color: $dark-shade;
+    background-color: $light-accent;
   }
 }

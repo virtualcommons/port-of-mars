@@ -1,13 +1,19 @@
 import * as _ from "lodash";
+import {getEventName, MarsEventState, MarsEventStateConstructor,} from "./common";
+import {ActionOrdering, GameState} from "@port-of-mars/server/rooms/game/state";
 import {
-  getEventName,
-  MarsEventState,
-  MarsEventStateConstructor,
-} from "./common";
-import { GameState, ActionOrdering } from "@port-of-mars/server/rooms/game/state";
-import {
-  CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER,
-  Role, ROLES, Resource, InvestmentData, MarsLogCategory, ResourceCostData, RESOURCES
+  CURATOR,
+  ENTREPRENEUR,
+  InvestmentData,
+  MarsLogCategory,
+  PIONEER,
+  POLITICIAN,
+  RESEARCHER,
+  Resource,
+  ResourceCostData,
+  RESOURCES,
+  Role,
+  ROLES
 } from "@port-of-mars/shared/types";
 import {COST_INAFFORDABLE} from "@port-of-mars/shared/settings";
 import {getLogger} from "@port-of-mars/server/settings";
@@ -43,8 +49,11 @@ export interface MarsEventSerialized {
 
 export interface BaseEvent {
   initialize?(game: GameState): void;
+
   finalize(game: GameState): void;
+
   getData?(): Record<string, unknown>;
+
   toJSON(): MarsEventSerialized;
 }
 
@@ -68,8 +77,8 @@ export abstract class BaseEvent implements MarsEventState {
 export class Audit extends BaseEvent {
   finalize(game: GameState) {
     game.log(
-      `You will be able to view other players' resources. Hover over each player tab on the right to reveal their inventory.`,
-      `${MarsLogCategory.event}: ${formatEventName(Audit.name)}`
+        `You will be able to view other players' resources. Hover over each player tab on the right to reveal their inventory.`,
+        `${MarsLogCategory.event}: ${formatEventName(Audit.name)}`
     );
   }
 }
@@ -104,8 +113,8 @@ export class BondingThroughAdversity extends BaseEvent {
   /**
    * Change Influence votes associated with each Role after a Player votes.
    * @param player The Role
-   * @param vote The Influence the Player voted for 
-   * 
+   * @param vote The Influence the Player voted for
+   *
    */
   updateVotes(player: Role, vote: Resource): void {
     this.votes[player] = vote;
@@ -114,8 +123,8 @@ export class BondingThroughAdversity extends BaseEvent {
   /**
    * Change each Player's resource inventory with their Influence vote via game state and
    * push a message to the mars log.
-   * @param game The current Game State 
-   * 
+   * @param game The current Game State
+   *
    */
   finalize(game: GameState): void {
     for (const role of ROLES) {
@@ -144,8 +153,8 @@ export class ChangingTides extends BaseEvent {
       player.accomplishments.draw(1);
     }
     game.log(
-      'Each player discards their current Accomplishments and draws one new Accomplishment.',
-      `${MarsLogCategory.event}: ${formatEventName(ChangingTides.name)}`
+        'Each player discards their current Accomplishments and draws one new Accomplishment.',
+        `${MarsLogCategory.event}: ${formatEventName(ChangingTides.name)}`
     );
   }
 }
@@ -185,7 +194,7 @@ export class BreakdownOfTrust extends BaseEvent {
       player.timeBlocks = this.savedtimeBlockAllocations[player.role];
     }
     game.log(`Each player can choose to save up to 2 units of Influence that they already own. The rest will be lost.`,
-      `${MarsLogCategory.event}: ${formatEventName(BreakdownOfTrust.name)}`
+        `${MarsLogCategory.event}: ${formatEventName(BreakdownOfTrust.name)}`
     );
   }
 }
@@ -241,19 +250,23 @@ export class CompulsivePhilanthropy extends BaseEvent {
     }
     const winner: Role = _.find(this.order, (w: Role) => winners.includes(w)) || this.order[0];
     game.log(
-      `The ${winner} was voted to be Compulsive Philanthropist with ${count} votes. The ${winner} invested all of their timeblocks into System Health.`,
-      `${MarsLogCategory.event}: ${formatEventName(CompulsivePhilanthropy.name)}`
+        `The ${winner} was voted to be Compulsive Philanthropist with ${count} votes. The ${winner} invested all of their timeblocks into System Health.`,
+        `${MarsLogCategory.event}: ${formatEventName(CompulsivePhilanthropy.name)}`
     );
-    game.pendingMarsEventActions.push({ordering: ActionOrdering.LAST, execute: (state) => {
-      state.increaseSystemHealth(state.players[winner].timeBlocks);
-      state.players[winner].timeBlocks = 0;
-    }});
+    game.pendingMarsEventActions.push({
+      ordering: ActionOrdering.LAST, execute: (state) => {
+        state.increaseSystemHealth(state.players[winner].timeBlocks);
+        state.players[winner].timeBlocks = 0;
+      }
+    });
   }
 
-  getData()  {
-    return { votes: this.votes, order: this.order };
+  getData() {
+    return {votes: this.votes, order: this.order};
   }
 }
+
+////////////////////////// Crop Failure //////////////////////////
 
 @assocEventId
 export class CropFailure extends BaseEvent {
@@ -262,6 +275,8 @@ export class CropFailure extends BaseEvent {
     state.log(`Crop failure has destroyed 20 system health.`, `${MarsLogCategory.event}: Crop Failure`);
   }
 }
+
+////////////////////////// Difficult Conditions //////////////////////////
 
 @assocEventId
 export class DifficultConditions extends BaseEvent {
@@ -272,6 +287,8 @@ export class DifficultConditions extends BaseEvent {
     state.log(`System Health costs twice as many Time Blocks as usual this round.`, `${MarsLogCategory.event}: Difficult Conditions`)
   }
 }
+
+////////////////////////// Efforts Wasted //////////////////////////
 
 @assocEventId
 export class EffortsWasted extends BaseEvent {
@@ -304,10 +321,92 @@ export class EffortsWasted extends BaseEvent {
       }
     }
     state.log(discards.join(', '),
-      `${MarsLogCategory.event}: Efforts Wasted`
+        `${MarsLogCategory.event}: Efforts Wasted`
     )
   }
 }
+
+////////////////////////// Hero or Pariah //////////////////////////
+
+type HeroOrPariahData = Partial<{ [role in Role]: 'hero' | 'pariah' | '' }>
+type playerVotesData = { [role in Role]: Role }
+
+@assocEventId
+export class HeroOrPariah extends BaseEvent {
+  private static defaultPlayerVotes: playerVotesData = {
+    [CURATOR]: CURATOR,
+    [ENTREPRENEUR]: ENTREPRENEUR,
+    [PIONEER]: PIONEER,
+    [POLITICIAN]: POLITICIAN,
+    [RESEARCHER]: RESEARCHER
+  }
+  private heroOrPariahVotes: HeroOrPariahData = {};
+  private playerVotes: playerVotesData;
+
+  constructor(data?: { heroOrPariahVotes?: HeroOrPariahData; playerVotes: playerVotesData; order: Array<Role> }) {
+    super();
+    this.playerVotes = data?.playerVotes ?? _.cloneDeep(HeroOrPariah.defaultPlayerVotes);
+  }
+
+  hasVoted(role: Role) {
+    return !_.isUndefined(this.heroOrPariahVotes[role]);
+  }
+
+  voteHeroOrPariah(player: Role, vote: 'hero' | 'pariah', state: GameState): void {
+    this.heroOrPariahVotes[player] = vote;
+    logger.debug('votes: %o',this.heroOrPariahVotes);
+    // check that all players have voted
+    if (Object.keys(this.heroOrPariahVotes).length === ROLES.length) {
+      // number of hero votes
+      let heroVotes = Object.values(this.heroOrPariahVotes).filter(v => v == 'hero').length;
+
+      // FIXME this will probably end to change when we have > 5 players in a group
+      state.heroOrPariah = heroVotes > 2 ? 'hero' : 'pariah';
+    }
+  }
+
+  voteForPlayer(voter: Role, heroOrPariah: Role): void {
+    this.playerVotes[voter] = heroOrPariah;
+  }
+
+  finalize(state: GameState): void {
+
+    // determine who is hero or pariah
+    const votes: { [role in Role]: number } = {
+      [CURATOR]: 0,
+      [ENTREPRENEUR]: 0,
+      [PIONEER]: 0,
+      [POLITICIAN]: 0,
+      [RESEARCHER]: 0
+    };
+
+    for (const votedPlayer of Object.values(this.playerVotes)) {
+      votes[votedPlayer] += 1;
+    }
+
+    const winners = _.orderBy(_.toPairs(votes), (o) => o[1], 'desc');
+
+    const winner: Role = winners[0][0] as Role;
+
+    // if winner is a hero
+    if (state.heroOrPariah == 'hero') {
+      // gain 4 of their speciality resource
+      const specialty = state.players[winner].specialty;
+      state.players[winner].inventory[specialty] += 4;
+      state.log(`${winner} has gained 4 ${specialty} after being voted a Hero.`, `${MarsLogCategory.event}: Hero Or Pariah`);
+
+      // if winner is pariah
+    } else {
+      // lose all resources
+      for (const resource of RESOURCES) {
+        state.players[winner].inventory[resource] = 0;
+      }
+      state.log(`${winner} has lost all their Influence resources after being voted a Pariah.`, `${MarsLogCategory.event}: Hero Or Pariah`);
+    }
+  }
+}
+
+////////////////////////// Hull Breach //////////////////////////
 
 @assocEventId
 export class HullBreach extends BaseEvent {
@@ -316,6 +415,8 @@ export class HullBreach extends BaseEvent {
     state.log(`A hull breach has destroyed 7 System Health.`, `${MarsLogCategory.event}: Hull Breach`);
   }
 }
+
+////////////////////////// Interdisciplinary //////////////////////////
 
 @assocEventId
 export class Interdisciplinary extends BaseEvent {
@@ -334,7 +435,7 @@ export class Interdisciplinary extends BaseEvent {
       this.makeResourcesAvailable(state.players[role].costs);
     }
     state.log(`In this round, each player can spend 3 time blocks to earn an influence in either of the 2 influences they normally can't create.`,
-      `${MarsLogCategory.event}: Interdisciplinary`
+        `${MarsLogCategory.event}: Interdisciplinary`
     );
   }
 }
@@ -348,31 +449,39 @@ export class LifeAsUsual extends BaseEvent {
   }
 }
 
+////////////////////////// Lost Time //////////////////////////
+
 @assocEventId
 export class LostTime extends BaseEvent {
   finalize(game: GameState) {
-    game.pendingMarsEventActions.push({ordering: ActionOrdering.LAST, execute: (state) => {
-      for (const role of ROLES) {
-        const timeBlocks = state.players[role].timeBlocks - 5;
-        state.players[role].timeBlocks = Math.max(0, timeBlocks);
+    game.pendingMarsEventActions.push({
+      ordering: ActionOrdering.LAST, execute: (state) => {
+        for (const role of ROLES) {
+          const timeBlocks = state.players[role].timeBlocks - 5;
+          state.players[role].timeBlocks = Math.max(0, timeBlocks);
+        }
+        state.log(
+            `All players have has 5 time fewer (or zero) blocks to invest during this round.`,
+            `${MarsLogCategory.event}: ${formatEventName(LostTime.name)}`
+        );
       }
-      state.log(
-        `All players have has 5 time fewer (or zero) blocks to invest during this round.`,
-        `${MarsLogCategory.event}: ${formatEventName(LostTime.name)}`
-      );
-    }});
+    });
   }
 }
+
+////////////////////////// Markets Closed //////////////////////////
 
 @assocEventId
 export class MarketsClosed extends BaseEvent {
   finalize(state: GameState): void {
     state.disableTrading();
     state.log(`Markets Closed: Players may not trade Influences this round.`,
-      `${MarsLogCategory.event}: Markets Closed`
+        `${MarsLogCategory.event}: Markets Closed`
     );
   }
 }
+
+////////////////////////// Murphy's Law //////////////////////////
 
 @assocEventId
 export class MurphysLaw extends BaseEvent {
@@ -409,65 +518,71 @@ abstract class OutOfCommission extends BaseEvent {
   }
 
   finalize(game: GameState): void {
-    game.pendingMarsEventActions.push({ordering: ActionOrdering.MIDDLE, execute: (state) => {
-      const role: Role = this.playerOutOfCommission(this.player);
-      state.players[role].timeBlocks = 3;
-      state.log(
-        `${this.player} has 3 time blocks to invest during this round.`,
-        `${MarsLogCategory.event}: ${formatEventName(OutOfCommission.name)}`
-      );
-    }});
+    game.pendingMarsEventActions.push({
+      ordering: ActionOrdering.MIDDLE, execute: (state) => {
+        const role: Role = this.playerOutOfCommission(this.player);
+        state.players[role].timeBlocks = 3;
+        state.log(
+            `${this.player} has 3 time blocks to invest during this round.`,
+            `${MarsLogCategory.event}: ${formatEventName(OutOfCommission.name)}`
+        );
+      }
+    });
   }
 
   getData() {
-    return { roles: this.roles };
+    return {roles: this.roles};
   }
 }
 
 // Curator
 @assocEventId
 export class OutOfCommissionCurator extends OutOfCommission {
+  player: Role = this.roles.Curator;
+
   constructor() {
     super();
   }
-  player: Role = this.roles.Curator;
 }
 
 // Politician
 @assocEventId
 export class OutOfCommissionPolitician extends OutOfCommission {
+  player: Role = this.roles.Politician;
+
   constructor() {
     super();
   }
-  player: Role = this.roles.Politician;
 }
 
 // Researcher
 @assocEventId
 export class OutOfCommissionResearcher extends OutOfCommission {
+  player: Role = this.roles.Researcher;
+
   constructor() {
     super();
   }
-  player: Role = this.roles.Researcher;
 }
 
 // Pioneer
 @assocEventId
 export class OutOfCommissionPioneer extends OutOfCommission {
+  player: Role = this.roles.Pioneer;
+
   constructor() {
     super();
   }
-
-  player: Role = this.roles.Pioneer;
 }
 
 // Entrepreneur
 @assocEventId
 export class OutOfCommissionEntrepreneur extends OutOfCommission {
+  player: Role = this.roles.Entrepreneur;
+
   constructor() {
     super();
   }
-  player: Role = this.roles.Entrepreneur;
 }
 
 ////////////////////////// PersonalGain //////////////////////////
@@ -515,18 +630,20 @@ export class PersonalGain extends BaseEvent {
 
   finalize(game: GameState) {
     const playerVotingInfo = this.playerVotingInfo(this.votes);
-    game.pendingMarsEventActions.push({ordering: ActionOrdering.FIRST, execute: (state) => {
-      let systemHealthReduction = 0;
-      for (const role of ROLES) {
-        if (this.votes[role]) {
-          state.players[role].timeBlocks += 6;
-          systemHealthReduction += 6;
+    game.pendingMarsEventActions.push({
+      ordering: ActionOrdering.FIRST, execute: (state) => {
+        let systemHealthReduction = 0;
+        for (const role of ROLES) {
+          if (this.votes[role]) {
+            state.players[role].timeBlocks += 6;
+            systemHealthReduction += 6;
+          }
         }
+        state.decreaseSystemHealth(systemHealthReduction);
+        const message = `System health decreased by ${systemHealthReduction}. The following players voted yes: ${playerVotingInfo}`;
+        state.log(message, `${MarsLogCategory.event}: ${formatEventName(PersonalGain.name)}`);
       }
-      state.decreaseSystemHealth(systemHealthReduction);
-      const message = `System health decreased by ${systemHealthReduction}. The following players voted yes: ${playerVotingInfo}`;
-      state.log(message, `${MarsLogCategory.event}: ${formatEventName(PersonalGain.name)}`);
-    }});
+    });
   }
 
   getData() {
@@ -550,7 +667,7 @@ export class SolarFlare extends BaseEvent {
     state.decreaseSystemHealth(5);
     state.disableTrading();
     state.log(`A Solar Flare has destroyed 5 System Health. Chat and trade are not available in this round.`,
-      `${MarsLogCategory.event}: Solar Flare`
+        `${MarsLogCategory.event}: Solar Flare`
     );
   }
 }
@@ -563,4 +680,14 @@ export class Stymied extends BaseEvent {
     }
     state.log(`Players may not earn their specialty Influence this round.`, `${MarsLogCategory.event}: Stymied`)
   }
+}
+
+export function downCastEventState<T extends BaseEvent, R>(
+    classDef: { new(...args: any): T },
+    game: GameState,
+    callBack: (currentEvent: T) => R): R | undefined {
+  if (game.currentEvent.state instanceof classDef) {
+    const eventState = game.currentEvent.state;
+    return callBack(eventState);
+  } else logger.warn('the expected event state is the wrong type ');
 }

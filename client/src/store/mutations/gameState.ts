@@ -93,6 +93,10 @@ function TOGGLE_LOADING(state: State) {
   state.loading = reverse;
 }
 
+function SET_HERO_OR_PARIAH(state: State, vote: 'hero' | 'pariah') {
+  state.heroOrPariah = vote;
+}
+
 export default {
   SET_GAME_PHASE,
   SET_ROUND,
@@ -106,5 +110,6 @@ export default {
   SET_MARS_EVENTS_PROCESSED,
   SET_USER,
   SET_WINNERS,
+  SET_HERO_OR_PARIAH,
   TOGGLE_LOADING
 };

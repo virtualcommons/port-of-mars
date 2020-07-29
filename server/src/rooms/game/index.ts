@@ -5,7 +5,9 @@ import {
   BondingThroughAdversityCmd,
   BreakdownOfTrustCmd,
   CancelTradeRequestCmd,
-  DiscardAccomplishmentCmd, StageDiscardOfPurchasedAccomplishmentCmd,
+  StageDiscardOfPurchasedAccomplishmentCmd,
+  ChooseHeroOrPariahCmd, ChooseHeroOrPariahVoteRoleCmd,
+  DiscardAccomplishmentCmd,
   OutOfCommissionCuratorCmd,
   OutOfCommissionEntrepreneurCmd,
   OutOfCommissionPioneerCmd,
@@ -120,6 +122,10 @@ function prepareRequest(room: Room<GameState> & Game, r: Requests, client: Clien
       return BondingThroughAdversityCmd.fromReq(r, player);
     case 'breakdown-of-trust':
       return BreakdownOfTrustCmd.fromReq(r, player);
+    case 'vote-hero-or-pariah':
+      return ChooseHeroOrPariahCmd.fromReq(r, player);
+    case 'vote-hero-or-pariah-role':
+      return ChooseHeroOrPariahVoteRoleCmd.fromReq(r, player);
   }
 }
 

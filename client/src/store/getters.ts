@@ -53,6 +53,10 @@ export default {
     return op;
   },
 
+  // tradeFilter(state: State): boolean {
+  //   return state.userInterface.toggleYourTrades;
+  // },
+
   /**
    * Gets the current event.
    * @param state The current state of the game.
@@ -152,5 +156,9 @@ export default {
         ...state.players[role].systemHealthChanges.purchases.map(p => ({ label: p.description, role, value: p.systemHealth})));
     }
     return purchases;
+  },
+
+  heroOrPariah(state: State) {
+    return state.heroOrPariah;
   }
 }

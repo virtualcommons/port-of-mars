@@ -19,11 +19,11 @@ export class DevLogging implements Logging {
   paths = [
     {
       match: /\/code\/server\/src\/rooms\/game\/events\/.*/,
-      level: 'warn'
+      level: 'trace'
     },
     {
       match: /.*/,
-      level: 'info'
+      level: 'trace'
     }]
 
   findMatchingLogger(filename: string): LogService {

@@ -1,93 +1,94 @@
 <template>
   <div class="event-vote-for-player-hero-pariah">
-    <p class="hero-title">Select a Hero</p>
-
-    <div class="player-frame-container">
-      <div
-        v-for="member in members"
-        class="player-frame"
-        v-bind:class="{ 'selected-background': member === selectedHero }"
-        :key="member + 2"
+    <!-- Select Hero or Pariah -->
+    <p class="hero-title">Select Hero or Pariah</p>
+    <b-form>
+      <b-form-radio-group
+        :options="options"
+        :value="voteHeroOrPariah"
+        @change="submitHeroOrPariah"
+        button-variant="outline-warning"
+        buttons
+        size="lg"
       >
-        <img
-          @click="selectHero(member)"
-          :src="require(`@port-of-mars/client/assets/characters/${member}.png`)"
-          alt="Player"
-        />
+      </b-form-radio-group>
+    </b-form>
+
+    <p v-if="voteHeroOrPariah">You voted for a {{ voteHeroOrPariah }}.</p>
+    <p v-if="!decidedHeroOrPariah">Please wait while we collect
+      other players' votes.</p>
+
+    <div v-if="voteHeroOrPariah">
+      <p class="pariah-title">Select a {{ decidedHeroOrPariah }}</p>
+
+      <div class="player-frame-container">
+        <div
+          :key="player"
+          class="player-frame"
+          v-bind:class="{ 'selected-background': player === role }"
+          v-for="player in roles"
+        >
+          <img
+            :src="require(`@port-of-mars/client/assets/characters/${player}.png`)"
+            @click="selectRole(player)"
+            alt="Player"
+          />
+        </div>
       </div>
+
+      <p
+        :style="role === 'None Selected' ? 'color: var(--light-shade-25)' : ''"
+        class="selected-pariah-text"
+      >
+        {{ role }}
+      </p>
     </div>
 
-    <p
-      :style="selectedHero === 'None Selected' ? 'color: var(--light-shade-25)' : ''"
-      class="selected-hero-text"
-    >
-      {{ selectedHero }}
-    </p>
-
-    <p class="pariah-title">Select a Pariah</p>
-
-    <div class="player-frame-container">
-      <div
-        v-for="member in members"
-        class="player-frame"
-        v-bind:class="{ 'selected-background': member === selectedPariah }"
-        :key="member + 3"
-      >
-        <img
-          @click="selectPariah(member)"
-          :src="require(`@port-of-mars/client/assets/characters/${member}.png`)"
-          alt="Player"
-        />
-      </div>
-    </div>
-
-    <p
-      :style="selectedPariah === 'None Selected' ? 'color: var(--light-shade-25)' : ''"
-      class="selected-pariah-text"
-    >
-      {{ selectedPariah }}
-    </p>
-
-    <button type="button" name="button" @click="submitHeroPariah">Done</button>
+    <!-- Vote for player -->
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
-import { Role } from '@port-of-mars/shared/types';
+  import {Component, Inject, Vue} from 'vue-property-decorator';
+  import {Role, ROLES} from '@port-of-mars/shared/types';
+  import {GameRequestAPI} from '@port-of-mars/client/api/game/request';
 
-@Component({})
-export default class VoteForPlayerHeroPariah extends Vue {
-  private selectedHero = 'None Selected';
-  private selectedPariah = 'None Selected';
+  @Component({})
+  export default class VoteForPlayerHeroPariah extends Vue {
+    @Inject() api!: GameRequestAPI;
+    voteHeroOrPariah: 'hero' | 'pariah' | '' = '';
+    role: Role | '' = '';
 
-  get members(): Array<string> {
-    // if (this.$store.state.role !== '') {
-    //   return ['Researcher', 'Pioneer', 'Curator', 'Entrepreneur', 'Politician'].filter(
-    //     name => name !== this.$store.state.role
-    //   );
-    // }
-    return ['Researcher', 'Pioneer', 'Curator', 'Entrepreneur', 'Politician'];
+    options = [
+      {text: 'Hero', value: 'hero'},
+      {text: 'Pariah', value: 'pariah'}
+    ]
+
+    get decidedHeroOrPariah() {
+      return this.$tstore.getters.heroOrPariah;
+    }
+
+    get roles(): Array<Role> {
+      return ROLES;
+    }
+
+    private submitHeroOrPariah(vote: 'hero' | 'pariah') {
+      this.voteHeroOrPariah = vote;
+      if (this.voteHeroOrPariah) {
+        this.api.saveHeroOrPariah(this.voteHeroOrPariah);
+        console.log('VOTED FOR: ', this.voteHeroOrPariah);
+      }
+    }
+
+    private selectRole(member: Role): void {
+      this.role = member;
+      this.api.saveHeroOrPariahRole(this.role);
+      console.log('VOTED ROLE: ', this.role);
+    }
+
   }
-
-  private selectHero(member: Role): void {
-    this.selectedHero = member;
-    console.log('SELECTED HERO: ', this.selectedHero);
-  }
-
-  private selectPariah(member: Role): void {
-    this.selectedPariah = member;
-    console.log('SELECTED PARIAH: ', this.selectedPariah);
-  }
-
-  private submitHeroPariah(): void {
-    // Note: Do we want to allow hero and pariah to be same person?
-    console.log('SUBMITTED HERO: ', this.selectedHero);
-    console.log('SUBMITTED PARIAH: ', this.selectedPariah);
-  }
-}
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/events/events/views/VoteForPlayerHeroPariah.scss';
+  @import '@port-of-mars/client/stylesheets/game/phases/events/events/views/VoteForPlayerHeroPariah.scss';
 </style>

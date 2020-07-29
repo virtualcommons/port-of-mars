@@ -229,6 +229,7 @@ export function getAllMarsEvents(): Array<MarsEventDeckItem> {
     'cropFailure',
     'difficultConditions',
     'effortsWasted',
+    'heroOrPariah',
     'hullBreach',
     'interdisciplinary',
     'lifeAsUsual',

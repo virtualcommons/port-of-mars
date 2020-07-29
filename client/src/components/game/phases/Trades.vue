@@ -52,6 +52,9 @@
     readonly api!: TutorialAPI;
 
     private checked: boolean = false;
+    // get checked(): boolean {
+    //   return this.$tstore.getters.tradeFilter;
+    // }
 
     /**
      * If player is ready, disabled is true.
@@ -84,6 +87,7 @@
       return trades
         // filter the trades by active filter (show all trades vs local player's trades)
         .filter((trade) => {
+          // this.$tstore.commit('SET_TRADE_FILTER', !this.checked);
           return !this.checked || this.associatedWithTrade(trade) != -1;
         })
 

@@ -242,6 +242,7 @@ export interface GameData {
   roundIntroduction: RoundIntroductionData;
   tradeSet: TradeSetData;
   winners: Array<Role>;
+  heroOrPariah: '' | 'hero' | 'pariah';
 }
 
 export interface QuizData {

@@ -2,27 +2,35 @@ import {
   AccomplishmentData,
   ChatMessageData,
   InvestmentData,
-  Phase,
-  Role,
-  TradeData,
-  Resource,
   MarsLogCategory,
+  Phase,
+  Resource,
+  Role,
   SERVER,
-  ServerRole
+  ServerRole,
+  TradeData
 } from '@port-of-mars/shared/types';
 import {GameSerialized, GameState} from '@port-of-mars/server/rooms/game/state';
-import { GameEvent } from '@port-of-mars/server/rooms/game/events/types';
+import {GameEvent} from '@port-of-mars/server/rooms/game/events/types';
 import {
-  CompulsivePhilanthropy, PersonalGain,
-  OutOfCommissionCurator, OutOfCommissionPolitician,
-  OutOfCommissionResearcher, OutOfCommissionPioneer,
-  OutOfCommissionEntrepreneur, BondingThroughAdversity, BreakdownOfTrust, EffortsWasted
-}
-  from '@port-of-mars/server/rooms/game/state/marsevents/state';
+  BondingThroughAdversity,
+  BreakdownOfTrust,
+  CompulsivePhilanthropy,
+  downCastEventState,
+  EffortsWasted,
+  HeroOrPariah,
+  OutOfCommissionCurator,
+  OutOfCommissionEntrepreneur,
+  OutOfCommissionPioneer,
+  OutOfCommissionPolitician,
+  OutOfCommissionResearcher,
+  PersonalGain
+} from '@port-of-mars/server/rooms/game/state/marsevents/state';
 import * as entities from '@port-of-mars/server/entity/GameEvent';
-import { getLogger } from "@port-of-mars/server/settings";
+import {getLogger} from "@port-of-mars/server/settings";
 import _ from "lodash";
 import {getAccomplishmentByID} from "@port-of-mars/server/data/Accomplishment";
+import {VoteHeroOrPariahData} from "@port-of-mars/shared/game";
 
 const logger = getLogger(__filename);
 
@@ -612,6 +620,38 @@ export class StagedDiscardOfPurchasedAccomplishment extends GameEventWithData {
 }
 gameEventDeserializer.register(StagedDiscardOfPurchasedAccomplishment);
 
+// Hero or Pariah event - select Hero or Pariah (1/2)
+  export class VoteHeroOrPariah extends GameEventWithData {
+    constructor(public data: { role: Role, heroOrPariah: VoteHeroOrPariahData["heroOrPariah"] }) {
+      super();
+    }
+
+    apply(game: GameState) {
+      downCastEventState(HeroOrPariah, game, (eventState) => {
+        eventState.voteHeroOrPariah(this.data.role, this.data.heroOrPariah, game);
+
+      })
+    }
+  }
+
+gameEventDeserializer.register(VoteHeroOrPariah);
+
+// Hero or Pariah event - select player as Hero or Pariah (2/2)
+export class VoteHeroOrPariahRole extends GameEventWithData {
+  constructor(public data: {role: Role, vote: Role}) {
+    super();
+  }
+
+  apply(game: GameState) {
+    downCastEventState(HeroOrPariah, game, (eventState) => {
+      eventState.voteForPlayer(this.data.role, this.data.vote);
+      game.players[this.data.role].updateReadiness(true);
+    })
+  }
+}
+
+gameEventDeserializer.register(VoteHeroOrPariahRole);
+
 ////////////////////////// Bot Related //////////////////////////
 
 export class BotControlTaken extends GameEventWithData {
@@ -646,3 +686,4 @@ export class BotWarningAcknowledged extends GameEventWithData {
   }
 }
 gameEventDeserializer.register(BotWarningAcknowledged);
+
