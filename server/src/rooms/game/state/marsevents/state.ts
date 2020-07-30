@@ -250,7 +250,8 @@ export class CompulsivePhilanthropy extends BaseEvent {
     }
     const winner: Role = _.find(this.order, (w: Role) => winners.includes(w)) || this.order[0];
     game.log(
-        `The ${winner} was voted to be Compulsive Philanthropist with ${count} votes. The ${winner} invested all of their timeblocks into System Health.`,
+        `The ${winner} was voted to be Compulsive Philanthropist with ${count} votes. The ${winner} invested all 
+        of their time blocks into System Health.`,
         `${MarsLogCategory.event}: ${formatEventName(CompulsivePhilanthropy.name)}`
     );
     game.pendingMarsEventActions.push({
@@ -354,7 +355,7 @@ export class HeroOrPariah extends BaseEvent {
 
   voteHeroOrPariah(player: Role, vote: 'hero' | 'pariah', state: GameState): void {
     this.heroOrPariahVotes[player] = vote;
-    logger.debug('votes: %o',this.heroOrPariahVotes);
+    logger.debug('votes: %o', this.heroOrPariahVotes);
     // check that all players have voted
     if (Object.keys(this.heroOrPariahVotes).length === ROLES.length) {
       // number of hero votes
@@ -368,6 +369,8 @@ export class HeroOrPariah extends BaseEvent {
   voteForPlayer(voter: Role, heroOrPariah: Role): void {
     this.playerVotes[voter] = heroOrPariah;
   }
+
+  // FIXME corner cases for resolving voting ties
 
   finalize(state: GameState): void {
 
@@ -388,12 +391,14 @@ export class HeroOrPariah extends BaseEvent {
 
     const winner: Role = winners[0][0] as Role;
 
+
     // if winner is a hero
     if (state.heroOrPariah == 'hero') {
       // gain 4 of their speciality resource
       const specialty = state.players[winner].specialty;
       state.players[winner].inventory[specialty] += 4;
-      state.log(`${winner} has gained 4 ${specialty} after being voted a Hero.`, `${MarsLogCategory.event}: Hero Or Pariah`);
+      state.log(`${winner} is voted a Hero and has gained 4 ${specialty} after receiving ${votes[winner]} 
+      votes.`, `${MarsLogCategory.event}: Hero Or Pariah`);
 
       // if winner is pariah
     } else {
@@ -401,7 +406,8 @@ export class HeroOrPariah extends BaseEvent {
       for (const resource of RESOURCES) {
         state.players[winner].inventory[resource] = 0;
       }
-      state.log(`${winner} has lost all their Influence resources after being voted a Pariah.`, `${MarsLogCategory.event}: Hero Or Pariah`);
+      state.log(`${winner} is voted a Pariah and has lost all their Influence resources after receiving 
+      ${votes[winner]} votes.`, `${MarsLogCategory.event}: Hero Or Pariah`);
     }
   }
 }
