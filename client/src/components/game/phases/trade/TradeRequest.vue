@@ -57,7 +57,7 @@
           :disabled="!validateTrade"
           class="tour-send-trade"
         >
-          Send Trade
+          Send Trade Request
         </button>
       </div>
     </div>
