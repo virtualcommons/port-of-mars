@@ -2,15 +2,7 @@
   <div class="event-select-resources">
     <div class="wrapper">
       <div class="topbar">
-        <p class="title">Resources you can save</p>
-
-        <TimeBlockMeter
-          class="discrete-bar"
-          :usedTimeBlocks="remainingTime"
-          :totalTimeBlocks="timeBlockTotal"
-        />
-
-        <p class="status">[ {{ remainingTime }} ]</p>
+        <p class="title"><strong>Directions: </strong>Save 2 units of influence</p>
       </div>
 
       <div class="cards">
@@ -30,20 +22,16 @@
 import { Vue, Component, Inject } from 'vue-property-decorator';
 import {
   Resource,
-  ResourceAmountData,
-  RESOURCES,
   INVESTMENTS,
   ResourceCostData,
   Investment,
 } from '@port-of-mars/shared/types';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
-import TimeBlockMeter from '@port-of-mars/client/components/game/phases/investment/TimeBlockMeter.vue';
 import InvestmentCard from '@port-of-mars/client/components/game/phases/investment/InvestmentCard.vue';
 import * as _ from 'lodash';
 
 @Component({
   components: {
-    TimeBlockMeter,
     InvestmentCard,
   },
 })
@@ -56,6 +44,7 @@ export default class InfluencesSelect extends Vue {
 
   get investments(): any {
     const p = this.$tstore.getters.player;
+
     return Object.keys(this.origPending).map((investment) => {
       return {
         name: investment,
