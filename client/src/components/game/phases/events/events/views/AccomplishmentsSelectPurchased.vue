@@ -2,6 +2,14 @@
   <div class="event-select-purchased-accomplishment-container">
     <div class="actions">
       <div>
+        <template v-if="purchasedAccomplishmentsLength > 0">
+          <p>
+            {{ marsEvent.effect }}
+          </p>
+          <p>
+            {{ marsEvent.flavorText }}
+          </p>
+        </template>
         <p v-if="purchasedAccomplishmentsLength === 0">
           No Purchased Accomplishments. Please click 'Continue'.
         </p>
@@ -22,7 +30,7 @@
 
 <script lang="ts">
   import {Vue, Component, Prop, Inject} from 'vue-property-decorator';
-import { AccomplishmentData, RESEARCHER } from '@port-of-mars/shared/types';
+  import {AccomplishmentData, MarsEventData, RESEARCHER} from '@port-of-mars/shared/types';
 import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
   import {AbstractGameAPI} from "@port-of-mars/client/api/game/types";
 
@@ -50,6 +58,10 @@ export default class AccomplishmentsSelectPurchased extends Vue {
     victoryPoints: 0,
     effect: '',
   };
+
+  get marsEvent(): MarsEventData {
+    return this.$tstore.getters.currentEvent!;
+  }
 
   get purchasedAccomplishments() {
     const purchased = this.$tstore.getters.player.accomplishments.purchased;
