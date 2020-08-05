@@ -78,36 +78,16 @@ function prepareRequest(room: Room<GameState> & Game, r: Requests, client: Clien
   const player = room.getPlayer(client);
   player.resetElapsed();
   switch (r.kind) {
-    case 'send-chat-message':
-      return SendChatMessageCmd.fromReq(r, room.state, player);
-    case 'set-next-phase':
-      return SetNextPhaseCmd.fromReq(room.state);
-    case 'reset-bot-warning':
-      return ResetBotWarningCmd.fromReq(player);
-    case 'set-player-readiness':
-      return SetPlayerReadinessCmd.fromReq(r, player);
-    case 'reset-game':
-      return ResetGameCmd.fromReq(r, room.state);
-    case 'set-time-investment':
-      return TimeInvestmentCmd.fromReq(r, player);
-    case 'purchase-accomplishment-card':
-      return PurchaseAccomplishmentCmd.fromReq(r, player);
-    case 'discard-accomplishment-card':
-      return DiscardAccomplishmentCmd.fromReq(r, player);
-    case 'stage-discard-of-purchased-accomplishment-card':
-      return StageDiscardOfPurchasedAccomplishmentCmd.fromReq(r, player);
     case 'accept-trade-request':
       return AcceptTradeRequestCmd.fromReq(r);
-    case 'reject-trade-request':
-      return RejectTradeRequestCmd.fromReq(r);
+    case 'bonding-through-adversity':
+      return BondingThroughAdversityCmd.fromReq(r, player);
+    case 'breakdown-of-trust':
+      return BreakdownOfTrustCmd.fromReq(r, player);
     case 'cancel-trade-request':
       return CancelTradeRequestCmd.fromReq(r, player);
-    case 'send-trade-request':
-      return SendTradeRequestCmd.fromReq(r, player);
-    case 'personal-gain':
-      return PersonalGainVotes.fromReq(r, player);
-    case 'vote-for-philanthropist':
-      return VoteForPhilanthropistCmd.fromReq(r, player);
+    case 'discard-accomplishment-card':
+      return DiscardAccomplishmentCmd.fromReq(r, player);
     case 'out-of-commission-curator':
       return OutOfCommissionCuratorCmd.fromReq(r, player);
     case 'out-of-commission-politician':
@@ -118,10 +98,30 @@ function prepareRequest(room: Room<GameState> & Game, r: Requests, client: Clien
       return OutOfCommissionPioneerCmd.fromReq(r, player);
     case 'out-of-commission-entrepreneur':
       return OutOfCommissionEntrepreneurCmd.fromReq(r, player);
-    case 'bonding-through-adversity':
-      return BondingThroughAdversityCmd.fromReq(r, player);
-    case 'breakdown-of-trust':
-      return BreakdownOfTrustCmd.fromReq(r, player);
+    case 'personal-gain':
+      return PersonalGainVotes.fromReq(r, player);
+    case 'purchase-accomplishment-card':
+      return PurchaseAccomplishmentCmd.fromReq(r, player);
+    case 'reset-bot-warning':
+      return ResetBotWarningCmd.fromReq(player);
+    case 'reject-trade-request':
+      return RejectTradeRequestCmd.fromReq(r);
+    case 'reset-game':
+      return ResetGameCmd.fromReq(r, room.state);
+    case 'send-chat-message':
+      return SendChatMessageCmd.fromReq(r, room.state, player);
+    case 'send-trade-request':
+      return SendTradeRequestCmd.fromReq(r, player);
+    case 'set-next-phase':
+      return SetNextPhaseCmd.fromReq(room.state);
+    case 'set-player-readiness':
+      return SetPlayerReadinessCmd.fromReq(r, player);
+    case 'set-time-investment':
+      return TimeInvestmentCmd.fromReq(r, player);
+    case 'stage-discard-of-purchased-accomplishment-card':
+      return StageDiscardOfPurchasedAccomplishmentCmd.fromReq(r, player);
+    case 'vote-for-philanthropist':
+      return VoteForPhilanthropistCmd.fromReq(r, player);
     case 'vote-hero-or-pariah':
       return ChooseHeroOrPariahCmd.fromReq(r, player);
     case 'vote-hero-or-pariah-role':
