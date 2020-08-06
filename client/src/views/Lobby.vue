@@ -1,5 +1,5 @@
 <template>
-  <div class="c-waiting-lobby container">
+  <div class="lobby container">
     <div class="wrapper row">
       <div class="content col-12">
         <p>THIS PAGE IS TEMPORARY, WILL BE REMOVED</p>
@@ -27,7 +27,7 @@ import { DASHBOARD_PAGE } from '@port-of-mars/shared/routes';
 import moment from 'moment';
 
 @Component({})
-export default class WaitingLobby extends Vue {
+export default class Lobby extends Vue {
   @Inject() $client!: Client;
   private lobbyAPI: WaitingRequestAPI = new WaitingRequestAPI();
   private waitingUserCount: number = 0;
@@ -80,5 +80,5 @@ export default class WaitingLobby extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/views/WaitingLobby.scss';
+@import '@port-of-mars/client/stylesheets/views/Lobby.scss';
 </style>

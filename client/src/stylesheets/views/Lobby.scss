@@ -1,0 +1,26 @@
+.lobby {
+  height: 100vh !important;
+  width: 100vw !important;
+  max-width: none;
+  @include make-center;
+}
+
+.wrapper {
+  padding: 1rem;
+  margin: 0;
+  background-color: $dark-shade;
+}
+
+.content {
+  @include make-column-and-center;
+}
+
+p {
+  color: $light-shade;
+}
+
+p,
+a,
+button {
+  margin: 0.5rem 0;
+}

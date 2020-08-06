@@ -4,8 +4,8 @@ import {
   SentInvitation,
   RemovedClientFromLobby,
 } from '@port-of-mars/shared/lobby/responses';
-import { GAME_PAGE, LOGIN_PAGE } from '@port-of-mars/shared/routes';
-import WaitingLobby from '@port-of-mars/client/views/WaitingLobby.vue';
+import { GAME_PAGE } from '@port-of-mars/shared/routes';
+import Lobby from '@port-of-mars/client/views/Lobby.vue';
 
 // TODO: Temporary Implementation
 const GAME_DATA = 'gameData';
@@ -21,7 +21,7 @@ function setGameData(data: GameData) {
 
 export function applyWaitingServerResponses<T>(
   room: Room,
-  component: WaitingLobby
+  component: Lobby
 ) {
   const store = component.$tstore;
   const router = component.$router;
