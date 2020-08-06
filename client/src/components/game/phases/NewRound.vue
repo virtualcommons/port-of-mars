@@ -14,10 +14,11 @@
         </div>
         <div v-else>
           <p>
-            In the previous round you invested <b>{{ systemHealthContribution }}</b> and the rest
+            In the previous round you invested <b>{{ systemHealthContributed }}</b> and the rest
             of your group invested
             <b>{{ groupContributions }}</b> in System Health for a total of {{
-            totalSystemHealthContributions }}.
+              totalContributedSystemHealth
+            }}.
             Your group's average investment was {{ averageContribution }}.
           </p>
           <p>
@@ -72,11 +73,11 @@
     }
 
     get systemHealth() {
-      return _.clamp(this.$tstore.getters.systemHealth - this.totalSystemHealthContributions, 0, 100);
+      return _.clamp(this.$tstore.getters.systemHealth - this.totalTakenSystemHealth - this.totalContributedSystemHealth, 0, 100);
     }
 
     get nextRoundSystemHealth() {
-      return _.clamp(this.systemHealth + this.totalSystemHealthContributions + this.systemHealthMaintenanceCost, 0, 100);
+      return _.clamp(this.systemHealth + this.totalContributedSystemHealth + this.totalContributedSystemHealth - this.systemHealthMaintenanceCost, 0, 100);
     }
 
     get isFirstRound() {
@@ -84,11 +85,11 @@
     }
 
     get averageContribution() {
-      return this.totalSystemHealthContributions / 5;
+      return this.totalContributedSystemHealth / 5;
     }
 
-    get systemHealthContribution() {
-      return this.$tstore.getters.systemHealthContribution;
+    get systemHealthContributed() {
+      return this.$tstore.getters.systemHealthContributed;
     }
 
     get purchaseFields() {
@@ -120,7 +121,7 @@
     get tabularContributions() {
       const items = [
         {label: 'Prior System Health', role: 'System', value: this.systemHealth},
-        {label: 'Group Contributions', role: 'System', value: this.totalSystemHealthContributions},
+        {label: 'Group Contributions', role: 'System', value: this.totalContributedSystemHealth},
         ...this.$tstore.getters.purchaseSystemHealth,
         {label: 'Wear and Tear', role: 'System', value: this.systemHealthMaintenanceCost},
         {
@@ -135,7 +136,7 @@
         items.splice(2, 0, ...this.otherPlayerContributions().concat({
           label: 'System Health',
           role: this.$tstore.getters.player.role,
-          value: this.systemHealthContribution
+          value: this.systemHealthContributed
         }));
       }
       // Next Round System Health = Previous System Health + Group Contributions - Wear and Tear
@@ -155,11 +156,15 @@
     }
 
     get groupContributions() {
-      return this.totalSystemHealthContributions - this.systemHealthContribution;
+      return this.totalContributedSystemHealth - this.systemHealthContributed;
     }
 
-    get totalSystemHealthContributions() {
-      return this.$tstore.state.roundIntroduction.contributedSystemHealth;
+    get totalContributedSystemHealth() {
+      return this.$tstore.state.roundIntroduction.systemHealthContributed;
+    }
+
+    get totalTakenSystemHealth() {
+      return this.$tstore.state.roundIntroduction.systemHealthTaken;
     }
   }
 </script>

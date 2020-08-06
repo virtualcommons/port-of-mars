@@ -331,10 +331,6 @@ export class EnteredDiscardPhase extends KindOnlyGameEvent {
     game.phase = Phase.discard;
     logger.debug('phase: %s', Phase[game.phase]);
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
-    game.log(
-      `During Round ${game.round}, your group invested a total of ${game.contributedSystemHealth()} into System Health.
-        Updated System Health = ${game.nextRoundSystemHealth()}.`,
-      MarsLogCategory.systemHealth);
   }
 }
 gameEventDeserializer.register(EnteredDiscardPhase);
@@ -372,7 +368,8 @@ export class EnteredNewRoundPhase extends KindOnlyGameEvent {
     game.phase = Phase.newRound;
     game.timeRemaining = 60;
     game.round += 1;
-    game.roundIntroduction.addContribution(game.getPlayerContributions());
+    game.roundIntroduction.addContribution(game.systemHealthContributed());
+    game.roundIntroduction.addTaken(game.systemHealthTaken());
     game.log(`Round ${game.round} begins.`, MarsLogCategory.newRound);
 
     // FIXME: game.resetRound to encompass resets
@@ -386,11 +383,14 @@ gameEventDeserializer.register(EnteredNewRoundPhase);
 
 export class AddedSystemHealthContributions extends KindOnlyGameEvent {
   apply(game: GameState): void {
+    const prevSystemHealth = game.upkeep;
     game.updateSystemHealth();
 
     // system health - last round
     game.log(
-      `At the end of Round ${game.round}, System Health = ${game.upkeep}.`,
+      `At the end of Round ${game.round}, System Health = 
+      System Health' + Contributed - Taken = 
+      ${prevSystemHealth} + ${game.systemHealthContributed()} + ${game.systemHealthTaken()} = ${game.upkeep}.`,
       MarsLogCategory.systemHealth);
   }
 }

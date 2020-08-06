@@ -216,14 +216,15 @@ export class RoundIntroduction extends Schema implements RoundIntroductionData {
 
   fromJSON(data: RoundIntroductionData): void {
     this.maintenanceSystemHealth = data.maintenanceSystemHealth;
-    this.contributedSystemHealth = data.contributedSystemHealth;
+    this.systemHealthContributed = data.systemHealthContributed;
     this.accomplishmentPurchases.splice(0, this.accomplishmentPurchases.length, ...data.accomplishmentPurchases.map(ap => new AccomplishmentPurchase(ap)));
     this.completedTrades.splice(0, this.completedTrades.length, ...data.completedTrades.map(ct => new Trade(ct.id, ct.sender, ct.recipient, ct.status)));
   }
 
   toJSON(): RoundIntroductionData {
     return {
-      contributedSystemHealth: this.contributedSystemHealth,
+      systemHealthContributed: this.systemHealthContributed,
+      systemHealthTaken: this.systemHealthTaken,
       maintenanceSystemHealth: this.maintenanceSystemHealth,
       accomplishmentPurchases: this.accomplishmentPurchases.map(ap => ap.toJSON()),
       completedTrades: this.completedTrades.map(ct => ct.toJSON())
@@ -234,7 +235,10 @@ export class RoundIntroduction extends Schema implements RoundIntroductionData {
   maintenanceSystemHealth = -SYSTEM_HEALTH_MAINTENANCE_COST;
 
   @type('number')
-  contributedSystemHealth = 0;
+  systemHealthContributed = 0;
+
+  @type('number')
+  systemHealthTaken = 0;
 
   @type([AccomplishmentPurchase])
   accomplishmentPurchases = new ArraySchema<AccomplishmentPurchase>();
@@ -243,7 +247,11 @@ export class RoundIntroduction extends Schema implements RoundIntroductionData {
   completedTrades = new ArraySchema<Trade>();
 
   addContribution(systemHealth: number): void {
-    this.contributedSystemHealth += systemHealth;
+    this.systemHealthContributed += systemHealth;
+  }
+
+  addTaken(systemHealth: number): void {
+    this.systemHealthTaken += systemHealth;
   }
 
   addAccomplishmentPurchase(accomplishment: AccomplishmentPurchase): void {
@@ -255,7 +263,8 @@ export class RoundIntroduction extends Schema implements RoundIntroductionData {
   }
 
   reset(): void {
-    this.contributedSystemHealth = 0;
+    this.systemHealthContributed = 0;
+    this.systemHealthTaken = 0;
     this.accomplishmentPurchases.splice(0, this.accomplishmentPurchases.length);
     this.completedTrades.splice(0, this.completedTrades.length);
   }
@@ -1307,14 +1316,6 @@ export class GameState extends Schema implements GameData {
     player.invest(investment);
   }
 
-  getPlayerContributions(): number {
-    let contributions = 0;
-    for (const p of this.players) {
-      contributions += p.systemHealthChanges.investment;
-    }
-    return contributions;
-  }
-
   getPlayer(username: string): Player {
     if (this.hasUser(username)) {
       return this.players[this.userRoles[username]];
@@ -1424,19 +1425,27 @@ export class GameState extends Schema implements GameData {
   }
 
   nextRoundSystemHealth(): number {
-    return _.clamp(this.upkeep + this.contributedSystemHealth(), 0, 100);
+    return _.clamp(this.upkeep + this.systemHealthContributed() + this.systemHealthTaken(), 0, 100);
   }
-
-  contributedSystemHealth(): number {
-    let contributions = 0;
+  
+  systemHealthContributed(): number {
+    let contributed = 0;
     for (const p of this.players) {
-      contributions += p.systemHealthChanges.investment;
+      contributed += p.systemHealthChanges.investment;
+    }
+    logger.trace('system health contributed: %d', contributed);
+    return contributed;
+  }
+  
+  systemHealthTaken(): number {
+    let taken = 0;
+    for (const p of this.players) {
       for (const purchase of p.systemHealthChanges.purchases) {
-        contributions += purchase.systemHealth;
+        taken += purchase.systemHealth;
       }
     }
-    logger.trace('contributions: %d', contributions);
-    return contributions;
+    logger.trace('system health taken: %d', taken);
+    return taken;
   }
 
   increaseSystemHealth(amount: number): number {

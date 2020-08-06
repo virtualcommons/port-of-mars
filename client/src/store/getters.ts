@@ -135,7 +135,7 @@ export default {
     return state.round === 1;
   },
 
-  systemHealthContribution(state: State): number {
+  systemHealthContributed(state: State): number {
     return state.players[state.role].systemHealthChanges.investment;
   },
 
@@ -145,6 +145,16 @@ export default {
       contributed += state.players[role].systemHealthChanges.investment;
     }
     return contributed;
+  },
+
+  totalTakenSystemHealth(state: State): number {
+    let taken = 0;
+    for (const role of ROLES) {
+      for (const p of state.players[role].systemHealthChanges.purchases) {
+        taken += p.systemHealth;
+      }
+    }
+    return taken;
   },
 
   purchaseSystemHealth(state: State): Array<{label: string; role: string; value: number}> {

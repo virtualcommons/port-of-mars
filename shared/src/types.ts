@@ -110,7 +110,8 @@ export interface AccomplishmentPurchaseData {
 }
 
 export interface RoundIntroductionData {
-  contributedSystemHealth: number;
+  systemHealthContributed: number;
+  systemHealthTaken: number;
   maintenanceSystemHealth: number;
   accomplishmentPurchases: Array<AccomplishmentPurchaseData>;
   completedTrades: Array<TradeData>;
