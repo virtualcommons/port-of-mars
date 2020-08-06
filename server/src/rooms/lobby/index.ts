@@ -245,7 +245,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
         group.confirmed = 0;
         // FIXME: for dev mode, make sure there are at least 5 valid usernames after taking into account
         // connected usernames
-        const usernames = this.fillUsernames(group.clientStats.map(s => s.client.auth.username));
+        const usernames = _.shuffle(this.fillUsernames(group.clientStats.map(s => s.client.auth.username)));
         // build game options to register the usernames and persister with a newly created room
         const gameOpts = await buildGameOpts(usernames);
         // Create room instance in the server.
