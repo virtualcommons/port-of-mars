@@ -372,11 +372,7 @@ export class EnteredNewRoundPhase extends KindOnlyGameEvent {
     game.roundIntroduction.addTaken(game.systemHealthTaken());
     game.log(`Round ${game.round} begins.`, MarsLogCategory.newRound);
 
-    // FIXME: game.resetRound to encompass resets
-    game.resetHeroOrPariah();
-    game.resetPlayerCosts();
-    game.resetPlayerReadiness();
-    game.refreshPlayerPurchasableAccomplisments();
+    game.resetRound();
   }
 }
 gameEventDeserializer.register(EnteredNewRoundPhase);

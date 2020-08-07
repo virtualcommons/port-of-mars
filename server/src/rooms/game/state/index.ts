@@ -1369,7 +1369,6 @@ export class GameState extends Schema implements GameData {
   }
 
   resetPlayerCosts(): void {
-    this.tradingEnabled = true;
     for (const player of this.players) {
       logger.info('costs (before) [%s]: %o', player.role, player.costs.toJSON());
       player.costs.fromJSON(ResourceCosts.getCosts(player.role));
