@@ -104,6 +104,13 @@ export default {
     return auditEventIndex !== -1 && auditEventIndex <= eventProcessedIndex;
   },
 
+  isChatAvailable(state: State): boolean {
+    const marsEvents = state.marsEvents;
+    const eventProcessedIndex = state.marsEventsProcessed;
+    const solarFlareIndex = marsEvents.findIndex(event => event.id === 'solarFlare');
+    return !(solarFlareIndex !== -1 && eventProcessedIndex <= eventProcessedIndex);
+  },
+
   categoryColorMap(state: State): Map<string, string> {
 
     return new Map([

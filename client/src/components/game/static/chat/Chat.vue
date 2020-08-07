@@ -1,5 +1,5 @@
 <template>
-  <div v-if="layout !== 'DISABLE_CHAT'" class="c-chat">
+  <div v-if="isChatAvailable" class="c-chat">
     <div class="messages-view">
       <div class="wrapper">
         <p v-if="messages.length === 0" class="empty">
@@ -44,7 +44,7 @@
       />
     </div>
   </div>
-  <div v-else-if="layout === 'DISABLE_CHAT'" class="chat-disabled">
+  <div v-else class="chat-disabled">
     <div class="wrapper">
       <p>Chat is disabled this round.</p>
     </div>
@@ -81,8 +81,8 @@ export default class Chat extends Vue {
       : 'chat-input-sendbtn--ready';
   }
 
-  get layout(): any {
-    return this.$store.getters.currentEventView;
+  get isChatAvailable(): any {
+    return this.$store.getters.isChatAvailable;
   }
 
   get messages(): any {
