@@ -77,7 +77,7 @@
     }
 
     get nextRoundSystemHealth() {
-      return _.clamp(this.systemHealth + this.totalContributedSystemHealth + this.totalContributedSystemHealth - this.systemHealthMaintenanceCost, 0, 100);
+      return _.clamp(this.$tstore.getters.systemHealth + this.systemHealthMaintenanceCost, 0, 100);
     }
 
     get isFirstRound() {
