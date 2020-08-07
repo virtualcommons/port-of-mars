@@ -89,13 +89,6 @@ export default class Chat extends Vue {
     return this.$tstore.state.messages;
   }
 
-  private updated(): any {
-    if (this.layout !== 'DISABLE_CHAT') {
-      const elem = this.$el.querySelector('.messages-view');
-      elem!.scrollTop = elem!.scrollHeight;
-    }
-  }
-
   private toDate(unixTimestamp: number): any {
     return new Date(unixTimestamp).toLocaleTimeString();
   }
