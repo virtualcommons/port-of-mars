@@ -28,6 +28,13 @@ export default {
   },
 
   /**
+   * Gets 5 player roles.
+   */
+  roles() {
+    return ROLES;
+  },
+
+  /**
    * Gets mars log messages.
    * @param state The current state of the game.
    * @returns The array containing mars log messages.
