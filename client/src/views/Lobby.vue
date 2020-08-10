@@ -3,7 +3,7 @@
     <div class="wrapper row">
       <div class="content col-12">
         <h3 class="m-5">Next Game Time: {{ nextAssignmentTimeString }}</h3>
-        <b-row class="m-5">
+        <b-row>
           <b-col
             :key="role"
             class="m-5 avatar"
@@ -19,19 +19,28 @@
         </b-row>
 
 <!--        <p>{{ joinedText }}</p>-->
-        <p>{{ waitingUserCount }}/5 players ready</p>
+        <h3 class="mb-3">{{ waitingUserCount }}/5 players ready</h3>
         <b-spinner
           :label="'Loading...'"
           :variant="'warning'"
+          class="mb-4"
         ></b-spinner>
-<!--        <b-button-group>-->
-          <b-button :to="'tutorial'" variant="warning">Take Tutorial</b-button>
-          <b-button @click="distributeGroups" variant="danger">
-            Distribute Groups
-          </b-button>
-<!--        </b-button-group>-->
       </div>
     </div>
+    <b-row class="m-5">
+      <b-col cols="auto" class="mr-auto">
+        <b-button :to="'tutorial'" variant="warning">
+          <b-icon icon="skip-start-fill"></b-icon>
+          Take Tutorial
+        </b-button>
+      </b-col>
+      <b-col cols="auto">
+        <b-button @click="distributeGroups">
+          Distribute Groups
+          <b-icon icon="skip-end-fill"></b-icon>
+        </b-button>
+      </b-col>
+    </b-row>
   </div>
 </template>
 
