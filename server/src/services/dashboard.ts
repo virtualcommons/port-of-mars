@@ -138,10 +138,15 @@ export class DashboardService extends BaseService {
 
   async getActionItems(user: User, round: TournamentRound): Promise<Array<ActionItem>> {
     const actionItems = [];
-    actionItems.push(this.getRegisterActionItem(user));
-    if (user.dateConsented) {
-      actionItems.push(this.getVerifyActionItem(user));
-      actionItems.push(this.getTakeTutorialActionItem(user));
+    if (!user.dateConsented) {
+      actionItems.push(this.getRegisterActionItem(user));
+    }
+    else if (!user.isVerified) {
+      actionItems.push(this.getVerifyActionItem(user))
+    }
+    else if (!user.passedQuiz) {
+      actionItems.push(this.getTakeTutorialActionItem(user))
+    } else {
       const invite = await this.sp.tournament.getActiveRoundInvite(user.id, round);
       if (settings.allowInternalSurveyRoutes) {
         actionItems.push(this.getInternalSurveyActionItem(user, round, invite));
