@@ -11,9 +11,9 @@
           </div>
         </div>
       </div>
-      <div class="purchasableaccomplishments col-8">
-        <div class="topbar">
-          <p class="title">Discardable Accomplishments</p>
+      <div class="purchasable col-8">
+        <div class="header">
+          <p class="title">Discard Accomplishments</p>
         </div>
         <div class="outer-wrapper">
           <div class="wrapper">

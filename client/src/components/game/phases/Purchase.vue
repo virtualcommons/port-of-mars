@@ -11,8 +11,8 @@
           </div>
         </div>
       </div>
-      <div class="purchasableaccomplishments col-8 tour-purchase">
-        <div class="topbar">
+      <div class="purchasable col-8 tour-purchase">
+        <div class="header">
           <p class="title">Purchasable Accomplishments</p>
         </div>
         <div class="outer-wrapper">
