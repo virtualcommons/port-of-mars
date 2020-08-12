@@ -2,13 +2,13 @@
   height: 100vh !important;
   width: 100vw !important;
   max-width: none;
-  //@include make-center;
+  @include make-center;
 }
 
 .wrapper {
   padding: 1rem;
   margin: 0;
-  background-color: $dark-shade;
+  //background-color: $dark-shade;
 }
 
 .content {
@@ -53,4 +53,14 @@ p,
 a,
 button {
   margin: 0.5rem 0;
+}
+
+.background-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: -1;
+  opacity: 0.0625;
 }

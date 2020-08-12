@@ -1,5 +1,10 @@
 <template>
   <div class="lobby container">
+    <img
+      :src="require(`@port-of-mars/client/assets/marsbg.jpg`)"
+      alt="Background Image"
+      class="background-image"
+    />
     <div class="wrapper row">
       <div class="content col-12">
         <h3 class="m-5">Next Game Time: {{ nextAssignmentTimeString }}</h3>
@@ -19,28 +24,25 @@
         </b-row>
 
 <!--        <p>{{ joinedText }}</p>-->
-        <h3 class="mb-3">{{ waitingUserCount }}/5 players ready</h3>
+        <h4 class="mb-3">{{ waitingUserCount }}/5 PLAYERS READY</h4>
         <b-spinner
           :label="'Loading...'"
-          :variant="'warning'"
+          :variant="variantStyle(waitingUserCount)"
           class="mb-4"
         ></b-spinner>
+
+        <b-button-group class="w-25 mt-4" vertical>
+          <b-button :to="'tutorial'" variant="outline-warning">
+            Take Tutorial
+          </b-button>
+          <b-button @click="distributeGroups" variant="outline-warning">
+            Join game
+          </b-button>
+        </b-button-group>
       </div>
     </div>
-    <b-row class="m-5">
-      <b-col cols="auto" class="mr-auto">
-        <b-button :to="'tutorial'" variant="warning">
-          <b-icon icon="skip-start-fill"></b-icon>
-          Take Tutorial
-        </b-button>
-      </b-col>
-      <b-col cols="auto">
-        <b-button @click="distributeGroups">
-          Distribute Groups
-          <b-icon icon="skip-end-fill"></b-icon>
-        </b-button>
-      </b-col>
-    </b-row>
+
+
   </div>
 </template>
 
@@ -119,6 +121,11 @@
 
     private distributeGroups() {
       this.lobbyAPI.distributeGroups();
+    }
+
+    private variantStyle(ready: number): string {
+      if (ready < 4) return 'warning';
+      else return 'success';
     }
   }
 </script>
