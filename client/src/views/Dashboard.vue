@@ -1,106 +1,65 @@
 <template>
-  <b-container class="c-dashboard">
-    <div class="container">
-      <img
-        :src="require(`@port-of-mars/client/assets/marsbg.jpg`)"
-        alt="Background Image"
-        class="background-image"
-      />
-
-      <!-- HEADER -->
-      <b-row class="title-wrapper">
-        <b-col class="title mt-5">
-          <h1>Player Dashboard</h1>
-        </b-col>
-      </b-row>
-
-      <b-row class="message-wrapper">
-        <!-- MESSAGES -->
-        <h2>Messages</h2>
-        <b-alert :key="dm.message" :variant="dm.kind" dismissible fade show
-                 v-for="dm in dashboardMessages">
-          {{ dm.message }}
-        </b-alert>
-      </b-row>
-
-      <!-- DASHBOARD ITEMS -->
-      <b-row class="content-wrapper">
-
-        <!-- SCHEDULE + STATS -->
-        <b-col class="stats">
-
-          <!-- FIXME : refactor to radio button group -->
-          <b-button-group class="w-100 mb-4" size="lg">
-            <b-button @click="switchView('schedule')" variant="outline-warning">
-              Schedule
-            </b-button>
-            <b-button @click="switchView('stats')" variant="outline-warning">
-              Stats
-            </b-button>
-          </b-button-group>
-
-          <div class="games-played">
-            <p class="text-center">Games Played: {{ gamesPlayedCount }}</p>
-          </div>
-
-          <div class="outer-wrapper" v-show="view === 'stats'">
-            <PlayerStatItem
-              :key="playerStatItem.time"
-              :playerStatItem="playerStatItem"
-              v-for="playerStatItem in stats.games"
-            />
-          </div>
-
-          <div class="outer-wrapper" v-show="view === 'schedule'">
-            <h3 class="text-center">No game schedule at this time</h3>
-          </div>
-
-        </b-col>
-
-        <!-- ACTION ITEMS -->
-        <b-col class="action-items">
-          <h2>Action Items</h2>
-          <div class="next-game">
-            <UpcomingGameItem
-              :key="upcomingGame.time"
-              :upcomingGame="upcomingGame"
-              v-for="upcomingGame in upcomingGames"
-            />
-          </div>
-          <div class="outer-wrapper">
-            <p v-if="loading">Action Items are loading...</p>
-            <ActionItemComponent
-              :actionItem="actionItem"
-              :key="actionItem.description"
-              v-for="actionItem in actionItems"
-            />
-          </div>
-        </b-col>
-      </b-row>
-      <b-row class="justify-content-center mt-3">
-
-        <b-button block class="w-25" size="lg" variant="outline-danger" @click="logoutUser">
-          Logout
-        </b-button>
-      </b-row>
-
-    </div>
-
+  <b-container>
+    <b-row>
+      <h1>Player Dashboard</h1>
+    </b-row>
+    <b-row>
+      <b-col>
+        <b-list-group class="px-0">
+          <b-list-group-item :href="tournamentIntroductionUrl"
+                             class="d-flex justify-content-between align-items-center">
+            Tournament Introduction Survey
+            <b-badge variant="primary">
+              <b-icon-check v-if="tournamentIntroductionComplete"></b-icon-check>
+              <b-icon-x-circle v-else></b-icon-x-circle>
+            </b-badge>
+          </b-list-group-item>
+        </b-list-group>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col>
+        <h2>Schedule</h2>
+        <b-table responsive sticky-header small dark bordered striped
+                 :items="schedule">
+          <template v-slot:cell(invite)="data">
+            <a :href="inviteLink(data.item.invite)"><font-awesome-icon :icon="['fab', 'google']" /></a>
+          </template>
+        </b-table>
+      </b-col>
+    </b-row>
+    <b-row v-if="roundComplete">
+      <b-list-group class="px-0">
+        <b-list-group-item :href="roundExitSurveyUrl"
+                           class="d-flex justify-content-between align-items-center">
+          Tournament Introduction Survey
+          <b-badge variant="primary">
+            <b-icon-check v-if="roundExitSurveyComplete"></b-icon-check>
+            <b-icon-x-circle v-else></b-icon-x-circle>
+          </b-badge>
+        </b-list-group-item>
+      </b-list-group>
+    </b-row>
   </b-container>
 </template>
 
 <script lang="ts">
   import {Component, Mixins, Vue} from 'vue-property-decorator';
-  import ActionItemComponent from '@port-of-mars/client/components/dashboard/ActionItem.vue';
-  import UpcomingGameItem from '@port-of-mars/client/components/dashboard/UpcomingGameItem.vue';
   import PlayerStatItem from '@port-of-mars/client/components/dashboard/PlayerStatItem.vue';
   import {DashboardAPI} from '@port-of-mars/client/api/dashboard/request';
   import {ActionItem, DashboardData, GameMeta,} from '@port-of-mars/shared/types';
+  import {faGoogle} from '@fortawesome/free-brands-svg-icons/faGoogle';
+  import { library } from '@fortawesome/fontawesome-svg-core'
+
+  import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
+  import { google, outlook, office365, yahoo,  ics } from "calendar-link";
+
+  library.add(faGoogle);
+
+  Vue.component('font-awesome-icon', FontAwesomeIcon);
 
   @Component({
     components: {
-      ActionItemComponent,
-      UpcomingGameItem,
       PlayerStatItem,
     },
   })
@@ -110,6 +69,56 @@
     private stats: DashboardData['stats'] = {games: []};
     private upcomingGames: Array<GameMeta> = [];
     private view: 'stats' | 'schedule' = 'schedule';
+    private scheduleColNames = ['Day', 'Time', 'Invite'];
+    private schedule = [
+      {
+        day: 'Thursday, Oct 7',
+        time: '16:00',
+        invite: {
+          title: 'Round 2',
+          location: 'Port of Mars',
+          start: new Date().toISOString(),
+          duration: [3, "hour"],
+          description: 'A scheduled port of mars game'
+        }
+      },
+      {
+        day: 'Thursday, Oct 8',
+        time: '08:00',
+        invite: {
+          title: 'Round 2',
+          location: 'Port of Mars',
+          start: new Date().toISOString(),
+          duration: [3, "hour"],
+          description: 'A scheduled port of mars game'
+        }
+      }
+    ]
+
+    tournamentIntroductionUrl = '#/dashboard';
+    tournamentIntroductionComplete = true;
+
+    roundEntranceSurveyUrl = '#/dashboard';
+    roundEntranceSurveyComplete = '#/dashboard';
+    roundExitSurveyUrl = '#/dashboard';
+    roundExitSurveyComplete = false;
+    roundComplete = false;
+
+    inviteLink(invite: {title: string, location: string, start: Date, end: Date, details: string}) {
+      console.log({invite});
+      return google(invite);
+    }
+
+    event = {
+      title: "My birthday party",
+      description: "Be there!",
+      start: "2019-12-29 18:00:00 +0100",
+      duration: [3, "hour"]
+    };
+
+    get eventLink() {
+      return google(this.event);
+    }
 
     get dashboardMessages() {
       return this.$tstore.state.dashboardMessages;

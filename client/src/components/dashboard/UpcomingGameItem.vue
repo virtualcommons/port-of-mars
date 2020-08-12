@@ -1,10 +1,10 @@
 <template>
   <div class="d-flex justify-content-between container wrapper">
     <div>
-      <p class="next-game">Next Game at {{ toTimeString(upcomingGame.time) }}</p>
+      <p class="next-game">Next Game at Thurs, Oct 7 at 15:45</p>
     </div>
         <router-link :to="joinLink">
-          <b-button class="button px-4 py-1" variant="outline-light">Join</b-button>
+          <b-button class="button px-6 py-1" variant="outline-light">Join</b-button>
         </router-link>
   </div>
 </template>
