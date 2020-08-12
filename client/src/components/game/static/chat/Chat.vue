@@ -89,6 +89,13 @@ export default class Chat extends Vue {
     return this.$tstore.state.messages;
   }
 
+  updated(): any {
+    if (this.isChatAvailable) {
+      const elem = this.$el.querySelector('.messages-view');
+      elem!.scrollTop = elem!.scrollHeight;
+    }
+  }
+
   private toDate(unixTimestamp: number): any {
     return new Date(unixTimestamp).toLocaleTimeString();
   }
