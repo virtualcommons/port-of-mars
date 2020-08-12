@@ -17,7 +17,7 @@
       <b-row class="message-wrapper">
         <!-- MESSAGES -->
         <h2>Messages</h2>
-        <b-alert :key="dm.message" :variant="dm.kind" show dismissible fade
+        <b-alert :key="dm.message" :variant="dm.kind" dismissible fade show
                  v-for="dm in dashboardMessages">
           {{ dm.message }}
         </b-alert>
@@ -26,22 +26,34 @@
       <!-- DASHBOARD ITEMS -->
       <b-row class="content-wrapper">
 
-        <!-- STATS -->
+        <!-- SCHEDULE + STATS -->
         <b-col class="stats">
 
-              <h2>Your Stats</h2>
+          <!-- FIXME : refactor to radio button group -->
+          <b-button-group class="w-100 mb-4" size="lg">
+            <b-button variant="outline-warning" @click="switchView('schedule')">
+              Schedule
+            </b-button>
+            <b-button variant="outline-warning" @click="switchView('stats')">
+              Stats
+            </b-button>
+          </b-button-group>
 
-              <div class="games-played">
-                <p class="text-center">Games Played: {{ gamesPlayedCount }}</p>
-              </div>
+          <div class="games-played">
+            <p class="text-center">Games Played: {{ gamesPlayedCount }}</p>
+          </div>
 
-              <div class="outer-wrapper">
-                <PlayerStatItem
-                  :key="playerStatItem.time"
-                  :playerStatItem="playerStatItem"
-                  v-for="playerStatItem in stats.games"
-                />
-              </div>
+          <div class="outer-wrapper" v-show="view === 'stats'">
+            <PlayerStatItem
+              :key="playerStatItem.time"
+              :playerStatItem="playerStatItem"
+              v-for="playerStatItem in stats.games"
+            />
+          </div>
+
+          <div class="outer-wrapper" v-show="view === 'schedule'">
+            <h3 class="text-center">No game schedule at this time</h3>
+          </div>
 
         </b-col>
 
@@ -56,14 +68,12 @@
             />
           </div>
           <div class="outer-wrapper">
-<!--            <div class="wrapper">-->
-              <p v-if="loading">Action Items are loading...</p>
-              <ActionItemComponent
-                :actionItem="actionItem"
-                :key="actionItem.description"
-                v-for="actionItem in actionItems"
-              />
-<!--            </div>-->
+            <p v-if="loading">Action Items are loading...</p>
+            <ActionItemComponent
+              :actionItem="actionItem"
+              :key="actionItem.description"
+              v-for="actionItem in actionItems"
+            />
           </div>
         </b-col>
       </b-row>
@@ -72,13 +82,12 @@
 </template>
 
 <script lang="ts">
-  import {Component, Mixins, Prop, Vue} from 'vue-property-decorator';
+  import {Component, Mixins, Vue} from 'vue-property-decorator';
   import ActionItemComponent from '@port-of-mars/client/components/dashboard/ActionItem.vue';
   import UpcomingGameItem from '@port-of-mars/client/components/dashboard/UpcomingGameItem.vue';
   import PlayerStatItem from '@port-of-mars/client/components/dashboard/PlayerStatItem.vue';
   import {DashboardAPI} from '@port-of-mars/client/api/dashboard/request';
   import {ActionItem, DashboardData, GameMeta,} from '@port-of-mars/shared/types';
-  import {LOBBY_PAGE} from "@port-of-mars/shared/routes";
 
   @Component({
     components: {
@@ -92,6 +101,7 @@
     private actionItems: Array<ActionItem> = [];
     private stats: DashboardData['stats'] = {games: []};
     private upcomingGames: Array<GameMeta> = [];
+    private view: 'stats' | 'schedule' = 'schedule';
 
     get dashboardMessages() {
       return this.$tstore.state.dashboardMessages;
@@ -116,6 +126,12 @@
       );
       this.loading = false;
     }
+
+    private switchView(toggle: 'stats' | 'schedule') {
+      this.view = toggle;
+    }
+
+
   }
 </script>
 
