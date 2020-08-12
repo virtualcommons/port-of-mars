@@ -1,5 +1,5 @@
 <template>
-  <div class="c-dashboard">
+  <b-container class="c-dashboard">
     <div class="container">
       <img
         :src="require(`@port-of-mars/client/assets/marsbg.jpg`)"
@@ -31,10 +31,10 @@
 
           <!-- FIXME : refactor to radio button group -->
           <b-button-group class="w-100 mb-4" size="lg">
-            <b-button variant="outline-warning" @click="switchView('schedule')">
+            <b-button @click="switchView('schedule')" variant="outline-warning">
               Schedule
             </b-button>
-            <b-button variant="outline-warning" @click="switchView('stats')">
+            <b-button @click="switchView('stats')" variant="outline-warning">
               Stats
             </b-button>
           </b-button-group>
@@ -77,8 +77,16 @@
           </div>
         </b-col>
       </b-row>
+      <b-row class="justify-content-center mt-3">
+
+        <b-button block class="w-25" size="lg" variant="outline-danger" @click="logoutUser">
+          Logout
+        </b-button>
+      </b-row>
+
     </div>
-  </div>
+
+  </b-container>
 </template>
 
 <script lang="ts">
@@ -131,6 +139,10 @@
       this.view = toggle;
     }
 
+    private logoutUser(): void {
+      this.$ajax.forgetLoginCreds();
+      this.$router.push({ name: 'Login' });
+    }
 
   }
 </script>
