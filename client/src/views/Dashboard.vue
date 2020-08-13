@@ -52,7 +52,7 @@
   import { library } from '@fortawesome/fontawesome-svg-core'
 
   import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
-  import { google, outlook, office365, yahoo,  ics } from "calendar-link";
+  import {google, outlook, office365, yahoo, ics, CalendarEvent} from "calendar-link";
 
   library.add(faGoogle);
 
@@ -69,8 +69,7 @@
     private stats: DashboardData['stats'] = {games: []};
     private upcomingGames: Array<GameMeta> = [];
     private view: 'stats' | 'schedule' = 'schedule';
-    private scheduleColNames = ['Day', 'Time', 'Invite'];
-    private schedule = [
+    private schedule: Array<{ day: string, time: string, invite: CalendarEvent }> = [
       {
         day: 'Thursday, Oct 7',
         time: '16:00',
@@ -107,17 +106,6 @@
     inviteLink(invite: {title: string, location: string, start: Date, end: Date, details: string}) {
       console.log({invite});
       return google(invite);
-    }
-
-    event = {
-      title: "My birthday party",
-      description: "Be there!",
-      start: "2019-12-29 18:00:00 +0100",
-      duration: [3, "hour"]
-    };
-
-    get eventLink() {
-      return google(this.event);
     }
 
     get dashboardMessages() {
