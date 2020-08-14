@@ -5,10 +5,10 @@
     "build": "tsc -p ."
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.157",
-    "@types/node": "^13.9.1"
+    "@types/lodash": "^4.14.159",
+    "@types/node": "^14.0.27"
   },
   "dependencies": {
-    "lodash": "^4.17.19"
+    "lodash": "^4.17.20"
   }
 }
