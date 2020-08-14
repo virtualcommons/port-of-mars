@@ -87,6 +87,10 @@ function SET_TRADE_PLAYER_NAME(state: State, payload: Role) {
   state.ui.tradeData.sender.role = payload;
 }
 
+function SET_TOGGLE_YOUR_TRADES(state: State, payload: boolean) {
+  state.userInterface.toggleYourTrades = payload;
+}
+
 function RESET_TRADE_MODAL(state: State, payload: any) {
   state.ui.tradeData = defaultTradeData();
 }
@@ -107,5 +111,5 @@ export default {
   OPEN_TRADE_MODAL_WARM,
   RESET_TRADE_MODAL,
   SET_RESOURCE_COSTS_VISIBLE,
-  // SET_TRADE_FILTER
+  SET_TOGGLE_YOUR_TRADES
 };

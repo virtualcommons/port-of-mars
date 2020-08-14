@@ -184,5 +184,9 @@ export default {
 
   heroOrPariah(state: State) {
     return state.heroOrPariah;
+  },
+
+  toggleYourTrades(state: State) {
+    return state.userInterface.toggleYourTrades;
   }
 }

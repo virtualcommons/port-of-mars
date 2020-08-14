@@ -126,7 +126,7 @@ export interface UserInterface {
   hudRightView: HUDRightView;
   modalView: ModalView;
   toggleResourceCost: boolean;
-  // toggleYourTrades: boolean;
+  toggleYourTrades: boolean;
 }
 
 export interface UserInterfaceTwo {
@@ -220,7 +220,7 @@ export const initialStoreState: State = {
       data: null,
     },
     toggleResourceCost: false,
-    // toggleYourTrades: false,
+    toggleYourTrades: false,
   },
 
   dashboardMessages: [],

@@ -51,7 +51,7 @@
     @Inject()
     readonly api!: TutorialAPI;
 
-    private checked: boolean = false;
+    private checked: boolean = this.$tstore.getters.toggleYourTrades;
     // get checked(): boolean {
     //   return this.$tstore.getters.tradeFilter;
     // }
@@ -103,6 +103,10 @@
      */
     get myRole() {
       return this.$tstore.getters.player.role;
+    }
+
+    updated() {
+      this.$tstore.commit('SET_TOGGLE_YOUR_TRADES', this.checked);
     }
 
     /**
