@@ -40,6 +40,7 @@ import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishm
 import Inventory from '@port-of-mars/client/components/game/Inventory.vue';
 import {AccomplishmentCardType} from '@port-of-mars/client/types/cards.ts';
 import {AccomplishmentData} from '@port-of-mars/shared/types';
+import {canPurchaseAccomplishment} from "@port-of-mars/shared/validation";
 
 @Component({
   components: {
@@ -48,11 +49,19 @@ import {AccomplishmentData} from '@port-of-mars/shared/types';
   },
 })
 export default class Purchase extends Vue {
-
-
-  get sortedAccomplishments(): Array<AccomplishmentData> {
-    return this.$tstore.getters.sortedAccomplishments;
-  }
+  // sort accomplishments by purchasable in ascending order
+  // static and is set when component is created; does not update with changes
+  private sortedAccomplishments = this.$store.getters.player.accomplishments.purchasable.slice()
+    .sort((a: AccomplishmentData, b: AccomplishmentData) => {
+      return (
+        Number(
+          canPurchaseAccomplishment(b, this.$store.getters.player.inventory)
+        ) -
+        Number(
+          canPurchaseAccomplishment(a, this.$store.getters.player.inventory)
+        )
+      );
+    });
 
   /**
    * Get card type: default (0), purchase (1), discard (2)
@@ -62,11 +71,10 @@ export default class Purchase extends Vue {
   }
 
   /**
-   * Label accomplishment as purchased so purchased accomplishments are hidden on the client side.
+   * Asynchronously change accomplishment status to purchased.
    * @param id The ID number of an accomplishment.
-   * > get purchasable accomplishments for that round
-   * > filter accomplishments by ID
-   *
+   * > Hide accomplishments on client side when status changes
+   * > Filter accomplishments by ID - if ID is not in the array, card has been purchased
    */
   wasPurchased(id: number): boolean {
     return Boolean((this.$tstore.getters.player.accomplishments.purchasable as Array<AccomplishmentData>)

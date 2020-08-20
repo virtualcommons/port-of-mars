@@ -40,6 +40,7 @@ import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishm
 import Inventory from '@port-of-mars/client/components/game/Inventory.vue';
 import {AccomplishmentCardType} from '@port-of-mars/client/types/cards.ts';
 import {AccomplishmentData} from '@port-of-mars/shared/types';
+import {canPurchaseAccomplishment} from "@port-of-mars/shared/validation";
 
 @Component({
   components: {
@@ -48,7 +49,19 @@ import {AccomplishmentData} from '@port-of-mars/shared/types';
   },
 })
 export default class Discard extends Vue {
-  private accomplishments = Array<AccomplishmentData>();
+  // sort accomplishments by purchasable in ascending order
+  // static and is set when component is created; does not update with changes
+  private sortedAccomplishments = this.$store.getters.player.accomplishments.purchasable.slice()
+    .sort((a: AccomplishmentData, b: AccomplishmentData) => {
+      return (
+        Number(
+          canPurchaseAccomplishment(b, this.$store.getters.player.inventory)
+        ) -
+        Number(
+          canPurchaseAccomplishment(a, this.$store.getters.player.inventory)
+        )
+      );
+    });
 
   /**
    * Get card type: default (0), purchase (1), discard (2)
@@ -57,21 +70,16 @@ export default class Discard extends Vue {
     return AccomplishmentCardType.discard;
   }
 
-  //sorts the accomplishments, showing the ones you cannot buy first.
-  //this is static and gets set as the component is created, but does not update with changes
-  get sortedAccomplishments(): Array<AccomplishmentData> {
-    return this.$tstore.getters.sortedAccomplishments;
-  }
-
-  updated() {
-    this.accomplishments = this.sortedAccomplishments
-  }
-
-  //this does update with changes, allowing us to change the status of the accomplishment asynchronously
+  /**
+   * Asynchronously change accomplishment status to discarded.
+   * @param id The ID number of an accomplishment.
+   * > Hide accomplishments on client side when status changes
+   * > Filter accomplishments by ID - if ID is not in the array, card has been discarded
+   */
   wasDiscarded(id: number) {
     return Boolean((this.$store.getters.player.accomplishments.purchasable as Array<AccomplishmentData>)
       .slice()
-      .filter(accomplishment => accomplishment.id == id).length > 0);//if the id is not in the array, it must have been discarded.
+      .filter(accomplishment => accomplishment.id == id).length > 0);
   }
 
 }
