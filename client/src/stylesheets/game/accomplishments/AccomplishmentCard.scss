@@ -1,51 +1,78 @@
-.c-accomplishment-card {
-  width: 100%;
-  padding: 0;
-  margin: 0 0 0.5rem 0;
-  @include make-column-and-center;
-  flex-shrink: 0;
-  align-items: stretch;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-}
-
 button {
   &:disabled {
     cursor: not-allowed;
   }
 }
 
-.title-wrapper,
-.info-wrapper,
-.cost-wrapper,
+.default {
+  border: 0.125rem solid $light-shade;
+  background-color: $light-shade;
+
+  .purchase button,
+  .discard button {
+    @include space-button-white;
+  }
+}
+
+.purchasable {
+  border: 0.125rem solid $light-accent;
+  background-color: $light-accent;
+
+  .purchase button,
+  .discard button {
+    @include space-button;
+  }
+}
+
+.unpurchasable {
+  border: 0.125rem solid $light-shade;
+  background-color: $light-shade;
+
+  .purchase button,
+  .discard button {
+    @include space-button-white;
+  }
+}
+
+.discarded {
+  @include default-transition-base;
+  border: 0.125rem solid $status-red;
+  background-color: $status-red;
+
+  .text{
+    color: $status-red;
+    font-size: $font-med;
+    font-weight: bold;
+  }
+}
+
+.purchased {
+  @include default-transition-base;
+  border: 0.125rem solid $status-green;
+  background-color: $status-green;
+
+  .text{
+    color: $status-green;
+    font-size: $font-med;
+    font-weight: bold;
+  }
+}
+
+
+.info {
+  background: $dark-shade;
+}
+
+
+.title,
+.info,
+.cost,
 .purchase-wrapper,
 .discard-wrapper,
 .status-text {
   @include default-transition-base;
-  width: 100%;
-  padding: 0.5rem;
-  margin: 0;
 }
 
-.title {
-  padding: 0;
-  position: relative;
-
-  p {
-    width: 100%;
-    margin-bottom: 0;
-    font-size: $font-med;
-    font-weight: $medium;
-    text-align: center;
-    @include text-overflow-ellipses;
-  }
-}
-
-.info-wrapper {
-  background-color: $dark-shade;
-}
 
 .points {
   padding: 0 0.5rem;
@@ -124,61 +151,7 @@ button {
   text-align: center;
 }
 
-.default {
-  border: 0.125rem solid $light-shade;
-  background-color: $light-shade;
-
-  .purchase button,
-  .discard button {
-    @include space-button-white;
-  }
-}
-
-.purchasable {
-  border: 0.125rem solid $light-accent;
-  background-color: $light-accent;
-
-  .purchase button,
-  .discard button {
-    @include space-button;
-  }
-}
-
-.unpurchasable {
-  border: 0.125rem solid $light-shade;
-  background-color: $light-shade;
-
-  .purchase button,
-  .discard button {
-    @include space-button-white;
-  }
-}
-
-.discarded {
-  @include default-transition-base;
-  border: 0.125rem solid $status-red;
-  background-color: $status-red;
-
-  .text{
-    color: $status-red;
-    font-size: $font-med;
-    font-weight: bold;
-  }
-}
-
-.purchased {
-  @include default-transition-base;
-  border: 0.125rem solid $status-green;
-  background-color: $status-green;
-
-  .text{
-    color: $status-green;
-    font-size: $font-med;
-    font-weight: bold;
-  }
-}
-
-.modal-view{
+.modal-view {
   border:none;
   max-height: 17rem !important;
 }

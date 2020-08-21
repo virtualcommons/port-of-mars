@@ -1,55 +1,60 @@
 <template>
   <div
-    :class="[cardTypeStyling, { 'modal-view' : isModal }]"
-    class="c-accomplishment-card"
+    :class="[cardTypeStyling, isModal ? 'modal-view' : '']"
+    class="w-100 p-0 mb-3 flex-shrink-0 justify-content-center align-items-stretch overflow-hidden"
     v-show="cardIsActive"
   >
     <!-- title -->
-    <div class="title-wrapper">
-      <div class="d-flex flex-row title">
-        <b-icon
-          @click="showInfo"
-          circle
-          class="align-self-center"
-          icon="exclamation-circle-fill"
-          v-if="!isModal"
-          variant="dark"
-        />
-        <p :style="fontColor">{{ accomplishment.label }}</p>
-      </div>
+    <div class="w-100 m-0 p-1 title">
+      <b-row align-v="center" class="w-100 justify-content-center">
+        <b-col class="px-4">
+          <b-icon
+            @click="showInfo"
+            circle
+            icon="exclamation-circle-fill"
+            v-if="!isModal"
+            variant="dark"
+          />
+        </b-col>
+        <b-col class="mt-2">
+          <p class="w-100" :style="fontColor">{{ accomplishment.label }}</p>
+        </b-col>
+      </b-row>
     </div>
+
 
     <!-- information: points, description -->
-    <div
-      class="d-flex flex-row info-wrapper"
-      v-bind="{ class: isModal ? 'p-4 p-lg-4' : '' }"
-    >
-      <!-- points -->
-      <div
-        class="points"
-        v-bind="{ class: showDescription ? 'mt-3 col-3' : 'col-12' }"
+    <div class="w-100 m-0 p-2 info">
+      <b-row
+        align-v="center"
+        :class="isModal ? 'p-4 p-lg-4' : ''"
       >
-        <p>Points</p>
-        <p>{{ accomplishment.victoryPoints }}</p>
-      </div>
+        <!-- points -->
+        <b-col
+          class="points"
+          :class="showDescription ? 'mt-3 col-3' : 'col-12'"
+        >
+          <p>Points</p>
+          <p>{{ accomplishment.victoryPoints }}</p>
+        </b-col>
 
-      <!-- description -->
-      <div
-        class="flavortext col-9"
-        v-if="showDescription"
-        v-bind="{ class: showDescription ? 'mt-3' : '' }"
-      >
-        <p>{{ accomplishment.flavorText }}</p>
-      </div>
+        <!-- description -->
+        <b-col
+          class="flavortext col-9"
+          v-if="showDescription"
+          :class="showDescription ? 'mt-3' : ''"
+        >
+          <p>{{ accomplishment.flavorText }}</p>
+        </b-col>
+      </b-row>
     </div>
 
+
     <!-- cost -->
-    <div class="d-flex flex-row cost-wrapper">
-      <div class="cost col-12">
+    <div class="w-100 m-0 p-3 cost-wrapper">
+      <b-row class="cost justify-content-center">
         <div
-          :class="{
-            'unattainable-resource': shouldResourceBeGrayedOut(investment),
-          }"
+          :class="shouldResourceBeGrayedOut(investment) ? 'unattainable-resource' : ''"
           :key="investment + Math.random()"
           class="container"
           v-for="investment in accomplishmentCost"
@@ -61,12 +66,12 @@
             alt="Investment"
           />
         </div>
-      </div>
+      </b-row>
     </div>
 
     <!-- in purchase phase, allow purchase if sufficient resources -->
     <div
-      class="d-flex flex-row purchase-wrapper"
+      class="w-100 m-0 p-3 purchase-wrapper"
       v-if="type === cardType.purchase && showCard"
     >
       <div class="purchase col-12">
@@ -78,7 +83,7 @@
 
     <!-- in discard phase, allow discard -->
     <div
-      class="d-flex flex-row discard-wrapper"
+      class="w-100 m-0 p-3 discard-wrapper"
       v-else-if="type === cardType.discard && showCard"
     >
       <div class="discard col-12">
@@ -90,7 +95,7 @@
 
     <!-- display status of card after it has been purchased or discarded -->
     <div
-      class="d-flex flex-row status-text"
+      class="w-100 m-0 p-3 status-text"
       v-else
     >
       <div class="text col-12" v-if="type === cardType.discard">
