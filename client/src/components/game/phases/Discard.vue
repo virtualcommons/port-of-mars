@@ -1,5 +1,5 @@
 <template>
-  <b-container class="h-100 p-0 m-0 tour-purchase-action" fluid>
+  <b-container class="h-100 p-0 m-0 tour-discard-action" fluid>
     <b-row class="h-100 w-100 p-0 m-0">
       <!-- inventory -->
       <b-col class="h-100 w-100 py-2 tour-inventory" cols="4">

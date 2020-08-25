@@ -158,15 +158,15 @@ const steps: Array<Step> = [
     ],
   },
   {
-    target: '.tour-invest-action',
+    target: '.tour-phase',
     content: 'Quiz Question',
     params: {
-      placement: RIGHT,
+      placement: LEFT,
       tutorialElementId: 'timeblocks',
     },
   },
   {
-    target: '.tour-invest',
+    target: '.tour-phase',
     content:
       `There are some Resources that you cannot earn on your own. For example, ` +
       `the Researcher cannot earn Culture or Finance Resources by investing their time blocks. ` +

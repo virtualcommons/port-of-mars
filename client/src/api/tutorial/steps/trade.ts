@@ -85,14 +85,14 @@ const steps: Array<Step> = [
       placement: LEFT,
     },
   },
-  {
-    target: '.tour-active-accomplishments',
-    content: `During the Trade phase, Active Accomplishments will automatically toggle so you can ` +
-      `reference your available accomplishments and active trades simultaneously.`,
-    params: {
-      placement: RIGHT
-    }
-  },
+  // {
+  //   target: '.tour-active-accomplishments',
+  //   content: `During the Trade phase, Active Accomplishments will automatically toggle so you can ` +
+  //     `reference your available accomplishments and active trades simultaneously.`,
+  //   params: {
+  //     placement: RIGHT
+  //   }
+  // },
   {
     target: '.tour-trade-filters',
     content:
