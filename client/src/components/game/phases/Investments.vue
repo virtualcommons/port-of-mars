@@ -10,7 +10,7 @@
             :totalTimeBlocks="timeBlockTotal"
           />
           <p class="status">{{ remainingTimeBlocks }}</p>
-          <font-awesome-icon :icon="['fas', 'clock']" size="lg" class="icon" />
+          <b-icon-clock-fill scale="1.3" class="m-2"></b-icon-clock-fill>
         </div>
 
         <div class="cards">
