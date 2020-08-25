@@ -1,5 +1,5 @@
 <template>
-  <div class="c-inventory">
+  <div class="w-100 h-100 inventory">
     <div class="toggle">
       <p>Toggle Resource Costs</p>
       <button @click="toggleCosts" :class="costTogglerClass">

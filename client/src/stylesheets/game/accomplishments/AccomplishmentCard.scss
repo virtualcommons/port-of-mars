@@ -1,78 +1,23 @@
+// ACCOMPLISHMENT : CARD STYLING
+
 button {
   &:disabled {
     cursor: not-allowed;
   }
 }
 
-.default {
-  border: 0.125rem solid $light-shade;
-  background-color: $light-shade;
-
-  .purchase button,
-  .discard button {
-    @include space-button-white;
-  }
+.modal-view {
+  border: none;
+  max-height: 17rem !important;
 }
 
-.purchasable {
-  border: 0.125rem solid $light-accent;
-  background-color: $light-accent;
-
-  .purchase button,
-  .discard button {
-    @include space-button;
-  }
+.wrapper, .status-text {
+  @include default-transition-base
 }
 
-.unpurchasable {
-  border: 0.125rem solid $light-shade;
-  background-color: $light-shade;
-
-  .purchase button,
-  .discard button {
-    @include space-button-white;
-  }
-}
-
-.discarded {
-  @include default-transition-base;
-  border: 0.125rem solid $status-red;
-  background-color: $status-red;
-
-  .text{
-    color: $status-red;
-    font-size: $font-med;
-    font-weight: bold;
-  }
-}
-
-.purchased {
-  @include default-transition-base;
-  border: 0.125rem solid $status-green;
-  background-color: $status-green;
-
-  .text{
-    color: $status-green;
-    font-size: $font-med;
-    font-weight: bold;
-  }
-}
-
-
-.info {
+.wrapper {
   background: $dark-shade;
 }
-
-
-.title,
-.info,
-.cost,
-.purchase-wrapper,
-.discard-wrapper,
-.status-text {
-  @include default-transition-base;
-}
-
 
 .points {
   padding: 0 0.5rem;
@@ -100,50 +45,89 @@ button {
   }
 }
 
-.cost-wrapper {
-  background-color: $dark-shade;
 
-  .cost {
-    padding: 0;
-    @include make-center;
-    flex-wrap: wrap;
+.cost {
+  height: 2rem;
+  width: 2rem;
+  padding: 0.25rem;
+  border-radius: 50%;
+  margin: 0.125rem;
+  background-color: $light-shade;
 
-    .container {
-      @include make-center;
-      height: 2rem;
-      width: 2rem;
-      padding: 0.25rem;
-      border-radius: 50%;
-      margin: 0.125rem;
-      background-color: $light-shade;
-
-      img {
-        @include expand;
-      }
-    }
-
-    .unattainable-resource {
-      background-color: $light-shade-25 !important;
-    }
+  img {
+    @include expand;
   }
 }
 
-.purchase-wrapper {
-  background-color: $dark-shade;
+.unattainable-resource {
+  background-color: $light-shade-25 !important;
+}
 
-  .purchase {
-    padding: 0;
-    @include make-center;
+// ACCOMPLISHMENT : STATUS STYLING
+
+// default
+.default {
+  border: 0.125rem solid $light-shade;
+  background-color: $light-shade;
+
+  .purchase button,
+  .discard button {
+    @include space-button-white;
   }
 }
 
-.discard-wrapper {
-  background-color: $dark-shade;
 
-  .discard {
-    padding: 0;
-    @include make-center;
+// purchasable
+.purchasable {
+  border: 0.125rem solid $light-accent;
+  background-color: $light-accent;
+
+  .purchase button,
+  .discard button {
+    @include space-button;
   }
+}
+
+// unpurchasable
+.unpurchasable {
+  border: 0.125rem solid $light-shade;
+  background-color: $light-shade;
+
+  .purchase button,
+  .discard button {
+    @include space-button-white;
+  }
+}
+
+// discarded
+.discarded {
+  @include default-transition-base;
+  border: 0.125rem solid $status-red;
+  background-color: $status-red;
+
+  .text {
+    color: $status-red;
+    font-size: $font-med;
+    font-weight: bold;
+  }
+}
+
+// purchased
+.purchased {
+  @include default-transition-base;
+  border: 0.125rem solid $status-green;
+  background-color: $status-green;
+
+  .text {
+    color: $status-green;
+    font-size: $font-med;
+    font-weight: bold;
+  }
+}
+
+.discard {
+  padding: 0;
+  @include make-center;
 }
 
 .status-text {
@@ -151,22 +135,20 @@ button {
   text-align: center;
 }
 
-.modal-view {
-  border:none;
-  max-height: 17rem !important;
-}
-
 .hide-card {
   animation: hide 0.3s linear 1.5s 1 forwards;
 }
 
-@keyframes hide{
-  0%{
+
+// ANIMATION : hide card
+
+@keyframes hide {
+  0% {
     opacity: 100%;
   }
 
-  100%{
+  100% {
     opacity: 0;
-    height:0;
+    height: 0;
   }
 }
