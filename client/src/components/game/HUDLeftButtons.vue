@@ -1,46 +1,42 @@
 <template>
-  <div class="c-hud-left-buttons container">
+  <b-container class="w-100 p-0 m-0">
     <!-- button to switch between HUD Left Views -->
-    <div class="button-switchers row">
+    <b-row class="w-100 h-100 p-0 m-0 justify-content-center align-items-center">
 
       <!-- view : other players -->
-      <div class="other-players col-4">
+      <b-col cols="4" class="other-players">
         <button
           v-b-tooltip.hover.bottom="'Other Players'"
           @click="switchCurrentView(view.OtherPlayers)"
           :class="buttonClass(view.OtherPlayers)"
         >
-          <font-awesome-icon :icon="['fas', 'users']" size="lg" class="icon" />
+          <b-icon-people-fill scale="1.5"></b-icon-people-fill>
         </button>
-      </div>
+      </b-col>
 
       <!-- inventory -->
-      <div class="inventory col-4">
+      <b-col cols="4" class="inventory">
         <button
           v-b-tooltip.hover.bottom="'Inventory'"
           @click="switchCurrentView(view.Inventory)"
           :class="buttonClass(view.Inventory)"
         >
-          <font-awesome-icon
-            :icon="['fas', 'briefcase']"
-            size="lg"
-            class="icon"
-          />
+          <b-icon-briefcase-fill scale="1.5"></b-icon-briefcase-fill>
         </button>
-      </div>
+      </b-col>
 
       <!-- accomplishments -->
-      <div class="accomplishments col-4">
+      <b-col cols="4" class="accomplishments">
         <button
           v-b-tooltip.hover.bottom="'Accomplishments'"
           @click="switchCurrentView(view.Accomplishments)"
           :class="buttonClass(view.Accomplishments)"
         >
-          <font-awesome-icon :icon="['fas', 'star']" size="lg" class="icon" />
+          <b-icon-star-fill scale="1.5"></b-icon-star-fill>
         </button>
-      </div>
-    </div>
-  </div>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script lang="ts">
