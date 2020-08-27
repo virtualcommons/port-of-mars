@@ -126,6 +126,8 @@ export default {
 
       // system health
       [MarsLogCategory.systemHealth, 'var(--marslog-red)'],
+      [MarsLogCategory.systemHealthScrew, 'var(--marslog-red)'],
+      [MarsLogCategory.systemHealthContributions, 'var(--marslog-red)'],
 
       // trade
       [MarsLogCategory.trade, 'var(--marslog-purple)'],

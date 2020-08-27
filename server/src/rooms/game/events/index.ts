@@ -49,16 +49,17 @@ class GameEventDeserializer {
     return new constructor(ge.payload);
   }
 }
+
 export const gameEventDeserializer = new GameEventDeserializer();
 
 abstract class GameEventWithData implements GameEvent {
   abstract data: object;
 
-  abstract apply(game: GameState): void;
-
   get kind() {
     return _.kebabCase(this.constructor.name);
   }
+
+  abstract apply(game: GameState): void;
 
   serialize() {
     return {
@@ -77,6 +78,7 @@ export class SetPlayerReadiness extends GameEventWithData {
     game.setPlayerReadiness(this.data.role, this.data.value);
   }
 }
+
 gameEventDeserializer.register(SetPlayerReadiness);
 
 export class SentChatMessage extends GameEventWithData {
@@ -88,31 +90,32 @@ export class SentChatMessage extends GameEventWithData {
     game.addChat(this.data);
   }
 }
+
 gameEventDeserializer.register(SentChatMessage);
 
 export class PurchasedAccomplishment extends GameEventWithData {
   data: { accomplishment: AccomplishmentData; role: Role }
 
-  isAccomplishmentData(ad: AccomplishmentData | {id: number}): ad is AccomplishmentData {
-    return (ad as AccomplishmentData).label !== undefined;
-  }
-
   constructor(data: { accomplishment: AccomplishmentData | { id: number }; role: Role }) {
     super();
     // to get around
     if (!this.isAccomplishmentData(data.accomplishment)) {
-      this.data = { accomplishment: getAccomplishmentByID(data.role, data.accomplishment.id), role: data.role };
+      this.data = {accomplishment: getAccomplishmentByID(data.role, data.accomplishment.id), role: data.role};
     } else {
-      this.data = { accomplishment: data.accomplishment, role: data.role };
+      this.data = {accomplishment: data.accomplishment, role: data.role};
     }
   }
 
+  isAccomplishmentData(ad: AccomplishmentData | { id: number }): ad is AccomplishmentData {
+    return (ad as AccomplishmentData).label !== undefined;
+  }
 
   apply(game: GameState): void {
     logger.warn('accomplishment: %o', _.fromPairs(_.toPairs(this.data.accomplishment)));
     game.purchaseAccomplishment(this.data.role, this.data.accomplishment);
   }
 }
+
 gameEventDeserializer.register(PurchasedAccomplishment);
 
 export class DiscardedAccomplishment extends GameEventWithData {
@@ -124,6 +127,7 @@ export class DiscardedAccomplishment extends GameEventWithData {
     game.discardAccomplishment(this.data.role, this.data.id);
   }
 }
+
 gameEventDeserializer.register(DiscardedAccomplishment);
 
 export class TimeInvested extends GameEventWithData {
@@ -135,6 +139,7 @@ export class TimeInvested extends GameEventWithData {
     game.investTime(this.data.role, this.data.investment);
   }
 }
+
 gameEventDeserializer.register(TimeInvested);
 
 export class AcceptedTradeRequest extends GameEventWithData {
@@ -150,6 +155,7 @@ export class AcceptedTradeRequest extends GameEventWithData {
     game.acceptTrade(this.data.id);
   }
 }
+
 gameEventDeserializer.register(AcceptedTradeRequest);
 
 export class RejectedTradeRequest extends GameEventWithData {
@@ -165,6 +171,7 @@ export class RejectedTradeRequest extends GameEventWithData {
     game.removeTrade(this.data.id, 'reject-trade-request');
   }
 }
+
 gameEventDeserializer.register(RejectedTradeRequest);
 
 export class CanceledTradeRequest extends GameEventWithData {
@@ -180,6 +187,7 @@ export class CanceledTradeRequest extends GameEventWithData {
     game.removeTrade(this.data.id, 'cancel-trade-request');
   }
 }
+
 gameEventDeserializer.register(CanceledTradeRequest);
 
 export class SentTradeRequest extends GameEventWithData {
@@ -195,6 +203,7 @@ export class SentTradeRequest extends GameEventWithData {
     game.addTrade(this.data, 'sent-trade-request');
   }
 }
+
 gameEventDeserializer.register(SentTradeRequest);
 
 /*
@@ -213,7 +222,7 @@ abstract class KindOnlyGameEvent implements GameEvent {
   abstract apply(game: GameState): void;
 
   serialize() {
-    return { type: this.kind, dateCreated: new Date().getTime(), payload: {} };
+    return {type: this.kind, dateCreated: new Date().getTime(), payload: {}};
   }
 }
 
@@ -222,6 +231,7 @@ export class FinalizedMarsEvent extends KindOnlyGameEvent {
     game.currentEvent.state.finalize(game);
   }
 }
+
 gameEventDeserializer.register(FinalizedMarsEvent);
 
 /**
@@ -235,6 +245,7 @@ export class InitializedMarsEvent extends KindOnlyGameEvent {
 
   }
 }
+
 gameEventDeserializer.register(InitializedMarsEvent);
 
 export class EnteredMarsEventPhase extends KindOnlyGameEvent {
@@ -262,6 +273,7 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
     // TODO: HANDLE CURRENT EVENT USING MARSEVENTSPROCESSED
   }
 }
+
 gameEventDeserializer.register(EnteredMarsEventPhase);
 
 export class ReenteredMarsEventPhase extends KindOnlyGameEvent {
@@ -272,6 +284,7 @@ export class ReenteredMarsEventPhase extends KindOnlyGameEvent {
     game.timeRemaining = game.currentEvent.timeDuration;
   }
 }
+
 gameEventDeserializer.register(ReenteredMarsEventPhase);
 
 export class EnteredInvestmentPhase extends KindOnlyGameEvent {
@@ -282,6 +295,7 @@ export class EnteredInvestmentPhase extends KindOnlyGameEvent {
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
   }
 }
+
 gameEventDeserializer.register(EnteredInvestmentPhase);
 
 export class ExitedInvestmentPhase extends KindOnlyGameEvent {
@@ -292,6 +306,7 @@ export class ExitedInvestmentPhase extends KindOnlyGameEvent {
     }
   }
 }
+
 gameEventDeserializer.register(ExitedInvestmentPhase);
 
 export class ExitedMarsEventPhase extends KindOnlyGameEvent {
@@ -299,6 +314,7 @@ export class ExitedMarsEventPhase extends KindOnlyGameEvent {
     state.applyPendingActions();
   }
 }
+
 gameEventDeserializer.register(ExitedMarsEventPhase);
 
 export class EnteredTradePhase extends KindOnlyGameEvent {
@@ -309,6 +325,7 @@ export class EnteredTradePhase extends KindOnlyGameEvent {
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
   }
 }
+
 gameEventDeserializer.register(EnteredTradePhase);
 
 export class EnteredPurchasePhase extends KindOnlyGameEvent {
@@ -323,6 +340,7 @@ export class EnteredPurchasePhase extends KindOnlyGameEvent {
     }
   }
 }
+
 gameEventDeserializer.register(EnteredPurchasePhase);
 
 export class EnteredDiscardPhase extends KindOnlyGameEvent {
@@ -333,6 +351,7 @@ export class EnteredDiscardPhase extends KindOnlyGameEvent {
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
   }
 }
+
 gameEventDeserializer.register(EnteredDiscardPhase);
 
 export class EnteredDefeatPhase extends GameEventWithData {
@@ -347,6 +366,7 @@ export class EnteredDefeatPhase extends GameEventWithData {
     game.log(`System Health has reached zero.`, MarsLogCategory.systemHealth, 'Server');
   }
 }
+
 gameEventDeserializer.register(EnteredDefeatPhase);
 
 export class EnteredVictoryPhase extends GameEventWithData {
@@ -361,6 +381,7 @@ export class EnteredVictoryPhase extends GameEventWithData {
     game.evaluateGameWinners();
   }
 }
+
 gameEventDeserializer.register(EnteredVictoryPhase);
 
 export class EnteredNewRoundPhase extends KindOnlyGameEvent {
@@ -375,6 +396,7 @@ export class EnteredNewRoundPhase extends KindOnlyGameEvent {
     game.resetRound();
   }
 }
+
 gameEventDeserializer.register(EnteredNewRoundPhase);
 
 export class AddedSystemHealthContributions extends KindOnlyGameEvent {
@@ -384,12 +406,24 @@ export class AddedSystemHealthContributions extends KindOnlyGameEvent {
 
     // system health - last round
     game.log(
-      `At the end of Round ${game.round}, System Health = 
-      System Health' + Contributed - Taken = 
-      ${prevSystemHealth} + ${game.systemHealthContributed()} + ${game.systemHealthTaken()} = ${game.upkeep}.`,
-      MarsLogCategory.systemHealth);
+        `At the beginning of Round ${game.round}, System Health started at ${prevSystemHealth}.`,
+        MarsLogCategory.systemHealth);
+
+    game.log(`Collectively, players contributed +${game.systemHealthContributed()} System Health.`,
+        MarsLogCategory.systemHealthContributions);
+
+    if (game.systemHealthTaken() < 0) {
+      game.log(`${game.systemHealthTaken()} System Health was subtracted because players purchased screw 
+      Accomplishments.`, MarsLogCategory.systemHealthScrew);
+    } else {
+      game.log(`Players did not purchase any screw Accomplishments.`, MarsLogCategory.systemHealthScrew);
+    }
+
+    game.log(`At the end of Round ${game.round}, System Health is ${game.upkeep} after accounting for 
+    contributions and purchased screw Accomplishments.`, MarsLogCategory.systemHealth);
   }
 }
+
 gameEventDeserializer.register(AddedSystemHealthContributions);
 
 export class SubtractedSystemHealthWearAndTear extends KindOnlyGameEvent {
@@ -399,11 +433,12 @@ export class SubtractedSystemHealthWearAndTear extends KindOnlyGameEvent {
     game.resetPlayerContributions();
     game.roundIntroduction.reset();
     game.log(
-      `Standard wear and tear reduces System Health by 25.
+        `Standard wear and tear reduces System Health by 25.
         At the beginning of this round, System Health = ${game.upkeep}.`,
-      MarsLogCategory.systemHealth);
+        MarsLogCategory.systemHealth);
   }
 }
+
 gameEventDeserializer.register(SubtractedSystemHealthWearAndTear);
 
 // apply system health updates from previous round
@@ -414,6 +449,7 @@ export class BeganNewRound extends KindOnlyGameEvent {
     game.log(`Round ${game.round} begins.`, MarsLogCategory.newRound);
   }
 }
+
 gameEventDeserializer.register(BeganNewRound);
 
 export class TakenStateSnapshot implements GameEvent {
@@ -432,6 +468,7 @@ export class TakenStateSnapshot implements GameEvent {
     };
   }
 }
+
 gameEventDeserializer.register(TakenStateSnapshot);
 
 export class VotedForPersonalGain extends GameEventWithData {
@@ -447,6 +484,7 @@ export class VotedForPersonalGain extends GameEventWithData {
     }
   }
 }
+
 gameEventDeserializer.register(VotedForPersonalGain);
 
 export class VotedForPhilanthropist extends GameEventWithData {
@@ -466,6 +504,7 @@ export class VotedForPhilanthropist extends GameEventWithData {
     game.players[this.data.voter].updateReadiness(true);
   }
 }
+
 gameEventDeserializer.register(VotedForPhilanthropist);
 
 export class OutOfCommissionedCurator extends GameEventWithData {
@@ -485,6 +524,7 @@ export class OutOfCommissionedCurator extends GameEventWithData {
     game.players[this.data.role].updateReadiness(true);
   }
 }
+
 gameEventDeserializer.register(OutOfCommissionedCurator);
 
 export class OutOfCommissionedPolitician extends GameEventWithData {
@@ -524,6 +564,7 @@ export class OutOfCommissionedResearcher extends GameEventWithData {
     game.players[this.data.role].updateReadiness(true);
   }
 }
+
 gameEventDeserializer.register(OutOfCommissionedResearcher);
 
 export class OutOfCommissionedPioneer extends GameEventWithData {
@@ -543,6 +584,7 @@ export class OutOfCommissionedPioneer extends GameEventWithData {
     game.players[this.data.role].updateReadiness(true);
   }
 }
+
 gameEventDeserializer.register(OutOfCommissionedPioneer);
 
 export class OutOfCommissionedEntrepreneur extends GameEventWithData {
@@ -562,6 +604,7 @@ export class OutOfCommissionedEntrepreneur extends GameEventWithData {
     game.players[this.data.role].updateReadiness(true);
   }
 }
+
 gameEventDeserializer.register(OutOfCommissionedEntrepreneur);
 
 export class SelectedInfluence extends GameEventWithData {
@@ -580,6 +623,7 @@ export class SelectedInfluence extends GameEventWithData {
     }
   }
 }
+
 gameEventDeserializer.register(SelectedInfluence);
 
 export class KeptResources extends GameEventWithData {
@@ -598,6 +642,7 @@ export class KeptResources extends GameEventWithData {
     game.players[this.data.role].updateReadiness(true);
   }
 }
+
 gameEventDeserializer.register(KeptResources);
 
 export class StagedDiscardOfPurchasedAccomplishment extends GameEventWithData {
@@ -615,27 +660,28 @@ export class StagedDiscardOfPurchasedAccomplishment extends GameEventWithData {
     }
   }
 }
+
 gameEventDeserializer.register(StagedDiscardOfPurchasedAccomplishment);
 
 // Hero or Pariah event - select Hero or Pariah (1/2)
-  export class VoteHeroOrPariah extends GameEventWithData {
-    constructor(public data: { role: Role, heroOrPariah: VoteHeroOrPariahData["heroOrPariah"] }) {
-      super();
-    }
-
-    apply(game: GameState) {
-      downCastEventState(HeroOrPariah, game, (eventState) => {
-        eventState.voteHeroOrPariah(this.data.role, this.data.heroOrPariah, game);
-
-      })
-    }
+export class VoteHeroOrPariah extends GameEventWithData {
+  constructor(public data: { role: Role, heroOrPariah: VoteHeroOrPariahData["heroOrPariah"] }) {
+    super();
   }
+
+  apply(game: GameState) {
+    downCastEventState(HeroOrPariah, game, (eventState) => {
+      eventState.voteHeroOrPariah(this.data.role, this.data.heroOrPariah, game);
+
+    })
+  }
+}
 
 gameEventDeserializer.register(VoteHeroOrPariah);
 
 // Hero or Pariah event - select player as Hero or Pariah (2/2)
 export class VoteHeroOrPariahRole extends GameEventWithData {
-  constructor(public data: {role: Role, vote: Role}) {
+  constructor(public data: { role: Role, vote: Role }) {
     super();
   }
 
@@ -660,6 +706,7 @@ export class BotControlTaken extends GameEventWithData {
     game.players[this.data.role].bot.active = true;
   }
 }
+
 gameEventDeserializer.register(BotControlTaken);
 
 export class BotControlRelinquished extends GameEventWithData {
@@ -671,10 +718,11 @@ export class BotControlRelinquished extends GameEventWithData {
     game.players[this.data.role].bot.active = false;
   }
 }
+
 gameEventDeserializer.register(BotControlRelinquished);
 
 export class BotWarningAcknowledged extends GameEventWithData {
-  constructor(public data: {role: Role}) {
+  constructor(public data: { role: Role }) {
     super();
   }
 
@@ -682,5 +730,6 @@ export class BotWarningAcknowledged extends GameEventWithData {
     game.players[this.data.role].bot.resetElapsed();
   }
 }
+
 gameEventDeserializer.register(BotWarningAcknowledged);
 

@@ -130,6 +130,8 @@ export interface MarsEventData {
 export enum MarsLogCategory {
   newRound = "NEW ROUND",
   systemHealth = "SYSTEM HEALTH",
+  systemHealthContributions = "PLAYER CONTRIBUTIONS",
+  systemHealthScrew = "SCREW ACCOMPLISHMENTS",
   event = "EVENT",
   trade = "TRADE",
   accomplishment = "ACCOMPLISHMENT",
