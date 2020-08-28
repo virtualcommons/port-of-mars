@@ -137,6 +137,35 @@ export class TimeInvested extends GameEventWithData {
 
   apply(game: GameState): void {
     game.investTime(this.data.role, this.data.investment);
+
+    // if Audit event is in effect
+    if (game.marsEvents.filter(event => event.id == 'audit').length > 0) {
+      const influenceType = Object.keys(this.data.investment)
+          .filter((investment) => {
+            return investment == 'systemHealth' || this.data.investment[investment as Resource] != 0;
+          })
+
+          .map((investment) => {
+            const formattedInvestmentLabel = investment == 'systemHealth' ? 'System Health' :
+                investment.charAt(0).toUpperCase() + investment.slice(1);
+            const timeBlockString = this.data.investment[investment as Resource] > 1 ? 'time blocks' : 'time block';
+
+            return `${this.data.investment[investment as Resource]} ${timeBlockString} in ${formattedInvestmentLabel}`;
+          })
+
+          .join('; ');
+
+      const auditChatMessage: ChatMessageData = {
+        message: `${this.data.role} has invested ${influenceType}.`,
+        role: this.data.role,
+        dateCreated: new Date().getDate(),
+        round: game.round
+      }
+
+      game.addChat(auditChatMessage);
+
+    }
+
   }
 }
 
