@@ -6,11 +6,20 @@ import { BaseService } from "@port-of-mars/server/services/db";
 import {IsNull, Not, SelectQueryBuilder} from "typeorm";
 import { GAME_PAGE, TUTORIAL_PAGE, REGISTER_PAGE, VERIFY_PAGE } from "@port-of-mars/shared/routes";
 import { settings } from "@port-of-mars/server/settings";
+import _ from "lodash";
+
+interface PlayerTaskCompletion {
+  mustVerifyEmail: boolean;
+  mustProvideConsent: boolean;
+  mustTakeTutorial: boolean;
+  mustTakeIntroSurvey: boolean;
+  canPlayGame: boolean;
+  shouldTakeExitSurvey: boolean;
+}
 
 interface DashboardData {
-  actionItems: Array<ActionItem>;
+  playerTaskCompletion: PlayerTaskCompletion;
   upcomingGames: Array<GameMeta>;
-  stats: Stats;
 }
 
 export class DashboardService extends BaseService {
@@ -136,35 +145,40 @@ export class DashboardService extends BaseService {
     return { games: stats }
   }
 
-  async getActionItems(user: User, round: TournamentRound): Promise<Array<ActionItem>> {
-    const actionItems = [];
-    if (!user.dateConsented) {
-      actionItems.push(this.getRegisterActionItem(user));
-    }
-    else if (!user.isVerified) {
-      actionItems.push(this.getVerifyActionItem(user))
-    }
-    else if (!user.passedQuiz) {
-      actionItems.push(this.getTakeTutorialActionItem(user))
-    } else {
-      const invite = await this.sp.tournament.getActiveRoundInvite(user.id, round);
-      if (settings.allowInternalSurveyRoutes) {
-        actionItems.push(this.getInternalSurveyActionItem(user, round, invite));
-      }
-      actionItems.push(this.getTakeIntroSurveyActionItem(user, round, invite));
-      if (user.passedQuiz && invite.hasCompletedIntroSurvey) {
-        const gameActionItem = await this.getCurrentGameActionItem(user);
-        if (gameActionItem) {
-          actionItems.push(gameActionItem);
-        }
-        // if the player has completed a game for this round, offer the exit survey
-        if (invite.hasParticipated) {
-          actionItems.push(this.getTakeExitSurveyActionItem(user, round, invite));
-        }
-      }
-    }
+  mustVerifyEmail(user: User): boolean {
+    return !user.isVerified;
+  }
 
-    return actionItems;
+  mustProvideConsent(user: User): boolean {
+    return _.isUndefined(user.dateConsented)
+  }
+
+  mustTakeTutorial(user: User): boolean {
+    return !user.passedQuiz
+  }
+
+  mustTakeIntroSurvey(invite: TournamentRoundInvite | undefined): boolean {
+    return _.isUndefined(invite) || !invite.hasCompletedIntroSurvey
+  }
+
+  canPlayGame(invite: TournamentRoundInvite | undefined): boolean {
+    return _.isUndefined(invite) || !invite.hasParticipated
+  }
+
+  shouldTakeExitSurvey(invite: TournamentRoundInvite | undefined): boolean {
+    return _.isUndefined(invite) || !invite.hasCompletedExitSurvey
+  }
+
+  async getPlayerTaskCompletion(user: User, round: TournamentRound): Promise<PlayerTaskCompletion> {
+    const invite = await this.sp.tournament.getActiveRoundInviteIfExists(user.id, round);
+    return {
+      mustVerifyEmail: this.mustVerifyEmail(user),
+      mustProvideConsent: this.mustProvideConsent(user),
+      mustTakeTutorial: this.mustTakeTutorial(user),
+      mustTakeIntroSurvey: this.mustTakeIntroSurvey(invite),
+      canPlayGame: this.canPlayGame(invite),
+      shouldTakeExitSurvey: this.shouldTakeExitSurvey(invite),
+    }
   }
 
   async getData(user: User): Promise<DashboardData> {
@@ -172,16 +186,14 @@ export class DashboardService extends BaseService {
     if (!round) {
       throw new Error(`no active tournament round found`);
     }
-    const actionItems: Array<ActionItem> = await this.getActionItems(user, round);
-    const stats = await this.getStats(user, round);
+    const playerTaskCompletion: PlayerTaskCompletion = await this.getPlayerTaskCompletion(user, round);
     return {
-      actionItems,
+      playerTaskCompletion,
       upcomingGames: [{
         time: this.sp.time.now().getTime(),
         round: round.roundNumber,
         tournamentName: round.tournament.name
-      }],
-      stats
+      }]
     }
   }
 }

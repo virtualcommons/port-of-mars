@@ -74,6 +74,17 @@ export class TournamentService extends BaseService {
   }
 
 
+  async getActiveRoundInviteIfExists(userId: number, tournamentRound: TournamentRound): Promise<TournamentRoundInvite | undefined> {
+    const tournamentRoundId = tournamentRound.id;
+    const invite = await this.em.getRepository(TournamentRoundInvite).findOne({
+      where: {
+        tournamentRoundId,
+        userId
+      }
+    });
+    return invite;
+  }
+
   async getActiveRoundInvite(userId: number, tournamentRound: TournamentRound): Promise<TournamentRoundInvite> {
     const tournamentRoundId = tournamentRound.id;
     const invite = await this.em.getRepository(TournamentRoundInvite).findOne({
