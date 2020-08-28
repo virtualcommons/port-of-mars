@@ -20,7 +20,7 @@ const steps: Array<Step> = [
             government: 0,
             legacy: 10,
             science: 10,
-            upkeep: 0,
+            systemHealth: 0,
           },
           role: 'Researcher',
         },
@@ -36,7 +36,7 @@ const steps: Array<Step> = [
             legacy: 0,
             finance: 0,
             culture: 0,
-            upkeep: 0,
+            systemHealth: 0,
             victoryPoints: 1,
             effect:
               'You can no longer make Politics or Legacy Influence. Science Influence only costs 1 Time Block to make.',

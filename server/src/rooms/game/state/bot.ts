@@ -53,7 +53,7 @@ export class MarsEventVisitor implements AbstractMarsEventVisitor {
   }
 
   VOTE_YES_NO(state: GameState, player: Player): Array<GameEvent> {
-    return [new VotedForPersonalGain({vote: state.upkeep > 30, role: player.role})]
+    return [new VotedForPersonalGain({vote: state.systemHealth > 30, role: player.role})]
   }
 
   VOTE_FOR_PLAYER_SINGLE(state: GameState, player: Player): Array<GameEvent> {
@@ -103,7 +103,7 @@ export class MarsEventVisitor implements AbstractMarsEventVisitor {
       government: -player.inventory.government,
       legacy: -player.inventory.legacy,
       science: -player.inventory.science,
-      upkeep: 0
+      systemHealth: 0
     };
 
     let unitsRemaining = 2;
@@ -159,7 +159,7 @@ export class ActorRunner implements Actor {
     const speciality = player.specialty;
     const specialityCost = player.costs[speciality];
     const specialityUnits = Math.floor(tbs / specialityCost * 0.5);
-    const upkeepCost = player.costs['upkeep'];
+    const upkeepCost = player.costs['systemHealth'];
     const upkeepUnits = Math.floor((tbs - specialityCost * specialityUnits) / upkeepCost);
     const investment: InvestmentData = {
       culture: 0,
@@ -167,7 +167,7 @@ export class ActorRunner implements Actor {
       government: 0,
       legacy: 0,
       science: 0,
-      upkeep: upkeepUnits
+      systemHealth: upkeepUnits
     };
     investment[speciality] = specialityUnits;
     return [
@@ -195,7 +195,7 @@ export class ActorRunner implements Actor {
     for (const accomplishment of player.accomplishments.purchasable) {
       if (player.isAccomplishmentPurchaseFeasible(accomplishment)) {
         // don't purchase screw cards if system health is low
-        if (state.upkeep <= 35 && accomplishment.upkeep < 0) {
+        if (state.systemHealth <= 35 && accomplishment.systemHealth < 0) {
           continue;
         }
         return [new PurchasedAccomplishment({accomplishment, role: player.role})]
@@ -214,7 +214,7 @@ export class ActorRunner implements Actor {
     // Discard all screw cards
     const events: Array<GameEvent> = [];
     for (const accomplishment of player.accomplishments.purchasable) {
-      if (accomplishment.upkeep <= 0) {
+      if (accomplishment.systemHealth <= 0) {
         events.push(new DiscardedAccomplishment({id: accomplishment.id, role: player.role}))
       }
     }

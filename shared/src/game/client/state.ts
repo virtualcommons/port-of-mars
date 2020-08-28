@@ -73,7 +73,7 @@ function defaultCostData(role: Role): ResourceCostData {
     legacy: 0,
     finance: 0,
     culture: 0,
-    upkeep: 0,
+    systemHealth: 0,
   };
 }
 
@@ -94,7 +94,7 @@ export function defaultPendingInvestment(): ResourceCostData {
     legacy: 0,
     finance: 0,
     culture: 0,
-    upkeep: 0,
+    systemHealth: 0,
   };
 }
 
@@ -171,7 +171,7 @@ export const initialStoreState: State = {
   timeRemaining: 300,
   round: 1,
   phase: Phase.newRound,
-  upkeep: 100,
+  systemHealth: 100,
   messages: [],
   marsEvents: [],
   logs: [],

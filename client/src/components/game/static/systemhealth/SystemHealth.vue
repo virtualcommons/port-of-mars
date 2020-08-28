@@ -17,7 +17,7 @@ import StatusBar from './StatusBar.vue';
 })
 export default class SystemHealth extends Vue {
   get systemHealthStatus() {
-    return this.$tstore.state.upkeep;
+    return this.$tstore.state.systemHealth;
   }
 }
 </script>

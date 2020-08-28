@@ -37,7 +37,7 @@ describe('a Researcher Player Accomplishment', () => {
     expect(p.accomplishments.purchasable.length).toBe(3);
   });
 
-  it('screw cards handle contributed upkeep correctly', () => {
+  it('screw cards handle contributed sysem health correctly', () => {
     const grantFunkAccomplishment = getAccomplishmentByID(RESEARCHER, 14);
     expect(p.systemHealthChanges.netChange()).toBe(0);
     p.purchaseAccomplishment(grantFunkAccomplishment);
@@ -113,8 +113,8 @@ describe('an accomplishment', () => {
     const accomplishment2 = new Accomplishment(getAccomplishmentByID(CURATOR, 81));
     accomplishment2.fromJSON(accomplishment.toJSON());
     expect(_.isEqual(accomplishment, accomplishment2)).toBeTruthy();
-    expect(accomplishment.upkeep).toBe(accomplishment2.upkeep)
-    expect(accomplishment.upkeep).toBe(0);
+    expect(accomplishment.systemHealth).toBe(accomplishment2.systemHealth)
+    expect(accomplishment.systemHealth).toBe(0);
   })
 })
 

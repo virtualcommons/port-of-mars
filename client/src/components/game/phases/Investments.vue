@@ -54,13 +54,7 @@ import TimeBlockMeter from './investment/TimeBlockMeter.vue';
 import InvestmentCard from './investment/InvestmentCard.vue';
 import { canPurchaseAccomplishment } from '@port-of-mars/shared/validation';
 import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faClock } from '@fortawesome/free-solid-svg-icons/faClock';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import * as _ from 'lodash';
-
-library.add(faClock);
-Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 @Component({
   components: {

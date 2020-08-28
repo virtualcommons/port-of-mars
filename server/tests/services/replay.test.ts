@@ -28,7 +28,7 @@ describe('a game', () => {
     [40, new EnteredInvestmentPhase()],
     [200, new TimeInvested({
       role: CURATOR,
-      investment: {upkeep: 2, culture: 2, finance: 0, government: 0, legacy: 0, science: 0}
+      investment: {systemHealth: 2, culture: 2, finance: 0, government: 0, legacy: 0, science: 0}
     })],
     [200, new ExitedInvestmentPhase()],
     [10, new EnteredTradePhase()],

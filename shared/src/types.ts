@@ -44,7 +44,7 @@ export interface ResourceAmountData {
 }
 
 export interface InvestmentData extends ResourceAmountData {
-  upkeep: number;
+  systemHealth: number;
 }
 
 export type ResourceCostData = InvestmentData;
@@ -57,7 +57,7 @@ export const INVESTMENTS: Array<Investment> = [
   'government',
   'legacy',
   'science',
-  'upkeep'
+  'systemHealth'
 ];
 export const RESOURCES: Array<Resource> = [
   'culture',
@@ -128,6 +128,7 @@ export interface MarsEventData {
 }
 
 export enum MarsLogCategory {
+  audit = "AUDIT",
   newRound = "NEW ROUND",
   systemHealth = "SYSTEM HEALTH",
   systemHealthContributions = "PLAYER CONTRIBUTIONS",
@@ -167,7 +168,7 @@ export interface AccomplishmentData {
   legacy: number;
   finance: number;
   culture: number;
-  upkeep: number;
+  systemHealth: number;
   victoryPoints: number;
   effect: string;
 }
@@ -237,7 +238,7 @@ export interface GameData {
   timeRemaining: number;
   round: number;
   phase: Phase;
-  upkeep: number;
+  systemHealth: number;
   messages: Array<ChatMessageData>;
   marsEvents: Array<MarsEventData>;
   logs: Array<MarsLogMessageData>;

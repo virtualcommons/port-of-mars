@@ -129,7 +129,6 @@ export class BondingThroughAdversity extends BaseEvent {
   finalize(game: GameState): void {
     for (const role of ROLES) {
       game.players[role].inventory[this.votes[role]] += 1;
-
     }
     const message = `Players have gained one influence currency of their choice.`
     game.log(message, `${MarsLogCategory.event}: ${formatEventName(BondingThroughAdversity.name)}`);
@@ -283,7 +282,7 @@ export class CropFailure extends BaseEvent {
 export class DifficultConditions extends BaseEvent {
   finalize(state: GameState): void {
     for (const player of state.players) {
-      player.costs.upkeep *= 2;
+      player.costs.systemHealth *= 2;
     }
     state.log(`System Health costs twice as many Time Blocks as usual this round.`, `${MarsLogCategory.event}: Difficult Conditions`)
   }

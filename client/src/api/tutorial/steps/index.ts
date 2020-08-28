@@ -5,13 +5,13 @@ import gamePlay from './gamePlay';
 import invest from './invest';
 import player from './player';
 import trade from './trade';
-import upkeep from './upkeep';
+import systemHealth from './systemHealth';
 import purchase from './purchase';
 import discard from './discard';
 
 // concatenate tutorial steps in order
 export const tutorialSteps: Array<Step> = gamePlay.concat(
-  upkeep,
+  systemHealth,
   player,
   newRound,
   events,

@@ -55,7 +55,7 @@ function gameLoop(room: GameRoomType): void {
 
     if (room.state.allPlayersAreReady
       || room.state.timeRemaining <= 0
-      || (room.state.upkeep <= 0 && !inEndGame)) {
+      || (room.state.systemHealth <= 0 && !inEndGame)) {
       const cmd = new SetNextPhaseCmd(room.state);
       const phaseEvents = cmd.execute();
       room.state.applyMany(phaseEvents);

@@ -102,7 +102,7 @@
     }
 
     get label() {
-      return this.name == ('upkeep' as any) ? 'System Health' : this.name;
+      return this.name == ('systemHealth' as any) ? 'System Health' : this.name;
     }
 
     get playerReady() {

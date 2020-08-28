@@ -258,7 +258,7 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
     game.handleIncomplete();
 
     // process mars events
-    const nCards = game.upkeep < 35 ? 3 : game.upkeep < 65 ? 2 : 1;
+    const nCards = game.systemHealth < 35 ? 3 : game.systemHealth < 65 ? 2 : 1;
     game.updateMarsEventsElapsed();
     game.marsEventsProcessed = GameState.DEFAULTS.marsEventsProcessed;
     game.drawMarsEvents(nCards);
@@ -401,7 +401,7 @@ gameEventDeserializer.register(EnteredNewRoundPhase);
 
 export class AddedSystemHealthContributions extends KindOnlyGameEvent {
   apply(game: GameState): void {
-    const prevSystemHealth = game.upkeep;
+    const prevSystemHealth = game.systemHealth;
     game.updateSystemHealth();
 
     // system health - last round
@@ -419,7 +419,7 @@ export class AddedSystemHealthContributions extends KindOnlyGameEvent {
       game.log(`Players did not purchase any screw Accomplishments.`, MarsLogCategory.systemHealthScrew);
     }
 
-    game.log(`At the end of Round ${game.round}, System Health is ${game.upkeep} after accounting for 
+    game.log(`At the end of Round ${game.round}, System Health is ${game.systemHealth} after accounting for 
     contributions and purchased screw Accomplishments.`, MarsLogCategory.systemHealth);
   }
 }
@@ -434,7 +434,7 @@ export class SubtractedSystemHealthWearAndTear extends KindOnlyGameEvent {
     game.roundIntroduction.reset();
     game.log(
         `Standard wear and tear reduces System Health by 25.
-        At the beginning of this round, System Health = ${game.upkeep}.`,
+        At the beginning of this round, System Health = ${game.systemHealth}.`,
         MarsLogCategory.systemHealth);
   }
 }

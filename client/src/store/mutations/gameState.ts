@@ -26,8 +26,8 @@ function SET_ROUND(state: State, round: number) {
   //   state.players[role].pendingInvestments = defaultPendingInvestment();
   // }
 }
-function SET_UPKEEP(state: State, upkeep: number) {
-  state.upkeep = upkeep;
+function SET_SYSTEM_HEALTH(state: State, systemHealth: number) {
+  state.systemHealth = systemHealth;
 }
 
 // MUTATIONS FOR EVENTS :: START
@@ -100,7 +100,7 @@ function SET_HERO_OR_PARIAH(state: State, vote: 'hero' | 'pariah') {
 export default {
   SET_GAME_PHASE,
   SET_ROUND,
-  SET_UPKEEP,
+  SET_SYSTEM_HEALTH,
   ADD_TO_EVENTS,
   REMOVE_FROM_EVENTS,
   CHANGE_EVENT,

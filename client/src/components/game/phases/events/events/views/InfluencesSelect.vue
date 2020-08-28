@@ -45,7 +45,7 @@ export default class InfluencesSelect extends Vue {
   get investments(): any {
     const p = this.$tstore.getters.player;
 
-    return Object.keys(this.origPending).filter(investment => investment !== 'upkeep').map((investment) => {
+    return Object.keys(this.origPending).filter(investment => investment !== 'systemHealth').map((investment) => {
       return {
         name: investment,
         cost:

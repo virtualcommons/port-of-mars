@@ -250,7 +250,7 @@ export class SetNextPhaseCmd implements Command {
   }
 
   execute(): Array<GameEvent> {
-    if (this.state.upkeep <= 0) {
+    if (this.state.systemHealth <= 0) {
       return [new EnteredDefeatPhase(this.state.playerScores)];
     }
 

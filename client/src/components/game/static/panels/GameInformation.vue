@@ -42,10 +42,10 @@ export default class GameInformation extends Vue {
   @Inject() private api!: AbstractGameAPI;
 
   get roundNumber() {
-    const { round, upkeep } = this.$store.state;
-    if (round > 0 && upkeep > 0) {
+    const { round, systemHealth } = this.$store.state;
+    if (round > 0 && systemHealth > 0) {
       return round;
-    } else if (upkeep <= 0) {
+    } else if (systemHealth <= 0) {
       return 'Over';
     } else {
       return 'Pregame';

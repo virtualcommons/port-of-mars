@@ -137,7 +137,7 @@ export default class AccomplishmentCard extends Vue {
       legacy: undefined,
       finance: undefined,
       culture: undefined,
-      upkeep: undefined,
+      systemHealth: undefined,
       victoryPoints: undefined,
       effect: undefined,
     }),
@@ -267,7 +267,7 @@ export default class AccomplishmentCard extends Vue {
   }
 
   private shouldResourceBeGrayedOut(investment: Investment) {
-    if (investment === 'upkeep') {
+    if (investment === 'systemHealth') {
       return false;
     }
 

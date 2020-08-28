@@ -25,7 +25,7 @@ const steps: Array<Step> = [
             legacy: 0,
             finance: 0,
             culture: 0,
-            upkeep: 0,
+            systemHealth: 0,
             victoryPoints: 1,
             effect: 'none',
           },

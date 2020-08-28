@@ -200,7 +200,7 @@ export class Trade extends Schema {
 
     pFrom.inventory.update(_.mapValues(this.sender.resourceAmount, r => -r!));
     pFrom.inventory.update(this.recipient.resourceAmount);
-    //pFrom.pendingInvestments.rollback({...this.from.resourceAmount,upkeep:0});
+    //pFrom.pendingInvestments.rollback({...this.from.resourceAmount,systemHealth:0});
 
     pTo.inventory.update(_.mapValues(this.recipient.resourceAmount, r => -r!));
     pTo.inventory.update(this.sender.resourceAmount);
@@ -314,7 +314,7 @@ class PendingInvestment extends Schema implements InvestmentData {
     this.government = pendingInvestments.government;
     this.legacy = pendingInvestments.legacy;
     this.science = pendingInvestments.science;
-    this.upkeep = pendingInvestments.upkeep;
+    this.systemHealth = pendingInvestments.systemHealth;
   }
 
   static defaults(): InvestmentData {
@@ -324,7 +324,7 @@ class PendingInvestment extends Schema implements InvestmentData {
       government: 0,
       legacy: 0,
       science: 0,
-      upkeep: 0
+      systemHealth: 0
     };
   }
 
@@ -343,7 +343,7 @@ class PendingInvestment extends Schema implements InvestmentData {
       government: this.government,
       legacy: this.legacy,
       science: this.science,
-      upkeep: this.upkeep
+      systemHealth: this.systemHealth
     };
   }
 
@@ -361,7 +361,7 @@ class PendingInvestment extends Schema implements InvestmentData {
     this.government += data.government;
     this.legacy += data.legacy;
     this.science += data.science;
-    this.upkeep += data.upkeep;
+    this.systemHealth += data.systemHealth;
   }
 
   @type('number')
@@ -380,7 +380,7 @@ class PendingInvestment extends Schema implements InvestmentData {
   science: number;
 
   @type('number')
-  upkeep: number;
+  systemHealth: number;
 }
 
 export class MarsLogMessage extends Schema implements MarsLogMessageData {
@@ -436,7 +436,7 @@ class ResourceCosts extends Schema implements ResourceCostData {
     this.government = costs.government;
     this.legacy = costs.legacy;
     this.science = costs.science;
-    this.upkeep = costs.upkeep;
+    this.systemHealth = costs.systemHealth;
   }
 
   fromJSON(data: ResourceCostData) {
@@ -450,7 +450,7 @@ class ResourceCosts extends Schema implements ResourceCostData {
       government: this.government,
       legacy: this.legacy,
       science: this.science,
-      upkeep: this.upkeep
+      systemHealth: this.systemHealth
     };
   }
 
@@ -463,7 +463,7 @@ class ResourceCosts extends Schema implements ResourceCostData {
             government: COST_INAFFORDABLE,
             legacy: 3,
             science: COST_INAFFORDABLE,
-            upkeep: 1
+            systemHealth: 1
             // specialty: 'culture'
           };
         case ENTREPRENEUR:
@@ -473,7 +473,7 @@ class ResourceCosts extends Schema implements ResourceCostData {
             government: 3,
             legacy: COST_INAFFORDABLE,
             science: COST_INAFFORDABLE,
-            upkeep: 1
+            systemHealth: 1
             // specialty: 'finance'
           };
         case PIONEER:
@@ -483,7 +483,7 @@ class ResourceCosts extends Schema implements ResourceCostData {
             government: COST_INAFFORDABLE,
             legacy: 2,
             science: 3,
-            upkeep: 1
+            systemHealth: 1
             // specialty: 'legacy'
           };
         case POLITICIAN:
@@ -493,7 +493,7 @@ class ResourceCosts extends Schema implements ResourceCostData {
             government: 2,
             legacy: COST_INAFFORDABLE,
             science: 3,
-            upkeep: 1
+            systemHealth: 1
             // specialty: 'government'
           };
         case RESEARCHER:
@@ -503,7 +503,7 @@ class ResourceCosts extends Schema implements ResourceCostData {
             government: 3,
             legacy: 3,
             science: 2,
-            upkeep: 1
+            systemHealth: 1
             // specialty: 'science'
           };
       }
@@ -544,7 +544,7 @@ class ResourceCosts extends Schema implements ResourceCostData {
   science: number;
 
   @type('number')
-  upkeep: number;
+  systemHealth: number;
 
   investmentWithinBudget(investment: InvestmentData, budget: number) {
     return (
@@ -553,7 +553,7 @@ class ResourceCosts extends Schema implements ResourceCostData {
       this.government * investment.government +
       this.legacy * investment.legacy +
       this.science * investment.science +
-      this.upkeep * investment.upkeep <=
+      this.systemHealth * investment.systemHealth <=
       budget
     );
   }
@@ -571,7 +571,7 @@ export class Accomplishment extends Schema implements AccomplishmentData {
     this.legacy = data.legacy;
     this.finance = data.finance;
     this.culture = data.culture;
-    this.upkeep = data.upkeep;
+    this.systemHealth = data.systemHealth;
     this.victoryPoints = data.victoryPoints;
     this.effect = data.effect;
   }
@@ -616,7 +616,7 @@ export class Accomplishment extends Schema implements AccomplishmentData {
   culture: number;
 
   @type('number')
-  upkeep: number;
+  systemHealth: number;
 
   @type('number')
   victoryPoints: number;
@@ -960,8 +960,8 @@ export class Player extends Schema implements PlayerData {
       science: -accomplishment.science
     };
     logger.trace('accomplishments: %o', JSON.stringify(this.accomplishments.purchasable.map(p => _.fromPairs(Object.entries(p)))));
-    logger.trace('accomplishment upkeep: %d [%s] (%o)', accomplishment.upkeep, accomplishment.label, _.fromPairs(_.toPairs(accomplishment)))
-    this.systemHealthChanges.addPurchase(new PurchasedSystemHealth({description: `Purchase: ${accomplishment.label}`, systemHealth: accomplishment.upkeep}));
+    logger.trace('accomplishment systemHealth: %d [%s] (%o)', accomplishment.systemHealth, accomplishment.label, _.fromPairs(_.toPairs(accomplishment)))
+    this.systemHealthChanges.addPurchase(new PurchasedSystemHealth({description: `Purchase: ${accomplishment.label}`, systemHealth: accomplishment.systemHealth}));
     logger.trace('purchases: %o', this.systemHealthChanges.purchases);
     // FIXME: victoryPoints should probably be a computed property
     // that sums this.accomplishments.purchased.victoryPoints
@@ -1000,7 +1000,7 @@ export class Player extends Schema implements PlayerData {
       if (v != Infinity) {
         leftOvers += (investment as any)[k] * v;
       }
-      if (minCost > v && k != 'upkeep') {
+      if (minCost > v && k != 'systemHealth') {
         minCost = v;
         minCostResource = k;
       }
@@ -1013,7 +1013,7 @@ export class Player extends Schema implements PlayerData {
       }
 
       while (leftOvers < 10) {
-        leftOverInvestments.upkeep += 1;
+        leftOverInvestments.systemHealth += 1;
         leftOvers += 1;
       }
     }
@@ -1029,7 +1029,7 @@ export class Player extends Schema implements PlayerData {
       (investment as any)[k] += (leftOverInvestments as any)[k];
     }
 
-    this.systemHealthChanges.investment = investment.upkeep;
+    this.systemHealthChanges.investment = investment.systemHealth;
     this.inventory.update(investment);
     // console.log(this.inventory.toJSON())
   }
@@ -1041,7 +1041,7 @@ export class Player extends Schema implements PlayerData {
       invertedInventory[resource as Resource] = this.inventory[resource as Resource] * -1;
     }
 
-    this.pendingInvestments.add({ ...invertedInventory, upkeep: 0 });
+    this.pendingInvestments.add({ ...invertedInventory, systemHealth: 0 });
   }
 
   mergePendingAndInventory(): void {
@@ -1117,7 +1117,7 @@ export interface GameSerialized {
   botWarning: boolean;
   round: number;
   phase: Phase;
-  upkeep: number;
+  systemHealth: number;
   logs: Array<MarsLogMessageData>;
   messages: Array<ChatMessageData>;
   marsEvents: Array<MarsEventData>;
@@ -1164,7 +1164,7 @@ export class GameState extends Schema implements GameData {
     marsEventsProcessed: 0,
     round: 1,
     phase: Phase.newRound,
-    upkeep: 100,
+    systemHealth: 100,
     heroOrPariah: ''
   };
 
@@ -1177,7 +1177,7 @@ export class GameState extends Schema implements GameData {
     this.timeRemaining = data.timeRemaining;
     this.round = data.round;
     this.phase = data.phase;
-    this.upkeep = data.upkeep;
+    this.systemHealth = data.systemHealth;
     this.roundIntroduction.fromJSON(data.roundIntroduction);
     this.tradingEnabled = data.tradingEnabled;
     this.heroOrPariah = data.heroOrPariah;
@@ -1215,7 +1215,7 @@ export class GameState extends Schema implements GameData {
       timeRemaining: this.timeRemaining,
       round: this.round,
       phase: this.phase,
-      upkeep: this.upkeep,
+      systemHealth: this.systemHealth,
       logs: _.map(this.logs, x => x.toJSON()),
       messages: _.map(this.messages, x => x.toJSON()),
       marsEvents: _.map(this.marsEvents, e => e.toJSON()),
@@ -1253,7 +1253,7 @@ export class GameState extends Schema implements GameData {
   phase: Phase = GameState.DEFAULTS.phase;
 
   @type('number')
-  upkeep: number = GameState.DEFAULTS.upkeep;
+  systemHealth: number = GameState.DEFAULTS.systemHealth;
 
   @type([MarsLogMessage])
   logs = new ArraySchema<MarsLogMessage>();
@@ -1409,7 +1409,7 @@ export class GameState extends Schema implements GameData {
     this.phase = GameState.DEFAULTS.phase;
     this.round = GameState.DEFAULTS.round;
     this.timeRemaining = GameState.DEFAULTS.timeRemaining;
-    this.upkeep = GameState.DEFAULTS.upkeep;
+    this.systemHealth = GameState.DEFAULTS.systemHealth;
     this.logs.splice(0, this.logs.length);
     this.marsEvents.splice(0, this.marsEvents.length);
     this.messages.splice(0, this.messages.length);
@@ -1420,11 +1420,11 @@ export class GameState extends Schema implements GameData {
   }
 
   updateSystemHealth(): void {
-    this.upkeep = this.nextRoundSystemHealth();
+    this.systemHealth = this.nextRoundSystemHealth();
   }
 
   nextRoundSystemHealth(): number {
-    return _.clamp(this.upkeep + this.systemHealthContributed() + this.systemHealthTaken(), 0, 100);
+    return _.clamp(this.systemHealth + this.systemHealthContributed() + this.systemHealthTaken(), 0, 100);
   }
   
   systemHealthContributed(): number {
@@ -1448,15 +1448,15 @@ export class GameState extends Schema implements GameData {
   }
 
   increaseSystemHealth(amount: number): number {
-    const current = this.upkeep;
-    this.upkeep = _.clamp(current + amount, 0, 100);
-    return this.upkeep;
+    const current = this.systemHealth;
+    this.systemHealth = _.clamp(current + amount, 0, 100);
+    return this.systemHealth;
   }
 
   decreaseSystemHealth(amount: number): number {
-    const current = this.upkeep;
-    this.upkeep = _.clamp(current - amount, 0, 100);
-    return this.upkeep;
+    const current = this.systemHealth;
+    this.systemHealth = _.clamp(current - amount, 0, 100);
+    return this.systemHealth;
   }
 
   applyPendingActions(): void {
@@ -1654,9 +1654,9 @@ export class GameState extends Schema implements GameData {
   }
 
   purchaseAccomplishment(role: Role, accomplishment: AccomplishmentData): void {
-    const { label, science, government, legacy, finance, culture, upkeep, victoryPoints } = accomplishment;
+    const { label, science, government, legacy, finance, culture, systemHealth, victoryPoints } = accomplishment;
     const message = `The ${role} purchased an accomplishment: ${label}.
-    COST: System Health: ${upkeep}, Science: ${science}, Government: ${government}, Legacy: ${legacy}, Finance: ${finance}, Culture: ${culture}.
+    COST: System Health: ${systemHealth}, Science: ${science}, Government: ${government}, Legacy: ${legacy}, Finance: ${finance}, Culture: ${culture}.
     ${victoryPoints} points were added to the ${role}'s score.`;
     const category: string = MarsLogCategory.purchaseAccomplishment;
     const performedBy: ServerRole = SERVER;

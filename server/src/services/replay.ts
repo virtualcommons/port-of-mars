@@ -94,13 +94,13 @@ export type GameEventSummary =
 
 function extractBefore(g: GameState): { phaseInitialTimeRemaining: number; systemHealthInitial: number; roundInitial: number; phaseInitial: string } {
   const phaseInitialTimeRemaining = g.timeRemaining;
-  const systemHealthInitial = g.upkeep;
+  const systemHealthInitial = g.systemHealth;
   return {phaseInitialTimeRemaining, systemHealthInitial, roundInitial: g.round, phaseInitial: Phase[g.phase]}
 }
 
 function extractAfter(g: GameState): { phaseFinalTimeRemaining: number; systemHealthFinal: number; roundFinal: number; phaseFinal: string } {
   const phaseFinalTimeRemaining = g.timeRemaining;
-  const systemHealthFinal = g.upkeep;
+  const systemHealthFinal = g.systemHealth;
   return {phaseFinalTimeRemaining, systemHealthFinal, roundFinal: g.round, phaseFinal: Phase[g.phase]}
 }
 
@@ -244,9 +244,9 @@ export class PlayerInvestmentSummarizer extends Summarizer<PlayerInvestmentExpor
           {
             gameId: event.gameId,
             role,
-            investment: 'upkeep',
+            investment: 'systemHealth',
             name: 'pendingInvestment',
-            value: game.players[role].pendingInvestments['upkeep'],
+            value: game.players[role].pendingInvestments['systemHealth'],
           },
           ...RESOURCES.map(
             (investment: Resource) => ({
@@ -259,9 +259,9 @@ export class PlayerInvestmentSummarizer extends Summarizer<PlayerInvestmentExpor
           {
             gameId: event.gameId,
             role,
-            investment: 'upkeep',
+            investment: 'systemHealth',
             name: 'cost',
-            value: game.players[role].costs.upkeep
+            value: game.players[role].costs.systemHealth
           },
           ...RESOURCES.map(
             (investment: Resource) => ({
@@ -274,7 +274,7 @@ export class PlayerInvestmentSummarizer extends Summarizer<PlayerInvestmentExpor
           {
             gameId: event.gameId,
             role,
-            investment: 'upkeep',
+            investment: 'systemHealth',
             name: 'inventory',
             value: game.players[role].systemHealthChanges.investment,
           }

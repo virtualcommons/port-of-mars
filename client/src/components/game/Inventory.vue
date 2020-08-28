@@ -46,12 +46,12 @@
 
     <div
       v-if="displaySystemHealth"
-      :style="backgroundColor('upkeep')"
+      :style="backgroundColor('systemHealth')"
       class="investment"
     >
       <div class="left">
         <img
-          :src="require(`@port-of-mars/client/assets/icons/upkeep.svg`)"
+          :src="require(`@port-of-mars/client/assets/icons/systemHealth.svg`)"
           alt="Investment"
         />
         <p>{{ contributedSystemHealth.name }}</p>
@@ -136,8 +136,8 @@ export default class Inventory extends Vue {
     return {
       name: 'System Health',
       units: p.systemHealthChanges.investment,
-      pendingUnits: pendingInvestment.upkeep,
-      cost: costs.upkeep,
+      pendingUnits: pendingInvestment.systemHealth,
+      cost: costs.systemHealth,
     };
   }
 
@@ -172,7 +172,7 @@ export default class Inventory extends Vue {
       case 'science':
         color = 'var(--color-Researcher)';
         break;
-      case 'upkeep':
+      case 'systemHealth':
         color = 'var(--color-Upkeep)';
         break;
       default:

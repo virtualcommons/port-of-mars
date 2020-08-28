@@ -54,7 +54,7 @@ export default class AccomplishmentsSelectPurchased extends Vue {
     legacy: 0,
     finance: 0,
     culture: 0,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 0,
     effect: '',
   };

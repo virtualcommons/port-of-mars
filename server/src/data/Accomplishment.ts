@@ -14,7 +14,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 1,
     finance: 1,
     culture: 1,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 5,
     effect: ""
   },
@@ -28,7 +28,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 1,
     culture: 1,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 3,
     effect: ""
   },
@@ -42,7 +42,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 2,
     culture: 2,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 4,
     effect: ""
   },
@@ -56,7 +56,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 4,
     culture: 0,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 4,
     effect: ""
   },
@@ -70,7 +70,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 0,
     culture: 4,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 4,
     effect: ""
   },
@@ -84,7 +84,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 1,
     finance: 0,
     culture: 0,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 2,
     effect: ""
   },
@@ -98,7 +98,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 0,
     culture: 2,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 2,
     effect: ""
   },
@@ -112,7 +112,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 2,
     culture: 0,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 2,
     effect: ""
   },
@@ -126,7 +126,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 2,
     finance: 0,
     culture: 2,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 2,
     effect: ""
   },
@@ -140,7 +140,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 2,
     finance: 2,
     culture: 0,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 2,
     effect: ""
   },
@@ -154,7 +154,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 0,
     culture: 0,
-    upkeep: -6,
+    systemHealth: -6,
     victoryPoints: 3,
     effect: ""
   },
@@ -168,7 +168,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 0,
     culture: 0,
-    upkeep: -13,
+    systemHealth: -13,
     victoryPoints: 6,
     effect: ""
   },
@@ -182,7 +182,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 1,
     culture: 0,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 3,
     effect: ""
   },
@@ -196,7 +196,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 0,
     culture: 1,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 3,
     effect: ""
   },
@@ -210,7 +210,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 1,
     finance: 1,
     culture: 1,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 5,
     effect: ""
   },
@@ -224,7 +224,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 1,
     culture: 1,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 3,
     effect: ""
   },
@@ -238,7 +238,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 2,
     culture: 2,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 4,
     effect: ""
   },
@@ -252,7 +252,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 4,
     culture: 0,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 4,
     effect: ""
   },
@@ -266,7 +266,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 0,
     culture: 4,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 4,
     effect: ""
   },
@@ -280,7 +280,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 1,
     finance: 0,
     culture: 0,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 2,
     effect: ""
   },
@@ -294,7 +294,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 0,
     culture: 2,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 2,
     effect: ""
   },
@@ -308,7 +308,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 2,
     culture: 0,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 2,
     effect: ""
   },
@@ -322,7 +322,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 2,
     finance: 0,
     culture: 2,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 2,
     effect: ""
   },
@@ -336,7 +336,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 2,
     finance: 2,
     culture: 0,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 2,
     effect: ""
   },
@@ -350,7 +350,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 0,
     culture: 0,
-    upkeep: -6,
+    systemHealth: -6,
     victoryPoints: 3,
     effect: ""
   },
@@ -364,7 +364,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 0,
     culture: 0,
-    upkeep: -13,
+    systemHealth: -13,
     victoryPoints: 6,
     effect: ""
   },
@@ -378,7 +378,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 1,
     culture: 0,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 3,
     effect: ""
   },
@@ -392,7 +392,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 0,
     culture: 1,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 3,
     effect: ""
   },
@@ -406,7 +406,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 1,
     finance: 1,
     culture: 1,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 5,
     effect: ""
   },
@@ -420,7 +420,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 1,
     culture: 1,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 3,
     effect: ""
   },
@@ -434,7 +434,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 2,
     culture: 2,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 4,
     effect: ""
   },
@@ -448,7 +448,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 4,
     culture: 0,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 4,
     effect: ""
   },
@@ -462,7 +462,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 0,
     culture: 4,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 4,
     effect: ""
   },
@@ -476,7 +476,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 1,
     finance: 0,
     culture: 0,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 2,
     effect: ""
   },
@@ -484,13 +484,13 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     id: 50,
     role: "Entrepreneur",
     label: "Further Automation",
-    flavorText: "You help spearhead advancements in robotic technologies to help automate upkeep tasks previously assigned to humans.",
+    flavorText: "You help spearhead advancements in robotic technologies to help automate systemHealth tasks previously assigned to humans.",
     science: 0,
     government: 2,
     legacy: 0,
     finance: 0,
     culture: 2,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 2,
     effect: ""
   },
@@ -504,7 +504,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 2,
     culture: 0,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 2,
     effect: ""
   },
@@ -518,7 +518,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 2,
     finance: 0,
     culture: 2,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 2,
     effect: ""
   },
@@ -532,7 +532,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 2,
     finance: 2,
     culture: 0,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 2,
     effect: ""
   },
@@ -546,7 +546,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 0,
     culture: 0,
-    upkeep: -6,
+    systemHealth: -6,
     victoryPoints: 3,
     effect: ""
   },
@@ -560,7 +560,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 0,
     culture: 0,
-    upkeep: -13,
+    systemHealth: -13,
     victoryPoints: 6,
     effect: ""
   },
@@ -574,7 +574,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 1,
     culture: 0,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 3,
     effect: ""
   },
@@ -588,7 +588,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 0,
     culture: 1,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 3,
     effect: ""
   },
@@ -602,7 +602,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 1,
     finance: 1,
     culture: 1,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 5,
     effect: ""
   },
@@ -616,7 +616,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 1,
     culture: 1,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 3,
     effect: ""
   },
@@ -630,7 +630,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 2,
     culture: 2,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 4,
     effect: ""
   },
@@ -644,7 +644,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 4,
     culture: 0,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 4,
     effect: ""
   },
@@ -658,7 +658,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 0,
     culture: 4,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 4,
     effect: ""
   },
@@ -672,7 +672,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 1,
     finance: 0,
     culture: 0,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 2,
     effect: ""
   },
@@ -686,7 +686,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 0,
     culture: 2,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 2,
     effect: ""
   },
@@ -700,7 +700,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 2,
     culture: 0,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 2,
     effect: ""
   },
@@ -714,7 +714,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 2,
     finance: 0,
     culture: 2,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 2,
     effect: ""
   },
@@ -728,7 +728,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 2,
     finance: 2,
     culture: 0,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 2,
     effect: ""
   },
@@ -742,7 +742,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 0,
     culture: 0,
-    upkeep: -6,
+    systemHealth: -6,
     victoryPoints: 3,
     effect: ""
   },
@@ -756,7 +756,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 0,
     culture: 0,
-    upkeep: -13,
+    systemHealth: -13,
     victoryPoints: 6,
     effect: ""
   },
@@ -770,7 +770,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 1,
     culture: 0,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 3,
     effect: ""
   },
@@ -784,7 +784,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 0,
     culture: 1,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 3,
     effect: ""
   },
@@ -798,7 +798,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 1,
     finance: 1,
     culture: 1,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 5,
     effect: ""
   },
@@ -812,7 +812,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 1,
     culture: 1,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 3,
     effect: ""
   },
@@ -826,7 +826,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 2,
     culture: 2,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 4,
     effect: ""
   },
@@ -840,7 +840,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 4,
     culture: 0,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 4,
     effect: ""
   },
@@ -854,7 +854,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 0,
     culture: 4,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 4,
     effect: ""
   },
@@ -868,7 +868,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 1,
     finance: 0,
     culture: 0,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 2,
     effect: ""
   },
@@ -882,7 +882,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 0,
     culture: 2,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 2,
     effect: ""
   },
@@ -896,7 +896,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 2,
     culture: 0,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 2,
     effect: ""
   },
@@ -910,7 +910,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 2,
     finance: 0,
     culture: 2,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 2,
     effect: ""
   },
@@ -924,7 +924,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 2,
     finance: 2,
     culture: 0,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 2,
     effect: ""
   },
@@ -938,7 +938,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 0,
     culture: 0,
-    upkeep: -6,
+    systemHealth: -6,
     victoryPoints: 3,
     effect: ""
   },
@@ -952,7 +952,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 0,
     culture: 0,
-    upkeep: -13,
+    systemHealth: -13,
     victoryPoints: 6,
     effect: ""
   },
@@ -966,7 +966,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 1,
     culture: 0,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 3,
     effect: ""
   },
@@ -980,7 +980,7 @@ const accomplishments: AccomplishmentPartitioned = _.groupBy([
     legacy: 0,
     finance: 0,
     culture: 1,
-    upkeep: 0,
+    systemHealth: 0,
     victoryPoints: 3,
     effect: ""
   }

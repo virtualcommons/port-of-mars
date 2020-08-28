@@ -144,7 +144,7 @@ export default {
   },
 
   systemHealth(state: State): number {
-    return state.upkeep;
+    return state.systemHealth;
   },
 
   isFirstRound(state: State): boolean {

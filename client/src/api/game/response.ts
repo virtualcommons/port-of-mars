@@ -195,9 +195,9 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
       if (change.field === 'marsEventsProcessed') {
         store.commit('SET_MARS_EVENTS_PROCESSED', change.value);
       }
-      if (change.field === 'upkeep') {
-        const upkeep: number = change.value;
-        store.commit('SET_UPKEEP', upkeep);
+      if (change.field === 'systemHealth') {
+        const systemHealth: number = change.value;
+        store.commit('SET_SYSTEM_HEALTH', systemHealth);
       }
       if (change.field === 'winners') {
         const winners: Array<Role> = change.value;

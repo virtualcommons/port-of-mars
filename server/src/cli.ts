@@ -45,7 +45,7 @@ async function finalize(em: EntityManager, gameId: number): Promise<void> {
   const gameEvents = [];
   console.log(`Phase: ${Phase[gameState.phase]}`);
   if (![Phase.defeat, Phase.victory].includes(gameState.phase)) {
-    if (gameState.upkeep <= 0) {
+    if (gameState.systemHealth <= 0) {
       console.log('game needs a entered defeat phase event. adding finalization event.')
       gameEvents.push(new EnteredDefeatPhase(gameState.playerScores));
     } else if (gameState.round >= gameState.maxRound) {
