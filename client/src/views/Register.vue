@@ -127,6 +127,10 @@ export default class Register extends Vue {
   consented = false;
   error = "";
 
+  async created() {
+    await this.$ajax.get(url('/registration/authenticated'), () => {})
+  }
+
   async register(e: Event) {
     e.preventDefault();
     if (this.emailsMatch && !_.isEmpty(this.email)) {

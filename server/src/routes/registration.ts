@@ -36,3 +36,13 @@ registrationRouter.post('/verify/:registrationToken', async (req: Request, res: 
     next(e);
   }
 });
+
+registrationRouter.get('/authenticated', async (req: Request, res: Response, next: NextFunction) => {
+  const user = req.user as User
+  try {
+    res.json(true);
+  } catch (e) {
+    logger.warn(`Unable to authorize user for registration ${user.username}`);
+    next(e);
+  }
+})

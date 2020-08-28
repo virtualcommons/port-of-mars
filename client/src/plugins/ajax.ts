@@ -164,6 +164,7 @@ export class AjaxRequest {
         }
         else {
           console.error("Unhandled error in request, returning to home screen");
+          // FIXME: add context so that login page has information about why they were redirected
           this.router.push({ name: LOGIN_PAGE });
         }
       }

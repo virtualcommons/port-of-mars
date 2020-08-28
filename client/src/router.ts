@@ -31,6 +31,7 @@ const router = new Router({
     { ...PAGE_META[DASHBOARD_PAGE], component: PlayerDashboard },
     { ...PAGE_META[VERIFY_PAGE], component: Verify },
   ],
+
 });
 
 export default router;
