@@ -416,7 +416,6 @@ export class EnteredNewRoundPhase extends KindOnlyGameEvent {
     game.timeRemaining = 60;
     game.round += 1;
     game.roundIntroduction.addContribution(game.systemHealthContributed());
-    game.roundIntroduction.addTaken(game.systemHealthTaken());
     game.log(`Round ${game.round} begins.`, MarsLogCategory.newRound);
 
     game.resetRound();

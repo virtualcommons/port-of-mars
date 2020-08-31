@@ -950,7 +950,7 @@ export class Player extends Schema implements PlayerData {
     this.accomplishments.discardPurchased(id);
   }
 
-  purchaseAccomplishment(accomplishment: AccomplishmentData): void {
+  purchaseAccomplishment(accomplishment: AccomplishmentData): number {
     this.accomplishments.purchase(accomplishment);
     const inv: ResourceAmountData = {
       culture: -accomplishment.culture,
@@ -961,7 +961,13 @@ export class Player extends Schema implements PlayerData {
     };
     logger.trace('accomplishments: %o', JSON.stringify(this.accomplishments.purchasable.map(p => _.fromPairs(Object.entries(p)))));
     logger.trace('accomplishment systemHealth: %d [%s] (%o)', accomplishment.systemHealth, accomplishment.label, _.fromPairs(_.toPairs(accomplishment)))
-    this.systemHealthChanges.addPurchase(new PurchasedSystemHealth({description: `Purchase: ${accomplishment.label}`, systemHealth: accomplishment.systemHealth}));
+    if (accomplishment.systemHealth !== 0) {
+      this.systemHealthChanges
+        .addPurchase(new PurchasedSystemHealth({
+          description: `Purchase: ${accomplishment.label}`,
+          systemHealth: accomplishment.systemHealth
+        }));
+    }
     logger.trace('purchases: %o', this.systemHealthChanges.purchases);
     // FIXME: victoryPoints should probably be a computed property
     // that sums this.accomplishments.purchased.victoryPoints
@@ -970,6 +976,7 @@ export class Player extends Schema implements PlayerData {
     // we convert it into a getter?
     this.victoryPoints += accomplishment.victoryPoints;
     this.inventory.update(inv);
+    return accomplishment.systemHealth
   }
 
   reset(): void {
@@ -1433,7 +1440,7 @@ export class GameState extends Schema implements GameData {
   }
 
   nextRoundSystemHealth(): number {
-    return _.clamp(this.systemHealth + this.systemHealthContributed() + this.systemHealthTaken(), 0, 100);
+    return _.clamp(this.systemHealth + this.systemHealthContributed(), 0, 100);
   }
   
   systemHealthContributed(): number {
@@ -1670,6 +1677,7 @@ export class GameState extends Schema implements GameData {
     const category: string = MarsLogCategory.purchaseAccomplishment;
     const performedBy: ServerRole = SERVER;
     this.players[role].purchaseAccomplishment(accomplishment);
+    this.systemHealth += accomplishment.systemHealth;
     const ap = new AccomplishmentPurchase({name: label, victoryPoints});
     this.roundIntroduction.addAccomplishmentPurchase(ap);
     this.log(message, category, performedBy);
