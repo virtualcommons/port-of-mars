@@ -36,7 +36,7 @@ import {
   SetPlayerReadiness,
   TimeInvested,
   VotedForPersonalGain,
-  VotedForPhilanthropist, VoteHeroOrPariah
+  VotedForPhilanthropist, VoteHeroOrPariah, ExitedTradePhase
 } from '@port-of-mars/server/rooms/game/events';
 import {getAccomplishmentByID} from '@port-of-mars/server/data/Accomplishment';
 import {Command} from '@port-of-mars/server/rooms/game/commands/types';
@@ -282,7 +282,7 @@ export class SetNextPhaseCmd implements Command {
             ? [new ExitedInvestmentPhase(), new EnteredTradePhase()]
             : [new ExitedInvestmentPhase(), new EnteredPurchasePhase()];
       case Phase.trade:
-        return [new ExitedInvestmentPhase(), new EnteredPurchasePhase()];
+        return [new ExitedTradePhase(), new EnteredPurchasePhase()];
       case Phase.purchase:
         return [new EnteredDiscardPhase()];
       case Phase.discard: {
