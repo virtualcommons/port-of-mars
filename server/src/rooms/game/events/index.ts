@@ -294,11 +294,6 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
 
     game.resetPlayerReadiness();
 
-    for (const player of game.players) {
-      player.refreshPurchasableAccomplishments();
-      player.resetTimeBlocks();
-    }
-
     // TODO: HANDLE CURRENT EVENT USING MARSEVENTSPROCESSED
   }
 }

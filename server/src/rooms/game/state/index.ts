@@ -1366,6 +1366,11 @@ export class GameState extends Schema implements GameData {
     this.resetPlayerReadiness();
     this.refreshPlayerPurchasableAccomplisments();
     this.resetHeroOrPariah();
+    // FIXME: move rest of the player resets above into this loop as a player.resetRound()
+    for (const player of this.players) {
+      player.refreshPurchasableAccomplishments();
+      player.resetTimeBlocks();
+    }
   }
 
   resetPlayerCosts(): void {
