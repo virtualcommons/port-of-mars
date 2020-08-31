@@ -972,6 +972,19 @@ export class Player extends Schema implements PlayerData {
     this.inventory.update(inv);
   }
 
+  reset(): void {
+    this.resetCosts();
+    this.ready = false;
+    this.refreshPurchasableAccomplishments();
+    this.resetTimeBlocks();
+  }
+
+  resetCosts(): void {
+    logger.info('costs (before) [%s]: %o', this.role, this.costs.toJSON());
+    this.costs.fromJSON(ResourceCosts.getCosts(this.role));
+    logger.info('costs (after) [%s]: %o', this.role, this.costs.toJSON());
+  }
+
   refreshPurchasableAccomplishments(): void {
     this.accomplishments.refreshPurchasableAccomplishments(this.role);
   }
@@ -1031,7 +1044,7 @@ export class Player extends Schema implements PlayerData {
 
     this.systemHealthChanges.investment = investment.systemHealth;
     this.inventory.update(investment);
-    // console.log(this.inventory.toJSON())
+    this.pendingInvestments.reset();
   }
 
 
@@ -1311,11 +1324,6 @@ export class GameState extends Schema implements GameData {
     return events;
   }
 
-  invest(role: Role, investment: InvestmentData): void {
-    const player = this.players[role];
-    player.invest(investment);
-  }
-
   getPlayer(username: string): Player {
     if (this.hasUser(username)) {
       return this.players[this.userRoles[username]];
@@ -1362,14 +1370,10 @@ export class GameState extends Schema implements GameData {
   resetRound(): void {
     // FIXME: replace various resetXYZ with resetRound() / resetPhase()
     this.tradingEnabled = true;
-    this.resetPlayerCosts();
-    this.resetPlayerReadiness();
-    this.refreshPlayerPurchasableAccomplisments();
     this.resetHeroOrPariah();
     // FIXME: move rest of the player resets above into this loop as a player.resetRound()
     for (const player of this.players) {
-      player.refreshPurchasableAccomplishments();
-      player.resetTimeBlocks();
+      player.reset();
     }
   }
 

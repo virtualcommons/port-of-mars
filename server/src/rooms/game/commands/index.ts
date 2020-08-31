@@ -282,7 +282,7 @@ export class SetNextPhaseCmd implements Command {
             ? [new ExitedInvestmentPhase(), new EnteredTradePhase()]
             : [new ExitedInvestmentPhase(), new EnteredPurchasePhase()];
       case Phase.trade:
-        return [new EnteredPurchasePhase()];
+        return [new ExitedInvestmentPhase(), new EnteredPurchasePhase()];
       case Phase.purchase:
         return [new EnteredDiscardPhase()];
       case Phase.discard: {
