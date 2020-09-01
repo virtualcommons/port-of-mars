@@ -47,9 +47,11 @@
   import {Component, Mixins, Vue} from 'vue-property-decorator';
   import PlayerStatItem from '@port-of-mars/client/components/dashboard/PlayerStatItem.vue';
   import {DashboardAPI} from '@port-of-mars/client/api/dashboard/request';
-  import {ActionItem, DashboardData, GameMeta,} from '@port-of-mars/shared/types';
+  import {PlayerTaskCompletion, DashboardData, GameMeta,} from '@port-of-mars/shared/types';
   import {faGoogle} from '@fortawesome/free-brands-svg-icons/faGoogle';
   import { library } from '@fortawesome/fontawesome-svg-core'
+
+  import { REGISTER_PAGE, LOGIN_PAGE, LOBBY_PAGE, VERIFY_PAGE, TUTORIAL_PAGE, GAME_PAGE } from '@port-of-mars/shared/routes';
 
   import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
   import {google, outlook, office365, yahoo, ics, CalendarEvent} from "calendar-link";
@@ -63,12 +65,10 @@
       PlayerStatItem,
     },
   })
-  export default class PlayerDashboard extends Mixins(Vue, DashboardAPI) {
+  export default class PlayerDashboard extends Vue {
+    private api!: DashboardAPI;
     private loading = true;
-    private actionItems: Array<ActionItem> = [];
-    private stats: DashboardData['stats'] = {games: []};
     private upcomingGames: Array<GameMeta> = [];
-    private view: 'stats' | 'schedule' = 'schedule';
     private schedule: Array<{ day: string, time: string, invite: CalendarEvent }> = [
       {
         day: 'Thursday, Oct 7',
@@ -103,6 +103,18 @@
     roundExitSurveyComplete = false;
     roundComplete = false;
 
+    created() {
+      console.log("creating dashboard API");
+      this.api = new DashboardAPI(this.$tstore, this.$ajax);
+      console.log("created dashboard api");
+    }
+
+    async mounted() {
+      console.log("initializing dashboard");
+      await this.initialize();
+      console.log('initialized');
+    }
+
     inviteLink(invite: {title: string, location: string, start: Date, end: Date, details: string}) {
       console.log({invite});
       return google(invite);
@@ -112,18 +124,20 @@
       return this.$tstore.state.dashboardMessages;
     }
 
-    get gamesPlayedCount() {
-      return this.stats.games.length;
-    }
-
-    async mounted() {
-      await this.initialize();
-    }
-
     async initialize() {
-      const data = await this.getData();
-      this.actionItems = data.actionItems;
-      this.stats.games.splice(0, this.stats.games.length, ...data.stats.games);
+      const data = await this.api.getData();
+      const playerTaskCompletion: PlayerTaskCompletion = data.playerTaskCompletion;
+      // display email verification page if not verified
+      if (playerTaskCompletion.mustVerifyEmail) {
+        this.$router.push({name: VERIFY_PAGE});
+      }
+      else if (playerTaskCompletion.mustProvideConsent) {
+        // FIXME: rename REGISTER_PAGE to CONSENT_PAGE
+        this.$router.push({name: REGISTER_PAGE});
+      }
+      else if (playerTaskCompletion.mustTakeTutorial) {
+        this.$router.push({name: TUTORIAL_PAGE});
+      }
       this.upcomingGames.splice(
         0,
         this.upcomingGames.length,
@@ -132,13 +146,9 @@
       this.loading = false;
     }
 
-    private switchView(toggle: 'stats' | 'schedule') {
-      this.view = toggle;
-    }
-
     private logoutUser(): void {
       this.$ajax.forgetLoginCreds();
-      this.$router.push({ name: 'Login' });
+      this.$router.push({ name: LOGIN_PAGE });
     }
 
   }

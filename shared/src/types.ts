@@ -282,10 +282,21 @@ export interface Stats {
   games: Array<PlayerStatItem>
 }
 
+export interface PlayerTaskCompletion {
+  mustVerifyEmail: boolean;
+  mustProvideConsent: boolean;
+  mustTakeTutorial: boolean;
+  mustTakeIntroSurvey: boolean;
+  canPlayGame: boolean;
+  shouldTakeExitSurvey: boolean;
+}
+
+
 export interface DashboardData {
-  actionItems: Array<ActionItem>
-  upcomingGames: Array<GameMeta>
-  stats: Stats
+  playerTaskCompletion: PlayerTaskCompletion;
+  introSurveyUrl: string;
+  exitSurveyUrl: string;
+  upcomingGames: Array<GameMeta>;
 }
 
 export interface DashboardMessage {

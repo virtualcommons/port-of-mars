@@ -5,25 +5,13 @@ import { Game, Player, Tournament, TournamentRoundInvite } from "@port-of-mars/s
 import { BaseService } from "@port-of-mars/server/services/db";
 import {IsNull, Not, SelectQueryBuilder} from "typeorm";
 import { GAME_PAGE, TUTORIAL_PAGE, REGISTER_PAGE, VERIFY_PAGE } from "@port-of-mars/shared/routes";
+import { PlayerTaskCompletion, DashboardData } from "@port-of-mars/shared/types";
 import { settings } from "@port-of-mars/server/settings";
 import _ from "lodash";
 
-interface PlayerTaskCompletion {
-  mustVerifyEmail: boolean;
-  mustProvideConsent: boolean;
-  mustTakeTutorial: boolean;
-  mustTakeIntroSurvey: boolean;
-  canPlayGame: boolean;
-  shouldTakeExitSurvey: boolean;
-}
-
-interface DashboardData {
-  playerTaskCompletion: PlayerTaskCompletion;
-  upcomingGames: Array<GameMeta>;
-}
 
 export class DashboardService extends BaseService {
-  getInternalSurveyActionItem(user: User, round: TournamentRound, invite: TournamentRoundInvite): ActionItem {
+  getInternalCompleteSurveyActionItem(user: User, round: TournamentRound, invite: TournamentRoundInvite): ActionItem {
     // https://asu.co1.qualtrics.com/jfe/form/SV_0c8tCMZkAUh4V8x
     // FIXME: generate the correct survey completion URL for the given user and tournament round invite
     let surveyUrl = round.introSurveyUrl;
@@ -69,30 +57,20 @@ export class DashboardService extends BaseService {
    * @param round 
    * @param invite 
    */
-  getTakeIntroSurveyActionItem(user: User, round: TournamentRound, invite: TournamentRoundInvite): ActionItem {
+  getIntroSurveyUrl(user: User, round: TournamentRound, invite: TournamentRoundInvite | undefined): string {
     let introSurveyUrl = round.introSurveyUrl;
-    if (introSurveyUrl) {
+    if (invite && introSurveyUrl) {
       introSurveyUrl = `${round.introSurveyUrl}?pid=${user.participantId}&tid=${invite.id}&redirectHost=${encodeURIComponent(settings.host)}`;
     }
-    return {
-      redoable: true,
-      done: invite.hasCompletedIntroSurvey,
-      description: 'Complete an introductory survey',
-      link: { kind: 'external', data: introSurveyUrl ?? '' }
-    };
+    return introSurveyUrl ?? '';
   }
 
-  getTakeExitSurveyActionItem(user: User, round: TournamentRound, invite: TournamentRoundInvite): ActionItem {
+  getExitSurveyUrl(user: User, round: TournamentRound, invite: TournamentRoundInvite | undefined): string {
     let surveyUrl = round.exitSurveyUrl;
-    if (surveyUrl) {
+    if (invite && surveyUrl) {
       surveyUrl = `${round.introSurveyUrl}?pid=${user.participantId}&tid=${invite.id}&redirectHost=${encodeURIComponent(settings.host)}`;
     }
-    return {
-      redoable: true,
-      done: invite.hasCompletedExitSurvey,
-      description: 'Complete an exit survey',
-      link: { kind: 'external', data: surveyUrl ?? '' }
-    };
+    return surveyUrl ?? '';
   }
 
   async getCurrentGameActionItem(user: User): Promise<ActionItem | undefined> {
@@ -169,8 +147,7 @@ export class DashboardService extends BaseService {
     return _.isUndefined(invite) || !invite.hasCompletedExitSurvey
   }
 
-  async getPlayerTaskCompletion(user: User, round: TournamentRound): Promise<PlayerTaskCompletion> {
-    const invite = await this.sp.tournament.getActiveRoundInviteIfExists(user.id, round);
+  async getPlayerTaskCompletion(user: User, invite: TournamentRoundInvite | undefined): Promise<PlayerTaskCompletion> {
     return {
       mustVerifyEmail: this.mustVerifyEmail(user),
       mustProvideConsent: this.mustProvideConsent(user),
@@ -186,9 +163,12 @@ export class DashboardService extends BaseService {
     if (!round) {
       throw new Error(`no active tournament round found`);
     }
-    const playerTaskCompletion: PlayerTaskCompletion = await this.getPlayerTaskCompletion(user, round);
+    const invite = await this.sp.tournament.getActiveRoundInviteIfExists(user.id, round);
+    const playerTaskCompletion: PlayerTaskCompletion = await this.getPlayerTaskCompletion(user, invite);
     return {
       playerTaskCompletion,
+      introSurveyUrl: this.getIntroSurveyUrl(user, round, invite),
+      exitSurveyUrl: this.getExitSurveyUrl(user, round, invite),
       upcomingGames: [{
         time: this.sp.time.now().getTime(),
         round: round.roundNumber,
