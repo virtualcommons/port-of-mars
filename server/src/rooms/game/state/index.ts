@@ -1041,19 +1041,10 @@ export class Player extends Schema implements PlayerData {
     return leftOverInvestments;
   }
 
-  invest(investment?: InvestmentData, leftOverInvestments?: InvestmentData): void {
-    investment = investment ?? this.pendingInvestments;
-    leftOverInvestments = leftOverInvestments ?? PendingInvestment.defaults();
-
-    for (const [k, v] of Object.entries(investment)) {
-      (investment as any)[k] += (leftOverInvestments as any)[k];
-    }
-
-    this.systemHealthChanges.investment = investment.systemHealth;
-    this.inventory.update(investment);
-    this.pendingInvestments.reset();
+  invest(): void {
+    this.systemHealthChanges.investment = this.pendingInvestments.systemHealth;
+    this.applyPendingInvestments();
   }
-
 
   invertPendingInventory(): void {
     const invertedInventory = PendingInvestment.defaults();
@@ -1064,7 +1055,7 @@ export class Player extends Schema implements PlayerData {
     this.pendingInvestments.add({ ...invertedInventory, systemHealth: 0 });
   }
 
-  mergePendingAndInventory(): void {
+  applyPendingInvestments(): void {
     this.inventory.update(this.pendingInvestments);
     this.pendingInvestments.reset();
   }

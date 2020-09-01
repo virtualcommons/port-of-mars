@@ -2,12 +2,12 @@ import _ from 'lodash';
 import { MarsEventData } from '@port-of-mars/shared/types';
 import { getLogger } from '@port-of-mars/server/settings';
 
-type MarsEventDeckItem = [MarsEventData, number];
+type MarsEventDeckItem = MarsEventData;
 
 const logger = getLogger(__filename);
 
 const _marsEvents: Array<MarsEventDeckItem> = [
-  [{
+  {
     id: 'audit',
     name: 'Audit',
     effect: `In this round, players will be able to view each other's accomplishments, inventories, resources and investment decisions.`,
@@ -15,24 +15,24 @@ const _marsEvents: Array<MarsEventDeckItem> = [
     clientViewHandler: 'AUDIT' as const,
     duration: 1,
     timeDuration: 10,
-  }, 1],
-  [{
+  },
+  {
     id: 'bondingThroughAdversity',
     name: 'Bonding Through Adversity',
     effect: 'Each player gains one unit of Influence of their choice.',
     flavorText: 'Challenges brings communities together.',
     clientViewHandler: 'INFLUENCES_DRAW' as const,
     duration: 1
-  }, 1],
-  [{
+  },
+  {
     id: 'breakdownOfTrust',
     name: 'Breakdown of Trust',
     effect: `Each player can choose to save up to 2 units of Influence that they already own. The rest will be lost.`,
     flavorText: `Setbacks are inevitable, but no less painful each time.`,
     clientViewHandler: 'INFLUENCES_SELECT' as const,
     duration: 1
-  }, 1],
-  [{
+  },
+  {
     id: 'changingTides',
     name: 'Changing Tides',
     effect: `Each player discards all of their available Accomplishments and draws 1 new Accomplishment. You will be able to discard this Accomplishment at the end of this round and draw up to three new Accomplishments at the start of the next round (if this is not the final round).`,
@@ -40,16 +40,16 @@ const _marsEvents: Array<MarsEventDeckItem> = [
     clientViewHandler: 'NO_CHANGE' as const,
     timeDuration: 10,
     duration: 1
-  }, 1],
-  [{
+  },
+  {
     id: 'compulsivePhilanthropy',
     name: 'Compulsive Philanthropy',
     effect: `Players must vote for one player to put all their Time Blocks into System Health this round.`,
     flavorText: `There's nothing quite like being volun-told for the greater good.`,
     clientViewHandler: 'VOTE_FOR_PLAYER_SINGLE' as const,
     duration: 1
-  }, 1],
-  [{
+  },
+  {
     id: 'cropFailure',
     name: 'Crop Failure',
     effect: `Destroy 20 System Health.`,
@@ -57,8 +57,8 @@ const _marsEvents: Array<MarsEventDeckItem> = [
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 1,
     timeDuration: 10,
-  }, 1],
-  [{
+  },
+  {
     id: 'difficultConditions',
     name: 'Difficult Conditions',
     effect: `System Health costs twice as many Time Blocks as usual this round.`,
@@ -66,24 +66,24 @@ const _marsEvents: Array<MarsEventDeckItem> = [
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 1,
     timeDuration: 15,
-  }, 1],
-  [{
+  },
+  {
     id: 'effortsWasted',
     name: 'Efforts Wasted',
     effect: `Each player must discard an Accomplishment that they have already purchased.`,
     flavorText: `"All markets are volatile. The trick is learning how to ride the waves." - The Entrepreneur`,
     clientViewHandler: 'ACCOMPLISHMENT_SELECT_PURCHASED' as const,
     duration: 1
-  }, 1],
-  [{
+  },
+  {
     id: 'heroOrPariah',
     name: 'Hero or Pariah',
     effect: `CHOOSE ONE: Players must vote for 1 player to lose all Influence OR Players must vote for 1 player to gain 4 of their specialty Influence`,
     flavorText: `In a community as small as Port of Mars, some individuals always stand out - for better or worse.`,
     clientViewHandler: 'VOTE_FOR_PLAYER_HERO_PARIAH' as const,
     duration: 1
-  }, 1],
-  [{
+  },
+  {
     id: 'hullBreach',
     name: 'Hull Breach',
     effect: `Destroy 7 System Health.`,
@@ -91,8 +91,8 @@ const _marsEvents: Array<MarsEventDeckItem> = [
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 1,
     timeDuration: 10,
-  }, 1],
-  [{
+  },
+  {
     id: 'interdisciplinary',
     name: 'Interdisciplinary',
     effect: `For this round, each player can spend 3 Time Blocks to earn an Influence in either of the 2 Influences they normally can't create.`,
@@ -100,8 +100,8 @@ const _marsEvents: Array<MarsEventDeckItem> = [
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 1,
     timeDuration: 10,
-  }, 1],
-  [{
+  },
+  {
     id: 'lifeAsUsual',
     name: 'Life as Usual',
     effect: 'No special effect',
@@ -109,8 +109,8 @@ const _marsEvents: Array<MarsEventDeckItem> = [
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 1,
     timeDuration: 10,
-  }, 12],
-  [{
+  },
+  {
     id: 'lostTime',
     name: 'Lost Time',
     effect: `Each player has 5 fewer Time Blocks to spend this round.`,
@@ -118,8 +118,8 @@ const _marsEvents: Array<MarsEventDeckItem> = [
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 1,
     timeDuration: 10,
-  }, 1],
-  [{
+  },
+  {
     id: 'marketsClosed',
     name: 'Markets Closed',
     effect: `Players may not trade Influences this round.`,
@@ -127,8 +127,8 @@ const _marsEvents: Array<MarsEventDeckItem> = [
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 1,
     timeDuration: 10,
-  }, 1],
-  [{
+  },
+  {
     id: 'murphysLaw',
     name: "Murphy's Law",
     effect: `Reveal 2 more events. They're both in effect.`,
@@ -136,8 +136,8 @@ const _marsEvents: Array<MarsEventDeckItem> = [
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 1,
     timeDuration: 10,
-  }, 1],
-  [{
+  },
+  {
     id: 'outOfCommissionCurator',
     name: 'Out of Commission',
     effect: 'The Curator receives only 3 Time Blocks this round.',
@@ -145,8 +145,8 @@ const _marsEvents: Array<MarsEventDeckItem> = [
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 1,
     timeDuration: 15,
-  }, 1],
-  [{
+  },
+  {
     id: 'outOfCommissionEntrepreneur',
     name: 'Out of Commission',
     effect: 'The Entrepreneur receives only 3 Time Blocks this round.',
@@ -154,8 +154,8 @@ const _marsEvents: Array<MarsEventDeckItem> = [
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 1,
     timeDuration: 15,
-  }, 1],
-  [{
+  },
+  {
     id: 'outOfCommissionPioneer',
     name: 'Out of Commission',
     effect: 'The Pioneer receives only 3 Time Blocks this round.',
@@ -163,8 +163,8 @@ const _marsEvents: Array<MarsEventDeckItem> = [
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 1,
     timeDuration: 15,
-  }, 1],
-  [{
+  },
+  {
     id: 'outOfCommissionPolitician',
     name: 'Out of Commission',
     effect: 'The Politician receives only 3 Time Blocks this round.',
@@ -172,8 +172,8 @@ const _marsEvents: Array<MarsEventDeckItem> = [
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 1,
     timeDuration: 15,
-  }, 1],
-  [{
+  },
+  {
     id: 'outOfCommissionResearcher',
     name: 'Out of Commission',
     effect: 'The Researcher receives only 3 Time Blocks this round.',
@@ -181,16 +181,16 @@ const _marsEvents: Array<MarsEventDeckItem> = [
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 1,
     timeDuration: 15,
-  }, 1],
-  [{
+  },
+  {
     id: 'personalGain',
     name: 'Personal Gain',
     effect: `Each player secretly chooses Yes or No. Then, simultaneously, players reveal their choice. Players who chose yes gain 6 extra Time Blocks this round, but destroy 6 System Health.`,
     flavorText: `It's easy to take risks when others are incurring the costs.`,
     clientViewHandler: 'VOTE_YES_NO' as const,
     duration: 1
-  }, 1],
-  [{
+  },
+  {
     id: 'sandstorm',
     name: 'Sandstorm',
     effect: `For the next 3 rounds, destroy an additional 10 System Health at the start of the round.`,
@@ -198,8 +198,8 @@ const _marsEvents: Array<MarsEventDeckItem> = [
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 3,
     timeDuration: 10,
-  }, 1],
-  [{
+  },
+  {
     id: 'solarFlare',
     name: 'Solar Flare',
     effect: `Destroy 5 System Health. Skip discussion and trading phases this turn. Players cannot chat or trade Influences.`,
@@ -207,8 +207,8 @@ const _marsEvents: Array<MarsEventDeckItem> = [
     clientViewHandler: 'DISABLE_CHAT' as const,
     duration: 1,
     timeDuration: 10,
-  }, 1],
-  [{
+  },
+  {
     id: 'stymied',
     name: 'Stymied',
     effect: `Players may not earn their specialty Influence this round.`,
@@ -216,35 +216,35 @@ const _marsEvents: Array<MarsEventDeckItem> = [
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 1,
     timeDuration: 10,
-  }, 1],
+  },
 ];
 
 export function getAllMarsEvents(): Array<MarsEventDeckItem> {
   const AVAILABLE_EVENTS = [
-    'audit',
-    'bondingThroughAdversity',
-    'breakdownOfTrust',
-    'changingTides',
-    'compulsivePhilanthropy',
-    'cropFailure',
-    'difficultConditions',
-    'effortsWasted',
-    'heroOrPariah',
-    'hullBreach',
-    'interdisciplinary',
-    'lifeAsUsual',
-    'lostTime',
-    'marketsClosed',
-    'murphysLaw',
-    'outOfCommissionCurator',
-    'outOfCommissionEntrepreneur',
-    'outOfCommissionPolitician',
-    'outOfCommissionPioneer',
-    'outOfCommissionResearcher',
-    'personalGain',
-    'sandstorm',
-    'solarFlare',
-    'stymied'
+    ['audit', 1],
+    ['bondingThroughAdversity', 1],
+    ['breakdownOfTrust', 1],
+    ['changingTides', 1],
+    ['compulsivePhilanthropy', 1],
+    ['cropFailure', 1],
+    ['difficultConditions', 1],
+    ['effortsWasted', 1],
+    ['heroOrPariah', 1],
+    ['hullBreach', 1],
+    ['interdisciplinary', 1],
+    ['lifeAsUsual', 12],
+    ['lostTime', 1],
+    ['marketsClosed', 1],
+    ['murphysLaw', 1],
+    ['outOfCommissionCurator', 1],
+    ['outOfCommissionEntrepreneur', 1],
+    ['outOfCommissionPolitician', 1],
+    ['outOfCommissionPioneer', 1],
+    ['outOfCommissionResearcher', 1],
+    ['personalGain', 1],
+    ['sandstorm', 1],
+    ['solarFlare', 1],
+    ['stymied', 1],
   ];
   const availableEvents: Array<MarsEventDeckItem> = [];
   for (const eventId of AVAILABLE_EVENTS) {

@@ -188,7 +188,7 @@ export class BreakdownOfTrust extends BaseEvent {
 
   finalize(game: GameState): void {
     for (const player of game.players) {
-      player.mergePendingAndInventory();
+      player.applyPendingInvestments();
       //set that value back to the preserved amount before the event
       player.timeBlocks = this.savedtimeBlockAllocations[player.role];
     }
