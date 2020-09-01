@@ -333,6 +333,7 @@ export class EffortsWasted extends BaseEvent {
 type HeroOrPariahData = Partial<{ [role in Role]: 'hero' | 'pariah' | '' }>
 type playerVotesData = { [role in Role]: Role }
 
+// FIXME: fix mars log messaging for Hero or Pariah in the case of  random vote
 @assocEventId
 export class HeroOrPariah extends BaseEvent {
   private static defaultPlayerVotes: playerVotesData = {

@@ -1648,6 +1648,7 @@ export class GameState extends Schema implements GameData {
     }
   }
 
+  // FIXME: refine mars log message
   purchaseAccomplishment(role: Role, accomplishment: AccomplishmentData): void {
     const { label, science, government, legacy, finance, culture, systemHealth, victoryPoints } = accomplishment;
     const message = `The ${role} purchased an accomplishment: ${label}.

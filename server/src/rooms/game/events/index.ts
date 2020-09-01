@@ -363,6 +363,10 @@ export class EnteredPurchasePhase extends KindOnlyGameEvent {
     game.phase = Phase.purchase;
     logger.debug('phase: %s', Phase[game.phase]);
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
+    game.clearTrades();
+    // for (const player of game.players) {
+    //   player.pendingInvestments.reset();
+    // }
   }
 }
 gameEventDeserializer.register(EnteredPurchasePhase);
