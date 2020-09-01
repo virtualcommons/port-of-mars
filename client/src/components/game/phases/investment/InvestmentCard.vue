@@ -94,10 +94,9 @@
     }
 
     get pendingUnits() {
-      const pendingUnits = this.$tstore.getters.player.pendingInvestments[
-        this.name
-        ];
-      if (pendingUnits) return pendingUnits;
+      const amount = this.$tstore.getters.player.pendingInvestments[this.name];
+      // FIXME: this guard seems unnecessary
+      if (amount) return amount;
       return 0;
     }
 
