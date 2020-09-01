@@ -305,9 +305,16 @@ export class ChatMessage extends Schema implements ChatMessageData {
   round: number;
 }
 
-class PendingInvestment extends Schema implements InvestmentData {
+class PendingInvestment implements InvestmentData {
+
+  culture: number;
+  finance: number;
+  government: number;
+  legacy: number;
+  science: number;
+  systemHealth: number;
+
   constructor() {
-    super();
     const pendingInvestments = { ...PendingInvestment.defaults() };
     this.culture = pendingInvestments.culture;
     this.finance = pendingInvestments.finance;
@@ -363,24 +370,6 @@ class PendingInvestment extends Schema implements InvestmentData {
     this.science += data.science;
     this.systemHealth += data.systemHealth;
   }
-
-  @type('number')
-  culture: number;
-
-  @type('number')
-  finance: number;
-
-  @type('number')
-  government: number;
-
-  @type('number')
-  legacy: number;
-
-  @type('number')
-  science: number;
-
-  @type('number')
-  systemHealth: number;
 }
 
 export class MarsLogMessage extends Schema implements MarsLogMessageData {
@@ -913,7 +902,6 @@ export class Player extends Schema implements PlayerData {
   @type(ResourceInventory)
   inventory = new ResourceInventory();
 
-  @type(PendingInvestment)
   pendingInvestments = new PendingInvestment();
 
   @type('number')

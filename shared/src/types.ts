@@ -228,7 +228,6 @@ export interface PlayerData {
   systemHealthChanges: SystemHealthChangeData;
   victoryPoints: number;
   inventory: ResourceAmountData;
-  pendingInvestments: ResourceAmountData;
 }
 
 export type PlayerSetData = { [role in Role]: PlayerData };

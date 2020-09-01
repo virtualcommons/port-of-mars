@@ -1,6 +1,7 @@
 import {
   CURATOR,
   ENTREPRENEUR,
+  DashboardMessage,
   GameData,
   InvestmentData,
   MarsLogMessageData,
@@ -14,19 +15,61 @@ import {
   ResourceCostData,
   Role,
   TradeDataWithNull,
-} from '../../types';
+} from '@port-of-mars/shared/types';
 import {
   ModalViewType,
   ModalDataType,
-} from './modals';
+} from '@port-of-mars/shared/game/client/modals';
 import {
   ChatMarsLogView,
   HUDLeftView,
   HUDRightView,
-} from './panes';
+} from '@port-of-mars/shared/game/client/panes';
 import _ from 'lodash';
-import { DashboardMessage } from '../../types';
 import {SYSTEM_HEALTH_MAINTENANCE_COST} from "../../settings";
+
+export const ROLE_TO_INVESTMENT_DATA: { [role in Role]: Array<keyof InvestmentData> } = {
+  [CURATOR]: [
+    'systemHealth',
+    'culture',
+    'finance',
+    'legacy',
+    'government',
+    'science'
+  ],
+  [ENTREPRENEUR]: [
+    'systemHealth',
+    'finance',
+    'culture',
+    'government',
+    'legacy',
+    'science'
+  ],
+  [POLITICIAN]: [
+    'systemHealth',
+    'government',
+    'finance',
+    'science',
+    'culture',
+    'legacy'
+  ],
+  [RESEARCHER]: [
+    'systemHealth',
+    'science',
+    'government',
+    'legacy',
+    'culture',
+    'finance'
+  ],
+  [PIONEER]: [
+    'systemHealth',
+    'legacy',
+    'culture',
+    'science',
+    'finance',
+    'government'
+  ],
+}
 
 export interface PlayerClientData extends PlayerData {
   pendingInvestments: InvestmentData;

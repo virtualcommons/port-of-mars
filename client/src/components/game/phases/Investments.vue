@@ -44,17 +44,19 @@
 import { Vue, Component, Prop, Inject } from 'vue-property-decorator';
 import {
   INVESTMENTS,
+  InvestmentData,
   Resource,
   ResourceCostData,
   AccomplishmentData,
   Role,
 } from '@port-of-mars/shared/types';
-import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
+import { AbstractGameAPI } from '@port-of-mars/client/api/game/types';
 import TimeBlockMeter from './investment/TimeBlockMeter.vue';
 import InvestmentCard from './investment/InvestmentCard.vue';
 import { canPurchaseAccomplishment } from '@port-of-mars/shared/validation';
 import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
-import * as _ from 'lodash';
+import _ from 'lodash';
+import { PlayerClientData, defaultPendingInvestment, ROLE_TO_INVESTMENT_DATA } from '@port-of-mars/shared/game/client/state';
 
 @Component({
   components: {
@@ -64,9 +66,21 @@ import * as _ from 'lodash';
   },
 })
 export default class Investments extends Vue {
-  @Inject() readonly api!: TutorialAPI;
+  @Inject() readonly api!: AbstractGameAPI;
 
   @Prop() role!: Role;
+
+  created() {
+    this.api.resetPendingInvestments();
+  }
+
+  get pendingInvestments(): InvestmentData {
+    return this.$tstore.getters.player.pendingInvestments;
+  }
+
+  get player(): PlayerClientData {
+    return this.$tstore.getters.player;
+  }
 
   get activeAccomplishments() {
     return this.$tstore.getters.player.accomplishments.purchasable;
@@ -78,23 +92,14 @@ export default class Investments extends Vue {
 
   get costs(): any {
     const p = this.$tstore.getters.player;
-    const investmentData = Object.keys(p.costs)
-      .reduce((prev, name) => {
-        const k: keyof ResourceCostData = name as keyof ResourceCostData;
-        const cost = p.costs[k];
-        let pendingInvestment = p.pendingInvestments[k];
-        prev.push({ name, cost, pendingInvestment });
-        return prev;
-      }, [] as Array<{ name: string; cost: number; pendingInvestment: number }>)
-      .sort((a, b) => a.cost - b.cost);
-
-    return investmentData;
+    const investmentCosts = ROLE_TO_INVESTMENT_DATA[p.role].map(
+      name => ({ name, cost: p.costs[name], pendingInvestment: this.pendingInvestments[name]})
+      );
+    return investmentCosts;
   }
 
   get remainingTimeBlocks() {
-    const p = this.$tstore.getters.player;
-    const pendingInvestments = p.pendingInvestments;
-    return this.getRemainingTimeBlocks(pendingInvestments);
+    return this.getRemainingTimeBlocks(this.pendingInvestments);
   }
 
   private getRemainingTimeBlocks(pendingInvestments: ResourceCostData) {
@@ -117,20 +122,14 @@ export default class Investments extends Vue {
     units: number;
     cost: number;
   }) {
-    const pendingInvestments = _.clone(
-      this.$tstore.getters.player.pendingInvestments
-    );
+    const pendingInvestments = _.clone(this.pendingInvestments);
     pendingInvestments[msg.name] = msg.units;
-    if (
-      msg.units >= 0 &&
-      this.getRemainingTimeBlocks(pendingInvestments) >= 0
-    ) {
-      let data = {
+    if (msg.units >= 0 && this.getRemainingTimeBlocks(pendingInvestments) >= 0) {
+      const data = {
         investment: msg.name,
         units: msg.units,
         role: this.$tstore.state.role,
       };
-
       this.api.investPendingTimeBlocks(data);
     }
   }

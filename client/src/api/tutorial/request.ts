@@ -5,7 +5,7 @@ import {
   Resource,
   Role, InvestmentData,
 } from '@port-of-mars/shared/types';
-import { initialStoreState } from '@port-of-mars/shared/game/client/state';
+import { initialStoreState, defaultPendingInvestment } from '@port-of-mars/shared/game/client/state';
 import {
   ChatMarsLogView,
   HUDLeftView,
@@ -313,6 +313,10 @@ export class TutorialAPI implements AbstractGameAPI {
     this.store.commit('REMOVE_FROM_TRADES', {
       id,
     });
+  }
+
+  public resetPendingInvestments() {
+    this.store.commit('SET_PENDING_INVESTMENTS', { role: this.store.state.role, data: defaultPendingInvestment()});
   }
 
   public resetTradeModal() {}

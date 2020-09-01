@@ -22,11 +22,11 @@ function deschemify<T>(s: Schemify<T>): T {
   return s.toJSON() as T;
 }
 
-type serverResponse = {
+type ServerResponse = {
   [field in keyof Omit<PlayerData, 'role'>]: keyof typeof Mutations;
 };
 
-const responseMap: serverResponse = {
+const responseMap: ServerResponse = {
   inventory: 'SET_INVENTORY',
   costs: 'SET_INVESTMENT_COSTS',
   botWarning: 'SET_BOT_WARNING',
@@ -35,7 +35,6 @@ const responseMap: serverResponse = {
   ready: 'SET_READINESS',
   accomplishments: 'SET_ACCOMPLISHMENTS',
   victoryPoints: 'SET_VICTORY_POINTS',
-  pendingInvestments: 'SET_PENDING_INVESTMENTS',
   systemHealthChanges: 'SET_SYSTEM_HEALTH_CHANGES',
 };
 

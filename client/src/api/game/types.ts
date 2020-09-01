@@ -49,6 +49,7 @@ export interface AbstractGameAPI {
 
   saveResourcesSelection(savedResources: InvestmentData): void
 
+  resetPendingInvestments(): void
   investPendingTimeBlocks(investment: any): void
 
   setModalVisible(data: any): void

@@ -34,6 +34,7 @@ import {
 import { MockRoom } from '@port-of-mars/client/types/tutorial';
 import { TStore } from '@port-of-mars/client/plugins/tstore';
 import {AbstractGameAPI} from "@port-of-mars/client/api/game/types";
+import { defaultPendingInvestment } from '@port-of-mars/shared/game/client/state';
 
 export class GameRequestAPI implements AbstractGameAPI {
   room!: Room | MockRoom;
@@ -46,6 +47,10 @@ export class GameRequestAPI implements AbstractGameAPI {
 
   public send(req: Requests) {
     this.room.send(req.kind, req);
+  }
+
+  public resetPendingInvestments() {
+    this.store.commit('SET_PENDING_INVESTMENTS', { role: this.store.state.role, data: defaultPendingInvestment() });
   }
 
   public resetBotWarning() {
