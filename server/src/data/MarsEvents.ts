@@ -2,11 +2,11 @@ import _ from 'lodash';
 import { MarsEventData } from '@port-of-mars/shared/types';
 import { getLogger } from '@port-of-mars/server/settings';
 
-type MarsEventDeckItem = MarsEventData;
+type MarsEventDeckItem = [MarsEventData, number];
 
 const logger = getLogger(__filename);
 
-const _marsEvents: Array<MarsEventDeckItem> = [
+const _marsEvents: Array<MarsEventData> = [
   {
     id: 'audit',
     name: 'Audit',
@@ -220,7 +220,7 @@ const _marsEvents: Array<MarsEventDeckItem> = [
 ];
 
 export function getAllMarsEvents(): Array<MarsEventDeckItem> {
-  const AVAILABLE_EVENTS = [
+  const AVAILABLE_EVENTS: Array<[string, number]> = [
     ['audit', 1],
     ['bondingThroughAdversity', 1],
     ['breakdownOfTrust', 1],
@@ -247,10 +247,10 @@ export function getAllMarsEvents(): Array<MarsEventDeckItem> {
     ['stymied', 1],
   ];
   const availableEvents: Array<MarsEventDeckItem> = [];
-  for (const eventId of AVAILABLE_EVENTS) {
-    const marsEventDeckItem = _.find(_marsEvents, (ev: MarsEventDeckItem) => ev[0].id === eventId);
+  for (const [eventId, count] of AVAILABLE_EVENTS) {
+    const marsEventDeckItem = _.find(_marsEvents, (ev: MarsEventData) => ev.id === eventId);
     if (marsEventDeckItem) {
-      availableEvents.push(_.cloneDeep(marsEventDeckItem));
+      availableEvents.push([_.cloneDeep(marsEventDeckItem), count]);
     }
     else {
       logger.warn("No event ID found in mars events: %s", eventId);
