@@ -1,6 +1,7 @@
-import {MarsEventData} from "@port-of-mars/shared/types";
-import * as _ from "lodash";
-import {GameState} from "@port-of-mars/server/rooms/game/state";
+import { MarsEventData } from "@port-of-mars/shared/types";
+import _ from "lodash";
+import { GameState } from "@port-of-mars/server/rooms/game/state";
+import { MarsEventDeckItem, getMarsEventDeckItems } from "@port-of-mars/server/data/MarsEvents";
 
 
 export interface MarsEventStateConstructor {
@@ -14,9 +15,18 @@ export interface MarsEventState {
   toJSON(): any;
 }
 
-export const expandCopies = (marsEventsCollection: Array<[MarsEventData, number]>) =>
-  _.flatMap(marsEventsCollection, ([event, copies]: [MarsEventData, number]) => {
-    return _.map(_.range(copies), i => _.cloneDeep(event));
-  });
+export function expandCopies(marsEventsCollection: Array<MarsEventDeckItem>): Array<MarsEventData> {
+  return _.flatMap(marsEventsCollection,
+    (eventItem: MarsEventDeckItem) => _.map(_.range(eventItem.numberOfCopies), (i: number) => _.cloneDeep(eventItem.event))
+  );
+}
 
-export const getEventName = (cls: {new(): any} | Function) => _.camelCase(cls.name);
+export function getFixedMarsEventDeck(): Array<MarsEventData> {
+  return _.clone(expandCopies(getMarsEventDeckItems()));
+}
+
+export function getRandomizedMarsEventDeck(): Array<MarsEventData> {
+  return _.shuffle(getFixedMarsEventDeck());
+}
+
+export const getEventName = (cls: { new(): any } | Function) => _.camelCase(cls.name);

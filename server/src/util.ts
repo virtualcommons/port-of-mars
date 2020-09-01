@@ -4,9 +4,9 @@ import * as assert from "assert";
 import * as to from "typeorm";
 import {Loader, Resolver} from "typeorm-fixtures-cli/dist";
 import {MarsEventData, ROLES, DashboardMessage} from "@port-of-mars/shared/types";
-import {GameOpts, GameStateOpts, Persister} from "@port-of-mars/server/rooms/game/types";
-import {expandCopies} from "@port-of-mars/server/rooms/game/state/marsevents/common";
-import {getAllMarsEvents} from "@port-of-mars/server/data/MarsEvents";
+import {GameOpts, GameStateOpts} from "@port-of-mars/server/rooms/game/types";
+import {getFixedMarsEventDeck, getRandomizedMarsEventDeck} from "@port-of-mars/server/rooms/game/state/marsevents/common";
+import {getMarsEventDeckItems} from "@port-of-mars/server/data/MarsEvents";
 import {Page, getPagePath} from "@port-of-mars/shared/routes";
 import {getLogger, settings} from "@port-of-mars/server/settings";
 import {getServices} from "@port-of-mars/server/services";
@@ -29,31 +29,17 @@ export function getRandomIntInclusive(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
 }
 
-function getMarsEventData(): Array<MarsEventData> {
-  return _.clone(expandCopies(getAllMarsEvents()));
-}
-
-export function getMarsEvent(id: string): MarsEventData {
-  const marsEvent = _.find(getAllMarsEvents(), e => e[0].id === id);
-  if (marsEvent) {
-    return marsEvent[0];
-  } else {
-    throw new Error(`${id} not found`)
-  }
-}
-
 /**
  * This function needs some documentation some day.
  * @param deckStrategy
  * @param nRoundStrategy
  */
 export function mockGameStateInitOpts(
-  deckStrategy: (events: Array<MarsEventData>) => Array<MarsEventData> = x => x,
   nRoundStrategy: () => number = () => getRandomIntInclusive(8, 12)): GameStateOpts {
   const loader = new Loader();
   loader.load(path.resolve(__dirname, '../fixtures'));
   const fixtures = new Resolver().resolve(loader.fixtureConfigs);
-  const deck = deckStrategy(_.clone(expandCopies(getAllMarsEvents())));
+  const deck = getFixedMarsEventDeck();
   const numberOfGameRounds = nRoundStrategy();
   const userRoles = _.zipObject(
     fixtures.filter(f => f.entity === 'User')
@@ -82,14 +68,15 @@ export async function buildGameOpts(usernames?: Array<string>): Promise<GameOpts
     logger.info("building game opts with current tournament round [%d]", currentTournamentRound.id);
     return {
       userRoles: _.zipObject(usernames, ROLES),
-      deck: _.shuffle(getMarsEventData()),
+      deck: getRandomizedMarsEventDeck(),
       numberOfGameRounds: currentTournamentRound.numberOfGameRounds,
       tournamentRoundId: currentTournamentRound.id,
     };
   } else {
+    // FIXME: explain this branch path
     return {
       userRoles: {},
-      deck: getMarsEventData(),
+      deck: getFixedMarsEventDeck(),
       numberOfGameRounds: currentTournamentRound.numberOfGameRounds,
       tournamentRoundId: currentTournamentRound.id
     }

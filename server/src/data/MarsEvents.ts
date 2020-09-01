@@ -2,9 +2,10 @@ import _ from 'lodash';
 import { MarsEventData } from '@port-of-mars/shared/types';
 import { getLogger } from '@port-of-mars/server/settings';
 
-type MarsEventDeckItem = [MarsEventData, number];
 
 const logger = getLogger(__filename);
+
+export type MarsEventDeckItem = { event: MarsEventData, numberOfCopies: number }
 
 const _marsEvents: Array<MarsEventData> = [
   {
@@ -219,7 +220,7 @@ const _marsEvents: Array<MarsEventData> = [
   },
 ];
 
-export function getAllMarsEvents(): Array<MarsEventDeckItem> {
+export function getMarsEventDeckItems(): Array<MarsEventDeckItem> {
   const AVAILABLE_EVENTS: Array<[string, number]> = [
     ['audit', 1],
     ['bondingThroughAdversity', 1],
@@ -247,14 +248,24 @@ export function getAllMarsEvents(): Array<MarsEventDeckItem> {
     ['stymied', 1],
   ];
   const availableEvents: Array<MarsEventDeckItem> = [];
-  for (const [eventId, count] of AVAILABLE_EVENTS) {
-    const marsEventDeckItem = _.find(_marsEvents, (ev: MarsEventData) => ev.id === eventId);
-    if (marsEventDeckItem) {
-      availableEvents.push([_.cloneDeep(marsEventDeckItem), count]);
+  for (const [eventId, numberOfCopies] of AVAILABLE_EVENTS) {
+    const marsEventData = _.find(_marsEvents, (ev: MarsEventData) => ev.id === eventId);
+    if (marsEventData) {
+      availableEvents.push(_.cloneDeep({ event: marsEventData, numberOfCopies: numberOfCopies }));
     }
     else {
       logger.warn("No event ID found in mars events: %s", eventId);
     }
   }
   return availableEvents;
+}
+
+export function getMarsEvent(id: string): MarsEventData {
+  const event = _.find(_marsEvents, (e: MarsEventData) => e.id === id);
+  if (event) {
+    return event;
+  } else {
+    logger.warn("No event ID found in mars events: %s", id);
+    throw new Error(`No event ID found in mars events: ${id}`);
+  }
 }

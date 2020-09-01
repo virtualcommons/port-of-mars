@@ -2,7 +2,8 @@ import {GameState, AccomplishmentSet, Player, Trade, Accomplishment} from "@port
 import {CURATOR, PIONEER, RESEARCHER, ENTREPRENEUR, TradeData, Role} from "@port-of-mars/shared/types";
 import {getAccomplishmentByID, getAccomplishmentIDs} from "@port-of-mars/server/data/Accomplishment";
 import * as _ from 'lodash'
-import {getMarsEvent, mockGameStateInitOpts} from "@port-of-mars/server/util";
+import {mockGameStateInitOpts} from "@port-of-mars/server/util";
+import { getMarsEvent } from "@port-of-mars/server/data/MarsEvents";
 import {canSendTradeRequest} from "@port-of-mars/shared/validation";
 import {
   OutOfCommissionCurator,
@@ -84,7 +85,7 @@ describe('a player snapshot', () => {
 describe('a game state snapshot', () => {
 
   it('can be round tripped', async () => {
-    const options = mockGameStateInitOpts(x => x, () => 10);
+    const options = mockGameStateInitOpts(() => 10);
     const g1 = new GameState(options);
     const g2 = new GameState(options);
     g2.fromJSON(g1.toJSON());
@@ -120,7 +121,7 @@ describe('an accomplishment', () => {
 
 /*
 describe('a personal gain event', () => {
-  const gameState = new GameState(mockGameStateInitOpts(x => x, () => 10));
+  const gameState = new GameState(mockGameStateInitOpts(() => 10));
   it('gets players who voted yes', () => {
     // check upkeep and
     // votes associated with roles and timeblocks affected
@@ -130,7 +131,7 @@ describe('a personal gain event', () => {
 */
 
 describe('trading validations', () => {
-  const g = new GameState(mockGameStateInitOpts(x => x, () => 10));
+  const g = new GameState(mockGameStateInitOpts(() => 10));
   g.players['Curator'].inventory.update({
     finance: 0,
     culture: 3,
@@ -225,7 +226,7 @@ describe('trading validations', () => {
 
 
 describe('inverting pending inventory', () => {
-  const g = new GameState(mockGameStateInitOpts(x => x, () => 10));
+  const g = new GameState(mockGameStateInitOpts(() => 10));
   g.players['Curator'].inventory.update({
     finance: 0,
     culture: 3,
@@ -242,7 +243,7 @@ describe('inverting pending inventory', () => {
 });
 
 describe('out of commission event reduces timeblocks for each role', () => {
-  const g = new GameState(mockGameStateInitOpts(x => x, () => 10));
+  const g = new GameState(mockGameStateInitOpts(() => 10));
 
   it('gives each role 3 timeblocks', () => {
     for (const p of g.players) {
@@ -261,8 +262,8 @@ describe('out of commission event reduces timeblocks for each role', () => {
 });
 
 describe('Pending Mars Events', () => {
-  const g = new GameState(mockGameStateInitOpts(x => x, () => 10));
-  const oppositeState = new GameState(mockGameStateInitOpts(x => x, () => 10));
+  const g = new GameState(mockGameStateInitOpts(() => 10));
+  const oppositeState = new GameState(mockGameStateInitOpts(() => 10));
   oppositeState.fromJSON(g.toJSON());
   it('are applied in the proper order', () => {
     new OutOfCommissionCurator().finalize(g);
@@ -292,7 +293,7 @@ describe('Pending Mars Events', () => {
 });
 
 describe('Breakdown of trust saves timeBlocks', () => {
-  const g = new GameState(mockGameStateInitOpts(x => x, () => 10));
+  const g = new GameState(mockGameStateInitOpts(() => 10));
 
   it('gives each role 10 timeblocks with no other events active', () => {
     const breakdownOfTrust = new BreakdownOfTrust();
