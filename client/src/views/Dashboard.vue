@@ -17,7 +17,7 @@
         </b-list-group>
       </b-col>
     </b-row>
-    <b-row>
+    <b-row v-if="playerTaskCompletion.canPlayGame">
       <b-col>
         <h2>Schedule</h2>
         <b-table responsive sticky-header small dark bordered striped
@@ -66,10 +66,24 @@
     },
   })
   export default class PlayerDashboard extends Vue {
-    private api!: DashboardAPI;
-    private loading = true;
-    private upcomingGames: Array<GameMeta> = [];
-    private schedule: Array<{ day: string, time: string, invite: CalendarEvent }> = [
+    api!: DashboardAPI;
+    loading = true;
+    playerTaskCompletion!: PlayerTaskCompletion;
+    upcomingGames: Array<GameMeta> = [];
+    introSurveyUrl!: string;
+    exitSurveyUrl!: string;
+
+    tournamentIntroductionUrl = '#/dashboard';
+    tournamentIntroductionComplete = true;
+
+    roundEntranceSurveyUrl = '#/dashboard';
+    roundEntranceSurveyComplete = '#/dashboard';
+    roundExitSurveyUrl = '#/dashboard';
+    roundExitSurveyComplete = false;
+    roundComplete = false;
+
+
+    schedule: Array<{ day: string, time: string, invite: CalendarEvent }> = [
       {
         day: 'Thursday, Oct 7',
         time: '16:00',
@@ -94,25 +108,9 @@
       }
     ]
 
-    tournamentIntroductionUrl = '#/dashboard';
-    tournamentIntroductionComplete = true;
-
-    roundEntranceSurveyUrl = '#/dashboard';
-    roundEntranceSurveyComplete = '#/dashboard';
-    roundExitSurveyUrl = '#/dashboard';
-    roundExitSurveyComplete = false;
-    roundComplete = false;
-
-    created() {
-      console.log("creating dashboard API");
+    async created() {
       this.api = new DashboardAPI(this.$tstore, this.$ajax);
-      console.log("created dashboard api");
-    }
-
-    async mounted() {
-      console.log("initializing dashboard");
       await this.initialize();
-      console.log('initialized');
     }
 
     inviteLink(invite: {title: string, location: string, start: Date, end: Date, details: string}) {
@@ -126,18 +124,20 @@
 
     async initialize() {
       const data = await this.api.getData();
-      const playerTaskCompletion: PlayerTaskCompletion = data.playerTaskCompletion;
+      Vue.set(this, 'playerTaskCompletion', data.playerTaskCompletion);
       // display email verification page if not verified
-      if (playerTaskCompletion.mustVerifyEmail) {
+      if (data.playerTaskCompletion.mustVerifyEmail) {
         this.$router.push({name: VERIFY_PAGE});
       }
-      else if (playerTaskCompletion.mustProvideConsent) {
+      else if (data.playerTaskCompletion.mustProvideConsent) {
         // FIXME: rename REGISTER_PAGE to CONSENT_PAGE
         this.$router.push({name: REGISTER_PAGE});
       }
-      else if (playerTaskCompletion.mustTakeTutorial) {
+      else if (data.playerTaskCompletion.mustTakeTutorial) {
         this.$router.push({name: TUTORIAL_PAGE});
       }
+      Vue.set(this, 'introSurveyUrl', data.introSurveyUrl);
+      Vue.set(this, 'exitSurveyUrl', data.exitSurveyUrl);
       this.upcomingGames.splice(
         0,
         this.upcomingGames.length,
