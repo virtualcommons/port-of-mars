@@ -179,5 +179,5 @@ export default class Register extends Vue {
 </script>
 
 <style lang="scss">
-  @import '@port-of-mars/client/stylesheets/views/Register.scss';
+  @import '@port-of-mars/client/stylesheets/views/Consent.scss';
 </style>

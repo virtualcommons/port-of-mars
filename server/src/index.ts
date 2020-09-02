@@ -18,7 +18,7 @@ import { DBPersister } from '@port-of-mars/server/services/persistence';
 import { ClockTimer } from '@gamestdio/timer/lib/ClockTimer';
 import { quizRouter } from '@port-of-mars/server/routes/quiz';
 import { dashboardRouter } from '@port-of-mars/server/routes/dashboard';
-import { LOGIN_PAGE, REGISTER_PAGE, DASHBOARD_PAGE, getPagePath } from "@port-of-mars/shared/routes";
+import { LOGIN_PAGE, CONSENT_PAGE, DASHBOARD_PAGE, getPagePath } from "@port-of-mars/shared/routes";
 
 import * as fs from 'fs';
 import { registrationRouter } from "@port-of-mars/server/routes/registration";
@@ -144,7 +144,7 @@ async function createApp() {
         }
         else {
           logger.warn('invalid / unregistered user %o', user);
-          res.redirect(getPagePath(REGISTER_PAGE));
+          res.redirect(getPagePath(CONSENT_PAGE));
         }
       } else {
         const loginPath = getPagePath(LOGIN_PAGE);

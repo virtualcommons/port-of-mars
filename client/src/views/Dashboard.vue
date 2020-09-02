@@ -51,7 +51,7 @@
   import {faGoogle} from '@fortawesome/free-brands-svg-icons/faGoogle';
   import { library } from '@fortawesome/fontawesome-svg-core'
 
-  import { REGISTER_PAGE, LOGIN_PAGE, LOBBY_PAGE, VERIFY_PAGE, TUTORIAL_PAGE, GAME_PAGE } from '@port-of-mars/shared/routes';
+  import { CONSENT_PAGE, LOGIN_PAGE, LOBBY_PAGE, VERIFY_PAGE, TUTORIAL_PAGE, GAME_PAGE } from '@port-of-mars/shared/routes';
 
   import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
   import {google, outlook, office365, yahoo, ics, CalendarEvent} from "calendar-link";
@@ -68,10 +68,17 @@
   export default class PlayerDashboard extends Vue {
     api!: DashboardAPI;
     loading = true;
-    playerTaskCompletion!: PlayerTaskCompletion;
     upcomingGames: Array<GameMeta> = [];
-    introSurveyUrl!: string;
-    exitSurveyUrl!: string;
+    introSurveyUrl: string = '';
+    exitSurveyUrl: string = '';
+    playerTaskCompletion: PlayerTaskCompletion = {
+      mustConsent: true,
+      mustVerifyEmail: true,
+      mustTakeTutorial: true,
+      mustTakeIntroSurvey: true,
+      canPlayGame: false,
+      shouldTakeExitSurvey: false
+    }
 
     tournamentIntroductionUrl = '#/dashboard';
     tournamentIntroductionComplete = true;
@@ -81,7 +88,6 @@
     roundExitSurveyUrl = '#/dashboard';
     roundExitSurveyComplete = false;
     roundComplete = false;
-
 
     schedule: Array<{ day: string, time: string, invite: CalendarEvent }> = [
       {
@@ -108,9 +114,9 @@
       }
     ]
 
-    async created() {
+    created() {
       this.api = new DashboardAPI(this.$tstore, this.$ajax);
-      await this.initialize();
+      this.initialize();
     }
 
     inviteLink(invite: {title: string, location: string, start: Date, end: Date, details: string}) {
@@ -124,20 +130,19 @@
 
     async initialize() {
       const data = await this.api.getData();
-      Vue.set(this, 'playerTaskCompletion', data.playerTaskCompletion);
+      this.$set(this, 'playerTaskCompletion', data.playerTaskCompletion);
       // display email verification page if not verified
       if (data.playerTaskCompletion.mustVerifyEmail) {
-        this.$router.push({name: VERIFY_PAGE});
+        await this.$router.push({name: VERIFY_PAGE});
       }
-      else if (data.playerTaskCompletion.mustProvideConsent) {
-        // FIXME: rename REGISTER_PAGE to CONSENT_PAGE
-        this.$router.push({name: REGISTER_PAGE});
+      else if (data.playerTaskCompletion.mustConsent) {
+        await this.$router.push({name: CONSENT_PAGE});
       }
       else if (data.playerTaskCompletion.mustTakeTutorial) {
-        this.$router.push({name: TUTORIAL_PAGE});
+        await this.$router.push({name: TUTORIAL_PAGE});
       }
-      Vue.set(this, 'introSurveyUrl', data.introSurveyUrl);
-      Vue.set(this, 'exitSurveyUrl', data.exitSurveyUrl);
+      this.$set(this, 'introSurveyUrl', data.introSurveyUrl);
+      this.$set(this, 'exitSurveyUrl', data.exitSurveyUrl);
       this.upcomingGames.splice(
         0,
         this.upcomingGames.length,

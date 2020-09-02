@@ -2,12 +2,12 @@ export const LOGIN_PAGE: 'Login' = 'Login';
 export const LOBBY_PAGE: 'Lobby' = 'Lobby';
 export const GAME_PAGE: 'Game' = 'Game';
 export const TUTORIAL_PAGE: 'Tutorial' = 'Tutorial';
-export const REGISTER_PAGE: 'Register' = 'Register';
+export const CONSENT_PAGE: 'Consent' = 'Consent';
 export const VERIFY_PAGE = 'Verify' as const;
 export const DASHBOARD_PAGE: 'Dashboard' = 'Dashboard';
 
-export type Page = 'Login' | 'Lobby' | 'Game' | 'Tutorial' | 'Register' | 'Dashboard' | 'Verify';
-export const PAGES: Array<Page> = [ LOGIN_PAGE, LOBBY_PAGE, GAME_PAGE, TUTORIAL_PAGE, REGISTER_PAGE, DASHBOARD_PAGE, VERIFY_PAGE ];
+export type Page = 'Login' | 'Lobby' | 'Game' | 'Tutorial' | 'Consent' | 'Dashboard' | 'Verify';
+export const PAGES: Array<Page> = [ LOGIN_PAGE, LOBBY_PAGE, GAME_PAGE, TUTORIAL_PAGE, CONSENT_PAGE, DASHBOARD_PAGE, VERIFY_PAGE ];
 
 export function isPage(pageName: string): pageName is Page {
   return PAGES.includes(pageName as Page);
@@ -47,9 +47,9 @@ export const PAGE_META: { [p in Page]: { path: string, name: string, props?: boo
       requiresAuth: true
     }
   },
-  [REGISTER_PAGE]: {
+  [CONSENT_PAGE]: {
     path: '/register',
-    name: REGISTER_PAGE,
+    name: CONSENT_PAGE,
     meta: {
       requiresAuth: false
     }

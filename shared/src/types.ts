@@ -284,7 +284,7 @@ export interface Stats {
 
 export interface PlayerTaskCompletion {
   mustVerifyEmail: boolean;
-  mustProvideConsent: boolean;
+  mustConsent: boolean;
   mustTakeTutorial: boolean;
   mustTakeIntroSurvey: boolean;
   canPlayGame: boolean;

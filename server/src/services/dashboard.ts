@@ -4,7 +4,7 @@ import { TournamentRound } from "@port-of-mars/server/entity/TournamentRound";
 import { Game, Player, Tournament, TournamentRoundInvite } from "@port-of-mars/server/entity";
 import { BaseService } from "@port-of-mars/server/services/db";
 import {IsNull, Not, SelectQueryBuilder} from "typeorm";
-import { GAME_PAGE, TUTORIAL_PAGE, REGISTER_PAGE, VERIFY_PAGE } from "@port-of-mars/shared/routes";
+import { GAME_PAGE, TUTORIAL_PAGE, CONSENT_PAGE, VERIFY_PAGE } from "@port-of-mars/shared/routes";
 import { PlayerTaskCompletion, DashboardData } from "@port-of-mars/shared/types";
 import { settings } from "@port-of-mars/server/settings";
 import _ from "lodash";
@@ -31,7 +31,7 @@ export class DashboardService extends BaseService {
       redoable: true,
       done: !!user.dateConsented,
       description: 'View consent form and register email',
-      link: { kind: 'internal', data: { name: REGISTER_PAGE }}
+      link: { kind: 'internal', data: { name: CONSENT_PAGE }}
     };
   }
   getVerifyActionItem(user: User): ActionItem {
@@ -150,7 +150,7 @@ export class DashboardService extends BaseService {
   async getPlayerTaskCompletion(user: User, invite: TournamentRoundInvite | undefined): Promise<PlayerTaskCompletion> {
     return {
       mustVerifyEmail: this.mustVerifyEmail(user),
-      mustProvideConsent: this.mustProvideConsent(user),
+      mustConsent: this.mustProvideConsent(user),
       mustTakeTutorial: this.mustTakeTutorial(user),
       mustTakeIntroSurvey: this.mustTakeIntroSurvey(invite),
       canPlayGame: this.canPlayGame(invite),
