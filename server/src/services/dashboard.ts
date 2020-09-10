@@ -165,6 +165,7 @@ export class DashboardService extends BaseService {
     }
     const invite = await this.sp.tournament.getActiveRoundInviteIfExists(user.id, round);
     const playerTaskCompletion: PlayerTaskCompletion = await this.getPlayerTaskCompletion(user, invite);
+    const stats = await this.getStats(user, round);
     return {
       playerTaskCompletion,
       introSurveyUrl: this.getIntroSurveyUrl(user, round, invite),
@@ -173,7 +174,8 @@ export class DashboardService extends BaseService {
         time: this.sp.time.now().getTime(),
         round: round.roundNumber,
         tournamentName: round.tournament.name
-      }]
+      }],
+      stats
     }
   }
 }

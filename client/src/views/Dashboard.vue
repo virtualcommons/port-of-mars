@@ -23,13 +23,15 @@
           <b-nav-item-dropdown right>
             <!-- Using 'button-content' slot -->
             <template v-slot:button-content>
-              <em><b-icon-person-fill variant="light"></b-icon-person-fill></em>
+              <em>
+                <b-icon-person-fill variant="light"></b-icon-person-fill>
+              </em>
             </template>
 
-            <b-dropdown-item-button variant="dark" :to="'register'">Rescind Consent</b-dropdown-item-button>
-            <b-dropdown-item-button variant="dark" :to="'tutorial'">Tutorial</b-dropdown-item-button>
+            <b-dropdown-item-button :to="'register'" variant="dark">Rescind Consent</b-dropdown-item-button>
+            <b-dropdown-item-button :to="'tutorial'" variant="dark">Tutorial</b-dropdown-item-button>
             <b-dropdown-divider></b-dropdown-divider>
-            <b-dropdown-item-button variant="danger" @click="logout">Logout</b-dropdown-item-button>
+            <b-dropdown-item-button @click="logout" variant="danger">Logout</b-dropdown-item-button>
           </b-nav-item-dropdown>
         </b-navbar-nav>
       </b-collapse>
@@ -41,8 +43,8 @@
       <b-col class="text-center my-5 p-5" cols="6" v-if="view === 'game'">
         <!-- GO TO LOBBY -->
         <h2 class="py-2 text-uppercase">Play Game</h2>
-        <b-button :to="join" size="lg" variant="success" pill class="mb-5">
-          <b-icon-play-fill scale="1" class="my-1 mx-2" />
+        <b-button :to="join" class="mb-5" pill size="lg" variant="success">
+          <b-icon-play-fill class="my-1 mx-2" scale="1"/>
         </b-button>
 
         <!-- TOURNAMENT SURVEYS -->
@@ -132,10 +134,13 @@ export default class PlayerDashboard extends Vue {
   upcomingGames: Array<GameMeta> = [];
   introSurveyUrl: string = '';
   exitSurveyUrl: string = '';
-  options = [
-    {text: 'Game', value: 'game'},
-    {text: 'Stats', value: 'stats'}
-  ];
+  tournamentIntroductionUrl = '#/dashboard';
+  tournamentIntroductionComplete = true;
+  roundEntranceSurveyUrl = '#/dashboard';
+  roundEntranceSurveyComplete = '#/dashboard';
+  roundExitSurveyUrl = '#/dashboard';
+  roundExitSurveyComplete = false;
+  roundComplete = false;
   playerTaskCompletion: PlayerTaskCompletion = {
     mustConsent: true,
     mustVerifyEmail: true,
@@ -144,13 +149,6 @@ export default class PlayerDashboard extends Vue {
     canPlayGame: false,
     shouldTakeExitSurvey: false
   }
-  tournamentIntroductionUrl = '#/dashboard';
-  tournamentIntroductionComplete = true;
-  roundEntranceSurveyUrl = '#/dashboard';
-  roundEntranceSurveyComplete = '#/dashboard';
-  roundExitSurveyUrl = '#/dashboard';
-  roundExitSurveyComplete = false;
-  roundComplete = false;
   schedule: Array<{ day: string, time: string, invite: CalendarEvent }> = [
     {
       day: '',
@@ -212,6 +210,10 @@ export default class PlayerDashboard extends Vue {
     this.$set(this, 'introSurveyUrl', data.introSurveyUrl);
     this.$set(this, 'exitSurveyUrl', data.exitSurveyUrl);
 
+    // get player stats
+    this.stats.games.splice(0, this.stats.games.length, ...data.stats.games);
+
+    // get upcoming game
     this.upcomingGames.splice(
       0,
       this.upcomingGames.length,
