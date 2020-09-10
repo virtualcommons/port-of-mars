@@ -28,8 +28,16 @@
               </em>
             </template>
 
-            <b-dropdown-item-button :to="'register'" variant="dark">Rescind Consent</b-dropdown-item-button>
-            <b-dropdown-item-button :to="'tutorial'" variant="dark">Tutorial</b-dropdown-item-button>
+            <router-link :to="'register'">
+              <b-dropdown-item-button>
+                Rescind Consent
+              </b-dropdown-item-button>
+            </router-link>
+            <router-link :to="'tutorial'">
+              <b-dropdown-item-button>
+                Tutorial
+              </b-dropdown-item-button>
+            </router-link>
             <b-dropdown-divider></b-dropdown-divider>
             <b-dropdown-item-button @click="logout" variant="danger">Logout</b-dropdown-item-button>
           </b-nav-item-dropdown>
