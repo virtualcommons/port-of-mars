@@ -64,7 +64,7 @@
       </b-collapse>
       <b-button-group class="mt-2">
         <b-button @click="toggleConsent" variant="success">{{ consentLabel }}</b-button>
-        <b-button @click="gotoTutorial" variant="danger" class="ml-2">Do Not Consent (return to dashboard)</b-button>
+        <b-button @click="logout" variant="danger" class="ml-2">Do Not Consent (return to dashboard)</b-button>
       </b-button-group>
     </b-row>
     <b-row>
@@ -115,7 +115,7 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import { url } from "@port-of-mars/client/util";
-import {TUTORIAL_PAGE} from "@port-of-mars/shared/routes";
+import {LOGIN_PAGE, TUTORIAL_PAGE} from "@port-of-mars/shared/routes";
 import _ from 'lodash';
 
 @Component({})
@@ -174,6 +174,11 @@ export default class Register extends Vue {
 
   get registerUrl() {
     return url('/registration/register');
+  }
+
+  logout(): void {
+    this.$ajax.forgetLoginCreds();
+    this.$router.push({name: LOGIN_PAGE});
   }
 }
 </script>

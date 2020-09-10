@@ -1,116 +1,3 @@
-// WRAPPERS, CONTAINERS
-.c-dashboard {
-  height: 100vh !important;
-  width: 100vw !important;
-  @include make-center;
-}
-
-.title-wrapper,
-.content-wrapper {
-  width: 100%;
-}
-
-.content-wrapper {
-  height: 70vh;
-  overflow-y: hidden;
-  justify-content: space-around;
-}
-
-.message-wrapper {
-  @include make-center;
-}
-
-// WRAPPER :: DASHBOARD ITEM GROUPS (STATS, ACTIONS, GAMES)
-
-.outer-wrapper {
-  max-height: 50vh;
-  width: 100%;
-  padding: 0.5rem;
-  background-color: $light-shade-05;
-  overflow-y: auto;
-}
-
-.wrapper {
-  width: 100%;
-}
-
-// TITLE
-
-.title {
-  height: 100%;
-  padding: 0;
-  @include make-column-and-center;
-
-  h2 {
-    margin-bottom: 0;
-    text-transform: uppercase;
-    letter-spacing: 0.25rem;
-    font-size: 2rem;
-    font-weight: 700;
-    color: $light-accent;
-  }
-}
-
-// DASHBOARD ITEMS :: STATS, ACTION ITEMS, UPCOMING GAMES
-
-.stats,
-.action-items,
-.upcoming-games {
-  padding: 1rem;
-}
-
-.games-played, .next-game {
-  height: auto;
-  width: 100%;
-  padding: 0.5rem 1rem;
-  margin-bottom: 0.5rem;
-  @include make-horizontal-between;
-}
-
-.games-played {
-  background-color: $light-shade-05;
-}
-
-.next-game {
-  background-color: $light-shade-05;
-  //border-color: $light-accent;
-}
-
-// HTML TEXT ELEMENTS
-
-a {
-  text-decoration: none;
-}
-
-h1 {
-  text-transform: uppercase;
-  letter-spacing: 0.25rem;
-  font-size: 4.5rem;
-  font-weight: 700;
-  color: $light-accent;
-}
-
-h2 {
-  width: 100%;
-  padding: 0.5rem;
-  margin-bottom: 1rem;
-  color: $light-shade;
-  font-size: 2rem;
-  font-weight: 700;
-  text-align: center;
-}
-
-p {
-  width: 100%;
-  margin-bottom: 0;
-  color: $light-shade;
-  font-size: $font-large;
-  font-weight: $bold;
-  text-align: left;
-}
-
-// IMAGES
-
 .background-image {
   position: absolute;
   top: 0;
@@ -119,5 +6,15 @@ p {
   width: 100vw;
   z-index: -1;
   opacity: 0.0625;
+}
+
+.sidebar {
+  z-index: 0;
+}
+
+button {
+  &:disabled{
+    opacity: 0.5;
+  }
 }
 

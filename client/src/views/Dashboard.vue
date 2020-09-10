@@ -1,204 +1,259 @@
 <template>
-  <b-container fluid class="m-0 p-0">
+  <b-container class="m-0 p-0 h-100" fluid>
+    <img
+      :src="require(`@port-of-mars/client/assets/marsbg.jpg`)"
+      alt="Background Image"
+      class="background-image"
+    />
 
-    <!-- NAVIGATION BAR -->
-    <b-navbar type="dark" variant="info">
-      <b-navbar-brand href="#">Player Dashboard</b-navbar-brand>
+    <b-navbar toggleable="lg" type="dark" variant="secondary">
+      <b-navbar-brand href="#/dashboard"><h4 class="text-uppercase">Player Dashboard</h4></b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
       <b-collapse id="nav-collapse" is-nav>
-        <b-navbar-nav>
-          <b-nav-item href="#">Tutorial</b-nav-item>
-          <b-nav-item href="#" disabled>Game</b-nav-item>
+        <b-navbar-nav class="px-3">
+          <b-nav-item @click="toggle('game')">Game</b-nav-item>
+          <b-nav-item @click="toggle('stats')">Stats</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
-<!--          <b-nav-form>-->
-<!--            <b-form-input size="sm" class="mr-sm-2" placeholder="Search"></b-form-input>-->
-<!--            <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>-->
-<!--          </b-nav-form>-->
 
           <b-nav-item-dropdown right>
             <!-- Using 'button-content' slot -->
             <template v-slot:button-content>
-              <em>{{ username }}</em>
+              <em><b-icon-person-fill variant="light"></b-icon-person-fill></em>
             </template>
-            <b-dropdown-item @click="logout">Sign Out</b-dropdown-item>
+
+            <b-dropdown-item-button variant="dark" :to="'register'">Rescind Consent</b-dropdown-item-button>
+            <b-dropdown-item-button variant="dark" :to="'tutorial'">Tutorial</b-dropdown-item-button>
+            <b-dropdown-divider></b-dropdown-divider>
+            <b-dropdown-item-button variant="danger" @click="logout">Logout</b-dropdown-item-button>
           </b-nav-item-dropdown>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
 
-    <!-- TOURNAMENT INTRODUCTION SURVEY -->
-    <b-row class="justify-content-center m-4">
-      <b-col>
-        <b-list-group class="px-0">
-          <b-list-group-item :href="tournamentIntroductionUrl"
-                             class="d-flex justify-content-between align-items-center">
+    <b-row class="justify-content-md-center">
+
+      <!-- GAME -->
+      <b-col class="text-center my-5 p-5" cols="6" v-if="view === 'game'">
+        <!-- GO TO LOBBY -->
+        <h2 class="py-2 text-uppercase">Play Game</h2>
+        <b-button :to="join" size="lg" variant="success" pill class="mb-5">
+          <b-icon-play-fill scale="1" class="my-1 mx-2" />
+        </b-button>
+
+        <!-- TOURNAMENT SURVEYS -->
+        <h2 class="text-center text-uppercase mt-5 py-2">Game Surveys</h2>
+        <b-list-group class="py-3 mb-5">
+          <b-list-group-item :href="tournamentIntroductionUrl" button
+                             class="d-flex justify-content-between align-items-center"
+                             variant="info">
             Tournament Introduction Survey
             <b-badge variant="primary">
               <b-icon-check v-if="tournamentIntroductionComplete"></b-icon-check>
               <b-icon-x-circle v-else></b-icon-x-circle>
             </b-badge>
           </b-list-group-item>
+          <b-list-group-item
+            :disabled="!roundComplete"
+            :href="roundExitSurveyUrl"
+            button
+            class="d-flex justify-content-between align-items-center"
+            variant="info"
+          >
+            Tournament Exit Survey
+            <b-badge variant="primary">
+              <b-icon-check v-if="roundExitSurveyComplete"></b-icon-check>
+              <b-icon-x-circle v-else></b-icon-x-circle>
+            </b-badge>
+          </b-list-group-item>
         </b-list-group>
+
+        <b-container class="text-center" v-if="playerTaskCompletion.canPlayGame">
+          <h2 class="text-uppercase pt-5 my-3">Schedule</h2>
+          <b-table :items="schedule" bordered class="py-3" dark responsive small
+                   sticky-header striped>
+            <template v-slot:cell(invite)="data">
+              <a :href="inviteLink(data.item.invite)">
+                <font-awesome-icon :icon="['fab', 'google']"/>
+              </a>
+            </template>
+          </b-table>
+        </b-container>
+      </b-col>
+
+      <!-- STATS -->
+      <b-col class="text-center my-5 p-5" cols="6" v-if="view === 'stats'">
+        <h2 class="text-uppercase">Games Played: {{ gamesPlayedCount }}</h2>
+        <p class="my-5 py-5" v-if="stats.games.length === 0">No player stats to display</p>
+        <PlayerStatItem
+          :key="playerStatItem.time"
+          :playerStatItem="playerStatItem"
+          class="my-5 py-5"
+          v-for="playerStatItem in stats.games"
+        />
       </b-col>
     </b-row>
 
-    <!-- TOURNAMENT EXIT SURVEY -->
-    <b-row class="justify-content-center" v-if="roundComplete">
-      <b-list-group class="px-0">
-        <b-list-group-item :href="roundExitSurveyUrl"
-                           class="d-flex justify-content-between align-items-center">
-          Tournament Exit Survey
-          <b-badge variant="primary">
-            <b-icon-check v-if="roundExitSurveyComplete"></b-icon-check>
-            <b-icon-x-circle v-else></b-icon-x-circle>
-          </b-badge>
-        </b-list-group-item>
-      </b-list-group>
-    </b-row>
-
-    <b-row class="justify-content-center p-4" v-if="playerTaskCompletion.canPlayGame">
-      <b-col>
-        <h2>Schedule</h2>
-        <b-table responsive sticky-header small dark bordered striped
-                 :items="schedule">
-          <template v-slot:cell(invite)="data">
-            <a :href="inviteLink(data.item.invite)"><font-awesome-icon :icon="['fab', 'google']" /></a>
-          </template>
-        </b-table>
-      </b-col>
-    </b-row>
   </b-container>
 </template>
 
 <script lang="ts">
-  import {Component, Vue} from 'vue-property-decorator';
-  import PlayerStatItem from '@port-of-mars/client/components/dashboard/PlayerStatItem.vue';
-  import {DashboardAPI} from '@port-of-mars/client/api/dashboard/request';
-  import {PlayerTaskCompletion, GameMeta,} from '@port-of-mars/shared/types';
-  import {faGoogle} from '@fortawesome/free-brands-svg-icons/faGoogle';
-  import { library } from '@fortawesome/fontawesome-svg-core'
+import {Component, Vue} from 'vue-property-decorator';
+import PlayerStatItem from '@port-of-mars/client/components/dashboard/PlayerStatItem.vue';
+import {DashboardAPI} from '@port-of-mars/client/api/dashboard/request';
+import {GameMeta, PlayerTaskCompletion, Stats} from '@port-of-mars/shared/types';
+import {faGoogle} from '@fortawesome/free-brands-svg-icons/faGoogle';
+import {library} from '@fortawesome/fontawesome-svg-core'
+import {CONSENT_PAGE, LOBBY_PAGE, LOGIN_PAGE, TUTORIAL_PAGE, VERIFY_PAGE} from '@port-of-mars/shared/routes';
 
-  import { CONSENT_PAGE, LOGIN_PAGE, VERIFY_PAGE, TUTORIAL_PAGE, GAME_PAGE } from '@port-of-mars/shared/routes';
+import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
+import {CalendarEvent, google} from "calendar-link";
+import ActionItem from "@port-of-mars/client/components/dashboard/ActionItem.vue";
 
-  import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
-  import {google, outlook, office365, yahoo, ics, CalendarEvent} from "calendar-link";
+library.add(faGoogle);
 
-  library.add(faGoogle);
+Vue.component('font-awesome-icon', FontAwesomeIcon);
 
-  Vue.component('font-awesome-icon', FontAwesomeIcon);
-
-  @Component({
-    components: {
-      PlayerStatItem,
-    },
-  })
-  export default class PlayerDashboard extends Vue {
-    username: string = this.$tstore.state.user.username;
-    api!: DashboardAPI;
-    loading = true;
-    upcomingGames: Array<GameMeta> = [];
-    introSurveyUrl: string = '';
-    exitSurveyUrl: string = '';
-    playerTaskCompletion: PlayerTaskCompletion = {
-      mustConsent: true,
-      mustVerifyEmail: true,
-      mustTakeTutorial: true,
-      mustTakeIntroSurvey: true,
-      canPlayGame: false,
-      shouldTakeExitSurvey: false
-    }
-
-    tournamentIntroductionUrl = '#/dashboard';
-    tournamentIntroductionComplete = true;
-
-    roundEntranceSurveyUrl = '#/dashboard';
-    roundEntranceSurveyComplete = '#/dashboard';
-    roundExitSurveyUrl = '#/dashboard';
-    roundExitSurveyComplete = false;
-    roundComplete = false;
-
-    schedule: Array<{ day: string, time: string, invite: CalendarEvent }> = [
-      {
-        day: 'Thursday, Oct 7',
-        time: '16:00',
-        invite: {
-          title: 'Round 2',
-          location: 'Port of Mars',
-          start: new Date().toISOString(),
-          duration: [3, "hour"],
-          description: 'A scheduled port of mars game'
-        }
-      },
-      {
-        day: 'Thursday, Oct 8',
-        time: '08:00',
-        invite: {
-          title: 'Round 2',
-          location: 'Port of Mars',
-          start: new Date().toISOString(),
-          duration: [3, "hour"],
-          description: 'A scheduled port of mars game'
-        }
-      }
-    ]
-
-    created() {
-      this.api = new DashboardAPI(this.$tstore, this.$ajax);
-      this.initialize();
-    }
-
-    inviteLink(invite: {title: string, location: string, start: Date, end: Date, details: string}) {
-      console.log({invite});
-      return google(invite);
-    }
-
-    get dashboardMessages() {
-      return this.$tstore.state.dashboardMessages;
-    }
-
-    async initialize() {
-      // get player task completion status
-      const data = await this.api.getData();
-      this.$set(this, 'playerTaskCompletion', data.playerTaskCompletion);
-
-      // go to email verification page if player is not verified
-      if (data.playerTaskCompletion.mustVerifyEmail) {
-        await this.$router.push({name: VERIFY_PAGE});
-      }
-
-      // go to consent page if player has not consented
-      else if (data.playerTaskCompletion.mustConsent) {
-        await this.$router.push({name: CONSENT_PAGE});
-      }
-
-      // go to tutorial if player has not taken tutorial
-      else if (data.playerTaskCompletion.mustTakeTutorial) {
-        await this.$router.push({name: TUTORIAL_PAGE});
-      }
-
-      this.$set(this, 'introSurveyUrl', data.introSurveyUrl);
-      this.$set(this, 'exitSurveyUrl', data.exitSurveyUrl);
-      this.upcomingGames.splice(
-        0,
-        this.upcomingGames.length,
-        ...data.upcomingGames
-      );
-      this.loading = false;
-    }
-
-    private logout(): void {
-      this.$ajax.forgetLoginCreds();
-      this.$router.push({ name: LOGIN_PAGE });
-    }
-
+@Component({
+  components: {
+    ActionItem,
+    PlayerStatItem,
+  },
+})
+export default class PlayerDashboard extends Vue {
+  username: string = this.$tstore.state.user.username;
+  view: 'game' | 'stats' = 'game';
+  api!: DashboardAPI;
+  loading = true;
+  upcomingGames: Array<GameMeta> = [];
+  introSurveyUrl: string = '';
+  exitSurveyUrl: string = '';
+  options = [
+    {text: 'Game', value: 'game'},
+    {text: 'Stats', value: 'stats'}
+  ];
+  playerTaskCompletion: PlayerTaskCompletion = {
+    mustConsent: true,
+    mustVerifyEmail: true,
+    mustTakeTutorial: true,
+    mustTakeIntroSurvey: true,
+    canPlayGame: false,
+    shouldTakeExitSurvey: false
   }
+  tournamentIntroductionUrl = '#/dashboard';
+  tournamentIntroductionComplete = true;
+  roundEntranceSurveyUrl = '#/dashboard';
+  roundEntranceSurveyComplete = '#/dashboard';
+  roundExitSurveyUrl = '#/dashboard';
+  roundExitSurveyComplete = false;
+  roundComplete = false;
+  schedule: Array<{ day: string, time: string, invite: CalendarEvent }> = [
+    {
+      day: '',
+      time: '',
+      invite: {
+        title: '',
+        location: '',
+        start: '',
+        duration: [0, 'hour'],
+        description: ''
+      }
+    },
+  ]
+  private stats: Stats = {games: []};
+
+  get dashboardMessages() {
+    return this.$tstore.state.dashboardMessages;
+  }
+
+  get gamesPlayedCount() {
+    return this.stats.games.length;
+  }
+
+  get join() {
+    return {name: LOBBY_PAGE};
+  }
+
+  created() {
+    this.api = new DashboardAPI(this.$tstore, this.$ajax);
+    this.initialize();
+  }
+
+  inviteLink(invite: { title: string, location: string, start: Date, end: Date, details: string }) {
+    console.log({invite});
+    return google(invite);
+  }
+
+  async initialize() {
+    // get player task completion status
+    const data = await this.api.getData();
+    this.$set(this, 'playerTaskCompletion', data.playerTaskCompletion);
+
+    // go to email verification page if player is not verified
+    if (data.playerTaskCompletion.mustVerifyEmail) {
+      await this.$router.push({name: VERIFY_PAGE});
+    }
+
+    // go to consent page if player has not consented
+    else if (data.playerTaskCompletion.mustConsent) {
+      await this.$router.push({name: CONSENT_PAGE});
+    }
+
+    // go to tutorial if player has not taken tutorial
+    else if (data.playerTaskCompletion.mustTakeTutorial) {
+      await this.$router.push({name: TUTORIAL_PAGE});
+    }
+
+    // set survey URLs
+    this.$set(this, 'introSurveyUrl', data.introSurveyUrl);
+    this.$set(this, 'exitSurveyUrl', data.exitSurveyUrl);
+
+    this.upcomingGames.splice(
+      0,
+      this.upcomingGames.length,
+      ...data.upcomingGames
+    );
+
+    for (let game = 0; game < this.upcomingGames.length; game++) {
+
+      // convert UTC --> string
+      let unixTimestamp = new Date(this.upcomingGames[game].time);
+      let day = unixTimestamp.getMonth().toString() + `/` + unixTimestamp.getDay().toString();
+      let time = unixTimestamp.getHours() + `:` + unixTimestamp.getMinutes();
+
+      this.schedule = [
+        {
+          day: day,
+          time: time,
+          invite: {
+            title: this.upcomingGames[game].tournamentName,
+            location: 'https://alpha.portofmars.asu.edu/#/',
+            start: time,
+            duration: [2, "hour"],
+            description: 'https://alpha.portofmars.asu.edu/#/'
+          }
+        }
+      ]
+    }
+    this.loading = false;
+  }
+
+  toggle(view: 'game' | 'stats'): void {
+    this.view = view;
+  }
+
+  logout(): void {
+    this.$ajax.forgetLoginCreds();
+    this.$router.push({name: LOGIN_PAGE});
+  }
+
+}
 </script>
 
 <style lang="scss" scoped>
-  @import "@port-of-mars/client/stylesheets/views/Dashboard.scss";
+@import "@port-of-mars/client/stylesheets/views/Dashboard.scss";
 </style>
