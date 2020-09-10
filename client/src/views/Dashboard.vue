@@ -21,6 +21,11 @@
         <b-navbar-nav class="ml-auto">
 
           <b-nav-item-dropdown right>
+            <b-dropdown-text variant="info">
+              {{username}}
+            </b-dropdown-text>
+            <b-dropdown-divider></b-dropdown-divider>
+
             <!-- Using 'button-content' slot -->
             <template v-slot:button-content>
               <em>
