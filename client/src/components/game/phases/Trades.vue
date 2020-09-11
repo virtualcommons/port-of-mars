@@ -41,6 +41,7 @@
   import {Component, Inject, Vue} from "vue-property-decorator";
   import ActiveTrade from "./trade/ActiveTrade.vue";
   import {TutorialAPI} from '@port-of-mars/client/api/tutorial/request';
+  import {Phase} from "@port-of-mars/shared/types";
 
   @Component({
     components: {
@@ -52,9 +53,10 @@
     readonly api!: TutorialAPI;
 
     private checked: boolean = this.$tstore.getters.toggleYourTrades;
-    // get checked(): boolean {
-    //   return this.$tstore.getters.tradeFilter;
-    // }
+
+    get phase() {
+      return this.$tstore.state.phase;
+    }
 
     /**
      * If player is ready, disabled is true.
@@ -103,6 +105,12 @@
      */
     get myRole() {
       return this.$tstore.getters.player.role;
+    }
+
+    created() {
+      if (this.phase === Phase.trade) {
+        this.api.setHUDLeftView(2);
+      }
     }
 
     updated() {
