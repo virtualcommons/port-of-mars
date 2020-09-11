@@ -65,18 +65,10 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Inject } from 'vue-property-decorator';
+import {Component, Inject, Vue, Watch} from 'vue-property-decorator';
 import TradeOptions from '@port-of-mars/client/components/game/phases/trade/TradeOptions.vue';
-import {
-  TradeAmountData,
-  ResourceAmountData,
-  Role,
-} from '@port-of-mars/shared/types';
-import {
-  canPlayerMakeTrade,
-  isZeroTrade
-} from '@port-of-mars/shared/validation';
-import { makeTradeSafe } from '@port-of-mars/shared/validation';
+import {ResourceAmountData, Role, TradeAmountData,} from '@port-of-mars/shared/types';
+import {canPlayerMakeTrade, isZeroTrade, makeTradeSafe} from '@port-of-mars/shared/validation';
 import {SendTradeRequestData} from "@port-of-mars/shared/game";
 import {AbstractGameAPI} from "@port-of-mars/client/api/game/types";
 
@@ -88,7 +80,6 @@ import {AbstractGameAPI} from "@port-of-mars/client/api/game/types";
 })
 export default class TradeRequest extends Vue {
   @Inject() readonly api!: AbstractGameAPI;
-  private count: number = 0;
 
   created() {
     this.api.setTradePlayerName(this.$tstore.getters.player.role);
@@ -118,7 +109,7 @@ export default class TradeRequest extends Vue {
 
   // NOTE :: HANDLE TRADE
 
-  private handleChange(name: string) {
+  handleChange(name: string) {
     if (name == this.tradePartnerName) {
       this.api.setTradePartnerName('');
     } else {
@@ -130,7 +121,8 @@ export default class TradeRequest extends Vue {
     const inventory = this.$tstore.getters.player.inventory;
     console.log('validate trade: ', this.tradePartnerName != '' &&
             canPlayerMakeTrade(this.recipientResources, inventory) &&
-            !isZeroTrade(this.recipientResources, this.senderResources))
+            !isZeroTrade(this.recipientResources, this.senderResources));
+
     return (
       this.tradePartnerName != '' &&
       canPlayerMakeTrade(this.recipientResources, inventory) &&
@@ -138,16 +130,17 @@ export default class TradeRequest extends Vue {
     );
   }
 
-  private handleSendResources(resources: ResourceAmountData) {
+
+  handleSendResources(resources: ResourceAmountData) {
     this.api.setTradeGiveResources(resources);
   }
 
-  private handleReceiveResources(resources: ResourceAmountData) {
+  handleReceiveResources(resources: ResourceAmountData) {
     this.api.setTradeGetResources(resources);
   }
 
-  private handleTrade() {
-
+  // FIXME: trade is only validated on click. needs to validate before hand so button is disabled properly
+  handleTrade() {
     if (this.validateTrade()) {
       const senderPackage: TradeAmountData = {
         role: this.$tstore.state.role,
@@ -169,13 +162,13 @@ export default class TradeRequest extends Vue {
 
 
   // NOTE :: STYLES
-  private borderStyle(role: Role) {
+  borderStyle(role: Role) {
     return role === this.tradePartnerName
       ? { border: `0.125rem solid var(--light-accent)` }
       : { border: `0.125rem solid var(--color-${role})` };
   }
 
-  private frameStyle(role: Role) {
+  frameStyle(role: Role) {
     return role === this.tradePartnerName
       ? { backgroundColor: `var(--light-accent)` }
       : { backgroundColor: `var(--color-${role})` };
