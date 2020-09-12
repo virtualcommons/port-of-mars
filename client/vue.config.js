@@ -10,6 +10,10 @@ if (fs.existsSync('/run/secrets/sentry_dsn')) {
 }
 
 module.exports = {
+  configureWebpack: {
+    // https://webpack.js.org/configuration/devtool/
+    devtool: NODE_ENV === 'development' ? 'eval-cheap-module-source-map' : 'source-map'
+  },
   chainWebpack: (config) => {
     config.resolve.alias.set(
       '@port-of-mars/shared',
