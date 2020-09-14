@@ -14,3 +14,11 @@ button {
   }
 }
 
+.wrapper {
+  height: 75vh;
+  overflow-y: auto;
+}
+
+.stats {
+  overflow-y: scroll;
+}

@@ -106,8 +106,9 @@
       </b-col>
 
       <!-- STATS -->
-      <b-col class="text-center my-5 p-5" cols="6" v-if="view === 'stats'">
+      <b-col class="text-center my-5 p-5 wrapper" cols="6" v-if="view === 'stats'">
         <h2 class="text-uppercase">Games Played: {{ gamesPlayedCount }}</h2>
+        <div class="stats w-100 h-100 p-0 m-0">
         <p class="my-5 py-5" v-if="stats.games.length === 0">No player stats to display</p>
         <PlayerStatItem
           :key="playerStatItem.time"
@@ -115,6 +116,7 @@
           class="my-5 py-5"
           v-for="playerStatItem in stats.games"
         />
+        </div>
       </b-col>
     </b-row>
   </b-container>
