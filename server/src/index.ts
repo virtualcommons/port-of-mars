@@ -56,12 +56,14 @@ passport.use(new CasStrategy(
   }
 ));
 passport.use(new LocalStrategy(
-  function (username: string, password: string, done: Function) {
+  async function (username: string, password: string, done: Function) {
     logger.warn('***** DO NOT ALLOW IN PRODUCTION! running local auth for user: ', username);
-    getServices().account.getOrCreateTestUser(username).then(user => {
+    const tournamentService = getServices().tournament;
+    const user = await getServices().account.getOrCreateTestUser(username);
+    const tournamentRound = await tournamentService.getCurrentTournamentRound();
+    await tournamentService.getActiveRoundInvite(user.id, tournamentRound);
       // set all testing things on the user
-      done(null, user)
-    });
+    done(null, user)
   }
 ));
 
