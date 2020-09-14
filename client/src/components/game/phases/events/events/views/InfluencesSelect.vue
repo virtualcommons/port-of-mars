@@ -24,7 +24,7 @@ import {
   Resource,
   INVESTMENTS,
   ResourceCostData,
-  Investment,
+  Investment, InvestmentData,
 } from '@port-of-mars/shared/types';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 import InvestmentCard from '@port-of-mars/client/components/game/phases/investment/InvestmentCard.vue';
@@ -57,6 +57,10 @@ export default class InfluencesSelect extends Vue {
     });
   }
 
+  get pendingInvestments(): InvestmentData {
+    return this.$tstore.getters.player.pendingInvestments;
+  }
+
   get remainingTime() {
     const p = this.$tstore.getters.player;
     const pendingInvestments = p.pendingInvestments;
@@ -87,10 +91,10 @@ export default class InfluencesSelect extends Vue {
       this.$tstore.getters.player.pendingInvestments
     );
 
-    pendingInvestments[msg.name] = msg.units;
+    this.pendingInvestments[msg.name] = msg.units;
     if (
       msg.units >= this.origPending[msg.name] &&
-      this.getRemainingTimeBlocks(pendingInvestments) >= 0
+      this.getRemainingTimeBlocks(this.pendingInvestments) >= 0
     ) {
       this.api.investPendingTimeBlocks({
         investment: msg.name,

@@ -76,7 +76,7 @@ export default class Discard extends Vue {
    * > Hide accomplishments on client side when status changes
    * > Filter accomplishments by ID - if ID is not in the array, card has been discarded
    */
-  wasDiscarded(id: number) {
+  wasDiscarded(id: number): boolean {
     return Boolean((this.$store.getters.player.accomplishments.purchasable as Array<AccomplishmentData>)
       .slice()
       .filter(accomplishment => accomplishment.id == id).length > 0);
