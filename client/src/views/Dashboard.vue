@@ -35,7 +35,7 @@
 
             <router-link :to="'register'">
               <b-dropdown-item-button>
-                Rescind Consent
+                Change Consent or Email
               </b-dropdown-item-button>
             </router-link>
             <router-link :to="'tutorial'">
@@ -49,6 +49,15 @@
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
+
+    <b-row class='justify-content-md-center' v-if="dashboardMessages.length > 0">
+      <!-- MESSAGES -->
+      <h2>Messages</h2>
+      <b-alert :key="dm.message" :variant="dm.kind" dismissible fade show
+                 v-for="dm in dashboardMessages">
+          {{ dm.message }}
+      </b-alert>
+    </b-row>
 
     <b-row class="justify-content-md-center">
 
@@ -206,7 +215,7 @@ export default class PlayerDashboard extends Vue {
 
     // go to email verification page if player is not verified
     if (data.playerTaskCompletion.mustVerifyEmail) {
-      await this.$router.push({name: VERIFY_PAGE});
+      await this.$router.push({name: CONSENT_PAGE});
     }
 
     // go to consent page if player has not consented

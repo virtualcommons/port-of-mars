@@ -10,7 +10,7 @@ export const registrationRouter = Router();
 
 registrationRouter.use(isAuthenticated);
 
-registrationRouter.post('/register', async (req: Request, res: Response, next: NextFunction) => {
+registrationRouter.post('/grant-consent', async (req: Request, res: Response, next: NextFunction) => {
   const user = req.user as User;
   try {
     const services = getServices();

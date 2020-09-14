@@ -2,8 +2,17 @@
   <b-container class="container registration">
     <b-row class="p-3">
       <b-col>
-        <h1>Port of Mars Registration</h1>
+        <h1>Port of Mars Consent Form and Email Registration</h1>
       </b-col>
+    </b-row>
+    <b-row v-if="messages.length > 0" class="message-wrapper">
+      <!-- FIXME: should create a component for this instead of repeating it across multiple pages -->
+      <!-- MESSAGES -->
+      <h2>Messages</h2>
+      <b-alert :key="dm.message" :variant="dm.kind" dismissible fade show
+                v-for="dm in messages">
+        {{ dm.message }}
+      </b-alert>
     </b-row>
     <b-row>
       <b-collapse :visible="showConsentForm" id="consent-collapse">
@@ -13,28 +22,30 @@
             <p>
                 I am a professor in the School of Sustainability at Arizona State University.
                 I am conducting experiments that investigate how people think, act, and make decisions.
-                This research is part of the Interplanetary Research Initiative at Arizona State University.
+                This research is part of the <a href='https://interplanetary.asu.edu/'>Interplanetary Initiative</a> at 
+                Arizona State University.
             </p>
             <p>
-                I am requesting your participation, which will involve participating in a game tournament.
-                The game will take a maximum of 60 minutes. The tournament has 4 rounds to determine the Mars Madness
-                champion, and if you qualify for another round, such a game will take another hour at a later day with a
-                special invitation. Your participation in this study is voluntary. <code><b>You must be 18 or older to participate
-                in the study.</b></code> If you choose not to participate or to withdraw from the study at any time, there will be
-                no penalty; it will not affect your compensation for participation up to that point.
+                I am requesting your participation in a tournament consisting of several rounds of games. Each game in
+                the tournament will take no more than 60 minutes on average. The top ranking players in each round will
+                qualify for the next round and will receive an email invitation to participate in another game on a
+                later day. Your participation in this study is strictly voluntary and you may choose to not participate
+                or to withdraw from the study at any time with no penalty; it will not affect your compensation for
+                participation up to that point.
+            </p>
+            <p>
+                <mark>You must be 18 or older to participate in the study.</mark>
             </p>
             <p>During the game you can chat with other participants. By signing this consent form, you consent to:</p>
                 <ul>
                     <li>Abstain from personal attacks or harassment</li>
-                    <li>Will not use profanity or offensive language</li>
+                    <li>Abstain from using profanity or offensive language when communicating with your fellow participants</li>
                 </ul>
-
             <p>
-                For participation in this study you may receive extra credit if your instructor of one of the
-                participating classes has made the participation in this event an extra credit opportunity. Those
-                who qualify for the championship round will be invited to have lunch with astronaut in residence,
-                Catherine Coleman. The winner of the Mars Madness championship round will be able to create an
-                Event for the next edition of Mars Madness.
+                For participation in this study you may receive extra credit if you are in a class with a participating instructor.
+                Those who qualify for the championship round will be invited to have lunch with Arizona State University's astronaut in residence,
+                Catherine Coleman. The <em>winner</em> of the Mars Madness tournament will be able to create new personalized content
+                for the next edition of Mars Madness.
             </p>
             <p>
                 Society may benefit from this research because an understanding of how people make decisions can
@@ -45,12 +56,13 @@
                 There are no foreseeable risks or discomforts to your participation.
             </p>
             <p>
-                The results of the research study may be published, but your name will not be used. Your
-                responses will be confidential. However, due to the group nature of this study, complete
-                confidentiality cannot be guaranteed. We contact your instructor that you have participated,
-                if your instructor asked us to do so for an extra credit assignment. We also keep track who
-                moves to next rounds. We delete personal information such as your email address from our database
-                after the tournament is completed.
+                The results of the research study may be published, but your name will not be used. Your responses will
+                be confidential. However, due to the group nature of this study, complete confidentiality cannot be
+                guaranteed. If you are participating in this study as part of a class for extra credit, we may inform
+                your instructor that you have participated, for example. We also have to keep track of which players
+                will move on to next rounds. We will remove personal information such as your email address from our
+                database after the tournament has been completed and ensure that only anonymized participant identifiers
+                are associated with your experiment data.
             </p>
             <p>
                 If you have any questions concerning the research study, please contact
@@ -64,7 +76,7 @@
       </b-collapse>
       <b-button-group class="mt-2">
         <b-button @click="toggleConsent" variant="success">{{ consentLabel }}</b-button>
-        <b-button @click="logout" variant="danger" class="ml-2">Do Not Consent (return to dashboard)</b-button>
+        <b-button @click="logout" variant="danger" class="ml-2">Deny Consent</b-button>
       </b-button-group>
     </b-row>
     <b-row>
@@ -81,13 +93,13 @@
               placeholder='Enter your full name'>
               </b-form-input>
             </b-form-group>
-            <b-form-group label='Email' label-for='email' description='We will never share your email.'>
+            <b-form-group label='Email' label-for='email' description='We will only use your email to contact you for Port of Mars related activities and will never share your email.'>
               <b-form-input
               id='email'
               v-model='email'
               type='email'
               size='lg'
-              placeholder='Please enter a valid email address so we can contact you with additional information.'
+              placeholder='Please enter a valid email address.'
               required>
               </b-form-input>
             </b-form-group>
@@ -97,7 +109,7 @@
               v-model='verifyEmail'
               type='email'
               size='lg'
-              placeholder='Please verify your email address'
+              placeholder='Email address (again)'
               required>
               </b-form-input>
             </b-form-group>
@@ -127,6 +139,10 @@ export default class Register extends Vue {
   consented = false;
   error = "";
 
+  get messages() {
+    return this.$tstore.state.dashboardMessages;
+  }
+
   async created() {
     await this.$ajax.get(url('/registration/authenticated'), () => {})
   }
@@ -135,9 +151,12 @@ export default class Register extends Vue {
     e.preventDefault();
     if (this.emailsMatch && !_.isEmpty(this.email)) {
       const formData = { name: this.name, email: this.email };
-      await this.$ajax.post(this.registerUrl, ({data, status}) => {
+      await this.$ajax.post(this.grantConsentUrl, ({data, status}) => {
         if (status === 200) {
-          this.gotoTutorial();
+          this.$tstore.commit("SET_DASHBOARD_MESSAGE", {
+            kind: "success",
+            message: `We have sent an email to ${this.email}, please check your email to verify your email continue.`
+          });
         }
         else {
           console.error("Unexpected status code: " + status);
@@ -172,8 +191,8 @@ export default class Register extends Vue {
     return this.name.length === 0 || this.email.length === 0 || ! this.emailsMatch;
   }
 
-  get registerUrl() {
-    return url('/registration/register');
+  get grantConsentUrl() {
+    return url('/registration/grant-consent');
   }
 
   logout(): void {
