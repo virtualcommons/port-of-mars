@@ -36,7 +36,7 @@ import {
   SetPlayerReadiness,
   TimeInvested,
   VotedForPersonalGain,
-  VotedForPhilanthropist, VoteHeroOrPariah, ExitedTradePhase
+  VotedForPhilanthropist, VoteHeroOrPariah, ExitedTradePhase, ExitedPurchasePhase
 } from '@port-of-mars/server/rooms/game/events';
 import {getAccomplishmentByID} from '@port-of-mars/server/data/Accomplishment';
 import {Command} from '@port-of-mars/server/rooms/game/commands/types';
@@ -284,7 +284,7 @@ export class SetNextPhaseCmd implements Command {
       case Phase.trade:
         return [new ExitedTradePhase(), new EnteredPurchasePhase()];
       case Phase.purchase:
-        return [new EnteredDiscardPhase()];
+        return [new ExitedPurchasePhase(), new EnteredDiscardPhase()];
       case Phase.discard: {
         const state = this.state;
         if (state.isLastRound()) {

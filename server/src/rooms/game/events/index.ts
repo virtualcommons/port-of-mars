@@ -355,7 +355,6 @@ export class ExitedTradePhase extends KindOnlyGameEvent {
     game.clearTrades();
   }
 }
-
 gameEventDeserializer.register(ExitedTradePhase);
 
 export class EnteredPurchasePhase extends KindOnlyGameEvent {
@@ -366,8 +365,13 @@ export class EnteredPurchasePhase extends KindOnlyGameEvent {
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
   }
 }
-
 gameEventDeserializer.register(EnteredPurchasePhase);
+
+export class ExitedPurchasePhase extends KindOnlyGameEvent {
+  apply(game: GameState): void {
+  }
+}
+gameEventDeserializer.register(ExitedPurchasePhase);
 
 export class EnteredDiscardPhase extends KindOnlyGameEvent {
   apply(game: GameState): void {
@@ -377,7 +381,6 @@ export class EnteredDiscardPhase extends KindOnlyGameEvent {
     game.timeRemaining = GameState.DEFAULTS.timeRemaining;
   }
 }
-
 gameEventDeserializer.register(EnteredDiscardPhase);
 
 export class EnteredDefeatPhase extends GameEventWithData {
@@ -392,7 +395,6 @@ export class EnteredDefeatPhase extends GameEventWithData {
     game.log(`System Health has reached zero.`, MarsLogCategory.systemHealth, 'Server');
   }
 }
-
 gameEventDeserializer.register(EnteredDefeatPhase);
 
 export class EnteredVictoryPhase extends GameEventWithData {
