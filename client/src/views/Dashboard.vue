@@ -76,10 +76,8 @@
                              class="d-flex justify-content-between align-items-center"
                              variant="info">
             Tournament Introduction Survey
-            <b-badge variant="primary">
-              <b-icon-check v-if="tournamentIntroductionComplete"></b-icon-check>
-              <b-icon-x-circle v-else></b-icon-x-circle>
-            </b-badge>
+              <b-icon-check-circle-fill v-if="tournamentIntroductionComplete" variant="success"></b-icon-check-circle-fill>
+              <b-icon-x-circle-fill v-else variant="danger"></b-icon-x-circle-fill>
           </b-list-group-item>
           <b-list-group-item
             :disabled="!roundComplete"
@@ -89,10 +87,8 @@
             variant="info"
           >
             Tournament Exit Survey
-            <b-badge variant="primary">
-              <b-icon-check v-if="roundExitSurveyComplete"></b-icon-check>
-              <b-icon-x-circle v-else></b-icon-x-circle>
-            </b-badge>
+              <b-icon-check-circle-fill v-if="roundExitSurveyComplete" variant="success"></b-icon-check-circle-fill>
+              <b-icon-x-circle-fill v-else variant="danger"></b-icon-x-circle-fill>
           </b-list-group-item>
         </b-list-group>
 
@@ -121,7 +117,6 @@
         />
       </b-col>
     </b-row>
-
   </b-container>
 </template>
 
@@ -170,7 +165,7 @@ export default class PlayerDashboard extends Vue {
     mustTakeIntroSurvey: true,
     canPlayGame: false,
     shouldTakeExitSurvey: false
-  }
+  };
   schedule: Array<{ day: string, time: string, invite: CalendarEvent }> = [
     {
       day: '',
@@ -183,7 +178,7 @@ export default class PlayerDashboard extends Vue {
         description: ''
       }
     },
-  ]
+  ];
   private stats: Stats = {games: []};
 
   get dashboardMessages() {
@@ -273,6 +268,11 @@ export default class PlayerDashboard extends Vue {
   logout(): void {
     this.$ajax.forgetLoginCreds();
     this.$router.push({name: LOGIN_PAGE});
+  }
+
+  complete() {
+    if (this.tournamentIntroductionComplete || this.roundExitSurveyComplete) return '$danger';
+    return '$success';
   }
 
 }
