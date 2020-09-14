@@ -84,7 +84,7 @@
       class="w-100 m-0 p-3 wrapper text-center discard"
       v-else-if="type === cardType.discard && showCard"
     >
-      <button :disabled="playerReady" @click="handleDiscard()">
+      <button @click="handleDiscard()">
         Discard Accomplishment
       </button>
 
