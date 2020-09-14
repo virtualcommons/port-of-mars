@@ -30,9 +30,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Inject } from 'vue-property-decorator';
-import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 import { Phase, PHASE_LABELS } from '@port-of-mars/shared/types';
-import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
 import {AbstractGameAPI} from "@port-of-mars/client/api/game/types";
 
 @Component({
@@ -42,7 +40,7 @@ export default class GameInformation extends Vue {
   @Inject() private api!: AbstractGameAPI;
 
   get roundNumber() {
-    const { round, systemHealth } = this.$store.state;
+    const { round, systemHealth } = this.$tstore.state;
     if (round > 0 && systemHealth > 0) {
       return round;
     } else if (systemHealth <= 0) {
@@ -53,7 +51,7 @@ export default class GameInformation extends Vue {
   }
 
   get phaseNumber(): Phase {
-    const phaseNumber = this.$store.state.phase;
+    const phaseNumber = this.$tstore.state.phase;
     return phaseNumber ? phaseNumber : 0;
   }
 
@@ -64,11 +62,11 @@ export default class GameInformation extends Vue {
   }
 
   get playerReady() {
-    return this.$store.getters.player.ready;
+    return this.$tstore.getters.player.ready;
   }
 
   get timeRemaining() {
-    const fromState = this.$store.state.timeRemaining;
+    const fromState = this.$tstore.state.timeRemaining;
     const minutesRemaining = Math.floor(fromState / 60);
     const minutesRemainingDisplay = `${minutesRemaining}`.padStart(2, '0');
     const secondsRemainingDisplay = `${
@@ -79,7 +77,7 @@ export default class GameInformation extends Vue {
   }
 
   get countdownStyling() {
-    return this.$store.state.timeRemaining < 60 ? 'blink-timer' : 'countdown';
+    return this.$tstore.state.timeRemaining < 60 ? 'blink-timer' : 'countdown';
   }
 
   private submitDone() {
