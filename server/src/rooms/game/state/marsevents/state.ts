@@ -345,6 +345,7 @@ export class HeroOrPariah extends BaseEvent {
   }
   private heroOrPariahVotes: HeroOrPariahData = {};
   private playerVotes: playerVotesData;
+  winner!: Role;
 
   constructor(data?: { heroOrPariahVotes?: HeroOrPariahData; playerVotes: playerVotesData; order: Array<Role> }) {
     super();
@@ -372,7 +373,6 @@ export class HeroOrPariah extends BaseEvent {
     this.playerVotes[voter] = heroOrPariah;
   }
 
-  // FIXME corner cases for resolving voting ties
 
   finalize(state: GameState): void {
 
@@ -389,27 +389,49 @@ export class HeroOrPariah extends BaseEvent {
       votes[votedPlayer] += 1;
     }
 
-    const winners = _.orderBy(_.toPairs(votes), (o) => o[1], 'desc');
+    // order by highest vote to lowest vote
+    // _.toPairs => [[ROLE, vote], ... [ROLE, vote]]
+    // _.orderBy => [[ROLE, highest vote], ... [ROLE, lowest vote]]
+    const winners = _.orderBy(_.toPairs(votes), (o) => o[1], 'asc');
+    const tie = _.intersectionBy(winners, (o) => o[1]).length < 3
+    console.log('intersections: ', _.intersectionBy(winners, (o) => o[1]))
 
-    const winner: Role = winners[0][0] as Role;
+    if (tie) {
+      this.winner = winners[Math.floor(Math.random() * winners.length)][0] as Role;
+
+    } else this.winner = winners[0][0] as Role;
+
 
 
     // if winner is a hero
     if (state.heroOrPariah == 'hero') {
       // gain 4 of their speciality resource
-      const specialty = state.players[winner].specialty;
-      state.players[winner].inventory[specialty] += 4;
-      state.log(`${winner} is voted a Hero and has gained 4 ${specialty} after receiving ${votes[winner]} 
+      const specialty = state.players[this.winner].specialty;
+      state.players[this.winner].inventory[specialty] += 4;
+
+      if (tie) {
+        state.log(`Because of a voting tie, ${this.winner} is randomly voted a Hero and has gained 4 ${specialty}.`,
+            `${MarsLogCategory.event}: Hero Or Pariah`);
+      } else {
+        state.log(`${this.winner} is voted a Hero and has gained 4 ${specialty} after receiving ${votes[this.winner]} 
       votes.`, `${MarsLogCategory.event}: Hero Or Pariah`);
+      }
 
       // if winner is pariah
     } else {
       // lose all resources
       for (const resource of RESOURCES) {
-        state.players[winner].inventory[resource] = 0;
+        state.players[this.winner].inventory[resource] = 0;
       }
-      state.log(`${winner} is voted a Pariah and has lost all their Influence resources after receiving 
-      ${votes[winner]} votes.`, `${MarsLogCategory.event}: Hero Or Pariah`);
+
+      if (tie) {
+        state.log(`Because of a voting tie, ${this.winner} is randomly voted a Pariah and has lost all 
+        their Influence resources.`, `${MarsLogCategory.event}: Hero Or Pariah`);
+      } else {
+        state.log(`${this.winner} is voted a Pariah and has lost all their Influence resources after receiving 
+      ${votes[this.winner]} votes.`, `${MarsLogCategory.event}: Hero Or Pariah`);
+      }
+
     }
   }
 }
