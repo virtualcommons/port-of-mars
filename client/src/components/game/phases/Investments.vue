@@ -74,6 +74,10 @@ export default class Investments extends Vue {
     this.api.resetPendingInvestments();
   }
 
+  destroyed() {
+    this.api.resetPendingInvestments();
+  }
+
   get pendingInvestments(): InvestmentData {
     return this.$tstore.getters.player.pendingInvestments;
   }

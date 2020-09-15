@@ -1,8 +1,8 @@
 <template>
   <div
-    :class="[cardTypeStyling, isModal ? 'modal-view' : '']"
+    :class="[cardTypeStyling(type), isModal ? 'modal-view' : '']"
     class="w-100 p-0 mb-3 flex-shrink-0 overflow-hidden"
-    v-show="cardIsActive"
+    v-show="isActive"
   >
     <!-- title -->
     <div class="w-100 m-0">
@@ -15,7 +15,7 @@
           />
         </b-col>
         <b-col class="mt-2 text-center">
-          <p :style="fontColor" class="w-100">{{ accomplishment.label }}</p>
+          <p :style="fontColor()" class="w-100">{{ accomplishment.label }}</p>
         </b-col>
 
       </b-row>
@@ -53,14 +53,13 @@
     <div class="w-100 m-0 pt-1 wrapper">
       <b-row class="flex-wrap justify-content-center px-4 py-2">
         <div
-          :class="shouldResourceBeGrayedOut(investment) ? 'unattainable-resource' : ''"
-          :key="investment + Math.random()"
+          :class="investment.available ? '' : 'unattainable-resource'"
           class="cost justify-content-center align-items-center"
           v-for="investment in accomplishmentCost"
         >
           <img
             :src="
-              require(`@port-of-mars/client/assets/icons/${investment}.svg`)
+              require(`@port-of-mars/client/assets/icons/${investment.influence}.svg`)
             "
             alt="Investment"
           />
@@ -73,7 +72,7 @@
       class="w-100 m-0 p-3 wrapper text-center purchase"
       v-if="type === cardType.purchase && showCard"
     >
-      <button :disabled="!canPurchase || playerReady" @click="handlePurchase()">
+      <button :disabled="!canPurchase || playerReady" @click="purchase()">
         Purchase Accomplishment
       </button>
 
@@ -84,7 +83,7 @@
       class="w-100 m-0 p-3 wrapper text-center discard"
       v-else-if="type === cardType.discard && showCard"
     >
-      <button @click="handleDiscard()">
+      <button :disabled="playerReady" @click="discard()">
         Discard Accomplishment
       </button>
 
@@ -108,7 +107,14 @@
 <script lang="ts">
 import {Component, Inject, Prop, Vue, Watch,} from 'vue-property-decorator';
 import {AccomplishmentCardType} from '@port-of-mars/client/types/cards.ts';
-import {AccomplishmentData, Investment, INVESTMENTS, Resource,} from '@port-of-mars/shared/types';
+import {
+  AccomplishmentData,
+  Investment,
+  InvestmentData,
+  INVESTMENTS,
+  Resource,
+  ResourceAmountData,
+} from '@port-of-mars/shared/types';
 
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {faInfoCircle} from '@fortawesome/free-solid-svg-icons/faInfoCircle';
@@ -142,34 +148,109 @@ export default class AccomplishmentCard extends Vue {
       effect: undefined,
     }),
   })
-  private accomplishment!: AccomplishmentData;
+  accomplishment!: AccomplishmentData;
 
+  // accomplishment type: default, discard, purchase
   @Prop({default: AccomplishmentCardType.default})
-  private type!: AccomplishmentCardType;
+  type!: AccomplishmentCardType;
 
+  // show accomplishment description
   @Prop({default: true})
-  private showDescription!: boolean;
+  showDescription!: boolean;
 
-  /* this is for handling whether or not the card has been
-    purchased or discarded
-  */
+  // if card has been discarded, showCard = false
+  // else showCard = true
   @Prop({default: true})
-  private showCard!: boolean;
+  showCard!: boolean;
 
-  private cardIsActive: boolean = true;
-
-  //we want a different view for the modals.
+  // accomplishment modal view
   @Prop({default: false})
-  private isModal!: boolean;
+  isModal!: boolean;
 
-  // NOTE :: All / Default Type
+  // set when showCard changes
+  isActive: boolean = true;
 
+  // local player's readiness
   get playerReady() {
-    return this.$tstore.getters.player.ready;
+    return this.$tstore.getters.ready;
   }
 
+  // local player's pending investments
+  get pendingInvestments(): InvestmentData {
+    return this.$tstore.getters.player.pendingInvestments;
+  }
+
+  // local player's inventory
+  get inventory(): ResourceAmountData {
+    return this.$tstore.getters.player.inventory;
+  }
+
+  // accomplishment type: default, discard, purchase
   get cardType() {
     return AccomplishmentCardType;
+  }
+
+  /**
+   * Map cost of accomplishments to available influences in local player's inventory.
+   * */
+  get accomplishmentCost() {
+    // local player's inventory - defines inventory numerically
+    // e.g. { culture: 3, science: 0, finance: 0, legacy: 0, govt: 0 }
+    const inventory = this.playerInventory;
+
+    // accomplishment cost as an array (e.g. [culture, culture, culture]
+    const costs = INVESTMENTS.filter(
+      // this.accomplishment generates cost of accomplishment
+      // e.g. cost = { ..., culture: 3, science: 0, finance: 0, legacy: 0, govt: 0 }
+      (influence) => this.accomplishment[influence] != 0
+    ).flatMap((influence) =>
+
+      // accomplishment cost formatted as : [ culture, culture, culture]
+      _.fill(Array(Math.abs(this.accomplishment[influence])), influence)
+    );
+
+    // create data structure to map accomplishment cost to local player's available influences
+    // in their inventory
+    const costMap = [];
+    for (const influence of costs) {
+      costMap.push({
+        influence,
+        available: this.isInfluenceAvailable(influence, inventory),
+      })
+    }
+
+    // return cost map
+    return costMap;
+
+  }
+
+  // local player's inventory
+  get playerInventory() {
+    const pendingInventory = _.cloneDeep(this.pendingInvestments);
+    const inventory = _.cloneDeep(this.inventory);
+
+    Object.keys(inventory).forEach((resource) => {
+      inventory[resource as Resource] += pendingInventory[resource as Resource];
+    });
+
+    return inventory;
+  }
+
+  // determine if local player can purchase accomplishment by comparing
+  // accomplishment cost to inventory
+  get canPurchase(): boolean {
+    const inventory = this.playerInventory;
+    const accomplishment = this.accomplishment;
+    return canPurchaseAccomplishment(accomplishment, inventory);
+  }
+
+  // hide card if showCard value changes upon discard
+  @Watch('showCard', {immediate: true})
+  shouldShowCard(showCard: boolean) {
+    if (!showCard) {
+      // if Accomplishment status changes, remove card
+      setTimeout(() => (this.isActive = false), 5000);
+    }
   }
 
   /**
@@ -178,8 +259,8 @@ export default class AccomplishmentCard extends Vue {
    * discard status.
    *
    */
-  get cardTypeStyling() {
-    switch (this.type) {
+  cardTypeStyling(type: AccomplishmentCardType) {
+    switch (type) {
       case AccomplishmentCardType.purchase:
         if (this.showCard) {
           return this.canPurchase ? 'purchasable' : 'unpurchasable';
@@ -199,88 +280,55 @@ export default class AccomplishmentCard extends Vue {
     }
   }
 
-  get accomplishmentCost() {
-    return INVESTMENTS.filter(
-      (investment) => this.accomplishment[investment] !== 0
-    ).flatMap((investment) =>
-      _.fill(Array(Math.abs(this.accomplishment[investment])), investment)
-    );
-  }
-
-  get fontColor() {
-    if (!this.showCard) {
-      return {color: 'white'};
-    }
-
+  // font color for accomplishment title
+  fontColor() {
+    if (!this.showCard) return {color: 'white'};
     return {color: 'black'};
   }
 
-  get canPurchase() {
-    return canPurchaseAccomplishment(this.accomplishment, this.playerInventory);
-  }
-
-  get playerInventory() {
-    let pendingInventory = _.clone(
-      this.$tstore.getters.player.pendingInvestments
-    );
-    let inventory = _.clone(this.$tstore.getters.player.inventory);
-
-    Object.keys(inventory).forEach((resource) => {
-      inventory[resource as Resource] += pendingInventory[resource as Resource];
-    });
-
-    return inventory;
-  }
-
-  // NOTE :: Purchase Type
-
-  @Watch('showCard', {immediate: true})
-  shouldShowCard(showCard: boolean) {
-    if (!showCard) {
-      // if Accomplishment status changes, remove card
-      setTimeout(() => (this.cardIsActive = false), 5000);
-    }
-  }
-
   // expand card into modal that displays accomplishment info
-  private showInfo() {
+  showInfo() {
     let data = {
       type: 'CardModal',
       data: {
         activator: 'User',
         title: 'Accomplishment Card',
         content: 'This is an accomplishment.',
-        cardType: 'AccomplishmentCard',
+        cardType: AccomplishmentCardType.default,
         cardData: this.accomplishment,
         confirmation: false,
       },
     };
 
-
     this.api.setModalVisible(data);
   }
 
-  private handlePurchase() {
-    if (this.canPurchase) {
-      this.api.purchaseAccomplishment(this.accomplishment);
+  /**
+   * Determine if influence is available in local player's inventory
+   * @param influence
+   * @param inventory
+   */
+  isInfluenceAvailable(influence: Investment, inventory: ResourceAmountData) {
+    if (influence === 'systemHealth') {
+      return true;
     }
+
+    // check science, govt, finance, legacy, culture
+    if (inventory[influence] > 0) {
+      inventory[influence]--;
+      return true;
+    }
+
+    return false;
   }
 
-  private shouldResourceBeGrayedOut(investment: Investment) {
-    if (investment === 'systemHealth') {
-      return false;
-    }
-
-    if (this.playerInventory[investment] > 0) {
-      this.playerInventory[investment]--;
-      return false;
-    }
-    return true;
+  // purchase accomplishment
+  purchase() {
+    if (this.canPurchase) this.api.purchaseAccomplishment(this.accomplishment);
   }
 
-  // NOTE :: Discard Type
-
-  private handleDiscard() {
+  // discard accomplishment
+  discard() {
     this.api.discardAccomplishment(this.accomplishment.id as number);
   }
 }

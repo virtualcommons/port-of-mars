@@ -28,6 +28,16 @@ export default {
   },
 
   /**
+   * Gets the current player by the current role.
+   * @param state The current state of the game.
+   * @returns The current player.
+   *
+   */
+  ready(state: State): boolean {
+    return state.players[state.role].ready;
+  },
+
+  /**
    * Gets 5 player roles.
    */
   roles() {
@@ -59,10 +69,6 @@ export default {
     }
     return op;
   },
-
-  // tradeFilter(state: State): boolean {
-  //   return state.userInterface.toggleYourTrades;
-  // },
 
   /**
    * Gets the current event.
