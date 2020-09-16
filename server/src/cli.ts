@@ -99,21 +99,21 @@ program
           .addCommand(
             program
               .createCommand('create')
-              .requiredOption('--name [name]', 'id of tournament')
+              .requiredOption('--tournamentName [tournamentName]', 'id of tournament')
               .description('create a tournament round')
               .action(async (cmd) => {
                 const startDate = new Date();
                 const endDate = new Date(startDate.getTime() + 1000*60*60*24*3);
-                await withConnection((em) => createRound(em, cmd.name, {startDate, endDate}));
+                await withConnection((em) => createRound(em, cmd.tournamentName, {startDate, endDate}));
                 console.log('tournament round create...')
               })))
       .addCommand(
         program
           .createCommand('create')
-          .requiredOption('--name', 'name of tournament')
+          .requiredOption('--tournamentName', 'name of tournament')
           .description('create a tournament')
           .action(async (cmd) => {
-            await withConnection((em) => createTournament(em, cmd.name))
+            await withConnection((em) => createTournament(em, cmd.tournamentName))
             console.log('tournament create...')
           })
       ))
