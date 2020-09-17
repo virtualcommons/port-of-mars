@@ -104,4 +104,4 @@ in a development environment or
 yarn cli:prod dump
 ```
 
-in a staging or production environment. This will reproject the game events and summary csv files outlining the state of the game for every game event as well as export game, player and tounnament data
+in a staging or production environment inside the server container. This will reproject the game events and summary csv files outlining the state of the game for every game event as well as export game, player and tounnament data. The csv files will be in the `docker/dump` folder.
