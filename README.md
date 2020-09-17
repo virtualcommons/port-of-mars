@@ -69,6 +69,7 @@ If you just want to update the `docker-compose.yml` you can run `make docker-com
 
 To get `make browser` working you'll need to install an Firefox extension so that you open container tabs from the command line. See https://addons.mozilla.org/en-US/firefox/addon/open-url-in-container/
 
+
 ### Staging Setup
 
 ```bash
@@ -88,3 +89,19 @@ make secrets
 make
 docker-compose up -d
 ```
+
+### Database Management
+
+To extract the database to csv files run
+
+```bash
+yarn cli dump
+```
+
+in a development environment or
+
+```bash
+yarn cli:prod dump
+```
+
+in a staging or production environment. This will reproject the game events and summary csv files outlining the state of the game for every game event as well as export game, player and tounnament data
