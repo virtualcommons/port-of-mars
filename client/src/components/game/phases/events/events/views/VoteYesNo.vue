@@ -8,7 +8,7 @@
         button-variant="outline-warning"
         buttons
         size="lg"
-        v-model="playerVote"
+        :value="playerVote"
       >
       </b-form-radio-group>
     </b-form>
@@ -40,7 +40,9 @@
     }
 
 
-    private vote() {
+    vote(v: boolean) {
+      console.log('PERSONAL GAIN VOTE: ', v)
+      this.playerVote = v;
       this.api.savePersonalGainVote(this.playerVote ?? false);
 
     }
