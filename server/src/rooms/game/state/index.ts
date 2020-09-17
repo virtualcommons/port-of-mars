@@ -95,7 +95,7 @@ class ResourceInventory extends Schema implements ResourceAmountData {
     return true;
   }
 
-  update(newResources: ResourceAmountData) {
+  add(newResources: ResourceAmountData) {
     this.culture += newResources.culture;
     this.finance += newResources.finance;
     this.government += newResources.government;
@@ -198,12 +198,12 @@ export class Trade extends Schema {
     const pFrom = state.players[this.sender.role];
     const pTo = state.players[this.recipient.role];
 
-    pFrom.inventory.update(_.mapValues(this.sender.resourceAmount, r => -r!));
-    pFrom.inventory.update(this.recipient.resourceAmount);
+    pFrom.inventory.add(_.mapValues(this.sender.resourceAmount, r => -r!));
+    pFrom.inventory.add(this.recipient.resourceAmount);
     //pFrom.pendingInvestments.rollback({...this.from.resourceAmount,systemHealth:0});
 
-    pTo.inventory.update(_.mapValues(this.recipient.resourceAmount, r => -r!));
-    pTo.inventory.update(this.sender.resourceAmount);
+    pTo.inventory.add(_.mapValues(this.recipient.resourceAmount, r => -r!));
+    pTo.inventory.add(this.sender.resourceAmount);
 
     this.status = 'Accepted';
   }
@@ -369,6 +369,14 @@ class PendingInvestment implements InvestmentData {
     this.legacy += data.legacy;
     this.science += data.science;
     this.systemHealth += data.systemHealth;
+  }
+
+  updateAsInventory(newResources: ResourceAmountData) {
+    this.culture = newResources.culture;
+    this.finance = newResources.finance;
+    this.government = newResources.government;
+    this.legacy = newResources.legacy;
+    this.science = newResources.science;
   }
 }
 
@@ -963,7 +971,7 @@ export class Player extends Schema implements PlayerData {
     // will this cause issues for the Schema though if
     // we convert it into a getter?
     this.victoryPoints += accomplishment.victoryPoints;
-    this.inventory.update(inv);
+    this.inventory.add(inv);
     return accomplishment.systemHealth
   }
 
@@ -1044,12 +1052,19 @@ export class Player extends Schema implements PlayerData {
   }
 
   applyPendingInvestments(): void {
-    this.inventory.update(this.pendingInvestments);
+    this.inventory.add(this.pendingInvestments);
     this.pendingInvestments.reset();
   }
 
   updateReadiness(ready: boolean): void {
     this.ready = ready;
+  }
+
+  assignPendingInvestmentsToInventory(): void {
+    for (const resource of RESOURCES) {
+      this.inventory[resource] = this.pendingInvestments[resource];
+    }
+    this.pendingInvestments.reset();
   }
 }
 
@@ -1617,11 +1632,11 @@ export class GameState extends Schema implements GameData {
       const toTradeResources: ResourceAmountData = trade.recipient.resourceAmount;
 
       // apply trade resources to sender's inventory
-      sender.inventory.update(_.mapValues(trade.sender.resourceAmount, r => -r!));
-      sender.inventory.update(trade.recipient.resourceAmount);
+      sender.inventory.add(_.mapValues(trade.sender.resourceAmount, r => -r!));
+      sender.inventory.add(trade.recipient.resourceAmount);
       // apply trade resources to recipient's inventory
-      recipient.inventory.update(_.mapValues(trade.recipient.resourceAmount, r => -r!));
-      recipient.inventory.update(trade.sender.resourceAmount);
+      recipient.inventory.add(_.mapValues(trade.recipient.resourceAmount, r => -r!));
+      recipient.inventory.add(trade.sender.resourceAmount);
 
       for (const [resource, amount] of Object.entries(toTradeResources)) {
         if (amount > 0) {

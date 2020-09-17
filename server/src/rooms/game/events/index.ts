@@ -657,7 +657,7 @@ export class SelectedInfluence extends GameEventWithData {
 
 gameEventDeserializer.register(SelectedInfluence);
 
-export class KeptResources extends GameEventWithData {
+export class BreakdownOfTrustOccured extends GameEventWithData {
   constructor(public data: { role: Role; savedResources: InvestmentData }) {
     super();
   }
@@ -669,12 +669,12 @@ export class KeptResources extends GameEventWithData {
     } else {
       return;
     }
-    state.updateSavedResources(this.data.role, game, this.data.savedResources);
+    state.setInventory(this.data.role, game, this.data.savedResources);
     game.players[this.data.role].updateReadiness(true);
   }
 }
 
-gameEventDeserializer.register(KeptResources);
+gameEventDeserializer.register(BreakdownOfTrustOccured);
 
 export class StagedDiscardOfPurchasedAccomplishment extends GameEventWithData {
   constructor(public data: { id: number; role: Role }) {

@@ -47,7 +47,7 @@ export interface AbstractGameAPI {
     influence: Resource;
   }): void
 
-  saveResourcesSelection(savedResources: InvestmentData): void
+  saveBreakdownOfTrust(savedResources: InvestmentData): void
 
   resetPendingInvestments(): void
   investPendingTimeBlocks(investment: any): void

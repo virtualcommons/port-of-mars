@@ -5,7 +5,8 @@
         <p class="title"><strong>Directions: </strong>Save 2 units of influence</p>
       </div>
 
-      <div class="cards">
+      <TimeBlockMeter></TimeBlockMeter>
+      <div class="cards" v-if="investments.length > 0">
         <InvestmentCard
           class="card"
           v-for="investment in investments"
@@ -13,6 +14,11 @@
           :key="investment.name"
           @input="setInvestmentAmount"
         />
+      </div>
+      <div class="cards" v-else>
+        <p>
+          You have no resources to save. Please press Ready to Advance.
+        </p>
       </div>
     </div>
   </div>
@@ -22,64 +28,58 @@
 import { Vue, Component, Inject } from 'vue-property-decorator';
 import {
   Resource,
-  INVESTMENTS,
-  ResourceCostData,
-  Investment, InvestmentData,
+  ResourceAmountData, RESOURCES,
 } from '@port-of-mars/shared/types';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 import InvestmentCard from '@port-of-mars/client/components/game/phases/investment/InvestmentCard.vue';
 import * as _ from 'lodash';
+import {defaultInventory} from "@port-of-mars/shared/game/client/state";
+import TimeBlockMeter from "@port-of-mars/client/components/game/phases/investment/TimeBlockMeter.vue";
 
 @Component({
   components: {
+    TimeBlockMeter,
     InvestmentCard,
   },
 })
 export default class InfluencesSelect extends Vue {
-  @Inject() readonly api!: GameRequestAPI
+  @Inject() readonly api!: GameRequestAPI;
 
-  private origPending = _.cloneDeep(
-    this.$tstore.getters.player.pendingInvestments
-  );
-
-  get investments(): any {
-    const p = this.$tstore.getters.player;
-
-    return Object.keys(this.origPending).filter(investment => investment !== 'systemHealth').map((investment) => {
-      return {
-        name: investment,
-        cost:
-          this.origPending[investment as Investment] < 0
-            ? 1
-            : Number.MAX_SAFE_INTEGER,
-        pendingInvestment: p.pendingInvestments[investment as Investment],
-      };
-    });
+  created() {
+    this.api.resetPendingInvestments();
   }
 
-  get pendingInvestments(): InvestmentData {
+  destroyed() {
+    this.api.resetPendingInvestments();
+  }
+
+  get investments(): any {
+    return RESOURCES
+      .filter(resource => this.inventory[resource] !== 0)
+      .map((resource) => {
+        return {
+          name: resource,
+          cost: 1,
+          pendingInvestment: this.localInventory[resource],
+        };
+      });
+  }
+
+  get inventory(): ResourceAmountData {
+    return this.$tstore.getters.player.inventory;
+  }
+
+  get localInventory(): ResourceAmountData {
     return this.$tstore.getters.player.pendingInvestments;
   }
 
   get remainingTime() {
-    const p = this.$tstore.getters.player;
-    const pendingInvestments = p.pendingInvestments;
-    return this.getRemainingTimeBlocks(pendingInvestments);
+    return this.getRemainingTimeBlocks(this.localInventory);
   }
 
-  private getRemainingTimeBlocks(pendingInvestment: ResourceCostData) {
+  getRemainingTimeBlocks(pendingInvestment: ResourceAmountData) {
     const timeBlocks = this.$tstore.getters.player.timeBlocks;
-    return (
-      timeBlocks -
-      _.reduce(
-        INVESTMENTS,
-        (tot, investment) =>
-          tot +
-          (this.origPending[investment] * -1 -
-            pendingInvestment[investment] * -1),
-        0
-      )
-    );
+    return timeBlocks - _.sum(Object.values(pendingInvestment));
   }
 
   private setInvestmentAmount(msg: {
@@ -87,15 +87,15 @@ export default class InfluencesSelect extends Vue {
     units: number;
     cost: number;
   }) {
-    const pendingInvestments = _.clone(
-      this.$tstore.getters.player.pendingInvestments
-    );
+    const inventory = _.cloneDeep(this.localInventory);
+    inventory[msg.name] = msg.units;
 
-    this.pendingInvestments[msg.name] = msg.units;
-    if (
-      msg.units >= this.origPending[msg.name] &&
-      this.getRemainingTimeBlocks(this.pendingInvestments) >= 0
-    ) {
+    const isAffordable =
+      msg.units >= 0 &&
+      msg.units <= this.inventory[msg.name] &&
+      this.getRemainingTimeBlocks(inventory) >= 0;
+
+    if (isAffordable) {
       this.api.investPendingTimeBlocks({
         investment: msg.name,
         units: msg.units,
@@ -111,5 +111,5 @@ export default class InfluencesSelect extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/events/events/views/InfluencesSelect.scss';
+//@import '@port-of-mars/client/stylesheets/game/phases/events/events/views/InfluencesSelect.scss';
 </style>

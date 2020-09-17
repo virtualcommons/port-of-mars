@@ -84,11 +84,13 @@ export default class GameInformation extends Vue {
     let pendingInvestments;
 
     switch (this.phaseNumber) {
+      // FIXME: change to using a queue system where other components can push pending api calls to
+      //  queue. Submitting would flush the queue
       case Phase.events:
         const currentEvent = this.$tstore.getters.currentEvent;
         pendingInvestments = this.$tstore.getters.player.pendingInvestments;
         if (currentEvent && currentEvent.id === 'breakdownOfTrust') {
-          this.api.saveResourcesSelection(pendingInvestments);
+          this.api.saveBreakdownOfTrust(pendingInvestments);
         }
       case Phase.invest:
         pendingInvestments = this.$tstore.getters.player.pendingInvestments;

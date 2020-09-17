@@ -173,7 +173,7 @@ export class GameRequestAPI implements AbstractGameAPI {
     this.send(msg);
   }
 
-  public saveResourcesSelection(savedResources: InvestmentData) {
+  public saveBreakdownOfTrust(savedResources: InvestmentData) {
     const msg: BreakdownOfTrustData = {
       kind: 'breakdown-of-trust',
       savedResources,

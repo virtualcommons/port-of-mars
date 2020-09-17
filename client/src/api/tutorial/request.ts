@@ -54,7 +54,7 @@ export class TutorialAPI implements AbstractGameAPI {
   saveBondingThroughAdversitySelection(influenceVoteData: { role: Role; influence: Resource }): void {
   }
 
-  saveResourcesSelection(savedResources: InvestmentData): void {
+  saveBreakdownOfTrust(savedResources: InvestmentData): void {
   }
 
   stageDiscardOfPurchasedAccomplishment(id: number) {}

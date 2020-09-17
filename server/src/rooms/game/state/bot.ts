@@ -6,7 +6,7 @@ import {
   BotControlRelinquished,
   BotControlTaken,
   DiscardedAccomplishment,
-  KeptResources,
+  BreakdownOfTrustOccured,
   PurchasedAccomplishment,
   SelectedInfluence,
   SetPlayerReadiness,
@@ -119,7 +119,7 @@ export class MarsEventVisitor implements AbstractMarsEventVisitor {
       }
     }
     logger.info('influences draw %o', savedResources);
-    return [new KeptResources({role: player.role, savedResources})]
+    return [new BreakdownOfTrustOccured({role: player.role, savedResources})]
   }
 
   INFLUENCES_DRAW(state: GameState, player: Player): Array<GameEvent> {

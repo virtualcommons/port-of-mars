@@ -132,7 +132,7 @@ describe('a personal gain event', () => {
 
 describe('trading validations', () => {
   const g = new GameState(mockGameStateInitOpts(() => 10));
-  g.players['Curator'].inventory.update({
+  g.players['Curator'].inventory.add({
     finance: 0,
     culture: 3,
     science: 0,
@@ -140,7 +140,7 @@ describe('trading validations', () => {
     government: 0,
   });
 
-  g.players['Entrepreneur'].inventory.update({
+  g.players['Entrepreneur'].inventory.add({
     finance: 3,
     culture: 1,
     science: 0,
@@ -227,7 +227,7 @@ describe('trading validations', () => {
 
 describe('inverting pending inventory', () => {
   const g = new GameState(mockGameStateInitOpts(() => 10));
-  g.players['Curator'].inventory.update({
+  g.players['Curator'].inventory.add({
     finance: 0,
     culture: 3,
     science: 0,

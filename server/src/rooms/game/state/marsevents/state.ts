@@ -184,13 +184,13 @@ export class BreakdownOfTrust extends BaseEvent {
     }
   }
 
-  updateSavedResources(player: Role, game: GameState, updatedInventory: InvestmentData): void {
-    game.players[player].pendingInvestments.add(updatedInventory);
+  setInventory(player: Role, game: GameState, updatedInventory: InvestmentData): void {
+    game.players[player].pendingInvestments.updateAsInventory(updatedInventory);
   }
 
   finalize(game: GameState): void {
     for (const player of game.players) {
-      player.applyPendingInvestments();
+      player.assignPendingInvestmentsToInventory();
       //set that value back to the preserved amount before the event
       player.timeBlocks = this.savedtimeBlockAllocations[player.role];
     }
