@@ -1,5 +1,5 @@
 import { User } from "@port-of-mars/server/entity";
-import { Repository } from "typeorm"
+import { UpdateResult, Repository } from "typeorm"
 import { settings } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
 
@@ -22,13 +22,17 @@ export class AccountService extends BaseService {
     return await this.getRepository().findOneOrFail(id);
   }
 
+  async denyConsent(id: number): Promise<UpdateResult> {
+    return await this.getRepository().update(id, { dateConsented: undefined });
+  }
+
   async getOrCreateTestUser(username: string): Promise<User> {
     const user = await this.getOrCreateUser(username);
     // test user, set fake data so they can immediately join a game
     user.email = `${username}@mailinator.com`;
-    user.dateConsented = new Date();
-    user.isVerified = true;
-    user.passedQuiz = true;
+    // user.dateConsented = new Date();
+    // user.isVerified = true;
+    // user.passedQuiz = true;
     user.name = `Test User ${username}`;
     await this.getRepository().save(user);
     // in subsequent tournament rounds should we create an TournamentRoundInvite for this year

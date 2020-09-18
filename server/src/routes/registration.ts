@@ -25,6 +25,30 @@ registrationRouter.post('/grant-consent', async (req: Request, res: Response, ne
   }
 });
 
+registrationRouter.post('/deny-consent', async (req: Request, res: Response, next: NextFunction) => {
+  const user = req.user as User;
+  try {
+    const services = getServices();
+    await services.account.denyConsent(user.id);
+    res.json(true);
+  } catch (e) {
+    logger.warn("unable to deny consent for %s", user.username);
+    next(e);
+  }
+});
+
+registrationRouter.post('/send-email-verification', async (req: Request, res: Response, next: NextFunction) => { 
+  const user = req.user as User;
+  try {
+    await getServices().registration.sendEmailVerification(user);
+    res.json(true);
+  } catch (e) {
+    logger.warn("Unable to send verification email for %s", user.username);
+    next(e);
+  }
+
+});
+
 registrationRouter.post('/verify/:registrationToken', async (req: Request, res: Response, next: NextFunction) => {
   const user = req.user as User
   const registrationToken = req.params.registrationToken;
@@ -40,9 +64,9 @@ registrationRouter.post('/verify/:registrationToken', async (req: Request, res: 
 registrationRouter.get('/authenticated', async (req: Request, res: Response, next: NextFunction) => {
   const user = req.user as User
   try {
-    res.json(true);
+    res.json({ name: user.name, email: user.email, dateConsented: user.dateConsented ?? null, isVerified: user.isVerified });
   } catch (e) {
     logger.warn(`Unable to authorize user for registration ${user.username}`);
     next(e);
   }
-})
+});

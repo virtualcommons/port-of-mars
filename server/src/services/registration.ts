@@ -10,6 +10,7 @@ import _ from "lodash";
 const logger = getLogger(__filename);
 
 export class RegistrationService extends BaseService {
+
   createVerificationUrl(registrationToken: string) {
     return `${settings.host}/#/verify/${registrationToken}`;
   }

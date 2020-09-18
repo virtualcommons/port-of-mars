@@ -8,7 +8,6 @@
     <b-row v-if="messages.length > 0" class="message-wrapper">
       <!-- FIXME: should create a component for this instead of repeating it across multiple pages -->
       <!-- MESSAGES -->
-      <h2>Messages</h2>
       <b-alert :key="dm.message" :variant="dm.kind" dismissible fade show
                 v-for="dm in messages">
         {{ dm.message }}
@@ -17,7 +16,7 @@
     <b-row>
       <b-collapse :visible="showConsentForm" id="consent-collapse">
         <b-card>
-          <b-card-text class="form-text">
+          <b-card-text class="consent-form-text">
             <p>Dear Participant,</p>
             <p>
                 I am a professor in the School of Sustainability at Arizona State University.
@@ -76,7 +75,7 @@
       </b-collapse>
       <b-button-group class="mt-2">
         <b-button @click="toggleConsent" variant="success">{{ consentLabel }}</b-button>
-        <b-button @click="logout" variant="danger" class="ml-2">Deny Consent</b-button>
+        <b-button @click="denyConsent" variant="danger" class="ml-2">Deny Consent</b-button>
       </b-button-group>
     </b-row>
     <b-row>
@@ -109,12 +108,15 @@
               v-model='verifyEmail'
               type='email'
               size='lg'
-              placeholder='Email address (again)'
+              placeholder='Please enter your email address again.'
               required>
               </b-form-input>
             </b-form-group>
             <b-alert variant="danger" dismissible v-if="error">
               <b-icon icon="exclamation-triangle-fill" variant="danger"></b-icon> {{ error }}
+            </b-alert>
+            <b-alert variant="warning" v-if="! isVerified">
+              <b-icon icon="exclamation-triangle-fill" variant="danger"></b-icon> Please check your email and click on the link to verify your email.
             </b-alert>
             <b-button type="submit" variant="primary" :disabled="submitDisabled">Grant Consent to Participate</b-button>
           </b-form>
@@ -135,16 +137,28 @@ export default class Register extends Vue {
   username = "";
   name = "";
   email = "";
-  verifyEmail = "";
   consented = false;
+  verifyEmail = "";
+  dateConsented: Date | null = null;
+  isVerified = false;
   error = "";
+
+  async created() {
+    await this.$ajax.get(url('/registration/authenticated'), (response) => {
+      if (response.data !== null) {
+        const data = response.data;
+        this.name = data.name;
+        this.email = data.email;
+        this.verifyEmail = data.email;
+        this.isVerified = data.isVerified;
+        this.dateConsented = new Date(Date.parse(data.dateConsented));
+        this.consented = true;
+      }
+    });
+  }
 
   get messages() {
     return this.$tstore.state.dashboardMessages;
-  }
-
-  async created() {
-    await this.$ajax.get(url('/registration/authenticated'), () => {})
   }
 
   async register(e: Event) {
@@ -172,7 +186,7 @@ export default class Register extends Vue {
   }
 
   get consentLabel() {
-    return this.consented ? "Read Consent Form" : "Grant Consent";
+    return this.consented ? "Read Consent Form" : "Grant Consent and Register";
   }
 
   toggleConsent() {
@@ -195,9 +209,8 @@ export default class Register extends Vue {
     return url('/registration/grant-consent');
   }
 
-  logout(): void {
-    this.$ajax.forgetLoginCreds();
-    this.$router.push({name: LOGIN_PAGE});
+  denyConsent(): void {
+    this.$ajax.denyConsent();
   }
 }
 </script>

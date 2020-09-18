@@ -95,6 +95,15 @@ export class AjaxRequest {
     this.store.commit('SET_USER', { username: this.username, passedQuiz });
   }
 
+  async denyConsent() {
+    await this.post(url('/registration/deny-consent'), () => {});
+    this.store.commit('SET_DASHBOARD_MESSAGE',
+      {
+        kind: 'info',
+        message: 'You have denied consent to participate in this experiment. You can still change your mind though!'
+      });
+  }
+
   forgetLoginCreds() {
     document.cookie = "connect.sid= ;expires=Thu, 01 Jan 1970 00:00:00 GMT";
     this.store.commit('SET_USER', { username: '', passedQuiz: false });
