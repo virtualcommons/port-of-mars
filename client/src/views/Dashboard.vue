@@ -22,7 +22,7 @@
 
           <b-nav-item-dropdown right>
             <b-dropdown-text variant="info">
-              {{username}}
+              {{ username }}
             </b-dropdown-text>
             <b-dropdown-divider></b-dropdown-divider>
 
@@ -44,55 +44,60 @@
               </b-dropdown-item-button>
             </router-link>
             <b-dropdown-divider></b-dropdown-divider>
-            <b-dropdown-item-button @click="logout" variant="danger">Logout</b-dropdown-item-button>
+            <b-dropdown-item-button variant="danger" @click="logout">Logout</b-dropdown-item-button>
           </b-nav-item-dropdown>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
 
-    <b-row class='justify-content-md-center' v-if="dashboardMessages.length > 0">
+    <b-row v-if="dashboardMessages.length > 0" class='justify-content-md-center'>
       <!-- MESSAGES -->
       <h2>Messages</h2>
-      <b-alert :key="dm.message" :variant="dm.kind" dismissible fade show
-                 v-for="dm in dashboardMessages">
-          {{ dm.message }}
+      <b-alert v-for="dm in dashboardMessages" :key="dm.message" :variant="dm.kind" dismissible fade
+               show>
+        {{ dm.message }}
       </b-alert>
     </b-row>
 
     <b-row class="justify-content-md-center">
 
       <!-- GAME -->
-      <b-col class="text-center my-5 p-5" cols="6" v-if="view === 'game'">
+      <b-col v-if="view === 'game'" class="text-center my-5 p-5" cols="6">
         <!-- GO TO LOBBY -->
         <h2 class="py-2 text-uppercase">Play Game</h2>
-        <b-button :to="join" class="mb-5" pill size="lg" variant="success">
+        <b-button :disabled="this.playerTaskCompletion.canPlayGame" :to="join" class="mb-5" pill size="lg"
+                  variant="success">
           <b-icon-play-fill class="my-1 mx-2" scale="1"/>
         </b-button>
 
         <!-- TOURNAMENT SURVEYS -->
         <h2 class="text-center text-uppercase mt-5 py-2">Game Surveys</h2>
-        <b-list-group class="py-3 mb-5">
-          <b-list-group-item :href="tournamentIntroductionUrl" button
-                             class="d-flex justify-content-between align-items-center"
-                             variant="info">
-            Tournament Introduction Survey
-              <b-icon-check-circle-fill v-if="tournamentIntroductionComplete" variant="success"></b-icon-check-circle-fill>
-              <b-icon-x-circle-fill v-else variant="danger"></b-icon-x-circle-fill>
-          </b-list-group-item>
-          <b-list-group-item
-            :disabled="!roundComplete"
-            :href="roundExitSurveyUrl"
-            button
-            class="d-flex justify-content-between align-items-center"
-            variant="info"
-          >
-            Tournament Exit Survey
-              <b-icon-check-circle-fill v-if="roundExitSurveyComplete" variant="success"></b-icon-check-circle-fill>
-              <b-icon-x-circle-fill v-else variant="danger"></b-icon-x-circle-fill>
-          </b-list-group-item>
-        </b-list-group>
 
-        <b-container class="text-center" v-if="playerTaskCompletion.canPlayGame">
+        <b-button-group class="py-3 mb-5 w-100" vertical>
+          <b-button :href="introSurveyUrl" block
+                    class="my-2" size="lg" variant="secondary">
+            <b-icon-check-circle-fill v-if="!playerTaskCompletion.mustTakeIntroSurvey"
+                                      class="my-2" scale="0.8" variant="success"></b-icon-check-circle-fill>
+            <b-icon-x-circle-fill v-else v-b-tooltip.hover class="m-2" scale="0.8" title="Need to complete"
+                                  variant="danger"></b-icon-x-circle-fill>
+            Introduction Survey
+          </b-button>
+
+          <b-button :disabled="!roundComplete"
+                    :href="roundExitSurveyUrl"
+                    block
+                    size="lg"
+                    variant="secondary">
+            <b-icon-check-circle-fill v-if="roundExitSurveyComplete" class="m-2" scale="0.8"
+                                      variant="success"></b-icon-check-circle-fill>
+            <b-icon-x-circle-fill v-else v-b-tooltip.hover class="m-2" scale="0.8" title="Need to complete"
+                                  variant="danger"></b-icon-x-circle-fill>
+            Exit Survey
+
+          </b-button>
+        </b-button-group>
+
+        <b-container v-if="playerTaskCompletion.canPlayGame" class="text-center">
           <h2 class="text-uppercase pt-5 my-3">Schedule</h2>
           <b-table :items="schedule" bordered class="py-3" dark responsive small
                    sticky-header striped>
@@ -106,16 +111,16 @@
       </b-col>
 
       <!-- STATS -->
-      <b-col class="text-center my-5 p-5 wrapper" cols="6" v-if="view === 'stats'">
+      <b-col v-if="view === 'stats'" class="text-center my-5 p-5 wrapper" cols="6">
         <h2 class="text-uppercase">Games Played: {{ gamesPlayedCount }}</h2>
         <div class="stats w-100 h-100 p-0 m-0">
-        <p class="my-5 py-5" v-if="stats.games.length === 0">No player stats to display</p>
-        <PlayerStatItem
-          :key="playerStatItem.time"
-          :playerStatItem="playerStatItem"
-          class="my-5 py-5"
-          v-for="playerStatItem in stats.games"
-        />
+          <p v-if="stats.games.length === 0" class="my-5 py-5">No player stats to display</p>
+          <PlayerStatItem
+            v-for="playerStatItem in stats.games"
+            :key="playerStatItem.time"
+            :playerStatItem="playerStatItem"
+            class="my-5 py-5"
+          />
         </div>
       </b-col>
     </b-row>
@@ -129,7 +134,7 @@ import {DashboardAPI} from '@port-of-mars/client/api/dashboard/request';
 import {GameMeta, PlayerTaskCompletion, Stats} from '@port-of-mars/shared/types';
 import {faGoogle} from '@fortawesome/free-brands-svg-icons/faGoogle';
 import {library} from '@fortawesome/fontawesome-svg-core'
-import {CONSENT_PAGE, LOBBY_PAGE, LOGIN_PAGE, TUTORIAL_PAGE, VERIFY_PAGE} from '@port-of-mars/shared/routes';
+import {CONSENT_PAGE, LOBBY_PAGE, LOGIN_PAGE, TUTORIAL_PAGE} from '@port-of-mars/shared/routes';
 
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 import {CalendarEvent, google} from "calendar-link";
@@ -227,7 +232,9 @@ export default class PlayerDashboard extends Vue {
 
     // set survey URLs
     this.$set(this, 'introSurveyUrl', data.introSurveyUrl);
+    console.log(this.introSurveyUrl);
     this.$set(this, 'exitSurveyUrl', data.exitSurveyUrl);
+    console.log(this.exitSurveyUrl);
 
     // get player stats
     this.stats.games.splice(0, this.stats.games.length, ...data.stats.games);
