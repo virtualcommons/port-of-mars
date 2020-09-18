@@ -86,7 +86,6 @@
   import {Component, Vue} from 'vue-property-decorator';
   import BootstrapVue from 'bootstrap-vue';
 
-  import {getBuildId} from '@port-of-mars/client/settings';
   // FontAwesome icons
   import {library} from '@fortawesome/fontawesome-svg-core';
   import {faGithub} from '@fortawesome/free-brands-svg-icons/faGithub';
@@ -94,6 +93,7 @@
   import {faChevronCircleUp} from '@fortawesome/free-solid-svg-icons/faChevronCircleUp';
   import {faChevronCircleDown} from '@fortawesome/free-solid-svg-icons/faChevronCircleDown';
   import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
+  import {getBuildId} from "@port-of-mars/shared/settings";
 
   library.add(faChevronCircleUp, faChevronCircleDown, faGithub, faEnvelope);
 

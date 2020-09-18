@@ -1,3 +1,5 @@
+import {BUILD_ID} from "./assets/build-id";
+
 export function isDev(): boolean {
   return process.env.NODE_ENV === 'development';
 }
@@ -21,3 +23,7 @@ export function isProduction(): boolean {
 export const COST_INAFFORDABLE = 1000;
 
 export const SYSTEM_HEALTH_MAINTENANCE_COST = 25;
+
+export function getBuildId(): string {
+  return BUILD_ID;
+}

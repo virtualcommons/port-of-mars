@@ -11,6 +11,10 @@ export class Game {
   @Column()
   roomId!: string;
 
+  // git build-id
+  @Column()
+  buildId!: string;
+
   @OneToMany(type => GameEvent, event => event.game)
   events!: Array<GameEvent>;
 

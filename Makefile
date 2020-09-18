@@ -12,7 +12,7 @@ PGPASS_PATH=keys/.pgpass
 SENTRY_DSN_PATH=keys/sentry_dsn
 MAIL_API_KEY_PATH=keys/mail_api_key
 SECRETS=$(MAIL_API_KEY_PATH) $(DB_PASSWORD_PATH) $(JWT_SECRET_PATH) $(ORMCONFIG_PATH) $(PGPASS_PATH) $(SENTRY_DSN_PATH)
-BUILD_ID_PATH=client/src/assets/build-id.json
+BUILD_ID_PATH=shared/src/assets/build-id.ts
 BUILD_ID=$(shell git describe --tags --abbrev=1)
 
 .PHONY: build
@@ -85,8 +85,8 @@ $(DB_DATA_PATH):
 secrets: $(SECRETS)
 
 .PHONY: build-id
-build-id: 
-	echo "\"${BUILD_ID}\"" > $(BUILD_ID_PATH)
+build-id: keys
+	echo "export const BUILD_ID = \"${BUILD_ID}\";" > $(BUILD_ID_PATH)
 
 docker-compose.yml: base.yml staging.base.yml $(ENVIR).yml config.mk $(DB_DATA_PATH) $(DATA_DUMP_PATH) $(LOG_DATA_PATH) build-id
 	case "$(ENVIR)" in \

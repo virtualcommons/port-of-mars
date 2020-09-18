@@ -10,6 +10,7 @@ import _ from "lodash";
 import {getServices, ServiceProvider} from "@port-of-mars/server/services/index";
 import {settings} from "@port-of-mars/server/settings";
 import {BaseService} from "@port-of-mars/server/services/db";
+import {getBuildId} from "@port-of-mars/shared/settings";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -104,6 +105,7 @@ export class DBPersister implements Persister {
       if (_.isNull(options.tournamentRoundId)) {
         throw new Error('could not find matching tournament round')
       }
+      g.buildId = getBuildId();
       g.tournamentRoundId = options.tournamentRoundId;
       g.roomId = roomId;
 

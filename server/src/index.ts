@@ -23,7 +23,7 @@ import { LOGIN_PAGE, CONSENT_PAGE, DASHBOARD_PAGE, getPagePath } from "@port-of-
 import * as fs from 'fs';
 import { registrationRouter } from "@port-of-mars/server/routes/registration";
 import { settings } from "@port-of-mars/server/settings";
-import { isDev } from '@port-of-mars/shared/settings';
+import {getBuildId, isDev} from '@port-of-mars/shared/settings';
 import { getServices } from "@port-of-mars/server/services";
 import { gameRouter } from "@port-of-mars/server/routes/game";
 import { surveyRouter } from "@port-of-mars/server/routes/survey";
@@ -82,7 +82,7 @@ passport.deserializeUser(function (id: number, done: Function) {
     });
 });
 
-function applyInStagingOrProd(f: Function) {
+function applyInStagingOrProd(f: () => void) {
   if (['staging', 'production'].includes(NODE_ENV)) {
     f();
   }
@@ -93,6 +93,7 @@ applyInStagingOrProd(() =>
 );
 
 async function createApp() {
+  logger.info('running server with build id: %s', getBuildId());
   const port = Number(process.env.PORT || 2567);
   const app = express();
   applyInStagingOrProd(() => app.use(Sentry.Handlers.requestHandler()));
