@@ -1,6 +1,6 @@
 <template>
   <div class="event-select-influences py-4">
-    <p><strong>Select one resource:</strong></p>
+    <p><strong>Select one Influence:</strong></p>
 
     <div class="event-select-influences-select pt-3">
       <div
@@ -34,7 +34,7 @@
       </div>
     </div>
 
-    <button type="button" name="Submit Button" @click="submitDrawnInfluence">Done</button>
+    <button @click="submitDrawnInfluence">Done</button>
   </div>
 </template>
 
@@ -90,12 +90,12 @@ export default class InfluencesDraw extends Vue {
 
   /**
    * Passes the influence that the Player selected to a request api.
-   *
    */
   private submitDrawnInfluence(): void {
     const influenceChoice: Resource = this.drawnInfluence as Resource;
     const influenceVoteResults = { role: this.playerRole, influence: influenceChoice };
     this.api.saveBondingThroughAdversitySelection(influenceVoteResults);
+    this.api.setPlayerReadiness(true);
     console.log('SUBMIT DRAWN INFLUENCE: ', this.drawnInfluence);
   }
 }
