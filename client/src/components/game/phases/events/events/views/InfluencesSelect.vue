@@ -1,39 +1,43 @@
 <template>
-  <div class="event-select-resources">
-    <div class="wrapper">
-      <div class="topbar">
-        <p class="title"><strong>Directions: </strong>Save 2 units of influence</p>
-      </div>
+  <b-container fluid class="align-items-stretch">
+    <b-row class="justify-content-center my-2">
+      <p v-if="remainingTime > 0">Save 2 units of influence that you already own.</p>
+      <p v-else>You have saved 2 units of influence.</p>
+    </b-row>
 
-      <TimeBlockMeter></TimeBlockMeter>
-      <div class="cards" v-if="investments.length > 0">
+    <b-row>
+        <div class="h-100 w-100 px-1 timeblocks">
+          <TimeBlockMeter :totalTimeBlocks="timeBlockTotal"
+                          :usedTimeBlocks="remainingTime"
+                          class="flex-grow-1"
+          />
+          <p class="m-1 status"><strong>{{ remainingTime }}</strong></p>
+          <b-icon-briefcase-fill scale="1.3" class="m-2"></b-icon-briefcase-fill>
+        </div>
+      </b-row>
+      <b-row v-if="investments.length > 0" class="py-3">
         <InvestmentCard
-          class="card"
           v-for="investment in investments"
-          v-bind="investment"
           :key="investment.name"
+          v-bind="investment"
+          class="card"
           @input="setInvestmentAmount"
         />
-      </div>
-      <div class="cards" v-else>
+      </b-row>
+      <b-row v-else class="cards justify-content-center">
         <p>
           You have no resources to save. Please press Ready to Advance.
         </p>
-      </div>
-    </div>
-  </div>
+      </b-row>
+  </b-container>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Inject } from 'vue-property-decorator';
-import {
-  Resource,
-  ResourceAmountData, RESOURCES,
-} from '@port-of-mars/shared/types';
-import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
+import {Component, Inject, Vue} from 'vue-property-decorator';
+import {Resource, ResourceAmountData, RESOURCES,} from '@port-of-mars/shared/types';
+import {GameRequestAPI} from '@port-of-mars/client/api/game/request';
 import InvestmentCard from '@port-of-mars/client/components/game/phases/investment/InvestmentCard.vue';
 import * as _ from 'lodash';
-import {defaultInventory} from "@port-of-mars/shared/game/client/state";
 import TimeBlockMeter from "@port-of-mars/client/components/game/phases/investment/TimeBlockMeter.vue";
 
 @Component({
@@ -44,14 +48,6 @@ import TimeBlockMeter from "@port-of-mars/client/components/game/phases/investme
 })
 export default class InfluencesSelect extends Vue {
   @Inject() readonly api!: GameRequestAPI;
-
-  created() {
-    this.api.resetPendingInvestments();
-  }
-
-  destroyed() {
-    this.api.resetPendingInvestments();
-  }
 
   get investments(): any {
     return RESOURCES
@@ -77,8 +73,22 @@ export default class InfluencesSelect extends Vue {
     return this.getRemainingTimeBlocks(this.localInventory);
   }
 
+  get timeBlockTotal() {
+    console.log('total: ', this.$tstore.getters.player.timeBlocks)
+    return this.$tstore.getters.player.timeBlocks;
+  }
+
+  created() {
+    this.api.resetPendingInvestments();
+  }
+
+  destroyed() {
+    this.api.resetPendingInvestments();
+  }
+
   getRemainingTimeBlocks(pendingInvestment: ResourceAmountData) {
     const timeBlocks = this.$tstore.getters.player.timeBlocks;
+    console.log('remaining: ', timeBlocks - _.sum(Object.values(pendingInvestment)))
     return timeBlocks - _.sum(Object.values(pendingInvestment));
   }
 
@@ -103,13 +113,9 @@ export default class InfluencesSelect extends Vue {
       });
     }
   }
-
-  get timeBlockTotal() {
-    return this.$store.getters.player.timeBlocks;
-  }
 }
 </script>
 
 <style lang="scss" scoped>
-//@import '@port-of-mars/client/stylesheets/game/phases/events/events/views/InfluencesSelect.scss';
+@import '@port-of-mars/client/stylesheets/game/phases/events/events/views/InfluencesSelect.scss';
 </style>

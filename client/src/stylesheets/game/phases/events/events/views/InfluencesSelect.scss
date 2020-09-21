@@ -1,12 +1,4 @@
-.event-select-resources{
-  @include expand;
-  top: 0;
-  display: flex;
-  align-items: stretch;
-  overflow-y: hidden;
-}
-
-.wrapper{
+.wrapper {
   display: flex;
   width: 100%;
   top: 0%;
@@ -15,35 +7,15 @@
   flex: 1 1 0;
 }
 
-.topbar{
-  height: 100%;
-  width: 100%;
-  padding: 0.25rem 1rem;
-  margin-bottom: 0.5rem;
+.timeblocks {
   @include make-center;
-  background-color: $light-accent;
-}
-
-.discrete-bar {
-  margin: 0 1rem;
-  flex: 1;
-}
-
-.title {
-  margin: 0;
-  font-size: $font-med;
-  color: $dark-shade;
-}
-
-.statusbar {
-  margin: 0 1rem;
-  flex: 1;
+  background-color: $main-brand;
 }
 
 .status {
-  margin-bottom: 0;
-  color: $dark-shade;
-  font-size: $font-med;
+  font-size: $font-large;
+  font-weight: $bold;
+  color: $phase-topbar-foreground;
   text-align: center;
 }
 
@@ -53,4 +25,8 @@
   width: 100%;
   display: flex;
   flex-wrap: wrap;
+}
+
+p {
+  font-size: $font-med;
 }
