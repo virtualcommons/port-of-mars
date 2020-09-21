@@ -13,6 +13,8 @@ import {EnteredDefeatPhase, EnteredVictoryPhase} from "@port-of-mars/server/room
 import {Phase} from "@port-of-mars/shared/types";
 import {getLogger} from "@port-of-mars/server/settings";
 import {GameEvent, Tournament, TournamentRound} from "@port-of-mars/server/entity";
+import * as ops from "typeorm/index";
+import _ from "lodash";
 
 const logger = getLogger(__filename);
 
@@ -26,8 +28,23 @@ async function withConnection<T>(f: (em: EntityManager) => Promise<T>): Promise<
   }
 }
 
-async function exportData(em: EntityManager): Promise<void> {
-  const events = await em.getRepository(GameEvent).find({ order: { id: "ASC" }});
+async function exportData(em: EntityManager, opts: {ids?: Array<number>, dateCreatedMin?: Date}): Promise<void> {
+  let eventQuery = await em.getRepository(GameEvent)
+    .createQueryBuilder("ge")
+    .leftJoinAndSelect("ge.game", "g")
+    .orderBy('ge.id', 'ASC');
+  if (opts.ids && opts.ids.length > 0) {
+    eventQuery = eventQuery.where('"gameId" in (:...ids)', {ids: opts.ids});
+  }
+  if (opts.dateCreatedMin) {
+    if (opts.ids && opts.ids.length > 0) {
+      eventQuery = eventQuery.andWhere('g."dateCreated" > (:dateCreatedMin)', {dateCreatedMin: opts.dateCreatedMin});
+    } else {
+      eventQuery = eventQuery.where('g."dateCreated" > (:dateCreatedMin)', {dateCreatedMin: opts.dateCreatedMin});
+    }
+  }
+  console.log(eventQuery.getSql());
+  const events = await eventQuery.getMany();
   const gameEventSummarizer = new GameEventSummarizer(events, '/dump/gameEvent.csv');
   const victoryPointSummarizer = new VictoryPointSummarizer(events, '/dump/victoryPoint.csv');
   const playerInvestmentSummarizer = new PlayerInvestmentSummarizer(events, '/dump/playerInvestment.csv');
@@ -88,6 +105,11 @@ async function createRound(
   return round;
 }
 
+interface CLIOpts {
+  ids?: Array<number>,
+  dateCreatedMin?: Date
+}
+
 program
   .addCommand(
     program.createCommand('tournament')
@@ -134,7 +156,18 @@ program
   .addCommand(
     program.createCommand('dump')
       .description('dump db to csvs')
-      .action(async (cmd) => await withConnection(exportData))
+      .option('--ids <ids...>', 'game ids to extract', false)
+      .option('--dateCreatedMin <dateCreatedMin>', 'minimum game dateCreated value', false)
+      .action(async (cmd) => {
+        const opts: CLIOpts = {};
+        if (cmd.ids) {
+          opts.ids = cmd.ids.map((id: string) => parseInt(id));
+        }
+        if (cmd.dateCreatedMin) {
+          opts.dateCreatedMin = new Date(Date.parse(cmd.dateCreatedMin));
+        }
+        await withConnection((em) => exportData(em, opts))
+      })
   );
 
 async function main(argv: Array<string>): Promise<void> {
