@@ -333,7 +333,6 @@ export class EffortsWasted extends BaseEvent {
 type HeroOrPariahData = Partial<{ [role in Role]: 'hero' | 'pariah' | '' }>
 type playerVotesData = { [role in Role]: Role }
 
-// FIXME: fix mars log messaging for Hero or Pariah in the case of  random vote
 @assocEventId
 export class HeroOrPariah extends BaseEvent {
   private static defaultPlayerVotes: playerVotesData = {
@@ -373,6 +372,9 @@ export class HeroOrPariah extends BaseEvent {
     this.playerVotes[voter] = heroOrPariah;
   }
 
+  tie(votes: Array<[string, number]>): boolean {
+    return _.filter(votes, (o) => o[1] == 2).length == 2 || _.filter(votes, (o) => o[1] == 1).length == 5;
+  }
 
   finalize(state: GameState): void {
 
@@ -389,19 +391,24 @@ export class HeroOrPariah extends BaseEvent {
       votes[votedPlayer] += 1;
     }
 
-    // order by highest vote to lowest vote
+    // order by: highest vote to lowest vote
     // _.toPairs => [[ROLE, vote], ... [ROLE, vote]]
     // _.orderBy => [[ROLE, highest vote], ... [ROLE, lowest vote]]
-    const winners = _.orderBy(_.toPairs(votes), (o) => o[1], 'asc');
-    const tie = _.intersectionBy(winners, (o) => o[1]).length < 3
-    console.log('intersections: ', _.intersectionBy(winners, (o) => o[1]))
+    const winners = _.orderBy(_.toPairs(votes), (o) => o[1], 'desc');
+    logger.debug('winners: %o', winners);
+    console.log('winners: ', winners);
 
-    if (tie) {
+
+    if (this.tie(winners)) {
+      logger.debug('hero or pariah voting tie: %o', this.tie(winners));
+      logger.debug('2-way tie: %o', _.filter(winners, (o) => o[1] == 2));
+      logger.debug('5-way tie: %o', _.filter(winners, (o) => o[1] == 1));
       this.winner = winners[Math.floor(Math.random() * winners.length)][0] as Role;
 
     } else this.winner = winners[0][0] as Role;
 
 
+    // mars log messaging
 
     // if winner is a hero
     if (state.heroOrPariah == 'hero') {
@@ -409,7 +416,7 @@ export class HeroOrPariah extends BaseEvent {
       const specialty = state.players[this.winner].specialty;
       state.players[this.winner].inventory[specialty] += 4;
 
-      if (tie) {
+      if (this.tie(winners)) {
         state.log(`Because of a voting tie, ${this.winner} is randomly voted a Hero and has gained 4 ${specialty}.`,
             `${MarsLogCategory.event}: Hero Or Pariah`);
       } else {
@@ -424,7 +431,7 @@ export class HeroOrPariah extends BaseEvent {
         state.players[this.winner].inventory[resource] = 0;
       }
 
-      if (tie) {
+      if (this.tie(winners)) {
         state.log(`Because of a voting tie, ${this.winner} is randomly voted a Pariah and has lost all 
         their Influence resources.`, `${MarsLogCategory.event}: Hero Or Pariah`);
       } else {

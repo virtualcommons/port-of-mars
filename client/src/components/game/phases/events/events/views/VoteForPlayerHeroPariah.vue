@@ -82,6 +82,7 @@
 
     private selectRole(member: Role): void {
       this.role = member;
+      console.log('Hero or Pariah - Role Vote: ', this.role)
       this.api.saveHeroOrPariahRole(this.role);
     }
 
