@@ -26,6 +26,19 @@ export default class App extends Vue {
     return !(path === `/game` || path === `/tutorial` || path === `/dashboard`);
   }
 
+  detectBrowser() {
+    // check for internet explorer or safari
+    if (
+      // check if browser is Internet Explorer
+      (window.navigator.userAgent.indexOf("MSIE ") > -1 || !!navigator.userAgent.match(/Trident.*rv\:11\./))
+
+      // check if browser is Safari
+      || (window.navigator.userAgent.indexOf("Safari") > -1 && window.navigator.userAgent.indexOf('Chrome') == -1)
+    ) {
+      alert('Please use the latest version of Firefox or Chrome.');
+    }
+  }
+
 }
 </script>
 
