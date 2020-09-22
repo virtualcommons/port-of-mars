@@ -52,7 +52,6 @@
 
     <b-row v-if="dashboardMessages.length > 0" class='justify-content-md-center'>
       <!-- MESSAGES -->
-      <h2>Messages</h2>
       <b-alert v-for="dm in dashboardMessages" :key="dm.message" :variant="dm.kind" dismissible fade
                show>
         {{ dm.message }}

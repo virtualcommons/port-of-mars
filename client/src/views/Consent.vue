@@ -6,6 +6,9 @@
       </b-col>
     </b-row>
     <b-row>
+      <Messages />
+    </b-row>
+    <b-row>
       <b-collapse id="consent-collapse" :visible="showConsentForm">
         <b-card>
           <b-card-text class="consent-form-text">
@@ -79,11 +82,11 @@
         <b-collapse v-model="consented">
           <b-form @submit="register">
             <b-alert v-if="existingUser" dismissible show variant="warning">It looks like you have logged in before!
-              Please review the information below, and
-              resend your verification email to register your account.
+              Please review the information below, and resend your verification email if you have not received it yet.
+              Sometimes email can take a few minutes to arrive in your inbox and you may need to check your spam folder as well.
             </b-alert>
             <b-alert v-else dismissible show variant="success">Please fill out the fields below with your name and email
-              so we can contact you and verify your email.
+              so we can verify your email.
             </b-alert>
             <b-form-group description='Please enter your full name.' label='Name' label-for='name'>
               <b-form-input
@@ -139,9 +142,12 @@
 import {Component, Vue} from "vue-property-decorator";
 import {url} from "@port-of-mars/client/util";
 import {DASHBOARD_PAGE} from '@port-of-mars/shared/routes';
+import Messages from '@port-of-mars/client/components/dashboard/Messages.vue';
 import _ from 'lodash';
 
-@Component({})
+@Component({
+  components: { Messages }
+})
 export default class Register extends Vue {
   username: string = "";
   name: string = "";
@@ -201,7 +207,7 @@ export default class Register extends Vue {
         if (status === 200) {
           this.$tstore.commit("SET_DASHBOARD_MESSAGE", {
             kind: "success",
-            message: `We have sent an email to ${this.email}, please check your email to verify your email continue.`
+            message: `We have sent an email to ${this.email}. Please wait a few minutes for it to arrive, then check your email and click on the link inside it to verify your email.`
           });
         } else {
           console.error("Unexpected status code: " + status);
