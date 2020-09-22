@@ -479,6 +479,6 @@ export class ChooseHeroOrPariahVoteRoleCmd implements Command {
   }
 
   execute(): Array<GameEvent> {
-    return [new VoteHeroOrPariahRole({role: this.player.role, vote: this.player.role})]
+    return [new VoteHeroOrPariahRole({role: this.player.role, vote: this.data.vote})]
   }
 }

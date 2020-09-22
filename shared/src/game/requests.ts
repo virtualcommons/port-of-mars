@@ -145,4 +145,4 @@ export type Requests =
   | BondingThroughAdversityData
   | BreakdownOfTrustData
   | VoteHeroOrPariahData
-  | VoteHeroOrPariahRoleData  ;
+  | VoteHeroOrPariahRoleData;
