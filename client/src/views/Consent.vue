@@ -138,6 +138,7 @@
 <script lang="ts">
 import {Component, Vue} from "vue-property-decorator";
 import {url} from "@port-of-mars/client/util";
+import {DASHBOARD_PAGE} from '@port-of-mars/shared/routes';
 import _ from 'lodash';
 
 @Component({})
@@ -217,6 +218,7 @@ export default class Register extends Vue {
 
   denyConsent(): void {
     this.$ajax.denyConsent();
+    this.$router.push({name: DASHBOARD_PAGE});
   }
 }
 </script>
