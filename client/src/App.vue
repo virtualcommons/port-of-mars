@@ -18,6 +18,10 @@ Vue.use(BootstrapVue);
   }
 })
 export default class App extends Vue {
+  mounted() {
+    this.detectBrowser()
+  }
+
   /**
    * Show footer if layout !== /game or /tutorial.
    * @param path
@@ -35,7 +39,9 @@ export default class App extends Vue {
       // check if browser is Safari
       || (window.navigator.userAgent.indexOf("Safari") > -1 && window.navigator.userAgent.indexOf('Chrome') == -1)
     ) {
-      alert('Please use the latest version of Firefox or Chrome.');
+      alert('Please use the latest version of Chrome or Firefox.')
+    } else {
+      console.log('valid browser');
     }
   }
 
