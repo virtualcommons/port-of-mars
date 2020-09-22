@@ -1,7 +1,7 @@
 import { User } from '@port-of-mars/server/entity/User';
-import {Role, ActionItem, GameMeta, Stats, RESEARCHER, PlayerScores} from "@port-of-mars/shared/types";
+import {ActionItem, Stats, PlayerScores} from "@port-of-mars/shared/types";
 import { TournamentRound } from "@port-of-mars/server/entity/TournamentRound";
-import { Game, Player, Tournament, TournamentRoundInvite } from "@port-of-mars/server/entity";
+import { Game, Player, TournamentRoundInvite } from "@port-of-mars/server/entity";
 import { BaseService } from "@port-of-mars/server/services/db";
 import {IsNull, Not, SelectQueryBuilder} from "typeorm";
 import { GAME_PAGE, TUTORIAL_PAGE, CONSENT_PAGE, VERIFY_PAGE } from "@port-of-mars/shared/routes";
@@ -166,15 +166,20 @@ export class DashboardService extends BaseService {
     const invite = await this.sp.tournament.getActiveRoundInviteIfExists(user.id, round);
     const playerTaskCompletion: PlayerTaskCompletion = await this.getPlayerTaskCompletion(user, invite);
     const stats = await this.getStats(user, round);
+    // FIXME: this canned game schedule should be retrieved from the DB in the future
+    // first game is September 30th, 1500
+    // Arizona time is UTC-7 so 1500 - 7 = 8
+    const firstGameDate = new Date('Sep 30 2020 15:00:00 GMT-0700');
+    const secondGameDate = new Date('Sep 30 2020 19:00:00 GMT-0700');
+    const upcomingGames = [
+      {time: firstGameDate.getTime(), round: round.roundNumber, tournamentName: round.tournament.name},
+      {time: secondGameDate.getTime(), round: round.roundNumber, tournamentName: round.tournament.name},
+    ];
     return {
       playerTaskCompletion,
       introSurveyUrl: this.getIntroSurveyUrl(user, round, invite),
       exitSurveyUrl: this.getExitSurveyUrl(user, round, invite),
-      upcomingGames: [{
-        time: this.sp.time.now().getTime(),
-        round: round.roundNumber,
-        tournamentName: round.tournament.name
-      }],
+      upcomingGames,
       stats
     }
   }

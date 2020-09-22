@@ -1,12 +1,10 @@
 import {
   Column,
   Entity,
-  JoinColumn,
   ManyToOne,
   OneToMany,
   CreateDateColumn,
   PrimaryGeneratedColumn,
-  Unique
 } from 'typeorm';
 import { Game } from '@port-of-mars/server/entity/Game';
 import { TournamentRoundInvite } from '@port-of-mars/server/entity/TournamentRoundInvite';
