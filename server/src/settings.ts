@@ -12,6 +12,7 @@ export interface AppSettings {
   lobby: LobbySettings;
   supportEmail: string,
   allowInternalSurveyRoutes: boolean;
+  isProduction: boolean;
 }
 
 export class LobbySettings {
@@ -25,7 +26,8 @@ const dev: () => AppSettings = () => ({
   allowInternalSurveyRoutes: true,
   secret: SECRET_KEY,
   supportEmail: 'portmars@asu.edu',
-  lobby: new LobbySettings(15)
+  lobby: new LobbySettings(15),
+  isProduction: false,
 });
 
 const staging: () => AppSettings = () => {
@@ -38,7 +40,8 @@ const staging: () => AppSettings = () => {
     logging: new DevLogging(),
     secret: SECRET_KEY,
     supportEmail: 'portmars@asu.edu',
-    lobby: new LobbySettings(15)
+    lobby: new LobbySettings(15),
+    isProduction: false,
   };
 };
 
@@ -48,7 +51,8 @@ const prod: () => AppSettings = () => {
     ...stagingSettings,
     allowInternalSurveyRoutes: false,
     host: 'https://portofmars.asu.edu',
-    lobby: new LobbySettings(15, false)
+    lobby: new LobbySettings(15, false),
+    isProduction: true
   };
 };
 

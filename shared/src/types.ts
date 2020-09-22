@@ -297,6 +297,7 @@ export interface DashboardData {
   introSurveyUrl: string;
   exitSurveyUrl: string;
   upcomingGames: Array<GameMeta>;
+  isLobbyOpen: boolean;
   stats: Stats;
 }
 

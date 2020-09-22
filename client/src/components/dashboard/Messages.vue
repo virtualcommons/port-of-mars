@@ -1,12 +1,10 @@
 <template>
-  <b-container>
-    <b-row v-if="messages.length > 0" class='justify-content-md-center'>
-      <!-- MESSAGES -->
-      <b-alert v-for="dm in messages" :key="dm.message" :variant="dm.kind" dismissible fade show>
-        {{ dm.message }}
-      </b-alert>
-    </b-row>
-  </b-container>
+  <div v-if="messages.length > 0" class='pt-1'>
+    <!-- MESSAGES -->
+    <b-alert v-for="dm in messages" :key="dm.message" :variant="dm.kind" class='mb-0' dismissible fade show>
+      {{ dm.message }}
+    </b-alert>
+  </div>
 </template>
 
 <script lang="ts">

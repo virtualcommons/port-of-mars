@@ -47,13 +47,15 @@
 </template>
 
 <script lang="ts">
-  import {Component, Inject, Prop, Vue} from 'vue-property-decorator';
-  import {LOBBY_NAME} from '@port-of-mars/shared/lobby';
   import {Client} from 'colyseus.js';
+  import moment from 'moment';
+  import {Component, Inject, Prop, Vue} from 'vue-property-decorator';
+
+  import {DashboardAPI} from '@port-of-mars/client/api/dashboard/request';
   import {applyWaitingServerResponses} from '@port-of-mars/client/api/lobby/response';
   import {WaitingRequestAPI} from '@port-of-mars/client/api/lobby/request';
-  import {DASHBOARD_PAGE} from '@port-of-mars/shared/routes';
-  import moment from 'moment';
+  import {LOBBY_NAME} from '@port-of-mars/shared/lobby';
+  import {CONSENT_PAGE, TUTORIAL_PAGE, DASHBOARD_PAGE} from '@port-of-mars/shared/routes';
   import {Role} from '@port-of-mars/shared/types';
 
   @Component({})
@@ -84,6 +86,44 @@
     }
 
     async created() {
+      const dashboardAPI = new DashboardAPI(this.$tstore, this.$ajax);
+      const dashboardData = await dashboardAPI.getData();
+      // check if player can play a game
+      const playerTaskCompletion = dashboardData.playerTaskCompletion;
+      // FIXME: repeated logic from Dashboard.vue
+      // go to email verification page if player is not verified
+      if (playerTaskCompletion.mustVerifyEmail) {
+        await this.$router.push({name: CONSENT_PAGE});
+        return;
+      }
+      // go to consent page if player has not consented
+      else if (playerTaskCompletion.mustConsent) {
+        await this.$router.push({name: CONSENT_PAGE});
+        return;
+      }
+      // go to tutorial if player has not taken tutorial
+      else if (playerTaskCompletion.mustTakeTutorial) {
+        dashboardAPI.message('Please take the tutorial before joining the lobby to participate.');
+        await this.$router.push({name: TUTORIAL_PAGE});
+        return;
+      }
+      else if (playerTaskCompletion.mustTakeIntroSurvey) {
+        dashboardAPI.message('Please take the introductory survey before joining the lobby to participate.');
+        await this.$router.push({name: DASHBOARD_PAGE});
+        return;
+      }
+      if (! playerTaskCompletion.canPlayGame) {
+        dashboardAPI.message('You do not currently have an active Port of Mars invitation. Please contact us if this is an error.');
+        await this.$router.push({name: DASHBOARD_PAGE});
+        return;
+      }
+      // check if there is a game scheduled for play
+      if (! dashboardData.isLobbyOpen) {
+        dashboardAPI.message('You can only join the lobby a half hour before a game is scheduled to start. Please try again later.');
+        await this.$router.push({name: DASHBOARD_PAGE});
+        return;
+      }
+      // all checks passed, actually join the lobby
       try {
         const room = await this.$client.joinOrCreate(LOBBY_NAME);
         applyWaitingServerResponses(room, this);

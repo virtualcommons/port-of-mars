@@ -169,18 +169,37 @@ export class DashboardService extends BaseService {
     // FIXME: this canned game schedule should be retrieved from the DB in the future
     // first game is September 30th, 1500
     // Arizona time is UTC-7 so 1500 - 7 = 8
-    const firstGameDate = new Date('Sep 30 2020 15:00:00 GMT-0700');
-    const secondGameDate = new Date('Sep 30 2020 19:00:00 GMT-0700');
-    const upcomingGames = [
-      {time: firstGameDate.getTime(), round: round.roundNumber, tournamentName: round.tournament.name},
-      {time: secondGameDate.getTime(), round: round.roundNumber, tournamentName: round.tournament.name},
+    const gameDates = [
+      new Date('Sep 30 2020 15:00:00 GMT-0700'),
+      new Date('Sep 30 2020 19:00:00 GMT-0700')
     ];
+    const upcomingGames = gameDates.map( date => {
+      return {time: date.getTime(), round: round.roundNumber, tournamentName: round.tournament.name};
+    });
     return {
       playerTaskCompletion,
       introSurveyUrl: this.getIntroSurveyUrl(user, round, invite),
       exitSurveyUrl: this.getExitSurveyUrl(user, round, invite),
       upcomingGames,
+      isLobbyOpen: this.isLobbyOpen(gameDates),
       stats
     }
+  }
+
+  isLobbyOpen(gameDates: Array<Date>): boolean {
+    // 30 minutes in milliseconds offset for checking when the lobby is open
+    if (settings.lobby.devMode) {
+      return true;
+    }
+    const lobbyOpenOffset = 30 * 60 * 1000;
+    const now = new Date();
+    for (const date of gameDates) {
+      const openDate = new Date(date.getTime() - lobbyOpenOffset);
+      const closeDate = new Date(date.getTime() + lobbyOpenOffset);
+      if (now > openDate && now < closeDate) {
+        return true;
+      }
+    }
+    return false;
   }
 }

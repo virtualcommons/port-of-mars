@@ -50,12 +50,8 @@
       </b-collapse>
     </b-navbar>
 
-    <b-row v-if="dashboardMessages.length > 0" class='justify-content-md-center'>
-      <!-- MESSAGES -->
-      <b-alert v-for="dm in dashboardMessages" :key="dm.message" :variant="dm.kind" dismissible fade
-               show>
-        {{ dm.message }}
-      </b-alert>
+    <b-row class='justify-content-md-center'>
+      <Messages />
     </b-row>
 
     <b-row class="justify-content-md-center">
@@ -138,6 +134,7 @@
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
 import PlayerStatItem from '@port-of-mars/client/components/dashboard/PlayerStatItem.vue';
+import Messages from '@port-of-mars/client/components/dashboard/Messages.vue';
 import {DashboardAPI} from '@port-of-mars/client/api/dashboard/request';
 import {GameMeta, PlayerTaskCompletion, Stats} from '@port-of-mars/shared/types';
 import {faGoogle} from '@fortawesome/free-brands-svg-icons/faGoogle';
@@ -156,6 +153,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
   components: {
     ActionItem,
     PlayerStatItem,
+    Messages,
   },
 })
 export default class PlayerDashboard extends Vue {
@@ -196,10 +194,6 @@ export default class PlayerDashboard extends Vue {
     },
   ];
   private stats: Stats = {games: []};
-
-  get dashboardMessages() {
-    return this.$tstore.state.dashboardMessages;
-  }
 
   get gamesPlayedCount() {
     return this.stats.games.length;

@@ -7,6 +7,10 @@ export class DashboardAPI {
 
   constructor(public store: TStore, public ajax: AjaxRequest) {}
 
+  message(message: string, kind: 'warning'|'info'|'danger'='info') {
+    this.store.commit('SET_DASHBOARD_MESSAGE', {kind, message});
+  }
+
   async getData(): Promise<DashboardData> {
     try {
       return await this.ajax.get(url('/dashboard/'), ({data, status}) => {

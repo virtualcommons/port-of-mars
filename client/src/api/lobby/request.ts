@@ -1,4 +1,4 @@
-import { Room, Client } from 'colyseus.js';
+import { Room } from 'colyseus.js';
 import {
   WaitingRequests,
   AcceptInvitation,
