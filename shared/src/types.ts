@@ -124,6 +124,7 @@ export interface MarsEventData {
   flavorText: string;
   clientViewHandler: EventClientView;
   duration: number;
+  // real time duration of the round in seconds (overrides the default phase length)
   timeDuration?: number;
 }
 
