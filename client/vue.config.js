@@ -15,6 +15,10 @@ module.exports = {
     devtool: NODE_ENV === 'development' ? 'eval-cheap-module-source-map' : 'source-map'
   },
   chainWebpack: (config) => {
+    // get around CSP error on safari https://github.com/vuejs/vue-cli/issues/1074
+    config.plugins
+      .delete('split-manifest')
+      .delete('inline-manifest');
     config.resolve.alias.set(
       '@port-of-mars/shared',
       path.resolve('../shared/src')
