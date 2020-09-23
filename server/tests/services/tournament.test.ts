@@ -32,7 +32,7 @@ describe('first round', () => {
       const bob = await services.account.getOrCreateUser('bob');
       expect(await services.auth.checkUserCanPlayGame(bob.id, tr.id)).toBeFalsy();
 
-      await services.registration.submitRegistrationMetadata({username: 'bob', email: 'bob@foo.com', name: 'Bob'});
+      await services.registration.submitRegistrationMetadata(bob, {username: 'bob', email: 'bob@foo.com', name: 'Bob'});
       expect(await services.auth.checkUserCanPlayGame(bob.id, tr.id)).toBeFalsy();
 
       await services.registration.verifyUnregisteredUser(bob, bob.registrationToken);

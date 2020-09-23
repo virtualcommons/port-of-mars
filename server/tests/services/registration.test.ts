@@ -31,10 +31,11 @@ describe('a potential user', () => {
   it('can submit their registration information', async () => {
     const email = 'a@foo.bar';
     const name = 'Alyssa P Hacker';
-    await registrationService.submitRegistrationMetadata({ username, email, name });
-    const u = await qr.manager.getRepository(User).findOneOrFail({username});
-    expect(u.email).toBe(email);
-    expect(u.name).toBe(name);
+    const user = await sp.account.getOrCreateUser(username);
+    await registrationService.submitRegistrationMetadata(user, { username, email, name });
+    // const u = await qr.manager.getRepository(User).findOneOrFail({username});
+    expect(user.email).toBe(email);
+    expect(user.name).toBe(name);
   });
 
   it('can be sent an email verification email', async () => {
