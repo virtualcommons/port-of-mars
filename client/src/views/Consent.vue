@@ -157,10 +157,13 @@ export default class Register extends Vue {
   dateConsented: Date | null = null;
   isVerified: boolean = false;
   error: string = "";
-  existingUser: boolean = false;
 
   get messages() {
     return this.$tstore.state.dashboardMessages;
+  }
+
+  get existingUser() {
+    return this.dateConsented !== null;
   }
 
   get showConsentForm() {
@@ -193,8 +196,7 @@ export default class Register extends Vue {
         this.isVerified = data.isVerified;
         this.dateConsented = new Date(Date.parse(data.dateConsented));
         this.consented = false;
-        this.existingUser = true;
-      } else this.existingUser = false;
+      }
     });
   }
 

@@ -15,9 +15,7 @@ registrationRouter.post('/grant-consent', async (req: Request, res: Response, ne
   try {
     const services = getServices();
     const data = { ...req.body, ...{ username: user.username } };
-    await services.registration.submitRegistrationMetadata(data);
-    logger.debug("updated registration metadata for user %o", data);
-    await services.registration.sendEmailVerification(user);
+    await services.registration.submitRegistrationMetadata(user, data);
     res.json(true);
   } catch (e) {
     logger.warn("unable to process registration metadata for %s", user.username);

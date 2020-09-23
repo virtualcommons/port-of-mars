@@ -15,9 +15,15 @@ export class RegistrationService extends BaseService {
     return `${settings.host}/#/verify/${registrationToken}`;
   }
 
-  async submitRegistrationMetadata(data: { username: string; email: string; name: string }) {
+  async submitRegistrationMetadata(user: User, data: { username: string; email: string; name: string }) {
     const repo = this.em.getRepository(User);
-    await repo.update({ username: data.username }, { dateConsented: new Date(), ...data });
+    user.name = data.name;
+    user.email = data.email;
+    user.dateConsented = new Date();
+    await repo.save(user);
+    logger.debug("updated registration metadata for user %o", data);
+    await this.sendEmailVerification(user);
+
   }
 
   async findUnregisteredUserByRegistrationToken(registrationToken: string): Promise<User | undefined> {
