@@ -43,7 +43,7 @@ export class RegistrationService extends BaseService {
         throw new ServerError(err);
       }
       else {
-        logger.info(`Successfully sent? $info`);
+        logger.info(`Successfully sent? %o`, info);
       }
     });
     return;
