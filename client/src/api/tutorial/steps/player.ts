@@ -70,26 +70,6 @@ const
     },
   },
   {
-    target: '.tour-profile-menu-toggle',
-    content: `Click here to reveal your profile menu.`,
-    params: {
-      placement: 'right',
-    },
-    stateTransform: [
-      {
-        required: true,
-        SET_MODAL_HIDDEN: 'hide',
-      },
-    ],
-  },
-  {
-    target: '.tour-profile-menu',
-    content: `From here, you can access your player dashboard or log out.`,
-    params: {
-      placement: 'right',
-    },
-  },
-  {
     target: '.tour-players',
     content:
       `These are the other four residents of the Port of Mars. Some events may ` +
@@ -100,6 +80,7 @@ const
     stateTransform: [
       {
         SET_PROFILE_MENU_VISIBILITY: false,
+        SET_MODAL_HIDDEN: true,
       },
     ],
   },
