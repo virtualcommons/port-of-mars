@@ -44,7 +44,7 @@ browser-staging:
 keys:
 	mkdir -p keys
 
-$(DB_PASSWORD_PATH): keys
+$(DB_PASSWORD_PATH): | keys
 	DB_PASSWORD=$$(head /dev/urandom | tr -dc '[:alnum:]' | head -c42); \
 	TODAY=$$(date +%Y-%m-%d-%H:%M:%S); \
 	if [ -f $(DB_PASSWORD_PATH) ]; \
@@ -59,23 +59,23 @@ $(LOG_DATA_PATH):
 $(DATA_DUMP_PATH):
 	mkdir -p $(DATA_DUMP_PATH)
 
-$(JWT_SECRET_PATH): keys
+$(JWT_SECRET_PATH): | keys
 	JWT_SECRET=$$(head /dev/urandom | tr -dc '[:alnum:]' | head -c42); \
 	echo $${JWT_SECRET} > $(JWT_SECRET_PATH)
 
-$(ORMCONFIG_PATH): server/ormconfig.template.json $(DB_PASSWORD_PATH) keys
+$(ORMCONFIG_PATH): server/ormconfig.template.json $(DB_PASSWORD_PATH)
 	DB_PASSWORD=$$(cat $(DB_PASSWORD_PATH)); \
 	sed "s|DB_PASSWORD|$$DB_PASSWORD|g" server/ormconfig.template.json > $(ORMCONFIG_PATH)
 	
-$(PGPASS_PATH): $(DB_PASSWORD_PATH) server/deploy/pgpass.template keys
+$(PGPASS_PATH): $(DB_PASSWORD_PATH) server/deploy/pgpass.template | keys
 	DB_PASSWORD=$$(cat $(DB_PASSWORD_PATH)); \
 	sed "s|DB_PASSWORD|$$DB_PASSWORD|g" server/deploy/pgpass.template > $(PGPASS_PATH)
 	chmod 0600 $(PGPASS_PATH)
 
-$(MAIL_API_KEY_PATH): keys
+$(MAIL_API_KEY_PATH): | keys
 	touch "$(MAIL_API_KEY_PATH)"
 
-$(SENTRY_DSN_PATH): keys
+$(SENTRY_DSN_PATH): | keys
 	touch "$(SENTRY_DSN_PATH)"
 
 $(DB_DATA_PATH):
@@ -85,10 +85,10 @@ $(DB_DATA_PATH):
 secrets: $(SECRETS)
 
 .PHONY: build-id
-build-id: keys
+build-id: | keys
 	echo "export const BUILD_ID = \"${BUILD_ID}\";" > $(BUILD_ID_PATH)
 
-docker-compose.yml: base.yml staging.base.yml $(ENVIR).yml config.mk $(DB_DATA_PATH) $(DATA_DUMP_PATH) $(LOG_DATA_PATH) build-id
+docker-compose.yml: base.yml staging.base.yml $(ENVIR).yml config.mk $(DB_DATA_PATH) $(DATA_DUMP_PATH) $(LOG_DATA_PATH) $(ORMCONFIG_PATH) $(PGPASS_PATH) build-id
 	case "$(ENVIR)" in \
 	  dev) docker-compose -f base.yml -f "$(ENVIR).yml" config > docker-compose.yml;; \
 	  staging|prod) docker-compose -f base.yml -f staging.base.yml -f "$(ENVIR).yml" config > docker-compose.yml;; \
