@@ -3,12 +3,11 @@ import {
   Entity,
   ManyToOne,
   CreateDateColumn,
-  PrimaryGeneratedColumn, Unique,
+  PrimaryGeneratedColumn
 } from 'typeorm';
 import { TournamentRound } from './TournamentRound';
 
 @Entity()
-@Unique(['user', 'tournamentRound'])
 export class TournamentRoundDate {
   @PrimaryGeneratedColumn()
   id!: number;

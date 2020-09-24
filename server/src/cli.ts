@@ -120,9 +120,7 @@ program
               .requiredOption('--tournamentName [tournamentName]', 'id of tournament')
               .description('create a tournament round')
               .action(async (cmd) => {
-                const startDate = new Date();
-                const endDate = new Date(startDate.getTime() + 1000*60*60*24*3);
-                await withConnection((em) => createRound(em, cmd.tournamentName, {startDate, endDate}));
+                await withConnection((em) => createRound(em, cmd.tournamentName));
                 console.log('tournament round create...')
               })))
       .addCommand(
