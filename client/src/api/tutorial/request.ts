@@ -123,10 +123,6 @@ export class TutorialAPI implements AbstractGameAPI {
     this.isTaskComplete = true;
   }
 
-  discardAccomplishment(id: number): void {
-    this.store.commit('DISCARD_ACCOMPLISHMENT', { id, role: this.store.state.role});
-  }
-
   //To completely reset the state, we simply empty the state stack
   public resetState() {
     this.stateStack = [];
@@ -173,25 +169,22 @@ export class TutorialAPI implements AbstractGameAPI {
     this.completedActionWithImplicitForward();
   }
 
-  //PURCHASE HANDLER
+  // handle accomplishment purchases and discards
   public purchaseAccomplishment(accomplishment: AccomplishmentData) {
-    this.store.commit('DISCARD_ACCOMPLISHMENT', {
-      id: accomplishment.id,
+    // discard as we don't actually add points?
+    this.store.commit('PURCHASE_ACCOMPLISHMENT', {
+      data: accomplishment,
       role: accomplishment.role,
     });
 
     this.completedActionWithImplicitForward();
   }
 
-  //DISCARD HANDLER
-  public discardOption(cardInfo: any) {
-    this.store.commit('DISCARD_ACCOMPLISHMENT', {
-      id: cardInfo.data.cardData.id,
-      role: 'Researcher',
-    });
-
+  discardAccomplishment(id: number): void {
+    this.store.commit('DISCARD_ACCOMPLISHMENT', { id, role: this.store.state.role});
     this.completedActionWithImplicitForward();
   }
+
 
   //INVESTMENTS HANDLER
   public investPendingTimeBlocks(investment: any) {

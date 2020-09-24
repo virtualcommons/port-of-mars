@@ -73,6 +73,4 @@ export interface AbstractGameAPI {
   setTradeGiveResources(resources: ResourceAmountData): void
 
   resetTradeModal(): void
-
-  discardOption(data: any): void
 }

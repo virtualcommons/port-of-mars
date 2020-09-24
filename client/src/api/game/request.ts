@@ -246,7 +246,4 @@ public saveHeroOrPariahRole(vote: Role) {
     this.store.commit('RESET_TRADE_MODAL', null);
   }
 
-  public discardOption(data: any) {
-    this.setModalVisible(data);
-  }
 }
