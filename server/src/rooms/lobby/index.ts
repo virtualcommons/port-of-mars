@@ -62,7 +62,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
   clientStats: Array<ClientStat> = [];
 
   /**
-   * determine if lobby should force group assignment
+   * determine if lobby should allow canned group assignment
    */
   devMode = false;
 
@@ -167,7 +167,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
     });
     this.onMessage('distribute-groups', (client: Client, message: DistributeGroups) => {
       if (! this.devMode) {
-        logger.debug("client %d requesting to force distribute groups");
+        logger.debug("client requested force distribute groups");
         this.redistributeGroups().then(() => logger.debug("Groups redistributed"));
       }
     });
@@ -231,14 +231,12 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
       const newUsernames = ['bob1', 'amanda1', 'adison1', 'sydney1', 'frank1'].filter(u => !usernames.includes(u));
       return usernames.concat(newUsernames).slice(0, this.numClientsToMatch);
     }
-
     return usernames;
   }
 
   isGroupReady(group: MatchmakingGroup): boolean {
-    logger.trace('WAITING LOBBY: isGroupReady %o',
-      { ready: group.ready, length: group.clientStats.length, devMode: this.devMode });
-    return group.ready || group.clientStats.length === this.numClientsToMatch || this.devMode;
+    logger.trace('WAITING LOBBY: isGroupReady %o',{ ready: group.ready, length: group.clientStats.length });
+    return group.ready || group.clientStats.length === this.numClientsToMatch;
   }
 
   async checkGroupsReady() {
