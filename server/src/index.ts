@@ -14,8 +14,6 @@ import { Server } from 'colyseus';
 import {GameRoom, LoadTestGameRoom} from '@port-of-mars/server/rooms/game';
 import { RankedLobbyRoom } from '@port-of-mars/server/rooms/lobby';
 import { User } from '@port-of-mars/server/entity';
-import { DBPersister } from '@port-of-mars/server/services/persistence';
-import { ClockTimer } from '@gamestdio/timer/lib/ClockTimer';
 import { quizRouter } from '@port-of-mars/server/routes/quiz';
 import { dashboardRouter } from '@port-of-mars/server/routes/dashboard';
 import { LOGIN_PAGE, CONSENT_PAGE, DASHBOARD_PAGE, getPagePath } from "@port-of-mars/shared/routes";
@@ -60,8 +58,6 @@ passport.use(new LocalStrategy(
     logger.warn('***** DO NOT ALLOW IN PRODUCTION! running local auth for user: ', username);
     const tournamentService = getServices().tournament;
     const user = await getServices().account.getOrCreateTestUser(username);
-    const tournamentRound = await tournamentService.getCurrentTournamentRound();
-    await tournamentService.getActiveRoundInvite(user.id, tournamentRound);
       // set all testing things on the user
     done(null, user)
   }

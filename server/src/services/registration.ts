@@ -23,7 +23,10 @@ export class RegistrationService extends BaseService {
     await repo.save(user);
     logger.debug("updated registration metadata for user %o", data);
     await this.sendEmailVerification(user);
-
+    // check if we need to create an invitation for this new user (currently only in the first round of a tournament)
+    const tournamentService = this.sp.tournament;
+    const tournamentRound = await tournamentService.getCurrentTournamentRound();
+    await tournamentService.getActiveRoundInvite(user.id, tournamentRound);
   }
 
   async findUnregisteredUserByRegistrationToken(registrationToken: string): Promise<User | undefined> {
