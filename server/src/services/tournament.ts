@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 import { getLogger } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
+import {TournamentRoundDate} from "@port-of-mars/server/entity/TournamentRoundDate";
 
 const logger = getLogger(__filename);
 
@@ -43,6 +44,16 @@ export class TournamentService extends BaseService {
       });
   }
 
+  async getScheduledDates(tournamentRound?: TournamentRound): Promise<Array<Date>> {
+    if (!tournamentRound) {
+      tournamentRound = await this.getCurrentTournamentRound();
+    }
+    const schedule = await this.em.getRepository(TournamentRoundDate).find({
+      select: ['date'],
+      where: { tournamentRoundId: tournamentRound.id },
+      order: { date: 'ASC' }});
+    return schedule.map(s => s.date);
+  }
 
   async getInviteList(
     roundId?: number

@@ -169,10 +169,7 @@ export class DashboardService extends BaseService {
     // FIXME: this canned game schedule should be retrieved from the DB in the future
     // first game is September 30th, 1500
     // Arizona time is UTC-7 so 1500 - 7 = 8
-    const gameDates = [
-      new Date('Sep 30 2020 15:00:00 GMT-0700'),
-      new Date('Sep 30 2020 19:00:00 GMT-0700')
-    ];
+    const gameDates = await this.sp.tournament.getScheduledDates(round);
     const upcomingGames = gameDates.map( date => {
       return {time: date.getTime(), round: round.roundNumber, tournamentName: round.tournament.name};
     });
