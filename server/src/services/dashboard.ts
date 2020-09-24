@@ -139,8 +139,12 @@ export class DashboardService extends BaseService {
     return invite?.hasCompletedIntroSurvey?? false;
   }
 
-  canPlayGame(invite: TournamentRoundInvite | undefined): boolean {
-    return invite?.hasParticipated?? false;
+  /**
+   * Returns true if the player has participated or they do not have an invite (to prevent them from participating again).
+   * @param invite Returns
+   */
+  hasParticipated(invite: TournamentRoundInvite | undefined): boolean {
+    return invite?.hasParticipated?? true;
   }
 
   hasCompletedExitSurvey(invite: TournamentRoundInvite | undefined): boolean {
@@ -153,7 +157,7 @@ export class DashboardService extends BaseService {
       mustConsent: this.mustProvideConsent(user),
       mustTakeTutorial: this.mustTakeTutorial(user),
       mustTakeIntroSurvey: ! this.hasCompletedIntroSurvey(invite),
-      canPlayGame: this.canPlayGame(invite),
+      canPlayGame: ! this.hasParticipated(invite),
       shouldTakeExitSurvey: ! this.hasCompletedExitSurvey(invite),
     }
   }
