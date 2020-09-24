@@ -135,16 +135,16 @@ export class DashboardService extends BaseService {
     return !user.passedQuiz
   }
 
-  mustTakeIntroSurvey(invite: TournamentRoundInvite | undefined): boolean {
-    return !_.isUndefined(invite) && !invite.hasCompletedIntroSurvey
+  hasCompletedIntroSurvey(invite: TournamentRoundInvite | undefined): boolean {
+    return invite?.hasCompletedIntroSurvey?? false;
   }
 
   canPlayGame(invite: TournamentRoundInvite | undefined): boolean {
-    return !_.isUndefined(invite) && !invite.hasParticipated
+    return invite?.hasParticipated?? false;
   }
 
-  shouldTakeExitSurvey(invite: TournamentRoundInvite | undefined): boolean {
-    return !_.isUndefined(invite) && !invite.hasCompletedExitSurvey
+  hasCompletedExitSurvey(invite: TournamentRoundInvite | undefined): boolean {
+    return invite?.hasCompletedExitSurvey?? false;
   }
 
   async getPlayerTaskCompletion(user: User, invite: TournamentRoundInvite | undefined): Promise<PlayerTaskCompletion> {
@@ -152,9 +152,9 @@ export class DashboardService extends BaseService {
       mustVerifyEmail: this.mustVerifyEmail(user),
       mustConsent: this.mustProvideConsent(user),
       mustTakeTutorial: this.mustTakeTutorial(user),
-      mustTakeIntroSurvey: this.mustTakeIntroSurvey(invite),
+      mustTakeIntroSurvey: ! this.hasCompletedIntroSurvey(invite),
       canPlayGame: this.canPlayGame(invite),
-      shouldTakeExitSurvey: this.shouldTakeExitSurvey(invite),
+      shouldTakeExitSurvey: ! this.hasCompletedExitSurvey(invite),
     }
   }
 
@@ -166,9 +166,6 @@ export class DashboardService extends BaseService {
     const invite = await this.sp.tournament.getActiveRoundInviteIfExists(user.id, round);
     const playerTaskCompletion: PlayerTaskCompletion = await this.getPlayerTaskCompletion(user, invite);
     const stats = await this.getStats(user, round);
-    // FIXME: this canned game schedule should be retrieved from the DB in the future
-    // first game is September 30th, 1500
-    // Arizona time is UTC-7 so 1500 - 7 = 8
     const gameDates = await this.sp.tournament.getScheduledDates(round);
     const upcomingGames = gameDates.map( date => {
       return {time: date.getTime(), round: round.roundNumber, tournamentName: round.tournament.name};
