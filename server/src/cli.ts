@@ -87,10 +87,7 @@ async function createTournament(em: EntityManager, name: string): Promise<Tourna
 async function createRound(
   em: EntityManager,
   name: string,
-  roundData: {
-    startDate: Date;
-    endDate: Date;
-  }): Promise<TournamentRound> {
+  ): Promise<TournamentRound> {
   const s = getServices(em);
   const t = await s.tournament.getTournamentByName(name);
   const currentRound = await s.tournament.getCurrentTournamentRound();
@@ -99,7 +96,6 @@ async function createRound(
     introSurveyUrl: currentRound.introSurveyUrl,
     exitSurveyUrl: currentRound.exitSurveyUrl,
     roundNumber: currentRound.roundNumber + 1,
-    ...roundData
   })
   logger.info('created tournament round %d for tournament %s', round.roundNumber, t.name);
   return round;

@@ -6,9 +6,10 @@ import {
   CreateDateColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Game } from '@port-of-mars/server/entity/Game';
-import { TournamentRoundInvite } from '@port-of-mars/server/entity/TournamentRoundInvite';
+import { Game } from './Game';
 import { Tournament } from './Tournament';
+import { TournamentRoundDate } from './TournamentRoundDate';
+import { TournamentRoundInvite } from './TournamentRoundInvite';
 
 @Entity()
 export class TournamentRound {
@@ -51,9 +52,9 @@ export class TournamentRound {
   @CreateDateColumn()
   dateCreated!: Date;
 
-  @Column()
-  startDate!: Date;
-
-  @Column()
-  endDate!: Date;
+  @OneToMany(
+    type => TournamentRoundDate,
+    smur => smur.tournamentRound
+  )
+  scheduledDates!: Array<TournamentRoundDate>;
 }
