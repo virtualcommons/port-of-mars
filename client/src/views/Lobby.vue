@@ -7,7 +7,8 @@
     />
     <div class="wrapper row">
       <div class="content col-12">
-        <h3 class="m-5">Next Game Time: {{ nextAssignmentTimeString }}</h3>
+        <h3 class="m-5">Next Game: <mark>{{ scheduledGameTimeString }}</mark></h3>
+        <!--<h4>Groups will be assigned in <mark>{{ nextAssignmentTimeString }}</mark> minutes.</h4>-->
         <b-row>
           <b-col
             :key="role"
@@ -23,8 +24,11 @@
           </b-col>
         </b-row>
 
-<!--        <p>{{ joinedText }}</p>-->
-        <h4 class="mb-3">{{ waitingUserCount }}/5 PLAYERS READY</h4>
+        <h4 class="mb-3">{{ waitingUserCount }} PLAYER(S) READY</h4>
+        <b-alert show class="w-50" variant="info">
+          You'll join a game as soon as there are enough players to form a full group. The lobby will remain open up to 30 minutes after
+          the scheduled game time.
+        </b-alert>
         <b-spinner
           :label="'Loading...'"
           :variant="variantStyle(waitingUserCount)"
@@ -35,7 +39,7 @@
           <b-button :to="'tutorial'" variant="outline-warning">
             Take Tutorial
           </b-button>
-          <b-button @click="distributeGroups" variant="outline-warning">
+          <b-button v-if="isDevOrStaging" @click="distributeGroups" variant="outline-warning">
             Join game
           </b-button>
         </b-button-group>
@@ -54,6 +58,7 @@
   import {DashboardAPI} from '@port-of-mars/client/api/dashboard/request';
   import {applyWaitingServerResponses} from '@port-of-mars/client/api/lobby/response';
   import {WaitingRequestAPI} from '@port-of-mars/client/api/lobby/request';
+  import {isDevOrStaging} from '@port-of-mars/shared/settings';
   import {LOBBY_NAME} from '@port-of-mars/shared/lobby';
   import {CONSENT_PAGE, TUTORIAL_PAGE, DASHBOARD_PAGE} from '@port-of-mars/shared/routes';
   import {Role} from '@port-of-mars/shared/types';
@@ -64,25 +69,23 @@
     @Prop() private role!: string;
     private lobbyAPI: WaitingRequestAPI = new WaitingRequestAPI();
     private waitingUserCount: number = 0;
-    private joinedQueue: boolean = false;
-    private nextAssignmentTime: number = new Date().getTime();
+    private nextAssignmentTime: number = 0;
+    private scheduledGameTime: number = 0;
 
     get roles() {
       return this.$tstore.getters.roles;
     }
 
-    get nextAssignmentTimeString(): string {
-      const unformatted = this.nextAssignmentTime;
-      const formatted = moment(unformatted).format('LLL');
-      return formatted;
+    get scheduledGameTimeString(): string {
+      return new Date(this.scheduledGameTime).toString();
     }
 
-    get joinedText(): string {
-      const lobbyClientJoinedQueue = this.joinedQueue;
-      if (lobbyClientJoinedQueue) {
-        return 'You are currently in line for a game';
-      }
-      return 'You have not yet been added to the game queue.';
+    get nextAssignmentTimeString(): string {
+      return new Date(this.nextAssignmentTime).toString();
+    }
+
+    get isDevOrStaging() {
+      return isDevOrStaging();
     }
 
     async created() {
@@ -123,7 +126,8 @@
         await this.$router.push({name: DASHBOARD_PAGE});
         return;
       }
-      // all checks passed, actually join the lobby
+      // all checks passed, set up the lobby page and join the Colyseus Lobby room
+      this.scheduledGameTime = dashboardData.upcomingGames[0].time;
       try {
         const room = await this.$client.joinOrCreate(LOBBY_NAME);
         applyWaitingServerResponses(room, this);
@@ -138,7 +142,7 @@
         if (!errorMessage) {
           errorMessage = 'Please complete all onboarding items on your dashboard before joining a game.';
         }
-        this.$tstore.commit('SET_DASHBOARD_MESSAGE', {kind: 'warning', message: errorMessage});
+        dashboardAPI.message(errorMessage, 'warning');
         await this.$router.push({name: DASHBOARD_PAGE});
       }
     }

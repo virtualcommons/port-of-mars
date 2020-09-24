@@ -1,7 +1,7 @@
 import { Game, User, Player, Tournament, TournamentRound, TournamentRoundInvite } from '@port-of-mars/server/entity';
-import { Equal, SelectQueryBuilder } from 'typeorm';
+import { MoreThan, Equal, SelectQueryBuilder } from 'typeorm';
 import * as _ from 'lodash';
-import { getLogger } from "@port-of-mars/server/settings";
+import { settings, getLogger } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 import {TournamentRoundDate} from "@port-of-mars/server/entity/TournamentRoundDate";
@@ -50,7 +50,7 @@ export class TournamentService extends BaseService {
     }
     const schedule = await this.em.getRepository(TournamentRoundDate).find({
       select: ['date'],
-      where: { tournamentRoundId: tournamentRound.id },
+      where: { tournamentRoundId: tournamentRound.id, date: MoreThan(new Date().toDateString()) },
       order: { date: 'ASC' }});
     return schedule.map(s => s.date);
   }
@@ -229,6 +229,26 @@ export class TournamentService extends BaseService {
       logger.debug("participant %s completed exit survey %s", invite.user.username, exitSurveyUrl);
     }
     this.em.save(invite);
+  }
+
+  isLobbyOpen(gameDates: Array<Date>): boolean {
+    // 30 minutes in milliseconds offset for checking when the lobby is open
+    if (settings.lobby.devMode) {
+      return true;
+    }
+    if (gameDates.length === 0) {
+      return false;
+    }
+    const lobbyOpenOffset = 30 * 60 * 1000;
+    const now = new Date();
+    for (const date of gameDates) {
+      const openDate = new Date(date.getTime() - lobbyOpenOffset);
+      const closeDate = new Date(date.getTime() + lobbyOpenOffset);
+      if (now > openDate && now < closeDate) {
+        return true;
+      }
+    }
+    return false;
   }
 }
 

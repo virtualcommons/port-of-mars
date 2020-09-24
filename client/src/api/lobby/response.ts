@@ -4,7 +4,7 @@ import {
   SentInvitation,
   RemovedClientFromLobby,
 } from '@port-of-mars/shared/lobby/responses';
-import { GAME_PAGE } from '@port-of-mars/shared/routes';
+import { DASHBOARD_PAGE, GAME_PAGE } from '@port-of-mars/shared/routes';
 import Lobby from '@port-of-mars/client/views/Lobby.vue';
 
 // TODO: Temporary Implementation
@@ -54,6 +54,13 @@ export function applyWaitingServerResponses<T>(
       switch (change.field) {
         case 'nextAssignmentTime':
           (component as any).nextAssignmentTime = change.value;
+          break;
+        case 'isOpen':
+          if (!change.value) {
+            // lobby is now closed, go to dashboard
+            store.commit('SET_DASHBOARD_MESSAGE', { kind: 'warning', message: 'Not enough players joined to start a game, please try again later.'});
+            router.push({ name: DASHBOARD_PAGE });
+          }
           break;
         case 'waitingUserCount':
           (component as any).waitingUserCount = change.value;

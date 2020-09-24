@@ -9,7 +9,6 @@ import { getServices } from "@port-of-mars/server/services";
 import _ from "lodash";
 import * as http from "http";
 import { DistributeGroups, WaitingResponses, LOBBY_NAME, AcceptInvitation } from "@port-of-mars/shared/lobby";
-import { Persister } from "@port-of-mars/server/rooms/game/types";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -45,7 +44,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
    * Distribute clients into groups at this interval
    * currently set to 15 minutes
    */
-  evaluateAtEveryMinute = 15;
+  evaluateAtEveryMinute = 5;
 
   /**
    * Groups of players per iteration
@@ -84,22 +83,25 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
      */
     this.scheduler = schedule.scheduleJob(
       `*/${this.evaluateAtEveryMinute} * * * *`,
-      () => {
+      async () => {
         logger.trace('SCHEDULED JOB: REDISTRIBUTE GROUPS');
         this.redistributeGroups();
-        this.updateLobbyNextAssignmentTime();
+        await this.updateLobbyNextAssignmentTime();
       }
     );
     this.updateLobbyNextAssignmentTime();
   }
 
-  updateLobbyNextAssignmentTime() {
+  async updateLobbyNextAssignmentTime() {
     if (this.scheduler) {
       const nextInvocation: any = this.scheduler
         .nextInvocation()
         .toDate()
         .getTime();
       this.state.nextAssignmentTime = nextInvocation;
+      const tournamentService = getServices().tournament;
+      const scheduledDates = await tournamentService.getScheduledDates();
+      this.state.isOpen = tournamentService.isLobbyOpen(scheduledDates);
     }
   }
 
@@ -129,7 +131,8 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
     this.clientStats.push(clientStat);
     this.state.waitingUserCount = this.clientStats.length;
     this.sendSafe(client, { kind: 'joined-client-queue', value: true });
-    if (this.devMode && this.clientStats.length === this.numClientsToMatch) {
+    // FIXME: first come first serve semantics, allocate groups as soon as we have enough people to allocate
+    if (this.clientStats.length >= this.numClientsToMatch) {
       this.redistributeGroups();
     }
   }
@@ -163,8 +166,10 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
       }
     });
     this.onMessage('distribute-groups', (client: Client, message: DistributeGroups) => {
-      logger.debug("client %d requesting to force distribute groups");
-      this.redistributeGroups().then(() => logger.debug("Groups redistributed"));
+      if (! this.devMode) {
+        logger.debug("client %d requesting to force distribute groups");
+        this.redistributeGroups().then(() => logger.debug("Groups redistributed"));
+      }
     });
   }
 

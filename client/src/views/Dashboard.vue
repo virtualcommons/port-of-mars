@@ -89,9 +89,9 @@
 
         <!-- GO TO WAITING LOBBY -->
         <h2 class="py-2 text-uppercase">Participate</h2>
-        <b-button :disabled="this.playerTaskCompletion.canPlayGame" :to="join" class="mb-5" pill size="lg"
+        <b-button :disabled="!playerTaskCompletion.canPlayGame" :to="join" pill size="lg"
                   variant="success">
-          <b-icon-play-fill class="my-1 mx-2" scale="1"/>
+          Join the Waiting Lobby <font-awesome-icon icon="rocket" />
         </b-button>
 
 
@@ -138,6 +138,7 @@ import Messages from '@port-of-mars/client/components/dashboard/Messages.vue';
 import {DashboardAPI} from '@port-of-mars/client/api/dashboard/request';
 import {GameMeta, PlayerTaskCompletion, Stats} from '@port-of-mars/shared/types';
 import {faGoogle} from '@fortawesome/free-brands-svg-icons/faGoogle';
+import {faRocket} from '@fortawesome/free-solid-svg-icons';
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {CONSENT_PAGE, LOBBY_PAGE, LOGIN_PAGE, TUTORIAL_PAGE} from '@port-of-mars/shared/routes';
 
@@ -145,7 +146,7 @@ import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 import {CalendarEvent, google} from "calendar-link";
 import ActionItem from "@port-of-mars/client/components/dashboard/ActionItem.vue";
 
-library.add(faGoogle);
+library.add(faGoogle, faRocket);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 

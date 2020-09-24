@@ -136,15 +136,15 @@ export class DashboardService extends BaseService {
   }
 
   mustTakeIntroSurvey(invite: TournamentRoundInvite | undefined): boolean {
-    return _.isUndefined(invite) || !invite.hasCompletedIntroSurvey
+    return !_.isUndefined(invite) && !invite.hasCompletedIntroSurvey
   }
 
   canPlayGame(invite: TournamentRoundInvite | undefined): boolean {
-    return _.isUndefined(invite) || !invite.hasParticipated
+    return !_.isUndefined(invite) && !invite.hasParticipated
   }
 
   shouldTakeExitSurvey(invite: TournamentRoundInvite | undefined): boolean {
-    return _.isUndefined(invite) || !invite.hasCompletedExitSurvey
+    return !_.isUndefined(invite) && !invite.hasCompletedExitSurvey
   }
 
   async getPlayerTaskCompletion(user: User, invite: TournamentRoundInvite | undefined): Promise<PlayerTaskCompletion> {
@@ -178,25 +178,9 @@ export class DashboardService extends BaseService {
       introSurveyUrl: this.getIntroSurveyUrl(user, round, invite),
       exitSurveyUrl: this.getExitSurveyUrl(user, round, invite),
       upcomingGames,
-      isLobbyOpen: this.isLobbyOpen(gameDates),
+      isLobbyOpen: this.sp.tournament.isLobbyOpen(gameDates),
       stats
     }
   }
 
-  isLobbyOpen(gameDates: Array<Date>): boolean {
-    // 30 minutes in milliseconds offset for checking when the lobby is open
-    if (settings.lobby.devMode) {
-      return true;
-    }
-    const lobbyOpenOffset = 30 * 60 * 1000;
-    const now = new Date();
-    for (const date of gameDates) {
-      const openDate = new Date(date.getTime() - lobbyOpenOffset);
-      const closeDate = new Date(date.getTime() + lobbyOpenOffset);
-      if (now > openDate && now < closeDate) {
-        return true;
-      }
-    }
-    return false;
-  }
 }
