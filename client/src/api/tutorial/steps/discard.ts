@@ -4,10 +4,8 @@ import { Phase } from '@port-of-mars/shared/types';
 const steps: Array<Step> = [
   {
     target: '.tour-phase',
-    content:
-      `The last phase in a round is Discard! You can ` +
-      `draw new Accomplishments to replace any Accomplishments ` +
-      `you don't want to keep during the next round.`,
+    content: `The last phase in a round is Discard. You can discard any Accomplishments you don't want to keep ` +
+      `and draw up to three new Accomplishments at the beginning of the next round.`,
     params: {
       placement: RIGHT,
     },
@@ -19,7 +17,7 @@ const steps: Array<Step> = [
             id: 6,
             role: 'Researcher',
             label: 'Accomplishment you cannot currently purchase',
-            flavorText: 'Dummy Accomplishment that you should throw away!',
+            flavorText: 'A placeholder Accomplishment that you should discard.',
             science: 3,
             government: 1,
             legacy: 0,
@@ -48,7 +46,7 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-ready-to-advance-button',
-    content: `Click the Ready to Advance button when you have finished discarding. `,
+    content: `Click the Ready to Advance button after you have discarded the Accomplishment. `,
     params: {
       placement: LEFT,
     },

@@ -33,7 +33,9 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-accomplishments',
-    content: `Here, you can see what Accomplishments are available to you during a round.`,
+    content: `Accomplishments are how you earn points and establish your legacy on Mars. 
+    You can purchase an accomplishment if you have enough Influence to cover its costs.
+    Here you'll be able to see what Accomplishments you can purchase this round.`,
     params: {
       placement: RIGHT,
     },
@@ -82,8 +84,8 @@ const steps: Array<Step> = [
   {
     target: '.tour-time-blocks',
     content:
-      `You have 10 time blocks to spend each round unless otherwise instructed. ` +
-      `You can spend these time blocks on System Health or Resources. ` +
+      `In each round you will have 10 time blocks to spend unless otherwise instructed. ` +
+      `You can spend these time blocks on System Health or Influence Resources. ` +
       `Remember: you have 5 minutes to decide how to invest your time blocks.`,
     params: {
       placement: BOTTOM,
@@ -91,8 +93,7 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-invest',
-    content: `You cannot recycle time blocks between rounds so you should spend all of
-    them in each round.`,
+    content: `Time blocks are reset each round and do not get saved for subsequent rounds. You should allocate all of your time each round!`,
     params: {
       placement: RIGHT,
     },
@@ -100,18 +101,16 @@ const steps: Array<Step> = [
   {
     target: '.tour-invest',
     content:
-      `The time block cost is located at the bottom right corner of a Resource. ` +
-      `On the Resource, there are two buttons: '+' and '-'. Press '+' to invest ` +
-      `your available time blocks into a Resource. If you choose to reallocate your  ` +
-      `time blocks, press '-' to reduce your time block investment from a Resource.`,
+      `Each Resource costs time blocks and you can see the cost at the bottom right corner next to the clock icon. ` +
+      `Use the '+' button to invest your time blocks into a Resource. If you decide to change your  ` +
+      `investment, use the '-' button to reduce your time block investment from a Resource.`,
     params: {
       placement: RIGHT,
     },
   },
   {
     target: '.tour-invest-action',
-    content: `Try it out: purchase 1 science. Note the '2' near the clock! That is the
-    cost of this resource.`,
+    content: `Let's purchase 1 Science Influence. Each Science Influence costs 2 time blocks, shown on the bottom right.`,
     params: {
       placement: TOP,
     },
@@ -131,15 +130,15 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-time-blocks',
-    content: `As you can see, 2 time blocks have been removed!`,
+    content: `You should notice that 2 time blocks have been removed from your Time Blocks meter and you have 8 remaining time blocks to invest.`,
     params: {
       placement: TOP,
     },
   },
   {
     target: '.tour-invest-action',
-    content: `Time blocks cannot be recycled, so finish spending!
-      You should buy 1 more science and 2 government!`,
+    content: `Time blocks aren't saved across rounds, so let's finish investing our time.
+      Please buy 1 more Science and 2 Government Influences.`,
     params: {
       placement: TOP,
     },
@@ -168,7 +167,7 @@ const steps: Array<Step> = [
   {
     target: '.tour-phase',
     content:
-      `There are some Resources that you cannot earn on your own. For example, ` +
+      `There are some Influence Resources that you cannot earn on your own. For example, ` +
       `the Researcher cannot earn Culture or Finance Resources by investing their time blocks. ` +
       `However, you may need these resources to purchase certain Accomplishments.`,
     params: {
@@ -178,8 +177,8 @@ const steps: Array<Step> = [
   {
     target: '.tour-accomplishments',
     content:
-      `For example, this Accomplishment requires 1 Culture, which you cannot earn. ` +
-      `To get this Resource, you must trade with someone who has 1 Culture.`,
+      `This Accomplishment requires 1 Culture, which you as the Researcher cannot earn by investing time blocks. ` +
+      `To earn this Resource, you must trade with someone who has 1 Culture.`,
     params: {
       placement: RIGHT,
     },
@@ -188,7 +187,7 @@ const steps: Array<Step> = [
     target: '.tour-ready-to-advance-button',
     content:
       `Click Ready to Advance when you have finished investing your time blocks. ` +
-      `The Investment Phase ends as soon as all members of your habitat have finished investing.`,
+      `The Investment Phase ends as soon as all members of your group have finished investing.`,
     params: {
       placement: BOTTOM,
     },

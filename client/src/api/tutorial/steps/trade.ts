@@ -11,7 +11,7 @@ import { ChatMarsLogView } from '@port-of-mars/shared/game/client/panes';
 const steps: Array<Step> = [
   {
     target: '.tour-phase',
-    content: `The next phase is Trade. Here, you will trade for resources that you need to purchase Accomplishments.`,
+    content: `The next phase is Trade where you can trade for Influence Resources that you need to purchase Accomplishments.`,
     params: {
       placement: RIGHT,
     },
@@ -79,32 +79,24 @@ const steps: Array<Step> = [
   {
     target: '.tour-active-trades-list',
     content:
-      `All active trades are listed here. If you receive a trade, you can accept or decline the trade. ` +
+      `All active trades are listed here. If you receive a trade request, you can either accept or decline the trade. ` +
       `When you send a trade, you only have the option to cancel the request.`,
     params: {
       placement: LEFT,
     },
   },
-  // {
-  //   target: '.tour-active-accomplishments',
-  //   content: `During the Trade phase, Active Accomplishments will automatically toggle so you can ` +
-  //     `reference your available accomplishments and active trades simultaneously.`,
-  //   params: {
-  //     placement: RIGHT
-  //   }
-  // },
   {
     target: '.tour-trade-filters',
     content:
-      `Use this switch to toggle trade filters so you can easily view Your Trades (trades that ` +
-      `you have sent and received) and All Trades.`,
+      `Use this toggle switch to view all trade requests in the Port of Mars or just your trades, i.e., trade requests that ` +
+      `you have received or sent to others.`,
     params: {
       placement: LEFT,
     },
   },
   {
     target: '.tour-chat',
-    content: `Before making trade requests, you should talk about your plans in chat!`,
+    content: `Before making trade requests, it's usually a good idea to talk about your trade plans in chat.`,
     params: {
       placement: LEFT,
     },
@@ -143,16 +135,16 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-request-trade-accomplishments',
-    content: `Upon opening a Trade Request, you can easily reference your available ` +
-    `Accomplishments here while creating a Trade Request. You can also toggle the menu to view ` +
-    `your Inventory.`,
+    content: `Upon opening a Trade Request, you can view your available ` +
+    `Accomplishments here. You can also toggle the menu to view ` +
+    `your inventory of available Influence Resources.`,
     params: {
       placement: RIGHT,
     },
   },
   {
     target: '.tour-request-trade-partner',
-    content: `First, select a player to trade with. Try clicking the curator!`,
+    content: `First, you must select a player to trade with. Please click on the Curator!`,
     params: {
       placement: TOP,
     },
@@ -171,7 +163,7 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-request-resources',
-    content: `Next, you choose the amount of any resource that you want. Ask for 3 culture!`,
+    content: `Next, select the quantity and type of Influence Resource that you want. Let's request 3 culture.`,
     params: {
       placement: TOP,
     },
@@ -191,8 +183,8 @@ const steps: Array<Step> = [
   {
     target: '.tour-offer-resources',
     content:
-      `Finally, select the amount of each resource you are willing to give up. You cannot send more ` +
-      `resources than you currently have. Increment Science to 2 and Government to 1!`,
+      `Finally, select the quantity of each Influence Resource you wish to trade. You cannot send more ` +
+      `resources than you currently have. Let's trade 2 Science and 1 Government.`,
     params: {
       placement: TOP,
     },
@@ -223,7 +215,7 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-send-trade',
-    content: `Hit send to see your trade in action!`,
+    content: `Click Send Trade Request to see your trade in action!`,
     params: {
       placement: 'bottom',
     },

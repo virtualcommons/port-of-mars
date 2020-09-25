@@ -5,15 +5,14 @@ import { ChatMarsLogView } from '@port-of-mars/shared/game/client/panes';
 const steps: Array<Step> = [
   {
     target: '.tour-phase',
-    content: `Information about the current game state is always displayed here.`,
+    content: `Information on the current state of the Port of Mars is always displayed here.`,
     params: {
       placement: LEFT,
     },
   },
   {
     target: '.tour-round',
-    content: `The game progresses in rounds. The total number of rounds varies for each game
-    so a game may end after any number of rounds.`,
+    content: `Port of Mars progresses in rounds. The total number of rounds may vary and a game may end after any number of rounds.`,
     params: {
       placement: BOTTOM,
     },
@@ -21,7 +20,7 @@ const steps: Array<Step> = [
   {
     target: '.tour-current-phase',
     content:
-      `There are multiple phases in a round: New Round, Events, Invest, Trade, Purchase ` +
+      `Every round consists of the following phases: New Round, Event, Investment, Trade, Purchase ` +
       `and Discard.`,
     params: {
       placement: BOTTOM,
@@ -37,9 +36,10 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-ready-to-advance-button',
-    content: `If you are finished with your actions before the 5 minutes are up, click Ready ` +
-      `to Advance to lock in your choices. When every player has indicated that they are ` +
-      `ready, the phase will end, and all players will progress to the next phase.`,
+    content: `If you are finished with your actions in a given phase before the 5 minutes are up, click Ready 
+      to Advance to indicate that you are ready to move on and lock in your choices. 
+      When every player in your group has indicated that they are 
+      ready, the phase will end and your group will move on to the next phase.`,
     params: {
       placement: LEFT,
     },
@@ -54,8 +54,7 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-split-chat-log',
-    content: `You can switch between the Chat or Mars Log view. If you want to view both, toggle ` +
-      `the Split view option.`,
+    content: `You can view the Port of Mars Chat or Mars Log here, or both using the Split view option.`,
     params: {
       placement: LEFT,
     },
@@ -74,8 +73,8 @@ const steps: Array<Step> = [
     target: '.tour-chat',
     content:
       `At any time during the game, you can communicate with the other players ` +
-      `in your habitat to plan and strategize. Remember: all chat is public ` +
-      `and recorded; there are no private messages. Please adhere to the Port of ` +
+      `in your group to plan and strategize. Remember: all chat is public ` +
+      `and recorded and there are no private messages. Please adhere to the Port of ` +
       `Mars Code of Conduct in your communications. Try sending a message!`,
     params: {
       placement: LEFT,

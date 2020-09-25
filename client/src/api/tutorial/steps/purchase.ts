@@ -5,8 +5,8 @@ const steps: Array<Step> = [
   {
     target: '.tour-phase',
     content:
-      `Ok, so now we've invested our timeblocks and traded our Resources! It's ` +
-      `finally time to purchase Accomplishments!`,
+      `Now that we have invested our time blocks and traded Influence Resources, it's 
+      finally time to purchase some Accomplishments!`,
     params: {
       placement: RIGHT,
     },
@@ -38,6 +38,7 @@ const steps: Array<Step> = [
             culture: 0,
             systemHealth: 0,
             victoryPoints: 1,
+            // FIXME: this should be removed
             effect:
               'You can no longer make Politics or Legacy Influence. Science Influence only costs 1 Time Block to make.',
           },
@@ -48,7 +49,7 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-inventory',
-    content: `You can view and reference your inventory of Resources here.`,
+    content: `You can view your current inventory of Influence Resources here.`,
     params: {
       placement: RIGHT,
     },
@@ -68,7 +69,7 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-ready-to-advance-button',
-    content: `Click the Ready to Advance button when you have finished purchasing Accomplishments. `,
+    content: `Click the Ready to Advance button when you are done purchasing Accomplishments. `,
     params: {
       placement: LEFT,
     },

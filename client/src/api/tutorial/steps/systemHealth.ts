@@ -4,9 +4,9 @@ const steps: Array<Step> = [
   {
     target: '.tour-system-health',
     content:
-      `The game starts with System Health at 100. This represents the habitat at peak ` +
-      `condition and maintenance. However, at the start of every round, the ` +
-      `community loses 25 System Health due to standard wear and tear.`,
+      `You begin at the Port of Mars with an initial System Health of 100. This represents your habitat 
+      at peak condition and maintenance. At the start of every round, your community will lose 25 System 
+      Health due to standard wear and tear.`,
     params: {
       placement: 'bottom'
     }
@@ -22,9 +22,8 @@ const steps: Array<Step> = [
   {
     target: '.tour-system-health',
     content:
-      `At the start of a round, if System Health is lower than 65, 2 Events will occur in the round; ` +
-      `if System Health is lower than 35, 3 Events will occur. Conditions on Mars ` +
-      `are tough!`,
+      `If System Health is lower than 65 at the start of the round, your group will be affected by 2 Events. ` +
+      `If System Health is lower than 35, your group will be affected by 3 Events. Conditions on Mars are tough!`,
     params: {
       placement: BOTTOM
     }

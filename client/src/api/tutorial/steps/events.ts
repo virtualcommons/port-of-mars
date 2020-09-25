@@ -5,13 +5,14 @@ import { HUDRightView } from '@port-of-mars/shared/game/client/panes';
 const steps: Array<Step> = [
   {
     target: '.tour-phase',
-    content: `The first phase in a round is Events, where the Events of the round will be revealed.`,
+    content: `The Events phase reveals Events that may affect your group this round.`,
     params: {
       placement: LEFT,
     },
     stateTransform: [
       {
         SET_GAME_PHASE: Phase.events,
+        // FIXME: this should be pulling its data from MarsEvents, which I suppose makes a case for keeping them in shared instead?
         ADD_TO_EVENTS: {
           id: 'changingTides',
           name: 'Changing Tides',
@@ -29,29 +30,29 @@ const steps: Array<Step> = [
   {
     target: '.tour-active-events',
     content:
-      `Some Events can be more involved and require players to fulfill tasks ` +
-      `that include voting. Mars is unpredictable; many different events can happen!`,
+      `Some Events can have complex effects and require players to make difficult choices or vote ` +
+      `for an outcome. Mars is unpredictable; many different events can happen!`,
     params: {
       placement: 'left',
     },
   },
   {
     target: '.tour-system-health',
-    content: `Keep in mind that as System Health drops, the number of Events you will encounter will increase.`,
+    content: `Keep in mind that as System Health decreases, the number of Events you will encounter will increase.`,
     params: {
       placement: BOTTOM,
     },
   },
   {
     target: '.tour-event-deck',
-    content: `Events persisting multiple rounds or relevant to the current round will be shown here.`,
+    content: `Events that are relevant to the current round will be shown here. Some events may even persist across multiple rounds!`,
     params: {
       placement: LEFT,
     },
   },
   {
     target: '.tour-event-view',
-    content: `Throughout the game, you can also access the Active Events for a round in this menu.`,
+    content: `Throughout the game, you can also access the Active Events in this menu.`,
     params: {
       placement: LEFT,
     },

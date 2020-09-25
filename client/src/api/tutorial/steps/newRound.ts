@@ -4,8 +4,8 @@ import { Phase, RESEARCHER } from "@port-of-mars/shared/types";
 const steps: Array<Step> = [
   {
     target: '.tour-phase-instructions',
-    content: `During the New Round phase, a System Health Report (SHR) is generated ` +
-      `to report players\' contributions to system health from the previous round.`,
+    content: `At the beginning of each round a System Health Report (SHR) is generated ` +
+      `to report your group's contributions to System Health from the previous round.`,
     params: {
       placement: LEFT
     },
@@ -24,16 +24,16 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-report',
-    content: `Your players\' total contributions is the net amount which is calculated by ` +
-      `(players\'s contributions to System Health during Invest phase - purchased ` +
-      `accomplishments that subtract from System Health.`,
+    content: `Your group's total contributions is the net amount of each ` +
+      `player's investments to System Health during the Investment phase minus any purchased ` +
+      `Accomplishments that subtracted from System Health.`,
     params: {
       placement: TOP,
     }
   },
   {
     target: '.tour-report-hint',
-    content: 'More than 1 Event will occur if System Health < 65.',
+    content: 'If System Health drops below 65, more than one Event will affect your group.',
     params: {
       placement: LEFT,
     }
