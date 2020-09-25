@@ -294,7 +294,7 @@ export default class AccomplishmentCard extends Vue {
         activator: 'User',
         title: 'Accomplishment Card',
         content: 'This is an accomplishment.',
-        cardType: AccomplishmentCardType.default,
+        cardType: 'AccomplishmentCard',
         cardData: this.accomplishment,
         confirmation: false,
       },
