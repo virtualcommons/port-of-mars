@@ -84,19 +84,10 @@ export class TournamentService extends BaseService {
     return await repository.save(invite);
   }
 
-
-  async getActiveRoundInviteIfExists(userId: number, tournamentRound: TournamentRound): Promise<TournamentRoundInvite | undefined> {
-    const tournamentRoundId = tournamentRound.id;
-    const invite = await this.em.getRepository(TournamentRoundInvite).findOne({
-      where: {
-        tournamentRoundId,
-        userId
-      }
-    });
-    return invite;
-  }
-
-  async getActiveRoundInvite(userId: number, tournamentRound: TournamentRound): Promise<TournamentRoundInvite> {
+  async getActiveRoundInvite(userId: number, tournamentRound?: TournamentRound): Promise<TournamentRoundInvite> {
+    if (!tournamentRound) {
+      tournamentRound = await this.getCurrentTournamentRound();
+    }
     const tournamentRoundId = tournamentRound.id;
     const invite = await this.em.getRepository(TournamentRoundInvite).findOne({
       where: {
@@ -131,9 +122,7 @@ export class TournamentService extends BaseService {
     return await this.em.getRepository(TournamentRound).save(tr);
   }
 
-  async findRoundWinners(
-    roundId?: number
-  ): Promise<Array<number> | undefined> {
+  async findRoundWinners(roundId?: number): Promise<Array<number> | undefined> {
     // NOTE: Get Tournament Round ID
     let tournamentRoundId;
     if (roundId) {

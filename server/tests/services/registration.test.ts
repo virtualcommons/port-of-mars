@@ -1,26 +1,27 @@
-import {
-  RegistrationService,
-} from "@port-of-mars/server/services/registration";
-import {User} from "@port-of-mars/server/entity/User";
+import {RegistrationService} from "@port-of-mars/server/services/registration";
+import {User, Tournament, TournamentRound} from "@port-of-mars/server/entity";
 import {settings} from "@port-of-mars/server/settings";
-import {Connection, createConnection, QueryRunner} from "typeorm";
+import {Connection, EntityManager, QueryRunner} from "typeorm";
 import {ServiceProvider} from "@port-of-mars/server/services";
 import {ServerError} from "@port-of-mars/server/util";
+import {createRound, createTournament, initTransaction, rollbackTransaction} from "./common";
 
 describe('a potential user', () => {
   const username = 'ahacker';
   let conn: Connection;
   let qr: QueryRunner;
+  let manager: EntityManager;
   let sp: ServiceProvider;
+  let t: Tournament;
+  let tr: TournamentRound;
   let registrationService: RegistrationService;
 
   beforeAll(async () => {
-    conn = await createConnection('test');
-    qr = conn.createQueryRunner();
+    [conn, qr, manager] = await initTransaction();
     sp = new ServiceProvider(qr.manager);
+    t = await createTournament(sp);
+    tr = await createRound(sp, {tournamentId: t.id});
     registrationService = sp.registration;
-    await qr.connect();
-    await qr.startTransaction();
   });
 
   it('can begin registration', async () => {
@@ -33,7 +34,6 @@ describe('a potential user', () => {
     const name = 'Alyssa P Hacker';
     const user = await sp.account.getOrCreateUser(username);
     await registrationService.submitRegistrationMetadata(user, { username, email, name });
-    // const u = await qr.manager.getRepository(User).findOneOrFail({username});
     expect(user.email).toBe(email);
     expect(user.name).toBe(name);
   });
@@ -61,10 +61,5 @@ describe('a potential user', () => {
     const u = await qr.manager.getRepository(User).findOneOrFail({username});
     await expect(registrationService.verifyUnregisteredUser(u, 'invalid-registration-token')).rejects.toThrowError(ServerError);
   });
-
-  afterAll(async () => {
-    await qr.rollbackTransaction();
-    await qr.release();
-    await conn.close();
-  })
+  afterAll(async () => rollbackTransaction(conn, qr));
 });

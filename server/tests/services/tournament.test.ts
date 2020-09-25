@@ -34,21 +34,18 @@ describe('first round', () => {
 
       await services.registration.submitRegistrationMetadata(bob, {username: 'bob', email: 'bob@foo.com', name: 'Bob'});
       expect(await services.auth.checkUserCanPlayGame(bob.id, tr.id)).toBeFalsy();
+      // FIXME: invites are automatically created in submitRegistrationMetadata now for the first round of a tournament
+      // we should test that an invite exists now since this is the first round of the Tournament
 
       await services.registration.verifyUnregisteredUser(bob, bob.registrationToken);
       expect(await services.auth.checkUserCanPlayGame(bob.id, tr.id)).toBeFalsy();
 
       await services.quiz.setUserQuizCompletion(bob.id, true);
-      expect(await services.auth.checkUserCanPlayGame(bob.id, tr.id)).toBeFalsy();
-
-      const invites = await services.tournament.createInvites([bob.id], tr.id);
       expect(await services.auth.checkUserCanPlayGame(bob.id, tr.id)).toBeTruthy();
 
-      await services.quiz.setUserQuizCompletion(bob.id, true);
-      expect(await services.auth.checkUserCanPlayGame(bob.id, tr.id)).toBeTruthy();
 
-      // Don't want to have to create game and finalize it so this is a work around
-      const invite = invites[0];
+      // workaround to avoid creating and finalizing a game
+      const invite = await services.tournament.getActiveRoundInvite(bob.id);
       invite.hasParticipated = true;
       await qr.manager.getRepository(TournamentRoundInvite).save(invite);
       expect(await services.auth.checkUserCanPlayGame(bob.id, tr.id)).toBeFalsy();
@@ -58,7 +55,7 @@ describe('first round', () => {
   afterAll(async () => rollbackTransaction(conn, qr));
 });
 
-describe('round round list', () => {
+describe('round list', () => {
   let conn: Connection;
   let qr: QueryRunner;
   let manager: EntityManager;

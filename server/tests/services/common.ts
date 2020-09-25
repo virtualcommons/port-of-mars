@@ -1,11 +1,6 @@
 import {Connection, createConnection, EntityManager, QueryRunner} from "typeorm";
-import { getConnection } from "@port-of-mars/server/util";
 import {ServiceProvider} from "@port-of-mars/server/services";
-import {Tournament, TournamentRound, User} from "@port-of-mars/server/entity";
-import {DBPersister} from "@port-of-mars/server/services/persistence";
-import {GameOpts, Persister} from "@port-of-mars/server/rooms/game/types";
-import * as assert from "assert";
-import {ROLES} from "@port-of-mars/shared/types";
+import {Tournament, User} from "@port-of-mars/server/entity";
 
 export async function initTransaction(): Promise<[Connection, QueryRunner, EntityManager]> {
   const conn = await createConnection('test');

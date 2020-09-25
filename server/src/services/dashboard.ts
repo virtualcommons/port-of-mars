@@ -167,7 +167,7 @@ export class DashboardService extends BaseService {
     if (!round) {
       throw new Error(`no active tournament round found`);
     }
-    const invite = await this.sp.tournament.getActiveRoundInviteIfExists(user.id, round);
+    const invite = await this.sp.tournament.getActiveRoundInvite(user.id, round);
     const playerTaskCompletion: PlayerTaskCompletion = await this.getPlayerTaskCompletion(user, invite);
     const stats = await this.getStats(user, round);
     const gameDates = await this.sp.tournament.getScheduledDates(round);
