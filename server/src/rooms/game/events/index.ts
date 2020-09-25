@@ -444,14 +444,10 @@ export class AddedSystemHealthContributions extends KindOnlyGameEvent {
         MarsLogCategory.systemHealthContributions);
 
     if (game.systemHealthTaken() < 0) {
-      game.log(`${game.systemHealthTaken()} System Health was subtracted because players purchased screw 
-      Accomplishments.`, MarsLogCategory.systemHealthScrew);
-    } else {
-      game.log(`Players did not purchase any screw Accomplishments.`, MarsLogCategory.systemHealthScrew);
-    }
-
+      game.log(`${game.systemHealthTaken()} System Health was subtracted because players purchased Accomplishments that cost System Health.`, MarsLogCategory.systemHealthScrew);
+    } 
     game.log(`At the end of Round ${game.round}, System Health is ${game.systemHealth} after accounting for 
-    contributions and purchased screw Accomplishments.`, MarsLogCategory.systemHealth);
+    contributions and purchased Accomplishments that decrease System Health.`, MarsLogCategory.systemHealth);
   }
 }
 
