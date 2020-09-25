@@ -41,6 +41,45 @@ const
           data: { role: 'Researcher' },
         },
       },
+      {
+        SET_ACTIVE_ACCOMPLISHMENTS: {
+          data: {
+            id: 7,
+            role: 'Researcher',
+            label: 'Radiation Shielding',
+            flavorText:
+              'You discover a material that is more effective at shielding the habitats from radiation.',
+            science: 1,
+            government: 0,
+            legacy: 0,
+            finance: 4,
+            culture: 0,
+            systemHealth: 0,
+            victoryPoints: 4,
+            effect: '',
+          },
+          role: `Researcher`,
+        },
+        PURCHASE_ACCOMPLISHMENT: {
+          data: {
+            id: 2,
+            role: 'Researcher',
+            label: 'Mars Helicopter',
+            flavorText:
+              'Your invention of a low gravity, low atmosphere, low-flying vehicle enables ' +
+              'greater exploration of the Martian surface.',
+            science: 2,
+            government: 0,
+            legacy: 0,
+            finance: 1,
+            culture: 1,
+            systemHealth: 0,
+            victoryPoints: 3,
+            effect: '',
+          },
+          role: `Researcher`,
+        },
+      },
     ],
   },
   {

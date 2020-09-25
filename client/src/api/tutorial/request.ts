@@ -181,6 +181,7 @@ export class TutorialAPI implements AbstractGameAPI {
   }
 
   discardAccomplishment(id: number): void {
+    console.log("Discarding accomplishment: " + id);
     this.store.commit('DISCARD_ACCOMPLISHMENT', { id, role: this.store.state.role});
     this.completedActionWithImplicitForward();
   }

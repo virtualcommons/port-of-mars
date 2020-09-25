@@ -63,7 +63,7 @@
                 @click="switchAccomplishmentType('active')"
                 :class="accomplishmentType === 'active' ? 'selected' : ''"
               >
-                Active
+                Available
               </button>
               <button
                 @click="switchAccomplishmentType('purchased')"
@@ -77,7 +77,7 @@
                 class="unavailable"
                 v-if="!playerData.isSelf && !isUnderAudit"
               >
-                <p v-if="accomplishmentType==='active'">This information cannot be viewed at this time. Check back later... </p>
+                <p v-if="accomplishmentType==='active'">This information is currently private and cannot be viewed at this time.</p>
                 <p v-if="accomplishmentType==='purchased'">None</p>
               </div>
               <div

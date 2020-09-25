@@ -87,7 +87,7 @@
       <b-button
         :disabled="playerReady"
         @click="handleTradeReject"
-        class="decline"
+        class="decline mr-5"
         title="Reject trade"
         v-b-tooltip.hover.bottom
         pill
@@ -101,7 +101,7 @@
       <b-button
         :disabled="!hasSufficientResources || playerReady"
         @click="handleAcceptTrade"
-        class="accept"
+        class="accept ml-5"
         title="Accept trade"
         v-b-tooltip.hover.bottom
         pill

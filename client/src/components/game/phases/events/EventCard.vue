@@ -33,9 +33,11 @@
     <div class="duration-wrapper w-100 h-100" v-bind="{ class: isModal ? 'pt-1' : '' }">
       <div class="duration">
         <p>
-          Duration:<span> {{ event.elapsed }} </span>of<span>
-            {{ event.duration }} </span
-        >Rounds
+          Duration: 
+          <template v-if="event.duration > 1">
+            <em>{{ event.elapsed }}</em> of 
+          </template>
+          <b>{{ event.duration }}</b> Round(s)
         </p>
       </div>
     </div>
