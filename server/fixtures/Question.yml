@@ -57,13 +57,13 @@ items:
   #   tutorialElementId: 'accCardUpkeep'
   timeblocks:
     quiz: '@tutorialquiz'
-    question: 'In each round you will have 10 timeblocks to invest (unless otherwise instructed). Which of the following statements is incorrect?'
+    question: 'In each round you will have 10 time blocks to invest (unless otherwise instructed). Which of the following statements is INCORRECT?'
     correctAnswer: 3
     options:
-      - 'You can spend as many timeblocks as you want.'
+      - 'You can spend as many time blocks as you want.'
       - 'Each player has unique skills that change the costs of specific Influence Resources.'
-      - "Each timeblock invested in System Health increases your group's System Health by 1."
-      - 'Every timeblock you do not spend can be saved and used in the next round.'
+      - "Each time block invested in System Health increases your group's System Health by 1."
+      - 'Every time block you do not spend can be saved and used in the next round.'
     order: 7
     tutorialElementId: 'timeblocks'
   upkeep35:

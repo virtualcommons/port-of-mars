@@ -147,18 +147,22 @@ export class DashboardService extends BaseService {
     return invite?.hasParticipated?? true;
   }
 
-  hasCompletedExitSurvey(invite: TournamentRoundInvite | undefined): boolean {
-    return invite?.hasCompletedExitSurvey?? false;
+  shouldTakeExitSurvey(invite: TournamentRoundInvite | undefined): boolean {
+    if (! invite) {
+      return false;
+    }
+    return ! invite.hasCompletedExitSurvey
   }
 
   async getPlayerTaskCompletion(user: User, invite: TournamentRoundInvite | undefined): Promise<PlayerTaskCompletion> {
+    // FIXME: at some point we should make these predicates all semantically consistent
     return {
       mustVerifyEmail: this.mustVerifyEmail(user),
       mustConsent: this.mustProvideConsent(user),
       mustTakeTutorial: this.mustTakeTutorial(user),
       mustTakeIntroSurvey: ! this.hasCompletedIntroSurvey(invite),
       canPlayGame: ! this.hasParticipated(invite),
-      shouldTakeExitSurvey: ! this.hasCompletedExitSurvey(invite),
+      shouldTakeExitSurvey: this.shouldTakeExitSurvey(invite),
     }
   }
 

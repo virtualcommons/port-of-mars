@@ -61,29 +61,13 @@
         <!-- TOURNAMENT SURVEYS -->
         <h2 class="text-center text-uppercase mt-5 py-2">Surveys</h2>
 
-        <b-button-group class="py-3 mb-5 w-100" vertical>
-          <b-button :href="introSurveyUrl" target="_blank" block
-                    class="my-2" size="lg" variant="secondary">
+        <b-button-group v-if="playerTaskCompletion.mustTakeIntroSurvey || playerTaskCompletion.shouldTakeExitSurvey" 
+          class="py-3 mb-5 w-100" vertical>
+          <b-button v-if="playerTaskCompletion.mustTakeIntroSurvey" :href="introSurveyUrl" block class="my-2" size="lg" variant="secondary">
             Complete introductory survey (required)
-            <b-icon-check-circle-fill v-if="!playerTaskCompletion.mustTakeIntroSurvey"
-                                      class="my-2" scale="0.8" variant="success"></b-icon-check-circle-fill>
-            <b-icon-x-circle-fill v-else v-b-tooltip.hover class="m-2" scale="0.8" title="Need to complete"
-                                  variant="danger"></b-icon-x-circle-fill>
           </b-button>
-
-          <b-button :disabled="!roundComplete"
-                    :href="roundExitSurveyUrl"
-                    target="_blank"
-                    block
-                    size="lg"
-                    variant="secondary">
-            <span v-if="roundComplete">Please take exit survey</span>
-            <span v-else>Exit survey will be available after you participate</span>
-            <b-icon-check-circle-fill v-if="roundExitSurveyComplete" class="m-2" scale="0.8"
-                                      variant="success"></b-icon-check-circle-fill>
-            <b-icon-x-circle-fill v-else v-b-tooltip.hover class="m-2" scale="0.8" title="Need to complete"
-                                  variant="danger"></b-icon-x-circle-fill>
-
+          <b-button v-if="playerTaskCompletion.shouldTakeExitSurvey" :href="roundExitSurveyUrl" block size="lg" variant="secondary">
+            Please click here to complete an exit survey
           </b-button>
         </b-button-group>
 
