@@ -194,14 +194,15 @@ export default class Register extends Vue {
         this.email = data.email;
         this.verifyEmail = data.email;
         this.isVerified = data.isVerified;
-        this.dateConsented = new Date(Date.parse(data.dateConsented));
+        if (data.dateConsented !== null) {
+          this.dateConsented = new Date(Date.parse(data.dateConsented));
+        }
         this.consented = false;
       }
     });
   }
 
   async register(e: Event) {
-    console.log('yup')
     e.preventDefault();
     if (this.emailsMatch && !_.isEmpty(this.email)) {
       const formData = {name: this.name, email: this.email};
@@ -209,7 +210,10 @@ export default class Register extends Vue {
         if (status === 200) {
           this.$tstore.commit("SET_DASHBOARD_MESSAGE", {
             kind: "success",
-            message: `We have sent an email to ${this.email}. Please wait a few minutes for it to arrive, then check your email and click on the link inside it to verify your email.`
+            message: `We have sent an email to ${this.email}.
+             Please wait for it to arrive then click on the link inside to verify your email.
+             It may take some time to arrive, and you may need to check your spam folder as well.
+             You can close this browser window as the link will take you back to Port of Mars again.`
           });
         } else {
           console.error("Unexpected status code: " + status);
