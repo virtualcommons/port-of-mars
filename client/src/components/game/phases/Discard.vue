@@ -2,7 +2,7 @@
   <b-container class="h-100 p-0 m-0 tour-discard-action" fluid>
     <b-row class="h-100 w-100 p-0 m-0">
       <!-- inventory -->
-      <b-col class="h-100 w-100 py-2 tour-inventory" cols="4">
+      <b-col class="h-100 w-100 py-2" cols="4">
         <div class="header">
           <p class="title">Inventory</p>
         </div>
@@ -14,7 +14,7 @@
       </b-col>
 
       <!-- discardable accomplishments -->
-      <b-col class="h-100 w-100 py-2 tour-purchase" cols="8">
+      <b-col class="h-100 w-100 py-2" cols="8">
         <div class="header">
           <p class="title">Discard Accomplishments</p>
         </div>
