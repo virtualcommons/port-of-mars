@@ -1,8 +1,10 @@
 import { Question, QuestionResponse, Quiz, QuizSubmission, User } from '@port-of-mars/server/entity';
 import { getConnection } from '@port-of-mars/server/util';
-import { EntityManager } from "typeorm";
 import * as _ from 'lodash';
 import { BaseService } from "@port-of-mars/server/services/db";
+import { getLogger } from "@port-of-mars/server/settings";
+
+const logger = getLogger(__filename);
 
 export class QuizService extends BaseService {
   async createQuestionResponse(
@@ -92,47 +94,29 @@ export class QuizService extends BaseService {
     return questionResponse.answer === questionResponse.question.correctAnswer;
   }
 
-  async checkQuizCompletion(
-    userId: number,
-    quizId?: number
-  ): Promise<boolean> {
+  /**
+   * Returns an Array<number> representing all the quiz question IDs that the given user has answered incorrectly for the given quiz.
+   * If empty, the user has passed the quiz.
+   * @param userId 
+   * @param quizId 
+   */
+  async checkQuizCompletion(userId: number, quizId?: number): Promise<Array<number>> {
 
     const quiz: Quiz = (quizId) ? await this.getQuizById(quizId, { relations: ['questions'] }) : await this.getDefaultQuiz({ relations: ['questions'] });
     const quizSubmission = await this.getLatestQuizSubmission(userId, quiz.id, { relations: ['responses', 'responses.question'] });
-    if (!quizSubmission?.responses) return false;
-
-    const questions = quiz.questions;
+    const questionIds = quiz.questions.map(q => q.id);
+    if (!quizSubmission?.responses) return questionIds;
     const responses = quizSubmission.responses;
-
-    // check if there are less responses than the total number of quiz questions
-    if (responses.length < questions.length) return false;
-    // FIXME: this assumes that the client doesn't submit multiple correct responses after they've gotten the answer right.
-    const correctResponses = _.filter(responses, (response: QuestionResponse) => response.answer === response.question.correctAnswer);
-    if (correctResponses.length === questions.length) {
-      this.setUserQuizCompletion(userId, true);
-      return true;
-    }
-    return false;
-
-    /*
+    // FIXME: convert this into a single QueryBuilder query
+    const correctQuizQuestionIds = new Set<number>();
     for (const response of responses) {
-      if (response.question
-    }
-    // otherwise iterate through all questions and check for correct responses
-    for (const question of questions) {
-      const correctResponses = _.filter(
-        responses,
-        (response: QuestionResponse) => {
-          return (
-            response.questionId === question.id
-            && response.answer === question.correctAnswer
-          );
-        }
-      );
-      if (correctResponses.length === 0) {
-        return false;
+      if (response.answer === response.question.correctAnswer) {
+        correctQuizQuestionIds.add(response.question.id);
       }
     }
-    */
+    const incorrectQuestionIds = questionIds.filter(id => ! correctQuizQuestionIds.has(id));
+    logger.debug("user %d answered incorrectly to %o", userId, incorrectQuestionIds);
+    await this.setUserQuizCompletion(userId, incorrectQuestionIds.length === 0);
+    return incorrectQuestionIds;
   }
 }

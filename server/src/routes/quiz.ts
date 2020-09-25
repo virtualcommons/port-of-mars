@@ -104,17 +104,18 @@ quizRouter.post(
 quizRouter.get(
   '/complete',
   async (req: Request, res: Response, next: NextFunction) => {
+    // this endpoint should always return an array of numbers representing the incorrect question ids
     try {
       const quizService = getServices().quiz;
       const user = req.user as User;
       // check if the user already passed the quiz
       if (user.passedQuiz) {
-        return res.status(200).json(true);
+        return res.status(200).json([]);
       }
 
       // otherwise check for quiz completion and notify the client
-      const complete = await quizService.checkQuizCompletion(user.id);
-      return res.status(200).json(complete);
+      const incorrectQuestionIds = await quizService.checkQuizCompletion(user.id);
+      return res.status(200).json(incorrectQuestionIds);
     } catch (e) {
       next(e);
     }

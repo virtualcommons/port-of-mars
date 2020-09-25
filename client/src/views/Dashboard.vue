@@ -64,10 +64,13 @@
         <b-button-group v-if="playerTaskCompletion.mustTakeIntroSurvey || playerTaskCompletion.shouldTakeExitSurvey" 
           class="py-3 mb-5 w-100" vertical>
           <b-button v-if="playerTaskCompletion.mustTakeIntroSurvey" :href="introSurveyUrl" block class="my-2" size="lg" variant="secondary">
-            Complete introductory survey (required)
+            Please complete this introductory survey before participating (required)
+            <b-icon-x-circle-fill v-b-tooltip.hover class="m-2" title="Please complete this introductory survey to participate."
+             variant="danger"></b-icon-x-circle-fill>
           </b-button>
           <b-button v-if="playerTaskCompletion.shouldTakeExitSurvey" :href="roundExitSurveyUrl" block size="lg" variant="secondary">
-            Please click here to complete an exit survey
+            Please complete our exit survey
+            <b-icon-x-circle-fill v-b-tooltip.hover class="m-2" title="Please take this exit survey" variant="danger"></b-icon-x-circle-fill>
           </b-button>
         </b-button-group>
 

@@ -151,7 +151,7 @@ export class DashboardService extends BaseService {
     if (! invite) {
       return false;
     }
-    return ! invite.hasCompletedExitSurvey
+    return invite.hasParticipated && ! invite.hasCompletedExitSurvey
   }
 
   async getPlayerTaskCompletion(user: User, invite: TournamentRoundInvite | undefined): Promise<PlayerTaskCompletion> {
