@@ -14,7 +14,7 @@ const steps: Array<Step> = [
         SET_GAME_PHASE: Phase.discard,
         SET_ACTIVE_ACCOMPLISHMENTS: {
           data: {
-            id: 6,
+            id: 42,
             role: 'Researcher',
             label: 'Accomplishment you cannot currently purchase',
             flavorText: 'A placeholder Accomplishment that you should discard.',
