@@ -166,7 +166,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
       }
     });
     this.onMessage('distribute-groups', (client: Client, message: DistributeGroups) => {
-      if (! this.devMode) {
+      if (this.devMode) {
         logger.debug("client requested force distribute groups");
         this.redistributeGroups().then(() => logger.debug("Groups redistributed"));
       }
