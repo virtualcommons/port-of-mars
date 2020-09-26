@@ -168,7 +168,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
     this.onMessage('distribute-groups', (client: Client, message: DistributeGroups) => {
       if (this.devMode) {
         logger.debug("client requested force distribute groups");
-        this.redistributeGroups().then(() => logger.debug("Groups redistributed"));
+        this.redistributeGroups(true).then(() => logger.debug("Groups redistributed"));
       }
     });
   }
@@ -190,7 +190,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
     return group;
   }
 
-  async redistributeGroups() {
+  async redistributeGroups(force=false) {
     logger.trace('WAITING LOBBY:redistributeGroups: allocating connected clients to groups', this.clientStats);
     if (this.clientStats.length === 0) {
       logger.trace("WAITING LOBBY: not redistributing groups, no connected clients")
@@ -218,7 +218,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
       clientStat.group = currentGroup;
       currentGroup.clientStats.push(clientStat);
     }
-    await this.checkGroupsReady();
+    await this.checkGroupsReady(force);
   }
 
   sendSafe(client: Client, msg: WaitingResponses) {
@@ -239,10 +239,10 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
     return group.ready || group.clientStats.length === this.numClientsToMatch;
   }
 
-  async checkGroupsReady() {
+  async checkGroupsReady(force: boolean) {
     for (const group of this.groups) {
       logger.trace('WAITING LOBBY: checking group %o', group);
-      if (this.isGroupReady(group)) {
+      if (this.isGroupReady(group) || force) {
         logger.debug('WAITING LOBBY: group was ready, creating room');
         group.ready = true;
         group.confirmed = 0;
