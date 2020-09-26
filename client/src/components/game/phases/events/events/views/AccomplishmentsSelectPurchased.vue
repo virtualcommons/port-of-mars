@@ -13,16 +13,14 @@
         <p v-if="purchasedAccomplishmentsLength === 0">
           No Purchased Accomplishments. Please click 'Continue'.
         </p>
-        <button
-          v-for="accomplishment in purchasedAccomplishments"
+        <!--:style="handleAccomplishmentStyle(accomplishment)"-->
+        <AccomplishmentCard
+          :accomplishment="accomplishment"
           :key="accomplishment.id"
-          @click="handleDiscardAccomplishment(accomplishment)"
-          :style="handleAccomplishmentStyle(accomplishment)"
-          type="button"
-          name="Discard Accomplishment"
-        >
-          {{ accomplishment.label }} ({{ accomplishment.victoryPoints }} Points)
-        </button>
+          @discarded="handleDiscardAccomplishment(accomplishment)"
+          :type="discardType"
+          v-for="accomplishment in purchasedAccomplishments"
+          />
       </div>
     </div>
   </div>
@@ -30,9 +28,11 @@
 
 <script lang="ts">
   import {Vue, Component, Prop, Inject} from 'vue-property-decorator';
-  import {AccomplishmentData, MarsEventData, RESEARCHER} from '@port-of-mars/shared/types';
-import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
+
   import {AbstractGameAPI} from "@port-of-mars/client/api/game/types";
+  import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
+  import {AccomplishmentCardType} from '@port-of-mars/client/types/cards.ts'
+  import {AccomplishmentData, MarsEventData, RESEARCHER} from '@port-of-mars/shared/types';
 
 @Component({
   components: {
@@ -61,6 +61,10 @@ export default class AccomplishmentsSelectPurchased extends Vue {
 
   get marsEvent(): MarsEventData {
     return this.$tstore.getters.currentEvent!;
+  }
+
+  get discardType() {
+    return AccomplishmentCardType.discard;
   }
 
   get purchasedAccomplishments() {

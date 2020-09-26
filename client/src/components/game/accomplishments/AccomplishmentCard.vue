@@ -324,12 +324,15 @@ export default class AccomplishmentCard extends Vue {
 
   // purchase accomplishment
   purchase() {
-    if (this.canPurchase) this.api.purchaseAccomplishment(this.accomplishment);
+    if (this.canPurchase) {
+      // FIXME: should refactor to this.$emit('purchased')
+      this.api.purchaseAccomplishment(this.accomplishment);
+    }
   }
 
   // discard accomplishment
   discard() {
-    this.api.discardAccomplishment(this.accomplishment.id as number);
+    this.$emit('discarded', this.accomplishment.id);
   }
 }
 </script>

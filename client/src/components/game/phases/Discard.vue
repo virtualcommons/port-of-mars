@@ -22,7 +22,8 @@
           <div class="w-100 wrapper">
             <AccomplishmentCard
               :accomplishment="accomplishment"
-              :key="accomplishment.label + 2"
+              :key="accomplishment.id"
+              @discarded="discardAccomplishment"
               :showCard="wasDiscarded(accomplishment.id)"
               :type="cardType"
               v-for="accomplishment in sortedAccomplishments"
@@ -35,7 +36,9 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue} from 'vue-property-decorator';
+import {Inject, Component, Vue} from 'vue-property-decorator';
+
+import {GameRequestAPI} from '@port-of-mars/client/api/game/request';
 import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
 import Inventory from '@port-of-mars/client/components/game/Inventory.vue';
 import {AccomplishmentCardType} from '@port-of-mars/client/types/cards.ts';
@@ -49,6 +52,7 @@ import {canPurchaseAccomplishment} from "@port-of-mars/shared/validation";
   },
 })
 export default class Discard extends Vue {
+  @Inject() readonly api!: GameRequestAPI;
   // sort accomplishments by purchasable in ascending order
   // static and is set when component is created; does not update with changes
   private sortedAccomplishments = this.$store.getters.player.accomplishments.purchasable.slice()
@@ -80,6 +84,10 @@ export default class Discard extends Vue {
     return Boolean((this.$store.getters.player.accomplishments.purchasable as Array<AccomplishmentData>)
       .slice()
       .filter(accomplishment => accomplishment.id == id).length > 0);
+  }
+
+  discardAccomplishment(accomplishmentId: number) {
+    this.api.discardAccomplishment(accomplishmentId);
   }
 
 }
