@@ -68,7 +68,7 @@ export class DashboardService extends BaseService {
   getExitSurveyUrl(user: User, round: TournamentRound, invite: TournamentRoundInvite | undefined): string {
     let surveyUrl = round.exitSurveyUrl;
     if (invite && surveyUrl) {
-      surveyUrl = `${round.introSurveyUrl}?pid=${user.participantId}&tid=${invite.id}&redirectHost=${encodeURIComponent(settings.host)}`;
+      surveyUrl = `${surveyUrl}?pid=${user.participantId}&tid=${invite.id}&redirectHost=${encodeURIComponent(settings.host)}`;
     }
     return surveyUrl ?? '';
   }
