@@ -1,18 +1,17 @@
-import {Game, GameEvent, Player, TournamentRoundInvite, User} from "@port-of-mars/server/entity";
-import * as ge from "@port-of-mars/server/rooms/game/events/types";
-import {GameOpts, Metadata, Persister} from "@port-of-mars/server/rooms/game/types";
 import * as assert from "assert";
 import {Mutex} from "async-mutex";
 import {ClockTimer} from "@gamestdio/timer/lib/ClockTimer";
-import {getConnection} from "@port-of-mars/server/util";
-import {EntityManager, In, IsNull} from "typeorm";
+import {EntityManager, In} from "typeorm";
 import _ from "lodash";
+
+import {Game, GameEvent, Player, TournamentRoundInvite, User} from "@port-of-mars/server/entity";
+import * as ge from "@port-of-mars/server/rooms/game/events/types";
+import {GameOpts, Metadata, Persister} from "@port-of-mars/server/rooms/game/types";
 import {getServices, ServiceProvider} from "@port-of-mars/server/services/index";
-import {settings} from "@port-of-mars/server/settings";
-import {BaseService} from "@port-of-mars/server/services/db";
+import {getLogger} from "@port-of-mars/server/settings";
 import {getBuildId} from "@port-of-mars/shared/settings";
 
-const logger = settings.logging.getLogger(__filename);
+const logger = getLogger(__filename);
 
 function toDBRawGameEvent(gameEvent: ge.GameEvent, metadata: Metadata) {
   const ev = gameEvent.serialize();
@@ -126,7 +125,7 @@ export class DBPersister implements Persister {
 
   static FINAL_EVENTS = ['entered-defeat-phase', 'entered-victory-phase'];
 
-  async finalize(gameId: number, shouldFinalizePlayers: boolean): Promise<[Game, Array<Player>, Array<TournamentRoundInvite>]> {
+  async finalize(gameId: number, shouldFinalizePlayers: boolean): Promise<[Game, Array<Player>]> {
     const f = async (em: EntityManager) => {
       logger.debug('finalizing game %s', gameId);
       const event = await em.getRepository(GameEvent).findOneOrFail({
@@ -137,22 +136,24 @@ export class DBPersister implements Persister {
       game.status = event.type === 'entered-defeat-phase' ? 'defeat' : 'victory';
       game.dateFinalized = this.sp.time.now();
       if (!shouldFinalizePlayers) {
-        const res: [Game, Array<Player>, Array<TournamentRoundInvite>] = [await em.save(game), [], []];
+        const res: [Game, Array<Player>] = [await em.save(game), []];
         return res;
       }
       const players = await em.getRepository(Player).find({gameId});
       for (const p of players) {
         p.points = (event.payload as any)[p.role];
       }
-      const invites = await em.createQueryBuilder()
-        .from(TournamentRoundInvite, 'invite')
-        .innerJoin('invite.tournamentRound', 'round')
-        .innerJoin('round.games', 'game')
-        .getMany();
-      for (const invite of invites) {
-        invite.hasParticipated = true;
-      }
-      const res = await Promise.all([em.save(game), em.save(players), em.save(invites)]);
+
+      const userIds = players.map(p => p.userId);
+      logger.debug("Finalizing invites and setting hasParticipated for users: %o", userIds);
+      await em.createQueryBuilder()
+        .update(TournamentRoundInvite)
+        .set({ hasParticipated: true })
+        .where('tournamentRoundId = :tournamentRoundId', { tournamentRoundId: game.tournamentRoundId })
+        .andWhere('userId in (:...userIds)', { userIds })
+        .execute();
+
+      const res = await Promise.all([em.save(game), em.save(players)]);
       logger.debug('finalized game %s', gameId);
       return res;
     };

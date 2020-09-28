@@ -50,3 +50,6 @@ export async function createRound(sp: ServiceProvider, data: { roundNumber?: num
   return await sp.tournament.createRound(d);
 }
 
+export async function createTournamentRoundInvites(sp: ServiceProvider, data: { userIds: Array<number>; tournamentRoundId: number }) {
+  return await sp.tournament.createInvites(data.userIds, data.tournamentRoundId);
+}

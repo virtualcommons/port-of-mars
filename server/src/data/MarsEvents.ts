@@ -233,7 +233,7 @@ export function getMarsEventDeckItems(): Array<MarsEventDeckItem> {
     ['heroOrPariah', 1],
     ['hullBreach', 1],
     ['interdisciplinary', 1],
-    ['lifeAsUsual', 1],
+    ['lifeAsUsual', 12],
     ['lostTime', 1],
     ['marketsClosed', 1],
     ['murphysLaw', 1],
