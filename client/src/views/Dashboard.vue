@@ -252,11 +252,6 @@ export default class PlayerDashboard extends Vue {
     this.$router.push({name: LOGIN_PAGE});
   }
 
-  complete() {
-    if (this.tournamentIntroductionComplete || this.roundExitSurveyComplete) return '$danger';
-    return '$success';
-  }
-
 }
 </script>
 
