@@ -215,10 +215,7 @@ export default class Register extends Vue {
              It may take some time to arrive, and you may need to check your spam folder as well.
              You can close this browser window as the link will take you back to Port of Mars again.`
           });
-        } else {
-          console.error("Unexpected status code: " + status);
-          console.error(data);
-        }
+        } 
       }, formData);
 
     }

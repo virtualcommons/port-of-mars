@@ -18,6 +18,14 @@ export class AccountService extends BaseService {
     return await this.getRepository().findOneOrFail({ username })
   }
 
+  async isEmailAvailable(user: User, email: string): Promise<boolean> {
+    const otherUser = await this.getRepository().findOne({email});
+    if (otherUser) {
+      return otherUser.id === user.id;
+    }
+    return true;
+  }
+
   async findUserById(id: number): Promise<User> {
     return await this.getRepository().findOneOrFail(id);
   }

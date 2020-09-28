@@ -1,28 +1,20 @@
 <template>
-  <div class="c-player-stat-item container">
-    <div class="title-wrapper row">
-      <div class="title col-12">
-        <p>{{ status }} Round {{ playerStatItem.round }}</p>
-      </div>
-    </div>
-    <div class="content-wrapper row">
-      <div class="content col-12">
-        <div class="section">
-          <p>
-            <span>Date:&nbsp;</span>
-            {{ new Date(playerStatItem.time).toDateString() }}
-          </p>
-
-          <b-list-group v-for="playerScore in playerStatItem.playerScores">
-            <b-list-group-item :active="playerScore.role === role" class="d-flex justify-content-between align-items-center" variant="warning">
-              {{ playerScore.role }}
-              <b-badge pill :variant="getVariant(playerStatItem.victory, playerScore.winner)">{{ playerScore.points }}</b-badge>
-            </b-list-group-item>
-          </b-list-group>
-        </div>
-      </div>
-    </div>
-  </div>
+  <b-row>
+    <b-col>
+      <p>{{ status }} Round {{ playerStatItem.round }}</p>
+      <p>
+        <span>Date: </span>
+        {{ dateString }}
+      </p>
+      <b-list-group v-for="playerScore in playerStatItem.playerScores" :key="playerScore.role">
+        <b-list-group-item :active="playerScore.isSelf" class="d-flex justify-content-between align-items-center" variant="warning">
+          {{ playerScore.role }}
+          <template v-if="playerScore.isSelf"> (YOUR ROLE) </template>
+          <b-badge pill :variant="getVariant(playerStatItem.victory, playerScore.winner)">{{ playerScore.points }}</b-badge>
+        </b-list-group-item>
+      </b-list-group>
+    </b-col>
+  </b-row>
 </template>
 
 <script lang="ts">
@@ -33,8 +25,9 @@
   export default class PlayerStatItem extends Vue {
     @Prop() private playerStatItem!: types.PlayerStatItem;
 
-    get role() {
-      return this.$tstore.getters.player.role;
+    get dateString() {
+      const date = new Date(this.playerStatItem.time);
+      return date.toLocaleString();
     }
 
     getActive(victory: boolean, winner: boolean) {
@@ -50,7 +43,3 @@
     }
   }
 </script>
-
-<style lang="scss" scoped>
-  @import '@port-of-mars/client/stylesheets/dashboard/PlayerStatItem.scss';
-</style>

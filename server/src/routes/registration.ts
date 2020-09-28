@@ -15,8 +15,14 @@ registrationRouter.post('/grant-consent', async (req: Request, res: Response, ne
   try {
     const services = getServices();
     const data = { ...req.body, ...{ username: user.username } };
-    await services.registration.submitRegistrationMetadata(user, data);
-    res.json(true);
+    const emailAvailable = await services.account.isEmailAvailable(user, data.email);
+    if (emailAvailable) {
+      await services.registration.submitRegistrationMetadata(user, data);
+      res.json(true);
+    }
+    else {
+      res.status(400).json({kind: 'danger', message: `The email ${data.email} is already taken. Please try another one.`})
+    }
   } catch (e) {
     logger.warn("unable to process registration metadata for %s", user.username);
     next(e);

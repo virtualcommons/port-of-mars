@@ -57,7 +57,6 @@ export class AjaxRequest {
   _roomId?: RoomId;
 
   errorRoutes: Map<number, string> = new Map([
-    [400, DASHBOARD_PAGE],
     [401, LOGIN_PAGE],
     [403, DASHBOARD_PAGE],
     [404, DASHBOARD_PAGE],
@@ -135,9 +134,10 @@ export class AjaxRequest {
       // push the error onto the store and move on.
       const serverErrorMessage: DashboardMessage = data;
       this.store.commit('SET_DASHBOARD_MESSAGE', serverErrorMessage);
-      const destinationPage = this.errorRoutes.has(response.status) ? this.errorRoutes.get(response.status) : DASHBOARD_PAGE;
-      this.router.push({ name: destinationPage })
-      throw new AjaxResponseError(serverErrorMessage, response);
+      if (response.status > 400) {
+        const destinationPage = this.errorRoutes.has(response.status) ? this.errorRoutes.get(response.status) : DASHBOARD_PAGE;
+        this.router.push({ name: destinationPage })
+      }
     }
     return { data, status: response.status };
   }

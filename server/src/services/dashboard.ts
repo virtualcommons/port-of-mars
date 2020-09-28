@@ -1,10 +1,9 @@
 import { User } from '@port-of-mars/server/entity/User';
-import {ActionItem, Stats, PlayerScores} from "@port-of-mars/shared/types";
+import {Stats, PlayerScores} from "@port-of-mars/shared/types";
 import { TournamentRound } from "@port-of-mars/server/entity/TournamentRound";
 import { Game, Player, TournamentRoundInvite } from "@port-of-mars/server/entity";
 import { BaseService } from "@port-of-mars/server/services/db";
 import {IsNull, Not, SelectQueryBuilder} from "typeorm";
-import { GAME_PAGE, TUTORIAL_PAGE, CONSENT_PAGE, VERIFY_PAGE } from "@port-of-mars/shared/routes";
 import { PlayerTaskCompletion, DashboardData } from "@port-of-mars/shared/types";
 import { settings } from "@port-of-mars/server/settings";
 import _ from "lodash";
@@ -51,10 +50,13 @@ export class DashboardService extends BaseService {
           return ms;
         }
       }, 0);
-      const playerScores = g.players.reduce((d: PlayerScores, player: Player) => {
-        d.push({role: player.role, points: player.points ?? 0, winner: player.points === maxScore})
-        return d;
-      }, []);
+      const playerScores = g.players.map(player => 
+        ({ role: player.role,
+           points: player.points ?? 0,
+           winner: (player.points === maxScore),
+           isSelf: player.userId === user.id,
+        })
+      );
       playerScores.sort((a, b) => b.points - a.points);
 
       return {
@@ -133,5 +135,4 @@ export class DashboardService extends BaseService {
       stats
     }
   }
-
 }

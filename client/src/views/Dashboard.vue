@@ -57,7 +57,7 @@
     <b-row class="justify-content-md-center">
 
       <!-- participate -->
-      <b-col v-if="view === 'participate'" class="text-center" cols="6">
+      <b-col v-if="view === 'participate'" class="text-center">
         <!-- TOURNAMENT SURVEYS -->
         <h2 class="text-center text-uppercase mt-5 py-2">Surveys</h2>
 
@@ -96,17 +96,17 @@
       </b-col>
 
       <!-- STATS -->
-      <b-col v-if="view === 'stats'" class="text-center my-5 p-5 wrapper" cols="6">
-        <h2 class="text-uppercase">You have participated in <b>{{ gamesPlayedCount }}</b> missions.</h2>
-        <div class="stats w-100 h-100 p-0 m-0">
-          <p v-if="stats.games.length === 0" class="my-5 py-5">No player stats to display</p>
+      <b-col v-if="view === 'stats'" class="stats text-center my-2 p-2">
+        <h2 class="text-uppercase">You have participated in <b>{{ gamesPlayedCount }}</b> missions</h2>
+        <b-container class="py-0 my-0">
+          <p v-if="stats.games.length === 0" class="my-5 py-5">No games to display.</p>
           <PlayerStatItem
             v-for="playerStatItem in stats.games"
             :key="playerStatItem.time"
             :playerStatItem="playerStatItem"
-            class="my-5 py-5"
+            class="my-1 py-1"
           />
-        </div>
+        </b-container>
       </b-col>
     </b-row>
   </b-container>
