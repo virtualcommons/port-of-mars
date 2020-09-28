@@ -178,7 +178,7 @@ async function createApp() {
     }
     else {
       logger.fatal(err);
-      res.status(err.statusCode || 500).json(err.toDashboardMessage());
+      res.status(err.statusCode || 500).json({kind: 'danger', message: err.message});
     }
   });
 
