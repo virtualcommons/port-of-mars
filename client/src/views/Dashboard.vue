@@ -98,13 +98,7 @@
       <!-- STATS -->
       <b-col v-if="view === 'stats'" class="text-center my-5 p-5 wrapper" cols="6">
         <h2 class="text-uppercase">You have participated in <b>{{ gamesPlayedCount }}</b> missions.</h2>
-        <div class="stats w-100 h-100 p-0 m-0">    <b-row v-if="messages.length > 0" class='justify-content-md-center'>
-      <!-- MESSAGES -->
-      <b-alert v-for="dm in messages" :key="dm.message" :variant="dm.kind" dismissible fade show>
-        {{ dm.message }}
-      </b-alert>
-    </b-row>
-
+        <div class="stats w-100 h-100 p-0 m-0">
           <p v-if="stats.games.length === 0" class="my-5 py-5">No player stats to display</p>
           <PlayerStatItem
             v-for="playerStatItem in stats.games"
@@ -152,13 +146,6 @@ export default class PlayerDashboard extends Vue {
   upcomingGames: Array<GameMeta> = [];
   introSurveyUrl: string = '';
   exitSurveyUrl: string = '';
-  tournamentIntroductionUrl = '#/dashboard';
-  tournamentIntroductionComplete = true;
-  roundEntranceSurveyUrl = '#/dashboard';
-  roundEntranceSurveyComplete = '#/dashboard';
-  roundExitSurveyUrl = '#/dashboard';
-  roundExitSurveyComplete = false;
-  roundComplete = false;
   playerTaskCompletion: PlayerTaskCompletion = {
     mustConsent: true,
     mustVerifyEmail: true,

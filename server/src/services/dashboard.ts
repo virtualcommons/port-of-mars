@@ -11,46 +11,6 @@ import _ from "lodash";
 
 
 export class DashboardService extends BaseService {
-  getInternalCompleteSurveyActionItem(user: User, round: TournamentRound, invite: TournamentRoundInvite): ActionItem {
-    // https://asu.co1.qualtrics.com/jfe/form/SV_0c8tCMZkAUh4V8x
-    // FIXME: generate the correct survey completion URL for the given user and tournament round invite
-    let surveyUrl = round.introSurveyUrl;
-    if (surveyUrl) {
-      const surveyId = surveyUrl.split('/').pop();
-      surveyUrl = `/survey/complete?pid=${user.participantId}&tid=${invite.id}&surveyId=${surveyId}`;
-    }
-    return {
-      redoable: true,
-      done: invite.hasCompletedIntroSurvey,
-      description: 'DEVMODE: Mark intro survey as completed',
-      link: { kind: 'external', data: surveyUrl ?? ''}
-    };
-  }
-  getRegisterActionItem(user: User): ActionItem {
-    return {
-      redoable: true,
-      done: !!user.dateConsented,
-      description: 'View consent form and register email',
-      link: { kind: 'internal', data: { name: CONSENT_PAGE }}
-    };
-  }
-  getVerifyActionItem(user: User): ActionItem {
-    return {
-      redoable: false,
-      done: user.isVerified,
-      description: 'Verify your email',
-      link: { kind: 'internal', data: { name: VERIFY_PAGE, params: { token: user.registrationToken }}}
-    };
-  }
-  getTakeTutorialActionItem(user: User): ActionItem {
-    return {
-      redoable: true,
-      done: user.passedQuiz,
-      description: 'Take tutorial',
-      link: { kind: 'internal', data: { name: TUTORIAL_PAGE }}
-    };
-  }
-
 
   /**
    * generate a parameterized survey URL with pid=participantId and tid=tournamentRoundInvite.id
@@ -58,32 +18,18 @@ export class DashboardService extends BaseService {
    * @param invite 
    */
   getIntroSurveyUrl(user: User, round: TournamentRound, invite: TournamentRoundInvite | undefined): string {
-    let introSurveyUrl = round.introSurveyUrl;
-    if (invite && introSurveyUrl) {
-      introSurveyUrl = `${round.introSurveyUrl}?pid=${user.participantId}&tid=${invite.id}&redirectHost=${encodeURIComponent(settings.host)}`;
-    }
-    return introSurveyUrl ?? '';
+    return this.buildSurveyUrl(round.introSurveyUrl, user, invite);
   }
 
   getExitSurveyUrl(user: User, round: TournamentRound, invite: TournamentRoundInvite | undefined): string {
-    let surveyUrl = round.exitSurveyUrl;
+    return this.buildSurveyUrl(round.exitSurveyUrl, user, invite);
+  }
+
+  buildSurveyUrl(surveyUrl: string | undefined, user: User, invite: TournamentRoundInvite | undefined): string {
     if (invite && surveyUrl) {
       surveyUrl = `${surveyUrl}?pid=${user.participantId}&tid=${invite.id}&redirectHost=${encodeURIComponent(settings.host)}`;
     }
     return surveyUrl ?? '';
-  }
-
-  async getCurrentGameActionItem(user: User): Promise<ActionItem | undefined> {
-    const roomId = await this.sp.game.getActiveGameRoomId(user.id);
-    if (!roomId) {
-      return;
-    }
-    return {
-      redoable: true,
-      done: false,
-      description: 'Rejoin your current game',
-      link: { kind: 'internal', data: { name: GAME_PAGE }}
-    };
   }
 
   async getStats(user: User, tournamentRound: TournamentRound): Promise<Stats> {
