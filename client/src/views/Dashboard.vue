@@ -68,7 +68,7 @@
             <b-icon-x-circle-fill v-b-tooltip.hover class="m-2" title="Please complete this introductory survey to participate."
              variant="danger"></b-icon-x-circle-fill>
           </b-button>
-          <b-button v-if="playerTaskCompletion.shouldTakeExitSurvey" :href="roundExitSurveyUrl" block size="lg" variant="secondary">
+          <b-button v-if="playerTaskCompletion.shouldTakeExitSurvey" :href="exitSurveyUrl" block size="lg" variant="secondary">
             Please complete our exit survey
             <b-icon-x-circle-fill v-b-tooltip.hover class="m-2" title="Please take this exit survey" variant="danger"></b-icon-x-circle-fill>
           </b-button>
