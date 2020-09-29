@@ -60,14 +60,13 @@
       <b-col v-if="view === 'participate'" class="text-center">
         <!-- TOURNAMENT SURVEYS -->
         <template v-if="playerTaskCompletion.mustTakeIntroSurvey || playerTaskCompletion.shouldTakeExitSurvey">
-          <h2 class="text-center text-uppercase mt-5 py-2">Surveys</h2>
+          <h2 class="text-center text-uppercase pt-5 my-2">Surveys</h2>
           <b-button-group class="py-3 mb-5 w-100" vertical>
             <b-button v-if="playerTaskCompletion.mustTakeIntroSurvey" :href="introSurveyUrl" block class="my-2" size="lg" variant="secondary">
               Please complete this introductory survey before participating <span class='text-danger'>*</span>
             </b-button>
             <b-button v-if="playerTaskCompletion.shouldTakeExitSurvey" :href="exitSurveyUrl" block size="lg" variant="secondary">
-              Please complete our exit survey
-              <b-icon-x-circle-fill v-b-tooltip.hover class="m-2" title="Please take this exit survey" variant="danger"></b-icon-x-circle-fill>
+              Please complete this exit survey <span class='text-danger'>*</span>
             </b-button>
           </b-button-group>
         </template>
@@ -94,6 +93,7 @@
           <h2 class="text-center text-uppercase mt-5 py-2">Already Participated</h2>
           <p class='lead text-left'>
             Thanks for participating in the Port of Mars! 
+            <a :href='exitSurveyUrl' v-if="playerTaskCompletion.shouldTakeExitSurvey">Please complete our exit survey by clicking this link.</a>
             We will email you with further instructions if you are eligible to participate in the next round.
             You can review your past games by clicking <code>Your Stats</code> in the navbar above.
           </p>
@@ -159,8 +159,7 @@ export default class PlayerDashboard extends Vue {
     canPlayGame: false,
     shouldTakeExitSurvey: false
   };
-  // FIXME: this needs to be pulled from the server side
-  schedule: Array<{ day: string, time: string, addToCalendar: CalendarEvent }> = [
+  schedule: Array<{ date: string, addToCalendar: CalendarEvent }> = [
     {
       date: '',
       addToCalendar: {
@@ -226,10 +225,10 @@ export default class PlayerDashboard extends Vue {
           date: scheduledDate.toLocaleString(),
           addToCalendar: {
             title: `Participate in Port of Mars Experiment, Round ${game.round}`,
-            location: 'https://alpha.portofmars.asu.edu/#/',
+            location: 'https://portofmars.asu.edu/',
             start: scheduledDate,
             duration: [2, "hour"],
-            description: 'https://alpha.portofmars.asu.edu/#/'
+            description: 'https://portofmars.asu.edu/'
           }
       };
     });
