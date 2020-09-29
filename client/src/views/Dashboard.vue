@@ -59,33 +59,40 @@
       <!-- participate -->
       <b-col v-if="view === 'participate'" class="text-center">
         <!-- TOURNAMENT SURVEYS -->
-        <h2 class="text-center text-uppercase mt-5 py-2">Surveys</h2>
-
-        <b-button-group v-if="playerTaskCompletion.mustTakeIntroSurvey || playerTaskCompletion.shouldTakeExitSurvey" 
-          class="py-3 mb-5 w-100" vertical>
-          <b-button v-if="playerTaskCompletion.mustTakeIntroSurvey" :href="introSurveyUrl" block class="my-2" size="lg" variant="secondary">
-            Please complete this introductory survey before participating (required)
-            <b-icon-x-circle-fill v-b-tooltip.hover class="m-2" title="Please complete this introductory survey to participate."
-             variant="danger"></b-icon-x-circle-fill>
-          </b-button>
-          <b-button v-if="playerTaskCompletion.shouldTakeExitSurvey" :href="exitSurveyUrl" block size="lg" variant="secondary">
-            Please complete our exit survey
-            <b-icon-x-circle-fill v-b-tooltip.hover class="m-2" title="Please take this exit survey" variant="danger"></b-icon-x-circle-fill>
-          </b-button>
-        </b-button-group>
+        <template v-if="playerTaskCompletion.mustTakeIntroSurvey || playerTaskCompletion.shouldTakeExitSurvey">
+          <h2 class="text-center text-uppercase mt-5 py-2">Surveys</h2>
+          <b-button-group class="py-3 mb-5 w-100" vertical>
+            <b-button v-if="playerTaskCompletion.mustTakeIntroSurvey" :href="introSurveyUrl" block class="my-2" size="lg" variant="secondary">
+              Please complete this introductory survey before participating <span class='text-danger'>*</span>
+            </b-button>
+            <b-button v-if="playerTaskCompletion.shouldTakeExitSurvey" :href="exitSurveyUrl" block size="lg" variant="secondary">
+              Please complete our exit survey
+              <b-icon-x-circle-fill v-b-tooltip.hover class="m-2" title="Please take this exit survey" variant="danger"></b-icon-x-circle-fill>
+            </b-button>
+          </b-button-group>
+        </template>
+        <b-container v-if="! playerTaskCompletion.canPlayGame">
+          <h2 class="text-center text-uppercase mt-5 py-2">Already Participated</h2>
+          <p class='lead text-left'>
+            Thanks for participating in the Port of Mars! 
+            We will email you with further instructions if you are eligible to participate in the next round.
+            You can review your past games by clicking <code>Your Stats</code> in the navbar above.
+          </p>
+        </b-container>
 
         <!-- GO TO WAITING LOBBY -->
         <h2 class="py-2 text-uppercase">Participate</h2>
         <b-button :disabled="!playerTaskCompletion.canPlayGame" :to="join" pill size="lg"
                   variant="success">
-          Join the Waiting Lobby <font-awesome-icon icon="rocket" />
+          Ready to Launch - Join the Waiting Lobby <font-awesome-icon icon="rocket" />
         </b-button>
-
-
         <b-container v-if="playerTaskCompletion.canPlayGame" class="text-center">
           <h2 class="text-uppercase pt-5 my-3">Schedule</h2>
-          <b-table :items="schedule" bordered class="py-3" dark responsive small
-                   sticky-header striped>
+          <p class='lead text-left '>Please login during one of the following times to participate. We recommend that you show up 5 minutes earlier to 
+            join the waiting lobby.
+          </p>
+
+          <b-table :items="schedule" bordered class="py-3" dark responsive sticky-header striped>
             <template v-slot:cell(addToCalendar)="data">
               <a target="_blank" :href="inviteLink(data.item.addToCalendar)">
                 <font-awesome-icon :icon="['fab', 'google']"/>
@@ -157,8 +164,7 @@ export default class PlayerDashboard extends Vue {
   // FIXME: this needs to be pulled from the server side
   schedule: Array<{ day: string, time: string, addToCalendar: CalendarEvent }> = [
     {
-      day: '',
-      time: '',
+      date: '',
       addToCalendar: {
         title: '',
         location: '',
@@ -215,22 +221,11 @@ export default class PlayerDashboard extends Vue {
 
     // set player stats
     this.stats.games.splice(0, this.stats.games.length, ...data.stats.games);
-    console.log(data.upcomingGames);
-
-    // set upcoming games
-    /* FIXME: not sure why but data.upcomingGames are already observable (in the console)
-    this.upcomingGames.splice(
-      0,
-      data.upcomingGames.length,
-      ...data.upcomingGames
-    );
-    */
     this.upcomingGames = data.upcomingGames;
     this.schedule = data.upcomingGames.map((game) => { 
       const scheduledDate = new Date(game.time);
       return {
-          day: scheduledDate.toDateString(),
-          time: scheduledDate.toTimeString(),
+          date: scheduledDate.toLocaleString(),
           addToCalendar: {
             title: `Participate in Port of Mars Experiment, Round ${game.round}`,
             location: 'https://alpha.portofmars.asu.edu/#/',
