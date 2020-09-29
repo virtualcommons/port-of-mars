@@ -71,22 +71,12 @@
             </b-button>
           </b-button-group>
         </template>
-        <b-container v-if="! playerTaskCompletion.canPlayGame">
-          <h2 class="text-center text-uppercase mt-5 py-2">Already Participated</h2>
-          <p class='lead text-left'>
-            Thanks for participating in the Port of Mars! 
-            We will email you with further instructions if you are eligible to participate in the next round.
-            You can review your past games by clicking <code>Your Stats</code> in the navbar above.
-          </p>
-        </b-container>
-
-        <!-- GO TO WAITING LOBBY -->
-        <h2 class="py-2 text-uppercase">Participate</h2>
-        <b-button :disabled="!playerTaskCompletion.canPlayGame" :to="join" pill size="lg"
-                  variant="success">
-          Ready to Launch - Join the Waiting Lobby <font-awesome-icon icon="rocket" />
-        </b-button>
         <b-container v-if="playerTaskCompletion.canPlayGame" class="text-center">
+          <!-- GO TO WAITING LOBBY -->
+          <h2 class="pt-5 my-3 text-uppercase">Participate</h2>
+          <b-button :to="join" pill size="lg" variant="success">
+            Ready to Launch - Join the Waiting Lobby <font-awesome-icon icon="rocket" />
+          </b-button>
           <h2 class="text-uppercase pt-5 my-3">Schedule</h2>
           <p class='lead text-left '>Please login during one of the following times to participate. We recommend that you show up 5 minutes earlier to 
             join the waiting lobby.
@@ -99,6 +89,14 @@
               </a>
             </template>
           </b-table>
+        </b-container>
+        <b-container v-else>
+          <h2 class="text-center text-uppercase mt-5 py-2">Already Participated</h2>
+          <p class='lead text-left'>
+            Thanks for participating in the Port of Mars! 
+            We will email you with further instructions if you are eligible to participate in the next round.
+            You can review your past games by clicking <code>Your Stats</code> in the navbar above.
+          </p>
         </b-container>
       </b-col>
 
