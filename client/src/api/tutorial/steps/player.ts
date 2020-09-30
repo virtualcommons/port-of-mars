@@ -177,12 +177,13 @@ const
         `These are the other four residents at the Port of Mars. Certain Events will ` +
         `allow you to view their inventories as well.`,
       params: {
-        placement: RIGHT,
+        placement: 'RIGHT',
       },
       stateTransform: [
         {
           SET_PROFILE_MENU_VISIBILITY: false,
           SET_MODAL_HIDDEN: true,
+          SET_HUDLEFT_VIEW: HUDLeftView.OtherPlayers
         },
       ],
     },
