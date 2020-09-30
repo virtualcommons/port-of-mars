@@ -221,18 +221,19 @@ export class TournamentService extends BaseService {
   }
 
   isLobbyOpen(gameDates: Array<Date>): boolean {
-    // 30 minutes in milliseconds offset for checking when the lobby is open
     if (settings.lobby.devMode) {
       return true;
     }
     if (gameDates.length === 0) {
       return false;
     }
-    const lobbyOpenOffset = 30 * 60 * 1000;
+    // 30 minutes in milliseconds offset for checking when the lobby is open
+    const lobbyOpenBeforeOffset = 10 * 60 * 1000;
+    const lobbyOpenAfterOffset = 30 * 60 * 1000;
     const now = new Date();
     for (const date of gameDates) {
-      const openDate = new Date(date.getTime() - lobbyOpenOffset);
-      const closeDate = new Date(date.getTime() + lobbyOpenOffset);
+      const openDate = new Date(date.getTime() - lobbyOpenBeforeOffset);
+      const closeDate = new Date(date.getTime() + lobbyOpenAfterOffset);
       if (now > openDate && now < closeDate) {
         return true;
       }

@@ -66,7 +66,8 @@ export class SendChatMessageCmd implements Command {
   }
 
   execute() {
-    logger.trace(`MESSAGE: ${this.message}\nPLAYER: ${this.player}`);
+    // FIXME: add game ID to log messages, need to thread from the Game DB entity into GameState
+    logger.debug("[CHAT MESSAGE] %s: %s", this.message, this.player.role);
     return [
       new SentChatMessage({
         message: this.message,
