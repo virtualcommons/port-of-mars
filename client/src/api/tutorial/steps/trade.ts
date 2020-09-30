@@ -235,7 +235,7 @@ const steps: Array<Step> = [
     ],
   },
   {
-    target: '.tour-trade-list',
+    target: '.tour-phase',
     content: 'Quiz Question',
     params: {
       placement: RIGHT,
