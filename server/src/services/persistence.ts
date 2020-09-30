@@ -175,13 +175,13 @@ export class DBPersister implements Persister {
         this.pendingEvents = [];
       };
       if (this.pendingEvents.length > 0) {
-        logger.debug('syncing to db')
+        logger.trace('syncing to db')
         if (this.em.queryRunner?.isTransactionActive) {
           await f(this.em);
         } else {
           await this.em.transaction(f);
         }
-        logger.debug('synced to db')
+        logger.trace('synced to db')
       }
     })
   }

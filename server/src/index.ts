@@ -64,12 +64,10 @@ passport.use(new LocalStrategy(
 ));
 
 passport.serializeUser(function (user: User, done: Function) {
-  logger.info('serializing user: ', user.id);
   done(null, user.id);
 });
 
 passport.deserializeUser(function (id: number, done: Function) {
-  logger.warn(`deserializing ${id}`);
   getServices().account.findUserById(id)
     .then(user => done(null, user))
     .catch((e) => {
@@ -109,13 +107,6 @@ async function createApp() {
   app.use(sessionParser);
   app.use(passport.initialize());
   app.use(passport.session());
-  app.use(function (req, res, next) {
-    logger.info('req user: ', req.user);
-    logger.info('req cookies: ', req.cookies);
-    logger.info('req session: ', req.session);
-    logger.info('req sessionID', req.sessionID);
-    next();
-  });
 
   // make this conditional on isDev()
   app.post('/login', passport.authenticate('local'), function (req, res) {

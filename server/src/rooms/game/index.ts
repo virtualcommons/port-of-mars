@@ -74,7 +74,7 @@ function gameLoop(room: GameRoomType): void {
 }
 
 function prepareRequest(room: Room<GameState> & Game, r: Requests, client: Client): Command {
-  logger.trace('prepareRequest from', client.id, ':', { r });
+  logger.trace('prepareRequest from %s: %o', client.id, r);
   const player = room.getPlayer(client);
   player.resetElapsed();
   switch (r.kind) {
