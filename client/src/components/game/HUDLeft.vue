@@ -1,5 +1,5 @@
 <template>
-  <div class="c-hud-left container">
+  <div class="c-hud-left container tour-hud-left-toggle">
     <div class="wrapper row">
       <div class="player col-5">
         <Player />
