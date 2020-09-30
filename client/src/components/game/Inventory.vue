@@ -2,12 +2,9 @@
   <div class="w-100 h-100 inventory">
     <div class="toggle">
       <p>Toggle Resource Costs</p>
-      <button @click="toggleCosts" :class="costTogglerClass">
-        <font-awesome-icon
-          :icon="['fas', 'clock']"
-          size="sm"
-          class="timeblock"
-        />
+      <button @click="toggleCosts">
+        <b-icon-clock v-if="!costsVisible" scale="1" variant="light"></b-icon-clock>
+        <b-icon-clock-fill v-else-if="costsVisible" scale="1" variant="light"></b-icon-clock-fill>
       </button>
     </div>
     <div
