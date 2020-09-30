@@ -12,23 +12,6 @@ const steps: Array<Step> = [
     stateTransform: [
       {
         SET_GAME_PHASE: Phase.discard,
-        SET_ACTIVE_ACCOMPLISHMENTS: {
-          data: {
-            id: 42,
-            role: 'Researcher',
-            label: 'Accomplishment you cannot currently purchase',
-            flavorText: 'A placeholder Accomplishment that you should discard.',
-            science: 3,
-            government: 1,
-            legacy: 0,
-            finance: 0,
-            culture: 0,
-            systemHealth: 0,
-            victoryPoints: 1,
-            effect: 'none',
-          },
-          role: 'Researcher',
-        },
       },
     ],
   },
