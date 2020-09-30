@@ -53,7 +53,7 @@
     <div class="w-100 m-0 pt-1 wrapper">
       <b-row class="flex-wrap justify-content-center px-4 py-2">
         <div
-          :class="investment.available && showAvailableResources ? '' : 'unattainable-resource'"
+          :class="investment.available ? '' : 'unattainable-resource'"
           class="cost justify-content-center align-items-center"
           v-for="investment in accomplishmentCost"
         >
@@ -166,9 +166,6 @@ export default class AccomplishmentCard extends Vue {
   // accomplishment modal view
   @Prop({default: false})
   isModal!: boolean;
-
-  @Prop({default: true})
-  showAvailableResources: boolean;
 
   // set when showCard changes
   isActive: boolean = true;
