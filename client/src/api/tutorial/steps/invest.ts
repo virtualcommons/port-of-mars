@@ -33,53 +33,12 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-accomplishments',
-    content: `Accomplishments are how you earn points and establish your legacy on Mars. 
+    content: `Accomplishments are how you earn points and establish your legacy on Mars.
     You can purchase an accomplishment if you have enough Influence to cover its costs.
     Here you'll be able to see what Accomplishments you can purchase this round.`,
     params: {
       placement: RIGHT,
     },
-    stateTransform: [
-      {
-        SET_ACTIVE_ACCOMPLISHMENTS: {
-          data: {
-            id: 1,
-            role: 'Researcher',
-            label: 'Interdisciplinary',
-            flavorText:
-              'You have more PhDs than most people have common sense.',
-            science: 2,
-            government: 1,
-            legacy: 1,
-            finance: 1,
-            culture: 1,
-            systemHealth: 0,
-            victoryPoints: 5,
-            effect: '',
-          },
-          role: `Researcher`,
-        },
-        PURCHASE_ACCOMPLISHMENT: {
-          data: {
-            id: 2,
-            role: 'Researcher',
-            label: 'Mars Helicopter',
-            flavorText:
-              'Your invention of a low gravity, low atmosphere, low-flying vehicle enables ' +
-              'greater exploration of the Martian surface.',
-            science: 2,
-            government: 0,
-            legacy: 0,
-            finance: 1,
-            culture: 1,
-            systemHealth: 0,
-            victoryPoints: 3,
-            effect: '',
-          },
-          role: `Researcher`,
-        },
-      },
-    ],
   },
   {
     target: '.tour-time-blocks',

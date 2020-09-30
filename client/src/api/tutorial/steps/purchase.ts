@@ -5,7 +5,7 @@ const steps: Array<Step> = [
   {
     target: '.tour-phase',
     content:
-      `Now that we have invested our time blocks and traded Influence Resources, it's 
+      `Now that we have invested our time blocks and traded Influence Resources, it's
       finally time to purchase some Accomplishments!`,
     params: {
       placement: RIGHT,
@@ -21,26 +21,6 @@ const steps: Array<Step> = [
             legacy: 10,
             science: 10,
             systemHealth: 0,
-          },
-          role: 'Researcher',
-        },
-        SET_ACTIVE_ACCOMPLISHMENTS: {
-          data: {
-            id: 6,
-            role: 'Researcher',
-            label: 'Highly Specialized',
-            flavorText:
-              "You're solely focused on your research, to the exclusion of all other pursuits.",
-            science: 3,
-            government: 0,
-            legacy: 0,
-            finance: 0,
-            culture: 0,
-            systemHealth: 0,
-            victoryPoints: 1,
-            // FIXME: this should be removed
-            effect:
-              'You can no longer make Politics or Legacy Influence. Science Influence only costs 1 Time Block to make.',
           },
           role: 'Researcher',
         },
