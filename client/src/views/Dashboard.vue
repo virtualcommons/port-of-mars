@@ -51,7 +51,7 @@
     </b-navbar>
 
     <b-row class='justify-content-md-center'>
-      <Messages />
+      <Messages/>
     </b-row>
 
     <b-row class="justify-content-md-center">
@@ -62,10 +62,12 @@
         <template v-if="playerTaskCompletion.mustTakeIntroSurvey || playerTaskCompletion.shouldTakeExitSurvey">
           <h2 class="text-center text-uppercase pt-5 my-2">Surveys</h2>
           <b-button-group class="py-3 mb-5 w-100" vertical>
-            <b-button v-if="playerTaskCompletion.mustTakeIntroSurvey" :href="introSurveyUrl" block class="my-2" size="lg" variant="secondary">
+            <b-button v-if="playerTaskCompletion.mustTakeIntroSurvey" :href="introSurveyUrl" block class="my-2"
+                      size="lg" variant="secondary">
               Please complete this introductory survey before participating <span class='text-danger'>*</span>
             </b-button>
-            <b-button v-if="playerTaskCompletion.shouldTakeExitSurvey" :href="exitSurveyUrl" block size="lg" variant="secondary">
+            <b-button v-if="playerTaskCompletion.shouldTakeExitSurvey" :href="exitSurveyUrl" block size="lg"
+                      variant="secondary">
               Please complete this exit survey <span class='text-danger'>*</span>
             </b-button>
           </b-button-group>
@@ -74,16 +76,18 @@
           <!-- GO TO WAITING LOBBY -->
           <h2 class="pt-5 my-3 text-uppercase">Participate</h2>
           <b-button :to="join" pill size="lg" variant="success">
-            Ready to Launch - Join the Waiting Lobby <font-awesome-icon icon="rocket" />
+            Ready to Launch - Join the Waiting Lobby
+            <font-awesome-icon icon="rocket"/>
           </b-button>
           <h2 class="text-uppercase pt-5 my-3">Schedule</h2>
-          <p class='lead text-left '>Please login during one of the following times to participate. We recommend that you show up 5 minutes earlier to 
+          <p class='lead text-left '>Please login during one of the following times to participate. We recommend that
+            you show up 5 minutes earlier to
             join the waiting lobby.
           </p>
 
           <b-table :items="schedule" bordered class="py-3" dark responsive sticky-header striped>
             <template v-slot:cell(addToCalendar)="data">
-              <a target="_blank" :href="inviteLink(data.item.addToCalendar)">
+              <a :href="inviteLink(data.item.addToCalendar)" target="_blank">
                 <font-awesome-icon :icon="['fab', 'google']"/>
               </a>
             </template>
@@ -92,8 +96,9 @@
         <b-container v-else>
           <h2 class="text-center text-uppercase mt-5 py-2">Already Participated</h2>
           <p class='lead text-left'>
-            Thanks for participating in the Port of Mars! 
-            <a :href='exitSurveyUrl' v-if="playerTaskCompletion.shouldTakeExitSurvey">Please complete our exit survey by clicking this link.</a>
+            Thanks for participating in the Port of Mars!
+            <a v-if="playerTaskCompletion.shouldTakeExitSurvey" :href='exitSurveyUrl'>Please complete our exit survey by
+              clicking this link.</a>
             We will email you with further instructions if you are eligible to participate in the next round.
             You can review your past games by clicking <code>Your Stats</code> in the navbar above.
           </p>
@@ -101,16 +106,18 @@
       </b-col>
 
       <!-- STATS -->
-      <b-col v-if="view === 'stats'" class="stats text-center my-2 p-2">
+      <b-col v-if="view === 'stats'" class="stats text-center my-2 py-5 px-2">
         <h2 class="text-uppercase">You have participated in <b>{{ gamesPlayedCount }}</b> missions</h2>
         <b-container class="py-0 my-0">
-          <p v-if="stats.games.length === 0" class="my-5 py-5">No games to display.</p>
-          <PlayerStatItem
-            v-for="playerStatItem in stats.games"
-            :key="playerStatItem.time"
-            :playerStatItem="playerStatItem"
-            class="my-1 py-1"
-          />
+          <div class="wrapper">
+            <p v-if="stats.games.length === 0" class="my-5 py-5">No games to display.</p>
+            <PlayerStatItem
+              v-for="playerStatItem in stats.games"
+              :key="playerStatItem.time"
+              :playerStatItem="playerStatItem"
+              class="my-1 py-1"
+            />
+          </div>
         </b-container>
       </b-col>
     </b-row>
@@ -219,17 +226,17 @@ export default class PlayerDashboard extends Vue {
     // set player stats
     this.stats.games.splice(0, this.stats.games.length, ...data.stats.games);
     this.upcomingGames = data.upcomingGames;
-    this.schedule = data.upcomingGames.map((game) => { 
+    this.schedule = data.upcomingGames.map((game) => {
       const scheduledDate = new Date(game.time);
       return {
-          date: scheduledDate.toLocaleString(),
-          addToCalendar: {
-            title: `Participate in Port of Mars Experiment, Round ${game.round}`,
-            location: 'https://portofmars.asu.edu/',
-            start: scheduledDate,
-            duration: [2, "hour"],
-            description: 'https://portofmars.asu.edu/'
-          }
+        date: scheduledDate.toLocaleString(),
+        addToCalendar: {
+          title: `Participate in Port of Mars Experiment, Round ${game.round}`,
+          location: 'https://portofmars.asu.edu/',
+          start: scheduledDate,
+          duration: [2, "hour"],
+          description: 'https://portofmars.asu.edu/'
+        }
       };
     });
     this.loading = false;
