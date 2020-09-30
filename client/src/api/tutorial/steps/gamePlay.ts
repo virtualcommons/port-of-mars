@@ -36,9 +36,9 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-ready-to-advance-button',
-    content: `If you are finished with your actions in a given phase before the 5 minutes are up, click Ready 
-      to Advance to indicate that you are ready to move on and lock in your choices. 
-      When every player in your group has indicated that they are 
+    content: `If you are finished with your actions in a given phase before the 5 minutes are up, click Ready
+      to Advance to indicate that you are ready to move on and lock in your choices.
+      When every player in your group has indicated that they are
       ready, the phase will end and your group will move on to the next phase.`,
     params: {
       placement: LEFT,
@@ -66,6 +66,16 @@ const steps: Array<Step> = [
           dateCreated: new Date().getTime(),
           round: 0,
         },
+      },
+      {
+        ADD_TO_MARS_LOG: {
+          performedBy: 'Server',
+          category: 'EVENT - Life As Usual',
+          content: 'As the first human outpost on Mars, having a "usual" day is pretty unusual.',
+          round: 1,
+          timestamp: 8,
+          id: 1
+        }
       }
     ]
   },
