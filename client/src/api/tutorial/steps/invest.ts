@@ -69,9 +69,17 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-invest-action',
-    content: `Let's purchase 1 Science Influence. Each Science Influence costs 2 time blocks, shown on the bottom right.`,
+    content: `During this phase, you may invest your timeblocks to invest in System Health. The System Health
+    card will always be located in the top left corner.`,
     params: {
       placement: TOP,
+    },
+  },
+  {
+    target: '.tour-invest-action',
+    content: `Let's purchase 1 Science Influence. Each Science Influence costs 2 time blocks, shown on the bottom right.`,
+    params: {
+      placement: RIGHT,
     },
     stateTransform: [
       {

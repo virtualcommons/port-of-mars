@@ -4,18 +4,18 @@ const steps: Array<Step> = [
   {
     target: '.tour-system-health',
     content:
-      `You begin at the Port of Mars with an initial System Health of 100. This represents your habitat 
-      at peak condition and maintenance. At the start of every round, your community will lose 25 System 
+      `You begin at the Port of Mars with an initial System Health of 100. This represents your habitat
+      at peak condition and maintenance. At the start of every round, your community will lose 25 System
       Health due to standard wear and tear.`,
     params: {
-      placement: 'bottom'
+      placement: BOTTOM
     }
   },
   {
     target: '.tour-system-health',
     content: 'Quiz Question',
     params: {
-      placement: LEFT,
+      placement: BOTTOM,
       tutorialElementId: 'upkeep25'
     }
   },
@@ -29,10 +29,20 @@ const steps: Array<Step> = [
     }
   },
   {
+    target: '.tour-hud-left-toggle',
+    content:
+      `To keep you and your habitat alive, System Health cannot reach 0. Players should invest their
+       timeblocks into System Health to stay alive. Investments will be explained later in the
+       tutorial.`,
+    params: {
+      placement: LEFT
+    }
+  },
+  {
     target: '.tour-system-health',
     content: 'Quiz Question',
     params: {
-      placement: LEFT,
+      placement: BOTTOM,
       tutorialElementId: 'upkeep65'
     }
   },
@@ -40,7 +50,7 @@ const steps: Array<Step> = [
     target: '.tour-system-health',
     content: 'Quiz Question',
     params: {
-      placement: LEFT,
+      placement: BOTTOM,
       tutorialElementId: 'upkeep35'
     }
   }

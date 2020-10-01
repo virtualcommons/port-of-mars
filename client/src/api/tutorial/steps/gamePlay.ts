@@ -83,7 +83,7 @@ const steps: Array<Step> = [
     target: '.tour-chat',
     content:
       `At any time during the game, you can communicate with the other players ` +
-      `in your group to plan and strategize. Remember: all chat is public ` +
+      `in your group to strategize. Remember: all chat is public ` +
       `and recorded and there are no private messages. Please adhere to the Port of ` +
       `Mars Code of Conduct in your communications. Try sending a message!`,
     params: {
