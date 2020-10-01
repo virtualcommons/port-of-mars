@@ -39,6 +39,9 @@
           <b-button :to="'tutorial'" variant="outline-warning">
             Take Tutorial
           </b-button>
+          <b-button :to="'dashboard'" variant="outline-warning">
+            Return to the Dashboard
+          </b-button>
           <b-button v-if="isDevOrStaging" @click="distributeGroups" variant="outline-warning">
             Join game
           </b-button>
@@ -122,7 +125,7 @@
       }
       // check if there is a game scheduled for play
       if (! dashboardData.isLobbyOpen) {
-        dashboardAPI.message('You can only join the lobby a half hour before a game is scheduled to start. Please try again later.');
+        dashboardAPI.message('You can join the lobby 10 minutes before a game is scheduled to start. Please try again later.');
         await this.$router.push({name: DASHBOARD_PAGE});
         return;
       }
