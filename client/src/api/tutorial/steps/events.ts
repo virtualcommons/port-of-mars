@@ -1,5 +1,5 @@
 import { Step, LEFT, BOTTOM } from '@port-of-mars/client/types/tutorial';
-import { Phase } from '@port-of-mars/shared/types';
+import {Phase, RESEARCHER} from '@port-of-mars/shared/types';
 import { HUDRightView } from '@port-of-mars/shared/game/client/panes';
 
 const steps: Array<Step> = [
@@ -12,6 +12,17 @@ const steps: Array<Step> = [
     stateTransform: [
       {
         SET_GAME_PHASE: Phase.events,
+        SET_INVESTMENT_COSTS: {
+          data: {
+            culture: Number.MAX_SAFE_INTEGER,
+            finance: Number.MAX_SAFE_INTEGER,
+            government: 3,
+            legacy: 3,
+            science: 2,
+            systemHealth: 1
+          },
+          role: RESEARCHER,
+        },
         // FIXME: this should be pulling its data from MarsEvents, which I suppose makes a case for keeping them in shared instead?
         ADD_TO_EVENTS: {
           id: 'changingTides',

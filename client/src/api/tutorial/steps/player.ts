@@ -1,5 +1,6 @@
 import {BOTTOM, LEFT, RIGHT, Step} from '@port-of-mars/client/types/tutorial';
 import {ChatMarsLogView, HUDLeftView,} from '@port-of-mars/shared/game/client/panes';
+import {RESEARCHER} from "@port-of-mars/shared/types";
 
 const
   steps: Array<Step> = [
@@ -11,6 +12,21 @@ const
       params: {
         placement: RIGHT,
       },
+      stateTransform: [
+        {
+          SET_INVESTMENT_COSTS: {
+            data: {
+              culture: Number.MAX_SAFE_INTEGER,
+              finance: Number.MAX_SAFE_INTEGER,
+              government: 3,
+              legacy: 3,
+              science: 2,
+              systemHealth: 1
+            },
+            role: RESEARCHER,
+          },
+        }
+      ]
     },
     {
       target: '.tour-hud-left-toggle',
@@ -100,8 +116,8 @@ const
       },
       stateTransform: [
         {
-          SET_HUDLEFT_VIEW: HUDLeftView.Inventory
-        }
+          SET_HUDLEFT_VIEW: HUDLeftView.Inventory,
+        },
       ]
     },
     {

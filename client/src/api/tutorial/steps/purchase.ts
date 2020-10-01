@@ -1,5 +1,5 @@
 import { Step, TOP, RIGHT, LEFT } from '@port-of-mars/client/types/tutorial';
-import { Phase } from '@port-of-mars/shared/types';
+import {Phase, RESEARCHER} from '@port-of-mars/shared/types';
 
 const steps: Array<Step> = [
   {
@@ -13,6 +13,17 @@ const steps: Array<Step> = [
     stateTransform: [
       {
         SET_GAME_PHASE: Phase.purchase,
+        SET_INVESTMENT_COSTS: {
+          data: {
+            culture: Number.MAX_SAFE_INTEGER,
+            finance: Number.MAX_SAFE_INTEGER,
+            government: 3,
+            legacy: 3,
+            science: 2,
+            systemHealth: 1
+          },
+          role: RESEARCHER,
+        },
         SET_INVENTORY: {
           data: {
             culture: 10,

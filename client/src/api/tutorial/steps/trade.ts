@@ -17,6 +17,17 @@ const steps: Array<Step> = [
     },
     stateTransform: [
       {
+        SET_INVESTMENT_COSTS: {
+          data: {
+            culture: Number.MAX_SAFE_INTEGER,
+            finance: Number.MAX_SAFE_INTEGER,
+            government: 3,
+            legacy: 3,
+            science: 2,
+            systemHealth: 1
+          },
+          role: RESEARCHER,
+        },
         SET_PENDING_INVESTMENTS: {
           data: {
             culture: 0,
