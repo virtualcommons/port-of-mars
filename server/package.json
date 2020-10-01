@@ -1,11 +1,12 @@
 {
   "name": "port-of-mars-server",
-  "version": "0.1.0",
+  "version": "t0.1.0",
   "description": "Port Of Mars digital version",
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc -p .",
     "build:deploy": "yarn build && rm -rf /code/server/src /code/shared && mv lib/server/src /code/server/src && mv lib/shared /code/shared",
+    "backupdb": "pg_dump -h db -U marsmadness port_of_mars > pom-$(date +%Y-%m-%d-%H.%M.%S).sql",
     "cli": "ts-node -r tsconfig-paths/register src/cli.ts",
     "loadtest": "ts-node -r tsconfig-paths/register src/loadtest.ts",
     "cli:prod": "node -r tsconfig-paths/register src/cli.js",
