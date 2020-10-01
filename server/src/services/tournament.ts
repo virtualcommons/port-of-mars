@@ -73,6 +73,18 @@ export class TournamentService extends BaseService {
       });
   }
 
+  async getEmails(tournamentRoundId?: number): Promise<Array<string>> {
+    if (! tournamentRoundId) {
+      const tournamentRound = await this.getCurrentTournamentRound();
+      tournamentRoundId = tournamentRound.id;
+    }
+    const users: Array<User> = await this.em.getRepository(User)
+      .createQueryBuilder("user")
+      .innerJoin("user.invites", "invite", "invite.tournamentRoundId = :tournamentRoundId", { tournamentRoundId })
+      .getMany();
+    return users.map(u => u.email ?? 'no email specified - should not be possible, check database');
+  }
+
   async createInvites(userIds: Array<number>, tournamentRoundId: number): Promise<Array<TournamentRoundInvite>> {
     const invites = userIds.map(userId => this.em.getRepository(TournamentRoundInvite).create({ userId, tournamentRoundId }));
     return await this.em.getRepository(TournamentRoundInvite).save(invites);
