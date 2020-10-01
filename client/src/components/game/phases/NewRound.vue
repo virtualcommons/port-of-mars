@@ -21,9 +21,6 @@
             }}.
             Your group's average investment was {{ averageContribution }}.
           </p>
-          <p>
-            {{ previousRoundSummary }}
-          </p>
         </div>
         <div class="summary-tables overflow-auto">
           <b-table responsive sticky-header small dark bordered striped
@@ -58,10 +55,6 @@
       } else {
         return "danger";
       }
-    }
-
-    get previousRoundSummary() {
-      return "This will be a summary of the previous round... eventually!";
     }
 
     get currentRound() {

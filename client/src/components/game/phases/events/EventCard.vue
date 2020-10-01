@@ -35,7 +35,7 @@
         <p>
           Duration: 
           <template v-if="event.duration > 1">
-            <em>{{ event.elapsed }}</em> of 
+            <b>{{ event.elapsed }}</b> of 
           </template>
           <b>{{ event.duration }}</b> Round(s)
         </p>

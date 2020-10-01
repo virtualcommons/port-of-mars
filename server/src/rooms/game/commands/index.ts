@@ -43,7 +43,7 @@ import {Command} from '@port-of-mars/server/rooms/game/commands/types';
 import {GameEvent} from '@port-of-mars/server/rooms/game/events/types';
 import {canSendTradeRequest} from "@port-of-mars/shared/validation";
 import {settings} from "@port-of-mars/server/settings";
-import {uuid} from "uuidv4";
+import {v4 as uuidv4} from "uuid";
 import {VoteHeroOrPariahRoleData} from "@port-of-mars/shared/game/requests";
 
 const logger = settings.logging.getLogger(__filename);
@@ -67,7 +67,7 @@ export class SendChatMessageCmd implements Command {
 
   execute() {
     // FIXME: add game ID to log messages, need to thread from the Game DB entity into GameState
-    logger.debug("[CHAT MESSAGE for game %d] %s: %s", this.state.gameId, this.message, this.player.role);
+    logger.debug("[CHAT game %d] %s: %s", this.state.gameId, this.player.role, this.message);
     return [
       new SentChatMessage({
         message: this.message,
@@ -234,7 +234,7 @@ export class SendTradeRequestCmd implements Command {
 
   execute(): Array<GameEvent> {
     if (canSendTradeRequest(this.player, this.trade.sender.resourceAmount)) {
-      return [new SentTradeRequest({...this.trade, id: uuid()})];
+      return [new SentTradeRequest({...this.trade, id: uuidv4()})];
     } else {
       return [];
     }
