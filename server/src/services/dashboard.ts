@@ -6,8 +6,10 @@ import { BaseService } from "@port-of-mars/server/services/db";
 import {IsNull, Not, SelectQueryBuilder} from "typeorm";
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 import { PlayerTaskCompletion, DashboardData } from "@port-of-mars/shared/types";
-import { settings } from "@port-of-mars/server/settings";
+import { getLogger, settings } from "@port-of-mars/server/settings";
 import _ from "lodash";
+
+const logger = getLogger(__filename);
 
 
 export class DashboardService extends BaseService {
@@ -27,6 +29,7 @@ export class DashboardService extends BaseService {
 
   buildSurveyUrl(surveyUrl: string | undefined, user: User, invite: TournamentRoundInvite | undefined): string {
     if (invite && surveyUrl) {
+      logger.debug("settings: %o", settings);
       surveyUrl = `${surveyUrl}?pid=${user.participantId}&tid=${invite.id}&redirectHost=${encodeURIComponent(settings.host)}`;
     }
     return surveyUrl ?? '';

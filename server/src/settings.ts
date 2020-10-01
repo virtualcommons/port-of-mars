@@ -11,7 +11,6 @@ export interface AppSettings {
   secret: string;
   lobby: LobbySettings;
   supportEmail: string,
-  allowInternalSurveyRoutes: boolean;
   isProduction: boolean;
 }
 
@@ -23,7 +22,6 @@ const dev: () => AppSettings = () => ({
   emailer: new MemoryEmailer(),
   host: 'http://localhost:8081',
   logging: new DevLogging(),
-  allowInternalSurveyRoutes: true,
   secret: SECRET_KEY,
   supportEmail: 'portmars@asu.edu',
   lobby: new LobbySettings(15),
@@ -36,7 +34,6 @@ const staging: () => AppSettings = () => {
   return {
     emailer: new MailgunEmailer({ api_key: apiKey, domain }),
     host: 'https://alpha.portofmars.asu.edu',
-    allowInternalSurveyRoutes: true,
     logging: new DevLogging(),
     secret: SECRET_KEY,
     supportEmail: 'portmars@asu.edu',
@@ -49,19 +46,26 @@ const prod: () => AppSettings = () => {
   const stagingSettings = staging();
   return {
     ...stagingSettings,
-    allowInternalSurveyRoutes: false,
     host: 'https://portofmars.asu.edu',
     lobby: new LobbySettings(15, false),
     isProduction: true
   };
 };
 
-const env = process.env.NODE_ENV;
-
-export const settings: AppSettings = ['development', 'test'].includes(env || '') ?
-  dev() : env === 'staging' ?
-    staging() : prod();
+function getSettings(): AppSettings {
+  const env = process.env.NODE_ENV;
+  console.log("env: " + env);
+  if (['development', 'test'].includes(env || '')) {
+    return dev();
+  }
+  else if (env === 'staging') {
+    return staging();
+  }
+  return prod();
+}
 
 export function getLogger(filename: string): LogService {
   return settings.logging.getLogger(filename);
 }
+
+export const settings: AppSettings = getSettings();
