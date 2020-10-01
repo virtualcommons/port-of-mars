@@ -6,7 +6,7 @@
         <h2>Upcoming System Health:
           <b-badge :variant="systemHealthBadgeVariant">{{ nextRoundSystemHealth }}</b-badge>
         </h2>
-        <div v-if="isFirstRound">
+        <div v-if="isFirstRound" class="tour-wear-tear">
           Welcome to Mars! Each round, your System Health degrades by <b>{{
           systemHealthMaintenanceCost }}</b> due to standard wear and tear.
           Your System Health at the start of this round is <code>{{ nextRoundSystemHealth
@@ -22,7 +22,7 @@
             Your group's average investment was {{ averageContribution }}.
           </p>
         </div>
-        <div class="summary-tables overflow-auto">
+        <div class="summary-tables overflow-auto tour-shr-table">
           <b-table responsive sticky-header small dark bordered striped
                    :items="tabularContributions" :fields="tabularContributionFields">
           </b-table>

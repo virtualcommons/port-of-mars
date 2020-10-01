@@ -23,10 +23,26 @@ const steps: Array<Step> = [
     }
   },
   {
+    target: '.tour-wear-tear',
+    content: 'Due to wear and tear, System Health will always decrease -25 at the beginning of each round.',
+    params: {
+      placement: LEFT
+    }
+  },
+  {
+    target: '.tour-shr-table',
+    content: 'This report details: System Health from previous round and all occurrences that ' +
+    'affect System Health including group contributions during Invest phase, wear and tear and ' +
+    'purchased Accomplishments.',
+    params: {
+      placement: LEFT
+    }
+  },
+  {
     target: '.tour-report',
-    content: `Your group's total contributions is the net amount of each ` +
-      `player's investments to System Health during the Investment phase minus any purchased ` +
-      `Accomplishments that subtracted from System Health.`,
+    content: `Your group's total contributions = (sum of each ` +
+      `player's investments to System Health during the Invest phase) - (sum of players' purchased ` +
+      `Accomplishments that subtracted from System Health)`,
     params: {
       placement: TOP,
     }

@@ -10,7 +10,7 @@ import { Phase, RESEARCHER } from '@port-of-mars/shared/types';
 const steps: Array<Step> = [
   {
     target: '.tour-phase',
-    content: `The second phase is Investment.`,
+    content: `The third phase is Investment.`,
     params: {
       placement: RIGHT,
     },
