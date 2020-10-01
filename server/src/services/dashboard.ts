@@ -4,6 +4,7 @@ import { TournamentRound } from "@port-of-mars/server/entity/TournamentRound";
 import { Game, Player, TournamentRoundInvite } from "@port-of-mars/server/entity";
 import { BaseService } from "@port-of-mars/server/services/db";
 import {IsNull, Not, SelectQueryBuilder} from "typeorm";
+import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 import { PlayerTaskCompletion, DashboardData } from "@port-of-mars/shared/types";
 import { settings } from "@port-of-mars/server/settings";
 import _ from "lodash";
@@ -83,23 +84,29 @@ export class DashboardService extends BaseService {
     return !user.passedQuiz
   }
 
-  hasCompletedIntroSurvey(invite: TournamentRoundInvite | undefined): boolean {
-    return invite?.hasCompletedIntroSurvey?? false;
+  mustTakeIntroSurvey(invite: TournamentRoundInvite | undefined): boolean {
+    if (invite) {
+      return ! invite.hasCompletedIntroSurvey;
+    }
+    return false;
   }
 
   /**
    * Returns true if the player has participated or they do not have an invite (to prevent them from participating again).
    * @param invite Returns
    */
-  hasParticipated(invite: TournamentRoundInvite | undefined): boolean {
-    return invite?.hasParticipated?? true;
+  canPlayGame(invite: TournamentRoundInvite | undefined): boolean {
+    if (invite) {
+      return ! invite.hasParticipated;
+    }
+    return false;
   }
 
   shouldTakeExitSurvey(invite: TournamentRoundInvite | undefined): boolean {
-    if (! invite) {
-      return false;
+    if (invite) {
+      return invite.hasParticipated && ! invite.hasCompletedExitSurvey
     }
-    return invite.hasParticipated && ! invite.hasCompletedExitSurvey
+    return false;
   }
 
   async getPlayerTaskCompletion(user: User, invite: TournamentRoundInvite | undefined): Promise<PlayerTaskCompletion> {
@@ -108,8 +115,8 @@ export class DashboardService extends BaseService {
       mustVerifyEmail: this.mustVerifyEmail(user),
       mustConsent: this.mustProvideConsent(user),
       mustTakeTutorial: this.mustTakeTutorial(user),
-      mustTakeIntroSurvey: ! this.hasCompletedIntroSurvey(invite),
-      canPlayGame: ! this.hasParticipated(invite),
+      mustTakeIntroSurvey: this.mustTakeIntroSurvey(invite),
+      canPlayGame: this.canPlayGame(invite),
       shouldTakeExitSurvey: this.shouldTakeExitSurvey(invite),
     }
   }
@@ -119,9 +126,17 @@ export class DashboardService extends BaseService {
     if (!round) {
       throw new Error(`no active tournament round found`);
     }
-    const invite = await this.sp.tournament.getActiveRoundInvite(user.id, round);
-    const playerTaskCompletion: PlayerTaskCompletion = await this.getPlayerTaskCompletion(user, invite);
     const stats = await this.getStats(user, round);
+    let invite: TournamentRoundInvite | undefined = undefined;
+    try {
+      invite = await this.sp.tournament.getActiveRoundInvite(user.id, round);
+    }
+    catch (err) {
+      if (! (err instanceof EntityNotFoundError)) {
+        throw err;
+      }
+    }
+    const playerTaskCompletion: PlayerTaskCompletion = await this.getPlayerTaskCompletion(user, invite);
     const gameDates = await this.sp.tournament.getScheduledDates(round);
     const upcomingGames = gameDates.map( date => {
       return {time: date.getTime(), round: round.roundNumber, tournamentName: round.tournament.name};
