@@ -423,7 +423,7 @@ export class EnteredNewRoundPhase extends KindOnlyGameEvent {
     game.round += 1;
     game.roundIntroduction.addContribution(game.systemHealthContributed());
     game.log(`Round ${game.round} begins.`, MarsLogCategory.newRound);
-
+    logger.debug("[game %d] current system health: %d", game.gameId, game.systemHealth);
     game.resetRound();
   }
 }

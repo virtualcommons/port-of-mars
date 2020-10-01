@@ -47,7 +47,6 @@ function gameLoop(room: GameRoomType): void {
     room.state.timeRemaining -= 1;
     let events: Array<GameEvent>;
     const metadata = room.getMetadata();
-    const timeRemaining = _.cloneDeep(metadata.timeRemaining);
     const botEvents = room.state.act();
     if (botEvents.length > 0) {
       logger.debug('bot events: %o', botEvents)
@@ -137,7 +136,6 @@ async function onCreate(room: GameRoomType, options?: GameOpts, shouldEnableDb?:
   room.onMessage('*', (client, type, message) => {
     // we can refactor this.prepareRequest to not run a billion long switch statement and instead have
     // lots of small onMessages coupled with Commands that modify the state (within the Command itself, not here)
-    // something like this:
     const cmd = prepareRequest(room, message, client);
     const metadata = room.getMetadata()
     const events = cmd.execute();
@@ -194,7 +192,6 @@ export class GameRoom extends Room<GameState> implements Game {
   public static get NAME(): string { return 'port_of_mars_game_room' }
   autoDispose = false;
   persister!: Persister;
-  gameId!: number;
 
   async onAuth(client: Client, options: any, request: http.IncomingMessage) {
     try {
@@ -248,6 +245,14 @@ export class GameRoom extends Room<GameState> implements Game {
     await this.persister.sync();
     await this.persister.finalize(this.gameId, true);
     logger.info('Disposed of room', this.roomId);
+  }
+
+  set gameId(id: number) {
+    this.state.gameId = id;
+  }
+
+  get gameId() {
+    return this.state.gameId;
   }
 
 }

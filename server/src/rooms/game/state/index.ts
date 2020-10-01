@@ -1160,6 +1160,58 @@ export interface PendingMarsEventAction {
 
 export class GameState extends Schema implements GameData {
 
+  userRoles: GameOpts['userRoles'] = {};
+  gameId!: number;
+  maxRound: number;
+  lastTimePolled: Date;
+  marsEventDeck: MarsEventsDeck;
+  pendingMarsEventActions: Array<PendingMarsEventAction> = [];
+
+  @type(RoundIntroduction)
+  roundIntroduction: RoundIntroduction = new RoundIntroduction();
+
+  @type(PlayerSet)
+  players: PlayerSet;
+
+  @type('number')
+  timeRemaining = 60;
+
+  @type('boolean')
+  botWarning: boolean = GameState.DEFAULTS.botWarning;
+
+  @type('number')
+  round: number = GameState.DEFAULTS.round;
+
+  @type('number')
+  phase: Phase = GameState.DEFAULTS.phase;
+
+  @type('number')
+  systemHealth: number = GameState.DEFAULTS.systemHealth;
+
+  @type([MarsLogMessage])
+  logs = new ArraySchema<MarsLogMessage>();
+
+  @type([ChatMessage])
+  messages = new ArraySchema<ChatMessage>();
+
+  @type([MarsEvent])
+  marsEvents = new ArraySchema<MarsEvent>();
+
+  @type('number')
+  marsEventsProcessed = GameState.DEFAULTS.marsEventsProcessed;
+
+  @type({ map: Trade })
+  tradeSet = new MapSchema<Trade>();
+
+  @type(['string'])
+  winners = new ArraySchema<Role>();
+
+  @type('boolean')
+  tradingEnabled = true;
+
+  @type('string')
+  heroOrPariah: '' | 'hero' | 'pariah' = '';
+
   constructor(data: GameStateOpts) {
     super();
     if (isProduction() && data.userRoles) {
@@ -1242,60 +1294,6 @@ export class GameState extends Schema implements GameData {
       heroOrPariah: this.heroOrPariah
     };
   }
-
-  @type(RoundIntroduction)
-  roundIntroduction: RoundIntroduction = new RoundIntroduction();
-
-  @type(PlayerSet)
-  players: PlayerSet;
-
-  userRoles: GameOpts['userRoles'] = {};
-
-  maxRound: number;
-  lastTimePolled: Date;
-
-  @type('number')
-  timeRemaining = 60;
-
-  @type('boolean')
-  botWarning: boolean = GameState.DEFAULTS.botWarning;
-
-  @type('number')
-  round: number = GameState.DEFAULTS.round;
-
-  @type('number')
-  phase: Phase = GameState.DEFAULTS.phase;
-
-  @type('number')
-  systemHealth: number = GameState.DEFAULTS.systemHealth;
-
-  @type([MarsLogMessage])
-  logs = new ArraySchema<MarsLogMessage>();
-
-  @type([ChatMessage])
-  messages = new ArraySchema<ChatMessage>();
-
-  @type([MarsEvent])
-  marsEvents = new ArraySchema<MarsEvent>();
-
-  @type('number')
-  marsEventsProcessed = GameState.DEFAULTS.marsEventsProcessed;
-
-  marsEventDeck: MarsEventsDeck;
-
-  @type({ map: Trade })
-  tradeSet = new MapSchema<Trade>();
-
-  @type(['string'])
-  winners = new ArraySchema<Role>();
-
-  @type('boolean')
-  tradingEnabled = true;
-
-  @type('string')
-  heroOrPariah: '' | 'hero' | 'pariah' = '';
-
-  pendingMarsEventActions: Array<PendingMarsEventAction> = [];
 
   isFirstRound(): boolean {
     return this.round === GameState.DEFAULTS.round;
