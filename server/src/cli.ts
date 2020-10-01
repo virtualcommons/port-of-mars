@@ -88,7 +88,8 @@ async function createRound(
   em: EntityManager,
   name: string,
   introSurveyUrl: string,
-  exitSurveyUrl: string
+  exitSurveyUrl: string,
+  numberOfGameRounds: number,
   ): Promise<TournamentRound> {
   const s = getServices(em);
   const t = await s.tournament.getTournamentByName(name);
@@ -98,6 +99,7 @@ async function createRound(
     introSurveyUrl: introSurveyUrl ? introSurveyUrl : currentRound.introSurveyUrl,
     exitSurveyUrl: exitSurveyUrl ? exitSurveyUrl : currentRound.exitSurveyUrl,
     roundNumber: currentRound.roundNumber + 1,
+    numberOfGameRounds
   })
   logger.info('created tournament round %d for tournament %s', round.roundNumber, t.name);
   return round;
@@ -131,6 +133,20 @@ async function createTournamentRoundDate(em: EntityManager, tournamentRoundId: n
 
 function toIntArray(value: string, previous: Array<number>): Array<number> {
   return previous.concat([parseInt(value)])
+}
+
+/**
+ * Workaround for commander custom options processing, otherwise any default values specified get used as the second arg
+ * to parseInt (e.g., as the radix). For number of game rounds this turns into something like parseInt(<incoming-value>, 12)
+ * which is completely not what we want.
+ * 
+ * https://github.com/tj/commander.js/blob/master/examples/options-custom-processing.js
+ * 
+ * @param value 
+ * @param ignored 
+ */
+function customParseInt(value: string, ignored: number): number {
+  return parseInt(value);
 }
 
 interface CLIOpts {
@@ -182,10 +198,12 @@ program
               .requiredOption('--tournamentName <tournamentName>', 'string name of an existing tournament')
               .option('--introSurveyUrl <introSurveyUrl>', 'introductory survey URL', '')
               .option('--exitSurveyUrl <exitSurveyUrl>', 'exit survey URL', '')
+              .option('--numberOfGameRounds <numberOfGameRounds>', 'number of game rounds for this TournamentRound', customParseInt, 11)
               .description('create a tournament round')
               .action(async (cmd) => {
-                await withConnection((em) => createRound(em, cmd.tournamentName, cmd.introSurveyUrl, cmd.exitSurveyUrl));
-                logger.debug('tournament round create %s [intro: %s] [exit: %s]', cmd.tournamentName, cmd.introSurveyUrl, cmd.exitSurveyUrl)
+                await withConnection((em) => createRound(em, cmd.tournamentName, cmd.introSurveyUrl, cmd.exitSurveyUrl, cmd.numberOfGameRounds));
+                logger.debug('tournament round create %s [intro: %s] [exit: %s] [numberOfGameRounds: %d',
+                 cmd.tournamentName, cmd.introSurveyUrl, cmd.exitSurveyUrl, cmd.numberOfGameRounds)
               })))
       .addCommand(
         program

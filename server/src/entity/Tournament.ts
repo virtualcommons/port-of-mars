@@ -8,12 +8,11 @@ import {
 import { TournamentRound } from './TournamentRound';
 
 @Entity()
-@Unique(["name"])
 export class Tournament {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({ unique: true })
   name!: string;
 
   @OneToMany(
@@ -24,6 +23,14 @@ export class Tournament {
 
   @Column()
   active!: boolean;
+
+  /* FIXME: to be applied after pilot tournament concludes
+  @Column()
+  minNumberOfGameRounds!: number;
+
+  @Column()
+  maxNumberOfGameRounds!: number;
+  */
 
   @CreateDateColumn()
   dateCreated!: Date;

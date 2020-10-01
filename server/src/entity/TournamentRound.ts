@@ -54,7 +54,7 @@ export class TournamentRound {
 
   @OneToMany(
     type => TournamentRoundDate,
-    smur => smur.tournamentRound
+    date => date.tournamentRound
   )
   scheduledDates!: Array<TournamentRoundDate>;
 }

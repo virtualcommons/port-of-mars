@@ -130,9 +130,10 @@ export class TournamentService extends BaseService {
     return await this.em.save(t)
   }
 
-  async createRound(data: Pick<TournamentRound, 'exitSurveyUrl' | 'introSurveyUrl' | 'roundNumber'> & { tournamentId?: number }): Promise<TournamentRound> {
+  async createRound(data: Pick<TournamentRound, 'exitSurveyUrl' | 'introSurveyUrl' | 'roundNumber' | 'numberOfGameRounds'> & { tournamentId?: number }): Promise<TournamentRound> {
     if (!data.tournamentId) {
-      data.tournamentId = (await this.em.getRepository(Tournament).createQueryBuilder('tournament').select('id').where({ active: true }).getRawOne()).id;
+      const tournament = await this.getActiveTournament();
+      data.tournamentId = tournament.id;
     }
 
     const tr = new TournamentRound();

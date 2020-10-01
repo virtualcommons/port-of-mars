@@ -1,4 +1,4 @@
-import { Column, Entity, Generated, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { CreateDateColumn, Column, Entity, Generated, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Player } from "./Player";
 import { TournamentRoundInvite } from "./TournamentRoundInvite";
 
@@ -38,5 +38,10 @@ export class User {
 
   @Column({ nullable: true })
   dateConsented?: Date;
+
+  /* FIXME: to be applied after the pilot tournament concludes
+  @CreateDateColumn()
+  dateCreated!: Date;
+  */
 
 }
