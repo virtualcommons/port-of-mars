@@ -45,6 +45,7 @@ export async function createRound(sp: ServiceProvider, data: { roundNumber?: num
     startDate: new Date('1970 01 01'),
     endDate: new Date('1970 01 03'),
     roundNumber: 1,
+    numberOfGameRounds: 10,
     ...data
   };
   return await sp.tournament.createRound(d);
