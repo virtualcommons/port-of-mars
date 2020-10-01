@@ -87,7 +87,7 @@ applyInStagingOrProd(() =>
 );
 
 async function createApp() {
-  logger.info('running server with build id: %s', getBuildId());
+  logger.info('starting server (%s) with build id: %s, settings %o', process.env.NODE_ENV, getBuildId(), settings);
   const port = Number(process.env.PORT || 2567);
   const app = express();
   applyInStagingOrProd(() => app.use(Sentry.Handlers.requestHandler()));
