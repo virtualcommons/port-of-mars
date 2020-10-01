@@ -44,6 +44,13 @@ export class TournamentService extends BaseService {
       });
   }
 
+  async createScheduledRoundDate(tournamentRoundId: number, date: Date): Promise<TournamentRoundDate> {
+    const tournamentRound = await this.getTournamentRound(tournamentRoundId);
+    const repository = this.em.getRepository(TournamentRoundDate);
+    const scheduledDate = repository.create({ tournamentRoundId: tournamentRound.id, date });
+    return await repository.save(scheduledDate);
+  }
+
   async getScheduledDates(tournamentRound?: TournamentRound): Promise<Array<Date>> {
     if (!tournamentRound) {
       tournamentRound = await this.getCurrentTournamentRound();

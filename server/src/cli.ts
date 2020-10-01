@@ -123,6 +123,12 @@ async function exportEmails(em: EntityManager, tournamentRoundId: number): Promi
   });
 }
 
+async function createTournamentRoundDate(em: EntityManager, tournamentRoundId: number, date: Date): Promise<void> {
+  const sp = getServices(em);
+  const scheduledDate = await sp.tournament.createScheduledRoundDate(tournamentRoundId, date);
+  logger.debug("created scheduled date: %o", scheduledDate);
+}
+
 function toIntArray(value: string, previous: Array<number>): Array<number> {
   return previous.concat([parseInt(value)])
 }
@@ -140,6 +146,16 @@ program
         program
           .createCommand('round')
           .description('round subcommands')
+          .addCommand(
+            program
+            .createCommand('date')
+            .requiredOption('--tournamentRoundId <tournamentRoundId>', 'ID of the tournament round', parseInt)
+            .requiredOption('--date <date>', 'UTC Datetime for an upcoming scheduled game', s => new Date(Date.parse(s)))
+            .description('add a TournamentRoundDate for the given date')
+            .action(async (cmd) => {
+              await withConnection(em => createTournamentRoundDate(em, cmd.tournamentRoundId, cmd.date));
+            })
+          )
           .addCommand(
             program
             .createCommand('emails')
