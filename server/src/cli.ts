@@ -29,19 +29,19 @@ async function withConnection<T>(f: (em: EntityManager) => Promise<T>): Promise<
   }
 }
 
-async function exportData(em: EntityManager, opts: {ids?: Array<number>, dateCreatedMin?: Date}): Promise<void> {
+async function exportData(em: EntityManager, ids?: Array<number>, dateCreatedMin?: Date): Promise<void> {
   let eventQuery = await em.getRepository(GameEvent)
     .createQueryBuilder("ge")
     .leftJoinAndSelect("ge.game", "g")
     .orderBy('ge.id', 'ASC');
-  if (opts.ids && opts.ids.length > 0) {
-    eventQuery = eventQuery.where('"gameId" in (:...ids)', {ids: opts.ids});
+  if (ids && ids.length > 0) {
+    eventQuery = eventQuery.where('"gameId" in (:...ids)', {ids});
   }
-  if (opts.dateCreatedMin) {
-    if (opts.ids && opts.ids.length > 0) {
-      eventQuery = eventQuery.andWhere('g."dateCreated" > (:dateCreatedMin)', {dateCreatedMin: opts.dateCreatedMin});
+  if (dateCreatedMin) {
+    if (ids && ids.length > 0) {
+      eventQuery = eventQuery.andWhere('g."dateCreated" > (:dateCreatedMin)', {dateCreatedMin: dateCreatedMin});
     } else {
-      eventQuery = eventQuery.where('g."dateCreated" > (:dateCreatedMin)', {dateCreatedMin: opts.dateCreatedMin});
+      eventQuery = eventQuery.where('g."dateCreated" > (:dateCreatedMin)', {dateCreatedMin: dateCreatedMin});
     }
   }
   logger.debug(eventQuery.getSql());
@@ -149,11 +149,6 @@ function customParseInt(value: string, ignored: number): number {
   return parseInt(value);
 }
 
-interface CLIOpts {
-  ids?: Array<number>,
-  dateCreatedMin?: Date
-}
-
 program
   .addCommand(
     program.createCommand('tournament')
@@ -232,13 +227,9 @@ program
     program.createCommand('dump')
       .description('dump db to csvs')
       .option('--ids <ids...>', 'game ids to extract, separate multiples with spaces e.g., 1 2 3', toIntArray, [] as Array<number>)
-      .option('--dateCreatedMin <dateCreatedMin>', 'return games after this ISO formatted date', false)
+      .option('--dateCreatedMin <dateCreatedMin>', 'return games after this ISO formatted date', s => new Date(Date.parse(s)))
       .action(async (cmd) => {
-        const opts: CLIOpts = {};
-        if (cmd.dateCreatedMin) {
-          opts.dateCreatedMin = new Date(Date.parse(cmd.dateCreatedMin));
-        }
-        await withConnection((em) => exportData(em, opts))
+        await withConnection((em) => exportData(em, cmd.ids, cmd.dateCreatedMin))
       })
   );
 
