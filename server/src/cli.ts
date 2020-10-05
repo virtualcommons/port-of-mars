@@ -5,17 +5,18 @@ import {
   AccomplishmentSummarizer,
   GameEventSummarizer,
   GameReplayer, MarsEventSummarizer,
-  PlayerInvestmentSummarizer,
+  PlayerInvestmentSummarizer, PlayerSummarizer,
   VictoryPointSummarizer
 } from "@port-of-mars/server/services/replay";
 import {DBPersister} from "@port-of-mars/server/services/persistence";
 import {EnteredDefeatPhase, EnteredVictoryPhase} from "@port-of-mars/server/rooms/game/events";
 import {Phase} from "@port-of-mars/shared/types";
 import {getLogger} from "@port-of-mars/server/settings";
-import {GameEvent, Tournament, TournamentRound} from "@port-of-mars/server/entity";
+import {GameEvent, Player, Tournament, TournamentRound} from "@port-of-mars/server/entity";
 import _ from "lodash";
 
 import fs from 'fs';
+import {getRepository, In} from "typeorm/index";
 
 const logger = getLogger(__filename);
 
@@ -45,13 +46,21 @@ async function exportData(em: EntityManager, ids?: Array<number>, dateCreatedMin
     }
   }
   logger.debug(eventQuery.getSql());
+  let players: Array<Player>;
+  if (ids && ids.length > 0) {
+    players = await em.getRepository(Player).find({ relations: ['user'], where: {gameId: In(ids)}})
+  } else {
+    players = await em.getRepository(Player).find({ relations: ['user']});
+  }
+
   const events = await eventQuery.getMany();
+  const playerSummarizer =  new PlayerSummarizer(players, '/dump/player.csv');
   const gameEventSummarizer = new GameEventSummarizer(events, '/dump/gameEvent.csv');
   const victoryPointSummarizer = new VictoryPointSummarizer(events, '/dump/victoryPoint.csv');
   const playerInvestmentSummarizer = new PlayerInvestmentSummarizer(events, '/dump/playerInvestment.csv');
   const marsEventSummarizer = new MarsEventSummarizer(events, '/dump/marsEvent.csv');
   const accomplishmentSummarizer = new AccomplishmentSummarizer('/dump/accomplishment.csv')
-  await Promise.all([gameEventSummarizer, victoryPointSummarizer, playerInvestmentSummarizer, marsEventSummarizer, accomplishmentSummarizer].map(s => s.save()))
+  await Promise.all([playerSummarizer, gameEventSummarizer, victoryPointSummarizer, playerInvestmentSummarizer, marsEventSummarizer, accomplishmentSummarizer].map(s => s.save()))
 }
 
 async function finalize(em: EntityManager, gameId: number): Promise<void> {

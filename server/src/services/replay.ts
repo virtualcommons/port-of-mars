@@ -19,6 +19,8 @@ import {createObjectCsvWriter} from "csv-writer";
 import {GameEvent} from "@port-of-mars/server/rooms/game/events/types";
 import * as jdiff from 'jsondiffpatch'
 import {getAccomplishmentIDs, getAllAccomplishments} from "@port-of-mars/server/data/Accomplishment";
+import {EntityManager} from "typeorm/index";
+import {Player} from "@port-of-mars/server/entity";
 
 const logger = getLogger(__filename);
 
@@ -214,6 +216,37 @@ export class AccomplishmentSummarizer {
     const header = Object.keys(accomplishements[0]).map(name => ({id: name, title: name}))
     const writer = createObjectCsvWriter({path: this.path, header});
     await writer.writeRecords(accomplishements);
+  }
+}
+
+interface PlayerExport {
+  id: number;
+  gameId: number;
+  participantId: string;
+  role: Role;
+}
+
+export class PlayerSummarizer {
+  constructor(public players: Array<Player>, public path: string) {}
+
+  * summarize(): Generator<PlayerExport> {
+    for (const p of this.players) {
+      yield {id: p.id, gameId: p.gameId, participantId: p.user.participantId, role: p.role}
+    }
+  }
+
+  async save() {
+    const summaries = this.summarize();
+    let result: IteratorResult<PlayerExport> = summaries.next();
+    const header = Object.keys(result.value).map(k => ({id: k, title: k}));
+    const rows = [result.value];
+    while (!result.done) {
+      rows.push(result.value);
+      result = summaries.next();
+    }
+
+    const writer = createObjectCsvWriter({path: this.path, header});
+    await writer.writeRecords(rows);
   }
 }
 
