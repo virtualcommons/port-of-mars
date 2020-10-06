@@ -249,8 +249,12 @@ export class PlayerSummarizer {
     let result: IteratorResult<PlayerExport> = summaries.next();
     const header = Object.keys(result.value).map(k => ({id: k, title: k}));
     const rows = [result.value];
-    while (!result.done) {
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
       result = summaries.next();
+      if (result.done) {
+        break;
+      }
       rows.push(result.value);
     }
 
