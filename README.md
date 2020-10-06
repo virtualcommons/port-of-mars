@@ -95,13 +95,13 @@ docker-compose up -d
 To extract the database to csv files run
 
 ```bash
-yarn cli dump
+./dump.sh dev
 ```
 
 in a development environment or
 
 ```bash
-yarn cli:prod dump
+./dump.sh prod
 ```
 
 in a staging or production environment inside the server container. This will reproject the game events and summary csv files outlining the state of the game for every game event as well as export game, player and tounnament data. The csv files will be in the `docker/dump` folder.

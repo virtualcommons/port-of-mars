@@ -326,10 +326,8 @@ export class PlayerInvestmentSummarizer extends Summarizer<PlayerInvestmentExpor
       game.timeRemaining = event.timeRemaining;
       game.applyMany([e]);
       const curr = this._summarizeEvent(game, event);
-      for (const [row, prev_row] of _.zip(curr, prev)) {
-        if (!_.isEqual(row, prev_row)) {
+      for (const row of curr) {
           yield {id: event.id, ...row as Omit<PlayerInvestmentExport, 'id'>, initialTimeRemaining: event.timeRemaining, ...extractAfter(game)};
-        }
       }
       prev = curr;
     }
