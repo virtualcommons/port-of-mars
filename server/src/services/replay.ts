@@ -20,7 +20,7 @@ import {GameEvent} from "@port-of-mars/server/rooms/game/events/types";
 import * as jdiff from 'jsondiffpatch'
 import {getAccomplishmentIDs, getAllAccomplishments} from "@port-of-mars/server/data/Accomplishment";
 import {EntityManager} from "typeorm/index";
-import {Player} from "@port-of-mars/server/entity";
+import {Player, TournamentRoundInvite, User} from "@port-of-mars/server/entity";
 
 const logger = getLogger(__filename);
 
@@ -219,19 +219,28 @@ export class AccomplishmentSummarizer {
   }
 }
 
+interface PlayerRaw {
+  player_id: Player['id'],
+  player_gameId: Player['gameId'],
+  player_role: Player['role'],
+  user_participantId: User['participantId'],
+  invitation_id: TournamentRoundInvite['id']
+}
+
 interface PlayerExport {
   id: number;
   gameId: number;
   participantId: string;
+  inviteId: number;
   role: Role;
 }
 
 export class PlayerSummarizer {
-  constructor(public players: Array<Player>, public path: string) {}
+  constructor(public players: Array<PlayerRaw>, public path: string) {}
 
   * summarize(): Generator<PlayerExport> {
     for (const p of this.players) {
-      yield {id: p.id, gameId: p.gameId, participantId: p.user.participantId, role: p.role}
+      yield {id: p.player_id, gameId: p.player_gameId, participantId: p.user_participantId, role: p.player_role, inviteId: p.invitation_id}
     }
   }
 

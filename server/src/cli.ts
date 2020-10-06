@@ -12,7 +12,15 @@ import {DBPersister} from "@port-of-mars/server/services/persistence";
 import {EnteredDefeatPhase, EnteredVictoryPhase} from "@port-of-mars/server/rooms/game/events";
 import {Phase} from "@port-of-mars/shared/types";
 import {getLogger} from "@port-of-mars/server/settings";
-import {GameEvent, Player, Tournament, TournamentRound} from "@port-of-mars/server/entity";
+import {
+  Game,
+  GameEvent,
+  Player,
+  Tournament,
+  TournamentRound,
+  TournamentRoundInvite,
+  User
+} from "@port-of-mars/server/entity";
 import _ from "lodash";
 
 import fs from 'fs';
@@ -46,15 +54,21 @@ async function exportData(em: EntityManager, ids?: Array<number>, dateCreatedMin
     }
   }
   logger.debug(eventQuery.getSql());
-  let players: Array<Player>;
+  const playerQuery = em.getRepository(Player)
+    .createQueryBuilder('player')
+    .innerJoinAndSelect(User, 'user', 'user.id = player.userId')
+    .innerJoinAndSelect(Game, 'game', 'game.id = player.gameId')
+    .innerJoinAndSelect(TournamentRound, 'tournamentRound', 'tournamentRound.id = game.tournamentRoundId')
+    .innerJoinAndSelect(TournamentRoundInvite, 'invitation', 'invitation.tournamentRoundId = tournamentRound.id')
+    .where('player.userId = invitation.userId');
   if (ids && ids.length > 0) {
-    players = await em.getRepository(Player).find({ relations: ['user'], where: {gameId: In(ids)}})
-  } else {
-    players = await em.getRepository(Player).find({ relations: ['user']});
+    playerQuery
+      .andWhere('game.id in (:...ids)', {ids});
   }
+  const playerRaw = await playerQuery.getRawMany();
 
   const events = await eventQuery.getMany();
-  const playerSummarizer =  new PlayerSummarizer(players, '/dump/player.csv');
+  const playerSummarizer =  new PlayerSummarizer(playerRaw, '/dump/player.csv');
   const gameEventSummarizer = new GameEventSummarizer(events, '/dump/gameEvent.csv');
   const victoryPointSummarizer = new VictoryPointSummarizer(events, '/dump/victoryPoint.csv');
   const playerInvestmentSummarizer = new PlayerInvestmentSummarizer(events, '/dump/playerInvestment.csv');
