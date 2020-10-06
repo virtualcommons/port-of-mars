@@ -4,7 +4,7 @@ set -o nounset
 set -o pipefail
 set -o errexit
 
-ENV=${1:-dev}
+ENV=$1
 shift
 
 case "$ENV" in
