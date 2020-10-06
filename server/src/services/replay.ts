@@ -250,8 +250,8 @@ export class PlayerSummarizer {
     const header = Object.keys(result.value).map(k => ({id: k, title: k}));
     const rows = [result.value];
     while (!result.done) {
-      rows.push(result.value);
       result = summaries.next();
+      rows.push(result.value);
     }
 
     const writer = createObjectCsvWriter({path: this.path, header});

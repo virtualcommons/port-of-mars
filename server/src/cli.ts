@@ -57,14 +57,15 @@ async function exportData(em: EntityManager, ids?: Array<number>, dateCreatedMin
   const playerQuery = em.getRepository(Player)
     .createQueryBuilder('player')
     .innerJoinAndSelect(User, 'user', 'user.id = player.userId')
-    .innerJoinAndSelect(Game, 'game', 'game.id = player.gameId')
-    .innerJoinAndSelect(TournamentRound, 'tournamentRound', 'tournamentRound.id = game.tournamentRoundId')
+    .innerJoin(Game, 'game', 'game.id = player.gameId')
+    .innerJoin(TournamentRound, 'tournamentRound', 'tournamentRound.id = game.tournamentRoundId')
     .innerJoinAndSelect(TournamentRoundInvite, 'invitation', 'invitation.tournamentRoundId = tournamentRound.id')
     .where('player.userId = invitation.userId');
   if (ids && ids.length > 0) {
     playerQuery
       .andWhere('game.id in (:...ids)', {ids});
   }
+  console.log(playerQuery.getSql());
   const playerRaw = await playerQuery.getRawMany();
 
   const events = await eventQuery.getMany();
