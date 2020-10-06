@@ -22,6 +22,12 @@ final_investment <- dplyr::bind_rows(
     dplyr::filter(id == max(id)) %>%
     dplyr::ungroup() %>%
     dplyr::mutate(name = 'finalInvestment'),
+  player_investment %>%
+    dplyr::filter(name == 'inventory') %>%
+    dplyr::group_by(gameId, roundFinal, phaseFinal) %>%
+    dplyr::filter(id == max(id)) %>%
+    dplyr::ungroup() %>%
+    dplyr::mutate(name = 'finalInventory'),
   player_investment)
 
 readr::write_csv(final_investment, "/dump/playerInvestment.csv")
