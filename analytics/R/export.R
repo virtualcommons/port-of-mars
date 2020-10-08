@@ -6,8 +6,8 @@ INVESTMENTS = c(RESOURCES, 'systemHealth')
 STATISTICS = c('pendingInvestment', 'cost', 'inventory')
 PHASES = factor(c('newRound', 'events', 'invest', 'trade', 'purchase', 'discard'), ordered = T, levels = c('newRound', 'events', 'invest', 'trade', 'purchase', 'discard'))
 
-game_events <- readr::read_csv("/dump/gameEvent.csv")
-player_investment <- readr::read_csv("/dump/playerInvestment.csv")
+game_events <- readr::read_csv("/dump/processed/gameEvent.csv")
+player_investment <- readr::read_csv("/dump/raw/playerInvestment.csv")
 
 final_investment <- dplyr::bind_rows(
   player_investment %>%
@@ -30,4 +30,12 @@ final_investment <- dplyr::bind_rows(
     dplyr::mutate(name = 'finalInventory'),
   player_investment)
 
-readr::write_csv(final_investment, "/dump/playerInvestment.csv")
+tryCatch(
+  dir.create("/dump/processed", recursive = TRUE),
+  warning = function(c) {
+    msg <- conditionMessage(c)
+    if (!stringr::str_detect(msg, "'/dump/processed' already exists")) {
+      warning(c)
+    }
+  })
+readr::write_csv(final_investment, "/dump/processed/playerInvestment.csv")

@@ -21,11 +21,11 @@ import {
   TournamentRoundInvite,
   User
 } from "@port-of-mars/server/entity";
-import _ from "lodash";
+import {promisify} from "util";
 
 import fs from 'fs';
-import {getRepository, In} from "typeorm/index";
 
+const mkdir = promisify(fs.mkdir);
 const logger = getLogger(__filename);
 
 async function withConnection<T>(f: (em: EntityManager) => Promise<T>): Promise<void> {
@@ -69,12 +69,14 @@ async function exportData(em: EntityManager, ids?: Array<number>, dateCreatedMin
   const playerRaw = await playerQuery.getRawMany();
 
   const events = await eventQuery.getMany();
-  const playerSummarizer =  new PlayerSummarizer(playerRaw, '/dump/player.csv');
-  const gameEventSummarizer = new GameEventSummarizer(events, '/dump/gameEvent.csv');
-  const victoryPointSummarizer = new VictoryPointSummarizer(events, '/dump/victoryPoint.csv');
-  const playerInvestmentSummarizer = new PlayerInvestmentSummarizer(events, '/dump/playerInvestment.csv');
-  const marsEventSummarizer = new MarsEventSummarizer(events, '/dump/marsEvent.csv');
-  const accomplishmentSummarizer = new AccomplishmentSummarizer('/dump/accomplishment.csv')
+  await mkdir('/dump/processed', {recursive: true});
+  await mkdir('/dump/raw', {recursive: true});
+  const playerSummarizer =  new PlayerSummarizer(playerRaw, '/dump/processed/player.csv');
+  const gameEventSummarizer = new GameEventSummarizer(events, '/dump/processed/gameEvent.csv');
+  const victoryPointSummarizer = new VictoryPointSummarizer(events, '/dump/processed/victoryPoint.csv');
+  const playerInvestmentSummarizer = new PlayerInvestmentSummarizer(events, '/dump/raw/playerInvestment.csv');
+  const marsEventSummarizer = new MarsEventSummarizer(events, '/dump/processed/marsEvent.csv');
+  const accomplishmentSummarizer = new AccomplishmentSummarizer('/dump/processed/accomplishment.csv')
   await Promise.all([playerSummarizer, gameEventSummarizer, victoryPointSummarizer, playerInvestmentSummarizer, marsEventSummarizer, accomplishmentSummarizer].map(s => s.save()))
 }
 
