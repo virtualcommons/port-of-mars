@@ -1,6 +1,6 @@
 import * as req from '@port-of-mars/shared/game/requests';
 import {InvestmentData, Phase, TradeData} from '@port-of-mars/shared/types';
-import {GameState, Player} from '@port-of-mars/server/rooms/game/state';
+import {GameState, Player, Trade} from '@port-of-mars/server/rooms/game/state';
 import {
   AcceptedTradeRequest,
   AddedSystemHealthContributions,
@@ -36,7 +36,7 @@ import {
   SetPlayerReadiness,
   TimeInvested,
   VotedForPersonalGain,
-  VotedForPhilanthropist, VoteHeroOrPariah, ExitedTradePhase, ExitedPurchasePhase
+  VotedForPhilanthropist, VoteHeroOrPariah, ExitedTradePhase, ExitedPurchasePhase, ServerCanceledTradeRequest
 } from '@port-of-mars/server/rooms/game/events';
 import {getAccomplishmentByID} from '@port-of-mars/server/data/Accomplishment';
 import {Command} from '@port-of-mars/server/rooms/game/commands/types';
@@ -183,16 +183,28 @@ export class ResetBotWarningCmd implements Command {
 }
 
 export class AcceptTradeRequestCmd implements Command {
-  constructor(private id: string) {
+  constructor(private state: GameState, private id: string) {
   }
 
-  static fromReq(r: req.AcceptTradeRequestData) {
-    return new AcceptTradeRequestCmd(r.id);
+  static fromReq(r: req.AcceptTradeRequestData, state: GameState,) {
+    return new AcceptTradeRequestCmd(state, r.id);
   }
 
   execute(): Array<GameEvent> {
-    return [new AcceptedTradeRequest({id: this.id})];
+    const trade: Trade | undefined = this.state.tradeSet[this.id];
+    if (!trade) {
+      logger.info('[GAME %d]: attempted to accept non-existent trade %s', this.state.gameId, this.id)
+      return [];
+    }
+    const sender = this.state.players[trade.sender.role];
+    const recipient = this.state.players[trade.recipient.role];
+    if (this.state.canCompleteTrade(sender, recipient, trade)) {
+      return [new AcceptedTradeRequest({id: this.id})];
+    } else {
+      return [new ServerCanceledTradeRequest({id: this.id})]
+    }
   }
+
 }
 
 export class RejectTradeRequestCmd implements Command {

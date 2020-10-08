@@ -197,7 +197,7 @@ export class RejectedTradeRequest extends GameEventWithData {
   }
 
   apply(game: GameState): void {
-    game.removeTrade(this.data.id, 'reject-trade-request');
+    game.rejectTrade(this.data.id);
   }
 }
 
@@ -213,7 +213,7 @@ export class CanceledTradeRequest extends GameEventWithData {
   }
 
   apply(game: GameState): void {
-    game.removeTrade(this.data.id, 'cancel-trade-request');
+    game.cancelTrade(this.data.id);
   }
 }
 
@@ -234,6 +234,22 @@ export class SentTradeRequest extends GameEventWithData {
 }
 
 gameEventDeserializer.register(SentTradeRequest);
+
+export class ServerCanceledTradeRequest extends GameEventWithData {
+  constructor(public data: { id: string }) {
+    super();
+  }
+
+  getRole(game: GameState): Role | ServerRole {
+    return game.tradeSet[this.data.id]?.from?.role ?? SERVER;
+  }
+
+  apply(game: GameState): void {
+    game.cancelTrade(this.data.id, true);
+  }
+}
+
+gameEventDeserializer.register(ServerCanceledTradeRequest);
 
 /*
  Phase Events

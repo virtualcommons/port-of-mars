@@ -1572,44 +1572,12 @@ export class GameState extends Schema implements GameData {
     }
   }
 
-  removeTrade(id: string, reason?: string): void {
-    let message: string;
-    let category: string;
-    const performedBy: ServerRole = SERVER;
-    const trade: Trade | undefined = this.tradeSet[id];
-    if (!trade) {
-      logger.warn('Could not remove trade. Trade %s not found', id);
-      return;
-    }
-    const recipientRole: Role = this.tradeSet[id].recipient.role;
-    const senderRole: Role = this.tradeSet[id].sender.role;
-
-    switch (reason) {
-      case 'reject-trade-request':
-        message = `The ${recipientRole} rejected a trade request from the ${senderRole}.`;
-        category = MarsLogCategory.rejectTrade;
-        this.log(message, category, performedBy);
-        this.tradeSet[id].status = 'Rejected';
-        break;
-      case 'cancel-trade-request':
-        message = `The ${senderRole} canceled a trade request sent to the ${recipientRole}.`;
-        category = MarsLogCategory.cancelTrade;
-        this.log(message, category, performedBy);
-        this.tradeSet[id].status = 'Cancelled';
-        break;
-      default:
-        break;
-    }
-  }
-
   canCompleteTrade(sender: PlayerData, recipient: PlayerData, trade: Trade): boolean {
     return canSendTradeRequest(sender, trade.sender.resourceAmount)
       && canSendTradeRequest(recipient, trade.recipient.resourceAmount);
   }
 
   acceptTrade(id: string): void {
-    let message: string;
-    let category: string;
     const performedBy: ServerRole = SERVER;
 
     const trade: Trade | undefined = this.tradeSet[id];
@@ -1623,42 +1591,73 @@ export class GameState extends Schema implements GameData {
     const recipient = this.players[recipientRole];
     const fromTradeResources: ResourceAmountData = trade.sender.resourceAmount;
 
-    if (this.canCompleteTrade(sender, recipient, trade)) {
-      const toMsg: Array<string> = [];
-      const fromMsg: Array<string> = [];
+    const toMsg: Array<string> = [];
+    const fromMsg: Array<string> = [];
 
-      const toTradeResources: ResourceAmountData = trade.recipient.resourceAmount;
+    const toTradeResources: ResourceAmountData = trade.recipient.resourceAmount;
 
-      // apply trade resources to sender's inventory
-      sender.inventory.add(_.mapValues(trade.sender.resourceAmount, r => -r!));
-      sender.inventory.add(trade.recipient.resourceAmount);
-      // apply trade resources to recipient's inventory
-      recipient.inventory.add(_.mapValues(trade.recipient.resourceAmount, r => -r!));
-      recipient.inventory.add(trade.sender.resourceAmount);
+    // apply trade resources to sender's inventory
+    sender.inventory.add(_.mapValues(trade.sender.resourceAmount, r => -r!));
+    sender.inventory.add(trade.recipient.resourceAmount);
+    // apply trade resources to recipient's inventory
+    recipient.inventory.add(_.mapValues(trade.recipient.resourceAmount, r => -r!));
+    recipient.inventory.add(trade.sender.resourceAmount);
 
-      for (const [resource, amount] of Object.entries(toTradeResources)) {
-        if (amount > 0) {
-          const resourceFormatted = resource.charAt(0).toUpperCase() + resource.slice(1);
-          toMsg.push(`${resourceFormatted}: ${amount}`);
-        }
+    for (const [resource, amount] of Object.entries(toTradeResources)) {
+      if (amount > 0) {
+        const resourceFormatted = resource.charAt(0).toUpperCase() + resource.slice(1);
+        toMsg.push(`${resourceFormatted}: ${amount}`);
       }
-      for (const [resource, amount] of Object.entries(fromTradeResources)) {
-        if (amount > 0) {
-          const resourceFormatted = resource.charAt(0).toUpperCase() + resource.slice(1);
-          toMsg.push(`${resourceFormatted}: ${amount}`);
-        }
-      }
-      message = `The ${senderRole} has traded ${fromMsg.join(', ')} in exchange for ${toMsg.join(', ')} from the ${recipientRole}.`;
-      category = MarsLogCategory.acceptTrade;
-      this.roundIntroduction.addCompletedTrade(this.tradeSet[id]);
-      this.log(message, category, performedBy);
-      this.tradeSet[id].status = 'Accepted';
-    } else {
-      message = `The ${senderRole} is unable to fulfill a trade request previously sent to the ${recipientRole}. The trade will be removed.`;
-      category = MarsLogCategory.invalidTrade;
-      this.log(message, category, performedBy);
-      this.tradeSet[id].status = 'Cancelled';
     }
+    for (const [resource, amount] of Object.entries(fromTradeResources)) {
+      if (amount > 0) {
+        const resourceFormatted = resource.charAt(0).toUpperCase() + resource.slice(1);
+        toMsg.push(`${resourceFormatted}: ${amount}`);
+      }
+    }
+    const message = `The ${senderRole} has traded ${fromMsg.join(', ')} in exchange for ${toMsg.join(', ')} from the ${recipientRole}.`;
+    const category = MarsLogCategory.acceptTrade;
+    this.roundIntroduction.addCompletedTrade(this.tradeSet[id]);
+    this.log(message, category, performedBy);
+    this.tradeSet[id].status = 'Accepted';
+  }
+
+  rejectTrade(id: string) {
+    const performedBy: ServerRole = SERVER;
+    const trade: Trade | undefined = this.tradeSet[id];
+    if (!trade) {
+      logger.warn('Could not remove trade. Trade %s not found', id);
+      return;
+    }
+    const recipientRole: Role = this.tradeSet[id].recipient.role;
+    const senderRole: Role = this.tradeSet[id].sender.role;
+
+    const message = `The ${recipientRole} rejected a trade request from the ${senderRole}.`;
+    const category = MarsLogCategory.rejectTrade;
+    this.log(message, category, performedBy);
+    this.tradeSet[id].status = 'Rejected';
+  }
+
+  cancelTrade(id: string, byServer=false) {
+    const performedBy: ServerRole = SERVER;
+
+    const trade: Trade | undefined = this.tradeSet[id];
+    if (!trade) {
+      logger.warn('Trade not accepted. Could not find %s', id);
+      return;
+    }
+    const senderRole = trade.sender.role;
+    const recipientRole = trade.recipient.role;
+    const sender = this.players[senderRole];
+    const recipient = this.players[recipientRole];
+    const fromTradeResources: ResourceAmountData = trade.sender.resourceAmount;
+
+    const message = byServer
+      ? `The ${senderRole} is unable to fulfill a trade request previously sent to the ${recipientRole}. The trade will be removed.`
+      : `The ${senderRole} canceled a trade request sent to the ${recipientRole}.`;
+    const category = MarsLogCategory.invalidTrade;
+    this.log(message, category, performedBy);
+    this.tradeSet[id].status = 'Cancelled';
   }
 
   // FIXME: refine mars log message

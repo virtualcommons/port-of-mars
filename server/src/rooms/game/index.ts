@@ -78,7 +78,7 @@ function prepareRequest(room: Room<GameState> & Game, r: Requests, client: Clien
   player.resetElapsed();
   switch (r.kind) {
     case 'accept-trade-request':
-      return AcceptTradeRequestCmd.fromReq(r);
+      return AcceptTradeRequestCmd.fromReq(r, room.state);
     case 'bonding-through-adversity':
       return BondingThroughAdversityCmd.fromReq(r, player);
     case 'breakdown-of-trust':
