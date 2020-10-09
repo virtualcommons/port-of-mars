@@ -172,7 +172,8 @@ export default class PlayerDashboard extends Vue {
     mustTakeTutorial: true,
     mustTakeIntroSurvey: true,
     canPlayGame: false,
-    shouldTakeExitSurvey: false
+    shouldTakeExitSurvey: false,
+    hasInvite: false,
   };
   schedule: Array<{ date: string, addToCalendar: CalendarEvent }> = [
     {
