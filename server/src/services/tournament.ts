@@ -103,7 +103,7 @@ export class TournamentService extends BaseService {
     return await repository.save(invite);
   }
 
-  async getActiveRoundInvite(userId: number, tournamentRound?: TournamentRound): Promise<TournamentRoundInvite> {
+  async getActiveRoundInvite(userId: number, tournamentRound?: TournamentRound): Promise<TournamentRoundInvite | undefined> {
     if (!tournamentRound) {
       tournamentRound = await this.getCurrentTournamentRound();
     }
@@ -114,15 +114,11 @@ export class TournamentService extends BaseService {
         userId
       }
     });
-    if (invite) return invite;
-
     // special case for the first round of a tournament where everyone's invited 
     if (!invite && tournamentRound.roundNumber === 1) {
       return await this.createInvite(userId, tournamentRoundId);
     }
-    else {
-      throw new EntityNotFoundError(TournamentRoundInvite, `User ${userId} does not have an invite for the current round ${tournamentRoundId}.`);
-    }
+    return invite;
   }
 
   async createTournament(data: Pick<Tournament, 'name' | 'active'>): Promise<Tournament> {
@@ -240,7 +236,14 @@ export class TournamentService extends BaseService {
     this.em.save(invite);
   }
 
-  isLobbyOpen(gameDates: Array<Date>): boolean {
+  /**
+   * Returns true if there is a scheduled game within a specific time window of now. Currently set to open 10 mins before the
+   * scheduled game, and 30 minutes after the scheduled game (i.e., 40 minute window).
+   */
+  async isLobbyOpen(gameDates?: Array<Date>, tournamentRound?: TournamentRound): Promise<boolean> {
+    if (! gameDates) {
+      gameDates = await this.getScheduledDates(tournamentRound);
+    }
     if (settings.lobby.devMode) {
       return true;
     }

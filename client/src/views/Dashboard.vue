@@ -93,6 +93,14 @@
             </template>
           </b-table>
         </b-container>
+        <b-container v-else-if="! playerTaskCompletion.hasInvite">
+          <h2 class="text-center text-uppercase mt-5 py-2">No active invitation found</h2>
+          <p class='lead text-left'>
+            Thanks for your interest in the Port of Mars! Unfortunately you do not appear to have an invitation to participate
+            in this round of the Port of Mars. If you think this is an error, please contact us at 
+            <a href='mailto:portmars@asu.edu'>portmars@asu.edu</a>.
+          </p>
+        </b-container>
         <b-container v-else>
           <h2 class="text-center text-uppercase mt-5 py-2">Already Participated</h2>
           <p class='lead text-left'>

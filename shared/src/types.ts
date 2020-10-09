@@ -290,6 +290,7 @@ export interface PlayerTaskCompletion {
   mustTakeIntroSurvey: boolean;
   canPlayGame: boolean;
   shouldTakeExitSurvey: boolean;
+  hasInvite: boolean;
 }
 
 

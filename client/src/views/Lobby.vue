@@ -129,9 +129,11 @@
         await this.$router.push({name: DASHBOARD_PAGE});
         return;
       }
-      // all checks passed, set up the lobby page and join the Colyseus Lobby room
-      this.scheduledGameTime = dashboardData.upcomingGames[0].time;
+      if (dashboardData.upcomingGames.length > 0) {
+        this.scheduledGameTime = dashboardData.upcomingGames[0].time;
+      }
       try {
+        // all dashboard checks passed, try to join the Colyseus Lobby
         const room = await this.$client.joinOrCreate(LOBBY_NAME);
         applyWaitingServerResponses(room, this);
         this.lobbyAPI.connect(room);

@@ -1,4 +1,4 @@
-import {Game, GameEvent} from "@port-of-mars/server/entity";
+import {Game, GameEvent, Player} from "@port-of-mars/server/entity";
 import {BaseService} from "@port-of-mars/server/services/db";
 
 export class GameService extends BaseService {
@@ -20,5 +20,17 @@ export class GameService extends BaseService {
       .getOne();
 
     return game?.roomId;
+  }
+
+  async getNumberOfActiveParticipants(tournamentRoundId?: number): Promise<number> {
+    if (! tournamentRoundId) {
+      tournamentRoundId = (await this.sp.tournament.getCurrentTournamentRound()).id;
+    }
+    return await this.em.getRepository(Player)
+      .createQueryBuilder("player")
+      .innerJoin("player.game", "game")
+      .where("game.status = 'incomplete'")
+      .andWhere("game.tournamentRoundId = :tournamentRoundId", {tournamentRoundId})
+      .getCount()
   }
 }

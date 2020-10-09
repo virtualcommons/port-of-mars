@@ -3,6 +3,7 @@ import {
   JoinedClientQueue,
   SentInvitation,
   RemovedClientFromLobby,
+  JoinFailure
 } from '@port-of-mars/shared/lobby/responses';
 import { DASHBOARD_PAGE, GAME_PAGE } from '@port-of-mars/shared/routes';
 import Lobby from '@port-of-mars/client/views/Lobby.vue';
@@ -36,17 +37,21 @@ export function applyWaitingServerResponses<T>(
     console.log(`client left the room: ${code}`);
   });
 
+  room.onMessage('join-failure', (msg: JoinFailure) => {
+    store.commit('SET_DASHBOARD_MESSAGE', { kind: 'warning', message: msg.reason});
+    router.push({ name: DASHBOARD_PAGE });
+  });
+
   room.onMessage('joined-client-queue', (msg: JoinedClientQueue) => {
     (component as any).joinedQueue = msg.value;
   });
   room.onMessage('sent-invitation', (msg: SentInvitation) => {
     component.$ajax.roomId = msg.roomId;
-    router.push({ name: GAME_PAGE });
     room.send('accept-invitation', { kind: 'accept-invitation' });
   });
   room.onMessage('removed-client-from-lobby', (msg: RemovedClientFromLobby) => {
-    // TODO: HANDLE WAITING LOBBY DISCONNECT
     console.log('Removed client from lobby (currently a NO-OP).');
+    router.push({ name: GAME_PAGE });
   });
 
   room.state.onChange = (changes: Array<any>) => {

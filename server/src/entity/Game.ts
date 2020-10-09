@@ -34,7 +34,7 @@ export class Game {
   players!: Array<Player>;
 
   @Column({ default: 'incomplete',  })
-  status: 'incomplete' | 'defeat' | 'victory' = 'incomplete';
+  status: 'incomplete' | 'defeat' | 'victory' | 'failure' = 'incomplete';
 
   @OneToOne(type => Player, { nullable: true })
   @JoinColumn()

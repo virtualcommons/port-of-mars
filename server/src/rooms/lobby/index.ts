@@ -42,9 +42,9 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
 
   /**
    * Distribute clients into groups at this interval
-   * currently set to 15 minutes
+   * currently set to check for group assignment every 5 minutes
    */
-  evaluateAtEveryMinute = 5;
+  groupAssignmentInterval = 5;
 
   /**
    * Groups of players per iteration
@@ -74,7 +74,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
   onCreate(options: any) {
     logger.info(`RankedLobbyRoom: new room ${this.roomId}`);
     this.setState(new LobbyRoomState());
-    this.evaluateAtEveryMinute = settings.lobby.evaluateAtEveryMinute;
+    this.groupAssignmentInterval = settings.lobby.groupAssignmentInterval;
     this.devMode = settings.lobby.devMode;
     this.registerLobbyHandlers();
 
@@ -82,9 +82,9 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
      * Redistribute clients into groups at every interval
      */
     this.scheduler = schedule.scheduleJob(
-      `*/${this.evaluateAtEveryMinute} * * * *`,
+      `*/${this.groupAssignmentInterval} * * * *`,
       async () => {
-        logger.trace('SCHEDULED JOB: REDISTRIBUTE GROUPS');
+        logger.trace('SCHEDULED JOB: REDISTRIBUTE GROUPS EVERY %d', this.groupAssignmentInterval);
         this.redistributeGroups();
         await this.updateLobbyNextAssignmentTime();
       }
@@ -98,10 +98,10 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
         .nextInvocation()
         .toDate()
         .getTime();
+      logger.trace("next invocation: %s", nextInvocation);
       this.state.nextAssignmentTime = nextInvocation;
       const tournamentService = getServices().tournament;
-      const scheduledDates = await tournamentService.getScheduledDates();
-      this.state.isOpen = tournamentService.isLobbyOpen(scheduledDates);
+      this.state.isOpen = await tournamentService.isLobbyOpen();
     }
   }
 
@@ -121,7 +121,19 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
     return false;
   }
 
-  onJoin(client: Client, options: any) {
+  async onJoin(client: Client, options: any) {
+    // FIXME: need to consider how this will scale and adjust if we go to the multiple-process Colyseus route, we may
+    // need to include process ID info in the Game table so we can find how many participants a given Colyseus process is servicing
+
+    // guard against too many connections, check total number of participants + currently waiting participants against
+    // the maxConnections threshold
+    const numberOfActiveParticipants = await getServices().game.getNumberOfActiveParticipants();
+    logger.debug("active participants: %d lobby clients: %d", numberOfActiveParticipants, this.clientStats.length);
+    if (numberOfActiveParticipants + this.clientStats.length > settings.maxConnections) {
+      // abort the connection and send an error message to the client
+      this.sendSafe(client, { kind: 'join-failure', reason: 'Sorry, Port of Mars is currently full! Please try again later.' });
+      return;
+    }
     const clientStat = {
       client: client,
       rank: options.rank,

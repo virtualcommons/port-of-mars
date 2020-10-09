@@ -9,13 +9,14 @@ export interface AppSettings {
   host: string;
   logging: Logging;
   secret: string;
+  maxConnections: number;
   lobby: LobbySettings;
   supportEmail: string,
   isProduction: boolean;
 }
 
 export class LobbySettings {
-  constructor(public evaluateAtEveryMinute: number = 15, public devMode: boolean = true) { }
+  constructor(public groupAssignmentInterval: number = 15, public devMode: boolean = true) { }
 }
 
 const dev: () => AppSettings = () => ({
@@ -26,6 +27,7 @@ const dev: () => AppSettings = () => ({
   supportEmail: 'portmars@asu.edu',
   lobby: new LobbySettings(15),
   isProduction: false,
+  maxConnections: 100
 });
 
 const staging: () => AppSettings = () => {
@@ -39,6 +41,7 @@ const staging: () => AppSettings = () => {
     supportEmail: 'portmars@asu.edu',
     lobby: new LobbySettings(15),
     isProduction: false,
+    maxConnections: 200
   };
 };
 

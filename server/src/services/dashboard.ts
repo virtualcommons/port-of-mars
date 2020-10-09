@@ -1,10 +1,9 @@
 import { User } from '@port-of-mars/server/entity/User';
-import {Stats, PlayerScores} from "@port-of-mars/shared/types";
+import {Stats} from "@port-of-mars/shared/types";
 import { TournamentRound } from "@port-of-mars/server/entity/TournamentRound";
-import { Game, Player, TournamentRoundInvite } from "@port-of-mars/server/entity";
+import { Game, TournamentRoundInvite } from "@port-of-mars/server/entity";
 import { BaseService } from "@port-of-mars/server/services/db";
 import {IsNull, Not, SelectQueryBuilder} from "typeorm";
-import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 import { PlayerTaskCompletion, DashboardData } from "@port-of-mars/shared/types";
 import { getLogger, settings } from "@port-of-mars/server/settings";
 import _ from "lodash";
@@ -121,6 +120,7 @@ export class DashboardService extends BaseService {
       mustTakeIntroSurvey: this.mustTakeIntroSurvey(invite),
       canPlayGame: this.canPlayGame(invite),
       shouldTakeExitSurvey: this.shouldTakeExitSurvey(invite),
+      hasInvite: !_.isUndefined(invite),
     }
   }
 
@@ -130,15 +130,7 @@ export class DashboardService extends BaseService {
       throw new Error(`no active tournament round found`);
     }
     const stats = await this.getStats(user, round);
-    let invite: TournamentRoundInvite | undefined = undefined;
-    try {
-      invite = await this.sp.tournament.getActiveRoundInvite(user.id, round);
-    }
-    catch (err) {
-      if (! (err instanceof EntityNotFoundError)) {
-        throw err;
-      }
-    }
+    const invite = await this.sp.tournament.getActiveRoundInvite(user.id, round);
     const playerTaskCompletion: PlayerTaskCompletion = await this.getPlayerTaskCompletion(user, invite);
     const gameDates = await this.sp.tournament.getScheduledDates(round);
     const upcomingGames = gameDates.map( date => {
@@ -149,7 +141,7 @@ export class DashboardService extends BaseService {
       introSurveyUrl: this.getIntroSurveyUrl(user, round, invite),
       exitSurveyUrl: this.getExitSurveyUrl(user, round, invite),
       upcomingGames,
-      isLobbyOpen: this.sp.tournament.isLobbyOpen(gameDates),
+      isLobbyOpen: await this.sp.tournament.isLobbyOpen(gameDates),
       stats
     }
   }
