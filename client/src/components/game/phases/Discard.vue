@@ -55,7 +55,7 @@ export default class Discard extends Vue {
   @Inject() readonly api!: GameRequestAPI;
   // sort accomplishments by purchasable in ascending order
   // static and is set when component is created; does not update with changes
-  private sortedAccomplishments = this.$store.getters.player.accomplishments.purchasable.slice()
+  private sortedAccomplishments = this.$tstore.getters.player.accomplishments.purchasable.slice()
     .sort((a: AccomplishmentData, b: AccomplishmentData) => {
       return (
         Number(
@@ -81,7 +81,7 @@ export default class Discard extends Vue {
    * > Filter accomplishments by ID - if ID is not in the array, card has been discarded
    */
   wasDiscarded(id: number): boolean {
-    return Boolean((this.$store.getters.player.accomplishments.purchasable as Array<AccomplishmentData>)
+    return Boolean((this.$tstore.getters.player.accomplishments.purchasable as Array<AccomplishmentData>)
       .slice()
       .filter(accomplishment => accomplishment.id == id).length > 0);
   }

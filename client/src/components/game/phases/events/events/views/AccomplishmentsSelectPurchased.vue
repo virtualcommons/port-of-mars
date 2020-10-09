@@ -1,38 +1,37 @@
 <template>
-  <div class="event-select-purchased-accomplishment-container">
-    <div class="actions">
-      <div>
-        <template v-if="purchasedAccomplishmentsLength > 0">
-          <p>
-            {{ marsEvent.effect }}
-          </p>
-          <p>
-            {{ marsEvent.flavorText }}
-          </p>
-        </template>
-        <p v-if="purchasedAccomplishmentsLength === 0">
-          No Purchased Accomplishments. Please click 'Continue'.
-        </p>
-        <!--:style="handleAccomplishmentStyle(accomplishment)"-->
-        <AccomplishmentCard
-          :accomplishment="accomplishment"
-          :key="accomplishment.id"
-          @discarded="handleDiscardAccomplishment(accomplishment)"
-          :type="discardType"
-          v-for="accomplishment in purchasedAccomplishments"
-          />
+  <b-container fluid>
+    <b-row class="justify-content-center m-2 text-center">
+      <template class="py-2">
+        <p class="pb-1"><i>{{ marsEvent.flavorText }}</i></p>
+        <p><strong>{{ marsEvent.effect }}</strong></p>
+      </template>
+      <div v-if="purchasedAccomplishmentsLength < 1">
+        <b-row class="pt-5">
+          <p>No Purchased Accomplishments. Please click 'Continue'.</p>
+        </b-row>
+        <b-row class="justify-content-center align-items-center pt-3">
+          <button @click="ready" class="button">Continue</button>
+        </b-row>
       </div>
-    </div>
-  </div>
+      <AccomplishmentCard
+        v-else
+        :accomplishment="accomplishment"
+        :key="accomplishment.id"
+        @discardPurchased="handleDiscardAccomplishment"
+        :type="discardType"
+        v-for="accomplishment in purchasedAccomplishments"
+      />
+    </b-row>
+  </b-container>
 </template>
 
 <script lang="ts">
-  import {Vue, Component, Prop, Inject} from 'vue-property-decorator';
-
-  import {AbstractGameAPI} from "@port-of-mars/client/api/game/types";
-  import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
-  import {AccomplishmentCardType} from '@port-of-mars/client/types/cards.ts'
-  import {AccomplishmentData, MarsEventData, RESEARCHER} from '@port-of-mars/shared/types';
+import {Component, Inject, Prop, Vue} from 'vue-property-decorator';
+import _ from "lodash";
+import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
+import {AccomplishmentCardType} from '@port-of-mars/client/types/cards.ts'
+import {AccomplishmentData, MarsEventData, RESEARCHER} from '@port-of-mars/shared/types';
+import {GameRequestAPI} from "@port-of-mars/client/api/game/request";
 
 @Component({
   components: {
@@ -43,7 +42,8 @@ export default class AccomplishmentsSelectPurchased extends Vue {
   @Inject()
   api!: AbstractGameAPI;
 
-  private purchasedAccomplishmentsLength: number = -1;
+  purchasedAccomplishmentsLength: number = Object.keys(this.purchasedAccomplishments).length;
+
   private selectedPurchasedAccomplishment: AccomplishmentData = {
     id: -1,
     role: RESEARCHER,
@@ -58,6 +58,10 @@ export default class AccomplishmentsSelectPurchased extends Vue {
     victoryPoints: 0,
     effect: '',
   };
+
+  ready() {
+    this.api.setPlayerReadiness(true);
+  }
 
   get marsEvent(): MarsEventData {
     return this.$tstore.getters.currentEvent!;

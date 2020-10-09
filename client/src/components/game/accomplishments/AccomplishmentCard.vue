@@ -83,10 +83,13 @@
       class="w-100 m-0 p-3 wrapper text-center discard"
       v-else-if="type === cardType.discard && showCard"
     >
-      <button :disabled="playerReady" @click="discard()">
+      <button v-if="!isEffortsWasted" :disabled="playerReady" @click="discard()">
         Discard Accomplishment
       </button>
 
+      <button v-else :disabled="playerReady" @click="discardPurchasedAccomplishment()">
+        Discard Purchased Accomplishment
+      </button>
     </div>
 
     <!-- display status of card after it has been purchased or discarded -->
@@ -173,6 +176,10 @@ export default class AccomplishmentCard extends Vue {
   // local player's readiness
   get playerReady() {
     return this.$tstore.getters.ready;
+  }
+
+  get isEffortsWasted() {
+    return this.$tstore.getters.isEffortsWasted;
   }
 
   // local player's pending investments
@@ -324,16 +331,18 @@ export default class AccomplishmentCard extends Vue {
 
   // purchase accomplishment
   purchase() {
-    if (this.canPurchase) {
-      // FIXME: should refactor to this.$emit('purchased')
-      this.api.purchaseAccomplishment(this.accomplishment);
-    }
+    if (this.canPurchase) this.$emit('purchased', this.accomplishment);
   }
 
   // discard accomplishment
   discard() {
     this.$emit('discarded', this.accomplishment.id);
   }
+
+  discardPurchasedAccomplishment() {
+    this.$emit('discardPurchased', this.accomplishment.id)
+  }
+
 }
 </script>
 
