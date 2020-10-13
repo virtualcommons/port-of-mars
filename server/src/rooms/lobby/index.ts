@@ -127,9 +127,11 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
 
     // guard against too many connections, check total number of participants + currently waiting participants against
     // the maxConnections threshold
-    const numberOfActiveParticipants = await getServices().game.getNumberOfActiveParticipants();
+    const sp = getServices();
+    const numberOfActiveParticipants = await sp.game.getNumberOfActiveParticipants();
+    const maxConnections = await sp.dynamicSettings.getMaxConnections();
     logger.debug("active participants: %d lobby clients: %d", numberOfActiveParticipants, this.clientStats.length);
-    if (numberOfActiveParticipants + this.clientStats.length > settings.maxConnections) {
+    if (numberOfActiveParticipants + this.clientStats.length > maxConnections) {
       // abort the connection and send an error message to the client
       this.sendSafe(client, { kind: 'join-failure', reason: 'Sorry, Port of Mars is currently full! Please try again later.' });
       return;

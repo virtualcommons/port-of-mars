@@ -1,6 +1,6 @@
 import {program} from 'commander'
 import {createConnection, EntityManager} from "typeorm";
-import {getServices} from "@port-of-mars/server/services";
+import {getRedis, getServices} from "@port-of-mars/server/services";
 import {
   AccomplishmentSummarizer,
   GameEventSummarizer,
@@ -24,6 +24,8 @@ import {
 import {promisify} from "util";
 
 import fs from 'fs';
+import {createClient} from "redis";
+import {DYNAMIC_SETTINGS_PATH, DynamicSettings} from "@port-of-mars/server/services/dynamicSettings";
 
 const mkdir = promisify(fs.mkdir);
 const logger = getLogger(__filename);
@@ -257,6 +259,30 @@ program
       .action(async (cmd) => {
         await withConnection((em) => exportData(em, cmd.ids, cmd.dateCreatedMin))
       })
+  )
+  .addCommand(
+    program.createCommand('settings')
+      .description('subcommands for dynamic settings in redis')
+      .addCommand(
+        program.createCommand('reload')
+          .description(`reload settings from the file system at ${DYNAMIC_SETTINGS_PATH}`)
+          .action(async (cmd) => {
+            try {
+              const client = getRedis();
+              console.log('reloading dynamic settings');
+              const dynamicSettings = new DynamicSettings(client);
+              const code = await dynamicSettings.reload();
+              console.log({code});
+              if (code) {
+                console.error(`reloading settings failed with code ${code}`);
+                process.exit(code);
+              }
+              console.log('reloaded dynamic settings')
+            } finally {
+              getRedis().quit()
+            }
+          })
+      )
   );
 
 async function main(argv: Array<string>): Promise<void> {

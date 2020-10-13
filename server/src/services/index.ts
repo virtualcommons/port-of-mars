@@ -8,6 +8,8 @@ import {DashboardService} from "@port-of-mars/server/services/dashboard";
 import {getConnection} from "@port-of-mars/server/util";
 import {TimeService} from "@port-of-mars/server/services/time";
 import {GameService} from "@port-of-mars/server/services/game";
+import {DynamicSettings} from "@port-of-mars/server/services/dynamicSettings";
+import {createClient, RedisClient} from "redis";
 
 export class ServiceProvider {
   constructor(public em: EntityManager) {}
@@ -75,6 +77,22 @@ export class ServiceProvider {
     }
     return this._dashboard;
   }
+
+  private _dynamicSettings?: DynamicSettings;
+  get dynamicSettings() {
+    if (!this._dynamicSettings) {
+      this._dynamicSettings = new DynamicSettings(getRedis())
+    }
+    return this._dynamicSettings;
+  }
+}
+
+let _redis!: RedisClient;
+export function getRedis(): RedisClient {
+  if (!_redis) {
+    _redis = createClient({ host: 'redis' });
+  }
+  return _redis;
 }
 
 export function getServices(em?: EntityManager) {

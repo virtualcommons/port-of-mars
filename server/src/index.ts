@@ -22,7 +22,7 @@ import * as fs from 'fs';
 import { registrationRouter } from "@port-of-mars/server/routes/registration";
 import { settings } from "@port-of-mars/server/settings";
 import {getBuildId, isDev} from '@port-of-mars/shared/settings';
-import { getServices } from "@port-of-mars/server/services";
+import {getRedis, getServices} from "@port-of-mars/server/services";
 import { gameRouter } from "@port-of-mars/server/routes/game";
 import { surveyRouter } from "@port-of-mars/server/routes/survey";
 import { ServerError } from './util';
@@ -36,7 +36,7 @@ const CasStrategy = require('passport-cas2').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
 
 const RedisStore = connectRedis(session);
-const store = new RedisStore({ host: 'redis', client: redis.createClient({ host: 'redis' }) });
+const store = new RedisStore({ host: 'redis', client: getRedis() });
 const sessionParser = session({
   resave: false,
   saveUninitialized: false,
@@ -87,6 +87,11 @@ applyInStagingOrProd(() =>
 );
 
 async function createApp() {
+  await (async () => {
+    const sp = getServices();
+    await sp.dynamicSettings.loadIfNotExist();
+  })()
+
   logger.info('starting server (%s) with build id: %s, settings %o', process.env.NODE_ENV, getBuildId(), settings);
   const port = Number(process.env.PORT || 2567);
   const app = express();
