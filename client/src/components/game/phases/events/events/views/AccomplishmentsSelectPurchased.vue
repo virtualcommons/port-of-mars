@@ -20,13 +20,9 @@
         v-if="!completed"
         :accomplishment="accomplishment"
         :key="accomplishment.id"
-        @discardPurchased="handleDiscardAccomplishment"
+        @discardPurchased="stageDiscard"
         :type="cardType"
         v-for="accomplishment in purchasedAccomplishments"
-      />
-      <AccomplishmentCard
-        v-else
-        :accomplishment="selectedPurchasedAccomplishment"
       />
     </b-row>
   </b-container>
@@ -38,6 +34,7 @@ import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishm
 import {AccomplishmentCardType} from '@port-of-mars/client/types/cards.ts'
 import {AccomplishmentData, MarsEventData, RESEARCHER} from '@port-of-mars/shared/types';
 import {GameRequestAPI} from "@port-of-mars/client/api/game/request";
+import _ from 'lodash';
 
 @Component({
   components: {
@@ -88,10 +85,12 @@ export default class AccomplishmentsSelectPurchased extends Vue {
     return this.selectedPurchasedAccomplishment.id !== -1;
   }
 
-  private handleDiscardAccomplishment(accomplishment: AccomplishmentData) {
-    // FIXME: selected accomplishment to discard isn't getting copied correctly
-    this.selectedPurchasedAccomplishment = accomplishment;
-    this.api.stageDiscardOfPurchasedAccomplishment(accomplishment.id);
+  private stageDiscard(id: number) {
+    const pendingAccomplishmentDiscard = _.filter(this.purchasedAccomplishments, accomplishment => accomplishment.id);
+
+    // deep copy of pending accomplishment to discard
+    this.selectedPurchasedAccomplishment = JSON.parse(JSON.stringify(pendingAccomplishmentDiscard));
+    this.api.stageDiscardOfPurchasedAccomplishment(id);
   }
 }
 </script>
