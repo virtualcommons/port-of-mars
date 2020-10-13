@@ -40,7 +40,7 @@
         <!-- description -->
         <b-col
           :class="showDescription ? 'mt-3' : ''"
-          class="flavortext col-9"
+          class="flavortext text-left col-9"
           v-if="showDescription"
         >
           <p>{{ accomplishment.flavorText }}</p>
