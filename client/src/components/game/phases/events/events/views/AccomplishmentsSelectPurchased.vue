@@ -1,11 +1,14 @@
 <template>
   <b-container fluid>
-    <b-row class="justify-content-center m-2 text-center">
-      <template class="py-2">
+    <b-row class="justify-content-center m-2 pt-3 text-center">
+      <template class="py-2" v-if="completed">
+        <p><strong>You have discarded the Accomplishment below.</strong></p>
+      </template>
+      <template class="py-2" v-else>
         <p class="pb-1"><i>{{ marsEvent.flavorText }}</i></p>
         <p><strong>{{ marsEvent.effect }}</strong></p>
       </template>
-      <div v-if="purchasedAccomplishmentsLength < 1">
+      <div class="mt-3" v-if="purchasedAccomplishmentsLength < 1">
         <b-row class="pt-5">
           <p>No Purchased Accomplishments. Please click 'Continue'.</p>
         </b-row>
@@ -14,20 +17,23 @@
         </b-row>
       </div>
       <AccomplishmentCard
-        v-else
+        v-if="!completed"
         :accomplishment="accomplishment"
         :key="accomplishment.id"
         @discardPurchased="handleDiscardAccomplishment"
-        :type="discardType"
+        :type="cardType"
         v-for="accomplishment in purchasedAccomplishments"
+      />
+      <AccomplishmentCard
+        v-else
+        :accomplishment="selectedPurchasedAccomplishment"
       />
     </b-row>
   </b-container>
 </template>
 
 <script lang="ts">
-import {Component, Inject, Prop, Vue} from 'vue-property-decorator';
-import _ from "lodash";
+import {Component, Inject, Vue} from 'vue-property-decorator';
 import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
 import {AccomplishmentCardType} from '@port-of-mars/client/types/cards.ts'
 import {AccomplishmentData, MarsEventData, RESEARCHER} from '@port-of-mars/shared/types';
@@ -39,8 +45,7 @@ import {GameRequestAPI} from "@port-of-mars/client/api/game/request";
   },
 })
 export default class AccomplishmentsSelectPurchased extends Vue {
-  @Inject()
-  api!: AbstractGameAPI;
+  @Inject() readonly api!: GameRequestAPI;
 
   purchasedAccomplishmentsLength: number = Object.keys(this.purchasedAccomplishments).length;
 
@@ -67,7 +72,7 @@ export default class AccomplishmentsSelectPurchased extends Vue {
     return this.$tstore.getters.currentEvent!;
   }
 
-  get discardType() {
+  get cardType() {
     return AccomplishmentCardType.discard;
   }
 
@@ -80,16 +85,11 @@ export default class AccomplishmentsSelectPurchased extends Vue {
   }
 
   get completed() {
-    if (
-      this.purchasedAccomplishmentsLength === 0 ||
-      this.selectedPurchasedAccomplishment.id !== -1
-    ) {
-      return true;
-    }
-    return false;
+    return this.selectedPurchasedAccomplishment.id !== -1;
   }
 
   private handleDiscardAccomplishment(accomplishment: AccomplishmentData) {
+    // FIXME: selected accomplishment to discard isn't getting copied correctly
     this.selectedPurchasedAccomplishment = accomplishment;
     this.api.stageDiscardOfPurchasedAccomplishment(accomplishment.id);
   }
