@@ -92,8 +92,8 @@ export class TournamentService extends BaseService {
     return users.map(u => u.email ?? 'no email specified - should not be possible, check database');
   }
 
-  async createInvites(userIds: Array<number>, tournamentRoundId: number): Promise<Array<TournamentRoundInvite>> {
-    const invites = userIds.map(userId => this.em.getRepository(TournamentRoundInvite).create({ userId, tournamentRoundId }));
+  async createInvites(userIds: Array<number>, tournamentRoundId: number, hasParticipated=false): Promise<Array<TournamentRoundInvite>> {
+    const invites = userIds.map(userId => this.em.getRepository(TournamentRoundInvite).create({ userId, tournamentRoundId, hasParticipated }));
     return await this.em.getRepository(TournamentRoundInvite).save(invites);
   }
 

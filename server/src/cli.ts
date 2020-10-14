@@ -144,9 +144,9 @@ async function createRound(
   return round;
 }
 
-async function createTournamentRoundInvites(em: EntityManager, tournamentRoundId: number, userIds: Array<number>): Promise<number> {
+async function createTournamentRoundInvites(em: EntityManager, tournamentRoundId: number, userIds: Array<number>, hasParticipated: boolean): Promise<number> {
   const sp = getServices(em);
-  const invites = await sp.tournament.createInvites(userIds, tournamentRoundId);
+  const invites = await sp.tournament.createInvites(userIds, tournamentRoundId, hasParticipated);
   logger.debug("created tournament round invites for %s", userIds);
   return invites.length;
 }
@@ -221,9 +221,11 @@ program
             .requiredOption('--tournamentRoundId <tournamentRoundId>', 'ID of the tournament round', parseInt)
             .requiredOption('--userIds <userIds...>',
              'space separated list of user ids to invite', toIntArray, [] as Array<number>)
+            .option('-p, --participated', 'Set to mark these users as having already participated')
             .description('create invitations for the given users in the given tournament round')
             .action(async (cmd) => {
-              await withConnection(em => createTournamentRoundInvites(em, cmd.tournamentRoundId, cmd.userIds));
+              logger.debug("Participated: %s", cmd.participated);
+              await withConnection(em => createTournamentRoundInvites(em, cmd.tournamentRoundId, cmd.userIds, cmd.participated));
             })
           )
           .addCommand(
