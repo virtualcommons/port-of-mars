@@ -74,17 +74,15 @@
         </template>
         <b-container v-if="playerTaskCompletion.canPlayGame" class="text-center">
           <!-- GO TO WAITING LOBBY -->
-          <h2 class="pt-5 my-3 text-uppercase">Participate</h2>
+          <h2 class="pt-5 my-3 text-uppercase">Participate in Round {{ currentRoundNumber }}</h2>
           <b-button :to="join" pill size="lg" variant="success">
             Ready to Launch - Join the Waiting Lobby
             <font-awesome-icon icon="rocket"/>
           </b-button>
           <h2 class="text-uppercase pt-5 my-3">Schedule</h2>
-          <p class='lead text-left '>Please login during one of the following times to participate. We recommend that
-            you show up 5 minutes earlier to
-            join the waiting lobby.
+          <p class='lead text-left '>Please sign in during <b>one</b> of the following times to participate. We recommend that
+            you show up 5 minutes earlier to join the waiting lobby.
           </p>
-
           <b-table :items="schedule" bordered class="py-3" dark responsive sticky-header striped>
             <template v-slot:cell(addToCalendar)="data">
               <a :href="inviteLink(data.item.addToCalendar)" target="_blank">
@@ -166,6 +164,7 @@ export default class PlayerDashboard extends Vue {
   upcomingGames: Array<GameMeta> = [];
   introSurveyUrl: string = '';
   exitSurveyUrl: string = '';
+  currentRoundNumber: number = 1;
   playerTaskCompletion: PlayerTaskCompletion = {
     mustConsent: true,
     mustVerifyEmail: true,
@@ -228,9 +227,8 @@ export default class PlayerDashboard extends Vue {
 
     // set survey URLs
     this.$set(this, 'introSurveyUrl', data.introSurveyUrl);
-    console.log(this.introSurveyUrl);
     this.$set(this, 'exitSurveyUrl', data.exitSurveyUrl);
-    console.log(this.exitSurveyUrl);
+    this.$set(this, 'currentRoundNumber', data.currentRoundNumber);
 
     // set player stats
     this.stats.games.splice(0, this.stats.games.length, ...data.stats.games);

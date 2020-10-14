@@ -141,6 +141,7 @@ export class DashboardService extends BaseService {
       introSurveyUrl: this.getIntroSurveyUrl(user, round, invite),
       exitSurveyUrl: this.getExitSurveyUrl(user, round, invite),
       upcomingGames,
+      currentRoundNumber: round.roundNumber,
       isLobbyOpen: await this.sp.tournament.isLobbyOpen(gameDates),
       stats
     }
