@@ -124,7 +124,15 @@ async function createRound(
   ): Promise<TournamentRound> {
   const s = getServices(em);
   const t = await s.tournament.getTournamentByName(name);
-  const currentRound = await s.tournament.getCurrentTournamentRound();
+  let currentRound: Pick<TournamentRound, 'roundNumber' | 'introSurveyUrl' | 'exitSurveyUrl'> | undefined =
+   await s.tournament.getCurrentTournamentRound().catch(err => undefined);
+  if (! currentRound) {
+    currentRound = {
+      roundNumber: 0,
+      introSurveyUrl: '',
+      exitSurveyUrl: '',
+    }
+  }
   const round = await s.tournament.createRound({
     tournamentId: t.id,
     introSurveyUrl: introSurveyUrl ? introSurveyUrl : currentRound.introSurveyUrl,

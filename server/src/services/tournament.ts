@@ -122,8 +122,13 @@ export class TournamentService extends BaseService {
   }
 
   async createTournament(data: Pick<Tournament, 'name' | 'active'>): Promise<Tournament> {
+    await this.deactivateTournaments();
     const t = this.em.getRepository(Tournament).create(data);
     return await this.em.save(t)
+  }
+
+  async deactivateTournaments(): Promise<void> {
+    await this.em.getRepository(Tournament).update({}, { active: false});
   }
 
   async createRound(data: Pick<TournamentRound, 'exitSurveyUrl' | 'introSurveyUrl' | 'roundNumber' | 'numberOfGameRounds'> & { tournamentId?: number }): Promise<TournamentRound> {
