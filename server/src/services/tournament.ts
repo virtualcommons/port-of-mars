@@ -93,7 +93,13 @@ export class TournamentService extends BaseService {
   }
 
   async createInvites(userIds: Array<number>, tournamentRoundId: number, hasParticipated=false): Promise<Array<TournamentRoundInvite>> {
-    const invites = userIds.map(userId => this.em.getRepository(TournamentRoundInvite).create({ userId, tournamentRoundId, hasParticipated }));
+    let invites: Array<TournamentRoundInvite> = []
+    if (hasParticipated) {
+      invites = userIds.map(userId => this.em.getRepository(TournamentRoundInvite).create({ userId, tournamentRoundId, hasParticipated, hasCompletedExitSurvey: true, hasCompletedIntroSurvey: true }));
+    }
+    else {
+      invites = userIds.map(userId => this.em.getRepository(TournamentRoundInvite).create({ userId, tournamentRoundId }));
+    }
     return await this.em.getRepository(TournamentRoundInvite).save(invites);
   }
 

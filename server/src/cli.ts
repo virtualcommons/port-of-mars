@@ -224,7 +224,6 @@ program
             .option('-p, --participated', 'Set to mark these users as having already participated')
             .description('create invitations for the given users in the given tournament round')
             .action(async (cmd) => {
-              logger.debug("Participated: %s", cmd.participated);
               await withConnection(em => createTournamentRoundInvites(em, cmd.tournamentRoundId, cmd.userIds, cmd.participated));
             })
           )
