@@ -26,7 +26,7 @@ import {
   HUDRightView,
 } from '@port-of-mars/shared/game/client/panes';
 import _ from 'lodash';
-import {SYSTEM_HEALTH_MAINTENANCE_COST} from "../../settings";
+import {SYSTEM_HEALTH_MAINTENANCE_COST} from "@port-of-mars/shared/settings";
 
 export const ROLE_TO_INVESTMENT_DATA: { [role in Role]: Array<keyof InvestmentData> } = {
   [CURATOR]: [

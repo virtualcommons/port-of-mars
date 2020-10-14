@@ -49,7 +49,6 @@ import { GameOpts, GameStateOpts } from '@port-of-mars/server/rooms/game/types';
 import MarsEventsDeck from '@port-of-mars/server/rooms/game/state/marsevents/MarsEventDeck';
 import { MarsEvent } from '@port-of-mars/server/rooms/game/state/marsevents/MarsEvent';
 import { SimpleBot } from "@port-of-mars/server/rooms/game/state/bot";
-import {State} from "@port-of-mars/shared/game/client/state";
 
 const logger = settings.logging.getLogger(__filename);
 
