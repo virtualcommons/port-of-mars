@@ -25,11 +25,11 @@ function createAsyncClient(client: RedisClient): AsyncClient {
 
 export const DYNAMIC_SETTINGS_PATH = '/run/secrets/settings.json';
 
-export interface DynamicSettingsData {
+export interface SettingsData {
   maxConnections: number
 }
 
-export class DynamicSettings {
+export class RedisSettings {
   client: AsyncClient;
 
   constructor(client: RedisClient) {
@@ -44,11 +44,12 @@ export class DynamicSettings {
   }
 
   async reload(path = DYNAMIC_SETTINGS_PATH): Promise<number> {
-    const settings: DynamicSettingsData = JSON.parse(fs.readFileSync(path, 'utf8'));
+    const settings: SettingsData = JSON.parse(fs.readFileSync(path, 'utf8'));
     return await this.setSettings(settings);
   }
 
-  async setSettings(settings: DynamicSettingsData): Promise<number> {
+  async setSettings(settings: SettingsData): Promise<number> {
+    // FIXME: this should set all settings from the file and replace server/settings
     return await this.client.hset(['settings', 'maxConnections', settings.maxConnections.toString()])
   }
 

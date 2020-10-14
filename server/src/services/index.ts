@@ -8,7 +8,7 @@ import {DashboardService} from "@port-of-mars/server/services/dashboard";
 import {getConnection} from "@port-of-mars/server/util";
 import {TimeService} from "@port-of-mars/server/services/time";
 import {GameService} from "@port-of-mars/server/services/game";
-import {DynamicSettings} from "@port-of-mars/server/services/dynamicSettings";
+import {RedisSettings} from "@port-of-mars/server/services/settings";
 import {createClient, RedisClient} from "redis";
 
 export class ServiceProvider {
@@ -78,12 +78,12 @@ export class ServiceProvider {
     return this._dashboard;
   }
 
-  private _dynamicSettings?: DynamicSettings;
-  get dynamicSettings() {
-    if (!this._dynamicSettings) {
-      this._dynamicSettings = new DynamicSettings(getRedis())
+  private _settings?: RedisSettings;
+  get settings() {
+    if (!this._settings) {
+      this._settings = new RedisSettings(getRedis())
     }
-    return this._dynamicSettings;
+    return this._settings;
   }
 }
 

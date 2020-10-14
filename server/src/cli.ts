@@ -25,7 +25,7 @@ import {promisify} from "util";
 
 import fs from 'fs';
 import {createClient} from "redis";
-import {DYNAMIC_SETTINGS_PATH, DynamicSettings} from "@port-of-mars/server/services/dynamicSettings";
+import {DYNAMIC_SETTINGS_PATH, RedisSettings} from "@port-of-mars/server/services/settings";
 
 const mkdir = promisify(fs.mkdir);
 const logger = getLogger(__filename);
@@ -67,7 +67,7 @@ async function exportData(em: EntityManager, ids?: Array<number>, dateCreatedMin
     playerQuery
       .andWhere('game.id in (:...ids)', {ids});
   }
-  console.log(playerQuery.getSql());
+  logger.debug(playerQuery.getSql());
   const playerRaw = await playerQuery.getRawMany();
 
   const events = await eventQuery.getMany();
@@ -269,17 +269,32 @@ program
           .action(async (cmd) => {
             try {
               const client = getRedis();
-              console.log('reloading dynamic settings');
-              const dynamicSettings = new DynamicSettings(client);
-              const code = await dynamicSettings.reload();
-              console.log({code});
+              logger.debug('reloading dynamic settings');
+              const settings = new RedisSettings(client);
+              const code = await settings.reload();
+              logger.debug({code});
               if (code) {
                 console.error(`reloading settings failed with code ${code}`);
                 process.exit(code);
               }
-              console.log('reloaded dynamic settings')
+              logger.debug('reloaded settings into redis');
             } finally {
-              getRedis().quit()
+              getRedis().quit();
+            }
+          })
+      )
+      .addCommand(
+        program.createCommand('report')
+          .description('Report current redis settings')
+          .action(async (cmd) => {
+            try {
+              const client = getRedis();
+              const settings = new RedisSettings(client);
+              await settings.loadIfNotExist();
+              const maxConnections = await settings.getMaxConnections();
+              logger.debug("Current max connections: %d", maxConnections);
+            } finally {
+              getRedis().quit();
             }
           })
       )

@@ -129,7 +129,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
     // the maxConnections threshold
     const sp = getServices();
     const numberOfActiveParticipants = await sp.game.getNumberOfActiveParticipants();
-    const maxConnections = await sp.dynamicSettings.getMaxConnections();
+    const maxConnections = await sp.settings.getMaxConnections();
     logger.debug("active participants: %d lobby clients: %d", numberOfActiveParticipants, this.clientStats.length);
     if (numberOfActiveParticipants + this.clientStats.length > maxConnections) {
       // abort the connection and send an error message to the client

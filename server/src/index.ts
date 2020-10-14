@@ -89,7 +89,7 @@ applyInStagingOrProd(() =>
 async function createApp() {
   await (async () => {
     const sp = getServices();
-    await sp.dynamicSettings.loadIfNotExist();
+    await sp.settings.loadIfNotExist();
   })()
 
   logger.info('starting server (%s) with build id: %s, settings %o', process.env.NODE_ENV, getBuildId(), settings);
