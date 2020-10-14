@@ -24,15 +24,15 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-wear-tear',
-    content: 'Due to wear and tear, System Health will always decrease -25 at the beginning of each round.',
+    content: 'Due to wear and tear, System Health will always decrease by 25 at the beginning of each round. If your System Health reaches 0, your Port of Mars journey will end.',
     params: {
       placement: LEFT
     }
   },
   {
     target: '.tour-shr-table',
-    content: 'This report details: System Health from previous round and all occurrences that ' +
-    'affect System Health including group contributions during Invest phase, wear and tear and ' +
+    content: 'This report shows your System Health from the previous round and all actions that ' +
+    'affected your System Health including the contributions your group made towards System Health during the Investment phase, wear and tear and ' +
     'purchased Accomplishments.',
     params: {
       placement: LEFT
@@ -41,8 +41,8 @@ const steps: Array<Step> = [
   {
     target: '.tour-report',
     content: `Your group's total contributions = (sum of each ` +
-      `player's investments to System Health during the Invest phase) - (sum of players' purchased ` +
-      `Accomplishments that subtracted from System Health)`,
+      `player's investments to System Health during the Investment phase) - (sum of players' purchased ` +
+      `Accomplishments that decreased System Health)`,
     params: {
       placement: TOP,
     }

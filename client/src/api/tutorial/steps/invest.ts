@@ -69,8 +69,10 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-invest-action',
-    content: `During this phase, you may invest your timeblocks to invest in System Health. The System Health
-    card will always be located in the top left corner.`,
+    content: `During this phase, you may invest your time blocks in System Health or other Influence Resources.
+    Right now, System Health costs 1 time block so if we invest 3 time blocks in System Health, your personal contribution to your group's 
+    System Health is 3. If everyone in your group invested 3 time blocks in System Health this round, your total group contribution to 
+    System Health would be 15.`,
     params: {
       placement: TOP,
     },
