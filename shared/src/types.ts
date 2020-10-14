@@ -67,6 +67,15 @@ export const RESOURCES: Array<Resource> = [
   'science'
 ];
 
+export const INVESTMENT_LABELS: {[k in keyof InvestmentData]: string} = {
+  culture: 'Culture',
+  finance: 'Finance',
+  government: 'Government',
+  legacy: 'Legacy',
+  science: 'Science',
+  systemHealth: 'System Health'
+}
+
 export enum Phase {
   newRound,
   events,

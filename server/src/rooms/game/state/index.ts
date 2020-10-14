@@ -27,7 +27,13 @@ import {
   TradeStatus,
   TradeSetData,
   RESOURCES,
-  MarsLogCategory, RoundIntroductionData, SystemHealthChangeData, PurchasedSystemHealthData, AccomplishmentPurchaseData,
+  MarsLogCategory,
+  RoundIntroductionData,
+  SystemHealthChangeData,
+  PurchasedSystemHealthData,
+  AccomplishmentPurchaseData,
+  INVESTMENTS,
+  INVESTMENT_LABELS
 } from '@port-of-mars/shared/types';
 import { canSendTradeRequest } from '@port-of-mars/shared/validation';
 import _ from 'lodash';
@@ -43,6 +49,7 @@ import { GameOpts, GameStateOpts } from '@port-of-mars/server/rooms/game/types';
 import MarsEventsDeck from '@port-of-mars/server/rooms/game/state/marsevents/MarsEventDeck';
 import { MarsEvent } from '@port-of-mars/server/rooms/game/state/marsevents/MarsEvent';
 import { SimpleBot } from "@port-of-mars/server/rooms/game/state/bot";
+import {State} from "@port-of-mars/shared/game/client/state";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -1662,10 +1669,24 @@ export class GameState extends Schema implements GameData {
 
   // FIXME: refine mars log message
   purchaseAccomplishment(role: Role, accomplishment: AccomplishmentData): void {
-    const { label, science, government, legacy, finance, culture, systemHealth, victoryPoints } = accomplishment;
-    const message = `The ${role} purchased an accomplishment: ${label}.
-    COST: System Health: ${systemHealth}, Science: ${science}, Government: ${government}, Legacy: ${legacy}, Finance: ${finance}, Culture: ${culture}.
-    ${victoryPoints} points were added to the ${role}'s score.`;
+    const { label, systemHealth, victoryPoints } = accomplishment;
+    const costArray: Array<string> = [];
+    const auditIndex = this.marsEvents.findIndex(event => event.id === 'audit');
+    const isUnderAudit = auditIndex !== -1 && auditIndex <= this.marsEventsProcessed;
+
+    if (isUnderAudit) {
+      for(const investment of INVESTMENTS) {
+        if (accomplishment[investment] != 0) {
+          costArray.push(`${INVESTMENT_LABELS[investment]}=${accomplishment[investment]}`);
+        }
+      }
+    } else if (systemHealth != 0) {
+      costArray.push(`System Health= ${systemHealth}.`)
+    }
+
+    const cost = costArray.length > 0 ? `COST: ${costArray.join(', ')}.` : ``;
+
+    const message = `The ${role} purchased an accomplishment: ${label}. ${cost} ${victoryPoints} points were added to the ${role}'s score.`;
     const category: string = MarsLogCategory.purchaseAccomplishment;
     const performedBy: ServerRole = SERVER;
     this.players[role].purchaseAccomplishment(accomplishment);
