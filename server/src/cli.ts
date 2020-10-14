@@ -24,7 +24,6 @@ import {
 import {promisify} from "util";
 
 import fs from 'fs';
-import {createClient} from "redis";
 import {DYNAMIC_SETTINGS_PATH, RedisSettings} from "@port-of-mars/server/services/settings";
 
 const mkdir = promisify(fs.mkdir);
@@ -41,18 +40,21 @@ async function withConnection<T>(f: (em: EntityManager) => Promise<T>): Promise<
 }
 
 async function exportData(em: EntityManager, ids?: Array<number>, dateCreatedMin?: Date): Promise<void> {
+  // FIXME: it would be good to disable the pino logger for the duration of this call so we don't repeat
+  // all the logging spam as we replay events
+  logger.debug("=====EXPORTING DATA START=====");
   let eventQuery = await em.getRepository(GameEvent)
     .createQueryBuilder("ge")
     .leftJoinAndSelect("ge.game", "g")
     .orderBy('ge.id', 'ASC');
   if (ids && ids.length > 0) {
-    eventQuery = eventQuery.where('"gameId" in (:...ids)', {ids});
+    eventQuery = eventQuery.where('gameId in (:...ids)', {ids});
   }
   if (dateCreatedMin) {
     if (ids && ids.length > 0) {
-      eventQuery = eventQuery.andWhere('g."dateCreated" > (:dateCreatedMin)', {dateCreatedMin: dateCreatedMin});
+      eventQuery = eventQuery.andWhere('g.dateCreated > (:dateCreatedMin)', {dateCreatedMin: dateCreatedMin});
     } else {
-      eventQuery = eventQuery.where('g."dateCreated" > (:dateCreatedMin)', {dateCreatedMin: dateCreatedMin});
+      eventQuery = eventQuery.where('g.dateCreated > (:dateCreatedMin)', {dateCreatedMin: dateCreatedMin});
     }
   }
   logger.debug(eventQuery.getSql());
@@ -80,6 +82,7 @@ async function exportData(em: EntityManager, ids?: Array<number>, dateCreatedMin
   const marsEventSummarizer = new MarsEventSummarizer(events, '/dump/processed/marsEvent.csv');
   const accomplishmentSummarizer = new AccomplishmentSummarizer('/dump/processed/accomplishment.csv')
   await Promise.all([playerSummarizer, gameEventSummarizer, victoryPointSummarizer, playerInvestmentSummarizer, marsEventSummarizer, accomplishmentSummarizer].map(s => s.save()))
+  logger.debug("=====EXPORTING DATA END=====");
 }
 
 async function finalize(em: EntityManager, gameId: number): Promise<void> {

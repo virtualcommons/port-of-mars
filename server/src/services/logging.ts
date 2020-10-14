@@ -1,5 +1,4 @@
-import pino, {LogFn, Logger} from 'pino';
-import stream from "stream";
+import pino, {LogFn} from 'pino';
 
 export interface LogService {
   trace: LogFn;
@@ -11,10 +10,13 @@ export interface LogService {
 
 export interface Logging {
   getLogger(filename: string): LogService;
+  enable(): void;
+  disable(): void;
 }
 
 export class DevLogging implements Logging {
   logger = pino();
+  previousLevel = '';
 
   paths = [
     {
@@ -37,5 +39,14 @@ export class DevLogging implements Logging {
 
   getLogger(filename: string): LogService {
     return this.findMatchingLogger(filename);
+  }
+
+  disable() {
+    this.previousLevel = this.logger.level;
+    this.logger.level = 'silent'
+  }
+
+  enable() {
+    this.logger.level = this.previousLevel;
   }
 }

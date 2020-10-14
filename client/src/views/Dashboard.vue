@@ -72,6 +72,7 @@
             </b-button>
           </b-button-group>
         </template>
+        
         <b-container v-if="playerTaskCompletion.canPlayGame" class="text-center">
           <!-- GO TO WAITING LOBBY -->
           <h2 class="pt-5 my-3 text-uppercase">Participate in Round {{ currentRoundNumber }}</h2>
