@@ -60,8 +60,8 @@
       <b-col v-if="view === 'participate'" class="text-center">
         <!-- TOURNAMENT SURVEYS -->
         <template v-if="playerTaskCompletion.mustTakeIntroSurvey || playerTaskCompletion.shouldTakeExitSurvey">
-          <h2 class="text-center text-uppercase pt-5 my-2">Surveys</h2>
-          <b-button-group class="py-3 mb-5 w-100" vertical>
+          <h2 class="text-center text-uppercase pt-4">Surveys</h2>
+          <b-button-group class="py-3 w-100" vertical>
             <b-button v-if="playerTaskCompletion.mustTakeIntroSurvey" :href="introSurveyUrl" block class="my-2"
                       size="lg" variant="secondary">
               Please complete this introductory survey before participating <span class='text-danger'>*</span>
@@ -72,25 +72,26 @@
             </b-button>
           </b-button-group>
         </template>
-        
         <b-container v-if="playerTaskCompletion.canPlayGame" class="text-center">
           <!-- GO TO WAITING LOBBY -->
-          <h2 class="pt-5 my-3 text-uppercase">Participate in Round {{ currentRoundNumber }}</h2>
+          <h2 class="text-uppercase">Participate in Round {{ currentRoundNumber }}</h2>
           <b-button :to="join" pill size="lg" variant="success">
             Ready to Launch - Join the Waiting Lobby
             <font-awesome-icon icon="rocket"/>
           </b-button>
-          <h2 class="text-uppercase pt-5 my-3">Schedule</h2>
+          <h2 class="text-uppercase pt-3 my-3">Schedule</h2>
           <p class='lead text-left '>Please sign in during <b>one</b> of the following times to participate. We recommend that
             you show up 5 minutes earlier to join the waiting lobby.
           </p>
-          <b-table :items="schedule" bordered class="py-3" dark responsive sticky-header striped>
-            <template v-slot:cell(addToCalendar)="data">
-              <a :href="inviteLink(data.item.addToCalendar)" target="_blank">
-                <font-awesome-icon :icon="['fab', 'google']"/>
-              </a>
-            </template>
-          </b-table>
+          <div style="overflow-y: auto !important;">
+            <b-table :items="schedule" bordered class="py-3" stacked="md" small dark striped>
+              <template v-slot:cell(addToCalendar)="data">
+                <a :href="inviteLink(data.item.addToCalendar)" target="_blank">
+                  <font-awesome-icon :icon="['fab', 'google']"/>
+                </a>
+              </template>
+            </b-table>
+          </div>
         </b-container>
         <b-container v-else-if="! playerTaskCompletion.hasInvite">
           <h2 class="text-center text-uppercase mt-5 py-2">No active invitation found</h2>
