@@ -18,16 +18,11 @@ import {
 import {COST_INAFFORDABLE} from "@port-of-mars/shared/settings";
 import {getLogger} from "@port-of-mars/server/settings";
 import {getAccomplishmentByID} from "@port-of-mars/server/data/Accomplishment";
+import {getMarsEvent} from "@port-of-mars/server/data/MarsEvents";
 
 const logger = getLogger(__filename);
 
 const _dispatch: { [id: string]: MarsEventStateConstructor } = {};
-
-export function formatEventName(eventName: string): string {
-  return eventName.replace(/([A-Z])/g, ' $1').trim();
-  // eventName = eventName.replace(/([A-Z])/g, ' $1').trim();
-  // return [category.event].concat(eventName);
-}
 
 export function assocEventId(constructor: MarsEventStateConstructor) {
   _dispatch[getEventName(constructor)] = constructor;
@@ -54,19 +49,25 @@ export interface BaseEvent {
 
   getData?(): Record<string, unknown>;
 
+  getEffect(): string;
+
   toJSON(): MarsEventSerialized;
 }
 
 export abstract class BaseEvent implements MarsEventState {
+  json: MarsEventSerialized = {
+    id: getEventName(this.constructor)
+  };
+
+  name = getMarsEvent(this.json.id).name;
+  title = `${MarsLogCategory.event}: ${this.name}`;
+  effect = getMarsEvent(this.json.id).effect;
 
   toJSON(): MarsEventSerialized {
-    const json: MarsEventSerialized = {
-      id: getEventName(this.constructor)
-    };
     if (this.getData) {
-      json.data = _.cloneDeep(this.getData());
+      this.json.data = _.cloneDeep(this.getData());
     }
-    return json;
+    return this.json;
   }
 
 }
@@ -75,13 +76,8 @@ export abstract class BaseEvent implements MarsEventState {
 
 @assocEventId
 export class Audit extends BaseEvent {
-  finalize(game: GameState) {
-    game.log(
-        `You are be able to view other players' resources. You can view existing Influence resources and
-         Accomplishments can be viewed by clicking each player's avatar. Investment decisions are broadcast 
-         in Chat.`,
-        `${MarsLogCategory.event}: ${formatEventName(Audit.name)}`
-    );
+  finalize(game: GameState): void {
+    game.log(this.effect,this.title);
   }
 }
 
@@ -132,8 +128,7 @@ export class BondingThroughAdversity extends BaseEvent {
     for (const role of ROLES) {
       game.players[role].inventory[this.votes[role]] += 1;
     }
-    const message = `Players have gained one influence currency of their choice.`
-    game.log(message, `${MarsLogCategory.event}: ${formatEventName(BondingThroughAdversity.name)}`);
+    game.log(this.effect, this.title);
   }
 
   /**
@@ -153,10 +148,7 @@ export class ChangingTides extends BaseEvent {
       player.accomplishments.discardAll();
       player.accomplishments.draw(1);
     }
-    game.log(
-        'Each player discards their current Accomplishments and draws one new Accomplishment.',
-        `${MarsLogCategory.event}: ${formatEventName(ChangingTides.name)}`
-    );
+    game.log(this.effect, this.title);
   }
 }
 
@@ -168,7 +160,7 @@ export type BreakdownOfTrustData = { [role in Role]: number }
 export class BreakdownOfTrust extends BaseEvent {
 
   //converts the roles array into an object that looks like BreakdownOfTrustData
-  private savedtimeBlockAllocations: BreakdownOfTrustData = ROLES.reduce((obj, role) => {
+  private savedTimeBlockAllocations: BreakdownOfTrustData = ROLES.reduce((obj, role) => {
     //these are placeholder values, they will be overridden.
     obj[role] = 0;
     return obj;
@@ -178,7 +170,7 @@ export class BreakdownOfTrust extends BaseEvent {
     for (const player of game.players) {
       player.invertPendingInventory();
       //save the timeblock amount the player is allotted for the round
-      this.savedtimeBlockAllocations[player.role] = player.currentTimeBlocksAmount;
+      this.savedTimeBlockAllocations[player.role] = player.currentTimeBlocksAmount;
       //set them to 2 for the event
       player.setTimeBlocks(2);
     }
@@ -192,11 +184,9 @@ export class BreakdownOfTrust extends BaseEvent {
     for (const player of game.players) {
       player.assignPendingInvestmentsToInventory();
       //set that value back to the preserved amount before the event
-      player.timeBlocks = this.savedtimeBlockAllocations[player.role];
+      player.timeBlocks = this.savedTimeBlockAllocations[player.role];
     }
-    game.log(`Each player can choose to save up to 2 units of Influence that they already own. The rest will be lost.`,
-        `${MarsLogCategory.event}: ${formatEventName(BreakdownOfTrust.name)}`
-    );
+    game.log(this.effect, this.title);
   }
 }
 
@@ -250,11 +240,9 @@ export class CompulsivePhilanthropy extends BaseEvent {
       }
     }
     const winner: Role = _.find(this.order, (w: Role) => winners.includes(w)) || this.order[0];
-    game.log(
-        `The ${winner} was voted to be Compulsive Philanthropist with ${count} votes. The ${winner} invested all 
-        of their time blocks into System Health.`,
-        `${MarsLogCategory.event}: ${formatEventName(CompulsivePhilanthropy.name)}`
-    );
+    const message = `The ${winner} was voted to be Compulsive Philanthropist with ${count} votes. The ${winner} invested all 
+        of their time blocks into System Health.`
+    game.log(message,this.title);
     game.pendingMarsEventActions.push({
       ordering: ActionOrdering.LAST, execute: (state) => {
         state.increaseSystemHealth(state.players[winner].timeBlocks);
@@ -272,9 +260,9 @@ export class CompulsivePhilanthropy extends BaseEvent {
 
 @assocEventId
 export class CropFailure extends BaseEvent {
-  finalize(state: GameState): void {
-    state.decreaseSystemHealth(20);
-    state.log(`Crop failure has destroyed 20 system health.`, `${MarsLogCategory.event}: Crop Failure`);
+  finalize(game: GameState): void {
+    game.decreaseSystemHealth(20);
+    game.log(this.effect, this.title);
   }
 }
 
@@ -282,11 +270,11 @@ export class CropFailure extends BaseEvent {
 
 @assocEventId
 export class DifficultConditions extends BaseEvent {
-  finalize(state: GameState): void {
-    for (const player of state.players) {
+  finalize(game: GameState): void {
+    for (const player of game.players) {
       player.costs.systemHealth *= 2;
     }
-    state.log(`System Health costs twice as many Time Blocks as usual this round.`, `${MarsLogCategory.event}: Difficult Conditions`)
+    game.log(this.effect, this.title)
   }
 }
 
@@ -309,8 +297,8 @@ export class EffortsWasted extends BaseEvent {
     }
   }
 
-  finalize(state: GameState): void {
-    this.fillAccomplishmentsToDiscard(state);
+  finalize(game: GameState): void {
+    this.fillAccomplishmentsToDiscard(game);
     logger.info('Efforts wasted %o', this.accomplishmentsToDiscard);
     const discards: Array<string> = [];
     for (const role of ROLES) {
@@ -318,13 +306,11 @@ export class EffortsWasted extends BaseEvent {
       if (!_.isUndefined(id)) {
         const accomplishment = getAccomplishmentByID(role, id);
         discards.push(`${role} discarded ${accomplishment.label} for ${accomplishment.victoryPoints}`);
-        state.players[role].discardPurchasedAccomplishment(id);
-        state.players[role].victoryPoints -= accomplishment.victoryPoints;
+        game.players[role].discardPurchasedAccomplishment(id);
+        game.players[role].victoryPoints -= accomplishment.victoryPoints;
       }
     }
-    state.log(discards.join(', '),
-        `${MarsLogCategory.event}: Efforts Wasted`
-    )
+    game.log(discards.join(', '), this.effect);
   }
 }
 
@@ -342,9 +328,9 @@ export class HeroOrPariah extends BaseEvent {
     [POLITICIAN]: POLITICIAN,
     [RESEARCHER]: RESEARCHER
   }
+  winner!: Role;
   private heroOrPariahVotes: HeroOrPariahData = {};
   private playerVotes: playerVotesData;
-  winner!: Role;
 
   constructor(data?: { heroOrPariahVotes?: HeroOrPariahData; playerVotes: playerVotesData; order: Array<Role> }) {
     super();
@@ -355,7 +341,7 @@ export class HeroOrPariah extends BaseEvent {
     return !_.isUndefined(this.heroOrPariahVotes[role]);
   }
 
-  voteHeroOrPariah(player: Role, vote: 'hero' | 'pariah', state: GameState): void {
+  voteHeroOrPariah(player: Role, vote: 'hero' | 'pariah', game: GameState): void {
     this.heroOrPariahVotes[player] = vote;
     logger.debug('votes: %o', this.heroOrPariahVotes);
     // check that all players have voted
@@ -364,7 +350,7 @@ export class HeroOrPariah extends BaseEvent {
       let heroVotes = Object.values(this.heroOrPariahVotes).filter(v => v == 'hero').length;
 
       // FIXME this will probably end to change when we have > 5 players in a group
-      state.heroOrPariah = heroVotes > 2 ? 'hero' : 'pariah';
+      game.heroOrPariah = heroVotes > 2 ? 'hero' : 'pariah';
     }
   }
 
@@ -376,7 +362,7 @@ export class HeroOrPariah extends BaseEvent {
     return _.filter(votes, (o) => o[1] == 2).length == 2 || _.filter(votes, (o) => o[1] == 1).length == 5;
   }
 
-  finalize(state: GameState): void {
+  finalize(game: GameState): void {
 
     // determine who is hero or pariah
     const votes: { [role in Role]: number } = {
@@ -396,7 +382,6 @@ export class HeroOrPariah extends BaseEvent {
     // _.orderBy => [[ROLE, highest vote], ... [ROLE, lowest vote]]
     const winners = _.orderBy(_.toPairs(votes), (o) => o[1], 'desc');
     logger.debug('winners: %o', winners);
-    console.log('winners: ', winners);
 
 
     if (this.tie(winners)) {
@@ -411,32 +396,32 @@ export class HeroOrPariah extends BaseEvent {
     // mars log messaging
 
     // if winner is a hero
-    if (state.heroOrPariah == 'hero') {
+    if (game.heroOrPariah == 'hero') {
       // gain 4 of their speciality resource
-      const specialty = state.players[this.winner].specialty;
-      state.players[this.winner].inventory[specialty] += 4;
+      const specialty = game.players[this.winner].specialty;
+      game.players[this.winner].inventory[specialty] += 4;
 
       if (this.tie(winners)) {
-        state.log(`Because of a voting tie, ${this.winner} is randomly voted a Hero and has gained 4 ${specialty}.`,
-            `${MarsLogCategory.event}: Hero Or Pariah`);
+        game.log(`Because of a voting tie, ${this.winner} is randomly voted a Hero and has gained 4 ${specialty}.`,
+            this.title);
       } else {
-        state.log(`${this.winner} is voted a Hero and has gained 4 ${specialty} after receiving ${votes[this.winner]} 
-      votes.`, `${MarsLogCategory.event}: Hero Or Pariah`);
+        game.log(`${this.winner} is voted a Hero and has gained 4 ${specialty} after receiving ${votes[this.winner]} 
+      votes.`, this.title);
       }
 
       // if winner is pariah
     } else {
       // lose all resources
       for (const resource of RESOURCES) {
-        state.players[this.winner].inventory[resource] = 0;
+        game.players[this.winner].inventory[resource] = 0;
       }
 
       if (this.tie(winners)) {
-        state.log(`Because of a voting tie, ${this.winner} is randomly voted a Pariah and has lost all 
-        their Influence resources.`, `${MarsLogCategory.event}: Hero Or Pariah`);
+        game.log(`Because of a voting tie, ${this.winner} is randomly voted a Pariah and has lost all 
+        their Influence resources.`, this.title);
       } else {
-        state.log(`${this.winner} is voted a Pariah and has lost all their Influence resources after receiving 
-      ${votes[this.winner]} votes.`, `${MarsLogCategory.event}: Hero Or Pariah`);
+        game.log(`${this.winner} is voted a Pariah and has lost all their Influence resources after receiving 
+      ${votes[this.winner]} votes.`, this.title);
       }
 
     }
@@ -447,9 +432,9 @@ export class HeroOrPariah extends BaseEvent {
 
 @assocEventId
 export class HullBreach extends BaseEvent {
-  finalize(state: GameState): void {
-    state.decreaseSystemHealth(7);
-    state.log(`A hull breach has destroyed 7 System Health.`, `${MarsLogCategory.event}: Hull Breach`);
+  finalize(game: GameState): void {
+    game.decreaseSystemHealth(7);
+    game.log(this.effect, this.title);
   }
 }
 
@@ -467,13 +452,11 @@ export class Interdisciplinary extends BaseEvent {
     }
   }
 
-  finalize(state: GameState): void {
+  finalize(game: GameState): void {
     for (const role of ROLES) {
-      this.makeResourcesAvailable(state.players[role].costs);
+      this.makeResourcesAvailable(game.players[role].costs);
     }
-    state.log(`In this round, each player can spend 3 time blocks to earn an influence in either of the 2 influences they normally can't create.`,
-        `${MarsLogCategory.event}: Interdisciplinary`
-    );
+    game.log(this.effect,this.title);
   }
 }
 
@@ -482,7 +465,7 @@ export class Interdisciplinary extends BaseEvent {
 @assocEventId
 export class LifeAsUsual extends BaseEvent {
   finalize(game: GameState): void {
-    game.log(`As the first human outpost on Mars, having a "usual" day is pretty unusual.`, `${MarsLogCategory.event}: ${formatEventName(LifeAsUsual.name)}`)
+    game.log(this.effect, this.title);
   }
 }
 
@@ -497,10 +480,8 @@ export class LostTime extends BaseEvent {
           const timeBlocks = state.players[role].timeBlocks - 5;
           state.players[role].timeBlocks = Math.max(0, timeBlocks);
         }
-        state.log(
-            `All players have 5 fewer time blocks to invest during this round.`,
-            `${MarsLogCategory.event}: ${formatEventName(LostTime.name)}`
-        );
+
+        state.log(this.effect, this.title);
       }
     });
   }
@@ -510,11 +491,9 @@ export class LostTime extends BaseEvent {
 
 @assocEventId
 export class MarketsClosed extends BaseEvent {
-  finalize(state: GameState): void {
-    state.disableTrading();
-    state.log(`Markets Closed: Players may not trade Influences this round.`,
-        `${MarsLogCategory.event}: Markets Closed`
-    );
+  finalize(game: GameState): void {
+    game.disableTrading();
+    game.log(this.effect,this.title);
   }
 }
 
@@ -526,7 +505,8 @@ export class MurphysLaw extends BaseEvent {
     game.drawMarsEvents(2);
   }
 
-  finalize(game: GameState): void {
+  finalize(game: GameState) {
+    game.log(this.effect, this.title)
   }
 }
 
@@ -559,10 +539,7 @@ abstract class OutOfCommission extends BaseEvent {
       ordering: ActionOrdering.MIDDLE, execute: (state) => {
         const role: Role = this.playerOutOfCommission(this.player);
         state.players[role].timeBlocks = 3;
-        state.log(
-            `${this.player} has 3 time blocks to invest during this round.`,
-            `${MarsLogCategory.event}: ${formatEventName(OutOfCommission.name)}`
-        );
+        state.log(this.effect, this.title);
       }
     });
   }
@@ -678,7 +655,7 @@ export class PersonalGain extends BaseEvent {
         }
         state.decreaseSystemHealth(systemHealthReduction);
         const message = `System health decreased by ${systemHealthReduction}. The following players voted yes: ${playerVotingInfo}`;
-        state.log(message, `${MarsLogCategory.event}: ${formatEventName(PersonalGain.name)}`);
+        state.log(message, this.title);
       }
     });
   }
@@ -694,28 +671,26 @@ export class PersonalGain extends BaseEvent {
 export class Sandstorm extends BaseEvent {
   finalize(game: GameState): void {
     game.decreaseSystemHealth(10);
-    game.log('A sandstorm has decreased system health by 10.', `${MarsLogCategory.event}: ${formatEventName(Sandstorm.name)}`);
+    game.log(this.effect, this.title);
   }
 }
 
 @assocEventId
 export class SolarFlare extends BaseEvent {
-  finalize(state: GameState): void {
-    state.decreaseSystemHealth(5);
-    state.disableTrading();
-    state.log(`A Solar Flare has destroyed 5 System Health. Chat and trade are not available in this round.`,
-        `${MarsLogCategory.event}: Solar Flare`
-    );
+  finalize(game: GameState): void {
+    game.decreaseSystemHealth(5);
+    game.disableTrading();
+    game.log(this.effect, this.title);
   }
 }
 
 @assocEventId
 export class Stymied extends BaseEvent {
-  finalize(state: GameState): void {
-    for (const player of state.players) {
+  finalize(game: GameState): void {
+    for (const player of game.players) {
       player.costs[player.specialty] = COST_INAFFORDABLE;
     }
-    state.log(`Players may not earn their specialty Influence this round.`, `${MarsLogCategory.event}: Stymied`)
+    game.log(this.effect, this.title)
   }
 }
 

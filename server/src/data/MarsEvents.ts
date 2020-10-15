@@ -11,7 +11,9 @@ const _marsEvents: Array<MarsEventData> = [
   {
     id: 'audit',
     name: 'Audit',
-    effect: `In this round, players will be able to view each other's accomplishments, inventories, resources and investment decisions.`,
+    effect: `You are be able to view other players' resources. You can view existing Influence resources and
+         Accomplishments can be viewed by clicking each player's avatar. Investment decisions are broadcast 
+         in Chat.`,
     flavorText: `"Of course we trust everyone to be truthful. But it doesn't hurt to check now and again." - The Politician`,
     clientViewHandler: 'AUDIT' as const,
     duration: 1,
@@ -105,7 +107,7 @@ const _marsEvents: Array<MarsEventData> = [
   {
     id: 'lifeAsUsual',
     name: 'Life as Usual',
-    effect: 'No special effect',
+    effect: 'No special effect.',
     flavorText: `As the first human outpost on Mars, having a "usual" day is pretty unusual.`,
     clientViewHandler: 'NO_CHANGE' as const,
     duration: 1,
@@ -247,7 +249,9 @@ export function getMarsEventDeckItems(): Array<MarsEventDeckItem> {
     ['solarFlare', 1],
     ['stymied', 1],
   ];
+
   const availableEvents: Array<MarsEventDeckItem> = [];
+
   for (const [eventId, numberOfCopies] of AVAILABLE_EVENTS) {
     const marsEventData = _.find(_marsEvents, (ev: MarsEventData) => ev.id === eventId);
     if (marsEventData) {
