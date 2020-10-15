@@ -630,7 +630,6 @@ export class Accomplishment extends Schema implements AccomplishmentData {
 
 interface AccomplishmentSetSerialized {
   role: Role;
-  // FIXME: consider renaming to purchased to match purchasable
   purchased: Array<number>;
   purchasable: Array<number>;
   remaining: Array<number>;
@@ -1666,7 +1665,6 @@ export class GameState extends Schema implements GameData {
     this.tradeSet[id].status = 'Cancelled';
   }
 
-  // FIXME: refine mars log message
   purchaseAccomplishment(role: Role, accomplishment: AccomplishmentData): void {
     const { label, systemHealth, victoryPoints } = accomplishment;
     const costArray: Array<string> = [];
@@ -1680,10 +1678,10 @@ export class GameState extends Schema implements GameData {
         }
       }
     } else if (systemHealth != 0) {
-      costArray.push(`System Health= ${systemHealth}.`)
+      costArray.push(`System Health= ${systemHealth}`);
     }
 
-    const cost = costArray.length > 0 ? `COST: ${costArray.join(', ')}.` : ``;
+    const cost = costArray.length > 0 ? `COST: ${costArray.join(', ')}.` : '';
 
     const message = `The ${role} purchased an accomplishment: ${label}. ${cost} ${victoryPoints} points were added to the ${role}'s score.`;
     const category: string = MarsLogCategory.purchaseAccomplishment;
