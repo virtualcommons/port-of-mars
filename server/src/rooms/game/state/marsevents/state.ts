@@ -498,7 +498,7 @@ export class LostTime extends BaseEvent {
           state.players[role].timeBlocks = Math.max(0, timeBlocks);
         }
         state.log(
-            `All players have has 5 time fewer (or zero) blocks to invest during this round.`,
+            `All players have 5 fewer time blocks to invest during this round.`,
             `${MarsLogCategory.event}: ${formatEventName(LostTime.name)}`
         );
       }
