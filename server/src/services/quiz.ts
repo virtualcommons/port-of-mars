@@ -69,10 +69,7 @@ export class QuizService extends BaseService {
       .findOne({ quizId, userId, ...opts });
   }
 
-  async setUserQuizCompletion(
-    userId: number,
-    complete: boolean
-  ): Promise<any> {
+  async setUserQuizCompletion(userId: number, complete: boolean): Promise<any> {
     return await this.em
       .createQueryBuilder()
       .update(User)
@@ -105,17 +102,23 @@ export class QuizService extends BaseService {
     const quiz: Quiz = (quizId) ? await this.getQuizById(quizId, { relations: ['questions'] }) : await this.getDefaultQuiz({ relations: ['questions'] });
     const quizSubmission = await this.getLatestQuizSubmission(userId, quiz.id, { relations: ['responses', 'responses.question'] });
     const questionIds = quiz.questions.map(q => q.id);
-    if (!quizSubmission?.responses) return questionIds;
-    const responses = quizSubmission.responses;
-    // FIXME: convert this into a single QueryBuilder query
+    if (! quizSubmission || quizSubmission.responses.length === 0) {
+      // the quiz submission does not exist, or it has no responses, so return all question IDs as "incorrect"
+      logger.debug("User has not answered any quiz questions yet, send to tutorial");
+      return questionIds;
+    }
+    const quizResponses = quizSubmission.responses;
+    // FIXME: look into converting into a single QueryBuilder query
     const correctQuizQuestionIds = new Set<number>();
-    for (const response of responses) {
-      if (response.answer === response.question.correctAnswer) {
-        correctQuizQuestionIds.add(response.question.id);
+    for (const quizResponse of quizResponses) {
+      const question = quizResponse.question;
+      logger.debug("checking quiz response %o from user %d", {quizResponse}, userId);
+      if (quizResponse.answer === question.correctAnswer) {
+        correctQuizQuestionIds.add(question.id);
       }
     }
     const incorrectQuestionIds = questionIds.filter(id => ! correctQuizQuestionIds.has(id));
-    logger.debug("user %d answered incorrectly to %o", userId, incorrectQuestionIds);
+    logger.debug("user %d answered the following questions incorrectly: %o", userId, incorrectQuestionIds);
     await this.setUserQuizCompletion(userId, incorrectQuestionIds.length === 0);
     return incorrectQuestionIds;
   }

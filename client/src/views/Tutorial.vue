@@ -117,15 +117,17 @@ import VueTour from 'vue-tour';
 import TourModal from '@port-of-mars/client/components/tutorial/TourModal.vue';
 import CompletedQuizModal from '@port-of-mars/client/components/tutorial/CompletedQuizModal.vue';
 import GameDashboard from '@port-of-mars/client/components/GameDashboard.vue';
-import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
 import { QuizAPI } from '@port-of-mars/client/api/tutorial/quiz';
-import { Step } from '@port-of-mars/client/types/tutorial';
-import { CURATOR, Phase, QuizQuestionData, RESEARCHER } from '@port-of-mars/shared/types';
-import * as _ from 'lodash';
-import { url } from '@port-of-mars/client/util';
-
+import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
 import { tutorialSteps } from '@port-of-mars/client/api/tutorial/steps';
+import { Step } from '@port-of-mars/client/types/tutorial';
+import { url } from '@port-of-mars/client/util';
+import { CURATOR, Phase, QuizQuestionData, RESEARCHER } from '@port-of-mars/shared/types';
 
+import { isStagingOrProduction, isTest } from '@port-of-mars/shared/settings';
+
+
+import * as _ from 'lodash';
 
 require('vue-tour/dist/vue-tour.css');
 Vue.use(VueTour);
@@ -145,9 +147,6 @@ export default class Tutorial extends Vue {
 
   private TOUR_ACTIVE_CLASS: string = 'tour-active';
   private BODY_TOUR: string = 'in-tour';
-  private tourOptions = {
-    // useKeyboardNavigation: false,
-  };
   private tourCallbacks = {
     onStart: this.startTourCallback,
     onPreviousStep: this.previousStepCallback,
@@ -178,14 +177,22 @@ export default class Tutorial extends Vue {
 
   async mounted() {
 
-    if (process.env.NODE_ENV != 'test') {
+    if (! isTest()) {
       this.quizQuestions = await this.quiz.initalizeQuiz();
-      if(this.quizQuestions.length > 0){
+      if (this.quizQuestions.length > 0) {
         this.dataFetched = true;
       }
       this.showModal();
     }
 
+  }
+
+  get tourOptions() {
+    return { useKeyboardNavigation: this.isKeyboardNavigationEnabled };
+  }
+
+  get isKeyboardNavigationEnabled() {
+    return ! isStagingOrProduction();
   }
 
   // NOTE: Initialize
