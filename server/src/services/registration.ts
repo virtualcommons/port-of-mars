@@ -26,7 +26,7 @@ export class RegistrationService extends BaseService {
   }
 
   async findUnregisteredUserByRegistrationToken(registrationToken: string): Promise<User | undefined> {
-    return await this.em.getRepository(User).findOne({ registrationToken })
+    return await this.em.getRepository(User).findOne({ registrationToken });
   }
 
   async sendEmailVerification(u: User): Promise<void> {

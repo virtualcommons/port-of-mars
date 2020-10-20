@@ -1,8 +1,8 @@
 import { Question, QuestionResponse, Quiz, QuizSubmission, User } from '@port-of-mars/server/entity';
-import { getConnection } from '@port-of-mars/server/util';
-import * as _ from 'lodash';
 import { BaseService } from "@port-of-mars/server/services/db";
 import { getLogger } from "@port-of-mars/server/settings";
+
+import * as _ from 'lodash';
 
 const logger = getLogger(__filename);
 
@@ -34,7 +34,7 @@ export class QuizService extends BaseService {
   }
 
   async findQuizSubmission(id: number, opts?: Partial<{ relations: Array<string>; where: object }>): Promise<QuizSubmission | undefined> {
-    return this.em.getRepository(QuizSubmission).findOne({ id, ...opts });
+    return this.em.getRepository(QuizSubmission).findOne(id, opts);
   }
 
   async getDefaultQuiz(opts?: Partial<{ relations: Array<string>; where: object }>): Promise<Quiz> {
@@ -43,19 +43,15 @@ export class QuizService extends BaseService {
   }
 
   async getQuizById(id: number, opts?: Partial<{ relations: Array<string>; where: object }>) {
-    return await this.em.getRepository(Quiz).findOneOrFail({ id, ...opts });
+    return await this.em.getRepository(Quiz).findOneOrFail(id, opts);
   }
 
   async getQuizByName(name: string, opts?: Partial<{ relations: Array<string>; where: object }>): Promise<Quiz> {
-    return await getConnection()
-      .getRepository(Quiz)
-      .findOneOrFail({ name, ...opts });
+    return await this.em.getRepository(Quiz).findOneOrFail(_.merge(opts, { where: {name} }));
   }
 
   async getQuizQuestionsByQuizId(quizId: number): Promise<Array<Question> | undefined> {
-    return await this.em
-      .getRepository(Question)
-      .find({ quizId });
+    return await this.em.getRepository(Question).find({ where: { quizId } });
   }
 
   async getLatestQuizSubmission(
@@ -66,7 +62,7 @@ export class QuizService extends BaseService {
     opts = { order: { dateCreated: 'DESC' }, ...opts };
     return await this.em
       .getRepository(QuizSubmission)
-      .findOne({ where: {quizId, userId}, ...opts });
+      .findOne(_.merge(opts, { where: {quizId, userId} }));
   }
 
   async setUserQuizCompletion(userId: number, complete: boolean): Promise<any> {
@@ -79,7 +75,7 @@ export class QuizService extends BaseService {
   }
 
   async findQuestion(id: number): Promise<Question> {
-    return await this.em.getRepository(Question).findOneOrFail({ id });
+    return await this.em.getRepository(Question).findOneOrFail(id);
   }
 
   async isCorrect(questionResponse: QuestionResponse): Promise<boolean> {

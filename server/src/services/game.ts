@@ -3,7 +3,7 @@ import {BaseService} from "@port-of-mars/server/services/db";
 
 export class GameService extends BaseService {
   async findById(id: number): Promise<Game> {
-    return await this.em.getRepository(Game).findOneOrFail({id});
+    return await this.em.getRepository(Game).findOneOrFail(id);
   }
 
   async findEventsByGameId(gameId: number): Promise<Array<GameEvent>> {

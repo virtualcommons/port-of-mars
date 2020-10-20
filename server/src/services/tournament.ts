@@ -12,19 +12,13 @@ export class TournamentService extends BaseService {
   async getActiveTournament(): Promise<Tournament> {
     return await this.em
       .getRepository(Tournament)
-      .findOneOrFail({
-        active: true
-      });
+      .findOneOrFail({active: true});
   }
 
   async getTournamentByName(name: string): Promise<Tournament> {
     return await this.em
       .getRepository(Tournament)
-      .findOneOrFail({
-        where: {
-          name
-        }
-      })
+      .findOneOrFail({ name });
   }
 
   async getCurrentTournamentRound(): Promise<TournamentRound> {
@@ -224,11 +218,11 @@ export class TournamentService extends BaseService {
   }
 
   async getTournamentRoundInvite(id: number): Promise<TournamentRoundInvite> {
-    return this.em.getRepository(TournamentRoundInvite).findOneOrFail({ relations: ['user', 'tournamentRound'], where: { id } });
+    return this.em.getRepository(TournamentRoundInvite).findOneOrFail(id, { relations: ['user', 'tournamentRound'] });
   }
 
   async getTournamentRound(id: number): Promise<TournamentRound> {
-    return this.em.getRepository(TournamentRound).findOneOrFail({ where: { id } });
+    return this.em.getRepository(TournamentRound).findOneOrFail(id);
   }
 
   async setSurveyComplete(data: { inviteId: number; surveyId: string }) {

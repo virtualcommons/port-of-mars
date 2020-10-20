@@ -83,7 +83,7 @@ describe('a game', () => {
         }
       }
       for (const invite of invites) {
-        const refreshedInvite = await manager.getRepository(TournamentRoundInvite).findOneOrFail({id: invite.id});
+        const refreshedInvite = await manager.getRepository(TournamentRoundInvite).findOneOrFail(invite.id);
         expect(refreshedInvite.hasParticipated).toBeTruthy();
       }
     });
