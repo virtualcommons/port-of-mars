@@ -66,7 +66,7 @@ export class QuizService extends BaseService {
     opts = { order: { dateCreated: 'DESC' }, ...opts };
     return await this.em
       .getRepository(QuizSubmission)
-      .findOne({ quizId, userId, ...opts });
+      .findOne({ where: {quizId, userId}, ...opts });
   }
 
   async setUserQuizCompletion(userId: number, complete: boolean): Promise<any> {
@@ -109,6 +109,7 @@ export class QuizService extends BaseService {
 
     const quiz: Quiz = (quizId) ? await this.getQuizById(quizId, { relations: ['questions'] }) : await this.getDefaultQuiz({ relations: ['questions'] });
     const quizSubmission = await this.getLatestQuizSubmission(userId, quiz.id);
+    logger.debug("retrieved quiz submission for user %d and quiz %d: %o", userId, quiz.id, quizSubmission);
     const questionIds = quiz.questions.map(q => q.id);
     if (! quizSubmission) {
       // the quiz submission does not exist, or it has no responses, so return all question IDs as "incorrect"
@@ -116,10 +117,11 @@ export class QuizService extends BaseService {
       return questionIds;
     }
     const quizResponses  = await this.getQuizResponses(quizSubmission.id);
-    logger.debug("Checking responses for user %d: %o", userId, quizResponses);
+    logger.debug("Checking %d responses for user %d (quiz submission %d)", quizResponses.length, userId, quizSubmission.id);
     const correctQuizQuestionIds = new Set<number>();
     for (const quizResponse of quizResponses) {
       const question = quizResponse.question;
+      logger.debug("Checking response %d for question %d [%d -> %d]", quizResponse.id, question.id, quizResponse.answer, question.correctAnswer)
       if (quizResponse.answer === question.correctAnswer) {
         correctQuizQuestionIds.add(question.id);
       }
