@@ -120,7 +120,6 @@ export class QuizService extends BaseService {
     const correctQuizQuestionIds = new Set<number>();
     for (const quizResponse of quizResponses) {
       const question = quizResponse.question;
-      logger.debug("checking quiz response %o from user %d", {quizResponse}, userId);
       if (quizResponse.answer === question.correctAnswer) {
         correctQuizQuestionIds.add(question.id);
       }

@@ -28,8 +28,8 @@ export class DashboardService extends BaseService {
 
   buildSurveyUrl(surveyUrl: string | undefined, user: User, invite: TournamentRoundInvite | undefined): string {
     if (invite && surveyUrl) {
-      logger.debug("settings: %o", settings);
       surveyUrl = `${surveyUrl}?pid=${user.participantId}&tid=${invite.id}&redirectHost=${encodeURIComponent(settings.host)}`;
+      logger.debug("survey url: %s", surveyUrl);
     }
     return surveyUrl ?? '';
   }
