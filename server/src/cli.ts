@@ -111,8 +111,21 @@ async function finalize(em: EntityManager, gameId: number): Promise<void> {
 }
 
 async function createTournament(em: EntityManager, name: string): Promise<Tournament> {
-  const s = getServices(em);
-  return await s.tournament.createTournament({name, active: true});
+  const services = getServices(em);
+  return await services.tournament.createTournament({name, active: true});
+}
+
+async function checkQuizCompletion(em: EntityManager, ids: Array<number>): Promise<void> {
+  const services = getServices(em);
+  if (ids.length === 0) {
+    const users = await services.quiz.getIncompleteQuizUsers();
+    ids = users.map(u => u.id);
+    logger.debug("checking quiz completion for all verified users who haven't passed the quiz: %o", ids);
+  }
+  for (const userId of ids) {
+    logger.debug("checking quiz completion for user id %d", userId);
+    await services.quiz.checkQuizCompletion(userId);
+  }
 }
 
 async function createRound(
@@ -259,7 +272,7 @@ program
           .description('finalize a game that wasn\'t finalized properly')
           .requiredOption('--gameId <gameId>', 'id of game', parseInt)
           .action(async (cmd) => {
-            await withConnection((conn) => finalize(conn, cmd.gameId))
+            await withConnection(em => finalize(em, cmd.gameId))
           })
       )
   )
@@ -270,6 +283,14 @@ program
       .option('--dateCreatedMin <dateCreatedMin>', 'return games after this ISO formatted date', s => new Date(Date.parse(s)))
       .action(async (cmd) => {
         await withConnection((em) => exportData(em, cmd.ids, cmd.dateCreatedMin))
+      })
+  )
+  .addCommand(
+    program.createCommand('checkquiz')
+      .description('commands for checking quiz completion')
+      .option('--ids <ids...>', 'user ids to check, separate multiples with spaces, e.g., 1 2 3', toIntArray, [] as Array<number>)
+      .action(async (cmd) => {
+        await withConnection(em => checkQuizCompletion(em, cmd.ids))
       })
   )
   .addCommand(

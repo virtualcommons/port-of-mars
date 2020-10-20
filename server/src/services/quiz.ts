@@ -91,6 +91,14 @@ export class QuizService extends BaseService {
     return questionResponse.answer === questionResponse.question.correctAnswer;
   }
 
+  async getQuizResponses(submissionId: number): Promise<Array<QuestionResponse>> {
+    return await this.em.getRepository(QuestionResponse).find({where: { submissionId }, relations: ['question']});
+  }
+
+  async getIncompleteQuizUsers(): Promise<Array<User>> {
+    return await this.em.getRepository(User).find({where: { passedQuiz: false, isVerified: true }});
+  }
+
   /**
    * Returns an Array<number> representing all the quiz question IDs that the given user has answered incorrectly for the given quiz.
    * If empty, the user has passed the quiz.
@@ -100,15 +108,15 @@ export class QuizService extends BaseService {
   async checkQuizCompletion(userId: number, quizId?: number): Promise<Array<number>> {
 
     const quiz: Quiz = (quizId) ? await this.getQuizById(quizId, { relations: ['questions'] }) : await this.getDefaultQuiz({ relations: ['questions'] });
-    const quizSubmission = await this.getLatestQuizSubmission(userId, quiz.id, { relations: ['responses', 'responses.question'] });
+    const quizSubmission = await this.getLatestQuizSubmission(userId, quiz.id);
     const questionIds = quiz.questions.map(q => q.id);
-    if (! quizSubmission || quizSubmission.responses.length === 0) {
+    if (! quizSubmission) {
       // the quiz submission does not exist, or it has no responses, so return all question IDs as "incorrect"
-      logger.debug("User has not answered any quiz questions yet, send to tutorial");
+      logger.debug("User has not created a quiz submission yet, should send to tutorial.");
       return questionIds;
     }
-    const quizResponses = quizSubmission.responses;
-    // FIXME: look into converting into a single QueryBuilder query
+    const quizResponses  = await this.getQuizResponses(quizSubmission.id);
+    logger.debug("Checking responses for user %d: %o", userId, quizResponses);
     const correctQuizQuestionIds = new Set<number>();
     for (const quizResponse of quizResponses) {
       const question = quizResponse.question;
