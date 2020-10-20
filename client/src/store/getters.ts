@@ -117,13 +117,6 @@ export default {
     return auditEventIndex !== -1 && auditEventIndex <= eventProcessedIndex;
   },
 
-  isEffortsWasted(state: State): boolean {
-    const marsEvents = state.marsEvents;
-    const processedIndex = state.marsEventsProcessed;
-    const effortsWastedIndex = marsEvents.findIndex(event => event.id === 'effortsWasted');
-    return effortsWastedIndex !== -1 && effortsWastedIndex <= processedIndex;
-  },
-
   isChatAvailable(state: State): boolean {
     const marsEvents = state.marsEvents;
     const eventProcessedIndex = state.marsEventsProcessed;

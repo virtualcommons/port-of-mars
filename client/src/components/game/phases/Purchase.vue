@@ -21,12 +21,11 @@
         <div class="p-3 w-100 outer-wrapper">
           <div class="w-100 wrapper">
             <AccomplishmentCard
-              v-for="accomplishment in sortedAccomplishments"
-              :key="accomplishment.id"
               :accomplishment="accomplishment"
+              :key="accomplishment.label + 2"
               :showCard="wasPurchased(accomplishment.id)"
               :type="cardType"
-              @purchased="purchase(accomplishment)"
+              v-for="accomplishment in sortedAccomplishments"
             />
           </div>
         </div>
@@ -36,13 +35,12 @@
 </template>
 
 <script lang="ts">
-import {Component, Inject, Vue} from 'vue-property-decorator';
+import {Component, Vue} from 'vue-property-decorator';
 import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
 import Inventory from '@port-of-mars/client/components/game/Inventory.vue';
 import {AccomplishmentCardType} from '@port-of-mars/client/types/cards.ts';
 import {AccomplishmentData} from '@port-of-mars/shared/types';
 import {canPurchaseAccomplishment} from "@port-of-mars/shared/validation";
-import {GameRequestAPI} from "@port-of-mars/client/api/game/request";
 
 @Component({
   components: {
@@ -51,8 +49,6 @@ import {GameRequestAPI} from "@port-of-mars/client/api/game/request";
   },
 })
 export default class Purchase extends Vue {
-  @Inject() readonly api!: GameRequestAPI;
-
   // sort accomplishments by purchasable in ascending order
   // static and is set when component is created; does not update with changes
   private sortedAccomplishments = this.$store.getters.player.accomplishments.purchasable.slice()
@@ -84,10 +80,6 @@ export default class Purchase extends Vue {
     return Boolean((this.$tstore.getters.player.accomplishments.purchasable as Array<AccomplishmentData>)
       .slice()
       .filter(accomplishment => accomplishment.id == id).length > 0);
-  }
-
-  purchase(accomplishment: AccomplishmentData) {
-    this.api.purchaseAccomplishment(accomplishment);
   }
 }
 </script>
