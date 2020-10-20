@@ -93,6 +93,23 @@ export default class AccomplishmentsSelectPurchased extends Vue {
     this.selectedPurchasedAccomplishment = accomplishment;
     this.api.stageDiscardOfPurchasedAccomplishment(accomplishment.id);
   }
+
+  private handleContinue() {
+    console.log(
+      'DISCARD PURCHASED ACCOMPLISHMENT:',
+      this.selectedPurchasedAccomplishment
+    );
+  }
+
+  private handleAccomplishmentStyle(a: any) {
+    if (a.id === this.selectedPurchasedAccomplishment.id) {
+      return {
+        backgroundColor: 'var(--light-accent)',
+        color: 'var(--dark-shade)',
+      };
+    }
+    return {};
+  }
 }
 </script>
 
