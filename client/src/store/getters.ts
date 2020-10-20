@@ -3,7 +3,7 @@ import {
   EventClientView,
   MarsEventData,
   MarsLogCategory,
-  MarsLogMessageData,
+  MarsLogMessageData, Phase,
   ROLES,
 } from '@port-of-mars/shared/types';
 
@@ -117,11 +117,11 @@ export default {
     return auditEventIndex !== -1 && auditEventIndex <= eventProcessedIndex;
   },
 
-  isEffortsWasted(state: State): boolean {
+  isEffortsWastedActive(state: State): boolean {
     const marsEvents = state.marsEvents;
     const processedIndex = state.marsEventsProcessed;
     const effortsWastedIndex = marsEvents.findIndex(event => event.id === 'effortsWasted');
-    return effortsWastedIndex !== -1 && effortsWastedIndex <= processedIndex;
+    return state.phase === Phase.events && effortsWastedIndex !== -1 && effortsWastedIndex <= processedIndex;
   },
 
   isChatAvailable(state: State): boolean {

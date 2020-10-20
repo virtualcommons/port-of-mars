@@ -179,7 +179,7 @@ export default class AccomplishmentCard extends Vue {
   }
 
   get isEffortsWasted() {
-    return this.$tstore.getters.isEffortsWasted;
+    return this.$tstore.getters.isEffortsWastedActive;
   }
 
   // local player's pending investments
