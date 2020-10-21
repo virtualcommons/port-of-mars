@@ -72,7 +72,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
   scheduler: any = undefined;
 
   onCreate(options: any) {
-    logger.info(`RankedLobbyRoom: new room ${this.roomId}`);
+    logger.info('RankedLobbyRoom: new room %s', this.roomId);
     this.setState(new LobbyRoomState());
     this.groupAssignmentInterval = settings.lobby.groupAssignmentInterval;
     this.devMode = settings.lobby.devMode;
@@ -90,6 +90,13 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
       }
     );
     this.updateLobbyNextAssignmentTime();
+  }
+
+  onDispose() {
+    logger.trace('RankedLobbyRoom: disposing of %s, no connected clients. Cleaning up scheduler.', this.roomId);
+    if (this.scheduler) {
+      this.scheduler.cancel();
+    }
   }
 
   async updateLobbyNextAssignmentTime() {
