@@ -15,6 +15,10 @@ export class TournamentService extends BaseService {
       .findOneOrFail({active: true});
   }
 
+  async getTournament(id: number): Promise<Tournament> {
+    return await this.em.getRepository(Tournament).findOneOrFail(id);
+  }
+
   async getTournamentByName(name: string): Promise<Tournament> {
     return await this.em
       .getRepository(Tournament)

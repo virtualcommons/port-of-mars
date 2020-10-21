@@ -48,7 +48,8 @@ async function exportData(em: EntityManager, ids?: Array<number>, dateCreatedMin
     .leftJoinAndSelect("ge.game", "g")
     .orderBy('ge.id', 'ASC');
   if (ids && ids.length > 0) {
-    eventQuery = eventQuery.where('gameId in (:...ids)', {ids});
+    // FIXME: double quotes needed until https://github.com/typeorm/typeorm/issues/2919 and related are resolved
+    eventQuery = eventQuery.where('"gameId" in (:...ids)', {ids});
   }
   if (dateCreatedMin) {
     if (ids && ids.length > 0) {
@@ -130,13 +131,13 @@ async function checkQuizCompletion(em: EntityManager, ids: Array<number>): Promi
 
 async function createRound(
   em: EntityManager,
-  name: string,
+  id: number,
   introSurveyUrl: string,
   exitSurveyUrl: string,
   numberOfGameRounds: number,
   ): Promise<TournamentRound> {
   const s = getServices(em);
-  const t = await s.tournament.getTournamentByName(name);
+  const t = await s.tournament.getTournament(id);
   let currentRound: Pick<TournamentRound, 'roundNumber' | 'introSurveyUrl' | 'exitSurveyUrl'> | undefined =
    await s.tournament.getCurrentTournamentRound().catch(err => undefined);
   if (! currentRound) {
@@ -222,7 +223,7 @@ program
           .addCommand(
             program
             .createCommand('emails')
-            .requiredOption('--tournamentRoundId <tournamentRoundId>', 'ID of the tournament round', parseInt)
+            .requiredOption('--tournamentRoundId <tournamentRoundId>', 'ID of the tournament round', customParseInt)
             .description('report emails for all users in the given tournament round')
             .action(async (cmd) => {
               await withConnection(em => exportEmails(em, cmd.tournamentRoundId));
@@ -231,7 +232,7 @@ program
           .addCommand(
             program
             .createCommand('invite')
-            .requiredOption('--tournamentRoundId <tournamentRoundId>', 'ID of the tournament round', parseInt)
+            .requiredOption('--tournamentRoundId <tournamentRoundId>', 'ID of the tournament round', customParseInt)
             .requiredOption('--userIds <userIds...>',
              'space separated list of user ids to invite', toIntArray, [] as Array<number>)
             .option('-p, --participated', 'Set to mark these users as having already participated')
@@ -243,15 +244,15 @@ program
           .addCommand(
             program
               .createCommand('create')
-              .requiredOption('--tournamentName <tournamentName>', 'string name of an existing tournament')
+              .requiredOption('--tournamentId <tournamentId>', 'id of an existing tournament', customParseInt)
               .option('--introSurveyUrl <introSurveyUrl>', 'introductory survey URL', '')
               .option('--exitSurveyUrl <exitSurveyUrl>', 'exit survey URL', '')
               .option('--numberOfGameRounds <numberOfGameRounds>', 'number of game rounds for this TournamentRound', customParseInt, 11)
               .description('create a tournament round')
               .action(async (cmd) => {
-                await withConnection((em) => createRound(em, cmd.tournamentName, cmd.introSurveyUrl, cmd.exitSurveyUrl, cmd.numberOfGameRounds));
+                await withConnection((em) => createRound(em, cmd.tournamentId, cmd.introSurveyUrl, cmd.exitSurveyUrl, cmd.numberOfGameRounds));
                 logger.debug('tournament round create %s [intro: %s] [exit: %s] [numberOfGameRounds: %d',
-                 cmd.tournamentName, cmd.introSurveyUrl, cmd.exitSurveyUrl, cmd.numberOfGameRounds)
+                 cmd.tournamentId, cmd.introSurveyUrl, cmd.exitSurveyUrl, cmd.numberOfGameRounds)
               })))
       .addCommand(
         program
