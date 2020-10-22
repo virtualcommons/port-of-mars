@@ -41,18 +41,21 @@ export class RegistrationService extends BaseService {
       bcc: settings.supportEmail,
       subject: '[Port of Mars] Verify your email',
       // FIXME: convert these to a server-side template
-      text: `Greetings! Someone signed this email address up to participate in the Port of Mars.
+      text: `Greetings! Someone signed this email address up (${u.email}) to participate in the Port of Mars.
       If this was you, please complete your registration by going to ${verificationUrl} and clicking on the "Verify" button.
       If you did not request this, there is no need to take any action and you can safely ignore this message.
 
       Thanks for participating!
       the Port of Mars team`,
-      html: `Greetings! <p>Someone signed this email address up to participate in the Port of Mars.
+      html: `Greetings!
+      <p>Someone signed this email address up (${u.email}) to participate in the Port of Mars.
       If this was you, please complete your registration by <a href='${verificationUrl}'>going to ${verificationUrl}</a> 
       and clicking on the "Verify" button.</p>
       <p>If you did not request this, there is no need to take any action and you can safely ignore this message.</p>
 
+      <p>
       Thanks for participating!
+      </p>
       the Port of Mars team`,
     }, function(err, info) {
       if (err) {

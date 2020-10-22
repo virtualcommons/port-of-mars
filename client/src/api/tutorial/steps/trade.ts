@@ -226,7 +226,7 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-send-trade',
-    content: `Click Send Trade Request to see your trade in action!`,
+    content: `Click Send Trade Request to see your trade in action.`,
     params: {
       placement: 'bottom',
     },
@@ -260,7 +260,7 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-ready-to-advance-button',
-    content: `Click the Ready to Advance button when you have finished trading. `,
+    content: `Click the Ready to Advance button when you have finished trading.`,
     params: {
       placement: LEFT,
     },

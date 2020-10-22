@@ -11,7 +11,7 @@
     <b-row>
       <b-collapse id="consent-collapse" :visible="showConsentForm">
         <b-card>
-          <b-card-text class="consent-form-text">
+          <b-card-text class="pr-2 consent-form-text">
             <p>Dear Participant,</p>
             <p>
               I am a professor in the School of Sustainability at Arizona State University.
@@ -28,7 +28,7 @@
               participation up to that point.
             </p>
             <p>
-              <mark>You must be 18 or older to participate in the study.</mark>
+              <mark>You must be 18 or older and a current undergraduate student at Arizona State University to participate in the study.</mark>
             </p>
             <p>During the game you can chat with other participants. By signing this consent form, you consent to:</p>
             <ul>
@@ -38,12 +38,9 @@
             </ul>
             <p>
               For participation in this study you may receive extra credit if you are in a class with a participating
-              instructor.
-              Those who qualify for the championship round will be invited to have lunch with Arizona State University's
-              astronaut in residence,
-              Catherine Coleman. The <em>winner</em> of the Mars Madness tournament will be able to create new
-              personalized content
-              for the next edition of Mars Madness.
+              instructor. <mark>Those who qualify for the championship round will be invited to have lunch with Arizona State University's
+              astronaut in residence, Catherine Coleman. The <em>winner</em> of the Mars Madness tournament will be eligible to create new
+              personalized content for the next edition of Mars Madness.</mark>
             </p>
             <p>
               Society may benefit from this research because an understanding of how people make decisions can
@@ -119,10 +116,6 @@
                 type='email'>
               </b-form-input>
             </b-form-group>
-            <b-alert v-if="error" dismissible variant="danger">
-              <b-icon icon="exclamation-triangle-fill" variant="danger"></b-icon>
-              {{ error }}
-            </b-alert>
             <b-alert v-if="! isVerified" variant="warning">
               <b-icon icon="exclamation-triangle-fill" variant="danger"></b-icon>
               Please check your email and click on the link to verify your email.
@@ -130,7 +123,7 @@
             <b-button v-if="!existingUser" :disabled="submitDisabled" type="submit" variant="success">Grant Consent to
               Participate
             </b-button>
-            <b-button v-else type="submit" variant="warning">Resend verification email</b-button>
+            <b-button v-else type="submit" :disabled="isVerificationDisabled" variant="warning">Resend verification email</b-button>
           </b-form>
         </b-collapse>
       </b-col>
@@ -149,14 +142,14 @@ import _ from 'lodash';
   components: { Messages }
 })
 export default class Register extends Vue {
-  username: string = "";
-  name: string = "";
-  email: string = "";
-  consented: boolean = false;
-  verifyEmail: string = "";
+  username = "";
+  name = "";
+  email = "";
+  consented = false;
+  verifyEmail = "";
   dateConsented: Date | null = null;
-  isVerified: boolean = false;
-  error: string = "";
+  isVerified = false;
+  isVerificationDisabled = false;
 
   get messages() {
     return this.$tstore.state.dashboardMessages;
@@ -206,6 +199,9 @@ export default class Register extends Vue {
     e.preventDefault();
     if (this.emailsMatch && !_.isEmpty(this.email)) {
       const formData = {name: this.name, email: this.email};
+      this.dateConsented = new Date();
+      // temporarily disable verification
+      this.isVerificationDisabled = true;
       await this.$ajax.post(this.grantConsentUrl, ({data, status}) => {
         if (status === 200) {
           this.$tstore.commit("SET_DASHBOARD_MESSAGE", {
@@ -215,6 +211,7 @@ export default class Register extends Vue {
              It may take some time to arrive, and you may need to check your spam folder as well.
              You can close this browser window as the link will take you back to Port of Mars again.`
           });
+          setTimeout(() => this.isVerificationDisabled = false, 20000);
         } 
       }, formData);
 
