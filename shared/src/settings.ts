@@ -1,4 +1,5 @@
-import {BUILD_ID} from "./assets/build-id";
+export {BUILD_ID} from "./assets/build-id";
+export {SENTRY_DSN} from "./assets/sentry-dsn";
 
 export function isDev(): boolean {
   return process.env.NODE_ENV === 'development';
@@ -27,7 +28,3 @@ export function isTest(): boolean {
 export const COST_INAFFORDABLE = 1000;
 
 export const SYSTEM_HEALTH_MAINTENANCE_COST = 25;
-
-export function getBuildId(): string {
-  return BUILD_ID;
-}

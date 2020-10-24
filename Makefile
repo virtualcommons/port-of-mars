@@ -6,14 +6,15 @@ DB_DATA_PATH=docker/data
 DATA_DUMP_PATH=docker/dump
 LOG_DATA_PATH=docker/logs
 DB_PASSWORD_PATH=keys/pom_db_password
-DYNAMIC_SETTINGS_PATH=keys/settings.json
-JWT_SECRET_PATH=keys/jwt
+REDIS_SETTINGS_PATH=keys/settings.json
 ORMCONFIG_PATH=keys/ormconfig.json
 PGPASS_PATH=keys/.pgpass
 SENTRY_DSN_PATH=keys/sentry_dsn
+SENTRY_DSN=$(shell cat $(SENTRY_DSN_PATH))
+SENTRY_DSN_ASSETS_PATH=shared/src/assets/sentry-dsn.ts
 MAIL_API_KEY_PATH=keys/mail_api_key
-SECRETS=$(MAIL_API_KEY_PATH) $(DB_PASSWORD_PATH) $(JWT_SECRET_PATH) $(ORMCONFIG_PATH) $(PGPASS_PATH) $(SENTRY_DSN_PATH)
-BUILD_ID_PATH=shared/src/assets/build-id.ts
+SECRETS=$(MAIL_API_KEY_PATH) $(DB_PASSWORD_PATH) $(ORMCONFIG_PATH) $(PGPASS_PATH) $(SENTRY_DSN_PATH)
+BUILD_ID_ASSETS_PATH=shared/src/assets/build-id.ts
 BUILD_ID=$(shell git describe --tags --abbrev=1)
 
 .PHONY: build
@@ -60,12 +61,8 @@ $(LOG_DATA_PATH):
 $(DATA_DUMP_PATH):
 	mkdir -p $(DATA_DUMP_PATH)
 
-$(DYNAMIC_SETTINGS_PATH): server/deploy/settings.template.json | keys
-	cp server/deploy/settings.template.json $(DYNAMIC_SETTINGS_PATH)
-
-$(JWT_SECRET_PATH): | keys
-	JWT_SECRET=$$(head /dev/urandom | tr -dc '[:alnum:]' | head -c42); \
-	echo $${JWT_SECRET} > $(JWT_SECRET_PATH)
+$(REDIS_SETTINGS_PATH): server/deploy/settings.template.json | keys
+	cp server/deploy/settings.template.json $(REDIS_SETTINGS_PATH)
 
 $(ORMCONFIG_PATH): server/ormconfig.template.json $(DB_PASSWORD_PATH)
 	DB_PASSWORD=$$(cat $(DB_PASSWORD_PATH)); \
@@ -88,11 +85,12 @@ $(DB_DATA_PATH):
 .PHONY: secrets
 secrets: $(SECRETS)
 
-.PHONY: build-id
-build-id: | keys
-	echo "export const BUILD_ID = \"${BUILD_ID}\";" > $(BUILD_ID_PATH)
+.PHONY: settings
+settings: $(SENTRY_DSN_PATH) | keys
+	echo 'export const BUILD_ID = "${BUILD_ID}";' > $(BUILD_ID_ASSETS_PATH)
+	echo 'export const SENTRY_DSN = "${SENTRY_DSN}";' > $(SENTRY_DSN_ASSETS_PATH)
 
-docker-compose.yml: base.yml staging.base.yml $(ENVIR).yml config.mk $(DB_DATA_PATH) $(DATA_DUMP_PATH) $(LOG_DATA_PATH) $(DYNAMIC_SETTINGS_PATH) $(ORMCONFIG_PATH) $(PGPASS_PATH) build-id
+docker-compose.yml: base.yml staging.base.yml $(ENVIR).yml config.mk $(DB_DATA_PATH) $(DATA_DUMP_PATH) $(LOG_DATA_PATH) $(REDIS_SETTINGS_PATH) $(ORMCONFIG_PATH) $(PGPASS_PATH) settings
 	case "$(ENVIR)" in \
 	  dev) docker-compose -f base.yml -f "$(ENVIR).yml" config > docker-compose.yml;; \
 	  staging|prod) docker-compose -f base.yml -f staging.base.yml -f "$(ENVIR).yml" config > docker-compose.yml;; \
@@ -109,7 +107,7 @@ test: test-setup
 	docker-compose run --rm server yarn test
 
 .PHONY: deploy
-deploy: docker-compose.yml build-id
+deploy: docker-compose.yml settings
 	docker-compose pull db redis
 	docker-compose build --pull
 	docker-compose up -d 

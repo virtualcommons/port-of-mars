@@ -199,9 +199,9 @@ export default class Register extends Vue {
     e.preventDefault();
     if (this.emailsMatch && !_.isEmpty(this.email)) {
       const formData = {name: this.name, email: this.email};
-      this.dateConsented = new Date();
       // temporarily disable verification
       this.isVerificationDisabled = true;
+      this.dateConsented = new Date();
       await this.$ajax.post(this.grantConsentUrl, ({data, status}) => {
         if (status === 200) {
           this.$tstore.commit("SET_DASHBOARD_MESSAGE", {
@@ -211,6 +211,7 @@ export default class Register extends Vue {
              It may take some time to arrive, and you may need to check your spam folder as well.
              You can close this browser window as the link will take you back to Port of Mars again.`
           });
+          // re-enable the re-send verification email button
           setTimeout(() => this.isVerificationDisabled = false, 20000);
         } 
       }, formData);

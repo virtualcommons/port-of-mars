@@ -93,7 +93,7 @@
   import {faChevronCircleUp} from '@fortawesome/free-solid-svg-icons/faChevronCircleUp';
   import {faChevronCircleDown} from '@fortawesome/free-solid-svg-icons/faChevronCircleDown';
   import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
-  import {getBuildId} from "@port-of-mars/shared/settings";
+  import {BUILD_ID} from "@port-of-mars/shared/settings";
 
   library.add(faChevronCircleUp, faChevronCircleDown, faGithub, faEnvelope);
 
@@ -118,7 +118,7 @@
     }
 
     async mounted() {
-      this.buildId = await getBuildId();
+      this.buildId = BUILD_ID;
     }
 
     private toggle() {

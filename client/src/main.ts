@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import * as Sentry from '@sentry/browser';
-import * as Integrations from '@sentry/integrations';
+import { Vue as VueIntegration } from '@sentry/integrations';
+import { Integrations } from "@sentry/tracing";
 import Vuex, { Store } from 'vuex';
 import * as Colyseus from 'colyseus.js';
 import App from './App.vue';
@@ -20,7 +21,10 @@ Vue.config.productionTip = false;
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
-  integrations: [new Integrations.Vue({ Vue, attachProps: true })],
+  integrations: [
+    new VueIntegration({ Vue, tracing: true }),
+    new Integrations.BrowserTracing(),
+  ],
 });
 
 const $client = new Colyseus.Client(process.env.SERVER_URL_WS || undefined);
