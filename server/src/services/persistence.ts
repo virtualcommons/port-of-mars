@@ -9,7 +9,7 @@ import * as ge from "@port-of-mars/server/rooms/game/events/types";
 import {GameOpts, Metadata, Persister} from "@port-of-mars/server/rooms/game/types";
 import {getServices, ServiceProvider} from "@port-of-mars/server/services/index";
 import {getLogger} from "@port-of-mars/server/settings";
-import {getBuildId} from "@port-of-mars/shared/settings";
+import {BUILD_ID} from "@port-of-mars/shared/settings";
 
 const logger = getLogger(__filename);
 
@@ -104,7 +104,7 @@ export class DBPersister implements Persister {
       if (_.isNull(options.tournamentRoundId)) {
         throw new Error('could not find matching tournament round')
       }
-      g.buildId = getBuildId();
+      g.buildId = BUILD_ID;
       g.tournamentRoundId = options.tournamentRoundId;
       g.roomId = roomId;
 
