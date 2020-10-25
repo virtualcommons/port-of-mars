@@ -2,7 +2,7 @@ import { MemoryEmailer, Emailer, MailgunEmailer } from "@port-of-mars/server/ser
 import { LogService, DevLogging, Logging } from "@port-of-mars/server/services/logging";
 import * as fs from 'fs';
 
-export const SECRET_KEY: string = fs.readFileSync('/run/secrets/jwt', 'utf8').trim();
+export const SECRET_KEY: string = fs.readFileSync('/run/secrets/secret_key', 'utf8').trim();
 
 export interface AppSettings {
   emailer: Emailer;
