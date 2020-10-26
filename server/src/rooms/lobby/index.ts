@@ -151,6 +151,14 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
       this.sendSafe(client, { kind: 'join-failure', reason: 'Sorry, Port of Mars is currently full! Please try again later.' });
       return;
     }
+    const userAlreadyInLobby = this.clientStats.filter(cs => cs.client.auth.id === client.auth.id).length > 0;
+    if (userAlreadyInLobby) {
+      this.sendSafe(client, {
+        kind: "join-failure",
+        reason: "You are already in the lobby. Please check your other browser windows."
+      })
+      return;
+    }
     const clientStat = {
       client: client,
       rank: options.rank,
