@@ -135,6 +135,14 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
     // guard against too many connections, check total number of participants + currently waiting participants against
     // the maxConnections threshold
     const sp = getServices();
+    const roomId = await sp.game.getActiveGameRoomId(client.auth.id);
+    if (roomId) {
+      this.sendSafe(client, {
+        kind: "join-existing-game"
+      })
+      logger.info('User %d joining existing game %s', client.auth.id, roomId)
+      return;
+    }
     const numberOfActiveParticipants = await sp.game.getNumberOfActiveParticipants();
     const maxConnections = await sp.settings.getMaxConnections();
     logger.debug("active participants: %d lobby clients: %d", numberOfActiveParticipants, this.clientStats.length);
@@ -200,7 +208,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
   }
 
   onLeave(client: Client, consented: boolean) {
-    logger.trace('WAITING LOBBY: onLeave');
+    logger.trace('WAITING LOBBY: onLeave %s', client.id);
     this.removeClientStat(client);
   }
 

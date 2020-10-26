@@ -15,7 +15,8 @@ export class GameService extends BaseService {
       .createQueryBuilder("game")
       .innerJoin("game.players", "player")
       .innerJoin("player.user", "user")
-      .where("user.id = :userId", {userId})
+      .where("game.status = 'incomplete'")
+      .andWhere("user.id = :userId", {userId})
       .orderBy("game.dateCreated", "DESC")
       .getOne();
 
@@ -32,5 +33,14 @@ export class GameService extends BaseService {
       .where("game.status = 'incomplete'")
       .andWhere("game.tournamentRoundId = :tournamentRoundId", {tournamentRoundId})
       .getCount()
+  }
+
+  async isUserInActiveGame(id: number) {
+    return (await this.em.getRepository(Game)
+      .createQueryBuilder('game')
+      .innerJoin('game.players', 'player')
+      .where("status = 'incomplete'")
+      .andWhere('player.userId = :id', {id})
+      .getCount()) > 0;
   }
 }

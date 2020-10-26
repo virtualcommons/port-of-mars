@@ -3,7 +3,7 @@ import {
   JoinedClientQueue,
   SentInvitation,
   RemovedClientFromLobby,
-  JoinFailure
+  JoinFailure, JoinExistingGame
 } from '@port-of-mars/shared/lobby/responses';
 import { DASHBOARD_PAGE, GAME_PAGE } from '@port-of-mars/shared/routes';
 import Lobby from '@port-of-mars/client/views/Lobby.vue';
@@ -53,6 +53,9 @@ export function applyWaitingServerResponses<T>(
     console.log('Removed client from lobby (currently a NO-OP).');
     router.push({ name: GAME_PAGE });
   });
+  room.onMessage('join-existing-game', (msg: JoinExistingGame) => {
+    router.push({ name: GAME_PAGE });
+  })
 
   room.state.onChange = (changes: Array<any>) => {
     changes.forEach((change) => {

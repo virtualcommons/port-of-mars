@@ -143,6 +143,7 @@
           this.$tstore.commit('SET_DASHBOARD_MESSAGE', { kind: 'danger', message: `Couldn't join the lobby: ${e.message}` });
         }
         */
+        console.log(e);
         let errorMessage = e.message;
         if (!errorMessage) {
           errorMessage = 'Please complete all onboarding items on your dashboard before joining a game.';

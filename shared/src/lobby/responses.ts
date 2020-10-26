@@ -3,6 +3,10 @@ export interface JoinedClientQueue {
   value: boolean;
 }
 
+export interface JoinExistingGame {
+  kind: 'join-existing-game';
+}
+
 export interface SentInvitation {
   kind: 'sent-invitation';
   roomId: string;
@@ -20,6 +24,7 @@ export interface JoinFailure {
 
 export type WaitingResponses =
   | JoinedClientQueue
+  | JoinExistingGame
   | SentInvitation
   | RemovedClientFromLobby
   | JoinFailure;
