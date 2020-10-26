@@ -38,9 +38,9 @@ export class AccountService extends BaseService {
     const user = await this.getOrCreateUser(username);
     // test user, set fake data so they can immediately join a game
     user.email = `${username}@mailinator.com`;
-    // user.dateConsented = new Date();
-    // user.isVerified = true;
-    // user.passedQuiz = true;
+    user.dateConsented = new Date();
+    user.isVerified = true;
+    user.passedQuiz = true;
     user.name = `Test User ${username}`;
     await this.getRepository().save(user);
     // in subsequent tournament rounds should we create an TournamentRoundInvite for this year
