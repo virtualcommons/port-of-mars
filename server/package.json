@@ -15,6 +15,7 @@
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "dangerously-resetdb": "dropdb -U marsmadness -h db port_of_mars && createdb -U marsmadness -h db port_of_mars && yarn typeorm schema:sync && yarn load-fixtures",
     "migrate": "yarn typeorm migration:run",
+    "repl": "yarn ts-node -r tsconfig-paths/register",
     "sql": "pgcli -U marsmadness -d port_of_mars -h db",
     "test": "NODE_ENV=test jest",
     "lint": "eslint --ext .ts .",

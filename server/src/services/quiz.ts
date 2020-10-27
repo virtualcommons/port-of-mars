@@ -3,6 +3,7 @@ import { BaseService } from "@port-of-mars/server/services/db";
 import { getLogger } from "@port-of-mars/server/settings";
 
 import * as _ from 'lodash';
+import {FindOneOptions} from "typeorm/index";
 
 const logger = getLogger(__filename);
 
@@ -37,16 +38,16 @@ export class QuizService extends BaseService {
     return this.em.getRepository(QuizSubmission).findOne(id, opts);
   }
 
-  async getDefaultQuiz(opts?: Partial<{ relations: Array<string>; where: object }>): Promise<Quiz> {
+  async getDefaultQuiz(opts?: FindOneOptions<Quiz>): Promise<Quiz> {
     const DEFAULT_QUIZ_NAME = 'TutorialQuiz';
     return await this.getQuizByName(DEFAULT_QUIZ_NAME, opts);
   }
 
-  async getQuizById(id: number, opts?: Partial<{ relations: Array<string>; where: object }>) {
+  async getQuizById(id: number, opts?: FindOneOptions<Quiz>): Promise<Quiz> {
     return await this.em.getRepository(Quiz).findOneOrFail(id, opts);
   }
 
-  async getQuizByName(name: string, opts?: Partial<{ relations: Array<string>; where: object }>): Promise<Quiz> {
+  async getQuizByName(name: string, opts?: FindOneOptions<Quiz>): Promise<Quiz> {
     return await this.em.getRepository(Quiz).findOneOrFail(_.merge(opts, { where: {name} }));
   }
 
@@ -57,7 +58,7 @@ export class QuizService extends BaseService {
   async getLatestQuizSubmission(
     userId: number,
     quizId: number,
-    opts: Partial<{ relations: Array<string>; where: object; order: object }> = {}
+    opts: FindOneOptions<QuizSubmission> = {}
   ): Promise<QuizSubmission | undefined> {
     opts = { order: { dateCreated: 'DESC' }, ...opts };
     return await this.em

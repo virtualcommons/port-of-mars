@@ -174,7 +174,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
     }
   }
 
-  registerLobbyHandlers() {
+  registerLobbyHandlers(): void {
     this.onMessage('accept-invitation', (client, message: AcceptInvitation) => {
       logger.trace('CLIENT ACCEPTED INVITATION');
       const clientStat = this.clientStats.find(stat => stat.client === client);
@@ -210,17 +210,17 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
     });
   }
 
-  removeGroup(group: MatchmakingGroup) {
+  removeGroup(group: MatchmakingGroup): void {
     const groupIndex = this.groups.indexOf(group);
     this.groups.splice(groupIndex, 1);
   }
 
-  onLeave(client: Client, consented: boolean) {
+  onLeave(client: Client, consented: boolean): void {
     logger.trace('WAITING LOBBY: onLeave %s', client.id);
     this.removeClientStat(client);
   }
 
-  createGroup() {
+  createGroup(): MatchmakingGroup {
     logger.trace('WAITING LOBBY: createGroup');
     const group = new MatchmakingGroup();
     this.groups.push(group);
