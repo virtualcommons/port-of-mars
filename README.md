@@ -95,13 +95,15 @@ docker-compose up -d
 To extract the database to csv files run
 
 ```bash
-./dump.sh dev
+./dump.sh dev # all games
+./dump.sh dev --ids 1 2 4 6 # games matching ids
 ```
 
 in a development environment or
 
 ```bash
-./dump.sh prod
+./dump.sh prod # all games
+./dump.sh prod --ids 1 2 4 6 # game matching ids
 ```
 
-in a staging or production environment inside the server container. This will reproject the game events and summary csv files outlining the state of the game for every game event as well as export game, player and tounnament data. The csv files will be in the `docker/dump` folder.
+in a staging or production environment inside the server container. This will reproject the game events and summary csv files outlining the state of the game for every game event as well as export game, player and tounnament data. The csv files will be in the `docker/dump` folder. You can pack the results into an archive with `zip -r <name-of-archive> docker/dump/processed`
