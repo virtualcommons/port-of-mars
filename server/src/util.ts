@@ -2,11 +2,9 @@ import path from "path";
 import _ from "lodash";
 import * as assert from "assert";
 import * as to from "typeorm";
-import {Loader, Resolver} from "typeorm-fixtures-cli/dist";
-import {MarsEventData, ROLES, DashboardMessage} from "@port-of-mars/shared/types";
+import {ROLES, DashboardMessage} from "@port-of-mars/shared/types";
 import {GameOpts, GameStateOpts} from "@port-of-mars/server/rooms/game/types";
 import {getFixedMarsEventDeck, getRandomizedMarsEventDeck} from "@port-of-mars/server/rooms/game/state/marsevents/common";
-import {getMarsEventDeckItems} from "@port-of-mars/server/data/MarsEvents";
 import {Page, getPagePath} from "@port-of-mars/shared/routes";
 import {getLogger, settings} from "@port-of-mars/server/settings";
 import {getServices} from "@port-of-mars/server/services";
@@ -35,17 +33,12 @@ export function getRandomIntInclusive(min: number, max: number): number {
  * @param nRoundStrategy
  */
 export function mockGameStateInitOpts(
-  nRoundStrategy: () => number = () => getRandomIntInclusive(8, 12)): GameStateOpts {
-  const loader = new Loader();
-  loader.load(path.resolve(__dirname, '../fixtures'));
-  const fixtures = new Resolver().resolve(loader.fixtureConfigs);
+  nRoundStrategy: () => number = () => getRandomIntInclusive(8, 12),
+  username = 'bob'
+): GameStateOpts {
   const deck = getFixedMarsEventDeck();
   const numberOfGameRounds = nRoundStrategy();
-  const userRoles = _.zipObject(
-    fixtures.filter(f => f.entity === 'User')
-      .map(f => f.data.username)
-      .filter((name: string) => name.includes('bob')), ROLES);
-
+  const userRoles = _.zipObject([1, 2, 3, 4, 5].map(n => `${username}${n}`), ROLES);
   return {
     userRoles,
     deck,

@@ -69,7 +69,7 @@ describe('a game', () => {
     it('can be loaded into the database and finalized', async () => {
       const gameId = await persister.initialize({tournamentRoundId: tr.id, ...opts}, 'foo', true);
       for (const [endTime, e] of ges) {
-        await persister.persist([e], {gameId, dateCreated: new Date('1970 01 01'), timeRemaining: endTime})
+        await persister.persist([e], {gameId, dateCreated: new Date('1970 01 01'), timeRemaining: endTime});
       }
       await persister.sync();
       await persister.finalize(gameId, true);
