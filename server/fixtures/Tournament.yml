@@ -1,5 +1,5 @@
 entity: Tournament
 items:
   tournament:
-    name: 'main'
+    name: 'Initial Development and Testing Tournament'
     active: true
