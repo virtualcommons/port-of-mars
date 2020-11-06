@@ -36,6 +36,7 @@ In order to setup your database you'll need to run
 docker-compose exec server bash
 yarn typeorm schema:drop
 yarn typeorm migration:run
+yarn load-fixtures
 ```
 
 Now you should be able to login into the website using the development login using any username you wish.
