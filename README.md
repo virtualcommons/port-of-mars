@@ -28,42 +28,23 @@ Now run
 docker-compose up -d
 ```
 
-and you should have a working development environment.
+and you should have a working development environment if your database was already setup.
 
-In order to login fixtures for the project need to be loaded. This can be done with
+In order to setup your database you'll need to run
 
 ```
 docker-compose exec server bash
-yarn load-fixtures
-```
-
-Since the project hasn't been released yet there are no DB migrations. If a schema change occurs then
-you can update the schema of your development DB with `yarn typeorm schema:sync`. If that doesn't work
-it's best to start from scratch
-
-```
 yarn typeorm schema:drop
-yarn typeorm schema:sync
-yarn load-fixtures
+yarn typeorm migration:run
 ```
 
-Now you should be able to login using the usernames in the `fixtures/User.yml` file.
-
-Tests for the project must be setup before they are run. Be sure to run
-
-```
-make test-setup
-```
-
-before trying to run and tests.
+Now you should be able to login into the website using the development login using any username you wish.
 
 Tests for the project can be run with
 
 ```
 make test
 ```
-
-You should be able to go to a game instance by logging in as 'bob' on the login page. You should be taken to a game instance.
 
 If you just want to update the `docker-compose.yml` you can run `make docker-compose.yml`.
 
@@ -74,7 +55,6 @@ To get `make browser` working you'll need to install an Firefox extension so tha
 
 ```bash
 ./configure staging
-make secrets
 make
 docker-compose up -d
 ```
@@ -85,7 +65,6 @@ Copy the Sentry DSN url into `keys/sentry_dsn`. Then
 
 ```bash
 ./configure prod
-make secrets
 make
 docker-compose up -d
 ```
