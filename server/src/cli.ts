@@ -129,6 +129,13 @@ async function checkQuizCompletion(em: EntityManager, ids: Array<number>): Promi
   }
 }
 
+async function completeQuizCompletion(em: EntityManager, ids: Array<number>): Promise<void> {
+  const services = getServices(em);
+  for (const id of ids) {
+    await services.quiz.setUserQuizCompletion(id, true)
+  }
+}
+
 async function createRound(
   em: EntityManager,
   id: number,
@@ -292,6 +299,14 @@ program
       .option('--ids <ids...>', 'user ids to check, separate multiples with spaces, e.g., 1 2 3', toIntArray, [] as Array<number>)
       .action(async (cmd) => {
         await withConnection(em => checkQuizCompletion(em, cmd.ids))
+      })
+  )
+  .addCommand(
+    program.createCommand('completequiz')
+      .description('mark quiz for user as complete')
+      .option('--ids <ids...>', 'user ids to mark quiz completion for', toIntArray, [] as Array<number>)
+      .action(async (cmd) => {
+        await withConnection(em => completeQuizCompletion(em, cmd.ids))
       })
   )
   .addCommand(
