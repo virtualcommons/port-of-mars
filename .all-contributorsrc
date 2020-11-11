@@ -1,6 +1,6 @@
 {
-  "projectName": "Port of Mars",
-  "projectOwner": "alee",
+  "projectName": "port-of-mars",
+  "projectOwner": "virtualcommons",
   "repoType": "github",
   "repoHost": "https://github.com",
   "files": [
@@ -10,6 +10,21 @@
   "commit": true,
   "commitConvention": "angular",
   "contributors": [
+    {
+      "login": "cpritcha",
+      "name": "cpritcha",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/4530298?v=4",
+      "profile": "https://github.com/cpritcha",
+      "contributions": [
+        "bug",
+        "code",
+        "doc",
+        "maintenance",
+        "test",
+        "review"
+      ]
+    }
   ],
-  "contributorsPerLine": 7
+  "contributorsPerLine": 7,
+  "skipCi": true
 }
