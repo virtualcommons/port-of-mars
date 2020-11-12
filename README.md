@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.com/virtualcommons/port-of-mars.svg?token=Axd1f7q98op1tRxrKi92&branch=master)](https://travis-ci.com/virtualcommons/port-of-mars)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END --> 
 
 ## About
@@ -113,6 +113,9 @@ Thanks to all the contributors to this project - [emoji key](https://allcontribu
     <td align="center"><a href="https://complexity.asu.edu"><img src="https://avatars0.githubusercontent.com/u/22534?v=4" width="100px;" alt=""/><br /><sub><b>A Lee</b></sub></a><br /><a href="https://github.com/virtualcommons/port-of-mars/issues?q=author%3Aalee" title="Bug reports">🐛</a> <a href="https://github.com/virtualcommons/port-of-mars/commits?author=alee" title="Code">💻</a> <a href="#maintenance-alee" title="Maintenance">🚧</a> <a href="https://github.com/virtualcommons/port-of-mars/pulls?q=is%3Apr+reviewed-by%3Aalee" title="Reviewed Pull Requests">👀</a> <a href="#projectManagement-alee" title="Project Management">📆</a></td>
     <td align="center"><a href="https://github.com/connor4410"><img src="https://avatars2.githubusercontent.com/u/65049616?v=4" width="100px;" alt=""/><br /><sub><b>connor4410</b></sub></a><br /><a href="https://github.com/virtualcommons/port-of-mars/issues?q=author%3Aconnor4410" title="Bug reports">🐛</a> <a href="#userTesting-connor4410" title="User Testing">📓</a></td>
     <td align="center"><a href="https://github.com/tsommer2"><img src="https://avatars0.githubusercontent.com/u/65748677?v=4" width="100px;" alt=""/><br /><sub><b>tsommer2</b></sub></a><br /><a href="https://github.com/virtualcommons/port-of-mars/issues?q=author%3Atsommer2" title="Bug reports">🐛</a> <a href="#userTesting-tsommer2" title="User Testing">📓</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="http://colyseus.io"><img src="https://avatars3.githubusercontent.com/u/130494?v=4" width="100px;" alt=""/><br /><sub><b>Endel Dreyer</b></sub></a><br /><a href="https://github.com/virtualcommons/port-of-mars/commits?author=endel" title="Code">💻</a></td>
   </tr>
 </table>
 
