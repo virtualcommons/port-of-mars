@@ -72,6 +72,16 @@
         "review",
         "projectManagement"
       ]
+    },
+    {
+      "login": "connor4410",
+      "name": "connor4410",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/65049616?v=4",
+      "profile": "https://github.com/connor4410",
+      "contributions": [
+        "bug",
+        "userTesting"
+      ]
     }
   ],
   "contributorsPerLine": 7,
