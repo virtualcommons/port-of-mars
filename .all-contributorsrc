@@ -48,6 +48,17 @@
         "doc",
         "design"
       ]
+    },
+    {
+      "login": "nick",
+      "name": "Nick Poulden",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/939?v=4",
+      "profile": "https://poulden.com",
+      "contributions": [
+        "code",
+        "doc",
+        "design"
+      ]
     }
   ],
   "contributorsPerLine": 7,
