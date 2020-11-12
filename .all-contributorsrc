@@ -92,6 +92,15 @@
         "bug",
         "userTesting"
       ]
+    },
+    {
+      "login": "endel",
+      "name": "Endel Dreyer",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/130494?v=4",
+      "profile": "http://colyseus.io",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
