@@ -59,6 +59,19 @@
         "doc",
         "design"
       ]
+    },
+    {
+      "login": "alee",
+      "name": "A Lee",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/22534?v=4",
+      "profile": "https://complexity.asu.edu",
+      "contributions": [
+        "bug",
+        "code",
+        "maintenance",
+        "review",
+        "projectManagement"
+      ]
     }
   ],
   "contributorsPerLine": 7,
