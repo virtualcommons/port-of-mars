@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.com/virtualcommons/port-of-mars.svg?token=Axd1f7q98op1tRxrKi92&branch=master)](https://travis-ci.com/virtualcommons/port-of-mars)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END --> 
 
 ## About
@@ -109,6 +109,7 @@ Thanks to all the contributors to this project - [emoji key](https://allcontribu
     <td align="center"><a href="https://github.com/cpritcha"><img src="https://avatars0.githubusercontent.com/u/4530298?v=4" width="100px;" alt=""/><br /><sub><b>cpritcha</b></sub></a><br /><a href="https://github.com/virtualcommons/port-of-mars/issues?q=author%3Acpritcha" title="Bug reports">🐛</a> <a href="https://github.com/virtualcommons/port-of-mars/commits?author=cpritcha" title="Code">💻</a> <a href="https://github.com/virtualcommons/port-of-mars/commits?author=cpritcha" title="Documentation">📖</a> <a href="#maintenance-cpritcha" title="Maintenance">🚧</a> <a href="https://github.com/virtualcommons/port-of-mars/commits?author=cpritcha" title="Tests">⚠️</a> <a href="https://github.com/virtualcommons/port-of-mars/pulls?q=is%3Apr+reviewed-by%3Acpritcha" title="Reviewed Pull Requests">👀</a></td>
     <td align="center"><a href="https://www.linkedin.com/in/chrstngyn/"><img src="https://avatars0.githubusercontent.com/u/8737685?v=4" width="100px;" alt=""/><br /><sub><b>Christine Nguyễn</b></sub></a><br /><a href="https://github.com/virtualcommons/port-of-mars/issues?q=author%3Achrstngyn" title="Bug reports">🐛</a> <a href="https://github.com/virtualcommons/port-of-mars/commits?author=chrstngyn" title="Code">💻</a> <a href="https://github.com/virtualcommons/port-of-mars/commits?author=chrstngyn" title="Documentation">📖</a> <a href="https://github.com/virtualcommons/port-of-mars/commits?author=chrstngyn" title="Tests">⚠️</a> <a href="#design-chrstngyn" title="Design">🎨</a> <a href="https://github.com/virtualcommons/port-of-mars/pulls?q=is%3Apr+reviewed-by%3Achrstngyn" title="Reviewed Pull Requests">👀</a></td>
     <td align="center"><a href="http://adelerium.dev"><img src="https://avatars2.githubusercontent.com/u/43051098?v=4" width="100px;" alt=""/><br /><sub><b>Lorenzo Faivre</b></sub></a><br /><a href="https://github.com/virtualcommons/port-of-mars/commits?author=lfaivre" title="Code">💻</a> <a href="https://github.com/virtualcommons/port-of-mars/commits?author=lfaivre" title="Documentation">📖</a> <a href="#design-lfaivre" title="Design">🎨</a></td>
+    <td align="center"><a href="http://nmoran.com"><img src="https://avatars0.githubusercontent.com/u/31869062?v=4" width="100px;" alt=""/><br /><sub><b>Nick Moran</b></sub></a><br /><a href="https://github.com/virtualcommons/port-of-mars/commits?author=nick-moran" title="Code">💻</a> <a href="https://github.com/virtualcommons/port-of-mars/commits?author=nick-moran" title="Documentation">📖</a> <a href="#design-nick-moran" title="Design">🎨</a></td>
   </tr>
 </table>
 
