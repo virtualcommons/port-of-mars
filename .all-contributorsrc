@@ -48,6 +48,17 @@
         "doc",
         "design"
       ]
+    },
+    {
+      "login": "nick-moran",
+      "name": "Nick Moran",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/31869062?v=4",
+      "profile": "http://nmoran.com",
+      "contributions": [
+        "code",
+        "doc",
+        "design"
+      ]
     }
   ],
   "contributorsPerLine": 7,
