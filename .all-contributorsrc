@@ -82,6 +82,16 @@
         "bug",
         "userTesting"
       ]
+    },
+    {
+      "login": "tsommer2",
+      "name": "tsommer2",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/65748677?v=4",
+      "profile": "https://github.com/tsommer2",
+      "contributions": [
+        "bug",
+        "userTesting"
+      ]
     }
   ],
   "contributorsPerLine": 7,
