@@ -37,6 +37,17 @@
         "design",
         "review"
       ]
+    },
+    {
+      "login": "lfaivre",
+      "name": "Lorenzo Faivre",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/43051098?v=4",
+      "profile": "http://adelerium.dev",
+      "contributions": [
+        "code",
+        "doc",
+        "design"
+      ]
     }
   ],
   "contributorsPerLine": 7,
