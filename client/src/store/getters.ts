@@ -17,6 +17,10 @@ export default {
     return state.layout;
   },
 
+  environment(state: State): string {
+    return state.environment;
+  },
+
   /**
    * Gets the current player by the current role.
    * @param state The current state of the game.
@@ -203,5 +207,5 @@ export default {
 
   toggleYourTrades(state: State) {
     return state.userInterface.toggleYourTrades;
-  }
+  },
 }

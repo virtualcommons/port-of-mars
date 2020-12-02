@@ -1,5 +1,9 @@
 <template>
   <div id="app" class="game">
+    <b-alert show v-if="isDevModeEnabled" variant="warning" class="text-center">
+        <b-icon icon="exclamation-triangle-fill" scale="1.5" variant="warning" class="mx-3"></b-icon>
+        You are currently accessing a development version of the Port of Mars only used for testing.
+        </b-alert>
     <router-view :key="$route.path" />
     <Footer v-if="showFooter($route.path)"/>
   </div>
@@ -7,6 +11,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
+import { isDev, isStaging } from '@port-of-mars/shared/settings';
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
 import BootstrapVue from 'bootstrap-vue';
 
@@ -20,6 +25,10 @@ Vue.use(BootstrapVue);
 export default class App extends Vue {
   mounted() {
     this.detectBrowser()
+  }
+
+  get isDevModeEnabled() {
+    return isDev() || isStaging();
   }
 
   /**
