@@ -27,7 +27,7 @@ export const DYNAMIC_SETTINGS_PATH = '/run/secrets/settings.json';
 
 export interface SettingsData {
   maxConnections: number
-  isSignUpEnabled: number
+  isSignUpEnabled: boolean
 }
 
 export class RedisSettings {

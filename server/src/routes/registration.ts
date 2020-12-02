@@ -56,9 +56,10 @@ registrationRouter.post('/send-email-verification', async (req: Request, res: Re
 registrationRouter.post('/verify/:registrationToken', async (req: Request, res: Response, next: NextFunction) => {
   const user = req.user as User
   const registrationToken = req.params.registrationToken;
+  const s = getServices();
   try {
-    await getServices().registration.verifyUnregisteredUser(user, registrationToken);
-    res.json(true);
+    await s.registration.verifyUnregisteredUser(user, registrationToken);
+    res.json(await s.settings.getIsSignUpEnabled());
   } catch (e) {
     logger.warn(`Unable to verify unregistered user ${user.username} with token ${registrationToken}}`)
     next(e);

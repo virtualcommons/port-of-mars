@@ -11,7 +11,7 @@
 
 <script lang="ts">
   import {Component, Prop, Vue} from "vue-property-decorator";
-  import {DASHBOARD_PAGE} from "@port-of-mars/shared/routes";
+  import {DASHBOARD_PAGE, SIGNEDUP_PAGE} from "@port-of-mars/shared/routes";
   import {url} from "@port-of-mars/client/util";
 
   @Component({})
@@ -31,7 +31,12 @@
           kind: "success",
           message: "Email successfully verified."
         });
-        this.$router.push({name: DASHBOARD_PAGE});
+        const signUpEnabled = data;
+        if (signUpEnabled) {
+          this.$router.push({name: SIGNEDUP_PAGE});
+        } else {
+          this.$router.push({name: DASHBOARD_PAGE});
+        }
       });
     }
   }
