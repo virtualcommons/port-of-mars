@@ -27,6 +27,7 @@ export const DYNAMIC_SETTINGS_PATH = '/run/secrets/settings.json';
 
 export interface SettingsData {
   maxConnections: number
+  isSignUpEnabled: number
 }
 
 export class RedisSettings {
@@ -43,17 +44,23 @@ export class RedisSettings {
     }
   }
 
-  async reload(path = DYNAMIC_SETTINGS_PATH): Promise<number> {
+  async reload(path = DYNAMIC_SETTINGS_PATH): Promise<void> {
     const settings: SettingsData = JSON.parse(fs.readFileSync(path, 'utf8'));
     return await this.setSettings(settings);
   }
 
-  async setSettings(settings: SettingsData): Promise<number> {
-    // FIXME: this should set all settings from the file and replace server/settings
-    return await this.client.hset(['settings', 'maxConnections', settings.maxConnections.toString()])
+  async setSettings(settings: SettingsData): Promise<void> {
+    for (const k of _.keys(settings)) {
+      const key = k as keyof SettingsData;
+      await this.client.hset(['settings', key, _.toNumber(settings[key]).toString()])
+    }
   }
 
   async getMaxConnections(): Promise<number> {
     return _.toNumber(await this.client.hget('settings', 'maxConnections'));
+  }
+
+  async getIsSignUpEnabled(): Promise<boolean> {
+    return !!_.toNumber(await this.client.hget('settings', 'isSignUpEnabled'))
   }
 }

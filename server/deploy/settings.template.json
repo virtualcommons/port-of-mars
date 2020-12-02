@@ -1,3 +1,4 @@
 {
+  "isSignUpEnabled": true,
   "maxConnections": 200
 }

@@ -43,8 +43,6 @@ export class AccountService extends BaseService {
     user.passedQuiz = true;
     user.name = `Test User ${username}`;
     await this.getRepository().save(user);
-    // in subsequent tournament rounds should we create an TournamentRoundInvite for this year
-
     return user;
   }
 

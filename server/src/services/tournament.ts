@@ -107,6 +107,14 @@ export class TournamentService extends BaseService {
     return await repository.save(invite);
   }
 
+  async getOrCreateInvite(userId: number, tournamentRound: TournamentRound): Promise<TournamentRoundInvite> {
+    let invite = await this.getActiveRoundInvite(userId, tournamentRound);
+    if (!invite) {
+      invite = await this.createInvite(userId, tournamentRound.id);
+    }
+    return invite;
+  }
+
   async getActiveRoundInvite(userId: number, tournamentRound?: TournamentRound): Promise<TournamentRoundInvite | undefined> {
     if (!tournamentRound) {
       tournamentRound = await this.getCurrentTournamentRound();

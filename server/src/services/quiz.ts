@@ -34,7 +34,7 @@ export class QuizService extends BaseService {
       .save(quizSubmission);
   }
 
-  async findQuizSubmission(id: number, opts?: Partial<{ relations: Array<string>; where: object }>): Promise<QuizSubmission | undefined> {
+  async findQuizSubmission(id: number, opts?: FindOneOptions<QuizSubmission>): Promise<QuizSubmission | undefined> {
     return this.em.getRepository(QuizSubmission).findOne(id, opts);
   }
 

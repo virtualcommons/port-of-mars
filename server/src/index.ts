@@ -49,17 +49,26 @@ passport.use(new CasStrategy(
     casURL: 'https://weblogin.asu.edu/cas'
   },
   // verify callback
-  function (username: string, profile: Record<string, unknown>, done: Function) {
-    getServices().account.getOrCreateUser(username, profile).then(user => done(null, user));
+  async function (username: string, profile: Record<string, unknown>, done: Function) {
+    const s = getServices();
+    const user = await s.account.getOrCreateUser(username, profile);
+    const tournamentRound = await s.tournament.getCurrentTournamentRound();
+    if (await s.settings.getIsSignUpEnabled() && tournamentRound.id === 1) {
+      await s.tournament.getOrCreateInvite(user.id, tournamentRound);
+    }
+    await done(null, user);
   }
 ));
 passport.use(new LocalStrategy(
   async function (username: string, password: string, done: Function) {
-    logger.warn('***** DO NOT ALLOW IN PRODUCTION! running local auth for user: ', username);
-    const tournamentService = getServices().tournament;
+    const s = getServices();
     const user = await getServices().account.getOrCreateTestUser(username);
       // set all testing things on the user
-    done(null, user)
+    const tournamentRound = await s.tournament.getCurrentTournamentRound();
+    if (await s.settings.getIsSignUpEnabled() && tournamentRound.id === 1) {
+      await s.tournament.getOrCreateInvite(user.id, tournamentRound);
+    }
+    await done(null, user);
   }
 ));
 
