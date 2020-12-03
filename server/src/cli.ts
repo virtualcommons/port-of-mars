@@ -322,11 +322,10 @@ program
               const settings = new RedisSettings(client);
               const code = await settings.reload();
               logger.debug({code});
-              if (code) {
-                console.error(`reloading settings failed with code ${code}`);
-                process.exit(code);
-              }
               logger.debug('reloaded settings into redis');
+            } catch (e) {
+              console.error(`reloading settings failed: ${e}`);
+              process.exit(1);
             } finally {
               getRedis().quit();
             }
