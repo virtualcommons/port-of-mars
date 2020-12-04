@@ -52,10 +52,6 @@ passport.use(new CasStrategy(
   async function (username: string, profile: Record<string, unknown>, done: Function) {
     const s = getServices();
     const user = await s.account.getOrCreateUser(username, profile);
-    const tournamentRound = await s.tournament.getCurrentTournamentRound();
-    if (await s.settings.getIsSignUpEnabled() && tournamentRound.roundNumber === 1) {
-      await s.tournament.getOrCreateInvite(user.id, tournamentRound);
-    }
     await done(null, user);
   }
 ));
@@ -65,9 +61,7 @@ passport.use(new LocalStrategy(
     const user = await getServices().account.getOrCreateTestUser(username);
       // set all testing things on the user
     const tournamentRound = await s.tournament.getCurrentTournamentRound();
-    if (await s.settings.getIsSignUpEnabled() && tournamentRound.roundNumber === 1) {
-      await s.tournament.getOrCreateInvite(user.id, tournamentRound);
-    }
+    await s.tournament.getOrCreateInvite(user.id, tournamentRound);
     await done(null, user);
   }
 ));

@@ -97,7 +97,7 @@
           <h2 class="text-center text-uppercase mt-5 py-2">No active invitation found</h2>
           <p class='lead text-left'>
             Thanks for your interest in the Port of Mars! Unfortunately you do not appear to have an invitation to participate
-            in this round of the Port of Mars. If you think this is an error, please contact us at 
+            in this round of the Port of Mars. If you think this is an error, please contact us at
             <a href='mailto:portmars@asu.edu'>portmars@asu.edu</a>.
           </p>
         </b-container>
@@ -141,7 +141,7 @@ import {GameMeta, PlayerTaskCompletion, Stats} from '@port-of-mars/shared/types'
 import {faGoogle} from '@fortawesome/free-brands-svg-icons/faGoogle';
 import {faRocket} from '@fortawesome/free-solid-svg-icons';
 import {library} from '@fortawesome/fontawesome-svg-core'
-import {CONSENT_PAGE, LOBBY_PAGE, LOGIN_PAGE, TUTORIAL_PAGE} from '@port-of-mars/shared/routes';
+import {CONSENT_PAGE, LOBBY_PAGE, LOGIN_PAGE, SIGNEDUP_PAGE, TUTORIAL_PAGE} from '@port-of-mars/shared/routes';
 
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 import {CalendarEvent, google} from "calendar-link";
@@ -220,6 +220,11 @@ export default class PlayerDashboard extends Vue {
     // go to consent page if player has not consented
     else if (data.playerTaskCompletion.mustConsent) {
       await this.$router.push({name: CONSENT_PAGE});
+    }
+
+    // go to the signed up page if signup is enabled
+    else if (data.isSignUpEnabled) {
+      await this.$router.push({name: SIGNEDUP_PAGE});
     }
 
     // go to tutorial if player has not taken tutorial
