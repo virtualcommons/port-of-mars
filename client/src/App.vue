@@ -1,12 +1,12 @@
 <template>
-  <div id="app" class="game">
+  <b-container class="w-100 h-100 p-0 m-0" fluid>
     <b-alert show v-if="isDevModeEnabled" variant="warning" class="text-center">
         <b-icon icon="exclamation-triangle-fill" scale="1.5" variant="warning" class="mx-3"></b-icon>
         You are currently accessing a development version of the Port of Mars only used for testing.
         </b-alert>
     <router-view :key="$route.path" />
     <Footer v-if="showFooter($route.path)"/>
-  </div>
+  </b-container>
 </template>
 
 <script lang="ts">

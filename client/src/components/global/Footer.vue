@@ -1,85 +1,78 @@
 <template>
-  <div class="c-footer d-flex flex-row">
-    <b-button :style="button" @click="toggle" class="footer-button" pill>
-      <font-awesome-icon
-        :icon="['fas', 'chevron-circle-up']"
-        size="lg"
-        v-if="!footer"
+  <footer :style="show" class="footer">
+    <b-container class="p-0 m-0" fluid>
+      <b-row class="p2">
+        <!-- copyright -->
+        <b-col>
+          <p>&copy; 2020 <a href='https://www.azregents.edu/' target='_blank'>Arizona Board of
+          Regents</a></p>
+        </b-col>
 
-      />
-      <font-awesome-icon
-        :icon="['fas', 'chevron-circle-down']"
-        size="lg"
-        v-if="footer"
-      />
-    </b-button>
+        <!-- build id -->
+        <b-col>
+          <p>Build: {{ buildId }}</p>
+        </b-col>
 
-    <footer :style="show" class="footer">
-      <!-- ROW 1 -->
-      <div class="d-flex flex-row p-2">
-        <div class="p-2 footer-copyright">
-          &copy; 2020 <a href='https://www.azregents.edu/' target='_blank'>Arizona Board of
-          Regents</a>
-        </div>
-        <div class="p-2 mr-auto footer-build">
-          Build: {{ buildId }}
-        </div>
-        <div class="p-2 footer-github">
+        <!-- github -->
+        <b-col>
           <a href="https://github.com/virtualcommons/port-of-mars/" target="_blank">
             <font-awesome-icon
               :icon="['fab', 'github']"
               size="lg"
             />
           </a>
-        </div>
-        <div class="p-2 footer-mail">
+        </b-col>
+        
+        <!-- email -->
+        <b-col>
           <a href="mailto:portmars@asu.edu">
             <font-awesome-icon
               :icon="['fas', 'envelope']"
               size="lg"
             />
           </a>
-        </div>
-        <div class="p-2 footer-license">
+        </b-col>
+
+        <!-- license -->
+        <b-col>
           <a href="https://github.com/virtualcommons/port-of-mars/blob/master/LICENSE"
-             target="_blank">
+            target="_blank">
             GNU AGPL v3.0
           </a>
-        </div>
+        </b-col>
+      </b-row>
+  <!-- <div class="d-flex flex-row">
+    
+      <div class="p-2 align-self-center">
+        <img
+          :src="
+      require(`@port-of-mars/client/assets/sponsors/compute_canada.png`)
+    "
+          alt="Compute Canada"
+          class="compute-canada"
+        />
       </div>
-
-      <!-- ROW 2 -->
-      <div class="d-flex flex-row">
-          <div class="p-2 align-self-center">
-            <img
-              :src="
-          require(`@port-of-mars/client/assets/sponsors/compute_canada.png`)
-        "
-              alt="Compute Canada"
-              class="compute-canada"
-            />
-          </div>
-          <div class="p-2 align-self-center">
-            <img
-              :src="
-          require(`@port-of-mars/client/assets/sponsors/asu_gbci.png`)
-        "
-              alt="ASU Global Biosocial Complexity Initiative"
-              class="gbci"
-            />
-          </div>
-          <div class="p-2 align-self-center">
-            <img
-              :src="
-          require(`@port-of-mars/client/assets/sponsors/asu_interplanetary_initiative.png`)
-        "
-              alt="ASU Interplanetary Initative"
-              class="ii"
-            />
-          </div>
+      <div class="p-2 align-self-center">
+        <img
+          :src="
+      require(`@port-of-mars/client/assets/sponsors/asu_gbci.png`)
+    "
+          alt="ASU Global Biosocial Complexity Initiative"
+          class="gbci"
+        />
       </div>
-    </footer>
-  </div>
+      <div class="p-2 align-self-center">
+        <img
+          :src="
+      require(`@port-of-mars/client/assets/sponsors/asu_interplanetary_initiative.png`)
+    "
+          alt="ASU Interplanetary Initative"
+          class="ii"
+        />
+      </div>
+  </div> -->
+    </b-container>
+  </footer>
 </template>
 
 <script lang="ts">
