@@ -1,10 +1,5 @@
 // CONTAINERS, WRAPPERS
 
-.c-login {
-  height: 100vh !important;
-  width: 100vw !important;
-  @include make-center;
-}
 
 .title-wrapper,
 .content-wrapper {
@@ -43,37 +38,7 @@
   @include make-column-and-center;
 }
 
-.dev-login-toggler {
-  @include reset-button;
-  height: 3rem;
-  width: 3rem;
-  padding: 0;
-  border: 0.125rem solid $light-shade;
-  border-radius: 50%;
-  margin-top: 1rem;
-  @include make-center;
-  @include default-transition-base;
 
-  &:hover {
-    @include default-scale-up;
-  }
-
-  &.active {
-    background-color: $light-shade;
-
-    .icon {
-      color: $dark-shade;
-    }
-  }
-
-  &.inactive {
-    background-color: transparent;
-
-    .icon {
-      color: $light-shade;
-    }
-  }
-}
 
 // LOGIN :: BUTTONS
 
@@ -108,69 +73,7 @@
 
 // LOGIN :: FORM
 
-form {
-  padding: 0.5rem;
-  margin: 1rem 0;
-  @include make-column-and-center;
-  background-color: $light-shade-05;
-}
 
-.error {
-  margin: 0.5rem 0 0 0;
-  font-size: $font-med;
-  font-weight: $medium !important;
-  text-align: center;
-  color: $status-red;
-}
-
-.input-username {
-  width: 100%;
-  padding: 0.5rem;
-  margin-bottom: 0.5rem;
-  @include make-column-and-center;
-}
-
-label {
-  width: 100%;
-  padding: 0.5rem;
-  @include border-bottom-white;
-  margin-bottom: 0.5rem;
-  font-size: $font-med;
-  font-weight: $medium !important;
-  text-align: center;
-  color: $light-shade-25;
-}
-
-.input-wrapper {
-  height: 5rem;
-  width: 25rem;
-  padding: 0.5rem;
-  border: 0.125rem solid $light-shade;
-  @include make-center;
-}
-
-input[type='text'] {
-  @include expand;
-  padding: 0.5rem;
-  border: none;
-  font-size: $font-med;
-  font-weight: $medium !important;
-  text-align: left;
-  color: $light-shade;
-  background-color: transparent !important;
-
-  &:focus,
-  &:active {
-    outline: none;
-  }
-
-  &::placeholder {
-    font-size: $font-med;
-    font-weight: $medium !important;
-    text-align: left;
-    color: $light-shade-25;
-  }
-}
 
 .submit {
   @include make-center;
@@ -180,49 +83,7 @@ input[type='text'] {
 
 // HTML TEXT ELEMENTS
 
-a {
-  //color: transparent;
-  text-decoration: none;
-}
-
-h1 {
-  text-transform: uppercase;
-  letter-spacing: 0.25rem;
-  font-size: 6rem;
-  font-weight: 700;
-  color: $main-brand;
-}
-
-h2 {
-  margin-bottom: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.25rem;
-  font-size: 2rem;
-  font-weight: 700;
-  color: $main-brand;
-}
 
 // IMAGES
 
-.background-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: -1;
-  opacity: 0.0625;
-}
 
-.politician, .pioneer {
-  position: absolute;
-  height: 55vh;
-  top: 25vh;
-}
-
-.politician {
-  left: 6.25vh;
-}
-
-.pioneer {
-  right: 3vw;
-}
