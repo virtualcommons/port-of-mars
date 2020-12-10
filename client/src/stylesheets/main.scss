@@ -1,17 +1,24 @@
-@import './utilities/_mixins.scss';
-@import './utilities/_variables.scss';
-@import './utilities/color-palette.scss';
+@import "./utilities/_mixins.scss";
+@import "./utilities/_variables.scss";
+@import "./utilities/color-palette.scss";
 
 // TODO :: Download Fonts Locally
 
 // Exo
-@import url('https://fonts.googleapis.com/css2?family=Exo:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Exo:wght@400;500;600;700&display=swap");
 
 // Ruda
-@import url('https://fonts.googleapis.com/css2?family=Ruda:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Ruda:wght@400;500;600;700&display=swap");
 
 // Khula
-@import url('https://fonts.googleapis.com/css2?family=Khula:wght@400;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Khula:wght@400;600;700&display=swap");
+
+// ----- HTML ELEMENTS
+html {
+  height: 100%;
+  width: 100%;
+  scroll-snap-type: y mandatory;
+}
 
 html {
   @include xl {
@@ -31,22 +38,25 @@ html {
 }
 
 body {
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
+  overflow-x: hidden;
   font-family: $khula !important;
   font-weight: $regular !important;
   color: $light-shade;
-  background-color: $dark-shade;
+  background-color: black;
+
+  // fade animation for body
+  animation: fadeInAnimation ease 3s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
 
   // CSS VARIABLES
 
-  // color scheme
+  // color theme
   --light-accent: rgb(202, 166, 110);
   --dark-shade: rgb(34, 26, 27);
   --light-shade: rgb(241, 224, 197);
-  --light-shade-05: rgba(241, 224, 197, .05);
-  --light-shade-25: rgba(241, 224, 197, .25);
+  --light-shade-05: rgba(241, 224, 197, 0.05);
+  --light-shade-25: rgba(241, 224, 197, 0.25);
 
   // player colors
   --color-Researcher: rgba(67, 124, 174, 0.2);
@@ -69,7 +79,10 @@ p {
   font-family: $ruda !important;
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
   font-family: $exo !important;
 }
 
@@ -80,6 +93,19 @@ button {
   user-select: none !important;
 }
 
+// ----- CUSTOM ANIMATION
+
+// fade in animation
+@keyframes fadeInAnimation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+// ----- CLASSES
 .game {
   @include expand;
 }
