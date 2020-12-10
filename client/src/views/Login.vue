@@ -31,7 +31,7 @@
           <b-card
             header="Register"
             header-bg-variant="primary"
-            style="font-family: '$exo'; text-transform: uppercase;"
+            style="font-family: '$exo'; text-transform: uppercase"
           >
             <b-card-text>
               <p class="py-2"><strong>Sign up to be notified about the next opportunity to play in the Mars Madness
@@ -40,7 +40,7 @@
               <b-button v-if="isLoggedIn" class="m-4" size="lg" variant="danger" @click="logout">
                 {{ logoutText }}
               </b-button>
-              <b-button v-else :href="asuLoginUrl" class="mt-2 mb-5" size="lg" variant="info">
+              <b-button v-else :href="asuLoginUrl" class="mt-2 mb-5" size="lg" variant="success">
                 Sign Up via ASU CAS
               </b-button>
 
