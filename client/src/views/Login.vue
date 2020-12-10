@@ -71,8 +71,8 @@
     <section>
       <b-row align-v="center" class="h-100 p-5 text-center">
         <b-col></b-col>
-        <b-col :style="'background-color: grey'" align-self="center" class="m-0 p-5 text-center" cols="8">
-
+        <b-col align-self="center" class="h-100 m-0 p-5 text-center" cols="8">
+          <Sponsors />
         </b-col>
         <b-col></b-col>
       </b-row>
@@ -136,10 +136,12 @@ import {Component, Vue} from "vue-property-decorator";
 import {url} from "@port-of-mars/client/util";
 import {isDevOrStaging} from "@port-of-mars/shared/settings";
 import Consent from '@port-of-mars/client/components/dashboard/Consent.vue'
+import Sponsors from '@port-of-mars/client/components/dashboard/Sponsors'
 
 @Component({
   components: {
     Consent,
+    Sponsors
   }
 })
 export default class Login extends Vue {
@@ -219,6 +221,7 @@ h2 {
   max-width: 100vw;
   height: auto;
   z-index: -1;
+  background-size: cover;
   // object-fit: cover;
   // object-position: bottom;
 }
