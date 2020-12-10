@@ -62,17 +62,6 @@
       </b-row>
     </section>
 
-    <section>
-      <b-row class="h-100 p-5 text-center" align-v="center">
-        <b-col></b-col>
-        <b-col align-self="center" cols="8" class="m-0 p-5 text-center" :style="'background-color: grey'">
-          <h2>This project was made possible by funding and support from our sponsors.</h2>
-          
-        </b-col>
-        <b-col></b-col>
-      </b-row>
-    </section>
-
     <!-- OLD LOGIN -->
     <!-- <div class="content-wrapper row">
       <div class="logged-in col-12" >
