@@ -1,19 +1,14 @@
 <template>
-  <div class="game">
-    <b-container class="p-0 m-0" fluid>
-      <b-alert show v-if="isDevModeEnabled" variant="warning" class="text-center">
-        <b-icon
-          icon="exclamation-triangle-fill"
-          scale="1.5"
-          variant="warning"
-          class="mx-3"
-        ></b-icon>
-        You are currently accessing a development version of the Port of Mars only used for testing.
-      </b-alert>
-      <router-view :key="$route.path"></router-view>
-      <Footer />
-    </b-container>
-  </div>
+   <div class="game">
+  <b-container class="p-0 m-0" fluid>
+    <b-alert show v-if="isDevModeEnabled" variant="warning" class="text-center">
+      <b-icon icon="exclamation-triangle-fill" scale="1.5" variant="warning" class="mx-3"></b-icon>
+      You are currently accessing a development version of the Port of Mars only used for testing.
+    </b-alert>
+    <router-view :key="$route.path"></router-view>
+<!--    <Footer />-->
+  </b-container>
+   </div>
 </template>
 
 <script lang="ts">

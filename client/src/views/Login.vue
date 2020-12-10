@@ -27,7 +27,6 @@
       <b-row align-v="center" class="h-100 p-5 text-center">
         <b-col></b-col>
         <b-col align-self="center" class="m-0 p-5 text-center" cols="8">
-
           <b-card
             header="Register"
             header-bg-variant="primary"
@@ -48,10 +47,11 @@
                 <label class="sr-only" for="input-username">Username</label>
                 <b-form-input id="input-username" v-model="username" class="w-25 mx-3" placeholder="DEV_LOGIN" required>
                 </b-form-input>
-                <b-button type="submit">
+                <b-button variant="warning" type="submit">
                   <b-icon-gear></b-icon-gear>
                 </b-button>
               </b-form>
+              <b-alert variant="warning" v-if="error">{{ error }}</b-alert>
             </b-card-text>
           </b-card>
         </b-col>
@@ -60,10 +60,10 @@
     </section>
 
     <section>
-      <b-row align-v="center" class="h-100 p-5 text-center">
+      <b-row align-v="center" class="h-100 p-5">
         <b-col></b-col>
-        <b-col :style="'background-color: grey'" align-self="center" class="m-0 p-5 text-center" cols="8">
-          <h2>Consent Form</h2>
+        <b-col align-self="center" cols="8">
+          <Consent />
         </b-col>
         <b-col></b-col>
       </b-row>
@@ -72,11 +72,12 @@
       <b-row align-v="center" class="h-100 p-5 text-center">
         <b-col></b-col>
         <b-col :style="'background-color: grey'" align-self="center" class="m-0 p-5 text-center" cols="8">
-          <h2>Consent Form</h2>
+
         </b-col>
         <b-col></b-col>
       </b-row>
-    </section>s
+    </section>
+
 
     <!-- OLD LOGIN -->
     <!-- <div class="content-wrapper row">
@@ -134,8 +135,13 @@
 import {Component, Vue} from "vue-property-decorator";
 import {url} from "@port-of-mars/client/util";
 import {isDevOrStaging} from "@port-of-mars/shared/settings";
+import Consent from '@port-of-mars/client/components/dashboard/Consent.vue'
 
-@Component({})
+@Component({
+  components: {
+    Consent,
+  }
+})
 export default class Login extends Vue {
   private username: string = "";
   private isLoggedIn: boolean = false;
