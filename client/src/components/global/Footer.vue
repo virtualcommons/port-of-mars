@@ -1,20 +1,19 @@
 <template>
-  <footer :style="show" class="footer">
-    <b-container class="p-0 m-0" fluid>
-      <b-row class="p2">
+<b-container class="p-0 m-0 w-100" fluid>
+      <b-row class="m-2">
         <!-- copyright -->
-        <b-col>
+        <b-col cols="auto">
           <p>&copy; 2020 <a href='https://www.azregents.edu/' target='_blank'>Arizona Board of
           Regents</a></p>
         </b-col>
 
         <!-- build id -->
-        <b-col>
+        <b-col cols="auto" class="mr-auto">
           <p>Build: {{ buildId }}</p>
         </b-col>
 
         <!-- github -->
-        <b-col>
+        <b-col cols="auto">
           <a href="https://github.com/virtualcommons/port-of-mars/" target="_blank">
             <font-awesome-icon
               :icon="['fab', 'github']"
@@ -24,7 +23,7 @@
         </b-col>
         
         <!-- email -->
-        <b-col>
+        <b-col cols="auto">
           <a href="mailto:portmars@asu.edu">
             <font-awesome-icon
               :icon="['fas', 'envelope']"
@@ -34,7 +33,7 @@
         </b-col>
 
         <!-- license -->
-        <b-col>
+        <b-col cols="auto">
           <a href="https://github.com/virtualcommons/port-of-mars/blob/master/LICENSE"
             target="_blank">
             GNU AGPL v3.0
@@ -70,9 +69,8 @@
           class="ii"
         />
       </div>
-  </div> -->
-    </b-container>
-  </footer>
+  </div> -->  
+</b-container>
 </template>
 
 <script lang="ts">
