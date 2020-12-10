@@ -24,7 +24,7 @@
         <b-button size="lg" class="my-3" variant="outline-warning" :to="logout">Logout</b-button>
       </b-col>
 
-      <b-col cols="auto"  >
+      <b-col cols="auto">
         <img
           :src="
           require(`@port-of-mars/client/assets/characters-large/Entrepreneur.png`)

@@ -50,6 +50,7 @@ import _ from 'lodash';
 export default class AccomplishmentsSelectPurchased extends Vue {
   @Inject() readonly api!: GameRequestAPI;
 
+
   purchasedAccomplishmentsLength: number = Object.keys(this.purchasedAccomplishments).length;
 
   private selectedPurchasedAccomplishment: AccomplishmentData = {
