@@ -9,12 +9,12 @@
     </img>
 
     <section>
-      <b-row class="h-100 p-5 text-center" align-v="center">
+      <b-row align-v="center" class="h-100 p-5 text-center">
         <b-col></b-col>
-        <b-col align-self="end" cols="8" class="m-5 ">
+        <b-col align-self="end" class="m-5 " cols="8">
           <h2 class="p-5">
-          Port of Mars is a fun, game-based social science experiment set on the first human
-          community on the Red Planet.
+            Port of Mars is a fun, game-based social science experiment set on the first human
+            community on the Red Planet.
           </h2>
           <b-icon-arrow-down-circle-fill scale=2></b-icon-arrow-down-circle-fill>
         </b-col>
@@ -24,43 +24,59 @@
 
     <!-- LOGIN -->
     <section>
-      <b-row class="h-100 p-5 text-center" align-v="center">
+      <b-row align-v="center" class="h-100 p-5 text-center">
         <b-col></b-col>
-        <b-col align-self="center" cols="8" class="m-0 p-5 text-center">
-          <h2>
-          Sign up to be notified about the next opportunity to play Port of Mars in the Mars Madness
-          tournament.
-          </h2>
-          <b-button v-if="isLoggedIn" @click="logout" variant="danger" class="m-4" size="lg">
-            {{ logoutText }}
-          </b-button>
-          <b-button v-else :href="asuLoginUrl" class="m-5" size="lg" variant="danger">
-            Sign Up via ASU CAS
-          </b-button>
-        
-        <b-form v-if="isDevLoginEnabled" @submit="devLogin" class="justify-content-center" inline>
-          <label class="sr-only" for="input-username">Username</label>
-          <b-form-input required class="w-25 mx-3" id="input-username" placeholder="DEV_LOGIN" v-model="username">
-          </b-form-input>
-          <b-button type="submit" pill>
-          <b-icon-gear></b-icon-gear>
-          </b-button>
-        </b-form>
+        <b-col align-self="center" class="m-0 p-5 text-center" cols="8">
+
+          <b-card
+            header="Register"
+            header-bg-variant="primary"
+            style="font-family: '$exo'; text-transform: uppercase;"
+          >
+            <b-card-text>
+              <p class="py-2"><strong>Sign up to be notified about the next opportunity to play in the Mars Madness
+                tournament.</strong></p>
+
+              <b-button v-if="isLoggedIn" class="m-4" size="lg" variant="danger" @click="logout">
+                {{ logoutText }}
+              </b-button>
+              <b-button v-else :href="asuLoginUrl" class="mt-2 mb-5" size="lg" variant="info">
+                Sign Up via ASU CAS
+              </b-button>
+
+              <b-form v-if="isDevLoginEnabled" class="justify-content-center" inline @submit="devLogin">
+                <label class="sr-only" for="input-username">Username</label>
+                <b-form-input id="input-username" v-model="username" class="w-25 mx-3" placeholder="DEV_LOGIN" required>
+                </b-form-input>
+                <b-button type="submit">
+                  <b-icon-gear></b-icon-gear>
+                </b-button>
+              </b-form>
+            </b-card-text>
+          </b-card>
         </b-col>
         <b-col></b-col>
       </b-row>
     </section>
 
     <section>
-      <b-row class="h-100 p-5 text-center" align-v="center">
+      <b-row align-v="center" class="h-100 p-5 text-center">
         <b-col></b-col>
-        <b-col align-self="center" cols="8" class="m-0 p-5 text-center" :style="'background-color: grey'">
+        <b-col :style="'background-color: grey'" align-self="center" class="m-0 p-5 text-center" cols="8">
           <h2>Consent Form</h2>
-
         </b-col>
         <b-col></b-col>
       </b-row>
     </section>
+    <section>
+      <b-row align-v="center" class="h-100 p-5 text-center">
+        <b-col></b-col>
+        <b-col :style="'background-color: grey'" align-self="center" class="m-0 p-5 text-center" cols="8">
+          <h2>Consent Form</h2>
+        </b-col>
+        <b-col></b-col>
+      </b-row>
+    </section>s
 
     <!-- OLD LOGIN -->
     <!-- <div class="content-wrapper row">
@@ -115,17 +131,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import { url } from "@port-of-mars/client/util";
-import { isDevOrStaging } from "@port-of-mars/shared/settings";
-
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faUserCog } from "@fortawesome/free-solid-svg-icons/faUserCog";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-
-library.add(faUserCog);
-
-Vue.component("font-awesome-icon", FontAwesomeIcon);
+import {Component, Vue} from "vue-property-decorator";
+import {url} from "@port-of-mars/client/util";
+import {isDevOrStaging} from "@port-of-mars/shared/settings";
 
 @Component({})
 export default class Login extends Vue {
@@ -213,31 +221,6 @@ section {
   scroll-snap-align: start;
   height: 100vh;
   width: 100vw;
-}
-
-.blurred-box{
-  position: relative;
-  width: 250px;
-  height: 350px;
-  top: calc(50% - 175px);
-  left: calc(50% - 125px);
-  background: inherit;
-  border-radius: 2px;
-  overflow: hidden;
-}
-
-.blurred-box:after{
- content: '';
- width: 300px;
- height: 300px;
- background: inherit; 
- position: absolute;
- left: -25px;
- right: 0;
- top: -25px;  
- bottom: 0;
- box-shadow: inset 0 0 0 200px rgba(255,255,255,0.05);
- filter: blur(10px);
 }
 
 // LOGIN :: FORM
