@@ -11,15 +11,11 @@
     <section>
       <b-row class="h-100 p-5 text-center" align-v="center">
         <b-col></b-col>
-        <b-col align-self="center" cols="8" class="m-0 p-5">
-          <h2 class="py-4">
+        <b-col align-self="end" cols="8" class="m-5 ">
+          <h2 class="p-5">
           Port of Mars is a fun, game-based social science experiment set on the first human
           community on the Red Planet.
           </h2>
-          <h4 class="py-4">
-          Sign up to be notified about the next opportunity to play Port of Mars in the Mars Madness
-          tournament.
-          </h4>
           <b-icon-arrow-down-circle-fill scale=2></b-icon-arrow-down-circle-fill>
         </b-col>
         <b-col></b-col>
@@ -30,19 +26,23 @@
     <section>
       <b-row class="h-100 p-5 text-center" align-v="center">
         <b-col></b-col>
-        <b-col align-self="center" cols="8" class="blurred-box m-0 p-5 text-center">
+        <b-col align-self="center" cols="8" class="m-0 p-5 text-center">
+          <h2>
+          Sign up to be notified about the next opportunity to play Port of Mars in the Mars Madness
+          tournament.
+          </h2>
           <b-button v-if="isLoggedIn" @click="logout" variant="danger" class="m-4" size="lg">
             {{ logoutText }}
           </b-button>
-          <b-button v-else :href="asuLoginUrl" class="m-5" size="lg" variant="secondary">
-            Sign In via ASU CAS
+          <b-button v-else :href="asuLoginUrl" class="m-5" size="lg" variant="danger">
+            Sign Up via ASU CAS
           </b-button>
         
-        <b-form class="justify-content-center" inline>
-          <label class="sr-only" for="inline-form-input-name">Username</label>
-          <b-form-input class="w-25 mx-3" id="inline-form-input-name" placeholder="DEV_LOGIN">
+        <b-form v-if="isDevLoginEnabled" @submit="devLogin" class="justify-content-center" inline>
+          <label class="sr-only" for="input-username">Username</label>
+          <b-form-input required class="w-25 mx-3" id="input-username" placeholder="DEV_LOGIN" v-model="username">
           </b-form-input>
-          <b-button @click="toggleDevLogin" class="dev-login-toggler" pill v-if="isDevLoginEnabled">
+          <b-button type="submit" pill>
           <b-icon-gear></b-icon-gear>
           </b-button>
         </b-form>
@@ -159,9 +159,8 @@ export default class Login extends Vue {
 
   async devLogin(e: Event) {
     e.preventDefault();
-    const fd = new FormData((e as any).target.form);
     const devLoginData: any = {
-      username: fd.get("username"),
+      username: this.username,
       password: "testing"
     };
     try {
@@ -190,20 +189,12 @@ a {
   text-decoration: none;
 }
 
-h1 {
-  text-transform: uppercase;
-  letter-spacing: 0.25rem;
-  font-size: 6rem;
-  font-weight: 700;
-  color: $main-brand;
-}
-
 h2 {
   margin-bottom: 0;
   text-transform: uppercase;
   letter-spacing: 0.25rem;
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 1.5rem;
+  font-weight: 600;
   color: $light-shade;
 }
 
@@ -211,7 +202,11 @@ h2 {
 
 .background-image {
   position: absolute;
+  max-width: 100vw;
+  height: auto;
   z-index: -1;
+  // object-fit: cover;
+  // object-position: bottom;
 }
 
 section {
