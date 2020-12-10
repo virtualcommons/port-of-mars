@@ -19,8 +19,8 @@
       </b-col>
 
       <b-col class="text-center">
-        <h1>Thank you for signing up!</h1>
-        <p>We will send you an email when the tournament is ready to begin.</p>
+        <h1>Thank you for signing up for the next <em>Port Of Mars</em> Mars Madness tournament!</h1>
+        <p>When we're ready to launch we will send you an email with additional instructions.</p>
         <b-button size="lg" class="my-3" variant="outline-warning" @click="logout">Logout</b-button>
       </b-col>
 
