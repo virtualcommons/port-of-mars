@@ -23,7 +23,7 @@
           <b-card
             header="Register"
             header-bg-variant="primary"
-            style="font-family: '$exo'; text-transform: uppercase"
+            style="font-family: '$exo';"
           >
             <b-card-text>
               <p class="py-2"><strong>Sign up to be notified about the next opportunity to play in the Mars Madness
@@ -35,15 +35,15 @@
               <b-button v-else :href="asuLoginUrl" class="mt-2 mb-5" size="lg" variant="success">
                 Sign Up via ASU CAS
               </b-button>
-
-              <b-form v-if="isDevLoginEnabled" class="justify-content-center" inline @submit="devLogin">
+              <b-form v-if="isDevMode && toggleDevLogin" class="justify-content-center" inline @submit="devLogin">
                 <label class="sr-only" for="input-username">Username</label>
                 <b-form-input id="input-username" v-model="username" class="w-25 mx-3" placeholder="DEV_LOGIN" required>
                 </b-form-input>
-                <b-button type="submit" variant="warning">
+                <b-button type="submit">
                   <b-icon-gear></b-icon-gear>
                 </b-button>
               </b-form>
+              <b-form-checkbox v-if="isDevMode" switch size="sm" v-model="toggleDevLogin" class="pt-3">Developer Login</b-form-checkbox>
               <b-alert v-if="error" variant="warning">{{ error }}</b-alert>
             </b-card-text>
           </b-card>
@@ -91,11 +91,11 @@
           size="lg"
           pill
           variant="outline-light"
-          v-if="isDevLoginEnabled"
+          v-if="isDevMode"
         >
           <font-awesome-icon :icon="['fas', 'user-cog']" class="icon" size="lg" />
         </b-button>
-        <form class="login-form" v-if="isDevLoginEnabled && devLoginVisible">
+        <form class="login-form" v-if="isDevMode && toggleDevLogin">
           <div class="input-username">
             <label for="username">Developer Login (TESTING ONLY)</label>
             <div class="input-wrapper">
@@ -139,15 +139,11 @@ import Sponsors from '@port-of-mars/client/components/dashboard/Sponsors.vue'
   }
 })
 export default class Login extends Vue {
-  private username: string = "";
-  private isLoggedIn: boolean = false;
-  private error: string = "";
-  private isDevLoginEnabled: boolean = false;
-  private devLoginVisible: boolean = false;
-
-  get devLoginTogglerClass() {
-    return this.devLoginVisible ? "active" : "inactive";
-  }
+  username: string = "";
+  isLoggedIn: boolean = false;
+  error: string = "";
+  isDevMode: boolean = false;
+  toggleDevLogin: boolean = false;
 
   get submitDisabled() {
     return !this.username;
@@ -164,7 +160,7 @@ export default class Login extends Vue {
 
   created() {
     this.isLoggedIn = !!this.$ajax.username;
-    this.isDevLoginEnabled = isDevOrStaging();
+    this.isDevMode = isDevOrStaging();
   }
 
   async devLogin(e: Event) {
@@ -184,10 +180,6 @@ export default class Login extends Vue {
     this.$ajax.forgetLoginCreds();
     this.$ajax.forgetSubmissionId();
     this.isLoggedIn = false;
-  }
-
-  private toggleDevLogin() {
-    this.devLoginVisible = !this.devLoginVisible;
   }
 }
 </script>
