@@ -1,19 +1,19 @@
 <template>
-   <div class="game">
-  <b-container class="p-0 m-0" fluid>
-    <b-alert show v-if="isDevModeEnabled" variant="warning" class="text-center">
-      <b-icon icon="exclamation-triangle-fill" scale="1.5" variant="warning" class="mx-3"></b-icon>
-      You are currently accessing a development version of the Port of Mars only used for testing.
-    </b-alert>
-    <router-view :key="$route.path"></router-view>
-<!--    <Footer />-->
-  </b-container>
-   </div>
+  <div class="game">
+    <b-container class="p-0 m-0" fluid>
+      <b-alert v-if="isDevModeEnabled" class="text-center" show variant="warning">
+        <b-icon class="mx-3" icon="exclamation-triangle-fill" scale="1.5" variant="warning"></b-icon>
+        You are currently accessing a development version of the Port of Mars only used for testing.
+      </b-alert>
+      <router-view :key="$route.path" class="background-image"></router-view>
+      <!--    <Footer />-->
+    </b-container>
+  </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
-import { isDev, isStaging } from "@port-of-mars/shared/settings";
+import {Component, Vue} from "vue-property-decorator";
+import {isDev, isStaging} from "@port-of-mars/shared/settings";
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
 import BootstrapVue from "bootstrap-vue";
 
@@ -25,12 +25,12 @@ Vue.use(BootstrapVue);
   }
 })
 export default class App extends Vue {
-  mounted() {
-    this.detectBrowser();
-  }
-
   get isDevModeEnabled() {
     return isDev() || isStaging();
+  }
+
+  mounted() {
+    this.detectBrowser();
   }
 
   /**
@@ -70,4 +70,11 @@ export default class App extends Vue {
 
 /* IMPORT SCSS */
 @import "./stylesheets/main.scss";
+
+.background-image {
+  background-image: url("assets/background/space_open.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 </style>
