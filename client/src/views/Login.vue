@@ -1,13 +1,6 @@
 <template>
-  <b-container class="h-100 w-100 p-0 m-0 parent" fluid>
-    <!-- BACKGROUND IMAGE -->
-    <img
-      :src="require(`@port-of-mars/client/assets/background/space_open.png`)"
-      alt="Background Image"
-      class="background-image w-100"
-    >
-    </img>
-
+  <b-container class="p-0 m-0" fluid>
+    <!-- splash page text -->
     <section>
       <b-row align-v="center" class="h-100 p-5 text-center">
         <b-col></b-col>
@@ -22,7 +15,7 @@
       </b-row>
     </section>
 
-    <!-- LOGIN -->
+    <!-- sign up + dev login buttons -->
     <section>
       <b-row align-v="center" class="h-100 p-5 text-center">
         <b-col></b-col>
@@ -47,11 +40,11 @@
                 <label class="sr-only" for="input-username">Username</label>
                 <b-form-input id="input-username" v-model="username" class="w-25 mx-3" placeholder="DEV_LOGIN" required>
                 </b-form-input>
-                <b-button variant="warning" type="submit">
+                <b-button type="submit" variant="warning">
                   <b-icon-gear></b-icon-gear>
                 </b-button>
               </b-form>
-              <b-alert variant="warning" v-if="error">{{ error }}</b-alert>
+              <b-alert v-if="error" variant="warning">{{ error }}</b-alert>
             </b-card-text>
           </b-card>
         </b-col>
@@ -59,11 +52,12 @@
       </b-row>
     </section>
 
+    <!-- consent form -->
     <section>
       <b-row align-v="center" class="h-100 p-5">
         <b-col></b-col>
         <b-col align-self="center" cols="8">
-          <Consent />
+          <Consent/>
         </b-col>
         <b-col></b-col>
       </b-row>
@@ -72,7 +66,7 @@
       <b-row align-v="center" class="h-100 p-5 text-center">
         <b-col></b-col>
         <b-col align-self="center" class="h-100 m-0 p-5 text-center" cols="8">
-          <Sponsors />
+          <Sponsors/>
         </b-col>
         <b-col></b-col>
       </b-row>
@@ -136,7 +130,7 @@ import {Component, Vue} from "vue-property-decorator";
 import {url} from "@port-of-mars/client/util";
 import {isDevOrStaging} from "@port-of-mars/shared/settings";
 import Consent from '@port-of-mars/client/components/dashboard/Consent.vue'
-import Sponsors from '@port-of-mars/client/components/dashboard/Sponsors'
+import Sponsors from '@port-of-mars/client/components/dashboard/Sponsors.vue'
 
 @Component({
   components: {
@@ -201,7 +195,6 @@ export default class Login extends Vue {
 <style lang="scss" scoped>
 // HTML TEXT ELEMENTS
 a {
-  //color: transparent;
   text-decoration: none;
 }
 
@@ -212,18 +205,6 @@ h2 {
   font-size: 1.5rem;
   font-weight: 600;
   color: $light-shade;
-}
-
-// IMAGES
-
-.background-image {
-  position: absolute;
-  max-width: 100vw;
-  height: auto;
-  z-index: -1;
-  background-size: cover;
-  // object-fit: cover;
-  // object-position: bottom;
 }
 
 section {
@@ -246,38 +227,6 @@ input[type="text"] {
     font-size: $font-med;
     font-weight: $medium !important;
     color: $light-shade-25;
-  }
-}
-
-.dev-login-toggler {
-  @include reset-button;
-  height: 3rem;
-  width: 3rem;
-  padding: 0;
-  border: 0.125rem solid $light-shade;
-  border-radius: 50%;
-  margin-top: 1rem;
-  @include make-center;
-  @include default-transition-base;
-
-  &:hover {
-    @include default-scale-up;
-  }
-
-  &.active {
-    background-color: $light-shade;
-
-    .icon {
-      color: $dark-shade;
-    }
-  }
-
-  &.inactive {
-    background-color: transparent;
-
-    .icon {
-      color: $light-shade;
-    }
   }
 }
 </style>
