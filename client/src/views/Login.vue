@@ -43,7 +43,7 @@
                   <b-icon-gear></b-icon-gear>
                 </b-button>
               </b-form>
-              <b-form-checkbox v-if="isDevMode" switch size="sm" v-model="toggleDevLogin" class="pt-3">Developer Login</b-form-checkbox>
+              <b-form-checkbox :state="toggleDevLogin" v-if="isDevMode" switch size="sm" v-model="toggleDevLogin" class="pt-3">Developer Login</b-form-checkbox>
               <b-alert v-if="error" variant="warning">{{ error }}</b-alert>
             </b-card-text>
           </b-card>
@@ -71,57 +71,6 @@
         <b-col></b-col>
       </b-row>
     </section>
-
-
-    <!-- OLD LOGIN -->
-    <!-- <div class="content-wrapper row">
-      <div class="logged-in col-12" >
-        <b-button @click="logout" variant="outline-light" class="m-4" size="lg">
-          {{ logoutText }}
-        </b-button>
-      </div>
-      <div class="logged-out col-12" v-else>
-        <b-button :href="asuLoginUrl" class="m-4" size="lg" variant="outline-light">
-          Sign In via ASU CAS
-        </b-button>
-        <b-button
-          :class="devLoginTogglerClass"
-          @click="toggleDevLogin"
-          class="dev-login-toggler"
-          size="lg"
-          pill
-          variant="outline-light"
-          v-if="isDevMode"
-        >
-          <font-awesome-icon :icon="['fas', 'user-cog']" class="icon" size="lg" />
-        </b-button>
-        <form class="login-form" v-if="isDevMode && toggleDevLogin">
-          <div class="input-username">
-            <label for="username">Developer Login (TESTING ONLY)</label>
-            <div class="input-wrapper">
-              <input
-                autocomplete="off"
-                id="username"
-                name="username"
-                placeholder="Username"
-                type="text"
-                v-model="username"
-              />
-            </div>
-          </div>
-          <div class="submit">
-            <input
-              :disabled="submitDisabled"
-              @click="devLogin"
-              class="button-white"
-              type="submit"
-              value="Login"
-            />
-          </div>
-          <p class="error" v-if="error">{{ error }}</p>
-        </form>
-      </div>
-    </div> -->
   </b-container>
 </template>
 
@@ -176,7 +125,7 @@ export default class Login extends Vue {
     }
   }
 
-  private logout() {
+  logout() {
     this.$ajax.forgetLoginCreds();
     this.$ajax.forgetSubmissionId();
     this.isLoggedIn = false;
