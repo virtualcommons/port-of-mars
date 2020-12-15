@@ -1,5 +1,5 @@
 <template>
-  <b-container class="container registration">
+  <b-container class="vw-50 vh-100">
     <b-row>
       <b-collapse id="consent-collapse" :visible="showConsentForm">
         <b-card
@@ -252,5 +252,10 @@ mark {
 
 p {
   font-size: 1.2rem;
+}
+
+.consent-form-text {
+  max-height: 60vh;
+  overflow-y: scroll;
 }
 </style>
