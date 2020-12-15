@@ -27,6 +27,7 @@ export const DYNAMIC_SETTINGS_PATH = '/run/secrets/settings.json';
 
 export interface SettingsData {
   maxConnections: number
+  // sign up enabled controls where the user is redirected once their email is verified
   isSignUpEnabled: boolean
 }
 
@@ -56,11 +57,11 @@ export class RedisSettings {
     }
   }
 
-  async getMaxConnections(): Promise<number> {
+  async maxConnections(): Promise<number> {
     return _.toNumber(await this.client.hget('settings', 'maxConnections'));
   }
 
-  async getIsSignUpEnabled(): Promise<boolean> {
+  async isSignUpEnabled(): Promise<boolean> {
     return !!_.toNumber(await this.client.hget('settings', 'isSignUpEnabled'))
   }
 }

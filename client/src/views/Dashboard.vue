@@ -217,6 +217,11 @@ export default class PlayerDashboard extends Vue {
       await this.$router.push({name: REGISTER_PAGE});
     }
 
+    // go to the signed up page if signup is enabled
+    else if (data.isSignUpEnabled) {
+      await this.$router.push({name: SIGNEDUP_PAGE});
+    }
+
     // go to tutorial if player has not taken tutorial
     else if (data.playerTaskCompletion.mustTakeTutorial) {
       await this.$router.push({name: TUTORIAL_PAGE});

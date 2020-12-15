@@ -339,7 +339,7 @@ program
               const client = getRedis();
               const settings = new RedisSettings(client);
               await settings.loadIfNotExist();
-              const maxConnections = await settings.getMaxConnections();
+              const maxConnections = await settings.maxConnections();
               logger.debug("Current max connections: %d", maxConnections);
             } finally {
               getRedis().quit();

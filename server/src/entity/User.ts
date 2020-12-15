@@ -39,9 +39,9 @@ export class User {
   @Column({ nullable: true })
   dateConsented?: Date;
 
-  /* FIXME: to be applied after the pilot tournament concludes
+  @Column({ default: true })
+  isActive!: boolean;
+
   @CreateDateColumn()
   dateCreated!: Date;
-  */
-
 }
