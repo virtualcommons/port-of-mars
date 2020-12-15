@@ -39,6 +39,7 @@ html {
 
 body {
   overflow-x: hidden;
+  overflow-y: hidden;
   font-family: $khula !important;
   font-weight: $regular !important;
   color: $light-shade;
@@ -107,5 +108,6 @@ button {
 
 // ----- CLASSES
 .game {
-  @include expand;
+  height: 100vh;
+  width: 100vw;
 }
