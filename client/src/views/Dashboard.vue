@@ -136,7 +136,7 @@ import {GameMeta, PlayerTaskCompletion, Stats} from '@port-of-mars/shared/types'
 import {faGoogle} from '@fortawesome/free-brands-svg-icons/faGoogle';
 import {faRocket} from '@fortawesome/free-solid-svg-icons';
 import {library} from '@fortawesome/fontawesome-svg-core'
-import {REGISTER_PAGE, LOBBY_PAGE, LOGIN_PAGE, TUTORIAL_PAGE} from '@port-of-mars/shared/routes';
+import {REGISTER_PAGE, LOBBY_PAGE, LOGIN_PAGE, SIGNEDUP_PAGE, TUTORIAL_PAGE} from '@port-of-mars/shared/routes';
 
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 import {CalendarEvent, google} from "calendar-link";
