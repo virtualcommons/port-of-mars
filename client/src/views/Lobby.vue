@@ -63,7 +63,7 @@
   import {WaitingRequestAPI} from '@port-of-mars/client/api/lobby/request';
   import {isDevOrStaging} from '@port-of-mars/shared/settings';
   import {LOBBY_NAME} from '@port-of-mars/shared/lobby';
-  import {CONSENT_PAGE, TUTORIAL_PAGE, DASHBOARD_PAGE} from '@port-of-mars/shared/routes';
+  import {REGISTER_PAGE, TUTORIAL_PAGE, DASHBOARD_PAGE} from '@port-of-mars/shared/routes';
   import {Role} from '@port-of-mars/shared/types';
 
   @Component({})
@@ -99,12 +99,12 @@
       // FIXME: repeated logic from Dashboard.vue
       // go to email verification page if player is not verified
       if (playerTaskCompletion.mustVerifyEmail) {
-        await this.$router.push({name: CONSENT_PAGE});
+        await this.$router.push({name: REGISTER_PAGE});
         return;
       }
       // go to consent page if player has not consented
       else if (playerTaskCompletion.mustConsent) {
-        await this.$router.push({name: CONSENT_PAGE});
+        await this.$router.push({name: REGISTER_PAGE});
         return;
       }
       // go to tutorial if player has not taken tutorial
