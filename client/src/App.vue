@@ -1,7 +1,7 @@
 <template>
   <div class="game">
-    <b-container class="p-0 m-0" fluid>
-      <b-alert v-if="isDevModeEnabled" class="text-center" show variant="warning">
+    <b-container class="h-100 p-0 m-0" fluid>
+      <b-alert v-if="isDevModeEnabled" class="text-center m-0" show variant="warning">
         <b-icon class="mx-3" icon="exclamation-triangle-fill" scale="1.5" variant="warning"></b-icon>
         You are currently accessing a development version of the Port of Mars only used for testing.
       </b-alert>
@@ -73,7 +73,7 @@ export default class App extends Vue {
 
 .background-image {
   background-image: url("assets/background/space_open.png");
-  background-position: center;
+  background-position: top;
   background-repeat: no-repeat;
   background-size: cover;
 }
