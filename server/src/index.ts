@@ -16,7 +16,7 @@ import { RankedLobbyRoom } from '@port-of-mars/server/rooms/lobby';
 import { User } from '@port-of-mars/server/entity';
 import { quizRouter } from '@port-of-mars/server/routes/quiz';
 import { dashboardRouter } from '@port-of-mars/server/routes/dashboard';
-import { LOGIN_PAGE, CONSENT_PAGE, DASHBOARD_PAGE, getPagePath } from "@port-of-mars/shared/routes";
+import { LOGIN_PAGE, REGISTER_PAGE, DASHBOARD_PAGE, getPagePath } from "@port-of-mars/shared/routes";
 
 import * as fs from 'fs';
 import { registrationRouter } from "@port-of-mars/server/routes/registration";
@@ -142,7 +142,7 @@ async function createApp() {
         }
         else {
           logger.warn('invalid / unregistered user %o', user);
-          res.redirect(getPagePath(CONSENT_PAGE));
+          res.redirect(getPagePath(REGISTER_PAGE));
         }
       } else {
         const loginPath = getPagePath(LOGIN_PAGE);
