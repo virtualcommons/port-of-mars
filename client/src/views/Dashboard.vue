@@ -1,10 +1,5 @@
 <template>
-  <b-container class="m-0 p-0 h-100" fluid>
-    <img
-      :src="require(`@port-of-mars/client/assets/marsbg.jpg`)"
-      alt="Background Image"
-      class="background-image"
-    />
+  <b-container class="vh-100 p-0 m-0" fluid>
 
     <b-navbar fixed toggleable="lg" type="dark" variant="secondary">
       <b-navbar-brand href="#/dashboard"><h4 class="text-uppercase">Player Dashboard</h4></b-navbar-brand>
@@ -97,7 +92,7 @@
           <h2 class="text-center text-uppercase mt-5 py-2">No active invitation found</h2>
           <p class='lead text-left'>
             Thanks for your interest in the Port of Mars! Unfortunately you do not appear to have an invitation to participate
-            in this round of the Port of Mars. If you think this is an error, please contact us at 
+            in this round of the Port of Mars. If you think this is an error, please contact us at
             <a href='mailto:portmars@asu.edu'>portmars@asu.edu</a>.
           </p>
         </b-container>
@@ -141,7 +136,7 @@ import {GameMeta, PlayerTaskCompletion, Stats} from '@port-of-mars/shared/types'
 import {faGoogle} from '@fortawesome/free-brands-svg-icons/faGoogle';
 import {faRocket} from '@fortawesome/free-solid-svg-icons';
 import {library} from '@fortawesome/fontawesome-svg-core'
-import {CONSENT_PAGE, LOBBY_PAGE, LOGIN_PAGE, TUTORIAL_PAGE} from '@port-of-mars/shared/routes';
+import {REGISTER_PAGE, LOBBY_PAGE, LOGIN_PAGE, TUTORIAL_PAGE} from '@port-of-mars/shared/routes';
 
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 import {CalendarEvent, google} from "calendar-link";
@@ -214,12 +209,12 @@ export default class PlayerDashboard extends Vue {
 
     // go to email verification page if player is not verified
     if (data.playerTaskCompletion.mustVerifyEmail) {
-      await this.$router.push({name: CONSENT_PAGE});
+      await this.$router.push({name: REGISTER_PAGE});
     }
 
     // go to consent page if player has not consented
     else if (data.playerTaskCompletion.mustConsent) {
-      await this.$router.push({name: CONSENT_PAGE});
+      await this.$router.push({name: REGISTER_PAGE});
     }
 
     // go to tutorial if player has not taken tutorial
