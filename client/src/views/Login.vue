@@ -10,17 +10,17 @@
           </h2>
           <h2 class="my-5">Sign up to be notified about the next opportunity to play in the Mars Madness
             tournament.</h2>
-          <b-button v-if="isLoggedIn" class="justify-content-center mt-3" size="lg" variant="warning" @click="logout">
+          <b-button v-if="isLoggedIn" class="justify-content-center my-2" size="lg" variant="warning" @click="logout">
             {{ logoutText }}
           </b-button>
-          <b-button v-else-if="!toggleDevLogin" :href="asuLoginUrl" class="justify-content-center mt-3" size="lg" variant="success">
+          <b-button v-else-if="!toggleDevLogin" :href="asuLoginUrl" class="justify-content-center my-2" size="lg" variant="success">
             Sign Up via ASU CAS
           </b-button>
-          <b-form v-if="isDevMode && toggleDevLogin" class="justify-content-center mt-3" inline @submit="devLogin">
+          <b-form v-if="isDevMode && toggleDevLogin" class="justify-content-center my-2" inline @submit="devLogin">
             <label class="sr-only" for="input-username">Username</label>
             <b-form-input id="input-username" v-model="username" class="mx-3" placeholder="DEV_LOGIN" required>
             </b-form-input>
-            <b-button type="submit">
+            <b-button type="submit" variant="success">
               <b-icon-gear></b-icon-gear>
             </b-button>
           </b-form>

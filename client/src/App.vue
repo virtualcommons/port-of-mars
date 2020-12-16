@@ -5,7 +5,8 @@
         <b-icon-exclamation-triangle-fill class="mx-3" scale="1.5" variant="warning"></b-icon-exclamation-triangle-fill>
         You are currently accessing a development version of the Port of Mars only used for testing.
       </b-alert>
-      <router-view :key="$route.path" :class="{'background-image': isLogin($route.name) }"></router-view>
+      <router-view :key="$route.path" :class="{'bg-login': isLogin($route.name), 'bg-generic': !isLogin($route.name) }"></router-view>
+      <Footer />
     </b-container>
   </div>
 </template>
@@ -47,9 +48,16 @@ export default class App extends Vue {
 /* IMPORT SCSS */
 @import "./stylesheets/main.scss";
 
-.background-image {
+.bg-login {
   background-image: url("assets/background/space_open.png");
   background-position: top;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.bg-generic {
+  background-image: url("assets/background/space_open.png");
+  background-position: bottom;
   background-repeat: no-repeat;
   background-size: cover;
 }

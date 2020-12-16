@@ -1,12 +1,5 @@
 <template>
   <b-container class="m-0 p-0 h-100" fluid>
-    <!-- BACKGROUND -->
-    <img
-      :src="require(`@port-of-mars/client/assets/marsbg.jpg`)"
-      alt="Background Image"
-      class="background-image h-100 w-100"
-    />
-
     <b-row align-v="center" class="h-75 w-100">
       <b-col cols="auto" class="mr-auto">
         <img
@@ -18,10 +11,16 @@
         />
       </b-col>
 
-      <b-col class="text-center">
-        <h1>Thank you for signing up for the next <em>Port Of Mars</em> Mars Madness tournament!</h1>
-        <p>When we're ready to launch we will send you an email with additional instructions.</p>
-        <b-button size="lg" class="my-3" variant="outline-warning" @click="logout">Logout</b-button>
+      <b-col class="mx-5 p-5 text-center">
+        <b-card
+          style="font-family: '$exo';"
+        >
+         <b-card-text>
+           <h2>Thank you for signing up for the next Mars Madness tournament!</h2>
+           <p class="m-4">When we're ready to launch, we will send you an email with additional instructions.</p>
+           <b-button variant="outline-warning" @click="logout">Logout</b-button>
+         </b-card-text>
+        </b-card>
       </b-col>
 
       <b-col cols="auto">
