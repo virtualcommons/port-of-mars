@@ -1,10 +1,5 @@
 <template>
   <div class="lobby container">
-    <img
-      :src="require(`@port-of-mars/client/assets/marsbg.jpg`)"
-      alt="Background Image"
-      class="background-image"
-    />
     <div class="wrapper row">
       <div class="content col-12">
         <h3 class="m-5">Next Game: <mark>{{ scheduledGameTimeString }}</mark></h3>
