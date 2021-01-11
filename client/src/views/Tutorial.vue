@@ -128,6 +128,7 @@ import { isStagingOrProduction, isTest } from '@port-of-mars/shared/settings';
 
 
 import * as _ from 'lodash';
+import { LOGIN_PAGE } from '@port-of-mars/shared/routes';
 
 require('vue-tour/dist/vue-tour.css');
 Vue.use(VueTour);
@@ -215,7 +216,7 @@ export default class Tutorial extends Vue {
 
   private forceLogoutUser(): void {
     this.$ajax.forgetLoginCreds();
-    this.$router.push({ name: 'Login' });
+    this.$router.push({ name: LOGIN_PAGE });
   }
 
   // NOTE: Callbacks

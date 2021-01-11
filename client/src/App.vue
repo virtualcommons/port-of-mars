@@ -49,7 +49,7 @@ export default class App extends Vue {
 @import "./stylesheets/main.scss";
 
 .bg-login {
-  background-image: url("assets/background/space_open.png");
+  background-image: url("assets/background/space_open_erased.fw.png");
   background-position: top;
   background-repeat: no-repeat;
   background-size: cover;
