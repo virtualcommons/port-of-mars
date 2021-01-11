@@ -3,14 +3,14 @@
     <!-- splash page text -->
       <b-row class="h-100 p-5 text-center">
         <b-col></b-col>
-        <b-col align-self="end" class="m-5 p-5" cols="8">
-          <h2 class="my-5 p-5">
+        <b-col align-self="baseline" class="m-5 p-0" cols="8">
+          <h2 class="title">Space is now open.</h2>
+          <h2 class="subtitle my-3 p-5">How can we sustain healthy communities in space?</h2>
+          <h2 class="m-5">
             Port of Mars is a fun, game-based social science experiment set on the first human
             community on the Red Planet.
           </h2>
-          <h2 class="my-5">Sign up to be notified about the next opportunity to play in the Mars Madness
-            tournament.</h2>
-          <b-button v-if="isLoggedIn" class="justify-content-center my-2" size="lg" variant="warning" @click="logout">
+          <b-button v-if="isLoggedIn" class="justify-content-center my-5" size="lg" variant="warning" @click="logout">
             {{ logoutText }}
           </b-button>
           <b-button v-else-if="!toggleDevLogin" :href="asuLoginUrl" class="justify-content-center my-2" size="lg" variant="success">
@@ -26,6 +26,8 @@
           </b-form>
           <b-form-checkbox v-if="isDevMode" switch size="sm" v-model="toggleDevLogin" class="pt-3">Developer Login</b-form-checkbox>
           <b-alert v-if="error" variant="warning">{{ error }}</b-alert>
+          <h2 class="my-5">Sign up to be notified about the next opportunity to play in the Mars Madness
+            tournament.</h2>
         </b-col>
         <b-col></b-col>
       </b-row>
@@ -103,7 +105,21 @@ h2 {
   letter-spacing: 0.25rem;
   font-size: 1.5rem;
   font-weight: 600;
-  color: $light-shade;
+  color: white;
+}
+
+.title {
+  letter-spacing: 0.75rem;
+  font-size: 6rem;
+  font-weight: 500;
+  color: white;
+}
+
+.subtitle {
+  letter-spacing: 0.25rem;
+  font-size: 2.75rem;
+  font-weight: 600;
+  color: white;
 }
 
 section {
