@@ -18,6 +18,7 @@
          <b-card-text>
            <h2>Thank you for signing up for the next Mars Madness tournament!</h2>
            <p class="m-4">When we're ready to launch, we will send you an email with additional instructions.</p>
+           <b-button variant="outline-success" class="mx-3" :to="tutorial">Take the Tutorial</b-button>
            <b-button variant="outline-warning" @click="logout">Logout</b-button>
          </b-card-text>
         </b-card>
@@ -38,10 +39,15 @@
 
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
-import {LOGIN_PAGE} from "@port-of-mars/shared/routes";
+import {LOGIN_PAGE, TUTORIAL_PAGE} from "@port-of-mars/shared/routes";
 
 @Component({})
 export default class SignedUp extends Vue {
+
+  get tutorial() {
+    return {name: TUTORIAL_PAGE}
+  }
+
   logout() {
     this.$ajax.forgetLoginCreds();
     this.$router.push({ name: LOGIN_PAGE });
