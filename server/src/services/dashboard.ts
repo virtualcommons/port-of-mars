@@ -79,7 +79,7 @@ export class DashboardService extends BaseService {
   }
 
   mustProvideConsent(user: User): boolean {
-    return _.isUndefined(user.dateConsented)
+    return _.isNil(user.dateConsented)
   }
 
   mustTakeTutorial(user: User): boolean {
