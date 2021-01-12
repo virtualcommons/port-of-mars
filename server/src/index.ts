@@ -66,9 +66,9 @@ passport.use(new LocalStrategy(
   }
 ));
 
-passport.serializeUser(function (user: User, done: Function) {
+passport.serializeUser(function (user: Pick<User, 'id'>, done: Function) {
   done(null, user.id);
-});
+} as any);
 
 passport.deserializeUser(function (id: number, done: Function) {
   getServices().account.findUserById(id)

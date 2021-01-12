@@ -136,7 +136,7 @@ export class TimeInvestmentCmd implements Command {
 
   static fromReq(r: req.SetTimeInvestmentData, player: Player) {
     // FIXME: why is this delete here?
-    delete r.kind;
+    delete (r as any).kind;
     return new TimeInvestmentCmd(r, player);
   }
 
