@@ -1,7 +1,7 @@
 <template>
   <b-container class="h-100 p-0 m-0" fluid>
     <b-row class="p-5 justify-content-center">
-      <b-col cols="4">
+      <b-col cols="8">
         <Messages/>
       </b-col>
     </b-row>
