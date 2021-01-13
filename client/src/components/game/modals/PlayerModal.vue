@@ -17,13 +17,12 @@
               }}
             </p>
             <p class="score">Score: {{ playerData.info.victoryPoints }}</p>
-            <p class="ranking">Ranking: {{ ranking }} / 5</p>
+            <p class="ranking">Ranking: #{{ ranking }} out of 5</p>
           </div>
           <div class="trade col-4">
             <button
               v-if="!playerData.isSelf && gamePhase === phase.trade"
-              @click="handleRequestTrade"
-            >
+              @click="handleRequestTrade">
               Request Trade
             </button>
           </div>
