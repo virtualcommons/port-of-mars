@@ -31,13 +31,13 @@
         ></b-spinner>
 
         <b-button-group class="w-25 mt-4" vertical>
-          <b-button :to="'tutorial'" variant="outline-warning">
+          <b-button :to="'tutorial'" variant="secondary">
             Take Tutorial
           </b-button>
-          <b-button :to="'dashboard'" variant="outline-warning">
+          <b-button :to="'dashboard'" variant="secondary">
             Return to the Dashboard
           </b-button>
-          <b-button v-if="isDevOrStaging" @click="distributeGroups" variant="outline-warning">
+          <b-button v-if="isDevOrStaging" @click="distributeGroups" variant="secondary">
             Join game
           </b-button>
         </b-button-group>
