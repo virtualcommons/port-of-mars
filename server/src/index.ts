@@ -61,7 +61,7 @@ passport.use(new LocalStrategy(
     const user = await getServices().account.getOrCreateTestUser(username);
       // set all testing things on the user
     const tournamentRound = await s.tournament.getCurrentTournamentRound();
-    await s.tournament.getOrCreateInvite(user.id, tournamentRound);
+    const invite = await s.tournament.getOrCreateInvite(user.id, tournamentRound, true);
     await done(null, user);
   }
 ));

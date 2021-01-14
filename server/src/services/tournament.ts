@@ -3,7 +3,6 @@ import { MoreThan, Equal, SelectQueryBuilder } from 'typeorm';
 import * as _ from 'lodash';
 import { settings, getLogger } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
-import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 import {TournamentRoundDate} from "@port-of-mars/server/entity/TournamentRoundDate";
 
 const logger = getLogger(__filename);
@@ -107,10 +106,15 @@ export class TournamentService extends BaseService {
     return await repository.save(invite);
   }
 
-  async getOrCreateInvite(userId: number, tournamentRound: TournamentRound): Promise<TournamentRoundInvite> {
+  async getOrCreateInvite(userId: number, tournamentRound: TournamentRound, skipSurveys=false): Promise<TournamentRoundInvite> {
     let invite = await this.getActiveRoundInvite(userId, tournamentRound);
     if (!invite) {
       invite = await this.createInvite(userId, tournamentRound.id);
+    }
+    if (skipSurveys) {
+      invite.hasCompletedIntroSurvey = true;
+      invite.hasCompletedExitSurvey = true;
+      await this.em.getRepository(TournamentRoundInvite).save(invite);
     }
     return invite;
   }

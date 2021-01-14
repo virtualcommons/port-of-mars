@@ -26,9 +26,12 @@ function createAsyncClient(client: RedisClient): AsyncClient {
 export const DYNAMIC_SETTINGS_PATH = '/run/secrets/settings.json';
 
 export interface SettingsData {
+  // display an error message to users connecting to the lobby if more than `maxConnections` clients are connected
   maxConnections: number
   // sign up enabled controls where the user is redirected once their email is verified
   isSignUpEnabled: boolean
+  // if true, set all checks to true (isVerified, passedQuiz, completed intro and exit surveys), otherwise only bypass isVerified
+  skipDevUserChecks: boolean
 }
 
 export class RedisSettings {

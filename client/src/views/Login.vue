@@ -10,21 +10,21 @@
             Port of Mars is a fun, game-based social science experiment set on the first human
             community on the Red Planet.
           </h2>
-          <b-button v-if="isLoggedIn" class="justify-content-center my-5" size="lg" variant="warning" @click="logout">
+          <b-button v-if="isLoggedIn" size="lg" variant="warning" @click="logout">
             {{ logoutText }}
           </b-button>
-          <b-button v-else-if="!toggleDevLogin" :href="asuLoginUrl" class="justify-content-center my-2" size="lg" variant="success">
+          <b-button v-else-if="!toggleDevLogin" :href="asuLoginUrl" size="lg" variant="success">
             Sign Up via ASU CAS
           </b-button>
           <b-form v-if="isDevMode && toggleDevLogin" class="justify-content-center my-2" inline @submit="devLogin">
             <label class="sr-only" for="input-username">Username</label>
-            <b-form-input id="input-username" v-model="username" class="mx-3" placeholder="DEV_LOGIN" required>
+            <b-form-input id="input-username" v-model="username" class="mx-3" placeholder="Developer Testing Login" required>
             </b-form-input>
             <b-button type="submit" variant="success">
-              <b-icon-gear></b-icon-gear>
+              <b-icon icon="box-arrow-right" class="mb-1"></b-icon>
             </b-button>
           </b-form>
-          <b-form-checkbox v-if="isDevMode" switch size="sm" v-model="toggleDevLogin" class="pt-3">Developer Login</b-form-checkbox>
+          <b-form-checkbox v-if="isDevMode" v-model="toggleDevLogin" class="pt-3">Enable Test Login</b-form-checkbox>
           <b-alert v-if="error" variant="warning">{{ error }}</b-alert>
           <h2 class="my-5">Sign up to be notified about the next opportunity to play in the Mars Madness
             tournament.</h2>
