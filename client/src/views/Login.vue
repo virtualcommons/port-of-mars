@@ -10,6 +10,12 @@
             Port of Mars is a fun, game-based social science experiment set on the first human
             community on the Red Planet.
           </h2>
+          <p class="lead text-left">
+            Currently only <mark>undergraduate students at Arizona State University 
+            are eligible to participate</mark> in the Port of Mars <em>Mars Madness</em> tournament. If you are an undergraduate student at ASU, click 
+            on the Sign Up via ASU CAS button below, read and sign a brief digital consent form, and you will receive more specific 
+            information on how to participate in the Mars Madness tournament in early March 2021.
+          </p>
           <b-button v-if="isLoggedIn" size="lg" variant="warning" @click="logout">
             {{ logoutText }}
           </b-button>
@@ -17,14 +23,14 @@
             Sign Up via ASU CAS
           </b-button>
           <b-form v-if="isDevMode && toggleDevLogin" class="justify-content-center my-2" inline @submit="devLogin">
-            <label class="sr-only" for="input-username">Username</label>
-            <b-form-input id="input-username" v-model="username" class="mx-3" placeholder="Developer Testing Login" required>
+            <label for="input-username">Enter any username (testing)</label>
+            <b-form-input id="input-username" v-model="username" class="w-25 mx-3" placeholder="Test username" required>
             </b-form-input>
             <b-button type="submit" variant="success">
-              <b-icon icon="box-arrow-right" class="mb-1"></b-icon>
+              <b-icon icon="box-arrow-right" class="mb-1"></b-icon> Test User Sign In
             </b-button>
           </b-form>
-          <b-form-checkbox v-if="isDevMode" v-model="toggleDevLogin" class="pt-3">Enable Test Login</b-form-checkbox>
+          <b-form-checkbox v-if="isDevMode" v-model="toggleDevLogin" class="pt-3">Enable Test User Sign In</b-form-checkbox>
           <b-alert v-if="error" variant="warning">{{ error }}</b-alert>
           <h2 class="my-5">Sign up to be notified about the next opportunity to play in the Mars Madness
             tournament.</h2>
