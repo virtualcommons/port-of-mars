@@ -3,19 +3,20 @@
     <!-- splash page text -->
       <b-row class="h-100 p-5 text-center">
         <b-col></b-col>
-        <b-col align-self="baseline" class="m-5 p-0" cols="8">
-          <h2 class="title">Space is now open.</h2>
-          <h2 class="subtitle my-3 p-5">How can we sustain healthy communities in space?</h2>
-          <h2 class="m-5">
+        <b-col class="m-5 p-0" cols="8">
+          <h2 class="title">Welcome to Port of Mars!</h2>
+          <h2 class="m-5 text-left">
             Port of Mars is a fun, game-based social science experiment set on the first human
             community on the Red Planet.
           </h2>
           <p class="lead text-left">
-            Currently only <mark>undergraduate students at Arizona State University 
-            are eligible to participate</mark> in the Port of Mars <em>Mars Madness</em> tournament. If you are an undergraduate student at ASU, click 
-            on the Sign Up via ASU CAS button below, read and sign a brief digital consent form, and you will receive more specific 
-            information on how to participate in the Mars Madness tournament in early March 2021.
+            Click below to sign up to play in the Mars Madness tournament. After you register, you will receive an email in early March 2021 with details
+            on how to participate in the tournament.
           </p>
+          <b-alert show variant="primary">
+            <h4><b-icon icon="exclamation-circle-fill" variant="primary"></b-icon> 
+            Currently, the Mars Madness tournament is only open to undergraduate students at Arizona State University.</h4>
+          </b-alert>
           <b-button v-if="isLoggedIn" size="lg" variant="warning" @click="logout">
             {{ logoutText }}
           </b-button>
@@ -23,7 +24,7 @@
             Sign Up via ASU CAS
           </b-button>
           <b-form v-if="isDevMode && toggleDevLogin" class="justify-content-center my-2" inline @submit="devLogin">
-            <label for="input-username">Enter any username (testing)</label>
+            <label for="input-username">Enter any username for testing</label>
             <b-form-input id="input-username" v-model="username" class="w-25 mx-3" placeholder="Test username" required>
             </b-form-input>
             <b-button type="submit" variant="success">
@@ -32,8 +33,6 @@
           </b-form>
           <b-form-checkbox v-if="isDevMode" v-model="toggleDevLogin" class="pt-3">Enable Test User Sign In</b-form-checkbox>
           <b-alert v-if="error" variant="warning">{{ error }}</b-alert>
-          <h2 class="my-5">Sign up to be notified about the next opportunity to play in the Mars Madness
-            tournament.</h2>
         </b-col>
         <b-col></b-col>
       </b-row>
