@@ -45,6 +45,39 @@ If you are starting from scratch you will need to initialize the database and lo
 
 At this point you should be able to access the client by going to `http://localhost:8081` in your browser.
 
+### Run database migrations
+
+To display or run database migrations (for schema changes etc.) use the `yarn typeorm` commands, e.g., `migration:show` and `migration:run`.
+
+Example:
+
+```
+% yarn typeorm migration:show # shows all available migrations and any pending ones
+yarn run v1.22.5                                                                                                   
+$ ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:show                                  
+query: SELECT * FROM "information_schema"."tables" WHERE "table_schema" = current_schema() AND "table_name" = 'migrations'
+query: SELECT * FROM "migrations" "migrations"  ORDER BY "id" DESC
+ [X] Initial1600968396723              
+ [ ] UserMetadataAddition1607117297405
+% yarn typeorm migration:run                          
+yarn run v1.22.5                                                                                                   
+$ ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run
+query: SELECT * FROM "information_schema"."tables" WHERE "table_schema" = current_schema() AND "table_name" = 'migrations'
+query: SELECT * FROM "migrations" "migrations"  ORDER BY "id" DESC
+1 migrations are already loaded in the database.                                                                                                                                                                                       
+2 migrations were found in the source code.
+Initial1600968396723 is the last executed migration. It was executed on Thu Sep 24 2020 17:26:36 GMT+0000 (Coordinated Universal Time).
+1 migrations are new migrations that needs to be executed.
+query: START TRANSACTION
+query: ALTER TABLE "user" ADD "isActive" boolean NOT NULL DEFAULT true
+query: ALTER TABLE "user" ADD "dateCreated" TIMESTAMP NOT NULL DEFAULT now()
+query: INSERT INTO "migrations"("timestamp", "name") VALUES ($1, $2) -- PARAMETERS: [1607117297405,"UserMetadataAddition1607117297405"]
+Migration UserMetadataAddition1607117297405 has been executed successfully.
+query: COMMIT
+Done in 1.75s.
+```
+
+
 ### Test Suite
 
 Server tests: https://github.com/virtualcommons/port-of-mars/tree/master/server/tests
