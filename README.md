@@ -1,14 +1,10 @@
 # port-of-mars
 
-[![Build Status](https://travis-ci.com/virtualcommons/port-of-mars.svg?token=Axd1f7q98op1tRxrKi92&branch=master)](https://travis-ci.com/virtualcommons/port-of-mars)
-
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END --> 
+[![Build Status](https://travis-ci.com/virtualcommons/port-of-mars.svg?token=Axd1f7q98op1tRxrKi92&branch=master)](https://travis-ci.com/virtualcommons/port-of-mars) <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors-)<!-- ALL-CONTRIBUTORS-BADGE:END --> 
 
 ## About
 
-[Port of Mars](https://interplanetary.asu.edu/port-of-mars) is an interdisciplinary research project sponsored by [Arizona State University's](https://www.asu.edu) [Interplanetary Initiative](https://interplanetary.asu.edu/). Its original incarnation was designed and implemented as a physical card game for 5 players. We are now a developing digital version of the Port of Mars card game to serve as a scalable research testbed for studying collective action.
+[Port of Mars](https://interplanetary.asu.edu/port-of-mars) is an interdisciplinary research project sponsored by [Arizona State University's](https://www.asu.edu) [Interplanetary Initiative](https://interplanetary.asu.edu/). Its original incarnation was designed and implemented as a physical card game for 5 players. We are developing a digital version of the Port of Mars game to serve as a scalable research testbed for studying collective action.
 
 If you'd like to get involved, please [let us know!](https://complexity.asu.edu/contact)
 
@@ -26,28 +22,24 @@ To set up a development environment that starts a hot-reloading client and serve
 % make         # create a new docker-compose.yml and build client and server docker images
 ```
 
-If this completes successfully you will be able to bring up all necessary services (client, server, database, redis) by running
-
-```
-% docker-compose up -d
-```
+If this completes successfully you will be able to bring up all necessary services (client, server, database, redis) with `docker-compose up -d`
 
 ### Initialize the database
 
-If you are starting from scratch you will need to initialize the database and load in the schema as well as fixture data for the Port of Mars tutorial quiz + questions.
+If you are starting from scratch you will need to initialize the database and initialize the schema and then load data fixtures into the database for the Port of Mars tutorial quiz questions.
 
 ```
-% docker-compose exec server bash # open a bash shell in the server container
-% yarn typeorm schema:drop        # drop the existing port of mars database schema if it exists
-% yarn typeorm migration:run      # reload the port of mars database schema and apply all defined typeorm migrations in server/src/migration
-% yarn load-fixtures
+% docker-compose exec server bash # open a bash shell into the server container
+% yarn typeorm schema:drop        # DESTRUCTIVE OPERATION, be careful with this! Drops the existing port of mars database if it exists
+% yarn typeorm migration:run      # initialize the port of mars database schema and apply all defined typeorm migrations in server/src/migration
+% yarn load-fixtures              # load data fixtures into the database
 ```
 
-At this point you should be able to access the client by going to `http://localhost:8081` in your browser.
+At this point you should be able to test the Port of Mars by visiting `http://localhost:8081` in your browser.
 
 ### Run database migrations
 
-To display or run database migrations (for schema changes etc.) use the `yarn typeorm` commands, e.g., `migration:show` and `migration:run`.
+To display or run database migrations (for schema changes etc.) use `yarn typeorm` commands e.g., `migration:show` and `migration:run`
 
 Example:
 
@@ -84,7 +76,7 @@ Server tests: https://github.com/virtualcommons/port-of-mars/tree/master/server/
 
 Client tests: https://github.com/virtualcommons/port-of-mars/tree/master/client/tests
 
-Run the tests via 
+You can run all of the tests via
 
 ```
 % make test
@@ -92,7 +84,7 @@ Run the tests via
 
 ### Additional make targets
 
-` make docker-compose.yml` generates the `docker-compose.yml` from templates and should be re-run to apply any changes in these templates.
+` make docker-compose.yml` generates the `docker-compose.yml` from templates and can be re-run to apply any changes in these templates.
 
 `make browser` requires the `open-url-in-container` Firefox extension: https://addons.mozilla.org/en-US/firefox/addon/open-url-in-container/
 
@@ -133,7 +125,8 @@ This generates CSV files with every persisted game event as well as summary csv 
 
 ## Contributors
 
-Thanks to all the contributors to this project - [emoji key](https://allcontributors.org/docs/en/emoji-key)
+Thanks to all the contributors to this project! [emoji key](https://allcontributors.org/docs/en/emoji-key)
+
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
