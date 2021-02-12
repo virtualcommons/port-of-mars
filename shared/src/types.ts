@@ -222,7 +222,7 @@ export interface PurchasedSystemHealthData {
   systemHealth: number;
 }
 
-export interface SystemHealthChangeData {
+export interface SystemHealthChangesData {
   investment: number;
   purchases: Array<PurchasedSystemHealthData>
 }
@@ -235,7 +235,7 @@ export interface PlayerData {
   accomplishments: AccomplishmentSetData;
   ready: boolean;
   timeBlocks: number;
-  systemHealthChanges: SystemHealthChangeData;
+  systemHealthChanges: SystemHealthChangesData;
   victoryPoints: number;
   inventory: ResourceAmountData;
 }

@@ -29,7 +29,7 @@ import {
   RESOURCES,
   MarsLogCategory,
   RoundIntroductionData,
-  SystemHealthChangeData,
+  SystemHealthChangesData,
   PurchasedSystemHealthData,
   AccomplishmentPurchaseData,
   INVESTMENTS,
@@ -764,7 +764,7 @@ export interface PlayerSerialized {
   accomplishment: AccomplishmentSetSerialized;
   ready: boolean;
   timeBlocks: number;
-  systemHealthChange: SystemHealthChangeData;
+  systemHealthChange: SystemHealthChangesData;
   victoryPoints: number;
   inventory: ResourceAmountData;
   pendingInvestments: InvestmentData;
@@ -803,14 +803,16 @@ export class PurchasedSystemHealth extends Schema implements PurchasedSystemHeal
   systemHealth: number;
 }
 
-export class SystemHealthChange extends Schema implements SystemHealthChangeData {
-
-  fromJSON(data: SystemHealthChangeData): void {
+/**
+ * Maintained to display the system health report state at the beginning of a round on the client
+ */
+export class SystemHealthChanges extends Schema implements SystemHealthChangesData {
+  fromJSON(data: SystemHealthChangesData): void {
     this.investment = data.investment;
     this.purchases.splice(this.purchases.length, 0, ...data.purchases.map(p => new PurchasedSystemHealth(p)));
   }
 
-  toJSON(): SystemHealthChangeData {
+  toJSON(): SystemHealthChangesData {
     return {
       investment: this.investment,
       purchases: this.purchases
@@ -909,8 +911,8 @@ export class Player extends Schema implements PlayerData {
   @type('number')
   timeBlocks: number = Player.defaults.timeBlocks;
 
-  @type(SystemHealthChange)
-  systemHealthChanges = new SystemHealthChange();
+  @type(SystemHealthChanges)
+  systemHealthChanges = new SystemHealthChanges();
 
   @type(ResourceInventory)
   inventory = new ResourceInventory();
@@ -951,7 +953,7 @@ export class Player extends Schema implements PlayerData {
     this.accomplishments.discardPurchased(id);
   }
 
-  purchaseAccomplishment(accomplishment: AccomplishmentData): number {
+  purchaseAccomplishment(accomplishment: AccomplishmentData): void {
     this.accomplishments.purchase(accomplishment);
     const inv: ResourceAmountData = {
       culture: -accomplishment.culture,
@@ -977,7 +979,6 @@ export class Player extends Schema implements PlayerData {
     // we convert it into a getter?
     this.victoryPoints += accomplishment.victoryPoints;
     this.inventory.add(inv);
-    return accomplishment.systemHealth
   }
 
   reset(): void {
@@ -1171,6 +1172,7 @@ export class GameState extends Schema implements GameData {
   lastTimePolled: Date;
   marsEventDeck: MarsEventsDeck;
   pendingMarsEventActions: Array<PendingMarsEventAction> = [];
+  pendingSystemHealthContribution = 0;
 
   @type(RoundIntroduction)
   roundIntroduction: RoundIntroduction = new RoundIntroduction();
@@ -1437,7 +1439,7 @@ export class GameState extends Schema implements GameData {
   }
 
   nextRoundSystemHealth(): number {
-    return _.clamp(this.systemHealth + this.systemHealthContributed(), 0, 100);
+    return _.clamp(this.systemHealth + this.systemHealthContributed() + this.systemHealthTaken(), 0, 100);
   }
   
   systemHealthContributed(): number {
@@ -1687,7 +1689,6 @@ export class GameState extends Schema implements GameData {
     const category: string = MarsLogCategory.purchaseAccomplishment;
     const performedBy: ServerRole = SERVER;
     this.players[role].purchaseAccomplishment(accomplishment);
-    this.systemHealth += accomplishment.systemHealth;
     const ap = new AccomplishmentPurchase({name: label, victoryPoints});
     this.roundIntroduction.addAccomplishmentPurchase(ap);
     this.log(message, category, performedBy);
