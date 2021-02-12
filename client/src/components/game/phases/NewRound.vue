@@ -14,10 +14,10 @@
         </div>
         <div v-else>
           <p>
-            In the previous round you invested <b>{{ systemHealthContributed }}</b> and the rest
+            In the previous round you invested <b>{{ yourSystemHealthContributions }}</b> and the rest
             of your group invested
-            <b>{{ groupContributions }}</b> in System Health for a total of {{
-              totalContributedSystemHealth
+            <b>{{ otherPlayerSystemHealthContributions }}</b> in System Health for a total of {{
+              groupSystemHealthContributions
             }}.
             Your group's average investment was {{ averageContribution }}.
           </p>
@@ -65,13 +65,17 @@
       return this.$tstore.state.roundIntroduction.maintenanceSystemHealth;
     }
 
+    get priorSystemHealth() {
+      return this.systemHealth - this.groupSystemHealthContributions;
+    }
+
     get systemHealth() {
-      return _.clamp(this.$tstore.getters.systemHealth, 0, 100);
+      return this.$tstore.getters.systemHealth;
     }
 
     get nextRoundSystemHealth() {
       // FIXME: figure out a way to make this clearer
-      return _.clamp(this.$tstore.getters.systemHealth + this.systemHealthMaintenanceCost, 0, 100);
+      return _.clamp(this.systemHealth + this.systemHealthMaintenanceCost, 0, 100);
     }
 
     get isFirstRound() {
@@ -79,10 +83,10 @@
     }
 
     get averageContribution() {
-      return this.totalContributedSystemHealth / 5;
+      return this.groupSystemHealthContributions / 5;
     }
 
-    get systemHealthContributed() {
+    get yourSystemHealthContributions() {
       return this.$tstore.getters.systemHealthContributed;
     }
 
@@ -114,8 +118,8 @@
 
     get tabularContributions() {
       const items = [
-        {label: 'Prior System Health', role: 'System', value: this.systemHealth},
-        {label: 'Group Contributions', role: 'System', value: this.totalContributedSystemHealth},
+        {label: 'Prior System Health', role: 'System', value: this.priorSystemHealth},
+        {label: 'Group Contributions', role: 'System', value: this.groupSystemHealthContributions},
         ...this.$tstore.getters.purchaseSystemHealth,
         {label: 'Wear and Tear', role: 'System', value: this.systemHealthMaintenanceCost},
         {
@@ -127,17 +131,17 @@
       ];
       const isUnderAudit = this.$tstore.getters.isUnderAudit;
       if (isUnderAudit) {
-        items.splice(2, 0, ...this.otherPlayerContributions().concat({
+        items.splice(2, 0, ...this.otherPlayerContributionsInfo().concat({
           label: 'System Health',
           role: this.$tstore.getters.player.role,
-          value: this.systemHealthContributed
+          value: this.yourSystemHealthContributions
         }));
       }
       // Next Round System Health = Previous System Health + Group Contributions - Wear and Tear
       return items;
     }
 
-    otherPlayerContributions(): Array<{ label: string, role: string, value: number }> {
+    otherPlayerContributionsInfo(): Array<{ label: string, role: string, value: number }> {
       const contributions = [];
       for (const [role, player] of Object.entries(this.$tstore.getters.otherPlayers)) {
         contributions.push({
@@ -149,11 +153,11 @@
       return contributions;
     }
 
-    get groupContributions() {
-      return this.totalContributedSystemHealth - this.systemHealthContributed;
+    get otherPlayerSystemHealthContributions() {
+      return this.groupSystemHealthContributions - this.yourSystemHealthContributions;
     }
 
-    get totalContributedSystemHealth() {
+    get groupSystemHealthContributions() {
       return this.$tstore.state.roundIntroduction.systemHealthContributed;
     }
 
