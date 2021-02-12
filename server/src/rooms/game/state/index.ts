@@ -1172,7 +1172,6 @@ export class GameState extends Schema implements GameData {
   lastTimePolled: Date;
   marsEventDeck: MarsEventsDeck;
   pendingMarsEventActions: Array<PendingMarsEventAction> = [];
-  pendingSystemHealthContribution = 0;
 
   @type(RoundIntroduction)
   roundIntroduction: RoundIntroduction = new RoundIntroduction();
@@ -1712,5 +1711,15 @@ export class GameState extends Schema implements GameData {
     this.timeRemaining = marsEvents[0].timeDuration;
     this.marsEvents.push(...marsEvents);
     this.marsEventDeck.updatePosition(this.marsEvents.length);
+  }
+
+  setUpNewRound(): void {
+    this.phase = Phase.newRound;
+    this.timeRemaining = 60;
+    this.round += 1;
+    this.roundIntroduction.addContribution(this.systemHealthContributed());
+    this.log(`Round ${this.round} begins.`, MarsLogCategory.newRound);
+    logger.debug("[game %d] current system health: %d", this.gameId, this.systemHealth);
+    this.resetRound();
   }
 }

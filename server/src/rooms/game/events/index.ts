@@ -434,13 +434,7 @@ gameEventDeserializer.register(EnteredVictoryPhase);
 
 export class EnteredNewRoundPhase extends KindOnlyGameEvent {
   apply(game: GameState): void {
-    game.phase = Phase.newRound;
-    game.timeRemaining = 60;
-    game.round += 1;
-    game.roundIntroduction.addContribution(game.systemHealthContributed());
-    game.log(`Round ${game.round} begins.`, MarsLogCategory.newRound);
-    logger.debug("[game %d] current system health: %d", game.gameId, game.systemHealth);
-    game.resetRound();
+    game.setUpNewRound();
   }
 }
 
@@ -460,7 +454,7 @@ export class AddedSystemHealthContributions extends KindOnlyGameEvent {
         MarsLogCategory.systemHealthContributions);
 
     if (game.systemHealthTaken() < 0) {
-      game.log(`${game.systemHealthTaken()} System Health was subtracted because players purchased Accomplishments that cost System Health.`, MarsLogCategory.systemHealthScrew);
+      game.log(`${game.systemHealthTaken()} System Health was subtracted because players purchased Accomplishments that cost System Health.`, MarsLogCategory.systemHealthContributions);
     } 
     game.log(`At the end of Round ${game.round}, System Health is ${game.systemHealth} after accounting for 
     contributions and purchased Accomplishments that decrease System Health.`, MarsLogCategory.systemHealth);

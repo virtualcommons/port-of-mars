@@ -66,10 +66,11 @@
     }
 
     get systemHealth() {
-      return _.clamp(this.$tstore.getters.systemHealth - this.totalContributedSystemHealth, 0, 100);
+      return _.clamp(this.$tstore.getters.systemHealth, 0, 100);
     }
 
     get nextRoundSystemHealth() {
+      // FIXME: figure out a way to make this clearer
       return _.clamp(this.$tstore.getters.systemHealth + this.systemHealthMaintenanceCost, 0, 100);
     }
 
