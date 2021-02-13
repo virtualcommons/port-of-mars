@@ -66,7 +66,7 @@
     }
 
     get priorSystemHealth() {
-      return this.systemHealth - this.groupSystemHealthContributions;
+      return this.systemHealth - this.groupSystemHealthContributions + this.groupSystemHealthTaken;
     }
 
     get systemHealth() {
@@ -161,7 +161,7 @@
       return this.$tstore.state.roundIntroduction.systemHealthContributed;
     }
 
-    get totalTakenSystemHealth() {
+    get groupSystemHealthTaken() {
       return this.$tstore.state.roundIntroduction.systemHealthTaken;
     }
   }
