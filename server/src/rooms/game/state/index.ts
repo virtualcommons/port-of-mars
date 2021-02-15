@@ -274,7 +274,7 @@ export class RoundIntroduction extends Schema implements RoundIntroductionData {
   systemHealthGroupContributions = 0;
 
   @type('number')
-  systemHealthAtStartOfRound = 0;
+  systemHealthAtStartOfRound = 100;
 
   @type([SystemHealthMarsEvent])
   systemHealthMarsEvents = new ArraySchema<SystemHealthMarsEvent>();
