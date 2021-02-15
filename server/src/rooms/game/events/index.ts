@@ -443,7 +443,7 @@ gameEventDeserializer.register(EnteredNewRoundPhase);
 export class AddedSystemHealthContributions extends KindOnlyGameEvent {
   apply(game: GameState): void {
     const prevSystemHealth = game.systemHealth;
-    game.updateSystemHealth();
+    game.setNextRoundSystemHealth();
 
     // system health - last round
     game.log(
@@ -466,13 +466,7 @@ gameEventDeserializer.register(AddedSystemHealthContributions);
 export class SubtractedSystemHealthWearAndTear extends KindOnlyGameEvent {
   apply(game: GameState): void {
     // apply system health - wear and tear
-    game.decreaseSystemHealth(25);
-    game.resetPlayerContributions();
-    game.roundIntroduction.reset();
-    game.log(
-        `Standard wear and tear reduces System Health by 25.
-        At the beginning of this round, System Health = ${game.systemHealth}.`,
-        MarsLogCategory.systemHealth);
+    game.subtractSystemHealthWearAndTear()
   }
 }
 

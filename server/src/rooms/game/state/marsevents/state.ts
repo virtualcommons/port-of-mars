@@ -1,6 +1,6 @@
 import * as _ from "lodash";
 import {getEventName, MarsEventState, MarsEventStateConstructor,} from "./common";
-import {ActionOrdering, GameState} from "@port-of-mars/server/rooms/game/state";
+import {ActionOrdering, GameState, SystemHealthMarsEvent} from "@port-of-mars/server/rooms/game/state";
 import {
   CURATOR,
   ENTREPRENEUR,
@@ -67,6 +67,10 @@ export abstract class BaseEvent implements MarsEventState {
       json.data = _.cloneDeep(this.getData());
     }
     return json;
+  }
+
+  get displayName() {
+    return formatEventName(this.constructor.name);
   }
 
 }
@@ -257,7 +261,7 @@ export class CompulsivePhilanthropy extends BaseEvent {
     );
     game.pendingMarsEventActions.push({
       ordering: ActionOrdering.LAST, execute: (state) => {
-        state.increaseSystemHealth(state.players[winner].timeBlocks);
+        state.setNextRoundSystemHealth(state.players[winner].timeBlocks);
         state.players[winner].timeBlocks = 0;
       }
     });
@@ -273,8 +277,9 @@ export class CompulsivePhilanthropy extends BaseEvent {
 @assocEventId
 export class CropFailure extends BaseEvent {
   finalize(state: GameState): void {
-    state.decreaseSystemHealth(20);
-    state.log(`Crop failure has destroyed 20 system health.`, `${MarsLogCategory.event}: Crop Failure`);
+    const label = this.displayName;
+    state.applySystemHealthMarsEvent(new SystemHealthMarsEvent({label, systemHealthModification: -20}));
+    state.log(`Crop failure has destroyed 20 system health.`, `${MarsLogCategory.event}: ${label}`);
   }
 }
 
@@ -448,8 +453,9 @@ export class HeroOrPariah extends BaseEvent {
 @assocEventId
 export class HullBreach extends BaseEvent {
   finalize(state: GameState): void {
-    state.decreaseSystemHealth(7);
-    state.log(`A hull breach has destroyed 7 System Health.`, `${MarsLogCategory.event}: Hull Breach`);
+    const label = this.displayName;
+    state.applySystemHealthMarsEvent(new SystemHealthMarsEvent({label, systemHealthModification: -7}));
+    state.log(`A hull breach has destroyed 7 System Health.`, `${MarsLogCategory.event}: ${label}`);
   }
 }
 
@@ -676,9 +682,11 @@ export class PersonalGain extends BaseEvent {
             systemHealthReduction += 6;
           }
         }
-        state.decreaseSystemHealth(systemHealthReduction);
+        const label = this.displayName;
+        state.applySystemHealthMarsEvent(new SystemHealthMarsEvent({ label, systemHealthModification: -systemHealthReduction }));
         const message = `System health decreased by ${systemHealthReduction}. The following players voted yes: ${playerVotingInfo}`;
-        state.log(message, `${MarsLogCategory.event}: ${formatEventName(PersonalGain.name)}`);
+        // FIXME: push a log message method into BaseEvent that does the canned ${MarsLogCategory.event}: ${this.displayName} things
+        state.log(message, `${MarsLogCategory.event}: ${label}`);
       }
     });
   }
@@ -693,18 +701,20 @@ export class PersonalGain extends BaseEvent {
 @assocEventId
 export class Sandstorm extends BaseEvent {
   finalize(game: GameState): void {
-    game.decreaseSystemHealth(10);
-    game.log('A sandstorm has decreased system health by 10.', `${MarsLogCategory.event}: ${formatEventName(Sandstorm.name)}`);
+    const label = this.displayName;
+    game.applySystemHealthMarsEvent(new SystemHealthMarsEvent({ label, systemHealthModification: -10}));
+    game.log('A sandstorm has decreased system health by 10.', `${MarsLogCategory.event}: ${label}`);
   }
 }
 
 @assocEventId
 export class SolarFlare extends BaseEvent {
   finalize(state: GameState): void {
-    state.decreaseSystemHealth(5);
+    const label = this.displayName;
+    state.applySystemHealthMarsEvent(new SystemHealthMarsEvent({ label, systemHealthModification: -5}));
     state.disableTrading();
     state.log(`A Solar Flare has destroyed 5 System Health. Chat and trade are not available in this round.`,
-        `${MarsLogCategory.event}: Solar Flare`
+        `${MarsLogCategory.event}: ${label}`
     );
   }
 }

@@ -118,10 +118,16 @@ export interface AccomplishmentPurchaseData {
   victoryPoints: number;
 }
 
+export interface SystemHealthMarsEventData {
+  label: string;
+  systemHealthModification: number;
+}
+
 export interface RoundIntroductionData {
-  systemHealthContributed: number;
-  systemHealthTaken: number;
-  maintenanceSystemHealth: number;
+  systemHealthGroupContributions: number;
+  systemHealthAtStartOfRound: number;
+  systemHealthMaintenanceCost: number;
+  systemHealthMarsEvents: Array<SystemHealthMarsEventData>;
   accomplishmentPurchases: Array<AccomplishmentPurchaseData>;
   completedTrades: Array<TradeData>;
 }

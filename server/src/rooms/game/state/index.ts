@@ -33,7 +33,8 @@ import {
   PurchasedSystemHealthData,
   AccomplishmentPurchaseData,
   INVESTMENTS,
-  INVESTMENT_LABELS
+  INVESTMENT_LABELS,
+  SystemHealthMarsEventData
 } from '@port-of-mars/shared/types';
 import { canSendTradeRequest } from '@port-of-mars/shared/validation';
 import _ from 'lodash';
@@ -215,36 +216,68 @@ export class Trade extends Schema {
   }
 }
 
+export class SystemHealthMarsEvent extends Schema implements SystemHealthMarsEventData {
+  @type('string')
+  label: string;
+
+  @type('number')
+  systemHealthModification: number;
+
+  constructor(data: SystemHealthMarsEventData) {
+    super();
+    this.label = data.label;
+    this.systemHealthModification = data.systemHealthModification;
+  }
+
+  fromJSON(data: SystemHealthMarsEventData): void {
+    this.label = data.label;
+    this.systemHealthModification = data.systemHealthModification;
+  }
+
+  toJSON(): SystemHealthMarsEventData {
+    return {
+      label: this.label,
+      systemHealthModification: this.systemHealthModification
+    };
+  }
+
+}
+
 export class RoundIntroduction extends Schema implements RoundIntroductionData {
   constructor() {
     super();
   }
 
   fromJSON(data: RoundIntroductionData): void {
-    this.maintenanceSystemHealth = data.maintenanceSystemHealth;
-    this.systemHealthContributed = data.systemHealthContributed;
+    this.systemHealthMaintenanceCost = data.systemHealthMaintenanceCost;
+    this.systemHealthGroupContributions = data.systemHealthGroupContributions;
+    this.systemHealthMarsEvents.splice(0, this.systemHealthMarsEvents.length, ...data.systemHealthMarsEvents.map(d => new SystemHealthMarsEvent(d)));
     this.accomplishmentPurchases.splice(0, this.accomplishmentPurchases.length, ...data.accomplishmentPurchases.map(ap => new AccomplishmentPurchase(ap)));
     this.completedTrades.splice(0, this.completedTrades.length, ...data.completedTrades.map(ct => new Trade(ct.id, ct.sender, ct.recipient, ct.status)));
   }
 
   toJSON(): RoundIntroductionData {
     return {
-      systemHealthContributed: this.systemHealthContributed,
-      systemHealthTaken: this.systemHealthTaken,
-      maintenanceSystemHealth: this.maintenanceSystemHealth,
+      systemHealthGroupContributions: this.systemHealthGroupContributions,
+      systemHealthAtStartOfRound: this.systemHealthAtStartOfRound,
+      systemHealthMarsEvents: this.systemHealthMarsEvents.map(e => e.toJSON()),
+      systemHealthMaintenanceCost: this.systemHealthMaintenanceCost,
       accomplishmentPurchases: this.accomplishmentPurchases.map(ap => ap.toJSON()),
       completedTrades: this.completedTrades.map(ct => ct.toJSON())
     }
   }
 
   @type('number')
-  maintenanceSystemHealth = -SYSTEM_HEALTH_MAINTENANCE_COST;
+  systemHealthMaintenanceCost = -SYSTEM_HEALTH_MAINTENANCE_COST;
 
   @type('number')
-  systemHealthContributed = 0;
+  systemHealthGroupContributions = 0;
 
   @type('number')
-  systemHealthTaken = 0;
+  systemHealthAtStartOfRound = 0;
+
+  @type([SystemHealthMarsEvent])
+  systemHealthMarsEvents = new ArraySchema<SystemHealthMarsEvent>();
 
   @type([AccomplishmentPurchase])
   accomplishmentPurchases = new ArraySchema<AccomplishmentPurchase>();
@@ -252,12 +285,16 @@ export class RoundIntroduction extends Schema implements RoundIntroductionData {
   @type([Trade])
   completedTrades = new ArraySchema<Trade>();
 
-  addContribution(systemHealth: number): void {
-    this.systemHealthContributed += systemHealth;
+  setSystemHealthGroupContributions(contributions: number): void {
+    this.systemHealthGroupContributions = contributions;
   }
 
-  addTaken(systemHealth: number): void {
-    this.systemHealthTaken += systemHealth;
+  setSystemHealthAtStartOfRound(systemHealth: number): void {
+    this.systemHealthAtStartOfRound = systemHealth;
+  }
+
+  addSystemHealthMarsEvent(event: SystemHealthMarsEvent): void {
+    this.systemHealthMarsEvents.push(event);
   }
 
   addAccomplishmentPurchase(accomplishment: AccomplishmentPurchase): void {
@@ -265,14 +302,20 @@ export class RoundIntroduction extends Schema implements RoundIntroductionData {
   }
 
   addCompletedTrade(trade: Trade) {
+    // FIXME: no-op for now, need to implement clone
     // this.completedTrades.push(trade.clone());
   }
 
-  reset(): void {
-    this.systemHealthContributed = 0;
-    this.systemHealthTaken = 0;
+  /**
+   * Invoked at the time that wear and tear is calculated and applied to the system health, currently at the end of each round.
+   * @param systemHealthAtStartOfRound 
+   */
+  initialize(systemHealthAtStartOfRound: number): void {
+    this.systemHealthGroupContributions = 0;
+    this.systemHealthAtStartOfRound = systemHealthAtStartOfRound;
     this.accomplishmentPurchases.splice(0, this.accomplishmentPurchases.length);
     this.completedTrades.splice(0, this.completedTrades.length);
+    this.systemHealthMarsEvents.splice(0, this.systemHealthMarsEvents.length);
   }
 }
 
@@ -1165,7 +1208,6 @@ export interface PendingMarsEventAction {
 }
 
 export class GameState extends Schema implements GameData {
-
   userRoles: GameOpts['userRoles'] = {};
   gameId!: number;
   maxRound: number;
@@ -1372,21 +1414,35 @@ export class GameState extends Schema implements GameData {
     }
   }
 
-  resetRound(): void {
-    // FIXME: replace various resetXYZ with resetRound() / resetPhase()
-    this.tradingEnabled = true;
-    this.resetHeroOrPariah();
-    // FIXME: move rest of the player resets above into this loop as a player.resetRound()
-    for (const player of this.players) {
-      player.reset();
-    }
+  /**
+   * Apply maintenance costs to system health. This occurs after we exit the new round phase 
+   */
+  subtractSystemHealthWearAndTear() {
+    this.addSystemHealth(-25);
+    // we can now safely reset each player's system health changes because
+    // the system health report has been generated
+    this.resetPlayerContributions();
+    this.roundIntroduction.initialize(this.systemHealth);
+    this.log(
+        `Standard wear and tear reduces System Health by 25.
+        At the beginning of this round, System Health = ${this.systemHealth}.`,
+        MarsLogCategory.systemHealth);
   }
 
-  resetPlayerCosts(): void {
+  /**
+   * clean up and initialization for a new round, precursor to the new round after we exit the discard phase
+   */
+  setUpNewRound(): void {
+    this.phase = Phase.newRound;
+    this.timeRemaining = 60;
+    this.round += 1;
+    this.roundIntroduction.setSystemHealthGroupContributions(this.systemHealthContributed());
+    this.log(`Round ${this.round} begins.`, MarsLogCategory.newRound);
+    logger.debug("[game %d] current system health: %d", this.gameId, this.systemHealth);
+    this.tradingEnabled = true;
+    this.resetHeroOrPariah();
     for (const player of this.players) {
-      logger.info('costs (before) [%s]: %o', player.role, player.costs.toJSON());
-      player.costs.fromJSON(ResourceCosts.getCosts(player.role));
-      logger.info('costs (after) [%s]: %o', player.role, player.costs.toJSON());
+      player.reset();
     }
   }
 
@@ -1433,7 +1489,7 @@ export class GameState extends Schema implements GameData {
     this.heroOrPariah = '';
   }
 
-  updateSystemHealth(): void {
+  setNextRoundSystemHealth(): void {
     this.systemHealth = this.nextRoundSystemHealth();
   }
 
@@ -1461,16 +1517,15 @@ export class GameState extends Schema implements GameData {
     return taken;
   }
 
-  increaseSystemHealth(amount: number): number {
+  addSystemHealth(amount: number): number {
     const current = this.systemHealth;
     this.systemHealth = _.clamp(current + amount, 0, 100);
     return this.systemHealth;
   }
 
-  decreaseSystemHealth(amount: number): number {
-    const current = this.systemHealth;
-    this.systemHealth = _.clamp(current - amount, 0, 100);
-    return this.systemHealth;
+  applySystemHealthMarsEvent(event: SystemHealthMarsEvent) {
+    this.roundIntroduction.addSystemHealthMarsEvent(event);
+    this.addSystemHealth(event.systemHealthModification);
   }
 
   applyPendingActions(): void {
@@ -1713,13 +1768,5 @@ export class GameState extends Schema implements GameData {
     this.marsEventDeck.updatePosition(this.marsEvents.length);
   }
 
-  setUpNewRound(): void {
-    this.phase = Phase.newRound;
-    this.timeRemaining = 60;
-    this.round += 1;
-    this.roundIntroduction.addContribution(this.systemHealthContributed());
-    this.log(`Round ${this.round} begins.`, MarsLogCategory.newRound);
-    logger.debug("[game %d] current system health: %d", this.gameId, this.systemHealth);
-    this.resetRound();
-  }
+
 }

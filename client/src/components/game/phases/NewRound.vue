@@ -62,7 +62,7 @@
     }
 
     get systemHealthMaintenanceCost(): number {
-      return this.$tstore.state.roundIntroduction.maintenanceSystemHealth;
+      return this.$tstore.state.roundIntroduction.systemHealthMaintenanceCost;
     }
 
     get priorSystemHealth() {
