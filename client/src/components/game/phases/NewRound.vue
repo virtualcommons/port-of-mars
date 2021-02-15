@@ -123,7 +123,7 @@
     get tabularContributions() {
       const items = [
         {label: 'Prior System Health', role: 'System', value: this.priorSystemHealth},
-        {label: 'Group Contributions', role: 'System', value: this.systemHealthGroupContributions
+        {label: 'Group Contributions', role: 'Players', value: this.systemHealthGroupContributions
         },
         ...this.$tstore.getters.purchaseSystemHealth,
         ...this.systemHealthMarsEvents,
@@ -168,7 +168,7 @@
     }
 
     get systemHealthMarsEvents() {
-      return this.roundIntroduction.systemHealthMarsEvents.map(({ label, systemHealthModification }) => ({label, role: 'System', value: systemHealthModification}));
+      return this.roundIntroduction.systemHealthMarsEvents.map(({ label, systemHealthModification }) => ({label, role: 'Mars Event', value: systemHealthModification}));
     }
 
   }
