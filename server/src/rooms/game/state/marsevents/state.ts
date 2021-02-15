@@ -261,7 +261,7 @@ export class CompulsivePhilanthropy extends BaseEvent {
     );
     game.pendingMarsEventActions.push({
       ordering: ActionOrdering.LAST, execute: (state) => {
-        state.setNextRoundSystemHealth(state.players[winner].timeBlocks);
+        state.addSystemHealth(state.players[winner].timeBlocks);
         state.players[winner].timeBlocks = 0;
       }
     });
