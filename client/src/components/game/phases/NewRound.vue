@@ -9,15 +9,15 @@
         <div v-if="isFirstRound" class="tour-wear-tear">
           Welcome to Mars! Each round, your System Health degrades by <b>{{
           systemHealthMaintenanceCost }}</b> due to standard wear and tear.
-          Your System Health at the start of this round is <code>{{ nextRoundSystemHealth
-          }}</code>.
+          Your System Health at the start of this round is <code>{{ nextRoundSystemHealth }}</code>.
         </div>
         <div v-else>
           <p>
             In the previous round you invested <b>{{ yourSystemHealthContributions }}</b> and the rest
             of your group invested
             <b>{{ otherPlayerSystemHealthContributions }}</b> in System Health for a total of {{
-              groupSystemHealthContributions
+              systemHealthGroupContributions
+
             }}.
             Your group's average investment was {{ averageContribution }}.
           </p>
@@ -62,11 +62,15 @@
     }
 
     get systemHealthMaintenanceCost(): number {
-      return this.$tstore.state.roundIntroduction.systemHealthMaintenanceCost;
+      return this.roundIntroduction.systemHealthMaintenanceCost;
+    }
+    
+    get roundIntroduction() {
+      return this.$tstore.state.roundIntroduction;
     }
 
     get priorSystemHealth() {
-      return this.systemHealth - this.groupSystemHealthContributions + this.groupSystemHealthTaken;
+      return this.roundIntroduction.systemHealthAtStartOfRound;
     }
 
     get systemHealth() {
@@ -83,7 +87,7 @@
     }
 
     get averageContribution() {
-      return this.groupSystemHealthContributions / 5;
+      return this.systemHealthGroupContributions / 5;
     }
 
     get yourSystemHealthContributions() {
@@ -95,7 +99,7 @@
     }
 
     get purchases() {
-      return this.$tstore.state.roundIntroduction.accomplishmentPurchases;
+      return this.roundIntroduction.accomplishmentPurchases;
     }
 
     getTradeAmount(tradeAmount: TradeAmountData) {
@@ -119,8 +123,10 @@
     get tabularContributions() {
       const items = [
         {label: 'Prior System Health', role: 'System', value: this.priorSystemHealth},
-        {label: 'Group Contributions', role: 'System', value: this.groupSystemHealthContributions},
+        {label: 'Group Contributions', role: 'System', value: this.systemHealthGroupContributions
+        },
         ...this.$tstore.getters.purchaseSystemHealth,
+        ...this.systemHealthMarsEvents,
         {label: 'Wear and Tear', role: 'System', value: this.systemHealthMaintenanceCost},
         {
           label: 'Upcoming System Health',
@@ -154,16 +160,17 @@
     }
 
     get otherPlayerSystemHealthContributions() {
-      return this.groupSystemHealthContributions - this.yourSystemHealthContributions;
+      return this.systemHealthGroupContributions - this.yourSystemHealthContributions;
     }
 
-    get groupSystemHealthContributions() {
-      return this.$tstore.state.roundIntroduction.systemHealthContributed;
+    get systemHealthGroupContributions() {
+      return this.roundIntroduction.systemHealthGroupContributions;
     }
 
-    get groupSystemHealthTaken() {
-      return this.$tstore.state.roundIntroduction.systemHealthTaken;
+    get systemHealthMarsEvents() {
+      return this.roundIntroduction.systemHealthMarsEvents.map(({ label, systemHealthModification }) => ({label, role: 'System', value: systemHealthModification}));
     }
+
   }
 </script>
 
