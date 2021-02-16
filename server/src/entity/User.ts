@@ -42,6 +42,9 @@ export class User {
   @Column({ default: true })
   isActive!: boolean;
 
+  @Column({default: false})
+  isBot!: boolean;
+
   @CreateDateColumn()
   dateCreated!: Date;
 }
