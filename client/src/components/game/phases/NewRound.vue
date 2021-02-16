@@ -22,14 +22,14 @@
             Your group's average investment was {{ averageContribution }}.
           </p>
         </div>
-        <div class="summary-tables overflow-auto tour-shr-table">
-          <b-table responsive sticky-header small dark bordered striped
+        <template class="tour-shr-table">
+          <b-table small dark bordered striped
                    :items="tabularContributions" :fields="tabularContributionFields">
           </b-table>
-          <b-table responsive sticky-header small dark bordered striped :items="purchases" v-if="purchases.length > 0"
+          <b-table sticky-header small dark bordered striped :items="purchases" v-if="purchases.length > 0"
                    :fields="purchaseFields">
           </b-table>
-        </div>
+        </template>
       </b-col>
       <b-col fluid cols="4" class="events m-auto tour-report-hint">
         <h4>If System Health drops below 65, your group will encounter <b>two</b> Events.</h4>
@@ -64,7 +64,7 @@
     get systemHealthMaintenanceCost(): number {
       return this.roundIntroduction.systemHealthMaintenanceCost;
     }
-    
+
     get roundIntroduction() {
       return this.$tstore.state.roundIntroduction;
     }
