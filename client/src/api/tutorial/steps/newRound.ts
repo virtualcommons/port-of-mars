@@ -53,6 +53,22 @@ const steps: Array<Step> = [
     params: {
       placement: LEFT,
     }
+  },
+  {
+    target: '.tour-system-health',
+    content: 'Quiz Question',
+    params: {
+      placement: BOTTOM,
+      tutorialElementId: 'upkeep65'
+    }
+  },
+  {
+    target: '.tour-system-health',
+    content: 'Quiz Question',
+    params: {
+      placement: BOTTOM,
+      tutorialElementId: 'upkeep35'
+    }
   }
 ];
 

@@ -12,7 +12,7 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-round',
-    content: `Port of Mars progresses in rounds. The total number of rounds may vary and a game may end after any number of rounds.`,
+    content: `Port of Mars progresses in rounds. The total number of rounds can vary and a game will end after some number of rounds.`,
     params: {
       placement: BOTTOM,
     },
@@ -38,8 +38,7 @@ const steps: Array<Step> = [
     target: '.tour-ready-to-advance-button',
     content: `If you are finished with your actions in a given phase before the 5 minutes are up, click Ready
       to Advance to indicate that you are ready to move on and lock in your choices.
-      When every player in your group has indicated that they are
-      ready, the phase will end and your group will move on to the next phase.`,
+      When every player in your group is ready your group will immediately move on to the next phase.`,
     params: {
       placement: LEFT,
     },
@@ -82,10 +81,10 @@ const steps: Array<Step> = [
   {
     target: '.tour-chat',
     content:
-      `At any time during the game, you can communicate with the other players ` +
-      `in your group to strategize. Remember: all chat is public ` +
-      `and recorded and there are no private messages. Please adhere to the Port of ` +
-      `Mars Code of Conduct in your communications. Try sending a message!`,
+      `At any time during the game, you can communicate with all of the other players ` +
+      `in your group. The chat is recorded and you cannot send private messages within your group. ` +
+      `Please adhere to the Port of Mars Code of Conduct in your communications. ` +
+      `Enter and send a chat message to continue.`,
     params: {
       placement: LEFT,
     },

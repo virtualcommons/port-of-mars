@@ -30,7 +30,7 @@ const
     },
     {
       target: '.tour-hud-left-toggle',
-      content: `You are able to toggle your different views by clicking the buttons to view different menus: Other Players, Inventory, and Available Accomplishments.`,
+      content: `You can access different views by clicking these buttons: Other Players, Inventory, and Available Accomplishments.`,
       params: {
         placement: BOTTOM
       },
@@ -110,7 +110,7 @@ const
     },
     {
       target: '.tour-hud-left-toggle',
-      content: `In the Inventory menu, you can view the Resources that you own and view their costs.`,
+      content: `In the Inventory menu, you can view the Resources that you own and their costs.`,
       params: {
         placement: RIGHT,
       },
@@ -207,7 +207,7 @@ const
       target: '.tour-inventory-view',
       content:
         `You can see the Influence Resources you own here, earned from investing time blocks, trading, ` +
-        `or even the occasional Event`,
+        `or Events`,
       params: {
         placement: 'right',
       },

@@ -35,7 +35,7 @@ const steps: Array<Step> = [
     target: '.tour-accomplishments',
     content: `Accomplishments are how you earn points and establish your legacy on Mars.
     You can purchase an accomplishment if you have enough Influence to cover its costs.
-    Here you'll be able to see what Accomplishments you can purchase this round.`,
+    This panel shows the Accomplishments you can purchase this round.`,
     params: {
       placement: RIGHT,
     },
@@ -52,7 +52,7 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-invest',
-    content: `Time blocks are reset each round and do not get saved for subsequent rounds. You should allocate all of your time each round!`,
+    content: `Time blocks are reset each round and do not get saved for subsequent rounds. You should allocate all of your time blocks in each round.`,
     params: {
       placement: RIGHT,
     },
@@ -99,7 +99,7 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-time-blocks',
-    content: `You should notice that 2 time blocks have been removed from your Time Blocks meter and you have 8 remaining time blocks to invest.`,
+    content: `Notice that 2 time blocks have been removed from your Time Blocks meter and you have 8 remaining time blocks to invest.`,
     params: {
       placement: TOP,
     },
@@ -107,7 +107,7 @@ const steps: Array<Step> = [
   {
     target: '.tour-invest-action',
     content: `Time blocks aren't saved across rounds, so let's finish investing our time.
-      Please buy 1 more Science and 2 Government Influences.`,
+      Please allocate your time blocks to purchase 2 System Health, 1 Legacy, and 1 Government.`,
     params: {
       placement: TOP,
     },
@@ -115,12 +115,12 @@ const steps: Array<Step> = [
       {
         required: true,
         validationObject: {
-          science: 2,
-          government: 2,
-          legacy: 0,
+          science: 1,
+          government: 1,
+          legacy: 1,
           culture: 0,
           finance: 0,
-          systemHealth: 0,
+          systemHealth: 2,
         },
       },
     ],
