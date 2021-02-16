@@ -51,7 +51,7 @@ passport.use(new CasStrategy(
   // verify callback
   async function (username: string, profile: Record<string, unknown>, done: Function) {
     const s = getServices();
-    const user = await s.account.getOrCreateUser(username, profile);
+    const user = await s.account.getOrCreateUser(username);
     await done(null, user);
   }
 ));

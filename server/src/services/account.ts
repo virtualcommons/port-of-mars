@@ -2,6 +2,7 @@ import { User } from "@port-of-mars/server/entity";
 import { UpdateResult, Repository } from "typeorm"
 import { settings } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
+import { v4 as uuidv4 } from "uuid";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -40,21 +41,35 @@ export class AccountService extends BaseService {
     user.email = `${username}@mailinator.com`;
     user.dateConsented = new Date();
     user.isVerified = true;
+    user.passedQuiz = true;
     // consider having configuration to determine what user properties to bypass (passedQuiz, isVerified, etc)
     user.name = `Test User ${username}`;
     await this.getRepository().save(user);
     return user;
   }
 
-  async getOrCreateUser(username: string, profile?: any): Promise<User> {
+  async getOrCreateUser(username: string, data: Pick<User, 'isBot'> = {isBot: false}): Promise<User> {
     let user = await this.getRepository().findOne({ username });
-    logger.info('getOrCreateUser for username %s and profile: %o', username, profile);
+    logger.info('getOrCreateUser for username %s and profile: %o', username);
     if (!user) {
       user = new User();
       user.name = '';
       user.username = username;
+      user.isBot = data.isBot;
       await this.getRepository().save(user);
     }
     return user;
+  }
+
+  async getOrCreateBotUsers(requiredNumberOfBots: number): Promise<Array<User>> {
+    const bots = await this.getRepository().find({where: {isBot: true}, take: requiredNumberOfBots})
+    const numberOfBotsToCreate = requiredNumberOfBots - bots.length;
+    if (numberOfBotsToCreate > 0) {
+      for (let i = 0; i < numberOfBotsToCreate; i++) {
+        const user = await this.getOrCreateUser(uuidv4(), {isBot: true});
+        bots.push(user);
+      }
+    }
+    return bots;
   }
 }

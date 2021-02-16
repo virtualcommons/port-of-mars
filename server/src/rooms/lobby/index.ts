@@ -262,11 +262,12 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
     client.send(msg.kind, msg);
   }
 
-  fillUsernames(usernames: Array<string>) {
+  async fillUsernames(usernames: Array<string>) {
     // in development mode, allow for less than 5 usernames and fill in 
-    if (usernames.length < ROLES.length && this.devMode) {
-      const newUsernames = ['bob1', 'amanda1', 'adison1', 'sydney1', 'frank1'].filter(u => !usernames.includes(u));
-      return usernames.concat(newUsernames).slice(0, this.numClientsToMatch);
+    if (usernames.length < this.numClientsToMatch && this.devMode) {
+      const requiredBots = this.numClientsToMatch - usernames.length;
+      const bots = await getServices().account.getOrCreateBotUsers(requiredBots);
+      return usernames.concat(bots.map(u => u.username)).slice(0, this.numClientsToMatch);
     }
     return usernames;
   }
@@ -285,7 +286,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
         group.confirmed = 0;
         // FIXME: for dev mode, make sure there are at least 5 valid usernames after taking into account
         // connected usernames
-        const usernames = _.shuffle(this.fillUsernames(group.clientStats.map(s => s.client.auth.username)));
+        const usernames = _.shuffle(await this.fillUsernames(group.clientStats.map(s => s.client.auth.username)));
         // build game options to register the usernames and persister with a newly created room
         const gameOpts = await buildGameOpts(usernames);
         // Create room instance in the server.
