@@ -4,22 +4,16 @@ p {
 
 .report {
   color: white;
-  width: 100%;
-  height: 100%;
 }
 
 .system-health {
   border-right: .2rem solid;
   border-color: $light-shade-25;
+}
+
+.outer {
+  background-color: $light-shade-05;
+  height: 95%;
   overflow-y: scroll;
-  height: 65%;
-}
-
-.calc {
-  font-style: italic;
-}
-
-.events {
-  width: 100%;
-  text-align: center;
+  overflow-x: hidden;
 }
