@@ -3,6 +3,7 @@ import { CURATOR } from '@port-of-mars/shared/types';
 import { ChatMarsLogView } from '@port-of-mars/shared/game/client/panes';
 
 const steps: Array<Step> = [
+
   {
     target: '.tour-phase',
     content: `Information on the current state of the Port of Mars is always displayed here.`,

@@ -11,9 +11,9 @@ import { ChatMarsLogView } from '@port-of-mars/shared/game/client/panes';
 const steps: Array<Step> = [
   {
     target: '.tour-phase',
-    content: `The next phase is Trade where you can trade for Influence Resources that you need to purchase Accomplishments.`,
+    content: 'Welcome to the Trade phase!',
     params: {
-      placement: RIGHT,
+      placement: RIGHT
     },
     stateTransform: [
       {
@@ -86,6 +86,13 @@ const steps: Array<Step> = [
         },
       },
     ],
+  },
+  {
+    target: '.tour-phase',
+    content: `The next phase is Trade where you can trade for Influence Resources that you need to purchase Accomplishments.`,
+    params: {
+      placement: RIGHT,
+    },
   },
   {
     target: '.tour-active-trades-list',

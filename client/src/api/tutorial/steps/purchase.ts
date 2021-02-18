@@ -4,6 +4,13 @@ import {Phase, RESEARCHER} from '@port-of-mars/shared/types';
 const steps: Array<Step> = [
   {
     target: '.tour-phase',
+    content: 'Welcome to the Purchase phase!',
+    params: {
+      placement: RIGHT
+    }
+  },
+  {
+    target: '.tour-phase',
     content:
       `Now that we have invested our time blocks and traded Influence Resources, it's
       finally time to purchase some Accomplishments!`,

@@ -5,12 +5,20 @@ import { HUDRightView } from '@port-of-mars/shared/game/client/panes';
 const steps: Array<Step> = [
   {
     target: '.tour-phase',
+    content: 'Welcome to the Mars Event phase',
+    params: {
+      placement: LEFT
+    }
+  },
+  {
+    target: '.tour-phase',
     content: `The Events phase reveals Events that may affect your group this round.`,
     params: {
       placement: LEFT,
     },
     stateTransform: [
       {
+        SET_SYSTEM_HEALTH: 70,
         SET_GAME_PHASE: Phase.events,
         SET_INVESTMENT_COSTS: {
           data: {

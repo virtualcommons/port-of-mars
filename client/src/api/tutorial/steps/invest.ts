@@ -10,13 +10,18 @@ import { Phase, RESEARCHER } from '@port-of-mars/shared/types';
 const steps: Array<Step> = [
   {
     target: '.tour-phase',
-    content: `The third phase is Investment.`,
+    content: `Welcome to the Investment phase!`,
     params: {
       placement: RIGHT,
     },
     stateTransform: [
       {
-        SET_GAME_PHASE: Phase.invest,
+        SET_SYSTEM_HEALTH: 75,
+      },
+      {
+        SET_GAME_PHASE: Phase.invest
+      },
+      {
         SET_INVESTMENT_COSTS: {
           data: {
             culture: Number.MAX_SAFE_INTEGER,
@@ -32,23 +37,35 @@ const steps: Array<Step> = [
     ],
   },
   {
-    target: '.tour-accomplishments',
-    content: `Accomplishments are how you earn points and establish your legacy on Mars.
-    You can purchase an accomplishment if you have enough Influence to cover its costs.
-    This panel shows the Accomplishments you can purchase this round.`,
-    params: {
-      placement: RIGHT,
-    },
-  },
-  {
     target: '.tour-time-blocks',
     content:
-      `In each round you will have 10 time blocks to spend unless otherwise instructed. ` +
+      `Each investment phase you have 10 time blocks (at most) to spend. ` +
       `You can spend these time blocks on System Health or Influence Resources. ` +
       `Remember: you have 5 minutes to decide how to invest your time blocks.`,
     params: {
       placement: BOTTOM,
     },
+  },
+  {
+    target: '.tour-time-blocks',
+    content: `System Health investment contributes to the group pool.`,
+    params: {
+      placement: RIGHT,
+    },
+  },
+  {
+    target: '.tour-system-health',
+    content: `In order to stay alive your group's System Health must stay above 0. If System Health reaches 0 or below it is game over.`,
+    params: {
+      placement: BOTTOM
+    }
+  },
+  {
+    target: `.tour-time-blocks`,
+    content:  `Influence resources are used to purchase accomplishments which give you points`,
+    params: {
+      placement: BOTTOM
+    }
   },
   {
     target: '.tour-invest',
@@ -70,8 +87,8 @@ const steps: Array<Step> = [
   {
     target: '.tour-invest-action',
     content: `During this phase, you may invest your time blocks in System Health or other Influence Resources.
-    Right now, System Health costs 1 time block so if we invest 3 time blocks in System Health, your personal contribution to your group's 
-    System Health is 3. If everyone in your group invested 3 time blocks in System Health this round, your total group contribution to 
+    Right now, System Health costs 1 time block so if we invest 3 time blocks in System Health, your personal contribution to your group's
+    System Health is 3. If everyone in your group invested 3 time blocks in System Health this round, your total group contribution to
     System Health would be 15.`,
     params: {
       placement: TOP,

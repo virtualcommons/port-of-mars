@@ -1,4 +1,4 @@
-import { Step, LEFT, BOTTOM } from '@port-of-mars/client/types/tutorial';
+import { Step, BOTTOM } from '@port-of-mars/client/types/tutorial';
 
 const steps: Array<Step> = [
   {
@@ -21,9 +21,28 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-system-health',
-    content: `In order to stay alive your group's System Health must stay above 0. If System Health reaches 0 or below it is game over.`,
+    content:
+      `If System Health is lower than 65 at the start of the round, your group will be affected
+      by 2 Events. If System Health is lower than 35, your group will be affected by 3 Events.
+      Conditions on Mars are tough!`,
     params: {
       placement: BOTTOM
+    }
+  },
+  {
+    target: '.tour-system-health',
+    content: 'Quiz Question',
+    params: {
+      placement: BOTTOM,
+      tutorialElementId: 'upkeep65'
+    }
+  },
+  {
+    target: '.tour-system-health',
+    content: 'Quiz Question',
+    params: {
+      placement: BOTTOM,
+      tutorialElementId: 'upkeep35'
     }
   }
 ];
