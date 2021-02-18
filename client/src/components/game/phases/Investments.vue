@@ -1,36 +1,36 @@
 <template>
-  <b-container fluid class="h-100 w-auto p-0 m-0 tour-invest-action">
+  <b-container class="h-100 w-auto p-0 m-0 tour-invest-action" fluid>
     <b-row class="h-100 w-auto flex-shrink-1">
-      <b-col class="h-100 w-auto col-border" cols="8">
-        <b-row class="topbar mx-auto flex-shrink-1">
-          <span class="my-auto mx-2">Time Blocks</span>
+      <b-col class="h-100 w-auto partition" cols="8">
+        <b-row class="header-banner mx-auto flex-shrink-1">
+          <p class="my-auto mx-2">Time Blocks</p>
           <TimeBlockMeter
-            class="meter my-auto"
-            :usedTimeBlocks="remainingTimeBlocks"
             :totalTimeBlocks="totalTimeBlocks"
+            :usedTimeBlocks="remainingTimeBlocks"
+            class="meter my-auto"
           />
           <span class="my-auto mx-2">{{ remainingTimeBlocks }}
             <b-icon-clock-fill class="mx-2" scale="1.3"></b-icon-clock-fill>
           </span>
         </b-row>
-          <b-row class="outer p-3 mt-3 mx-auto flex-shrink-1">
-              <InvestmentCard
-                v-for="cost in costs"
-                v-bind="cost"
-                :key="cost.name"
-                @input="investTimeBlocks"
-              />
-          </b-row>
-      </b-col>
-      <b-col cols="4" class="h-100 w-auto">
-        <b-row class="topbar mx-auto flex-shrink-1">
-          <span>Purchasable Accomplishments</span>
+        <b-row class="content-wrapper p-3 mt-3 mx-auto flex-shrink-1">
+          <InvestmentCard
+            v-for="cost in costs"
+            :key="cost.name"
+            v-bind="cost"
+            @input="investTimeBlocks"
+          />
         </b-row>
-        <b-row class="mx-auto mt-3 p-3 outer" fluid>
+      </b-col>
+      <b-col class="h-100 w-auto tour-accomplishments" cols="4">
+        <b-row class="header-banner mx-auto flex-shrink-1">
+          <p class="m-auto">Purchasable Accomplishments</p>
+        </b-row>
+        <b-row class="mx-auto mt-3 p-3 content-wrapper" fluid>
           <AccomplishmentCard
             v-for="accomplishment in purchasableAccomplishments"
-            :accomplishment="accomplishment"
             :key="accomplishment.label + Math.random()"
+            :accomplishment="accomplishment"
           />
         </b-row>
       </b-col>
@@ -69,18 +69,6 @@ export default class Investments extends Vue {
   @Prop() role!: Role;
 
   // called synchronously after Vue instance created
-  // available: data observation, computed properties, methods, watch/event callbacks
-  created() {
-    // reset pending investments to 0
-    this.api.resetPendingInvestments();
-  }
-
-  // called after Vue instance destroyed
-  // all directives of the Vue instance have been unbound,
-  // all event listeners have been removed, and all child Vue instances have also been destroyed
-  destroyed() {
-    this.api.resetPendingInvestments();
-  }
 
   /**
    * Get local player's pending investments in
@@ -89,6 +77,9 @@ export default class Investments extends Vue {
   get pendingInvestments(): InvestmentData {
     return this.$tstore.getters.player.pendingInvestments;
   }
+
+  // called after Vue instance destroyed
+  // all directives of the Vue instance have been unbound,
 
   /**
    * Get local player.
@@ -155,6 +146,17 @@ export default class Investments extends Vue {
     return this.calculateRemainingTimeBlocks(this.pendingInvestments);
   }
 
+  // available: data observation, computed properties, methods, watch/event callbacks
+  created() {
+    // reset pending investments to 0
+    this.api.resetPendingInvestments();
+  }
+
+  // all event listeners have been removed, and all child Vue instances have also been destroyed
+  destroyed() {
+    this.api.resetPendingInvestments();
+  }
+
   /**
    * Remaining time blocks = (Total time block available) - (Local player's current
    * investments for each influence)
@@ -199,9 +201,10 @@ export default class Investments extends Vue {
 </script>
 
 <style lang="scss">
-.topbar {
+.header-banner {
   background-color: $phase-topbar-background;
   height: 10%;
+  color: $dark-shade;
 }
 
 .meter {
@@ -209,19 +212,19 @@ export default class Investments extends Vue {
   overflow-x: hidden;
 }
 
-.bar {
-  overflow-y: scroll;
-}
-
-.col-border {
+.partition {
   border-right: .2rem solid;
   border-color: $light-shade-25;
 }
 
-.outer {
+.content-wrapper {
   background-color: $light-shade-05;
-  height: 90%;
+  height: 85%;
   overflow-y: scroll;
   overflow-x: hidden;
+}
+
+.header-text {
+  color: $dark-shade;
 }
 </style>
