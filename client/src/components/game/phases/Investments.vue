@@ -1,43 +1,41 @@
 <template>
-  <div class="c-investments container tour-invest-action">
-    <div class="wrapper row">
-      <div class="timeblock-investments col-8 tour-invest">
-        <div class="topbar tour-time-blocks">
-          <p class="title">Time Blocks</p>
+  <b-container fluid class="h-100 w-auto p-0 m-0 tour-invest-action">
+    <b-row class="h-100 w-auto flex-shrink-1">
+      <b-col class="h-100 w-auto col-border" cols="8">
+        <b-row class="topbar mx-auto flex-shrink-1">
+          <span class="my-auto mx-2">Time Blocks</span>
           <TimeBlockMeter
-            class="timeblockmeter"
+            class="meter my-auto"
             :usedTimeBlocks="remainingTimeBlocks"
             :totalTimeBlocks="totalTimeBlocks"
           />
-          <p class="status">{{ remainingTimeBlocks }}</p>
-          <b-icon-clock-fill scale="1.3" class="m-2"></b-icon-clock-fill>
-        </div>
-
-        <div class="cards">
-          <InvestmentCard
-            v-for="cost in costs"
-            v-bind="cost"
-            :key="cost.name"
-            @input="investTimeBlocks"
+          <span class="my-auto mx-2">{{ remainingTimeBlocks }}
+            <b-icon-clock-fill class="mx-2" scale="1.3"></b-icon-clock-fill>
+          </span>
+        </b-row>
+          <b-row class="outer p-3 mt-3 mx-auto flex-shrink-1">
+              <InvestmentCard
+                v-for="cost in costs"
+                v-bind="cost"
+                :key="cost.name"
+                @input="investTimeBlocks"
+              />
+          </b-row>
+      </b-col>
+      <b-col cols="4" class="h-100 w-auto">
+        <b-row class="topbar mx-auto flex-shrink-1">
+          <span>Purchasable Accomplishments</span>
+        </b-row>
+        <b-row class="mx-auto mt-3 p-3 outer" fluid>
+          <AccomplishmentCard
+            v-for="accomplishment in purchasableAccomplishments"
+            :accomplishment="accomplishment"
+            :key="accomplishment.label + Math.random()"
           />
-        </div>
-      </div>
-      <div class="purchasable-accomplishments col-4 tour-accomplishments">
-        <div class="topbar">
-          <p class="title">Purchasable Accomplishments</p>
-        </div>
-        <div class="outer-wrapper">
-          <div class="wrapper">
-            <AccomplishmentCard
-              v-for="accomplishment in purchasableAccomplishments"
-              :accomplishment="accomplishment"
-              :key="accomplishment.label + Math.random()"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+        </b-row>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script lang="ts">
@@ -200,6 +198,30 @@ export default class Investments extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/Investments.scss';
+<style lang="scss">
+.topbar {
+  background-color: $phase-topbar-background;
+  height: 10%;
+}
+
+.meter {
+  flex: 1;
+  overflow-x: hidden;
+}
+
+.bar {
+  overflow-y: scroll;
+}
+
+.col-border {
+  border-right: .2rem solid;
+  border-color: $light-shade-25;
+}
+
+.outer {
+  background-color: $light-shade-05;
+  height: 90%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
 </style>

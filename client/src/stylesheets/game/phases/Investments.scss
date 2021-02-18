@@ -95,3 +95,20 @@
     }
   }
 }
+.topbar {
+  background-color: $phase-topbar-background;
+  height: 10%;
+  padding: 0.25rem 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.timeblockmeter {
+  flex: 1;
+  overflow-x: hidden;
+}
+
+.bar {
+  height: 45%;
+  overflow-y: scroll;
+}
+
