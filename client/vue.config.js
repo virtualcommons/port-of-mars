@@ -10,12 +10,10 @@ if (fs.existsSync('/run/secrets/sentry_dsn')) {
 }
 
 module.exports = {
-  configureWebpack: {
+  chainWebpack: (config) => {
     // https://webpack.js.org/configuration/devtool/
     // disable source maps in staging and prod
-    devtool: NODE_ENV === 'development' ? 'eval-cheap-module-source-map' : 'none'
-  },
-  chainWebpack: (config) => {
+    config.devtool((NODE_ENV === 'development') ? 'eval-cheap-module-source-map' : 'none');
     // get around CSP error on safari https://github.com/vuejs/vue-cli/issues/1074
     config.plugins
       .delete('split-manifest')
