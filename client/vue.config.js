@@ -12,7 +12,8 @@ if (fs.existsSync('/run/secrets/sentry_dsn')) {
 module.exports = {
   configureWebpack: {
     // https://webpack.js.org/configuration/devtool/
-    devtool: NODE_ENV === 'development' ? 'eval-cheap-module-source-map' : 'source-map'
+    // disable source maps in staging and prod
+    devtool: NODE_ENV === 'development' ? 'eval-cheap-module-source-map' : 'none'
   },
   chainWebpack: (config) => {
     // get around CSP error on safari https://github.com/vuejs/vue-cli/issues/1074
@@ -31,6 +32,8 @@ module.exports = {
     );
 
     config.plugin('define-env').use(webpack.DefinePlugin, [
+      // local development workarounds to set URLs for the server
+      // in staging and prod this doesn't matter, leave as empty string
       {
         'process.env.SERVER_URL_WS': JSON.stringify(
           ['development'].includes(NODE_ENV) ? 'ws://localhost:2567' : ''
