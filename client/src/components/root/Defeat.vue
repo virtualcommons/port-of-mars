@@ -4,11 +4,7 @@
       <div class="title col-12">
         <h1>Port of Mars</h1>
         <h2 class="animated pulse slower infinite">Game Over</h2>
-      </div>
-    </div>
-    <div class="content-wrapper row">
-      <div class="content col-12">
-        <h2>Your team has perished. See below for details.</h2>
+        <h3 class="my-2">Your team has perished. See below for details.</h3>
       </div>
     </div>
     <div class="marslog-wrapper row">

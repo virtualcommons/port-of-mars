@@ -8,14 +8,8 @@
           <div v-for="winner in winners" class="d-flex flex-row">
             <p>{{ winner }}</p>
           </div>
-        </div>
-      </div>
-
-      <!-- SUBTITLE -->
-      <div class="content-wrapper">
-        <div class="content">
-          <h2>Despite all doubts, you have successfully established an extraterrestrial society. Thanks to you, future generations
-            can flourish on planet Mars.</h2>
+          <h3>Despite all doubts, you have successfully established an extraterrestrial society. Thanks to you, future generations
+            can flourish on planet Mars.</h3>
         </div>
       </div>
 
