@@ -2,7 +2,7 @@
   <b-container class="h-100 w-auto p-0 m-0 tour-invest-action" fluid>
     <b-row class="h-100 w-auto flex-shrink-1">
       <b-col class="h-100 w-auto partition" cols="8">
-        <b-row class="header-banner mx-auto flex-shrink-1">
+        <b-row class="header-banner mx-auto flex-shrink-1 tour-time-blocks">
           <p class="my-auto mx-2">Time Blocks</p>
           <TimeBlockMeter
             :totalTimeBlocks="totalTimeBlocks"
@@ -13,7 +13,7 @@
             <b-icon-clock-fill class="mx-2" scale="1.3"></b-icon-clock-fill>
           </span>
         </b-row>
-        <b-row class="content-wrapper p-3 mt-3 mx-auto flex-shrink-1">
+        <b-row class="content-wrapper p-3 mt-3 mx-auto flex-shrink-1 tour-invest">
           <InvestmentCard
             v-for="cost in costs"
             :key="cost.name"
