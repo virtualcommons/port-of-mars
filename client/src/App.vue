@@ -1,13 +1,13 @@
 <template>
   <div class="game">
-    <b-alert v-if="isDevModeEnabled && !isGameOrTutorial" class="text-center m-0" show dismissible variant="warning">
-      <h3><b-icon icon="exclamation-triangle-fill" variant="danger"></b-icon> You are currently accessing a development version of the Port of Mars only used for testing.</h3>
-      Go to <a href='https://portofmars.asu.edu'>portofmars.asu.edu</a> for the real deal.
-    </b-alert>
     <b-container class="h-100 p-0 m-0" fluid>
+      <b-alert v-if="isDevModeEnabled && !isGameOrTutorial" class="text-center m-0" show dismissible variant="warning">
+        <h3><b-icon icon="exclamation-triangle-fill" variant="danger"></b-icon> You are currently accessing a development version of the Port of Mars only used for testing.</h3>
+        Go to <a href='https://portofmars.asu.edu'>portofmars.asu.edu</a> for the real deal.
+      </b-alert>
       <router-view :key="$route.path" class="bg-login"></router-view>
+      <Footer v-if="!isGameOrTutorial" />
     </b-container>
-    <Footer v-if="!isGameOrTutorial" />
   </div>
 </template>
 

@@ -8,12 +8,12 @@
           Port of Mars is a fun, game-based social science experiment set on the first human
           community on the Red Planet.
         </h2>
-        <b-container :style="'background-color: rgba(34, 26, 27, .9)'" class="h-75 w-50">
-          <b-row :style="'background-color: rgb(156, 81, 71); height: 15%; color: $dark-shade;'"
-                 class="align-content-center mb-5">
+        <b-container :style="'background-color: rgba(34, 26, 27, .9)'" class="mb-5 pb-5 w-50">
+          <b-row :style="'background-color: rgb(156, 81, 71); color: $dark-shade;'"
+                 class="align-content-center mb-3 py-4">
             <h2 class="mx-auto">Sign Up for Mars Madness 2021</h2>
           </b-row>
-          <b-alert class="m-4" show variant="warning">
+          <b-alert class="m-2" show variant="warning">
             <p>
               <b-icon class="mx-2" icon="exclamation-triangle-fill" size="lg" variant="warning"></b-icon>
               Currently, the Mars Madness tournament is only open to undergraduate students at Arizona State University.
@@ -27,7 +27,7 @@
           <b-button v-if="isLoggedIn" size="lg" variant="warning" @click="logout">
             {{ logoutText }}
           </b-button>
-          <b-button v-else-if="!toggleDevLogin" :href="asuLoginUrl" class="mt-4 mb-2" size="lg" variant="success">
+          <b-button v-else-if="!toggleDevLogin" :href="asuLoginUrl" class="my-2" size="lg" variant="success">
             Sign Up via ASU CAS
           </b-button>
 
