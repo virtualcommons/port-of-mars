@@ -2,15 +2,13 @@
   <b-container class="h-100 p-0 m-0 tour-discard-action" fluid>
     <b-row class="h-100 w-100 p-0 m-0">
       <!-- inventory -->
-      <b-col class="h-100 w-100 py-2" cols="4">
+      <b-col class="h-100 w-100 py-2 partition" cols="4">
         <div class="header">
           <p class="title">Inventory</p>
         </div>
-        <div class="p-2 w-100 outer-wrapper">
-          <div class="w-100">
-            <Inventory :isSelf="true"/>
-          </div>
-        </div>
+        <b-container class="p-3 mt-3 outer" fluid>
+          <Inventory :isSelf="true"/>
+        </b-container>
       </b-col>
 
       <!-- discardable accomplishments -->
@@ -18,18 +16,16 @@
         <div class="header">
           <p class="title">Discard Accomplishments</p>
         </div>
-        <div class="p-3 w-100 outer-wrapper">
-          <div class="w-100 wrapper">
-            <AccomplishmentCard
-              :accomplishment="accomplishment"
-              :key="accomplishment.id"
-              @discarded="discardAccomplishment"
-              :showCard="wasDiscarded(accomplishment.id)"
-              :type="cardType"
-              v-for="accomplishment in sortedAccomplishments"
-            />
-          </div>
-        </div>
+        <b-container class="p-3 mt-3 outer" fluid>
+          <AccomplishmentCard
+            :accomplishment="accomplishment"
+            :key="accomplishment.id"
+            @discarded="discardAccomplishment"
+            :showCard="wasDiscarded(accomplishment.id)"
+            :type="cardType"
+            v-for="accomplishment in sortedAccomplishments"
+          />
+        </b-container>
       </b-col>
     </b-row>
   </b-container>

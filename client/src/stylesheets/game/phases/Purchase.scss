@@ -15,14 +15,7 @@
   color: $phase-topbar-foreground;
 }
 
-.outer-wrapper {
-  flex: 1;
-  background-color: $light-shade-05;
-  overflow-y: hidden;
-  height: 44vh;
-}
-
-.wrapper {
-  overflow-y: scroll;
-  height: 41vh;
+.partition {
+  border-right: .2rem solid;
+  border-color: $light-shade-25;
 }

@@ -2,24 +2,21 @@
   <b-container class="h-100 p-0 m-0 tour-purchase-action" fluid>
     <b-row class="h-100 w-100 p-0 m-0">
       <!-- inventory -->
-      <b-col class="h-100 w-100 py-2 tour-inventory" cols="4">
+      <b-col class="h-100 w-100 py-2 partition tour-inventory" cols="4">
         <div class="header">
           <p class="title">Inventory</p>
         </div>
-        <div class="p-2 w-100 outer-wrapper">
-          <div class="w-100">
-            <Inventory :isSelf="true"/>
-          </div>
-        </div>
+        <b-container class="p-3 mt-3 outer" fluid>
+          <Inventory :isSelf="true"/>
+        </b-container>
       </b-col>
 
       <!-- purchasable accomplishments -->
-      <b-col class="h-100 w-100 py-2 tour-purchase" cols="8">
+      <b-col class="h-100 w-auto py-2 tour-purchase" cols="8">
         <div class="header">
           <p class="title">Purchasable Accomplishments</p>
         </div>
-        <div class="p-3 w-100 outer-wrapper">
-          <div class="w-100 wrapper">
+        <b-container class="p-3 mt-3 outer" fluid>
             <AccomplishmentCard
               v-for="accomplishment in sortedAccomplishments"
               :key="accomplishment.id"
@@ -28,8 +25,7 @@
               :type="cardType"
               @purchased="purchase(accomplishment)"
             />
-          </div>
-        </div>
+        </b-container>
       </b-col>
     </b-row>
   </b-container>
