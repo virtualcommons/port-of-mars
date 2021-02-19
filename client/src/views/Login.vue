@@ -1,41 +1,56 @@
 <template>
   <b-container class="vh-100 p-0 m-0" fluid>
     <!-- splash page text -->
-      <b-row class="h-100 p-5 text-center">
-        <b-col></b-col>
-        <b-col class="m-5 p-0" cols="8">
-          <h2 class="title">Welcome to Port of Mars!</h2>
-          <h2 class="m-5 text-left">
-            Port of Mars is a fun, game-based social science experiment set on the first human
-            community on the Red Planet.
-          </h2>
-          <p class="lead text-left">
-            Click below to sign up to play in the Mars Madness tournament. After you register, you will receive an email in early March 2021 with details
+    <b-row class="h-100 p-5 text-center justify-content-center">
+      <b-col class="mx-auto my-5 p-0" cols="auto">
+        <h2 class="title">Welcome to Port of Mars!</h2>
+        <h2 class="m-5">
+          Port of Mars is a fun, game-based social science experiment set on the first human
+          community on the Red Planet.
+        </h2>
+        <b-container :style="'background-color: rgba(34, 26, 27, .9)'" class="h-50 w-50">
+          <b-row :style="'background-color: rgb(156, 81, 71); height: 15%; color: $dark-shade;'"
+                 class="align-content-center mb-5">
+            <h2 class="mx-auto">Sign Up for Mars Madness 2021</h2>
+          </b-row>
+          <b-alert class="m-4" show variant="warning">
+            <p>
+              <b-icon class="mx-2" icon="exclamation-triangle-fill" size="lg" variant="warning"></b-icon>
+              Currently, the Mars Madness tournament is only open to undergraduate students at Arizona State University.
+            </p>
+          </b-alert>
+          <p class="mx-3">
+            Click below to sign up to play in the Mars Madness tournament. After you register, you will receive an email
+            in early March 2021 with details
             on how to participate in the tournament.
           </p>
-          <b-alert show variant="primary">
-            <h4><b-icon icon="exclamation-circle-fill" variant="primary"></b-icon> 
-            Currently, the Mars Madness tournament is only open to undergraduate students at Arizona State University.</h4>
-          </b-alert>
           <b-button v-if="isLoggedIn" size="lg" variant="warning" @click="logout">
             {{ logoutText }}
           </b-button>
-          <b-button v-else-if="!toggleDevLogin" :href="asuLoginUrl" size="lg" variant="success">
+          <b-button v-else-if="!toggleDevLogin" :href="asuLoginUrl" class="mt-4 mb-2" size="lg" variant="success">
             Sign Up via ASU CAS
           </b-button>
-          <b-form v-if="isDevMode && toggleDevLogin" class="justify-content-center my-2" inline @submit="devLogin">
-            <label for="input-username">Enter any username for testing</label>
-            <b-form-input id="input-username" v-model="username" class="w-25 mx-3" placeholder="Test username" required>
+
+          <!-- register form -->
+          <b-form v-if="isDevMode && toggleDevLogin" class="mx-auto w-50" @submit="devLogin">
+            <b-form-input
+              id="input-username"
+              v-model="username"
+              placeholder="Enter any username for testing"
+              required
+            >
             </b-form-input>
-            <b-button type="submit" variant="success">
-              <b-icon icon="box-arrow-right" class="mb-1"></b-icon> Test User Sign In
+            <b-button class="mx-auto my-3" type="submit" variant="success">
+              <b-icon class="mb-1 mr-2" icon="box-arrow-right"></b-icon>
+              Sign In
             </b-button>
           </b-form>
-          <b-form-checkbox v-if="isDevMode" v-model="toggleDevLogin" class="pt-3">Enable Test User Sign In</b-form-checkbox>
+          <b-form-checkbox v-if="isDevMode" v-model="toggleDevLogin" class="mt-4">Enable Test User Sign In
+          </b-form-checkbox>
           <b-alert v-if="error" variant="warning">{{ error }}</b-alert>
-        </b-col>
-        <b-col></b-col>
-      </b-row>
+        </b-container>
+      </b-col>
+    </b-row>
   </b-container>
 </template>
 
@@ -115,9 +130,9 @@ h2 {
 
 .title {
   letter-spacing: 0.75rem;
-  font-size: 6rem;
-  font-weight: 500;
-  color: white;
+  font-size: 5.75rem;
+  font-weight: 750;
+  color: $main-brand;
 }
 
 .subtitle {

@@ -1,6 +1,5 @@
 <template>
   <b-container class="vh-100 p-0 m-0" fluid>
-
     <b-navbar fixed toggleable="lg" type="dark" variant="secondary">
       <b-navbar-brand href="#/dashboard"><h4 class="text-uppercase">Player Dashboard</h4></b-navbar-brand>
 
@@ -45,12 +44,11 @@
       </b-collapse>
     </b-navbar>
 
-    <b-row class='justify-content-md-center'>
+    <b-row class="text-center h-25">
       <Messages/>
     </b-row>
 
-    <b-row class="justify-content-md-center">
-
+    <b-row class="text-center h-75">
       <!-- participate -->
       <b-col v-if="view === 'participate'" class="text-center">
         <!-- TOURNAMENT SURVEYS -->
@@ -67,15 +65,15 @@
             </b-button>
           </b-button-group>
         </template>
-        <b-container v-if="playerTaskCompletion.canPlayGame" class="text-center">
-          <!-- GO TO WAITING LOBBY -->
-          <h2 class="text-uppercase">Participate in Round {{ currentRoundNumber }}</h2>
-          <b-button :to="join" pill size="lg" variant="success">
-            Ready to Launch - Join the Waiting Lobby
+        <!-- go to waiting lobby -->
+        <b-container v-if="playerTaskCompletion.canPlayGame" class="my-2 text-center">
+          <h2 class="text-uppercase my-2">Participate in Round {{ currentRoundNumber }}</h2>
+          <b-button :to="join" size="lg" variant="success">
+            Join the Waiting Lobby
             <font-awesome-icon icon="rocket"/>
           </b-button>
-          <h2 class="text-uppercase pt-3 my-3">Schedule</h2>
-          <p class='lead text-left '>Please sign in during <b>one</b> of the following times to participate. We recommend that
+          <h2 class="text-uppercase mt-5 mb-3">Schedule</h2>
+          <p class="lead text-left">Please sign in during <b>one</b> of the following times to participate. We recommend that
             you show up 5 minutes earlier to join the waiting lobby.
           </p>
           <div style="overflow-y: auto !important;">
@@ -88,6 +86,7 @@
             </b-table>
           </div>
         </b-container>
+        <!-- invite + participation status -->
         <b-container v-else-if="! playerTaskCompletion.hasInvite">
           <h2 class="text-center text-uppercase mt-5 py-2">No active invitation found</h2>
           <p class='lead text-left'>
