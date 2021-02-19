@@ -1,8 +1,8 @@
 <template>
   <b-container class="vh-100 p-0 m-0" fluid>
     <!-- splash page text -->
-    <b-row class="h-100 p-5 text-center justify-content-center">
-      <b-col class="mx-auto my-5 p-0" cols="auto">
+    <b-row class="h-100 p-0 text-center justify-content-center">
+      <b-col class="mx-auto my-4 p-0" cols="auto">
         <h2 class="title">Welcome to Port of Mars!</h2>
         <h2 class="m-5">
           Port of Mars is a fun, game-based social science experiment set on the first human
@@ -13,7 +13,7 @@
                  class="align-content-center mb-3 py-4">
             <h2 class="mx-auto">Sign Up for Mars Madness 2021</h2>
           </b-row>
-          <b-alert class="m-2" show variant="warning">
+          <b-alert show variant="warning">
             <p>
               <b-icon class="mx-2" icon="exclamation-triangle-fill" size="lg" variant="warning"></b-icon>
               Currently, the Mars Madness tournament is only open to undergraduate students at Arizona State University.
@@ -32,17 +32,17 @@
           </b-button>
 
           <!-- register form -->
-          <b-form v-if="isDevMode && toggleDevLogin" class="mx-auto w-50" @submit="devLogin">
+          <b-form inline v-if="isDevMode && toggleDevLogin" class="mx-auto w-50" @submit="devLogin">
             <b-form-input
               id="input-username"
               v-model="username"
               placeholder="Enter any username for testing"
               required
+              class="ml-auto"
             >
             </b-form-input>
-            <b-button class="mx-auto my-3" type="submit" variant="success">
-              <b-icon class="mb-1 mr-2" icon="box-arrow-right"></b-icon>
-              Sign In
+            <b-button class="mx-2" icon type="submit" variant="success">
+              <b-icon class="mb-1 mr-2" icon="box-arrow-right"></b-icon>Sign in
             </b-button>
           </b-form>
           <b-form-checkbox v-if="isDevMode" v-model="toggleDevLogin" class="mt-4">Enable Test User Sign In
