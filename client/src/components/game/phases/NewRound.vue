@@ -2,12 +2,12 @@
   <b-container class="h-100 w-100 tour-report" fluid>
     <b-row align-v="center" class="h-100 report">
       <b-col class="h-100 w-100 system-health tour-contribute" cols="8">
-        <b-container class="p-3 mt-3 outer" fluid>
+        <b-container class="p-3 mt-3 outer tour-wear-tear tour-shr-table" fluid>
           <h1 class="mb-3 mx-1">System Health Report</h1>
           <h2 class="mb-3 mx-1">Upcoming System Health:
             <b-badge :variant="systemHealthBadgeVariant">{{ nextRoundSystemHealth }}</b-badge>
           </h2>
-          <b-row v-if="isFirstRound" class="mx-1 tour-wear-tear">
+          <b-row v-if="isFirstRound" class="mx-1">
             <p>Welcome to Mars! Each round, your System Health degrades by <b>{{
                 systemHealthMaintenanceCost
               }}</b> due to standard wear and tear.
@@ -23,7 +23,7 @@
               Your group's average investment was {{ averageContribution }}.
             </p>
           </b-row>
-          <b-row class="mx-1 tour-shr-table">
+          <b-row class="mx-1">
             <b-table :fields="tabularContributionFields" :items="tabularContributions" bordered dark
                      small striped>
             </b-table>

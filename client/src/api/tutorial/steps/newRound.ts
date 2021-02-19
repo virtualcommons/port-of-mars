@@ -1,4 +1,4 @@
-import { Step, LEFT, TOP, BOTTOM } from '@port-of-mars/client/types/tutorial';
+import { Step, LEFT, TOP, BOTTOM, RIGHT } from '@port-of-mars/client/types/tutorial';
 import { Phase } from "@port-of-mars/shared/types";
 
 const steps: Array<Step> = [
@@ -7,7 +7,7 @@ const steps: Array<Step> = [
     content: `At the beginning of each round a System Health Report (SHR) is generated ` +
       `to report your group's contributions to System Health from the previous round.`,
     params: {
-      placement: LEFT
+      placement: LEFT,
     },
     stateTransform: [
       {
@@ -19,7 +19,7 @@ const steps: Array<Step> = [
     target: '.tour-report',
     content: 'Here is an example System Health Report.',
     params: {
-      placement: LEFT
+      placement: LEFT,
     }
   },
   {
@@ -27,16 +27,16 @@ const steps: Array<Step> = [
     content: `Due to wear and tear, System Health will <b>always decrease by 25</b> at the beginning of each round.
      If your System Health reaches 0, your Port of Mars journey will come to an end.`,
     params: {
-      placement: TOP
+      placement: TOP,
     }
   },
   {
     target: '.tour-shr-table',
-    content: `This report shows your System Health from the previous round and everything that 
-    affected System Health that round. This includes your group's System Health investments, 
+    content: `This report shows your System Health from the previous round and everything that
+    affected System Health that round. This includes your group's System Health investments,
     purchased Accomplishments that cost System Health, and Events that affect System Health.`,
     params: {
-      placement: TOP
+      placement: RIGHT,
     }
   },
   {
