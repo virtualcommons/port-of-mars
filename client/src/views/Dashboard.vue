@@ -44,7 +44,7 @@
       </b-collapse>
     </b-navbar>
 
-    <b-row class="text-center h-25">
+    <b-row class="text-center">
       <Messages/>
     </b-row>
 
@@ -108,10 +108,10 @@
       </b-col>
 
       <!-- STATS -->
-      <b-col v-if="view === 'stats'" class="stats text-center my-2 py-5 px-2">
+      <b-col v-if="view === 'stats'" class="text-center mt-5">
         <h2 class="text-uppercase">You have participated in <b>{{ gamesPlayedCount }}</b> missions</h2>
-        <b-container class="py-0 my-0">
-          <div class="wrapper">
+        <b-container>
+          <b-container class="wrapper">
             <p v-if="stats.games.length === 0" class="my-5 py-5">No games to display.</p>
             <PlayerStatItem
               v-for="playerStatItem in stats.games"
@@ -119,7 +119,7 @@
               :playerStatItem="playerStatItem"
               class="my-1 py-1"
             />
-          </div>
+          </b-container>
         </b-container>
       </b-col>
     </b-row>
