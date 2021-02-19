@@ -17,43 +17,34 @@
     @show="showModal"
   >
     <template v-slot:modal-title>
-      <code><b>TUTORIAL</b></code>
+      <h2>Port of Mars Mission Control: TUTORIAL</h2>
     </template>
-    <div class="d-block text-center">
-      <h2>
-        <code><b>WELCOME TO PORT OF MARS!</b></code>
-      </h2>
-      <p>
-        You are 1 of 5 members of Generation Zero at <code><b>Port of Mars</b></code>, the first long-term human
-        community on Mars. Your mission is to <code><b>keep the community alive</b></code> while earning individual
-        points by <code><b>achieving Accomplishments</b></code> for the future legacy of Mars. Each round, you
-        have <code><b>10 timeblocks</b></code> that you can either (a) invest in the maintenance of the shared infrastructure
-        called <code><b>System Health</b></code> or (b) purchase <code><b>influence</b></code> currency in specific
+    <div class="d-block text-left">
+      <h3>
+        WELCOME TO PORT OF MARS!
+      </h3>
+      <p class='lead'>
+        You are 1 of 5 members of Generation Zero at the <mark>Port of Mars</mark>, the first long-term human
+        community on Mars. Your mission is to <b>keep the community alive</b> while earning individual
+        points by <code>achieving Accomplishments</code> for the future legacy of Mars. Each round, you
+        have <code>10 time blocks</code> that you can either (a) invest in the maintenance of the shared infrastructure
+        called <code>System Health</code> or (b) purchase <code>Influence Resources</code> in specific
         disciplines: <b>Culture, Finance, Government, Legacy, and Science</b>.
       </p>
-
-      <p>
-        <code><b>System Health</b></code> is needed to keep everyone alive.
-      </p>
-
-      <p>
-        <code><b>Influence</b></code> resources are used to purchase <code><b>Accomplishments</b></code>, which is how you win
-        the game. You <b>earn points</b> for each <code><b>Accomplishment</b></code> that you purchase.
-      </p>
-
-      <br />
-
-      <h4><b>OBJECTIVES</b></h4>
-      <ul>
+      <h3 class='mt-2'>OBJECTIVES</h3>
+      <ol class='lead'>
         <li>
-          Keep <code><b>System Health</b></code> from reaching zero! If that happens,
-          the habitat collapses, everyone dies, and the game is over.
+          <code>System Health</code> is needed to keep everyone alive.
+          Keep <code>System Health</code> from reaching zero!
+          If System Health reaches 0, the habitat collapses, everyone dies, and the game is over.
         </li>
         <li>
-          Earn points by achieving <code><b>Accomplishments</b></code>!
-          Be the player with the most points at the end of the game to win.
+          Invest your time blocks or trade to earn <code>Influence Resources</code> and use them to purchase 
+          <code>Accomplishments</code>, which is how you win the game. You earn <code>Victory Points</code>
+          for each <code>Accomplishment</code> that you purchase. Be the player with the most points at the end 
+          of the game to win.
         </li>
-      </ul>
+      </ol>
 
       <BButton @click="$bvModal.hide('bv-modal')" type="button" name="button">
           Next

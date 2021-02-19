@@ -7,8 +7,9 @@ const
     {
       target: '.tour-player-self',
       content:
-        `This is your role and score. Each role has a unique set of Resources that ` +
-        `they can invest time blocks in and Accomplishments that they can purchase.`,
+        `There are 5 roles in the Port of Mars: the Curator, Entrepreneur, Pioneer, Politician, and Researcher.
+         In this tutorial you are the <b>Researcher</b>. Each role has a unique set of Influence Resources that 
+         they can earn and Accomplishments that they can purchase.`,
       params: {
         placement: RIGHT,
       },
@@ -30,7 +31,7 @@ const
     },
     {
       target: '.tour-hud-left-toggle',
-      content: `You can access different views by clicking these buttons: Other Players, Inventory, and Available Accomplishments.`,
+      content: `You can view different information by clicking the icons above: Other Players, Inventory, and Available Accomplishments.`,
       params: {
         placement: BOTTOM
       },
@@ -59,7 +60,8 @@ const
     },
     {
       target: '.tour-hud-left-toggle',
-      content: `There are 5 roles in the Port of Mars: the Curator, Entrepreneur, Pioneer, Politician, and Researcher.`,
+      content: `The Other Players screen displays your group's roles and scores. 
+      `,
       params: {
         placement: RIGHT,
       },
@@ -109,8 +111,9 @@ const
       ]
     },
     {
-      target: '.tour-hud-left-toggle',
-      content: `In the Inventory menu, you can view the Resources that you own and their costs.`,
+      target: '.tour-inventory-view',
+      content: `The Inventory screen displays the Influence Resources that you own and their investment costs. 
+      You can earn Influence Resources by investing time blocks, trading, or certain Events.`,
       params: {
         placement: RIGHT,
       },
@@ -122,7 +125,9 @@ const
     },
     {
       target: '.tour-hud-left-toggle',
-      content: `In the Accomplishments menu, you can view the Accomplishments that are available to buy this round.`,
+      content: `These are the Accomplishments you can buy in the Purchase phase of this round 
+      <b>if you can afford them</b>. Different Accomplishments have different costs in Influence
+      Resources or System Health.`,
       params: {
         placement: RIGHT,
       },
@@ -135,7 +140,7 @@ const
     {
       target: '.tour-player-self',
       content:
-        `Click on your role's icon to reveal more information about your role.`,
+        `Click on your large role icon to reveal more information about your role and continue with the tutorial.`,
       params: {
         placement: RIGHT,
       },
@@ -148,7 +153,7 @@ const
     },
     {
       target: '.tour-player-info-modal',
-      content: `This menu displays your player's information including your available and purchased Accomplishments and the Influence Resources you have earned.`,
+      content: `This screen shows your score, available and purchased Accomplishments and the Influence Resources you have earned.`,
       params: {
         placement: RIGHT,
       },
@@ -180,9 +185,10 @@ const
     },
     {
       target: '.tour-player-info-modal-accomplishments',
-      content: `Here you can find the Accomplishments you have available to purchase and any already purchased Accomplishments.
-    At the beginning of each round you will draw up to three new Accomplishment cards to replace any you may have Purchased
-    or Discarded. We will cover Accomplishments in more detail in the Investment and Purchase phases.`,
+      content: `The Accomplishments that you can purchase or have already purchased are displayed here. You can have up to 
+      <b>three Accomplishments</b> available to purchase at a time. If you Purchase an Accomplishment or Discard them, you will
+      receive up to the maximum of three new Accomplishments at the beginning of the next round.
+      We will cover Accomplishments in more detail in the Investment and Purchase phases.`,
       params: {
         placement: RIGHT,
       },
@@ -190,8 +196,7 @@ const
     {
       target: '.tour-players',
       content:
-        `These are the other four residents at the Port of Mars. Certain Events will ` +
-        `allow you to view their inventories as well.`,
+        `These are the other four residents at the Port of Mars. Certain Events can let you view their Inventories as well.`,
       params: {
         placement: 'RIGHT',
       },
@@ -204,24 +209,10 @@ const
       ],
     },
     {
-      target: '.tour-inventory-view',
-      content:
-        `You can see the Influence Resources you own here, earned from investing time blocks, trading, ` +
-        `or Events`,
-      params: {
-        placement: 'right',
-      },
-      stateTransform: [
-        {
-          SET_HUDLEFT_VIEW: HUDLeftView.Inventory,
-        },
-      ],
-    },
-    {
       target: '.tour-log-view',
       content:
-        `This is the Mars Log, a history of what has transpired at the Port of Mars thus far.
-      You can find more information about any past Events, Accomplishment purchases, or Trades here.`,
+        `The Mars Log keeps track everything that has transpired at the Port of Mars thus far.
+        You can find more information about past Events, Accomplishment purchases, or Trades here.`,
       params: {
         placement: 'left',
       },

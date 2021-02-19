@@ -11,7 +11,7 @@ import { ChatMarsLogView } from '@port-of-mars/shared/game/client/panes';
 const steps: Array<Step> = [
   {
     target: '.tour-phase',
-    content: `The next phase is Trade where you can trade for Influence Resources that you need to purchase Accomplishments.`,
+    content: `The next phase is Trade where members of your group can trade Influence Resources to purchase Accomplishments.`,
     params: {
       placement: RIGHT,
     },
@@ -90,8 +90,8 @@ const steps: Array<Step> = [
   {
     target: '.tour-active-trades-list',
     content:
-      `All active trades are listed here. If you receive a trade request, you can either accept or decline the trade. ` +
-      `When you send a trade, you only have the option to cancel the request.`,
+      `Active trade requests are listed here. If you receive a trade request, you can accept or decline the trade. ` +
+      `If you send a trade request, you only have the option to cancel the request.`,
     params: {
       placement: LEFT,
     },
@@ -99,7 +99,7 @@ const steps: Array<Step> = [
   {
     target: '.tour-trade-filters',
     content:
-      `Use this toggle switch to view all trade requests in the Port of Mars or just your trades, i.e., trade requests that ` +
+      `Use this toggle to view all trade requests in the Port of Mars or just Your Trades - trade requests that ` +
       `you have received or sent to others.`,
     params: {
       placement: LEFT,
@@ -107,7 +107,7 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-chat',
-    content: `Before making trade requests, it's usually a good idea to talk about your trade plans in chat.`,
+    content: `Before sending trade requests, it's often a good idea to talk about your trade plans in chat.`,
     params: {
       placement: LEFT,
     },
@@ -134,7 +134,7 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-request-trade',
-    content: `To initiate a trade request with another player, click on the Request Trade button.`,
+    content: `To initiate a trade request with another player, use the Request Trade button here. Try clicking it now.`,
     params: {
       placement: TOP,
     },
@@ -146,16 +146,16 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-request-trade-accomplishments',
-    content: `Upon opening a Trade Request, you can view your available ` +
-    `Accomplishments here. You can also toggle the menu to view ` +
-    `your inventory of available Influence Resources.`,
+    content: `After starting a Trade Request, you can see your available
+    Accomplishments here. You can also click on Inventory to view 
+    the Influence Resources you currently own.`,
     params: {
       placement: RIGHT,
     },
   },
   {
     target: '.tour-request-trade-partner',
-    content: `First, you must select a player to trade with. Please click on the Curator!`,
+    content: `First, select a player to trade with. Let's select the Curator.`,
     params: {
       placement: TOP,
     },
@@ -174,7 +174,7 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-request-resources',
-    content: `Next, select the quantity and type of Influence Resource that you want. Let's request 3 culture.`,
+    content: `Next, select the quantity and type of Influence Resource that you want. Let's request 3 Culture (the brown paintbrush).`,
     params: {
       placement: TOP,
     },
@@ -194,8 +194,8 @@ const steps: Array<Step> = [
   {
     target: '.tour-offer-resources',
     content:
-      `Finally, select the quantity of each Influence Resource you wish to trade. You cannot send more ` +
-      `resources than you currently have. Let's trade 2 Science and 1 Government.`,
+      `Then select the quantity of each Influence Resource you wish to offer in trade. You cannot send more ` +
+      `resources than you currently have. Let's offer 2 Science and 1 Government.`,
     params: {
       placement: TOP,
     },
@@ -226,7 +226,7 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-send-trade',
-    content: `Click Send Trade Request to see your trade in action.`,
+    content: `Finally, click Send Trade Request to issue your trade request to the Curator.`,
     params: {
       placement: 'bottom',
     },

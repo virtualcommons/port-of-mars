@@ -5,8 +5,8 @@ const steps: Array<Step> = [
   {
     target: '.tour-phase',
     content:
-      `Now that we have invested our time blocks and traded Influence Resources, it's
-      finally time to purchase some Accomplishments!`,
+      `Now that we have invested our time blocks and traded Influence Resources,
+       it's finally time to purchase an Accomplishment!`,
     params: {
       placement: RIGHT,
     },

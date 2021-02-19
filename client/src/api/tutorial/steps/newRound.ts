@@ -1,5 +1,5 @@
-import { Step, LEFT, TOP, RIGHT, BOTTOM } from '@port-of-mars/client/types/tutorial';
-import { Phase, RESEARCHER } from "@port-of-mars/shared/types";
+import { Step, LEFT, TOP, BOTTOM } from '@port-of-mars/client/types/tutorial';
+import { Phase } from "@port-of-mars/shared/types";
 
 const steps: Array<Step> = [
   {
@@ -17,39 +17,39 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-report',
-    content: 'Here is an example of an SHR.',
+    content: 'Here is an example System Health Report.',
     params: {
       placement: LEFT
     }
   },
   {
     target: '.tour-wear-tear',
-    content: 'Due to wear and tear, System Health will always decrease by 25 at the beginning of each round. If your System Health reaches 0, your Port of Mars journey will end.',
+    content: `Due to wear and tear, System Health will <b>always decrease by 25</b> at the beginning of each round.
+     If your System Health reaches 0, your Port of Mars journey will come to an end.`,
     params: {
-      placement: LEFT
+      placement: TOP
     }
   },
   {
     target: '.tour-shr-table',
-    content: 'This report shows your System Health from the previous round and all actions that ' +
-    'affected your System Health including the contributions your group made towards System Health during the Investment phase, wear and tear and ' +
-    'purchased Accomplishments.',
+    content: `This report shows your System Health from the previous round and everything that 
+    affected System Health that round. This includes your group's System Health investments, 
+    purchased Accomplishments that cost System Health, and Events that affect System Health.`,
     params: {
-      placement: LEFT
+      placement: TOP
     }
   },
   {
     target: '.tour-report',
-    content: `Your group's total contributions = (sum of each ` +
-      `player's investments to System Health during the Investment phase) - (sum of players' purchased ` +
-      `Accomplishments that decreased System Health)`,
+    content: `Your group's total contributions = (all player investments to System Health during the Investment phase)
+     - (all purchased Accomplishments that decreased System Health)`,
     params: {
       placement: TOP,
     }
   },
   {
     target: '.tour-report-hint',
-    content: 'If System Health drops below 65, more than one Event will affect your group.',
+    content: 'If System Health drops below 65, more than one Event will affect your group during the Event phase.',
     params: {
       placement: LEFT,
     }

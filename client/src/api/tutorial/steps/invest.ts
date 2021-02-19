@@ -33,9 +33,10 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-accomplishments',
-    content: `Accomplishments are how you earn points and establish your legacy on Mars.
-    You can purchase an accomplishment if you have enough Influence to cover its costs.
-    This panel shows the Accomplishments you can purchase this round.`,
+    content: `Purchasing Accomplishments are how you earn points and establish your legacy on Mars.
+    You can purchase an Accomplishment during the Purchase phase. Accomplishments can cost <b>Influence 
+    Resources or System Health</b>. This panel shows the Accomplishments you can purchase this round as 
+    well as their costs.`,
     params: {
       placement: RIGHT,
     },
@@ -43,16 +44,16 @@ const steps: Array<Step> = [
   {
     target: '.tour-time-blocks',
     content:
-      `In each round you will have 10 time blocks to spend unless otherwise instructed. ` +
-      `You can spend these time blocks on System Health or Influence Resources. ` +
-      `Remember: you have 5 minutes to decide how to invest your time blocks.`,
+      `In each round you will have 10 time blocks to spend in the Investment Phase unless otherwise instructed.
+      You can invest these time blocks to increase System Health or to earn Influence Resources.
+      You have 5 minutes to decide how to invest your time blocks. If you don't make your decision by then, you invest 0 time blocks.`,
     params: {
       placement: BOTTOM,
     },
   },
   {
     target: '.tour-invest',
-    content: `Time blocks are reset each round and do not get saved for subsequent rounds. You should allocate all of your time blocks in each round.`,
+    content: `Your available time blocks reset each round and are not saved across subsequent rounds. You should invest all of your time blocks each round.`,
     params: {
       placement: RIGHT,
     },
@@ -60,26 +61,24 @@ const steps: Array<Step> = [
   {
     target: '.tour-invest',
     content:
-      `Each Resource costs time blocks and you can see the cost at the bottom right corner next to the clock icon. ` +
-      `Use the '+' button to invest your time blocks into a Resource. If you decide to change your  ` +
-      `investment, use the '-' button to reduce your time block investment from a Resource.`,
+      `Each Influence Resource costs a certain number of time blocks, shown on the bottom right corner next to the clock icon.
+      Use the '+' and '-' buttons next to System Health and each Influence Resource to change your allocation.`,
     params: {
       placement: RIGHT,
     },
   },
   {
     target: '.tour-invest-action',
-    content: `During this phase, you may invest your time blocks in System Health or other Influence Resources.
-    Right now, System Health costs 1 time block so if we invest 3 time blocks in System Health, your personal contribution to your group's 
-    System Health is 3. If everyone in your group invested 3 time blocks in System Health this round, your total group contribution to 
-    System Health would be 15.`,
+    content: `At the moment, 1 point of System Health costs 1 time block so if you invest 2 time blocks in System Health,
+    your personal contribution to System Health is 2. If everyone in your group invests 2 time blocks in System Health this 
+    round, your group would have contributed a total of 10 to System Health.`,
     params: {
       placement: TOP,
     },
   },
   {
     target: '.tour-invest-action',
-    content: `Let's purchase 1 Science Influence. Each Science Influence costs 2 time blocks, shown on the bottom right.`,
+    content: `Let's try allocating our time blocks. Please purchase 1 Science Influence. Each Science Influence costs 2 time blocks, shown on the bottom right.`,
     params: {
       placement: RIGHT,
     },
@@ -99,15 +98,15 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-time-blocks',
-    content: `Notice that 2 time blocks have been removed from your Time Blocks meter and you have 8 remaining time blocks to invest.`,
+    content: `2 time blocks have been removed from your Time Blocks meter and you have 8 remaining time blocks to invest.`,
     params: {
       placement: TOP,
     },
   },
   {
     target: '.tour-invest-action',
-    content: `Time blocks aren't saved across rounds, so let's finish investing our time.
-      Please allocate your time blocks to purchase 2 System Health, 1 Legacy, and 1 Government.`,
+    content: `Time blocks aren't saved across rounds, so we should finish investing our time blocks.
+      Please purchase 1 Legacy, 1 Government, and 2 System Health.`,
     params: {
       placement: TOP,
     },
@@ -136,9 +135,8 @@ const steps: Array<Step> = [
   {
     target: '.tour-phase',
     content:
-      `There are some Influence Resources that you cannot earn on your own. For example, ` +
-      `the Researcher cannot earn Culture or Finance Resources by investing their time blocks. ` +
-      `However, you may need these resources to purchase certain Accomplishments.`,
+      `Some Influence Resources can't be earned on your own. In our case, the Researcher can't earn 
+      Culture or Finance Resources. However, we may need these resources to purchase certain Accomplishments.`,
     params: {
       placement: RIGHT,
     },
@@ -146,8 +144,8 @@ const steps: Array<Step> = [
   {
     target: '.tour-accomplishments',
     content:
-      `This Accomplishment requires 1 Culture, which you as the Researcher cannot earn by investing time blocks. ` +
-      `To earn this Resource, you must trade with someone who has 1 Culture.`,
+      `This Accomplishment requires 1 Culture and 1 Finance, which the Researcher can't earn directly by investing time blocks.
+      To earn this Resource, we must trade with other members of our group who can earn Culture and Finance.`,
     params: {
       placement: RIGHT,
     },
@@ -155,8 +153,9 @@ const steps: Array<Step> = [
   {
     target: '.tour-ready-to-advance-button',
     content:
-      `Click Ready to Advance when you have finished investing your time blocks. ` +
-      `The Investment Phase ends as soon as all members of your group have finished investing.`,
+      `Click <mark>Ready to Advance</mark> when you are done investing your time blocks. 
+      Like all other phases, the Investment Phase will end as soon as all members of your group have finished investing and clicked 
+      <mark>Ready to Advance</mark>.`,
     params: {
       placement: BOTTOM,
     },

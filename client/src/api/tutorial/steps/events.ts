@@ -1,11 +1,11 @@
-import { Step, LEFT, BOTTOM } from '@port-of-mars/client/types/tutorial';
+import { Step, LEFT, TOP, BOTTOM } from '@port-of-mars/client/types/tutorial';
 import {Phase, RESEARCHER} from '@port-of-mars/shared/types';
 import { HUDRightView } from '@port-of-mars/shared/game/client/panes';
 
 const steps: Array<Step> = [
   {
     target: '.tour-phase',
-    content: `The Events phase reveals Events that may affect your group this round.`,
+    content: `The Event phase reveals Events that may affect your group this round.`,
     params: {
       placement: LEFT,
     },
@@ -41,29 +41,31 @@ const steps: Array<Step> = [
   {
     target: '.tour-active-events',
     content:
-      `Some Events can have complex effects and require players to make difficult choices or vote ` +
+      `Some Events have complex effects and require players to make difficult choices or vote ` +
       `for an outcome. Mars is unpredictable; many different events can happen!`,
     params: {
-      placement: 'left',
+      placement: TOP,
     },
   },
   {
     target: '.tour-system-health',
-    content: `Keep in mind that as System Health decreases, the number of Events you will encounter will increase.`,
+    content: `Remember: as System Health decreases, the number of Events your group encounters will increase.`,
     params: {
       placement: BOTTOM,
     },
   },
   {
     target: '.tour-event-deck',
-    content: `Events that are relevant to the current round will be shown here. Some events may even persist across multiple rounds!`,
+    content: `Events relevant to the current round are displayed here.
+     Some events can affect your group for more than one round - indicated by their <b>Duration</b>.`,
     params: {
       placement: LEFT,
     },
   },
   {
     target: '.tour-event-view',
-    content: `Throughout the game, you can also access the Active Events in this menu.`,
+    content: `You can view the current Events by clicking on the Active Events icon above this event.
+     The Mars Log will also list all current and past Events.`,
     params: {
       placement: LEFT,
     },

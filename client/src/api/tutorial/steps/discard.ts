@@ -28,7 +28,7 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-discard-action',
-    content: `Try discarding an Accomplishment!`,
+    content: `Please discard an Accomplishment to continue.`,
     params: {
       placement: TOP,
     },
