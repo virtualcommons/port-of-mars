@@ -41,8 +41,8 @@ export class AccountService extends BaseService {
     user.email = `${username}@mailinator.com`;
     user.dateConsented = new Date();
     user.isVerified = true;
-    user.passedQuiz = true;
-    // consider having configuration to determine what user properties to bypass (passedQuiz, isVerified, etc)
+    // user.passedQuiz = true;
+    // FIXME: use run-time configuration / settings to determine what user properties to bypass (passedQuiz, isVerified, hasParticipated, etc)
     user.name = `Test User ${username}`;
     await this.getRepository().save(user);
     return user;
