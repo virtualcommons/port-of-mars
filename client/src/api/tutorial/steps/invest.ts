@@ -32,16 +32,6 @@ const steps: Array<Step> = [
     ],
   },
   {
-    target: '.tour-accomplishments',
-    content: `Purchasing Accomplishments are how you earn points and establish your legacy on Mars.
-    You can purchase an Accomplishment during the Purchase phase. Accomplishments can cost <b>Influence 
-    Resources or System Health</b>. This panel shows the Accomplishments you can purchase this round as 
-    well as their costs.`,
-    params: {
-      placement: RIGHT,
-    },
-  },
-  {
     target: '.tour-time-blocks',
     content:
       `In each round you will have 10 time blocks to spend in the Investment Phase unless otherwise instructed.
@@ -71,14 +61,14 @@ const steps: Array<Step> = [
     target: '.tour-invest-action',
     content: `At the moment, 1 point of System Health costs 1 time block so if you invest 2 time blocks in System Health,
     your personal contribution to System Health is 2. If everyone in your group invests 2 time blocks in System Health this 
-    round, your group would have contributed a total of 10 to System Health.`,
+    round, your Group Contributions to System Health would be 10.`,
     params: {
       placement: TOP,
     },
   },
   {
     target: '.tour-invest-action',
-    content: `Let's try allocating our time blocks. Please purchase 1 Science Influence. Each Science Influence costs 2 time blocks, shown on the bottom right.`,
+    content: `Let's allocate our time blocks. Please purchase 1 Science Influence which will costs 2 time blocks, shown on the bottom right.`,
     params: {
       placement: RIGHT,
     },
@@ -143,9 +133,20 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-accomplishments',
+    content: `Purchasing Accomplishments are how you earn points and establish your legacy on Mars.
+    You can purchase an Accomplishment during the Purchase phase. Accomplishments can cost <b>Influence 
+    Resources or System Health</b>. This panel shows the Accomplishments you can purchase this round as 
+    well as their costs.`,
+    params: {
+      placement: LEFT,
+    },
+  },
+  {
+    target: '.tour-accomplishments',
     content:
-      `This Accomplishment requires 1 Culture and 1 Finance, which the Researcher can't earn directly by investing time blocks.
-      To earn this Resource, we must trade with other members of our group who can earn Culture and Finance.`,
+      `The <b>Interdisciplinary</b> Accomplishment to the right costs 1 Culture, 1 Finance, 1 Government, 1 Legacy, and 2 Science.
+      However, the Researcher can't earn Culture or Finance by investing time blocks.
+      To gain these Influence Resources we must trade with other members of our group who can earn Culture and Finance.`,
     params: {
       placement: RIGHT,
     },

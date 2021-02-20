@@ -31,7 +31,8 @@ const
     },
     {
       target: '.tour-hud-left-toggle',
-      content: `You can view different information by clicking the icons above: Other Players, Inventory, and Available Accomplishments.`,
+      content: `The Other Players, Inventory, and Accomplishments icons at the bottom of this panel can 
+      be selected to quickly display additional information.`,
       params: {
         placement: BOTTOM
       },
@@ -60,8 +61,7 @@ const
     },
     {
       target: '.tour-hud-left-toggle',
-      content: `The Other Players screen displays your group's roles and scores. 
-      `,
+      content: `The Other Players view shows your group's roles and scores.`,
       params: {
         placement: RIGHT,
       },
@@ -106,14 +106,14 @@ const
               effect: '',
             },
             role: `Researcher`,
-          },
+          }
         },
       ]
     },
     {
       target: '.tour-inventory-view',
-      content: `The Inventory screen displays the Influence Resources that you own and their investment costs. 
-      You can earn Influence Resources by investing time blocks, trading, or certain Events.`,
+      content: `The Inventory view lists your Influence Resources. You can earn Influence Resources by 
+      investing time blocks, trading with others, or from certain Events.`,
       params: {
         placement: RIGHT,
       },
@@ -125,9 +125,9 @@ const
     },
     {
       target: '.tour-hud-left-toggle',
-      content: `These are the Accomplishments you can buy in the Purchase phase of this round 
-      <b>if you can afford them</b>. Different Accomplishments have different costs in Influence
-      Resources or System Health.`,
+      content: `These are the Accomplishments you can buy in the Purchase phase of this round <b>if you can afford them</b>.
+      Different Accomplishments have different costs in Influence Resources or System Health and award different amounts of
+      Victory Points.`,
       params: {
         placement: RIGHT,
       },
@@ -140,7 +140,7 @@ const
     {
       target: '.tour-player-self',
       content:
-        `Click on your large role icon to reveal more information about your role and continue with the tutorial.`,
+        `Click on your own role to view your details and continue with the tutorial.`,
       params: {
         placement: RIGHT,
       },
@@ -153,7 +153,8 @@ const
     },
     {
       target: '.tour-player-info-modal',
-      content: `This screen shows your score, available and purchased Accomplishments and the Influence Resources you have earned.`,
+      content: `Your score, Influence Resources you have earned or collected, purchased Accomplishments,
+      and Accomplishments available to purchase are accessible from this screen.`,
       params: {
         placement: RIGHT,
       },
@@ -169,9 +170,7 @@ const
     },
     {
       target: '.tour-player-info-modal-stats',
-      content:
-        `Your player stats include your role, current score in the ` +
-        `game, and how your score compares with the other members of your group.`,
+      content: `Your player stats include your role, current score, and how your score compares with the other members of your group.`,
       params: {
         placement: 'top',
       },
@@ -185,10 +184,8 @@ const
     },
     {
       target: '.tour-player-info-modal-accomplishments',
-      content: `The Accomplishments that you can purchase or have already purchased are displayed here. You can have up to 
-      <b>three Accomplishments</b> available to purchase at a time. If you Purchase an Accomplishment or Discard them, you will
-      receive up to the maximum of three new Accomplishments at the beginning of the next round.
-      We will cover Accomplishments in more detail in the Investment and Purchase phases.`,
+      content: `These are the Accomplishments that you can purchase or have already purchased. You can have <b>up to 
+      three Accomplishments</b> available to purchase.`,
       params: {
         placement: RIGHT,
       },
@@ -196,7 +193,8 @@ const
     {
       target: '.tour-players',
       content:
-        `These are the other four residents at the Port of Mars. Certain Events can let you view their Inventories as well.`,
+        `These are the other four residents at the Port of Mars. Their scores and purchased accomplishments are public 
+        but their inventory is not, except under special circumstances.`,
       params: {
         placement: 'RIGHT',
       },

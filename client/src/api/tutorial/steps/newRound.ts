@@ -4,8 +4,8 @@ import { Phase } from "@port-of-mars/shared/types";
 const steps: Array<Step> = [
   {
     target: '.tour-phase-instructions',
-    content: `At the beginning of each round a System Health Report (SHR) is generated ` +
-      `to report your group's contributions to System Health from the previous round.`,
+    content: `At the beginning of each round a System Health Report is generated ` +
+      `with details on all activities that affected System Health in the previous round.`,
     params: {
       placement: LEFT,
     },
@@ -16,24 +16,18 @@ const steps: Array<Step> = [
     ],
   },
   {
-    target: '.tour-report',
-    content: 'Here is an example System Health Report.',
-    params: {
-      placement: LEFT,
-    }
-  },
-  {
     target: '.tour-wear-tear',
-    content: `Due to wear and tear, System Health will <b>always decrease by 25</b> at the beginning of each round.
-     If your System Health reaches 0, your Port of Mars journey will come to an end.`,
+    content: `Let's take a closer look at this System Health Report. Due to wear and tear, 
+    System Health <b>always decreases by 25</b> at the beginning of each round.
+    If your System Health reaches 0, your Port of Mars journey will come to an end.`,
     params: {
       placement: TOP,
     }
   },
   {
     target: '.tour-shr-table',
-    content: `This report shows your System Health from the previous round and everything that
-    affected System Health that round. This includes your group's System Health investments,
+    content: `This table shows your System Health from the previous round and everything that
+    affected System Health that round. This includes your Group Contributions to System Health,
     purchased Accomplishments that cost System Health, and Events that affect System Health.`,
     params: {
       placement: RIGHT,
@@ -41,8 +35,7 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-report',
-    content: `Your group's total contributions = (all player investments to System Health during the Investment phase)
-     - (all purchased Accomplishments that decreased System Health)`,
+    content: `Group Contributions are the sum of all player time block investments in System Health in the previous round.`,
     params: {
       placement: TOP,
     }

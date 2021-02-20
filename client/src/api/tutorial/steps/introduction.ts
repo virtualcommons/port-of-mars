@@ -80,10 +80,11 @@ const steps: Array<Step> = [
   {
     target: '.tour-chat',
     content:
-      `At any time during the game, you can communicate with all of the other players ` +
-      `in your group. The <b>chat is recorded</b> and you cannot send private messages within your group. ` +
-      `Please <b>adhere to the <a target='_blank' href='https://github.com/virtualcommons/port-of-mars/wiki/Port-of-Mars-Chat-Code-of-Conduct'>Port of Mars Chat Code of Conduct</a></b> in your communications. ` +
-      `Enter and send a chat message to continue.`,
+      `You can communicate with all of the other players in your group at any time during the game using this chat box. 
+      Please remember that <b>chat is recorded</b> and <b>adhere to the 
+      <a target='_blank' href='https://github.com/virtualcommons/port-of-mars/wiki/Port-of-Mars-Chat-Code-of-Conduct'>Port of Mars Chat Code of Conduct</a>
+      </b>
+      in your communications. You cannot send private messages to other members in your group. Please send a chat message to continue.`,
     params: {
       placement: LEFT,
     },

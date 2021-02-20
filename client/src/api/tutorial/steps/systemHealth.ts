@@ -4,7 +4,7 @@ const steps: Array<Step> = [
   {
     target: '.tour-system-health',
     content:
-      `You land at the Port of Mars with an initial System Health of 100. This represents your habitat
+      `You arrive at the Port of Mars with an initial System Health of 100. This represents your habitat
       at peak condition and maintenance. At the start of each round your habitat will <b>lose 25 System
       Health due to standard wear and tear</b>.`,
     params: {
