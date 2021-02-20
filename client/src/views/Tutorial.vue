@@ -37,6 +37,7 @@
                   v-if="!tour.isLast"
                   ref="forwardButton"
                   v-on="{ click: api.hasCompletedAction ? tour.nextStep : () => {} }"
+                  :disabled="!api.hasCompletedAction"
                   class="btn btn-dark next-button"
                   v-bind="{ class: api.hasCompletedAction ? 'button-active' : 'button-inactive' }"
                 >
