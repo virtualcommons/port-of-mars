@@ -1,30 +1,37 @@
 import {
-  TradeData,
   AccomplishmentData,
-  ResourceAmountData,
+  InvestmentData,
   Resource,
-  Role, InvestmentData,
+  ResourceAmountData,
+  Role,
+  TradeData,
 } from '@port-of-mars/shared/types';
-import { initialStoreState, defaultPendingInvestment } from '@port-of-mars/shared/game/client/state';
 import {
-  ChatMarsLogView,
-  HUDLeftView,
-  HUDRightView,
-} from '@port-of-mars/shared/game/client/panes';
+  defaultPendingInvestment,
+  initialStoreState,
+  State
+} from '@port-of-mars/shared/game/client/state';
+import {ChatMarsLogView, HUDLeftView, HUDRightView,} from '@port-of-mars/shared/game/client/panes';
 import * as _ from 'lodash';
-import { Store } from 'vuex/types/index';
-import { State } from '@port-of-mars/shared/game/client/state';
-import { StateTransform } from '@port-of-mars/client/types/tutorial';
+import {Store} from 'vuex/types/index';
+import {StateTransform} from '@port-of-mars/client/types/tutorial';
 import {AbstractGameAPI} from "@port-of-mars/client/api/game/types";
 
 export class TutorialAPI implements AbstractGameAPI {
+  count: number = 1;
   private store!: Store<State>;
   private stateStack: Array<StateTransform[]> = [];
   private isTaskComplete = true;
   private validationObject: any = {};
   private requiredObject!: StateTransform;
-
   private forwardButtonRef!: any;
+
+  //This is used by Tutorial.vue to determine if the user can move forward
+  get hasCompletedAction() {
+    return this.isTaskComplete;
+  }
+
+  // Stubbed API methods not used in tutorial
 
   connect(store: any) {
     this.store = store;
@@ -33,8 +40,6 @@ export class TutorialAPI implements AbstractGameAPI {
   registerRef(forwardButtonRef: any) {
     this.forwardButtonRef = forwardButtonRef;
   }
-
-  // Stubbed API methods not used in tutorial
 
   resetBotWarning(): void {
   }
@@ -57,7 +62,8 @@ export class TutorialAPI implements AbstractGameAPI {
   saveBreakdownOfTrust(savedResources: InvestmentData): void {
   }
 
-  stageDiscardOfPurchasedAccomplishment(id: number) {}
+  stageDiscardOfPurchasedAccomplishment(id: number) {
+  }
 
   /*
     This adds the sigular state transform it received to the state
@@ -135,28 +141,6 @@ export class TutorialAPI implements AbstractGameAPI {
     this.replayState();
   }
 
-  //This is used by Tutorial.vue to determine if the user can move forward
-  get hasCompletedAction() {
-    return this.isTaskComplete;
-  }
-
-  //use this to verify that the user has completed the action
-  private completedRequiredAction() {
-    //we want to immediatly set the task to completed
-    this.isTaskComplete = true;
-
-    //this sets the 'required' tag to false on the tutorial step, so when we replay,
-    //that action is no longer required.
-    this.requiredObject.required = false;
-  }
-
-  //use this to verify that the user has completed the action and to move the user forward a step.
-  private completedActionWithImplicitForward() {
-    this.completedRequiredAction();
-
-    setTimeout(() => this.forwardButtonRef[0].click(), 0);
-  }
-
   //CHAT HANDLER
   public sendChatMessage(message: String) {
     this.store.commit('ADD_TO_CHAT', {
@@ -169,23 +153,27 @@ export class TutorialAPI implements AbstractGameAPI {
     this.completedActionWithImplicitForward();
   }
 
-  // handle accomplishment purchases and discards
-  public purchaseAccomplishment(accomplishment: AccomplishmentData) {
-    // discard as we don't actually add points?
+  purchaseAccomplishment(accomplishment: AccomplishmentData): void {
     this.store.commit('PURCHASE_ACCOMPLISHMENT', {
       data: accomplishment,
-      role: accomplishment.role,
+      role: this.store.state.role,
     });
-
+    this.store.commit('DISCARD_ACCOMPLISHMENT', {
+      data: accomplishment.id,
+      role: this.store.state.role
+    });
+    this.store.commit('SET_VICTORY_POINTS', {
+      data: 7,
+      role: 'Researcher',
+    });
     this.completedActionWithImplicitForward();
   }
 
   discardAccomplishment(id: number): void {
     console.log("Discarding accomplishment: " + id);
-    this.store.commit('DISCARD_ACCOMPLISHMENT', { id, role: this.store.state.role});
+    this.store.commit('DISCARD_ACCOMPLISHMENT', {id, role: this.store.state.role});
     this.completedActionWithImplicitForward();
   }
-
 
   //INVESTMENTS HANDLER
   public investPendingTimeBlocks(investment: any) {
@@ -200,7 +188,8 @@ export class TutorialAPI implements AbstractGameAPI {
     return true;
   }
 
-  public investTimeBlocks() {}
+  public investTimeBlocks() {
+  }
 
   //PLAYER READINESS HANDLER
   public setPlayerReadiness(ready: boolean): void {
@@ -227,11 +216,11 @@ export class TutorialAPI implements AbstractGameAPI {
     this.completedActionWithImplicitForward();
   }
 
-  // OTHER UI
-
   public setChatMarsLogView(view: ChatMarsLogView) {
     this.store.commit('SET_CHATMARSLOG_VIEW', view);
   }
+
+  // OTHER UI
 
   public setHUDLeftView(view: HUDLeftView) {
     this.store.commit('SET_HUDLEFT_VIEW', view);
@@ -257,7 +246,7 @@ export class TutorialAPI implements AbstractGameAPI {
   }
 
   //validate against the validation object that's passed in.
-  public setTradeGetResources(resources: ResourceAmountData){
+  public setTradeGetResources(resources: ResourceAmountData) {
     this.store.commit('SET_GET_RESOURCES', resources);
 
     for (const [resource, amt] of Object.entries(resources)) {
@@ -269,7 +258,7 @@ export class TutorialAPI implements AbstractGameAPI {
   }
 
   //validate against the validation object that's passed in.
-  public setTradeGiveResources(resources: ResourceAmountData){
+  public setTradeGiveResources(resources: ResourceAmountData) {
     this.store.commit('SET_SEND_RESOURCES', resources);
 
     for (const [resource, amt] of Object.entries(resources)) {
@@ -280,7 +269,6 @@ export class TutorialAPI implements AbstractGameAPI {
     return true;
   }
 
-  count: number = 1;
   public sendTradeRequest(tradePackage: TradeData) {
     this.store.commit('ADD_TO_TRADES', {
       id: `mock-trade-${this.count}`,
@@ -310,8 +298,29 @@ export class TutorialAPI implements AbstractGameAPI {
   }
 
   public resetPendingInvestments() {
-    this.store.commit('SET_PENDING_INVESTMENTS', { role: this.store.state.role, data: defaultPendingInvestment()});
+    this.store.commit('SET_PENDING_INVESTMENTS', {
+      role: this.store.state.role,
+      data: defaultPendingInvestment()
+    });
   }
 
-  public resetTradeModal() {}
+  public resetTradeModal() {
+  }
+
+  //use this to verify that the user has completed the action
+  private completedRequiredAction() {
+    //we want to immediatly set the task to completed
+    this.isTaskComplete = true;
+
+    //this sets the 'required' tag to false on the tutorial step, so when we replay,
+    //that action is no longer required.
+    this.requiredObject.required = false;
+  }
+
+  //use this to verify that the user has completed the action and to move the user forward a step.
+  private completedActionWithImplicitForward() {
+    this.completedRequiredAction();
+
+    setTimeout(() => this.forwardButtonRef[0].click(), 0);
+  }
 }

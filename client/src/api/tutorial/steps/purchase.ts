@@ -67,6 +67,10 @@ const steps: Array<Step> = [
     stateTransform: [
       {
         SET_LAYOUT: 'tutorial',
+        // SET_VICTORY_POINTS: {
+        //   data: 3,
+        //   role: 'Researcher',
+        // },
         required: true,
       },
     ],
