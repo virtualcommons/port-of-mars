@@ -3,11 +3,9 @@
     <b-row align-v="center" class="h-75 w-100">
       <b-col cols="auto" class="mr-auto">
         <img
-          :src="
-          require(`@port-of-mars/client/assets/characters-large/Researcher.png`)
-        "
-          alt="Researcher Role"
-          class="researcher"
+          :src="require(`@port-of-mars/client/assets/characters-large/Entrepreneur.png`)"
+          alt="Entrepreneur"
+          class="avatar"
         />
       </b-col>
 
@@ -20,11 +18,9 @@
 
       <b-col cols="auto">
         <img
-          :src="
-          require(`@port-of-mars/client/assets/characters-large/Entrepreneur.png`)
-        "
-          alt="Entrepreneur Role"
-          class="entrepreneur"
+          :src="require(`@port-of-mars/client/assets/characters-large/Researcher.png`)"
+          alt="Researcher"
+          class="avatar"
         />
       </b-col>
     </b-row>
@@ -57,11 +53,8 @@ export default class SignedUp extends Vue {
   z-index: -1;
   opacity: 0.0625;
 }
-
-.researcher, .entrepreneur {
-  //position: absolute;
+.avatar {
   height: 40vh;
   top: 10vh;
 }
-
 </style>
