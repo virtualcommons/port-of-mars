@@ -1,4 +1,5 @@
 library(magrittr)
+source("R/chat_messages.R")
 
 ROLES = c('Curator', 'Entrepreneur', 'Pioneer', 'Politician', 'Researcher')
 RESOURCES = c('culture', 'finance', 'government', 'legacy', 'science')
@@ -30,6 +31,7 @@ final_investment <- dplyr::bind_rows(
     dplyr::mutate(name = 'finalInventory'),
   player_investment)
 
+chat_messages <- get_chat_messages(game_events)
 tryCatch(
   dir.create("/dump/processed", recursive = TRUE),
   warning = function(c) {
@@ -39,3 +41,4 @@ tryCatch(
     }
   })
 readr::write_csv(final_investment, "/dump/processed/playerInvestment.csv")
+readr::write_csv(chat_messages, "/dump/processed/chatMessages.csv")
