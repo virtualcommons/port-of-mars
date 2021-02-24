@@ -1,0 +1,5 @@
+ROLES = c('Curator', 'Entrepreneur', 'Pioneer', 'Politician', 'Researcher')
+RESOURCES = c('culture', 'finance', 'government', 'legacy', 'science')
+INVESTMENTS = c(RESOURCES, 'systemHealth')
+STATISTICS = c('pendingInvestment', 'cost', 'inventory')
+PHASES = factor(c('newRound', 'events', 'invest', 'trade', 'purchase', 'discard'), ordered = T, levels = c('newRound', 'events', 'invest', 'trade', 'purchase', 'discard'))

@@ -36,5 +36,3 @@ get_chat_messages <- function(events) {
     dplyr::summarise(ids = stringr::str_c(id, collapse="; "), role = role[1], message=stringr::str_c(message, collapse="; "), time_min=min(time), time_max=max(time)) %>%
     dplyr::rename(text = message, round = roundInitial)
 }
-
-get_chat_messages(readr::read_csv("rounds/1/processed/gameEvent.csv"))
