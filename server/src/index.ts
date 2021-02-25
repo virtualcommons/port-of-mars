@@ -114,8 +114,9 @@ async function createApp() {
           scriptSrc: ["'self'", "https://sentry.comses.net"],
           connectSrc: ["'self'", "https://sentry.comses.net"],
 	  imgSrc: ["'self'", "data:"],
-	  styleSrc: ["'self'", "https://fonts.googleapis.com"],
+	  styleSrc: ["'self'", "https://fonts.googleapis.com", "'unsafe-inline'"],
 	  fontSrc: ["'self'", "https://fonts.gstatic.com"],
+	  objectSrc: ["'none'"],
       },
     }
   }));
