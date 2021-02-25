@@ -13,11 +13,10 @@
 // Khula
 @import url("https://fonts.googleapis.com/css2?family=Khula:wght@400;600;700&display=swap");
 
-// ----- HTML ELEMENTS
+// ----- HTML ELEMENTS -----
 html {
   height: 100%;
   width: 100%;
-  scroll-snap-type: y mandatory;
 }
 
 html {
@@ -38,8 +37,9 @@ html {
 }
 
 body {
+  height: 100% !important;
+  width: 100% !important;
   overflow-x: hidden;
-  overflow-y: hidden;
   font-family: $khula !important;
   font-weight: $regular !important;
   color: $light-shade;
@@ -94,7 +94,7 @@ button {
   user-select: none !important;
 }
 
-// ----- CUSTOM ANIMATION
+// ----- CUSTOM ANIMATION -----
 
 // fade in animation
 @keyframes fadeInAnimation {
@@ -104,10 +104,4 @@ button {
   100% {
     opacity: 1;
   }
-}
-
-// ----- CLASSES
-.game {
-  height: 100vh;
-  width: 100vw;
 }

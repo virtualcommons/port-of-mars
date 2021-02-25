@@ -1,5 +1,5 @@
 <template>
-  <div class="tutorial-layout">
+  <b-container class="h-100 w-auto p-0 m-0" fluid>
     <TourModal @show="showTour" @hide="startTourOnHideModal" />
     <CompletedQuizModal v-if="tourIsOver" />
     <GameDashboard />
@@ -109,7 +109,7 @@
       </template>
     </v-tour>
 
-  </div>
+  </b-container>
 </template>
 
 <script lang="ts">
