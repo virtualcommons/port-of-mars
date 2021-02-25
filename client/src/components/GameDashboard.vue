@@ -1,12 +1,14 @@
 <template>
-  <div class="c-game-dashboard">
-    <GameboardContainer
-      v-if="shouldDisplayGame"
-    />
-<!--    <NewRound v-if="gamePhase === phase.newRound" />-->
-    <Defeat v-if="gamePhase === phase.defeat" />
-    <Victory v-if="gamePhase === phase.victory" />
-  </div>
+  <b-container fluid class="h-100 w-auto p-0 m-0">
+    <b-row class="h-100 p-0 justify-content-center" align-v="center">
+      <GameboardContainer
+        v-if="shouldDisplayGame"
+      />
+      <!--    <NewRound v-if="gamePhase === phase.newRound" />-->
+      <Defeat v-if="gamePhase === phase.defeat" />
+      <Victory v-if="gamePhase === phase.victory" />
+    </b-row>
+  </b-container>
 </template>
 
 <script lang="ts">
@@ -41,7 +43,3 @@
     }
   }
 </script>
-
-<style lang="scss" scoped>
-  @import '@port-of-mars/client/stylesheets/views/GameDashboard.scss';
-</style>
