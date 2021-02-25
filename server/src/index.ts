@@ -107,7 +107,18 @@ async function createApp() {
       credentials: true
     }));
   } else {
-    app.use(helmet());
+    app.use(helmet({
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'self'"],
+          scriptSrc: ["'self'", "https://sentry.comses.net"],
+          connectSrc: ["'self'", "https://sentry.comses.net"],
+	  imgSrc: ["'self'", "data:"],
+	  styleSrc: ["'self'", "https://fonts.googleapis.com"],
+	  fontSrc: ["'self'", "https://fonts.gstatic.com"],
+      },
+    }
+  }));
   }
   app.use(express.static('static'));
   app.use(express.json());
