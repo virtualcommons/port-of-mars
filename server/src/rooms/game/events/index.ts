@@ -4,8 +4,8 @@ import {
   InvestmentData,
   MarsLogCategory,
   Phase,
-  Resource,
-  Role,
+  Resource, ResourceCostData,
+  Role, ROLES,
   SERVER,
   ServerRole,
   TradeData
@@ -140,23 +140,33 @@ export class TimeInvested extends GameEventWithData {
 
     // if Audit event is in effect
     if (game.marsEvents.filter(event => event.id == 'audit').length > 0) {
-      const influenceType = Object.keys(this.data.investment)
+
+      const resources = Object.keys(this.data.investment)
+          // get a player's investments for system health and resources
           .filter((investment) => {
-            return investment == 'systemHealth' || this.data.investment[investment as Resource] != 0;
+            // return time block investments for system health and any resource where investments > 0
+            return investment == 'systemHealth' || this.data.investment[investment as Resource] > 0;
           })
 
           .map((investment) => {
-            const formattedInvestmentLabel = investment == 'systemHealth' ? 'System Health' :
+            // format resource type string
+            const resourceToString = investment == 'systemHealth' ? 'System Health' :
                 investment.charAt(0).toUpperCase() + investment.slice(1);
-            const timeBlockString = this.data.investment[investment as Resource] > 1 ? 'time blocks' : 'time block';
+            const pendingInvestment = this.data.investment[investment as Resource]
+            const cost = game.players[this.data.role].costs[investment as Resource]
 
-            return `${this.data.investment[investment as Resource]} ${timeBlockString} in ${formattedInvestmentLabel}`;
+            // format time block investments string
+            if (investment == 'systemHealth') {
+              return `and contributes ${pendingInvestment * cost} ${resourceToString}`;
+            } else {
+              return `${pendingInvestment} ${resourceToString} (cost: ${pendingInvestment * cost} time)`
+            }
           })
 
           .join('; ');
 
       const auditChatMessage: ChatMessageData = {
-        message: `${this.data.role} has invested ${influenceType}.`,
+        message: `${this.data.role} adds ${resources}.`,
         role: this.data.role,
         dateCreated: new Date().getDate(),
         round: game.round
