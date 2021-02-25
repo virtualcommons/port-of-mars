@@ -8,7 +8,7 @@
           Port of Mars is a fun, game-based social science experiment set on the first human
           community on the Red Planet.
         </h2>
-        <b-container :style="'background-color: rgba(34, 26, 27, .9)'" class="mb-5 pb-5 w-50">
+        <b-container :style="'background-color: rgba(34, 26, 27, .9)'" class="mb-5 pb-5 w-75">
           <b-row :style="'background-color: rgb(156, 81, 71); color: $dark-shade;'"
                  class="align-content-center mb-3 py-4">
             <h2 class="mx-auto">Sign Up for Mars Madness 2021</h2>
