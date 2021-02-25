@@ -1,7 +1,7 @@
 <template>
-  <div class="game-layout">
+  <b-container fluid class="h-100 w-auto p-0 m-0">
     <GameDashboard />
-  </div>
+  </b-container>
 </template>
 
 <script lang="ts">
