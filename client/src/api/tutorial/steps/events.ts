@@ -64,8 +64,8 @@ const steps: Array<Step> = [
   },
   {
     target: '.tour-event-view',
-    content: `You can view the current Events by clicking on the Active Events icon above this panel.
-     The Mars Log will also list all current and past Events.`,
+    content: `You can switch between the phase info screen and current Events by clicking on the Active Events icon above this panel.
+     The Mars Log also documents all current and past Events.`,
     params: {
       placement: LEFT,
     },
