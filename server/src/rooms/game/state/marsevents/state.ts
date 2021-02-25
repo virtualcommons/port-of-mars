@@ -81,9 +81,8 @@ export abstract class BaseEvent implements MarsEventState {
 export class Audit extends BaseEvent {
   finalize(game: GameState) {
     game.log(
-        `You are be able to view other players' resources. You can view existing Influence resources and
-         Accomplishments can be viewed by clicking each player's avatar. Investment decisions are broadcast 
-         in Chat.`,
+        `All player investments and inventories are public this round. You can view each player's current Influence resources 
+         and Accomplishments by clicking each player's avatar. Investment decisions are broadcast in Chat.`,
         `${MarsLogCategory.event}: ${formatEventName(Audit.name)}`
     );
   }
