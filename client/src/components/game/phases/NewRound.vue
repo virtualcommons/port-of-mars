@@ -17,10 +17,13 @@
             <p>
               In the previous round you invested <b>{{ yourSystemHealthContributions }}</b> and the rest
               of your group invested
-              <b>{{ otherPlayerSystemHealthContributions }}</b> in System Health for a total of {{
-                systemHealthGroupContributions
-              }}.
-              Your group's average investment was {{ averageContribution }}.
+              <b>{{ otherPlayerSystemHealthContributions }}</b> in System Health for a total of {{systemHealthGroupContributions}}.
+              Your group's average investment was {{ averageContribution }}. 
+              <span v-if="systemHealthAccomplishmentPurchasesCost < 0">
+                Accomplishments were purchased that cost {{ systemHealthAccomplishmentPurchasesCost }} System Health.
+              </span>
+              <br>
+              <b>Your final System Health at the end of last round was <code>{{ lastRoundSystemHealthCalculation }}</code></b>.
             </p>
           </b-row>
           <b-row class="mx-1">
@@ -106,6 +109,23 @@ export default class NewRound extends Vue {
     return this.roundIntroduction.accomplishmentPurchases;
   }
 
+  get systemHealthAccomplishmentPurchasesCost() {
+    return _.sum(this.$tstore.getters.systemHealthAccomplishmentPurchases.map(p => p.value));
+  }
+
+  get lastRoundSystemHealthCalculation() {
+    // {{ priorSystemHealth }} + {{ systemHealthGroupContributions }} {{ systemHealth }}</code>.
+    let calculation = `${this.priorSystemHealth} + ${this.systemHealthGroupContributions}`;
+    if (this.systemHealthAccomplishmentPurchasesCost < 0) {
+      calculation = calculation.concat(` - ${Math.abs(this.systemHealthAccomplishmentPurchasesCost)}`);
+    }
+    if (this.systemHealthMarsEventsCost < 0) {
+      calculation = calculation.concat(` - ${Math.abs(this.systemHealthMarsEventsCost)}`);
+    }
+    calculation = calculation.concat(` = ${this.systemHealth}`);
+    return calculation;
+  }
+
   get trades() {
     return [];
   }
@@ -124,7 +144,7 @@ export default class NewRound extends Vue {
       {
         label: 'Group Contributions', role: 'Players', value: this.systemHealthGroupContributions
       },
-      ...this.$tstore.getters.purchaseSystemHealth,
+      ...this.$tstore.getters.systemHealthAccomplishmentPurchases,
       ...this.systemHealthMarsEvents,
       {label: 'Wear and Tear', role: 'System', value: this.systemHealthMaintenanceCost},
       {
@@ -160,6 +180,10 @@ export default class NewRound extends Vue {
       role: 'Mars Event',
       value: systemHealthModification
     }));
+  }
+
+  get systemHealthMarsEventsCost() {
+    return _.sum(this.systemHealthMarsEvents.map(e => e.value));
   }
 
   getTradeAmount(tradeAmount: TradeAmountData) {

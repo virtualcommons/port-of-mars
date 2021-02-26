@@ -185,13 +185,11 @@ export default {
     return taken;
   },
 
-  purchaseSystemHealth(state: State): Array<{label: string; role: string; value: number}> {
+  systemHealthAccomplishmentPurchases(state: State): Array<{label: string; role: string; value: number}> {
     const purchases: Array<{label: string; role: string; value: number}> = []
     for (const role of ROLES) {
-      purchases.splice(
-        purchases.length,
-        0,
-        ...state.players[role].systemHealthChanges.purchases.map(p => ({ label: p.description, role, value: p.systemHealth})));
+      const systemHealthPurchases = state.players[role].systemHealthChanges.purchases.map(p => ({ label: p.description, role, value: p.systemHealth}));
+      purchases.push(...systemHealthPurchases);
     }
     return purchases;
   },

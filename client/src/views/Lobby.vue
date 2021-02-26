@@ -50,7 +50,6 @@
 
 <script lang="ts">
   import {Client} from 'colyseus.js';
-  import moment from 'moment';
   import {Component, Inject, Prop, Vue} from 'vue-property-decorator';
 
   import {DashboardAPI} from '@port-of-mars/client/api/dashboard/request';
