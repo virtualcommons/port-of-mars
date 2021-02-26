@@ -8,7 +8,7 @@ import { Integrations } from "@sentry/tracing";
 
 import { Ajax } from "@port-of-mars/client/plugins/ajax";
 import { TypedStore } from "@port-of-mars/client/plugins/tstore";
-import { SENTRY_DSN } from '@port-of-mars/shared/settings';
+import { isStagingOrProduction, SENTRY_DSN } from '@port-of-mars/shared/settings';
 import App from './App.vue';
 import router from './router';
 import store from './store';
@@ -21,7 +21,7 @@ Vue.use(IconsPlugin);
 
 Vue.config.productionTip = false;
 
-if (['staging', 'production'].includes(process.env.NODE_ENV)) {
+if (isStagingOrProduction()) {
   Sentry.init({
     dsn: SENTRY_DSN,
     integrations: [

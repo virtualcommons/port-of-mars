@@ -1,8 +1,22 @@
 export {BUILD_ID} from "./assets/build-id";
 export {SENTRY_DSN} from "./assets/sentry-dsn";
 
+const ENVIRONMENT = process.env.NODE_ENV || 'development';
+
 export function isDev(): boolean {
-  return process.env.NODE_ENV === 'development';
+  return ENVIRONMENT === 'development';
+}
+
+export function isStaging(): boolean {
+  return ENVIRONMENT === 'staging';
+}
+
+export function isProduction(): boolean {
+  return ENVIRONMENT === 'production';
+}
+
+export function isTest(): boolean {
+  return ENVIRONMENT === 'test';
 }
 
 export function isDevOrStaging(): boolean {
@@ -10,19 +24,7 @@ export function isDevOrStaging(): boolean {
 }
 
 export function isStagingOrProduction(): boolean {
-  return !isDev();
-}
-
-export function isStaging(): boolean {
-  return process.env.NODE_ENV === 'staging';
-}
-
-export function isProduction(): boolean {
-  return process.env.NODE_ENV === 'production';
-}
-
-export function isTest(): boolean {
-  return process.env.NODE_ENV === 'test';
+  return isStaging() || isProduction();
 }
 
 export const COST_INAFFORDABLE = 1000;

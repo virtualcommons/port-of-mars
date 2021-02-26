@@ -19,7 +19,7 @@ import { LOGIN_PAGE, REGISTER_PAGE, DASHBOARD_PAGE, getPagePath } from "@port-of
 import * as fs from 'fs';
 import { registrationRouter } from "@port-of-mars/server/routes/registration";
 import { settings } from "@port-of-mars/server/settings";
-import {BUILD_ID, isDev} from '@port-of-mars/shared/settings';
+import {BUILD_ID, SENTRY_DSN, isDev} from '@port-of-mars/shared/settings';
 import {getRedis, getServices} from "@port-of-mars/server/services";
 import { gameRouter } from "@port-of-mars/server/routes/game";
 import { surveyRouter } from "@port-of-mars/server/routes/survey";
@@ -84,9 +84,8 @@ function applyInStagingOrProd(f: () => void) {
 }
 
 applyInStagingOrProd(() => {
-  const dsn = fs.readFileSync('/run/secrets/sentry_dsn', 'utf-8');
-  Sentry.init({ dsn });
-  logger.debug("Setting up sentry: %s", dsn);
+  Sentry.init({ dsn: SENTRY_DSN });
+  logger.debug("Setting up sentry: %s", SENTRY_DSN);
 });
 
 async function createApp() {
