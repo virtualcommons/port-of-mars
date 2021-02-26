@@ -2,7 +2,7 @@
   <b-container class="h-100 p-0 m-0" fluid>
     <!-- splash page text -->
     <b-row class="h-100 p-0 text-center justify-content-center">
-      <b-col class="my-4 p-0" cols="auto">
+      <b-col class="my-4 p-0 align-content-center" cols="auto">
         <h2 class="title">Welcome to Port of Mars!</h2>
         <h2 class="m-5">
           Port of Mars is a fun, game-based social science experiment set on the first human
@@ -10,7 +10,7 @@
         </h2>
         <b-container :style="'background-color: rgba(34, 26, 27, .9)'" class="mb-5 pb-5 w-75">
           <b-row :style="'background-color: rgb(156, 81, 71); color: $dark-shade;'"
-                 class="mb-3 py-4">
+                 class="mb-3 py-4 justify-content-center">
             <h2>Sign Up for Mars Madness 2021</h2>
           </b-row>
           <b-alert show variant="warning">
@@ -24,9 +24,9 @@
             in early March 2021 with details
             on how to participate in the tournament.
           </p>
-          <b-form-checkbox v-if="isDevMode" v-model="toggleDevLogin" class="my-2">
-            <p v-if="toggleDevLogin">Test User Sign In Enabled</p>
-            <p v-else>Test User Sign In Disabled</p>
+          <b-form-checkbox v-model="toggleDevLogin" v-if="isDevMode" class="my-2">
+            <p v-if="toggleDevLogin" class="text-uppercase">Test Mode Enabled</p>
+            <p v-else class="text-uppercase">Test Mode Disabled</p>
           </b-form-checkbox>
           <b-button v-if="isLoggedIn" size="lg" variant="warning" @click="logout">
             {{ logoutText }}
