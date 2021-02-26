@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { createConnection } from 'typeorm';
 import http from 'http';
 import express, { Response } from 'express';
@@ -7,7 +6,6 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import passport from 'passport';
 import session from 'express-session';
-import redis from 'redis';
 import connectRedis from 'connect-redis';
 import * as Sentry from '@sentry/node';
 import { Server } from 'colyseus';
@@ -85,9 +83,11 @@ function applyInStagingOrProd(f: () => void) {
   }
 }
 
-applyInStagingOrProd(() =>
-  Sentry.init({ dsn: fs.readFileSync('/run/secrets/sentry_dsn', 'utf-8') })
-);
+applyInStagingOrProd(() => {
+  const dsn = fs.readFileSync('/run/secrets/sentry_dsn', 'utf-8');
+  Sentry.init({ dsn });
+  logger.debug("Setting up sentry: %s", dsn);
+});
 
 async function createApp() {
   await (async () => {
@@ -95,7 +95,7 @@ async function createApp() {
     await sp.settings.loadIfNotExist();
   })()
 
-  logger.info('starting server (%s) with build id: %s, settings %s', process.env.NODE_ENV, BUILD_ID, settings.host);
+  logger.info('starting (%s) server: [build id: %s, settings.host %s]', process.env.NODE_ENV, BUILD_ID, settings.host);
   const port = Number(process.env.PORT || 2567);
   const app = express();
   applyInStagingOrProd(() => app.use(Sentry.Handlers.requestHandler()));
