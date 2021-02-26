@@ -21,14 +21,16 @@ Vue.use(IconsPlugin);
 
 Vue.config.productionTip = false;
 
-Sentry.init({
-  dsn: SENTRY_DSN,
-  integrations: [
-    new VueIntegration({ Vue, tracing: true }),
-    new Integrations.BrowserTracing(),
-  ],
-  tracesSampleRate: 1,
-});
+if (['staging', 'production'].includes(process.env.NODE_ENV)) {
+  Sentry.init({
+    dsn: SENTRY_DSN,
+    integrations: [
+      new VueIntegration({ Vue, tracing: true }),
+      new Integrations.BrowserTracing(),
+    ],
+    tracesSampleRate: 1,
+  });
+}
 
 const $client = new Colyseus.Client(process.env.SERVER_URL_WS || undefined);
 
