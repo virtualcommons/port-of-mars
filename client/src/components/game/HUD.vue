@@ -1,14 +1,14 @@
 <template>
-  <div class="c-hud container">
-    <div class="wrapper row">
-      <div class="left col-6">
+  <b-container fluid class="h-100 py-5 m-0 flex-column justify-content-start align-items-center">
+    <b-row class="h-100 w-auto p-0 m-0">
+      <b-col cols="6" class="h-100 left pb-1">
         <HUDLeft />
-      </div>
-      <div class="right col-6">
+      </b-col>
+      <b-col cols="6" class="h-100 right pb-1">
         <HUDRight />
-      </div>
-    </div>
-  </div>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script lang="ts">
@@ -26,5 +26,12 @@ export default class HUD extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/HUD.scss';
+.left  {
+  border-left: 0.2rem solid $light-shade-25;
+  border-right: 0.2rem solid $light-shade-25;
+}
+
+.right {
+  border-right: 0.2rem solid $light-shade-25;
+}
 </style>

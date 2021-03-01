@@ -1,9 +1,11 @@
 <template>
-  <div class="c-system-health tour-system-health">
-    <p class="title">System Health</p>
-    <StatusBar class="statusbar" :setWidth="`${systemHealthStatus}`" />
-    <p class="status">{{ systemHealthStatus }}<span>%</span></p>
-  </div>
+  <b-container fluid class="justify-content-center tour-system-health">
+    <b-row align-v="center" class="m-auto">
+      <h3 class="title ml-2 mr-4 my-auto">System Health</h3>
+      <StatusBar class="statusbar" :setWidth="`${systemHealthStatus}`" />
+      <h3 class="status mr-2 ml-4 my-auto">{{ systemHealthStatus }}<span>%</span></h3>
+    </b-row>
+  </b-container>
 </template>
 
 <script lang="ts">

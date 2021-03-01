@@ -1,53 +1,11 @@
-.c-events {
-  @include expand;
-  max-width: none;
-  @include reset-padding-margin;
-}
-
-.wrapper {
-  @include expand;
-  max-width: none;
-  @include reset-padding-margin;
-}
-
-.event-deck,
-.active-events,
-.active-accomplishments {
-  height: 100%;
-  padding: 0;
-  @include make-column-and-top;
-}
-
-.topbar {
-  height: 10%;
-  flex-shrink: 0;
-  width: 100%;
-  padding: 0.25rem 1rem;
-  margin-bottom: 0.5rem;
-  @include make-center;
+button {
+  border: 0.125rem solid $phase-topbar-background;
+  color: $phase-topbar-foreground;
   background-color: $phase-topbar-background;
 
-  .title {
-    margin-bottom: 0;
-    color: $phase-topbar-foreground;
-    font-size: $font-med;
-    font-weight: $bold;
-  }
-}
-
-button {
-  @include reset-button;
-  height: 100%;
-  width: 50%;
-  padding: 0;
-  margin: 0;
-  font-size: $font-med;
-  font-weight: $bold !important;
-  color: $phase-topbar-background;
-  border: 0.125rem solid $phase-topbar-background;
-
-  &:disabled {
-    opacity: 0.5;
+  &:hover {
+    color: $phase-topbar-background;
+    background-color: $phase-topbar-foreground;
   }
 }
 
@@ -60,41 +18,6 @@ button {
 }
 
 .selected {
-  color: $phase-topbar-foreground;
-  background-color: $phase-topbar-background;
-}
-
-.event-deck-wrapper,
-.accomplishments-wrapper {
-  flex: 1;
-  width: 100%;
-  padding: 0.5rem;
-  background-color: $light-shade-05;
-  overflow-y: hidden;
-
-  .wrapper {
-    width: 100%;
-    @include make-column-and-top;
-    overflow-y: scroll;
-  }
-}
-
-.active-events {
-  height: 100%;
-  padding: 0 0 0 0.5rem;
-  @include make-column-and-top;
-
-  .outer-wrapper {
-    flex: 1;
-    width: 100%;
-    padding: 0.5rem;
-    background-color: $light-shade-05;
-    overflow-y: hidden;
-
-    .wrapper {
-      width: 100%;
-      @include make-column-and-top;
-      overflow-y: scroll;
-    }
-  }
+  color: $phase-topbar-background;
+  background-color: $phase-topbar-foreground;
 }

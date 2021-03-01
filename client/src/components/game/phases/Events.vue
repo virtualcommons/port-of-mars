@@ -1,69 +1,72 @@
 <template>
-  <div class="c-events container tour-event">
-    <div class="wrapper row">
-      <div class="event-deck col-4 tour-event-deck">
-        <div class="buttons">
-          <button
-            @click="switchView('Event Deck')"
-            :class="selectedView === 'Event Deck' ? 'selected' : ''"
-          >
-            Event Deck
-          </button>
-          <button
-            @click="switchView('Active Accomplishments')"
-            :class="selectedView === 'Active Accomplishments' ? 'selected' : ''"
-          >
-            Accomplishments
-          </button>
-        </div>
-        <div v-if="selectedView === 'Event Deck'" class="event-deck-wrapper">
-          <div class="wrapper event-scroll">
+  <b-container class="h-100 m-0 p-0 tour-event" fluid>
+    <b-row  class="h-100 w-auto flex-shrink-1">
+      <b-col cols="4" class="h-100 flex-column justify-content-start align-items-center
+      partition tour-event-deck">
+        <!-- events | active accomplishments -->
+        <b-row class="header-banner w-100 mx-auto align-items-center flex-shrink-0">
+          <b-col cols="6" class="h-100 w-100 text-center my-auto">
+            <button
+              :class="selectedView === 'Event Deck' ? 'selected' : ''"
+              @click="switchView('Event Deck')"
+              class="h-100 w-100 p-0 m-0"
+            >
+              <p class="my-auto">Event Deck</p>
+            </button>
+          </b-col>
+          <b-col cols="6" class="h-100 w-100 text-center align-content-center">
+            <button
+              :class="selectedView === 'Active Accomplishments' ? 'selected' : ''"
+              @click="switchView('Active Accomplishments')"
+              class="h-100 w-100 p-0 m-0"
+            >
+              <p class="my-auto">Accomplishments</p>
+            </button>
+          </b-col>
+        </b-row>
+        <b-row v-if="selectedView === 'Event Deck'" class="mx-auto mt-3 p-3 content-wrapper">
             <EventCard
               v-for="(event, index) in eventsForTheRound"
               :key="index"
+              :active="eventActive(index)"
               :event="event"
               :visible="eventVisible(index)"
-              :active="eventActive(index)"
+              class="my-2"
             />
-          </div>
-        </div>
-        <div
+        </b-row>
+        <b-row
           v-if="selectedView === 'Active Accomplishments'"
-          class="accomplishments-wrapper"
+          class="mx-auto mt-3 p-3 content-wrapper"
         >
-          <div class="wrapper">
             <AccomplishmentCard
               v-for="accomplishment in accomplishmentCards"
               :key="accomplishment.id"
               :accomplishment="accomplishment"
               :showDescription="false"
             />
-          </div>
-        </div>
-      </div>
-      <div class="active-events tour-active-events col-8">
-        <div class="topbar">
-          <p class="title">
+        </b-row>
+      </b-col>
+      <b-col class="h-100 w-auto tour-active-events" cols="8">
+        <b-row class="header-banner mx-auto flex-shrink-1">
+          <p class="m-auto">
             {{ eventTitle }}
           </p>
-        </div>
-        <div class="outer-wrapper">
-          <div class="wrapper">
-            <EventContainer :event="currentEvent" :key="eventNumber" />
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+        </b-row>
+        <b-row class="mx-auto mt-3 p-3 content-wrapper">
+            <EventContainer :key="eventNumber" :event="currentEvent"/>
+        </b-row>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch, Inject } from 'vue-property-decorator';
+import {Component, Inject, Vue, Watch} from 'vue-property-decorator';
 import EventCard from './events/EventCard.vue';
 import EventContainer from './events/events/EventContainer.vue';
 import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
-import { MarsEventData, Phase } from '@port-of-mars/shared/types';
-import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
+import {MarsEventData, Phase} from '@port-of-mars/shared/types';
+import {GameRequestAPI} from '@port-of-mars/client/api/game/request';
 
 @Component({
   components: {
@@ -79,38 +82,6 @@ export default class Events extends Vue {
 
   // NOTE :: LIFECYCLE HOOKS & WATCHERS
 
-  updated() {
-    let elem = this.$el.querySelector('.event-scroll');
-    if (elem) {
-      elem!.scrollTop = elem!.scrollHeight;
-    }
-  }
-
-  @Watch('eventsProcessed')
-  onEventsProcessedChange(val: any, oldVal: any) {
-    if (this.selectedView === 'Active Accomplishments') {
-      this.selectedView = 'Event Deck';
-    }
-  }
-
-  //Open an event modal when a new card comes in
-  @Watch('currentEvent',{immediate:true})
-  onNewEvent(event:any){
-    this.api.setModalVisible({
-      type: 'CardModal',
-      data: {
-        activator: 'Server',
-        title: 'Event',
-        content: 'This is a description of the Event.',
-        cardType: 'EventCard',
-        cardData: event,
-        confirmation: false,
-      },
-    });
-  }
-
-  // NOTE :: EVENT SPECIFIC
-
   get currentEvent(): MarsEventData {
     return this.$store.getters.currentEvent;
   }
@@ -125,20 +96,56 @@ export default class Events extends Vue {
     return this.$tstore.state.marsEventsProcessed;
   }
 
+  // NOTE :: EVENT SPECIFIC
+
   get eventNumber(): number {
     return this.$tstore.state.marsEventsProcessed + 1;
   }
 
+  get eventsForTheRound() {
+    return this.$tstore.state.marsEvents;
+  }
+
+  get accomplishmentCards(): any {
+    return this.$tstore.getters.player.accomplishments.purchasable;
+  }
+
+  updated() {
+    let elem = this.$el.querySelector('.event-scroll');
+    if (elem) {
+      elem!.scrollTop = elem!.scrollHeight;
+    }
+  }
+
   // NOTE :: VIEW HANDLING
 
-  private switchView(view: string) {
-    this.selectedView = view;
+  @Watch('eventsProcessed')
+  onEventsProcessedChange(val: any, oldVal: any) {
+    if (this.selectedView === 'Active Accomplishments') {
+      this.selectedView = 'Event Deck';
+    }
   }
 
   // NOTE :: EVENT CARDS
 
-  get eventsForTheRound() {
-    return this.$tstore.state.marsEvents;
+  //Open an event modal when a new card comes in
+  @Watch('currentEvent', {immediate: true})
+  onNewEvent(event: any) {
+    this.api.setModalVisible({
+      type: 'CardModal',
+      data: {
+        activator: 'Server',
+        title: 'Event',
+        content: 'This is a description of the Event.',
+        cardType: 'EventCard',
+        cardData: event,
+        confirmation: false,
+      },
+    });
+  }
+
+  private switchView(view: string) {
+    this.selectedView = view;
   }
 
   private eventVisible(index: number) {
@@ -147,16 +154,12 @@ export default class Events extends Vue {
     );
   }
 
+  // NOTE :: ACCOMPLISHMENT CARDS
+
   private eventActive(ind: number) {
     return (
       this.$tstore.state.phase === Phase.events && ind == this.eventsProcessed
     );
-  }
-
-  // NOTE :: ACCOMPLISHMENT CARDS
-
-  get accomplishmentCards(): any {
-    return this.$tstore.getters.player.accomplishments.purchasable;
   }
 }
 </script>

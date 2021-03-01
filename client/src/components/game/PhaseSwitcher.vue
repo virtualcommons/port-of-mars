@@ -1,11 +1,11 @@
 <template>
-  <div class="c-phase-switcher">
-    <div class="wrapper row">
+  <b-container fluid class="h-100 p-0 m-0">
+    <b-row class="h-100 px-3">
       <transition name="component-fade" mode="out-in">
         <component v-bind:is="phase[gamePhase]"></component>
       </transition>
-    </div>
-  </div>
+    </b-row>
+  </b-container>
 </template>
 
 <script lang="ts">
@@ -42,5 +42,35 @@ export default class Phases extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/PhaseSwitcher.scss';
+.component-fade-enter-active {
+  animation: fade-in 0.5s;
+}
+
+.component-fade-leave-active {
+  animation: fade-out 0.5s;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+
+  100% {
+    opacity: 100%;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 100;
+    transform: translateX(0px);
+  }
+
+  100% {
+    opacity: 0%;
+    transform: translateX(20px);
+  }
+}
 </style>

@@ -26,7 +26,7 @@
         <b-row class="header-banner mx-auto flex-shrink-1">
           <p class="m-auto">Purchasable Accomplishments</p>
         </b-row>
-        <b-row class="mx-auto mt-3 p-3 content-wrapper" fluid>
+        <b-row class="mx-auto mt-3 p-3 content-wrapper">
           <AccomplishmentCard
             v-for="accomplishment in purchasableAccomplishments"
             :key="accomplishment.label + Math.random()"
@@ -213,8 +213,7 @@ export default class Investments extends Vue {
 }
 
 .partition {
-  border-right: .2rem solid;
-  border-color: $light-shade-25;
+  border-right: .2rem solid $light-shade-25;
 }
 
 .content-wrapper {
