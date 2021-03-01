@@ -1,23 +1,23 @@
 <template>
-  <div class="c-gameboard-container container">
-    <ModalController/>
-    <ProfileMenu/>
-    <div class="system-health row">
-      <SystemHealth/>
-    </div>
-    <div class="gameboard row">
-      <div class="left col-9">
-        <div class="hud row">
+  <b-container fluid class="h-100 p-5 m-0" :style="'background-color: $dark-shade'">
+    <ModalController />
+    <ProfileMenu />
+    <b-row class="w-100">
+      <SystemHealth />
+    </b-row>
+    <b-row class="h-100 flex-grow-1 p-0 m-0 overflow-hidden">
+      <b-col cols="9" class="h-100 align-items-center">
+        <b-row class="w-100" :style="'height: 40%'">
           <HUD/>
-        </div>
-        <div class="phase-switcher row">
-          <PhaseSwitcher/>
-        </div>
-      </div>
-      <div class="right col-3">
+        </b-row>
+        <b-row class="p-3" :style="'height: 60%; border: 0.2rem solid rgba(241, 224, 197, 0.25); '">
+          <PhaseSwitcher />
+        </b-row>
+      </b-col>
+      <b-col cols="3" class="w-100 h-100">
         <ChatMarsLog/>
-      </div>
-    </div>
+      </b-col>
+    </b-row>
     <b-modal body-bg-variant="dark" body-text-variant="warning" centered no-close-on-backdrop no-close-on-esc no-enforce-focus
              header-bg-variant="dark" header-border-variant="dark" header-text-variant="warning" hide-footer
              hide-header-close title="Timeout Warning: Impending Bot Takeover" v-model="botWarning"
@@ -26,7 +26,7 @@
         your player.</p>
       <b-button @click="resetBotWarning" block variant="warning">OK</b-button>
     </b-modal>
-  </div>
+  </b-container>
 </template>
 
 <script lang="ts">
@@ -65,5 +65,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '@port-of-mars/client/stylesheets/root/GameboardContainer.scss';
+.border {
+  border: 0.5rem solid $light-shade-25;
+}
 </style>

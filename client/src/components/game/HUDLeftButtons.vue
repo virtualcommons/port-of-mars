@@ -1,10 +1,10 @@
 <template>
-  <b-container class="w-100 p-0 m-0">
+  <b-container class="w-100 py-3 m-0">
     <!-- button to switch between HUD Left Views -->
     <b-row class="w-100 h-100 p-0 m-0 justify-content-center align-items-center">
 
       <!-- view : other players -->
-      <b-col cols="4" class="other-players">
+      <b-col cols="4" class="justify-content-center align-items-center">
         <button
           v-b-tooltip.hover.bottom="'Other Players'"
           @click="switchCurrentView(view.OtherPlayers)"
@@ -15,7 +15,7 @@
       </b-col>
 
       <!-- inventory -->
-      <b-col cols="4" class="inventory">
+      <b-col cols="4" class="justify-content-center align-items-center">
         <button
           v-b-tooltip.hover.bottom="'Inventory'"
           @click="switchCurrentView(view.Inventory)"
@@ -26,7 +26,7 @@
       </b-col>
 
       <!-- accomplishments -->
-      <b-col cols="4" class="accomplishments">
+      <b-col cols="4" class="justify-content-center align-items-center">
         <button
           v-b-tooltip.hover.bottom="'Accomplishments'"
           @click="switchCurrentView(view.Accomplishments)"

@@ -1,14 +1,8 @@
-.c-phase-switcher {
+.wrapper {
   @include expand;
-  max-width: none;
-  @include reset-padding-margin;
-
-  .wrapper {
-    @include expand;
-    border: 0.125rem solid $light-shade-25;
-    padding: 0.5rem;
-    margin: 0;
-  }
+  border: 0.125rem solid $light-shade-25;
+  padding: 0.5rem;
+  margin: 0;
 }
 
 .component-fade-enter-active {

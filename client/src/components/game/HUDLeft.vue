@@ -1,37 +1,42 @@
 <template>
-  <div class="c-hud-left container tour-hud-left-toggle">
-    <div class="wrapper row">
-      <div class="player col-5">
+  <b-container fluid class="h-100 m-0 p-0 tour-hud-left-toggle">
+    <b-row class="h-100 w-auto m-0 p-0">
+      <b-col cols="5" class="player">
         <Player />
         <HUDLeftButtons />
-      </div>
-      <div class="views col-7">
+      </b-col>
+      <b-col cols="7" class="views">
         <!-- OtherPlayers View -->
-        <div
+        <b-row
           v-show="currentView === view.OtherPlayers"
-          class="other-players-view row tour-players"
+          class="h-100 p-0 m-0 other-players-view tour-players"
         >
-          <OtherPlayers
-            v-for="player in otherPlayers"
-            v-bind="player"
-            :key="player.role"
-          />
-        </div>
+          <b-container fluid class="hud-outer">
+            <OtherPlayers
+              v-for="player in otherPlayers"
+              v-bind="player"
+              :key="player.role"
+            />
+          </b-container>
+        </b-row>
 
         <!-- Inventory View -->
-        <div
+        <b-row
           v-show="currentView === view.Inventory"
-          class="inventory-view row tour-inventory-view"
+          class="h-100 py-3 m-0 outer tour-inventory-view"
         >
-          <Inventory :isSelf="true" />
-        </div>
+          <b-container fluid>
+            <Inventory :isSelf="true" />
+          </b-container>
+        </b-row>
 
         <!-- Accomplishments View -->
-        <div
+        <b-row
           v-show="currentView === view.Accomplishments"
-          class="accomplishments-view tour-active-accomplishments"
+          class="tour-active-accomplishments"
+          :style="'height: 60%'"
         >
-          <div class="wrapper">
+          <b-container fluid class="p-3 mt-3 outer" fluid>
             <AccomplishmentCard
               v-for="accomplishment in accomplishmentCards"
               :key="accomplishment.id"
@@ -39,11 +44,11 @@
               :showDescription="false"
               :showCost="false"
             />
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+          </b-container>
+        </b-row>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script lang="ts">
@@ -97,5 +102,10 @@ export default class HUDLeft extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/HUDLeft.scss';
+.hud-outer {
+  background-color: $light-shade-05;
+  height: 85%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
 </style>
