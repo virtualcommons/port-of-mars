@@ -1,29 +1,43 @@
 <template>
-  <div class="c-marslog">
-    <div class="wrapper">
-      <p v-if="logs.length === 0" class="empty">
-        No Logs
-      </p>
-      <div
-        v-for="log in logs"
-        :style="{ backgroundColor: categoryColorMap.get(log.category) }"
-        :key="log.id"
-        class="message"
-      >
-        <p class="category">{{ log.category }}</p>
-        <p class="content">{{ log.content }}</p>
-        <div class="time">
-        <span class="timestamp-wrapper"><span class="timestamp"> [ </span>{{ logTime(log.timestamp) }}<span class="timestamp"> ]</span></span>
-          <span>ROUND {{ log.round }}</span>
-        </div>
-      </div>
-    </div>
-  </div>
+  <b-container fluid class="h-100 m-0 p-0">
+    <b-row class="w-100 h-100 m-auto justify-content-center scroll-to-recent"
+           style="overflow-y: auto; overflow-x: hidden;">
+      <b-row class="w-100 my-2 justify-content-center"
+             align-content="end">
+        <!-- if there is no history to display -->
+        <p v-if="logs.length === 0" class="m-5" style="color: rgba(241, 224, 197, 0.25)">
+          No Logs
+        </p>
+        <!-- log message -->
+        <b-row
+          v-for="log in logs"
+          :style="{ backgroundColor: categoryColorMap.get(log.category) }"
+          :key="log.id"
+          class="h-auto w-100 overflow-hidden m-2"
+          style="background-color: var(--marslog-orange)"
+        >
+          <!-- category (e.g. System Health, Event, etc.) -->
+          <p class="text-capitalize m-2" style="color: #CAA66E; font-weight: bold">{{ log.category }}</p>
+          <!-- message -->
+          <p class="mx-2">{{ log.content }}</p>
+
+          <!-- timestamp and round -->
+          <b-row class="w-100">
+            <b-col cols="auto" class="mr-auto ml-2">
+              <p> [ {{ logTime(log.timestamp) }} ]</p>
+            </b-col>
+            <b-col cols="auto">
+              <p>ROUND {{ log.round }}</p>
+            </b-col>
+          </b-row>
+        </b-row>
+      </b-row>
+    </b-row>
+  </b-container>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
-import { MarsLogData, MarsLogCategory } from '@port-of-mars/shared/types';
+import { Vue, Component } from 'vue-property-decorator';
 
 @Component({
   components: {},
@@ -31,7 +45,7 @@ import { MarsLogData, MarsLogCategory } from '@port-of-mars/shared/types';
 export default class MarsLog extends Vue {
 
   updated() {
-    const elem = this.$el.querySelector('.wrapper');
+    const elem = this.$el.querySelector('.scroll-to-recent');
     elem!.scrollTop = elem!.scrollHeight;
   }
 
@@ -49,7 +63,3 @@ export default class MarsLog extends Vue {
 
 }
 </script>
-
-<style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/MarsLog.scss';
-</style>
