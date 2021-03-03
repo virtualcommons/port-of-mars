@@ -1,54 +1,78 @@
 <template>
-  <div v-if="isChatAvailable" class="c-chat">
-    <div class="messages-view">
-      <div class="wrapper">
-        <p v-if="messages.length === 0" class="empty">
+  <!-- display chat if chat is available -->
+  <!--  d-flex: transform b-container into flex-item -->
+  <!--  flex-column: set vertical direction on flex-items -->
+  <b-container v-if="isChatAvailable" class="d-flex flex-column h-100 m-0 p-0" fluid>
+    <!-- flex-grow-1: tells this row to grow as needed to fill the remainder -->
+    <!-- height of b-container -->
+    <b-row class="w-100 flex-grow-1 m-auto scroll-to-recent"
+           style="overflow-y: auto; overflow-x: hidden;"
+    >
+      <!-- b-row wrapper to achieve chat scroll effect -->
+      <b-row class="w-100 my-2 justify-content-center" align-content="end">
+        <!-- if there is no chat history to display -->
+        <p v-if="messages.length === 0" style="color: rgba(241, 224, 197, 0.25)">
           No Messages
         </p>
-        <div
+        <!-- chat message -->
+        <b-row
           v-for="message in messages"
-          :key="message.dateCreated + Math.random()"
+          :key="message.dateCreated"
           :style="getMessageColor(message)"
-          class="message"
+          class="h-auto w-100 my-1 flex-column justify-content-start"
+          style="color: rgb(241, 224, 197); background-color: rgba(241, 224, 197, 0.05);
+                font-size: 1rem;"
         >
-          <div class="top">
-            <p class="member">
+          <b-col align-self="end">
+            <!-- role of sender (e.g. Curator) -->
+            <p class="mb-0 mx-2 mt-2 text-uppercase" style=" color: rgb(202, 166, 110);
+               font-weight: bold">
               {{ message.role }}
             </p>
-            <p class="time">
-              <span>[ </span>{{ toDate(message.dateCreated) }}<span> ]</span>
-            </p>
-          </div>
-          <div class="bottom">
-            <p class="content">
+            <!-- message of sender -->
+            <p class="mx-2" style="word-wrap: break-word">
               {{ message.message }}
             </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="input-frame">
-      <input
-        class="chat-input"
-        @keydown.enter="submitToChat"
-        v-model="pendingMessage"
-        type="text"
-        placeholder="send a message"
-      />
-      <font-awesome-icon
-        :icon="['far', 'paper-plane']"
-        :class="sendBtnClass"
-        @click="submitToChat"
-        size="lg"
-      />
-    </div>
-  </div>
-  <div v-else class="chat-disabled">
-    <div class="wrapper">
-      <p>Chat is disabled this round.</p>
-    </div>
-  </div>
+            <!-- timestamp -->
+            <p class="mb-2 mx-2">[ {{ toDate(message.dateCreated) }} ]</p>
+          </b-col>
+        </b-row>
+      </b-row>
+    </b-row>
+    <!-- flex-shrink-1: tells this row to shrink as needed to make room for other flex-items
+    within the height constraints of b-container -->
+    <b-row class="w-100 h-auto align-items-center flex-shrink-1 my-2 mx-auto">
+      <b-col cols="10" class="w-100">
+        <b-form-input
+          class="h-100 flex-grow-1"
+          style="color: rgb(241, 224, 197); background-color: transparent; font-size: 1rem;"
+          @keydown.enter="submitToChat"
+          v-model="pendingMessage"
+          placeholder="Send a message"
+        />
+      </b-col>
+      <b-col cols="2" class="w-100 m-0 p-0">
+        <b-button icon v-b-tooltip.hover="'Send chat message'" @click="submitToChat">
+          <font-awesome-icon
+            :icon="['far', 'paper-plane']"
+            :class="sendBtnClass"
+            size="lg"
+            style="color: rgb(241, 224, 197)"
+          />
+        </b-button>
+      </b-col>
+    </b-row>
+  </b-container>
+  <!-- disable chat if chat is not available -->
+  <b-container v-else class="h-100 m-0 p-0 flex-grow-1" fluid>
+    <b-row class="h-100 w-100 mb-0 justify-content-center align-items-center"
+           style="color: rgb(241, 224, 197); background-color: rgba(241, 224, 197, 0.05);">
+      <p class="mb-0 text-center" style="color: rgba(241, 224, 197, 0.25); font-weight: bold;
+         font-size: 1rem;">
+        Chat is disabled this round.
+      </p>
+    </b-row>
+  </b-container>
 </template>
 
 <script lang="ts">
@@ -66,9 +90,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 export default class Chat extends Vue {
   @Inject() readonly api!: GameRequestAPI;
 
-  private pendingMessage: string = '';
-
-  private count: number = 0;
+  pendingMessage: string = '';
 
   get pendingMessageCleaned(): string {
     // TODO: CAN ADD MORE CLEANING AS NECESSARY
@@ -89,25 +111,25 @@ export default class Chat extends Vue {
     return this.$tstore.state.messages;
   }
 
-  updated(): any {
+  updated() {
     if (this.isChatAvailable) {
-      const elem = this.$el.querySelector('.messages-view');
+      const elem = this.$el.querySelector('.scroll-to-recent');
       elem!.scrollTop = elem!.scrollHeight;
     }
   }
 
-  private toDate(unixTimestamp: number): any {
+  toDate(unixTimestamp: number): any {
     return new Date(unixTimestamp).toLocaleTimeString();
   }
 
-  private submitToChat(): void {
+  submitToChat(): void {
     if (this.pendingMessageCleaned && this.pendingMessageCleaned !== '') {
       this.api.sendChatMessage(this.pendingMessageCleaned);
       this.pendingMessage = '';
     }
   }
 
-  private getMessageColor(message: ChatMessageData): object {
+  getMessageColor(message: ChatMessageData): object {
     if (message.role) {
       return { backgroundColor: `var(--color-${message.role})` };
     }
@@ -117,5 +139,16 @@ export default class Chat extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/static/chat/Chat.scss';
+.chat-input-sendbtn {
+  margin: 0 0.5rem;
+  color: $light-accent-25;
+  @include default-transition-base;
+  cursor: pointer;
+
+  &--ready {
+    @extend .chat-input-sendbtn;
+    color: $light-accent;
+    @include default-scale-up;
+  }
+}
 </style>
