@@ -10,7 +10,7 @@ export const PHASE_INSTRUCTIONS = {
          'You can chat with the other players to discuss and coordinate trades prior to making a trade request.',
   purchase: 'Accomplishments that you can purchase have an orange header and have been sorted to the top. You can ' +
             'view your purchased Accomplishments by clicking on your player icon at the top left. ',
-  discard: 'You can discard as many Accomplishments as you like in the Discardable Accomplishments section below. ' +
-           'At the beginning of the next round you will receive up to 3 new Accomplishments to replace Accomplishments ' +
-           'you have purchased or discarded. You start every round with a total of 3 available Accomplishments.',
+  discard: 'Discard as many Accomplishments as you like At the beginning of the next round, you will ' +
+           'receive up to 3 new Accomplishments to replace Accomplishments you have purchased or discarded. ' +
+           'You start every round with a total of 3 available Accomplishments.',
 };

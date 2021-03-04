@@ -1,22 +1,27 @@
 <template>
-  <div class="c-hud-right container">
-    <div class="wrapper row">
-      <div class="information col-5 tour-phase">
+  <b-row class="h-100 w-100 m-0 p-0">
+    <!--                   |
+          Game Information | Instructions / Active Events
+                           |                             -->
+      <!-- Game Information -->
+      <b-col class="w-100 m-0 p-0 tour-phase" cols="4">
         <GameInformation />
-      </div>
-      <div class="views col-7">
-        <HUDRightButtons />
-        <div class="views-wrapper tour-phase-instructions tour-event-view">
+      </b-col>
+      <!-- Instructions / Active Events -->
+      <b-col class="d-flex flex-column h-100 w-100 m-0 p-0 justify-content-center" cols="8">
+        <b-row class="h-auto w-100 mx-0 mb-2 p-0">
+          <HUDRightButtons />
+        </b-row>
+        <b-row class="w-100 flex-grow-1 tour-phase-instructions tour-event-view"
+               style="background-color: rgba(241, 224, 197, 0.05)"
+        >
           <!-- Phase Instructions View -->
-          <PhaseInstructions v-show="currentView === view.PhaseInformation" />
-
-          <!-- Active Events View -->
-          <div
-            v-show="currentView === view.ActiveEvents"
-            class="active-events-view"
+            <PhaseInstructions v-show="currentView === view.PhaseInformation"/>
+          <!-- active events for a given round -->
+          <b-col v-show="currentView === view.ActiveEvents" class="w-100"
           >
-            <div class="wrapper">
-              <p class="empty" v-if="eventsForTheRound.length === 0">
+            <b-row class="w-100 justify-content-center" style="overflow-y: auto">
+              <p v-if="eventsForTheRound.length === 0" class="mb-0">
                 No Active Events
               </p>
               <EventCard
@@ -25,22 +30,21 @@
                 :event="event"
                 :visible="eventVisible(index)"
               />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+            </b-row>
+          </b-col>
+        </b-row>
+      </b-col>
+  </b-row>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import {Vue, Component} from 'vue-property-decorator';
 import HUDRightButtons from '@port-of-mars/client/components/game/HUDRightButtons.vue';
 import GameInformation from './static/panels/GameInformation.vue';
 import PhaseInstructions from './static/panels/PhaseInstructions.vue';
 import EventCard from '@port-of-mars/client/components/game/phases/events/EventCard.vue';
-import { Phase } from '@port-of-mars/shared/types';
-import { HUDRightView } from '@port-of-mars/shared/game/client/panes';
+import {Phase} from '@port-of-mars/shared/types';
+import {HUDRightView} from '@port-of-mars/shared/game/client/panes';
 
 @Component({
   components: {

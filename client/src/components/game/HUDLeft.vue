@@ -1,42 +1,35 @@
 <template>
-  <b-container fluid class="h-100 m-0 p-0 tour-hud-left-toggle">
-    <b-row class="h-100 w-auto m-0 p-0">
-      <b-col cols="5" class="player">
-        <Player />
-        <HUDLeftButtons />
+  <b-row class="h-100 w-100 m-0 p-0 tour-hud-left-toggle">
+      <b-col cols="5" class="h-100 w-100 m-0 p-0">
+        <b-row class="w-100 m-0 p-0">
+          <Player />
+        </b-row>
+        <b-row class="w-100 mt-2 mb-0 mx-0 p-0">
+          <HUDLeftButtons />
+        </b-row>
       </b-col>
-      <b-col cols="7" class="views">
-        <!-- OtherPlayers View -->
-        <b-row
-          v-show="currentView === view.OtherPlayers"
-          class="h-100 p-0 m-0 other-players-view tour-players"
-        >
-          <b-container fluid class="hud-outer">
-            <OtherPlayers
-              v-for="player in otherPlayers"
-              v-bind="player"
-              :key="player.role"
-            />
-          </b-container>
-        </b-row>
+      <b-col cols="7" v-show="currentView === view.OtherPlayers"
+             class="h-100 w-100 p-0 m-0 tour-players"
+             style="background-color: rgba(241, 224, 197, 0.05);
+             overflow-y: auto; overflow-x: hidden;"
+      >
+          <OtherPlayers
+            v-for="player in otherPlayers"
+            v-bind="player"
+            :key="player.role"
+          />
 
-        <!-- Inventory View -->
-        <b-row
-          v-show="currentView === view.Inventory"
-          class="h-100 py-3 m-0 outer tour-inventory-view"
-        >
-          <b-container fluid>
-            <Inventory :isSelf="true" />
-          </b-container>
-        </b-row>
-
-        <!-- Accomplishments View -->
-        <b-row
-          v-show="currentView === view.Accomplishments"
-          class="tour-active-accomplishments"
-          :style="'height: 60%'"
-        >
-          <b-container fluid class="p-3 mt-3 outer" fluid>
+      </b-col>
+      <b-col cols="7" v-show="currentView === view.Inventory"
+             class="h-100 w-100 p-0 m-0 tour-inventory-view"
+             style="background-color: rgba(241, 224, 197, 0.05); overflow-y: auto; overflow-x: hidden;"
+      >
+        <Inventory :isSelf="true" />
+      </b-col>
+      <b-col cols="7" v-show="currentView === view.Accomplishments"
+             class="h-100 w-100 p-0 m-0 tour-active-accomplishments"
+             style="background-color: rgba(241, 224, 197, 0.05); overflow-y: auto; overflow-x: hidden;"
+      >
             <AccomplishmentCard
               v-for="accomplishment in accomplishmentCards"
               :key="accomplishment.id"
@@ -44,11 +37,8 @@
               :showDescription="false"
               :showCost="false"
             />
-          </b-container>
-        </b-row>
       </b-col>
-    </b-row>
-  </b-container>
+  </b-row>
 </template>
 
 <script lang="ts">
@@ -102,9 +92,9 @@ export default class HUDLeft extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.hud-outer {
+.scroll-container {
   background-color: $light-shade-05;
-  height: 85%;
+  height: 45%;
   overflow-y: auto;
   overflow-x: hidden;
 }

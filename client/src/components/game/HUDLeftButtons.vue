@@ -1,58 +1,55 @@
 <template>
-  <b-container class="w-100 py-3 m-0">
+  <b-row class="h-100 w-100 m-0 p-0 justify-content-center align-items-center">
     <!-- button to switch between HUD Left Views -->
-    <b-row class="w-100 h-100 p-0 m-0 justify-content-center align-items-center">
+    <!-- view : other players -->
+    <b-col class="justify-content-center align-items-center" cols="4">
+      <button
+        v-b-tooltip.hover.bottom="'Other Players'"
+        :class="buttonClass(view.OtherPlayers)"
+        @click="switchCurrentView(view.OtherPlayers)"
+      >
+        <b-icon-people-fill scale="1.5"></b-icon-people-fill>
+      </button>
+    </b-col>
 
-      <!-- view : other players -->
-      <b-col cols="4" class="justify-content-center align-items-center">
-        <button
-          v-b-tooltip.hover.bottom="'Other Players'"
-          @click="switchCurrentView(view.OtherPlayers)"
-          :class="buttonClass(view.OtherPlayers)"
-        >
-          <b-icon-people-fill scale="1.5"></b-icon-people-fill>
-        </button>
-      </b-col>
+    <!-- inventory -->
+    <b-col class="justify-content-center align-items-center" cols="4">
+      <button
+        v-b-tooltip.hover.bottom="'Inventory'"
+        :class="buttonClass(view.Inventory)"
+        @click="switchCurrentView(view.Inventory)"
+      >
+        <b-icon-briefcase-fill scale="1.5"></b-icon-briefcase-fill>
+      </button>
+    </b-col>
 
-      <!-- inventory -->
-      <b-col cols="4" class="justify-content-center align-items-center">
-        <button
-          v-b-tooltip.hover.bottom="'Inventory'"
-          @click="switchCurrentView(view.Inventory)"
-          :class="buttonClass(view.Inventory)"
-        >
-          <b-icon-briefcase-fill scale="1.5"></b-icon-briefcase-fill>
-        </button>
-      </b-col>
-
-      <!-- accomplishments -->
-      <b-col cols="4" class="justify-content-center align-items-center">
-        <button
-          v-b-tooltip.hover.bottom="'Accomplishments'"
-          @click="switchCurrentView(view.Accomplishments)"
-          :class="buttonClass(view.Accomplishments)"
-        >
-          <b-icon-star-fill scale="1.5"></b-icon-star-fill>
-        </button>
-      </b-col>
-    </b-row>
-  </b-container>
+    <!-- accomplishments -->
+    <b-col class="justify-content-center align-items-center" cols="4">
+      <button
+        v-b-tooltip.hover.bottom="'Accomplishments'"
+        :class="buttonClass(view.Accomplishments)"
+        @click="switchCurrentView(view.Accomplishments)"
+      >
+        <b-icon-star-fill scale="1.5"></b-icon-star-fill>
+      </button>
+    </b-col>
+  </b-row>
 </template>
 
 <script lang="ts">
-  import {Component, Inject, Vue} from 'vue-property-decorator';
+import {Component, Inject, Vue} from 'vue-property-decorator';
 
-  import {GameRequestAPI} from '@port-of-mars/client/api/game/request';
-  import {HUDLeftView} from '@port-of-mars/shared/game/client/panes';
-  import {Phase} from "@port-of-mars/shared/types";
+import {GameRequestAPI} from '@port-of-mars/client/api/game/request';
+import {HUDLeftView} from '@port-of-mars/shared/game/client/panes';
+import {Phase} from "@port-of-mars/shared/types";
 
-  import {library} from '@fortawesome/fontawesome-svg-core';
-  import {faUsers} from '@fortawesome/free-solid-svg-icons/faUsers';
-  import {faBriefcase} from '@fortawesome/free-solid-svg-icons/faBriefcase';
-  import {faStar} from '@fortawesome/free-solid-svg-icons/faStar';
-  import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
+import {library} from '@fortawesome/fontawesome-svg-core';
+import {faUsers} from '@fortawesome/free-solid-svg-icons/faUsers';
+import {faBriefcase} from '@fortawesome/free-solid-svg-icons/faBriefcase';
+import {faStar} from '@fortawesome/free-solid-svg-icons/faStar';
+import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 
-  library.add(faUsers, faBriefcase, faStar);
+library.add(faUsers, faBriefcase, faStar);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 @Component({})
@@ -119,5 +116,36 @@ export default class HUDLeftButtons extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/HUDLeftButtons.scss';
+button {
+  @include reset-button;
+  height: 3rem;
+  width: 3rem;
+  @include reset-padding-margin;
+  border-radius: 50%;
+  font-size: $font-med;
+  font-weight: $bold !important;
+  text-align: center;
+  color: $light-shade;
+  border: 0.125rem solid $light-shade;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+
+  &:disabled {
+    opacity: 0.5;
+  }
+
+  &.selected {
+    color: $dark-shade;
+    background-color: $light-shade;
+
+    .icon {
+      color: $dark-shade;
+    }
+  }
+}
+
+.icon {
+  height: 50%;
+  width: 50%;
+  color: $light-shade;
+}
 </style>
