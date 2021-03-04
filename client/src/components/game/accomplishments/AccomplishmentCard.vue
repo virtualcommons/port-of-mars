@@ -1,57 +1,48 @@
 <template>
   <div
     :class="[cardTypeStyling(type), isModal ? 'modal-view' : '']"
-    class="w-100 p-0 mb-3 flex-shrink-0 overflow-hidden"
+    class="w-100 p-0 mx-0 mb-2 overflow-hidden"
     v-show="isActive"
   >
     <!-- title -->
-    <div class="w-100 m-0">
-      <b-row align-v="center" class="w-100 justify-content-center">
-        <b-col class="px-4 mr-auto" cols="auto" v-if="!isModal">
-          <b-icon-exclamation-circle-fill
-            @click="showInfo"
-            circle
-            variant="dark"
-          />
+    <b-row align-v="center" class="w-100 mx-0 mt-2 p-0 justify-content-center align-items-center"
+           @click="showInfo" style="cursor: pointer"
+    >
+        <b-col class="m-0 p-0 w-100">
+          <p :style="fontColor()" class="w-100 text-center">{{ accomplishment.label }}</p>
         </b-col>
-        <b-col class="mt-2 text-center">
-          <p :style="fontColor()" class="w-100">{{ accomplishment.label }}</p>
-        </b-col>
-
-      </b-row>
-    </div>
-
+    </b-row>
 
     <!-- information: points, description -->
-    <div class="w-100 m-0 p-2 wrapper">
       <b-row
         :class="isModal ? 'p-4 p-lg-4' : ''"
         align-v="center"
+        class="w-100 m-0 p-2"
+        style="background-color: rgb(34, 26, 27)"
       >
         <!-- points -->
         <b-col
           :class="showDescription ? 'mt-3 col-3' : 'col-12'"
-          class="points"
+          class="d-flex flex-column justify-content-center align-items-center"
         >
-          <p>Points</p>
-          <p>{{ accomplishment.victoryPoints }}</p>
+          <p>{{ accomplishment.victoryPoints }} Points</p>
         </b-col>
 
         <!-- description -->
         <b-col
           :class="showDescription ? 'mt-3' : ''"
-          class="flavortext text-left col-9"
+          class="pb-2 text-left col-9"
           v-if="showDescription"
         >
           <p>{{ accomplishment.flavorText }}</p>
         </b-col>
       </b-row>
-    </div>
-
+<!--    </div>-->
 
     <!-- cost -->
-    <div class="w-100 m-0 pt-1 wrapper">
-      <b-row class="flex-wrap justify-content-center px-4 py-2">
+    <b-row class="w-100 m-0 pt-1"
+           style="background-color: rgb(34, 26, 27); transition: all 0.15s ease-in-out;">
+      <b-row class="d-flex flex-wrap w-100 m-0 justify-content-center px-4 py-2">
         <div
           :class="investment.available ? '' : 'unattainable-resource'"
           class="cost justify-content-center align-items-center"
@@ -65,22 +56,24 @@
           />
         </div>
       </b-row>
-    </div>
+    </b-row>
 
     <!-- in purchase phase, allow purchase if sufficient resources -->
-    <div
-      class="w-100 m-0 p-3 wrapper text-center purchase"
+    <b-row
+      class="w-100 m-0 p-3 justify-content-center"
       v-if="type === cardType.purchase && showCard"
+      style="background-color: rgb(34, 26, 27); transition: all 0.15s ease-in-out;"
     >
       <button :disabled="!canPurchase || playerReady" @click="purchase()">
         Purchase Accomplishment
       </button>
 
-    </div>
+    </b-row>
 
     <!-- in discard phase, allow discard -->
-    <div
-      class="w-100 m-0 p-3 wrapper text-center discard"
+    <b-row
+      class="w-100 m-0 p-3 justify-content-center"
+      style="background-color: rgb(34, 26, 27); transition: all 0.15s ease-in-out;"
       v-else-if="type === cardType.discard && showCard"
     >
       <button v-if="!isEffortsWasted" :disabled="playerReady" @click="discard()">
@@ -90,11 +83,12 @@
       <button v-else :disabled="playerReady" @click="discardPurchasedAccomplishment()">
         Discard Purchased Accomplishment
       </button>
-    </div>
+    </b-row>
 
     <!-- display status of card after it has been purchased or discarded -->
     <div
-      class="w-100 m-0 p-3 status-text"
+      class="w-100 m-0 p-3 text-center"
+      style="transition: all 0.15s ease-in-out; background-color: rgb(34, 26, 27);"
       v-else
     >
       <div class="text" v-if="type === cardType.discard">
@@ -348,4 +342,5 @@ export default class AccomplishmentCard extends Vue {
 
 <style lang="scss" scoped>
 @import '@port-of-mars/client/stylesheets/game/accomplishments/AccomplishmentCard.scss';
+
 </style>

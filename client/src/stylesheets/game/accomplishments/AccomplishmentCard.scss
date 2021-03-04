@@ -11,40 +11,6 @@ button {
   max-height: 17rem !important;
 }
 
-.wrapper, .status-text {
-  @include default-transition-base
-}
-
-.wrapper {
-  background: $dark-shade;
-}
-
-.points {
-  padding: 0 0.5rem;
-  @include make-column-and-center;
-
-  p {
-    width: 100%;
-    margin-bottom: 0;
-    font-size: $font-med;
-    font-weight: $regular;
-    color: $light-shade;
-    text-align: center;
-  }
-}
-
-.flavortext {
-  padding: 0 0.5rem;
-
-  p {
-    width: 100%;
-    margin-bottom: 0;
-    font-size: $font-med;
-    font-weight: $regular;
-    color: $light-shade;
-  }
-}
-
 
 .cost {
   height: 2rem;
@@ -70,8 +36,7 @@ button {
   border: 0.125rem solid $light-shade;
   background-color: $light-shade;
 
-  .purchase button,
-  .discard button {
+  button {
     @include space-button-white;
   }
 }
@@ -82,8 +47,7 @@ button {
   border: 0.125rem solid $light-accent;
   background-color: $light-accent;
 
-  .purchase button,
-  .discard button {
+  button {
     @include space-button;
   }
 }
@@ -93,8 +57,7 @@ button {
   border: 0.125rem solid $light-shade;
   background-color: $light-shade;
 
-  .purchase button,
-  .discard button {
+  button {
     @include space-button-white;
   }
 }
@@ -125,15 +88,7 @@ button {
   }
 }
 
-.discard {
-  padding: 0;
-  @include make-center;
-}
 
-.status-text {
-  background-color: $dark-shade;
-  text-align: center;
-}
 
 .hide-card {
   animation: hide 0.3s linear 1.5s 1 forwards;
