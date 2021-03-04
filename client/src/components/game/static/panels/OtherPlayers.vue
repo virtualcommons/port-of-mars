@@ -1,19 +1,26 @@
 <template>
-  <div @click="handleModal()" class="c-otherplayers container">
-    <div class="wrapper row">
-      <div class="picture col-3">
-        <div :style="indicatorStyle" class="indicator">
-          <div :style="frameColor" class="frame">
-            <img :src="playerRoleImage" alt="Player Image"/>
-          </div>
-        </div>
-      </div>
-      <div class="information col-9">
-        <p class="role">{{ role }}</p>
-        <p class="score">Score: {{ victoryPoints }}</p>
-      </div>
-    </div>
-  </div>
+  <b-row class="m-0 p-0"
+               style="cursor: pointer; transition: color 0.15s ease-in-out, background-color 0.15s
+               ease-in-out;"
+               fluid
+               @click="handleModal()"
+  >
+<!--    <b-row class="w-100 h-100 justify-content-center">-->
+      <b-col cols="3" class="h-100 w-100">
+        <b-row :style="indicatorStyle" class="p-1 my-2 mx-auto" style="border-radius: 50%;
+               height: 4rem; width: 4rem;  transition: color 0.15s ease-in-out,
+               background-color 0.15s ease-in-out;">
+          <b-col :style="frameColor" class="w-100 h-100 m-0 p-0" style="border-radius: 50%">
+            <img :src="playerRoleImage" alt="Player Image" style="object-fit: cover" class="w-100 h-100 m-0 p-0" />
+          </b-col>
+        </b-row>
+      </b-col>
+      <b-col cols="9" class="h-100 w-100 my-2">
+        <p class="font-weight-bold m-0 p-0" style="font-size: 1.5rem">{{ role }}</p>
+        <p class="font-weight-bold m-0 p-0" style="font-size: 1rem">Score: {{ victoryPoints }}</p>
+      </b-col>
+<!--    </b-row>-->
+  </b-row>
 </template>
 
 <script lang="ts">
@@ -26,9 +33,9 @@
   export default class OtherPlayers extends Vue {
     @Inject() readonly api!: GameRequestAPI;
 
-    @Prop() private role!: string;
-    @Prop() private ready!: boolean;
-    @Prop() private victoryPoints!: number;
+    @Prop() role!: string;
+    @Prop() ready!: boolean;
+    @Prop() victoryPoints!: number;
 
     get frameColor(): object {
       return this.role
@@ -48,7 +55,7 @@
         : require(`@port-of-mars/client/assets/characters/Researcher.png`);
     }
 
-    private handleModal(): void {
+    handleModal(): void {
       this.api.setModalVisible({
         type: 'PlayerModal',
         data: {
@@ -58,7 +65,3 @@
     }
   }
 </script>
-
-<style lang="scss" scoped>
-  @import '@port-of-mars/client/stylesheets/game/static/panels/OtherPlayers.scss';
-</style>

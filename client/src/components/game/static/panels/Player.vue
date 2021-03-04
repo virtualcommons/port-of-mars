@@ -1,19 +1,22 @@
 <template>
-  <div
+  <b-row
     @click="handleOpenModal()"
-    class="c-player tour-profile tour-player-self"
+    class="flex-column h-100 w-100 m-0 p-0 tour-profile tour-player-self"
+    style="cursor: pointer"
   >
-    <div class="indicator" :style="indicatorStyle">
-      <div class="frame" :style="frameColor">
-        <img :src="playerRoleImage" alt="Player Image" />
-      </div>
-    </div>
-    <div class="information">
-      <p class="title">Your Role</p>
-      <p class="role">{{ playerRole }}</p>
-      <p class="score">Score: {{ playerScore }}</p>
-    </div>
-  </div>
+    <b-row class="p-1 my-2 mx-auto" :style="indicatorStyle" style="border-radius: 50%;
+           transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+           height: 10rem; width: 10rem;">
+      <b-col class="h-100 w-100 m-0 p-0" style="border-radius: 50%" :style="frameColor">
+        <img :src="playerRoleImage" alt="Player Image" style="object-fit: cover" class="my-3" />
+      </b-col>
+    </b-row>
+    <b-row class="flex-column text-center">
+      <p class="mb-1" style="color: rgb(202, 166, 110); font-weight: bold;">Your Role</p>
+      <p class="mb-1" style="color: rgb(241, 224, 197); font-weight: bold;">{{ playerRole }}</p>
+      <p class="m-0" style="color: rgb(241, 224, 197); font-weight: bold;">Score: {{ playerScore }}</p>
+    </b-row>
+  </b-row>
 </template>
 
 <script lang="ts">
@@ -70,7 +73,3 @@ export default class Player extends Vue {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/static/panels/Player.scss';
-</style>

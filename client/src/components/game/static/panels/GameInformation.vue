@@ -1,19 +1,25 @@
 <template>
-  <div class="c-gameinformation">
-    <div class="section tour-round">
-      <p class="title">Round</p>
-      <p class="round">{{ roundNumber }}</p>
-    </div>
-    <div class="section tour-current-phase">
-      <p class="title">Current Phase</p>
-      <p class="number">{{ phaseNumber + 1 }} of 6</p>
-      <p class="phase">{{ phaseText }}</p>
-    </div>
-    <div class="section tour-time-remaining">
-      <p class="title">Phase Countdown</p>
+  <b-row class="h-100 my-2 flex-column justify-content-center align-items-start"
+         style="color: rgb(34, 26, 27)"
+  >
+    <b-col class="w-100 py-0 my-0 tour-round">
+      <p class="py-0 my-0 title">
+        Round
+      </p>
+      <p class="subtitle">
+        {{ roundNumber }}
+      </p>
+    </b-col>
+    <b-col class="w-100 py-0 my-0 tour-current-phase">
+      <p class="py-0 my-0 title">Current Phase</p>
+      <p class="py-0 my-0 phase-number">{{ phaseNumber + 1 }} of 6</p>
+      <p class="subtitle">{{ phaseText }}</p>
+    </b-col>
+    <b-col class="w-100 py-0 my-0 tour-time-remaining">
+      <p class="py-0 my-0 title">Phase Countdown</p>
       <p :class="countdownStyling">{{ timeRemaining }}</p>
-    </div>
-    <div class="section">
+    </b-col>
+    <b-col class="w-100 my-0 py-0">
       <button
         @click="submitDone"
         class="ready-button tour-ready-to-advance-button"
@@ -24,8 +30,8 @@
       <button @click="submitCancel" v-if="playerReady" class="cancel-button">
         Cancel Readiness
       </button>
-    </div>
-  </div>
+    </b-col>
+  </b-row>
 </template>
 
 <script lang="ts">
@@ -107,5 +113,92 @@ export default class GameInformation extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/static/panels/GameInformation.scss';
+button {
+  @include space-button;
+  font-size: $font-med;
+  font-weight: $bold !important;
+}
+
+button.ready-button,
+button.cancel-button {
+  position: relative;
+  overflow: hidden;
+}
+
+button.ready-button {
+  border: 0.125rem solid $light-accent;
+  color: $dark-shade;
+  background-color: $light-accent;
+}
+
+button.cancel-button {
+  border: 0.125rem solid $light-shade;
+  color: $dark-shade;
+  background-color: $light-shade;
+}
+
+button.ready-button:after {
+  animation: glint 5s linear 0s infinite forwards;
+  //animation: name duration timing-function delay iteration-count direction fill-mode;
+
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgba(240, 218, 177, 0.5),
+      50%,
+      transparent
+  );
+  transform: rotateZ(120deg) translate(-1em, 4em);
+  @keyframes glint {
+    10%,
+    100% {
+      transform: rotateZ(120deg) translate(0, -5em);
+    }
+  }
+}
+
+.title {
+  color: $light-shade-5;
+  font-size: $font-med;
+  font-weight: $bold;
+}
+
+.subtitle {
+  color: $light-shade;
+  font-size: $font-large;
+  font-weight: $bold;
+}
+
+.phase-number {
+  color: $light-shade;
+  font-size: $font-med;
+  font-weight: $bold;
+}
+
+.countdown {
+  color: $light-shade;
+  font-size: $font-large;
+  transition: all 0.15s ease-in-out;
+}
+
+.blink-timer {
+  animation: blinker 0.5s linear 5;
+  color: $status-red;
+  font-size: $font-large;
+  font-weight: $bold;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
 </style>

@@ -1,16 +1,31 @@
 <template>
-  <b-container fluid class="h-100 p-5 m-0" :style="'background-color: $dark-shade'">
+  <b-container class="d-flex flex-column h-100 p-3 m-0"
+               style="background-color: rgb(34, 26, 27)"
+               fluid
+  >
     <ModalController />
     <ProfileMenu />
-    <b-row class="w-100">
+
+  <!--  ----------------------------------------
+                     System Health
+        ----------------------------------------
+              HUD              | Mars Log /
+        ---------------------- |
+          Phase Switcher       | Chat
+        ---------------------------------------- -->
+
+    <!-- System Health -->
+    <b-row class="h-auto w-100 my-2">
       <SystemHealth />
     </b-row>
-    <b-row class="h-100 flex-grow-1 p-0 m-0 overflow-hidden">
-      <b-col cols="9" class="h-100 align-items-center">
-        <b-row class="w-100" :style="'height: 40%'">
-          <HUD/>
+
+    <!-- HUD, Phase Switcher, Mars Log, Chat -->
+    <b-row class="h-100 w-100 justify-content-center p-0 m-0">
+      <b-col cols="9" class="w-100 h-100 justify-content-center align-items-center">
+        <b-row class="w-100 p-2 mx-0" style="height: 40%; border: 0.2rem solid rgba(241, 224, 197, 0.25);">
+          <HUD />
         </b-row>
-        <b-row class="p-3" :style="'height: 60%; border: 0.2rem solid rgba(241, 224, 197, 0.25); '">
+        <b-row class="w-100 p-2 mt-2 mx-0" style="height: 60%; border: 0.2rem solid rgba(241, 224, 197, 0.25);">
           <PhaseSwitcher />
         </b-row>
       </b-col>

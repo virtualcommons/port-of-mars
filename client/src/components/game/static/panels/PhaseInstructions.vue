@@ -1,13 +1,7 @@
 <template>
-  <div class="c-phaseinstructions">
-    <div class="wrapper">
-      <div class="instructions">
-        <div class="text">
-          <p>{{ phaseInstructions }}</p>
-        </div>
-      </div>
-    </div>
-  </div>
+  <b-row class="h-100 w-100 p-0 m-3">
+      <p class="text-left">{{ phaseInstructions }}</p>
+  </b-row>
 </template>
 
 <script lang="ts">
@@ -44,7 +38,3 @@ export default class PhaseInstructions extends Vue {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/static/panels/PhaseInstructions.scss';
-</style>
