@@ -47,7 +47,7 @@
         class="flex-grow-1 w-100 mx-auto mt-3 p-3"
         style="background-color: var(--light-shade-05)"
       >
-        <div class="position-absolute p-3 w-100" style="overflow-y: auto; overflow-x: hidden; background-color: pink;
+        <div class="position-absolute p-3 w-100" style="overflow-y: auto; overflow-x: hidden;
             max-height: 75%; max-width: 85%;"
         >
           <AccomplishmentCard
