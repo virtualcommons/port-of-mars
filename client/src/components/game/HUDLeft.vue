@@ -1,5 +1,5 @@
 <template>
-  <b-row class="h-100 w-100 m-0 p-0 tour-hud-left-toggle">
+  <b-row class="h-100 w-100 m-0 p-0 tour-hud-left-toggle overflow-hidden">
       <b-col cols="5" class="h-100 w-100 m-0 p-0">
         <b-row class="w-100 m-0 p-0">
           <Player />
@@ -24,19 +24,23 @@
              class="h-100 w-100 p-0 m-0 tour-inventory-view"
              style="background-color: rgba(241, 224, 197, 0.05); overflow-y: auto; overflow-x: hidden;"
       >
-        <Inventory :isSelf="true" />
+        <div class="w-100 position-absolute" style="overflow-y: auto; overflow-x: hidden;">
+          <Inventory :isSelf="true" />
+        </div>
       </b-col>
       <b-col cols="7" v-show="currentView === view.Accomplishments"
              class="h-100 w-100 p-0 m-0 tour-active-accomplishments"
-             style="background-color: rgba(241, 224, 197, 0.05); overflow-y: auto; overflow-x: hidden;"
+             style="background-color: rgba(241, 224, 197, 0.05);"
       >
-            <AccomplishmentCard
-              v-for="accomplishment in accomplishmentCards"
-              :key="accomplishment.id"
-              :accomplishment="accomplishment"
-              :showDescription="false"
-              :showCost="false"
-            />
+        <div class="h-100 w-100 position-absolute" style="overflow-y: auto; overflow-x: hidden;">
+          <AccomplishmentCard
+            v-for="accomplishment in accomplishmentCards"
+            :key="accomplishment.id"
+            :accomplishment="accomplishment"
+            :showDescription="false"
+            :showCost="false"
+          />
+        </div>
       </b-col>
   </b-row>
 </template>

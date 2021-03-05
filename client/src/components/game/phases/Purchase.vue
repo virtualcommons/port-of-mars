@@ -1,22 +1,33 @@
 <template>
-  <b-container class="h-100 p-0 m-0 tour-purchase-action" fluid>
-    <b-row class="h-100 w-100 p-0 m-0">
+  <b-row class="h-100 w-100 p-0 m-0 tour-purchase-action">
       <!-- inventory -->
-      <b-col class="h-100 w-100 py-2 partition tour-inventory" cols="4">
-        <div class="header">
+      <b-col class="d-flex flex-column w-100 py-2 partition tour-inventory" cols="4">
+        <b-row class="w-100 m-0 p-3 justify-content-center" style="background-color: var(--main-brand)">
           <p class="title">Inventory</p>
-        </div>
-        <b-container class="p-3 mt-3 outer" fluid>
-          <Inventory :isSelf="true"/>
-        </b-container>
+        </b-row>
+        <b-row class="flex-grow-1 w-100 p-3 mt-3 mx-auto"
+               style="background-color: var(--light-shade-05); overflow-y: auto; overflow-x: hidden;"
+        >
+          <div class="position-absolute px-2 mb-5" style="overflow-y: auto; overflow-x: hidden;
+          width: 90%">
+            <Inventory :isSelf="true"/>
+          </div>
+        </b-row>
       </b-col>
 
       <!-- purchasable accomplishments -->
-      <b-col class="h-100 w-auto py-2 tour-purchase" cols="8">
-        <div class="header">
+      <b-col class="d-flex flex-column h-100 w-100 py-2 tour-purchase" cols="8">
+        <b-row class="h-auto w-100 m-0 p-3 justify-content-center"
+               style="background-color: var(--main-brand)"
+        >
           <p class="title">Purchasable Accomplishments</p>
-        </div>
-        <b-container class="p-3 mt-3 outer" fluid>
+        </b-row>
+        <b-row class="flex-grow-1 w-100 p-3 mt-2 mx-0"
+               style="background-color: var(--light-shade-05); overflow-y: auto; overflow-x: hidden;"
+        >
+
+          <div class="position-absolute" style="overflow-y: auto; overflow-x: hidden;
+               max-width: 92%; max-height: 80%;">
             <AccomplishmentCard
               v-for="accomplishment in sortedAccomplishments"
               :key="accomplishment.id"
@@ -25,10 +36,11 @@
               :type="cardType"
               @purchased="purchase(accomplishment)"
             />
-        </b-container>
+          </div>
+
+        </b-row>
       </b-col>
-    </b-row>
-  </b-container>
+  </b-row>
 </template>
 
 <script lang="ts">
@@ -89,5 +101,15 @@ export default class Purchase extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/Purchase.scss';
+.title {
+  margin: 0 1rem 0 0;
+  font-size: $font-med;
+  font-weight: $bold;
+  color: $phase-topbar-foreground;
+}
+
+.partition {
+  border-right: .2rem solid;
+  border-color: $light-shade-25;
+}
 </style>

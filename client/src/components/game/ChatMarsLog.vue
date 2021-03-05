@@ -1,10 +1,10 @@
 <template>
 <!--  d-flex: transform b-container into flex-item -->
 <!--  flex-column: set vertical direction on flex-items -->
-  <b-container fluid class="h-100 px-2 d-flex flex-column tour-split-chat-log">
+  <b-container fluid class="h-100 m-0 p-0 d-flex flex-column tour-split-chat-log">
     <!-- h-auto: auto sets height + gives row a height -->
     <!-- ** must give a height in order for flex-grow-1 to work below -->
-    <b-row class="h-auto w-100 p-0 mt-2 justify-content-center">
+    <b-row class="h-auto w-100 p-0 justify-content-center">
       <!-- buttons: toggle chat | mars log | split -->
       <b-col cols="4" class="p-0">
         <button

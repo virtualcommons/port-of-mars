@@ -1,40 +1,39 @@
 <template>
-  <div class="c-trades container tour-trade-list">
-    <div class="wrapper row">
-      <div class="trade-list col-12">
-        <div class="topbar">
-          <div class="title-wrapper">
-            <div class="wrapper">
-              <p class="title">Active Trades</p>
-              <b-form-checkbox
-                v-model="checked"
-                switch
-                class="tour-trade-filters"
-              >
-                <span v-if="checked">Your Trades</span>
-                <span v-else>All Trades</span>
-              </b-form-checkbox>
-            </div>
-          </div>
-          <button @click="requestTrade" class="tour-request-trade"
-                  :disabled="playerReady"
-          >
-            Request a Trade
-          </button>
-        </div>
-        <div class="outer-wrapper tour-active-trades-list">
-          <div class="wrapper">
-            <ActiveTrade
-              :key="trade.id"
-              :participant="associatedWithTrade(trade)"
-              v-bind="trade"
-              v-for="trade in trades"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <b-row class="h-100 w-100 flex-column m-0 p-0 tour-active-trades-list">
+    <!-- header -->
+    <b-row class="h-auto w-100 p-0 m-0 justify-content-between">
+      <b-col cols="9" class="h-100 w-100 p-3 m-0 d-flex flex-row justify-content-between align-items-center"
+             style="background-color: var(--main-brand); color: var(--dark-shade);">
+        <p class="my-auto">Active Trades</p>
+        <b-form-checkbox
+          v-model="checked"
+          switch
+          class="tour-trade-filters"
+        >
+          <span v-if="checked">Your Trades</span>
+          <span v-else>All Trades</span>
+        </b-form-checkbox>
+      </b-col>
+      <b-col cols="3" class="h-100 w-100 p-0">
+        <button @click="requestTrade" class="h-100 w-100 mr-5 ml-1 tour-request-trade"
+                :disabled="playerReady"
+        >
+          Request a Trade
+        </button>
+      </b-col>
+    </b-row>
+    <!-- trade list -->
+    <b-row class="flex-grow-1 w-100 flex-column justify-content-start align-items-center
+           p-0 mx-0 mt-2 mb-0" style="background-color: var(--light-shade-05); overflow-y: auto;
+           overflow-x: hidden;">
+      <ActiveTrade
+        :key="trade.id"
+        :participant="associatedWithTrade(trade)"
+        v-bind="trade"
+        v-for="trade in trades"
+      />
+    </b-row>
+  </b-row>
 </template>
 
 <script lang="ts">
@@ -153,5 +152,27 @@
 </script>
 
 <style lang="scss" scoped>
-  @import "@port-of-mars/client/stylesheets/game/phases/Trades.scss";
+button {
+  @include reset-button;
+  @include default-transition-base;
+  padding: 0.5rem 1rem;
+  font-size: $font-med;
+  font-weight: $bold !important;
+  text-align: center;
+  border: solid 0.125rem $dark-accent;
+  color: $dark-accent;
+
+  &:hover {
+    color: $modal-foreground-default;
+    background-color: $dark-accent;
+  }
+
+  &:disabled {
+    border: solid 0.125rem $light-shade-25;
+    color: $light-shade-25;
+    background-color: $dark-shade;
+    cursor: not-allowed;
+    opacity: 90%;
+  }
+}
 </style>

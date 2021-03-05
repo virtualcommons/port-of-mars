@@ -32,7 +32,7 @@
 
 .cards {
   padding: 0;
-  overflow-y: scroll;
+  overflow-y: auto;
   @include disable-scroll;
   height: 100%;
   background-color: $dark-shade;

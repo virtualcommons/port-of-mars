@@ -47,7 +47,7 @@
     .wrapper {
       width: 100%;
       height: 100%;
-      overflow-y: scroll;
+      overflow-y: auto;
     }
   }
 }
@@ -111,7 +111,7 @@
 
   .inventory {
     width: 100%;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
 }
 
@@ -120,11 +120,11 @@
   width: 100%;
   padding: 0.5rem;
   background-color: $light-shade-05;
-  overflow-y: scroll;
+  overflow-y: auto;
 
   .accomplishment-cards {
     width: 100%;
     @include make-column-and-top;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
 }

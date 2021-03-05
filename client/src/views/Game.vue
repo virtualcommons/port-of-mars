@@ -1,6 +1,6 @@
 <template>
-  <b-container fluid class="h-100 w-auto p-0 m-0">
-    <GameDashboard />
+  <b-container fluid class="h-100 p-0 m-0">
+    <GameDashboard class="w-100 h-100" />
   </b-container>
 </template>
 

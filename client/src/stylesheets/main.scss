@@ -54,7 +54,10 @@ body {
 
   // color theme
   --light-accent: rgb(202, 166, 110);
+  --dark-accent: #a49ca6; // accent - modal borders, hover,
   --dark-shade: rgb(34, 26, 27);
+  --dark-shade-9: rgba(34, 26, 27, .9);
+  --dark-shade-75: rgba(34, 26, 27, .75);
   --light-shade: rgb(241, 224, 197);
   --light-shade-05: rgba(241, 224, 197, 0.05);
   --light-shade-25: rgba(241, 224, 197, 0.25);

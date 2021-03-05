@@ -88,7 +88,7 @@
       .wrapper {
         @include expand;
         @include make-column-and-top;
-        overflow-y: scroll;
+        overflow-y: auto;
 
         .message {
           background-color: var(--marslog-orange);
