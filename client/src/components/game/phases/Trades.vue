@@ -24,14 +24,17 @@
     </b-row>
     <!-- trade list -->
     <b-row class="flex-grow-1 w-100 flex-column justify-content-start align-items-center
-           p-0 mx-0 mt-2 mb-0" style="background-color: var(--light-shade-05); overflow-y: auto;
-           overflow-x: hidden;">
-      <ActiveTrade
-        :key="trade.id"
-        :participant="associatedWithTrade(trade)"
-        v-bind="trade"
-        v-for="trade in trades"
-      />
+           p-0 mx-0 mt-2 mb-0 overflow-hidden" style="background-color: var(--light-shade-05)">
+      <div class="position-absolute mt-2" style="overflow-y: auto; overflow-x: hidden;
+           height: 48%; width: 95%;"
+      >
+        <ActiveTrade
+          :key="trade.id"
+          :participant="associatedWithTrade(trade)"
+          v-bind="trade"
+          v-for="trade in trades"
+        />
+      </div>
     </b-row>
   </b-row>
 </template>
