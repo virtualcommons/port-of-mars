@@ -16,21 +16,22 @@
               <b-badge :variant="systemHealthBadgeVariant">{{ nextRoundSystemHealth }}</b-badge>
             </h2>
             <p>Welcome to Mars! Each round, your System Health degrades by
-              <b>{{ systemHealthMaintenanceCost }}</b> due to standard wear and tear. Your System
-              Health at the start of this round is <b><code>{{ nextRoundSystemHealth }}</code></b>.
+              <b><span style="color: var(--light-accent)">{{ systemHealthMaintenanceCost }}</span></b> due to standard wear and tear. Your System
+              Health at the start of this round is <b><span style="color: var(--light-accent)">
+                {{ nextRoundSystemHealth }}</span></b>.
             </p>
           </b-col>
           <b-col class="flex-shrink-1 w-100 m-0 p-0" v-else>
             <p>
-              In the previous round you invested <b><code>{{ yourSystemHealthContributions }}</code></b> and the rest
+              In the previous round you invested <b><span style="color: var(--light-accent)">{{ yourSystemHealthContributions }}</span></b> and the rest
               of your group invested
-              <b><code>{{ otherPlayerSystemHealthContributions }}</code></b> in System Health for a total of {{systemHealthGroupContributions}}.
+              <b><span style="color: var(--light-accent)">{{ otherPlayerSystemHealthContributions }}</span></b> in System Health for a total of {{systemHealthGroupContributions}}.
               Your group's average investment was {{ averageContribution }}.
               <span v-if="systemHealthAccomplishmentPurchasesCost < 0">
                 Accomplishments were purchased that cost {{ systemHealthAccomplishmentPurchasesCost }} System Health.
               </span>
               <br>
-              <b>Your final System Health at the end of last round was <code>{{ lastRoundSystemHealthCalculation }}</code></b>.
+              <b>Your final System Health at the end of last round was <span style="color: var(--light-accent)">{{ lastRoundSystemHealthCalculation }}</span></b>.
             </p>
           </b-col>
           <!-- table -->
@@ -56,8 +57,8 @@
         <b-row class="flex-grow-1 w-100 m-0 p-0 align-items-center"
                style="background-color: var(--light-shade-05)">
           <b-col class="w-100 m-0 p-0">
-            <h4 class="mx-3 my-0">If System Health drops below 65, your group will encounter <b><code>2 events</code></b>.</h4>
-            <h4 class="mx-3 my-5">If System Health drops below 35, your group will encounter <b><code>3 events</code></b>.</h4>
+            <h4 class="mx-3 my-0">If System Health drops below 65, your group will encounter <b><span style="color: var(--light-accent)">2 events</span></b>.</h4>
+            <h4 class="mx-3 my-5">If System Health drops below 35, your group will encounter <b><span style="color: var(--light-accent)">3 events</span></b>.</h4>
           </b-col>
         </b-row>
       </b-col>
