@@ -1,6 +1,9 @@
 <template>
-  <div class="c-modal-controller" v-if="modalsVisible">
-    <div class="wrapper">
+  <b-row v-if="modalsVisible"
+         class="h-100 w-100 m-0 p-0 position-absolute justify-content-center align-items-center"
+         style="backdrop-filter: blur(2px); z-index: 4; background-color: var(--dark-shade-75)"
+  >
+    <b-col class="d-flex flex-column justify-content-center align-items-center" cols="4">
       <!-- modal type: event, accomplishment -->
       <component :is="modalType" :modalData="modalData"></component>
 
@@ -18,8 +21,8 @@
         />
       </button>
 
-    </div>
-  </div>
+    </b-col>
+  </b-row>
 </template>
 
 <script lang="ts">

@@ -1,63 +1,80 @@
 <template>
-  <b-container class="h-100 m-0 p-0 tour-event" fluid>
-    <b-row  class="h-100 w-auto flex-shrink-1">
-      <b-col cols="4" class="h-100 flex-column justify-content-start align-items-center
-      partition tour-event-deck">
-        <!-- events | active accomplishments -->
-        <b-row class="header-banner w-100 mx-auto align-items-center flex-shrink-0">
-          <b-col cols="6" class="h-100 w-100 text-center my-auto">
-            <button
-              :class="selectedView === 'Event Deck' ? 'selected' : ''"
-              @click="switchView('Event Deck')"
-              class="h-100 w-100 p-0 m-0"
-            >
-              <p class="my-auto">Event Deck</p>
-            </button>
-          </b-col>
-          <b-col cols="6" class="h-100 w-100 text-center align-content-center">
-            <button
-              :class="selectedView === 'Active Accomplishments' ? 'selected' : ''"
-              @click="switchView('Active Accomplishments')"
-              class="h-100 w-100 p-0 m-0"
-            >
-              <p class="my-auto">Accomplishments</p>
-            </button>
-          </b-col>
-        </b-row>
-        <b-row v-if="selectedView === 'Event Deck'" class="mx-auto mt-3 p-3 content-wrapper">
-            <EventCard
-              v-for="(event, index) in eventsForTheRound"
-              :key="index"
-              :active="eventActive(index)"
-              :event="event"
-              :visible="eventVisible(index)"
-              class="my-2"
-            />
-        </b-row>
-        <b-row
-          v-if="selectedView === 'Active Accomplishments'"
-          class="mx-auto mt-3 p-3 content-wrapper"
+  <b-row class="h-100 w-100 m-0 p-3 tour-event">
+    <b-col class="d-flex flex-column h-100 w-100 partition tour-event-deck" cols="4">
+      <!-- events | active accomplishments -->
+
+      <!-- toggle events or active accomplishments -->
+      <b-row class="h-auto w-100 m-0 p-3 justify-content-center" style="background-color: var(--main-brand)">
+        <b-col class="h-100 w-100 text-center my-auto p-0 mx-0" cols="6">
+          <button
+            :class="selectedView === 'Event Deck' ? 'selected' : ''"
+            class="h-100 w-100 p-0 m-0"
+            @click="switchView('Event Deck')"
+          >
+            <p class="my-auto">Event Deck</p>
+          </button>
+        </b-col>
+        <b-col class="h-100 w-100 text-center align-content-center" cols="6">
+          <button
+            :class="selectedView === 'Active Accomplishments' ? 'selected' : ''"
+            class="h-100 w-100 p-0 m-0"
+            @click="switchView('Active Accomplishments')"
+          >
+            <p class="my-auto">Accomplishments</p>
+          </button>
+        </b-col>
+      </b-row>
+      <!-- event deck -->
+      <b-row v-if="selectedView === 'Event Deck'" class="flex-grow-1 w-100 mx-auto mt-3"
+             style="background-color: var(--light-shade-05)"
+      >
+        <div class="position-absolute p-3" style="overflow-y: auto; overflow-x: hidden;
+             height: 80%; width: 92%;"
         >
-            <AccomplishmentCard
-              v-for="accomplishment in accomplishmentCards"
-              :key="accomplishment.id"
-              :accomplishment="accomplishment"
-              :showDescription="false"
-            />
-        </b-row>
-      </b-col>
-      <b-col class="h-100 w-auto tour-active-events" cols="8">
-        <b-row class="header-banner mx-auto flex-shrink-1">
-          <p class="m-auto">
-            {{ eventTitle }}
-          </p>
-        </b-row>
-        <b-row class="mx-auto mt-3 p-3 content-wrapper">
-            <EventContainer :key="eventNumber" :event="currentEvent"/>
-        </b-row>
-      </b-col>
-    </b-row>
-  </b-container>
+          <EventCard
+            v-for="(event, index) in eventsForTheRound"
+            :key="index"
+            :active="eventActive(index)"
+            :event="event"
+            :visible="eventVisible(index)"
+            class="my-2"
+          />
+        </div>
+      </b-row>
+      <!-- accomplishments -->
+      <b-row
+        v-if="selectedView === 'Active Accomplishments'"
+        class="flex-grow-1 w-100 mx-auto mt-3 p-3"
+        style="background-color: var(--light-shade-05)"
+      >
+        <div class="position-absolute p-3 w-100" style="overflow-y: auto; overflow-x: hidden; background-color: pink;
+            max-height: 75%; max-width: 85%;"
+        >
+          <AccomplishmentCard
+            v-for="accomplishment in accomplishmentCards"
+            :key="accomplishment.id"
+            :accomplishment="accomplishment"
+            :showDescription="false"
+          />
+        </div>
+      </b-row>
+    </b-col>
+
+    <b-col class="d-flex flex-column h-100 w-100 tour-active-events" cols="8">
+      <b-row class="w-100 m-0 p-3 justify-content-center"
+             style="background-color: var(--main-brand); color: var(--dark-shade)"
+      >
+        <p class="m-auto">
+          {{ eventTitle }}
+        </p>
+      </b-row>
+      <b-row class="flex-grow-1 w-100 mx-auto mt-3 p-3"
+             style="background-color: var(--light-shade-05)"
+      >
+        <EventContainer :key="eventNumber" :event="currentEvent"/>
+      </b-row>
+    </b-col>
+  </b-row>
 </template>
 
 <script lang="ts">
@@ -165,5 +182,27 @@ export default class Events extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/Events.scss';
+button {
+  border: 0.125rem solid $main-brand;
+  color: $dark-shade;
+  background-color: $main-brand;
+
+  &:hover {
+    color: $main-brand;
+    background-color: $dark-shade;
+  }
+}
+
+.buttons {
+  height: 10%;
+  flex-shrink: 0;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  @include make-center;
+}
+
+.selected {
+  color: $main-brand;
+  background-color: $dark-shade;
+}
 </style>

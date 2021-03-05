@@ -1,19 +1,25 @@
 <template>
-  <b-container class="h-100 w-auto p-0 m-0 tour-invest-action" fluid>
-    <b-row class="h-100 w-auto flex-shrink-1">
-      <b-col class="h-100 w-auto partition" cols="8">
-        <b-row class="header-banner mx-auto flex-shrink-1 tour-time-blocks">
-          <p class="my-auto mx-2">Time Blocks</p>
+  <b-row class="h-100 w-100 p-0 m-0 tour-invest-action">
+    <!-- invest -->
+      <b-col class="d-flex flex-column h-100 w-100" cols="8"
+             style="border-right: .2rem solid var(--light-shade-25);"
+      >
+        <!-- timeblocks header -->
+        <b-row class="h-auto p-3 w-100 align-items-center tour-time-blocks"
+               style="background-color: var(--main-brand); color: var(--dark-shade);">
+          <p class="mx-2 my-auto p-0">Time Blocks</p>
           <TimeBlockMeter
             :totalTimeBlocks="totalTimeBlocks"
             :usedTimeBlocks="remainingTimeBlocks"
             class="meter my-auto"
           />
-          <span class="my-auto mx-2">{{ remainingTimeBlocks }}
+          <span class="mx-2 my-auto">{{ remainingTimeBlocks }}
             <b-icon-clock-fill class="mx-2" scale="1.3"></b-icon-clock-fill>
           </span>
         </b-row>
-        <b-row class="content-wrapper p-3 mt-3 mx-auto flex-shrink-1 tour-invest">
+        <!-- influences -->
+        <b-row class="flex-grow-1 my-2 p-2 w-100 tour-invest"
+               style="background-color: var(--light-shade-05)">
           <InvestmentCard
             v-for="cost in costs"
             :key="cost.name"
@@ -22,20 +28,29 @@
           />
         </b-row>
       </b-col>
-      <b-col class="h-100 w-auto tour-accomplishments" cols="4">
-        <b-row class="header-banner mx-auto flex-shrink-1">
-          <p class="m-auto">Purchasable Accomplishments</p>
+    <!-- purchasable accomplishments -->
+      <b-col class="h-100 w-100 d-flex flex-column tour-accomplishments" cols="4">
+        <!-- header -->
+        <b-row class="h-auto p-3 mx-auto w-100 justify-content-center"
+               style="background-color: var(--main-brand); color: var(--dark-shade);"
+        >
+          <p class="mx-2 my-auto p-0">Purchasable Accomplishments</p>
         </b-row>
-        <b-row class="mx-auto mt-3 p-3 content-wrapper">
-          <AccomplishmentCard
-            v-for="accomplishment in purchasableAccomplishments"
-            :key="accomplishment.label + Math.random()"
-            :accomplishment="accomplishment"
-          />
+        <!-- accomplishments -->
+        <b-row class="flex-grow-1 w-100 mx-auto my-2 p-2"
+               style="background-color: var(--light-shade-05);"
+        >
+          <div class="position-absolute" style="overflow-y: auto;
+               overflow-x: hidden; max-width: 90%; max-height: 80%;">
+            <AccomplishmentCard
+              v-for="accomplishment in purchasableAccomplishments"
+              :key="accomplishment.label + Math.random()"
+              :accomplishment="accomplishment"
+            ></AccomplishmentCard>
+          </div>
         </b-row>
       </b-col>
-    </b-row>
-  </b-container>
+  </b-row>
 </template>
 
 <script lang="ts">
@@ -201,12 +216,6 @@ export default class Investments extends Vue {
 </script>
 
 <style lang="scss">
-.header-banner {
-  background-color: $phase-topbar-background;
-  height: 10%;
-  color: $dark-shade;
-}
-
 .meter {
   flex: 1;
   overflow-x: hidden;
@@ -214,16 +223,5 @@ export default class Investments extends Vue {
 
 .partition {
   border-right: .2rem solid $light-shade-25;
-}
-
-.content-wrapper {
-  background-color: $light-shade-05;
-  height: 85%;
-  overflow-y: scroll;
-  overflow-x: hidden;
-}
-
-.header-text {
-  color: $dark-shade;
 }
 </style>

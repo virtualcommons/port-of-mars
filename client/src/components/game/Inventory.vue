@@ -1,17 +1,20 @@
 <template>
-  <b-row class="flex-column h-100 w-100 m-0 p-1 justify-content-center">
-    <b-row class="h-auto w-100 m-0 p-0 justify-content-center" style="background-color: rgb(156, 81, 71)">
-      <p class="my-auto p-0 mx-2" style="color: rgb(34, 26, 27)">Toggle Resource Costs</p>
-      <b-button size="lg" icon pill style="background-color: transparent; border-radius: 50%;"
-                @click="toggleCosts">
-        <b-icon-clock v-if="!costsVisible" scale="1" variant="light"></b-icon-clock>
-        <b-icon-clock-fill v-else-if="costsVisible" scale="1" variant="light"></b-icon-clock-fill>
-      </b-button>
+  <b-row class="flex-column h-100 w-100 m-0 p-2 justify-content-center">
+    <b-row class="h-auto w-100 m-0 p-0 justify-content-center" style="background-color: var(--dark-accent)">
+      <p class="my-auto p-0 text-center" style="color: var(--dark-shade)">
+        Toggle Resource Costs
+        <b-button size="lg" icon pill style="background-color: transparent; border-radius: 50%;"
+                  @click="toggleCosts">
+          <b-icon-clock v-if="!costsVisible" scale="1" variant="var(--dark-shade)"></b-icon-clock>
+          <b-icon-clock-fill v-else-if="costsVisible" scale="1" variant="light"></b-icon-clock-fill>
+        </b-button>
+      </p>
+
     </b-row>
     <b-row v-for="investment in investments"
            :key="investment.name"
            :style="backgroundColor(investment.name)"
-           class="w-100 m-0 p-2 justify-content-between align-items-center"
+           class="w-100 m-0 p-3 justify-content-between align-items-center"
     >
       <!-- costs -->
       <b-col v-if="costsVisible" class="m-0 p-0 text-left">

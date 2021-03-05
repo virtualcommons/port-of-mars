@@ -247,6 +247,6 @@ p {
 
 .consent-form-text {
   max-height: 60vh;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 </style>

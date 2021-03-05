@@ -1,28 +1,3 @@
-.c-eventcard {
-  width: 100%;
-  padding: 0;
-  margin: 0 0 0.5rem 0;
-  //@include make-column-and-center;
-  //flex-shrink: 0;
-  //align-items: stretch;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-}
-
-.title-wrapper,
-.flavortext-wrapper,
-.duration-wrapper {
-  width: 100%;
-  padding: 0.5rem;
-  margin: 0;
-}
-
-.title-wrapper {
-  background-color: $light-shade;
-}
-
 .title {
   padding: 0;
   position: relative;
@@ -68,18 +43,18 @@
   background-color: $dark-shade;
 }
 
-.flavortext {
-  padding: 0;
-
-  p {
-    width: 100%;
-    margin-bottom: 0;
-    font-size: $font-med;
-    font-weight: $regular;
-    color: $light-shade;
-    text-align: center;
-  }
-}
+//.flavortext {
+//  padding: 0;
+//
+//  p {
+//    width: 100%;
+//    margin-bottom: 0;
+//    font-size: $font-med;
+//    font-weight: $regular;
+//    color: $light-shade;
+//    text-align: center;
+//  }
+//}
 
 .duration-wrapper {
   //flex: 1;
@@ -99,10 +74,29 @@
   }
 }
 
-.interact-wrapper {
-  //flex: 1;
-  background-color: $dark-shade;
-  margin-top:4rem;
+p {
+  font-size: $font-med;
+  font-weight: $regular;
+  color: $light-shade;
+}
+
+button {
+  color: $light-accent;
+  border: 0.125rem solid $light-accent;
+  &:hover {
+    color: $dark-shade;
+    background-color: $light-accent;
+  }
+
+  &:disabled:hover {
+    color: $light-accent;
+    background-color: transparent;
+  }
+}
+
+.modal-view {
+  border: none;
+  max-height: 20rem !important;
 }
 
 .interact {
@@ -114,7 +108,4 @@
   }
 }
 
-.modal-view {
-  border: 0;
-  background-color: $dark-shade;
-}
+

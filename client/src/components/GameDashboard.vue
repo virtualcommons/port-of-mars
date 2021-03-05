@@ -1,6 +1,6 @@
 <template>
-  <b-container class="h-100 w-auto p-0 m-0" fluid :style="'background-color: #221A1B'">
-    <b-row align-v="center" class="h-100 p-0 justify-content-start flex-column align-items-center">
+  <b-container class="h-100 p-0 m-0" fluid style="background-color: #221A1B">
+    <b-row align-v="center" class="h-100 w-100 m-0 p-0 justify-content-start flex-column align-items-center">
       <GameboardContainer
         v-if="shouldDisplayGame"
       />

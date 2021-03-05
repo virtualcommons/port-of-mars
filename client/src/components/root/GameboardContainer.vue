@@ -1,7 +1,6 @@
 <template>
-  <b-container class="d-flex flex-column h-100 p-3 m-0"
-               style="background-color: rgb(34, 26, 27)"
-               fluid
+  <b-container fluid class="h-100 p-2 m-0 d-flex flex-column justify-content-start"
+               style="background-color: var(--dark-shade);"
   >
     <ModalController />
     <ProfileMenu />
@@ -15,21 +14,24 @@
         ---------------------------------------- -->
 
     <!-- System Health -->
-    <b-row class="h-auto w-100 my-2">
+    <b-row class="flex-shrink-1 w-100 mb-2">
       <SystemHealth />
     </b-row>
 
     <!-- HUD, Phase Switcher, Mars Log, Chat -->
-    <b-row class="h-100 w-100 justify-content-center p-0 m-0">
-      <b-col cols="9" class="w-100 h-100 justify-content-center align-items-center">
-        <b-row class="w-100 p-2 mx-0" style="height: 40%; border: 0.2rem solid rgba(241, 224, 197, 0.25);">
+    <b-row class="w-100 p-0 m-0" style="height: 95vh !important">
+      <b-col cols="9" class="d-flex flex-column w-100">
+        <!-- HUD -->
+        <b-row class="w-100 p-2 mx-0" style="border: 0.2rem solid rgba(241, 224, 197, 0.25);">
           <HUD />
         </b-row>
-        <b-row class="w-100 p-2 mt-2 mx-0" style="height: 60%; border: 0.2rem solid rgba(241, 224, 197, 0.25);">
+        <!-- Phase Switcher -->
+        <b-row class="w-100 flex-grow-1 p-2 mt-2 mx-0" style="border: 0.2rem solid rgba(241, 224, 197, 0.25);">
           <PhaseSwitcher />
         </b-row>
       </b-col>
-      <b-col cols="3" class="w-100 h-100">
+      <!-- Chat | Mars Log -->
+      <b-col cols="3" class="w-100">
         <ChatMarsLog/>
       </b-col>
     </b-row>

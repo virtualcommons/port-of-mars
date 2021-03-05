@@ -1,5 +1,5 @@
 <template>
-  <b-container fluid class="h-100 m-0 p-0">
+  <b-container fluid class="h-100 w-100 m-0 p-0">
     <b-row class="w-100 h-100 m-auto justify-content-center scroll-to-recent"
            style="overflow-y: auto; overflow-x: hidden;">
       <b-row class="w-100 my-2 justify-content-center"
@@ -13,11 +13,11 @@
           v-for="log in logs"
           :style="{ backgroundColor: categoryColorMap.get(log.category) }"
           :key="log.id"
-          class="h-auto w-100 overflow-hidden m-2"
+          class="h-auto w-100 flex-column overflow-hidden m-2"
           style="background-color: var(--marslog-orange)"
         >
           <!-- category (e.g. System Health, Event, etc.) -->
-          <p class="text-capitalize m-2" style="color: #CAA66E; font-weight: bold">{{ log.category }}</p>
+          <p class="text-capitalize m-2" style="color: var(--light-accent); font-weight: bold">{{ log.category }}</p>
           <!-- message -->
           <p class="mx-2">{{ log.content }}</p>
 

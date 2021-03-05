@@ -1,57 +1,61 @@
 <template>
   <div
-    :class="{'modal-view': isModal}"
-    class="c-eventcard d-flex flex-column justify-content-between justify-content-center"
+    :class=" isModal ? 'modal-view' : 'mb-3'"
+    class="w-100 p-0 mx-0 overflow-hidden"
     v-if="visible"
+    style="border: .125rem solid var(--light-shade)"
   >
-    <div class="title-wrapper">
-      <div class="d-flex flex-row title">
-        <b-icon
-          @click="showInfo"
-          circle
-          class="align-self-center"
-          icon="exclamation-circle-fill"
-          v-if="!isModal"
-          variant="dark"
-        />
+    <b-row class="w-100 justify-content-center mx-auto p-3"
+           style="cursor: pointer; background-color: var(--light-shade)"
+           @click="showInfo"
+    >
+      <b-col>
+      </b-col>
+      <b-col cols="6" class="title">
         <p>{{ event.name }}</p>
+      </b-col>
+      <b-col>
         <font-awesome-icon
           :icon="['far', 'dot-circle']"
           class="icontwo animated pulse infinite"
           size="lg"
           v-if="showActiveIndicator"
         />
-      </div>
-    </div>
+      </b-col>
+    </b-row>
 
-    <div class="flavortext-wrapper w-100 h-100" v-bind="{ class: isModal ? 'pt-4 px-3' : '' }">
-      <div class="flavortext">
+    <b-row class="w-100 justify-content-center mx-auto flex-grow-1"
+           :class="isModal ? 'pt-4 px-3' : 'p-3'"
+           style="background-color: var(--dark-shade)"
+    >
+      <b-col class="w-100 p-0 m-0 text-center">
         <p>{{ event.effect !== '' ? event.effect : 'No special effect' }}</p>
-      </div>
-    </div>
+      </b-col>
+    </b-row>
 
-    <div class="duration-wrapper w-100 h-100" v-bind="{ class: isModal ? 'pt-1' : '' }">
-      <div class="duration">
+    <b-row class="w-100 justify-content-center mx-auto"
+           :class="isModal ? 'pt-1' : 'pb-3'"
+           :style="'background-color: #221A1B'"
+    >
+      <b-col class="w-100 p-0 m-0 text-center">
         <p>
-          Duration: 
+          Duration:
           <template v-if="event.duration > 1">
-            <b>{{ event.elapsed }}</b> of 
+            <b>{{ event.elapsed }}</b> of
           </template>
           <b>{{ event.duration }}</b> Round(s)
         </p>
-      </div>
-    </div>
+      </b-col>
+    </b-row>
 
-    <div class="w-100 h-100 pt-2" v-if="wasSpawnedByServer">
-      <div class="interact" v-if="requiresInteraction">
+    <b-row class="w-100 py-4 justify-content-center text-center" v-if="wasSpawnedByServer">
+      <b-col class="interact" v-if="requiresInteraction">
         <button @click="closeModal" class="button">Interact</button>
-      </div>
-      <div class="interact" v-else>
+      </b-col>
+      <b-col class="interact" v-else>
         <button @click="readyUp" class="button">Continue</button>
-      </div>
-    </div>
-
-
+      </b-col>
+    </b-row>
   </div>
 </template>
 
@@ -112,10 +116,7 @@
     }
 
     get requiresInteraction() {
-      if (!this.eventNoChangeViews.includes(this.event.clientViewHandler)) {
-        return true;
-      }
-      return false;
+      return !this.eventNoChangeViews.includes(this.event.clientViewHandler);
     }
 
     closeModal() {

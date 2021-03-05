@@ -1,49 +1,67 @@
 <template>
-  <b-container class="h-100 w-100 tour-report" fluid>
-    <b-row align-v="center" class="h-100 report">
-      <b-col class="h-100 w-100 system-health tour-contribute" cols="8">
-        <b-container class="p-3 mt-3 outer tour-wear-tear tour-shr-table" fluid>
-          <h1 class="mb-3 mx-1">System Health Report</h1>
-          <h2 class="mb-3 mx-1">Upcoming System Health:
-            <b-badge :variant="systemHealthBadgeVariant">{{ nextRoundSystemHealth }}</b-badge>
-          </h2>
-          <b-row v-if="isFirstRound" class="mx-1">
-            <p>Welcome to Mars! Each round, your System Health degrades by <b>{{
-                systemHealthMaintenanceCost
-              }}</b> due to standard wear and tear.
-              Your System Health at the start of this round is <b><code>{{ nextRoundSystemHealth }}</code></b>.</p>
-          </b-row>
-          <b-row class="mx-1" v-else>
+  <b-row class="h-100 w-100 report tour-report" align-v="center">
+      <!-- system health report -->
+      <b-col class="d-flex flex-column h-100 w-100 system-health tour-contribute" cols="8">
+        <!-- header -->
+        <b-row class="h-auto w-100 my-2 mx-0 p-3 justify-content-center" style="background-color: var(--main-brand)">
+          <p class="my-auto p-0 mx-2" style="color: rgb(34, 26, 27)">System Health Report</p>
+        </b-row>
+
+        <b-row class="flex-grow-1 flex-column w-100 m-0 p-3 justify-content-center tour-wear-tear tour-shr-table"
+               style="background-color: var(--light-shade-05);"
+        >
+          <!-- text info -->
+          <b-col class="flex-shrink-1 w-100 m-0 p-0" v-if="isFirstRound">
+            <h2 class="my-2">Upcoming System Health:
+              <b-badge :variant="systemHealthBadgeVariant">{{ nextRoundSystemHealth }}</b-badge>
+            </h2>
+            <p>Welcome to Mars! Each round, your System Health degrades by
+              <b>{{ systemHealthMaintenanceCost }}</b> due to standard wear and tear. Your System
+              Health at the start of this round is <b><code>{{ nextRoundSystemHealth }}</code></b>.
+            </p>
+          </b-col>
+          <b-col class="flex-shrink-1 w-100 m-0 p-0" v-else>
             <p>
-              In the previous round you invested <b>{{ yourSystemHealthContributions }}</b> and the rest
+              In the previous round you invested <b><code>{{ yourSystemHealthContributions }}</code></b> and the rest
               of your group invested
-              <b>{{ otherPlayerSystemHealthContributions }}</b> in System Health for a total of {{systemHealthGroupContributions}}.
-              Your group's average investment was {{ averageContribution }}. 
+              <b><code>{{ otherPlayerSystemHealthContributions }}</code></b> in System Health for a total of {{systemHealthGroupContributions}}.
+              Your group's average investment was {{ averageContribution }}.
               <span v-if="systemHealthAccomplishmentPurchasesCost < 0">
                 Accomplishments were purchased that cost {{ systemHealthAccomplishmentPurchasesCost }} System Health.
               </span>
               <br>
               <b>Your final System Health at the end of last round was <code>{{ lastRoundSystemHealthCalculation }}</code></b>.
             </p>
-          </b-row>
-          <b-row class="mx-1">
-            <b-table :fields="tabularContributionFields" :items="tabularContributions" bordered dark
-                     small striped>
-            </b-table>
-            <b-table v-if="purchases.length > 0" :fields="purchaseFields" :items="purchases" bordered dark small sticky-header
-                     striped>
-            </b-table>
-          </b-row>
-        </b-container>
+          </b-col>
+          <!-- table -->
+          <b-col class="w-100 p-0 m-0">
+            <div class="w-100 position-absolute m-0" style="overflow-y: auto; overflow-x: hidden;
+                 max-height: 100%">
+              <b-table :fields="tabularContributionFields" :items="tabularContributions" bordered dark
+                       small striped>
+              </b-table>
+              <b-table v-if="purchases.length > 0" :fields="purchaseFields" :items="purchases" bordered dark small sticky-header
+                       striped >
+              </b-table>
+            </div>
+          </b-col>
+        </b-row>
       </b-col>
-      <b-col class="h-100 w-100 tour-report-hint" cols="4">
-        <b-container class="py-5 mt-3 outer" fluid>
-          <h4 class="py-4 my-4">If System Health drops below 65, your group will encounter <b><code>2 events</code></b></h4>
-          <h4>If System Health drops below 35, your group will encounter <b><code>3 events</code></b>.</h4>
-        </b-container>
+      <!-- system health information -->
+      <b-col class="d-flex flex-column h-100 w-100 tour-report-hint" cols="4">
+        <!-- header -->
+        <b-row class="h-auto w-100 my-2 mx-0 p-3 justify-content-center" style="background-color: var(--main-brand)">
+          <p class="my-auto p-0 mx-2" style="color: rgb(34, 26, 27)">Information</p>
+        </b-row>
+        <b-row class="flex-grow-1 w-100 m-0 p-0 align-items-center"
+               style="background-color: var(--light-shade-05)">
+          <b-col class="w-100 m-0 p-0">
+            <h4 class="mx-3 my-0">If System Health drops below 65, your group will encounter <b><code>2 events</code></b>.</h4>
+            <h4 class="mx-3 my-5">If System Health drops below 35, your group will encounter <b><code>3 events</code></b>.</h4>
+          </b-col>
+        </b-row>
       </b-col>
-    </b-row>
-  </b-container>
+  </b-row>
 </template>
 
 <script lang="ts">
@@ -212,5 +230,13 @@ export default class NewRound extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/NewRound.scss';
+.report {
+  color: white;
+}
+
+.system-health {
+  border-right: .2rem solid;
+  border-color: $light-shade-25;
+}
+
 </style>

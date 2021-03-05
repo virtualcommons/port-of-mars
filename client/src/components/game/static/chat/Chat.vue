@@ -64,15 +64,12 @@
     </b-row>
   </b-container>
   <!-- disable chat if chat is not available -->
-  <b-container v-else class="h-100 m-0 p-0 flex-grow-1" fluid>
-    <b-row class="h-100 w-100 mb-0 justify-content-center align-items-center"
-           style="color: rgb(241, 224, 197); background-color: rgba(241, 224, 197, 0.05);">
-      <p class="mb-0 text-center" style="color: rgba(241, 224, 197, 0.25); font-weight: bold;
+  <b-row v-else class="h-100 w-100 m-0 p-0 justify-content-center align-items-center">
+      <p class="m-0 p-0 text-center" style="color: var(--dark-accent); font-weight: bold;
          font-size: 1rem;">
         Chat is disabled this round.
       </p>
-    </b-row>
-  </b-container>
+  </b-row>
 </template>
 
 <script lang="ts">

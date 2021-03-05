@@ -173,7 +173,7 @@
 
             .wrapper {
               width: 100%;
-              overflow-y: scroll;
+              overflow-y: auto;
             }
           }
         }
@@ -251,7 +251,7 @@
             .wrapper {
               width: 100%;
               @include make-column-and-top;
-              overflow-y: scroll;
+              overflow-y: auto;
             }
           }
         }

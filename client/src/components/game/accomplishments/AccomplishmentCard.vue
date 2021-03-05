@@ -1,12 +1,14 @@
 <template>
   <div
-    :class="[cardTypeStyling(type), isModal ? 'modal-view' : '']"
-    class="w-100 p-0 mx-0 mb-2 overflow-hidden"
+    :class="[cardTypeStyling(type), isModal ? 'modal-view' : 'mb-2']"
+    class="w-100 p-0 mx-0 overflow-hidden"
     v-show="isActive"
+
   >
     <!-- title -->
     <b-row align-v="center" class="w-100 mx-0 mt-2 p-0 justify-content-center align-items-center"
-           @click="showInfo" style="cursor: pointer"
+            style="cursor: pointer"
+           @click="showInfo"
     >
         <b-col class="m-0 p-0 w-100">
           <p :style="fontColor()" class="w-100 text-center">{{ accomplishment.label }}</p>

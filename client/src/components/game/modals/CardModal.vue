@@ -1,33 +1,26 @@
 <template>
-  <div class="card-modal">
-
-    <!-- card type -->
-    <div class="cards-wrapper">
+  <b-row class="h-100 w-100 p-0 m-0"
+         style="background-color: var(--light-shade-05)">
       <!-- types of cards to display in modal -->
-      <div class="cards">
-
+      <b-col class="w-100 h-100 m-0 p-0" style="background-color: var(--dark-shade)">
         <!-- accomplishment -->
         <AccomplishmentCard
           v-if="modalData.cardType === 'AccomplishmentCard'"
-          class="accomplishment-card"
           :key="modalData.cardData.id"
           :accomplishment="modalData.cardData"
           :isModal="true"
         />
-
         <!-- event -->
         <EventCard
           v-else-if="modalData.cardType === 'EventCard'"
-          class="event-card"
           :key="modalData.cardData.id"
           :event="modalData.cardData"
           :visible="true"
           :isModal="true"
           :wasSpawnedByServer="serverCreated(modalData.activator)"
         />
-      </div>
-    </div>
-  </div>
+      </b-col>
+  </b-row>
 </template>
 
 <script lang="ts">
