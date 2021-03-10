@@ -51,41 +51,6 @@
         </p>
       </b-col>
     </b-row>
-
-    <!--    <div-->
-    <!--      v-if="displaySystemHealth"-->
-    <!--      :style="backgroundColor('systemHealth')"-->
-    <!--      class="investment"-->
-    <!--    >-->
-    <!--      <div class="left">-->
-    <!--        <img-->
-    <!--          :src="require(`@port-of-mars/client/assets/icons/systemHealth.svg`)"-->
-    <!--          alt="Investment"-->
-    <!--        />-->
-    <!--        <p>{{ contributedSystemHealth.name }}</p>-->
-    <!--      </div>-->
-    <!--      <div class="right">-->
-    <!--        <font-awesome-icon-->
-    <!--          v-if="costsVisible"-->
-    <!--          :icon="['fas', 'clock']"-->
-    <!--          size="lg"-->
-    <!--          class="timeblock"-->
-    <!--        />-->
-    <!--        <p v-if="costsVisible" class="cost">-->
-    <!--          {{-->
-    <!--            canInvest(contributedSystemHealth.cost)-->
-    <!--              ? contributedSystemHealth.cost-->
-    <!--              : '-'-->
-    <!--          }}-->
-    <!--        </p>-->
-    <!--        <font-awesome-icon-->
-    <!--          :icon="['fas', 'briefcase']"-->
-    <!--          size="lg"-->
-    <!--          class="inventory"-->
-    <!--        />-->
-    <!--        <p class="units">{{ contributedSystemHealth.units }}</p>-->
-    <!--      </div>-->
-    <!--    </div>-->
   </b-row>
 </template>
 
