@@ -16,16 +16,16 @@
               <b-badge :variant="systemHealthBadgeVariant">{{ nextRoundSystemHealth }}</b-badge>
             </h2>
             <p>Welcome to Mars! Each round, your System Health degrades by
-              <b><span style="color: var(--light-accent)">{{ systemHealthMaintenanceCost }}</span></b> due to standard wear and tear. Your System
-              Health at the start of this round is <b><span style="color: var(--light-accent)">
-                {{ nextRoundSystemHealth }}</span></b>.
+              <b style="color: var(--light-accent)">{{ systemHealthMaintenanceCost }}</b> due to standard wear and tear. Your System
+              Health at the start of this round is <b style="color: var(--light-accent)">
+                {{ nextRoundSystemHealth }}</b>.
             </p>
           </b-col>
           <b-col class="flex-shrink-1 w-100 m-0 p-0" v-else>
             <p>
-              In the previous round you invested <b><span style="color: var(--light-accent)">{{ yourSystemHealthContributions }}</span></b> and the rest
+              In the previous round you invested <b style="color: var(--light-accent)">{{ yourSystemHealthContributions }}</b> and the rest
               of your group invested
-              <b><span style="color: var(--light-accent)">{{ otherPlayerSystemHealthContributions }}</span></b> in System Health for a total of {{systemHealthGroupContributions}}.
+              <b style="color: var(--light-accent)">{{ otherPlayerSystemHealthContributions }}</b> in System Health for a total of {{systemHealthGroupContributions}}.
               Your group's average investment was {{ averageContribution }}.
               <span v-if="systemHealthAccomplishmentPurchasesCost < 0">
                 Accomplishments were purchased that cost {{ systemHealthAccomplishmentPurchasesCost }} System Health.
