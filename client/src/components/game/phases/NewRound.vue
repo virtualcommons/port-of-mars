@@ -16,22 +16,22 @@
               <b-badge :variant="systemHealthBadgeVariant">{{ nextRoundSystemHealth }}</b-badge>
             </h2>
             <p>Welcome to Mars! Each round, your System Health degrades by
-              <b style="color: var(--light-accent)">{{ systemHealthMaintenanceCost }}</b> due to standard wear and tear. Your System
-              Health at the start of this round is <b style="color: var(--light-accent)">
+              <b class="highlighted-number">{{ systemHealthMaintenanceCost }}</b> due to standard wear and tear. Your System
+              Health at the start of this round is <b class="highlighted-number">
                 {{ nextRoundSystemHealth }}</b>.
             </p>
           </b-col>
           <b-col class="flex-shrink-1 w-100 m-0 p-0" v-else>
             <p>
-              In the previous round you invested <b style="color: var(--light-accent)">{{ yourSystemHealthContributions }}</b> and the rest
+              In the previous round you invested <b class="highlighted-number">{{ yourSystemHealthContributions }}</b> and the rest
               of your group invested
-              <b style="color: var(--light-accent)">{{ otherPlayerSystemHealthContributions }}</b> in System Health for a total of {{systemHealthGroupContributions}}.
+              <b class="highlighted-number">{{ otherPlayerSystemHealthContributions }}</b> in System Health for a total of {{systemHealthGroupContributions}}.
               Your group's average investment was {{ averageContribution }}.
               <span v-if="systemHealthAccomplishmentPurchasesCost < 0">
                 Accomplishments were purchased that cost {{ systemHealthAccomplishmentPurchasesCost }} System Health.
               </span>
               <br>
-              <b>Your final System Health at the end of last round was <span style="color: var(--light-accent)">{{ lastRoundSystemHealthCalculation }}</span></b>.
+              <b>Your final System Health at the end of last round was <span class="highlighted-number">{{ lastRoundSystemHealthCalculation }}</span></b>.
             </p>
           </b-col>
           <!-- table -->
@@ -240,4 +240,7 @@ export default class NewRound extends Vue {
   border-color: $light-shade-25;
 }
 
+.highlighted-number {
+  color: var(--light-accent)
+}
 </style>
