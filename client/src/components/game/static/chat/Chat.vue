@@ -7,6 +7,7 @@
     <!-- height of b-container -->
     <b-row class="w-100 flex-grow-1 m-auto scroll-to-recent"
            style="overflow-y: auto; overflow-x: hidden;"
+           @click="focusChatInput"
     >
       <!-- b-row wrapper to achieve chat scroll effect -->
       <b-row class="w-100 my-2 justify-content-center" align-content="end">
@@ -44,6 +45,7 @@
     <b-row class="w-100 h-auto align-items-center flex-shrink-1 my-2 mx-auto">
       <b-col cols="10" class="w-100">
         <b-form-input
+          ref="chatInputRef"
           class="h-100 flex-grow-1"
           style="color: rgb(241, 224, 197); background-color: transparent; font-size: 1rem;"
           @keydown.enter="submitToChat"
@@ -88,6 +90,13 @@ export default class Chat extends Vue {
   @Inject() readonly api!: GameRequestAPI;
 
   pendingMessage: string = '';
+
+  focusChatInput() {
+    if (this.isChatAvailable) {
+      console.log('focus chat');
+      (<any>this.$refs.chatInputRef).focus()
+    }
+  }
 
   get pendingMessageCleaned(): string {
     // TODO: CAN ADD MORE CLEANING AS NECESSARY
