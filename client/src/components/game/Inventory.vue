@@ -6,7 +6,7 @@
         <b-button size="lg" icon pill style="background-color: transparent; border-radius: 50%;"
                   @click="toggleCosts">
           <b-icon-clock v-if="!costsVisible" scale="1" variant="var(--dark-shade)"></b-icon-clock>
-          <b-icon-clock-fill v-else-if="costsVisible" scale="1" variant="light"></b-icon-clock-fill>
+          <b-icon-clock-fill v-else scale="1" variant="light"></b-icon-clock-fill>
         </b-button>
       </p>
 
@@ -17,11 +17,10 @@
            class="w-100 m-0 p-3 justify-content-between align-items-center"
     >
       <!-- costs -->
-      <b-col v-if="costsVisible" class="m-0 p-0 text-left">
+      <b-col v-show="costsVisible" md="4" class="m-0 p-0 text-left">
         <p v-b-tooltip.hover.bottom class="mx-2 my-auto" title="Time Block Cost">
           {{ canInvest(investment.cost) ? investment.cost : '-' }}
           <font-awesome-icon
-            v-if="costsVisible"
             :icon="['fas', 'clock']"
             class="mx-2"
             style="color: rgb(241, 224, 197)"
@@ -29,10 +28,9 @@
         </p>
       </b-col>
       <!-- influence -->
-      <b-col class="m-0 p-0 text-left">
+      <b-col md="4" :lg="costsVisible ? 6: 10" class="m-0 p-0 text-left">
         <p class="my-auto">
           <img
-            :class="costsVisible ? '' : 'mx-2'"
             :src="
             require(`@port-of-mars/client/assets/icons/${investment.name}.svg`)
           "
@@ -43,8 +41,8 @@
         </p>
       </b-col>
       <!-- inventory amount -->
-      <b-col class="p-0 m-0 text-right">
-        <p v-b-tooltip.hover.bottom class="mx-3 my-auto" title="Inventory Amount">
+      <b-col md="4" lg="2" class="p-0 m-0 text-right">
+        <p v-b-tooltip.hover.bottom class="ml-3 my-auto" title="Inventory Amount">
           <font-awesome-icon
             :icon="['fas', 'briefcase']"
             class="mx-2"
