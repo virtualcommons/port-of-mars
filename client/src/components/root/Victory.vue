@@ -47,7 +47,7 @@
           <h2>Thank you for playing.</h2>
           <div class="buttons">
             <router-link :to="'dashboard'">
-              <button class="exit">Exit</button>
+              <button class="exit">Return to dashboard and take the exit survey</button>
             </router-link>
           </div>
         </div>

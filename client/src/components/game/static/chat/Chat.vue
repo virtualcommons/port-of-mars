@@ -93,8 +93,7 @@ export default class Chat extends Vue {
 
   focusChatInput() {
     if (this.isChatAvailable) {
-      console.log('focus chat');
-      (<any>this.$refs.chatInputRef).focus()
+      (<any>this.$refs.chatInputRef).focus();
     }
   }
 
@@ -119,6 +118,7 @@ export default class Chat extends Vue {
 
   updated() {
     if (this.isChatAvailable) {
+      // FIXME: this would be more efficient as an id lookup, not a css class lookup
       const elem = this.$el.querySelector('.scroll-to-recent');
       elem!.scrollTop = elem!.scrollHeight;
     }
