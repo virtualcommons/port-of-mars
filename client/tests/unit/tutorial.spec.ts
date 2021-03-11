@@ -3,6 +3,7 @@ import { mockRoomSetup, mountPOM, provideClient } from './common';
 import { Step, StateTransform } from '@port-of-mars/client/types/tutorial';
 import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
 import Vue from 'vue';
+jest.mock('@port-of-mars/client/components/game/static/chat/Chat.vue')
 
 
 describe.skip('Tutorial.vue', () => {
