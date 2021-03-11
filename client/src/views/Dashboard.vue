@@ -55,13 +55,17 @@
         <template v-if="playerTaskCompletion.mustTakeIntroSurvey || playerTaskCompletion.shouldTakeExitSurvey">
           <h2 class="text-center text-uppercase pt-4">Surveys</h2>
           <b-button-group class="py-3 w-100" vertical>
-            <b-button v-if="playerTaskCompletion.mustTakeIntroSurvey" :href="introSurveyUrl" block class="my-2"
-                      size="lg" variant="secondary">
-              Please complete this introductory survey before participating <span class='text-danger'>*</span>
+            <b-button v-if="playerTaskCompletion.mustTakeIntroSurvey" :href="introSurveyUrl" block size="lg" variant="primary">
+              <h1>
+              <font-awesome-icon class='text-warning' icon="exclamation-triangle"/>
+              Please click here to complete our intro survey before participating (REQUIRED)
+              </h1>
             </b-button>
-            <b-button v-if="playerTaskCompletion.shouldTakeExitSurvey" :href="exitSurveyUrl" block size="lg"
-                      variant="secondary">
-              Please complete this exit survey <span class='text-danger'>*</span>
+            <b-button v-if="playerTaskCompletion.shouldTakeExitSurvey" :href="exitSurveyUrl" block size="lg" variant="primary">
+              <h1>
+              <font-awesome-icon class='text-warning' icon="exclamation-triangle" />
+              Thanks for participating! Please click here to complete an exit survey.
+              </h1>
             </b-button>
           </b-button-group>
         </template>
