@@ -12,7 +12,7 @@ export class AccountService extends BaseService {
   }
 
   isRegisteredAndValid(user: User): boolean {
-    return !!user.isVerified && !!user.email;
+    return !!user.isVerified && !!user.email && !!user.isActive;
   }
 
   async findByUsername(username: string): Promise<User> {

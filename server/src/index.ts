@@ -148,7 +148,11 @@ async function createApp() {
       // successful authentication
       if (req.user) {
         const user = (req.user as User)
-        if (getServices().account.isRegisteredAndValid(user)) {
+        if (! user.isActive) {
+          logger.warn('inactivated user attempted to login %o', user);
+          res.redirect(getPagePath(LOGIN_PAGE));
+        }
+        else if (getServices().account.isRegisteredAndValid(user)) {
           res.redirect(getPagePath(DASHBOARD_PAGE));
         }
         else {
@@ -158,7 +162,7 @@ async function createApp() {
       } else {
         const loginPath = getPagePath(LOGIN_PAGE);
         logger.warn('no user on the request, returning to login %o', req);
-        res.redirect(loginPath)
+        res.redirect(loginPath);
       }
     }
   );
