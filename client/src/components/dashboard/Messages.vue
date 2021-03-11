@@ -1,5 +1,5 @@
 <template>
-  <div v-if="messages.length > 0" class='pt-1'>
+  <div v-if="messages.length > 0" class='lead w-100'>
     <!-- MESSAGES -->
     <b-alert v-for="dm in messages" :key="dm.message" :variant="dm.kind" class='mb-0' dismissible fade show>
       {{ dm.message }}

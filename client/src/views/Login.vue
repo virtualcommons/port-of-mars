@@ -32,7 +32,7 @@
             {{ logoutText }}
           </b-button>
           <b-button v-else-if="!toggleDevLogin" :href="asuLoginUrl" class="my-2" size="lg" variant="success">
-            Sign Up via ASU CAS
+            Sign In via ASU CAS
           </b-button>
 
           <!-- register form -->

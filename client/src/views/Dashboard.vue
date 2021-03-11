@@ -53,15 +53,14 @@
       <b-col v-if="view === 'participate'" class="text-center">
         <!-- TOURNAMENT SURVEYS -->
         <template v-if="playerTaskCompletion.mustTakeIntroSurvey || playerTaskCompletion.shouldTakeExitSurvey">
-          <h2 class="text-center text-uppercase pt-4">Surveys</h2>
-          <b-button-group class="py-3 w-100" vertical>
-            <b-button v-if="playerTaskCompletion.mustTakeIntroSurvey" :href="introSurveyUrl" block size="lg" variant="primary">
+          <b-button-group class="py-3 w-75" vertical>
+            <b-button v-if="playerTaskCompletion.mustTakeIntroSurvey" :href="introSurveyUrl" block size="lg" variant="success">
               <h1>
               <font-awesome-icon class='text-warning' icon="exclamation-triangle"/>
-              Please click here to complete our intro survey before participating (REQUIRED)
+              Click here to take an intro survey before participating (REQUIRED)
               </h1>
             </b-button>
-            <b-button v-if="playerTaskCompletion.shouldTakeExitSurvey" :href="exitSurveyUrl" block size="lg" variant="primary">
+            <b-button v-if="playerTaskCompletion.shouldTakeExitSurvey" :href="exitSurveyUrl" block size="lg" variant="success">
               <h1>
               <font-awesome-icon class='text-warning' icon="exclamation-triangle" />
               Thanks for participating! Please click here to complete an exit survey.
@@ -70,7 +69,11 @@
           </b-button-group>
         </template>
         <!-- go to waiting lobby -->
-        <b-container v-if="playerTaskCompletion.canPlayGame" class="my-2 text-center">
+
+        <b-container v-if="playerTaskCompletion.mustTakeIntroSurvey" class="my-2 text-center">
+          <h2 class="text-uppercase my-2">Please click the link above to complete a brief introductory survey before participating.</h2>
+        </b-container>
+        <b-container v-else-if="playerTaskCompletion.canPlayGame" class="my-2 text-center">
           <h2 class="text-uppercase my-2">Participate in Round {{ currentRoundNumber }}</h2>
           <b-button :to="join" size="lg" variant="success">
             Join the Waiting Lobby
