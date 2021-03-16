@@ -54,27 +54,9 @@ export class TournamentService extends BaseService {
     }
     const schedule = await this.em.getRepository(TournamentRoundDate).find({
       select: ['date'],
-      where: { tournamentRoundId: tournamentRound.id, date: MoreThan(new Date().toDateString()) },
+      where: { tournamentRoundId: tournamentRound.id, date: MoreThan(new Date().toISOString()) },
       order: { date: 'ASC' }});
     return schedule.map(s => s.date);
-  }
-
-  async getInviteList(
-    roundId?: number
-  ): Promise<Array<TournamentRoundInvite> | undefined> {
-    let tournamentRoundId;
-    if (roundId) {
-      tournamentRoundId = roundId;
-    } else {
-      const tournamentRound = await this.getCurrentTournamentRound();
-      if (tournamentRound === undefined) return undefined;
-      tournamentRoundId = tournamentRound.id;
-    }
-
-    return await this.em.getRepository(TournamentRoundInvite)
-      .find({
-        tournamentRoundId: Equal(tournamentRoundId)
-      });
   }
 
   async getEmails(tournamentRoundId?: number): Promise<Array<string>> {
