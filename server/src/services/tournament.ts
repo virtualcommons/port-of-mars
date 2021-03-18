@@ -6,6 +6,9 @@ import { BaseService } from "@port-of-mars/server/services/db";
 import {TournamentRoundDate} from "@port-of-mars/server/entity/TournamentRoundDate";
 
 const logger = getLogger(__filename);
+// 30 minutes in milliseconds offset for checking when the lobby is open
+const LOBBY_OPEN_BEFORE_OFFSET = 10 * 60 * 1000;
+const LOBBY_OPEN_AFTER_OFFSET = 30 * 60 * 1000;
 
 export class TournamentService extends BaseService {
   async getActiveTournament(): Promise<Tournament> {
@@ -49,12 +52,19 @@ export class TournamentService extends BaseService {
   }
 
   async getScheduledDates(tournamentRound?: TournamentRound): Promise<Array<Date>> {
+    /**
+     * Returns upcoming scheduled dates for the given TournamentRound with 30 minutes of wiggle room e.g.,
+     * if round is scheduled at 2021-01-03 1900, it will return that date up until 2021-01-03 1930.
+     */
     if (!tournamentRound) {
       tournamentRound = await this.getCurrentTournamentRound();
     }
+    // scheduled dates within 30 minutes of the scheduled tournament date should
+    // still be available
+    const offsetTime = new Date().getTime() - LOBBY_OPEN_AFTER_OFFSET;
     const schedule = await this.em.getRepository(TournamentRoundDate).find({
       select: ['date'],
-      where: { tournamentRoundId: tournamentRound.id, date: MoreThan(new Date().toISOString()) },
+      where: { tournamentRoundId: tournamentRound.id, date: MoreThan(new Date(offsetTime))},
       order: { date: 'ASC' }});
     return schedule.map(s => s.date);
   }
@@ -141,57 +151,6 @@ export class TournamentService extends BaseService {
     return await this.em.getRepository(TournamentRound).save(tr);
   }
 
-  async findRoundWinners(roundId?: number): Promise<Array<number> | undefined> {
-    // NOTE: Get Tournament Round ID
-    let tournamentRoundId;
-    if (roundId) {
-      tournamentRoundId = roundId;
-    } else {
-      const tournamentRound = await this.getCurrentTournamentRound();
-      if (tournamentRound === undefined) return undefined;
-      tournamentRoundId = tournamentRound.id;
-    }
-
-    // NOTE: Get Games
-    const games: Array<Game> | undefined = await this.em
-      .getRepository(Game)
-      .find({ tournamentRoundId: Equal(tournamentRoundId) });
-    if (games === undefined) {
-      return undefined;
-    }
-
-    // NOTE: Get Winners from Games
-    const winnerIds: Array<number> = [];
-
-    for (const game of games) {
-      // NOTE: Get Players from Games
-      const gameId: number = game.id;
-      const players: Array<Player> = await this.em
-        .getRepository(Player)
-        .find({
-          gameId: Equal(gameId)
-        });
-      if (players === undefined) {
-        return undefined;
-      }
-
-      // NOTE: Get Winners from Players
-      const playerPoints: Array<[number, number | null]> = [];
-      const winners: Array<number> = [];
-
-      for (const player of players) {
-        playerPoints.push([player.userId, player.points]);
-      }
-
-      const sorted = _.reverse(_.sortBy(playerPoints, [1]));
-      sorted.forEach((s: [number, number | null]) => {
-        if (s[1] === sorted[0][1]) winners.push(s[0]);
-      })
-    }
-
-
-    return undefined;
-  }
 
   findQBAlternateCandidates(qb: SelectQueryBuilder<any>, tournamentRoundId: number): SelectQueryBuilder<any> {
     return qb
@@ -253,13 +212,11 @@ export class TournamentService extends BaseService {
     if (gameDates.length === 0) {
       return false;
     }
-    // 30 minutes in milliseconds offset for checking when the lobby is open
-    const lobbyOpenBeforeOffset = 10 * 60 * 1000;
-    const lobbyOpenAfterOffset = 30 * 60 * 1000;
     const now = new Date();
     for (const date of gameDates) {
-      const openDate = new Date(date.getTime() - lobbyOpenBeforeOffset);
-      const closeDate = new Date(date.getTime() + lobbyOpenAfterOffset);
+      const gameTime = date.getTime();
+      const openDate = new Date(gameTime - LOBBY_OPEN_BEFORE_OFFSET);
+      const closeDate = new Date(gameTime + LOBBY_OPEN_AFTER_OFFSET);
       if (now > openDate && now < closeDate) {
         return true;
       }

@@ -132,7 +132,7 @@ export class DashboardService extends BaseService {
     const stats = await this.getStats(user, round);
     const invite = await this.sp.tournament.getActiveRoundInvite(user.id, round);
     const playerTaskCompletion: PlayerTaskCompletion = await this.getPlayerTaskCompletion(user, invite);
-    const gameDates = await this.sp.tournament.getScheduledDates(round);
+    const gameDates = await this.sp.tournament.getScheduledDates(round, true);
     const upcomingGames = gameDates.map( date => {
       return {time: date.getTime(), round: round.roundNumber, tournamentName: round.tournament.name};
     });
