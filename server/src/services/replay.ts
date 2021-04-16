@@ -425,10 +425,10 @@ export class MarsLogSummarizer extends Summarizer<MarsLogExport> {
   }
 
   * summarize(): Generator<MarsLogExport> {
-    for (const events of this.events.values()) {
+    for (const [gameId, events] of this.events.entries()) {
       const gameSummary = this._summarizeGame(events);
       for (const marsLog of gameSummary.logs) {
-        yield { ...marsLog, gameId: gameSummary.gameId }
+        yield { ...marsLog, gameId }
       }
     }
   }
