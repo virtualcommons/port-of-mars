@@ -76,14 +76,14 @@ async function exportData(em: EntityManager, ids?: Array<number>, dateCreatedMin
   const events = await eventQuery.getMany();
   await mkdir('/dump/processed', {recursive: true});
   await mkdir('/dump/raw', {recursive: true});
-  const marsLogSummarizer = new MarsLogSummarizer(events, '/dump/processed/marsLog.csv')
+  const marsLogSummarizer = new MarsLogSummarizer(events, '/dump/processed/marsLog.csv');
   const playerSummarizer =  new PlayerSummarizer(playerRaw, '/dump/processed/player.csv');
   const gameEventSummarizer = new GameEventSummarizer(events, '/dump/processed/gameEvent.csv');
   const victoryPointSummarizer = new VictoryPointSummarizer(events, '/dump/processed/victoryPoint.csv');
   const playerInvestmentSummarizer = new PlayerInvestmentSummarizer(events, '/dump/raw/playerInvestment.csv');
   const marsEventSummarizer = new MarsEventSummarizer(events, '/dump/processed/marsEvent.csv');
   const accomplishmentSummarizer = new AccomplishmentSummarizer('/dump/processed/accomplishment.csv')
-  await Promise.all([playerSummarizer, gameEventSummarizer, victoryPointSummarizer, playerInvestmentSummarizer, marsEventSummarizer, accomplishmentSummarizer].map(s => s.save()))
+  await Promise.all([marsLogSummarizer, playerSummarizer, gameEventSummarizer, victoryPointSummarizer, playerInvestmentSummarizer, marsEventSummarizer, accomplishmentSummarizer].map(s => s.save()))
   logger.debug("=====EXPORTING DATA END=====");
 }
 
