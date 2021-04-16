@@ -5,7 +5,7 @@ import {gameEventDeserializer} from "@port-of-mars/server/rooms/game/events";
 import _ from "lodash";
 import {getLogger} from "@port-of-mars/server/settings";
 import {
-  CURATOR, ENTREPRENEUR, Investment, INVESTMENTS,
+  CURATOR, ENTREPRENEUR, Investment, INVESTMENTS, MarsLogMessageData,
   Phase, PIONEER, POLITICIAN,
   RESEARCHER,
   Resource,
@@ -403,6 +403,32 @@ export class MarsEventSummarizer extends Summarizer<MarsEventExport> {
       const gameSummary = this._summarizeGame(events);
       for (const gameEvent of gameSummary) {
         yield gameEvent;
+      }
+    }
+  }
+}
+
+
+export interface MarsLogExport extends MarsLogMessageData {
+  gameId: number;
+}
+
+export class MarsLogSummarizer extends Summarizer<MarsLogExport> {
+  _summarizeGame(events: Array<entity.GameEvent>): GameState {
+    // FIXME: may want to relate mars logs with game events - that isn't done right now
+    const game = loadSnapshot(events[0].payload as GameSerialized);
+    for (const event of events.slice(1)) {
+      const e = gameEventDeserializer.deserialize(event);
+      game.applyMany([e])
+    }
+    return game;
+  }
+
+  * summarize(): Generator<MarsLogExport> {
+    for (const events of this.events.values()) {
+      const gameSummary = this._summarizeGame(events);
+      for (const marsLog of gameSummary.logs) {
+        yield { ...marsLog, gameId: gameSummary.gameId }
       }
     }
   }
