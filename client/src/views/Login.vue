@@ -11,18 +11,18 @@
         <b-container :style="'background-color: rgba(34, 26, 27, .9)'" class="mb-5 pb-5 w-75">
           <b-row :style="'background-color: rgb(156, 81, 71); color: $dark-shade;'"
                  class="mb-3 py-4 justify-content-center">
-            <h2>Sign Up for Mars Madness 2021</h2>
+            <h2>Sign Up for Mars Madness</h2>
           </b-row>
           <b-alert show variant="warning">
             <p>
               <b-icon class="mx-2" icon="exclamation-triangle-fill" size="lg" variant="warning"></b-icon>
-              Currently, the Mars Madness tournament is only open to undergraduate students at Arizona State University.
+              Currently, Mars Madness is only open to undergraduate students at Arizona State University.
             </p>
           </b-alert>
           <p class="mx-3">
-            Click below to sign up to play in the Mars Madness tournament. After you register, you will receive an email
-            in early March 2021 with details
-            on how to participate in the tournament.
+            Click below to sign up for the Mars Madness tournament, a single-elimination tournament where the highest
+            scoring players from each surviving group move on to the next bracket round. You will receive an email a few
+            weeks before the tournament starts with details.
           </p>
           <b-form-checkbox v-model="toggleDevLogin" v-if="isDevMode" class="my-2">
             <p v-if="toggleDevLogin" class="text-uppercase">Test Mode Enabled</p>
