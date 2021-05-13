@@ -22,8 +22,8 @@ get_chat_messages <- function(events) {
     dplyr::arrange(gameId, id)
   
   epoched_events <- chat_messages %>%
-    dplyr::select(-type, -phaseInitial, -min_timestamp, -timestamp) %>%
-    dplyr::group_by(gameId, roundInitial) %>%
+    dplyr::select(-type, -min_timestamp, -timestamp) %>%
+    dplyr::group_by(gameId, roundInitial, phaseInitial) %>%
     dplyr::mutate(role_prev=dplyr::coalesce(dplyr::lag(role), role), time_prev=dplyr::coalesce(dplyr::lag(time), time)) %>%
     dplyr::mutate(time_diff = time - time_prev) %>%
     dplyr::mutate(role_change=role != role_prev, time_change = time_diff > lubridate::dseconds(30)) %>%
@@ -32,7 +32,7 @@ get_chat_messages <- function(events) {
     dplyr::ungroup()
   
   epoched_events %>%
-    dplyr::group_by(gameId, roundInitial, epoch) %>%
+    dplyr::group_by(gameId, roundInitial, phaseInitial, epoch) %>%
     dplyr::summarise(ids = stringr::str_c(id, collapse="; "), role = role[1], message=stringr::str_c(message, collapse="; "), time_min=min(time), time_max=max(time)) %>%
-    dplyr::rename(text = message, round = roundInitial)
+    dplyr::rename(text = message, round = roundInitial, phase = phaseInitial)
 }
