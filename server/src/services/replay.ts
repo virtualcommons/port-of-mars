@@ -357,13 +357,11 @@ export class PlayerInvestmentSummarizer extends Summarizer<PlayerInvestmentExpor
 }
 
 export interface MarsEventExport {
-  id: number;
   gameId: number;
   round: number;
   name: string;
   description: string;
   index: number;
-  initialTimeRemaining: number;
 }
 
 export class MarsEventSummarizer extends Summarizer<MarsEventExport> {
@@ -381,7 +379,7 @@ export class MarsEventSummarizer extends Summarizer<MarsEventExport> {
     const game = loadSnapshot(events[0].payload as GameSerialized);
     let prev = this._summarizeEvent(game, events[0]);
     for (const row of prev) {
-      yield {id: events[0].id, ...row, initialTimeRemaining: events[0].timeRemaining, ...extractBefore(game)};
+      yield row;
     }
 
     for (const event of events.slice(1)) {
@@ -390,8 +388,8 @@ export class MarsEventSummarizer extends Summarizer<MarsEventExport> {
       game.applyMany([e]);
       const curr = this._summarizeEvent(game, event);
       for (const [row, prevrow] of _.zip(curr, prev)) {
-        if (!_.isEqual(row, prevrow) && row) {
-          yield {id: event.id, ...row, initialTimeRemaining: event.timeRemaining, ...extractAfter(game)}
+        if (row && prevrow && (row.round !== prevrow.round)) {
+          yield row;
         }
       }
       prev = curr;
