@@ -1,7 +1,12 @@
 import {GameSerialized, GameState} from "@port-of-mars/server/rooms/game/state";
 import {mockGameStateInitOpts} from "@port-of-mars/server/util";
 import * as entity from "@port-of-mars/server/entity";
-import {gameEventDeserializer} from "@port-of-mars/server/rooms/game/events";
+import {
+  EnteredDefeatPhase,
+  EnteredMarsEventPhase,
+  EnteredNewRoundPhase, ExitedMarsEventPhase,
+  gameEventDeserializer
+} from "@port-of-mars/server/rooms/game/events";
 import _ from "lodash";
 import {getLogger} from "@port-of-mars/server/settings";
 import {
@@ -21,6 +26,7 @@ import * as jdiff from 'jsondiffpatch'
 import {getAccomplishmentIDs, getAllAccomplishments} from "@port-of-mars/server/data/Accomplishment";
 import {EntityManager} from "typeorm/index";
 import {Player, TournamentRoundInvite, User} from "@port-of-mars/server/entity";
+import * as fs from "fs";
 
 const logger = getLogger(__filename);
 
@@ -366,7 +372,7 @@ export interface MarsEventExport {
 
 export class MarsEventSummarizer extends Summarizer<MarsEventExport> {
   _summarizeEvent(game: GameState, event: entity.GameEvent): Array<Omit<MarsEventExport, 'id' | 'initialTimeRemaining'>> {
-    return game.marsEvents.map((marsEvent, index) => ({
+    return game.marsEvents.slice(0, game.marsEventsProcessed).map((marsEvent, index) => ({
       gameId: event.gameId,
       round: game.round,
       name: marsEvent.name,
@@ -377,22 +383,29 @@ export class MarsEventSummarizer extends Summarizer<MarsEventExport> {
 
   * _summarizeGame(events: Array<entity.GameEvent>): Generator<MarsEventExport> {
     const game = loadSnapshot(events[0].payload as GameSerialized);
-    let prev = this._summarizeEvent(game, events[0]);
-    for (const row of prev) {
-      yield row;
-    }
+    const exitedMarsEventPhase = new ExitedMarsEventPhase();
+    const enteredDefeatPhase = new EnteredDefeatPhase({} as any);
+    let eventCount = 0;
+    let prevRound = game.round;
+    let currRound = game.round;
 
     for (const event of events.slice(1)) {
       const e = gameEventDeserializer.deserialize(event);
       game.timeRemaining = event.timeRemaining;
       game.applyMany([e]);
-      const curr = this._summarizeEvent(game, event);
-      for (const [row, prevrow] of _.zip(curr, prev)) {
-        if (row && prevrow && (row.round !== prevrow.round)) {
+      if (exitedMarsEventPhase.kind === event.type || (enteredDefeatPhase.kind === event.type && eventCount === 0)) {
+        const curr = this._summarizeEvent(game, event);
+        eventCount += 1;
+        for (const row of curr) {
           yield row;
         }
       }
-      prev = curr;
+
+      prevRound = currRound;
+      currRound = game.round;
+      if (currRound !== prevRound) {
+        eventCount = 0;
+      }
     }
   }
 
