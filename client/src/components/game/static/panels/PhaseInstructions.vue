@@ -7,7 +7,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { Phase } from '@port-of-mars/shared/types';
-import { PHASE_INSTRUCTIONS } from '@port-of-mars/client/repo/instructions.ts';
+import { PHASE_INSTRUCTIONS } from '@port-of-mars/client/repo/instructions';
 
 @Component({
   components: {},

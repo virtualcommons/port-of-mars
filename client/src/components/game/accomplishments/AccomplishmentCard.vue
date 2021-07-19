@@ -105,7 +105,7 @@
 
 <script lang="ts">
 import {Component, Inject, Prop, Vue, Watch,} from 'vue-property-decorator';
-import {AccomplishmentCardType} from '@port-of-mars/client/types/cards.ts';
+import {AccomplishmentCardType} from '@port-of-mars/client/types/cards';
 import {
   AccomplishmentData,
   Investment,

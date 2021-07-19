@@ -37,7 +37,7 @@
 <script lang="ts">
 import {Component, Inject, Vue} from 'vue-property-decorator';
 import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
-import {AccomplishmentCardType} from '@port-of-mars/client/types/cards.ts'
+import {AccomplishmentCardType} from '@port-of-mars/client/types/cards';
 import {AccomplishmentData, MarsEventData, RESEARCHER} from '@port-of-mars/shared/types';
 import {GameRequestAPI} from "@port-of-mars/client/api/game/request";
 import _ from 'lodash';

@@ -47,7 +47,7 @@
 import {Component, Inject, Vue} from 'vue-property-decorator';
 import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
 import Inventory from '@port-of-mars/client/components/game/Inventory.vue';
-import {AccomplishmentCardType} from '@port-of-mars/client/types/cards.ts';
+import {AccomplishmentCardType} from '@port-of-mars/client/types/cards';
 import {AccomplishmentData} from '@port-of-mars/shared/types';
 import {canPurchaseAccomplishment} from "@port-of-mars/shared/validation";
 import {GameRequestAPI} from "@port-of-mars/client/api/game/request";
