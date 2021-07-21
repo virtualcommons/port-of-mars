@@ -9,6 +9,7 @@
     "@types/node": "^14.0.27"
   },
   "dependencies": {
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "@colyseus/schema": "^1.0.25"
   }
 }

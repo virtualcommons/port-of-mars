@@ -67,11 +67,12 @@
     "yamljs": "^0.3.0"
   },
   "dependencies": {
+    "@colyseus/schema": "^1.0.25",
     "@sentry/node": "~5.29.2",
     "@vrbo/pino-rotating-file": "^2.0.1",
     "async-mutex": "^0.2.6",
     "bcryptjs": "^2.4.3",
-    "colyseus": "^0.13.7",
+    "colyseus": "^0.14.16",
     "commander": "^6.2.1",
     "connect-redis": "^5.0.0",
     "cookie": "^0.4.0",

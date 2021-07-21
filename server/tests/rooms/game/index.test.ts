@@ -4,7 +4,6 @@ import {getAccomplishmentByID, getAccomplishmentIDs} from "@port-of-mars/server/
 import * as _ from 'lodash'
 import {mockGameStateInitOpts} from "@port-of-mars/server/util";
 import { getMarsEvent } from "@port-of-mars/server/data/MarsEvents";
-import {canSendTradeRequest} from "@port-of-mars/shared/validation";
 import {
   OutOfCommissionCurator,
   OutOfCommissionPioneer,
@@ -15,6 +14,7 @@ import {
   PersonalGain
 } from "@port-of-mars/server/rooms/game/state/marsevents/state";
 import {MarsEvent} from "@port-of-mars/server/rooms/game/state/marsevents/MarsEvent";
+import {canSendTradeRequest} from "@port-of-mars/server/state/validation";
 
 
 describe('a Researcher Player Accomplishment', () => {

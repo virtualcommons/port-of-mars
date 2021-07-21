@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@colyseus/schema@^1.0.25":
+  version "1.0.25"
+  resolved "https://registry.yarnpkg.com/@colyseus/schema/-/schema-1.0.25.tgz#bccc28f047c979ea1c39c56f8708e5eb476b4e99"
+  integrity sha512-Obb4/Nh+uXJaLg57lFoe9wFL5vVkjZqoi7SlBPw4h9xzTdj9PTfh9t1s+ZRmnc15SknN8nrjrMArIJ77nyVCKQ==
+
 "@types/lodash@^4.14.159":
   version "4.14.159"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.159.tgz#61089719dc6fdd9c5cb46efc827f2571d1517065"

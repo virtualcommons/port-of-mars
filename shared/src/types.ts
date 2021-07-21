@@ -123,13 +123,16 @@ export interface SystemHealthMarsEventData {
   systemHealthModification: number;
 }
 
-export interface RoundIntroductionData {
+export interface RoundIntroductionData<
+  SystemHealth=SystemHealthMarsEventData,
+  AccomplishmentPurchase=AccomplishmentPurchaseData,
+  Trade=TradeData> {
   systemHealthGroupContributions: number;
   systemHealthAtStartOfRound: number;
   systemHealthMaintenanceCost: number;
-  systemHealthMarsEvents: Array<SystemHealthMarsEventData>;
-  accomplishmentPurchases: Array<AccomplishmentPurchaseData>;
-  completedTrades: Array<TradeData>;
+  systemHealthMarsEvents: Array<SystemHealth>;
+  accomplishmentPurchases: Array<AccomplishmentPurchase>;
+  completedTrades: Array<Trade>;
 }
 
 export interface MarsEventData {
@@ -188,9 +191,9 @@ export interface AccomplishmentData {
   effect: string;
 }
 
-export interface AccomplishmentSetData {
-  purchased: Array<AccomplishmentData>;
-  purchasable: Array<AccomplishmentData>;
+export interface AccomplishmentSetData<Accomplishment=AccomplishmentData> {
+  purchased: Array<Accomplishment>;
+  purchasable: Array<Accomplishment>;
 }
 
 export interface TradeAmountData {
@@ -220,45 +223,54 @@ export interface TradeDataWithNull<R=Role|NullPartner>{
   recipient: TradeAmountDataWithNull<R>;
 }
 
-export type TradeSetData = { [uuid: string]: TradeData };
+export type TradeSetData<Trade=TradeData> = Map<string, Trade>;
 
 export interface PurchasedSystemHealthData {
   description: string;
   systemHealth: number;
 }
 
-export interface SystemHealthChangesData {
+export interface SystemHealthChangesData<PurchasedSystemHealth=PurchasedSystemHealthData> {
   investment: number;
-  purchases: Array<PurchasedSystemHealthData>
+  purchases: Array<PurchasedSystemHealth>
 }
 
-export interface PlayerData {
+export interface PlayerData<
+  AccomplishmentSet=AccomplishmentSetData,
+  ResourceAmount=ResourceAmountData,
+  SystemHealthChanges=SystemHealthChangesData> {
   role: Role;
   costs: ResourceCostData;
   botWarning: boolean;
   specialty: Resource;
-  accomplishments: AccomplishmentSetData;
+  accomplishments: AccomplishmentSet;
   ready: boolean;
   timeBlocks: number;
-  systemHealthChanges: SystemHealthChangesData;
+  systemHealthChanges: SystemHealthChanges;
   victoryPoints: number;
-  inventory: ResourceAmountData;
+  inventory: ResourceAmount;
 }
 
-export type PlayerSetData = { [role in Role]: PlayerData };
+export type PlayerSetData<Player=PlayerData> = { [role in Role]: Player };
 
-export interface GameData {
-  players: PlayerSetData;
+export interface GameData<
+  ChatMessage=ChatMessageData,
+  MarsEvent=MarsEventData,
+  MarsLogMessage=MarsLogMessageData,
+  PlayerSet=PlayerSetData,
+  RoundIntroduction=RoundIntroductionData,
+  TradeSet=TradeSetData> {
+  players: PlayerSet;
   timeRemaining: number;
   round: number;
   phase: Phase;
   systemHealth: number;
-  messages: Array<ChatMessageData>;
-  marsEvents: Array<MarsEventData>;
-  logs: Array<MarsLogMessageData>;
+  messages: Array<ChatMessage>;
+  marsEvents: Array<MarsEvent>;
+  logs: Array<MarsLogMessage>;
   marsEventsProcessed: number;
-  roundIntroduction: RoundIntroductionData;
-  tradeSet: TradeSetData;
+  roundIntroduction: RoundIntroduction;
+  tradeSet: TradeSet;
   winners: Array<Role>;
   heroOrPariah: '' | 'hero' | 'pariah';
 }

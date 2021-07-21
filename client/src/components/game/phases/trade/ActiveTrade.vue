@@ -135,12 +135,12 @@
   import {Component, Inject, Prop, Vue, Watch} from 'vue-property-decorator';
   import {GameRequestAPI} from '@port-of-mars/client/api/game/request';
   import {RESOURCES, Role, TradeAmountData} from '@port-of-mars/shared/types';
-  import { canPlayerMakeTrade} from '@port-of-mars/shared/validation';
   import {library} from '@fortawesome/fontawesome-svg-core';
   import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
   import {faExchangeAlt} from '@fortawesome/free-solid-svg-icons/faExchangeAlt';
   import {faTimes} from '@fortawesome/free-solid-svg-icons/faTimes';
   import {faCheck} from '@fortawesome/free-solid-svg-icons/faCheck';
+  import {canPlayerMakeTrade} from "@port-of-mars/shared/validation";
 
   library.add(faExchangeAlt);
   library.add(faTimes);

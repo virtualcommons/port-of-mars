@@ -1,11 +1,4 @@
-import {
-  AccomplishmentData,
-  Resource,
-  ResourceAmountData,
-  ResourceCostData,
-  RESOURCES,
-  PlayerData,
-} from './types';
+import {AccomplishmentData, Resource, ResourceAmountData, RESOURCES,} from './types';
 
 export function canPurchaseAccomplishment(
   accomplishment: AccomplishmentData,
@@ -65,23 +58,4 @@ export function canPlayerMakeTrade(
     }
   }
   return canMakeTrade && isTradingSomething;
-}
-
-/**
- * Returns true iff the given playerData has enough resources to send a trade request
- * for the given tradeAmount
- * @param playerData
- * @param tradeAmount
- */
-export function canSendTradeRequest(
-  playerData: PlayerData,
-  tradeAmount: ResourceAmountData
-) {
-  let availableResources: ResourceAmountData = { ...playerData.inventory };
-  for (const resource of RESOURCES) {
-    if (tradeAmount[resource] > availableResources[resource]) {
-      return false;
-    }
-  }
-  return true;
 }

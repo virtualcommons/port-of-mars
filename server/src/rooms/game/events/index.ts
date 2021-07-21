@@ -187,7 +187,7 @@ export class AcceptedTradeRequest extends GameEventWithData {
   }
 
   getRole(game: GameState): Role | ServerRole {
-    return game.tradeSet[this.data.id]?.to?.role ?? SERVER;
+    return game.tradeSet.get(this.data.id)?.recipient?.role ?? SERVER;
   }
 
   apply(game: GameState): void {
@@ -203,7 +203,7 @@ export class RejectedTradeRequest extends GameEventWithData {
   }
 
   getRole(game: GameState): Role | ServerRole {
-    return game.tradeSet[this.data.id]?.to?.role ?? SERVER;
+    return game.tradeSet.get(this.data.id)?.recipient?.role ?? SERVER;
   }
 
   apply(game: GameState): void {
@@ -219,7 +219,7 @@ export class CanceledTradeRequest extends GameEventWithData {
   }
 
   getRole(game: GameState): Role | ServerRole {
-    return game.tradeSet[this.data.id]?.from?.role ?? SERVER;
+    return game.tradeSet.get(this.data.id)?.sender?.role ?? SERVER;
   }
 
   apply(game: GameState): void {
@@ -251,7 +251,7 @@ export class ServerCanceledTradeRequest extends GameEventWithData {
   }
 
   getRole(game: GameState): Role | ServerRole {
-    return game.tradeSet[this.data.id]?.from?.role ?? SERVER;
+    return game.tradeSet.get(this.data.id)?.sender?.role ?? SERVER;
   }
 
   apply(game: GameState): void {

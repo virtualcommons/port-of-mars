@@ -310,10 +310,10 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@colyseus/schema@^0.5.19":
-  version "0.5.41"
-  resolved "https://registry.yarnpkg.com/@colyseus/schema/-/schema-0.5.41.tgz#0bb3d3653e2b9170fef8732835cc3db2f0d8e8a0"
-  integrity sha512-yJXSK6S1bAyWTKuxfNQ2u3KAVHjornnDg8hvbX7T+ZfX8BiYGBTbiv5JIUG9bYXbMRqQnQYa5QlPHjU30R7rJQ==
+"@colyseus/schema@^1.0.15", "@colyseus/schema@^1.0.25":
+  version "1.0.25"
+  resolved "https://registry.yarnpkg.com/@colyseus/schema/-/schema-1.0.25.tgz#bccc28f047c979ea1c39c56f8708e5eb476b4e99"
+  integrity sha512-Obb4/Nh+uXJaLg57lFoe9wFL5vVkjZqoi7SlBPw4h9xzTdj9PTfh9t1s+ZRmnc15SknN8nrjrMArIJ77nyVCKQ==
 
 "@eslint/eslintrc@^0.4.2":
   version "0.4.2"
@@ -1911,12 +1911,12 @@ colors@^1.1.2:
   resolved "https://registry.yarnpkg.com/colors/-/colors-1.4.0.tgz#c50491479d4c1bdaed2c9ced32cf7c7dc2360f78"
   integrity sha512-a+UqTh4kgZg/SlGvfbzDHpgRu7AAQOmmqRHJnxhRZICKFUT91brVhNNt58CMWU9PsBbv3PDCZUHbVxuDiH2mtA==
 
-colyseus@^0.13.7:
-  version "0.13.7"
-  resolved "https://registry.yarnpkg.com/colyseus/-/colyseus-0.13.7.tgz#7cc5a76d945d4d3f264606afdcde0042c6c3b462"
-  integrity sha512-MalA6bHWFyz5c3o7wmSuOnVqZUBAdDaGv9OWc5kI0/jteyMn5BkqjxXV7IHhRy+B3DQGJOxLSnvoOFIy9eIf/A==
+colyseus@^0.14.16:
+  version "0.14.16"
+  resolved "https://registry.yarnpkg.com/colyseus/-/colyseus-0.14.16.tgz#5054094777b0ea021b13cf0862533c4df9f69efe"
+  integrity sha512-FeY+Av5+lEb630Ffm0kCQYHf2HwuIz1jsMPQrjTezN4ScidmrZ2acLzI1ZtNFmPG9Gtuyxd6RHZKzLxFwLwHiw==
   dependencies:
-    "@colyseus/schema" "^0.5.19"
+    "@colyseus/schema" "^1.0.15"
     "@gamestdio/timer" "^1.3.0"
     "@types/redis" "^2.8.12"
     "@types/ws" "^6.0.1"
@@ -1929,7 +1929,7 @@ colyseus@^0.13.7:
     notepack.io "^2.2.0"
     ws "^7.1.0"
   optionalDependencies:
-    mongoose "^5.6.9"
+    mongoose "^5.11.3"
     redis "^2.8.0"
 
 combined-stream@^1.0.8:
@@ -4456,10 +4456,10 @@ mongoose-legacy-pluralize@1.0.2:
   resolved "https://registry.yarnpkg.com/mongoose-legacy-pluralize/-/mongoose-legacy-pluralize-1.0.2.tgz#3ba9f91fa507b5186d399fb40854bff18fb563e4"
   integrity sha512-Yo/7qQU4/EyIS8YDFSeenIvXxZN+ld7YdV9LqFVQJzTLye8unujAWPZ4NWKfFA+RNjh+wvTWKY9Z3E5XM6ZZiQ==
 
-mongoose@^5.6.9:
-  version "5.12.14"
-  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.12.14.tgz#610460f0725acf67b3eefcd92f0a48a08919d51b"
-  integrity sha512-1lMRY8cfGYFWHqe5DLnVgNQDyD0fEbSoWIQe9Mllt/ZtayZ5XUFQt+o5VKrB44vsT5cLNzgwEFO0NvwTwqLluQ==
+mongoose@^5.11.3:
+  version "5.13.0"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.13.0.tgz#3d5241991261681a913696d5b7c88f76b31aedb0"
+  integrity sha512-8dvu7vxmDzlupj4I9T0g33GPf4HzSZmIOKQfG9RJQ5Nxk/Ztx1b8zlYp+blvaCfWwtBpiAJuKYOBU17Wq1RVFQ==
   dependencies:
     "@types/mongodb" "^3.5.27"
     bson "^1.1.4"

@@ -188,6 +188,7 @@ export interface ProfileMenuView {
 }
 
 export interface State extends GameData {
+  timeRemaining: number;
   role: Role;
   logs: Array<MarsLogMessageData>;
   dashboardMessages: Array<DashboardMessage>;
@@ -227,7 +228,7 @@ export const initialStoreState: State = {
     accomplishmentPurchases: [],
     completedTrades: []
   },
-  tradeSet: {},
+  tradeSet: new Map(),
   winners: [],
   heroOrPariah: '',
 

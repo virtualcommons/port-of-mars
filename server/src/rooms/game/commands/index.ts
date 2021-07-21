@@ -41,10 +41,10 @@ import {
 import {getAccomplishmentByID} from '@port-of-mars/server/data/Accomplishment';
 import {Command} from '@port-of-mars/server/rooms/game/commands/types';
 import {GameEvent} from '@port-of-mars/server/rooms/game/events/types';
-import {canSendTradeRequest} from "@port-of-mars/shared/validation";
 import {settings} from "@port-of-mars/server/settings";
 import {v4 as uuidv4} from "uuid";
 import {VoteHeroOrPariahRoleData} from "@port-of-mars/shared/game/requests";
+import {canSendTradeRequest} from "@port-of-mars/server/state/validation";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -186,12 +186,12 @@ export class AcceptTradeRequestCmd implements Command {
   constructor(private state: GameState, private id: string) {
   }
 
-  static fromReq(r: req.AcceptTradeRequestData, state: GameState,) {
+  static fromReq(r: req.AcceptTradeRequestData, state: GameState) {
     return new AcceptTradeRequestCmd(state, r.id);
   }
 
   execute(): Array<GameEvent> {
-    const trade: Trade | undefined = this.state.tradeSet[this.id];
+    const trade: Trade | undefined = this.state.tradeSet.get(this.id);
     if (!trade) {
       logger.info('[GAME %d]: attempted to accept non-existent trade %s', this.state.gameId, this.id)
       return [];
@@ -245,7 +245,7 @@ export class SendTradeRequestCmd implements Command {
   }
 
   execute(): Array<GameEvent> {
-    if (canSendTradeRequest(this.player, this.trade.sender.resourceAmount)) {
+    if (this.player.canSendTradeRequest(this.trade.sender.resourceAmount)) {
       return [new SentTradeRequest({...this.trade, id: uuidv4()})];
     } else {
       return [];

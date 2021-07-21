@@ -11,6 +11,6 @@ export default {
   },
 
   UPDATE_TRADE_STATUS(state: State, payload: {id: string, status: TradeStatus}){
-    state.tradeSet[payload.id].status = payload.status;
+    state.tradeSet.get(payload.id)!.status = payload.status;
   }
 };
