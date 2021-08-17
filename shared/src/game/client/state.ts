@@ -266,7 +266,7 @@ export const initialStoreState: State = {
     profileMenuView: {
       visible: false,
     },
-    chatMarsLogView: ChatMarsLogView.Split,
+    chatMarsLogView: ChatMarsLogView.Chat,
     hudLeftView: HUDLeftView.OtherPlayers,
     hudRightView: HUDRightView.PhaseInformation,
     modalView: {

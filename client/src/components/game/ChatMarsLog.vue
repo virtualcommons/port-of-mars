@@ -1,53 +1,31 @@
 <template>
-<!--  d-flex: transform b-container into flex-item -->
-<!--  flex-column: set vertical direction on flex-items -->
-  <b-container fluid class="h-100 m-0 p-0 d-flex flex-column tour-split-chat-log">
-    <!-- h-auto: auto sets height + gives row a height -->
-    <!-- ** must give a height in order for flex-grow-1 to work below -->
-    <b-row class="h-auto w-100 p-0 justify-content-center">
-      <!-- buttons: toggle chat | mars log | split -->
-      <b-col cols="4" class="p-0">
-        <button
-          @click="switchCurrentView(view.Chat)"
-          :class="buttonClass(view.Chat)"
-        >
-          Chat
-        </button>
-      </b-col>
-      <b-col cols="4" class="p-0 m-0">
-        <button
-          @click="switchCurrentView(view.MarsLog)"
-          :class="buttonClass(view.MarsLog)"
-        >
-          Mars Log
-        </button>
-      </b-col>
-      <b-col cols="4" class="p-0 m-0">
-        <button
-          @click="switchCurrentView(view.Split)"
-          :class="buttonClass(view.Split)"
-        >
-          Split
-        </button>
-      </b-col>
-    </b-row>
-    <!-- flex-grow-1: tells this row to grow as needed to fill the remainder -->
-    <!-- height of b-container -->
-    <!-- flex-column: set vertical direction (cols stack on top consecutively -->
-    <b-row class="flex-grow-1 flex-column p-0 w-100 justify-content-center"
-    >
-      <b-col v-show="currentView === view.MarsLog || currentView === view.Split"
-             class="w-100 mt-2 tour-log-view overflow-hidden"
-             style="border: 0.125rem solid #A49CA6"
-      >
-        <MarsLog />
-      </b-col>
-      <b-col v-show="currentView === view.Chat || currentView === view.Split"
-             class="w-100 mt-2 tour-chat overflow-hidden"
-             style="border: 0.125rem solid #A49CA6"
-      >
+  <b-container fluid class="h-100 m-0 p-0">
+    <!--  flex-column: set vertical direction on flex-items -->
+    <b-row class="h-100 flex-column p-0 justify-content-center">
+      <h2 class="text-center">Chat Messages</h2>
+      <b-col class="flex-grow-1 mt-2 tour-chat overflow-hidden" style="border: 0.125rem solid #A49CA6">
         <Chat />
       </b-col>
+      <b-button
+        v-b-modal.modal-center
+        block
+        squared
+        class="mt-2"
+        variant="outline-secondary"
+        style="border: 0.125rem solid"
+      >
+        <p class="my-auto"><b>Show Mars Log</b></p>
+      </b-button>
+      <b-modal
+        id="modal-center"
+        scrollable
+        centered
+        header-bg-variant="dark"
+        body-bg-variant="dark"
+        footer-bg-variant="dark"
+      >
+        <MarsLog></MarsLog>
+      </b-modal>
     </b-row>
   </b-container>
 </template>
@@ -75,38 +53,5 @@ export default class ChatMarsLog extends Vue {
   get view() {
     return ChatMarsLogView;
   }
-
-  private buttonClass(buttonViewOption: ChatMarsLogView) {
-    return buttonViewOption === this.currentView ? 'selected' : '';
-  }
-
-  private switchCurrentView(view: ChatMarsLogView) {
-    this.api.setChatMarsLogView(view);
-  }
 }
 </script>
-
-<style lang="scss" scoped>
-button {
-  @include reset-button;
-  width: 100%;
-  padding: 0.5rem 1rem;
-  margin: 0;
-  border-radius: 0;
-  font-size: $font-med;
-  font-weight: $bold !important;
-  text-align: center;
-  color: $dark-accent;
-  border: 0.125rem solid $dark-accent;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
-
-  &:disabled {
-    opacity: 0.5;
-  }
-
-  &.selected {
-    color: $dark-shade;
-    background-color: $dark-accent;
-  }
-}
-</style>
