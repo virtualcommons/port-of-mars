@@ -22,6 +22,12 @@ export default {
   ) {
     state.players[payload.role].costs = payload.data;
   },
+  SET_INVESTMENT_COST(
+    state: State,
+    payload: { data: number; resource: Resource; role: Role }
+  ) {
+    state.players[payload.role].costs[payload.resource] = payload.data;
+  },
   SET_SPECIALTY(state: State, payload: { data: Resource; role: Role }) {
     state.players[payload.role].specialty = payload.data;
   },

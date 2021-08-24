@@ -5,14 +5,14 @@ import {
   MarsEventData,
   MarsLogMessageData,
   Phase,
-  PlayerData,
+  PlayerData, ResourceAmountData,
   Role,
   ROLES,
   RoundIntroductionData,
   TradeData
 } from '@port-of-mars/shared/types';
 import {SetError, SetPlayerRole} from '@port-of-mars/shared/game/responses';
-import {Schema} from '@colyseus/schema';
+import {DataChange, Schema} from '@colyseus/schema';
 import {TStore} from '@port-of-mars/client/plugins/tstore';
 import Mutations from '@port-of-mars/client/store/mutations';
 
@@ -22,30 +22,57 @@ function deschemify<T>(s: Schemify<T>): T {
   return s.toJSON() as T;
 }
 
+type PlayerPrimitive = Omit<PlayerData, 'role' | 'inventory' | 'costs' | 'accomplishments'>;
+
 type ServerResponse = {
-  [field in keyof Omit<PlayerData, 'role' | 'inventory'>]: keyof typeof Mutations;
+  [field in keyof PlayerPrimitive]: keyof typeof Mutations;
 };
 
 const responseMap: ServerResponse = {
-  // inventory: 'SET_INVENTORY',
-  costs: 'SET_INVESTMENT_COSTS',
   botWarning: 'SET_BOT_WARNING',
   specialty: 'SET_SPECIALTY',
   timeBlocks: 'SET_TIME_BLOCKS',
   ready: 'SET_READINESS',
-  accomplishments: 'SET_ACCOMPLISHMENTS',
   victoryPoints: 'SET_VICTORY_POINTS',
   systemHealthChanges: 'SET_SYSTEM_HEALTH_CHANGES',
 };
 
-function applyAccomplishmentResponse(role: Role, accomplishment: any, store: TStore) {
-  accomplishment.purchased.onAdd = 
-  accomplishment.purchased.onRemove
-
-  accomplishment.purchasable.onAdd
-  accomplishment.purchasable.onRemove
+function applyCosts(role: Role, costs: any, store: TStore) {
+  costs.onChange = (changes: Array<DataChange>) => {
+    for (const change of changes) {
+      store.commit('SET_INVESTMENT_COST', {role, resource: change.field as keyof ResourceAmountData, data: change.value});
+    }
+  }
 }
 
+function applyAccomplishmentResponse(role: Role, accomplishment: any, store: TStore) {
+  accomplishment.purchased.onAdd = (acc: any, index: number) => {
+    store.commit('ADD_TO_PURCHASED_ACCOMPLISHMENTS', {role, data: acc});
+  }
+  accomplishment.purchased.onRemove = (acc: any, index: number) => {
+    store.commit('REMOVE_FROM_PURCHASED_ACCOMPLISHMENTS', {role, data: acc})
+  }
+
+  accomplishment.purchasable.onAdd = (acc: any, index: number) => {
+    console.log("Adding to purchasable accomplishments: ", acc);
+    store.commit('ADD_TO_PURCHASABLE_ACCOMPLISHMENTS', {role, data: acc})
+  }
+  accomplishment.purchasable.onRemove = (acc: any, index: number) => {
+    console.log('removing from purchasable', acc);
+    store.commit('REMOVE_FROM_PURCHASABLE_ACCOMPLISHMENTS', {role, data: acc})
+  }
+}
+
+/**
+ * Translates automatic colyseus schema changes into vuex mutations on the store.
+ *
+ * Colyseus automatically syncs primitive values but nested classes (Player -> Inventory -> Resources)
+ * need to be manually registered.
+ *
+ * @param role
+ * @param inventory
+ * @param store
+ */
 function applyInventoryResponses(role: Role, inventory: any, store: TStore) {
   inventory.onChange = (changes: Array<any>) => {
     for (const change of changes) {
@@ -61,15 +88,16 @@ function applyPlayerResponses(role: Role, player: any, store: TStore) {
       .filter((change) => change.field != 'role')
       .forEach((change) => {
         const payload = {role: player.role, data: change.value};
-        console.log(change)
         store.commit(
-          responseMap[change.field as keyof Omit<PlayerData, 'role' | 'inventory'>],
+          responseMap[change.field as keyof PlayerPrimitive],
           payload
         );
       });
   };
   applyInventoryResponses(role, player.inventory, store);
-  player.triggerAll();
+  applyAccomplishmentResponse(role, player.accomplishments, store);
+  applyCosts(role, player.costs, store);
+  // player.triggerAll();
 }
 
 // see https://github.com/Luka967/websocket-close-codes#websocket-close-codes
