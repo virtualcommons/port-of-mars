@@ -174,6 +174,7 @@ export class ActorRunner implements Actor {
       new TimeInvested({investment, role: player.role}),
       new SetPlayerReadiness({value: true, role: player.role})
     ];
+
   }
 
   [Phase.trade](state: GameState, player: Player): Array<GameEvent> {

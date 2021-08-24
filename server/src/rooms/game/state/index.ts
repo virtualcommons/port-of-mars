@@ -163,7 +163,7 @@ export class AccomplishmentPurchase extends Schema implements AccomplishmentPurc
   victoryPoints: number;
 }
 
-export class Trade extends Schema {
+export class Trade extends Schema implements TradeData<TradeAmount> {
   constructor(id: string, sender: TradeAmountData, recipient: TradeAmountData, status: TradeStatus) {
     super();
     this.id = id;
@@ -1086,6 +1086,7 @@ export class Player extends Schema implements PlayerData<AccomplishmentSet, Reso
   }
 
   invest(): void {
+    logger.info('investing %o', this.pendingInvestments);
     this.systemHealthChanges.investment = this.pendingInvestments.systemHealth;
     this.applyPendingInvestments();
   }
@@ -1242,7 +1243,7 @@ export interface PendingMarsEventAction {
   execute(state: GameState): void;
 }
 
-export class GameState extends Schema implements GameData<ChatMessage, MarsEvent, MarsLogMessage, PlayerSet, RoundIntroduction, TradeSetData<Trade>> {
+export class GameState extends Schema implements GameData<ChatMessage, MarsEvent, MarsLogMessage, PlayerSet, RoundIntroduction, Map<string, Trade>> {
   userRoles: GameOpts['userRoles'] = {};
   gameId!: number;
   maxRound: number;
@@ -1344,7 +1345,7 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
     this.marsEventDeck.fromJSON(data.marsEventDeck);
     Object.keys(this.tradeSet).forEach(k => this.tradeSet.delete(k));
     Object.keys(data.tradeSet).forEach(k => {
-      const tradeData: TradeData = data.tradeSet.get(k)!;
+      const tradeData: TradeData = data.tradeSet[k];
       this.tradeSet.set(k, new Trade(k, tradeData.sender, tradeData.recipient, 'Active'));
     });
 

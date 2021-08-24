@@ -204,10 +204,10 @@ export interface TradeAmountData {
 
 export type TradeStatus = 'Active' | 'Accepted' | 'Rejected' | 'Cancelled';
 
-export interface TradeData {
+export interface TradeData<TradeAmount=TradeAmountData> {
   id: string;
-  sender: TradeAmountData;
-  recipient: TradeAmountData;
+  sender: TradeAmount;
+  recipient: TradeAmount;
   status: TradeStatus;
 }
 
@@ -223,7 +223,7 @@ export interface TradeDataWithNull<R=Role|NullPartner>{
   recipient: TradeAmountDataWithNull<R>;
 }
 
-export type TradeSetData<Trade=TradeData> = Map<string, Trade>;
+export type TradeSetData<Trade=TradeData> = Record<string, Trade>;
 
 export interface PurchasedSystemHealthData {
   description: string;

@@ -23,11 +23,11 @@ function deschemify<T>(s: Schemify<T>): T {
 }
 
 type ServerResponse = {
-  [field in keyof Omit<PlayerData, 'role'>]: keyof typeof Mutations;
+  [field in keyof Omit<PlayerData, 'role' | 'inventory'>]: keyof typeof Mutations;
 };
 
 const responseMap: ServerResponse = {
-  inventory: 'SET_INVENTORY',
+  // inventory: 'SET_INVENTORY',
   costs: 'SET_INVESTMENT_COSTS',
   botWarning: 'SET_BOT_WARNING',
   specialty: 'SET_SPECIALTY',
@@ -38,19 +38,37 @@ const responseMap: ServerResponse = {
   systemHealthChanges: 'SET_SYSTEM_HEALTH_CHANGES',
 };
 
-function applyPlayerResponses(player: any, store: TStore) {
+function applyAccomplishmentResponse(role: Role, accomplishment: any, store: TStore) {
+  accomplishment.purchased.onAdd = 
+  accomplishment.purchased.onRemove
+
+  accomplishment.purchasable.onAdd
+  accomplishment.purchasable.onRemove
+}
+
+function applyInventoryResponses(role: Role, inventory: any, store: TStore) {
+  inventory.onChange = (changes: Array<any>) => {
+    for (const change of changes) {
+      store.commit('SET_INVENTORY_AMOUNT', {role, resource: change.field, value: change.value});
+    }
+  }
+}
+
+function applyPlayerResponses(role: Role, player: any, store: TStore) {
   player.onChange = (changes: Array<any>) => {
     //filtering out any changes that have to do with the role immediately
     changes
       .filter((change) => change.field != 'role')
       .forEach((change) => {
         const payload = {role: player.role, data: change.value};
+        console.log(change)
         store.commit(
-          responseMap[change.field as keyof Omit<PlayerData, 'role'>],
+          responseMap[change.field as keyof Omit<PlayerData, 'role' | 'inventory'>],
           payload
         );
       });
   };
+  applyInventoryResponses(role, player.inventory, store);
   player.triggerAll();
 }
 
@@ -74,7 +92,7 @@ const REFRESHABLE_WEBSOCKET_ERROR_CODES = [
 
 export function applyGameServerResponses<T>(room: Room, store: TStore) {
   room.onStateChange.once((state: Schemify<GameData>) => {
-    ROLES.forEach((role) => applyPlayerResponses(state.players[role], store));
+    ROLES.forEach((role) => applyPlayerResponses(role, state.players[role], store));
     (state.players as any).triggerAll();
   });
 
@@ -163,21 +181,26 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
   };
 
   room.state.tradeSet.onAdd = (event: Schemify<TradeData>, id: string) => {
-    const rawEvent: TradeData = deschemify(event);
-    store.commit('ADD_TO_TRADES', {trade: rawEvent, id});
+    console.log({ rawTrade: event });
+    event.onChange = (changes) => {
+      changes.forEach(change => {
+        if (change.field === 'status') {
+          store.commit('UPDATE_TRADE_STATUS', {id: event.id, status: change.value});
+        }
+      })
+    }
+    const trade: TradeData = deschemify(event);
+    console.log({ trade });
+    store.commit('ADD_TO_TRADES', {trade, id});
   };
 
   room.state.tradeSet.onRemove = (event: Schemify<TradeData>, id: string) => {
     store.commit('REMOVE_FROM_TRADES', {id});
   };
 
-  room.state.tradeSet.onChange = (event: Schemify<TradeData>, id: string) => {
-    const rawEvent: TradeData = deschemify(event);
-    store.commit('UPDATE_TRADE_STATUS', {id, status: rawEvent.status});
-  };
-
   room.state.onChange = (changes: Array<any>) => {
     changes.forEach((change) => {
+      console.log(change);
       if (change.field === 'phase') {
         const phase: Phase = change.value;
         store.commit('SET_GAME_PHASE', phase);

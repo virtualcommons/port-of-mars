@@ -27,6 +27,7 @@ import {
 } from '@port-of-mars/shared/game/client/panes';
 import _ from 'lodash';
 import {SYSTEM_HEALTH_MAINTENANCE_COST} from "@port-of-mars/shared/settings";
+import {ChatMessageData, MarsEventData, RoundIntroductionData, TradeData, TradeSetData} from "../../types";
 
 export const ROLE_TO_INVESTMENT_DATA: { [role in Role]: Array<keyof InvestmentData> } = {
   [CURATOR]: [
@@ -189,7 +190,16 @@ export interface ProfileMenuView {
 
 export interface State extends GameData {
   timeRemaining: number;
+  round: number;
+  systemHealth: number;
+  messages: Array<ChatMessageData>;
+  marsEvents: Array<MarsEventData>;
+  marsEventsProcessed: number;
+  roundIntroduction: RoundIntroductionData;
+  tradeSet: TradeSetData;
   role: Role;
+  winners: Array<Role>;
+  heroOrPariah: '' | 'hero' | 'pariah';
   logs: Array<MarsLogMessageData>;
   dashboardMessages: Array<DashboardMessage>;
   players: PlayerClientSet;
@@ -228,7 +238,7 @@ export const initialStoreState: State = {
     accomplishmentPurchases: [],
     completedTrades: []
   },
-  tradeSet: new Map(),
+  tradeSet: {},
   winners: [],
   heroOrPariah: '',
 

@@ -31,6 +31,9 @@ export default {
       state.players[payload.role].inventory[resource] = payload.data[resource];
     }
   },
+  SET_INVENTORY_AMOUNT(state: State, payload: { resource: Resource; value: number; role: Role }) {
+    state.players[payload.role].inventory[payload.resource] = payload.value;
+  },
   SET_TIME_BLOCKS(state: State, payload: { data: number; role: Role }) {
     // console.log('timeblocks', payload);
     state.players[payload.role].timeBlocks = payload.data;

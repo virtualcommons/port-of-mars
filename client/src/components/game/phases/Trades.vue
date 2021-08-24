@@ -83,9 +83,9 @@
       // map the trades to something we can use
       const trades = Object.keys(tradeSet).map(id => ({
         id,
-        sender: tradeSet.get(id)!.sender,
-        recipient: tradeSet.get(id)!.recipient,
-        status: tradeSet.get(id)!.status
+        sender: tradeSet[id].sender,
+        recipient: tradeSet[id].recipient,
+        status: tradeSet[id].status
       }));
 
       return trades
