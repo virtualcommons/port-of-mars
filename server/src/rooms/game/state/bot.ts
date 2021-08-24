@@ -179,8 +179,7 @@ export class ActorRunner implements Actor {
 
   [Phase.trade](state: GameState, player: Player): Array<GameEvent> {
     const events: Array<GameEvent> = [];
-    for (const id of Object.keys(state.tradeSet)) {
-      const trade: Trade = state.tradeSet.get(id)!;
+    for (const [id, trade] of state.tradeSet.entries()) {
       if (trade.status === 'Active' && trade.recipient.role === player.role) {
         events.push(new AcceptedTradeRequest({id}));
         break;

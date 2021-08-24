@@ -694,26 +694,24 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData<A
 
   fromJSON(data: AccomplishmentSetSerialized): void {
     this.role = data.role;
-    const purchased = _.map(
-      data.purchased,
+    const purchased = data.purchased.map(
       _id => new Accomplishment(getAccomplishmentByID(this.role, _id))
     );
-    const purchasable = _.map(
-      data.purchasable,
+    const purchasable = data.purchasable.map(
       _id => new Accomplishment(getAccomplishmentByID(this.role, _id))
     );
     this.purchased.splice(0, this.purchased.length, ...purchased);
-    this.purchasable.splice(0, this.purchasable.length, ...purchasable);
+    // this.purchasable.splice(0, this.purchasable.length, ...purchasable);
+    this.purchasable.splice(0, this.purchasable.length);
+    purchasable.forEach(p => this.purchasable.push(p));
+
     this.deck = _.cloneDeep(data.remaining);
   }
 
   toJSON(): AccomplishmentSetSerialized {
     return {
-      purchased: _.map(
-        this.purchased.map(a => a.id),
-        x => x
-      ),
-      purchasable: _.map(this.purchasable, a => a.id),
+      purchased: _.map(this.purchased, x => x.id),
+      purchasable: _.map(this.purchasable, x => x.id),
       remaining: this.deck,
       role: this.role
     };
@@ -803,6 +801,7 @@ export interface PlayerSerialized {
   role: Role;
   costs: ResourceCostData;
   specialty: Resource;
+  // TODO: rename to accomplishments for consistency but postpone till we're about to have a new tournament
   accomplishment: AccomplishmentSetSerialized;
   ready: boolean;
   timeBlocks: number;
@@ -901,6 +900,7 @@ export class Player extends Schema implements PlayerData<AccomplishmentSet, Reso
     this.role = data.role;
     this.costs.fromJSON(data.costs);
     this.specialty = data.specialty;
+    // this.accomplishments = "";
     this.accomplishments.fromJSON(data.accomplishment);
     this.ready = data.ready;
     this.timeBlocks = data.timeBlocks;
@@ -918,6 +918,7 @@ export class Player extends Schema implements PlayerData<AccomplishmentSet, Reso
       role: this.role,
       costs: this.costs.toJSON(),
       specialty: this.specialty,
+      // FIXME: rename to accomplishments but will also involve a data migration for all persisted events
       accomplishment: this.accomplishments.toJSON(),
       ready: this.ready,
       timeBlocks: this.timeBlocks,
@@ -1343,7 +1344,7 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
 
     this.marsEventsProcessed = data.marsEventsProcessed;
     this.marsEventDeck.fromJSON(data.marsEventDeck);
-    Object.keys(this.tradeSet).forEach(k => this.tradeSet.delete(k));
+    this.clearTrades();
     Object.keys(data.tradeSet).forEach(k => {
       const tradeData: TradeData = data.tradeSet[k];
       this.tradeSet.set(k, new Trade(k, tradeData.sender, tradeData.recipient, 'Active'));
@@ -1575,7 +1576,7 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
   }
 
   clearTrades(): void {
-    Object.keys(this.tradeSet).forEach(trade => this.tradeSet.delete(trade));
+    this.tradeSet.clear();
   }
 
   applyMany(event: Array<GameEvent>): void {

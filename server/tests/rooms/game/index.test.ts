@@ -1,5 +1,13 @@
 import {GameState, AccomplishmentSet, Player, Trade, Accomplishment} from "@port-of-mars/server/rooms/game/state";
-import {CURATOR, PIONEER, RESEARCHER, ENTREPRENEUR, TradeData, Role} from "@port-of-mars/shared/types";
+import {
+  CURATOR,
+  PIONEER,
+  RESEARCHER,
+  ENTREPRENEUR,
+  TradeData,
+  Role,
+  ResourceAmountData, RESOURCES
+} from "@port-of-mars/shared/types";
 import {getAccomplishmentByID, getAccomplishmentIDs} from "@port-of-mars/server/data/Accomplishment";
 import * as _ from 'lodash'
 import {mockGameStateInitOpts} from "@port-of-mars/server/util";
@@ -14,7 +22,27 @@ import {
   PersonalGain
 } from "@port-of-mars/server/rooms/game/state/marsevents/state";
 import {MarsEvent} from "@port-of-mars/server/rooms/game/state/marsevents/MarsEvent";
-import {canSendTradeRequest} from "@port-of-mars/server/state/validation";
+
+
+/**
+ * Returns true iff the given playerData has enough resources to send a trade request
+ * for the given tradeAmount
+ * @param playerData
+ * @param tradeAmount
+ */
+function canSendTradeRequest(
+  player: Player,
+  tradeAmount: ResourceAmountData
+) {
+  const availableResources: ResourceAmountData = {...player.inventory};
+  for (const resource of RESOURCES) {
+    if (tradeAmount[resource] > availableResources[resource]) {
+      return false;
+    }
+  }
+  return true;
+}
+
 
 
 describe('a Researcher Player Accomplishment', () => {
@@ -78,7 +106,7 @@ describe('a player snapshot', () => {
   const p2 = new Player(CURATOR);
   it('can be round tripped', () => {
     p2.fromJSON(p1.toJSON());
-    expect(_.isEqual(p1, p2)).toBeTruthy();
+    expect(p2.toJSON()).toEqual(p1.toJSON());
   });
 });
 
@@ -89,9 +117,9 @@ describe('a game state snapshot', () => {
     const g1 = new GameState(options);
     const g2 = new GameState(options);
     g2.fromJSON(g1.toJSON());
-    expect(_.isEqual(g1, g2)).toBeTruthy();
+    expect(g1.toJSON()).toEqual(g2.toJSON());
     g2.maxRound = g1.maxRound + 1;
-    expect(_.isEqual(g1, g2)).toBeFalsy()
+    expect(g2.toJSON()).not.toEqual(g1.toJSON());
     g1.players[CURATOR].timeBlocks = 15;
     expect(g2.players[CURATOR].timeBlocks).toBe(10);
   });
@@ -103,7 +131,7 @@ describe('a mars event', () => {
       const me = getMarsEvent('personalGain');
       const marsEvent = new MarsEvent(me);
       const marsEvent2 = new MarsEvent(marsEvent.toJSON());
-      expect(_.isEqual(marsEvent, marsEvent2)).toBeTruthy();
+      expect(marsEvent2.toJSON()).toEqual(marsEvent.toJSON());
     })
   })
 })
@@ -113,7 +141,7 @@ describe('an accomplishment', () => {
     const accomplishment = new Accomplishment(getAccomplishmentByID(CURATOR, 81));
     const accomplishment2 = new Accomplishment(getAccomplishmentByID(CURATOR, 81));
     accomplishment2.fromJSON(accomplishment.toJSON());
-    expect(_.isEqual(accomplishment, accomplishment2)).toBeTruthy();
+    expect(accomplishment2.toJSON()).toEqual(accomplishment2.toJSON());
     expect(accomplishment.systemHealth).toBe(accomplishment2.systemHealth)
     expect(accomplishment.systemHealth).toBe(0);
   })
@@ -148,7 +176,7 @@ describe('trading validations', () => {
     government: 0,
   });
 
-  g.tradeSet['invalid-request'] = new Trade(
+  g.tradeSet.set('invalid-request', new Trade(
     'invalid-request',
     {
       role: 'Curator',
@@ -171,9 +199,9 @@ describe('trading validations', () => {
       }
     },
     'Active'
-  );
+  ));
 
-  g.tradeSet['valid-request'] = new Trade(
+  g.tradeSet.set('valid-request', new Trade(
     'valid-request',
     {
       role: 'Entrepreneur',
@@ -196,10 +224,10 @@ describe('trading validations', () => {
       }
     },
     'Active'
-  );
+  ));
 
-  const invalidTrade: Trade = g.tradeSet['invalid-request'];
-  const validTrade: Trade = g.tradeSet['valid-request'];
+  const invalidTrade: Trade = g.tradeSet.get('invalid-request')!;
+  const validTrade: Trade = g.tradeSet.get('valid-request')!;
 
   it('Curator can send trade request that Entrepeneur cannot accept', () => {
     expect(canSendTradeRequest(g.players[invalidTrade.sender.role as Role], invalidTrade.sender.resourceAmount)).toBe(true);

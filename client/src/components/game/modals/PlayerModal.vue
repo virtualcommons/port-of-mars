@@ -1,5 +1,6 @@
 <template>
   <div class="c-player-modal container tour-player-info-modal">
+    <!-- player stats row -->
     <div class="top-wrapper row tour-player-info-modal-stats">
       <div class="top container">
         <div class="wrapper row">
@@ -29,9 +30,12 @@
         </div>
       </div>
     </div>
+
+    <!-- player inventory row -->
     <div class="bottom-wrapper row">
       <div class="bottom container">
         <div class="wrapper row">
+          <!-- col: inventory -->
           <div class="inventory col-4 tour-player-info-modal-inventory">
             <div class="topbar">
               <p class="title">Inventory</p>
@@ -51,6 +55,7 @@
               </div>
             </div>
           </div>
+          <!-- col: accomplishments -->
           <div
             class="purchasable-accomplishments col-8 tour-player-info-modal-accomplishments"
           >
@@ -88,6 +93,7 @@
                   :key="accomplishment.id"
                   :accomplishment="accomplishment"
                   :showDescription="false"
+                  :type="cardType"
                 />
               </div>
             </div>
@@ -108,6 +114,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
+import { AccomplishmentCardType } from '@port-of-mars/client/types/cards';
 
 library.add(faTimes);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
@@ -121,8 +128,8 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 export default class PlayerModal extends Vue {
   @Inject() readonly api!: GameRequestAPI;
 
-  @Prop({}) private modalData!: PlayerInfoModalData;
-  private accomplishmentType: string = 'purchased';
+  @Prop({}) modalData!: PlayerInfoModalData;
+  accomplishmentType: string = 'purchased';
 
   get playerData() {
     return {
@@ -174,7 +181,7 @@ export default class PlayerModal extends Vue {
       : { border: `0.2rem solid var(--green)` };
   }
 
-  private switchAccomplishmentType(type: string): void {
+  switchAccomplishmentType(type: string): void {
     this.accomplishmentType = type;
   }
 
@@ -196,6 +203,13 @@ export default class PlayerModal extends Vue {
         data: {},
       });
     }
+  }
+
+  /**
+   * Get card type: default (0), purchase (1), discard (2)
+   */
+  get cardType(): AccomplishmentCardType {
+    return AccomplishmentCardType.purchase;
   }
 }
 </script>

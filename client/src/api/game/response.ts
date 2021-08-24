@@ -227,7 +227,6 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
 
   room.state.onChange = (changes: Array<any>) => {
     changes.forEach((change) => {
-      console.log(change);
       if (change.field === 'phase') {
         const phase: Phase = change.value;
         store.commit('SET_GAME_PHASE', phase);
