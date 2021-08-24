@@ -170,9 +170,8 @@ async function createApp() {
   const server = http.createServer(app);
   const gameServer = new Server({
     server,
-    express: app,
     // put express session into websocket onAuth requests
-    verifyClient(info, next) {
+    verifyClient(info: any, next: any) {
       sessionParser(info.req as any, {} as any, () => next(true))
     }
   });
