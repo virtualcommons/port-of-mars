@@ -148,7 +148,7 @@ async function onCreate(room: GameRoomType, options?: GameOpts, shouldEnableDb?:
   const snapshot = room.state.toJSON();
   const event = new TakenStateSnapshot(snapshot);
   room.persister.persist([event], room.getMetadata());
-  // room.clock.setInterval(() => gameLoop(room), 1000);
+  room.clock.setInterval(() => gameLoop(room), 1000);
   room.clock.setInterval(async () => await room.persister.sync(), 5000);
 }
 

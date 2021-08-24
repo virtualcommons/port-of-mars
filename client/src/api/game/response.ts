@@ -97,7 +97,6 @@ function applyPlayerResponses(role: Role, player: any, store: TStore) {
   applyInventoryResponses(role, player.inventory, store);
   applyAccomplishmentResponse(role, player.accomplishments, store);
   applyCosts(role, player.costs, store);
-  // player.triggerAll();
 }
 
 // see https://github.com/Luka967/websocket-close-codes#websocket-close-codes
