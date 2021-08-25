@@ -2,7 +2,7 @@
 <!--  <b-container class="h-100 " fluid>-->
     <b-row class="h-100 w-100 p-0 m-0">
       <transition name="component-fade" mode="out-in">
-        <component v-bind:is="phase[gamePhase]"></component>
+        <component :is="phase[gamePhase]"></component>
       </transition>
     </b-row>
 <!--  </b-container>-->

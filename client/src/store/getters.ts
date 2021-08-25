@@ -80,7 +80,7 @@ export default {
     const marsEvents = state.marsEvents;
     const marsEventsProcessed = state.marsEventsProcessed;
     const current = marsEvents[marsEventsProcessed];
-    if(current) {
+    if (current) {
       return current;
     }
     return undefined;
@@ -97,7 +97,7 @@ export default {
     const marsEvents = state.marsEvents;
     const marsEventsProcessed = state.marsEventsProcessed;
     const current = marsEvents[marsEventsProcessed];
-    if(current) {
+    if (current) {
       const view = current.clientViewHandler;
       return view;
     }

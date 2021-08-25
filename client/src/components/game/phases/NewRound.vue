@@ -125,7 +125,9 @@ export default class NewRound extends Vue {
   }
 
   get purchases() {
-    return this.roundIntroduction.accomplishmentPurchases;
+    const purchasedAccomplishments = this.roundIntroduction.accomplishmentPurchases;
+    console.log("purchases: ", purchasedAccomplishments);
+    return purchasedAccomplishments;
   }
 
   get systemHealthAccomplishmentPurchasesCost() {
@@ -182,6 +184,7 @@ export default class NewRound extends Vue {
       }));
     }
     // Next Round System Health = Previous System Health + Group Contributions - Wear and Tear
+    console.log("tabular contributions:", items);
     return items;
   }
 

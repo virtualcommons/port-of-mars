@@ -146,14 +146,15 @@ export default class Events extends Vue {
   // NOTE :: EVENT CARDS
 
   //Open an event modal when a new card comes in
-  @Watch('currentEvent', {immediate: true})
+  @Watch('currentEvent', { immediate: true })
   onNewEvent(event: any) {
+    console.log("displaying new event: ", event);
     this.api.setModalVisible({
       type: 'CardModal',
       data: {
         activator: 'Server',
-        title: 'Event',
-        content: 'This is a description of the Event.',
+        title: event.name,
+        content: event.effect,
         cardType: 'EventCard',
         cardData: event,
         confirmation: false,

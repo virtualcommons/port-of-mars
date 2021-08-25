@@ -58,7 +58,7 @@ function applyAccomplishmentResponse(role: Role, accomplishment: any, store: TSt
     store.commit('ADD_TO_PURCHASABLE_ACCOMPLISHMENTS', {role, data: acc})
   }
   accomplishment.purchasable.onRemove = (acc: any, index: number) => {
-    console.log('removing from purchasable', acc);
+    // console.log('removing from purchasable', acc);
     store.commit('REMOVE_FROM_PURCHASABLE_ACCOMPLISHMENTS', {role, data: acc})
   }
 }
@@ -120,7 +120,6 @@ const REFRESHABLE_WEBSOCKET_ERROR_CODES = [
 export function applyGameServerResponses<T>(room: Room, store: TStore) {
   room.onStateChange.once((state: Schemify<GameData>) => {
     ROLES.forEach((role) => applyPlayerResponses(role, state.players[role], store));
-    (state.players as any).triggerAll();
   });
 
   room.onError((code: number, message?: string) => {

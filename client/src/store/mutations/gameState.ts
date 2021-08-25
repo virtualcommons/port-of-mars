@@ -38,9 +38,8 @@ function SET_MARS_EVENTS_PROCESSED(state: State, marsEventsProcessed: number) {
 
 function ADD_TO_EVENTS(state: State, event: MarsEventData) {
   // TODO: REMOVE AFTER REFACTOR
-  const initVisbilityObject = { name: event.name, visible: false };
-  state.eventCardsVisible.push(initVisbilityObject);
-
+  const initialEventVisibility = { name: event.name, visible: false };
+  state.eventCardsVisible.push(initialEventVisibility);
   state.marsEvents.push(event);
 }
 
@@ -51,8 +50,8 @@ function REMOVE_FROM_EVENTS(state: State, event: MarsEventData) {
 
 function CHANGE_EVENT(state: State, payload: { event: MarsEventData; index: number }) {
   // TODO: REMOVE AFTER REFACTOR
-  const initVisbilityObject = { name: payload.event.name, visible: false };
-  state.eventCardsVisible.push(initVisbilityObject);
+  const initVisibilityObject = { name: payload.event.name, visible: false };
+  state.eventCardsVisible.push(initVisibilityObject);
 
   Vue.set(state.marsEvents, payload.index, payload.event);
 }

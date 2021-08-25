@@ -1,7 +1,8 @@
 <template>
-  <div
+  <b-container
+    fluid
     :class=" isModal ? 'modal-view' : 'mb-3'"
-    class="w-100 p-0 mx-0 overflow-hidden"
+    class="p-0 mx-0 overflow-hidden"
     v-if="visible"
     style="border: .125rem solid var(--light-shade)"
   >
@@ -57,7 +58,7 @@
         <button @click="readyUp" class="button">Continue</button>
       </b-col>
     </b-row>
-  </div>
+  </b-container>
 </template>
 
 <script lang="ts">
@@ -89,11 +90,14 @@
     })
     private event!: MarsEventData;
 
-    @Prop({default: false}) private visible!: boolean;
-    @Prop({default: false}) private active!: boolean;
+    @Prop({default: false})
+    visible!: boolean;
+    @Prop({default: false})
+    active!: boolean;
 
     //if you're in a modal, show the modal view
-    @Prop({default: false}) private isModal!: boolean;
+    @Prop({default: false})
+    isModal!: boolean;
 
     //if the modal was spawned by the server, show the option buttons
     @Prop({default: false}) private wasSpawnedByServer!: boolean;
@@ -134,8 +138,8 @@
         type: 'CardModal',
         data: {
           activator: 'User',
-          title: 'Event',
-          content: 'This is a description of the Event.',
+          title: this.event.name,
+          content: this.event.effect,
           cardType: 'EventCard',
           cardData: this.event,
           confirmation: false,

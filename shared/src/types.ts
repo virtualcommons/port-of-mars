@@ -126,7 +126,8 @@ export interface SystemHealthMarsEventData {
 export interface RoundIntroductionData<
   SystemHealth=SystemHealthMarsEventData,
   AccomplishmentPurchase=AccomplishmentPurchaseData,
-  Trade=TradeData> {
+  Trade=TradeData>
+{
   systemHealthGroupContributions: number;
   systemHealthAtStartOfRound: number;
   systemHealthMaintenanceCost: number;

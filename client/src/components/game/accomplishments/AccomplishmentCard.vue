@@ -213,8 +213,8 @@ export default class AccomplishmentCard extends Vue {
       _.fill(Array(Math.abs(this.accomplishment[influence])), influence)
     );
 
-    console.log("costs: ", costs);
-    console.log("accomplishment: ", this.accomplishment);
+    // console.log("costs: ", costs);
+    // console.log("accomplishment: ", this.accomplishment);
 
     // create data structure to map accomplishment cost to local player's available influences
     // in their inventory

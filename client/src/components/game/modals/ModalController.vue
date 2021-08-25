@@ -7,9 +7,11 @@
       <b-modal
         id="gameModal"
         class="h-100"
+        centered
         :title="modalData.title"
         size="xl"
         hide-footer
+        :hide-header="modalType !== 'CardModal'"
         header-bg-variant="secondary"
         body-bg-variant="info"
         @hidden="handleClose"
@@ -20,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Inject } from 'vue-property-decorator';
+import { Component, Vue, Inject } from 'vue-property-decorator';
 import GeneralModal from '@port-of-mars/client/components/game/modals/GeneralModal.vue';
 import CardModal from '@port-of-mars/client/components/game/modals/CardModal.vue';
 import PlayerModal from '@port-of-mars/client/components/game/modals/PlayerModal.vue';
@@ -29,6 +31,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
+
 
 library.add(faTimes);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
