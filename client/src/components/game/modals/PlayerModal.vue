@@ -51,8 +51,8 @@
         <b-button-group class="w-100">
           <b-button
             squared
-            @click="switchAccomplishmentType('available')"
-            :pressed="accomplishmentType === 'available'"
+            @click="switchAccomplishmentType('purchasable')"
+            :pressed="accomplishmentType === 'purchasable'"
           >
             Available
           </b-button>
@@ -69,7 +69,7 @@
             class="unavailable"
             v-if="!playerData.isSelf && !isUnderAudit"
           >
-            <p v-if="accomplishmentType==='available'">This information is currently private and cannot
+            <p v-if="accomplishmentType==='purchasable'">This information is currently private and cannot
               be viewed at this time.</p>
             <p v-if="accomplishmentType==='purchased'">None</p>
           </div>
@@ -115,7 +115,7 @@ export default class PlayerModal extends Vue {
   @Inject() readonly api!: GameRequestAPI;
 
   @Prop({}) modalData!: PlayerInfoModalData;
-  accomplishmentType: string = 'available';
+  accomplishmentType: string = 'purchasable';
 
   get playerData() {
     return {
@@ -169,7 +169,7 @@ export default class PlayerModal extends Vue {
 
   get accomplishmentCards(): any {
     switch (this.accomplishmentType) {
-      case 'active':
+      case 'purchasable':
         return this.playerData.info.accomplishments.purchasable;
       case 'purchased':
         return this.playerData.info.accomplishments.purchased;
@@ -189,13 +189,6 @@ export default class PlayerModal extends Vue {
         data: {},
       });
     }
-  }
-
-  /**
-   * Get card type: default (0), purchase (1), discard (2)
-   */
-  get cardType(): AccomplishmentCardType {
-    return AccomplishmentCardType.purchase;
   }
 }
 </script>
