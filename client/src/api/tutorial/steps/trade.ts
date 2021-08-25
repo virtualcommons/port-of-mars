@@ -3,15 +3,13 @@ import {
   LEFT,
   TOP,
   RIGHT,
-  BOTTOM,
 } from '@port-of-mars/client/types/tutorial';
 import { Phase, RESEARCHER, CURATOR } from '@port-of-mars/shared/types';
-import { ChatMarsLogView } from '@port-of-mars/shared/game/client/panes';
 
 const steps: Array<Step> = [
   {
-    target: '.tour-phase',
-    content: `The next phase is Trade where members of your group can trade Influence Resources to purchase Accomplishments.`,
+    target: '.tour-trade',
+    content: `During the Trade Phase, you can exchange Influence with other players.`,
     params: {
       placement: RIGHT,
     },
@@ -87,54 +85,53 @@ const steps: Array<Step> = [
       },
     ],
   },
-  {
-    target: '.tour-active-trades-list',
-    content:
-      `Active trade requests are listed here. If you receive a trade request, you can accept or decline the trade. ` +
-      `If you send a trade request, you only have the option to cancel the request.`,
-    params: {
-      placement: LEFT,
-    },
-  },
-  {
-    target: '.tour-trade-filters',
-    content:
-      `Use this toggle to view all trade requests in the Port of Mars or just Your Trades - trade requests that ` +
-      `you have received or sent to others.`,
-    params: {
-      placement: LEFT,
-    },
-  },
-  {
-    target: '.tour-chat',
-    content: `Before sending trade requests, it's often a good idea to talk about your trade plans in chat.`,
-    params: {
-      placement: LEFT,
-    },
-    stateTransform: [
-      { SET_CHATMARSLOG_VIEW: ChatMarsLogView.Chat },
-      {
-        ADD_TO_CHAT: {
-          message:
-            'Hey Researcher, can I have 2 Science and 1 Government in exchange for 3 Culture?',
-          role: 'Curator',
-          dateCreated: new Date().getTime(),
-          round: 0,
-        },
-      },
-      {
-        ADD_TO_CHAT: {
-          message: 'Sure, let me make that trade right now!',
-          role: 'Researcher',
-          dateCreated: new Date().getTime(),
-          round: 0,
-        },
-      },
-    ],
-  },
+  // {
+  //   target: '.tour-active-trades-list',
+  //   content:
+  //     ``,
+  //   params: {
+  //     placement: LEFT,
+  //   },
+  // },
+  // {
+  //   target: '.tour-trade-filters',
+  //   content:
+  //     `Use this toggle to view all trade requests in the Port of Mars or just Your Trades - trade requests that ` +
+  //     `you have received or sent to others.`,
+  //   params: {
+  //     placement: LEFT,
+  //   },
+  // },
+  // {
+  //   target: '.tour-chat',
+  //   content: `Before sending trade requests, it's often a good idea to talk about your trade plans in chat.`,
+  //   params: {
+  //     placement: LEFT,
+  //   },
+  //   stateTransform: [
+  //     { SET_CHATMARSLOG_VIEW: ChatMarsLogView.Chat },
+  //     {
+  //       ADD_TO_CHAT: {
+  //         message:
+  //           'Hey Researcher, can I have 2 Science and 1 Government in exchange for 3 Culture?',
+  //         role: 'Curator',
+  //         dateCreated: new Date().getTime(),
+  //         round: 0,
+  //       },
+  //     },
+  //     {
+  //       ADD_TO_CHAT: {
+  //         message: 'Sure, let me make that trade right now!',
+  //         role: 'Researcher',
+  //         dateCreated: new Date().getTime(),
+  //         round: 0,
+  //       },
+  //     },
+  //   ],
+  // },
   {
     target: '.tour-request-trade',
-    content: `To initiate a trade request with another player, use the Request Trade button here. Try clicking it now.`,
+    content: `Initiate a trade request with another player`,
     params: {
       placement: TOP,
     },
@@ -145,16 +142,7 @@ const steps: Array<Step> = [
     ],
   },
   {
-    target: '.tour-request-trade-accomplishments',
-    content: `After starting a Trade Request, you can see your available
-    Accomplishments here. You can also click on Inventory to view 
-    the Influence Resources you currently own.`,
-    params: {
-      placement: RIGHT,
-    },
-  },
-  {
-    target: '.tour-request-trade-partner',
+    target: '.tour-trade-request',
     content: `First, select a player to trade with. Let's select the Curator.`,
     params: {
       placement: TOP,
@@ -245,19 +233,19 @@ const steps: Array<Step> = [
       },
     ],
   },
-  {
-    target: '.tour-phase',
-    content: 'Quiz Question',
-    params: {
-      placement: RIGHT,
-      tutorialElementId: 'trade',
-    },
-    stateTransform: [
-      {
-        SET_MODAL_HIDDEN: 'hide',
-      },
-    ],
-  },
+  // {
+  //   target: '.tour-phase',
+  //   content: 'Quiz Question',
+  //   params: {
+  //     placement: RIGHT,
+  //     tutorialElementId: 'trade',
+  //   },
+  //   stateTransform: [
+  //     {
+  //       SET_MODAL_HIDDEN: 'hide',
+  //     },
+  //   ],
+  // },
   {
     target: '.tour-ready-to-advance-button',
     content: `Click the Ready to Advance button when you have finished trading.`,

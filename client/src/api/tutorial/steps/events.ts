@@ -1,13 +1,14 @@
-import { Step, LEFT, TOP, BOTTOM } from '@port-of-mars/client/types/tutorial';
-import {Phase, RESEARCHER} from '@port-of-mars/shared/types';
-import { HUDRightView } from '@port-of-mars/shared/game/client/panes';
+import { Step, RIGHT } from '@port-of-mars/client/types/tutorial';
+import { Phase, RESEARCHER } from '@port-of-mars/shared/types';
 
 const steps: Array<Step> = [
   {
-    target: '.tour-phase',
-    content: `The Event phase reveals Events that may affect your group this round.`,
+    target: '.tour-event',
+    content:
+      `Mars is unpredictable; many different events can happen! The number of events
+      that occur during each round depends on your System Health`,
     params: {
-      placement: LEFT,
+      placement: RIGHT,
     },
     stateTransform: [
       {
@@ -38,43 +39,34 @@ const steps: Array<Step> = [
       },
     ],
   },
-  {
-    target: '.tour-active-events',
-    content:
-      `Some Events have complex effects and require players to make difficult choices or vote ` +
-      `for an outcome. Mars is unpredictable; many different events can happen!`,
-    params: {
-      placement: TOP,
-    },
-  },
-  {
-    target: '.tour-system-health',
-    content: `Remember: as System Health decreases, the number of Events your group encounters will increase.`,
-    params: {
-      placement: BOTTOM,
-    },
-  },
-  {
-    target: '.tour-event-deck',
-    content: `Events relevant to the current round are displayed here.
-     Some events can affect your group for more than one round - indicated by their <b>Duration</b>.`,
-    params: {
-      placement: LEFT,
-    },
-  },
-  {
-    target: '.tour-event-view',
-    content: `You can switch between the phase info screen and current Events by clicking on the Active Events icon above this panel.
-     The Mars Log also documents all current and past Events.`,
-    params: {
-      placement: LEFT,
-    },
-    stateTransform: [
-      {
-        SET_HUDRIGHT_VIEW: HUDRightView.ActiveEvents,
-      },
-    ],
-  },
+  // {
+  //   target: '.tour-system-health',
+  //   content: `Remember: as System Health decreases, the number of Events your group encounters will increase.`,
+  //   params: {
+  //     placement: BOTTOM,
+  //   },
+  // },
+  // {
+  //   target: '.tour-event-deck',
+  //   content: `Events relevant to the current round are displayed here.
+  //    Some events can affect your group for more than one round - indicated by their <b>Duration</b>.`,
+  //   params: {
+  //     placement: LEFT,
+  //   },
+  // },
+  // {
+  //   target: '.tour-event-view',
+  //   content: `You can switch between the phase info screen and current Events by clicking on the Active Events icon above this panel.
+  //    The Mars Log also documents all current and past Events.`,
+  //   params: {
+  //     placement: LEFT,
+  //   },
+  //   stateTransform: [
+  //     {
+  //       SET_HUDRIGHT_VIEW: HUDRightView.ActiveEvents,
+  //     },
+  //   ],
+  // },
 ];
 
 export default steps;
