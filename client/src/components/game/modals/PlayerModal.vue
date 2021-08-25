@@ -1,120 +1,208 @@
 <template>
-  <div class="c-player-modal container tour-player-info-modal">
+  <b-container fluid class="h-100">
     <!-- player stats row -->
-    <div class="top-wrapper row tour-player-info-modal-stats">
-      <div class="top container">
-        <div class="wrapper row">
-          <div class="picture col-2">
-            <div class="indicator" :style="indicatorStyle">
-              <div class="frame" :style="frameColor">
-                <img :src="playerRoleImage" alt="Player Image" />
-              </div>
-            </div>
-          </div>
-          <div class="information col-6">
-            <p class="role">
-              {{
-                playerData.isSelf ? `You (${modalData.role})` : modalData.role
-              }}
-            </p>
-            <p class="score">Score: {{ playerData.info.victoryPoints }}</p>
-            <p class="ranking">Ranking: #{{ ranking }} out of 5</p>
-          </div>
-          <div class="trade col-4">
-            <button
-              v-if="!playerData.isSelf && gamePhase === phase.trade"
-              @click="handleRequestTrade">
-              Request Trade
-            </button>
+    <b-row class="w-100">
+      <!-- player picture -->
+      <b-col cols="2">
+        <div class="indicator" :style="indicatorStyle">
+          <div class="frame" :style="frameColor">
+            <img :src="playerRoleImage" alt="Player Image"/>
           </div>
         </div>
-      </div>
-    </div>
-
-    <!-- player inventory row -->
-    <div class="bottom-wrapper row">
-      <div class="bottom container">
-        <div class="wrapper row">
-          <!-- col: inventory -->
-          <div class="inventory col-4 tour-player-info-modal-inventory">
-            <div class="topbar">
-              <p class="title">Inventory</p>
-            </div>
-            <div class="outer-wrapper">
-              <div
-                class="unavailable"
-                v-if="!playerData.isSelf && !isUnderAudit"
-              >
-                <p>This information cannot be viewed at this time. Check back later...</p>
-              </div>
-              <div
-                class="wrapper"
-                v-else-if="playerData.isSelf || isUnderAudit"
-              >
-                <Inventory :isSelf="false" :role="modalData.role" />
-              </div>
-            </div>
+      </b-col>
+      <!-- information -->
+      <b-col cols="6" align-self="center">
+        <h3 class="role">
+          {{
+            playerData.isSelf ? `You (${modalData.role})` : modalData.role
+          }}
+        </h3>
+      </b-col>
+      <!-- trade -->
+      <b-col cols="4">
+        <b-button
+          v-if="!playerData.isSelf && gamePhase === phase.trade"
+          @click="handleRequestTrade">
+          Request Trade
+        </b-button>
+      </b-col>
+    </b-row>
+    <b-row class="w-100 my-5" align="center">
+      <!-- col: player inventory -->
+      <b-col cols="4">
+          <h2 class="text-center">Inventory</h2>
+        <div class="outer-wrapper">
+          <div
+            class="unavailable"
+            v-if="!playerData.isSelf && !isUnderAudit"
+          >
+            <p>This information cannot be viewed at this time. Check back later...</p>
+          </div>
+          <div
+            class="wrapper"
+            v-else-if="playerData.isSelf || isUnderAudit"
+          >
+            <Inventory :isSelf="false" :role="modalData.role"/>
+          </div>
+        </div>
+      </b-col>
+      <b-col cols="8">
+          <h2 class="text-center">Accomplishments</h2>
+        <b-button-group class="w-100">
+          <b-button
+            squared
+            @click="switchAccomplishmentType('active')"
+            :class="accomplishmentType === 'active' ? 'selected' : ''"
+          >
+            Available
+          </b-button>
+          <b-button
+            squared
+            @click="switchAccomplishmentType('purchased')"
+            :class="accomplishmentType === 'purchased' ? 'selected' : ''"
+          >
+            Purchased
+          </b-button>
+        </b-button-group>
+        <div class="outer-wrapper">
+          <div
+            class="unavailable"
+            v-if="!playerData.isSelf && !isUnderAudit"
+          >
+            <p v-if="accomplishmentType==='active'">This information is currently private and cannot
+              be viewed at this time.</p>
+            <p v-if="accomplishmentType==='purchased'">None</p>
           </div>
           <!-- col: accomplishments -->
           <div
-            class="purchasable-accomplishments col-8 tour-player-info-modal-accomplishments"
+            class="wrapper"
+            v-else-if="playerData.isSelf || isUnderAudit"
           >
-            <div class="topbar">
-              <p class="title">Accomplishments</p>
-            </div>
-            <div class="buttons">
-              <button
-                @click="switchAccomplishmentType('active')"
-                :class="accomplishmentType === 'active' ? 'selected' : ''"
-              >
-                Available
-              </button>
-              <button
-                @click="switchAccomplishmentType('purchased')"
-                :class="accomplishmentType === 'purchased' ? 'selected' : ''"
-              >
-                Purchased
-              </button>
-            </div>
-            <div class="outer-wrapper">
-              <div
-                class="unavailable"
-                v-if="!playerData.isSelf && !isUnderAudit"
-              >
-                <p v-if="accomplishmentType==='active'">This information is currently private and cannot be viewed at this time.</p>
-                <p v-if="accomplishmentType==='purchased'">None</p>
-              </div>
-              <div
-                class="wrapper"
-                v-else-if="playerData.isSelf || isUnderAudit"
-              >
-                <AccomplishmentCard
-                  v-for="accomplishment in accomplishmentCards"
-                  :key="accomplishment.id"
-                  :accomplishment="accomplishment"
-                  :showDescription="false"
-                  :type="cardType"
-                />
-              </div>
-            </div>
+            <AccomplishmentCard
+              v-for="accomplishment in accomplishmentCards"
+              :key="accomplishment.id"
+              :accomplishment="accomplishment"
+              :showDescription="false"
+            />
           </div>
         </div>
-      </div>
-    </div>
-  </div>
+      </b-col>
+    </b-row>
+  </b-container>
+
+  <!--  <div class="c-player-modal container">-->
+  <!--    &lt;!&ndash; player stats row &ndash;&gt;-->
+  <!--    <div class="top-wrapper row tour-player-info-modal-stats">-->
+  <!--      <div class="top container">-->
+  <!--        <div class="wrapper row">-->
+  <!--          <div class="picture col-2">-->
+  <!--            <div class="indicator" :style="indicatorStyle">-->
+  <!--              <div class="frame" :style="frameColor">-->
+  <!--                <img :src="playerRoleImage" alt="Player Image" />-->
+  <!--              </div>-->
+  <!--            </div>-->
+  <!--          </div>-->
+  <!--          <div class="information col-6">-->
+  <!--            <p class="role">-->
+  <!--              {{-->
+  <!--                playerData.isSelf ? `You (${modalData.role})` : modalData.role-->
+  <!--              }}-->
+  <!--            </p>-->
+  <!--            <p class="score">Score: {{ playerData.info.victoryPoints }}</p>-->
+  <!--            <p class="ranking">Ranking: #{{ ranking }} out of 5</p>-->
+  <!--          </div>-->
+  <!--          <div class="trade col-4">-->
+  <!--            <button-->
+  <!--              v-if="!playerData.isSelf && gamePhase === phase.trade"-->
+  <!--              @click="handleRequestTrade">-->
+  <!--              Request Trade-->
+  <!--            </button>-->
+  <!--          </div>-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--    &lt;!&ndash; player inventory row &ndash;&gt;-->
+  <!--    <div class="bottom-wrapper row">-->
+  <!--      <div class="bottom container">-->
+  <!--        <div class="wrapper row">-->
+  <!--          &lt;!&ndash; col: inventory &ndash;&gt;-->
+  <!--          <div class="inventory col-4 tour-player-info-modal-inventory">-->
+  <!--            <div class="topbar">-->
+  <!--              <p class="title">Inventory</p>-->
+  <!--            </div>-->
+  <!--            <div class="outer-wrapper">-->
+  <!--              <div-->
+  <!--                class="unavailable"-->
+  <!--                v-if="!playerData.isSelf && !isUnderAudit"-->
+  <!--              >-->
+  <!--                <p>This information cannot be viewed at this time. Check back later...</p>-->
+  <!--              </div>-->
+  <!--              <div-->
+  <!--                class="wrapper"-->
+  <!--                v-else-if="playerData.isSelf || isUnderAudit"-->
+  <!--              >-->
+  <!--                <Inventory :isSelf="false" :role="modalData.role" />-->
+  <!--              </div>-->
+  <!--            </div>-->
+  <!--          </div>-->
+  <!--          &lt;!&ndash; col: accomplishments &ndash;&gt;-->
+  <!--          <div-->
+  <!--            class="purchasable-accomplishments col-8 tour-player-info-modal-accomplishments"-->
+  <!--          >-->
+  <!--            <div class="topbar">-->
+  <!--              <p class="title">Accomplishments</p>-->
+  <!--            </div>-->
+  <!--            <div class="buttons">-->
+  <!--              <button-->
+  <!--                @click="switchAccomplishmentType('active')"-->
+  <!--                :class="accomplishmentType === 'active' ? 'selected' : ''"-->
+  <!--              >-->
+  <!--                Available-->
+  <!--              </button>-->
+  <!--              <button-->
+  <!--                @click="switchAccomplishmentType('purchased')"-->
+  <!--                :class="accomplishmentType === 'purchased' ? 'selected' : ''"-->
+  <!--              >-->
+  <!--                Purchased-->
+  <!--              </button>-->
+  <!--            </div>-->
+  <!--            <div class="outer-wrapper">-->
+  <!--              <div-->
+  <!--                class="unavailable"-->
+  <!--                v-if="!playerData.isSelf && !isUnderAudit"-->
+  <!--              >-->
+  <!--                <p v-if="accomplishmentType==='active'">This information is currently private and cannot be viewed at this time.</p>-->
+  <!--                <p v-if="accomplishmentType==='purchased'">None</p>-->
+  <!--              </div>-->
+  <!--              <div-->
+  <!--                class="wrapper"-->
+  <!--                v-else-if="playerData.isSelf || isUnderAudit"-->
+  <!--              >-->
+  <!--                <AccomplishmentCard-->
+  <!--                  v-for="accomplishment in accomplishmentCards"-->
+  <!--                  :key="accomplishment.id"-->
+  <!--                  :accomplishment="accomplishment"-->
+  <!--                  :showDescription="false"-->
+  <!--                />-->
+  <!--              </div>-->
+  <!--            </div>-->
+  <!--          </div>-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  </div>-->
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Inject } from 'vue-property-decorator';
-import { PlayerInfoModalData } from '@port-of-mars/shared/game/client/modals';
-import { Role, Phase } from '@port-of-mars/shared/types';
+import {Component, Vue, Prop, Inject} from 'vue-property-decorator';
+import {PlayerInfoModalData} from '@port-of-mars/shared/game/client/modals';
+import {Role, Phase} from '@port-of-mars/shared/types';
 import Inventory from '@port-of-mars/client/components/game/Inventory.vue';
 import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
-import { AccomplishmentCardType } from '@port-of-mars/client/types/cards';
+import {library} from '@fortawesome/fontawesome-svg-core';
+import {faTimes} from '@fortawesome/free-solid-svg-icons/faTimes';
+import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
+import {GameRequestAPI} from '@port-of-mars/client/api/game/request';
 
 library.add(faTimes);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
@@ -171,18 +259,14 @@ export default class PlayerModal extends Vue {
 
   get frameColor(): object {
     return this.modalData.role
-      ? { backgroundColor: `var(--color-${this.modalData.role})` }
-      : { backgroundColor: `var(--color-Researcher)` };
+      ? {backgroundColor: `var(--color-${this.modalData.role})`}
+      : {backgroundColor: `var(--color-Researcher)`};
   }
 
   get indicatorStyle() {
     return !this.playerData.info.ready
-      ? { border: `0.2rem solid var(--color-${this.modalData.role})` }
-      : { border: `0.2rem solid var(--green)` };
-  }
-
-  switchAccomplishmentType(type: string): void {
-    this.accomplishmentType = type;
+      ? {border: `0.2rem solid var(--color-${this.modalData.role})`}
+      : {border: `0.2rem solid var(--green)`};
   }
 
   get accomplishmentCards(): any {
@@ -196,7 +280,11 @@ export default class PlayerModal extends Vue {
     }
   }
 
-  private handleRequestTrade() {
+  switchAccomplishmentType(type: string): void {
+    this.accomplishmentType = type;
+  }
+
+  handleRequestTrade() {
     if (!this.playerData.isSelf && this.gamePhase === this.phase.trade) {
       this.api.setModalVisible({
         type: 'TradeRequestModal',
@@ -215,5 +303,59 @@ export default class PlayerModal extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/modals/PlayerModal.scss';
+.picture,
+.information,
+.trade {
+  height: 100%;
+  padding: 0;
+}
+
+.picture {
+  overflow: hidden;
+  @include make-column-and-center;
+}
+
+.indicator {
+  height: 8rem;
+  width: 8rem;
+  padding: 0.25rem;
+  border-radius: 50%;
+}
+
+.frame {
+  @include expand;
+  border-radius: 50%;
+  @include make-center;
+}
+
+img {
+  object-fit: cover;
+  height: 60%;
+}
+
+.information {
+  @include make-column-and-center;
+  align-items: flex-start;
+
+  .role {
+    margin-bottom: 0.25rem;
+    color: $light-shade;
+    font-size: $font-large;
+    font-weight: $bold;
+  }
+
+  .score {
+    margin-bottom: 0.25rem;
+    color: $light-shade;
+    font-size: $font-med;
+    font-weight: $medium;
+  }
+
+  .ranking {
+    margin-bottom: 0;
+    color: $light-shade;
+    font-size: $font-med;
+    font-weight: $medium;
+  }
+}
 </style>

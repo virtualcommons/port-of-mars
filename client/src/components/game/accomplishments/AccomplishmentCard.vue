@@ -7,39 +7,40 @@
   >
     <!-- title -->
     <b-row align-v="center" class="w-100 mx-0 mt-2 p-0 justify-content-center align-items-center"
-            style="cursor: pointer"
+           style="cursor: pointer"
            @click="showInfo"
+           v-b-modal="'gameModal'"
     >
-        <b-col class="m-0 p-0 w-100">
-          <p :style="fontColor()" class="w-100 text-center">{{ accomplishment.label }}</p>
-        </b-col>
+      <b-col class="m-0 p-0 w-100">
+        <p :style="fontColor()" class="w-100 text-center">{{ accomplishment.label }}</p>
+      </b-col>
     </b-row>
 
     <!-- information: points, description -->
-      <b-row
-        :class="isModal ? 'p-4 p-lg-4' : ''"
-        align-v="center"
-        class="w-100 m-0 p-2"
-        style="background-color: rgb(34, 26, 27)"
+    <b-row
+      :class="isModal ? 'p-4 p-lg-4' : ''"
+      align-v="center"
+      class="w-100 m-0 p-2"
+      style="background-color: rgb(34, 26, 27)"
+    >
+      <!-- points -->
+      <b-col
+        :class="showDescription ? 'mt-3 col-3' : 'col-12'"
+        class="d-flex flex-column justify-content-center align-items-center"
       >
-        <!-- points -->
-        <b-col
-          :class="showDescription ? 'mt-3 col-3' : 'col-12'"
-          class="d-flex flex-column justify-content-center align-items-center"
-        >
-          <p>{{ accomplishment.victoryPoints }} Points</p>
-        </b-col>
+        <p>{{ accomplishment.victoryPoints }} Points</p>
+      </b-col>
 
-        <!-- description -->
-        <b-col
-          :class="showDescription ? 'mt-3' : ''"
-          class="pb-2 text-left col-9"
-          v-if="showDescription"
-        >
-          <p>{{ accomplishment.flavorText }}</p>
-        </b-col>
-      </b-row>
-<!--    </div>-->
+      <!-- description -->
+      <b-col
+        :class="showDescription ? 'mt-3' : ''"
+        class="pb-2 text-left col-9"
+        v-if="showDescription"
+      >
+        <p>{{ accomplishment.flavorText }}</p>
+      </b-col>
+    </b-row>
+    <!--    </div>-->
 
     <!-- cost -->
     <b-row class="w-100 m-0 pt-1"

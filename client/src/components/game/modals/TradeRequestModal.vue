@@ -1,5 +1,5 @@
 <template>
-  <div class="c-trade-request-modal">
+  <div class="c-trade-request-modal tour-trade-request">
     <div class="wrapper row">
       <div class="trade-request col-8">
         <div class="topbar">
@@ -11,7 +11,7 @@
           </div>
         </div>
       </div>
-      <div class="side-view col-4 tour-request-trade-accomplishments">
+      <div class="side-view col-4">
         <div class="buttons">
           <button
             @click="switchView('Active Accomplishments')"

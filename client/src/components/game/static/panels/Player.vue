@@ -1,7 +1,8 @@
 <template>
   <b-row
+    v-b-modal="'gameModal'"
     @click="handleOpenModal()"
-    class="flex-column h-100 w-100 m-0 p-0 tour-profile tour-player-self"
+    class="flex-column h-100 w-100 m-0 p-0 tour-profile"
     style="cursor: pointer"
   >
     <b-row class="p-1 my-2 mx-auto" :style="indicatorStyle" style="border-radius: 50%;

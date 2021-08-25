@@ -29,7 +29,7 @@
         </b-row>
       </b-col>
     <!-- purchasable accomplishments -->
-      <b-col class="h-100 w-100 d-flex flex-column tour-accomplishments" cols="4">
+      <b-col class="h-100 w-100 d-flex flex-column" cols="4">
         <!-- header -->
         <b-row class="h-auto p-3 mx-auto w-100 justify-content-center"
                style="background-color: var(--main-brand); color: var(--dark-shade);"

@@ -2,7 +2,7 @@
   <b-row class="h-100 my-2 flex-column justify-content-center align-items-start"
          style="color: rgb(34, 26, 27)"
   >
-    <b-col class="w-100 py-0 my-0 tour-round">
+    <b-col class="w-100 py-0 my-0">
       <p class="py-0 my-0 title">
         Round
       </p>
@@ -10,12 +10,12 @@
         {{ roundNumber }}
       </p>
     </b-col>
-    <b-col class="w-100 py-0 my-0 tour-current-phase">
+    <b-col class="w-100 py-0 my-0">
       <p class="py-0 my-0 title">Current Phase</p>
       <p class="py-0 my-0 phase-number">{{ phaseNumber + 1 }} of 6</p>
       <p class="subtitle">{{ phaseText }}</p>
     </b-col>
-    <b-col class="w-100 py-0 my-0 tour-time-remaining">
+    <b-col class="w-100 py-0 my-0">
       <p class="py-0 my-0 title">Phase Countdown</p>
       <p :class="countdownStyling">{{ timeRemaining }}</p>
     </b-col>

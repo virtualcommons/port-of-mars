@@ -1,4 +1,67 @@
 <template>
+  <!--  <b-container fluid class="h-100 p-0 m-0">-->
+  <!--    <b-form @submit="handleTrade">-->
+  <!--      &lt;!&ndash; select trade partner &ndash;&gt;-->
+  <!--      <b-form-group class="w-100">-->
+  <!--        <b-form-radio-->
+  <!--          inline-->
+  <!--          v-model="tradePartnerName"-->
+  <!--          v-for="player in otherPlayers"-->
+  <!--          :value="player" :key="player"-->
+  <!--          @click="handleChange(player)"-->
+  <!--          button-->
+  <!--          justify="center"-->
+  <!--        >-->
+  <!--          <div-->
+  <!--            class="p-1 mr-3"-->
+  <!--            :style="borderStyle(player)"-->
+  <!--            style="border-radius: 50%; height: 5rem; width: 5rem"-->
+  <!--          >-->
+  <!--            <div class="inner-frame" :style="frameStyle(player)">-->
+  <!--              <img-->
+  <!--                :src="-->
+  <!--                require(`@port-of-mars/client/assets/characters/${player}.png`)-->
+  <!--              "-->
+  <!--                alt="Player"-->
+  <!--              />-->
+  <!--            </div>-->
+  <!--          </div>-->
+  <!--        </b-form-radio>-->
+  <!--      </b-form-group>-->
+
+  <!--      &lt;!&ndash; request &ndash;&gt;-->
+  <!--      <b-form-group>-->
+  <!--        <TradeOptions-->
+  <!--          :resourceReader="handleReceiveResources"-->
+  <!--          :resources="senderResources"-->
+  <!--          :mode="'incoming'"-->
+  <!--          :text="'Your Request'"-->
+  <!--          class="tour-request-resources"-->
+  <!--        ></TradeOptions>-->
+  <!--      </b-form-group>-->
+
+  <!--      &lt;!&ndash; offer &ndash;&gt;-->
+  <!--      <b-form-group>-->
+  <!--        <TradeOptions-->
+  <!--          :resourceReader="handleSendResources"-->
+  <!--          :resources="recipientResources"-->
+  <!--          :mode="'outgoing'"-->
+  <!--          :text="'Your Offer'"-->
+  <!--          class="tour-offer-resources"-->
+  <!--        ></TradeOptions>-->
+  <!--      </b-form-group>-->
+
+  <!--      &lt;!&ndash; send trade request &ndash;&gt;-->
+  <!--      <b-button-->
+  <!--        block-->
+  <!--        pressed-->
+  <!--        type="submit"-->
+  <!--        :disabled="!validateTrade"-->
+  <!--        class="text-center tour-send-trade">-->
+  <!--        <p class="text-bold">Send trade request</p>-->
+  <!--      </b-button>-->
+  <!--    </b-form>-->
+  <!--  </b-container>-->
   <!-- FIXME: refactor to b-form -->
   <div class="c-trade-request container tour-trade-request">
     <p>Trade Partner</p>
@@ -107,8 +170,6 @@ export default class TradeRequest extends Vue {
     return Object.keys(this.$tstore.getters.otherPlayers);
   }
 
-  // NOTE :: HANDLE TRADE
-
   handleChange(name: string) {
     if (name == this.tradePartnerName) {
       this.api.setTradePartnerName('');
@@ -120,8 +181,8 @@ export default class TradeRequest extends Vue {
   validateTrade(): boolean {
     const inventory = this.$tstore.getters.player.inventory;
     console.log('validate trade: ', this.tradePartnerName != '' &&
-            canPlayerMakeTrade(this.recipientResources, inventory) &&
-            !isZeroTrade(this.recipientResources, this.senderResources));
+      canPlayerMakeTrade(this.recipientResources, inventory) &&
+      !isZeroTrade(this.recipientResources, this.senderResources));
 
     return (
       this.tradePartnerName != '' &&
@@ -164,14 +225,14 @@ export default class TradeRequest extends Vue {
   // NOTE :: STYLES
   borderStyle(role: Role) {
     return role === this.tradePartnerName
-      ? { border: `0.125rem solid var(--light-accent)` }
-      : { border: `0.125rem solid var(--color-${role})` };
+      ? {border: `0.125rem solid var(--light-accent)`}
+      : {border: `0.125rem solid var(--color-${role})`};
   }
 
   frameStyle(role: Role) {
     return role === this.tradePartnerName
-      ? { backgroundColor: `var(--light-accent)` }
-      : { backgroundColor: `var(--color-${role})` };
+      ? {backgroundColor: `var(--light-accent)`}
+      : {backgroundColor: `var(--color-${role})`};
   }
 }
 </script>

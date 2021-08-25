@@ -7,7 +7,7 @@
           <p class="my-auto p-0 mx-2" style="color: rgb(34, 26, 27)">System Health Report</p>
         </b-row>
 
-        <b-row class="flex-grow-1 flex-column w-100 m-0 p-3 justify-content-center tour-wear-tear tour-shr-table"
+        <b-row class="flex-grow-1 flex-column w-100 m-0 p-3 justify-content-center tour-wear-tear"
                style="background-color: var(--light-shade-05);"
         >
           <!-- text info -->

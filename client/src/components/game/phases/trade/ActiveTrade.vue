@@ -151,22 +151,22 @@
   export default class ActiveTrade extends Vue {
     @Inject() api!: GameRequestAPI;
     // sender: who sent the trade
-    @Prop() private sender!: TradeAmountData;
+    @Prop() sender!: TradeAmountData;
     // recipient: who is receiving the trade
-    @Prop() private recipient!: TradeAmountData;
+    @Prop() recipient!: TradeAmountData;
     //id on the trade
-    @Prop() private id!: string;
+    @Prop() id!: string;
     //status of the trade -> 'Active' | 'Accepted' | 'Cancelled' | 'Rejected'
-    @Prop() private status!: string;
+    @Prop() status!: string;
     //degree of participation -> 1 | 0 | -1
-    @Prop() private participant!: number;
+    @Prop() participant!: number;
 
     //internal state for whether or not the trade should be shown
     //show is the root element dictates whether or not the trade should be shown
-    private show = true;
+    show = true;
 
     //active dictates what animation should be playing
-    private active = true;
+    active = true;
 
     get role() {
       return this.$tstore.state.role;
@@ -218,17 +218,17 @@
       }
     }
 
-    //color of the trade header and trade background
+    // color of the trade header and trade background
     statusColor(type: string) {
-      //default is white
+      // default color: white
       let color: string = 'var(--light-shade)';
 
-      //if the player is involved with the trade, color it orange
+      // if player is involved with the trade, color = orange
       if (this.participant == 1 || this.participant == 0) {
         color = 'var(--light-accent)';
       }
 
-      //alternate statuses supersede involvement
+      // alternate statuses supersede involvement
       if (this.status == 'Accepted') {
         color = 'var(--green)';
       } else if (this.status == 'Cancelled' || this.status == 'Rejected') {
@@ -240,28 +240,28 @@
 
     }
 
-    private handleAcceptTrade() {
+    handleAcceptTrade() {
       console.log('active: ', this.active);
       if (this.hasSufficientResources) {
         this.api.acceptTradeRequest(this.id);
       }
     }
 
-    private handleTradeReject() {
+    handleTradeReject() {
       this.api.rejectTradeRequest(this.id);
     }
 
-    private handleTradeCancel() {
+    handleTradeCancel() {
       this.api.cancelTradeRequest(this.id);
     }
 
-    //the border on the player portait background
-    private borderStyle(role: Role) {
+    // border on the player portrait background
+    borderStyle(role: Role) {
       return {border: `0.2rem solid var(--color-${role})`};
     }
 
-    //the frame of the player portait background
-    private frameStyle(role: Role) {
+    // frame of the player portrait background
+    frameStyle(role: Role) {
       return {backgroundColor: `var(--color-${role})`};
     }
   }

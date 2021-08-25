@@ -1,28 +1,40 @@
 <template>
-  <b-row v-if="modalsVisible"
-         class="h-100 w-100 m-0 p-0 position-absolute justify-content-center align-items-center"
-         style="backdrop-filter: blur(2px); z-index: 4; background-color: var(--dark-shade-75)"
+  <b-container v-if="isVisible"
+               fluid
+               class="h-100 w-100 m-0 p-0 position-absolute justify-content-center align-items-center"
+               style="backdrop-filter: blur(2px); z-index: 4; background-color: var(--dark-shade-75)"
   >
-    <b-col class="d-flex flex-column justify-content-center align-items-center" cols="4">
-      <!-- modal type: event, accomplishment -->
-      <component :is="modalType" :modalData="modalData"></component>
-
-      <!-- close modal button -->
-      <button
-        @click="handleClose"
-        type="button"
-        name="Close Button"
-        class="modal-close"
+      <b-modal
+        id="gameModal"
+        class="h-100"
+        :title="modalData.title"
+        size="xl"
+        hide-footer
+        header-bg-variant="info"
+        body-bg-variant="info"
+        @hidden="handleClose"
       >
-        <font-awesome-icon
-          :icon="['fas', 'times']"
-          size="lg"
-          class="close-icon"
-        />
-      </button>
+<!--        <b-col class="d-flex flex-column justify-content-center align-items-center" cols="4">-->
+          <!-- modal type: event, accomplishment -->
+          <component :is="modalType" :modalData="modalData"></component>
 
-    </b-col>
-  </b-row>
+<!--          &lt;!&ndash; close modal button &ndash;&gt;-->
+<!--          <button-->
+<!--            @click="handleClose"-->
+<!--            type="button"-->
+<!--            name="Close Button"-->
+<!--            class="modal-close"-->
+<!--          >-->
+<!--            <font-awesome-icon-->
+<!--              :icon="['fas', 'times']"-->
+<!--              size="lg"-->
+<!--              class="close-icon"-->
+<!--            />-->
+<!--          </button>-->
+
+<!--        </b-col>-->
+      </b-modal>
+  </b-container>
 </template>
 
 <script lang="ts">
@@ -35,7 +47,6 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
-import { Phase } from '@port-of-mars/shared/types';
 
 library.add(faTimes);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
@@ -51,7 +62,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 export default class ModalController extends Vue {
   @Inject() readonly api!: GameRequestAPI;
 
-  get modalsVisible() {
+  get isVisible() {
     return this.$tstore.state.userInterface.modalView.visible;
   }
 
@@ -71,14 +82,14 @@ export default class ModalController extends Vue {
     } else {
       return {
         activator: 'Default',
-        title: '',
-        content: '',
+        title: 'Default modal title',
+        content: 'Default modal content',
       };
     }
   }
 
-  private handleClose(): void {
-    if (this.modalsVisible) {
+  handleClose(): void {
+    if (this.isVisible) {
       this.api.setModalHidden();
     }
   }

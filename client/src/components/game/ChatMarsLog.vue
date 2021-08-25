@@ -10,7 +10,7 @@
         v-b-modal.modal-center
         block
         squared
-        class="mt-2"
+        class="mt-2 tour-log"
         variant="outline-secondary"
         style="border: 0.125rem solid"
       >

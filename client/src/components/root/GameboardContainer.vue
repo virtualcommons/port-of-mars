@@ -26,7 +26,7 @@
           <HUD />
         </b-row>
         <!-- Phase Switcher -->
-        <b-row class="w-100 flex-grow-1 p-2 mt-2 mx-0" style="border: 0.2rem solid rgba(241, 224, 197, 0.25);">
+        <b-row class="w-100 flex-grow-1 p-2 mt-2 mx-0 tour-event tour-invest tour-trade" style="border: 0.2rem solid rgba(241, 224, 197, 0.25);">
           <PhaseSwitcher />
         </b-row>
       </b-col>

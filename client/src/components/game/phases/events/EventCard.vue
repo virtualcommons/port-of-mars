@@ -8,6 +8,7 @@
     <b-row class="w-100 justify-content-center mx-auto p-3"
            style="cursor: pointer; background-color: var(--light-shade)"
            @click="showInfo"
+           v-b-modal="'gameModal'"
     >
       <b-col>
       </b-col>

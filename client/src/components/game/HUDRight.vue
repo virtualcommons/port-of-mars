@@ -12,7 +12,7 @@
       <b-row class="h-auto w-100 mx-0 mb-2 p-0">
         <HUDRightButtons/>
       </b-row>
-      <b-row class="w-100 flex-grow-1 tour-phase-instructions tour-event-view"
+      <b-row class="w-100 flex-grow-1"
              style="background-color: rgba(241, 224, 197, 0.05)"
       >
         <!-- Phase Instructions View -->

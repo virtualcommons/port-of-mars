@@ -23,8 +23,8 @@ import { DASHBOARD_PAGE } from '@port-of-mars/shared/routes';
 export default class Game extends Vue {
   @Inject() readonly $client!: Client;
   @Provide() private api: GameRequestAPI = new GameRequestAPI();
-  private hasApi: boolean = false;
-  private env: EnvironmentMode = new EnvironmentMode();
+  hasApi: boolean = false;
+  env: EnvironmentMode = new EnvironmentMode();
 
   async created() {
     this.api.room?.leave();

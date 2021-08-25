@@ -8,7 +8,6 @@
         <b-form-checkbox
           v-model="checked"
           switch
-          class="tour-trade-filters"
         >
           <span v-if="checked">Your Trades</span>
           <span v-else>All Trades</span>

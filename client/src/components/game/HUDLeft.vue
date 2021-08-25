@@ -1,5 +1,5 @@
 <template>
-  <b-row class="h-100 w-100 m-0 p-0 tour-hud-left-toggle overflow-hidden">
+  <b-row class="h-100 w-100 m-0 p-0 overflow-hidden">
       <b-col cols="5" class="h-100 w-100 m-0 p-0">
         <b-row class="w-100 m-0 p-0">
           <Player />
@@ -21,7 +21,7 @@
 
       </b-col>
       <b-col cols="7" v-show="currentView === view.Inventory"
-             class="h-100 w-100 p-0 m-0 tour-inventory-view"
+             class="h-100 w-100 p-0 m-0"
              style="background-color: rgba(241, 224, 197, 0.05); overflow-y: auto; overflow-x: hidden;"
       >
         <div class="w-100 position-absolute" style="overflow-y: auto; overflow-x: hidden;">

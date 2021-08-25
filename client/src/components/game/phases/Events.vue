@@ -1,6 +1,6 @@
 <template>
-  <b-row class="h-100 w-100 m-0 p-3 tour-event">
-    <b-col class="d-flex flex-column h-100 w-100 partition tour-event-deck" cols="4">
+  <b-row class="h-100 w-100 m-0 p-3">
+    <b-col class="d-flex flex-column h-100 w-100 partition" cols="4">
       <!-- events | active accomplishments -->
 
       <!-- toggle events or active accomplishments -->
@@ -60,7 +60,7 @@
       </b-row>
     </b-col>
 
-    <b-col class="d-flex flex-column h-100 w-100 tour-active-events" cols="8">
+    <b-col class="d-flex flex-column h-100 w-100" cols="8">
       <b-row class="w-100 m-0 p-3 justify-content-center"
              style="background-color: var(--main-brand); color: var(--dark-shade)"
       >
