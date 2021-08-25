@@ -47,19 +47,18 @@ function applyCosts(role: Role, costs: any, store: TStore) {
 
 function applyAccomplishmentResponse(role: Role, accomplishment: any, store: TStore) {
   accomplishment.purchased.onAdd = (acc: any, index: number) => {
-    store.commit('ADD_TO_PURCHASED_ACCOMPLISHMENTS', {role, data: acc});
+    store.commit('ADD_TO_PURCHASED_ACCOMPLISHMENTS', {role, data: deschemify(acc)});
   }
   accomplishment.purchased.onRemove = (acc: any, index: number) => {
-    store.commit('REMOVE_FROM_PURCHASED_ACCOMPLISHMENTS', {role, data: acc})
+    store.commit('REMOVE_FROM_PURCHASED_ACCOMPLISHMENTS', {role, data: deschemify(acc)})
   }
 
   accomplishment.purchasable.onAdd = (acc: any, index: number) => {
-    console.log("Adding to purchasable accomplishments: ", acc);
-    store.commit('ADD_TO_PURCHASABLE_ACCOMPLISHMENTS', {role, data: acc})
+    store.commit('ADD_TO_PURCHASABLE_ACCOMPLISHMENTS', {role, data: deschemify(acc)})
   }
   accomplishment.purchasable.onRemove = (acc: any, index: number) => {
     // console.log('removing from purchasable', acc);
-    store.commit('REMOVE_FROM_PURCHASABLE_ACCOMPLISHMENTS', {role, data: acc})
+    store.commit('REMOVE_FROM_PURCHASABLE_ACCOMPLISHMENTS', {role, data: deschemify(acc)})
   }
 }
 
