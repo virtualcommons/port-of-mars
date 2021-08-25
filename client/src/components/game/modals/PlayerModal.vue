@@ -51,15 +51,15 @@
         <b-button-group class="w-100">
           <b-button
             squared
-            @click="switchAccomplishmentType('active')"
-            :class="accomplishmentType === 'active' ? 'selected' : ''"
+            @click="switchAccomplishmentType('available')"
+            :pressed="accomplishmentType === 'available'"
           >
             Available
           </b-button>
           <b-button
             squared
             @click="switchAccomplishmentType('purchased')"
-            :class="accomplishmentType === 'purchased' ? 'selected' : ''"
+            :pressed="accomplishmentType === 'purchased'"
           >
             Purchased
           </b-button>
@@ -69,7 +69,7 @@
             class="unavailable"
             v-if="!playerData.isSelf && !isUnderAudit"
           >
-            <p v-if="accomplishmentType==='active'">This information is currently private and cannot
+            <p v-if="accomplishmentType==='available'">This information is currently private and cannot
               be viewed at this time.</p>
             <p v-if="accomplishmentType==='purchased'">None</p>
           </div>
@@ -89,108 +89,6 @@
       </b-col>
     </b-row>
   </b-container>
-
-  <!--  <div class="c-player-modal container">-->
-  <!--    &lt;!&ndash; player stats row &ndash;&gt;-->
-  <!--    <div class="top-wrapper row tour-player-info-modal-stats">-->
-  <!--      <div class="top container">-->
-  <!--        <div class="wrapper row">-->
-  <!--          <div class="picture col-2">-->
-  <!--            <div class="indicator" :style="indicatorStyle">-->
-  <!--              <div class="frame" :style="frameColor">-->
-  <!--                <img :src="playerRoleImage" alt="Player Image" />-->
-  <!--              </div>-->
-  <!--            </div>-->
-  <!--          </div>-->
-  <!--          <div class="information col-6">-->
-  <!--            <p class="role">-->
-  <!--              {{-->
-  <!--                playerData.isSelf ? `You (${modalData.role})` : modalData.role-->
-  <!--              }}-->
-  <!--            </p>-->
-  <!--            <p class="score">Score: {{ playerData.info.victoryPoints }}</p>-->
-  <!--            <p class="ranking">Ranking: #{{ ranking }} out of 5</p>-->
-  <!--          </div>-->
-  <!--          <div class="trade col-4">-->
-  <!--            <button-->
-  <!--              v-if="!playerData.isSelf && gamePhase === phase.trade"-->
-  <!--              @click="handleRequestTrade">-->
-  <!--              Request Trade-->
-  <!--            </button>-->
-  <!--          </div>-->
-  <!--        </div>-->
-  <!--      </div>-->
-  <!--    </div>-->
-  <!--    &lt;!&ndash; player inventory row &ndash;&gt;-->
-  <!--    <div class="bottom-wrapper row">-->
-  <!--      <div class="bottom container">-->
-  <!--        <div class="wrapper row">-->
-  <!--          &lt;!&ndash; col: inventory &ndash;&gt;-->
-  <!--          <div class="inventory col-4 tour-player-info-modal-inventory">-->
-  <!--            <div class="topbar">-->
-  <!--              <p class="title">Inventory</p>-->
-  <!--            </div>-->
-  <!--            <div class="outer-wrapper">-->
-  <!--              <div-->
-  <!--                class="unavailable"-->
-  <!--                v-if="!playerData.isSelf && !isUnderAudit"-->
-  <!--              >-->
-  <!--                <p>This information cannot be viewed at this time. Check back later...</p>-->
-  <!--              </div>-->
-  <!--              <div-->
-  <!--                class="wrapper"-->
-  <!--                v-else-if="playerData.isSelf || isUnderAudit"-->
-  <!--              >-->
-  <!--                <Inventory :isSelf="false" :role="modalData.role" />-->
-  <!--              </div>-->
-  <!--            </div>-->
-  <!--          </div>-->
-  <!--          &lt;!&ndash; col: accomplishments &ndash;&gt;-->
-  <!--          <div-->
-  <!--            class="purchasable-accomplishments col-8 tour-player-info-modal-accomplishments"-->
-  <!--          >-->
-  <!--            <div class="topbar">-->
-  <!--              <p class="title">Accomplishments</p>-->
-  <!--            </div>-->
-  <!--            <div class="buttons">-->
-  <!--              <button-->
-  <!--                @click="switchAccomplishmentType('active')"-->
-  <!--                :class="accomplishmentType === 'active' ? 'selected' : ''"-->
-  <!--              >-->
-  <!--                Available-->
-  <!--              </button>-->
-  <!--              <button-->
-  <!--                @click="switchAccomplishmentType('purchased')"-->
-  <!--                :class="accomplishmentType === 'purchased' ? 'selected' : ''"-->
-  <!--              >-->
-  <!--                Purchased-->
-  <!--              </button>-->
-  <!--            </div>-->
-  <!--            <div class="outer-wrapper">-->
-  <!--              <div-->
-  <!--                class="unavailable"-->
-  <!--                v-if="!playerData.isSelf && !isUnderAudit"-->
-  <!--              >-->
-  <!--                <p v-if="accomplishmentType==='active'">This information is currently private and cannot be viewed at this time.</p>-->
-  <!--                <p v-if="accomplishmentType==='purchased'">None</p>-->
-  <!--              </div>-->
-  <!--              <div-->
-  <!--                class="wrapper"-->
-  <!--                v-else-if="playerData.isSelf || isUnderAudit"-->
-  <!--              >-->
-  <!--                <AccomplishmentCard-->
-  <!--                  v-for="accomplishment in accomplishmentCards"-->
-  <!--                  :key="accomplishment.id"-->
-  <!--                  :accomplishment="accomplishment"-->
-  <!--                  :showDescription="false"-->
-  <!--                />-->
-  <!--              </div>-->
-  <!--            </div>-->
-  <!--          </div>-->
-  <!--        </div>-->
-  <!--      </div>-->
-  <!--    </div>-->
-  <!--  </div>-->
 </template>
 
 <script lang="ts">
@@ -217,7 +115,7 @@ export default class PlayerModal extends Vue {
   @Inject() readonly api!: GameRequestAPI;
 
   @Prop({}) modalData!: PlayerInfoModalData;
-  accomplishmentType: string = 'purchased';
+  accomplishmentType: string = 'available';
 
   get playerData() {
     return {

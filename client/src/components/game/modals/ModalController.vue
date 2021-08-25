@@ -10,29 +10,11 @@
         :title="modalData.title"
         size="xl"
         hide-footer
-        header-bg-variant="info"
+        header-bg-variant="secondary"
         body-bg-variant="info"
         @hidden="handleClose"
       >
-<!--        <b-col class="d-flex flex-column justify-content-center align-items-center" cols="4">-->
-          <!-- modal type: event, accomplishment -->
-          <component :is="modalType" :modalData="modalData"></component>
-
-<!--          &lt;!&ndash; close modal button &ndash;&gt;-->
-<!--          <button-->
-<!--            @click="handleClose"-->
-<!--            type="button"-->
-<!--            name="Close Button"-->
-<!--            class="modal-close"-->
-<!--          >-->
-<!--            <font-awesome-icon-->
-<!--              :icon="['fas', 'times']"-->
-<!--              size="lg"-->
-<!--              class="close-icon"-->
-<!--            />-->
-<!--          </button>-->
-
-<!--        </b-col>-->
+        <component :is="modalType" :modalData="modalData"></component>
       </b-modal>
   </b-container>
 </template>

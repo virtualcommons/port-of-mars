@@ -60,6 +60,7 @@ export default class OtherPlayers extends Vue {
       type: 'PlayerModal',
       data: {
         role: this.role,
+        title: `${this.role} Details`,
       },
     });
   }

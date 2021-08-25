@@ -68,6 +68,7 @@ export default class Player extends Vue {
       type: 'PlayerModal',
       data: {
         role: this.playerRole,
+        title: `${this.playerRole} Details`
       },
     };
     this.api.setModalVisible(data);
