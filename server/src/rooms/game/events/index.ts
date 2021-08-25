@@ -139,34 +139,31 @@ export class TimeInvested extends GameEventWithData {
     game.investTime(this.data.role, this.data.investment);
 
     // if Audit event is in effect
-    if (game.marsEvents.filter(event => event.id == 'audit').length > 0) {
+    if (game.marsEvents.filter(event => event.id === 'audit').length > 0) {
 
       const resources = Object.keys(this.data.investment)
           // get a player's investments for system health and resources
           .filter((investment) => {
             // return time block investments for system health and any resource where investments > 0
-            return investment == 'systemHealth' || this.data.investment[investment as Resource] > 0;
+            return investment === 'systemHealth' || this.data.investment[investment as Resource] > 0;
           })
 
           .map((investment) => {
             // format resource type string
-            const resourceToString = investment == 'systemHealth' ? 'System Health' :
-                investment.charAt(0).toUpperCase() + investment.slice(1);
             const pendingInvestment = this.data.investment[investment as Resource]
             const cost = game.players[this.data.role].costs[investment as Resource]
-
             // format time block investments string
-            if (investment == 'systemHealth') {
-              return `and contributes ${pendingInvestment * cost} ${resourceToString}`;
+            if (investment === 'systemHealth') {
+              return `and contributes ${pendingInvestment} to System Health (cost: ${pendingInvestment * cost} time blocks)`;
             } else {
-              return `${pendingInvestment} ${resourceToString} (cost: ${pendingInvestment * cost} time)`
+              const capitalizedResource = investment.charAt(0).toUpperCase() + investment.slice(1);
+              return `${pendingInvestment} ${capitalizedResource} (cost: ${pendingInvestment * cost} time blocks)`
             }
           })
-
-          .join('; ');
+          .join(' ');
 
       const auditChatMessage: ChatMessageData = {
-        message: `${this.data.role} adds ${resources}.`,
+        message: `${this.data.role} earned ${resources}.`,
         role: this.data.role,
         dateCreated: new Date().getDate(),
         round: game.round
