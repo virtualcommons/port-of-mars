@@ -2,6 +2,7 @@
   "compilerOptions": {
     "outDir": "lib",
     "lib": ["es6", "dom"],
+    "skipLibCheck": true,
     "target": "es6",
     "module": "commonjs",
     "strict": true,

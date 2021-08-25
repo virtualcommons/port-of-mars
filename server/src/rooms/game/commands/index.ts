@@ -44,7 +44,6 @@ import {GameEvent} from '@port-of-mars/server/rooms/game/events/types';
 import {settings} from "@port-of-mars/server/settings";
 import {v4 as uuidv4} from "uuid";
 import {VoteHeroOrPariahRoleData} from "@port-of-mars/shared/game/requests";
-import {canSendTradeRequest} from "@port-of-mars/server/state/validation";
 
 const logger = settings.logging.getLogger(__filename);
 
