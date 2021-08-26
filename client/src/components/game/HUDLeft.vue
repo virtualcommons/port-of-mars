@@ -17,8 +17,7 @@
             v-for="player in otherPlayers"
             v-bind="player"
             :key="player.role"
-          />
-
+          ></OtherPlayers>
       </b-col>
       <b-col cols="7" v-show="currentView === view.Inventory"
              class="h-100 w-100 p-0 m-0"
@@ -39,7 +38,7 @@
             :accomplishment="accomplishment"
             :showDescription="false"
             :showCost="false"
-          />
+          ></AccomplishmentCard>
         </div>
       </b-col>
   </b-row>

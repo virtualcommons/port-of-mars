@@ -3,7 +3,6 @@
     :class="[cardTypeStyling(type), isModal ? 'modal-view' : 'mb-2']"
     class="w-100 p-0 mx-0 overflow-hidden"
     v-show="isActive"
-
   >
     <!-- title -->
     <b-row align-v="center" class="w-100 mx-0 mt-2 p-0 justify-content-center align-items-center"

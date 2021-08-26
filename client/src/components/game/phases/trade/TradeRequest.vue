@@ -115,13 +115,14 @@
     <!-- FIXME: add disable button styling if trade is not valid -->
     <div class="buttons-wrapper row">
       <div class="buttons col-12">
-        <button
+        <b-button
           @click="handleTrade"
           :disabled="!validateTrade"
           class="tour-send-trade"
+          ref="sendTrade"
         >
           Send Trade Request
-        </button>
+        </b-button>
       </div>
     </div>
   </div>
@@ -217,6 +218,7 @@ export default class TradeRequest extends Vue {
         status: 'Active',
       };
       this.api.sendTradeRequest(tradeDataPackage);
+      this.$root.$emit('bv::hide::modal', 'gameModal', '#sendTrade')
       this.api.setModalHidden();
     }
   }

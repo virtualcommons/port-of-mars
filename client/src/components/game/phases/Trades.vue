@@ -14,11 +14,15 @@
         </b-form-checkbox>
       </b-col>
       <b-col cols="3" class="h-100 w-100 p-0">
-        <button @click="requestTrade" class="h-100 w-100 mr-5 ml-1 tour-request-trade"
-                :disabled="playerReady"
+        <b-button
+          squared
+          @click="requestTrade"
+          v-b-modal="'gameModal'"
+          class="h-100 w-100 mr-5 ml-1 tour-request-trade"
+          :disabled="playerReady"
         >
           Request a Trade
-        </button>
+        </b-button>
       </b-col>
     </b-row>
     <!-- trade list -->
@@ -53,7 +57,7 @@
     @Inject()
     readonly api!: TutorialAPI;
 
-    private checked: boolean = this.$tstore.getters.toggleYourTrades;
+    checked: boolean = this.$tstore.getters.toggleYourTrades;
 
     get phase() {
       return this.$tstore.state.phase;
@@ -126,20 +130,20 @@
      * 0 : local player is sender of trade
      * -1: local player is not involved in trade
      */
-    private associatedWithTrade(trade: any): number {
+    associatedWithTrade(trade: any): number {
       return trade.recipient.role == this.myRole ? 1 : trade.sender.role == this.myRole ? 0 : -1;
     }
 
     /**
      * Open trade request modal when player wants to initiate a trade.
      */
-    private requestTrade() {
+    requestTrade() {
       this.api.setModalVisible({type: 'TradeRequestModal', data: {}});
 
       if (this.$tstore.state.round < 3) this.makeToast();
     }
 
-    private makeToast() {
+    makeToast() {
       this.$bvToast.toast('To initiate a trade request, select a trade partner first. Then make your offer and request.', {
         title: 'Remember!',
         toaster: 'b-toaster-top-left',

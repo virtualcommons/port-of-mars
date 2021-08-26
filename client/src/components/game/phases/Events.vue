@@ -160,13 +160,14 @@ export default class Events extends Vue {
         confirmation: false,
       },
     });
+    this.$root.$emit('bv::toggle::modal', 'gameModal');
   }
 
-  private switchView(view: string) {
+  switchView(view: string) {
     this.selectedView = view;
   }
 
-  private eventVisible(index: number) {
+  eventVisible(index: number) {
     return (
       this.$tstore.state.phase !== Phase.events || index <= this.eventsProcessed
     );
@@ -174,7 +175,7 @@ export default class Events extends Vue {
 
   // NOTE :: ACCOMPLISHMENT CARDS
 
-  private eventActive(ind: number) {
+  eventActive(ind: number) {
     return (
       this.$tstore.state.phase === Phase.events && ind == this.eventsProcessed
     );

@@ -1,16 +1,13 @@
 <template>
   <b-row class="flex-column h-100 w-100 m-0 p-2 justify-content-center">
-    <b-row class="h-auto w-100 m-0 p-0 justify-content-center" style="background-color: var(--dark-accent)">
-      <p class="my-auto p-0 text-center" style="color: var(--dark-shade)">
-        Toggle Resource Costs
-        <b-button size="lg" icon pill style="background-color: transparent; border-radius: 50%;"
-                  @click="toggleCosts">
-          <b-icon-clock v-if="!costsVisible" scale="1" variant="var(--dark-shade)"></b-icon-clock>
-          <b-icon-clock-fill v-else scale="1" variant="light"></b-icon-clock-fill>
-        </b-button>
-      </p>
-
-    </b-row>
+<!--    <b-row class="h-auto w-100 m-0 p-0 justify-content-center">-->
+      <b-button block squared @click="toggleCosts">
+        <h4>Show Costs
+<!--          <b-icon-clock v-if="!costsVisible"></b-icon-clock>-->
+<!--          <b-icon-clock-fill v-else></b-icon-clock-fill>-->
+        </h4>
+      </b-button>
+<!--    </b-row>-->
     <b-row v-for="investment in investments"
            :key="investment.name"
            :style="backgroundColor(investment.name)"

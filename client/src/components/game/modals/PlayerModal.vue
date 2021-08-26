@@ -29,14 +29,14 @@
     </b-row>
     <b-row class="w-100 my-5" align="center">
       <!-- col: player inventory -->
-      <b-col cols="4">
-          <h2 class="text-center">Inventory</h2>
+      <b-col cols="6">
+        <h2 class="text-center">Inventory</h2>
         <div class="outer-wrapper">
           <div
             class="unavailable"
             v-if="!playerData.isSelf && !isUnderAudit"
           >
-            <p>This information cannot be viewed at this time. Check back later...</p>
+            <p class="my-4">This information cannot be viewed at this time. Check back later...</p>
           </div>
           <div
             class="wrapper"
@@ -46,22 +46,22 @@
           </div>
         </div>
       </b-col>
-      <b-col cols="8">
-          <h2 class="text-center">Accomplishments</h2>
-        <b-button-group class="w-100">
+      <b-col cols="6">
+        <h2 class="text-center">Accomplishments</h2>
+        <b-button-group class="w-100 mt-2">
           <b-button
             squared
             @click="switchAccomplishmentType('purchasable')"
             :pressed="accomplishmentType === 'purchasable'"
           >
-            Available
+            <h4>Available</h4>
           </b-button>
           <b-button
             squared
             @click="switchAccomplishmentType('purchased')"
             :pressed="accomplishmentType === 'purchased'"
           >
-            Purchased
+            <h4>Purchased</h4>
           </b-button>
         </b-button-group>
         <div class="outer-wrapper">
@@ -69,9 +69,10 @@
             class="unavailable"
             v-if="!playerData.isSelf && !isUnderAudit"
           >
-            <p v-if="accomplishmentType==='purchasable'">This information is currently private and cannot
+            <p class="my-4" v-if="accomplishmentType==='purchasable'">This information is currently
+              private and cannot
               be viewed at this time.</p>
-            <p v-if="accomplishmentType==='purchased'">None</p>
+            <p v-if="accomplishmentType==='purchased'" class="my-4">None</p>
           </div>
           <!-- col: accomplishments -->
           <div
@@ -83,7 +84,7 @@
               :key="accomplishment.id"
               :accomplishment="accomplishment"
               :showDescription="false"
-            />
+            ></AccomplishmentCard>
           </div>
         </div>
       </b-col>
@@ -96,7 +97,8 @@ import {Component, Vue, Prop, Inject} from 'vue-property-decorator';
 import {PlayerInfoModalData} from '@port-of-mars/shared/game/client/modals';
 import {Role, Phase} from '@port-of-mars/shared/types';
 import Inventory from '@port-of-mars/client/components/game/Inventory.vue';
-import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
+import AccomplishmentCard
+  from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {faTimes} from '@fortawesome/free-solid-svg-icons/faTimes';
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';

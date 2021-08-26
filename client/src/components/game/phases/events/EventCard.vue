@@ -5,11 +5,11 @@
     class="p-0 mx-0 overflow-hidden"
     v-if="visible"
     style="border: .125rem solid var(--light-shade)"
+    v-b-modal="'gameModal'"
   >
     <b-row class="w-100 justify-content-center mx-auto p-3"
            style="cursor: pointer; background-color: var(--light-shade)"
            @click="showInfo"
-           v-b-modal="'gameModal'"
     >
       <b-col>
       </b-col>
@@ -88,7 +88,7 @@
         effect: undefined,
       }),
     })
-    private event!: MarsEventData;
+    event!: MarsEventData;
 
     @Prop({default: false})
     visible!: boolean;
@@ -100,9 +100,9 @@
     isModal!: boolean;
 
     //if the modal was spawned by the server, show the option buttons
-    @Prop({default: false}) private wasSpawnedByServer!: boolean;
+    @Prop({default: false}) wasSpawnedByServer!: boolean;
     //determining which type of events require which interactions
-    private eventNoChangeViews: Array<EventClientView> = [
+    eventNoChangeViews: Array<EventClientView> = [
       'NO_CHANGE',
       'AUDIT',
       'DISABLE_CHAT'
@@ -126,14 +126,16 @@
 
     closeModal() {
       this.api.setModalHidden();
+      this.$root.$emit('bv::hide::modal', 'gameModal');
     }
 
     readyUp() {
       this.api.setPlayerReadiness(true);
       this.api.setModalHidden();
+      this.$root.$emit('bv::hide::modal', 'gameModal');
     }
 
-    private showInfo(): void {
+    showInfo(): void {
       this.api.setModalVisible({
         type: 'CardModal',
         data: {

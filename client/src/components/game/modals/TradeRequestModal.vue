@@ -1,55 +1,45 @@
 <template>
-  <div class="c-trade-request-modal tour-trade-request">
-    <div class="wrapper row">
-      <div class="trade-request col-8">
-        <div class="topbar">
-          <p class="title">Request a Trade</p>
-        </div>
-        <div class="outer-wrapper">
-          <div class="wrapper">
-            <TradeRequest />
-          </div>
-        </div>
-      </div>
-      <div class="side-view col-4">
-        <div class="buttons">
-          <button
-            @click="switchView('Active Accomplishments')"
-            :class="selectedView === 'Active Accomplishments' ? 'selected' : ''"
+  <b-container fluid class="h-100 m-0 p-0 tour-trade-request">
+    <b-row class="w-100" align="center">
+      <b-col cols="8">
+        <TradeRequest />
+      </b-col>
+      <b-col cols="4">
+        <b-button-group class="w-100 mb-2">
+          <b-button
+            squared
+            @click="switchView(false)"
+            variant="primary"
+            :pressed="!selectedView"
           >
             Accomplishments
-          </button>
-          <button
-            @click="switchView('Inventory')"
-            :class="selectedView === 'Inventory' ? 'selected' : ''"
+          </b-button>
+          <b-button
+            squared
+            @click="switchView(true)"
+            variant="primary"
+            :pressed="selectedView"
           >
             Inventory
-          </button>
-        </div>
-        <div class="topbar">
-          <p class="title">{{ selectedView }}</p>
-        </div>
-        <div v-if="selectedView === 'Inventory'" class="inventory-wrapper">
-          <div class="inventory">
+          </b-button>
+        </b-button-group>
+        <b-row v-if="selectedView === true" class="inventory-wrapper">
             <Inventory :isSelf="true" />
-          </div>
-        </div>
-        <div
-          v-if="selectedView === 'Active Accomplishments'"
+        </b-row>
+        <b-row
+          v-if="selectedView === false"
           class="accomplishment-cards-wrapper"
         >
-          <div class="accomplishment-cards">
             <AccomplishmentCard
               v-for="accomplishment in activeAccomplishments"
               :key="accomplishment.id"
               :accomplishment="accomplishment"
               :showDescription="false"
             />
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+        </b-row>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script lang="ts">
@@ -70,9 +60,9 @@ import { TutorialAPI } from '../../../api/tutorial/request';
 export default class TradeRequestModal extends Vue {
   @Prop({}) private modalData!: TradeRequestModalData;
   @Inject() readonly api!: TutorialAPI;
-  private selectedView: string = 'Active Accomplishments';
+  selectedView: boolean = false;
 
-  private switchView(view: string) {
+  switchView(view: boolean) {
     this.selectedView = view;
   }
 
@@ -83,5 +73,28 @@ export default class TradeRequestModal extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/modals/TradeRequestModal.scss';
+.inventory-wrapper {
+  flex: 1;
+  width: 100%;
+  overflow-y: hidden;
+}
+
+.inventory {
+  width: 100%;
+  overflow-y: auto;
+}
+
+.accomplishment-cards-wrapper {
+  flex: 1;
+  width: 100%;
+  padding: 0.5rem;
+  background-color: $light-shade-05;
+  overflow-y: auto;
+}
+
+.accomplishment-cards {
+  width: 100%;
+  @include make-column-and-top;
+  overflow-y: auto;
+}
 </style>
