@@ -105,14 +105,14 @@ describe('a game', () => {
     expect(data).toEqual([
       // new round phase lasted 20 seconds between taken state snapshot and entered investment phase
       {phase: Phase.newRound, culture: 0, duration: 20, points: 0},
-      // investment lasted 290 seconds, going from 300 seconds to 10 seconds to enter the trade phase
-      {phase: Phase.invest, culture: 2, duration: 290, points: 0},
+      // investment lasted 80 seconds, going from 90 seconds to 10 seconds to enter the trade phase
+      {phase: Phase.invest, culture: 2, duration: 80, points: 0},
       // trade phase lasts 295 seconds, going from 300 seconds to 5 seconds exiting the trade phase
       {phase: Phase.trade, culture: 2, duration: 295, points: 0},
-      // purchase phase lasts 285 seconds going from 300 seconds to 15 seconds exiting the purchase phase / entering the discard phase
-      {phase: Phase.purchase, culture: 2, duration: 285, points: 5},
-      // discard phase lasts 270 seconds going from 300 seconds to 30 seconds exiting the discard phase (entering the mars event phase again)
-      {phase: Phase.discard, culture: 2, duration: 270, points: 5},
+      // purchase phase lasts 45 seconds going from 60 seconds to 15 seconds exiting the purchase phase / entering the discard phase
+      {phase: Phase.purchase, culture: 2, duration: 45, points: 5},
+      // discard phase lasts 30 seconds going from 60 seconds to 30 seconds exiting the discard phase (entering the mars event phase again)
+      {phase: Phase.discard, culture: 2, duration: 30, points: 5},
       // FIXME: this duration depends on the specific MarsEvent that was persisted, some events may have 10s, others 300s
       // regardless, transition occurs with 5s left in the phase, so should be MarsEvent.duration - 5
       {phase: Phase.events, culture: 2, duration: 5, points: 5},
