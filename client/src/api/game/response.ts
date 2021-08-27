@@ -50,16 +50,17 @@ function applyAccomplishmentResponse(role: Role, accomplishment: any, store: TSt
     store.commit('ADD_TO_PURCHASED_ACCOMPLISHMENTS', {role, data: deschemify(acc)});
   }
   accomplishment.purchased.onRemove = (acc: any, index: number) => {
-    store.commit('REMOVE_FROM_PURCHASED_ACCOMPLISHMENTS', {role, data: deschemify(acc)})
+    store.commit('REMOVE_FROM_PURCHASED_ACCOMPLISHMENTS', {role, data: deschemify(acc)});
   }
 
   accomplishment.purchasable.onAdd = (acc: any, index: number) => {
-    // console.log("Adding to purchasable accomplishments: ", acc);
-    store.commit('ADD_TO_PURCHASABLE_ACCOMPLISHMENTS', {role, data: acc})
+    console.log("Adding to purchasable accomplishments: ", acc);
+    store.commit('ADD_TO_PURCHASABLE_ACCOMPLISHMENTS', {role, data: deschemify(acc)});
   }
+
   accomplishment.purchasable.onRemove = (acc: any, index: number) => {
-    // console.log('removing from purchasable', acc);
-    store.commit('REMOVE_FROM_PURCHASABLE_ACCOMPLISHMENTS', {role, data: acc})
+    console.log('removing from purchasable', acc);
+    store.commit('REMOVE_FROM_PURCHASABLE_ACCOMPLISHMENTS', {role, data: deschemify(acc)});
   }
 }
 
@@ -120,6 +121,10 @@ const REFRESHABLE_WEBSOCKET_ERROR_CODES = [
 export function applyGameServerResponses<T>(room: Room, store: TStore) {
   room.onStateChange.once((state: Schemify<GameData>) => {
     ROLES.forEach((role) => applyPlayerResponses(role, state.players[role], store));
+    // FIXME: needed to bootstrap / synchronize the client side players with the server
+    // but may be causing some initialization / ordering issues
+    // Error: [vuex] expects string as the type but found undefined
+    (state.players as any).triggerAll();
   });
 
   room.onError((code: number, message?: string) => {
@@ -248,7 +253,7 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
       }
       if (change.field === 'winners') {
         const winners: Array<Role> = change.value;
-        store.commit('SET_WINNERS', winners);
+        store.commit('SET_WINNERS', deschemify(winners));
       }
       if (change.field === 'roundIntroduction') {
         const roundIntroduction: RoundIntroductionData = change.value;

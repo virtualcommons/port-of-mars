@@ -3,9 +3,6 @@ import { State } from '@port-of-mars/shared/game/client/state';
 import {AccomplishmentData, Role} from '@port-of-mars/shared/types';
 
 export default {
-  SET_ACTIVE_ACCOMPLISHMENTS(state: State, payload: { data: AccomplishmentData; role: Role }) {
-    state.players[payload.role].accomplishments.purchasable.push(payload.data);
-  },
   DISCARD_ACCOMPLISHMENT(state: State, payload: { id: number; role: Role }) {
     let index = _.findIndex(
       state.players[payload.role].accomplishments.purchasable,

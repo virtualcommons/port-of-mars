@@ -1,120 +1,60 @@
 <template>
-  <!--  <b-container fluid class="h-100 p-0 m-0">-->
-  <!--    <b-form @submit="handleTrade">-->
-  <!--      &lt;!&ndash; select trade partner &ndash;&gt;-->
-  <!--      <b-form-group class="w-100">-->
-  <!--        <b-form-radio-->
-  <!--          inline-->
-  <!--          v-model="tradePartnerName"-->
-  <!--          v-for="player in otherPlayers"-->
-  <!--          :value="player" :key="player"-->
-  <!--          @click="handleChange(player)"-->
-  <!--          button-->
-  <!--          justify="center"-->
-  <!--        >-->
-  <!--          <div-->
-  <!--            class="p-1 mr-3"-->
-  <!--            :style="borderStyle(player)"-->
-  <!--            style="border-radius: 50%; height: 5rem; width: 5rem"-->
-  <!--          >-->
-  <!--            <div class="inner-frame" :style="frameStyle(player)">-->
-  <!--              <img-->
-  <!--                :src="-->
-  <!--                require(`@port-of-mars/client/assets/characters/${player}.png`)-->
-  <!--              "-->
-  <!--                alt="Player"-->
-  <!--              />-->
-  <!--            </div>-->
-  <!--          </div>-->
-  <!--        </b-form-radio>-->
-  <!--      </b-form-group>-->
+    <b-container fluid class="h-100 p-0 m-0">
+      <b-form @submit="handleTrade">
+        <!-- select trade partner -->
+        <b-form-group class="w-100">
+          <b-form-radio-group
+            inline
+            v-model="selectedTradePartner"
+            button
+            justify="center"
+          >
+            <b-form-radio
+              v-for="player in otherPlayers"
+              :value="player"
+              :key="player">
+<!--            <div-->
+<!--              class="p-1 mr-3"-->
+<!--              :style="borderStyle(player)"-->
+<!--              style="border-radius: 50%; height: 5rem; width: 5rem"-->
+<!--            >-->
+<!--              <div class="inner-frame" :style="frameStyle(player)">-->
+<!--                <img-->
+<!--                  :src="-->
+<!--                  require(`@port-of-mars/client/assets/characters/${player}.png`)-->
+<!--                "-->
+<!--                  alt="Player"-->
+<!--                />-->
+<!--              </div>-->
+<!--              -->
+<!--            </div>-->
+            </b-form-radio>
+          </b-form-radio-group>
+        </b-form-group>
 
-  <!--      &lt;!&ndash; request &ndash;&gt;-->
-  <!--      <b-form-group>-->
-  <!--        <TradeOptions-->
-  <!--          :resourceReader="handleReceiveResources"-->
-  <!--          :resources="senderResources"-->
-  <!--          :mode="'incoming'"-->
-  <!--          :text="'Your Request'"-->
-  <!--          class="tour-request-resources"-->
-  <!--        ></TradeOptions>-->
-  <!--      </b-form-group>-->
+        <!-- request -->
+        <b-form-group>
+          <TradeOptions
+            :resourceReader="handleReceiveResources"
+            :resources="senderResources"
+            :mode="'incoming'"
+            :text="'Your Request'"
+            class="tour-request-resources"
+          ></TradeOptions>
+        </b-form-group>
 
-  <!--      &lt;!&ndash; offer &ndash;&gt;-->
-  <!--      <b-form-group>-->
-  <!--        <TradeOptions-->
-  <!--          :resourceReader="handleSendResources"-->
-  <!--          :resources="recipientResources"-->
-  <!--          :mode="'outgoing'"-->
-  <!--          :text="'Your Offer'"-->
-  <!--          class="tour-offer-resources"-->
-  <!--        ></TradeOptions>-->
-  <!--      </b-form-group>-->
-
-  <!--      &lt;!&ndash; send trade request &ndash;&gt;-->
-  <!--      <b-button-->
-  <!--        block-->
-  <!--        pressed-->
-  <!--        type="submit"-->
-  <!--        :disabled="!validateTrade"-->
-  <!--        class="text-center tour-send-trade">-->
-  <!--        <p class="text-bold">Send trade request</p>-->
-  <!--      </b-button>-->
-  <!--    </b-form>-->
-  <!--  </b-container>-->
-  <!-- FIXME: refactor to b-form -->
-  <div class="c-trade-request container tour-trade-request">
-    <p>Trade Partner</p>
-    <div class="player-selection-wrapper row tour-request-trade-partner">
-      <!-- select trade partner -->
-      <div class="player col-3" v-for="player in otherPlayers" :key="player">
-        <button
-          @click="handleChange(player)"
-          class="outer-frame"
-          :style="borderStyle(player)"
-        >
-          <div class="inner-frame" :style="frameStyle(player)">
-            <img
-              :src="
-                require(`@port-of-mars/client/assets/characters/${player}.png`)
-              "
-              alt="Player"
-            />
-          </div>
-        </button>
-        <p>{{ player }}</p>
-      </div>
-    </div>
-
-    <!-- request resources -->
-    <div class="request-wrapper row">
-      <div class="request col-12">
-        <TradeOptions
-          :resourceReader="handleReceiveResources"
-          :resources="senderResources"
-          :mode="'incoming'"
-          :text="'Your Request'"
-          class="tour-request-resources"
-        />
-      </div>
-    </div>
-
-    <!-- offer resources -->
-    <div class="offer-wrapper row">
-      <div class="offer col-12">
-        <TradeOptions
+        <!-- send resources -->
+        <b-form-group>
+          <TradeOptions
           :resourceReader="handleSendResources"
           :resources="recipientResources"
           :mode="'outgoing'"
           :text="'Your Offer'"
           class="tour-offer-resources"
-        />
-      </div>
-    </div>
+        ></TradeOptions>
+        </b-form-group>
 
-    <!-- FIXME: add disable button styling if trade is not valid -->
-    <div class="buttons-wrapper row">
-      <div class="buttons col-12">
+        <!-- send trade -->
         <b-button
           @click="handleTrade"
           :disabled="!validateTrade"
@@ -123,9 +63,8 @@
         >
           Send Trade Request
         </b-button>
-      </div>
-    </div>
-  </div>
+      </b-form>
+    </b-container>
 </template>
 
 <script lang="ts">
@@ -135,7 +74,6 @@ import {ResourceAmountData, Role, TradeAmountData,} from '@port-of-mars/shared/t
 import {isZeroTrade, makeTradeSafe, canPlayerMakeTrade} from '@port-of-mars/shared/validation';
 import {SendTradeRequestData} from "@port-of-mars/shared/game";
 import {AbstractGameAPI} from "@port-of-mars/client/api/game/types";
-
 
 @Component({
   components: {
@@ -155,8 +93,16 @@ export default class TradeRequest extends Vue {
 
   // NOTE :: STATE GETTERS
 
-  get tradePartnerName() {
+  get selectedTradePartner() {
     return this.$tstore.state.ui.tradeData.recipient.role;
+  }
+
+  set selectedTradePartner(value: string) {
+    if (name == this.selectedTradePartner) {
+      this.api.setTradePartnerName('');
+    } else {
+      this.api.setTradePartnerName(name);
+    }
   }
 
   get recipientResources() {
@@ -171,22 +117,14 @@ export default class TradeRequest extends Vue {
     return Object.keys(this.$tstore.getters.otherPlayers);
   }
 
-  handleChange(name: string) {
-    if (name == this.tradePartnerName) {
-      this.api.setTradePartnerName('');
-    } else {
-      this.api.setTradePartnerName(name);
-    }
-  }
-
   validateTrade(): boolean {
     const inventory = this.$tstore.getters.player.inventory;
-    console.log('validate trade: ', this.tradePartnerName != '' &&
+    console.log('validate trade: ', this.selectedTradePartner != '' &&
       canPlayerMakeTrade(this.recipientResources, inventory) &&
       !isZeroTrade(this.recipientResources, this.senderResources));
 
     return (
-      this.tradePartnerName != '' &&
+      this.selectedTradePartner != '' &&
       canPlayerMakeTrade(this.recipientResources, inventory) &&
       !isZeroTrade(this.recipientResources, this.senderResources)
     );
@@ -209,7 +147,7 @@ export default class TradeRequest extends Vue {
         resourceAmount: makeTradeSafe(this.recipientResources),
       };
       const recipientPackage: TradeAmountData = {
-        role: this.tradePartnerName as Role,
+        role: this.selectedTradePartner as Role,
         resourceAmount: makeTradeSafe(this.senderResources),
       };
       const tradeDataPackage: SendTradeRequestData['trade'] = {
@@ -226,19 +164,15 @@ export default class TradeRequest extends Vue {
 
   // NOTE :: STYLES
   borderStyle(role: Role) {
-    return role === this.tradePartnerName
+    return role === this.selectedTradePartner
       ? {border: `0.125rem solid var(--light-accent)`}
       : {border: `0.125rem solid var(--color-${role})`};
   }
 
   frameStyle(role: Role) {
-    return role === this.tradePartnerName
+    return role === this.selectedTradePartner
       ? {backgroundColor: `var(--light-accent)`}
       : {backgroundColor: `var(--color-${role})`};
   }
 }
 </script>
-
-<style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/trade/TradeRequest.scss';
-</style>

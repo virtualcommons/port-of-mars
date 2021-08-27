@@ -26,6 +26,8 @@ const steps: Array<Step> = [
           data: 3,
           role: `Researcher`
         },
+
+        // FIXME: fix mutation
         SET_ACTIVE_ACCOMPLISHMENTS: {
           data: {
             id: 1,

@@ -138,10 +138,10 @@ export default class Investments extends Vue {
       .sort((a: AccomplishmentData, b: AccomplishmentData) => {
         return (
           Number(
-            canPurchaseAccomplishment(b, this.$store.getters.player.inventory)
+            canPurchaseAccomplishment(b, this.$tstore.getters.player.inventory)
           ) -
           Number(
-            canPurchaseAccomplishment(a, this.$store.getters.player.inventory)
+            canPurchaseAccomplishment(a, this.$tstore.getters.player.inventory)
           )
         );
       });

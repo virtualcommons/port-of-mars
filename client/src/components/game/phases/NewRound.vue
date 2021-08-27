@@ -126,7 +126,6 @@ export default class NewRound extends Vue {
 
   get purchases() {
     const purchasedAccomplishments = this.roundIntroduction.accomplishmentPurchases;
-    console.log("purchases: ", purchasedAccomplishments);
     return purchasedAccomplishments;
   }
 

@@ -76,6 +76,7 @@ export interface PlayerClientData extends PlayerData {
   pendingInvestments: InvestmentData;
 }
 
+// FIXME: this will need to change if/when we move to multiple players per role
 export type PlayerClientSet = { [role in Role]: PlayerClientData };
 
 function defaultPlayerClientSet(): PlayerClientSet {
