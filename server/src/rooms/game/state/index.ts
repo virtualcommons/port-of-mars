@@ -1311,13 +1311,23 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
 
   static DEFAULTS = {
     botWarning: false,
-    timeRemaining: 300,
     marsEventsProcessed: 0,
     round: 1,
     phase: Phase.newRound,
     systemHealth: 100,
     heroOrPariah: ''
   };
+
+  static DEFAULT_PHASE_DURATION: Record<Phase, number> = {
+    [Phase.newRound]: 60,
+    [Phase.events]: 90,
+    [Phase.invest]: 90,
+    [Phase.trade]: 300,
+    [Phase.purchase]: 60,
+    [Phase.discard]: 60,
+    [Phase.victory]: 10000,
+    [Phase.defeat]: 10000,
+  }
 
   fromJSON(data: GameSerialized): GameState {
     this.players.fromJSON(data.players);
@@ -1471,7 +1481,7 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
    */
   setUpNewRound(): void {
     this.phase = Phase.newRound;
-    this.timeRemaining = 60;
+    this.timeRemaining = GameState.DEFAULT_PHASE_DURATION[this.phase];
     this.round += 1;
     this.roundIntroduction.setSystemHealthGroupContributions(this.systemHealthContributed());
     this.log(`Round ${this.round} begins.`, MarsLogCategory.newRound);
@@ -1515,7 +1525,7 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
     this.marsEventsProcessed = GameState.DEFAULTS.marsEventsProcessed;
     this.phase = GameState.DEFAULTS.phase;
     this.round = GameState.DEFAULTS.round;
-    this.timeRemaining = GameState.DEFAULTS.timeRemaining;
+    this.timeRemaining = GameState.DEFAULT_PHASE_DURATION[this.phase];
     this.systemHealth = GameState.DEFAULTS.systemHealth;
     this.logs.splice(0, this.logs.length);
     this.marsEvents.splice(0, this.marsEvents.length);

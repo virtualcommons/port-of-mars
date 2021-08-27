@@ -1,5 +1,5 @@
 import { Schema, type } from "@colyseus/schema";
-import { EventClientView, MarsEventData } from "@port-of-mars/shared/types";
+import {EventClientView, MarsEventData, Phase} from "@port-of-mars/shared/types";
 import { GameState } from "@port-of-mars/server/rooms/game/state";
 import { MarsEventState } from "./common";
 import { constructState } from "./state";
@@ -14,7 +14,7 @@ export class MarsEvent extends Schema implements MarsEventData {
     this.clientViewHandler = data.clientViewHandler;
     this.duration = data.duration;
     this.state = constructState(data.id);
-    this.timeDuration = data.timeDuration ?? GameState.DEFAULTS.timeRemaining;
+    this.timeDuration = data.timeDuration ?? GameState.DEFAULT_PHASE_DURATION[Phase.events];
   }
 
   @type('string')
