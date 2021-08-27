@@ -50,10 +50,16 @@ export default class ModalController extends Vue {
     }
   }
 
+  // accomplishemnts not showing up until game force start game over
   get modalData() {
     const data = this.$tstore.state.userInterface.modalView.data;
     if (data) {
       return data;
+    } else {
+      return {
+        title: '',
+        content: '',
+      };
     }
   }
 
