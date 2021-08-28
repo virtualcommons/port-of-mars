@@ -98,10 +98,10 @@ export default class TradeRequest extends Vue {
   }
 
   set selectedTradePartner(value: string) {
-    if (name == this.selectedTradePartner) {
+    if (value == this.selectedTradePartner) {
       this.api.setTradePartnerName('');
     } else {
-      this.api.setTradePartnerName(name);
+      this.api.setTradePartnerName(value);
     }
   }
 

@@ -27,7 +27,8 @@ const steps: Array<Step> = [
           role: `Researcher`
         },
 
-        // FIXME: fix mutation
+	/*
+        FIXME: fix mutation
         SET_ACTIVE_ACCOMPLISHMENTS: {
           data: {
             id: 1,
@@ -45,6 +46,7 @@ const steps: Array<Step> = [
           },
           role: `Researcher`
         }
+       */
       }
     ]
   },

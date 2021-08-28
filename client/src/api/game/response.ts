@@ -252,8 +252,8 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
         store.commit('SET_SYSTEM_HEALTH', systemHealth);
       }
       if (change.field === 'winners') {
-        const winners: Array<Role> = change.value;
-        store.commit('SET_WINNERS', deschemify(winners));
+        const winners: Array<Role> = deschemify(change.value);
+        store.commit('SET_WINNERS', winners);
       }
       if (change.field === 'roundIntroduction') {
         const roundIntroduction: RoundIntroductionData = change.value;
