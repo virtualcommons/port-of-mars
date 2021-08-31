@@ -1,5 +1,6 @@
 import {Room} from 'colyseus.js';
 import {
+  AccomplishmentPurchaseData,
   ChatMessageData,
   GameData,
   MarsEventData,
@@ -9,7 +10,8 @@ import {
   Role,
   ROLES,
   RoundIntroductionData,
-  TradeData
+  SystemHealthMarsEventData,
+  TradeData,
 } from '@port-of-mars/shared/types';
 import {SetError, SetPlayerRole} from '@port-of-mars/shared/game/responses';
 import {DataChange, Schema} from '@colyseus/schema';
@@ -47,19 +49,22 @@ function applyCosts(role: Role, costs: any, store: TStore) {
 
 function applyAccomplishmentResponse(role: Role, accomplishment: any, store: TStore) {
   accomplishment.purchased.onAdd = (acc: any, index: number) => {
-    store.commit('ADD_TO_PURCHASED_ACCOMPLISHMENTS', {role, data: deschemify(acc)});
+    const purchasedAccomplishment = deschemify(acc);
+    console.log("adding to purchased accomplishments: ", purchasedAccomplishment);
+    store.commit('ADD_TO_PURCHASED_ACCOMPLISHMENTS', {role, data: purchasedAccomplishment});
   }
   accomplishment.purchased.onRemove = (acc: any, index: number) => {
-    store.commit('REMOVE_FROM_PURCHASED_ACCOMPLISHMENTS', {role, data: deschemify(acc)});
+    const data = deschemify(acc);
+    console.log("Removing purchased accomplishment: ", data);
+    store.commit('REMOVE_FROM_PURCHASED_ACCOMPLISHMENTS', {role, data});
   }
 
   accomplishment.purchasable.onAdd = (acc: any, index: number) => {
-    console.log("Adding to purchasable accomplishments: ", acc);
-    store.commit('ADD_TO_PURCHASABLE_ACCOMPLISHMENTS', {role, data: deschemify(acc)});
+    const purchasableAccomplishment = deschemify(acc);
+    store.commit('ADD_TO_PURCHASABLE_ACCOMPLISHMENTS', {role, data: purchasableAccomplishment});
   }
 
   accomplishment.purchasable.onRemove = (acc: any, index: number) => {
-    console.log('removing from purchasable', acc);
     store.commit('REMOVE_FROM_PURCHASABLE_ACCOMPLISHMENTS', {role, data: deschemify(acc)});
   }
 }
@@ -100,6 +105,40 @@ function applyPlayerResponses(role: Role, player: any, store: TStore) {
   applyCosts(role, player.costs, store);
 }
 
+function applyRoundIntroduction(roundIntroduction: any, store: TStore) {
+  roundIntroduction.onChange = (changes: Array<DataChange>) => {
+    changes.forEach((change) => {
+      if (! ['systemHealthMarsEvents', 'accomplishmentPurchases', 'completedTrades'].includes(change.field)) {
+        store.commit('SET_ROUND_INTRODUCTION_FIELD', {field: change.field, value: change.value});
+      }
+    });
+  }
+
+  roundIntroduction.systemHealthMarsEvents.onAdd = (e: Schemify<SystemHealthMarsEventData>, index: number) => {
+    store.commit('ADD_TO_ROUND_INTRO_SYSTEM_HEALTH_MARS_EVENTS', deschemify(e));
+  }
+
+  roundIntroduction.systemHealthMarsEvents.onRemove = (e: Schemify<SystemHealthMarsEventData>, index: number) => {
+    store.commit('REMOVE_FROM_ROUND_INTRO_SYSTEM_HEALTH_MARS_EVENTS', deschemify(e));
+  }
+
+  roundIntroduction.accomplishmentPurchases.onAdd = (e: Schemify<AccomplishmentPurchaseData>, index: number) => {
+    store.commit('ADD_TO_ROUND_INTRO_ACCOMPLISHMENT_PURCHASES', deschemify(e));
+  }
+
+  roundIntroduction.accomplishmentPurchases.onRemove = (e: Schemify<AccomplishmentPurchaseData>, index: number) => {
+    store.commit('REMOVE_FROM_ROUND_INTRO_ACCOMPLISHMENT_PURCHASES', deschemify(e));
+  }
+
+  roundIntroduction.completedTrades.onAdd = (e: Schemify<TradeData>, index: number) => {
+    store.commit('ADD_TO_ROUND_INTRO_COMPLETED_TRADES', deschemify(e));
+  }
+
+  roundIntroduction.completedTrades.onRemove = (e: Schemify<TradeData>, index: number) => {
+    store.commit('REMOVE_FROM_ROUND_INTRO_COMPLETED_TRADES', deschemify(e));
+  }
+}
+
 // see https://github.com/Luka967/websocket-close-codes#websocket-close-codes
 // and https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent
 const REFRESHABLE_WEBSOCKET_ERROR_CODES = [
@@ -125,6 +164,8 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
     // but may be causing some initialization / ordering issues
     // Error: [vuex] expects string as the type but found undefined
     (state.players as any).triggerAll();
+    applyRoundIntroduction(state.roundIntroduction, store);
+    (state.roundIntroduction as any).triggerAll();
   });
 
   room.onError((code: number, message?: string) => {
@@ -229,7 +270,7 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
     store.commit('REMOVE_FROM_TRADES', {id});
   };
 
-  room.state.onChange = (changes: Array<any>) => {
+  room.state.onChange = (changes: Array<DataChange>) => {
     changes.forEach((change) => {
       if (change.field === 'phase') {
         const phase: Phase = change.value;
@@ -254,10 +295,6 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
       if (change.field === 'winners') {
         const winners: Array<Role> = deschemify(change.value);
         store.commit('SET_WINNERS', winners);
-      }
-      if (change.field === 'roundIntroduction') {
-        const roundIntroduction: RoundIntroductionData = change.value;
-        store.commit('SET_ROUND_INTRODUCTION', roundIntroduction);
       }
       if (change.field === 'heroOrPariah') {
         const heroOrPariah: 'hero' | 'pariah' = change.value;

@@ -32,6 +32,7 @@ export interface SettingsData {
   isSignUpEnabled: boolean
   // if true, set all checks to true (isVerified, passedQuiz, completed intro and exit surveys), otherwise only bypass isVerified
   skipDevUserChecks: boolean
+  // FIXME: add a free play option to support endless join / play
 }
 
 export class RedisSettings {

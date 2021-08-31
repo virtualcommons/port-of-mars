@@ -42,7 +42,7 @@
                        small striped>
               </b-table>
               <b-table v-if="purchases.length > 0" :fields="purchaseFields" :items="purchases" bordered dark small sticky-header
-                       striped >
+                       striped>
               </b-table>
             </div>
           </b-col>
@@ -125,8 +125,7 @@ export default class NewRound extends Vue {
   }
 
   get purchases() {
-    const purchasedAccomplishments = this.roundIntroduction.accomplishmentPurchases;
-    return purchasedAccomplishments;
+    return this.roundIntroduction.accomplishmentPurchases;
   }
 
   get systemHealthAccomplishmentPurchasesCost() {

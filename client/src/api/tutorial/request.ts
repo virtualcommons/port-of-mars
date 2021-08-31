@@ -200,10 +200,8 @@ export class TutorialAPI implements AbstractGameAPI {
 
   //MODAL HANDLERS
   public setModalVisible(data: any) {
-    if (data.data.activator != 'Server') {
       this.store.commit('SET_MODAL_VISIBLE', data);
       this.completedActionWithImplicitForward();
-    }
   }
 
   public setModalHidden() {

@@ -21,7 +21,11 @@ export default {
   REMOVE_FROM_PURCHASED_ACCOMPLISHMENTS(state: State, payload: { role: Role, data: AccomplishmentData}) {
     const purchased = state.players[payload.role].accomplishments.purchased;
     const index = purchased.findIndex((accomplishment: AccomplishmentData) => accomplishment.id === payload.data.id);
-    purchased.splice(index);
+    if (index === -1) {
+      console.log("Couldn't remove purchased accomplishment: ", payload.data);
+      return;
+    }
+    purchased.splice(index, 1);
   },
 
   ADD_TO_PURCHASABLE_ACCOMPLISHMENTS(state: State, payload: { role: Role, data: AccomplishmentData }) {
@@ -31,6 +35,10 @@ export default {
   REMOVE_FROM_PURCHASABLE_ACCOMPLISHMENTS(state: State, payload: { role: Role, data: AccomplishmentData }) {
     const purchasable = state.players[payload.role].accomplishments.purchasable;
     const index = purchasable.findIndex((accomplishment: AccomplishmentData) => accomplishment.id === payload.data.id);
+    if (index === -1) {
+      console.log("Couldn't remove purchasable accomplishment: ", payload.data);
+      return;
+    }
     purchasable.splice(index, 1);
   }
 };

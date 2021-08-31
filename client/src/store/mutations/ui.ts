@@ -18,11 +18,9 @@ function SET_MODAL_VISIBLE(
 ) {
   state.userInterface.modalView.type = payload.type;
   state.userInterface.modalView.data = payload.data;
-  state.userInterface.modalView.visible = true;
 }
 
 function SET_MODAL_HIDDEN(state: State, payload: any) {
-  state.userInterface.modalView.visible = false;
   state.userInterface.modalView.type = null;
   state.userInterface.modalView.data = null;
 }
