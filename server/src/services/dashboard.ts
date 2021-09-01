@@ -97,9 +97,10 @@ export class DashboardService extends BaseService {
    * Returns true if the player has participated or they do not have an invite (to prevent them from participating again).
    * @param invite Returns
    */
-  canPlayGame(invite: TournamentRoundInvite | undefined): boolean {
+  async canPlayGame(invite: TournamentRoundInvite | undefined): Promise<boolean> {
     if (invite) {
-      return ! invite.hasParticipated;
+      const isFreePlayEnabled = await this.sp.settings.isFreePlayEnabled();
+      return isFreePlayEnabled || invite.hasParticipated;
     }
     return false;
   }
@@ -118,7 +119,7 @@ export class DashboardService extends BaseService {
       mustConsent: this.mustProvideConsent(user),
       mustTakeTutorial: this.mustTakeTutorial(user),
       mustTakeIntroSurvey: this.mustTakeIntroSurvey(invite),
-      canPlayGame: this.canPlayGame(invite),
+      canPlayGame: await this.canPlayGame(invite),
       shouldTakeExitSurvey: this.shouldTakeExitSurvey(invite),
       hasInvite: !_.isUndefined(invite),
     }

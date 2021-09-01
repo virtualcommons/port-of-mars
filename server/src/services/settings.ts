@@ -32,7 +32,8 @@ export interface SettingsData {
   isSignUpEnabled: boolean
   // if true, set all checks to true (isVerified, passedQuiz, completed intro and exit surveys), otherwise only bypass isVerified
   skipDevUserChecks: boolean
-  // FIXME: add a free play option to support endless join / play
+  // enables players to participate as many times as they wish
+  isFreePlayEnabled: boolean
 }
 
 export class RedisSettings {
@@ -66,6 +67,10 @@ export class RedisSettings {
   }
 
   async isSignUpEnabled(): Promise<boolean> {
-    return !!_.toNumber(await this.client.hget('settings', 'isSignUpEnabled'))
+    return !!_.toNumber(await this.client.hget('settings', 'isSignUpEnabled'));
+  }
+
+  async isFreePlayEnabled(): Promise<boolean> {
+    return !!_.toNumber(await this.client.hget('settings', 'isFreePlayEnabled'));
   }
 }
