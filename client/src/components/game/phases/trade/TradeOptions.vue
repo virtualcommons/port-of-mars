@@ -21,7 +21,7 @@
           v-model="resources[resource]"
           v-if="mode === 'outgoing'"
           min="0"
-          max="999"
+          :max="playerInventory[resource]"
           :disabled="playerInventory[resource] === 0 || !hasSelectedPlayer"
           inline
           @change="resourceReader(resources)"

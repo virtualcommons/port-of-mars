@@ -13,25 +13,6 @@ export function canPurchaseAccomplishment(
   return true;
 }
 
-export function canPlayerMakeTrade(
-  resourcesToTrade: ResourceAmountData,
-  inventory: ResourceAmountData
-) {
-  let canMakeTrade = true;
-  let isTradingSomething = false;
-  for (const resource of RESOURCES) {
-    if (resourcesToTrade[resource] > inventory[resource]) {
-      canMakeTrade = false;
-      break;
-    }
-    if (resourcesToTrade[resource] >= 0) {
-      // make sure that at least one resource is being traded
-      isTradingSomething = true;
-    }
-  }
-  return canMakeTrade && isTradingSomething;
-}
-
 //does not allow user to type in blank data
 export function makeTradeSafe(resources: ResourceAmountData) {
   for (const resource of RESOURCES) {
@@ -39,7 +20,6 @@ export function makeTradeSafe(resources: ResourceAmountData) {
       resources[resource] = 0;
     }
   }
-
   return resources;
 }
 
