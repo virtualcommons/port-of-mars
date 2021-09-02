@@ -12,6 +12,8 @@ import { isStagingOrProduction, SENTRY_DSN } from '@port-of-mars/shared/settings
 import App from './App.vue';
 import router from './router';
 import store from './store';
+import {State} from "@port-of-mars/shared/game/client/state";
+import {Howl} from "howler";
 
 Vue.use(Vuex);
 Vue.use(TypedStore);
@@ -20,6 +22,20 @@ Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 
 Vue.config.productionTip = false;
+
+console.log({Howl});
+const chat_sound_notification = new Howl({ src: [require('./assets/sfx/notification/chat.mp3')] });
+console.log({chat_sound_notification});
+
+store.subscribe((mutation, state: State) => {
+  switch (mutation.type) {
+    case 'ADD_TO_CHAT': {
+      console.log('playing chat notification sound');
+      chat_sound_notification.play();
+      break;
+    }
+  }
+});
 
 if (isStagingOrProduction()) {
   Sentry.init({

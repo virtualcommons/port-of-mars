@@ -25,6 +25,7 @@
     "calendar-link": "^2.0.8",
     "colyseus.js": "^0.14.12",
     "core-js": "^3.8.2",
+    "howler": "^2.2.3",
     "jquery": "^3.5.1",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
@@ -44,6 +45,7 @@
   "devDependencies": {
     "@fortawesome/free-brands-svg-icons": "^5.15.1",
     "@types/blessed": "^0.1.17",
+    "@types/howler": "^2.2.4",
     "@types/jest": "^26.0.20",
     "@types/lodash": "^4.14.167",
     "@types/node": "^16.7.1",
