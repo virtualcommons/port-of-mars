@@ -4,7 +4,7 @@
         <p class="mt-2"><b-icon class="mx-2" icon="exclamation-triangle-fill" variant="danger"></b-icon> You are currently accessing a development version of the Port of Mars only used for testing. Go to <a href='https://portofmars.asu.edu'>portofmars.asu.edu</a> for the real deal.</p>
       </b-alert>
       <router-view :key="$route.path" class="bg-login"></router-view>
-<!--      <Footer v-if="!isGameOrTutorial" />-->
+      <Footer v-if="!isGameOrTutorial" />
     </b-container>
 </template>
 

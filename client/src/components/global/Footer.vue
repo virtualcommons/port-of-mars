@@ -63,7 +63,6 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 @Component({})
 export default class Footer extends Vue {
-  footer = false;
   buildId = '';
 
   async mounted() {
