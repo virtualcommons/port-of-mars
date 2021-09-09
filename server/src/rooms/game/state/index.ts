@@ -1594,7 +1594,7 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
   }
 
   apply(event: GameEvent): void {
-    event.apply(this);
+    return event.apply(this);
   }
 
   // REFACTOR: DEFAULT CATEGORY

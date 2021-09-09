@@ -1,3 +1,4 @@
+import { SfxManager } from '@port-of-mars/client/util';
 import { Room } from 'colyseus.js';
 import {
   Requests,
@@ -35,10 +36,12 @@ import { MockRoom } from '@port-of-mars/client/types/tutorial';
 import { TStore } from '@port-of-mars/client/plugins/tstore';
 import {AbstractGameAPI} from "@port-of-mars/client/api/game/types";
 import { defaultPendingInvestment } from '@port-of-mars/shared/game/client/state';
+import {Sfx} from '@port-of-mars/shared/game/responses'
 
 export class GameRequestAPI implements AbstractGameAPI {
   room!: Room | MockRoom;
   private store!: TStore;
+  private sfx!: SfxManager;
 
   public connect(room: Room | MockRoom, store: TStore) {
     this.room = room;
@@ -59,7 +62,6 @@ export class GameRequestAPI implements AbstractGameAPI {
   }
 
   public sendChatMessage(message: string) {
-    // console.log('SEND CHAT MESSAGE: ', message);
     const msg: SendChatMessageData = {
       message,
       kind: 'send-chat-message',
@@ -70,6 +72,10 @@ export class GameRequestAPI implements AbstractGameAPI {
   public setNextPhase() {
     const msg: SetNextPhaseData = { kind: 'set-next-phase' };
     this.send(msg);
+  }
+
+  public setSfxManager(sfxManager: SfxManager) {
+    this.sfx = sfxManager;
   }
 
   public resetGame() {
@@ -91,6 +97,7 @@ export class GameRequestAPI implements AbstractGameAPI {
       id: accomplishment.id,
     };
     this.send(msg);
+    this.sfx.play({kind: "set-sfx", sfx: Sfx.PURCHASE_ACCOMPLISHMENT});
   }
 
   public discardAccomplishment(id: number) {
@@ -99,6 +106,7 @@ export class GameRequestAPI implements AbstractGameAPI {
       id,
     };
     this.send(msg);
+    this.sfx.play({kind: "set-sfx", sfx: Sfx.DISCARD_ACCOMPLISHMENT});
   }
 
   public stageDiscardOfPurchasedAccomplishment(id: number) {
@@ -115,6 +123,7 @@ export class GameRequestAPI implements AbstractGameAPI {
       trade,
     };
     this.send(msg);
+    this.sfx.play({kind: "set-sfx", sfx: Sfx.SEND_TRADE_REQUEST });
   }
 
   public acceptTradeRequest(id: string) {
@@ -147,6 +156,7 @@ export class GameRequestAPI implements AbstractGameAPI {
       value,
     };
     this.send(msg);
+    this.sfx.play({kind: "set-sfx", sfx: Sfx.READY_TO_ADVANCE});
   }
 
   public savePersonalGainVote(vote: boolean) {
