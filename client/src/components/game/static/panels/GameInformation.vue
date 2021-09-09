@@ -86,7 +86,7 @@ export default class GameInformation extends Vue {
     return this.$tstore.state.timeRemaining < 60 ? 'blink-timer' : 'countdown';
   }
 
-  private submitDone() {
+  submitDone() {
     let pendingInvestments;
 
     switch (this.phaseNumber) {
@@ -104,9 +104,10 @@ export default class GameInformation extends Vue {
       default:
         this.api.setPlayerReadiness(true);
     }
+
   }
 
-  private submitCancel() {
+  submitCancel() {
     this.api.setPlayerReadiness(false);
   }
 }

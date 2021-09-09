@@ -12,8 +12,7 @@ import { isStagingOrProduction, SENTRY_DSN } from '@port-of-mars/shared/settings
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import {State} from "@port-of-mars/shared/game/client/state";
-import {Howl} from "howler";
+import {SfxManager} from '@port-of-mars/client/util';
 
 Vue.use(Vuex);
 Vue.use(TypedStore);
@@ -22,20 +21,6 @@ Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 
 Vue.config.productionTip = false;
-
-console.log({Howl});
-const chat_sound_notification = new Howl({ src: [require('./assets/sfx/notification/chat.mp3')] });
-console.log({chat_sound_notification});
-
-store.subscribe((mutation, state: State) => {
-  switch (mutation.type) {
-    case 'ADD_TO_CHAT': {
-      console.log('playing chat notification sound');
-      chat_sound_notification.play();
-      break;
-    }
-  }
-});
 
 if (isStagingOrProduction()) {
   Sentry.init({
@@ -49,12 +34,13 @@ if (isStagingOrProduction()) {
 }
 
 const $client = new Colyseus.Client(process.env.SERVER_URL_WS || undefined);
+const $sfx = new SfxManager();
 
 new Vue({
   router,
   store,
   render: h => h(App),
   provide() {
-    return { $client }
+    return { $client, $sfx }
   }
 }).$mount('#app');

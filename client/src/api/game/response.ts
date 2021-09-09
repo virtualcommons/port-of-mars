@@ -13,7 +13,8 @@ import {
   SystemHealthMarsEventData,
   TradeData,
 } from '@port-of-mars/shared/types';
-import {SetError, SetPlayerRole} from '@port-of-mars/shared/game/responses';
+import {SetError, SetPlayerRole, SetSfx, Sfx} from '@port-of-mars/shared/game/responses';
+import {SfxManager} from '@port-of-mars/client/util';
 import {DataChange, Schema} from '@colyseus/schema';
 import {TStore} from '@port-of-mars/client/plugins/tstore';
 import Mutations from '@port-of-mars/client/store/mutations';
@@ -157,7 +158,8 @@ const REFRESHABLE_WEBSOCKET_ERROR_CODES = [
   1015,
 ];
 
-export function applyGameServerResponses<T>(room: Room, store: TStore) {
+export function applyGameServerResponses<T>(room: Room, store: TStore, sfx: SfxManager) {
+
   room.onStateChange.once((state: Schemify<GameData>) => {
     ROLES.forEach((role) => applyPlayerResponses(role, state.players[role], store));
     // FIXME: needed to bootstrap / synchronize the client side players with the server
@@ -190,6 +192,9 @@ export function applyGameServerResponses<T>(room: Room, store: TStore) {
     }
   });
 
+  room.onMessage('set-sound', (msg: SetSfx) => {
+    sfx.play(msg, 10);
+  });
   room.onMessage('set-player-role', (msg: SetPlayerRole) => {
     store.commit('SET_PLAYER_ROLE', msg.role);
   });

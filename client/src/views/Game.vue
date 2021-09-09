@@ -13,6 +13,7 @@ import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
 import { EnvironmentMode } from '@port-of-mars/client/settings';
 import { url } from '@port-of-mars/client/util';
 import { DASHBOARD_PAGE } from '@port-of-mars/shared/routes';
+import {SfxManager} from '@port-of-mars/client/util';
 
 @Component({
   name: 'game',
@@ -22,12 +23,14 @@ import { DASHBOARD_PAGE } from '@port-of-mars/shared/routes';
 })
 export default class Game extends Vue {
   @Inject() readonly $client!: Client;
+  @Inject() readonly $sfx!: SfxManager;
   @Provide() private api: GameRequestAPI = new GameRequestAPI();
   hasApi: boolean = false;
   env: EnvironmentMode = new EnvironmentMode();
 
   async created() {
     this.api.room?.leave();
+    this.api.setSfxManager(this.$sfx);
     let gameRoom: Room;
     let cachedRoomId = this.$ajax.roomId;
     let roomId: string = '';
@@ -48,7 +51,7 @@ export default class Game extends Vue {
       console.log({ roomId });
       if (roomId) {
         gameRoom = await this.$client.joinById(roomId);
-        applyGameServerResponses(gameRoom, this.$tstore);
+        applyGameServerResponses(gameRoom, this.$tstore, this.$sfx);
         this.api.connect(gameRoom, this.$tstore);
         this.hasApi = true;
         this.$tstore.commit('SET_LAYOUT', 'game');

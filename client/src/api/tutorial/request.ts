@@ -16,6 +16,7 @@ import * as _ from 'lodash';
 import {Store} from 'vuex/types/index';
 import {StateTransform} from '@port-of-mars/client/types/tutorial';
 import {AbstractGameAPI} from "@port-of-mars/client/api/game/types";
+import {SfxManager} from "@port-of-mars/client/util";
 
 export class TutorialAPI implements AbstractGameAPI {
   count: number = 1;
@@ -25,6 +26,7 @@ export class TutorialAPI implements AbstractGameAPI {
   private validationObject: any = {};
   private requiredObject!: StateTransform;
   private forwardButtonRef!: any;
+  private sfxManager!: SfxManager;
 
   //This is used by Tutorial.vue to determine if the user can move forward
   get hasCompletedAction() {
@@ -60,6 +62,10 @@ export class TutorialAPI implements AbstractGameAPI {
   }
 
   saveBreakdownOfTrust(savedResources: InvestmentData): void {
+  }
+
+  setSfxManager(sfx: SfxManager) {
+    this.sfxManager = sfx;
   }
 
   stageDiscardOfPurchasedAccomplishment(id: number) {

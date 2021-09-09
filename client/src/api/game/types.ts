@@ -1,5 +1,7 @@
-import {MockRoom} from "@port-of-mars/client/types/tutorial";
 import {Room} from "colyseus.js";
+import {MockRoom} from "@port-of-mars/client/types/tutorial";
+import {TStore} from "@port-of-mars/client/plugins/tstore";
+import {SfxManager} from "@port-of-mars/client/util";
 import {SendTradeRequestData} from "@port-of-mars/shared/game";
 import {
   AccomplishmentData,
@@ -9,7 +11,6 @@ import {
   Role
 } from "@port-of-mars/shared/types";
 import {ChatMarsLogView, HUDLeftView, HUDRightView} from "@port-of-mars/shared/game/client/panes";
-import {TStore} from "@port-of-mars/client/plugins/tstore";
 
 export interface AbstractGameAPI {
   connect(room: Room | MockRoom, store: TStore): void
@@ -35,6 +36,8 @@ export interface AbstractGameAPI {
   rejectTradeRequest(id: string): void
 
   cancelTradeRequest(id: string): void
+
+  setSfxManager(sfx: SfxManager): void
 
   setPlayerReadiness(value: boolean): void
 
