@@ -17,7 +17,7 @@
       <b-col cols="12">
         <b-form-spinbutton
           v-model="pendingInvestment"
-          :disabled="!canInvest"
+          :disabled="cannotInvest"
           min="0"
           :max="cost > remainingTimeBlocks ? pendingInvestment : 10"
           inline
@@ -31,15 +31,15 @@
           </template>
         </b-form-spinbutton>
       </b-col>
-      <b-col cols="6">
+      <b-col cols="6" class="text-left">
         <!-- pending units -->
         <b-icon-bag-plus scale="1.5"></b-icon-bag-plus>
         <span v-if="pendingUnits > 0" class="mx-2" style="color: green">+ {{ pendingUnits }}</span>
       </b-col>
-      <b-col cols="6">
+      <b-col cols="6" class="text-right">
         <!-- cost -->
         <font-awesome-icon :icon="['fas', 'clock']" size="lg"></font-awesome-icon>
-        <span class="mx-2">{{ canInvest ? cost : "X" }}</span>
+        <span class="mx-2">{{ cannotAfford ? "-" : cost }}</span>
       </b-col>
     </b-row>
   </b-container>
@@ -73,12 +73,12 @@ export default class InvestmentCard extends Vue {
     height: 65
   };
 
-  get canInvest(): boolean {
-    return this.cost < COST_INAFFORDABLE || !this.playerReady;
+  get cannotInvest(): boolean {
+    return COST_INAFFORDABLE == this.cost || this.playerReady;
   }
 
-  get opacity(): object {
-    return this.disabled ? { opacity: "0.5" } : {};
+  get cannotAfford(): boolean {
+    return COST_INAFFORDABLE >= this.cost;
   }
 
   get pendingUnits() {
