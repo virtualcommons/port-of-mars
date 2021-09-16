@@ -1,82 +1,96 @@
 <template>
   <b-row class="h-100 w-100 p-0 m-0 tour-invest-action">
     <!-- invest -->
-      <b-col class="d-flex flex-column h-100 w-100" cols="8"
-             style="border-right: .2rem solid var(--light-shade-25);"
+    <b-col
+      class="d-flex flex-column h-100 w-100"
+      cols="8"
+      style="border-right: .2rem solid var(--light-shade-25);"
+    >
+      <!-- timeblocks header -->
+      <b-row
+        class="h-auto p-3 w-100 align-items-center tour-time-blocks"
+        style="background-color: var(--main-brand); color: var(--dark-shade);"
       >
-        <!-- timeblocks header -->
-        <b-row class="h-auto p-3 w-100 align-items-center tour-time-blocks"
-               style="background-color: var(--main-brand); color: var(--dark-shade);">
-          <p class="mx-2 my-auto p-0">Time Blocks</p>
-          <TimeBlockMeter
-            :totalTimeBlocks="totalTimeBlocks"
-            :usedTimeBlocks="remainingTimeBlocks"
-            class="meter my-auto"
-          />
-          <span class="mx-2 my-auto">{{ remainingTimeBlocks }}
-            <b-icon-clock-fill class="mx-2" scale="1.3"></b-icon-clock-fill>
-          </span>
-        </b-row>
-        <!-- influences -->
-        <b-row class="flex-grow-1 my-2 p-2 w-100 tour-invest"
-               style="background-color: var(--light-shade-05)">
-          <InvestmentCard
-            v-for="cost in costs"
-            :key="cost.name"
-            v-bind="cost"
-            @input="investTimeBlocks"
-          />
-        </b-row>
-      </b-col>
+        <p class="mx-2 my-auto p-0">Time Blocks</p>
+        <TimeBlockMeter
+          :totalTimeBlocks="totalTimeBlocks"
+          :usedTimeBlocks="remainingTimeBlocks"
+          class="meter my-auto"
+        />
+        <span class="mx-2 my-auto"
+          >{{ remainingTimeBlocks }}
+          <b-icon-clock-fill class="mx-2" scale="1.3"></b-icon-clock-fill>
+        </span>
+      </b-row>
+      <!-- influences -->
+      <b-row
+        align-h="around"
+        class="flex-grow-1 my-2 p-4 w-100 tour-invest"
+        style="background-color: var(--light-shade-05)"
+      >
+        <InvestmentCard
+          v-for="cost in costs"
+          :key="cost.name"
+          v-bind="cost"
+          @input="investTimeBlocks"
+          :remainingTimeBlocks="remainingTimeBlocks"
+        />
+      </b-row>
+    </b-col>
     <!-- purchasable accomplishments -->
-      <b-col class="h-100 w-100 d-flex flex-column" cols="4">
-        <!-- header -->
-        <b-row class="h-auto p-3 mx-auto w-100 justify-content-center"
-               style="background-color: var(--main-brand); color: var(--dark-shade);"
+    <b-col class="h-100 w-100 d-flex flex-column" cols="4">
+      <!-- header -->
+      <b-row
+        class="h-auto p-3 mx-auto w-100 justify-content-center"
+        style="background-color: var(--main-brand); color: var(--dark-shade);"
+      >
+        <p class="mx-2 my-auto p-0">Purchasable Accomplishments</p>
+      </b-row>
+      <!-- accomplishments -->
+      <b-row
+        class="flex-grow-1 w-100 mx-auto my-2 p-2"
+        style="background-color: var(--light-shade-05);"
+      >
+        <div
+          class="position-absolute"
+          style="overflow-y: auto;
+               overflow-x: hidden; max-width: 90%; max-height: 80%;"
         >
-          <p class="mx-2 my-auto p-0">Purchasable Accomplishments</p>
-        </b-row>
-        <!-- accomplishments -->
-        <b-row class="flex-grow-1 w-100 mx-auto my-2 p-2"
-               style="background-color: var(--light-shade-05);"
-        >
-          <div class="position-absolute" style="overflow-y: auto;
-               overflow-x: hidden; max-width: 90%; max-height: 80%;">
-            <AccomplishmentCard
-              v-for="accomplishment in purchasableAccomplishments"
-              :key="accomplishment.label + Math.random()"
-              :accomplishment="accomplishment"
-            ></AccomplishmentCard>
-          </div>
-        </b-row>
-      </b-col>
+          <AccomplishmentCard
+            v-for="accomplishment in purchasableAccomplishments"
+            :key="accomplishment.label + Math.random()"
+            :accomplishment="accomplishment"
+          ></AccomplishmentCard>
+        </div>
+      </b-row>
+    </b-col>
   </b-row>
 </template>
 
 <script lang="ts">
-import {Component, Inject, Prop, Vue} from 'vue-property-decorator';
+import { Component, Inject, Prop, Vue } from "vue-property-decorator";
 import {
   AccomplishmentData,
   InvestmentData,
   INVESTMENTS,
   Resource,
   ResourceCostData,
-  Role,
-} from '@port-of-mars/shared/types';
-import {AbstractGameAPI} from '@port-of-mars/client/api/game/types';
-import TimeBlockMeter from './investment/TimeBlockMeter.vue';
-import InvestmentCard from './investment/InvestmentCard.vue';
-import {canPurchaseAccomplishment} from '@port-of-mars/shared/validation';
-import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
-import _ from 'lodash';
-import {PlayerClientData, ROLE_TO_INVESTMENT_DATA} from '@port-of-mars/shared/game/client/state';
+  Role
+} from "@port-of-mars/shared/types";
+import { AbstractGameAPI } from "@port-of-mars/client/api/game/types";
+import TimeBlockMeter from "./investment/TimeBlockMeter.vue";
+import InvestmentCard from "./investment/InvestmentCard.vue";
+import { canPurchaseAccomplishment } from "@port-of-mars/shared/validation";
+import AccomplishmentCard from "@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue";
+import _ from "lodash";
+import { PlayerClientData, ROLE_TO_INVESTMENT_DATA } from "@port-of-mars/shared/game/client/state";
 
 @Component({
   components: {
     TimeBlockMeter,
     InvestmentCard,
-    AccomplishmentCard,
-  },
+    AccomplishmentCard
+  }
 })
 export default class Investments extends Vue {
   @Inject() readonly api!: AbstractGameAPI;
@@ -124,9 +138,11 @@ export default class Investments extends Vue {
     const p = this.$tstore.getters.player;
 
     // get influence costs base on local player's role
-    return ROLE_TO_INVESTMENT_DATA[p.role].map(
-      name => ({name, cost: p.costs[name], pendingInvestment: this.pendingInvestments[name]})
-    );
+    return ROLE_TO_INVESTMENT_DATA[p.role].map(name => ({
+      name,
+      cost: p.costs[name],
+      pendingInvestment: this.pendingInvestments[name]
+    }));
   }
 
   /**
@@ -137,12 +153,8 @@ export default class Investments extends Vue {
       .slice()
       .sort((a: AccomplishmentData, b: AccomplishmentData) => {
         return (
-          Number(
-            canPurchaseAccomplishment(b, this.$tstore.getters.player.inventory)
-          ) -
-          Number(
-            canPurchaseAccomplishment(a, this.$tstore.getters.player.inventory)
-          )
+          Number(canPurchaseAccomplishment(b, this.$tstore.getters.player.inventory)) -
+          Number(canPurchaseAccomplishment(a, this.$tstore.getters.player.inventory))
         );
       });
   }
@@ -185,8 +197,7 @@ export default class Investments extends Vue {
       timeBlocks -
       _.reduce(
         INVESTMENTS,
-        (tot, investment) =>
-          tot + pendingInvestments[investment] * costs[investment],
+        (tot, investment) => tot + pendingInvestments[investment] * costs[investment],
         0
       )
     );
@@ -196,18 +207,14 @@ export default class Investments extends Vue {
    * Invest time blocks into a resource.
    * @param investment Time block investment into a resource.
    */
-  investTimeBlocks(investment: {
-    name: Resource;
-    units: number;
-    cost: number;
-  }) {
+  investTimeBlocks(investment: { name: Resource; units: number; cost: number }) {
     const pendingInvestments = _.clone(this.pendingInvestments);
     pendingInvestments[investment.name] = investment.units;
     if (investment.units >= 0 && this.calculateRemainingTimeBlocks(pendingInvestments) >= 0) {
       const data = {
         investment: investment.name,
         units: investment.units,
-        role: this.$tstore.state.role,
+        role: this.$tstore.state.role
       };
       this.api.investPendingTimeBlocks(data);
     }
@@ -222,6 +229,6 @@ export default class Investments extends Vue {
 }
 
 .partition {
-  border-right: .2rem solid $light-shade-25;
+  border-right: 0.2rem solid $light-shade-25;
 }
 </style>
