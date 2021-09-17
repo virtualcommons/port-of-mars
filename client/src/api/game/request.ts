@@ -158,7 +158,11 @@ export class GameRequestAPI implements AbstractGameAPI {
       value
     };
     this.send(msg);
-    this.sfx.play({ kind: "set-sfx", sfx: Sfx.READY_TO_ADVANCE });
+    if (value) {
+      this.sfx.play({ kind: "set-sfx", sfx: Sfx.READY_TO_ADVANCE });
+    } else {
+      this.sfx.play({ kind: "set-sfx", sfx: Sfx.CANCEL_READY_TO_ADVANCE });
+    }
   }
 
   public savePersonalGainVote(vote: boolean) {
