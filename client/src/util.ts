@@ -1,5 +1,6 @@
 import { SetSfx } from '@port-of-mars/shared/game/responses';
 import {Sfx, SOUND_PREFIX_URI} from '@port-of-mars/shared/game/responses.ts';
+import { timeStamp } from 'console';
 import {Howl} from 'howler';
 
 
@@ -33,11 +34,12 @@ export class SfxCache {
 
 export class SfxManager {
   activeSfx: Howl | null;
-  activeSoundId: number;
+  activeSoundId: number | null;
   private cache: SfxCache;
 
   constructor() {
     this.cache = new SfxCache();
+    this.activeSoundId = null;
   }
 
   public play(sound: SetSfx, volume: number = 1.0) {
