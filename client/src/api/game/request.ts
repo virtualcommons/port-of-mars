@@ -252,7 +252,17 @@ export class GameRequestAPI implements AbstractGameAPI {
 
   public setHUDLeftView(view: HUDLeftView) {
     this.store.commit("SET_HUDLEFT_VIEW", view);
-    this.sfx.play({ kind: "set-sfx", sfx: Sfx.CLICK });
+    switch (view) {
+      case HUDLeftView.OtherPlayers:
+        this.sfx.play({ kind: "set-sfx", sfx: Sfx.TOGGLE_OTHER_PLAYERS });
+        break;
+      case HUDLeftView.Accomplishments:
+        this.sfx.play({ kind: "set-sfx", sfx: Sfx.TOGGLE_ACCOMPLISHMENTS });
+        break;
+      case HUDLeftView.Inventory:
+        this.sfx.play({ kind: "set-sfx", sfx: Sfx.TOGGLE_INVENTORY });
+        break;
+    }
   }
 
   public setHUDRightView(view: HUDRightView) {
