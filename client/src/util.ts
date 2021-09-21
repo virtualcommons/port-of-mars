@@ -1,21 +1,21 @@
-import { SetSfx } from '@port-of-mars/shared/game/responses';
-import {Sfx, SOUND_PREFIX_URI} from '@port-of-mars/shared/game/responses.ts';
-import { timeStamp } from 'console';
-import {Howl} from 'howler';
-
+import { SetSfx } from "@port-of-mars/shared/game/responses";
+import { Sfx } from "@port-of-mars/shared/game/responses";
+import { Howl } from "howler";
 
 export function url(path: string) {
   // workaround to connect to localhost:2567 server endpoints
-  return `${process.env.SERVER_URL_HTTP}${path}`
+  return `${process.env.SERVER_URL_HTTP}${path}`;
 }
 
 export class SfxCache {
   cache: Record<string, Howl>;
 
   constructor() {
-    this.cache = {}
-    for (const [name, relpath] of Object.entries(Sfx)) { 
-      this.cache[relpath] = new Howl({ src: require(`@port-of-mars/client/assets/sfx/${relpath}`) })
+    this.cache = {};
+    for (const [name, relpath] of Object.entries(Sfx)) {
+      this.cache[relpath] = new Howl({
+        src: require(`@port-of-mars/client/assets/sfx/${relpath}`)
+      });
     }
   }
 
@@ -38,6 +38,7 @@ export class SfxManager {
   private cache: SfxCache;
 
   constructor() {
+    this.activeSfx = null;
     this.cache = new SfxCache();
     this.activeSoundId = null;
   }
@@ -46,10 +47,11 @@ export class SfxManager {
     if (this.activeSfx?.playing()) {
       this.activeSfx.stop();
     }
-    this.activeSfx = this.cache.getSound(sound.sfx);
-    this.activeSfx.on('end', () => {this.activeSfx = null;});
+    this.activeSfx = this.cache.getSound(sound.sfx as Sfx);
+    this.activeSfx.on("end", () => {
+      this.activeSfx = null;
+    });
     this.activeSfx.volume(volume);
     this.activeSoundId = this.activeSfx.play();
-
   }
 }
