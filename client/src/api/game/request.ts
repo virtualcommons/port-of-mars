@@ -1,4 +1,5 @@
 import { SfxManager } from "@port-of-mars/client/util";
+import { Sfx } from "@port-of-mars/shared/game/responses";
 import { Room } from "colyseus.js";
 import {
   Requests,
@@ -25,7 +26,6 @@ import {
 import {
   AccomplishmentData,
   InvestmentData,
-  TradeData,
   Role,
   Resource,
   ResourceAmountData
@@ -35,7 +35,6 @@ import { MockRoom } from "@port-of-mars/client/types/tutorial";
 import { TStore } from "@port-of-mars/client/plugins/tstore";
 import { AbstractGameAPI } from "@port-of-mars/client/api/game/types";
 import { defaultPendingInvestment } from "@port-of-mars/shared/game/client/state";
-import { Sfx } from "@port-of-mars/shared/game/responses";
 
 export class GameRequestAPI implements AbstractGameAPI {
   room!: Room | MockRoom;

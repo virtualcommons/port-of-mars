@@ -1,4 +1,5 @@
-import { ArraySchema, MapSchema, Schema, type } from '@colyseus/schema';
+import { Responses } from "@port-of-mars/shared/game/responses";
+import { ArraySchema, MapSchema, Schema, type } from "@colyseus/schema";
 import {
   AccomplishmentData,
   AccomplishmentSetData,
@@ -34,20 +35,24 @@ import {
   AccomplishmentPurchaseData,
   INVESTMENTS,
   INVESTMENT_LABELS,
-  SystemHealthMarsEventData
-} from '@port-of-mars/shared/types';
-import _ from 'lodash';
-import * as assert from 'assert';
+  SystemHealthMarsEventData,
+} from "@port-of-mars/shared/types";
+import _ from "lodash";
+import * as assert from "assert";
 import {
   getAccomplishmentByID,
-  getAccomplishmentIDs
-} from '@port-of-mars/server/data/Accomplishment';
-import {COST_INAFFORDABLE, isProduction, SYSTEM_HEALTH_MAINTENANCE_COST} from '@port-of-mars/shared/settings';
-import { settings } from '@port-of-mars/server/settings';
-import { GameEvent } from '@port-of-mars/server/rooms/game/events/types';
-import { GameOpts, GameStateOpts } from '@port-of-mars/server/rooms/game/types';
-import MarsEventsDeck from '@port-of-mars/server/rooms/game/state/marsevents/MarsEventDeck';
-import { MarsEvent } from '@port-of-mars/server/rooms/game/state/marsevents/MarsEvent';
+  getAccomplishmentIDs,
+} from "@port-of-mars/server/data/Accomplishment";
+import {
+  COST_INAFFORDABLE,
+  isProduction,
+  SYSTEM_HEALTH_MAINTENANCE_COST,
+} from "@port-of-mars/shared/settings";
+import { settings } from "@port-of-mars/server/settings";
+import { GameEvent } from "@port-of-mars/server/rooms/game/events/types";
+import { GameOpts, GameStateOpts } from "@port-of-mars/server/rooms/game/types";
+import MarsEventsDeck from "@port-of-mars/server/rooms/game/state/marsevents/MarsEventDeck";
+import { MarsEvent } from "@port-of-mars/server/rooms/game/state/marsevents/MarsEvent";
 import { SimpleBot } from "@port-of-mars/server/rooms/game/state/bot";
 
 const logger = settings.logging.getLogger(__filename);
@@ -72,23 +77,23 @@ class ResourceInventory extends Schema implements ResourceAmountData {
       finance: this.finance,
       government: this.government,
       legacy: this.legacy,
-      science: this.science
+      science: this.science,
     };
   }
 
-  @type('number')
+  @type("number")
   culture: number;
 
-  @type('number')
+  @type("number")
   finance: number;
 
-  @type('number')
+  @type("number")
   government: number;
 
-  @type('number')
+  @type("number")
   legacy: number;
 
-  @type('number')
+  @type("number")
   science: number;
 
   canAfford(inventory: ResourceAmountData): boolean {
@@ -130,18 +135,21 @@ export class TradeAmount extends Schema {
   toJSON(): TradeAmountData {
     return {
       role: this.role,
-      resourceAmount: this.resourceAmount
+      resourceAmount: this.resourceAmount,
     };
   }
 
-  @type('string')
+  @type("string")
   role: Role;
 
   @type(ResourceInventory)
   resourceAmount: ResourceInventory;
 }
 
-export class AccomplishmentPurchase extends Schema implements AccomplishmentPurchaseData {
+export class AccomplishmentPurchase
+  extends Schema
+  implements AccomplishmentPurchaseData
+{
   constructor(data: AccomplishmentPurchaseData) {
     super();
     this.name = data.name;
@@ -149,22 +157,27 @@ export class AccomplishmentPurchase extends Schema implements AccomplishmentPurc
   }
 
   toJSON(): AccomplishmentPurchaseData {
-    return {name: this.name, victoryPoints: this.victoryPoints};
+    return { name: this.name, victoryPoints: this.victoryPoints };
   }
 
   fromJSON(data: AccomplishmentPurchaseData): void {
     Object.assign(this, data);
   }
 
-  @type('string')
+  @type("string")
   name: string;
 
-  @type('number')
+  @type("number")
   victoryPoints: number;
 }
 
 export class Trade extends Schema implements TradeData<TradeAmount> {
-  constructor(id: string, sender: TradeAmountData, recipient: TradeAmountData, status: TradeStatus) {
+  constructor(
+    id: string,
+    sender: TradeAmountData,
+    recipient: TradeAmountData,
+    status: TradeStatus
+  ) {
     super();
     this.id = id;
     this.sender = new TradeAmount(sender.role, sender.resourceAmount);
@@ -184,11 +197,11 @@ export class Trade extends Schema implements TradeData<TradeAmount> {
       id: this.id,
       sender: this.sender.toJSON(),
       recipient: this.recipient.toJSON(),
-      status: this.status
+      status: this.status,
     };
   }
 
-  @type('string')
+  @type("string")
   id: string;
 
   @type(TradeAmount)
@@ -197,29 +210,32 @@ export class Trade extends Schema implements TradeData<TradeAmount> {
   @type(TradeAmount)
   recipient: TradeAmount;
 
-  @type('string')
-  status: TradeStatus
+  @type("string")
+  status: TradeStatus;
 
   apply(state: GameState): void {
     const pFrom = state.players[this.sender.role];
     const pTo = state.players[this.recipient.role];
 
-    pFrom.inventory.add(_.mapValues(this.sender.resourceAmount, r => -r!));
+    pFrom.inventory.add(_.mapValues(this.sender.resourceAmount, (r) => -r!));
     pFrom.inventory.add(this.recipient.resourceAmount);
     //pFrom.pendingInvestments.rollback({...this.from.resourceAmount,systemHealth:0});
 
-    pTo.inventory.add(_.mapValues(this.recipient.resourceAmount, r => -r!));
+    pTo.inventory.add(_.mapValues(this.recipient.resourceAmount, (r) => -r!));
     pTo.inventory.add(this.sender.resourceAmount);
 
-    this.status = 'Accepted';
+    this.status = "Accepted";
   }
 }
 
-export class SystemHealthMarsEvent extends Schema implements SystemHealthMarsEventData {
-  @type('string')
+export class SystemHealthMarsEvent
+  extends Schema
+  implements SystemHealthMarsEventData
+{
+  @type("string")
   label: string;
 
-  @type('number')
+  @type("number")
   systemHealthModification: number;
 
   constructor(data: SystemHealthMarsEventData) {
@@ -236,13 +252,16 @@ export class SystemHealthMarsEvent extends Schema implements SystemHealthMarsEve
   toJSON(): SystemHealthMarsEventData {
     return {
       label: this.label,
-      systemHealthModification: this.systemHealthModification
+      systemHealthModification: this.systemHealthModification,
     };
   }
-
 }
 
-export class RoundIntroduction extends Schema implements RoundIntroductionData<SystemHealthMarsEvent, AccomplishmentPurchase, Trade> {
+export class RoundIntroduction
+  extends Schema
+  implements
+    RoundIntroductionData<SystemHealthMarsEvent, AccomplishmentPurchase, Trade>
+{
   constructor() {
     super();
   }
@@ -250,29 +269,49 @@ export class RoundIntroduction extends Schema implements RoundIntroductionData<S
   fromJSON(data: RoundIntroductionData): void {
     this.systemHealthMaintenanceCost = data.systemHealthMaintenanceCost;
     this.systemHealthGroupContributions = data.systemHealthGroupContributions;
-    this.systemHealthMarsEvents.splice(0, this.systemHealthMarsEvents.length, ...data.systemHealthMarsEvents.map(d => new SystemHealthMarsEvent(d)));
-    this.accomplishmentPurchases.splice(0, this.accomplishmentPurchases.length, ...data.accomplishmentPurchases.map(ap => new AccomplishmentPurchase(ap)));
-    this.completedTrades.splice(0, this.completedTrades.length, ...data.completedTrades.map(ct => new Trade(ct.id, ct.sender, ct.recipient, ct.status)));
+    this.systemHealthMarsEvents.splice(
+      0,
+      this.systemHealthMarsEvents.length,
+      ...data.systemHealthMarsEvents.map((d) => new SystemHealthMarsEvent(d))
+    );
+    this.accomplishmentPurchases.splice(
+      0,
+      this.accomplishmentPurchases.length,
+      ...data.accomplishmentPurchases.map(
+        (ap) => new AccomplishmentPurchase(ap)
+      )
+    );
+    this.completedTrades.splice(
+      0,
+      this.completedTrades.length,
+      ...data.completedTrades.map(
+        (ct) => new Trade(ct.id, ct.sender, ct.recipient, ct.status)
+      )
+    );
   }
 
   toJSON(): RoundIntroductionData {
     return {
       systemHealthGroupContributions: this.systemHealthGroupContributions,
       systemHealthAtStartOfRound: this.systemHealthAtStartOfRound,
-      systemHealthMarsEvents: this.systemHealthMarsEvents.map(e => e.toJSON()),
+      systemHealthMarsEvents: this.systemHealthMarsEvents.map((e) =>
+        e.toJSON()
+      ),
       systemHealthMaintenanceCost: this.systemHealthMaintenanceCost,
-      accomplishmentPurchases: this.accomplishmentPurchases.map(ap => ap.toJSON()),
-      completedTrades: this.completedTrades.map(ct => ct.toJSON())
-    }
+      accomplishmentPurchases: this.accomplishmentPurchases.map((ap) =>
+        ap.toJSON()
+      ),
+      completedTrades: this.completedTrades.map((ct) => ct.toJSON()),
+    };
   }
 
-  @type('number')
+  @type("number")
   systemHealthMaintenanceCost = -SYSTEM_HEALTH_MAINTENANCE_COST;
 
-  @type('number')
+  @type("number")
   systemHealthGroupContributions = 0;
 
-  @type('number')
+  @type("number")
   systemHealthAtStartOfRound = 100;
 
   @type([SystemHealthMarsEvent])
@@ -307,7 +346,7 @@ export class RoundIntroduction extends Schema implements RoundIntroductionData<S
 
   /**
    * Invoked at the time that wear and tear is calculated and applied to the system health, currently at the end of each round.
-   * @param systemHealthAtStartOfRound 
+   * @param systemHealthAtStartOfRound
    */
   initialize(systemHealthAtStartOfRound: number): void {
     this.systemHealthGroupContributions = 0;
@@ -336,25 +375,24 @@ export class ChatMessage extends Schema implements ChatMessageData {
       role: this.role,
       message: this.message,
       dateCreated: this.dateCreated,
-      round: this.round
+      round: this.round,
     };
   }
 
-  @type('string')
+  @type("string")
   role: string;
 
-  @type('string')
+  @type("string")
   message: string;
 
-  @type('number')
+  @type("number")
   dateCreated: number;
 
-  @type('number')
+  @type("number")
   round: number;
 }
 
 class PendingInvestment implements InvestmentData {
-
   culture: number;
   finance: number;
   government: number;
@@ -379,7 +417,7 @@ class PendingInvestment implements InvestmentData {
       government: 0,
       legacy: 0,
       science: 0,
-      systemHealth: 0
+      systemHealth: 0,
     };
   }
 
@@ -398,7 +436,7 @@ class PendingInvestment implements InvestmentData {
       government: this.government,
       legacy: this.legacy,
       science: this.science,
-      systemHealth: this.systemHealth
+      systemHealth: this.systemHealth,
     };
   }
 
@@ -454,22 +492,22 @@ export class MarsLogMessage extends Schema implements MarsLogMessageData {
     };
   }
 
-  @type('number')
+  @type("number")
   round: number;
 
-  @type('string')
+  @type("string")
   performedBy: Role | ServerRole;
 
-  @type('string')
+  @type("string")
   category: string;
 
-  @type('string')
+  @type("string")
   content: string;
 
-  @type('number')
+  @type("number")
   timestamp: number;
 
-  @type('number')
+  @type("number")
   id: number;
 }
 
@@ -495,63 +533,63 @@ class ResourceCosts extends Schema implements ResourceCostData {
       government: this.government,
       legacy: this.legacy,
       science: this.science,
-      systemHealth: this.systemHealth
+      systemHealth: this.systemHealth,
     };
   }
 
   static getCosts(role: Role): ResourceCostData {
-      switch (role) {
-        case CURATOR:
-          return {
-            culture: 2,
-            finance: 3,
-            government: COST_INAFFORDABLE,
-            legacy: 3,
-            science: COST_INAFFORDABLE,
-            systemHealth: 1
-            // specialty: 'culture'
-          };
-        case ENTREPRENEUR:
-          return {
-            culture: 3,
-            finance: 2,
-            government: 3,
-            legacy: COST_INAFFORDABLE,
-            science: COST_INAFFORDABLE,
-            systemHealth: 1
-            // specialty: 'finance'
-          };
-        case PIONEER:
-          return {
-            culture: 3,
-            finance: COST_INAFFORDABLE,
-            government: COST_INAFFORDABLE,
-            legacy: 2,
-            science: 3,
-            systemHealth: 1
-            // specialty: 'legacy'
-          };
-        case POLITICIAN:
-          return {
-            culture: COST_INAFFORDABLE,
-            finance: 3,
-            government: 2,
-            legacy: COST_INAFFORDABLE,
-            science: 3,
-            systemHealth: 1
-            // specialty: 'government'
-          };
-        case RESEARCHER:
-          return {
-            culture: COST_INAFFORDABLE,
-            finance: COST_INAFFORDABLE,
-            government: 3,
-            legacy: 3,
-            science: 2,
-            systemHealth: 1
-            // specialty: 'science'
-          };
-      }
+    switch (role) {
+      case CURATOR:
+        return {
+          culture: 2,
+          finance: 3,
+          government: COST_INAFFORDABLE,
+          legacy: 3,
+          science: COST_INAFFORDABLE,
+          systemHealth: 1,
+          // specialty: 'culture'
+        };
+      case ENTREPRENEUR:
+        return {
+          culture: 3,
+          finance: 2,
+          government: 3,
+          legacy: COST_INAFFORDABLE,
+          science: COST_INAFFORDABLE,
+          systemHealth: 1,
+          // specialty: 'finance'
+        };
+      case PIONEER:
+        return {
+          culture: 3,
+          finance: COST_INAFFORDABLE,
+          government: COST_INAFFORDABLE,
+          legacy: 2,
+          science: 3,
+          systemHealth: 1,
+          // specialty: 'legacy'
+        };
+      case POLITICIAN:
+        return {
+          culture: COST_INAFFORDABLE,
+          finance: 3,
+          government: 2,
+          legacy: COST_INAFFORDABLE,
+          science: 3,
+          systemHealth: 1,
+          // specialty: 'government'
+        };
+      case RESEARCHER:
+        return {
+          culture: COST_INAFFORDABLE,
+          finance: COST_INAFFORDABLE,
+          government: 3,
+          legacy: 3,
+          science: 2,
+          systemHealth: 1,
+          // specialty: 'science'
+        };
+    }
   }
 
   static senderRole(role: Role): ResourceCosts {
@@ -561,44 +599,44 @@ class ResourceCosts extends Schema implements ResourceCostData {
   static getSpecialty(role: Role): Resource {
     switch (role) {
       case CURATOR:
-        return 'culture';
+        return "culture";
       case ENTREPRENEUR:
-        return 'finance';
+        return "finance";
       case PIONEER:
-        return 'legacy';
+        return "legacy";
       case POLITICIAN:
-        return 'government';
+        return "government";
       case RESEARCHER:
-        return 'science';
+        return "science";
     }
   }
 
-  @type('number')
+  @type("number")
   culture: number;
 
-  @type('number')
+  @type("number")
   finance: number;
 
-  @type('number')
+  @type("number")
   government: number;
 
-  @type('number')
+  @type("number")
   legacy: number;
 
-  @type('number')
+  @type("number")
   science: number;
 
-  @type('number')
+  @type("number")
   systemHealth: number;
 
   investmentWithinBudget(investment: InvestmentData, budget: number) {
     return (
       this.culture * investment.culture +
-      this.finance * investment.finance +
-      this.government * investment.government +
-      this.legacy * investment.legacy +
-      this.science * investment.science +
-      this.systemHealth * investment.systemHealth <=
+        this.finance * investment.finance +
+        this.government * investment.government +
+        this.legacy * investment.legacy +
+        this.science * investment.science +
+        this.systemHealth * investment.systemHealth <=
       budget
     );
   }
@@ -629,44 +667,44 @@ export class Accomplishment extends Schema implements AccomplishmentData {
     return JSON.stringify(super.toJSON());
   }
 
-  toJSON(): { role: Role, id: number } {
+  toJSON(): { role: Role; id: number } {
     return { role: this.role, id: this.id };
   }
 
-  @type('number')
+  @type("number")
   id: number;
 
-  @type('string')
+  @type("string")
   role: Role;
 
-  @type('string')
+  @type("string")
   label: string;
 
-  @type('string')
+  @type("string")
   flavorText: string;
 
-  @type('number')
+  @type("number")
   science: number;
 
-  @type('number')
+  @type("number")
   government: number;
 
-  @type('number')
+  @type("number")
   legacy: number;
 
-  @type('number')
+  @type("number")
   finance: number;
 
-  @type('number')
+  @type("number")
   culture: number;
 
-  @type('number')
+  @type("number")
   systemHealth: number;
 
-  @type('number')
+  @type("number")
   victoryPoints: number;
 
-  @type('string')
+  @type("string")
   effect: string;
 }
 
@@ -677,7 +715,10 @@ interface AccomplishmentSetSerialized {
   remaining: Array<number>;
 }
 
-export class AccomplishmentSet extends Schema implements AccomplishmentSetData<Accomplishment> {
+export class AccomplishmentSet
+  extends Schema
+  implements AccomplishmentSetData<Accomplishment>
+{
   constructor(role: Role) {
     super();
     this.role = role;
@@ -686,7 +727,7 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData<A
     const purchasableInds: Array<number> = deck.slice(0, 3);
     this.purchasable = new ArraySchema<Accomplishment>(
       ...purchasableInds.map(
-        id => new Accomplishment(getAccomplishmentByID(role, id))
+        (id) => new Accomplishment(getAccomplishmentByID(role, id))
       )
     );
     this.deck = deck.slice(3);
@@ -695,25 +736,25 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData<A
   fromJSON(data: AccomplishmentSetSerialized): void {
     this.role = data.role;
     const purchased = data.purchased.map(
-      _id => new Accomplishment(getAccomplishmentByID(this.role, _id))
+      (_id) => new Accomplishment(getAccomplishmentByID(this.role, _id))
     );
     const purchasable = data.purchasable.map(
-      _id => new Accomplishment(getAccomplishmentByID(this.role, _id))
+      (_id) => new Accomplishment(getAccomplishmentByID(this.role, _id))
     );
     this.purchased.splice(0, this.purchased.length, ...purchased);
     // this.purchasable.splice(0, this.purchasable.length, ...purchasable);
     this.purchasable.splice(0, this.purchasable.length);
-    purchasable.forEach(p => this.purchasable.push(p));
+    purchasable.forEach((p) => this.purchasable.push(p));
 
     this.deck = _.cloneDeep(data.remaining);
   }
 
   toJSON(): AccomplishmentSetSerialized {
     return {
-      purchased: _.map(this.purchased, x => x.id),
-      purchasable: _.map(this.purchasable, x => x.id),
+      purchased: _.map(this.purchased, (x) => x.id),
+      purchasable: _.map(this.purchasable, (x) => x.id),
       remaining: this.deck,
-      role: this.role
+      role: this.role,
     };
   }
 
@@ -738,8 +779,8 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData<A
   }
 
   discardPurchased(id: number): void {
-    const ind = this.purchased.findIndex(acc => acc.id === id);
-    logger.info('Discarding purchase %d %d %o', ind, id, this.purchased);
+    const ind = this.purchased.findIndex((acc) => acc.id === id);
+    logger.info("Discarding purchase %d %d %o", ind, id, this.purchased);
     if (ind >= 0) {
       this.purchased.splice(ind, 1);
     }
@@ -771,7 +812,7 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData<A
     }
     assert.ok(
       this.purchasable.length <= 3,
-      'Should never have more than 3 cards'
+      "Should never have more than 3 cards"
     );
   }
 
@@ -788,7 +829,7 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData<A
   }
 
   isPurchasable(accomplishment: AccomplishmentData): Accomplishment {
-    return this.purchasable.find(a => a.id === accomplishment.id)!;
+    return this.purchasable.find((a) => a.id === accomplishment.id)!;
   }
 }
 
@@ -818,7 +859,10 @@ export interface Bot {
   act(state: GameState, player: Player): Array<GameEvent>;
 }
 
-export class PurchasedSystemHealth extends Schema implements PurchasedSystemHealthData {
+export class PurchasedSystemHealth
+  extends Schema
+  implements PurchasedSystemHealthData
+{
   constructor(data: PurchasedSystemHealthData) {
     super();
     this.description = data.description;
@@ -833,30 +877,40 @@ export class PurchasedSystemHealth extends Schema implements PurchasedSystemHeal
   toJSON(): PurchasedSystemHealthData {
     return {
       description: this.description,
-      systemHealth: this.systemHealth
-    }
+      systemHealth: this.systemHealth,
+    };
   }
 
-  @type('string')
+  @type("string")
   description: string;
 
-  @type('number')
+  @type("number")
   systemHealth: number;
 }
 
 /**
  * Maintained to display the system health report state at the beginning of a round on the client
  */
-export class SystemHealthChanges extends Schema implements SystemHealthChangesData<PurchasedSystemHealth> {
+export class SystemHealthChanges
+  extends Schema
+  implements SystemHealthChangesData<PurchasedSystemHealth>
+{
   fromJSON(data: SystemHealthChangesData): void {
     this.investment = data.investment;
-    this.purchases.splice(this.purchases.length, 0, ...data.purchases.map(p => new PurchasedSystemHealth(p)));
+    this.purchases.splice(
+      this.purchases.length,
+      0,
+      ...data.purchases.map((p) => new PurchasedSystemHealth(p))
+    );
   }
 
   toJSON(): SystemHealthChangesData {
     return {
       investment: this.investment,
-      purchases: this.purchases.map(p => ({ description: p.description, systemHealth: p.systemHealth }))
+      purchases: this.purchases.map((p) => ({
+        description: p.description,
+        systemHealth: p.systemHealth,
+      })),
     };
   }
 
@@ -877,14 +931,18 @@ export class SystemHealthChanges extends Schema implements SystemHealthChangesDa
     return netSystemChange;
   }
 
-  @type('number')
+  @type("number")
   investment = 0;
 
   @type([PurchasedSystemHealth])
   purchases = new ArraySchema<PurchasedSystemHealth>();
 }
 
-export class Player extends Schema implements PlayerData<AccomplishmentSet, ResourceInventory, SystemHealthChanges> {
+export class Player
+  extends Schema
+  implements
+    PlayerData<AccomplishmentSet, ResourceInventory, SystemHealthChanges>
+{
   constructor(role: Role) {
     super();
     this.role = role;
@@ -930,28 +988,28 @@ export class Player extends Schema implements PlayerData<AccomplishmentSet, Reso
   }
 
   static defaults = {
-    timeBlocks: 10
+    timeBlocks: 10,
   };
 
-  @type('string')
+  @type("string")
   role: Role;
 
   @type(ResourceCosts)
   costs: ResourceCosts;
 
-  @type('boolean')
+  @type("boolean")
   botWarning = false;
 
-  @type('string')
+  @type("string")
   specialty: Resource;
 
   @type(AccomplishmentSet)
   accomplishments: AccomplishmentSet;
 
-  @type('boolean')
+  @type("boolean")
   ready = false;
 
-  @type('number')
+  @type("number")
   timeBlocks: number = Player.defaults.timeBlocks;
 
   @type(SystemHealthChanges)
@@ -962,7 +1020,7 @@ export class Player extends Schema implements PlayerData<AccomplishmentSet, Reso
 
   pendingInvestments = new PendingInvestment();
 
-  @type('number')
+  @type("number")
   victoryPoints = 0;
 
   connected = true;
@@ -981,11 +1039,14 @@ export class Player extends Schema implements PlayerData<AccomplishmentSet, Reso
     return this.costs.investmentWithinBudget(investment, this.timeBlocks);
   }
 
-  isAccomplishmentPurchaseFeasible(accomplishment: AccomplishmentData): boolean {
+  isAccomplishmentPurchaseFeasible(
+    accomplishment: AccomplishmentData
+  ): boolean {
     return (
-      this.accomplishments.isPurchasable(accomplishment) &&
-      this.inventory.canAfford(accomplishment)
-    ) ?? false;
+      (this.accomplishments.isPurchasable(accomplishment) &&
+        this.inventory.canAfford(accomplishment)) ??
+      false
+    );
   }
 
   discardAccomplishment(id: number): void {
@@ -1003,18 +1064,31 @@ export class Player extends Schema implements PlayerData<AccomplishmentSet, Reso
       finance: -accomplishment.finance,
       government: -accomplishment.government,
       legacy: -accomplishment.legacy,
-      science: -accomplishment.science
+      science: -accomplishment.science,
     };
-    logger.trace('accomplishments: %o', JSON.stringify(this.accomplishments.purchasable.map(p => _.fromPairs(Object.entries(p)))));
-    logger.trace('accomplishment systemHealth: %d [%s] (%o)', accomplishment.systemHealth, accomplishment.label, _.fromPairs(_.toPairs(accomplishment)))
+    logger.trace(
+      "accomplishments: %o",
+      JSON.stringify(
+        this.accomplishments.purchasable.map((p) =>
+          _.fromPairs(Object.entries(p))
+        )
+      )
+    );
+    logger.trace(
+      "accomplishment systemHealth: %d [%s] (%o)",
+      accomplishment.systemHealth,
+      accomplishment.label,
+      _.fromPairs(_.toPairs(accomplishment))
+    );
     if (accomplishment.systemHealth !== 0) {
-      this.systemHealthChanges
-        .addPurchase(new PurchasedSystemHealth({
+      this.systemHealthChanges.addPurchase(
+        new PurchasedSystemHealth({
           description: `Purchase: ${accomplishment.label}`,
-          systemHealth: accomplishment.systemHealth
-        }));
+          systemHealth: accomplishment.systemHealth,
+        })
+      );
     }
-    logger.trace('purchases: %o', this.systemHealthChanges.purchases);
+    logger.trace("purchases: %o", this.systemHealthChanges.purchases);
     // FIXME: victoryPoints should probably be a computed property
     // that sums this.accomplishments.purchased.victoryPoints
     // and not a cached numerical value
@@ -1032,9 +1106,9 @@ export class Player extends Schema implements PlayerData<AccomplishmentSet, Reso
   }
 
   resetCosts(): void {
-    logger.info('costs (before) [%s]: %o', this.role, this.costs.toJSON());
+    logger.info("costs (before) [%s]: %o", this.role, this.costs.toJSON());
     this.costs.fromJSON(ResourceCosts.getCosts(this.role));
-    logger.info('costs (after) [%s]: %o', this.role, this.costs.toJSON());
+    logger.info("costs (after) [%s]: %o", this.role, this.costs.toJSON());
   }
 
   refreshPurchasableAccomplishments(): void {
@@ -1057,7 +1131,7 @@ export class Player extends Schema implements PlayerData<AccomplishmentSet, Reso
     const investment = _.cloneDeep(this.pendingInvestments);
 
     let leftOvers = 0;
-    let minCostResource = '';
+    let minCostResource = "";
     let minCost = Infinity;
     const leftOverInvestments: InvestmentData = PendingInvestment.defaults();
 
@@ -1065,7 +1139,7 @@ export class Player extends Schema implements PlayerData<AccomplishmentSet, Reso
       if (v != Infinity) {
         leftOvers += (investment as any)[k] * v;
       }
-      if (minCost > v && k != 'systemHealth') {
+      if (minCost > v && k != "systemHealth") {
         minCost = v;
         minCostResource = k;
       }
@@ -1087,7 +1161,7 @@ export class Player extends Schema implements PlayerData<AccomplishmentSet, Reso
   }
 
   invest(): void {
-    logger.info('investing %o', this.pendingInvestments);
+    logger.info("investing %o", this.pendingInvestments);
     this.systemHealthChanges.investment = this.pendingInvestments.systemHealth;
     this.applyPendingInvestments();
   }
@@ -1095,7 +1169,8 @@ export class Player extends Schema implements PlayerData<AccomplishmentSet, Reso
   invertPendingInventory(): void {
     const invertedInventory = PendingInvestment.defaults();
     for (const resource of RESOURCES) {
-      invertedInventory[resource as Resource] = this.inventory[resource as Resource] * -1;
+      invertedInventory[resource as Resource] =
+        this.inventory[resource as Resource] * -1;
     }
 
     this.pendingInvestments.add({ ...invertedInventory, systemHealth: 0 });
@@ -1141,10 +1216,8 @@ export class Player extends Schema implements PlayerData<AccomplishmentSet, Reso
    * for the given tradeAmount
    * @param tradeAmount
    */
-  canSendTradeRequest(
-    tradeAmount: ResourceAmountData
-  ): boolean {
-    const availableResources: ResourceAmountData = {...this.inventory};
+  canSendTradeRequest(tradeAmount: ResourceAmountData): boolean {
+    const availableResources: ResourceAmountData = { ...this.inventory };
     for (const resource of RESOURCES) {
       if (tradeAmount[resource] > availableResources[resource]) {
         return false;
@@ -1187,7 +1260,7 @@ class PlayerSet extends Schema implements PlayerSetData<Player> {
       Entrepreneur: this.Entrepreneur.toJSON(),
       Pioneer: this.Pioneer.toJSON(),
       Politician: this.Politician.toJSON(),
-      Researcher: this.Researcher.toJSON()
+      Researcher: this.Researcher.toJSON(),
     };
   }
 
@@ -1200,7 +1273,13 @@ class PlayerSet extends Schema implements PlayerSetData<Player> {
   }
 
   asArray(): Array<Player> {
-    return [this.Curator, this.Entrepreneur, this.Pioneer, this.Politician, this.Researcher];
+    return [
+      this.Curator,
+      this.Entrepreneur,
+      this.Pioneer,
+      this.Politician,
+      this.Researcher,
+    ];
   }
 
   [Symbol.iterator](): Iterator<Player> {
@@ -1227,7 +1306,7 @@ export interface GameSerialized {
   tradeSet: TradeSetData;
   winners: Array<Role>;
   tradingEnabled: boolean;
-  heroOrPariah: '' | 'hero' | 'pariah';
+  heroOrPariah: "" | "hero" | "pariah";
 }
 
 export enum ActionOrdering {
@@ -1236,7 +1315,7 @@ export enum ActionOrdering {
   // pending actions to be processed after FIRSTs
   MIDDLE = 10,
   // final actions to be processed
-  LAST = 20
+  LAST = 20,
 }
 
 export interface PendingMarsEventAction {
@@ -1244,8 +1323,19 @@ export interface PendingMarsEventAction {
   execute(state: GameState): void;
 }
 
-export class GameState extends Schema implements GameData<ChatMessage, MarsEvent, MarsLogMessage, PlayerSet, RoundIntroduction, Map<string, Trade>> {
-  userRoles: GameOpts['userRoles'] = {};
+export class GameState
+  extends Schema
+  implements
+    GameData<
+      ChatMessage,
+      MarsEvent,
+      MarsLogMessage,
+      PlayerSet,
+      RoundIntroduction,
+      Map<string, Trade>
+    >
+{
+  userRoles: GameOpts["userRoles"] = {};
   gameId!: number;
   maxRound: number;
   lastTimePolled: Date;
@@ -1258,19 +1348,19 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
   @type(PlayerSet)
   players: PlayerSet;
 
-  @type('number')
+  @type("number")
   timeRemaining = 60;
 
-  @type('boolean')
+  @type("boolean")
   botWarning: boolean = GameState.DEFAULTS.botWarning;
 
-  @type('number')
+  @type("number")
   round: number = GameState.DEFAULTS.round;
 
-  @type('number')
+  @type("number")
   phase: Phase = GameState.DEFAULTS.phase;
 
-  @type('number')
+  @type("number")
   systemHealth: number = GameState.DEFAULTS.systemHealth;
 
   @type([MarsLogMessage])
@@ -1282,25 +1372,29 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
   @type([MarsEvent])
   marsEvents = new ArraySchema<MarsEvent>();
 
-  @type('number')
+  @type("number")
   marsEventsProcessed = GameState.DEFAULTS.marsEventsProcessed;
 
   @type({ map: Trade })
   tradeSet = new MapSchema<Trade>();
 
-  @type(['string'])
+  @type(["string"])
   winners = new ArraySchema<Role>();
 
-  @type('boolean')
+  @type("boolean")
   tradingEnabled = true;
 
-  @type('string')
-  heroOrPariah: '' | 'hero' | 'pariah' = '';
+  @type("string")
+  heroOrPariah: "" | "hero" | "pariah" = "";
 
   constructor(data: GameStateOpts) {
     super();
     if (isProduction() && data.userRoles) {
-      assert.equal(Object.keys(data.userRoles).length, ROLES.length, 'Must have five players');
+      assert.equal(
+        Object.keys(data.userRoles).length,
+        ROLES.length,
+        "Must have five players"
+      );
     }
     this.userRoles = data.userRoles;
     this.marsEventDeck = new MarsEventsDeck(data.deck);
@@ -1315,7 +1409,7 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
     round: 1,
     phase: Phase.newRound,
     systemHealth: 100,
-    heroOrPariah: ''
+    heroOrPariah: "",
   };
 
   static DEFAULT_PHASE_DURATION: Record<Phase, number> = {
@@ -1327,7 +1421,7 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
     [Phase.discard]: 60,
     [Phase.victory]: 10000,
     [Phase.defeat]: 10000,
-  }
+  };
 
   fromJSON(data: GameSerialized): GameState {
     this.players.fromJSON(data.players);
@@ -1343,24 +1437,27 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
     this.tradingEnabled = data.tradingEnabled;
     this.heroOrPariah = data.heroOrPariah;
 
-    const marsLogs = _.map(data.logs, m => new MarsLogMessage(m));
+    const marsLogs = _.map(data.logs, (m) => new MarsLogMessage(m));
     this.logs.splice(0, this.logs.length, ...marsLogs);
 
-    const chatMessages = _.map(data.messages, m => new ChatMessage(m));
+    const chatMessages = _.map(data.messages, (m) => new ChatMessage(m));
     this.messages.splice(0, this.messages.length, ...chatMessages);
 
-    const marsEvents = _.map(data.marsEvents, e => new MarsEvent(e));
+    const marsEvents = _.map(data.marsEvents, (e) => new MarsEvent(e));
     this.marsEvents.splice(0, this.marsEvents.length, ...marsEvents);
 
     this.marsEventsProcessed = data.marsEventsProcessed;
     this.marsEventDeck.fromJSON(data.marsEventDeck);
     this.clearTrades();
-    Object.keys(data.tradeSet).forEach(k => {
+    Object.keys(data.tradeSet).forEach((k) => {
       const tradeData: TradeData = data.tradeSet[k];
-      this.tradeSet.set(k, new Trade(k, tradeData.sender, tradeData.recipient, 'Active'));
+      this.tradeSet.set(
+        k,
+        new Trade(k, tradeData.sender, tradeData.recipient, "Active")
+      );
     });
 
-    const winners = _.map(data.winners, w => w);
+    const winners = _.map(data.winners, (w) => w);
     this.winners.splice(0, this.winners.length, ...winners);
 
     return this;
@@ -1377,16 +1474,16 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
       round: this.round,
       phase: this.phase,
       systemHealth: this.systemHealth,
-      logs: _.map(this.logs, x => x.toJSON()),
-      messages: _.map(this.messages, x => x.toJSON()),
-      marsEvents: _.map(this.marsEvents, e => e.toJSON()),
+      logs: _.map(this.logs, (x) => x.toJSON()),
+      messages: _.map(this.messages, (x) => x.toJSON()),
+      marsEvents: _.map(this.marsEvents, (e) => e.toJSON()),
       marsEventsProcessed: this.marsEventsProcessed,
       marsEventDeck: this.marsEventDeck.toJSON(),
       roundIntroduction: this.roundIntroduction.toJSON(),
       tradeSet: this.tradeSet.toJSON(),
       tradingEnabled: this.tradingEnabled,
-      winners: _.map(this.winners, w => w),
-      heroOrPariah: this.heroOrPariah
+      winners: _.map(this.winners, (w) => w),
+      heroOrPariah: this.heroOrPariah,
     };
   }
 
@@ -1408,11 +1505,11 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
       const es = player.act(this);
       this.applyMany(es);
       if (es.length > 0) {
-        logger.debug('events to concat: %o', es);
+        logger.debug("events to concat: %o", es);
       }
       events.splice(events.length, 0, ...es);
       if (es.length > 0) {
-        logger.debug('events (all): %o', events);
+        logger.debug("events (all): %o", events);
       }
     }
     return events;
@@ -1422,7 +1519,10 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
     if (this.hasUser(username)) {
       return this.players[this.userRoles[username]];
     }
-    logger.fatal("GameState.getPlayer: Unable to find player with username", username);
+    logger.fatal(
+      "GameState.getPlayer: Unable to find player with username",
+      username
+    );
     throw new Error(`No player found with ${username}`);
   }
 
@@ -1462,18 +1562,19 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
   }
 
   /**
-   * Apply maintenance costs to system health. This occurs after we exit the new round phase 
+   * Apply maintenance costs to system health. This occurs after we exit the new round phase
    */
-  subtractSystemHealthWearAndTear() {
+  subtractSystemHealthWearAndTear(): void {
     this.addSystemHealth(-25);
     // we can now safely reset each player's system health changes because
     // the system health report has been generated
     this.resetPlayerContributions();
     this.roundIntroduction.initialize(this.systemHealth);
     this.log(
-        `Standard wear and tear reduces System Health by 25.
+      `Standard wear and tear reduces System Health by 25.
         At the beginning of this round, System Health = ${this.systemHealth}.`,
-        MarsLogCategory.systemHealth);
+      MarsLogCategory.systemHealth
+    );
   }
 
   /**
@@ -1483,9 +1584,15 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
     this.phase = Phase.newRound;
     this.timeRemaining = GameState.DEFAULT_PHASE_DURATION[this.phase];
     this.round += 1;
-    this.roundIntroduction.setSystemHealthGroupContributions(this.systemHealthContributed());
+    this.roundIntroduction.setSystemHealthGroupContributions(
+      this.systemHealthContributed()
+    );
     this.log(`Round ${this.round} begins.`, MarsLogCategory.newRound);
-    logger.debug("[game %d] current system health: %d", this.gameId, this.systemHealth);
+    logger.debug(
+      "[game %d] current system health: %d",
+      this.gameId,
+      this.systemHealth
+    );
     this.tradingEnabled = true;
     this.resetHeroOrPariah();
     for (const player of this.players) {
@@ -1494,7 +1601,7 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
   }
 
   resetHeroOrPariah(): void {
-    this.heroOrPariah = '';
+    this.heroOrPariah = "";
   }
 
   resetPlayerReadiness(): void {
@@ -1505,7 +1612,7 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
 
   resetPlayerContributions(): void {
     for (const player of this.players) {
-      player.systemHealthChanges.reset()
+      player.systemHealthChanges.reset();
     }
   }
 
@@ -1516,7 +1623,7 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
   }
 
   handleIncomplete(): void {
-    this.marsEvents = this.marsEvents.filter(event => {
+    this.marsEvents = this.marsEvents.filter((event) => {
       return !event.complete;
     });
   }
@@ -1533,7 +1640,7 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
     this.players.fromJSON(new PlayerSet().toJSON());
     this.marsEventDeck = new MarsEventsDeck(_.shuffle(this.marsEventDeck.deck));
     this.winners.splice(0, this.winners.length);
-    this.heroOrPariah = '';
+    this.heroOrPariah = "";
   }
 
   setNextRoundSystemHealth(): void {
@@ -1541,18 +1648,24 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
   }
 
   nextRoundSystemHealth(): number {
-    return _.clamp(this.systemHealth + this.systemHealthContributed() + this.systemHealthTaken(), 0, 100);
+    return _.clamp(
+      this.systemHealth +
+        this.systemHealthContributed() +
+        this.systemHealthTaken(),
+      0,
+      100
+    );
   }
-  
+
   systemHealthContributed(): number {
     let contributed = 0;
     for (const p of this.players) {
       contributed += p.systemHealthChanges.investment;
     }
-    logger.trace('system health contributed: %d', contributed);
+    logger.trace("system health contributed: %d", contributed);
     return contributed;
   }
-  
+
   systemHealthTaken(): number {
     let taken = 0;
     for (const p of this.players) {
@@ -1560,7 +1673,7 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
         taken += purchase.systemHealth;
       }
     }
-    logger.trace('system health taken: %d', taken);
+    logger.trace("system health taken: %d", taken);
     return taken;
   }
 
@@ -1590,10 +1703,10 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
   }
 
   applyMany(event: Array<GameEvent>): void {
-    event.forEach(e => e.apply(this));
+    event.forEach((e) => e.apply(this));
   }
 
-  apply(event: GameEvent): void {
+  apply(event: GameEvent): void | Responses {
     return event.apply(this);
   }
 
@@ -1610,7 +1723,7 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
       category,
       content: message,
       timestamp: new Date().getTime(),
-      id: this.logs.length
+      id: this.logs.length,
     });
     this.logs.push(msg);
     return msg;
@@ -1624,12 +1737,14 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
     return scores;
   }
 
-  get currentEvent() {
+  get currentEvent(): MarsEvent {
     return this.marsEvents[this.marsEventsProcessed];
   }
 
   evaluateGameWinners(): void {
-    const playerScores: Array<[Role, number]> = this.players.asArray().map(p => [p.role, p.victoryPoints]);
+    const playerScores: Array<[Role, number]> = this.players
+      .asArray()
+      .map((p) => [p.role, p.victoryPoints]);
     const winners: Array<Role> = [];
 
     for (const p of this.players) {
@@ -1639,7 +1754,7 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
     const sorted = _.reverse(_.sortBy(playerScores, [1]));
     sorted.forEach((s: [Role, number]) => {
       if (s[1] === sorted[0][1]) winners.push(s[0]);
-    })
+    });
 
     this.winners.push(...winners);
   }
@@ -1667,10 +1782,13 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
     const recipientRole: Role = trade.recipient.role;
     const senderRole: Role = trade.sender.role;
 
-    this.tradeSet.set(trade.id, new Trade(trade.id, trade.sender, trade.recipient, 'Active'));
+    this.tradeSet.set(
+      trade.id,
+      new Trade(trade.id, trade.sender, trade.recipient, "Active")
+    );
 
     switch (reason) {
-      case 'sent-trade-request':
+      case "sent-trade-request":
         message = `The ${senderRole} sent a trade request to the ${recipientRole}.`;
         category = MarsLogCategory.sentTrade;
         this.log(message, category, performedBy);
@@ -1681,8 +1799,10 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
   }
 
   canCompleteTrade(sender: Player, recipient: Player, trade: Trade): boolean {
-    return sender.canSendTradeRequest(trade.sender.resourceAmount)
-      && recipient.canSendTradeRequest(trade.recipient.resourceAmount);
+    return (
+      sender.canSendTradeRequest(trade.sender.resourceAmount) &&
+      recipient.canSendTradeRequest(trade.recipient.resourceAmount)
+    );
   }
 
   acceptTrade(id: string): void {
@@ -1690,7 +1810,7 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
 
     const trade: Trade | undefined = this.tradeSet.get(id);
     if (!trade) {
-      logger.warn('Trade not accepted. Could not find %s', id);
+      logger.warn("Trade not accepted. Could not find %s", id);
       return;
     }
     const senderRole = trade.sender.role;
@@ -1705,36 +1825,42 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
     const toTradeResources: ResourceAmountData = trade.recipient.resourceAmount;
 
     // apply trade resources to sender's inventory
-    sender.inventory.add(_.mapValues(trade.sender.resourceAmount, r => -r!));
+    sender.inventory.add(_.mapValues(trade.sender.resourceAmount, (r) => -r!));
     sender.inventory.add(trade.recipient.resourceAmount);
     // apply trade resources to recipient's inventory
-    recipient.inventory.add(_.mapValues(trade.recipient.resourceAmount, r => -r!));
+    recipient.inventory.add(
+      _.mapValues(trade.recipient.resourceAmount, (r) => -r!)
+    );
     recipient.inventory.add(trade.sender.resourceAmount);
 
     for (const [resource, amount] of Object.entries(toTradeResources)) {
       if (amount > 0) {
-        const resourceFormatted = resource.charAt(0).toUpperCase() + resource.slice(1);
+        const resourceFormatted =
+          resource.charAt(0).toUpperCase() + resource.slice(1);
         toMsg.push(`${resourceFormatted}: ${amount}`);
       }
     }
     for (const [resource, amount] of Object.entries(fromTradeResources)) {
       if (amount > 0) {
-        const resourceFormatted = resource.charAt(0).toUpperCase() + resource.slice(1);
+        const resourceFormatted =
+          resource.charAt(0).toUpperCase() + resource.slice(1);
         toMsg.push(`${resourceFormatted}: ${amount}`);
       }
     }
-    const message = `The ${senderRole} has traded ${fromMsg.join(', ')} in exchange for ${toMsg.join(', ')} from the ${recipientRole}.`;
+    const message = `The ${senderRole} has traded ${fromMsg.join(
+      ", "
+    )} in exchange for ${toMsg.join(", ")} from the ${recipientRole}.`;
     const category = MarsLogCategory.acceptTrade;
     this.roundIntroduction.addCompletedTrade(this.tradeSet.get(id)!);
     this.log(message, category, performedBy);
-    this.tradeSet.get(id)!.status = 'Accepted';
+    this.tradeSet.get(id)!.status = "Accepted";
   }
 
-  rejectTrade(id: string) {
+  rejectTrade(id: string): void {
     const performedBy: ServerRole = SERVER;
     const trade: Trade | undefined = this.tradeSet.get(id);
     if (!trade) {
-      logger.warn('Could not remove trade. Trade %s not found', id);
+      logger.warn("Could not remove trade. Trade %s not found", id);
       return;
     }
     const recipientRole: Role = this.tradeSet.get(id)!.recipient.role;
@@ -1743,15 +1869,15 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
     const message = `The ${recipientRole} rejected a trade request from the ${senderRole}.`;
     const category = MarsLogCategory.rejectTrade;
     this.log(message, category, performedBy);
-    this.tradeSet.get(id)!.status = 'Rejected';
+    this.tradeSet.get(id)!.status = "Rejected";
   }
 
-  cancelTrade(id: string, byServer=false) {
+  cancelTrade(id: string, byServer = false): void {
     const performedBy: ServerRole = SERVER;
 
     const trade: Trade | undefined = this.tradeSet.get(id);
     if (!trade) {
-      logger.warn('Trade not accepted. Could not find %s', id);
+      logger.warn("Trade not accepted. Could not find %s", id);
       return;
     }
     const senderRole = trade.sender.role;
@@ -1765,32 +1891,37 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
       : `The ${senderRole} canceled a trade request sent to the ${recipientRole}.`;
     const category = MarsLogCategory.invalidTrade;
     this.log(message, category, performedBy);
-    this.tradeSet.get(id)!.status = 'Cancelled';
+    this.tradeSet.get(id)!.status = "Cancelled";
   }
 
   purchaseAccomplishment(role: Role, accomplishment: AccomplishmentData): void {
     const { label, systemHealth, victoryPoints } = accomplishment;
     const costArray: Array<string> = [];
-    const auditIndex = this.marsEvents.findIndex(event => event.id === 'audit');
-    const isUnderAudit = auditIndex !== -1 && auditIndex <= this.marsEventsProcessed;
+    const auditIndex = this.marsEvents.findIndex(
+      (event) => event.id === "audit"
+    );
+    const isUnderAudit =
+      auditIndex !== -1 && auditIndex <= this.marsEventsProcessed;
 
     if (isUnderAudit) {
-      for(const investment of INVESTMENTS) {
+      for (const investment of INVESTMENTS) {
         if (accomplishment[investment] != 0) {
-          costArray.push(`${INVESTMENT_LABELS[investment]}=${accomplishment[investment]}`);
+          costArray.push(
+            `${INVESTMENT_LABELS[investment]}=${accomplishment[investment]}`
+          );
         }
       }
     } else if (systemHealth != 0) {
       costArray.push(`System Health= ${systemHealth}`);
     }
 
-    const cost = costArray.length > 0 ? `COST: ${costArray.join(', ')}.` : '';
+    const cost = costArray.length > 0 ? `COST: ${costArray.join(", ")}.` : "";
 
     const message = `The ${role} purchased an accomplishment: ${label}. ${cost} ${victoryPoints} points were added to the ${role}'s score.`;
     const category: string = MarsLogCategory.purchaseAccomplishment;
     const performedBy: ServerRole = SERVER;
     this.players[role].purchaseAccomplishment(accomplishment);
-    const ap = new AccomplishmentPurchase({name: label, victoryPoints});
+    const ap = new AccomplishmentPurchase({ name: label, victoryPoints });
     this.roundIntroduction.addAccomplishmentPurchase(ap);
     this.log(message, category, performedBy);
   }
@@ -1805,7 +1936,7 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
 
   drawMarsEvents(nCards: number): void {
     const cards = this.marsEventDeck.peek(nCards);
-    const marsEvents = cards.map(e => {
+    const marsEvents = cards.map((e) => {
       const me = new MarsEvent(e);
       me.updateElapsed();
       return me;
@@ -1814,6 +1945,4 @@ export class GameState extends Schema implements GameData<ChatMessage, MarsEvent
     this.marsEvents.push(...marsEvents);
     this.marsEventDeck.updatePosition(this.marsEvents.length);
   }
-
-
 }
