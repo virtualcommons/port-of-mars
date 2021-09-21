@@ -1,4 +1,4 @@
-import { Role } from "../types";
+import { Role } from "@port-of-mars/shared/types";
 
 export interface SetPlayerRole {
   kind: "set-player-role";
@@ -16,8 +16,6 @@ export interface SetSfx {
 }
 
 export type Responses = SetPlayerRole | SetError | SetSfx;
-
-export const SOUND_PREFIX_URI = "./assets/sfx";
 
 export enum Sfx {
   // incoming server notification sounds
@@ -56,4 +54,7 @@ export enum Sfx {
   TOGGLE_ACCOMPLISHMENTS = "action/toggleAccomplishments.mp3",
   TOGGLE_INVENTORY = "action/toggleInventory.mp3",
   TOGGLE_OTHER_PLAYERS = "action/toggleOtherPlayers.mp3",
+
+  // general
+  CLICK = "click.mp3",
 }
