@@ -1,4 +1,9 @@
-import {AccomplishmentData, Resource, ResourceAmountData, RESOURCES,} from './types';
+import {
+  AccomplishmentData,
+  Resource,
+  ResourceAmountData,
+  RESOURCES,
+} from "./types";
 
 export function canPurchaseAccomplishment(
   accomplishment: AccomplishmentData,
@@ -16,7 +21,7 @@ export function canPurchaseAccomplishment(
 //does not allow user to type in blank data
 export function makeTradeSafe(resources: ResourceAmountData) {
   for (const resource of RESOURCES) {
-    if (typeof resources[resource] == 'string') {
+    if (typeof resources[resource] == "string") {
       resources[resource] = 0;
     }
   }
@@ -29,14 +34,32 @@ export function makeTradeSafe(resources: ResourceAmountData) {
  * @param request Resources that the local player requests in a trade request.
  */
 export function isZeroTrade(
-    offer: ResourceAmountData,
-    request: ResourceAmountData
+  offer: ResourceAmountData,
+  request: ResourceAmountData
 ) {
   let zeroTrade: boolean = true;
   for (const resource of RESOURCES) {
-    zeroTrade = zeroTrade && (offer[resource] == 0 && request[resource] == 0);
+    zeroTrade = zeroTrade && offer[resource] == 0 && request[resource] == 0;
   }
-  if (zeroTrade) console.log('this is a zero trade');
+  if (zeroTrade) console.log("this is a zero trade");
   return zeroTrade;
 }
 
+export function canPlayerMakeTrade(
+  resourcesToTrade: ResourceAmountData,
+  inventory: ResourceAmountData
+) {
+  let canMakeTrade = true;
+  let isTradingSomething = false;
+  for (const resource of RESOURCES) {
+    if (resourcesToTrade[resource] > inventory[resource]) {
+      canMakeTrade = false;
+      break;
+    }
+    if (resourcesToTrade[resource] >= 0) {
+      // make sure that at least one resource is being traded
+      isTradingSomething = true;
+    }
+  }
+  return canMakeTrade && isTradingSomething;
+}
