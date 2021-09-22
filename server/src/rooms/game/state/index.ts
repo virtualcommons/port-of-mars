@@ -1702,8 +1702,15 @@ export class GameState
     this.tradeSet.clear();
   }
 
-  applyMany(event: Array<GameEvent>): void {
-    event.forEach((e) => e.apply(this));
+  applyMany(event: Array<GameEvent>): Array<Responses> {
+    const responses: Array<Responses> = [];
+    event.forEach((e) => {
+      const response = e.apply(this);
+      if (response) {
+        responses.push(response);
+      }
+    });
+    return responses;
   }
 
   apply(event: GameEvent): void | Responses {

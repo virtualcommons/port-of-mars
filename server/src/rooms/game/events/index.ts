@@ -5,9 +5,7 @@ import {
   MarsLogCategory,
   Phase,
   Resource,
-  ResourceCostData,
   Role,
-  ROLES,
   SERVER,
   ServerRole,
   TradeData,
@@ -36,6 +34,7 @@ import { getLogger } from "@port-of-mars/server/settings";
 import _ from "lodash";
 import { getAccomplishmentByID } from "@port-of-mars/server/data/Accomplishment";
 import { VoteHeroOrPariahData } from "@port-of-mars/shared/game";
+import { Responses, Sfx } from "@port-of-mars/shared/game/responses";
 
 const logger = getLogger(__filename);
 
@@ -65,7 +64,7 @@ abstract class GameEventWithData implements GameEvent {
     return _.kebabCase(this.constructor.name);
   }
 
-  abstract apply(game: GameState): Response | void;
+  abstract apply(game: GameState): void | Responses;
 
   serialize() {
     return {
@@ -80,8 +79,13 @@ export class SetPlayerReadiness extends GameEventWithData {
     super();
   }
 
-  apply(game: GameState) {
+  apply(game: GameState): void | Responses {
     game.setPlayerReadiness(this.data.role, this.data.value);
+    if (this.data.value) {
+      return { kind: "set-sfx", sfx: Sfx.READY_TO_ADVANCE };
+    } else {
+      return { kind: "set-sfx", sfx: Sfx.CANCEL_READY_TO_ADVANCE };
+    }
   }
 }
 
@@ -92,8 +96,9 @@ export class SentChatMessage extends GameEventWithData {
     super();
   }
 
-  apply(game: GameState) {
+  apply(game: GameState): void | Responses {
     game.addChat(this.data);
+    return { kind: "set-sfx", sfx: Sfx.CHAT_MESSAGE_NOTIFICATION };
   }
 }
 
@@ -127,7 +132,7 @@ export class PurchasedAccomplishment extends GameEventWithData {
     return (ad as AccomplishmentData).label !== undefined;
   }
 
-  apply(game: GameState) {
+  apply(game: GameState): void {
     logger.warn(
       "accomplishment: %o",
       _.fromPairs(_.toPairs(this.data.accomplishment))
@@ -143,7 +148,7 @@ export class DiscardedAccomplishment extends GameEventWithData {
     super();
   }
 
-  apply(game: GameState) {
+  apply(game: GameState): void {
     game.discardAccomplishment(this.data.role, this.data.id);
   }
 }
@@ -155,7 +160,7 @@ export class TimeInvested extends GameEventWithData {
     super();
   }
 
-  apply(game: GameState) {
+  apply(game: GameState): void {
     game.investTime(this.data.role, this.data.investment);
 
     // if Audit event is in effect
@@ -258,12 +263,13 @@ export class SentTradeRequest extends GameEventWithData {
     super();
   }
 
-  getRole(game: GameState): Role | ServerRole {
+  getRole(): Role | ServerRole {
     return this.data.sender.role;
   }
 
-  apply(game: GameState): void {
+  apply(game: GameState): void | Responses {
     game.addTrade(this.data, "sent-trade-request");
+    return { kind: "set-sfx", sfx: Sfx.TRADE_REQUEST_NOTIFICATION };
   }
 }
 
@@ -325,7 +331,8 @@ export class InitializedMarsEvent extends KindOnlyGameEvent {
 gameEventDeserializer.register(InitializedMarsEvent);
 
 export class EnteredMarsEventPhase extends KindOnlyGameEvent {
-  apply(game: GameState): void {
+  // TODO: add sfx
+  apply(game: GameState): void | Responses {
     game.phase = Phase.events;
     logger.debug("phase: %s", Phase[game.phase]);
 
@@ -347,7 +354,7 @@ export class EnteredMarsEventPhase extends KindOnlyGameEvent {
 gameEventDeserializer.register(EnteredMarsEventPhase);
 
 export class ReenteredMarsEventPhase extends KindOnlyGameEvent {
-  apply(game: GameState): void {
+  apply(game: GameState): void | Responses {
     game.resetPlayerReadiness();
     game.marsEventsProcessed += 1;
     logger.warn(
@@ -422,9 +429,11 @@ export class EnteredPurchasePhase extends KindOnlyGameEvent {
 }
 gameEventDeserializer.register(EnteredPurchasePhase);
 
+// ? Should we remove this? Doesn't seem to be used.
 export class ExitedPurchasePhase extends KindOnlyGameEvent {
   apply(game: GameState): void {}
 }
+
 gameEventDeserializer.register(ExitedPurchasePhase);
 
 export class EnteredDiscardPhase extends KindOnlyGameEvent {
@@ -552,7 +561,7 @@ export class VotedForPersonalGain extends GameEventWithData {
     super();
   }
 
-  apply(game: GameState) {
+  apply(game: GameState): void {
     if (game.currentEvent.state instanceof PersonalGain) {
       const state = game.currentEvent.state;
       state.updateVotes(this.data.role, this.data.vote);
@@ -758,7 +767,7 @@ export class VoteHeroOrPariah extends GameEventWithData {
     super();
   }
 
-  apply(game: GameState) {
+  apply(game: GameState): void {
     downCastEventState(HeroOrPariah, game, (eventState) => {
       eventState.voteHeroOrPariah(this.data.role, this.data.heroOrPariah, game);
     });
@@ -773,7 +782,7 @@ export class VoteHeroOrPariahRole extends GameEventWithData {
     super();
   }
 
-  apply(game: GameState) {
+  apply(game: GameState): void {
     downCastEventState(HeroOrPariah, game, (eventState) => {
       eventState.voteForPlayer(this.data.role, this.data.vote);
       game.players[this.data.role].updateReadiness(true);
@@ -814,7 +823,7 @@ export class BotWarningAcknowledged extends GameEventWithData {
     super();
   }
 
-  apply(game: GameState) {
+  apply(game: GameState): void {
     game.players[this.data.role].bot.resetElapsed();
   }
 }
