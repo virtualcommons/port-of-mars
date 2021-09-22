@@ -100,7 +100,8 @@ export class DashboardService extends BaseService {
   async canPlayGame(invite: TournamentRoundInvite | undefined): Promise<boolean> {
     if (invite) {
       const isFreePlayEnabled = await this.sp.settings.isFreePlayEnabled();
-      return isFreePlayEnabled || invite.hasParticipated;
+      // participants can play the game if free play is enabled or if they haven't already participated
+      return isFreePlayEnabled || ! invite.hasParticipated;
     }
     return false;
   }
