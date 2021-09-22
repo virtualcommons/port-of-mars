@@ -4,19 +4,19 @@ import {
   Resource,
   ResourceAmountData,
   Role,
-  TradeData,
-} from '@port-of-mars/shared/types';
+  TradeData
+} from "@port-of-mars/shared/types";
 import {
   defaultPendingInvestment,
   initialStoreState,
   State
-} from '@port-of-mars/shared/game/client/state';
-import {ChatMarsLogView, HUDLeftView, HUDRightView,} from '@port-of-mars/shared/game/client/panes';
-import * as _ from 'lodash';
-import {Store} from 'vuex/types/index';
-import {StateTransform} from '@port-of-mars/client/types/tutorial';
-import {AbstractGameAPI} from "@port-of-mars/client/api/game/types";
-import {SfxManager} from "@port-of-mars/client/util";
+} from "@port-of-mars/shared/game/client/state";
+import { ChatMarsLogView, HUDLeftView, HUDRightView } from "@port-of-mars/shared/game/client/panes";
+import * as _ from "lodash";
+import { Store } from "vuex/types/index";
+import { StateTransform } from "@port-of-mars/client/types/tutorial";
+import { AbstractGameAPI } from "@port-of-mars/client/api/game/types";
+import { SfxManager } from "@port-of-mars/client/util";
 
 export class TutorialAPI implements AbstractGameAPI {
   count: number = 1;
@@ -26,7 +26,7 @@ export class TutorialAPI implements AbstractGameAPI {
   private validationObject: any = {};
   private requiredObject!: StateTransform;
   private forwardButtonRef!: any;
-  private sfxManager!: SfxManager;
+  private sfx!: SfxManager;
 
   //This is used by Tutorial.vue to determine if the user can move forward
   get hasCompletedAction() {
@@ -43,33 +43,28 @@ export class TutorialAPI implements AbstractGameAPI {
     this.forwardButtonRef = forwardButtonRef;
   }
 
-  resetBotWarning(): void {
+  setSfxManager(sfx: SfxManager): void {
+    this.sfx = sfx;
   }
 
-  setNextPhase(): void {
-  }
+  resetBotWarning(): void {}
 
-  resetGame(): void {
-  }
+  setNextPhase(): void {}
 
-  savePersonalGainVote(vote: boolean): void {
-  }
+  resetGame(): void {}
 
-  voteForPhilanthropist(vote: Role): void {
-  }
+  savePersonalGainVote(vote: boolean): void {}
 
-  saveBondingThroughAdversitySelection(influenceVoteData: { role: Role; influence: Resource }): void {
-  }
+  voteForPhilanthropist(vote: Role): void {}
 
-  saveBreakdownOfTrust(savedResources: InvestmentData): void {
-  }
+  saveBondingThroughAdversitySelection(influenceVoteData: {
+    role: Role;
+    influence: Resource;
+  }): void {}
 
-  setSfxManager(sfx: SfxManager) {
-    this.sfxManager = sfx;
-  }
+  saveBreakdownOfTrust(savedResources: InvestmentData): void {}
 
-  stageDiscardOfPurchasedAccomplishment(id: number) {
-  }
+  stageDiscardOfPurchasedAccomplishment(id: number) {}
 
   /*
     This adds the sigular state transform it received to the state
@@ -80,12 +75,12 @@ export class TutorialAPI implements AbstractGameAPI {
       for (const commandSet of state) {
         for (const [command, value] of Object.entries(commandSet)) {
           switch (command) {
-            case 'required':
+            case "required":
               //we want to set this to the opposite of whatever the required tag is.
               this.isTaskComplete = !value;
               this.requiredObject = commandSet;
               break;
-            case 'validationObject':
+            case "validationObject":
               this.validationObject = value;
               break;
             default:
@@ -120,9 +115,9 @@ export class TutorialAPI implements AbstractGameAPI {
               you shouldn't have to do it again. therefore, we don't care about
               the required tag or the vaildation object.
             */
-            case 'required':
+            case "required":
               break;
-            case 'validationObject':
+            case "validationObject":
               break;
             default:
               this.store.commit(command, value);
@@ -149,41 +144,41 @@ export class TutorialAPI implements AbstractGameAPI {
 
   //CHAT HANDLER
   public sendChatMessage(message: String) {
-    this.store.commit('ADD_TO_CHAT', {
+    this.store.commit("ADD_TO_CHAT", {
       message,
       role: this.store.state.role,
       dateCreated: new Date().getTime(),
-      round: 0,
+      round: 0
     });
 
     this.completedActionWithImplicitForward();
   }
 
   purchaseAccomplishment(accomplishment: AccomplishmentData): void {
-    this.store.commit('PURCHASE_ACCOMPLISHMENT', {
+    this.store.commit("PURCHASE_ACCOMPLISHMENT", {
       data: accomplishment,
-      role: this.store.state.role,
+      role: this.store.state.role
     });
-    this.store.commit('DISCARD_ACCOMPLISHMENT', {
+    this.store.commit("DISCARD_ACCOMPLISHMENT", {
       data: accomplishment.id,
       role: this.store.state.role
     });
-    this.store.commit('SET_VICTORY_POINTS', {
+    this.store.commit("SET_VICTORY_POINTS", {
       data: 7,
-      role: 'Researcher',
+      role: "Researcher"
     });
     this.completedActionWithImplicitForward();
   }
 
   discardAccomplishment(id: number): void {
     console.log("Discarding accomplishment: " + id);
-    this.store.commit('DISCARD_ACCOMPLISHMENT', {id, role: this.store.state.role});
+    this.store.commit("DISCARD_ACCOMPLISHMENT", { id, role: this.store.state.role });
     this.completedActionWithImplicitForward();
   }
 
   //INVESTMENTS HANDLER
   public investPendingTimeBlocks(investment: any) {
-    this.store.commit('SET_PENDING_INVESTMENT_AMOUNT', investment);
+    this.store.commit("SET_PENDING_INVESTMENT_AMOUNT", investment);
 
     const pendingInventory = this.store.getters.player.pendingInvestments;
     for (const [resource, amt] of Object.entries(pendingInventory)) {
@@ -194,8 +189,7 @@ export class TutorialAPI implements AbstractGameAPI {
     return true;
   }
 
-  public investTimeBlocks() {
-  }
+  public investTimeBlocks() {}
 
   //PLAYER READINESS HANDLER
   public setPlayerReadiness(ready: boolean): void {
@@ -206,41 +200,41 @@ export class TutorialAPI implements AbstractGameAPI {
 
   //MODAL HANDLERS
   public setModalVisible(data: any) {
-      this.store.commit('SET_MODAL_VISIBLE', data);
-      this.completedActionWithImplicitForward();
+    this.store.commit("SET_MODAL_VISIBLE", data);
+    this.completedActionWithImplicitForward();
   }
 
   public setModalHidden() {
-    this.store.commit('SET_MODAL_HIDDEN', null);
+    this.store.commit("SET_MODAL_HIDDEN", null);
   }
 
   public toggleProfileMenu(currentlyVisible: boolean) {
-    this.store.commit('SET_PROFILE_MENU_VISIBILITY', !currentlyVisible);
+    this.store.commit("SET_PROFILE_MENU_VISIBILITY", !currentlyVisible);
 
     this.completedActionWithImplicitForward();
   }
 
   public setChatMarsLogView(view: ChatMarsLogView) {
-    this.store.commit('SET_CHATMARSLOG_VIEW', view);
+    this.store.commit("SET_CHATMARSLOG_VIEW", view);
   }
 
   // OTHER UI
 
   public setHUDLeftView(view: HUDLeftView) {
-    this.store.commit('SET_HUDLEFT_VIEW', view);
+    this.store.commit("SET_HUDLEFT_VIEW", view);
   }
 
   public setHUDRightView(view: HUDRightView) {
-    this.store.commit('SET_HUDRIGHT_VIEW', view);
+    this.store.commit("SET_HUDRIGHT_VIEW", view);
   }
 
   //TRADES
   public setTradePlayerName(role: Role) {
-    this.store.commit('SET_TRADE_PLAYER_NAME', role);
+    this.store.commit("SET_TRADE_PLAYER_NAME", role);
   }
 
   public setTradePartnerName(name: string) {
-    this.store.commit('SET_TRADE_PARTNER_NAME', name as Role);
+    this.store.commit("SET_TRADE_PARTNER_NAME", name as Role);
 
     if (this.validationObject.name == name) {
       this.completedActionWithImplicitForward();
@@ -251,7 +245,7 @@ export class TutorialAPI implements AbstractGameAPI {
 
   //validate against the validation object that's passed in.
   public setTradeGetResources(resources: ResourceAmountData) {
-    this.store.commit('SET_GET_RESOURCES', resources);
+    this.store.commit("SET_GET_RESOURCES", resources);
 
     for (const [resource, amt] of Object.entries(resources)) {
       if (this.validationObject[resource as Resource] != amt) return false;
@@ -263,7 +257,7 @@ export class TutorialAPI implements AbstractGameAPI {
 
   //validate against the validation object that's passed in.
   public setTradeGiveResources(resources: ResourceAmountData) {
-    this.store.commit('SET_SEND_RESOURCES', resources);
+    this.store.commit("SET_SEND_RESOURCES", resources);
 
     for (const [resource, amt] of Object.entries(resources)) {
       if (this.validationObject[resource as Resource] != amt) return false;
@@ -274,9 +268,9 @@ export class TutorialAPI implements AbstractGameAPI {
   }
 
   public sendTradeRequest(tradePackage: TradeData) {
-    this.store.commit('ADD_TO_TRADES', {
+    this.store.commit("ADD_TO_TRADES", {
       id: `mock-trade-${this.count}`,
-      trade: tradePackage,
+      trade: tradePackage
     });
     this.count++;
 
@@ -284,32 +278,31 @@ export class TutorialAPI implements AbstractGameAPI {
   }
 
   public acceptTradeRequest(id: string) {
-    this.store.commit('REMOVE_FROM_TRADES', {
-      id,
+    this.store.commit("REMOVE_FROM_TRADES", {
+      id
     });
   }
 
   public rejectTradeRequest(id: string) {
-    this.store.commit('REMOVE_FROM_TRADES', {
-      id,
+    this.store.commit("REMOVE_FROM_TRADES", {
+      id
     });
   }
 
   public cancelTradeRequest(id: string) {
-    this.store.commit('REMOVE_FROM_TRADES', {
-      id,
+    this.store.commit("REMOVE_FROM_TRADES", {
+      id
     });
   }
 
   public resetPendingInvestments() {
-    this.store.commit('SET_PENDING_INVESTMENTS', {
+    this.store.commit("SET_PENDING_INVESTMENTS", {
       role: this.store.state.role,
       data: defaultPendingInvestment()
     });
   }
 
-  public resetTradeModal() {
-  }
+  public resetTradeModal() {}
 
   //use this to verify that the user has completed the action
   private completedRequiredAction() {
