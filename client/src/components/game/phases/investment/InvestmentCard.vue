@@ -1,5 +1,5 @@
 <template>
-  <b-container class="m-2" style="width: 45%; background-color: var(--dark-shade)">
+  <b-container class="m-2" style="width: 30%; background-color: var(--dark-shade)">
     <b-row class="text-center">
       <b-col cols="12" style="background-color: var(--light-shade)">
         <p class="text-capitalize my-2" style="color: var(--dark-shade)">{{ label }}</p>
@@ -10,7 +10,7 @@
           v-bind="mainProps"
           :src="require(`@port-of-mars/client/assets/icons/${name}.svg`)"
           :alt="name"
-          class="m-3"
+          class="m-2"
         >
         </b-img>
       </b-col>
@@ -21,22 +21,33 @@
           min="0"
           :max="cost > remainingTimeBlocks ? pendingInvestment : 10"
           inline
-          @change="setInvestmentAmount(pendingInvestment)"
         >
           <template #decrement>
-            <b-icon-dash scale="1.25" color="white"></b-icon-dash>
+            <b-button
+              variant="transparent"
+              :disabled="pendingUnits < 1"
+              @click="setInvestmentAmount(pendingInvestment)"
+            >
+              <b-icon-dash scale="1.25" color="white"></b-icon-dash>
+            </b-button>
           </template>
           <template #increment>
-            <b-icon-plus scale="1.25" color="white"></b-icon-plus>
+            <b-button
+              variant="transparent"
+              :disabled="cost > remainingTimeBlocks"
+              @click="setInvestmentAmount(pendingInvestment)"
+            >
+              <b-icon-plus scale="1.25" color="white"></b-icon-plus>
+            </b-button>
           </template>
         </b-form-spinbutton>
       </b-col>
-      <b-col cols="6" class="text-left">
+      <b-col cols="6" class="text-left mt-3">
         <!-- pending units -->
         <b-icon-bag-plus scale="1.5"></b-icon-bag-plus>
         <span v-if="pendingUnits > 0" class="mx-2" style="color: green">+ {{ pendingUnits }}</span>
       </b-col>
-      <b-col cols="6" class="text-right">
+      <b-col cols="6" class="text-right mt-3">
         <!-- cost -->
         <font-awesome-icon :icon="['fas', 'clock']" size="lg"></font-awesome-icon>
         <span class="mx-2">{{ cannotAfford ? "-" : cost }}</span>
@@ -69,8 +80,8 @@ export default class InvestmentCard extends Vue {
     center: true,
     fluid: true,
     blankColor: "#bbb",
-    width: 65,
-    height: 65
+    width: 50,
+    height: 50
   };
 
   get cannotInvest(): boolean {
@@ -78,7 +89,7 @@ export default class InvestmentCard extends Vue {
   }
 
   get cannotAfford(): boolean {
-    return COST_INAFFORDABLE >= this.cost;
+    return this.cost >= COST_INAFFORDABLE;
   }
 
   get pendingUnits() {
