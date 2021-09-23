@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: configure for staging environment
-      run: ./configure staging
+      run: ./configure dev
     - name: Compile TS code for production
       run: make buildprod
     - name: Run tests
