@@ -58,6 +58,7 @@ describe('first round', () => {
   afterAll(async () => rollbackTransaction(conn, qr));
 });
 
+/*
 describe('round list', () => {
   let conn: Connection;
   let qr: QueryRunner;
@@ -84,3 +85,4 @@ describe('round list', () => {
   
   afterAll(async () => rollbackTransaction(conn, qr));
 });
+*/
