@@ -25,7 +25,7 @@
       <!-- influences -->
       <b-row
         align-h="around"
-        class="flex-grow-1 my-1 p-2 w-100 tour-invest"
+        class="flex-grow-1 my-1 w-100 tour-invest"
         style="background-color: var(--light-shade-05)"
       >
         <InvestmentCard
