@@ -102,7 +102,9 @@ export default class Login extends Vue {
     try {
       await this.$ajax.devLogin(devLoginData);
     } catch (e) {
-      this.error = e.message;
+      if (e instanceof Error) {
+        this.error = e.message;
+      }
     }
   }
 

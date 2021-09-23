@@ -84,7 +84,7 @@ export class RegistrationService extends BaseService {
       logger.fatal("error while updating user %s registration token %s", u.username, registrationToken);
       throw new ServerError({
         code: 400,
-        error: e,
+        error: e as Error,
         message: `Invalid user and registration token ${u.username}, ${registrationToken}`,
         displayMessage: `Sorry, your registration token ${registrationToken} does not appear to be valid. Please try to verify your account again and contact us if this continues.`
       });

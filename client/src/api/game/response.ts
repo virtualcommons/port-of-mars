@@ -199,7 +199,7 @@ export function applyGameServerResponses<T>(room: Room, store: TStore, sfx: SfxM
     }
     if (REFRESHABLE_WEBSOCKET_ERROR_CODES.includes(code)) {
       alert("your connection was interrupted, refreshing the browser");
-      window.location.reload(false);
+      window.location.reload();
     } else {
       alert("your connection was interrupted, please try refreshing the page or contact us");
     }

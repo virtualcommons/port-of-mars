@@ -41,8 +41,10 @@ export default class Game extends Vue {
           roomId = data;
         });
       } catch (e) {
-        this.$tstore.commit('SET_DASHBOARD_MESSAGE', e.data);
-        console.error('Failed to get latest active game');
+        if (e instanceof Error) {
+          this.$tstore.commit('SET_DASHBOARD_MESSAGE', { kind: 'danger', message: e.message });
+        }
+        console.error('Failed to get latest active game', e);
       }
     } else {
       roomId = cachedRoomId;
@@ -59,11 +61,13 @@ export default class Game extends Vue {
         // this.$tstore.commit("SET_ENVIRONMENT", this.env.environment);
       }
     } catch (e) {
-      console.error(e);
-      this.$tstore.commit('SET_DASHBOARD_MESSAGE', {
-        kind: 'danger',
-        message: e.message,
-      });
+      if (e instanceof Error) {
+        this.$tstore.commit('SET_DASHBOARD_MESSAGE', {
+          kind: 'danger',
+          message: e.message,
+        });
+      }
+      console.error("Unable to join room: ", e);
       this.$router.push({ name: DASHBOARD_PAGE });
     }
   }

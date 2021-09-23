@@ -132,16 +132,11 @@
         applyWaitingServerResponses(room, this);
         this.lobbyAPI.connect(room);
       } catch (e) {
-        /*
-        if (e instanceof MatchMakeError) {
-          this.$tstore.commit('SET_DASHBOARD_MESSAGE', { kind: 'danger', message: `Couldn't join the lobby: ${e.message}` });
+        let errorMessage = "Please complete all onboarding items on your dashboard before joining a game.";
+        if (e instanceof Error) {
+          errorMessage = e.message;
         }
-        */
-        console.log(e);
-        let errorMessage = e.message;
-        if (!errorMessage) {
-          errorMessage = 'Please complete all onboarding items on your dashboard before joining a game.';
-        }
+        console.log("Unable to join game, need to complete onboarding items", e);
         dashboardAPI.message(errorMessage, 'warning');
         await this.$router.push({name: DASHBOARD_PAGE});
       }

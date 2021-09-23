@@ -123,7 +123,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
       // this.sendSafe(client, { kind: 'join-failure', reason: 'Please complete all onboarding items on your dashboard before joining a game.' });
       logger.debug('user should be redirected back to the dashboard');
     } catch (e) {
-      logger.fatal(e);
+      logger.fatal('Unable to authenticate client: %s', e);
     }
     return false;
   }

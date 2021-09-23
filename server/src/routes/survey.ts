@@ -29,7 +29,7 @@ surveyRouter
       res.redirect(`${settings.host}/${getPagePath(DASHBOARD_PAGE)}`)
     }
     catch (e) {
-      logger.fatal(e);
+      logger.fatal("Unable to mark survey completion: %s", e);
       next(e);
     }
   })

@@ -168,11 +168,11 @@ export class AjaxRequest {
         throw e;
       }
       else {
-        if (response) {
+        if (response && e instanceof Error) {
           throw new AjaxResponseError({ kind: 'danger', message: e.message }, response);
         }
         else {
-          console.error("Unhandled error in request, returning to home screen");
+          console.error("Unhandled error in request, returning to home screen", e);
           // FIXME: add context so that login page has information about why they were redirected
           this.router.push({ name: LOGIN_PAGE });
         }
@@ -204,11 +204,11 @@ export class AjaxRequest {
         throw e;
       }
       else {
-        if (response) {
+        if (response && e instanceof Error) {
           throw new AjaxResponseError({ kind: 'danger', message: e.message }, response);
         }
         else {
-          console.error("Unhandled error in request, returning to home screen");
+          console.error("Unhandled error in request, returning to home screen", e);
           this.router.push({ name: LOGIN_PAGE });
         }
       }
