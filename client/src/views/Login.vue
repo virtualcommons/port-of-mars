@@ -36,7 +36,7 @@
       </b-col>
       <b-row class="w-100">
         <b-col cols="6" offset="3" class="text-center" align-self="end">
-          <b-form-checkbox v-model="toggleDevLogin" v-if="!isDevMode" class="my-2">
+          <b-form-checkbox v-model="toggleDevLogin" v-if="isDevMode" class="my-2">
             <p v-if="toggleDevLogin" class="text-uppercase">Test Mode Enabled</p>
             <p v-else class="text-uppercase">Test Mode Disabled</p>
           </b-form-checkbox>
