@@ -1,19 +1,15 @@
 <template>
-    <b-container class="h-100 w-auto p-0 m-0" fluid>
-      <b-alert v-if="isDevModeEnabled && !isGameOrTutorial" class="text-center m-0 p-0" show dismissible variant="warning">
-        <p class="mt-2"><b-icon class="mx-2" icon="exclamation-triangle-fill" variant="danger"></b-icon> You are currently accessing a development version of the Port of Mars only used for testing. Go to <a href='https://portofmars.asu.edu'>portofmars.asu.edu</a> for the real deal.</p>
-      </b-alert>
-      <router-view :key="$route.path" class="bg-login"></router-view>
-      <Footer v-if="!isGameOrTutorial" />
-    </b-container>
+  <b-container class="h-100 p-0 m-0 bg" fluid>
+    <b-row no-gutters class="h-100 w-100">
+      <router-view class="m-0 p-0" :key="$route.path"></router-view>
+    </b-row>
+  </b-container>
 </template>
 
 <script lang="ts">
-import {Component, Vue} from "vue-property-decorator";
-import {isDev, isStaging} from "@port-of-mars/shared/settings";
+import { Component, Vue } from "vue-property-decorator";
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
 import BootstrapVue from "bootstrap-vue";
-import {GAME_PAGE, LOGIN_PAGE, TUTORIAL_PAGE} from "@port-of-mars/shared/routes";
 
 Vue.use(BootstrapVue);
 
@@ -22,19 +18,7 @@ Vue.use(BootstrapVue);
     Footer
   }
 })
-export default class App extends Vue {
-  get isDevModeEnabled() {
-    return isDev() || isStaging();
-  }
-
-  get isGameOrTutorial() {
-    return this.$route.name == GAME_PAGE || this.$route.name == TUTORIAL_PAGE
-  }
-
-  isLogin(routeName: string) {
-    return routeName == LOGIN_PAGE;
-  }
-}
+export default class App extends Vue {}
 </script>
 
 <style lang="scss">
@@ -49,9 +33,9 @@ export default class App extends Vue {
 /* IMPORT SCSS */
 @import "./stylesheets/main.scss";
 
-.bg-login {
-  background-image: url("assets/background/landing.png");
-  background-position: top;
+.bg {
+  background-image: url("assets/background/landing_2021.jpg");
+  background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 }

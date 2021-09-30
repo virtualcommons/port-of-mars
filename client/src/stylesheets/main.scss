@@ -4,6 +4,9 @@
 
 // TODO :: Download Fonts Locally
 
+// Montserrat
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap");
+
 // Exo
 @import url("https://fonts.googleapis.com/css2?family=Exo:wght@400;500;600;700&display=swap");
 
@@ -56,13 +59,13 @@ body {
   --light-accent: rgb(202, 166, 110);
   --dark-accent: #a49ca6; // accent - modal borders, hover,
   --dark-shade: rgb(34, 26, 27);
-  --dark-shade-9: rgba(34, 26, 27, .9);
-  --dark-shade-75: rgba(34, 26, 27, .75);
+  --dark-shade-9: rgba(34, 26, 27, 0.9);
+  --dark-shade-75: rgba(34, 26, 27, 0.75);
   --light-shade: rgb(241, 224, 197);
   --light-shade-05: rgba(241, 224, 197, 0.05);
   --light-shade-25: rgba(241, 224, 197, 0.25);
   --main-brand: rgb(156, 81, 71);
-  --main-brand-5: rgba(156, 81, 71, .5);
+  --main-brand-5: rgba(156, 81, 71, 0.5);
 
   // player colors
   --color-Researcher: rgba(67, 124, 174, 0.2);
@@ -89,7 +92,7 @@ h1,
 h2,
 h3,
 h4 {
-  font-family: $exo !important;
+  font-family: $montserrat !important;
 }
 
 p,

@@ -1,16 +1,7 @@
-// ACCOMPLISHMENT : CARD STYLING
-
-button {
-  &:disabled {
-    cursor: not-allowed;
-  }
-}
-
 .modal-view {
   border: none;
   max-height: 20rem !important;
 }
-
 
 .cost {
   height: 2rem;
@@ -19,10 +10,6 @@ button {
   border-radius: 50%;
   margin: 0.125rem;
   background-color: $light-shade;
-
-  img {
-    @include expand;
-  }
 }
 
 .unattainable-resource {
@@ -40,7 +27,6 @@ button {
     @include space-button-white;
   }
 }
-
 
 // purchasable
 .purchasable {
@@ -85,25 +71,5 @@ button {
     color: $status-green;
     font-size: $font-med;
     font-weight: bold;
-  }
-}
-
-
-
-.hide-card {
-  animation: hide 0.3s linear 1.5s 1 forwards;
-}
-
-
-// ANIMATION : hide card
-
-@keyframes hide {
-  0% {
-    opacity: 100%;
-  }
-
-  100% {
-    opacity: 0;
-    height: 0;
   }
 }

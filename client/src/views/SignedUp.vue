@@ -1,41 +1,26 @@
 <template>
-  <b-container class="m-0 p-0 h-100" fluid>
-    <b-row align-v="center" class="h-75 w-100">
-      <b-col cols="auto" class="mr-auto">
-        <img
-          :src="require(`@port-of-mars/client/assets/characters-large/Entrepreneur.png`)"
-          alt="Entrepreneur"
-          class="avatar"
-        />
-      </b-col>
-
-      <b-col class="mx-5 p-5 text-center">
-       <h2>Thank you for signing up for the next Mars Madness tournament!</h2>
-       <p class="m-4">When we're ready to launch, we will send you an email with additional instructions.</p>
-       <b-button variant="outline-success" class="mx-3" :to="tutorial">Take the Tutorial</b-button>
-       <b-button variant="outline-warning" @click="logout">Logout</b-button>
-      </b-col>
-
-      <b-col cols="auto">
-        <img
-          :src="require(`@port-of-mars/client/assets/characters-large/Researcher.png`)"
-          alt="Researcher"
-          class="avatar"
-        />
+  <b-container class="h-100" fluid style="background-color: var(--dark-shade-75)">
+    <b-row align-h="center" align-v="center" class="h-100 w-100 text-center">
+      <b-col align-self="center">
+        <h1>Thank you for signing up for the Mars Madness tournament!</h1>
+        <h3 class="m-4">
+          When we're ready to launch, we will send you an email with additional instructions.
+        </h3>
+        <!-- <b-button variant="outline-success" class="mx-3" :to="tutorial">Take the Tutorial</b-button> -->
+        <b-button size="lg" squared variant="primary" @click="logout">Log Out</b-button>
       </b-col>
     </b-row>
   </b-container>
 </template>
 
 <script lang="ts">
-import {Component, Vue} from 'vue-property-decorator';
-import {LOGIN_PAGE, TUTORIAL_PAGE} from "@port-of-mars/shared/routes";
+import { Component, Vue } from "vue-property-decorator";
+import { LOGIN_PAGE, TUTORIAL_PAGE } from "@port-of-mars/shared/routes";
 
 @Component({})
 export default class SignedUp extends Vue {
-
   get tutorial() {
-    return {name: TUTORIAL_PAGE}
+    return { name: TUTORIAL_PAGE };
   }
 
   logout() {
@@ -46,15 +31,14 @@ export default class SignedUp extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.background-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: -1;
-  opacity: 0.0625;
+h1,
+h3 {
+  color: white;
 }
-.avatar {
-  height: 40vh;
-  top: 10vh;
+
+.subtitle {
+  font-size: 2rem;
+  font-weight: 500;
+  color: white;
 }
 </style>
