@@ -19,6 +19,34 @@
         Complex Adaptive Systems, and the National Science Foundation.
       </b-col>
 
+      <!-- instagram -->
+      <b-col cols="auto">
+        <a href="https://www.instagram.com/portofmars/" target="_blank">
+          <font-awesome-icon :icon="['fab', 'instagram']" size="lg" />
+        </a>
+      </b-col>
+
+      <!-- facebook -->
+      <b-col cols="auto">
+        <a href="https://www.facebook.com/Port-of-Mars-278162624025157" target="_blank">
+          <font-awesome-icon :icon="['fab', 'facebook']" size="lg" />
+        </a>
+      </b-col>
+
+      <!-- twitter -->
+      <b-col cols="auto">
+        <a href="https://twitter.com/PortOfMars" target="_blank">
+          <font-awesome-icon :icon="['fab', 'twitter']" size="lg" />
+        </a>
+      </b-col>
+
+      <!-- email -->
+      <b-col cols="auto">
+        <a href="mailto:portmars@asu.edu" target="_blank">
+          <font-awesome-icon :icon="['fas', 'envelope']" size="lg" />
+        </a>
+      </b-col>
+
       <!-- github -->
       <b-col cols="auto">
         <a href="https://github.com/virtualcommons/port-of-mars/" target="_blank">
@@ -26,12 +54,6 @@
         </a>
       </b-col>
 
-      <!-- email -->
-      <b-col cols="auto">
-        <a href="mailto:portmars@asu.edu">
-          <font-awesome-icon :icon="['fas', 'envelope']" size="lg" />
-        </a>
-      </b-col>
       <b-col cols="auto">
         &copy; 2021
         <a href="https://www.azregents.edu/" target="_blank">Arizona Board of Regents</a>
@@ -46,12 +68,12 @@ import BootstrapVue from "bootstrap-vue";
 
 // FontAwesome icons
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faGithub } from "@fortawesome/free-brands-svg-icons/faGithub";
+import { faGithub, faTwitter, faFacebook, faInstagram } from "@fortawesome/free-brands-svg-icons";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { BUILD_ID } from "@port-of-mars/shared/settings";
 
-library.add(faGithub, faEnvelope);
+library.add(faGithub, faEnvelope, faTwitter, faFacebook, faInstagram);
 Vue.use(BootstrapVue);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 
