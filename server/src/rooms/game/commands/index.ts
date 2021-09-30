@@ -24,7 +24,7 @@ import {
   ExitedMarsEventPhase,
   FinalizedMarsEvent,
   InitializedMarsEvent,
-  BreakdownOfTrustOccured,
+  BreakdownOfTrustOccurred,
   OutOfCommissionedCurator,
   OutOfCommissionedEntrepreneur,
   OutOfCommissionedPioneer,
@@ -510,7 +510,7 @@ export class BreakdownOfTrustCmd implements Command {
 
   execute(): Array<GameEvent> {
     return [
-      new BreakdownOfTrustOccured({
+      new BreakdownOfTrustOccurred({
         role: this.player.role,
         savedResources: this.data.savedResources,
       }),

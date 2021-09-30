@@ -675,7 +675,7 @@ export class SelectedInfluence extends GameEventWithData {
 
 gameEventDeserializer.register(SelectedInfluence);
 
-export class BreakdownOfTrustOccured extends GameEventWithData {
+export class BreakdownOfTrustOccurred extends GameEventWithData {
   constructor(public data: { role: Role; savedResources: InvestmentData }) {
     super();
   }
@@ -692,7 +692,7 @@ export class BreakdownOfTrustOccured extends GameEventWithData {
   }
 }
 
-gameEventDeserializer.register(BreakdownOfTrustOccured);
+gameEventDeserializer.register(BreakdownOfTrustOccurred);
 
 export class StagedDiscardOfPurchasedAccomplishment extends GameEventWithData {
   constructor(public data: { id: number; role: Role }) {

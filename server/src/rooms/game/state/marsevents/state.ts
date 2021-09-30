@@ -38,7 +38,7 @@ export function constructState(id: string, data?: any) {
   if (constructor) {
     return new constructor(data);
   } else {
-    throw Error(`${id} does not have a corresponding state class in dispatch ${JSON.stringify(_dispatch)}`)
+    throw Error(`${id} does not have a corresponding state class constructor in dispatch ${JSON.stringify(_dispatch)}`)
   }
 }
 
@@ -716,8 +716,10 @@ export function downCastEventState<T extends BaseEvent, R>(
     classDef: { new(...args: any): T },
     game: GameState,
     callBack: (currentEvent: T) => R): R | undefined {
-  if (game.currentEvent.state instanceof classDef) {
-    const eventState = game.currentEvent.state;
+  const eventState = game.currentEvent.state;
+  if (eventState instanceof classDef) {
     return callBack(eventState);
-  } else logger.warn('the expected event state is the wrong type ');
+  } else {
+    logger.warn('the expected event state is the wrong type %s', eventState);
+  }
 }
