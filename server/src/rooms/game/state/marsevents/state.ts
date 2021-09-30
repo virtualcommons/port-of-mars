@@ -537,33 +537,17 @@ export class MurphysLaw extends BaseEvent {
 
 ////////////////////////// Out of Commission //////////////////////////
 
-type OutOfCommissionData = { [role in Role]: Role }
-
 abstract class OutOfCommission extends BaseEvent {
   player: Role = CURATOR;
-  roles: OutOfCommissionData;
 
-  constructor(public data?: { roles: OutOfCommissionData }) {
+  constructor() {
     super();
-    this.roles = data?.roles ?? {
-      [CURATOR]: CURATOR,
-      [ENTREPRENEUR]: ENTREPRENEUR,
-      [PIONEER]: PIONEER,
-      [POLITICIAN]: POLITICIAN,
-      [RESEARCHER]: RESEARCHER
-    };
-  }
-
-  playerOutOfCommission(outOfCommission: Role): Role {
-    const player: Role = this.roles[outOfCommission];
-    return player;
   }
 
   finalize(game: GameState): void {
     game.pendingMarsEventActions.push({
       ordering: ActionOrdering.MIDDLE, execute: (state) => {
-        const role: Role = this.playerOutOfCommission(this.player);
-        state.players[role].timeBlocks = 3;
+        state.players[this.player].timeBlocks = 3;
         state.log(
             `${this.player} has 3 time blocks to invest during this round.`,
             `${MarsLogCategory.event}: ${formatEventName(OutOfCommission.name)}`
@@ -573,14 +557,14 @@ abstract class OutOfCommission extends BaseEvent {
   }
 
   getData() {
-    return {roles: this.roles};
+    return {player: this.player};
   }
 }
 
 // Curator
 @assocEventId
 export class OutOfCommissionCurator extends OutOfCommission {
-  player: Role = this.roles.Curator;
+  player: Role = CURATOR;
 
   constructor() {
     super();
@@ -590,7 +574,7 @@ export class OutOfCommissionCurator extends OutOfCommission {
 // Politician
 @assocEventId
 export class OutOfCommissionPolitician extends OutOfCommission {
-  player: Role = this.roles.Politician;
+  player: Role = POLITICIAN;
 
   constructor() {
     super();
@@ -600,7 +584,7 @@ export class OutOfCommissionPolitician extends OutOfCommission {
 // Researcher
 @assocEventId
 export class OutOfCommissionResearcher extends OutOfCommission {
-  player: Role = this.roles.Researcher;
+  player: Role = RESEARCHER;
 
   constructor() {
     super();
@@ -610,7 +594,7 @@ export class OutOfCommissionResearcher extends OutOfCommission {
 // Pioneer
 @assocEventId
 export class OutOfCommissionPioneer extends OutOfCommission {
-  player: Role = this.roles.Pioneer;
+  player: Role = PIONEER;
 
   constructor() {
     super();
@@ -620,7 +604,7 @@ export class OutOfCommissionPioneer extends OutOfCommission {
 // Entrepreneur
 @assocEventId
 export class OutOfCommissionEntrepreneur extends OutOfCommission {
-  player: Role = this.roles.Entrepreneur;
+  player: Role = ENTREPRENEUR;
 
   constructor() {
     super();

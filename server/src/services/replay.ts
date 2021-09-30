@@ -112,6 +112,10 @@ function extractAfter(g: GameState): { phaseFinalTimeRemaining: number; systemHe
   return {phaseFinalTimeRemaining, systemHealthFinal, roundFinal: g.round, phaseFinal: Phase[g.phase]}
 }
 
+
+/**
+ * Emits snapshot summaries of the game state before / after each game event
+ */
 export class GameEventSummarizer extends Summarizer<GameEventSummary> {
   _summarizeEvent(game: GameState, event: entity.GameEvent): GameEventSummary {
     game.timeRemaining = event.timeRemaining;
@@ -214,14 +218,19 @@ export class VictoryPointSummarizer extends Summarizer<VictoryPointExport> {
   }
 }
 
-export class AccomplishmentSummarizer {
+/**
+ * Emits the list of all Accomplishments currently available in Port of Mars. Completely static, this is not
+ * expected to change often and if the set of accomplishments related to roles changes in the codebase, this
+ * serialized list will also change.
+ */
+export class AccomplishmentSummarizer {  
   constructor(public path: string) {}
 
   async save() {
-    const accomplishements = getAllAccomplishments();
-    const header = Object.keys(accomplishements[0]).map(name => ({id: name, title: name}))
+    const accomplishments = getAllAccomplishments();
+    const header = Object.keys(accomplishments[0]).map(name => ({id: name, title: name}))
     const writer = createObjectCsvWriter({path: this.path, header});
-    await writer.writeRecords(accomplishements);
+    await writer.writeRecords(accomplishments);
   }
 }
 

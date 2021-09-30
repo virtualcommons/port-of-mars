@@ -578,14 +578,14 @@ export class VotedForPhilanthropist extends GameEventWithData {
   }
 
   apply(game: GameState): void {
-    let state: CompulsivePhilanthropy;
+    let eventState: CompulsivePhilanthropy;
     if (game.currentEvent.state instanceof CompulsivePhilanthropy) {
-      state = game.currentEvent.state;
+      eventState = game.currentEvent.state;
     } else {
       return;
     }
 
-    state.voteForPlayer(this.data.voter, this.data.vote);
+    eventState.voteForPlayer(this.data.voter, this.data.vote);
     game.players[this.data.voter].updateReadiness(true);
   }
 }
@@ -598,14 +598,6 @@ export class OutOfCommissionedCurator extends GameEventWithData {
   }
 
   apply(game: GameState): void {
-    let state: OutOfCommissionCurator;
-    if (game.currentEvent.state instanceof OutOfCommissionCurator) {
-      state = game.currentEvent.state;
-    } else {
-      return;
-    }
-
-    state.playerOutOfCommission(this.data.role);
     game.players[this.data.role].updateReadiness(true);
   }
 }
@@ -618,14 +610,6 @@ export class OutOfCommissionedPolitician extends GameEventWithData {
   }
 
   apply(game: GameState): void {
-    let state: OutOfCommissionPolitician;
-    if (game.currentEvent.state instanceof OutOfCommissionPolitician) {
-      state = game.currentEvent.state;
-    } else {
-      return;
-    }
-
-    state.playerOutOfCommission(this.data.role);
     game.players[this.data.role].updateReadiness(true);
   }
 }
@@ -638,14 +622,6 @@ export class OutOfCommissionedResearcher extends GameEventWithData {
   }
 
   apply(game: GameState): void {
-    let state: OutOfCommissionResearcher;
-    if (game.currentEvent.state instanceof OutOfCommissionResearcher) {
-      state = game.currentEvent.state;
-    } else {
-      return;
-    }
-
-    state.playerOutOfCommission(this.data.role);
     game.players[this.data.role].updateReadiness(true);
   }
 }
@@ -658,14 +634,6 @@ export class OutOfCommissionedPioneer extends GameEventWithData {
   }
 
   apply(game: GameState): void {
-    let state: OutOfCommissionPioneer;
-    if (game.currentEvent.state instanceof OutOfCommissionPioneer) {
-      state = game.currentEvent.state;
-    } else {
-      return;
-    }
-
-    state.playerOutOfCommission(this.data.role);
     game.players[this.data.role].updateReadiness(true);
   }
 }
@@ -678,14 +646,6 @@ export class OutOfCommissionedEntrepreneur extends GameEventWithData {
   }
 
   apply(game: GameState): void {
-    let state: OutOfCommissionEntrepreneur;
-    if (game.currentEvent.state instanceof OutOfCommissionEntrepreneur) {
-      state = game.currentEvent.state;
-    } else {
-      return;
-    }
-
-    state.playerOutOfCommission(this.data.role);
     game.players[this.data.role].updateReadiness(true);
   }
 }
@@ -703,10 +663,10 @@ export class SelectedInfluence extends GameEventWithData {
       this,
       game.currentEvent.state
     );
-    let state: BondingThroughAdversity;
+    let eventState: BondingThroughAdversity;
     if (game.currentEvent.state instanceof BondingThroughAdversity) {
-      state = game.currentEvent.state;
-      state.updateVotes(this.data.role, this.data.influence);
+      eventState = game.currentEvent.state;
+      eventState.updateVotes(this.data.role, this.data.influence);
       game.players[this.data.role].updateReadiness(true);
       logger.warn("done bonding");
     }

@@ -1,5 +1,5 @@
 import {EventClientView, InvestmentData, Phase, RESOURCES, Role, ROLES} from "@port-of-mars/shared/types";
-import {Bot, GameState, Player, Trade} from "@port-of-mars/server/rooms/game/state/index";
+import {Bot, GameState, Player} from "@port-of-mars/server/rooms/game/state/index";
 import {GameEvent} from "@port-of-mars/server/rooms/game/events/types";
 import {
   AcceptedTradeRequest,
@@ -138,9 +138,8 @@ export class ActorRunner implements Actor {
   [Phase.newRound](state: GameState, player: Player): Array<GameEvent> {
     if (player.ready) {
       return [];
-    } else {
-      return [new SetPlayerReadiness({value: true, role: player.role})];
     }
+    return [new SetPlayerReadiness({value: true, role: player.role})];
   }
 
   [Phase.events](state: GameState, player: Player): Array<GameEvent> {
@@ -156,20 +155,21 @@ export class ActorRunner implements Actor {
       return [];
     }
     const tbs = player.timeBlocks;
-    const speciality = player.specialty;
-    const specialityCost = player.costs[speciality];
-    const specialityUnits = Math.floor(tbs / specialityCost * 0.5);
-    const upkeepCost = player.costs['systemHealth'];
-    const upkeepUnits = Math.floor((tbs - specialityCost * specialityUnits) / upkeepCost);
+    const specialty = player.specialty;
+    const specialtyInfluenceCost = player.costs[specialty];
+    // compute amounts to invest in specialty influence and system health
+    const specialtyInfluenceInvestment = Math.floor(tbs / specialtyInfluenceCost * 0.5);
+    const systemHealthCost = player.costs['systemHealth'];
+    const systemHealthInvestment = Math.floor((tbs - specialtyInfluenceCost * specialtyInfluenceInvestment) / systemHealthCost);
     const investment: InvestmentData = {
       culture: 0,
       finance: 0,
       government: 0,
       legacy: 0,
       science: 0,
-      systemHealth: upkeepUnits
+      systemHealth: systemHealthInvestment
     };
-    investment[speciality] = specialityUnits;
+    investment[specialty] = specialtyInfluenceInvestment;
     return [
       new TimeInvested({investment, role: player.role}),
       new SetPlayerReadiness({value: true, role: player.role})
