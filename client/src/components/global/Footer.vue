@@ -16,7 +16,7 @@
 
       <b-col class="mr-auto text-center">
         This material is based upon work sponsored by ASU Interplanetary Initiative, ASU School of
-        Complex Adaptive Systems, and the National Science Foundation.
+        Complex Adaptive Systems, and National Science Foundation.
       </b-col>
 
       <!-- instagram -->
@@ -46,9 +46,8 @@
           <font-awesome-icon :icon="['fas', 'envelope']" size="lg" />
         </a>
       </b-col>
-
-      <!-- github -->
       <b-col cols="auto">
+        <!-- github -->
         <a href="https://github.com/virtualcommons/port-of-mars/" target="_blank">
           <font-awesome-icon :icon="['fab', 'github']" size="lg" />
         </a>
