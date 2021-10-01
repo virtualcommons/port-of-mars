@@ -9,13 +9,12 @@
         </p>
       </b-alert>
     </b-row>
-    <b-row class="w-100 mx-3" align-v="start">
-      <b-col cols="10" class="text-left" align-self="start">
+    <b-row class="w-100 mx-2" align-v="start">
+      <b-col class="text-left mr-2">
         <b-img
-          class="mt-2"
-          fluid
-          right
+          class="mt-3"
           v-bind="mainProps"
+          right
           :src="require(`@port-of-mars/client/assets/background/logo.png`)">
         </b-img>
         <h1 class="title">Welcome to the Port of Mars</h1>
@@ -25,21 +24,19 @@
         </h3>
       </b-col>
     </b-row>
-    <b-row class='w-100 mx-3'>
-      <b-col cols="6" class="text-center m-3 embed-responsive embed-responsive-16by9">
+    <b-row class='mx-2'>
+      <b-col cols="7" class="text-center m-3 embed-responsive embed-responsive-16by9">
         <iframe
           src="https://player.vimeo.com/video/618174821?h=82fd072f73"
-          width="640"
-          height="360"
           allow="autoplay; fullscreen; picture-in-picture"
           allowfullscreen
-          class="embed-responsive-item"
+          class="embed-responsive-item rounded h-75"
         >
         </iframe>
       </b-col>
-      <b-col cols="4" class="text-center" align-self="center">
+      <b-col cols="4" class="text-left mt-2">
         <h3 class="subtitle">
-          The next Mars Madness tournament is coming soon! Register to be notified when it starts.
+          The next Mars Madness tournament is coming soon! Register and get notified when it starts.
         </h3>
         <b-form-checkbox v-model="toggleDevLogin" v-if="isDevMode" class="my-2">
           <p v-if="toggleDevLogin" class="text-uppercase">Test Mode Enabled</p>
@@ -80,7 +77,7 @@
         <b-alert v-if="error" variant="warning">{{ error }}</b-alert>
       </b-col>
     </b-row>
-    <b-row class="pt-2 w-100" align-v="end" align-h="end">
+    <b-row class="w-100" align-v="end" align-h="end">
       <Footer></Footer>
     </b-row>
   </b-container>
@@ -111,8 +108,8 @@ export default class Login extends Vue {
     center: true,
     fluid: true,
     blankColor: "#bbb",
-    width: 250,
-    height: 250
+    width: 225,
+    height: 225
   };
 
   get submitDisabled() {

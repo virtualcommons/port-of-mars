@@ -1,6 +1,6 @@
 <template>
   <b-container class="p-3" style="background-color: var(--dark-shade-75)" fluid>
-    <b-row>
+    <b-row align-h="center">
       <!-- build id -->
       <b-col cols="auto"> Build: {{ buildId }} </b-col>
 
@@ -12,11 +12,6 @@
         >
           GNU AGPL v3.0
         </a>
-      </b-col>
-
-      <b-col class="mr-auto text-center">
-        This material is based upon work sponsored by ASU Interplanetary Initiative, ASU School of
-        Complex Adaptive Systems, and National Science Foundation.
       </b-col>
 
       <!-- instagram -->
@@ -52,10 +47,19 @@
           <font-awesome-icon :icon="['fab', 'github']" size="lg" />
         </a>
       </b-col>
-
       <b-col cols="auto">
-        &copy; 2021
-        <a href="https://www.azregents.edu/" target="_blank">Arizona Board of Regents</a>
+        <a href="https://www.azregents.edu/" target="_blank">
+        &copy; 2020 - {{ currentYear }} Arizona Board of Regents
+        </a>
+      </b-col>
+    </b-row>
+    <b-row align-h="center">
+      <b-col cols="auto">
+        <small>
+          This material is based on work sponsored by the <a href='https://interplanetary.asu.edu'>ASU Interplanetary Initiative</a>, 
+          <a href='https://complexity.asu.edu'>ASU School of Complex Adaptive Systems</a>, and 
+          the <a href='https://www.nsf.gov'>US National Science Foundation (SES-2049553)</a>.
+        </small>
       </b-col>
     </b-row>
   </b-container>
@@ -79,6 +83,7 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
 @Component({})
 export default class Footer extends Vue {
   buildId = "";
+  currentYear = new Date().getFullYear();
 
   async mounted() {
     this.buildId = BUILD_ID;
