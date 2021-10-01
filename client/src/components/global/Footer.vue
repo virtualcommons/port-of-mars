@@ -1,5 +1,5 @@
 <template>
-  <b-container class="p-3" style="background-color: var(--dark-shade-75)" fluid>
+  <b-container class="w-100 p-3" style="background-color: var(--dark-shade-75)" fluid>
     <b-row align-h="center">
       <!-- build id -->
       <b-col cols="auto"> Build: {{ buildId }} </b-col>

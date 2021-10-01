@@ -24,13 +24,13 @@
         </h3>
       </b-col>
     </b-row>
-    <b-row class='mx-2'>
+    <b-row class='mx-2' align-v="center">
       <b-col cols="7" class="text-center m-3 embed-responsive embed-responsive-16by9">
         <iframe
           src="https://player.vimeo.com/video/618174821?h=82fd072f73"
           allow="autoplay; fullscreen; picture-in-picture"
           allowfullscreen
-          class="embed-responsive-item rounded h-75"
+          class="embed-responsive-item rounded"
         >
         </iframe>
       </b-col>
@@ -77,9 +77,7 @@
         <b-alert v-if="error" variant="warning">{{ error }}</b-alert>
       </b-col>
     </b-row>
-    <b-row class="w-100" align-v="end" align-h="end">
-      <Footer></Footer>
-    </b-row>
+    <Footer></Footer>
   </b-container>
 </template>
 
