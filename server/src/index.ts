@@ -111,7 +111,7 @@ async function createApp() {
       helmet.contentSecurityPolicy({
         useDefaults: false,
         directives: {
-          defaultSrc: ["'self'", "player.vimeo.com"],
+          defaultSrc: ["'self'"],
           connectSrc: ["'self'", "sentry.comses.net"],
           frameSrc: ["'self'", "player.vimeo.com"],
           scriptSrc: ["'self'", "sentry.comses.net"],

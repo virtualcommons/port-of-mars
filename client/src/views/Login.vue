@@ -11,7 +11,7 @@
         </b-alert>
       </b-row>
       <b-row class="w-100" align-v="start">
-        <b-col class="text-center" align-self="start">
+        <b-col class="text-left" align-self="start">
           <h1 class="title">Welcome to Port of Mars</h1>
           <h3 class="subtitle">
             Port of Mars is a fun, game-based social science experiment set on the first human
@@ -19,8 +19,8 @@
           </h3>
         </b-col>
       </b-row>
-      <b-col cols="6" class="text-center"
-        ><iframe
+      <b-col cols="6" class="text-center">
+        <iframe
           src="https://player.vimeo.com/video/618174821?h=82fd072f73"
           width="640"
           height="360"
@@ -29,9 +29,9 @@
           allowfullscreen
         ></iframe
       ></b-col>
-      <b-col cols="4" class="text-center" align-self="center">
+      <b-col cols="4" class="text-left" align-self="center">
         <h3 class="subtitle">
-          Click below to sign up for Mars Madness Tournament
+          The next Mars Madness tournament is coming soon! Register below and get notified when it starts.
         </h3>
       </b-col>
       <b-row class="w-100">
@@ -52,7 +52,7 @@
             squared
             block
           >
-            <h3>Register for Mars Madness October 2021</h3>
+          <h3>Register for Mars Madness {{ currentYear }}</h3>
           </b-button>
 
           <!-- register form -->
@@ -109,6 +109,7 @@ export default class Login extends Vue {
   error: string = "";
   isDevMode: boolean = false;
   toggleDevLogin: boolean = false;
+  currentYear = new Date().getFullYear();
 
   mainProps = {
     center: true,
