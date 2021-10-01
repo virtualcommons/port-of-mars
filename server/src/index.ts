@@ -106,19 +106,22 @@ async function createApp() {
       credentials: true
     }));
   } else {
-    app.use(helmet({
-      contentSecurityPolicy: {
+    logger.info("setting helmet content security policy");
+    app.use(
+      helmet.contentSecurityPolicy({
+        useDefaults: false,
         directives: {
-          defaultSrc: ["'self'"],
-          scriptSrc: ["'self'", "https://sentry.comses.net"],
-          connectSrc: ["'self'", "https://sentry.comses.net"],
-	  imgSrc: ["'self'", "data:"],
-	  styleSrc: ["'self'", "https://fonts.googleapis.com", "'unsafe-inline'"],
-	  fontSrc: ["'self'", "https://fonts.gstatic.com"],
-	  objectSrc: ["'none'"],
-      },
-    }
-  }));
+          defaultSrc: ["'self'", "player.vimeo.com"],
+          connectSrc: ["'self'", "sentry.comses.net"],
+          frameSrc: ["'self'", "player.vimeo.com"],
+          scriptSrc: ["'self'", "sentry.comses.net"],
+	        imgSrc: ["'self'", "data:"],
+	        styleSrc: ["'self'", "fonts.googleapis.com", "'unsafe-inline'"],
+	        fontSrc: ["'self'", "fonts.gstatic.com"],
+	        objectSrc: ["'none'"],
+        }
+      })
+    );
   }
   app.use(express.static('static'));
   app.use(express.json());
