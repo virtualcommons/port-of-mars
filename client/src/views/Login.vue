@@ -4,8 +4,8 @@
       <b-alert class="text-center w-100" show variant="warning">
         <p class="mt-2">
           <b-icon class="mx-2" icon="exclamation-triangle-fill" variant="danger"></b-icon> You are
-          currently accessing a development version of the Port of Mars only used for testing. Go
-          to <a href="https://portofmars.asu.edu">portofmars.asu.edu</a> for the real deal.
+          currently accessing a development version of the Port of Mars only used for testing. Go to
+          <a href="https://portofmars.asu.edu">portofmars.asu.edu</a> for the real deal.
         </p>
       </b-alert>
     </b-row>
@@ -15,7 +15,8 @@
           class="mt-3"
           v-bind="mainProps"
           right
-          :src="require(`@port-of-mars/client/assets/background/logo.png`)">
+          :src="require(`@port-of-mars/client/assets/background/logo.png`)"
+        >
         </b-img>
         <h1 class="title">Welcome to the Port of Mars</h1>
         <h3 class="subtitle">
@@ -24,7 +25,7 @@
         </h3>
       </b-col>
     </b-row>
-    <b-row class='mx-2' align-v="center">
+    <b-row class="mx-2" align-v="center">
       <b-col cols="7" class="text-center m-3 embed-responsive embed-responsive-16by9">
         <iframe
           src="https://player.vimeo.com/video/618174821?h=82fd072f73"
@@ -54,7 +55,7 @@
           squared
           block
         >
-        Register for Mars Madness {{ currentYear }}
+          Register for Mars Madness {{ currentYear }}
         </b-button>
         <!-- register form -->
         <b-form
@@ -77,7 +78,10 @@
         <b-alert v-if="error" variant="warning">{{ error }}</b-alert>
       </b-col>
     </b-row>
-    <Footer></Footer>
+    <!-- align Footer to bottom of viewport using Bootstrap fixed-bottom utility 
+        https://getbootstrap.com/docs/4.4/utilities/position/#fixed-bottom
+    -->
+    <Footer class="fixed-bottom"></Footer>
   </b-container>
 </template>
 

@@ -49,16 +49,17 @@
       </b-col>
       <b-col cols="auto">
         <a href="https://www.azregents.edu/" target="_blank">
-        &copy; 2020 - {{ currentYear }} Arizona Board of Regents
+          &copy; 2020 - {{ currentYear }} Arizona Board of Regents
         </a>
       </b-col>
     </b-row>
     <b-row align-h="center">
       <b-col cols="auto">
         <small>
-          This material is based on work sponsored by the <a href='https://interplanetary.asu.edu'>ASU Interplanetary Initiative</a>, 
-          <a href='https://complexity.asu.edu'>ASU School of Complex Adaptive Systems</a>, and 
-          the <a href='https://www.nsf.gov'>US National Science Foundation (SES-2049553)</a>.
+          This material is based on work sponsored by the
+          <a href="https://interplanetary.asu.edu">ASU Interplanetary Initiative</a>,
+          <a href="https://complexity.asu.edu">ASU School of Complex Adaptive Systems</a>, and the
+          <a href="https://www.nsf.gov">US National Science Foundation (SES-2049553)</a>.
         </small>
       </b-col>
     </b-row>
