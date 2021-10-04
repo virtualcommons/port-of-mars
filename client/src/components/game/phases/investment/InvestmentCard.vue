@@ -1,10 +1,18 @@
 <template>
-  <b-container class="m-2" style="width: 30%; background-color: var(--dark-shade)">
-    <b-row class="text-center">
-      <b-col cols="12" style="background-color: var(--light-shade)">
-        <p class="text-capitalize my-2" style="color: var(--dark-shade)">{{ label }}</p>
+  <b-container
+    class="m-2"
+    style="width: 30%; background-color: var(--dark-shade); border: 0.2rem solid var(--light-shade-25)"
+  >
+    <b-row align-v="stretch" class="h-100 text-center">
+      <b-col style="color: var(--dark-shade)">
+        <p class="text-capitalize p-2 my-3" style="background-color: var(--light-shade)">
+          {{ label }}
+        </p>
       </b-col>
-      <b-col cols="12">
+      <!-- create equal-width cols that span multiple lines by inserting <div class="w-100" /> to break new line after
+           a col https://bootstrap-vue.org/docs/components/layout#columns-b-col -->
+      <div class="w-100"></div>
+      <b-col>
         <b-img
           rounded="circle"
           v-bind="mainProps"
@@ -14,7 +22,8 @@
         >
         </b-img>
       </b-col>
-      <b-col cols="12">
+      <div class="w-100"></div>
+      <b-col>
         <b-form-spinbutton
           v-model="pendingInvestment"
           :disabled="cannotInvest"
@@ -42,12 +51,13 @@
           </template>
         </b-form-spinbutton>
       </b-col>
-      <b-col cols="6" class="text-left mt-3">
+      <div class="w-100"></div>
+      <b-col align-self="end" cols="auto" class="mr-auto mb-2">
         <!-- pending units -->
         <b-icon-bag-plus scale="1.5"></b-icon-bag-plus>
         <span v-if="pendingUnits > 0" class="mx-2" style="color: green">+ {{ pendingUnits }}</span>
       </b-col>
-      <b-col cols="6" class="text-right mt-3">
+      <b-col align-self="end" cols="auto" class="mb-2">
         <!-- cost -->
         <font-awesome-icon :icon="['fas', 'clock']" size="lg"></font-awesome-icon>
         <span class="mx-2">{{ cannotAfford ? "-" : cost }}</span>
