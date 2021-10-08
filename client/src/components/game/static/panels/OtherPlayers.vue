@@ -1,18 +1,27 @@
 <template>
-  <b-row class="m-0 p-0"
-         style="cursor: pointer; transition: color 0.15s ease-in-out, background-color 0.15s
+  <b-row
+    class="m-0 p-0"
+    style="cursor: pointer; transition: color 0.15s ease-in-out, background-color 0.15s
                ease-in-out;"
-         fluid
-         @click="handleModal()"
-         v-b-modal="'gameModal'"
+    fluid
+    @click="setModalData"
+    v-b-modal="'gameModal'"
   >
     <b-col cols="3" class="h-100 w-100">
-      <b-row :style="indicatorStyle" class="p-1 my-2 mx-auto" style="border-radius: 50%;
+      <b-row
+        :style="indicatorStyle"
+        class="p-1 my-2 mx-auto"
+        style="border-radius: 50%;
                height: 4rem; width: 4rem;  transition: color 0.15s ease-in-out,
-               background-color 0.15s ease-in-out;">
+               background-color 0.15s ease-in-out;"
+      >
         <b-col :style="frameColor" class="w-100 h-100 m-0 p-0" style="border-radius: 50%">
-          <img :src="playerRoleImage" alt="Player Image" style="object-fit: cover"
-               class="w-100 h-100 m-0 p-0"/>
+          <img
+            :src="playerRoleImage"
+            alt="Player Image"
+            style="object-fit: cover"
+            class="w-100 h-100 m-0 p-0"
+          />
         </b-col>
       </b-row>
     </b-col>
@@ -24,11 +33,11 @@
 </template>
 
 <script lang="ts">
-import {Component, Inject, Prop, Vue} from 'vue-property-decorator';
-import {GameRequestAPI} from '@port-of-mars/client/api/game/request';
+import { Component, Inject, Prop, Vue } from "vue-property-decorator";
+import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 
 @Component({
-  components: {},
+  components: {}
 })
 export default class OtherPlayers extends Vue {
   @Inject() readonly api!: GameRequestAPI;
@@ -39,14 +48,14 @@ export default class OtherPlayers extends Vue {
 
   get frameColor(): object {
     return this.role
-      ? {backgroundColor: `var(--color-${this.role})`}
-      : {backgroundColor: `var(--color-Researcher)`};
+      ? { backgroundColor: `var(--color-${this.role})` }
+      : { backgroundColor: `var(--color-Researcher)` };
   }
 
   get indicatorStyle() {
     return !this.ready
-      ? {border: `0.125rem solid var(--color-${this.role})`}
-      : {border: `0.125rem solid var(--green)`};
+      ? { border: `0.125rem solid var(--color-${this.role})` }
+      : { border: `0.125rem solid var(--green)` };
   }
 
   get playerRoleImage(): any {
@@ -55,13 +64,13 @@ export default class OtherPlayers extends Vue {
       : require(`@port-of-mars/client/assets/characters/Researcher.png`);
   }
 
-  handleModal(): void {
+  setModalData(): void {
     this.api.setModalVisible({
-      type: 'PlayerModal',
+      type: "PlayerModal",
       data: {
         role: this.role,
-        title: `${this.role} Details`,
-      },
+        title: `${this.role} Details`
+      }
     });
   }
 }

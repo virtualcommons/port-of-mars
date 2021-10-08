@@ -2,38 +2,31 @@ import {
   MarsEventData,
   AccomplishmentData,
   Role,
-} from '../../types';
+} from "@port-of-mars/shared/types";
 
-export type ModalActivator = 'Server' | 'User' | 'Default';
+export type ModalActivator = "Server" | "User" | "Default";
 
-export interface GeneralModalData {
+export interface ModalData {
   activator: ModalActivator;
-  title: string;
-  content: string;
 }
 
-export type CardModalType = 'EventCard' | 'AccomplishmentCard';
+export type CardModalType = "EventCard" | "AccomplishmentCard";
 
-export interface CardModalData extends GeneralModalData {
+export interface CardModalData extends ModalData {
   cardType: CardModalType;
   cardData: MarsEventData | AccomplishmentData;
-  confirmation: boolean;
 }
 
-export interface PlayerInfoModalData {
+export interface PlayerModalData {
   role: Role;
 }
 
 export interface TradeRequestModalData {}
 
-export type ModalViewType =
-  | 'GeneralModal'
-  | 'CardModal'
-  | 'PlayerModal'
-  | 'TradeRequestModal';
+export type ModalType = "CardModal" | "PlayerModal" | "TradeRequestModal";
 
 export type ModalDataType =
-  | GeneralModalData
+  | ModalData
   | CardModalData
-  | PlayerInfoModalData
+  | PlayerModalData
   | TradeRequestModalData;

@@ -6,7 +6,7 @@
       :key="modalData.cardData.id"
       :accomplishment="modalData.cardData"
       :isModal="true"
-    />
+    ></AccomplishmentCard>
     <!-- event -->
     <EventCard
       v-else-if="modalData.cardType === 'EventCard'"
@@ -15,28 +15,26 @@
       :visible="true"
       :isModal="true"
       :wasSpawnedByServer="serverCreated(modalData.activator)"
-    />
-
+    ></EventCard>
   </b-container>
 </template>
 
 <script lang="ts">
-import {Component, Vue, Inject, Prop} from 'vue-property-decorator';
-import {GameRequestAPI} from '@port-of-mars/client/api/game/request';
-import {CardModalData} from '@port-of-mars/shared/game/client/modals';
-import {Phase} from '@port-of-mars/shared/types';
-import EventCard from '@port-of-mars/client/components/game/phases/events/EventCard.vue';
-import AccomplishmentCard
-  from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
+import { Component, Vue, Inject, Prop } from "vue-property-decorator";
+import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
+import { CardModalData } from "@port-of-mars/shared/game/client/modals";
+import { Phase } from "@port-of-mars/shared/types";
+import EventCard from "@port-of-mars/client/components/game/phases/events/EventCard.vue";
+import AccomplishmentCard from "@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue";
 
 @Component({
   components: {
     EventCard,
-    AccomplishmentCard,
-  },
+    AccomplishmentCard
+  }
 })
 export default class CardModal extends Vue {
-  @Prop({}) private modalData!: CardModalData;
+  @Prop({}) modalData!: CardModalData;
   @Inject() readonly api!: GameRequestAPI;
 
   get gamePhase() {
@@ -47,8 +45,8 @@ export default class CardModal extends Vue {
     return Phase;
   }
 
-  private serverCreated(activator: string) {
-    return activator == 'Server';
+  serverCreated(activator: string) {
+    return activator == "Server";
   }
 }
 </script>

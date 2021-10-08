@@ -1,31 +1,48 @@
 <template>
-  <div
-    :class="[cardTypeStyling(type), isModal ? 'modal-view' : 'mb-2']"
-    class="w-100 p-0 mx-0 overflow-hidden"
+  <b-container
+    fluid
+    :style="
+      canPurchase
+        ? 'border: 0.125rem solid var(--light-accent)'
+        : 'border: 0.125rem solid var(--light-shade)'
+    "
+    :class="[isModal ? 'border: none' : 'mb-2']"
+    class="p-0 mx-0"
     v-show="isActive"
   >
     <!-- title -->
-    <b-row align-v="center" class="w-100 mx-0 mt-2 p-0 justify-content-center align-items-center"
-           style="cursor: pointer"
-           @click="showInfo"
-           v-b-modal="'gameModal'"
-    >
-      <b-col class="m-0 p-0 w-100">
-        <p :style="fontColor()" class="w-100 text-center">{{ accomplishment.label }}</p>
-      </b-col>
-    </b-row>
-
-    <!-- information: points, description -->
     <b-row
-      :class="isModal ? 'p-4 p-lg-4' : ''"
       align-v="center"
-      class="w-100 m-0 p-2"
-      style="background-color: rgb(34, 26, 27)"
+      class="w-100 mx-0 mt-2 p-0 text-center"
+      style="background-color: var(--dark-shade)"
     >
+      <b-col
+        @click="setModalData"
+        v-b-modal="'gameModal'"
+        :style="showCard ? 'color: black' : 'color: white'"
+        style="cursor: pointer"
+      >
+        <h5
+          :style="
+            canPurchase
+              ? 'backgroundColor: var(--light-accent)'
+              : 'backgroundColor: var(--light-shade)'
+          "
+          class="p-2 text-center"
+        >
+          {{ accomplishment.label }}
+        </h5>
+      </b-col>
+
+      <!-- Equal-width columns that span multiple lines: https://bootstrap-vue.org/docs/components/layout#comp-ref-b-col -->
+      <div class="w-100"></div>
+
+      <!-- information: points, description -->
+
       <!-- points -->
       <b-col
-        :class="showDescription ? 'mt-3 col-3' : 'col-12'"
-        class="d-flex flex-column justify-content-center align-items-center"
+        :class="[showDescription ? 'mt-3 col-3' : 'col-12', isModal ? 'p-4 p-lg-4' : '']"
+        class="d-flex flex-column justify-content-center align-items-center  m-0 p-2"
       >
         <p>{{ accomplishment.victoryPoints }} Points</p>
       </b-col>
@@ -38,94 +55,106 @@
       >
         <p>{{ accomplishment.flavorText }}</p>
       </b-col>
-    </b-row>
-    <!--    </div>-->
 
-    <!-- cost -->
-    <b-row class="w-100 m-0 pt-1"
-           style="background-color: rgb(34, 26, 27); transition: all 0.15s ease-in-out;">
-      <b-row class="d-flex flex-wrap w-100 m-0 justify-content-center px-4 py-2">
+      <div class="w-100"></div>
+
+      <!-- cost -->
+      <b-col
+        class="d-flex flex-wrap w-100 m-0 pt-1 justify-content-center px-4 py-2"
+        style="transition: all 0.15s ease-in-out;"
+      >
         <div
           :class="investment.available ? '' : 'unattainable-resource'"
           class="cost justify-content-center align-items-center"
           v-for="investment in accomplishmentCost"
         >
           <img
-            :src="
-              require(`@port-of-mars/client/assets/icons/${investment.influence}.svg`)
-            "
+            :src="require(`@port-of-mars/client/assets/icons/${investment.influence}.svg`)"
             alt="Investment"
           />
         </div>
-      </b-row>
+      </b-col>
+
+      <div class="w-100"></div>
+
+      <!-- in purchase phase, allow purchase if sufficient resources -->
+      <b-col
+        class="w-100 m-0 p-3 justify-content-center"
+        v-if="type === cardType.purchase && showCard"
+        style="transition: all 0.15s ease-in-out"
+      >
+        <b-button
+          variant="outline-success"
+          squared
+          size="lg"
+          :disabled="!canPurchase || playerReady"
+          @click="purchase()"
+        >
+          Purchase Accomplishment
+        </b-button>
+      </b-col>
+
+      <!-- in discard phase, allow discard -->
+      <b-col
+        class="w-100 m-0 p-3 justify-content-center"
+        style="transition: all 0.15s ease-in-out;"
+        v-else-if="type === cardType.discard && showCard"
+      >
+        <b-button
+          variant="outline-danger"
+          squared
+          size="lg"
+          v-if="!isEffortsWasted"
+          :disabled="playerReady"
+          @click="discard()"
+        >
+          Discard Accomplishment
+        </b-button>
+
+        <b-button
+          variant="outline-danger"
+          squared
+          size="lg"
+          v-else
+          :disabled="playerReady"
+          @click="discardPurchasedAccomplishment()"
+        >
+          Discard Purchased Accomplishment
+        </b-button>
+      </b-col>
+
+      <!-- display status of card after it has been purchased or discarded -->
+      <b-col class="w-100 m-0 p-3 text-center" style="transition: all 0.15s ease-in-out" v-else>
+        <p v-if="type === cardType.discard">Accomplishment Discarded</p>
+        <p v-else-if="type === cardType.purchase">Accomplishment Purchased</p>
+      </b-col>
     </b-row>
-
-    <!-- in purchase phase, allow purchase if sufficient resources -->
-    <b-row
-      class="w-100 m-0 p-3 justify-content-center"
-      v-if="type === cardType.purchase && showCard"
-      style="background-color: rgb(34, 26, 27); transition: all 0.15s ease-in-out;"
-    >
-      <button :disabled="!canPurchase || playerReady" @click="purchase()">
-        Purchase Accomplishment
-      </button>
-
-    </b-row>
-
-    <!-- in discard phase, allow discard -->
-    <b-row
-      class="w-100 m-0 p-3 justify-content-center"
-      style="background-color: rgb(34, 26, 27); transition: all 0.15s ease-in-out;"
-      v-else-if="type === cardType.discard && showCard"
-    >
-      <button v-if="!isEffortsWasted" :disabled="playerReady" @click="discard()">
-        Discard Accomplishment
-      </button>
-
-      <button v-else :disabled="playerReady" @click="discardPurchasedAccomplishment()">
-        Discard Purchased Accomplishment
-      </button>
-    </b-row>
-
-    <!-- display status of card after it has been purchased or discarded -->
-    <div
-      class="w-100 m-0 p-3 text-center"
-      style="transition: all 0.15s ease-in-out; background-color: rgb(34, 26, 27);"
-      v-else
-    >
-      <div class="text" v-if="type === cardType.discard">
-        <p>Accomplishment Discarded</p>
-      </div>
-      <div class="text" v-else-if="type === cardType.purchase">
-        <p>Accomplishment Purchased</p>
-      </div>
-    </div>
-  </div>
+  </b-container>
 </template>
 
 <script lang="ts">
-import {Component, Inject, Prop, Vue, Watch,} from 'vue-property-decorator';
-import {AccomplishmentCardType} from '@port-of-mars/client/types/cards';
+import { Component, Inject, Prop, Vue, Watch } from "vue-property-decorator";
+import { AccomplishmentCardType } from "@port-of-mars/client/types/cards";
 import {
   AccomplishmentData,
   Investment,
   InvestmentData,
   INVESTMENTS,
   Resource,
-  ResourceAmountData,
-} from '@port-of-mars/shared/types';
+  ResourceAmountData
+} from "@port-of-mars/shared/types";
 
-import {library} from '@fortawesome/fontawesome-svg-core';
-import {faInfoCircle} from '@fortawesome/free-solid-svg-icons/faInfoCircle';
-import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons/faInfoCircle";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-import {GameRequestAPI} from '@port-of-mars/client/api/game/request';
-import {canPurchaseAccomplishment} from '@port-of-mars/shared/validation';
+import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
+import { canPurchaseAccomplishment } from "@port-of-mars/shared/validation";
 
-import * as _ from 'lodash';
+import * as _ from "lodash";
 
 library.add(faInfoCircle);
-Vue.component('font-awesome-icon', FontAwesomeIcon);
+Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 @Component({})
 export default class AccomplishmentCard extends Vue {
@@ -144,26 +173,26 @@ export default class AccomplishmentCard extends Vue {
       culture: undefined,
       systemHealth: undefined,
       victoryPoints: undefined,
-      effect: undefined,
-    }),
+      effect: undefined
+    })
   })
   accomplishment!: AccomplishmentData;
 
   // accomplishment type: default, discard, purchase
-  @Prop({default: AccomplishmentCardType.default})
+  @Prop({ default: AccomplishmentCardType.default })
   type!: AccomplishmentCardType;
 
   // show accomplishment description
-  @Prop({default: true})
+  @Prop({ default: true })
   showDescription!: boolean;
 
   // if card has been discarded, showCard = false
   // else showCard = true
-  @Prop({default: true})
+  @Prop({ default: true })
   showCard!: boolean;
 
   // accomplishment modal view
-  @Prop({default: false})
+  @Prop({ default: false })
   isModal!: boolean;
 
   // set when showCard changes
@@ -205,9 +234,8 @@ export default class AccomplishmentCard extends Vue {
     const costs = INVESTMENTS.filter(
       // this.accomplishment generates cost of accomplishment
       // e.g. cost = { ..., culture: 3, science: 0, finance: 0, legacy: 0, govt: 0 }
-      (influence) => this.accomplishment[influence] != 0
-    ).flatMap((influence) =>
-
+      influence => this.accomplishment[influence] != 0
+    ).flatMap(influence =>
       // accomplishment cost formatted as : [ culture, culture, culture]
       _.fill(Array(Math.abs(this.accomplishment[influence])), influence)
     );
@@ -221,13 +249,12 @@ export default class AccomplishmentCard extends Vue {
     for (const influence of costs) {
       costMap.push({
         influence,
-        available: this.isInfluenceAvailable(influence, inventory),
-      })
+        available: this.isInfluenceAvailable(influence, inventory)
+      });
     }
 
     // return cost map
     return costMap;
-
   }
 
   // local player's inventory
@@ -235,7 +262,7 @@ export default class AccomplishmentCard extends Vue {
     const pendingInventory = _.cloneDeep(this.pendingInvestments);
     const inventory = _.cloneDeep(this.inventory);
 
-    Object.keys(inventory).forEach((resource) => {
+    Object.keys(inventory).forEach(resource => {
       inventory[resource as Resource] += pendingInventory[resource as Resource];
     });
 
@@ -251,7 +278,7 @@ export default class AccomplishmentCard extends Vue {
   }
 
   // hide card if showCard value changes upon discard
-  @Watch('showCard', {immediate: true})
+  @Watch("showCard", { immediate: true })
   shouldShowCard(showCard: boolean) {
     if (!showCard) {
       // if Accomplishment status changes, remove card
@@ -269,41 +296,42 @@ export default class AccomplishmentCard extends Vue {
     switch (type) {
       case AccomplishmentCardType.purchase:
         if (this.showCard) {
-          return this.canPurchase ? 'purchasable' : 'unpurchasable';
+          return this.canPurchase
+            ? { backgroundColor: "var(--light-accent)" }
+            : { backgroundColor: "var(--light-accent)" };
         } else {
-          return 'purchased hide-card';
+          return "purchased";
         }
       case AccomplishmentCardType.discard:
         if (this.showCard) {
-          return this.canPurchase ? 'purchasable' : 'default';
+          return this.canPurchase ? "purchasable" : "default";
         } else {
-          return 'discarded hide-card';
+          return "discarded";
         }
       case AccomplishmentCardType.default:
-        return this.canPurchase ? 'purchasable' : 'unpurchasable';
+        return this.canPurchase ? "purchasable" : "unpurchasable";
       default:
-        return 'default';
+        return "default";
     }
   }
 
   // font color for accomplishment title
   fontColor() {
-    if (!this.showCard) return {color: 'white'};
-    return {color: 'black'};
+    if (!this.showCard) return { color: "white" };
+    return { color: "black" };
   }
 
   // expand card into modal that displays accomplishment info
-  showInfo() {
+  setModalData() {
     let data = {
-      type: 'CardModal',
+      type: "CardModal",
       data: {
-        activator: 'User',
-        title: 'Accomplishment Card',
-        content: 'This is an accomplishment.',
-        cardType: 'AccomplishmentCard',
-        cardData: this.accomplishment,
-        confirmation: false,
-      },
+        activator: "User",
+        title: "Accomplishment Card",
+        content: "This is an accomplishment.",
+        cardType: "AccomplishmentCard",
+        cardData: this.accomplishment
+      }
     };
 
     this.api.setModalVisible(data);
@@ -315,7 +343,7 @@ export default class AccomplishmentCard extends Vue {
    * @param inventory
    */
   isInfluenceAvailable(influence: Investment, inventory: ResourceAmountData) {
-    if (influence === 'systemHealth') {
+    if (influence === "systemHealth") {
       return true;
     }
 
@@ -330,22 +358,39 @@ export default class AccomplishmentCard extends Vue {
 
   // purchase accomplishment
   purchase() {
-    if (this.canPurchase) this.$emit('purchased', this.accomplishment);
+    if (this.canPurchase) this.$emit("purchased", this.accomplishment);
   }
 
   // discard accomplishment
   discard() {
-    this.$emit('discarded', this.accomplishment.id);
+    this.$emit("discarded", this.accomplishment.id);
   }
 
   discardPurchasedAccomplishment() {
-    this.$emit('discardPurchased', this.accomplishment.id)
+    this.$emit("discardPurchased", this.accomplishment.id);
   }
-
 }
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/accomplishments/AccomplishmentCard.scss';
+@import "@port-of-mars/client/stylesheets/game/accomplishments/AccomplishmentCard.scss";
+p {
+  font-size: var(--font-med);
+}
 
+// .purchasable {
+//   background-color: $light-accent;
+// }
+
+// .unpurchasable {
+//   background-color: $light-shade;
+// }
+
+// .purchased {
+//   color: var(--status-green);
+// }
+
+// .discarded {
+//   color: var(--status-red);
+// }
 </style>

@@ -6,23 +6,22 @@
       <b-col cols="2">
         <div class="indicator" :style="indicatorStyle">
           <div class="frame" :style="frameColor">
-            <img :src="playerRoleImage" alt="Player Image"/>
+            <img :src="playerRoleImage" alt="Player Image" />
           </div>
         </div>
       </b-col>
       <!-- information -->
       <b-col cols="6" align-self="center">
         <h3 class="role">
-          {{
-            playerData.isSelf ? `You (${modalData.role})` : modalData.role
-          }}
+          {{ playerData.isSelf ? `You (${modalData.role})` : modalData.role }}
         </h3>
       </b-col>
       <!-- trade -->
       <b-col cols="4">
         <b-button
           v-if="!playerData.isSelf && gamePhase === phase.trade"
-          @click="handleRequestTrade">
+          @click="handleRequestTrade"
+        >
           Request Trade
         </b-button>
       </b-col>
@@ -32,17 +31,11 @@
       <b-col cols="6">
         <h2 class="text-center">Inventory</h2>
         <div class="outer-wrapper">
-          <div
-            class="unavailable"
-            v-if="!playerData.isSelf && !isUnderAudit"
-          >
+          <div class="unavailable" v-if="!playerData.isSelf && !isUnderAudit">
             <p class="my-4">This information cannot be viewed at this time. Check back later...</p>
           </div>
-          <div
-            class="wrapper"
-            v-else-if="playerData.isSelf || isUnderAudit"
-          >
-            <Inventory :isSelf="false" :role="modalData.role"/>
+          <div class="wrapper" v-else-if="playerData.isSelf || isUnderAudit">
+            <Inventory :isSelf="false" :role="modalData.role" />
           </div>
         </div>
       </b-col>
@@ -65,20 +58,14 @@
           </b-button>
         </b-button-group>
         <div class="outer-wrapper">
-          <div
-            class="unavailable"
-            v-if="!playerData.isSelf && !isUnderAudit"
-          >
-            <p class="my-4" v-if="accomplishmentType==='purchasable'">This information is currently
-              private and cannot
-              be viewed at this time.</p>
-            <p v-if="accomplishmentType==='purchased'" class="my-4">None</p>
+          <div class="unavailable" v-if="!playerData.isSelf && !isUnderAudit">
+            <p class="my-4" v-if="accomplishmentType === 'purchasable'">
+              This information is currently private and cannot be viewed at this time.
+            </p>
+            <p v-if="accomplishmentType === 'purchased'" class="my-4">None</p>
           </div>
           <!-- col: accomplishments -->
-          <div
-            class="wrapper"
-            v-else-if="playerData.isSelf || isUnderAudit"
-          >
+          <div class="wrapper" v-else-if="playerData.isSelf || isUnderAudit">
             <AccomplishmentCard
               v-for="accomplishment in accomplishmentCards"
               :key="accomplishment.id"
@@ -93,36 +80,35 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue, Prop, Inject} from 'vue-property-decorator';
-import {PlayerInfoModalData} from '@port-of-mars/shared/game/client/modals';
-import {Role, Phase} from '@port-of-mars/shared/types';
-import Inventory from '@port-of-mars/client/components/game/Inventory.vue';
-import AccomplishmentCard
-  from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
-import {library} from '@fortawesome/fontawesome-svg-core';
-import {faTimes} from '@fortawesome/free-solid-svg-icons/faTimes';
-import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
-import {GameRequestAPI} from '@port-of-mars/client/api/game/request';
+import { Component, Vue, Prop, Inject } from "vue-property-decorator";
+import { PlayerModalData } from "@port-of-mars/shared/game/client/modals";
+import { Role, Phase } from "@port-of-mars/shared/types";
+import Inventory from "@port-of-mars/client/components/game/Inventory.vue";
+import AccomplishmentCard from "@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faTimes } from "@fortawesome/free-solid-svg-icons/faTimes";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 
 library.add(faTimes);
-Vue.component('font-awesome-icon', FontAwesomeIcon);
+Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 @Component({
   components: {
     Inventory,
-    AccomplishmentCard,
-  },
+    AccomplishmentCard
+  }
 })
 export default class PlayerModal extends Vue {
   @Inject() readonly api!: GameRequestAPI;
 
-  @Prop({}) modalData!: PlayerInfoModalData;
-  accomplishmentType: string = 'purchasable';
+  @Prop({}) modalData!: PlayerModalData;
+  accomplishmentType: string = "purchasable";
 
   get playerData() {
     return {
       info: this.$tstore.state.players[this.modalData.role],
-      isSelf: this.modalData.role === this.$tstore.getters.player.role,
+      isSelf: this.modalData.role === this.$tstore.getters.player.role
     };
   }
 
@@ -159,21 +145,21 @@ export default class PlayerModal extends Vue {
 
   get frameColor(): object {
     return this.modalData.role
-      ? {backgroundColor: `var(--color-${this.modalData.role})`}
-      : {backgroundColor: `var(--color-Researcher)`};
+      ? { backgroundColor: `var(--color-${this.modalData.role})` }
+      : { backgroundColor: `var(--color-Researcher)` };
   }
 
   get indicatorStyle() {
     return !this.playerData.info.ready
-      ? {border: `0.2rem solid var(--color-${this.modalData.role})`}
-      : {border: `0.2rem solid var(--green)`};
+      ? { border: `0.2rem solid var(--color-${this.modalData.role})` }
+      : { border: `0.2rem solid var(--green)` };
   }
 
   get accomplishmentCards(): any {
     switch (this.accomplishmentType) {
-      case 'purchasable':
+      case "purchasable":
         return this.playerData.info.accomplishments.purchasable;
-      case 'purchased':
+      case "purchased":
         return this.playerData.info.accomplishments.purchased;
       default:
         return this.playerData.info.accomplishments.purchasable;
@@ -187,8 +173,8 @@ export default class PlayerModal extends Vue {
   handleRequestTrade() {
     if (!this.playerData.isSelf && this.gamePhase === this.phase.trade) {
       this.api.setModalVisible({
-        type: 'TradeRequestModal',
-        data: {},
+        type: "TradeRequestModal",
+        data: {}
       });
     }
   }

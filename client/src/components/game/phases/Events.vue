@@ -4,7 +4,10 @@
       <!-- events | active accomplishments -->
 
       <!-- toggle events or active accomplishments -->
-      <b-row class="h-auto w-100 m-0 p-3 justify-content-center" style="background-color: var(--main-brand)">
+      <b-row
+        class="h-auto w-100 m-0 p-3 justify-content-center"
+        style="background-color: var(--main-brand)"
+      >
         <b-col class="h-100 w-100 text-center my-auto p-0 mx-0" cols="6">
           <button
             :class="selectedView === 'Event Deck' ? 'selected' : ''"
@@ -25,10 +28,14 @@
         </b-col>
       </b-row>
       <!-- event deck -->
-      <b-row v-if="selectedView === 'Event Deck'" class="flex-grow-1 w-100 mx-auto mt-3"
-             style="background-color: var(--light-shade-05)"
+      <b-row
+        v-if="selectedView === 'Event Deck'"
+        class="flex-grow-1 w-100 mx-auto mt-3"
+        style="background-color: var(--light-shade-05)"
       >
-        <div class="position-absolute p-3" style="overflow-y: auto; overflow-x: hidden;
+        <div
+          class="position-absolute p-3  event-scroll"
+          style="overflow-y: auto; overflow-x: hidden;
              height: 80%; width: 92%;"
         >
           <EventCard
@@ -38,7 +45,7 @@
             :event="event"
             :visible="eventVisible(index)"
             class="my-2"
-          />
+          ></EventCard>
         </div>
       </b-row>
       <!-- accomplishments -->
@@ -47,7 +54,9 @@
         class="flex-grow-1 w-100 mx-auto mt-3 p-3"
         style="background-color: var(--light-shade-05)"
       >
-        <div class="position-absolute p-3 w-100" style="overflow-y: auto; overflow-x: hidden;
+        <div
+          class="position-absolute p-3 w-100"
+          style="overflow-y: auto; overflow-x: hidden;
             max-height: 75%; max-width: 85%;"
         >
           <AccomplishmentCard
@@ -55,47 +64,49 @@
             :key="accomplishment.id"
             :accomplishment="accomplishment"
             :showDescription="false"
-          />
+          ></AccomplishmentCard>
         </div>
       </b-row>
     </b-col>
 
     <b-col class="d-flex flex-column h-100 w-100" cols="8">
-      <b-row class="w-100 m-0 p-3 justify-content-center"
-             style="background-color: var(--main-brand); color: var(--dark-shade)"
+      <b-row
+        class="w-100 m-0 p-3 justify-content-center"
+        style="background-color: var(--main-brand); color: var(--dark-shade)"
       >
         <p class="m-auto">
           {{ eventTitle }}
         </p>
       </b-row>
-      <b-row class="flex-grow-1 w-100 mx-auto mt-3 p-3"
-             style="background-color: var(--light-shade-05)"
+      <b-row
+        class="flex-grow-1 w-100 mx-auto mt-3 p-3"
+        style="background-color: var(--light-shade-05)"
       >
-        <EventContainer :key="eventNumber" :event="currentEvent"/>
+        <EventContainer :key="eventNumber" :event="currentEvent" />
       </b-row>
     </b-col>
   </b-row>
 </template>
 
 <script lang="ts">
-import {Component, Inject, Vue, Watch} from 'vue-property-decorator';
-import EventCard from './events/EventCard.vue';
-import EventContainer from './events/events/EventContainer.vue';
-import AccomplishmentCard from '@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue';
-import {MarsEventData, Phase} from '@port-of-mars/shared/types';
-import {GameRequestAPI} from '@port-of-mars/client/api/game/request';
+import { Component, Inject, Vue, Watch } from "vue-property-decorator";
+import EventCard from "./events/EventCard.vue";
+import EventContainer from "./events/events/EventContainer.vue";
+import AccomplishmentCard from "@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue";
+import { MarsEventData, Phase } from "@port-of-mars/shared/types";
+import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 
 @Component({
   components: {
     EventCard,
     EventContainer,
-    AccomplishmentCard,
-  },
+    AccomplishmentCard
+  }
 })
 export default class Events extends Vue {
   @Inject() readonly api!: GameRequestAPI;
 
-  private selectedView: string = 'Event Deck';
+  private selectedView: string = "Event Deck";
 
   // NOTE :: LIFECYCLE HOOKS & WATCHERS
 
@@ -128,7 +139,7 @@ export default class Events extends Vue {
   }
 
   updated() {
-    let elem = this.$el.querySelector('.event-scroll');
+    let elem = this.$el.querySelector(".event-scroll");
     if (elem) {
       elem!.scrollTop = elem!.scrollHeight;
     }
@@ -136,31 +147,30 @@ export default class Events extends Vue {
 
   // NOTE :: VIEW HANDLING
 
-  @Watch('eventsProcessed')
+  @Watch("eventsProcessed")
   onEventsProcessedChange(val: any, oldVal: any) {
-    if (this.selectedView === 'Active Accomplishments') {
-      this.selectedView = 'Event Deck';
+    if (this.selectedView === "Active Accomplishments") {
+      this.selectedView = "Event Deck";
     }
   }
 
   // NOTE :: EVENT CARDS
 
   //Open an event modal when a new card comes in
-  @Watch('currentEvent', { immediate: true })
+  @Watch("currentEvent", { immediate: true })
   onNewEvent(event: any) {
     console.log("displaying new event: ", event);
     this.api.setModalVisible({
-      type: 'CardModal',
+      type: "CardModal",
       data: {
-        activator: 'Server',
+        activator: "Server",
         title: event.name,
         content: event.effect,
-        cardType: 'EventCard',
-        cardData: event,
-        confirmation: false,
-      },
+        cardType: "EventCard",
+        cardData: event
+      }
     });
-    this.$root.$emit('bv::toggle::modal', 'gameModal');
+    this.$root.$emit("bv::toggle::modal", "gameModal");
   }
 
   switchView(view: string) {
@@ -168,17 +178,13 @@ export default class Events extends Vue {
   }
 
   eventVisible(index: number) {
-    return (
-      this.$tstore.state.phase !== Phase.events || index <= this.eventsProcessed
-    );
+    return this.$tstore.state.phase !== Phase.events || index <= this.eventsProcessed;
   }
 
   // NOTE :: ACCOMPLISHMENT CARDS
 
   eventActive(ind: number) {
-    return (
-      this.$tstore.state.phase === Phase.events && ind == this.eventsProcessed
-    );
+    return this.$tstore.state.phase === Phase.events && ind == this.eventsProcessed;
   }
 }
 </script>

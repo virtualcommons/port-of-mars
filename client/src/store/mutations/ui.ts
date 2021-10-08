@@ -1,7 +1,7 @@
 import { State, defaultTradeData } from '@port-of-mars/shared/game/client/state';
 import { Role, ResourceAmountData } from '@port-of-mars/shared/types';
 import {
-  ModalViewType,
+  ModalType,
   ModalDataType,
 } from '@port-of-mars/shared/game/client/modals';
 import {
@@ -14,15 +14,15 @@ import {
 
 function SET_MODAL_VISIBLE(
   state: State,
-  payload: { type: ModalViewType; data: ModalDataType }
+  payload: { type: ModalType; data: ModalDataType }
 ) {
-  state.userInterface.modalView.type = payload.type;
-  state.userInterface.modalView.data = payload.data;
+  state.userInterface.modal.type = payload.type;
+  state.userInterface.modal.data = payload.data;
 }
 
 function SET_MODAL_HIDDEN(state: State, payload: any) {
-  state.userInterface.modalView.type = null;
-  state.userInterface.modalView.data = null;
+  state.userInterface.modal.type = null;
+  state.userInterface.modal.data = null;
 }
 
 // NOTE :: CONTROL PROFILE MENU VISIBILITY

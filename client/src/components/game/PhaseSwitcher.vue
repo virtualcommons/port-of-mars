@@ -1,23 +1,21 @@
 <template>
-<!--  <b-container class="h-100 " fluid>-->
-    <b-row class="h-100 w-100 p-0 m-0">
-      <transition name="component-fade" mode="out-in">
-        <component :is="phase[gamePhase]"></component>
-      </transition>
-    </b-row>
-<!--  </b-container>-->
+  <b-row class="h-100 w-100 p-0 m-0">
+    <transition name="component-fade" mode="out-in">
+      <component :is="phase[gamePhase]"></component>
+    </transition>
+  </b-row>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
-import Invest from './phases/Investments.vue';
-import Trade from './phases/Trades.vue';
-import Purchase from './phases/Purchase.vue';
-import Discard from './phases/Discard.vue';
-import Events from './phases/Events.vue';
-import Default from './phases/Default.vue';
-import NewRound from './phases/NewRound.vue';
-import { Phase } from '@port-of-mars/shared/types';
+import { Vue, Component, Watch } from "vue-property-decorator";
+import Invest from "@port-of-mars/client/components/game/phases/Investments.vue";
+import Trade from "@port-of-mars/client/components/game/phases/Trades.vue";
+import Purchase from "@port-of-mars/client/components/game/phases/Purchase.vue";
+import Discard from "@port-of-mars/client/components/game/phases/Discard.vue";
+import Events from "@port-of-mars/client/components/game/phases/Events.vue";
+import Default from "@port-of-mars/client/components/game/phases/Default.vue";
+import NewRound from "@port-of-mars/client/components/game/phases/NewRound.vue";
+import { Phase } from "@port-of-mars/shared/types";
 
 @Component({
   components: {
@@ -27,8 +25,8 @@ import { Phase } from '@port-of-mars/shared/types';
     Discard,
     Events,
     Invest,
-    Default,
-  },
+    Default
+  }
 })
 export default class Phases extends Vue {
   get phase() {
@@ -37,6 +35,11 @@ export default class Phases extends Vue {
 
   get gamePhase() {
     return this.$store.state.phase;
+  }
+
+  @Watch("gamePhase", { immediate: true })
+  hideGameModal() {
+    this.$root.$emit("bv::hide::modal", "gameModal");
   }
 }
 </script>

@@ -15,62 +15,70 @@ import {
   ResourceCostData,
   Role,
   TradeDataWithNull,
-} from '@port-of-mars/shared/types';
+} from "@port-of-mars/shared/types";
 import {
-  ModalViewType,
+  ModalType,
   ModalDataType,
-} from '@port-of-mars/shared/game/client/modals';
+} from "@port-of-mars/shared/game/client/modals";
 import {
   ChatMarsLogView,
   HUDLeftView,
   HUDRightView,
-} from '@port-of-mars/shared/game/client/panes';
-import _ from 'lodash';
-import {SYSTEM_HEALTH_MAINTENANCE_COST} from "@port-of-mars/shared/settings";
-import {ChatMessageData, MarsEventData, RoundIntroductionData, TradeData, TradeSetData} from "../../types";
+} from "@port-of-mars/shared/game/client/panes";
+import _ from "lodash";
+import { SYSTEM_HEALTH_MAINTENANCE_COST } from "@port-of-mars/shared/settings";
+import {
+  ChatMessageData,
+  MarsEventData,
+  RoundIntroductionData,
+  TradeData,
+  TradeSetData,
+} from "../../types";
 
-export const ROLE_TO_INVESTMENT_DATA: { [role in Role]: Array<keyof InvestmentData> } = {
+export const ROLE_TO_INVESTMENT_DATA: {
+  [role in Role]: Array<keyof InvestmentData>;
+} = {
   [CURATOR]: [
-    'systemHealth',
-    'culture',
-    'finance',
-    'legacy',
-    'government',
-    'science'
+    "systemHealth",
+    "culture",
+    "finance",
+    "legacy",
+    "government",
+    "science",
   ],
   [ENTREPRENEUR]: [
-    'systemHealth',
-    'finance',
-    'culture',
-    'government',
-    'legacy',
-    'science'
+    "systemHealth",
+    "finance",
+    "culture",
+    "government",
+    "legacy",
+    "science",
   ],
   [POLITICIAN]: [
-    'systemHealth',
-    'government',
-    'finance',
-    'science',
-    'culture',
-    'legacy'
+    "systemHealth",
+    "government",
+    "finance",
+    "science",
+    "culture",
+    "legacy",
   ],
   [RESEARCHER]: [
-    'systemHealth',
-    'science',
-    'government',
-    'legacy',
-    'culture',
-    'finance'
+    "systemHealth",
+    "science",
+    "government",
+    "legacy",
+    "culture",
+    "finance",
   ],
   [PIONEER]: [
-    'systemHealth',
-    'legacy',
-    'culture',
-    'science',
-    'finance',
-    'government'
+    "systemHealth",
+    "legacy",
+    "culture",
+    "science",
+    "finance",
+    "government",
   ],
-}
+};
 
 export interface PlayerClientData extends PlayerData {
   pendingInvestments: InvestmentData;
@@ -98,7 +106,7 @@ function defaultPlayerData(role: Role): PlayerClientData {
     },
     costs: defaultCostData(role),
     botWarning: false,
-    specialty: 'science',
+    specialty: "science",
     inventory: defaultInventory(role),
     ready: false,
     timeBlocks: 10,
@@ -106,8 +114,8 @@ function defaultPlayerData(role: Role): PlayerClientData {
     pendingInvestments: defaultPendingInvestment(),
     systemHealthChanges: {
       investment: 0,
-      purchases: []
-    }
+      purchases: [],
+    },
   };
 }
 
@@ -143,15 +151,15 @@ export function defaultPendingInvestment(): ResourceCostData {
   };
 }
 
-export function defaultTradeData(): TradeDataWithNull<'' | Role> {
+export function defaultTradeData(): TradeDataWithNull<"" | Role> {
   return {
     recipient: {
-      role: '',
+      role: "",
       resourceAmount: defaultInventory(),
     },
 
     sender: {
-      role: 'Researcher',
+      role: "Researcher",
       resourceAmount: defaultInventory(),
     },
   };
@@ -169,19 +177,17 @@ export interface UserInterface {
   chatMarsLogView: ChatMarsLogView;
   hudLeftView: HUDLeftView;
   hudRightView: HUDRightView;
-  modalView: ModalView;
+  modal: Modal;
   toggleResourceCost: boolean;
   toggleYourTrades: boolean;
 }
 
 export interface UserInterfaceTwo {
-  tradeData: TradeDataWithNull<'' | Role>;
-  // modalViews: Modals;
+  tradeData: TradeDataWithNull<"" | Role>;
 }
 
-export interface ModalView {
-  visible: boolean;
-  type: ModalViewType | null;
+export interface Modal {
+  type: ModalType | null;
   data: ModalDataType | null;
 }
 
@@ -200,7 +206,7 @@ export interface State extends GameData {
   tradeSet: TradeSetData;
   role: Role;
   winners: Array<Role>;
-  heroOrPariah: '' | 'hero' | 'pariah';
+  heroOrPariah: "" | "hero" | "pariah";
   logs: Array<MarsLogMessageData>;
   dashboardMessages: Array<DashboardMessage>;
   players: PlayerClientSet;
@@ -237,41 +243,40 @@ export const initialStoreState: State = {
     systemHealthMarsEvents: [],
     systemHealthMaintenanceCost: -SYSTEM_HEALTH_MAINTENANCE_COST,
     accomplishmentPurchases: [],
-    completedTrades: []
+    completedTrades: [],
   },
   tradeSet: {},
   winners: [],
-  heroOrPariah: '',
+  heroOrPariah: "",
 
   // State
   role: RESEARCHER,
-  layout: 'game',
+  layout: "game",
   loading: false,
-  environment: 'development',
+  environment: "development",
   consent: false,
 
   // eventView: 'ACCOMPLISHMENT_SELECT_PURCHASED',
   quizQuestions: [],
   eventCardsVisible: [],
   user: {
-    username: '',
+    username: "",
     passedQuiz: false,
   },
 
   // TUTORIAL TRADING
-  tutorialTradePartner: '',
+  tutorialTradePartner: "",
   tutorialTradeGive: defaultInventory(),
   tutorialTradeGet: defaultInventory(),
 
   userInterface: {
     profileMenuView: {
       visible: false,
-    },
+    },                                                                                                                                                    
     chatMarsLogView: ChatMarsLogView.Chat,
     hudLeftView: HUDLeftView.OtherPlayers,
     hudRightView: HUDRightView.PhaseInformation,
-    modalView: {
-      visible: false,
+    modal: {
       type: null,
       data: null,
     },

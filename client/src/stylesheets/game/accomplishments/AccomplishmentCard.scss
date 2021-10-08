@@ -18,58 +18,58 @@
 
 // ACCOMPLISHMENT : STATUS STYLING
 
-// default
-.default {
-  border: 0.125rem solid $light-shade;
-  background-color: $light-shade;
+// // default
+// .default {
+//   border: 0.125rem solid $light-shade;
+//   background-color: $light-shade;
 
-  button {
-    @include space-button-white;
-  }
-}
+//   button {
+//     @include space-button-white;
+//   }
+// }
 
-// purchasable
-.purchasable {
-  border: 0.125rem solid $light-accent;
-  background-color: $light-accent;
+// // purchasable
+// .purchasable {
+//   border: 0.125rem solid $light-accent;
+//   background-color: $light-accent;
 
-  button {
-    @include space-button;
-  }
-}
+//   button {
+//     @include space-button;
+//   }
+// }
 
-// unpurchasable
-.unpurchasable {
-  border: 0.125rem solid $light-shade;
-  background-color: $light-shade;
+// // unpurchasable
+// .unpurchasable {
+//   border: 0.125rem solid $light-shade;
+//   background-color: $light-shade;
 
-  button {
-    @include space-button-white;
-  }
-}
+//   button {
+//     @include space-button-white;
+//   }
+// }
 
-// discarded
-.discarded {
-  @include default-transition-base;
-  border: 0.125rem solid $status-red;
-  background-color: $status-red;
+// // discarded
+// .discarded {
+//   @include default-transition-base;
+//   border: 0.125rem solid $status-red;
+//   background-color: $status-red;
 
-  .text {
-    color: $status-red;
-    font-size: $font-med;
-    font-weight: bold;
-  }
-}
+//   .text {
+//     color: $status-red;
+//     font-size: $font-med;
+//     font-weight: bold;
+//   }
+// }
 
-// purchased
-.purchased {
-  @include default-transition-base;
-  border: 0.125rem solid $status-green;
-  background-color: $status-green;
+// // purchased
+// .purchased {
+//   @include default-transition-base;
+//   border: 0.125rem solid $status-green;
+//   background-color: $status-green;
 
-  .text {
-    color: $status-green;
-    font-size: $font-med;
-    font-weight: bold;
-  }
-}
+//   .text {
+//     color: $status-green;
+//     font-size: $font-med;
+//     font-weight: bold;
+//   }
+// }
