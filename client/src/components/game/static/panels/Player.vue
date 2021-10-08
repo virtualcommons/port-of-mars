@@ -1,13 +1,16 @@
 <template>
   <b-row
-    v-b-modal="'gameModal'"
-    @click="handleOpenModal()"
+    @click="setModalData"
     class="flex-column h-100 w-100 m-0 p-0 tour-profile"
     style="cursor: pointer"
   >
-    <b-row class="p-1 my-2 mx-auto" :style="indicatorStyle" style="border-radius: 50%;
+    <b-row
+      class="p-1 my-2 mx-auto"
+      :style="indicatorStyle"
+      style="border-radius: 50%;
            transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
-           height: 10rem; width: 10rem;">
+           height: 10rem; width: 10rem;"
+    >
       <b-col class="h-100 w-100 m-0 p-0" style="border-radius: 50%" :style="frameColor">
         <img :src="playerRoleImage" alt="Player Image" style="object-fit: cover" class="my-3" />
       </b-col>
@@ -15,17 +18,19 @@
     <b-row class="flex-column text-center">
       <p class="mb-1" style="color: rgb(202, 166, 110); font-weight: bold;">Your Role</p>
       <p class="mb-1" style="color: rgb(241, 224, 197); font-weight: bold;">{{ playerRole }}</p>
-      <p class="m-0" style="color: rgb(241, 224, 197); font-weight: bold;">Score: {{ playerScore }}</p>
+      <p class="m-0" style="color: rgb(241, 224, 197); font-weight: bold;">
+        Score: {{ playerScore }}
+      </p>
     </b-row>
   </b-row>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Inject, Prop } from 'vue-property-decorator';
-import { Role } from '@port-of-mars/shared/types';
-import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
+import { Vue, Component, Inject, Prop } from "vue-property-decorator";
+import { Role } from "@port-of-mars/shared/types";
+import { TutorialAPI } from "@port-of-mars/client/api/tutorial/request";
 @Component({
-  components: {},
+  components: {}
 })
 export default class Player extends Vue {
   @Inject()
@@ -36,9 +41,7 @@ export default class Player extends Vue {
   }
 
   get playerScore(): number {
-    return this.playerRole
-      ? this.$tstore.state.players[this.playerRole].victoryPoints
-      : 0;
+    return this.playerRole ? this.$tstore.state.players[this.playerRole].victoryPoints : 0;
   }
 
   get playerReady() {
@@ -63,15 +66,16 @@ export default class Player extends Vue {
       : require(`@port-of-mars/client/assets/characters/Researcher.png`);
   }
 
-  handleOpenModal() {
+  setModalData() {
     let data = {
-      type: 'PlayerModal',
+      type: "PlayerModal",
       data: {
         role: this.playerRole,
         title: `${this.playerRole} Details`
-      },
+      }
     };
     this.api.setModalVisible(data);
+    this.$root.$emit("bv::show::modal", "gameModal");
   }
 }
 </script>

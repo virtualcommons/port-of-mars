@@ -2,28 +2,28 @@
   <b-container fluid class="h-100 p-0 m-0">
     <b-form @submit="createTrade">
       <!-- select trade partner -->
-      <b-form-group class="w-100 my-4">
-          <b-form-radio
-            v-for="player in otherPlayers"
-            :key="player"
-            :value="player"
-            v-model="selected"
-            @change="setTradeRecipient(selected)"
-            inline
-            class="mx-2"
-            button
-            button-variant="transparent"
-            v-b-tooltip:bottom="player"
-            :style="{border: borderStyle(player)}"
+      <b-form-group class="w-100 my-4 tour-send-trade">
+        <b-form-radio
+          v-for="player in otherPlayers"
+          :key="player"
+          :value="player"
+          v-model="selected"
+          @change="setTradeRecipient(selected)"
+          inline
+          class="mx-2"
+          button
+          button-variant="transparent"
+          v-b-tooltip:bottom="player"
+          :style="{ border: borderStyle(player) }"
+        >
+          <b-img
+            v-bind="mainProps"
+            :src="require(`@port-of-mars/client/assets/characters/${player}.png`)"
+            :alt="player"
+            :style="{ backgroundColor: frameStyle(player) }"
           >
-            <b-img
-              v-bind="mainProps"
-              :src="require(`@port-of-mars/client/assets/characters/${player}.png`)"
-              :alt="player"
-              :style="{backgroundColor: frameStyle(player)}"
-            >
-            </b-img>
-          </b-form-radio>
+          </b-img>
+        </b-form-radio>
       </b-form-group>
       <!-- request -->
       <b-form-group>
@@ -32,7 +32,6 @@
           :resources="senderResources"
           :mode="'incoming'"
           :text="'Your Request'"
-          class="tour-request-resources"
         ></TradeOptions>
       </b-form-group>
 
@@ -43,7 +42,6 @@
           :resources="recipientResources"
           :mode="'outgoing'"
           :text="'Your Offer'"
-          class="tour-offer-resources"
         ></TradeOptions>
       </b-form-group>
 
@@ -51,10 +49,9 @@
       <b-button
         type="submit"
         block
-        pressed
+        variant="outline-secondary"
         :disabled="!validateTrade"
-        class="text-center tour-send-trade"
-        ref="send-trade"
+        class="text-center"
       >
         <p class="text-bold my-auto">Send trade request</p>
       </b-button>
@@ -63,17 +60,17 @@
 </template>
 
 <script lang="ts">
-import {Component, Inject, Vue} from 'vue-property-decorator';
-import TradeOptions from '@port-of-mars/client/components/game/phases/trade/TradeOptions.vue';
-import {ResourceAmountData, Role, TradeAmountData} from '@port-of-mars/shared/types';
-import {isZeroTrade, makeTradeSafe} from '@port-of-mars/shared/validation';
-import {SendTradeRequestData} from "@port-of-mars/shared/game";
-import {AbstractGameAPI} from "@port-of-mars/client/api/game/types";
+import { Component, Inject, Vue } from "vue-property-decorator";
+import TradeOptions from "@port-of-mars/client/components/game/phases/trade/TradeOptions.vue";
+import { ResourceAmountData, Role, TradeAmountData } from "@port-of-mars/shared/types";
+import { isZeroTrade, makeTradeSafe } from "@port-of-mars/shared/validation";
+import { SendTradeRequestData } from "@port-of-mars/shared/game";
+import { AbstractGameAPI } from "@port-of-mars/client/api/game/types";
 
 @Component({
   components: {
-    TradeOptions,
-  },
+    TradeOptions
+  }
 })
 export default class TradeRequest extends Vue {
   @Inject() readonly api!: AbstractGameAPI;
@@ -81,10 +78,10 @@ export default class TradeRequest extends Vue {
   mainProps = {
     center: true,
     fluid: true,
-    blankColor: '#bbb',
+    blankColor: "#bbb",
     width: 125,
-    height: 125,
-  }
+    height: 125
+  };
 
   created() {
     this.api.setTradePlayerName(this.$tstore.getters.player.role);
@@ -112,11 +109,12 @@ export default class TradeRequest extends Vue {
 
   validateTrade(): boolean {
     const inventory = this.$tstore.getters.player.inventory;
-    console.log('validate trade: ', this.selectedTradePartner != '' &&
-      !isZeroTrade(this.recipientResources, this.senderResources));
+    console.log(
+      "validate trade: ",
+      this.selectedTradePartner != "" && !isZeroTrade(this.recipientResources, this.senderResources)
+    );
     return (
-      this.selectedTradePartner != '' ||
-      !isZeroTrade(this.recipientResources, this.senderResources)
+      this.selectedTradePartner != "" || !isZeroTrade(this.recipientResources, this.senderResources)
     );
   }
 
@@ -137,31 +135,30 @@ export default class TradeRequest extends Vue {
     if (this.validateTrade()) {
       const senderPackage: TradeAmountData = {
         role: this.$tstore.state.role,
-        resourceAmount: makeTradeSafe(this.recipientResources),
+        resourceAmount: makeTradeSafe(this.recipientResources)
       };
       const recipientPackage: TradeAmountData = {
         role: this.selectedTradePartner as Role,
-        resourceAmount: makeTradeSafe(this.senderResources),
+        resourceAmount: makeTradeSafe(this.senderResources)
       };
-      const tradeDataPackage: SendTradeRequestData['trade'] = {
+      const tradeDataPackage: SendTradeRequestData["trade"] = {
         sender: senderPackage,
         recipient: recipientPackage,
-        status: 'Active',
+        status: "Active"
       };
       this.api.sendTradeRequest(tradeDataPackage);
-      this.$root.$emit('bv::hide::modal', 'gameModal', '#sendTrade')
-      this.api.setModalHidden();
+      this.$root.$emit("bv::hide::modal", "gameModal");
     }
   }
 
   borderStyle(role: string) {
-    return role as Role === this.selectedTradePartner
+    return (role as Role) === this.selectedTradePartner
       ? `0.125rem solid var(--light-accent)`
       : `0.125rem solid var(--color-${role})`;
   }
 
   frameStyle(role: string) {
-    return role as Role === this.selectedTradePartner
+    return (role as Role) === this.selectedTradePartner
       ? `var(--light-accent)`
       : `var(--color-${role})`;
   }

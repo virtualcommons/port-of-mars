@@ -5,15 +5,23 @@
   <b-container v-if="isChatAvailable" class="d-flex flex-column h-100 m-0 p-0" fluid>
     <!-- flex-grow-1: tells this row to grow as needed to fill the remainder -->
     <!-- height of b-container -->
-    <b-row class="w-100 flex-grow-1 m-auto scroll-to-recent"
-           style="overflow-y: auto; overflow-x: hidden;"
-           @click="focusChatInput"
+    <b-row
+      class="w-100 flex-grow-1 m-auto scroll-to-recent"
+      style="overflow-y: auto; overflow-x: hidden;"
+      @click="focusChatInput"
     >
       <!-- b-row wrapper to achieve chat scroll effect -->
-      <b-row class="w-100 my-2 justify-content-center" align-content="end">
+      <b-row class="w-100 justify-content-center" align-content="end">
         <!-- if there is no chat history to display -->
-        <p v-if="messages.length === 0" style="color: rgba(241, 224, 197, 0.25)">
-          No Messages
+        <p class="m-3" v-if="messages.length === 0">
+          Chat is recorded. Please adhere to the
+          <b>
+            <a
+              target="_blank"
+              href="https://github.com/virtualcommons/port-of-mars/wiki/Port-of-Mars-Chat-Code-of-Conduct"
+              >Port of Mars Chat Code of Conduct</a
+            > </b
+          >. You cannot send private messages to other members in your group.
         </p>
         <!-- chat message -->
         <b-row
@@ -26,8 +34,11 @@
         >
           <b-col align-self="end">
             <!-- role of sender (e.g. Curator) -->
-            <p class="mb-0 mx-2 mt-2 text-uppercase" style=" color: rgb(202, 166, 110);
-               font-weight: bold">
+            <p
+              class="mb-0 mx-2 mt-2 text-uppercase"
+              style=" color: rgb(202, 166, 110);
+               font-weight: bold"
+            >
               {{ message.role }}
             </p>
             <!-- message of sender -->
@@ -67,29 +78,32 @@
   </b-container>
   <!-- disable chat if chat is not available -->
   <b-row v-else class="h-100 w-100 m-0 p-0 justify-content-center align-items-center">
-      <p class="m-0 p-0 text-center" style="color: var(--dark-accent); font-weight: bold;
-         font-size: 1rem;">
-        Chat is disabled this round.
-      </p>
+    <p
+      class="m-0 p-0 text-center"
+      style="color: var(--dark-accent); font-weight: bold;
+         font-size: 1rem;"
+    >
+      Chat is disabled this round.
+    </p>
   </b-row>
 </template>
 
 <script lang="ts">
-import { Vue, Component, InjectReactive, Inject } from 'vue-property-decorator';
-import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faPaperPlane } from '@fortawesome/free-regular-svg-icons/faPaperPlane';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { ChatMessageData } from '@port-of-mars/shared/types';
+import { Vue, Component, InjectReactive, Inject } from "vue-property-decorator";
+import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faPaperPlane } from "@fortawesome/free-regular-svg-icons/faPaperPlane";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { ChatMessageData } from "@port-of-mars/shared/types";
 
 library.add(faPaperPlane);
-Vue.component('font-awesome-icon', FontAwesomeIcon);
+Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 @Component({})
 export default class Chat extends Vue {
   @Inject() readonly api!: GameRequestAPI;
 
-  pendingMessage: string = '';
+  pendingMessage: string = "";
 
   focusChatInput() {
     if (this.isChatAvailable) {
@@ -104,8 +118,8 @@ export default class Chat extends Vue {
 
   get sendBtnClass(): string {
     return this.pendingMessageCleaned.length === 0
-      ? 'chat-input-sendbtn'
-      : 'chat-input-sendbtn--ready';
+      ? "chat-input-sendbtn"
+      : "chat-input-sendbtn--ready";
   }
 
   get isChatAvailable(): any {
@@ -119,7 +133,7 @@ export default class Chat extends Vue {
   updated() {
     if (this.isChatAvailable) {
       // FIXME: this would be more efficient as an id lookup, not a css class lookup
-      const elem = this.$el.querySelector('.scroll-to-recent');
+      const elem = this.$el.querySelector(".scroll-to-recent");
       elem!.scrollTop = elem!.scrollHeight;
     }
   }
@@ -129,9 +143,9 @@ export default class Chat extends Vue {
   }
 
   submitToChat(): void {
-    if (this.pendingMessageCleaned && this.pendingMessageCleaned !== '') {
+    if (this.pendingMessageCleaned && this.pendingMessageCleaned !== "") {
       this.api.sendChatMessage(this.pendingMessageCleaned);
-      this.pendingMessage = '';
+      this.pendingMessage = "";
     }
   }
 
@@ -139,7 +153,7 @@ export default class Chat extends Vue {
     if (message.role) {
       return { backgroundColor: `var(--color-${message.role})` };
     }
-    return { backgroundColor: 'var(--light-shade-05)' };
+    return { backgroundColor: "var(--light-shade-05)" };
   }
 }
 </script>

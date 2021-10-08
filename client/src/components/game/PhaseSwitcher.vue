@@ -39,7 +39,7 @@ export default class Phases extends Vue {
 
   @Watch("gamePhase", { immediate: true })
   hideGameModal() {
-    this.$root.$emit("bv::hide::modal", "gameModal");
+      this.$root.$emit("bv::hide::modal", "gameModal");
   }
 }
 </script>

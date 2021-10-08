@@ -1,9 +1,6 @@
 <template>
   <b-container fluid class="h-100 m-0 p-0">
-    <b-row
-      class="w-100 tour-trade-player tour-request-resources tour-offer-resources tour-send-trade"
-      align="center"
-    >
+    <b-row class="w-100" align="center">
       <b-col cols="8">
         <TradeRequest></TradeRequest>
       </b-col>

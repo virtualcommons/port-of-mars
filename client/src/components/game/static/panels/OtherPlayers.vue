@@ -5,7 +5,6 @@
                ease-in-out;"
     fluid
     @click="setModalData"
-    v-b-modal="'gameModal'"
   >
     <b-col cols="3" class="h-100 w-100">
       <b-row
@@ -65,13 +64,15 @@ export default class OtherPlayers extends Vue {
   }
 
   setModalData(): void {
-    this.api.setModalVisible({
+    let data = {
       type: "PlayerModal",
       data: {
         role: this.role,
         title: `${this.role} Details`
       }
-    });
+    };
+    this.api.setModalVisible(data);
+    this.$root.$emit("bv::show::modal", "gameModal");
   }
 }
 </script>

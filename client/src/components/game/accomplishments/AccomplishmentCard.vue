@@ -18,7 +18,6 @@
     >
       <b-col
         @click="setModalData"
-        v-b-modal="'gameModal'"
         :style="showCard ? 'color: black' : 'color: white'"
         style="cursor: pointer"
       >
@@ -333,8 +332,8 @@ export default class AccomplishmentCard extends Vue {
         cardData: this.accomplishment
       }
     };
-
     this.api.setModalVisible(data);
+    this.$root.$emit("bv::show::modal", "gameModal");
   }
 
   /**

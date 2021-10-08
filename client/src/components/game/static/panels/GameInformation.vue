@@ -1,6 +1,7 @@
 <template>
-  <b-row class="h-100 my-2 flex-column justify-content-center align-items-start"
-         style="color: rgb(34, 26, 27)"
+  <b-row
+    class="h-100 my-2 flex-column justify-content-center align-items-start"
+    style="color: rgb(34, 26, 27)"
   >
     <b-col class="w-100 py-0 my-0">
       <p class="py-0 my-0 title">
@@ -23,7 +24,9 @@
       <button
         @click="submitDone"
         class="ready-button tour-ready-to-advance-button"
+        ref="ready"
         v-if="!playerReady"
+        id="#ready"
       >
         Ready to Advance
       </button>
@@ -35,12 +38,12 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Inject } from 'vue-property-decorator';
-import { Phase, PHASE_LABELS } from '@port-of-mars/shared/types';
-import {AbstractGameAPI} from "@port-of-mars/client/api/game/types";
+import { Vue, Component, Prop, Inject } from "vue-property-decorator";
+import { Phase, PHASE_LABELS } from "@port-of-mars/shared/types";
+import { AbstractGameAPI } from "@port-of-mars/client/api/game/types";
 
 @Component({
-  components: {},
+  components: {}
 })
 export default class GameInformation extends Vue {
   @Inject() private api!: AbstractGameAPI;
@@ -50,9 +53,9 @@ export default class GameInformation extends Vue {
     if (round > 0 && systemHealth > 0) {
       return round;
     } else if (systemHealth <= 0) {
-      return 'Over';
+      return "Over";
     } else {
-      return 'Pregame';
+      return "Pregame";
     }
   }
 
@@ -74,16 +77,14 @@ export default class GameInformation extends Vue {
   get timeRemaining() {
     const fromState = this.$tstore.state.timeRemaining;
     const minutesRemaining = Math.floor(fromState / 60);
-    const minutesRemainingDisplay = `${minutesRemaining}`.padStart(2, '0');
-    const secondsRemainingDisplay = `${
-      fromState - minutesRemaining * 60
-    }`.padStart(2, '0');
+    const minutesRemainingDisplay = `${minutesRemaining}`.padStart(2, "0");
+    const secondsRemainingDisplay = `${fromState - minutesRemaining * 60}`.padStart(2, "0");
     const timeRemaining = `${minutesRemainingDisplay}:${secondsRemainingDisplay}`;
-    return timeRemaining ? timeRemaining : '00:00';
+    return timeRemaining ? timeRemaining : "00:00";
   }
 
   get countdownStyling() {
-    return this.$tstore.state.timeRemaining < 60 ? 'blink-timer' : 'countdown';
+    return this.$tstore.state.timeRemaining < 60 ? "blink-timer" : "countdown";
   }
 
   submitDone() {
@@ -95,7 +96,7 @@ export default class GameInformation extends Vue {
       case Phase.events:
         const currentEvent = this.$tstore.getters.currentEvent;
         pendingInvestments = this.$tstore.getters.player.pendingInvestments;
-        if (currentEvent && currentEvent.id === 'breakdownOfTrust') {
+        if (currentEvent && currentEvent.id === "breakdownOfTrust") {
           this.api.saveBreakdownOfTrust(pendingInvestments);
         }
       case Phase.invest:
@@ -104,7 +105,6 @@ export default class GameInformation extends Vue {
       default:
         this.api.setPlayerReadiness(true);
     }
-
   }
 
   submitCancel() {
@@ -142,20 +142,14 @@ button.ready-button:after {
   animation: glint 5s linear 0s infinite forwards;
   //animation: name duration timing-function delay iteration-count direction fill-mode;
 
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
 
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgba(240, 218, 177, 0.5),
-      50%,
-      transparent
-  );
+  background: linear-gradient(to bottom, transparent, rgba(240, 218, 177, 0.5), 50%, transparent);
   transform: rotateZ(120deg) translate(-1em, 4em);
   @keyframes glint {
     10%,
@@ -201,5 +195,4 @@ button.ready-button:after {
     opacity: 0;
   }
 }
-
 </style>

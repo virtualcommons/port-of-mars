@@ -12,7 +12,7 @@
       style="background-color: var(--dark-shade)"
     >
       <!-- Event name | Active event indicator -->
-      <b-col style="cursor: pointer" @click="setModalData" v-b-modal="'gameModal'">
+      <b-col style="cursor: pointer" @click="setModalData">
         <h5 class="p-2 text-center" style="background-color: var(--light-shade); color: black">
           {{ event.name }}
         </h5>
@@ -142,6 +142,7 @@ export default class EventCard extends Vue {
   }
 
   setModalData(): void {
+    this.$root.$emit("bv::show::modal", "gameModal");
     this.api.setModalVisible({
       type: "CardModal",
       data: {
@@ -149,7 +150,7 @@ export default class EventCard extends Vue {
         title: this.event.name,
         content: this.event.effect,
         cardType: "EventCard",
-        cardData: this.event 
+        cardData: this.event
       }
     });
   }

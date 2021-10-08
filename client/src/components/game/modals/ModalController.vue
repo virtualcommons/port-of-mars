@@ -1,6 +1,7 @@
 <template>
   <b-modal
     id="gameModal"
+    class="tour-trade-player tour-request-resources tour-offer-resources"
     centered
     :title="modalData.title"
     :size="modalType === 'CardModal' ? 'lg' : 'xl'"
