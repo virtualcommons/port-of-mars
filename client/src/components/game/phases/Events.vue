@@ -170,7 +170,7 @@ export default class Events extends Vue {
         cardData: event
       }
     });
-    this.$root.$emit("bv::toggle::modal", "gameModal");
+    this.$root.$emit("bv::hide::modal", "gameModal");
   }
 
   switchView(view: string) {

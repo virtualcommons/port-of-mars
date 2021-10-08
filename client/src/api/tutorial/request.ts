@@ -142,7 +142,6 @@ export class TutorialAPI implements AbstractGameAPI {
     this.replayState();
   }
 
-  //CHAT HANDLER
   public sendChatMessage(message: String) {
     this.store.commit("ADD_TO_CHAT", {
       message,
@@ -273,7 +272,6 @@ export class TutorialAPI implements AbstractGameAPI {
       trade: tradePackage
     });
     this.count++;
-
     this.completedActionWithImplicitForward();
   }
 

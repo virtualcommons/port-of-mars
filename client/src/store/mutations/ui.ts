@@ -12,6 +12,7 @@ import {
 
 // NOTE :: CONTROL MODAL VISIBILITY
 
+// FIXME: rename this 
 function SET_MODAL_VISIBLE(
   state: State,
   payload: { type: ModalType; data: ModalDataType }

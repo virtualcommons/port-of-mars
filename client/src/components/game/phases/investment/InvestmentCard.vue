@@ -5,7 +5,7 @@
   >
     <b-row align-v="stretch" class="h-100 text-center">
       <b-col style="color: var(--dark-shade)">
-        <p class="text-capitalize p-2 my-3" style="background-color: var(--light-shade)">
+        <p class="text-capitalize p-2 my-2" style="background-color: var(--light-shade)">
           {{ label }}
         </p>
       </b-col>
@@ -14,11 +14,11 @@
       <div class="w-100"></div>
       <b-col>
         <b-img
+          center
           rounded="circle"
           v-bind="mainProps"
           :src="require(`@port-of-mars/client/assets/icons/${name}.svg`)"
           :alt="name"
-          class="m-2"
         >
         </b-img>
       </b-col>
@@ -37,7 +37,7 @@
               :disabled="pendingUnits < 1"
               @click="setInvestmentAmount(pendingInvestment)"
             >
-              <b-icon-dash scale="1.25" color="white"></b-icon-dash>
+              <b-icon-dash scale="1.5" color="white"></b-icon-dash>
             </b-button>
           </template>
           <template #increment>
@@ -46,7 +46,7 @@
               :disabled="cost > remainingTimeBlocks"
               @click="setInvestmentAmount(pendingInvestment)"
             >
-              <b-icon-plus scale="1.25" color="white"></b-icon-plus>
+              <b-icon-plus scale="1.5" color="white"></b-icon-plus>
             </b-button>
           </template>
         </b-form-spinbutton>

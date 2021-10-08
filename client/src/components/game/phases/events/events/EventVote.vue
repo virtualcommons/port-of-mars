@@ -3,10 +3,10 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
-import VoteYesNo from './views/VoteYesNo.vue';
-import VoteForPlayerSingle from './views/VoteForPlayerSingle.vue';
-import VoteForPlayerHeroPariah from './views/VoteForPlayerHeroPariah.vue';
+import { Vue, Component, Prop } from "vue-property-decorator";
+import VoteYesNo from "./views/VoteYesNo.vue";
+import VoteForPlayerSingle from "./views/VoteForPlayerSingle.vue";
+import VoteForPlayerHeroPariah from "./views/VoteForPlayerHeroPariah.vue";
 
 @Component({
   components: {
@@ -16,24 +16,23 @@ import VoteForPlayerHeroPariah from './views/VoteForPlayerHeroPariah.vue';
   }
 })
 export default class EventVote extends Vue {
-  @Prop({ default: '' }) private eventView!: string;
+  @Prop({ default: "" }) private eventView!: string;
 
   get eventVoteView(): string {
     switch (this.eventView) {
-      case 'VOTE_YES_NO':
-        return 'VoteYesNo';
-      case 'VOTE_FOR_PLAYER_SINGLE':
-        return 'VoteForPlayerSingle';
-      case 'VOTE_FOR_PLAYER_HERO_PARIAH':
-        return 'VoteForPlayerHeroPariah';
+      case "VOTE_YES_NO":
+        return "VoteYesNo";
+      case "VOTE_FOR_PLAYER_SINGLE":
+        return "VoteForPlayerSingle";
+      case "VOTE_FOR_PLAYER_HERO_PARIAH":
+        return "VoteForPlayerHeroPariah";
       default:
-        return '';
+        return "";
     }
-    return '';
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/events/events/EventVote.scss';
+@import "@port-of-mars/client/stylesheets/game/phases/events/events/EventVote.scss";
 </style>
