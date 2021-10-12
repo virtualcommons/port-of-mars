@@ -37,10 +37,10 @@
         </b-row>
 
         <b-nav vertical pills class="text-left">
-          <b-nav-item active>Dashboard</b-nav-item>
-          <b-nav-item :to="'tutorial'">Tutorial</b-nav-item>
-          <b-nav-item :to="'register'">Modify Consent and Email</b-nav-item>
-          <b-nav-item @click="logout">Logout</b-nav-item>
+          <b-nav-item active><h4>Dashboard</h4></b-nav-item>
+          <b-nav-item to="tutorial"><h4>Tutorial</h4></b-nav-item>
+          <b-nav-item to="register"><h4>Modify Consent and Email</h4></b-nav-item>
+          <b-nav-item @click="logout"><h4>Logout</h4></b-nav-item>
         </b-nav>
 
         <b-row>
@@ -49,7 +49,7 @@
       </b-col>
       <b-col align-self="stretch" cols="9" style="background-color: var(--dark-shade-75)">
         <b-row class="h-100 mt-3">
-          <b-col>
+          <b-col align-self="stretch">
             <template
               v-if="playerTaskCompletion.mustTakeIntroSurvey || playerTaskCompletion.canPlayGame"
             >
@@ -69,7 +69,7 @@
                 <b-col class="text-left my-5">
                   <b-button
                     :disabled="!playerTaskCompletion.mustTakeTutorial"
-                    :to="tutorial"
+                    to="tutorial"
                     :variant="playerTaskCompletion.mustTakeTutorial ? 'warning' : 'secondary'"
                     size="lg"
                     ><h4>
@@ -112,7 +112,7 @@
                   <b-button
                     :disabled="!playerTaskCompletion.canPlayGame"
                     size="lg"
-                    :to="join"
+                    to="join"
                     variant="success"
                   >
                     <h4>Join Game Lobby</h4>
@@ -153,43 +153,49 @@
             <!-- Navigate: Schedule or Stats -->
             <b-nav pills align="left" class="my-3">
               <b-nav-item @click="switchTab('schedule')" :active="view === 'schedule'"
-                >Schedule</b-nav-item
+                ><h4>Schedule</h4></b-nav-item
               >
               <b-nav-item @click="switchTab('stats')" :active="view === 'stats'"
-                >Your Game Stats</b-nav-item
+                ><h4>Your Game Stats</h4></b-nav-item
               >
             </b-nav>
-            <!-- Schedule -->
-            <div v-if="view === 'schedule'" class="text-center">
-              <h2 class="text-uppercase mt-5 mb-3">Schedule</h2>
-              <p>
-                Please sign in during <b>one</b> of the following times to participate. We recommend
-                that you show up 5 minutes earlier to join the waiting lobby.
-              </p>
-              <div style="overflow-y: auto !important">
-                <b-table :items="schedule" bordered class="py-3" stacked="md" small dark striped>
-                  <template v-slot:cell(addToCalendar)="data">
-                    <a :href="inviteLink(data.item.addToCalendar)" target="_blank">
-                      <font-awesome-icon :icon="['fab', 'google']"></font-awesome-icon>
-                    </a>
-                  </template>
-                </b-table>
-              </div>
-            </div>
-            <!-- Stats -->
-            <div class="my-0" v-else-if="view === 'stats'">
-              <div
-                class="p-5 mx-auto my-0"
-                style="max-height: 35vh; width: 50%; overflow-y: scroll; overflow-x: hidden"
-              >
-                <p v-if="stats.games.length === 0" class="my-5 py-5">No games to display.</p>
-                <PlayerStatItem
-                  v-for="playerStatItem in stats.games"
-                  :key="playerStatItem.time"
-                  :playerStatItem="playerStatItem"
-                  class="my-1 py-1"
-                ></PlayerStatItem>
-              </div>
+            <div
+              class="text-center p-4"
+              style="height: 75vh; background-color: var(--dark-shade); border: 0.2rem solid var(--light-shade-25)"
+            >
+              <!-- Schedule -->
+              <template v-if="view === 'schedule'">
+                <h1>Schedule</h1>
+                <p>
+                  Please sign in during <b>one</b> of the following times to participate. We
+                  recommend that you show up 5 minutes earlier to join the waiting lobby.
+                </p>
+                <div style="overflow-y: auto !important">
+                  <b-table :items="schedule" bordered class="py-3" stacked="md" small dark striped>
+                    <template v-slot:cell(addToCalendar)="data">
+                      <a :href="inviteLink(data.item.addToCalendar)" target="_blank">
+                        <font-awesome-icon :icon="['fab', 'google']"></font-awesome-icon>
+                      </a>
+                    </template>
+                  </b-table>
+                </div>
+              </template>
+              <!-- Stats -->
+              <template v-else-if="view === 'stats'" style="background-color: var(--dark-shade)">
+                <h1>Your Game Stats</h1>
+                <div
+                  class="mx-auto my-0"
+                  style="height: 90%; width: 70%; overflow-y: scroll; overflow-x: hidden"
+                >
+                  <p v-if="stats.games.length === 0" class="my-5 py-5">No games to display.</p>
+                  <PlayerStatItem
+                    v-for="playerStatItem in stats.games"
+                    :key="playerStatItem.time"
+                    :playerStatItem="playerStatItem"
+                    class="my-1 py-1"
+                  ></PlayerStatItem>
+                </div>
+              </template>
             </div>
           </b-col>
         </b-row>
@@ -232,7 +238,7 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
     Footer
   }
 })
-export default class PlayerDashboard extends Vue {
+export default class Dashboard extends Vue {
   username: string = this.$tstore.state.user.username;
   view: "schedule" | "stats" = "schedule";
   api!: DashboardAPI;
