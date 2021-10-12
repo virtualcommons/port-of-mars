@@ -6,30 +6,148 @@
       style="background-color: var(--dark-shade-75)"
     >
       <!-- profile info -->
-      <b-col align-self="center" cols="3" class="text-center">
-        <b-img
-          v-bind="mainProps"
-          :src="require(`@port-of-mars/client/assets/characters/Politician.png`)"
-          :alt="player"
-        >
-        </b-img>
-        <h4>{{ username }}</h4>
-        <p class="text-uppercase">
-          You have participated in <b>{{ gamesPlayedCount }}</b> missions
-        </p>
-        <b-button class="mx-2" :to="'register'">Modify consent or email</b-button>
-        <b-button variant="danger" @click="logout">Log out</b-button>
+      <b-col align-self="stretch" cols="3" style="background-color: var(--dark-shade)">
+        <b-row>
+          <b-img
+            v-bind="mainProps"
+            style="opacity: 50%"
+            :src="require(`@port-of-mars/client/assets/background/logo.png`)"
+            alt="Port of Mars"
+            left
+            class="m-4"
+          >
+          </b-img>
+        </b-row>
+
+        <b-row class="my-5 mx-1 py-3" style="background-color: var(--dark-accent)">
+          <b-col cols="4">
+            <b-img
+              v-bind="mainProps"
+              :src="require(`@port-of-mars/client/assets/characters/Politician.png`)"
+              :alt="player"
+            >
+            </b-img>
+          </b-col>
+          <b-col cols="8">
+            <h3 style="color: var(--dark-shade); font-weight: bold">{{ username }}</h3>
+            <p style="color: var(--dark-shade)">
+              You have participated in <b>{{ gamesPlayedCount }}</b> missions.
+            </p>
+          </b-col>
+        </b-row>
+
+        <b-nav vertical pills class="text-left">
+          <b-nav-item active>Dashboard</b-nav-item>
+          <b-nav-item :to="'tutorial'">Tutorial</b-nav-item>
+          <b-nav-item :to="'register'">Modify Consent and Email</b-nav-item>
+          <b-nav-item @click="logout">Logout</b-nav-item>
+        </b-nav>
       </b-col>
-      <b-col
-        align-self="stretch"
-        cols="9"
-        class="text-center"
-        style="border-left: 0.4rem solid var(--light-shade-25)"
-      >
-        <b-row class="h-100">
-          <b-col class="m-0 p-0" style="border-bottom: 0.4rem solid var(--light-shade-25)">
+      <b-col align-self="stretch" cols="9" style="background-color: var(--dark-shade-75)">
+        <b-row class="h-100 mt-3">
+          <b-col>
+            <template
+              v-if="playerTaskCompletion.mustTakeIntroSurvey || playerTaskCompletion.canPlayGame"
+            >
+              <b-row>
+                <b-col cols="4">
+                  <h1 class="text-left my-3" style="font-weight: medium">Onboarding Tasks</h1>
+                  <p
+                    v-if="
+                      !playerTaskCompletion.canPlayGame || playerTaskCompletion.mustTakeIntroSurvey
+                    "
+                    class="text-left"
+                  >
+                    Complete the following items to play a game.
+                  </p>
+                  <p v-else class="text-left">Onboarding tasks complete. Ready to launch.</p>
+                </b-col>
+                <b-col class="text-left my-5">
+                  <b-button
+                    :disabled="!playerTaskCompletion.mustTakeTutorial"
+                    :to="tutorial"
+                    :variant="playerTaskCompletion.mustTakeTutorial ? 'warning' : 'secondary'"
+                    size="lg"
+                    ><h4>
+                      Tutorial
+                      <b-icon-check-circle-fill
+                        v-if="!playerTaskCompletion.mustTakeTutorial"
+                        scale="1"
+                        class="ml-2"
+                      ></b-icon-check-circle-fill>
+                    </h4>
+                  </b-button>
+
+                  <b-icon-arrow-right-circle-fill
+                    scale="2"
+                    class="mx-4"
+                  ></b-icon-arrow-right-circle-fill>
+                  <b-button
+                    :disabled="!playerTaskCompletion.mustTakeIntroSurvey"
+                    :href="introSurveyUrl"
+                    size="lg"
+                    :variant="playerTaskCompletion.mustTakeIntroSurvey ? 'warning' : 'secondary'"
+                  >
+                    <h4>
+                      Introduction Survey
+                      <b-icon-check-circle-fill
+                        v-if="!playerTaskCompletion.mustTakeIntroSurvey"
+                        scale="1"
+                        class="ml-2"
+                      ></b-icon-check-circle-fill>
+                    </h4>
+                  </b-button>
+
+                  <b-icon-arrow-right-circle-fill
+                    scale="2"
+                    class="mx-4"
+                  ></b-icon-arrow-right-circle-fill>
+
+                  <!-- go to waiting lobby -->
+
+                  <b-button
+                    :disabled="!playerTaskCompletion.canPlayGame"
+                    size="lg"
+                    :to="join"
+                    variant="success"
+                  >
+                    <h4>Join Game Lobby</h4>
+                  </b-button>
+                </b-col>
+              </b-row>
+            </template>
+
+            <!-- invite + participation status -->
+            <template v-if="!playerTaskCompletion.hasInvite">
+              <h1 class="text-left text-uppercase mt-5 py-2">No active invitation found</h1>
+              <p class="text-left">
+                Thanks for your interest in the Port of Mars! Unfortunately you do not appear to
+                have an invitation to participate in this round of the Port of Mars. If you think
+                this is an error, please contact us at
+                <a href="mailto:portmars@asu.edu">portmars@asu.edu</a>.
+              </p>
+            </template>
+
+            <template v-else-if="playerTaskCompletion.shouldTakeExitSurvey">
+              <h1 class="text-left text-uppercase mt-5 py-2">Already Participated</h1>
+              <b-button
+                v-if="playerTaskCompletion.shouldTakeExitSurvey"
+                :href="exitSurveyUrl"
+                size="lg"
+                variant="warning"
+              >
+                Exit Survey
+              </b-button>
+              <p class="text-left">
+                Thanks for participating in the Port of Mars! We will email you with further
+                instructions if you are eligible to participate in the next round. You can review
+                your past games by clicking
+                <code>Your Stats</code> in the navbar above.
+              </p>
+            </template>
+
             <!-- Navigate: Schedule or Stats -->
-            <b-nav pills align="center" class="my-3">
+            <b-nav pills align="left" class="my-3">
               <b-nav-item @click="switchTab('schedule')" :active="view === 'schedule'"
                 >Schedule</b-nav-item
               >
@@ -38,7 +156,7 @@
               >
             </b-nav>
             <!-- Schedule -->
-            <div v-if="view === 'schedule'" class="m-0 p-0 text-center">
+            <div v-if="view === 'schedule'" class="text-center">
               <h2 class="text-uppercase mt-5 mb-3">Schedule</h2>
               <p>
                 Please sign in during <b>one</b> of the following times to participate. We recommend
@@ -55,8 +173,11 @@
               </div>
             </div>
             <!-- Stats -->
-            <div v-else-if="view === 'stats'" class="m-0 p-0">
-              <div style="max-height: 35vh; overflow-y: scroll; overflow-x: hidden">
+            <div class="my-0" v-else-if="view === 'stats'">
+              <div
+                class="p-5 mx-auto my-0"
+                style="max-height: 35vh; width: 50%; overflow-y: scroll; overflow-x: hidden"
+              >
                 <p v-if="stats.games.length === 0" class="my-5 py-5">No games to display.</p>
                 <PlayerStatItem
                   v-for="playerStatItem in stats.games"
@@ -66,81 +187,6 @@
                 ></PlayerStatItem>
               </div>
             </div>
-            ></b-col
-          >
-          <div class="w-100 my-3"></div>
-          <b-col>
-            <b-button squared variant="primary" :to="'tutorial'">Tutorial</b-button>
-            <template
-              v-if="
-                playerTaskCompletion.mustTakeIntroSurvey ||
-                  playerTaskCompletion.shouldTakeExitSurvey
-              "
-            >
-              <b-button-group class="py-3" vertical>
-                <b-button
-                  v-if="playerTaskCompletion.mustTakeIntroSurvey"
-                  :href="introSurveyUrl"
-                  block
-                  size="lg"
-                  variant="success"
-                >
-                  <h1>
-                    <font-awesome-icon class="text-warning" icon="exclamation-triangle" />
-                    Click here to take an intro survey before participating (REQUIRED)
-                  </h1>
-                </b-button>
-                <b-button
-                  v-if="playerTaskCompletion.shouldTakeExitSurvey"
-                  :href="exitSurveyUrl"
-                  block
-                  size="lg"
-                  variant="success"
-                >
-                  <h1>
-                    <font-awesome-icon class="text-warning" icon="exclamation-triangle" />
-                    Thanks for participating! Please click here to complete an exit survey.
-                  </h1>
-                </b-button>
-              </b-button-group>
-            </template>
-
-            <!-- go to waiting lobby -->
-            <template v-if="playerTaskCompletion.mustTakeIntroSurvey" class="my-2 text-center">
-              <h2 class="text-uppercase my-2">
-                Please click the link above to complete a brief introductory survey before
-                participating.
-              </h2>
-            </template>
-            <template v-else-if="playerTaskCompletion.canPlayGame" class="my-2 text-center">
-              <b-button squared :to="join" variant="success">
-                Join Game Lobby
-              </b-button>
-            </template>
-
-            <!-- invite + participation status -->
-            <template v-else-if="!playerTaskCompletion.hasInvite">
-              <h2 class="text-center text-uppercase mt-5 py-2">No active invitation found</h2>
-              <p class="lead text-left">
-                Thanks for your interest in the Port of Mars! Unfortunately you do not appear to
-                have an invitation to participate in this round of the Port of Mars. If you think
-                this is an error, please contact us at
-                <a href="mailto:portmars@asu.edu">portmars@asu.edu</a>.
-              </p>
-            </template>
-
-            <template v-else>
-              <h2 class="text-center text-uppercase mt-5 py-2">Already Participated</h2>
-              <p class="lead text-left">
-                Thanks for participating in the Port of Mars!
-                <a v-if="playerTaskCompletion.shouldTakeExitSurvey" :href="exitSurveyUrl"
-                  >Please complete our exit survey by clicking this link.</a
-                >
-                We will email you with further instructions if you are eligible to participate in
-                the next round. You can review your past games by clicking
-                <code>Your Stats</code> in the navbar above.
-              </p>
-            </template>
           </b-col>
         </b-row>
       </b-col>
@@ -215,8 +261,8 @@ export default class PlayerDashboard extends Vue {
     center: true,
     fluid: true,
     blankColor: "#bbb",
-    width: 125,
-    height: 125
+    width: 200,
+    height: 200
   };
 
   get gamesPlayedCount() {
