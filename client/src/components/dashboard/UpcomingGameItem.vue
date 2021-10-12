@@ -3,7 +3,7 @@
     <div>
       <p class="next-game">Next Game at Thurs, Oct 7 at 15:45</p>
     </div>
-    <router-link to="join">
+    <router-link to="lobby">
       <b-button class="button px-6 py-1" variant="outline-light">Join</b-button>
     </router-link>
   </div>

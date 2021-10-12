@@ -112,7 +112,7 @@
                   <b-button
                     :disabled="!playerTaskCompletion.canPlayGame"
                     size="lg"
-                    to="join"
+                    to="lobby"
                     variant="success"
                   >
                     <h4>Join Game Lobby</h4>
