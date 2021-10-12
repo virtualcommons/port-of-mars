@@ -15,7 +15,7 @@
     </button>
     <div class="wrapper" v-show="profileMenuVisible">
       <p>Logged in as {{ username }}</p>
-      <router-link :to="'dashboard'" class="link">
+      <router-link to="dashboard" class="link">
         <button>
           <font-awesome-icon :icon="['fas', 'user-circle']" size="sm" />
           <span>Your Dashboard</span>

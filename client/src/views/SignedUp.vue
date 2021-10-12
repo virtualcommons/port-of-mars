@@ -7,7 +7,7 @@
           <h3 class="m-4">
             When we're ready to launch, we will send you an email with additional instructions.
           </h3>
-          <!-- <b-button variant="outline-success" class="mx-3" :to="tutorial">Take the Tutorial</b-button> -->
+          <!-- <b-button variant="outline-success" class="mx-3" to="tutorial">Take the Tutorial</b-button> -->
           <b-button size="lg" squared variant="primary" @click="logout">Log Out</b-button>
         </b-col>
       </b-row>
