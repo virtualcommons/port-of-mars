@@ -42,6 +42,10 @@
           <b-nav-item :to="'register'">Modify Consent and Email</b-nav-item>
           <b-nav-item @click="logout">Logout</b-nav-item>
         </b-nav>
+
+        <b-row>
+          <Footer style="position: absolute; bottom: 0"></Footer>
+        </b-row>
       </b-col>
       <b-col align-self="stretch" cols="9" style="background-color: var(--dark-shade-75)">
         <b-row class="h-100 mt-3">
@@ -198,6 +202,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import PlayerStatItem from "@port-of-mars/client/components/dashboard/PlayerStatItem.vue";
 import Messages from "@port-of-mars/client/components/dashboard/Messages.vue";
+import Footer from "@port-of-mars/client/components/global/Footer.vue";
 import { DashboardAPI } from "@port-of-mars/client/api/dashboard/request";
 import { GameMeta, PlayerTaskCompletion, Stats } from "@port-of-mars/shared/types";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons/faGoogle";
@@ -223,7 +228,8 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
   components: {
     ActionItem,
     PlayerStatItem,
-    Messages
+    Messages,
+    Footer
   }
 })
 export default class PlayerDashboard extends Vue {
