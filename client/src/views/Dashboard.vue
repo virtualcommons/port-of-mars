@@ -1,10 +1,6 @@
 <template>
   <b-container fluid class="h-100 m-0 p-0">
-    <Messages />
-    <b-row
-      class="justify-content-center  m-0 p-0 w-100 h-100"
-      style="background-color: var(--dark-shade-75)"
-    >
+    <b-row class="m-0 p-0 w-100 h-100" style="background-color: var(--dark-shade-75)">
       <!-- profile info -->
       <b-col align-self="stretch" cols="3" style="background-color: var(--dark-shade)">
         <b-row>
@@ -20,15 +16,16 @@
         </b-row>
 
         <b-row class="my-5 mx-1 py-3" style="background-color: var(--dark-accent)">
-          <b-col cols="4">
+          <b-col align-self="center" cols="5">
             <b-img
-              v-bind="mainProps"
+              fluid-grow
+              center
               :src="require(`@port-of-mars/client/assets/characters/Politician.png`)"
-              :alt="player"
+              alt="player"
             >
             </b-img>
           </b-col>
-          <b-col cols="8">
+          <b-col align-self="center" cols="7">
             <h3 style="color: var(--dark-shade); font-weight: bold">{{ username }}</h3>
             <p style="color: var(--dark-shade)">
               You have participated in <b>{{ gamesPlayedCount }}</b> missions.
@@ -38,13 +35,13 @@
 
         <b-nav vertical pills class="text-left">
           <b-nav-item active><h4>Dashboard</h4></b-nav-item>
-          <b-nav-item to="tutorial"><h4>Tutorial</h4></b-nav-item>
-          <b-nav-item to="register"><h4>Modify Consent and Email</h4></b-nav-item>
+          <b-nav-item :to="tutorial"><h4>Tutorial</h4></b-nav-item>
+          <b-nav-item :to="register"><h4>Modify Consent and Email</h4></b-nav-item>
           <b-nav-item @click="logout"><h4>Logout</h4></b-nav-item>
         </b-nav>
 
         <b-row>
-          <Footer style="position: absolute; bottom: 0"></Footer>
+          <Footer class="text-center" style="position: absolute; bottom: 0"></Footer>
         </b-row>
       </b-col>
       <b-col align-self="stretch" cols="9" style="background-color: var(--dark-shade-75)">
@@ -54,22 +51,26 @@
               v-if="playerTaskCompletion.mustTakeIntroSurvey || playerTaskCompletion.canPlayGame"
             >
               <b-row>
-                <b-col cols="4">
-                  <h1 class="text-left my-3" style="font-weight: medium">Onboarding Tasks</h1>
-                  <p
-                    v-if="
-                      !playerTaskCompletion.canPlayGame || playerTaskCompletion.mustTakeIntroSurvey
-                    "
-                    class="text-left"
-                  >
-                    Complete the following items to play a game.
-                  </p>
-                  <p v-else class="text-left">Onboarding tasks complete. Ready to launch.</p>
+                <Messages></Messages>
+                <b-col cols="auto" class="mr-5">
+                  <h1 class="text-left my-3" style="font-weight: medium" variant="warning">
+                    Onboarding Tasks
+                  </h1>
+                  <b-progress
+                    :max="maxValue"
+                    :value="progressValue"
+                    :variant="progressVariant"
+                    show-value
+                    height="1.75rem"
+                    striped
+                    animated
+                    class="my-3"
+                  ></b-progress>
                 </b-col>
-                <b-col class="text-left my-5">
+                <b-col cols="auto" class="text-left my-5">
                   <b-button
                     :disabled="!playerTaskCompletion.mustTakeTutorial"
-                    to="tutorial"
+                    :to="tutorial"
                     :variant="playerTaskCompletion.mustTakeTutorial ? 'warning' : 'secondary'"
                     size="lg"
                     ><h4>
@@ -89,11 +90,11 @@
                   <b-button
                     :disabled="!playerTaskCompletion.mustTakeIntroSurvey"
                     :href="introSurveyUrl"
-                    size="lg"
                     :variant="playerTaskCompletion.mustTakeIntroSurvey ? 'warning' : 'secondary'"
+                    size="lg"
                   >
                     <h4>
-                      Introduction Survey
+                      Intro Survey
                       <b-icon-check-circle-fill
                         v-if="!playerTaskCompletion.mustTakeIntroSurvey"
                         scale="1"
@@ -111,8 +112,8 @@
 
                   <b-button
                     :disabled="!playerTaskCompletion.canPlayGame"
+                    :to="lobby"
                     size="lg"
-                    to="lobby"
                     variant="success"
                   >
                     <h4>Join Game Lobby</h4>
@@ -276,13 +277,38 @@ export default class Dashboard extends Vue {
     width: 200,
     height: 200
   };
+  maxValue = 100;
 
   get gamesPlayedCount() {
     return this.stats.games.length;
   }
 
-  get join() {
+  get lobby() {
     return { name: LOBBY_PAGE };
+  }
+
+  get register() {
+    return { name: REGISTER_PAGE };
+  }
+
+  get tutorial() {
+    return { name: TUTORIAL_PAGE };
+  }
+
+  get progressValue() {
+    if (this.playerTaskCompletion.canPlayGame) return 100;
+    else if (this.playerTaskCompletion.mustTakeIntroSurvey) return 66;
+    else if (this.playerTaskCompletion.mustTakeTutorial) return 50;
+  }
+
+  get progressVariant() {
+    switch (this.progressValue) {
+      case 50:
+      case 66:
+        return "warning";
+      case 100:
+        return "success";
+    }
   }
 
   created() {
@@ -353,7 +379,3 @@ export default class Dashboard extends Vue {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-@import "@port-of-mars/client/stylesheets/views/Dashboard.scss";
-</style>
