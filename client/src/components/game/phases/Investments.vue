@@ -134,9 +134,16 @@ export default class Investments extends Vue {
   /**
    * Get local player's costs for influences.
    */
-  get investments(): { name: Resource; cost: number; pendingInvestment: number } {
+  get investments(): any {
     const p = this.$tstore.getters.player;
 
+    console.log(
+      ROLE_TO_INVESTMENT_DATA[p.role].map(name => ({
+        name,
+        cost: p.costs[name],
+        pendingInvestment: this.pendingInvestments[name]
+      }))
+    );
     // get influence costs base on local player's role
     return ROLE_TO_INVESTMENT_DATA[p.role].map(name => ({
       name,
@@ -218,7 +225,6 @@ export default class Investments extends Vue {
         role: this.$tstore.state.role
       };
       this.api.investPendingTimeBlocks(data);
-      console.log("data to send: ", data);
     }
   }
 }
