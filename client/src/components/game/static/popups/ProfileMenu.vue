@@ -42,20 +42,20 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Inject } from 'vue-property-decorator';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCaretRight } from '@fortawesome/free-solid-svg-icons/faCaretRight';
-import { faCaretLeft } from '@fortawesome/free-solid-svg-icons/faCaretLeft';
-import { faUserCircle } from '@fortawesome/free-solid-svg-icons/faUserCircle';
-import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons/faSignOutAlt';
-import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons/faExclamationTriangle';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
-import { TutorialAPI } from '@port-of-mars/client/api/tutorial/request';
-import { isDev, isStaging } from '@port-of-mars/shared/settings';
-import { faTerminal } from '@fortawesome/free-solid-svg-icons/faTerminal';
-import { faWindowClose } from '@fortawesome/free-regular-svg-icons/faWindowClose';
-import {AbstractGameAPI} from "@port-of-mars/client/api/game/types";
+import { Vue, Component, Prop, Inject } from "vue-property-decorator";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faCaretRight } from "@fortawesome/free-solid-svg-icons/faCaretRight";
+import { faCaretLeft } from "@fortawesome/free-solid-svg-icons/faCaretLeft";
+import { faUserCircle } from "@fortawesome/free-solid-svg-icons/faUserCircle";
+import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons/faSignOutAlt";
+import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons/faExclamationTriangle";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
+import { TutorialAPI } from "@port-of-mars/client/api/tutorial/request";
+import { isDev, isStaging } from "@port-of-mars/shared/settings";
+import { faTerminal } from "@fortawesome/free-solid-svg-icons/faTerminal";
+import { faWindowClose } from "@fortawesome/free-regular-svg-icons/faWindowClose";
+import { AbstractGameAPI } from "@port-of-mars/client/api/game/types";
 import { DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
 
 library.add(faCaretRight);
@@ -65,17 +65,17 @@ library.add(faSignOutAlt);
 library.add(faTerminal);
 library.add(faWindowClose);
 library.add(faExclamationTriangle);
-Vue.component('font-awesome-icon', FontAwesomeIcon);
+Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 @Component({
-  components: {},
+  components: {}
 })
 export default class ProfileMenu extends Vue {
   @Inject() readonly api!: AbstractGameAPI;
-  devtoolsEnabled: boolean = false;\
+  devtoolsEnabled: boolean = false;
 
   get dashboard() {
-    return {name: DASHBOARD_PAGE}
+    return { name: DASHBOARD_PAGE };
   }
 
   get profileMenuVisible() {
@@ -87,17 +87,17 @@ export default class ProfileMenu extends Vue {
   }
 
   get position() {
-    return this.profileMenuVisible ? { left: '0rem' } : { left: '-20rem' };
+    return this.profileMenuVisible ? { left: "0rem" } : { left: "-20rem" };
   }
 
   get username(): string {
     const username = this.$tstore.state.user.username;
-    return username ? username : 'Username';
+    return username ? username : "Username";
   }
 
   logoutUser(): void {
     this.$ajax.forgetLoginCreds();
-    this.$router.push({ name: 'Login' });
+    this.$router.push({ name: "Login" });
   }
 
   get isDevModeEnabled() {
@@ -126,10 +126,10 @@ export default class ProfileMenu extends Vue {
    */
   onKeyDown(e: any) {
     switch (e.key) {
-      case 'r':
+      case "r":
         this.api.setNextPhase();
         break;
-      case 'q':
+      case "q":
         this.api.resetGame();
         break;
       default:
