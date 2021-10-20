@@ -25,27 +25,20 @@
       <div class="w-100"></div>
       <b-col>
         <b-form-spinbutton
-          v-model="pendingInvestment"
+          v-model="units"
           :disabled="cannotInvest"
           min="0"
-          :max="cost > remainingTimeBlocks ? pendingInvestment : 10"
+          :max="cost > remainingTimeBlocks ? units : 10"
           inline
+          @input="setInvestmentAmount(units)"
         >
           <template #decrement>
-            <b-button
-              variant="transparent"
-              :disabled="pendingUnits < 1"
-              @click="setInvestmentAmount(pendingInvestment)"
-            >
+            <b-button variant="transparent" :disabled="pendingUnits < 1">
               <b-icon-dash scale="1.5" color="white"></b-icon-dash>
             </b-button>
           </template>
           <template #increment>
-            <b-button
-              variant="transparent"
-              :disabled="cost > remainingTimeBlocks"
-              @click="setInvestmentAmount(pendingInvestment)"
-            >
+            <b-button variant="transparent" :disabled="cost > remainingTimeBlocks">
               <b-icon-plus scale="1.5" color="white"></b-icon-plus>
             </b-button>
           </template>
@@ -83,7 +76,6 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
 export default class InvestmentCard extends Vue {
   @Prop() name!: Resource;
   @Prop() cost!: number;
-  @Prop() pendingInvestment!: number;
   @Prop() remainingTimeBlocks!: number;
 
   mainProps = {
@@ -93,6 +85,7 @@ export default class InvestmentCard extends Vue {
     width: 50,
     height: 50
   };
+  units: number = 0;
 
   get cannotInvest(): boolean {
     return COST_INAFFORDABLE == this.cost || this.playerReady;
@@ -114,10 +107,10 @@ export default class InvestmentCard extends Vue {
     return this.$tstore.getters.player.ready;
   }
 
-  setInvestmentAmount(pendingInvestment: number): void {
-    this.$emit("input", {
+  setInvestmentAmount(units: number): void {
+    this.$emit("update", {
       name: this.name,
-      units: this.pendingInvestment = pendingInvestment,
+      units: units,
       cost: this.cost
     });
   }

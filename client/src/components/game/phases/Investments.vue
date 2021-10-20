@@ -29,12 +29,12 @@
         style="background-color: var(--light-shade-05)"
       >
         <InvestmentCard
-          v-for="cost in costs"
-          :key="cost.name"
-          v-bind="cost"
-          @input="investTimeBlocks"
+          v-for="investment in investments"
+          :key="investment.name"
+          v-bind="investment"
+          @update="investTimeBlocks"
           :remainingTimeBlocks="remainingTimeBlocks"
-        />
+        ></InvestmentCard>
       </b-row>
     </b-col>
     <!-- purchasable accomplishments -->
@@ -134,7 +134,7 @@ export default class Investments extends Vue {
   /**
    * Get local player's costs for influences.
    */
-  get costs(): any {
+  get investments(): { name: Resource; cost: number; pendingInvestment: number } {
     const p = this.$tstore.getters.player;
 
     // get influence costs base on local player's role
@@ -162,14 +162,14 @@ export default class Investments extends Vue {
   /**
    * Get local player's total time blocks.
    */
-  get totalTimeBlocks() {
-    return this.$store.getters.player.timeBlocks;
+  get totalTimeBlocks(): number {
+    return this.$tstore.getters.player.timeBlocks;
   }
 
   /**
    * Get local player's costs for influences.
    */
-  get remainingTimeBlocks() {
+  get remainingTimeBlocks(): number {
     return this.calculateRemainingTimeBlocks(this.pendingInvestments);
   }
 
@@ -192,15 +192,16 @@ export default class Investments extends Vue {
   calculateRemainingTimeBlocks(pendingInvestments: ResourceCostData): number {
     const p = this.$tstore.getters.player;
     const timeBlocks = p.timeBlocks;
+
     const costs = p.costs;
-    return (
+    const difference =
       timeBlocks -
       _.reduce(
         INVESTMENTS,
         (tot, investment) => tot + pendingInvestments[investment] * costs[investment],
         0
-      )
-    );
+      );
+    return difference;
   }
 
   /**
@@ -213,10 +214,11 @@ export default class Investments extends Vue {
     if (investment.units >= 0 && this.calculateRemainingTimeBlocks(pendingInvestments) >= 0) {
       const data = {
         investment: investment.name,
-        units: investment.units,
+        units: pendingInvestments[investment.name],
         role: this.$tstore.state.role
       };
       this.api.investPendingTimeBlocks(data);
+      console.log("data to send: ", data);
     }
   }
 }
