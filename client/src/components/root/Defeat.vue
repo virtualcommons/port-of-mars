@@ -22,9 +22,7 @@
               <span> Log: {{ logs.length - index }} / {{ logs.length }} </span>
             </p>
             <p class="content">{{ log.content }}</p>
-            <p class="time">
-              <span>[ </span>{{ logTime(log.timestamp) }}<span> ]</span>
-            </p>
+            <p class="time"><span>[ </span>{{ logTime(log.timestamp) }}<span> ]</span></p>
             <div class="round row" v-if="delineateRound(index, logs)">
               <b>Round {{ log.round - 1 }}</b>
             </div>
@@ -37,7 +35,7 @@
       <div class="footnote col-12">
         <h2>Thank you for playing.</h2>
         <div class="buttons">
-          <router-link to="dashboard">
+          <router-link :to="dashboard">
             <button class="exit">Return to dashboard and take the exit survey</button>
           </router-link>
         </div>
@@ -47,17 +45,22 @@
 </template>
 
 <script lang="ts">
-import { Component, Inject, Vue } from 'vue-property-decorator';
-import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
-import { MarsLogMessageData } from '@port-of-mars/shared/types';
+import { Component, Inject, Vue } from "vue-property-decorator";
+import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
+import { MarsLogMessageData } from "@port-of-mars/shared/types";
+import { DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
 import _ from "lodash";
 
 @Component({})
 export default class Defeat extends Vue {
   @Inject() readonly api!: GameRequestAPI;
 
+  get dashboard() {
+    return { name: DASHBOARD_PAGE };
+  }
+
   get logs() {
-    return _.sortBy(this.$store.getters.logs, (ml) => - ml.id);
+    return _.sortBy(this.$store.getters.logs, ml => -ml.id);
   }
 
   get categoryColorMap() {
@@ -83,6 +86,6 @@ export default class Defeat extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '~animate.css/source/attention_seekers/pulse.css';
-@import '@port-of-mars/client/stylesheets/root/Defeat.scss';
+@import "~animate.css/source/attention_seekers/pulse.css";
+@import "@port-of-mars/client/stylesheets/root/Defeat.scss";
 </style>

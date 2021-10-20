@@ -25,7 +25,7 @@
         </div>
       </div>
     </div>
-    <router-link to="dashboard">
+    <router-link :to="dashboard">
       <button class="lobby-button">Continue</button>
     </router-link>
   </div>
@@ -40,10 +40,13 @@ import { DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
   components: {}
 })
 export default class CompletedQuizModal extends Vue {
-  async gotoDashboard() {
-    await this.$router.push({ name: DASHBOARD_PAGE });
-    return;
+  get dashboard() {
+    return { name: DASHBOARD_PAGE };
   }
+  // async gotoDashboard() {
+  //   await this.$router.push({ name: DASHBOARD_PAGE });
+  //   return;
+  // }
 }
 </script>
 

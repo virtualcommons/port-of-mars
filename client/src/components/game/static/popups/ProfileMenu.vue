@@ -1,11 +1,7 @@
 <template>
   <div class="c-profilemenu tour-profile-menu" :style="position">
     <button @click="toggle" class="toggle tour-profile-menu-toggle">
-      <font-awesome-icon
-        v-if="!profileMenuVisible"
-        :icon="['fas', 'caret-right']"
-        size="lg"
-      />
+      <font-awesome-icon v-if="!profileMenuVisible" :icon="['fas', 'caret-right']" size="lg" />
       <font-awesome-icon
         v-if="profileMenuVisible"
         :icon="['fas', 'caret-left']"
@@ -15,7 +11,7 @@
     </button>
     <div class="wrapper" v-show="profileMenuVisible">
       <p>Logged in as {{ username }}</p>
-      <router-link to="dashboard" class="link">
+      <router-link :to="dashboard" class="link">
         <button>
           <font-awesome-icon :icon="['fas', 'user-circle']" size="sm" />
           <span>Your Dashboard</span>
@@ -29,24 +25,15 @@
         href="mailto:portmars@asu.edu?subject=[port-of-mars]  Issue Submission"
         target="_blank"
         class="link"
-        ><font-awesome-icon
-          :icon="['fas', 'exclamation-triangle']"
-          size="sm"
-        /><span>Report a Problem</span></a
+        ><font-awesome-icon :icon="['fas', 'exclamation-triangle']" size="sm" /><span
+          >Report a Problem</span
+        ></a
       >
-      <button
-        @click="enableDevtools"
-        v-if="!devtoolsEnabled && isDevModeEnabled"
-        class="link"
-      >
+      <button @click="enableDevtools" v-if="!devtoolsEnabled && isDevModeEnabled" class="link">
         <font-awesome-icon :icon="['far', 'window-close']" size="sm" />
         <span>Enable DevTools</span>
       </button>
-      <button
-        @click="disableDevtools"
-        v-if="devtoolsEnabled && isDevModeEnabled"
-        class="link"
-      >
+      <button @click="disableDevtools" v-if="devtoolsEnabled && isDevModeEnabled" class="link">
         <font-awesome-icon :icon="['fas', 'terminal']" size="sm" />
         <span>Disable Devtools</span>
       </button>
@@ -69,6 +56,7 @@ import { isDev, isStaging } from '@port-of-mars/shared/settings';
 import { faTerminal } from '@fortawesome/free-solid-svg-icons/faTerminal';
 import { faWindowClose } from '@fortawesome/free-regular-svg-icons/faWindowClose';
 import {AbstractGameAPI} from "@port-of-mars/client/api/game/types";
+import { DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
 
 library.add(faCaretRight);
 library.add(faCaretLeft);
@@ -84,13 +72,17 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 })
 export default class ProfileMenu extends Vue {
   @Inject() readonly api!: AbstractGameAPI;
-  private devtoolsEnabled: boolean = false;
+  devtoolsEnabled: boolean = false;\
+
+  get dashboard() {
+    return {name: DASHBOARD_PAGE}
+  }
 
   get profileMenuVisible() {
     return this.$tstore.state.userInterface.profileMenuView.visible;
   }
 
-  private toggle() {
+  toggle() {
     this.api.toggleProfileMenu(this.profileMenuVisible);
   }
 
@@ -103,7 +95,7 @@ export default class ProfileMenu extends Vue {
     return username ? username : 'Username';
   }
 
-  private logoutUser(): void {
+  logoutUser(): void {
     this.$ajax.forgetLoginCreds();
     this.$router.push({ name: 'Login' });
   }
@@ -148,5 +140,5 @@ export default class ProfileMenu extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/static/popups/ProfileMenu.scss';
+@import "@port-of-mars/client/stylesheets/game/static/popups/ProfileMenu.scss";
 </style>
