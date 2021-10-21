@@ -16,7 +16,7 @@
         <b-img
           center
           rounded="circle"
-          v-bind="mainProps"
+          v-bind="icon"
           :src="require(`@port-of-mars/client/assets/icons/${name}.svg`)"
           :alt="name"
         >
@@ -26,11 +26,11 @@
       <b-col>
         <b-form-spinbutton
           v-model="units"
+          @input="setInvestmentAmount(units)"
           :disabled="cannotInvest"
           min="0"
           :max="cost > remainingTimeBlocks ? units : 10"
           inline
-          @input="setInvestmentAmount(units)"
         >
           <template #decrement>
             <b-button variant="transparent" :disabled="pendingUnits < 1">
@@ -38,7 +38,10 @@
             </b-button>
           </template>
           <template #increment>
-            <b-button variant="transparent" :disabled="cost > remainingTimeBlocks">
+            <b-button
+              variant="transparent"
+              :disabled="cost > remainingTimeBlocks || outOfTimeBlocks"
+            >
               <b-icon-plus scale="1.5" color="white"></b-icon-plus>
             </b-button>
           </template>
@@ -65,7 +68,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faClock } from "@fortawesome/free-solid-svg-icons/faClock";
 import { faBriefcase } from "@fortawesome/free-solid-svg-icons/faBriefcase";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { Resource } from "@port-of-mars/shared/types";
+import { Resource, ResourceAmountData } from "@port-of-mars/shared/types";
 import { COST_INAFFORDABLE } from "@port-of-mars/shared/settings";
 
 library.add(faClock);
@@ -77,8 +80,9 @@ export default class InvestmentCard extends Vue {
   @Prop() name!: Resource;
   @Prop() cost!: number;
   @Prop() remainingTimeBlocks!: number;
+  @Prop() outOfTimeBlocks!: boolean;
 
-  mainProps = {
+  icon = {
     center: true,
     fluid: true,
     blankColor: "#bbb",
@@ -87,26 +91,44 @@ export default class InvestmentCard extends Vue {
   };
   units: number = 0;
 
+  /**
+   * Define conditions for disabling investment buttons.
+   */
   get cannotInvest(): boolean {
     return COST_INAFFORDABLE == this.cost || this.playerReady;
   }
 
+  /**
+   * Define if investment is affordable.
+   */
   get cannotAfford(): boolean {
     return this.cost >= COST_INAFFORDABLE;
   }
 
+  /**
+   * Units that will be invested when the invest phase ends.
+   */
   get pendingUnits() {
     return this.$tstore.getters.player.pendingInvestments[this.name];
   }
 
+  /**
+   * Formatted system health label
+   */
   get label() {
     return this.name == ("systemHealth" as any) ? "System Health" : this.name;
   }
 
+  /**
+   * Player readiness status.
+   */
   get playerReady() {
     return this.$tstore.getters.player.ready;
   }
 
+  /**
+   * PPurchase
+   */
   setInvestmentAmount(units: number): void {
     this.$emit("update", {
       name: this.name,
