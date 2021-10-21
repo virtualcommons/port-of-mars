@@ -29,10 +29,7 @@
         ></b-spinner>
 
         <b-button-group class="w-25 mt-4" vertical>
-          <b-button to="tutorial" variant="secondary">
-            Take Tutorial
-          </b-button>
-          <b-button to="dashboard" variant="secondary">
+          <b-button :to="dashboard" variant="secondary">
             Return to the Dashboard
           </b-button>
           <b-button v-if="isDevOrStaging" @click="distributeGroups" variant="secondary">
@@ -79,6 +76,10 @@ export default class Lobby extends Vue {
 
   get isDevOrStaging() {
     return isDevOrStaging();
+  }
+
+  get dashboard() {
+    return { name: DASHBOARD_PAGE };
   }
 
   async created() {
