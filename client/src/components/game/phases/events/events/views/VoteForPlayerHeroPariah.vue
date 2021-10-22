@@ -73,14 +73,14 @@
       return ROLES;
     }
 
-    private submitHeroOrPariah(vote: 'hero' | 'pariah') {
+    submitHeroOrPariah(vote: 'hero' | 'pariah') {
       this.voteHeroOrPariah = vote;
       if (this.voteHeroOrPariah) {
         this.api.saveHeroOrPariah(this.voteHeroOrPariah);
       }
     }
 
-    private selectRole(member: Role): void {
+    selectRole(member: Role): void {
       this.role = member;
       console.log('Hero or Pariah - Role Vote: ', this.role)
       this.api.saveHeroOrPariahRole(this.role);

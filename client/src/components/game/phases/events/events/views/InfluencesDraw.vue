@@ -39,15 +39,13 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Inject, InjectReactive } from 'vue-property-decorator';
-import { Role, ROLES, Resource } from '@port-of-mars/shared/types';
-import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
+import { Vue, Component, Inject, InjectReactive } from "vue-property-decorator";
+import { Role, ROLES, Resource } from "@port-of-mars/shared/types";
+import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 
 @Component({})
-
 export default class InfluencesDraw extends Vue {
-
-  private drawnInfluence: string = 'None Selected';
+  drawnInfluence: string = "None Selected";
   @Inject() api!: GameRequestAPI;
 
   /**
@@ -65,7 +63,7 @@ export default class InfluencesDraw extends Vue {
    *
    */
   get availableInfluences(): Array<string> {
-    return ['science', 'government', 'legacy', 'finance', 'culture'];
+    return ["science", "government", "legacy", "finance", "culture"];
   }
 
   /**
@@ -73,10 +71,10 @@ export default class InfluencesDraw extends Vue {
    * @param influence The influence that the Player votes for.
    *
    */
-  private handleDrawInfluence(influence: string): void {
+  handleDrawInfluence(influence: string): void {
     this.drawnInfluence = influence;
-    console.log('DRAW (type): ', typeof influence);
-    console.log('DRAW: ', influence);
+    console.log("DRAW (type): ", typeof influence);
+    console.log("DRAW: ", influence);
   }
 
   /**
@@ -84,23 +82,23 @@ export default class InfluencesDraw extends Vue {
    * influence category.
    *
    */
-  private handleUndrawInfluence(): void {
-    this.drawnInfluence = 'None Selected';
+  handleUndrawInfluence(): void {
+    this.drawnInfluence = "None Selected";
   }
 
   /**
    * Passes the influence that the Player selected to a request api.
    */
-  private submitDrawnInfluence(): void {
+  submitDrawnInfluence(): void {
     const influenceChoice: Resource = this.drawnInfluence as Resource;
     const influenceVoteResults = { role: this.playerRole, influence: influenceChoice };
     this.api.saveBondingThroughAdversitySelection(influenceVoteResults);
     this.api.setPlayerReadiness(true);
-    console.log('SUBMIT DRAWN INFLUENCE: ', this.drawnInfluence);
+    console.log("SUBMIT DRAWN INFLUENCE: ", this.drawnInfluence);
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/events/events/views/InfluencesDraw.scss';
+@import "@port-of-mars/client/stylesheets/game/phases/events/events/views/InfluencesDraw.scss";
 </style>

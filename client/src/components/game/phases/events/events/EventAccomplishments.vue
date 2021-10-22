@@ -3,8 +3,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
-import AccomplishmentsSelectPurchased from './views/AccomplishmentsSelectPurchased.vue';
+import { Vue, Component, Prop } from "vue-property-decorator";
+import AccomplishmentsSelectPurchased from "./views/AccomplishmentsSelectPurchased.vue";
 
 @Component({
   components: {
@@ -12,20 +12,19 @@ import AccomplishmentsSelectPurchased from './views/AccomplishmentsSelectPurchas
   }
 })
 export default class EventAccomplishments extends Vue {
-  @Prop({ default: '' }) private eventView!: string;
+  @Prop({ default: "" }) eventView!: string;
 
   get eventAccomplishmentsView(): string {
     switch (this.eventView) {
-      case 'ACCOMPLISHMENT_SELECT_PURCHASED':
-        return 'AccomplishmentsSelectPurchased';
+      case "ACCOMPLISHMENT_SELECT_PURCHASED":
+        return "AccomplishmentsSelectPurchased";
       default:
-        return '';
+        return "";
     }
-    return '';
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/events/events/EventAccomplishments.scss';
+@import "@port-of-mars/client/stylesheets/game/phases/events/events/EventAccomplishments.scss";
 </style>

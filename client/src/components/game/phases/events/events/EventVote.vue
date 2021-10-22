@@ -16,7 +16,7 @@ import VoteForPlayerHeroPariah from "./views/VoteForPlayerHeroPariah.vue";
   }
 })
 export default class EventVote extends Vue {
-  @Prop({ default: "" }) private eventView!: string;
+  @Prop({ default: "" }) eventView!: string;
 
   get eventVoteView(): string {
     switch (this.eventView) {

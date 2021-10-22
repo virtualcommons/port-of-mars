@@ -3,9 +3,9 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
-import InfluencesSelect from './views/InfluencesSelect.vue';
-import InfluencesDraw from './views/InfluencesDraw.vue';
+import { Vue, Component, Prop } from "vue-property-decorator";
+import InfluencesSelect from "./views/InfluencesSelect.vue";
+import InfluencesDraw from "./views/InfluencesDraw.vue";
 
 @Component({
   components: {
@@ -14,22 +14,21 @@ import InfluencesDraw from './views/InfluencesDraw.vue';
   }
 })
 export default class EventInfluences extends Vue {
-  @Prop({ default: '' }) private eventView!: string;
+  @Prop({ default: "" }) eventView!: string;
 
   get eventInvestmentsView(): string {
     switch (this.eventView) {
-      case 'INFLUENCES_SELECT':
-        return 'InfluencesSelect';
-      case 'INFLUENCES_DRAW':
-        return 'InfluencesDraw';
+      case "INFLUENCES_SELECT":
+        return "InfluencesSelect";
+      case "INFLUENCES_DRAW":
+        return "InfluencesDraw";
       default:
-        return '';
+        return "";
     }
-    return '';
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/events/events/EventInfluences.scss';
+@import "@port-of-mars/client/stylesheets/game/phases/events/events/EventInfluences.scss";
 </style>

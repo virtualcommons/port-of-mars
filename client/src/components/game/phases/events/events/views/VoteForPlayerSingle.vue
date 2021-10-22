@@ -35,7 +35,7 @@
 
   @Component({})
   export default class VoteForPlayerSingle extends Vue {
-    private selectedPlayer: Role | null = null;
+    selectedPlayer: Role | null = null;
 
     @Inject()
     api!: GameRequestAPI;
@@ -44,12 +44,12 @@
       return ROLES;
     }
 
-    private handleSelectPlayer(member: Role): void {
+    handleSelectPlayer(member: Role): void {
       this.selectedPlayer = member;
       console.log('MEMBER: ', this.selectedPlayer);
     }
 
-    private submitSelectedPlayer(): void {
+    submitSelectedPlayer(): void {
       if (!_.isNull(this.selectedPlayer)) {
         console.log('SUBMIT MEMBER: ', this.selectedPlayer);
         this.api.voteForPhilanthropist(this.selectedPlayer);
