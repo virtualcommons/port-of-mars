@@ -27,7 +27,7 @@
           <b-col align-self="center" cols="7">
             <h3 class="dark">{{ username }}</h3>
             <p class="dark">
-              You have participated in 
+              You have participated in
               <b-badge pill variant="primary">{{ gamesPlayedCount }}</b-badge> missions.
             </p>
           </b-col>
@@ -142,7 +142,7 @@
             <b-nav pills align="left" class="my-3">
               <b-nav-item @click="switchTab('schedule')" :active="view === 'schedule'">
                 <h4>Schedule</h4>
-                </b-nav-item>
+              </b-nav-item>
               <b-nav-item @click="switchTab('stats')" :active="view === 'stats'">
                 <h4>Previous Games</h4>
               </b-nav-item>
@@ -172,8 +172,8 @@
               <template v-else-if="view === 'stats'" style="background-color: var(--dark-shade)">
                 <h1>Previous Games</h1>
                 <div
-                  class="mx-auto my-0"
-                  style="height: 90%; width: 70%; overflow-y: auto; overflow-x: hidden"
+                  class="mx-auto my-0 scroll-to-recent"
+                  style="height: 90%; width: 70%; overflow-y: scroll; overflow-x: hidden"
                 >
                   <p v-if="stats.games.length === 0" class="my-5 py-5">No games to display.</p>
                   <PlayerStatItem
@@ -214,6 +214,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { CalendarEvent, google } from "calendar-link";
 import ActionItem from "@port-of-mars/client/components/dashboard/ActionItem.vue";
+import _ from "lodash";
 
 library.add(faGoogle, faRocket);
 
@@ -302,6 +303,11 @@ export default class Dashboard extends Vue {
   created() {
     this.api = new DashboardAPI(this.$tstore, this.$ajax);
     this.initialize();
+  }
+
+  updated() {
+    const elem = this.$el.querySelector(".scroll-to-recent");
+    elem!.scrollTop = elem!.scrollHeight;
   }
 
   inviteLink(invite: { title: string; location: string; start: Date; end: Date; details: string }) {

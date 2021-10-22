@@ -1,30 +1,16 @@
 <template>
   <b-container fluid class="h-100 m-0 p-0">
     <!--  flex-column: set vertical direction on flex-items -->
-    <b-row class="h-100 flex-column p-0 justify-content-center">
-      <b-col class="flex-grow-1 tour-chat overflow-hidden" style="border: 0.125rem solid #A49CA6">
-        <Chat />
+    <b-row class="h-100 flex-column p-0">
+      <h4>Mars Log</h4>
+      <b-col class="tour-chat overflow-hidden" style="border: 0.125rem solid #A49CA6">
+        <MarsLog></MarsLog
+      ></b-col>
+      <div class="w-100 my-2"></div>
+      <h4>Chat</h4>
+      <b-col class="tour-chat overflow-hidden" style="border: 0.125rem solid #A49CA6">
+        <Chat></Chat>
       </b-col>
-      <b-button
-        v-b-modal.modal-center
-        block
-        squared
-        class="mt-2 tour-log"
-        variant="outline-secondary"
-        style="border: 0.125rem solid"
-      >
-        <p class="my-auto"><b>Show Mars Log</b></p>
-      </b-button>
-      <b-modal
-        id="modal-center"
-        scrollable
-        centered
-        header-bg-variant="dark"
-        body-bg-variant="dark"
-        footer-bg-variant="dark"
-      >
-        <MarsLog></MarsLog>
-      </b-modal>
     </b-row>
   </b-container>
 </template>
