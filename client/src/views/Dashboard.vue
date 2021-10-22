@@ -52,23 +52,27 @@
                   <h1 class="text-left my-3" style="font-weight: medium">
                     Mission Control Onboarding
                   </h1>
+                  <div class='lead'>
+                    Welcome to the Port of Mars! Please be sure to complete all onboarding tasks before
+                    embarking on your next mission.
+                  </div>
                 </b-col>
-                <b-col cols="auto" class="text-left my-5">
+                <b-col cols="auto" class="text-left my-3">
                   <b-button
                     :disabled="!playerTaskCompletion.mustTakeTutorial"
                     :to="tutorial"
                     :variant="playerTaskCompletion.mustTakeTutorial ? 'warning' : 'secondary'"
-                    size="lg"
-                    ><h4>
+                    size="lg">
+                    <h4>
                       Tutorial
                       <b-icon-check-circle-fill
                         v-if="!playerTaskCompletion.mustTakeTutorial"
+                        variant="success"
                         scale="1"
-                        class="ml-2"
-                      ></b-icon-check-circle-fill>
+                        class="ml-2">
+                      </b-icon-check-circle-fill>
                     </h4>
                   </b-button>
-
                   <b-icon-arrow-right-circle-fill
                     scale="2"
                     class="mx-4"
@@ -137,54 +141,54 @@
                 <code>Your Stats</code> in the navbar above.
               </p>
             </template>
-
-            <!-- Navigate: Schedule or Stats -->
-            <b-nav pills align="left" class="my-3">
-              <b-nav-item @click="switchTab('schedule')" :active="view === 'schedule'">
-                <h4>Schedule</h4>
-              </b-nav-item>
-              <b-nav-item @click="switchTab('stats')" :active="view === 'stats'">
-                <h4>Previous Games</h4>
-              </b-nav-item>
-            </b-nav>
-            <div
-              class="text-center p-4"
-              style="height: 75vh; background-color: var(--dark-shade); border: 0.2rem solid var(--light-shade-25)"
-            >
-              <!-- Schedule -->
-              <template v-if="view === 'schedule'">
-                <h1>Schedule</h1>
-                <p>
-                  Please sign in during <b>one</b> of the following times to participate. We
-                  recommend that you show up 5 minutes earlier to join the waiting lobby.
-                </p>
-                <div style="overflow-y: auto !important">
-                  <b-table :items="schedule" bordered class="py-3" stacked="md" small dark striped>
-                    <template v-slot:cell(addToCalendar)="data">
-                      <a :href="inviteLink(data.item.addToCalendar)" target="_blank">
-                        <font-awesome-icon :icon="['fab', 'google']"></font-awesome-icon>
-                      </a>
-                    </template>
-                  </b-table>
-                </div>
-              </template>
-              <!-- Stats -->
-              <template v-else-if="view === 'stats'" style="background-color: var(--dark-shade)">
-                <h1>Previous Games</h1>
-                <div
-                  class="mx-auto my-0 scroll-to-recent"
-                  style="height: 90%; width: 70%; overflow-y: scroll; overflow-x: hidden"
-                >
-                  <p v-if="stats.games.length === 0" class="my-5 py-5">No games to display.</p>
-                  <PlayerStatItem
-                    v-for="playerStatItem in stats.games"
-                    :key="playerStatItem.time"
-                    :playerStatItem="playerStatItem"
-                    class="my-1 py-1"
-                  ></PlayerStatItem>
-                </div>
-              </template>
-            </div>
+            <!-- tabs: Schedule or Stats -->
+            <!-- FIXME: consider using b-cards https://bootstrap-vue.org/docs/components/tabs once the regression between bootstrap-vue and vue-class-component is merged -->
+            <b-tabs class="mt-3" content-class="mt-3">
+              <b-tab title="Schedule" title-link-class="tab-title" active>
+                <b-card-title>Upcoming Games</b-card-title>
+                <b-card-text>
+                  <div v-if="schedule && schedule.length > 0">
+                    Please sign in during <b>one</b> of the following times to participate. We
+                    recommend that you show up 5 minutes earlier to join the waiting lobby.
+                    <div style="overflow-y: auto !important">
+                      <b-table :items="schedule" bordered class="py-3" stacked="md" small dark striped show-empty empty-text="No upcoming games scheduled.">
+                        <template v-slot:cell(addToCalendar)="data">
+                          <a :href="inviteLink(data.item.addToCalendar)" target="_blank">
+                            <font-awesome-icon :icon="['fab', 'google']"></font-awesome-icon>
+                          </a>
+                        </template>
+                      </b-table>
+                    </div>
+                  </div>
+                  <div v-else>
+                    <b-alert show variant="primary">
+                      <b-icon-exclamation-circle font-scale="2" />
+                    No upcoming games on the schedule. Please check your 
+                    email for future available dates.
+                    </b-alert>
+                  </div>
+                </b-card-text>
+              </b-tab>
+              <b-tab title="History" title-link-class="tab-title">
+                <b-card-title>Past Port of Mars Missions</b-card-title>
+                <b-card-text>
+                  <div class="game-list">
+                    <p v-if="stats.games.length === 0">
+                      <b-alert show variant="primary">
+                      <b-icon-bell-fill font-scale="2" />
+                      No missions to report. 
+                      </b-alert>
+                    </p>
+                    <PlayerStatItem
+                      v-for="playerStatItem in stats.games"
+                      :key="playerStatItem.time"
+                      :playerStatItem="playerStatItem"
+                      class="my-1 py-1"
+                    ></PlayerStatItem>
+                  </div>
+                </b-card-text>
+              </b-tab>
+            </b-tabs>
           </b-col>
         </b-row>
       </b-col>
@@ -195,14 +199,13 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import PlayerStatItem from "@port-of-mars/client/components/dashboard/PlayerStatItem.vue";
-import Messages from "@port-of-mars/client/components/dashboard/Messages.vue";
-import Footer from "@port-of-mars/client/components/global/Footer.vue";
-import { DashboardAPI } from "@port-of-mars/client/api/dashboard/request";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
+import { CalendarEvent, google } from "calendar-link";
+
 import { GameMeta, PlayerTaskCompletion, Stats } from "@port-of-mars/shared/types";
-import { faGoogle } from "@fortawesome/free-brands-svg-icons/faGoogle";
-import { faRocket } from "@fortawesome/free-solid-svg-icons";
-import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   REGISTER_PAGE,
   LOBBY_PAGE,
@@ -211,13 +214,14 @@ import {
   TUTORIAL_PAGE
 } from "@port-of-mars/shared/routes";
 
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { CalendarEvent, google } from "calendar-link";
+import { DashboardAPI } from "@port-of-mars/client/api/dashboard/request";
+import PlayerStatItem from "@port-of-mars/client/components/dashboard/PlayerStatItem.vue";
+import Messages from "@port-of-mars/client/components/dashboard/Messages.vue";
+import Footer from "@port-of-mars/client/components/global/Footer.vue";
 import ActionItem from "@port-of-mars/client/components/dashboard/ActionItem.vue";
 import _ from "lodash";
 
-library.add(faGoogle, faRocket);
-
+library.add(faGoogle, faInfoCircle);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 @Component({
@@ -230,7 +234,6 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
 })
 export default class Dashboard extends Vue {
   username: string = this.$tstore.state.user.username;
-  view: "schedule" | "stats" = "schedule";
   api!: DashboardAPI;
   loading = true;
   upcomingGames: Array<GameMeta> = [];
@@ -363,18 +366,24 @@ export default class Dashboard extends Vue {
     this.loading = false;
   }
 
-  switchTab(view: "schedule" | "stats"): void {
-    this.view = view;
-  }
-
   logout(): void {
     this.$ajax.forgetLoginCreds();
     this.$router.push({ name: LOGIN_PAGE });
   }
 }
 </script>
-<style scoped lang="scss">
+
+<style lang="scss">
 .dark {
   color: var(--dark-shade);
+}
+.tab-title {
+  font-size: 2em;
+}
+.game-list {
+  height: 80%;
+  width: 80%;
+  overflow-y: auto;
+  overflow-x: auto;
 }
 </style>
