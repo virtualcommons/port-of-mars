@@ -1,45 +1,7 @@
 <template>
-  <b-container
-    fluid
-    class="h-100 p-2 m-0 d-flex flex-column justify-content-start"
-    style="background-color: var(--dark-shade);"
-  >
-    <ModalController />
+  <b-container fluid class="h-100 m-0" style="background-color: var(--dark-shade)">
+    <ModalController></ModalController>
     <ProfileMenu />
-
-    <!--  ----------------------------------------
-                     System Health
-        ----------------------------------------
-              HUD              | Mars Log /
-        ---------------------- |
-          Phase Switcher       | Chat
-        ---------------------------------------- -->
-
-    <!-- System Health -->
-    <b-row class="flex-shrink-1 w-100 mb-2">
-      <SystemHealth />
-    </b-row>
-
-    <!-- HUD, Phase Switcher, Mars Log, Chat -->
-    <b-row class="w-100 p-0 m-0" style="height: 95vh !important">
-      <b-col cols="9" class="d-flex flex-column w-100">
-        <!-- HUD -->
-        <b-row class="w-100 p-2 mx-0" style="border: 0.2rem solid rgba(241, 224, 197, 0.25);">
-          <HUD />
-        </b-row>
-        <!-- Phase Switcher -->
-        <b-row
-          class="w-100 flex-grow-1 p-2 mt-2 mx-0 tour-event tour-invest tour-trade tour-purchase"
-          style="border: 0.2rem solid rgba(241, 224, 197, 0.25);"
-        >
-          <PhaseSwitcher></PhaseSwitcher>
-        </b-row>
-      </b-col>
-      <!-- Chat | Mars Log -->
-      <b-col cols="3" class="w-100">
-        <ChatMarsLog />
-      </b-col>
-    </b-row>
     <b-modal
       body-bg-variant="dark"
       body-text-variant="warning"
@@ -62,6 +24,35 @@
       </p>
       <b-button @click="resetBotWarning" block variant="warning">OK</b-button>
     </b-modal>
+
+    <!--  ----------------------------------------
+                     System Health
+        ----------------------------------------
+              HUD              | Mars Log /
+        ---------------------- |
+          Phase Switcher       | Chat
+        ---------------------------------------- -->
+    <b-row align-self="start" class="w-100 h-100 m-0 p-2">
+      <b-col><SystemHealth></SystemHealth></b-col>
+      <div class="w-100 m-0 p-0"></div>
+      <b-col class="m-0" cols="9">
+        <b-row align="stretch" class="h-100 w-100 p-2">
+          <b-col class="h-50 w-100 p-2 mx-0" style="border: 0.2rem solid rgba(241, 224, 197, 0.25)">
+            <HUD />
+          </b-col>
+          <div class="w-100 m-0 p-0"></div>
+          <b-col
+            class="h-50 w-100 p-2 mt-2 mx-0 tour-event tour-invest tour-trade tour-purchase"
+            style="border: 0.2rem solid rgba(241, 224, 197, 0.25)"
+          >
+            <PhaseSwitcher></PhaseSwitcher>
+          </b-col>
+        </b-row>
+      </b-col>
+      <b-col class="m-0" cols="3">
+        <ChatMarsLog />
+      </b-col>
+    </b-row>
   </b-container>
 </template>
 
