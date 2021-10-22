@@ -1,5 +1,5 @@
 <template>
-  <b-container fluid class="h-100 m-0 p-0">
+  <b-container fluid class="m-0 p-0">
     <b-row class="m-0 p-0 w-100 h-100" style="background-color: var(--dark-shade-75)">
       <!-- profile info -->
       <b-col align-self="stretch" cols="3" style="background-color: var(--dark-shade)">
@@ -14,7 +14,6 @@
           >
           </b-img>
         </b-row>
-
         <b-row class="my-5 mx-1 py-3" style="background-color: var(--dark-accent)">
           <b-col align-self="center" cols="5">
             <b-img
@@ -26,9 +25,10 @@
             </b-img>
           </b-col>
           <b-col align-self="center" cols="7">
-            <h3 style="color: var(--dark-shade); font-weight: bold">{{ username }}</h3>
-            <p style="color: var(--dark-shade)">
-              You have participated in <b>{{ gamesPlayedCount }}</b> missions.
+            <h3 class="dark">{{ username }}</h3>
+            <p class="dark">
+              You have participated in 
+              <b-badge pill variant="primary">{{ gamesPlayedCount }}</b-badge> missions.
             </p>
           </b-col>
         </b-row>
@@ -39,10 +39,6 @@
           <b-nav-item :to="register"><h4>Modify Consent and Email</h4></b-nav-item>
           <b-nav-item @click="logout"><h4>Logout</h4></b-nav-item>
         </b-nav>
-
-        <b-row>
-          <Footer class="text-center" style="position: absolute; bottom: 0"></Footer>
-        </b-row>
       </b-col>
       <b-col align-self="stretch" cols="9" style="background-color: var(--dark-shade-75)">
         <b-row class="h-100 mt-3">
@@ -53,19 +49,9 @@
               <b-row>
                 <Messages></Messages>
                 <b-col cols="auto" class="mr-5">
-                  <h1 class="text-left my-3" style="font-weight: medium" variant="warning">
-                    Onboarding Tasks
+                  <h1 class="text-left my-3" style="font-weight: medium">
+                    Mission Control Onboarding
                   </h1>
-                  <b-progress
-                    :max="maxValue"
-                    :value="progressValue"
-                    :variant="progressVariant"
-                    show-value
-                    height="1.75rem"
-                    striped
-                    animated
-                    class="my-3"
-                  ></b-progress>
                 </b-col>
                 <b-col cols="auto" class="text-left my-5">
                   <b-button
@@ -89,6 +75,7 @@
                   ></b-icon-arrow-right-circle-fill>
                   <b-button
                     :disabled="!playerTaskCompletion.mustTakeIntroSurvey"
+                    target="_blank"
                     :href="introSurveyUrl"
                     :variant="playerTaskCompletion.mustTakeIntroSurvey ? 'warning' : 'secondary'"
                     size="lg"
@@ -153,12 +140,12 @@
 
             <!-- Navigate: Schedule or Stats -->
             <b-nav pills align="left" class="my-3">
-              <b-nav-item @click="switchTab('schedule')" :active="view === 'schedule'"
-                ><h4>Schedule</h4></b-nav-item
-              >
-              <b-nav-item @click="switchTab('stats')" :active="view === 'stats'"
-                ><h4>Your Game Stats</h4></b-nav-item
-              >
+              <b-nav-item @click="switchTab('schedule')" :active="view === 'schedule'">
+                <h4>Schedule</h4>
+                </b-nav-item>
+              <b-nav-item @click="switchTab('stats')" :active="view === 'stats'">
+                <h4>Previous Games</h4>
+              </b-nav-item>
             </b-nav>
             <div
               class="text-center p-4"
@@ -183,10 +170,10 @@
               </template>
               <!-- Stats -->
               <template v-else-if="view === 'stats'" style="background-color: var(--dark-shade)">
-                <h1>Your Game Stats</h1>
+                <h1>Previous Games</h1>
                 <div
                   class="mx-auto my-0"
-                  style="height: 90%; width: 70%; overflow-y: scroll; overflow-x: hidden"
+                  style="height: 90%; width: 70%; overflow-y: auto; overflow-x: hidden"
                 >
                   <p v-if="stats.games.length === 0" class="my-5 py-5">No games to display.</p>
                   <PlayerStatItem
@@ -202,6 +189,7 @@
         </b-row>
       </b-col>
     </b-row>
+    <Footer class="position-absolute"></Footer>
   </b-container>
 </template>
 
@@ -379,3 +367,8 @@ export default class Dashboard extends Vue {
   }
 }
 </script>
+<style scoped lang="scss">
+.dark {
+  color: var(--dark-shade);
+}
+</style>
