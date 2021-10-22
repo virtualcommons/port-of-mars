@@ -1415,8 +1415,8 @@ export class GameState
   static DEFAULT_PHASE_DURATION: Record<Phase, number> = {
     [Phase.newRound]: 60,
     [Phase.events]: 90,
-    [Phase.invest]: 90,
-    [Phase.trade]: 300,
+    [Phase.invest]: 180,
+    [Phase.trade]: 180,
     [Phase.purchase]: 60,
     [Phase.discard]: 60,
     [Phase.victory]: 10000,
