@@ -27,21 +27,18 @@
         <b-form-spinbutton
           v-model="units"
           @input="setInvestmentAmount(units)"
-          :disabled="cannotInvest"
+          :disabled="playerReady"
           min="0"
           :max="cost > remainingTimeBlocks ? units : 10"
           inline
         >
           <template #decrement>
-            <b-button variant="transparent" :disabled="pendingUnits < 1">
+            <b-button variant="transparent" :disabled="disableDecrement">
               <b-icon-dash scale="1.5" color="white"></b-icon-dash>
             </b-button>
           </template>
           <template #increment>
-            <b-button
-              variant="transparent"
-              :disabled="cost > remainingTimeBlocks || outOfTimeBlocks"
-            >
+            <b-button variant="transparent" :disabled="disableIncrement">
               <b-icon-plus scale="1.5" color="white"></b-icon-plus>
             </b-button>
           </template>
@@ -63,12 +60,13 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Inject, Prop, Vue } from "vue-property-decorator";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faClock } from "@fortawesome/free-solid-svg-icons/faClock";
 import { faBriefcase } from "@fortawesome/free-solid-svg-icons/faBriefcase";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { Resource, ResourceAmountData } from "@port-of-mars/shared/types";
+import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 import { COST_INAFFORDABLE } from "@port-of-mars/shared/settings";
 
 library.add(faClock);
@@ -80,7 +78,12 @@ export default class InvestmentCard extends Vue {
   @Prop() name!: Resource;
   @Prop() cost!: number;
   @Prop() remainingTimeBlocks!: number;
+
+  // Breakdown of Trust props
   @Prop() outOfTimeBlocks!: boolean;
+  // @Prop() canSave!: boolean;
+
+  @Inject() readonly api!: GameRequestAPI;
 
   icon = {
     center: true,
@@ -94,8 +97,12 @@ export default class InvestmentCard extends Vue {
   /**
    * Define conditions for disabling investment buttons.
    */
-  get cannotInvest(): boolean {
-    return COST_INAFFORDABLE == this.cost || this.playerReady;
+  get disableIncrement(): boolean {
+    return this.cannotAfford || this.outOfTimeBlocks;
+  }
+
+  get disableDecrement(): boolean {
+    return this.cannotAfford || this.pendingUnits < 1;
   }
 
   /**
@@ -127,7 +134,7 @@ export default class InvestmentCard extends Vue {
   }
 
   /**
-   * PPurchase
+   * Purchase
    */
   setInvestmentAmount(units: number): void {
     this.$emit("update", {

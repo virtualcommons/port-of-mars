@@ -132,22 +132,26 @@ export default class InfluencesSelect extends Vue {
     return timeBlocks - _.sum(Object.values(pendingInvestment));
   }
 
+  // hasResource(data: { name: Resource; units: number; cost: number }) {
+  //   if (data.units == this.currentInventory[data.name]) return false;
+  //   else return true;
+  // }
+
   setInvestmentAmount(data: { name: Resource; units: number; cost: number }) {
     const pendingInventory = _.cloneDeep(this.pendingInvestments);
     pendingInventory[data.name] = data.units;
-    const isAffordable =
+    const canAfford =
       data.units >= 0 &&
       data.units <= this.currentInventory[data.name] &&
       this.getRemainingTimeBlocks(pendingInventory) >= 0;
 
-    console.log(this.currentInventory[data.name]);
-
-    if (isAffordable) {
+    if (canAfford) {
       this.api.investPendingTimeBlocks({
         investment: data.name,
         units: data.units,
         role: this.$tstore.state.role
       });
+      // this.hasResource(data);
     }
   }
 }
