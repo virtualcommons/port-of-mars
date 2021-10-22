@@ -137,11 +137,10 @@
               <p class="text-left">
                 Thanks for participating in the Port of Mars! We will email you with further
                 instructions if you are eligible to participate in the next round. You can review
-                your past games by clicking
-                <code>Your Stats</code> in the navbar above.
+                your past games in the <code>History</code> tab.
               </p>
             </template>
-            <!-- tabs: Schedule or Stats -->
+            <!-- tabs: Schedule and History -->
             <!-- FIXME: consider using b-cards https://bootstrap-vue.org/docs/components/tabs once the regression between bootstrap-vue and vue-class-component is merged -->
             <b-tabs class="mt-3" content-class="mt-3">
               <b-tab title="Schedule" title-link-class="tab-title" active>

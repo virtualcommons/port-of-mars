@@ -45,7 +45,7 @@ export class DashboardService extends BaseService {
         relations: ['players']
       });
 
-    const stats: Stats['games'] = games.map(g => {
+    const previousGames: Stats['games'] = games.map(g => {
       const maxScore = g.players.reduce((ms, player) => {
         if (player.points ?? 0 > ms) {
           return player.points ?? 0;
@@ -53,6 +53,7 @@ export class DashboardService extends BaseService {
           return ms;
         }
       }, 0);
+      logger.debug("max score: %s", maxScore);
       const playerScores = g.players.map(player => 
         ({ role: player.role,
            points: player.points ?? 0,
@@ -60,6 +61,7 @@ export class DashboardService extends BaseService {
            isSelf: player.userId === user.id,
         })
       );
+      // sort in descending order
       playerScores.sort((a, b) => b.points - a.points);
 
       return {
@@ -70,8 +72,9 @@ export class DashboardService extends BaseService {
         victory: g.status === 'victory'
       }
     });
-
-    return { games: stats }
+    const history = _.sortBy(previousGames, ['time'], ['desc']);
+    logger.debug("history in descending order: %s", history);
+    return { games: history }
   }
 
   mustVerifyEmail(user: User): boolean {
