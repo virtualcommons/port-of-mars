@@ -5,7 +5,7 @@
   >
     <b-row align-v="stretch" class="h-100 text-center">
       <b-col style="color: var(--dark-shade)">
-        <p class="text-capitalize p-2 my-2" style="background-color: var(--light-shade)">
+        <p class="text-capitalize my-2" style="background-color: var(--light-shade)">
           {{ label }}
         </p>
       </b-col>
@@ -15,6 +15,7 @@
       <b-col>
         <b-img
           center
+          class="p-1"
           rounded="circle"
           v-bind="icon"
           :src="require(`@port-of-mars/client/assets/icons/${name}.svg`)"
