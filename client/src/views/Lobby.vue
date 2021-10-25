@@ -1,32 +1,37 @@
 <template>
-  <div class="lobby container">
-    <div class="wrapper row">
-      <div class="content col-12">
-        <h3 class="m-5">
-          Next Game: <mark>{{ scheduledGameTimeString }}</mark>
-        </h3>
-        <!--<h4>Groups will be assigned in <mark>{{ nextAssignmentTimeString }}</mark> minutes.</h4>-->
-        <b-row>
-          <b-col :key="role" class="m-5 avatar" v-for="role of roles">
-            <div :style="borderStyle(role)" class="avatar-border">
-              <div :style="frameColor(role)" class="frame">
-                <img :src="playerRoleImage(role)" alt="Player Image" />
-              </div>
-            </div>
-            <p class="p-3 text-center">{{ role }}</p>
-          </b-col>
-        </b-row>
-
-        <h4 class="mb-3">{{ waitingUserCount }} PLAYER(S) READY</h4>
-        <b-alert show class="w-50" variant="info">
+  <b-container fluid class="h-100">
+    <b-row
+      align-v="stretch"
+      align-h="center"
+      class="h-100 w-100 m-0 p-0 text-center"
+      style="background-color: var(--dark-shade-75)"
+    >
+      <b-col>
+        <h2 class="m-5">
+          Next Game <mark>{{ scheduledGameTimeString }}</mark>
+        </h2>
+      </b-col>
+      <div class="w-100"></div>
+      <b-col>
+        <div class="h-50 w-50 mx-auto">
+          <b-embed
+            type="iframe"
+            aspect="16by9"
+            src="https://www.youtube.com/embed/CiB4q3CnyCY?autoplay=1"
+          >
+          </b-embed>
+        </div>
+      </b-col>
+      <div class="w-100"></div>
+      <b-col>
+        <b-spinner small type="grow" label="Loading..."></b-spinner>
+        <b-spinner small class="mx-2" type="grow" label="Loading..."></b-spinner>
+        <b-spinner small type="grow" label="Loading..."></b-spinner>
+        <h2 class="my-4">{{ waitingUserCount }} / 5 Player(s) Ready</h2>
+        <p>
           You'll join a game as soon as there are enough players to form a full group. The lobby
           will remain open up to 30 minutes after the scheduled game time.
-        </b-alert>
-        <b-spinner
-          :label="'Loading...'"
-          :variant="variantStyle(waitingUserCount)"
-          class="mb-4"
-        ></b-spinner>
+        </p>
 
         <b-button-group class="w-25 mt-4" vertical>
           <b-button :to="dashboard" variant="secondary">
@@ -36,9 +41,9 @@
             Join game
           </b-button>
         </b-button-group>
-      </div>
-    </div>
-  </div>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script lang="ts">
