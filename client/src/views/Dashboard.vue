@@ -1,8 +1,12 @@
 <template>
-  <b-container fluid class="m-0 p-0">
-    <b-row class="m-0 p-0 w-100 h-100" style="background-color: var(--dark-shade-75)">
+  <b-container fluid class="h-100 m-0 p-0">
+    <b-row
+      align-v="stretch"
+      class="h-100 w-100 m-0 p-0"
+      style="background-color: var(--dark-shade-75)"
+    >
       <!-- profile info -->
-      <b-col align-self="stretch" cols="3" style="background-color: var(--dark-shade)">
+      <b-col class="h-100" cols="3" style="background-color: var(--dark-shade)">
         <b-row>
           <b-img
             v-bind="mainProps"
@@ -28,7 +32,7 @@
             <h3 class="dark">{{ username }}</h3>
             <p class="dark">
               You have participated in
-              <b-badge pill variant="primary">{{ gamesPlayedCount }}</b-badge> missions.
+              <b-badge variant="primary">{{ gamesPlayedCount }}</b-badge> missions.
             </p>
           </b-col>
         </b-row>
@@ -40,36 +44,37 @@
           <b-nav-item @click="logout"><h4>Logout</h4></b-nav-item>
         </b-nav>
       </b-col>
-      <b-col align-self="stretch" cols="9" style="background-color: var(--dark-shade-75)">
-        <b-row class="h-100 mt-3">
-          <b-col align-self="stretch">
+      <b-col class="h-100" cols="9" style="background-color: var(--dark-shade-75)">
+        <b-row class="h-100">
+          <b-col class="h-25 w-100">
             <template
               v-if="playerTaskCompletion.mustTakeIntroSurvey || playerTaskCompletion.canPlayGame"
             >
-              <b-row>
+              <b-row align-v="center" class="w-100 h-100">
                 <Messages></Messages>
-                <b-col cols="auto" class="mr-5">
-                  <h1 class="text-left my-3" style="font-weight: medium">
+                <b-col cols="auto">
+                  <h1 style="font-weight: medium">
                     Mission Control Onboarding
                   </h1>
-                  <div class='lead'>
-                    Welcome to the Port of Mars! Please be sure to complete all onboarding tasks before
-                    embarking on your next mission.
+                  <div class="lead">
+                    Welcome to the Port of Mars! Please be sure to complete all onboarding tasks
+                    before embarking on your next mission.
                   </div>
                 </b-col>
-                <b-col cols="auto" class="text-left my-3">
+                <b-col cols="auto">
                   <b-button
                     :disabled="!playerTaskCompletion.mustTakeTutorial"
                     :to="tutorial"
                     :variant="playerTaskCompletion.mustTakeTutorial ? 'warning' : 'secondary'"
-                    size="lg">
+                    size="lg"
+                  >
                     <h4>
                       Tutorial
                       <b-icon-check-circle-fill
                         v-if="!playerTaskCompletion.mustTakeTutorial"
-                        variant="success"
                         scale="1"
-                        class="ml-2">
+                        class="ml-2"
+                      >
                       </b-icon-check-circle-fill>
                     </h4>
                   </b-button>
@@ -140,68 +145,69 @@
                 your past games in the <code>History</code> tab.
               </p>
             </template>
-            <!-- tabs: Schedule and History -->
-            <!-- FIXME: consider using b-cards https://bootstrap-vue.org/docs/components/tabs once the regression between bootstrap-vue and vue-class-component is merged -->
-            <b-tabs class="mt-3" content-class="mt-3">
-              <b-tab title="Schedule" title-link-class="tab-title" active>
-                <b-card-title>Upcoming Games</b-card-title>
-                <b-card-text>
-                  <div v-if="schedule && schedule.length > 0">
-                    Please sign in during <b>one</b> of the following times to participate. We
-                    recommend that you show up 5 minutes earlier to join the waiting lobby.
-                    <div style="overflow-y: auto !important">
-                      <b-table :items="schedule" bordered class="py-3" stacked="md" small dark striped show-empty empty-text="No upcoming games scheduled.">
-                        <template v-slot:cell(addToCalendar)="data">
-                          <a :href="inviteLink(data.item.addToCalendar)" target="_blank">
-                            <font-awesome-icon :icon="['fab', 'google']"></font-awesome-icon>
-                          </a>
-                        </template>
-                      </b-table>
-                    </div>
-                  </div>
-                  <div v-else>
-                    <b-alert show variant="primary">
-                      <b-icon-exclamation-circle font-scale="2" />
-                    No upcoming games on the schedule. Please check your 
-                    email for future available dates.
-                    </b-alert>
-                  </div>
-                </b-card-text>
-              </b-tab>
-              <b-tab title="History" title-link-class="tab-title">
-                <b-card-title>Past Port of Mars Missions</b-card-title>
-                <b-card-text>
-                  <div class="game-list">
-                    <p v-if="stats.games.length === 0">
-                      <b-alert show variant="primary">
-                      <b-icon-bell-fill font-scale="2" />
-                      No missions to report. 
-                      </b-alert>
-                    </p>
-                    <PlayerStatItem
-                      v-for="playerStatItem in stats.games"
-                      :key="playerStatItem.time"
-                      :playerStatItem="playerStatItem"
-                      class="my-1 py-1"
-                    ></PlayerStatItem>
-                  </div>
-                </b-card-text>
-              </b-tab>
-            </b-tabs>
+          </b-col>
+          <div class="w-100"></div>
+          <!-- #FIXME: refactor using b-tabs and b-card -->
+          <!-- for now, maintain this implementation for scrollable div to view previous games -->
+          <b-col class="h-75">
+            <!-- Navigate: Schedule or Stats -->
+            <b-nav pills align="left" class="my-3">
+              <b-nav-item @click="switchTab('schedule')" :active="view === 'schedule'">
+                <h4>Schedule</h4>
+              </b-nav-item>
+              <b-nav-item @click="switchTab('stats')" :active="view === 'stats'">
+                <h4>Previous Games</h4>
+              </b-nav-item>
+            </b-nav>
+            <div
+              class="h-75 text-center p-4"
+              style="background-color: var(--dark-shade); border: 0.2rem solid var(--light-shade-25)"
+            >
+              <!-- Schedule -->
+              <template v-if="view === 'schedule'">
+                <h1>Schedule</h1>
+                <p>
+                  Please sign in during <b>one</b> of the following times to participate. We
+                  recommend that you show up 5 minutes earlier to join the waiting lobby.
+                </p>
+                <div style="overflow-y: auto !important">
+                  <b-table :items="schedule" bordered class="py-3" stacked="md" small dark striped>
+                    <template v-slot:cell(addToCalendar)="data">
+                      <a :href="inviteLink(data.item.addToCalendar)" target="_blank">
+                        <font-awesome-icon :icon="['fab', 'google']"></font-awesome-icon>
+                      </a>
+                    </template>
+                  </b-table>
+                </div>
+              </template>
+              <!-- Stats -->
+              <template v-else-if="view === 'stats'" style="background-color: var(--dark-shade)">
+                <h1>Previous Games</h1>
+                <div class="m-3 scrolling-wrapper">
+                  <p v-if="stats.games.length === 0" class="my-5 py-5">No games to display.</p>
+                  <PlayerStatItem
+                    v-for="playerStatItem in stats.games"
+                    :key="playerStatItem.time"
+                    :playerStatItem="playerStatItem"
+                    class="my-1 py-1"
+                  ></PlayerStatItem>
+                </div>
+              </template>
+            </div>
           </b-col>
         </b-row>
       </b-col>
+      <Footer class="fixed-bottom"></Footer>
     </b-row>
-    <Footer class="position-absolute"></Footer>
   </b-container>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-import { faGoogle } from '@fortawesome/free-brands-svg-icons';
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { CalendarEvent, google } from "calendar-link";
 
 import { GameMeta, PlayerTaskCompletion, Stats } from "@port-of-mars/shared/types";
@@ -269,6 +275,7 @@ export default class Dashboard extends Vue {
     height: 200
   };
   maxValue = 100;
+  view: "stats" | "schedule" = "schedule";
 
   get gamesPlayedCount() {
     return this.stats.games.length;
@@ -307,9 +314,8 @@ export default class Dashboard extends Vue {
     this.initialize();
   }
 
-  updated() {
-    const elem = this.$el.querySelector(".scroll-to-recent");
-    elem!.scrollTop = elem!.scrollHeight;
+  switchTab(tab: "stats" | "schedule") {
+    this.view = tab;
   }
 
   inviteLink(invite: { title: string; location: string; start: Date; end: Date; details: string }) {
@@ -332,7 +338,7 @@ export default class Dashboard extends Vue {
     }
 
     // go to the signed up page if signup is enabled
-    else if (data.isSignUpEnabled) {
+    else if (!data.isSignUpEnabled) {
       await this.$router.push({ name: SIGNEDUP_PAGE });
     }
 
@@ -376,13 +382,10 @@ export default class Dashboard extends Vue {
 .dark {
   color: var(--dark-shade);
 }
-.tab-title {
-  font-size: 2em;
-}
-.game-list {
-  height: 80%;
-  width: 80%;
+
+.scrolling-wrapper {
   overflow-y: auto;
-  overflow-x: auto;
+  overflow-x: hidden;
+  height: 90%;
 }
 </style>
