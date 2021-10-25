@@ -21,18 +21,20 @@
       <p :class="countdownStyling">{{ timeRemaining }}</p>
     </b-col>
     <b-col class="w-100 my-0 py-0">
-      <button
+      <b-button
         @click="submitDone"
-        class="ready-button tour-ready-to-advance-button"
+        variant="light"
+        squared
+        class="tour-ready-to-advance-button"
         ref="ready"
         v-if="!playerReady"
         id="#ready"
       >
         Ready to Advance
-      </button>
-      <button @click="submitCancel" v-if="playerReady" class="cancel-button">
+      </b-button>
+      <b-button squared @click="submitCancel" v-else variant="danger">
         Cancel Readiness
-      </button>
+      </b-button>
     </b-col>
   </b-row>
 </template>

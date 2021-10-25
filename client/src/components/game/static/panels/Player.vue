@@ -1,4 +1,5 @@
 <template>
+  <!-- FIXME: remove flex column -->
   <b-row
     @click="setModalData"
     class="flex-column h-100 w-100 m-0 p-0 tour-profile"
@@ -9,10 +10,16 @@
       :style="indicatorStyle"
       style="border-radius: 50%;
            transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
-           height: 10rem; width: 10rem;"
+           height: 10rem; width: 10rem"
     >
       <b-col class="h-100 w-100 m-0 p-0" style="border-radius: 50%" :style="frameColor">
-        <img :src="playerRoleImage" alt="Player Image" style="object-fit: cover" class="my-3" />
+        <b-img
+          rounded="circle"
+          v-bind="avatar"
+          :src="playerRoleImage"
+          alt="Player Image"
+          class="my-3"
+        ></b-img>
       </b-col>
     </b-row>
     <b-row class="flex-column text-center">
@@ -35,6 +42,14 @@ import { TutorialAPI } from "@port-of-mars/client/api/tutorial/request";
 export default class Player extends Vue {
   @Inject()
   readonly api!: TutorialAPI;
+
+  avatar = {
+    center: true,
+    fluid: true,
+    blankColor: "#bbb",
+    width: 200,
+    height: 200
+  };
 
   get playerRole(): Role {
     return this.$tstore.state.role;

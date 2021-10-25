@@ -1,13 +1,13 @@
 <template>
   <b-container class="h-100 p-0 m-0" fluid>
     <b-row align-v="stretch" align-h="center" class="h-100 p-0 m-0">
-      <b-col v-if="shouldDisplayGame" class="m-0 p-0">
+      <b-col v-if="shouldDisplayGame" class="h-100 w-100 m-0 p-0">
         <GameboardContainer></GameboardContainer>
       </b-col>
-      <b-col v-else-if="gamePhase === phase.defeat">
+      <b-col v-else-if="gamePhase === phase.defeat" class="h-100 w-100 m-0 p-0">
         <Defeat v-if="gamePhase === phase.defeat"></Defeat>
       </b-col>
-      <b-col v-else-if="gamePhase === phase.victory">
+      <b-col v-else-if="gamePhase === phase.victory" class="h-100 w-100 m-0 p-0">
         <Victory v-if="gamePhase === phase.victory"></Victory>
       </b-col>
     </b-row>
