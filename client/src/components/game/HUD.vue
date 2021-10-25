@@ -1,27 +1,26 @@
 <template>
   <b-row class="h-100 w-100 m-0 p-0">
     <b-col class="h-100 w-100" cols="6">
-      <HUDLeft/>
+      <HUDLeft></HUDLeft>
     </b-col>
     <b-col class="h-100 w-100" cols="6">
-      <HUDRight/>
+      <HUDRight></HUDRight>
     </b-col>
   </b-row>
 </template>
 
 <script lang="ts">
-import {Vue, Component, Inject} from 'vue-property-decorator';
-import HUDLeft from '@port-of-mars/client/components/game/HUDLeft.vue';
-import HUDRight from '@port-of-mars/client/components/game/HUDRight.vue';
+import { Vue, Component, Inject } from "vue-property-decorator";
+import HUDLeft from "@port-of-mars/client/components/game/HUDLeft.vue";
+import HUDRight from "@port-of-mars/client/components/game/HUDRight.vue";
 
 @Component({
   components: {
     HUDLeft,
-    HUDRight,
-  },
+    HUDRight
+  }
 })
-export default class HUD extends Vue {
-}
+export default class HUD extends Vue {}
 </script>
 
 <style lang="scss" scoped>
