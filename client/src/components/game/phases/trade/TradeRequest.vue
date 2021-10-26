@@ -63,7 +63,7 @@
 import { Component, Inject, Vue } from "vue-property-decorator";
 import TradeOptions from "@port-of-mars/client/components/game/phases/trade/TradeOptions.vue";
 import { ResourceAmountData, Role, TradeAmountData } from "@port-of-mars/shared/types";
-import { isZeroTrade, makeTradeSafe } from "@port-of-mars/shared/validation";
+import { isZeroTrade, makeTradeSafe, canPlayerMakeTrade } from "@port-of-mars/shared/validation";
 import { SendTradeRequestData } from "@port-of-mars/shared/game";
 import { AbstractGameAPI } from "@port-of-mars/client/api/game/types";
 
@@ -109,12 +109,10 @@ export default class TradeRequest extends Vue {
 
   validateTrade(): boolean {
     const inventory = this.$tstore.getters.player.inventory;
-    console.log(
-      "validate trade: ",
-      this.selectedTradePartner != "" && !isZeroTrade(this.recipientResources, this.senderResources)
-    );
     return (
-      this.selectedTradePartner != "" || !isZeroTrade(this.recipientResources, this.senderResources)
+      this.selectedTradePartner != "" &&
+      canPlayerMakeTrade(this.recipientResources, inventory) &&
+      !isZeroTrade(this.recipientResources, this.senderResources)
     );
   }
 
