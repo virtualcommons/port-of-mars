@@ -46,11 +46,11 @@
       <b-col class="h-100" cols="9" style="background-color: var(--dark-shade-75)">
         <b-row class="h-100">
           <b-col class="h-25 w-100">
+            <Messages></Messages>
             <template
               v-if="playerTaskCompletion.mustTakeIntroSurvey || playerTaskCompletion.canPlayGame"
             >
               <b-row align-v="center" class="w-100 h-100">
-                <Messages></Messages>
                 <b-col cols="auto">
                   <h1 style="font-weight: medium">
                     Mission Control Onboarding
@@ -118,7 +118,7 @@
             </template>
 
             <!-- invite + participation status -->
-            <template v-if="!playerTaskCompletion.hasInvite">
+            <template v-else-if="!playerTaskCompletion.hasInvite">
               <h1 class="text-left text-uppercase mt-5 py-2">No active invitation found</h1>
               <p class="text-left">
                 Thanks for your interest in the Port of Mars! Unfortunately you do not appear to
