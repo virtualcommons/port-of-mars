@@ -119,7 +119,9 @@
 
             <!-- invite + participation status -->
             <template v-else-if="!playerTaskCompletion.hasInvite">
-              <h1 class="text-left text-uppercase mt-5 py-2">No active invitation found</h1>
+              <h1 class="text-left mt-5 py-2" style="font-weight: medium">
+                No active invitation found
+              </h1>
               <p class="text-left">
                 Thanks for your interest in the Port of Mars! Unfortunately you do not appear to
                 have an invitation to participate in this round of the Port of Mars. If you think
@@ -129,13 +131,17 @@
             </template>
 
             <template v-else-if="playerTaskCompletion.shouldTakeExitSurvey">
-              <h1 class="text-left text-uppercase mt-5 py-2">Already Participated</h1>
-              <b-button :href="exitSurveyUrl" size="lg" variant="warning">
-                Exit Survey
+              <h1 class="text-left mt-5 py-2" style="font-weight: medium">
+                Thank you for participating in the Port of Mars.
+              </h1>
+              <b-button :href="exitSurveyUrl" size="lg" squared variant="success">
+                Take Exit Survey
               </b-button>
             </template>
             <template v-else>
-              <h1 class="mt-5 py-2">Thanks for participating in the Port of Mars!</h1>
+              <h1 class="mt-5 py-2" style="font-weight: medium">
+                Thanks for participating in the Port of Mars.
+              </h1>
               <p>
                 We will email you with further instructions if you are eligible to participate in
                 the next round. You can review your past games by clicking
