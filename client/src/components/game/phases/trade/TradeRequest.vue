@@ -1,6 +1,6 @@
 <template>
   <b-container fluid class="h-100 p-0 m-0">
-    <b-form @submit="createTrade">
+    <b-form @submit.stop.prevent="createTrade">
       <!-- select trade partner -->
       <b-form-group class="w-100 my-4 tour-send-trade">
         <b-form-radio
