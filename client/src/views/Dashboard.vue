@@ -130,18 +130,16 @@
 
             <template v-else-if="playerTaskCompletion.shouldTakeExitSurvey">
               <h1 class="text-left text-uppercase mt-5 py-2">Already Participated</h1>
-              <b-button
-                v-if="playerTaskCompletion.shouldTakeExitSurvey"
-                :href="exitSurveyUrl"
-                size="lg"
-                variant="warning"
-              >
+              <b-button :href="exitSurveyUrl" size="lg" variant="warning">
                 Exit Survey
               </b-button>
-              <p class="text-left">
-                Thanks for participating in the Port of Mars! We will email you with further
-                instructions if you are eligible to participate in the next round. You can review
-                your past games in the <code>History</code> tab.
+            </template>
+            <template v-else>
+              <h1 class="mt-5 py-2">Thanks for participating in the Port of Mars!</h1>
+              <p>
+                We will email you with further instructions if you are eligible to participate in
+                the next round. You can review your past games by clicking
+                <code>Previous Games</code>.
               </p>
             </template>
           </b-col>
