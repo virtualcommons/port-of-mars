@@ -4,9 +4,9 @@
       <b-col cols="4" class="text-center">
         <h1>Port of Mars</h1>
         <h2>Winners</h2>
-        <div v-for="winner in winners" :key="winner" class="d-flex flex-row">
+        <span v-for="winner in winners" :key="winner" class="my-3">
           <p>{{ winner }}</p>
-        </div>
+        </span>
         <h3>
           Despite all doubts, you have successfully established an extraterrestrial society. Thanks
           to you, future generations can flourish on planet Mars.

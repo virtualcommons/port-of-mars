@@ -11,11 +11,11 @@
     <b-row
       align-v="stretch"
       align-h="center"
-      class="h-100 w-100 m-0 py-5"
-      style="background-color: var(--dark-shade-75)"
+      class="h-100 w-100 pt-5 pb-2"
+      style="background-color: var(--dark-shade-75); overflow: hidden"
     >
       <ModalController></ModalController>
-      <ProfileMenu />
+      <ProfileMenu></ProfileMenu>
       <b-modal
         body-bg-variant="dark"
         body-text-variant="warning"
@@ -38,7 +38,7 @@
         </p>
         <b-button @click="resetBotWarning" block variant="warning">OK</b-button>
       </b-modal>
-      <SystemHealth class="fixed-top"></SystemHealth>
+      <SystemHealth class="fixed-top" style="z-index: 0"></SystemHealth>
       <b-col class="mx-0" cols="9">
         <b-row align="stretch" class="h-100 w-100 p-2">
           <b-col

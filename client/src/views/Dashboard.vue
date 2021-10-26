@@ -15,8 +15,7 @@
             alt="Port of Mars"
             left
             class="m-4"
-          >
-          </b-img>
+          ></b-img>
         </b-row>
         <b-row class="my-5 mx-1 py-3" style="background-color: var(--dark-accent)">
           <b-col align-self="center" cols="5">

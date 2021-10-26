@@ -1,7 +1,7 @@
 <template>
-  <b-container class="h-100 m-0 p-0" fluid>
+  <b-container fluid class="h-100 m-0 p-0">
     <b-row v-if="isDevMode" class="w-100 m-0 p-0" align-v="start" align-h="start">
-      <b-alert class="text-center w-100" show variant="warning">
+      <b-alert class="text-center w-100 p-0" show variant="warning">
         <p class="mt-2">
           <b-icon class="mx-2" icon="exclamation-triangle-fill" variant="danger"></b-icon> You are
           currently accessing a development version of the Port of Mars only used for testing. Go to
@@ -10,19 +10,21 @@
       </b-alert>
     </b-row>
     <b-row class="w-100 mx-2" align-v="start">
-      <b-col class="text-left mr-2">
-        <b-img
-          class="mt-3"
-          v-bind="mainProps"
-          right
-          :src="require(`@port-of-mars/client/assets/background/logo.png`)"
-        >
-        </b-img>
+      <b-col cols="9" class="mr-auto">
         <h1 class="title">Welcome to the Port of Mars</h1>
         <h3 class="subtitle">
           Port of Mars is a fun, game-based social science experiment set on the first human
           community on the Red Planet.
         </h3>
+      </b-col>
+      <b-col>
+        <b-img
+          class="p-3"
+          v-bind="logo"
+          right
+          :src="require(`@port-of-mars/client/assets/background/logo.png`)"
+        >
+        </b-img>
       </b-col>
     </b-row>
     <b-row class="mx-2" align-v="center">
@@ -106,7 +108,7 @@ export default class Login extends Vue {
   toggleDevLogin: boolean = false;
   currentYear = new Date().getFullYear();
 
-  mainProps = {
+  logo = {
     center: true,
     fluid: true,
     blankColor: "#bbb",

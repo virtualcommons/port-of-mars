@@ -4,7 +4,7 @@
       <b-row class="w-100">
         <Player></Player>
       </b-row>
-      <b-row align-v="end" class="w-100 py-2">
+      <b-row align-v="end" class="w-100 pb-2">
         <HUDLeftButtons></HUDLeftButtons>
       </b-row>
     </b-col>
