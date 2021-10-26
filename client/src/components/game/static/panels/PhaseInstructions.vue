@@ -1,16 +1,16 @@
 <template>
-  <b-row class="h-100 w-100 p-0 m-3">
-      <p class="text-left">{{ phaseInstructions }}</p>
+  <b-row class="h-100 w-100 mx-auto my-auto p-3">
+    <p>{{ phaseInstructions }}</p>
   </b-row>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
-import { Phase } from '@port-of-mars/shared/types';
-import { PHASE_INSTRUCTIONS } from '@port-of-mars/client/repo/instructions';
+import { Vue, Component } from "vue-property-decorator";
+import { Phase } from "@port-of-mars/shared/types";
+import { PHASE_INSTRUCTIONS } from "@port-of-mars/client/repo/instructions";
 
 @Component({
-  components: {},
+  components: {}
 })
 export default class PhaseInstructions extends Vue {
   get phaseNumber() {
@@ -33,7 +33,7 @@ export default class PhaseInstructions extends Vue {
       case Phase.discard:
         return PHASE_INSTRUCTIONS.discard;
       default:
-        return 'No instructions for this phase.';
+        return "No instructions for this phase.";
     }
   }
 }

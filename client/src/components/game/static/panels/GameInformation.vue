@@ -10,17 +10,11 @@
       <p class="subtitle">
         {{ roundNumber }}
       </p>
-    </b-col>
-    <b-col class="w-100 py-0 my-0">
       <p class="py-0 my-0 title">Current Phase</p>
       <p class="py-0 my-0 phase-number">{{ phaseNumber + 1 }} of 6</p>
       <p class="subtitle">{{ phaseText }}</p>
-    </b-col>
-    <b-col class="w-100 py-0 my-0">
       <p class="py-0 my-0 title">Phase Countdown</p>
       <p :class="countdownStyling">{{ timeRemaining }}</p>
-    </b-col>
-    <b-col class="w-100 my-0 py-0">
       <b-button
         @click="submitDone"
         variant="light"

@@ -1,39 +1,39 @@
 <template>
-  <b-row class="h-100 w-100 justify-content-center mx-0 my-2 p-0">
-      <b-col class="p-0" cols="3">
-        <button
-          v-b-tooltip.hover.top="'Phase Information'"
-          :class="buttonClass(view.PhaseInformation)"
-          @click="switchCurrentView(view.PhaseInformation)"
-        >
-          <font-awesome-icon :icon="['fas', 'info']" class="icon" size="lg"/>
-        </button>
-      </b-col>
-      <b-col class="justify-content-center align-items-center" cols="3">
-        <button
-          v-b-tooltip.hover.top="'Active Events'"
-          :class="buttonClass(view.ActiveEvents)"
-          @click="switchCurrentView(view.ActiveEvents)"
-        >
-          <font-awesome-icon :icon="['fas', 'meteor']" class="icon" size="lg"/>
-        </button>
-      </b-col>
+  <b-row class="h-100 w-100 justify-content-center my-2 p-0">
+    <b-col class="p-0" cols="3">
+      <button
+        v-b-tooltip.hover.top="'Phase Information'"
+        :class="buttonClass(view.PhaseInformation)"
+        @click="switchCurrentView(view.PhaseInformation)"
+      >
+        <font-awesome-icon :icon="['fas', 'info']" class="icon" size="lg" />
+      </button>
+    </b-col>
+    <b-col class="justify-content-center align-items-center" cols="3">
+      <button
+        v-b-tooltip.hover.top="'Active Events'"
+        :class="buttonClass(view.ActiveEvents)"
+        @click="switchCurrentView(view.ActiveEvents)"
+      >
+        <font-awesome-icon :icon="['fas', 'meteor']" class="icon" size="lg" />
+      </button>
+    </b-col>
   </b-row>
 </template>
 
 <script lang="ts">
-import {Vue, Component, Inject} from 'vue-property-decorator';
+import { Vue, Component, Inject } from "vue-property-decorator";
 
-import {GameRequestAPI} from '@port-of-mars/client/api/game/request';
-import {HUDRightView} from '@port-of-mars/shared/game/client/panes';
+import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
+import { HUDRightView } from "@port-of-mars/shared/game/client/panes";
 
-import {library} from '@fortawesome/fontawesome-svg-core';
-import {faMeteor} from '@fortawesome/free-solid-svg-icons/faMeteor';
-import {faInfo} from '@fortawesome/free-solid-svg-icons/faInfo';
-import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faMeteor } from "@fortawesome/free-solid-svg-icons/faMeteor";
+import { faInfo } from "@fortawesome/free-solid-svg-icons/faInfo";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(faMeteor, faInfo);
-Vue.component('font-awesome-icon', FontAwesomeIcon);
+Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 @Component({})
 export default class HUDRightButtons extends Vue {
@@ -52,7 +52,7 @@ export default class HUDRightButtons extends Vue {
   }
 
   private buttonClass(buttonViewOption: HUDRightView) {
-    return buttonViewOption === this.currentView ? 'selected' : '';
+    return buttonViewOption === this.currentView ? "selected" : "";
   }
 }
 </script>
