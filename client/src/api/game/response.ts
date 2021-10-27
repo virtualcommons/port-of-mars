@@ -56,12 +56,10 @@ function applyCosts(role: Role, costs: any, store: TStore) {
 function applyAccomplishmentResponse(role: Role, accomplishment: any, store: TStore) {
   accomplishment.purchased.onAdd = (acc: any, index: number) => {
     const purchasedAccomplishment = deschemify(acc);
-    console.log("adding to purchased accomplishments: ", purchasedAccomplishment);
     store.commit("ADD_TO_PURCHASED_ACCOMPLISHMENTS", { role, data: purchasedAccomplishment });
   };
   accomplishment.purchased.onRemove = (acc: any, index: number) => {
     const data = deschemify(acc);
-    console.log("Removing purchased accomplishment: ", data);
     store.commit("REMOVE_FROM_PURCHASED_ACCOMPLISHMENTS", { role, data });
   };
 
@@ -95,7 +93,7 @@ function applyInventoryResponses(role: Role, inventory: any, store: TStore) {
 
 function applyPlayerResponses(role: Role, player: any, store: TStore) {
   player.onChange = (changes: Array<any>) => {
-    //filtering out any changes that have to do with the role immediately
+    // filtering out any changes that have to do with the role immediately
     changes
       .filter(change => change.field != "role")
       .forEach(change => {
@@ -207,7 +205,6 @@ export function applyGameServerResponses<T>(room: Room, store: TStore, sfx: SfxM
 
   room.onMessage("set-sfx", (sounds: Array<SetSfx>) => {
     sounds.forEach(sound => {
-      console.log("playing sound: ", sound);
       sfx.play(sound, 10);
     });
   });
@@ -260,7 +257,6 @@ export function applyGameServerResponses<T>(room: Room, store: TStore, sfx: SfxM
   };
 
   room.state.tradeSet.onAdd = (event: Schemify<TradeData>, id: string) => {
-    console.log({ rawTrade: event });
     event.onChange = changes => {
       changes.forEach(change => {
         if (change.field === "status") {
@@ -269,8 +265,7 @@ export function applyGameServerResponses<T>(room: Room, store: TStore, sfx: SfxM
       });
     };
     const trade: TradeData = deschemify(event);
-    console.log({ trade });
-    store.commit("ADD_TO_TRADES", { trade, id });
+    store.commit("ADD_TO_TRADES", { id, trade });
   };
 
   room.state.tradeSet.onRemove = (event: Schemify<TradeData>, id: string) => {
