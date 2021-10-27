@@ -107,7 +107,7 @@ export default class TradeRequest extends Vue {
     return Object.keys(this.$tstore.getters.otherPlayers);
   }
 
-  validateTrade(): boolean {
+  get validateTrade(): boolean {
     const inventory = this.$tstore.getters.player.inventory;
     return (
       this.selectedTradePartner != "" &&
@@ -130,7 +130,7 @@ export default class TradeRequest extends Vue {
 
   // FIXME: trade is only validated on click. needs to validate before hand so button is disabled properly
   createTrade() {
-    if (this.validateTrade()) {
+    if (this.validateTrade) {
       const senderPackage: TradeAmountData = {
         role: this.$tstore.state.role,
         resourceAmount: makeTradeSafe(this.recipientResources)

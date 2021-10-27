@@ -40,7 +40,7 @@
           :participant="associatedWithTrade(trade)"
           v-bind="trade"
           v-for="trade in trades"
-        />
+        ></ActiveTrade>
       </div>
     </b-row>
   </b-row>
@@ -49,7 +49,7 @@
 <script lang="ts">
 import { Component, Inject, Vue } from "vue-property-decorator";
 import ActiveTrade from "./trade/ActiveTrade.vue";
-import { TutorialAPI } from "@port-of-mars/client/api/tutorial/request";
+import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 import { Phase } from "@port-of-mars/shared/types";
 
 @Component({
@@ -59,7 +59,7 @@ import { Phase } from "@port-of-mars/shared/types";
 })
 export default class Trades extends Vue {
   @Inject()
-  readonly api!: TutorialAPI;
+  readonly api!: GameRequestAPI;
 
   checked: boolean = this.$tstore.getters.toggleYourTrades;
 
@@ -157,7 +157,7 @@ export default class Trades extends Vue {
         toaster: "b-toaster-top-left",
         variant: "warning",
         solid: true,
-        autoHideDelay: 10000
+        autoHideDelay: 7000
       }
     );
   }

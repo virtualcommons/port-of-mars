@@ -546,7 +546,7 @@ export class TakenStateSnapshot implements GameEvent {
 
   apply(game: GameState): void {}
 
-  serialize() {
+  serialize(): { type: string; payload: GameSerialized } {
     return {
       type: this.kind,
       payload: this.data,

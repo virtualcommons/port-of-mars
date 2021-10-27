@@ -1699,7 +1699,14 @@ export class GameState
   }
 
   clearTrades(): void {
-    this.tradeSet.clear();
+    /*
+    for (const tradeId of this.tradeSet.keys()) {
+      this.tradeSet.delete(tradeId);
+    }
+    */
+    this.tradeSet.forEach((trade: TradeData) => this.tradeSet.delete(trade.id));
+    logger.debug("clearing trade set %o ", this.tradeSet);
+    // this.tradeSet.clear();
   }
 
   applyMany(event: Array<GameEvent>): Array<Responses> {
@@ -1884,7 +1891,7 @@ export class GameState
 
     const trade: Trade | undefined = this.tradeSet.get(id);
     if (!trade) {
-      logger.warn("Trade not accepted. Could not find %s", id);
+      logger.warn("Trade not cancelled. Could not find %s", id);
       return;
     }
     const senderRole = trade.sender.role;
