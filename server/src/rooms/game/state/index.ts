@@ -1914,21 +1914,19 @@ export class GameState
       for (const investment of INVESTMENTS) {
         if (accomplishment[investment] != 0) {
           costArray.push(
-            `${INVESTMENT_LABELS[investment]}=${accomplishment[investment]}`
+            `${INVESTMENT_LABELS[investment]} ${accomplishment[investment]}`
           );
         }
       }
     } else if (systemHealth != 0) {
-      costArray.push(`System Health=${systemHealth}`);
+      costArray.push(`System Health ${systemHealth}`);
     }
-
-    const cost = costArray.length > 0 ? `COST: ${costArray.join(", ")}.` : "";
-
+    const cost = costArray.length > 0 ? `Cost(s): ${costArray.join(", ")}.` : "";
     const message = `The ${role} purchased an accomplishment: ${label}. ${cost} ${victoryPoints} points were added to the ${role}'s score.`;
     const category: string = MarsLogCategory.purchaseAccomplishment;
     const performedBy: ServerRole = SERVER;
     this.players[role].purchaseAccomplishment(accomplishment);
-    const ap = new AccomplishmentPurchase({ name: label, victoryPoints, systemHealthModification: -systemHealth });
+    const ap = new AccomplishmentPurchase({ name: label, victoryPoints, systemHealthModification: systemHealth });
     this.roundIntroduction.addAccomplishmentPurchase(ap);
     this.log(message, category, performedBy);
   }

@@ -125,7 +125,7 @@ export default class NewRound extends Vue {
   }
 
   get purchaseFields() {
-    return [{key: 'name', label: 'Accomplishment'}, {key: 'victoryPoints'}, {key: 'systemHealthModification', label: 'System Health'}]
+    return [{key: 'name', label: 'Purchased Accomplishment'}, {key: 'victoryPoints'}, {key: 'systemHealthModification', label: 'System Health'}]
   }
 
   get purchases() {
@@ -154,18 +154,23 @@ export default class NewRound extends Vue {
   }
 
   get tabularContributionFields() {
-    return [{key: 'label', label: 'Description'}, {key: 'role'}, {
-      key: 'value',
-      label: 'System Health',
-      class: 'text-md-right'
-    }];
+    return [
+      {key: 'role', label: 'Source'},
+      {key: 'label', label: 'Description'},
+      {key: 'value', label: 'System Health', class: 'text-right'}
+    ];
   }
 
   get tabularContributions() {
     const items = [
-      {label: 'Prior System Health', role: 'System', value: this.priorSystemHealth},
+      {
+        label: 'Prior System Health', role: 'System', value: this.priorSystemHealth
+      },
       {
         label: 'Group Contributions', role: 'Players', value: this.totalSystemHealthGroupContributions
+      },
+      {
+        label: 'Accomplishments that cost System Health', role: 'Players', value: this.systemHealthAccomplishmentPurchasesCost
       },
       ...this.systemHealthMarsEvents,
       {label: 'Wear and Tear', role: 'System', value: this.systemHealthMaintenanceCost},
