@@ -28,18 +28,18 @@
         <b-form-spinbutton
           v-model="units"
           @input="setInvestmentAmount(units)"
-          :disabled="playerReady"
+          :readonly="playerReady"
           min="0"
-          :max="cost > remainingTimeBlocks ? units : 10"
+          :max="maxInfluenceInvestment"
           inline
         >
           <template #decrement>
-            <b-button variant="transparent" :disabled="disableDecrement">
+            <b-button variant="transparent" :disabled="isDecrementDisabled">
               <b-icon-dash scale="1.5" color="white"></b-icon-dash>
             </b-button>
           </template>
           <template #increment>
-            <b-button variant="transparent" :disabled="disableIncrement">
+            <b-button variant="transparent" :disabled="isIncrementDisabled">
               <b-icon-plus scale="1.5" color="white"></b-icon-plus>
             </b-button>
           </template>
@@ -80,8 +80,8 @@ export default class InvestmentCard extends Vue {
   @Prop() cost!: number;
   @Prop() remainingTimeBlocks!: number;
 
-  // Breakdown of Trust props
-  @Prop() outOfTimeBlocks!: boolean;
+  // is this card part of a Breakdown of Trust event?
+  @Prop({ default: false }) breakdownOfTrust: boolean;
   // @Prop() canSave!: boolean;
 
   @Inject() readonly api!: GameRequestAPI;
@@ -98,11 +98,16 @@ export default class InvestmentCard extends Vue {
   /**
    * Define conditions for disabling investment buttons.
    */
-  get disableIncrement(): boolean {
-    return this.cannotAfford || this.outOfTimeBlocks;
+  get isIncrementDisabled(): boolean {
+    if (this.breakdownOfTrust) {
+      // check if the number of units we have incremented is at or exceeds
+      // the number of available inventory influence resources
+      return this.units >= this.currentInfluence;
+    }
+    return this.cannotAfford;
   }
 
-  get disableDecrement(): boolean {
+  get isDecrementDisabled(): boolean {
     return this.cannotAfford || this.pendingUnits < 1;
   }
 
@@ -118,6 +123,23 @@ export default class InvestmentCard extends Vue {
    */
   get pendingUnits() {
     return this.$tstore.getters.player.pendingInvestments[this.name];
+  }
+
+  get currentInfluence() {
+    const influence = this.$tstore.getters.player.inventory[this.name];
+    return influence;
+  }
+
+  get maxInfluenceInvestment() {
+    if (this.breakdownOfTrust) {
+      return Math.min(this.remainingTimeBlocks, this.currentInfluence);
+    }
+    // FIXME: 10 should be pulled from somewhere else, max time blocks in the store?
+    return this.cost > this.remainingTimeBlocks ? this.units : this.maxTimeBlocks;
+  }
+
+  get maxTimeBlocks() {
+    return this.$tstore.getters.player.timeBlocks;
   }
 
   /**
@@ -146,3 +168,9 @@ export default class InvestmentCard extends Vue {
   }
 }
 </script>
+
+<style scoped lang="scss">
+.b-form-spinbutton.disabled, .b-form-spinbutton.readonly {
+  background-color: $dark-shade-75;
+}
+</style>
