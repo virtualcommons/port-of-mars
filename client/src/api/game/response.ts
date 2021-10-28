@@ -157,6 +157,11 @@ function applyRoundIntroductionResponses(roundIntroduction: any, store: TStore) 
   roundIntroduction.completedTrades.onRemove = (e: Schemify<TradeData>, index: number) => {
     store.commit("REMOVE_FROM_ROUND_INTRO_COMPLETED_TRADES", deschemify(e));
   };
+
+  roundIntroduction.systemHealthGroupContributions.onChange = (value: number, playerId: string) => {
+    console.log("updating system health group contributions: ", { playerId, value });
+    store.commit("UPDATE_SYSTEM_HEALTH_GROUP_CONTRIBUTION", { playerId, value });
+  }
 }
 
 // see https://github.com/Luka967/websocket-close-codes#websocket-close-codes

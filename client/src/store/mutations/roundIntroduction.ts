@@ -70,6 +70,11 @@ function REMOVE_FROM_ROUND_INTRO_COMPLETED_TRADES(state: State, payload: TradeDa
   completedTrades.splice(index, 1);
 }
 
+function UPDATE_SYSTEM_HEALTH_GROUP_CONTRIBUTION(state: State, data: { playerId: string, value: number}) {
+  console.log("updating system health group contributions");
+  state.roundIntroduction.systemHealthGroupContributions.set(data.playerId, data.value);
+}
+
 export default {
   ADD_TO_ROUND_INTRO_ACCOMPLISHMENT_PURCHASES,
   ADD_TO_ROUND_INTRO_SYSTEM_HEALTH_MARS_EVENTS,
@@ -77,5 +82,6 @@ export default {
   REMOVE_FROM_ROUND_INTRO_ACCOMPLISHMENT_PURCHASES,
   REMOVE_FROM_ROUND_INTRO_COMPLETED_TRADES,
   REMOVE_FROM_ROUND_INTRO_SYSTEM_HEALTH_MARS_EVENTS,
-  SET_ROUND_INTRODUCTION_FIELD
+  SET_ROUND_INTRODUCTION_FIELD,
+  UPDATE_SYSTEM_HEALTH_GROUP_CONTRIBUTION,
 };

@@ -499,7 +499,7 @@ export class AddedSystemHealthContributions extends KindOnlyGameEvent {
     );
 
     game.log(
-      `Collectively, players contributed +${game.systemHealthContributed()} System Health.`,
+      `Collectively, players contributed +${game.totalSystemHealthContributions()} System Health.`,
       MarsLogCategory.systemHealthContributions
     );
 

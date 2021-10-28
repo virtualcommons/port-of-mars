@@ -103,6 +103,10 @@ export default class NewRound extends Vue {
     return this.$tstore.getters.systemHealth;
   }
 
+  get role() {
+    return this.$tstore.getters.player.role;
+  }
+
   get nextRoundSystemHealth() {
     // FIXME: figure out a way to make this clearer
     return _.clamp(this.systemHealth + this.systemHealthMaintenanceCost, 0, 100);
@@ -113,11 +117,11 @@ export default class NewRound extends Vue {
   }
 
   get averageContribution() {
-    return this.systemHealthGroupContributions / 5;
+    return this.totalSystemHealthGroupContributions / 5;
   }
 
   get yourSystemHealthContributions() {
-    return this.$tstore.getters.systemHealthContributed;
+    return this.systemHealthGroupContributions.get(this.role)?? 0;
   }
 
   get purchaseFields() {
@@ -175,11 +179,7 @@ export default class NewRound extends Vue {
     ];
     const isUnderAudit = this.$tstore.getters.isUnderAudit;
     if (isUnderAudit) {
-      items.splice(2, 0, ...this.otherPlayerContributionsInfo().concat({
-        label: 'System Health',
-        role: this.$tstore.getters.player.role,
-        value: this.yourSystemHealthContributions
-      }));
+      items.splice(2, 0, ...this.playerContributionAuditInfo());
     }
     // Next Round System Health = Previous System Health + Group Contributions - Wear and Tear
     console.log("tabular contributions:", items);
@@ -187,7 +187,13 @@ export default class NewRound extends Vue {
   }
 
   get otherPlayerSystemHealthContributions() {
-    return this.systemHealthGroupContributions - this.yourSystemHealthContributions;
+    return this.totalSystemHealthGroupContributions - this.yourSystemHealthContributions;
+  }
+
+  get totalSystemHealthGroupContributions() {
+    let systemHealthContributions = 0;
+    this.systemHealthGroupContributions.forEach((value) => systemHealthContributions += value);
+    return systemHealthContributions;
   }
 
   get systemHealthGroupContributions() {
@@ -216,15 +222,15 @@ export default class NewRound extends Vue {
     return resources
   }
 
-  otherPlayerContributionsInfo(): Array<{ label: string, role: string, value: number }> {
-    const contributions = [];
-    for (const [role, player] of Object.entries(this.$tstore.getters.otherPlayers)) {
+  playerContributionAuditInfo(): Array<{ label: string, role: string, value: number }> {
+    const contributions: ReturnType<typeof this.playerContributionAuditInfo> = [];
+    this.systemHealthGroupContributions.forEach((investment: number, role: string) => {
       contributions.push({
         label: 'System Health',
         role,
-        value: (player as PlayerClientData).systemHealthChanges.investment
+        value: investment
       });
-    }
+    });
     return contributions;
   }
 

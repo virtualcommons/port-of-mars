@@ -325,8 +325,8 @@ export class RoundIntroduction
   @type([Trade])
   completedTrades = new ArraySchema<Trade>();
 
-  updateSystemHealthGroupContributions(): void {
-    for (const p of this.players) {
+  updateSystemHealthGroupContributions(players: Array<Player>): void {
+    for (const p of players) {
       this.systemHealthGroupContributions.set(p.role, p.systemHealthChanges.investment);
     }
   }
@@ -1588,7 +1588,7 @@ export class GameState
     this.phase = Phase.newRound;
     this.timeRemaining = GameState.DEFAULT_PHASE_DURATION[this.phase];
     this.round += 1;
-    this.roundIntroduction.updateSystemHealthGroupContributions();
+    this.roundIntroduction.updateSystemHealthGroupContributions(this.getPlayers());
     this.log(`Round ${this.round} begins.`, MarsLogCategory.newRound);
     logger.debug(
       "[game %d] current system health: %d",
