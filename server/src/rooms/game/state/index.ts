@@ -1921,7 +1921,7 @@ export class GameState
         }
       }
     } else if (systemHealth != 0) {
-      costArray.push(`System Health= ${systemHealth}`);
+      costArray.push(`System Health=${systemHealth}`);
     }
 
     const cost = costArray.length > 0 ? `COST: ${costArray.join(", ")}.` : "";
@@ -1930,7 +1930,7 @@ export class GameState
     const category: string = MarsLogCategory.purchaseAccomplishment;
     const performedBy: ServerRole = SERVER;
     this.players[role].purchaseAccomplishment(accomplishment);
-    const ap = new AccomplishmentPurchase({ name: label, victoryPoints });
+    const ap = new AccomplishmentPurchase({ name: label, victoryPoints, systemHealthModification: -systemHealth });
     this.roundIntroduction.addAccomplishmentPurchase(ap);
     this.log(message, category, performedBy);
   }

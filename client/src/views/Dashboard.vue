@@ -151,8 +151,6 @@
             </template>
           </b-col>
           <div class="w-100"></div>
-          <!-- #FIXME: refactor using b-tabs and b-card -->
-          <!-- for now, maintain this implementation for scrollable div to view previous games -->
           <b-col class="h-75">
             <b-tabs pills>
               <b-tab class="mt-3">
@@ -164,7 +162,7 @@
                   style="background-color: var(--dark-shade); border: 0.2rem solid var(--light-shade-25)"
                 >
                   <template>
-                    <p class="m-5">
+                    <p class="m-5 p-5">
                       Please sign in during <b>one</b> of the following times to participate. We
                       recommend that you show up 5 minutes earlier to join the waiting lobby.
                     </p>
@@ -401,9 +399,6 @@ export default class Dashboard extends Vue {
 }
 
 .tabs {
-  text-align: center;
-  flex-wrap: nowrap;
-  white-space: nowrap;
   height: 550px;
   overflow: none;
 }

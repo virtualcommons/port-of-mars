@@ -116,6 +116,7 @@ export type EventClientView =
 export interface AccomplishmentPurchaseData {
   name: string;
   victoryPoints: number;
+  systemHealthModification?: number;
 }
 
 export interface SystemHealthMarsEventData {

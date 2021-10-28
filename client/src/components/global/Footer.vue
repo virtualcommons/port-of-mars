@@ -42,12 +42,6 @@
         </a>
       </b-col>
       <b-col cols="auto">
-        <!-- github -->
-        <a href="https://github.com/virtualcommons/port-of-mars/" target="_blank">
-          <font-awesome-icon :icon="['fab', 'github']" size="lg" />
-        </a>
-      </b-col>
-      <b-col cols="auto">
         <a href="https://www.azregents.edu/" target="_blank">
           &copy; 2020 - {{ currentYear }} Arizona Board of Regents
         </a>

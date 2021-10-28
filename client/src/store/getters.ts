@@ -163,15 +163,6 @@ export default {
     return state.round === 1;
   },
 
-  systemHealthAccomplishmentPurchases(state: State): Array<{label: string; role: string; value: number}> {
-    const purchases: Array<{label: string; role: string; value: number}> = []
-    for (const role of ROLES) {
-      const systemHealthPurchases = state.players[role].systemHealthChanges.purchases.map(p => ({ label: p.description, role, value: p.systemHealth}));
-      purchases.push(...systemHealthPurchases);
-    }
-    return purchases;
-  },
-
   heroOrPariah(state: State) {
     return state.heroOrPariah;
   },
@@ -179,4 +170,6 @@ export default {
   toggleYourTrades(state: State) {
     return state.userInterface.toggleYourTrades;
   },
+
+  
 }

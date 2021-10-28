@@ -28,7 +28,7 @@
               <b class="highlighted-number">{{ otherPlayerSystemHealthContributions }}</b> in System Health for a total of {{totalSystemHealthGroupContributions}}.
               Your group's average investment was {{ averageContribution }}.
               <span v-if="systemHealthAccomplishmentPurchasesCost < 0">
-                Accomplishments were purchased that cost {{ systemHealthAccomplishmentPurchasesCost }} System Health.
+                Accomplishments were purchased that cost a total of {{ systemHealthAccomplishmentPurchasesCost }} System Health.
               </span>
               <br>
               <b>Your final System Health at the end of last round was <span class="highlighted-number">{{ lastRoundSystemHealthCalculation }}</span></b>.
@@ -125,7 +125,7 @@ export default class NewRound extends Vue {
   }
 
   get purchaseFields() {
-    return [{key: 'name', label: 'Accomplishment'}, {key: 'victoryPoints'}]
+    return [{key: 'name', label: 'Accomplishment'}, {key: 'victoryPoints'}, {key: 'systemHealthModification', label: 'System Health'}]
   }
 
   get purchases() {
@@ -133,7 +133,7 @@ export default class NewRound extends Vue {
   }
 
   get systemHealthAccomplishmentPurchasesCost() {
-    return _.sum(this.$tstore.getters.systemHealthAccomplishmentPurchases.map(p => p.value));
+    return _.sum(this.purchases.map(p => p.systemHealthModification));
   }
 
   get lastRoundSystemHealthCalculation() {
@@ -167,7 +167,6 @@ export default class NewRound extends Vue {
       {
         label: 'Group Contributions', role: 'Players', value: this.totalSystemHealthGroupContributions
       },
-      ...this.$tstore.getters.systemHealthAccomplishmentPurchases,
       ...this.systemHealthMarsEvents,
       {label: 'Wear and Tear', role: 'System', value: this.systemHealthMaintenanceCost},
       {
@@ -191,9 +190,7 @@ export default class NewRound extends Vue {
   }
 
   get totalSystemHealthGroupContributions() {
-    let systemHealthContributions = 0;
-    this.systemHealthGroupContributions.forEach((value) => systemHealthContributions += value);
-    return systemHealthContributions;
+    return _.sum(this.systemHealthGroupContributions.values());
   }
 
   get systemHealthGroupContributions() {
