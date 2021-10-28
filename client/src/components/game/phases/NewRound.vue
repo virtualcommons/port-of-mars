@@ -25,7 +25,7 @@
             <p>
               In the previous round you invested <b class="highlighted-number">{{ yourSystemHealthContributions }}</b> and the rest
               of your group invested
-              <b class="highlighted-number">{{ otherPlayerSystemHealthContributions }}</b> in System Health for a total of {{systemHealthGroupContributions}}.
+              <b class="highlighted-number">{{ otherPlayerSystemHealthContributions }}</b> in System Health for a total of {{totalSystemHealthGroupContributions}}.
               Your group's average investment was {{ averageContribution }}.
               <span v-if="systemHealthAccomplishmentPurchasesCost < 0">
                 Accomplishments were purchased that cost {{ systemHealthAccomplishmentPurchasesCost }} System Health.
@@ -138,7 +138,7 @@ export default class NewRound extends Vue {
 
   get lastRoundSystemHealthCalculation() {
     // {{ priorSystemHealth }} + {{ systemHealthGroupContributions }} {{ systemHealth }}</code>.
-    let calculation = `${this.priorSystemHealth} + ${this.systemHealthGroupContributions}`;
+    let calculation = `${this.priorSystemHealth} + ${this.totalSystemHealthGroupContributions}`;
     if (this.systemHealthAccomplishmentPurchasesCost < 0) {
       calculation = calculation.concat(` - ${Math.abs(this.systemHealthAccomplishmentPurchasesCost)}`);
     }
@@ -165,7 +165,7 @@ export default class NewRound extends Vue {
     const items = [
       {label: 'Prior System Health', role: 'System', value: this.priorSystemHealth},
       {
-        label: 'Group Contributions', role: 'Players', value: this.systemHealthGroupContributions
+        label: 'Group Contributions', role: 'Players', value: this.totalSystemHealthGroupContributions
       },
       ...this.$tstore.getters.systemHealthAccomplishmentPurchases,
       ...this.systemHealthMarsEvents,
