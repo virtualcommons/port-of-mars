@@ -106,14 +106,17 @@ function applyPlayerResponses(role: Role, player: any, store: TStore) {
   applyCosts(role, player.costs, store);
 }
 
-function applyRoundIntroduction(roundIntroduction: any, store: TStore) {
+function applyRoundIntroductionResponses(roundIntroduction: any, store: TStore) {
   roundIntroduction.onChange = (changes: Array<DataChange>) => {
+    console.log("incoming round introduction changes: ", { changes });
     changes.forEach(change => {
       if (
         !["systemHealthMarsEvents", "accomplishmentPurchases", "completedTrades"].includes(
           change.field
         )
-      ) {
+      ) 
+      {
+        console.log("setting round introduction field: ", { field: change.field, value: change.value });
         store.commit("SET_ROUND_INTRODUCTION_FIELD", { field: change.field, value: change.value });
       }
     });
@@ -181,7 +184,7 @@ export function applyGameServerResponses<T>(room: Room, store: TStore, sfx: SfxM
     // but may be causing some initialization / ordering issues
     // Error: [vuex] expects string as the type but found undefined
     (state.players as any).triggerAll();
-    applyRoundIntroduction(state.roundIntroduction, store);
+    applyRoundIntroductionResponses(state.roundIntroduction, store);
     (state.roundIntroduction as any).triggerAll();
   });
 
