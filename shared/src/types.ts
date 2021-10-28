@@ -128,7 +128,7 @@ export interface RoundIntroductionData<
   AccomplishmentPurchase=AccomplishmentPurchaseData,
   Trade=TradeData>
 {
-  systemHealthGroupContributions: number;
+  systemHealthGroupContributions: Map<string, number>;
   systemHealthAtStartOfRound: number;
   systemHealthMaintenanceCost: number;
   systemHealthMarsEvents: Array<SystemHealth>;

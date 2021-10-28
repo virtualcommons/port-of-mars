@@ -1,17 +1,32 @@
-import Vue from 'vue';
-import {State} from "@port-of-mars/shared/game/client/state";
-import {AccomplishmentPurchaseData, RoundIntroductionData, SystemHealthMarsEventData, TradeData} from "@port-of-mars/shared/types";
-import _ from 'lodash';
+import Vue from "vue";
+import { State } from "@port-of-mars/shared/game/client/state";
+import {
+  AccomplishmentPurchaseData,
+  RoundIntroductionData,
+  SystemHealthMarsEventData,
+  TradeData
+} from "@port-of-mars/shared/types";
+import _ from "lodash";
 
-function SET_ROUND_INTRODUCTION_FIELD(state: State, { field, value }: { field: string, value: number}) {
+function SET_ROUND_INTRODUCTION_FIELD(
+  state: State,
+  { field, value }: { field: string; value: number }
+) {
+  console.log("setting field ", field, " to ", value);
   (state.roundIntroduction as any)[field] = value;
 }
 
-function ADD_TO_ROUND_INTRO_SYSTEM_HEALTH_MARS_EVENTS(state: State, payload: SystemHealthMarsEventData) {
+function ADD_TO_ROUND_INTRO_SYSTEM_HEALTH_MARS_EVENTS(
+  state: State,
+  payload: SystemHealthMarsEventData
+) {
   state.roundIntroduction.systemHealthMarsEvents.push(payload);
 }
 
-function REMOVE_FROM_ROUND_INTRO_SYSTEM_HEALTH_MARS_EVENTS(state: State, payload: SystemHealthMarsEventData) {
+function REMOVE_FROM_ROUND_INTRO_SYSTEM_HEALTH_MARS_EVENTS(
+  state: State,
+  payload: SystemHealthMarsEventData
+) {
   const marsEvents = state.roundIntroduction.systemHealthMarsEvents;
   const index = marsEvents.findIndex(e => _.isEqual(e, payload));
   if (index === -1) {
@@ -20,12 +35,18 @@ function REMOVE_FROM_ROUND_INTRO_SYSTEM_HEALTH_MARS_EVENTS(state: State, payload
   marsEvents.splice(index, 1);
 }
 
-function ADD_TO_ROUND_INTRO_ACCOMPLISHMENT_PURCHASES(state: State, payload: AccomplishmentPurchaseData) {
+function ADD_TO_ROUND_INTRO_ACCOMPLISHMENT_PURCHASES(
+  state: State,
+  payload: AccomplishmentPurchaseData
+) {
   console.log("Adding to round intro acc purchases: ", payload);
   state.roundIntroduction.accomplishmentPurchases.push(payload);
 }
 
-function REMOVE_FROM_ROUND_INTRO_ACCOMPLISHMENT_PURCHASES(state: State, payload: AccomplishmentPurchaseData) {
+function REMOVE_FROM_ROUND_INTRO_ACCOMPLISHMENT_PURCHASES(
+  state: State,
+  payload: AccomplishmentPurchaseData
+) {
   const accPurchases = state.roundIntroduction.accomplishmentPurchases;
   const index = accPurchases.findIndex(e => _.isEqual(e, payload));
   if (index === -1) {
@@ -56,5 +77,5 @@ export default {
   REMOVE_FROM_ROUND_INTRO_ACCOMPLISHMENT_PURCHASES,
   REMOVE_FROM_ROUND_INTRO_COMPLETED_TRADES,
   REMOVE_FROM_ROUND_INTRO_SYSTEM_HEALTH_MARS_EVENTS,
-  SET_ROUND_INTRODUCTION_FIELD,
-}
+  SET_ROUND_INTRODUCTION_FIELD
+};
