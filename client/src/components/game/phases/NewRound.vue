@@ -190,7 +190,7 @@ export default class NewRound extends Vue {
   }
 
   get totalSystemHealthGroupContributions() {
-    return _.sum(this.systemHealthGroupContributions.values());
+    return _.sum(Array.from(this.systemHealthGroupContributions.values()));
   }
 
   get systemHealthGroupContributions() {
