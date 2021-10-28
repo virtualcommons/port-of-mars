@@ -1174,7 +1174,7 @@ export class Player
     this.applyPendingInvestments();
   }
 
-  invertPendingInventory(): void {
+  clearPendingInventory(): void {
     this.pendingInvestments.reset();
   }
 

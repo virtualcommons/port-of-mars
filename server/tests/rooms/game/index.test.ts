@@ -253,7 +253,7 @@ describe('trading validations', () => {
 });
 
 
-describe('inverting pending inventory', () => {
+describe('clear pending inventory', () => {
   const g = new GameState(mockGameStateInitOpts(() => 10));
   g.players['Curator'].inventory.add({
     finance: 0,
@@ -263,9 +263,9 @@ describe('inverting pending inventory', () => {
     government: 0,
   });
 
-  it('sets the pending investments to the inverted inventory while preserving the inventory', () => {
-    g.players['Curator'].invertPendingInventory();
-    expect(g.players['Curator'].pendingInvestments.culture).toBe(-3);
+  it('clear the pending investments while preserving the inventory', () => {
+    g.players['Curator'].clearPendingInventory();
+    expect(g.players['Curator'].pendingInvestments.culture).toBe(0);
     expect(g.players['Curator'].inventory.culture).toBe(3);
   });
 });

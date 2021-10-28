@@ -66,7 +66,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faClock } from "@fortawesome/free-solid-svg-icons/faClock";
 import { faBriefcase } from "@fortawesome/free-solid-svg-icons/faBriefcase";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { Resource, ResourceAmountData } from "@port-of-mars/shared/types";
+import { Resource } from "@port-of-mars/shared/types";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 import { COST_INAFFORDABLE } from "@port-of-mars/shared/settings";
 

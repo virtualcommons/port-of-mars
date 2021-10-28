@@ -46,7 +46,8 @@
           v-bind="investment"
           @update="setInvestmentAmount"
           :outOfTimeBlocks="remainingTime == 0"
-        ></InvestmentCard>
+        >
+        </InvestmentCard>
       </b-row>
       <b-col v-else class="text-center">
         <b-alert show variant="secondary" class="text-center">
@@ -55,6 +56,8 @@
           </h5>
         </b-alert>
       </b-col>
+      <div class="w-100"></div>
+      <button @click="submitSelection">Done</button>
     </b-row>
   </b-container>
 </template>
@@ -102,6 +105,8 @@ export default class InfluencesSelect extends Vue {
   }
 
   get remainingTime() {
+    console.log("pending investments: ", this.pendingInvestments);
+
     return this.getRemainingTimeBlocks(this.pendingInvestments);
   }
 
@@ -109,9 +114,11 @@ export default class InfluencesSelect extends Vue {
     return this.$tstore.getters.player.timeBlocks;
   }
 
+/* FIXME: this should be handled server side
   created() {
     this.api.resetPendingInvestments();
   }
+*/
 
   mounted() {
     if (this.investments.length < 1) {
@@ -120,11 +127,14 @@ export default class InfluencesSelect extends Vue {
   }
 
   updated() {
-    if (this.remainingTime < 1) this.api.setPlayerReadiness(true);
+    if (this.remainingTime < 1) {
+      this.submitSelection();
+    }
   }
 
-  destroyed() {
-    this.api.resetPendingInvestments();
+  submitSelection() {
+    this.api.saveBreakdownOfTrust(this.pendingInvestments);
+    this.api.setPlayerReadiness(true);
   }
 
   getRemainingTimeBlocks(pendingInvestment: ResourceAmountData) {

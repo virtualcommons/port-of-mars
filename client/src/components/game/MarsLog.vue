@@ -14,19 +14,19 @@
           v-for="log in logs"
           :style="{ backgroundColor: categoryColorMap.get(log.category) }"
           :key="log.id"
-          class="h-auto w-100 flex-column overflow-hidden m-2 p-2"
+          class="h-auto w-100 flex-column overflow-hidden px-5"
           style="background-color: var(--marslog-orange)"
         >
           <!-- category (e.g. System Health, Event, etc.) -->
-          <p class="text-capitalize m-2" style="color: var(--light-accent); font-weight: bold">
+          <p class="text-capitalize" style="color: var(--light-accent); font-weight: bold">
             {{ log.category }}
           </p>
           <!-- message -->
-          <p class="mx-2">{{ log.content }}</p>
+          <p >{{ log.content }}</p>
 
           <!-- timestamp and round -->
           <b-row class="w-100">
-            <b-col cols="auto" class="mr-auto ml-2">
+            <b-col cols="auto" class="mr-auto">
               <p>[ {{ logTime(log.timestamp) }} ]</p>
             </b-col>
             <b-col cols="auto">

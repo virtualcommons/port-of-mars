@@ -13,15 +13,14 @@
       <!-- b-row wrapper to achieve chat scroll effect -->
       <b-row class="w-100 justify-content-center" align-content="end">
         <!-- if there is no chat history to display -->
-        <p class="m-3" v-if="messages.length === 0">
+        <p class="ml-4" v-if="messages.length === 0">
           Chat is recorded. Please adhere to the
-          <b>
-            <a
-              target="_blank"
-              href="https://github.com/virtualcommons/port-of-mars/wiki/Port-of-Mars-Chat-Code-of-Conduct"
-              >Port of Mars Chat Code of Conduct</a
-            > </b
-          >. You cannot send private messages to other members in your group.
+          <b><a target="_blank"
+               href="https://github.com/virtualcommons/port-of-mars/wiki/Port-of-Mars-Chat-Code-of-Conduct">
+               Port of Mars Code of Conduct
+            </a>
+          </b>.
+          You cannot send private messages to other members in your group.
         </p>
         <!-- chat message -->
         <b-row

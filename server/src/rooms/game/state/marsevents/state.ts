@@ -179,8 +179,9 @@ export class BreakdownOfTrust extends BaseEvent {
 
   initialize(game: GameState): void {
     for (const player of game.players) {
-      player.invertPendingInventory();
-      //save the timeblock amount the player is allotted for the round
+      // player.invertPendingInventory(); FIXME: why was this needed?
+      // player.clearPendingInventory();
+      // save the timeblock amount the player is allotted for the round
       this.savedtimeBlockAllocations[player.role] = player.currentTimeBlocksAmount;
       //set them to 2 for the event
       player.setTimeBlocks(2);
@@ -188,6 +189,7 @@ export class BreakdownOfTrust extends BaseEvent {
   }
 
   setInventory(player: Role, game: GameState, updatedInventory: InvestmentData): void {
+    logger.debug("setting pending investments to: %o", { updatedInventory });
     game.players[player].pendingInvestments.updateAsInventory(updatedInventory);
   }
 

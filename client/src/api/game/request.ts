@@ -193,6 +193,7 @@ export class GameRequestAPI implements AbstractGameAPI {
       kind: "breakdown-of-trust",
       savedResources
     };
+    console.log("Saving breakdown of trust resources: ", savedResources);
     this.send(msg);
   }
 

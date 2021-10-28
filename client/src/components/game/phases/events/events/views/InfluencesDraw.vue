@@ -40,7 +40,7 @@
 
 <script lang="ts">
 import { Vue, Component, Inject, InjectReactive } from "vue-property-decorator";
-import { Role, ROLES, Resource } from "@port-of-mars/shared/types";
+import { Role, Resource } from "@port-of-mars/shared/types";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 
 @Component({})

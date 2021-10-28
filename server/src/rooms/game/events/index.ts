@@ -681,13 +681,14 @@ export class BreakdownOfTrustOccurred extends GameEventWithData {
   }
 
   apply(game: GameState): void {
-    let state: BreakdownOfTrust;
+    let eventState: BreakdownOfTrust;
     if (game.currentEvent.state instanceof BreakdownOfTrust) {
-      state = game.currentEvent.state;
+      eventState = game.currentEvent.state;
     } else {
       return;
     }
-    state.setInventory(this.data.role, game, this.data.savedResources);
+    logger.debug("saved resources: %o", { role: this.data.role, savedResources: this.data.savedResources });
+    eventState.setInventory(this.data.role, game, this.data.savedResources);
     game.players[this.data.role].updateReadiness(true);
   }
 }
