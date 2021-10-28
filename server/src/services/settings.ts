@@ -73,4 +73,11 @@ export class RedisSettings {
   async isFreePlayEnabled(): Promise<boolean> {
     return !!_.toNumber(await this.client.hget('settings', 'isFreePlayEnabled'));
   }
+
+  async report(): Promise<string> {
+    const mc = await this.maxConnections();
+    const signupEnabled = await this.isSignUpEnabled();
+    const freePlayEnabled = await this.isFreePlayEnabled();
+    return `[Max connections ${mc}, Sign Up Only? ${signupEnabled}, Free Play Enabled? ${freePlayEnabled}]`;
+  }
 }
