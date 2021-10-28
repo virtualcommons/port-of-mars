@@ -30,8 +30,12 @@
               <span v-if="systemHealthAccomplishmentPurchasesCost < 0">
                 Accomplishments were purchased that cost a total of {{ systemHealthAccomplishmentPurchasesCost }} System Health.
               </span>
-              <br>
-              <b>Your final System Health at the end of last round was <span class="highlighted-number">{{ lastRoundSystemHealthCalculation }}</span></b>.
+              <br />
+              <b>
+                Your final System Health at the end of last round was <b-badge :variant="systemHealthBadgeVariant(systemHealth)">{{ lastRoundSystemHealthCalculation }}</b-badge>.
+                After standard wear and tear, your starting System Health this round is 
+                <b-badge :variant="systemHealthBadgeVariant(nextRoundSystemHealth)">{{nextRoundSystemHealth}}</b-badge>.
+              </b>
             </p>
           </b-col>
           <!-- table -->
@@ -73,10 +77,10 @@ import {RESOURCES, TradeAmountData} from "@port-of-mars/shared/types";
 
 export default class NewRound extends Vue {
 
-  get systemHealthBadgeVariant() {
-    if (this.systemHealth >= 65) {
+  systemHealthBadgeVariant(systemHealth) {
+    if (systemHealth >= 65) {
       return "success";
-    } else if (this.systemHealth >= 35) {
+    } else if (systemHealth >= 35) {
       return "warning";
     } else {
       return "danger";
@@ -169,18 +173,25 @@ export default class NewRound extends Vue {
       {
         label: 'Group Contributions', role: 'Players', value: this.totalSystemHealthGroupContributions
       },
-      {
-        label: 'Accomplishments that cost System Health', role: 'Players', value: this.systemHealthAccomplishmentPurchasesCost
-      },
-      ...this.systemHealthMarsEvents,
-      {label: 'Wear and Tear', role: 'System', value: this.systemHealthMaintenanceCost},
-      {
-        label: 'Upcoming System Health',
-        role: 'System',
-        value: this.nextRoundSystemHealth,
-        _rowVariant: this.systemHealthBadgeVariant
-      }
     ];
+    if (this.systemHealthAccomplishmentPurchasesCost !== 0) {
+      items.push({
+        role: 'Players',
+        label: 'Accomplishments that cost System Health',
+        value: this.systemHealthAccomplishmentPurchasesCost
+      });
+    }
+    items.push(...this.systemHealthMarsEvents);
+    items.push({
+      role: 'System',
+      label: 'Wear and Tear',
+      value: this.systemHealthMaintenanceCost
+    });
+    items.push({
+      label: 'Upcoming System Health',
+      role: 'System',
+      value: this.nextRoundSystemHealth,
+    });
     const isUnderAudit = this.$tstore.getters.isUnderAudit;
     if (isUnderAudit) {
       items.splice(2, 0, ...this.playerContributionAuditInfo());
