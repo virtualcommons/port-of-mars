@@ -154,10 +154,11 @@ export class AccomplishmentPurchase
     super();
     this.name = data.name;
     this.victoryPoints = data.victoryPoints;
+    this.systemHealthModification = data.systemHealthModification;
   }
 
   toJSON(): AccomplishmentPurchaseData {
-    return { name: this.name, victoryPoints: this.victoryPoints };
+    return { name: this.name, victoryPoints: this.victoryPoints, systemHealthModification: this.systemHealthModification };
   }
 
   fromJSON(data: AccomplishmentPurchaseData): void {
@@ -169,6 +170,9 @@ export class AccomplishmentPurchase
 
   @type("number")
   victoryPoints: number;
+
+  @type("number")
+  systemHealthModification: number;
 }
 
 export class Trade extends Schema implements TradeData<TradeAmount> {
@@ -1171,13 +1175,7 @@ export class Player
   }
 
   invertPendingInventory(): void {
-    const invertedInventory = PendingInvestment.defaults();
-    for (const resource of RESOURCES) {
-      invertedInventory[resource as Resource] =
-        this.inventory[resource as Resource] * -1;
-    }
-
-    this.pendingInvestments.add({ ...invertedInventory, systemHealth: 0 });
+    this.pendingInvestments.reset();
   }
 
   applyPendingInvestments(): void {
