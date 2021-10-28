@@ -55,12 +55,13 @@
                   <h1 style="font-weight: medium">
                     Mission Control Onboarding
                   </h1>
-                  <div class="lead">
+                  <p>
                     Welcome to the Port of Mars! Please be sure to complete all onboarding tasks
                     before embarking on your next mission.
-                  </div>
+                  </p>
                 </b-col>
-                <b-col cols="auto">
+                <div class="w-100"></div>
+                <b-col align-self="start" cols="auto">
                   <b-button
                     :disabled="!playerTaskCompletion.mustTakeTutorial"
                     :to="tutorial"
@@ -153,50 +154,62 @@
           <!-- #FIXME: refactor using b-tabs and b-card -->
           <!-- for now, maintain this implementation for scrollable div to view previous games -->
           <b-col class="h-75">
-            <!-- Navigate: Schedule or Stats -->
-            <b-nav pills align="left" class="my-3">
-              <b-nav-item @click="switchTab('schedule')" :active="view === 'schedule'">
-                <h4>Schedule</h4>
-              </b-nav-item>
-              <b-nav-item @click="switchTab('stats')" :active="view === 'stats'">
-                <h4>Previous Games</h4>
-              </b-nav-item>
-            </b-nav>
-            <div
-              class="h-75 text-center p-4"
-              style="background-color: var(--dark-shade); border: 0.2rem solid var(--light-shade-25)"
-            >
-              <!-- Schedule -->
-              <template v-if="view === 'schedule'">
-                <h1>Schedule</h1>
-                <p>
-                  Please sign in during <b>one</b> of the following times to participate. We
-                  recommend that you show up 5 minutes earlier to join the waiting lobby.
-                </p>
-                <div style="overflow-y: auto !important">
-                  <b-table :items="schedule" bordered class="py-3" stacked="md" small dark striped>
-                    <template v-slot:cell(addToCalendar)="data">
-                      <a :href="inviteLink(data.item.addToCalendar)" target="_blank">
-                        <font-awesome-icon :icon="['fab', 'google']"></font-awesome-icon>
-                      </a>
-                    </template>
-                  </b-table>
+            <b-tabs pills>
+              <b-tab class="mt-3">
+                <template #title>
+                  <h4>Schedule</h4>
+                </template>
+                <div
+                  class="tabs"
+                  style="background-color: var(--dark-shade); border: 0.2rem solid var(--light-shade-25)"
+                >
+                  <template>
+                    <p class="m-5">
+                      Please sign in during <b>one</b> of the following times to participate. We
+                      recommend that you show up 5 minutes earlier to join the waiting lobby.
+                    </p>
+                    <div style="overflow-y: auto !important">
+                      <b-table
+                        :items="schedule"
+                        bordered
+                        class="py-3"
+                        stacked="md"
+                        small
+                        dark
+                        striped
+                      >
+                        <template v-slot:cell(addToCalendar)="data">
+                          <a :href="inviteLink(data.item.addToCalendar)" target="_blank">
+                            <font-awesome-icon :icon="['fab', 'google']"></font-awesome-icon>
+                          </a>
+                        </template>
+                      </b-table>
+                    </div>
+                  </template>
                 </div>
-              </template>
-              <!-- Stats -->
-              <template v-else-if="view === 'stats'" style="background-color: var(--dark-shade)">
-                <h1>Previous Games</h1>
-                <div class="m-3 scrolling-wrapper">
-                  <p v-if="stats.games.length === 0" class="my-5 py-5">No games to display.</p>
-                  <PlayerStatItem
-                    v-for="playerStatItem in stats.games"
-                    :key="playerStatItem.time"
-                    :playerStatItem="playerStatItem"
-                    class="my-1 py-1"
-                  ></PlayerStatItem>
+              </b-tab>
+              <b-tab class="mt-3">
+                <template #title>
+                  <h4>Previous Games</h4>
+                </template>
+                <div
+                  class="tabs"
+                  style="background-color: var(--dark-shade); border: 0.2rem solid var(--light-shade-25)"
+                >
+                  <template style="background-color: var(--dark-shade)">
+                    <div class="p-5 m-3 scrolling-wrapper">
+                      <p v-if="stats.games.length === 0" class="my-5 py-5">No games to display.</p>
+                      <PlayerStatItem
+                        v-for="playerStatItem in stats.games"
+                        :key="playerStatItem.time"
+                        :playerStatItem="playerStatItem"
+                        class="my-1 py-1"
+                      ></PlayerStatItem>
+                    </div>
+                  </template>
                 </div>
-              </template>
-            </div>
+              </b-tab>
+            </b-tabs>
           </b-col>
         </b-row>
       </b-col>
@@ -278,7 +291,6 @@ export default class Dashboard extends Vue {
     height: 200
   };
   maxValue = 100;
-  view: "stats" | "schedule" = "schedule";
 
   get gamesPlayedCount() {
     return this.stats.games.length;
@@ -315,10 +327,6 @@ export default class Dashboard extends Vue {
   created() {
     this.api = new DashboardAPI(this.$tstore, this.$ajax);
     this.initialize();
-  }
-
-  switchTab(tab: "stats" | "schedule") {
-    this.view = tab;
   }
 
   inviteLink(invite: { title: string; location: string; start: Date; end: Date; details: string }) {
@@ -390,5 +398,13 @@ export default class Dashboard extends Vue {
   overflow-y: auto;
   overflow-x: hidden;
   height: 90%;
+}
+
+.tabs {
+  text-align: center;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  height: 550px;
+  overflow: none;
 }
 </style>
