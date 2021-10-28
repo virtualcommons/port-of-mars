@@ -268,9 +268,9 @@ export class RoundIntroduction
 
   fromJSON(data: RoundIntroductionData): void {
     this.systemHealthMaintenanceCost = data.systemHealthMaintenanceCost;
-    data.systemHealthGroupContributions.forEach((value, key) {
+    data.systemHealthGroupContributions.forEach((value, key) => {
       this.systemHealthGroupContributions.set(key, value);
-    })
+    });
     this.systemHealthMarsEvents.splice(
       0,
       this.systemHealthMarsEvents.length,
@@ -310,7 +310,7 @@ export class RoundIntroduction
   @type("number")
   systemHealthMaintenanceCost = -SYSTEM_HEALTH_MAINTENANCE_COST;
 
-  @type({ map: number })
+  @type({ map: "number" })
   systemHealthGroupContributions = new MapSchema<number>();
 
   @type("number")
@@ -325,8 +325,10 @@ export class RoundIntroduction
   @type([Trade])
   completedTrades = new ArraySchema<Trade>();
 
-  setSystemHealthGroupContributions(contributions: Map<string, number>): void {
-    this.systemHealthGroupContributions = contributions;
+  updateSystemHealthGroupContributions(): void {
+    for (const p of this.players) {
+      this.systemHealthGroupContributions.set(p.role, p.systemHealthChanges.investment);
+    }
   }
 
   setSystemHealthAtStartOfRound(systemHealth: number): void {
@@ -351,7 +353,7 @@ export class RoundIntroduction
    * @param systemHealthAtStartOfRound
    */
   initialize(systemHealthAtStartOfRound: number): void {
-    this.systemHealthGroupContributions = 0;
+    this.systemHealthGroupContributions.forEach((value, key) => this.systemHealthGroupContributions.set(key, 0));
     this.systemHealthAtStartOfRound = systemHealthAtStartOfRound;
     this.accomplishmentPurchases.splice(0, this.accomplishmentPurchases.length);
     this.completedTrades.splice(0, this.completedTrades.length);
@@ -1586,9 +1588,7 @@ export class GameState
     this.phase = Phase.newRound;
     this.timeRemaining = GameState.DEFAULT_PHASE_DURATION[this.phase];
     this.round += 1;
-    this.roundIntroduction.setSystemHealthGroupContributions(
-      this.systemHealthGroupContributions()
-    );
+    this.roundIntroduction.updateSystemHealthGroupContributions();
     this.log(`Round ${this.round} begins.`, MarsLogCategory.newRound);
     logger.debug(
       "[game %d] current system health: %d",
@@ -1652,28 +1652,19 @@ export class GameState
   nextRoundSystemHealth(): number {
     return _.clamp(
       this.systemHealth +
-        this.systemHealthContributed() +
+        this.totalSystemHealthContributions() +
         this.systemHealthTaken(),
       0,
       100
     );
   }
 
-  systemHealthContributed(): number {
+  totalSystemHealthContributions(): number {
     let contributed = 0;
     for (const p of this.players) {
       contributed += p.systemHealthChanges.investment;
     }
-    logger.trace("system health contributed: %d", contributed);
     return contributed;
-  }
-
-  systemHealthGroupContributions(): Map<string, number> {
-    const contributionMap = new Map<string, number>();
-    for (const p of this.players) {
-      contributionMap.set(p.role, p.systemHealthChanges.investment);
-    }
-    return contributionMap;
   }
 
   systemHealthTaken(): number {
@@ -1709,11 +1700,6 @@ export class GameState
   }
 
   clearTrades(): void {
-    /*
-    for (const tradeId of this.tradeSet.keys()) {
-      this.tradeSet.delete(tradeId);
-    }
-    */
     logger.debug("clearing trade set %o ", this.tradeSet);
     this.tradeSet.forEach((trade: TradeData) => this.tradeSet.delete(trade.id));
   }
