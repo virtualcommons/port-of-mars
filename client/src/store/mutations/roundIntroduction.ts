@@ -1,25 +1,16 @@
-import Vue from "vue";
 import { State } from "@port-of-mars/shared/game/client/state";
 import {
   AccomplishmentPurchaseData,
-  RoundIntroductionData,
   SystemHealthMarsEventData,
   TradeData
 } from "@port-of-mars/shared/types";
 import _ from "lodash";
 
-function SET_ROUND_INTRODUCTION_FIELD(
-  state: State,
-  { field, value }: { field: string; value: number }
-) {
-  console.log("setting field ", field, " to ", value);
+function SET_ROUND_INTRODUCTION_FIELD(state: State, { field, value }: { field: string; value: number }) {
   (state.roundIntroduction as any)[field] = value;
 }
 
-function ADD_TO_ROUND_INTRO_SYSTEM_HEALTH_MARS_EVENTS(
-  state: State,
-  payload: SystemHealthMarsEventData
-) {
+function ADD_TO_ROUND_INTRO_SYSTEM_HEALTH_MARS_EVENTS(state: State, payload: SystemHealthMarsEventData) {
   state.roundIntroduction.systemHealthMarsEvents.push(payload);
 }
 
@@ -39,7 +30,6 @@ function ADD_TO_ROUND_INTRO_ACCOMPLISHMENT_PURCHASES(
   state: State,
   payload: AccomplishmentPurchaseData
 ) {
-  console.log("Adding to round intro acc purchases: ", payload);
   state.roundIntroduction.accomplishmentPurchases.push(payload);
 }
 
@@ -53,7 +43,6 @@ function REMOVE_FROM_ROUND_INTRO_ACCOMPLISHMENT_PURCHASES(
     console.log("Did not find accomplishment purchase for : ", payload);
     return;
   }
-  console.log("removing purchase from round intro: ", payload);
   accPurchases.splice(index, 1);
 }
 
@@ -71,7 +60,6 @@ function REMOVE_FROM_ROUND_INTRO_COMPLETED_TRADES(state: State, payload: TradeDa
 }
 
 function UPDATE_SYSTEM_HEALTH_GROUP_CONTRIBUTION(state: State, data: { playerId: string, value: number}) {
-  console.log("updating system health group contributions");
   state.roundIntroduction.systemHealthGroupContributions.set(data.playerId, data.value);
 }
 

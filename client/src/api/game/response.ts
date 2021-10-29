@@ -116,7 +116,6 @@ function applyRoundIntroductionResponses(roundIntroduction: any, store: TStore) 
         )
       ) 
       {
-        console.log("setting round introduction field: ", { field: change.field, value: change.value });
         store.commit("SET_ROUND_INTRODUCTION_FIELD", { field: change.field, value: change.value });
       }
     });
@@ -159,7 +158,6 @@ function applyRoundIntroductionResponses(roundIntroduction: any, store: TStore) 
   };
 
   roundIntroduction.systemHealthGroupContributions.onChange = (value: number, playerId: string) => {
-    console.log("updating system health group contributions: ", { playerId, value });
     store.commit("UPDATE_SYSTEM_HEALTH_GROUP_CONTRIBUTION", { playerId, value });
   }
 }
