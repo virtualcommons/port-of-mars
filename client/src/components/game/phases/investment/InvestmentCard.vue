@@ -81,7 +81,7 @@ export default class InvestmentCard extends Vue {
   @Prop() remainingTimeBlocks!: number;
 
   // prop to signify that this card is part of a Breakdown of Trust event
-  @Prop({ default: false }) breakdownOfTrust: boolean = false;
+  @Prop({ default: false }) breakdownOfTrust: boolean;
 
   @Inject() readonly api!: GameRequestAPI;
 
@@ -169,7 +169,8 @@ export default class InvestmentCard extends Vue {
 </script>
 
 <style scoped lang="scss">
-.b-form-spinbutton.disabled, .b-form-spinbutton.readonly {
+.b-form-spinbutton.disabled,
+.b-form-spinbutton.readonly {
   background-color: $dark-shade-75;
 }
 </style>
