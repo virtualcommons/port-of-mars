@@ -151,8 +151,6 @@
             </template>
           </b-col>
           <div class="w-100"></div>
-          <!-- #FIXME: refactor using b-tabs and b-card -->
-          <!-- for now, maintain this implementation for scrollable div to view previous games -->
           <b-col class="h-75">
             <b-tabs pills>
               <b-tab class="mt-3">

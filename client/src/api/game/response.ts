@@ -108,7 +108,6 @@ function applyPlayerResponses(role: Role, player: any, store: TStore) {
 
 function applyRoundIntroductionResponses(roundIntroduction: any, store: TStore) {
   roundIntroduction.onChange = (changes: Array<DataChange>) => {
-    console.log("incoming round introduction changes: ", { changes });
     changes.forEach(change => {
       if (
         !["systemHealthMarsEvents", "accomplishmentPurchases", "completedTrades"].includes(

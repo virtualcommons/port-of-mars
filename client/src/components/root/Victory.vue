@@ -3,13 +3,13 @@
     <b-row align-v="center" align-h="center" class="h-100 w-100">
       <b-col cols="4" class="text-center">
         <h1>Port of Mars</h1>
-        <h2>Winners</h2>
+        <h2>Victory!</h2>
         <span v-for="winner in winners" :key="winner" class="my-3">
           <p>{{ winner }}</p>
         </span>
         <h3>
           Despite all doubts, you have successfully established an extraterrestrial society. Thanks
-          to you, future generations can flourish on planet Mars.
+          to you, future generations can flourish on Mars.
         </h3>
       </b-col>
       <b-col cols="8" class="h-75">

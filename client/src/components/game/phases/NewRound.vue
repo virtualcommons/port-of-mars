@@ -13,17 +13,18 @@
           <!-- text info -->
           <b-col class="flex-shrink-1 w-100 m-0 p-0" v-if="isFirstRound">
             <h2 class="my-2">Upcoming System Health:
-              <b-badge :variant="systemHealthBadgeVariant">{{ nextRoundSystemHealth }}</b-badge>
+              <b-badge :variant="systemHealthBadgeVariant(nextRoundSystemHealth)">{{ nextRoundSystemHealth }}</b-badge>
             </h2>
             <p>Welcome to Mars! Each round, your System Health degrades by
-              <b class="highlighted-number">{{ systemHealthMaintenanceCost }}</b> due to standard wear and tear. Your System
-              Health at the start of this round is <b class="highlighted-number">
-                {{ nextRoundSystemHealth }}</b>.
+              <b-badge variant="danger">{{ systemHealthMaintenanceCost }}</b-badge> 
+              due to standard wear and tear. Your System Health at the start of this round is 
+              <b-badge variant="success">{{ nextRoundSystemHealth }}</b-badge>.
             </p>
           </b-col>
           <b-col class="flex-shrink-1 w-100 m-0 p-0" v-else>
             <p>
-              In the previous round you invested <b class="highlighted-number">{{ yourSystemHealthContributions }}</b> and the rest
+              In the previous round you invested 
+              <b class="highlighted-number">{{ yourSystemHealthContributions }}</b> and the rest
               of your group invested
               <b class="highlighted-number">{{ otherPlayerSystemHealthContributions }}</b> in System Health for a total of {{totalSystemHealthGroupContributions}}.
               Your group's average investment was {{ averageContribution }}.
@@ -40,8 +41,7 @@
           </b-col>
           <!-- table -->
           <b-col class="w-100 p-0 m-0">
-            <div class="w-100 position-absolute m-0" style="overflow-y: auto; overflow-x: hidden;
-                 max-height: 100%">
+            <div class="w-100 position-absolute m-0" style="overflow-y: auto; overflow-x: hidden; max-height: 100%">
               <b-table :fields="tabularContributionFields" :items="tabularContributions" bordered dark
                        small striped>
               </b-table>
