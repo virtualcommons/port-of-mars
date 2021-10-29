@@ -213,7 +213,7 @@
           </b-col>
         </b-row>
       </b-col>
-      <Footer class="fixed-bottom"></Footer>
+      <Footer class="fixed-bottom position-absolute"></Footer>
     </b-row>
   </b-container>
 </template>
@@ -349,7 +349,7 @@ export default class Dashboard extends Vue {
     }
 
     // go to the signed up page if signup is enabled
-    else if (data.isSignUpEnabled) {
+    else if (!data.isSignUpEnabled) {
       await this.$router.push({ name: SIGNEDUP_PAGE });
     }
 
@@ -404,7 +404,7 @@ export default class Dashboard extends Vue {
   text-align: center;
   flex-wrap: nowrap;
   white-space: nowrap;
-  height: 550px;
+  height: 500px;
   overflow: none;
 }
 </style>

@@ -1,25 +1,25 @@
 <template>
   <b-container fluid class="h-100 p-0 m-0">
-    <GameDashboard class="w-100 h-100" />
+    <GameDashboard class="h-100 w-100 p-0 m-0"></GameDashboard>
   </b-container>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Inject, Provide } from 'vue-property-decorator';
-import GameDashboard from '@port-of-mars/client/components/GameDashboard.vue';
-import { Client, Room } from 'colyseus.js';
-import { applyGameServerResponses } from '@port-of-mars/client/api/game/response';
-import { GameRequestAPI } from '@port-of-mars/client/api/game/request';
-import { EnvironmentMode } from '@port-of-mars/client/settings';
-import { url } from '@port-of-mars/client/util';
-import { DASHBOARD_PAGE } from '@port-of-mars/shared/routes';
-import {SfxManager} from '@port-of-mars/client/util';
+import { Vue, Component, Inject, Provide } from "vue-property-decorator";
+import GameDashboard from "@port-of-mars/client/components/GameDashboard.vue";
+import { Client, Room } from "colyseus.js";
+import { applyGameServerResponses } from "@port-of-mars/client/api/game/response";
+import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
+import { EnvironmentMode } from "@port-of-mars/client/settings";
+import { url } from "@port-of-mars/client/util";
+import { DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
+import { SfxManager } from "@port-of-mars/client/util";
 
 @Component({
-  name: 'game',
+  name: "game",
   components: {
-    GameDashboard,
-  },
+    GameDashboard
+  }
 })
 export default class Game extends Vue {
   @Inject() readonly $client!: Client;
@@ -33,18 +33,18 @@ export default class Game extends Vue {
     this.api.setSfxManager(this.$sfx);
     let gameRoom: Room;
     let cachedRoomId = this.$ajax.roomId;
-    let roomId: string = '';
+    let roomId: string = "";
     console.log({ cachedRoomId });
     if (!cachedRoomId) {
       try {
-        await this.$ajax.get(url('/game/latest-active'), ({ data, status }) => {
+        await this.$ajax.get(url("/game/latest-active"), ({ data, status }) => {
           roomId = data;
         });
       } catch (e) {
         if (e instanceof Error) {
-          this.$tstore.commit('SET_DASHBOARD_MESSAGE', { kind: 'danger', message: e.message });
+          this.$tstore.commit("SET_DASHBOARD_MESSAGE", { kind: "danger", message: e.message });
         }
-        console.error('Failed to get latest active game', e);
+        console.error("Failed to get latest active game", e);
       }
     } else {
       roomId = cachedRoomId;
@@ -56,15 +56,15 @@ export default class Game extends Vue {
         applyGameServerResponses(gameRoom, this.$tstore, this.$sfx);
         this.api.connect(gameRoom, this.$tstore);
         this.hasApi = true;
-        this.$tstore.commit('SET_LAYOUT', 'game');
+        this.$tstore.commit("SET_LAYOUT", "game");
         // FIXME: remove SET_ENVIRONMENT entirely in a later refactor
         // this.$tstore.commit("SET_ENVIRONMENT", this.env.environment);
       }
     } catch (e) {
       if (e instanceof Error) {
-        this.$tstore.commit('SET_DASHBOARD_MESSAGE', {
-          kind: 'danger',
-          message: e.message,
+        this.$tstore.commit("SET_DASHBOARD_MESSAGE", {
+          kind: "danger",
+          message: e.message
         });
       }
       console.error("Unable to join room: ", e);
@@ -74,7 +74,7 @@ export default class Game extends Vue {
 
   destroyed() {
     if (this.api.room) this.api.room.leave();
-    this.$tstore.commit('RESET_STATE', {});
+    this.$tstore.commit("RESET_STATE", {});
   }
 }
 </script>

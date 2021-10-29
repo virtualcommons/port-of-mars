@@ -1,9 +1,11 @@
 <template>
-  <b-row class="w-100 py-0 px-4 m-auto tour-system-health" align-v="center">
-    <h3 class="title ml-2 mr-4 my-auto">System Health</h3>
-    <StatusBar class="statusbar" :setWidth="`${systemHealthStatus}`" />
-    <h3 class="status mr-2 ml-4 my-auto">{{ systemHealthStatus }}<span>%</span></h3>
-  </b-row>
+  <b-container fluid>
+    <b-row class="px-4 tour-system-health" align-v="center">
+      <h3 class="title mx-3 my-auto">System Health</h3>
+      <StatusBar class="statusbar" :setWidth="`${systemHealthStatus}`" />
+      <h3 class="status mx-3">{{ systemHealthStatus }}<span>%</span></h3>
+    </b-row>
+  </b-container>
 </template>
 
 <script lang="ts">

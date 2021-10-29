@@ -1,5 +1,12 @@
 <template>
-  <b-container fluid class="h-100 m-0" style="background-color: var(--dark-shade)">
+  <b-container
+    fluid
+    class="h-100 p-2 m-0 d-flex flex-column justify-content-start"
+    style="background-color: var(--dark-shade);"
+  >
+    <ModalController />
+    <ProfileMenu />
+
     <!--  ----------------------------------------
                      System Health
         ----------------------------------------
@@ -8,58 +15,53 @@
           Phase Switcher       | Chat
         ---------------------------------------- -->
 
-    <b-row
-      align-v="stretch"
-      align-h="center"
-      class="h-100 w-100 pt-5 pb-2"
-      style="background-color: var(--dark-shade-75); overflow: hidden"
-    >
-      <ModalController></ModalController>
-      <ProfileMenu></ProfileMenu>
-      <b-modal
-        body-bg-variant="dark"
-        body-text-variant="warning"
-        centered
-        no-close-on-backdrop
-        no-close-on-esc
-        no-enforce-focus
-        header-bg-variant="dark"
-        header-border-variant="dark"
-        header-text-variant="warning"
-        hide-footer
-        hide-header-close
-        title="Timeout Warning: Impending Bot Takeover"
-        v-model="botWarning"
-        variant="outline-warning"
-      >
-        <p>
-          You have been inactive for at least four minutes. After five minutes a bot will takeover
-          your player.
-        </p>
-        <b-button @click="resetBotWarning" block variant="warning">OK</b-button>
-      </b-modal>
-      <SystemHealth class="fixed-top" style="z-index: 0"></SystemHealth>
-      <b-col class="mx-0" cols="9">
-        <b-row align="stretch" class="h-100 w-100 p-2">
-          <b-col
-            class="w-100 p-2 mx-0"
-            style="height: 40%; border: 0.2rem solid rgba(241, 224, 197, 0.25)"
-          >
-            <HUD></HUD>
-          </b-col>
-          <div class="w-100 m-0 p-0"></div>
-          <b-col
-            class="w-100 p-2 mt-2 mx-0 tour-event tour-invest tour-trade tour-purchase"
-            style="height: 60%; border: 0.2rem solid rgba(241, 224, 197, 0.25)"
-          >
-            <PhaseSwitcher></PhaseSwitcher>
-          </b-col>
+    <!-- System Health -->
+    <b-row class="flex-shrink-1 w-100 mb-2">
+      <SystemHealth></SystemHealth>
+    </b-row>
+
+    <!-- HUD, Phase Switcher, Mars Log, Chat -->
+    <b-row class="w-100 p-0 m-0" style="height: 95vh !important">
+      <b-col cols="9" class="d-flex flex-column w-100">
+        <!-- HUD -->
+        <b-row class="w-100 p-2 mx-0" style="border: 0.2rem solid rgba(241, 224, 197, 0.25);">
+          <HUD></HUD>
+        </b-row>
+        <!-- Phase Switcher -->
+        <b-row
+          class="w-100 flex-grow-1 p-2 mt-2 mx-0"
+          style="border: 0.2rem solid rgba(241, 224, 197, 0.25);"
+        >
+          <PhaseSwitcher></PhaseSwitcher>
         </b-row>
       </b-col>
-      <b-col class="mx-0" cols="3">
+      <!-- Chat | Mars Log -->
+      <b-col cols="3" class="w-100">
         <ChatMarsLog></ChatMarsLog>
       </b-col>
     </b-row>
+    <b-modal
+      body-bg-variant="dark"
+      body-text-variant="warning"
+      centered
+      no-close-on-backdrop
+      no-close-on-esc
+      no-enforce-focus
+      header-bg-variant="dark"
+      header-border-variant="dark"
+      header-text-variant="warning"
+      hide-footer
+      hide-header-close
+      title="Timeout Warning: Impending Bot Takeover"
+      v-model="botWarning"
+      variant="outline-warning"
+    >
+      <p>
+        You have been inactive for at least four minutes. After five minutes a bot will takeover
+        your player.
+      </p>
+      <b-button @click="resetBotWarning" block variant="warning">OK</b-button>
+    </b-modal>
   </b-container>
 </template>
 
