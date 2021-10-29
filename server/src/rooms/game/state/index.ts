@@ -272,9 +272,9 @@ export class RoundIntroduction
 
   fromJSON(data: RoundIntroductionData): void {
     this.systemHealthMaintenanceCost = data.systemHealthMaintenanceCost;
-    data.systemHealthGroupContributions.forEach((value, key) => {
+    for (const [key, value] of Object.entries(data.systemHealthGroupContributions)) {
       this.systemHealthGroupContributions.set(key, value);
-    });
+    }
     this.systemHealthMarsEvents.splice(
       0,
       this.systemHealthMarsEvents.length,
