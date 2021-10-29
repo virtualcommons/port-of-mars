@@ -80,9 +80,8 @@ export default class InvestmentCard extends Vue {
   @Prop() cost!: number;
   @Prop() remainingTimeBlocks!: number;
 
-  // is this card part of a Breakdown of Trust event?
-  @Prop({ default: false }) breakdownOfTrust: boolean;
-  // @Prop() canSave!: boolean;
+  // prop to signify that this card is part of a Breakdown of Trust event
+  @Prop({ default: false }) breakdownOfTrust: boolean = false;
 
   @Inject() readonly api!: GameRequestAPI;
 

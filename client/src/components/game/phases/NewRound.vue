@@ -77,7 +77,7 @@ import {RESOURCES, TradeAmountData} from "@port-of-mars/shared/types";
 
 export default class NewRound extends Vue {
 
-  systemHealthBadgeVariant(systemHealth) {
+  systemHealthBadgeVariant(systemHealth: number) {
     if (systemHealth >= 65) {
       return "success";
     } else if (systemHealth >= 35) {

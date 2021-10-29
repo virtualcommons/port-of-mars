@@ -65,8 +65,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Inject, Vue, Watch } from "vue-property-decorator";
-import { Resource, ResourceAmountData, RESOURCES } from "@port-of-mars/shared/types";
+import { Component, Inject, Vue } from "vue-property-decorator";
+import { Resource, ResourceAmountData, InvestmentData, RESOURCES } from "@port-of-mars/shared/types";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 import InvestmentCard from "@port-of-mars/client/components/game/phases/investment/InvestmentCard.vue";
 import * as _ from "lodash";
@@ -129,7 +129,7 @@ export default class InfluencesSelect extends Vue {
     return this.$tstore.getters.player.inventory;
   }
 
-  get pendingInvestments(): ResourceAmountData {
+  get pendingInvestments(): InvestmentData {
     return this.$tstore.getters.player.pendingInvestments;
   }
 
