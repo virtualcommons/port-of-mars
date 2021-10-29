@@ -47,9 +47,7 @@
         <b-row class="h-100">
           <b-col class="h-25 w-100">
             <Messages></Messages>
-            <template
-              v-if="playerTaskCompletion.mustTakeIntroSurvey || playerTaskCompletion.canPlayGame"
-            >
+            <template v-if="playerTaskCompletion.mustTakeIntroSurvey || playerTaskCompletion.canPlayGame">
               <b-row align-v="center" class="w-100 h-100">
                 <b-col cols="auto">
                   <h1 style="font-weight: medium">
@@ -161,29 +159,30 @@
                   class="tabs"
                   style="background-color: var(--dark-shade); border: 0.2rem solid var(--light-shade-25)"
                 >
-                  <template>
-                    <p class="m-5">
-                      Please sign in during <b>one</b> of the following times to participate. We
-                      recommend that you show up 5 minutes earlier to join the waiting lobby.
-                    </p>
-                    <div style="overflow-y: auto !important">
-                      <b-table
-                        :items="schedule"
-                        bordered
-                        class="py-3"
-                        stacked="md"
-                        small
-                        dark
-                        striped
-                      >
-                        <template v-slot:cell(addToCalendar)="data">
-                          <a :href="inviteLink(data.item.addToCalendar)" target="_blank">
-                            <font-awesome-icon :icon="['fab', 'google']"></font-awesome-icon>
-                          </a>
-                        </template>
-                      </b-table>
-                    </div>
-                  </template>
+                  <div class="m-5">
+                    Please sign in during <b>one</b> of the following times to participate. We
+                    recommend that you show up 5 minutes earlier to join the waiting lobby.
+                  </div>
+                  <div style="overflow-y: auto !important">
+                    <b-table
+                      :items="schedule"
+                      bordered
+                      stacked="md"
+                      small
+                      dark
+                      striped
+                      show-empty
+                    >
+                      <template #empty="scope">
+                        <b-alert class="mt-3" variant="info" show>No games have been scheduled. Please check again later!</b-alert>
+                      </template>
+                      <template v-slot:cell(addToCalendar)="data">
+                        <a :href="inviteLink(data.item.addToCalendar)" target="_blank">
+                          <font-awesome-icon :icon="['fab', 'google']"></font-awesome-icon>
+                        </a>
+                      </template>
+                    </b-table>
+                  </div>
                 </div>
               </b-tab>
               <b-tab class="mt-3">
@@ -399,10 +398,7 @@ export default class Dashboard extends Vue {
 }
 
 .tabs {
-  text-align: center;
-  flex-wrap: nowrap;
-  white-space: nowrap;
-  height: 500px;
+  text-align: left;
   overflow: none;
 }
 </style>
