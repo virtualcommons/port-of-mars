@@ -34,12 +34,12 @@
           inline
         >
           <template #decrement>
-            <b-button variant="transparent" :disabled="isDecrementDisabled">
+            <b-button variant="transparent">
               <b-icon-dash scale="1.5" color="white"></b-icon-dash>
             </b-button>
           </template>
           <template #increment>
-            <b-button variant="transparent" :disabled="isIncrementDisabled">
+            <b-button variant="transparent">
               <b-icon-plus scale="1.5" color="white"></b-icon-plus>
             </b-button>
           </template>
@@ -81,7 +81,7 @@ export default class InvestmentCard extends Vue {
   @Prop() remainingTimeBlocks!: number;
 
   // prop to signify that this card is part of a Breakdown of Trust event
-  @Prop({ default: false }) breakdownOfTrust: boolean;
+  @Prop({ default: false }) breakdownOfTrust!: boolean;
 
   @Inject() readonly api!: GameRequestAPI;
 
@@ -93,22 +93,6 @@ export default class InvestmentCard extends Vue {
     height: 50
   };
   units: number = 0;
-
-  /**
-   * Define conditions for disabling investment buttons.
-   */
-  get isIncrementDisabled(): boolean {
-    if (this.breakdownOfTrust) {
-      // check if the number of units we have incremented is at or exceeds
-      // the number of available inventory influence resources
-      return this.units >= this.currentInfluence;
-    }
-    return this.cannotAfford;
-  }
-
-  get isDecrementDisabled(): boolean {
-    return this.cannotAfford || this.pendingUnits < 1;
-  }
 
   /**
    * Define if investment is affordable.
