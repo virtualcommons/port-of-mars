@@ -1,8 +1,7 @@
 <template>
   <b-container fluid class="h-100 m-0 p-0">
     <b-row
-      align-v="stretch"
-      class="h-100 w-100 m-0 p-0"
+      class="h-100 m-0 p-0"
       style="background-color: var(--dark-shade-75)"
     >
       <!-- profile info -->
@@ -13,11 +12,11 @@
             style="opacity: 50%"
             :src="require(`@port-of-mars/client/assets/background/logo.png`)"
             alt="Port of Mars"
-            left
-            class="m-4"
+            center
+            class="m-3"
           ></b-img>
         </b-row>
-        <b-row class="my-5 mx-1 py-3" style="background-color: var(--dark-accent)">
+        <b-row class="my-3 mx-1" style="background-color: var(--dark-accent)">
           <b-col align-self="center" cols="5">
             <b-img
               fluid-grow
@@ -28,7 +27,6 @@
             </b-img>
           </b-col>
           <b-col align-self="center" cols="7">
-            <h3 class="dark">{{ username }}</h3>
             <p class="dark">
               You have participated in
               <b-badge variant="primary">{{ gamesPlayedCount }}</b-badge> missions.
@@ -36,13 +34,13 @@
           </b-col>
         </b-row>
 
-        <b-nav vertical pills class="text-left">
+        <b-nav vertical pills class="mx-1 text-left">
           <b-nav-item active><h4>Dashboard</h4></b-nav-item>
-          <b-nav-item :to="tutorial"><h4>Tutorial</h4></b-nav-item>
-          <b-nav-item :to="register"><h4>Modify Consent and Email</h4></b-nav-item>
+          <b-nav-item :to="register"><h4>Consent Form</h4></b-nav-item>
           <b-nav-item @click="logout"><h4>Logout</h4></b-nav-item>
         </b-nav>
       </b-col>
+      <!-- main content area -->
       <b-col class="h-100" cols="9" style="background-color: var(--dark-shade-75)">
         <b-row class="h-100">
           <b-col class="h-25 w-100">
@@ -155,7 +153,7 @@
                 <template #title>
                   <h4>Schedule</h4>
                 </template>
-                <div class="m-5">
+                <div class="m-3 lead">
                   Please sign in during <b>one</b> of the following times to participate. We
                   recommend that you show up 5 minutes earlier to join the waiting lobby.
                 </div>
@@ -184,7 +182,7 @@
                 <template #title>
                   <h4>Previous Games</h4>
                 </template>
-                <div class="p-5 m-3 scrolling-wrapper">
+                <div class="p-3 m-3 scrolling-wrapper">
                   <p v-if="stats.games.length === 0" class="my-5 py-5">No games to display.</p>
                   <PlayerStatItem
                     v-for="playerStatItem in stats.games"
@@ -198,7 +196,10 @@
                 <template #title>
                   <h4>Tutorial</h4>
                 </template>
-                <div class='h-50 w-50 mx-auto my-3'>
+                <p class='m-3 lead'>
+                  Learn how to play Port of Mars by watching this brief tutorial video.
+                </p>
+                <div class='w-75 mx-auto my-3'>
                   <b-embed type="embed" aspect="16by9" :src="tutorialVideoUrl"
                   allowfullscreen>
                   </b-embed>
@@ -208,7 +209,7 @@
           </b-col>
         </b-row>
       </b-col>
-      <Footer class="fixed-bottom position-absolute"></Footer>
+      <Footer></Footer>
     </b-row>
   </b-container>
 </template>
@@ -249,7 +250,6 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
   }
 })
 export default class Dashboard extends Vue {
-  username: string = this.$tstore.state.user.username;
   api!: DashboardAPI;
   loading = true;
   upcomingGames: Array<GameMeta> = [];
@@ -287,6 +287,11 @@ export default class Dashboard extends Vue {
   };
   maxValue = 100;
   tutorialVideoUrl = 'https://player.vimeo.com/video/618174821?h=82fd072f73';
+
+  get username() {
+    console.log("user? ", this.$tstore.state.user);
+    return this.$tstore.state.user.username;
+  }
 
   get gamesPlayedCount() {
     return this.stats.games.length;
@@ -396,10 +401,16 @@ export default class Dashboard extends Vue {
   height: 90%;
 }
 
+.tab-content {
+  border-top: 0.1rem solid var(--light-shade-25);
+}
+
 .tabs {
   text-align: left;
+  margin-top: 2em;
   overflow: none;
   background-color: var(--dark-shade);
   border: 0.2rem solid var(--light-shade-25);
+  border-radius: 3px;
 }
 </style>
