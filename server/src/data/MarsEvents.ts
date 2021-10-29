@@ -224,7 +224,7 @@ export function getMarsEventDeckItems(): Array<MarsEventDeckItem> {
   const AVAILABLE_EVENTS: Array<[string, number]> = [
     ['audit', 1],
     ['bondingThroughAdversity', 1],
-    ['breakdownOfTrust', 30],
+    ['breakdownOfTrust', 1],
     ['changingTides', 1],
     ['compulsivePhilanthropy', 1],
     ['cropFailure', 1],
