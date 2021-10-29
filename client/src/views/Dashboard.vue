@@ -349,7 +349,7 @@ export default class Dashboard extends Vue {
     }
 
     // go to the signed up page if signup is enabled
-    else if (!data.isSignUpEnabled) {
+    else if (data.isSignUpEnabled) {
       await this.$router.push({ name: SIGNEDUP_PAGE });
     }
 
