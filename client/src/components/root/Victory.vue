@@ -11,6 +11,10 @@
           Despite all doubts, you have successfully established an extraterrestrial society. Thanks
           to you, future generations can flourish on Mars.
         </h3>
+        <h4 class="mt-5">Thank you for participating!</h4>
+        <b-button block class="w-50 mx-auto" squared variant="light" :to="dashboard">
+          Take the exit survey
+        </b-button>
       </b-col>
       <b-col cols="8" class="h-75">
         <div
@@ -25,9 +29,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, InjectReactive, Inject } from "vue-property-decorator";
+import { Vue, Component, Inject } from "vue-property-decorator";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
-import { MarsLogMessageData } from "@port-of-mars/shared/types";
 import { DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
 import MarsLog from "@port-of-mars/client/components/game/MarsLog.vue";
 import _ from "lodash";
@@ -42,30 +45,6 @@ export default class Victory extends Vue {
 
   get dashboard() {
     return { name: DASHBOARD_PAGE };
-  }
-
-  get logs() {
-    return _.sortBy(this.$store.getters.logs, ml => -ml.id);
-  }
-
-  get categoryColorMap() {
-    return this.$store.getters.categoryColorMap;
-  }
-
-  private delineateRound(index: number, logs: MarsLogMessageData[]): boolean {
-    let currentIndex: number = index;
-    let nextIndex: number = index + 1;
-
-    // console.log('currentIndex ', currentIndex);
-
-    if (!logs[nextIndex]) {
-      // console.log('undefined');
-      return false;
-    } else return logs[currentIndex].round !== logs[nextIndex].round;
-  }
-
-  private logTime(timestamp: number) {
-    return new Date(timestamp).toLocaleTimeString();
   }
 
   get winners() {

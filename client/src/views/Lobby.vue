@@ -13,17 +13,6 @@
       </b-col>
       <div class="w-100"></div>
       <b-col>
-        <div class="h-50 w-50 mx-auto">
-          <b-embed
-            type="iframe"
-            aspect="16by9"
-            src="https://www.youtube.com/embed/CiB4q3CnyCY?autoplay=1"
-          >
-          </b-embed>
-        </div>
-      </b-col>
-      <div class="w-100"></div>
-      <b-col>
         <b-spinner small type="grow" label="Loading..."></b-spinner>
         <b-spinner small class="mx-2" type="grow" label="Loading..."></b-spinner>
         <b-spinner small type="grow" label="Loading..."></b-spinner>
