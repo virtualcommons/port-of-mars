@@ -47,7 +47,7 @@
           v-bind="investment"
           @update="setInvestmentAmount"
           :breakdownOfTrust="true"
-          :remainingTimeBlocks="remainingTimeBlocks"
+          :remainingTimeBlocks="totalAvailableTimeBlocks"
         >
         </InvestmentCard>
       </b-row>
