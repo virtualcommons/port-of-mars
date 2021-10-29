@@ -155,55 +155,53 @@
                 <template #title>
                   <h4>Schedule</h4>
                 </template>
-                <div
-                  class="tabs"
-                  style="background-color: var(--dark-shade); border: 0.2rem solid var(--light-shade-25)"
-                >
-                  <div class="m-5">
-                    Please sign in during <b>one</b> of the following times to participate. We
-                    recommend that you show up 5 minutes earlier to join the waiting lobby.
-                  </div>
-                  <div style="overflow-y: auto !important">
-                    <b-table
-                      :items="schedule"
-                      bordered
-                      stacked="md"
-                      small
-                      dark
-                      striped
-                      show-empty
-                    >
-                      <template #empty="scope">
-                        <b-alert class="mt-3" variant="info" show>No games have been scheduled. Please check again later!</b-alert>
-                      </template>
-                      <template v-slot:cell(addToCalendar)="data">
-                        <a :href="inviteLink(data.item.addToCalendar)" target="_blank">
-                          <font-awesome-icon :icon="['fab', 'google']"></font-awesome-icon>
-                        </a>
-                      </template>
-                    </b-table>
-                  </div>
+                <div class="m-5">
+                  Please sign in during <b>one</b> of the following times to participate. We
+                  recommend that you show up 5 minutes earlier to join the waiting lobby.
+                </div>
+                <div style="overflow-y: auto !important">
+                  <b-table
+                    :items="schedule"
+                    bordered
+                    stacked="md"
+                    small
+                    dark
+                    striped
+                    show-empty
+                  >
+                    <template #empty="scope">
+                      <b-alert class="mt-3" variant="info" show>No games have been scheduled. Please check again later!</b-alert>
+                    </template>
+                    <template v-slot:cell(addToCalendar)="data">
+                      <a :href="inviteLink(data.item.addToCalendar)" target="_blank">
+                        <font-awesome-icon :icon="['fab', 'google']"></font-awesome-icon>
+                      </a>
+                    </template>
+                  </b-table>
                 </div>
               </b-tab>
               <b-tab class="mt-3">
                 <template #title>
                   <h4>Previous Games</h4>
                 </template>
-                <div
-                  class="tabs"
-                  style="background-color: var(--dark-shade); border: 0.2rem solid var(--light-shade-25)"
-                >
-                  <template style="background-color: var(--dark-shade)">
-                    <div class="p-5 m-3 scrolling-wrapper">
-                      <p v-if="stats.games.length === 0" class="my-5 py-5">No games to display.</p>
-                      <PlayerStatItem
-                        v-for="playerStatItem in stats.games"
-                        :key="playerStatItem.time"
-                        :playerStatItem="playerStatItem"
-                        class="my-1 py-1"
-                      ></PlayerStatItem>
-                    </div>
-                  </template>
+                <div class="p-5 m-3 scrolling-wrapper">
+                  <p v-if="stats.games.length === 0" class="my-5 py-5">No games to display.</p>
+                  <PlayerStatItem
+                    v-for="playerStatItem in stats.games"
+                    :key="playerStatItem.time"
+                    :playerStatItem="playerStatItem"
+                    class="my-1 py-1">
+                  </PlayerStatItem>
+                </div>
+              </b-tab>
+              <b-tab class="mt-3">
+                <template #title>
+                  <h4>Tutorial</h4>
+                </template>
+                <div class='h-50 w-50 mx-auto my-3'>
+                  <b-embed type="embed" aspect="16by9" :src="tutorialVideoUrl"
+                  allowfullscreen>
+                  </b-embed>
                 </div>
               </b-tab>
             </b-tabs>
@@ -288,6 +286,7 @@ export default class Dashboard extends Vue {
     height: 200
   };
   maxValue = 100;
+  tutorialVideoUrl = 'https://player.vimeo.com/video/618174821?h=82fd072f73';
 
   get gamesPlayedCount() {
     return this.stats.games.length;
@@ -400,5 +399,7 @@ export default class Dashboard extends Vue {
 .tabs {
   text-align: left;
   overflow: none;
+  background-color: var(--dark-shade);
+  border: 0.2rem solid var(--light-shade-25);
 }
 </style>
