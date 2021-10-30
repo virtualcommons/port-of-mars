@@ -32,6 +32,7 @@
 import { Vue, Component, Inject } from "vue-property-decorator";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 import { DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
+import { Role } from "@port-of-mars/shared/types";
 import MarsLog from "@port-of-mars/client/components/game/MarsLog.vue";
 import _ from "lodash";
 
@@ -51,7 +52,7 @@ export default class Victory extends Vue {
     return this.$tstore.state.winners;
   }
   
-  points(role) {
+  points(role: Role) {
     return this.$tstore.state.players[role].victoryPoints;
   }
 }

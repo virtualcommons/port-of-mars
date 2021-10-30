@@ -149,7 +149,7 @@
           <div class="w-100"></div>
           <b-col class="h-75">
             <b-tabs pills>
-              <b-tab class="mt-3">
+              <b-tab class="history mt-3">
                 <template #title>
                   <h4>Schedule</h4>
                 </template>
@@ -178,7 +178,7 @@
                   </b-table>
                 </div>
               </b-tab>
-              <b-tab class="mt-3">
+              <b-tab class="history mt-3">
                 <template #title>
                   <h4>Previous Games</h4>
                 </template>
@@ -390,7 +390,7 @@ export default class Dashboard extends Vue {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .dark {
   color: var(--dark-shade);
 }
@@ -398,7 +398,12 @@ export default class Dashboard extends Vue {
 .scrolling-wrapper {
   overflow-y: auto;
   overflow-x: hidden;
-  height: 90%;
+  max-height: 32rem;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
 }
 
 .tab-content {
@@ -412,5 +417,9 @@ export default class Dashboard extends Vue {
   background-color: var(--dark-shade);
   border: 0.2rem solid var(--light-shade-25);
   border-radius: 3px;
+}
+
+.history {
+  height: 32rem;
 }
 </style>
