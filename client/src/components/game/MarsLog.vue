@@ -40,20 +40,28 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Prop, Component } from "vue-property-decorator";
+import _ from "lodash";
 
 @Component({
   components: {}
 })
 export default class MarsLog extends Vue {
+
+  @Prop({ default: false }) 
+  orderByMostRecent!: boolean;
+
   updated() {
     const elem = this.$el.querySelector(".scroll-to-recent");
     elem!.scrollTop = elem!.scrollHeight;
   }
 
   get logs() {
+    if (this.orderByMostRecent) {
+      return _.orderBy(this.$tstore.getters.logs, ['timestamp'], ['desc']);
+    }
     return this.$tstore.getters.logs;
-  }
+}
 
   get categoryColorMap() {
     return this.$store.getters.categoryColorMap;

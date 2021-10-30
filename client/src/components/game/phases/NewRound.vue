@@ -17,8 +17,9 @@
             </h2>
             <p>Welcome to Mars! Each round, your System Health degrades by
               <b-badge variant="danger">{{ systemHealthMaintenanceCost }}</b-badge> 
-              due to standard wear and tear. Your System Health at the start of this round is 
-              <b-badge variant="success">{{ nextRoundSystemHealth }}</b-badge>.
+              due to standard wear and tear. <br>
+              Your System Health at the start of this round is 
+              <b-badge variant="success">{{ nextRoundSystemHealth }}</b-badge>
             </p>
           </b-col>
           <b-col class="flex-shrink-1 w-100 m-0 p-0" v-else>
@@ -34,8 +35,9 @@
               <br />
               <b>
                 Your final System Health at the end of last round was <b-badge :variant="systemHealthBadgeVariant(systemHealth)">{{ lastRoundSystemHealthCalculation }}</b-badge>.
+                <br>
                 After standard wear and tear, your starting System Health this round is 
-                <b-badge :variant="systemHealthBadgeVariant(nextRoundSystemHealth)">{{nextRoundSystemHealth}}</b-badge>.
+                <b-badge :variant="systemHealthBadgeVariant(nextRoundSystemHealth)">{{nextRoundSystemHealth}}</b-badge>
               </b>
             </p>
           </b-col>

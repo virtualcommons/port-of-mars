@@ -31,7 +31,6 @@ import {
   ChatMessageData,
   MarsEventData,
   RoundIntroductionData,
-  TradeData,
   TradeSetData,
 } from "../../types";
 

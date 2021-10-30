@@ -15,7 +15,7 @@
           class="p-5"
           style="overflow-y: auto; overflow-x: hidden; height: 90%; background-color: var(--dark-shade)"
         >
-          <MarsLog></MarsLog>
+          <MarsLog orderByMostRecent="true"></MarsLog>
         </div>
       </b-col>
     </b-row>

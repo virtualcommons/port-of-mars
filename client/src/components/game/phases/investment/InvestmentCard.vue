@@ -67,7 +67,6 @@ import { faClock } from "@fortawesome/free-solid-svg-icons/faClock";
 import { faBriefcase } from "@fortawesome/free-solid-svg-icons/faBriefcase";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { Resource } from "@port-of-mars/shared/types";
-import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 import { COST_INAFFORDABLE } from "@port-of-mars/shared/settings";
 
 library.add(faClock);
@@ -76,14 +75,19 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 @Component({})
 export default class InvestmentCard extends Vue {
-  @Prop() name!: Resource;
-  @Prop() cost!: number;
-  @Prop() remainingTimeBlocks!: number;
+
+  @Prop()
+  name!: Resource;
+
+  @Prop()
+  cost!: number;
+
+  @Prop()
+  remainingTimeBlocks!: number;
 
   // prop to signify that this card is part of a Breakdown of Trust event
-  @Prop({ default: false }) breakdownOfTrust!: boolean;
-
-  @Inject() readonly api!: GameRequestAPI;
+  @Prop({ default: false })
+  breakdownOfTrust!: boolean;
 
   icon = {
     center: true,
