@@ -28,16 +28,12 @@
       </b-col>
     </b-row>
     <b-row class="mx-2" align-v="center">
-      <b-col cols="7" class="text-center m-3 embed-responsive embed-responsive-16by9">
-        <iframe
-          src="https://player.vimeo.com/video/618174821?h=82fd072f73"
-          allow="autoplay; fullscreen; picture-in-picture"
-          allowfullscreen
-          class="embed-responsive-item rounded"
-        >
-        </iframe>
+      <b-col cols="7" class="mt-n4">
+        <b-embed type="iframe" class="w-75" aspect="16by9"
+          :src="trailerVideoUrl" allowfullscreen>
+        </b-embed>
       </b-col>
-      <b-col cols="4" class="text-left mt-2">
+      <b-col cols="4" class="text-left">
         <h3 class="subtitle">
           The next Mars Madness tournament is coming soon! Register and get notified when it starts.
         </h3>
@@ -107,6 +103,7 @@ export default class Login extends Vue {
   isDevMode: boolean = false;
   toggleDevLogin: boolean = false;
   currentYear = new Date().getFullYear();
+  trailerVideoUrl = "https://player.vimeo.com/video/618174821?h=82fd072f73";
 
   logo = {
     center: true,

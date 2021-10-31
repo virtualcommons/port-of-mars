@@ -200,7 +200,7 @@
                   Learn how to play Port of Mars by watching this brief tutorial video.
                 </p>
                 <div class='w-75 mx-auto my-3'>
-                  <b-embed type="embed" aspect="16by9" :src="tutorialVideoUrl"
+                  <b-embed type="iframe" aspect="16by9" :src="tutorialVideoUrl"
                   allowfullscreen>
                   </b-embed>
                 </div>
