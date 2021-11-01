@@ -1,9 +1,6 @@
 <template>
   <b-container fluid class="h-100 m-0 p-0">
-    <b-row
-      class="h-100 m-0 p-0"
-      style="background-color: var(--dark-shade-75)"
-    >
+    <b-row class="h-100 m-0 p-0" style="background-color: var(--dark-shade-75)">
       <!-- profile info -->
       <b-col class="h-100" cols="3" style="background-color: var(--dark-shade)">
         <b-row>
@@ -45,7 +42,9 @@
         <b-row class="h-100">
           <b-col class="h-25 w-100">
             <Messages></Messages>
-            <template v-if="playerTaskCompletion.mustTakeIntroSurvey || playerTaskCompletion.canPlayGame">
+            <template
+              v-if="playerTaskCompletion.mustTakeIntroSurvey || playerTaskCompletion.canPlayGame"
+            >
               <b-row align-v="center" class="w-100 h-100">
                 <b-col cols="auto">
                   <h1 style="font-weight: medium">
@@ -141,14 +140,14 @@
               </h1>
               <p>
                 We will email you with further instructions if you are eligible to participate in
-                the next round. You can review your past games in the 
+                the next round. You can review your past games in the
                 <code>Previous Games</code> tab.
               </p>
             </template>
           </b-col>
           <div class="w-100"></div>
           <b-col class="h-75">
-            <b-tabs pills>
+            <b-tabs pills class="p-3">
               <b-tab class="history mt-3">
                 <template #title>
                   <h4>Schedule</h4>
@@ -158,17 +157,11 @@
                   recommend that you show up 5 minutes earlier to join the waiting lobby.
                 </div>
                 <div style="overflow-y: auto !important">
-                  <b-table
-                    :items="schedule"
-                    bordered
-                    stacked="md"
-                    small
-                    dark
-                    striped
-                    show-empty
-                  >
+                  <b-table :items="schedule" bordered stacked="md" small dark striped show-empty>
                     <template #empty="scope">
-                      <b-alert class="mt-3" variant="info" show>No games have been scheduled. Please check again later!</b-alert>
+                      <b-alert class="mt-3" variant="info" show
+                        >No games have been scheduled. Please check again later!</b-alert
+                      >
                     </template>
                     <template v-slot:cell(addToCalendar)="data">
                       <a :href="inviteLink(data.item.addToCalendar)" target="_blank">
@@ -188,7 +181,8 @@
                     v-for="playerStatItem in previousGames"
                     :key="playerStatItem.time"
                     :playerStatItem="playerStatItem"
-                    class="my-1 py-1">
+                    class="my-1 py-1"
+                  >
                   </PlayerStatItem>
                 </div>
               </b-tab>
@@ -196,12 +190,11 @@
                 <template #title>
                   <h4>Tutorial</h4>
                 </template>
-                <p class='m-3 lead'>
+                <p class="m-3 lead">
                   Learn how to play Port of Mars by watching this brief tutorial video.
                 </p>
-                <div class='w-75 mx-auto my-3'>
-                  <b-embed type="iframe" aspect="16by9" :src="tutorialVideoUrl"
-                  allowfullscreen>
+                <div class="w-75 mx-auto p-3">
+                  <b-embed type="iframe" aspect="21by9" :src="tutorialVideoUrl" allowfullscreen>
                   </b-embed>
                 </div>
               </b-tab>
@@ -286,7 +279,7 @@ export default class Dashboard extends Vue {
     height: 200
   };
   maxValue = 100;
-  tutorialVideoUrl = 'https://player.vimeo.com/video/618174821?h=82fd072f73';
+  tutorialVideoUrl = "https://player.vimeo.com/video/618174821?h=82fd072f73";
 
   get username() {
     console.log("user? ", this.$tstore.state.user);
@@ -298,7 +291,7 @@ export default class Dashboard extends Vue {
   }
 
   get previousGames() {
-    return _.orderBy(this.stats.games, ['time'], ['desc']);
+    return _.orderBy(this.stats.games, ["time"], ["desc"]);
   }
 
   get lobby() {
@@ -354,7 +347,7 @@ export default class Dashboard extends Vue {
     }
 
     // go to the signed up page if signup is enabled
-    else if (data.isSignUpEnabled) {
+    else if (!data.isSignUpEnabled) {
       await this.$router.push({ name: SIGNEDUP_PAGE });
     }
 
@@ -395,10 +388,6 @@ export default class Dashboard extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.dark {
-  color: var(--dark-shade);
-}
-
 .scrolling-wrapper {
   overflow-y: auto;
   overflow-x: hidden;
