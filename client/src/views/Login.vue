@@ -27,13 +27,12 @@
         </b-img>
       </b-col>
     </b-row>
-    <b-row class="mx-2" align-v="center">
-      <b-col cols="7" class="mt-n4">
-        <b-embed type="iframe" class="w-75" aspect="16by9"
-          :src="trailerVideoUrl" allowfullscreen>
+    <b-row class="mx-2">
+      <b-col align-self="start" cols="7" class="p-5">
+        <b-embed type="iframe" class="w-75" aspect="21by9" :src="trailerVideoUrl" allowfullscreen>
         </b-embed>
       </b-col>
-      <b-col cols="4" class="text-left">
+      <b-col align-self="center" cols="5" class="text-left mt-2">
         <h3 class="subtitle">
           The next Mars Madness tournament is coming soon! Register and get notified when it starts.
         </h3>
