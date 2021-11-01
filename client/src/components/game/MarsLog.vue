@@ -4,7 +4,7 @@
       class="w-100 h-100 m-auto scroll-to-recent"
       style="overflow-y: auto; overflow-x: hidden;"
     >
-      <b-row class="w-100 my-2 " align-content="end">
+      <b-row class="w-100 my-2" align-content="end">
         <!-- if there is no history to display -->
         <p v-if="logs.length === 0" class="m-5" style="color: rgba(241, 224, 197, 0.25)">
           Nothing to report.
@@ -14,25 +14,29 @@
           v-for="log in logs"
           :style="{ backgroundColor: categoryColorMap.get(log.category) }"
           :key="log.id"
-          class="h-auto w-100 flex-column overflow-hidden px-5"
+          class="w-100 my-1 d-flex flex-column overflow-hidden"
           style="background-color: var(--marslog-orange)"
         >
-          <!-- category (e.g. System Health, Event, etc.) -->
-          <p class="text-capitalize" style="color: var(--light-accent); font-weight: bold">
-            {{ log.category }}
-          </p>
-          <!-- message -->
-          <p >{{ log.content }}</p>
-
-          <!-- timestamp and round -->
-          <b-row class="w-100">
-            <b-col cols="auto" class="mr-auto">
-              <p>[ {{ logTime(log.timestamp) }} ]</p>
-            </b-col>
-            <b-col cols="auto">
-              <p>ROUND {{ log.round }}</p>
-            </b-col>
-          </b-row>
+          <b-col>
+            <!-- category (e.g. System Health, Event, etc.) -->
+            <p
+              class="mb-0 ml-4 mt-2 text-uppercase"
+              style="color: var(--light-accent); font-weight: bold"
+            >
+              {{ log.category }}
+            </p>
+            <!-- message -->
+            <p class="ml-4" style="word-wrap: break-word">{{ log.content }}</p>
+            <b-row class="w-100 ml-2">
+              <!-- timestamp and round -->
+              <b-col cols="auto" class="mr-auto">
+                <p>[ {{ logTime(log.timestamp) }} ]</p>
+              </b-col>
+              <b-col cols="auto">
+                <p>ROUND {{ log.round }}</p>
+              </b-col>
+            </b-row>
+          </b-col>
         </b-row>
       </b-row>
     </b-row>
@@ -47,8 +51,7 @@ import _ from "lodash";
   components: {}
 })
 export default class MarsLog extends Vue {
-
-  @Prop({ default: false }) 
+  @Prop({ default: false })
   orderByMostRecent!: boolean;
 
   updated() {
@@ -58,10 +61,10 @@ export default class MarsLog extends Vue {
 
   get logs() {
     if (this.orderByMostRecent) {
-      return _.orderBy(this.$tstore.getters.logs, ['timestamp', 'id'], ['desc', 'desc']);
+      return _.orderBy(this.$tstore.getters.logs, ["timestamp", "id"], ["desc", "desc"]);
     }
     return this.$tstore.getters.logs;
-}
+  }
 
   get categoryColorMap() {
     return this.$store.getters.categoryColorMap;
