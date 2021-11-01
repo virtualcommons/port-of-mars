@@ -13,8 +13,8 @@
             class="m-3"
           ></b-img>
         </b-row>
-        <b-row class="my-3 mx-1" style="background-color: var(--dark-accent)">
-          <b-col align-self="center" cols="5">
+        <b-row align-v="center" class="my-3 mx-1" style="background-color: var(--dark-accent)">
+          <b-col cols="5" class="p-1">
             <b-img
               fluid-grow
               center
@@ -23,7 +23,7 @@
             >
             </b-img>
           </b-col>
-          <b-col align-self="center" cols="7">
+          <b-col cols="7">
             <p class="dark">
               You have participated in
               <b-badge variant="primary">{{ gamesPlayedCount }}</b-badge> missions.
