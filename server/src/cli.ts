@@ -173,10 +173,21 @@ async function createTournamentRoundInvites(em: EntityManager, tournamentRoundId
   return invites.length;
 }
 
+async function exportActiveEmails(em: EntityManager, participated: boolean): Promise<void> {
+  const sp = getServices(em);
+  const emails = await sp.account.getActiveEmails(participated);
+  fs.writeFile('active-emails.csv', emails.join('\n'), (err) => {
+    if (err) {
+      logger.fatal("unable to export active emails: %s", err);
+      throw err;
+    }
+    logger.debug("Exported all active users with emails to active-emails.csv");
+  });
+}
+
 async function exportEmails(em: EntityManager, tournamentRoundId: number): Promise<void> {
   const sp = getServices(em);
   const emails = await sp.tournament.getEmails(tournamentRoundId);
-  logger.debug("emails: %s", emails);
   fs.writeFile('emails.txt', emails.join('\n'), (err) => {
     if (err) {
       logger.fatal("Unable to export emails: %s", err);
@@ -308,6 +319,15 @@ program
       .option('--ids <ids...>', 'user ids to mark quiz completion for', toIntArray, [] as Array<number>)
       .action(async (cmd) => {
         await withConnection(em => completeQuizCompletion(em, cmd.ids))
+      })
+  )
+  .addCommand(
+    program
+      .createCommand('emails')
+      .option('-p, --participated', 'Set to filter only participants who have participated in a game.')
+      .description('generate a CSV for mailchimp import of all active users with a valid email address')
+      .action(async (cmd) => {
+        await withConnection(em => exportActiveEmails(em, cmd.participated));
       })
   )
   .addCommand(

@@ -1,5 +1,5 @@
 import { User } from "@port-of-mars/server/entity";
-import { UpdateResult, Repository } from "typeorm"
+import { IsNull, Not, Repository, UpdateResult } from "typeorm"
 import { settings } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { v4 as uuidv4 } from "uuid";
@@ -25,6 +25,14 @@ export class AccountService extends BaseService {
       return otherUser.id === user.id;
     }
     return true;
+  }
+
+  async getActiveEmails(participated: boolean): Promise<Array<string>> {
+    const users: Array<User> = await this.getRepository().find({
+      select: ['name', 'email', 'username', 'dateCreated'],
+      where: { isActive: true, email: Not(IsNull()) },
+    })
+    return users.map(u => u.email ?? 'no email specified - should not be possible, check database');
   }
 
   async findUserById(id: number): Promise<User> {
