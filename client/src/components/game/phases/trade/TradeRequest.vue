@@ -1,8 +1,9 @@
 <template>
-  <b-container fluid class="h-100 p-0 m-0">
+  <b-container fluid no-gutters class="h-100">
     <b-form @submit.stop.prevent="createTrade">
       <!-- select trade partner -->
-      <b-form-group class="w-100 my-4 tour-send-trade">
+      <b-form-group class="w-100 p-2 tour-send-trade">
+        <h4 class="my-2">Trade with:</h4>
         <b-form-radio
           v-for="player in otherPlayers"
           :key="player"
@@ -13,7 +14,6 @@
           class="mx-2"
           button
           button-variant="transparent"
-          v-b-tooltip:bottom="player"
           :style="{ border: borderStyle(player) }"
         >
           <b-img
@@ -23,10 +23,15 @@
             :style="{ backgroundColor: frameStyle(player) }"
           >
           </b-img>
+          <p class="text-capitalize font-weight-bold my-2" style="color: var(--light-shade)">
+            {{ player }}
+          </p>
         </b-form-radio>
       </b-form-group>
+      <div class="w-75 my-3 light-shade-05-border"></div>
       <!-- request -->
       <b-form-group>
+        <h4 class="my-2">Ask For:</h4>
         <TradeOptions
           :resourceReader="handleReceiveResources"
           :resources="senderResources"
@@ -35,8 +40,11 @@
         ></TradeOptions>
       </b-form-group>
 
+      <div class="w-75 my-3 light-shade-05-border"></div>
+
       <!-- offer -->
       <b-form-group>
+        <h4>Offer:</h4>
         <TradeOptions
           :resourceReader="handleSendResources"
           :resources="recipientResources"
@@ -46,14 +54,8 @@
       </b-form-group>
 
       <!-- send trade request -->
-      <b-button
-        type="submit"
-        block
-        variant="outline-secondary"
-        :disabled="!validateTrade"
-        class="text-center"
-      >
-        <p class="text-bold my-auto">Send trade request</p>
+      <b-button type="submit" block variant="light" :disabled="!validateTrade" class="text-center">
+        <p class="text-bold my-auto">Send Trade Request</p>
       </b-button>
     </b-form>
   </b-container>
@@ -79,8 +81,8 @@ export default class TradeRequest extends Vue {
     center: true,
     fluid: true,
     blankColor: "#bbb",
-    width: 125,
-    height: 125
+    width: 110,
+    height: 110
   };
 
   created() {

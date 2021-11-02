@@ -1,7 +1,7 @@
 <template>
   <b-container fluid class="h-100">
     <!-- player stats row -->
-    <b-row class="w-100">
+    <b-row class="h-100 w-100">
       <!-- player picture -->
       <b-col cols="2">
         <div class="indicator" :style="indicatorStyle">
@@ -19,53 +19,61 @@
       <!-- trade -->
       <b-col cols="4">
         <b-button
+          squared
+          variant="outline-secondary"
+          size="lg"
           v-if="!playerData.isSelf && gamePhase === phase.trade"
           @click="handleRequestTrade"
         >
           Request Trade
         </b-button>
       </b-col>
-    </b-row>
-    <b-row class="w-100 my-5" align="center">
+
+      <div class="w-100 my-3"></div>
+
       <!-- col: player inventory -->
       <b-col cols="6">
-        <h2 class="text-center">Inventory</h2>
-        <div class="outer-wrapper">
-          <div class="unavailable" v-if="!playerData.isSelf && !isUnderAudit">
-            <p class="my-4">This information cannot be viewed at this time. Check back later...</p>
+        <h2 class="text-center p-2" style="background-color: var(--primary)">Inventory</h2>
+        <div>
+          <div v-if="!playerData.isSelf && !isUnderAudit">
+            <p class="my-4 text-center">
+              This information cannot be viewed at this time. Check back later...
+            </p>
           </div>
-          <div class="wrapper" v-else-if="playerData.isSelf || isUnderAudit">
-            <Inventory :isSelf="false" :role="modalData.role" />
+          <div v-else-if="playerData.isSelf || isUnderAudit">
+            <Inventory :isSelf="false" :role="modalData.role"></Inventory>
           </div>
         </div>
       </b-col>
       <b-col cols="6">
-        <h2 class="text-center">Accomplishments</h2>
-        <b-button-group class="w-100 mt-2">
+        <h2 class="text-center p-2" style="background-color: var(--primary)">
+          Accomplishments
+        </h2>
+        <b-button-group class="w-100 my-3">
           <b-button
             squared
             @click="switchAccomplishmentType('purchasable')"
-            :pressed="accomplishmentType === 'purchasable'"
+            :variant="accomplishmentType === 'purchasable' ? 'secondary' : 'outline-secondary'"
           >
-            <h4>Available</h4>
+            Available
           </b-button>
           <b-button
             squared
             @click="switchAccomplishmentType('purchased')"
-            :pressed="accomplishmentType === 'purchased'"
+            :variant="accomplishmentType === 'purchased' ? 'secondary' : 'outline-secondary'"
           >
-            <h4>Purchased</h4>
+            Purchased
           </b-button>
         </b-button-group>
-        <div class="outer-wrapper">
-          <div class="unavailable" v-if="!playerData.isSelf && !isUnderAudit">
+        <div class="outer-wrapper backdrop">
+          <div class="p-3" v-if="!playerData.isSelf && !isUnderAudit">
             <p class="my-4" v-if="accomplishmentType === 'purchasable'">
               This information is currently private and cannot be viewed at this time.
             </p>
-            <p v-if="accomplishmentType === 'purchased'" class="my-4">None</p>
+            <p v-if="accomplishmentType === 'purchased'" class="my-auto text-center">None</p>
           </div>
           <!-- col: accomplishments -->
-          <div class="wrapper" v-else-if="playerData.isSelf || isUnderAudit">
+          <div class="scroll p-3" v-else-if="playerData.isSelf || isUnderAudit">
             <AccomplishmentCard
               v-for="accomplishment in accomplishmentCards"
               :key="accomplishment.id"
@@ -182,6 +190,16 @@ export default class PlayerModal extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 20rem;
+}
+
+.outer-wrapper {
+  height: 20rem;
+}
+
 .picture,
 .information,
 .trade {
@@ -235,6 +253,9 @@ img {
     color: $light-shade;
     font-size: $font-med;
     font-weight: $medium;
+  }
+
+  .wrapper {
   }
 }
 </style>

@@ -113,3 +113,16 @@ button {
     opacity: 1;
   }
 }
+
+.backdrop {
+  background-color: $light-shade-05;
+}
+
+.light-shade-05-border {
+  border: 0.05rem solid var(--light-shade-05);
+}
+
+.header {
+  background-color: $main-brand;
+  color: $dark-shade;
+}

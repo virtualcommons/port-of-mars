@@ -1,9 +1,6 @@
 <template>
-  <b-container fluid class="h-100">
-    <b-row class="w-100 h-auto">
-      <p>{{ text }}</p>
-    </b-row>
-    <b-row class="w-100">
+  <b-container no-gutters fluid class="h-100">
+    <b-row class="h-100 w-100">
       <div v-for="(value, resource) in resources" :key="resource" class="m-2">
         <b-img
           v-bind="mainProps"
@@ -13,6 +10,7 @@
           class="m-3"
         >
         </b-img>
+        <p class="text-capitalize font-weight-bold">{{ resource }}</p>
         <b-form-spinbutton
           v-model="resources[resource]"
           v-if="mode === 'outgoing'"

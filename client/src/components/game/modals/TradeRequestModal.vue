@@ -1,28 +1,40 @@
 <template>
-  <b-container fluid class="h-100 m-0 p-0">
-    <b-row class="w-100" align="center">
+  <b-container fluid no-gutters class="h-100">
+    <b-row no-gutters class="w-100" align="center">
       <b-col cols="8">
         <TradeRequest></TradeRequest>
       </b-col>
       <b-col cols="4">
         <b-button-group class="w-100 mb-2">
-          <b-button squared @click="switchView(false)" variant="primary" :pressed="!selectedView">
+          <b-button
+            squared
+            @click="switchView(false)"
+            :variant="switchView == false ? 'secondary' : 'outline-secondary'"
+          >
             Accomplishments
           </b-button>
-          <b-button squared @click="switchView(true)" variant="primary" :pressed="selectedView">
+          <b-button
+            squared
+            @click="switchView(true)"
+            :variant="switchView == true ? 'secondary' : 'outline-secondary'"
+          >
             Inventory
           </b-button>
         </b-button-group>
-        <b-row v-if="selectedView === true" class="inventory-wrapper">
-          <Inventory :isSelf="true" />
+        <b-row v-if="selectedView === true" class="h-75 w-100 my-2 backdrop">
+          <div class="w-100 h-100 p-4" style="overflow-y: auto; overflow-x: hidden">
+            <Inventory :isSelf="true"></Inventory>
+          </div>
         </b-row>
-        <b-row v-if="selectedView === false" class="accomplishment-cards-wrapper">
-          <AccomplishmentCard
-            v-for="accomplishment in activeAccomplishments"
-            :key="accomplishment.id"
-            :accomplishment="accomplishment"
-            :showDescription="false"
-          />
+        <b-row v-if="selectedView === false" class="h-75 w-100 my-2 backdrop">
+          <div class="h-100 w-100 p-4" style="overflow-y: auto; overflow-x: hidden">
+            <AccomplishmentCard
+              v-for="accomplishment in activeAccomplishments"
+              :key="accomplishment.id"
+              :accomplishment="accomplishment"
+              :showDescription="false"
+            ></AccomplishmentCard>
+          </div>
         </b-row>
       </b-col>
     </b-row>
