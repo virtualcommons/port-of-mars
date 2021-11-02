@@ -4,7 +4,7 @@
     class="tour-trade-player tour-request-resources tour-offer-resources"
     centered
     :title="modalData.title"
-    :size="modalType === 'CardModal' ? 'lg' : 'xl'"
+  :size="modalType === 'CardModal' ? 'lg' : 'xl'"
     hide-footer
     header-bg-variant="primary"
     header-border-variant="primary"
