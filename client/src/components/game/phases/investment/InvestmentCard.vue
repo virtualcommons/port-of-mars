@@ -24,6 +24,7 @@
         </b-img>
       </b-col>
       <div class="w-100"></div>
+      <!-- FIXME:  adjustment for large screens?  offset-lg="3" lg="6" -->
       <b-col>
         <b-form-spinbutton
           v-model="units"
@@ -31,17 +32,12 @@
           :readonly="playerReady"
           min="0"
           :max="maxInfluenceInvestment"
-          inline
         >
           <template #decrement>
-            <b-button variant="transparent">
-              <b-icon-dash scale="1.5" color="white"></b-icon-dash>
-            </b-button>
+            <b-icon-dash scale="1.25" color="white"></b-icon-dash>
           </template>
           <template #increment>
-            <b-button variant="transparent">
-              <b-icon-plus scale="1.5" color="white"></b-icon-plus>
-            </b-button>
+            <b-icon-plus scale="1.25" color="white"></b-icon-plus>
           </template>
         </b-form-spinbutton>
       </b-col>
@@ -75,7 +71,6 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 @Component({})
 export default class InvestmentCard extends Vue {
-
   @Prop()
   name!: Resource;
 
