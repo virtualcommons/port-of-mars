@@ -4,8 +4,7 @@
     <b-row class="h-auto w-100 p-0 m-0 justify-content-between">
       <b-col
         cols="9"
-        class="h-100 w-100 p-3 m-0 d-flex flex-row justify-content-between align-items-center"
-        style="background-color: var(--main-brand); color: var(--dark-shade);"
+        class="h-100 w-100 p-3 m-0 d-flex flex-row justify-content-between align-items-center header"
       >
         <p class="my-auto">Active Trades</p>
         <b-form-checkbox v-model="checked" switch>
