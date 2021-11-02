@@ -4,35 +4,13 @@
       <!-- events | active accomplishments -->
 
       <!-- toggle events or active accomplishments -->
-      <b-row
-        class="h-auto w-100 m-0 p-3 justify-content-center"
-        style="background-color: var(--main-brand)"
-      >
+      <b-row class="h-auto w-100 m-0 p-3 justify-content-center header">
         <b-col class="h-100 w-100 text-center my-auto p-0 mx-0" cols="6">
-          <button
-            :class="selectedView === 'Event Deck' ? 'selected' : ''"
-            class="h-100 w-100 p-0 m-0"
-            @click="switchView('Event Deck')"
-          >
-            <p class="my-auto">Event Deck</p>
-          </button>
-        </b-col>
-        <b-col class="h-100 w-100 text-center align-content-center" cols="6">
-          <button
-            :class="selectedView === 'Active Accomplishments' ? 'selected' : ''"
-            class="h-100 w-100 p-0 m-0"
-            @click="switchView('Active Accomplishments')"
-          >
-            <p class="my-auto">Accomplishments</p>
-          </button>
+          <p class="m-auto">Current Events</p>
         </b-col>
       </b-row>
       <!-- event deck -->
-      <b-row
-        v-if="selectedView === 'Event Deck'"
-        class="flex-grow-1 w-100 mx-auto mt-3"
-        style="background-color: var(--light-shade-05)"
-      >
+      <b-row class="flex-grow-1 w-100 mx-auto mt-3" style="background-color: var(--light-shade-05)">
         <div
           class="position-absolute p-3  event-scroll"
           style="overflow-y: auto; overflow-x: hidden;
@@ -48,32 +26,10 @@
           ></EventCard>
         </div>
       </b-row>
-      <!-- accomplishments -->
-      <b-row
-        v-if="selectedView === 'Active Accomplishments'"
-        class="flex-grow-1 w-100 mx-auto mt-3 p-3"
-        style="background-color: var(--light-shade-05)"
-      >
-        <div
-          class="position-absolute p-3 w-100"
-          style="overflow-y: auto; overflow-x: hidden;
-            max-height: 75%; max-width: 85%;"
-        >
-          <AccomplishmentCard
-            v-for="accomplishment in accomplishmentCards"
-            :key="accomplishment.id"
-            :accomplishment="accomplishment"
-            :showDescription="false"
-          ></AccomplishmentCard>
-        </div>
-      </b-row>
     </b-col>
 
     <b-col class="d-flex flex-column h-100 w-100" cols="8">
-      <b-row
-        class="w-100 m-0 p-3 justify-content-center"
-        style="background-color: var(--main-brand); color: var(--dark-shade)"
-      >
+      <b-row class="w-100 m-0 p-3 justify-content-center header">
         <p class="m-auto">
           {{ eventTitle }}
         </p>
@@ -82,7 +38,7 @@
         class="flex-grow-1 w-100 mx-auto mt-3 p-3"
         style="background-color: var(--light-shade-05)"
       >
-        <EventContainer :key="eventNumber" :event="currentEvent" />
+        <EventContainer :key="eventNumber" :event="currentEvent"></EventContainer>
       </b-row>
     </b-col>
   </b-row>

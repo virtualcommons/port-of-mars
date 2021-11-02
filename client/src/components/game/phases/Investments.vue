@@ -7,10 +7,7 @@
       style="border-right: .2rem solid var(--light-shade-25);"
     >
       <!-- timeblocks header -->
-      <b-row
-        class="h-auto p-3 w-100 align-items-center tour-time-blocks"
-        style="background-color: var(--main-brand); color: var(--dark-shade);"
-      >
+      <b-row class="h-auto p-3 w-100 align-items-center tour-time-blocks header">
         <p class="mx-2 my-auto p-0">Time Blocks</p>
         <TimeBlockMeter
           :totalTimeBlocks="totalTimeBlocks"
@@ -40,10 +37,7 @@
     <!-- purchasable accomplishments -->
     <b-col class="h-100 w-100 d-flex flex-column" cols="4">
       <!-- header -->
-      <b-row
-        class="h-auto p-3 mx-auto w-100 justify-content-center"
-        style="background-color: var(--main-brand); color: var(--dark-shade);"
-      >
+      <b-row class="h-auto p-3 mx-auto w-100 justify-content-center header">
         <p class="mx-2 my-auto p-0">Purchasable Accomplishments</p>
       </b-row>
       <!-- accomplishments -->

@@ -2,10 +2,7 @@
   <b-row class="h-100 w-100 p-0 m-0 tour-discard-action">
     <!-- inventory -->
     <b-col class="d-flex flex-column h-100 w-100 py-2 partition" cols="4">
-      <b-row
-        class="h-auto w-100 m-0 p-3 align-items-center justify-content-center"
-        style="background-color: var(--main-brand)"
-      >
+      <b-row class="h-auto w-100 m-0 p-3 align-items-center justify-content-center header">
         <p class="title">Inventory</p>
       </b-row>
       <b-row
@@ -24,10 +21,7 @@
 
     <!-- discardable accomplishments -->
     <b-col class="d-flex flex-column h-100 w-100 py-2" cols="8">
-      <b-row
-        class="h-auto w-100 m-0 p-3 align-items-center justify-content-center"
-        style="background-color: var(--main-brand)"
-      >
+      <b-row class="h-auto w-100 m-0 p-3 align-items-center justify-content-center header">
         <p class="title">Discard Accomplishments</p>
       </b-row>
       <b-row
