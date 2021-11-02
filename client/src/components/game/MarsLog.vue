@@ -7,7 +7,7 @@
       <b-row class="w-100 my-2 " align-content="end">
         <!-- if there is no history to display -->
         <p v-if="logs.length === 0" class="m-5" style="color: rgba(241, 224, 197, 0.25)">
-          No Logs
+          Nothing to report.
         </p>
         <!-- log message -->
         <b-row
@@ -58,7 +58,7 @@ export default class MarsLog extends Vue {
 
   get logs() {
     if (this.orderByMostRecent) {
-      return _.orderBy(this.$tstore.getters.logs, ['timestamp'], ['desc']);
+      return _.orderBy(this.$tstore.getters.logs, ['timestamp', 'id'], ['desc', 'desc']);
     }
     return this.$tstore.getters.logs;
 }
