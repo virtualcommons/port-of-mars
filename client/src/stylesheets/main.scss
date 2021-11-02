@@ -126,3 +126,13 @@ button {
   background-color: $main-brand;
   color: $dark-shade;
 }
+
+.light-shade-25-border-right {
+  border-right: 0.2rem solid $light-shade-25;
+}
+
+.scrollable {
+  position: absolute;
+  overflow-y: auto;
+  overflow-x: hidden;
+}

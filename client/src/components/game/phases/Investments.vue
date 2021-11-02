@@ -1,14 +1,10 @@
 <template>
   <b-row class="h-100 w-100 p-0 m-0 tour-invest-action">
     <!-- invest -->
-    <b-col
-      class="d-flex flex-column h-100 w-100"
-      cols="8"
-      style="border-right: .2rem solid var(--light-shade-25);"
-    >
+    <b-col cols="8" class="d-flex flex-column h-100 w-100 light-shade-25-border-right">
       <!-- timeblocks header -->
-      <b-row class="h-auto p-3 w-100 align-items-center tour-time-blocks header">
-        <p class="mx-2 my-auto p-0">Time Blocks</p>
+      <b-row class="h-auto w-100 mx-auto p-3 tour-time-blocks header">
+        <p class="mx-2 my-auto">Time Blocks</p>
         <TimeBlockMeter
           :totalTimeBlocks="totalTimeBlocks"
           :usedTimeBlocks="remainingTimeBlocks"
@@ -20,11 +16,9 @@
         </span>
       </b-row>
       <!-- influences -->
-      <b-row
-        align-h="around"
-        class="flex-grow-1 my-1 w-100 tour-invest"
-        style="background-color: var(--light-shade-05)"
-      >
+      <!-- Investment cards are not nested in a b-col because we want to
+      align cards in a row, not column -->
+      <b-row align-h="around" class="flex-grow-1 w-100 mx-auto my-3 p-2 tour-invest backdrop">
         <InvestmentCard
           v-for="investment in investments"
           :key="investment.name"
@@ -35,27 +29,22 @@
       </b-row>
     </b-col>
     <!-- purchasable accomplishments -->
-    <b-col class="h-100 w-100 d-flex flex-column" cols="4">
+    <b-col cols="4" class="d-flex flex-column h-100 w-100">
       <!-- header -->
-      <b-row class="h-auto p-3 mx-auto w-100 justify-content-center header">
-        <p class="mx-2 my-auto p-0">Purchasable Accomplishments</p>
+      <b-row class="h-auto w-100 mx-auto p-3 justify-content-center header">
+        <p class="mx-2 my-auto">Purchasable Accomplishments</p>
       </b-row>
       <!-- accomplishments -->
-      <b-row
-        class="flex-grow-1 w-100 mx-auto my-2 p-2"
-        style="background-color: var(--light-shade-05);"
-      >
-        <div
-          class="position-absolute"
-          style="overflow-y: auto;
-               overflow-x: hidden; max-width: 90%; max-height: 80%;"
-        >
-          <AccomplishmentCard
-            v-for="accomplishment in purchasableAccomplishments"
-            :key="accomplishment.label + Math.random()"
-            :accomplishment="accomplishment"
-          ></AccomplishmentCard>
-        </div>
+      <b-row class="flex-grow-1 w-100 mx-auto my-3 p-2 backdrop">
+        <b-col>
+          <div class="h-100 p-2 scrollable">
+            <AccomplishmentCard
+              v-for="accomplishment in purchasableAccomplishments"
+              :key="accomplishment.label + Math.random()"
+              :accomplishment="accomplishment"
+            ></AccomplishmentCard>
+          </div>
+        </b-col>
       </b-row>
     </b-col>
   </b-row>
