@@ -12,26 +12,26 @@
       <!-- create equal-width cols that span multiple lines by inserting <div class="w-100" /> to break new line after
            a col https://bootstrap-vue.org/docs/components/layout#columns-b-col -->
       <div class="w-100"></div>
-      <b-col>
+      <b-row class="mx-auto">
         <b-img
           center
-          class="p-1"
           rounded="circle"
           v-bind="icon"
           :src="require(`@port-of-mars/client/assets/icons/${name}.svg`)"
           :alt="name"
         >
         </b-img>
-      </b-col>
-      <div class="w-100"></div>
-      <!-- FIXME:  adjustment for large screens?  offset-lg="3" lg="6" -->
-      <b-col>
+        <!-- </b-col> -->
+        <!-- FIXME:  adjustment for large screens?  offset-lg="3" lg="6" -->
+        <!-- <b-col style="background-color:blue"> -->
         <b-form-spinbutton
           v-model="units"
           @input="setInvestmentAmount(units)"
           :readonly="playerReady"
           min="0"
           :max="maxInfluenceInvestment"
+          vertical
+          class="mx-3"
         >
           <template #decrement>
             <b-icon-dash scale="1.25" color="white"></b-icon-dash>
@@ -40,7 +40,7 @@
             <b-icon-plus scale="1.25" color="white"></b-icon-plus>
           </template>
         </b-form-spinbutton>
-      </b-col>
+      </b-row>
       <div class="w-100"></div>
       <b-col align-self="end" cols="auto" class="mr-auto mb-2">
         <!-- pending units -->
@@ -88,8 +88,8 @@ export default class InvestmentCard extends Vue {
     center: true,
     fluid: true,
     blankColor: "#bbb",
-    width: 50,
-    height: 50
+    width: 70,
+    height: 70
   };
   units: number = 0;
 
