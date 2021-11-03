@@ -497,12 +497,10 @@ export class AddedSystemHealthContributions extends KindOnlyGameEvent {
       `At the beginning of Round ${game.round}, System Health started at ${prevSystemHealth}.`,
       MarsLogCategory.systemHealth
     );
-
     game.log(
       `Collectively, players contributed +${game.totalSystemHealthContributions()} System Health.`,
       MarsLogCategory.systemHealthContributions
     );
-
     if (game.systemHealthTaken() < 0) {
       game.log(
         `${game.systemHealthTaken()} System Health was subtracted because players purchased Accomplishments that cost System Health.`,

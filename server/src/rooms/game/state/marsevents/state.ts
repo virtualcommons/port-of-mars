@@ -82,7 +82,7 @@ export class Audit extends BaseEvent {
   finalize(game: GameState) {
     game.log(
         `All player investments and inventories are public this round. You can view each player's current Influence resources 
-         and Accomplishments by clicking each player's avatar. Investment decisions are broadcast in Chat.`,
+         and Accomplishments by clicking on their avatar. Investment decisions are broadcast in chat.`,
         `${MarsLogCategory.event}: ${formatEventName(Audit.name)}`
     );
   }
@@ -256,8 +256,8 @@ export class CompulsivePhilanthropy extends BaseEvent {
     }
     const winner: Role = _.find(this.order, (w: Role) => winners.includes(w)) || this.order[0];
     game.log(
-        `The ${winner} was voted to be Compulsive Philanthropist with ${count} votes. The ${winner} invested all 
-        of their time blocks into System Health.`,
+        `The ${winner} was voted Compulsive Philanthropist with ${count} votes. The ${winner} must invest 
+        all of their time blocks this round into System Health.`,
         `${MarsLogCategory.event}: ${formatEventName(CompulsivePhilanthropy.name)}`
     );
     game.pendingMarsEventActions.push({
@@ -292,7 +292,7 @@ export class DifficultConditions extends BaseEvent {
     for (const player of state.players) {
       player.costs.systemHealth *= 2;
     }
-    state.log(`System Health costs twice as many Time Blocks as usual this round.`, `${MarsLogCategory.event}: Difficult Conditions`)
+    state.log(`System Health costs twice as many time blocks this round.`, `${MarsLogCategory.event}: Difficult Conditions`)
   }
 }
 
@@ -478,7 +478,7 @@ export class Interdisciplinary extends BaseEvent {
     for (const role of ROLES) {
       this.makeResourcesAvailable(state.players[role].costs);
     }
-    state.log(`In this round, each player can spend 3 time blocks to earn an influence in either of the 2 influences they normally can't create.`,
+    state.log(`In this round, players can spend 3 time blocks to earn units from the 2 Influences they normally cannot earn.`,
         `${MarsLogCategory.event}: Interdisciplinary`
     );
   }
@@ -643,21 +643,18 @@ export class PersonalGain extends BaseEvent {
     this.votes[player] = vote;
   }
 
-  playerVotingInfo(voteResults: PersonalGainData): string {
-    let player = '';
-    const playerYesVotes: Array<string> = [];
-
-    for (const role of ROLES) {
-      if (voteResults[role]) {
-        player = role.toString();
-        playerYesVotes.push(player);
-      }
-    }
-    return playerYesVotes.toString();
+  /**
+   * Returns a comma separated string with all of the players that voted
+   * yes for the Personal Gain event.
+   * @param voteResults an object that maps Role->boolean where true = yes, false = no
+   * @returns 
+   */
+  yesVotePlayers(voteResults: PersonalGainData): string {
+    return ROLES.filter(role => voteResults[role]).join(', ');
   }
 
   finalize(game: GameState) {
-    const playerVotingInfo = this.playerVotingInfo(this.votes);
+    const yesVotePlayers = this.yesVotePlayers(this.votes);
     game.pendingMarsEventActions.push({
       ordering: ActionOrdering.FIRST, execute: (state) => {
         let systemHealthReduction = 0;
@@ -669,7 +666,7 @@ export class PersonalGain extends BaseEvent {
         }
         const label = this.displayName;
         state.applySystemHealthMarsEvent(new SystemHealthMarsEvent({ label, systemHealthModification: -systemHealthReduction }));
-        const message = `System health decreased by ${systemHealthReduction}. The following players voted yes: ${playerVotingInfo}`;
+        const message = `System health decreased by ${systemHealthReduction}. The following players voted yes: ${yesVotePlayers}`;
         // FIXME: push a log message method into BaseEvent that does the canned ${MarsLogCategory.event}: ${this.displayName} things
         state.log(message, `${MarsLogCategory.event}: ${label}`);
       }
@@ -688,7 +685,7 @@ export class Sandstorm extends BaseEvent {
   finalize(game: GameState): void {
     const label = this.displayName;
     game.applySystemHealthMarsEvent(new SystemHealthMarsEvent({ label, systemHealthModification: -10}));
-    game.log('A sandstorm has decreased system health by 10.', `${MarsLogCategory.event}: ${label}`);
+    game.log('A sandstorm has decreased System Health by 10.', `${MarsLogCategory.event}: ${label}`);
   }
 }
 
