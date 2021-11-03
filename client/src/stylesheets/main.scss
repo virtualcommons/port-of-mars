@@ -136,3 +136,31 @@ button {
   overflow-y: auto;
   overflow-x: hidden;
 }
+
+// CLASSES FOR LAYOUT TESTING
+// use these classes to set the background color on b-rows and b-cols
+// to help visualize the layout of a page
+
+.bg-test-red {
+  background-color: red;
+}
+
+.bg-test-yellow {
+  background-color: yellow;
+}
+
+.bg-test-orange {
+  background-color: orange;
+}
+
+.bg-test-green {
+  background-color: green;
+}
+
+.bg-test-blue {
+  background-color: blue;
+}
+
+.bg-test-purple {
+  background-color: purple;
+}
