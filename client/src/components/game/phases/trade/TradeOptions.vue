@@ -1,6 +1,6 @@
 <template>
   <b-container no-gutters fluid class="h-100">
-    <b-row align-v="stretch" align-h="around" class="h-100 w-100 text-center">
+    <b-row align-v="stretch" align-h="center" class="h-100 w-100 text-center">
       <b-col
         v-for="(value, resource) in resources"
         :key="resource"

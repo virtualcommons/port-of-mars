@@ -1,27 +1,27 @@
 <template>
   <b-container
-    class="m-2"
+    class="m-1"
     style="width: 30%; background-color: var(--dark-shade); border: 0.2rem solid var(--light-shade-25)"
   >
-    <b-row align-v="stretch" class="h-100 text-center">
-      <b-col style="color: var(--dark-shade)">
-        <p class="text-capitalize my-2" style="background-color: var(--light-shade)">
+    <b-row align-h="center" class="h-100">
+      <b-col align-self="start" style="color: var(--dark-shade)">
+        <p class="text-capitalize text-center my-2" style="background-color: var(--light-shade)">
           {{ label }}
         </p>
       </b-col>
       <!-- create equal-width cols that span multiple lines by inserting <div class="w-100" /> to break new line after
            a col https://bootstrap-vue.org/docs/components/layout#columns-b-col -->
       <div class="w-100"></div>
-      <b-row class="mx-auto">
+      <b-col align-self="center">
         <b-img
-          center
-          rounded="circle"
+          right
           v-bind="icon"
           :src="require(`@port-of-mars/client/assets/icons/${name}.svg`)"
           :alt="name"
         >
         </b-img>
-        <!-- </b-col> -->
+      </b-col>
+      <b-col align-self="center">
         <!-- FIXME:  adjustment for large screens?  offset-lg="3" lg="6" -->
         <!-- <b-col style="background-color:blue"> -->
         <b-form-spinbutton
@@ -31,7 +31,6 @@
           min="0"
           :max="maxInfluenceInvestment"
           vertical
-          class="mx-3"
         >
           <template #decrement>
             <b-icon-dash scale="1.25" color="white"></b-icon-dash>
@@ -40,14 +39,9 @@
             <b-icon-plus scale="1.25" color="white"></b-icon-plus>
           </template>
         </b-form-spinbutton>
-      </b-row>
-      <div class="w-100"></div>
-      <b-col align-self="end" cols="auto" class="mr-auto mb-2">
-        <!-- pending units -->
-        <b-icon-bag-plus scale="1.5"></b-icon-bag-plus>
-        <span v-if="pendingUnits > 0" class="mx-2" style="color: green">+ {{ pendingUnits }}</span>
       </b-col>
-      <b-col align-self="end" cols="auto" class="mb-2">
+      <div class="w-100"></div>
+      <b-col align-self="end" class="text-left mx-1 p-1">
         <!-- cost -->
         <font-awesome-icon :icon="['fas', 'clock']" size="lg"></font-awesome-icon>
         <span class="mx-2">{{ cannotAfford ? "-" : cost }}</span>
@@ -88,8 +82,8 @@ export default class InvestmentCard extends Vue {
     center: true,
     fluid: true,
     blankColor: "#bbb",
-    width: 70,
-    height: 70
+    width: 75,
+    height: 75
   };
   units: number = 0;
 
