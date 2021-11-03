@@ -101,6 +101,6 @@
     "tinyqueue": "^2.0.3",
     "typeorm": "^0.2.30",
     "uuid": "^8.3.2",
-    "validator": "^13.5.2"
+    "validator": "^13.7.0"
   }
 }
