@@ -141,8 +141,8 @@
               </h1>
               <p>
                 We will email you with further instructions if you are eligible to participate in
-                the next round. You can review your past games by clicking
-                <code>Previous Games</code>.
+                the next round. You can review your past games in the 
+                <code>Previous Games</code> tab.
               </p>
             </template>
           </b-col>
@@ -183,9 +183,9 @@
                   <h4>Previous Games</h4>
                 </template>
                 <div class="p-3 m-3 scrolling-wrapper">
-                  <p v-if="stats.games.length === 0" class="my-5 py-5">No games to display.</p>
+                  <p v-if="previousGames.length === 0" class="my-5 py-5">No games to display.</p>
                   <PlayerStatItem
-                    v-for="playerStatItem in stats.games"
+                    v-for="playerStatItem in previousGames"
                     :key="playerStatItem.time"
                     :playerStatItem="playerStatItem"
                     class="my-1 py-1">
@@ -295,6 +295,10 @@ export default class Dashboard extends Vue {
 
   get gamesPlayedCount() {
     return this.stats.games.length;
+  }
+
+  get previousGames() {
+    return _.orderBy(this.stats.games, ['time'], ['desc']);
   }
 
   get lobby() {
