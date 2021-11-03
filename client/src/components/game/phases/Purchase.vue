@@ -1,47 +1,35 @@
 <template>
   <b-row class="h-100 w-100 p-0 m-0 tour-purchase-action">
     <!-- inventory -->
-    <b-col class="d-flex flex-column w-100 py-2 partition tour-inventory" cols="4">
-      <b-row class="w-100 m-0 p-3 justify-content-center header">
-        <p class="title">Inventory</p>
+    <b-col cols="4" class="d-flex flex-column h-100 w-100 light-shade-25-partition tour-inventory">
+      <b-row class="h-auto w-100 justify-content-center mx-auto p-3 tour-time-blocks header">
+        <p class="mx-2 my-auto">Inventory</p>
       </b-row>
-      <b-row
-        class="flex-grow-1 w-100 p-3 mt-3 mx-auto"
-        style="background-color: var(--light-shade-05); overflow-y: auto; overflow-x: hidden;"
-      >
-        <div
-          class="position-absolute px-2 mb-5"
-          style="overflow-y: auto; overflow-x: hidden;
-          width: 90%"
-        >
+      <b-row class="flex-grow-1 w-100 mx-auto my-3 p-2 backdrop">
+        <b-col>
           <Inventory :isSelf="true" />
-        </div>
+        </b-col>
       </b-row>
     </b-col>
 
     <!-- purchasable accomplishments -->
-    <b-col class="d-flex flex-column h-100 w-100 py-2 tour-purchase" cols="8">
-      <b-row class="h-auto w-100 m-0 p-3 justify-content-center header">
-        <p class="title">Purchasable Accomplishments</p>
+    <b-col cols="8" class="d-flex flex-column h-100 w-100 tour-purchase">
+      <b-row class="h-auto w-100 justify-content-center mx-auto p-3 header">
+        <p class="mx-2 my-auto">Purchasable Accomplishments</p>
       </b-row>
-      <b-row
-        class="flex-grow-1 w-100 p-3 mt-2 mx-0"
-        style="background-color: var(--light-shade-05); overflow-y: auto; overflow-x: hidden;"
-      >
-        <div
-          class="position-absolute"
-          style="overflow-y: auto; overflow-x: hidden;
-               max-width: 92%; max-height: 80%;"
-        >
-          <AccomplishmentCard
-            v-for="accomplishment in sortedAccomplishments"
-            :key="accomplishment.id"
-            :accomplishment="accomplishment"
-            :showCard="wasPurchased(accomplishment.id)"
-            :type="cardType"
-            @purchased="purchase(accomplishment)"
-          ></AccomplishmentCard>
-        </div>
+      <b-row class="flex-grow-1 w-100 mx-auto my-3 p-2 backdrop">
+        <b-col>
+          <div class="h-100 p-2 scrollable">
+            <AccomplishmentCard
+              v-for="accomplishment in sortedAccomplishments"
+              :key="accomplishment.id"
+              :accomplishment="accomplishment"
+              :showCard="wasPurchased(accomplishment.id)"
+              :type="cardType"
+              @purchased="purchase(accomplishment)"
+            ></AccomplishmentCard>
+          </div>
+        </b-col>
       </b-row>
     </b-col>
   </b-row>
