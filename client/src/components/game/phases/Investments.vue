@@ -1,7 +1,7 @@
 <template>
   <b-row class="h-100 w-100 p-0 m-0 tour-invest-action">
     <!-- invest -->
-    <b-col cols="8" class="d-flex flex-column h-100 w-100 light-shade-25-border-right">
+    <b-col cols="8" class="d-flex flex-column h-100 w-100 light-shade-25-partition">
       <!-- timeblocks header -->
       <b-row class="h-auto w-100 mx-auto p-3 tour-time-blocks header">
         <p class="mx-2 my-auto">Time Blocks</p>
@@ -217,9 +217,5 @@ export default class Investments extends Vue {
 .meter {
   flex: 1;
   overflow-x: hidden;
-}
-
-.partition {
-  border-right: 0.2rem solid $light-shade-25;
 }
 </style>
