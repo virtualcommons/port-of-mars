@@ -1,18 +1,18 @@
 <template>
-  <b-row class="h-100 w-100 report tour-report" align-v="center">
+  <b-row class="h-100 w-100 m-0 p-0 report tour-report" align-v="center">
     <!-- system health report -->
-    <b-col class="d-flex flex-column h-100 w-100 system-health tour-contribute" cols="8">
+    <b-col
+      cols="8"
+      class="d-flex flex-column h-100 w-100 system-health tour-contribute light-shade-25-partition"
+    >
       <!-- header -->
-      <b-row class="h-auto w-100 my-2 mx-0 p-3 justify-content-center header">
-        <p class="my-auto p-0 mx-2" style="color: rgb(34, 26, 27)">System Health Report</p>
+      <b-row class="h-auto w-100 mx-auto p-3 justify-content-center header">
+        <p class="m-auto">System Health Report</p>
       </b-row>
 
-      <b-row
-        class="flex-grow-1 flex-column w-100 m-0 p-3 justify-content-center tour-wear-tear"
-        style="background-color: var(--light-shade-05);"
-      >
+      <b-row align-v="start" class="flex-grow-1 w-100 mx-auto  my-3 p-2 tour-wear-tear backdrop">
         <!-- text info -->
-        <b-col class="flex-shrink-1 w-100 m-0 p-0" v-if="isFirstRound">
+        <b-col v-if="isFirstRound" class="flex-shrink-1 p-2">
           <h2 class="my-2">
             Upcoming System Health:
             <b-badge :variant="systemHealthBadgeVariant(nextRoundSystemHealth)">{{
@@ -27,7 +27,7 @@
             <b-badge variant="success">{{ nextRoundSystemHealth }}</b-badge>
           </p>
         </b-col>
-        <b-col class="flex-shrink-1 w-100 m-0 p-0" v-else>
+        <b-col v-else class="flex-shrink-1 p-2">
           <p>
             In the previous round you invested
             <b class="highlighted-number">{{ yourSystemHealthContributions }}</b> and the rest of
@@ -54,47 +54,42 @@
             </b>
           </p>
         </b-col>
-        <!-- table -->
-        <b-col class="w-100 p-0 m-0">
-          <div
-            class="w-100 position-absolute m-0"
-            style="overflow-y: auto; overflow-x: hidden; max-height: 100%"
-          >
-            <b-table
+        <div class="w-100"></div>
+        <b-col class="h-75 w-100 mx-4 mb-2">
+          <div class="m-0 p-0 h-75 scrollable">
+            <b-table-lite
               :fields="tabularContributionFields"
               :items="tabularContributions"
+              fixed
               bordered
               dark
-              small
               striped
+              responsive
             >
-            </b-table>
-            <b-table
+            </b-table-lite>
+            <b-table-lite
               v-if="purchases.length > 0"
               :fields="purchaseFields"
               :items="purchases"
+              fixed
               bordered
               dark
-              small
-              sticky-header
               striped
+              responsive
             >
-            </b-table>
+            </b-table-lite>
           </div>
         </b-col>
       </b-row>
     </b-col>
     <!-- system health information -->
-    <b-col class="d-flex flex-column h-100 w-100 tour-report-hint" cols="4">
+    <b-col cols="4" class="d-flex flex-column h-100 w-100 tour-report-hint">
       <!-- header -->
-      <b-row class="h-auto w-100 my-2 mx-0 p-3 justify-content-center header">
-        <p class="my-auto p-0 mx-2" style="color: rgb(34, 26, 27)">Information</p>
+      <b-row class="h-auto w-100 mx-auto p-3 justify-content-center header">
+        <p class="m-auto">Information</p>
       </b-row>
-      <b-row
-        class="flex-grow-1 w-100 m-0 p-0 align-items-center"
-        style="background-color: var(--light-shade-05)"
-      >
-        <b-col class="w-100 m-0 p-0">
+      <b-row class="flex-grow-1 w-100 mx-auto my-3 p-2 tour-wear-tear backdrop">
+        <b-col align-self="center">
           <h4 class="mx-3 my-0">
             If System Health drops below 65, your group will encounter
             <b><span style="color: var(--light-accent)">2 events</span></b
@@ -113,7 +108,6 @@
 
 <script lang="ts">
 import { Vue } from "vue-property-decorator";
-import { PlayerClientData } from "@port-of-mars/shared/game/client/state";
 import _ from "lodash";
 import { RESOURCES, TradeAmountData } from "@port-of-mars/shared/types";
 
