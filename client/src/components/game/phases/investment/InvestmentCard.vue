@@ -1,11 +1,13 @@
 <template>
   <b-container
-    class="m-1"
     style="width: 30%; background-color: var(--dark-shade); border: 0.2rem solid var(--light-shade-25)"
   >
     <b-row align-h="center" class="h-100">
       <b-col align-self="start" style="color: var(--dark-shade)">
-        <p class="text-capitalize text-center my-2" style="background-color: var(--light-shade)">
+        <p
+          class="text-capitalize text-center my-2 p-1"
+          style="background-color: var(--light-shade)"
+        >
           {{ label }}
         </p>
       </b-col>
