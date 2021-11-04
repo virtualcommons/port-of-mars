@@ -1,10 +1,11 @@
 <template>
   <b-container fluid class="h-100 m-0 p-0">
-    <Header></Header>
-    <b-container fluid style="background-color: var(--dark-shade-75)">
-      <b-row>
-        <Messages></Messages>
-        <b-col align-self="center" cols="9">
+    <b-row class="h-auto w-100 m-0 p-0">
+      <Header></Header>
+    </b-row>
+    <b-row class="d-flex flex-grow-1 m-2">
+      <Messages></Messages>
+      <b-col align-self="center" cols="9">
         <template
           v-if="playerTaskCompletion.mustTakeIntroSurvey || playerTaskCompletion.canPlayGame"
         >
@@ -74,7 +75,7 @@
           </p>
         </template>
       </b-col>
-      <!-- splash image + missions completed -->
+    <!-- splash image + missions completed -->
       <b-col class="mt-2" align-self="end" cols="3">
         <b-img
           :src="require(`@port-of-mars/client/assets/characters/Politician.png`)"
@@ -86,24 +87,22 @@
           <b-badge variant="primary">{{ gamesPlayedCount }}</b-badge> missions.
         </p>
       </b-col>
-    </b-row>
-    <b-row class="mt-n5" no-gutters>
-      <!-- main content area -->
+      <div class="w-100"></div>
       <b-col>
         <b-tabs pills class="p-3">
-          <b-tab class="history mt-3">
+          <b-tab class="mt-3">
             <template #title>
               <h4>Tutorial</h4>
             </template>
             <p class="m-3 lead">
               Learn how to play Port of Mars by watching this brief tutorial video.
             </p>
-            <div class="w-75 mx-auto p-3">
-              <b-embed type="iframe" aspect="21by9" :src="tutorialVideoUrl" allowfullscreen>
+            <div class="mx-auto w-50">
+              <b-embed type="iframe" aspect="16by9" :src="tutorialVideoUrl" allowfullscreen>
               </b-embed>
             </div>
           </b-tab>
-          <b-tab class="history mt-3">
+          <b-tab class="mt-3">
             <template #title>
               <h4>Schedule</h4>
             </template>
@@ -126,7 +125,7 @@
               </b-table>
             </div>
           </b-tab>
-          <b-tab class="history mt-3">
+          <b-tab class="mt-3">
             <template #title>
               <h4>Previous Games</h4>
             </template>
@@ -146,8 +145,9 @@
         </b-tabs>
       </b-col>
     </b-row>
-    </b-container>
-    <Footer></Footer>
+    <b-row align-v="end" class="h-auto w-100 m-0 p-0">
+      <Footer></Footer>
+    </b-row>
   </b-container>
 </template>
 
@@ -311,7 +311,7 @@ export default class Dashboard extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .scrolling-wrapper {
   overflow-y: auto;
   overflow-x: hidden;
@@ -324,19 +324,16 @@ export default class Dashboard extends Vue {
 }
 
 .tab-content {
-  border-top: 0.1rem solid var(--light-shade-25);
+  border-top: 0.1rem solid $light-shade-25;
 }
 
 .tabs {
   text-align: left;
   margin-top: 2em;
   overflow: none;
-  background-color: var(--dark-shade);
-  border: 0.2rem solid var(--light-shade-25);
+  background-color: $dark-shade-75;
+  border: 0.2rem solid $light-shade-25;
   border-radius: 3px;
 }
 
-.history {
-  height: 32rem;
-}
 </style>

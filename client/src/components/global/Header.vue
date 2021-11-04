@@ -1,5 +1,5 @@
 <template>
-  <b-navbar toggleable="lg" type="dark" variant="primary">
+  <b-navbar toggleable="lg" type="dark" variant="primary" class="w-100">
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
     <b-collapse id="nav-collapse" is-nav>
     <b-navbar-brand :to="dashboard">
