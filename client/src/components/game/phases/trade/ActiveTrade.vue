@@ -31,6 +31,8 @@
               v-bind="investment"
               :src="require(`@port-of-mars/client/assets/icons/${name}.svg`)"
               :alt="name"
+              :title="name"
+              v-b-tooltip.hover.bottom
             />
             <p v-if="value !== 0" class="text-center my-2">{{ value }}</p>
             <p v-if="value === 0" class="text-center my-2">0</p>
@@ -53,7 +55,9 @@
             <b-img
               v-bind="investment"
               :src="require(`@port-of-mars/client/assets/icons/${name}.svg`)"
-              alt="Investment"
+              :alt="name"
+              :title="name"
+              v-b-tooltip.hover.bottom
             />
             <p v-if="value !== 0" class="text-center my-2">{{ value }}</p>
             <p v-if="value === 0" class="text-center my-2">0</p>
