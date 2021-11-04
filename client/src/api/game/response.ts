@@ -1,4 +1,6 @@
 import { Room } from "colyseus.js";
+import { DataChange, Schema } from "@colyseus/schema";
+
 import {
   AccomplishmentPurchaseData,
   ChatMessageData,
@@ -10,15 +12,13 @@ import {
   ResourceAmountData,
   Role,
   ROLES,
-  RoundIntroductionData,
   SystemHealthMarsEventData,
   TradeData
 } from "@port-of-mars/shared/types";
 import { SetError, SetPlayerRole, SetSfx } from "@port-of-mars/shared/game/responses";
-import { SfxManager } from "@port-of-mars/client/util";
-import { DataChange, Schema } from "@colyseus/schema";
 import { TStore } from "@port-of-mars/client/plugins/tstore";
 import Mutations from "@port-of-mars/client/store/mutations";
+import { SfxManager } from "@port-of-mars/client/util";
 
 type Schemify<T> = T & Schema;
 
@@ -32,7 +32,7 @@ type ServerResponse = {
   [field in keyof PlayerPrimitive]: keyof typeof Mutations;
 };
 
-const responseMap: ServerResponse = {
+const RESPONSE_MAP: ServerResponse = {
   botWarning: "SET_BOT_WARNING",
   specialty: "SET_SPECIALTY",
   timeBlocks: "SET_TIME_BLOCKS",
@@ -41,7 +41,7 @@ const responseMap: ServerResponse = {
   systemHealthChanges: "SET_SYSTEM_HEALTH_CHANGES"
 };
 
-function applyCosts(role: Role, costs: any, store: TStore) {
+function applyCostResponses(role: Role, costs: any, store: TStore) {
   costs.onChange = (changes: Array<DataChange>) => {
     for (const change of changes) {
       store.commit("SET_INVESTMENT_COST", {
@@ -93,17 +93,17 @@ function applyInventoryResponses(role: Role, inventory: any, store: TStore) {
 
 function applyPlayerResponses(role: Role, player: any, store: TStore) {
   player.onChange = (changes: Array<any>) => {
-    // filtering out any changes that have to do with the role immediately
+    // only run these for changes supported in RESPONSE_MAP
     changes
-      .filter(change => change.field != "role")
+      .filter(change => Object.keys(RESPONSE_MAP).includes(change.field))
       .forEach(change => {
         const payload = { role: player.role, data: change.value };
-        store.commit(responseMap[change.field as keyof PlayerPrimitive], payload);
+        store.commit(RESPONSE_MAP[change.field as keyof PlayerPrimitive], payload);
       });
   };
   applyInventoryResponses(role, player.inventory, store);
   applyAccomplishmentResponse(role, player.accomplishments, store);
-  applyCosts(role, player.costs, store);
+  applyCostResponses(role, player.costs, store);
 }
 
 function applyRoundIntroductionResponses(roundIntroduction: any, store: TStore) {
@@ -185,8 +185,8 @@ export function applyGameServerResponses<T>(room: Room, store: TStore, sfx: SfxM
     // FIXME: needed to bootstrap / synchronize the client side players with the server
     // but may be causing some initialization / ordering issues
     // Error: [vuex] expects string as the type but found undefined
-    (state.players as any).triggerAll();
     applyRoundIntroductionResponses(state.roundIntroduction, store);
+    (state.players as any).triggerAll();
     (state.roundIntroduction as any).triggerAll();
   });
 
@@ -244,20 +244,14 @@ export function applyGameServerResponses<T>(room: Room, store: TStore, sfx: SfxM
   // RESPONSES FOR EVENTS :: START
 
   room.state.marsEvents.onAdd = (e: Schemify<MarsEventData>, index: number) => {
-    // console.log('RESPONSE (marsEvents.onAdd): ', deschemify(e));
     store.commit("ADD_TO_EVENTS", deschemify(e));
   };
 
   room.state.marsEvents.onRemove = (e: Schemify<MarsEventData>, index: number) => {
-    // console.log('RESPONSE (marsEvents.onRemove): ', deschemify(e));
     store.commit("REMOVE_FROM_EVENTS", deschemify(e));
   };
 
   room.state.marsEvents.onChange = (event: Schemify<MarsEventData>, index: number) => {
-    // console.log('RESPONSE (marsEvents.onChange): ', {
-    //   event: deschemify(event),
-    //   index
-    // });
     store.commit("CHANGE_EVENT", { event: deschemify(event), index });
   };
 
