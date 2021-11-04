@@ -8,16 +8,11 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import Footer from "@port-of-mars/client/components/global/Footer.vue";
 import BootstrapVue from "bootstrap-vue";
 
 Vue.use(BootstrapVue);
 
-@Component({
-  components: {
-    Footer
-  }
-})
+@Component({})
 export default class App extends Vue {}
 </script>
 

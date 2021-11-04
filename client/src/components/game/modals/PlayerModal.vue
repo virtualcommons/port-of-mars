@@ -1,8 +1,8 @@
 <template>
   <b-container fluid class="h-100">
     <!-- player stats row -->
-    <b-row class="h-100 w-100">
-      <!-- player picture -->
+    <b-row class="w-100">
+      <!-- player image -->
       <b-col cols="2">
         <div class="indicator" :style="indicatorStyle">
           <div class="frame" :style="frameColor">
@@ -13,11 +13,8 @@
       <!-- information -->
       <b-col cols="6" align-self="center">
         <h3 class="role">
-          {{ playerData.isSelf ? `You (${modalData.role})` : modalData.role }}
+          {{ playerData.isSelf ? `${modalData.role} (Your Role)` : modalData.role }}
         </h3>
-      </b-col>
-      <!-- trade -->
-      <b-col cols="4">
         <b-button
           squared
           variant="outline-secondary"
@@ -255,7 +252,5 @@ img {
     font-weight: $medium;
   }
 
-  .wrapper {
-  }
 }
 </style>
