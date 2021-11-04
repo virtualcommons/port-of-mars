@@ -3,6 +3,7 @@ import {Bot, GameState, Player} from "@port-of-mars/server/rooms/game/state/inde
 import {GameEvent} from "@port-of-mars/server/rooms/game/events/types";
 import {
   AcceptedTradeRequest,
+  RejectedTradeRequest,
   BotControlRelinquished,
   BotControlTaken,
   DiscardedAccomplishment,
@@ -19,6 +20,7 @@ import {
 import {getLogger} from "@port-of-mars/server/settings";
 import _ from "lodash";
 import {downCastEventState, HeroOrPariah} from "@port-of-mars/server/rooms/game/state/marsevents/state";
+import {canPlayerMakeTrade} from "@port-of-mars/shared/validation";
 
 const logger = getLogger(__filename);
 
@@ -181,7 +183,15 @@ export class ActorRunner implements Actor {
     const events: Array<GameEvent> = [];
     for (const [id, trade] of state.tradeSet.entries()) {
       if (trade.status === 'Active' && trade.recipient.role === player.role) {
-        events.push(new AcceptedTradeRequest({id}));
+        if (canPlayerMakeTrade(trade.recipient.resourceAmount, player.inventory)) {
+          logger.debug("Bot can make trade for %o", trade.recipient.resourceAmount);
+          // FIXME: bot should reject altruistic trades
+          events.push(new AcceptedTradeRequest({id}));
+        }
+        else {
+          logger.debug("Bot rejecting invalid trade request");
+          events.push(new RejectedTradeRequest({id}))
+        }
         break;
       }
     }

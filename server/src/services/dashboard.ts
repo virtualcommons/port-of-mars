@@ -29,7 +29,6 @@ export class DashboardService extends BaseService {
   buildSurveyUrl(surveyUrl: string | undefined, user: User, invite: TournamentRoundInvite | undefined): string {
     if (invite && surveyUrl) {
       surveyUrl = `${surveyUrl}?pid=${user.participantId}&tid=${invite.id}&redirectHost=${encodeURIComponent(settings.host)}`;
-      logger.debug("survey url: %s", surveyUrl);
     }
     return surveyUrl ?? '';
   }
@@ -53,7 +52,6 @@ export class DashboardService extends BaseService {
           return currentMax;
         }
       }, 0);
-      logger.debug("max score: %s", maxScore);
       const playerScores = g.players.map((player: Player) => 
         ({ role: player.role,
            points: player.points ?? 0,
