@@ -61,17 +61,17 @@
         <template v-else>
           <h1>
             Thank you for participating!
+            <template v-if="playerTaskCompletion.shouldTakeExitSurvey">
+              <b-button :href="exitSurveyUrl" size="lg" squared variant="success">
+                Take Exit Survey
+              </b-button>
+            </template>
           </h1>
           <p>
             We will email you with further instructions if you are eligible to 
             participate in the next round. You can review your past games in the
             <code>Previous Games</code> tab.
           </p>
-          <template v-if="playerTaskCompletion.shouldTakeExitSurvey">
-            <b-button :href="exitSurveyUrl" size="lg" squared variant="success">
-              Take Exit Survey
-            </b-button>
-          </template>
         </template>
       </b-col>
       <!-- splash image + missions completed -->

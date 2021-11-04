@@ -42,7 +42,7 @@
             of the Mars Madness tournament is now open!
           </span>
         </h3>
-        <b-alert :show="tournamentRoundNumber >=1" variant="warning">
+        <b-alert :show="tournamentRoundNumber > 1" variant="warning">
           Eligible participants have been invited via email 
           to <b-badge variant="info">Round {{ tournamentRoundNumber }}</b-badge>.
         </b-alert>

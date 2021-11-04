@@ -12,7 +12,7 @@
     </b-navbar-brand>
     <h2 class="mx-auto">{{ title }}</h2>
     <b-navbar-nav class="ml-auto">
-      <b-nav-item :to="consent">Consent Form</b-nav-item>
+      <slot name="nav-items"><b-nav-item :to="consent">Consent Form</b-nav-item></slot>
       <b-nav-item :href="contactUrl">Contact Us</b-nav-item>
       <b-nav-item @click="logout">Logout</b-nav-item>
     </b-navbar-nav>
