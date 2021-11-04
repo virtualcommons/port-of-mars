@@ -16,20 +16,4 @@ dashboardRouter
     catch (e) {
       next(e);
     }
-  })
-  //this route is only for testing. it will be removed when the registration method is complete
-  .get('/createInvite', async (req, res, next) => {
-    try {
-      const tournament = getServices().tournament;
-
-      //assuming the round number is 1
-      await tournament.createInvites([(req.user as User).id], 1);
-
-      res.json({ message: "created invite for " + (req.user as User).id })
-
-    }
-    catch (e) {
-      next(e);
-    }
   });
-

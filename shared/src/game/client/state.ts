@@ -167,6 +167,9 @@ export function defaultTradeData(): TradeDataWithNull<"" | Role> {
 export interface User {
   username: string;
   passedQuiz?: boolean;
+  isVerified?: boolean;
+  dateConsented?: Date;
+  participantId?: string;
 }
 
 // NOTE :: State - userInterface
@@ -261,6 +264,7 @@ export const initialStoreState: State = {
   user: {
     username: "",
     passedQuiz: false,
+    isVerified: false,
   },
 
   // TUTORIAL TRADING

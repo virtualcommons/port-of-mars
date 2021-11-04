@@ -28,37 +28,47 @@
       </b-col>
     </b-row>
     <b-row class="mx-2">
-      <b-col align-self="start" cols="7" class="p-5">
-        <b-embed type="iframe" class="w-75" aspect="21by9" :src="trailerVideoUrl" allowfullscreen>
+      <b-col align-self="center" cols="7" class="p-1">
+        <b-embed type="iframe" aspect="21by9" :src="trailerVideoUrl" allowfullscreen>
         </b-embed>
       </b-col>
-      <b-col align-self="center" cols="5" class="text-left mt-2">
+      <b-col align-self="start" cols="5" class="text-left mt-2">
         <h3 class="subtitle">
-          The next Mars Madness tournament is coming soon! Register and get notified when it starts.
+          <span v-if="isSignUpEnabled">
+            The next Mars Madness tournament is coming soon! Register and get notified when it starts.
+          </span>
+          <span v-else>
+            <b-badge variant="info">Round {{ tournamentRoundNumber }}</b-badge>
+            of the Mars Madness tournament has begun!
+          </span>
         </h3>
         <b-form-checkbox v-model="toggleDevLogin" v-if="isDevMode" class="my-2">
           <p v-if="toggleDevLogin" class="text-uppercase">Test Mode Enabled</p>
           <p v-else class="text-uppercase">Enable Test Mode</p>
         </b-form-checkbox>
-        <b-button v-if="isLoggedIn" size="lg" variant="warning" @click="logout">
+        <b-button v-if="isAuthenticated" size="lg" variant="warning" @click="logout">
           {{ logoutText }}
         </b-button>
         <b-button
           v-else-if="!toggleDevLogin"
           :href="asuLoginUrl"
-          class="my-2"
           size="lg"
           variant="primary"
-          squared
           block
         >
-          Register for Mars Madness {{ currentYear }}
+          <b-icon class="mb-1" icon="box-arrow-right"></b-icon>
+          <span v-if="isSignUpEnabled">
+            Register for
+          </span>
+          <span v-else>
+            Participate in
+          </span>
+          Mars Madness {{ currentYear }}
         </b-button>
         <!-- register form -->
         <b-form
           inline
           v-if="isDevMode && toggleDevLogin"
-          class="justify-content-center"
           @submit="devLogin"
         >
           <b-form-input
@@ -69,7 +79,7 @@
           >
           </b-form-input>
           <b-button class="mx-2" icon type="submit" variant="success">
-            <b-icon class="mb-1 mr-2" icon="box-arrow-right"></b-icon>Sign in
+            <b-icon class="mb-1" icon="box-arrow-right"></b-icon> Sign in
           </b-button>
         </b-form>
         <b-alert v-if="error" variant="warning">{{ error }}</b-alert>
@@ -85,24 +95,24 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { url } from "@port-of-mars/client/util";
-import { isDevOrStaging } from "@port-of-mars/shared/settings";
-import Consent from "@port-of-mars/client/components/dashboard/Consent.vue";
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
+import { DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
+import { isDevOrStaging } from "@port-of-mars/shared/settings";
 
 @Component({
   components: {
-    Consent,
     Footer
   }
 })
 export default class Login extends Vue {
-  username: string = "";
-  isLoggedIn: boolean = false;
+  isSignUpEnabled: boolean = false;
   error: string = "";
   isDevMode: boolean = false;
   toggleDevLogin: boolean = false;
   currentYear = new Date().getFullYear();
   trailerVideoUrl = "https://player.vimeo.com/video/618174821?h=82fd072f73";
+  tournamentRoundNumber = 1;
+  
 
   logo = {
     center: true,
@@ -112,22 +122,43 @@ export default class Login extends Vue {
     height: 225
   };
 
-  get submitDisabled() {
-    return !this.username;
-  }
-
   get asuLoginUrl() {
     return url("/asulogin");
   }
 
   get logoutText() {
-    const username = this.$tstore.state.user.username;
-    return username ? `Logout (${username})` : `Logout (Expired)`;
+    return `Sign Out (${this.user.username})`;
   }
 
-  created() {
-    this.isLoggedIn = !!this.$ajax.username;
+  get isAuthenticated() {
+    return this.user?.username;
+  }
+
+  get user() {
+    return this.$tstore.state.user;
+  }
+
+  async created() {
+    // FIXME: this should probably come from the server when we fetchData
     this.isDevMode = isDevOrStaging();
+    await this.fetchData();
+  }
+
+  async fetchData() {
+    try {
+      await this.$ajax.get(url('/status/'), ({data, status}) => {
+        this.isSignUpEnabled = data.isSignUpEnabled;
+        this.tournamentRoundNumber = data.tournamentRoundNumber;
+        if (data.user) {
+          this.$tstore.commit('SET_USER', data.user);
+          this.$router.push({ name: DASHBOARD_PAGE });
+        }
+      });
+    }
+    catch (e) {
+      this.error = "Unable to connect to servers. Please try again later.";
+      throw e;
+    }
   }
 
   async devLogin(e: Event) {
@@ -148,7 +179,7 @@ export default class Login extends Vue {
   logout() {
     this.$ajax.forgetLoginCreds();
     this.$ajax.forgetSubmissionId();
-    this.isLoggedIn = false;
+    this.isAuthenticated = false;
   }
 }
 </script>

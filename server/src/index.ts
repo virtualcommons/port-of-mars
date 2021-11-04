@@ -9,20 +9,22 @@ import session from 'express-session';
 import connectRedis from 'connect-redis';
 import * as Sentry from '@sentry/node';
 import { Server } from 'colyseus';
+
+// shared imports
+import { LOGIN_PAGE, REGISTER_PAGE, DASHBOARD_PAGE, getPagePath } from "@port-of-mars/shared/routes";
+import { BUILD_ID, SENTRY_DSN, isDev } from '@port-of-mars/shared/settings';
+
+// server side imports
 import {GameRoom, LoadTestGameRoom} from '@port-of-mars/server/rooms/game';
 import { RankedLobbyRoom } from '@port-of-mars/server/rooms/lobby';
 import { User } from '@port-of-mars/server/entity';
-import { quizRouter } from '@port-of-mars/server/routes/quiz';
-import { dashboardRouter } from '@port-of-mars/server/routes/dashboard';
-import { LOGIN_PAGE, REGISTER_PAGE, DASHBOARD_PAGE, getPagePath } from "@port-of-mars/shared/routes";
-
-import * as fs from 'fs';
-import { registrationRouter } from "@port-of-mars/server/routes/registration";
 import { settings } from "@port-of-mars/server/settings";
-import {BUILD_ID, SENTRY_DSN, isDev} from '@port-of-mars/shared/settings';
-import {getRedis, getServices} from "@port-of-mars/server/services";
-import { gameRouter } from "@port-of-mars/server/routes/game";
-import { surveyRouter } from "@port-of-mars/server/routes/survey";
+import { getRedis, getServices } from "@port-of-mars/server/services";
+import { 
+  dashboardRouter, gameRouter,
+  quizRouter, registrationRouter, 
+  surveyRouter, statusRouter,
+} from '@port-of-mars/server/routes';
 import { ServerError } from './util';
 
 const logger = settings.logging.getLogger(__filename);
@@ -144,6 +146,7 @@ async function createApp() {
   app.use('/quiz', quizRouter);
   app.use('/dashboard', dashboardRouter);
   app.use('/registration', registrationRouter);
+  app.use('/status', statusRouter);
 
   app.get('/asulogin',
     passport.authenticate('cas', { failureRedirect: '/' }),
@@ -205,4 +208,4 @@ createConnection(CONNECTION_NAME)
   .then(async connection => {
     await createApp();
   })
-  .catch(error => console.error(error));
+  .catch(error => logger.fatal(error));
