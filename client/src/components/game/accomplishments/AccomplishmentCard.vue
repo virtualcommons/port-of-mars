@@ -6,16 +6,13 @@
         ? 'border: 0.125rem solid var(--light-accent)'
         : 'border: 0.125rem solid var(--light-shade)'
     "
+    style="background-color: var(--dark-shade)"
     :class="[isModal ? 'border: none' : 'mb-2']"
     class="p-0 mx-0"
     v-show="isActive"
   >
     <!-- title -->
-    <b-row
-      align-v="center"
-      class="w-100 mx-0 mt-2 p-0 text-center"
-      style="background-color: var(--dark-shade)"
-    >
+    <b-row align-v="center" class="w-100 mx-0 mt-2 p-0 text-center">
       <b-col
         @click="setModalData"
         :style="showCard ? 'color: black' : 'color: white'"

@@ -1,50 +1,30 @@
 <template>
   <b-container
     fluid
+    style="border: .125rem solid var(--light-shade); background-color: var(--dark-shade)"
     :class="isModal ? 'border: none' : 'mb-2'"
     class="p-0 mx-0"
     v-if="visible"
-    style="border: .125rem solid var(--light-shade)"
   >
-    <b-row
-      align-v="center"
-      class="w-100 mx-0 mt-2 p-0 text-center"
-      style="background-color: var(--dark-shade)"
-    >
+    <b-row align-v="center" class="w-100 mx-0 mt-2 p-0 text-center">
       <!-- Event name | Active event indicator -->
       <b-col style="cursor: pointer" @click="setModalData">
         <h5 class="p-2 text-center" style="background-color: var(--light-shade); color: black">
           {{ event.name }}
         </h5>
-        <font-awesome-icon
-          :icon="['far', 'dot-circle']"
-          class="icontwo animated pulse infinite"
-          size="lg"
-          v-if="showActiveIndicator"
-        />
+        <b-badge v-if="showActiveIndicator" variant="success">
+          Active
+        </b-badge>
       </b-col>
       <!-- Equal-width columns that span multiple lines: https://bootstrap-vue.org/docs/components/layout#comp-ref-b-col -->
       <div class="w-100"></div>
-      <!-- </b-row> -->
 
-      <!-- Event description -->
-      <!-- <b-row
-      class="w-100 justify-content-center mx-auto flex-grow-1"
-      :class="isModal ? 'pt-4 px-3' : 'p-3'"
-      style="background-color: var(--dark-shade)"
-    > -->
       <b-col :class="isModal ? 'pt-4 px-3' : 'p-3'" class="w-100 p-0 m-0 text-center">
         <p>{{ event.effect !== "" ? event.effect : "No special effect" }}</p>
       </b-col>
-      <div class="w-100"></div>
-      <!-- </b-row> -->
 
-      <!-- Event duration -->
-      <!-- <b-row
-      class="w-100 justify-content-center mx-auto"
-      :class="isModal ? 'pt-1' : 'pb-3'"
-      :style="'background-color: #221A1B'"
-    > -->
+      <div class="w-100"></div>
+
       <b-col :class="isModal ? 'pt-1' : 'pb-3'" class="w-100 p-0 m-0 text-center">
         <p>
           Duration:
@@ -54,10 +34,9 @@
           <b>{{ event.duration }}</b> Round(s)
         </p>
       </b-col>
-      <div class="w-100"></div>
-      <!-- </b-row> -->
 
-      <!-- buttons -->
+      <div class="w-100"></div>
+
       <b-row class="w-100 mx-auto my-4" v-if="wasSpawnedByServer">
         <b-col v-if="requiresInteraction">
           <b-button squared @click="closeModal" variant="outline-secondary">Interact</b-button>
