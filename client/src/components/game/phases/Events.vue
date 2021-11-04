@@ -1,43 +1,38 @@
 <template>
-  <b-row class="h-100 w-100 m-0 p-3">
-    <b-col class="d-flex flex-column h-100 w-100 partition" cols="4">
+  <b-row class="h-100 w-100 m-0 p-0">
+    <b-col class="d-flex flex-column w-100 py-2 light-shade-25-partition">
       <!-- events | active accomplishments -->
 
       <!-- toggle events or active accomplishments -->
       <b-row class="h-auto w-100 m-0 p-3 justify-content-center header">
         <b-col class="h-100 w-100 text-center my-auto p-0 mx-0" cols="6">
-          <p class="m-auto">Current Events</p>
+          <p class="m-auto">Active Events</p>
         </b-col>
       </b-row>
       <!-- event deck -->
-      <b-row class="flex-grow-1 w-100 mx-auto mt-3" style="background-color: var(--light-shade-05)">
-        <div
-          class="position-absolute p-3  event-scroll"
-          style="overflow-y: auto; overflow-x: hidden;
-             height: 80%; width: 92%;"
-        >
-          <EventCard
-            v-for="(event, index) in eventsForTheRound"
-            :key="index"
-            :active="eventActive(index)"
-            :event="event"
-            :visible="eventVisible(index)"
-            class="my-2"
-          ></EventCard>
-        </div>
+      <b-row align-v="stretch" class="flex-grow-1 w-100 my-3 mx-auto backdrop">
+        <b-col>
+          <div class="h-100 p-2 scrollable" style="width: 90%">
+            <EventCard
+              v-for="(event, index) in eventsForTheRound"
+              :key="index"
+              :active="eventActive(index)"
+              :event="event"
+              :visible="eventVisible(index)"
+              class="my-2"
+            ></EventCard>
+          </div>
+        </b-col>
       </b-row>
     </b-col>
 
-    <b-col class="d-flex flex-column h-100 w-100" cols="8">
-      <b-row class="w-100 m-0 p-3 justify-content-center header">
+    <b-col cols="8" class="d-flex flex-column h-100 w-100 py-2">
+      <b-row class="h-auto w-100 mx-auto p-3 justify-content-center header">
         <p class="m-auto">
           {{ eventTitle }}
         </p>
       </b-row>
-      <b-row
-        class="flex-grow-1 w-100 mx-auto mt-3 p-3"
-        style="background-color: var(--light-shade-05)"
-      >
+      <b-row align-v="stretch" class="flex-grow-1 w-100 my-3 mx-auto backdrop">
         <EventContainer :key="eventNumber" :event="currentEvent"></EventContainer>
       </b-row>
     </b-col>
