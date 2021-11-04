@@ -8,8 +8,15 @@
   >
     <!-- header -->
     <b-row class="h-auto w-100 mx-auto">
-      <p class="w-100 text-center p-1" :style="[textColor, statusColor('backgroundColor')]">
+      <p
+        v-if="active"
+        class="w-100 text-center p-1"
+        :style="[textColor, statusColor('backgroundColor')]"
+      >
         New Trade Request
+      </p>
+      <p v-else class="w-100 text-center p-1" :style="[textColor, statusColor('backgroundColor')]">
+        Trade {{ status }}
       </p>
     </b-row>
     <!-- trade info -->
@@ -90,10 +97,6 @@
         >
           Cancel
         </b-button>
-      </b-col>
-      <!-- trade status -->
-      <b-col v-else :style="statusColor('color')">
-        <p>Trade Status: {{ status }}</p>
       </b-col>
     </b-row>
   </b-container>
