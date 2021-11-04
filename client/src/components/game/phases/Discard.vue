@@ -3,7 +3,7 @@
     <!-- inventory -->
     <b-col cols="5" class="d-flex flex-column w-100 py-2 light-shade-25-partition tour-inventory">
       <b-row class="h-auto w-100 mx-auto p-3 justify-content-center header">
-        <p class="title">Inventory</p>
+        <p class="m-auto">Inventory</p>
       </b-row>
       <b-row align-v="stretch" class="flex-grow-1 w-100 my-3 mx-auto backdrop">
         <div class="scrollable" style="width: 90%">
@@ -15,7 +15,7 @@
     <!-- discardable accomplishments -->
     <b-col cols="7" class="d-flex flex-column h-100 w-100 py-2 tour-purchase">
       <b-row class="h-auto w-100 mx-auto p-3 justify-content-center header">
-        <p class="title">Discardable Accomplishments</p>
+        <p class="m-auto">Discardable Accomplishments</p>
       </b-row>
       <b-row align-v="stretch" class="flex-grow-1 w-100 my-3 mx-auto backdrop">
         <b-col>
