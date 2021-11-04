@@ -17,9 +17,9 @@
       <b-row class="h-auto w-100 mx-auto p-3 justify-content-center header">
         <p class="m-auto">Purchasable Accomplishments</p>
       </b-row>
-      <b-row align-v="stretch" class="flex-grow-1 w-100 my-3 mx-auto backdrop">
+      <b-row align-v="stretch" class="flex-grow-1 flex-column w-100 mx-auto my-3 p-2 backdrop">
         <b-col>
-          <div class="h-100 p-2 scrollable" style="width: 90%">
+          <div class="h-100 p-2 scrollable" style="width: 95%">
             <AccomplishmentCard
               v-for="accomplishment in sortedAccomplishments"
               :key="accomplishment.id"

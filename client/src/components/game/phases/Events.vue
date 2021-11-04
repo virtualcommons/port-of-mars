@@ -10,9 +10,9 @@
         </b-col>
       </b-row>
       <!-- event deck -->
-      <b-row align-v="stretch" class="flex-grow-1 w-100 my-3 mx-auto backdrop">
+      <b-row class="flex-grow-1 flex-column w-100 mx-auto my-3 p-2 backdrop">
         <b-col>
-          <div class="h-100 p-2 scrollable" style="width: 90%">
+          <div class="h-100 p-2 scrollable sort-events" style="width: 95%">
             <EventCard
               v-for="(event, index) in eventsForTheRound"
               :key="index"
@@ -90,7 +90,7 @@ export default class Events extends Vue {
   }
 
   updated() {
-    let elem = this.$el.querySelector(".event-scroll");
+    let elem = this.$el.querySelector(".sort-events");
     if (elem) {
       elem!.scrollTop = elem!.scrollHeight;
     }
@@ -134,8 +134,8 @@ export default class Events extends Vue {
 
   // NOTE :: ACCOMPLISHMENT CARDS
 
-  eventActive(ind: number) {
-    return this.$tstore.state.phase === Phase.events && ind == this.eventsProcessed;
+  eventActive(index: number) {
+    return this.$tstore.state.phase === Phase.events && index == this.eventsProcessed;
   }
 }
 </script>

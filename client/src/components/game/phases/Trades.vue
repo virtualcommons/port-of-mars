@@ -26,7 +26,7 @@
     <!-- trade list -->
     <b-row class="flex-grow-1 flex-column w-100 mx-auto my-3 p-2 backdrop">
       <b-col>
-        <div class="h-100 scrollable p-2" style="width: 98%">
+        <div class="h-100 scrollable p-2" style="width: 95%">
           <ActiveTrade
             :key="trade.id"
             :participant="associatedWithTrade(trade)"
