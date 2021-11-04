@@ -139,7 +139,7 @@ async function createApp() {
     res.cookie('connect.sid', _sessionId, { signed: true });
     const sessionCookie: any = res.getHeaders()['set-cookie'];
     logger.info(sessionCookie);
-    res.json({ username: (req.user as User).username, sessionCookie });
+    res.json({ user: req.user, sessionCookie });
   });
   app.use('/survey', surveyRouter);
   app.use('/game', gameRouter);

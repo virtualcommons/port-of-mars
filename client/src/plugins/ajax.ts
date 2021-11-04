@@ -7,34 +7,10 @@ import { LOGIN_PAGE, DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
 import { DashboardMessage } from "@port-of-mars/shared/types";
 import { url } from "@port-of-mars/client/util";
 
-interface RoomListingData<Metadata = any> {
-  clients: number;
-  locked: boolean;
-  private: boolean;
-  maxClients: number;
-  metadata: Metadata;
-  name: string;
-  processId: string;
-  roomId: string;
-
-  updateOne(operations: any): any;
-
-  save(): any;
-
-  remove(): any;
-}
-
 declare module 'vue/types/vue' {
   interface Vue {
     $ajax: AjaxRequest;
   }
-}
-
-const SUBMISSION_ID = 'submissionId';
-
-interface LoginCreds {
-  sessionCookie: string
-  username: string
 }
 
 interface ResponseData<T = any> {
@@ -49,6 +25,8 @@ export class AjaxResponseError extends Error {
     super(data.message);
   }
 }
+
+const SUBMISSION_ID = 'submissionId';
 
 export class AjaxRequest {
   constructor(private router: VueRouter, private store: TStore) {
@@ -70,15 +48,11 @@ export class AjaxRequest {
     return this._roomId
   }
 
-  setLoginCreds(loginCredentials: { username: string }) {
-    this.store.commit('SET_USER', loginCredentials);
-  }
-
   async devLogin(formData: { username: string, password: string }) {
     const devLoginUrl = url('/login');
     await this.post(devLoginUrl, ({ data, status }) => {
       if (status === 200) {
-        this.setLoginCreds(data);
+        this.store.commit("SET_USER", data.user);
         this.router.push({ name: DASHBOARD_PAGE });
       } else {
         return data;
@@ -91,7 +65,7 @@ export class AjaxRequest {
   }
 
   setQuizCompletion(passedQuiz: boolean) {
-    this.store.commit('SET_USER', { username: this.username, passedQuiz });
+    // no-op
   }
 
   async denyConsent() {
@@ -127,6 +101,7 @@ export class AjaxRequest {
 
   private async handleResponse(response: Response): Promise<ResponseData> {
     // ASSUMPTION we always receive JSON back from the server given an ajax request
+    // so server side should never do a res.redirect(..) for instance
     console.log("RECEIVED RESPONSE: ")
     console.log(response);
     const data = await response.json();
