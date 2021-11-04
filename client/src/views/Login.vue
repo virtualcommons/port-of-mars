@@ -1,5 +1,5 @@
 <template>
-  <b-container fluid class="h-100 m-0 p-0">
+  <b-container fluid>
     <b-row v-if="isDevMode" class="w-100 m-0 p-0" align-v="start" align-h="start">
       <b-alert class="text-center w-100 p-0" show variant="warning">
         <p class="mt-2">
@@ -39,9 +39,13 @@
           </span>
           <span v-else>
             <b-badge variant="info">Round {{ tournamentRoundNumber }}</b-badge>
-            of the Mars Madness tournament has begun!
+            of the Mars Madness tournament is now open!
           </span>
         </h3>
+        <b-alert :show="tournamentRoundNumber >=1" variant="warning">
+          Eligible participants have been invited via email 
+          to <b-badge variant="info">Round {{ tournamentRoundNumber }}</b-badge>.
+        </b-alert>
         <b-form-checkbox v-model="toggleDevLogin" v-if="isDevMode" class="my-2">
           <p v-if="toggleDevLogin" class="text-uppercase">Test Mode Enabled</p>
           <p v-else class="text-uppercase">Enable Test Mode</p>
@@ -85,9 +89,6 @@
         <b-alert v-if="error" variant="warning">{{ error }}</b-alert>
       </b-col>
     </b-row>
-    <!-- align Footer to bottom of viewport using Bootstrap fixed-bottom utility 
-        https://getbootstrap.com/docs/4.4/utilities/position/#fixed-bottom
-    -->
     <Footer class="fixed-bottom"></Footer>
   </b-container>
 </template>
@@ -190,6 +191,10 @@ a {
   text-decoration: none;
 }
 
+a:hover {
+  color: inherit;
+}
+
 .title {
   letter-spacing: 0.25rem;
   font-size: 5rem;
@@ -201,12 +206,6 @@ a {
   font-size: 2rem;
   font-weight: 500;
   color: white;
-}
-
-section {
-  scroll-snap-align: start;
-  height: 100vh;
-  width: 100vw;
 }
 
 // LOGIN :: FORM
