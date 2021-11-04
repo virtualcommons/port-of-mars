@@ -14,7 +14,7 @@
     <b-navbar-nav class="ml-auto">
       <slot name="nav-items"><b-nav-item :to="consent">Consent Form</b-nav-item></slot>
       <b-nav-item :href="contactUrl">Contact Us</b-nav-item>
-      <b-nav-item @click="logout">Logout ( {{username}} )</b-nav-item>
+      <b-nav-item @click="logout">Logout</b-nav-item>
     </b-navbar-nav>
     </b-collapse>
   </b-navbar>
@@ -41,7 +41,7 @@ export default class Header extends Vue {
   login = { name: LOGIN_PAGE };
 
   get username() {
-    console.log("user: ", this.$tstore.state.user);
+    console.log("store user: ", this.$tstore.state.user);
     return this.$tstore.state.user.username;
   }
 

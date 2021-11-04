@@ -108,6 +108,7 @@ export class AjaxRequest {
     if (response.status >= 400) {
       // something badwrong happened on the server side that we were not expecting.
       // push the error onto the store and move on.
+      console.error("error response from server: ", response);
       const serverErrorMessage: DashboardMessage = data;
       this.store.commit('SET_DASHBOARD_MESSAGE', serverErrorMessage);
       if (response.status > 400) {

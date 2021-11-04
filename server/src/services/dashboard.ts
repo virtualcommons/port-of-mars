@@ -1,7 +1,7 @@
 import { User } from '@port-of-mars/server/entity/User';
 import {Stats} from "@port-of-mars/shared/types";
 import { TournamentRound } from "@port-of-mars/server/entity/TournamentRound";
-import { Game, TournamentRoundInvite } from "@port-of-mars/server/entity";
+import { Game, Player, TournamentRoundInvite } from "@port-of-mars/server/entity";
 import { BaseService } from "@port-of-mars/server/services/db";
 import {IsNull, Not, SelectQueryBuilder} from "typeorm";
 import { PlayerTaskCompletion, DashboardData } from "@port-of-mars/shared/types";
@@ -46,22 +46,22 @@ export class DashboardService extends BaseService {
       });
 
     const previousGames: Stats['games'] = games.map(g => {
-      const maxScore = g.players.reduce((ms, player) => {
-        if (player.points ?? 0 > ms) {
+      const maxScore = g.players.reduce((currentMax: number, player: Player) => {
+        if (player.points ?? 0 > currentMax) {
           return player.points ?? 0;
         } else {
-          return ms;
+          return currentMax;
         }
       }, 0);
       logger.debug("max score: %s", maxScore);
-      const playerScores = g.players.map(player => 
+      const playerScores = g.players.map((player: Player) => 
         ({ role: player.role,
            points: player.points ?? 0,
            winner: (player.points === maxScore),
            isSelf: player.userId === user.id,
         })
       );
-      // sort in descending order
+      // sort players by points descending
       playerScores.sort((a, b) => b.points - a.points);
 
       return {
@@ -73,7 +73,6 @@ export class DashboardService extends BaseService {
       }
     });
     const history = _.sortBy(previousGames, ['time'], ['desc']);
-    logger.debug("history in descending order: %s", history);
     return { games: history }
   }
 

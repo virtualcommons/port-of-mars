@@ -1194,25 +1194,6 @@ export class Player
     this.pendingInvestments.reset();
   }
 
-  canPlayerMakeTrade(
-    resourcesToTrade: ResourceAmountData,
-    inventory: ResourceAmountData
-  ): boolean {
-    let canMakeTrade = true;
-    let isTradingSomething = false;
-    for (const resource of RESOURCES) {
-      if (resourcesToTrade[resource] > inventory[resource]) {
-        canMakeTrade = false;
-        break;
-      }
-      if (resourcesToTrade[resource] >= 0) {
-        // make sure that at least one resource is being traded
-        isTradingSomething = true;
-      }
-    }
-    return canMakeTrade && isTradingSomething;
-  }
-
   /**
    * Returns true if the given playerData has enough resources to send a trade request
    * for the given tradeAmount
