@@ -1,7 +1,7 @@
 <template>
   <b-container
     fluid
-    :class="!active ? 'h-100 m-0 p-0 hide-trade' : 'h-100 m-0 p-0 backdrop'"
+    :class="!active ? 'mb-2 p-0 hide-trade' : 'mb-2 p-0 backdrop'"
     :style="statusColor('borderColor')"
     style="border: .125rem solid"
     v-show="show"
@@ -13,68 +13,20 @@
       </p>
     </b-row>
     <!-- trade info -->
-    <b-row class="d-flex flex-grow-1 w-100 mx-auto">
-      <!-- to -->
-      <b-col cols="5">
-        <b-row align-h="center" align-v="center" class="w-100">
-          <div :style="borderStyle(recipient.role)" class="outer-frame">
-            <div :style="frameStyle(recipient.role)" class="inner-frame">
-              <b-img
-                v-bind="player"
-                :src="require(`@port-of-mars/client/assets/characters/${recipient.role}.png`)"
-                :alt="recipient.role"
-              />
-            </div>
-          </div>
-          <p>{{ recipient.role }} requests</p>
-        </b-row>
-        <b-row align-h="between" class="my-2">
-          <b-col
-            align-v="center"
-            :key="name"
-            class="wrapper"
-            v-for="(value, name) in recipient.resourceAmount"
-          >
-            <b-img
-              v-bind="investment"
-              :src="require(`@port-of-mars/client/assets/icons/${name}.svg`)"
-              alt="Investment"
-            />
-            <p v-if="value !== 0" class="text-center my-2">{{ value }}</p>
-            <p v-if="value === 0" class="text-center my-2">0</p>
-          </b-col>
-        </b-row>
-      </b-col>
-
-      <b-col cols="2" class="text-center my-auto">
-        <font-awesome-icon
-          :icon="['fas', 'exchange-alt']"
-          class="m-auto p-0"
-          size="lg"
-        ></font-awesome-icon>
-      </b-col>
-
+    <b-row align-h="around" align-v="center" class="h-auto w-100 mx-3">
       <!-- from -->
-      <b-col cols="5">
-        <b-row align-h="center" align-v="center" class="w-100">
-          <div :style="borderStyle(sender.role)" class="outer-frame">
-            <div :style="frameStyle(sender.role)" class="inner-frame">
-              <b-img
-                v-bind="player"
-                :src="require(`@port-of-mars/client/assets/characters/${sender.role}.png`)"
-                :alt="sender.role"
-              />
-            </div>
-          </div>
-          <p class="mx-2">{{ sender.role }} offers</p>
+      <b-col cols="auto" class="w-50">
+        <b-row align-h="start" align-v="center" class="w-100" :style="frameStyle(sender.role)">
+          <b-img
+            v-bind="player"
+            :src="require(`@port-of-mars/client/assets/characters/${sender.role}.png`)"
+            :alt="sender.role"
+          />
+          <p>{{ sender.role }} offers</p>
         </b-row>
-        <b-row align-h="between" class="my-2">
-          <b-col
-            align-v="center"
-            :key="name"
-            class="wrapper"
-            v-for="(value, name) in sender.resourceAmount"
-          >
+
+        <b-row align-h="around" class="w-100 my-1 backdrop">
+          <b-col :key="name" v-for="(value, name) in sender.resourceAmount" class="pt-2">
             <b-img
               v-bind="investment"
               :src="require(`@port-of-mars/client/assets/icons/${name}.svg`)"
@@ -85,9 +37,32 @@
           </b-col>
         </b-row>
       </b-col>
+
+      <!-- to -->
+      <b-col cols="auto" class="w-50">
+        <b-row align-h="end" align-v="center" class="w-100" :style="frameStyle(recipient.role)">
+          <p>Request from {{ recipient.role }}</p>
+          <b-img
+            v-bind="player"
+            :src="require(`@port-of-mars/client/assets/characters/${recipient.role}.png`)"
+            :alt="recipient.role"
+          />
+        </b-row>
+        <b-row align-h="around" class="w-100 my-1 backdrop">
+          <b-col :key="name" v-for="(value, name) in recipient.resourceAmount" class="pt-2">
+            <b-img
+              v-bind="investment"
+              :src="require(`@port-of-mars/client/assets/icons/${name}.svg`)"
+              alt="Investment"
+            />
+            <p v-if="value !== 0" class="text-center my-2">{{ value }}</p>
+            <p v-if="value === 0" class="text-center my-2">0</p>
+          </b-col>
+        </b-row>
+      </b-col>
     </b-row>
     <!-- buttons / trade request status -->
-    <b-row class="h-auto w-100 mb-2 text-center">
+    <b-row class="h-auto w-100 mx-0 my-2 text-center">
       <!-- accept or reject -->
       <b-col v-if="active">
         <b-button-group v-if="role === recipient.role && role !== sender.role">
@@ -161,8 +136,8 @@ export default class ActiveTrade extends Vue {
     center: true,
     fluid: true,
     blankColor: "#bbb",
-    width: 40,
-    height: 40
+    width: 30,
+    height: 30
   };
 
   player = {

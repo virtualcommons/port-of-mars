@@ -1,5 +1,5 @@
 <template>
-  <b-row class="h-100 w-100 p-0 m-0">
+  <b-row class="h-100 w-100 m-0 p-0">
     <transition name="component-fade" mode="out-in">
       <component :is="phase[gamePhase]"></component>
     </transition>
@@ -39,7 +39,7 @@ export default class Phases extends Vue {
 
   @Watch("gamePhase", { immediate: true })
   hideGameModal() {
-      this.$root.$emit("bv::hide::modal", "gameModal");
+    this.$root.$emit("bv::hide::modal", "gameModal");
   }
 }
 </script>

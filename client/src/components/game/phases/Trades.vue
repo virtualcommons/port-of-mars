@@ -24,18 +24,17 @@
       </b-col>
     </b-row>
     <!-- trade list -->
-    <b-row
-      class="flex-grow-1  flex-column w-100 justify-content-start align-items-center
-           p-0 mx-0 mt-2 mb-0 backdrop"
-    >
-      <div class="scrollable p-2" style="width: 95%">
-        <ActiveTrade
-          :key="trade.id"
-          :participant="associatedWithTrade(trade)"
-          v-bind="trade"
-          v-for="trade in trades"
-        ></ActiveTrade>
-      </div>
+    <b-row class="flex-grow-1 flex-column w-100 mx-auto my-3 p-2 backdrop">
+      <b-col>
+        <div class="h-100 scrollable p-2" style="width: 98%">
+          <ActiveTrade
+            :key="trade.id"
+            :participant="associatedWithTrade(trade)"
+            v-bind="trade"
+            v-for="trade in trades"
+          ></ActiveTrade>
+        </div>
+      </b-col>
     </b-row>
   </b-row>
 </template>
