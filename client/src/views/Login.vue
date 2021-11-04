@@ -177,8 +177,8 @@ export default class Login extends Vue {
     }
   }
 
-  logout() {
-    this.$ajax.forgetLoginCreds();
+  async logout() {
+    await this.$ajax.forgetLoginCreds();
     this.$ajax.forgetSubmissionId();
   }
 }

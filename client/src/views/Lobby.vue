@@ -92,12 +92,15 @@ export default class Lobby extends Vue {
       await this.$router.push({ name: REGISTER_PAGE });
       return;
     }
-    // go to tutorial if player has not taken tutorial
+    // XXX: currently disabled: go to tutorial if player has not taken tutorial
+    /*
     else if (playerTaskCompletion.mustTakeTutorial) {
       dashboardAPI.message("Please take the tutorial before joining the lobby to participate.");
       await this.$router.push({ name: TUTORIAL_PAGE });
       return;
-    } else if (playerTaskCompletion.mustTakeIntroSurvey) {
+    } 
+    */
+    else if (playerTaskCompletion.mustTakeIntroSurvey) {
       dashboardAPI.message(
         "Please take the introductory survey before joining the lobby to participate."
       );

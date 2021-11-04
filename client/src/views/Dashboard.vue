@@ -1,23 +1,6 @@
 <template>
   <b-container fluid class="h-100 m-0 p-0">
-    <b-navbar toggleable="lg" type="dark" variant="primary">
-      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-      <b-collapse id="nav-collapse" is-nav>
-        <b-navbar-brand :to="dashboard">
-          <b-img
-            v-bind="portOfMarsLogoProps"
-            :src="require(`@port-of-mars/client/assets/background/logo.png`)"
-            alt="Port of Mars"
-            >
-          </b-img>
-        </b-navbar-brand>
-        <h2 class="mx-auto">Mission Control Dashboard</h2>
-        <b-navbar-nav class="ml-auto">
-          <b-nav-item :href="contactUrl">Contact Us</b-nav-item>
-          <b-nav-item @click="logout">Logout</b-nav-item>
-        </b-navbar-nav>
-      </b-collapse>
-    </b-navbar>
+    <Header></Header>
     <b-container fluid style="background-color: var(--dark-shade-75)">
       <b-row class="m-0 p-0">
         <Messages></Messages>
@@ -178,7 +161,6 @@ import { GameMeta, PlayerTaskCompletion, Stats } from "@port-of-mars/shared/type
 import {
   REGISTER_PAGE,
   LOBBY_PAGE,
-  LOGIN_PAGE,
   SIGNEDUP_PAGE,
   TUTORIAL_PAGE,
   DASHBOARD_PAGE
@@ -187,6 +169,7 @@ import {
 import { DashboardAPI } from "@port-of-mars/client/api/dashboard/request";
 import PlayerStatItem from "@port-of-mars/client/components/dashboard/PlayerStatItem.vue";
 import Messages from "@port-of-mars/client/components/dashboard/Messages.vue";
+import Header from "@port-of-mars/client/components/global/Header.vue";
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
 import _ from "lodash";
 
@@ -195,6 +178,7 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 @Component({
   components: {
+    Header,
     PlayerStatItem,
     Messages,
     Footer
@@ -230,14 +214,7 @@ export default class Dashboard extends Vue {
   ];
   stats: Stats = { games: [] };
 
-  portOfMarsLogoProps = {
-    blankColor: "#bbb",
-    height: 50,
-  };
-
-  contactUrl = "mailto:portmars@asu.edu";
   tutorialVideoUrl = "https://player.vimeo.com/video/642036661?h=2295c303de&autoplay=1&autopause=1";
-
 
   get username() {
     console.log("user? ", this.$tstore.state.user);
@@ -299,10 +276,12 @@ export default class Dashboard extends Vue {
       await this.$router.push({ name: SIGNEDUP_PAGE });
     }
 
+    /*
     // go to tutorial if player has not taken tutorial
     else if (data.playerTaskCompletion.mustTakeTutorial) {
       await this.$router.push({ name: TUTORIAL_PAGE });
     }
+    */
 
     // set survey URLs
     this.$set(this, "introSurveyUrl", data.introSurveyUrl);
@@ -326,11 +305,6 @@ export default class Dashboard extends Vue {
       };
     });
     this.loading = false;
-  }
-
-  logout(): void {
-    this.$ajax.forgetLoginCreds();
-    this.$router.push({ name: LOGIN_PAGE });
   }
 }
 </script>
