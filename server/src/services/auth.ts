@@ -8,19 +8,20 @@ export class AuthService extends BaseService {
   async checkUserCanPlayGame(userId: number, tournamentRoundId?: number): Promise<boolean> {
     if (!tournamentRoundId) {
       const tournamentService = this.sp.tournament;
-      tournamentRoundId = (await tournamentService.getCurrentTournamentRound())?.id
+      const currentRound = await tournamentService.getCurrentTournamentRound();
+      tournamentRoundId = currentRound.id;
     }
-
-    // select TournamentRoundInvite. 
-    const r = await this.em
+    // check that the given User has a valid TournamentRoundInvite 
+    // that hasn't already been marked as participated
+    const result = await this.em
       .createQueryBuilder()
       .from(User, 'user')
       .innerJoin('user.invites', 'invite')
       .innerJoin('invite.tournamentRound', 'round')
-      .where(`user.id = :userId and round.id = :tournamentRoundId and not invite.hasParticipated and user.passedQuiz`, { userId, tournamentRoundId })
-      .select('count(*) > 0', 'n')
+      .where(`user.id = :userId and round.id = :tournamentRoundId and not invite.hasParticipated`, { userId, tournamentRoundId })
+      .select('count(*) > 0', 'validInvitation')
       .getRawOne();
-    logger.info("user %s can play the game? %o", userId, r?.n);
-    return r?.n ? r.n : false;
+    logger.info("user %s can play the game? %o", userId, result?.validInvitation);
+    return result?.validInvitation ? result.validInvitation : false;
   }
 }
