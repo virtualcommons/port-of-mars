@@ -2,7 +2,7 @@
   <b-container fluid class="h-100 m-0 p-0">
     <Header></Header>
     <b-container fluid style="background-color: var(--dark-shade-75)">
-      <b-row class="m-0 p-0">
+      <b-row>
         <Messages></Messages>
         <b-col align-self="center" cols="9">
         <template
@@ -48,7 +48,7 @@
         </template>
         <!-- invite + participation status -->
         <template v-else-if="!playerTaskCompletion.hasInvite">
-          <h1 class="mt-5 py-2">
+          <h1 class="mt-3 py-2">
             Invitation not found
           </h1>
           <p class="lead">
@@ -87,11 +87,11 @@
         </p>
       </b-col>
     </b-row>
-    <b-row no-gutters>
+    <b-row class="mt-n5" no-gutters>
       <!-- main content area -->
       <b-col>
         <b-tabs pills class="p-3">
-          <b-tab class="mt-3">
+          <b-tab class="history mt-3">
             <template #title>
               <h4>Tutorial</h4>
             </template>
@@ -107,16 +107,16 @@
             <template #title>
               <h4>Schedule</h4>
             </template>
-            <div class="m-3 lead">
+            <p class="m-3 lead">
               Please sign in during <b>one</b> of the following times to participate. We
               recommend that you show up 5 minutes earlier to join the waiting lobby.
-            </div>
+            </p>
             <div style="overflow-y: auto !important">
-              <b-table :items="schedule" bordered stacked="md" small dark striped show-empty>
+              <b-table :items="schedule" stacked="md" dark bordered show-empty>
                 <template #empty="scope">
-                  <b-alert class="mt-3" variant="info" show
-                    >No games have been scheduled. Please check again later!</b-alert
-                  >
+                  <b-alert class="mt-2 lead" variant="info" show>
+                    No upcoming games on the schedule at this time. Please check again later!
+                  </b-alert>
                 </template>
                 <template v-slot:cell(addToCalendar)="data">
                   <a :href="inviteLink(data.item.addToCalendar)" target="_blank">
@@ -130,8 +130,10 @@
             <template #title>
               <h4>Previous Games</h4>
             </template>
+            <p v-if="previousGames.length === 0" class='m-3 lead'>
+              No games to display.
+            </p>
             <div class="p-3 m-3 scrolling-wrapper">
-              <p v-if="previousGames.length === 0" class="my-5 py-5">No games to display.</p>
               <PlayerStatItem
                 v-for="playerStatItem in previousGames"
                 :key="playerStatItem.time"

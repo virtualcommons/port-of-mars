@@ -16,14 +16,17 @@
         <b-spinner small type="grow" label="Loading..."></b-spinner>
         <b-spinner small class="mx-2" type="grow" label="Loading..."></b-spinner>
         <b-spinner small type="grow" label="Loading..."></b-spinner>
-        <h2 class="my-4">{{ waitingUserCount }} / 5 Player(s) Ready</h2>
-        <p>
-          You'll join a game as soon as there are enough players to form a full group. The lobby
-          will remain open up to 30 minutes after the scheduled game time.
+        <h1 class="my-4">
+          <b-badge :variant="variantStyle(waitingUserCount)">{{ waitingUserCount }} Player(s) Ready</b-badge>
+        </h1>
+        <p class='lead'>
+          You'll join a game as soon as there are enough players to form a full group.
         </p>
-
+        <p>
+          The lobby will remain open up to 30 minutes after the scheduled game time.
+        </p>
         <b-button-group class="w-25 mt-4" vertical>
-          <b-button :to="dashboard" variant="secondary">
+          <b-button :to="dashboard" variant="primary">
             Return to the Dashboard
           </b-button>
           <b-button v-if="isDevOrStaging" @click="distributeGroups" variant="secondary">
