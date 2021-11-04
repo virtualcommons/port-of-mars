@@ -268,9 +268,10 @@ export default class Dashboard extends Vue {
     return { name: DASHBOARD_PAGE };
   }
 
-  created() {
+  async created() {
     this.api = new DashboardAPI(this.$tstore, this.$ajax);
-    this.initialize();
+    await this.initialize();
+    console.log("user: ", this.$tstore.state.user);
   }
 
   inviteLink(invite: { title: string; location: string; start: Date; end: Date; details: string }) {
@@ -280,6 +281,7 @@ export default class Dashboard extends Vue {
   async initialize() {
     // get player task completion status
     const data = await this.api.getData();
+    console.log("incoming dashboard data: ", data);
     this.$set(this, "playerTaskCompletion", data.playerTaskCompletion);
 
     // go to email verification page if player is not verified

@@ -148,6 +148,11 @@ async function createApp() {
   app.use('/registration', registrationRouter);
   app.use('/status', statusRouter);
 
+  app.get('/logout', function (req, res) {
+    req.logout();
+    return res.json({ user: {}});
+  });
+
   app.get('/asulogin',
     passport.authenticate('cas', { failureRedirect: '/' }),
     function (req, res) {

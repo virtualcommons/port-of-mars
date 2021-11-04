@@ -73,7 +73,7 @@
         >
           <b-form-input
             id="input-username"
-            v-model="username"
+            v-model="testUsername"
             placeholder="Enter any username for testing"
             required
           >
@@ -105,6 +105,7 @@ import { isDevOrStaging } from "@port-of-mars/shared/settings";
   }
 })
 export default class Login extends Vue {
+  testUsername: string = "";
   isSignUpEnabled: boolean = false;
   error: string = "";
   isDevMode: boolean = false;
@@ -164,7 +165,7 @@ export default class Login extends Vue {
   async devLogin(e: Event) {
     e.preventDefault();
     const devLoginData: any = {
-      username: this.username,
+      username: this.testUsername,
       password: "testing"
     };
     try {
@@ -179,7 +180,6 @@ export default class Login extends Vue {
   logout() {
     this.$ajax.forgetLoginCreds();
     this.$ajax.forgetSubmissionId();
-    this.isAuthenticated = false;
   }
 }
 </script>
