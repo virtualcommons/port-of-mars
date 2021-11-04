@@ -28,11 +28,11 @@
       </b-col>
     </b-row>
     <b-row class="mx-2">
-      <b-col align-self="center" cols="7" class="p-1">
+      <b-col cols="8" class="p-0">
         <b-embed type="iframe" aspect="21by9" :src="trailerVideoUrl" allowfullscreen>
         </b-embed>
       </b-col>
-      <b-col align-self="start" cols="5" class="text-left mt-2">
+      <b-col align-self="center" cols="4" class="mt-2">
         <h3 class="subtitle">
           <span v-if="isSignUpEnabled">
             The next Mars Madness tournament is coming soon! Register and get notified when it starts.
@@ -197,7 +197,7 @@ a:hover {
 
 .title {
   letter-spacing: 0.25rem;
-  font-size: 5rem;
+  font-size: 4rem;
   font-weight: 600;
   color: white;
 }

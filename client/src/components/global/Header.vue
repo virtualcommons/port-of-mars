@@ -14,7 +14,7 @@
     <b-navbar-nav class="ml-auto">
       <slot name="nav-items"><b-nav-item :to="consent">Consent Form</b-nav-item></slot>
       <b-nav-item :href="contactUrl">Contact Us</b-nav-item>
-      <b-nav-item @click="logout">Logout</b-nav-item>
+      <b-nav-item @click="logout">Logout ( {{username}} )</b-nav-item>
     </b-navbar-nav>
     </b-collapse>
   </b-navbar>
@@ -22,7 +22,7 @@
 
 <script>
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { LOGIN_PAGE, REGISTER_PAGE } from "@port-of-mars/shared/routes";
+import { DASHBOARD_PAGE, LOGIN_PAGE, REGISTER_PAGE } from "@port-of-mars/shared/routes";
 
 @Component({})
 export default class Header extends Vue {
@@ -36,13 +36,18 @@ export default class Header extends Vue {
     height: 50,
   };
 
-  get consent() {
-    return { name: REGISTER_PAGE };
+  dashboard = { name: DASHBOARD_PAGE };
+  consent = { name: REGISTER_PAGE };
+  login = { name: LOGIN_PAGE };
+
+  get username() {
+    console.log("user: ", this.$tstore.state.user);
+    return this.$tstore.state.user.username;
   }
 
   logout() {
     this.$ajax.forgetLoginCreds();
-    this.$router.push({ name: LOGIN_PAGE });
+    this.$router.push(this.login);
   }
 
 }

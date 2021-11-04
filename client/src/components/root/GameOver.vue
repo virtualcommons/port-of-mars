@@ -16,7 +16,7 @@
           <h3 class='mt-2 text-left'>Unfortunately, your team was not able to withstand the perils of Mars.</h3>
         </div>
         <b-list-group dark>
-          <b-list-group-item variant="primary" class="d-flex justify-content-between align-items-center" v-for="(player, index) in players" :key="player">
+          <b-list-group-item variant="primary" class="d-flex justify-content-between align-items-center" v-for="(player, index) in players" :key="player.role + index">
             {{ roleLabel(player.role) }} 
             <b-badge :variant="index === 0 ? 'success' : 'primary'">{{ player.victoryPoints }}</b-badge>
           </b-list-group-item>
