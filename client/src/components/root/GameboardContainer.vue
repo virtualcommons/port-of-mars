@@ -1,8 +1,8 @@
 <template>
   <b-container
     fluid
-    class="h-100 p-2 m-0 d-flex flex-column justify-content-start"
-    style="background-color: var(--dark-shade);"
+    class="h-100 m-0 p-0 d-flex flex-column justify-content-start"
+    style="background-color: var(--dark-shade)"
   >
     <ModalController />
     <ProfileMenu />
@@ -16,12 +16,12 @@
         ---------------------------------------- -->
 
     <!-- System Health -->
-    <b-row class="flex-shrink-1 w-100 mb-2">
+    <b-row class="flex-shrink-1 w-100">
       <SystemHealth></SystemHealth>
     </b-row>
 
     <!-- HUD, Phase Switcher, Mars Log, Chat -->
-    <b-row class="w-100 p-0 m-0" style="height: 95vh !important">
+    <b-row align-v="stretch" class="w-100 p-0 m-auto" style="height: 90vh !important">
       <b-col cols="9" class="d-flex flex-column w-100">
         <!-- HUD -->
         <b-row class="w-100 p-2 mx-0" style="border: 0.2rem solid rgba(241, 224, 197, 0.25);">

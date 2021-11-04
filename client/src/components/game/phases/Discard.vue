@@ -1,25 +1,25 @@
 <template>
   <b-row class="h-100 w-100 p-0 m-0 tour-discard-action">
     <!-- inventory -->
-    <b-col cols="4" class="d-flex flex-column h-100 w-100 light-shade-25-partition">
-      <b-row class="h-auto w-100 justify-content-center mx-auto p-3 tour-time-blocks header">
-        <p class="mx-2 my-auto">Inventory</p>
+    <b-col cols="5" class="d-flex flex-column w-100 py-2 light-shade-25-partition tour-inventory">
+      <b-row class="h-auto w-100 mx-auto p-3 justify-content-center header">
+        <p class="title">Inventory</p>
       </b-row>
-      <b-row class="flex-grow-1 w-100 mx-auto my-3 p-2 backdrop">
-        <b-col>
-          <Inventory :isSelf="true" />
-        </b-col>
+      <b-row align-v="stretch" class="flex-grow-1 w-100 my-3 mx-auto backdrop">
+        <div class="scrollable" style="width: 90%">
+          <Inventory :isSelf="true" :hideCosts="true" />
+        </div>
       </b-row>
     </b-col>
 
     <!-- discardable accomplishments -->
-    <b-col cols="8" class="d-flex flex-column h-100 w-100 tour-purchase">
-      <b-row class="h-auto w-100 justify-content-center mx-auto p-3 header">
-        <p class="mx-2 my-auto">Purchasable Accomplishments</p>
+    <b-col cols="7" class="d-flex flex-column h-100 w-100 py-2 tour-purchase">
+      <b-row class="h-auto w-100 mx-auto p-3 justify-content-center header">
+        <p class="title">Discardable Accomplishments</p>
       </b-row>
-      <b-row class="flex-grow-1 w-100 mx-auto my-3 p-2 backdrop">
+      <b-row align-v="stretch" class="flex-grow-1 w-100 my-3 mx-auto backdrop">
         <b-col>
-          <div class="h-100 p-2 scrollable">
+          <div class="h-100 p-2 scrollable" style="width: 90%">
             <AccomplishmentCard
               v-for="accomplishment in sortedAccomplishments"
               :key="accomplishment.id"

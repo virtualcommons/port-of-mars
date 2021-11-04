@@ -28,7 +28,7 @@
       style="background-color: rgba(241, 224, 197, 0.05); overflow-y: auto; overflow-x: hidden;"
     >
       <div class="w-100 position-absolute" style="overflow-y: auto; overflow-x: hidden;">
-        <Inventory :isSelf="true" />
+        <Inventory :isSelf="true" :hideCosts="false" />
       </div>
     </b-col>
     <b-col

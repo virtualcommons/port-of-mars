@@ -1,7 +1,7 @@
 <template>
   <b-row class="flex-column h-100 w-100 m-0 p-2 justify-content-center">
     <!--    <b-row class="h-auto w-100 m-0 p-0 justify-content-center">-->
-    <b-button block squared variant="outline-secondary" @click="toggleCosts">
+    <b-button v-if="!hideCosts" block squared variant="outline-secondary" @click="toggleCosts">
       Show Costs
     </b-button>
     <!--    </b-row>-->
@@ -12,7 +12,7 @@
       class="w-100 m-0 p-3 justify-content-between align-items-center"
     >
       <!-- costs -->
-      <b-col v-show="costsVisible" md="4" class="m-0 p-0 text-left">
+      <b-col v-if="!hideCosts" v-show="costsVisible" md="4" class="m-0 p-0 text-left">
         <p v-b-tooltip.hover.bottom class="mx-2 my-auto" title="Time Block Cost">
           {{ canInvest(investment.cost) ? investment.cost : "-" }}
           <font-awesome-icon
@@ -63,10 +63,11 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
   components: {}
 })
 export default class Inventory extends Vue {
-  @Prop({ default: true }) private isSelf!: boolean;
-  @Prop({ default: RESEARCHER }) private role!: Role;
-  @Prop({ default: false }) private displaySystemHealth!: boolean;
-  private costsVisible: boolean = this.$tstore.state.userInterface.toggleResourceCost;
+  @Prop({ default: true }) isSelf!: boolean;
+  @Prop({ default: RESEARCHER }) role!: Role;
+  @Prop({ default: false }) displaySystemHealth!: boolean;
+  @Prop({ default: false }) hideCosts!: boolean;
+  costsVisible: boolean = this.$tstore.state.userInterface.toggleResourceCost;
 
   get playerData() {
     return this.isSelf ? this.$tstore.getters.player : this.$tstore.state.players[this.role];
@@ -101,16 +102,20 @@ export default class Inventory extends Vue {
     return this.costsVisible ? "active" : "inactive";
   }
 
-  private canInvest(cost: number): boolean {
+  get isPurchaseOrDiscardPhase() {
+    return Phase.purchase || Phase.discard;
+  }
+
+  canInvest(cost: number): boolean {
     return cost < COST_INAFFORDABLE;
   }
 
-  private toggleCosts() {
+  toggleCosts() {
     this.$tstore.commit("SET_RESOURCE_COSTS_VISIBLE", !this.costsVisible);
     this.costsVisible = this.$tstore.state.userInterface.toggleResourceCost;
   }
 
-  private backgroundColor(resource: Investment) {
+  backgroundColor(resource: Investment) {
     let color;
     switch (resource) {
       case "culture":
