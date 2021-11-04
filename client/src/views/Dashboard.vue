@@ -1,209 +1,168 @@
 <template>
   <b-container fluid class="h-100 m-0 p-0">
-    <b-row class="h-100 m-0 p-0" style="background-color: var(--dark-shade-75)">
-      <!-- profile info -->
-      <b-col class="h-100" cols="3" style="background-color: var(--dark-shade)">
-        <b-row>
+    <b-navbar toggleable="lg" type="dark" variant="primary">
+      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+      <b-collapse id="nav-collapse" is-nav>
+        <b-navbar-brand :to="dashboard">
           <b-img
-            v-bind="mainProps"
-            style="opacity: 50%"
+            v-bind="portOfMarsLogoProps"
             :src="require(`@port-of-mars/client/assets/background/logo.png`)"
             alt="Port of Mars"
-            center
-            class="m-3"
-          ></b-img>
-        </b-row>
-        <b-row align-v="center" class="my-3 mx-1" style="background-color: var(--dark-accent)">
-          <b-col cols="5" class="p-1">
-            <b-img
-              fluid-grow
-              center
-              :src="require(`@port-of-mars/client/assets/characters/Politician.png`)"
-              alt="player"
             >
-            </b-img>
-          </b-col>
-          <b-col cols="7">
-            <p class="dark">
-              You have participated in
-              <b-badge variant="primary">{{ gamesPlayedCount }}</b-badge> missions.
-            </p>
-          </b-col>
-        </b-row>
-
-        <b-nav vertical pills class="mx-1 text-left">
-          <b-nav-item active><h4>Dashboard</h4></b-nav-item>
-          <b-nav-item :to="register"><h4>Consent Form</h4></b-nav-item>
-          <b-nav-item @click="logout"><h4>Logout</h4></b-nav-item>
-        </b-nav>
-      </b-col>
-      <!-- main content area -->
-      <b-col class="h-100" cols="9" style="background-color: var(--dark-shade-75)">
-        <b-row class="h-100">
-          <b-col class="h-25 w-100">
-            <Messages></Messages>
-            <template
-              v-if="playerTaskCompletion.mustTakeIntroSurvey || playerTaskCompletion.canPlayGame"
-            >
-              <b-row align-v="center" class="w-100 h-100">
-                <b-col cols="auto">
-                  <h1 style="font-weight: medium">
-                    Mission Control Onboarding
-                  </h1>
-                  <p>
-                    Welcome to the Port of Mars! Please be sure to complete all onboarding tasks
-                    before embarking on your next mission.
-                  </p>
-                </b-col>
-                <div class="w-100"></div>
-                <b-col align-self="start" cols="auto">
-                  <b-button
-                    :disabled="!playerTaskCompletion.mustTakeTutorial"
-                    :to="tutorial"
-                    :variant="playerTaskCompletion.mustTakeTutorial ? 'warning' : 'secondary'"
-                    size="lg"
-                  >
-                    <h4>
-                      Tutorial
-                      <b-icon-check-circle-fill
-                        v-if="!playerTaskCompletion.mustTakeTutorial"
-                        scale="1"
-                        class="ml-2"
-                      >
-                      </b-icon-check-circle-fill>
-                    </h4>
-                  </b-button>
-                  <b-icon-arrow-right-circle-fill
-                    scale="2"
-                    class="mx-4"
-                  ></b-icon-arrow-right-circle-fill>
-                  <b-button
-                    :disabled="!playerTaskCompletion.mustTakeIntroSurvey"
-                    target="_blank"
-                    :href="introSurveyUrl"
-                    :variant="playerTaskCompletion.mustTakeIntroSurvey ? 'warning' : 'secondary'"
-                    size="lg"
-                  >
-                    <h4>
-                      Intro Survey
-                      <b-icon-check-circle-fill
-                        v-if="!playerTaskCompletion.mustTakeIntroSurvey"
-                        scale="1"
-                        class="ml-2"
-                      ></b-icon-check-circle-fill>
-                    </h4>
-                  </b-button>
-
-                  <b-icon-arrow-right-circle-fill
-                    scale="2"
-                    class="mx-4"
-                  ></b-icon-arrow-right-circle-fill>
-
-                  <!-- go to waiting lobby -->
-
-                  <b-button
-                    :disabled="!playerTaskCompletion.canPlayGame"
-                    :to="lobby"
-                    size="lg"
-                    variant="success"
-                  >
-                    <h4>Join Game Lobby</h4>
-                  </b-button>
-                </b-col>
-              </b-row>
-            </template>
-
-            <!-- invite + participation status -->
-            <template v-else-if="!playerTaskCompletion.hasInvite">
-              <h1 class="text-left mt-5 py-2" style="font-weight: medium">
-                No active invitation found
-              </h1>
-              <p class="text-left">
-                Thanks for your interest in the Port of Mars! Unfortunately you do not appear to
-                have an invitation to participate in this round of the Port of Mars. If you think
-                this is an error, please contact us at
-                <a href="mailto:portmars@asu.edu">portmars@asu.edu</a>.
-              </p>
-            </template>
-
-            <template v-else-if="playerTaskCompletion.shouldTakeExitSurvey">
-              <h1 class="text-left mt-5 py-2" style="font-weight: medium">
-                Thank you for participating in the Port of Mars.
-              </h1>
-              <b-button :href="exitSurveyUrl" size="lg" squared variant="success">
-                Take Exit Survey
+          </b-img>
+        </b-navbar-brand>
+        <h2 class="mx-auto">Mission Control Dashboard</h2>
+        <b-navbar-nav class="ml-auto">
+          <b-nav-item :href="contactUrl">Contact Us</b-nav-item>
+          <b-nav-item @click="logout">Logout</b-nav-item>
+        </b-navbar-nav>
+      </b-collapse>
+    </b-navbar>
+    <b-container fluid style="background-color: var(--dark-shade-75)">
+      <b-row class="m-0 p-0">
+        <Messages></Messages>
+        <b-col align-self="center" cols="9">
+        <template
+          v-if="playerTaskCompletion.mustTakeIntroSurvey || playerTaskCompletion.canPlayGame"
+        >
+          <p class="lead">
+            Welcome to the Port of Mars! Please be sure to complete all onboarding tasks
+            before embarking on your next mission.
+          </p>
+          <b-row>
+            <b-col align-self="start" cols="auto">
+              <b-button
+                :disabled="!playerTaskCompletion.mustTakeIntroSurvey"
+                target="_blank"
+                :href="introSurveyUrl"
+                :variant="playerTaskCompletion.mustTakeIntroSurvey ? 'warning' : 'secondary'"
+                size="lg"
+              >
+                <h4>
+                  Take Intro Survey
+                  <b-icon-check-circle-fill
+                    v-if="!playerTaskCompletion.mustTakeIntroSurvey"
+                    scale="1"
+                    class="ml-2"
+                  ></b-icon-check-circle-fill>
+                </h4>
               </b-button>
-            </template>
-            <template v-else>
-              <h1 class="mt-5 py-2" style="font-weight: medium">
-                Thanks for participating in the Port of Mars.
-              </h1>
-              <p>
-                We will email you with further instructions if you are eligible to participate in
-                the next round. You can review your past games in the
-                <code>Previous Games</code> tab.
-              </p>
-            </template>
-          </b-col>
-          <div class="w-100"></div>
-          <b-col class="h-75">
-            <b-tabs pills class="p-3">
-              <b-tab class="history mt-3">
-                <template #title>
-                  <h4>Schedule</h4>
-                </template>
-                <div class="m-3 lead">
-                  Please sign in during <b>one</b> of the following times to participate. We
-                  recommend that you show up 5 minutes earlier to join the waiting lobby.
-                </div>
-                <div style="overflow-y: auto !important">
-                  <b-table :items="schedule" bordered stacked="md" small dark striped show-empty>
-                    <template #empty="scope">
-                      <b-alert class="mt-3" variant="info" show
-                        >No games have been scheduled. Please check again later!</b-alert
-                      >
-                    </template>
-                    <template v-slot:cell(addToCalendar)="data">
-                      <a :href="inviteLink(data.item.addToCalendar)" target="_blank">
-                        <font-awesome-icon :icon="['fab', 'google']"></font-awesome-icon>
-                      </a>
-                    </template>
-                  </b-table>
-                </div>
-              </b-tab>
-              <b-tab class="history mt-3">
-                <template #title>
-                  <h4>Previous Games</h4>
-                </template>
-                <div class="p-3 m-3 scrolling-wrapper">
-                  <p v-if="previousGames.length === 0" class="my-5 py-5">No games to display.</p>
-                  <PlayerStatItem
-                    v-for="playerStatItem in previousGames"
-                    :key="playerStatItem.time"
-                    :playerStatItem="playerStatItem"
-                    class="my-1 py-1"
-                  >
-                  </PlayerStatItem>
-                </div>
-              </b-tab>
-              <b-tab class="mt-3">
-                <template #title>
-                  <h4>Tutorial</h4>
-                </template>
-                <p class="m-3 lead">
-                  Learn how to play Port of Mars by watching this brief tutorial video.
-                </p>
-                <div class="w-75 mx-auto p-3">
-                  <b-embed type="iframe" aspect="21by9" :src="tutorialVideoUrl" allowfullscreen>
-                  </b-embed>
-                </div>
-              </b-tab>
-            </b-tabs>
-          </b-col>
-        </b-row>
+              <b-icon-arrow-right-circle-fill
+                scale="2"
+                class="mx-4"
+              ></b-icon-arrow-right-circle-fill>
+              <!-- Join waiting lobby -->
+              <b-button
+                :disabled="!playerTaskCompletion.canPlayGame"
+                :to="lobby"
+                size="lg"
+                variant="success"
+              >
+                <h4>Join Game Lobby</h4>
+              </b-button>
+            </b-col>
+          </b-row>
+        </template>
+        <!-- invite + participation status -->
+        <template v-else-if="!playerTaskCompletion.hasInvite">
+          <h1 class="mt-5 py-2">
+            Invitation not found
+          </h1>
+          <p class="lead">
+            Thanks for your interest in the Port of Mars! Unfortunately you do not appear to
+            have an invitation to participate in this round of the Port of Mars. If you think
+            this is an error, please <a href="mailto:portmars@asu.edu">contact us at
+            portmars@asu.edu</a>.
+          </p>
+        </template>
+        <template v-else>
+          <h1>
+            Thank you for participating!
+          </h1>
+          <p>
+            We will email you with further instructions if you are eligible to 
+            participate in the next round. You can review your past games in the
+            <code>Previous Games</code> tab.
+          </p>
+          <template v-if="playerTaskCompletion.shouldTakeExitSurvey">
+            <b-button :href="exitSurveyUrl" size="lg" squared variant="success">
+              Take Exit Survey
+            </b-button>
+          </template>
+        </template>
       </b-col>
-      <Footer></Footer>
+      <!-- splash image + missions completed -->
+      <b-col class="mt-2" align-self="end" cols="3">
+        <b-img
+          :src="require(`@port-of-mars/client/assets/characters/Politician.png`)"
+          alt="player"
+        >
+        </b-img>
+        <p>
+          You have participated in
+          <b-badge variant="primary">{{ gamesPlayedCount }}</b-badge> missions.
+        </p>
+      </b-col>
     </b-row>
+    <b-row no-gutters>
+      <!-- main content area -->
+      <b-col>
+        <b-tabs pills class="p-3">
+          <b-tab class="mt-3">
+            <template #title>
+              <h4>Tutorial</h4>
+            </template>
+            <p class="m-3 lead">
+              Learn how to play Port of Mars by watching this brief tutorial video.
+            </p>
+            <div class="w-75 mx-auto p-3">
+              <b-embed type="iframe" aspect="21by9" :src="tutorialVideoUrl" allowfullscreen>
+              </b-embed>
+            </div>
+          </b-tab>
+          <b-tab class="history mt-3">
+            <template #title>
+              <h4>Schedule</h4>
+            </template>
+            <div class="m-3 lead">
+              Please sign in during <b>one</b> of the following times to participate. We
+              recommend that you show up 5 minutes earlier to join the waiting lobby.
+            </div>
+            <div style="overflow-y: auto !important">
+              <b-table :items="schedule" bordered stacked="md" small dark striped show-empty>
+                <template #empty="scope">
+                  <b-alert class="mt-3" variant="info" show
+                    >No games have been scheduled. Please check again later!</b-alert
+                  >
+                </template>
+                <template v-slot:cell(addToCalendar)="data">
+                  <a :href="inviteLink(data.item.addToCalendar)" target="_blank">
+                    <font-awesome-icon :icon="['fab', 'google']"></font-awesome-icon>
+                  </a>
+                </template>
+              </b-table>
+            </div>
+          </b-tab>
+          <b-tab class="history mt-3">
+            <template #title>
+              <h4>Previous Games</h4>
+            </template>
+            <div class="p-3 m-3 scrolling-wrapper">
+              <p v-if="previousGames.length === 0" class="my-5 py-5">No games to display.</p>
+              <PlayerStatItem
+                v-for="playerStatItem in previousGames"
+                :key="playerStatItem.time"
+                :playerStatItem="playerStatItem"
+                class="my-1 py-1"
+              >
+              </PlayerStatItem>
+            </div>
+          </b-tab>
+        </b-tabs>
+      </b-col>
+    </b-row>
+    </b-container>
+    <Footer></Footer>
   </b-container>
 </template>
 
@@ -221,14 +180,14 @@ import {
   LOBBY_PAGE,
   LOGIN_PAGE,
   SIGNEDUP_PAGE,
-  TUTORIAL_PAGE
+  TUTORIAL_PAGE,
+  DASHBOARD_PAGE
 } from "@port-of-mars/shared/routes";
 
 import { DashboardAPI } from "@port-of-mars/client/api/dashboard/request";
 import PlayerStatItem from "@port-of-mars/client/components/dashboard/PlayerStatItem.vue";
 import Messages from "@port-of-mars/client/components/dashboard/Messages.vue";
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
-import ActionItem from "@port-of-mars/client/components/dashboard/ActionItem.vue";
 import _ from "lodash";
 
 library.add(faGoogle, faInfoCircle);
@@ -236,7 +195,6 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 @Component({
   components: {
-    ActionItem,
     PlayerStatItem,
     Messages,
     Footer
@@ -271,15 +229,15 @@ export default class Dashboard extends Vue {
     }
   ];
   stats: Stats = { games: [] };
-  mainProps = {
-    center: true,
-    fluid: true,
+
+  portOfMarsLogoProps = {
     blankColor: "#bbb",
-    width: 200,
-    height: 200
+    height: 50,
   };
-  maxValue = 100;
-  tutorialVideoUrl = "https://player.vimeo.com/video/618174821?h=82fd072f73";
+
+  contactUrl = "mailto:portmars@asu.edu";
+  tutorialVideoUrl = "https://player.vimeo.com/video/642036661?h=2295c303de&autoplay=1&autopause=1";
+
 
   get username() {
     console.log("user? ", this.$tstore.state.user);
@@ -306,20 +264,8 @@ export default class Dashboard extends Vue {
     return { name: TUTORIAL_PAGE };
   }
 
-  get progressValue() {
-    if (this.playerTaskCompletion.canPlayGame) return 100;
-    else if (this.playerTaskCompletion.mustTakeIntroSurvey) return 66;
-    else if (this.playerTaskCompletion.mustTakeTutorial) return 50;
-  }
-
-  get progressVariant() {
-    switch (this.progressValue) {
-      case 50:
-      case 66:
-        return "warning";
-      case 100:
-        return "success";
-    }
+  get dashboard() {
+    return { name: DASHBOARD_PAGE };
   }
 
   created() {
@@ -347,7 +293,7 @@ export default class Dashboard extends Vue {
     }
 
     // go to the signed up page if signup is enabled
-    else if (!data.isSignUpEnabled) {
+    else if (data.isSignUpEnabled) {
       await this.$router.push({ name: SIGNEDUP_PAGE });
     }
 
