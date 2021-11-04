@@ -5,10 +5,12 @@
       <b-row class="h-auto w-100 mx-auto p-3 justify-content-center header">
         <p class="m-auto">Inventory</p>
       </b-row>
-      <b-row align-v="stretch" class="flex-grow-1 w-100 my-3 mx-auto backdrop">
-        <div class="scrollable" style="width: 90%">
-          <Inventory :isSelf="true" :hideCosts="true" />
-        </div>
+      <b-row class="flex-grow-1 w-100 my-3 mx-auto backdrop">
+        <b-col class="h-100 w-100 p-0 m-0" style="overflow-y: auto; overflow-x: hidden">
+          <div class="w-100 scrollable">
+            <Inventory :isSelf="true" :hideCosts="true" />
+          </div>
+        </b-col>
       </b-row>
     </b-col>
 
