@@ -253,23 +253,3 @@ export default class ActiveTrade extends Vue {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.outer-frame {
-  height: 4rem;
-  width: 4rem;
-  padding: 0.125rem;
-  border-radius: 50%;
-
-  .inner-frame {
-    @include expand;
-    @include make-center;
-    border-radius: 50%;
-
-    img {
-      object-fit: cover;
-      height: 80%;
-    }
-  }
-}
-</style>
