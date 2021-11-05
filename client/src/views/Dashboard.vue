@@ -102,7 +102,7 @@
               <b-embed
                 id="tutorialVideo"
                 type="iframe"
-                aspect="16by9"
+                aspect="21by9"
                 :src="tutorialVideoUrl"
                 allowfullscreen
               >
