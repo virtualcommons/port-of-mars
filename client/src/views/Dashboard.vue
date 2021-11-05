@@ -178,7 +178,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faRocket, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
-import Vimeo from "@vimeo/player";
+import Player from "@vimeo/player";
 import { CalendarEvent, google } from "calendar-link";
 
 import { GameMeta, PlayerTaskCompletion, Stats } from "@port-of-mars/shared/types";
@@ -341,9 +341,10 @@ export default class Dashboard extends Vue {
 
   activateTutorial() {
     this.activateTab(0);
-    const iframe = document.getElementById("tutorialVideo");
-    const player = new Vimeo(iframe);
-    player.requestFullscreen().then(() => player.play());
+    const iframe = document.getElementById("tutorialVideo") as HTMLIFrameElement;
+    const player = new Player(iframe);
+    // FIXME: currently some typescript bugs with the vimeo player ts defs
+    (player as any).requestFullscreen().then(() => player.play());
   }
 
 }

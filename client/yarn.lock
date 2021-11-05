@@ -1767,6 +1767,11 @@
   dependencies:
     source-map "^0.6.1"
 
+"@types/vimeo__player@^2.10.1":
+  version "2.10.1"
+  resolved "https://registry.yarnpkg.com/@types/vimeo__player/-/vimeo__player-2.10.1.tgz#53d5ccffb757b49e3ff3f059803275832e54f1fe"
+  integrity sha512-PgmJmOFlkr1r/1bomlTAEY7yuJNM447DqBem1CLNmSefs8ILE/e3e0Ey07GcZK0NujWW/m3kyv1kIhtLh/iu/A==
+
 "@types/webpack-dev-server@^3.11.0":
   version "3.11.6"
   resolved "https://registry.yarnpkg.com/@types/webpack-dev-server/-/webpack-dev-server-3.11.6.tgz#d8888cfd2f0630203e13d3ed7833a4d11b8a34dc"
