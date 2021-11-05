@@ -105,8 +105,8 @@
       </b-row>
 
       <!-- tutorial, schedule, previous games -->
-      <b-row class="flex-grow-1"
-        ><b-tabs pills class="h-auto w-75 p-3 my-2 mx-auto">
+      <b-row class="flex-grow-1">
+        <b-tabs pills class="h-auto w-75 p-3 my-2 mx-auto" v-model="tabIndex">
           <b-tab class="h-100 mt-3">
             <template #title>
               <h4>Tutorial</h4>
@@ -134,7 +134,6 @@
               that you show up 5 minutes earlier to join the waiting lobby.
             </p>
             <b-table
-              class="schedule"
               sticky-header="20rem"
               :items="schedule"
               dark
@@ -161,7 +160,7 @@
             <p v-if="previousGames.length === 0" class="m-3 lead">
               No games to display.
             </p>
-            <div class="h-50 w-75 p-3 scrollable backdrop">
+            <div v-else class="h-50 w-75 p-3 scrollable backdrop">
               <b-row>
                 <b-col v-for="playerStatItem in previousGames" :key="playerStatItem.time">
                   <PlayerStatItem :playerStatItem="playerStatItem" class="my-3 p-3">
