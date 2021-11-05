@@ -99,9 +99,7 @@ export class DashboardService extends BaseService {
    */
   async canPlayGame(invite: TournamentRoundInvite | undefined): Promise<boolean> {
     if (invite) {
-      const isFreePlayEnabled = await this.sp.settings.isFreePlayEnabled();
-      // participants can play the game if free play is enabled or if they haven't already participated
-      return isFreePlayEnabled || ! invite.hasParticipated;
+      return ! invite.hasParticipated;
     }
     return false;
   }
@@ -115,12 +113,14 @@ export class DashboardService extends BaseService {
 
   async getPlayerTaskCompletion(user: User, invite: TournamentRoundInvite | undefined): Promise<PlayerTaskCompletion> {
     // FIXME: at some point we should make these predicates all semantically consistent
+    // participants can play the game even if they have already participated this round when isFreePlayEnabled
+    const isFreePlayEnabled = await this.sp.settings.isFreePlayEnabled();
     return {
       mustVerifyEmail: this.mustVerifyEmail(user),
       mustConsent: this.mustProvideConsent(user),
       mustTakeTutorial: this.mustTakeTutorial(user),
       mustTakeIntroSurvey: this.mustTakeIntroSurvey(invite),
-      canPlayGame: await this.canPlayGame(invite),
+      canPlayGame: await this.canPlayGame(invite) || isFreePlayEnabled,
       shouldTakeExitSurvey: this.shouldTakeExitSurvey(invite),
       hasInvite: !_.isUndefined(invite),
     }

@@ -178,7 +178,7 @@
 
     get hasSufficientResources() {
       // retrieve local player's inventory
-      const inventory = this.$store.state.players[this.role].inventory;
+      const inventory = this.$tstore.state.players[this.role].inventory;
       let validTrade: boolean = canPlayerMakeTrade(this.recipient.resourceAmount, inventory);
 
       if (this.role === this.recipient.role) {
