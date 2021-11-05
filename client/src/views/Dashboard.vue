@@ -101,7 +101,7 @@
             <template #title>
               <h4>Tutorial</h4>
             </template>
-            <p class="m-3 lead">
+            <p class="m-3 text-center">
               Learn how to play Port of Mars by watching this brief tutorial video.
             </p>
             <div class="mx-auto w-75">
