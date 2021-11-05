@@ -6,7 +6,7 @@
       <!-- messages -->
       <Messages></Messages>
       <!-- onboarding tasks -->
-      <b-row class="p-4">
+      <b-row align-h="center" class="text-center p-4">
         <!-- tasks to complete -->
         <template
           v-if="playerTaskCompletion.mustTakeIntroSurvey || playerTaskCompletion.canPlayGame"
