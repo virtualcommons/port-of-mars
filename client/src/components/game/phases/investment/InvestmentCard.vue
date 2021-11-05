@@ -29,7 +29,7 @@
         <b-form-spinbutton
           v-model="units"
           @input="setInvestmentAmount(units)"
-          :readonly="playerReady"
+          :readonly="playerReady || cannotAfford"
           min="0"
           :max="maxInfluenceInvestment"
           vertical
@@ -43,10 +43,13 @@
         </b-form-spinbutton>
       </b-col>
       <div class="w-100"></div>
-      <b-col align-self="end" class="text-left mx-1 p-1">
+      <b-col v-if="!cannotAfford" align-self="end" class="text-left mx-1 p-1">
         <!-- cost -->
         <font-awesome-icon :icon="['fas', 'clock']" size="lg"></font-awesome-icon>
-        <span class="mx-2">{{ cannotAfford ? "-" : cost }}</span>
+        <span class="mx-2">{{ cost }}</span>
+      </b-col>
+      <b-col v-else align-self="end" class="text-left mx-1 p-1">
+        <b-badge variant="warning">Cannot Invest</b-badge>
       </b-col>
     </b-row>
   </b-container>

@@ -32,7 +32,7 @@
     <b-col cols="4" class="d-flex flex-column h-100 w-100">
       <!-- header -->
       <b-row class="h-auto w-100 mx-auto p-3 justify-content-center header">
-        <p class="mx-2 my-auto">Purchasable Accomplishments</p>
+        <p class="mx-2 my-auto">Accomplishments</p>
       </b-row>
       <!-- accomplishments -->
       <b-row class="flex-grow-1 w-100 mx-auto my-3 p-2 backdrop">
