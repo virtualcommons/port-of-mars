@@ -64,7 +64,7 @@
       </b-row>
       <b-row align-h="center" class="flex-grow-1 flex-column w-100 mx-auto my-3 p-3 backdrop">
         <b-col>
-          <div class="scrollable">
+          <div class="h-100 p-2 scrollable">
             <b-table-lite
               :fields="tabularContributionFields"
               :items="tabularContributions"

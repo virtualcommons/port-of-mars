@@ -12,7 +12,9 @@
       -->
 
       <b-col v-if="investments.length > 0" cols="auto">
-        <h5 v-if="remainingTimeBlocks > 0">Save up to {{ totalAvailableTimeBlocks }} Influence Resources from your current inventory.</h5>
+        <h5 v-if="remainingTimeBlocks > 0">
+          Save up to {{ totalAvailableTimeBlocks }} Influence Resources from your current inventory.
+        </h5>
         <h5 v-else>You have saved {{ totalAvailableTimeBlocks }} Influence Resource.</h5>
       </b-col>
       <div class="w-100"></div>
@@ -22,7 +24,10 @@
         <!-- 1 unit saved -->
         <b-icon-bag-plus v-else-if="remainingTimeBlocks == 1" scale="2"></b-icon-bag-plus>
         <!-- 2 units saved -->
-        <b-icon-bag-check-fill v-else-if="remainingTimeBlocks == 0" scale="2"></b-icon-bag-check-fill>
+        <b-icon-bag-check-fill
+          v-else-if="remainingTimeBlocks == 0"
+          scale="2"
+        ></b-icon-bag-check-fill>
       </b-col>
       <b-col cols="auto" v-if="investments.length > 0">
         <h5>{{ remainingTimeBlocks }} / {{ totalAvailableTimeBlocks }}</h5>
@@ -59,29 +64,33 @@
         </b-alert>
       </b-col>
       <div class="w-100"></div>
-      <button @click="submitSelection">Done</button>
+      <b-button squared variant="light" class="my-2" @click="submitSelection">Done</b-button>
     </b-row>
   </b-container>
 </template>
 
 <script lang="ts">
 import { Component, Inject, Vue } from "vue-property-decorator";
-import { Resource, ResourceAmountData, InvestmentData, RESOURCES } from "@port-of-mars/shared/types";
+import {
+  Resource,
+  ResourceAmountData,
+  InvestmentData,
+  RESOURCES
+} from "@port-of-mars/shared/types";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 import InvestmentCard from "@port-of-mars/client/components/game/phases/investment/InvestmentCard.vue";
 import * as _ from "lodash";
 import TimeBlockMeter from "@port-of-mars/client/components/game/phases/investment/TimeBlockMeter.vue";
 
-
 /**
- * This component handles the Breakdown of Trust event that 
+ * This component handles the Breakdown of Trust event that
  * forces each player to select up to 2 of any influence resources that
  * they already possess.
- * 
- * Their choices are stored in the player's pendingInventory state and 
+ *
+ * Their choices are stored in the player's pendingInventory state and
  * should not be applied to their actual inventory until the event
- * has completely finalized, otherwise they couldn't go back and cancel 
- * their readiness and redo their selection. 
+ * has completely finalized, otherwise they couldn't go back and cancel
+ * their readiness and redo their selection.
  */
 @Component({
   components: {
