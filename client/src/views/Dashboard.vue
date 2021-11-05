@@ -1,5 +1,5 @@
 <template>
-  <b-container fluid class="h-100 m-0 p-0 position-absolute bg-dark-75">
+  <b-container fluid class="h-100 m-0 p-0 bg-dark-75">
     <b-row class="d-flex flex-column h-100 w-100 m-0">
       <b-row><Header></Header></b-row>
       <b-row><Messages></Messages></b-row>
