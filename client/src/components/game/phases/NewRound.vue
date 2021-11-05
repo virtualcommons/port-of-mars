@@ -10,10 +10,13 @@
         <p class="m-auto">System Health Report</p>
       </b-row>
 
-      <b-row align-v="start" class="flex-grow-1 w-100 mx-auto  my-3 p-2 tour-wear-tear backdrop">
+      <b-row
+        align-h="center"
+        class="d-flex flex-column flex-grow-1 w-100 mx-auto my-3 p-2 tour-wear-tear backdrop"
+      >
         <!-- text info -->
-        <b-col v-if="isFirstRound" class="flex-shrink-1 p-2">
-          <h2 class="my-2">
+        <b-row v-if="isFirstRound" class="flex-shrink-1 m-3 p-2">
+          <h2>
             Upcoming System Health:
             <b-badge :variant="systemHealthBadgeVariant(nextRoundSystemHealth)">{{
               nextRoundSystemHealth
@@ -26,8 +29,8 @@
             Your System Health at the start of this round is
             <b-badge variant="success">{{ nextRoundSystemHealth }}</b-badge>
           </p>
-        </b-col>
-        <b-col v-else class="flex-shrink-1 p-2">
+        </b-row>
+        <b-row v-else class="flex-shrink-1 m-3 p-2">
           <p>
             In the previous round you invested
             <b class="highlighted-number">{{ yourSystemHealthContributions }}</b> and the rest of
@@ -53,33 +56,34 @@
               }}</b-badge>
             </b>
           </p>
-        </b-col>
-        <div class="w-100"></div>
-        <b-col class="h-75 w-100 mx-4 mb-2">
-          <div class="m-0 p-0 h-75 scrollable">
-            <b-table-lite
-              :fields="tabularContributionFields"
-              :items="tabularContributions"
-              fixed
-              bordered
-              dark
-              striped
-              responsive
-            >
-            </b-table-lite>
-            <b-table-lite
-              v-if="purchases.length > 0"
-              :fields="purchaseFields"
-              :items="purchases"
-              fixed
-              bordered
-              dark
-              striped
-              responsive
-            >
-            </b-table-lite>
-          </div>
-        </b-col>
+        </b-row>
+        <b-row class="flex-grow-1 w-100 mx-auto">
+          <b-col>
+            <div class="h-100 p-2 scrollable">
+              <b-table-lite
+                :fields="tabularContributionFields"
+                :items="tabularContributions"
+                fixed
+                bordered
+                dark
+                striped
+                responsive
+              >
+              </b-table-lite>
+              <b-table-lite
+                v-if="purchases.length > 0"
+                :fields="purchaseFields"
+                :items="purchases"
+                fixed
+                bordered
+                dark
+                striped
+                responsive
+              >
+              </b-table-lite>
+            </div>
+          </b-col>
+        </b-row>
       </b-row>
     </b-col>
     <!-- system health information -->
