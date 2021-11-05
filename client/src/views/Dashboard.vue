@@ -2,13 +2,11 @@
   <b-container fluid class="h-100 m-0 p-0 bg-dark-75">
     <b-row class="d-flex flex-column h-100 w-100 m-0">
       <!-- header -->
-      <b-row><Header></Header></b-row>
-
+      <Header></Header>
       <!-- messages -->
-      <b-row><Messages></Messages></b-row>
-
+      <Messages></Messages>
       <!-- onboarding tasks -->
-      <b-row class="p-5">
+      <b-row class="p-4">
         <!-- tasks to complete -->
         <template
           v-if="playerTaskCompletion.mustTakeIntroSurvey || playerTaskCompletion.canPlayGame"
@@ -116,7 +114,7 @@
             <h3 class="m-3 text-center">
               Learn how to play Port of Mars by watching this brief tutorial video.
             </h3>
-            <div class="m-auto w-100">
+            <div class="m-auto w-75">
               <b-embed
                 id="tutorialVideo"
                 type="iframe"
