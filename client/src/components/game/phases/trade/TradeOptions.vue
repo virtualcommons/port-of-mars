@@ -103,3 +103,10 @@ export default class TradeOptions extends Vue {
   }
 }
 </script>
+<style lang="scss" scoped>
+.b-form-spinbutton.disabled,
+.b-form-spinbutton.readonly {
+  background-color: $dark-shade-75;
+}
+</style>
+
