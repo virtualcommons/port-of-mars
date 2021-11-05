@@ -14,8 +14,9 @@
             before embarking on your next mission. If this is your first time we highly encourage
             you to <a class='text-primary' @click="activateTutorial">watch the tutorial video</a>.
             <br>
-            After watching the tutorial and completing the introductory survey, click on the Schedule tab below 
-            to see when games are available.
+            After watching the tutorial and completing the introductory survey, 
+            <a class='text-primary' @click="activateTab(1)">click on the 
+            Schedule tab</a> below to see when games are available.
           </p>
           <b-row>
             <b-col align-self="start" cols="auto">
@@ -129,22 +130,20 @@
             </template>
             <p class="m-3 lead">
               Please sign in during <b>one</b> of the following times to participate. We
-              recommend that you show up 5 minutes earlier to join the waiting lobby.
+              recommend that you show up 5 minutes earlier to join the game lobby.
             </p>
-            <div style="overflow-y: auto !important">
-              <b-table :items="schedule" stacked="md" bordered show-empty>
-                <template #empty="scope">
-                  <b-alert class="mt-2 lead" variant="info" show>
-                    No upcoming games on the schedule at this time. Please check again later!
-                  </b-alert>
-                </template>
-                <template v-slot:cell(addToCalendar)="data">
-                  <a :href="inviteLink(data.item.addToCalendar)" target="_blank">
-                    <font-awesome-icon :icon="['fab', 'google']"></font-awesome-icon>
-                  </a>
-                </template>
-              </b-table>
-            </div>
+            <b-table class="schedule" sticky-header="20rem" :items="schedule" dark striped bordered show-empty>
+              <template #empty>
+                <b-alert class="mt-2 lead" variant="info" show>
+                  No upcoming games on the schedule at this time. Please check again later!
+                </b-alert>
+              </template>
+              <template v-slot:cell(addToCalendar)="data">
+                <a :href="inviteLink(data.item.addToCalendar)" target="_blank">
+                  <font-awesome-icon :icon="['fab', 'google']"></font-awesome-icon>
+                </a>
+              </template>
+            </b-table>
           </b-tab>
           <b-tab class="mt-3">
             <template #title>
@@ -313,7 +312,6 @@ export default class Dashboard extends Vue {
     this.$set(this, "introSurveyUrl", data.introSurveyUrl);
     this.$set(this, "exitSurveyUrl", data.exitSurveyUrl);
     this.$set(this, "currentRoundNumber", data.currentRoundNumber);
-    console.log("is lobby open? ", data.isLobbyOpen);
     this.$set(this, "isLobbyOpen", data.isLobbyOpen);
 
     // set player stats
@@ -322,13 +320,13 @@ export default class Dashboard extends Vue {
     this.schedule = data.upcomingGames.map(game => {
       const scheduledDate = new Date(game.time);
       return {
-        date: scheduledDate.toLocaleString(),
+        date: scheduledDate.toString(),
         addToCalendar: {
-          title: `Participate in Port of Mars Experiment, Round ${game.round}`,
+          title: `Port of Mars Round ${game.round}`,
           location: "https://portofmars.asu.edu/",
           start: scheduledDate,
-          duration: [2, "hour"],
-          description: "https://portofmars.asu.edu/"
+          duration: [1, "hour"],
+          description: `Participate in Round ${game.round} of the Mars Madness tournament at https://portofmars.asu.edu/`
         }
       };
     });
@@ -356,10 +354,15 @@ export default class Dashboard extends Vue {
   background-color: $dark-shade-75;
 }
 
+.schedule {
+  font-size: 1.3rem;
+  overflow-y: auto;
+}
+
 .scrolling-wrapper {
   overflow-y: auto;
   overflow-x: hidden;
-  max-height: 32rem;
+  max-height: 20rem;
 }
 
 ::-webkit-scrollbar {

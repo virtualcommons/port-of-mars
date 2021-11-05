@@ -1,16 +1,24 @@
 <template>
   <b-row>
     <b-col>
-      <p>{{ status }} Round {{ playerStatItem.round }}</p>
-      <p>
-        <span>Date: </span>
-        {{ dateString }}
-      </p>
-      <b-list-group v-for="playerScore in playerStatItem.playerScores" :key="playerScore.role">
-        <b-list-group-item :active="playerScore.isSelf" class="d-flex justify-content-between align-items-center" variant="warning">
+      <h4>
+        <b-badge :variant="status === 'Victory' ? 'success' : 'danger'">{{ status }}</b-badge> 
+        Round {{ playerStatItem.round }} 
+        <span class='float-right'>{{ dateString }}</span>
+      </h4>
+      <b-list-group horizontal>
+        <b-list-group-item 
+        v-for="playerScore in playerStatItem.playerScores" 
+        :key="playerScore.role"
+        class="d-flex flex-fill justify-content-between align-items-center"
+        variant="light">
+        <span class='score'>
           {{ playerScore.role }}
-          <template v-if="playerScore.isSelf"> (YOUR ROLE) </template>
-          <b-badge pill :variant="getVariant(playerStatItem.victory, playerScore.winner)">{{ playerScore.points }}</b-badge>
+          <template v-if="playerScore.isSelf">(YOUR ROLE)</template>
+        </span>
+        <span class='score'>
+          <b-badge pill :variant="getVariant(playerStatItem.victory, playerScore.winner)">{{ playerScore.points }} points</b-badge>
+        </span>
         </b-list-group-item>
       </b-list-group>
     </b-col>
@@ -27,7 +35,7 @@
 
     get dateString() {
       const date = new Date(this.playerStatItem.time);
-      return date.toLocaleString();
+      return date.toString();
     }
 
     getActive(victory: boolean, winner: boolean) {
@@ -35,7 +43,7 @@
     }
 
     getVariant(victory: boolean, winner: boolean) {
-      return victory && winner ? 'success' : 'danger';
+      return victory && winner ? 'success' : 'secondary';
     }
 
     get status() {
@@ -43,3 +51,8 @@
     }
   }
 </script>
+<style scoped>
+.score {
+  font-size: 1.2rem;
+}
+</style>
