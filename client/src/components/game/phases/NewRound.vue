@@ -1,65 +1,67 @@
 <template>
   <b-row class="h-100 w-100 m-0 p-0 report tour-report" align-v="center">
+    <!-- system health information -->
+    <b-col cols="6" class="d-flex flex-column h-100 w-100 tour-report-hint light-shade-25-partition">
+      <!-- header -->
+      <b-row class="h-auto w-100 mx-auto p-3 justify-content-center header">
+        <p class="m-auto">Information</p>
+      </b-row>
+      <!-- text info -->
+      <b-row v-if="isFirstRound" class="flex-grow-1 mx-auto p-3 backdrop">
+        <h2>
+          Upcoming System Health:
+          <b-badge :variant="systemHealthBadgeVariant(nextRoundSystemHealth)">{{
+            nextRoundSystemHealth
+          }}</b-badge>
+        </h2>
+        <p>
+          Welcome to Mars! Each round, your System Health degrades by
+          <b-badge variant="danger">{{ systemHealthMaintenanceCost }}</b-badge>
+          due to standard wear and tear. <br />
+          Your System Health at the start of this round is
+          <b-badge variant="success">{{ nextRoundSystemHealth }}</b-badge>
+        </p>
+      </b-row>
+      <b-row v-else class="flex-grow-1 mx-auto p-3 backdrop">
+        <p>
+          In the previous round you invested
+          <b class="highlighted-number">{{ yourSystemHealthContributions }}</b> and the rest of
+          your group invested
+          <b class="highlighted-number">{{ otherPlayerSystemHealthContributions }}</b> in System
+          Health for a total of {{ totalSystemHealthGroupContributions }}. Your group's average
+          investment was {{ averageContribution }}.
+          <span v-if="systemHealthAccomplishmentPurchasesCost < 0">
+            Accomplishments were purchased that cost a total of
+            {{ systemHealthAccomplishmentPurchasesCost }} System Health.
+          </span>
+          <br />
+          <b>
+            Your final System Health at the end of last round was
+            <b-badge :variant="systemHealthBadgeVariant(systemHealth)">{{
+              lastRoundSystemHealthCalculation
+            }}</b-badge
+            >.
+            <br />
+            After standard wear and tear, your starting System Health this round is
+            <b-badge :variant="systemHealthBadgeVariant(nextRoundSystemHealth)">{{
+              nextRoundSystemHealth
+            }}</b-badge>
+          </b>
+        </p>
+      </b-row>
+    </b-col>
     <!-- system health report -->
     <b-col
-      cols="8"
-      class="d-flex flex-column h-100 w-100 system-health tour-contribute light-shade-25-partition"
+      cols="6"
+      class="d-flex flex-column h-100 w-100 tour-contribute"
     >
       <!-- header -->
       <b-row class="h-auto w-100 mx-auto p-3 justify-content-center header">
         <p class="m-auto">System Health Report</p>
       </b-row>
-
-      <b-row
-        align-h="center"
-        class="d-flex flex-column flex-grow-1 w-100 mx-auto my-3 p-2 tour-wear-tear backdrop"
-      >
-        <!-- text info -->
-        <b-row v-if="isFirstRound" class="flex-shrink-1 m-3 p-2">
-          <h2>
-            Upcoming System Health:
-            <b-badge :variant="systemHealthBadgeVariant(nextRoundSystemHealth)">{{
-              nextRoundSystemHealth
-            }}</b-badge>
-          </h2>
-          <p>
-            Welcome to Mars! Each round, your System Health degrades by
-            <b-badge variant="danger">{{ systemHealthMaintenanceCost }}</b-badge>
-            due to standard wear and tear. <br />
-            Your System Health at the start of this round is
-            <b-badge variant="success">{{ nextRoundSystemHealth }}</b-badge>
-          </p>
-        </b-row>
-        <b-row v-else class="flex-shrink-1 m-3 p-2">
-          <p>
-            In the previous round you invested
-            <b class="highlighted-number">{{ yourSystemHealthContributions }}</b> and the rest of
-            your group invested
-            <b class="highlighted-number">{{ otherPlayerSystemHealthContributions }}</b> in System
-            Health for a total of {{ totalSystemHealthGroupContributions }}. Your group's average
-            investment was {{ averageContribution }}.
-            <span v-if="systemHealthAccomplishmentPurchasesCost < 0">
-              Accomplishments were purchased that cost a total of
-              {{ systemHealthAccomplishmentPurchasesCost }} System Health.
-            </span>
-            <br />
-            <b>
-              Your final System Health at the end of last round was
-              <b-badge :variant="systemHealthBadgeVariant(systemHealth)">{{
-                lastRoundSystemHealthCalculation
-              }}</b-badge
-              >.
-              <br />
-              After standard wear and tear, your starting System Health this round is
-              <b-badge :variant="systemHealthBadgeVariant(nextRoundSystemHealth)">{{
-                nextRoundSystemHealth
-              }}</b-badge>
-            </b>
-          </p>
-        </b-row>
-        <b-row class="flex-grow-1 w-100 mx-auto">
-          <b-col>
-            <div class="h-100 p-2 scrollable">
+      <b-row class="flex-grow-1 w-100 mx-auto my-3 backdrop">
+        <b-col>
+          <div class="scrollable">
               <b-table-lite
                 :fields="tabularContributionFields"
                 :items="tabularContributions"
@@ -81,29 +83,7 @@
                 responsive
               >
               </b-table-lite>
-            </div>
-          </b-col>
-        </b-row>
-      </b-row>
-    </b-col>
-    <!-- system health information -->
-    <b-col cols="4" class="d-flex flex-column h-100 w-100 tour-report-hint">
-      <!-- header -->
-      <b-row class="h-auto w-100 mx-auto p-3 justify-content-center header">
-        <p class="m-auto">Information</p>
-      </b-row>
-      <b-row class="flex-grow-1 w-100 mx-auto my-3 p-2 tour-wear-tear backdrop">
-        <b-col align-self="center">
-          <h4 class="mx-3 my-0">
-            If System Health drops below 65, your group will encounter
-            <b><span style="color: var(--light-accent)">2 events</span></b
-            >.
-          </h4>
-          <h4 class="mx-3 my-5">
-            If System Health drops below 35, your group will encounter
-            <b><span style="color: var(--light-accent)">3 events</span></b
-            >.
-          </h4>
+          </div>
         </b-col>
       </b-row>
     </b-col>
@@ -303,11 +283,6 @@ export default class NewRound extends Vue {
 <style lang="scss" scoped>
 .report {
   color: white;
-}
-
-.system-health {
-  border-right: 0.2rem solid;
-  border-color: $light-shade-25;
 }
 
 .highlighted-number {
