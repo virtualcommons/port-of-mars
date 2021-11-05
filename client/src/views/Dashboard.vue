@@ -7,10 +7,13 @@
         <template
           v-if="playerTaskCompletion.mustTakeIntroSurvey || playerTaskCompletion.canPlayGame"
         >
-          <h1>
-            Complete all onboarding tasks before embarking on your next mission.
-          </h1>
-          <b-row class="mt-4">
+          <b-row>
+            <b-col>
+              <h3>
+                Complete all onboarding tasks before embarking on your next mission.
+              </h3>
+            </b-col>
+            <div class="w-100 mb-2"></div>
             <b-col align-self="start" cols="auto">
               <b-button @click="activateTutorial" variant="primary" size="lg">
                 <h4>Watch Tutorial</h4>
@@ -30,7 +33,7 @@
                   Take Survey
                   <b-icon-check-circle-fill
                     v-if="!playerTaskCompletion.mustTakeIntroSurvey"
-                    variant="success"
+                    variant="info"
                     scale="1"
                     class="ml-2"
                   ></b-icon-check-circle-fill>
@@ -49,8 +52,11 @@
                   variant="success"
                 >
                   <h4>
-                    <font-awesome-icon :icon="['fas', 'rocket']"></font-awesome-icon>
                     Join Game Lobby
+                    <font-awesome-icon
+                      :icon="['fas', 'rocket']"
+                      class="my-auto mx-2"
+                    ></font-awesome-icon>
                   </h4>
                 </b-button>
               </template>
@@ -77,7 +83,7 @@
           <h1>
             Thank you for participating!
             <template v-if="playerTaskCompletion.shouldTakeExitSurvey">
-              <b-button :href="exitSurveyUrl" size="lg" squared variant="success">
+              <b-button :href="exitSurveyUrl" size="lg" squared variant="info">
                 Take Exit Survey
               </b-button>
             </template>
