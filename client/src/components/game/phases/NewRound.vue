@@ -59,8 +59,8 @@
       <b-row class="h-auto w-100 mx-auto p-3 justify-content-center header">
         <p class="m-auto">System Health Report</p>
       </b-row>
-      <b-row class="flex-grow-1 w-100 mx-auto my-3 backdrop">
-        <b-col>
+      <b-row class="flex-grow-1 w-100 mx-auto backdrop">
+        <b-col class="m-0 p-0">
           <div class="scrollable">
               <b-table-lite
                 :fields="tabularContributionFields"
