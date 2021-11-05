@@ -1,32 +1,38 @@
 <template>
   <b-row class="h-100 w-100 m-0 p-0 report tour-report" align-v="center">
     <!-- system health information -->
-    <b-col cols="6" class="d-flex flex-column h-100 w-100 tour-report-hint light-shade-25-partition">
+    <b-col
+      cols="6"
+      class="d-flex flex-column h-100 w-100 tour-report-hint light-shade-25-partition"
+    >
       <!-- header -->
       <b-row class="h-auto w-100 mx-auto p-3 justify-content-center header">
-        <p class="m-auto">Information</p>
+        <p class="m-auto">Summary</p>
       </b-row>
       <!-- text info -->
-      <b-row v-if="isFirstRound" class="flex-grow-1 mx-auto p-3 backdrop">
-        <h2>
-          Upcoming System Health:
-          <b-badge :variant="systemHealthBadgeVariant(nextRoundSystemHealth)">{{
-            nextRoundSystemHealth
-          }}</b-badge>
-        </h2>
-        <p>
-          Welcome to Mars! Each round, your System Health degrades by
-          <b-badge variant="danger">{{ systemHealthMaintenanceCost }}</b-badge>
-          due to standard wear and tear. <br />
-          Your System Health at the start of this round is
-          <b-badge variant="success">{{ nextRoundSystemHealth }}</b-badge>
-        </p>
+      <b-row v-if="isFirstRound" class="flex-grow-1 flex-column w-100 mx-auto my-3 p-3 backdrop">
+        <b-col>
+          <h2 class="my-2">
+            Upcoming System Health:
+            <b-badge :variant="systemHealthBadgeVariant(nextRoundSystemHealth)">{{
+              nextRoundSystemHealth
+            }}</b-badge>
+          </h2>
+          <p class="my-2">
+            Welcome to Mars! Each round, your System Health degrades by
+            <b-badge variant="danger">{{ systemHealthMaintenanceCost }}</b-badge>
+            due to standard wear and tear. <br />
+            Your System Health at the start of this round is
+            <b-badge variant="success">{{ nextRoundSystemHealth }}</b-badge
+            >.
+          </p>
+        </b-col>
       </b-row>
-      <b-row v-else class="flex-grow-1 mx-auto p-3 backdrop">
+      <b-row v-else class="flex-grow-1 flex-column w-100 mx-auto my-3 p-3 backdrop">
         <p>
           In the previous round you invested
-          <b class="highlighted-number">{{ yourSystemHealthContributions }}</b> and the rest of
-          your group invested
+          <b class="highlighted-number">{{ yourSystemHealthContributions }}</b> and the rest of your
+          group invested
           <b class="highlighted-number">{{ otherPlayerSystemHealthContributions }}</b> in System
           Health for a total of {{ totalSystemHealthGroupContributions }}. Your group's average
           investment was {{ averageContribution }}.
@@ -51,38 +57,35 @@
       </b-row>
     </b-col>
     <!-- system health report -->
-    <b-col
-      cols="6"
-      class="d-flex flex-column h-100 w-100 tour-contribute"
-    >
+    <b-col cols="6" class="d-flex flex-column h-100 w-100 tour-contribute">
       <!-- header -->
       <b-row class="h-auto w-100 mx-auto p-3 justify-content-center header">
         <p class="m-auto">System Health Report</p>
       </b-row>
-      <b-row class="flex-grow-1 w-100 mx-auto backdrop">
-        <b-col class="m-0 p-0">
+      <b-row align-h="center" class="flex-grow-1 flex-column w-100 mx-auto my-3 p-3 backdrop">
+        <b-col>
           <div class="scrollable">
-              <b-table-lite
-                :fields="tabularContributionFields"
-                :items="tabularContributions"
-                fixed
-                bordered
-                dark
-                striped
-                responsive
-              >
-              </b-table-lite>
-              <b-table-lite
-                v-if="purchases.length > 0"
-                :fields="purchaseFields"
-                :items="purchases"
-                fixed
-                bordered
-                dark
-                striped
-                responsive
-              >
-              </b-table-lite>
+            <b-table-lite
+              :fields="tabularContributionFields"
+              :items="tabularContributions"
+              fixed
+              bordered
+              dark
+              striped
+              responsive
+            >
+            </b-table-lite>
+            <b-table-lite
+              v-if="purchases.length > 0"
+              :fields="purchaseFields"
+              :items="purchases"
+              fixed
+              bordered
+              dark
+              striped
+              responsive
+            >
+            </b-table-lite>
           </div>
         </b-col>
       </b-row>
