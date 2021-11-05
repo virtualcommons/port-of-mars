@@ -11,7 +11,7 @@
     </b-row>
     <b-row class="w-100 mx-2" align-v="start">
       <b-col cols="9" class="mr-auto">
-        <h1 class="title">Welcome to the Port of Mars</h1>
+        <h1 class="title">Welcome to Port of Mars</h1>
         <h3 class="subtitle">
           Port of Mars is a fun, game-based social science experiment set on the first human
           community on the Red Planet.
@@ -27,12 +27,12 @@
         </b-img>
       </b-col>
     </b-row>
-    <b-row class="mx-2">
-      <b-col cols="8" class="p-0">
+    <b-row class="mt-2">
+      <b-col cols="7" class="mt-4 p-5">
         <b-embed type="iframe" aspect="21by9" :src="trailerVideoUrl" allowfullscreen>
         </b-embed>
       </b-col>
-      <b-col align-self="center" cols="4" class="mt-2">
+      <b-col align-self="center" cols="5">
         <h3 class="subtitle">
           <span v-if="isSignUpEnabled">
             The next Mars Madness tournament is coming soon! Register and get notified when it starts.
@@ -58,7 +58,7 @@
           :href="asuLoginUrl"
           size="lg"
           variant="primary"
-          block
+          class="w-75"
         >
           <b-icon class="mb-1" icon="box-arrow-right"></b-icon>
           <span v-if="isSignUpEnabled">
@@ -80,9 +80,10 @@
             v-model="testUsername"
             placeholder="Enter any username for testing"
             required
+            class="w-50"
           >
           </b-form-input>
-          <b-button class="mx-2" icon type="submit" variant="success">
+          <b-button class="w-25 mx-2" icon type="submit" variant="success">
             <b-icon class="mb-1" icon="box-arrow-right"></b-icon> Sign in
           </b-button>
         </b-form>
@@ -186,15 +187,6 @@ export default class Login extends Vue {
 </script>
 
 <style lang="scss" scoped>
-// HTML TEXT ELEMENTS
-a {
-  text-decoration: none;
-}
-
-a:hover {
-  color: inherit;
-}
-
 .title {
   letter-spacing: 0.25rem;
   font-size: 4rem;
@@ -206,22 +198,5 @@ a:hover {
   font-size: 2rem;
   font-weight: 500;
   color: white;
-}
-
-// LOGIN :: FORM
-
-input[type="text"] {
-  border: solid 0.1rem $light-shade;
-
-  &:focus,
-  &:active {
-    outline: none;
-  }
-
-  &::placeholder {
-    font-size: $font-med;
-    font-weight: $medium !important;
-    color: $light-shade-25;
-  }
 }
 </style>
