@@ -1,11 +1,36 @@
 <template>
-  <b-container
-    fluid
-    class="h-100 m-0 p-0 d-flex flex-column justify-content-start"
-    style="background-color: var(--dark-shade)"
-  >
-    <ModalController />
-    <ProfileMenu />
+  <b-container fluid class="h-100 m-0 p-0 d-flex flex-column bg-dark">
+    <b-row>
+      <ModalController />
+    </b-row>
+    <!-- FIXME: this modal should be controlled by modal controller -->
+    <b-row>
+      <b-modal
+        body-bg-variant="dark"
+        body-text-variant="warning"
+        centered
+        no-close-on-backdrop
+        no-close-on-esc
+        no-enforce-focus
+        header-bg-variant="dark"
+        header-border-variant="dark"
+        header-text-variant="warning"
+        hide-footer
+        hide-header-close
+        title="Timeout Warning: Impending Bot Takeover"
+        v-model="botWarning"
+        variant="outline-warning"
+      >
+        <p>
+          You have been inactive for at least four minutes. After five minutes a bot will takeover
+          your player.
+        </p>
+        <b-button @click="resetBotWarning" block variant="warning">OK</b-button>
+      </b-modal>
+    </b-row>
+    <b-row>
+      <ProfileMenu />
+    </b-row>
 
     <!--  ----------------------------------------
                      System Health
@@ -21,7 +46,7 @@
     </b-row>
 
     <!-- HUD, Phase Switcher, Mars Log, Chat -->
-    <b-row align-v="stretch" class="w-100 p-0 m-auto" style="height: 90vh !important">
+    <b-row class="flex-grow-1 w-100 my-2 mx-auto p-0">
       <b-col cols="9" class="d-flex flex-column w-100">
         <!-- HUD -->
         <b-row class="w-100 p-2 mx-0" style="border: 0.2rem solid rgba(241, 224, 197, 0.25);">
@@ -40,28 +65,6 @@
         <ChatMarsLog></ChatMarsLog>
       </b-col>
     </b-row>
-    <b-modal
-      body-bg-variant="dark"
-      body-text-variant="warning"
-      centered
-      no-close-on-backdrop
-      no-close-on-esc
-      no-enforce-focus
-      header-bg-variant="dark"
-      header-border-variant="dark"
-      header-text-variant="warning"
-      hide-footer
-      hide-header-close
-      title="Timeout Warning: Impending Bot Takeover"
-      v-model="botWarning"
-      variant="outline-warning"
-    >
-      <p>
-        You have been inactive for at least four minutes. After five minutes a bot will takeover
-        your player.
-      </p>
-      <b-button @click="resetBotWarning" block variant="warning">OK</b-button>
-    </b-modal>
   </b-container>
 </template>
 
