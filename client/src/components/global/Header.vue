@@ -2,20 +2,21 @@
   <b-navbar toggleable="lg" type="dark" variant="primary" class="w-100">
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
     <b-collapse id="nav-collapse" is-nav>
-    <b-navbar-brand :to="dashboard">
+      <b-navbar-brand :to="dashboard">
         <b-img
-        v-bind="portOfMarsLogoProps"
-        :src="require(`@port-of-mars/client/assets/background/logo.png`)"
-        alt="Port of Mars"
+          v-bind="portOfMarsLogoProps"
+          :src="require(`@port-of-mars/client/assets/background/logo.png`)"
+          alt="Port of Mars"
+          class="mx-3"
         >
         </b-img>
-    </b-navbar-brand>
-    <h2 class="mx-auto">{{ title }}</h2>
-    <b-navbar-nav class="ml-auto">
-      <slot name="nav-items"><b-nav-item :to="consent">Consent Form</b-nav-item></slot>
-      <b-nav-item :href="contactUrl">Contact Us</b-nav-item>
-      <b-nav-item @click="logout">Logout</b-nav-item>
-    </b-navbar-nav>
+      </b-navbar-brand>
+      <h2 class="mx-auto">{{ title }}</h2>
+      <b-navbar-nav class="ml-auto">
+        <slot name="nav-items"><b-nav-item :to="consent">Consent Form</b-nav-item></slot>
+        <b-nav-item :href="contactUrl">Contact Us</b-nav-item>
+        <b-nav-item @click="logout">Logout</b-nav-item>
+      </b-navbar-nav>
     </b-collapse>
   </b-navbar>
 </template>
@@ -26,14 +27,13 @@ import { DASHBOARD_PAGE, LOGIN_PAGE, REGISTER_PAGE } from "@port-of-mars/shared/
 
 @Component({})
 export default class Header extends Vue {
-
-  @Prop({ default: "Mission Control Dashboard"})
+  @Prop({ default: "Mission Control Dashboard" })
   title;
 
   contactUrl = "mailto:portmars@asu.edu";
 
   portOfMarsLogoProps = {
-    height: 50,
+    height: 50
   };
 
   dashboard = { name: DASHBOARD_PAGE };
@@ -49,6 +49,5 @@ export default class Header extends Vue {
     this.$ajax.forgetLoginCreds();
     this.$router.push(this.login);
   }
-
 }
 </script>

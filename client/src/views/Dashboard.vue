@@ -1,24 +1,16 @@
 <template>
-  <b-container fluid class="h-100 m-0 p-0">
-    <b-row class="h-auto m-0 p-0">
-      <Header></Header>
-    </b-row>
-    <b-row class="d-flex flex-grow-1 m-2">
-      <Messages></Messages>
-      <b-col align-self="center" cols="9">
+  <b-container fluid class="h-100 m-0 p-0 position-absolute bg-dark-75">
+    <b-row class="d-flex flex-column h-100 w-100 m-0">
+      <b-row><Header></Header></b-row>
+      <b-row><Messages></Messages></b-row>
+      <b-row class="p-5">
         <template
           v-if="playerTaskCompletion.mustTakeIntroSurvey || playerTaskCompletion.canPlayGame"
         >
-          <p class="text-dark lead">
-            Welcome to the Port of Mars! Please be sure to complete all onboarding tasks
-            before embarking on your next mission. If this is your first time we highly encourage
-            you to <a class='text-primary' @click="activateTutorial">watch the tutorial video</a>.
-            <br>
-            After watching the tutorial and completing the introductory survey, 
-            <a class='text-primary' @click="activateTab(1)">click on the 
-            Schedule tab</a> below to see when games are available.
-          </p>
-          <b-row>
+          <h1>
+            Complete all onboarding tasks before embarking on your next mission.
+          </h1>
+          <b-row class="mt-4">
             <b-col align-self="start" cols="auto">
               <b-button @click="activateTutorial" variant="primary" size="lg">
                 <h4>Watch Tutorial</h4>
@@ -58,7 +50,8 @@
                 >
                   <h4>
                     <font-awesome-icon :icon="['fas', 'rocket']"></font-awesome-icon>
-                  Join Game Lobby</h4>
+                    Join Game Lobby
+                  </h4>
                 </b-button>
               </template>
               <template v-else>
@@ -75,10 +68,9 @@
             Invitation not found
           </h1>
           <p class="lead">
-            Thanks for your interest in the Port of Mars! Unfortunately you do not appear to
-            have an invitation to participate in this round of the Port of Mars. If you think
-            this is an error, please <a href="mailto:portmars@asu.edu">contact us at
-            portmars@asu.edu</a>.
+            Thanks for your interest in the Port of Mars! Unfortunately you do not appear to have an
+            invitation to participate in this round of the Port of Mars. If you think this is an
+            error, please <a href="mailto:portmars@asu.edu">contact us at portmars@asu.edu</a>.
           </p>
         </template>
         <template v-else>
@@ -91,48 +83,49 @@
             </template>
           </h1>
           <p>
-            We will email you with further instructions if you are eligible to 
-            participate in the next round. You can review your past games in the
+            We will email you with further instructions if you are eligible to participate in the
+            next round. You can review your past games in the
             <code>Previous Games</code> tab.
           </p>
         </template>
-      </b-col>
-    <!-- splash image + missions completed -->
-      <b-col class="mt-2 align-content-end" align-self="end" cols="3">
-        <b-img
-          :src="require(`@port-of-mars/client/assets/characters/Politician.png`)"
-          alt="player"
-        >
-        </b-img>
-        <p>
-          You have participated in
-          <b-badge variant="primary">{{ gamesPlayedCount }}</b-badge> missions.
-        </p>
-      </b-col>
-      <div class="w-100"></div>
-      <b-col>
-        <b-tabs pills class="p-3" v-model="tabIndex" small>
-          <b-tab class="mt-3">
+      </b-row>
+      <b-row class="flex-grow-1"
+        ><b-tabs pills class="h-auto w-75 p-3 my-2 mx-auto">
+          <b-tab class="h-100 mt-3">
             <template #title>
               <h4>Tutorial</h4>
             </template>
             <p class="m-3 lead">
               Learn how to play Port of Mars by watching this brief tutorial video.
             </p>
-            <div class="mx-auto w-50">
-              <b-embed id="tutorialVideo" type="iframe" aspect="16by9" :src="tutorialVideoUrl" allowfullscreen>
+            <div class="mx-auto w-75">
+              <b-embed
+                id="tutorialVideo"
+                type="iframe"
+                aspect="16by9"
+                :src="tutorialVideoUrl"
+                allowfullscreen
+              >
               </b-embed>
             </div>
           </b-tab>
-          <b-tab class="mt-3">
+          <b-tab class="h-100 mt-3">
             <template #title>
               <h4>Schedule</h4>
             </template>
             <p class="m-3 lead">
-              Please sign in during <b>one</b> of the following times to participate. We
-              recommend that you show up 5 minutes earlier to join the game lobby.
+              Please sign in during <b>one</b> of the following times to participate. We recommend
+              that you show up 5 minutes earlier to join the waiting lobby.
             </p>
-            <b-table class="schedule" sticky-header="20rem" :items="schedule" dark striped bordered show-empty>
+            <b-table
+              class="schedule"
+              sticky-header="20rem"
+              :items="schedule"
+              dark
+              striped
+              bordered
+              show-empty
+            >
               <template #empty>
                 <b-alert class="mt-2 lead" variant="info" show>
                   No upcoming games on the schedule at this time. Please check again later!
@@ -145,28 +138,23 @@
               </template>
             </b-table>
           </b-tab>
-          <b-tab class="mt-3">
+          <b-tab class="h-100 mt-3">
             <template #title>
               <h4>Previous Games</h4>
             </template>
-            <p v-if="previousGames.length === 0" class='m-3 lead'>
+            <p v-if="previousGames.length === 0" class="m-3 lead">
               No games to display.
             </p>
-            <div class="p-3 m-3 scrolling-wrapper">
-              <PlayerStatItem
-                v-for="playerStatItem in previousGames"
-                :key="playerStatItem.time"
-                :playerStatItem="playerStatItem"
-                class="my-1 py-1"
-              >
-              </PlayerStatItem>
-            </div>
-          </b-tab>
-        </b-tabs>
-      </b-col>
-    </b-row>
-    <b-row align-v="end" class="h-auto w-100 m-0 p-0">
-      <Footer></Footer>
+            <div class="h-50 w-75 p-3 scrollable backdrop">
+              <b-row>
+                <b-col v-for="playerStatItem in previousGames" :key="playerStatItem.time">
+                  <PlayerStatItem :playerStatItem="playerStatItem" class="my-3 p-3">
+                  </PlayerStatItem>
+                </b-col>
+              </b-row>
+            </div> </b-tab></b-tabs
+      ></b-row>
+      <b-row><Footer></Footer></b-row>
     </b-row>
   </b-container>
 </template>
@@ -344,27 +332,10 @@ export default class Dashboard extends Vue {
     // FIXME: currently some typescript bugs with the vimeo player ts defs
     (player as any).requestFullscreen().then(() => player.play());
   }
-
 }
 </script>
 
-<style lang="scss" scoped>
-
-.dark-bg {
-  background-color: $dark-shade-75;
-}
-
-.schedule {
-  font-size: 1.3rem;
-  overflow-y: auto;
-}
-
-.scrolling-wrapper {
-  overflow-y: auto;
-  overflow-x: hidden;
-  max-height: 20rem;
-}
-
+<style lang="scss">
 ::-webkit-scrollbar {
   width: 0;
   background: transparent;
@@ -382,5 +353,4 @@ export default class Dashboard extends Vue {
   border: 0.2rem solid $light-shade-25;
   border-radius: 3px;
 }
-
 </style>
