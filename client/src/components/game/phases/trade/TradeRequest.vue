@@ -44,7 +44,7 @@
 
       <!-- offer -->
       <b-form-group>
-        <h4>Offer:</h4>
+        <h4>Your Offer:</h4>
         <TradeOptions
           :resourceReader="handleSendResources"
           :resources="recipientResources"

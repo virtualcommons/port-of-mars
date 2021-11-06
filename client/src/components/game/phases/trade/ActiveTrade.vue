@@ -41,8 +41,7 @@
               :title="name"
               v-b-tooltip.hover.bottom
             />
-            <p v-if="value !== 0" class="text-center my-2">{{ value }}</p>
-            <p v-if="value === 0" class="text-center my-2">0</p>
+            <p class="text-center my-2">{{ value }}</p>
           </b-col>
         </b-row>
       </b-col>
@@ -50,7 +49,7 @@
       <!-- to -->
       <b-col cols="auto" class="w-50">
         <b-row align-h="end" align-v="center" class="w-100" :style="frameStyle(recipient.role)">
-          <p>Request from {{ recipient.role }}</p>
+          <p>In exchange for</p>
           <b-img
             v-bind="player"
             :src="require(`@port-of-mars/client/assets/characters/${recipient.role}.png`)"
@@ -66,8 +65,7 @@
               :title="name"
               v-b-tooltip.hover.bottom
             />
-            <p v-if="value !== 0" class="text-center my-2">{{ value }}</p>
-            <p v-if="value === 0" class="text-center my-2">0</p>
+            <span class="text-center my-2">{{ value }}</span>
           </b-col>
         </b-row>
       </b-col>
