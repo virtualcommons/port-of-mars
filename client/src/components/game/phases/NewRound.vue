@@ -7,53 +7,59 @@
     >
       <!-- header -->
       <b-row class="h-auto w-100 mx-auto p-3 justify-content-center header">
-        <p class="m-auto">Summary</p>
+        <p class="m-auto">System Health Summary</p>
       </b-row>
       <!-- text info -->
       <b-row v-if="isFirstRound" class="flex-grow-1 flex-column w-100 mx-auto my-3 p-3 backdrop">
         <b-col>
-          <h2 class="my-2">
-            Upcoming System Health:
+          <h3 class="my-2">
+            System Health
             <b-badge :variant="systemHealthBadgeVariant(nextRoundSystemHealth)">{{
               nextRoundSystemHealth
             }}</b-badge>
-          </h2>
-          <p class="my-2">
+          </h3>
+          <p class="my-2 lead">
             Welcome to Mars! Each round, your System Health degrades by
             <b-badge variant="danger">{{ systemHealthMaintenanceCost }}</b-badge>
-            due to standard wear and tear. <br />
-            Your System Health at the start of this round is
-            <b-badge variant="success">{{ nextRoundSystemHealth }}</b-badge
-            >.
+            due to standard wear and tear.
+          </p>
+          <p>
+            Your System Health at the start of this round was <b-badge variant="success">100</b-badge>.
+            Applying standard wear and tear results in a current System Health of
+            <b-badge variant="success">{{ nextRoundSystemHealth }}</b-badge>.
           </p>
         </b-col>
       </b-row>
       <b-row v-else class="flex-grow-1 flex-column w-100 mx-auto my-3 p-3 backdrop">
-        <p>
-          In the previous round you invested
-          <b class="highlighted-number">{{ yourSystemHealthContributions }}</b> and the rest of your
-          group invested
-          <b class="highlighted-number">{{ otherPlayerSystemHealthContributions }}</b> in System
-          Health for a total of {{ totalSystemHealthGroupContributions }}. Your group's average
-          investment was {{ averageContribution }}.
-          <span v-if="systemHealthAccomplishmentPurchasesCost < 0">
-            Accomplishments were purchased that cost a total of
-            {{ systemHealthAccomplishmentPurchasesCost }} System Health.
-          </span>
-          <br />
-          <b>
-            Your final System Health at the end of last round was
-            <b-badge :variant="systemHealthBadgeVariant(systemHealth)">{{
-              lastRoundSystemHealthCalculation
-            }}</b-badge
-            >.
-            <br />
-            After standard wear and tear, your starting System Health this round is
-            <b-badge :variant="systemHealthBadgeVariant(nextRoundSystemHealth)">{{
-              nextRoundSystemHealth
-            }}</b-badge>
-          </b>
-        </p>
+        <h3 class="my-2">
+          System Health
+          <b-badge :variant="systemHealthBadgeVariant(nextRoundSystemHealth)">
+            {{ nextRoundSystemHealth }}
+          </b-badge>
+        </h3>
+        <ul>
+          <li>In the previous round you invested <b class="highlighted-number">{{ yourSystemHealthContributions }} System Health</b></li>
+          <li>The rest of your group invested <b class="highlighted-number">{{ otherPlayerSystemHealthContributions }} System Health</b></li>
+          <li>Total contributions: <b class='highlighted-number'>{{ totalSystemHealthGroupContributions }} System Health</b></li>
+          <li>Average contributions: <b class='highlighted-number'>{{ averageContribution }} System Health</b></li>
+          <li v-if="systemHealthAccomplishmentPurchasesCost < 0">
+            Purchased Accomplishments last round cost
+            <b class='highlighted-number'>{{ systemHealthAccomplishmentPurchasesCost }} System Health</b>.
+          </li>
+          <li v-if="systemHealthMarsEventsCost < 0">
+            Mars Events cost 
+            <b class='highlighted-number'>{{ systemHealthMarsEventsCost }} System Health</b>.
+          </li>
+          <li>Standard Wear and Tear: <b class='highlighted-number'>-25 System Health</b>.</li>
+        </ul>
+        <h4>
+          Upcoming System Health Calculation 
+        </h4>
+        <h4>
+          <b-badge :variant="systemHealthBadgeVariant(systemHealth)">
+            {{ upcomingSystemHealthCalculation}}
+          </b-badge>
+        </h4>
       </b-row>
     </b-col>
     <!-- system health report -->
@@ -166,8 +172,7 @@ export default class NewRound extends Vue {
     return _.sum(this.purchases.map(p => p.systemHealthModification));
   }
 
-  get lastRoundSystemHealthCalculation() {
-    // {{ priorSystemHealth }} + {{ systemHealthGroupContributions }} {{ systemHealth }}</code>.
+  get upcomingSystemHealthCalculation() {
     let calculation = `${this.priorSystemHealth} + ${this.totalSystemHealthGroupContributions}`;
     if (this.systemHealthAccomplishmentPurchasesCost < 0) {
       calculation = calculation.concat(
@@ -177,7 +182,7 @@ export default class NewRound extends Vue {
     if (this.systemHealthMarsEventsCost < 0) {
       calculation = calculation.concat(` - ${Math.abs(this.systemHealthMarsEventsCost)}`);
     }
-    calculation = calculation.concat(` = ${this.systemHealth}`);
+    calculation = calculation.concat(` = ${this.systemHealth} - 25 = ${this.nextRoundSystemHealth}`);
     return calculation;
   }
 
