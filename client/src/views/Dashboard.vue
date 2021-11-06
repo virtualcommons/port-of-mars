@@ -84,14 +84,10 @@
 
         <!-- exit survey -->
         <template v-else>
-          <b-col
-            ><h1>
-              Thank you for participating!
-            </h1></b-col
-          >
+          <b-col><h1>Thank you for participating!</h1></b-col>
           <div class="w-100 mb-2"></div>
           <b-col v-if="playerTaskCompletion.shouldTakeExitSurvey">
-            <b-button :href="exitSurveyUrl" size="lg" squared variant="info">
+            <b-button :href="exitSurveyUrl" size="lg" squared variant="primary">
               Take Exit Survey
             </b-button>
           </b-col>
