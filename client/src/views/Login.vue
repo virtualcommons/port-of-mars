@@ -113,7 +113,7 @@ export default class Login extends Vue {
   isDevMode: boolean = false;
   toggleDevLogin: boolean = false;
   currentYear = new Date().getFullYear();
-  trailerVideoUrl = "https://player.vimeo.com/video/618174821?h=82fd072f73";
+  trailerVideoUrl = "https://player.vimeo.com/video/644046830";
   tournamentRoundNumber = 1;
   
 
