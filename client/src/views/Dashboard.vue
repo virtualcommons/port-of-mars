@@ -12,33 +12,40 @@
           v-if="playerTaskCompletion.mustTakeIntroSurvey || playerTaskCompletion.canPlayGame"
         >
           <b-col>
-            <h3>
-              Complete all onboarding tasks before embarking on your next mission.
-            </h3>
+            <h2>
+              Round {{ currentRoundNumber }}: Complete onboarding tasks
+            </h2>
           </b-col>
           <div class="w-100 mb-2"></div>
           <b-col align-self="start" cols="auto">
-            <b-button @click="activateTutorial" variant="primary" size="lg">
-              <h4>Watch Tutorial</h4>
-            </b-button>
-            <b-icon-arrow-right-circle-fill scale="2" class="mx-4"></b-icon-arrow-right-circle-fill>
-            <b-button
-              :disabled="!playerTaskCompletion.mustTakeIntroSurvey"
-              target="_blank"
-              :href="introSurveyUrl"
-              variant="primary"
-              size="lg"
-            >
-              <h4>
-                Take Survey
-                <b-icon-check-circle-fill
-                  v-if="!playerTaskCompletion.mustTakeIntroSurvey"
-                  variant="info"
-                  scale="1"
-                  class="ml-2"
-                ></b-icon-check-circle-fill>
+            <b-button @click="activateTutorial" :variant="hasWatchedTutorial ? 'success' : 'primary'" size="lg">
+              <h4>Watch Tutorial
+                <b-icon-check-circle-fill scale="1" v-if="hasWatchedTutorial">
+                </b-icon-check-circle-fill>
               </h4>
             </b-button>
+            <b-icon-arrow-right-circle-fill scale="2" class="mx-4"></b-icon-arrow-right-circle-fill>
+            <template v-if="playerTaskCompletion.mustTakeIntroSurvey">
+              <b-button
+                target="_blank"
+                :href="introSurveyUrl"
+                variant="primary"
+                size="lg"
+              >
+                <h4>
+                  Take Survey
+                </h4>
+              </b-button>
+            </template>
+            <template v-else>
+              <b-button variant="success" size="lg">
+                <h4>Survey Completed
+                <b-icon-check-circle-fill scale="1">
+                </b-icon-check-circle-fill>
+                </h4>
+              </b-button>
+            </template>
+
             <b-icon-arrow-right-circle-fill scale="2" class="mx-4"></b-icon-arrow-right-circle-fill>
             <!-- Join waiting lobby -->
             <template v-if="isLobbyOpen">
@@ -46,7 +53,7 @@
                 :disabled="!playerTaskCompletion.canPlayGame"
                 :to="lobby"
                 size="lg"
-                variant="success"
+                variant="warning"
               >
                 <h4>
                   Join Game Lobby
@@ -126,8 +133,11 @@
               <h4>Schedule</h4>
             </template>
             <p class="m-3 lead">
-              Please sign in during <b>one</b> of the following times to participate. We recommend
-              that you show up 5 minutes earlier to join the waiting lobby.
+              <ul>
+                <li>You can only <mark>participate in one game</mark> this round</li>
+                <li>Sign in and join the game lobby when a game is scheduled</li>
+                <li>The game lobby <mark>opens 10 minutes before the launch time and stays open 30 minutes past</mark></li>
+              </ul>
             </p>
             <b-table
               sticky-header="20rem"
@@ -143,9 +153,18 @@
                 </b-alert>
               </template>
               <template v-slot:cell(addToCalendar)="data">
-                <a :href="inviteLink(data.item.addToCalendar)" target="_blank">
-                  <font-awesome-icon :icon="['fab', 'google']"></font-awesome-icon>
-                </a>
+                <div>
+                  <b-button-group>
+                    <a class="btn btn-info" :href="googleInviteLink(data.item.addToCalendar)" target="_blank">
+                      <font-awesome-icon :icon="['fab', 'google']"></font-awesome-icon>
+                      add to google calendar
+                    </a>
+                    <a class="btn btn-info" :href="icsInviteLink(data.item.addToCalendar)" target="_blank">
+                      <font-awesome-icon :icon="['fas', 'calendar-plus']"></font-awesome-icon>
+                      download ics
+                    </a>
+                  </b-button-group>
+                </div>
               </template>
             </b-table>
           </b-tab>
@@ -176,10 +195,10 @@
 import { Component, Vue } from "vue-property-decorator";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faRocket, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faRocket, faInfoCircle, faCalendarPlus } from "@fortawesome/free-solid-svg-icons";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import Player from "@vimeo/player";
-import { CalendarEvent, google } from "calendar-link";
+import { CalendarEvent, google, ics } from "calendar-link";
 
 import { GameMeta, PlayerTaskCompletion, Stats } from "@port-of-mars/shared/types";
 import {
@@ -197,7 +216,7 @@ import Header from "@port-of-mars/client/components/global/Header.vue";
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
 import _ from "lodash";
 
-library.add(faGoogle, faInfoCircle, faRocket);
+library.add(faGoogle, faInfoCircle, faRocket, faCalendarPlus);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 @Component({
@@ -217,6 +236,7 @@ export default class Dashboard extends Vue {
   exitSurveyUrl: string = "";
   currentRoundNumber: number = 1;
   isLobbyOpen = false;
+  hasWatchedTutorial = false;
   playerTaskCompletion: PlayerTaskCompletion = {
     mustConsent: true,
     mustVerifyEmail: true,
@@ -226,9 +246,9 @@ export default class Dashboard extends Vue {
     shouldTakeExitSurvey: false,
     hasInvite: false
   };
-  schedule: Array<{ date: string; addToCalendar: CalendarEvent }> = [
+  schedule: Array<{ launchTime: string; addToCalendar: CalendarEvent }> = [
     {
-      date: "",
+      launchTime: "",
       addToCalendar: {
         title: "",
         location: "",
@@ -240,10 +260,9 @@ export default class Dashboard extends Vue {
   ];
   stats: Stats = { games: [] };
 
-  tutorialVideoUrl = "https://player.vimeo.com/video/642036661?h=2295c303de&autoplay=1&autopause=1";
+  tutorialVideoUrl = "https://player.vimeo.com/video/642036661";
 
   get username() {
-    console.log("user? ", this.$tstore.state.user);
     return this.$tstore.state.user.username;
   }
 
@@ -274,17 +293,19 @@ export default class Dashboard extends Vue {
   async created() {
     this.api = new DashboardAPI(this.$tstore, this.$ajax);
     await this.initialize();
-    console.log("user: ", this.$tstore.state.user);
   }
 
-  inviteLink(invite: { title: string; location: string; start: Date; end: Date; details: string }) {
+  googleInviteLink(invite: { title: string; location: string; start: Date; end: Date; details: string }) {
     return google(invite);
+  }
+
+  icsInviteLink(invite: { title: string; location: string; start: Date; end: Date; details: string }) {
+    return ics(invite);
   }
 
   async initialize() {
     // get player task completion status
     const data = await this.api.getData();
-    console.log("incoming dashboard data: ", data);
     this.$set(this, "playerTaskCompletion", data.playerTaskCompletion);
 
     // go to email verification page if player is not verified
@@ -305,6 +326,7 @@ export default class Dashboard extends Vue {
     /*
     // go to tutorial if player has not taken tutorial
     else if (data.playerTaskCompletion.mustTakeTutorial) {
+      // FIXME: open tutorial video fullscreen once we get vimeo player integration set up
       await this.$router.push({ name: TUTORIAL_PAGE });
     }
     */
@@ -321,13 +343,13 @@ export default class Dashboard extends Vue {
     this.schedule = data.upcomingGames.map(game => {
       const scheduledDate = new Date(game.time);
       return {
-        date: scheduledDate.toString(),
+        launchTime: scheduledDate.toLocaleString(),
         addToCalendar: {
           title: `Port of Mars Round ${game.round}`,
           location: "https://portofmars.asu.edu/",
           start: scheduledDate,
           duration: [1, "hour"],
-          description: `Participate in Round ${game.round} of the Mars Madness tournament at https://portofmars.asu.edu/`
+          description: `Participate in Round ${game.round} of the Mars Madness tournament at https://portofmars.asu.edu/ - the lobby stays open for a 30 minute window after the scheduled time.`
         }
       };
     });
@@ -344,6 +366,11 @@ export default class Dashboard extends Vue {
     const player = new Player(iframe);
     // FIXME: currently some typescript bugs with the vimeo player ts defs
     (player as any).requestFullscreen().then(() => player.play());
+    (player as any).on('ended', (data) => {
+      console.log("Video ended");
+      this.hasWatchedTutorial = true;
+      // FIXME: submit to a new API endpoint also and read it in from dashboard data
+    });
   }
 }
 </script>

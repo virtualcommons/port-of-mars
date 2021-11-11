@@ -7,9 +7,16 @@
       style="background-color: var(--dark-shade-75)"
     >
       <b-col>
-        <h2 class="m-5">
-          Next Game <mark>{{ scheduledGameTimeString }}</mark>
+        <h1 class='m-3'>Next Launch Time</h1>
+        <h2 class="m-4">
+          <mark>{{ scheduledGameTimeString }}</mark>
         </h2>
+        <p class='lead'>
+          You'll join a game as soon as there are enough players to form a full group.
+        </p>
+        <p>
+          This lobby will remain open up to 30 minutes after the scheduled launch time.
+        </p>
       </b-col>
       <div class="w-100"></div>
       <b-col>
@@ -19,12 +26,6 @@
         <h1 class="my-4">
           <b-badge :variant="variantStyle(waitingUserCount)">{{ waitingUserCount }} Player(s) Ready</b-badge>
         </h1>
-        <p class='lead'>
-          You'll join a game as soon as there are enough players to form a full group.
-        </p>
-        <p>
-          The lobby will remain open up to 30 minutes after the scheduled game time.
-        </p>
         <b-button-group class="w-25 mt-4" vertical>
           <b-button :to="dashboard" variant="primary">
             Return to the Dashboard
@@ -112,7 +113,7 @@ export default class Lobby extends Vue {
     }
     if (!playerTaskCompletion.canPlayGame) {
       dashboardAPI.message(
-        "You do not currently have an active Port of Mars invitation. Please contact us if this is an error."
+        "You do not have an active Port of Mars invitation. Please contact us if this is an error."
       );
       await this.$router.push({ name: DASHBOARD_PAGE });
       return;
@@ -166,8 +167,7 @@ export default class Lobby extends Vue {
   }
 
   private variantStyle(ready: number): string {
-    if (ready < 4) return "warning";
-    else return "success";
+    return (ready < 4) ? "warning" : "success";
   }
 }
 </script>
