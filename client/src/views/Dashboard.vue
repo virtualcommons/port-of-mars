@@ -366,7 +366,7 @@ export default class Dashboard extends Vue {
     const player = new Player(iframe);
     // FIXME: currently some typescript bugs with the vimeo player ts defs
     (player as any).requestFullscreen().then(() => player.play());
-    (player as any).on('ended', (data) => {
+    (player as any).on('ended', (data: any) => {
       console.log("Video ended");
       this.hasWatchedTutorial = true;
       // FIXME: submit to a new API endpoint also and read it in from dashboard data
