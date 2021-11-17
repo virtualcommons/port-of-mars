@@ -24,9 +24,10 @@
             due to standard wear and tear.
           </p>
           <p>
-            Your System Health at the start of this round was <b-badge variant="success">100</b-badge>.
-            Applying standard wear and tear results in a current System Health of
-            <b-badge variant="success">{{ nextRoundSystemHealth }}</b-badge>.
+            Your System Health at the start of this round was
+            <b-badge variant="success">100</b-badge>. Applying standard wear and tear results in a
+            current System Health of <b-badge variant="success">{{ nextRoundSystemHealth }}</b-badge
+            >.
           </p>
         </b-col>
       </b-row>
@@ -38,26 +39,44 @@
           </b-badge>
         </h3>
         <ul>
-          <li>In the previous round you invested <b class="highlighted-number">{{ yourSystemHealthContributions }} System Health</b></li>
-          <li>The rest of your group invested <b class="highlighted-number">{{ otherPlayerSystemHealthContributions }} System Health</b></li>
-          <li>Total contributions: <b class='highlighted-number'>{{ totalSystemHealthGroupContributions }} System Health</b></li>
-          <li>Average contributions: <b class='highlighted-number'>{{ averageContribution }} System Health</b></li>
+          <li>
+            In the previous round you invested
+            <b class="highlighted-number">{{ yourSystemHealthContributions }} System Health</b>
+          </li>
+          <li>
+            The rest of your group invested
+            <b class="highlighted-number"
+              >{{ otherPlayerSystemHealthContributions }} System Health</b
+            >
+          </li>
+          <li>
+            Total contributions:
+            <b class="highlighted-number"
+              >{{ totalSystemHealthGroupContributions }} System Health</b
+            >
+          </li>
+          <li>
+            Average contributions:
+            <b class="highlighted-number">{{ averageContribution }} System Health</b>
+          </li>
           <li v-if="systemHealthAccomplishmentPurchasesCost < 0">
             Purchased Accomplishments last round cost
-            <b class='highlighted-number'>{{ systemHealthAccomplishmentPurchasesCost }} System Health</b>.
+            <b class="highlighted-number"
+              >{{ systemHealthAccomplishmentPurchasesCost }} System Health</b
+            >.
           </li>
           <li v-if="systemHealthMarsEventsCost < 0">
-            Mars Events cost 
-            <b class='highlighted-number'>{{ systemHealthMarsEventsCost }} System Health</b>.
+            Mars Events cost
+            <b class="highlighted-number">{{ systemHealthMarsEventsCost }} System Health</b>.
           </li>
-          <li>Standard Wear and Tear: <b class='highlighted-number'>-25 System Health</b>.</li>
+          <li>Standard Wear and Tear: <b class="highlighted-number">-25 System Health</b>.</li>
         </ul>
         <h4>
-          Upcoming System Health Calculation 
+          Upcoming System Health Calculation
         </h4>
         <h4>
           <b-badge :variant="systemHealthBadgeVariant(systemHealth)">
-            {{ upcomingSystemHealthCalculation}}
+            {{ upcomingSystemHealthCalculation }}
           </b-badge>
         </h4>
       </b-row>
@@ -156,6 +175,18 @@ export default class NewRound extends Vue {
     return this.systemHealthGroupContributions.get(this.role) ?? 0;
   }
 
+  get otherPlayerSystemHealthContributions() {
+    return this.totalSystemHealthGroupContributions - this.yourSystemHealthContributions;
+  }
+
+  get totalSystemHealthGroupContributions() {
+    return _.sum(Array.from(this.systemHealthGroupContributions.values()));
+  }
+
+  get systemHealthGroupContributions() {
+    return this.roundIntroduction.systemHealthGroupContributions;
+  }
+
   get purchaseFields() {
     return [
       { key: "name", label: "Purchased Accomplishment" },
@@ -182,7 +213,9 @@ export default class NewRound extends Vue {
     if (this.systemHealthMarsEventsCost < 0) {
       calculation = calculation.concat(` - ${Math.abs(this.systemHealthMarsEventsCost)}`);
     }
-    calculation = calculation.concat(` = ${this.systemHealth} - 25 = ${this.nextRoundSystemHealth}`);
+    calculation = calculation.concat(
+      ` = ${this.systemHealth} - 25 = ${this.nextRoundSystemHealth}`
+    );
     return calculation;
   }
 
@@ -236,18 +269,6 @@ export default class NewRound extends Vue {
     // Next Round System Health = Previous System Health + Group Contributions - Wear and Tear
     console.log("tabular contributions:", items);
     return items;
-  }
-
-  get otherPlayerSystemHealthContributions() {
-    return this.totalSystemHealthGroupContributions - this.yourSystemHealthContributions;
-  }
-
-  get totalSystemHealthGroupContributions() {
-    return _.sum(Array.from(this.systemHealthGroupContributions.values()));
-  }
-
-  get systemHealthGroupContributions() {
-    return this.roundIntroduction.systemHealthGroupContributions;
   }
 
   get systemHealthMarsEvents() {
