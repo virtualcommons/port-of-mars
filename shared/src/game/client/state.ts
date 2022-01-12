@@ -184,6 +184,7 @@ export interface UserInterface {
   toggleYourTrades: boolean;
 }
 
+// TODO: rename interface to something more descriptive
 export interface UserInterfaceTwo {
   tradeData: TradeDataWithNull<"" | Role>;
 }
@@ -225,6 +226,7 @@ export interface State extends GameData {
   tutorialTradeGive: ResourceAmountData;
   tutorialTradeGet: ResourceAmountData;
   userInterface: UserInterface;
+  // TODO: rename UserInterfaceTwo to something more descriptive
   ui: UserInterfaceTwo;
 }
 
@@ -275,7 +277,7 @@ export const initialStoreState: State = {
   userInterface: {
     profileMenuView: {
       visible: false,
-    },                                                                                                                                                    
+    },
     chatMarsLogView: ChatMarsLogView.Chat,
     hudLeftView: HUDLeftView.OtherPlayers,
     hudRightView: HUDRightView.PhaseInformation,

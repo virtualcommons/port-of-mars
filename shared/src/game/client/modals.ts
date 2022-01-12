@@ -23,10 +23,17 @@ export interface PlayerModalData {
 
 export interface TradeRequestModalData {}
 
-export type ModalType = "CardModal" | "PlayerModal" | "TradeRequestModal";
+export interface ManualData extends ModalData {}
+
+export type ModalType =
+  | "CardModal"
+  | "ManualModal"
+  | "PlayerModal"
+  | "TradeRequestModal";
 
 export type ModalDataType =
   | ModalData
+  | ManualData
   | CardModalData
   | PlayerModalData
   | TradeRequestModalData;
