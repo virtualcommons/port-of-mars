@@ -93,13 +93,6 @@
 import { Vue } from "vue-property-decorator";
 
 export default class Manual extends Vue {
-
-  // may use pagination 
-  pages: [
-    { link: "?page=1"; text: "One" },
-    { link: "?page=2"; text: "Two" },
-    { link: "?page=3"; text: "Three" }
-  ];
 }
 </script>
 
