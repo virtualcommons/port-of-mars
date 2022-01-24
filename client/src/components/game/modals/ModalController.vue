@@ -23,7 +23,6 @@ import { Component, Vue, Inject } from "vue-property-decorator";
 import CardModal from "@port-of-mars/client/components/game/modals/CardModal.vue";
 import PlayerModal from "@port-of-mars/client/components/game/modals/PlayerModal.vue";
 import TradeRequestModal from "@port-of-mars/client/components/game/modals/TradeRequestModal.vue";
-import Manual from "@port-of-mars/client/components/game/modals/Manual.vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faTimes } from "@fortawesome/free-solid-svg-icons/faTimes";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -35,7 +34,6 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
 @Component({
   components: {
     CardModal,
-    Manual,
     PlayerModal,
     TradeRequestModal
   }

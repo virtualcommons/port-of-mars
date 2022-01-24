@@ -55,7 +55,6 @@ import { TutorialAPI } from "@port-of-mars/client/api/tutorial/request";
 import { isDev, isStaging } from "@port-of-mars/shared/settings";
 import { faTerminal } from "@fortawesome/free-solid-svg-icons/faTerminal";
 import { faWindowClose } from "@fortawesome/free-regular-svg-icons/faWindowClose";
-import { AbstractGameAPI } from "@port-of-mars/client/api/game/types";
 import { DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
 
 library.add(faCaretRight);
@@ -71,7 +70,7 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
   components: {}
 })
 export default class ProfileMenu extends Vue {
-  @Inject() readonly api!: AbstractGameAPI;
+  @Inject() readonly api!: GameRequestAPI;
   devtoolsEnabled: boolean = false;
 
   get dashboard() {
