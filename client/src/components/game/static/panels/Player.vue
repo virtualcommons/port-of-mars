@@ -1,43 +1,62 @@
 <template>
   <!-- FIXME: remove flex column -->
-  <b-row
-    @click="setModalData"
-    class="flex-column h-100 w-100 m-0 p-0 tour-profile"
-    style="cursor: pointer"
-  >
+  <b-container>
     <b-row
-      class="p-1 my-2 mx-auto"
-      :style="indicatorStyle"
-      style="border-radius: 50%;
+      v-b-modal="`${role}-modal`"
+      class="flex-column h-100 w-100 m-0 p-0 tour-profile"
+      style="cursor: pointer"
+    >
+      <b-row
+        class="p-1 my-2 mx-auto"
+        :style="indicatorStyle"
+        style="border-radius: 50%;
            transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
            height: 10rem; width: 10rem"
+      >
+        <b-col class="h-100 w-100 m-0 p-0" style="border-radius: 50%" :style="frameColor">
+          <b-img
+            rounded="circle"
+            v-bind="avatar"
+            :src="roleImage"
+            alt="Player Image"
+            class="my-3"
+          ></b-img>
+        </b-col>
+      </b-row>
+      <b-row class="flex-column text-center">
+        <p class="mb-1" style="color: rgb(202, 166, 110); font-weight: bold;">Your Role</p>
+        <p class="mb-1" style="color: rgb(241, 224, 197); font-weight: bold;">{{ role }}</p>
+        <p class="m-0" style="color: rgb(241, 224, 197); font-weight: bold;">
+          Score: {{ playerScore }}
+        </p>
+      </b-row>
+    </b-row>
+    <!-- modal -->
+    <b-modal
+      :id="`${role}-modal`"
+      :title="`CONFIDENTIAL: ${role} Dossier`"
+      centered
+      no-stacking
+      hide-footer
+      header-bg-variant="primary"
+      header-border-variant="primary"
+      body-bg-variant="dark"
+      size="xl"
     >
-      <b-col class="h-100 w-100 m-0 p-0" style="border-radius: 50%" :style="frameColor">
-        <b-img
-          rounded="circle"
-          v-bind="avatar"
-          :src="playerRoleImage"
-          alt="Player Image"
-          class="my-3"
-        ></b-img>
-      </b-col>
-    </b-row>
-    <b-row class="flex-column text-center">
-      <p class="mb-1" style="color: rgb(202, 166, 110); font-weight: bold;">Your Role</p>
-      <p class="mb-1" style="color: rgb(241, 224, 197); font-weight: bold;">{{ playerRole }}</p>
-      <p class="m-0" style="color: rgb(241, 224, 197); font-weight: bold;">
-        Score: {{ playerScore }}
-      </p>
-    </b-row>
-  </b-row>
+      <PlayerModal :role="role"></PlayerModal>
+    </b-modal>
+  </b-container>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Inject, Prop } from "vue-property-decorator";
+import { Vue, Component, Inject } from "vue-property-decorator";
 import { Role } from "@port-of-mars/shared/types";
 import { TutorialAPI } from "@port-of-mars/client/api/tutorial/request";
+import PlayerModal from "@port-of-mars/client/components/game/modals/PlayerModal.vue";
 @Component({
-  components: {}
+  components: {
+    PlayerModal
+  }
 })
 export default class Player extends Vue {
   @Inject()
@@ -51,12 +70,12 @@ export default class Player extends Vue {
     height: 200
   };
 
-  get playerRole(): Role {
+  get role(): Role {
     return this.$tstore.state.role;
   }
 
   get playerScore(): number {
-    return this.playerRole ? this.$tstore.state.players[this.playerRole].victoryPoints : 0;
+    return this.role ? this.$tstore.state.players[this.role].victoryPoints : 0;
   }
 
   get playerReady() {
@@ -64,33 +83,21 @@ export default class Player extends Vue {
   }
 
   get frameColor(): object {
-    return this.playerRole
-      ? { backgroundColor: `var(--color-${this.playerRole})` }
+    return this.role
+      ? { backgroundColor: `var(--color-${this.role})` }
       : { backgroundColor: `var(--color-Researcher)` };
   }
 
   get indicatorStyle() {
     return !this.playerReady
-      ? { border: `0.25rem solid var(--color-${this.playerRole})` }
+      ? { border: `0.25rem solid var(--color-${this.role})` }
       : { border: `0.25rem solid var(--green)` };
   }
 
-  get playerRoleImage(): any {
-    return this.playerRole
-      ? require(`@port-of-mars/client/assets/characters/${this.playerRole}.png`)
+  get roleImage(): any {
+    return this.role
+      ? require(`@port-of-mars/client/assets/characters/${this.role}.png`)
       : require(`@port-of-mars/client/assets/characters/Researcher.png`);
-  }
-
-  setModalData() {
-    let data = {
-      type: "PlayerModal",
-      data: {
-        role: this.playerRole,
-        title: `CONFIDENTIAL: ${this.playerRole} Dossier`
-      }
-    };
-    this.api.setModalVisible(data);
-    this.$root.$emit("bv::show::modal", "gameModal");
   }
 }
 </script>
