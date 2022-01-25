@@ -19,6 +19,9 @@
         v-for="player in otherPlayers"
         v-bind="player"
         :key="player.role"
+        :role="player.role"
+        :ready="player.ready"
+        :victoryPoints="player.victoryPoints"
       ></OtherPlayers>
     </b-col>
     <b-col
@@ -52,13 +55,11 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-
-import Player from "./static/panels/Player.vue";
+import Player from "@port-of-mars/client/components/game/static/panels/Player.vue";
 import HUDLeftButtons from "@port-of-mars/client/components/game/HUDLeftButtons.vue";
-import OtherPlayers from "./static/panels/OtherPlayers.vue";
+import OtherPlayers from "@port-of-mars/client/components/game/static/panels/OtherPlayers.vue";
 import Inventory from "@port-of-mars/client/components/game/Inventory.vue";
 import AccomplishmentCard from "@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue";
-
 import { HUDLeftView } from "@port-of-mars/shared/game/client/panes";
 import { PlayerClientSet } from "@port-of-mars/shared/game/client/state";
 import { Role } from "@port-of-mars/shared/types";
