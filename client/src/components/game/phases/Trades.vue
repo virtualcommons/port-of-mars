@@ -15,12 +15,26 @@
       <b-col cols="3" class="h-100 w-100 p-0">
         <b-button
           squared
-          @click="requestTrade"
+          v-b-modal.trade-request-modal
           class="h-100 w-100 mr-5 ml-1 tour-request-trade"
           :disabled="playerReady"
+          @click="makeToast"
         >
           Request a Trade
         </b-button>
+        <b-modal
+          id="trade-request-modal"
+          title="Trade Request"
+          centered
+          no-stacking
+          hide-footer
+          header-bg-variant="primary"
+          header-border-variant="primary"
+          body-bg-variant="dark"
+          size="xl"
+        >
+          <TradeRequestModal></TradeRequestModal>
+        </b-modal>
       </b-col>
     </b-row>
     <!-- trade list -->
@@ -44,10 +58,12 @@ import { Component, Inject, Vue } from "vue-property-decorator";
 import ActiveTrade from "./trade/ActiveTrade.vue";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 import { Phase } from "@port-of-mars/shared/types";
+import TradeRequestModal from "@port-of-mars/client/components/game/modals/TradeRequestModal.vue";
 
 @Component({
   components: {
-    ActiveTrade
+    ActiveTrade,
+    TradeRequestModal
   }
 })
 export default class Trades extends Vue {
@@ -136,23 +152,25 @@ export default class Trades extends Vue {
   /**
    * Open trade request modal when player wants to initiate a trade.
    */
-  requestTrade() {
-    this.api.setModalVisible({ type: "TradeRequestModal", data: {} });
-    this.$root.$emit("bv::show::modal", "gameModal");
-    if (this.$tstore.state.round < 3) this.makeToast();
-  }
+  // requestTrade() {
+  //   this.api.setModalVisible({ type: "TradeRequestModal", data: {} });
+  //   this.$root.$emit("bv::show::modal", "gameModal");
+  //   if (this.$tstore.state.round < 3) this.makeToast();
+  // }
 
   makeToast() {
-    this.$bvToast.toast(
-      "To initiate a trade request, select a trade partner first. Then make your offer and request.",
-      {
-        title: "Remember!",
-        toaster: "b-toaster-top-left",
-        variant: "warning",
-        solid: true,
-        autoHideDelay: 7000
-      }
-    );
+    if (this.$tstore.state.round < 3) {
+      this.$bvToast.toast(
+        "To initiate a trade request, select a trade partner first. Then make your offer and request.",
+        {
+          title: "Remember!",
+          toaster: "b-toaster-top-left",
+          variant: "warning",
+          solid: true,
+          autoHideDelay: 7000
+        }
+      );
+    }
   }
 }
 </script>
