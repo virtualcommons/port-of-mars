@@ -42,12 +42,11 @@
 </template>
 
 <script lang="ts">
-import { Component, Inject, Vue, Prop } from "vue-property-decorator";
-import { TradeRequestModalData } from "@port-of-mars/shared/game/client/modals";
+import { Component, Inject, Vue } from "vue-property-decorator";
 import TradeRequest from "@port-of-mars/client/components/game/phases/trade/TradeRequest.vue";
 import Inventory from "@port-of-mars/client/components/game/Inventory.vue";
 import AccomplishmentCard from "@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue";
-import { TutorialAPI } from "../../../api/tutorial/request";
+import { TutorialAPI } from "@port-of-mars/client/api/tutorial/request";
 
 @Component({
   components: {

@@ -21,12 +21,6 @@ export interface PlayerModalData {
   role: Role;
 }
 
-export interface TradeRequestModalData {}
+export type ModalType = "CardModal";
 
-export type ModalType = "CardModal" | "PlayerModal" | "TradeRequestModal";
-
-export type ModalDataType =
-  | ModalData
-  | CardModalData
-  | PlayerModalData
-  | TradeRequestModalData;
+export type ModalDataType = ModalData | CardModalData;

@@ -21,7 +21,6 @@
 <script lang="ts">
 import { Component, Vue, Inject } from "vue-property-decorator";
 import CardModal from "@port-of-mars/client/components/game/modals/CardModal.vue";
-import TradeRequestModal from "@port-of-mars/client/components/game/modals/TradeRequestModal.vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faTimes } from "@fortawesome/free-solid-svg-icons/faTimes";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -32,8 +31,7 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 @Component({
   components: {
-    CardModal,
-    TradeRequestModal
+    CardModal
   }
 })
 export default class ModalController extends Vue {
