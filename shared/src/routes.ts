@@ -1,14 +1,33 @@
-export const LOGIN_PAGE: 'Login' = 'Login';
-export const LOBBY_PAGE: 'Lobby' = 'Lobby';
-export const GAME_PAGE: 'Game' = 'Game';
-export const SIGNEDUP_PAGE: 'SignedUp' = 'SignedUp';
-export const TUTORIAL_PAGE: 'Tutorial' = 'Tutorial';
-export const REGISTER_PAGE: 'Register' = 'Register';
-export const VERIFY_PAGE = 'Verify' as const;
-export const DASHBOARD_PAGE: 'Dashboard' = 'Dashboard';
+export const LOGIN_PAGE: "Login" = "Login";
+export const LOBBY_PAGE: "Lobby" = "Lobby";
+export const GAME_PAGE: "Game" = "Game";
+export const SIGNEDUP_PAGE: "SignedUp" = "SignedUp";
+export const TUTORIAL_PAGE: "Tutorial" = "Tutorial";
+export const REGISTER_PAGE: "Register" = "Register";
+export const VERIFY_PAGE = "Verify" as const;
+export const DASHBOARD_PAGE: "Dashboard" = "Dashboard";
+export const MANUAL_PAGE: "Manual" = "Manual";
 
-export type Page = 'Login' | 'Lobby' | 'Game' | 'Tutorial' | 'SignedUp' | 'Register' | 'Dashboard' | 'Verify';
-export const PAGES: Array<Page> = [ LOGIN_PAGE, LOBBY_PAGE, GAME_PAGE, TUTORIAL_PAGE, REGISTER_PAGE, DASHBOARD_PAGE, VERIFY_PAGE ];
+export type Page =
+  | "Login"
+  | "Lobby"
+  | "Game"
+  | "Tutorial"
+  | "SignedUp"
+  | "Register"
+  | "Dashboard"
+  | "Verify"
+  | "Manual";
+export const PAGES: Array<Page> = [
+  LOGIN_PAGE,
+  LOBBY_PAGE,
+  GAME_PAGE,
+  TUTORIAL_PAGE,
+  REGISTER_PAGE,
+  DASHBOARD_PAGE,
+  VERIFY_PAGE,
+  MANUAL_PAGE,
+];
 
 export function isPage(pageName: string): pageName is Page {
   return PAGES.includes(pageName as Page);
@@ -18,65 +37,78 @@ export function getPagePath(page: Page): string {
   return `/#${PAGE_META[page].path}`;
 }
 
-export const PAGE_META: { [p in Page]: { path: string, name: string, props?: boolean, meta: { requiresAuth: boolean} }} = {
+export const PAGE_META: {
+  [p in Page]: {
+    path: string;
+    name: string;
+    props?: boolean;
+    meta: { requiresAuth: boolean };
+  };
+} = {
   [REGISTER_PAGE]: {
-    path: '/register',
+    path: "/register",
     name: REGISTER_PAGE,
     meta: {
-      requiresAuth: false
-    }
+      requiresAuth: false,
+    },
   },
   [DASHBOARD_PAGE]: {
-    path: '/dashboard',
+    path: "/dashboard",
     name: DASHBOARD_PAGE,
     meta: {
-      requiresAuth: true
-    }
+      requiresAuth: true,
+    },
   },
   [GAME_PAGE]: {
-    path: '/game',
+    path: "/game",
     name: GAME_PAGE,
     meta: {
-      requiresAuth: true
-    }
+      requiresAuth: true,
+    },
   },
   [LOBBY_PAGE]: {
-    path: '/lobby',
+    path: "/lobby",
     name: LOBBY_PAGE,
-    meta:
-      {
-        requiresAuth: true
-      }
+    meta: {
+      requiresAuth: true,
+    },
   },
   [LOGIN_PAGE]: {
-    path: '/',
+    path: "/",
     name: LOGIN_PAGE,
     meta: {
-      requiresAuth: false
-    }
+      requiresAuth: false,
+    },
   },
   [SIGNEDUP_PAGE]: {
-    path: '/signedup',
+    path: "/signedup",
     name: SIGNEDUP_PAGE,
     meta: {
-      requiresAuth: true
-    }
+      requiresAuth: true,
+    },
   },
   [TUTORIAL_PAGE]: {
-    path: '/tutorial',
+    path: "/tutorial",
     name: TUTORIAL_PAGE,
     meta: {
-      requiresAuth: true
-    }
+      requiresAuth: true,
+    },
   },
   [VERIFY_PAGE]: {
-    path: '/verify/:token',
+    path: "/verify/:token",
     name: VERIFY_PAGE,
     props: true,
     meta: {
-      requiresAuth: false
-    }
-  }
+      requiresAuth: false,
+    },
+  },
+  [MANUAL_PAGE]: {
+    path: "/manual",
+    name: MANUAL_PAGE,
+    meta: {
+      requiresAuth: true,
+    },
+  },
 };
 
 export const PAGE_DEFAULT = PAGE_META[LOGIN_PAGE];

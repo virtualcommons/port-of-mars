@@ -14,7 +14,7 @@
     <!-- title -->
     <b-row align-v="center" class="w-100 mx-0 mt-2 p-0 text-center">
       <b-col
-        @click="setModalData"
+        v-b-modal.accomplishment-modal
         :style="showCard ? 'color: black' : 'color: white'"
         style="cursor: pointer"
       >
@@ -63,6 +63,7 @@
           :class="investment.available ? '' : 'unattainable-resource'"
           class="cost justify-content-center align-items-center"
           v-for="investment in accomplishmentCost"
+          :key="investment.name"
         >
           <img
             :src="require(`@port-of-mars/client/assets/icons/${investment.influence}.svg`)"
@@ -125,6 +126,17 @@
         <p v-else-if="type === cardType.purchase">Accomplishment Purchased</p>
       </b-col>
     </b-row>
+    <b-modal
+      id="accomplishment-modal"
+      centered
+      no-stacking
+      hide-header
+      hide-footer
+      body-bg-variant="dark"
+      size="lg"
+    >
+      <CardModal :modalData="accomplishmentData"></CardModal>
+    </b-modal>
   </b-container>
 </template>
 
@@ -139,20 +151,22 @@ import {
   Resource,
   ResourceAmountData
 } from "@port-of-mars/shared/types";
-
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons/faInfoCircle";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 import { canPurchaseAccomplishment } from "@port-of-mars/shared/validation";
-
+import CardModal from "@port-of-mars/client/components/game/modals/CardModal.vue";
 import * as _ from "lodash";
 
 library.add(faInfoCircle);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 
-@Component({})
+@Component({
+  components: {
+    CardModal
+  }
+})
 export default class AccomplishmentCard extends Vue {
   @Inject() readonly api!: GameRequestAPI;
 
@@ -216,6 +230,18 @@ export default class AccomplishmentCard extends Vue {
   // accomplishment type: default, discard, purchase
   get cardType() {
     return AccomplishmentCardType;
+  }
+
+  get accomplishmentData() {
+    let data = {
+      activator: "User",
+      title: "Accomplishment Card",
+      content: "This is an accomplishment.",
+      cardType: "AccomplishmentCard",
+      cardData: this.accomplishment
+    };
+
+    return data;
   }
 
   /**
@@ -318,20 +344,20 @@ export default class AccomplishmentCard extends Vue {
   }
 
   // expand card into modal that displays accomplishment info
-  setModalData() {
-    let data = {
-      type: "CardModal",
-      data: {
-        activator: "User",
-        title: "Accomplishment Card",
-        content: "This is an accomplishment.",
-        cardType: "AccomplishmentCard",
-        cardData: this.accomplishment
-      }
-    };
-    this.api.setModalVisible(data);
-    this.$root.$emit("bv::show::modal", "gameModal");
-  }
+  // setModalData() {
+  //   let data = {
+  //     type: "CardModal",
+  //     data: {
+  //       activator: "User",
+  //       title: "Accomplishment Card",
+  //       content: "This is an accomplishment.",
+  //       cardType: "AccomplishmentCard",
+  //       cardData: this.accomplishment
+  //     }
+  //   };
+  //   this.api.setModalVisible(data);
+  //   this.$root.$emit("bv::show::modal", "gameModal");
+  // }
 
   /**
    * Determine if influence is available in local player's inventory
