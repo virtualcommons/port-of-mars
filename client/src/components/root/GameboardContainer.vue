@@ -1,8 +1,5 @@
 <template>
   <b-container fluid class="h-100 m-0 p-0 d-flex flex-column bg-dark">
-    <b-row>
-      <ModalController />
-    </b-row>
     <!-- FIXME: this modal should be controlled by modal controller -->
     <b-row>
       <b-modal
@@ -70,7 +67,6 @@
 
 <script lang="ts">
 import { Component, Inject, Vue } from "vue-property-decorator";
-import ModalController from "@port-of-mars/client/components/game/modals/ModalController.vue";
 import HUD from "@port-of-mars/client/components/game/HUD.vue";
 import PhaseSwitcher from "@port-of-mars/client/components/game/PhaseSwitcher.vue";
 import ProfileMenu from "@port-of-mars/client/components/game/static/popups/ProfileMenu.vue";
@@ -80,7 +76,6 @@ import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 
 @Component({
   components: {
-    ModalController,
     HUD,
     PhaseSwitcher,
     ProfileMenu,

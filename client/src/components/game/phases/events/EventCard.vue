@@ -2,13 +2,12 @@
   <b-container
     fluid
     style="border: .125rem solid var(--light-shade); background-color: var(--dark-shade)"
-    :class="isModal ? 'border: none' : 'mb-2'"
-    class="p-0 mx-0"
+    class="p-0 mx-0 mb-2"
     v-if="visible"
   >
     <b-row align-v="center" class="w-100 mx-0 mt-2 p-0 text-center">
       <!-- Event name | Active event indicator -->
-      <b-col style="cursor: pointer" @click="setModalData">
+      <b-col style="cursor: pointer" v-b-modal="eventModalId">
         <h5 class="p-2 text-center" style="background-color: var(--light-shade); color: black">
           {{ event.name }}
         </h5>
@@ -19,13 +18,13 @@
       <!-- Equal-width columns that span multiple lines: https://bootstrap-vue.org/docs/components/layout#comp-ref-b-col -->
       <div class="w-100"></div>
 
-      <b-col :class="isModal ? 'pt-4 px-3' : 'p-3'" class="w-100 p-0 m-0 text-center">
+      <b-col class="w-100 p-3 m-0 text-center">
         <p>{{ event.effect !== "" ? event.effect : "No special effect" }}</p>
       </b-col>
 
       <div class="w-100"></div>
 
-      <b-col :class="isModal ? 'pt-1' : 'pb-3'" class="w-100 p-0 m-0 text-center">
+      <b-col class="w-100 pb-3 m-0 text-center">
         <p>
           Duration:
           <template v-if="event.duration > 1">
@@ -34,35 +33,44 @@
           <b>{{ event.duration }}</b> Round(s)
         </p>
       </b-col>
+    </b-row>
+    <!-- FIXME: set prop -->
+    <b-modal
+      :id="eventModalId"
+      centered
+      no-stacking
+      hide-header
+      hide-footer
+      body-bg-variant="dark"
+      size="lg"
+    >
+      <EventModal :modalData="event" :showActiveIndicator="showActiveIndicator"></EventModal>
 
       <div class="w-100"></div>
 
       <b-row class="w-100 mx-auto my-4" v-if="wasSpawnedByServer">
         <b-col v-if="requiresInteraction">
-          <b-button squared @click="closeModal" variant="outline-secondary">Interact</b-button>
+          <b-button squared @click="$bvModal.hide(eventModalId)" variant="outline-secondary"
+            >Interact</b-button
+          >
         </b-col>
         <b-col v-else>
           <b-button squared @click="readyUp" variant="outline-secondary">Continue</b-button>
         </b-col>
       </b-row>
-    </b-row>
+    </b-modal>
   </b-container>
 </template>
 
 <script lang="ts">
 import { Component, Inject, Prop, Vue } from "vue-property-decorator";
 import { EventClientView, MarsEventData, Phase } from "@port-of-mars/shared/types";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons/faInfoCircle";
-import { faDotCircle } from "@fortawesome/free-regular-svg-icons/faDotCircle";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
+import EventModal from "@port-of-mars/client/components/game/modals/EventModal.vue";
 
-library.add(faInfoCircle);
-library.add(faDotCircle);
-Vue.component("font-awesome-icon", FontAwesomeIcon);
-
-@Component({})
+@Component({
+  components: { EventModal }
+})
 export default class EventCard extends Vue {
   @Inject() readonly api!: GameRequestAPI;
 
@@ -84,54 +92,37 @@ export default class EventCard extends Vue {
   @Prop({ default: false })
   active!: boolean;
 
-  //if you're in a modal, show the modal view
-  @Prop({ default: false })
-  isModal!: boolean;
-
-  //if the modal was spawned by the server, show the option buttons
-  @Prop({ default: false }) wasSpawnedByServer!: boolean;
   //determining which type of events require which interactions
   eventNoChangeViews: Array<EventClientView> = ["NO_CHANGE", "AUDIT", "DISABLE_CHAT"];
 
-  get phase() {
-    return Phase;
+  //if the modal was spawned by the server, show the option buttons
+  get wasSpawnedByServer() {
+    return this.currentPhase === Phase.events && this.currentEvent.id === this.event.id;
   }
 
-  get gamePhase() {
-    return this.$store.state.phase;
+  get currentEvent(): MarsEventData {
+    return this.$tstore.getters.currentEvent;
+  }
+
+  get eventModalId() {
+    return `event-modal-${this.event.id}`;
+  }
+
+  get currentPhase() {
+    return this.$tstore.state.phase;
   }
 
   get showActiveIndicator() {
-    return this.active && this.gamePhase === this.phase.events;
+    return this.active && this.currentPhase === Phase.events;
   }
 
   get requiresInteraction() {
     return !this.eventNoChangeViews.includes(this.event.clientViewHandler);
   }
 
-  closeModal() {
-    this.api.setModalHidden();
-    this.$root.$emit("bv::hide::modal", "gameModal");
-  }
-
   readyUp() {
     this.api.setPlayerReadiness(true);
-    this.api.setModalHidden();
-    this.$root.$emit("bv::hide::modal", "gameModal");
-  }
-
-  setModalData(): void {
-    this.$root.$emit("bv::show::modal", "gameModal");
-    this.api.setModalVisible({
-      type: "CardModal",
-      data: {
-        activator: "User",
-        title: this.event.name,
-        content: this.event.effect,
-        cardType: "EventCard",
-        cardData: this.event
-      }
-    });
+    this.$bvModal.hide(this.eventModalId);
   }
 }
 </script>

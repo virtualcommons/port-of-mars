@@ -1,30 +1,12 @@
 import { State, defaultTradeData } from '@port-of-mars/shared/game/client/state';
 import { Role, ResourceAmountData } from '@port-of-mars/shared/types';
 import {
-  ModalType,
-  ModalDataType,
-} from '@port-of-mars/shared/game/client/modals';
-import {
   ChatMarsLogView,
   HUDLeftView,
   HUDRightView,
 } from '@port-of-mars/shared/game/client/panes';
 
 // NOTE :: CONTROL MODAL VISIBILITY
-
-// FIXME: rename this 
-function SET_MODAL_VISIBLE(
-  state: State,
-  payload: { type: ModalType; data: ModalDataType }
-) {
-  state.userInterface.modal.type = payload.type;
-  state.userInterface.modal.data = payload.data;
-}
-
-function SET_MODAL_HIDDEN(state: State, payload: any) {
-  state.userInterface.modal.type = null;
-  state.userInterface.modal.data = null;
-}
 
 // NOTE :: CONTROL PROFILE MENU VISIBILITY
 
@@ -97,8 +79,6 @@ function RESET_TRADE_MODAL(state: State, payload: any) {
 // NOTE :: EXPORT
 
 export default {
-  SET_MODAL_VISIBLE,
-  SET_MODAL_HIDDEN,
   SET_PROFILE_MENU_VISIBILITY,
   SET_CHATMARSLOG_VIEW,
   SET_HUDLEFT_VIEW,

@@ -147,7 +147,8 @@ export default class TradeRequest extends Vue {
         status: "Active"
       };
       this.api.sendTradeRequest(tradeDataPackage);
-      this.$root.$emit("bv::hide::modal", "gameModal");
+      // FIXME: magic string declared in Trades.vue
+      this.$bvModal.hide('trade-request-modal');
     }
   }
 
