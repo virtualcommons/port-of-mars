@@ -7,14 +7,13 @@
         : 'border: 0.125rem solid var(--light-shade)'
     "
     style="background-color: var(--dark-shade)"
-    :class="[isModal ? 'border: none' : 'mb-2']"
-    class="p-0 mx-0"
+    class="p-0 mx-0 mb-2"
     v-show="isActive"
   >
     <!-- title -->
     <b-row align-v="center" class="w-100 mx-0 mt-2 p-0 text-center">
       <b-col
-        v-b-modal.accomplishment-modal
+        v-b-modal="accomplishmentModalId"
         :style="showCard ? 'color: black' : 'color: white'"
         style="cursor: pointer"
       >
@@ -33,27 +32,11 @@
       <!-- Equal-width columns that span multiple lines: https://bootstrap-vue.org/docs/components/layout#comp-ref-b-col -->
       <div class="w-100"></div>
 
-      <!-- information: points, description -->
-
-      <!-- points -->
-      <b-col
-        :class="[showDescription ? 'mt-3 col-3' : 'col-12', isModal ? 'p-4 p-lg-4' : '']"
-        class="d-flex flex-column justify-content-center align-items-center  m-0 p-2"
-      >
+      <!-- accomplishment list item information: only display points -->
+      <b-col class="d-flex flex-column justify-content-center align-items-center col-12 m-0 p-2">
         <p>{{ accomplishment.victoryPoints }} Points</p>
       </b-col>
-
-      <!-- description -->
-      <b-col
-        :class="showDescription ? 'mt-3' : ''"
-        class="pb-2 text-left col-9"
-        v-if="showDescription"
-      >
-        <p>{{ accomplishment.flavorText }}</p>
-      </b-col>
-
       <div class="w-100"></div>
-
       <!-- cost -->
       <b-col
         class="d-flex flex-wrap w-100 m-0 pt-1 justify-content-center px-4 py-2"
@@ -101,11 +84,11 @@
           variant="outline-danger"
           squared
           size="lg"
-          v-if="!isEffortsWasted"
+          v-if="isEffortsWasted"
           :disabled="playerReady"
-          @click="discard()"
+          @click="discardPurchasedAccomplishment()"
         >
-          Discard Accomplishment
+          Discard Purchased Accomplishment
         </b-button>
 
         <b-button
@@ -114,9 +97,9 @@
           size="lg"
           v-else
           :disabled="playerReady"
-          @click="discardPurchasedAccomplishment()"
+          @click="discard()"
         >
-          Discard Purchased Accomplishment
+          Discard Accomplishment
         </b-button>
       </b-col>
 
@@ -127,7 +110,7 @@
       </b-col>
     </b-row>
     <b-modal
-      id="accomplishment-modal"
+      :id="accomplishmentModalId"
       centered
       no-stacking
       hide-header
@@ -135,7 +118,11 @@
       body-bg-variant="dark"
       size="lg"
     >
-      <CardModal :modalData="accomplishmentData"></CardModal>
+      <AccomplishmentModal
+        :modalData="accomplishment"
+        :accomplishmentCost="accomplishmentCost"
+        :canPurchase="canPurchase"
+      ></AccomplishmentModal>
     </b-modal>
   </b-container>
 </template>
@@ -156,7 +143,7 @@ import { faInfoCircle } from "@fortawesome/free-solid-svg-icons/faInfoCircle";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 import { canPurchaseAccomplishment } from "@port-of-mars/shared/validation";
-import CardModal from "@port-of-mars/client/components/game/modals/CardModal.vue";
+import AccomplishmentModal from "@port-of-mars/client/components/game/modals/AccomplishmentModal.vue";
 import * as _ from "lodash";
 
 library.add(faInfoCircle);
@@ -164,7 +151,7 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 @Component({
   components: {
-    CardModal
+    AccomplishmentModal
   }
 })
 export default class AccomplishmentCard extends Vue {
@@ -192,21 +179,17 @@ export default class AccomplishmentCard extends Vue {
   @Prop({ default: AccomplishmentCardType.default })
   type!: AccomplishmentCardType;
 
-  // show accomplishment description
-  @Prop({ default: true })
-  showDescription!: boolean;
-
   // if card has been discarded, showCard = false
   // else showCard = true
   @Prop({ default: true })
   showCard!: boolean;
 
-  // accomplishment modal view
-  @Prop({ default: false })
-  isModal!: boolean;
-
   // set when showCard changes
   isActive: boolean = true;
+
+  get accomplishmentModalId() {
+    return `accomplishment-modal-${this.accomplishment.id}`;
+  }
 
   // local player's readiness
   get playerReady() {
@@ -229,19 +212,7 @@ export default class AccomplishmentCard extends Vue {
 
   // accomplishment type: default, discard, purchase
   get cardType() {
-    return AccomplishmentCardType;
-  }
-
-  get accomplishmentData() {
-    let data = {
-      activator: "User",
-      title: "Accomplishment Card",
-      content: "This is an accomplishment.",
-      cardType: "AccomplishmentCard",
-      cardData: this.accomplishment
-    };
-
-    return data;
+    return this.type;
   }
 
   /**
@@ -309,58 +280,9 @@ export default class AccomplishmentCard extends Vue {
   }
 
   /**
-   * Determine card styling based on card type (purchase, discard, or default)
-   * and showCard to evaluate if card should be hidden based on purchase or
-   * discard status.
-   *
-   */
-  cardTypeStyling(type: AccomplishmentCardType) {
-    switch (type) {
-      case AccomplishmentCardType.purchase:
-        if (this.showCard) {
-          return this.canPurchase
-            ? { backgroundColor: "var(--light-accent)" }
-            : { backgroundColor: "var(--light-accent)" };
-        } else {
-          return "purchased";
-        }
-      case AccomplishmentCardType.discard:
-        if (this.showCard) {
-          return this.canPurchase ? "purchasable" : "default";
-        } else {
-          return "discarded";
-        }
-      case AccomplishmentCardType.default:
-        return this.canPurchase ? "purchasable" : "unpurchasable";
-      default:
-        return "default";
-    }
-  }
-
-  // font color for accomplishment title
-  fontColor() {
-    if (!this.showCard) return { color: "white" };
-    return { color: "black" };
-  }
-
-  // expand card into modal that displays accomplishment info
-  // setModalData() {
-  //   let data = {
-  //     type: "CardModal",
-  //     data: {
-  //       activator: "User",
-  //       title: "Accomplishment Card",
-  //       content: "This is an accomplishment.",
-  //       cardType: "AccomplishmentCard",
-  //       cardData: this.accomplishment
-  //     }
-  //   };
-  //   this.api.setModalVisible(data);
-  //   this.$root.$emit("bv::show::modal", "gameModal");
-  // }
-
-  /**
    * Determine if influence is available in local player's inventory
+   *
+   * FIXME: this should not mutate inventory
    * @param influence
    * @param inventory
    */

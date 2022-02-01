@@ -111,17 +111,19 @@ export default class Events extends Vue {
   @Watch("currentEvent", { immediate: true })
   onNewEvent(event: any) {
     console.log("displaying new event: ", event);
-    this.api.setModalVisible({
-      type: "CardModal",
-      data: {
-        activator: "Server",
-        title: event.name,
-        content: event.effect,
-        cardType: "EventCard",
-        cardData: event
-      }
-    });
-    this.$root.$emit("bv::hide::modal", "gameModal");
+    // FIXME: duplicate event modal id logic also in EventCard
+    this.$root.$emit("bv::show::modal", `event-modal-${event.id}`);
+    // this.api.setModalVisible({
+    //   type: "CardModal",
+    //   data: {
+    //     activator: "Server",
+    //     title: event.name,
+    //     content: event.effect,
+    //     cardType: "EventCard",
+    //     cardData: event
+    //   }
+    // });
+    // this.$root.$emit("bv::hide::modal", "gameModal");
   }
 
   switchView(view: string) {
