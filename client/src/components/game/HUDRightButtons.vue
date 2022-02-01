@@ -18,9 +18,9 @@
         <font-awesome-icon :icon="['fas', 'meteor']" class="icon" size="lg" />
       </button>
     </b-col>
-    <!-- <b-col>
+    <b-col>
       <b-button :to="manual" target="_blank">FAQ</b-button>
-    </b-col> -->
+    </b-col>
   </b-row>
 </template>
 
