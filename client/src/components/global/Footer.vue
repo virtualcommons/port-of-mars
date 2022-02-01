@@ -36,7 +36,7 @@ ccarra1@asu.edu
               >ASU School of Complex Adaptive Systems</a
             >
           </li>
-          <li>
+          <li></li>
             <a href="https://www.nsf.gov/" title="US National Science Foundation"
               >US National Science Foundation (SES-2049553)</a
             >
@@ -65,9 +65,10 @@ ccarra1@asu.edu
         </ul>
       </section>
       <div id="copyright">
-        <small>&copy; 2020-{{ currentYear }} Arizona Board of Regents</small>
+        <small>&copy; 2020-{{ currentYear }} Arizona Board of Regents
         <br />
-        {{ buildId }}
+        <a href="https://github.com/virtualcommons/port-of-mars">{{ buildId }}</a>
+        </small>
       </div>
     </footer>
   </b-container>
