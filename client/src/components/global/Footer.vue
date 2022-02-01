@@ -1,79 +1,83 @@
+<!-- 
+HTML Document by Christina Carrasquilla for Port of Mars (POM)
+ccarra1@asu.edu
+-->
 <template>
-  <b-container class="w-100 p-3" style="background-color: var(--dark-shade-75)" fluid>
-    <b-row class="text-center" align-v="end" align-h="center">
-      <!-- build id -->
-      <b-col cols="auto"> Build: {{ buildId }} </b-col>
-
-      <!-- license -->
-      <b-col cols="auto">
-        <a
-          href="https://github.com/virtualcommons/port-of-mars/blob/master/LICENSE"
-          target="_blank"
-        >
-          GNU AGPL v3.0
-        </a>
-      </b-col>
-
-      <!-- instagram -->
-      <b-col cols="auto">
-        <a href="https://www.instagram.com/portofmars/" target="_blank">
-          <font-awesome-icon :icon="['fab', 'instagram']" size="lg" />
-        </a>
-      </b-col>
-
-      <!-- facebook
-      <b-col cols="auto">
-        <a href="https://www.facebook.com/Port-of-Mars-278162624025157" target="_blank">
-          <font-awesome-icon :icon="['fab', 'facebook']" size="lg" />
-        </a>
-      </b-col>
-      -->
-      <!-- twitter -->
-      <b-col cols="auto">
-        <a href="https://twitter.com/PortOfMars" target="_blank">
-          <font-awesome-icon :icon="['fab', 'twitter']" size="lg" />
-        </a>
-      </b-col>
-
-      <!-- email -->
-      <b-col cols="auto">
-        <a href="mailto:portmars@asu.edu" target="_blank">
-          <font-awesome-icon :icon="['fas', 'envelope']" size="lg" />
-        </a>
-      </b-col>
-      <b-col cols="auto">
-        <a href="https://www.azregents.edu/" target="_blank">
-          &copy; 2020 - {{ currentYear }} Arizona Board of Regents
-        </a>
-      </b-col>
-    </b-row>
-    <b-row align-h="center">
-      <b-col cols="auto">
-        <small>
-          This material is based on work sponsored by the
-          <a href="https://interplanetary.asu.edu">ASU Interplanetary Initiative</a>,
-          <a href="https://complexity.asu.edu">ASU School of Complex Adaptive Systems</a>, and the
-          <a href="https://www.nsf.gov">US National Science Foundation (SES-2049553)</a>.
-        </small>
-      </b-col>
-    </b-row>
+  <b-container class="m-0 p-0" style="background-color: var(--dark-shade-75)" fluid>
+    <footer>
+      <!-- FIXME: nav links should change based on the route -->
+      <section id="footer-nav">
+        <h2>Navigation</h2>
+        <ul>
+          <li>
+            <a href="/#/#about" title="about">About</a>
+          </li>
+          <li>
+            <a href="/#/#leaderboard" title="leaderboard">Leaderboard</a>
+          </li>
+          <li>
+            <a href="/#/#news" title="news">News</a>
+          </li>
+          <li>
+            <a href="/#/#gameplay" title="gameplay">Gameplay</a>
+          </li>
+        </ul>
+      </section>
+      <section id="sponsors">
+        <h2>Sponsors</h2>
+        <ul>
+          <li>
+            <a href="https://interplanetary.asu.edu/" title="ASU Interplanetary Initiative"
+              >ASU Interplanetary Initiative</a
+            >
+          </li>
+          <li>
+            <a href="https://complexity.asu.edu/" title="ASU School of Complex Adaptive Systems"
+              >ASU School of Complex Adaptive Systems</a
+            >
+          </li>
+          <li>
+            <a href="https://www.nsf.gov/" title="US National Science Foundation"
+              >US National Science Foundation (SES-2049553)</a
+            >
+          </li>
+        </ul>
+      </section>
+      <section id="social-media">
+        <h2>Connect with Us</h2>
+        <ul>
+          <li>
+            <a href="mailto:portmars@asu.edu" title="Email us"
+              >Email
+              <b-icon icon="envelope" class="mx-1"></b-icon>
+            </a>
+          </li>
+          <li>
+            <a href="https://www.instagram.com/portofmars/" title="Instagram">Instagram </a>
+            <b-icon icon="instagram" class="mx-1"></b-icon>
+          </li>
+          <li>
+            <a href="https://twitter.com/PortOfMars" title="Twitter"
+              >Twitter
+              <b-icon icon="twitter" class="mx-1"></b-icon>
+            </a>
+          </li>
+        </ul>
+      </section>
+      <div id="copyright">
+        <small>&copy; 2020-{{ currentYear }} Arizona Board of Regents</small>
+        <br />
+        {{ buildId }}
+      </div>
+    </footer>
   </b-container>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import BootstrapVue from "bootstrap-vue";
-
-// FontAwesome icons
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faGithub, faTwitter, faInstagram } from "@fortawesome/free-brands-svg-icons";
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { BUILD_ID } from "@port-of-mars/shared/settings";
-
-library.add(faGithub, faEnvelope, faTwitter, faInstagram);
 Vue.use(BootstrapVue);
-Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 @Component({})
 export default class Footer extends Vue {
