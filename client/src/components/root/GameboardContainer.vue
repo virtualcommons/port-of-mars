@@ -1,6 +1,5 @@
 <template>
   <b-container fluid class="h-100 m-0 p-0 d-flex flex-column bg-dark">
-    <!-- FIXME: this modal should be controlled by modal controller -->
     <b-row>
       <b-modal
         body-bg-variant="dark"
