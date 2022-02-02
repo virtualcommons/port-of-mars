@@ -187,6 +187,15 @@ export default class AccomplishmentCard extends Vue {
   // set when showCard changes
   isActive: boolean = true;
 
+  // hide card if showCard value changes upon discard
+  @Watch("showCard", { immediate: true })
+  shouldShowCard(showCard: boolean): void {
+    if (!showCard) {
+      // if Accomplishment status changes, remove card
+      setTimeout(() => (this.isActive = false), 5000);
+    }
+  }
+
   get accomplishmentModalId() {
     return `accomplishment-modal-${this.accomplishment.id}`;
   }
@@ -218,7 +227,7 @@ export default class AccomplishmentCard extends Vue {
   /**
    * Map cost of accomplishments to available influences in local player's inventory.
    * */
-  get accomplishmentCost() {
+  get accomplishmentCost(): { influence: Investment; available: boolean }[] {
     // local player's inventory - defines inventory numerically
     // e.g. { culture: 3, science: 0, finance: 0, legacy: 0, govt: 0 }
     const inventory = this.playerInventory;
@@ -236,9 +245,8 @@ export default class AccomplishmentCard extends Vue {
     // console.log("costs: ", costs);
     // console.log("accomplishment: ", this.accomplishment);
 
-    // create data structure to map accomplishment cost to local player's available influences
-    // in their inventory
-    const costMap = [];
+    // create data structure to map accomplishment cost to local player's available influences in their inventory
+    const costMap: { influence: Investment; available: boolean }[] = [];
     for (const influence of costs) {
       costMap.push({
         influence,
@@ -270,15 +278,6 @@ export default class AccomplishmentCard extends Vue {
     return canPurchaseAccomplishment(accomplishment, inventory);
   }
 
-  // hide card if showCard value changes upon discard
-  @Watch("showCard", { immediate: true })
-  shouldShowCard(showCard: boolean) {
-    if (!showCard) {
-      // if Accomplishment status changes, remove card
-      setTimeout(() => (this.isActive = false), 5000);
-    }
-  }
-
   /**
    * Determine if influence is available in local player's inventory
    *
@@ -286,7 +285,7 @@ export default class AccomplishmentCard extends Vue {
    * @param influence
    * @param inventory
    */
-  isInfluenceAvailable(influence: Investment, inventory: ResourceAmountData) {
+  isInfluenceAvailable(influence: Investment, inventory: ResourceAmountData): boolean {
     if (influence === "systemHealth") {
       return true;
     }
@@ -306,11 +305,11 @@ export default class AccomplishmentCard extends Vue {
   }
 
   // discard accomplishment
-  discard() {
+  discard(): void {
     this.$emit("discarded", this.accomplishment.id);
   }
 
-  discardPurchasedAccomplishment() {
+  discardPurchasedAccomplishment(): void {
     this.$emit("discardPurchased", this.accomplishment.id);
   }
 }

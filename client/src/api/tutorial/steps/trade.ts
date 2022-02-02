@@ -213,9 +213,6 @@ const steps: Array<Step> = [
     },
     stateTransform: [
       {
-        SET_MODAL_HIDDEN: "hide"
-      },
-      {
         SET_LAYOUT: "tutorial",
         required: true
       }

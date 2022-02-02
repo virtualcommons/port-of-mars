@@ -237,14 +237,6 @@ export class GameRequestAPI implements AbstractGameAPI {
     }
   }
 
-  public setModalVisible(data: any) {
-    this.store.commit("SET_MODAL_VISIBLE", data);
-  }
-
-  public setModalHidden() {
-    this.store.commit("SET_MODAL_HIDDEN", null);
-  }
-
   public toggleProfileMenu(currentVisiblility: boolean) {
     this.store.commit("SET_PROFILE_MENU_VISIBILITY", !currentVisiblility);
   }

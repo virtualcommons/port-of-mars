@@ -41,8 +41,18 @@ import { MarsEventData } from "@port-of-mars/shared/types";
 
 @Component
 export default class EventModal extends Vue {
-  @Prop() modalData: MarsEventData;
-  @Prop() showActiveIndicator: boolean;
+  @Prop({
+    default: () => ({
+      id: undefined,
+      duration: undefined,
+      elapsed: undefined,
+      name: undefined,
+      flavorText: undefined,
+      effect: undefined
+    })
+  })
+  modalData!: MarsEventData;
+  @Prop({ default: false }) showActiveIndicator!: boolean;
 }
 </script>
 
