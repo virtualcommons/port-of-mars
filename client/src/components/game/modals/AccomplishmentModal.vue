@@ -68,12 +68,28 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
-import { AccomplishmentData } from "@port-of-mars/shared/types";
+import { AccomplishmentData, Investment } from "@port-of-mars/shared/types";
 
 @Component
 export default class AccomplishmentModal extends Vue {
-  @Prop() modalData!: AccomplishmentData;
-  @Prop() accomplishmentCost;
-  @Prop({ default: false }) canPurchase: boolean;
+  @Prop({
+    default: () => ({
+      id: undefined,
+      role: undefined,
+      label: undefined,
+      flavorText: undefined,
+      science: undefined,
+      government: undefined,
+      legacy: undefined,
+      finance: undefined,
+      culture: undefined,
+      systemHealth: undefined,
+      victoryPoints: undefined,
+      effect: undefined
+    })
+  })
+  modalData!: AccomplishmentData;
+  @Prop() accomplishmentCost!: { influence: Investment; available: boolean }[];
+  @Prop({ default: false }) canPurchase!: boolean;
 }
 </script>

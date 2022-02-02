@@ -113,8 +113,7 @@ function applyRoundIntroductionResponses(roundIntroduction: any, store: TStore) 
         !["systemHealthMarsEvents", "accomplishmentPurchases", "completedTrades"].includes(
           change.field
         )
-      ) 
-      {
+      ) {
         store.commit("SET_ROUND_INTRODUCTION_FIELD", { field: change.field, value: change.value });
       }
     });
@@ -158,7 +157,7 @@ function applyRoundIntroductionResponses(roundIntroduction: any, store: TStore) 
 
   roundIntroduction.systemHealthGroupContributions.onChange = (value: number, playerId: string) => {
     store.commit("UPDATE_SYSTEM_HEALTH_GROUP_CONTRIBUTION", { playerId, value });
-  }
+  };
 }
 
 // see https://github.com/Luka967/websocket-close-codes#websocket-close-codes
@@ -276,7 +275,6 @@ export function applyGameServerResponses<T>(room: Room, store: TStore, sfx: SfxM
       if (change.field === "phase") {
         const phase: Phase = change.value;
         store.commit("SET_GAME_PHASE", phase);
-        store.commit("SET_MODAL_HIDDEN", null);
       }
       if (change.field === "round") {
         const round: number = change.value;
