@@ -42,9 +42,9 @@
           with a participating instructor.
         </p>
         <p>
-          Those who qualify for the championship round will receive a special Port of Mars
-            t-shirt, and the winner of the Mars Madness tournament will receive about 100 grams
-            of unique Bondoc meteorite fragments.
+          Those who qualify for the championship round will receive a limited edition Port of Mars t-shirt, and the
+          winner of the Mars Madness tournament will receive a <mark>${{ cashPrize }} USD cash prize</mark>. In the
+          event of a tie, the cash prize will be split equally between the tied participants.
         </p>
         <p>
           Society may benefit from this research because an understanding of how people make
@@ -177,6 +177,7 @@ export default class Consent extends Vue {
   dateConsented: Date | null = null;
   isVerified = false;
   isVerificationDisabled = false;
+  cashPrize = 1000;
 
   get messages() {
     return this.$tstore.state.dashboardMessages;
