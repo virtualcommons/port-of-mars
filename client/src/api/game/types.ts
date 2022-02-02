@@ -1,8 +1,8 @@
-import {Room} from "colyseus.js";
-import {MockRoom} from "@port-of-mars/client/types/tutorial";
-import {TStore} from "@port-of-mars/client/plugins/tstore";
-import {SfxManager} from "@port-of-mars/client/util";
-import {SendTradeRequestData} from "@port-of-mars/shared/game";
+import { Room } from "colyseus.js";
+import { MockRoom } from "@port-of-mars/client/types/tutorial";
+import { TStore } from "@port-of-mars/client/plugins/tstore";
+import { SfxManager } from "@port-of-mars/client/util";
+import { SendTradeRequestData } from "@port-of-mars/shared/game";
 import {
   AccomplishmentData,
   InvestmentData,
@@ -10,70 +10,66 @@ import {
   ResourceAmountData,
   Role
 } from "@port-of-mars/shared/types";
-import {ChatMarsLogView, HUDLeftView, HUDRightView} from "@port-of-mars/shared/game/client/panes";
+import { ChatMarsLogView, HUDLeftView, HUDRightView } from "@port-of-mars/shared/game/client/panes";
 
 export interface AbstractGameAPI {
-  connect(room: Room | MockRoom, store: TStore): void
+  connect(room: Room | MockRoom, store: TStore): void;
 
-  resetBotWarning(): void
+  resetBotWarning(): void;
 
-  setNextPhase(): void
+  setNextPhase(): void;
 
-  resetGame(): void
+  resetGame(): void;
 
-  investTimeBlocks(investment: InvestmentData): void
+  investTimeBlocks(investment: InvestmentData): void;
 
-  purchaseAccomplishment(accomplishment: AccomplishmentData): void
+  purchaseAccomplishment(accomplishment: AccomplishmentData): void;
 
-  discardAccomplishment(id: number): void
+  discardAccomplishment(id: number): void;
 
-  stageDiscardOfPurchasedAccomplishment(id: number): void
+  stageDiscardOfPurchasedAccomplishment(id: number): void;
 
-  sendTradeRequest(trade: SendTradeRequestData['trade']): void
+  sendTradeRequest(trade: SendTradeRequestData["trade"]): void;
 
-  acceptTradeRequest(id: string): void
+  acceptTradeRequest(id: string): void;
 
-  rejectTradeRequest(id: string): void
+  rejectTradeRequest(id: string): void;
 
-  cancelTradeRequest(id: string): void
+  cancelTradeRequest(id: string): void;
 
-  setSfxManager(sfx: SfxManager): void
+  setSfxManager(sfx: SfxManager): void;
 
-  setPlayerReadiness(value: boolean): void
+  setPlayerReadiness(value: boolean): void;
 
-  savePersonalGainVote(vote: boolean): void
+  savePersonalGainVote(vote: boolean): void;
 
-  voteForPhilanthropist(vote: Role): void
+  voteForPhilanthropist(vote: Role): void;
 
   saveBondingThroughAdversitySelection(influenceVoteData: {
     role: Role;
     influence: Resource;
-  }): void
+  }): void;
 
-  saveBreakdownOfTrust(savedResources: InvestmentData): void
+  saveBreakdownOfTrust(savedResources: InvestmentData): void;
 
-  resetPendingInvestments(): void
-  investPendingTimeBlocks(investment: any): void
+  resetPendingInvestments(): void;
+  investPendingTimeBlocks(investment: any): void;
 
-  setModalVisible(data: any): void
+  toggleProfileMenu(currentVisiblility: boolean): void;
 
-  setModalHidden(): void
+  setChatMarsLogView(view: ChatMarsLogView): void;
 
-  toggleProfileMenu(currentVisiblility: boolean): void
+  setHUDLeftView(view: HUDLeftView): void;
 
-  setChatMarsLogView(view: ChatMarsLogView): void
+  setHUDRightView(view: HUDRightView): void;
 
-  setHUDLeftView(view: HUDLeftView): void
+  setTradePlayerName(role: Role): void;
 
-  setHUDRightView(view: HUDRightView): void
+  setTradePartnerName(name: string): void;
 
-  setTradePlayerName(role: Role): void
+  setTradeGetResources(resources: ResourceAmountData): void;
 
-  setTradePartnerName(name: string): void
+  setTradeGiveResources(resources: ResourceAmountData): void;
 
-  setTradeGetResources(resources: ResourceAmountData): void
-
-  setTradeGiveResources(resources: ResourceAmountData): void
-
-  resetTradeModal(): void
+  resetTradeModal(): void;
 }
