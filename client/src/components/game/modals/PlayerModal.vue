@@ -172,15 +172,6 @@ export default class PlayerModal extends Vue {
   switchAccomplishmentType(type: string): void {
     this.accomplishmentType = type;
   }
-
-  handleRequestTrade() {
-    if (!this.roleData.isSelf && this.gamePhase === this.phase.trade) {
-      this.api.setModalVisible({
-        type: "TradeRequestModal",
-        data: {}
-      });
-    }
-  }
 }
 </script>
 

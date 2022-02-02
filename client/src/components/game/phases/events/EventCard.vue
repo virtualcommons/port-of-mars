@@ -100,7 +100,7 @@ export default class EventCard extends Vue {
     return this.currentPhase === Phase.events && this.currentEvent.id === this.event.id;
   }
 
-  get currentEvent(): MarsEventData | undefined {
+  get currentEvent() {
     return this.$tstore.getters.currentEvent;
   }
 
