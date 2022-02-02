@@ -67,6 +67,7 @@ import { Component, Inject, Prop, Vue } from "vue-property-decorator";
 import { EventClientView, MarsEventData, Phase } from "@port-of-mars/shared/types";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 import EventModal from "@port-of-mars/client/components/game/modals/EventModal.vue";
+import EventVote from "./events/EventVote.vue";
 
 @Component({
   components: { EventModal }
@@ -97,7 +98,9 @@ export default class EventCard extends Vue {
 
   //if the modal was spawned by the server, show the option buttons
   get wasSpawnedByServer() {
-    return this.currentPhase === Phase.events && this.currentEvent.id === this.event.id;
+    if (this.currentEvent) {
+      return this.currentPhase === Phase.events && this.currentEvent.id === this.event.id;
+    } else return false;
   }
 
   get currentEvent() {
