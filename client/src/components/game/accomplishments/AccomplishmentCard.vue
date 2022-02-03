@@ -189,8 +189,8 @@ export default class AccomplishmentCard extends Vue {
   // was referenced 2x by the v-b-modal directive. To solve this problem, a locationId prop is created
   // to pass in a string to append to the modal ID to prevent the modal from showing 2x and
   // to disambiguate the source of the click.
-  @Prop({ default: "" })
-  locationId: string;
+  @Prop({ default: "", required: false })
+  locationId!: string;
 
   // set when showCard changes
   isActive: boolean = true;
