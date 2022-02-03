@@ -74,15 +74,12 @@ h4 {
   font-weight: bold;
 }
 
-/* CSS Document by Christina Carrasquilla for Port of Mars (POM) */
-
 body {
   height: 100% !important;
   width: 100% !important;
   overflow-x: hidden;
   font-family: $khula !important;
   font-weight: $regular !important;
-  color: $light-shade;
   background-color: black;
 
   // fade animation for body
@@ -119,6 +116,15 @@ body {
   --marslog-orange: rgba(170, 111, 0, 0.2);
   --marslog-green: rgba(9, 92, 41, 0.2);
   --trade-request-blue: #659be8;
+
+  --brown: #754c29;
+  --beige: #d9cfc6;
+  --red: #aa2a29;
+  --black: #000000;
+  --white: #ffffff;
+  --yellow: #ebce56;
+  --blue: #005dac;
+  --purple: #7f3f98;
 }
 
 p,
