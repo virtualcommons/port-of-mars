@@ -60,7 +60,7 @@
       <!-- in purchase phase, allow purchase if sufficient resources -->
       <b-col
         class="w-100 m-0 p-3 justify-content-center"
-        v-if="type === cardType.purchase && showCard"
+        v-if="type === isPurchaseType && showCard"
         style="transition: all 0.15s ease-in-out"
       >
         <b-button
@@ -68,7 +68,7 @@
           squared
           size="lg"
           :disabled="!canPurchase || playerReady"
-          @click="purchase()"
+          @click="purchase"
         >
           Purchase Accomplishment
         </b-button>
@@ -78,7 +78,7 @@
       <b-col
         class="w-100 m-0 p-3 justify-content-center"
         style="transition: all 0.15s ease-in-out;"
-        v-else-if="type === cardType.discard && showCard"
+        v-else-if="type === isDiscardType && showCard"
       >
         <b-button
           variant="outline-danger"
@@ -86,7 +86,7 @@
           size="lg"
           v-if="isEffortsWasted"
           :disabled="playerReady"
-          @click="discardPurchasedAccomplishment()"
+          @click="discardPurchasedAccomplishment"
         >
           Discard Purchased Accomplishment
         </b-button>
@@ -97,7 +97,7 @@
           size="lg"
           v-else
           :disabled="playerReady"
-          @click="discard()"
+          @click="discard"
         >
           Discard Accomplishment
         </b-button>
@@ -105,8 +105,8 @@
 
       <!-- display status of card after it has been purchased or discarded -->
       <b-col class="w-100 m-0 p-3 text-center" style="transition: all 0.15s ease-in-out" v-else>
-        <p v-if="type === cardType.discard">Accomplishment Discarded</p>
-        <p v-else-if="type === cardType.purchase">Accomplishment Purchased</p>
+        <p v-if="type === isDiscardType">Accomplishment Discarded</p>
+        <p v-else-if="type === isPurchaseType">Accomplishment Purchased</p>
       </b-col>
     </b-row>
     <b-modal
@@ -187,7 +187,7 @@ export default class AccomplishmentCard extends Vue {
   // set when showCard changes
   isActive: boolean = true;
 
-  // hide card if showCard value changes upon discard
+  // hide card if showCard value changes upon purchase or discard
   @Watch("showCard", { immediate: true })
   shouldShowCard(showCard: boolean): void {
     if (!showCard) {
@@ -198,6 +198,14 @@ export default class AccomplishmentCard extends Vue {
 
   get accomplishmentModalId() {
     return `accomplishment-modal-${this.accomplishment.id}`;
+  }
+
+  get isPurchaseType(): AccomplishmentCardType {
+    return AccomplishmentCardType.purchase;
+  }
+
+  get isDiscardType(): AccomplishmentCardType {
+    return AccomplishmentCardType.discard;
   }
 
   // local player's readiness
@@ -217,11 +225,6 @@ export default class AccomplishmentCard extends Vue {
   // local player's inventory
   get inventory(): ResourceAmountData {
     return this.$tstore.getters.player.inventory;
-  }
-
-  // accomplishment type: default, discard, purchase
-  get cardType() {
-    return this.type;
   }
 
   /**
