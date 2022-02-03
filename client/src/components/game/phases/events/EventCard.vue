@@ -48,14 +48,14 @@
 
       <div class="w-100"></div>
 
-      <b-row class="w-100 mx-auto my-4" v-if="wasSpawnedByServer">
+      <b-row class="w-100 mx-auto my-4 text-center" v-if="wasSpawnedByServer">
         <b-col v-if="requiresInteraction">
-          <b-button squared @click="$bvModal.hide(eventModalId)" variant="outline-secondary"
+          <b-button squared @click="$bvModal.hide(eventModalId)" variant="outline-light"
             >Interact</b-button
           >
         </b-col>
         <b-col v-else>
-          <b-button squared @click="readyUp" variant="outline-secondary">Continue</b-button>
+          <b-button squared @click="readyUp" variant="outline-light">Continue</b-button>
         </b-col>
       </b-row>
     </b-modal>

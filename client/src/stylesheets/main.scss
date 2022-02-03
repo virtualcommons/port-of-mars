@@ -22,22 +22,22 @@ html {
   width: 100%;
 }
 
-// html {
-//   @include xl {
-//     font-size: 12px !important;
-//   }
+html {
+  @include xl {
+    font-size: 12px !important;
+  }
 
-//   @include lg {
-//     font-size: 8px !important;
-//   }
+  @include lg {
+    font-size: 8px !important;
+  }
 
-//   @include md {
-//     font-size: 6px !important;
-//   }
-//   @include sm {
-//     font-size: 4px !important;
-//   }
-// }
+  @include md {
+    font-size: 6px !important;
+  }
+  @include sm {
+    font-size: 4px !important;
+  }
+}
 
 body {
   height: 100% !important;
@@ -84,23 +84,23 @@ body {
   --trade-request-blue: #659be8;
 }
 
-// p {
-//   font-family: $ruda !important;
-// }
+p {
+  font-family: $ruda !important;
+}
 
-// h1,
-// h2,
-// h3,
-// h4 {
-//   font-family: $montserrat !important;
-// }
+h1,
+h2,
+h3,
+h4 {
+  font-family: $montserrat !important;
+}
 
-// p,
-// h1,
-// img,
-// button {
-//   user-select: none !important;
-// }
+p,
+h1,
+img,
+button {
+  user-select: none !important;
+}
 
 // ----- CUSTOM ANIMATION -----
 
