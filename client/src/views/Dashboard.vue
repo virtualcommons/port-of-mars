@@ -182,12 +182,11 @@
                   </PlayerStatItem>
                 </b-col>
               </b-row>
-            </div> </b-tab></b-tabs
-      ></b-row>
-
-      <!-- footer -->
-      <b-row><Footer></Footer></b-row>
+            </div> </b-tab>
+          </b-tabs>
+        </b-row>
     </b-row>
+    <Footer></Footer>
   </b-container>
 </template>
 

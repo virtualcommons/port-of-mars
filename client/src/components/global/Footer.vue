@@ -3,7 +3,7 @@ HTML Document by Christina Carrasquilla for Port of Mars (POM)
 ccarra1@asu.edu
 -->
 <template>
-  <b-container class="m-0 p-0" style="background-color: var(--dark-shade-75)" fluid>
+  <b-container class="m-0 p-3 footer-container" fluid>
     <footer>
       <!-- FIXME: nav links should change based on the route -->
       <section id="footer-nav">
@@ -65,11 +65,10 @@ ccarra1@asu.edu
         </ul>
       </section>
       <div id="copyright">
-        <small
-          >&copy; 2020-{{ currentYear }} Arizona Board of Regents
-          <br />
+        &copy; 2020-{{ currentYear }} 
+          <a href="https://www.azregents.edu/">Arizona Board of Regents</a> | 
+
           <a href="https://github.com/virtualcommons/port-of-mars">{{ buildId }}</a>
-        </small>
       </div>
     </footer>
   </b-container>
@@ -92,4 +91,65 @@ export default class Footer extends Vue {
 }
 </script>
 
-<
+<style scoped>
+.footer-container {
+  background-color: var(--dark-shade-75);
+}
+
+footer {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+}
+footer section {
+  margin: 0 auto;
+}
+#copyright {
+  grid-column: 1/4;
+  padding: 1rem;
+  text-align: center;
+  width: 100%;
+}
+
+/* ------------------- POM TEXT STYLES -------------------  */
+footer {
+  font-size: 1em;
+  padding: 1rem;
+}
+footer a,
+footer a:link,
+footer a:visited,
+footer a:active {
+  color: var(--white);
+  text-decoration: none;
+  transition: all 0.5s cubic-bezier(0.75, 0.5, 0.05, 1);
+}
+footer a:hover {
+  color: var(--red);
+}
+footer svg:hover {
+  stroke: var(--red);
+}
+footer ul {
+  padding: 1rem;
+}
+#footer-nav h2,
+#sponsors h2,
+#social-media h2 {
+  text-align: left;
+}
+#footer-nav h2,
+#sponsors h2,
+#social-media h2 {
+  font-size: 1.5em;
+  padding: 1rem;
+}
+@media screen and (max-width: 810px) {
+  footer {
+    grid-template-columns: 1fr;
+  }
+  footer section {
+    grid-column: 1/2;
+    margin: 5px;
+  }
+}
+</style>
