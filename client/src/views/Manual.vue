@@ -252,5 +252,5 @@ export default class Manual extends Vue {}
 </script>
 
 <style scoped>
-@import url("../stylesheets/style.css");
+/* @import url("../stylesheets/custom.css"); */
 </style>
