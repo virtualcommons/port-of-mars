@@ -96,8 +96,13 @@ export default class GameboardContainer extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .border {
   border: 0.5rem solid $light-shade-25;
 }
+
+body {
+  color: $light-shade;
+}
+
 </style>
