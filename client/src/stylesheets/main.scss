@@ -1,8 +1,7 @@
 @import "./utilities/_mixins.scss";
 @import "./utilities/_variables.scss";
 @import "./utilities/color-palette.scss";
-
-// TODO :: Download Fonts Locally
+@import "styles.scss";
 
 // Montserrat
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap");
@@ -17,12 +16,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Khula:wght@400;600;700&display=swap");
 
 // ----- HTML ELEMENTS -----
+
 html {
   height: 100%;
   width: 100%;
-}
 
-html {
   @include xl {
     font-size: 12px !important;
   }
@@ -38,6 +36,45 @@ html {
     font-size: 4px !important;
   }
 }
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: $montserrat !important;
+}
+
+h2,
+h3 {
+  font-weight: bold;
+}
+
+h2 {
+  text-transform: uppercase;
+  // text-align: center;
+}
+
+h3 {
+  font-style: italic;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+p,
+li {
+  font-family: $ruda !important;
+  line-height: 1.5em;
+}
+
+h4 {
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+/* CSS Document by Christina Carrasquilla for Port of Mars (POM) */
 
 body {
   height: 100% !important;
@@ -84,17 +121,6 @@ body {
   --trade-request-blue: #659be8;
 }
 
-p {
-  font-family: $ruda !important;
-}
-
-h1,
-h2,
-h3,
-h4 {
-  font-family: $montserrat !important;
-}
-
 p,
 h1,
 img,
@@ -139,32 +165,4 @@ button {
 
 .bg-dark-75 {
   background-color: $dark-shade-75;
-}
-
-// CLASSES FOR LAYOUT TESTING
-// use these classes to set the background color on b-rows and b-cols
-// to help visualize the layout of a page
-
-.bg-test-red {
-  background-color: red;
-}
-
-.bg-test-yellow {
-  background-color: yellow;
-}
-
-.bg-test-orange {
-  background-color: orange;
-}
-
-.bg-test-green {
-  background-color: green;
-}
-
-.bg-test-blue {
-  background-color: blue;
-}
-
-.bg-test-purple {
-  background-color: purple;
 }

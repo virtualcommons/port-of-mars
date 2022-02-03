@@ -75,3 +75,28 @@ $border-white-opaque-2: 0.125rem solid $light-shade-25;
 $new-space-orange: rgba(221, 168, 119, 1);
 $new-space-orange-005: rgba(221, 168, 119, 0.05);
 $new-space-orange-opaque-025: rgba(221, 168, 119, 0.25);
+
+/* -------------------  CLASSES FOR TESTING -------------------  */
+.bg-test-red {
+  background-color: red;
+}
+
+.bg-test-yellow {
+  background-color: yellow;
+}
+
+.bg-test-orange {
+  background-color: orange;
+}
+
+.bg-test-green {
+  background-color: green;
+}
+
+.bg-test-blue {
+  background-color: blue;
+}
+
+.bg-test-purple {
+  background-color: purple;
+}

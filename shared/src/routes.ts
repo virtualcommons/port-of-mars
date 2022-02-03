@@ -7,8 +7,10 @@ export const REGISTER_PAGE: "Register" = "Register";
 export const VERIFY_PAGE = "Verify" as const;
 export const DASHBOARD_PAGE: "Dashboard" = "Dashboard";
 export const MANUAL_PAGE: "Manual" = "Manual";
+export const HOME_PAGE: "Home" = "Home";
 
 export type Page =
+  | "Home"
   | "Login"
   | "Lobby"
   | "Game"
@@ -27,6 +29,7 @@ export const PAGES: Array<Page> = [
   DASHBOARD_PAGE,
   VERIFY_PAGE,
   MANUAL_PAGE,
+  HOME_PAGE,
 ];
 
 export function isPage(pageName: string): pageName is Page {
@@ -73,8 +76,15 @@ export const PAGE_META: {
       requiresAuth: true,
     },
   },
-  [LOGIN_PAGE]: {
+  [HOME_PAGE]: {
     path: "/",
+    name: HOME_PAGE,
+    meta: {
+      requiresAuth: false,
+    },
+  },
+  [LOGIN_PAGE]: {
+    path: "/signin",
     name: LOGIN_PAGE,
     meta: {
       requiresAuth: false,
@@ -106,9 +116,9 @@ export const PAGE_META: {
     path: "/manual",
     name: MANUAL_PAGE,
     meta: {
-      requiresAuth: true,
+      requiresAuth: false,
     },
   },
 };
 
-export const PAGE_DEFAULT = PAGE_META[LOGIN_PAGE];
+export const PAGE_DEFAULT = PAGE_META[HOME_PAGE];
