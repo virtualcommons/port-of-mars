@@ -18,7 +18,8 @@
               ? 'backgroundColor: var(--light-accent)'
               : 'backgroundColor: var(--light-shade)'
           "
-          class="p-2 text-center"
+          class="p-2"
+          style="color: black"
         >
           {{ modalData.label }}
         </h5>
