@@ -9,6 +9,7 @@ import Register from "@port-of-mars/client/views/Register.vue";
 import Dashboard from "@port-of-mars/client/views/Dashboard.vue";
 import Verify from "@port-of-mars/client/views/VerifyEmail.vue";
 import Manual from "@port-of-mars/client/views/Manual.vue";
+import Home from "@port-of-mars/client/views/Home.vue";
 import {
   PAGE_META,
   LOGIN_PAGE,
@@ -19,7 +20,8 @@ import {
   DASHBOARD_PAGE,
   VERIFY_PAGE,
   SIGNEDUP_PAGE,
-  MANUAL_PAGE
+  MANUAL_PAGE,
+  HOME_PAGE
 } from "@port-of-mars/shared/routes";
 
 Vue.use(Router);
@@ -35,7 +37,8 @@ const router = new Router({
     { ...PAGE_META[REGISTER_PAGE], component: Register },
     { ...PAGE_META[DASHBOARD_PAGE], component: Dashboard },
     { ...PAGE_META[VERIFY_PAGE], component: Verify },
-    { ...PAGE_META[MANUAL_PAGE], component: Manual }
+    { ...PAGE_META[MANUAL_PAGE], component: Manual },
+    { ...PAGE_META[HOME_PAGE], component: Home }
   ]
 });
 
