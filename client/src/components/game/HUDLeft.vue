@@ -47,6 +47,7 @@
           :accomplishment="accomplishment"
           :showDescription="false"
           :showCost="false"
+          :locationId="'hud'"
         ></AccomplishmentCard>
       </div>
     </b-col>

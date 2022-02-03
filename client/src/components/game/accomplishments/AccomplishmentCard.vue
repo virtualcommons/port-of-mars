@@ -184,6 +184,14 @@ export default class AccomplishmentCard extends Vue {
   @Prop({ default: true })
   showCard!: boolean;
 
+  // since Accomplishment cards are generated in more than one place (HUD Left and PhaseSwitcher)
+  // when a user clicked on it to show the modal, the modal opens 2x because the Accomplishment card
+  // was referenced 2x by the v-b-modal directive. To solve this problem, a locationId prop is created
+  // to pass in a string to append to the modal ID to prevent the modal from showing 2x and
+  // to disambiguate the source of the click.
+  @Prop({ default: "" })
+  locationId: string;
+
   // set when showCard changes
   isActive: boolean = true;
 
@@ -197,7 +205,11 @@ export default class AccomplishmentCard extends Vue {
   }
 
   get accomplishmentModalId() {
-    return `accomplishment-modal-${this.accomplishment.id}`;
+    if (this.locationId === "") {
+      return `accomplishment-modal-${this.accomplishment.id}`;
+    } else {
+      return `accomplishment-modal-${this.accomplishment.id}-${this.locationId}`;
+    }
   }
 
   get isPurchaseType(): AccomplishmentCardType {
