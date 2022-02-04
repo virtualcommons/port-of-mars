@@ -19,14 +19,14 @@
             }}</b-badge>
           </h3>
           <p class="my-2 lead">
-            Welcome to Mars! Each round, your System Health degrades by
+            Welcome to Mars! Each round, System Health degrades by
             <b-badge variant="danger">{{ systemHealthMaintenanceCost }}</b-badge>
             due to standard wear and tear.
           </p>
           <p>
-            Your System Health at the start of this round was
-            <b-badge variant="success">100</b-badge>. Applying standard wear and tear results in a
-            current System Health of <b-badge variant="success">{{ nextRoundSystemHealth }}</b-badge
+            System Health at the start of this round was
+            <b-badge variant="success">100</b-badge>. After the costs of standard wear and tear,
+            current System Health is <b-badge variant="success">{{ nextRoundSystemHealth }}</b-badge
             >.
           </p>
         </b-col>
@@ -41,13 +41,12 @@
         <ul>
           <li>
             In the previous round you invested
-            <b class="highlighted-number">{{ yourSystemHealthContributions }} System Health</b>
+            <b class="highlighted-number">{{ yourSystemHealthContributions }} System Health</b>.
           </li>
           <li>
             The rest of your group invested
-            <b class="highlighted-number"
-              >{{ otherPlayerSystemHealthContributions }} System Health</b
-            >
+            <b class="highlighted-number">
+              {{ otherPlayerSystemHealthContributions }} System Health</b>.
           </li>
           <li>
             Total contributions:
@@ -60,19 +59,19 @@
             <b class="highlighted-number">{{ averageContribution }} System Health</b>
           </li>
           <li v-if="systemHealthAccomplishmentPurchasesCost < 0">
-            Purchased Accomplishments last round cost
+            Purchased Accomplishments last round cost:
             <b class="highlighted-number"
               >{{ systemHealthAccomplishmentPurchasesCost }} System Health</b
             >.
           </li>
           <li v-if="systemHealthMarsEventsCost < 0">
-            Mars Events cost
-            <b class="highlighted-number">{{ systemHealthMarsEventsCost }} System Health</b>.
+            Mars Events cost:
+            <b class="highlighted-number">{{ systemHealthMarsEventsCost }} System Health</b>
           </li>
-          <li>Standard Wear and Tear: <b class="highlighted-number">-25 System Health</b>.</li>
+          <li>Standard Wear and Tear cost: <b class="highlighted-number">-25 System Health</b>.</li>
         </ul>
         <h4>
-          Upcoming System Health Calculation
+          Upcoming System Health
         </h4>
         <h4>
           <b-badge :variant="systemHealthBadgeVariant(systemHealth)">
