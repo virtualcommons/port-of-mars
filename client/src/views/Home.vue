@@ -18,15 +18,6 @@
           community on the Red Planet.
         </h3>
       </b-col>
-      <b-col>
-        <b-img
-          class="p-3"
-          v-bind="logo"
-          right
-          :src="require(`@port-of-mars/client/assets/background/logo.png`)"
-        >
-        </b-img>
-      </b-col>
     </b-row>
     <b-row class="mt-2">
       <b-col cols="7" class="mt-4 p-5">
