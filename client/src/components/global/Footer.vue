@@ -3,75 +3,75 @@ Footer designed by Christina Carrasquilla for Port of Mars
 ccarra1@asu.edu
 -->
 <template>
-  <b-container class="mt-3 p-2 footer-container" fluid>
-    <footer id="pom-footer">
-      <!-- FIXME: nav links should change based on the route -->
-      <section id="footer-nav">
-        <h2>Navigation</h2>
-        <ul>
-          <li>
-            <a href="/#/#about" title="about">About</a>
-          </li>
-          <li>
-            <a href="/#/#leaderboard" title="leaderboard">Leaderboard</a>
-          </li>
-          <li>
-            <a href="/#/#news" title="news">News</a>
-          </li>
-          <li>
-            <a href="/#/#gameplay" title="gameplay">Gameplay</a>
-          </li>
-        </ul>
-      </section>
-      <section id="sponsors">
-        <h2>Sponsors</h2>
-        <ul>
-          <li>
-            <a href="https://interplanetary.asu.edu/" title="ASU Interplanetary Initiative"
-              >ASU Interplanetary Initiative</a
-            >
-          </li>
-          <li>
-            <a href="https://complexity.asu.edu/" title="ASU School of Complex Adaptive Systems"
-              >ASU School of Complex Adaptive Systems</a
-            >
-          </li>
-          <li>
-            <a href="https://www.nsf.gov/" title="US National Science Foundation"
-              >US National Science Foundation (SES-2049553)</a
-            >
-          </li>
-        </ul>
-      </section>
-      <section id="social-media">
-        <h2>Connect with Us</h2>
-        <ul>
-          <li>
-            <a href="mailto:portmars@asu.edu" title="Email us"
-              >Email
-              <b-icon icon="envelope" class="mx-1"></b-icon>
-            </a>
-          </li>
-          <li>
-            <a href="https://www.instagram.com/portofmars/" title="Instagram">Instagram </a>
-            <b-icon icon="instagram" class="mx-1"></b-icon>
-          </li>
-          <li>
-            <a href="https://twitter.com/PortOfMars" title="Twitter"
-              >Twitter
-              <b-icon icon="twitter" class="mx-1"></b-icon>
-            </a>
-          </li>
-        </ul>
-      </section>
-      <div id="copyright">
-        &copy; 2020-{{ currentYear }} 
-          <a href="https://www.azregents.edu/">Arizona Board of Regents</a> | 
+  <!-- <b-container class="m-0 p-3 footer-container" fluid> -->
+  <footer class="footer-container">
+    <!-- FIXME: nav links should change based on the route -->
+    <section id="footer-nav">
+      <h2>Navigation</h2>
+      <ul>
+        <li>
+          <a href="/#/#about" title="about">About</a>
+        </li>
+        <li>
+          <a href="/#/#leaderboard" title="leaderboard">Leaderboard</a>
+        </li>
+        <li>
+          <a href="/#/#news" title="news">News</a>
+        </li>
+        <li>
+          <a href="/#/#gameplay" title="gameplay">Gameplay</a>
+        </li>
+      </ul>
+    </section>
+    <section id="sponsors">
+      <h2>Sponsors</h2>
+      <ul>
+        <li>
+          <a href="https://interplanetary.asu.edu/" title="ASU Interplanetary Initiative"
+            >ASU Interplanetary Initiative</a
+          >
+        </li>
+        <li>
+          <a href="https://complexity.asu.edu/" title="ASU School of Complex Adaptive Systems"
+            >ASU School of Complex Adaptive Systems</a
+          >
+        </li>
+        <li>
+          <a href="https://www.nsf.gov/" title="US National Science Foundation"
+            >US National Science Foundation (SES-2049553)</a
+          >
+        </li>
+      </ul>
+    </section>
+    <section id="social-media">
+      <h2>Connect with Us</h2>
+      <ul>
+        <li>
+          <a href="mailto:portmars@asu.edu" title="Email us"
+            >Email
+            <b-icon icon="envelope" class="mx-1"></b-icon>
+          </a>
+        </li>
+        <li>
+          <a href="https://www.instagram.com/portofmars/" title="Instagram">Instagram </a>
+          <b-icon icon="instagram" class="mx-1"></b-icon>
+        </li>
+        <li>
+          <a href="https://twitter.com/PortOfMars" title="Twitter"
+            >Twitter
+            <b-icon icon="twitter" class="mx-1"></b-icon>
+          </a>
+        </li>
+      </ul>
+    </section>
+    <div id="copyright">
+      &copy; 2020-{{ currentYear }}
+      <a href="https://www.azregents.edu/">Arizona Board of Regents</a> |
 
-          <a href="https://github.com/virtualcommons/port-of-mars">{{ buildId }}</a>
-      </div>
-    </footer>
-  </b-container>
+      <a href="https://github.com/virtualcommons/port-of-mars">{{ buildId }}</a>
+    </div>
+  </footer>
+  <!-- </b-container> -->
 </template>
 
 <script lang="ts">
@@ -104,9 +104,11 @@ footer {
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
 }
+
 footer section {
   margin: 0 auto;
 }
+
 #copyright {
   grid-column: 1/4;
   padding: 1rem;
@@ -119,6 +121,11 @@ footer {
   font-size: 1em;
   padding: 1rem;
 }
+
+footer li {
+  margin: 0.5rem 0 0.5rem 0;
+}
+
 footer a,
 footer a:link,
 footer a:visited,
@@ -129,6 +136,8 @@ footer a:active {
 }
 footer a:hover {
   color: var(--red);
+  padding-bottom: 2px;
+  border-bottom: 3px solid var(--red);
 }
 footer ul {
   padding: 1rem;
