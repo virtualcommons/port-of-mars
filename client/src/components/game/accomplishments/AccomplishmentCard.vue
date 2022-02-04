@@ -45,7 +45,7 @@
         <div
           :class="investment.available ? '' : 'unattainable-resource'"
           class="cost justify-content-center align-items-center"
-          v-for="investment in accomplishmentCost"
+          v-for="investment in costToPurchase"
           :key="investment.name"
         >
           <img
@@ -120,7 +120,7 @@
     >
       <AccomplishmentModal
         :modalData="accomplishment"
-        :accomplishmentCost="accomplishmentCost"
+        :costToPurchase="costToPurchase"
         :canPurchase="canPurchase"
       ></AccomplishmentModal>
     </b-modal>
@@ -242,7 +242,7 @@ export default class AccomplishmentCard extends Vue {
   /**
    * Map cost of accomplishments to available influences in local player's inventory.
    * */
-  get accomplishmentCost(): { influence: Investment; available: boolean }[] {
+  get costToPurchase(): { influence: Investment; available: boolean }[] {
     // local player's inventory - defines inventory numerically
     // e.g. { culture: 3, science: 0, finance: 0, legacy: 0, govt: 0 }
     const inventory = this.playerInventory;

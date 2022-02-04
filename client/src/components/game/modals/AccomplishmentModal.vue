@@ -7,7 +7,7 @@
         : 'border: 0.125rem solid var(--light-shade)'
     "
     style="background-color: var(--dark-shade); border: none"
-    class="p-0 mx-0"
+    class="p-3 mx-0"
   >
     <!-- title -->
     <b-row align-v="center" class="w-100 mx-0 mt-2 p-0 text-center">
@@ -53,12 +53,12 @@
         <div
           :class="investment.available ? '' : 'unattainable-resource'"
           class="cost justify-content-center align-items-center"
-          v-for="investment in accomplishmentCost"
+          v-for="investment in costToPurchase"
           :key="investment.name"
         >
           <img
             :src="require(`@port-of-mars/client/assets/icons/${investment.influence}.svg`)"
-            alt="Investment"
+            :alt="investment.name"
           />
         </div>
       </b-col>
@@ -90,7 +90,22 @@ export default class AccomplishmentModal extends Vue {
     })
   })
   modalData!: AccomplishmentData;
-  @Prop() accomplishmentCost!: { influence: Investment; available: boolean }[];
+  @Prop({ required: true }) costToPurchase!: { influence: Investment; available: boolean }[];
   @Prop({ default: false }) canPurchase!: boolean;
 }
 </script>
+
+<style lang="scss">
+.cost {
+  height: 2rem;
+  width: 2rem;
+  padding: 0.25rem;
+  border-radius: 50%;
+  margin: 0.125rem;
+  background-color: $light-shade;
+}
+
+.unattainable-resource {
+  background-color: $light-shade-25 !important;
+}
+</style>
