@@ -91,16 +91,9 @@ export default class Footer extends Vue {
 }
 </script>
 
-<style>
+<style scoped>
 .footer-container {
   background-color: var(--dark-shade-75);
-  display: flex;
-  align-items: flex-end;
-  flex-direction: row-reverse;
-  justify-content: center;
-}
-
-footer {
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
 }
