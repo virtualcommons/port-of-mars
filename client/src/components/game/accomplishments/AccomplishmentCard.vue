@@ -12,21 +12,20 @@
   >
     <!-- title -->
     <b-row align-v="center" class="w-100 mx-0 mt-2 p-0 text-center">
-      <b-col
-        v-b-modal="accomplishmentModalId"
-        :style="showCard ? 'color: black' : 'color: white'"
-        style="cursor: pointer"
-      >
-        <h5
+      <b-col :style="showCard ? 'color: black' : 'color: white'">
+        <b-button
           :style="
             canPurchase
               ? 'backgroundColor: var(--light-accent)'
               : 'backgroundColor: var(--light-shade)'
           "
           class="p-2 text-center"
+          block
+          squared
+          v-b-modal="accomplishmentModalId"
         >
           {{ accomplishment.label }}
-        </h5>
+        </b-button>
       </b-col>
 
       <!-- Equal-width columns that span multiple lines: https://bootstrap-vue.org/docs/components/layout#comp-ref-b-col -->

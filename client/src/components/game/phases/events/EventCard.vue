@@ -7,10 +7,16 @@
   >
     <b-row align-v="center" class="w-100 mx-0 mt-2 p-0 text-center">
       <!-- Event name | Active event indicator -->
-      <b-col style="cursor: pointer" v-b-modal="eventModalId">
-        <h5 class="p-2 text-center" style="background-color: var(--light-shade); color: black">
+      <b-col>
+        <b-button
+          squared
+          block
+          class="p-2 text-center"
+          style="background-color: var(--light-shade); color: black"
+          v-b-modal="eventModalId"
+        >
           {{ event.name }}
-        </h5>
+        </b-button>
         <b-badge v-if="showActiveIndicator" variant="success">
           Active
         </b-badge>
