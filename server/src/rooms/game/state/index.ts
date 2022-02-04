@@ -1807,8 +1807,8 @@ export class GameState
     const recipient = this.players[recipientRole];
     const fromTradeResources: ResourceAmountData = trade.sender.resourceAmount;
 
-    const toMsg: Array<string> = [];
-    const fromMsg: Array<string> = [];
+    const recipientTradeResources: Array<string> = [];
+    const senderTradeResources: Array<string> = [];
 
     const toTradeResources: ResourceAmountData = trade.recipient.resourceAmount;
 
@@ -1823,21 +1823,24 @@ export class GameState
 
     for (const [resource, amount] of Object.entries(toTradeResources)) {
       if (amount > 0) {
-        const resourceFormatted =
-          resource.charAt(0).toUpperCase() + resource.slice(1);
-        toMsg.push(`${resourceFormatted}: ${amount}`);
+        recipientTradeResources.push(`${amount} ${_.capitalize(resource)}`);
       }
     }
     for (const [resource, amount] of Object.entries(fromTradeResources)) {
       if (amount > 0) {
-        const resourceFormatted =
-          resource.charAt(0).toUpperCase() + resource.slice(1);
-        toMsg.push(`${resourceFormatted}: ${amount}`);
+        senderTradeResources.push(`${amount} ${_.capitalize(resource)}`);
       }
     }
-    const message = `The ${senderRole} has traded ${fromMsg.join(
-      ", "
-    )} in exchange for ${toMsg.join(", ")} from the ${recipientRole}.`;
+
+    if (senderTradeResources.length === 0) {
+      senderTradeResources.push("nothing");
+    }
+
+    if (recipientTradeResources.length === 0) {
+      recipientTradeResources.push("nothing");
+    }
+
+    const message = `${senderRole} traded ${senderTradeResources.join(", ")} to ${recipientRole} in exchange for ${recipientTradeResources.join(", ")}.`;
     const category = MarsLogCategory.acceptTrade;
     this.roundIntroduction.addCompletedTrade(this.tradeSet.get(id)!);
     this.log(message, category, performedBy);
