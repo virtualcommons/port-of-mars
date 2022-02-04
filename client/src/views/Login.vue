@@ -62,22 +62,24 @@
         </b-button>
         <!-- register form -->
         <b-form inline v-if="isDevMode && toggleDevLogin" @submit="devLogin">
-          <b-form-input
-            id="input-username"
-            v-model="testUsername"
-            placeholder="Enter any username for testing"
-            required
-            class="w-50"
-          >
-          </b-form-input>
-          <b-button class="w-25 mx-2" icon type="submit" variant="success">
-            <b-icon class="mb-1" icon="box-arrow-right"></b-icon> Sign in
-          </b-button>
+          <div class="w-75 m-auto">
+            <b-form-input
+              id="input-username"
+              v-model="testUsername"
+              placeholder="Enter any username for testing"
+              required
+              class="w-50"
+            >
+            </b-form-input>
+            <b-button class="w-25 mx-2" icon type="submit" variant="success">
+              <b-icon class="mb-1" icon="box-arrow-right"></b-icon> Sign in
+            </b-button>
+          </div>
         </b-form>
         <b-alert v-if="error" variant="warning">{{ error }}</b-alert>
       </b-col>
     </b-row>
-    <Footer class="fixed-bottom"></Footer>
+    <Footer></Footer>
   </b-container>
 </template>
 
@@ -172,7 +174,11 @@ export default class Login extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
+::placeholder, #input-username {
+  color: var(--dark-shade);
+  background-color: var(--light-shade);
+}
 .title {
   letter-spacing: 0.25rem;
   font-size: 4rem;

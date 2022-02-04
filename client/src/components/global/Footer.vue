@@ -1,10 +1,10 @@
 <!-- 
-HTML Document by Christina Carrasquilla for Port of Mars (POM)
+Footer designed by Christina Carrasquilla for Port of Mars
 ccarra1@asu.edu
 -->
 <template>
-  <b-container class="m-0 p-3 footer-container" fluid>
-    <footer>
+  <b-container class="mt-3 p-2 footer-container" fluid>
+    <footer id="pom-footer">
       <!-- FIXME: nav links should change based on the route -->
       <section id="footer-nav">
         <h2>Navigation</h2>
@@ -91,9 +91,13 @@ export default class Footer extends Vue {
 }
 </script>
 
-<style scoped>
+<style>
 .footer-container {
   background-color: var(--dark-shade-75);
+  display: flex;
+  align-items: flex-end;
+  flex-direction: row-reverse;
+  justify-content: center;
 }
 
 footer {
@@ -125,9 +129,6 @@ footer a:active {
 }
 footer a:hover {
   color: var(--red);
-}
-footer svg:hover {
-  stroke: var(--red);
 }
 footer ul {
   padding: 1rem;
