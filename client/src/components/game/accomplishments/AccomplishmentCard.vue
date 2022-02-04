@@ -12,21 +12,36 @@
   >
     <!-- title -->
     <b-row align-v="center" class="w-100 mx-0 mt-2 p-0 text-center">
-      <b-col :style="showCard ? 'color: black' : 'color: white'">
-        <b-button
-          :style="
-            canPurchase
-              ? 'backgroundColor: var(--light-accent)'
-              : 'backgroundColor: var(--light-shade)'
-          "
-          class="p-2 text-center"
-          block
-          squared
-          v-b-modal="accomplishmentModalId"
-        >
-          {{ accomplishment.label }}
-        </b-button>
-      </b-col>
+      <template v-if="enableModal">
+        <b-col :style="showCard ? 'color: black' : 'color: white'">
+          <b-button
+            :style="
+              canPurchase
+                ? 'backgroundColor: var(--light-accent)'
+                : 'backgroundColor: var(--light-shade)'
+            "
+            class="p-2 text-center"
+            block
+            squared
+            v-b-modal="accomplishmentModalId"
+          >
+            {{ accomplishment.label }}
+          </b-button>
+        </b-col>
+      </template>
+      <template v-else>
+        <b-col :style="showCard ? 'color: black' : 'color: white'">
+          <h5 :style="
+              canPurchase
+                ? 'backgroundColor: var(--light-accent)'
+                : 'backgroundColor: var(--light-shade)'
+            "
+            class="p-2 text-center"
+          >
+            {{ accomplishment.label }}
+          </h5>
+        </b-col>
+      </template>
 
       <!-- Equal-width columns that span multiple lines: https://bootstrap-vue.org/docs/components/layout#comp-ref-b-col -->
       <div class="w-100"></div>
@@ -108,21 +123,23 @@
         <p v-else-if="type === isPurchaseType">Accomplishment Purchased</p>
       </b-col>
     </b-row>
-    <b-modal
-      :id="accomplishmentModalId"
-      centered
-      no-stacking
-      hide-header
-      hide-footer
-      body-bg-variant="dark"
-      size="lg"
-    >
-      <AccomplishmentModal
-        :modalData="accomplishment"
-        :costToPurchase="costToPurchase"
-        :canPurchase="canPurchase"
-      ></AccomplishmentModal>
-    </b-modal>
+    <template v-if="enableModal">
+      <b-modal
+        :id="accomplishmentModalId"
+        centered
+        no-stacking
+        hide-header
+        hide-footer
+        body-bg-variant="dark"
+        size="lg"
+      >
+        <AccomplishmentModal
+          :modalData="accomplishment"
+          :costToPurchase="costToPurchase"
+          :canPurchase="canPurchase"
+        ></AccomplishmentModal>
+      </b-modal>
+    </template>
   </b-container>
 </template>
 
@@ -183,13 +200,11 @@ export default class AccomplishmentCard extends Vue {
   @Prop({ default: true })
   showCard!: boolean;
 
-  // since Accomplishment cards are generated in more than one place (HUD Left and PhaseSwitcher)
-  // when a user clicked on it to show the modal, the modal opens 2x because the Accomplishment card
-  // was referenced 2x by the v-b-modal directive. To solve this problem, a locationId prop is created
-  // to pass in a string to append to the modal ID to prevent the modal from showing 2x and
-  // to disambiguate the source of the click.
-  @Prop({ default: "", required: false })
-  locationId!: string;
+  @Prop({ default: false })
+  showDescription!: boolean;
+
+  @Prop({ default: false })
+  enableModal!: boolean;
 
   // set when showCard changes
   isActive: boolean = true;
@@ -204,11 +219,7 @@ export default class AccomplishmentCard extends Vue {
   }
 
   get accomplishmentModalId() {
-    if (this.locationId === "") {
-      return `accomplishment-modal-${this.accomplishment.id}`;
-    } else {
-      return `accomplishment-modal-${this.accomplishment.id}-${this.locationId}`;
-    }
+    return `accomplishment-modal-${this.accomplishment.id}`;
   }
 
   get isPurchaseType(): AccomplishmentCardType {

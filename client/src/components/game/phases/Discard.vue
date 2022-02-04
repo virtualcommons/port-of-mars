@@ -27,6 +27,7 @@
               :key="accomplishment.id"
               :accomplishment="accomplishment"
               :showCard="wasDiscarded(accomplishment.id)"
+              :enableModal="true"
               :type="cardType"
               @discarded="discardAccomplishment"
             ></AccomplishmentCard>

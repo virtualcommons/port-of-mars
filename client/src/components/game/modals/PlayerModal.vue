@@ -67,7 +67,7 @@
             <p class="my-4" v-if="accomplishmentType === 'purchasable'">
               This information is currently private and cannot be viewed at this time.
             </p>
-            <p v-if="accomplishmentType === 'purchased'" class="my-auto text-center">None</p>
+            <p v-if="accomplishmentType === 'purchased'" class="my-auto text-center">No purchased accomplishments</p>
           </div>
           <!-- col: accomplishments -->
           <div class="scroll p-3" v-else-if="roleData.isSelf || isUnderAudit">

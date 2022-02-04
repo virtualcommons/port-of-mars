@@ -92,6 +92,10 @@ export default class AccomplishmentModal extends Vue {
   modalData!: AccomplishmentData;
   @Prop({ required: true }) costToPurchase!: { influence: Investment; available: boolean }[];
   @Prop({ default: false }) canPurchase!: boolean;
+
+  mounted() {
+    console.log("mounted with accomplishment card: ", this.costToPurchase);
+  }
 }
 </script>
 

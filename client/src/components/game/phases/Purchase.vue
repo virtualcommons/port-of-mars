@@ -27,6 +27,7 @@
               :key="accomplishment.id"
               :accomplishment="accomplishment"
               :showCard="wasPurchased(accomplishment.id)"
+              :enableModal="true"
               :type="cardType"
               @purchased="purchase(accomplishment)"
             ></AccomplishmentCard>
