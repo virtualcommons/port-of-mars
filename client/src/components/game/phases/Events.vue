@@ -20,6 +20,7 @@
               :event="event"
               :visible="eventVisible(index)"
               class="my-2"
+              :timestamp="timestamp"
             ></EventCard>
           </div>
         </b-col>
@@ -57,7 +58,7 @@ import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 export default class Events extends Vue {
   @Inject() readonly api!: GameRequestAPI;
 
-  private selectedView: string = "Event Deck";
+  selectedView: string = "Event Deck";
 
   // NOTE :: LIFECYCLE HOOKS & WATCHERS
 
@@ -89,6 +90,10 @@ export default class Events extends Vue {
     return this.$tstore.getters.player.accomplishments.purchasable;
   }
 
+  get timestamp() {
+    return Date.now();
+  }
+
   updated() {
     let elem = this.$el.querySelector(".sort-events");
     if (elem) {
@@ -107,23 +112,15 @@ export default class Events extends Vue {
 
   // NOTE :: EVENT CARDS
 
-  //Open an event modal when a new card comes in
+  // show event modal when there is a new event
   @Watch("currentEvent", { immediate: true })
-  onNewEvent(event: any) {
+  async onNewEvent(event: any) {
     console.log("displaying new event: ", event);
+
     // FIXME: duplicate event modal id logic also in EventCard
-    this.$root.$emit("bv::show::modal", `event-modal-${event.id}`);
-    // this.api.setModalVisible({
-    //   type: "CardModal",
-    //   data: {
-    //     activator: "Server",
-    //     title: event.name,
-    //     content: event.effect,
-    //     cardType: "EventCard",
-    //     cardData: event
-    //   }
-    // });
-    // this.$root.$emit("bv::hide::modal", "gameModal");
+    console.log(`shwing event-modal-${event.id}-${this.timestamp}`);
+    await this.$nextTick();
+    this.$root.$emit("bv::show::modal", `event-modal-${event.id}-${this.timestamp}`);
   }
 
   switchView(view: string) {

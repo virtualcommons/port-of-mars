@@ -69,11 +69,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Inject, Prop, Vue } from "vue-property-decorator";
+import { Component, Inject, Prop, Vue, Watch } from "vue-property-decorator";
 import { EventClientView, MarsEventData, Phase } from "@port-of-mars/shared/types";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 import EventModal from "@port-of-mars/client/components/game/modals/EventModal.vue";
-import EventVote from "./events/EventVote.vue";
 
 @Component({
   components: { EventModal }
@@ -99,6 +98,9 @@ export default class EventCard extends Vue {
   @Prop({ default: false })
   active!: boolean;
 
+  @Prop({ default: 0, required: false })
+  timestamp!: number;
+
   //determining which type of events require which interactions
   eventNoChangeViews: Array<EventClientView> = ["NO_CHANGE", "AUDIT", "DISABLE_CHAT"];
 
@@ -114,7 +116,7 @@ export default class EventCard extends Vue {
   }
 
   get eventModalId() {
-    return `event-modal-${this.event.id}`;
+    return `event-modal-${this.event.id}-${this.timestamp}`;
   }
 
   get currentPhase() {
