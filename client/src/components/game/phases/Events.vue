@@ -22,6 +22,8 @@
               class="my-2"
               :timestamp="timestamp"
               :enableModal="true"
+              :currentEventModalId="currentEventModalId"
+              @updatedModalId="showModal(currentEventModalId)"
             ></EventCard>
           </div>
         </b-col>
@@ -60,6 +62,7 @@ export default class Events extends Vue {
   @Inject() readonly api!: GameRequestAPI;
 
   selectedView: string = "Event Deck";
+  currentEventModalId: string = "";
 
   // NOTE :: LIFECYCLE HOOKS & WATCHERS
 
@@ -115,13 +118,12 @@ export default class Events extends Vue {
 
   // show event modal when there is a new event
   @Watch("currentEvent", { immediate: true })
-  async onNewEvent(event: any) {
-    console.log("displaying new event: ", event);
-
+  onNewEvent(event: any) {
+    console.log("new current event: ", event);
+    let timestamp: number = Date.now();
+    let modalId: string = `event-modal-${event.id}-${timestamp}`;
     // FIXME: duplicate event modal id logic also in EventCard
-    console.log(`shwing event-modal-${event.id}-${this.timestamp}`);
-    await this.$nextTick();
-    this.$root.$emit("bv::show::modal", `event-modal-${event.id}-${this.timestamp}`);
+    this.currentEventModalId = modalId;
   }
 
   switchView(view: string) {
@@ -136,6 +138,11 @@ export default class Events extends Vue {
 
   eventActive(index: number) {
     return this.$tstore.state.phase === Phase.events && index == this.eventsProcessed;
+  }
+
+  showModal(currentEventModalId: string) {
+    console.log("showing: ", currentEventModalId);
+    this.$root.$emit("bv::show::modal", currentEventModalId);
   }
 }
 </script>
