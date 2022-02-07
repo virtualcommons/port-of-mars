@@ -14,7 +14,7 @@
             block
             class="p-2 text-center"
             style="background-color: var(--light-shade); color: black"
-            v-b-modal="eventModalId"
+            v-b-modal="currentEventModalId"
           >
             {{ event.name }}
           </b-button>
@@ -54,7 +54,7 @@
     </b-row>
     <!-- FIXME: set prop -->
     <b-modal
-      :id="eventModalId"
+      :id="currentEventModalId"
       centered
       no-stacking
       hide-header
@@ -66,9 +66,9 @@
 
       <div class="w-100"></div>
 
-      <b-row class="w-100 mx-auto my-4 text-center" v-if="wasSpawnedByServer">
+      <b-row class="w-100 mx-auto my-4 text-center">
         <b-col v-if="requiresInteraction">
-          <b-button squared @click="$bvModal.hide(eventModalId)" variant="outline-light"
+          <b-button squared @click="$bvModal.hide(currentEventModalId)" variant="outline-light"
             >Interact</b-button
           >
         </b-col>
@@ -116,14 +116,23 @@ export default class EventCard extends Vue {
   @Prop({ default: false })
   enableModal!: boolean;
 
+  @Prop()
+  currentEventModalId!: string;
+
   //determining which type of events require which interactions
   eventNoChangeViews: Array<EventClientView> = ["NO_CHANGE", "AUDIT", "DISABLE_CHAT"];
 
   //if the modal was spawned by the server, show the option buttons
-  get wasSpawnedByServer() {
-    if (this.currentEvent) {
-      return this.currentPhase === Phase.events && this.currentEvent.id === this.event.id;
-    } else return false;
+  // get wasSpawnedByServer() {
+  //   if (this.currentEvent) {
+  //     return this.currentPhase === Phase.events && this.currentEvent.id === this.event.id;
+  //   } else return false;
+  // }
+
+  @Watch("currentEvent")
+  onNewCurrentEvent() {
+    console.log("received new modal id: ", this.currentEventModalId);
+    this.$emit("updatedModalId", this.currentEventModalId);
   }
 
   get currentEvent() {
@@ -148,7 +157,7 @@ export default class EventCard extends Vue {
 
   readyUp() {
     this.api.setPlayerReadiness(true);
-    this.$bvModal.hide(this.eventModalId);
+    this.$bvModal.hide(this.currentEventModalId);
   }
 }
 </script>
