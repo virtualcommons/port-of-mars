@@ -21,6 +21,7 @@
               :visible="eventVisible(index)"
               class="my-2"
               :timestamp="timestamp"
+              :enableModal="true"
             ></EventCard>
           </div>
         </b-col>
