@@ -36,6 +36,7 @@
                 :key="index"
                 :event="event"
                 :visible="eventVisible(index)"
+                :enableModal="false"
               />
             </div>
           </b-row>

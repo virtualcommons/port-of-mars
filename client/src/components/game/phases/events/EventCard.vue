@@ -7,20 +7,32 @@
   >
     <b-row align-v="center" class="w-100 mx-0 mt-2 p-0 text-center">
       <!-- Event name | Active event indicator -->
-      <b-col>
-        <b-button
-          squared
-          block
-          class="p-2 text-center"
-          style="background-color: var(--light-shade); color: black"
-          v-b-modal="eventModalId"
-        >
-          {{ event.name }}
-        </b-button>
-        <b-badge v-if="showActiveIndicator" variant="success">
-          Active
-        </b-badge>
-      </b-col>
+      <template v-if="enableModal">
+        <b-col>
+          <b-button
+            squared
+            block
+            class="p-2 text-center"
+            style="background-color: var(--light-shade); color: black"
+            v-b-modal="eventModalId"
+          >
+            {{ event.name }}
+          </b-button>
+          <b-badge v-if="showActiveIndicator" variant="success">
+            Active
+          </b-badge>
+        </b-col>
+      </template>
+      <template v-else>
+        <b-col>
+          <h5 class="p-2 text-center" style="background-color: var(--light-shade); color: black">
+            {{ event.name }}
+          </h5>
+          <b-badge v-if="showActiveIndicator" variant="success">
+            Active
+          </b-badge>
+        </b-col>
+      </template>
       <!-- Equal-width columns that span multiple lines: https://bootstrap-vue.org/docs/components/layout#comp-ref-b-col -->
       <div class="w-100"></div>
 
@@ -100,6 +112,9 @@ export default class EventCard extends Vue {
 
   @Prop({ default: 0, required: false })
   timestamp!: number;
+
+  @Prop({ default: false })
+  enableModal!: boolean;
 
   //determining which type of events require which interactions
   eventNoChangeViews: Array<EventClientView> = ["NO_CHANGE", "AUDIT", "DISABLE_CHAT"];
