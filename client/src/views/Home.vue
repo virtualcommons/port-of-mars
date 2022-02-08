@@ -51,6 +51,7 @@ import { url } from "@port-of-mars/client/util";
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
 import { DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
 import { isDevOrStaging } from "@port-of-mars/shared/settings";
+import { TournamentStatus } from "@port-of-mars/shared/types";
 import Header from "@port-of-mars/client/components/global/Header.vue";
 
 @Component({
@@ -67,7 +68,7 @@ export default class Login extends Vue {
   toggleDevLogin: boolean = false;
   currentYear = new Date().getFullYear();
   trailerVideoUrl = "https://player.vimeo.com/video/644046830";
-  tournamentRoundNumber = 1;
+  tournamentStatus: TournamentStatus = { schedule: [], championship: false, round: 0};
 
   logo = {
     center: true,
@@ -77,20 +78,16 @@ export default class Login extends Vue {
     height: 225
   };
 
+  get tournamentRoundNumber() {
+    return this.tournamentStatus.round === 0 ? "No tournament in progress." : this.tournamentStatus.round;
+  }
+
   get asuLoginUrl() {
     return url("/asulogin");
   }
 
   get logoutText() {
     return `Sign Out (${this.user.username})`;
-  }
-
-  get isAuthenticated() {
-    return this.user?.username;
-  }
-
-  get user() {
-    return this.$tstore.state.user;
   }
 
   async created() {
@@ -102,9 +99,11 @@ export default class Login extends Vue {
   async fetchData() {
     try {
       await this.$ajax.get(url("/status/"), ({ data, status }) => {
+        console.log(data);
         this.isSignUpEnabled = data.isSignUpEnabled;
-        this.tournamentRoundNumber = data.tournamentRoundNumber;
+        Vue.set(this, 'tournamentStatus', data.tournamentStatus);
         if (data.user) {
+          console.log("setting user to ", data.user);
           this.$tstore.commit("SET_USER", data.user);
           this.$router.push({ name: DASHBOARD_PAGE });
         }

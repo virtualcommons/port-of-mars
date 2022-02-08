@@ -297,7 +297,7 @@ export interface ActionItem {
   link: { kind: 'internal', data: { name: Page, params?: Dictionary<string> } } | { kind: 'external', data: string }
 }
 
-export interface GameMeta {
+export interface GameMetadata {
   time: number // unix timestamp
   round: number
   tournamentName: string
@@ -305,7 +305,7 @@ export interface GameMeta {
 
 export type PlayerScores = Array<{ role: Role, points: number, winner: boolean }>
 
-export type PlayerStatItem = GameMeta & {playerScores: PlayerScores, victory: boolean}
+export type PlayerStatItem = GameMetadata & {playerScores: PlayerScores, victory: boolean}
 
 export interface Stats {
   games: Array<PlayerStatItem>
@@ -321,12 +321,18 @@ export interface PlayerTaskCompletion {
   hasInvite: boolean;
 }
 
+export interface TournamentStatus {
+  round: number;
+  schedule: Array<number>; // list of timestamps for upcoming games
+  championship: boolean;
+}
 
 export interface DashboardData {
+  user: { username: string };
   playerTaskCompletion: PlayerTaskCompletion;
   introSurveyUrl: string;
   exitSurveyUrl: string;
-  upcomingGames: Array<GameMeta>;
+  schedule: Array<number>; // list of timestamps for upcoming games
   isSignUpEnabled: boolean;
   isLobbyOpen: boolean;
   currentRoundNumber: number;

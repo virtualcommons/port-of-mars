@@ -115,7 +115,7 @@
               <h4>Tutorial</h4>
             </template>
             <h3 class="m-3 text-center">
-              Learn how to play Port of Mars by watching this brief tutorial video.
+              Learn to play Port of Mars with this brief tutorial video.
             </h3>
             <div class="m-auto w-75">
               <b-embed
@@ -136,7 +136,7 @@
               <ul>
                 <li>You can only <mark>participate in one game</mark> this round</li>
                 <li>Sign in and join the game lobby when a game is scheduled</li>
-                <li>The game lobby <mark>opens 10 minutes before the launch time and stays open 30 minutes past</mark></li>
+                <li>The game lobby <mark>opens 10 minutes before launch time and stays open for 30 minutes after launch time</mark></li>
               </ul>
             </p>
             <b-table
@@ -199,7 +199,7 @@ import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import Player from "@vimeo/player";
 import { CalendarEvent, google, ics } from "calendar-link";
 
-import { GameMeta, PlayerTaskCompletion, Stats } from "@port-of-mars/shared/types";
+import { PlayerTaskCompletion, Stats } from "@port-of-mars/shared/types";
 import {
   REGISTER_PAGE,
   LOBBY_PAGE,
@@ -230,7 +230,6 @@ export default class Dashboard extends Vue {
   api!: DashboardAPI;
   tabIndex = 0;
   loading = true;
-  upcomingGames: Array<GameMeta> = [];
   introSurveyUrl: string = "";
   exitSurveyUrl: string = "";
   currentRoundNumber: number = 1;
@@ -260,10 +259,6 @@ export default class Dashboard extends Vue {
   stats: Stats = { games: [] };
 
   tutorialVideoUrl = "https://player.vimeo.com/video/642036661";
-
-  get username() {
-    return this.$tstore.state.user.username;
-  }
 
   get gamesPlayedCount() {
     return this.stats.games.length;
@@ -338,17 +333,16 @@ export default class Dashboard extends Vue {
 
     // set player stats
     this.stats.games.splice(0, this.stats.games.length, ...data.stats.games);
-    this.upcomingGames = data.upcomingGames;
-    this.schedule = data.upcomingGames.map(game => {
-      const scheduledDate = new Date(game.time);
+    this.schedule = data.schedule.map(gameTime => {
+      const scheduledDate = new Date(gameTime);
       return {
         launchTime: scheduledDate.toLocaleString(),
         addToCalendar: {
-          title: `Port of Mars Round ${game.round}`,
+          title: `Port of Mars Round ${data.currentRoundNumber}`,
           location: "https://portofmars.asu.edu/",
           start: scheduledDate,
           duration: [1, "hour"],
-          description: `Participate in Round ${game.round} of the Mars Madness tournament at https://portofmars.asu.edu/ - the lobby stays open for a 30 minute window after the scheduled time.`
+          description: `Participate in Round ${data.currentRoundNumber} of the Mars Madness tournament at https://portofmars.asu.edu/ - the lobby stays open for a 30 minute window after the scheduled time.`
         }
       };
     });

@@ -1,9 +1,9 @@
 import { User } from '@port-of-mars/server/entity/User';
-import {Stats} from "@port-of-mars/shared/types";
+import { Stats } from "@port-of-mars/shared/types";
 import { TournamentRound } from "@port-of-mars/server/entity/TournamentRound";
 import { Game, Player, TournamentRoundInvite } from "@port-of-mars/server/entity";
 import { BaseService } from "@port-of-mars/server/services/db";
-import {IsNull, Not, SelectQueryBuilder} from "typeorm";
+import { IsNull, Not, SelectQueryBuilder } from "typeorm";
 import { PlayerTaskCompletion, DashboardData } from "@port-of-mars/shared/types";
 import { getLogger, settings } from "@port-of-mars/server/settings";
 import _ from "lodash";
@@ -36,10 +36,10 @@ export class DashboardService extends BaseService {
   async getStats(user: User, tournamentRound: TournamentRound): Promise<Stats> {
     const games = await this.em.getRepository(Game)
       .find({
-        join: { alias: 'games', innerJoin: { players: 'games.players' }},
+        join: { alias: 'games', innerJoin: { players: 'games.players' } },
         where: (qb: SelectQueryBuilder<Game>) => {
-          qb.where({tournamentRound, dateFinalized: Not(IsNull())})
-            .andWhere('players.user.id = :userId', {userId: user.id})
+          qb.where({ tournamentRound, dateFinalized: Not(IsNull()) })
+            .andWhere('players.user.id = :userId', { userId: user.id })
         },
         relations: ['players']
       });
@@ -52,12 +52,13 @@ export class DashboardService extends BaseService {
           return currentMax;
         }
       }, 0);
-      const playerScores = g.players.map((player: Player) => 
-        ({ role: player.role,
-           points: player.points ?? 0,
-           winner: (player.points === maxScore),
-           isSelf: player.userId === user.id,
-        })
+      const playerScores = g.players.map((player: Player) =>
+      ({
+        role: player.role,
+        points: player.points ?? 0,
+        winner: (player.points === maxScore),
+        isSelf: player.userId === user.id,
+      })
       );
       // sort players by points descending
       playerScores.sort((a, b) => b.points - a.points);
@@ -88,7 +89,7 @@ export class DashboardService extends BaseService {
 
   mustTakeIntroSurvey(invite: TournamentRoundInvite | undefined): boolean {
     if (invite) {
-      return ! invite.hasCompletedIntroSurvey;
+      return !invite.hasCompletedIntroSurvey;
     }
     return false;
   }
@@ -99,14 +100,14 @@ export class DashboardService extends BaseService {
    */
   async canPlayGame(invite: TournamentRoundInvite | undefined): Promise<boolean> {
     if (invite) {
-      return ! invite.hasParticipated;
+      return !invite.hasParticipated;
     }
     return false;
   }
 
   shouldTakeExitSurvey(invite: TournamentRoundInvite | undefined): boolean {
     if (invite) {
-      return invite.hasParticipated && ! invite.hasCompletedExitSurvey
+      return invite.hasParticipated && !invite.hasCompletedExitSurvey
     }
     return false;
   }
@@ -135,14 +136,12 @@ export class DashboardService extends BaseService {
     const invite = await this.sp.tournament.getActiveRoundInvite(user.id, round);
     const playerTaskCompletion: PlayerTaskCompletion = await this.getPlayerTaskCompletion(user, invite);
     const gameDates = await this.sp.tournament.getScheduledDates(round);
-    const upcomingGames = gameDates.map( date => {
-      return {time: date.getTime(), round: round.roundNumber, tournamentName: round.tournament.name};
-    });
     return {
+      user,
       playerTaskCompletion,
       introSurveyUrl: this.getIntroSurveyUrl(user, round, invite),
       exitSurveyUrl: this.getExitSurveyUrl(user, round, invite),
-      upcomingGames,
+      schedule: gameDates.map(d => d.getTime()),
       isSignUpEnabled: await this.sp.settings.isSignUpEnabled(),
       currentRoundNumber: round.roundNumber,
       isLobbyOpen: await this.sp.tournament.isLobbyOpen(gameDates),

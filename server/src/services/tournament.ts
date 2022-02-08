@@ -1,11 +1,14 @@
-import { Game, User, Player, Tournament, TournamentRound, TournamentRoundInvite } from '@port-of-mars/server/entity';
-import { MoreThan, Equal, SelectQueryBuilder } from 'typeorm';
-import * as _ from 'lodash';
+import { User, Player, Tournament, TournamentRound, TournamentRoundInvite } from '@port-of-mars/server/entity';
+import { MoreThan, SelectQueryBuilder } from 'typeorm';
 import { settings, getLogger } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
-import {TournamentRoundDate} from "@port-of-mars/server/entity/TournamentRoundDate";
+import { TournamentRoundDate } from "@port-of-mars/server/entity/TournamentRoundDate";
+import { TournamentStatus } from "@port-of-mars/shared/types";
+
+import * as _ from 'lodash';
 
 const logger = getLogger(__filename);
+// FIXME: should probably be pulled from settings
 // 30 minutes in milliseconds offset for checking when the lobby is open
 const LOBBY_OPEN_BEFORE_OFFSET = 10 * 60 * 1000;
 const LOBBY_OPEN_AFTER_OFFSET = 30 * 60 * 1000;
@@ -14,7 +17,7 @@ export class TournamentService extends BaseService {
   async getActiveTournament(): Promise<Tournament> {
     return await this.em
       .getRepository(Tournament)
-      .findOneOrFail({active: true});
+      .findOneOrFail({ active: true });
   }
 
   async getTournament(id: number): Promise<Tournament> {
@@ -64,13 +67,14 @@ export class TournamentService extends BaseService {
     const offsetTime = new Date().getTime() - LOBBY_OPEN_AFTER_OFFSET;
     const schedule = await this.em.getRepository(TournamentRoundDate).find({
       select: ['date'],
-      where: { tournamentRoundId: tournamentRound.id, date: MoreThan(new Date(offsetTime))},
-      order: { date: 'ASC' }});
+      where: { tournamentRoundId: tournamentRound.id, date: MoreThan(new Date(offsetTime)) },
+      order: { date: 'ASC' }
+    });
     return schedule.map(s => s.date);
   }
 
   async getEmails(tournamentRoundId?: number): Promise<Array<string>> {
-    if (! tournamentRoundId) {
+    if (!tournamentRoundId) {
       const tournamentRound = await this.getCurrentTournamentRound();
       tournamentRoundId = tournamentRound.id;
     }
@@ -81,7 +85,7 @@ export class TournamentService extends BaseService {
     return users.map(u => u.email ?? 'no email specified - should not be possible, check database');
   }
 
-  async createInvites(userIds: Array<number>, tournamentRoundId: number, hasParticipated=false): Promise<Array<TournamentRoundInvite>> {
+  async createInvites(userIds: Array<number>, tournamentRoundId: number, hasParticipated = false): Promise<Array<TournamentRoundInvite>> {
     let invites: Array<TournamentRoundInvite> = []
     if (hasParticipated) {
       invites = userIds.map(userId => this.em.getRepository(TournamentRoundInvite).create({ userId, tournamentRoundId, hasParticipated, hasCompletedExitSurvey: true, hasCompletedIntroSurvey: true }));
@@ -98,7 +102,7 @@ export class TournamentService extends BaseService {
     return await repository.save(invite);
   }
 
-  async getOrCreateInvite(userId: number, tournamentRound: TournamentRound, skipSurveys=false): Promise<TournamentRoundInvite> {
+  async getOrCreateInvite(userId: number, tournamentRound: TournamentRound, skipSurveys = false): Promise<TournamentRoundInvite> {
     let invite = await this.getActiveRoundInvite(userId, tournamentRound);
     if (!invite) {
       invite = await this.createInvite(userId, tournamentRound.id);
@@ -136,7 +140,19 @@ export class TournamentService extends BaseService {
   }
 
   async deactivateTournaments(): Promise<void> {
-    await this.em.getRepository(Tournament).update({}, { active: false});
+    await this.em.getRepository(Tournament).update({}, { active: false });
+  }
+
+  async getTournamentStatus(tournamentRound?: TournamentRound): Promise<TournamentStatus> {
+    if (!tournamentRound) {
+      tournamentRound = await this.getCurrentTournamentRound();
+    }
+    const scheduledDates = await this.getScheduledDates(tournamentRound);
+    return {
+      schedule: scheduledDates.map((date:Date) => date.getTime()),
+      championship: tournamentRound.championship??false,
+      round: tournamentRound.roundNumber,
+    }
   }
 
   async createRound(data: Pick<TournamentRound, 'exitSurveyUrl' | 'introSurveyUrl' | 'roundNumber' | 'numberOfGameRounds'> & { tournamentId?: number }): Promise<TournamentRound> {
@@ -203,7 +219,7 @@ export class TournamentService extends BaseService {
    * scheduled game, and 30 minutes after the scheduled game (i.e., 40 minute window).
    */
   async isLobbyOpen(gameDates?: Array<Date>, tournamentRound?: TournamentRound): Promise<boolean> {
-    if (! gameDates) {
+    if (!gameDates) {
       gameDates = await this.getScheduledDates(tournamentRound);
     }
     if (settings.lobby.devMode) {

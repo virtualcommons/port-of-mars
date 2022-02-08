@@ -1,22 +1,22 @@
 import { Router, Request, Response } from 'express';
 import { getServices } from '@port-of-mars/server/services';
+import { TournamentStatus } from '@port-of-mars/shared/types';
 
 export const statusRouter = Router();
 
 statusRouter.get('/', async (req: Request, res: Response, next) => {
-  // FIXME: add richer tournament status object to output
+  // provide tournament status + schedule
   try {
     const isSignUpEnabled = await getServices().settings.isSignUpEnabled();
-    let tournamentRoundNumber = 1;
+    let tournamentStatus: TournamentStatus = { schedule: [], championship: false, round: 0 };
     if (! isSignUpEnabled) {
-      const tournamentRound = await getServices().tournament.getCurrentTournamentRound();
-      tournamentRoundNumber = tournamentRound.roundNumber;
+      tournamentStatus = await getServices().tournament.getTournamentStatus();
     }
 
     res.json({
-      isSignUpEnabled,
       user: req.user,
-      tournamentRoundNumber,
+      isSignUpEnabled,
+      tournamentStatus,
     });
   }
   catch (e) {
