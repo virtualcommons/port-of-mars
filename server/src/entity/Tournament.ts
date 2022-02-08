@@ -24,13 +24,14 @@ export class Tournament {
   @Column()
   active!: boolean;
 
-  /* FIXME: to be applied after pilot tournament concludes
-  @Column()
+  @Column({ default: 8 })
   minNumberOfGameRounds!: number;
 
-  @Column()
+  @Column({ default: 12 })
   maxNumberOfGameRounds!: number;
-  */
+
+  @Column({ nullable: true })
+  description?: string;
 
   @CreateDateColumn()
   dateCreated!: Date;

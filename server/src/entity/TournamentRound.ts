@@ -49,8 +49,11 @@ export class TournamentRound {
   @Column({ nullable: true })
   exitSurveyUrl?: string;
 
+  @Column({ nullable: true })
+  announcement?: string;
+
   @Column({ nullable: false, default: false })
-  championship?: boolean;
+  championship!: boolean;
 
   @CreateDateColumn()
   dateCreated!: Date;
