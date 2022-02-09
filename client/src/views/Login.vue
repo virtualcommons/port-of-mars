@@ -2,7 +2,7 @@
   <b-container fluid>
     <Header></Header>
     <b-row v-if="isDevMode" class="w-100 my-0 p-0 text-center" align-v="center">
-      <b-col>
+      <b-col class="w-100">
         <b-alert class="w-100 p-0" show variant="warning">
           <p class="mt-2">
             <b-icon class="mx-2" icon="exclamation-triangle-fill" variant="danger"></b-icon> You are
@@ -49,7 +49,7 @@
           :href="asuLoginUrl"
           size="lg"
           variant="primary"
-          class="w-75"
+          class="w-50"
         >
           <b-icon class="mb-1" icon="box-arrow-right"></b-icon>
           <span v-if="isSignUpEnabled">
@@ -62,7 +62,7 @@
         </b-button>
         <!-- register form -->
         <b-form inline v-if="isDevMode && toggleDevLogin" @submit="devLogin">
-          <div class="w-75 m-auto">
+          <div class="w-50 m-auto">
             <b-form-input
               id="input-username"
               v-model="testUsername"
@@ -136,22 +136,6 @@ export default class Login extends Vue {
     await this.fetchData();
   }
 
-  async fetchData() {
-    try {
-      await this.$ajax.get(url("/status/"), ({ data, status }) => {
-        this.isSignUpEnabled = data.isSignUpEnabled;
-        this.tournamentRoundNumber = data.tournamentRoundNumber;
-        if (data.user) {
-          this.$tstore.commit("SET_USER", data.user);
-          this.$router.push({ name: DASHBOARD_PAGE });
-        }
-      });
-    } catch (e) {
-      this.error = "Unable to connect to servers. Please try again later.";
-      throw e;
-    }
-  }
-
   async devLogin(e: Event) {
     e.preventDefault();
     const devLoginData: any = {
@@ -183,12 +167,12 @@ export default class Login extends Vue {
   letter-spacing: 0.25rem;
   font-size: 4rem;
   font-weight: 600;
-  color: white;
+  color: var(--light-shade);
 }
 
 .subtitle {
   font-size: 2rem;
   font-weight: 500;
-  color: white;
+  color: var(--light-shade);
 }
 </style>

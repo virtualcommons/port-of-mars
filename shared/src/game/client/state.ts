@@ -1,16 +1,19 @@
 import {
-  CURATOR,
-  ENTREPRENEUR,
+  // onboarding interface store data
   DashboardMessage,
+  TournamentStatus,
+  // game data
+  CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER,
+  ChatMessageData,
   GameData,
   InvestmentData,
+  MarsEventData,
   MarsLogMessageData,
+  RoundIntroductionData,
+  TradeSetData,
   Phase,
-  PIONEER,
   PlayerData,
-  POLITICIAN,
   QuizQuestionData,
-  RESEARCHER,
   ResourceAmountData,
   ResourceCostData,
   Role,
@@ -25,14 +28,10 @@ import {
   HUDLeftView,
   HUDRightView,
 } from "@port-of-mars/shared/game/client/panes";
-import _ from "lodash";
+// FIXME: rename to settings to constants or pull from DB / configuration
 import { SYSTEM_HEALTH_MAINTENANCE_COST } from "@port-of-mars/shared/settings";
-import {
-  ChatMessageData,
-  MarsEventData,
-  RoundIntroductionData,
-  TradeSetData,
-} from "../../types";
+
+import _ from "lodash";
 
 export const ROLE_TO_INVESTMENT_DATA: {
   [role in Role]: Array<keyof InvestmentData>;
@@ -211,7 +210,6 @@ export interface State extends GameData {
   winners: Array<Role>;
   heroOrPariah: "" | "hero" | "pariah";
   logs: Array<MarsLogMessageData>;
-  dashboardMessages: Array<DashboardMessage>;
   players: PlayerClientSet;
   phase: Phase;
   layout: string;
@@ -226,6 +224,12 @@ export interface State extends GameData {
   tutorialTradeGive: ResourceAmountData;
   tutorialTradeGet: ResourceAmountData;
   userInterface: UserInterface;
+
+  // webapp data: consider refactoring to separate in-game store data with
+  // normal onboarding store data
+  dashboardMessages: Array<DashboardMessage>;
+  tournamentStatus: TournamentStatus;
+
   // TODO: rename UserInterfaceTwo to something more descriptive
   ui: UserInterfaceTwo;
 }
@@ -290,6 +294,7 @@ export const initialStoreState: State = {
   },
 
   dashboardMessages: [],
+  tournamentStatus: { round: 0, announcement: '', championship: false, description: ''},
 
   ui: {
     // TODO: Still needs to be refactored

@@ -13,7 +13,13 @@ import BootstrapVue from "bootstrap-vue";
 Vue.use(BootstrapVue);
 
 @Component({})
-export default class App extends Vue {}
+export default class App extends Vue {
+
+  mounted() {
+    this.$tstore.dispatch('initTournamentStatus', { ajax: this.$ajax });
+  }
+
+}
 </script>
 
 <style lang="scss">
@@ -29,7 +35,7 @@ export default class App extends Vue {}
 @import "./stylesheets/main.scss";
 
 .bg {
-  background-image: url("assets/background/landing_2021.jpg");
+  background-image: url("assets/background/textured.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

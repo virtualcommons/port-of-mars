@@ -10,7 +10,7 @@ import trading from './trading';
 import ui from './ui';
 import Vue from 'vue';
 import { State, getInitialStoreState } from '@port-of-mars/shared/game/client/state';
-import {DashboardMessage, Role, SystemHealthChangesData} from '@port-of-mars/shared/types';
+import { DashboardMessage, TournamentStatus, Role, SystemHealthChangesData } from '@port-of-mars/shared/types';
 import _ from 'lodash';
 
 export default {
@@ -18,8 +18,12 @@ export default {
     Object.assign(state, getInitialStoreState());
   },
 
+  SET_TOURNAMENT_STATUS(state: State, payload: TournamentStatus) {
+    Vue.set(state, 'tournamentStatus', payload);
+  },
+
   SET_DASHBOARD_MESSAGE(state: State, payload: DashboardMessage) {
-    if (! _.some(state.dashboardMessages, payload)) {
+    if (!_.some(state.dashboardMessages, payload)) {
       state.dashboardMessages.push(payload);
     }
   },
@@ -36,7 +40,7 @@ export default {
     state.environment = newEnvironment;
   },
 
-  SET_SYSTEM_HEALTH_CHANGES(state: State, payload: {role: Role, data: SystemHealthChangesData}) {
+  SET_SYSTEM_HEALTH_CHANGES(state: State, payload: { role: Role, data: SystemHealthChangesData }) {
     Vue.set(state.players[payload.role].systemHealthChanges, 'purchases', payload.data.purchases);
     state.players[payload.role].systemHealthChanges.investment = payload.data.investment;
   },

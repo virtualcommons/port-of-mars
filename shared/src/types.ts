@@ -325,6 +325,8 @@ export interface TournamentStatus {
   round: number;
   schedule: Array<number>; // list of timestamps for upcoming games
   championship: boolean;
+  announcement: string;
+  description: string;
 }
 
 export interface DashboardData {

@@ -148,10 +148,12 @@ export class TournamentService extends BaseService {
       tournamentRound = await this.getCurrentTournamentRound();
     }
     const scheduledDates = await this.getScheduledDates(tournamentRound);
+    const announcement = tournamentRound.announcement ?? `Round ${tournamentRound.roundNumber} is now open!`;
     return {
-      schedule: scheduledDates.map((date:Date) => date.getTime()),
-      championship: tournamentRound.championship??false,
+      schedule: scheduledDates.map((date: Date) => date.getTime()),
+      championship: tournamentRound.championship,
       round: tournamentRound.roundNumber,
+      announcement,
     }
   }
 

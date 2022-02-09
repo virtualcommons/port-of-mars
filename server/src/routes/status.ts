@@ -8,8 +8,12 @@ statusRouter.get('/', async (req: Request, res: Response, next) => {
   // provide tournament status + schedule
   try {
     const isSignUpEnabled = await getServices().settings.isSignUpEnabled();
-    let tournamentStatus: TournamentStatus = { schedule: [], championship: false, round: 0 };
-    if (! isSignUpEnabled) {
+    let tournamentStatus: TournamentStatus = {
+      schedule: [], championship: false, round: 0,
+      announcement: "",
+      description: "",
+    };
+    if (!isSignUpEnabled) {
       tournamentStatus = await getServices().tournament.getTournamentStatus();
     }
 
