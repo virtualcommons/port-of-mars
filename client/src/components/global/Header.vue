@@ -20,25 +20,50 @@
         <b-nav-item class="nav-link"><a href="#leaderboard" title="leaderboard">Leaderboard</a></b-nav-item>
         <b-nav-item class="nav-link"><a href="sign-up" title="sign-up">Sign Up</a></b-nav-item>
         -->
-        <b-nav-item class="nav-link">
-          <a href="https://www.instagram.com/portofmars/" title="news">News</a>
+        <b-nav-item
+          class="nav-link"
+          target="_blank"
+          href="https://www.instagram.com/portofmars/"
+          title="News"
+        >
+          News
         </b-nav-item>
         <b-nav-item
           class="nav-link"
           :to="manual"
-          target="_blank"
-          title="gameplay"
-          >Gameplay
+          :target="isInGame ? '_blank' : '_self'"
+          exact-active-class="active"
+          title="Gameplay Manual"
+          >Manual
         </b-nav-item>
         <template v-if="isAuthenticated">
-          <b-nav-item class="nav-link" :to="consent">Consent Form</b-nav-item>
-          <b-nav-item class="nav-link" v-if="isAuthenticated" @click="logout"
-            >Logout
+          <b-nav-item
+            exact-active-class="active"
+            title="Dashboard"
+            class="nav-link"
+            :to="dashboard"
+            >Dashboard</b-nav-item
+          >
+          <b-nav-item
+            exact-active-class="active"
+            title="Consent Form"
+            class="nav-link"
+            :to="consent"
+            >Consent Form</b-nav-item
+          >
+          <b-nav-item
+            title="Sign Out"
+            class="nav-link"
+            v-if="isAuthenticated"
+            @click="logout"
+          >
+            Sign out
           </b-nav-item>
         </template>
         <template v-else>
           <b-nav-item
             class="nav-link"
+            exact-active-class="active"
             v-if="!isAuthenticated"
             :to="login"
             title="Sign in"
@@ -58,6 +83,8 @@ import {
   LOGIN_PAGE,
   REGISTER_PAGE,
   MANUAL_PAGE,
+  GAME_PAGE,
+  LOBBY_PAGE,
 } from "@port-of-mars/shared/routes";
 
 @Component({})
@@ -76,6 +103,8 @@ export default class Header extends Vue {
   home = { name: HOME_PAGE };
   login = { name: LOGIN_PAGE };
   manual = { name: MANUAL_PAGE };
+  game = { name: GAME_PAGE };
+  lobby = { name: LOBBY_PAGE };
 
   mounted() {}
 
@@ -83,8 +112,8 @@ export default class Header extends Vue {
     return this.$tstore.getters.isAuthenticated;
   }
 
-  get isHomeOrLogin() {
-    return [this.login.name, this.home.name].includes(this.$route.name);
+  get isInGame() {
+    return [this.game.name, this.lobby.name].includes(this.$route.name);
   }
 
   logout() {
