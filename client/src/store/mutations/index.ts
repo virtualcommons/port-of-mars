@@ -22,6 +22,10 @@ export default {
     Vue.set(state, 'tournamentStatus', payload);
   },
 
+  SET_SIGNUP_ENABLED(state: State, payload: boolean) {
+    Vue.set(state, 'signupEnabled', payload);
+  },
+
   SET_DASHBOARD_MESSAGE(state: State, payload: DashboardMessage) {
     if (!_.some(state.dashboardMessages, payload)) {
       state.dashboardMessages.push(payload);

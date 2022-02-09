@@ -1,5 +1,5 @@
 import Vue from "vue";
-import Router from "vue-router";
+import VueRouter from "vue-router";
 import Login from "@port-of-mars/client/views/Login.vue";
 import Lobby from "@port-of-mars/client/views/Lobby.vue";
 import Game from "@port-of-mars/client/views/Game.vue";
@@ -25,9 +25,9 @@ import {
   HOME_PAGE
 } from "@port-of-mars/shared/routes";
 
-Vue.use(Router);
+Vue.use(VueRouter);
 
-const router = new Router({
+const router = new VueRouter({
   mode: "hash",
   routes: [
     { ...PAGE_META[LOGIN_PAGE], component: Login },
@@ -47,9 +47,28 @@ function isAuthenticated() {
   return store.getters.isAuthenticated;
 }
 
-router.beforeEach((to:any, from:any, next:any) => {
+
+router.beforeEach((to, from, next) => {
+  if (from === VueRouter.START_LOCATION) {
+    console.log("initializing store");
+    store.dispatch('init').then((user) => {
+      console.log("store init returned user: ", user);
+      next();
+    }).catch(e => {
+      console.error("Unable to initialize store: ", e);
+    });
+  }
+  else {
+    next();
+  }
+});
+
+router.beforeEach((to: any, from: any, next: any) => {
   if (to.meta.requiresAuth && !isAuthenticated()) {
     next({ name: LOGIN_PAGE });
+  }
+  else if (to.name === LOGIN_PAGE && isAuthenticated()) {
+    next({ name: DASHBOARD_PAGE });
   }
   else {
     next();

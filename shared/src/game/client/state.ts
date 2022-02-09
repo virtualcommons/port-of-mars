@@ -229,6 +229,7 @@ export interface State extends GameData {
   // normal onboarding store data
   dashboardMessages: Array<DashboardMessage>;
   tournamentStatus: TournamentStatus;
+  signupEnabled: boolean;
 
   // TODO: rename UserInterfaceTwo to something more descriptive
   ui: UserInterfaceTwo;
@@ -297,6 +298,7 @@ export const initialStoreState: State = {
   tournamentStatus: {
     round: 0, announcement: '', championship: false, description: '', schedule: []
   },
+  signupEnabled: true,
 
   ui: {
     // TODO: Still needs to be refactored

@@ -47,7 +47,7 @@
         </b-embed>
       </b-col>
       <b-col align-self="center" cols="5">
-        <template v-if="isSignUpEnabled">
+        <template v-if="signupEnabled">
           <h3 class="subtitle">
             The next Mars Madness tournament is coming soon! Register and get
             notified when it starts.
@@ -55,13 +55,13 @@
         </template>
         <template v-else>
           <h3 class="subtitle">
-          {{ announcement }}
+            {{ announcement }}
           </h3>
           <b-button :to="loginPage" size="lg" variant="primary" class="w-75">
-            <b-icon icon="box-arrow-right"></b-icon>
-            <span v-if="isSignUpEnabled"> Register for </span>
-            <span v-else> Participate in </span>
-              Mars Madness {{ currentYear }}
+            <b-icon class="mb-2" icon="box-arrow-right"></b-icon>
+            <template v-if="signupEnabled"> Register for </template>
+            <template v-else> Participate in </template>
+            Mars Madness {{ currentYear }}
           </b-button>
         </template>
         <b-alert :show="tournamentRoundNumber > 1" variant="warning">
@@ -90,7 +90,6 @@ import Header from "@port-of-mars/client/components/global/Header.vue";
 })
 export default class Home extends Vue {
   testUsername: string = "";
-  isSignUpEnabled: boolean = false;
   error: string = "";
   isDevMode: boolean = false;
   toggleDevLogin: boolean = false;
@@ -111,20 +110,24 @@ export default class Home extends Vue {
     return this.$tstore.state.tournamentStatus;
   }
 
+  get signupEnabled() {
+    return this.$tstore.state.signupEnabled;
+  }
+
   get tournamentRoundNumber() {
     return this.tournamentStatus.round;
   }
 
   get announcement() {
     return (
-      this.tournamentStatus.announcement ??
+      this.tournamentStatus.announcement ||
       `Register and complete Port of Mars Mission Control onboarding to be ready for the next Mars Madness tournament.`
     );
   }
 
   get description() {
     return (
-      this.tournamentStatus.description ??
+      this.tournamentStatus.description ||
       `Participate in the next Mars Madness Tournament for a chance to win $1000 USD!`
     );
   }
@@ -132,27 +135,9 @@ export default class Home extends Vue {
   async mounted() {
     // FIXME: this should probably come from the server when we fetchData
     this.isDevMode = isDevOrStaging();
+    console.log("status: ", this.tournamentStatus);
   }
 
-/*
-  async fetchData() {
-    try {
-      await this.$ajax.get(url("/status/"), ({ data, status }) => {
-        console.log(data);
-        this.isSignUpEnabled = data.isSignUpEnabled;
-        Vue.set(this, "tournamentStatus", data.tournamentStatus);
-        if (data.user) {
-          console.log("setting user to ", data.user);
-          this.$tstore.commit("SET_USER", data.user);
-          this.$router.push(this.dashboardPage);
-        }
-      });
-    } catch (e) {
-      this.error = "Unable to connect to servers. Please try again later.";
-      throw e;
-    }
-  }
-  */
 }
 </script>
 

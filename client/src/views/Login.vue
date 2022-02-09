@@ -23,7 +23,7 @@
       <div class="w-100"></div>
       <b-col>
         <h3 class="subtitle">
-          <span v-if="isSignUpEnabled">
+          <span v-if="signupEnabled">
             The next Mars Madness tournament is coming soon! Register and get notified when it
             starts.
           </span>
@@ -51,8 +51,8 @@
           variant="primary"
           class="w-50"
         >
-          <b-icon class="mb-1" icon="box-arrow-right"></b-icon>
-          <span v-if="isSignUpEnabled">
+          <b-icon class="mb-2" icon="box-arrow-right"></b-icon>
+          <span v-if="signupEnabled">
             Register for
           </span>
           <span v-else>
@@ -65,13 +65,13 @@
           <div class="w-50 m-auto">
             <b-form-input
               id="input-username"
-              v-model="testUsername"
+              v-model="devLoginUsername"
               placeholder="Enter any username for testing"
               required
               class="w-50"
             >
             </b-form-input>
-            <b-button class="w-25 mx-2" icon type="submit" variant="success">
+            <b-button class="w-25" icon type="submit" variant="success">
               <b-icon class="mb-1" icon="box-arrow-right"></b-icon> Sign in
             </b-button>
           </div>
@@ -98,8 +98,7 @@ import Header from "@port-of-mars/client/components/global/Header.vue";
   }
 })
 export default class Login extends Vue {
-  testUsername: string = "";
-  isSignUpEnabled: boolean = false;
+  devLoginUsername: string = "";
   error: string = "";
   isDevMode: boolean = false;
   toggleDevLogin: boolean = false;
@@ -114,20 +113,24 @@ export default class Login extends Vue {
     height: 225
   };
 
+  get signupEnabled() {
+    return this.$tstore.state.signupEnabled;
+  }
+
+  get username() {
+    return this.$tstore.getters.user?.username;
+  }
+
   get asuLoginUrl() {
     return url("/asulogin");
   }
 
   get logoutText() {
-    return `Sign Out (${this.user.username})`;
+    return `Sign Out (${this.username})`;
   }
 
   get isAuthenticated() {
-    return this.user?.username;
-  }
-
-  get user() {
-    return this.$tstore.state.user;
+    return this.$tstore.getters.isAuthenticated;
   }
 
   async created() {
@@ -138,7 +141,7 @@ export default class Login extends Vue {
   async devLogin(e: Event) {
     e.preventDefault();
     const devLoginData: any = {
-      username: this.testUsername,
+      username: this.devLoginUsername,
       password: "testing"
     };
     try {
