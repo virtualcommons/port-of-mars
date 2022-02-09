@@ -69,18 +69,19 @@ export class AjaxRequest {
   }
 
   async denyConsent() {
-    await this.post(url('/registration/deny-consent'), () => {});
+    await this.post(url('/registration/deny-consent'), () => { });
     this.store.commit('SET_DASHBOARD_MESSAGE',
       {
         kind: 'info',
-        message: 'You have denied consent to participate in this experiment. You can still change your mind though!'
-      });
+        message: 'You have denied consent to participate in this research project. Sorry to see you go!'
+      }
+    );
   }
 
   async forgetLoginCreds() {
     document.cookie = "connect.sid= ;expires=Thu, 01 Jan 1970 00:00:00 GMT";
     this.store.commit('SET_USER', { username: '', passedQuiz: false });
-    await this.get(url('/logout'), () => {});
+    await this.get(url('/logout'), () => { });
   }
 
   get submissionId(): number | null {

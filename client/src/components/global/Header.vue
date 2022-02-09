@@ -4,7 +4,9 @@
       <b-img
         id="logo"
         v-bind="portOfMarsLogoProps"
-        :src="require('@port-of-mars/client/assets/images/logo-Port-of-Mars-White.svg')"
+        :src="
+          require('@port-of-mars/client/assets/images/logo-Port-of-Mars-White.svg')
+        "
         alt="the planet mars illustrated in white above Port of Mars"
       >
       </b-img>
@@ -18,20 +20,30 @@
         <b-nav-item class="nav-link"><a href="#leaderboard" title="leaderboard">Leaderboard</a></b-nav-item>
         <b-nav-item class="nav-link"><a href="sign-up" title="sign-up">Sign Up</a></b-nav-item>
         -->
-        <b-nav-item class="nav-link"
-          ><a href="https://www.instagram.com/portofmars/" title="news">News</a></b-nav-item
-        >
-        <b-nav-item class="nav-link" :to="manual" target="_blank" title="gameplay"
-          >Gameplay</b-nav-item
-        >
+        <b-nav-item class="nav-link">
+          <a href="https://www.instagram.com/portofmars/" title="news">News</a>
+        </b-nav-item>
+        <b-nav-item
+          class="nav-link"
+          :to="manual"
+          target="_blank"
+          title="gameplay"
+          >Gameplay
+        </b-nav-item>
         <template v-if="isAuthenticated">
           <b-nav-item class="nav-link" :to="consent">Consent Form</b-nav-item>
-          <b-nav-item class="nav-link" v-if="isAuthenticated" @click="logout">Logout</b-nav-item>
+          <b-nav-item class="nav-link" v-if="isAuthenticated" @click="logout"
+            >Logout
+          </b-nav-item>
         </template>
         <template v-else>
-          <b-nav-item class="nav-link" v-if="!isAuthenticated" :to="login" title="Sign in"
-            >Sign In</b-nav-item
-          >
+          <b-nav-item
+            class="nav-link"
+            v-if="!isAuthenticated"
+            :to="login"
+            title="Sign in"
+            >Sign In
+          </b-nav-item>
         </template>
       </b-navbar-nav>
     </b-collapse>
@@ -45,7 +57,7 @@ import {
   HOME_PAGE,
   LOGIN_PAGE,
   REGISTER_PAGE,
-  MANUAL_PAGE
+  MANUAL_PAGE,
 } from "@port-of-mars/shared/routes";
 
 @Component({})
@@ -56,7 +68,7 @@ export default class Header extends Vue {
   contactUrl = "mailto:portmars@asu.edu";
 
   portOfMarsLogoProps = {
-    height: 60
+    height: 60,
   };
 
   dashboard = { name: DASHBOARD_PAGE };
@@ -65,8 +77,7 @@ export default class Header extends Vue {
   login = { name: LOGIN_PAGE };
   manual = { name: MANUAL_PAGE };
 
-  mounted() {
-  }
+  mounted() {}
 
   get isAuthenticated() {
     return this.$tstore.getters.isAuthenticated;
