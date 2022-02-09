@@ -24,11 +24,15 @@
         <b-nav-item class="nav-link" :to="manual" target="_blank" title="gameplay"
           >Gameplay</b-nav-item
         >
-        <b-nav-item class="nav-link" v-if="!isHomeOrLogin" :to="consent">Consent Form</b-nav-item>
-        <b-nav-item class="nav-link" v-if="isHomeOrLogin" :to="login" title="Sign in"
-          >Sign In</b-nav-item
-        >
-        <b-nav-item class="nav-link" v-if="!isHomeOrLogin" @click="logout">Logout</b-nav-item>
+        <template v-if="isAuthenticated">
+          <b-nav-item class="nav-link" :to="consent">Consent Form</b-nav-item>
+          <b-nav-item class="nav-link" v-if="isAuthenticated" @click="logout">Logout</b-nav-item>
+        </template>
+        <template v-else>
+          <b-nav-item class="nav-link" v-if="!isAuthenticated" :to="login" title="Sign in"
+            >Sign In</b-nav-item
+          >
+        </template>
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
@@ -62,26 +66,19 @@ export default class Header extends Vue {
   manual = { name: MANUAL_PAGE };
 
   mounted() {
-    console.log("route name: ", this.$route.name);
-    console.log("route.name = login", this.$route.name == this.login.name);
   }
 
-  get username() {
-    console.log("store user: ", this.$tstore.state.user);
-    return this.$tstore.state.user.username;
+  get isAuthenticated() {
+    return this.$tstore.getters.isAuthenticated;
   }
 
   get isHomeOrLogin() {
     return [this.login.name, this.home.name].includes(this.$route.name);
   }
 
-  get isDashboard() {
-    return [this.dashboard.name, this.consent.name].includes(this.$route.name);
-  }
-
   logout() {
     this.$ajax.forgetLoginCreds();
-    this.$router.push(this.login);
+    this.$router.push(this.home);
   }
 }
 </script>

@@ -109,7 +109,7 @@ export const PAGE_META: {
     name: VERIFY_PAGE,
     props: true,
     meta: {
-      requiresAuth: false,
+      requiresAuth: true,
     },
   },
   [MANUAL_PAGE]: {

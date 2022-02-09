@@ -126,8 +126,8 @@ export default class Lobby extends Vue {
       await this.$router.push({ name: DASHBOARD_PAGE });
       return;
     }
-    if (dashboardData.upcomingGames.length > 0) {
-      this.scheduledGameTime = dashboardData.upcomingGames[0].time;
+    if (dashboardData.schedule.length > 0) {
+      this.scheduledGameTime = dashboardData.schedule[0];
     }
     try {
       // all dashboard checks passed, try to join the Colyseus Lobby

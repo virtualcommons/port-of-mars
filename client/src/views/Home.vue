@@ -129,10 +129,9 @@ export default class Home extends Vue {
     );
   }
 
-  async created() {
+  async mounted() {
     // FIXME: this should probably come from the server when we fetchData
     this.isDevMode = isDevOrStaging();
-    // await this.fetchData();
   }
 
 /*

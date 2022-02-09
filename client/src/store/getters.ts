@@ -1,4 +1,4 @@
-import {PlayerClientData, PlayerClientSet, State} from '@port-of-mars/shared/game/client/state';
+import {User, PlayerClientData, PlayerClientSet, State} from '@port-of-mars/shared/game/client/state';
 import {
   EventClientView,
   MarsEventData,
@@ -8,6 +8,13 @@ import {
 } from '@port-of-mars/shared/types';
 
 export default {
+  isAuthenticated(state: State): boolean {
+    return state.user?.username !== '';
+  },
+
+  user(state: State): User {
+    return state.user;
+  },
   /**
    * Gets the state out of state variable layout.
    * @returns The string value of the current layout.

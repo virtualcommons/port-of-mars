@@ -294,7 +294,9 @@ export const initialStoreState: State = {
   },
 
   dashboardMessages: [],
-  tournamentStatus: { round: 0, announcement: '', championship: false, description: ''},
+  tournamentStatus: {
+    round: 0, announcement: '', championship: false, description: '', schedule: []
+  },
 
   ui: {
     // TODO: Still needs to be refactored

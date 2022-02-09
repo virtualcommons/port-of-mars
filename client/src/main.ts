@@ -1,6 +1,7 @@
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 import * as Colyseus from 'colyseus.js';
 import Vue from 'vue';
+import VueMeta from 'vue-meta';
 import Vuex from 'vuex';
 import * as Sentry from '@sentry/browser';
 import { Vue as VueIntegration } from '@sentry/integrations';
@@ -19,6 +20,7 @@ Vue.use(TypedStore);
 Vue.use(Ajax, { router, store });
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
+Vue.use(VueMeta);
 
 Vue.config.productionTip = false;
 

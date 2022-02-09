@@ -18,7 +18,7 @@ export class DashboardAPI {
       });
     }
     catch (e) {
-      console.log("UNABLE TO GET DATA");
+      console.log("Unable to retrieve DashboardData");
       console.log(e);
       // this.store.commit('SET_DASHBOARD_MESSAGE', {kind: 'danger', message: 'Unable to retrieve dashboard data, please contact us if this persists.'});
       throw e;

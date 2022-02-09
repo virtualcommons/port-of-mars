@@ -16,7 +16,7 @@ Vue.use(BootstrapVue);
 export default class App extends Vue {
 
   mounted() {
-    this.$tstore.dispatch('initTournamentStatus', { ajax: this.$ajax });
+    this.$store.dispatch('initTournamentStatus', { ajax: this.$ajax });
   }
 
 }

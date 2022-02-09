@@ -133,7 +133,6 @@ export default class Login extends Vue {
   async created() {
     // FIXME: this should probably come from the server when we fetchData
     this.isDevMode = isDevOrStaging();
-    await this.fetchData();
   }
 
   async devLogin(e: Event) {

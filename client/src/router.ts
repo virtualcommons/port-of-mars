@@ -10,6 +10,7 @@ import Dashboard from "@port-of-mars/client/views/Dashboard.vue";
 import Verify from "@port-of-mars/client/views/VerifyEmail.vue";
 import Manual from "@port-of-mars/client/views/Manual.vue";
 import Home from "@port-of-mars/client/views/Home.vue";
+import store from "@port-of-mars/client/store";
 import {
   PAGE_META,
   LOGIN_PAGE,
@@ -40,6 +41,19 @@ const router = new Router({
     { ...PAGE_META[MANUAL_PAGE], component: Manual },
     { ...PAGE_META[HOME_PAGE], component: Home }
   ]
+});
+
+function isAuthenticated() {
+  return store.getters.isAuthenticated;
+}
+
+router.beforeEach((to:any, from:any, next:any) => {
+  if (to.meta.requiresAuth && !isAuthenticated()) {
+    next({ name: LOGIN_PAGE });
+  }
+  else {
+    next();
+  }
 });
 
 export default router;
