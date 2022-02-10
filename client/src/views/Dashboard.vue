@@ -139,34 +139,7 @@
                 <li>The game lobby <mark>opens 10 minutes before launch time and stays open for 30 minutes after launch time</mark></li>
               </ul>
             </p>
-            <b-table
-              sticky-header="20rem"
-              :items="upcomingGames"
-              dark
-              striped
-              bordered
-              show-empty
-            >
-              <template #empty>
-                <b-alert class="mt-2 lead" variant="info" show>
-                  No upcoming games on the schedule at this time. Please check again later!
-                </b-alert>
-              </template>
-              <template v-slot:cell(addToCalendar)="data">
-                <div>
-                  <b-button-group>
-                    <a class="btn btn-info" :href="googleInviteLink(data.item.addToCalendar)" target="_blank">
-                      <font-awesome-icon :icon="['fab', 'google']"></font-awesome-icon>
-                      add to google calendar
-                    </a>
-                    <a class="btn btn-info" :href="icsInviteLink(data.item.addToCalendar)" target="_blank">
-                      <font-awesome-icon :icon="['fas', 'calendar-plus']"></font-awesome-icon>
-                      download ics
-                    </a>
-                  </b-button-group>
-                </div>
-              </template>
-            </b-table>
+            <Schedule :schedule="schedule" :roundNumber="currentRoundNumber"></Schedule>
           </b-tab>
           <b-tab class="h-100 mt-3">
             <template #title>
@@ -197,7 +170,6 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faRocket, faInfoCircle, faCalendarPlus } from "@fortawesome/free-solid-svg-icons";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import Player from "@vimeo/player";
-import { CalendarEvent, google, ics } from "calendar-link";
 
 import { PlayerTaskCompletion, Stats } from "@port-of-mars/shared/types";
 import {
@@ -213,6 +185,7 @@ import PlayerStatItem from "@port-of-mars/client/components/dashboard/PlayerStat
 import Messages from "@port-of-mars/client/components/dashboard/Messages.vue";
 import Header from "@port-of-mars/client/components/global/Header.vue";
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
+import Schedule from "@port-of-mars/client/components/dashboard/Schedule.vue";
 import _ from "lodash";
 
 library.add(faGoogle, faInfoCircle, faRocket, faCalendarPlus);
@@ -220,10 +193,11 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 @Component({
   components: {
+    Footer,
     Header,
-    PlayerStatItem,
     Messages,
-    Footer
+    PlayerStatItem,
+    Schedule
   }
 })
 export default class Dashboard extends Vue {
@@ -233,6 +207,7 @@ export default class Dashboard extends Vue {
   introSurveyUrl: string = "";
   exitSurveyUrl: string = "";
   currentRoundNumber: number = 1;
+  schedule: Array<number> = [];
   isLobbyOpen = false;
   hasWatchedTutorial = false;
   playerTaskCompletion: PlayerTaskCompletion = {
@@ -244,18 +219,6 @@ export default class Dashboard extends Vue {
     shouldTakeExitSurvey: false,
     hasInvite: false
   };
-  upcomingGames: Array<{ launchTime: string; addToCalendar: CalendarEvent }> = [
-    {
-      launchTime: "",
-      addToCalendar: {
-        title: "",
-        location: "",
-        start: "",
-        duration: [0, "hour"],
-        description: ""
-      }
-    }
-  ];
   stats: Stats = { games: [] };
 
   tutorialVideoUrl = "https://player.vimeo.com/video/642036661";
@@ -289,14 +252,6 @@ export default class Dashboard extends Vue {
     await this.initialize();
   }
 
-  googleInviteLink(invite: { title: string; location: string; start: Date; end: Date; details: string }) {
-    return google(invite);
-  }
-
-  icsInviteLink(invite: { title: string; location: string; start: Date; end: Date; details: string }) {
-    return ics(invite);
-  }
-
   async initialize() {
     // get player task completion status
     const data = await this.api.getData();
@@ -326,26 +281,16 @@ export default class Dashboard extends Vue {
     */
 
     // set survey URLs
-    this.$set(this, "introSurveyUrl", data.introSurveyUrl);
-    this.$set(this, "exitSurveyUrl", data.exitSurveyUrl);
-    this.$set(this, "currentRoundNumber", data.currentRoundNumber);
-    this.$set(this, "isLobbyOpen", data.isLobbyOpen);
+    Vue.set(this, "introSurveyUrl", data.introSurveyUrl);
+    Vue.set(this, "exitSurveyUrl", data.exitSurveyUrl);
+    Vue.set(this, "isLobbyOpen", data.isLobbyOpen);
+    Vue.set(this, "currentRoundNumber", data.currentRoundNumber);
+    Vue.set(this, "schedule", data.schedule);
+
 
     // set player stats
     this.stats.games.splice(0, this.stats.games.length, ...data.stats.games);
-    this.upcomingGames = data.schedule.map(gameTime => {
-      const scheduledDate = new Date(gameTime);
-      return {
-        launchTime: scheduledDate.toLocaleString(),
-        addToCalendar: {
-          title: `Port of Mars Round ${data.currentRoundNumber}`,
-          location: "https://portofmars.asu.edu/",
-          start: scheduledDate,
-          duration: [1, "hour"],
-          description: `Participate in Round ${data.currentRoundNumber} of the Mars Madness tournament at https://portofmars.asu.edu/ - the lobby stays open for a 30 minute window after the scheduled time.`
-        }
-      };
-    });
+    console.log("setting upcoming games for schedule: ", data.schedule);
     this.loading = false;
   }
 
