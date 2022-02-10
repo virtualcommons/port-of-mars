@@ -12,7 +12,8 @@ const logger = getLogger(__filename);
 export class RegistrationService extends BaseService {
 
   createVerificationUrl(registrationToken: string) {
-    return `${settings.host}/verify/${registrationToken}`;
+    // FIXME: depends on VueRouter hash mode
+    return `${settings.host}/#/verify/${registrationToken}`;
   }
 
   async submitRegistrationMetadata(user: User, data: { username: string; email: string; name: string }) {

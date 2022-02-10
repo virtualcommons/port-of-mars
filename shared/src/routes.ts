@@ -37,6 +37,7 @@ export function isPage(pageName: string): pageName is Page {
 }
 
 export function getPagePath(page: Page): string {
+  // FIXME: depends on mode: hash for vue router
   return `/#${PAGE_META[page].path}`;
 }
 

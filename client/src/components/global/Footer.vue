@@ -13,13 +13,13 @@ ccarra1@asu.edu
           <a href="https://interplanetary.asu.edu/port-of-mars" title="About Port of Mars">About</a>
         </li>
         <li>
-          <a href="/#leaderboard" title="Leaderboard">Leaderboard</a>
+          <a href="/#/#leaderboard" title="Leaderboard">Leaderboard</a>
         </li>
         <li>
           <a href="https://instagram.com/portofmars/" title="News">News</a>
         </li>
         <li>
-          <a href="/manual" title="User Manual">How to play</a>
+          <b-link to="manual" title="User Manual">How to play</b-link>
         </li>
       </ul>
     </section>
@@ -91,12 +91,17 @@ ccarra1@asu.edu
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import { MANUAL_PAGE } from "@port-of-mars/shared/routes";
 import { BUILD_ID } from "@port-of-mars/shared/settings";
 
 @Component({})
 export default class Footer extends Vue {
   buildId = "";
   currentYear = new Date().getFullYear();
+
+  get manual() {
+    return { name: MANUAL_PAGE };
+  }
 
   async mounted() {
     this.buildId = BUILD_ID;
