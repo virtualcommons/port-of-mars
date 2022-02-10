@@ -1,9 +1,9 @@
 <template>
-  <b-container fluid>
+  <b-container class="h-100 bg-dark-75" fluid>
     <Header></Header>
-    <b-row v-if="isDevMode" class="w-100 my-0 p-0 text-center" align-v="center">
-      <b-col class="w-100">
-        <b-alert class="w-100 p-0" show variant="warning">
+    <b-row v-if="isDevMode" class="my-0 p-0 text-center" align-v="center">
+      <b-col>
+        <b-alert class="p-0 m-0" show variant="warning">
           <p class="mt-2">
             <b-icon class="mx-2" icon="exclamation-triangle-fill" variant="danger"></b-icon> You are
             currently accessing a development version of the Port of Mars only used for testing. Go
@@ -12,13 +12,13 @@
         </b-alert>
       </b-col>
     </b-row>
-    <b-row class="h-50 text-center" align-v="center">
+    <b-row class="text-center mb-5">
       <b-col>
-        <h1 class="title">Sign In to Port of Mars</h1>
+        <h2 class="title">Sign In to Port of Mars</h2>
         <h3 class="subtitle">
-          Port of Mars is only open to Arizona State University undergraduates at the moment. Please
-          sign in using your ASURITE ID below.
+          Port of Mars is currently only open to Arizona State University undergraduates.
         </h3>
+        <h4>Please sign in using your ASURITE ID below.</h4>
       </b-col>
       <div class="w-100"></div>
       <b-col>
@@ -166,15 +166,15 @@ export default class Login extends Vue {
   background-color: var(--light-shade);
 }
 .title {
-  letter-spacing: 0.25rem;
-  font-size: 4rem;
+  letter-spacing: 0.15rem;
+  font-size: 3rem;
   font-weight: 600;
   color: var(--light-shade);
 }
 
 .subtitle {
   font-size: 2rem;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--light-shade);
 }
 </style>

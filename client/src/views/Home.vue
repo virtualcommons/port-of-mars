@@ -16,30 +16,28 @@
           ></b-icon>
           You are currently accessing a development version of the Port of Mars
           only used for testing. Go to
-          <a href="https://portofmars.asu.edu">portofmars.asu.edu</a> for the
+          <a :href="SITE_URL">{{ SITE_URL }}</a> for the
           real deal.
         </p>
       </b-alert>
     </b-row>
     <b-row class="w-100 mx-2" align-v="start">
       <b-col cols="12">
-        <h1 class="title">
+        <h1 class="jumbo-title">
           Welcome to Port of Mars
-          <b-badge class="float-right" variant="primary"
-            >Round {{ tournamentRoundNumber }}</b-badge
-          >
         </h1>
-        <h3 class="subtitle">
+        <h2>
           Port of Mars is a fun, game-based social science experiment set on the
           first human community on the Red Planet.
-          <br>
-          {{ description }}
-
+        </h2>
+        <h3 class="subtitle">
+            {{ description }}
         </h3>
       </b-col>
     </b-row>
+
     <b-row v-if="schedule.length > 0">
-      <b-col class="m-4">
+      <b-col>
         <Schedule :schedule="schedule" :roundNumber="tournamentRoundNumber">
         </Schedule>
       </b-col>
@@ -104,6 +102,7 @@ export default class Home extends Vue {
   trailerVideoUrl = "https://player.vimeo.com/video/644046830";
   loginPage = { name: LOGIN_PAGE };
   dashboardPage = { name: DASHBOARD_PAGE };
+  readonly SITE_URL = "https://portofmars.asu.edu";
 
   logo = {
     center: true,
@@ -139,8 +138,18 @@ export default class Home extends Vue {
   get description() {
     return (
       this.tournamentStatus.description ||
-      `Participate in the next Mars Madness Tournament for a chance to win $1000 USD!`
+      `Participate in the next Mars Madness Tournament ${this.dateRange} for a chance to win $1000 USD!`
     );
+  }
+
+  get dateRange() {
+    const schedule = this.schedule;
+    if (schedule.length > 0) {
+      return `from ${this.toDate(schedule[0])} to ${this.toDate(
+        schedule[schedule.length - 1]
+      )}`;
+    }
+    return "";
   }
 
   async mounted() {
@@ -148,15 +157,18 @@ export default class Home extends Vue {
     this.isDevMode = isDevOrStaging();
     console.log("status: ", this.tournamentStatus);
   }
+
+  toDate(timestamp: number) {
+    return new Date(timestamp).toDateString();
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-.title {
-  letter-spacing: 0.25rem;
-  font-size: 4rem;
-  font-weight: 600;
-  color: var(--white);
+.jumbo-title {
+  font-size: 3.8rem;
+  font-weight: 800;
+  color: var(--dark-shade);
 }
 
 .subtitle {

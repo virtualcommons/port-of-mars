@@ -1,43 +1,37 @@
 <template>
-  <b-table
-    sticky-header="20rem"
-    :items="upcomingGames"
-    dark
-    striped
-    bordered
-    show-empty
-  >
-    <template #empty>
-      <b-alert class="mt-2 lead" variant="info" show>
-        No upcoming games on the schedule at this time. Please check again
-        later!
-      </b-alert>
-    </template>
-    <template v-slot:cell(addToCalendar)="data">
-      <div>
+  <div class="mx-4">
+    <h3 :id="scheduleId">Schedule</h3>
+    <b-list-group horizontal="lg" class="p-1">
+      <b-list-group-item
+        class="p-1 text-center"
+        v-for="game in upcomingGames"
+        :key="game.launchTime"
+        variant="dark"
+      >
+        <span class="launch-time">{{ game.launchTime }}</span>
         <b-button-group>
           <a
-            class="btn btn-info"
-            :href="googleInviteLink(data.item.addToCalendar)"
+            class="btn btn-primary"
+            :href="googleInviteLink(game.addToCalendar)"
+            title="add to Google Calendar"
             target="_blank"
           >
             <font-awesome-icon :icon="['fab', 'google']"></font-awesome-icon>
-            add to google calendar
           </a>
           <a
             class="btn btn-info"
-            :href="icsInviteLink(data.item.addToCalendar)"
+            :href="icsInviteLink(game.addToCalendar)"
+            title="download as ics"
             target="_blank"
           >
             <font-awesome-icon
               :icon="['fas', 'calendar-plus']"
             ></font-awesome-icon>
-            download ics
           </a>
         </b-button-group>
-      </div>
-    </template>
-  </b-table>
+      </b-list-group-item>
+    </b-list-group>
+  </div>
 </template>
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
@@ -45,28 +39,36 @@ import { google, ics } from "calendar-link";
 
 @Component({})
 export default class Schedule extends Vue {
+  @Prop({default: "schedule"})
+  scheduleId!: string;
+
   @Prop()
   schedule!: Array<number>;
 
   @Prop()
   roundNumber!: number;
 
+  readonly SITE_URL = "https://portofmars.asu.edu";
+
   get upcomingGames() {
-    const currentRoundNumber = this.roundNumber;
     // FIXME: extract duplicate logic here + dashboard into schedule component
     return this.schedule.map((gameTime) => {
       const scheduledDate = new Date(gameTime);
       return {
         launchTime: scheduledDate.toLocaleString(),
         addToCalendar: {
-          title: `Port of Mars Round ${currentRoundNumber}`,
-          location: "https://portofmars.asu.edu/",
+          title: `Port of Mars Round ${this.roundNumber}`,
+          location: this.SITE_URL,
           start: scheduledDate,
           duration: [1, "hour"],
-          description: `Participate in Round ${currentRoundNumber} of the Mars Madness tournament at https://portofmars.asu.edu/ - the lobby stays open for a 30 minute window after the scheduled time.`,
+          description: this.calendarDescription,
         },
       };
     });
+  }
+
+  get calendarDescription() {
+    return `Register and complete all Port of Mars Mission Control onboarding tasks at ${this.SITE_URL}. You must complete onboarding before you can participate in Round ${this.roundNumber} of the Mars Madness tournament.`;
   }
 
   googleInviteLink(invite: {
@@ -90,3 +92,9 @@ export default class Schedule extends Vue {
   }
 }
 </script>
+<style scoped>
+.launch-time {
+  font-size: 1.1rem;
+  font-weight: bolder;
+}
+</style>
