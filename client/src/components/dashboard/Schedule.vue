@@ -41,17 +41,17 @@
 </template>
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { CalendarEvent, google, ics } from "calendar-link";
+import { google, ics } from "calendar-link";
 
 @Component({})
 export default class Schedule extends Vue {
   @Prop()
-  schedule: Array<number>;
+  schedule!: Array<number>;
 
   @Prop()
-  roundNumber: number;
+  roundNumber!: number;
 
-  get upcomingGames(): Array<CalendarEvent> {
+  get upcomingGames() {
     const currentRoundNumber = this.roundNumber;
     // FIXME: extract duplicate logic here + dashboard into schedule component
     return this.schedule.map((gameTime) => {
