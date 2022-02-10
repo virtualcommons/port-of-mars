@@ -36,6 +36,45 @@
         <h4>{{ description }}</h4>
       </b-col>
     </b-row>
+    <b-row v-if="tournamentStatus.schedule.length > 0">
+      <b-col>
+        <b-table
+          sticky-header="20rem"
+          :items="upcomingGames"
+          dark
+          striped
+          bordered
+          show-empty
+        >
+          <template v-slot:cell(addToCalendar)="data">
+            <div>
+              <b-button-group>
+                <a
+                  class="btn btn-info"
+                  :href="googleInviteLink(data.item.addToCalendar)"
+                  target="_blank"
+                >
+                  <font-awesome-icon
+                    :icon="['fab', 'google']"
+                  ></font-awesome-icon>
+                  add to google calendar
+                </a>
+                <a
+                  class="btn btn-info"
+                  :href="icsInviteLink(data.item.addToCalendar)"
+                  target="_blank"
+                >
+                  <font-awesome-icon
+                    :icon="['fas', 'calendar-plus']"
+                  ></font-awesome-icon>
+                  download ics
+                </a>
+              </b-button-group>
+            </div>
+          </template>
+        </b-table>
+      </b-col>
+    </b-row>
     <b-row class="mt-2">
       <b-col align-self="start" cols="7" class="p-3">
         <b-embed
@@ -106,6 +145,24 @@ export default class Home extends Vue {
     height: 225,
   };
 
+  get upcomingGames() {
+    const currentRoundNumber = this.tournamentRoundNumber;
+    // FIXME: extract duplicate logic here + dashboard into schedule component
+    return this.tournamentStatus.schedule.map(gameTime => {
+      const scheduledDate = new Date(gameTime);
+      return {
+        launchTime: scheduledDate.toLocaleString(),
+        addToCalendar: {
+          title: `Port of Mars Round ${currentRoundNumber}`,
+          location: "https://portofmars.asu.edu/",
+          start: scheduledDate,
+          duration: [1, "hour"],
+          description: `Participate in Round ${currentRoundNumber} of the Mars Madness tournament at https://portofmars.asu.edu/ - the lobby stays open for a 30 minute window after the scheduled time.`
+        }
+      };
+    });
+  }
+
   get tournamentStatus() {
     return this.$tstore.state.tournamentStatus;
   }
@@ -137,7 +194,6 @@ export default class Home extends Vue {
     this.isDevMode = isDevOrStaging();
     console.log("status: ", this.tournamentStatus);
   }
-
 }
 </script>
 

@@ -18,7 +18,7 @@ export function getConnection(): to.Connection {
 
 export function toUrl(page: Page): string {
   const pagePath = getPagePath(page);
-  return `${settings.host}/#${pagePath}`
+  return `${settings.host}/${pagePath}`
 }
 
 export function getRandomIntInclusive(min: number, max: number): number {

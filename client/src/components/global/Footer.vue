@@ -10,16 +10,16 @@ ccarra1@asu.edu
       <h2>Navigation</h2>
       <ul>
         <li>
-          <a href="/#/#about" title="about">About</a>
+          <a href="https://interplanetary.asu.edu/port-of-mars" title="About Port of Mars">About</a>
         </li>
         <li>
-          <a href="/#/#leaderboard" title="leaderboard">Leaderboard</a>
+          <a href="/#leaderboard" title="Leaderboard">Leaderboard</a>
         </li>
         <li>
-          <a href="/#/#news" title="news">News</a>
+          <a href="https://instagram.com/portofmars/" title="News">News</a>
         </li>
         <li>
-          <a href="/#/#gameplay" title="gameplay">Gameplay</a>
+          <a href="/manual" title="User Manual">How to play</a>
         </li>
       </ul>
     </section>
@@ -27,19 +27,32 @@ ccarra1@asu.edu
       <h2>Sponsors</h2>
       <ul>
         <li>
-          <a href="https://interplanetary.asu.edu/" title="ASU Interplanetary Initiative"
-            >ASU Interplanetary Initiative</a
+          <a
+            href="https://interplanetary.asu.edu/"
+            title="ASU Interplanetary Initiative"
+          >
+            ASU Interplanetary Initiative
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://complexity.asu.edu/"
+            title="ASU School of Complex Adaptive Systems"
+          >
+            ASU School of Complex Adaptive Systems
+          </a>
+        </li>
+        <li>
+          <a href="https://www.nsf.gov/" title="US National Science Foundation">
+            US National Science Foundation (SES-2049553)</a
           >
         </li>
         <li>
-          <a href="https://complexity.asu.edu/" title="ASU School of Complex Adaptive Systems"
-            >ASU School of Complex Adaptive Systems</a
-          >
-        </li>
-        <li>
-          <a href="https://www.nsf.gov/" title="US National Science Foundation"
-            >US National Science Foundation (SES-2049553)</a
-          >
+          <a href="https://www.computecanada.ca" title="Compute Canada">
+            Compute Canada
+          </a>
+          and 
+          <a href="https://westgrid.ca">WestGrid</a>
         </li>
       </ul>
     </section>
@@ -53,7 +66,9 @@ ccarra1@asu.edu
           </a>
         </li>
         <li>
-          <a href="https://www.instagram.com/portofmars/" title="Instagram">Instagram </a>
+          <a href="https://www.instagram.com/portofmars/" title="Instagram"
+            >Instagram
+          </a>
           <b-icon icon="instagram" class="mx-1"></b-icon>
         </li>
         <li>
@@ -76,9 +91,7 @@ ccarra1@asu.edu
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import BootstrapVue from "bootstrap-vue";
 import { BUILD_ID } from "@port-of-mars/shared/settings";
-Vue.use(BootstrapVue);
 
 @Component({})
 export default class Footer extends Vue {

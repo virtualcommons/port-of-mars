@@ -8,20 +8,9 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import BootstrapVue from "bootstrap-vue";
-
-Vue.use(BootstrapVue);
 
 @Component({})
-export default class App extends Vue {
-
-  /**
-  mounted() {
-    this.$store.dispatch('initTournamentStatus', { ajax: this.$ajax });
-  }
-  */
-
-}
+export default class App extends Vue {}
 </script>
 
 <style lang="scss">

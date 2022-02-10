@@ -141,7 +141,7 @@
             </p>
             <b-table
               sticky-header="20rem"
-              :items="schedule"
+              :items="upcomingGames"
               dark
               striped
               bordered
@@ -244,7 +244,7 @@ export default class Dashboard extends Vue {
     shouldTakeExitSurvey: false,
     hasInvite: false
   };
-  schedule: Array<{ launchTime: string; addToCalendar: CalendarEvent }> = [
+  upcomingGames: Array<{ launchTime: string; addToCalendar: CalendarEvent }> = [
     {
       launchTime: "",
       addToCalendar: {
@@ -333,7 +333,7 @@ export default class Dashboard extends Vue {
 
     // set player stats
     this.stats.games.splice(0, this.stats.games.length, ...data.stats.games);
-    this.schedule = data.schedule.map(gameTime => {
+    this.upcomingGames = data.schedule.map(gameTime => {
       const scheduledDate = new Date(gameTime);
       return {
         launchTime: scheduledDate.toLocaleString(),

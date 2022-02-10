@@ -28,7 +28,7 @@ import {
 Vue.use(VueRouter);
 
 const router = new VueRouter({
-  mode: "hash",
+  mode: "history",
   routes: [
     { ...PAGE_META[LOGIN_PAGE], component: Login },
     { ...PAGE_META[LOBBY_PAGE], component: Lobby },
@@ -39,7 +39,7 @@ const router = new VueRouter({
     { ...PAGE_META[DASHBOARD_PAGE], component: Dashboard },
     { ...PAGE_META[VERIFY_PAGE], component: Verify },
     { ...PAGE_META[MANUAL_PAGE], component: Manual },
-    { ...PAGE_META[HOME_PAGE], component: Home }
+    { ...PAGE_META[HOME_PAGE], component: Home },
   ]
 });
 

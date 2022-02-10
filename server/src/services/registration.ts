@@ -12,7 +12,7 @@ const logger = getLogger(__filename);
 export class RegistrationService extends BaseService {
 
   createVerificationUrl(registrationToken: string) {
-    return `${settings.host}/#/verify/${registrationToken}`;
+    return `${settings.host}/verify/${registrationToken}`;
   }
 
   async submitRegistrationMetadata(user: User, data: { username: string; email: string; name: string }) {

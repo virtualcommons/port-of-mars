@@ -7,13 +7,14 @@ import * as Sentry from '@sentry/browser';
 import { Vue as VueIntegration } from '@sentry/integrations';
 import { Integrations } from "@sentry/tracing";
 
+import { isStagingOrProduction, SENTRY_DSN } from '@port-of-mars/shared/settings';
+
 import { Ajax } from "@port-of-mars/client/plugins/ajax";
 import { TypedStore } from "@port-of-mars/client/plugins/tstore";
-import { isStagingOrProduction, SENTRY_DSN } from '@port-of-mars/shared/settings';
+import { SfxManager } from '@port-of-mars/client/util';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import {SfxManager} from '@port-of-mars/client/util';
 
 Vue.use(Vuex);
 Vue.use(TypedStore);
