@@ -1,4 +1,3 @@
-import path from "path";
 import _ from "lodash";
 import * as assert from "assert";
 import * as to from "typeorm";

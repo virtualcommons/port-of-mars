@@ -17,11 +17,21 @@ export class TournamentService extends BaseService {
   async getActiveTournament(): Promise<Tournament> {
     return await this.em
       .getRepository(Tournament)
-      .findOneOrFail({ active: true });
+      .findOneOrFail({
+        where: { active: true },
+        order: {
+          id: "DESC"
+        }
+      });
   }
 
-  async getTournament(id: number): Promise<Tournament> {
-    return await this.em.getRepository(Tournament).findOneOrFail(id);
+  async getTournament(id?: number): Promise<Tournament> {
+    if (id) {
+      return await this.em.getRepository(Tournament).findOneOrFail(id);
+    }
+    else {
+      return await this.getActiveTournament();
+    }
   }
 
   async getTournamentByName(name: string): Promise<Tournament> {
@@ -30,9 +40,9 @@ export class TournamentService extends BaseService {
       .findOneOrFail({ name });
   }
 
-  async getCurrentTournamentRound(): Promise<TournamentRound> {
-    const tournament = await this.getActiveTournament();
-    const tournamentId = tournament.id;
+  async getCurrentTournamentRound(tournamentId?: number): Promise<TournamentRound> {
+    const tournament = await this.getTournament(tournamentId);
+    tournamentId = tournament.id;
 
     return await this.em
       .getRepository(TournamentRound)
@@ -47,7 +57,7 @@ export class TournamentService extends BaseService {
       });
   }
 
-  async createScheduledRoundDate(tournamentRoundId: number, date: Date): Promise<TournamentRoundDate> {
+  async createScheduledRoundDate(date: Date, tournamentRoundId?: number): Promise<TournamentRoundDate> {
     const tournamentRound = await this.getTournamentRound(tournamentRoundId);
     const repository = this.em.getRepository(TournamentRoundDate);
     const scheduledDate = repository.create({ tournamentRoundId: tournamentRound.id, date });
@@ -133,7 +143,7 @@ export class TournamentService extends BaseService {
     return invite;
   }
 
-  async createTournament(data: Pick<Tournament, 'name' | 'active'>): Promise<Tournament> {
+  async createTournament(data: Pick<Tournament, 'name' | 'active' | 'minNumberOfGameRounds' | 'maxNumberOfGameRounds' | 'description'>): Promise<Tournament> {
     await this.deactivateTournaments();
     const t = this.em.getRepository(Tournament).create(data);
     return await this.em.save(t)
@@ -159,7 +169,7 @@ export class TournamentService extends BaseService {
     }
   }
 
-  async createRound(data: Pick<TournamentRound, 'exitSurveyUrl' | 'introSurveyUrl' | 'roundNumber' | 'numberOfGameRounds'> & { tournamentId?: number }): Promise<TournamentRound> {
+  async createRound(data: Pick<TournamentRound, 'exitSurveyUrl' | 'introSurveyUrl' | 'roundNumber' | 'numberOfGameRounds' | 'announcement'> & { tournamentId?: number }): Promise<TournamentRound> {
     if (!data.tournamentId) {
       const tournament = await this.getActiveTournament();
       data.tournamentId = tournament.id;
@@ -195,11 +205,16 @@ export class TournamentService extends BaseService {
   }
 
   async getTournamentRoundInvite(id: number): Promise<TournamentRoundInvite> {
-    return this.em.getRepository(TournamentRoundInvite).findOneOrFail(id, { relations: ['user', 'tournamentRound'] });
+    return await this.em.getRepository(TournamentRoundInvite).findOneOrFail(id, { relations: ['user', 'tournamentRound'] });
   }
 
-  async getTournamentRound(id: number): Promise<TournamentRound> {
-    return this.em.getRepository(TournamentRound).findOneOrFail(id);
+  async getTournamentRound(id?: number): Promise<TournamentRound> {
+    if (id) {
+      return await this.em.getRepository(TournamentRound).findOneOrFail(id);
+    }
+    else {
+      return await this.getCurrentTournamentRound();
+    }
   }
 
   async setSurveyComplete(data: { inviteId: number; surveyId: string }) {
