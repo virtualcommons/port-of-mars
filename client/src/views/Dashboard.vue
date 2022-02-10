@@ -1,7 +1,5 @@
 <template>
-  <b-container fluid class="h-100 m-0 p-0 bg-dark-75">
-   <!-- header -->
-      <!-- messages -->
+  <b-container fluid class="bg-dark-75">
     <Header></Header>
     <Messages></Messages>
     <b-row class="text-center p-4" align-h="center">
@@ -15,7 +13,7 @@
         <div class="w-100 mb-2"></div>
         <b-col align-self="start" cols="auto">
           <b-button @click="activateTutorial" :variant="hasWatchedTutorial ? 'success' : 'primary'" size="lg">
-            <h4>Watch Tutorial
+            <h4><b-icon-exclamation-triangle scale="1" v-if="!hasWatchedTutorial"></b-icon-exclamation-triangle> Watch Tutorial
               <b-icon-check-circle-fill scale="1" v-if="hasWatchedTutorial">
               </b-icon-check-circle-fill>
             </h4>
@@ -28,7 +26,7 @@
               variant="primary"
               size="lg"
             >
-              <h4>Take Survey</h4>
+              <h4><b-icon-exclamation-triangle scale="1"></b-icon-exclamation-triangle> Take Survey</h4>
             </b-button>
           </template>
           <template v-else>

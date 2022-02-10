@@ -1,9 +1,28 @@
 <template>
   <b-container fluid>
     <b-row class="px-4 tour-system-health" align-v="center">
-      <h3 class="title mx-3 my-auto">System Health</h3>
-      <StatusBar class="statusbar" :setWidth="`${systemHealthStatus}`" />
-      <h3 class="status mx-3">{{ systemHealthStatus }}<span>%</span></h3>
+      <h3 class="title mx-3 my-auto">
+        <b-img
+        v-bind="systemHealthIconProps"
+          :src="require(`@port-of-mars/client/assets/icons/systemHealth.svg`)"
+          rounded="circle"
+          left
+          class="mr-1"
+          alt="System Health"
+        />
+        System Health
+     </h3>
+      <StatusBar class="statusbar" :setWidth="systemHealth" />
+      <h3 class="mx-2">
+        {{ systemHealth }}
+        <b-img
+        v-bind="systemHealthIconProps"
+        class="ml-2"
+          :src="require(`@port-of-mars/client/assets/icons/systemHealth.svg`)"
+          right
+          alt="System Health Icon"
+        />
+       </h3>
     </b-row>
   </b-container>
 </template>
@@ -14,12 +33,19 @@ import StatusBar from "./StatusBar.vue";
 
 @Component({
   components: {
-    StatusBar
-  }
+    StatusBar,
+  },
 })
 export default class SystemHealth extends Vue {
-  get systemHealthStatus() {
+  get systemHealth() {
     return this.$tstore.state.systemHealth;
+  }
+
+  get systemHealthIconProps() {
+    return {
+      height: 25,
+    }
+
   }
 }
 </script>
