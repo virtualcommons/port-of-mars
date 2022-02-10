@@ -1,8 +1,6 @@
 <template>
   <b-container class="h-100 p-0 m-0 bg" fluid>
-    <b-row no-gutters class="h-100 w-100">
-      <router-view class="m-0 p-0" :key="$route.path"></router-view>
-    </b-row>
+    <router-view class="m-0 p-0" :key="$route.path"></router-view>
   </b-container>
 </template>
 
@@ -27,8 +25,6 @@ export default class App extends Vue {}
 
 .bg {
   background-image: url("assets/background/textured.jpg");
-  background-position: center;
-  background-repeat: no-repeat;
   background-size: cover;
 }
 </style>

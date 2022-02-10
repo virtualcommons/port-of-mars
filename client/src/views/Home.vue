@@ -1,5 +1,5 @@
 <template>
-  <b-container fluid>
+  <b-container class="bg" fluid>
     <Header></Header>
     <b-row
       v-if="isDevMode"
@@ -32,8 +32,10 @@
         <h3 class="subtitle">
           Port of Mars is a fun, game-based social science experiment set on the
           first human community on the Red Planet.
+          <br>
+          {{ description }}
+
         </h3>
-        <h4>{{ description }}</h4>
       </b-col>
     </b-row>
     <b-row v-if="schedule.length > 0">
@@ -60,7 +62,7 @@
           </h3>
         </template>
         <template v-else>
-          <h3 class="subtitle">
+          <h3 class="subtitle p-3 mr-4">
             {{ announcement }}
           </h3>
           <b-button :to="loginPage" size="lg" variant="primary" class="w-75">
@@ -154,12 +156,13 @@ export default class Home extends Vue {
   letter-spacing: 0.25rem;
   font-size: 4rem;
   font-weight: 600;
-  color: white;
+  color: var(--white);
 }
 
 .subtitle {
+  background-color: var(--dark-shade-75);
   font-size: 2rem;
   font-weight: 500;
-  color: white;
+  color: var(--white);
 }
 </style>
