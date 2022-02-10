@@ -33,6 +33,9 @@ export async function createTournament(sp: ServiceProvider, data?: { name?: stri
   const d = {
     name: 'example',
     active: true,
+    minNumberOfGameRounds: 10,
+    maxNumberOfGameRounds: 15,
+    description: '',
     ...data
   };
   return await sp.tournament.createTournament(d);
