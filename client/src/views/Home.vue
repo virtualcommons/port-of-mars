@@ -38,7 +38,7 @@
 
     <b-row v-if="schedule.length > 0">
       <b-col>
-        <Schedule :schedule="schedule" :roundNumber="tournamentRoundNumber">
+        <Schedule :schedule="schedule" :roundNumber="currentRoundNumber">
         </Schedule>
       </b-col>
     </b-row>
@@ -70,9 +70,9 @@
             Mars Madness {{ currentYear }}
           </b-button>
         </template>
-        <b-alert :show="tournamentRoundNumber > 1" variant="warning">
+        <b-alert :show="currentRoundNumber > 1" variant="warning">
           Eligible participants have been invited via email to
-          <b-badge variant="info">Round {{ tournamentRoundNumber }}</b-badge
+          <b-badge variant="info">Round {{ currentRoundNumber }}</b-badge
           >.
         </b-alert>
       </b-col>
@@ -124,7 +124,7 @@ export default class Home extends Vue {
     return this.$tstore.state.signupEnabled;
   }
 
-  get tournamentRoundNumber() {
+  get currentRoundNumber() {
     return this.tournamentStatus.round;
   }
 
