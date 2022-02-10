@@ -53,27 +53,18 @@
         </b-embed>
       </b-col>
       <b-col align-self="center" cols="5">
-        <template v-if="signupEnabled">
-          <h3 class="subtitle">
-            The next Mars Madness tournament is coming soon! Register and get
-            notified when it starts.
-          </h3>
-        </template>
-        <template v-else>
-          <h3 class="subtitle p-3 mr-4">
+        <h3 class="subtitle p-3 w-75">
             {{ announcement }}
-          </h3>
-          <b-button :to="loginPage" size="lg" variant="primary" class="w-75">
+        </h3>
+        <b-button :to="loginPage" size="lg" variant="primary" class="w-75">
             <b-icon class="mb-2" icon="box-arrow-right"></b-icon>
-            <template v-if="signupEnabled"> Register for </template>
-            <template v-else> Participate in </template>
-            Mars Madness {{ currentYear }}
-          </b-button>
-        </template>
-        <b-alert :show="currentRoundNumber > 1" variant="warning">
-          Eligible participants have been invited via email to
-          <b-badge variant="info">Round {{ currentRoundNumber }}</b-badge
-          >.
+            Participate in Mars Madness {{ currentYear }}
+        </b-button>
+        <b-alert class="w-75" :show="currentRoundNumber > 1" variant="warning">
+          <em>Eligible participants will be invited via email to </em>
+          <b-badge variant="primary">
+            Round {{ currentRoundNumber }}
+          </b-badge>
         </b-alert>
       </b-col>
     </b-row>
@@ -173,8 +164,8 @@ export default class Home extends Vue {
 
 .subtitle {
   background-color: var(--dark-shade-75);
-  font-size: 2rem;
-  font-weight: 500;
+  font-size: 1.8rem;
+  font-weight: 600;
   color: var(--white);
 }
 </style>
