@@ -94,7 +94,7 @@ export default class Schedule extends Vue {
 </script>
 <style scoped>
 .launch-time {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: bolder;
 }
 </style>

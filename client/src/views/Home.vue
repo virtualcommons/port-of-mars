@@ -30,7 +30,7 @@
           Port of Mars is a fun, game-based social science experiment set on the
           first human community on the Red Planet.
         </h2>
-        <h3 class="subtitle">
+        <h3 class="p-3 subtitle">
             {{ description }}
         </h3>
       </b-col>
