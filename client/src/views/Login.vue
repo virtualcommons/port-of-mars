@@ -1,99 +1,85 @@
 <template>
-  <b-container class="h-100 bg-dark-75" fluid>
-    <Header></Header>
-    <b-row v-if="isDevMode" class="my-0 p-0 text-center" align-v="center">
-      <b-col>
-        <b-alert class="p-0 m-0" show variant="warning">
-          <p class="mt-2">
-            <b-icon class="mx-2" icon="exclamation-triangle-fill" variant="danger"></b-icon> You are
-            currently accessing a development version of the Port of Mars only used for testing. Go
-            to <a href="https://portofmars.asu.edu">portofmars.asu.edu</a> for the real deal.
+  <b-container fluid class="h-100 m-0 p-0">
+    <b-row no-gutters class="h-100 w-100">
+      <section id="login-wrapper" class="h-100 w-100 text-center">
+        <div class="mx-5 p-5" id="login-container">
+          <h1>Sign In to Port of Mars</h1>
+          <p>
+            Port of Mars is only open to Arizona State University undergraduates at the moment.
+            Please sign in using your ASURITE ID below.
           </p>
-        </b-alert>
-      </b-col>
+          <p>
+            <span v-if="signupEnabled">
+              The next Mars Madness tournament is coming soon! Register and get notified when it
+              starts.
+            </span>
+            <span v-else>
+              <b-badge variant="info">Round {{ tournamentRoundNumber }}</b-badge>
+              of the Mars Madness tournament is now open!
+            </span>
+          </p>
+          <b-alert :show="tournamentRoundNumber > 1" variant="warning">
+            Eligible participants have been invited via email to
+            <b-badge variant="info">Round {{ tournamentRoundNumber }}</b-badge
+            >.
+          </b-alert>
+          <b-form-checkbox v-model="toggleDevLogin" v-if="isDevMode" class="my-2">
+            <p v-if="toggleDevLogin" class="text-uppercase">Test Mode Enabled</p>
+            <p v-else class="text-uppercase">Enable Test Mode</p>
+          </b-form-checkbox>
+          <b-button v-if="isAuthenticated" size="lg" variant="warning" @click="logout">
+            {{ logoutText }}
+          </b-button>
+          <b-button
+            v-else-if="!toggleDevLogin"
+            :href="asuLoginUrl"
+            size="lg"
+            variant="primary"
+            class="w-50"
+          >
+            <h4 class="p-1">
+              <span v-if="signupEnabled">
+                Register for
+              </span>
+              <span v-else>
+                Participate in
+              </span>
+              Mars Madness {{ currentYear }}
+            </h4>
+          </b-button>
+          <!-- register form -->
+          <b-form inline v-if="isDevMode && toggleDevLogin" @submit="devLogin">
+            <div class="w-50 m-auto">
+              <b-form-input
+                id="input-username"
+                v-model="devLoginUsername"
+                placeholder="Enter any username for testing"
+                required
+                class="w-50"
+              >
+              </b-form-input>
+              <b-button class="w-25" icon type="submit" variant="success">
+                <b-icon class="mb-1" icon="box-arrow-right"></b-icon> Sign in
+              </b-button>
+            </div>
+          </b-form>
+          <b-alert v-if="error" variant="warning">{{ error }}</b-alert>
+        </div>
+      </section>
+      <Footer></Footer>
     </b-row>
-    <b-row class="text-center mb-5">
-      <b-col>
-        <h2 class="title">Sign In to Port of Mars</h2>
-        <h3 class="subtitle">
-          Port of Mars is currently only open to Arizona State University undergraduates.
-        </h3>
-        <h4>Please sign in using your ASURITE ID below.</h4>
-      </b-col>
-      <div class="w-100"></div>
-      <b-col>
-        <h3 class="subtitle">
-          <span v-if="signupEnabled">
-            The next Mars Madness tournament is coming soon! Register and get notified when it
-            starts.
-          </span>
-          <span v-else>
-            <b-badge variant="info">Round {{ tournamentRoundNumber }}</b-badge>
-            of the Mars Madness tournament is now open!
-          </span>
-        </h3>
-        <b-alert :show="tournamentRoundNumber > 1" variant="warning">
-          Eligible participants have been invited via email to
-          <b-badge variant="info">Round {{ tournamentRoundNumber }}</b-badge
-          >.
-        </b-alert>
-        <b-form-checkbox v-model="toggleDevLogin" v-if="isDevMode" class="my-2">
-          <p v-if="toggleDevLogin" class="text-uppercase">Test Mode Enabled</p>
-          <p v-else class="text-uppercase">Enable Test Mode</p>
-        </b-form-checkbox>
-        <b-button v-if="isAuthenticated" size="lg" variant="warning" @click="logout">
-          {{ logoutText }}
-        </b-button>
-        <b-button
-          v-else-if="!toggleDevLogin"
-          :href="asuLoginUrl"
-          size="lg"
-          variant="primary"
-          class="w-50"
-        >
-          <b-icon class="mb-2" icon="box-arrow-right"></b-icon>
-          <span v-if="signupEnabled">
-            Register for
-          </span>
-          <span v-else>
-            Participate in
-          </span>
-          Mars Madness {{ currentYear }}
-        </b-button>
-        <!-- register form -->
-        <b-form inline v-if="isDevMode && toggleDevLogin" @submit="devLogin">
-          <div class="w-50 m-auto">
-            <b-form-input
-              id="input-username"
-              v-model="devLoginUsername"
-              placeholder="Enter any username for testing"
-              required
-              class="w-50"
-            >
-            </b-form-input>
-            <b-button class="w-25" icon type="submit" variant="success">
-              <b-icon class="mb-1" icon="box-arrow-right"></b-icon> Sign in
-            </b-button>
-          </div>
-        </b-form>
-        <b-alert v-if="error" variant="warning">{{ error }}</b-alert>
-      </b-col>
-    </b-row>
-    <Footer></Footer>
   </b-container>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { url } from "@port-of-mars/client/util";
-import Footer from "@port-of-mars/client/components/global/Footer.vue";
 import { DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
 import { isDevOrStaging } from "@port-of-mars/shared/settings";
-import Header from "@port-of-mars/client/components/global/Header.vue";
+import Footer from "@port-of-mars/client/components/global/Footer.vue";
 
 @Component({
   components: {
-    Header,
     Footer
   }
 })
@@ -160,11 +146,27 @@ export default class Login extends Vue {
 }
 </script>
 
-<style scoped>
-::placeholder, #input-username {
+<style lang="scss" scoped>
+p {
+  color: var(--white);
+}
+
+#login-wrapper {
+  padding: 250px 0 250px 0;
+  background: url("../assets/images/bg-dark-moon.png");
+  background-position: center;
+}
+
+#login-container {
+  background-color: var(--dark-shade-75);
+}
+
+::placeholder,
+#input-username {
   color: var(--dark-shade);
   background-color: var(--light-shade);
 }
+
 .title {
   letter-spacing: 0.15rem;
   font-size: 3rem;

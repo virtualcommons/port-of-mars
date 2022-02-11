@@ -1,81 +1,96 @@
 <template>
-  <b-container class="bg" fluid>
-    <Header></Header>
-    <b-row
-      v-if="isDevMode"
-      class="w-100 m-0 p-0"
-      align-v="start"
-      align-h="start"
-    >
-      <b-alert class="text-center w-100 p-0" show variant="warning">
-        <p class="mt-2">
-          <b-icon
-            class="mx-2"
-            icon="exclamation-triangle-fill"
-            variant="danger"
-          ></b-icon>
-          You are currently accessing a development version of the Port of Mars
-          only used for testing. Go to
-          <a :href="SITE_URL">{{ SITE_URL }}</a> for the
-          real deal.
-        </p>
-      </b-alert>
-    </b-row>
-    <b-row class="w-100 mx-2" align-v="start">
-      <b-col cols="12">
-        <h1 class="jumbo-title">
-          Welcome to Port of Mars
-        </h1>
-        <h2>
-          Port of Mars is a fun, game-based social science experiment set on the
-          first human community on the Red Planet.
-        </h2>
-        <h3 class="p-3 subtitle">
-            {{ description }}
-        </h3>
-      </b-col>
-    </b-row>
+  <b-container fluid class="h-100 m-0 p-0">
+    <b-row no-gutters class="h-100 w-100">
+      <!-- about -->
+      <section id="about" class="m-0 w-100">
+        <b-row class="w-100 mx-2" align-v="center" align-h="center">
+          <b-col sm="12" class="text-center">
+            <h2>Welcome to Port of Mars</h2>
+            <p class="my-3">
+              Port of Mars is an online, game-based, social science experiment set on the first
+              human community on the Red Planet. Currently recruiting Arizona State University
+              Undergraduates for game play.
+            </p>
+          </b-col>
+        </b-row>
+      </section>
 
-    <b-row v-if="schedule.length > 0">
-      <b-col>
-        <Schedule :schedule="schedule" :roundNumber="currentRoundNumber">
-        </Schedule>
-      </b-col>
+      <!-- schedule -->
+      <!-- <section id="schedule">
+        <b-row v-if="schedule.length > 0">
+          <b-col class="m-4">
+            <Schedule :schedule="schedule" :roundNumber="tournamentRoundNumber"> </Schedule>
+          </b-col>
+        </b-row>
+      </section> -->
+
+      <!-- prize info -->
+      <section id="prize" class="w-100 p-5 text-center">
+        <b-row class="w-100 mx-2" align-v="center" align-h="center">
+          <b-col sm="12">
+            <h3>{{ description }}</h3>
+            <p class="text">
+              The next Mars Madness tournament is coming soon! Sign up and get notified when it
+              starts.
+            </p>
+            <template v-if="signupEnabled" class="my-5">
+              <b-button squared variant="primary"><h4 class="p-1">Sign Up to Play</h4></b-button>
+            </template>
+            <template v-else>
+              <h3 class="subtitle p-3 mr-4">
+                {{ announcement }}
+              </h3>
+              <b-button :to="loginPage" size="lg" variant="primary" class="w-75">
+                <b-icon class="mb-2" icon="box-arrow-right"></b-icon>
+                <template v-if="signupEnabled"> Register for </template>
+                <template v-else> Participate in </template>
+                Mars Madness {{ currentYear }}
+              </b-button>
+            </template>
+          </b-col>
+          <b-col v-if="schedule.length > 0" sm="12" class="m-5 text-center">
+            <Schedule :schedule="schedule" :roundNumber="tournamentRoundNumber"> </Schedule>
+          </b-col>
+        </b-row>
+      </section>
+
+      <!-- game-trailer -->
+      <section id="game-trailer" class="m-0 p-5 w-100">
+        <b-row class="mt-2" align-v="center" align-h="center">
+          <b-col align-self="center" sm="12" md="5">
+            <h2>The Game</h2>
+            <p class="text my-3">
+              You are 1 of 5 residents at the Port of Mars, the first long-term habitat on the
+              planet. Each game consists of 8 — 12 rounds, each with phases of investing, trading,
+              purchasing, discarding, and reacting to Mars events. Chance and player actions impact
+              system health. If system health falls to zero all players die.
+            </p>
+
+            <b-alert :show="tournamentRoundNumber > 1" variant="warning">
+              Eligible participants have been invited via email to
+              <b-badge variant="info">Round {{ currentRoundNumber }}</b-badge
+              >.
+            </b-alert>
+          </b-col>
+          <b-col align-self="start" sm="12" md="7" class="p-3">
+            <b-embed
+              class="p-1"
+              type="iframe"
+              aspect="21by9"
+              :src="trailerVideoUrl"
+              allowfullscreen
+            ></b-embed>
+          </b-col>
+        </b-row>
+      </section>
+      <Footer></Footer>
     </b-row>
-    <b-row class="mt-2">
-      <b-col align-self="start" cols="7" class="p-3">
-        <b-embed
-          type="iframe"
-          aspect="21by9"
-          :src="trailerVideoUrl"
-          allowfullscreen
-        >
-        </b-embed>
-      </b-col>
-      <b-col align-self="center" cols="5">
-        <h3 class="subtitle p-3 w-75">
-            {{ announcement }}
-        </h3>
-        <b-button :to="loginPage" size="lg" variant="primary" class="w-75">
-            <b-icon class="mb-2" icon="box-arrow-right"></b-icon>
-            Participate in Mars Madness {{ currentYear }}
-        </b-button>
-        <b-alert class="w-75" :show="currentRoundNumber > 1" variant="warning">
-          <em>Eligible participants will be invited via email to </em>
-          <b-badge variant="primary">
-            Round {{ currentRoundNumber }}
-          </b-badge>
-        </b-alert>
-      </b-col>
-    </b-row>
-    <Footer></Footer>
   </b-container>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
-import Header from "@port-of-mars/client/components/global/Header.vue";
 import Schedule from "@port-of-mars/client/components/dashboard/Schedule.vue";
 import { LOGIN_PAGE, DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
 import { isDevOrStaging } from "@port-of-mars/shared/settings";
@@ -83,9 +98,8 @@ import { isDevOrStaging } from "@port-of-mars/shared/settings";
 @Component({
   components: {
     Footer,
-    Header,
-    Schedule,
-  },
+    Schedule
+  }
 })
 export default class Home extends Vue {
   isDevMode: boolean = false;
@@ -100,7 +114,7 @@ export default class Home extends Vue {
     fluid: true,
     blankColor: "#bbb",
     width: 225,
-    height: 225,
+    height: 225
   };
 
   get tournamentStatus() {
@@ -136,9 +150,7 @@ export default class Home extends Vue {
   get dateRange() {
     const schedule = this.schedule;
     if (schedule.length > 0) {
-      return `from ${this.toDate(schedule[0])} to ${this.toDate(
-        schedule[schedule.length - 1]
-      )}`;
+      return `from ${this.toDate(schedule[0])} to ${this.toDate(schedule[schedule.length - 1])}`;
     }
     return "";
   }
@@ -156,16 +168,43 @@ export default class Home extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.jumbo-title {
-  font-size: 3.8rem;
-  font-weight: 800;
-  color: var(--dark-shade);
+h2,
+h3 {
+  color: var(--white);
+  font-weight: bold;
+  font-size: 2em;
 }
 
-.subtitle {
-  background-color: var(--dark-shade-75);
-  font-size: 1.8rem;
-  font-weight: 600;
+h2 {
+  text-transform: uppercase;
+  text-align: center;
+}
+
+p {
   color: var(--white);
+}
+
+#about {
+  background-image: url("../assets/images/bg-moon.png");
+  padding: 150px 0 50px 0;
+}
+
+#about p {
+  color: var(--white);
+  width: 70%;
+  margin: 0 auto;
+}
+
+#prize {
+  width: 70%;
+  margin: 0 auto;
+  padding: 1rem;
+  background: url("../assets/images/bg-stars.png") no-repeat;
+  background-position: center;
+  background-color: var(--black);
+}
+
+#game-trailer {
+  background: url("../assets/images/bg-dark-moon.png");
 }
 </style>

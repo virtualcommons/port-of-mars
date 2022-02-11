@@ -25,6 +25,7 @@
           v-bind="investment"
           @update="investTimeBlocks"
           :remainingTimeBlocks="remainingTimeBlocks"
+          class="my-1"
         ></InvestmentCard>
       </b-row>
     </b-col>
