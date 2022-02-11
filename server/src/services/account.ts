@@ -20,19 +20,23 @@ export class AccountService extends BaseService {
   }
 
   async isEmailAvailable(user: User, email: string): Promise<boolean> {
-    const otherUser = await this.getRepository().findOne({email});
+    const otherUser = await this.getRepository().findOne({ email });
     if (otherUser) {
       return otherUser.id === user.id;
     }
     return true;
   }
 
-  async getActiveEmails(participated: boolean): Promise<Array<string>> {
-    const users: Array<User> = await this.getRepository().find({
+  async getActiveUsers(participated: boolean): Promise<Array<User>> {
+    return await this.getRepository().find({
       select: ['name', 'email', 'username', 'dateCreated'],
       where: { isActive: true, email: Not(IsNull()) },
     })
-    return users.map(u => u.email ?? 'no email specified - should not be possible, check database');
+  }
+
+  async getActiveEmails(participated: boolean): Promise<Array<string>> {
+    const users: Array<User> = await this.getActiveUsers(participated)
+    return users.map(u => u.email ?? '');
   }
 
   async findUserById(id: number): Promise<User> {
@@ -56,7 +60,7 @@ export class AccountService extends BaseService {
     return user;
   }
 
-  async getOrCreateUser(username: string, data: Pick<User, 'isBot'> = {isBot: false}): Promise<User> {
+  async getOrCreateUser(username: string, data: Pick<User, 'isBot'> = { isBot: false }): Promise<User> {
     let user = await this.getRepository().findOne({ username });
     logger.info('getOrCreateUser for username %s and profile: %o', username);
     if (!user) {
@@ -70,11 +74,11 @@ export class AccountService extends BaseService {
   }
 
   async getOrCreateBotUsers(requiredNumberOfBots: number): Promise<Array<User>> {
-    const bots = await this.getRepository().find({where: {isBot: true}, take: requiredNumberOfBots})
+    const bots = await this.getRepository().find({ where: { isBot: true }, take: requiredNumberOfBots })
     const numberOfBotsToCreate = requiredNumberOfBots - bots.length;
     if (numberOfBotsToCreate > 0) {
       for (let i = 0; i < numberOfBotsToCreate; i++) {
-        const user = await this.getOrCreateUser(uuidv4(), {isBot: true});
+        const user = await this.getOrCreateUser(uuidv4(), { isBot: true });
         bots.push(user);
       }
     }

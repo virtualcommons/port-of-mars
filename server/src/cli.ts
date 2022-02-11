@@ -29,7 +29,7 @@ import { promisify } from "util";
 const mkdir = promisify(fs.mkdir);
 const logger = getLogger(__filename);
 
-function getRandomInt(min:number, max:number) {
+function getRandomInt(min: number, max: number) {
   min = Math.ceil(min);
   max = Math.ceil(max);
   return Math.floor(Math.random() * (max - min) + min);
@@ -192,7 +192,8 @@ async function createTournamentRoundInvites(em: EntityManager, tournamentRoundId
 
 async function exportActiveEmails(em: EntityManager, participated: boolean): Promise<void> {
   const sp = getServices(em);
-  const emails = await sp.account.getActiveEmails(participated);
+  const users = await sp.account.getActiveUsers(participated);
+  const emails = users.map(u => `${u.name}, ${u.email}`);
   fs.writeFile('active-emails.csv', emails.join('\n'), (err) => {
     if (err) {
       logger.fatal("unable to export active emails: %s", err);
