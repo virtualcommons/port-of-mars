@@ -1,6 +1,7 @@
 <template>
-  <div class="mx-4">
-    <h3 :id="scheduleId">Schedule</h3>
+  <div class="mx-5">
+    <h4 v-if="schedule.length > 0" :id="scheduleId">Schedule</h4>
+    <h3 v-else>There are currently no scheduled games.</h3>
     <b-list-group horizontal="lg" class="p-1">
       <b-list-group-item
         class="p-1 text-center"
@@ -24,9 +25,7 @@
             title="download as ics"
             target="_blank"
           >
-            <font-awesome-icon
-              :icon="['fas', 'calendar-plus']"
-            ></font-awesome-icon>
+            <font-awesome-icon :icon="['fas', 'calendar-plus']"></font-awesome-icon>
           </a>
         </b-button-group>
       </b-list-group-item>
@@ -39,7 +38,7 @@ import { google, ics } from "calendar-link";
 
 @Component({})
 export default class Schedule extends Vue {
-  @Prop({default: "schedule"})
+  @Prop({ default: "schedule" })
   scheduleId!: string;
 
   @Prop()
@@ -52,7 +51,7 @@ export default class Schedule extends Vue {
 
   get upcomingGames() {
     // FIXME: extract duplicate logic here + dashboard into schedule component
-    return this.schedule.map((gameTime) => {
+    return this.schedule.map(gameTime => {
       const scheduledDate = new Date(gameTime);
       return {
         launchTime: scheduledDate.toLocaleString(),
@@ -61,8 +60,8 @@ export default class Schedule extends Vue {
           location: this.SITE_URL,
           start: scheduledDate,
           duration: [1, "hour"],
-          description: this.calendarDescription,
-        },
+          description: this.calendarDescription
+        }
       };
     });
   }
@@ -93,6 +92,10 @@ export default class Schedule extends Vue {
 }
 </script>
 <style scoped>
+h4 {
+  color: white;
+}
+
 .launch-time {
   font-size: 1.2rem;
   font-weight: bolder;

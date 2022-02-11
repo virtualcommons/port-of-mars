@@ -1,6 +1,5 @@
 <template>
   <b-container fluid class="h-100 m-0 p-0 background">
-    <Header></Header>
     <!-- Gameplay -->
     <section id="gameplay" class="p-2 m-4">
       <h1 class="section-title text-center m-2">Gameplay</h1>
@@ -229,12 +228,10 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import Header from "@port-of-mars/client/components/global/Header.vue";
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
 @Component({
   components: {
-    Footer,
-    Header
+    Footer
   }
 })
 export default class Manual extends Vue {

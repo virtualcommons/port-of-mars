@@ -1,14 +1,50 @@
 <template>
   <b-container class="h-100 p-0 m-0 bg" fluid>
-    <router-view class="m-0 p-0" :key="$route.path"></router-view>
+    <b-row no-gutters class="h-100 w-100">
+      <Header v-if="!isGamePage"></Header>
+      <router-view
+        :class="!isManual ? 'h-100 d-flex flex-grow-1 ' : 'h-auto'"
+        :key="$route.path"
+      ></router-view>
+    </b-row>
+    <!-- FIXME: figure out how to add footer to dashboard without weird page behaior
+          ideally, we should just be able to import the Footer once into App.vue
+    -->
+    <Footer v-if="isDashboard"></Footer>
   </b-container>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import BootstrapVue from "bootstrap-vue";
+import Header from "@port-of-mars/client/components/global/Header.vue";
+import Footer from "@port-of-mars/client/components/global/Footer.vue";
+import { GAME_PAGE, MANUAL_PAGE, DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
+Vue.use(BootstrapVue);
 
-@Component({})
-export default class App extends Vue {}
+@Component({
+  components: {
+    Header,
+    Footer
+  }
+})
+export default class App extends Vue {
+  dashboard = { name: DASHBOARD_PAGE };
+  game = { name: GAME_PAGE };
+  manual = { name: MANUAL_PAGE };
+
+  get isGamePage() {
+    return [this.game.name].includes(this.$route.name);
+  }
+
+  get isManual() {
+    return [this.manual.name].includes(this.$route.name);
+  }
+
+  get isDashboard() {
+    return [this.dashboard.name].includes(this.$route.name);
+  }
+}
 </script>
 
 <style lang="scss">
@@ -24,7 +60,7 @@ export default class App extends Vue {}
 @import "./stylesheets/main.scss";
 
 .bg {
-  background-image: url("assets/background/textured.jpg");
+  background-color: var(--dark-shade);
   background-size: cover;
 }
 </style>

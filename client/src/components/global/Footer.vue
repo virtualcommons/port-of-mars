@@ -4,7 +4,7 @@ ccarra1@asu.edu
 -->
 <template>
   <!-- <b-container class="m-0 p-3 footer-container" fluid> -->
-  <footer class="footer-container">
+  <footer class="footer-container p-5 w-100">
     <!-- FIXME: nav links should change based on the route -->
     <section id="footer-nav">
       <h2>Navigation</h2>
@@ -27,18 +27,12 @@ ccarra1@asu.edu
       <h2>Sponsors</h2>
       <ul>
         <li>
-          <a
-            href="https://interplanetary.asu.edu/"
-            title="ASU Interplanetary Initiative"
-          >
+          <a href="https://interplanetary.asu.edu/" title="ASU Interplanetary Initiative">
             ASU Interplanetary Initiative
           </a>
         </li>
         <li>
-          <a
-            href="https://complexity.asu.edu/"
-            title="ASU School of Complex Adaptive Systems"
-          >
+          <a href="https://complexity.asu.edu/" title="ASU School of Complex Adaptive Systems">
             ASU School of Complex Adaptive Systems
           </a>
         </li>
@@ -51,7 +45,7 @@ ccarra1@asu.edu
           <a href="https://www.computecanada.ca" title="Compute Canada">
             Compute Canada
           </a>
-          and 
+          and
           <a href="https://westgrid.ca">WestGrid</a>
         </li>
       </ul>
@@ -66,9 +60,7 @@ ccarra1@asu.edu
           </a>
         </li>
         <li>
-          <a href="https://www.instagram.com/portofmars/" title="Instagram"
-            >Instagram
-          </a>
+          <a href="https://www.instagram.com/portofmars/" title="Instagram">Instagram </a>
           <b-icon icon="instagram" class="mx-1"></b-icon>
         </li>
         <li>
@@ -158,12 +150,14 @@ footer ul {
 #social-media h2 {
   text-align: left;
 }
+
 #footer-nav h2,
 #sponsors h2,
 #social-media h2 {
   font-size: 1.5em;
   padding: 1rem;
 }
+
 @media screen and (max-width: 810px) {
   footer {
     grid-template-columns: 1fr;
