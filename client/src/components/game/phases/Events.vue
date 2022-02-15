@@ -20,10 +20,8 @@
               :event="event"
               :visible="eventVisible(index)"
               class="my-2"
-              :timestamp="timestamp"
-              :enableModal="true"
               :currentEventModalId="currentEventModalId"
-              @updatedModalId="showModal(currentEventModalId)"
+              :enableModal="true"
             ></EventCard>
           </div>
         </b-col>
@@ -107,14 +105,12 @@ export default class Events extends Vue {
 
   // NOTE :: VIEW HANDLING
 
-  @Watch("eventsProcessed")
+  @Watch("eventsProcessed", { immediate: true })
   onEventsProcessedChange(val: any, oldVal: any) {
     if (this.selectedView === "Active Accomplishments") {
       this.selectedView = "Event Deck";
     }
   }
-
-  // NOTE :: EVENT CARDS
 
   // show event modal when there is a new event
   @Watch("currentEvent", { immediate: true })
@@ -123,6 +119,7 @@ export default class Events extends Vue {
     let timestamp: number = Date.now();
     let modalId: string = `event-modal-${event.id}-${timestamp}`;
     // FIXME: duplicate event modal id logic also in EventCard
+    console.log(`generated modalId: ${modalId}`);
     this.currentEventModalId = modalId;
   }
 
@@ -134,15 +131,8 @@ export default class Events extends Vue {
     return this.$tstore.state.phase !== Phase.events || index <= this.eventsProcessed;
   }
 
-  // NOTE :: ACCOMPLISHMENT CARDS
-
   eventActive(index: number) {
     return this.$tstore.state.phase === Phase.events && index == this.eventsProcessed;
-  }
-
-  showModal(currentEventModalId: string) {
-    console.log("showing: ", currentEventModalId);
-    this.$root.$emit("bv::show::modal", currentEventModalId);
   }
 }
 </script>
