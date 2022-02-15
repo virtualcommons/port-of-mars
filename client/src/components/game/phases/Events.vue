@@ -92,10 +92,6 @@ export default class Events extends Vue {
     return this.$tstore.getters.player.accomplishments.purchasable;
   }
 
-  get timestamp() {
-    return Date.now();
-  }
-
   updated() {
     let elem = this.$el.querySelector(".sort-events");
     if (elem) {
@@ -118,8 +114,6 @@ export default class Events extends Vue {
     console.log("new current event: ", event);
     let timestamp: number = Date.now();
     let modalId: string = `event-modal-${event.id}-${timestamp}`;
-    // FIXME: duplicate event modal id logic also in EventCard
-    console.log(`generated modalId: ${modalId}`);
     this.currentEventModalId = modalId;
   }
 
