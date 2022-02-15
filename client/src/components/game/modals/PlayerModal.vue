@@ -15,15 +15,6 @@
         <h3 class="role">
           {{ roleData.isSelf ? `${role} (Your Role)` : role }}
         </h3>
-        <b-button
-          squared
-          variant="outline-secondary"
-          size="lg"
-          v-if="!roleData.isSelf && gamePhase === phase.trade"
-          @click="handleRequestTrade"
-        >
-          Request Trade
-        </b-button>
       </b-col>
 
       <div class="w-100 my-3"></div>
@@ -67,7 +58,9 @@
             <p class="my-4" v-if="accomplishmentType === 'purchasable'">
               This information is currently private and cannot be viewed at this time.
             </p>
-            <p v-if="accomplishmentType === 'purchased'" class="my-auto text-center">No purchased accomplishments</p>
+            <p v-if="accomplishmentType === 'purchased'" class="my-auto text-center">
+              No purchased accomplishments
+            </p>
           </div>
           <!-- col: accomplishments -->
           <div class="scroll p-3" v-else-if="roleData.isSelf || isUnderAudit">
