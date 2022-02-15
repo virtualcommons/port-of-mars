@@ -120,17 +120,9 @@ export default class EventCard extends Vue {
   eventNoChangeViews: Array<EventClientView> = ["NO_CHANGE", "AUDIT", "DISABLE_CHAT"];
   modalIds: string[] = [];
 
-  //if the modal was spawned by the server, show the option buttons
-  // get wasSpawnedByServer() {
-  //   if (this.currentEvent) {
-  //     return this.currentPhase === Phase.events && this.currentEvent.id === this.event.id;
-  //   } else return false;
-  // }
-
   mounted() {
     console.log("------- event card / mounted hook");
     if (!isUndefined(this.currentEventModalId) && this.active) {
-      console.log(`// show : ${this.currentEventModalId}`);
       this.$bvModal.show(this.currentEventModalId);
     }
   }
@@ -139,10 +131,6 @@ export default class EventCard extends Vue {
     if (this.active) {
       this.$bvModal.show(this.currentEventModalId);
     }
-  }
-
-  get currentEvent() {
-    return this.$tstore.getters.currentEvent;
   }
 
   get currentPhase() {
@@ -160,11 +148,9 @@ export default class EventCard extends Vue {
   async readyUp() {
     if (this.requiresInteraction) {
       await this.$bvModal.hide(this.currentEventModalId);
-      // this.$emit("clear-current-event-modal-id");
     } else {
       this.api.setPlayerReadiness(true);
       await this.$bvModal.hide(this.currentEventModalId);
-      // this.$emit("clear-current-event-modal-id");
     }
   }
 }
