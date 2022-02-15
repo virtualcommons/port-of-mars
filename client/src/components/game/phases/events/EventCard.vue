@@ -54,6 +54,7 @@
     </b-row>
     <!-- FIXME: set prop -->
     <b-modal
+      v-if="active"
       :id="currentEventModalId"
       centered
       no-stacking
@@ -68,9 +69,7 @@
 
       <b-row class="w-100 mx-auto my-4 text-center">
         <b-col v-if="requiresInteraction">
-          <b-button squared @click="$bvModal.hide(currentEventModalId)" variant="outline-light"
-            >Interact</b-button
-          >
+          <b-button squared @click="readyUp" variant="outline-light">Interact</b-button>
         </b-col>
         <b-col v-else>
           <b-button squared @click="readyUp" variant="outline-light">Continue</b-button>
@@ -85,6 +84,7 @@ import { Component, Inject, Prop, Vue, Watch } from "vue-property-decorator";
 import { EventClientView, MarsEventData, Phase } from "@port-of-mars/shared/types";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 import EventModal from "@port-of-mars/client/components/game/modals/EventModal.vue";
+import { isUndefined } from "lodash";
 
 @Component({
   components: { EventModal }
@@ -110,9 +110,6 @@ export default class EventCard extends Vue {
   @Prop({ default: false })
   active!: boolean;
 
-  @Prop({ default: 0, required: false })
-  timestamp!: number;
-
   @Prop({ default: false })
   enableModal!: boolean;
 
@@ -121,6 +118,7 @@ export default class EventCard extends Vue {
 
   //determining which type of events require which interactions
   eventNoChangeViews: Array<EventClientView> = ["NO_CHANGE", "AUDIT", "DISABLE_CHAT"];
+  modalIds: string[] = [];
 
   //if the modal was spawned by the server, show the option buttons
   // get wasSpawnedByServer() {
@@ -129,18 +127,22 @@ export default class EventCard extends Vue {
   //   } else return false;
   // }
 
-  @Watch("currentEvent")
-  onNewCurrentEvent() {
-    console.log("received new modal id: ", this.currentEventModalId);
-    this.$emit("updatedModalId", this.currentEventModalId);
+  mounted() {
+    console.log("------- event card / mounted hook");
+    if (!isUndefined(this.currentEventModalId) && this.active) {
+      console.log(`// show : ${this.currentEventModalId}`);
+      this.$bvModal.show(this.currentEventModalId);
+    }
+  }
+
+  updated() {
+    if (this.active) {
+      this.$bvModal.show(this.currentEventModalId);
+    }
   }
 
   get currentEvent() {
     return this.$tstore.getters.currentEvent;
-  }
-
-  get eventModalId() {
-    return `event-modal-${this.event.id}-${this.timestamp}`;
   }
 
   get currentPhase() {
@@ -155,9 +157,15 @@ export default class EventCard extends Vue {
     return !this.eventNoChangeViews.includes(this.event.clientViewHandler);
   }
 
-  readyUp() {
-    this.api.setPlayerReadiness(true);
-    this.$bvModal.hide(this.currentEventModalId);
+  async readyUp() {
+    if (this.requiresInteraction) {
+      await this.$bvModal.hide(this.currentEventModalId);
+      // this.$emit("clear-current-event-modal-id");
+    } else {
+      this.api.setPlayerReadiness(true);
+      await this.$bvModal.hide(this.currentEventModalId);
+      // this.$emit("clear-current-event-modal-id");
+    }
   }
 }
 </script>
