@@ -89,11 +89,12 @@ import {
   LOBBY_PAGE
 } from "@port-of-mars/shared/routes";
 import { isDevOrStaging } from "@port-of-mars/shared/settings";
+import _ from "lodash";
 
 @Component({})
 export default class Header extends Vue {
   @Prop({ default: "Mission Control Dashboard" })
-  title: string;
+  title!: string;
 
   isDevMode: boolean = false;
 
@@ -131,7 +132,11 @@ export default class Header extends Vue {
   }
 
   get isInGame() {
-    return [this.game.name, this.lobby.name].includes(this.$route.name);
+    if (_.isNil(this.$route.name)) {
+      return false;
+    } else {
+      return this.game.name == this.$router.name || this.lobby.name == this.$router.name;
+    }
   }
 
   logout() {

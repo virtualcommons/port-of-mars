@@ -19,7 +19,8 @@ import { Component, Vue } from "vue-property-decorator";
 import BootstrapVue from "bootstrap-vue";
 import Header from "@port-of-mars/client/components/global/Header.vue";
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
-import { GAME_PAGE, MANUAL_PAGE, DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
+import { GAME_PAGE, MANUAL_PAGE, DASHBOARD_PAGE, LOBBY_PAGE } from "@port-of-mars/shared/routes";
+import _ from "lodash";
 Vue.use(BootstrapVue);
 
 @Component({
@@ -32,17 +33,30 @@ export default class App extends Vue {
   dashboard = { name: DASHBOARD_PAGE };
   game = { name: GAME_PAGE };
   manual = { name: MANUAL_PAGE };
+  lobby = { name: LOBBY_PAGE };
 
   get isGamePage() {
-    return [this.game.name].includes(this.$route.name);
+    if (_.isNil(this.$route.name)) {
+      return false;
+    } else {
+      return this.lobby.name == this.$route.name || this.game.name == this.$route.name;
+    }
   }
 
   get isManual() {
-    return [this.manual.name].includes(this.$route.name);
+    if (_.isNil(this.$route.name)) {
+      return false;
+    } else {
+      return this.manual.name == this.$route.name;
+    }
   }
 
   get isDashboard() {
-    return [this.dashboard.name].includes(this.$route.name);
+    if (_.isNil(this.$route.name)) {
+      return false;
+    } else {
+      return this.dashboard.name == this.$route.name;
+    }
   }
 }
 </script>
