@@ -43,6 +43,7 @@
               v-for="accomplishment in purchasableAccomplishments"
               :key="accomplishment.label + Math.random()"
               :accomplishment="accomplishment"
+              :enableModal="true"
             ></AccomplishmentCard>
           </div>
         </b-col>

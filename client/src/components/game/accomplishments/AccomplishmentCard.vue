@@ -1,11 +1,7 @@
 <template>
   <b-container
     fluid
-    :style="
-      canPurchase
-        ? 'border: 0.125rem solid var(--light-accent)'
-        : 'border: 0.125rem solid var(--light-shade)'
-    "
+    :style="cardBorderStyle"
     style="background-color: var(--dark-shade)"
     class="p-0 mx-0 mb-2"
     v-show="isActive"
@@ -13,31 +9,23 @@
     <!-- title -->
     <b-row align-v="center" class="w-100 mx-0 mt-2 p-0 text-center">
       <template v-if="enableModal">
-        <b-col :style="showCard ? 'color: black' : 'color: white'">
+        <b-col>
           <b-button
-            :style="
-              canPurchase
-                ? 'backgroundColor: var(--light-accent)'
-                : 'backgroundColor: var(--light-shade)'
-            "
-            class="p-2 text-center"
+            :style="cardHeaderStyle"
+            class="text-center"
             block
             squared
             v-b-modal="accomplishmentModalId"
           >
-            {{ accomplishment.label }}
+            <h5 class="my-auto">
+              {{ accomplishment.label }}
+            </h5>
           </b-button>
         </b-col>
       </template>
       <template v-else>
-        <b-col :style="showCard ? 'color: black' : 'color: white'">
-          <h5 :style="
-              canPurchase
-                ? 'backgroundColor: var(--light-accent)'
-                : 'backgroundColor: var(--light-shade)'
-            "
-            class="p-2 text-center"
-          >
+        <b-col>
+          <h5 :style="cardHeaderStyle" class="p-2 text-center">
             {{ accomplishment.label }}
           </h5>
         </b-col>
@@ -78,7 +66,7 @@
         style="transition: all 0.15s ease-in-out"
       >
         <b-button
-          variant="outline-success"
+          variant="success"
           squared
           size="lg"
           :disabled="!canPurchase || playerReady"
@@ -106,7 +94,7 @@
         </b-button>
 
         <b-button
-          variant="outline-danger"
+          variant="danger"
           squared
           size="lg"
           v-else
@@ -119,8 +107,10 @@
 
       <!-- display status of card after it has been purchased or discarded -->
       <b-col class="w-100 m-0 p-3 text-center" style="transition: all 0.15s ease-in-out" v-else>
-        <p v-if="type === isDiscardType">Accomplishment Discarded</p>
-        <p v-else-if="type === isPurchaseType">Accomplishment Purchased</p>
+        <h4 id="card-status-discarded" v-if="type === isDiscardType">Accomplishment Discarded</h4>
+        <h4 id="card-status-purchased" v-else-if="type === isPurchaseType">
+          Accomplishment Purchased
+        </h4>
       </b-col>
     </b-row>
     <template v-if="enableModal">
@@ -230,6 +220,10 @@ export default class AccomplishmentCard extends Vue {
     return AccomplishmentCardType.discard;
   }
 
+  get isDefaultType(): AccomplishmentCardType {
+    return AccomplishmentCardType.default;
+  }
+
   // local player's readiness
   get playerReady() {
     return this.$tstore.getters.ready;
@@ -303,6 +297,60 @@ export default class AccomplishmentCard extends Vue {
     return canPurchaseAccomplishment(accomplishment, inventory);
   }
 
+  get cardHeaderStyle(): string {
+    switch (this.type) {
+      case this.isPurchaseType:
+        if (this.showCard) {
+          return this.canPurchase
+            ? "backgroundColor: var(--light-accent); border: var(--light-accent)"
+            : "backgroundColor: var(--light-shade); border: var(--light-shade)";
+        } else {
+          return "backgroundColor: var(--green); border: var(--green)";
+        }
+      case this.isDiscardType:
+        if (this.showCard) {
+          return this.canPurchase
+            ? "backgroundColor: var(--light-accent); border: var(--light-accent)"
+            : "backgroundColor: var(--light-shade); border: var(--light-shade)";
+        } else {
+          return "backgroundColor: var(--red); border: var(--red)";
+        }
+      case this.isDefaultType:
+        return this.canPurchase
+          ? "backgroundColor: var(--light-accent); border: var(--light-accent)"
+          : "backgroundColor: var(--light-shade); border: var(--light-shade)";
+      default:
+        return "backgroundColor: var(--light-shade); border: var(--light-shade)";
+    }
+  }
+
+  get cardBorderStyle(): string {
+    switch (this.type) {
+      case this.isPurchaseType:
+        if (this.showCard) {
+          return this.canPurchase
+            ? "border:  0.125rem solid var(--light-accent)"
+            : "border:  0.125rem solid var(--light-shade)";
+        } else {
+          return "border:  0.125rem solid var(--green)";
+        }
+      case this.isDiscardType:
+        if (this.showCard) {
+          return this.canPurchase
+            ? "border:  0.125rem solid var(--light-accent)"
+            : "border:  0.125rem solid var(--light-shade)";
+        } else {
+          return "border:  0.125rem solid var(--red)";
+        }
+      case this.isDefaultType:
+        return this.canPurchase
+          ? "border:  0.125rem solid var(--light-accent)"
+          : "border:  0.125rem solid var(--light-shade)";
+      default:
+        return "border:  0.125rem solid var(--light-shade)";
+    }
+  }
+
   /**
    * Determine if influence is available in local player's inventory
    *
@@ -345,20 +393,4 @@ export default class AccomplishmentCard extends Vue {
 p {
   font-size: var(--font-med);
 }
-
-// .purchasable {
-//   background-color: $light-accent;
-// }
-
-// .unpurchasable {
-//   background-color: $light-shade;
-// }
-
-// .purchased {
-//   color: var(--status-green);
-// }
-
-// .discarded {
-//   color: var(--status-red);
-// }
 </style>
