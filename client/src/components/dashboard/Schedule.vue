@@ -1,14 +1,18 @@
 <template>
   <div class="mx-4">
     <h3 :id="scheduleId">Schedule</h3>
-    <b-list-group horizontal="lg" class="p-1">
+    <b-list-group horizontal="lg" class="p-1 d-flex justify-content-center">
       <b-list-group-item
         class="p-1 text-center"
         v-for="game in upcomingGames"
         :key="game.launchTime"
         variant="dark"
       >
-        <span class="launch-time">{{ game.launchTime }}</span>
+        <div class='launch-date'>
+        {{ game.launchDate }}
+        <br/>
+        <span class='launch-time'>{{ game.launchTime }}</span>
+        </div>
         <b-button-group>
           <a
             class="btn btn-primary"
@@ -54,7 +58,8 @@ export default class Schedule extends Vue {
     return this.schedule.map((gameTime) => {
       const scheduledDate = new Date(gameTime);
       return {
-        launchTime: scheduledDate.toLocaleString('en-US', { timeZoneName: 'short'}),
+        launchDate: scheduledDate.toLocaleDateString('en-US'),
+        launchTime: scheduledDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: false, timeZoneName: 'short'}),
         addToCalendar: {
           title: `Port of Mars Round ${this.roundNumber}`,
           location: this.SITE_URL,
@@ -92,8 +97,13 @@ export default class Schedule extends Vue {
 }
 </script>
 <style scoped>
-.launch-time {
-  font-size: 1.1rem;
+.launch-date {
+  font-size: 1.2rem;
   font-weight: bolder;
+  line-height: 0.9;
+}
+
+.launch-time {
+  font-size: 1rem;
 }
 </style>
