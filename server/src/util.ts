@@ -17,6 +17,7 @@ export function getConnection(): to.Connection {
 
 export function toUrl(page: Page): string {
   const pagePath = getPagePath(page);
+  // getPagePath returns a string with initial slash
   return `${settings.host}${pagePath}`
 }
 

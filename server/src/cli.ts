@@ -22,11 +22,14 @@ import {
 import { DYNAMIC_SETTINGS_PATH, RedisSettings } from "@port-of-mars/server/services/settings";
 
 import { program } from 'commander'
-import fs from 'fs';
+import { mkdir, readFile, writeFile } from 'fs/promises';
 import { createConnection, EntityManager } from "typeorm";
+/*
 import { promisify } from "util";
 
 const mkdir = promisify(fs.mkdir);
+const readFile = promisify(fs.readFile);
+*/
 const logger = getLogger(__filename);
 
 function getRandomInt(min: number, max: number) {
@@ -123,6 +126,9 @@ async function createTournament(em: EntityManager, name: string, minRounds: numb
   return await services.tournament.createTournament({ name, minNumberOfGameRounds: minRounds, maxNumberOfGameRounds: maxRounds, active: true });
 }
 
+/**
+ * FIXME: these two are mostly defunct now.
+ */
 async function checkQuizCompletion(em: EntityManager, ids: Array<number>): Promise<void> {
   const services = getServices(em);
   if (ids.length === 0) {
@@ -141,6 +147,14 @@ async function completeQuizCompletion(em: EntityManager, ids: Array<number>): Pr
   for (const id of ids) {
     await services.quiz.setUserQuizCompletion(id, true)
   }
+}
+
+async function deactivateUsers(em: EntityManager, filename: string) {
+  const services = getServices(em);
+  const data = await readFile(filename);
+  const emails = data.toString().split("\n");
+  const numDeactivated = await services.account.deactivateUsers(emails);
+  logger.debug(`deactivated ${numDeactivated} users`);
 }
 
 async function createRound(
@@ -194,25 +208,26 @@ async function exportActiveEmails(em: EntityManager, participated: boolean): Pro
   const sp = getServices(em);
   const users = await sp.account.getActiveUsers(participated);
   const emails = users.map(u => `${u.name}, ${u.email}`);
-  fs.writeFile('active-emails.csv', emails.join('\n'), (err) => {
-    if (err) {
-      logger.fatal("unable to export active emails: %s", err);
-      throw err;
-    }
+  try {
+    await writeFile('active-emails.csv', emails.join('\n'));
     logger.debug("Exported all active users with emails to active-emails.csv");
-  });
+  }
+  catch (err) {
+    logger.fatal("unable to export active emails: %s", err);
+  }
 }
 
-async function exportEmails(em: EntityManager, tournamentRoundId: number): Promise<void> {
+async function exportTournamentRoundEmails(em: EntityManager, tournamentRoundId: number): Promise<void> {
   const sp = getServices(em);
   const emails = await sp.tournament.getEmails(tournamentRoundId);
-  fs.writeFile('emails.txt', emails.join('\n'), (err) => {
-    if (err) {
-      logger.fatal("Unable to export emails: %s", err);
-      throw err;
-    }
-    logger.debug("exported emails to emails.txt");
-  });
+  const outputFile = 'emails.txt';
+  try {
+    await writeFile(outputFile, emails.join('\n'));
+    logger.debug(`exported round invitation emails to ${outputFile}`);
+  }
+  catch (err) {
+    logger.fatal("Unable to export emails", err);
+  }
 }
 
 async function createTournamentRoundDate(em: EntityManager, date: Date, tournamentRoundId?: number): Promise<void> {
@@ -263,7 +278,7 @@ program
               .requiredOption('--tournamentRoundId <tournamentRoundId>', 'ID of the tournament round', customParseInt)
               .description('report emails for all users in the given tournament round')
               .action(async (cmd) => {
-                await withConnection(em => exportEmails(em, cmd.tournamentRoundId));
+                await withConnection(em => exportTournamentRoundEmails(em, cmd.tournamentRoundId));
               })
           )
           .addCommand(
@@ -349,6 +364,15 @@ program
       .description('generate a CSV for mailchimp import of all active users with a valid email address')
       .action(async (cmd) => {
         await withConnection(em => exportActiveEmails(em, cmd.participated));
+      })
+  )
+  .addCommand(
+    program
+      .createCommand('deactivate')
+      .option('-f, --filename <emails>', 'A file with a list of emails to deactivate, one email per line.', "inactive.csv")
+      .description('Deactivate users who have unsubscribed from emails (currently from mailchimp).')
+      .action(async (cmd) => {
+        await withConnection(em => deactivateUsers(em, cmd.filename));
       })
   )
   .addCommand(

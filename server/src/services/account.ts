@@ -1,5 +1,5 @@
 import { User } from "@port-of-mars/server/entity";
-import { IsNull, Not, Repository, UpdateResult } from "typeorm"
+import { IsNull, Not, In, Repository, UpdateResult } from "typeorm"
 import { settings } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { v4 as uuidv4 } from "uuid";
@@ -37,6 +37,20 @@ export class AccountService extends BaseService {
   async getActiveEmails(participated: boolean): Promise<Array<string>> {
     const users: Array<User> = await this.getActiveUsers(participated)
     return users.map(u => u.email ?? '');
+  }
+
+  async deactivateUsers(emails: Array<string>): Promise<number> {
+    const repository = this.getRepository();
+    const users = await repository.find({
+      where: {
+        email: In(emails),
+      }
+    });
+    for (const u of users) {
+      u.isActive = false;
+    }
+    await repository.save(users);
+    return users.length;
   }
 
   async findUserById(id: number): Promise<User> {
