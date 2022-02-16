@@ -51,11 +51,10 @@ export default class Schedule extends Vue {
   readonly SITE_URL = "https://portofmars.asu.edu";
 
   get upcomingGames() {
-    // FIXME: extract duplicate logic here + dashboard into schedule component
     return this.schedule.map((gameTime) => {
       const scheduledDate = new Date(gameTime);
       return {
-        launchTime: scheduledDate.toLocaleString(),
+        launchTime: scheduledDate.toLocaleString('en-US', { timeZoneName: 'short'}),
         addToCalendar: {
           title: `Port of Mars Round ${this.roundNumber}`,
           location: this.SITE_URL,
@@ -94,7 +93,7 @@ export default class Schedule extends Vue {
 </script>
 <style scoped>
 .launch-time {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: bolder;
 }
 </style>
