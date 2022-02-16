@@ -135,7 +135,7 @@ export default class Header extends Vue {
     if (_.isNil(this.$route.name)) {
       return false;
     } else {
-      return this.game.name == this.$router.name || this.lobby.name == this.$router.name;
+      return this.game.name == this.$route.name || this.lobby.name == this.$route.name;
     }
   }
 
