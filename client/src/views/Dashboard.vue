@@ -53,7 +53,7 @@
             </b-button>
           </template>
           <template v-else>
-            <b-button href="#schedule" size="lg" variant="secondary">
+            <b-button href="#schedule-header" size="lg" variant="secondary">
               <h4>Check Schedule for Next Launch</h4>
             </b-button>
           </template>
@@ -95,6 +95,11 @@
     </b-row>
     <!-- end first row onboarding status -->
     <b-row>
+      <b-col>
+        <Schedule :showInstructions="true" :schedule="schedule" :roundNumber="currentRoundNumber"></Schedule>
+      </b-col>
+    </b-row>
+    <b-row>
       <b-col class="mx-4" align-v="start">
         <h3>Tutorial</h3>
         <p class="lead">
@@ -110,18 +115,6 @@
           >
           </b-embed>
         </div>
-      </b-col>
-      <div class="w-100 mb-2"></div>
-      <hr>
-      <b-col>
-        <Schedule :schedule="schedule" :roundNumber="currentRoundNumber"></Schedule>
-        <p class="lead text-center">
-          <ul class="p-1 mx-4">
-            <li>You can only participate in <mark>one game per round</mark></li>
-            <li>Sign in and join the game lobby when a game is scheduled</li>
-            <li>The game lobby opens 10 minutes before launch time and stays open for 30 minutes after launch time</li>
-          </ul>
-        </p>
       </b-col>
     </b-row>
     <Footer></Footer>
@@ -262,12 +255,7 @@ export default class Dashboard extends Vue {
     this.loading = false;
   }
 
-  activateTab(index: number) {
-    this.tabIndex = index;
-  }
-
   activateTutorial() {
-    this.activateTab(0);
     const iframe = document.getElementById(
       "tutorialVideo"
     ) as HTMLIFrameElement;

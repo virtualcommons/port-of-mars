@@ -1,6 +1,12 @@
 <template>
   <div class="mx-4">
-    <h3 :id="scheduleId">Schedule</h3>
+    <h3 :id="scheduleId">Upcoming Games</h3>
+    <ul v-if="showInstructions" class="lead p-1">
+      <li>You can only participate in <mark>one game per tournament round</mark></li>
+      <li>Sign in and <em>join the game lobby</em> when a game is scheduled</li>
+      <li>Games will automatically start in the lobby when at least 5 players are connected</li>
+      <li>The game lobby opens 10 minutes before launch time and stays open for 30 minutes after launch time</li>
+    </ul>
     <b-list-group horizontal="lg" class="p-1 d-flex justify-content-center">
       <b-list-group-item
         class="p-1 text-center"
@@ -43,7 +49,7 @@ import { google, ics } from "calendar-link";
 
 @Component({})
 export default class Schedule extends Vue {
-  @Prop({default: "schedule"})
+  @Prop({default: "schedule-header"})
   scheduleId!: string;
 
   @Prop()
@@ -51,6 +57,9 @@ export default class Schedule extends Vue {
 
   @Prop()
   roundNumber!: number;
+
+  @Prop({ default: false })
+  showInstructions!: boolean;
 
   readonly SITE_URL = "https://portofmars.asu.edu";
 
@@ -72,7 +81,9 @@ export default class Schedule extends Vue {
   }
 
   get calendarDescription() {
-    return `Register and complete all Port of Mars Mission Control onboarding tasks at ${this.SITE_URL}. You must complete onboarding before you can participate in Round ${this.roundNumber} of the Mars Madness tournament.`;
+    return `Register and complete all Port of Mars Mission Control onboarding tasks at ${this.SITE_URL}.` +
+    ` You must complete onboarding before you can participate in Round ${this.roundNumber} of the Mars Madness tournament.\n\n` + 
+    `Sign in and join the game lobby up to 10 minutes before launch time. Games will automatically start when at least 5 players are connected to the game lobby.`;
   }
 
   googleInviteLink(invite: {
