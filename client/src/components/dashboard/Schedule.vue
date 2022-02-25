@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-4">
+  <div class="mx-4 text-center">
     <h3 :id="scheduleId">Upcoming Games</h3>
     <ul v-if="showInstructions" class="lead p-1">
       <li>You can only participate in <mark>one game per tournament round</mark></li>

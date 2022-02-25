@@ -99,8 +99,8 @@
         <Schedule :showInstructions="true" :schedule="schedule" :roundNumber="currentRoundNumber"></Schedule>
       </b-col>
     </b-row>
-    <b-row>
-      <b-col class="mx-4" align-v="start">
+    <b-row class="mt-3">
+      <b-col class="mx-4 text-center" align-v="start">
         <h3>Tutorial</h3>
         <p class="lead">
           Learn to play Port of Mars with this brief tutorial video.
