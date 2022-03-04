@@ -204,9 +204,10 @@ async function createTournamentRoundInvites(em: EntityManager, tournamentRoundId
   return invites.length;
 }
 
-async function exportActiveEmails(em: EntityManager, participated: boolean): Promise<void> {
+async function exportActiveEmails(em: EntityManager, after: Date): Promise<void> {
   const sp = getServices(em);
-  const users = await sp.account.getActiveUsers(participated);
+  logger.debug("exporting emails after %s", after);
+  const users = await sp.account.getActiveUsers(after);
   const emails = users.map(u => `${u.name}, ${u.email}`);
   try {
     await writeFile('active-emails.csv', emails.join('\n'));
@@ -254,6 +255,10 @@ function customParseInt(value: string, ignored: number): number {
   return parseInt(value);
 }
 
+/**
+ * Set up commander program CLI options.
+ */
+const DEFAULT_AFTER_DATE = new Date('2021-01-23');
 program
   .addCommand(
     program.createCommand('tournament')
@@ -265,7 +270,7 @@ program
           .addCommand(
             program
               .createCommand('date')
-              .requiredOption('--date <date>', 'UTC Datetime for an upcoming scheduled game', s => new Date(Date.parse(s)))
+              .requiredOption('-d, --date <date>', 'UTC Datetime for an upcoming scheduled game', s => new Date(Date.parse(s)))
               .option('--tournamentRoundId <tournamentRoundId>', 'ID of the tournament round', parseInt)
               .description('add a TournamentRoundDate for the given date')
               .action(async (cmd) => {
@@ -275,7 +280,7 @@ program
           .addCommand(
             program
               .createCommand('emails')
-              .requiredOption('--tournamentRoundId <tournamentRoundId>', 'ID of the tournament round', customParseInt)
+              .option('--tournamentRoundId <tournamentRoundId>', 'ID of the tournament round', customParseInt)
               .description('report emails for all users in the given tournament round')
               .action(async (cmd) => {
                 await withConnection(em => exportTournamentRoundEmails(em, cmd.tournamentRoundId));
@@ -284,9 +289,9 @@ program
           .addCommand(
             program
               .createCommand('invite')
-              .requiredOption('--tournamentRoundId <tournamentRoundId>', 'ID of the tournament round', customParseInt)
               .requiredOption('--userIds <userIds...>',
                 'space separated list of user ids to invite', toIntArray, [] as Array<number>)
+              .option('--tournamentRoundId <tournamentRoundId>', 'ID of the tournament round', customParseInt)
               .option('-p, --participated', 'Set to mark these users as having already participated')
               .description('create invitations for the given users in the given tournament round')
               .action(async (cmd) => {
@@ -336,7 +341,7 @@ program
     program.createCommand('dump')
       .description('dump db to csvs')
       .option('--ids <ids...>', 'game ids to extract, separate multiples with spaces e.g., 1 2 3', toIntArray, [] as Array<number>)
-      .option('--dateCreatedMin <dateCreatedMin>', 'return games after this ISO formatted date', s => new Date(Date.parse(s)))
+      .option('-d, --dateCreatedMin <dateCreatedMin>', 'return games after this ISO formatted date', s => new Date(Date.parse(s)))
       .action(async (cmd) => {
         await withConnection((em) => exportData(em, cmd.ids, cmd.dateCreatedMin))
       })
@@ -360,10 +365,10 @@ program
   .addCommand(
     program
       .createCommand('emails')
-      .option('-p, --participated', 'Set to filter only participants who have participated in a game.')
+      .option('-a, --after <after_date>', 'Only select participants created after the date yyyy-mm-dd', s => new Date(Date.parse(s)), DEFAULT_AFTER_DATE)
       .description('generate a CSV for mailchimp import of all active users with a valid email address')
       .action(async (cmd) => {
-        await withConnection(em => exportActiveEmails(em, cmd.participated));
+        await withConnection(em => exportActiveEmails(em, cmd.after));
       })
   )
   .addCommand(

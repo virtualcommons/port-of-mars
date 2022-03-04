@@ -41,9 +41,7 @@ export class TournamentService extends BaseService {
   }
 
   async getCurrentTournamentRound(tournamentId?: number): Promise<TournamentRound> {
-    const tournament = await this.getTournament(tournamentId);
-    tournamentId = tournament.id;
-
+    tournamentId = (await this.getTournament(tournamentId)).id;
     return await this.em
       .getRepository(TournamentRound)
       .findOneOrFail({
@@ -95,13 +93,17 @@ export class TournamentService extends BaseService {
     return users.map(u => u.email ?? 'no email specified - should not be possible, check database');
   }
 
-  async createInvites(userIds: Array<number>, tournamentRoundId: number, hasParticipated = false): Promise<Array<TournamentRoundInvite>> {
+  async createInvites(userIds: Array<number>, tournamentRoundId?: number, hasParticipated = false): Promise<Array<TournamentRoundInvite>> {
+    if (!tournamentRoundId) {
+      tournamentRoundId = (await this.getCurrentTournamentRound()).id;
+    }
     let invites: Array<TournamentRoundInvite> = []
+    const inviteRepository = this.em.getRepository(TournamentRoundInvite);
     if (hasParticipated) {
-      invites = userIds.map(userId => this.em.getRepository(TournamentRoundInvite).create({ userId, tournamentRoundId, hasParticipated, hasCompletedExitSurvey: true, hasCompletedIntroSurvey: true }));
+      invites = userIds.map(userId => inviteRepository.create({ userId, tournamentRoundId, hasParticipated, hasCompletedExitSurvey: true, hasCompletedIntroSurvey: true }));
     }
     else {
-      invites = userIds.map(userId => this.em.getRepository(TournamentRoundInvite).create({ userId, tournamentRoundId }));
+      invites = userIds.map(userId => inviteRepository.create({ userId, tournamentRoundId }));
     }
     return await this.em.getRepository(TournamentRoundInvite).save(invites);
   }

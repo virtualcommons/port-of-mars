@@ -1,5 +1,5 @@
 import { User } from "@port-of-mars/server/entity";
-import { IsNull, Not, In, Repository, UpdateResult } from "typeorm"
+import { MoreThan, IsNull, Not, In, Repository, UpdateResult } from "typeorm"
 import { settings } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { v4 as uuidv4 } from "uuid";
@@ -27,15 +27,19 @@ export class AccountService extends BaseService {
     return true;
   }
 
-  async getActiveUsers(participated: boolean): Promise<Array<User>> {
+  async getActiveUsers(after: Date): Promise<Array<User>> {
     return await this.getRepository().find({
       select: ['name', 'email', 'username', 'dateCreated'],
-      where: { isActive: true, email: Not(IsNull()) },
+      where: { 
+        isActive: true,
+        email: Not(IsNull()),
+        dateCreated: MoreThan(after),
+       },
     })
   }
 
-  async getActiveEmails(participated: boolean): Promise<Array<string>> {
-    const users: Array<User> = await this.getActiveUsers(participated)
+  async getActiveEmails(after: Date): Promise<Array<string>> {
+    const users: Array<User> = await this.getActiveUsers(after)
     return users.map(u => u.email ?? '');
   }
 
