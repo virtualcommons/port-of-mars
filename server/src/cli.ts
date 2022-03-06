@@ -204,11 +204,18 @@ async function createTournamentRoundInvites(em: EntityManager, tournamentRoundId
   return invites.length;
 }
 
-async function exportActiveEmails(em: EntityManager, after: Date): Promise<void> {
+function formatEmail(user: User, enableAmdfFormat: boolean): string {
+  if (enableAmdfFormat) {
+    return user.name ? `${user.email} *${user.name}` : user.email!;
+  }
+  return `${user.name}, ${user.email}`;
+}
+
+async function exportActiveEmails(em: EntityManager, after: Date, enableAmdfFormat: boolean): Promise<void> {
   const sp = getServices(em);
   logger.debug("exporting emails after %s", after);
   const users = await sp.account.getActiveUsers(after);
-  const emails = users.map(u => `${u.name}, ${u.email}`);
+  const emails = users.map(u => formatEmail(u, enableAmdfFormat));
   try {
     await writeFile('active-emails.csv', emails.join('\n'));
     logger.debug("Exported all active users with emails to active-emails.csv");
@@ -366,9 +373,10 @@ program
     program
       .createCommand('emails')
       .option('-a, --after <after_date>', 'Only select participants created after the date yyyy-mm-dd', s => new Date(Date.parse(s)), DEFAULT_AFTER_DATE)
+      .option('-m, --enable-amdf', 'Emit CSV in ASU AMDF email format')
       .description('generate a CSV for mailchimp import of all active users with a valid email address')
       .action(async (cmd) => {
-        await withConnection(em => exportActiveEmails(em, cmd.after));
+        await withConnection(em => exportActiveEmails(em, cmd.after, cmd.enableAmdf));
       })
   )
   .addCommand(
