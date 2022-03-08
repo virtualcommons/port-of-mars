@@ -54,7 +54,7 @@ import _ from "lodash";
     AccomplishmentCard
   }
 })
-export default class AccomplishmentsSelectPurchased extends Vue {
+export default class SelectPurchasedAccomplishment extends Vue {
   @Inject() readonly api!: GameRequestAPI;
 
   purchasedAccomplishmentsLength: number = Object.keys(this.purchasedAccomplishments).length;

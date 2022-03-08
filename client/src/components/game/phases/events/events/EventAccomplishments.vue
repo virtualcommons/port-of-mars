@@ -4,11 +4,11 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
-import AccomplishmentsSelectPurchased from "./views/AccomplishmentsSelectPurchased.vue";
+import SelectPurchasedAccomplishment from "@port-of-mars/client/components/game/phases/views/SelectPurchasedAccomplishment.vue";
 
 @Component({
   components: {
-    AccomplishmentsSelectPurchased
+    SelectPurchasedAccomplishment
   }
 })
 export default class EventAccomplishments extends Vue {
@@ -16,8 +16,8 @@ export default class EventAccomplishments extends Vue {
 
   get eventAccomplishmentsView(): string {
     switch (this.eventView) {
-      case "ACCOMPLISHMENT_SELECT_PURCHASED":
-        return "AccomplishmentsSelectPurchased";
+      case "SELECT_PURCHASED_ACCOMPLISHMENT":
+        return "SelectPurchasedAccomplishment";
       default:
         return "";
     }

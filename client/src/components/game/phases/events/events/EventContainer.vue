@@ -1,6 +1,6 @@
 <template>
-  <b-container class="h-100" fluid style="color: var(--light-shade)">
-    <b-row align-v="center" class="h-100 w-100">
+  <b-container fluid class="h-100" style="color: var(--light-shade)">
+    <b-row align-v="center" align-h="center" class="h-100 w-100">
       <component :is="eventView" :eventView="layout"></component>
     </b-row>
   </b-container>
@@ -27,8 +27,8 @@ export default class EventContainer extends Vue {
 
   eventVoteViews: Array<EventClientView> = [
     "VOTE_YES_NO",
-    "VOTE_FOR_PLAYER_SINGLE",
-    "VOTE_FOR_PLAYER_HERO_PARIAH"
+    "VOTE_PLAYER",
+    "VOTE_HERO_PARIAH"
   ];
   eventInfluencesViews: Array<EventClientView> = ["INFLUENCES_SELECT", "INFLUENCES_DRAW"];
   eventAccomplishmentsViews: Array<EventClientView> = ["ACCOMPLISHMENT_SELECT_PURCHASED"];
@@ -53,7 +53,3 @@ export default class EventContainer extends Vue {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-@import "~animate.css/source/attention_seekers/pulse.css";
-</style>

@@ -4,13 +4,13 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
-import InfluencesSelect from "./views/InfluencesSelect.vue";
-import InfluencesDraw from "./views/InfluencesDraw.vue";
+import SelectResource from "@port-of-mars/client/components/game/phases/events/views/InfluencesSelect.vue";
+import DrawResource from "@port-of-mars/client/components/game/phases/events/views/DrawResource.vue";
 
 @Component({
   components: {
-    InfluencesSelect,
-    InfluencesDraw
+    SelectResource,
+    DrawResource,
   }
 })
 export default class EventInfluences extends Vue {
@@ -18,10 +18,10 @@ export default class EventInfluences extends Vue {
 
   get eventInvestmentsView(): string {
     switch (this.eventView) {
-      case "INFLUENCES_SELECT":
-        return "InfluencesSelect";
-      case "INFLUENCES_DRAW":
-        return "InfluencesDraw";
+      case "SELECT_RESOURCE":
+        return "SelectResource";
+      case "DRAW_RESOURCE":
+        return "DrawResource";
       default:
         return "";
     }

@@ -1,28 +1,25 @@
 <template>
-  <div class="event-no-change">
-    <div class="wrapper">
-      <p class="note">Note</p>
-      <p class="event-text">{{ eventNoChangeText }}</p>
-    </div>
-    <button
-      @click="setReadiness"
-      class="animated pulse slower infinite"
-      type="button"
-      name="button"
-    >
-      Continue
-    </button>
-  </div>
+  <b-row class="text-center" align-v="center" align-h="center">
+    <b-col sm="12">
+      <p class="event-instructions">Event</p>
+      <p class="event-body text">{{ eventNoChangeText }}</p>
+    </b-col>
+    <b-col sm="12">
+      <b-button @click="setReadiness" variant="outline-light" squared id="button">
+        Continue
+      </b-button>
+    </b-col>
+  </b-row>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Inject, InjectReactive } from "vue-property-decorator";
+import { Vue, Component, Prop, Inject } from "vue-property-decorator";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 
 @Component({})
 export default class EventNoChange extends Vue {
   @Inject() readonly api!: GameRequestAPI;
-  @Prop({ default: "" }) private eventView!: string;
+  @Prop({ default: "" }) eventView!: string;
 
   get eventNoChangeText(): string {
     switch (this.eventView) {
@@ -43,7 +40,3 @@ export default class EventNoChange extends Vue {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-@import "@port-of-mars/client/stylesheets/game/phases/events/events/EventNoChange.scss";
-</style>
