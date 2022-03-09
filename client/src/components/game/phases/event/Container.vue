@@ -9,10 +9,10 @@
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
 import { MarsEventData, EventClientView } from "@port-of-mars/shared/types";
-import EventVote from "./EventVote.vue";
-import EventInfluences from "./EventInfluences.vue";
-import EventAccomplishments from "./EventAccomplishments.vue";
-import EventNoChange from "./EventNoChange.vue";
+import EventVote from "@port-of-mars/client/components/game/phases/event/type/Vote.vue";
+import EventInfluences from "@port-of-mars/client/components/game/phases/event/type/Resource.vue";
+import EventAccomplishments from "@port-of-mars/client/components/game/phases/event/type/Accomplishment.vue";
+import EventNoChange from "@port-of-mars/client/components/game/phases/event/type/NoChange.vue";
 
 @Component({
   components: {
@@ -22,16 +22,12 @@ import EventNoChange from "./EventNoChange.vue";
     EventNoChange
   }
 })
-export default class EventContainer extends Vue {
+export default class Container extends Vue {
   @Prop() event!: MarsEventData;
 
-  eventVoteViews: Array<EventClientView> = [
-    "VOTE_YES_NO",
-    "VOTE_PLAYER",
-    "VOTE_HERO_PARIAH"
-  ];
-  eventInfluencesViews: Array<EventClientView> = ["INFLUENCES_SELECT", "INFLUENCES_DRAW"];
-  eventAccomplishmentsViews: Array<EventClientView> = ["ACCOMPLISHMENT_SELECT_PURCHASED"];
+  eventVoteViews: Array<EventClientView> = ["VOTE_YES_NO", "VOTE_PLAYER", "VOTE_HERO_PARIAH"];
+  eventInfluencesViews: Array<EventClientView> = ["SELECT_RESOURCE", "DRAW_RESOURCE"];
+  eventAccomplishmentsViews: Array<EventClientView> = ["SELECT_PURCHASED_ACCOMPLISHMENT"];
   eventNoChangeViews: Array<EventClientView> = ["NO_CHANGE", "AUDIT", "DISABLE_CHAT"];
 
   get layout() {
@@ -41,13 +37,13 @@ export default class EventContainer extends Vue {
   get eventView(): string {
     // TODO: NO_CHANGE VIEW (MAYBE)
     if (this.eventVoteViews.includes(this.layout)) {
-      return "EventVote";
+      return "Vote";
     } else if (this.eventInfluencesViews.includes(this.layout)) {
-      return "EventInfluences";
+      return "Resource";
     } else if (this.eventAccomplishmentsViews.includes(this.layout)) {
-      return "EventAccomplishments";
+      return "Accomplishment";
     } else if (this.eventNoChangeViews.includes(this.layout)) {
-      return "EventNoChange";
+      return "NoChange";
     }
     return "";
   }

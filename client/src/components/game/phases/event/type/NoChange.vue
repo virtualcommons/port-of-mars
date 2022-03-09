@@ -17,7 +17,7 @@ import { Vue, Component, Prop, Inject } from "vue-property-decorator";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 
 @Component({})
-export default class EventNoChange extends Vue {
+export default class NoChange extends Vue {
   @Inject() readonly api!: GameRequestAPI;
   @Prop({ default: "" }) eventView!: string;
 

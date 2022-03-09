@@ -4,14 +4,14 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
-import SelectPurchasedAccomplishment from "@port-of-mars/client/components/game/phases/views/SelectPurchasedAccomplishment.vue";
+import SelectPurchasedAccomplishment from "@port-of-mars/client/components/game/phases/event/view/SelectPurchasedAccomplishment.vue";
 
 @Component({
   components: {
     SelectPurchasedAccomplishment
   }
 })
-export default class EventAccomplishments extends Vue {
+export default class Accomplishment extends Vue {
   @Prop({ default: "" }) eventView!: string;
 
   get eventAccomplishmentsView(): string {

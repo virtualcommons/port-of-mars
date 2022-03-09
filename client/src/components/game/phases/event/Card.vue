@@ -89,7 +89,7 @@ import { isUndefined } from "lodash";
 @Component({
   components: { EventModal }
 })
-export default class EventCard extends Vue {
+export default class Card extends Vue {
   @Inject() readonly api!: GameRequestAPI;
 
   @Prop({

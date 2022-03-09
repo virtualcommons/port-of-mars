@@ -4,16 +4,16 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
-import SelectResource from "@port-of-mars/client/components/game/phases/events/views/InfluencesSelect.vue";
-import DrawResource from "@port-of-mars/client/components/game/phases/events/views/DrawResource.vue";
+import SelectResource from "@port-of-mars/client/components/game/phases/event/view/SelectResource.vue";
+import DrawResource from "@port-of-mars/client/components/game/phases/event/view/DrawResource.vue";
 
 @Component({
   components: {
     SelectResource,
-    DrawResource,
+    DrawResource
   }
 })
-export default class EventInfluences extends Vue {
+export default class Resource extends Vue {
   @Prop({ default: "" }) eventView!: string;
 
   get eventInvestmentsView(): string {

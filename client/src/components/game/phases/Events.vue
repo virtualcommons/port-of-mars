@@ -43,8 +43,8 @@
 
 <script lang="ts">
 import { Component, Inject, Vue, Watch } from "vue-property-decorator";
-import EventCard from "./events/EventCard.vue";
-import EventContainer from "./events/events/EventContainer.vue";
+import EventCard from "@port-of-mars/client/components/game/phases/event/Card.vue";
+import EventContainer from "@port-of-mars/client/components/game/phases/event/Container.vue";
 import AccomplishmentCard from "@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue";
 import { MarsEventData, Phase } from "@port-of-mars/shared/types";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
