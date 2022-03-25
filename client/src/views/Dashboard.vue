@@ -81,11 +81,7 @@
                   </b-button>
                 </template>
                 <template v-else>
-<<<<<<< HEAD
-                  <b-button @click="activateTab(1)" size="lg" variant="secondary">
-=======
                   <b-button size="lg" variant="secondary">
->>>>>>> chrstngyn-refactor-onboarding
                     <h4>Check Schedule for Next Launch</h4>
                   </b-button>
                 </template>
@@ -336,14 +332,9 @@ export default class Dashboard extends Vue {
   }
 
   activateTutorial() {
-<<<<<<< HEAD
-    this.activateTab(0);
-    const iframe = document.getElementById("tutorialVideo") as HTMLIFrameElement;
-=======
     const iframe = document.getElementById(
       "tutorialVideo"
     ) as HTMLIFrameElement;
->>>>>>> chrstngyn-refactor-onboarding
     const player = new Player(iframe);
     // FIXME: currently some typescript bugs with the vimeo player ts defs
     (player as any).requestFullscreen().then(() => player.play());
