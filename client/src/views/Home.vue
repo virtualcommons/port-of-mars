@@ -34,13 +34,23 @@
               starts.
             </p>
             <template v-if="signupEnabled" class="my-5">
+<<<<<<< HEAD
               <b-button squared variant="primary"><h4 class="p-1">Sign Up to Play</h4></b-button>
+=======
+              <b-button squared variant="primary" :to="login"
+                ><h4 class="p-1">Sign Up to Play</h4></b-button
+              >
+>>>>>>> chrstngyn-refactor-onboarding
             </template>
             <template v-else>
               <h3 class="subtitle p-3 mr-4">
                 {{ announcement }}
               </h3>
+<<<<<<< HEAD
               <b-button :to="loginPage" size="lg" variant="primary" class="w-75">
+=======
+              <b-button :to="login" size="lg" variant="primary" class="w-75">
+>>>>>>> chrstngyn-refactor-onboarding
                 <b-icon class="mb-2" icon="box-arrow-right"></b-icon>
                 <template v-if="signupEnabled"> Register for </template>
                 <template v-else> Participate in </template>
@@ -105,7 +115,7 @@ export default class Home extends Vue {
   isDevMode: boolean = false;
   currentYear = new Date().getFullYear();
   trailerVideoUrl = "https://player.vimeo.com/video/644046830";
-  loginPage = { name: LOGIN_PAGE };
+  login = { name: LOGIN_PAGE };
   dashboardPage = { name: DASHBOARD_PAGE };
   readonly SITE_URL = "https://portofmars.asu.edu";
 

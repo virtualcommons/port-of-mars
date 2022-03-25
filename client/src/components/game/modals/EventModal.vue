@@ -15,7 +15,7 @@
 
       <b-col class="w-100 pt-4 px-3 m-0 text-center">
         <p>{{ modalData.effect !== "" ? modalData.effect : "No special effect" }}</p>
-        <p class="text-left my-4 font-italic">
+        <p class="my-4 font-italic">
           {{ modalData.flavorText }}
         </p>
       </b-col>

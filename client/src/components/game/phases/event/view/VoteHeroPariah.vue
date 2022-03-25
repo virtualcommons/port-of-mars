@@ -64,7 +64,7 @@ import { Role, ROLES } from "@port-of-mars/shared/types";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 
 @Component({})
-export default class VoteForPlayerHeroPariah extends Vue {
+export default class VoteHeroPariah extends Vue {
   @Inject() api!: GameRequestAPI;
   voteHeroOrPariah: "hero" | "pariah" | "" = "";
   role: Role | "" = "";

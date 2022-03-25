@@ -31,6 +31,7 @@
           alt="Investment"
           v-b-tooltip.hover.bottom="'Click to clear selection'"
         />
+        <p>{{ drawnInfluence }}</p>
       </div>
     </div>
 
@@ -39,12 +40,12 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Inject, InjectReactive } from "vue-property-decorator";
+import { Vue, Component, Inject } from "vue-property-decorator";
 import { Role, Resource } from "@port-of-mars/shared/types";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 
 @Component({})
-export default class InfluencesDraw extends Vue {
+export default class DrawResource extends Vue {
   drawnInfluence: string = "None Selected";
   @Inject() api!: GameRequestAPI;
 

@@ -4,6 +4,7 @@
       <button
         v-b-tooltip.hover.top="'Phase Information'"
         :class="buttonClass(view.PhaseInformation)"
+        class="hud-button"
         @click="switchCurrentView(view.PhaseInformation)"
       >
         <font-awesome-icon :icon="['fas', 'info']" class="icon" size="lg" />
@@ -13,14 +14,15 @@
       <button
         v-b-tooltip.hover.top="'Active Events'"
         :class="buttonClass(view.ActiveEvents)"
+        class="hud-button"
         @click="switchCurrentView(view.ActiveEvents)"
       >
         <font-awesome-icon :icon="['fas', 'meteor']" class="icon" size="lg" />
       </button>
     </b-col>
-    <b-col cols="auto" class="ml-auto">
-      <b-button class="float-right" v-b-tooltip.hover.top="'Game Manual'" :to="manual" target="_blank">
-        <font-awesome-icon :icon="['fas', 'question-circle']" class="icon" size="lg" />
+    <b-col cols="3">
+      <b-button class="hud-button" v-b-tooltip.hover.top="'Game Manual'" :to="manual" target="_blank">
+        <font-awesome-icon :icon="['fas', 'question-circle']" class="icon mt-2" size="lg" />
       </b-button>
     </b-col>
   </b-row>
@@ -67,7 +69,7 @@ export default class HUDRightButtons extends Vue {
 </script>
 
 <style lang="scss" scoped>
-button {
+.hud-button {
   @include reset-button;
   height: 3rem;
   width: 3rem;

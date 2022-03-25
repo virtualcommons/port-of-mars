@@ -51,7 +51,7 @@ import { Vue, Component } from "vue-property-decorator";
 import HUDRightButtons from "@port-of-mars/client/components/game/HUDRightButtons.vue";
 import GameInformation from "./static/panels/GameInformation.vue";
 import PhaseInstructions from "./static/panels/PhaseInstructions.vue";
-import EventCard from "@port-of-mars/client/components/game/phases/events/EventCard.vue";
+import EventCard from "@port-of-mars/client/components/game/phases/event/Card.vue";
 import { Phase } from "@port-of-mars/shared/types";
 import { HUDRightView } from "@port-of-mars/shared/game/client/panes";
 

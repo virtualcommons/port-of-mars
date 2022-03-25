@@ -80,7 +80,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Inject, Prop, Vue, Watch } from "vue-property-decorator";
+import { Component, Inject, Prop, Vue } from "vue-property-decorator";
 import { EventClientView, MarsEventData, Phase } from "@port-of-mars/shared/types";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 import EventModal from "@port-of-mars/client/components/game/modals/EventModal.vue";
@@ -89,7 +89,7 @@ import { isUndefined } from "lodash";
 @Component({
   components: { EventModal }
 })
-export default class EventCard extends Vue {
+export default class Card extends Vue {
   @Inject() readonly api!: GameRequestAPI;
 
   @Prop({

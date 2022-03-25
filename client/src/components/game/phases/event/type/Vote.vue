@@ -4,28 +4,28 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
-import VoteYesNo from "./views/VoteYesNo.vue";
-import VoteForPlayerSingle from "./views/VoteForPlayerSingle.vue";
-import VoteForPlayerHeroPariah from "./views/VoteForPlayerHeroPariah.vue";
+import VoteYesNo from "@port-of-mars/client/components/game/phases/event/view/VoteYesNo.vue";
+import VotePlayer from "@port-of-mars/client/components/game/phases/event/view/VotePlayer.vue";
+import VoteHeroPariah from "@port-of-mars/client/components/game/phases/event/view/VoteHeroPariah.vue";
 
 @Component({
   components: {
     VoteYesNo,
-    VoteForPlayerSingle,
-    VoteForPlayerHeroPariah
+    VotePlayer,
+    VoteHeroPariah
   }
 })
-export default class EventVote extends Vue {
+export default class Vote extends Vue {
   @Prop({ default: "" }) eventView!: string;
 
   get eventVoteView(): string {
     switch (this.eventView) {
       case "VOTE_YES_NO":
         return "VoteYesNo";
-      case "VOTE_FOR_PLAYER_SINGLE":
-        return "VoteForPlayerSingle";
-      case "VOTE_FOR_PLAYER_HERO_PARIAH":
-        return "VoteForPlayerHeroPariah";
+      case "VOTE_PLAYER":
+        return "VotePlayer";
+      case "VOTE_HERO_PARIAH":
+        return "VoteHeroPariah";
       default:
         return "";
     }

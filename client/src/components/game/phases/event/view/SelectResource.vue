@@ -98,7 +98,7 @@ import TimeBlockMeter from "@port-of-mars/client/components/game/phases/investme
     InvestmentCard
   }
 })
-export default class InfluencesSelect extends Vue {
+export default class SelectResource extends Vue {
   @Inject() readonly api!: GameRequestAPI;
   icon = {
     center: true,

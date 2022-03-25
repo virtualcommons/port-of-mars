@@ -1,6 +1,17 @@
-import {EventClientView, InvestmentData, Phase, RESOURCES, Role, ROLES} from "@port-of-mars/shared/types";
-import {Bot, GameState, Player} from "@port-of-mars/server/rooms/game/state/index";
-import {GameEvent} from "@port-of-mars/server/rooms/game/events/types";
+import {
+  EventClientView,
+  InvestmentData,
+  Phase,
+  RESOURCES,
+  Role,
+  ROLES,
+} from "@port-of-mars/shared/types";
+import {
+  Bot,
+  GameState,
+  Player,
+} from "@port-of-mars/server/rooms/game/state/index";
+import { GameEvent } from "@port-of-mars/server/rooms/game/events/types";
 import {
   AcceptedTradeRequest,
   RejectedTradeRequest,
@@ -15,12 +26,15 @@ import {
   VotedForPersonalGain,
   VotedForPhilanthropist,
   VoteHeroOrPariah,
-  VoteHeroOrPariahRole
+  VoteHeroOrPariahRole,
 } from "@port-of-mars/server/rooms/game/events";
-import {getLogger} from "@port-of-mars/server/settings";
+import { getLogger } from "@port-of-mars/server/settings";
 import _ from "lodash";
-import {downCastEventState, HeroOrPariah} from "@port-of-mars/server/rooms/game/state/marsevents/state";
-import {canPlayerMakeTrade} from "@port-of-mars/shared/validation";
+import {
+  downCastEventState,
+  HeroOrPariah,
+} from "@port-of-mars/server/rooms/game/state/marsevents/state";
+import { canPlayerMakeTrade } from "@port-of-mars/shared/validation";
 
 const logger = getLogger(__filename);
 
@@ -38,74 +52,102 @@ function getTopAdversary(state: GameState, player: Player): Player {
   return adversary;
 }
 
-export type AbstractMarsEventVisitor = { [view in EventClientView]: (state: GameState, player: Player) => Array<GameEvent> };
+export type AbstractMarsEventVisitor = {
+  [view in EventClientView]: (
+    state: GameState,
+    player: Player
+  ) => Array<GameEvent>;
+};
 
 // bot actions: voting events
 export class MarsEventVisitor implements AbstractMarsEventVisitor {
   NO_CHANGE(state: GameState, player: Player): Array<GameEvent> {
-    return [new SetPlayerReadiness({value: true, role: player.role})]
+    return [new SetPlayerReadiness({ value: true, role: player.role })];
   }
 
   AUDIT(state: GameState, player: Player): Array<GameEvent> {
-    return [new SetPlayerReadiness({value: true, role: player.role})]
+    return [new SetPlayerReadiness({ value: true, role: player.role })];
   }
 
   DISABLE_CHAT(state: GameState, player: Player): Array<GameEvent> {
-    return [new SetPlayerReadiness({value: true, role: player.role})]
+    return [new SetPlayerReadiness({ value: true, role: player.role })];
   }
 
   VOTE_YES_NO(state: GameState, player: Player): Array<GameEvent> {
-    return [new VotedForPersonalGain({vote: state.systemHealth > 30, role: player.role})]
+    return [
+      new VotedForPersonalGain({
+        vote: state.systemHealth > 30,
+        role: player.role,
+      }),
+    ];
   }
 
-  VOTE_FOR_PLAYER_SINGLE(state: GameState, player: Player): Array<GameEvent> {
+  VOTE_PLAYER(state: GameState, player: Player): Array<GameEvent> {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const defaultRole: Role = _.find(ROLES, r => r !== player.role)!;
-    const [role, points] = _.reduce(ROLES, ([r, p], role) => {
-      if (role !== player.role && player.victoryPoints > p) {
-        r = player.role;
-        p = player.victoryPoints;
-      }
-      return [r, p]
-    }, [defaultRole, state.players[defaultRole].victoryPoints]);
+    const defaultRole: Role = _.find(ROLES, (r) => r !== player.role)!;
+    const [role, points] = _.reduce(
+      ROLES,
+      ([r, p], role) => {
+        if (role !== player.role && player.victoryPoints > p) {
+          r = player.role;
+          p = player.victoryPoints;
+        }
+        return [r, p];
+      },
+      [defaultRole, state.players[defaultRole].victoryPoints]
+    );
 
-    return [new VotedForPhilanthropist({voter: player.role, vote: role})]
+    return [new VotedForPhilanthropist({ voter: player.role, vote: role })];
   }
 
-  VOTE_FOR_PLAYER_HERO_PARIAH(state: GameState, player: Player): Array<GameEvent> {
+  VOTE_HERO_PARIAH(state: GameState, player: Player): Array<GameEvent> {
     // 1. check game state: has H or P been decided?
     // if voting for hero or pariah, then local bot player (LBP) select another player randomly
 
     switch (state.heroOrPariah) {
-        // if hero -> make preference for voting for LBP
+      // if hero -> make preference for voting for LBP
       case "hero":
-        return [new VoteHeroOrPariahRole({role: player.role, vote: player.role})];
+        return [
+          new VoteHeroOrPariahRole({ role: player.role, vote: player.role }),
+        ];
 
-        // if pariah -> pick someone else that's not the LBP
+      // if pariah -> pick someone else that's not the LBP
       case "pariah":
-        return [new VoteHeroOrPariahRole({role: player.role, vote: getTopAdversary(state, player).role})];
+        return [
+          new VoteHeroOrPariahRole({
+            role: player.role,
+            vote: getTopAdversary(state, player).role,
+          }),
+        ];
 
-        // 2. if not in hero or pariah voting phase 1, LBP submits vote for hero or pariah randomly
+      // 2. if not in hero or pariah voting phase 1, LBP submits vote for hero or pariah randomly
       case "": {
-        return downCastEventState(HeroOrPariah, state, (eventState) => {
-          if (!eventState.hasVoted(player.role)) {
-            const choice = _.random(0, 1) ? 'hero' : 'pariah';
-            logger.debug('player %s choice %o', player.role, choice);
-            return [new VoteHeroOrPariah({role: player.role, heroOrPariah: choice})];
-          } else return [];
-        }) ?? [];
+        return (
+          downCastEventState(HeroOrPariah, state, (eventState) => {
+            if (!eventState.hasVoted(player.role)) {
+              const choice = _.random(0, 1) ? "hero" : "pariah";
+              logger.debug("player %s choice %o", player.role, choice);
+              return [
+                new VoteHeroOrPariah({
+                  role: player.role,
+                  heroOrPariah: choice,
+                }),
+              ];
+            } else return [];
+          }) ?? []
+        );
       }
     }
   }
 
-  INFLUENCES_SELECT(state: GameState, player: Player): Array<GameEvent> {
+  SELECT_RESOURCE(state: GameState, player: Player): Array<GameEvent> {
     const savedResources: InvestmentData = {
       culture: -player.inventory.culture,
       finance: -player.inventory.finance,
       government: -player.inventory.government,
       legacy: -player.inventory.legacy,
       science: -player.inventory.science,
-      systemHealth: 0
+      systemHealth: 0,
     };
 
     let unitsRemaining = 2;
@@ -120,16 +162,21 @@ export class MarsEventVisitor implements AbstractMarsEventVisitor {
         unitsRemaining -= unitsToTake;
       }
     }
-    logger.info('influences draw %o', savedResources);
-    return [new BreakdownOfTrustOccurred({role: player.role, savedResources})]
+    logger.info("influences draw %o", savedResources);
+    return [
+      new BreakdownOfTrustOccurred({ role: player.role, savedResources }),
+    ];
   }
 
-  INFLUENCES_DRAW(state: GameState, player: Player): Array<GameEvent> {
-    return [new SelectedInfluence({role: player.role, influence: 'culture'})]
+  DRAW_RESOURCE(state: GameState, player: Player): Array<GameEvent> {
+    return [new SelectedInfluence({ role: player.role, influence: "culture" })];
   }
 
-  ACCOMPLISHMENT_SELECT_PURCHASED(state: GameState, player: Player): Array<GameEvent> {
-    return [new SetPlayerReadiness({value: true, role: player.role})]
+  SELECT_PURCHASED_ACCOMPLISHMENT(
+    state: GameState,
+    player: Player
+  ): Array<GameEvent> {
+    return [new SetPlayerReadiness({ value: true, role: player.role })];
   }
 }
 
@@ -141,7 +188,7 @@ export class ActorRunner implements Actor {
     if (player.ready) {
       return [];
     }
-    return [new SetPlayerReadiness({value: true, role: player.role})];
+    return [new SetPlayerReadiness({ value: true, role: player.role })];
   }
 
   [Phase.events](state: GameState, player: Player): Array<GameEvent> {
@@ -160,43 +207,51 @@ export class ActorRunner implements Actor {
     const specialty = player.specialty;
     const specialtyInfluenceCost = player.costs[specialty];
     // compute amounts to invest in specialty influence and system health
-    const specialtyInfluenceInvestment = Math.floor(tbs / specialtyInfluenceCost * 0.5);
-    const systemHealthCost = player.costs['systemHealth'];
-    const systemHealthInvestment = Math.floor((tbs - specialtyInfluenceCost * specialtyInfluenceInvestment) / systemHealthCost);
+    const specialtyInfluenceInvestment = Math.floor(
+      (tbs / specialtyInfluenceCost) * 0.5
+    );
+    const systemHealthCost = player.costs["systemHealth"];
+    const systemHealthInvestment = Math.floor(
+      (tbs - specialtyInfluenceCost * specialtyInfluenceInvestment) /
+        systemHealthCost
+    );
     const investment: InvestmentData = {
       culture: 0,
       finance: 0,
       government: 0,
       legacy: 0,
       science: 0,
-      systemHealth: systemHealthInvestment
+      systemHealth: systemHealthInvestment,
     };
     investment[specialty] = specialtyInfluenceInvestment;
     return [
-      new TimeInvested({investment, role: player.role}),
-      new SetPlayerReadiness({value: true, role: player.role})
+      new TimeInvested({ investment, role: player.role }),
+      new SetPlayerReadiness({ value: true, role: player.role }),
     ];
-
   }
 
   [Phase.trade](state: GameState, player: Player): Array<GameEvent> {
     const events: Array<GameEvent> = [];
     for (const [id, trade] of state.tradeSet.entries()) {
-      if (trade.status === 'Active' && trade.recipient.role === player.role) {
-        if (canPlayerMakeTrade(trade.recipient.resourceAmount, player.inventory)) {
-          logger.debug("Bot can make trade for %o", trade.recipient.resourceAmount);
+      if (trade.status === "Active" && trade.recipient.role === player.role) {
+        if (
+          canPlayerMakeTrade(trade.recipient.resourceAmount, player.inventory)
+        ) {
+          logger.debug(
+            "Bot can make trade for %o",
+            trade.recipient.resourceAmount
+          );
           // FIXME: bot should reject altruistic trades
-          events.push(new AcceptedTradeRequest({id}));
-        }
-        else {
+          events.push(new AcceptedTradeRequest({ id }));
+        } else {
           logger.debug("Bot rejecting invalid trade request");
-          events.push(new RejectedTradeRequest({id}))
+          events.push(new RejectedTradeRequest({ id }));
         }
         break;
       }
     }
     if (!player.ready) {
-      events.push(new SetPlayerReadiness({value: true, role: player.role}))
+      events.push(new SetPlayerReadiness({ value: true, role: player.role }));
     }
     return events;
   }
@@ -208,13 +263,15 @@ export class ActorRunner implements Actor {
         if (state.systemHealth <= 35 && accomplishment.systemHealth < 0) {
           continue;
         }
-        return [new PurchasedAccomplishment({accomplishment, role: player.role})]
+        return [
+          new PurchasedAccomplishment({ accomplishment, role: player.role }),
+        ];
       }
     }
     if (!player.ready) {
-      return [new SetPlayerReadiness({value: true, role: player.role})];
+      return [new SetPlayerReadiness({ value: true, role: player.role })];
     }
-    return []
+    return [];
   }
 
   [Phase.discard](state: GameState, player: Player): Array<GameEvent> {
@@ -225,19 +282,24 @@ export class ActorRunner implements Actor {
     const events: Array<GameEvent> = [];
     for (const accomplishment of player.accomplishments.purchasable) {
       if (accomplishment.systemHealth <= 0) {
-        events.push(new DiscardedAccomplishment({id: accomplishment.id, role: player.role}))
+        events.push(
+          new DiscardedAccomplishment({
+            id: accomplishment.id,
+            role: player.role,
+          })
+        );
       }
     }
-    events.push(new SetPlayerReadiness({value: true, role: player.role}))
+    events.push(new SetPlayerReadiness({ value: true, role: player.role }));
     return events;
   }
 
   [Phase.defeat](state: GameState, player: Player): Array<GameEvent> {
-    return []
+    return [];
   }
 
   [Phase.victory](state: GameState, player: Player): Array<GameEvent> {
-    return []
+    return [];
   }
 }
 
@@ -247,8 +309,7 @@ export class SimpleBot implements Bot {
   warningTime = 240;
   active = false;
 
-  constructor(public actor: ActorRunner, public player: Player) {
-  }
+  constructor(public actor: ActorRunner, public player: Player) {}
 
   get shouldBeActive(): boolean {
     return this.elapsed >= this.maxInactivityTime;
@@ -280,14 +341,15 @@ export class SimpleBot implements Bot {
     if (this.active) {
       if (this.shouldBeActive) {
         const events = this.actor[state.phase](state, this.player);
-        if (events.length > 0) logger.debug('actor events performed: %o', events);
+        if (events.length > 0)
+          logger.debug("actor events performed: %o", events);
         return events;
       } else {
-        return [new BotControlRelinquished({role: this.player.role})]
+        return [new BotControlRelinquished({ role: this.player.role })];
       }
     } else {
       if (this.shouldBeActive) {
-        return [new BotControlTaken({role: this.player.role})]
+        return [new BotControlTaken({ role: this.player.role })];
       } else {
         this.updateBotWarning();
         return [];
@@ -296,4 +358,6 @@ export class SimpleBot implements Bot {
   }
 }
 
-export type Actor = { [phase in Phase]: (state: GameState, player: Player) => Array<GameEvent> }
+export type Actor = {
+  [phase in Phase]: (state: GameState, player: Player) => Array<GameEvent>;
+};
