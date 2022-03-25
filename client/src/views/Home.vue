@@ -34,13 +34,15 @@
               starts.
             </p>
             <template v-if="signupEnabled" class="my-5">
-              <b-button squared variant="primary"><h4 class="p-1">Sign Up to Play</h4></b-button>
+              <b-button squared variant="primary" :to="login"
+                ><h4 class="p-1">Sign Up to Play</h4></b-button
+              >
             </template>
             <template v-else>
               <h3 class="subtitle p-3 mr-4">
                 {{ announcement }}
               </h3>
-              <b-button :to="loginPage" size="lg" variant="primary" class="w-75">
+              <b-button :to="login" size="lg" variant="primary" class="w-75">
                 <b-icon class="mb-2" icon="box-arrow-right"></b-icon>
                 <template v-if="signupEnabled"> Register for </template>
                 <template v-else> Participate in </template>
@@ -49,7 +51,7 @@
             </template>
           </b-col>
           <b-col v-if="schedule.length > 0" sm="12" class="m-5 text-center">
-            <Schedule :schedule="schedule" :roundNumber="tournamentRoundNumber"> </Schedule>
+            <Schedule :schedule="schedule" :roundNumber="currentRoundNumber"> </Schedule>
           </b-col>
         </b-row>
       </section>
@@ -66,7 +68,7 @@
               system health. If system health falls to zero all players die.
             </p>
 
-            <b-alert :show="tournamentRoundNumber > 1" variant="warning">
+            <b-alert :show="currentRoundNumber > 1" variant="warning">
               Eligible participants have been invited via email to
               <b-badge variant="info">Round {{ currentRoundNumber }}</b-badge
               >.
@@ -105,7 +107,7 @@ export default class Home extends Vue {
   isDevMode: boolean = false;
   currentYear = new Date().getFullYear();
   trailerVideoUrl = "https://player.vimeo.com/video/644046830";
-  loginPage = { name: LOGIN_PAGE };
+  login = { name: LOGIN_PAGE };
   dashboardPage = { name: DASHBOARD_PAGE };
   readonly SITE_URL = "https://portofmars.asu.edu";
 
