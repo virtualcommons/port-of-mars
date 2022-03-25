@@ -109,7 +109,7 @@ export default class Events extends Vue {
   }
 
   // show event modal when there is a new event
-  @Watch("currentEvent", { immediate: true })
+  @Watch("currentEvent", { deep: true, immediate: true })
   onNewEvent(event: any) {
     console.log("new current event: ", event);
     let timestamp: number = Date.now();

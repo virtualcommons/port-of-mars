@@ -37,6 +37,15 @@ html {
   }
 }
 
+header,
+footer {
+  display: block;
+}
+
+footer {
+  position: relative;
+}
+
 h1,
 h2,
 h3,
@@ -44,18 +53,26 @@ h4 {
   font-family: $montserrat !important;
 }
 
-h2,
-h3 {
-  font-weight: bold;
+h1 {
+  letter-spacing: 0.25rem;
+  font-size: 3rem;
+  font-weight: 600;
+  color: var(--white);
+  text-transform: uppercase;
 }
 
 h2 {
+  font-weight: 600;
   text-transform: uppercase;
-  // text-align: center;
+  color: var(--white);
+  font-size: 2em;
 }
 
 h3 {
-  font-style: italic;
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--white);
+  font-style: normal;
 }
 
 ol,
@@ -110,7 +127,6 @@ body {
   --color-Upkeep: rgba(45, 143, 68, 0.2);
   --color-Upkeep-opaque-2: rgba(45, 143, 68, 0.25);
   --green: rgba(95, 141, 75, 1);
-  --red: rgba(244, 67, 54, 1);
   --marslog-red: rgba(170, 42, 41, 0.2);
   --marslog-purple: rgba(111, 36, 134, 0.2);
   --marslog-orange: rgba(170, 111, 0, 0.2);

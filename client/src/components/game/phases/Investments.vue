@@ -25,6 +25,7 @@
           v-bind="investment"
           @update="investTimeBlocks"
           :remainingTimeBlocks="remainingTimeBlocks"
+          class="my-1"
         ></InvestmentCard>
       </b-row>
     </b-col>
@@ -42,6 +43,7 @@
               v-for="accomplishment in purchasableAccomplishments"
               :key="accomplishment.label + Math.random()"
               :accomplishment="accomplishment"
+              :enableModal="true"
             ></AccomplishmentCard>
           </div>
         </b-col>
