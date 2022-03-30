@@ -11,15 +11,14 @@
         </b-img>
       </b-navbar-brand>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-
+      <div v-if="isDevMode">
+        <b-alert variant="danger" class="w-50" show dismissible>
+          <b-icon class="mx-2" icon="exclamation-triangle-fill" variant="warning"></b-icon> You
+          are currently accessing a development version of the Port of Mars only used for testing.
+          Go to <a :href="SITE_URL">portofmars.asu.edu</a> for the real deal.
+        </b-alert>
+      </div>
       <b-collapse id="nav-collapse" is-nav>
-        <div v-if="isDevMode">
-          <p class="text-right">
-            <b-icon class="mx-2" icon="exclamation-triangle-fill" variant="warning"></b-icon> You
-            are currently accessing a development version of the Port of Mars only used for testing.
-            Go to <a :href="SITE_URL">portofmars.asu.edu</a> for the real deal.
-          </p>
-        </div>
         <b-navbar-nav class="ml-auto">
           <!--
         <b-nav-item class="nav-link"><a href="#about" title="about">About</a></b-nav-item>
@@ -73,6 +72,7 @@
           </template>
         </b-navbar-nav>
       </b-collapse>
+
     </b-navbar>
   </header>
 </template>
