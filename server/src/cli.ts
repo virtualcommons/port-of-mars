@@ -48,38 +48,25 @@ async function withConnection<T>(f: (em: EntityManager) => Promise<T>): Promise<
   }
 }
 
-async function exportData(em: EntityManager, ids?: Array<number>, dateCreatedMin?: Date): Promise<void> {
+async function exportData(em: EntityManager, tournamentRoundId: number): Promise<void> {
   // FIXME: it would be good to disable the pino logger for the duration of this call so we don't repeat
   // all the logging spam as we replay events
   logger.debug("=====EXPORTING DATA START=====");
-  let eventQuery = await em.getRepository(GameEvent)
+  const eventQuery = await em.getRepository(GameEvent)
     .createQueryBuilder("ge")
     .leftJoinAndSelect("ge.game", "g")
+    .innerJoin(TournamentRound, 'tournamentRound', 'tournamentRound.id = g.tournamentRoundId')
+    .where('tournamentRound.id = :tournamentRoundId', { tournamentRoundId })
     .orderBy('ge.id', 'ASC');
-  if (ids && ids.length > 0) {
     // FIXME: double quotes needed until https://github.com/typeorm/typeorm/issues/2919 and related are resolved
-    eventQuery = eventQuery.where('"gameId" in (:...ids)', { ids });
-  }
-  if (dateCreatedMin) {
-    if (ids && ids.length > 0) {
-      eventQuery = eventQuery.andWhere('g.dateCreated > (:dateCreatedMin)', { dateCreatedMin: dateCreatedMin });
-    } else {
-      eventQuery = eventQuery.where('g.dateCreated > (:dateCreatedMin)', { dateCreatedMin: dateCreatedMin });
-    }
-  }
-  logger.debug(eventQuery.getSql());
   const playerQuery = em.getRepository(Player)
     .createQueryBuilder('player')
     .innerJoinAndSelect(User, 'user', 'user.id = player.userId')
     .innerJoin(Game, 'game', 'game.id = player.gameId')
     .innerJoin(TournamentRound, 'tournamentRound', 'tournamentRound.id = game.tournamentRoundId')
     .innerJoinAndSelect(TournamentRoundInvite, 'invitation', 'invitation.tournamentRoundId = tournamentRound.id')
-    .where('player.userId = invitation.userId');
-  if (ids && ids.length > 0) {
-    playerQuery
-      .andWhere('game.id in (:...ids)', { ids });
-  }
-  logger.debug(playerQuery.getSql());
+    .where('player.userId = invitation.userId')
+    .andWhere("tournamentRound.id = :tournamentRoundId", { tournamentRoundId });
   const playerRaw = await playerQuery.getRawMany();
 
   const events = await eventQuery.getMany();
@@ -278,7 +265,7 @@ program
             program
               .createCommand('date')
               .requiredOption('-d, --date <date>', 'UTC Datetime for an upcoming scheduled game', s => new Date(Date.parse(s)))
-              .option('--tournamentRoundId <tournamentRoundId>', 'ID of the tournament round', parseInt)
+              .option('--tournamentRoundId <tournamentRoundId>', 'ID of the tournament round', customParseInt)
               .description('add a TournamentRoundDate for the given date')
               .action(async (cmd) => {
                 await withConnection(em => createTournamentRoundDate(em, cmd.date, cmd.tournamentRoundId));
@@ -338,7 +325,7 @@ program
         program
           .createCommand('finalize')
           .description('finalize a game that wasn\'t finalized properly')
-          .requiredOption('--gameId <gameId>', 'id of game', parseInt)
+          .requiredOption('--gameId <gameId>', 'id of game', customParseInt)
           .action(async (cmd) => {
             await withConnection(em => finalize(em, cmd.gameId))
           })
@@ -347,10 +334,9 @@ program
   .addCommand(
     program.createCommand('dump')
       .description('dump db to csvs')
-      .option('--ids <ids...>', 'game ids to extract, separate multiples with spaces e.g., 1 2 3', toIntArray, [] as Array<number>)
-      .option('-d, --dateCreatedMin <dateCreatedMin>', 'return games after this ISO formatted date', s => new Date(Date.parse(s)))
+      .requiredOption('--tournamentRoundId <tournamentRoundId>', 'tournament round id', customParseInt)
       .action(async (cmd) => {
-        await withConnection((em) => exportData(em, cmd.ids, cmd.dateCreatedMin))
+        await withConnection((em) => exportData(em, cmd.tournamentRoundId))
       })
   )
   .addCommand(
