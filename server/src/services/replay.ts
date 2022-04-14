@@ -88,7 +88,8 @@ export abstract class Summarizer<T> {
     let result: IteratorResult<T> = summaries.next();
     // FIXME: Cannot convert undefined or null to object
     const header = Object.keys(result.value).map((k) => ({ id: k, title: k }));
-    const rows = [result.value];
+    const rows = [];
+
     while (!result.done) {
       rows.push(this.transform(result.value));
       result = summaries.next();
@@ -457,7 +458,6 @@ export interface MarsEventExport {
   description: string;
   index: number;
 }
-
 
 // replays every single event that occurred
 // when it reaches ExitedMarsEventPhase, it goes through all the mars events that live inside gameState and prints them out
