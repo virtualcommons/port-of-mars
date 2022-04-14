@@ -272,6 +272,8 @@ export class RoundIntroduction
 
   fromJSON(data: RoundIntroductionData): void {
     this.systemHealthMaintenanceCost = data.systemHealthMaintenanceCost;
+    // FIXME: data.systemHealthGroupContributions does not exist in earlier games
+    // and causes data export to fail for previous tournaments
     for (const [key, value] of Object.entries(data.systemHealthGroupContributions)) {
       this.systemHealthGroupContributions.set(key, value);
     }

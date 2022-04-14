@@ -30,7 +30,6 @@ import {
 } from "@port-of-mars/shared/types";
 import { createObjectCsvWriter } from "csv-writer";
 import { GameEvent } from "@port-of-mars/server/rooms/game/events/types";
-import * as jdiff from "jsondiffpatch";
 import { getAllAccomplishments } from "@port-of-mars/server/data/Accomplishment";
 import {
   Player,
@@ -41,20 +40,7 @@ import {
 const logger = getLogger(__filename);
 
 function loadSnapshot(data: GameSerialized): GameState {
-  const g = new GameState(mockGameStateInitOpts());
-  g.fromJSON(data);
-  return g;
-}
-
-export interface DiffListener {
-  receive(
-    game: GameState,
-    diff: jdiff.Delta,
-    event: entity.GameEvent,
-    ge: GameEvent
-  ): void;
-
-  finalize(): Promise<void>;
+  return new GameState(mockGameStateInitOpts()).fromJSON(data);
 }
 
 class ObjColumn<T> {
@@ -86,10 +72,9 @@ export abstract class Summarizer<T> {
   async save(): Promise<void> {
     const summaries = this.summarize();
     let result: IteratorResult<T> = summaries.next();
-    // FIXME: Cannot convert undefined or null to object
+    // FIXME: Cannot convert undefined or null to object in earlier tournaments
     const header = Object.keys(result.value).map((k) => ({ id: k, title: k }));
     const rows = [];
-
     while (!result.done) {
       rows.push(this.transform(result.value));
       result = summaries.next();
@@ -459,8 +444,11 @@ export interface MarsEventExport {
   index: number;
 }
 
-// replays every single event that occurred
-// when it reaches ExitedMarsEventPhase, it goes through all the mars events that live inside gameState and prints them out
+
+/**
+ * replays every single event that occurred when it reaches ExitedMarsEventPhase,
+ * goes through all the mars events that live inside the gameState and prints them out
+ */
 export class MarsEventSummarizer extends Summarizer<MarsEventExport> {
   _summarizeEvent(
     game: GameState,

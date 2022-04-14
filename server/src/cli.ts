@@ -59,41 +59,24 @@ async function withConnection<T>(
   }
 }
 
-async function exportData(
-  em: EntityManager,
-  tournamentRoundId: number
-): Promise<void> {
-  // FIXME: it would be good to disable the pino logger for the duration of this call so we don't repeat
-  // all the logging spam as we replay events
-  logger.debug("=====EXPORTING DATA START=====");
-  const eventQuery = await em
-    .getRepository(GameEvent)
+async function exportData(em: EntityManager, tournamentRoundId: number, gameIds: Array<number>): Promise<void> {
+  logger.debug("=====EXPORT DATA START=====");
+  let eventQuery = await em.getRepository(GameEvent)
     .createQueryBuilder("ge")
     .leftJoinAndSelect("ge.game", "g")
-    .innerJoin(
-      TournamentRound,
-      "tournamentRound",
-      "tournamentRound.id = g.tournamentRoundId"
-    )
-    .where("tournamentRound.id = :tournamentRoundId", { tournamentRoundId })
-    .orderBy("ge.id", "ASC");
-  // FIXME: double quotes needed until https://github.com/typeorm/typeorm/issues/2919 and related are resolved
-  const playerQuery = em
-    .getRepository(Player)
-    .createQueryBuilder("player")
-    .innerJoinAndSelect(User, "user", "user.id = player.userId")
-    .innerJoin(Game, "game", "game.id = player.gameId")
-    .innerJoin(
-      TournamentRound,
-      "tournamentRound",
-      "tournamentRound.id = game.tournamentRoundId"
-    )
-    .innerJoinAndSelect(
-      TournamentRoundInvite,
-      "invitation",
-      "invitation.tournamentRoundId = tournamentRound.id"
-    )
-    .where("player.userId = invitation.userId")
+    .innerJoin(TournamentRound, 'tournamentRound', 'tournamentRound.id = g.tournamentRoundId')
+    .where('tournamentRound.id = :tournamentRoundId', { tournamentRoundId })
+    .orderBy('ge.id', 'ASC');
+  if (gameIds && gameIds.length > 0) {
+    eventQuery = eventQuery.andWhere('"gameId" in (:...gameIds)', { gameIds });
+  }
+  const playerQuery = em.getRepository(Player)
+    .createQueryBuilder('player')
+    .innerJoinAndSelect(User, 'user', 'user.id = player.userId')
+    .innerJoin(Game, 'game', 'game.id = player.gameId')
+    .innerJoin(TournamentRound, 'tournamentRound', 'tournamentRound.id = game.tournamentRoundId')
+    .innerJoinAndSelect(TournamentRoundInvite, 'invitation', 'invitation.tournamentRoundId = tournamentRound.id')
+    .where('player.userId = invitation.userId')
     .andWhere("tournamentRound.id = :tournamentRoundId", { tournamentRoundId });
   const playerRaw = await playerQuery.getRawMany();
 
@@ -543,16 +526,12 @@ program
       )
   )
   .addCommand(
-    program
-      .createCommand("dump")
-      .description("dump db to csvs")
-      .requiredOption(
-        "--tournamentRoundId <tournamentRoundId>",
-        "tournament round id",
-        customParseInt
-      )
+    program.createCommand('dump')
+      .description('dump db to csvs')
+      .requiredOption('--tournamentRoundId <tournamentRoundId>', 'tournament round id', customParseInt)
+      .option('--gids <game_ids>', 'specific game ids to export', toIntArray, [] as Array<number>)
       .action(async (cmd) => {
-        await withConnection((em) => exportData(em, cmd.tournamentRoundId));
+        await withConnection((em) => exportData(em, cmd.tournamentRoundId, cmd.gids))
       })
   )
   .addCommand(
