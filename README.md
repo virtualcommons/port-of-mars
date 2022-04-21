@@ -107,12 +107,22 @@ Copy the Sentry DSN url into `keys/sentry_dsn`. Then
 
 ### Data Export
 
+__Development__
+
+In development, data from a tournament can be exported by running:
+
+```bash
+% ./dump.sh prod --tournamentRoundId 1 2 # tournment ids
+```
+
 In development, data can be exported from the database by running:
 
 ```bash
 % ./dump.sh dev # all games
 % ./dump.sh dev --ids 1 2 4 6 # games matching ids
 ```
+
+__Production__
 
 In staging or production, change `dev` to `prod`:
 
