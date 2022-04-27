@@ -8,6 +8,19 @@ import {
   EnteredDefeatPhase,
   ExitedMarsEventPhase,
   gameEventDeserializer,
+  // Bonding Thru Adversity
+  SelectedInfluence,
+  // Breakdown of Trust
+  BreakdownOfTrustOccurred,
+  // Hero or Pariah
+  VoteHeroOrPariah,
+  VoteHeroOrPariahRole,
+  // Compulsive Philanthropist
+  VotedForPhilanthropist,
+  // Personal Gain
+  VotedForPersonalGain,
+  // Efforts Wasted
+  StagedDiscardOfPurchasedAccomplishment,
 } from "@port-of-mars/server/rooms/game/events";
 import _ from "lodash";
 import { getLogger } from "@port-of-mars/server/settings";
@@ -442,8 +455,8 @@ export interface MarsEventExport {
   name: string;
   description: string;
   index: number;
+  payload: string;
 }
-
 
 /**
  * replays every single event that occurred when it reaches ExitedMarsEventPhase,
@@ -460,30 +473,32 @@ export class MarsEventSummarizer extends Summarizer<MarsEventExport> {
       name: marsEvent.name,
       description: marsEvent.effect,
       index,
+      payload: JSON.stringify(event.payload),
     }));
   }
 
   _summarizeGame(events: Array<entity.GameEvent>): Array<MarsEventExport> {
     const game = loadSnapshot(events[0].payload as GameSerialized);
-    const exitedMarsEventPhase = new ExitedMarsEventPhase();
+    // const exitedMarsEventPhase = new ExitedMarsEventPhase();
     const remainingEvents = events.slice(1);
+    const eventPayloadMap = this.getEventPayloadMap();
     let allMarsEvents: Array<MarsEventExport> = [];
     for (const event of remainingEvents) {
       const e = gameEventDeserializer.deserialize(event);
       game.timeRemaining = event.timeRemaining;
       game.applyMany([e]);
-      // every time we run into an ExitedMarsEvent game event
+      // every time we run into a game event that has a payload,
       // summarize the game state's current set of MarsEvents
       // and produce values to summarize()
-      if (exitedMarsEventPhase.kind === event.type) {
+
+      if (eventPayloadMap.has(event.type)) {
         const marsEventSummary = this._summarizeEvent(game, event);
         allMarsEvents = allMarsEvents.concat(marsEventSummary);
-        /*
-        for (const row of marsEventSummary) {
-          // row in csv
-          yield row;
-        }
-        */
+      //   for (const row of marsEventSummary) {
+      //     // row in csv
+      //     yield row;
+      //   }
+      //
       }
     }
     return allMarsEvents;
@@ -496,6 +511,31 @@ export class MarsEventSummarizer extends Summarizer<MarsEventExport> {
         yield marsEvents;
       }
     }
+  }
+
+  getEventPayloadMap(): Map<string, Record<string, unknown>> {
+    const events = [
+      BreakdownOfTrustOccurred,
+      StagedDiscardOfPurchasedAccomplishment,
+      SelectedInfluence,
+      VoteHeroOrPariah,
+      VoteHeroOrPariahRole,
+      VotedForPhilanthropist,
+      VotedForPersonalGain,
+      ExitedMarsEventPhase,
+    ];
+
+    const eventPayloadMap = new Map(
+      events.map((e) => [_.kebabCase(e.name), {}])
+    );
+    return eventPayloadMap;
+
+    // console.log(interactiveEventMap);
+    // events.find((e) => event instanceof e);
+    // if (interactiveEventMap.has(event.type)) {
+    //   const marsEventSummary = this._summarizeEvent(game, event);
+    //   return marsEventSummary;
+    // } else return;
   }
 }
 
