@@ -529,13 +529,6 @@ export class MarsEventSummarizer extends Summarizer<MarsEventExport> {
       events.map((e) => [_.kebabCase(e.name), {}])
     );
     return eventPayloadMap;
-
-    // console.log(interactiveEventMap);
-    // events.find((e) => event instanceof e);
-    // if (interactiveEventMap.has(event.type)) {
-    //   const marsEventSummary = this._summarizeEvent(game, event);
-    //   return marsEventSummary;
-    // } else return;
   }
 }
 
