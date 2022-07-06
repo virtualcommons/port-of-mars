@@ -1,3 +1,4 @@
+export const ADMIN_PAGE: "Admin" = "Admin";
 export const LOGIN_PAGE: "Login" = "Login";
 export const LOBBY_PAGE: "Lobby" = "Lobby";
 export const GAME_PAGE: "Game" = "Game";
@@ -10,6 +11,7 @@ export const MANUAL_PAGE: "Manual" = "Manual";
 export const HOME_PAGE: "Home" = "Home";
 
 export type Page =
+  | "Admin"
   | "Home"
   | "Login"
   | "Lobby"
@@ -21,6 +23,7 @@ export type Page =
   | "Verify"
   | "Manual";
 export const PAGES: Array<Page> = [
+  ADMIN_PAGE,
   LOGIN_PAGE,
   LOBBY_PAGE,
   GAME_PAGE,
@@ -49,6 +52,13 @@ export const PAGE_META: {
     meta: { requiresAuth: boolean };
   };
 } = {
+  [ADMIN_PAGE]: {
+    path: "/admin",
+    name: ADMIN_PAGE,
+    meta: {
+      requiresAuth: true,
+    },
+  },
   [REGISTER_PAGE]: {
     path: "/register",
     name: REGISTER_PAGE,

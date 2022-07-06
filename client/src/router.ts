@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import Admin from "@port-of-mars/client/views/Admin.vue";
 import Login from "@port-of-mars/client/views/Login.vue";
 import Lobby from "@port-of-mars/client/views/Lobby.vue";
 import Game from "@port-of-mars/client/views/Game.vue";
@@ -12,6 +13,7 @@ import Manual from "@port-of-mars/client/views/Manual.vue";
 import Home from "@port-of-mars/client/views/Home.vue";
 import store from "@port-of-mars/client/store";
 import {
+  ADMIN_PAGE,
   PAGE_META,
   LOGIN_PAGE,
   LOBBY_PAGE,
@@ -30,6 +32,7 @@ Vue.use(VueRouter);
 const router = new VueRouter({
   mode: "hash",
   routes: [
+    { ...PAGE_META[ADMIN_PAGE], component: Admin },
     { ...PAGE_META[LOGIN_PAGE], component: Login },
     { ...PAGE_META[LOBBY_PAGE], component: Lobby },
     { ...PAGE_META[GAME_PAGE], component: Game },
@@ -39,7 +42,7 @@ const router = new VueRouter({
     { ...PAGE_META[DASHBOARD_PAGE], component: Dashboard },
     { ...PAGE_META[VERIFY_PAGE], component: Verify },
     { ...PAGE_META[MANUAL_PAGE], component: Manual },
-    { ...PAGE_META[HOME_PAGE], component: Home },
+    { ...PAGE_META[HOME_PAGE], component: Home }
   ]
 });
 
@@ -47,18 +50,19 @@ function isAuthenticated() {
   return store.getters.isAuthenticated;
 }
 
-
 router.beforeEach((to, from, next) => {
   if (from === VueRouter.START_LOCATION) {
     console.log("initializing store");
-    store.dispatch('init').then((user) => {
-      console.log("store init returned user: ", user);
-      next();
-    }).catch(e => {
-      console.error("Unable to initialize store: ", e);
-    });
-  }
-  else {
+    store
+      .dispatch("init")
+      .then(user => {
+        console.log("store init returned user: ", user);
+        next();
+      })
+      .catch(e => {
+        console.error("Unable to initialize store: ", e);
+      });
+  } else {
     next();
   }
 });
@@ -66,11 +70,9 @@ router.beforeEach((to, from, next) => {
 router.beforeEach((to: any, from: any, next: any) => {
   if (to.meta.requiresAuth && !isAuthenticated()) {
     next({ name: LOGIN_PAGE });
-  }
-  else if (to.name === LOGIN_PAGE && isAuthenticated()) {
+  } else if (to.name === LOGIN_PAGE && isAuthenticated()) {
     next({ name: DASHBOARD_PAGE });
-  }
-  else {
+  } else {
     next();
   }
 });
