@@ -37,7 +37,19 @@ If you are starting from scratch you will need to initialize the database and in
 
 At this point you should be able to test the Port of Mars by visiting `http://localhost:8081` in your browser.
 
-### Run database migrations
+### Create / Display / Run database migrations
+
+For more info on typeorm data migrations see https://orkhan.gitbook.io/typeorm/docs/migrations
+
+#### Create a data migration
+
+```
+% yarn typeorm migration:create -n NameOfMigration
+```
+
+This will create a new file prefixed by a timestamp, add the custom logic in the `up` and `down` methods.
+
+#### Display or run data migrations
 
 To display or run database migrations (for schema changes etc.) use `yarn typeorm` commands e.g., `migration:show` and `migration:run`
 
