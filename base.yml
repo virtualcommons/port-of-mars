@@ -14,8 +14,21 @@ services:
       - ./scripts:/scripts
       - ./docker/dump:/dump
       - ./docker/logs:/var/log/port-of-mars
+  nuxt:
+    build:
+      context: pom-nuxt
+    image: port-of-mars/web
+    ports:
+      - '127.0.0.1:3000:3000'
+    volumes:
+      - ./pom-nuxt:/code/web
+      - ./server:/code/server
+      - ./shared:/code/shared
+      - ./keys/ormconfig.json:/code/web/ormconfig.json:ro
+      - /code/web/node_modules
   redis:
     image: redis:5
+
     restart: always
   db:
     image: postgres:12
