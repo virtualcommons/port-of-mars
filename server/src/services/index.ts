@@ -1,4 +1,5 @@
 import {EntityManager} from "typeorm";
+import {AdminService} from "@port-of-mars/server/services/admin";
 import {AuthService} from "@port-of-mars/server/services/auth";
 import {RegistrationService} from "@port-of-mars/server/services/registration";
 import {AccountService} from "@port-of-mars/server/services/account";
@@ -71,12 +72,21 @@ export class ServiceProvider {
   }
 
   private _dashboard?: DashboardService;
-  get dashboard(){
-    if(!this._dashboard){
+  get dashboard() {
+    if(!this._dashboard) {
       this._dashboard = new DashboardService(this);
     }
     return this._dashboard;
   }
+
+  private _admin?: AdminService;
+  get admin() {
+    if (!this._admin) {
+      this._admin = new AdminService(this);
+    }
+    return this._admin;
+  }
+
 
   private _settings?: RedisSettings;
   get settings() {
