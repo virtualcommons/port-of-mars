@@ -1,4 +1,11 @@
-import { CreateDateColumn, Column, Entity, Generated, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  CreateDateColumn,
+  Column,
+  Entity,
+  Generated,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { Player } from "./Player";
 import { TournamentRoundInvite } from "./TournamentRoundInvite";
 
@@ -16,11 +23,11 @@ export class User {
   @Column({ unique: true, nullable: true })
   email?: string;
 
-  @OneToMany(type => Player, player => player.user)
+  @OneToMany((type) => Player, (player) => player.user)
   players!: Array<Player>;
 
-  @OneToMany(type => TournamentRoundInvite, invite => invite.user)
-  invites!: Array<TournamentRoundInvite>
+  @OneToMany((type) => TournamentRoundInvite, (invite) => invite.user)
+  invites!: Array<TournamentRoundInvite>;
 
   @Column({ default: false })
   passedQuiz!: boolean;
@@ -30,7 +37,7 @@ export class User {
   registrationToken!: string;
 
   @Column()
-  @Generated('uuid')
+  @Generated("uuid")
   participantId!: string;
 
   @Column({ default: false })
@@ -42,9 +49,12 @@ export class User {
   @Column({ default: true })
   isActive!: boolean;
 
-  @Column({default: false})
+  @Column({ default: false })
   isBot!: boolean;
 
   @CreateDateColumn()
   dateCreated!: Date;
+
+  @Column({ default: false })
+  isAdmin!: boolean;
 }
