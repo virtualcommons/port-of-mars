@@ -9,6 +9,21 @@ import { User } from '@port-of-mars/server/entity';
 
 const logger = settings.logging.getLogger(__filename);
 
+export function isAdminAuthenticated(req: Request, res: Response, next: NextFunction) {
+  if (_.isUndefined(req.user)) {
+    logger.trace('no user on the request, redirecting to login page');
+    return res.status(401).json({ kind: 'info', message: 'Please sign in before continuing.'});
+  }
+  else if (! (req.user as User).isAdmin) {
+    logger.warn('Non-admin user attempting to access admin section: %o', req.user);
+    return res.status(403).json({ kind: 'info', message: 'You do not appear to have access to this area. This has been logged.'});
+  }
+  else {
+    logger.trace('admin user accessing admin section: %o', req.user);
+    next();
+  }
+}
+
 export function isAuthenticated(req: Request, res: Response, next: NextFunction) {
   if (_.isUndefined(req.user)) {
     const loginUrl = toUrl(LOGIN_PAGE);
