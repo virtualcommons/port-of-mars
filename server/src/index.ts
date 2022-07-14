@@ -182,7 +182,7 @@ async function createApp() {
   app.use("/registration", registrationRouter);
   app.use("/status", statusRouter);
 
-  app.get("/logout", function (req, res) {
+  app.get("/logout", function (req, res, next) {
     req.logout(function(err) {
       if (err) {
         return next(err);
