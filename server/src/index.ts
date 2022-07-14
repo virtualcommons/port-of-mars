@@ -183,8 +183,12 @@ async function createApp() {
   app.use("/status", statusRouter);
 
   app.get("/logout", function (req, res) {
-    req.logout();
-    return res.json({ user: {} });
+    req.logout(function(err) {
+      if (err) {
+        return next(err);
+      }
+      return res.json({ user: {} });
+    });
   });
 
   app.get(
