@@ -1,0 +1,710 @@
+@charset "UTF-8";
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+/* CSS Document by Christina Carrasquilla for Port of Mars (POM) */
+/*  ------------------- POM COLOR PALETTE  ------------------- */
+:root {
+  --brown: #754c29;
+  --beige: #d9cfc6;
+  --red: #aa2a29;
+  --black: #000000;
+  --white: #ffffff;
+  --yellow: #ebce56;
+  --blue: #005dac;
+  --purple: #7f3f98;
+}
+/*  ------------------- POM GLOBAL CONTAINERS  ------------------- */
+* {
+  box-sizing: border-box;
+}
+header,
+footer {
+  background-color: var(--black);
+}
+header {
+  display: grid;
+  grid-template-columns: 200px 25px 1fr;
+  width: 100%;
+  position: fixed;
+  z-index: 10;
+  padding: 1rem;
+  box-shadow: 2px 2px 10px #000000;
+}
+#logo {
+  width: 200px;
+}
+nav input {
+  display: none;
+}
+nav ul {
+  float: right;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+}
+nav li {
+  text-align: center;
+}
+nav a {
+  transition: all 0.5s cubic-bezier(0.75, 0.5, 0.05, 1);
+}
+nav a:hover {
+  color: var(--red);
+  padding-bottom: 5px;
+  border-bottom: 3px solid var(--red);
+}
+[href="sign-up"],
+[href="log-in"] {
+  border: 3px solid var(--red);
+  padding: 5px;
+}
+[href="log-in"] {
+  background-color: var(--red);
+  color: var(--white);
+}
+[href="log-in"]:hover,
+[href="sign-up"]:hover {
+  background-color: var(--white);
+  color: var(--black);
+}
+footer {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+}
+footer section {
+  margin: 0 auto;
+}
+#copyright {
+  grid-column: 1/4;
+  padding: 1rem;
+  text-align: center;
+  width: 100%;
+}
+/*  ------------------- POM HOME CONTAINERS  ------------------- */
+#stats {
+  background-color: var(--black);
+}
+#about,
+#winners,
+#news {
+  background-color: var(--beige);
+}
+#game-trailer,
+#gameplay,
+#tutorial,
+#play {
+  background-color: var(--brown);
+}
+#about {
+  background-image: url("../images/bg-moon.png");
+  padding: 200px 0 50px 0;
+}
+#about p {
+  width: 70%;
+  margin: 0 auto;
+}
+#stats {
+  background: url("../images/bg-stars.png") no-repeat;
+  background-position: center;
+  padding: 1rem;
+}
+#stats table {
+  margin: 0 auto;
+  font-weight: bold;
+  text-align: center;
+  width: 80%;
+}
+#game-trailer,
+#objective {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 1rem;
+}
+#gameplay {
+  padding: 1rem;
+  background: url("../images/bg-dark-moon.png");
+}
+#game-trailer div:first-of-type,
+#objective div:first-of-type {
+  padding: 5% 5% 5% 30%;
+}
+#game-trailer iframe,
+#objective iframe {
+  padding-top: 5%;
+}
+#winners {
+  background: url("../images/bg-jupiter.png");
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  text-align: center;
+}
+#winners h2 {
+  grid-column: 1/-1;
+}
+#winners h2,
+#gameplay h2 {
+  padding: 1rem;
+}
+#winners img {
+  width: 100%;
+}
+#fall21 img {
+  margin-bottom: 15px;
+}
+#news {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 1rem;
+}
+#news h2 {
+  grid-column: 1/-1;
+  padding: 1rem;
+}
+#news a {
+  grid-column: 2/3;
+}
+#news img,
+#news video {
+  width: 350px;
+  margin: 0 auto;
+}
+/*  ------------------- POM ONBOARDING CONTAINERS -------------------  */
+#tutorial {
+  padding-top: 200px;
+  background-color: var(--brown);
+}
+#tutorial div {
+  margin: 0 auto;
+  padding: 1rem;
+}
+#tutorial iframe {
+  width: 100%;
+  padding: 1rem;
+}
+#play {
+  padding: 1rem;
+}
+#game-objectives {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+#the-game,
+#the-objectives {
+  background-color: var(--yellow);
+  padding: 1rem;
+  margin: 1rem;
+  color: var(--black);
+}
+#the-glossary,
+#the-resources,
+#the-phases,
+#the-roles {
+  display: grid;
+  grid-template-columns: repeat(15, 1fr);
+  padding: 1rem;
+}
+#the-glossary,
+#the-phases {
+  background-color: var(--yellow);
+  margin: 1rem;
+}
+#the-roles,
+#the-resources {
+  background-color: var(--beige);
+  margin: 1rem;
+  color: var(--black);
+}
+#the-glossary h3,
+#the-resources h3,
+#the-resources p,
+#the-phases h3,
+#the-phases p,
+#the-roles h3,
+#the-roles p {
+  grid-column: 1/16;
+  padding: 1rem;
+}
+#the-glossary section,
+#the-phases section {
+  background-color: var(--white);
+  color: var(--black);
+  border: 1px solid var(--black);
+  grid-column: span 5;
+  padding: 1rem;
+  margin: 0 3% 3% 0;
+}
+#the-resources section,
+#the-roles section {
+  grid-column: span 3;
+  padding: 1rem;
+  margin: 0 auto;
+  text-align: center;
+}
+img,
+video {
+  padding: 1rem;
+}
+/* ------------------- POM TEXT STYLES -------------------  */
+html {
+  font-family: Arial, sans-serif;
+  color: var(--white);
+}
+h2,
+h3 {
+  font-weight: bold;
+  font-size: 2em;
+}
+h2 {
+  text-transform: uppercase;
+  text-align: center;
+}
+#news h2 {
+  color: var(--brown);
+}
+h3 {
+  font-style: italic;
+}
+nav a {
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--white);
+  font-size: 1em;
+  font-weight: bold;
+}
+p,
+li {
+  font-size: 1.25em;
+  line-height: 1.5em;
+}
+main a,
+main a:link,
+main a:visited,
+main a:active {
+  color: var(--red);
+  text-decoration: none;
+  transition: all 0.5s cubic-bezier(0.75, 0.5, 0.05, 1);
+}
+main a:hover {
+  color: var(--white);
+}
+main svg:hover {
+  stroke: var(--white);
+}
+.hidden {
+  visibility: hidden;
+  height: 1px;
+}
+#stats th {
+  text-transform: uppercase;
+  padding: 1%;
+}
+#stats td {
+  font-size: 2em;
+  padding: 1%;
+}
+#news a {
+  background-color: var(--red);
+  color: var(--white);
+  border: 3px solid var(--red);
+  text-transform: uppercase;
+  text-align: center;
+  width: 100%;
+  text-decoration: none;
+  padding: 1rem;
+  font-weight: bold;
+  font-size: 1.5em;
+  margin: 0 auto;
+  transition: all 0.5s cubic-bezier(0.75, 0.5, 0.05, 1);
+}
+#news a:hover {
+  background-color: var(--white);
+  color: var(--black);
+}
+#the-glossary h3,
+#the-phases h3,
+#the-phases p {
+  color: var(--black);
+}
+h4 {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 1.5em;
+}
+#winners figcaption {
+  color: var(--black);
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 1rem;
+  margin: 1rem;
+  font-style: italic;
+  text-align: left;
+  line-height: 1.5em;
+}
+footer {
+  font-size: 0.75em;
+  padding: 1rem;
+}
+footer a,
+footer a:link,
+footer a:visited,
+footer a:active {
+  color: var(--white);
+  text-decoration: none;
+  transition: all 0.5s cubic-bezier(0.75, 0.5, 0.05, 1);
+}
+footer a:hover {
+  color: var(--red);
+}
+footer svg:hover {
+  stroke: var(--red);
+}
+footer ul {
+  padding: 1rem;
+}
+#footer-nav h2,
+#sponsors h2,
+#social-media h2 {
+  text-align: left;
+}
+#footer-nav h2,
+#sponsors h2,
+#social-media h2 {
+  font-size: 1.5em;
+  padding: 1rem;
+}
+/*  ------------------- POM RESPONSIVE LAYOUT -------------------  */
+/* -------------------  POM SCREEN SIZES UP TO 1165PX -------------------   */
+@media screen and (max-width: 1165px) {
+  #the-roles section {
+    grid-column: span 3;
+  }
+  #the-roles img {
+    width: 100%;
+  }
+  #the-roles h4 {
+    font-size: 100%;
+  }
+  #the-phases section {
+    grid-column: span 7;
+  }
+}
+/* -------------------  POM SCREEN SIZES UP TO 1130PX -------------------   */
+@media screen and (max-width: 1130px) {
+  #game-trailer div:first-of-type,
+  #objective div:first-of-type {
+    padding: 5% 5% 5% 5%;
+  }
+}
+/* -------------------  POM SCREEN SIZES UP TO 1066PX -------------------  */
+@media screen and (max-width: 1066px) {
+  #news {
+    grid-template-columns: 1fr 1fr;
+  }
+  #news h2 {
+    grid-column: 1/3;
+  }
+  #news a {
+    grid-column: 1/3;
+    grid-row: 4;
+    width: 50%;
+  }
+  #news img,
+  #news video {
+    width: 350px;
+    margin: 0 auto;
+  }
+}
+/* -------------------  POM SCREEN SIZES UP TO 1030PX -------------------  */
+@media screen and (max-width: 1030px) {
+  #game-trailer,
+  #objective {
+    grid-template-columns: 1fr;
+  }
+  #game-trailer div:first-of-type,
+  #objective div:first-of-type {
+    margin: 0 auto;
+  }
+  #game-trailer iframe,
+  #objective iframe {
+    padding-top: 0%;
+    width: 100%;
+  }
+}
+/* -------------------  POM SCREEN SIZES UP TO 935PX -------------------  */
+@media screen and (max-width: 935px) {
+  #nav {
+    position: absolute;
+    width: 300px;
+    margin: -100px 0 0 -200px;
+    padding: 50px;
+    padding-top: 125px;
+    background: rgba(0, 0, 0, 0.75);
+    list-style-type: none;
+    -webkit-font-smoothing: antialiased;
+    transform-origin: 0% 0%;
+    transform: translate(100%, 0);
+    transition: transform 0.5s cubic-bezier(0.75, 0.5, 0.05, 1);
+  }
+  #nav li {
+    padding: 10px 0;
+    font-size: 22px;
+    text-align: right;
+  }
+  nav input {
+    display: contents;
+  }
+  nav ul {
+    display: block;
+  }
+  #nav-mobile {
+    display: block;
+    float: right;
+    position: relative;
+    top: 50px;
+    right: 50px;
+    z-index: 1;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  #nav-mobile a {
+    text-decoration: none;
+    color: var(--white);
+    transition: color 0.3s ease;
+  }
+  #nav-mobile a:hover {
+    color: var(--red);
+  }
+  #nav-mobile input {
+    display: block;
+    width: 40px;
+    height: 32px;
+    position: absolute;
+    top: -7px;
+    left: -5px;
+    cursor: pointer;
+    opacity: 0;
+    z-index: 2;
+    -webkit-touch-callout: none;
+  }
+  #nav-mobile span {
+    display: block;
+    width: 33px;
+    height: 4px;
+    margin-bottom: 5px;
+    position: relative;
+    background: var(--white);
+    border-radius: 3px;
+    z-index: 1;
+    transform-origin: 4px 0px;
+    transition: transform 0.5s cubic-bezier(0.75, 0.5, 0.05, 1),
+      background 0.5s cubic-bezier(0.75, 0.5, 0.05, 1), opacity 0.75s ease;
+  }
+  #nav-mobile span:first-child {
+    transform-origin: 0% 0%;
+  }
+  #nav-mobile span:nth-last-child(2) {
+    transform-origin: 0% 100%;
+  }
+  #nav-mobile input:checked ~ span {
+    opacity: 1;
+    transform: rotate(45deg) translate(-2px, -1px);
+    background: var(--white);
+  }
+  #nav-mobile input:checked ~ span:nth-last-child(3) {
+    opacity: 0;
+    transform: rotate(0deg) scale(0.2, 0.2);
+  }
+  #nav-mobile input:checked ~ span:nth-last-child(2) {
+    transform: rotate(-45deg) translate(0, -1px);
+  }
+  #nav-mobile input:checked ~ ul {
+    transform: none;
+  }
+  #winners {
+    grid-template-columns: 1fr;
+  }
+  #game-objectives {
+    grid-template-columns: 1fr;
+  }
+  #the-glossary section {
+    grid-column: span 7;
+  }
+  #the-roles {
+    display: block;
+    padding: 1rem;
+  }
+  #the-roles img {
+    width: 60%;
+  }
+  #the-roles h4 {
+    font-size: 1.5em;
+  }
+  #the-resources section {
+    grid-column: span 7;
+  }
+  #the-resources section:last-of-type {
+    grid-column: span 15;
+  }
+}
+/* -------------------  POM SCREEN SIZES UP TO 810PX -------------------  */
+@media screen and (max-width: 810px) {
+  #the-phases section {
+    grid-column: span 15;
+  }
+  #news {
+    grid-template-columns: 1fr;
+  }
+  #news h2 {
+    grid-column: 1/-1;
+  }
+  #news a {
+    grid-column: 1/-1;
+    grid-row: 5;
+    width: 100%;
+  }
+  #news img,
+  #news video {
+    width: 350px;
+    margin: 0 auto;
+  }
+  #the-glossary section {
+    grid-column: span 15;
+  }
+  footer {
+    grid-template-columns: 1fr;
+  }
+  footer section {
+    grid-column: 1/2;
+    margin: 5px;
+  }
+}
