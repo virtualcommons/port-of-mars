@@ -32,7 +32,7 @@ const lobby = { name: LOBBY_PAGE };
   <header>
     <img
       id="logo"
-      src="images/logo-Port-of-Mars-White.svg"
+      src="assets/images/logo-Port-of-Mars-White.svg"
       alt="the planet mars illustrated in white above Port of Mars"
     />
     <h1 class="hidden">Port of Mars</h1>
