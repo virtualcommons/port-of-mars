@@ -148,30 +148,11 @@ table {
 * {
   box-sizing: border-box;
 }
-header,
-footer {
-  background-color: var(--black);
-}
-header {
-  display: grid;
-  grid-template-columns: 200px 25px 1fr;
-  width: 100%;
-  position: fixed;
-  z-index: 10;
-  padding: 1rem;
-  box-shadow: 2px 2px 10px #000000;
-}
+
 #logo {
   width: 200px;
 }
-nav input {
-  display: none;
-}
-nav ul {
-  float: right;
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-}
+
 nav li {
   text-align: center;
 }
@@ -197,19 +178,7 @@ nav a:hover {
   background-color: var(--white);
   color: var(--black);
 }
-footer {
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-}
-footer section {
-  margin: 0 auto;
-}
-#copyright {
-  grid-column: 1/4;
-  padding: 1rem;
-  text-align: center;
-  width: 100%;
-}
+
 /*  ------------------- POM HOME CONTAINERS  ------------------- */
 #stats {
   background-color: var(--black);
@@ -421,10 +390,15 @@ main a:hover {
 main svg:hover {
   stroke: var(--white);
 }
-.hidden {
+
+.icon svg {
+  height: 1em;
+  width: 1em;
+}
+/* .hidden {
   visibility: hidden;
   height: 1px;
-}
+} */
 #stats th {
   text-transform: uppercase;
   padding: 1%;
@@ -470,10 +444,7 @@ h4 {
   text-align: left;
   line-height: 1.5em;
 }
-footer {
-  font-size: 0.75em;
-  padding: 1rem;
-}
+
 footer a,
 footer a:link,
 footer a:visited,
@@ -488,20 +459,7 @@ footer a:hover {
 footer svg:hover {
   stroke: var(--red);
 }
-footer ul {
-  padding: 1rem;
-}
-#footer-nav h2,
-#sponsors h2,
-#social-media h2 {
-  text-align: left;
-}
-#footer-nav h2,
-#sponsors h2,
-#social-media h2 {
-  font-size: 1.5em;
-  padding: 1rem;
-}
+
 /*  ------------------- POM RESPONSIVE LAYOUT -------------------  */
 /* -------------------  POM SCREEN SIZES UP TO 1165PX -------------------   */
 @media screen and (max-width: 1165px) {
@@ -562,7 +520,7 @@ footer ul {
 }
 /* -------------------  POM SCREEN SIZES UP TO 935PX -------------------  */
 @media screen and (max-width: 935px) {
-  #nav {
+  /* #nav {
     position: absolute;
     width: 300px;
     margin: -100px 0 0 -200px;
@@ -649,7 +607,7 @@ footer ul {
   }
   #nav-mobile input:checked ~ ul {
     transform: none;
-  }
+  } */
   #winners {
     grid-template-columns: 1fr;
   }
@@ -700,11 +658,11 @@ footer ul {
   #the-glossary section {
     grid-column: span 15;
   }
-  footer {
+  /* footer {
     grid-template-columns: 1fr;
   }
   footer section {
     grid-column: 1/2;
     margin: 5px;
-  }
+  } */
 }
