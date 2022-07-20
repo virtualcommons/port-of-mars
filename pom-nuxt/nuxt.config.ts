@@ -4,23 +4,30 @@ import { defineNuxtConfig } from "nuxt";
 export default defineNuxtConfig({
   alias: {
     "@": "./*",
-    assets: "./assets",
+    assets: "./assets/",
+    composables: "./composables/",
+    "@port-of-mars/shared/": "../shared/src/",
   },
-  build: {
-    postcss: {
-      plugins: {
-        tailwindcss: {
-          cssPath: "assets/css/main.css",
-          configPath: "tailwind.config.js",
-          exposeConfig: false,
-          config: {},
-          injectPosition: 0,
-          viewer: true,
-        },
-        autoprefixer: {},
-      },
-    },
+  tailwindcss: {
+    cssPath: "assets/css/main.css",
+    configPath: "tailwind.config.js",
+    exposeConfig: false,
+    config: {},
+    injectPosition: 0,
+    viewer: true,
   },
+  // build: {
+  //   postcss: {
+  //     plugins: {
+
+  //       autoprefixer: {},
+  //     },
+  //   },
+  // },
   css: ["@/assets/css/main.css"],
   modules: ["@nuxtjs/tailwindcss"],
+  // ssr: false,
+  typescript: {
+    strict: true,
+  },
 });
