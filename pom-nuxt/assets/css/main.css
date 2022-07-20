@@ -283,6 +283,7 @@ nav a:hover {
 }
 #play {
   padding: 1rem;
+  padding: 200px 0 50px 0;
 }
 #game-objectives {
   display: grid;
