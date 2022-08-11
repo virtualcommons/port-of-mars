@@ -6,28 +6,24 @@ export default defineNuxtConfig({
     "@": "./*",
     assets: "./assets/",
     composables: "./composables/",
+    "@port-of-mars/client/": "../shared/src/",
+    "@port-of-mars/server/": "../server/src/",
     "@port-of-mars/shared/": "../shared/src/",
   },
+
   tailwindcss: {
-    cssPath: "assets/css/main.css",
+    // cssPath: "assets/css/main.css",
     configPath: "tailwind.config.js",
     exposeConfig: false,
     config: {},
     injectPosition: 0,
     viewer: true,
   },
-  // build: {
-  //   postcss: {
-  //     plugins: {
-
-  //       autoprefixer: {},
-  //     },
-  //   },
-  // },
-  css: ["@/assets/css/main.css"],
+  // css: ["@/assets/css/main.css"],
   modules: ["@nuxtjs/tailwindcss"],
   // ssr: false,
   typescript: {
+    shim: false,
     strict: true,
   },
 });
