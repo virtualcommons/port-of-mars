@@ -195,8 +195,8 @@ nav a:hover {
   background-color: var(--brown);
 }
 #about {
-  background-image: url("../images/bg-moon.png");
-  padding: 200px 0 50px 0;
+  /* background-image: url("../images/bg-moon.png"); */
+  padding: 50px 0 50px 0;
 }
 #about p {
   width: 70%;
@@ -377,6 +377,11 @@ li {
   font-size: 1.25em;
   line-height: 1.5em;
 }
+
+main {
+  padding: 175px 0 0 0;
+}
+
 main a,
 main a:link,
 main a:visited,

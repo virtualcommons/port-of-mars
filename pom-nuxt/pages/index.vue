@@ -1,6 +1,6 @@
 <template>
   <main>
-    <section id="about">
+    <section class="bg-home-about" id="about">
       <h2>About Port of Mars</h2>
       <p>
         Port of Mars is an online, game-based, social science experiment set on
@@ -8,7 +8,7 @@
         Arizona State University Undergraduates for game play.
       </p>
     </section>
-    <section id="stats">
+    <section class="bg-home-stats" id="stats">
       <h3 class="hidden">Game Stats</h3>
       <table>
         <thead>
@@ -46,7 +46,7 @@
         ></iframe>
       </div>
     </section>
-    <section id="winners">
+    <section class="bg-home-winners" id="winners">
       <h2>Winners</h2>
       <section>
         <h3>Fall 2021</h3>
@@ -137,7 +137,7 @@
         >See More</a
       >
     </section>
-    <section id="gameplay">
+    <section class="bg-home-gameplay" id="gameplay">
       <h2>Gameplay</h2>
       <section id="objective">
         <div>
