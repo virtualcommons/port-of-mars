@@ -2,28 +2,13 @@ import { defineNuxtConfig } from "nuxt";
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
-  alias: {
-    "@": "./*",
-    assets: "./assets/",
-    composables: "./composables/",
-    "@port-of-mars/client/": "../shared/src/",
-    "@port-of-mars/server/": "../server/src/",
-    "@port-of-mars/shared/": "../shared/src/",
-  },
-
-  tailwindcss: {
-    // cssPath: "assets/css/main.css",
-    configPath: "tailwind.config.js",
-    exposeConfig: false,
-    config: {},
-    injectPosition: 0,
-    viewer: true,
-  },
-  // css: ["@/assets/css/main.css"],
+  // https://tailwindcss.nuxtjs.org/getting-started/setup/
   modules: ["@nuxtjs/tailwindcss"],
   // ssr: false,
-  typescript: {
-    shim: false,
-    strict: true,
-  },
+
+  // FIXME: re-enable when we're ready to have full typescript type checking
+  // typescript: {
+  //   shim: false,
+  //   strict: true,
+  // },
 });
