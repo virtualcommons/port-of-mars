@@ -8,9 +8,8 @@
     "preview": "nuxt preview"
   },
   "devDependencies": {
-    "@nuxtjs/tailwindcss": "^5.3.1",
+    "@nuxtjs/tailwindcss": "^5.3.2",
     "@types/node": "^18.0.3",
-    "nuxt": "npm:nuxt3@latest",
     "ts-node": "^10.8.2",
     "tsconfig-paths": "^4.0.0",
     "typeorm-fixtures-cli": "^3.0.0",
@@ -19,7 +18,9 @@
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.22.1",
     "@heroicons/vue": "^1.0.6",
+    "nuxt": "npm:nuxt3@latest",
     "@nuxt/kit-edge": "^3.0.0-rc.8-27672245.2ec2d9b",
+    "daisyui": "^2.22.0",
     "typeorm": "^0.3.7",
     "vue": "^3"
   }
