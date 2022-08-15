@@ -3,46 +3,27 @@ Footer designed by Christina Carrasquilla (ccarra1@asu.edu) for Port of Mars
 Tailwind CSS optimization by Christine Nguyen (cnnguye9@asu.edu)
 -->
 
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
-import { isDevOrStaging } from "@port-of-mars/shared/settings";
-import { MANUAL_PAGE } from "@port-of-mars/shared/routes";
-import { BUILD_ID } from "@port-of-mars/shared/settings";
-import {
-  useContactUrl,
-  useSiteUrl,
-  useInstagramUrl,
-  useTwitterUrl,
-  useNsfUrl,
-} from "composables/url";
+// import { BUILD_ID } from "@port-of-mars/shared/settings";
+// const buildId = ref(BUILD_ID);
 
-const CONTACT_URL = useContactUrl;
-const SITE_URL = useSiteUrl;
-const INSTAGRAM_URL = useInstagramUrl;
-const NSF_URL = useNsfUrl;
-// const isDevMode = readonly(isDevOrStaging);
-
-const buildId = ref(BUILD_ID);
-const currentYear = new Date().getFullYear();
-const manual = { name: MANUAL_PAGE };
+enum Url {
+  CONTACT_EMAIL = "mailto:portmars@asu.edu",
+  ASU_II = "https://interplanetary.asu.edu/",
+  ASU_COMPLEXITY = "https://complexity.asu.edu/",
+  COMPUTE_CANADA = "https://www.computecanada.ca/",
+  WEST_GRID = "https://westgrid.ca/",
+  NSF = "https://www.nsf.gov/",
+  INSTAGRAM = "https://www.instagram.com/portofmars/",
+  TWITTER = "https://twitter.com/PortOfMars",
+}
 </script>
 
 <template>
-  <!-- 
-    Default: Create grid with 1 col 
-    Screen width >= 1024px: create grid with 6 equally sized cols 
-  -->
   <footer
     class="grid grid-cols-1 lg:grid-cols-6 mx-auto px-6 py-8 items-center text-xs bg-black"
   >
-    <!-- 
-      Default: section spans full column
-      Screen width >= 1024px: 
-        - Navigation section starts at col 1 and spans 1 col
-        - Sponsors section starts at col 3 and spans 2 cols
-        - Social Media section starts at col 6 and spans 1 col
-        - Copyright section spans full col
-   -->
     <section class="m-1.5 col-span-full lg:col-start-1 lg:col-span-1">
       <h2 class="p-4 text-left text-2xl">Navigation</h2>
       <ul class="p-4">
@@ -163,8 +144,9 @@ const manual = { name: MANUAL_PAGE };
       <ul class="p-4">
         <li>
           <a
-            href="https://interplanetary.asu.edu/"
+            :href="Url.ASU_II"
             title="ASU Interplanetary Initiative"
+            target="_blank"
             >ASU Interplanetary Initiative
             <div
               class="icon inline-flex relative self-center top-0.5 h-4 w-4 mx-1"
@@ -192,8 +174,9 @@ const manual = { name: MANUAL_PAGE };
         </li>
         <li>
           <a
-            href="https://complexity.asu.edu/"
+            :href="Url.ASU_COMPLEXITY"
             title="ASU School of Complex Adaptive Systems"
+            target="_blank"
             >ASU School of Complex Adaptive Systems
             <div
               class="icon inline-flex relative self-center top-0.5 h-4 w-4 mx-1"
@@ -220,7 +203,10 @@ const manual = { name: MANUAL_PAGE };
           </a>
         </li>
         <li>
-          <a :href="NSF_URL" title="US National Science Foundation"
+          <a
+            :href="Url.NSF"
+            title="US National Science Foundation"
+            target="_blank"
             >US National Science Foundation (SES-2049553)
             <div
               class="icon inline-flex relative self-center top-0.5 h-4 w-4 mx-1"
@@ -246,13 +232,43 @@ const manual = { name: MANUAL_PAGE };
             </div>
           </a>
         </li>
+        <li>
+          <a :href="Url.COMPUTE_CANADA" title="Compute Canada" target="_blank"
+            >Compute Canada</a
+          >
+          and
+          <a :href="Url.WEST_GRID" title="West Grid" target="_blank"
+            >West Grid
+            <div
+              class="icon inline-flex relative self-center top-0.5 h-4 w-4 mx-1"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="#ffffff"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path
+                  d="M11 7h-5a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-5"
+                />
+                <line x1="10" y1="14" x2="20" y2="4" />
+                <polyline points="15 4 20 4 20 9" />
+              </svg></div
+          ></a>
+        </li>
       </ul>
     </section>
     <section class="m-1.5 col-span-full lg:col-start-6 lg:col-span-1">
       <h2 class="p-4 text-left text-2xl">Social Media Links</h2>
       <ul class="p-4">
         <li>
-          <a :href="CONTACT_URL" title="email us"
+          <a :href="Url.CONTACT_EMAIL" title="Email Us" _target="blank"
             >Email
             <div
               class="icon inline-flex relative self-center top-0.5 h-4 w-4 mx-1"
@@ -278,7 +294,7 @@ const manual = { name: MANUAL_PAGE };
           </a>
         </li>
         <li>
-          <a :href="INSTAGRAM_URL" title="Instagram"
+          <a :href="Url.INSTAGRAM" title="Instagram" target="_blank"
             >Instagram
             <div
               class="icon inline-flex relative self-center top-0.5 h-4 w-4 mx-1"
@@ -304,7 +320,7 @@ const manual = { name: MANUAL_PAGE };
           </a>
         </li>
         <li>
-          <a :href="useTwitterUrl" title="Twitter"
+          <a :href="Url.TWITTER" title="Twitter" target="_blank"
             >Twitter
             <div
               class="icon inline-flex relative self-center top-0.5 h-4 w-4 mx-1"
