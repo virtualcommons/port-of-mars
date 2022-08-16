@@ -10,7 +10,7 @@ function toggleMenu() {
 
 <template>
   <header class="w-full fixed items-center top-0 z-10 bg-black shadow-md">
-    <nav class="grid grid-cols-2 lg:grid-cols-3 p-6 items-center">
+    <nav class="grid grid-cols-2 gap-3 p-6 lg:grid-cols-3 items-center">
       <div class="m-1.5 col-start-1 col-span-1">
         <nuxt-link to="/">
           <img
@@ -21,9 +21,7 @@ function toggleMenu() {
           <h1 class="hidden">Port of Mars</h1>
         </nuxt-link>
       </div>
-      <div
-        class="m-1.5 md:hidden md:col-start-3 md:col-span-1 justify-self-end"
-      >
+      <div class="md:hidden m-1.5 col-start-2 col-span-1 justify-self-end">
         <button @click="toggleMenu">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -40,10 +38,12 @@ function toggleMenu() {
           </svg>
         </button>
       </div>
-      <div class="m-1.5 col-span-full md:col-start-3 md:col-span-1">
+      <div
+        class="m-1.5 col-span-full md:col-start-2 md:col-span-full md:justify-self-center lg:justify-self-end"
+      >
         <ul
           :class="showMenu ? 'flex' : 'hidden'"
-          class="md:flex flex-col space-y-4 mt-8 md:space-y-0 md:flex-row md:items-center md:space-x-10 md:mt-0"
+          class="flex-col space-y-4 mt-8 md:space-y-0 md:flex md:flex-row md:items-center md:space-x-10 md:mt-0"
         >
           <li><nuxt-link to="/">Register</nuxt-link></li>
           <li><a href="#about" title="about">About</a></li>
