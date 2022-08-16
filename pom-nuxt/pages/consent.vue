@@ -1,7 +1,29 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
-const consent = ref(false);
+import { computed, onMounted, reactive, ref, watch } from "vue";
 const hasScrolledToBottom = ref(false);
+const name = ref("");
+const email = ref("");
+const consent = ref(false);
+const feedback = ref("");
+const form = reactive({ name, email, consent, feedback });
+
+watch(
+  () => email.value,
+  (email) => {
+    validateEmail(email);
+  }
+);
+
+// validate email input with regex
+function validateEmail(email: string) {
+  const emailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  console.log("test email: ", emailFormat.test(email));
+  if (!emailFormat.test(email)) {
+    feedback.value = "Invalid email";
+  } else {
+    feedback.value = "";
+  }
+}
 
 function onScroll(e: Event) {
   const [scrollTop, clientHeight, scrollHeight] = [
@@ -141,6 +163,8 @@ function denyConsent() {
               <span class="label-text">What is your name?</span>
             </label>
             <input
+              required
+              v-model="form.name"
               type="text"
               placeholder="Full Name"
               class="input input-bordered w-full max-w-xs"
@@ -149,10 +173,13 @@ function denyConsent() {
               <span class="label-text">What is your email?</span>
             </label>
             <input
+              required
+              v-model="form.email"
               type="text"
               placeholder="Email"
               class="input input-bordered w-full max-w-xs"
             />
+            <span v-if="form.feedback">{{ form.feedback }}</span>
             <button class="btn mx-5">Verify Email</button>
           </div>
         </div>
