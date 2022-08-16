@@ -9,7 +9,6 @@ function onScroll(e: Event) {
     e.target,
     e.target,
   ];
-
   if (scrollTop + clientHeight >= scrollHeight) {
     console.log("reached the bottom of the div");
     hasScrolledToBottom.value = true;
@@ -121,10 +120,20 @@ function denyConsent() {
         </div>
       </div>
       <div class="p-5 text-white">
-        <div class="collapse">
-          <input type="checkbox" />
-          <div class="collapse-title text-xl font-medium">
-            <button class="btn" @click="grantConsent">Grant Consent</button>
+        <div
+          tabindex="0"
+          :class="consent ? 'collapse-open' : 'collapse-close'"
+          class="collapse"
+        >
+          <div class="collapse-title text-xl font-medium space-x-5">
+            <button
+              class="btn"
+              @click="grantConsent"
+              :disabled="!hasScrolledToBottom"
+            >
+              Grant Consent
+            </button>
+            <button class="btn" @click="denyConsent">Deny Consent</button>
           </div>
           <div class="collapse-content">
             <p>Register</p>
@@ -147,6 +156,8 @@ function denyConsent() {
             <button class="btn mx-5">Verify Email</button>
           </div>
         </div>
+        <p>Consent {{ consent }}</p>
+        <p>hasScrolledToBottom {{ hasScrolledToBottom }}</p>
       </div>
     </div>
   </main>
