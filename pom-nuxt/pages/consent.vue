@@ -1,6 +1,20 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 const consent = ref(false);
+const hasScrolledToBottom = ref(false);
+
+function onScroll(e: Event) {
+  const [scrollTop, clientHeight, scrollHeight] = [
+    e.target,
+    e.target,
+    e.target,
+  ];
+
+  if (scrollTop + clientHeight >= scrollHeight) {
+    console.log("reached the bottom of the div");
+    hasScrolledToBottom.value = true;
+  }
+}
 
 function grantConsent() {
   consent.value = true;
@@ -15,13 +29,16 @@ function denyConsent() {
 <template>
   <main>
     <div
-      class="grid grid-cols-2 gap-3 items-stretch w-full h-full p-5 bg-amber-900/20"
+      class="grid grid-cols-2 gap-3 items-stretch w-full h-screen p-5 bg-amber-900/20"
     >
-      <div class="p-5" id="terms-and-conditions">
-        <h1 class="font-semibold text-black leading-tight text-xl my-2">
+      <div
+        class="p-5 h-5/6 overflow-y-auto bg-stone-800/50 text-white"
+        @scroll="onScroll"
+      >
+        <h1 class="font-semibold leading-tight text-xl my-2">
           Port of Mars Consent Form and Email Registration
         </h1>
-        <div class="text-black space-y-5">
+        <div class="space-y-5">
           <p>Dear Participant,</p>
           <p>
             I am a professor in the School of Sustainability at Arizona State
@@ -103,19 +120,33 @@ function denyConsent() {
           <p class="justify-self-start">Dr. Marco Janssen</p>
         </div>
       </div>
-      <div class="p-5 text-black" id="registration">
-        <!-- <form class="flex flex-col space-y-5"> -->
-        {{ consent }}
-        <button @click="grantConsent">Grant Consent</button>
-        <button @click="denyConsent">Deny Consent</button>
-        <div v-if="consent">
-          <input
-            type="text"
-            placeholder="Type here"
-            class="input w-full max-w-xs"
-          />
+      <div class="p-5 text-white">
+        <div class="collapse">
+          <input type="checkbox" />
+          <div class="collapse-title text-xl font-medium">
+            <button class="btn" @click="grantConsent">Grant Consent</button>
+          </div>
+          <div class="collapse-content">
+            <p>Register</p>
+            <label class="label">
+              <span class="label-text">What is your name?</span>
+            </label>
+            <input
+              type="text"
+              placeholder="Full Name"
+              class="input input-bordered w-full max-w-xs"
+            />
+            <label class="label">
+              <span class="label-text">What is your email?</span>
+            </label>
+            <input
+              type="text"
+              placeholder="Email"
+              class="input input-bordered w-full max-w-xs"
+            />
+            <button class="btn mx-5">Verify Email</button>
+          </div>
         </div>
-        <!-- </form> -->
       </div>
     </div>
   </main>
