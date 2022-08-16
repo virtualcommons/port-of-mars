@@ -4,8 +4,10 @@ const hasScrolledToBottom = ref(false);
 const name = ref("");
 const email = ref("");
 const consent = ref(false);
-const feedback = ref("");
-const form = reactive({ name, email, consent, feedback });
+const nameFeedback = ref("");
+const emailFeedback = ref("");
+
+const form = reactive({ name, email, consent, nameFeedback, emailFeedback });
 
 watch(
   () => email.value,
@@ -14,14 +16,27 @@ watch(
   }
 );
 
+watch(
+  () => name.value,
+  (name) => {
+    validateName(name);
+  }
+);
+
+function validateName(name: string) {
+  return name === null || name === undefined || name === ""
+    ? (nameFeedback.value = "Name cannot be an empty field.")
+    : (nameFeedback.value = "");
+}
+
 // validate email input with regex
 function validateEmail(email: string) {
   const emailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   console.log("test email: ", emailFormat.test(email));
   if (!emailFormat.test(email)) {
-    feedback.value = "Invalid email";
+    emailFeedback.value = "Invalid email";
   } else {
-    feedback.value = "";
+    emailFeedback.value = "";
   }
 }
 
@@ -169,6 +184,7 @@ function denyConsent() {
               placeholder="Full Name"
               class="input input-bordered w-full max-w-xs"
             />
+            <span v-if="form.nameFeedback">{{ nameFeedback }}</span>
             <label class="label">
               <span class="label-text">What is your email?</span>
             </label>
@@ -179,7 +195,7 @@ function denyConsent() {
               placeholder="Email"
               class="input input-bordered w-full max-w-xs"
             />
-            <span v-if="form.feedback">{{ form.feedback }}</span>
+            <span v-if="form.emailFeedback">{{ form.emailFeedback }}</span>
             <button class="btn mx-5">Verify Email</button>
           </div>
         </div>
