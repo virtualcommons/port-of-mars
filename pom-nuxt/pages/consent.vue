@@ -93,14 +93,14 @@ function denyConsent() {
 <template>
   <main>
     <div
-      class="grid grid-cols-2 gap-3 items-stretch w-full h-screen p-5 bg-amber-900/20"
+      class="grid lg:grid-cols-2 grid-cols-1 gap-3 items-stretch w-full h-screen p-5 bg-amber-900/20"
     >
       <div
         class="p-5 h-4/6 overflow-y-auto bg-stone-800/50 text-white"
         @scroll="onScroll"
       >
         <h1 class="font-semibold leading-tight text-xl my-2">
-          Port of Mars Consent Form and Email Registration
+          Port of Mars Consent Information
         </h1>
         <div class="space-y-5">
           <p>Dear Participant,</p>
@@ -190,16 +190,18 @@ function denyConsent() {
           :class="consent ? 'collapse-open' : 'collapse-close'"
           class="collapse"
         >
-          <div class="collapse-title text-xl font-medium space-x-5">
+          <div
+            class="md:flex text-center collapse-title text-xl font-medium md:space-x-5"
+          >
             <button
-              class="btn bg-emerald-800/70 hover:bg-emerald-500/50"
+              class="btn btn-wide bg-emerald-800/70 hover:bg-emerald-500/50 my-2"
               @click="grantConsent"
               :disabled="!hasScrolledToBottom"
             >
               Grant Consent
             </button>
             <button
-              class="btn bg-red-800/70 hover:bg-red-500/50"
+              class="btn btn-wide bg-red-800/70 hover:bg-red-500/50 my-2"
               @click="denyConsent"
             >
               Deny Consent
@@ -237,17 +239,17 @@ function denyConsent() {
               <span class="text-red-800" v-if="feedback.email">{{
                 feedback.email
               }}</span>
-              <div class="flex py-5 space-x-3">
+              <div class="md:flex py-5 md:space-x-3 text-center">
                 <input
                   type="submit"
                   value="Verify Email"
-                  class="btn btn-wide bg-emerald-800/70 hover:bg-emerald-500/50"
+                  class="btn btn-wide bg-emerald-800/70 hover:bg-emerald-500/50 my-2"
                   :disabled="isSubmitDisabled"
                 />
                 <input
                   type="reset"
                   value="Reset"
-                  class="btn btn-wide bg-slate-500/70 hover:bg-slate-300/50"
+                  class="btn btn-wide bg-slate-500/70 hover:bg-slate-300/50 my-2"
                 />
               </div>
             </form>
