@@ -1,12 +1,22 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch } from "vue";
+import { computed, reactive, ref, watch } from "vue";
 const hasScrolledToBottom = ref(false);
 const name = ref("");
 const email = ref("");
 const consent = ref(false);
 const feedback = reactive({ name: "", email: "" });
-
 const form = reactive({ name, email, consent });
+const isFormValid = reactive({ name: false, email: false });
+const initialState = () => {
+  return {
+    name: "",
+    email: "",
+    consent: false,
+  };
+};
+const isSubmitDisabled = computed(() => {
+  return isFormValid.name && isFormValid.email ? false : true;
+});
 
 watch(
   () => email.value,
@@ -25,9 +35,13 @@ watch(
 const emit = defineEmits(["verify-email"]);
 
 function validateName(name: string) {
-  return name === null || name === undefined || name === ""
-    ? (feedback.name = "Name cannot be an empty field.")
-    : (feedback.name = "");
+  if (name === null || name === undefined || name === "") {
+    feedback.name = "Name cannot be an empty field.";
+    isFormValid.name = false;
+  } else {
+    feedback.name = "";
+    isFormValid.name = true;
+  }
 }
 
 // validate email input with regex
@@ -36,8 +50,10 @@ function validateEmail(email: string) {
   console.log("test email: ", emailFormat.test(email));
   if (!emailFormat.test(email)) {
     feedback.email = "Invalid email";
+    isFormValid.email = false;
   } else {
     feedback.email = "";
+    isFormValid.email = true;
   }
 }
 
@@ -60,6 +76,10 @@ function onSubmit(e: Event) {
   // TODO: make api call to submit form and send verification email
 }
 
+function reset() {
+  Object.assign(form, initialState());
+}
+
 function grantConsent() {
   consent.value = true;
 }
@@ -76,7 +96,7 @@ function denyConsent() {
       class="grid grid-cols-2 gap-3 items-stretch w-full h-screen p-5 bg-amber-900/20"
     >
       <div
-        class="p-5 h-5/6 overflow-y-auto bg-stone-800/50 text-white"
+        class="p-5 h-4/6 overflow-y-auto bg-stone-800/50 text-white"
         @scroll="onScroll"
       >
         <h1 class="font-semibold leading-tight text-xl my-2">
@@ -164,7 +184,7 @@ function denyConsent() {
           <p class="justify-self-start">Dr. Marco Janssen</p>
         </div>
       </div>
-      <div class="p-5 text-white">
+      <div class="flex justify-center items-start p-5 text-white">
         <div
           tabindex="0"
           :class="consent ? 'collapse-open' : 'collapse-close'"
@@ -172,19 +192,24 @@ function denyConsent() {
         >
           <div class="collapse-title text-xl font-medium space-x-5">
             <button
-              class="btn"
+              class="btn bg-emerald-800/70 hover:bg-emerald-500/50"
               @click="grantConsent"
               :disabled="!hasScrolledToBottom"
             >
               Grant Consent
             </button>
-            <button class="btn" @click="denyConsent">Deny Consent</button>
+            <button
+              class="btn bg-red-800/70 hover:bg-red-500/50"
+              @click="denyConsent"
+            >
+              Deny Consent
+            </button>
           </div>
-          <div class="flex flex-col collapse-content">
+          <div class="collapse-content">
             <form class="flex flex-col space-y-2" @submit="onSubmit">
               <p>Register</p>
               <label class="label">
-                <span class="label-text">What is your name?</span>
+                <span class="label-text">Your Full Name</span>
               </label>
               <input
                 required
@@ -193,20 +218,38 @@ function denyConsent() {
                 placeholder="Full Name"
                 class="input input-bordered w-full max-w-xs"
               />
-              <span v-if="feedback.name">{{ feedback.name }}</span>
+              <span class="text-red-800" v-if="feedback.name">{{
+                feedback.name
+              }}</span>
               <label class="label">
-                <span class="label-text">What is your email?</span>
+                <span class="label-text">Your Email</span>
               </label>
-              <input
-                required
-                v-model="form.email"
-                type="text"
-                placeholder="Email"
-                class="input input-bordered w-full max-w-xs"
-              />
-              <span v-if="feedback.email">{{ feedback.email }}</span>
-              <!-- TODO: disable verify email submit during certain cases -->
-              <input type="submit" value="Verify Email" class="btn my-5" />
+              <label class="input-group">
+                <span>Email</span>
+                <input
+                  required
+                  v-model="form.email"
+                  type="text"
+                  placeholder="info@site.com"
+                  class="input input-bordered"
+                />
+              </label>
+              <span class="text-red-800" v-if="feedback.email">{{
+                feedback.email
+              }}</span>
+              <div class="flex py-5 space-x-3">
+                <input
+                  type="submit"
+                  value="Verify Email"
+                  class="btn btn-wide bg-emerald-800/70 hover:bg-emerald-500/50"
+                  :disabled="isSubmitDisabled"
+                />
+                <input
+                  type="reset"
+                  value="Reset"
+                  class="btn btn-wide bg-slate-500/70 hover:bg-slate-300/50"
+                />
+              </div>
             </form>
           </div>
         </div>
