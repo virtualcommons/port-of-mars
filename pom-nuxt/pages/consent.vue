@@ -4,10 +4,9 @@ const hasScrolledToBottom = ref(false);
 const name = ref("");
 const email = ref("");
 const consent = ref(false);
-const nameFeedback = ref("");
-const emailFeedback = ref("");
+const feedback = reactive({ name: "", email: "" });
 
-const form = reactive({ name, email, consent, nameFeedback, emailFeedback });
+const form = reactive({ name, email, consent });
 
 watch(
   () => email.value,
@@ -23,10 +22,12 @@ watch(
   }
 );
 
+const emit = defineEmits(["verify-email"]);
+
 function validateName(name: string) {
   return name === null || name === undefined || name === ""
-    ? (nameFeedback.value = "Name cannot be an empty field.")
-    : (nameFeedback.value = "");
+    ? (feedback.name = "Name cannot be an empty field.")
+    : (feedback.name = "");
 }
 
 // validate email input with regex
@@ -34,9 +35,9 @@ function validateEmail(email: string) {
   const emailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   console.log("test email: ", emailFormat.test(email));
   if (!emailFormat.test(email)) {
-    emailFeedback.value = "Invalid email";
+    feedback.email = "Invalid email";
   } else {
-    emailFeedback.value = "";
+    feedback.email = "";
   }
 }
 
@@ -52,13 +53,20 @@ function onScroll(e: Event) {
   }
 }
 
+function onSubmit(e: Event) {
+  console.log(form);
+  e.preventDefault();
+  emit("verify-email", form);
+  // TODO: make api call to submit form and send verification email
+}
+
 function grantConsent() {
   consent.value = true;
 }
 
 function denyConsent() {
   consent.value = false;
-  // api call then reroute to landing page (or stay here?)
+  // TODO: make api call then reroute to landing page (or stay here?)
 }
 </script>
 
@@ -172,35 +180,36 @@ function denyConsent() {
             </button>
             <button class="btn" @click="denyConsent">Deny Consent</button>
           </div>
-          <div class="collapse-content">
-            <p>Register</p>
-            <label class="label">
-              <span class="label-text">What is your name?</span>
-            </label>
-            <input
-              required
-              v-model="form.name"
-              type="text"
-              placeholder="Full Name"
-              class="input input-bordered w-full max-w-xs"
-            />
-            <span v-if="form.nameFeedback">{{ nameFeedback }}</span>
-            <label class="label">
-              <span class="label-text">What is your email?</span>
-            </label>
-            <input
-              required
-              v-model="form.email"
-              type="text"
-              placeholder="Email"
-              class="input input-bordered w-full max-w-xs"
-            />
-            <span v-if="form.emailFeedback">{{ form.emailFeedback }}</span>
-            <button class="btn mx-5">Verify Email</button>
+          <div class="flex flex-col collapse-content">
+            <form class="flex flex-col space-y-2" @submit="onSubmit">
+              <p>Register</p>
+              <label class="label">
+                <span class="label-text">What is your name?</span>
+              </label>
+              <input
+                required
+                v-model="form.name"
+                type="text"
+                placeholder="Full Name"
+                class="input input-bordered w-full max-w-xs"
+              />
+              <span v-if="feedback.name">{{ feedback.name }}</span>
+              <label class="label">
+                <span class="label-text">What is your email?</span>
+              </label>
+              <input
+                required
+                v-model="form.email"
+                type="text"
+                placeholder="Email"
+                class="input input-bordered w-full max-w-xs"
+              />
+              <span v-if="feedback.email">{{ feedback.email }}</span>
+              <!-- TODO: disable verify email submit during certain cases -->
+              <input type="submit" value="Verify Email" class="btn my-5" />
+            </form>
           </div>
         </div>
-        <p>Consent {{ consent }}</p>
-        <p>hasScrolledToBottom {{ hasScrolledToBottom }}</p>
       </div>
     </div>
   </main>
