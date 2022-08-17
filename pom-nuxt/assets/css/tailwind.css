@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+main {
+  padding: 155px 0 0 0;
+}
