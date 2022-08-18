@@ -2,6 +2,49 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  h1 {
+    @apply text-5xl;
+    @apply font-bold;
+    @apply text-white;
+    @apply tracking-wide;
+    @apply space-y-5;
+  }
+  h2 {
+    @apply text-4xl;
+    @apply font-bold;
+    @apply uppercase;
+    @apply text-white;
+    @apply tracking-wide;
+    @apply space-y-5;
+  }
+
+  h3 {
+    @apply text-3xl;
+    @apply font-bold;
+    @apply text-white;
+    @apply tracking-wide;
+    @apply space-y-5;
+  }
+
+  p {
+    @apply text-white;
+    @apply text-xl;
+  }
+
+  section {
+    @apply p-12;
+    @apply space-y-5;
+  }
+
+  figcaption {
+    @apply text-white;
+    @apply text-lg;
+    @apply bg-stone-500/50;
+    @apply p-4;
+  }
+}
+
 main {
-  padding: 155px 0 0 0;
+  padding: 130px 0 0 0;
 }

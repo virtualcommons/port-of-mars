@@ -1,8 +1,8 @@
 <template>
   <main>
     <div class="flex flex-col">
-      <section class="bg-home-about text-center py-10 space-y-3" id="about">
-        <h2 class="text-4xl font-bold">About Port of Mars</h2>
+      <section class="bg-home-about text-center">
+        <h2>About Port of Mars</h2>
         <p class="w-3/4 mx-auto">
           Port of Mars is an online, game-based, social science experiment set
           on the first human community on the Red Planet. Currently recruiting
@@ -10,7 +10,7 @@
         </p>
       </section>
       <section
-        class="grid grid-cols-1 md:grid-cols-2 space-x-4 p-4 bg-home-game-trailer"
+        class="grid grid-cols-1 md:grid-cols-2 space-x-4 bg-home-game-trailer"
       >
         <div class="flex flex-col justify-center space-y-5">
           <h3 class="text-center text-3xl font-bold">The Game</h3>
@@ -32,11 +32,11 @@
           ></iframe>
         </div>
       </section>
-      <section class="bg-home-winners text-center space-y-3 py-10" id="winners">
-        <h2 class="text-center text-4xl font-bold">Winners</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2">
+      <section class="bg-home-winners">
+        <h2 class="text-center">Winners</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
           <div>
-            <h3 class="text-center text-3xl font-bold">Fall 2021</h3>
+            <h3 class="text-center">Fall 2021</h3>
             <figure id="fall21">
               <img
                 class="w-full mb-4"
@@ -50,68 +50,24 @@
             </figure>
           </div>
           <div>
-            <h3 class="text-center text-3xl font-bold">Spring 2021</h3>
+            <h3 class="text-center">Spring 2021</h3>
             <figure>
               <img
-                class="w-full"
+                class="w-full mb-4"
                 src="assets/images/winner-spring21.png"
                 alt="NASA astronaut Cady Coleman on Zoom with the Port of Mars winning team"
               />
               <figcaption>
                 In a nail-biting finale, two players (Curator and Researcher)
                 emerged as winners. The championship team were awarded a virtual
-                dinner with NASA astronaut Cady Coleman
-                <span
-                  >(<a
-                    href="https://www.instagram.com/astro_cady"
-                    title="Instagram"
-                    >Instagram
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="icon icon-tabler icon-tabler-brand-instagram"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      stroke-width="2"
-                      stroke="#aa2a29"
-                      fill="none"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                      <rect x="4" y="4" width="16" height="16" rx="4" />
-                      <circle cx="12" cy="12" r="3" />
-                      <line x1="16.5" y1="7.5" x2="16.5" y2="7.501" /></svg
-                  ></a>
-                  <a href="https://twitter.com/Astro_Cady" title="Twitter"
-                    >Twitter
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="icon icon-tabler icon-tabler-brand-twitter"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      stroke-width="2"
-                      stroke="#aa2a29"
-                      fill="none"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                      <path
-                        d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z"
-                      /></svg></a
-                  >).</span
-                >
+                dinner with NASA astronaut Cady Coleman.
               </figcaption>
             </figure>
           </div>
         </div>
       </section>
-      <section
-        class="flex flex-col items-center justify-center space-y-5 py-10"
-      >
-        <h2 class="text-4xl font-bold">News</h2>
+      <section class="flex flex-col items-center justify-center">
+        <h2>News</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-x-24">
           <img
             class="w-96"
@@ -142,11 +98,11 @@
           >See More</a
         >
       </section>
-      <section class="bg-home-gameplay py-10" id="gameplay">
-        <h2 class="text-4xl font-bold text-center">Gameplay</h2>
-        <section class="grid grid-cols-1 md:grid-cols-2 space-x-4 p-4">
+      <section class="bg-home-gameplay">
+        <h2 class="text-center">Gameplay</h2>
+        <section class="grid grid-cols-1 md:grid-cols-2 space-x-4">
           <div class="flex flex-col justify-center space-y-5">
-            <h3 class="text-center text-3xl font-bold">The Objective</h3>
+            <h3 class="text-center">The Objective</h3>
             <p class="w-3/4 mx-auto">
               Your mission is to stay alive and achieve the most victory points.
               Each round you receive 10 time blocks that you can invest in
