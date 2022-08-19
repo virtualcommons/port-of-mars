@@ -25,8 +25,8 @@ enum Url {
     class="grid grid-cols-1 lg:grid-cols-6 mx-auto px-6 py-8 items-center text-xs bg-black"
   >
     <section class="m-1.5 col-span-full lg:col-start-1 lg:col-span-1">
-      <h2 class="p-4 text-left text-2xl">Navigation</h2>
-      <ul class="p-4">
+      <h4>Navigation</h4>
+      <ul>
         <li>
           <a href="#about" title="about"
             >About
@@ -140,8 +140,8 @@ enum Url {
       </ul>
     </section>
     <section class="m-1.5 col-span-full lg:col-start-3 lg:col-span-2">
-      <h2 class="p-4 text-left text-2xl">Sponsors</h2>
-      <ul class="p-4">
+      <h4>Sponsors</h4>
+      <ul>
         <li>
           <a
             :href="Url.ASU_II"
@@ -236,7 +236,7 @@ enum Url {
           <a :href="Url.COMPUTE_CANADA" title="Compute Canada" target="_blank"
             >Compute Canada</a
           >
-          and
+          <span class="mx-2">and</span>
           <a :href="Url.WEST_GRID" title="West Grid" target="_blank"
             >West Grid
             <div
@@ -265,8 +265,8 @@ enum Url {
       </ul>
     </section>
     <section class="m-1.5 col-span-full lg:col-start-6 lg:col-span-1">
-      <h2 class="p-4 text-left text-2xl">Social Media Links</h2>
-      <ul class="p-4">
+      <h4>Social Media Links</h4>
+      <ul>
         <li>
           <a :href="Url.CONTACT_EMAIL" title="Email Us" _target="blank"
             >Email

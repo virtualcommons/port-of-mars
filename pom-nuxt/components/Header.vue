@@ -14,6 +14,7 @@ function toggleMenu() {
       <div class="m-1.5 col-start-1 col-span-1">
         <nuxt-link to="/">
           <img
+            class="w-40"
             id="logo"
             src="assets/images/logo-Port-of-Mars-White.svg"
             alt="the planet mars illustrated in white above Port of Mars"

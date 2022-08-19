@@ -12,11 +12,12 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
-        "home-about": "url('public/bg-moon.png')",
-        "home-game-trailer": "url('public/bg-dark-moon.png')",
-        "home-winners": "url('public/bg-jupiter.png')",
-        "home-gameplay": "url('public/bg-dark-moon.png')",
-        login: "url('public/bg-dark-moon.png')",
+        "home-about": "url('assets/images/bg-moon.png')",
+        "home-game-trailer": "url('assets/images/bg-dark-moon.png')",
+        "home-winners": "url('assets/images/bg-jupiter.png')",
+        "home-gameplay": "url('assets/images/bg-dark-moon.png')",
+        "home-news": "url('assets/images/bg-stars.png')",
+        login: "url('assets/images/bg-dark-moon.png')",
       },
       colors: {
         main: "#9C5147",

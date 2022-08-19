@@ -39,7 +39,7 @@
             <h3 class="text-center">Fall 2021</h3>
             <figure id="fall21">
               <img
-                class="w-full mb-4"
+                class="mb-4"
                 src="assets/images/winner-fall21.jpg"
                 alt="Winner Kyle Villa poses for a photo with the Port of Mars development team, all wearing Port of Mars black t-shorts and standing on a virtual Mars background"
               />
@@ -53,7 +53,7 @@
             <h3 class="text-center">Spring 2021</h3>
             <figure>
               <img
-                class="w-full mb-4"
+                class="mb-4"
                 src="assets/images/winner-spring21.png"
                 alt="NASA astronaut Cady Coleman on Zoom with the Port of Mars winning team"
               />
@@ -66,7 +66,7 @@
           </div>
         </div>
       </section>
-      <section class="flex flex-col items-center justify-center">
+      <section class="flex flex-col items-center justify-center bg-home-news">
         <h2>News</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-x-24">
           <img
@@ -89,8 +89,6 @@
             Sorry, your browser doesn't support embedded videos.
           </video>
         </div>
-        <!--Insert Instagram widget, in the meantime, I've added them manually-->
-
         <a
           class="btn btn-wide"
           href="https://www.instagram.com/portofmars/"

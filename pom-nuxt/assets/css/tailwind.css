@@ -7,29 +7,50 @@
     @apply text-5xl;
     @apply font-bold;
     @apply text-white;
-    @apply tracking-wide;
+    @apply uppercase;
+    @apply tracking-wider;
     @apply space-y-5;
+    font-family: Roboto;
   }
+
   h2 {
     @apply text-4xl;
     @apply font-bold;
     @apply uppercase;
     @apply text-white;
-    @apply tracking-wide;
+    @apply tracking-wider;
     @apply space-y-5;
+    font-family: Roboto;
   }
 
   h3 {
     @apply text-3xl;
     @apply font-bold;
     @apply text-white;
-    @apply tracking-wide;
+    @apply tracking-wider;
     @apply space-y-5;
+    font-family: Roboto;
+  }
+
+  h4 {
+    @apply text-2xl;
+    @apply font-bold;
+    @apply text-white;
+    @apply tracking-wider;
+    @apply space-y-5;
+    font-family: Roboto;
   }
 
   p {
     @apply text-white;
     @apply text-xl;
+    font-family: Exo;
+  }
+
+  span {
+    @apply text-white;
+    @apply text-xl;
+    font-family: Exo;
   }
 
   section {
@@ -43,8 +64,16 @@
     @apply bg-stone-500/50;
     @apply p-4;
   }
-}
 
-main {
-  padding: 130px 0 0 0;
+  img {
+    @apply w-full;
+  }
+
+  a {
+    @apply text-xl;
+  }
+
+  main {
+    @apply pt-[140px];
+  }
 }
