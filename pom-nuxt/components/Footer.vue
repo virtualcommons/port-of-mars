@@ -348,7 +348,7 @@ enum Url {
       </ul>
     </section>
     <section class="m-1.5 col-span-full w-full text-center p-4">
-      <small>&copy; 2020-2022 Arizona Board of Regents</small>
+      <p>&copy; 2020-2022 Arizona Board of Regents</p>
     </section>
   </footer>
 </template>

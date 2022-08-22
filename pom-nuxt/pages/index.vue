@@ -1,7 +1,7 @@
 <template>
   <main>
     <div class="flex flex-col">
-      <section class="bg-home-about text-center">
+      <section class="bg-home-about text-center" id="about">
         <h2>About Port of Mars</h2>
         <p class="w-3/4 mx-auto">
           Port of Mars is an online, game-based, social science experiment set
@@ -32,7 +32,7 @@
           ></iframe>
         </div>
       </section>
-      <section class="bg-home-winners">
+      <section class="bg-home-winners" id="winners">
         <h2 class="text-center">Winners</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
           <div>
@@ -66,7 +66,10 @@
           </div>
         </div>
       </section>
-      <section class="flex flex-col items-center justify-center bg-home-news">
+      <section
+        class="flex flex-col items-center justify-center bg-home-news"
+        id="news"
+      >
         <h2>News</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-x-24">
           <img
@@ -90,13 +93,13 @@
           </video>
         </div>
         <a
-          class="btn btn-wide"
+          class="btn btn-wide btn-main"
           href="https://www.instagram.com/portofmars/"
           title="Go to Instagram"
           >See More</a
         >
       </section>
-      <section class="bg-home-gameplay">
+      <section class="bg-home-gameplay" id="gameplay">
         <h2 class="text-center">Gameplay</h2>
         <section class="grid grid-cols-1 md:grid-cols-2 space-x-4">
           <div class="flex flex-col justify-center space-y-5">

@@ -77,3 +77,13 @@
     @apply pt-[140px];
   }
 }
+
+@layer components {
+  .btn-main {
+    @apply rounded-lg font-semibold py-2 px-4 tracking-[.15em] bg-main text-white/80 hover:bg-main/70 hover:text-white;
+  }
+
+  .link {
+    @apply rounded-lg px-3 py-2 tracking-wide no-underline text-white/80 hover:bg-slate-100/20 hover:text-white;
+  }
+}

@@ -46,11 +46,15 @@ function toggleMenu() {
           :class="showMenu ? 'flex' : 'hidden'"
           class="flex-col space-y-4 mt-8 md:space-y-0 md:flex md:flex-row md:items-center md:space-x-10 md:mt-0"
         >
-          <li><nuxt-link to="/login">Register</nuxt-link></li>
-          <li><a href="#about" title="about">About</a></li>
-          <li><a href="#winners" title="winners">Winners</a></li>
-          <li><a href="#news" title="news">News</a></li>
-          <li><a href="#gameplay" title="gameplay">Gameplay</a></li>
+          <li class="link"><a href="#about" title="about">About</a></li>
+          <li class="link"><a href="#winners" title="winners">Winners</a></li>
+          <li class="link"><a href="#news" title="news">News</a></li>
+          <li class="link">
+            <a href="#gameplay" title="gameplay">Gameplay</a>
+          </li>
+          <li class="btn btn-main">
+            <nuxt-link to="/login">Register</nuxt-link>
+          </li>
         </ul>
       </div>
     </nav>
