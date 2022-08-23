@@ -27,7 +27,7 @@ enum Url {
     <section class="m-1.5 col-span-full lg:col-start-1 lg:col-span-1">
       <h4>Navigation</h4>
       <ul>
-        <li>
+        <li class="link">
           <a href="#about" title="about"
             >About
             <div
@@ -55,7 +55,7 @@ enum Url {
             </div>
           </a>
         </li>
-        <li>
+        <li class="link">
           <a href="#leaderboard" title="leaderboard">Leaderboard</a>
           <div
             class="icon inline-flex relative self-center top-0.5 h-4 w-4 mx-1"
@@ -81,7 +81,7 @@ enum Url {
             </svg>
           </div>
         </li>
-        <li>
+        <li class="link">
           <a href="#news" title="news"
             >News
             <div
@@ -109,7 +109,7 @@ enum Url {
             </div>
           </a>
         </li>
-        <li>
+        <li class="link">
           <a href="#gameplay" title="gameplay"
             >Gameplay
             <div
@@ -142,7 +142,7 @@ enum Url {
     <section class="m-1.5 col-span-full lg:col-start-3 lg:col-span-2">
       <h4>Sponsors</h4>
       <ul>
-        <li>
+        <li class="link">
           <a
             :href="Url.ASU_II"
             title="ASU Interplanetary Initiative"
@@ -172,7 +172,7 @@ enum Url {
             </div>
           </a>
         </li>
-        <li>
+        <li class="link">
           <a
             :href="Url.ASU_COMPLEXITY"
             title="ASU School of Complex Adaptive Systems"
@@ -202,7 +202,7 @@ enum Url {
             </div>
           </a>
         </li>
-        <li>
+        <li class="link">
           <a
             :href="Url.NSF"
             title="US National Science Foundation"
@@ -232,7 +232,7 @@ enum Url {
             </div>
           </a>
         </li>
-        <li>
+        <li class="link">
           <a :href="Url.COMPUTE_CANADA" title="Compute Canada" target="_blank"
             >Compute Canada</a
           >
@@ -267,7 +267,7 @@ enum Url {
     <section class="m-1.5 col-span-full lg:col-start-6 lg:col-span-1">
       <h4>Social Media Links</h4>
       <ul>
-        <li>
+        <li class="link">
           <a :href="Url.CONTACT_EMAIL" title="Email Us" _target="blank"
             >Email
             <div
@@ -293,7 +293,7 @@ enum Url {
             </div>
           </a>
         </li>
-        <li>
+        <li class="link">
           <a :href="Url.INSTAGRAM" title="Instagram" target="_blank"
             >Instagram
             <div
@@ -319,7 +319,7 @@ enum Url {
             </div>
           </a>
         </li>
-        <li>
+        <li class="link">
           <a :href="Url.TWITTER" title="Twitter" target="_blank"
             >Twitter
             <div
