@@ -5,7 +5,7 @@ export default defineNuxtConfig({
   alias: {
     "@port-of-mars/shared/": "../shared/src/",
   },
-  modules: ["@nuxtjs/tailwindcss"],
+  modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt"],
   typescript: {
     strict: true,
   },

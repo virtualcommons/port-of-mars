@@ -19,6 +19,7 @@
     "@auth0/auth0-vue": "^1.0.2",
     "@heroicons/vue": "^1.0.6",
     "@nuxt/kit": "^3.0.0-rc.8",
+    "@pinia/nuxt": "^0.4.1",
     "daisyui": "^2.22.0",
     "nuxt": "npm:nuxt3@latest",
     "typeorm": "^0.3.7",
