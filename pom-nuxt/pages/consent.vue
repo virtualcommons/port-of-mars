@@ -93,10 +93,10 @@ function denyConsent() {
 <template>
   <main>
     <div
-      class="grid lg:grid-cols-2 grid-cols-1 gap-3 items-stretch w-full h-screen p-5 bg-amber-900/20"
+      class="grid lg:grid-cols-2 grid-flow-row gap-3 items-stretch w-full h-screen p-5 bg-amber-900/20"
     >
       <div
-        class="p-5 h-4/6 overflow-y-auto bg-stone-800/50 text-white"
+        class="p-5 md:h-4/6 overflow-y-auto bg-stone-800/50 text-white"
         @scroll="onScroll"
       >
         <h1 class="font-semibold leading-tight text-xl my-2">
@@ -190,9 +190,7 @@ function denyConsent() {
           :class="consent ? 'collapse-open' : 'collapse-close'"
           class="collapse"
         >
-          <div
-            class="md:flex text-center collapse-title text-xl font-medium md:space-x-5"
-          >
+          <div class="btn-group text-center collapse-title text-xl font-medium">
             <button
               class="btn btn-wide bg-emerald-800/70 hover:bg-emerald-500/50 my-2"
               @click="grantConsent"
@@ -218,7 +216,7 @@ function denyConsent() {
                 v-model="form.name"
                 type="text"
                 placeholder="Full Name"
-                class="input input-bordered w-full max-w-xs"
+                class="input input-bordered w-full"
               />
               <span class="text-red-800" v-if="feedback.name">{{
                 feedback.name
@@ -233,13 +231,13 @@ function denyConsent() {
                   v-model="form.email"
                   type="text"
                   placeholder="info@site.com"
-                  class="input input-bordered"
+                  class="input input-bordered w-full"
                 />
               </label>
               <span class="text-red-800" v-if="feedback.email">{{
                 feedback.email
               }}</span>
-              <div class="md:flex py-5 md:space-x-3 text-center">
+              <div class="md:flex py-5 space-x-3 text-center">
                 <input
                   type="submit"
                   value="Verify Email"
