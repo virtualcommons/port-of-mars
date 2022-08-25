@@ -10,6 +10,7 @@
     @apply uppercase;
     @apply tracking-wider;
     @apply space-y-5;
+    @apply py-3;
     font-family: Roboto;
   }
 
@@ -20,6 +21,7 @@
     @apply text-white;
     @apply tracking-wider;
     @apply space-y-5;
+    @apply py-3;
     font-family: Roboto;
   }
 
@@ -29,6 +31,7 @@
     @apply text-white;
     @apply tracking-wider;
     @apply space-y-5;
+    @apply py-3;
     font-family: Roboto;
   }
 
@@ -38,6 +41,7 @@
     @apply text-white;
     @apply tracking-wider;
     @apply space-y-5;
+    @apply py-3;
     font-family: Roboto;
   }
 
