@@ -6,6 +6,10 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "jsdom",
-    include: ["./test/*.test.ts", "./test/components/*.test.ts"],
+    include: [
+      "./test/*.test.ts",
+      "./test/components/*.test.ts",
+      "./test/pages/*.test.ts",
+    ],
   },
 });
