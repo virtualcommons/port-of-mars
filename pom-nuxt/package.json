@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "@nuxtjs/tailwindcss": "^5.3.2",
+    "@types/express": "^4.17.14",
     "@types/node": "^18.0.3",
     "@vitejs/plugin-vue": "^3.0.3",
     "@vitest/coverage-c8": "^0.22.1",
@@ -27,10 +28,12 @@
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.22.1",
     "@heroicons/vue": "^1.0.6",
+    "@nuxt/http": "^0.6.4",
     "@nuxt/kit": "^3.0.0-rc.8",
     "@nuxt/kit-edge": "^3.0.0-rc.8-27672245.2ec2d9b",
     "@pinia/nuxt": "^0.4.1",
     "daisyui": "^2.22.0",
+    "express": "^4.18.1",
     "nuxt": "npm:nuxt3@latest",
     "typeorm": "^0.3.7",
     "vue": "^3"
