@@ -1,5 +1,11 @@
 <script setup lang="ts">
 import { computed, reactive, ref, watch } from "vue";
+import { registerWithEmail } from "~/composables/useAuth";
+import {
+  isNameValid,
+  isEmailValid,
+  isSubmitDisabled,
+} from "~/composables/useValidation";
 const hasScrolledToBottom = ref(false);
 const name = ref("");
 const email = ref("");
@@ -14,48 +20,32 @@ const initialState = () => {
     consent: false,
   };
 };
-const isSubmitDisabled = computed(() => {
-  return isFormValid.name && isFormValid.email ? false : true;
-});
 
 watch(
   () => email.value,
   (email) => {
-    validateEmail(email);
+    if (isEmailValid(email)) {
+      feedback.email = "";
+      isFormValid.email = true;
+    } else {
+      feedback.email = "Invalid email";
+      isFormValid.email = false;
+    }
   }
 );
 
 watch(
   () => name.value,
   (name) => {
-    validateName(name);
+    if (isNameValid(name)) {
+      feedback.name = "";
+      isFormValid.name = true;
+    } else {
+      feedback.name = "Name cannot be an empty field.";
+      isFormValid.name = false;
+    }
   }
 );
-
-const emit = defineEmits(["verify-email"]);
-
-function validateName(name: string) {
-  if (name === null || name === undefined || name === "") {
-    feedback.name = "Name cannot be an empty field.";
-    isFormValid.name = false;
-  } else {
-    feedback.name = "";
-    isFormValid.name = true;
-  }
-}
-
-// validate email input with regex
-function validateEmail(email: string) {
-  const emailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-  console.log("test email: ", emailFormat.test(email));
-  if (!emailFormat.test(email)) {
-    feedback.email = "Invalid email";
-    isFormValid.email = false;
-  } else {
-    feedback.email = "";
-    isFormValid.email = true;
-  }
-}
 
 function onScroll(e: Event) {
   const [scrollTop, clientHeight, scrollHeight] = [
@@ -68,13 +58,11 @@ function onScroll(e: Event) {
     hasScrolledToBottom.value = true;
   }
 }
-
-function onSubmit(e: Event) {
+const postConsentForm = async (e: Event) => {
   console.log(form);
   e.preventDefault();
-  emit("verify-email", form);
-  // TODO: make api call to submit form and send verification email
-}
+  await registerWithEmail(form);
+};
 
 function reset() {
   Object.assign(form, initialState());
@@ -206,7 +194,7 @@ function denyConsent() {
             </button>
           </div>
           <div class="collapse-content">
-            <form class="flex flex-col space-y-2" @submit="onSubmit">
+            <form class="flex flex-col space-y-2" @submit="postConsentForm">
               <p>Register</p>
               <label class="label">
                 <span class="label-text">Your Full Name</span>
@@ -242,7 +230,9 @@ function denyConsent() {
                   type="submit"
                   value="Verify Email"
                   class="btn btn-wide bg-emerald-800/70 hover:bg-emerald-500/50 my-2"
-                  :disabled="isSubmitDisabled"
+                  :disabled="
+                    isSubmitDisabled(isFormValid.name && isFormValid.email)
+                  "
                 />
                 <input
                   type="reset"
