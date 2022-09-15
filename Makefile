@@ -8,6 +8,8 @@ LOG_DATA_PATH=docker/logs
 DB_PASSWORD_PATH=keys/pom_db_password
 REDIS_SETTINGS_PATH=keys/settings.json
 ORMCONFIG_PATH=keys/ormconfig.json
+# FIXME: makeshift until we fully unify server + nuxt, then merge into ORMCONFIG_PATH
+NUXT_ORMCONFIG_PATH=keys/nuxt-ormconfig.json
 PGPASS_PATH=keys/.pgpass
 SECRET_KEY_PATH=keys/secret_key
 SENTRY_DSN_PATH=keys/sentry_dsn
@@ -68,6 +70,10 @@ $(REDIS_SETTINGS_PATH): server/deploy/settings.template.json | keys
 $(ORMCONFIG_PATH): server/ormconfig.template.json $(DB_PASSWORD_PATH)
 	DB_PASSWORD=$$(cat $(DB_PASSWORD_PATH)); \
 	sed "s|DB_PASSWORD|$$DB_PASSWORD|g" server/ormconfig.template.json > $(ORMCONFIG_PATH)
+
+$(NUXT_ORMCONFIG_PATH): pom-nuxt/ormconfig.template.json $(DB_PASSWORD_PATH)
+	DB_PASSWORD=$$(cat $(DB_PASSWORD_PATH)); \
+	sed "s|DB_PASSWORD|$$DB_PASSWORD|g" pom-nuxt/ormconfig.template.json > $(NUXT_ORMCONFIG_PATH)
 	
 $(PGPASS_PATH): $(DB_PASSWORD_PATH) server/deploy/pgpass.template | keys
 	DB_PASSWORD=$$(cat $(DB_PASSWORD_PATH)); \
@@ -95,7 +101,7 @@ settings: $(SENTRY_DSN_PATH) $(SECRET_KEY_PATH) | keys
 	echo 'export const BUILD_ID = "${BUILD_ID}";' > $(BUILD_ID_ASSETS_PATH)
 	echo 'export const SENTRY_DSN = "${SENTRY_DSN}";' > $(SENTRY_DSN_ASSETS_PATH)
 
-docker-compose.yml: base.yml staging.base.yml $(ENVIR).yml config.mk $(DB_DATA_PATH) $(DATA_DUMP_PATH) $(LOG_DATA_PATH) $(REDIS_SETTINGS_PATH) $(ORMCONFIG_PATH) $(PGPASS_PATH) settings
+docker-compose.yml: base.yml staging.base.yml $(ENVIR).yml config.mk $(DB_DATA_PATH) $(DATA_DUMP_PATH) $(LOG_DATA_PATH) $(REDIS_SETTINGS_PATH) $(ORMCONFIG_PATH) $(NUXT_ORMCONFIG_PATH) $(PGPASS_PATH) settings
 	case "$(ENVIR)" in \
 	  dev) docker-compose -f base.yml -f "$(ENVIR).yml" config > docker-compose.yml;; \
 	  staging|prod) docker-compose -f base.yml -f staging.base.yml -f "$(ENVIR).yml" config > docker-compose.yml;; \
