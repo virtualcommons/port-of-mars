@@ -1,30 +1,4 @@
 {
   // https://v3.nuxtjs.org/concepts/typescript
-  "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "strict": true,
-    "jsx": "preserve",
-    "importHelpers": true,
-    "moduleResolution": "node",
-    "experimentalDecorators": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true,
-    "sourceMap": true,
-    "baseUrl": ".",
-    "typeRoots": [
-      "node_modules/@types",
-      "../types"
-    ],
-    "paths": {
-      "@port-of-mars/nuxt/*": [
-        "src/*"
-      ],
-      "@port-of-mars/shared/*": [
-        "../shared/src/*"
-      ]
-    },
-  },
   "extends": "./.nuxt/tsconfig.json"
 }

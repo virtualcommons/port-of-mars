@@ -1,3 +1,5 @@
+import { useUserStore } from "../store/user";
+
 type Form = {
   name: string;
   email: string;
@@ -5,6 +7,9 @@ type Form = {
 };
 
 export async function loginWithEmail(email: string) {
+  const userStore = useUserStore();
+
+
   const { data: token } = await useFetch("/api/auth/login", {
     method: "POST",
     body: { email },

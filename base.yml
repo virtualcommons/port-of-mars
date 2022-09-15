@@ -24,7 +24,7 @@ services:
       - ./pom-nuxt:/code/web
       - ./server:/code/server
       - ./shared:/code/shared
-      - ./keys/nuxt-ormconfig.json:/code/web/ormconfig.json:ro
+      - ./keys/ormconfig.ts:/code/web/ormconfig.ts:ro
       - /code/web/node_modules
   redis:
     image: redis:5
