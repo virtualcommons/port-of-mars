@@ -19,6 +19,7 @@
     "@vue/test-utils": "^2.0.2",
     "c8": "^7.12.0",
     "jsdom": "^20.0.0",
+    "lodash": "^4.17.21",
     "ts-node": "^10.8.2",
     "tsconfig-paths": "^4.0.0",
     "typeorm-fixtures-cli": "^3.0.0",
@@ -32,8 +33,10 @@
     "@nuxt/kit": "^3.0.0-rc.8",
     "@nuxt/kit-edge": "^3.0.0-rc.8-27672245.2ec2d9b",
     "@pinia/nuxt": "^0.4.1",
+    "@types/jsonwebtoken": "^8.5.9",
     "daisyui": "^2.22.0",
     "express": "^4.18.1",
+    "jsonwebtoken": "auth0/node-jsonwebtoken",
     "nuxt": "npm:nuxt3@latest",
     "typeorm": "^0.3.7",
     "vue": "^3"

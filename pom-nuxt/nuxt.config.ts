@@ -5,7 +5,13 @@ export default defineNuxtConfig({
   alias: {
     "@port-of-mars/shared/": "../shared/src/",
   },
-  modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt"],
+
+  /*
+   ** Auto import components
+   ** See https://nuxtjs.org/api/configuration-components
+   */
+  components: true,
+  modules: ["@nuxtjs/tailwindcss"],
   typescript: {
     strict: true,
   },

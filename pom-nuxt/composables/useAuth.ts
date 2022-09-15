@@ -5,18 +5,18 @@ type Form = {
 };
 
 export async function loginWithEmail(email: string) {
-  try {
-    const response = await useFetch("/api/auth/login", {
-      method: "POST",
-      body: { email },
-    });
-    if (response) {
-      useState("user").value = response;
-      await useRouter().push("/consent");
-    }
-  } catch (error) {
-    console.log("error: " + email.toString());
-  }
+  const { data: token } = await useFetch("/api/auth/login", {
+    method: "POST",
+    body: { email },
+  });
+
+  console.log("json web token?");
+  console.log("token: ", token);
+  // const cookie = useCookie("authtoken", { httpOnly: true });
+  // cookie.value = token;
+  // console.log("cookie: ", cookie.value);
+  // console.log("token: ", token);
+  return token;
 }
 
 export async function registerWithEmail(form: Form) {

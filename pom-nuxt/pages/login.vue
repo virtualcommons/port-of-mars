@@ -5,6 +5,8 @@ import { loginWithEmail } from "~/composables/useAuth";
 const email = ref("");
 const form = reactive({ feedback: "", isValid: false });
 
+const jwtCookie = useCookie("pom_authtoken", { httpOnly: true });
+
 watch(
   () => email.value,
   (email) => {
@@ -21,7 +23,16 @@ watch(
 const postLoginForm = async (e: Event) => {
   console.log(email);
   e.preventDefault();
-  await loginWithEmail(email);
+  const jwt = await loginWithEmail(email.value);
+  try {
+    if (jwt) {
+      console.log("got jwt from login: ", jwt);
+      jwtCookie.value = jwt;
+      await useRouter().push("/consent");
+    }
+  } catch (error) {
+    console.log("error: " + email.toString());
+  }
 };
 </script>
 

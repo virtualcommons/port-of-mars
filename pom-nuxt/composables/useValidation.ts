@@ -1,6 +1,7 @@
 export function isNameValid(name: string) {
   return name === null || name === undefined || name === "" ? false : true;
 }
+
 // validate email input with regex
 export function isEmailValid(email: string) {
   const emailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
