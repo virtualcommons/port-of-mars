@@ -38,6 +38,7 @@
     "express": "^4.18.1",
     "jsonwebtoken": "auth0/node-jsonwebtoken",
     "nuxt": "npm:nuxt3@latest",
+    "pinia": "^2.0.22",
     "typeorm": "^0.3.7",
     "vue": "^3"
   }
