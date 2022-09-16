@@ -15,9 +15,9 @@ export class GameEvent {
   @Column({type: 'jsonb'})
   payload!: object;
 
-  @Column()
+  @Column("date")
   dateCreated!: Date;
 
-  @Column()
+  @Column("int")
   timeRemaining!: number;
 }
