@@ -17,14 +17,8 @@ export class Player {
   @ManyToOne((type) => User, (user) => user.players, { nullable: false })
   user!: User;
 
-  @Column()
-  userId!: number;
-
   @ManyToOne((type) => Game, (game) => game.players, { nullable: false })
   game!: Game;
-
-  @Column()
-  gameId!: number;
 
   @Column("int", { nullable: true })
   points!: number | null;

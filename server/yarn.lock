@@ -1717,15 +1717,15 @@ caniuse-lite@^1.0.30001370:
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001373.tgz#2dc3bc3bfcb5d5a929bec11300883040d7b4b4be"
   integrity sha512-pJYArGHrPp3TUqQzFYRmP/lwJlj8RCbVe3Gd3eJQkAV8SAC6b19XS9BjMvRdvaS8RMkaTN8ZhoHP6S1y8zzwEQ==
 
-"cas@git://github.com/joshchan/node-cas.git":
+"cas@git://github.com/joshchan/node-cas":
   version "0.0.5"
-  resolved "git://github.com/joshchan/node-cas.git#344a8bfba9d054e2e378adaf95b720c898ae48a2"
+  uid "344a8bfba9d054e2e378adaf95b720c898ae48a2"
+  resolved "git://github.com/joshchan/node-cas#344a8bfba9d054e2e378adaf95b720c898ae48a2"
   dependencies:
     cheerio "0.19.0"
 
 "cas@https://github.com/joshchan/node-cas":
   version "0.0.5"
-  uid "344a8bfba9d054e2e378adaf95b720c898ae48a2"
   resolved "https://github.com/joshchan/node-cas#344a8bfba9d054e2e378adaf95b720c898ae48a2"
   dependencies:
     cheerio "0.19.0"

@@ -12,9 +12,6 @@ export class TournamentRoundDate {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
-  tournamentRoundId!: number;
-
   @ManyToOne(
     type => TournamentRound,
     tournamentRound => tournamentRound.scheduledDates

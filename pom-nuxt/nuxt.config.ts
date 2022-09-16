@@ -17,5 +17,12 @@ export default defineNuxtConfig({
   },
   typescript: {
     strict: false,
+    tsConfig: {
+      "compilerOptions": {
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "lib": ["es6"],
+      },
+    }
   },
 });

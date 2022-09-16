@@ -10,9 +10,6 @@ export class GameEvent {
   game!: Game;
 
   @Column()
-  gameId!: number;
-
-  @Column()
   type!: string;
 
   @Column({type: 'jsonb'})

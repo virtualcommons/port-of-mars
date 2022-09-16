@@ -18,6 +18,7 @@
     "@vitest/coverage-c8": "^0.22.1",
     "@vue/test-utils": "^2.0.2",
     "c8": "^7.12.0",
+    "es6-shim": "^0.35.6",
     "jsdom": "^20.0.0",
     "lodash": "^4.17.21",
     "ts-node": "^10.8.2",
@@ -27,7 +28,6 @@
     "vitest": "^0.22.1"
   },
   "dependencies": {
-    "@auth0/auth0-spa-js": "^1.22.1",
     "@heroicons/vue": "^1.0.6",
     "@nuxt/http": "^0.6.4",
     "@nuxt/kit": "npm:@nuxt/kit-edge@latest",

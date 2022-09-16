@@ -15,17 +15,11 @@ export class TournamentRoundInvite {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
-  tournamentRoundId!: number;
-
   @ManyToOne(
     (type) => TournamentRound,
     (tournamentRound) => tournamentRound.invitations
   )
   tournamentRound!: TournamentRound;
-
-  @Column()
-  userId!: number;
 
   @ManyToOne((type) => User, (user) => user.invites)
   user!: User;
