@@ -1,3 +1,4 @@
+ormconfig.ts
 node_modules
 *.log*
 .nuxt

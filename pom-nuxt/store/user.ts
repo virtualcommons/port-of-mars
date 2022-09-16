@@ -5,7 +5,6 @@ import { defineStore } from "pinia";
 // and `Store` (e.g. `useUserStore`, `useCartStore`, `useProductStore`)
 // the first argument is a unique id of the store across your application
 export const useUserStore = defineStore("user-store", {
-  id: "user",
   state: () => ({
     name: "",
     email: "",
