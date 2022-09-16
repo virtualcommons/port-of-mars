@@ -1,9 +1,10 @@
 {
   "extends": "./.nuxt/tsconfig.json",
   "compilerOptions": {
-    "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "lib": ["es6"],
+    "experimentalDecorators": true,
+    "target": "es6",
+    "lib": ["es6", "dom"],
     "strict": false
   }
 }

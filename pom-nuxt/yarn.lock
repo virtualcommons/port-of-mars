@@ -1000,6 +1000,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/es6-shim@^0.31.42":
+  version "0.31.42"
+  resolved "https://registry.yarnpkg.com/@types/es6-shim/-/es6-shim-0.31.42.tgz#710e4c48d2ebbf2517498c3307b41beed63fe1ef"
+  integrity sha512-GS3EuEgiGv/TP7bwPLOlkSiTfdSL4XHOj0jJuvz4/UbR89QrC4Py3lYlMlH/7w0dKfJ8fIori0rVIl2gQ7lb5A==
+
 "@types/estree@*":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-1.0.0.tgz#5fb2e536c1ae9bf35366eed879e827fa59ca41c2"

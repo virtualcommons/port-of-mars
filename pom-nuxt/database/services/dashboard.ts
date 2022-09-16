@@ -4,12 +4,11 @@ import {
   User,
   TournamentRound,
   TournamentRoundInvite,
-} from "../models";
-import { BaseService } from "./base";
+} from "@/database/entities";
 import { IsNull, Not, SelectQueryBuilder } from "typeorm";
 import _ from "lodash";
 
-export class DashboardService extends BaseService {
+export class DashboardService {
   /**
    * generate a parameterized survey URL with pid=participantId and tid=tournamentRoundInvite.id
    * @param round
@@ -39,7 +38,7 @@ export class DashboardService extends BaseService {
     if (invite && surveyUrl) {
       surveyUrl = `${surveyUrl}?pid=${user.participantId}&tid=${
         invite.id
-      }&redirectHost=${encodeURIComponent(settings.host)}`;
+      }&redirectHost=${encodeURIComponent(useRuntimeConfig().host)}`;
     }
     return surveyUrl ?? "";
   }

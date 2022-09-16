@@ -14,15 +14,6 @@ export default defineNuxtConfig({
   modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt"],
   runtimeConfig: {
     jwtSecretToken,
-  },
-  typescript: {
-    strict: false,
-    tsConfig: {
-      "compilerOptions": {
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
-        "lib": ["es6"],
-      },
-    }
-  },
+    host: 'http://localhost:3000'
+  }
 });
