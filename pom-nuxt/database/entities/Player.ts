@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Role, ROLES } from "@port-of-mars/shared/types";
+import { Role, ROLES } from "@/core/types";
 import { User } from "./User";
 import { Game } from "./Game";
 

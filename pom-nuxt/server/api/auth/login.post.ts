@@ -1,17 +1,16 @@
 import jwt from "jsonwebtoken";
-import { User } from "@port-of-mars/nuxt/dashboard/entities/User";
-import crypto from "crypto";
+import { User } from "@/database/entities/User";
 
 export default defineEventHandler(async (event) => {
   const nuxtApp = useNuxtApp();
   const body = await useBody(event);
   const email = body.email;
-  console.log("email: ", email);
+  const jwtSecret = useRuntimeConfig().jwtSecretToken;
   try {
     // FIXME: support actual authentication here when nuxt-auth is finally released
     const token: string = await jwt.sign(
       { email },
-      useRuntimeConfig().jwtSecretToken
+      jwtSecret
     );
     let jwtCookie = getCookie(event, "authtoken") || "";
     jwtCookie = token;

@@ -30,15 +30,16 @@
     "@auth0/auth0-spa-js": "^1.22.1",
     "@heroicons/vue": "^1.0.6",
     "@nuxt/http": "^0.6.4",
-    "@nuxt/kit": "^3.0.0-rc.8",
-    "@nuxt/kit-edge": "^3.0.0-rc.8-27672245.2ec2d9b",
+    "@nuxt/kit": "npm:@nuxt/kit-edge@latest",
     "@pinia/nuxt": "^0.4.1",
     "@types/jsonwebtoken": "^8.5.9",
     "daisyui": "^2.22.0",
     "express": "^4.18.1",
     "jsonwebtoken": "auth0/node-jsonwebtoken",
     "nuxt": "npm:nuxt3@latest",
+    "pg": "^8.8.0",
     "pinia": "^2.0.22",
+    "reflect-metadata": "^0.1.13",
     "typeorm": "^0.3.7",
     "vue": "^3"
   }

@@ -1,6 +1,4 @@
-import { DataSource } from "typeorm";
-import { AppDataSource } from "@port-of-mars/nuxt/ormconfig.ts";
-
+import { AppDataSource } from "@/ormconfig";
 
 export default defineNuxtPlugin(async (nuxtApp) => {
   await AppDataSource.initialize();
