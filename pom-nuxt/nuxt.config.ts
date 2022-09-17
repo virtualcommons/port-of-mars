@@ -1,6 +1,5 @@
-import crypto from "crypto";
-import { defineNuxtConfig } from "nuxt";
-import "reflect-metadata";
+import crypto from "crypto"
+import { defineNuxtConfig } from "nuxt"
 
 const jwtSecretToken = crypto.randomBytes(48).toString('base64');
 

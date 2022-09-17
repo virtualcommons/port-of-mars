@@ -8,8 +8,9 @@ LOG_DATA_PATH=docker/logs
 DB_PASSWORD_PATH=keys/pom_db_password
 REDIS_SETTINGS_PATH=keys/settings.json
 ORMCONFIG_PATH=keys/ormconfig.json
-# FIXME: makeshift until we fully unify server + nuxt, then merge into ORMCONFIG_PATH
-NUXT_ORMCONFIG_PATH=keys/ormconfig.ts
+# FIXME: makeshift until we fully unify server + nuxt, then remove legacy ORMCONFIG_PATH
+TYPEORM_DATA_SOURCE_TEMPLATE=database/data-source.template.ts
+TYPEORM_DATA_SOURCE_PATH=keys/data-source.ts
 PGPASS_PATH=keys/.pgpass
 SECRET_KEY_PATH=keys/secret_key
 SENTRY_DSN_PATH=keys/sentry_dsn
@@ -71,9 +72,9 @@ $(ORMCONFIG_PATH): server/ormconfig.template.json $(DB_PASSWORD_PATH)
 	DB_PASSWORD=$$(cat $(DB_PASSWORD_PATH)); \
 	sed "s|DB_PASSWORD|$$DB_PASSWORD|g" server/ormconfig.template.json > $(ORMCONFIG_PATH)
 
-$(NUXT_ORMCONFIG_PATH): pom-nuxt/ormconfig.template.ts $(DB_PASSWORD_PATH)
+$(TYPEORM_DATA_SOURCE_PATH): pom-nuxt/${TYPEORM_DATA_SOURCE_TEMPLATE) $(DB_PASSWORD_PATH)
 	DB_PASSWORD=$$(cat $(DB_PASSWORD_PATH)); \
-	sed "s|DB_PASSWORD|$$DB_PASSWORD|g" pom-nuxt/ormconfig.template.ts > $(NUXT_ORMCONFIG_PATH)
+	sed "s|DB_PASSWORD|$$DB_PASSWORD|g" pom-nuxt/${TYPEORM_DATA_SOURCE_TEMPLATE) > $(TYPEORM_DATA_SOURCE_PATH)
 	
 $(PGPASS_PATH): $(DB_PASSWORD_PATH) server/deploy/pgpass.template | keys
 	DB_PASSWORD=$$(cat $(DB_PASSWORD_PATH)); \
