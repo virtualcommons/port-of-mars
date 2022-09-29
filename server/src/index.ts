@@ -40,9 +40,11 @@ const logger = settings.logging.getLogger(__filename);
 const NODE_ENV = process.env.NODE_ENV || "development";
 const CONNECTION_NAME = NODE_ENV === "test" ? "test" : "default";
 
-// FIXME: set up typescript types for these
-const CasStrategy = require("passport-cas2").Strategy;
+// FIXME: make imports more consistent, replace `require` where possible
+
 const LocalStrategy = require("passport-local").Strategy;
+
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const RedisStore = connectRedis(session);
 const store = new RedisStore({ host: "redis", client: getRedis() });
@@ -53,6 +55,24 @@ const sessionParser = session({
   store,
 });
 
+passport.use(new GoogleStrategy({
+    clientID: settings.googleAuth.clientId,
+    clientSecret: settings.googleAuth.clientSecret,
+    callbackURL: `${settings.host}/auth/google/callback`,
+    scope: [ 'profile' ],
+    state: true,
+    passReqToCallback: true
+  },
+  function(request:any, accessToken:any, refreshToken:any, profile:any, done:any) {
+    const s = getServices();
+    logger.debug("google profile: %s", profile);
+  }
+));
+
+// set up Google routes
+
+
+/*
 passport.use(
   new CasStrategy(
     {
@@ -70,17 +90,18 @@ passport.use(
     }
   )
 );
+*/
 passport.use(
   new LocalStrategy(async function (
     username: string,
     password: string,
     done: Function
   ) {
-    const s = getServices();
-    const user = await getServices().account.getOrCreateTestUser(await generateUsername());
+    const services = getServices();
+    const user = await services.account.getOrCreateTestUser(await generateUsername());
     // set all testing things on the user
-    const tournamentRound = await s.tournament.getCurrentTournamentRound();
-    const invite = await s.tournament.getOrCreateInvite(
+    const tournamentRound = await services.tournament.getCurrentTournamentRound();
+    const invite = await services.tournament.getOrCreateInvite(
       user.id,
       tournamentRound,
       true

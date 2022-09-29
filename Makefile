@@ -72,9 +72,13 @@ $(ORMCONFIG_PATH): server/ormconfig.template.json $(DB_PASSWORD_PATH)
 	DB_PASSWORD=$$(cat $(DB_PASSWORD_PATH)); \
 	sed "s|DB_PASSWORD|$$DB_PASSWORD|g" server/ormconfig.template.json > $(ORMCONFIG_PATH)
 
-$(TYPEORM_DATA_SOURCE_PATH): pom-nuxt/${TYPEORM_DATA_SOURCE_TEMPLATE) $(DB_PASSWORD_PATH)
+$(TYPEORM_DATA_SOURCE_PATH): pom-nuxt/$(TYPEORM_DATA_SOURCE_TEMPLATE) $(DB_PASSWORD_PATH)
 	DB_PASSWORD=$$(cat $(DB_PASSWORD_PATH)); \
 	sed "s|DB_PASSWORD|$$DB_PASSWORD|g" pom-nuxt/${TYPEORM_DATA_SOURCE_TEMPLATE) > $(TYPEORM_DATA_SOURCE_PATH)
+
+$(SERVER_ENV): $(SERVER_ENV_TEMPLATE) $(SECRETS)
+	POM_BASE_URL=${POM_BASE_URL} \
+		envsubst < $(SERVER_ENV_TEMPLATE) > $(SERVER_ENV)
 	
 $(PGPASS_PATH): $(DB_PASSWORD_PATH) server/deploy/pgpass.template | keys
 	DB_PASSWORD=$$(cat $(DB_PASSWORD_PATH)); \
@@ -94,7 +98,7 @@ $(DB_DATA_PATH):
 secrets: $(SECRETS)
 
 $(SECRET_KEY_PATH): | keys
-	SECRET_KEY=$$(head /dev/urandom | tr -dc '[:alnum:]' | head -c42); \
+	SECRET_KEY=$$(openssl rand -base64 48); \
 	echo $${SECRET_KEY} > $(SECRET_KEY_PATH)
 
 .PHONY: settings

@@ -1,6 +1,10 @@
 import { MemoryEmailer, Emailer, MailgunEmailer } from "@port-of-mars/server/services/email/emailers";
 import { LogService, DevLogging, Logging } from "@port-of-mars/server/services/logging";
 import * as fs from 'fs';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+
 
 export const SECRET_KEY: string = fs.readFileSync('/run/secrets/secret_key', 'utf8').trim();
 
@@ -9,6 +13,10 @@ export interface AppSettings {
   host: string;
   logging: Logging;
   secret: string;
+  googleAuth: {
+    clientId: string,
+    clientSecret: string,
+  };
   lobby: LobbySettings;
   supportEmail: string,
   isProduction: boolean;
@@ -28,6 +36,10 @@ const dev: () => AppSettings = () => ({
   host: 'http://localhost:8081',
   logging: new DevLogging(),
   secret: SECRET_KEY,
+  googleAuth: {
+    clientId: process.env.GOOGLE_CLIENT_ID || '',
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+  },
   supportEmail: 'portmars@asu.edu',
   lobby: new LobbySettings(1, 10, 5, true),
   isProduction: false,
@@ -41,6 +53,10 @@ const staging: () => AppSettings = () => {
     host: 'https://alpha.portofmars.asu.edu',
     logging: new DevLogging(),
     secret: SECRET_KEY,
+    googleAuth: {
+      clientId: process.env.GOOGLE_CLIENT_ID || '',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+    },
     supportEmail: 'portmars@asu.edu',
     lobby: new LobbySettings(1, 10, 5, true),
     isProduction: false,
