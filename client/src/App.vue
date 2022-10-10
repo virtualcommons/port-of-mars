@@ -1,7 +1,8 @@
 <template>
   <b-container class="h-100 p-0 m-0 bg" fluid>
     <b-row no-gutters class="h-100 w-100">
-      <Header v-if="!isGamePage"></Header>
+      <!-- <Header v-if="!isGamePage"></Header> -->
+      <Navbar v-if="!isGamePage"></Navbar>
       <router-view
         :class="!isManual ? 'h-100 d-flex flex-grow-1 ' : 'h-auto'"
         :key="$route.path"
@@ -17,6 +18,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import BootstrapVue from "bootstrap-vue";
+import Navbar from "@port-of-mars/client/components/global/Navbar.vue";
 import Header from "@port-of-mars/client/components/global/Header.vue";
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
 import { GAME_PAGE, MANUAL_PAGE, DASHBOARD_PAGE, LOBBY_PAGE } from "@port-of-mars/shared/routes";
@@ -25,6 +27,7 @@ Vue.use(BootstrapVue);
 
 @Component({
   components: {
+    Navbar,
     Header,
     Footer
   }
