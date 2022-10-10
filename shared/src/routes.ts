@@ -9,6 +9,10 @@ export const VERIFY_PAGE = "Verify" as const;
 export const DASHBOARD_PAGE: "Dashboard" = "Dashboard";
 export const MANUAL_PAGE: "Manual" = "Manual";
 export const HOME_PAGE: "Home" = "Home";
+export const OPENLOGIN_PAGE: "OpenLogin" = "OpenLogin";
+export const USERNAME_PAGE: "Username" = "Username";
+export const OPENLOBBY_PAGE: "OpenLobby" = "OpenLobby";
+export const ONBOARDING_PAGE: "Onboarding" = "Onboarding";
 
 export type Page =
   | "Admin"
@@ -21,7 +25,11 @@ export type Page =
   | "Register"
   | "Dashboard"
   | "Verify"
-  | "Manual";
+  | "Manual"
+  | "OpenLogin"
+  | "Username"
+  | "OpenLobby"
+  | "Onboarding";
 export const PAGES: Array<Page> = [
   ADMIN_PAGE,
   LOGIN_PAGE,
@@ -33,6 +41,10 @@ export const PAGES: Array<Page> = [
   VERIFY_PAGE,
   MANUAL_PAGE,
   HOME_PAGE,
+  OPENLOGIN_PAGE,
+  USERNAME_PAGE,
+  OPENLOBBY_PAGE,
+  ONBOARDING_PAGE
 ];
 
 export function isPage(pageName: string): pageName is Page {
@@ -128,6 +140,34 @@ export const PAGE_META: {
     name: MANUAL_PAGE,
     meta: {
       requiresAuth: false,
+    },
+  },
+  [OPENLOGIN_PAGE]: {
+    path: "/openlogin",
+    name: OPENLOGIN_PAGE,
+    meta: {
+      requiresAuth: false,
+    },
+  },
+  [USERNAME_PAGE]: {
+    path: "/username",
+    name: USERNAME_PAGE,
+    meta: {
+      requiresAuth: false,
+    },
+  },
+  [OPENLOBBY_PAGE]: {
+    path: "/openlobby",
+    name: OPENLOBBY_PAGE,
+    meta: {
+      requiresAuth: false, // FIXME: should require auth, false for testing
+    },
+  },
+  [ONBOARDING_PAGE]: {
+    path: "/onboarding",
+    name: ONBOARDING_PAGE,
+    meta: {
+      requiresAuth: false, // FIXME: should require auth, false for testing
     },
   },
 };
