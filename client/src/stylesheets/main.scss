@@ -21,20 +21,21 @@ html {
   height: 100%;
   width: 100%;
 
-  @include xl {
+  // @include xl {
+  //   font-size: 12px !important;
+  // }
+
+  // @include lg {
+  //   font-size: 8px !important;
+  // }
+
+  @include md {
     font-size: 12px !important;
   }
 
-  @include lg {
-    font-size: 8px !important;
-  }
-
-  @include md {
-    font-size: 6px !important;
-  }
-  @include sm {
-    font-size: 4px !important;
-  }
+  // @include sm {
+  //   font-size: 4px !important;
+  // }
 }
 
 header,
