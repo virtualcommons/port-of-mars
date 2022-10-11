@@ -1,6 +1,6 @@
 <template>
-  <b-container fluid class="h-100 w-100 d-flex justify-content-center align-items-center">
-    <div id="login-container">
+  <b-container fluid class="h-100 w-100 d-flex justify-content-center align-items-center backdrop content-container">
+    <div id="login-container" class="content-container">
       <b-form>
         <h1 class="text-center">Login or Sign Up</h1>
         <hr>
@@ -47,17 +47,10 @@ export default class OpenLogin extends Vue {
 
 <style lang="scss" scoped>
 
-hr {
-  margin: 2rem 0 2rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
 #login-container {
   padding: 2rem;
-  border-radius: 1rem;
   margin-top: -10rem;
   width: 30rem;
-  background-color: rgba(0, 0, 0, 0.25);
 }
 
 </style>

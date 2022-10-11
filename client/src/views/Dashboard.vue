@@ -132,7 +132,7 @@
         <!-- tutorial, schedule, previous games -->
         <b-row class="h-100 w-100 mx-2">
           <b-col sm="12" md="8" offset-md="2">
-            <b-tabs pills class="h-100 w-100 p-4 my-2 mx-auto" v-model="tabIndex">
+            <b-tabs pills class="h-100 w-100 p-4 my-2 mx-auto content-container" v-model="tabIndex">
               <!-- tutorial -->
               <b-tab class="h-100 w-100 mt-3">
                 <template #title>
@@ -364,13 +364,10 @@ export default class Dashboard extends Vue {
   text-align: left;
   margin-top: 2em;
   overflow: none;
-  background-color: $dark-shade-75;
-  border: 0.2rem solid $light-shade-25;
-  border-radius: 3px;
 }
 
 #message-wrapper {
-  padding: 150px 0 0 0;
+  padding: 0 0 0 0;
 }
 
 #stats-container {

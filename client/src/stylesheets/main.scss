@@ -92,6 +92,11 @@ h4 {
   font-weight: bold;
 }
 
+hr {
+  margin: 2rem 0 2rem;
+  border-top: 1px solid $light-shade-10;
+}
+
 body {
   height: 100% !important;
   width: 100% !important;
@@ -165,6 +170,12 @@ button {
 
 .backdrop {
   background-color: $light-shade-05;
+}
+
+.content-container {
+  background-color: $dark-shade-75;
+  border: 0.2rem solid $light-shade-25;
+  border-radius: 3px;
 }
 
 .light-shade-05-border {

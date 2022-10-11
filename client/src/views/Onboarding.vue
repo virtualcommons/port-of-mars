@@ -1,6 +1,6 @@
 <template>
   <b-container fluid class="h-100 w-100 d-flex justify-content-center align-items-center">
-    <div id="onboarding-container">
+    <div id="onboarding-container" class="content-container">
       <component :is="activeStep.component" @completed="advanceStep"></component>
       <hr>
       <Stepper
@@ -77,17 +77,10 @@ export default class Onboarding extends Vue {
 
 <style lang="scss" scoped>
 
-hr {
-  margin: 2rem 0 2rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
 #onboarding-container {
   padding: 2rem;
-  border-radius: 1rem;
   margin-top: -10rem;
   width: 60rem;
-  background-color: rgba(0, 0, 0, 0.25);
 }
 
 </style>
