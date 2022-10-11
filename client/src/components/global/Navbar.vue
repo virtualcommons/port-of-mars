@@ -1,13 +1,12 @@
 <template>
-  <b-navbar tag="header" toggleable="lg" type="dark" variant="dark" class="w-100" sticky>
+  <b-navbar tag="header" toggleable="md" type="dark" variant="dark" class="w-100" sticky>
     <b-navbar-brand :to="home">
       <b-img
         id="logo"
         v-bind="portOfMarsLogoProps"
         :src="require('@port-of-mars/client/assets/images/logo-Port-of-Mars-White.svg')"
         alt="the planet mars illustrated in white above Port of Mars"
-      >
-      </b-img>
+      ></b-img>
     </b-navbar-brand>
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
     <b-collapse id="nav-collapse" is-nav>
@@ -17,22 +16,23 @@
           :to="openlobby"
           exact-active-class="active"
           title="Play Port of Mars"
-          >Play</b-nav-item>
+        >Play</b-nav-item>
         <b-nav-item
           :to="onboarding"
           exact-active-class="active"
           title="Tutorial"
-          >Tutorial</b-nav-item>
+        >Tutorial</b-nav-item>
         <b-nav-item
+          :to="home"
           exact-active-class="active"
           title="About"
-          >About</b-nav-item>
+        >About</b-nav-item>
         <b-nav-item
           href="https://instagram.com/portofmars/"
           target="_blank"
           exact-active-class="active"
           title="News"
-          >News</b-nav-item>
+        >News</b-nav-item>
 
         <!-- Icons -->
         <!-- <b-nav-item href="https://email.com/">
@@ -131,6 +131,7 @@ export default class Header extends Vue {
 
   logout() {
     this.$ajax.forgetLoginCreds();
+    this.$ajax.forgetSubmissionId();
     this.$router.push(this.home);
   }
 }

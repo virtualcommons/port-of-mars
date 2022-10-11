@@ -20,7 +20,7 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 
 @Component({})
-export default class Verify extends Vue {
+export default class Play extends Vue {
 
 }
 </script>

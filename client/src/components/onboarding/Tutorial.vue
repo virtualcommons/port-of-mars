@@ -22,7 +22,7 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 
 @Component({})
-export default class Verify extends Vue {
+export default class Tutorial extends Vue {
   tutorialVideoUrl = "https://player.vimeo.com/video/642036661";
 }
 </script>

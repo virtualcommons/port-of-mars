@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 import { url } from "@port-of-mars/client/util";
 import Stepper from "@port-of-mars/client/components/global/Stepper.vue";
 import Verify from "@port-of-mars/client/components/onboarding/Verify.vue";
@@ -32,6 +32,9 @@ import { USERNAME_PAGE } from "@port-of-mars/shared/routes";
   }
 })
 export default class Onboarding extends Vue {
+  @Prop({ default: "Consent" })
+  startStep: string;
+
   isDevMode: boolean = false;
 
   onboardingSteps = [
@@ -40,13 +43,26 @@ export default class Onboarding extends Vue {
     {name: "Tutorial", component: Tutorial, completed: false},
     {name: "Play", component: Play, completed: false},
   ];
-  // TODO: use store so we can track step when email is verified for example
   activeStep = this.onboardingSteps[0];
+  // TODO: use store so we can track step when email is verified for example
+  // maybe, currently using prop startStep
 
   usernamePage = { name: USERNAME_PAGE };
   
-  async created() {
+  created() {
+    this.advanceTo(this.startStep);
     this.isDevMode = isDevOrStaging();
+  }
+
+  advanceTo(componentName: string) {
+    for (const step of this.onboardingSteps) {
+      if (step.component.name === componentName) {
+        this.activeStep = step;
+        return;
+      } else {
+        step.completed = true;
+      }
+    }
   }
 
   advanceStep() {

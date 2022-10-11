@@ -160,14 +160,14 @@ export const PAGE_META: {
     path: "/openlobby",
     name: OPENLOBBY_PAGE,
     meta: {
-      requiresAuth: false, // FIXME: should require auth, false for testing
+      requiresAuth: true,
     },
   },
   [ONBOARDING_PAGE]: {
     path: "/onboarding",
     name: ONBOARDING_PAGE,
     meta: {
-      requiresAuth: false, // FIXME: should require auth, false for testing
+      requiresAuth: true,
     },
   },
 };

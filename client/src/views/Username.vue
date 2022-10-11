@@ -47,6 +47,7 @@ import { ONBOARDING_PAGE } from "@port-of-mars/shared/routes"
 @Component({})
 export default class OpenLogin extends Vue {
   isDevMode: boolean = false;
+  error: string = "";
   // TODO: add validation + errors for username
   username: string = "";
   // FIXME: use store
@@ -63,9 +64,28 @@ export default class OpenLogin extends Vue {
     this.$refs.username.$el.focus();
   }
 
-  async signUp() {
+  async signUp(e: Event) {
+    if (this.isDevMode) {
+      this.devLogin(e);
+      return;
+    }
     // TODO: send ajax request and route to onboarding
     this.$router.push(this.onboarding);
+  }
+
+  async devLogin(e: Event) {
+    e.preventDefault();
+    const devLoginData: any = {
+      username: this.username,
+      password: "testing"
+    };
+    try {
+      await this.$ajax.devLogin(devLoginData);
+    } catch (e) {
+      if (e instanceof Error) {
+        this.error = e.message;
+      }
+    }
   }
 }
 </script>

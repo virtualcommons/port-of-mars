@@ -2,6 +2,7 @@
   <b-container>
     <b-row class="mb-3">
       <b-col>
+        <!-- TODO: use scrollspy to check if text has been read through -->
         <div id="consent-form-text">
           <p>Dear Participant,</p>
           <p>
@@ -96,7 +97,7 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 
 @Component({})
-export default class Verify extends Vue {
+export default class Consent extends Vue {
 
 }
 </script>
