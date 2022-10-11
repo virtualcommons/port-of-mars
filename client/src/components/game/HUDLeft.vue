@@ -47,6 +47,7 @@
           :accomplishment="accomplishment"
           :showDescription="false"
           :showCost="false"
+          :enableModal="true"
         ></AccomplishmentCard>
       </div>
     </b-col>
