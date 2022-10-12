@@ -1,38 +1,28 @@
 <template>
   <b-container fluid class="h-100 w-100 d-flex justify-content-center align-items-center backdrop">
     <div id="login-container" class="content-container">
-      <h1 class="text-center">Login or Sign Up</h1>
-      <hr>
-      <p>
-        Port of Mars is now in open beta, meaning anyone is welcome to sign up and
-        play as long you adhere to our <a href="" target="_blank">code of conduct</a>.
-      </p>
-      <hr>
-      <div v-if="isDevMode" class="mb-3">
-        <b-form inline @submit="devLogin">
-          <b-form-input
-            id="input-username"
-            v-model="devLoginUsername"
-            placeholder="Dev Username"
-            required
-            class="w-50"
-          >
-          </b-form-input>
-          <b-button class="w-50" icon type="submit" variant="success" size="lg">
-            <b-icon class="mb-1" icon="box-arrow-right"></b-icon> Sign in
-          </b-button>
-        </b-form>
-      </div>
-      <b-button block variant="white" size="lg" class="mb-3">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" 
-          class="float-left" style="width:1.25em"/>Sign in with Google
-      </b-button>
-      <b-button block variant="facebook" size="lg" class="mb-3">
-        <b-icon icon="facebook" class="float-left"/>Sign in with Facebook
-      </b-button>
-      <b-button block variant="black" size="lg">
-        <b-icon icon="github" class="float-left"/>Sign in with Github
-      </b-button>
+      <b-form>
+        <h1 class="text-center">Login or Sign Up</h1>
+        <hr>
+        <p>
+          Port of Mars is now in open beta, meaning anyone is welcome to sign up and
+          play as long you adhere to our <a href="" target="_blank">code of conduct</a>.
+        </p>
+        <hr>
+        <b-button @click="devLogin" block variant="primary" size="lg" class="mb-3">
+          <b-icon icon="file-earmark-code" class="float-left"/>Sign in (Dev Mode)
+        </b-button>
+        <b-button block variant="white" size="lg" class="mb-3">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" 
+            class="float-left" style="width:1.25em"/>Sign in with Google
+        </b-button>
+        <b-button block variant="facebook" size="lg" class="mb-3">
+          <b-icon icon="facebook" class="float-left"/>Sign in with Facebook
+        </b-button>
+        <b-button block variant="black" size="lg">
+          <b-icon icon="github" class="float-left"/>Sign in with Github
+        </b-button>
+      </b-form>
     </div>
   </b-container>
 </template>
@@ -41,16 +31,13 @@
 import { Component, Vue } from "vue-property-decorator";
 import { url } from "@port-of-mars/client/util";
 import { isDevOrStaging } from "@port-of-mars/shared/settings";
-import { DASHBOARD_PAGE, ONBOARDING_PAGE } from "@port-of-mars/shared/routes";
+import { REGISTER_PAGE } from "@port-of-mars/shared/routes";
 
 @Component({})
 export default class OpenLogin extends Vue {
   isDevMode: boolean = false;
-  error: string = "";
-  devLoginUsername: string = "";
 
-  dashboard = { name: DASHBOARD_PAGE };
-  usernamePage = { name: ONBOARDING_PAGE };
+  register = { name: REGISTER_PAGE };
 
   async created() {
     this.isDevMode = isDevOrStaging();
@@ -59,7 +46,7 @@ export default class OpenLogin extends Vue {
   async devLogin(e: Event) {
     e.preventDefault();
     const devLoginData: any = {
-      username: this.devLoginUsername,
+      username: "testing",
       password: "testing"
     };
     try {

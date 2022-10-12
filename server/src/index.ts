@@ -35,6 +35,7 @@ import {
   statusRouter,
 } from "@port-of-mars/server/routes";
 import { ServerError } from "./util";
+import { generateUsername } from "./util"
 
 const logger = settings.logging.getLogger(__filename);
 const NODE_ENV = process.env.NODE_ENV || "development";
@@ -77,7 +78,7 @@ passport.use(
     done: Function
   ) {
     const s = getServices();
-    const user = await getServices().account.getOrCreateTestUser(username);
+    const user = await getServices().account.getOrCreateTestUser(generateUsername());
     // set all testing things on the user
     const tournamentRound = await s.tournament.getCurrentTournamentRound();
     const invite = await s.tournament.getOrCreateInvite(

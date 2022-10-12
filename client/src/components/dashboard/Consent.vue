@@ -104,14 +104,14 @@
           verify your email.
         </b-alert>
         <b-form-group
-          description="Please enter your full name."
-          label="Name"
-          label-for="name"
+          description="Choose a username to go by"
+          label="Username"
+          label-for="username"
         >
           <b-form-input
-            id="name"
-            v-model="name"
-            placeholder="Enter your full name"
+            id="username"
+            v-model="username"
+            placeholder="Username"
             required
             size="lg"
             type="text"
@@ -183,6 +183,7 @@ import _ from "lodash";
   components: { Messages },
 })
 export default class Consent extends Vue {
+  // FIXME: username doesn't actually get updated anywhere
   username = "";
   name = "";
   email = "";
@@ -227,7 +228,7 @@ export default class Consent extends Vue {
     await this.$ajax.get(url("/registration/authenticated"), (response) => {
       if (response.data !== null) {
         const data = response.data;
-        this.name = data.name;
+        this.username = data.username;
         this.email = data.email;
         this.verifyEmail = data.email;
         this.isVerified = data.isVerified;

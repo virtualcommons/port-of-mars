@@ -104,3 +104,37 @@ export class ServerError extends Error implements ServerErrorData {
     return this.displayMessage ?? this.message;
   }
 }
+
+export function generateUsername() {
+  const NOUNS = [
+    'Asteroid',
+    'Blackhole',
+    'Comet',
+    'Planet',
+    'Moon',
+    'Star',
+    'Ship',
+    'Spacecraft',
+    'Rocket',
+    'Astronaut',
+    'Cosmonaut',
+    'Tardigrade',
+    'Alien',
+    'Rover',
+    'Martian',
+    ];
+    
+  const ADJECTIVES = [
+    'Astral',
+    'Celestial',
+    'Cosmic',
+    'Solar',
+    'Orbiting',
+    'Elliptical',
+  ];
+
+  const adj = Math.floor(Math.random() * ADJECTIVES.length);
+  const noun = Math.floor(Math.random() * NOUNS.length);
+  const num = Math.floor(1000 + Math.random() * 9000);
+  return ADJECTIVES[adj] + NOUNS[noun] + num;
+}

@@ -3,7 +3,7 @@ import _ from "lodash";
 import { VueRouter } from "vue-router/types/router";
 import { TStore } from "@port-of-mars/client/plugins/tstore";
 import { RoomId } from "@port-of-mars/shared/types";
-import { LOGIN_PAGE, DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
+import { OPENLOGIN_PAGE, DASHBOARD_PAGE, REGISTER_PAGE } from "@port-of-mars/shared/routes";
 import { DashboardMessage } from "@port-of-mars/shared/types";
 import { url } from "@port-of-mars/client/util";
 
@@ -35,7 +35,7 @@ export class AjaxRequest {
   _roomId?: RoomId;
 
   errorRoutes: Map<number, string> = new Map([
-    [401, LOGIN_PAGE],
+    [401, OPENLOGIN_PAGE],
     [403, DASHBOARD_PAGE],
     [404, DASHBOARD_PAGE],
   ]);
@@ -53,7 +53,7 @@ export class AjaxRequest {
     await this.post(devLoginUrl, ({ data, status }) => {
       if (status === 200) {
         this.store.commit("SET_USER", data.user);
-        this.router.push({ name: DASHBOARD_PAGE });
+        this.router.push({ name: REGISTER_PAGE });
       } else {
         return data;
       }
