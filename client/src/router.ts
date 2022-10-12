@@ -12,7 +12,6 @@ import Verify from "@port-of-mars/client/views/VerifyEmail.vue";
 import Manual from "@port-of-mars/client/views/Manual.vue";
 import Home from "@port-of-mars/client/views/Home.vue";
 import OpenLogin from "@port-of-mars/client/views/OpenLogin.vue";
-import Username from "@port-of-mars/client/views/Username.vue";
 import OpenLobby from "@port-of-mars/client/views/OpenLobby.vue";
 import Onboarding from "@port-of-mars/client/views/Onboarding.vue";
 import store from "@port-of-mars/client/store";
@@ -30,7 +29,6 @@ import {
   MANUAL_PAGE,
   HOME_PAGE,
   OPENLOGIN_PAGE,
-  USERNAME_PAGE,
   OPENLOBBY_PAGE,
   ONBOARDING_PAGE
 } from "@port-of-mars/shared/routes";
@@ -52,7 +50,6 @@ const router = new VueRouter({
     { ...PAGE_META[MANUAL_PAGE], component: Manual },
     { ...PAGE_META[HOME_PAGE], component: Home },
     { ...PAGE_META[OPENLOGIN_PAGE], component: OpenLogin },
-    { ...PAGE_META[USERNAME_PAGE], component: Username },
     { ...PAGE_META[OPENLOBBY_PAGE], component: OpenLobby },
     { ...PAGE_META[ONBOARDING_PAGE], component: Onboarding }
   ]
@@ -81,8 +78,8 @@ router.beforeEach((to, from, next) => {
 
 router.beforeEach((to: any, from: any, next: any) => {
   if (to.meta.requiresAuth && !isAuthenticated()) {
-    next({ name: LOGIN_PAGE });
-  } else if (to.name === LOGIN_PAGE && isAuthenticated()) {
+    next({ name: OPENLOGIN_PAGE });
+  } else if (to.name === OPENLOGIN_PAGE && isAuthenticated()) {
     next({ name: DASHBOARD_PAGE });
   } else {
     next();

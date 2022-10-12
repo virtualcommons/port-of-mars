@@ -10,7 +10,6 @@ export const DASHBOARD_PAGE: "Dashboard" = "Dashboard";
 export const MANUAL_PAGE: "Manual" = "Manual";
 export const HOME_PAGE: "Home" = "Home";
 export const OPENLOGIN_PAGE: "OpenLogin" = "OpenLogin";
-export const USERNAME_PAGE: "Username" = "Username";
 export const OPENLOBBY_PAGE: "OpenLobby" = "OpenLobby";
 export const ONBOARDING_PAGE: "Onboarding" = "Onboarding";
 
@@ -27,7 +26,6 @@ export type Page =
   | "Verify"
   | "Manual"
   | "OpenLogin"
-  | "Username"
   | "OpenLobby"
   | "Onboarding";
 export const PAGES: Array<Page> = [
@@ -42,7 +40,6 @@ export const PAGES: Array<Page> = [
   MANUAL_PAGE,
   HOME_PAGE,
   OPENLOGIN_PAGE,
-  USERNAME_PAGE,
   OPENLOBBY_PAGE,
   ONBOARDING_PAGE
 ];
@@ -145,13 +142,6 @@ export const PAGE_META: {
   [OPENLOGIN_PAGE]: {
     path: "/openlogin",
     name: OPENLOGIN_PAGE,
-    meta: {
-      requiresAuth: false,
-    },
-  },
-  [USERNAME_PAGE]: {
-    path: "/username",
-    name: USERNAME_PAGE,
     meta: {
       requiresAuth: false,
     },
