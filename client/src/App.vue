@@ -4,14 +4,14 @@
       <!-- <Header v-if="!isGamePage"></Header> -->
       <Navbar v-if="!isGamePage"></Navbar>
       <router-view
-        :class="!isManual ? 'h-100 d-flex flex-grow-1 ' : 'h-auto'"
+        :class="!isManual ? 'h-100 d-flex flex-grow-1 body-content' : 'h-auto'"
         :key="$route.path"
       ></router-view>
     </b-row>
     <!-- FIXME: figure out how to add footer to dashboard without weird page behaior
           ideally, we should just be able to import the Footer once into App.vue
     -->
-    <Footer v-if="isDashboard"></Footer>
+    <!-- <Footer v-if="isDashboard"></Footer> -->
   </b-container>
 </template>
 
@@ -75,6 +75,10 @@ export default class App extends Vue {
 
 /* IMPORT SCSS */
 @import "./stylesheets/main.scss";
+
+.body-content {
+  padding-top: 85px !important;
+}
 
 .bg {
   background-color: var(--dark-shade);

@@ -1,12 +1,12 @@
 <template>
-  <b-container fluid class="h-100 m-0 p-0">
+  <b-container fluid class="h-100 m-0 p-0 backdrop">
     <b-row no-gutters class="h-100 w-100 justify-content-center">
       <section id="consent-wrapper" class="m-0 w-100">
         <b-col sm="12" md="6" offset-md="3" class="text-center">
           <Messages></Messages>
         </b-col>
         <div class="w-100"></div>
-        <div class="h-75 p-5 scrollable backdrop">
+        <div class="h-100 p-5 scrollable backdrop">
           <div>
             <ConsentForm></ConsentForm>
           </div>
@@ -29,7 +29,7 @@ export default class Register extends Vue {}
 
 <style lang="scss" scoped>
 #consent-wrapper {
-  padding: 150px 0 0 0;
+  padding: 0 0 0 0;
   // background: url("../assets/images/bg-dark-moon.png");
   // background-position: center;
 }

@@ -12,8 +12,6 @@ import Verify from "@port-of-mars/client/views/VerifyEmail.vue";
 import Manual from "@port-of-mars/client/views/Manual.vue";
 import Home from "@port-of-mars/client/views/Home.vue";
 import OpenLogin from "@port-of-mars/client/views/OpenLogin.vue";
-import OpenLobby from "@port-of-mars/client/views/OpenLobby.vue";
-import Onboarding from "@port-of-mars/client/views/Onboarding.vue";
 import store from "@port-of-mars/client/store";
 import {
   ADMIN_PAGE,
@@ -29,8 +27,6 @@ import {
   MANUAL_PAGE,
   HOME_PAGE,
   OPENLOGIN_PAGE,
-  OPENLOBBY_PAGE,
-  ONBOARDING_PAGE
 } from "@port-of-mars/shared/routes";
 
 Vue.use(VueRouter);
@@ -50,8 +46,6 @@ const router = new VueRouter({
     { ...PAGE_META[MANUAL_PAGE], component: Manual },
     { ...PAGE_META[HOME_PAGE], component: Home },
     { ...PAGE_META[OPENLOGIN_PAGE], component: OpenLogin },
-    { ...PAGE_META[OPENLOBBY_PAGE], component: OpenLobby },
-    { ...PAGE_META[ONBOARDING_PAGE], component: Onboarding }
   ]
 });
 

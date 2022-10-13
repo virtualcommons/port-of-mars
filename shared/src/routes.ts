@@ -10,8 +10,6 @@ export const DASHBOARD_PAGE: "Dashboard" = "Dashboard";
 export const MANUAL_PAGE: "Manual" = "Manual";
 export const HOME_PAGE: "Home" = "Home";
 export const OPENLOGIN_PAGE: "OpenLogin" = "OpenLogin";
-export const OPENLOBBY_PAGE: "OpenLobby" = "OpenLobby";
-export const ONBOARDING_PAGE: "Onboarding" = "Onboarding";
 
 export type Page =
   | "Admin"
@@ -25,9 +23,7 @@ export type Page =
   | "Dashboard"
   | "Verify"
   | "Manual"
-  | "OpenLogin"
-  | "OpenLobby"
-  | "Onboarding";
+  | "OpenLogin";
 export const PAGES: Array<Page> = [
   ADMIN_PAGE,
   LOGIN_PAGE,
@@ -40,8 +36,6 @@ export const PAGES: Array<Page> = [
   MANUAL_PAGE,
   HOME_PAGE,
   OPENLOGIN_PAGE,
-  OPENLOBBY_PAGE,
-  ONBOARDING_PAGE
 ];
 
 export function isPage(pageName: string): pageName is Page {
@@ -144,20 +138,6 @@ export const PAGE_META: {
     name: OPENLOGIN_PAGE,
     meta: {
       requiresAuth: false,
-    },
-  },
-  [OPENLOBBY_PAGE]: {
-    path: "/openlobby",
-    name: OPENLOBBY_PAGE,
-    meta: {
-      requiresAuth: true,
-    },
-  },
-  [ONBOARDING_PAGE]: {
-    path: "/onboarding",
-    name: ONBOARDING_PAGE,
-    meta: {
-      requiresAuth: true,
     },
   },
 };

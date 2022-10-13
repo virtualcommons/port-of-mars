@@ -1,70 +1,39 @@
 <template>
   <b-container fluid class="h-100 m-0 p-0 backdrop">
-    <b-row no-gutters class="h-100 w-100 justify-content-start">
-      <!-- messages -->
-      <section id="message-wrapper" class="d-flex flex-shrink-1 h-auto w-100 m-0">
-        <b-row class="w-100 mx-2" align-v="center" align-h="center">
-          <b-col sm="12" md="6" offset-md="3" class="text-center">
-            <Messages></Messages>
-          </b-col>
-        </b-row>
-      </section>
-
-      <!-- onboarding tasks -->
-      <section id="onboarding-wrapper" class="d-flex flex-shrink-1 h-auto w-100 text-center m-0 p-0">
-        <!-- tasks to complete -->
-        <b-row class="w-100 mx-2">
-          <b-col sm="12" align-self="start">
-            <template
-              v-if="playerTaskCompletion.mustTakeIntroSurvey || playerTaskCompletion.canPlayGame"
-            >
-              <b-col>
-                <h2>Round {{ currentRoundNumber }}: Complete onboarding tasks</h2>
-              </b-col>
-              <div class="w-100 mb-2"></div>
-              <b-col align-self="start" cols="auto">
-                <b-button
-                  @click="activateTutorial"
-                  :variant="hasWatchedTutorial ? 'success' : 'primary'"
-                  size="lg"
-                >
-                  <h4>
-                    <b-icon-exclamation-triangle
-                      scale="1"
-                      v-if="!hasWatchedTutorial"
-                    ></b-icon-exclamation-triangle>
-                    Watch Tutorial
-                    <b-icon-check-circle-fill scale="1" v-if="hasWatchedTutorial">
-                    </b-icon-check-circle-fill>
-                  </h4>
-                </b-button>
-                <b-icon-arrow-right-circle-fill
-                  scale="2"
-                  class="mx-4"
-                ></b-icon-arrow-right-circle-fill>
-                <template v-if="playerTaskCompletion.mustTakeIntroSurvey">
-                  <b-button target="_blank" :href="introSurveyUrl" variant="primary" size="lg">
-                    <h4>
-                      <b-icon-exclamation-triangle scale="1"></b-icon-exclamation-triangle> Take
-                      Survey
-                    </h4>
-                  </b-button>
-                </template>
-                <template v-else>
-                  <b-button variant="success" size="lg">
-                    <h4>
-                      Survey Completed
-                      <b-icon-check-circle-fill scale="1"> </b-icon-check-circle-fill>
-                    </h4>
-                  </b-button>
-                </template>
-
-                <b-icon-arrow-right-circle-fill
-                  scale="2"
-                  class="mx-4"
-                ></b-icon-arrow-right-circle-fill>
-                <!-- Join waiting lobby -->
-                <template v-if="isLobbyOpen">
+    <b-row no-gutters class="h-100 w-100 p-5">
+      <b-col>
+        <b-tabs pills class="h-100 w-100 p-4 my-2 mx-auto content-container">
+          <b-tab title="Dashboard" class="h-100 w-100 mt-3">
+            <b-container fluid class="h-100">
+              <b-row class="justify-content-center">
+                <b-col sm="12" md="6">
+                  <h4>The Objective</h4>
+                  <p>
+                    Your mission is to stay alive and achieve the most victory points.
+                    Each round you receive 10 time blocks that you can invest in system health
+                    or accomplishments. System health will maintain the shared infrastructure 
+                    (upkeep) and keep the team alive. Accomplishments will earn you victory points.
+                  </p>
+                  <h4>Manual</h4>
+                  <p>
+                    For a quick reference, check out the <router-link :to="manual">game manual</router-link>
+                  </p>
+                  <h4>Tutorial</h4>
+                  <div id="tutorial-wrapper">
+                    <b-embed
+                      id="tutorialVideo"
+                      type="iframe"
+                      aspect="16by9"
+                      :src="tutorialVideoUrl"
+                      allowfullscreens
+                      class="py-3"
+                    ></b-embed>
+                  </div>
+                </b-col>
+                <b-col sm="12" md="6" class="text-center" align-self="center">
+                  <h4>Next Launch In</h4>
+                  <!-- FIXME: use schedule[0] or something to get the next game -->
+                  <Countdown :nextLaunch="Date.now() + (1000 * 60 * 60 * 4.5)" class="mb-5"></Countdown>
                   <b-button
                     :disabled="!playerTaskCompletion.canPlayGame"
                     :to="lobby"
@@ -79,124 +48,26 @@
                       ></font-awesome-icon>
                     </h4>
                   </b-button>
-                </template>
-                <template v-else>
-                  <b-button @click="activateTab(1)" size="lg" variant="secondary">
-                    <h4>Check Schedule for Next Launch</h4>
-                  </b-button>
-                </template>
-              </b-col>
-            </template>
-
-            <!-- invite + participation status -->
-            <template v-else-if="!playerTaskCompletion.hasInvite">
-              <b-col>
-                <h1 class="mt-3 py-2">
-                  Invitation not found
-                </h1>
-              </b-col>
-              <div class="w-100 mb-2"></div>
-              <b-col>
-                <p class="lead">
-                  Thanks for your interest in the Port of Mars! Unfortunately you do not appear to
-                  have an invitation to participate in this round of the Port of Mars. If you think
-                  this is an error, please
-                  <a href="mailto:portmars@asu.edu">contact us at portmars@asu.edu</a>.
-                </p>
-              </b-col>
-            </template>
-
-            <!-- exit survey -->
-            <template v-else>
-              <b-col><h1>Thank you for participating!</h1></b-col>
-              <div class="w-100 mb-2"></div>
-              <b-col v-if="playerTaskCompletion.shouldTakeExitSurvey">
-                <b-button :href="exitSurveyUrl" size="lg" squared variant="primary">
-                  Take Exit Survey
-                </b-button>
-              </b-col>
-              <b-col v-else>
-                <p>
-                  We will email you with further instructions if you are eligible to participate in
-                  the next round. You can review your past games in the
-                  <code>Previous Games</code> tab.
-                </p>
-              </b-col>
-            </template>
-          </b-col>
-        </b-row>
-      </section>
-
-      <!-- game info -->
-      <section id="game-info-wrapper" class="d-flex flex-grow-1 w-100 h-50 m-0 p-0">
-        <!-- tutorial, schedule, previous games -->
-        <b-row class="h-100 w-100 mx-2">
-          <b-col sm="12" md="8" offset-md="2">
-            <b-tabs pills class="h-100 w-100 p-4 my-2 mx-auto content-container" v-model="tabIndex">
-              <!-- tutorial -->
-              <b-tab class="h-100 w-100 mt-3">
-                <template #title>
-                  <h4>Tutorial</h4>
-                </template>
-                <h4 class="text-center">
-                  Learn to play Port of Mars with this brief tutorial video.
-                </h4>
-                <div class="m-auto w-50">
-                  <b-embed
-                    id="tutorialVideo"
-                    type="iframe"
-                    aspect="16by9"
-                    :src="tutorialVideoUrl"
-                    allowfullscreens
-                    class="p-3"
-                  >
-                  </b-embed>
-                </div>
-              </b-tab>
-
-              <!-- schedule -->
-              <b-tab class="h-100 w-100 mt-3 p-2">
-                <template #title>
-                  <h4>Schedule</h4>
-                </template>
-                <p class="m-3 lead">
-                  <ul>
-                    <li>You can only <mark>participate in one game</mark> this round</li>
-                    <li>Sign in and join the game lobby when a game is scheduled</li>
-                    <li>
-                      The game lobby
-                      <mark
-                        >opens 10 minutes before launch time and stays open for 30 minutes after
-                        launch time</mark
-                      >
-                    </li>
-                  </ul>
-                </p>
-                <p class="text-center">
-                  <Schedule :schedule="schedule" :roundNumber="currentRoundNumber"></Schedule>
-                </p>
-              </b-tab>
-
-              <!-- previous games -->
-              <b-tab class="h-100 w-100 mt-3 p-2">
-                <template #title>
-                  <h4>Previous Games</h4>
-                </template>
-                <h4 v-if="previousGames.length === 0" class="text-center">
-                  No games to display
-                </h4>
-                <div v-else class="scrollable backdrop" id="stats-container">
-                  <div v-for="playerStatItem in previousGames" :key="playerStatItem.time">
-                    <PlayerStatItem :playerStatItem="playerStatItem" class="my-3 p-3">
-                    </PlayerStatItem>
-                  </div>
-                </div>
-              </b-tab>
-            </b-tabs>
-          </b-col>
-        </b-row>
-      </section>
-
+                </b-col>
+              </b-row>
+            </b-container>
+          </b-tab>
+          <b-tab title="Launch Schedule" class="h-100 w-100 ">
+            <Schedule :schedule="schedule" :roundNumber="currentRoundNumber"></Schedule>
+          </b-tab>
+          <b-tab title="Statistics" class="h-100 w-100 ">
+            <h4 v-if="previousGames.length === 0" class="text-center">
+              No games to display
+            </h4>
+            <div v-else class="scrollable backdrop" id="stats-container">
+              <div v-for="playerStatItem in previousGames" :key="playerStatItem.time">
+                <PlayerStatItem :playerStatItem="playerStatItem" class="my-3 p-3">
+                </PlayerStatItem>
+              </div>
+            </div>
+          </b-tab>
+        </b-tabs>
+      </b-col>
     </b-row>
   </b-container>
 </template>
@@ -215,12 +86,14 @@ import {
   LOBBY_PAGE,
   SIGNEDUP_PAGE,
   TUTORIAL_PAGE,
-  DASHBOARD_PAGE
+  DASHBOARD_PAGE,
+  MANUAL_PAGE,
 } from "@port-of-mars/shared/routes";
 
 import { DashboardAPI } from "@port-of-mars/client/api/dashboard/request";
 import PlayerStatItem from "@port-of-mars/client/components/dashboard/PlayerStatItem.vue";
 import Messages from "@port-of-mars/client/components/dashboard/Messages.vue";
+import Countdown from "@port-of-mars/client/components/global/Countdown.vue";
 import Header from "@port-of-mars/client/components/global/Header.vue";
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
 import Schedule from "@port-of-mars/client/components/dashboard/Schedule.vue";
@@ -233,6 +106,7 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
   components: {
     Footer,
     Header,
+    Countdown,
     Messages,
     PlayerStatItem,
     Schedule
@@ -283,6 +157,10 @@ export default class Dashboard extends Vue {
 
   get dashboard() {
     return { name: DASHBOARD_PAGE };
+  }
+
+  get manual() {
+    return { name: MANUAL_PAGE };
   }
 
   async created() {
@@ -357,13 +235,18 @@ export default class Dashboard extends Vue {
 }
 
 .tab-content {
+  height: 100%;
   border-top: 0.1rem solid $light-shade-25;
 }
 
 .tabs {
   text-align: left;
-  margin-top: 2em;
   overflow: none;
+}
+
+#tutorial-wrapper {
+  max-width: 600px;
+  margin-left: -25px;
 }
 
 #message-wrapper {

@@ -8,8 +8,8 @@
             <h2>Welcome to Port of Mars</h2>
             <p class="my-3">
               Port of Mars is an online, game-based, social science experiment set on the first
-              human community on the Red Planet. Currently recruiting Arizona State University
-              Undergraduates for game play.
+              human community on the Red Planet. Currently in Open Beta, meaning anyone is welcome
+              to participate.
             </p>
           </b-col>
         </b-row>
@@ -27,39 +27,44 @@
       <!-- prize info -->
       <section id="prize" class="w-100 p-5 text-center">
         <b-row class="w-100 mx-2" align-v="center" align-h="center">
-          <b-col sm="12">
-            <h3>{{ description }}</h3>
-            <p class="text">
-              The next Mars Madness tournament is coming soon! Sign up and get notified when it
-              starts.
+          <b-col sm="12" md="6">
+            <h2>Open Beta</h2>
+            <p class="text my-3">
+              Games are scheduled to take place every 3 hours. Sign up to be ready when the
+              next round starts.
             </p>
-            <template v-if="signupEnabled" class="my-5">
-              <b-button squared variant="primary" :to="login"
-                ><h4 class="p-1">Sign Up to Play</h4></b-button
-              >
-            </template>
-            <template v-else>
-              <h3 class="subtitle p-3 mr-4">
-                {{ announcement }}
-              </h3>
-              <b-button :to="login" size="lg" variant="primary" class="w-75">
-                <b-icon class="mb-2" icon="box-arrow-right"></b-icon>
-                <template v-if="signupEnabled"> Register for </template>
-                <template v-else> Participate in </template>
-                Mars Madness {{ currentYear }}
-              </b-button>
-            </template>
+            <b-button variant="primary" :to="openlogin"
+              ><h4 class="p-1">Sign Up to Play</h4>
+            </b-button>
           </b-col>
-          <b-col v-if="schedule.length > 0" sm="12" class="m-5 text-center">
+          <b-col sm="12" md="6">
+            <h2>Next Launch In</h2>
+            <!-- FIXME: use schedule[0] or something to get the next game -->
+            <Countdown
+              :nextLaunch="Date.now() + (1000 * 60 * 60 * 4.5)"
+              class="my-3"
+              style="color: #fff;"
+            ></Countdown>
+          </b-col>
+          <!-- <b-col v-if="schedule.length > 0" sm="12" class="m-5 text-center">
             <Schedule :schedule="schedule" :roundNumber="currentRoundNumber"> </Schedule>
-          </b-col>
+          </b-col> -->
         </b-row>
       </section>
 
       <!-- game-trailer -->
       <section id="game-trailer" class="m-0 p-5 w-100">
         <b-row class="mt-2" align-v="center" align-h="center">
-          <b-col align-self="center" sm="12" md="5">
+          <b-col align-self="center" sm="12" md="6" class="p-3">
+            <b-embed
+              class="p-1"
+              type="iframe"
+              aspect="21by9"
+              :src="trailerVideoUrl"
+              allowfullscreen
+            ></b-embed>
+          </b-col>
+          <b-col align-self="center" sm="12" md="6">
             <h2>The Game</h2>
             <p class="text my-3">
               You are 1 of 5 residents at the Port of Mars, the first long-term habitat on the
@@ -68,20 +73,11 @@
               system health. If system health falls to zero all players die.
             </p>
 
-            <b-alert :show="currentRoundNumber > 1" variant="warning">
+            <!-- <b-alert :show="currentRoundNumber > 1" variant="warning">
               Eligible participants have been invited via email to
               <b-badge variant="info">Round {{ currentRoundNumber }}</b-badge
               >.
-            </b-alert>
-          </b-col>
-          <b-col align-self="start" sm="12" md="7" class="p-3">
-            <b-embed
-              class="p-1"
-              type="iframe"
-              aspect="21by9"
-              :src="trailerVideoUrl"
-              allowfullscreen
-            ></b-embed>
+            </b-alert> -->
           </b-col>
         </b-row>
       </section>
@@ -93,13 +89,15 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
+import Countdown from "@port-of-mars/client/components/global/Countdown.vue";
 import Schedule from "@port-of-mars/client/components/dashboard/Schedule.vue";
-import { LOGIN_PAGE, DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
+import { LOGIN_PAGE, OPENLOGIN_PAGE, DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
 import { isDevOrStaging } from "@port-of-mars/shared/settings";
 
 @Component({
   components: {
     Footer,
+    Countdown,
     Schedule
   }
 })
@@ -108,6 +106,7 @@ export default class Home extends Vue {
   currentYear = new Date().getFullYear();
   trailerVideoUrl = "https://player.vimeo.com/video/644046830";
   login = { name: LOGIN_PAGE };
+  openlogin = { name: OPENLOGIN_PAGE };
   dashboardPage = { name: DASHBOARD_PAGE };
   readonly SITE_URL = "https://portofmars.asu.edu";
 
@@ -188,7 +187,7 @@ p {
 
 #about {
   background-image: url("../assets/images/bg-moon.png");
-  padding: 150px 0 50px 0;
+  padding: 50px 0 50px 0;
 }
 
 #about p {

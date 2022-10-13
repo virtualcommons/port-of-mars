@@ -54,18 +54,20 @@ ccarra1@asu.edu
       <h2>Connect with Us</h2>
       <ul>
         <li>
-          <a href="mailto:portmars@asu.edu" title="Email us"
-            >Email
+          <a href="mailto:portmars@asu.edu" title="Email us">
+            Email
             <b-icon icon="envelope" class="mx-1"></b-icon>
           </a>
         </li>
         <li>
-          <a href="https://www.instagram.com/portofmars/" title="Instagram">Instagram </a>
-          <b-icon icon="instagram" class="mx-1"></b-icon>
+          <a href="https://www.instagram.com/portofmars/" title="Instagram">
+            Instagram
+            <b-icon icon="instagram" class="mx-1"></b-icon>
+          </a>
         </li>
         <li>
-          <a href="https://twitter.com/PortOfMars" title="Twitter"
-            >Twitter
+          <a href="https://twitter.com/PortOfMars" title="Twitter">
+            Twitter
             <b-icon icon="twitter" class="mx-1"></b-icon>
           </a>
         </li>

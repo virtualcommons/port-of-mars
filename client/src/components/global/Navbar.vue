@@ -1,5 +1,5 @@
 <template>
-  <b-navbar tag="header" toggleable="md" type="dark" variant="dark" class="w-100" sticky>
+  <b-navbar tag="header" toggleable="md" type="dark" variant="dark" class="w-100" fixed="top">
     <b-navbar-brand :to="home">
       <b-img
         id="logo"
@@ -13,20 +13,22 @@
       <b-navbar-nav class="ml-auto">
 
         <b-nav-item
-          :to="openlobby"
+          :to="dashboard"
           exact-active-class="active"
           title="Play Port of Mars"
         >Play</b-nav-item>
         <b-nav-item
-          :to="onboarding"
+          href="https://player.vimeo.com/video/642036661"
+          target="_blank"
           exact-active-class="active"
           title="Tutorial"
         >Tutorial</b-nav-item>
         <b-nav-item
-          :to="home"
+          :to="manual"
+          target="_blank"
           exact-active-class="active"
-          title="About"
-        >About</b-nav-item>
+          title="Manual"
+        >Manual</b-nav-item>
         <b-nav-item
           href="https://instagram.com/portofmars/"
           target="_blank"
@@ -72,8 +74,6 @@ import {
   GAME_PAGE,
   LOBBY_PAGE,
   OPENLOGIN_PAGE,
-  OPENLOBBY_PAGE,
-  ONBOARDING_PAGE
 } from "@port-of-mars/shared/routes";
 import { isDevOrStaging } from "@port-of-mars/shared/settings";
 import _ from "lodash";
@@ -100,8 +100,6 @@ export default class Header extends Vue {
   game = { name: GAME_PAGE };
   lobby = { name: LOBBY_PAGE };
   openlogin = { name: OPENLOGIN_PAGE };
-  openlobby = { name: OPENLOBBY_PAGE };
-  onboarding = { name: ONBOARDING_PAGE };
 
   async created() {
     this.isDevMode = isDevOrStaging();
@@ -139,14 +137,8 @@ export default class Header extends Vue {
 
 <style scoped>
 
-#header {
-  display: grid;
-  grid-template-columns: 200px 25px 1fr;
-  width: 100%;
-  position: fixed;
-  z-index: 10;
-  padding: 1rem;
-  box-shadow: 2px 2px 10px #000000;
+header {
+  height: 85px;
 }
 
 #logo {
