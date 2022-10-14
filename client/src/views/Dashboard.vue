@@ -1,5 +1,5 @@
 <template>
-  <b-container fluid class="h-100 m-0 p-0 backdrop">
+  <b-container fluid class="h-100 m-0 p-0 backdrop overflow-auto">
     <b-row no-gutters class="h-100 w-100 p-5">
       <b-col>
         <b-tabs pills class="h-100 w-100 p-4 my-2 mx-auto content-container">
@@ -230,6 +230,11 @@ export default class Dashboard extends Vue {
   background: url("../assets/images/bg-moon.png");
   background-position: center;
 }
+
+.overflow-auto {
+  overflow: auto;
+}
+
 ::-webkit-scrollbar {
   width: 0;
 }

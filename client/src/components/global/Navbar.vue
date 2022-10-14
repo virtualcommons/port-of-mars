@@ -137,10 +137,6 @@ export default class Header extends Vue {
 
 <style scoped>
 
-header {
-  height: 85px;
-}
-
 #logo {
   width: 200px;
 }

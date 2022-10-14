@@ -64,7 +64,6 @@ export default class OpenLogin extends Vue {
 
 #login-container {
   padding: 2rem;
-  margin-top: -10rem;
   width: 30rem;
 }
 

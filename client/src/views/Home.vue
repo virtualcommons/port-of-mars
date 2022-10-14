@@ -38,7 +38,7 @@
             </b-button>
           </b-col>
           <b-col sm="12" md="6">
-            <h2>Next Launch In</h2>
+            <h2 class="mt-3">Next Launch In</h2>
             <!-- FIXME: use schedule[0] or something to get the next game -->
             <Countdown
               :nextLaunch="Date.now() + (1000 * 60 * 60 * 4.5)"
@@ -55,15 +55,6 @@
       <!-- game-trailer -->
       <section id="game-trailer" class="m-0 p-5 w-100">
         <b-row class="mt-2" align-v="center" align-h="center">
-          <b-col align-self="center" sm="12" md="6" class="p-3">
-            <b-embed
-              class="p-1"
-              type="iframe"
-              aspect="21by9"
-              :src="trailerVideoUrl"
-              allowfullscreen
-            ></b-embed>
-          </b-col>
           <b-col align-self="center" sm="12" md="6">
             <h2>The Game</h2>
             <p class="text my-3">
@@ -78,6 +69,15 @@
               <b-badge variant="info">Round {{ currentRoundNumber }}</b-badge
               >.
             </b-alert> -->
+          </b-col>
+          <b-col align-self="center" sm="12" md="6" class="p-3">
+            <b-embed
+              class="p-1"
+              type="iframe"
+              aspect="21by9"
+              :src="trailerVideoUrl"
+              allowfullscreen
+            ></b-embed>
           </b-col>
         </b-row>
       </section>
