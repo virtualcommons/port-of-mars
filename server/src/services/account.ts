@@ -70,7 +70,7 @@ export class AccountService extends BaseService {
     // test user, set fake data so they can immediately join a game
     user.email = `${username}@mailinator.com`;
     user.dateConsented = new Date();
-    user.isVerified = true;
+    // user.isVerified = true;
     // user.passedQuiz = true;
     // FIXME: use run-time configuration / settings to determine what user properties to bypass (passedQuiz, isVerified, hasParticipated, etc)
     user.name = `Test User ${username}`;

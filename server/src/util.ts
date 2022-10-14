@@ -136,5 +136,7 @@ export function generateUsername() {
   const adj = Math.floor(Math.random() * ADJECTIVES.length);
   const noun = Math.floor(Math.random() * NOUNS.length);
   const num = Math.floor(1000 + Math.random() * 9000);
+
+  // FIXME: make sure this is unique
   return ADJECTIVES[adj] + NOUNS[noun] + num;
 }

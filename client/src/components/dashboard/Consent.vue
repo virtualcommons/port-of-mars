@@ -1,7 +1,7 @@
 <template>
-  <b-container class="p-3" style="background-color: var(--dark-shade-75)" fluid>
+  <b-container class="p-3 h-100 d-flex flex-column" fluid>
     <h1>Port of Mars Consent Form and Email Registration</h1>
-    <b-collapse id="consent-collapse" :visible="showConsentForm">
+    <b-collapse class="consent-scrollable" id="consent-collapse" :visible="showConsentForm">
       <div class="consent-form-text">
         <p>Dear Participant,</p>
         <p>
@@ -24,12 +24,6 @@
           affect your compensation for participation up to that point.
         </p>
         <p>
-          <mark>
-            You must be 18 or older and a current undergraduate student at
-            Arizona State University to participate in the study.
-          </mark>
-        </p>
-        <p>
           During the game you can chat with other participants. By signing this
           consent form, you consent to:
         </p>
@@ -40,17 +34,6 @@
             communicating with your fellow participants
           </li>
         </ul>
-        <p>
-          For participation in this study you may receive extra credit if you
-          are in a class with a participating instructor.
-        </p>
-        <p>
-          Those who qualify for the championship round will receive a limited
-          edition Port of Mars t-shirt, and the winner(s) of the Mars Madness
-          tournament will be eligible to receive <mark>{{ prize }}</mark>.
-          In the event of a tie, the prize will be split equally between the tied 
-          participants.
-        </p>
         <p>
           Society may benefit from this research because an understanding of how
           people make decisions can help us to design regulations that sustain
@@ -65,10 +48,7 @@
           The results of the research study may be published, but your name will
           not be used. Your responses will be confidential. However, due to the
           group nature of this study, complete confidentiality cannot be
-          guaranteed. If you are participating in this study as part of a class
-          for extra credit, we may inform your instructor that you have
-          participated, for example. We also have to keep track of which players
-          will move on to next rounds. We will remove personal information such
+          guaranteed. We will remove personal information such
           as your email address from our database after the tournament has been
           completed and ensure that only anonymized participant identifiers are
           associated with your experiment data.
@@ -83,15 +63,15 @@
         <p align="justify">Dr. Marco Janssen</p>
       </div>
     </b-collapse>
-    <b-button-group class="my-3">
-      <b-button squared variant="success" @click="toggleConsent">
+    <b-button-group class="my-3 align-self-start">
+      <b-button variant="success" @click="toggleConsent">
         {{ consentLabel }}
       </b-button>
-      <b-button squared variant="danger" @click="denyConsent" class="mx-2">
+      <b-button variant="danger" @click="denyConsent" class="mx-2">
         Deny Consent
       </b-button>
     </b-button-group>
-    <b-collapse v-model="consented">
+    <b-collapse class="consent-scrollable" v-model="consented">
       <b-form @submit="register">
         <b-alert v-if="existingUser" dismissible show variant="warning"
           >It looks like you have logged in before! Please review the
@@ -157,11 +137,9 @@
           :disabled="submitDisabled"
           type="submit"
           variant="success"
-          squared
           >Grant Consent to Participate
         </b-button>
         <b-button
-          squared
           v-else
           type="submit"
           :disabled="isVerificationDisabled"
@@ -216,7 +194,7 @@ export default class Consent extends Vue {
 
   get submitDisabled() {
     return (
-      this.name.length === 0 || this.email.length === 0 || !this.emailsMatch
+      this.username.length === 0 || this.email.length === 0 || !this.emailsMatch
     );
   }
 
@@ -277,7 +255,7 @@ export default class Consent extends Vue {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 h2 {
   margin-bottom: 0;
   text-transform: uppercase;
@@ -295,5 +273,9 @@ mark {
 }
 p {
   font-size: 1.2rem;
+}
+
+.consent-scrollable {
+  overflow: auto;
 }
 </style>

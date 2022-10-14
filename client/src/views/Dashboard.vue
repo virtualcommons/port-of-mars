@@ -32,8 +32,8 @@
                 </b-col>
                 <b-col sm="12" md="6" class="text-center" align-self="center">
                   <h4>Next Launch In</h4>
-                  <!-- FIXME: use schedule[0] or something to get the next game -->
-                  <Countdown :nextLaunch="Date.now() + (1000 * 60 * 60 * 4.5)" class="mb-5"></Countdown>
+                  <Countdown v-if="nextScheduledLaunch" :nextLaunch="nextScheduledLaunch" class="mb-5"></Countdown>
+                  <p v-else>No games scheduled</p>
                   <b-button
                     :disabled="!playerTaskCompletion.canPlayGame"
                     :to="lobby"
@@ -161,6 +161,10 @@ export default class Dashboard extends Vue {
 
   get manual() {
     return { name: MANUAL_PAGE };
+  }
+
+  get nextScheduledLaunch() {
+    return this.schedule[0];
   }
 
   async created() {

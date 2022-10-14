@@ -39,12 +39,13 @@
           </b-col>
           <b-col sm="12" md="6">
             <h2 class="mt-3">Next Launch In</h2>
-            <!-- FIXME: use schedule[0] or something to get the next game -->
             <Countdown
-              :nextLaunch="Date.now() + (1000 * 60 * 60 * 4.5)"
+              v-if="nextScheduledLaunch"
+              :nextLaunch="nextScheduledLaunch"
               class="my-3"
               style="color: #fff;"
             ></Countdown>
+            <p v-else>No games scheduled</p>
           </b-col>
           <!-- <b-col v-if="schedule.length > 0" sm="12" class="m-5 text-center">
             <Schedule :schedule="schedule" :roundNumber="currentRoundNumber"> </Schedule>
@@ -124,6 +125,10 @@ export default class Home extends Vue {
 
   get schedule() {
     return this.tournamentStatus.schedule;
+  }
+
+  get nextScheduledLaunch() {
+    return this.schedule[0];
   }
 
   get signupEnabled() {
