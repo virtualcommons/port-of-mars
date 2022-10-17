@@ -275,6 +275,11 @@ p {
   font-size: 1.2rem;
 }
 
+.consent-form-text {
+  padding: 0.5rem;
+  background-color: $light-shade-05;
+}
+
 .consent-scrollable {
   overflow: auto;
 }
