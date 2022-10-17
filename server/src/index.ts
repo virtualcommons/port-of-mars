@@ -34,8 +34,7 @@ import {
   surveyRouter,
   statusRouter,
 } from "@port-of-mars/server/routes";
-import { ServerError } from "./util";
-import { generateUsername } from "./util"
+import { ServerError, generateUsername } from "./util";
 
 const logger = settings.logging.getLogger(__filename);
 const NODE_ENV = process.env.NODE_ENV || "development";
@@ -245,6 +244,13 @@ async function createApp() {
   });
 
   gameServer.listen(port);
+
+  // run scheduler once, then every hour
+  getServices().schedule.scheduleGames();
+  const schedule = require("node-schedule");
+  const job = schedule.scheduleJob("0 * * * *", async () => {
+    getServices().schedule.scheduleGames();
+  });
 }
 
 createConnection(CONNECTION_NAME)
