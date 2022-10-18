@@ -331,6 +331,15 @@ async function createTournamentRoundDate(
   logger.debug("created scheduled date: %o", scheduledDate);
 }
 
+async function createScheduledGameDate(
+  em: EntityManager,
+  date: Date
+): Promise<void> {
+  const sp = getServices(em);
+  const scheduledDate = await sp.schedule.createScheduledGameDate(date);
+  logger.debug("created scheduled date: %o", scheduledDate);
+}
+
 function toIntArray(value: string, previous: Array<number>): Array<number> {
   return previous.concat([parseInt(value)]);
 }
@@ -508,6 +517,26 @@ program
               )
             );
             logger.debug("tournament create...");
+          })
+      )
+  )
+  .addCommand(
+    program
+      .createCommand("schedule")
+      .description("scheduler subcommands")
+      .addCommand(
+        program
+          .createCommand("create")
+          .requiredOption(
+            "-d, --date <date>",
+            "UTC Datetime for an upcoming scheduled game",
+            (s) => new Date(Date.parse(s))
+          )
+          .description("add a new date to the schedule")
+          .action(async (cmd) => {
+            await withConnection((em) =>
+              createScheduledGameDate(em, cmd.date)
+            );
           })
       )
   )

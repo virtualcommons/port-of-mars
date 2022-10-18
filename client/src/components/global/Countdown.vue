@@ -26,7 +26,12 @@ export default class Countdown extends Vue {
   now: number = Math.trunc(Date.now() / 1000);
 
   get secondsUntilLaunch() {
-    return Math.trunc(this.nextLaunch / 1000) - this.now;
+    const seconds = Math.trunc(this.nextLaunch / 1000) - this.now;
+    if (seconds <= 0 ) {
+      this.$emit("launchTime");
+      return 0;
+    }
+    return seconds;
   }
 
   get seconds() {

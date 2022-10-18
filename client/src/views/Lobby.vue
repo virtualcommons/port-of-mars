@@ -15,8 +15,9 @@
           You'll join a game as soon as there are enough players to form a full group.
         </p>
         <p>
-          This lobby will remain open up to 30 minutes after the scheduled launch time.
+          This lobby will remain open up to 5 minutes after the scheduled launch time.
         </p>
+        <p>{{ message }}</p>
       </b-col>
       <div class="w-100"></div>
       <b-col>
@@ -59,6 +60,7 @@ export default class Lobby extends Vue {
   private waitingUserCount: number = 0;
   private nextAssignmentTime: number = 0;
   private scheduledGameTime: number = 0;
+  message: string = "";
 
   get roles() {
     return this.$tstore.getters.roles;
@@ -96,14 +98,13 @@ export default class Lobby extends Vue {
       await this.$router.push({ name: REGISTER_PAGE });
       return;
     }
-    // XXX: currently disabled: go to tutorial if player has not taken tutorial
+    // currently disabled
     /*
     else if (playerTaskCompletion.mustTakeTutorial) {
       dashboardAPI.message("Please take the tutorial before joining the lobby to participate.");
       await this.$router.push({ name: TUTORIAL_PAGE });
       return;
     } 
-    */
     else if (playerTaskCompletion.mustTakeIntroSurvey) {
       dashboardAPI.message(
         "Please take the introductory survey before joining the lobby to participate."
@@ -118,6 +119,7 @@ export default class Lobby extends Vue {
       await this.$router.push({ name: DASHBOARD_PAGE });
       return;
     }
+    */
     // check if there is a game scheduled for play
     if (!dashboardData.isLobbyOpen) {
       dashboardAPI.message(

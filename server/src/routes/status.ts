@@ -7,12 +7,10 @@ export const statusRouter = Router();
 statusRouter.get('/', async (req: Request, res: Response, next) => {
   // provide tournament status + schedule
   try {
-    const isSignUpEnabled = await getServices().settings.isSignUpEnabled();
-    const tournamentStatus = await getServices().tournament.getTournamentStatus();
+    const gameDates = await getServices().schedule.getScheduledDates();
     res.json({
       user: req.user,
-      isSignUpEnabled,
-      tournamentStatus,
+      schedule: gameDates.map(d => d.getTime()),
     });
   }
   catch (e) {

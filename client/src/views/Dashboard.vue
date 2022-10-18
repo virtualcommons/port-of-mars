@@ -35,7 +35,7 @@
                   <Countdown v-if="nextScheduledLaunch" :nextLaunch="nextScheduledLaunch" class="mb-5"></Countdown>
                   <p v-else>No games scheduled</p>
                   <b-button
-                    :disabled="!playerTaskCompletion.canPlayGame"
+                    :disabled="!isLobbyOpen"
                     :to="lobby"
                     size="lg"
                     variant="warning"
@@ -188,17 +188,15 @@ export default class Dashboard extends Vue {
     }
 
     // go to the signed up page if signup is enabled
-    else if (data.isSignUpEnabled) {
-      await this.$router.push({ name: SIGNEDUP_PAGE });
-    }
+    // else if (data.isSignUpEnabled) {
+    //   await this.$router.push({ name: SIGNEDUP_PAGE });
+    // }
 
-    /*
     // go to tutorial if player has not taken tutorial
-    else if (data.playerTaskCompletion.mustTakeTutorial) {
-      // FIXME: open tutorial video fullscreen once we get vimeo player integration set up
-      await this.$router.push({ name: TUTORIAL_PAGE });
-    }
-    */
+    // else if (data.playerTaskCompletion.mustTakeTutorial) {
+    //   // FIXME: open tutorial video fullscreen once we get vimeo player integration set up
+    //   await this.$router.push({ name: TUTORIAL_PAGE });
+    // }
 
     // set survey URLs
     Vue.set(this, "introSurveyUrl", data.introSurveyUrl);

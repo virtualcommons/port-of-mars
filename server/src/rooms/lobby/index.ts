@@ -42,9 +42,9 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
 
   /**
    * Distribute clients into groups at this interval
-   * currently set to check for group assignment every 5 minutes
+   * currently set to check for group assignment every 1 minutes
    */
-  groupAssignmentInterval = 5;
+  groupAssignmentInterval = 1;
 
   /**
    * Groups of players per iteration
@@ -74,7 +74,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
   onCreate(options: any) {
     logger.info('RankedLobbyRoom: new room %s', this.roomId);
     this.setState(new LobbyRoomState());
-    this.groupAssignmentInterval = settings.lobby.groupAssignmentInterval;
+    // this.groupAssignmentInterval = settings.lobby.groupAssignmentInterval;
     this.devMode = settings.lobby.devMode;
     this.registerLobbyHandlers();
 
@@ -85,7 +85,8 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
       `*/${this.groupAssignmentInterval} * * * *`,
       async () => {
         logger.trace('SCHEDULED JOB: REDISTRIBUTE GROUPS EVERY %d', this.groupAssignmentInterval);
-        this.redistributeGroups();
+        // force assign group with bots if its the last attempt in a scheduled window
+        this.redistributeGroups(this.state.isLastTry);
         await this.updateLobbyNextAssignmentTime();
       }
     );
@@ -105,20 +106,29 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
         .nextInvocation()
         .toDate()
         .getTime();
-      logger.trace("next invocation: %s", nextInvocation);
+      logger.trace("next invocation: %s", this.scheduler.nextInvocation());
       this.state.nextAssignmentTime = nextInvocation;
-      const tournamentService = getServices().tournament;
-      this.state.isOpen = await tournamentService.isLobbyOpen();
+      const scheduleService = getServices().schedule;
+      const prevOpenState = this.state.isOpen
+      this.state.isOpen = await scheduleService.isLobbyOpen();
+      // check if this is the last attempt
+      logger.debug("previous open state: %s current open state: %s", prevOpenState, this.state.isOpen);
+      if (!this.state.isOpen && prevOpenState) {
+        this.state.isLastTry = true;
+      } else this.state.isLastTry = false;
     }
   }
 
   async onAuth(client: Client, options: { token: string }, request?: http.IncomingMessage) {
     try {
       const user = await getServices().account.findUserById((request as any).session.passport.user);
-      logger.debug('checking if user %s can play the game', user.username);
-      if (await getServices().auth.checkUserCanPlayGame(user.id)) {
-        return user;
-      }
+      return user;
+      // Don't need to do this for the open beta
+      // logger.debug('checking if user %s can play the game', user.username);
+      // if (await getServices().auth.checkUserCanPlayGame(user.id)) {
+      //   return user;
+      // }
+
       // FIXME: this won't work since we don't have any registered handlers to process this client-side
       // this.sendSafe(client, { kind: 'join-failure', reason: 'Please complete all onboarding items on your dashboard before joining a game.' });
       logger.debug('user should be redirected back to the dashboard');

@@ -119,38 +119,12 @@ export default class Home extends Vue {
     height: 225
   };
 
-  get tournamentStatus() {
-    return this.$tstore.state.tournamentStatus;
-  }
-
   get schedule() {
-    return this.tournamentStatus.schedule;
+    return this.$tstore.state.scheduledGames;
   }
 
   get nextScheduledLaunch() {
     return this.schedule[0];
-  }
-
-  get signupEnabled() {
-    return this.$tstore.state.signupEnabled;
-  }
-
-  get currentRoundNumber() {
-    return this.tournamentStatus.round;
-  }
-
-  get announcement() {
-    return (
-      this.tournamentStatus.announcement ||
-      `Register and complete Port of Mars Mission Control onboarding to be ready for the next Mars Madness tournament.`
-    );
-  }
-
-  get description() {
-    return (
-      this.tournamentStatus.description ||
-      `Participate in the next Mars Madness Tournament ${this.dateRange} for a chance to win $1000 USD!`
-    );
   }
 
   get dateRange() {
@@ -164,7 +138,6 @@ export default class Home extends Vue {
   async mounted() {
     // FIXME: this should probably come from the server when we fetchData
     this.isDevMode = isDevOrStaging();
-    console.log("status: ", this.tournamentStatus);
   }
 
   toDate(timestamp: number) {

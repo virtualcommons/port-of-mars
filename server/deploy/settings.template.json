@@ -1,5 +1,5 @@
 {
   "isSignUpEnabled": false,
-  "isFreePlayEnabled": false,
+  "isFreePlayEnabled": true,
   "maxConnections": 200
 }

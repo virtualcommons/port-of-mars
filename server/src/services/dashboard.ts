@@ -145,7 +145,7 @@ export class DashboardService extends BaseService {
       schedule: gameDates.map(d => d.getTime()),
       isSignUpEnabled: await this.sp.settings.isSignUpEnabled(),
       currentRoundNumber: round.roundNumber,
-      isLobbyOpen: await this.sp.tournament.isLobbyOpen(gameDates),
+      isLobbyOpen: await this.sp.schedule.isLobbyOpen(),
       stats
     }
   }
