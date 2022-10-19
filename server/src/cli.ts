@@ -15,7 +15,7 @@ import {
   EnteredVictoryPhase,
 } from "@port-of-mars/server/rooms/game/events";
 import { Phase } from "@port-of-mars/shared/types";
-import { getLogger } from "@port-of-mars/server/settings";
+import { settings, getLogger } from "@port-of-mars/server/settings";
 import {
   Game,
   GameEvent,
@@ -333,10 +333,12 @@ async function createTournamentRoundDate(
 
 async function createScheduledGameDate(
   em: EntityManager,
-  date: Date
+  date: Date,
+  minutesOpenBefore: number,
+  minutesOpenAfter: number
 ): Promise<void> {
   const sp = getServices(em);
-  const scheduledDate = await sp.schedule.createScheduledGameDate(date);
+  const scheduledDate = await sp.schedule.createScheduledGameDate(date, minutesOpenBefore, minutesOpenAfter);
   logger.debug("created scheduled date: %o", scheduledDate);
 }
 
@@ -528,14 +530,28 @@ program
         program
           .createCommand("create")
           .requiredOption(
-            "-d, --date <date>",
+            "--date <date>",
             "UTC Datetime for an upcoming scheduled game",
             (s) => new Date(Date.parse(s))
+          )
+          .option(
+            "--before <minutesOpenBefore>",
+            "Number of minutes before the date that the lobby will open",
+            customParseInt,
+            10
+            // settings.lobby.lobbyOpenBeforeOffset
+          )
+          .option(
+            "--after <minutesOpenAfter>",
+            "Number of minutes after the date that the lobby will close",
+            customParseInt,
+            5
+            // settings.lobby.lobbyOpenAfterOffset
           )
           .description("add a new date to the schedule")
           .action(async (cmd) => {
             await withConnection((em) =>
-              createScheduledGameDate(em, cmd.date)
+              createScheduledGameDate(em, cmd.date, cmd.before, cmd.after)
             );
           })
       )

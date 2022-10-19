@@ -41,8 +41,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
   public static get NAME(): string { return LOBBY_NAME }
 
   /**
-   * Distribute clients into groups at this interval
-   * currently set to check for group assignment every 1 minutes
+   * Distribute clients into groups at this interval (minutes)
    */
   groupAssignmentInterval = 1;
 
@@ -74,7 +73,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
   onCreate(options: any) {
     logger.info('RankedLobbyRoom: new room %s', this.roomId);
     this.setState(new LobbyRoomState());
-    // this.groupAssignmentInterval = settings.lobby.groupAssignmentInterval;
+    this.groupAssignmentInterval = settings.lobby.groupAssignmentInterval;
     this.devMode = settings.lobby.devMode;
     this.registerLobbyHandlers();
 

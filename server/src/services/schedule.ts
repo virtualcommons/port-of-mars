@@ -6,10 +6,12 @@ import { BaseService } from "@port-of-mars/server/services/db";
 import * as _ from 'lodash';
 
 const logger = getLogger(__filename);
-// FIXME: should probably be pulled from settings
-// 5 minutes grace period for whether the scheduled game is joinable
-const LOBBY_OPEN_AFTER_OFFSET = 5 * 60 * 1000;
-const LOBBY_OPEN_BEFORE_OFFSET = 10 * 60 * 1000;
+
+interface DateWindow {
+  date: Date;
+  minutesOpenBefore: number;
+  minutesOpenAfter: number;
+}
 
 export class ScheduleService extends BaseService {
 
@@ -17,9 +19,18 @@ export class ScheduleService extends BaseService {
    * Creates a new scheduled game date
    * Returns the date scheduled
    */
-  async createScheduledGameDate(date: Date, autoCreated: boolean = false): Promise<ScheduledGameDate> {
+  async createScheduledGameDate(
+    date: Date, minutesOpenBefore: number, minutesOpenAfter: number, autoCreated: boolean = false
+  ): Promise<ScheduledGameDate> {
+    const lobbyCloseDate = new Date(date.getTime() + (minutesOpenAfter * 60 * 1000));
     const repository = this.em.getRepository(ScheduledGameDate);
-    const scheduledDate = repository.create({ date, autoCreated });
+    const scheduledDate = repository.create({
+      date,
+      minutesOpenBefore,
+      minutesOpenAfter,
+      lobbyCloseDate,
+      autoCreated
+    });
     return await repository.save(scheduledDate);
   }
 
@@ -29,7 +40,9 @@ export class ScheduleService extends BaseService {
    * @param {number} [interval=3] - hours between games, must be a divisor of 24
    * @param {number} [days=1] - days from current date to schedule games until
    */
-  async scheduleGames(interval: number = 3, days: number = 1): Promise<Array<Date>> {
+  async scheduleGames(interval: number = 3, days: number = 1): Promise<Array<DateWindow>> {
+    const minutesOpenBefore = settings.lobby.lobbyOpenBeforeOffset;
+    const minutesOpenAfter = settings.lobby.lobbyOpenAfterOffset;
     const period = days * 24;
     const scheduled = await this.getScheduledDates(true);
     const numGamesToSchedule = Math.trunc(period / interval);
@@ -50,7 +63,7 @@ export class ScheduleService extends BaseService {
         nextDate.setUTCHours(nextHourToSchedule, 0, 0, 0);
         const hourOffset = i * interval;
         const time = nextDate.getTime() + hourOffset * 60 * 60 * 1000;
-        await this.createScheduledGameDate(new Date(time), true);
+        await this.createScheduledGameDate(new Date(time), minutesOpenBefore, minutesOpenAfter, true);
         logger.debug("scheduling a game for %s", new Date(time).toUTCString());
       }
     }
@@ -60,28 +73,29 @@ export class ScheduleService extends BaseService {
   /**
    * Returns upcoming scheduled dates
    */
-  async getScheduledDates(onlyAutoCreated: boolean = false): Promise<Array<Date>> {
-    // scheduled dates within 5 minutes of the scheduled tournament date should
-    // still be available
-    const offsetTime = new Date().getTime() - LOBBY_OPEN_AFTER_OFFSET;
+  async getScheduledDates(onlyAutoCreated: boolean = false): Promise<Array<DateWindow>> {
+    // select scheduled dates for which the lobby has not closed for (lobbyCloseDate > now)
     let schedule = await this.em.getRepository(ScheduledGameDate).find({
-      select: ['date', 'autoCreated'],
-      where: { date: MoreThan(new Date(offsetTime)) },
+      select: ['date', 'minutesOpenBefore', 'minutesOpenAfter', 'lobbyCloseDate', 'autoCreated'],
+      where: { lobbyCloseDate: MoreThan(new Date()) },
       order: { date: 'ASC' }
     });
     if (onlyAutoCreated) {
       schedule = schedule.filter(s => s.autoCreated);
     }
-    const scheduledDates = schedule.map(s => s.date);
-    return scheduledDates;
+    const scheduledGames = schedule.map(s => ({
+      date: s.date,
+      minutesOpenBefore: s.minutesOpenBefore,
+      minutesOpenAfter: s.minutesOpenAfter,
+    }));
+    return scheduledGames;
   }
 
   /**
-   * Returns true if there is a scheduled game within a specific time window of now.
-   * Currently set to open 10 mins before the scheduled game, and 5 minutes after
-   * the scheduled game (i.e., 15 minute window).
+   * Returns true if there is a scheduled game within a specific time window of now
+   * given by the offsets of the scheduled game
    */
-  async isLobbyOpen(gameDates?: Array<Date>): Promise<boolean> {
+  async isLobbyOpen(gameDates?: Array<DateWindow>): Promise<boolean> {
     // FIXME: use settings for the offsets
     if (!gameDates) {
       gameDates = await this.getScheduledDates();
@@ -93,10 +107,13 @@ export class ScheduleService extends BaseService {
       return false;
     }
     const now = new Date();
-    for (const date of gameDates) {
-      const gameTime = date.getTime();
-      const openDate = new Date(gameTime - LOBBY_OPEN_BEFORE_OFFSET);
-      const closeDate = new Date(gameTime + LOBBY_OPEN_AFTER_OFFSET);
+    for (const game of gameDates) {
+      const gameTime = game.date.getTime();
+      const openDate = new Date(gameTime - (game.minutesOpenBefore * 60 * 1000));
+      const closeDate = new Date(gameTime + (game.minutesOpenAfter * 60 * 1000));
+      logger.debug("game: %s", now);
+      logger.debug("open: %s", openDate);
+      logger.debug("close: %s", closeDate);
       if (now > openDate && now < closeDate) {
         return true;
       }

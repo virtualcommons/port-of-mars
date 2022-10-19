@@ -135,14 +135,13 @@ export class DashboardService extends BaseService {
     const stats = await this.getStats(user, round);
     const invite = await this.sp.tournament.getActiveRoundInvite(user.id, round);
     const playerTaskCompletion: PlayerTaskCompletion = await this.getPlayerTaskCompletion(user, invite);
-    // const gameDates = await this.sp.tournament.getScheduledDates(round);
     const gameDates = await this.sp.schedule.getScheduledDates();
     return {
       user,
       playerTaskCompletion,
       introSurveyUrl: this.getIntroSurveyUrl(user, round, invite),
       exitSurveyUrl: this.getExitSurveyUrl(user, round, invite),
-      schedule: gameDates.map(d => d.getTime()),
+      schedule: gameDates.map(d => d.date.getTime()),
       isSignUpEnabled: await this.sp.settings.isSignUpEnabled(),
       currentRoundNumber: round.roundNumber,
       isLobbyOpen: await this.sp.schedule.isLobbyOpen(),

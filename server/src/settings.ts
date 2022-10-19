@@ -15,7 +15,12 @@ export interface AppSettings {
 }
 
 export class LobbySettings {
-  constructor(public groupAssignmentInterval: number = 15, public devMode: boolean = true) { }
+  constructor(
+    public groupAssignmentInterval: number = 1, // minutes between attempts to form groups
+    public lobbyOpenBeforeOffset: number = 10, // minutes BEFORE scheduled time that the lobby will be open for
+    public lobbyOpenAfterOffset: number = 5, // minutes AFTER scheduled time that the lobby will be open for
+    public devMode: boolean = true
+  ) { }
 }
 
 const dev: () => AppSettings = () => ({
@@ -24,7 +29,7 @@ const dev: () => AppSettings = () => ({
   logging: new DevLogging(),
   secret: SECRET_KEY,
   supportEmail: 'portmars@asu.edu',
-  lobby: new LobbySettings(15),
+  lobby: new LobbySettings(1, 10, 5, true),
   isProduction: false,
 });
 
@@ -37,7 +42,7 @@ const staging: () => AppSettings = () => {
     logging: new DevLogging(),
     secret: SECRET_KEY,
     supportEmail: 'portmars@asu.edu',
-    lobby: new LobbySettings(15),
+    lobby: new LobbySettings(1, 10, 5, true),
     isProduction: false,
   };
 };
@@ -47,7 +52,7 @@ const prod: () => AppSettings = () => {
   return {
     ...stagingSettings,
     host: 'https://portofmars.asu.edu',
-    lobby: new LobbySettings(15, false),
+    lobby: new LobbySettings(1, 10, 5, false),
     isProduction: true
   };
 };

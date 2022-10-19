@@ -16,6 +16,15 @@ export class ScheduledGameDate {
   date!: Date;
 
   @Column()
+  minutesOpenBefore!: number;
+
+  @Column()
+  minutesOpenAfter!: number;
+
+  @Column()
+  lobbyCloseDate!: Date;
+
+  @Column()
   autoCreated!: boolean;
 
   @CreateDateColumn()

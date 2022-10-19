@@ -10,7 +10,7 @@ statusRouter.get('/', async (req: Request, res: Response, next) => {
     const gameDates = await getServices().schedule.getScheduledDates();
     res.json({
       user: req.user,
-      schedule: gameDates.map(d => d.getTime()),
+      schedule: gameDates.map(d => d.date.getTime()),
     });
   }
   catch (e) {
