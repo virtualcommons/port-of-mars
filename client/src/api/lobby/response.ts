@@ -63,17 +63,6 @@ export function applyWaitingServerResponses<T>(
         case 'nextAssignmentTime':
           (component as any).nextAssignmentTime = change.value;
           break;
-        case 'isOpen':
-          if (!change.value) {
-            // lobby is now closed, go to dashboard
-            // store.commit('SET_DASHBOARD_MESSAGE', { kind: 'warning', message: 'Not enough players joined to start a game, please try again later.'});
-            // router.push({ name: DASHBOARD_PAGE });
-          }
-          break;
-        case 'isLastTry':
-          // FIXME: placeholder message
-          (component as any).message = "not enough players, filling a game with bots soon"
-          break;
         case 'waitingUserCount':
           (component as any).waitingUserCount = change.value;
           break;

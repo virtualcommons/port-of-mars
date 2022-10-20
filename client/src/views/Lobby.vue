@@ -15,9 +15,9 @@
           You'll join a game as soon as there are enough players to form a full group.
         </p>
         <p>
-          This lobby will remain open up to 5 minutes after the scheduled launch time.
+          This lobby will remain open up to {{ minutesOpenAfter }} minutes after the scheduled launch time.<br>
+          After which, a game will begin with enough bots to form a full 5-person group.
         </p>
-        <p>{{ message }}</p>
       </b-col>
       <div class="w-100"></div>
       <b-col>
@@ -49,7 +49,7 @@ import { applyWaitingServerResponses } from "@port-of-mars/client/api/lobby/resp
 import { WaitingRequestAPI } from "@port-of-mars/client/api/lobby/request";
 import { isDevOrStaging } from "@port-of-mars/shared/settings";
 import { LOBBY_NAME } from "@port-of-mars/shared/lobby";
-import { REGISTER_PAGE, TUTORIAL_PAGE, DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
+import { REGISTER_PAGE, DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
 import { Role } from "@port-of-mars/shared/types";
 
 @Component({})
@@ -61,6 +61,7 @@ export default class Lobby extends Vue {
   private nextAssignmentTime: number = 0;
   private scheduledGameTime: number = 0;
   message: string = "";
+  private minutesOpenAfter: number = 0;
 
   get roles() {
     return this.$tstore.getters.roles;
@@ -85,6 +86,7 @@ export default class Lobby extends Vue {
   async created() {
     const dashboardAPI = new DashboardAPI(this.$tstore, this.$ajax);
     const dashboardData = await dashboardAPI.getData();
+    this.minutesOpenAfter = dashboardData.minutesOpenAfter;
     // check if player can play a game
     const playerTaskCompletion = dashboardData.playerTaskCompletion;
     // FIXME: repeated logic from Dashboard.vue
