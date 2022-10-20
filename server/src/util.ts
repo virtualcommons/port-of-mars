@@ -105,23 +105,26 @@ export class ServerError extends Error implements ServerErrorData {
   }
 }
 
-export function generateUsername() {
+export async function generateUsername() {
   const NOUNS = [
-    'Asteroid',
-    'Blackhole',
-    'Comet',
-    'Planet',
-    'Moon',
-    'Star',
-    'Ship',
-    'Spacecraft',
-    'Rocket',
-    'Astronaut',
-    'Cosmonaut',
-    'Tardigrade',
-    'Alien',
-    'Rover',
-    'Martian',
+    'Ferret',
+    'Marmot',
+    'Bison',
+    'Parrot',
+    'Meerkat',
+    'Orca',
+    'Leopard',
+    'Raccoon',
+    'Quagga',
+    'Newt',
+    'Starfish',
+    'Chameleon',
+    'Oranguatn',
+    'Wolverine',
+    'Ibex',
+    'Antelope',
+    'Lizard',
+    'Camel',
     ];
     
   const ADJECTIVES = [
@@ -131,12 +134,18 @@ export function generateUsername() {
     'Solar',
     'Orbiting',
     'Elliptical',
+    'Martian',
   ];
 
-  const adj = Math.floor(Math.random() * ADJECTIVES.length);
-  const noun = Math.floor(Math.random() * NOUNS.length);
-  const num = Math.floor(1000 + Math.random() * 9000);
+  let isUnique = false;
+  let username = "";
+  while (!isUnique) {
+    const adj = Math.floor(Math.random() * ADJECTIVES.length);
+    const noun = Math.floor(Math.random() * NOUNS.length);
+    const num = Math.floor(1000 + Math.random() * 9000);
+    username = ADJECTIVES[adj] + NOUNS[noun] + num;
+    isUnique = await getServices().account.isUsernameAvailable(username);
+  }
 
-  // FIXME: make sure this is unique
-  return ADJECTIVES[adj] + NOUNS[noun] + num;
+  return username;
 }

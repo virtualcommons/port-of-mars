@@ -18,7 +18,7 @@ export class RegistrationService extends BaseService {
 
   async submitRegistrationMetadata(user: User, data: { username: string; email: string; name: string }) {
     const repo = this.em.getRepository(User);
-    user.name = data.name;
+    user.username = data.username;
     user.email = data.email;
     user.dateConsented = new Date();
     await repo.save(user);

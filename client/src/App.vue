@@ -8,9 +8,7 @@
         :key="$route.path"
       ></router-view>
     </b-row>
-    <!-- FIXME: figure out how to add footer to dashboard without weird page behaior
-          ideally, we should just be able to import the Footer once into App.vue
-    -->
+    <!-- TODO: decide which pages we want the footer on and adjust layout if needed -->
     <!-- <Footer v-if="isDashboard"></Footer> -->
   </b-container>
 </template>

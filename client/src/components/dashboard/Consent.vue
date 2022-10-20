@@ -80,11 +80,11 @@
           your inbox and you may need to check your spam folder as well.
         </b-alert>
         <b-alert v-else dismissible show variant="success"
-          >Please fill out the fields below with your name and email so we can
+          >Please fill out the fields below with your desired username and email so we can
           verify your email.
         </b-alert>
         <b-form-group
-          description="Choose a username to go by"
+          description="Choose a username to go by, or keep the randomly generated one"
           label="Username"
           label-for="username"
         >
@@ -133,7 +133,7 @@
           Please check your email and click on the link to verify your email.
         </b-alert>
         <b-button
-          v-if="!existingUser"
+          v-if="!hasConsented"
           :disabled="submitDisabled"
           type="submit"
           variant="success"
@@ -161,13 +161,12 @@ import _ from "lodash";
   components: { Messages },
 })
 export default class Consent extends Vue {
-  // FIXME: username doesn't actually get updated anywhere
   username = "";
-  name = "";
   email = "";
   consented = false;
   verifyEmail = "";
   dateConsented: Date | null = null;
+  hasConsented = false;
   isVerified = false;
   isVerificationDisabled = false;
   prize = "a cash prize of up to $1000 USD";
@@ -212,6 +211,7 @@ export default class Consent extends Vue {
         this.isVerified = data.isVerified;
         if (data.dateConsented !== null) {
           this.dateConsented = new Date(Date.parse(data.dateConsented));
+          this.hasConsented = true;
         }
         this.consented = false;
       }
@@ -221,14 +221,15 @@ export default class Consent extends Vue {
   async register(e: Event) {
     e.preventDefault();
     if (this.emailsMatch && !_.isEmpty(this.email)) {
-      const formData = { name: this.name, email: this.email };
-      // temporarily disable verification
-      this.isVerificationDisabled = true;
-      this.dateConsented = new Date();
+      const formData = { username: this.username, email: this.email };
       await this.$ajax.post(
         this.grantConsentUrl,
         ({ data, status }) => {
           if (status === 200) {
+            this.$tstore.state.user.username = this.username;
+            // temporarily disable verification
+            this.isVerificationDisabled = true;
+            this.hasConsented = true;
             this.$tstore.commit("SET_DASHBOARD_MESSAGE", {
               kind: "success",
               message: `We have sent an email to ${this.email}.

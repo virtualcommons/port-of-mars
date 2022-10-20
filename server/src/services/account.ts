@@ -26,6 +26,17 @@ export class AccountService extends BaseService {
     }
     return true;
   }
+  
+  async isUsernameAvailable(username: string, user?: User): Promise<boolean> {
+    const otherUser = await this.getRepository().findOne({ username });
+    if (otherUser) {
+      if (!user) {
+        return false;
+      }
+      return otherUser.id === user.id;
+    }
+    return true;
+  }
 
   async getActiveUsers(after: Date): Promise<Array<User>> {
     return await this.getRepository().find({
@@ -69,7 +80,7 @@ export class AccountService extends BaseService {
     const user = await this.getOrCreateUser(username);
     // test user, set fake data so they can immediately join a game
     user.email = `${username}@mailinator.com`;
-    user.dateConsented = new Date();
+    // user.dateConsented = new Date();
     // user.isVerified = true;
     // user.passedQuiz = true;
     // FIXME: use run-time configuration / settings to determine what user properties to bypass (passedQuiz, isVerified, hasParticipated, etc)
