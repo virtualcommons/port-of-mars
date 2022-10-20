@@ -1,5 +1,6 @@
 <template>
   <b-container fluid class="h-100 m-0 p-0 backdrop overflow-auto">
+    <Messages class="position-fixed p-3"></Messages>
     <b-row no-gutters class="h-100 w-100 p-5">
       <b-col>
         <b-tabs pills class="h-100 w-100 p-4 my-2 mx-auto content-container">

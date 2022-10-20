@@ -1,10 +1,8 @@
 <template>
   <b-container fluid class="h-100 m-0 p-0 backdrop">
+    <Messages class="position-fixed p-3"></Messages>
     <b-row no-gutters class="h-100 w-100 justify-content-center">
       <section id="consent-wrapper" class="m-0 h-100 w-100">
-        <b-col sm="12" md="6" offset-md="3" class="text-center">
-          <Messages></Messages>
-        </b-col>
         <div class="w-100"></div>
         <div class="h-100 p-5 backdrop">
           <div class="h-100 content-container">

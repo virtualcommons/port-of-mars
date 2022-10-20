@@ -111,9 +111,6 @@ export class ScheduleService extends BaseService {
       const gameTime = game.date.getTime();
       const openDate = new Date(gameTime - (game.minutesOpenBefore * 60 * 1000));
       const closeDate = new Date(gameTime + (game.minutesOpenAfter * 60 * 1000));
-      logger.debug("game: %s", now);
-      logger.debug("open: %s", openDate);
-      logger.debug("close: %s", closeDate);
       if (now > openDate && now < closeDate) {
         return true;
       }
