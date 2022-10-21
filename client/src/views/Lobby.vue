@@ -123,6 +123,7 @@ export default class Lobby extends Vue {
     }
     */
     // check if there is a game scheduled for play
+    // FIXME: add lobby error message to server side instead of hard coding here
     if (!dashboardData.isLobbyOpen) {
       dashboardAPI.message(
         "You can join the lobby 10 minutes before a game is scheduled to start. Please try again later."

@@ -107,10 +107,10 @@ export class ScheduleService extends BaseService {
       return false;
     }
     const now = new Date();
-    for (const game of gameDates) {
-      const gameTime = game.date.getTime();
-      const openDate = new Date(gameTime - (game.minutesOpenBefore * 60 * 1000));
-      const closeDate = new Date(gameTime + (game.minutesOpenAfter * 60 * 1000));
+    for (const gameDate of gameDates) {
+      const gameTime = gameDate.date.getTime();
+      const openDate = new Date(gameTime - (gameDate.minutesOpenBefore * 60 * 1000));
+      const closeDate = new Date(gameTime + (gameDate.minutesOpenAfter * 60 * 1000));
       if (now > openDate && now < closeDate) {
         return true;
       }

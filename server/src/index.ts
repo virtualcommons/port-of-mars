@@ -212,28 +212,39 @@ async function createApp() {
     });
   });
 
-  app.get(
-    "/asulogin",
-    passport.authenticate("cas", { failureRedirect: "/" }),
-    function (req, res) {
-      // successful authentication
-      if (req.user) {
-        const user = req.user as User;
-        if (!user.isActive) {
-          logger.warn("inactivated user attempted to login %o", user);
-          res.redirect(getPagePath(LOGIN_PAGE));
-        } else if (getServices().account.isRegisteredAndValid(user)) {
-          res.redirect(getPagePath(DASHBOARD_PAGE));
-        } else {
-          logger.warn("invalid / unregistered user %o", user);
-          res.redirect(getPagePath(REGISTER_PAGE));
-        }
-      } else {
-        const loginPath = getPagePath(LOGIN_PAGE);
-        logger.warn("no user on the request, returning to login %o", req);
-        res.redirect(loginPath);
-      }
-    }
+  // app.get(
+  //   "/asulogin",
+  //   passport.authenticate("cas", { failureRedirect: "/" }),
+  //   function (req, res) {
+  //     // successful authentication
+  //     if (req.user) {
+  //       const user = req.user as User;
+  //       if (!user.isActive) {
+  //         logger.warn("inactivated user attempted to login %o", user);
+  //         res.redirect(getPagePath(LOGIN_PAGE));
+  //       } else if (getServices().account.isRegisteredAndValid(user)) {
+  //         res.redirect(getPagePath(DASHBOARD_PAGE));
+  //       } else {
+  //         logger.warn("invalid / unregistered user %o", user);
+  //         res.redirect(getPagePath(REGISTER_PAGE));
+  //       }
+  //     } else {
+  //       const loginPath = getPagePath(LOGIN_PAGE);
+  //       logger.warn("no user on the request, returning to login %o", req);
+  //       res.redirect(loginPath);
+  //     }
+  //   }
+  // );
+
+  app.get("/auth/google",
+    passport.authenticate("google", { scope: ["email", "profile"] }),
+  );
+
+  app.get("/auth/google/callback",
+    passport.authenticate("google", {
+      successRedirect: "auth/google/success",
+      failureRedirect: "auth/google/failue"
+    })
   );
 
   const server = http.createServer(app);

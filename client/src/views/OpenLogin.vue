@@ -9,10 +9,10 @@
           play as long you adhere to our <a href="" target="_blank">code of conduct</a>.
         </p>
         <hr>
-        <b-button @click="devLogin" block variant="primary" size="lg" class="mb-3">
+        <b-button v-if="isDevMode" @click="devLogin" block variant="primary" size="lg" class="mb-3">
           <b-icon icon="file-earmark-code" class="float-left"/>Sign in (Dev Mode)
         </b-button>
-        <b-button block variant="white" size="lg" class="mb-3">
+        <b-button block variant="white" size="lg" class="mb-3" :href="googleLoginUrl">
           <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" 
             class="float-left" style="width:1.25em"/>Sign in with Google
         </b-button>
@@ -41,6 +41,10 @@ export default class OpenLogin extends Vue {
 
   async created() {
     this.isDevMode = isDevOrStaging();
+  }
+
+  get googleLoginUrl() {
+    return url("/auth/google")
   }
 
   async devLogin(e: Event) {

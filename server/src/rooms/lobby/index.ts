@@ -85,7 +85,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
       async () => {
         logger.trace('SCHEDULED JOB: REDISTRIBUTE GROUPS EVERY %d', this.groupAssignmentInterval);
         // force assign group with bots if its the last attempt in a scheduled window
-        this.redistributeGroups(this.state.isLastTry);
+        this.redistributeGroups();
         await this.updateLobbyNextAssignmentTime();
       }
     );
@@ -105,16 +105,18 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
         .nextInvocation()
         .toDate()
         .getTime();
-      logger.trace("next invocation: %s", this.scheduler.nextInvocation());
+      logger.trace("next invocation: %s", nextInvocation);
       this.state.nextAssignmentTime = nextInvocation;
       const scheduleService = getServices().schedule;
-      const prevOpenState = this.state.isOpen
-      this.state.isOpen = await scheduleService.isLobbyOpen();
+      // const prevOpenState = this.state.isOpen
+      const isLobbyOpen = await scheduleService.isLobbyOpen();
       // check if this is the last attempt
-      logger.debug("previous open state: %s current open state: %s", prevOpenState, this.state.isOpen);
-      if (!this.state.isOpen && prevOpenState) {
-        this.state.isLastTry = true;
-      } else this.state.isLastTry = false;
+      // logger.debug("previous open state: %s current open state: %s", prevOpenState, this.state.isOpen);
+      if (!isLobbyOpen) {
+        // the lobby time window has closed, place all connected participants into games with bots if needed
+        // and close this LobbyRoom down
+        this.redistributeGroups(true);
+      }
     }
   }
 
@@ -272,10 +274,11 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
   }
 
   async fillUsernames(usernames: Array<string>) {
-    // in development mode, allow for less than 5 usernames and fill in 
-    if (usernames.length < this.numClientsToMatch && this.devMode) {
+    // if there aren't enough users, create bots to fill in
+    if (usernames.length < this.numClientsToMatch) {
       const requiredBots = this.numClientsToMatch - usernames.length;
       const bots = await getServices().account.getOrCreateBotUsers(requiredBots);
+      // FIXME: consider making bot usernames a more display friendly
       return usernames.concat(bots.map(u => u.username)).slice(0, this.numClientsToMatch);
     }
     return usernames;
