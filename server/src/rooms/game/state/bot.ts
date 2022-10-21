@@ -247,15 +247,19 @@ export class SimpleBot implements Bot {
   warningTime = 240;
   active = false;
 
-  constructor(public actor: ActorRunner, public player: Player) {
+  constructor(public actor: ActorRunner, public player: Player, isBot?: boolean) {
+    if (isBot) {
+      this.active = true;
+      this.maxInactivityTime = -1;
+    }
   }
 
   get shouldBeActive(): boolean {
     return this.elapsed >= this.maxInactivityTime;
   }
 
-  static fromActor(player: Player): SimpleBot {
-    return new SimpleBot(new ActorRunner(), player);
+  static fromActor(player: Player, isBot?: boolean): SimpleBot {
+    return new SimpleBot(new ActorRunner(), player, isBot);
   }
 
   incrementElapsed(): void {

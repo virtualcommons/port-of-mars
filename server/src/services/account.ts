@@ -19,6 +19,14 @@ export class AccountService extends BaseService {
     return await this.getRepository().findOneOrFail({ username })
   }
 
+  async findUsers(usernames: Array<string>): Promise<Array<User>> {
+    return await this.getRepository().find({
+      where: {
+        username: In(usernames)
+      }
+    });
+  }
+
   async isEmailAvailable(user: User, email: string): Promise<boolean> {
     const otherUser = await this.getRepository().findOne({ email });
     if (otherUser) {
@@ -103,12 +111,15 @@ export class AccountService extends BaseService {
   }
 
   async getOrCreateBotUsers(requiredNumberOfBots: number): Promise<Array<User>> {
+    // FIXME: currently isBot also gets set when a real player is taken over by a bot when they have an 
+    // inactivity time out. We need to disambiguate between forever Bots and temporary human player Bots
+    // https://github.com/virtualcommons/port-of-mars/issues/813
     const bots = await this.getRepository().find({ where: { isBot: true }, take: requiredNumberOfBots })
     const numberOfBotsToCreate = requiredNumberOfBots - bots.length;
     if (numberOfBotsToCreate > 0) {
       for (let i = 0; i < numberOfBotsToCreate; i++) {
-        const user = await this.getOrCreateUser(uuidv4(), { isBot: true });
-        bots.push(user);
+        const bot = await this.getOrCreateUser(uuidv4(), { isBot: true });
+        bots.push(bot);
       }
     }
     return bots;
