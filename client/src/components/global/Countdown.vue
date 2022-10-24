@@ -23,6 +23,7 @@ export default class Countdown extends Vue {
   @Prop({})
   nextLaunch: number;
 
+  secondInterval: number = null;
   now: number = Math.trunc(Date.now() / 1000);
 
   get secondsUntilLaunch() {
@@ -47,9 +48,13 @@ export default class Countdown extends Vue {
   }
 
   mounted() {
-    window.setInterval(() => {
+    this.secondInterval = window.setInterval(() => {
       this.now = Math.trunc(Date.now() / 1000);
     }, 1000);
+  }
+  
+  beforeDestroy() {
+    clearInterval(this.secondInterval);
   }
 
   format(value: number) {

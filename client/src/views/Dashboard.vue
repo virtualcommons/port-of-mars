@@ -121,6 +121,7 @@ export default class Dashboard extends Vue {
   exitSurveyUrl: string = "";
   currentRoundNumber: number = 1;
   schedule: Array<number> = [];
+  polling: number = null;
   isLobbyOpen = false;
   hasWatchedTutorial = false;
   playerTaskCompletion: PlayerTaskCompletion = {
@@ -173,6 +174,10 @@ export default class Dashboard extends Vue {
     await this.initialize();
   }
 
+  beforeDestroy() {
+    clearInterval(this.polling);
+  }
+
   async initialize() {
     // get player task completion status
     const data = await this.api.getData();
@@ -188,17 +193,6 @@ export default class Dashboard extends Vue {
       await this.$router.push({ name: REGISTER_PAGE });
     }
 
-    // go to the signed up page if signup is enabled
-    // else if (data.isSignUpEnabled) {
-    //   await this.$router.push({ name: SIGNEDUP_PAGE });
-    // }
-
-    // go to tutorial if player has not taken tutorial
-    // else if (data.playerTaskCompletion.mustTakeTutorial) {
-    //   // FIXME: open tutorial video fullscreen once we get vimeo player integration set up
-    //   await this.$router.push({ name: TUTORIAL_PAGE });
-    // }
-
     // set survey URLs
     Vue.set(this, "introSurveyUrl", data.introSurveyUrl);
     Vue.set(this, "exitSurveyUrl", data.exitSurveyUrl);
@@ -212,11 +206,15 @@ export default class Dashboard extends Vue {
     this.loading = false;
 
     // poll server for lobby open status
-    window.setInterval(async () => {
+    this.pollLobbyStatus();
+  }
+
+  async pollLobbyStatus() {
+    this.polling = setInterval(async () => {
       const isLobbyOpen = await this.api.isLobbyOpen();
       console.log("lobby status: ", isLobbyOpen);
       Vue.set(this, "isLobbyOpen", isLobbyOpen);
-    }, 60 * 1000);
+    }, 60 * 1000); // FIXME: change back to 1 min
   }
 
   activateTutorial() {

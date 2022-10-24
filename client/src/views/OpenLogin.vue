@@ -6,7 +6,9 @@
         <hr>
         <p>
           Port of Mars is now in open beta, meaning anyone is welcome to sign up and
-          play as long you adhere to our <a href="" target="_blank">code of conduct</a>.
+          play as long you adhere to our
+          <a href="https://github.com/virtualcommons/port-of-mars/wiki/Port-of-Mars-Chat-Code-of-Conduct"
+            target="_blank">code of conduct</a>.
         </p>
         <hr>
         <b-button v-if="isDevMode" @click="devLogin" block variant="primary" size="lg" class="mb-3">
