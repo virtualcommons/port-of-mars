@@ -154,6 +154,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { url } from "@port-of-mars/client/util";
+import { DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
 import Messages from "@port-of-mars/client/components/dashboard/Messages.vue";
 import _ from "lodash";
 
@@ -230,13 +231,19 @@ export default class Consent extends Vue {
             // temporarily disable verification
             this.isVerificationDisabled = true;
             this.hasConsented = true;
-            this.$tstore.commit("SET_DASHBOARD_MESSAGE", {
-              kind: "success",
-              message: `We have sent an email to ${this.email}.
-             Please wait for it to arrive then click on the link inside to verify your email.
-             It may take some time to arrive, and you may need to check your spam folder as well.
-             You can close this browser window as the link will take you back to Port of Mars again.`,
-            });
+            // if user is already verified (mostly for dev mode), redirect to dashboard
+            if (this.isVerified) {
+              this.$router.push({ name: DASHBOARD_PAGE });
+            }
+            else {
+              this.$tstore.commit("SET_DASHBOARD_MESSAGE", {
+                kind: "success",
+                message: `We have sent an email to ${this.email}.
+               Please wait for it to arrive then click on the link inside to verify your email.
+               It may take some time to arrive, and you may need to check your spam folder as well.
+               You can close this browser window as the link will take you back to Port of Mars again.`,
+              });
+            }
             // re-enable the re-send verification email button
             setTimeout(() => (this.isVerificationDisabled = false), 20000);
           }

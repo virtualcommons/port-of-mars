@@ -14,3 +14,14 @@ dashboardRouter
       next(e);
     }
   });
+
+dashboardRouter
+  .get('/lobby-status', isAuthenticated, async (req: Request, res: Response, next) => {
+    try {
+      const isLobbyOpen = await getServices().dashboard.isLobbyOpen(req.user as User);
+      res.json(isLobbyOpen);
+    }
+    catch (e) {
+      next(e);
+    }
+  });

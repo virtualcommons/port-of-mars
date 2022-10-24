@@ -24,4 +24,17 @@ export class DashboardAPI {
       throw e;
     }
   }
+
+  async isLobbyOpen(): Promise<boolean> {
+    try {
+      return await this.ajax.get(url('/dashboard/lobby-status'), ({data, status}) => {
+        return data;
+      });
+    }
+    catch (e) {
+      console.log("Unable to retrieve lobby status");
+      console.log(e);
+      throw e;
+    }
+  }
 }

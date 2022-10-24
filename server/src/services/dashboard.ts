@@ -149,4 +149,8 @@ export class DashboardService extends BaseService {
       stats
     }
   }
+
+  async isLobbyOpen(user: User): Promise<boolean> {
+    return this.sp.schedule.isLobbyOpen();
+  }
 }

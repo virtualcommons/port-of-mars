@@ -210,6 +210,13 @@ export default class Dashboard extends Vue {
     this.stats.games.splice(0, this.stats.games.length, ...data.stats.games);
     console.log("setting upcoming games for schedule: ", data.schedule);
     this.loading = false;
+
+    // poll server for lobby open status
+    window.setInterval(async () => {
+      const isLobbyOpen = await this.api.isLobbyOpen();
+      console.log("lobby status: ", isLobbyOpen);
+      Vue.set(this, "isLobbyOpen", isLobbyOpen);
+    }, 60 * 1000);
   }
 
   activateTutorial() {
