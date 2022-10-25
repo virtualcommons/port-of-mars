@@ -33,7 +33,7 @@ export class LobbySettings {
 
 const dev: () => AppSettings = () => ({
   emailer: new MemoryEmailer(),
-  host: 'http://localhost:8081',
+  host: process.env.BASE_URL || 'http://localhost:8081',
   logging: new DevLogging(),
   secret: SECRET_KEY,
   googleAuth: {
@@ -50,7 +50,7 @@ const staging: () => AppSettings = () => {
   const domain = 'mg.comses.net';
   return {
     emailer: new MailgunEmailer({ api_key: apiKey, domain }),
-    host: 'https://staging.portofmars.asu.edu',
+    host: process.env.BASE_URL || 'https://staging.portofmars.asu.edu',
     logging: new DevLogging(),
     secret: SECRET_KEY,
     googleAuth: {
@@ -67,7 +67,7 @@ const prod: () => AppSettings = () => {
   const stagingSettings = staging();
   return {
     ...stagingSettings,
-    host: 'https://portofmars.asu.edu',
+    host: process.env.BASE_URL || 'https://portofmars.asu.edu',
     lobby: new LobbySettings(1, 10, 5, false),
     isProduction: true
   };
@@ -75,7 +75,6 @@ const prod: () => AppSettings = () => {
 
 function getSettings(): AppSettings {
   const env = process.env.NODE_ENV;
-  console.log("env: " + env);
   if (['development', 'test'].includes(env || '')) {
     return dev();
   }
