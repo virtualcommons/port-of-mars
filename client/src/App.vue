@@ -4,7 +4,7 @@
       <!-- <Header v-if="!isGamePage"></Header> -->
       <Navbar v-if="!isGamePage"></Navbar>
       <router-view
-        :class="!isManual ? 'h-100 d-flex flex-grow-1 body-content' : 'h-auto'"
+        :class="bodyClass"
         :key="$route.path"
       ></router-view>
     </b-row>
@@ -58,6 +58,16 @@ export default class App extends Vue {
     } else {
       return this.dashboard.name == this.$route.name;
     }
+  }
+
+  get bodyClass() {
+    return [
+      { 'h-100': !this.isManual },
+      { 'd-flex': !this.isManual },
+      { 'flex-grow-1': !this.isManual },
+      { 'h-auto': this.isManual },
+      { 'body-content': !this.isGamePage }
+    ];
   }
 }
 </script>

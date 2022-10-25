@@ -214,7 +214,7 @@ export default class Dashboard extends Vue {
       const isLobbyOpen = await this.api.isLobbyOpen();
       console.log("lobby status: ", isLobbyOpen);
       Vue.set(this, "isLobbyOpen", isLobbyOpen);
-    }, 60 * 1000); // FIXME: change back to 1 min
+    }, 60 * 1000);
   }
 
   activateTutorial() {
