@@ -105,7 +105,7 @@ import { isDevOrStaging } from "@port-of-mars/shared/settings";
 export default class Home extends Vue {
   isDevMode: boolean = false;
   currentYear = new Date().getFullYear();
-  trailerVideoUrl = "https://player.vimeo.com/video/644046830";
+  trailerVideoUrl = "https://www.youtube.com/embed/D4FfofyrlkA";
   login = { name: LOGIN_PAGE };
   openlogin = { name: OPENLOGIN_PAGE };
   dashboardPage = { name: DASHBOARD_PAGE };
