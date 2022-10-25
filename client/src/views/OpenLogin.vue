@@ -15,8 +15,7 @@
           <b-icon icon="file-earmark-code" class="float-left"/>Sign in (Dev Mode)
         </b-button>
         <b-button block variant="white" size="lg" class="mb-3" :href="googleLoginUrl">
-          <img :src="require('@port-of-mars/client/assets/images/Google-G-Logo.svg')" 
-            class="float-left" style="width:1.25em"/>Sign in with Google
+          <b-icon icon="google" class="float-left" />Sign in with Google
         </b-button>
         <b-button block variant="facebook" size="lg" class="mb-3">
           <b-icon icon="facebook" class="float-left"/>Sign in with Facebook
