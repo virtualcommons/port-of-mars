@@ -167,7 +167,7 @@ async function createApp() {
         directives: {
           defaultSrc: ["'self'"],
           connectSrc: ["'self'", "sentry.comses.net"],
-          frameSrc: ["'self'", "player.vimeo.com"],
+          frameSrc: ["'self'", "player.vimeo.com", "youtube.com"],
           scriptSrc: ["'self'", "sentry.comses.net"],
           imgSrc: ["'self'", "data:"],
           styleSrc: ["'self'", "fonts.googleapis.com", "'unsafe-inline'"],
