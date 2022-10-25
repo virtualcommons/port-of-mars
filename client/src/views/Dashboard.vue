@@ -54,7 +54,7 @@
             </b-container>
           </b-tab>
           <b-tab title="Launch Schedule" class="h-100 w-100 ">
-            <Schedule :schedule="schedule" :roundNumber="currentRoundNumber"></Schedule>
+            <Schedule :schedule="schedule"></Schedule>
           </b-tab>
           <b-tab title="Statistics" class="h-100 w-100 ">
             <h4 v-if="previousGames.length === 0" class="text-center">
@@ -79,7 +79,6 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faRocket, faInfoCircle, faCalendarPlus } from "@fortawesome/free-solid-svg-icons";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
-import Player from "@vimeo/player";
 
 import { PlayerTaskCompletion, Stats } from "@port-of-mars/shared/types";
 import {
@@ -135,7 +134,7 @@ export default class Dashboard extends Vue {
   };
   stats: Stats = { games: [] };
 
-  tutorialVideoUrl = "https://player.vimeo.com/video/642036661";
+  tutorialVideoUrl = "https://www.youtube.com/embed/D4FfofyrlkA";
 
   get gamesPlayedCount() {
     return this.stats.games.length;

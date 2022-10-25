@@ -32,7 +32,7 @@ ccarra1@asu.edu
           </a>
         </li>
         <li>
-          <a href="https://complexity.asu.edu/" title="ASU School of Complex Adaptive Systems">
+          <a href="https://scas.asu.edu/" title="ASU School of Complex Adaptive Systems">
             ASU School of Complex Adaptive Systems
           </a>
         </li>
@@ -42,11 +42,9 @@ ccarra1@asu.edu
           >
         </li>
         <li>
-          <a href="https://www.computecanada.ca" title="Compute Canada">
-            Compute Canada
+          <a href="https://alliancecan.ca/en" title="Digital Research Alliance of Canada">
+            Digital Research Alliance of Canada
           </a>
-          and
-          <a href="https://westgrid.ca">WestGrid</a>
         </li>
       </ul>
     </section>

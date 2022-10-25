@@ -18,17 +18,17 @@
           title="Play Port of Mars"
         >Play</b-nav-item>
         <b-nav-item
-          href="https://player.vimeo.com/video/642036661"
-          target="_blank"
-          exact-active-class="active"
-          title="Tutorial"
-        >Tutorial</b-nav-item>
-        <b-nav-item
           :to="manual"
           target="_blank"
           exact-active-class="active"
           title="Manual"
         >Manual</b-nav-item>
+        <b-nav-item
+          :to="consent"
+          exact-active-class="active"
+          title="Consent Form">
+          Consent Form
+        </b-nav-item>
         <b-nav-item
           href="https://instagram.com/portofmars/"
           target="_blank"

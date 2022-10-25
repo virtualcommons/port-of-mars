@@ -47,9 +47,6 @@
             ></Countdown>
             <p v-else>No games scheduled</p>
           </b-col>
-          <!-- <b-col v-if="schedule.length > 0" sm="12" class="m-5 text-center">
-            <Schedule :schedule="schedule" :roundNumber="currentRoundNumber"> </Schedule>
-          </b-col> -->
         </b-row>
       </section>
 
