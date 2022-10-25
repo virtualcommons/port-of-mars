@@ -17,11 +17,16 @@ export class ScheduleService extends BaseService {
 
   /**
    * Creates a new scheduled game date
-   * Returns the date scheduled
+   * Returns the date scheduled or null if there was a conflict
    */
   async createScheduledGameDate(
     date: Date, minutesOpenBefore: number, minutesOpenAfter: number, autoCreated: boolean = false
-  ): Promise<ScheduledGameDate> {
+  ): Promise<ScheduledGameDate|null> {
+    const scheduledDates = await this.getScheduledDates();
+    // don't allow games to be scheduled at the same time
+    if (scheduledDates.find(e => e.date.getTime() === date.getTime())) {
+      return null;
+    }
     const lobbyCloseDate = new Date(date.getTime() + (minutesOpenAfter * 60 * 1000));
     const repository = this.em.getRepository(ScheduledGameDate);
     const scheduledDate = repository.create({
@@ -41,6 +46,7 @@ export class ScheduleService extends BaseService {
    * @param {number} [days=1] - days from current date to schedule games until
    */
   async scheduleGames(interval: number = 3, days: number = 1): Promise<Array<DateWindow>> {
+    // FIXME: re-implement this with luxon or a more clever algo for better clarity
     const minutesOpenBefore = settings.lobby.lobbyOpenBeforeOffset;
     const minutesOpenAfter = settings.lobby.lobbyOpenAfterOffset;
     const period = days * 24;
@@ -63,8 +69,13 @@ export class ScheduleService extends BaseService {
         nextDate.setUTCHours(nextHourToSchedule, 0, 0, 0);
         const hourOffset = i * interval;
         const time = nextDate.getTime() + hourOffset * 60 * 60 * 1000;
-        await this.createScheduledGameDate(new Date(time), minutesOpenBefore, minutesOpenAfter, true);
-        logger.debug("scheduling a game for %s", new Date(time).toUTCString());
+        const scheduledDate = await this.createScheduledGameDate(new Date(time), minutesOpenBefore, minutesOpenAfter, true);
+        if (scheduledDate) {
+          logger.debug("scheduling a game for %s", new Date(time).toUTCString());
+        }
+        else {
+          logger.debug("duplicate date: %s, nothing scheduled", new Date(time).toUTCString());
+        }
       }
     }
     return this.getScheduledDates();
@@ -96,7 +107,6 @@ export class ScheduleService extends BaseService {
    * given by the offsets of the scheduled game
    */
   async isLobbyOpen(gameDates?: Array<DateWindow>): Promise<boolean> {
-    // FIXME: use settings for the offsets
     if (!gameDates) {
       gameDates = await this.getScheduledDates();
     }

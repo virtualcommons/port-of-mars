@@ -339,7 +339,12 @@ async function createScheduledGameDate(
 ): Promise<void> {
   const sp = getServices(em);
   const scheduledDate = await sp.schedule.createScheduledGameDate(date, minutesOpenBefore, minutesOpenAfter);
-  logger.debug("created scheduled date: %o", scheduledDate);
+  if (scheduledDate) {
+    logger.info("created scheduled date: %o", scheduledDate);
+  }
+  else {
+    logger.debug("duplicate date: %s, nothing scheduled", date);
+  }
 }
 
 function toIntArray(value: string, previous: Array<number>): Array<number> {

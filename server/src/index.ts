@@ -278,10 +278,10 @@ async function createApp() {
   gameServer.listen(port);
 
   // run scheduler once, then every hour
-  getServices().schedule.scheduleGames();
+  await getServices().schedule.scheduleGames();
   const schedule = require("node-schedule");
   const job = schedule.scheduleJob("0 * * * *", async () => {
-    getServices().schedule.scheduleGames();
+    await getServices().schedule.scheduleGames();
   });
 }
 

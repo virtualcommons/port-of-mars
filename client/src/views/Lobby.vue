@@ -6,7 +6,7 @@
       class="h-100 w-100 m-0 p-0 text-center"
       style="background-color: var(--dark-shade-75)"
     >
-      <b-col>
+      <b-col align-self="center">
         <h1 class='m-3'>Next Launch Time</h1>
         <h2 class="m-4">
           <mark>{{ scheduledGameTimeString }}</mark>
