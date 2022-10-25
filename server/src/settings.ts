@@ -50,7 +50,7 @@ const staging: () => AppSettings = () => {
   const domain = 'mg.comses.net';
   return {
     emailer: new MailgunEmailer({ api_key: apiKey, domain }),
-    host: 'https://alpha.portofmars.asu.edu',
+    host: 'https://staging.portofmars.asu.edu',
     logging: new DevLogging(),
     secret: SECRET_KEY,
     googleAuth: {
