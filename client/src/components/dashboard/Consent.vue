@@ -5,23 +5,16 @@
       <div class="consent-form-text">
         <p>Dear Participant,</p>
         <p>
-          I am a professor in the School of Sustainability at Arizona State
-          University. I am conducting experiments that investigate how people
-          think, act, and make decisions. This research is part of the
-          <a href="https://interplanetary.asu.edu/">
-            Interplanetary Initiative
-          </a>
-          at Arizona State University.
+        I am a professor in the <a href='https://schoolofsustainability.asu.edu/'>School of Sustainability</a> at
+        <a href='https://asu.edu'>Arizona State University</a>.
+        I am conducting experiments that investigate how people think, act, and make decisions. This research is part of
+        the <a href="https://interplanetary.asu.edu/"> Interplanetary Initiative </a> at Arizona State University.
         </p>
         <p>
-          I am requesting your participation in a tournament consisting of
-          several rounds of games. Each game in the tournament will take no more
-          than 60 minutes on average. The top ranking players in each round will
-          qualify for the next round and will receive an email invitation to
-          participate in another game on a later day. Your participation in this
-          study is strictly voluntary and you may choose to not participate or
-          to withdraw from the study at any time with no penalty; it will not
-          affect your compensation for participation up to that point.
+        I am requesting your participation in a game, <em>Port of Mars</em>. The game will take no more than 60 minutes
+        on average. Your participation in this study is voluntary. <strong>You must be 18 or older to participate in the
+        study.</strong> If you choose not to participate or to withdraw from the study at any time, there will be no
+        penalty; it will not affect your compensation for participation up to that point.
         </p>
         <p>
           During the game you can chat with other participants. By signing this
@@ -33,34 +26,42 @@
             Abstain from using profanity or offensive language when
             communicating with your fellow participants
           </li>
+          <li>Only communicate with other participants via the chat options within the game</li>
         </ul>
         <p>
-          Society may benefit from this research because an understanding of how
-          people make decisions can help us to design regulations that sustain
-          the use of shared resources, in this experiment in a colony on Mars.
-          You may benefit from this experience because you learn something about
-          how an experiment is designed and conducted, what issues are of
-          interest to social scientists and space research, and how your own
-          cognitive abilities come into play in decision making situations.
-          There are no foreseeable risks or discomforts to your participation.
+        If you win the game, and 4 other human players participated, your name will be added to a weekly drawing for a
+        $25 USD Amazon gift card.
         </p>
         <p>
-          The results of the research study may be published, but your name will
-          not be used. Your responses will be confidential. However, due to the
-          group nature of this study, complete confidentiality cannot be
-          guaranteed. We will remove personal information such
-          as your email address from our database after the tournament has been
-          completed and ensure that only anonymized participant identifiers are
-          associated with your experiment data.
+          Society may benefit from this research because an understanding of how people make decisions can help us to
+          design policies and that sustain the use of shared resources, in this experiment in a habitat on Mars. You may
+          benefit from this experience by learning about how an experiment is designed and conducted, what issues are of
+          interest to social scientists and space research, and how make decisions in unanticipated situations.
+          <em>There are no foreseeable risks or discomforts to your participation</em>.
+        </p>
+        <p>
+          The results of the research study may be published, but your name will not be used. De-identified data
+          collected as part of the study may be shared with other researchers for research purposes only. Your responses
+          will be confidential. However, due to the group nature of this study, complete confidentiality cannot be
+          guaranteed. We delete all personal information such as your email address from our database after the study
+          has been completed and ensure that only anonymized participant identifiers are associated with any published
+          experiment data.
         </p>
         <p>
           If you have any questions concerning the research study, please
           contact
           <a href="mailto:Marco.Janssen@asu.edu">Marco.Janssen@asu.edu</a>.
         </p>
-
         <p align="justify">Sincerely,</p>
         <p align="justify">Dr. Marco Janssen</p>
+        <p class="text-muted">
+          <small>
+          This research has been reviewed by the ASU Social Behavioral Institutional Review Board (IRB). If the research
+          team has not responded to your questions or concerns or if you are unable to establish contact with the
+          research team you may contact the IRB by phone at 1.480.965.6788 or via email at
+          <a href='mailto:research.integrity@asu.edu'>research.integrity at asu dot edu</a>.
+          </small>
+        </p>
       </div>
     </b-collapse>
     <b-button-group class="my-3 align-self-start">
@@ -73,8 +74,8 @@
     </b-button-group>
     <b-collapse class="consent-scrollable" v-model="consented">
       <b-form @submit="register">
-        <b-alert v-if="existingUser" dismissible show variant="warning"
-          >It looks like you have logged in before! Please review the
+        <b-alert v-if="existingUser" dismissible show variant="warning">
+          It looks like you have logged in before! Please review the
           information below, and resend your verification email if you have not
           received it yet. Sometimes email can take a few minutes to arrive in
           your inbox and you may need to check your spam folder as well.
