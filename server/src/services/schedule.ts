@@ -1,5 +1,6 @@
 import { User, Player, ScheduledGameDate } from '@port-of-mars/server/entity';
 import { MoreThan, SelectQueryBuilder } from 'typeorm';
+import { DateTime, Interval } from 'luxon';
 import { settings, getLogger } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
 
@@ -20,22 +21,25 @@ export class ScheduleService extends BaseService {
    * Returns the date scheduled or null if there was a conflict
    */
   async createScheduledGameDate(
-    date: Date, minutesOpenBefore: number, minutesOpenAfter: number, autoCreated: boolean = false
+    gameDate: DateWindow, autoCreated: boolean = false
   ): Promise<ScheduledGameDate|null> {
     const scheduledDates = await this.getScheduledDates();
     // don't allow games to be scheduled at the same time
-    if (scheduledDates.find(e => e.date.getTime() === date.getTime())) {
+    if (scheduledDates.find(e => e.date.getTime() === gameDate.date.getTime())) {
+      logger.debug("duplicate date: %s, nothing scheduled", gameDate.date.toUTCString());
       return null;
     }
-    const lobbyCloseDate = new Date(date.getTime() + (minutesOpenAfter * 60 * 1000));
+    const lobbyCloseDate = new Date(gameDate.date.getTime() + (gameDate.minutesOpenAfter * 60 * 1000));
     const repository = this.em.getRepository(ScheduledGameDate);
     const scheduledDate = repository.create({
-      date,
-      minutesOpenBefore,
-      minutesOpenAfter,
+      date: gameDate.date,
+      minutesOpenBefore: gameDate.minutesOpenBefore,
+      minutesOpenAfter: gameDate.minutesOpenAfter,
       lobbyCloseDate,
       autoCreated
     });
+    logger.debug("scheduling a game for %s, min before: %d, min after: %d",
+      scheduledDate.date.toUTCString(), gameDate.minutesOpenBefore, gameDate.minutesOpenAfter);
     return await repository.save(scheduledDate);
   }
 
@@ -45,40 +49,31 @@ export class ScheduleService extends BaseService {
    * @param {number} [interval=3] - hours between games, must be a divisor of 24
    * @param {number} [days=1] - days from current date to schedule games until
    */
-  async scheduleGames(interval: number = 3, days: number = 1): Promise<Array<DateWindow>> {
-    // FIXME: re-implement this with luxon or a more clever algo for better clarity
-    const minutesOpenBefore = settings.lobby.lobbyOpenBeforeOffset;
-    const minutesOpenAfter = settings.lobby.lobbyOpenAfterOffset;
-    const period = days * 24;
+  async scheduleGames(interval: number = 3, days: number = 1) {
+    logger.debug("attempting to schedule games %d days out, every %d hours", days, interval);
     const scheduled = await this.getScheduledDates(true);
-    const numGamesToSchedule = Math.trunc(period / interval);
-    logger.debug("%d games to schedule", numGamesToSchedule);
-    logger.debug("%d already scheduled", scheduled.length);
-    if (scheduled.length >= numGamesToSchedule) {
-      // games are already scheduled for this period
-      return [];
-    } else {
-      const currentHour = new Date().getUTCHours();
-      // get the next time to schedule based off of 00:00 UTC
-      const nextHourToSchedule = (interval * Math.ceil((currentHour + 1) / interval)) % period;
-      for (var i = scheduled.length; i < numGamesToSchedule; i++) {
-        // get the next hour to schedule as a date today
-        const nextDate = new Date();
-        // rollover to next day if we are scheduling then
-        if (nextHourToSchedule === 0) nextDate.setUTCDate(nextDate.getUTCDate() + 1);
-        nextDate.setUTCHours(nextHourToSchedule, 0, 0, 0);
-        const hourOffset = i * interval;
-        const time = nextDate.getTime() + hourOffset * 60 * 60 * 1000;
-        const scheduledDate = await this.createScheduledGameDate(new Date(time), minutesOpenBefore, minutesOpenAfter, true);
-        if (scheduledDate) {
-          logger.debug("scheduling a game for %s", new Date(time).toUTCString());
-        }
-        else {
-          logger.debug("duplicate date: %s, nothing scheduled", new Date(time).toUTCString());
-        }
+    const now = DateTime.fromJSDate(new Date()).toUTC();
+    // get the next hour to schedule a date at based off of 00:00 UTC 
+    // e.g. (now = 10:30, interval = 3 hours) => 12
+    const nextHourToSchedule = interval * Math.ceil((now.hour + 1) / interval);
+    const start = now.startOf("day").plus({ hours: nextHourToSchedule });
+    // get an array of DateTimes every [interval] hours starting at [start] and
+    // ending at [start] + [days]
+    const datesToSchedule = Interval.fromDateTimes(start, start.plus({ days: days }))
+      .splitBy({ hours: interval })
+      .map((e) => e.start); 
+    for (const date of datesToSchedule) {
+      if (!scheduled.find((e) => e.date.getTime() === date.toMillis())) {
+        const scheduledDate = await this.createScheduledGameDate({
+          date: date.toJSDate(),
+          minutesOpenBefore: settings.lobby.lobbyOpenBeforeOffset,
+          minutesOpenAfter: settings.lobby.lobbyOpenAfterOffset,
+        }, true);
+      }
+      else {
+        logger.debug("game already scheduled for %s, nothing scheduled", date.toString());
       }
     }
-    return this.getScheduledDates();
   }
 
   /**
