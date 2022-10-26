@@ -73,7 +73,13 @@ registrationRouter.post('/verify/:registrationToken', async (req: Request, res: 
 registrationRouter.get('/authenticated', async (req: Request, res: Response, next: NextFunction) => {
   const user = req.user as User
   try {
-    res.json({ username : user.username, email: user.email, dateConsented: user.dateConsented ?? null, isVerified: user.isVerified });
+    res.json({
+      username : user.username,
+      name : user.name,
+      email: user.email,
+      dateConsented: user.dateConsented ?? null,
+      isVerified: user.isVerified
+    });
   } catch (e) {
     logger.warn(`Unable to authorize user for registration ${user.username}`);
     next(e);

@@ -73,7 +73,7 @@
       </b-button>
     </b-button-group>
     <b-collapse class="consent-scrollable" v-model="consented">
-      <b-form @submit="register">
+      <b-form class="pr-3" @submit="register">
         <b-alert v-if="existingUser" dismissible show variant="warning">
           It looks like you have logged in before! Please review the
           information below, and resend your verification email if you have not
@@ -82,10 +82,11 @@
         </b-alert>
         <b-alert v-else dismissible show variant="success"
           >Please fill out the fields below with your desired username and email so we can
-          verify your email.
+          verify your email. Your full name is required if you wish to be eligible to win
+          a gift card, however, we will never publish nor share this information.
         </b-alert>
         <b-form-group
-          description="Choose a username to go by, or keep the randomly generated one"
+          description="Choose a username to go by."
           label="Username"
           label-for="username"
         >
@@ -94,6 +95,20 @@
             v-model="username"
             placeholder="Username"
             required
+            size="lg"
+            type="text"
+          >
+          </b-form-input>
+        </b-form-group>
+        <b-form-group
+          description="If you wish to be eligible to win a gift card, please enter your full name."
+          label="Name (optional)"
+          label-for="name"
+        >
+          <b-form-input
+            id="name"
+            v-model="name"
+            placeholder="Enter your full name"
             size="lg"
             type="text"
           >
@@ -164,6 +179,7 @@ import _ from "lodash";
 })
 export default class Consent extends Vue {
   username = "";
+  name = "";
   email = "";
   consented = false;
   verifyEmail = "";
@@ -208,6 +224,7 @@ export default class Consent extends Vue {
       if (response.data !== null) {
         const data = response.data;
         this.username = data.username;
+        this.name = data.name;
         this.email = data.email;
         this.verifyEmail = data.email;
         this.isVerified = data.isVerified;
@@ -223,7 +240,7 @@ export default class Consent extends Vue {
   async register(e: Event) {
     e.preventDefault();
     if (this.emailsMatch && !_.isEmpty(this.email)) {
-      const formData = { username: this.username, email: this.email };
+      const formData = { username: this.username, email: this.email, name: this.name };
       await this.$ajax.post(
         this.grantConsentUrl,
         ({ data, status }) => {

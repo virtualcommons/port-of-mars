@@ -258,7 +258,6 @@ export default class Dashboard extends Vue {
 
 #tutorial-wrapper {
   max-width: 600px;
-  margin-left: -25px;
 }
 
 #message-wrapper {
