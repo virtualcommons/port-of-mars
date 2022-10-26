@@ -98,7 +98,7 @@ passport.use(
     done: Function
   ) {
     const services = getServices();
-    const user = await services.account.getOrCreateTestUser(await generateUsername());
+    const user = await services.account.getOrCreateTestUser(username);
     // set all testing things on the user
     const tournamentRound = await services.tournament.getCurrentTournamentRound();
     const invite = await services.tournament.getOrCreateInvite(

@@ -53,7 +53,8 @@ export class AjaxRequest {
     await this.post(devLoginUrl, ({ data, status }) => {
       if (status === 200) {
         this.store.commit("SET_USER", data.user);
-        this.router.push({ name: REGISTER_PAGE });
+        if (data.user.isVerified) this.router.push({ name: DASHBOARD_PAGE });
+        else this.router.push({ name: REGISTER_PAGE });
       } else {
         return data;
       }

@@ -11,9 +11,21 @@
             target="_blank">code of conduct</a>.
         </p>
         <hr>
-        <b-button v-if="isDevMode" @click="devLogin" block variant="primary" size="lg" class="mb-3">
-          <b-icon icon="file-earmark-code" class="float-left"/>Sign in (Dev Mode)
-        </b-button>
+        <div v-if=isDevMode>
+          <b-form-checkbox v-model="toggleDevLogin">
+            <p v-if="toggleDevLogin">Test Mode Enabled</p>
+            <p v-else>Enable Test Mode</p>
+          </b-form-checkbox>
+          <b-form inline v-if="isDevMode && toggleDevLogin" @submit="devLogin">
+            <b-form-input class="w-100" id="input-username" v-model="devLoginUsername"
+              placeholder="Sign up or sign back in with a test username" required>
+            </b-form-input>
+            <b-button class="w-100 mb-3" type="submit" variant="primary" size="lg">
+              <b-icon icon="file-earmark-code" class="float-left"/>Sign in (Dev Mode)
+            </b-button>
+          </b-form>
+          <b-alert v-if="error" variant="warning">{{ error }}</b-alert>
+        </div>
         <b-button block variant="white" size="lg" class="mb-3" :href="googleLoginUrl">
           <b-icon icon="google" class="float-left" />Sign in with Google
         </b-button>
@@ -37,6 +49,9 @@ import { REGISTER_PAGE } from "@port-of-mars/shared/routes";
 @Component({})
 export default class OpenLogin extends Vue {
   isDevMode: boolean = false;
+  toggleDevLogin: boolean = false;
+  devLoginUsername: string = "";
+  error: string = "";
 
   register = { name: REGISTER_PAGE };
 
@@ -51,7 +66,7 @@ export default class OpenLogin extends Vue {
   async devLogin(e: Event) {
     e.preventDefault();
     const devLoginData: any = {
-      username: "testing",
+      username: this.devLoginUsername,
       password: "testing"
     };
     try {
