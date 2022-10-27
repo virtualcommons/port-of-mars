@@ -11,6 +11,7 @@ export const SECRET_KEY: string = fs.readFileSync('/run/secrets/secret_key', 'ut
 export interface AppSettings {
   emailer: Emailer;
   host: string;
+  serverHost: string;
   logging: Logging;
   secret: string;
   googleAuth: {
@@ -34,6 +35,7 @@ export class LobbySettings {
 const dev: () => AppSettings = () => ({
   emailer: new MemoryEmailer(),
   host: process.env.BASE_URL || 'http://localhost:8081',
+  serverHost: 'http://localhost:2567',
   logging: new DevLogging(),
   secret: SECRET_KEY,
   googleAuth: {
@@ -51,6 +53,7 @@ const staging: () => AppSettings = () => {
   return {
     emailer: new MailgunEmailer({ api_key: apiKey, domain }),
     host: process.env.BASE_URL || 'https://staging.portofmars.asu.edu',
+    serverHost: process.env.BASE_URL || 'https://staging.portofmars.asu.edu',
     logging: new DevLogging(),
     secret: SECRET_KEY,
     googleAuth: {
@@ -68,6 +71,7 @@ const prod: () => AppSettings = () => {
   return {
     ...stagingSettings,
     host: process.env.BASE_URL || 'https://portofmars.asu.edu',
+    serverHost: process.env.BASE_URL || 'https://portofmars.asu.edu',
     lobby: new LobbySettings(1, 10, 5, false),
     isProduction: true
   };

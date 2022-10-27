@@ -2,6 +2,7 @@ import { User } from "@port-of-mars/server/entity";
 import { MoreThan, IsNull, Not, In, Repository, UpdateResult } from "typeorm"
 import { settings } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
+import { generateUsername } from "@port-of-mars/server/util";
 import { v4 as uuidv4 } from "uuid";
 
 const logger = settings.logging.getLogger(__filename);
@@ -85,7 +86,16 @@ export class AccountService extends BaseService {
   }
 
   async getOrCreateTestUser(username: string): Promise<User> {
-    const user = await this.getOrCreateUser(username);
+    let user = await this.getRepository().findOne({ username });
+    if (!user) {
+      user = new User();
+      user.username = username;
+      logger.info('getOrCreateTestUser: not found, creating test user %s', user.username);
+      await this.getRepository().save(user);
+    }
+    else {
+      logger.info('getOrCreateTestUser: test user %s exists', user.username);
+    }
     // test user, set fake data so they can immediately join a game
     user.email = `${username}@mailinator.com`;
     // user.dateConsented = new Date();
@@ -97,15 +107,20 @@ export class AccountService extends BaseService {
     return user;
   }
 
-  async getOrCreateUser(username: string, data: Pick<User, 'isBot'> = { isBot: false }): Promise<User> {
-    let user = await this.getRepository().findOne({ username });
-    logger.info('getOrCreateUser for username %s and profile: %o', username);
+  async getOrCreateUser(passportId: string, email: string, data: Pick<User, 'isBot'> = { isBot: false }): Promise<User> {
+    let user = await this.getRepository().findOne({ passportId });
     if (!user) {
       user = new User();
       user.name = '';
-      user.username = username;
+      user.email = email;
+      user.passportId = passportId;
+      user.username = await generateUsername();
       user.isBot = data.isBot;
+      logger.info('getOrCreateUser: not found, creating user %s', user.username);
       await this.getRepository().save(user);
+    }
+    else {
+      logger.info('getOrCreateUser: user %s exists', user.username);
     }
     return user;
   }
@@ -118,7 +133,12 @@ export class AccountService extends BaseService {
     const numberOfBotsToCreate = requiredNumberOfBots - bots.length;
     if (numberOfBotsToCreate > 0) {
       for (let i = 0; i < numberOfBotsToCreate; i++) {
-        const bot = await this.getOrCreateUser(uuidv4(), { isBot: true });
+        // const bot = await this.getOrCreateUser(uuidv4(), { isBot: true });
+        const bot = new User();
+        bot.username = await generateUsername();
+        bot.name = `robot ${bot.username}`
+        bot.isBot = true;
+        await this.getRepository().save(bot);
         bots.push(bot);
       }
     }

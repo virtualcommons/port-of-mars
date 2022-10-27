@@ -40,6 +40,9 @@ export class User {
   @Generated("uuid")
   participantId!: string;
 
+  @Column({ default: "" })
+  passportId!: string;
+
   @Column({ default: false })
   isVerified!: boolean;
 
