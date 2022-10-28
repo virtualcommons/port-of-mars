@@ -1,86 +1,71 @@
 <template>
   <b-container fluid class="h-100 m-0 p-0">
-    <b-row no-gutters class="h-100 w-100">
-      <!-- about -->
-      <section id="about" class="m-0 w-100">
-        <b-row class="w-100 mx-2" align-v="center" align-h="center">
-          <b-col sm="12" class="text-center">
-            <h2>Welcome to Port of Mars</h2>
-            <p class="my-3">
+    <b-row>
+      <section id="welcome">
+        <b-row class="w-100 mx-0 my-5 px-3" align-v="center" align-h="center">
+          <b-col md="12" lg="6" xl="5" class="text-left">
+            <h1 class="section-title mb-3">Welcome to Port of Mars</h1>
+            <p>
               Port of Mars is an online, game-based, social science experiment set on the first
               human community on the Red Planet. Currently in Open Beta, meaning anyone is welcome
               to participate.
             </p>
+            <b-row class="mt-3">
+              <b-col cols="5">
+                <b-button class="w-100" variant="primary" :to="openlogin"
+                  ><h4 class="p-1">Play Now</h4>
+                </b-button>
+              </b-col>
+              <b-col cols="7">
+                <p><small>
+                  Games are scheduled to take place every 3 hours. Sign up to be ready when
+                  the next round starts.
+                </small></p>
+              </b-col>
+            </b-row>
           </b-col>
-        </b-row>
-      </section>
-
-      <!-- schedule -->
-      <!-- <section id="schedule">
-        <b-row v-if="schedule.length > 0">
-          <b-col class="m-4">
-            <Schedule :schedule="schedule" :roundNumber="tournamentRoundNumber"> </Schedule>
+          <b-col md="12" lg="6" xl="5">
+            <char-carousel></char-carousel>
           </b-col>
-        </b-row>
-      </section> -->
-
-      <!-- prize info -->
-      <section id="prize" class="w-100 p-5 text-center">
-        <b-row class="w-100 mx-2" align-v="center" align-h="center">
-          <b-col sm="12" md="6">
-            <h2>Open Beta</h2>
-            <p class="text my-3">
-              Games are scheduled to take place every 3 hours. Sign up to be ready when the
-              next round starts.
-            </p>
-            <b-button variant="primary" :to="openlogin"
-              ><h4 class="p-1">Sign Up to Play</h4>
-            </b-button>
-          </b-col>
-          <b-col sm="12" md="6">
-            <h2 class="mt-3">Next Launch In</h2>
-            <Countdown
+          <div class="w-100"></div>
+          <b-col>
+            <h2 class="mb-3">Next Launch In</h2>
+            <countdown
               v-if="nextScheduledLaunch"
               :nextLaunch="nextScheduledLaunch"
-              class="my-3"
               style="color: #fff;"
-            ></Countdown>
-            <p v-else>No games scheduled</p>
+            ></countdown>
           </b-col>
+          <div class="w-100 mb-3"></div>
+          <b-button variant="link" @click="scrollToNextSection">
+            <p class="h1"><b-icon icon="chevron-down"></b-icon></p>
+          </b-button>
         </b-row>
       </section>
-
-      <!-- game-trailer -->
-      <section id="game-trailer" class="m-0 p-5 w-100">
-        <b-row class="mt-2" align-v="center" align-h="center">
-          <b-col align-self="center" sm="12" md="6">
-            <h2>The Game</h2>
-            <p class="text my-3">
+      <section id="about" ref="nextSection">
+        <b-row class="w-100 mx-0 my-5 px-3" align-v="center" align-h="center">
+          <b-col md="12" lg="6" xl="5" class="text-left">
+            <h1 class="section-title mb-3">About the Game</h1>
+            <p class="text mb-3">
               You are 1 of 5 residents at the Port of Mars, the first long-term habitat on the
               planet. Each game consists of 8 — 12 rounds, each with phases of investing, trading,
               purchasing, discarding, and reacting to Mars events. Chance and player actions impact
               system health. If system health falls to zero all players die.
             </p>
-
-            <!-- <b-alert :show="currentRoundNumber > 1" variant="warning">
-              Eligible participants have been invited via email to
-              <b-badge variant="info">Round {{ currentRoundNumber }}</b-badge
-              >.
-            </b-alert> -->
           </b-col>
-          <b-col align-self="center" sm="12" md="6" class="p-3">
+          <b-col md="12" lg="6" xl="5">
             <b-embed
               class="p-1"
               type="iframe"
-              aspect="21by9"
+              aspect="16by9"
               :src="trailerVideoUrl"
               allowfullscreen
             ></b-embed>
           </b-col>
         </b-row>
       </section>
-      <Footer></Footer>
     </b-row>
+    <Footer></Footer>
   </b-container>
 </template>
 
@@ -88,12 +73,14 @@
 import { Component, Vue } from "vue-property-decorator";
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
 import Countdown from "@port-of-mars/client/components/global/Countdown.vue";
+import CharCarousel from "@port-of-mars/client/components/global/CharCarousel.vue";
 import Schedule from "@port-of-mars/client/components/dashboard/Schedule.vue";
 import { LOGIN_PAGE, OPENLOGIN_PAGE, DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
 import { isDevOrStaging } from "@port-of-mars/shared/settings";
 
 @Component({
   components: {
+    CharCarousel,
     Footer,
     Countdown,
     Schedule
@@ -107,14 +94,6 @@ export default class Home extends Vue {
   openlogin = { name: OPENLOGIN_PAGE };
   dashboardPage = { name: DASHBOARD_PAGE };
   readonly SITE_URL = "https://portofmars.asu.edu";
-
-  logo = {
-    center: true,
-    fluid: true,
-    blankColor: "#bbb",
-    width: 225,
-    height: 225
-  };
 
   get schedule() {
     return this.$tstore.state.scheduledGames;
@@ -135,6 +114,13 @@ export default class Home extends Vue {
   async mounted() {
     // FIXME: this should probably come from the server when we fetchData
     this.isDevMode = isDevOrStaging();
+  }
+
+  scrollToNextSection() {
+    const el = this.$refs.nextSection;
+    if (el) {
+      el.scrollIntoView({ block: "start", behavior: "smooth" });
+    }
   }
 
   toDate(timestamp: number) {
@@ -160,27 +146,18 @@ p {
   color: var(--white);
 }
 
+#welcome {
+  display: flex;
+  align-items: center;
+  min-height: calc( 100vh - 85px );
+  background: url("../assets/images/stars-bg.jpg") no-repeat;
+  background-position: top; 
+  background-size: cover;
+  background-attachment: fixed;
+}
+
 #about {
-  background-image: url("../assets/images/bg-moon.png");
-  padding: 50px 0 50px 0;
-}
-
-#about p {
-  color: var(--white);
-  width: 70%;
-  margin: 0 auto;
-}
-
-#prize {
-  width: 70%;
-  margin: 0 auto;
-  padding: 1rem;
-  background: url("../assets/images/bg-stars.png") no-repeat;
-  background-position: center;
-  background-color: var(--black);
-}
-
-#game-trailer {
-  background: url("../assets/images/bg-dark-moon.png");
+  align-items: center;
+  background: var(--dark-shade);
 }
 </style>

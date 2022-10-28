@@ -19,7 +19,9 @@ import BootstrapVue from "bootstrap-vue";
 import Navbar from "@port-of-mars/client/components/global/Navbar.vue";
 import Header from "@port-of-mars/client/components/global/Header.vue";
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
-import { GAME_PAGE, MANUAL_PAGE, DASHBOARD_PAGE, LOBBY_PAGE } from "@port-of-mars/shared/routes";
+import { 
+  GAME_PAGE, MANUAL_PAGE, DASHBOARD_PAGE, LOBBY_PAGE, HOME_PAGE
+} from "@port-of-mars/shared/routes";
 import _ from "lodash";
 Vue.use(BootstrapVue);
 
@@ -35,20 +37,21 @@ export default class App extends Vue {
   game = { name: GAME_PAGE };
   manual = { name: MANUAL_PAGE };
   lobby = { name: LOBBY_PAGE };
+  home = { name: HOME_PAGE };
 
   get isGamePage() {
     if (_.isNil(this.$route.name)) {
       return false;
     } else {
-      return this.lobby.name == this.$route.name || this.game.name == this.$route.name;
+      return this.lobby.name === this.$route.name || this.game.name === this.$route.name;
     }
   }
 
-  get isManual() {
+  get isManualOrHome() {
     if (_.isNil(this.$route.name)) {
       return false;
     } else {
-      return this.manual.name == this.$route.name;
+      return this.manual.name === this.$route.name || this.home.name === this.$route.name;
     }
   }
 
@@ -56,16 +59,16 @@ export default class App extends Vue {
     if (_.isNil(this.$route.name)) {
       return false;
     } else {
-      return this.dashboard.name == this.$route.name;
+      return this.dashboard.name === this.$route.name;
     }
   }
 
   get bodyClass() {
     return [
-      { 'h-100': !this.isManual },
-      { 'd-flex': !this.isManual },
-      { 'flex-grow-1': !this.isManual },
-      { 'h-auto': this.isManual },
+      { 'h-100': !this.isManualOrHome },
+      { 'd-flex': !this.isManualOrHome },
+      { 'flex-grow-1': !this.isManualOrHome },
+      { 'h-auto': this.isManualOrHome },
       { 'body-content': !this.isGamePage }
     ];
   }
