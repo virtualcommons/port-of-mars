@@ -1,5 +1,7 @@
 {
   "isSignUpEnabled": false,
   "isFreePlayEnabled": true,
-  "maxConnections": 200
+  "isAutoSchedulerEnabled": true,
+  "maxConnections": 200,
+  "giftCardAmount": 15
 }

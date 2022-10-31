@@ -28,9 +28,9 @@
           </li>
           <li>Only communicate with other participants via the chat options within the game</li>
         </ul>
-        <p>
+        <p v-if="prizeAmount">
         If you win the game, and 4 other human players participated, your name will be added to a weekly drawing for a
-        $25 USD Amazon gift card.
+        ${{ prizeAmount }} USD Amazon gift card.
         </p>
         <p>
           Society may benefit from this research because an understanding of how people make decisions can help us to
@@ -187,7 +187,7 @@ export default class Consent extends Vue {
   hasConsented = false;
   isVerified = false;
   isVerificationDisabled = false;
-  prize = "a cash prize of up to $1000 USD";
+  prizeAmount = 0;
 
   get messages() {
     return this.$tstore.state.dashboardMessages;
@@ -221,7 +221,7 @@ export default class Consent extends Vue {
 
   async created() {
     await this.$ajax.get(url("/registration/authenticated"), (response) => {
-      if (response.data !== null) {
+      if (response.data) {
         const data = response.data;
         this.username = data.username;
         this.name = data.name;
@@ -233,6 +233,11 @@ export default class Consent extends Vue {
           this.hasConsented = true;
         }
         this.consented = false;
+      }
+    });
+    await this.$ajax.get(url("/status/winnings"), (response) => {
+      if (response.data) {
+        this.prizeAmount = response.data.giftCardAmount;
       }
     });
   }

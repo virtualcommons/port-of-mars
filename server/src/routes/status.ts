@@ -17,3 +17,13 @@ statusRouter.get('/', async (req: Request, res: Response, next) => {
     next(e);
   }
 });
+
+statusRouter.get('/winnings', async (req: Request, res: Response, next) => {
+  // return the current gift card amount setting
+  try {
+    res.json({ giftCardAmount: await getServices().settings.giftCardAmount() })
+  }
+  catch (e) {
+    next(e);
+  }
+});

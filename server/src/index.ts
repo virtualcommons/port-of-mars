@@ -215,12 +215,15 @@ async function createApp() {
 
   gameServer.listen(port);
 
-  // run scheduler once, then every hour
-  await getServices().schedule.scheduleGames();
-  const schedule = require("node-schedule");
-  const job = schedule.scheduleJob("0 * * * *", async () => {
-    await getServices().schedule.scheduleGames();
-  });
+  const services = getServices();
+  if (await services.settings.isAutoSchedulerEnabled()) {
+    // run scheduler once, then every hour
+    await services.schedule.scheduleGames();
+    const schedule = require("node-schedule");
+    const job = schedule.scheduleJob("0 * * * *", async () => {
+      await services.schedule.scheduleGames();
+    });
+  }
 }
 
 createConnection(CONNECTION_NAME)

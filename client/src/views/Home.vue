@@ -29,7 +29,8 @@
           </b-col>
           <div class="w-100"></div>
           <b-col>
-            <h2 class="mb-3">Next Launch In</h2>
+            <h2 v-if="nextScheduledLaunch" class="mb-3">Next Launch In</h2>
+            <h2 v-else class="mb-3">No Games Scheduled</h2>
             <countdown
               v-if="nextScheduledLaunch"
               :nextLaunch="nextScheduledLaunch"

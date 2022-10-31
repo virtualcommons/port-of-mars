@@ -145,7 +145,7 @@ export class DashboardService extends BaseService {
       isSignUpEnabled: await this.sp.settings.isSignUpEnabled(),
       currentRoundNumber: round.roundNumber,
       isLobbyOpen: await this.sp.schedule.isLobbyOpen(),
-      minutesOpenAfter: gameDates[0].minutesOpenAfter ?? 0,
+      minutesOpenAfter: gameDates.length ? gameDates[0].minutesOpenAfter : 0,
       stats
     }
   }
