@@ -34,9 +34,6 @@ authRouter.get("/google/success", function (req, res) {
   logger.debug("google login success, user: %o ", req.user);
   if (req.user) {
     const user = req.user as User;
-    // save ip user ip address
-    const ip = ((req.headers['x-forwarded-for'] || req.socket.remoteAddress) ?? "").toString();;
-    getServices().account.setLastPlayerIp(user.id, ip);
     if (!user.isActive) {
       logger.warn("inactivated user attempted to login %o", user);
       res.redirect(toUrl(OPENLOGIN_PAGE));

@@ -242,6 +242,9 @@ export class GameRoom extends Room<GameState> implements Game {
       if (user) {
         const username = user.username;
         logger.debug(`GameRoom.onAuth found user ${username}`);
+        // save user ip address
+        const ip = ((request.headers['x-forwarded-for'] || request.connection.remoteAddress) ?? "").toString();
+        await getServices().account.setLastPlayerIp(user.id, ip);
         if (this.state.hasUser(username)) {
           return user;
         }
