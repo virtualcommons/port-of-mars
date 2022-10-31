@@ -24,6 +24,9 @@ export class Player {
   @Column()
   userId!: number;
 
+  @Column({ default: '' })
+  playerIp!: string;
+
   @ManyToOne(
     type => Game,
     game => game.players,

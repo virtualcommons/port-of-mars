@@ -55,6 +55,12 @@ export class User {
   @Column({ default: false })
   isBot!: boolean;
 
+  @Column({ default: false })
+  isSystemBot!: boolean;
+
+  @Column({ default: "" })
+  lastPlayerIp!: string;
+
   @CreateDateColumn()
   dateCreated!: Date;
 

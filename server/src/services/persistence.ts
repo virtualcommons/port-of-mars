@@ -89,7 +89,8 @@ export class DBPersister implements Persister {
       const p = {
         userId: ru.id,
         role: userRoles[ru.username],
-        gameId
+        gameId,
+        playerIp: ru.lastPlayerIp
       };
       players.push(p);
     }
