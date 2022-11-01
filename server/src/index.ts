@@ -37,8 +37,8 @@ const CONNECTION_NAME = NODE_ENV === "test" ? "test" : "default";
 // FIXME: make imports more consistent, replace `require` where possible
 
 const LocalStrategy = require("passport-local").Strategy;
-
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
 
 const RedisStore = connectRedis(session);
 const store = new RedisStore({ host: "redis", client: getRedis() });
@@ -53,6 +53,21 @@ passport.use(new GoogleStrategy({
     clientID: settings.googleAuth.clientId,
     clientSecret: settings.googleAuth.clientSecret,
     callbackURL: `${settings.serverHost}/auth/google/callback`,
+    passReqToCallback: true
+  },
+  async function(request:any, accessToken:any, refreshToken:any, profile:any, done:any) {
+    const services = getServices();
+    const user = await services.account.getOrCreateUser(profile.id, profile.emails[0].value);
+    // const user = await s.account.getOrCreateUser()
+    return done(null, user);
+  }
+));
+
+passport.use(new FacebookStrategy({
+    clientID: settings.facebookAuth.clientId,
+    clientSecret: settings.facebookAuth.clientSecret,
+    callbackURL: `${settings.serverHost}/auth/facebook/callback`,
+    profileFields: ["id", "email"],
     passReqToCallback: true
   },
   async function(request:any, accessToken:any, refreshToken:any, profile:any, done:any) {

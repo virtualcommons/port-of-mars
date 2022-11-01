@@ -29,11 +29,8 @@
         <b-button block variant="white" size="lg" class="mb-3" :href="googleLoginUrl">
           <b-icon icon="google" class="float-left" />Sign in with Google
         </b-button>
-        <b-button block variant="facebook" size="lg" class="mb-3">
+        <b-button block variant="facebook" size="lg" class="mb-3" :href="facebookLoginUrl">
           <b-icon icon="facebook" class="float-left"/>Sign in with Facebook
-        </b-button>
-        <b-button block variant="black" size="lg">
-          <b-icon icon="github" class="float-left"/>Sign in with Github
         </b-button>
       </b-form>
     </div>
@@ -61,6 +58,10 @@ export default class OpenLogin extends Vue {
 
   get googleLoginUrl() {
     return url("/auth/google")
+  }
+
+  get facebookLoginUrl() {
+    return url("/auth/facebook")
   }
 
   async devLogin(e: Event) {

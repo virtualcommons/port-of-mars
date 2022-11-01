@@ -18,6 +18,10 @@ export interface AppSettings {
     clientId: string,
     clientSecret: string,
   };
+  facebookAuth: {
+    clientId: string,
+    clientSecret: string,
+  };
   lobby: LobbySettings;
   supportEmail: string,
   isProduction: boolean;
@@ -42,6 +46,10 @@ const dev: () => AppSettings = () => ({
     clientId: process.env.GOOGLE_CLIENT_ID || '',
     clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
   },
+  facebookAuth: {
+    clientId: process.env.FACEBOOK_CLIENT_ID || '',
+    clientSecret: process.env.FACEBOOK_CLIENT_SECRET || '',
+  },
   supportEmail: 'portmars@asu.edu',
   lobby: new LobbySettings(1, 10, 5, true),
   isProduction: false,
@@ -59,6 +67,10 @@ const staging: () => AppSettings = () => {
     googleAuth: {
       clientId: process.env.GOOGLE_CLIENT_ID || '',
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+    },
+    facebookAuth: {
+      clientId: process.env.FACEBOOK_CLIENT_ID || '',
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET || '',
     },
     supportEmail: 'portmars@asu.edu',
     lobby: new LobbySettings(1, 10, 5, true),

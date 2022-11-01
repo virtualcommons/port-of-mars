@@ -48,3 +48,38 @@ authRouter.get("/google/success", function (req, res) {
     res.redirect(toUrl(OPENLOGIN_PAGE));
   }
 });
+
+authRouter.get("/facebook",
+  passport.authenticate("facebook", { scope: "email" })
+);
+
+authRouter.get("/facebook/callback",
+  passport.authenticate("facebook", {
+    successRedirect: "/auth/facebook/success",
+    failureRedirect: "/auth/facebook/failure"
+  })
+);
+
+authRouter.get("/facebook/failure", function (req, res) {
+  logger.debug("facebook login failure, user: %o ", req.user);
+  res.redirect(toUrl(OPENLOGIN_PAGE));
+});
+
+authRouter.get("/facebook/success", function (req, res) {
+  logger.debug("facebook login success, user: %o ", req.user);
+  if (req.user) {
+    const user = req.user as User;
+    if (!user.isActive) {
+      logger.warn("inactivated user attempted to login %o", user);
+      res.redirect(toUrl(OPENLOGIN_PAGE));
+    } else if (getServices().account.isRegisteredAndValid(user)) {
+      res.redirect(toUrl(DASHBOARD_PAGE));
+    } else {
+      logger.warn("invalid / unregistered user %o", user);
+      res.redirect(toUrl(REGISTER_PAGE));
+    }
+  } else {
+    logger.warn("no user on the request, returning to login %o", req);
+    res.redirect(toUrl(OPENLOGIN_PAGE));
+  }
+});
