@@ -232,13 +232,15 @@ async function createApp() {
 
   const services = getServices();
   if (await services.settings.isAutoSchedulerEnabled()) {
-    // run scheduler once, then every hour
+    // run scheduler once, then every hour if enabled
     await services.schedule.scheduleGames();
-    const schedule = require("node-schedule");
-    const job = schedule.scheduleJob("0 * * * *", async () => {
-      await services.schedule.scheduleGames();
-    });
   }
+  const schedule = require("node-schedule");
+  const job = schedule.scheduleJob("0 * * * *", async () => {
+    if (await services.settings.isAutoSchedulerEnabled()) {
+      await services.schedule.scheduleGames();
+    }
+  });
 }
 
 createConnection(CONNECTION_NAME)
