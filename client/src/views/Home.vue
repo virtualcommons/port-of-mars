@@ -17,7 +17,8 @@
                 </b-button>
               </b-col>
               <b-col cols="7">
-                <p><small>
+                <p v-if="nextScheduledLaunch"><small>
+                  <!-- FIXME: get this interval from the server after cleaning up shared settings -->
                   Games are scheduled to take place every 3 hours. Sign up to be ready when
                   the next round starts.
                 </small></p>

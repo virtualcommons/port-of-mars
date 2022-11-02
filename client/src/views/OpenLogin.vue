@@ -29,7 +29,8 @@
         <b-button block variant="white" size="lg" class="mb-3" :href="googleLoginUrl">
           <b-icon icon="google" class="float-left" />Sign in with Google
         </b-button>
-        <b-button block variant="facebook" size="lg" class="mb-3" :href="facebookLoginUrl">
+        <!-- FB signin disabled for open beta pretest -->
+        <b-button v-if="isDevMode" block variant="facebook" size="lg" class="mb-3" :href="facebookLoginUrl">
           <b-icon icon="facebook" class="float-left"/>Sign in with Facebook
         </b-button>
       </b-form>

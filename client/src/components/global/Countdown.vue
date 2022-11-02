@@ -44,7 +44,7 @@ export default class Countdown extends Vue {
   }
 
   get hours() {
-    return Math.trunc(this.secondsUntilLaunch / 60 / 60) % 24;
+    return Math.trunc(this.secondsUntilLaunch / 60 / 60);
   }
 
   mounted() {
