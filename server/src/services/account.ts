@@ -94,19 +94,18 @@ export class AccountService extends BaseService {
     if (!user) {
       user = new User();
       user.username = username;
+      user.name = '';
+      user.email = `${username}@email.com`;
       logger.info('getOrCreateTestUser: not found, creating test user %s', user.username);
-      await this.getRepository().save(user);
     }
     else {
       logger.info('getOrCreateTestUser: test user %s exists', user.username);
     }
     // test user, set fake data so they can immediately join a game
-    user.email = `${username}@mailinator.com`;
+    // FIXME: use run-time configuration / settings to determine what user properties to bypass (passedQuiz, isVerified, hasParticipated, etc)
     // user.dateConsented = new Date();
     user.isVerified = true;
     // user.passedQuiz = true;
-    // FIXME: use run-time configuration / settings to determine what user properties to bypass (passedQuiz, isVerified, hasParticipated, etc)
-    user.name = `Test User ${username}`;
     await this.getRepository().save(user);
     return user;
   }
