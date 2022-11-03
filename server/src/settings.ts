@@ -32,7 +32,8 @@ export class LobbySettings {
     public groupAssignmentInterval: number = 1, // minutes between attempts to form groups
     public lobbyOpenBeforeOffset: number = 10, // minutes BEFORE scheduled time that the lobby will be open for
     public lobbyOpenAfterOffset: number = 5, // minutes AFTER scheduled time that the lobby will be open for
-    public devMode: boolean = true
+    public devMode: boolean = true,
+    public forceGroupAssignmentInterval: number = -1, // how much time should pass before a connected player will automatically be assigned to a group w/ bots
   ) { }
 }
 
@@ -84,7 +85,7 @@ const prod: () => AppSettings = () => {
     ...stagingSettings,
     host: process.env.BASE_URL || 'https://portofmars.asu.edu',
     serverHost: process.env.BASE_URL || 'https://portofmars.asu.edu',
-    lobby: new LobbySettings(1, 10, 5, false),
+    lobby: new LobbySettings(1, 10, 5, false, 5),
     isProduction: true
   };
 };

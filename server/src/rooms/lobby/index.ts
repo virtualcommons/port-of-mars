@@ -46,6 +46,16 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
   groupAssignmentInterval = 1;
 
   /**
+   * Force assignment of connected players into a group after this much time has passed (in minutes)
+   */
+  forceGroupAssignmentInterval = -1;
+  
+  /**
+   * Number of minutes elapsed since this room has opened
+   */
+  elapsedMinutes = 0;
+
+  /**
    * Groups of players per iteration
    */
   groups: Array<MatchmakingGroup> = [];
@@ -74,6 +84,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
     logger.info('RankedLobbyRoom: new room %s', this.roomId);
     this.setState(new LobbyRoomState());
     this.groupAssignmentInterval = settings.lobby.groupAssignmentInterval;
+    this.forceGroupAssignmentInterval = settings.lobby.forceGroupAssignmentInterval;
     this.devMode = settings.lobby.devMode;
     this.registerLobbyHandlers();
 
@@ -101,6 +112,13 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
 
   async updateLobbyNextAssignmentTime() {
     if (this.scheduler) {
+      this.elapsedMinutes += this.groupAssignmentInterval;
+      if (this.forceGroupAssignmentInterval > 0 && this.elapsedMinutes >= this.forceGroupAssignmentInterval) {
+        this.elapsedMinutes = 0;
+        // force start a game
+        this.redistributeGroups(true);
+        return;
+      }
       const nextInvocation: any = this.scheduler
         .nextInvocation()
         .toDate()
