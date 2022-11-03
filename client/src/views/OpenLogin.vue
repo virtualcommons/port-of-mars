@@ -18,7 +18,7 @@
           </b-form-checkbox>
           <b-form inline v-if="isDevMode && toggleDevLogin" @submit="devLogin">
             <b-form-input class="w-100 mb-2" id="input-username" v-model="devLoginUsername"
-              placeholder="Sign up or sign back in with a username" description="asdasd" required>
+              placeholder="Sign up or sign back in with a username" description="Enter any unique-ish username" required>
             </b-form-input>
             <b-button class="w-100 mb-3" type="submit" variant="primary" size="lg">
               <b-icon icon="file-earmark-code" class="float-left"/>Sign in (Test Mode)

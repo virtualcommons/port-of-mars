@@ -12,11 +12,11 @@
           <mark>{{ scheduledGameTimeString }}</mark>
         </h2>
         <p class='lead'>
-          You'll join a game as soon as there are enough players to form a full group.
+          You'll join a game as soon as there are enough players to form a full group. After a certain amount of time passes a game
+          may begin immediately with bots filling in for the rest of the group.
         </p>
         <p>
-          This lobby will remain open up to {{ minutesOpenAfter }} minutes after the scheduled launch time.<br>
-          After which, a game will begin with enough bots to form a full 5-person group.
+          This lobby will remain open up to {{ minutesOpenAfter }} minutes after the scheduled launch time.
         </p>
       </b-col>
       <div class="w-100"></div>
