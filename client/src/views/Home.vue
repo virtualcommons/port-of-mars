@@ -1,7 +1,7 @@
 <template>
   <b-container fluid class="h-100 m-0 p-0">
     <b-row>
-      <section id="welcome">
+      <div id="welcome" class="w-100 d-flex align-items-center welcome-bg">
         <b-row class="w-100 mx-0 my-5 px-3" align-v="center" align-h="center">
           <b-col md="12" lg="6" xl="5" class="text-left">
             <h1 class="section-title mb-3">Welcome to Port of Mars</h1>
@@ -43,8 +43,8 @@
             <p class="h1"><b-icon icon="chevron-down"></b-icon></p>
           </b-button>
         </b-row>
-      </section>
-      <section id="about" ref="nextSection">
+      </div>
+      <div id="about" class="w-100 d-flex align-items-center about-bg" ref="nextSection">
         <b-row class="w-100 mx-0 my-5 px-3" align-v="center" align-h="center">
           <b-col md="12" lg="6" xl="5" class="text-left">
             <h1 class="section-title mb-3">About the Game</h1>
@@ -65,7 +65,7 @@
             ></b-embed>
           </b-col>
         </b-row>
-      </section>
+      </div>
     </b-row>
     <Footer></Footer>
   </b-container>
@@ -148,9 +148,7 @@ p {
   color: var(--white);
 }
 
-#welcome {
-  display: flex;
-  align-items: center;
+.welcome-bg {
   min-height: calc( 100vh - 85px );
   background: url("../assets/images/stars-bg.jpg") no-repeat;
   background-position: top; 
@@ -158,8 +156,7 @@ p {
   background-attachment: fixed;
 }
 
-#about {
-  align-items: center;
+.about-bg {
   background: var(--dark-shade);
 }
 </style>
