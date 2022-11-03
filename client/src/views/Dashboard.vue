@@ -10,10 +10,10 @@
                 <b-col sm="12" md="6">
                   <h4>The Objective</h4>
                   <p>
-                    Your mission is to stay alive and achieve the most victory points.
-                    Each round you receive 10 time blocks that you can invest in system health
-                    or accomplishments. System health will maintain the shared infrastructure 
-                    (upkeep) and keep the team alive. Accomplishments will earn you victory points.
+                    Your mission is to stay alive and achieve the most Victory Points.
+                    In each round you will usually receive 10 time blocks that you can invest in System Health
+                    or Influence resources. System Health keeps your team alive.
+                    Influence resources are used to purchase Accomplishments that earn you Victory Points.
                   </p>
                   <h4>Manual</h4>
                   <p>
