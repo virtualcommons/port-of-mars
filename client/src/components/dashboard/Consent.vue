@@ -86,7 +86,7 @@
           a gift card, however, we will never publish nor share this information.
         </b-alert>
         <b-form-group
-          description="Choose a username to go by."
+          description="Choose a public username to be displayed to other Port of Mars participants."
           label="Username"
           label-for="username"
         >
@@ -101,7 +101,7 @@
           </b-form-input>
         </b-form-group>
         <b-form-group
-          description="If you wish to be eligible to win a gift card, please enter your full name."
+          description="To be eligible to win a gift card, please enter your full name."
           label="Name (optional)"
           label-for="name"
         >
