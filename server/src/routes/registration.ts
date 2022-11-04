@@ -14,14 +14,18 @@ registrationRouter.post('/grant-consent', async (req: Request, res: Response, ne
   const user = req.user as User;
   try {
     const services = getServices();
-    const data = { ...req.body, ...{ username: user.username } };
+    const data = { ...req.body };
     const emailAvailable = await services.account.isEmailAvailable(user, data.email);
-    if (emailAvailable) {
-      await services.registration.submitRegistrationMetadata(user, data);
-      res.json(true);
+    const usernameAvailable = await services.account.isUsernameAvailable(data.username, user);
+    if (!emailAvailable) {
+      res.status(400).json({kind: 'danger', message: `The email ${data.email} is already taken. Please try another one.`})
+    }
+    else if (!usernameAvailable) {
+      res.status(400).json({kind: 'danger', message: `The username ${data.username} is already taken. Please try another one.`})
     }
     else {
-      res.status(400).json({kind: 'danger', message: `The email ${data.email} is already taken. Please try another one.`})
+      await services.registration.submitRegistrationMetadata(user, data);
+      res.json(true);
     }
   } catch (e) {
     logger.warn("unable to process registration metadata for %s", user.username);
@@ -69,7 +73,13 @@ registrationRouter.post('/verify/:registrationToken', async (req: Request, res: 
 registrationRouter.get('/authenticated', async (req: Request, res: Response, next: NextFunction) => {
   const user = req.user as User
   try {
-    res.json({ name: user.name, email: user.email, dateConsented: user.dateConsented ?? null, isVerified: user.isVerified });
+    res.json({
+      username : user.username,
+      name : user.name,
+      email: user.email,
+      dateConsented: user.dateConsented ?? null,
+      isVerified: user.isVerified
+    });
   } catch (e) {
     logger.warn(`Unable to authorize user for registration ${user.username}`);
     next(e);

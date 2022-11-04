@@ -26,3 +26,10 @@ $danger: rgba(170, 42, 41, 1);
 $light: $light-accent;
 $new-space-orange: rgba(221, 168, 119, 1);
 $dark: rgba(34, 26, 27, 1);
+
+// Add custom variants
+$theme-colors: (
+  "facebook": rgba(66, 103, 178, 1),
+  "white": rgba(255, 255, 255, 1),
+  "black": rgba(0, 0, 0, 1)
+);

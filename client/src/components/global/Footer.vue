@@ -32,7 +32,7 @@ ccarra1@asu.edu
           </a>
         </li>
         <li>
-          <a href="https://complexity.asu.edu/" title="ASU School of Complex Adaptive Systems">
+          <a href="https://scas.asu.edu/" title="ASU School of Complex Adaptive Systems">
             ASU School of Complex Adaptive Systems
           </a>
         </li>
@@ -42,11 +42,9 @@ ccarra1@asu.edu
           >
         </li>
         <li>
-          <a href="https://www.computecanada.ca" title="Compute Canada">
-            Compute Canada
+          <a href="https://alliancecan.ca/en" title="Digital Research Alliance of Canada">
+            Digital Research Alliance of Canada
           </a>
-          and
-          <a href="https://westgrid.ca">WestGrid</a>
         </li>
       </ul>
     </section>
@@ -54,18 +52,20 @@ ccarra1@asu.edu
       <h2>Connect with Us</h2>
       <ul>
         <li>
-          <a href="mailto:portmars@asu.edu" title="Email us"
-            >Email
+          <a href="mailto:portmars@asu.edu" title="Email us">
+            Email
             <b-icon icon="envelope" class="mx-1"></b-icon>
           </a>
         </li>
         <li>
-          <a href="https://www.instagram.com/portofmars/" title="Instagram">Instagram </a>
-          <b-icon icon="instagram" class="mx-1"></b-icon>
+          <a href="https://www.instagram.com/portofmars/" title="Instagram">
+            Instagram
+            <b-icon icon="instagram" class="mx-1"></b-icon>
+          </a>
         </li>
         <li>
-          <a href="https://twitter.com/PortOfMars" title="Twitter"
-            >Twitter
+          <a href="https://twitter.com/PortOfMars" title="Twitter">
+            Twitter
             <b-icon icon="twitter" class="mx-1"></b-icon>
           </a>
         </li>

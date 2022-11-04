@@ -10,13 +10,6 @@ import connectRedis from "connect-redis";
 import * as Sentry from "@sentry/node";
 import { Server } from "colyseus";
 
-// shared imports
-import {
-  LOGIN_PAGE,
-  REGISTER_PAGE,
-  DASHBOARD_PAGE,
-  getPagePath,
-} from "@port-of-mars/shared/routes";
 import { BUILD_ID, SENTRY_DSN, isDev } from "@port-of-mars/shared/settings";
 
 // server side imports
@@ -27,6 +20,7 @@ import { settings } from "@port-of-mars/server/settings";
 import { getRedis, getServices } from "@port-of-mars/server/services";
 import {
   adminRouter,
+  authRouter,
   dashboardRouter,
   gameRouter,
   quizRouter,
@@ -34,15 +28,17 @@ import {
   surveyRouter,
   statusRouter,
 } from "@port-of-mars/server/routes";
-import { ServerError } from "./util";
+import { ServerError, toUrl } from "./util";
 
 const logger = settings.logging.getLogger(__filename);
 const NODE_ENV = process.env.NODE_ENV || "development";
 const CONNECTION_NAME = NODE_ENV === "test" ? "test" : "default";
 
-// FIXME: set up typescript types for these
-const CasStrategy = require("passport-cas2").Strategy;
+// FIXME: make imports more consistent, replace `require` where possible
+
 const LocalStrategy = require("passport-local").Strategy;
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
 
 const RedisStore = connectRedis(session);
 const store = new RedisStore({ host: "redis", client: getRedis() });
@@ -53,38 +49,50 @@ const sessionParser = session({
   store,
 });
 
-passport.use(
-  new CasStrategy(
-    {
-      casURL: "https://weblogin.asu.edu/cas",
-    },
-    // verify callback
-    async function (
-      username: string,
-      profile: Record<string, unknown>,
-      done: Function
-    ) {
-      const s = getServices();
-      const user = await s.account.getOrCreateUser(username);
-      await done(null, user);
-    }
-  )
-);
+passport.use(new GoogleStrategy({
+    clientID: settings.googleAuth.clientId,
+    clientSecret: settings.googleAuth.clientSecret,
+    callbackURL: `${settings.serverHost}/auth/google/callback`,
+    passReqToCallback: true
+  },
+  async function(request:any, accessToken:any, refreshToken:any, profile:any, done:any) {
+    const services = getServices();
+    const user = await services.account.getOrCreateUser(profile.id, profile.emails[0].value);
+    // const user = await s.account.getOrCreateUser()
+    return done(null, user);
+  }
+));
+
+passport.use(new FacebookStrategy({
+    clientID: settings.facebookAuth.clientId,
+    clientSecret: settings.facebookAuth.clientSecret,
+    callbackURL: `${settings.serverHost}/auth/facebook/callback`,
+    profileFields: ["id", "email"],
+    passReqToCallback: true
+  },
+  async function(request:any, accessToken:any, refreshToken:any, profile:any, done:any) {
+    const services = getServices();
+    const user = await services.account.getOrCreateUser(profile.id, profile.emails[0].value);
+    // const user = await s.account.getOrCreateUser()
+    return done(null, user);
+  }
+));
+
 passport.use(
   new LocalStrategy(async function (
     username: string,
     password: string,
     done: Function
   ) {
-    const s = getServices();
-    const user = await getServices().account.getOrCreateTestUser(username);
+    const services = getServices();
+    const user = await services.account.getOrCreateTestUser(username);
     // set all testing things on the user
-    const tournamentRound = await s.tournament.getCurrentTournamentRound();
-    const invite = await s.tournament.getOrCreateInvite(
-      user.id,
-      tournamentRound,
-      true
-    );
+    // const tournamentRound = await services.tournament.getCurrentTournamentRound();
+    // const invite = await services.tournament.getOrCreateInvite(
+    //   user.id,
+    //   tournamentRound,
+    //   true
+    // );
     await done(null, user);
   })
 );
@@ -146,7 +154,7 @@ async function createApp() {
         directives: {
           defaultSrc: ["'self'"],
           connectSrc: ["'self'", "sentry.comses.net"],
-          frameSrc: ["'self'", "player.vimeo.com"],
+          frameSrc: ["'self'", "player.vimeo.com", "youtube.com", "https://www.youtube.com"],
           scriptSrc: ["'self'", "sentry.comses.net"],
           imgSrc: ["'self'", "data:"],
           styleSrc: ["'self'", "fonts.googleapis.com", "'unsafe-inline'"],
@@ -175,6 +183,7 @@ async function createApp() {
     res.json({ user: req.user, sessionCookie });
   });
   app.use("/admin", adminRouter);
+  app.use("/auth", authRouter);
   app.use("/survey", surveyRouter);
   app.use("/game", gameRouter);
   app.use("/quiz", quizRouter);
@@ -190,30 +199,6 @@ async function createApp() {
       return res.json({ user: {} });
     });
   });
-
-  app.get(
-    "/asulogin",
-    passport.authenticate("cas", { failureRedirect: "/" }),
-    function (req, res) {
-      // successful authentication
-      if (req.user) {
-        const user = req.user as User;
-        if (!user.isActive) {
-          logger.warn("inactivated user attempted to login %o", user);
-          res.redirect(getPagePath(LOGIN_PAGE));
-        } else if (getServices().account.isRegisteredAndValid(user)) {
-          res.redirect(getPagePath(DASHBOARD_PAGE));
-        } else {
-          logger.warn("invalid / unregistered user %o", user);
-          res.redirect(getPagePath(REGISTER_PAGE));
-        }
-      } else {
-        const loginPath = getPagePath(LOGIN_PAGE);
-        logger.warn("no user on the request, returning to login %o", req);
-        res.redirect(loginPath);
-      }
-    }
-  );
 
   const server = http.createServer(app);
   const gameServer = new Server({
@@ -244,6 +229,18 @@ async function createApp() {
   });
 
   gameServer.listen(port);
+
+  const services = getServices();
+  if (await services.settings.isAutoSchedulerEnabled()) {
+    // run scheduler once, then every hour if enabled
+    await services.schedule.scheduleGames();
+  }
+  const schedule = require("node-schedule");
+  const job = schedule.scheduleJob("0 * * * *", async () => {
+    if (await services.settings.isAutoSchedulerEnabled()) {
+      await services.schedule.scheduleGames();
+    }
+  });
 }
 
 createConnection(CONNECTION_NAME)

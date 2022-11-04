@@ -49,12 +49,7 @@ export default class Verify extends Vue {
         kind: "success",
         message: "Email successfully verified."
       });
-      const signUpEnabled = data;
-      if (signUpEnabled) {
-        this.$router.push({ name: SIGNEDUP_PAGE });
-      } else {
-        this.$router.push({ name: DASHBOARD_PAGE });
-      }
+      this.$router.push({ name: DASHBOARD_PAGE });
     });
   }
 }

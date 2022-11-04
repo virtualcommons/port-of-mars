@@ -4,7 +4,7 @@ export default {
 
     async init(context: any) {
         const STATUS_URL = url('/status/');
-        console.log("Initializing store with tournament status data.", context);
+        console.log("Initializing store with status data.", context);
         const response = await fetch(STATUS_URL,
             {
                 method: 'GET',
@@ -23,8 +23,7 @@ export default {
         if (data.user) {
             context.commit('SET_USER', data.user);
         }
-        context.commit('SET_SIGNUP_ENABLED', data.isSignUpEnabled);
-        context.commit('SET_TOURNAMENT_STATUS', data.tournamentStatus);
+        context.commit('SET_SCHEDULED_GAMES', data.schedule);
         return data.user;
     },
 

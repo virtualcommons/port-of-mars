@@ -16,6 +16,13 @@
   background-color: $light-shade-25 !important;
 }
 
+.card-header-title {
+  color: $dark-shade !important;
+  &:hover {
+    text-decoration: underline
+  }
+}
+
 // ACCOMPLISHMENT : STATUS STYLING
 
 // // default

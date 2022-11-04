@@ -40,6 +40,9 @@ export class User {
   @Generated("uuid")
   participantId!: string;
 
+  @Column({ default: "" })
+  passportId!: string;
+
   @Column({ default: false })
   isVerified!: boolean;
 
@@ -51,6 +54,12 @@ export class User {
 
   @Column({ default: false })
   isBot!: boolean;
+
+  @Column({ default: false })
+  isSystemBot!: boolean;
+
+  @Column({ default: "" })
+  lastPlayerIp!: string;
 
   @CreateDateColumn()
   dateCreated!: Date;

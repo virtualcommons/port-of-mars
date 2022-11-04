@@ -18,7 +18,7 @@ export class AuthService extends BaseService {
       .from(User, 'user')
       .innerJoin('user.invites', 'invite')
       .innerJoin('invite.tournamentRound', 'round')
-      .where(`user.id = :userId and round.id = :tournamentRoundId and not invite.hasParticipated`, { userId, tournamentRoundId })
+      .where(`user.id = :userId`, { userId })
       .select('count(*) > 0', 'validInvitation')
       .getRawOne();
     logger.info("user %s can play the game? %o", userId, result?.validInvitation);

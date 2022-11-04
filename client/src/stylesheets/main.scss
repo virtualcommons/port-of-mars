@@ -21,20 +21,21 @@ html {
   height: 100%;
   width: 100%;
 
-  @include xl {
+  // @include xl {
+  //   font-size: 12px !important;
+  // }
+
+  // @include lg {
+  //   font-size: 8px !important;
+  // }
+
+  @include md {
     font-size: 12px !important;
   }
 
-  @include lg {
-    font-size: 8px !important;
-  }
-
-  @include md {
-    font-size: 6px !important;
-  }
-  @include sm {
-    font-size: 4px !important;
-  }
+  // @include sm {
+  //   font-size: 4px !important;
+  // }
 }
 
 header,
@@ -89,6 +90,11 @@ li {
 h4 {
   text-transform: uppercase;
   font-weight: bold;
+}
+
+hr {
+  margin: 2rem 0 2rem;
+  border-top: 1px solid $light-shade-10;
 }
 
 body {
@@ -164,6 +170,12 @@ button {
 
 .backdrop {
   background-color: $light-shade-05;
+}
+
+.content-container {
+  background-color: $dark-shade-75;
+  border: 0.2rem solid $light-shade-25;
+  border-radius: 3px;
 }
 
 .light-shade-05-border {

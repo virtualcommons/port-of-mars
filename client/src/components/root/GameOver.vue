@@ -23,7 +23,7 @@
         </b-list-group>
         <h4 class="mt-5">Thank you for participating!</h4>
         <b-button block class="w-50 mx-auto" squared variant="light" :to="dashboard">
-          Take the exit survey
+          Return to mission control
         </b-button>
       </b-col>
       <b-col cols="8" class="h-75">

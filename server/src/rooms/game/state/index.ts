@@ -953,10 +953,10 @@ export class Player
   implements
     PlayerData<AccomplishmentSet, ResourceInventory, SystemHealthChanges>
 {
-  constructor(role: Role) {
+  constructor(role: Role, isBot?: boolean) {
     super();
     this.role = role;
-    this.bot = SimpleBot.fromActor(this);
+    this.bot = SimpleBot.fromActor(this, isBot);
     this.accomplishments = new AccomplishmentSet(role);
     this.costs = ResourceCosts.senderRole(role);
     // FIXME: it'd be nice to bind the specialty to the ResourceCosts e.g., this.specialty = this.costs.specialty
@@ -1215,13 +1215,15 @@ export class Player
 type PlayerSetSerialized = { [role in Role]: PlayerSerialized };
 
 class PlayerSet extends Schema implements PlayerSetData<Player> {
-  constructor() {
+  constructor(botRoles?: Map<Role, boolean>) {
     super();
-    this.Curator = new Player(CURATOR);
-    this.Entrepreneur = new Player(ENTREPRENEUR);
-    this.Pioneer = new Player(PIONEER);
-    this.Politician = new Player(POLITICIAN);
-    this.Researcher = new Player(RESEARCHER);
+    // FIXME: should be able to reduce the duplication here of Roles, lookups into the botRoles, etc.
+    // clean up when we get time for a refactor pass
+    this.Curator = new Player(CURATOR, botRoles?.get(CURATOR));
+    this.Entrepreneur = new Player(ENTREPRENEUR, botRoles?.get(ENTREPRENEUR));
+    this.Pioneer = new Player(PIONEER, botRoles?.get(PIONEER));
+    this.Politician = new Player(POLITICIAN, botRoles?.get(POLITICIAN));
+    this.Researcher = new Player(RESEARCHER, botRoles?.get(RESEARCHER));
   }
 
   @type(Player)
@@ -1372,7 +1374,7 @@ export class GameState
   @type("string")
   heroOrPariah: "" | "hero" | "pariah" = "";
 
-  constructor(data: GameStateOpts) {
+  constructor(data: GameStateOpts, botRoles?: Map<Role, boolean>) {
     super();
     if (isProduction() && data.userRoles) {
       assert.equal(
@@ -1385,7 +1387,7 @@ export class GameState
     this.marsEventDeck = new MarsEventsDeck(data.deck);
     this.lastTimePolled = new Date();
     this.maxRound = data.numberOfGameRounds;
-    this.players = new PlayerSet();
+    this.players = new PlayerSet(botRoles);
   }
 
   static DEFAULTS = {

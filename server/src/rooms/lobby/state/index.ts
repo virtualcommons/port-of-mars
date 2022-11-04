@@ -6,6 +6,7 @@ export class LobbyRoomState extends Schema {
     this.nextAssignmentTime = 0;
     this.waitingUserCount = 0;
     this.isOpen = true;
+    this.isLastTry = false;
   }
 
   @type('number')
@@ -17,4 +18,7 @@ export class LobbyRoomState extends Schema {
 
   @type('boolean')
   isOpen: boolean;
+
+  @type('boolean')
+  isLastTry: boolean;
 }

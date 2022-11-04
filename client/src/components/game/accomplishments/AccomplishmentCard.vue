@@ -17,7 +17,7 @@
             squared
             v-b-modal="accomplishmentModalId"
           >
-            <h5 class="my-auto">
+            <h5 class="my-auto card-header-title">
               {{ accomplishment.label }}
             </h5>
           </b-button>
@@ -25,7 +25,7 @@
       </template>
       <template v-else>
         <b-col>
-          <h5 :style="cardHeaderStyle" class="p-2 text-center">
+          <h5 :style="cardHeaderStyle" class="p-2 text-center card-header-title">
             {{ accomplishment.label }}
           </h5>
         </b-col>

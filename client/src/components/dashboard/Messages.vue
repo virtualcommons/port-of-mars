@@ -1,5 +1,5 @@
 <template>
-  <div v-if="messages.length > 0" class="lead w-100">
+  <div v-if="messages.length > 0" id="messages-wrapper" class="lead w-100">
     <!-- MESSAGES -->
     <b-alert
       v-for="dm in messages"
@@ -26,4 +26,8 @@ export default class Messages extends Vue {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+#messages-wrapper {
+  z-index: 1030;
+}
+</style>

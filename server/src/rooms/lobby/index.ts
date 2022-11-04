@@ -41,10 +41,19 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
   public static get NAME(): string { return LOBBY_NAME }
 
   /**
-   * Distribute clients into groups at this interval
-   * currently set to check for group assignment every 5 minutes
+   * Distribute clients into groups at this interval (minutes)
    */
-  groupAssignmentInterval = 5;
+  groupAssignmentInterval = 1;
+
+  /**
+   * Force assignment of connected players into a group after this much time has passed (in minutes)
+   */
+  forceGroupAssignmentInterval = -1;
+  
+  /**
+   * Number of minutes elapsed since this room has opened
+   */
+  elapsedMinutes = 0;
 
   /**
    * Groups of players per iteration
@@ -75,6 +84,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
     logger.info('RankedLobbyRoom: new room %s', this.roomId);
     this.setState(new LobbyRoomState());
     this.groupAssignmentInterval = settings.lobby.groupAssignmentInterval;
+    this.forceGroupAssignmentInterval = settings.lobby.forceGroupAssignmentInterval;
     this.devMode = settings.lobby.devMode;
     this.registerLobbyHandlers();
 
@@ -85,6 +95,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
       `*/${this.groupAssignmentInterval} * * * *`,
       async () => {
         logger.trace('SCHEDULED JOB: REDISTRIBUTE GROUPS EVERY %d', this.groupAssignmentInterval);
+        // force assign group with bots if its the last attempt in a scheduled window
         this.redistributeGroups();
         await this.updateLobbyNextAssignmentTime();
       }
@@ -101,24 +112,42 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
 
   async updateLobbyNextAssignmentTime() {
     if (this.scheduler) {
+      this.elapsedMinutes += this.groupAssignmentInterval;
+      if (this.forceGroupAssignmentInterval > 0 && this.elapsedMinutes >= this.forceGroupAssignmentInterval) {
+        this.elapsedMinutes = 0;
+        // force start a game
+        this.redistributeGroups(true);
+        return;
+      }
       const nextInvocation: any = this.scheduler
         .nextInvocation()
         .toDate()
         .getTime();
       logger.trace("next invocation: %s", nextInvocation);
       this.state.nextAssignmentTime = nextInvocation;
-      const tournamentService = getServices().tournament;
-      this.state.isOpen = await tournamentService.isLobbyOpen();
+      const scheduleService = getServices().schedule;
+      // const prevOpenState = this.state.isOpen
+      const isLobbyOpen = await scheduleService.isLobbyOpen();
+      // check if this is the last attempt
+      // logger.debug("previous open state: %s current open state: %s", prevOpenState, this.state.isOpen);
+      if (!isLobbyOpen) {
+        // the lobby time window has closed, place all connected participants into games with bots if needed
+        // and close this LobbyRoom down
+        this.redistributeGroups(true);
+      }
     }
   }
 
   async onAuth(client: Client, options: { token: string }, request?: http.IncomingMessage) {
     try {
       const user = await getServices().account.findUserById((request as any).session.passport.user);
-      logger.debug('checking if user %s can play the game', user.username);
-      if (await getServices().auth.checkUserCanPlayGame(user.id)) {
-        return user;
-      }
+      return user;
+      // Don't need to do this for the open beta
+      // logger.debug('checking if user %s can play the game', user.username);
+      // if (await getServices().auth.checkUserCanPlayGame(user.id)) {
+      //   return user;
+      // }
+
       // FIXME: this won't work since we don't have any registered handlers to process this client-side
       // this.sendSafe(client, { kind: 'join-failure', reason: 'Please complete all onboarding items on your dashboard before joining a game.' });
       logger.debug('user should be redirected back to the dashboard');
@@ -263,10 +292,11 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
   }
 
   async fillUsernames(usernames: Array<string>) {
-    // in development mode, allow for less than 5 usernames and fill in 
-    if (usernames.length < this.numClientsToMatch && this.devMode) {
+    // if there aren't enough users, create bots to fill in
+    if (usernames.length < this.numClientsToMatch) {
       const requiredBots = this.numClientsToMatch - usernames.length;
       const bots = await getServices().account.getOrCreateBotUsers(requiredBots);
+      // FIXME: consider making bot usernames a more display friendly
       return usernames.concat(bots.map(u => u.username)).slice(0, this.numClientsToMatch);
     }
     return usernames;

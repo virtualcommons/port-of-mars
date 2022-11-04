@@ -25,14 +25,14 @@ describe('a potential user', () => {
   });
 
   it('can begin registration', async () => {
-      const u = await sp.account.getOrCreateUser(username);
+      const u = await sp.account.getOrCreateUser("foo", username);
       expect(u.username).toEqual(username);
   });
 
   it('can submit their registration information', async () => {
     const email = 'a@foo.bar';
     const name = 'Alyssa P Hacker';
-    const user = await sp.account.getOrCreateUser(username);
+    const user = await sp.account.getOrCreateUser("foo", username);
     await registrationService.submitRegistrationMetadata(user, { username, email, name });
     expect(user.email).toBe(email);
     expect(user.name).toBe(name);

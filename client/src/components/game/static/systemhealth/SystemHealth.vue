@@ -7,7 +7,7 @@
           :src="require(`@port-of-mars/client/assets/icons/systemHealth.svg`)"
           rounded="circle"
           left
-          class="mr-1"
+          class="mr-1 mt-2"
           alt="System Health"
         />
         System Health
@@ -17,7 +17,7 @@
         {{ systemHealth }}
         <b-img
         v-bind="systemHealthIconProps"
-        class="ml-2"
+        class="ml-2 mt-2"
           :src="require(`@port-of-mars/client/assets/icons/systemHealth.svg`)"
           right
           alt="System Health Icon"

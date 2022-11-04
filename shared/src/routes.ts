@@ -9,6 +9,7 @@ export const VERIFY_PAGE = "Verify" as const;
 export const DASHBOARD_PAGE: "Dashboard" = "Dashboard";
 export const MANUAL_PAGE: "Manual" = "Manual";
 export const HOME_PAGE: "Home" = "Home";
+export const OPENLOGIN_PAGE: "OpenLogin" = "OpenLogin";
 
 export type Page =
   | "Admin"
@@ -21,7 +22,8 @@ export type Page =
   | "Register"
   | "Dashboard"
   | "Verify"
-  | "Manual";
+  | "Manual"
+  | "OpenLogin";
 export const PAGES: Array<Page> = [
   ADMIN_PAGE,
   LOGIN_PAGE,
@@ -33,6 +35,7 @@ export const PAGES: Array<Page> = [
   VERIFY_PAGE,
   MANUAL_PAGE,
   HOME_PAGE,
+  OPENLOGIN_PAGE,
 ];
 
 export function isPage(pageName: string): pageName is Page {
@@ -126,6 +129,13 @@ export const PAGE_META: {
   [MANUAL_PAGE]: {
     path: "/manual",
     name: MANUAL_PAGE,
+    meta: {
+      requiresAuth: false,
+    },
+  },
+  [OPENLOGIN_PAGE]: {
+    path: "/openlogin",
+    name: OPENLOGIN_PAGE,
     meta: {
       requiresAuth: false,
     },

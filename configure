@@ -4,10 +4,18 @@ set -o nounset
 set -o pipefail
 set -o errexit
 
-ENVIR=${1:-dev} # dev|staging|prod
+declare -A url_map
 
-echo "configuring for **${ENVIR}** environment"
+url_map['dev']='http://localhost:8081'
+url_map['staging']='https://staging.portofmars.asu.edu'
+url_map['prod']='https://portofmars.asu.edu'
+
+ENVIR=${1:-dev} # dev|staging|prod
+POM_BASE_URL=${url_map[$ENVIR]}
+
+echo "configuring for **${ENVIR}** environment with base url $POM_BASE_URL"
 
 envsubst > config.mk <<EOF
 ENVIR=$ENVIR
+POM_BASE_URL=$POM_BASE_URL
 EOF

@@ -29,7 +29,7 @@ describe('first round', () => {
 
   describe('users', () => {
     it('can join if they\'ve completed registration, passed the tutorial and not played any games this round', async () => {
-      const bob = await services.account.getOrCreateUser('bob');
+      const bob = await services.account.getOrCreateUser('foo' ,'bob');
       expect(await services.auth.checkUserCanPlayGame(bob.id, tr.id)).toBeFalsy();
       await services.registration.submitRegistrationMetadata(bob, {username: 'bob', email: 'bob@foo.com', name: 'Bob'});
       expect(await services.auth.checkUserCanPlayGame(bob.id, tr.id)).toBeFalsy();

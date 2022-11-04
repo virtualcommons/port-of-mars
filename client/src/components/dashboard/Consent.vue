@@ -1,33 +1,20 @@
 <template>
-  <b-container class="p-3" style="background-color: var(--dark-shade-75)" fluid>
+  <b-container class="p-3 h-100 d-flex flex-column" fluid>
     <h1>Port of Mars Consent Form and Email Registration</h1>
-    <b-collapse id="consent-collapse" :visible="showConsentForm">
+    <b-collapse class="consent-scrollable" id="consent-collapse" :visible="showConsentForm">
       <div class="consent-form-text">
         <p>Dear Participant,</p>
         <p>
-          I am a professor in the School of Sustainability at Arizona State
-          University. I am conducting experiments that investigate how people
-          think, act, and make decisions. This research is part of the
-          <a href="https://interplanetary.asu.edu/">
-            Interplanetary Initiative
-          </a>
-          at Arizona State University.
+        I am a professor in the <a href='https://schoolofsustainability.asu.edu/'>School of Sustainability</a> at
+        <a href='https://asu.edu'>Arizona State University</a>.
+        I am conducting experiments that investigate how people think, act, and make decisions. This research is part of
+        the <a href="https://interplanetary.asu.edu/"> Interplanetary Initiative </a> at Arizona State University.
         </p>
         <p>
-          I am requesting your participation in a tournament consisting of
-          several rounds of games. Each game in the tournament will take no more
-          than 60 minutes on average. The top ranking players in each round will
-          qualify for the next round and will receive an email invitation to
-          participate in another game on a later day. Your participation in this
-          study is strictly voluntary and you may choose to not participate or
-          to withdraw from the study at any time with no penalty; it will not
-          affect your compensation for participation up to that point.
-        </p>
-        <p>
-          <mark>
-            You must be 18 or older and a current undergraduate student at
-            Arizona State University to participate in the study.
-          </mark>
+        I am requesting your participation in a game, <em>Port of Mars</em>. The game will take no more than 60 minutes
+        on average. Your participation in this study is voluntary. <strong>You must be 18 or older to participate in the
+        study.</strong> If you choose not to participate or to withdraw from the study at any time, there will be no
+        penalty; it will not affect your compensation for participation up to that point.
         </p>
         <p>
           During the game you can chat with other participants. By signing this
@@ -39,80 +26,89 @@
             Abstain from using profanity or offensive language when
             communicating with your fellow participants
           </li>
+          <li>Only communicate with other participants via the chat options within the game</li>
         </ul>
-        <p>
-          For participation in this study you may receive extra credit if you
-          are in a class with a participating instructor.
+        <p v-if="prizeAmount">
+        If you win the game, and 4 other human players participated, your name will be added to a weekly drawing for a
+        ${{ prizeAmount }} USD Amazon gift card.
         </p>
         <p>
-          Those who qualify for the championship round will receive a limited
-          edition Port of Mars t-shirt, and the winner(s) of the Mars Madness
-          tournament will be eligible to receive <mark>{{ prize }}</mark>.
-          In the event of a tie, the prize will be split equally between the tied 
-          participants.
+          Society may benefit from this research because an understanding of how people make decisions can help us to
+          design policies and that sustain the use of shared resources, in this experiment in a habitat on Mars. You may
+          benefit from this experience by learning about how an experiment is designed and conducted, what issues are of
+          interest to social scientists and space research, and how make decisions in unanticipated situations.
+          <em>There are no foreseeable risks or discomforts to your participation</em>.
         </p>
         <p>
-          Society may benefit from this research because an understanding of how
-          people make decisions can help us to design regulations that sustain
-          the use of shared resources, in this experiment in a colony on Mars.
-          You may benefit from this experience because you learn something about
-          how an experiment is designed and conducted, what issues are of
-          interest to social scientists and space research, and how your own
-          cognitive abilities come into play in decision making situations.
-          There are no foreseeable risks or discomforts to your participation.
-        </p>
-        <p>
-          The results of the research study may be published, but your name will
-          not be used. Your responses will be confidential. However, due to the
-          group nature of this study, complete confidentiality cannot be
-          guaranteed. If you are participating in this study as part of a class
-          for extra credit, we may inform your instructor that you have
-          participated, for example. We also have to keep track of which players
-          will move on to next rounds. We will remove personal information such
-          as your email address from our database after the tournament has been
-          completed and ensure that only anonymized participant identifiers are
-          associated with your experiment data.
+          The results of the research study may be published, but your name will not be used. De-identified data
+          collected as part of the study may be shared with other researchers for research purposes only. Your responses
+          will be confidential. However, due to the group nature of this study, complete confidentiality cannot be
+          guaranteed. We delete all personal information such as your email address from our database after the study
+          has been completed and ensure that only anonymized participant identifiers are associated with any published
+          experiment data.
         </p>
         <p>
           If you have any questions concerning the research study, please
           contact
           <a href="mailto:Marco.Janssen@asu.edu">Marco.Janssen@asu.edu</a>.
         </p>
-
         <p align="justify">Sincerely,</p>
         <p align="justify">Dr. Marco Janssen</p>
+        <p class="text-muted">
+          <small>
+          This research has been reviewed by the ASU Social Behavioral Institutional Review Board (IRB). If the research
+          team has not responded to your questions or concerns or if you are unable to establish contact with the
+          research team you may contact the IRB by phone at 1.480.965.6788 or via email at
+          <a href='mailto:research.integrity@asu.edu'>research.integrity at asu dot edu</a>.
+          </small>
+        </p>
       </div>
     </b-collapse>
-    <b-button-group class="my-3">
-      <b-button squared variant="success" @click="toggleConsent">
+    <b-button-group class="my-3 align-self-start">
+      <b-button variant="success" @click="toggleConsent">
         {{ consentLabel }}
       </b-button>
-      <b-button squared variant="danger" @click="denyConsent" class="mx-2">
+      <b-button variant="danger" @click="denyConsent" class="mx-2">
         Deny Consent
       </b-button>
     </b-button-group>
-    <b-collapse v-model="consented">
-      <b-form @submit="register">
-        <b-alert v-if="existingUser" dismissible show variant="warning"
-          >It looks like you have logged in before! Please review the
+    <b-collapse class="consent-scrollable" v-model="consented">
+      <b-form class="pr-3" @submit="register">
+        <b-alert v-if="existingUser" dismissible show variant="warning">
+          It looks like you have logged in before! Please review the
           information below, and resend your verification email if you have not
           received it yet. Sometimes email can take a few minutes to arrive in
           your inbox and you may need to check your spam folder as well.
         </b-alert>
         <b-alert v-else dismissible show variant="success"
-          >Please fill out the fields below with your name and email so we can
-          verify your email.
+          >Please fill out the fields below with your desired username and email so we can
+          verify your email. Your full name is required if you wish to be eligible to win
+          a gift card, however, we will never publish nor share this information.
         </b-alert>
         <b-form-group
-          description="Please enter your full name."
-          label="Name"
+          description="Choose a public username to be displayed to other Port of Mars participants."
+          label="Username"
+          label-for="username"
+        >
+          <b-form-input
+            id="username"
+            v-model="username"
+            placeholder="Username"
+            required
+            size="lg"
+            type="text"
+          >
+          </b-form-input>
+        </b-form-group>
+        <b-form-group
+          description="To be eligible to win a gift card, please enter your full name."
+          label="Name (optional)"
           label-for="name"
         >
           <b-form-input
             id="name"
             v-model="name"
             placeholder="Enter your full name"
-            required
             size="lg"
             type="text"
           >
@@ -153,15 +149,13 @@
           Please check your email and click on the link to verify your email.
         </b-alert>
         <b-button
-          v-if="!existingUser"
+          v-if="!hasConsented"
           :disabled="submitDisabled"
           type="submit"
           variant="success"
-          squared
           >Grant Consent to Participate
         </b-button>
         <b-button
-          squared
           v-else
           type="submit"
           :disabled="isVerificationDisabled"
@@ -176,6 +170,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { url } from "@port-of-mars/client/util";
+import { DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
 import Messages from "@port-of-mars/client/components/dashboard/Messages.vue";
 import _ from "lodash";
 
@@ -189,9 +184,10 @@ export default class Consent extends Vue {
   consented = false;
   verifyEmail = "";
   dateConsented: Date | null = null;
+  hasConsented = false;
   isVerified = false;
   isVerificationDisabled = false;
-  prize = "a cash prize of up to $1000 USD";
+  prizeAmount = 0;
 
   get messages() {
     return this.$tstore.state.dashboardMessages;
@@ -215,7 +211,7 @@ export default class Consent extends Vue {
 
   get submitDisabled() {
     return (
-      this.name.length === 0 || this.email.length === 0 || !this.emailsMatch
+      this.username.length === 0 || this.email.length === 0 || !this.emailsMatch
     );
   }
 
@@ -225,16 +221,23 @@ export default class Consent extends Vue {
 
   async created() {
     await this.$ajax.get(url("/registration/authenticated"), (response) => {
-      if (response.data !== null) {
+      if (response.data) {
         const data = response.data;
+        this.username = data.username;
         this.name = data.name;
         this.email = data.email;
         this.verifyEmail = data.email;
         this.isVerified = data.isVerified;
         if (data.dateConsented !== null) {
           this.dateConsented = new Date(Date.parse(data.dateConsented));
+          this.hasConsented = true;
         }
         this.consented = false;
+      }
+    });
+    await this.$ajax.get(url("/status/winnings"), (response) => {
+      if (response.data) {
+        this.prizeAmount = response.data.giftCardAmount;
       }
     });
   }
@@ -242,21 +245,28 @@ export default class Consent extends Vue {
   async register(e: Event) {
     e.preventDefault();
     if (this.emailsMatch && !_.isEmpty(this.email)) {
-      const formData = { name: this.name, email: this.email };
-      // temporarily disable verification
-      this.isVerificationDisabled = true;
-      this.dateConsented = new Date();
+      const formData = { username: this.username, email: this.email, name: this.name };
       await this.$ajax.post(
         this.grantConsentUrl,
         ({ data, status }) => {
           if (status === 200) {
-            this.$tstore.commit("SET_DASHBOARD_MESSAGE", {
-              kind: "success",
-              message: `We have sent an email to ${this.email}.
-             Please wait for it to arrive then click on the link inside to verify your email.
-             It may take some time to arrive, and you may need to check your spam folder as well.
-             You can close this browser window as the link will take you back to Port of Mars again.`,
-            });
+            this.$tstore.state.user.username = this.username;
+            // temporarily disable verification
+            this.isVerificationDisabled = true;
+            this.hasConsented = true;
+            // if user is already verified (mostly for dev mode), redirect to dashboard
+            if (this.isVerified) {
+              this.$router.push({ name: DASHBOARD_PAGE });
+            }
+            else {
+              this.$tstore.commit("SET_DASHBOARD_MESSAGE", {
+                kind: "success",
+                message: `We have sent an email to ${this.email}.
+               Please wait for it to arrive then click on the link inside to verify your email.
+               It may take some time to arrive, and you may need to check your spam folder as well.
+               You can close this browser window as the link will take you back to Port of Mars again.`,
+              });
+            }
             // re-enable the re-send verification email button
             setTimeout(() => (this.isVerificationDisabled = false), 20000);
           }
@@ -276,7 +286,7 @@ export default class Consent extends Vue {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 h2 {
   margin-bottom: 0;
   text-transform: uppercase;
@@ -294,5 +304,14 @@ mark {
 }
 p {
   font-size: 1.2rem;
+}
+
+.consent-form-text {
+  padding: 0.5rem;
+  background-color: $light-shade-05;
+}
+
+.consent-scrollable {
+  overflow: auto;
 }
 </style>

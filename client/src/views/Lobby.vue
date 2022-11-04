@@ -6,16 +6,17 @@
       class="h-100 w-100 m-0 p-0 text-center"
       style="background-color: var(--dark-shade-75)"
     >
-      <b-col>
+      <b-col align-self="center">
         <h1 class='m-3'>Next Launch Time</h1>
         <h2 class="m-4">
           <mark>{{ scheduledGameTimeString }}</mark>
         </h2>
         <p class='lead'>
-          You'll join a game as soon as there are enough players to form a full group.
+          You'll join a game as soon as there are enough players to form a full group. After a certain amount of time passes a game
+          may begin immediately with bots filling in for the rest of the group.
         </p>
         <p>
-          This lobby will remain open up to 30 minutes after the scheduled launch time.
+          This lobby will remain open up to {{ minutesOpenAfter }} minutes after the scheduled launch time.
         </p>
       </b-col>
       <div class="w-100"></div>
@@ -48,7 +49,7 @@ import { applyWaitingServerResponses } from "@port-of-mars/client/api/lobby/resp
 import { WaitingRequestAPI } from "@port-of-mars/client/api/lobby/request";
 import { isDevOrStaging } from "@port-of-mars/shared/settings";
 import { LOBBY_NAME } from "@port-of-mars/shared/lobby";
-import { REGISTER_PAGE, TUTORIAL_PAGE, DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
+import { REGISTER_PAGE, DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
 import { Role } from "@port-of-mars/shared/types";
 
 @Component({})
@@ -59,6 +60,8 @@ export default class Lobby extends Vue {
   private waitingUserCount: number = 0;
   private nextAssignmentTime: number = 0;
   private scheduledGameTime: number = 0;
+  message: string = "";
+  private minutesOpenAfter: number = 0;
 
   get roles() {
     return this.$tstore.getters.roles;
@@ -83,6 +86,7 @@ export default class Lobby extends Vue {
   async created() {
     const dashboardAPI = new DashboardAPI(this.$tstore, this.$ajax);
     const dashboardData = await dashboardAPI.getData();
+    this.minutesOpenAfter = dashboardData.minutesOpenAfter;
     // check if player can play a game
     const playerTaskCompletion = dashboardData.playerTaskCompletion;
     // FIXME: repeated logic from Dashboard.vue
@@ -96,14 +100,13 @@ export default class Lobby extends Vue {
       await this.$router.push({ name: REGISTER_PAGE });
       return;
     }
-    // XXX: currently disabled: go to tutorial if player has not taken tutorial
+    // currently disabled
     /*
     else if (playerTaskCompletion.mustTakeTutorial) {
       dashboardAPI.message("Please take the tutorial before joining the lobby to participate.");
       await this.$router.push({ name: TUTORIAL_PAGE });
       return;
     } 
-    */
     else if (playerTaskCompletion.mustTakeIntroSurvey) {
       dashboardAPI.message(
         "Please take the introductory survey before joining the lobby to participate."
@@ -118,7 +121,9 @@ export default class Lobby extends Vue {
       await this.$router.push({ name: DASHBOARD_PAGE });
       return;
     }
+    */
     // check if there is a game scheduled for play
+    // FIXME: add lobby error message to server side instead of hard coding here
     if (!dashboardData.isLobbyOpen) {
       dashboardAPI.message(
         "You can join the lobby 10 minutes before a game is scheduled to start. Please try again later."

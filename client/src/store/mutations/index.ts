@@ -18,12 +18,8 @@ export default {
     Object.assign(state, getInitialStoreState());
   },
 
-  SET_TOURNAMENT_STATUS(state: State, payload: TournamentStatus) {
-    Vue.set(state, 'tournamentStatus', payload);
-  },
-
-  SET_SIGNUP_ENABLED(state: State, payload: boolean) {
-    Vue.set(state, 'signupEnabled', payload);
+  SET_SCHEDULED_GAMES(state: State, payload: Array<Date>) {
+    Vue.set(state,'scheduledGames', payload);
   },
 
   SET_DASHBOARD_MESSAGE(state: State, payload: DashboardMessage) {

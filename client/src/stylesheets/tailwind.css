@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h1 {
+    @apply text-5xl;
+    @apply font-bold;
+    @apply text-white;
+    @apply uppercase;
+    @apply tracking-wider;
+    @apply space-y-5;
+    @apply py-3;
+    font-family: Roboto;
+  }
+
+  h2 {
+    @apply text-4xl;
+    @apply font-bold;
+    @apply uppercase;
+    @apply text-white;
+    @apply tracking-wider;
+    @apply space-y-5;
+    @apply py-3;
+    font-family: Roboto;
+  }
+
+  h3 {
+    @apply text-3xl;
+    @apply font-bold;
+    @apply text-white;
+    @apply tracking-wider;
+    @apply space-y-5;
+    @apply py-3;
+    font-family: Roboto;
+  }
+
+  h4 {
+    @apply text-2xl;
+    @apply font-bold;
+    @apply text-white;
+    @apply tracking-wider;
+    @apply space-y-5;
+    @apply py-3;
+    font-family: Roboto;
+  }
+
+  p {
+    @apply text-white;
+    @apply text-xl;
+    font-family: Exo;
+  }
+
+  span {
+    @apply text-white;
+    @apply text-xl;
+    font-family: Exo;
+  }
+
+  section {
+    @apply p-12;
+    @apply space-y-5;
+  }
+
+  figcaption {
+    @apply text-white;
+    @apply text-lg;
+    @apply bg-stone-500/50;
+    @apply p-4;
+  }
+
+  img {
+    @apply w-full;
+  }
+
+  a {
+    @apply text-xl;
+  }
+
+  main {
+    @apply pt-[140px];
+  }
+}
+
+@layer components {
+  .btn-main {
+    @apply rounded-lg font-semibold py-2 px-4 tracking-[.15em] bg-main text-white/80 hover:bg-main/70 hover:text-white;
+  }
+
+  .link {
+    @apply rounded-lg px-3 py-2 tracking-wide no-underline text-white/80 hover:bg-slate-100/20 hover:text-white;
+  }
+}

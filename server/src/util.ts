@@ -104,3 +104,48 @@ export class ServerError extends Error implements ServerErrorData {
     return this.displayMessage ?? this.message;
   }
 }
+
+export async function generateUsername() {
+  const NOUNS = [
+    'Ferret',
+    'Marmot',
+    'Bison',
+    'Parrot',
+    'Meerkat',
+    'Orca',
+    'Leopard',
+    'Raccoon',
+    'Quagga',
+    'Newt',
+    'Starfish',
+    'Chameleon',
+    'Oranguatn',
+    'Wolverine',
+    'Ibex',
+    'Antelope',
+    'Lizard',
+    'Camel',
+    ];
+    
+  const ADJECTIVES = [
+    'Astral',
+    'Celestial',
+    'Cosmic',
+    'Solar',
+    'Orbiting',
+    'Elliptical',
+    'Martian',
+  ];
+
+  let isUnique = false;
+  let username = "";
+  while (!isUnique) {
+    const adj = Math.floor(Math.random() * ADJECTIVES.length);
+    const noun = Math.floor(Math.random() * NOUNS.length);
+    const num = Math.floor(1000 + Math.random() * 9000);
+    username = ADJECTIVES[adj] + NOUNS[noun] + num;
+    isUnique = await getServices().account.isUsernameAvailable(username);
+  }
+
+  return username;
+}

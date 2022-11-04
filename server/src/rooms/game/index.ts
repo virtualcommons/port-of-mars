@@ -39,7 +39,7 @@ import {
 import { getServices } from "@port-of-mars/server/services";
 import { settings } from "@port-of-mars/server/settings";
 import { Requests, Responses } from "@port-of-mars/shared/game";
-import { Phase, ROLES } from "@port-of-mars/shared/types";
+import { Phase, Role, ROLES } from "@port-of-mars/shared/types";
 import { GameEvent } from "@port-of-mars/server/rooms/game/events/types";
 import _ from "lodash";
 import { DBPersister } from "@port-of-mars/server/services/persistence";
@@ -148,8 +148,16 @@ async function onCreate(
   shouldEnableDb?: boolean
 ): Promise<void> {
   shouldEnableDb = shouldEnableDb ?? false;
-  options = options ?? (await buildGameOpts());
-  room.setState(new GameState(options));
+  options = options ?? (await buildGameOpts()); // FIXME: should this ever be allowed to be empty
+  // FIXME: hack to inject User.isBot properties into the PlayerSet
+  // build a dictionary mapping Role -> isBot
+  const userRoles = options.userRoles;
+  const users = await getServices().account.findUsers(Object.keys(userRoles));
+  const botRoles: Map<Role, boolean> = new Map();
+  for (const user of users) {
+    botRoles.set(userRoles[user.username], user.isBot);
+  }
+  room.setState(new GameState(options, botRoles));
   room.setPrivate(true);
   room.onMessage("*", (client, type, message) => {
     // we can refactor this.prepareRequest to not run a billion long switch statement and instead have
@@ -234,6 +242,9 @@ export class GameRoom extends Room<GameState> implements Game {
       if (user) {
         const username = user.username;
         logger.debug(`GameRoom.onAuth found user ${username}`);
+        // save user ip address
+        const ip = ((request.headers['x-forwarded-for'] || request.connection.remoteAddress) ?? "").toString();
+        await getServices().account.setLastPlayerIp(user.id, ip);
         if (this.state.hasUser(username)) {
           return user;
         }

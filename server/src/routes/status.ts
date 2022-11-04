@@ -7,13 +7,21 @@ export const statusRouter = Router();
 statusRouter.get('/', async (req: Request, res: Response, next) => {
   // provide tournament status + schedule
   try {
-    const isSignUpEnabled = await getServices().settings.isSignUpEnabled();
-    const tournamentStatus = await getServices().tournament.getTournamentStatus();
+    const gameDates = await getServices().schedule.getScheduledDates();
     res.json({
       user: req.user,
-      isSignUpEnabled,
-      tournamentStatus,
+      schedule: gameDates.map(d => d.date.getTime()),
     });
+  }
+  catch (e) {
+    next(e);
+  }
+});
+
+statusRouter.get('/winnings', async (req: Request, res: Response, next) => {
+  // return the current gift card amount setting
+  try {
+    res.json({ giftCardAmount: await getServices().settings.giftCardAmount() })
   }
   catch (e) {
     next(e);

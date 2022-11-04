@@ -28,12 +28,16 @@ export const DYNAMIC_SETTINGS_PATH = '/run/secrets/settings.json';
 export interface SettingsData {
   // display an error message to users connecting to the lobby if more than `maxConnections` clients are connected
   maxConnections: number
+  // amount in USD for the regular gift card drawing
+  giftCardAmount: number
   // sign up enabled controls where the user is redirected once their email is verified
   isSignUpEnabled: boolean
   // if true, set all checks to true (isVerified, passedQuiz, completed intro and exit surveys), otherwise only bypass isVerified
   skipDevUserChecks: boolean
   // enables players to participate as many times as they wish
   isFreePlayEnabled: boolean
+  // whether to run the automatic game scheduler
+  isAutoSchedulerEnabled: boolean
 }
 
 export class RedisSettings {
@@ -66,12 +70,20 @@ export class RedisSettings {
     return _.toNumber(await this.client.hget('settings', 'maxConnections'));
   }
 
+  async giftCardAmount(): Promise<number> {
+    return _.toNumber(await this.client.hget('settings', 'giftCardAmount'));
+  }
+
   async isSignUpEnabled(): Promise<boolean> {
     return !!_.toNumber(await this.client.hget('settings', 'isSignUpEnabled'));
   }
 
   async isFreePlayEnabled(): Promise<boolean> {
     return !!_.toNumber(await this.client.hget('settings', 'isFreePlayEnabled'));
+  }
+
+  async isAutoSchedulerEnabled(): Promise<boolean> {
+    return !!_.toNumber(await this.client.hget('settings', 'isAutoSchedulerEnabled'));
   }
 
   async report(): Promise<string> {

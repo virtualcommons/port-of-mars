@@ -3,7 +3,7 @@ import _ from "lodash";
 import { VueRouter } from "vue-router/types/router";
 import { TStore } from "@port-of-mars/client/plugins/tstore";
 import { RoomId } from "@port-of-mars/shared/types";
-import { LOGIN_PAGE, DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
+import { OPENLOGIN_PAGE, DASHBOARD_PAGE, REGISTER_PAGE, HOME_PAGE } from "@port-of-mars/shared/routes";
 import { DashboardMessage } from "@port-of-mars/shared/types";
 import { url } from "@port-of-mars/client/util";
 
@@ -35,7 +35,7 @@ export class AjaxRequest {
   _roomId?: RoomId;
 
   errorRoutes: Map<number, string> = new Map([
-    [401, LOGIN_PAGE],
+    [401, OPENLOGIN_PAGE],
     [403, DASHBOARD_PAGE],
     [404, DASHBOARD_PAGE],
   ]);
@@ -53,7 +53,8 @@ export class AjaxRequest {
     await this.post(devLoginUrl, ({ data, status }) => {
       if (status === 200) {
         this.store.commit("SET_USER", data.user);
-        this.router.push({ name: DASHBOARD_PAGE });
+        if (data.user.isVerified) this.router.push({ name: DASHBOARD_PAGE });
+        else this.router.push({ name: REGISTER_PAGE });
       } else {
         return data;
       }
@@ -152,7 +153,7 @@ export class AjaxRequest {
         else {
           console.error("Unhandled error in request, returning to home screen", e);
           // FIXME: add context so that login page has information about why they were redirected
-          this.router.push({ name: LOGIN_PAGE });
+          this.router.push({ name: OPENLOGIN_PAGE });
         }
       }
     }
@@ -187,7 +188,7 @@ export class AjaxRequest {
         }
         else {
           console.error("Unhandled error in request, returning to home screen", e);
-          this.router.push({ name: LOGIN_PAGE });
+          this.router.push({ name: HOME_PAGE });
         }
       }
     }

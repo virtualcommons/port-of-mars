@@ -4,6 +4,7 @@ import {AuthService} from "@port-of-mars/server/services/auth";
 import {RegistrationService} from "@port-of-mars/server/services/registration";
 import {AccountService} from "@port-of-mars/server/services/account";
 import {TournamentService} from "@port-of-mars/server/services/tournament";
+import {ScheduleService} from "@port-of-mars/server/services/schedule";
 import {QuizService} from "@port-of-mars/server/services/quiz";
 import {DashboardService} from "@port-of-mars/server/services/dashboard";
 import {getConnection} from "@port-of-mars/server/util";
@@ -69,6 +70,14 @@ export class ServiceProvider {
       this._tournament = new TournamentService(this);
     }
     return this._tournament;
+  }
+
+  private _schedule?: ScheduleService;
+  get schedule() {
+    if (!this._schedule) {
+      this._schedule = new ScheduleService(this);
+    }
+    return this._schedule;
   }
 
   private _dashboard?: DashboardService;

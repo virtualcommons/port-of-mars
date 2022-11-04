@@ -3,7 +3,6 @@
     <template v-if="schedule.length > 0">
       <h4 :id="scheduleId">Schedule</h4>
       <ul v-if="showInstructions" class="lead p-1">
-        <li>You can only participate in <mark>one game per tournament round</mark></li>
         <li>Sign in and <em>join the game lobby</em> when a game is scheduled</li>
         <li>Games will automatically start in the lobby when at least 5 players are connected</li>
         <li>
@@ -18,7 +17,7 @@
       <b-list-group-item
         class="p-1 text-center"
         v-for="game in upcomingGames"
-        :key="game.launchTime"
+        :key="game.launchId"
         variant="dark"
       >
         <div class="launch-date">
@@ -60,9 +59,6 @@ export default class Schedule extends Vue {
   @Prop()
   schedule!: Array<number>;
 
-  @Prop()
-  roundNumber!: number;
-
   @Prop({ default: false })
   showInstructions!: boolean;
 
@@ -72,6 +68,7 @@ export default class Schedule extends Vue {
     return this.schedule.map(gameTime => {
       const scheduledDate = new Date(gameTime);
       return {
+        launchId: gameTime,
         launchDate: scheduledDate.toLocaleDateString("en-US"),
         launchTime: scheduledDate.toLocaleTimeString("en-US", {
           hour: "numeric",
@@ -80,7 +77,7 @@ export default class Schedule extends Vue {
           timeZoneName: "short"
         }),
         addToCalendar: {
-          title: `Port of Mars Round ${this.roundNumber}`,
+          title: `Port of Mars Launch`,
           location: this.SITE_URL,
           start: scheduledDate,
           duration: [1, "hour"],
@@ -93,7 +90,6 @@ export default class Schedule extends Vue {
   get calendarDescription() {
     return (
       `Register and complete all Port of Mars Mission Control onboarding tasks at ${this.SITE_URL}.` +
-      ` You must complete onboarding before you can participate in Round ${this.roundNumber} of the Mars Madness tournament.\n\n` +
       `Sign in and join the game lobby up to 10 minutes before launch time. Games will automatically start when at least 5 players are connected to the game lobby.`
     );
   }

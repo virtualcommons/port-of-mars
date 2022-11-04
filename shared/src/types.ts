@@ -356,6 +356,7 @@ export interface DashboardData {
   schedule: Array<number>; // list of timestamps for upcoming games
   isSignUpEnabled: boolean;
   isLobbyOpen: boolean;
+  minutesOpenAfter: number;
   currentRoundNumber: number;
   stats: Stats;
 }
