@@ -353,6 +353,7 @@ export interface PlayerInvestmentExport {
   role: Role;
   investment: Investment;
   name: string;
+  availableTimeBlocks: number;
   value: number;
   initialTimeRemaining: number;
 }
@@ -368,6 +369,7 @@ export class PlayerInvestmentSummarizer extends Summarizer<PlayerInvestmentExpor
         role,
         investment,
         name: "pendingInvestment",
+        availableTimeBlocks: game.players[role].timeBlocks,
         value: game.players[role].pendingInvestments[investment],
       })),
       {
@@ -375,6 +377,7 @@ export class PlayerInvestmentSummarizer extends Summarizer<PlayerInvestmentExpor
         role,
         investment: "systemHealth",
         name: "pendingInvestment",
+        availableTimeBlocks: game.players[role].timeBlocks,
         value: game.players[role].pendingInvestments["systemHealth"],
       },
       ...RESOURCES.map((investment: Resource) => ({
@@ -382,6 +385,7 @@ export class PlayerInvestmentSummarizer extends Summarizer<PlayerInvestmentExpor
         role,
         investment,
         name: "cost",
+        availableTimeBlocks: game.players[role].timeBlocks,
         value: game.players[role].costs[investment],
       })),
       {
@@ -389,6 +393,7 @@ export class PlayerInvestmentSummarizer extends Summarizer<PlayerInvestmentExpor
         role,
         investment: "systemHealth",
         name: "cost",
+        availableTimeBlocks: game.players[role].timeBlocks,
         value: game.players[role].costs.systemHealth,
       },
       ...RESOURCES.map((investment: Resource) => ({
@@ -396,6 +401,7 @@ export class PlayerInvestmentSummarizer extends Summarizer<PlayerInvestmentExpor
         role,
         investment,
         name: "inventory",
+        availableTimeBlocks: game.players[role].timeBlocks,
         value: game.players[role].inventory[investment],
       })),
       {
@@ -403,6 +409,7 @@ export class PlayerInvestmentSummarizer extends Summarizer<PlayerInvestmentExpor
         role,
         investment: "systemHealth",
         name: "inventory",
+        availableTimeBlocks: game.players[role].timeBlocks,
         value: game.players[role].systemHealthChanges.investment,
       },
     ]);
@@ -411,13 +418,14 @@ export class PlayerInvestmentSummarizer extends Summarizer<PlayerInvestmentExpor
   *_summarizeGame(
     events: Array<entity.GameEvent>
   ): Generator<PlayerInvestmentExport> {
-    const game = loadSnapshot(events[0].payload as GameSerialized);
-    let prev = this._summarizeEvent(game, events[0]);
+    const initialEvent = events[0];
+    const game = loadSnapshot(initialEvent.payload as GameSerialized);
+    let prev = this._summarizeEvent(game, initialEvent);
     for (const row of prev) {
       yield {
-        id: events[0].id,
+        id: initialEvent.id,
         ...row,
-        initialTimeRemaining: events[0].timeRemaining,
+        initialTimeRemaining: initialEvent.timeRemaining,
         ...extractAfter(game),
       };
     }

@@ -575,7 +575,7 @@ program
   )
   .addCommand(
     program.createCommand('dump')
-      .description('dump db to csvs')
+      .description('dump game data for a given tournament round id to a pile of CSV files')
       .requiredOption('--tournamentRoundId <tournamentRoundId>', 'tournament round id', customParseInt)
       .option('--gids <game_ids>', 'specific game ids to export', toIntArray, [] as Array<number>)
       .action(async (cmd) => {
