@@ -58,9 +58,14 @@
             <p class="my-4" v-if="accomplishmentType === 'purchasable'">
               This information is currently private and cannot be viewed at this time.
             </p>
-            <p v-if="accomplishmentType === 'purchased'" class="my-auto text-center">
-              No purchased accomplishments
-            </p>
+            <div class="scroll p-3" v-if="accomplishmentType === 'purchased'">
+              <AccomplishmentCard
+                v-for="accomplishment in accomplishmentCards"
+                :key="accomplishment.id"
+                :accomplishment="accomplishment"
+                :showDescription="false"
+              ></AccomplishmentCard>
+            </div>
           </div>
           <!-- col: accomplishments -->
           <div class="scroll p-3" v-else-if="roleData.isSelf || isUnderAudit">
@@ -99,7 +104,7 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
 export default class PlayerModal extends Vue {
   @Inject() readonly api!: GameRequestAPI;
   @Prop() role!: Role;
-  accomplishmentType: string = "purchasable";
+  accomplishmentType: string = "purchased";
 
   get roleData() {
     return {
