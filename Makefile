@@ -18,10 +18,9 @@ PGPASS_PATH=keys/.pgpass
 SECRET_KEY_PATH=keys/secret_key
 SENTRY_DSN_PATH=keys/sentry_dsn
 SENTRY_DSN=$(shell cat $(SENTRY_DSN_PATH))
-SENTRY_DSN_ASSETS_PATH=shared/src/assets/sentry-dsn.ts
 MAIL_API_KEY_PATH=keys/mail_api_key
 SECRETS=$(MAIL_API_KEY_PATH) $(DB_PASSWORD_PATH) $(ORMCONFIG_PATH) $(PGPASS_PATH) $(SENTRY_DSN_PATH) $(SECRET_KEY_PATH)
-BUILD_ID_ASSETS_PATH=shared/src/assets/build-id.ts
+SHARED_CONFIG_PATH=shared/src/assets/config.ts
 BUILD_ID=$(shell git describe --tags --abbrev=1)
 
 .PHONY: build
@@ -106,8 +105,8 @@ $(SECRET_KEY_PATH): | keys
 
 .PHONY: settings
 settings: $(SENTRY_DSN_PATH) $(SECRET_KEY_PATH) | keys
-	echo 'export const BUILD_ID = "${BUILD_ID}";' > $(BUILD_ID_ASSETS_PATH)
-	echo 'export const SENTRY_DSN = "${SENTRY_DSN}";' > $(SENTRY_DSN_ASSETS_PATH)
+	echo 'export const BUILD_ID = "${BUILD_ID}";' > $(SHARED_CONFIG_PATH)
+	echo 'export const SENTRY_DSN = "${SENTRY_DSN}";' >> $(SHARED_CONFIG_PATH)
 
 docker-compose.yml: base.yml staging.base.yml $(ENVIR).yml config.mk $(DB_DATA_PATH) $(DATA_DUMP_PATH) $(LOG_DATA_PATH) $(REDIS_SETTINGS_PATH) $(ORMCONFIG_PATH) $(NUXT_ORMCONFIG_PATH) $(PGPASS_PATH) settings
 	case "$(ENVIR)" in \

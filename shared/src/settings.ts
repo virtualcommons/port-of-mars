@@ -1,7 +1,6 @@
-export {BUILD_ID} from "./assets/build-id";
-export {SENTRY_DSN} from "./assets/sentry-dsn";
+export { BUILD_ID, SENTRY_DSN } from "./assets/config";
 
-const ENVIRONMENT = process.env.NODE_ENV || 'development';
+export const ENVIRONMENT = process.env.NODE_ENV || 'development';
 
 export function isDev(): boolean {
   return ENVIRONMENT === 'development';
