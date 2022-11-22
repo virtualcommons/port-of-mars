@@ -11,10 +11,6 @@
     "resolveJsonModule": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "typeRoots": [
-      "node_modules/@types",
-      "../types"
-    ],
     "paths": {
       "@port-of-mars/client/*": [
         "src/*"
@@ -30,13 +26,10 @@
   },
   "include": [
     "src/**/*.ts",
-    "src/**/*.tsx",
     "src/**/*.vue",
     "tests/**/*.ts",
-    "tests/**/*.tsx",
     "../shared/**/*.ts",
-    "node_modules/@types/jest/index.d.ts",
-    "node_modules/vue-socket.io-extended/types/index.d.ts"
+    "node_modules/@types/jest/index.d.ts"
   ],
   "exclude": [
     "node_modules"
