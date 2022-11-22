@@ -1037,6 +1037,8 @@ export class Player
 
   bot: Bot;
 
+  isCompulsivePhilanthropist = false;
+
   act(state: GameState): Array<GameEvent> {
     return this.bot.act(state, this);
   }
@@ -1111,6 +1113,7 @@ export class Player
   reset(): void {
     this.resetCosts();
     this.ready = false;
+    this.isCompulsivePhilanthropist = false;
     this.refreshPurchasableAccomplishments();
     this.resetTimeBlocks();
   }
@@ -1123,6 +1126,12 @@ export class Player
 
   refreshPurchasableAccomplishments(): void {
     this.accomplishments.refreshPurchasableAccomplishments(this.role);
+  }
+
+  setCompulsivePhilanthropist(): void {
+    this.isCompulsivePhilanthropist = true;
+    this.systemHealthChanges.investment = this.timeBlocks;
+    this.timeBlocks = 0;
   }
 
   resetTimeBlocks(): void {
@@ -1171,9 +1180,11 @@ export class Player
   }
 
   invest(): void {
-    logger.info("investing %o", this.pendingInvestments);
-    this.systemHealthChanges.investment = this.pendingInvestments.systemHealth;
-    this.applyPendingInvestments();
+    if (! this.isCompulsivePhilanthropist) {
+      logger.info("investing %o", this.pendingInvestments);
+      this.systemHealthChanges.investment = this.pendingInvestments.systemHealth;
+      this.applyPendingInvestments();
+    }
   }
 
   clearPendingInventory(): void {
