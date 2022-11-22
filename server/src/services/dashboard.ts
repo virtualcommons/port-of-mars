@@ -144,13 +144,13 @@ export class DashboardService extends BaseService {
       schedule: gameDates.map(d => d.date.getTime()),
       isSignUpEnabled: await this.sp.settings.isSignUpEnabled(),
       currentRoundNumber: round.roundNumber,
-      isLobbyOpen: await this.sp.schedule.isLobbyOpen(),
+      isLobbyOpen: await this.isLobbyOpen(user),
       minutesOpenAfter: gameDates.length ? gameDates[0].minutesOpenAfter : 0,
       stats
     }
   }
 
   async isLobbyOpen(user: User): Promise<boolean> {
-    return this.sp.schedule.isLobbyOpen();
+    return settings.lobby.devMode || this.sp.schedule.isLobbyOpen();
   }
 }
