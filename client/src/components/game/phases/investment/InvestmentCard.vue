@@ -61,7 +61,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faClock } from "@fortawesome/free-solid-svg-icons/faClock";
 import { faBriefcase } from "@fortawesome/free-solid-svg-icons/faBriefcase";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { Resource } from "@port-of-mars/shared/types";
+import { Investment, Resource } from "@port-of-mars/shared/types";
 import { COST_INAFFORDABLE } from "@port-of-mars/shared/settings";
 
 library.add(faClock);
@@ -71,7 +71,7 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
 @Component({})
 export default class InvestmentCard extends Vue {
   @Prop()
-  name!: Resource;
+  name!: Investment;
 
   @Prop()
   cost!: number;
@@ -120,16 +120,14 @@ export default class InvestmentCard extends Vue {
     return this.$tstore.getters.player.pendingInvestments[this.name];
   }
 
-  get currentInfluence() {
-    const influence = this.$tstore.getters.player.inventory[this.name];
-    return influence;
-  }
-
   get maxInfluenceInvestment() {
     if (this.breakdownOfTrust) {
-      return Math.min(this.remainingTimeBlocks, this.currentInfluence);
+      // in a breakdown of trust event show existing influence resources
+      // to let the player select 2 Influence resources to preserve
+      const influenceResourceName = this.name as Resource
+      const influence = this.$tstore.getters.player.inventory[influenceResourceName];
+      return Math.min(this.remainingTimeBlocks, influence);
     }
-    // FIXME: 10 should be pulled from somewhere else, max time blocks in the store?
     return this.cost > this.remainingTimeBlocks ? this.units : this.maxTimeBlocks;
   }
 
