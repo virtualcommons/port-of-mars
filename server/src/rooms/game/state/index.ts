@@ -1130,8 +1130,8 @@ export class Player
 
   setCompulsivePhilanthropist(): void {
     this.isCompulsivePhilanthropist = true;
-    this.systemHealthChanges.investment = this.timeBlocks;
-    this.timeBlocks = 0;
+    // this.systemHealthChanges.investment = this.timeBlocks;
+    // this.timeBlocks = 0;
   }
 
   resetTimeBlocks(): void {
@@ -1180,11 +1180,15 @@ export class Player
   }
 
   invest(): void {
-    if (! this.isCompulsivePhilanthropist) {
-      logger.info("investing %o", this.pendingInvestments);
-      this.systemHealthChanges.investment = this.pendingInvestments.systemHealth;
-      this.applyPendingInvestments();
+    if (this.isCompulsivePhilanthropist) {
+      logger.info("compulsive philanthropist: adding all timeblocks to system health")
+      this.pendingInvestments.reset();
+      // take dynamic system health costs into account (Difficult Conditions Event)
+      this.pendingInvestments.systemHealth = Math.floor(this.timeBlocks / this.costs.systemHealth);
     }
+    logger.info("investing %o", this.pendingInvestments);
+    this.systemHealthChanges.investment = this.pendingInvestments.systemHealth;
+    this.applyPendingInvestments();
   }
 
   clearPendingInventory(): void {
