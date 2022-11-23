@@ -1,6 +1,5 @@
 import { Router, Request, Response } from 'express';
 import { getServices } from '@port-of-mars/server/services';
-import { TournamentStatus } from '@port-of-mars/shared/types';
 
 export const statusRouter = Router();
 
