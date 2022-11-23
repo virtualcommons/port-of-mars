@@ -199,7 +199,7 @@ export class TimeInvested extends GameEventWithData {
       const auditChatMessage: ChatMessageData = {
         message: `${this.data.role} earned ${resources}.`,
         role: this.data.role,
-        dateCreated: new Date().getDate(),
+        dateCreated: new Date().getTime(),
         round: game.round,
       };
 
