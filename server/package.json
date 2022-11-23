@@ -75,7 +75,6 @@
     "@vrbo/pino-rotating-file": "^2.0.1",
     "async-mutex": "^0.2.6",
     "bcryptjs": "^2.4.3",
-    "cas": "https://github.com/joshchan/node-cas",
     "colyseus": "^0.14.16",
     "commander": "^9.0.0",
     "connect-redis": "^6.0.0",
