@@ -38,7 +38,8 @@ const RESPONSE_MAP: ServerResponse = {
   timeBlocks: "SET_TIME_BLOCKS",
   ready: "SET_READINESS",
   victoryPoints: "SET_VICTORY_POINTS",
-  systemHealthChanges: "SET_SYSTEM_HEALTH_CHANGES"
+  systemHealthChanges: "SET_SYSTEM_HEALTH_CHANGES",
+  isCompulsivePhilanthropist: "SET_COMPULSIVE_PHILANTHROPIST"
 };
 
 function applyCostResponses(role: Role, costs: any, store: TStore) {
@@ -216,6 +217,7 @@ export function applyGameServerResponses<T>(room: Room, store: TStore, sfx: SfxM
   room.onMessage("set-player-role", (msg: SetPlayerRole) => {
     store.commit("SET_PLAYER_ROLE", msg.role);
   });
+  
   room.onMessage("set-error", (msg: SetError) => {
     store.commit("SET_DASHBOARD_MESSAGE", {
       kind: "warning",

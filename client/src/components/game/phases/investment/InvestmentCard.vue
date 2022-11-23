@@ -29,7 +29,7 @@
         <b-form-spinbutton
           v-model="units"
           @input="setInvestmentAmount(units)"
-          :readonly="playerReady || cannotAfford"
+          :readonly="playerReady || cannotPurchase || isCompulsivePhilanthropist"
           min="0"
           :max="maxInfluenceInvestment"
           vertical
@@ -43,7 +43,7 @@
         </b-form-spinbutton>
       </b-col>
       <div class="w-100"></div>
-      <b-col v-if="!cannotAfford" align-self="end" class="text-left mx-1 p-1">
+      <b-col v-if="!cannotPurchase" align-self="end" class="text-left mx-1 p-1">
         <!-- cost -->
         <font-awesome-icon :icon="['fas', 'clock']" size="lg"></font-awesome-icon>
         <span class="mx-2">{{ cost }}</span>
@@ -92,10 +92,24 @@ export default class InvestmentCard extends Vue {
   };
   units: number = 0;
 
+  created() {
+    // we could instead sync pendingInvestments from the server instead of resetting
+    // them client-side, but since the server forces the correct investment, this
+    // is purely visual
+    if (this.isCompulsivePhilanthropist && this.name === "systemHealth") {
+      this.units = this.maxTimeBlocks;
+      this.setInvestmentAmount(this.units);
+    }
+  }
+
+  get isCompulsivePhilanthropist(): boolean {
+    return this.$tstore.getters.player.isCompulsivePhilanthropist;
+  }
+
   /**
    * Define if investment is affordable.
    */
-  get cannotAfford(): boolean {
+  get cannotPurchase(): boolean {
     return this.cost >= COST_INAFFORDABLE;
   }
 

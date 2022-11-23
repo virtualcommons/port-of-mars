@@ -11,6 +11,10 @@ function SET_PLAYER_ROLE(state: State, payload: Role) {
   state.role = payload;
 }
 
+function SET_COMPULSIVE_PHILANTHROPIST(state: State, payload: { data: boolean; role: Role }) {
+  state.players[payload.role].isCompulsivePhilanthropist = payload.data;
+}
+
 function SET_READINESS(state: State, payload: { data: boolean; role: Role }) {
   state.players[payload.role].ready = payload.data;
 }
@@ -37,6 +41,7 @@ function SET_BOT_WARNING(state: State, payload: { data: boolean, role: Role}) {
 
 export default {
   SET_PLAYER_ROLE,
+  SET_COMPULSIVE_PHILANTHROPIST,
   SET_READINESS,
   SET_BOT_WARNING,
   SET_ACCOMPLISHMENTS,

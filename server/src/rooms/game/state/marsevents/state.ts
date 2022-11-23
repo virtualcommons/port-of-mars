@@ -274,13 +274,6 @@ export class CompulsivePhilanthropy extends BaseEvent {
       ordering: ActionOrdering.LAST,
       execute: (state) => {
         const philanthropist = state.players[winner];
-        // FIXME: this conflicts with the way we normally handle system health investment 
-        // contributions which typically apply at the beginning of the next round. May allow
-        // a group to survive a round that they normally wouldn't
-        // need to find a way to patch this that uses pendingInvestments / invest normally but
-        // still disallows the player UI from being able to make investment choices that end up
-        // being overridden
-        // state.addSystemHealth(philanthropist.timeBlocks);
         philanthropist.setCompulsivePhilanthropist();
       },
     });

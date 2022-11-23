@@ -1037,6 +1037,7 @@ export class Player
 
   bot: Bot;
 
+  @type("boolean")
   isCompulsivePhilanthropist = false;
 
   act(state: GameState): Array<GameEvent> {

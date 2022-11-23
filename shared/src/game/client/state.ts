@@ -108,6 +108,7 @@ function defaultPlayerData(role: Role): PlayerClientData {
     inventory: defaultInventory(role),
     ready: false,
     timeBlocks: 10,
+    isCompulsivePhilanthropist: false,
     victoryPoints: 0,
     pendingInvestments: defaultPendingInvestment(),
     systemHealthChanges: {
