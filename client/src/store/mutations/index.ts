@@ -18,8 +18,8 @@ export default {
     Object.assign(state, getInitialStoreState());
   },
 
-  SET_SCHEDULED_GAMES(state: State, payload: Array<Date>) {
-    Vue.set(state,'scheduledGames', payload);
+  SET_SCHEDULED_GAMES(state: State, payload: Array<number>) {
+    Vue.set(state, 'scheduledGames', payload);
   },
 
   SET_DASHBOARD_MESSAGE(state: State, payload: DashboardMessage) {

@@ -6,6 +6,7 @@ import {
   CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER,
   ChatMessageData,
   GameData,
+  Investment,
   InvestmentData,
   MarsEventData,
   MarsLogMessageData,
@@ -34,7 +35,7 @@ import { SYSTEM_HEALTH_MAINTENANCE_COST } from "@port-of-mars/shared/settings";
 import _ from "lodash";
 
 export const ROLE_TO_INVESTMENT_DATA: {
-  [role in Role]: Array<keyof InvestmentData>;
+  [role in Role]: Array<Investment>;
 } = {
   [CURATOR]: [
     "systemHealth",
@@ -228,6 +229,7 @@ export interface State extends GameData {
 
   // webapp data: consider refactoring to separate in-game store data with
   // normal onboarding store data
+  scheduledGames: Array<number>; // upcoming scheduled games in Unix timestamp millis (e.g., new Date().getTime())
   dashboardMessages: Array<DashboardMessage>;
   tournamentStatus: TournamentStatus;
   signupEnabled: boolean;
@@ -295,6 +297,7 @@ export const initialStoreState: State = {
     toggleYourTrades: false,
   },
 
+  scheduledGames: [],
   dashboardMessages: [],
   tournamentStatus: {
     round: 0, announcement: '', championship: false, description: '', schedule: []

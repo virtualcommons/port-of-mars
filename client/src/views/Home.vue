@@ -119,7 +119,7 @@ export default class Home extends Vue {
   }
 
   scrollToNextSection() {
-    const el = this.$refs.nextSection;
+    const el = this.$refs.nextSection as Element;
     if (el) {
       el.scrollIntoView({ block: "start", behavior: "smooth" });
     }

@@ -120,7 +120,7 @@ export default class Dashboard extends Vue {
   exitSurveyUrl: string = "";
   currentRoundNumber: number = 1;
   schedule: Array<number> = [];
-  polling: number = null;
+  pollingIntervalId = 0;
   isLobbyOpen = false;
   hasWatchedTutorial = false;
   playerTaskCompletion: PlayerTaskCompletion = {
@@ -174,7 +174,9 @@ export default class Dashboard extends Vue {
   }
 
   beforeDestroy() {
-    clearInterval(this.polling);
+    if (this.pollingIntervalId != 0) {
+      clearInterval(this.pollingIntervalId);
+    }
   }
 
   async initialize() {
@@ -209,7 +211,7 @@ export default class Dashboard extends Vue {
   }
 
   async pollLobbyStatus() {
-    this.polling = setInterval(async () => {
+    this.pollingIntervalId = window.setInterval(async () => {
       const isLobbyOpen = await this.api.isLobbyOpen();
       console.log("lobby status: ", isLobbyOpen);
       Vue.set(this, "isLobbyOpen", isLobbyOpen);
@@ -217,17 +219,7 @@ export default class Dashboard extends Vue {
   }
 
   activateTutorial() {
-    const iframe = document.getElementById(
-      "tutorialVideo"
-    ) as HTMLIFrameElement;
-    const player = new Player(iframe);
-    // FIXME: currently some typescript bugs with the vimeo player ts defs
-    (player as any).requestFullscreen().then(() => player.play());
-    (player as any).on("ended", (data: any) => {
-      console.log("Video ended");
-      this.hasWatchedTutorial = true;
-      // FIXME: submit to a new API endpoint also and read it in from dashboard data
-    });
+    console.log("needs implementation");
   }
 }
 </script>
