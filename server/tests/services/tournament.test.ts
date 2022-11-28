@@ -7,7 +7,7 @@ import {createRound, createTournament, createUsers, initTransaction, rollbackTra
 import {User} from "@port-of-mars/server/entity";
 import {DBPersister} from "@port-of-mars/server/services/persistence";
 
-describe('first round', () => {
+describe.skip('first round', () => {
   let conn: Connection;
   let qr: QueryRunner;
   let manager: EntityManager;

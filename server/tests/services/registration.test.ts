@@ -5,6 +5,7 @@ import {Connection, EntityManager, QueryRunner} from "typeorm";
 import {ServiceProvider} from "@port-of-mars/server/services";
 import {ServerError} from "@port-of-mars/server/util";
 import {createRound, createTournament, initTransaction, rollbackTransaction} from "./common";
+import { isTest } from "@port-of-mars/shared/settings";
 
 describe('a potential user', () => {
   const username = 'ahacker';
@@ -25,8 +26,14 @@ describe('a potential user', () => {
   });
 
   it('can begin registration', async () => {
-      const u = await sp.account.getOrCreateUser("foo", username);
-      expect(u.username).toEqual(username);
+    const email = 'a@foo.bar';
+    const u = await sp.account.getOrCreateUser("foo", email);
+    expect(u.email).toEqual(email);
+  });
+
+  it.skip('rejects registration with duplicate email', async () => {
+    const u = await sp.account.getOrCreateUser("foo", 'a@foo.bar');
+    expect(await sp.account.getOrCreateUser('bar', 'a@foo.bar')).toThrow();
   });
 
   it('can submit their registration information', async () => {
