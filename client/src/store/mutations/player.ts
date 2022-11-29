@@ -11,6 +11,10 @@ function SET_PLAYER_ROLE(state: State, payload: Role) {
   state.role = payload;
 }
 
+function SET_USERNAME(state: State, payload: { data: string; role: Role }) {
+  state.players[payload.role].username = payload.data;
+}
+
 function SET_COMPULSIVE_PHILANTHROPIST(state: State, payload: { data: boolean; role: Role }) {
   state.players[payload.role].isCompulsivePhilanthropist = payload.data;
 }
@@ -35,15 +39,21 @@ function SET_PENDING_INVESTMENTS(state: State, payload: { data: InvestmentData; 
   }
 }
 
-function SET_BOT_WARNING(state: State, payload: { data: boolean, role: Role}) {
+function SET_BOT_WARNING(state: State, payload: { data: boolean, role: Role }) {
   state.players[payload.role].botWarning = payload.data;
+}
+
+function SET_BOT_STATUS(state: State, payload: { data: boolean, role: Role }) {
+  state.players[payload.role].isBot = payload.data;
 }
 
 export default {
   SET_PLAYER_ROLE,
+  SET_USERNAME,
   SET_COMPULSIVE_PHILANTHROPIST,
   SET_READINESS,
   SET_BOT_WARNING,
+  SET_BOT_STATUS,
   SET_ACCOMPLISHMENTS,
   SET_VICTORY_POINTS,
   SET_PENDING_INVESTMENTS,

@@ -61,6 +61,7 @@ export class GameState
     >
 {
   userRoles: GameOpts["userRoles"] = {};
+  playerOpts: GameOpts["playerOpts"];
   gameId!: number;
   maxRound: number;
   lastTimePolled: Date;
@@ -112,7 +113,7 @@ export class GameState
   @type("string")
   heroOrPariah: "" | "hero" | "pariah" = "";
 
-  constructor(data: GameStateOpts, botRoles?: Map<Role, boolean>) {
+  constructor(data: GameStateOpts) {
     super();
     if (isProduction() && data.userRoles) {
       assert.equal(
@@ -122,10 +123,11 @@ export class GameState
       );
     }
     this.userRoles = data.userRoles;
+    this.playerOpts = data.playerOpts;
     this.marsEventDeck = new MarsEventsDeck(data.deck);
     this.lastTimePolled = new Date();
     this.maxRound = data.numberOfGameRounds;
-    this.players = new PlayerSet(botRoles);
+    this.players = new PlayerSet(data.playerOpts);
   }
 
   static DEFAULTS = {
@@ -264,9 +266,11 @@ export class GameState
     return this.marsEventsProcessed < this.marsEvents.length - 1;
   }
 
-  hasUser(username: string | undefined): boolean {
-    if (username) {
-      return Object.keys(this.userRoles).includes(username);
+  hasUser(username: string): boolean {
+    for (const player of this.players) {
+      if (player.username === username) {
+        return true;
+      }
     }
     return false;
   }
@@ -360,7 +364,7 @@ export class GameState
     this.logs.splice(0, this.logs.length);
     this.marsEvents.splice(0, this.marsEvents.length);
     this.messages.splice(0, this.messages.length);
-    this.players.fromJSON(new PlayerSet().toJSON());
+    this.players.fromJSON(new PlayerSet(this.playerOpts).toJSON());
     this.marsEventDeck = new MarsEventsDeck(_.shuffle(this.marsEventDeck.deck));
     this.winners.splice(0, this.winners.length);
     this.heroOrPariah = "";

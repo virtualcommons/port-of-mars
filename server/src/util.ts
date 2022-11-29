@@ -38,9 +38,18 @@ export function mockGameStateInitOpts(
 ): GameStateOpts {
   const deck = getFixedMarsEventDeck();
   const numberOfGameRounds = nRoundStrategy();
-  const userRoles = _.zipObject([1, 2, 3, 4, 5].map(n => `${username}${n}`), ROLES);
+  const usernames = [1, 2, 3, 4, 5].map(n => `${username}${n}`);
+  const playerData = usernames.map((username) => ({
+    username: username,
+    isBot: false
+  }));
+  const playerOpts: GameOpts["playerOpts"] = new Map();
+  playerData.forEach((p, i) => {
+    playerOpts.set(ROLES[i], p);
+  });
   return {
-    userRoles,
+    userRoles: _.zipObject(usernames, ROLES),
+    playerOpts,
     deck,
     numberOfGameRounds
   };
@@ -54,27 +63,25 @@ export async function mockGameInitOpts(): Promise<GameOpts> {
   };
 }
 
-export async function buildGameOpts(usernames?: Array<string>): Promise<GameOpts> {
+export async function buildGameOpts(usernames: Array<string>): Promise<GameOpts> {
   const currentTournamentRound = await getServices().tournament.getCurrentTournamentRound();
-  if (usernames) {
-    assert.equal(usernames.length, ROLES.length);
-    logger.info("building game opts with current tournament round [%d]", currentTournamentRound.id);
-    return {
-      userRoles: _.zipObject(usernames, ROLES),
-      deck: getRandomizedMarsEventDeck(),
-      numberOfGameRounds: currentTournamentRound.numberOfGameRounds,
-      tournamentRoundId: currentTournamentRound.id,
-    };
-  } else {
-    // FIXME: explain this branch path
-    return {
-      userRoles: {},
-      deck: getFixedMarsEventDeck(),
-      numberOfGameRounds: currentTournamentRound.numberOfGameRounds,
-      tournamentRoundId: currentTournamentRound.id
-    }
-  }
-
+  assert.equal(usernames.length, ROLES.length);
+  logger.info("building game opts with current tournament round [%d]", currentTournamentRound.id);
+  const playerData = await Promise.all(usernames.map(async (username) => ({
+    username: username,
+    isBot: (await getServices().account.findByUsername(username)).isBot
+  })));
+  const playerOpts: GameOpts["playerOpts"] = new Map();
+  playerData.forEach((p, i) => {
+    playerOpts.set(ROLES[i], p);
+  });
+  return {
+    userRoles: _.zipObject(usernames, ROLES),
+    playerOpts,
+    deck: getRandomizedMarsEventDeck(),
+    numberOfGameRounds: currentTournamentRound.numberOfGameRounds,
+    tournamentRoundId: currentTournamentRound.id,
+  };
 }
 
 export interface ServerErrorData {

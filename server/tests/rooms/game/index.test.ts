@@ -47,7 +47,8 @@ function canSendTradeRequest(
 
 describe('a Researcher Player Accomplishment', () => {
   const repo = new AccomplishmentSet(RESEARCHER);
-  const p = new Player(RESEARCHER);
+  const pOpts = new GameState(mockGameStateInitOpts()).playerOpts;
+  const p = new Player(RESEARCHER, pOpts.get(RESEARCHER)!);
   it('can be purchased if their role matches', () => {
     const accomplishment = getAccomplishmentByID(RESEARCHER, 1);
     p.purchaseAccomplishment(accomplishment);
@@ -102,8 +103,9 @@ describe('a Researcher Player Accomplishment', () => {
 });
 
 describe('a player snapshot', () => {
-  const p1 = new Player(RESEARCHER);
-  const p2 = new Player(CURATOR);
+  const pOpts = new GameState(mockGameStateInitOpts()).playerOpts;
+  const p1 = new Player(RESEARCHER, pOpts.get(RESEARCHER)!);
+  const p2 = new Player(CURATOR, pOpts.get(CURATOR)!);
   it('can be round tripped', () => {
     p2.fromJSON(p1.toJSON());
     expect(p2.toJSON()).toEqual(p1.toJSON());

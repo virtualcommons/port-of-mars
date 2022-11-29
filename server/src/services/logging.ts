@@ -34,7 +34,7 @@ export class DevLogging implements Logging {
     },
     {
       match: /\/code\/server\/tests\/.*/,
-      level: 'debug'
+      level: 'info'
     }
   ];
 

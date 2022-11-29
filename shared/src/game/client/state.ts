@@ -99,6 +99,8 @@ function defaultPlayerClientSet(): PlayerClientSet {
 function defaultPlayerData(role: Role): PlayerClientData {
   return {
     role,
+    username: "",
+    isBot: false,
     accomplishments: {
       purchased: [],
       purchasable: [],

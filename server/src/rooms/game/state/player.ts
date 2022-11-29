@@ -23,6 +23,7 @@ import { SystemHealthChanges, PurchasedSystemHealth } from "@port-of-mars/server
 import { AccomplishmentSet } from "@port-of-mars/server/rooms/game/state/accomplishment"
 import { ResourceInventory, ResourceCosts } from "@port-of-mars/server/rooms/game/state/resource"
 import { PlayerSetSerialized, PlayerSerialized } from "@port-of-mars/server/rooms/game/state/types";
+import { GameStateOpts, PlayerOptsData } from "@port-of-mars/server/rooms/game/types";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -112,10 +113,12 @@ export class Player
   implements
     PlayerData<AccomplishmentSet, ResourceInventory, SystemHealthChanges>
 {
-  constructor(role: Role, isBot?: boolean) {
+  constructor(role: Role, data: PlayerOptsData) {
     super();
     this.role = role;
-    this.bot = SimpleBot.fromActor(this, isBot);
+    this.username = data.username;
+    this.isBot = data.isBot;
+    this.bot = SimpleBot.fromActor(this);
     this.accomplishments = new AccomplishmentSet(role);
     this.costs = ResourceCosts.senderRole(role);
     // FIXME: it'd be nice to bind the specialty to the ResourceCosts e.g., this.specialty = this.costs.specialty
@@ -162,6 +165,12 @@ export class Player
 
   @type("string")
   role: Role;
+
+  @type("string")
+  username: string;
+
+  @type("boolean")
+  isBot: boolean
 
   @type(ResourceCosts)
   costs: ResourceCosts;
@@ -388,15 +397,14 @@ export class Player
 }
 
 export class PlayerSet extends Schema implements PlayerSetData<Player> {
-  constructor(botRoles?: Map<Role, boolean>) {
+  constructor(playerOpts: GameStateOpts["playerOpts"]) {
     super();
-    // FIXME: should be able to reduce the duplication here of Roles, lookups into the botRoles, etc.
-    // clean up when we get time for a refactor pass
-    this.Curator = new Player(CURATOR, botRoles?.get(CURATOR));
-    this.Entrepreneur = new Player(ENTREPRENEUR, botRoles?.get(ENTREPRENEUR));
-    this.Pioneer = new Player(PIONEER, botRoles?.get(PIONEER));
-    this.Politician = new Player(POLITICIAN, botRoles?.get(POLITICIAN));
-    this.Researcher = new Player(RESEARCHER, botRoles?.get(RESEARCHER));
+    // FIXME: could reduce duplication here
+    this.Curator = new Player(CURATOR, playerOpts.get(CURATOR)!);
+    this.Entrepreneur = new Player(ENTREPRENEUR, playerOpts.get(ENTREPRENEUR)!);
+    this.Pioneer = new Player(PIONEER, playerOpts.get(PIONEER)!);
+    this.Politician = new Player(POLITICIAN, playerOpts.get(POLITICIAN)!);
+    this.Researcher = new Player(RESEARCHER, playerOpts.get(RESEARCHER)!);
   }
 
   @type(Player)

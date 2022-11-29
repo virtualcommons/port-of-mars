@@ -244,6 +244,8 @@ export interface PlayerData<
   SystemHealthChanges = SystemHealthChangesData
 > {
   role: Role;
+  username: string;
+  isBot: boolean;
   costs: ResourceCostData;
   botWarning: boolean;
   specialty: Resource;

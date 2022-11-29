@@ -247,8 +247,8 @@ export class SimpleBot implements Bot {
   warningTime = 240;
   active = false;
 
-  constructor(public actor: ActorRunner, public player: Player, isBot?: boolean) {
-    if (isBot) {
+  constructor(public actor: ActorRunner, public player: Player) {
+    if (player.isBot) {
       this.active = true;
       this.maxInactivityTime = -1;
     }
@@ -258,8 +258,8 @@ export class SimpleBot implements Bot {
     return this.elapsed >= this.maxInactivityTime;
   }
 
-  static fromActor(player: Player, isBot?: boolean): SimpleBot {
-    return new SimpleBot(new ActorRunner(), player, isBot);
+  static fromActor(player: Player): SimpleBot {
+    return new SimpleBot(new ActorRunner(), player);
   }
 
   incrementElapsed(): void {
