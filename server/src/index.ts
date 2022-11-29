@@ -57,8 +57,10 @@ passport.use(new GoogleStrategy({
   },
   async function(request:any, accessToken:any, refreshToken:any, profile:any, done:any) {
     const services = getServices();
-    const user = await services.account.getOrCreateUser(profile.id, profile.emails[0].value);
-    // const user = await s.account.getOrCreateUser()
+    const user = await services.account.getOrCreateUser({ 
+      email: profile.emails[0].value,
+      passportId: profile.id
+    });
     return done(null, user);
   }
 ));
@@ -72,8 +74,10 @@ passport.use(new FacebookStrategy({
   },
   async function(request:any, accessToken:any, refreshToken:any, profile:any, done:any) {
     const services = getServices();
-    const user = await services.account.getOrCreateUser(profile.id, profile.emails[0].value);
-    // const user = await s.account.getOrCreateUser()
+    const user = await services.account.getOrCreateUser({ 
+      email: profile.emails[0].value,
+      passportId: profile.id
+    });
     return done(null, user);
   }
 ));

@@ -5,7 +5,6 @@ import {Connection, EntityManager, QueryRunner} from "typeorm";
 import {ServiceProvider} from "@port-of-mars/server/services";
 import {ServerError} from "@port-of-mars/server/util";
 import {createRound, createTournament, initTransaction, rollbackTransaction} from "./common";
-import { isTest } from "@port-of-mars/shared/settings";
 
 describe('a potential user', () => {
   const username = 'ahacker';
@@ -27,22 +26,28 @@ describe('a potential user', () => {
 
   it('can begin registration', async () => {
     const email = 'a@foo.bar';
-    const u = await sp.account.getOrCreateUser("foo", email);
+    const u = await sp.account.getOrCreateUser({ email, passportId: '12345' });
     expect(u.email).toEqual(email);
   });
 
-  it.skip('rejects registration with duplicate email', async () => {
-    const u = await sp.account.getOrCreateUser("foo", 'a@foo.bar');
-    expect(await sp.account.getOrCreateUser('bar', 'a@foo.bar')).toThrow();
+  it('with an old account (no passportId) can register', async () => {
+    const email = 'alice@foo.bar';
+    const oldUser = await sp.account.getOrCreateUser({ email });
+    const newUser = await sp.account.getOrCreateUser({ email, passportId: '54321' })
+    expect(newUser).toEqual(oldUser);
   });
 
   it('can submit their registration information', async () => {
     const email = 'a@foo.bar';
     const name = 'Alyssa P Hacker';
-    const user = await sp.account.getOrCreateUser("foo", username);
-    await registrationService.submitRegistrationMetadata(user, { username, email, name });
-    expect(user.email).toBe(email);
+    let user = await sp.account.getOrCreateUser({ email, passportId: '67890' });
+    const newEmail = 'b@bar.foo';
+    await registrationService.submitRegistrationMetadata(user, {
+      username, email: newEmail, name: name
+    });
+    expect(user.email).toBe(newEmail);
     expect(user.name).toBe(name);
+    expect(user.username).toBe(username);
   });
 
   it('can be sent an email verification email', async () => {

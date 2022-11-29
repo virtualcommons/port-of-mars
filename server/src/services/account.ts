@@ -110,15 +110,23 @@ export class AccountService extends BaseService {
     return user;
   }
 
-  async getOrCreateUser(passportId: string, email: string, data: Pick<User, 'isBot'> = { isBot: false }): Promise<User> {
-    let user = await this.getRepository().findOne({ passportId });
+  async getOrCreateUser(userData: { email: string, passportId?: string }): Promise<User> {
+    let user: User | undefined;
+    // try to find user by id
+    if (userData.passportId) {
+      user = await this.getRepository().findOne({ passportId: userData.passportId });
+    }
+    // if no id or find by id turned up empty, try to find user by email
+    if (!userData.passportId || !user) {
+      user = await this.getRepository().findOne({ email: userData.email });
+    }
     if (!user) {
       user = new User();
       user.name = '';
-      user.email = email;
-      user.passportId = passportId;
+      user.email = userData.email;
+      user.passportId = userData.passportId ?? '';
       user.username = await generateUsername();
-      user.isBot = data.isBot;
+      user.isBot = false;
       logger.info('getOrCreateUser: not found, creating user %s', user.username);
       await this.getRepository().save(user);
     }
@@ -135,7 +143,7 @@ export class AccountService extends BaseService {
       for (let i = 0; i < numberOfBotsToCreate; i++) {
         const bot = new User();
         bot.username = await generateUsername();
-        bot.name = `robot${bot.username}`
+        bot.name = `robot ${bot.username}`
         bot.isBot = true;
         bot.isSystemBot = true;
         await this.getRepository().save(bot);
