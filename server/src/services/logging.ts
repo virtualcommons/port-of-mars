@@ -15,7 +15,12 @@ export interface Logging {
 }
 
 export class DevLogging implements Logging {
-  logger = pino();
+  logger = pino({
+    level: 'trace',
+    transport: {
+      target: 'pino-pretty'
+    }
+  });
   previousLevel = '';
 
   paths = [
@@ -26,7 +31,12 @@ export class DevLogging implements Logging {
     {
       match: /.*/,
       level: 'trace'
-    }]
+    },
+    {
+      match: /\/code\/server\/tests\/.*/,
+      level: 'debug'
+    }
+  ];
 
   findMatchingLogger(filename: string): LogService {
     for (const path of this.paths) {
@@ -46,6 +56,7 @@ export class DevLogging implements Logging {
     this.logger.level = 'silent'
   }
 
+  // FIXME: does this do anything?
   enable() {
     this.logger.level = this.previousLevel;
   }
