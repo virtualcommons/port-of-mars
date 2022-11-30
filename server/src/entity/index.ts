@@ -1,3 +1,4 @@
+export * from './ChatReport';
 export * from './Game';
 export * from './GameEvent';
 export * from './Player';

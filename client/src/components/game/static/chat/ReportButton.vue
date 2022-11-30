@@ -3,7 +3,7 @@
     <b-button
       squared
       v-b-tooltip.hover.top="'Report this player for violating the code of conduct'"
-      v-b-modal="`report-modal-${message.role}-${message.dateCreated}`"
+      v-b-modal="modalId"
       class="mb-2 mx-2 py-0 px-1"
       variant="outline-primary"
       size="sm"
@@ -13,7 +13,7 @@
       Report
     </b-button>
     <b-modal
-      :id="`report-modal-${message.role}-${message.dateCreated}`"
+      :id="modalId"
       title="Report this player"
       centered
       no-stacking
@@ -35,9 +35,10 @@
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
 import { library } from "@fortawesome/fontawesome-svg-core";
+import { url } from "@port-of-mars/client/util";
 import { faPaperPlane } from "@fortawesome/free-regular-svg-icons/faPaperPlane";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { ChatMessageData, Role } from "@port-of-mars/shared/types";
+import { ChatMessageData, ChatReportData, Role } from "@port-of-mars/shared/types";
 import ChatMessage from "@port-of-mars/client/components/game/static/chat/ChatMessage.vue";
 import ReportModal from "@port-of-mars/client/components/game/modals/ReportModal.vue";
 
@@ -55,13 +56,33 @@ export default class Chat extends Vue {
   @Prop({ default: false })
   showUsername!: boolean;
 
+  get modalId() {
+    return `report-modal-${this.message.role}-${this.message.dateCreated}`;
+  }
+
   get username() {
     return this.$tstore.state.players[this.message.role as Role].username;
   }
 
-  submitReport() {
-    // TODO: implement this
-    console.log("submitted report for message: %s sent by user: %s", this.message.message, this.username);
+  get submitReportUrl() {
+    return url("/admin/submit-report");
+  }
+
+  async submitReport() {
+    const formData: ChatReportData = {
+      roomId: this.$ajax.roomId,
+      username: this.username,
+      message: this.message
+    }
+    await this.$ajax.post(
+      this.submitReportUrl,
+      (response) => {
+        if (response.status === 200) {
+          this.$bvModal.hide(this.modalId);
+        }
+      },
+      formData
+    );
   }
 }
 </script>

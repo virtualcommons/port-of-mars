@@ -1,10 +1,10 @@
 import { Router, Request, Response } from "express";
 import { getServices } from "@port-of-mars/server/services";
-import { isAdminAuthenticated } from "@port-of-mars/server/routes/middleware";
+import { unless, isAdminAuthenticated } from "@port-of-mars/server/routes/middleware";
 
 export const adminRouter = Router();
 
-adminRouter.use(isAdminAuthenticated);
+adminRouter.use(unless("/submit-report", isAdminAuthenticated));
 
 adminRouter.get("/", async (req: Request, res: Response, next) => {
   try {
@@ -22,6 +22,16 @@ adminRouter.get("/", async (req: Request, res: Response, next) => {
       activeGames,
     };
     res.json(adminData);
+  } catch (e) {
+    next(e);
+  }
+});
+
+adminRouter.post("/submit-report", async (req: Request, res: Response, next) => {
+  try {
+    const data = req.body;
+    await getServices().admin.submitReport(data);
+    res.json(true);
   } catch (e) {
     next(e);
   }

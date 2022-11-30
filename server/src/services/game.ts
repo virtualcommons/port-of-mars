@@ -7,6 +7,12 @@ export class GameService extends BaseService {
     return await this.em.getRepository(Game).findOneOrFail(id);
   }
 
+  async findByRoomId(roomId: string): Promise<Game> {
+    return await this.em.getRepository(Game).findOneOrFail({
+      where: { roomId }
+    });
+  }
+
   async getTotalActiveGames(): Promise<number> {
     return await this.em.getRepository(Game).count({
       dateFinalized: IsNull(),

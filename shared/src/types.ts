@@ -30,6 +30,12 @@ export interface ChatMessageData {
   round: number;
 }
 
+export interface ChatReportData {
+  roomId: string;
+  username: string;
+  message: ChatMessageData;
+}
+
 export interface MarsLogData {
   category: string;
   message: string;

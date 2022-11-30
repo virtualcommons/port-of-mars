@@ -1,9 +1,10 @@
-import { User, Game, Player } from "@port-of-mars/server/entity";
+import { User, Game, Player, ChatReport } from "@port-of-mars/server/entity";
 import { BaseService } from "@port-of-mars/server/services/db";
-import { AdminStats } from "@port-of-mars/shared/types";
+import { AdminStats, ChatReportData, ChatMessageData } from "@port-of-mars/shared/types";
 import { IsNull, Not, SelectQueryBuilder } from "typeorm";
 import { getLogger, settings } from "@port-of-mars/server/settings";
 import _ from "lodash";
+import { getServices } from ".";
 
 const logger = getLogger(__filename);
 
@@ -47,5 +48,22 @@ export class AdminService extends BaseService {
       gamesWithoutBotsThatSurvived: gamesWithoutBotsThatSurvived,
       reportedPlayers: 0,
     };
+  }
+
+  async submitReport(data: ChatReportData) {
+    logger.debug("user in room: %s submitted report for chat message sent by: %s",
+      data.roomId, data.username);
+    const game = await getServices().game.findByRoomId(data.roomId);
+    const user = await getServices().account.findByUsername(data.username);
+    const message = data.message;
+    const repository = this.em.getRepository(ChatReport);
+    const scheduledDate = repository.create({
+      game,
+      gameId: game.id,
+      user,
+      userId: user.id,
+      message
+    });
+    await repository.save(scheduledDate);
   }
 }

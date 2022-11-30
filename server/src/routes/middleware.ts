@@ -9,6 +9,17 @@ import { User } from '@port-of-mars/server/entity';
 
 const logger = settings.logging.getLogger(__filename);
 
+// exclude a route from middleware
+export function unless(path: any, middleware: any) {
+  return function(req: Request, res: Response, next: NextFunction) {
+    if (path === req.path) {
+      return next();
+    } else {
+      return middleware(req, res, next);
+    }
+  }
+}
+
 export function isAdminAuthenticated(req: Request, res: Response, next: NextFunction) {
   if (_.isUndefined(req.user)) {
     logger.trace('no user on the request, redirecting to login page');

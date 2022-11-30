@@ -66,4 +66,7 @@ export class User {
 
   @Column({ default: false })
   isAdmin!: boolean;
+
+  @Column({ default: false })
+  isBanned!: boolean;
 }
