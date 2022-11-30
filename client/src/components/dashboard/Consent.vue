@@ -64,15 +64,23 @@
         </p>
       </div>
     </b-collapse>
-    <b-button-group class="my-3 align-self-start">
-      <b-button variant="success" @click="toggleConsent">
-        {{ consentLabel }}
-      </b-button>
-      <b-button variant="danger" @click="denyConsent" class="mx-2">
-        Deny Consent
-      </b-button>
-    </b-button-group>
-    <b-collapse class="consent-scrollable" v-model="consented">
+    <div v-if="isVerified" class="mt-4 align-self-start text-success">
+      <p>
+        <b-icon icon="patch-check-fill"></b-icon>
+        <small> You have agreed to the consent form and successfully been verified!</small>
+      </p>
+    </div>
+    <div v-else>
+      <b-button-group class="my-3 align-self-start">
+        <b-button variant="success" @click="toggleConsent">
+          {{ consentLabel }}
+        </b-button>
+        <b-button variant="danger" @click="denyConsent" class="mx-2">
+          Deny Consent
+        </b-button>
+      </b-button-group>
+    </div>
+    <b-collapse v-if="!isVerified" class="consent-scrollable" v-model="consented">
       <b-form class="pr-3" @submit="register">
         <b-alert v-if="existingUser" dismissible show variant="warning">
           It looks like you have logged in before! Please review the
