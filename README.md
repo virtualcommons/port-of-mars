@@ -121,31 +121,24 @@ Copy the Sentry DSN url into `keys/sentry_dsn`. Then
 
 ### Data Export
 
-__Development__
+Data can be exported from the database with the `dump.sh` script and pass in the required `tournamentRoundId` parameter and optional game ids `gids` (numbers separated by spaces). 
 
-In development, data from a tournament can be exported by running:
-
-```bash
-% ./dump.sh prod --tournamentRoundId 1 2 # tournment ids
-```
-
-In development, data can be exported from the database by running:
+Example:
 
 ```bash
-% ./dump.sh dev # all games
-% ./dump.sh dev --ids 1 2 4 6 # games matching ids
+% ./dump.sh dev --tournamentRoundId <id> # the tournament round to export
+% ./dump.sh dev --tournamentRoundId <id> --gids 1 5 9 15 # also filter by specific games for the given tournament round
 ```
 
 __Production__
 
-In staging or production, change `dev` to `prod`:
+In staging / production, change `dev` to `prod`:
 
 ```bash
-% ./dump.sh prod # all games
-% ./dump.sh prod --ids 1 2 4 6 # game matching ids
+% ./dump.sh prod --tournamentRoundId 11 # dump all games for tournament round 11
 ```
 
-This generates CSV files with every persisted game event as well as summary csv files with game, player and tournament data. The csv files will be in the `docker/dump` folder. You can pack the results into an archive with `zip -r <name-of-archive> docker/dump/processed`.
+This generates CSV files with every persisted game event as well as summary csv files with game, player and tournament data. The csv files will be in the `docker/dump` folder.
 
 ## Contributors
 
