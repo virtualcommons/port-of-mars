@@ -34,6 +34,12 @@ export class TournamentService extends BaseService {
     }
   }
 
+  async getOpenTournament(): Promise<Tournament> {
+    return await this.em.getRepository(Tournament).findOneOrFail({
+      where: { name: "openbeta" }
+    });
+  }
+
   async getTournamentByName(name: string): Promise<Tournament> {
     return await this.em
       .getRepository(Tournament)
@@ -45,13 +51,20 @@ export class TournamentService extends BaseService {
     return await this.em
       .getRepository(TournamentRound)
       .findOneOrFail({
-        relations: ['tournament'],
-        where: {
-          tournamentId
-        },
-        order: {
-          roundNumber: "DESC"
-        }
+        relations: ["tournament"],
+        where: { tournamentId },
+        order: { roundNumber: "DESC" }
+      });
+  }
+
+  async getOpenTournamentRound(): Promise<TournamentRound> {
+    const tournamentId = (await this.getOpenTournament()).id;
+    return await this.em
+      .getRepository(TournamentRound)
+      .findOneOrFail({
+        relations: ["tournament"],
+        where: { tournamentId },
+        order: { roundNumber: "DESC" }
       });
   }
 
@@ -138,10 +151,11 @@ export class TournamentService extends BaseService {
         userId
       }
     });
+    // NOTE: we'll need to manually invite users for a non-open tournament
     // special case for the first round of a tournament where everyone's invited 
-    if (!invite && tournamentRound.roundNumber === 1) {
-      return await this.createInvite(userId, tournamentRoundId);
-    }
+    // if (!invite && tournamentRound.roundNumber === 1) {
+    //   return await this.createInvite(userId, tournamentRoundId);
+    // }
     return invite;
   }
 

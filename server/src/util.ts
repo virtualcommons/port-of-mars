@@ -63,13 +63,19 @@ export async function mockGameInitOpts(): Promise<GameOpts> {
   };
 }
 
-export async function buildGameOpts(usernames: Array<string>): Promise<GameOpts> {
-  const currentTournamentRound = await getServices().tournament.getCurrentTournamentRound();
+export async function buildGameOpts(usernames: Array<string>, isOpenGame: boolean = true): Promise<GameOpts> {
+  const services = getServices();
+  const currentTournamentRound = isOpenGame ?
+      await services.tournament.getCurrentTournamentRound()
+    : await services.tournament.getOpenTournamentRound();
   assert.equal(usernames.length, ROLES.length);
   logger.info("building game opts with current tournament round [%d]", currentTournamentRound.id);
+  for (const u of usernames) {
+    logger.debug("username: %s", u);
+  }
   const playerData = await Promise.all(usernames.map(async (username) => ({
     username: username,
-    isBot: (await getServices().account.findByUsername(username)).isBot
+    isBot: (await services.account.findByUsername(username)).isBot
   })));
   const playerOpts: GameOpts["playerOpts"] = new Map();
   playerData.forEach((p, i) => {

@@ -5,7 +5,7 @@ import {BaseService} from "@port-of-mars/server/services/db";
 const logger = settings.logging.getLogger(__filename);
 
 export class AuthService extends BaseService {
-  async checkUserCanPlayGame(userId: number, tournamentRoundId?: number): Promise<boolean> {
+  async checkUserHasTournamentInvite(userId: number, tournamentRoundId?: number): Promise<boolean> {
     if (!tournamentRoundId) {
       const tournamentService = this.sp.tournament;
       const currentRound = await tournamentService.getCurrentTournamentRound();
