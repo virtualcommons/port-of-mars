@@ -172,6 +172,46 @@ async function createTournament(
   });
 }
 
+async function setAdminUser(
+  em: EntityManager,
+  username: string
+): Promise<void> {
+  const services = getServices(em);
+  logger.debug("setting admin user: %s", username);
+  try {
+    const user = await services.account.setAdminByUsername(username);
+    logger.info("set user '%s' (id: %s) as admin", user.username, user.id);
+  } catch(e) {
+    logger.warn("error attempting to set '%s' as admin", username);
+  }
+}
+
+async function banUser(
+  em: EntityManager,
+  username: string
+): Promise<void> {
+  const services = getServices(em);
+  try {
+    const user = await services.account.banByUsername(username);
+    logger.info("banned user '%s' (id: %s)", user.username, user.id);
+  } catch(e) {
+    logger.warn("error attempting to ban user '%s'", username);
+  }
+}
+
+async function unbanUser(
+  em: EntityManager,
+  username: string
+): Promise<void> {
+  const services = getServices(em);
+  try {
+    const user = await services.account.unbanByUsername(username);
+    logger.info("unbanned user '%s' (id: %s)", user.username, user.id);
+  } catch(e) {
+    logger.warn("error attempting to unban user '%s'", username);
+  }
+}
+
 /**
  * FIXME: these two are mostly defunct now.
  */
@@ -556,6 +596,38 @@ program
             await withConnection((em) =>
               createScheduledGameDate(em, cmd.date, cmd.before, cmd.after)
             );
+          })
+      )
+  )
+.addCommand(
+    program
+      .createCommand("accounts")
+      .description("account subcommands")
+      .addCommand(
+        program
+          .createCommand("setadmin")
+          .description("set a user as an administrator")
+          .requiredOption("--username <username>", "username of the user")
+          .action(async (cmd) => {
+            await withConnection((em) => setAdminUser(em, cmd.username));
+          })
+      )
+      .addCommand(
+        program
+          .createCommand("ban")
+          .description("ban a user from being able to play the game")
+          .requiredOption("--username <username>", "username of the user")
+          .action(async (cmd) => {
+            await withConnection((em) => banUser(em, cmd.username));
+          })
+      )
+      .addCommand(
+        program
+          .createCommand("unban")
+          .description("unban a currently banned user")
+          .requiredOption("--username <username>", "username of the user")
+          .action(async (cmd) => {
+            await withConnection((em) => unbanUser(em, cmd.username));
           })
       )
   )

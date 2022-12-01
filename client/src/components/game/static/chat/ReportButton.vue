@@ -70,7 +70,7 @@ export default class Chat extends Vue {
 
   async submitReport() {
     const formData: ChatReportData = {
-      roomId: this.$ajax.roomId,
+      roomId: this.$ajax.roomId!,
       username: this.username,
       message: this.message
     }

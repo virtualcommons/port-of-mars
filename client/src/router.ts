@@ -53,6 +53,10 @@ function isAuthenticated() {
   return store.getters.isAuthenticated;
 }
 
+function isAdmin() {
+  return store.getters.isAdmin;
+}
+
 router.beforeEach((to, from, next) => {
   if (from === VueRouter.START_LOCATION) {
     console.log("initializing store");
@@ -75,6 +79,8 @@ router.beforeEach((to: any, from: any, next: any) => {
     next({ name: OPENLOGIN_PAGE });
   } else if (to.name === OPENLOGIN_PAGE && isAuthenticated()) {
     next({ name: DASHBOARD_PAGE });
+  } else if (to.name === ADMIN_PAGE && !isAdmin()) {
+    next({ name: HOME_PAGE });
   } else {
     next();
   }

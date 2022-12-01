@@ -16,6 +16,24 @@ export class AccountService extends BaseService {
     return !!user.isVerified && !!user.email && !!user.isActive;
   }
 
+  async setAdminByUsername(username: string): Promise<User> {
+    const user = await this.findByUsername(username);
+    user.isAdmin = true;
+    return await this.getRepository().save(user);
+  }
+
+  async banByUsername(username: string): Promise<User> {
+    const user = await this.findByUsername(username);
+    user.isBanned = true;
+    return await this.getRepository().save(user);
+  }
+
+  async unbanByUsername(username: string): Promise<User> {
+    const user = await this.findByUsername(username);
+    user.isBanned = false;
+    return await this.getRepository().save(user);
+  }
+
   async findByUsername(username: string): Promise<User> {
     return await this.getRepository().findOneOrFail({ username })
   }

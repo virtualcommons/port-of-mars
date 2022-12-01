@@ -169,6 +169,7 @@ export function defaultTradeData(): TradeDataWithNull<"" | Role> {
 
 export interface User {
   username: string;
+  isAdmin: boolean;
   passedQuiz?: boolean;
   isVerified?: boolean;
   dateConsented?: Date;
@@ -275,6 +276,7 @@ export const initialStoreState: State = {
   eventCardsVisible: [],
   user: {
     username: "",
+    isAdmin: false,
     passedQuiz: false,
     isVerified: false,
   },

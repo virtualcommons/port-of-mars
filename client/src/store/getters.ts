@@ -12,6 +12,10 @@ export default {
     return state.user?.username !== '';
   },
 
+  isAdmin(state: State): boolean {
+    return state.user?.isAdmin;
+  },
+
   user(state: State): User {
     return state.user;
   },
