@@ -5,7 +5,7 @@
         <template #title>
           <b-icon icon="bar-chart-fill" class="mr-3"></b-icon>Overview
         </template>
-        <Overview></Overview>
+        <Overview :stats="adminStats"></Overview>
       </b-tab>
       <b-tab>
         <template #title>
@@ -43,6 +43,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import { AdminStats } from "@port-of-mars/shared/types";
 import { AdminAPI } from "@port-of-mars/client/api/admin/request";
 import Overview from "@port-of-mars/client/components/admin/Overview.vue";
 import Rooms from "@port-of-mars/client/components/admin/Rooms.vue";
@@ -63,6 +64,24 @@ import Settings from "@port-of-mars/client/components/admin/Settings.vue";
 })
 export default class Admin extends Vue {
   api!: AdminAPI;
+  adminStats: AdminStats = {
+    totalGames: 0,
+    activeGames: 0,
+    defeats: {
+      withBots: 0,
+      withoutBots: 0,
+    },
+    victories: {
+      withBots: 0,
+      withoutBots: 0,
+    },
+    totalUsers: 0,
+    reportedUsers: {
+      resolved: 0,
+      unresolved: 0,
+    },
+    bannedUsers: 0,
+  }
 
   async created() {
     this.api = new AdminAPI(this.$tstore, this.$ajax);
@@ -70,8 +89,9 @@ export default class Admin extends Vue {
   }
 
   async initialize() {
-    const data = await this.api.getData();
-    // TODO: store admin stats
+    const data = await this.api.getAdminStats();
+    console.log(data);
+    Vue.set(this, "adminStats", data)
   }
 }
 </script>

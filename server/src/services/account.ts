@@ -1,4 +1,4 @@
-import { User } from "@port-of-mars/server/entity";
+import { ChatReport, User } from "@port-of-mars/server/entity";
 import { MoreThan, IsNull, Not, In, Repository, UpdateResult } from "typeorm"
 import { settings } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
@@ -14,6 +14,29 @@ export class AccountService extends BaseService {
 
   isRegisteredAndValid(user: User): boolean {
     return !!user.isVerified && !!user.email && !!user.isActive;
+  }
+
+  async getTotalRegisteredUsers(): Promise<number> {
+    return await this.getRepository().count({
+      where: { isActive: true, isVerified: true }
+    });
+  }
+
+  async getTotalBannedUsers(): Promise<number> {
+    return await this.getRepository().count({
+      where: { isBanned: true }
+    });
+  }
+
+  async getTotalReportedUsers(): Promise<{ resolved: number, unresolved: number }> {
+    return {
+      resolved: await this.em.getRepository(ChatReport).count({
+        where: { resolved: true }
+      }),
+      unresolved: await this.em.getRepository(ChatReport).count({
+        where: { resolved: false }
+      })
+    }
   }
 
   async setAdminByUsername(username: string): Promise<User> {

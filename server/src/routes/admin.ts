@@ -1,28 +1,18 @@
 import { Router, Request, Response } from "express";
 import { getServices } from "@port-of-mars/server/services";
+import { AdminStats } from "@port-of-mars/shared/types";
 import { unless, isAdminAuthenticated } from "@port-of-mars/server/routes/middleware";
 
 export const adminRouter = Router();
 
 adminRouter.use(unless("/submit-report", isAdminAuthenticated));
 
-adminRouter.get("/", async (req: Request, res: Response, next) => {
+adminRouter.get("/stats", async (req: Request, res: Response, next) => {
   try {
-    // FIXME: replace with AdminService calls
-    const gameService = getServices().game;
-    const totalCompletedGames = await gameService.getTotalCompletedGames();
-    const totalVictoryGamesWithoutBots =
-      await gameService.getTotalGamesWithoutBots();
-    const totalActiveGames = await gameService.getTotalActiveGames();
-    const activeGames = await gameService.getAllActiveGames();
-    const adminData = {
-      totalCompletedGames,
-      totalVictoryGamesWithoutBots,
-      totalActiveGames,
-      activeGames,
-    };
-    res.json(adminData);
-  } catch (e) {
+    const adminStats = await getServices().admin.getAdminStats();
+    res.json(adminStats);
+  }
+  catch (e) {
     next(e);
   }
 });

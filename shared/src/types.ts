@@ -332,11 +332,18 @@ export interface Stats {
   games: Array<PlayerStatItem>;
 }
 
+export interface GameStatus {
+  status: "incomplete" | "defeat" | "victory" | "failure" | "incomplete";
+}
+
 export interface AdminStats {
-  totalGames: number;
-  gamesWithoutBots: number;
-  gamesWithoutBotsThatSurvived: number;
-  reportedPlayers: number;
+  totalGames: number; // completed games
+  activeGames: number;
+  defeats: { withBots: number; withoutBots: number };
+  victories: { withBots: number; withoutBots: number };
+  totalUsers: number;
+  reportedUsers: { resolved: number; unresolved: number };
+  bannedUsers: number;
 }
 
 export interface PlayerTaskCompletion {

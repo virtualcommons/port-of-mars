@@ -1,5 +1,6 @@
 import { Game, GameEvent, Player } from "@port-of-mars/server/entity";
 import { BaseService } from "@port-of-mars/server/services/db";
+import { GameStatus } from "@port-of-mars/shared/types";
 import { IsNull, Not, SelectQueryBuilder } from "typeorm";
 
 export class GameService extends BaseService {
@@ -19,32 +20,29 @@ export class GameService extends BaseService {
     });
   }
 
-  async getTotalCompletedGames(): Promise<number> {
+  async getTotalCompletedGames(
+    status: GameStatus | Array<GameStatus> = [{ status: "victory" }, { status: "defeat" }] 
+  ): Promise<number> {
     return await this.em.getRepository(Game).count({
-      where: [{ status: "victory" }, { status: "defeat" }],
+      where: status
     });
   }
 
-  async getTotalGamesWithoutBots(status='victory'): Promise<number> {
-    // select * from games g inner join players p inner join users u on g.id=p.gameId and p.userId=u.id where u.isBot=False
+  async getTotalGamesWithBots(
+    status: GameStatus | Array<GameStatus> = [{ status: "victory" }, { status: "defeat" }]
+  ): Promise<number> {
     const games = await this.em
       .getRepository(Game)
       .createQueryBuilder("game")
       .innerJoin("game.players", "player")
       .innerJoin("player.user", "user")
-      .where("user.isBot = :isBot", { isBot: false })
-      .andWhere("game.status = :status", { status })
+      // FIXME: this wont find games where someone timed out to a bot, to do so
+      // we would need to set isBot on the player instead of just the user since
+      // that becomes unreliable
+      .where("user.isSystemBot = :isSystemBot", { isSystemBot: true })
+      .andWhere("game.status = :status", status)
       .getMany();
     return games.length;
-  }
-
-  async getAllActiveGames(): Promise<Array<Game>> {
-    return await this.em.getRepository(Game).find({
-      relations: ["players"],
-      where: {
-        dateFinalized: IsNull(),
-      },
-    });
   }
 
   async findEventsByGameId(gameId: number): Promise<Array<GameEvent>> {
