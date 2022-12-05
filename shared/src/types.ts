@@ -30,10 +30,18 @@ export interface ChatMessageData {
   round: number;
 }
 
-export interface ChatReportData {
+export interface ChatReportRequestData {
+  // bare-minimum data that the client sends off when creating a chat report
   roomId: string;
   username: string;
   message: ChatMessageData;
+}
+
+export interface ChatReportData extends ChatReportRequestData{
+  id: number;
+  resolved: boolean;
+  isBanned: boolean;
+  dateCreated: Date;
 }
 
 export interface MarsLogData {

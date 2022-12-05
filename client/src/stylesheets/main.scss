@@ -168,6 +168,18 @@ button {
   }
 }
 
+// override vue-bootstrap dark table variant
+.table-dark {
+  background-color: $dark;
+  th {
+    background-color: $dark !important;
+    border-color: $light-shade-25 !important;
+  }
+  td {
+    border-color: $light-shade-25 !important;
+  }
+}
+
 .backdrop {
   background-color: $light-shade-05;
 }

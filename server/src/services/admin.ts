@@ -32,46 +32,26 @@ export class AdminService extends BaseService {
     }
   }
 
-  // select * from games and games.players where user.isBot == false
-  // async getData(): Promise<any> {
-  //   const games = await this.em.getRepository(Game).find({
-  //     join: { alias: "games", innerJoin: { players: "game.players" } },
-  //     where: (qb: SelectQueryBuilder<Game>) => {
-  //       qb.where({ dateFinalized: Not(IsNull()) });
-  //     },
-  //     relations: ["players"],
-  //   });
-
-  //   const totalGames: AdminStats["totalGames"] = _.size(games);
-
-  //   const gameWithoutBots: AdminStats["gamesWithoutBots"] = _.size(
-  //     games.map((g) => {
-  //       g.players.forEach((player: Player) => {
-  //         if (!player.user.isBot) {
-  //           return g.roomId;
-  //         }
-  //       });
-  //     })
-  //   );
-
-  //   const gamesWithoutBotsThatSurvived: AdminStats["gamesWithoutBotsThatSurvived"] =
-  //     _.size(
-  //       games.map((g) => {
-  //         g.players.forEach((player: Player) => {
-  //           if (!player.user.isBot && g.status == "victory") {
-  //             return g.roomId;
-  //           }
-  //         });
-  //       })
-  //     );
-
-  //   return {
-  //     totalGames: totalGames,
-  //     gamesWithoutBots: gameWithoutBots,
-  //     gamesWithoutBotsThatSurvived: gamesWithoutBotsThatSurvived,
-  //     reportedPlayers: 0,
-  //   };
-  // }
+  async getChatReports(): Promise<Array<ChatReportData>> {
+    const reports = await this.em
+      .getRepository(ChatReport)
+      .createQueryBuilder("report")
+      .innerJoinAndSelect("report.game", "game")
+      .innerJoinAndSelect("report.user", "user")
+      .getMany();
+    logger.debug(reports)
+    return reports.map((r: ChatReport) => {
+      return {
+        id: r.id,
+        username: r.user.username,
+        isBanned: r.user.isBanned,
+        roomId: r.game.roomId,
+        message: r.message as ChatMessageData,
+        resolved: r.resolved,
+        dateCreated: r.dateCreated
+      }
+    });
+  }
 
   async submitReport(data: ChatReportData) {
     logger.debug("user in room: %s submitted report for chat message sent by: %s",
@@ -88,5 +68,15 @@ export class AdminService extends BaseService {
       message
     });
     await repository.save(scheduledDate);
+  }
+
+  async resolveReport(data: { reportId: number, resolved: boolean, username: string, ban: boolean }) {
+    if (data.ban) {
+      this.sp.account.banByUsername(data.username);
+    }
+    const repository = this.em.getRepository(ChatReport);
+    const report = await repository.findOneOrFail({ id: data.reportId });
+    report.resolved = data.resolved;
+    await repository.save(report);
   }
 }

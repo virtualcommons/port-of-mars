@@ -38,7 +38,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { url } from "@port-of-mars/client/util";
 import { faPaperPlane } from "@fortawesome/free-regular-svg-icons/faPaperPlane";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { ChatMessageData, ChatReportData, Role } from "@port-of-mars/shared/types";
+import { ChatMessageData, ChatReportRequestData, Role } from "@port-of-mars/shared/types";
 import ChatMessage from "@port-of-mars/client/components/game/static/chat/ChatMessage.vue";
 import ReportModal from "@port-of-mars/client/components/game/modals/ReportModal.vue";
 
@@ -69,10 +69,10 @@ export default class Chat extends Vue {
   }
 
   async submitReport() {
-    const formData: ChatReportData = {
+    const formData: ChatReportRequestData = {
       roomId: this.$ajax.roomId!,
       username: this.username,
-      message: this.message
+      message: this.message,
     }
     await this.$ajax.post(
       this.submitReportUrl,

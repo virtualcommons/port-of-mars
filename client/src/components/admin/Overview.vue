@@ -1,5 +1,5 @@
 <template>
-  <b-container fluid class="h-100 m-0 p-0 overflow-auto">
+  <b-container fluid class="h-100 w-100 m-0 p-0 overflow-auto">
     <b-row class="m-2 mt-5">
       <h4 style="margin-left: 2rem;">Games</h4>
       <div class="w-100"></div>

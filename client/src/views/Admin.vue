@@ -1,5 +1,5 @@
 <template>
-  <b-container fluid class="h-100 m-0 p-0 backdrop overflow-auto">
+  <b-container fluid class="h-100 w-100 m-0 p-0 backdrop">
     <b-tabs vertical class="h-100 w-100" nav-wrapper-class="sidebar-wrapper" nav-class="sidebar">
       <b-tab active class="h-100 w-100">
         <template #title>
@@ -17,7 +17,7 @@
         <template #title>
           <b-icon icon="flag-fill" class="mr-3"></b-icon>Reports
         </template>
-        <Reports></Reports>
+        <Reports :reports="chatReports"></Reports>
       </b-tab>
       <b-tab>
         <template #title>
@@ -43,7 +43,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { AdminStats } from "@port-of-mars/shared/types";
+import { AdminStats, ChatReportData } from "@port-of-mars/shared/types";
 import { AdminAPI } from "@port-of-mars/client/api/admin/request";
 import Overview from "@port-of-mars/client/components/admin/Overview.vue";
 import Rooms from "@port-of-mars/client/components/admin/Rooms.vue";
@@ -67,21 +67,13 @@ export default class Admin extends Vue {
   adminStats: AdminStats = {
     totalGames: 0,
     activeGames: 0,
-    defeats: {
-      withBots: 0,
-      withoutBots: 0,
-    },
-    victories: {
-      withBots: 0,
-      withoutBots: 0,
-    },
+    defeats: { withBots: 0, withoutBots: 0 },
+    victories: { withBots: 0, withoutBots: 0 },
     totalUsers: 0,
-    reportedUsers: {
-      resolved: 0,
-      unresolved: 0,
-    },
+    reportedUsers: { resolved: 0, unresolved: 0 },
     bannedUsers: 0,
   }
+  chatReports: Array<ChatReportData> = [];
 
   async created() {
     this.api = new AdminAPI(this.$tstore, this.$ajax);
@@ -89,9 +81,11 @@ export default class Admin extends Vue {
   }
 
   async initialize() {
-    const data = await this.api.getAdminStats();
-    console.log(data);
-    Vue.set(this, "adminStats", data)
+    const adminStats = await this.api.getAdminStats();
+    const chatReports = await this.api.getChatReports();
+    console.log(chatReports);
+    Vue.set(this, "adminStats", adminStats);
+    Vue.set(this, "chatReports", chatReports);
   }
 }
 </script>
