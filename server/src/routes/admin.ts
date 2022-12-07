@@ -16,6 +16,34 @@ adminRouter.get("/stats", async (req: Request, res: Response, next) => {
   }
 });
 
+adminRouter.get("/rooms", async (req: Request, res: Response, next) => {
+  try {
+    const rooms = await getServices().admin.getActiveRooms();
+    res.json(rooms);
+  } catch (e) {
+    next(e);
+  }
+});
+
+adminRouter.get("/lobby", async (req: Request, res: Response, next) => {
+  try {
+    const lobby = await getServices().admin.getLobbyData();
+    res.json(lobby);
+  } catch (e) {
+    next(e);
+  }
+});
+
+adminRouter.get("/room", async (req: Request, res: Response, next) => {
+  const roomId = req.query.roomId as string;
+  try {
+    const room = await getServices().admin.getInspectData(roomId);
+    res.json(room);
+  } catch (e) {
+    next(e);
+  }
+});
+
 adminRouter.get("/chat-reports", async (req: Request, res: Response, next) => {
   try {
     const chatReports = await getServices().admin.getChatReports();

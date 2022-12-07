@@ -1,10 +1,11 @@
-import { User, Game, Player, ChatReport } from "@port-of-mars/server/entity";
+import { matchMaker } from "colyseus";
+import { GameRoom } from "@port-of-mars/server/rooms/game";
+import { RankedLobbyRoom } from "@port-of-mars/server/rooms/lobby";
+import { ChatReport } from "@port-of-mars/server/entity";
 import { BaseService } from "@port-of-mars/server/services/db";
-import { AdminStats, ChatReportData, ChatMessageData } from "@port-of-mars/shared/types";
-import { IsNull, Not, SelectQueryBuilder } from "typeorm";
-import { getLogger, settings } from "@port-of-mars/server/settings";
+import { AdminStats, ChatReportData, ChatMessageData, InspectData } from "@port-of-mars/shared/types";
+import { getLogger } from "@port-of-mars/server/settings";
 import _ from "lodash";
-import { getServices } from ".";
 
 const logger = getLogger(__filename);
 
@@ -30,6 +31,27 @@ export class AdminService extends BaseService {
       reportedUsers: await this.sp.account.getTotalReportedUsers(),
       bannedUsers: await this.sp.account.getTotalBannedUsers(),
     }
+  }
+
+  async getLobbyData(): Promise<any> {
+    const lobby = await matchMaker.findOneRoomAvailable(RankedLobbyRoom.NAME, {});
+    return lobby ?? {};
+  }
+
+  async getActiveRooms(): Promise<any> {
+    const games = await matchMaker.query({ name: GameRoom.NAME });
+    return games.map((g: any) => {
+      return {
+        roomId: g.roomId,
+        clients: g.clients,
+        elapsed: Date.now() - new Date(g.createdAt).getTime()
+      }
+    });
+  }
+
+  async getInspectData(roomId: string): Promise<InspectData> {
+    const data = await matchMaker.remoteRoomCall(roomId, "getInspectData");
+    return data;
   }
 
   async getChatReports(): Promise<Array<ChatReportData>> {

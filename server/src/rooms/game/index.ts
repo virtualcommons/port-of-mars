@@ -29,7 +29,7 @@ import {
 import { User } from "@port-of-mars/server/entity";
 import { Command } from "@port-of-mars/server/rooms/game/commands/types";
 import { TakenStateSnapshot } from "@port-of-mars/server/rooms/game/events";
-import { GameState, Player } from "@port-of-mars/server/rooms/game/state";
+import { GameState, Player, PlayerSerialized } from "@port-of-mars/server/rooms/game/state";
 import {
   Game,
   GameOpts,
@@ -39,7 +39,7 @@ import {
 import { getServices } from "@port-of-mars/server/services";
 import { settings } from "@port-of-mars/server/settings";
 import { Requests, Responses } from "@port-of-mars/shared/game";
-import { Phase, Role, ROLES } from "@port-of-mars/shared/types";
+import { InspectData, Phase, Role, ROLES } from "@port-of-mars/shared/types";
 import { GameEvent } from "@port-of-mars/server/rooms/game/events/types";
 import _ from "lodash";
 import { DBPersister } from "@port-of-mars/server/services/persistence";
@@ -265,6 +265,23 @@ export class GameRoom extends Room<GameState> implements Game {
       gameId: this.gameId,
       dateCreated: new Date(),
       timeRemaining: this.state.timeRemaining,
+    };
+  }
+
+  async getInspectData(): Promise<InspectData> {
+    const state = this.state.toJSON();
+    const players = this.state.players.asArray();
+    return {
+      players: players.map((p: Player) => {
+        return {
+          username: p.username,
+          role: p.role,
+          isBot: p.isBot
+        }
+      }),
+      systemHealth: state.systemHealth,
+      marsLog: state.logs,
+      chatMessages: state.messages
     };
   }
 

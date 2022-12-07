@@ -344,6 +344,13 @@ export interface GameStatus {
   status: "incomplete" | "defeat" | "victory" | "failure" | "incomplete";
 }
 
+export interface InspectData {
+  players: Array<{ username: string, role: string, isBot: boolean }>;
+  systemHealth: number;
+  marsLog: Array<MarsLogMessageData>;
+  chatMessages: Array<ChatMessageData>;
+}
+
 export interface AdminStats {
   totalGames: number; // completed games
   activeGames: number;

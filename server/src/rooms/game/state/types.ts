@@ -42,6 +42,8 @@ export interface MarsEventDeckSerialized {
 
 export interface PlayerSerialized {
   role: Role;
+  username: string;
+  isBot: boolean;
   costs: ResourceCostData;
   specialty: Resource;
   // TODO: rename to accomplishments for consistency but postpone till we're about to have a new tournament

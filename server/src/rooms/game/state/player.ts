@@ -128,6 +128,8 @@ export class Player
 
   fromJSON(data: PlayerSerialized): Player {
     this.role = data.role;
+    this.username = data.username,
+    this.isBot = data.isBot,
     this.costs.fromJSON(data.costs);
     this.specialty = data.specialty;
     // this.accomplishments = "";
@@ -146,6 +148,8 @@ export class Player
   toJSON(): PlayerSerialized {
     return {
       role: this.role,
+      username: this.username,
+      isBot: this.isBot,
       costs: this.costs.toJSON(),
       specialty: this.specialty,
       // FIXME: rename to accomplishments but will also involve a data migration for all persisted events
