@@ -5,19 +5,19 @@
         <template #title>
           <b-icon icon="bar-chart-fill" class="mr-3"></b-icon>Overview
         </template>
-        <Overview :stats="adminStats"></Overview>
+        <Overview :stats="adminStats" @refresh="fetchAdminStats"></Overview>
       </b-tab>
       <b-tab>
         <template #title>
           <b-icon icon="ui-radios" class="mr-3"></b-icon>Rooms
         </template>
-        <Rooms></Rooms>
+        <Rooms :rooms="roomList" :lobby="lobbyData" @refresh="fetchActiveRoomsAndLobby"></Rooms>
       </b-tab>
       <b-tab>
         <template #title>
           <b-icon icon="flag-fill" class="mr-3"></b-icon>Reports
         </template>
-        <Reports :reports="chatReports"></Reports>
+        <Reports :reports="chatReports" @refresh="fetchChatReports"></Reports>
       </b-tab>
       <b-tab>
         <template #title>
@@ -74,6 +74,8 @@ export default class Admin extends Vue {
     bannedUsers: 0,
   }
   chatReports: Array<ChatReportData> = [];
+  roomList: any = [];
+  lobbyData: any = {};
 
   async created() {
     this.api = new AdminAPI(this.$tstore, this.$ajax);
@@ -81,11 +83,26 @@ export default class Admin extends Vue {
   }
 
   async initialize() {
+    await this.fetchAdminStats();
+    await this.fetchChatReports();
+    await this.fetchActiveRoomsAndLobby();
+  }
+
+  async fetchAdminStats() {
     const adminStats = await this.api.getAdminStats();
-    const chatReports = await this.api.getChatReports();
-    console.log(chatReports);
     Vue.set(this, "adminStats", adminStats);
+  }
+
+  async fetchChatReports() {
+    const chatReports = await this.api.getChatReports();
     Vue.set(this, "chatReports", chatReports);
+  }
+
+  async fetchActiveRoomsAndLobby() {
+    const roomList = await this.api.getActiveRooms();
+    const lobbyData = await this.api.getLobbyData();
+    Vue.set(this, "roomList", roomList);
+    Vue.set(this, "lobbyData", lobbyData);
   }
 }
 </script>

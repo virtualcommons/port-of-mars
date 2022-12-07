@@ -32,7 +32,7 @@
           class="p-4"
           style="overflow-y: auto; overflow-x: hidden; height: 90%; background-color: var(--dark-shade)"
         >
-          <MarsLog orderByMostRecent="true"></MarsLog>
+          <MarsLog :logs="logs" :orderByMostRecent="true"></MarsLog>
         </div>
       </b-col>
     </b-row>
@@ -63,6 +63,10 @@ export default class Victory extends Vue {
 
   get playerRole() {
     return this.$tstore.state.role;
+  }
+
+  get logs() {
+    return this.$tstore.getters.logs;
   }
 
   get phase() {

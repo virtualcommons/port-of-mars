@@ -13,7 +13,10 @@
       <!-- b-row wrapper to achieve chat scroll effect -->
       <b-row class="w-100 justify-content-center" align-content="end">
         <!-- if there is no chat history to display -->
-        <p class="ml-4" v-if="messages.length === 0">
+        <p v-if="readOnly && messages.length === 0" class="m-5" style="color: rgba(241, 224, 197, 0.25)">
+          No chat history to display.
+        </p>
+        <p class="ml-4" v-if="!readOnly && messages.length === 0">
           Chat is recorded. Please adhere to the
           <b><a target="_blank"
                href="https://github.com/virtualcommons/port-of-mars/wiki/Port-of-Mars-Chat-Code-of-Conduct">
@@ -31,13 +34,14 @@
         >
         <!-- report button slot -->
         <!-- TODO: hide report button on server-generated audit chat messages -->
-          <ReportButton :message="message" :showUsername="false"></ReportButton>
+          <ReportButton v-if="reportable" :message="message" :showUsername="false"></ReportButton>
         </ChatMessage>
       </b-row>
     </b-row>
     <!-- flex-shrink-1: tells this row to shrink as needed to make room for other flex-items
     within the height constraints of b-container -->
-    <b-row class="w-100 h-auto align-items-center flex-shrink-1 my-2 mx-auto">
+    <b-row v-if="!readOnly"
+      class="w-100 h-auto align-items-center flex-shrink-1 my-2 mx-auto">
       <b-col cols="10" class="w-100">
         <b-form-input
           ref="chatInputRef"
@@ -73,7 +77,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Inject } from "vue-property-decorator";
+import { Vue, Prop, Component, Inject } from "vue-property-decorator";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPaperPlane } from "@fortawesome/free-regular-svg-icons/faPaperPlane";
@@ -93,10 +97,19 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
 export default class Chat extends Vue {
   @Inject() readonly api!: GameRequestAPI;
 
+  @Prop({ default: false })
+  readOnly!: boolean;
+
+  @Prop({ default: true })
+  reportable!: boolean;
+
+  @Prop()
+  messages!: any;
+
   pendingMessage: string = "";
 
   focusChatInput() {
-    if (this.isChatAvailable) {
+    if (this.isChatAvailable && !this.readOnly) {
       (<any>this.$refs.chatInputRef).focus();
     }
   }
@@ -114,10 +127,6 @@ export default class Chat extends Vue {
 
   get isChatAvailable(): any {
     return this.$store.getters.isChatAvailable;
-  }
-
-  get messages(): any {
-    return this.$tstore.state.messages;
   }
 
   updated() {
