@@ -30,8 +30,14 @@ export interface GameOpts extends GameStateOpts {
 
 export interface GameStateOpts {
   userRoles: { [username: string]: Role };
+  playerOpts: Map<Role, PlayerOptsData>,
   deck: Array<MarsEventData>;
   numberOfGameRounds: number;
+}
+
+export interface PlayerOptsData {
+  username: string;
+  isBot: boolean;
 }
 
 export type Metadata = Pick<GameEvent, 'dateCreated' | 'timeRemaining' | 'gameId'>

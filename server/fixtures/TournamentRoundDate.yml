@@ -1,8 +1,0 @@
-entity: TournamentRoundDate
-items:
-  firstLobbyOpening:
-    tournamentRound: '@firstRound'
-    date: '2020-09-30 15:00:00 GMT-0700'
-  secondLobbyOpening:
-    tournamentRound: '@firstRound'
-    date: '2020-09-30 19:00:00 GMT-0700'

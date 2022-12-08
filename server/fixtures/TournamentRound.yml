@@ -1,8 +1,6 @@
 entity: TournamentRound
 items:
-  firstRound:
+  openTournamentRound:
     roundNumber: 1
-    tournament: '@tournament'
-    introSurveyUrl: 'https://asu.co1.qualtrics.com/jfe/form/SV_0c8tCMZkAUh4V8x'
-    exitSurveyUrl: 'https://asu.co1.qualtrics.com/jfe/form/SV_6FNhPbsBuybTjEN'
+    tournament: '@openTournament'
     numberOfGameRounds: 8

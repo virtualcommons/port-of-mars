@@ -245,21 +245,24 @@ export class SimpleBot implements Bot {
   elapsed = 0;
   maxInactivityTime = 300;
   warningTime = 240;
-  active = false;
 
-  constructor(public actor: ActorRunner, public player: Player, isBot?: boolean) {
-    if (isBot) {
-      this.active = true;
+  constructor(public actor: ActorRunner, public player: Player) {
+    if (player.isBot) {
+      // instantiated as a bot means this is a system bot and has no max inactivity time
       this.maxInactivityTime = -1;
     }
+  }
+
+  get active() {
+    return this.player.isBot;
   }
 
   get shouldBeActive(): boolean {
     return this.elapsed >= this.maxInactivityTime;
   }
 
-  static fromActor(player: Player, isBot?: boolean): SimpleBot {
-    return new SimpleBot(new ActorRunner(), player, isBot);
+  static fromActor(player: Player): SimpleBot {
+    return new SimpleBot(new ActorRunner(), player);
   }
 
   incrementElapsed(): void {
@@ -284,7 +287,9 @@ export class SimpleBot implements Bot {
     if (this.active) {
       if (this.shouldBeActive) {
         const events = this.actor[state.phase](state, this.player);
-        if (events.length > 0) logger.debug('actor events performed: %o', events);
+        if (events.length > 0) {
+          logger.debug('bot actor performed events: %o', events);
+        }
         return events;
       } else {
         return [new BotControlRelinquished({role: this.player.role})]

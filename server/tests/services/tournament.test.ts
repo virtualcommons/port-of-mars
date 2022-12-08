@@ -30,18 +30,18 @@ describe.skip('first round', () => {
   describe('users', () => {
     it('can join if they\'ve completed registration, passed the tutorial and not played any games this round', async () => {
       const bob = await services.account.getOrCreateUser({ email: 'bob@foo.com', passportId: 'foo' });
-      expect(await services.auth.checkUserCanPlayGame(bob.id, tr.id)).toBeFalsy();
+      expect(await services.auth.checkUserHasTournamentInvite(bob.id, tr.id)).toBeFalsy();
       await services.registration.submitRegistrationMetadata(bob, {username: 'bob', email: 'bob@foo.com', name: 'Bob'});
-      expect(await services.auth.checkUserCanPlayGame(bob.id, tr.id)).toBeFalsy();
+      expect(await services.auth.checkUserHasTournamentInvite(bob.id, tr.id)).toBeFalsy();
       // FIXME: invites are automatically created in submitRegistrationMetadata now for the first round of a tournament
       // we should test that an invite exists now since this is the first round of the Tournament
 
       await services.registration.verifyUnregisteredUser(bob, bob.registrationToken);
-      expect(await services.auth.checkUserCanPlayGame(bob.id, tr.id)).toBeFalsy();
+      expect(await services.auth.checkUserHasTournamentInvite(bob.id, tr.id)).toBeFalsy();
 
       await services.quiz.setUserQuizCompletion(bob.id, true);
       await services.tournament.createInvite(bob.id, tr.id);
-      expect(await services.auth.checkUserCanPlayGame(bob.id, tr.id)).toBeTruthy();
+      expect(await services.auth.checkUserHasTournamentInvite(bob.id, tr.id)).toBeTruthy();
 
 
       // workaround to avoid creating and finalizing a game
@@ -50,7 +50,7 @@ describe.skip('first round', () => {
       if (invite) {
         invite.hasParticipated = true;
         await qr.manager.getRepository(TournamentRoundInvite).save(invite);
-        expect(await services.auth.checkUserCanPlayGame(bob.id, tr.id)).toBeFalsy();
+        expect(await services.auth.checkUserHasTournamentInvite(bob.id, tr.id)).toBeFalsy();
       }
     });
   });

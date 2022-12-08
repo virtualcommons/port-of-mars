@@ -1,6 +1,10 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Admin from "@port-of-mars/client/views/Admin.vue";
+import Overview from "@port-of-mars/client/views/admin/Overview.vue";
+import Rooms from "@port-of-mars/client/views/admin/Rooms.vue";
+import Reports from "@port-of-mars/client/views/admin/Reports.vue";
+import Settings from "@port-of-mars/client/views/admin/Settings.vue";
 import Login from "@port-of-mars/client/views/Login.vue";
 import Lobby from "@port-of-mars/client/views/Lobby.vue";
 import Game from "@port-of-mars/client/views/Game.vue";
@@ -34,7 +38,13 @@ Vue.use(VueRouter);
 const router = new VueRouter({
   mode: "hash",
   routes: [
-    { ...PAGE_META[ADMIN_PAGE], component: Admin },
+    { ...PAGE_META[ADMIN_PAGE], component: Admin, children: [
+      { path: "", name: "Admin", redirect: { name: "AdminOverview" } },
+      { path: "overview", name: "AdminOverview", component: Overview },
+      { path: "rooms", name: "AdminRooms", component: Rooms },
+      { path: "reports", name: "AdminReports", component: Reports },
+      { path: "settings", name: "AdminSettings", component: Settings },
+    ] },
     { ...PAGE_META[LOGIN_PAGE], component: Login },
     { ...PAGE_META[LOBBY_PAGE], component: Lobby },
     { ...PAGE_META[GAME_PAGE], component: Game },
@@ -51,6 +61,10 @@ const router = new VueRouter({
 
 function isAuthenticated() {
   return store.getters.isAuthenticated;
+}
+
+function isAdmin() {
+  return store.getters.isAdmin;
 }
 
 router.beforeEach((to, from, next) => {
@@ -75,6 +89,8 @@ router.beforeEach((to: any, from: any, next: any) => {
     next({ name: OPENLOGIN_PAGE });
   } else if (to.name === OPENLOGIN_PAGE && isAuthenticated()) {
     next({ name: DASHBOARD_PAGE });
+  } else if (to.name === ADMIN_PAGE && !isAdmin()) {
+    next({ name: HOME_PAGE });
   } else {
     next();
   }

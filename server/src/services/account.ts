@@ -1,4 +1,4 @@
-import { User } from "@port-of-mars/server/entity";
+import { ChatReport, User } from "@port-of-mars/server/entity";
 import { MoreThan, IsNull, Not, In, Repository, UpdateResult } from "typeorm"
 import { settings } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
@@ -14,6 +14,53 @@ export class AccountService extends BaseService {
 
   isRegisteredAndValid(user: User): boolean {
     return !!user.isVerified && !!user.email && !!user.isActive;
+  }
+
+  async getTotalRegisteredUsers(): Promise<number> {
+    return await this.getRepository().count({
+      where: { isActive: true, isVerified: true }
+    });
+  }
+
+  async getTotalBannedUsers(): Promise<number> {
+    return await this.getRepository().count({
+      where: { isBanned: true }
+    });
+  }
+
+  async getTotalReportedUsers(): Promise<{ resolved: number, unresolved: number }> {
+    return {
+      resolved: await this.em.getRepository(ChatReport).count({
+        where: { resolved: true }
+      }),
+      unresolved: await this.em.getRepository(ChatReport).count({
+        where: { resolved: false }
+      })
+    }
+  }
+
+  async setAdminByUsername(username: string): Promise<User> {
+    const user = await this.findByUsername(username);
+    user.isAdmin = true;
+    return await this.getRepository().save(user);
+  }
+
+  async banByUsername(username: string): Promise<User> {
+    const user = await this.findByUsername(username);
+    user.isBanned = true;
+    return await this.getRepository().save(user);
+  }
+
+  async unbanByUsername(username: string): Promise<User> {
+    const user = await this.findByUsername(username);
+    user.isBanned = false;
+    return await this.getRepository().save(user);
+  }
+
+  async getBannedUsers(): Promise<Array<User>> {
+    return await this.getRepository().find({
+      where: { isBanned: true }
+    });
   }
 
   async findByUsername(username: string): Promise<User> {
@@ -103,7 +150,7 @@ export class AccountService extends BaseService {
     }
     // test user, set fake data so they can immediately join a game
     // FIXME: use run-time configuration / settings to determine what user properties to bypass (passedQuiz, isVerified, hasParticipated, etc)
-    // user.dateConsented = new Date();
+    user.dateConsented = new Date();
     user.isVerified = true;
     // user.passedQuiz = true;
     await this.getRepository().save(user);
@@ -126,7 +173,7 @@ export class AccountService extends BaseService {
       user.email = userData.email;
       user.passportId = userData.passportId ?? '';
       user.username = await generateUsername();
-      user.isBot = false;
+      user.isSystemBot = false;
       logger.info('getOrCreateUser: not found, creating user %s', user.username);
       await this.getRepository().save(user);
     }
@@ -144,7 +191,6 @@ export class AccountService extends BaseService {
         const bot = new User();
         bot.username = await generateUsername();
         bot.name = `robot ${bot.username}`
-        bot.isBot = true;
         bot.isSystemBot = true;
         await this.getRepository().save(bot);
         bots.push(bot);

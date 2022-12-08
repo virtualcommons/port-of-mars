@@ -13,15 +13,21 @@
       <b-navbar-nav class="ml-auto">
 
         <b-nav-item
+          v-if="isAdmin"
+          :to="admin"
+          exact-active-class="active"
+          title="Admin Dashboard"
+        >Admin</b-nav-item>
+        <b-nav-item
           :to="dashboard"
           exact-active-class="active"
-          title="Play Port of Mars"
+          title="Player Dashboard"
         >Play</b-nav-item>
         <b-nav-item
           :to="manual"
           target="_blank"
           exact-active-class="active"
-          title="Manual"
+          title="Game Manual"
         >Manual</b-nav-item>
         <b-nav-item
           :to="consent"
@@ -33,7 +39,7 @@
           href="https://instagram.com/portofmars/"
           target="_blank"
           exact-active-class="active"
-          title="News"
+          title="Port of Mars on Instagram"
         >News</b-nav-item>
 
         <!-- Icons -->
@@ -66,6 +72,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import {
+  ADMIN_PAGE,
   DASHBOARD_PAGE,
   HOME_PAGE,
   LOGIN_PAGE,
@@ -92,6 +99,7 @@ export default class Header extends Vue {
   };
   readonly SITE_URL = "https://portofmars.asu.edu";
 
+  admin = { name: ADMIN_PAGE };
   dashboard = { name: DASHBOARD_PAGE };
   consent = { name: REGISTER_PAGE };
   home = { name: HOME_PAGE };
@@ -117,6 +125,10 @@ export default class Header extends Vue {
 
   get isAuthenticated() {
     return this.$tstore.getters.isAuthenticated;
+  }
+
+  get isAdmin() {
+    return this.$tstore.getters.isAdmin;
   }
 
   get isInGame() {

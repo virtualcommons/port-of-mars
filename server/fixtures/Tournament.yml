@@ -1,5 +1,8 @@
 entity: Tournament
 items:
-  tournament:
-    name: 'Initial Development and Testing Tournament'
+  openTournament:
+    name: 'openbeta'
     active: true
+    minNumberOfGameRounds: 8
+    maxNumberOfGameRounds: 12
+    description: 'Mono-Tournament for the Port of Mars Open Beta'

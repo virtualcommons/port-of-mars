@@ -81,7 +81,7 @@ export class AjaxRequest {
 
   async forgetLoginCreds() {
     document.cookie = "connect.sid= ;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-    this.store.commit('SET_USER', { username: '', passedQuiz: false });
+    this.store.commit('SET_USER', { username: '', isAdmin: false, passedQuiz: false });
     await this.get(url('/logout'), () => { });
   }
 

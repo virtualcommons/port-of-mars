@@ -29,7 +29,7 @@ import {
 import { User } from "@port-of-mars/server/entity";
 import { Command } from "@port-of-mars/server/rooms/game/commands/types";
 import { TakenStateSnapshot } from "@port-of-mars/server/rooms/game/events";
-import { GameState, Player } from "@port-of-mars/server/rooms/game/state";
+import { GameState, Player, PlayerSerialized } from "@port-of-mars/server/rooms/game/state";
 import {
   Game,
   GameOpts,
@@ -39,11 +39,11 @@ import {
 import { getServices } from "@port-of-mars/server/services";
 import { settings } from "@port-of-mars/server/settings";
 import { Requests, Responses } from "@port-of-mars/shared/game";
-import { Phase, Role, ROLES } from "@port-of-mars/shared/types";
+import { InspectData, Phase, Role, ROLES } from "@port-of-mars/shared/types";
 import { GameEvent } from "@port-of-mars/server/rooms/game/events/types";
 import _ from "lodash";
 import { DBPersister } from "@port-of-mars/server/services/persistence";
-import { buildGameOpts } from "@port-of-mars/server/util";
+import { mockGameInitOpts } from "@port-of-mars/server/util";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -144,20 +144,11 @@ function prepareRequest(
 
 async function onCreate(
   room: GameRoomType,
-  options?: GameOpts,
+  options: GameOpts,
   shouldEnableDb?: boolean
 ): Promise<void> {
   shouldEnableDb = shouldEnableDb ?? false;
-  options = options ?? (await buildGameOpts()); // FIXME: should this ever be allowed to be empty
-  // FIXME: hack to inject User.isBot properties into the PlayerSet
-  // build a dictionary mapping Role -> isBot
-  const userRoles = options.userRoles;
-  const users = await getServices().account.findUsers(Object.keys(userRoles));
-  const botRoles: Map<Role, boolean> = new Map();
-  for (const user of users) {
-    botRoles.set(userRoles[user.username], user.isBot);
-  }
-  room.setState(new GameState(options, botRoles));
+  room.setState(new GameState(options));
   room.setPrivate(true);
   room.onMessage("*", (client, type, message) => {
     // we can refactor this.prepareRequest to not run a billion long switch statement and instead have
@@ -192,16 +183,18 @@ export class LoadTestGameRoom extends Room<GameState> implements Game {
 
   async onCreate() {
     logger.info("creating room %s", this.roomId);
-    const options = await buildGameOpts();
+    const options = await mockGameInitOpts();
     await onCreate(this, options, false);
   }
 
   onJoin(client: Client, options: { username: string }): void | Promise<any> {
-    const roles = _.difference(ROLES, Object.values(this.state.userRoles));
-    if (roles.length === 0) {
-      logger.fatal("no available roles");
-    }
-    this.state.userRoles[client.id] = roles[0];
+    // commented out because this shouldn't be necessary if we use mockGameInitOpts
+    // to create canned user data
+    // const roles = _.difference(ROLES, Object.values(this.state.userRoles));
+    // if (roles.length === 0) {
+    //   logger.fatal("no available roles");
+    // }
+    // this.state.userRoles[client.id] = roles[0];
   }
 
   getMetadata(): Metadata {
@@ -272,6 +265,24 @@ export class GameRoom extends Room<GameState> implements Game {
       gameId: this.gameId,
       dateCreated: new Date(),
       timeRemaining: this.state.timeRemaining,
+    };
+  }
+
+  async getInspectData(): Promise<InspectData> {
+    const state = this.state.toJSON();
+    const players = this.state.players.asArray();
+    return {
+      players: players.map((p: Player) => {
+        return {
+          username: p.username,
+          role: p.role,
+          isBot: p.isBot,
+          points: p.victoryPoints
+        }
+      }),
+      systemHealth: state.systemHealth,
+      marsLog: state.logs,
+      chatMessages: state.messages
     };
   }
 

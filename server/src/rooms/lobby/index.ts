@@ -34,6 +34,7 @@ interface ClientStat {
   group?: MatchmakingGroup;
   rank: number;
   confirmed?: boolean;
+  hasInvite?: boolean;
 }
 
 export class RankedLobbyRoom extends Room<LobbyRoomState> {
@@ -142,22 +143,13 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
     try {
       const user = await getServices().account.findUserById((request as any).session.passport.user);
       return user;
-      // Don't need to do this for the open beta
-      // logger.debug('checking if user %s can play the game', user.username);
-      // if (await getServices().auth.checkUserCanPlayGame(user.id)) {
-      //   return user;
-      // }
-
-      // FIXME: this won't work since we don't have any registered handlers to process this client-side
-      // this.sendSafe(client, { kind: 'join-failure', reason: 'Please complete all onboarding items on your dashboard before joining a game.' });
-      logger.debug('user should be redirected back to the dashboard');
     } catch (e) {
       logger.fatal('Unable to authenticate client: %s', e);
     }
     return false;
   }
 
-  async onJoin(client: Client, options: any) {
+  async onJoin(client: Client, options: any, auth: any) {
     // FIXME: need to consider how this will scale and adjust if we go to the multiple-process Colyseus route, we may
     // need to include process ID info in the Game table so we can find how many participants a given Colyseus process is servicing
 
@@ -188,16 +180,21 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
       })
       return;
     }
+    // check if user has an invite to a tournament other than the open beta tournament
+    // FIXME: handle clients with an invite differently than open beta players
+    const hasInvite = await sp.auth.checkUserHasTournamentInvite(auth.id);
+    if (hasInvite) logger.debug("user: %s has invite to a tournament", auth.id);
     const clientStat = {
       client: client,
       rank: options.rank,
       waitingTime: 0,
+      hasInvite,
       options
     };
     this.clientStats.push(clientStat);
     this.state.waitingUserCount = this.clientStats.length;
     this.sendSafe(client, { kind: 'joined-client-queue', value: true });
-    // FIXME: first come first serve semantics, allocate groups as soon as we have enough people to allocate
+    // first come first serve semantics, allocate groups as soon as we have enough people to allocate
     if (this.clientStats.length >= this.numClientsToMatch) {
       this.redistributeGroups();
     }
@@ -213,9 +210,7 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
           clientStat.confirmed = true;
           group.confirmed++;
         }
-        /**
-         * check if this group's confirmed count matches the total number of clients it is managing
-         */
+        //check if this group's confirmed count matches the total number of clients it is managing
         if (group.hasConfirmedAllClients()) {
           // if so, let's disconnect all clients from this lobby room so they can connect to their
           // unique game instance
@@ -268,15 +263,11 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
     let currentGroup = this.createGroup();
     for (const clientStat of shuffledClientStats) {
       clientStat.waitingTime += this.clock.deltaTime;
-      /**
-       * do not attempt to re-assign groups for clients inside "ready" groups
-       */
+      // do not attempt to re-assign groups for clients inside "ready" groups
       if (clientStat.group && clientStat.group.ready) {
         continue;
       }
-      /**
-       * Create a new group if the current group is full.
-       */
+      // Create a new group if the current group is full.
       if (currentGroup.isFull(this.numClientsToMatch)) {
         currentGroup = this.createGroup();
       }
@@ -296,7 +287,6 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
     if (usernames.length < this.numClientsToMatch) {
       const requiredBots = this.numClientsToMatch - usernames.length;
       const bots = await getServices().account.getOrCreateBotUsers(requiredBots);
-      // FIXME: consider making bot usernames a more display friendly
       return usernames.concat(bots.map(u => u.username)).slice(0, this.numClientsToMatch);
     }
     return usernames;

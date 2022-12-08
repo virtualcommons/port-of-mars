@@ -11,7 +11,7 @@
         </p>
         <!-- log message -->
         <b-row
-          v-for="log in logs"
+          v-for="log in orderedLogs"
           :style="{ backgroundColor: categoryColorMap.get(log.category) }"
           :key="log.id"
           class="h-auto w-100 my-1 flex-column justify-content-start"
@@ -54,16 +54,20 @@ export default class MarsLog extends Vue {
   @Prop({ default: false })
   orderByMostRecent!: boolean;
 
+  @Prop()
+  logs!: any;
+
   updated() {
     const elem = this.$el.querySelector(".scroll-to-recent");
     elem!.scrollTop = elem!.scrollHeight;
   }
 
-  get logs() {
+  get orderedLogs() {
+    console.log(this.logs.length);
     if (this.orderByMostRecent) {
-      return _.orderBy(this.$tstore.getters.logs, ["timestamp", "id"], ["desc", "desc"]);
+      return _.orderBy(this.logs, ["timestamp", "id"], ["desc", "desc"]);
     }
-    return this.$tstore.getters.logs;
+    return this.logs;
   }
 
   get categoryColorMap() {

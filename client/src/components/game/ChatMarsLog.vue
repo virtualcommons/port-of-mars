@@ -36,14 +36,14 @@
         class="w-100 mt-2 tour-log-view overflow-hidden"
         style="border: 0.125rem solid #A49CA6"
       >
-        <MarsLog />
+        <MarsLog :logs="logs"/>
       </b-col>
       <b-col
         v-show="currentView === view.Chat || currentView === view.Split"
         class="w-100 mt-2 tour-chat overflow-hidden"
         style="border: 0.125rem solid #A49CA6"
       >
-        <Chat />
+        <Chat :messages="messages"/>
       </b-col>
     </b-row>
   </b-container>
@@ -64,15 +64,27 @@ import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 })
 export default class ChatMarsLog extends Vue {
   @Inject() readonly api!: GameRequestAPI;
+
   get currentView() {
     return this.$tstore.state.userInterface.chatMarsLogView;
   }
+
   get view() {
     return ChatMarsLogView;
   }
+
+  get messages() {
+    return this.$tstore.state.messages;
+  }
+
+  get logs() {
+    return this.$tstore.getters.logs;
+  }
+
   buttonClass(buttonViewOption: ChatMarsLogView) {
     return buttonViewOption === this.currentView ? "selected" : "";
   }
+
   switchCurrentView(view: ChatMarsLogView) {
     this.api.setChatMarsLogView(view);
   }

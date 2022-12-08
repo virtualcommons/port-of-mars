@@ -53,9 +53,6 @@ export class User {
   isActive!: boolean;
 
   @Column({ default: false })
-  isBot!: boolean;
-
-  @Column({ default: false })
   isSystemBot!: boolean;
 
   @Column({ default: "" })
@@ -66,4 +63,7 @@ export class User {
 
   @Column({ default: false })
   isAdmin!: boolean;
+
+  @Column({ default: false })
+  isBanned!: boolean;
 }

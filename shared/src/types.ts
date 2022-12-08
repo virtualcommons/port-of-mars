@@ -30,6 +30,20 @@ export interface ChatMessageData {
   round: number;
 }
 
+export interface ChatReportRequestData {
+  // bare-minimum data that the client sends off when creating a chat report
+  roomId: string;
+  username: string;
+  message: ChatMessageData;
+}
+
+export interface ChatReportData extends ChatReportRequestData{
+  id: number;
+  resolved: boolean;
+  isBanned: boolean;
+  dateCreated: Date;
+}
+
 export interface MarsLogData {
   category: string;
   message: string;
@@ -244,6 +258,8 @@ export interface PlayerData<
   SystemHealthChanges = SystemHealthChangesData
 > {
   role: Role;
+  username: string;
+  isBot: boolean;
   costs: ResourceCostData;
   botWarning: boolean;
   specialty: Resource;
@@ -251,6 +267,7 @@ export interface PlayerData<
   ready: boolean;
   timeBlocks: number;
   systemHealthChanges: SystemHealthChanges;
+  isMuted: boolean;
   isCompulsivePhilanthropist: boolean;
   victoryPoints: number;
   inventory: ResourceAmount;
@@ -324,11 +341,25 @@ export interface Stats {
   games: Array<PlayerStatItem>;
 }
 
+export interface GameStatus {
+  status: "incomplete" | "defeat" | "victory" | "failure" | "incomplete";
+}
+
+export interface InspectData {
+  players: Array<{ username: string, role: string, isBot: boolean, points: number }>;
+  systemHealth: number;
+  marsLog: Array<MarsLogMessageData>;
+  chatMessages: Array<ChatMessageData>;
+}
+
 export interface AdminStats {
-  totalGames: number;
-  gamesWithoutBots: number;
-  gamesWithoutBotsThatSurvived: number;
-  reportedPlayers: number;
+  totalGames: number; // completed games
+  activeGames: number;
+  defeats: { withBots: number; withoutBots: number };
+  victories: { withBots: number; withoutBots: number };
+  totalUsers: number;
+  reportedUsers: { resolved: number; unresolved: number };
+  bannedUsers: number;
 }
 
 export interface PlayerTaskCompletion {
