@@ -1,43 +1,23 @@
 <template>
-  <b-container fluid class="h-100 w-100 m-0 p-0 backdrop">
-    <b-tabs vertical class="h-100 w-100" nav-wrapper-class="sidebar-wrapper" nav-class="sidebar">
-      <b-tab active class="h-100 w-100">
-        <template #title>
-          <b-icon icon="bar-chart-fill" class="mr-3"></b-icon>Overview
-        </template>
-        <Overview :stats="adminStats" @refresh="fetchAdminStats"></Overview>
-      </b-tab>
-      <b-tab>
-        <template #title>
-          <b-icon icon="ui-radios" class="mr-3"></b-icon>Rooms
-        </template>
-        <Rooms :rooms="roomList" :lobby="lobbyData" @refresh="fetchActiveRoomsAndLobby"></Rooms>
-      </b-tab>
-      <b-tab>
-        <template #title>
-          <b-icon icon="flag-fill" class="mr-3"></b-icon>Reports
-        </template>
-        <Reports :reports="chatReports" @refresh="fetchChatReports"></Reports>
-      </b-tab>
-      <b-tab>
-        <template #title>
-          <b-icon icon="calendar-week-fill" class="mr-3"></b-icon>Schedule
-       </template>
-       <Schedule></Schedule>
-      </b-tab>
-      <b-tab>
-        <template #title>
-          <b-icon icon="trophy-fill" class="mr-3"></b-icon>Tournaments
-        </template>
-        <Tournaments></Tournaments>
-      </b-tab>
-      <b-tab>
-        <template #title>
-          <b-icon icon="gear-fill" class="mr-3"></b-icon>Settings
-        </template>
-        <Settings></Settings>
-      </b-tab>
-    </b-tabs>
+  <b-container class="h-100 p-0 m-0 bg" fluid>
+    <b-row no-gutters class="h-100 w-100">
+      <!-- admin sidebar -->
+      <b-nav pills class="sidebar" vertical style="display: block; position: fixed; width: 100%; max-width:145px;">
+        <b-nav-item class="nav-link" active-class="active" to="/admin/overview">
+          Overview
+        </b-nav-item>
+        <b-nav-item class="nav-link" active-class="active" to="/admin/rooms">
+          Rooms
+        </b-nav-item>
+        <b-nav-item class="nav-link" active-class="active" to="/admin/reports">
+          Reports
+        </b-nav-item>
+        <b-nav-item class="nav-link" active-class="active" disabled to="/admin/settings">
+          Settings
+        </b-nav-item>
+      </b-nav>
+      <router-view class="h-100 backdrop" style="position: relative; margin-left: 145px !important;"></router-view>
+    </b-row>
   </b-container>
 </template>
 
@@ -48,8 +28,6 @@ import { AdminAPI } from "@port-of-mars/client/api/admin/request";
 import Overview from "@port-of-mars/client/components/admin/Overview.vue";
 import Rooms from "@port-of-mars/client/components/admin/Rooms.vue";
 import Reports from "@port-of-mars/client/components/admin/Reports.vue";
-import Schedule from "@port-of-mars/client/components/admin/Schedule.vue";
-import Tournaments from "@port-of-mars/client/components/admin/Tournaments.vue";
 import Settings from "@port-of-mars/client/components/admin/Settings.vue";
 
 @Component({
@@ -57,8 +35,6 @@ import Settings from "@port-of-mars/client/components/admin/Settings.vue";
     Overview,
     Rooms,
     Reports,
-    Schedule,
-    Tournaments,
     Settings
   }
 })
@@ -107,7 +83,7 @@ export default class Admin extends Vue {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .overflow-auto {
   overflow: auto;
 }
@@ -120,9 +96,6 @@ export default class Admin extends Vue {
 .sidebar {
   border: none;
   .nav-link {
-    padding: 20px;
-    border: none;
-    border-radius: 0;
     color: #918d8d;
     &.active {
       background-color: $primary;

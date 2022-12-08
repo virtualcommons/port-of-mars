@@ -95,7 +95,7 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
   }
 })
 export default class Chat extends Vue {
-  @Inject() readonly api!: GameRequestAPI;
+  @Inject({ default: null }) readonly api!: GameRequestAPI;
 
   @Prop({ default: false })
   readOnly!: boolean;

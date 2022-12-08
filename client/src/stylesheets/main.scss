@@ -171,6 +171,12 @@ button {
 // override vue-bootstrap dark table variant
 .table-dark {
   background-color: $dark;
+  .hidden-header {
+    display: none;
+  }
+  .extra-small {
+    padding: 0.2rem;
+  }
   th {
     background-color: $dark !important;
     border-color: $light-shade-25 !important;
@@ -178,6 +184,11 @@ button {
   td {
     border-color: $light-shade-25 !important;
   }
+}
+
+// fix for bootstrap-vue sticky header on tables not working
+.b-table-sticky-header > .table.b-table > thead > tr > th {
+  position: sticky !important;
 }
 
 .backdrop {

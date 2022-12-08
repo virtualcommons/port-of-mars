@@ -345,7 +345,7 @@ export interface GameStatus {
 }
 
 export interface InspectData {
-  players: Array<{ username: string, role: string, isBot: boolean }>;
+  players: Array<{ username: string, role: string, isBot: boolean, points: number }>;
   systemHealth: number;
   marsLog: Array<MarsLogMessageData>;
   chatMessages: Array<ChatMessageData>;

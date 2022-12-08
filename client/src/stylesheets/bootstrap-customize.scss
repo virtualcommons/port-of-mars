@@ -1,5 +1,12 @@
 $enable-rounded: true;
 
+// Custom Sizes
+
+$sizes: (
+  "30" : 30%,
+  "70" : 70%,
+);
+
 // Buttons
 
 $btn-disabled-opacity: 0.3;

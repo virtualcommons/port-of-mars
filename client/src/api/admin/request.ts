@@ -65,4 +65,50 @@ export class AdminAPI {
       throw e;
     }
   }
+
+  async submitReportResolution(
+    data: { reportId: number, resolved: boolean, username: string, ban: boolean },
+    successCallback: () => void,
+  ): Promise<void> {
+    try {
+      await this.ajax.post(url("/admin/resolve-report"), ({ data, status }) => {
+          if (status === 200) {
+            successCallback();
+          }
+        },
+        data
+      );
+    } catch (e) {
+      console.log("Unable to submit chat report resolution");
+      console.log(e);
+      throw e;
+    }
+  }
+
+  async getBannedUsers(): Promise<Array<string>> {
+    try {
+      return await this.ajax.get(url("/admin/banned-users"), ({ data, status }) => {
+        return data;
+      });
+    } catch (e) {
+      console.log("Unable to retrieve banned users");
+      console.log(e);
+      throw e;
+    }
+  }
+
+  async unbanUser(username: string, successCallback: () => void): Promise<void> {
+    try {
+      await this.ajax.post(url("/admin/unban?user=" + username), ({ data, status }) => {
+          if (status === 200) {
+            successCallback();
+          }
+        }
+      );
+    } catch (e) {
+      console.log("Unable to unban user");
+      console.log(e);
+      throw e;
+    }
+  }
 }

@@ -276,7 +276,8 @@ export class GameRoom extends Room<GameState> implements Game {
         return {
           username: p.username,
           role: p.role,
-          isBot: p.isBot
+          isBot: p.isBot,
+          points: p.victoryPoints
         }
       }),
       systemHealth: state.systemHealth,

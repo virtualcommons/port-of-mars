@@ -1,6 +1,6 @@
 <template>
   <b-container fluid class="h-100 w-100 m-0 p-0 overflow-auto">
-    <b-row class="m-2 mt-5">
+    <b-row class="m-0 mt-5 mr-4">
       <h4 style="margin-left: 2rem;">Games</h4>
       <div class="w-100"></div>
       <b-col cols="12" md="6" xl="3">
@@ -38,7 +38,7 @@
       <div class="w-100"></div>
       <p style="margin-left: 2rem;"><small>*Games with five human players</small></p>
     </b-row>
-    <b-row class="m-2 mt-5">
+    <b-row class="m-0 mt-5 mr-4">
       <h4 style="margin-left: 2rem;">Players</h4>
       <div class="w-100"></div>
       <b-col cols="12" md="6" xl="3">
@@ -79,6 +79,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
+import { AdminAPI } from "@port-of-mars/client/api/admin/request";
 import { AdminStats } from "@port-of-mars/shared/types";
 import AdminStatCard from "@port-of-mars/client/components/admin/AdminStatCard.vue";
 
@@ -88,8 +89,44 @@ import AdminStatCard from "@port-of-mars/client/components/admin/AdminStatCard.v
   }
 })
 export default class Overview extends Vue {
-  @Prop()
-  stats!: AdminStats;
+  api!: AdminAPI;
+  stats: AdminStats = {
+    totalGames: 0,
+    activeGames: 0,
+    defeats: { withBots: 0, withoutBots: 0 },
+    victories: { withBots: 0, withoutBots: 0 },
+    totalUsers: 0,
+    reportedUsers: { resolved: 0, unresolved: 0 },
+    bannedUsers: 0,
+  }
+  pollingIntervalId = 0;
+
+  async created() {
+    this.api = new AdminAPI(this.$tstore, this.$ajax);
+    await this.initialize();
+  }
+
+  beforeDestroy() {
+    if (this.pollingIntervalId != 0) {
+      window.clearInterval(this.pollingIntervalId);
+    }
+  }
+
+  async initialize() {
+    await this.fetchAdminStats();
+    this.refresh();
+  }
+
+  async refresh() {
+    this.pollingIntervalId = window.setInterval(async () => {
+      await this.fetchAdminStats();
+    }, 15 * 1000);
+  }
+
+  async fetchAdminStats() {
+    const stats = await this.api.getAdminStats();
+    Vue.set(this, "stats", stats);
+  }
 }
 </script>
 

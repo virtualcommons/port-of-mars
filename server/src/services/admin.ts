@@ -49,9 +49,15 @@ export class AdminService extends BaseService {
     });
   }
 
-  async getInspectData(roomId: string): Promise<InspectData> {
-    const data = await matchMaker.remoteRoomCall(roomId, "getInspectData");
-    return data;
+  async getInspectData(roomId: string): Promise<InspectData | undefined> {
+    if (roomId && await matchMaker.query({ roomId })) {
+      try {
+        const data = await matchMaker.remoteRoomCall(roomId, "getInspectData");
+        return data;
+      } catch (e) {
+        return undefined;
+      }
+    }
   }
 
   async getChatReports(): Promise<Array<ChatReportData>> {

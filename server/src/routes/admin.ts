@@ -38,6 +38,10 @@ adminRouter.get("/room", async (req: Request, res: Response, next) => {
   const roomId = req.query.roomId as string;
   try {
     const room = await getServices().admin.getInspectData(roomId);
+    if (!room) {
+      res.status(204).send(`"Room ${roomId} not found"`);
+      return;
+    }
     res.json(room);
   } catch (e) {
     next(e);
@@ -67,6 +71,25 @@ adminRouter.post("/resolve-report", async (req: Request, res: Response, next) =>
   try {
     const data = req.body;
     await getServices().admin.resolveReport(data);
+    res.json(true);
+  } catch (e) {
+    next(e);
+  }
+});
+
+adminRouter.get("/banned-users", async (req: Request, res: Response, next) => {
+  try {
+    const bannedUsers = await getServices().account.getBannedUsers();
+    res.json(bannedUsers);
+  } catch (e) {
+    next(e);
+  }
+});
+
+adminRouter.post("/unban", async (req: Request, res: Response, next) => {
+  const username = req.query.user as string;
+  try {
+    await getServices().account.unbanByUsername(username);
     res.json(true);
   } catch (e) {
     next(e);

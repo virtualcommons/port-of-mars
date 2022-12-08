@@ -50,16 +50,16 @@ export function getPagePath(page: Page): string {
 export const PAGE_META: {
   [p in Page]: {
     path: string;
-    name: string;
+    name?: string;
     props?: boolean;
-    meta: { requiresAuth: boolean };
+    meta: { requiresAuth: boolean, requiresAdmin?: boolean };
   };
 } = {
   [ADMIN_PAGE]: {
     path: "/admin",
-    name: ADMIN_PAGE,
     meta: {
       requiresAuth: true,
+      requiresAdmin: true,
     },
   },
   [REGISTER_PAGE]: {

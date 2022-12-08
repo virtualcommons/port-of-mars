@@ -57,6 +57,12 @@ export class AccountService extends BaseService {
     return await this.getRepository().save(user);
   }
 
+  async getBannedUsers(): Promise<Array<User>> {
+    return await this.getRepository().find({
+      where: { isBanned: true }
+    });
+  }
+
   async findByUsername(username: string): Promise<User> {
     return await this.getRepository().findOneOrFail({ username })
   }
