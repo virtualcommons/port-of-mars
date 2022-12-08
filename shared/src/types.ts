@@ -267,6 +267,7 @@ export interface PlayerData<
   ready: boolean;
   timeBlocks: number;
   systemHealthChanges: SystemHealthChanges;
+  isMuted: boolean;
   isCompulsivePhilanthropist: boolean;
   victoryPoints: number;
   inventory: ResourceAmount;

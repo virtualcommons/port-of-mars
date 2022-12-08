@@ -128,8 +128,9 @@ export class Player
 
   fromJSON(data: PlayerSerialized): Player {
     this.role = data.role;
-    this.username = data.username,
-    this.isBot = data.isBot,
+    this.username = data.username;
+    this.isBot = data.isBot;
+    this.isMuted = data.isMuted;
     this.costs.fromJSON(data.costs);
     this.specialty = data.specialty;
     // this.accomplishments = "";
@@ -150,6 +151,7 @@ export class Player
       role: this.role,
       username: this.username,
       isBot: this.isBot,
+      isMuted: this.isMuted,
       costs: this.costs.toJSON(),
       specialty: this.specialty,
       // FIXME: rename to accomplishments but will also involve a data migration for all persisted events
@@ -181,6 +183,9 @@ export class Player
 
   @type("boolean")
   botWarning = false;
+
+  @type("boolean")
+  isMuted = false;
 
   @type("string")
   specialty: Resource;
