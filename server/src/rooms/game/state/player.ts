@@ -27,7 +27,7 @@ import { GameStateOpts, PlayerOptsData } from "@port-of-mars/server/rooms/game/t
 
 const logger = settings.logging.getLogger(__filename);
 
-class PendingInvestment implements InvestmentData {
+class PendingInvestments implements InvestmentData {
   culture: number;
   finance: number;
   government: number;
@@ -36,7 +36,7 @@ class PendingInvestment implements InvestmentData {
   systemHealth: number;
 
   constructor() {
-    const pendingInvestments = { ...PendingInvestment.defaults() };
+    const pendingInvestments = { ...PendingInvestments.defaults() };
     this.culture = pendingInvestments.culture;
     this.finance = pendingInvestments.finance;
     this.government = pendingInvestments.government;
@@ -57,7 +57,7 @@ class PendingInvestment implements InvestmentData {
   }
 
   reset() {
-    Object.assign(this, PendingInvestment.defaults());
+    Object.assign(this, PendingInvestments.defaults());
   }
 
   fromJSON(data: InvestmentData) {
@@ -205,7 +205,7 @@ export class Player
   @type(ResourceInventory)
   inventory = new ResourceInventory();
 
-  pendingInvestments = new PendingInvestment();
+  pendingInvestments = new PendingInvestments();
 
   @type("number")
   victoryPoints = 0;
@@ -338,7 +338,7 @@ export class Player
     let leftOvers = 0;
     let minCostResource = "";
     let minCost = Infinity;
-    const leftOverInvestments: InvestmentData = PendingInvestment.defaults();
+    const leftOverInvestments: InvestmentData = PendingInvestments.defaults();
 
     for (const [k, v] of Object.entries(this.costs)) {
       if (v != Infinity) {

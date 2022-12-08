@@ -472,7 +472,8 @@ export class GameState
   }
 
   get currentEvent(): MarsEvent {
-    return this.marsEvents[this.marsEventsProcessed];
+    const marsEventIndex = Math.min(this.marsEventsProcessed, this.marsEvents.length - 1);
+    return this.marsEvents[marsEventIndex];
   }
 
   evaluateGameWinners(): void {
