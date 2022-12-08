@@ -25,19 +25,8 @@
 import { Component, Vue } from "vue-property-decorator";
 import { AdminStats, ChatReportData } from "@port-of-mars/shared/types";
 import { AdminAPI } from "@port-of-mars/client/api/admin/request";
-import Overview from "@port-of-mars/client/components/admin/Overview.vue";
-import Rooms from "@port-of-mars/client/components/admin/Rooms.vue";
-import Reports from "@port-of-mars/client/components/admin/Reports.vue";
-import Settings from "@port-of-mars/client/components/admin/Settings.vue";
 
-@Component({
-  components: {
-    Overview,
-    Rooms,
-    Reports,
-    Settings
-  }
-})
+@Component({})
 export default class Admin extends Vue {
   api!: AdminAPI;
   adminStats: AdminStats = {

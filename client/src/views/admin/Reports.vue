@@ -111,6 +111,7 @@ import ChatMessage from "@port-of-mars/client/components/game/static/chat/ChatMe
   }
 })
 export default class Reports extends Vue {
+  api!: AdminAPI;
   reports: Array<ChatReportData> = [];
   reportFields = [
     { key: "status", label: "Status" },
