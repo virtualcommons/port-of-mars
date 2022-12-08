@@ -35,6 +35,7 @@ type ServerResponse = {
 const RESPONSE_MAP: ServerResponse = {
   username: "SET_USERNAME",
   isBot: "SET_BOT_STATUS",
+  isMuted: "SET_IS_MUTED",
   botWarning: "SET_BOT_WARNING",
   specialty: "SET_SPECIALTY",
   timeBlocks: "SET_TIME_BLOCKS",

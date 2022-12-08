@@ -19,6 +19,10 @@ function SET_COMPULSIVE_PHILANTHROPIST(state: State, payload: { data: boolean; r
   state.players[payload.role].isCompulsivePhilanthropist = payload.data;
 }
 
+function SET_IS_MUTED(state: State, payload: { data: boolean; role: Role }) {
+  state.players[payload.role].isMuted = payload.data;
+}
+
 function SET_READINESS(state: State, payload: { data: boolean; role: Role }) {
   state.players[payload.role].ready = payload.data;
 }
@@ -57,4 +61,5 @@ export default {
   SET_ACCOMPLISHMENTS,
   SET_VICTORY_POINTS,
   SET_PENDING_INVESTMENTS,
+  SET_IS_MUTED,
 };

@@ -112,6 +112,7 @@ function defaultPlayerData(role: Role): PlayerClientData {
     ready: false,
     timeBlocks: 10,
     isCompulsivePhilanthropist: false,
+    isMuted: false,
     victoryPoints: 0,
     pendingInvestments: defaultPendingInvestment(),
     systemHealthChanges: {
