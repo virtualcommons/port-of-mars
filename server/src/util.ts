@@ -75,7 +75,7 @@ export async function buildGameOpts(usernames: Array<string>, isOpenGame: boolea
   }
   const playerData = await Promise.all(usernames.map(async (username) => ({
     username: username,
-    isBot: (await services.account.findByUsername(username)).isBot
+    isBot: (await services.account.findByUsername(username)).isSystemBot
   })));
   const playerOpts: GameOpts["playerOpts"] = new Map();
   playerData.forEach((p, i) => {

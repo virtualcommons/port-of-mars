@@ -173,7 +173,7 @@ export class AccountService extends BaseService {
       user.email = userData.email;
       user.passportId = userData.passportId ?? '';
       user.username = await generateUsername();
-      user.isBot = false;
+      user.isSystemBot = false;
       logger.info('getOrCreateUser: not found, creating user %s', user.username);
       await this.getRepository().save(user);
     }
@@ -191,7 +191,6 @@ export class AccountService extends BaseService {
         const bot = new User();
         bot.username = await generateUsername();
         bot.name = `robot ${bot.username}`
-        bot.isBot = true;
         bot.isSystemBot = true;
         await this.getRepository().save(bot);
         bots.push(bot);

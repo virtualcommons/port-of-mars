@@ -759,7 +759,7 @@ export class BotControlTaken extends GameEventWithData {
   }
 
   apply(game: GameState): void {
-    game.players[this.data.role].bot.active = true;
+    game.players[this.data.role].activateBot();
   }
 }
 
@@ -771,7 +771,7 @@ export class BotControlRelinquished extends GameEventWithData {
   }
 
   apply(game: GameState): void {
-    game.players[this.data.role].bot.active = false;
+    game.players[this.data.role].deactivateBot();
   }
 }
 

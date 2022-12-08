@@ -212,6 +212,14 @@ export class Player
   @type("boolean")
   isCompulsivePhilanthropist = false;
 
+  activateBot() {
+    this.isBot = true;
+  }
+
+  deactivateBot() {
+    this.isBot = false;
+  }
+
   act(state: GameState): Array<GameEvent> {
     return this.bot.act(state, this);
   }

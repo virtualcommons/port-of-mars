@@ -53,9 +53,6 @@ export class User {
   isActive!: boolean;
 
   @Column({ default: false })
-  isBot!: boolean;
-
-  @Column({ default: false })
   isSystemBot!: boolean;
 
   @Column({ default: "" })
