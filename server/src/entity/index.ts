@@ -1,6 +1,7 @@
 export * from './ChatReport';
 export * from './Game';
 export * from './GameEvent';
+export * from './Incident';
 export * from './Player';
 export * from './Question';
 export * from './QuestionResponse';
