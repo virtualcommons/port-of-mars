@@ -21,7 +21,11 @@ export class ScheduledGameDate {
   @Column()
   minutesOpenAfter!: number;
 
-  @Column()
+  @Column({
+    generatedType: "STORED",
+    asExpression: `"date" + interval '1 minute' * "minutesOpenAfter"`,
+    nullable: true
+  })
   lobbyCloseDate!: Date;
 
   @Column()

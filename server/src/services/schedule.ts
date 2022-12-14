@@ -29,13 +29,11 @@ export class ScheduleService extends BaseService {
       logger.debug("duplicate date: %s, nothing scheduled", gameDate.date.toUTCString());
       return null;
     }
-    const lobbyCloseDate = new Date(gameDate.date.getTime() + (gameDate.minutesOpenAfter * 60 * 1000));
     const repository = this.em.getRepository(ScheduledGameDate);
     const scheduledDate = repository.create({
       date: gameDate.date,
       minutesOpenBefore: gameDate.minutesOpenBefore,
       minutesOpenAfter: gameDate.minutesOpenAfter,
-      lobbyCloseDate,
       autoCreated
     });
     logger.debug("scheduling a game for %s, min before: %d, min after: %d",

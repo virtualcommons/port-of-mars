@@ -21,7 +21,7 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 @Component({})
 export default class Countdown extends Vue {
   @Prop({ default: 0 })
-  nextLaunch = 0;
+  nextLaunch!: number;
 
   secondInterval = 0;
   now: number = Math.trunc(Date.now() / 1000);
