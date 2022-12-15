@@ -136,9 +136,10 @@ export class AdminService extends BaseService {
     const report = await reportRepo.findOneOrFail({ id: data.reportId });
     const user = await this.sp.account.findByUsername(data.username);
     const admin = await this.sp.account.findByUsername(data.adminUsername);
+    const defaultMuteLength = await this.sp.settings.defaultMuteLength();
     const { username, adminUsername, ...incidentData } = data;
     if (data.action === MUTE) {
-     incidentData.muteLength = incidentData.muteLength || 3; // FIXME: pull default from settings
+     incidentData.muteLength = incidentData.muteLength || defaultMuteLength;
     }
     // submit incident
     const incident = incidentRepo.create({

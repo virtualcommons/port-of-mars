@@ -30,6 +30,8 @@ export interface SettingsData {
   maxConnections: number
   // amount in USD for the regular gift card drawing
   giftCardAmount: number
+  // length in days that a player will be muted for
+  defaultMuteLength: number
   // sign up enabled controls where the user is redirected once their email is verified
   isSignUpEnabled: boolean
   // if true, set all checks to true (isVerified, passedQuiz, completed intro and exit surveys), otherwise only bypass isVerified
@@ -72,6 +74,10 @@ export class RedisSettings {
 
   async giftCardAmount(): Promise<number> {
     return _.toNumber(await this.client.hget('settings', 'giftCardAmount'));
+  }
+
+  async defaultMuteLength(): Promise<number> {
+    return _.toNumber(await this.client.hget('settings', 'defaultMuteLength'));
   }
 
   async isSignUpEnabled(): Promise<boolean> {
