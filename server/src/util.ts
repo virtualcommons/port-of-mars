@@ -41,7 +41,8 @@ export function mockGameStateInitOpts(
   const usernames = [1, 2, 3, 4, 5].map(n => `${username}${n}`);
   const playerData = usernames.map((username) => ({
     username: username,
-    isBot: false
+    isBot: false,
+    isMuted: false
   }));
   const playerOpts: GameOpts["playerOpts"] = new Map();
   playerData.forEach((p, i) => {
@@ -66,17 +67,21 @@ export async function mockGameInitOpts(): Promise<GameOpts> {
 export async function buildGameOpts(usernames: Array<string>, isOpenGame: boolean = true): Promise<GameOpts> {
   const services = getServices();
   const currentTournamentRound = isOpenGame ?
-      await services.tournament.getCurrentTournamentRound()
-    : await services.tournament.getOpenTournamentRound();
+      await services.tournament.getOpenTournamentRound()
+    : await services.tournament.getCurrentTournamentRound();
   assert.equal(usernames.length, ROLES.length);
   logger.info("building game opts with current tournament round [%d]", currentTournamentRound.id);
   for (const u of usernames) {
     logger.debug("username: %s", u);
   }
-  const playerData = await Promise.all(usernames.map(async (username) => ({
-    username: username,
-    isBot: (await services.account.findByUsername(username)).isSystemBot
-  })));
+  const playerData = await Promise.all(usernames.map(async (username) => {
+    const user = await services.account.findByUsername(username);
+    return {
+      username: username,
+      isBot: user.isSystemBot,
+      isMuted: user.isMuted
+    }
+  }));
   const playerOpts: GameOpts["playerOpts"] = new Map();
   playerData.forEach((p, i) => {
     playerOpts.set(ROLES[i], p);

@@ -66,4 +66,10 @@ export class User {
 
   @Column({ default: false })
   isBanned!: boolean;
+
+  @Column({ default: false })
+  isMuted!: boolean;
+
+  @Column({ default: 0 })
+  muteStrikes!: number;
 }

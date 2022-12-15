@@ -23,6 +23,12 @@ export type Role =
   | "Politician";
 export type ServerRole = "Server";
 
+export type AdminAction = "mute" | "ban" | "none";
+export const MUTE: "mute" = "mute";
+export const BAN: "ban" = "ban";
+export const NONE: "none" = "none";
+export const ADMIN_ACTIONS = [MUTE, BAN, NONE];
+
 export interface ChatMessageData {
   message: string;
   role: string;
@@ -41,7 +47,26 @@ export interface ChatReportData extends ChatReportRequestData{
   id: number;
   resolved: boolean;
   isBanned: boolean;
+  isMuted: boolean;
+  muteStrikes: number;
   dateCreated: Date;
+}
+
+export interface IncidentData {
+  reportId: number;
+  username: string;
+  adminUsername: string;
+  action: AdminAction;
+  muteLength?: number;
+  revoked?: boolean;
+}
+
+export interface IncidentClientData {
+  id: number;
+  username: string;
+  adminUsername: string;
+  action: AdminAction;
+  dateExpires?: Date;
 }
 
 export interface MarsLogData {

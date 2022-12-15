@@ -49,9 +49,19 @@ adminRouter.get("/room", async (req: Request, res: Response, next) => {
 });
 
 adminRouter.get("/chat-reports", async (req: Request, res: Response, next) => {
+  const onlyUnresolved = req.query.onlyUnresolved === "true";
   try {
-    const chatReports = await getServices().admin.getChatReports();
+    const chatReports = await getServices().admin.getChatReports(onlyUnresolved);
     res.json(chatReports);
+  } catch (e) {
+    next(e);
+  }
+});
+
+adminRouter.get("/incidents", async (req: Request, res: Response, next) => {
+  try {
+    const incidents = await getServices().admin.getIncidents();
+    res.json(incidents);
   } catch (e) {
     next(e);
   }
@@ -67,10 +77,20 @@ adminRouter.post("/submit-report", async (req: Request, res: Response, next) => 
   }
 });
 
-adminRouter.post("/resolve-report", async (req: Request, res: Response, next) => {
+adminRouter.post("/take-action", async (req: Request, res: Response, next) => {
   try {
     const data = req.body;
-    await getServices().admin.resolveReport(data);
+    await getServices().admin.takeAction(data);
+    res.json(true);
+  } catch (e) {
+    next(e);
+  }
+});
+
+adminRouter.post("/undo-action", async (req: Request, res: Response, next) => {
+  try {
+    const data = req.body;
+    await getServices().admin.undoAction(data);
     res.json(true);
   } catch (e) {
     next(e);
@@ -81,16 +101,6 @@ adminRouter.get("/banned-users", async (req: Request, res: Response, next) => {
   try {
     const bannedUsers = await getServices().account.getBannedUsers();
     res.json(bannedUsers);
-  } catch (e) {
-    next(e);
-  }
-});
-
-adminRouter.post("/unban", async (req: Request, res: Response, next) => {
-  const username = req.query.user as string;
-  try {
-    await getServices().account.unbanByUsername(username);
-    res.json(true);
   } catch (e) {
     next(e);
   }

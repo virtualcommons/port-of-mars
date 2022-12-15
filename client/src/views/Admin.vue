@@ -23,52 +23,9 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { AdminStats, ChatReportData } from "@port-of-mars/shared/types";
-import { AdminAPI } from "@port-of-mars/client/api/admin/request";
 
 @Component({})
 export default class Admin extends Vue {
-  api!: AdminAPI;
-  adminStats: AdminStats = {
-    totalGames: 0,
-    activeGames: 0,
-    defeats: { withBots: 0, withoutBots: 0 },
-    victories: { withBots: 0, withoutBots: 0 },
-    totalUsers: 0,
-    reportedUsers: { resolved: 0, unresolved: 0 },
-    bannedUsers: 0,
-  }
-  chatReports: Array<ChatReportData> = [];
-  roomList: any = [];
-  lobbyData: any = {};
-
-  async created() {
-    this.api = new AdminAPI(this.$tstore, this.$ajax);
-    await this.initialize();
-  }
-
-  async initialize() {
-    await this.fetchAdminStats();
-    await this.fetchChatReports();
-    await this.fetchActiveRoomsAndLobby();
-  }
-
-  async fetchAdminStats() {
-    const adminStats = await this.api.getAdminStats();
-    Vue.set(this, "adminStats", adminStats);
-  }
-
-  async fetchChatReports() {
-    const chatReports = await this.api.getChatReports();
-    Vue.set(this, "chatReports", chatReports);
-  }
-
-  async fetchActiveRoomsAndLobby() {
-    const roomList = await this.api.getActiveRooms();
-    const lobbyData = await this.api.getLobbyData();
-    Vue.set(this, "roomList", roomList);
-    Vue.set(this, "lobbyData", lobbyData);
-  }
 }
 </script>
 

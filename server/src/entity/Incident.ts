@@ -2,8 +2,7 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, CreateDateColumn } f
 import { Expose } from "class-transformer";
 import { ChatReport } from "./ChatReport";
 import { User } from "./User";
-
-type ActionType = "mute" | "ban";
+import { AdminAction, ADMIN_ACTIONS } from "@port-of-mars/shared/types";
 
 @Entity()
 export class Incident {
@@ -28,8 +27,8 @@ export class Incident {
   @Column()
   adminId!: number;
 
-  @Column({ type: "enum", enum: ["mute", "ban"], default: "mute" })
-  action!: ActionType;
+  @Column({ type: "enum", enum: ADMIN_ACTIONS })
+  action!: AdminAction;
 
   @CreateDateColumn()
   dateCreated!: Date;

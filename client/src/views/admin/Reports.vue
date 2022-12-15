@@ -2,7 +2,7 @@
   <b-container fluid class="h-100 w-100 m-0 p-0 overflow-auto">
     <div class="h-100 p-3">
       <b-row class="h-100 m-0">
-        <b-col cols="9" class="mh-100 p-2">
+        <b-col cols="8" class="mh-100 p-2">
           <h4 class="header-nowrap">Reported Chat Messages</h4>
           <div class="h-100-header w-100 content-container">
             <b-table dark sticky-header
@@ -21,93 +21,103 @@
                 <b-badge v-else variant="warning">Unresolved</b-badge>
               </template>
               <template #cell(time)="data">
-                {{ formatTime(data.item.dateCreated) }}
+                {{ formatPastTime(data.item.dateCreated) }}
               </template>
               <template #cell(user)="data">
                 {{ data.item.username }}
+                <span v-if="data.item.isMuted" class="text-warning"> [muted]</span>
                 <span v-if="data.item.isBanned" class="text-danger"> [banned]</span>
+                <span v-else-if="data.item.muteStrikes" class="text-light"> 
+                  ({{ data.item.muteStrikes }} {{ data.item.muteStrikes === 1 ? 'strike' : 'strikes' }})
+                </span>
               </template>
               <template #cell(message)="data">
                 {{ data.item.message.message }}
               </template>
               <template #cell(action)="data">
-                <b-button-group style="float: right" size="sm">
-                  <b-button v-if="!data.item.resolved"
-                    variant="success"
-                    @click="submitResolution(data.item.id, true, data.item.username, false)"
-                  >Resolve</b-button>
-                  <b-button v-else
-                    variant="warning"
-                    @click="submitResolution(data.item.id, false, data.item.username, false)"
-                  >Unresolve</b-button>
-                  <b-button
-                    variant="danger"
-                    v-b-modal="getModalId(data.item.id)"
-                  >Ban</b-button>
-                  <b-modal
-                    :id="getModalId(data.item.id)"
-                    title="Are you sure?" 
-                    centered
-                    no-stacking
-                    header-bg-variant="primary"
-                    header-border-variant="primary"
-                    body-bg-variant="dark"
-                    footer-border-variant="dark"
-                    footer-bg-variant="dark"
-                    >
-                    <p class="my-4">
-                      Ban user <span class="text-danger">{{ data.item.username }}</span> from playing Port of Mars?
-                    </p>
-                    <template #modal-footer="{ cancel }">
-                      <b-button variant="secondary" @click="cancel">Cancel</b-button>
-                      <b-button
-                        variant="danger"
-                        @click="submitResolution(data.item.id, true, data.item.username, true);"
-                      >Ban User</b-button>
+                <b-button-group style="float: right">
+                  <ConfirmationModalButton
+                    variant="secondary"
+                    action="Hide"
+                    :modalId="getModalId('none', data.item.id)"
+                    @confirmed="takeAction({ reportId: data.item.id, action: 'none', username: data.item.username })"
+                  >
+                    <template>
+                      Resolve this report of user 
+                      <span class="text-danger">{{ data.item.username }}</span> 
+                      without taking any action?
                     </template>
-                  </b-modal>
+                  </ConfirmationModalButton>
+                  <ConfirmationModalButton
+                    variant="warning"
+                    action="Mute"
+                    :modalId="getModalId('mute', data.item.id)"
+                    @confirmed="takeAction({ reportId: data.item.id, action: 'mute', username: data.item.username })"
+                  >
+                    <template>
+                      Mute user 
+                      <span class="text-danger">{{ data.item.username }}</span> 
+                      for 3 days? This will prevent them from using the in-game chat.
+                    </template>
+                  </ConfirmationModalButton>
+                  <ConfirmationModalButton
+                    variant="danger"
+                    action="Ban"
+                    :modalId="getModalId('ban', data.item.id)"
+                    @confirmed="takeAction({ reportId: data.item.id, action: 'ban', username: data.item.username })"
+                  >
+                    <template>
+                      Ban user 
+                      <span class="text-danger">{{ data.item.username }}</span> 
+                      from playing Port of Mars?
+                    </template>
+                  </ConfirmationModalButton>
                 </b-button-group>
               </template>
             </b-table>
           </div>
         </b-col>
-        <b-col cols="3" class="mh-100 p-2">
-          <h4 class="header-nowrap">Banned Users</h4>
+        <b-col cols="4" class="mh-100 p-2">
+          <h4 class="header-nowrap">Actions Log</h4>
           <div class="h-100-header w-100 content-container">
             <b-table dark sticky-header
               class="h-100 m-0"
               style="max-height: none;"
-              :fields="bannedUserFields"
-              :items="bannedUsers"
+              :fields="incidentFields"
+              :items="incidents"
             >
-              <template #cell(username)="data">
-                {{ data.item.username }}
+              <template #cell(dateExpires)="data">
+                <span v-if="data.item.dateExpires">
+                  <span v-if="data.item.dateExpires > new Date()">expired</span>
+                  <span v-else>{{ formatFutureTime(data.item.dateExpires) }}</span>
+                </span>
               </template>
-              <template #cell(action)="data">
+              <template #cell(undo)="data">
                 <b-button size="sm"
-                  style="float: right"
                   variant="success"
-                  @click="unbanUser(data.item.username)"
-                >Unban</b-button>
+                  @click="undoAction(data.item.id, data.item.username)"
+                >
+                Undo</b-button>
               </template>
             </b-table>
           </div>
         </b-col>
       </b-row>
     </div>
-    
   </b-container>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { ChatReportData } from "@port-of-mars/shared/types";
+import { AdminAction, ChatReportData, IncidentData, IncidentClientData, MUTE, BAN, NONE } from "@port-of-mars/shared/types";
 import { AdminAPI } from "@port-of-mars/client/api/admin/request";
 import ChatMessage from "@port-of-mars/client/components/game/static/chat/ChatMessage.vue";
+import ConfirmationModalButton from "@port-of-mars/client/components/admin/ConfirmationModalButton.vue";
 
 @Component({
   components: {
-    ChatMessage
+    ChatMessage,
+    ConfirmationModalButton
   }
 })
 export default class Reports extends Vue {
@@ -122,10 +132,13 @@ export default class Reports extends Vue {
     { key: "message", label: "Message" },
     { key: "action", label: "Action" }
   ];
-  bannedUsers: Array<string> = [];
-  bannedUserFields = [
-    { key: "username", label: "Username" },
-    { key: "action", label: "Action" }
+  incidents: Array<IncidentClientData> = [];
+  incidentFields = [
+    { key: "adminUsername", label: "Admin" },
+    { key: "username", label: "User" },
+    { key: "action", label: "Action", sortable: true },
+    { key: "dateExpires", label: "Expires" },
+    { key: "undo", label: "" }
   ];
   pollingIntervalId = 0;
 
@@ -142,28 +155,28 @@ export default class Reports extends Vue {
 
   async initialize() {
     await this.fetchChatReports();
-    await this.fetchBannedUsers();
+    await this.fetchIncidents();
     this.refresh();
   }
 
   async refresh() {
     this.pollingIntervalId = window.setInterval(async () => {
       await this.fetchChatReports();
-      await this.fetchBannedUsers();
+      await this.fetchIncidents();
     }, 30 * 1000);
   }
 
   async fetchChatReports() {
-    const reports = await this.api.getChatReports();
+    const reports = await this.api.getUnresolvedChatReports();
     Vue.set(this, "reports", reports);
   }
 
-  async fetchBannedUsers() {
-    const bannedUsers = await this.api.getBannedUsers();
-    Vue.set(this, "bannedUsers", bannedUsers);
+  async fetchIncidents() {
+    const incidents = await this.api.getIncidents();
+    Vue.set(this, "incidents", incidents);
   }
 
-  formatTime(date: Date) {
+  formatPastTime(date: Date) {
     const time = new Date(date);
     const now = new Date();
     const diff = now.getTime() - time.getTime();
@@ -178,21 +191,40 @@ export default class Reports extends Vue {
     }
   }
 
-  getModalId(reportId: number) {
-    return `confirm-modal-${reportId}`;
+  formatFutureTime(date: Date) {
+    const time = new Date(date);
+    const now = new Date();
+    const diff = time.getTime() - now.getTime();
+    const hours = Math.ceil(diff / 1000 / 60 / 60);
+    const days = Math.ceil(hours / 24);
+    if (days > 0) {
+      return `in ${days} day${(days === 1) ? "" : "s"}`;
+    } else if (hours > 0) {
+      return `in ${hours} hour${(hours === 1) ? "" : "s"}`;
+    } else {
+      return "soon";
+    }
   }
 
-  async submitResolution(reportId: number, resolved: boolean, username: string, ban: boolean) {
-    await this.api.submitReportResolution({ reportId, resolved, username, ban }, () => {
-      this.$bvModal.hide(this.getModalId(reportId));
+  getModalId(action: string, reportId: number) {
+    return `confirm-${action}-modal-${reportId}`;
+  }
+
+  async takeAction(data: { reportId: number, username: string, action: AdminAction, muteLength?: number }) {
+    const incidentData: IncidentData = {
+      ...data,
+      adminUsername: this.$tstore.state.user.username
+    };
+    await this.api.takeAction(incidentData, () => {
+      this.$bvModal.hide(this.getModalId(data.action, data.reportId));
       this.fetchChatReports();
-      this.fetchBannedUsers();
+      this.fetchIncidents();
     });
   }
 
-  async unbanUser(username: string) {
-    await this.api.unbanUser(username, () => {
-      this.fetchBannedUsers();
+  async undoAction(incidentId: number, username: string) {
+    await this.api.undoAction({ incidentId, username }, () => {
+      this.fetchIncidents();
       this.fetchChatReports();
     });
   }
