@@ -6,6 +6,7 @@ import { RoomId } from "@port-of-mars/shared/types";
 import { OPENLOGIN_PAGE, DASHBOARD_PAGE, REGISTER_PAGE, HOME_PAGE } from "@port-of-mars/shared/routes";
 import { DashboardMessage } from "@port-of-mars/shared/types";
 import { url } from "@port-of-mars/client/util";
+import { initialUserState } from '@port-of-mars/shared/game/client/state';
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -81,7 +82,7 @@ export class AjaxRequest {
 
   async forgetLoginCreds() {
     document.cookie = "connect.sid= ;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-    this.store.commit('SET_USER', { username: '', isAdmin: false, passedQuiz: false });
+    this.store.commit('SET_USER', initialUserState);
     await this.get(url('/logout'), () => { });
   }
 

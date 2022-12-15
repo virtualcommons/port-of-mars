@@ -72,12 +72,16 @@ export class SendChatMessageCmd implements Command {
   }
 
   execute(): Array<SentChatMessage> {
-    // FIXME: add game ID to log messages, need to thread from the Game DB entity into GameState
+    if (this.player.isMuted) {
+      logger.debug(
+        "[CHAT game %d] muted player: %s attempted to send a chat message",
+        this.state.gameId, this.player.username
+      );
+      return [];
+    }
     logger.debug(
       "[CHAT game %d] %s: %s",
-      this.state.gameId,
-      this.player.role,
-      this.message
+      this.state.gameId, this.player.role, this.message
     );
     return [
       new SentChatMessage({

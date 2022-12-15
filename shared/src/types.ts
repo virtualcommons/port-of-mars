@@ -406,7 +406,7 @@ export interface TournamentStatus {
 }
 
 export interface DashboardData {
-  user: { username: string };
+  user: { username: string, isMuted: boolean, isBanned: boolean };
   playerTaskCompletion: PlayerTaskCompletion;
   introSurveyUrl: string;
   exitSurveyUrl: string;

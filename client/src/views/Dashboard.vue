@@ -31,12 +31,36 @@
                     ></b-embed>
                   </div>
                 </b-col>
-                <b-col sm="12" md="6" class="text-center" align-self="center">
+                <b-col sm="12" md="6" class="text-center d-flex flex-column align-items-center" align-self="center">
+                  <b-alert v-if="isBanned" show variant="danger" class="w-75 mb-5 text-left">
+                    <h4 class="alert-heading">Warning</h4>
+                    <p>
+                      Your account has been permanantly disabled in response to multiple or egregious violations of the
+                      <a href="https://github.com/virtualcommons/port-of-mars/wiki/Port-of-Mars-Chat-Code-of-Conduct" class="alert-link">
+                        Code of Conduct</a>. You will not be able to partipate in any future games.
+                    </p>
+                    <hr class="my-2">
+                    <p class="mb-0">
+                      If you believe this was done in error, please <a href="mailto:portmars@asu.edu" class="alert-link">let us know</a>.
+                    </p>
+                  </b-alert>
+                  <b-alert v-else-if="isMuted" show variant="warning" class="w-75 mb-5 text-left">
+                    <h4 class="alert-heading">Warning</h4>
+                    <p>
+                      You have been muted for 3 days in response to a violation of the
+                      <a href="https://github.com/virtualcommons/port-of-mars/wiki/Port-of-Mars-Chat-Code-of-Conduct" class="alert-link">
+                        Code of Conduct</a>. You will not be able to send chat messages in game.
+                    </p>
+                    <hr class="my-2">
+                    <p class="mb-0">
+                      If you believe this was done in error, please <a href="mailto:portmars@asu.edu" class="alert-link">let us know</a>.
+                    </p>
+                  </b-alert>
                   <h4>Next Launch In</h4>
                   <Countdown v-if="nextScheduledLaunch" :nextLaunch="nextScheduledLaunch" class="mb-5"></Countdown>
                   <p v-else>No games scheduled</p>
                   <b-button
-                    :disabled="!isLobbyOpen"
+                    :disabled="!isLobbyOpen || isBanned"
                     :to="lobby"
                     size="lg"
                     variant="warning"
@@ -84,7 +108,6 @@ import { PlayerTaskCompletion, Stats } from "@port-of-mars/shared/types";
 import {
   REGISTER_PAGE,
   LOBBY_PAGE,
-  SIGNEDUP_PAGE,
   TUTORIAL_PAGE,
   DASHBOARD_PAGE,
   MANUAL_PAGE,
@@ -122,6 +145,8 @@ export default class Dashboard extends Vue {
   schedule: Array<number> = [];
   pollingIntervalId = 0;
   isLobbyOpen = false;
+  isBanned = false;
+  isMuted = false;
   hasWatchedTutorial = false;
   playerTaskCompletion: PlayerTaskCompletion = {
     mustConsent: true,
@@ -183,29 +208,26 @@ export default class Dashboard extends Vue {
     // get player task completion status
     const data = await this.api.getData();
     this.$set(this, "playerTaskCompletion", data.playerTaskCompletion);
-
     // go to email verification page if player is not verified
     if (data.playerTaskCompletion.mustVerifyEmail) {
       await this.$router.push({ name: REGISTER_PAGE });
     }
-
     // go to consent page if player has not consented
     else if (data.playerTaskCompletion.mustConsent) {
       await this.$router.push({ name: REGISTER_PAGE });
     }
-
-    // set survey URLs
+    // set additional data
     Vue.set(this, "introSurveyUrl", data.introSurveyUrl);
     Vue.set(this, "exitSurveyUrl", data.exitSurveyUrl);
     Vue.set(this, "isLobbyOpen", data.isLobbyOpen);
+    Vue.set(this, "isMuted", data.user.isMuted);
+    Vue.set(this, "isBanned", data.user.isBanned);
     Vue.set(this, "currentRoundNumber", data.currentRoundNumber);
     Vue.set(this, "schedule", data.schedule);
-
     // set player stats
     this.stats.games.splice(0, this.stats.games.length, ...data.stats.games);
     console.log("setting upcoming games for schedule: ", data.schedule);
     this.loading = false;
-
     // poll server for lobby open status
     this.pollLobbyStatus();
   }

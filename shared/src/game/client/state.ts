@@ -242,6 +242,13 @@ export interface State extends GameData {
   ui: UserInterfaceTwo;
 }
 
+export const initialUserState: User = {
+  username: "",
+  isAdmin: false,
+  passedQuiz: false,
+  isVerified: false
+}
+
 export const initialStoreState: State = {
   // GameData
   players: defaultPlayerClientSet(),
@@ -275,12 +282,7 @@ export const initialStoreState: State = {
   // eventView: 'ACCOMPLISHMENT_SELECT_PURCHASED',
   quizQuestions: [],
   eventCardsVisible: [],
-  user: {
-    username: "",
-    isAdmin: false,
-    passedQuiz: false,
-    isVerified: false,
-  },
+  user: initialUserState,
 
   // TUTORIAL TRADING
   tutorialTradePartner: "",

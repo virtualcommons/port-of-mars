@@ -137,7 +137,11 @@ export class DashboardService extends BaseService {
     const playerTaskCompletion: PlayerTaskCompletion = await this.getPlayerTaskCompletion(user, invite);
     const gameDates = await this.sp.schedule.getScheduledDates();
     return {
-      user,
+      user: {
+        username: user.username,
+        isBanned: user.isBanned,
+        isMuted: user.isMuted,
+      },
       playerTaskCompletion,
       introSurveyUrl: this.getIntroSurveyUrl(user, round, invite),
       exitSurveyUrl: this.getExitSurveyUrl(user, round, invite),

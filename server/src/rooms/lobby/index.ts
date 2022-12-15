@@ -142,6 +142,10 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
   async onAuth(client: Client, options: { token: string }, request?: http.IncomingMessage) {
     try {
       const user = await getServices().account.findUserById((request as any).session.passport.user);
+      if (user.isBanned) {
+        logger.info('Banned user %s attempted to join the lobby', user.username);
+        return false;
+      }
       return user;
     } catch (e) {
       logger.fatal('Unable to authenticate client: %s', e);

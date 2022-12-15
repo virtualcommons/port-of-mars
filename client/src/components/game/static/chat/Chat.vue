@@ -44,16 +44,17 @@
       class="w-100 h-auto align-items-center flex-shrink-1 my-2 mx-auto">
       <b-col cols="10" class="w-100">
         <b-form-input
+          :readonly="isMuted"
           ref="chatInputRef"
           class="h-100 flex-grow-1"
           style="color: rgb(241, 224, 197); background-color: transparent; font-size: 1rem;"
           @keydown.enter="submitToChat"
           v-model="pendingMessage"
-          placeholder="Send a message"
+          :placeholder="isMuted ? 'You are currently muted' : 'Send a message'"
         />
       </b-col>
       <b-col cols="2" class="w-100 m-0 p-0">
-        <b-button icon v-b-tooltip.hover="'Send chat message'" @click="submitToChat">
+        <b-button icon :disabled="isMuted" v-b-tooltip.hover="'Send chat message'" @click="submitToChat">
           <font-awesome-icon
             :icon="['far', 'paper-plane']"
             :class="sendBtnClass"
@@ -127,6 +128,10 @@ export default class Chat extends Vue {
 
   get isChatAvailable(): any {
     return this.$store.getters.isChatAvailable;
+  }
+
+  get isMuted() {
+    return this.$store.getters.player.isMuted;
   }
 
   updated() {
