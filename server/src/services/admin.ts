@@ -93,7 +93,7 @@ export class AdminService extends BaseService {
     return onlyUnresolved ? reports.filter((r: ChatReportData) => !r.resolved) : reports;
   }
 
-  async getModerationActions(): Promise<Array<ModerationActionClientData> | undefined> {
+  async getModerationActions(): Promise<Array<ModerationActionClientData>> {
     const moderationActions = await this.em
       .getRepository(ModerationAction)
       .createQueryBuilder("moderationAction")
