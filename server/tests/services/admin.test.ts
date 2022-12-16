@@ -1,12 +1,10 @@
-import { Room, Client, Server, matchMaker } from 'colyseus';
-import {RegistrationService} from "@port-of-mars/server/services/registration";
-import {User, Tournament, TournamentRound, Game, ChatReport} from "@port-of-mars/server/entity";
-import {Connection, EntityManager, QueryRunner} from "typeorm";
-import {ServiceProvider} from "@port-of-mars/server/services";
-import {createRound, createTournament, createUsers, initTransaction, rollbackTransaction} from "./common";
+import { Tournament, TournamentRound, Game } from "@port-of-mars/server/entity";
+import { Connection, EntityManager, QueryRunner } from "typeorm";
+import { ServiceProvider } from "@port-of-mars/server/services";
+import { createRound, createTournament, createUsers, initTransaction, rollbackTransaction } from "./common";
 import { BAN, ModerationActionType, MUTE, NONE } from '@port-of-mars/shared/types';
 
-describe("an open tournament game", () => {
+describe("users in a game", () => {
   let conn: Connection;
   let qr: QueryRunner;
   let manager: EntityManager;
@@ -17,7 +15,7 @@ describe("an open tournament game", () => {
   beforeAll(async () => {
     [conn, qr, manager] = await initTransaction();
     sp = new ServiceProvider(qr.manager);
-    t = await createTournament(sp, { name: "openbeta" }); // create open tournament
+    t = await createTournament(sp, { name: "openbeta" });
     tr = await createRound(sp, {tournamentId: t.id});
     // create users
     await createUsers(manager, "steve", [1, 2, 3, 4, 5]);
@@ -30,7 +28,7 @@ describe("an open tournament game", () => {
     await manager.save(g);
   });
 
-  it("can submit a report", async () => {
+  it("one can submit a report", async () => {
     const msg = {
       message: "something rude",
       role: "Curator",
@@ -89,7 +87,8 @@ describe("an open tournament game", () => {
         reportId: report!.id,
         username: report!.username,
         adminUsername: "admin",
-        action: MUTE
+        action: MUTE,
+        daysMuted: 3
       });
       user = await sp.account.findByUsername(username);
       expect(user.isMuted).toBe(true);
@@ -111,8 +110,30 @@ describe("an open tournament game", () => {
       user = await sp.account.findByUsername(username);
       expect(user.isBanned).toBe(true);
     });
+
+    it("can undo an actions", async () => {
+      const username = "steve5";
+      const reports = await sp.admin.getChatReports(false);
+      const report = reports.find(r => r.username === username);
+      await sp.admin.takeModerationAction({
+        reportId: report!.id,
+        username: report!.username,
+        adminUsername: "admin",
+        action: MUTE,
+        daysMuted: 3
+      });
+      let user = await sp.account.findByUsername(username);
+      expect(user.isMuted).toBe(true);
+      expect(user.muteStrikes).toBe(1);
+      const actions = await sp.admin.getModerationActions();
+      const action = actions.find(r => r.username === username);
+      await sp.admin.undoModerationAction({ moderationActionId: action!.id, username });
+      user = await sp.account.findByUsername(username);
+      expect(user.isMuted).toBe(false);
+      expect(user.muteStrikes).toBe(0);
+    });
   });
-  afterAll(async () => rollbackTransaction(conn, qr));
+  afterAll(async () => await rollbackTransaction(conn, qr));
 });
 
 const createChatReports = async (sp: ServiceProvider, usernames: Array<string>) => {
@@ -139,7 +160,8 @@ const createModerationActions = async (sp: ServiceProvider, usernames: Array<str
       reportId: reports[i].id,
       username: u,
       adminUsername: "admin",
-      action: actions[i]
+      action: actions[i],
+      daysMuted: actions[i] === MUTE ? 3 : undefined
     }
     await sp.admin.takeModerationAction(data);
   }

@@ -136,10 +136,9 @@ export class AdminService extends BaseService {
     const report = await reportRepo.findOneOrFail({ id: data.reportId });
     const user = await this.sp.account.findByUsername(data.username);
     const admin = await this.sp.account.findByUsername(data.adminUsername);
-    const defaultDaysMuted = await this.sp.settings.defaultDaysMuted();
     const { username, adminUsername, ...moderationActionData } = data;
-    if (data.action === MUTE) {
-     moderationActionData.daysMuted = moderationActionData.daysMuted || defaultDaysMuted;
+    if (data.action === MUTE && !moderationActionData.daysMuted) {
+      moderationActionData.daysMuted = await this.sp.settings.defaultDaysMuted();
     }
     // submit moderationAction
     const moderationAction = moderationActionRepo.create({
@@ -153,7 +152,7 @@ export class AdminService extends BaseService {
     await moderationActionRepo.save(moderationAction);
     // mark user as muted/banned
     if (data.action !== NONE) {
-      this.sp.account.muteOrBanByUsername(data.username, data.action);
+      await this.sp.account.muteOrBanByUsername(data.username, data.action);
     }
     report.resolved = true;
     await reportRepo.save(report);
@@ -172,7 +171,7 @@ export class AdminService extends BaseService {
     await reportRepo.save(report);
     // unmute/unban user
     if (moderationAction.action !== NONE) {
-      this.sp.account.unmuteOrUnbanByUsername(data.username, moderationAction.action);
+      await this.sp.account.unmuteOrUnbanByUsername(data.username, moderationAction.action);
     }
   }
 }
