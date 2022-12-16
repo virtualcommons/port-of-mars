@@ -30,7 +30,7 @@ import { Trade } from "@port-of-mars/server/rooms/game/state/trade"
 import { ChatMessage, MarsLogMessage } from "@port-of-mars/server/rooms/game/state/message"
 import { RoundIntroduction } from "@port-of-mars/server/rooms/game/state/roundintroduction";
 import { AccomplishmentPurchase } from "@port-of-mars/server/rooms/game/state/accomplishment"
-import { GameSerialized } from "@port-of-mars/server/rooms/game/state/types";
+import { GameSerialized, RoundSummary } from "@port-of-mars/server/rooms/game/state/types";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -76,9 +76,6 @@ export class GameState
 
   @type("number")
   timeRemaining = 60;
-
-  @type("boolean")
-  botWarning: boolean = GameState.DEFAULTS.botWarning;
 
   @type("number")
   round: number = GameState.DEFAULTS.round;
@@ -131,7 +128,6 @@ export class GameState
   }
 
   static DEFAULTS = {
-    botWarning: false,
     marsEventsProcessed: 0,
     round: 1,
     phase: Phase.newRound,
@@ -155,7 +151,6 @@ export class GameState
     this.userRoles = data.userRoles;
     this.maxRound = data.maxRound;
     this.lastTimePolled = new Date(data.lastTimePolled);
-    this.botWarning = data.botWarning;
     this.timeRemaining = data.timeRemaining;
     this.round = data.round;
     this.phase = data.phase;
@@ -190,13 +185,30 @@ export class GameState
     return this;
   }
 
+  toRoundSummaryJSON(): RoundSummary {
+    return {
+      round: this.round,
+      systemHealth: this.systemHealth,
+      marsEvents: _.map(this.marsEvents, (e) => e.toJSON()),
+      marsEventsProcessed: this.marsEventsProcessed,
+      tradeSet: this.tradeSet.toJSON(),
+      timeRemaining: this.timeRemaining,
+      roundIntroduction: this.roundIntroduction.toJSON(),
+      tradingEnabled: this.tradingEnabled,
+      heroOrPariah: this.heroOrPariah,
+      // FIXME: these should be filtered down to the round 
+      // but we need a way to demarcate by round
+      logs: _.map(this.logs, (x) => x.toJSON()),
+      messages: _.map(this.messages, (x) => x.toJSON()),
+    }
+  }
+
   toJSON(): GameSerialized {
     return {
       players: this.players.toJSON(),
       userRoles: this.userRoles,
       maxRound: this.maxRound,
       lastTimePolled: this.lastTimePolled.getTime(),
-      botWarning: this.botWarning,
       timeRemaining: this.timeRemaining,
       round: this.round,
       phase: this.phase,

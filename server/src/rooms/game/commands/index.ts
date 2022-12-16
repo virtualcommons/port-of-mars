@@ -322,7 +322,7 @@ export class SetNextPhaseCmd implements Command {
         return [new ExitedPurchasePhase(), new EnteredDiscardPhase()];
       case Phase.discard: {
         const state = this.state;
-        const snapshot = state.toJSON();
+        const snapshot = state.toRoundSummaryJSON();
         if (state.isLastRound()) {
           return [
             new TakenStateSnapshot(snapshot),

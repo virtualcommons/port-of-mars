@@ -12,6 +12,7 @@ import {
 } from "@port-of-mars/shared/types";
 import {
   GameSerialized,
+  RoundSummary,
   GameState,
 } from "@port-of-mars/server/rooms/game/state";
 import { GameEvent } from "@port-of-mars/server/rooms/game/events/types";
@@ -22,11 +23,6 @@ import {
   downCastEventState,
   EffortsWasted,
   HeroOrPariah,
-  OutOfCommissionCurator,
-  OutOfCommissionEntrepreneur,
-  OutOfCommissionPioneer,
-  OutOfCommissionPolitician,
-  OutOfCommissionResearcher,
   PersonalGain,
 } from "@port-of-mars/server/rooms/game/state/marsevents/state";
 import * as entities from "@port-of-mars/server/entity/GameEvent";
@@ -540,11 +536,11 @@ gameEventDeserializer.register(BeganNewRound);
 export class TakenStateSnapshot implements GameEvent {
   kind = "taken-state-snapshot";
 
-  constructor(public data: GameSerialized) {}
+  constructor(public data: GameSerialized | RoundSummary) {}
 
   apply(game: GameState): void {}
 
-  serialize(): { type: string; payload: GameSerialized } {
+  serialize(): { type: string; payload: GameSerialized | RoundSummary} {
     return {
       type: this.kind,
       payload: this.data,

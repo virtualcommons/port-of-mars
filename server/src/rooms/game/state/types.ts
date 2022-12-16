@@ -13,25 +13,28 @@ import {
   TradeSetData
 } from "@port-of-mars/shared/types";
 
-export interface GameSerialized {
-  players: PlayerSetSerialized;
-  userRoles: { [username: string]: Role };
-  maxRound: number;
-  lastTimePolled: number;
-  timeRemaining: number;
-  botWarning: boolean;
-  round: number;
-  phase: Phase;
+export interface RoundSummary {
   systemHealth: number;
+  timeRemaining: number;
+  round: number;
   logs: Array<MarsLogMessageData>;
   messages: Array<ChatMessageData>;
   marsEvents: Array<MarsEventData>;
   marsEventsProcessed: number;
-  marsEventDeck: MarsEventDeckSerialized;
   roundIntroduction: RoundIntroductionData;
   tradeSet: TradeSetData;
-  winners: Array<Role>;
   tradingEnabled: boolean;
+  heroOrPariah: "" | "hero" | "pariah";
+}
+
+export interface GameSerialized extends RoundSummary {
+  players: PlayerSetSerialized;
+  userRoles: { [username: string]: Role };
+  maxRound: number;
+  lastTimePolled: number;
+  phase: Phase;
+  marsEventDeck: MarsEventDeckSerialized;
+  winners: Array<Role>;
   heroOrPariah: "" | "hero" | "pariah";
 }
 
