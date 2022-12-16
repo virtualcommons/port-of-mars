@@ -1,5 +1,5 @@
 import { url } from "@port-of-mars/client/util";
-import { AdminStats, ChatReportData, IncidentClientData, IncidentData, InspectData } from "@port-of-mars/shared/types";
+import { AdminStats, ChatReportData, ModerationActionClientData, ModerationActionData, InspectData } from "@port-of-mars/shared/types";
 import { TStore } from "@port-of-mars/client/plugins/tstore";
 import { AjaxRequest } from "@port-of-mars/client/plugins/ajax";
 
@@ -66,13 +66,13 @@ export class AdminAPI {
     }
   }
 
-  async getIncidents(): Promise<Array<IncidentClientData>> {
+  async getModerationActions(): Promise<Array<ModerationActionClientData>> {
     try {
-      return await this.ajax.get(url("/admin/incidents"), ({ data, status }) => {
+      return await this.ajax.get(url("/admin/moderation-actions"), ({ data, status }) => {
         return data;
       });
     } catch (e) {
-      console.log("Unable to retrieve incidents");
+      console.log("Unable to retrieve moderation actions");
       console.log(e);
       throw e;
     }
@@ -90,9 +90,9 @@ export class AdminAPI {
     }
   }
 
-  async takeAction(data: IncidentData, success: () => void): Promise<void> {
+  async takeModerationAction(data: ModerationActionData, success: () => void): Promise<void> {
     try {
-      await this.ajax.post(url("/admin/take-action"), ({ data, status }) => {
+      await this.ajax.post(url("/admin/take-moderation-action"), ({ data, status }) => {
           if (status === 200) success();
         }, data);
     } catch (e) {
@@ -102,9 +102,9 @@ export class AdminAPI {
     }
   }
 
-  async undoAction(data: { incidentId: number, username: string }, success: () => void): Promise<void> {
+  async undoModerationAction(data: { moderationActionId: number, username: string }, success: () => void): Promise<void> {
     try {
-      await this.ajax.post(url("/admin/undo-action"), ({ data, status }) => {
+      await this.ajax.post(url("/admin/undo-moderation-action"), ({ data, status }) => {
           if (status === 200) success();
         }, data);
     } catch (e) {

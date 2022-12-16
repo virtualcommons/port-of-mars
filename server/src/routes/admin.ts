@@ -1,6 +1,5 @@
 import { Router, Request, Response } from "express";
 import { getServices } from "@port-of-mars/server/services";
-import { AdminStats } from "@port-of-mars/shared/types";
 import { unless, isAdminAuthenticated } from "@port-of-mars/server/routes/middleware";
 
 export const adminRouter = Router();
@@ -58,39 +57,39 @@ adminRouter.get("/chat-reports", async (req: Request, res: Response, next) => {
   }
 });
 
-adminRouter.get("/incidents", async (req: Request, res: Response, next) => {
+adminRouter.get("/moderation-actions", async (req: Request, res: Response, next) => {
   try {
-    const incidents = await getServices().admin.getIncidents();
-    res.json(incidents);
+    const moderationActions = await getServices().admin.getModerationActions();
+    res.json(moderationActions);
   } catch (e) {
     next(e);
   }
 });
 
-adminRouter.post("/submit-report", async (req: Request, res: Response, next) => {
+adminRouter.post("/submit-chat-report", async (req: Request, res: Response, next) => {
   try {
     const data = req.body;
-    await getServices().admin.submitReport(data);
+    await getServices().admin.submitChatReport(data);
     res.json(true);
   } catch (e) {
     next(e);
   }
 });
 
-adminRouter.post("/take-action", async (req: Request, res: Response, next) => {
+adminRouter.post("/take-moderation-action", async (req: Request, res: Response, next) => {
   try {
     const data = req.body;
-    await getServices().admin.takeAction(data);
+    await getServices().admin.takeModerationAction(data);
     res.json(true);
   } catch (e) {
     next(e);
   }
 });
 
-adminRouter.post("/undo-action", async (req: Request, res: Response, next) => {
+adminRouter.post("/undo-moderation-action", async (req: Request, res: Response, next) => {
   try {
     const data = req.body;
-    await getServices().admin.undoAction(data);
+    await getServices().admin.undoModerationAction(data);
     res.json(true);
   } catch (e) {
     next(e);

@@ -23,11 +23,11 @@ export type Role =
   | "Politician";
 export type ServerRole = "Server";
 
-export type AdminAction = "mute" | "ban" | "none";
+export type ModerationActionType = "mute" | "ban" | "none";
 export const MUTE: "mute" = "mute";
 export const BAN: "ban" = "ban";
 export const NONE: "none" = "none";
-export const ADMIN_ACTIONS = [MUTE, BAN, NONE];
+export const MODERATION_ACTION_TYPES = [MUTE, BAN, NONE];
 
 export interface ChatMessageData {
   message: string;
@@ -52,21 +52,21 @@ export interface ChatReportData extends ChatReportRequestData{
   dateCreated: Date;
 }
 
-export interface IncidentData {
+export interface ModerationActionData {
   reportId: number;
   username: string;
   adminUsername: string;
-  action: AdminAction;
-  muteLength?: number;
+  action: ModerationActionType;
+  daysMuted?: number;
   revoked?: boolean;
 }
 
-export interface IncidentClientData {
+export interface ModerationActionClientData {
   id: number;
   username: string;
   adminUsername: string;
-  action: AdminAction;
-  dateExpires?: Date;
+  action: ModerationActionType;
+  dateMuteExpires?: Date;
 }
 
 export interface MarsLogData {

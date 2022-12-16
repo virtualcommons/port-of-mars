@@ -1,17 +1,17 @@
 import { matchMaker } from "colyseus";
 import { GameRoom } from "@port-of-mars/server/rooms/game";
 import { RankedLobbyRoom } from "@port-of-mars/server/rooms/lobby";
-import { ChatReport, Incident } from "@port-of-mars/server/entity";
+import { ChatReport, ModerationAction } from "@port-of-mars/server/entity";
 import { BaseService } from "@port-of-mars/server/services/db";
 import {
   AdminStats,
   ChatReportData,
   ChatMessageData,
   InspectData,
-  IncidentData,
+  ModerationActionData,
   NONE,
   MUTE,
-  IncidentClientData,
+  ModerationActionClientData,
   ChatReportRequestData
 } from "@port-of-mars/shared/types";
 import { getLogger } from "@port-of-mars/server/settings";
@@ -93,27 +93,27 @@ export class AdminService extends BaseService {
     return onlyUnresolved ? reports.filter((r: ChatReportData) => !r.resolved) : reports;
   }
 
-  async getIncidents(): Promise<Array<IncidentClientData> | undefined> {
-    const incidents = await this.em
-      .getRepository(Incident)
-      .createQueryBuilder("incident")
-      .innerJoinAndSelect("incident.user", "user")
-      .innerJoinAndSelect("incident.admin", "admin")
-      .where("incident.revoked = :revoked", { revoked: false })
-      .andWhere("incident.action != :noneAction", { noneAction: NONE })
+  async getModerationActions(): Promise<Array<ModerationActionClientData> | undefined> {
+    const moderationActions = await this.em
+      .getRepository(ModerationAction)
+      .createQueryBuilder("moderationAction")
+      .innerJoinAndSelect("moderationAction.user", "user")
+      .innerJoinAndSelect("moderationAction.admin", "admin")
+      .where("moderationAction.revoked = :revoked", { revoked: false })
+      .andWhere("moderationAction.action != :noneAction", { noneAction: NONE })
       .getMany();
-    return incidents.map((i: Incident) => {
+    return moderationActions.map((i: ModerationAction) => {
       return {
         id: i.id,
         username: i.user.username,
         adminUsername: i.admin.username,
         action: i.action,
-        dateExpires: i.dateExpires,
+        dateMuteExpires: i.dateMuteExpires,
       }
     });
   }
 
-  async submitReport(data: ChatReportRequestData) {
+  async submitChatReport(data: ChatReportRequestData) {
     logger.debug("user in room: %s submitted report for chat message sent by: %s",
       data.roomId, data.username);
     const game = await this.sp.game.findByRoomId(data.roomId);
@@ -130,27 +130,27 @@ export class AdminService extends BaseService {
     await repository.save(report);
   }
 
-  async takeAction(data: IncidentData) {
-    const incidentRepo = this.em.getRepository(Incident);
+  async takeModerationAction(data: ModerationActionData) {
+    const moderationActionRepo = this.em.getRepository(ModerationAction);
     const reportRepo = this.em.getRepository(ChatReport);
     const report = await reportRepo.findOneOrFail({ id: data.reportId });
     const user = await this.sp.account.findByUsername(data.username);
     const admin = await this.sp.account.findByUsername(data.adminUsername);
-    const defaultMuteLength = await this.sp.settings.defaultMuteLength();
-    const { username, adminUsername, ...incidentData } = data;
+    const defaultDaysMuted = await this.sp.settings.defaultDaysMuted();
+    const { username, adminUsername, ...moderationActionData } = data;
     if (data.action === MUTE) {
-     incidentData.muteLength = incidentData.muteLength || defaultMuteLength;
+     moderationActionData.daysMuted = moderationActionData.daysMuted || defaultDaysMuted;
     }
-    // submit incident
-    const incident = incidentRepo.create({
+    // submit moderationAction
+    const moderationAction = moderationActionRepo.create({
       report: report,
       user,
       userId: user.id,
       admin,
       adminId: admin.id,
-      ...incidentData
+      ...moderationActionData
     });
-    await incidentRepo.save(incident);
+    await moderationActionRepo.save(moderationAction);
     // mark user as muted/banned
     if (data.action !== NONE) {
       this.sp.account.muteOrBanByUsername(data.username, data.action);
@@ -159,20 +159,20 @@ export class AdminService extends BaseService {
     await reportRepo.save(report);
   }
 
-  async undoAction(data: { incidentId: number, username: string }) {
-    const incidentRepo = this.em.getRepository(Incident);
+  async undoModerationAction(data: { moderationActionId: number, username: string }) {
+    const moderationActionRepo = this.em.getRepository(ModerationAction);
     const reportRepo = this.em.getRepository(ChatReport);
-    const incident = await incidentRepo.findOneOrFail({ id: data.incidentId });
-    const report = await reportRepo.findOneOrFail({ id: incident.reportId });
-    // mark incident as revoked
-    incident.revoked = true;
-    await incidentRepo.save(incident);
+    const moderationAction = await moderationActionRepo.findOneOrFail({ id: data.moderationActionId });
+    const report = await reportRepo.findOneOrFail({ id: moderationAction.reportId });
+    // mark moderationAction as revoked
+    moderationAction.revoked = true;
+    await moderationActionRepo.save(moderationAction);
     // unresolve report
     report.resolved = false;
     await reportRepo.save(report);
     // unmute/unban user
-    if (incident.action !== NONE) {
-      this.sp.account.unmuteOrUnbanByUsername(data.username, incident.action);
+    if (moderationAction.action !== NONE) {
+      this.sp.account.unmuteOrUnbanByUsername(data.username, moderationAction.action);
     }
   }
 }

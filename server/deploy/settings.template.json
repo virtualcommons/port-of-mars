@@ -4,5 +4,5 @@
   "isAutoSchedulerEnabled": false,
   "maxConnections": 200,
   "giftCardAmount": 10,
-  "defaultMuteLength": 3
+  "defaultDaysMuted": 3
 }

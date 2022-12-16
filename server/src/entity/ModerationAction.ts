@@ -1,11 +1,10 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, CreateDateColumn } from "typeorm";
-import { Expose } from "class-transformer";
 import { ChatReport } from "./ChatReport";
 import { User } from "./User";
-import { AdminAction, ADMIN_ACTIONS } from "@port-of-mars/shared/types";
+import { ModerationActionType, MODERATION_ACTION_TYPES } from "@port-of-mars/shared/types";
 
 @Entity()
-export class Incident {
+export class ModerationAction {
   @PrimaryGeneratedColumn()
   id!: number;
 
@@ -27,21 +26,21 @@ export class Incident {
   @Column()
   adminId!: number;
 
-  @Column({ type: "enum", enum: ADMIN_ACTIONS })
-  action!: AdminAction;
+  @Column({ type: "enum", enum: MODERATION_ACTION_TYPES })
+  action!: ModerationActionType;
 
   @CreateDateColumn()
   dateCreated!: Date;
 
   @Column({ nullable: true })
-  muteLength!: number; // length in days
+  daysMuted!: number;
 
   @Column({
     generatedType: "STORED",
-    asExpression: `case when "muteLength" is not null then "dateCreated" + interval '1 day' * "muteLength" else null end`,
+    asExpression: `case when "daysMuted" is not null then "dateCreated" + interval '1 day' * "daysMuted" else null end`,
     nullable: true
   })
-  dateExpires!: Date;
+  dateMuteExpires!: Date;
 
   @Column({ default: false })
   revoked!: boolean;

@@ -40,7 +40,7 @@
                     variant="secondary"
                     action="Hide"
                     :modalId="getModalId('none', data.item.id)"
-                    @confirmed="takeAction({ reportId: data.item.id, action: 'none', username: data.item.username })"
+                    @confirmed="takeModerationAction({ reportId: data.item.id, action: 'none', username: data.item.username })"
                   >
                     <template>
                       Resolve this report of user 
@@ -52,7 +52,7 @@
                     variant="warning"
                     action="Mute"
                     :modalId="getModalId('mute', data.item.id)"
-                    @confirmed="takeAction({ reportId: data.item.id, action: 'mute', username: data.item.username })"
+                    @confirmed="takeModerationAction({ reportId: data.item.id, action: 'mute', username: data.item.username })"
                   >
                     <template>
                       Mute user 
@@ -64,7 +64,7 @@
                     variant="danger"
                     action="Ban"
                     :modalId="getModalId('ban', data.item.id)"
-                    @confirmed="takeAction({ reportId: data.item.id, action: 'ban', username: data.item.username })"
+                    @confirmed="takeModerationAction({ reportId: data.item.id, action: 'ban', username: data.item.username })"
                   >
                     <template>
                       Ban user 
@@ -83,19 +83,19 @@
             <b-table dark sticky-header
               class="h-100 m-0"
               style="max-height: none;"
-              :fields="incidentFields"
-              :items="incidents"
+              :fields="moderationActionFields"
+              :items="moderationActions"
             >
-              <template #cell(dateExpires)="data">
-                <span v-if="data.item.dateExpires">
-                  <span v-if="data.item.dateExpires > new Date()">expired</span>
-                  <span v-else>{{ formatFutureTime(data.item.dateExpires) }}</span>
+              <template #cell(dateMuteExpires)="data">
+                <span v-if="data.item.dateMuteExpires">
+                  <span v-if="data.item.dateMuteExpires > new Date()">expired</span>
+                  <span v-else>{{ formatFutureTime(data.item.dateMuteExpires) }}</span>
                 </span>
               </template>
               <template #cell(undo)="data">
                 <b-button size="sm"
                   variant="success"
-                  @click="undoAction(data.item.id, data.item.username)"
+                  @click="undoModerationAction(data.item.id, data.item.username)"
                 >
                 Undo</b-button>
               </template>
@@ -108,8 +108,13 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
-import { AdminAction, ChatReportData, IncidentData, IncidentClientData, MUTE, BAN, NONE } from "@port-of-mars/shared/types";
+import { Component, Vue } from "vue-property-decorator";
+import {
+  ChatReportData,
+  ModerationActionType,
+  ModerationActionData,
+  ModerationActionClientData,
+} from "@port-of-mars/shared/types";
 import { AdminAPI } from "@port-of-mars/client/api/admin/request";
 import ChatMessage from "@port-of-mars/client/components/game/static/chat/ChatMessage.vue";
 import ConfirmationModalButton from "@port-of-mars/client/components/admin/ConfirmationModalButton.vue";
@@ -132,12 +137,12 @@ export default class Reports extends Vue {
     { key: "message", label: "Message" },
     { key: "action", label: "Action" }
   ];
-  incidents: Array<IncidentClientData> = [];
-  incidentFields = [
+  moderationActions: Array<ModerationActionClientData> = [];
+  moderationActionFields = [
     { key: "adminUsername", label: "Admin" },
     { key: "username", label: "User" },
     { key: "action", label: "Action", sortable: true },
-    { key: "dateExpires", label: "Expires" },
+    { key: "dateMuteExpires", label: "Expires" },
     { key: "undo", label: "" }
   ];
   pollingIntervalId = 0;
@@ -155,14 +160,14 @@ export default class Reports extends Vue {
 
   async initialize() {
     await this.fetchChatReports();
-    await this.fetchIncidents();
+    await this.fetchModerationActions();
     this.refresh();
   }
 
   async refresh() {
     this.pollingIntervalId = window.setInterval(async () => {
       await this.fetchChatReports();
-      await this.fetchIncidents();
+      await this.fetchModerationActions();
     }, 30 * 1000);
   }
 
@@ -171,9 +176,9 @@ export default class Reports extends Vue {
     Vue.set(this, "reports", reports);
   }
 
-  async fetchIncidents() {
-    const incidents = await this.api.getIncidents();
-    Vue.set(this, "incidents", incidents);
+  async fetchModerationActions() {
+    const moderationActions = await this.api.getModerationActions();
+    Vue.set(this, "moderationActions", moderationActions);
   }
 
   formatPastTime(date: Date) {
@@ -210,21 +215,21 @@ export default class Reports extends Vue {
     return `confirm-${action}-modal-${reportId}`;
   }
 
-  async takeAction(data: { reportId: number, username: string, action: AdminAction, muteLength?: number }) {
-    const incidentData: IncidentData = {
+  async takeModerationAction(data: { reportId: number, username: string, action: ModerationActionType, daysMuted?: number }) {
+    const moderationActionData: ModerationActionData = {
       ...data,
       adminUsername: this.$tstore.state.user.username
     };
-    await this.api.takeAction(incidentData, () => {
+    await this.api.takeModerationAction(moderationActionData, () => {
       this.$bvModal.hide(this.getModalId(data.action, data.reportId));
       this.fetchChatReports();
-      this.fetchIncidents();
+      this.fetchModerationActions();
     });
   }
 
-  async undoAction(incidentId: number, username: string) {
-    await this.api.undoAction({ incidentId, username }, () => {
-      this.fetchIncidents();
+  async undoModerationAction(moderationActionId: number, username: string) {
+    await this.api.undoModerationAction({ moderationActionId, username }, () => {
+      this.fetchModerationActions();
       this.fetchChatReports();
     });
   }

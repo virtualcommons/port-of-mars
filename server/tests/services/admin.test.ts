@@ -47,7 +47,7 @@ describe.skip("two users and admin", () => {
       username: "bob1",
       message: msg
     }
-    await sp.admin.submitReport(reportData);
+    await sp.admin.submitChatReport(reportData);
     const reports = await sp.admin.getChatReports(false);
     expect(reports[0].message).toEqual(msg);
     expect(reports[0].username).toEqual("alice");
