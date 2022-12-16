@@ -23,6 +23,12 @@ export type Role =
   | "Politician";
 export type ServerRole = "Server";
 
+export type ModerationActionType = "mute" | "ban" | "none";
+export const MUTE: "mute" = "mute";
+export const BAN: "ban" = "ban";
+export const NONE: "none" = "none";
+export const MODERATION_ACTION_TYPES = [MUTE, BAN, NONE];
+
 export interface ChatMessageData {
   message: string;
   role: string;
@@ -41,7 +47,26 @@ export interface ChatReportData extends ChatReportRequestData{
   id: number;
   resolved: boolean;
   isBanned: boolean;
+  isMuted: boolean;
+  muteStrikes: number;
   dateCreated: Date;
+}
+
+export interface ModerationActionData {
+  reportId: number;
+  username: string;
+  adminUsername: string;
+  action: ModerationActionType;
+  daysMuted?: number;
+  revoked?: boolean;
+}
+
+export interface ModerationActionClientData {
+  id: number;
+  username: string;
+  adminUsername: string;
+  action: ModerationActionType;
+  dateMuteExpires?: Date;
 }
 
 export interface MarsLogData {
@@ -381,7 +406,7 @@ export interface TournamentStatus {
 }
 
 export interface DashboardData {
-  user: { username: string };
+  user: { username: string, isMuted: boolean, isBanned: boolean };
   playerTaskCompletion: PlayerTaskCompletion;
   introSurveyUrl: string;
   exitSurveyUrl: string;

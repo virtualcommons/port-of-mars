@@ -3,5 +3,6 @@
   "isFreePlayEnabled": true,
   "isAutoSchedulerEnabled": false,
   "maxConnections": 200,
-  "giftCardAmount": 10
+  "giftCardAmount": 10,
+  "defaultDaysMuted": 3
 }

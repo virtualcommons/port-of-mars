@@ -26,7 +26,7 @@
       <ReportModal :message="message" :showUsername="showUsername"></ReportModal>
       <template #modal-footer="{ cancel }">
         <b-button variant="secondary" @click="cancel">Cancel</b-button>
-        <b-button variant="primary" @click="submitReport">Submit</b-button>
+        <b-button variant="primary" @click="submitChatReport">Submit</b-button>
       </template>
     </b-modal>
   </div>
@@ -64,18 +64,18 @@ export default class Chat extends Vue {
     return this.$tstore.state.players[this.message.role as Role].username;
   }
 
-  get submitReportUrl() {
-    return url("/admin/submit-report");
+  get submitChatReportUrl() {
+    return url("/admin/submit-chat-report");
   }
 
-  async submitReport() {
+  async submitChatReport() {
     const formData: ChatReportRequestData = {
       roomId: this.$ajax.roomId!,
       username: this.username,
       message: this.message,
     }
     await this.$ajax.post(
-      this.submitReportUrl,
+      this.submitChatReportUrl,
       (response) => {
         if (response.status === 200) {
           this.$bvModal.hide(this.modalId);

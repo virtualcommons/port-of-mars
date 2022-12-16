@@ -1,6 +1,5 @@
 import { Router, Request, Response } from "express";
 import { getServices } from "@port-of-mars/server/services";
-import { AdminStats } from "@port-of-mars/shared/types";
 import { unless, isAdminAuthenticated } from "@port-of-mars/server/routes/middleware";
 
 export const adminRouter = Router();
@@ -49,28 +48,48 @@ adminRouter.get("/room", async (req: Request, res: Response, next) => {
 });
 
 adminRouter.get("/chat-reports", async (req: Request, res: Response, next) => {
+  const onlyUnresolved = req.query.onlyUnresolved === "true";
   try {
-    const chatReports = await getServices().admin.getChatReports();
+    const chatReports = await getServices().admin.getChatReports(onlyUnresolved);
     res.json(chatReports);
   } catch (e) {
     next(e);
   }
 });
 
-adminRouter.post("/submit-report", async (req: Request, res: Response, next) => {
+adminRouter.get("/moderation-actions", async (req: Request, res: Response, next) => {
+  try {
+    const moderationActions = await getServices().admin.getModerationActions();
+    res.json(moderationActions);
+  } catch (e) {
+    next(e);
+  }
+});
+
+adminRouter.post("/submit-chat-report", async (req: Request, res: Response, next) => {
   try {
     const data = req.body;
-    await getServices().admin.submitReport(data);
+    await getServices().admin.submitChatReport(data);
     res.json(true);
   } catch (e) {
     next(e);
   }
 });
 
-adminRouter.post("/resolve-report", async (req: Request, res: Response, next) => {
+adminRouter.post("/take-moderation-action", async (req: Request, res: Response, next) => {
   try {
     const data = req.body;
-    await getServices().admin.resolveReport(data);
+    await getServices().admin.takeModerationAction(data);
+    res.json(true);
+  } catch (e) {
+    next(e);
+  }
+});
+
+adminRouter.post("/undo-moderation-action", async (req: Request, res: Response, next) => {
+  try {
+    const data = req.body;
+    await getServices().admin.undoModerationAction(data);
     res.json(true);
   } catch (e) {
     next(e);
@@ -81,16 +100,6 @@ adminRouter.get("/banned-users", async (req: Request, res: Response, next) => {
   try {
     const bannedUsers = await getServices().account.getBannedUsers();
     res.json(bannedUsers);
-  } catch (e) {
-    next(e);
-  }
-});
-
-adminRouter.post("/unban", async (req: Request, res: Response, next) => {
-  const username = req.query.user as string;
-  try {
-    await getServices().account.unbanByUsername(username);
-    res.json(true);
   } catch (e) {
     next(e);
   }

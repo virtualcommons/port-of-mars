@@ -3,7 +3,7 @@ import { MoreThan, IsNull, Not, In, Repository, UpdateResult } from "typeorm"
 import { settings } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { generateUsername } from "@port-of-mars/server/util";
-import { v4 as uuidv4 } from "uuid";
+import { ModerationActionType, BAN, MUTE } from "@port-of-mars/shared/types";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -45,9 +45,25 @@ export class AccountService extends BaseService {
     return await this.getRepository().save(user);
   }
 
-  async banByUsername(username: string): Promise<User> {
+  async muteOrBanByUsername(username: string, action: ModerationActionType): Promise<User> {
     const user = await this.findByUsername(username);
-    user.isBanned = true;
+    if (action === MUTE) {
+      user.isMuted = true;
+      user.muteStrikes++;
+    } else if (action === BAN) {
+      user.isBanned = true;
+    }
+    return await this.getRepository().save(user);
+  }
+
+  async unmuteOrUnbanByUsername(username: string, action: ModerationActionType): Promise<User> {
+    const user = await this.findByUsername(username);
+    if (action === MUTE) {
+      user.isMuted = false;
+      user.muteStrikes = Math.max(0, user.muteStrikes - 1);
+    } else if (action === BAN) {
+      user.isBanned = false;
+    }
     return await this.getRepository().save(user);
   }
 

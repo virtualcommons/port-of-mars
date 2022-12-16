@@ -118,6 +118,7 @@ export class Player
     this.role = role;
     this.username = data.username;
     this.isBot = data.isBot;
+    this.isMuted = data.isMuted;
     this.bot = SimpleBot.fromActor(this);
     this.accomplishments = new AccomplishmentSet(role);
     this.costs = ResourceCosts.senderRole(role);

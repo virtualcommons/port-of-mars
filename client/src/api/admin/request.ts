@@ -1,5 +1,5 @@
 import { url } from "@port-of-mars/client/util";
-import { AdminStats, ChatReportData, InspectData } from "@port-of-mars/shared/types";
+import { AdminStats, ChatReportData, ModerationActionClientData, ModerationActionData, InspectData } from "@port-of-mars/shared/types";
 import { TStore } from "@port-of-mars/client/plugins/tstore";
 import { AjaxRequest } from "@port-of-mars/client/plugins/ajax";
 
@@ -54,9 +54,9 @@ export class AdminAPI {
     }
   }
 
-  async getChatReports(): Promise<Array<ChatReportData>> {
+  async getUnresolvedChatReports(): Promise<Array<ChatReportData>> {
     try {
-      return await this.ajax.get(url("/admin/chat-reports"), ({ data, status }) => {
+      return await this.ajax.get(url("/admin/chat-reports?onlyUnresolved=true"), ({ data, status }) => {
         return data;
       });
     } catch (e) {
@@ -66,20 +66,13 @@ export class AdminAPI {
     }
   }
 
-  async submitReportResolution(
-    data: { reportId: number, resolved: boolean, username: string, ban: boolean },
-    successCallback: () => void,
-  ): Promise<void> {
+  async getModerationActions(): Promise<Array<ModerationActionClientData>> {
     try {
-      await this.ajax.post(url("/admin/resolve-report"), ({ data, status }) => {
-          if (status === 200) {
-            successCallback();
-          }
-        },
-        data
-      );
+      return await this.ajax.get(url("/admin/moderation-actions"), ({ data, status }) => {
+        return data;
+      });
     } catch (e) {
-      console.log("Unable to submit chat report resolution");
+      console.log("Unable to retrieve moderation actions");
       console.log(e);
       throw e;
     }
@@ -97,16 +90,25 @@ export class AdminAPI {
     }
   }
 
-  async unbanUser(username: string, successCallback: () => void): Promise<void> {
+  async takeModerationAction(data: ModerationActionData, success: () => void): Promise<void> {
     try {
-      await this.ajax.post(url("/admin/unban?user=" + username), ({ data, status }) => {
-          if (status === 200) {
-            successCallback();
-          }
-        }
-      );
+      await this.ajax.post(url("/admin/take-moderation-action"), ({ data, status }) => {
+          if (status === 200) success();
+        }, data);
     } catch (e) {
-      console.log("Unable to unban user");
+      console.log("Unable to submit chat report resolution");
+      console.log(e);
+      throw e;
+    }
+  }
+
+  async undoModerationAction(data: { moderationActionId: number, username: string }, success: () => void): Promise<void> {
+    try {
+      await this.ajax.post(url("/admin/undo-moderation-action"), ({ data, status }) => {
+          if (status === 200) success();
+        }, data);
+    } catch (e) {
+      console.log("Unable to undo action");
       console.log(e);
       throw e;
     }

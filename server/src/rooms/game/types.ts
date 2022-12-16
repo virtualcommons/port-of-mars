@@ -38,6 +38,7 @@ export interface GameStateOpts {
 export interface PlayerOptsData {
   username: string;
   isBot: boolean;
+  isMuted: boolean;
 }
 
 export type Metadata = Pick<GameEvent, 'dateCreated' | 'timeRemaining' | 'gameId'>
