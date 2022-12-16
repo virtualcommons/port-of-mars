@@ -150,6 +150,7 @@ async function onCreate(
   shouldEnableDb = shouldEnableDb ?? false;
   room.setState(new GameState(options));
   room.setPrivate(true);
+  room.persister = new DBPersister();
   room.onMessage("*", (client, type, message) => {
     // we can refactor this.prepareRequest to not run a billion long switch statement and instead have
     // lots of small onMessages coupled with Commands that modify the state (within the Command itself, not here)
@@ -160,7 +161,6 @@ async function onCreate(
     room.broadcast("set-sfx", responses);
     room.persister.persist(events, metadata);
   });
-  room.persister = new DBPersister();
   logger.info("roomId: %s", room.roomId);
   room.gameId = await room.persister.initialize(
     options,
