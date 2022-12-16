@@ -5,7 +5,7 @@
         <b-col cols="8" class="mh-100 p-2">
           <h4 class="header-nowrap">Reported Chat Messages</h4>
           <div class="h-100-header w-100 content-container">
-            <b-table dark sticky-header
+            <b-table dark sticky-header sort-icon-left
               class="h-100 m-0"
               style="max-height: none;"
               :fields="reportFields"
@@ -13,14 +13,7 @@
               sort-by="dateCreated"
               :sort-desc="true"
             >
-              <template #cell(dateCreated)>
-                <!-- sort-by column, dont render -->
-              </template>
-              <template #cell(status)="data">
-                <b-badge v-if="data.item.resolved" variant="success">Resolved</b-badge>
-                <b-badge v-else variant="warning">Unresolved</b-badge>
-              </template>
-              <template #cell(time)="data">
+              <template #cell(dateCreated)="data">
                 {{ formatPastTime(data.item.dateCreated) }}
               </template>
               <template #cell(user)="data">
@@ -80,7 +73,7 @@
         <b-col cols="4" class="mh-100 p-2">
           <h4 class="header-nowrap">Actions Log</h4>
           <div class="h-100-header w-100 content-container">
-            <b-table dark sticky-header
+            <b-table dark sticky-header sort-icon-left
               class="h-100 m-0"
               style="max-height: none;"
               :fields="moderationActionFields"
@@ -129,9 +122,7 @@ export default class Reports extends Vue {
   api!: AdminAPI;
   reports: Array<ChatReportData> = [];
   reportFields = [
-    { key: "status", label: "Status" },
-    { key: "dateCreated", label: "", sortable: true },
-    { key: "time", label: "Time" },
+    { key: "dateCreated", label: "Time", sortable: true },
     { key: "roomId", label: "Room" },
     { key: "user", label: "User" },
     { key: "message", label: "Message" },
