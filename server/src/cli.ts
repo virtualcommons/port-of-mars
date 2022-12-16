@@ -75,8 +75,7 @@ async function exportData(em: EntityManager, tournamentRoundId: number, gameIds:
     .innerJoinAndSelect(User, 'user', 'user.id = player.userId')
     .innerJoin(Game, 'game', 'game.id = player.gameId')
     .innerJoin(TournamentRound, 'tournamentRound', 'tournamentRound.id = game.tournamentRoundId')
-    .innerJoinAndSelect(TournamentRoundInvite, 'invitation', 'invitation.tournamentRoundId = tournamentRound.id')
-    .where('player.userId = invitation.userId')
+    .leftJoinAndSelect(TournamentRoundInvite, 'invitation', 'invitation.tournamentRoundId = tournamentRound.id AND player.userId = invitation.userId')
     .andWhere("tournamentRound.id = :tournamentRoundId", { tournamentRoundId });
   const playerRaw = await playerQuery.getRawMany();
 
