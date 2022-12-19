@@ -227,6 +227,7 @@ async function deactivateUsers(em: EntityManager, filename: string) {
 
 async function createRound(
   em: EntityManager,
+  open?: boolean,
   id?: number,
   introSurveyUrl?: string,
   exitSurveyUrl?: string,
@@ -235,16 +236,15 @@ async function createRound(
 ): Promise<TournamentRound> {
   const s = getServices(em);
   let tournament = undefined;
-  if (id) {
-    tournament = await s.tournament.getTournament(id);
+  let currentRound: Pick<TournamentRound, "roundNumber" | "introSurveyUrl" | "exitSurveyUrl"> | undefined
+  if (open) {
+    tournament = await s.tournament.getOpenTournament();
+    currentRound = await s.tournament.getOpenTournamentRound().catch((err) => undefined);
   } else {
-    tournament = await s.tournament.getActiveTournament();
+    if (id) tournament = await s.tournament.getTournament(id);
+    else tournament = await s.tournament.getActiveTournament();
+    currentRound = await s.tournament.getCurrentTournamentRound().catch((err) => undefined);
   }
-  let currentRound:
-    | Pick<TournamentRound, "roundNumber" | "introSurveyUrl" | "exitSurveyUrl">
-    | undefined = await s.tournament
-    .getCurrentTournamentRound()
-    .catch((err) => undefined);
   if (!currentRound) {
     currentRound = {
       roundNumber: 0,
@@ -462,6 +462,10 @@ program
             program
               .createCommand("create")
               .option(
+                "-o, --open",
+                "create an open beta tournament round"
+              )
+              .option(
                 "--tournamentId <tournamentId>",
                 "id of an existing tournament",
                 customParseInt
@@ -488,6 +492,7 @@ program
                 await withConnection((em) =>
                   createRound(
                     em,
+                    cmd.open,
                     cmd.tournamentId,
                     cmd.introSurveyUrl,
                     cmd.exitSurveyUrl,
