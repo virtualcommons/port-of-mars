@@ -146,7 +146,7 @@ describe("a game", () => {
   it("should preserve all data of the original game play through", () => {
     const gr = new GameReplayer(
       ges.map(([timeRemaining, e]) =>
-        toDBGameEvent(e, { gameId: 1, timeRemaining, dateCreated: new Date() })
+        toDBGameEvent(e, { gameId: 1, timeRemaining, dateCreated: new Date(jest.getRealSystemTime()) })
       )
     );
     const data = gr.summarize((g) => ({

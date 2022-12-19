@@ -32,7 +32,7 @@ describe("users in a game", () => {
     const msg = {
       message: "something rude",
       role: "Curator",
-      dateCreated: new Date().getTime(),
+      dateCreated: jest.getRealSystemTime(),
       round: 1
     }
     const reportData = {
@@ -141,7 +141,7 @@ const createChatReports = async (sp: ServiceProvider, usernames: Array<string>) 
     const msg = {
       message: `I am ${username} and I am rude`,
       role: "Curator",
-      dateCreated: new Date().getTime(),
+      dateCreated: jest.getRealSystemTime(),
       round: 1
     }
     const data = {
