@@ -19,8 +19,12 @@ run_pipeline <- function(base_dir) {
   player_investment <- readr::read_csv(player_investment_path)
   
   processed_player_investment <- get_processed_player_investments(game_events=game_events, player_investment=player_investment)
-  chat_messages <- get_chat_messages(game_events)
-  
+  chat_messages <- if (dim(dplyr::filter(game_events, type == 'sent-chat-message'))[1] > 0) {
+    get_chat_messages(game_events)
+  } else {
+    data.frame() # empty df if no chat messages
+  }
+
   readr::write_csv(processed_player_investment, fs::path_join(c(base_dir, "processed/playerInvestment.csv")))
   readr::write_csv(chat_messages, fs::path_join(c(base_dir, "processed/chatMessages.csv")))
 }
