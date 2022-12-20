@@ -96,7 +96,7 @@ export default class TradeOptions extends Vue {
       return Object.keys(this.resources)
         .filter((resource) => this.playerInventory[resource] > 0)
         .reduce((obj, key) => {
-          return Object.assign(obj, { [key]: this.resources[key] });
+          return Object.assign(obj, { [key]: this.resources[key as keyof ResourceAmountData] });
         }, {} as ResourceAmountData);
     } else {
       return this.resources;
