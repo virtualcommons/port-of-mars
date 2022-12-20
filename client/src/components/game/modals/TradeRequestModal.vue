@@ -21,12 +21,12 @@
             Inventory
           </b-button>
         </b-button-group>
-        <b-row v-if="selectedView === true" class="h-75 w-100 my-2 backdrop">
+        <b-row v-if="selectedView === true" class="w-100 my-2 backdrop">
           <div class="w-100 h-100 p-4" style="overflow-y: auto; overflow-x: hidden">
             <Inventory :isSelf="true"></Inventory>
           </div>
         </b-row>
-        <b-row v-if="selectedView === false" class="h-75 w-100 my-2 backdrop">
+        <b-row v-if="selectedView === false" class="w-100 my-2 backdrop">
           <div class="h-100 w-100 p-4" style="overflow-y: auto; overflow-x: hidden">
             <AccomplishmentCard
               v-for="accomplishment in activeAccomplishments"

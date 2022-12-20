@@ -3,7 +3,7 @@
     <b-form @submit.stop.prevent="createTrade">
       <!-- select trade partner -->
       <b-form-group class="w-100 p-2 tour-send-trade">
-        <h4 class="my-2">Trade with:</h4>
+        <h4>Trade with:</h4>
         <b-form-radio
           v-for="player in otherPlayers"
           :key="player"
@@ -23,7 +23,7 @@
             :style="{ backgroundColor: frameStyle(player) }"
           >
           </b-img>
-          <p class="text-capitalize font-weight-bold my-2" style="color: var(--light-shade)">
+          <p class="text-capitalize font-weight-bold mb-0 mt-2" style="color: var(--light-shade)">
             {{ player }}
           </p>
         </b-form-radio>
@@ -31,7 +31,7 @@
       <div class="w-75 my-3 light-shade-05-border"></div>
       <!-- request -->
       <b-form-group>
-        <h4 class="my-2">Ask For:</h4>
+        <h4>Ask For:</h4>
         <TradeOptions
           :resourceReader="handleReceiveResources"
           :resources="senderResources"

@@ -2,7 +2,7 @@
   <b-container no-gutters fluid class="h-100">
     <b-row align-v="stretch" align-h="center" class="h-100 w-100 text-center">
       <b-col
-        v-for="(value, resource) in resources"
+        v-for="(value, resource) in validResources"
         :key="resource"
         class="m-1 px-2 light-shade-05-border backdrop"
         style="border: 0.2rem solid var(--light-shade-25)"
@@ -14,7 +14,7 @@
           </p>
         </b-col>
 
-        <b-row class="p-3">
+        <b-row class="pb-2 pr-2">
           <b-img
             v-bind="mainProps"
             rounded="circle"
@@ -27,34 +27,36 @@
             v-model="resources[resource]"
             v-if="mode === 'outgoing'"
             vertical
+            size="sm"
             min="0"
             :max="playerInventory[resource]"
             :disabled="playerInventory[resource] === 0 || !hasSelectedPlayer"
             @change="resourceReader(resources)"
-            class="mx-2"
+            class="mr-2"
           >
             <template #decrement>
-              <b-icon-dash scale="1.25" color="white"></b-icon-dash>
+              <b-icon-dash scale="1.00" color="white"></b-icon-dash>
             </template>
             <template #increment>
-              <b-icon-plus scale="1.25" color="white"></b-icon-plus>
+              <b-icon-plus scale="1.00" color="white"></b-icon-plus>
             </template>
           </b-form-spinbutton>
           <b-form-spinbutton
             v-else
             v-model="resources[resource]"
             vertical
+            size="sm"
             :disabled="!hasSelectedPlayer"
             min="0"
             max="999"
             @change="resourceReader(resources)"
-            class="mx-2"
+            class="mr-2"
           >
             <template #decrement>
-              <b-icon-dash scale="1.25" color="white"></b-icon-dash>
+              <b-icon-dash scale="1.00" color="white"></b-icon-dash>
             </template>
             <template #increment>
-              <b-icon-plus scale="1.25" color="white"></b-icon-plus>
+              <b-icon-plus scale="1.00" color="white"></b-icon-plus>
             </template>
           </b-form-spinbutton>
         </b-row>
@@ -88,6 +90,18 @@ export default class TradeOptions extends Vue {
     width: 50,
     height: 50
   };
+
+  get validResources() {
+    if (this.mode === "outgoing") {
+      return Object.keys(this.resources)
+        .filter((resource) => this.playerInventory[resource] > 0)
+        .reduce((obj, key) => {
+          return Object.assign(obj, { [key]: this.resources[key] });
+        }, {} as ResourceAmountData);
+    } else {
+      return this.resources;
+    }
+  }
 
   get selectedPlayer() {
     return this.$tstore.state.ui.tradeData.recipient.role;
