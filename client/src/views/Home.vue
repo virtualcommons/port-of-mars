@@ -1,7 +1,7 @@
 <template>
   <b-container fluid class="h-100 m-0 p-0">
     <b-row>
-      <div id="welcome" class="w-100 d-flex align-items-center welcome-bg">
+      <div id="welcome" class="w-100 d-flex align-items-center welcome">
         <b-row class="w-100 mx-0 my-5 px-3" align-v="center" align-h="center">
           <b-col md="12" lg="6" xl="5" class="text-left">
             <h1 class="section-title mb-3">Welcome to Port of Mars</h1>
@@ -39,20 +39,44 @@
             ></countdown>
           </b-col>
           <div class="w-100 mb-3"></div>
-          <b-button variant="link" @click="scrollToNextSection">
+          <b-button variant="link" @click="scrollToAboutSection">
             <p class="h1"><b-icon icon="chevron-down"></b-icon></p>
           </b-button>
         </b-row>
       </div>
-      <div id="about" class="w-100 d-flex align-items-center about-bg" ref="nextSection">
-        <b-row class="w-100 mx-0 my-5 px-3" align-v="center" align-h="center">
+      <div id="about" class="w-100 d-flex align-items-center about" ref="aboutSection">
+        <b-row class="w-100 mx-0 my-5 px-3" align-v="start" align-h="center">
+          <div class="w-100 mt-5"></div>
+          <b-col md="12" lg="12" xl="10" class="text-left">
+            <h1 class="section-title mb-3">Port of Mars: Digital Version</h1>
+            <p class="text mb-3">
+              Port of Mars is an interdisciplinary research project sponsored by the
+              <a href="https://interplanetary.asu.edu/">Interplanetary Initiative</a> at
+              <a href="https://www.asu.edu/" target="_blank">Arizona State University</a>.
+              Its original incarnation was designed and implemented as a physical card game for 5
+              players. We are developing a digital version of the Port of Mars game to serve as a
+              scalable research testbed for studying collective action.
+            </p>
+            <p class="text mb-3">
+              Previously, the game was only open to ASU students to participate in double-elimination
+              "Mars Madness" tournaments. We are now entering into an Open Beta phase, where anyone
+              around the world can participate.
+            </p>
+          </b-col>
+          <div class="w-100 my-5"></div>
           <b-col md="12" lg="6" xl="5" class="text-left">
-            <h1 class="section-title mb-3">About the Game</h1>
+            <h1 class="section-title mb-3">Gameplay</h1>
             <p class="text mb-3">
               You are 1 of 5 residents at the Port of Mars, the first long-term habitat on the
               planet. Each game consists of 8 — 12 rounds, each with phases of investing, trading,
               purchasing, discarding, and reacting to Mars events. Chance and player actions impact
               system health. If system health falls to zero all players die.
+            </p>
+            <p class="text mb-3">
+              Your mission is to stay alive and achieve the most victory points. Each round you
+              receive time blocks that you can invest in system health or resources that can be
+              used to purchase accomplishments. System health will maintain the shared
+              infrastructure and keep the team alive, while accomplishments will earn you victory points.
             </p>
           </b-col>
           <b-col md="12" lg="6" xl="5">
@@ -64,6 +88,29 @@
               allowfullscreen
             ></b-embed>
           </b-col>
+          <div class="w-100 my-5"></div>
+          <b-col md="12" lg="6" xl="5">
+            <b-embed
+              class="p-1"
+              type="iframe"
+              aspect="16by9"
+              :src="introVideoUrl"
+              allowfullscreen
+            ></b-embed>
+          </b-col>
+          <b-col md="12" lg="6" xl="5" class="text-left">
+            <h1 class="section-title mb-3">About the Project</h1>
+            <p class="text mb-3">
+              We're researching effective strategies for navigating dilemmas of shared resources,
+              common good, and collective action under conditions of high uncertainty and high risk,
+              like those in space. Players are citizens of an early Martian community charged with
+              working together to provide for the sustained welfare of the settlement. All player
+              actions are tracked and analyzed. We examine what behaviors tend to produce success,
+              and what tends to produce failure. Each instance of gameplay is a simulation, a
+              modeling exercise for future human space communities.
+            </p>
+          </b-col>
+          <div class="w-100 mb-5"></div>
         </b-row>
       </div>
     </b-row>
@@ -72,7 +119,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
 import Countdown from "@port-of-mars/client/components/global/Countdown.vue";
 import CharCarousel from "@port-of-mars/client/components/global/CharCarousel.vue";
@@ -89,9 +136,13 @@ import { isDevOrStaging } from "@port-of-mars/shared/settings";
   }
 })
 export default class Home extends Vue {
+  @Prop({ default: false })
+  scrollToAbout!: boolean;  
+
   isDevMode: boolean = false;
   currentYear = new Date().getFullYear();
   trailerVideoUrl = "https://www.youtube.com/embed/D4FfofyrlkA";
+  introVideoUrl = "https://www.youtube.com/embed/CiB4q3CnyCY";
   login = { name: LOGIN_PAGE };
   dashboardPage = { name: DASHBOARD_PAGE };
   readonly SITE_URL = "https://portofmars.asu.edu";
@@ -113,12 +164,14 @@ export default class Home extends Vue {
   }
 
   async mounted() {
-    // FIXME: this should probably come from the server when we fetchData
     this.isDevMode = isDevOrStaging();
+    if (this.scrollToAbout) {
+      this.scrollToAboutSection();
+    }
   }
 
-  scrollToNextSection() {
-    const el = this.$refs.nextSection as Element;
+  scrollToAboutSection() {
+    const el = this.$refs.aboutSection as Element;
     if (el) {
       el.scrollIntoView({ block: "start", behavior: "smooth" });
     }
@@ -147,7 +200,7 @@ p {
   color: var(--white);
 }
 
-.welcome-bg {
+.welcome {
   min-height: calc( 100vh - 85px );
   background: url("../assets/images/stars-bg.jpg") no-repeat;
   background-position: top; 
@@ -155,7 +208,10 @@ p {
   background-attachment: fixed;
 }
 
-.about-bg {
-  background: var(--dark-shade);
+.about {
+  background: rgba(45, 37, 36, 1);
+  .text {
+    line-height: 1.75;
+  }
 }
 </style>

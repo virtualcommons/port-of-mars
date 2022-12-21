@@ -10,50 +10,61 @@
     </b-navbar-brand>
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
     <b-collapse id="nav-collapse" is-nav>
-      <b-navbar-nav class="ml-auto">
-
+      <b-navbar-nav>
         <b-nav-item
+          class="mx-2"
           v-if="isAdmin"
           :to="admin"
           exact-active-class="active"
           title="Admin Dashboard"
         >Admin</b-nav-item>
         <b-nav-item
-          :to="dashboard"
+          class="mx-2"
+          :to="about"
           exact-active-class="active"
-          title="Player Dashboard"
-        >Play</b-nav-item>
+          title="About Port of Mars"
+        >About</b-nav-item>
         <b-nav-item
+          class="mx-2"
+          :to="consent"
+          exact-active-class="active"
+          title="Consent Form"
+        >Consent Form</b-nav-item>
+        <b-nav-item
+          class="mx-2"
           :to="manual"
           target="_blank"
           exact-active-class="active"
           title="Game Manual"
         >Manual</b-nav-item>
         <b-nav-item
-          :to="consent"
+          class="mx-2"
+          :to="dashboard"
           exact-active-class="active"
-          title="Consent Form">
-          Consent Form
-        </b-nav-item>
+          title="Player Dashboard"
+        >Play</b-nav-item>
+      </b-navbar-nav>
+      <b-navbar-nav class="ml-auto">
         <b-nav-item
-          href="https://instagram.com/portofmars/"
+          class="mx-2"
           target="_blank"
-          exact-active-class="active"
-          title="Port of Mars on Instagram"
-        >News</b-nav-item>
-
-        <!-- Icons -->
-        <!-- <b-nav-item href="https://email.com/">
-          <b-icon icon="envelope"></b-icon>
-        </b-nav-item>
-        <b-nav-item href="https://instagram.com/">
-          <b-icon icon="instagram"></b-icon>
-        </b-nav-item>
-        <b-nav-item href="https://twitter.com/">
-          <b-icon icon="twitter"></b-icon>
-        </b-nav-item> -->
+          href="https://discord.gg/AFEtAJZfEM"
+          title="Discord"
+        ><b-icon icon="discord"></b-icon></b-nav-item>
+        <b-nav-item
+          class="mx-2"
+          target="_blank"
+          href="https://twitter.com/PortOfMars"
+          title="Twitter"
+        ><b-icon icon="twitter"></b-icon></b-nav-item>
+        <b-nav-item
+          class="mx-2"
+          target="_blank"
+          href="https://www.instagram.com/portofmars/"
+          title="Instagram"
+        ><b-icon icon="instagram"></b-icon></b-nav-item>
         <div v-if="isAuthenticated">
-          <b-nav-item-dropdown :to="manual" right>
+          <b-nav-item-dropdown class="ml-3" :to="manual" right>
             <template #button-content>
               <b-icon icon="person-fill"></b-icon>
               {{ username }}
@@ -75,6 +86,7 @@ import {
   ADMIN_PAGE,
   DASHBOARD_PAGE,
   HOME_PAGE,
+  ABOUT_PAGE,
   LOGIN_PAGE,
   REGISTER_PAGE,
   MANUAL_PAGE,
@@ -102,6 +114,7 @@ export default class Header extends Vue {
   dashboard = { name: DASHBOARD_PAGE };
   consent = { name: REGISTER_PAGE };
   home = { name: HOME_PAGE };
+  about = { name: ABOUT_PAGE };
   login = { name: LOGIN_PAGE };
   manual = { name: MANUAL_PAGE };
   game = { name: GAME_PAGE };
@@ -145,16 +158,8 @@ export default class Header extends Vue {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
 #logo {
   width: 200px;
-}
-
-#dev-alert {
-  position: fixed;
-  top: 0;
-  margin: 100px 0 0 5px;
-  z-index: 9999;
 }
 </style>

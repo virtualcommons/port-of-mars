@@ -8,10 +8,12 @@ export const VERIFY_PAGE = "Verify" as const;
 export const DASHBOARD_PAGE: "Dashboard" = "Dashboard";
 export const MANUAL_PAGE: "Manual" = "Manual";
 export const HOME_PAGE: "Home" = "Home";
+export const ABOUT_PAGE: "About" = "About";
 
 export type Page =
   | "Admin"
   | "Home"
+  | "About"
   | "Login"
   | "Lobby"
   | "Game"
@@ -31,6 +33,7 @@ export const PAGES: Array<Page> = [
   VERIFY_PAGE,
   MANUAL_PAGE,
   HOME_PAGE,
+  ABOUT_PAGE,
 ];
 
 export function isPage(pageName: string): pageName is Page {
@@ -46,7 +49,7 @@ export const PAGE_META: {
   [p in Page]: {
     path: string;
     name?: string;
-    props?: boolean;
+    props?: any;
     meta: { requiresAuth: boolean, requiresAdmin?: boolean };
   };
 } = {
@@ -88,9 +91,18 @@ export const PAGE_META: {
   [HOME_PAGE]: {
     path: "/",
     name: HOME_PAGE,
+    props: true,
     meta: {
       requiresAuth: false,
     },
+  },
+  [ABOUT_PAGE]: {
+    path: "/about",
+    name: ABOUT_PAGE,
+    props: { scrollToAbout: true },
+    meta: {
+      requiresAuth: true,
+    }
   },
   [LOGIN_PAGE]: {
     path: "/login",

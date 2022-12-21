@@ -5,21 +5,20 @@ ccarra1@asu.edu
 <template>
   <!-- <b-container class="m-0 p-3 footer-container" fluid> -->
   <footer class="footer-container p-5 w-100">
-    <!-- FIXME: nav links should change based on the route -->
     <section id="footer-nav">
       <h2>Navigation</h2>
       <ul>
         <li>
-          <a href="https://interplanetary.asu.edu/port-of-mars" title="About Port of Mars">About</a>
+          <b-link :to="login" title="Sign up or login">Sign In</b-link>
         </li>
         <li>
-          <a href="/#/#leaderboard" title="Leaderboard">Leaderboard</a>
+          <b-link :to="dashboard" title="Play Port of Mars">Player Dashboard</b-link>
         </li>
         <li>
-          <a href="https://instagram.com/portofmars/" title="News">News</a>
+          <b-link :to="manual" title="User Manual">How to Play</b-link>
         </li>
         <li>
-          <b-link to="manual" title="User Manual">How to play</b-link>
+          <b-link :to="consent" title="Player Consent Form">Consent Form</b-link>
         </li>
       </ul>
     </section>
@@ -52,6 +51,12 @@ ccarra1@asu.edu
       <h2>Connect with Us</h2>
       <ul>
         <li>
+          <a href="https://discord.gg/AFEtAJZfEM" title="Discord">
+            Discord
+            <b-icon icon="discord" class="mx-1"></b-icon>
+          </a>
+        </li>
+        <li>
           <a href="mailto:portmars@asu.edu" title="Email us">
             Email
             <b-icon icon="envelope" class="mx-1"></b-icon>
@@ -83,17 +88,23 @@ ccarra1@asu.edu
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { MANUAL_PAGE } from "@port-of-mars/shared/routes";
 import { BUILD_ID } from "@port-of-mars/shared/settings";
+import {
+  LOGIN_PAGE,
+  DASHBOARD_PAGE,
+  REGISTER_PAGE,
+  MANUAL_PAGE,
+} from "@port-of-mars/shared/routes";
 
 @Component({})
 export default class Footer extends Vue {
   buildId = "";
   currentYear = new Date().getFullYear();
 
-  get manual() {
-    return { name: MANUAL_PAGE };
-  }
+  dashboard = { name: DASHBOARD_PAGE };
+  consent = { name: REGISTER_PAGE };
+  manual = { name: MANUAL_PAGE };
+  login = { name: LOGIN_PAGE };
 
   async mounted() {
     this.buildId = BUILD_ID;
@@ -101,7 +112,7 @@ export default class Footer extends Vue {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .footer-container {
   background-color: var(--dark-shade-75);
   display: grid;

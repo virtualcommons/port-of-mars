@@ -27,6 +27,7 @@ import {
   VERIFY_PAGE,
   MANUAL_PAGE,
   HOME_PAGE,
+  ABOUT_PAGE,
 } from "@port-of-mars/shared/routes";
 
 Vue.use(VueRouter);
@@ -50,6 +51,7 @@ const router = new VueRouter({
     { ...PAGE_META[VERIFY_PAGE], component: Verify },
     { ...PAGE_META[MANUAL_PAGE], component: Manual },
     { ...PAGE_META[HOME_PAGE], component: Home },
+    { ...PAGE_META[ABOUT_PAGE], component: Home },
   ]
 });
 

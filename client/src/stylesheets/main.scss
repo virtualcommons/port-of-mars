@@ -21,6 +21,9 @@ html {
   height: 100%;
   width: 100%;
 
+  // account for header when scrolling
+  scroll-padding-top: 80px;
+
   // @include xl {
   //   font-size: 12px !important;
   // }
