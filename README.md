@@ -4,6 +4,9 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END --> 
 
+[![](https://dcbadge.vercel.app/api/server/AFEtAJZfEM)](https://discord.gg/AFEtAJZfEM)
+
+
 ## About
 
 [Port of Mars](https://interplanetary.asu.edu/port-of-mars) is an interdisciplinary research project sponsored by [Arizona State University's](https://www.asu.edu) [Interplanetary Initiative](https://interplanetary.asu.edu/). Its original incarnation was designed and implemented as a physical card game for 5 players. We are developing a digital version of the Port of Mars game to serve as a scalable research testbed for studying collective action.
