@@ -117,7 +117,6 @@ import { DashboardAPI } from "@port-of-mars/client/api/dashboard/request";
 import PlayerStatItem from "@port-of-mars/client/components/dashboard/PlayerStatItem.vue";
 import Messages from "@port-of-mars/client/components/dashboard/Messages.vue";
 import Countdown from "@port-of-mars/client/components/global/Countdown.vue";
-import Header from "@port-of-mars/client/components/global/Header.vue";
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
 import Schedule from "@port-of-mars/client/components/dashboard/Schedule.vue";
 import _ from "lodash";
@@ -128,7 +127,6 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
 @Component({
   components: {
     Footer,
-    Header,
     Countdown,
     Messages,
     PlayerStatItem,

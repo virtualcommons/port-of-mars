@@ -1,127 +1,68 @@
 <template>
-  <b-container fluid class="h-100 m-0 p-0">
-    <b-row no-gutters class="h-100 w-100">
-      <section id="login-wrapper" class="h-100 w-100 text-center">
-        <div class="mx-5 p-5" id="login-container">
-          <h1>Sign In to Port of Mars</h1>
-          <p>
-            Port of Mars is only open to Arizona State University undergraduates at the moment.
-            Please sign in using your ASURITE ID below.
-          </p>
-          <p>
-            <span v-if="signupEnabled">
-              The next Mars Madness tournament is coming soon! Register and get notified when it
-              starts.
-            </span>
-            <span v-else>
-              <b-badge variant="info">Round {{ tournamentRoundNumber }}</b-badge>
-              of the Mars Madness tournament is now open!
-            </span>
-          </p>
-          <b-alert :show="tournamentRoundNumber > 1" variant="warning">
-            Eligible participants have been invited via email to
-            <b-badge variant="info">Round {{ tournamentRoundNumber }}</b-badge
-            >.
-          </b-alert>
-          <b-form-checkbox v-model="toggleDevLogin" v-if="isDevMode" class="my-2">
-            <p v-if="toggleDevLogin" class="text-uppercase">Test Mode Enabled</p>
-            <p v-else class="text-uppercase">Enable Test Mode</p>
+  <b-container fluid class="h-100 w-100 d-flex justify-content-center align-items-center backdrop">
+    <div id="login-container" class="content-container">
+      <b-form>
+        <h1 class="text-center">Login or Sign Up</h1>
+        <hr>
+        <p>
+          Port of Mars is now in open beta, meaning anyone is welcome to sign up and
+          play as long you adhere to our
+          <a href="https://github.com/virtualcommons/port-of-mars/wiki/Port-of-Mars-Chat-Code-of-Conduct"
+            target="_blank">code of conduct</a>.
+        </p>
+        <hr>
+        <div v-if=isDevMode>
+          <b-form-checkbox v-model="toggleDevLogin">
+            <p v-if="toggleDevLogin">Test Mode Enabled</p>
+            <p v-else>Enable Test Mode</p>
           </b-form-checkbox>
-          <b-button v-if="isAuthenticated" size="lg" variant="warning" @click="logout">
-            {{ logoutText }}
-          </b-button>
-          <b-button
-            v-else-if="!toggleDevLogin"
-            :href="asuLoginUrl"
-            size="lg"
-            variant="primary"
-            class="w-50"
-          >
-            <h4 class="p-1">
-              <span v-if="signupEnabled">
-                Register for
-              </span>
-              <span v-else>
-                Participate in
-              </span>
-              Mars Madness {{ currentYear }}
-            </h4>
-          </b-button>
-          <!-- register form -->
           <b-form inline v-if="isDevMode && toggleDevLogin" @submit="devLogin">
-            <div class="w-50 m-auto">
-              <b-form-input
-                id="input-username"
-                v-model="devLoginUsername"
-                placeholder="Enter any username for testing"
-                required
-                class="w-50"
-              >
-              </b-form-input>
-              <b-button class="w-25" icon type="submit" variant="success">
-                <b-icon class="mb-1" icon="box-arrow-right"></b-icon> Sign in
-              </b-button>
-            </div>
+            <b-form-input class="w-100 mb-2" id="input-username" v-model="devLoginUsername"
+              placeholder="Sign up or sign back in with a username" description="Enter any unique-ish username" required>
+            </b-form-input>
+            <b-button class="w-100 mb-3" type="submit" variant="primary" size="lg">
+              <b-icon icon="file-earmark-code" class="float-left"/>Sign in (Test Mode)
+            </b-button>
           </b-form>
           <b-alert v-if="error" variant="warning">{{ error }}</b-alert>
         </div>
-      </section>
-      <Footer></Footer>
-    </b-row>
+        <b-button block variant="white" size="lg" class="mb-3" :href="googleLoginUrl">
+          <b-icon icon="google" class="float-left" />Sign in with Google
+        </b-button>
+        <!-- FB signin disabled for open beta pretest -->
+        <!-- <b-button block variant="facebook" size="lg" class="mb-3" :href="facebookLoginUrl">
+          <b-icon icon="facebook" class="float-left"/>Sign in with Facebook
+        </b-button> -->
+      </b-form>
+    </div>
   </b-container>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { url } from "@port-of-mars/client/util";
-import { DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
 import { isDevOrStaging } from "@port-of-mars/shared/settings";
-import Footer from "@port-of-mars/client/components/global/Footer.vue";
+import { REGISTER_PAGE } from "@port-of-mars/shared/routes";
 
-@Component({
-  components: {
-    Footer
-  }
-})
+@Component({})
 export default class Login extends Vue {
-  devLoginUsername: string = "";
-  error: string = "";
   isDevMode: boolean = false;
   toggleDevLogin: boolean = false;
-  currentYear = new Date().getFullYear();
-  tournamentRoundNumber = 1;
+  devLoginUsername: string = "";
+  error: string = "";
 
-  logo = {
-    center: true,
-    fluid: true,
-    blankColor: "#bbb",
-    width: 225,
-    height: 225
-  };
-
-  get signupEnabled() {
-    return this.$tstore.state.signupEnabled;
-  }
-
-  get username() {
-    return this.$tstore.getters.user?.username;
-  }
-
-  get asuLoginUrl() {
-    return url("/asulogin");
-  }
-
-  get logoutText() {
-    return `Sign Out (${this.username})`;
-  }
-
-  get isAuthenticated() {
-    return this.$tstore.getters.isAuthenticated;
-  }
+  register = { name: REGISTER_PAGE };
 
   async created() {
-    // FIXME: this should probably come from the server when we fetchData
     this.isDevMode = isDevOrStaging();
+  }
+
+  get googleLoginUrl() {
+    return url("/auth/google")
+  }
+
+  get facebookLoginUrl() {
+    return url("/auth/facebook")
   }
 
   async devLogin(e: Event) {
@@ -138,45 +79,14 @@ export default class Login extends Vue {
       }
     }
   }
-
-  async logout() {
-    await this.$ajax.forgetLoginCreds();
-    this.$ajax.forgetSubmissionId();
-  }
 }
 </script>
 
 <style lang="scss" scoped>
-p {
-  color: var(--white);
-}
-
-#login-wrapper {
-  padding: 250px 0 250px 0;
-  background: url("../assets/images/bg-dark-moon.png");
-  background-position: center;
-}
 
 #login-container {
-  background-color: var(--dark-shade-75);
+  padding: 2rem;
+  width: 30rem;
 }
 
-::placeholder,
-#input-username {
-  color: var(--dark-shade);
-  background-color: var(--light-shade);
-}
-
-.title {
-  letter-spacing: 0.15rem;
-  font-size: 3rem;
-  font-weight: 600;
-  color: var(--light-shade);
-}
-
-.subtitle {
-  font-size: 2rem;
-  font-weight: 600;
-  color: var(--light-shade);
-}
 </style>

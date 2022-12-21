@@ -12,7 +12,7 @@
             </p>
             <b-row class="mt-3">
               <b-col cols="5">
-                <b-button class="w-100" variant="primary" :to="openlogin"
+                <b-button class="w-100" variant="primary" :to="login"
                   ><h4 class="p-1">Play Now</h4>
                 </b-button>
               </b-col>
@@ -77,7 +77,7 @@ import Footer from "@port-of-mars/client/components/global/Footer.vue";
 import Countdown from "@port-of-mars/client/components/global/Countdown.vue";
 import CharCarousel from "@port-of-mars/client/components/global/CharCarousel.vue";
 import Schedule from "@port-of-mars/client/components/dashboard/Schedule.vue";
-import { LOGIN_PAGE, OPENLOGIN_PAGE, DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
+import { LOGIN_PAGE, DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
 import { isDevOrStaging } from "@port-of-mars/shared/settings";
 
 @Component({
@@ -93,7 +93,6 @@ export default class Home extends Vue {
   currentYear = new Date().getFullYear();
   trailerVideoUrl = "https://www.youtube.com/embed/D4FfofyrlkA";
   login = { name: LOGIN_PAGE };
-  openlogin = { name: OPENLOGIN_PAGE };
   dashboardPage = { name: DASHBOARD_PAGE };
   readonly SITE_URL = "https://portofmars.asu.edu";
 

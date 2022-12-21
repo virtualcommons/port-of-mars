@@ -3,7 +3,7 @@ import _ from "lodash";
 import { VueRouter } from "vue-router/types/router";
 import { TStore } from "@port-of-mars/client/plugins/tstore";
 import { RoomId } from "@port-of-mars/shared/types";
-import { OPENLOGIN_PAGE, DASHBOARD_PAGE, REGISTER_PAGE, HOME_PAGE } from "@port-of-mars/shared/routes";
+import { LOGIN_PAGE, DASHBOARD_PAGE, REGISTER_PAGE, HOME_PAGE } from "@port-of-mars/shared/routes";
 import { DashboardMessage } from "@port-of-mars/shared/types";
 import { url } from "@port-of-mars/client/util";
 import { initialUserState } from '@port-of-mars/shared/game/client/state';
@@ -36,7 +36,7 @@ export class AjaxRequest {
   _roomId?: RoomId;
 
   errorRoutes: Map<number, string> = new Map([
-    [401, OPENLOGIN_PAGE],
+    [401, LOGIN_PAGE],
     [403, DASHBOARD_PAGE],
     [404, DASHBOARD_PAGE],
   ]);
@@ -154,7 +154,7 @@ export class AjaxRequest {
         else {
           console.error("Unhandled error in request, returning to home screen", e);
           // FIXME: add context so that login page has information about why they were redirected
-          this.router.push({ name: OPENLOGIN_PAGE });
+          this.router.push({ name: LOGIN_PAGE });
         }
       }
     }

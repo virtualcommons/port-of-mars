@@ -8,14 +8,12 @@ import Settings from "@port-of-mars/client/views/admin/Settings.vue";
 import Login from "@port-of-mars/client/views/Login.vue";
 import Lobby from "@port-of-mars/client/views/Lobby.vue";
 import Game from "@port-of-mars/client/views/Game.vue";
-import SignedUp from "@port-of-mars/client/views/SignedUp.vue";
 import Tutorial from "@port-of-mars/client/views/Tutorial.vue";
 import Register from "@port-of-mars/client/views/Register.vue";
 import Dashboard from "@port-of-mars/client/views/Dashboard.vue";
 import Verify from "@port-of-mars/client/views/VerifyEmail.vue";
 import Manual from "@port-of-mars/client/views/Manual.vue";
 import Home from "@port-of-mars/client/views/Home.vue";
-import OpenLogin from "@port-of-mars/client/views/OpenLogin.vue";
 import store from "@port-of-mars/client/store";
 import {
   ADMIN_PAGE,
@@ -27,10 +25,8 @@ import {
   REGISTER_PAGE,
   DASHBOARD_PAGE,
   VERIFY_PAGE,
-  SIGNEDUP_PAGE,
   MANUAL_PAGE,
   HOME_PAGE,
-  OPENLOGIN_PAGE,
 } from "@port-of-mars/shared/routes";
 
 Vue.use(VueRouter);
@@ -48,14 +44,12 @@ const router = new VueRouter({
     { ...PAGE_META[LOGIN_PAGE], component: Login },
     { ...PAGE_META[LOBBY_PAGE], component: Lobby },
     { ...PAGE_META[GAME_PAGE], component: Game },
-    { ...PAGE_META[SIGNEDUP_PAGE], component: SignedUp },
     { ...PAGE_META[TUTORIAL_PAGE], component: Tutorial },
     { ...PAGE_META[REGISTER_PAGE], component: Register },
     { ...PAGE_META[DASHBOARD_PAGE], component: Dashboard },
     { ...PAGE_META[VERIFY_PAGE], component: Verify },
     { ...PAGE_META[MANUAL_PAGE], component: Manual },
     { ...PAGE_META[HOME_PAGE], component: Home },
-    { ...PAGE_META[OPENLOGIN_PAGE], component: OpenLogin },
   ]
 });
 
@@ -86,8 +80,8 @@ router.beforeEach((to, from, next) => {
 
 router.beforeEach((to: any, from: any, next: any) => {
   if (to.meta.requiresAuth && !isAuthenticated()) {
-    next({ name: OPENLOGIN_PAGE });
-  } else if (to.name === OPENLOGIN_PAGE && isAuthenticated()) {
+    next({ name: LOGIN_PAGE });
+  } else if (to.name === LOGIN_PAGE && isAuthenticated()) {
     next({ name: DASHBOARD_PAGE });
   } else if (to.name === ADMIN_PAGE && !isAdmin()) {
     next({ name: HOME_PAGE });

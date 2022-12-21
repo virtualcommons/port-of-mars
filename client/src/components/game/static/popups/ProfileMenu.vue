@@ -96,7 +96,7 @@ export default class ProfileMenu extends Vue {
 
   logoutUser(): void {
     this.$ajax.forgetLoginCreds();
-    this.$router.push({ name: "OpenLogin" });
+    this.$router.push({ name: "Login" });
   }
 
   get isDevModeEnabled() {

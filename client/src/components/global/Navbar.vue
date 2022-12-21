@@ -62,7 +62,7 @@
           </b-nav-item-dropdown>
         </div>
         <b-nav-form v-else class="ml-3">
-          <b-button title="Sign In" variant="primary" :to="openlogin">Sign In</b-button>
+          <b-button title="Sign In" variant="primary" :to="login">Sign In</b-button>
         </b-nav-form>
       </b-navbar-nav>
     </b-collapse>
@@ -80,7 +80,6 @@ import {
   MANUAL_PAGE,
   GAME_PAGE,
   LOBBY_PAGE,
-  OPENLOGIN_PAGE,
 } from "@port-of-mars/shared/routes";
 import { isDevOrStaging } from "@port-of-mars/shared/settings";
 import _ from "lodash";
@@ -107,7 +106,6 @@ export default class Header extends Vue {
   manual = { name: MANUAL_PAGE };
   game = { name: GAME_PAGE };
   lobby = { name: LOBBY_PAGE };
-  openlogin = { name: OPENLOGIN_PAGE };
 
   async created() {
     this.isDevMode = isDevOrStaging();

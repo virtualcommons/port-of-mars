@@ -5,7 +5,7 @@ import { settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
 import { ServerError, toUrl } from "@port-of-mars/server/util";
 import {
-  OPENLOGIN_PAGE,
+  LOGIN_PAGE,
   REGISTER_PAGE,
   DASHBOARD_PAGE,
 } from "@port-of-mars/shared/routes";
@@ -27,7 +27,7 @@ authRouter.get("/google/callback",
 
 authRouter.get("/google/failure", function (req, res) {
   logger.debug("google login failure, user: %o ", req.user);
-  res.redirect(toUrl(OPENLOGIN_PAGE));
+  res.redirect(toUrl(LOGIN_PAGE));
 });
 
 authRouter.get("/google/success", function (req, res) {
@@ -36,7 +36,7 @@ authRouter.get("/google/success", function (req, res) {
     const user = req.user as User;
     if (!user.isActive) {
       logger.warn("inactivated user attempted to login %o", user);
-      res.redirect(toUrl(OPENLOGIN_PAGE));
+      res.redirect(toUrl(LOGIN_PAGE));
     } else if (getServices().account.isRegisteredAndValid(user)) {
       res.redirect(toUrl(DASHBOARD_PAGE));
     } else {
@@ -45,7 +45,7 @@ authRouter.get("/google/success", function (req, res) {
     }
   } else {
     logger.warn("no user on the request, returning to login %o", req);
-    res.redirect(toUrl(OPENLOGIN_PAGE));
+    res.redirect(toUrl(LOGIN_PAGE));
   }
 });
 
@@ -62,7 +62,7 @@ authRouter.get("/facebook/callback",
 
 authRouter.get("/facebook/failure", function (req, res) {
   logger.debug("facebook login failure, user: %o ", req.user);
-  res.redirect(toUrl(OPENLOGIN_PAGE));
+  res.redirect(toUrl(LOGIN_PAGE));
 });
 
 authRouter.get("/facebook/success", function (req, res) {
@@ -71,7 +71,7 @@ authRouter.get("/facebook/success", function (req, res) {
     const user = req.user as User;
     if (!user.isActive) {
       logger.warn("inactivated user attempted to login %o", user);
-      res.redirect(toUrl(OPENLOGIN_PAGE));
+      res.redirect(toUrl(LOGIN_PAGE));
     } else if (getServices().account.isRegisteredAndValid(user)) {
       res.redirect(toUrl(DASHBOARD_PAGE));
     } else {
@@ -80,6 +80,6 @@ authRouter.get("/facebook/success", function (req, res) {
     }
   } else {
     logger.warn("no user on the request, returning to login %o", req);
-    res.redirect(toUrl(OPENLOGIN_PAGE));
+    res.redirect(toUrl(LOGIN_PAGE));
   }
 });

@@ -2,14 +2,12 @@ export const ADMIN_PAGE: "Admin" = "Admin";
 export const LOGIN_PAGE: "Login" = "Login";
 export const LOBBY_PAGE: "Lobby" = "Lobby";
 export const GAME_PAGE: "Game" = "Game";
-export const SIGNEDUP_PAGE: "SignedUp" = "SignedUp";
 export const TUTORIAL_PAGE: "Tutorial" = "Tutorial";
 export const REGISTER_PAGE: "Register" = "Register";
 export const VERIFY_PAGE = "Verify" as const;
 export const DASHBOARD_PAGE: "Dashboard" = "Dashboard";
 export const MANUAL_PAGE: "Manual" = "Manual";
 export const HOME_PAGE: "Home" = "Home";
-export const OPENLOGIN_PAGE: "OpenLogin" = "OpenLogin";
 
 export type Page =
   | "Admin"
@@ -18,12 +16,10 @@ export type Page =
   | "Lobby"
   | "Game"
   | "Tutorial"
-  | "SignedUp"
   | "Register"
   | "Dashboard"
   | "Verify"
   | "Manual"
-  | "OpenLogin";
 export const PAGES: Array<Page> = [
   ADMIN_PAGE,
   LOGIN_PAGE,
@@ -35,7 +31,6 @@ export const PAGES: Array<Page> = [
   VERIFY_PAGE,
   MANUAL_PAGE,
   HOME_PAGE,
-  OPENLOGIN_PAGE,
 ];
 
 export function isPage(pageName: string): pageName is Page {
@@ -98,17 +93,10 @@ export const PAGE_META: {
     },
   },
   [LOGIN_PAGE]: {
-    path: "/signin",
+    path: "/login",
     name: LOGIN_PAGE,
     meta: {
       requiresAuth: false,
-    },
-  },
-  [SIGNEDUP_PAGE]: {
-    path: "/signedup",
-    name: SIGNEDUP_PAGE,
-    meta: {
-      requiresAuth: true,
     },
   },
   [TUTORIAL_PAGE]: {
@@ -129,13 +117,6 @@ export const PAGE_META: {
   [MANUAL_PAGE]: {
     path: "/manual",
     name: MANUAL_PAGE,
-    meta: {
-      requiresAuth: false,
-    },
-  },
-  [OPENLOGIN_PAGE]: {
-    path: "/openlogin",
-    name: OPENLOGIN_PAGE,
     meta: {
       requiresAuth: false,
     },
