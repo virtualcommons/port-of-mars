@@ -139,7 +139,7 @@ export class AdminService extends BaseService {
     const user = await this.sp.account.findByUsername(data.username);
     const admin = await this.sp.account.findByUsername(data.adminUsername);
     const { username, adminUsername, ...moderationActionData } = data;
-    if (data.action === MUTE && !moderationActionData.daysMuted) {
+    if (data.action === MUTE && moderationActionData.daysMuted === undefined) {
       moderationActionData.daysMuted = await this.sp.settings.defaultDaysMuted();
     }
     // submit moderationAction
