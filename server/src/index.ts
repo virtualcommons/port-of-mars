@@ -240,10 +240,16 @@ async function createApp() {
     await services.schedule.scheduleGames();
   }
   const schedule = require("node-schedule");
-  const job = schedule.scheduleJob("0 * * * *", async () => {
+  const scheduleJob = schedule.scheduleJob("0 * * * *", async () => {
     if (await services.settings.isAutoSchedulerEnabled()) {
       await services.schedule.scheduleGames();
     }
+  });
+  
+  // run automated admin jobs (revoking expired mutes, etc) once a day
+  await services.admin.unapplyExpiredMutes();
+  const adminJob = schedule.scheduleJob("0 0 * * *", async () => {
+    await services.admin.unapplyExpiredMutes();
   });
 }
 

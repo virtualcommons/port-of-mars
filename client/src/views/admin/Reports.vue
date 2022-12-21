@@ -81,7 +81,7 @@
             >
               <template #cell(dateMuteExpires)="data">
                 <span v-if="data.item.dateMuteExpires">
-                  <span v-if="data.item.dateMuteExpires > new Date()">expired</span>
+                  <span v-if="new Date(data.item.dateMuteExpires) < new Date()" class="text-danger">expired</span>
                   <span v-else>{{ formatFutureTime(data.item.dateMuteExpires) }}</span>
                 </span>
               </template>

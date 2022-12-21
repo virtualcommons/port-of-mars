@@ -12,7 +12,9 @@ import {
   NONE,
   MUTE,
   ModerationActionClientData,
-  ChatReportRequestData
+  ChatReportRequestData,
+  BAN,
+  ModerationActionType
 } from "@port-of-mars/shared/types";
 import { getLogger } from "@port-of-mars/server/settings";
 import _ from "lodash";
@@ -158,6 +160,22 @@ export class AdminService extends BaseService {
     await reportRepo.save(report);
   }
 
+  async hasActiveModerationAction(username: string, action: ModerationActionType): Promise<boolean> {
+    const activeModerationActions = await this.em
+      .getRepository(ModerationAction).
+      createQueryBuilder("moderationAction")
+      .innerJoinAndSelect("moderationAction.user", "user")
+      .where("moderationAction.revoked = :revoked", { revoked: false })
+      .andWhere("moderationAction.action = :action", { action })
+      .andWhere("user.username = :username", { username })
+      .getMany();
+    if (action === MUTE) {
+      return activeModerationActions.some((i: ModerationAction) => i.dateMuteExpires > new Date());
+    } else {
+      return activeModerationActions.length > 0;
+    }
+  }
+
   async undoModerationAction(data: { moderationActionId: number, username: string }) {
     const moderationActionRepo = this.em.getRepository(ModerationAction);
     const reportRepo = this.em.getRepository(ChatReport);
@@ -169,9 +187,30 @@ export class AdminService extends BaseService {
     // unresolve report
     report.resolved = false;
     await reportRepo.save(report);
-    // unmute/unban user
+    // unmute/unban user if they have no other active actions
     if (moderationAction.action !== NONE) {
-      await this.sp.account.unmuteOrUnbanByUsername(data.username, moderationAction.action);
+      if (!(await this.hasActiveModerationAction(data.username, moderationAction.action))) {
+        await this.sp.account.unmuteOrUnbanByUsername(data.username, moderationAction.action);
+      } else if (moderationAction.action === MUTE) {
+        await this.sp.account.decrementMuteStrikes(data.username);
+      }
+    }
+  }
+
+  async unapplyExpiredMutes() {
+    const expiredMuteActions = await this.em
+      .getRepository(ModerationAction)
+      .createQueryBuilder("moderationAction")
+      .innerJoinAndSelect("moderationAction.user", "user")
+      .where("moderationAction.revoked = :revoked", { revoked: false })
+      .andWhere("moderationAction.action = :muteAction", { muteAction: MUTE })
+      .andWhere("moderationAction.dateMuteExpires < :now", { now: new Date() })
+      .getMany();
+    for (const action of expiredMuteActions) {
+      logger.trace("mute %s for user: %s has expired", action.id, action.user.username);
+      if (!(await this.hasActiveModerationAction(action.user.username, MUTE))) {
+        await this.sp.account.expireMute(action.user.username);
+      }
     }
   }
 }

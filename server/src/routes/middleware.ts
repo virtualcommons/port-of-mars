@@ -30,7 +30,6 @@ export function isAdminAuthenticated(req: Request, res: Response, next: NextFunc
     return res.status(403).json({ kind: 'info', message: 'You do not appear to have access to this area. This has been logged.'});
   }
   else {
-    logger.trace('admin user accessing admin section: %o', req.user);
     next();
   }
 }

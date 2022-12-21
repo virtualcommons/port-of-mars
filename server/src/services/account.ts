@@ -67,6 +67,19 @@ export class AccountService extends BaseService {
     return await this.getRepository().save(user);
   }
 
+  async expireMute(username: string): Promise<User> {
+    // unapply mute without decrementing mute strikes
+    const user = await this.findByUsername(username);
+    user.isMuted = false;
+    return await this.getRepository().save(user);
+  }
+
+  async decrementMuteStrikes(username: string): Promise<User> {
+    const user = await this.findByUsername(username);
+    user.muteStrikes = Math.max(0, user.muteStrikes - 1);
+    return await this.getRepository().save(user);
+  }
+
   async unbanByUsername(username: string): Promise<User> {
     const user = await this.findByUsername(username);
     user.isBanned = false;

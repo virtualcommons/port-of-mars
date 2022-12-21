@@ -18,7 +18,7 @@ describe("users in a game", () => {
     t = await createTournament(sp, { name: "openbeta" });
     tr = await createRound(sp, {tournamentId: t.id});
     // create users
-    await createUsers(manager, "steve", [1, 2, 3, 4, 5]);
+    await createUsers(manager, "steve", [1, 2, 3, 4, 5, 6]);
     await sp.account.getOrCreateTestUser("admin");
     // create a new game
     const g = new Game();
@@ -52,7 +52,7 @@ describe("users in a game", () => {
       await sp.account.setAdminByUsername("admin");
       const adminUser = await sp.account.findByUsername("admin");
       expect(adminUser.isAdmin).toBe(true);
-      await createChatReports(sp, ["steve2", "steve3", "steve4", "steve5"]);
+      await createChatReports(sp, ["steve2", "steve3", "steve4", "steve5", "steve6"]);
       await createModerationActions(sp, ["steve1", "steve2"], [MUTE, BAN]);
       // now have:
       //       ACTIONS                 REPORTS
@@ -64,11 +64,12 @@ describe("users in a game", () => {
       //                            3  | steve3
       //                            4  | steve4
       //                            5  | steve5
+      //                            6  | steve6
     });
 
     it("can get a list of chat reports", async () => {
       const reports = await sp.admin.getChatReports(false);
-      expect(reports.length).toBe(5);
+      expect(reports.length).toBe(6);
     });
 
     it("can get a list of moderation actions", async () => {
@@ -131,6 +132,26 @@ describe("users in a game", () => {
       user = await sp.account.findByUsername(username);
       expect(user.isMuted).toBe(false);
       expect(user.muteStrikes).toBe(0);
+    });
+
+    it("resolves expired mutes", async () => {
+      const username = "steve6";
+      const reports = await sp.admin.getChatReports(false);
+      const report = reports.find(r => r.username === username);
+      await sp.admin.takeModerationAction({
+        reportId: report!.id,
+        username: report!.username,
+        adminUsername: "admin",
+        action: MUTE,
+        daysMuted: 0
+      });
+      let user = await sp.account.findByUsername(username);
+      expect(user.isMuted).toBe(true);
+      expect(user.muteStrikes).toBe(1);
+      await sp.admin.unapplyExpiredMutes();
+      user = await sp.account.findByUsername(username);
+      expect(user.isMuted).toBe(false);
+      expect(user.muteStrikes).toBe(1);
     });
   });
   afterAll(async () => await rollbackTransaction(conn, qr));
