@@ -103,9 +103,9 @@ export class ScheduleService extends BaseService {
     if (!gameDates) {
       gameDates = await this.getScheduledDates();
     }
-    // if (settings.lobby.devMode) {
-    //   return true;
-    // }
+    if (settings.lobby.devMode) {
+      return true;
+    }
     if (gameDates.length === 0) {
       return false;
     }

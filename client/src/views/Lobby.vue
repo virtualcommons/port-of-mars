@@ -7,17 +7,16 @@
       style="background-color: var(--dark-shade-75)"
     >
       <b-col align-self="center">
-        <h1 class='m-3'>Next Launch Time</h1>
-        <h2 class="m-4">
-          <mark>{{ scheduledGameTimeString }}</mark>
-        </h2>
-        <p class='lead'>
-          You'll join a game as soon as there are enough players to form a full group. After a certain amount of time passes a game
-          may begin immediately with bots filling in for the rest of the group.
-        </p>
-        <p>
-          This lobby will remain open up to {{ minutesOpenAfter }} minutes after the scheduled launch time.
-        </p>
+        <h4>Launch Time</h4>
+        <h2 class="mt-2 mb-5"><b-badge variant="success">{{ scheduledGameTimeString }}</b-badge></h2>
+        <h4>Lobby Closes In</h4>
+        <Countdown :nextLaunch="lobbyCloseTime" class="mb-5"></Countdown>
+        <b-alert show variant="info" class="w-50 mx-auto">
+          You'll join a game as soon as there are enough players to form a full group of 5.
+          <hr class="my-2">
+          When the lobby closes or enough time passes, any players still in the lobby will
+          join a game with bots filling in the remaining spots.
+        </b-alert>
       </b-col>
       <div class="w-100"></div>
       <b-col>
@@ -43,7 +42,6 @@
 <script lang="ts">
 import { Client } from "colyseus.js";
 import { Component, Inject, Prop, Vue } from "vue-property-decorator";
-
 import { DashboardAPI } from "@port-of-mars/client/api/dashboard/request";
 import { applyWaitingServerResponses } from "@port-of-mars/client/api/lobby/response";
 import { WaitingRequestAPI } from "@port-of-mars/client/api/lobby/request";
@@ -51,8 +49,13 @@ import { isDevOrStaging } from "@port-of-mars/shared/settings";
 import { LOBBY_NAME } from "@port-of-mars/shared/lobby";
 import { REGISTER_PAGE, DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
 import { Role } from "@port-of-mars/shared/types";
+import Countdown from "@port-of-mars/client/components/global/Countdown.vue";
 
-@Component({})
+@Component({
+  components: {
+    Countdown
+  }
+})
 export default class Lobby extends Vue {
   @Inject() $client!: Client;
   @Prop() private role!: string;
@@ -67,12 +70,16 @@ export default class Lobby extends Vue {
     return this.$tstore.getters.roles;
   }
 
+  get lobbyCloseTime() {
+    return this.scheduledGameTime + (this.minutesOpenAfter * 60 * 1000);
+  }
+
   get scheduledGameTimeString(): string {
-    return new Date(this.scheduledGameTime).toString();
+    return new Date(this.scheduledGameTime).toLocaleString("en-US", { timeZoneName: "short" });
   }
 
   get nextAssignmentTimeString(): string {
-    return new Date(this.nextAssignmentTime).toString();
+    return new Date(this.nextAssignmentTime).toLocaleString();
   }
 
   get isDevOrStaging() {
@@ -87,9 +94,7 @@ export default class Lobby extends Vue {
     const dashboardAPI = new DashboardAPI(this.$tstore, this.$ajax);
     const dashboardData = await dashboardAPI.getData();
     this.minutesOpenAfter = dashboardData.minutesOpenAfter;
-    // check if player can play a game
     const playerTaskCompletion = dashboardData.playerTaskCompletion;
-    // FIXME: repeated logic from Dashboard.vue
     // go to email verification page if player is not verified
     if (playerTaskCompletion.mustVerifyEmail) {
       await this.$router.push({ name: REGISTER_PAGE });
@@ -100,33 +105,10 @@ export default class Lobby extends Vue {
       await this.$router.push({ name: REGISTER_PAGE });
       return;
     }
-    // currently disabled
-    /*
-    else if (playerTaskCompletion.mustTakeTutorial) {
-      dashboardAPI.message("Please take the tutorial before joining the lobby to participate.");
-      await this.$router.push({ name: TUTORIAL_PAGE });
-      return;
-    } 
-    else if (playerTaskCompletion.mustTakeIntroSurvey) {
-      dashboardAPI.message(
-        "Please take the introductory survey before joining the lobby to participate."
-      );
-      await this.$router.push({ name: DASHBOARD_PAGE });
-      return;
-    }
-    if (!playerTaskCompletion.canPlayGame) {
-      dashboardAPI.message(
-        "You do not have an active Port of Mars invitation. Please contact us if this is an error."
-      );
-      await this.$router.push({ name: DASHBOARD_PAGE });
-      return;
-    }
-    */
     // check if there is a game scheduled for play
-    // FIXME: add lobby error message to server side instead of hard coding here
     if (!dashboardData.isLobbyOpen) {
       dashboardAPI.message(
-        "You can join the lobby 10 minutes before a game is scheduled to start. Please try again later."
+        "The lobby is currently closed. Please try again later."
       );
       await this.$router.push({ name: DASHBOARD_PAGE });
       return;

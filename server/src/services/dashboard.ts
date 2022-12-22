@@ -155,6 +155,6 @@ export class DashboardService extends BaseService {
   }
 
   async isLobbyOpen(user: User): Promise<boolean> {
-    return settings.lobby.devMode || this.sp.schedule.isLobbyOpen();
+    return this.sp.schedule.isLobbyOpen();
   }
 }
