@@ -112,7 +112,7 @@ class RoleExtractor {
   }
 }
 
-export type GameEventSummary = entity.GameEvent & {
+export type GameEventSummary = Omit<entity.GameEvent, "game"> & {
   phaseInitialTimeRemaining: number;
   systemHealthInitial: number;
   phaseFinalTimeRemaining: number;
@@ -163,7 +163,8 @@ export class GameEventSummarizer extends Summarizer<GameEventSummary> {
     game.applyMany([e]);
     const role = this.extractRole(game, e, event);
     const after = extractAfter(game);
-    return { ...event, ...before, ...after, role };
+    const eventData = _.omit(event, ["game"]);
+    return { ...eventData, ...before, ...after, role };
   }
 
   *_summarizeGame(
