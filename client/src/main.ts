@@ -7,7 +7,7 @@ import * as Sentry from '@sentry/browser';
 import { Vue as VueIntegration } from '@sentry/integrations';
 import { Integrations } from "@sentry/tracing";
 
-import { isStagingOrProduction, SENTRY_DSN } from '@port-of-mars/shared/settings';
+import { isStagingOrProduction, Settings } from '@port-of-mars/shared/settings';
 
 import { Ajax } from "@port-of-mars/client/plugins/ajax";
 import { TypedStore } from "@port-of-mars/client/plugins/tstore";
@@ -27,7 +27,7 @@ Vue.config.productionTip = false;
 
 if (isStagingOrProduction()) {
   Sentry.init({
-    dsn: SENTRY_DSN,
+    dsn: Settings.SENTRY_DSN,
     integrations: [
       new VueIntegration({ Vue, tracing: true }),
       new Integrations.BrowserTracing(),

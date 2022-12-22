@@ -1,3 +1,4 @@
+import { BUILD_ID, SENTRY_DSN } from "./assets/config";
 export { BUILD_ID, SENTRY_DSN } from "./assets/config";
 
 export const ENVIRONMENT = process.env.NODE_ENV || 'development';
@@ -24,6 +25,25 @@ export function isDevOrStaging(): boolean {
 
 export function isStagingOrProduction(): boolean {
   return isStaging() || isProduction();
+}
+
+/**
+ * FIXME: support reading values from a settings file on startup as well
+ */
+export class Settings {
+  public static readonly TRAILER_VIDEO_URL = "https://www.youtube.com/embed/D4FfofyrlkA";
+  public static readonly INTRO_VIDEO_URL = "https://www.youtube.com/embed/CiB4q3CnyCY";
+  public static readonly DISCORD_URL = "https://discord.gg/AFEtAJZfEM";
+  public static readonly INSTAGRAM_URL = "https://www.instagram.com/portofmars/";
+  public static readonly TWITTER_URL = "https://twitter.com/PortOfMars";
+  public static readonly GITHUB_URL = "https://github.com/virtualcommons/port-of-mars";
+  public static readonly CONTACT_EMAIL = "portmars@asu.edu";
+  public static readonly BUILD_ID = BUILD_ID;
+  public static readonly SENTRY_DSN = SENTRY_DSN;
+  public static readonly ENVIRONMENT = ENVIRONMENT;
+  public static readonly SYSTEM_HEALTH_MAINTENANCE_COST = 25;
+  // FIXME: replace COST_INAFFORDABLE eventually
+  public static readonly MAXIMUM_COST = 1000;
 }
 
 export const COST_INAFFORDABLE = 1000;

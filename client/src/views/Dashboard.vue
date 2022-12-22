@@ -104,6 +104,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faRocket, faInfoCircle, faCalendarPlus } from "@fortawesome/free-solid-svg-icons";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 
+import { Settings } from "@port-of-mars/shared/settings";
 import { PlayerTaskCompletion, Stats } from "@port-of-mars/shared/types";
 import {
   REGISTER_PAGE,
@@ -157,7 +158,9 @@ export default class Dashboard extends Vue {
   };
   stats: Stats = { games: [] };
 
-  tutorialVideoUrl = "https://www.youtube.com/embed/D4FfofyrlkA";
+  get tutorialVideoUrl() {
+    return Settings.TRAILER_VIDEO_URL;
+  }
 
   get gamesPlayedCount() {
     return this.stats.games.length;

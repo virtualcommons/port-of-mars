@@ -573,7 +573,7 @@ export class GameReplayer {
       .slice(1)
       .map((e) => gameEventDeserializer.deserialize(e));
     const g = loadSnapshot(this.events[0].payload as GameSerialized);
-    logger.info("events: %o", events);
+    // logger.info("events: %o", events);
     g.applyMany(events);
     return g;
   }

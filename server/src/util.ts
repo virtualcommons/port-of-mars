@@ -66,9 +66,7 @@ export async function mockGameInitOpts(): Promise<GameOpts> {
 
 export async function buildGameOpts(usernames: Array<string>, isOpenGame: boolean = true): Promise<GameOpts> {
   const services = getServices();
-  const currentTournamentRound = isOpenGame ?
-      await services.tournament.getOpenTournamentRound()
-    : await services.tournament.getCurrentTournamentRound();
+  const currentTournamentRound = await services.tournament.getCurrentTournamentRound();
   assert.equal(usernames.length, ROLES.length);
   logger.info("building game opts with current tournament round [%d]", currentTournamentRound.id);
   for (const u of usernames) {

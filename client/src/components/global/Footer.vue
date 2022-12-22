@@ -51,25 +51,25 @@ ccarra1@asu.edu
       <h2>Connect with Us</h2>
       <ul>
         <li>
-          <a href="https://discord.gg/AFEtAJZfEM" title="Discord">
-            Discord
-            <b-icon icon="discord" class="mx-1"></b-icon>
+          <a :href="settings.DISCORD_URL" title='Discord'>
+          Discord
+          <b-icon icon="discord" class="mx-1"></b-icon>
           </a>
         </li>
         <li>
-          <a href="mailto:portmars@asu.edu" title="Email us">
+          <a :href="'mailto:' + settings.CONTACT_EMAIL" title="Email us">
             Email
             <b-icon icon="envelope" class="mx-1"></b-icon>
           </a>
         </li>
         <li>
-          <a href="https://www.instagram.com/portofmars/" title="Instagram">
+          <a :href="settings.INSTAGRAM_URL" title="Instagram">
             Instagram
             <b-icon icon="instagram" class="mx-1"></b-icon>
           </a>
         </li>
         <li>
-          <a href="https://twitter.com/PortOfMars" title="Twitter">
+          <a :href="settings.TWITTER_URL" title="Twitter">
             Twitter
             <b-icon icon="twitter" class="mx-1"></b-icon>
           </a>
@@ -80,7 +80,7 @@ ccarra1@asu.edu
       &copy; 2020-{{ currentYear }}
       <a href="https://www.azregents.edu/">Arizona Board of Regents</a> |
 
-      <a href="https://github.com/virtualcommons/port-of-mars">{{ buildId }}</a>
+      <a :href="settings.GITHUB_URL">{{ settings.BUILD_ID }}</a>
     </div>
   </footer>
   <!-- </b-container> -->
@@ -88,7 +88,7 @@ ccarra1@asu.edu
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { BUILD_ID } from "@port-of-mars/shared/settings";
+import { Settings } from "@port-of-mars/shared/settings";
 import {
   LOGIN_PAGE,
   DASHBOARD_PAGE,
@@ -98,7 +98,6 @@ import {
 
 @Component({})
 export default class Footer extends Vue {
-  buildId = "";
   currentYear = new Date().getFullYear();
 
   dashboard = { name: DASHBOARD_PAGE };
@@ -106,9 +105,10 @@ export default class Footer extends Vue {
   manual = { name: MANUAL_PAGE };
   login = { name: LOGIN_PAGE };
 
-  async mounted() {
-    this.buildId = BUILD_ID;
+  get settings() {
+    return Settings;
   }
+
 }
 </script>
 
