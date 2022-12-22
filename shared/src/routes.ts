@@ -64,7 +64,7 @@ export const PAGE_META: {
     path: "/register",
     name: REGISTER_PAGE,
     meta: {
-      requiresAuth: false,
+      requiresAuth: true,
     },
   },
   [DASHBOARD_PAGE]: {
@@ -101,8 +101,8 @@ export const PAGE_META: {
     name: ABOUT_PAGE,
     props: { scrollToAbout: true },
     meta: {
-      requiresAuth: true,
-    }
+      requiresAuth: false,
+    },
   },
   [LOGIN_PAGE]: {
     path: "/login",

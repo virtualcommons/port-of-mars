@@ -32,15 +32,17 @@ import {
 
 Vue.use(VueRouter);
 
+const ADMIN_META = PAGE_META[ADMIN_PAGE].meta;
+
 const router = new VueRouter({
   mode: "hash",
   routes: [
     { ...PAGE_META[ADMIN_PAGE], component: Admin, children: [
-      { path: "", name: "Admin", redirect: { name: "AdminOverview" } },
-      { path: "overview", name: "AdminOverview", component: Overview },
-      { path: "rooms", name: "AdminRooms", component: Rooms },
-      { path: "reports", name: "AdminReports", component: Reports },
-      { path: "settings", name: "AdminSettings", component: Settings },
+      { path: "", name: "Admin", redirect: { name: "AdminOverview" }, meta: ADMIN_META },
+      { path: "overview", name: "AdminOverview", component: Overview, meta: ADMIN_META },
+      { path: "rooms", name: "AdminRooms", component: Rooms, meta: ADMIN_META },
+      { path: "reports", name: "AdminReports", component: Reports, meta: ADMIN_META },
+      { path: "settings", name: "AdminSettings", component: Settings, meta: ADMIN_META },
     ] },
     { ...PAGE_META[LOGIN_PAGE], component: Login },
     { ...PAGE_META[LOBBY_PAGE], component: Lobby },
@@ -85,7 +87,7 @@ router.beforeEach((to: any, from: any, next: any) => {
     next({ name: LOGIN_PAGE });
   } else if (to.name === LOGIN_PAGE && isAuthenticated()) {
     next({ name: DASHBOARD_PAGE });
-  } else if (to.name === ADMIN_PAGE && !isAdmin()) {
+  } else if (to.meta.requiresAdmin && !isAdmin()) {
     next({ name: HOME_PAGE });
   } else {
     next();
