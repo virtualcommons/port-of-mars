@@ -36,10 +36,6 @@ export default {
     state.consent = consent;
   },
 
-  SET_ENVIRONMENT(state: any, newEnvironment: string) {
-    state.environment = newEnvironment;
-  },
-
   SET_SYSTEM_HEALTH_CHANGES(state: State, payload: { role: Role, data: SystemHealthChangesData }) {
     Vue.set(state.players[payload.role].systemHealthChanges, 'purchases', payload.data.purchases);
     state.players[payload.role].systemHealthChanges.investment = payload.data.investment;

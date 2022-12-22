@@ -10,7 +10,6 @@ import GameDashboard from "@port-of-mars/client/components/GameDashboard.vue";
 import { Client, Room } from "colyseus.js";
 import { applyGameServerResponses } from "@port-of-mars/client/api/game/response";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
-import { EnvironmentMode } from "@port-of-mars/client/settings";
 import { url } from "@port-of-mars/client/util";
 import { DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
 import { SfxManager } from "@port-of-mars/client/util";
@@ -26,7 +25,6 @@ export default class Game extends Vue {
   @Inject() readonly $sfx!: SfxManager;
   @Provide() private api: GameRequestAPI = new GameRequestAPI();
   hasApi: boolean = false;
-  env: EnvironmentMode = new EnvironmentMode();
 
   async created() {
     this.api.room?.leave();
@@ -57,8 +55,6 @@ export default class Game extends Vue {
         this.api.connect(gameRoom, this.$tstore);
         this.hasApi = true;
         this.$tstore.commit("SET_LAYOUT", "game");
-        // FIXME: remove SET_ENVIRONMENT entirely in a later refactor
-        // this.$tstore.commit("SET_ENVIRONMENT", this.env.environment);
       }
     } catch (e) {
       if (e instanceof Error) {
