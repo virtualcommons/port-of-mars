@@ -62,7 +62,7 @@ import { faClock } from "@fortawesome/free-solid-svg-icons/faClock";
 import { faBriefcase } from "@fortawesome/free-solid-svg-icons/faBriefcase";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { Investment, Resource } from "@port-of-mars/shared/types";
-import { COST_INAFFORDABLE } from "@port-of-mars/shared/settings";
+import { Constants } from "@port-of-mars/shared/settings";
 
 library.add(faClock);
 library.add(faBriefcase);
@@ -110,7 +110,7 @@ export default class InvestmentCard extends Vue {
    * Define if investment is affordable.
    */
   get cannotPurchase(): boolean {
-    return this.cost >= COST_INAFFORDABLE;
+    return this.cost >= Constants.MAXIMUM_COST;
   }
 
   /**

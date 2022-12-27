@@ -52,7 +52,7 @@ import { faClock } from "@fortawesome/free-solid-svg-icons/faClock";
 import { faBriefcase } from "@fortawesome/free-solid-svg-icons/faBriefcase";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { Investment, Resource, RESOURCES, Phase } from "@port-of-mars/shared/types";
-import { COST_INAFFORDABLE } from "@port-of-mars/shared/settings";
+import { Constants } from "@port-of-mars/shared/settings";
 
 library.add(faClock);
 library.add(faBriefcase);
@@ -107,7 +107,7 @@ export default class Inventory extends Vue {
   }
 
   canInvest(cost: number): boolean {
-    return cost < COST_INAFFORDABLE;
+    return cost < Constants.MAXIMUM_COST;
   }
 
   toggleCosts() {

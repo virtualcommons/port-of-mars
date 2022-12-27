@@ -1,7 +1,7 @@
 import { ArraySchema, MapSchema, Schema, type } from "@colyseus/schema";
 import { RoundIntroductionData } from "@port-of-mars/shared/types";
 import _ from "lodash";
-import { SYSTEM_HEALTH_MAINTENANCE_COST } from "@port-of-mars/shared/settings";
+import { Constants } from "@port-of-mars/shared/settings";
 import { Player } from "@port-of-mars/server/rooms/game/state/player";
 import { SystemHealthMarsEvent } from "@port-of-mars/server/rooms/game/state/systemhealth";
 import { AccomplishmentPurchase } from "@port-of-mars/server/rooms/game/state/accomplishment"
@@ -60,7 +60,7 @@ export class RoundIntroduction
   }
 
   @type("number")
-  systemHealthMaintenanceCost = -SYSTEM_HEALTH_MAINTENANCE_COST;
+  systemHealthMaintenanceCost = -Constants.SYSTEM_HEALTH_MAINTENANCE_COST;
 
   @type({ map: "number" })
   systemHealthGroupContributions = new MapSchema<number>();

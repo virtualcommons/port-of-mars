@@ -29,8 +29,7 @@ import {
   HUDLeftView,
   HUDRightView,
 } from "@port-of-mars/shared/game/client/panes";
-// FIXME: rename to settings to constants or pull from DB / configuration
-import { SYSTEM_HEALTH_MAINTENANCE_COST } from "@port-of-mars/shared/settings";
+import { Constants } from "@port-of-mars/shared/settings";
 
 import _ from "lodash";
 
@@ -264,7 +263,7 @@ export const initialStoreState: State = {
     systemHealthGroupContributions: new Map<string, number>(),
     systemHealthAtStartOfRound: 100,
     systemHealthMarsEvents: [],
-    systemHealthMaintenanceCost: -SYSTEM_HEALTH_MAINTENANCE_COST,
+    systemHealthMaintenanceCost: -Constants.SYSTEM_HEALTH_MAINTENANCE_COST,
     accomplishmentPurchases: [],
     completedTrades: [],
   },

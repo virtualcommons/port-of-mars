@@ -12,7 +12,7 @@ import {
   Role,
 } from "@port-of-mars/shared/types";
 import _ from "lodash";
-import { COST_INAFFORDABLE } from "@port-of-mars/shared/settings";
+import { Constants } from "@port-of-mars/shared/settings";
 
 export class ResourceInventory extends Schema implements ResourceAmountData {
   constructor() {
@@ -108,9 +108,9 @@ export class ResourceCosts extends Schema implements ResourceCostData {
         return {
           culture: 2,
           finance: 3,
-          government: COST_INAFFORDABLE,
+          government: Constants.MAXIMUM_COST,
           legacy: 3,
-          science: COST_INAFFORDABLE,
+          science: Constants.MAXIMUM_COST,
           systemHealth: 1,
           // specialty: 'culture'
         };
@@ -119,16 +119,16 @@ export class ResourceCosts extends Schema implements ResourceCostData {
           culture: 3,
           finance: 2,
           government: 3,
-          legacy: COST_INAFFORDABLE,
-          science: COST_INAFFORDABLE,
+          legacy: Constants.MAXIMUM_COST,
+          science: Constants.MAXIMUM_COST,
           systemHealth: 1,
           // specialty: 'finance'
         };
       case PIONEER:
         return {
           culture: 3,
-          finance: COST_INAFFORDABLE,
-          government: COST_INAFFORDABLE,
+          finance: Constants.MAXIMUM_COST,
+          government: Constants.MAXIMUM_COST,
           legacy: 2,
           science: 3,
           systemHealth: 1,
@@ -136,18 +136,18 @@ export class ResourceCosts extends Schema implements ResourceCostData {
         };
       case POLITICIAN:
         return {
-          culture: COST_INAFFORDABLE,
+          culture: Constants.MAXIMUM_COST,
           finance: 3,
           government: 2,
-          legacy: COST_INAFFORDABLE,
+          legacy: Constants.MAXIMUM_COST,
           science: 3,
           systemHealth: 1,
           // specialty: 'government'
         };
       case RESEARCHER:
         return {
-          culture: COST_INAFFORDABLE,
-          finance: COST_INAFFORDABLE,
+          culture: Constants.MAXIMUM_COST,
+          finance: Constants.MAXIMUM_COST,
           government: 3,
           legacy: 3,
           science: 2,

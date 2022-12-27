@@ -10,7 +10,7 @@ import connectRedis from "connect-redis";
 import * as Sentry from "@sentry/node";
 import { Server } from "colyseus";
 
-import { BUILD_ID, SENTRY_DSN, isDev } from "@port-of-mars/shared/settings";
+import { Constants, isDev } from "@port-of-mars/shared/settings";
 
 // server side imports
 import { GameRoom, LoadTestGameRoom } from "@port-of-mars/server/rooms/game";
@@ -122,8 +122,8 @@ function applyInStagingOrProd(f: () => void) {
 }
 
 applyInStagingOrProd(() => {
-  Sentry.init({ dsn: SENTRY_DSN });
-  logger.debug("Setting up sentry: %s", SENTRY_DSN);
+  Sentry.init({ dsn: Constants.SENTRY_DSN });
+  logger.debug("Setting up sentry: %s", Constants.SENTRY_DSN);
 });
 
 async function createApp() {
@@ -135,7 +135,7 @@ async function createApp() {
   logger.info(
     "starting (%s) server: [build id: %s, settings.host %s]",
     process.env.NODE_ENV,
-    BUILD_ID,
+    Constants.BUILD_ID,
     settings.host
   );
   const port = Number(process.env.PORT || 2567);

@@ -84,7 +84,7 @@
               class="p-1"
               type="iframe"
               aspect="16by9"
-              :src="settings.TRAILER_VIDEO_URL"
+              :src="constants.TRAILER_VIDEO_URL"
               allowfullscreen
             ></b-embed>
           </b-col>
@@ -94,7 +94,7 @@
               class="p-1"
               type="iframe"
               aspect="16by9"
-              :src="settings.INTRO_VIDEO_URL"
+              :src="constants.INTRO_VIDEO_URL"
               allowfullscreen
             ></b-embed>
           </b-col>
@@ -124,8 +124,8 @@ import Footer from "@port-of-mars/client/components/global/Footer.vue";
 import Countdown from "@port-of-mars/client/components/global/Countdown.vue";
 import CharCarousel from "@port-of-mars/client/components/global/CharCarousel.vue";
 import Schedule from "@port-of-mars/client/components/dashboard/Schedule.vue";
-import { LOGIN_PAGE, DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
-import { isDevOrStaging, Settings } from "@port-of-mars/shared/settings";
+import { LOGIN_PAGE } from "@port-of-mars/shared/routes";
+import { isDevOrStaging, Constants } from "@port-of-mars/shared/settings";
 
 @Component({
   components: {
@@ -143,8 +143,8 @@ export default class Home extends Vue {
   currentYear = new Date().getFullYear();
   login = { name: LOGIN_PAGE };
 
-  get settings() {
-    return Settings;
+  get constants() {
+    return Constants;
   }
 
   get schedule() {

@@ -48,19 +48,19 @@
         <b-nav-item
           class="mx-2"
           target="_blank"
-          href="https://discord.gg/AFEtAJZfEM"
+          :href="constants.DISCORD_URL"
           title="Discord"
         ><b-icon icon="discord"></b-icon></b-nav-item>
         <b-nav-item
           class="mx-2"
           target="_blank"
-          href="https://twitter.com/PortOfMars"
+          :href="constants.TWITTER_URL"
           title="Twitter"
         ><b-icon icon="twitter"></b-icon></b-nav-item>
         <b-nav-item
           class="mx-2"
           target="_blank"
-          href="https://www.instagram.com/portofmars/"
+          :href="constants.INSTAGRAM_URL"
           title="Instagram"
         ><b-icon icon="instagram"></b-icon></b-nav-item>
         <div v-if="isAuthenticated">
@@ -93,7 +93,7 @@ import {
   GAME_PAGE,
   LOBBY_PAGE,
 } from "@port-of-mars/shared/routes";
-import { isDevOrStaging } from "@port-of-mars/shared/settings";
+import { isDevOrStaging, Constants } from "@port-of-mars/shared/settings";
 import _ from "lodash";
 
 @Component({})
@@ -127,6 +127,10 @@ export default class Header extends Vue {
   mounted() {
     console.log("route name: ", this.$route.name);
     console.log("route.name = login", this.$route.name == this.login.name);
+  }
+
+  get constants() {
+    return Constants;
   }
 
   get username() {

@@ -25,7 +25,7 @@
                       id="tutorialVideo"
                       type="iframe"
                       aspect="16by9"
-                      :src="tutorialVideoUrl"
+                      :src="constants.TUTORIAL_VIDEO_URL"
                       allowfullscreens
                       class="py-3"
                     ></b-embed>
@@ -103,8 +103,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faRocket, faInfoCircle, faCalendarPlus } from "@fortawesome/free-solid-svg-icons";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
-
-import { Settings } from "@port-of-mars/shared/settings";
+import { Constants } from "@port-of-mars/shared/settings";
 import { PlayerTaskCompletion, Stats } from "@port-of-mars/shared/types";
 import {
   REGISTER_PAGE,
@@ -158,8 +157,8 @@ export default class Dashboard extends Vue {
   };
   stats: Stats = { games: [] };
 
-  get tutorialVideoUrl() {
-    return Settings.TRAILER_VIDEO_URL;
+  get constants() {
+    return Constants;
   }
 
   get gamesPlayedCount() {

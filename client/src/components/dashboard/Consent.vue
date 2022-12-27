@@ -28,9 +28,9 @@
           </li>
           <li>Only communicate with other participants via the chat options within the game</li>
         </ul>
-        <p v-if="prizeAmount">
+        <p v-if="constants.GIFT_CARD_AMOUNT">
         If you win the game, and 4 other human players participated, your name will be added to a weekly drawing for a
-        ${{ prizeAmount }} USD Amazon gift card.
+        ${{ constants.GIFT_CARD_AMOUNT }} USD Amazon gift card.
         </p>
         <p>
           Society may benefit from this research because an understanding of how people make decisions can help us to
@@ -178,6 +178,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { url } from "@port-of-mars/client/util";
+import { Constants } from "@port-of-mars/shared/settings";
 import { DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
 import Messages from "@port-of-mars/client/components/dashboard/Messages.vue";
 import _ from "lodash";
@@ -195,7 +196,10 @@ export default class Consent extends Vue {
   hasConsented = false;
   isVerified = false;
   isVerificationDisabled = false;
-  prizeAmount = 0;
+
+  get constants() {
+    return Constants;
+  }
 
   get messages() {
     return this.$tstore.state.dashboardMessages;
@@ -241,11 +245,6 @@ export default class Consent extends Vue {
           this.hasConsented = true;
         }
         this.consented = false;
-      }
-    });
-    await this.$ajax.get(url("/status/winnings"), (response) => {
-      if (response.data) {
-        this.prizeAmount = response.data.giftCardAmount;
       }
     });
   }

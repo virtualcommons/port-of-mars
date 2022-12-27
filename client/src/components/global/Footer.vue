@@ -51,25 +51,25 @@ ccarra1@asu.edu
       <h2>Connect with Us</h2>
       <ul>
         <li>
-          <a :href="settings.DISCORD_URL" title='Discord'>
+          <a :href="constants.DISCORD_URL" title='Discord'>
           Discord
           <b-icon icon="discord" class="mx-1"></b-icon>
           </a>
         </li>
         <li>
-          <a :href="'mailto:' + settings.CONTACT_EMAIL" title="Email us">
+          <a :href="'mailto:' + constants.CONTACT_EMAIL" title="Email us">
             Email
             <b-icon icon="envelope" class="mx-1"></b-icon>
           </a>
         </li>
         <li>
-          <a :href="settings.INSTAGRAM_URL" title="Instagram">
+          <a :href="constants.INSTAGRAM_URL" title="Instagram">
             Instagram
             <b-icon icon="instagram" class="mx-1"></b-icon>
           </a>
         </li>
         <li>
-          <a :href="settings.TWITTER_URL" title="Twitter">
+          <a :href="constants.TWITTER_URL" title="Twitter">
             Twitter
             <b-icon icon="twitter" class="mx-1"></b-icon>
           </a>
@@ -80,7 +80,7 @@ ccarra1@asu.edu
       &copy; 2020-{{ currentYear }}
       <a href="https://www.azregents.edu/">Arizona Board of Regents</a> |
 
-      <a :href="settings.GITHUB_URL">{{ settings.BUILD_ID }}</a>
+      <a :href="constants.GITHUB_URL">{{ constants.BUILD_ID }}</a>
     </div>
   </footer>
   <!-- </b-container> -->
@@ -88,7 +88,7 @@ ccarra1@asu.edu
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { Settings } from "@port-of-mars/shared/settings";
+import { Constants } from "@port-of-mars/shared/settings";
 import {
   LOGIN_PAGE,
   DASHBOARD_PAGE,
@@ -99,16 +99,14 @@ import {
 @Component({})
 export default class Footer extends Vue {
   currentYear = new Date().getFullYear();
-
   dashboard = { name: DASHBOARD_PAGE };
   consent = { name: REGISTER_PAGE };
   manual = { name: MANUAL_PAGE };
   login = { name: LOGIN_PAGE };
 
-  get settings() {
-    return Settings;
+  get constants() {
+    return Constants;
   }
-
 }
 </script>
 
