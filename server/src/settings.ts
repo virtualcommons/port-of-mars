@@ -22,19 +22,8 @@ export interface AppSettings {
     clientId: string,
     clientSecret: string,
   };
-  lobby: LobbySettings;
   supportEmail: string,
   isProduction: boolean;
-}
-
-export class LobbySettings {
-  constructor(
-    public groupAssignmentInterval: number = 1, // minutes between attempts to form groups
-    public lobbyOpenBeforeOffset: number = 10, // minutes BEFORE scheduled time that the lobby will be open for
-    public lobbyOpenAfterOffset: number = 5, // minutes AFTER scheduled time that the lobby will be open for
-    public devMode: boolean = true,
-    public forceGroupAssignmentInterval: number = -1, // how much time should pass before a connected player will automatically be assigned to a group w/ bots
-  ) { }
 }
 
 const dev: () => AppSettings = () => ({
@@ -52,30 +41,18 @@ const dev: () => AppSettings = () => ({
     clientSecret: process.env.FACEBOOK_CLIENT_SECRET || '',
   },
   supportEmail: 'portmars@asu.edu',
-  lobby: new LobbySettings(1, 10, 5, true),
   isProduction: false,
 });
 
 const staging: () => AppSettings = () => {
+  const devSettings = dev();
   const apiKey = fs.readFileSync('/run/secrets/mail_api_key', 'utf-8').trim();
   const domain = 'mg.comses.net';
   return {
+    ...devSettings,
     emailer: new MailgunEmailer({ api_key: apiKey, domain }),
     host: process.env.BASE_URL || 'https://staging.portofmars.asu.edu',
     serverHost: process.env.BASE_URL || 'https://staging.portofmars.asu.edu',
-    logging: new DevLogging(),
-    secret: SECRET_KEY,
-    googleAuth: {
-      clientId: process.env.GOOGLE_CLIENT_ID || '',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-    },
-    facebookAuth: {
-      clientId: process.env.FACEBOOK_CLIENT_ID || '',
-      clientSecret: process.env.FACEBOOK_CLIENT_SECRET || '',
-    },
-    supportEmail: 'portmars@asu.edu',
-    lobby: new LobbySettings(1, 10, 5, true),
-    isProduction: false,
   };
 };
 
@@ -85,7 +62,6 @@ const prod: () => AppSettings = () => {
     ...stagingSettings,
     host: process.env.BASE_URL || 'https://portofmars.asu.edu',
     serverHost: process.env.BASE_URL || 'https://portofmars.asu.edu',
-    lobby: new LobbySettings(1, 10, 5, false, 5),
     isProduction: true
   };
 };

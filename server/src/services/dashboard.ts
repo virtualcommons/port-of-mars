@@ -146,7 +146,7 @@ export class DashboardService extends BaseService {
       introSurveyUrl: this.getIntroSurveyUrl(user, round, invite),
       exitSurveyUrl: this.getExitSurveyUrl(user, round, invite),
       schedule: gameDates.map(d => d.date.getTime()),
-      isSignUpEnabled: await this.sp.settings.isSignUpEnabled(),
+      isTournamentSignUpEnabled: await this.sp.settings.isTournamentSignUpEnabled(),
       currentRoundNumber: round.roundNumber,
       isLobbyOpen: await this.isLobbyOpen(user),
       minutesOpenAfter: gameDates.length ? gameDates[0].minutesOpenAfter : 0,

@@ -17,7 +17,7 @@ describe("game scheduler", () => {
 
   it("schedules dates for the correct time", async () => {
     // schedule games every 3 hours for 1 day out
-    await services.schedule.scheduleGames(3, 1);
+    await services.schedule.scheduleGames({ interval: 3, days: 1, before: 10, after: 5 });
     const dates = await services.schedule.getScheduledDates();
     expect(dates[0].date.getTime()).toEqual(new Date("January 1, 2022 06:00:00 UTC").getTime());
     expect(dates[1].date.getTime()).toEqual(new Date("January 1, 2022 09:00:00 UTC").getTime());
@@ -30,7 +30,7 @@ describe("game scheduler", () => {
   });
 
   it("does not duplicate dates", async () => {
-    await services.schedule.scheduleGames(3, 1);
+    await services.schedule.scheduleGames({ interval: 3, days: 1, before: 10, after: 5 });
     const dates = await services.schedule.getScheduledDates();
     expect(dates.length).toBe(8);
     await services.schedule.createScheduledGameDate({
@@ -42,7 +42,7 @@ describe("game scheduler", () => {
   });
 
   it("distinguishes between auto-scheduled and manually created dates", async () => {
-    await services.schedule.scheduleGames(3, 1);
+    await services.schedule.scheduleGames({ interval: 3, days: 1, before: 10, after: 5 });
     await services.schedule.createScheduledGameDate({
       date: new Date("January 1, 2022 04:00:00 UTC"),
       minutesOpenBefore: 60,

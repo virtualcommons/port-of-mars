@@ -1,6 +1,7 @@
 import { Room, Client, matchMaker } from 'colyseus';
 import schedule from 'node-schedule';
 import { ROLES } from '@port-of-mars/shared/types';
+import { isDev } from '@port-of-mars/shared/settings';
 import { buildGameOpts } from '@port-of-mars/server/util';
 import { GameRoom } from '@port-of-mars/server/rooms/game';
 import { LobbyRoomState } from '@port-of-mars/server/rooms/lobby/state';
@@ -81,12 +82,13 @@ export class RankedLobbyRoom extends Room<LobbyRoomState> {
    */
   scheduler: any = undefined;
 
-  onCreate(options: any) {
+  async onCreate(options: any) {
     logger.info('RankedLobbyRoom: new room %s', this.roomId);
     this.setState(new LobbyRoomState());
-    this.groupAssignmentInterval = settings.lobby.groupAssignmentInterval;
-    this.forceGroupAssignmentInterval = settings.lobby.forceGroupAssignmentInterval;
-    this.devMode = settings.lobby.devMode;
+    const settings = getServices().settings;
+    this.groupAssignmentInterval = await settings.lobbyGroupAssignmentInterval();
+    this.forceGroupAssignmentInterval = await settings.lobbyForceGroupAssignmentInterval();
+    this.devMode = isDev();
     this.registerLobbyHandlers();
 
     /**

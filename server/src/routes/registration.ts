@@ -63,7 +63,7 @@ registrationRouter.post('/verify/:registrationToken', async (req: Request, res: 
   const s = getServices();
   try {
     await s.registration.verifyUnregisteredUser(user, registrationToken);
-    res.json(await s.settings.isSignUpEnabled());
+    res.json(await s.settings.isTournamentSignUpEnabled());
   } catch (e) {
     logger.warn(`Unable to verify unregistered user ${user.username} with token ${registrationToken}}`)
     next(e);

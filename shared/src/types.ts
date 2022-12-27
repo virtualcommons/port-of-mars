@@ -411,7 +411,7 @@ export interface DashboardData {
   introSurveyUrl: string;
   exitSurveyUrl: string;
   schedule: Array<number>; // list of timestamps for upcoming games
-  isSignUpEnabled: boolean;
+  isTournamentSignUpEnabled: boolean;
   isLobbyOpen: boolean;
   minutesOpenAfter: number;
   currentRoundNumber: number;
@@ -424,3 +424,17 @@ export interface DashboardMessage {
 }
 
 export type RoomId = string;
+
+export interface DynamicSettingsData {
+  maxConnections: number;
+  defaultDaysMuted: number;
+  isTournamentSignUpEnabled: boolean;
+  isFreePlayEnabled: boolean;
+  isAutoSchedulerEnabled: boolean;
+  lobbyGroupAssignmentInterval: number 
+  lobbyForceGroupAssignmentInterval: number;
+  lobbyOpenBeforeOffset: number;
+  lobbyOpenAfterOffset: number;
+  autoSchedulerHourInterval: number;
+  autoSchedulerDaysOut: number;
+}

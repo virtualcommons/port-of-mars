@@ -4,6 +4,7 @@ import { settings, getLogger } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { TournamentRoundDate } from "@port-of-mars/server/entity/TournamentRoundDate";
 import { TournamentStatus } from "@port-of-mars/shared/types";
+import { isDev } from '@port-of-mars/shared/settings';
 
 import * as _ from 'lodash';
 
@@ -257,7 +258,7 @@ export class TournamentService extends BaseService {
     if (!gameDates) {
       gameDates = await this.getScheduledDates(tournamentRound);
     }
-    if (settings.lobby.devMode) {
+    if (isDev()) {
       return true;
     }
     if (gameDates.length === 0) {

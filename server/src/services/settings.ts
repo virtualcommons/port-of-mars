@@ -1,5 +1,6 @@
 import * as util from "util";
-import {RedisClient} from "redis"
+import { DynamicSettingsData } from "@port-of-mars/shared/types";
+import { RedisClient } from "redis"
 import _ from "lodash";
 import * as fs from "fs";
 
@@ -25,23 +26,6 @@ function createAsyncClient(client: RedisClient): AsyncClient {
 
 export const DYNAMIC_SETTINGS_PATH = '/run/secrets/settings.json';
 
-export interface SettingsData {
-  // display an error message to users connecting to the lobby if more than `maxConnections` clients are connected
-  maxConnections: number
-  // amount in USD for the regular gift card drawing
-  giftCardAmount: number
-  // length in days that a player will be muted for
-  defaultDaysMuted: number
-  // sign up enabled controls where the user is redirected once their email is verified
-  isSignUpEnabled: boolean
-  // if true, set all checks to true (isVerified, passedQuiz, completed intro and exit surveys), otherwise only bypass isVerified
-  skipDevUserChecks: boolean
-  // enables players to participate as many times as they wish
-  isFreePlayEnabled: boolean
-  // whether to run the automatic game scheduler
-  isAutoSchedulerEnabled: boolean
-}
-
 export class RedisSettings {
   client: AsyncClient;
 
@@ -57,45 +41,96 @@ export class RedisSettings {
   }
 
   async reload(path = DYNAMIC_SETTINGS_PATH): Promise<void> {
-    const settings: SettingsData = JSON.parse(fs.readFileSync(path, 'utf8'));
+    const settings: DynamicSettingsData = JSON.parse(fs.readFileSync(path, 'utf8'));
     return await this.setSettings(settings);
   }
 
-  async setSettings(settings: SettingsData): Promise<void> {
+  async setSettings(settings: DynamicSettingsData): Promise<void> {
     for (const k of _.keys(settings)) {
-      const key = k as keyof SettingsData;
+      const key = k as keyof DynamicSettingsData;
       await this.client.hset(['settings', key, _.toNumber(settings[key]).toString()])
     }
   }
 
+  async getSettings(): Promise<DynamicSettingsData> {
+    const settings = await this.client.hgetall('settings');
+    return {
+      maxConnections: _.toNumber(settings.maxConnections),
+      defaultDaysMuted: _.toNumber(settings.defaultDaysMuted),
+      isTournamentSignUpEnabled: !!_.toNumber(settings.isTournamentSignUpEnabled),
+      isFreePlayEnabled: !!_.toNumber(settings.isFreePlayEnabled),
+      isAutoSchedulerEnabled: !!_.toNumber(settings.isAutoSchedulerEnabled),
+      autoSchedulerHourInterval: _.toNumber(settings.autoSchedulerHourInterval),
+      autoSchedulerDaysOut: _.toNumber(settings.autoSchedulerDaysOut),
+      lobbyGroupAssignmentInterval: _.toNumber(settings.lobbyGroupAssignmentInterval),
+      lobbyForceGroupAssignmentInterval: _.toNumber(settings.lobbyForceGroupAssignmentInterval),
+      lobbyOpenBeforeOffset: _.toNumber(settings.lobbyOpenBeforeOffset),
+      lobbyOpenAfterOffset: _.toNumber(settings.lobbyOpenAfterOffset),
+    }
+  }
+
+  // display an error message to users connecting to the lobby if more than `maxConnections` clients are connected
   async maxConnections(): Promise<number> {
     return _.toNumber(await this.client.hget('settings', 'maxConnections'));
   }
 
-  async giftCardAmount(): Promise<number> {
-    return _.toNumber(await this.client.hget('settings', 'giftCardAmount'));
-  }
-
+  // length in days that a player will be muted for
   async defaultDaysMuted(): Promise<number> {
     return _.toNumber(await this.client.hget('settings', 'defaultDaysMuted'));
   }
 
-  async isSignUpEnabled(): Promise<boolean> {
-    return !!_.toNumber(await this.client.hget('settings', 'isSignUpEnabled'));
+  // sign up enabled controls where the user is redirected once their email is verified
+  async isTournamentSignUpEnabled(): Promise<boolean> {
+    return !!_.toNumber(await this.client.hget('settings', 'isTournamentSignUpEnabled'));
   }
 
+  // enables players to participate as many times as they wish
   async isFreePlayEnabled(): Promise<boolean> {
     return !!_.toNumber(await this.client.hget('settings', 'isFreePlayEnabled'));
   }
 
+  // whether to run the automatic game scheduler
   async isAutoSchedulerEnabled(): Promise<boolean> {
     return !!_.toNumber(await this.client.hget('settings', 'isAutoSchedulerEnabled'));
   }
 
+  // hours between games that the scheduler will attempt to schedule
+  async autoSchedulerHourInterval(): Promise<number> {
+    return _.toNumber(await this.client.hget('settings', 'autoSchedulerHourInterval'));
+  }
+
+  // number of day in the future that the scheduler will attempt to schedule games for
+  async autoSchedulerDaysOut(): Promise<number> {
+    return _.toNumber(await this.client.hget('settings', 'autoSchedulerDaysOut'));
+  }
+
+  // interval at which the lobby attempts to form groups of 5 players
+  async lobbyGroupAssignmentInterval(): Promise<number> {
+    return _.toNumber(await this.client.hget('settings', 'lobbyGroupAssignmentInterval'));
+  }
+
+  // how much time should pass before a connected player will automatically be assigned to a group w/ bots
+  async lobbyForceGroupAssignmentInterval(): Promise<number> {
+    return _.toNumber(await this.client.hget('settings', 'lobbyForceGroupAssignmentInterval'));
+  }
+
+  // minutes BEFORE scheduled time that the lobby will be open for
+  async lobbyOpenBeforeOffset(): Promise<number> {
+    return _.toNumber(await this.client.hget('settings', 'lobbyOpenBeforeOffset'));
+  }
+
+  // minutes AFTER scheduled time that the lobby will be open for
+  async lobbyOpenAfterOffset(): Promise<number> {
+    return _.toNumber(await this.client.hget('settings', 'lobbyOpenAfterOffset'));
+  }
+
   async report(): Promise<string> {
-    const mc = await this.maxConnections();
-    const signupEnabled = await this.isSignUpEnabled();
-    const freePlayEnabled = await this.isFreePlayEnabled();
-    return `[Max connections ${mc}, Sign Up Only? ${signupEnabled}, Free Play Enabled? ${freePlayEnabled}]`;
+    const settings = await this.getSettings();
+    let report = '';
+    for (const k of _.keys(settings)) {
+      const key = k as keyof DynamicSettingsData;
+      report += `${key}: ${settings[key]}\n`
+    }
+    return report;
   }
 }

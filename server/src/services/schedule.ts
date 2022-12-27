@@ -3,6 +3,7 @@ import { MoreThan, SelectQueryBuilder } from 'typeorm';
 import { DateTime, Interval } from 'luxon';
 import { settings, getLogger } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
+import { isDev } from '@port-of-mars/shared/settings';
 
 import * as _ from 'lodash';
 
@@ -47,7 +48,12 @@ export class ScheduleService extends BaseService {
    * @param {number} [interval=3] - hours between games, must be a divisor of 24
    * @param {number} [days=1] - days from current date to schedule games until
    */
-  async scheduleGames(interval: number = 3, days: number = 1) {
+  async scheduleGames(options?: { before?: number, after?: number, interval?: number, days?: number }) {
+    const before = options?.before ?? await this.sp.settings.lobbyOpenBeforeOffset();
+    const after = options?.after ?? await this.sp.settings.lobbyOpenAfterOffset();
+    const interval = options?.interval ?? await this.sp.settings.autoSchedulerHourInterval();
+    const days = options?.days ?? await this.sp.settings.autoSchedulerDaysOut();
+
     logger.debug("attempting to schedule games %d days out, every %d hours", days, interval);
     const scheduled = await this.getScheduledDates(true);
     const now = DateTime.fromJSDate(new Date()).toUTC();
@@ -64,8 +70,8 @@ export class ScheduleService extends BaseService {
       if (!scheduled.find((e) => e.date.getTime() === date.toMillis())) {
         const scheduledDate = await this.createScheduledGameDate({
           date: date.toJSDate(),
-          minutesOpenBefore: settings.lobby.lobbyOpenBeforeOffset,
-          minutesOpenAfter: settings.lobby.lobbyOpenAfterOffset,
+          minutesOpenBefore: before,
+          minutesOpenAfter: after,
         }, true);
       }
       else {
@@ -103,7 +109,7 @@ export class ScheduleService extends BaseService {
     if (!gameDates) {
       gameDates = await this.getScheduledDates();
     }
-    if (settings.lobby.devMode) {
+    if (isDev()) {
       return true;
     }
     if (gameDates.length === 0) {

@@ -560,14 +560,12 @@ program
             "Number of minutes before the date that the lobby will open",
             customParseInt,
             10
-            // settings.lobby.lobbyOpenBeforeOffset
           )
           .option(
             "--after <minutesOpenAfter>",
             "Number of minutes after the date that the lobby will close",
             customParseInt,
             5
-            // settings.lobby.lobbyOpenAfterOffset
           )
           .description("add a new date to the schedule")
           .action(async (cmd) => {
