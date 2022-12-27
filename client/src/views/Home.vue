@@ -63,7 +63,7 @@
               around the world can participate.
             </p>
           </b-col>
-          <div class="w-100 my-5"></div>
+          <div class="w-100 my-5"><hr></div>
           <b-col md="12" lg="6" xl="5" class="text-left">
             <h1 class="section-title mb-3">Gameplay</h1>
             <p class="text mb-3">
@@ -88,7 +88,7 @@
               allowfullscreen
             ></b-embed>
           </b-col>
-          <div class="w-100 my-5"></div>
+          <div class="w-100 my-5"><hr></div>
           <b-col md="12" lg="6" xl="5">
             <b-embed
               class="p-1"
