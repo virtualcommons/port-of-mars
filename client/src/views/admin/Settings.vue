@@ -163,7 +163,19 @@ import { AdminAPI } from "@port-of-mars/client/api/admin/request";
 @Component({})
 export default class Reports extends Vue {
   api!: AdminAPI;
-  form: DynamicSettingsData = {};
+  form: DynamicSettingsData = {
+    isTournamentSignUpEnabled: false,
+    isFreePlayEnabled: false,
+    isAutoSchedulerEnabled: false,
+    maxConnections: 0,
+    defaultDaysMuted: 0,
+    autoSchedulerDaysOut: 0,
+    autoSchedulerHourInterval: 0,
+    lobbyOpenBeforeOffset: 0,
+    lobbyOpenAfterOffset: 0,
+    lobbyGroupAssignmentInterval: 0,
+    lobbyForceGroupAssignmentInterval: 0
+  };
 
   intervalOptions = [
     { value: 1, text: "1 hour" },
