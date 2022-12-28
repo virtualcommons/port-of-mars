@@ -1,5 +1,5 @@
 import { url } from "@port-of-mars/client/util";
-import { AdminStats, ChatReportData, ModerationActionClientData, ModerationActionData, InspectData } from "@port-of-mars/shared/types";
+import { AdminStats, ChatReportData, ModerationActionClientData, ModerationActionData, InspectData, DynamicSettingsData } from "@port-of-mars/shared/types";
 import { TStore } from "@port-of-mars/client/plugins/tstore";
 import { AjaxRequest } from "@port-of-mars/client/plugins/ajax";
 
@@ -13,6 +13,30 @@ export class AdminAPI {
       });
     } catch (e) {
       console.log("Unable to retrieve admin stats");
+      console.log(e);
+      throw e;
+    }
+  }
+
+  async getSettings(): Promise<DynamicSettingsData> {
+    try {
+      return await this.ajax.get(url("/admin/settings"), ({ data, status }) => {
+        return data;
+      });
+    } catch (e) {
+      console.log("Unable to retrieve dynamic settings");
+      console.log(e);
+      throw e;
+    }
+  }
+
+  async updateSettings(data: DynamicSettingsData): Promise<void> {
+    try {
+      await this.ajax.post(url("/admin/settings"), ({ data, status }) => {
+          if (status !== 200) throw "Error submitting dynamic settings";
+        }, data);
+    } catch (e) {
+      console.log("Unable to submit chat report resolution");
       console.log(e);
       throw e;
     }

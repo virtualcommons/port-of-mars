@@ -6,7 +6,7 @@
   "autoSchedulerDaysOut": 1,
   "maxConnections": 200,
   "defaultDaysMuted": 3,
-  "lobbyGroupAssignmentInterval": 5,
+  "lobbyGroupAssignmentInterval": 1,
   "lobbyForceGroupAssignmentInterval": -1,
   "lobbyOpenBeforeOffset": 10,
   "lobbyOpenAfterOffset": 5

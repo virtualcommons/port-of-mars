@@ -12,7 +12,7 @@
         <b-nav-item class="nav-link" active-class="active" to="/admin/reports">
           Reports
         </b-nav-item>
-        <b-nav-item class="nav-link" active-class="active" disabled to="/admin/settings">
+        <b-nav-item class="nav-link" active-class="active" to="/admin/settings">
           Settings
         </b-nav-item>
       </b-nav>

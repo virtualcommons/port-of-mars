@@ -15,6 +15,25 @@ adminRouter.get("/stats", async (req: Request, res: Response, next) => {
   }
 });
 
+adminRouter.get("/settings", async (req: Request, res: Response, next) => {
+  try {
+    const settings = await getServices().settings.getSettings();
+    res.json(settings);
+  } catch (e) {
+    next(e);
+  }
+});
+
+adminRouter.post("/settings", async (req: Request, res: Response, next) => {
+  try {
+    const data = req.body;
+    await getServices().settings.setSettings(data);
+    res.json(true);
+  } catch (e) {
+    next(e);
+  }
+});
+
 adminRouter.get("/rooms", async (req: Request, res: Response, next) => {
   try {
     const rooms = await getServices().admin.getActiveRooms();
