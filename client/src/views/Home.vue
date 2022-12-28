@@ -84,7 +84,7 @@
               class="p-1"
               type="iframe"
               aspect="16by9"
-              :src="constants.TRAILER_VIDEO_URL"
+              :src="constants.TUTORIAL_VIDEO_URL"
               allowfullscreen
             ></b-embed>
           </b-col>
@@ -94,7 +94,7 @@
               class="p-1"
               type="iframe"
               aspect="16by9"
-              :src="constants.INTRO_VIDEO_URL"
+              :src="constants.TRAILER_VIDEO_URL"
               allowfullscreen
             ></b-embed>
           </b-col>

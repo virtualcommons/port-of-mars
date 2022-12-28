@@ -29,8 +29,8 @@ export function isStagingOrProduction(): boolean {
 
 export class Constants {
   // FIXME: we could support reading values from a settings file as well/instead?
-  public static readonly TRAILER_VIDEO_URL = "https://www.youtube.com/embed/D4FfofyrlkA";
-  public static readonly INTRO_VIDEO_URL = "https://www.youtube.com/embed/CiB4q3CnyCY";
+  public static readonly TRAILER_VIDEO_URL = "https://www.youtube.com/embed/CiB4q3CnyCY";
+  public static readonly TUTORIAL_VIDEO_URL = "https://www.youtube.com/embed/D4FfofyrlkA";
   public static readonly DISCORD_URL = "https://discord.gg/AFEtAJZfEM";
   public static readonly INSTAGRAM_URL = "https://www.instagram.com/portofmars/";
   public static readonly TWITTER_URL = "https://twitter.com/PortOfMars";
