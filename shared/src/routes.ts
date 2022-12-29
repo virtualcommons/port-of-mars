@@ -2,7 +2,6 @@ export const ADMIN_PAGE: "Admin" = "Admin";
 export const LOGIN_PAGE: "Login" = "Login";
 export const LOBBY_PAGE: "Lobby" = "Lobby";
 export const GAME_PAGE: "Game" = "Game";
-export const TUTORIAL_PAGE: "Tutorial" = "Tutorial";
 export const REGISTER_PAGE: "Register" = "Register";
 export const VERIFY_PAGE = "Verify" as const;
 export const DASHBOARD_PAGE: "Dashboard" = "Dashboard";
@@ -17,7 +16,6 @@ export type Page =
   | "Login"
   | "Lobby"
   | "Game"
-  | "Tutorial"
   | "Register"
   | "Dashboard"
   | "Verify"
@@ -27,7 +25,6 @@ export const PAGES: Array<Page> = [
   LOGIN_PAGE,
   LOBBY_PAGE,
   GAME_PAGE,
-  TUTORIAL_PAGE,
   REGISTER_PAGE,
   DASHBOARD_PAGE,
   VERIFY_PAGE,
@@ -109,13 +106,6 @@ export const PAGE_META: {
     name: LOGIN_PAGE,
     meta: {
       requiresAuth: false,
-    },
-  },
-  [TUTORIAL_PAGE]: {
-    path: "/tutorial",
-    name: TUTORIAL_PAGE,
-    meta: {
-      requiresAuth: true,
     },
   },
   [VERIFY_PAGE]: {

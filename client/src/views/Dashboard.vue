@@ -108,7 +108,6 @@ import { PlayerTaskCompletion, Stats } from "@port-of-mars/shared/types";
 import {
   REGISTER_PAGE,
   LOBBY_PAGE,
-  TUTORIAL_PAGE,
   DASHBOARD_PAGE,
   MANUAL_PAGE,
 } from "@port-of-mars/shared/routes";
@@ -175,10 +174,6 @@ export default class Dashboard extends Vue {
 
   get register() {
     return { name: REGISTER_PAGE };
-  }
-
-  get tutorial() {
-    return { name: TUTORIAL_PAGE };
   }
 
   get dashboard() {

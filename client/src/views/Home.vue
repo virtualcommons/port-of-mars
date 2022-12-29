@@ -79,7 +79,7 @@
               infrastructure and keep the team alive, while accomplishments will earn you victory points.
             </p>
           </b-col>
-          <b-col md="12" lg="6" xl="5">
+          <b-col md="12" lg="6" xl="5" align-self="center">
             <b-embed
               class="p-1"
               type="iframe"
@@ -89,7 +89,7 @@
             ></b-embed>
           </b-col>
           <div class="w-100 my-5"><hr></div>
-          <b-col md="12" lg="6" xl="5">
+          <b-col md="12" lg="6" xl="5" align-self="center">
             <b-embed
               class="p-1"
               type="iframe"
