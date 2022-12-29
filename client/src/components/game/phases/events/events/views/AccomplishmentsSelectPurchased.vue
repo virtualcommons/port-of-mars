@@ -1,49 +1,50 @@
 <template>
-  <b-container fluid>
-    <b-row class="justify-content-center m-2 py-3 text-center">
-      <template v-if="completed">
-        <p class="pb-3"><strong>You have discarded the Accomplishment below:</strong></p>
-      </template>
-      <template v-else class="py-2">
-        <p class="pb-1">
-          <i>{{ marsEvent.flavorText }}</i>
-        </p>
-        <p class="pb-3">
-          <strong>{{ marsEvent.effect }}</strong>
-        </p>
-      </template>
-      <b-col v-if="purchasedAccomplishmentsLength < 1" class="mt-3">
-        <b-row class="pt-5">
-          <p>No Purchased Accomplishments. Please click 'Continue'.</p>
-        </b-row>
-        <b-row class="justify-content-center align-items-center pt-3">
-          <button class="button" @click="ready">Continue</button>
-        </b-row>
-      </b-col>
-      <div class="w-100"></div>
-      <b-col v-if="!completed">
-        <AccomplishmentCard
-          v-for="accomplishment in purchasedAccomplishments"
-          :key="accomplishment.id"
-          :accomplishment="accomplishment"
-          :type="cardType"
-          @discardPurchased="stageDiscard"
-        ></AccomplishmentCard>
-      </b-col>
-      <b-col v-else>
-        <AccomplishmentCard
-          v-for="accomplishment in selectedPurchasedAccomplishment"
-          :key="accomplishment.id"
-          :accomplishment="accomplishment"
-        ></AccomplishmentCard>
-      </b-col>
-    </b-row>
+  <b-container fluid class="h-100 m-0 p-0">
+    <div v-if="purchasedAccomplishments.length < 1">
+      <EventNoChange eventView="EFFORTS_WASTED_NO_ACCOMPLISHMENTS"></EventNoChange>
+    </div>
+    <div v-else class="h-100 w-100">
+      <b-row align-v="stretch" align-h="center" class="h-25 p-2">
+        <b-col class="text-center" align-self="center">
+          <p class="pb-1">
+            <i>{{ marsEvent.flavorText }}</i>
+          </p>
+          <p v-if="!completed">
+            <strong>Discard one Accomplishment that you have already purchased.</strong>
+          </p>
+          <p v-else>
+            <strong>You chose to discard:</strong>
+          </p>
+        </b-col>
+      </b-row>
+      <b-row align-v="stretch" align-h="center" class="h-75 p-2">
+        <b-col v-if="!completed">
+          <div class="h-100 w-100 p-2 scrollable">
+            <AccomplishmentCard
+              v-for="accomplishment in purchasedAccomplishments"
+              :key="accomplishment.id"
+              :accomplishment="accomplishment"
+              :type="cardType"
+              @discardPurchased="stageDiscard(accomplishment)"
+            ></AccomplishmentCard>
+          </div>
+        </b-col>
+        <b-col v-else>
+          <div class="h-100 w-100 p-2 scrollable">
+            <AccomplishmentCard
+              :accomplishment="selectedPurchasedAccomplishment"
+            ></AccomplishmentCard>
+          </div>
+        </b-col>
+      </b-row>
+    </div>
   </b-container>
 </template>
 
 <script lang="ts">
 import { Component, Inject, Vue } from "vue-property-decorator";
 import AccomplishmentCard from "@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue";
+import EventNoChange from "@port-of-mars/client/components/game/phases/events/events/EventNoChange.vue";
 import { AccomplishmentCardType } from "@port-of-mars/client/types/cards";
 import { AccomplishmentData, MarsEventData, RESEARCHER } from "@port-of-mars/shared/types";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
@@ -51,13 +52,12 @@ import _ from "lodash";
 
 @Component({
   components: {
-    AccomplishmentCard
+    AccomplishmentCard,
+    EventNoChange
   }
 })
 export default class AccomplishmentsSelectPurchased extends Vue {
   @Inject() readonly api!: GameRequestAPI;
-
-  purchasedAccomplishmentsLength: number = Object.keys(this.purchasedAccomplishments).length;
 
   selectedPurchasedAccomplishment: AccomplishmentData = {
     id: -1,
@@ -83,34 +83,19 @@ export default class AccomplishmentsSelectPurchased extends Vue {
   }
 
   get purchasedAccomplishments() {
-    const purchased = this.$tstore.getters.player.accomplishments.purchased;
-
-    // TODO: There's definitely a better place to do this...
-    this.purchasedAccomplishmentsLength = Object.keys(purchased).length;
-    return purchased;
+    return this.$tstore.getters.player.accomplishments.purchased;
   }
 
   get completed() {
     return this.selectedPurchasedAccomplishment.id !== -1;
   }
 
-  ready() {
-    this.api.setPlayerReadiness(true);
-  }
-
-  stageDiscard(id: number) {
-    const pendingAccomplishmentDiscard = _.filter(
-      this.purchasedAccomplishments,
-      accomplishment => accomplishment.id
-    );
-
-    // deep copy of pending accomplishment to discard
-    this.selectedPurchasedAccomplishment = JSON.parse(JSON.stringify(pendingAccomplishmentDiscard));
-    this.api.stageDiscardOfPurchasedAccomplishment(id);
+  stageDiscard(accomplishment: AccomplishmentData) {
+    this.selectedPurchasedAccomplishment = accomplishment;
+    this.api.stageDiscardOfPurchasedAccomplishment(accomplishment.id);
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import "@port-of-mars/client/stylesheets/game/phases/events/events/views/AccomplishmentsSelectPurchased.scss";
 </style>

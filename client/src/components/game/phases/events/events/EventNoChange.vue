@@ -32,6 +32,8 @@ export default class EventNoChange extends Vue {
         return "Click a player in the Player Scores area to view an overview of their investment inventory.";
       case "DISABLE_CHAT":
         return "This event requires no interaction.";
+      case "EFFORTS_WASTED_NO_ACCOMPLISHMENTS":
+        return "No Purchased Accomplishments. Select 'Continue' to proceed.";
       default:
         return "This event requires no interaction.";
     }
