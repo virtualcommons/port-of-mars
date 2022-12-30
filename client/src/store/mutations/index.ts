@@ -9,13 +9,13 @@ import roundIntroduction from './roundIntroduction';
 import trading from './trading';
 import ui from './ui';
 import Vue from 'vue';
-import { State, getInitialStoreState } from '@port-of-mars/shared/game/client/state';
-import { DashboardMessage, TournamentStatus, Role, SystemHealthChangesData } from '@port-of-mars/shared/types';
+import { State, initialStoreState } from '@port-of-mars/shared/game/client/state';
+import { DashboardMessage, Role, SystemHealthChangesData } from '@port-of-mars/shared/types';
 import _ from 'lodash';
 
 export default {
   RESET_STATE(state: State, options?: any) {
-    Object.assign(state, getInitialStoreState());
+    Object.assign(state, _.cloneDeep(initialStoreState));
   },
 
   SET_SCHEDULED_GAMES(state: State, payload: Array<number>) {

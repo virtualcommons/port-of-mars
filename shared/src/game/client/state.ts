@@ -31,8 +31,6 @@ import {
 } from "@port-of-mars/shared/game/client/panes";
 import { Constants } from "@port-of-mars/shared/settings";
 
-import _ from "lodash";
-
 export const ROLE_TO_INVESTMENT_DATA: {
   [role in Role]: Array<Investment>;
 } = {
@@ -315,5 +313,3 @@ export const initialStoreState: State = {
     tradeData: defaultTradeData(),
   },
 };
-
-export const getInitialStoreState = (): State => _.cloneDeep(initialStoreState);

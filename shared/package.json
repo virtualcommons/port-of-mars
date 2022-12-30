@@ -5,11 +5,8 @@
     "build": "tsc -p ."
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.159",
-    "@types/node": "^14.0.27"
   },
   "dependencies": {
-    "lodash": "^4.17.21",
     "@colyseus/schema": "^1.0.25"
   }
 }
