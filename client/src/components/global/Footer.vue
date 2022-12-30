@@ -53,25 +53,25 @@ ccarra1@asu.edu
         <li>
           <a :href="constants.DISCORD_URL" title='Discord'>
           Discord
-          <b-icon icon="discord" class="mx-1"></b-icon>
+          <b-icon-discord></b-icon-discord>
           </a>
         </li>
         <li>
           <a :href="'mailto:' + constants.CONTACT_EMAIL" title="Email us">
             Email
-            <b-icon icon="envelope" class="mx-1"></b-icon>
+            <b-icon-envelope class="mx-1"></b-icon-envelope>
           </a>
         </li>
         <li>
           <a :href="constants.INSTAGRAM_URL" title="Instagram">
             Instagram
-            <b-icon icon="instagram" class="mx-1"></b-icon>
+            <b-icon-instagram class="mx-1"></b-icon-instagram>
           </a>
         </li>
         <li>
           <a :href="constants.TWITTER_URL" title="Twitter">
             Twitter
-            <b-icon icon="twitter" class="mx-1"></b-icon>
+            <b-icon-twitter class="mx-1"></b-icon-twitter>
           </a>
         </li>
       </ul>

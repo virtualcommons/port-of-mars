@@ -42,25 +42,27 @@
     within the height constraints of b-container -->
     <b-row v-if="!readOnly"
       class="w-100 h-auto align-items-center flex-shrink-1 my-2 mx-auto">
-      <b-col cols="10" class="w-100">
-        <b-form-input
+      <b-col class="w-100 px-0">
+        <b-form-textarea
+          no-resize
+          rows="2"
           :readonly="isMuted"
           ref="chatInputRef"
-          class="h-100 flex-grow-1"
-          style="color: rgb(241, 224, 197); background-color: transparent; font-size: 1rem;"
+          class="h-100 flex-grow-1 backdrop"
+          style="color: rgb(241, 224, 197); font-size: 1rem; padding-right: 2rem;"
           @keydown.enter="submitToChat"
           v-model="pendingMessage"
-          :placeholder="isMuted ? 'You are currently muted' : 'Send a message'"
-        />
-      </b-col>
-      <b-col cols="2" class="w-100 m-0 p-0">
-        <b-button icon :disabled="isMuted" v-b-tooltip.hover="'Send chat message'" @click="submitToChat">
-          <font-awesome-icon
-            :icon="['far', 'paper-plane']"
-            :class="sendBtnClass"
-            size="lg"
-            style="color: rgb(241, 224, 197)"
-          />
+          :placeholder="isMuted ? 'You are currently muted' : 'Type and press enter to send a message'"
+        ></b-form-textarea>
+        <b-button
+          variant="link"
+          size="lg"
+          style="position: relative; float: right; bottom: 50px; margin-bottom: -50px; padding: 0.5rem; color: var(--light)"
+          :disabled="isMuted"
+          v-b-tooltip.hover="'Send chat message'"
+          @click="submitToChat"
+        >
+          <b-icon-cursor></b-icon-cursor>
         </b-button>
       </b-col>
     </b-row>
@@ -80,14 +82,8 @@
 <script lang="ts">
 import { Vue, Prop, Component, Inject } from "vue-property-decorator";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faPaperPlane } from "@fortawesome/free-regular-svg-icons/faPaperPlane";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import ChatMessage from "@port-of-mars/client/components/game/static/chat/ChatMessage.vue";
 import ReportButton from "@port-of-mars/client/components/game/static/chat/ReportButton.vue";
-
-library.add(faPaperPlane);
-Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 @Component({
   components: {
@@ -116,14 +112,9 @@ export default class Chat extends Vue {
   }
 
   get pendingMessageCleaned(): string {
-    // TODO: CAN ADD MORE CLEANING AS NECESSARY
-    return this.pendingMessage.trim();
-  }
-
-  get sendBtnClass(): string {
-    return this.pendingMessageCleaned.length === 0
-      ? "chat-input-sendbtn"
-      : "chat-input-sendbtn--ready";
+    return this.pendingMessage
+      .trim()
+      .replace(/(\n)/gm, " ");
   }
 
   get isChatAvailable(): any {
@@ -142,9 +133,9 @@ export default class Chat extends Vue {
     }
   }
 
-  submitToChat(): void {
+  async submitToChat() {
     if (this.pendingMessageCleaned && this.pendingMessageCleaned !== "") {
-      this.api.sendChatMessage(this.pendingMessageCleaned);
+      await this.api.sendChatMessage(this.pendingMessageCleaned);
       this.pendingMessage = "";
     }
   }
@@ -152,16 +143,4 @@ export default class Chat extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.chat-input-sendbtn {
-  margin: 0 0.5rem;
-  color: $light-accent-25;
-  @include default-transition-base;
-  cursor: pointer;
-
-  &--ready {
-    @extend .chat-input-sendbtn;
-    color: $light-accent;
-    @include default-scale-up;
-  }
-}
 </style>

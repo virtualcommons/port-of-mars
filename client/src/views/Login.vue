@@ -21,17 +21,17 @@
               placeholder="Sign up or sign back in with a username" description="Enter any unique-ish username" required>
             </b-form-input>
             <b-button class="w-100 mb-3" type="submit" variant="primary" size="lg">
-              <b-icon icon="file-earmark-code" class="float-left"/>Sign in (Test Mode)
+              <b-icon-file-earmark-code class="float-left"/>Sign in (Test Mode)
             </b-button>
           </b-form>
           <b-alert v-if="error" variant="warning">{{ error }}</b-alert>
         </div>
         <b-button block variant="white" size="lg" class="mb-3" :href="googleLoginUrl">
-          <b-icon icon="google" class="float-left" />Sign in with Google
+          <b-icon-google class="float-left" />Sign in with Google
         </b-button>
         <!-- FB signin disabled for open beta pretest -->
         <!-- <b-button block variant="facebook" size="lg" class="mb-3" :href="facebookLoginUrl">
-          <b-icon icon="facebook" class="float-left"/>Sign in with Facebook
+          <b-icon-facebook class="float-left"/>Sign in with Facebook
         </b-button> -->
       </b-form>
     </div>

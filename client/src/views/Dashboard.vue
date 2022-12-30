@@ -67,10 +67,6 @@
                   >
                     <h4>
                       Join Game Lobby
-                      <font-awesome-icon
-                        :icon="['fas', 'rocket']"
-                        class="my-auto mx-2"
-                      ></font-awesome-icon>
                     </h4>
                   </b-button>
                 </b-col>
@@ -99,10 +95,6 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faRocket, faInfoCircle, faCalendarPlus } from "@fortawesome/free-solid-svg-icons";
-import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { Constants } from "@port-of-mars/shared/settings";
 import { PlayerTaskCompletion, Stats } from "@port-of-mars/shared/types";
 import {
@@ -119,9 +111,6 @@ import Countdown from "@port-of-mars/client/components/global/Countdown.vue";
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
 import Schedule from "@port-of-mars/client/components/dashboard/Schedule.vue";
 import _ from "lodash";
-
-library.add(faGoogle, faInfoCircle, faRocket, faCalendarPlus);
-Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 @Component({
   components: {

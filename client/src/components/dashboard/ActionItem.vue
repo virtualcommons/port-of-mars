@@ -11,13 +11,13 @@
           :to="actionItem.link.data"
           class="button"
           v-if="isInternal(actionItem.link)">Go
-          <b-icon icon="arrow-right"></b-icon>
+          <b-icon-arrow-right></b-icon-arrow-right>
         </b-button>
         <b-button :href="toUrl(actionItem.link.data)" class="button" v-else>Go
-          <b-icon icon="box-arrow-up-right"></b-icon>
+          <b-icon-box-arrow-up-right></b-icon-box-arrow-up-right>
         </b-button>
-        <b-icon font-scale="3" icon="check-box" v-if="actionItem.done" variant="success"></b-icon>
-        <b-icon font-scale="3" icon="x-circle-fill" v-else variant="warning"></b-icon>
+        <b-icon-check-circle-fill font-scale="3" v-if="actionItem.done" variant="success"></b-icon-check-circle-fill>
+        <b-icon-x-circle-fill font-scale="3" v-else variant="warning"></b-icon-x-circle-fill>
       </div>
     </div>
   </div>

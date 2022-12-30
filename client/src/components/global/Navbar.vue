@@ -50,23 +50,23 @@
           target="_blank"
           :href="constants.DISCORD_URL"
           title="Discord"
-        ><b-icon icon="discord"></b-icon></b-nav-item>
+        ><b-icon-discord></b-icon-discord></b-nav-item>
         <b-nav-item
           class="mx-2"
           target="_blank"
           :href="constants.TWITTER_URL"
           title="Twitter"
-        ><b-icon icon="twitter"></b-icon></b-nav-item>
+        ><b-icon-twitter></b-icon-twitter></b-nav-item>
         <b-nav-item
           class="mx-2"
           target="_blank"
           :href="constants.INSTAGRAM_URL"
           title="Instagram"
-        ><b-icon icon="instagram"></b-icon></b-nav-item>
+        ><b-icon-instagram></b-icon-instagram></b-nav-item>
         <div v-if="isAuthenticated">
           <b-nav-item-dropdown class="ml-3" :to="manual" right>
             <template #button-content>
-              <b-icon icon="person-fill"></b-icon>
+              <b-icon-person-fill></b-icon-person-fill>
               {{ username }}
             </template>
             <b-dropdown-item @click="logout">Sign Out</b-dropdown-item>

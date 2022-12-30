@@ -18,8 +18,8 @@ Vue.use(Vuex);
 Vue.use(TypedStore);
 Vue.use(Ajax, { router, store });
 Vue.use(BootstrapVue);
-Vue.use(IconsPlugin);
 Vue.use(VueMeta);
+Vue.use(IconsPlugin); // FIXME: import only the icons we need
 
 Vue.config.productionTip = false;
 

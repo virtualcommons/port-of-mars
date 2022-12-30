@@ -14,12 +14,10 @@
       <!-- costs -->
       <b-col v-if="!hideCosts" v-show="costsVisible" md="4" class="m-0 p-0 text-left">
         <p v-b-tooltip.hover.bottom class="mx-2 my-auto" title="Time Block Cost">
-          {{ canInvest(investment.cost) ? investment.cost : "-" }}
-          <font-awesome-icon
-            :icon="['fas', 'clock']"
-            class="mx-2"
-            style="color: rgb(241, 224, 197)"
-          />
+          <span v-if="canInvest(investment.cost)">
+            {{ investment.cost }} <b-icon-clock-fill class="ml-1"></b-icon-clock-fill>
+          </span>
+          <span v-else>N/A</span>
         </p>
       </b-col>
       <!-- influence -->
@@ -47,17 +45,8 @@
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
 import { Role, RESEARCHER } from "@port-of-mars/shared/types";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faClock } from "@fortawesome/free-solid-svg-icons/faClock";
-import { faBriefcase } from "@fortawesome/free-solid-svg-icons/faBriefcase";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { Investment, Resource, RESOURCES, Phase } from "@port-of-mars/shared/types";
 import { Constants } from "@port-of-mars/shared/settings";
-
-library.add(faClock);
-library.add(faBriefcase);
-
-Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 @Component({
   components: {}

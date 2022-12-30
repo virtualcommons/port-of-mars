@@ -7,33 +7,33 @@
         <AdminStatCard
           title="Total Games Completed"
           :stat="stats.totalGames"
-          icon="check-circle-fill"
-          variant="light"
-        ></AdminStatCard>
+        >
+          <b-icon-check-circle-fill variant="light" font-scale="3"></b-icon-check-circle-fill>
+        </AdminStatCard>
       </b-col>
       <b-col cols="12" md="6" xl="3">
         <AdminStatCard
           title="Total Victories*"
           :stat="stats.victories.withoutBots"
-          icon="trophy-fill"
-          variant="success"
-        ></AdminStatCard>
+        >
+          <b-icon-trophy-fill variant="success" font-scale="3"></b-icon-trophy-fill>
+        </AdminStatCard>
       </b-col>
       <b-col cols="12" md="6" xl="3">
         <AdminStatCard
           title="Total Defeats*"
           :stat="stats.defeats.withoutBots"
-          icon="lightbulb-off-fill"
-          variant="danger"
-        ></AdminStatCard>
+        >
+          <b-icon-lightbulb-off-fill variant="danger" font-scale="3"></b-icon-lightbulb-off-fill>
+        </AdminStatCard>
       </b-col>
       <b-col cols="12" md="6" xl="3">
         <AdminStatCard
           title="Active Games"
           :stat="stats.activeGames"
-          icon="stopwatch-fill"
-          variant="warning"
-        ></AdminStatCard>
+        >
+          <b-icon-stopwatch-fill variant="warning" font-scale="3"></b-icon-stopwatch-fill>
+        </AdminStatCard>
       </b-col>
       <div class="w-100"></div>
       <p style="margin-left: 2rem;"><small>*Games with five human players</small></p>
@@ -45,33 +45,33 @@
         <AdminStatCard
           title="Verified Users"
           :stat="stats.totalUsers"
-          icon="people-fill"
-          variant="success"
-        ></AdminStatCard>
+        >
+          <b-icon-people-fill variant="success" font-scale="3"></b-icon-people-fill>
+        </AdminStatCard>
       </b-col>
       <b-col cols="12" md="6" xl="3">
         <AdminStatCard
           title="Banned Users"
           :stat="stats.bannedUsers"
-          icon="person-x-fill"
-          variant="warning"
-        ></AdminStatCard>
+        >
+          <b-icon-person-x-fill variant="warning" font-scale="3"></b-icon-person-x-fill>
+        </AdminStatCard>
       </b-col>
       <b-col cols="12" md="6" xl="3">
         <AdminStatCard
           title="New Reports"
           :stat="stats.reportedUsers.unresolved"
-          icon="exclamation-circle-fill"
-          variant="danger"
-        ></AdminStatCard>
+        >
+          <b-icon-exclamation-circle-fill variant="danger" font-scale="3"></b-icon-exclamation-circle-fill>
+        </AdminStatCard>
       </b-col>
       <b-col cols="12" md="6" xl="3">
         <AdminStatCard
           title="Resolved Reports"
           :stat="stats.reportedUsers.resolved"
-          icon="file-earmark-check-fill"
-          variant="light"
-        ></AdminStatCard>
+        >
+          <b-icon-file-earmark-check-fill variant="light" font-scale="3"></b-icon-file-earmark-check-fill>
+        </AdminStatCard>
       </b-col>
     </b-row>
   </b-container>

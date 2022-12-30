@@ -40,7 +40,7 @@
           </b-col>
           <div class="w-100 mb-3"></div>
           <b-button variant="link" @click="scrollToAboutSection">
-            <p class="h1"><b-icon icon="chevron-down"></b-icon></p>
+            <p class="h1"><b-icon-chevron-down></b-icon-chevron-down></p>
           </b-button>
         </b-row>
       </div>

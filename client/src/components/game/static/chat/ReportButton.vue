@@ -34,16 +34,10 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
-import { library } from "@fortawesome/fontawesome-svg-core";
 import { url } from "@port-of-mars/client/util";
-import { faPaperPlane } from "@fortawesome/free-regular-svg-icons/faPaperPlane";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { ChatMessageData, ChatReportRequestData, Role } from "@port-of-mars/shared/types";
 import ChatMessage from "@port-of-mars/client/components/game/static/chat/ChatMessage.vue";
 import ReportModal from "@port-of-mars/client/components/game/modals/ReportModal.vue";
-
-library.add(faPaperPlane);
-Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 @Component({
   components: {

@@ -38,7 +38,7 @@
                   class="float-right"
                   :disabled="isInspectedRoom(data.item.roomId)"
                   @click="fetchInspectData(data.item.roomId)"
-                >Inspect <b-icon class="float-right ml-2" icon="box-arrow-right"></b-icon>
+                >Inspect <b-icon-box-arrow-right class="float-right ml-2"></b-icon-box-arrow-right>
                 </b-button>
               </template>
             </b-table>

@@ -43,9 +43,9 @@
         </b-form-spinbutton>
       </b-col>
       <div class="w-100"></div>
-      <b-col v-if="!cannotPurchase" align-self="end" class="text-left mx-1 p-1">
+      <b-col v-if="!cannotPurchase" align-self="end" class="text-left mx-3 mb-1 p-0">
         <!-- cost -->
-        <font-awesome-icon :icon="['fas', 'clock']" size="lg"></font-awesome-icon>
+        <b-icon-clock-fill scale="1.2"></b-icon-clock-fill>
         <span class="mx-2">{{ cost }}</span>
       </b-col>
       <b-col v-else align-self="end" class="text-left mx-1 p-1">
@@ -56,17 +56,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Inject, Prop, Vue } from "vue-property-decorator";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faClock } from "@fortawesome/free-solid-svg-icons/faClock";
-import { faBriefcase } from "@fortawesome/free-solid-svg-icons/faBriefcase";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { Component, Prop, Vue } from "vue-property-decorator";
 import { Investment, Resource } from "@port-of-mars/shared/types";
 import { Constants } from "@port-of-mars/shared/settings";
-
-library.add(faClock);
-library.add(faBriefcase);
-Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 @Component({})
 export default class InvestmentCard extends Vue {

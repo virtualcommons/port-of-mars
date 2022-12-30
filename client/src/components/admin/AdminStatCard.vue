@@ -8,7 +8,7 @@
         <b-row><h5>{{ title }}</h5></b-row>
       </b-col>
       <b-col cols="4" class="pr-0">
-        <b-icon :icon="icon" :variant="variant" font-scale="3"></b-icon>
+        <slot></slot>
       </b-col>
     </b-row>
   </b-container>
@@ -24,12 +24,6 @@ export default class AdminStatCard extends Vue {
 
   @Prop()
   stat!: number;
-
-  @Prop()
-  icon!: string;
-
-  @Prop()
-  variant!: string;
 }
 </script>
 

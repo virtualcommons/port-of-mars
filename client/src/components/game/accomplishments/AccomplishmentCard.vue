@@ -144,16 +144,10 @@ import {
   Resource,
   ResourceAmountData
 } from "@port-of-mars/shared/types";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons/faInfoCircle";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 import { canPurchaseAccomplishment } from "@port-of-mars/shared/validation";
 import AccomplishmentModal from "@port-of-mars/client/components/game/modals/AccomplishmentModal.vue";
 import * as _ from "lodash";
-
-library.add(faInfoCircle);
-Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 @Component({
   components: {

@@ -66,7 +66,7 @@
     </b-collapse>
     <div v-if="isVerified" class="mt-4 align-self-start text-success">
       <p>
-        <b-icon icon="patch-check-fill"></b-icon>
+        <b-icon-patch-check-fill></b-icon-patch-check-fill>
         <small> You have agreed to the consent form and successfully been verified!</small>
       </p>
     </div>
@@ -153,7 +153,7 @@
           </b-form-input>
         </b-form-group>
         <b-alert v-if="!isVerified" variant="warning">
-          <b-icon icon="exclamation-triangle-fill" variant="danger"></b-icon>
+          <b-icon-exclamation-triangle-fill variant="danger"></b-icon-exclamation-triangle-fill>
           Please check your email and click on the link to verify your email.
         </b-alert>
         <b-button

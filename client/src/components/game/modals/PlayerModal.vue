@@ -87,13 +87,7 @@ import { Component, Vue, Prop, Inject } from "vue-property-decorator";
 import { Role, Phase } from "@port-of-mars/shared/types";
 import Inventory from "@port-of-mars/client/components/game/Inventory.vue";
 import AccomplishmentCard from "@port-of-mars/client/components/game/accomplishments/AccomplishmentCard.vue";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faTimes } from "@fortawesome/free-solid-svg-icons/faTimes";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
-
-library.add(faTimes);
-Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 @Component({
   components: {

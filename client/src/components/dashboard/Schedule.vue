@@ -32,7 +32,7 @@
             title="add to Google Calendar"
             target="_blank"
           >
-            <font-awesome-icon :icon="['fab', 'google']"></font-awesome-icon>
+            <b-icon-google scale=".8"></b-icon-google>
           </a>
           <a
             class="btn btn-info"
@@ -40,7 +40,7 @@
             title="download as ics"
             target="_blank"
           >
-            <font-awesome-icon :icon="['fas', 'calendar-plus']"></font-awesome-icon>
+            <b-icon-calendar-plus-fill scale=".8"></b-icon-calendar-plus-fill>
           </a>
         </b-button-group>
       </b-list-group-item>

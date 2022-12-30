@@ -1,40 +1,37 @@
 <template>
   <div class="c-profilemenu tour-profile-menu" :style="position">
     <button @click="toggle" class="toggle tour-profile-menu-toggle">
-      <font-awesome-icon v-if="!profileMenuVisible" :icon="['fas', 'caret-right']" size="lg" />
-      <font-awesome-icon
-        v-if="profileMenuVisible"
-        :icon="['fas', 'caret-left']"
-        size="lg"
-        class="left"
-      />
+      <b-icon-caret-right-fill v-if="!profileMenuVisible" class="mt-1"></b-icon-caret-right-fill>
+      <b-icon-caret-left-fill v-else class="left mt-1"></b-icon-caret-left-fill>
     </button>
     <div class="wrapper" v-show="profileMenuVisible">
       <p>Logged in as {{ username }}</p>
       <router-link :to="dashboard" class="link">
         <button>
-          <font-awesome-icon :icon="['fas', 'user-circle']" size="sm" />
+          <b-icon-person-fill></b-icon-person-fill>
           <span>Your Dashboard</span>
         </button>
       </router-link>
       <button @click="logoutUser" class="link">
-        <font-awesome-icon :icon="['fas', 'sign-out-alt']" size="sm" />
+        <b-icon-box-arrow-right></b-icon-box-arrow-right>
         <span>Log Out</span>
       </button>
       <a
         href="mailto:portmars@asu.edu?subject=[port-of-mars]  Issue Submission"
         target="_blank"
         class="link"
-        ><font-awesome-icon :icon="['fas', 'exclamation-triangle']" size="sm" /><span
+      >
+        <b-icon-exclamation-triangle-fill></b-icon-exclamation-triangle-fill>
+      <span
           >Report a Problem</span
         ></a
       >
       <button @click="enableDevtools" v-if="!devtoolsEnabled && isDevModeEnabled" class="link">
-        <font-awesome-icon :icon="['far', 'window-close']" size="sm" />
+        <b-icon-terminal></b-icon-terminal>
         <span>Enable DevTools</span>
       </button>
       <button @click="disableDevtools" v-if="devtoolsEnabled && isDevModeEnabled" class="link">
-        <font-awesome-icon :icon="['fas', 'terminal']" size="sm" />
+        <b-icon-x-square></b-icon-x-square>
         <span>Disable Devtools</span>
       </button>
     </div>
@@ -42,29 +39,10 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Inject } from "vue-property-decorator";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faCaretRight } from "@fortawesome/free-solid-svg-icons/faCaretRight";
-import { faCaretLeft } from "@fortawesome/free-solid-svg-icons/faCaretLeft";
-import { faUserCircle } from "@fortawesome/free-solid-svg-icons/faUserCircle";
-import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons/faSignOutAlt";
-import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons/faExclamationTriangle";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { Vue, Component, Inject } from "vue-property-decorator";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
-import { TutorialAPI } from "@port-of-mars/client/api/tutorial/request";
 import { isDev, isStaging } from "@port-of-mars/shared/settings";
-import { faTerminal } from "@fortawesome/free-solid-svg-icons/faTerminal";
-import { faWindowClose } from "@fortawesome/free-regular-svg-icons/faWindowClose";
 import { DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
-
-library.add(faCaretRight);
-library.add(faCaretLeft);
-library.add(faUserCircle);
-library.add(faSignOutAlt);
-library.add(faTerminal);
-library.add(faWindowClose);
-library.add(faExclamationTriangle);
-Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 @Component({
   components: {}

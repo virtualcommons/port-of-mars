@@ -7,7 +7,7 @@
         class="hud-button"
         @click="switchCurrentView(view.PhaseInformation)"
       >
-        <font-awesome-icon :icon="['fas', 'info']" class="icon" size="lg" />
+        <b-icon-info-lg scale="1.5"></b-icon-info-lg>
       </button>
     </b-col>
     <b-col cols="3">
@@ -17,12 +17,12 @@
         class="hud-button"
         @click="switchCurrentView(view.ActiveEvents)"
       >
-        <font-awesome-icon :icon="['fas', 'meteor']" class="icon" size="lg" />
+        <b-icon-cloud-lightning-rain scale="1.5"></b-icon-cloud-lightning-rain>
       </button>
     </b-col>
     <b-col cols="3">
       <b-button class="hud-button" v-b-tooltip.hover.top="'Game Manual'" :to="manual" target="_blank">
-        <font-awesome-icon :icon="['fas', 'question-circle']" class="icon mt-2" size="lg" />
+        <b-icon-question-lg scale="1.2" shift-v="-5"></b-icon-question-lg>
       </b-button>
     </b-col>
   </b-row>
@@ -32,15 +32,7 @@
 import { Vue, Component, Inject } from "vue-property-decorator";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 import { HUDRightView } from "@port-of-mars/shared/game/client/panes";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faInfo } from "@fortawesome/free-solid-svg-icons/faInfo";
-import { faMeteor } from "@fortawesome/free-solid-svg-icons/faMeteor";
-import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons/faQuestionCircle";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { MANUAL_PAGE } from "@port-of-mars/shared/routes";
-
-library.add(faMeteor, faInfo, faQuestionCircle);
-Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 @Component({})
 export default class HUDRightButtons extends Vue {
@@ -89,16 +81,6 @@ export default class HUDRightButtons extends Vue {
   &.selected {
     color: $dark-shade;
     background-color: $light-shade;
-
-    .icon {
-      color: $dark-shade;
-    }
-  }
-
-  .icon {
-    height: 50%;
-    width: 50%;
-    color: $light-shade;
   }
 }
 </style>
