@@ -1,5 +1,7 @@
 <template>
   <b-container fluid class="h-100 m-0 p-0 background">
+    <div id="manual">
+
     <!-- Gameplay -->
     <section id="gameplay" class="p-2 m-4">
       <h1 class="section-title text-center m-2">Gameplay</h1>
@@ -34,7 +36,7 @@
       <b-row class="m-2 justify-content-around">
         <b-col lg="2">
           <h4 class="role-title">Researcher</h4>
-          <b-img
+          <b-img fluid
             v-bind="roleProps"
             :src="require(`@port-of-mars/client/assets/images/character-Researcher.png`)"
             alt="Port of Mars character, the researcher, wears a purple suit and carries a transparent tablet"
@@ -42,7 +44,7 @@
         </b-col>
         <b-col sm="10" lg="2">
           <h4 class="role-title">Politician</h4>
-          <b-img
+          <b-img fluid
             v-bind="roleProps"
             :src="require(`@port-of-mars/client/assets/images/character-Politician.png`)"
             alt="Port of Mars character, the Politician, wears a green suit with honorary sashes"
@@ -50,7 +52,7 @@
         </b-col>
         <b-col sm="10" lg="2">
           <h4 class="role-title">Pioneer</h4>
-          <b-img
+          <b-img fluid
             v-bind="roleProps"
             :src="require(`@port-of-mars/client/assets/images/character-Pioneer.png`)"
             alt="Port of Mars character, the pioneer, wears a black suit with climbing equipment"
@@ -58,7 +60,7 @@
         </b-col>
         <b-col sm="10" lg="2">
           <h4 class="role-title">Entrepreneur</h4>
-          <b-img
+          <b-img fluid
             v-bind="roleProps"
             :src="require(`@port-of-mars/client/assets/images/character-Entreprenuer.png`)"
             alt="Port of Mars character, the entrepreneur, wears a brown suit and looks at a transparent computer interface"
@@ -66,7 +68,7 @@
         </b-col>
         <b-col sm="10" lg="2">
           <h4 class="role-title">Curator</h4>
-          <b-img
+          <b-img fluid
             v-bind="roleProps"
             :src="require(`@port-of-mars/client/assets/images/character-Curator.png`)"
             alt="Port of Mars character, the curator, wears a gray suit with a walking stick"
@@ -117,8 +119,8 @@
     </section>
     <!-- Resources -->
     <section id="the-resources" class="resources p-2 m-4">
-      <h2 class="box-title">The Resources</h2>
-      <p>
+      <h2 class="box-title m-2">The Resources</h2>
+      <p class="m-2 p-1">
         There are five different resource types in Port of Mars. These units can be acquired from
         Mars events, time blocks, are trades. Use them to purchase accomplishment cards which earns
         victory points.
@@ -168,7 +170,7 @@
     </section>
     <!-- Glossary -->
     <section id="the-glossary" class="glossary p-2 m-4">
-      <h2 class="box-title">The Glossary</h2>
+      <h2 class="box-title m-2">The Glossary</h2>
       <b-row class="m-2 justify-content-around">
         <b-col class="glossary-box p-3 my-4" sm="10" md="5" lg="3">
           <h4 class="glossary-title">Accomplishment Card</h4>
@@ -222,6 +224,7 @@
         </b-col>
       </b-row>
     </section>
+    </div>
     <Footer></Footer>
   </b-container>
 </template>
@@ -251,6 +254,11 @@ export default class Manual extends Vue {
 </script>
 
 <style>
+#manual {
+  max-width: 1200px;
+  margin: auto;
+}
+
 .background {
   background-color: rgba(45, 37, 36, 1);
 }
@@ -294,6 +302,8 @@ export default class Manual extends Vue {
   font-size: 1.5em;
   font-weight: bolder;
   text-align: center;
+  display: flex;
+  justify-content: center;
 }
 
 .phase-box,
