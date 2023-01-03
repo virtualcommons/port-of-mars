@@ -73,6 +73,9 @@ passport.use(new FacebookStrategy({
     passReqToCallback: true
   },
   async function(request:any, accessToken:any, refreshToken:any, profile:any, done:any) {
+    if (!profile.emails && !profile.emails[0]) {
+      return done(null, false, { message: "You must use a Facebook account with a verified email address." });
+    }
     const services = getServices();
     const user = await services.account.getOrCreateUser({ 
       email: profile.emails[0].value,
