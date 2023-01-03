@@ -13,6 +13,7 @@ import Dashboard from "@port-of-mars/client/views/Dashboard.vue";
 import Verify from "@port-of-mars/client/views/VerifyEmail.vue";
 import Manual from "@port-of-mars/client/views/Manual.vue";
 import Home from "@port-of-mars/client/views/Home.vue";
+import Privacy from "@port-of-mars/client/views/Privacy.vue";
 import store from "@port-of-mars/client/store";
 import {
   ADMIN_PAGE,
@@ -26,6 +27,7 @@ import {
   MANUAL_PAGE,
   HOME_PAGE,
   ABOUT_PAGE,
+  PRIVACY_PAGE,
 } from "@port-of-mars/shared/routes";
 
 Vue.use(VueRouter);
@@ -51,6 +53,7 @@ const router = new VueRouter({
     { ...PAGE_META[MANUAL_PAGE], component: Manual },
     { ...PAGE_META[HOME_PAGE], component: Home },
     { ...PAGE_META[ABOUT_PAGE], component: Home },
+    { ...PAGE_META[PRIVACY_PAGE], component: Privacy },
   ]
 });
 

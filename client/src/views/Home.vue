@@ -13,14 +13,12 @@
             <b-row class="mt-3">
               <b-col cols="5">
                 <b-button class="w-100" variant="primary" :to="login"
-                  ><h4 class="p-1">Play Now</h4>
+                  ><h4 class="pt-1">Play Now</h4>
                 </b-button>
               </b-col>
               <b-col cols="7">
                 <p v-if="nextScheduledLaunch"><small>
-                  <!-- FIXME: get this interval from the server after cleaning up shared settings -->
-                  Games are scheduled to take place every 3 hours. Sign up to be ready when
-                  the next round starts.
+                  Games occur on a set schedule. Sign up to be ready when the next round starts.
                 </small></p>
               </b-col>
             </b-row>
@@ -40,7 +38,7 @@
           </b-col>
           <div class="w-100 mb-3"></div>
           <b-button variant="link" @click="scrollToAboutSection">
-            <p class="h1"><b-icon-chevron-down></b-icon-chevron-down></p>
+            <h1><b-icon-chevron-down></b-icon-chevron-down></h1>
           </b-button>
         </b-row>
       </div>
@@ -48,7 +46,7 @@
         <b-row class="w-100 mx-0 my-5 px-3" align-v="start" align-h="center">
           <div class="w-100 mt-5"></div>
           <b-col md="12" lg="12" xl="10" class="text-left">
-            <h1 class="section-title mb-3">Port of Mars: Digital Version</h1>
+            <h1 class="section-title mb-3">About</h1>
             <p class="text mb-3">
               Port of Mars is an interdisciplinary research project sponsored by the
               <a href="https://interplanetary.asu.edu/">Interplanetary Initiative</a> at
@@ -62,6 +60,9 @@
               "Mars Madness" tournaments. We are now entering into an Open Beta phase, where anyone
               around the world can participate.
             </p>
+            <!-- <b-button variant="discord" :href="constants.DISCORD_URL">
+              <h4 class="pt-1"><b-icon-discord></b-icon-discord> Join us on Discord</h4>
+            </b-button> -->
           </b-col>
           <div class="w-100 my-5"><hr></div>
           <b-col md="12" lg="6" xl="5" class="text-left">
@@ -99,7 +100,7 @@
             ></b-embed>
           </b-col>
           <b-col md="12" lg="6" xl="5" class="text-left">
-            <h1 class="section-title mb-3">About the Project</h1>
+            <h1 class="section-title mb-3">Research</h1>
             <p class="text mb-3">
               We're researching effective strategies for navigating dilemmas of shared resources,
               common good, and collective action under conditions of high uncertainty and high risk,
@@ -211,7 +212,7 @@ p {
 .about {
   background: rgba(45, 37, 36, 1);
   .text {
-    line-height: 1.75;
+    line-height: 2;
   }
 }
 </style>

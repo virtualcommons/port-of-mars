@@ -252,11 +252,11 @@ export default class Manual extends Vue {
 
 <style>
 .background {
-  background-color: var(--brown);
+  background-color: rgba(45, 37, 36, 1);
 }
 
 .gameplay {
-  background-color: var(--brown);
+  background-color: rgba(45, 37, 36, 1);
   padding: 1rem;
   background: url("/assets/images/bg-dark-moon.png");
 }

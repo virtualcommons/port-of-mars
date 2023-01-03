@@ -8,6 +8,7 @@ export const DASHBOARD_PAGE: "Dashboard" = "Dashboard";
 export const MANUAL_PAGE: "Manual" = "Manual";
 export const HOME_PAGE: "Home" = "Home";
 export const ABOUT_PAGE: "About" = "About";
+export const PRIVACY_PAGE: "Privacy" = "Privacy";
 
 export type Page =
   | "Admin"
@@ -20,6 +21,8 @@ export type Page =
   | "Dashboard"
   | "Verify"
   | "Manual"
+  | "Privacy"
+
 export const PAGES: Array<Page> = [
   ADMIN_PAGE,
   LOGIN_PAGE,
@@ -31,6 +34,7 @@ export const PAGES: Array<Page> = [
   MANUAL_PAGE,
   HOME_PAGE,
   ABOUT_PAGE,
+  PRIVACY_PAGE,
 ];
 
 export function isPage(pageName: string): pageName is Page {
@@ -122,6 +126,13 @@ export const PAGE_META: {
     meta: {
       requiresAuth: false,
     },
+  },
+  [PRIVACY_PAGE]: {
+    path: "/privacy",
+    name: PRIVACY_PAGE,
+    meta: {
+      requiresAuth: false,
+    }
   },
 };
 

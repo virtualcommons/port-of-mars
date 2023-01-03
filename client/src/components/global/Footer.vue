@@ -18,6 +18,9 @@ ccarra1@asu.edu
           <b-link :to="manual" title="User Manual">How to Play</b-link>
         </li>
         <li>
+          <b-link :to="privacy" title="Privacy Policy">Privacy Policy</b-link>
+        </li>
+        <li>
           <b-link :to="consent" title="Player Consent Form">Consent Form</b-link>
         </li>
       </ul>
@@ -94,6 +97,7 @@ import {
   DASHBOARD_PAGE,
   REGISTER_PAGE,
   MANUAL_PAGE,
+  PRIVACY_PAGE,
 } from "@port-of-mars/shared/routes";
 
 @Component({})
@@ -103,6 +107,7 @@ export default class Footer extends Vue {
   consent = { name: REGISTER_PAGE };
   manual = { name: MANUAL_PAGE };
   login = { name: LOGIN_PAGE };
+  privacy = { name: PRIVACY_PAGE };
 
   get constants() {
     return Constants;

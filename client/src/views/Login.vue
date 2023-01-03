@@ -7,9 +7,23 @@
         <p>
           Port of Mars is now in open beta, meaning anyone is welcome to sign up and
           play as long you adhere to our
-          <a href="https://github.com/virtualcommons/port-of-mars/wiki/Port-of-Mars-Chat-Code-of-Conduct"
-            target="_blank">code of conduct</a>.
+          <b-button variant="link"
+            class="p-0"
+            v-b-toggle="'coc-collapse'"
+          >
+            code of conduct
+          </b-button>.
         </p>
+        <b-collapse id="coc-collapse" class="p-2 backdrop">
+          <ul>
+            <li>Abstain from personal attacks or harassment</li>
+            <li>
+              Abstain from using profanity or offensive language when
+              communicating with your fellow participants
+            </li>
+            <li>Only communicate with other participants via the chat options within the game</li>
+          </ul>
+        </b-collapse>
         <hr>
         <div v-if=isDevMode>
           <b-form-checkbox v-model="toggleDevLogin">
@@ -29,10 +43,9 @@
         <b-button block variant="white" size="lg" class="mb-3" :href="googleLoginUrl">
           <b-icon-google class="float-left" />Sign in with Google
         </b-button>
-        <!-- FB signin disabled for open beta pretest -->
-        <!-- <b-button block variant="facebook" size="lg" class="mb-3" :href="facebookLoginUrl">
+        <b-button block variant="facebook" size="lg" class="mb-3" :href="facebookLoginUrl">
           <b-icon-facebook class="float-left"/>Sign in with Facebook
-        </b-button> -->
+        </b-button>
       </b-form>
     </div>
   </b-container>
@@ -87,6 +100,11 @@ export default class Login extends Vue {
 #login-container {
   padding: 2rem;
   width: 30rem;
+}
+
+ul {
+  list-style: circle !important;
+  padding-left: 2rem;
 }
 
 </style>
