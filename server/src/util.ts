@@ -135,10 +135,11 @@ export async function generateUsername() {
     'Newt',
     'Starfish',
     'Chameleon',
-    'Oranguatn',
+    'Orangutan',
     'Wolverine',
     'Ibex',
     'Antelope',
+    'Axolotl',
     'Lizard',
     'Camel',
     ];
