@@ -45,7 +45,16 @@
       <div id="about" class="w-100 d-flex align-items-center about" ref="aboutSection">
         <b-row class="w-100 mx-0 my-5 px-3" align-v="start" align-h="center">
           <div class="w-100 mt-5"></div>
-          <b-col md="12" lg="12" xl="10" class="text-left">
+          <b-col md="12" lg="6" xl="5" align-self="center">
+            <b-embed
+              class="p-1"
+              type="iframe"
+              aspect="16by9"
+              :src="constants.TRAILER_VIDEO_URL"
+              allowfullscreen
+            ></b-embed>
+          </b-col>
+          <b-col md="12" lg="6" xl="5" class="text-left">
             <h1 class="section-title mb-3">About</h1>
             <p class="text mb-3">
               Port of Mars is an interdisciplinary research project sponsored by the
@@ -55,9 +64,15 @@
               players. This application is a digital version of the Port of Mars card game that serves as a
               scalable and evolving research testbed to study collective action.
             </p>
-            <!-- <b-button variant="discord" :href="constants.DISCORD_URL">
-              <h4 class="pt-1"><b-icon-discord></b-icon-discord> Join us on Discord</h4>
-            </b-button> -->
+            <p class="text mb-3">
+              We're researching effective strategies for navigating dilemmas of shared resources,
+              common good, and collective action under conditions of high uncertainty and high risk,
+              like those in space. Players are citizens of an early Martian community charged with
+              working together to provide for the sustained welfare of the settlement. All player
+              actions are tracked and analyzed. We examine what behaviors tend to produce success,
+              and what tends to produce failure. Each instance of gameplay is a simulation, a
+              modeling exercise for future human space communities.
+            </p>
           </b-col>
           <div class="w-100 my-5"><hr></div>
           <b-col md="12" lg="6" xl="5" class="text-left">
@@ -84,28 +99,6 @@
               :src="constants.TUTORIAL_VIDEO_URL"
               allowfullscreen
             ></b-embed>
-          </b-col>
-          <div class="w-100 my-5"><hr></div>
-          <b-col md="12" lg="6" xl="5" align-self="center">
-            <b-embed
-              class="p-1"
-              type="iframe"
-              aspect="16by9"
-              :src="constants.TRAILER_VIDEO_URL"
-              allowfullscreen
-            ></b-embed>
-          </b-col>
-          <b-col md="12" lg="6" xl="5" class="text-left">
-            <h1 class="section-title mb-3">Research</h1>
-            <p class="text mb-3">
-              We're researching effective strategies for navigating dilemmas of shared resources,
-              common good, and collective action under conditions of high uncertainty and high risk,
-              like those in space. Players are citizens of an early Martian community charged with
-              working together to provide for the sustained welfare of the settlement. All player
-              actions are tracked and analyzed. We examine what behaviors tend to produce success,
-              and what tends to produce failure. Each instance of gameplay is a simulation, a
-              modeling exercise for future human space communities.
-            </p>
           </b-col>
           <div class="w-100 mb-5"></div>
         </b-row>
