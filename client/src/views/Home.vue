@@ -7,8 +7,8 @@
             <h1 class="section-title mb-3">Welcome to Port of Mars</h1>
             <p>
               Port of Mars is an online, game-based, social science experiment set on the first
-              human community on the Red Planet. Currently in Open Beta, meaning anyone is welcome
-              to participate.
+              human community on the Red Planet. We are now in an Open Beta phase where
+              anyone aged 18 and over can participate.
             </p>
             <b-row class="mt-3">
               <b-col cols="5">
@@ -52,13 +52,8 @@
               <a href="https://interplanetary.asu.edu/">Interplanetary Initiative</a> at
               <a href="https://www.asu.edu/" target="_blank">Arizona State University</a>.
               Its original incarnation was designed and implemented as a physical card game for 5
-              players. We are developing a digital version of the Port of Mars game to serve as a
-              scalable research testbed for studying collective action.
-            </p>
-            <p class="text mb-3">
-              Previously, the game was only open to ASU students to participate in double-elimination
-              "Mars Madness" tournaments. We are now entering into an Open Beta phase, where anyone
-              around the world can participate.
+              players. This application is a digital version of the Port of Mars card game that serves as a
+              scalable and evolving research testbed to study collective action.
             </p>
             <!-- <b-button variant="discord" :href="constants.DISCORD_URL">
               <h4 class="pt-1"><b-icon-discord></b-icon-discord> Join us on Discord</h4>
@@ -71,13 +66,14 @@
               You are 1 of 5 residents at the Port of Mars, the first long-term habitat on the
               planet. Each game consists of 8 — 12 rounds, each with phases of investing, trading,
               purchasing, discarding, and reacting to Mars events. Chance and player actions impact
-              system health. If system health falls to zero all players die.
+              system health. If system health falls to zero everyone in the community dies.
             </p>
             <p class="text mb-3">
               Your mission is to stay alive and achieve the most victory points. Each round you
               receive time blocks that you can invest in system health or resources that can be
               used to purchase accomplishments. System health will maintain the shared
-              infrastructure and keep the team alive, while accomplishments will earn you victory points.
+              infrastructure and keep your community alive, while accomplishments will earn you the victory points 
+              necessary to win the game.
             </p>
           </b-col>
           <b-col md="12" lg="6" xl="5" align-self="center">
