@@ -1,11 +1,11 @@
 import {
   GameSerialized,
+  RoundSummary,
   GameState,
 } from "@port-of-mars/server/rooms/game/state";
 import { mockGameStateInitOpts } from "@port-of-mars/server/util";
 import * as entity from "@port-of-mars/server/entity";
 import {
-  EnteredDefeatPhase,
   ExitedMarsEventPhase,
   gameEventDeserializer,
   // Bonding Thru Adversity
@@ -28,7 +28,6 @@ import {
   CURATOR,
   ENTREPRENEUR,
   Investment,
-  INVESTMENTS,
   MarsLogMessageData,
   Phase,
   PIONEER,
@@ -573,10 +572,32 @@ export class GameReplayer {
     const events = this.events
       .slice(1)
       .map((e) => gameEventDeserializer.deserialize(e));
-    const g = loadSnapshot(this.events[0].payload as GameSerialized);
-    // logger.info("events: %o", events);
-    g.applyMany(events);
-    return g;
+    const gameState = loadSnapshot(this.events[0].payload as GameSerialized);
+    gameState.applyMany(events);
+    return gameState;
+  }
+
+  validate(): GameState {
+    // pull all events after the initial TakenStateSnapshot and deserialize them
+    const events = this.events.slice(1);
+    const gameState = loadSnapshot(this.events[0].payload as GameSerialized);
+    let currentRoundGameEvents = [];
+    for (const event of events) {
+      if (event.type === 'taken-state-snapshot') {
+        // do the validation against event.payload against the currentRoundGameEvents
+        const roundSummary = event.payload as RoundSummary;
+        gameState.applyMany(currentRoundGameEvents.map(e => gameEventDeserializer.deserialize(e)));
+        // assert that round summary data lines up properly with the current gameState
+
+        // something magic happens
+
+        currentRoundGameEvents = [];
+      }
+      else {
+        currentRoundGameEvents.push(event);
+      }
+    }
+    return gameState;
   }
 
   summarize<T>(summarizer: (g: GameState) => T): Array<T> {
