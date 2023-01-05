@@ -1,7 +1,8 @@
+import { strict as assert } from "assert";
 import {
   GameSerialized,
-  RoundSummary,
   GameState,
+  RoundSummary,
 } from "@port-of-mars/server/rooms/game/state";
 import { mockGameStateInitOpts } from "@port-of-mars/server/util";
 import * as entity from "@port-of-mars/server/entity";
@@ -577,27 +578,47 @@ export class GameReplayer {
     return gameState;
   }
 
-  validate(): GameState {
+  /**
+   * replay all events and validate that the actual (snapshot) data lines up with the
+   * simulated game state
+   */
+  validate(): Array<{ round: number, success: boolean, error?: any }> {
     // pull all events after the initial TakenStateSnapshot and deserialize them
     const events = this.events.slice(1);
     const gameState = loadSnapshot(this.events[0].payload as GameSerialized);
     let currentRoundGameEvents = [];
+    const results = [];
     for (const event of events) {
-      if (event.type === 'taken-state-snapshot') {
+      if (event.type !== 'taken-round-snapshot') {
+        currentRoundGameEvents.push(event);
+      } else {
         // do the validation against event.payload against the currentRoundGameEvents
-        const roundSummary = event.payload as RoundSummary;
+        const stateSnapshot = event.payload as RoundSummary;
         gameState.applyMany(currentRoundGameEvents.map(e => gameEventDeserializer.deserialize(e)));
         // assert that round summary data lines up properly with the current gameState
-
-        // something magic happens
-
+        try {
+          assert.deepEqual(stateSnapshot, gameState.getRoundSummary());
+          logger.trace(`successfully validated round ${gameState.round}`);
+          results.push({
+            round: gameState.round,
+            success: true,
+          });
+        } catch(e) {
+          logger.trace(`failed to validate round ${gameState.round}`);
+          logger.trace(e);
+          results.push({
+            round: gameState.round,
+            success: false,
+            error: e,
+          });
+        }
         currentRoundGameEvents = [];
       }
-      else {
-        currentRoundGameEvents.push(event);
-      }
     }
-    return gameState;
+    if (!results.length) {
+      throw new Error("Game contains no round snapshots, nothing to validate against for legacy games");
+    }
+    return results;
   }
 
   summarize<T>(summarizer: (g: GameState) => T): Array<T> {

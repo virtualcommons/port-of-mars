@@ -12,8 +12,8 @@ import {
 } from "@port-of-mars/shared/types";
 import {
   GameSerialized,
-  RoundSummary,
   GameState,
+  RoundSummary,
 } from "@port-of-mars/server/rooms/game/state";
 import { GameEvent } from "@port-of-mars/server/rooms/game/events/types";
 import {
@@ -536,11 +536,28 @@ gameEventDeserializer.register(BeganNewRound);
 export class TakenStateSnapshot implements GameEvent {
   kind = "taken-state-snapshot";
 
-  constructor(public data: GameSerialized | RoundSummary) {}
+  constructor(public data: GameSerialized) {}
 
   apply(game: GameState): void {}
 
-  serialize(): { type: string; payload: GameSerialized | RoundSummary} {
+  serialize(): { type: string; payload: GameSerialized} {
+    return {
+      type: this.kind,
+      payload: this.data,
+    };
+  }
+}
+
+gameEventDeserializer.register(TakenStateSnapshot);
+
+export class TakenRoundSnapshot implements GameEvent {
+  kind = "taken-round-snapshot";
+
+  constructor(public data: RoundSummary) {}
+
+  apply(game: GameState): void {}
+
+  serialize(): { type: string; payload: RoundSummary} {
     return {
       type: this.kind,
       payload: this.data,

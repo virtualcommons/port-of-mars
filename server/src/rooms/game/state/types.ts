@@ -13,35 +13,51 @@ import {
   TradeSetData
 } from "@port-of-mars/shared/types";
 
-export interface RoundSummary {
-  systemHealth: number;
-  timeRemaining: number;
-  round: number;
-  logs: Array<MarsLogMessageData>;
-  messages: Array<ChatMessageData>;
-  marsEvents: Array<MarsEventData>;
-  marsEventsProcessed: number;
-  roundIntroduction: RoundIntroductionData;
-  tradeSet: TradeSetData;
-  tradingEnabled: boolean;
-  heroOrPariah: "" | "hero" | "pariah";
-}
-
-export interface GameSerialized extends RoundSummary {
+export interface GameSerialized {
   players: PlayerSetSerialized;
   userRoles: { [username: string]: Role };
   maxRound: number;
   lastTimePolled: number;
+  timeRemaining: number;
+  round: number;
   phase: Phase;
+  systemHealth: number;
+  logs: Array<MarsLogMessageData>;
+  messages: Array<ChatMessageData>;
+  marsEvents: Array<MarsEventData>;
+  marsEventsProcessed: number;
   marsEventDeck: MarsEventDeckSerialized;
+  roundIntroduction: RoundIntroductionData;
+  tradeSet: TradeSetData;
   winners: Array<Role>;
+  tradingEnabled: boolean;
   heroOrPariah: "" | "hero" | "pariah";
+}
+
+export interface RoundSummary {
+  systemHealth: number;
+  round: number;
+  logsLength: number;
+  messagesLength: number;
+  marsEventsLength: number;
+  marsEventsProcessed: number;
+  players: PlayerSetSummary;
 }
 
 export interface MarsEventDeckSerialized {
   deck: Array<MarsEventData>;
   position: number;
 }
+
+export type PlayerSummary = Pick<PlayerSerialized,
+  | "role"
+  | "ready"
+  | "timeBlocks"
+  | "victoryPoints"
+  | "inventory" 
+>;
+
+export type PlayerSetSummary = { [role in Role]: PlayerSummary };
 
 export interface PlayerSerialized {
   role: Role;

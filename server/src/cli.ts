@@ -123,6 +123,25 @@ async function exportData(em: EntityManager, tournamentRoundId: number, gameIds:
   logger.debug("=====EXPORTING DATA END=====");
 }
 
+async function validate(em: EntityManager, gameId: number): Promise<void> {
+  const s = getServices(em);
+  const events = await s.game.findEventsByGameId(gameId);
+  const replayer = new GameReplayer(events);
+  try {
+    const results = replayer.validate();
+    console.log("===== Validation results: =====");
+    for (const result of results) {
+      console.log(`Round ${result.round}: ${result.success ? "SUCCESS" : "FAILED"}`)
+      if (!result.success) {
+        console.log(result.error);
+      }
+    }
+    console.log("===============================");
+  } catch(e) {
+    console.log(e);
+  }
+}
+
 async function finalize(em: EntityManager, gameId: number): Promise<void> {
   const s = getServices(em);
   const events = await s.game.findEventsByGameId(gameId);
@@ -600,6 +619,15 @@ program
           .requiredOption("--gameId <gameId>", "id of game", customParseInt)
           .action(async (cmd) => {
             await withConnection((em) => finalize(em, cmd.gameId));
+          })
+      )
+      .addCommand(
+        program
+          .createCommand("validate")
+          .description("verify that the replayer is producing correct results according to game state snaphots")
+          .requiredOption("--gameId <gameId>", "id of game", customParseInt)
+          .action(async (cmd) => {
+            await withConnection((em) => validate(em, cmd.gameId));
           })
       )
   )

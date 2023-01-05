@@ -185,21 +185,15 @@ export class GameState
     return this;
   }
 
-  toRoundSummaryJSON(): RoundSummary {
+  getRoundSummary(): RoundSummary {
     return {
-      round: this.round,
       systemHealth: this.systemHealth,
-      marsEvents: _.map(this.marsEvents, (e) => e.toJSON()),
+      round: this.round,
+      logsLength: this.logs.length,
+      messagesLength: this.messages.length,
+      marsEventsLength: this.marsEvents.length,
       marsEventsProcessed: this.marsEventsProcessed,
-      tradeSet: this.tradeSet.toJSON(),
-      timeRemaining: this.timeRemaining,
-      roundIntroduction: this.roundIntroduction.toJSON(),
-      tradingEnabled: this.tradingEnabled,
-      heroOrPariah: this.heroOrPariah,
-      // FIXME: these should be filtered down to the round 
-      // but we need a way to demarcate by round
-      logs: _.map(this.logs, (x) => x.toJSON()),
-      messages: _.map(this.messages, (x) => x.toJSON()),
+      players: this.players.getPlayerSetSummary(),
     }
   }
 

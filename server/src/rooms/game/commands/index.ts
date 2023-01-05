@@ -46,7 +46,7 @@ import {
   ExitedTradePhase,
   ExitedPurchasePhase,
   ServerCanceledTradeRequest,
-  TakenStateSnapshot,
+  TakenRoundSnapshot,
 } from "@port-of-mars/server/rooms/game/events";
 import { getAccomplishmentByID } from "@port-of-mars/server/data/Accomplishment";
 import { Command } from "@port-of-mars/server/rooms/game/commands/types";
@@ -322,15 +322,15 @@ export class SetNextPhaseCmd implements Command {
         return [new ExitedPurchasePhase(), new EnteredDiscardPhase()];
       case Phase.discard: {
         const state = this.state;
-        const snapshot = state.toRoundSummaryJSON();
+        const snapshot = state.getRoundSummary();
         if (state.isLastRound()) {
           return [
-            new TakenStateSnapshot(snapshot),
+            new TakenRoundSnapshot(snapshot),
             new EnteredVictoryPhase(state.playerScores)
           ];
         }
         return [
-          new TakenStateSnapshot(snapshot),
+          new TakenRoundSnapshot(snapshot),
           new AddedSystemHealthContributions(),
           new EnteredNewRoundPhase(),
         ];

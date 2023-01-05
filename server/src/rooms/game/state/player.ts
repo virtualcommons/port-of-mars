@@ -22,7 +22,7 @@ import { GameState } from "@port-of-mars/server/rooms/game/state/game";
 import { SystemHealthChanges, PurchasedSystemHealth } from "@port-of-mars/server/rooms/game/state/systemhealth";
 import { AccomplishmentSet } from "@port-of-mars/server/rooms/game/state/accomplishment"
 import { ResourceInventory, ResourceCosts } from "@port-of-mars/server/rooms/game/state/resource"
-import { PlayerSetSerialized, PlayerSerialized } from "@port-of-mars/server/rooms/game/state/types";
+import { PlayerSetSerialized, PlayerSerialized, PlayerSummary, PlayerSetSummary } from "@port-of-mars/server/rooms/game/state/types";
 import { GameStateOpts, PlayerOptsData } from "@port-of-mars/server/rooms/game/types";
 
 const logger = settings.logging.getLogger(__filename);
@@ -164,6 +164,16 @@ export class Player
       pendingInvestments: this.pendingInvestments.toJSON(),
       systemHealthChange: this.systemHealthChanges.toJSON(),
     };
+  }
+
+  getPlayerSummary(): PlayerSummary {
+    return {
+      role: this.role,
+      ready: this.ready,
+      timeBlocks: this.timeBlocks,
+      victoryPoints: this.victoryPoints,
+      inventory: this.inventory.toJSON(),
+    }
   }
 
   static defaults = {
@@ -456,6 +466,16 @@ export class PlayerSet extends Schema implements PlayerSetData<Player> {
     this.Pioneer.fromJSON(data.Pioneer);
     this.Politician.fromJSON(data.Politician);
     this.Researcher.fromJSON(data.Researcher);
+  }
+
+  getPlayerSetSummary(): PlayerSetSummary {
+    return {
+      Curator: this.Curator.getPlayerSummary(),
+      Entrepreneur: this.Entrepreneur.getPlayerSummary(),
+      Pioneer: this.Pioneer.getPlayerSummary(),
+      Politician: this.Politician.getPlayerSummary(),
+      Researcher: this.Researcher.getPlayerSummary(),
+    };
   }
 
   asArray(): Array<Player> {
