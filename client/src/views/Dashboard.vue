@@ -8,16 +8,23 @@
             <b-container fluid class="h-100">
               <b-row class="justify-content-center">
                 <b-col sm="12" md="6">
-                  <h4>The Objective</h4>
-                  <p>
-                    Your mission is to stay alive and achieve the most Victory Points.
-                    In each round you will usually receive 10 time blocks that you can invest in System Health
-                    or Influence resources. System Health keeps your team alive.
-                    Influence resources are used to purchase Accomplishments that earn you Victory Points.
-                  </p>
+                  <h4>Objective</h4>
+            <p class="text mb-3">
+              You are 1 of 5 residents at the Port of Mars, the first long-term habitat on the
+              planet. Each game consists of 8 — 12 rounds, and each round has phases for investing, trading,
+              purchasing, discarding, and reacting to Mars Events. Chance and player actions impact
+              System Health. If System Health falls to zero everyone in the community dies.
+            </p>
+            <p class="text mb-3">
+              Your mission is to stay alive and achieve as many Victory Points as you can.  
+              In each round you will receive time blocks that you can invest in System Health or Influence resources that can be
+              used to purchase Accomplishments. System Health will maintain the shared
+              infrastructure and keep your community alive, while Accomplishments will earn you the Victory Points 
+              necessary to win the game.
+            </p>
                   <h4>Manual</h4>
                   <p>
-                    For a quick reference, check out the <router-link :to="manual">game manual</router-link>
+                    For a quick reference, check out the <router-link :to="manual">game manual</router-link>.
                   </p>
                   <h4>Tutorial</h4>
                   <div id="tutorial-wrapper">
@@ -35,7 +42,7 @@
                   <b-alert v-if="isBanned" show variant="danger" class="w-75 mb-5 text-left">
                     <h4 class="alert-heading">Warning</h4>
                     <p>
-                      Your account has been permanantly disabled in response to multiple or egregious violations of the
+                      Your account has been disabled in response to violations of the
                       <a href="https://github.com/virtualcommons/port-of-mars/wiki/Port-of-Mars-Chat-Code-of-Conduct" class="alert-link">
                         Code of Conduct</a>. You will not be able to partipate in any future games.
                     </p>

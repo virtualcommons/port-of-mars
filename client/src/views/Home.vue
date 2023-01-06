@@ -7,7 +7,7 @@
             <h1 class="section-title mb-3">Welcome to Port of Mars</h1>
             <p>
               Port of Mars is an online, game-based, social science experiment set on the first
-              human community on the Red Planet. We are now in an Open Beta phase where
+              human community on the Red Planet. We are now in an open beta where
               anyone aged 18 and over can participate.
             </p>
             <b-row class="mt-3">
@@ -18,7 +18,7 @@
               </b-col>
               <b-col cols="7">
                 <p v-if="nextScheduledLaunch"><small>
-                  Games occur on a set schedule. Sign up to be ready when the next round starts.
+                  Games occur on a set schedule, every 3 hours. Sign up to be ready and join the game lobby before the next round starts.
                 </small></p>
               </b-col>
             </b-row>
@@ -28,7 +28,7 @@
           </b-col>
           <div class="w-100"></div>
           <b-col>
-            <h2 v-if="nextScheduledLaunch" class="mb-3">Next Launch In</h2>
+            <h2 v-if="nextScheduledLaunch" class="mb-3">Next Launch</h2>
             <h2 v-else class="mb-3">No Games Scheduled</h2>
             <countdown
               v-if="nextScheduledLaunch"
@@ -69,9 +69,8 @@
               common good, and collective action under conditions of high uncertainty and high risk,
               like those in space. Players are citizens of an early Martian community charged with
               working together to provide for the sustained welfare of the settlement. All player
-              actions are tracked and analyzed. We examine what behaviors tend to produce success,
-              and what tends to produce failure. Each instance of gameplay is a simulation, a
-              modeling exercise for future human space communities.
+              actions are tracked, allowing researchers to analyze and examine the behaviors that tend to produce success
+              or failure. Each individual game is a simulation and modeling exercise for future human space communities.
             </p>
           </b-col>
           <div class="w-100 my-5"><hr></div>
@@ -79,15 +78,15 @@
             <h1 class="section-title mb-3">Gameplay</h1>
             <p class="text mb-3">
               You are 1 of 5 residents at the Port of Mars, the first long-term habitat on the
-              planet. Each game consists of 8 — 12 rounds, each with phases of investing, trading,
-              purchasing, discarding, and reacting to Mars events. Chance and player actions impact
-              system health. If system health falls to zero everyone in the community dies.
+              planet. Each game consists of 8 — 12 rounds, and each round has phases for investing, trading,
+              purchasing, discarding, and reacting to Mars Events. Chance and player actions impact
+              System Health. If System Health falls to zero everyone in the community dies.
             </p>
             <p class="text mb-3">
-              Your mission is to stay alive and achieve the most victory points. Each round you
-              receive time blocks that you can invest in system health or resources that can be
-              used to purchase accomplishments. System health will maintain the shared
-              infrastructure and keep your community alive, while accomplishments will earn you the victory points 
+              Your mission is to stay alive and achieve as many Victory Points as you can.  
+              In each round you will receive time blocks that you can invest in System Health or Influence resources that can be
+              used to purchase Accomplishments. System Health will maintain the shared
+              infrastructure and keep your community alive, while Accomplishments will earn you the Victory Points 
               necessary to win the game.
             </p>
           </b-col>
@@ -122,7 +121,7 @@ import { isDevOrStaging, Constants } from "@port-of-mars/shared/settings";
     CharCarousel,
     Footer,
     Countdown,
-    Schedule
+    Schedule,
   }
 })
 export default class Home extends Vue {
