@@ -48,9 +48,9 @@
                     @confirmed="takeModerationAction({ reportId: data.item.id, action: 'mute', username: data.item.username })"
                   >
                     <template>
-                      Mute user 
-                      <span class="text-danger">{{ data.item.username }}</span> 
-                      for 3 days? This will prevent them from using the in-game chat.
+                      Temporarily mute user 
+                      <span class="text-danger">{{ data.item.username }}</span>?
+                      This will prevent them from using the in-game chat.
                     </template>
                   </ConfirmationModalButton>
                   <ConfirmationModalButton

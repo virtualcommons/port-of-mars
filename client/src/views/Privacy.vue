@@ -49,6 +49,13 @@
           without your consent, except as required by law.
         </p>
         <p>
+          Anonymized participant data may be published as results of a research study, but your
+          personal information such as email address and name will be removed from the data before
+          publication. You can read more about the study in our
+          <a href="https://researchintegrity.asu.edu/human-subjects"> Arizona State University IRB</a>-approved
+          <a href="https://portofmars.asu.edu/consent">consent form</a>.
+        </p>
+        <p>
           We may share your personal information with third parties who provide services on our
           behalf, such as hosting our website or sending email communications. These third parties
           are obligated to protect your personal information and may not use it for any other

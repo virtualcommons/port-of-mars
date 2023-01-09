@@ -5,7 +5,7 @@
         <h1 class="text-center">Login or Sign Up</h1>
         <hr>
         <p>
-          Port of Mars is now in Open Beta, where anyone aged 18 and over can participate as long as they
+          Port of Mars is now in Open Beta, where anyone aged 18 and over<AgeTooltip placement="top"/> can participate as long as they
           agree to our <a target='_blank' href='https://researchintegrity.asu.edu/human-subjects'>Arizona State University IRB-approved</a> 
           consent form and
           <b-button variant="link"
@@ -57,8 +57,13 @@ import { Component, Vue } from "vue-property-decorator";
 import { url } from "@port-of-mars/client/util";
 import { isDevOrStaging } from "@port-of-mars/shared/settings";
 import { REGISTER_PAGE } from "@port-of-mars/shared/routes";
+import AgeTooltip from "@port-of-mars/client/components/global/AgeTooltip.vue";
 
-@Component({})
+@Component({
+  components: {
+    AgeTooltip
+  }
+})
 export default class Login extends Vue {
   isDevMode: boolean = false;
   toggleDevLogin: boolean = false;

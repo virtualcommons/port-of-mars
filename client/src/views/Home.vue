@@ -8,7 +8,7 @@
             <p>
               Port of Mars is an online, game-based, social science experiment set on the first
               human community on the Red Planet. We are now in an open beta where
-              anyone aged 18 and over can participate.
+              anyone aged 18 and over<AgeTooltip placement="right"/> can participate.
             </p>
             <b-row class="mt-3">
               <b-col cols="5">
@@ -112,12 +112,14 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
 import Countdown from "@port-of-mars/client/components/global/Countdown.vue";
 import CharCarousel from "@port-of-mars/client/components/global/CharCarousel.vue";
+import AgeTooltip from "@port-of-mars/client/components/global/AgeTooltip.vue";
 import Schedule from "@port-of-mars/client/components/dashboard/Schedule.vue";
 import { LOGIN_PAGE } from "@port-of-mars/shared/routes";
 import { isDevOrStaging, Constants } from "@port-of-mars/shared/settings";
 
 @Component({
   components: {
+    AgeTooltip,
     CharCarousel,
     Footer,
     Countdown,
