@@ -53,7 +53,7 @@
           personal information such as email address and name will be removed from the data before
           publication. You can read more about the study in our
           <a href="https://researchintegrity.asu.edu/human-subjects"> Arizona State University IRB</a>-approved
-          <a href="https://portofmars.asu.edu/consent">consent form</a>.
+          <a href="https://portofmars.asu.edu/#/register">consent form</a>.
         </p>
         <p>
           We may share your personal information with third parties who provide services on our
