@@ -12,7 +12,10 @@ import {
   getAccomplishmentIDs,
 } from "@port-of-mars/server/data/Accomplishment";
 import { settings } from "@port-of-mars/server/settings";
-import { AccomplishmentSetSerialized } from "@port-of-mars/server/rooms/game/state/types";
+import {
+  AccomplishmentSetSerialized,
+  AccomplishmentSetSummary
+} from "@port-of-mars/server/rooms/game/state/types";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -142,15 +145,21 @@ export class AccomplishmentSet
     this.purchasable.splice(0, this.purchasable.length);
     purchasable.forEach((p) => this.purchasable.push(p));
 
-    this.deck = _.cloneDeep(data.remaining);
+    this.deck = data.remaining;
   }
 
   toJSON(): AccomplishmentSetSerialized {
     return {
-      purchased: _.map(this.purchased, (x) => x.id),
-      purchasable: _.map(this.purchasable, (x) => x.id),
+      ...this.getAccomplishmentSetSummary(),
       remaining: this.deck,
       role: this.role,
+    };
+  }
+
+  getAccomplishmentSetSummary(): AccomplishmentSetSummary {
+    return {
+      purchased: _.map(this.purchased, (x) => x.toJSON().id),
+      purchasable: _.map(this.purchasable, (x) => x.toJSON().id),
     };
   }
 

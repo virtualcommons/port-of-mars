@@ -37,9 +37,9 @@ export interface GameSerialized {
 export interface RoundSummary {
   systemHealth: number;
   round: number;
-  logsLength: number;
   messagesLength: number;
-  marsEventsLength: number;
+  logsLength: number;
+  marsEventIds: Array<string>;
   marsEventsProcessed: number;
   players: PlayerSetSummary;
 }
@@ -49,13 +49,15 @@ export interface MarsEventDeckSerialized {
   position: number;
 }
 
-export type PlayerSummary = Pick<PlayerSerialized,
+export interface PlayerSummary extends Pick<PlayerSerialized,
   | "role"
   | "ready"
   | "timeBlocks"
   | "victoryPoints"
   | "inventory" 
->;
+> {
+  accomplishment: AccomplishmentSetSummary;
+}
 
 export type PlayerSetSummary = { [role in Role]: PlayerSummary };
 
@@ -84,3 +86,5 @@ export interface AccomplishmentSetSerialized {
   purchasable: Array<number>;
   remaining: Array<number>;
 }
+
+export type AccomplishmentSetSummary = Omit<AccomplishmentSetSerialized, "remaining" | "role">;

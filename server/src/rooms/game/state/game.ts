@@ -189,9 +189,9 @@ export class GameState
     return {
       systemHealth: this.systemHealth,
       round: this.round,
-      logsLength: this.logs.length,
       messagesLength: this.messages.length,
-      marsEventsLength: this.marsEvents.length,
+      logsLength: this.logs.length,
+      marsEventIds: _.map(this.marsEvents, (e) => e.id),
       marsEventsProcessed: this.marsEventsProcessed,
       players: this.players.getPlayerSetSummary(),
     }

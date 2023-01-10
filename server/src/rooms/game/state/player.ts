@@ -173,6 +173,7 @@ export class Player
       timeBlocks: this.timeBlocks,
       victoryPoints: this.victoryPoints,
       inventory: this.inventory.toJSON(),
+      accomplishment: this.accomplishments.getAccomplishmentSetSummary(),
     }
   }
 
