@@ -565,7 +565,7 @@ export class TakenRoundSnapshot implements GameEvent {
   }
 }
 
-gameEventDeserializer.register(TakenStateSnapshot);
+gameEventDeserializer.register(TakenRoundSnapshot);
 
 export class VotedForPersonalGain extends GameEventWithData {
   constructor(public data: { role: Role; vote: boolean }) {
