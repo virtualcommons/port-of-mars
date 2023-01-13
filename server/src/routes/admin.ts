@@ -1,6 +1,7 @@
 import { Router, Request, Response } from "express";
 import { getServices } from "@port-of-mars/server/services";
 import { unless, isAdminAuthenticated } from "@port-of-mars/server/routes/middleware";
+import { GameStatus } from "@port-of-mars/shared/types";
 
 export const adminRouter = Router();
 
@@ -29,6 +30,21 @@ adminRouter.post("/settings", async (req: Request, res: Response, next) => {
     const data = req.body;
     await getServices().settings.setSettings(data);
     res.json(true);
+  } catch (e) {
+    next(e);
+  }
+});
+
+adminRouter.get("/completed-games", async (req: Request, res: Response, next) => {
+  const start = req.query.start as string;
+  const end = req.query.end as string;
+  const bots = req.query.bots === "true";
+  const defeats = req.query.defeats === "true";
+  try {
+    const games = await getServices().game.getCompletedGames(
+      { start: start, end: end }, bots, defeats
+    );
+    res.json(games);
   } catch (e) {
     next(e);
   }

@@ -1,5 +1,5 @@
 import { url } from "@port-of-mars/client/util";
-import { AdminStats, ChatReportData, ModerationActionClientData, ModerationActionData, InspectData, DynamicSettingsData } from "@port-of-mars/shared/types";
+import { AdminStats, ChatReportData, ModerationActionClientData, ModerationActionData, InspectData, DynamicSettingsData, GameStatus } from "@port-of-mars/shared/types";
 import { TStore } from "@port-of-mars/client/plugins/tstore";
 import { AjaxRequest } from "@port-of-mars/client/plugins/ajax";
 
@@ -37,6 +37,21 @@ export class AdminAPI {
         }, data);
     } catch (e) {
       console.log("Unable to submit chat report resolution");
+      console.log(e);
+      throw e;
+    }
+  }
+
+  async getCompletedGames(
+    start: string, end: string, bots: boolean, defeats: true
+  ): Promise<any> {
+    const params = `&start=${start}&end=${end}&bots=${bots}&defeats=${defeats}`;
+    try {
+      return await this.ajax.get(url("/admin/completed-games?" + params), ({ data, status }) => {
+        return data;
+      });
+    } catch (e) {
+      console.log("Unable to retrieve completed games");
       console.log(e);
       throw e;
     }

@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Admin from "@port-of-mars/client/views/Admin.vue";
 import Overview from "@port-of-mars/client/views/admin/Overview.vue";
+import Games from "@port-of-mars/client/views/admin/Games.vue";
 import Rooms from "@port-of-mars/client/views/admin/Rooms.vue";
 import Reports from "@port-of-mars/client/views/admin/Reports.vue";
 import Settings from "@port-of-mars/client/views/admin/Settings.vue";
@@ -40,6 +41,7 @@ const router = new VueRouter({
     { ...PAGE_META[ADMIN_PAGE], component: Admin, children: [
       { path: "", name: "Admin", redirect: { name: "AdminOverview" }, meta: ADMIN_META },
       { path: "overview", name: "AdminOverview", component: Overview, meta: ADMIN_META },
+      { path: "games", name: "AdminGames", component: Games, meta: ADMIN_META },
       { path: "rooms", name: "AdminRooms", component: Rooms, meta: ADMIN_META },
       { path: "reports", name: "AdminReports", component: Reports, meta: ADMIN_META },
       { path: "settings", name: "AdminSettings", component: Settings, meta: ADMIN_META },

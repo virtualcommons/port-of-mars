@@ -169,7 +169,7 @@ button {
   }
 }
 
-// override vue-bootstrap dark table variant
+// override bootstrap-vue dark table variant
 .table-dark {
   background-color: $dark;
   .hidden-header {
@@ -185,6 +185,16 @@ button {
   td {
     border-color: $light-shade-25 !important;
   }
+}
+
+// override bootstrap-vue dark text
+.text-dark {
+  color: $white !important;
+}
+
+// fix for bootstrap-vue calender dark variant
+.b-form-datepicker > .btn {
+  color: $light-shade !important;
 }
 
 // fix for bootstrap-vue sticky header on tables not working

@@ -6,8 +6,11 @@
         <b-nav-item class="nav-link" active-class="active" to="/admin/overview">
           Overview
         </b-nav-item>
+        <b-nav-item class="nav-link" active-class="active" to="/admin/games">
+          Games
+        </b-nav-item>
         <b-nav-item class="nav-link" active-class="active" to="/admin/rooms">
-          Rooms
+          Activity
         </b-nav-item>
         <b-nav-item class="nav-link" active-class="active" to="/admin/reports">
           Reports
