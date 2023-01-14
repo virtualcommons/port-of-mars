@@ -2,14 +2,14 @@
   <b-container fluid class="h-100 w-100 m-0 p-0 d-flex flex-column">
     <!-- 
               filter options
-      ------------------------------------------
-      | [x]                                    |
-      | [x]             games                  |
-      | [ ]                                    |
-      +----------------------------------------+
-      |                players        +--------+
-      |                               |download|
-      --------------------------------+---------
+      --------------------------+---------------
+      | [x]                     |              |
+      | [x]      games          |  scoreboard  |
+      | [ ]                     |              |
+      | [ ]                     |              |
+      | [ ]                     |     +--------+
+      | [ ]                     |     |download|
+      --------------------------+-----+---------
      -->
     <div class="p-3 h-100">
       <b-row class="h-100 m-0">
@@ -63,9 +63,6 @@
               sort-by="dateFinalized"
               :sort-desc="true" 
             >
-              <!-- <template #cell(select)="data">
-                <b-form-checkbox></b-form-checkbox>
-              </template> -->
               <template #cell(dateFinalized)="data">
                 {{ new Date(data.item.dateFinalized).toDateString() }}
               </template>
@@ -161,7 +158,6 @@ export default class Games extends Vue {
 
   games: any = [];
   gameFields = [
-    // { key: "select", label: "Download" },
     { key: "id", label: "Game ID" },
     { key: "tournamentRoundId", label: "Round" },
     { key: "dateFinalized", label: "Date" },
@@ -214,15 +210,15 @@ export default class Games extends Vue {
     return id === this.players[0].gameId;
   }
 
-  getBotCount(players) {
+  getBotCount(players: any) {
     return players.filter((p: any) => p.user.isSystemBot).length;
   }
 
-  getHumanCount(players) {
+  getHumanCount(players: any) {
     return players.filter((p: any) => !p.user.isSystemBot).length;
   }
 
-  playerRowStyle(item, type) {
+  playerRowStyle(item: any, type: any) {
     if (!item || type !== "row") return;
     else return {
       style: `background-color: var(--color-${item.role});`
@@ -245,7 +241,7 @@ export default class Games extends Vue {
 
   async fetchGamesList() {
     this.games = await this.api.getCompletedGames(
-      this.startDate.toISOString().split("T")[0],
+      this.startDate.toISOString().split("T")[0], // YYYY-MM-DD
       this.endDate.toISOString().split("T")[0],
       this.includeBotGames,
       this.includeDefeats
@@ -272,7 +268,7 @@ export default class Games extends Vue {
     });
   }
 
-  isEligibleForPrize(user) {
+  isEligibleForPrize(user: any) {
     return !user.isSystemBot && user.email && user.name;
   }
 }
@@ -283,15 +279,5 @@ export default class Games extends Vue {
   position: absolute;
   top: 0;
   right: 0;
-}
-
-.h-100-header {
-  height: calc(100% - 2rem);
-}
-
-.header-nowrap {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 </style>

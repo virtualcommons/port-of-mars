@@ -158,7 +158,6 @@ button {
 }
 
 // ----- CUSTOM ANIMATION -----
-
 // fade in animation
 @keyframes fadeInAnimation {
   0% {
@@ -167,6 +166,17 @@ button {
   100% {
     opacity: 1;
   }
+}
+
+// header utility classes
+.h-100-header {
+  height: calc(100% - 2rem);
+}
+
+.header-nowrap {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 // override bootstrap-vue dark table variant

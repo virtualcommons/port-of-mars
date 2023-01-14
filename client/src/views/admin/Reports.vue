@@ -228,13 +228,4 @@ export default class Reports extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.h-100-header {
-  height: calc(100% - 2rem);
-}
-
-.header-nowrap {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 </style>

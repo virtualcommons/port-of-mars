@@ -43,7 +43,7 @@ export class AdminAPI {
   }
 
   async getCompletedGames(
-    start: string, end: string, bots: boolean, defeats: true
+    start: string, end: string, bots: boolean, defeats: boolean
   ): Promise<any> {
     const params = `&start=${start}&end=${end}&bots=${bots}&defeats=${defeats}`;
     try {
