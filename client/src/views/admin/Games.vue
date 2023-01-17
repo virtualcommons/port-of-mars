@@ -144,15 +144,8 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { AdminAPI } from "@port-of-mars/client/api/admin/request";
-import MarsLog from "@port-of-mars/client/components/game/MarsLog.vue";
-import StatusBar from "@port-of-mars/client/components/game/static/systemhealth/StatusBar.vue";
 
-@Component({
-  components: {
-    MarsLog,
-    StatusBar
-  }
-})
+@Component({})
 export default class Games extends Vue {
   api!: AdminAPI;
 
