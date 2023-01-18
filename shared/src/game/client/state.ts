@@ -246,7 +246,13 @@ export const initialUserState: User = {
   isVerified: false
 }
 
-export const initialStoreState: State = {
+export const initialGameState: Omit<State,
+  | "user"
+  | "scheduledGames"
+  | "dashboardMessages"
+  | "tournamentStatus"
+  | "signupEnabled"
+> = {
   // GameData
   players: defaultPlayerClientSet(),
   timeRemaining: 300,
@@ -279,7 +285,6 @@ export const initialStoreState: State = {
   // eventView: 'ACCOMPLISHMENT_SELECT_PURCHASED',
   quizQuestions: [],
   eventCardsVisible: [],
-  user: initialUserState,
 
   // TUTORIAL TRADING
   tutorialTradePartner: "",
@@ -301,15 +306,19 @@ export const initialStoreState: State = {
     toggleYourTrades: false,
   },
 
+  ui: {
+    // TODO: Still needs to be refactored
+    tradeData: defaultTradeData(),
+  },
+}
+
+export const initialStoreState: State = {
+  ...initialGameState,
+  user: initialUserState,
   scheduledGames: [],
   dashboardMessages: [],
   tournamentStatus: {
     round: 0, announcement: '', championship: false, description: '', schedule: []
   },
   signupEnabled: true,
-
-  ui: {
-    // TODO: Still needs to be refactored
-    tradeData: defaultTradeData(),
-  },
 };
