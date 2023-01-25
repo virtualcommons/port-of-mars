@@ -19,6 +19,8 @@ import {
   ResourceCostData,
   Role,
   TradeDataWithNull,
+  LobbyChatMessageData,
+  LobbyClientData,
 } from "@port-of-mars/shared/types";
 import {
   ModalType,
@@ -166,6 +168,7 @@ export function defaultTradeData(): TradeDataWithNull<"" | Role> {
 }
 
 export interface User {
+  id: number;
   username: string;
   isAdmin: boolean;
   passedQuiz?: boolean;
@@ -200,6 +203,13 @@ export interface ProfileMenuView {
   visible: boolean;
 }
 
+export interface Lobby {
+  clients: Array<LobbyClientData>;
+  chat: Array<LobbyChatMessageData>;
+  ready: boolean;
+  dateCreated: number;
+}
+
 export interface State extends GameData {
   timeRemaining: number;
   round: number;
@@ -230,6 +240,7 @@ export interface State extends GameData {
 
   // webapp data: consider refactoring to separate in-game store data with
   // normal onboarding store data
+  lobby: Lobby;
   scheduledGames: Array<number>; // upcoming scheduled games in Unix timestamp millis (e.g., new Date().getTime())
   dashboardMessages: Array<DashboardMessage>;
   tournamentStatus: TournamentStatus;
@@ -240,14 +251,25 @@ export interface State extends GameData {
 }
 
 export const initialUserState: User = {
+  id: 0,
   username: "",
   isAdmin: false,
   passedQuiz: false,
   isVerified: false
 }
 
+export function defaultLobbyState(): Lobby {
+  return {
+    clients: [],
+    chat: [],
+    ready: false,
+    dateCreated: 0,
+  }
+}
+
 export const initialGameState: Omit<State,
   | "user"
+  | "lobby"
   | "scheduledGames"
   | "dashboardMessages"
   | "tournamentStatus"
@@ -314,6 +336,7 @@ export const initialGameState: Omit<State,
 
 export const initialStoreState: State = {
   ...initialGameState,
+  lobby: defaultLobbyState(),
   user: initialUserState,
   scheduledGames: [],
   dashboardMessages: [],

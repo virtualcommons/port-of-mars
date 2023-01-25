@@ -134,7 +134,6 @@ export default class Header extends Vue {
   }
 
   get username() {
-    console.log("store user: ", this.$tstore.state.user);
     return this.$tstore.state.user.username;
   }
 

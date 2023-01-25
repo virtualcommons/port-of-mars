@@ -4,7 +4,7 @@
       <Navbar v-if="!isGamePage"></Navbar>
       <router-view
         :class="bodyClass"
-        :key="$route.path"
+        :key="topLevelPath"
       ></router-view>
     </b-row>
   </b-container>
@@ -42,11 +42,15 @@ export default class App extends Vue {
   about = { name: ABOUT_PAGE };
   privacy = { name: PRIVACY_PAGE };
 
+  get topLevelPath() {
+    return this.$route.path.split("/")[1];
+  }
+
   get isGamePage() {
     if (_.isNil(this.$route.name)) {
       return false;
     } else {
-      return this.lobby.name === this.$route.name || this.game.name === this.$route.name;
+      return this.game.name === this.$route.name;
     }
   }
 

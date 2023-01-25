@@ -182,5 +182,8 @@ export default {
     return state.userInterface.toggleYourTrades;
   },
 
-  
+  lobbyPlayerReadiness(state: State) {
+    return state.lobby.clients
+      .find(client => client.username === state.user?.username)?.ready;
+  },
 }

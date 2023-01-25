@@ -8,6 +8,8 @@ import Reports from "@port-of-mars/client/views/admin/Reports.vue";
 import Settings from "@port-of-mars/client/views/admin/Settings.vue";
 import Login from "@port-of-mars/client/views/Login.vue";
 import Lobby from "@port-of-mars/client/views/Lobby.vue";
+import LobbyRoom from "@port-of-mars/client/components/lobby/LobbyRoom.vue";
+import LobbyRoomList from "@port-of-mars/client/components/lobby/LobbyRoomList.vue";
 import Game from "@port-of-mars/client/views/Game.vue";
 import Register from "@port-of-mars/client/views/Register.vue";
 import Dashboard from "@port-of-mars/client/views/Dashboard.vue";
@@ -47,7 +49,10 @@ const router = new VueRouter({
       { path: "settings", name: "AdminSettings", component: Settings, meta: ADMIN_META },
     ] },
     { ...PAGE_META[LOGIN_PAGE], component: Login },
-    { ...PAGE_META[LOBBY_PAGE], component: Lobby },
+    { ...PAGE_META[LOBBY_PAGE], component: Lobby, children: [
+      { path: "", name: "Lobby", component: LobbyRoomList, meta: { requiresAuth: true } },
+      { path: "room/:id", name: "LobbyRoom", component: LobbyRoom, meta: { requiresAuth: true }, props: true },
+    ] },
     { ...PAGE_META[GAME_PAGE], component: Game },
     { ...PAGE_META[REGISTER_PAGE], component: Register },
     { ...PAGE_META[DASHBOARD_PAGE], component: Dashboard },

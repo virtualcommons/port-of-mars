@@ -84,7 +84,6 @@ export const PAGE_META: {
   },
   [LOBBY_PAGE]: {
     path: "/lobby",
-    name: LOBBY_PAGE,
     meta: {
       requiresAuth: true,
     },
