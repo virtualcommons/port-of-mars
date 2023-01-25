@@ -1,6 +1,6 @@
 import { matchMaker } from "colyseus";
 import { GameRoom } from "@port-of-mars/server/rooms/game";
-import { RankedLobbyRoom } from "@port-of-mars/server/rooms/lobby";
+import { LobbyRoom } from "@port-of-mars/server/rooms/lobby";
 import { ChatReport, ModerationAction } from "@port-of-mars/server/entity";
 import { BaseService } from "@port-of-mars/server/services/db";
 import {
@@ -46,7 +46,7 @@ export class AdminService extends BaseService {
   }
 
   async getLobbyData(): Promise<any> {
-    const lobby = await matchMaker.findOneRoomAvailable(RankedLobbyRoom.NAME, {});
+    const lobby = await matchMaker.findOneRoomAvailable(LobbyRoom.NAME, {});
     return lobby ?? {};
   }
 

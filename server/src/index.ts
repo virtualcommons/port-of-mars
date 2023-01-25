@@ -14,7 +14,7 @@ import { Constants, isDev } from "@port-of-mars/shared/settings";
 
 // server side imports
 import { GameRoom, LoadTestGameRoom } from "@port-of-mars/server/rooms/game";
-import { RankedLobbyRoom } from "@port-of-mars/server/rooms/lobby";
+import { LobbyRoom } from "@port-of-mars/server/rooms/lobby";
 import { User } from "@port-of-mars/server/entity";
 import { settings } from "@port-of-mars/server/settings";
 import { getRedis, getServices } from "@port-of-mars/server/services";
@@ -219,7 +219,7 @@ async function createApp() {
   // register your room handlers
   gameServer.define(GameRoom.NAME, GameRoom);
   gameServer.define("loadtest-game", LoadTestGameRoom);
-  gameServer.define(RankedLobbyRoom.NAME, RankedLobbyRoom);
+  gameServer.define(LobbyRoom.NAME, LobbyRoom);
 
   applyInStagingOrProd(() => app.use(Sentry.Handlers.errorHandler()));
   // Final error handling middleware

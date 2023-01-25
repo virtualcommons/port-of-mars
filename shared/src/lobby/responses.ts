@@ -22,7 +22,7 @@ export interface JoinFailure {
   reason: string
 }
 
-export type WaitingResponses =
+export type LobbyResponse =
   | JoinedClientQueue
   | JoinExistingGame
   | SentInvitation

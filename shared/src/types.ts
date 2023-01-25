@@ -29,6 +29,18 @@ export const BAN: "ban" = "ban";
 export const NONE: "none" = "none";
 export const MODERATION_ACTION_TYPES = [MUTE, BAN, NONE];
 
+export interface LobbyChatMessageData {
+  username: string;
+  message: string;
+  dateCreated: number;
+}
+
+export interface LobbyClientData {
+  id: string;
+  username: string;
+  ready: boolean;
+}
+
 export interface ChatMessageData {
   message: string;
   role: string;

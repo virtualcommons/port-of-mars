@@ -28,3 +28,13 @@ gameRouter.get('/latest-active', async (req, res, next) => {
     next(e);
   }
 });
+
+gameRouter.get('/has-active', async (req, res, next) => {
+  try {
+    const user = req.user as User;
+    const roomId = await getServices().game.getActiveGameRoomId(user.id);
+    res.json(!!roomId);
+  } catch (e) {
+    next(e);
+  }
+});
