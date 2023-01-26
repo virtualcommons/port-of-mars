@@ -83,7 +83,8 @@ export class LobbyRoomState extends Schema {
     const lobbyClient = new LobbyClient(client);
     if (!this.isFull()) {
       this.clients.push(lobbyClient);
-    } else {
+    }
+    if (this.isFull()) {
       this.ready = true;
     }
   }
