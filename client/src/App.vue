@@ -18,7 +18,6 @@ import Footer from "@port-of-mars/client/components/global/Footer.vue";
 import { 
   GAME_PAGE,
   MANUAL_PAGE,
-  DASHBOARD_PAGE,
   LOBBY_PAGE,
   HOME_PAGE,
   ABOUT_PAGE,
@@ -34,7 +33,6 @@ Vue.use(BootstrapVue);
   }
 })
 export default class App extends Vue {
-  dashboard = { name: DASHBOARD_PAGE };
   game = { name: GAME_PAGE };
   manual = { name: MANUAL_PAGE };
   lobby = { name: LOBBY_PAGE };
@@ -62,14 +60,6 @@ export default class App extends Vue {
         || this.home.name === this.$route.name
         || this.about.name === this.$route.name
         || this.privacy.name === this.$route.name;
-    }
-  }
-
-  get isDashboard() {
-    if (_.isNil(this.$route.name)) {
-      return false;
-    } else {
-      return this.dashboard.name === this.$route.name;
     }
   }
 

@@ -1,17 +1,20 @@
 <template>
   <b-container fluid class="h-100 w-100 m-0 p-0 backdrop">
-    <b-row class="h-100 w-100 mx-auto p-5" style="max-width:1400px;">
-      <b-col cols="4">
-        <HelpPanel></HelpPanel>
-      </b-col>
-      <b-col cols="8">
-        <router-view
-          @createRoom="createRoom"
-          @joinRoom="joinRoom"
-          @startSoloWithBots="startSoloWithBots"
-        ></router-view>
-      </b-col>
-    </b-row>
+    <div class="h-100 w-100 d-flex flex-column">
+      <Messages class="p-3"></Messages>
+      <b-row class="h-100 w-100 mx-auto flex-grow-1 p-5" style="max-width:1400px;">
+        <b-col cols="4">
+          <HelpPanel></HelpPanel>
+        </b-col>
+        <b-col cols="8">
+          <router-view
+            @createRoom="createRoom"
+            @joinRoom="joinRoom"
+            @startSoloWithBots="startSoloWithBots"
+          ></router-view>
+        </b-col>
+      </b-row>
+    </div>
   </b-container>
 </template>
 
@@ -21,35 +24,30 @@ import { Client, Room } from "colyseus.js";
 import { DashboardAPI } from "@port-of-mars/client/api/dashboard/request";
 import { applyLobbyResponses } from "@port-of-mars/client/api/lobby/response";
 import { LobbyRequestAPI } from "@port-of-mars/client/api/lobby/request";
-import { isDevOrStaging } from "@port-of-mars/shared/settings";
 import { LOBBY_NAME } from "@port-of-mars/shared/lobby";
 import {
   GAME_PAGE,
   REGISTER_PAGE,
-  DASHBOARD_PAGE,
   MANUAL_PAGE
 } from "@port-of-mars/shared/routes";
 import { Constants } from "@port-of-mars/shared/settings";
 import { url } from "@port-of-mars/client/util";
 import Countdown from "@port-of-mars/client/components/global/Countdown.vue";
 import HelpPanel from "@port-of-mars/client/components/lobby/HelpPanel.vue";
+import Messages from "@port-of-mars/client/components/dashboard/Messages.vue";
 
 @Component({
   components: {
     Countdown,
-    HelpPanel
+    HelpPanel,
+    Messages
   }
 })
 export default class Lobby extends Vue {
   @Inject() readonly $client!: Client;
   @Provide() api: LobbyRequestAPI = new LobbyRequestAPI();
 
-  private nextAssignmentTime: number = 0;
-  private scheduledGameTime: number = 0;
-  private minutesOpenAfter: number = 0;
-
   game = { name: GAME_PAGE };
-  dashboard = { name: DASHBOARD_PAGE };
   manual = { name: MANUAL_PAGE };
   register = { name: REGISTER_PAGE };
 
@@ -57,35 +55,21 @@ export default class Lobby extends Vue {
     return Constants;
   }
 
-  get lobbyCloseTime() {
-    return this.scheduledGameTime + (this.minutesOpenAfter * 60 * 1000);
-  }
-
-  get scheduledGameTimeString(): string {
-    return new Date(this.scheduledGameTime).toLocaleString("en-US", { timeZoneName: "short" });
-  }
-
-  get nextAssignmentTimeString(): string {
-    return new Date(this.nextAssignmentTime).toLocaleString();
-  }
-
-  get isDevOrStaging() {
-    return isDevOrStaging();
-  }
-  
   async created() {
+    await this.initPlayerData();
+    await this.rejoinIfActiveGame();
+  }
+
+  async initPlayerData() {
     const dashboardAPI = new DashboardAPI(this.$tstore, this.$ajax);
-    const dashboardData = await dashboardAPI.getData();
-    this.minutesOpenAfter = dashboardData.minutesOpenAfter;
-    const playerTaskCompletion = dashboardData.playerTaskCompletion;
-    if (playerTaskCompletion.mustVerifyEmail || playerTaskCompletion.mustConsent) {
+    const data = await dashboardAPI.getData();
+    if (data.playerTaskCompletion.mustVerifyEmail || data.playerTaskCompletion.mustConsent) {
       await this.$router.push(this.register);
       return;
     }
-    if (dashboardData.schedule.length > 0) {
-      this.scheduledGameTime = dashboardData.schedule[0];
-    }
-    // rejoin game if an active one exists
+  }
+  
+  async rejoinIfActiveGame() {
     await this.$ajax.get(url("/game/has-active"), ({ data, status }) => {
       if (data) {
         this.$router.push(this.game);

@@ -10,7 +10,7 @@ import {
   LobbyChatMessageData,
   LobbyClientData,
 } from '@port-of-mars/shared/types'
-import { DASHBOARD_PAGE, GAME_PAGE } from '@port-of-mars/shared/routes';
+import { LOBBY_PAGE, GAME_PAGE } from '@port-of-mars/shared/routes';
 
 type Schemify<T> = T & Schema;
 
@@ -38,7 +38,7 @@ export function applyLobbyResponses<T>(
 
   room.onMessage('join-failure', (msg: JoinFailure) => {
     store.commit('SET_DASHBOARD_MESSAGE', { kind: 'warning', message: msg.reason});
-    router.push({ name: DASHBOARD_PAGE });
+    router.push({ name: LOBBY_PAGE });
   });
 
   room.onMessage('sent-invitation', (msg: SentInvitation) => {

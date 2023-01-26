@@ -22,8 +22,8 @@
           </b-list-group-item>
         </b-list-group>
         <h4 class="mt-5">Thank you for participating!</h4>
-        <b-button block class="w-50 mx-auto" squared variant="light" :to="dashboard">
-          Return to mission control
+        <b-button block class="w-50 mx-auto" squared variant="light" :to="lobby">
+          Return to lobby
         </b-button>
       </b-col>
       <b-col cols="8" class="h-75">
@@ -41,7 +41,7 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import { DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
+import { LOBBY_PAGE } from "@port-of-mars/shared/routes";
 import { Phase, Role } from "@port-of-mars/shared/types";
 import MarsLog from "@port-of-mars/client/components/game/MarsLog.vue";
 import _ from "lodash";
@@ -53,9 +53,7 @@ import _ from "lodash";
 })
 export default class Victory extends Vue {
 
-  get dashboard() {
-    return { name: DASHBOARD_PAGE };
-  }
+  lobby = { name: LOBBY_PAGE };
 
   get players() {
     return _.orderBy(this.$tstore.state.players, ['victoryPoints'], ['desc']);

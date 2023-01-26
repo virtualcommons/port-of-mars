@@ -18,7 +18,12 @@
             {{ data.item.leader }}'s room
           </template>
           <template #cell(action)="data">
-            <b-button size="sm" variant="primary" class="float-right" @click.once="$emit('joinRoom', data.item.id)">
+            <b-button size="sm"
+              variant="primary"
+              class="float-right"
+              @click.once="$emit('joinRoom', data.item.id)"
+              :disabled="isBanned"
+            >
               Join
             </b-button>
           </template>
@@ -38,6 +43,7 @@
           variant="primary"
           class="w-100 mb-3"
           @click.once="joinFullestRoom"
+          :disabled="isBanned"
         >
           <h4>Quick Start</h4>
         </b-button>
@@ -45,6 +51,7 @@
           variant="warning"
           class="w-100 mb-3"
           @click.once="$emit('startSoloWithBots')"
+          :disabled="isBanned"
         >
           <h4>Play vs Bots</h4>
         </b-button>
@@ -52,6 +59,7 @@
           variant="success"
           class="w-100 mb-3"
           @click.once="$emit('createRoom'); clickedCreateRoom = true"
+          :disabled="isBanned"
         >
           <h4>Create Room</h4>
         </b-button>
@@ -63,6 +71,7 @@
         >
           <h4>Join the Discord</h4>
         </b-button>
+        <MuteBanWarning class="mt-3"></MuteBanWarning>
       </div>
     </b-col>
   </b-row>
@@ -73,8 +82,13 @@ import { Component, Inject, Vue } from "vue-property-decorator";
 import { Client } from "colyseus.js";
 import { LOBBY_NAME } from "@port-of-mars/shared/lobby";
 import { Constants } from "@port-of-mars/shared/settings";
+import MuteBanWarning from "@port-of-mars/client/components/lobby/MuteBanWarning.vue";
 
-@Component({})
+@Component({
+  components: {
+    MuteBanWarning
+  }
+})
 export default class LobbyRoomList extends Vue {
   @Inject() readonly $client!: Client;
 
@@ -91,6 +105,10 @@ export default class LobbyRoomList extends Vue {
 
   get constants() {
     return Constants;
+  }
+
+  get isBanned() {
+    return this.$store.state.user.isBanned;
   }
 
   async created() {

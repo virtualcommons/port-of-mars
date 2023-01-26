@@ -179,7 +179,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import { url } from "@port-of-mars/client/util";
 import { Constants } from "@port-of-mars/shared/settings";
-import { DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
+import { LOBBY_PAGE } from "@port-of-mars/shared/routes";
 import Messages from "@port-of-mars/client/components/dashboard/Messages.vue";
 import _ from "lodash";
 
@@ -261,9 +261,9 @@ export default class Consent extends Vue {
             // temporarily disable verification
             this.isVerificationDisabled = true;
             this.hasConsented = true;
-            // if user is already verified (mostly for dev mode), redirect to dashboard
+            // if user is already verified (mostly for dev mode), redirect to lobby
             if (this.isVerified) {
-              this.$router.push({ name: DASHBOARD_PAGE });
+              this.$router.push({ name: LOBBY_PAGE });
             }
             else {
               this.$tstore.commit("SET_DASHBOARD_MESSAGE", {

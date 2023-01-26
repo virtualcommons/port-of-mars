@@ -39,9 +39,9 @@
         >Manual</b-nav-item>
         <b-nav-item
           class="mx-2"
-          :to="dashboard"
+          :to="lobby"
           exact-active-class="active"
-          title="Player Dashboard"
+          title="Game Lobby"
         >Play</b-nav-item>
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto">
@@ -84,7 +84,6 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import {
   ADMIN_PAGE,
-  DASHBOARD_PAGE,
   HOME_PAGE,
   ABOUT_PAGE,
   LOGIN_PAGE,
@@ -111,7 +110,6 @@ export default class Header extends Vue {
   readonly SITE_URL = "https://portofmars.asu.edu";
 
   admin = { name: ADMIN_PAGE };
-  dashboard = { name: DASHBOARD_PAGE };
   consent = { name: REGISTER_PAGE };
   home = { name: HOME_PAGE };
   about = { name: ABOUT_PAGE };

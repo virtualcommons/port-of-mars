@@ -4,12 +4,12 @@
       <h4>How to Play</h4>
       <p>
         Each round of a game consists of multiple phases for investing, trading with other
-        players, purchasing accomplishments, and reacting to Mars Events. Your goal is score
+        players, purchasing accomplishments, and reacting to Mars Events. Your goal is to score
         victory points through accomplishments, while maintaining the vital infrastructure
         keeping the community alive by investing in system health.
       <p>
-        Both individual choices, collective actions, and chance will affect the outcome of
-        the game. For a more information, see the game manual or short tutorial video below.
+        Individual choices, collective actions, and chance will affect the outcome of
+        the game. For more information, see the game manual or short tutorial video below.
       </p>
     </div>
     <div id="links">

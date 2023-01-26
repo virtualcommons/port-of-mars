@@ -7,7 +7,7 @@ import { ServerError, toUrl } from "@port-of-mars/server/util";
 import {
   LOGIN_PAGE,
   REGISTER_PAGE,
-  DASHBOARD_PAGE,
+  LOBBY_PAGE,
 } from "@port-of-mars/shared/routes";
 
 const logger = settings.logging.getLogger(__filename);
@@ -38,7 +38,7 @@ authRouter.get("/google/success", function (req, res) {
       logger.warn("inactivated user attempted to login %o", user);
       res.redirect(toUrl(LOGIN_PAGE));
     } else if (getServices().account.isRegisteredAndValid(user)) {
-      res.redirect(toUrl(DASHBOARD_PAGE));
+      res.redirect(toUrl(LOBBY_PAGE));
     } else {
       logger.warn("invalid / unregistered user %o", user);
       res.redirect(toUrl(REGISTER_PAGE));
@@ -73,7 +73,7 @@ authRouter.get("/facebook/success", function (req, res) {
       logger.warn("inactivated user attempted to login %o", user);
       res.redirect(toUrl(LOGIN_PAGE));
     } else if (getServices().account.isRegisteredAndValid(user)) {
-      res.redirect(toUrl(DASHBOARD_PAGE));
+      res.redirect(toUrl(LOBBY_PAGE));
     } else {
       logger.warn("invalid / unregistered user %o", user);
       res.redirect(toUrl(REGISTER_PAGE));

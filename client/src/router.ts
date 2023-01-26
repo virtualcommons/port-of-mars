@@ -12,7 +12,6 @@ import LobbyRoom from "@port-of-mars/client/components/lobby/LobbyRoom.vue";
 import LobbyRoomList from "@port-of-mars/client/components/lobby/LobbyRoomList.vue";
 import Game from "@port-of-mars/client/views/Game.vue";
 import Register from "@port-of-mars/client/views/Register.vue";
-import Dashboard from "@port-of-mars/client/views/Dashboard.vue";
 import Verify from "@port-of-mars/client/views/VerifyEmail.vue";
 import Manual from "@port-of-mars/client/views/Manual.vue";
 import Home from "@port-of-mars/client/views/Home.vue";
@@ -25,7 +24,6 @@ import {
   LOBBY_PAGE,
   GAME_PAGE,
   REGISTER_PAGE,
-  DASHBOARD_PAGE,
   VERIFY_PAGE,
   MANUAL_PAGE,
   HOME_PAGE,
@@ -55,7 +53,6 @@ const router = new VueRouter({
     ] },
     { ...PAGE_META[GAME_PAGE], component: Game },
     { ...PAGE_META[REGISTER_PAGE], component: Register },
-    { ...PAGE_META[DASHBOARD_PAGE], component: Dashboard },
     { ...PAGE_META[VERIFY_PAGE], component: Verify },
     { ...PAGE_META[MANUAL_PAGE], component: Manual },
     { ...PAGE_META[HOME_PAGE], component: Home },
@@ -93,7 +90,7 @@ router.beforeEach((to: any, from: any, next: any) => {
   if (to.meta.requiresAuth && !isAuthenticated()) {
     next({ name: LOGIN_PAGE });
   } else if (to.name === LOGIN_PAGE && isAuthenticated()) {
-    next({ name: DASHBOARD_PAGE });
+    next({ name: HOME_PAGE });
   } else if (to.meta.requiresAdmin && !isAdmin()) {
     next({ name: HOME_PAGE });
   } else {

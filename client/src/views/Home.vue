@@ -12,7 +12,7 @@
             </p>
             <b-row class="mt-3">
               <b-col cols="5">
-                <b-button class="w-100" variant="primary" :to="login"
+                <b-button class="w-100" variant="primary" :to="lobby"
                   ><h4 class="pt-1">Play Now</h4>
                 </b-button>
               </b-col>
@@ -114,7 +114,7 @@ import Countdown from "@port-of-mars/client/components/global/Countdown.vue";
 import CharCarousel from "@port-of-mars/client/components/global/CharCarousel.vue";
 import AgeTooltip from "@port-of-mars/client/components/global/AgeTooltip.vue";
 import Schedule from "@port-of-mars/client/components/dashboard/Schedule.vue";
-import { LOGIN_PAGE } from "@port-of-mars/shared/routes";
+import { LOBBY_PAGE } from "@port-of-mars/shared/routes";
 import { isDevOrStaging, Constants } from "@port-of-mars/shared/settings";
 
 @Component({
@@ -132,7 +132,7 @@ export default class Home extends Vue {
 
   isDevMode: boolean = false;
   currentYear = new Date().getFullYear();
-  login = { name: LOGIN_PAGE };
+  lobby = { name: LOBBY_PAGE };
 
   get constants() {
     return Constants;

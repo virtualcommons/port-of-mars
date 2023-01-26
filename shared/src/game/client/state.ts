@@ -171,6 +171,8 @@ export interface User {
   id: number;
   username: string;
   isAdmin: boolean;
+  isMuted: boolean;
+  isBanned: boolean;
   passedQuiz?: boolean;
   isVerified?: boolean;
   dateConsented?: Date;
@@ -254,6 +256,8 @@ export const initialUserState: User = {
   id: 0,
   username: "",
   isAdmin: false,
+  isMuted: false,
+  isBanned: false,
   passedQuiz: false,
   isVerified: false
 }
