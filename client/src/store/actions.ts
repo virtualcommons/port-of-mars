@@ -22,8 +22,6 @@ export default {
         const data = await response.json();
         if (data.user) {
             context.commit('SET_USER', data.user);
-            console.log("XXXXXXXXXXXXXX");
-            console.log(data.user);
         }
         context.commit('SET_SCHEDULED_GAMES', data.schedule);
         return data.user;

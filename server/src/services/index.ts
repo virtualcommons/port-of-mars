@@ -6,7 +6,8 @@ import {AccountService} from "@port-of-mars/server/services/account";
 import {TournamentService} from "@port-of-mars/server/services/tournament";
 import {ScheduleService} from "@port-of-mars/server/services/schedule";
 import {QuizService} from "@port-of-mars/server/services/quiz";
-import {DashboardService} from "@port-of-mars/server/services/dashboard";
+import {SurveyService} from "@port-of-mars/server/services/survey";
+import {LeaderboardService} from "@port-of-mars/server/services/leaderboard";
 import {getConnection} from "@port-of-mars/server/util";
 import {TimeService} from "@port-of-mars/server/services/time";
 import {GameService} from "@port-of-mars/server/services/game";
@@ -80,12 +81,20 @@ export class ServiceProvider {
     return this._schedule;
   }
 
-  private _dashboard?: DashboardService;
-  get dashboard() {
-    if(!this._dashboard) {
-      this._dashboard = new DashboardService(this);
+  private _survey?: SurveyService;
+  get survey() {
+    if(!this._survey) {
+      this._survey = new SurveyService(this);
     }
-    return this._dashboard;
+    return this._survey;
+  }
+
+  private _leaderboard?: LeaderboardService;
+  get leaderboard() {
+    if(!this._leaderboard) {
+      this._leaderboard = new LeaderboardService(this);
+    }
+    return this._leaderboard;
   }
 
   private _admin?: AdminService;
@@ -95,7 +104,6 @@ export class ServiceProvider {
     }
     return this._admin;
   }
-
 
   private _settings?: RedisSettings;
   get settings() {

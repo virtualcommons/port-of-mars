@@ -21,7 +21,6 @@ import { getRedis, getServices } from "@port-of-mars/server/services";
 import {
   adminRouter,
   authRouter,
-  dashboardRouter,
   gameRouter,
   quizRouter,
   registrationRouter,
@@ -194,7 +193,6 @@ async function createApp() {
   app.use("/survey", surveyRouter);
   app.use("/game", gameRouter);
   app.use("/quiz", quizRouter);
-  app.use("/dashboard", dashboardRouter);
   app.use("/registration", registrationRouter);
   app.use("/status", statusRouter);
 

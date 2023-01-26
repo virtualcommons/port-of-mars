@@ -21,7 +21,6 @@
 <script lang="ts">
 import { Component, Provide, Inject, Vue } from "vue-property-decorator";
 import { Client, Room } from "colyseus.js";
-import { DashboardAPI } from "@port-of-mars/client/api/dashboard/request";
 import { applyLobbyResponses } from "@port-of-mars/client/api/lobby/response";
 import { LobbyRequestAPI } from "@port-of-mars/client/api/lobby/request";
 import { LOBBY_NAME } from "@port-of-mars/shared/lobby";
@@ -34,7 +33,7 @@ import { Constants } from "@port-of-mars/shared/settings";
 import { url } from "@port-of-mars/client/util";
 import Countdown from "@port-of-mars/client/components/global/Countdown.vue";
 import HelpPanel from "@port-of-mars/client/components/lobby/HelpPanel.vue";
-import Messages from "@port-of-mars/client/components/dashboard/Messages.vue";
+import Messages from "@port-of-mars/client/components/global/Messages.vue";
 
 @Component({
   components: {
@@ -56,22 +55,23 @@ export default class Lobby extends Vue {
   }
 
   async created() {
-    await this.initPlayerData();
+    await this.checkCanPlay();
     await this.rejoinIfActiveGame();
   }
 
-  async initPlayerData() {
-    const dashboardAPI = new DashboardAPI(this.$tstore, this.$ajax);
-    const data = await dashboardAPI.getData();
-    if (data.playerTaskCompletion.mustVerifyEmail || data.playerTaskCompletion.mustConsent) {
-      await this.$router.push(this.register);
-      return;
-    }
+  async checkCanPlay() {
+    await this.$ajax.get(url("/registration/authenticated"), ({ data, status }) => {
+      if (data) {
+        if (!data.isVerified || !data.dateConsented) {
+          this.$router.push(this.register);
+        }
+      }
+    });
   }
   
   async rejoinIfActiveGame() {
     await this.$ajax.get(url("/game/has-active"), ({ data, status }) => {
-      if (data) {
+      if (status === 200 && data === true) {
         this.$router.push(this.game);
       }
     });

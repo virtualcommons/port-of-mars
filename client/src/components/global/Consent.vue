@@ -180,7 +180,7 @@ import { Component, Vue } from "vue-property-decorator";
 import { url } from "@port-of-mars/client/util";
 import { Constants } from "@port-of-mars/shared/settings";
 import { LOBBY_PAGE } from "@port-of-mars/shared/routes";
-import Messages from "@port-of-mars/client/components/dashboard/Messages.vue";
+import Messages from "@port-of-mars/client/components/global/Messages.vue";
 import _ from "lodash";
 
 @Component({

@@ -374,10 +374,6 @@ export type PlayerStatItem = GameMetadata & {
   victory: boolean;
 };
 
-export interface Stats {
-  games: Array<PlayerStatItem>;
-}
-
 export interface GameStatus {
   status: "incomplete" | "defeat" | "victory" | "failure" | "incomplete";
 }
@@ -399,14 +395,12 @@ export interface AdminStats {
   bannedUsers: number;
 }
 
-export interface PlayerTaskCompletion {
-  mustVerifyEmail: boolean;
-  mustConsent: boolean;
+export interface TournamentPlayerData {
+  hasInvite: boolean;
   mustTakeTutorial: boolean;
   mustTakeIntroSurvey: boolean;
   canPlayGame: boolean;
   shouldTakeExitSurvey: boolean;
-  hasInvite: boolean;
 }
 
 export interface TournamentStatus {
@@ -415,19 +409,6 @@ export interface TournamentStatus {
   championship: boolean;
   announcement: string;
   description: string;
-}
-
-export interface DashboardData {
-  user: { username: string, isMuted: boolean, isBanned: boolean };
-  playerTaskCompletion: PlayerTaskCompletion;
-  introSurveyUrl: string;
-  exitSurveyUrl: string;
-  schedule: Array<number>; // list of timestamps for upcoming games
-  isTournamentSignUpEnabled: boolean;
-  isLobbyOpen: boolean;
-  minutesOpenAfter: number;
-  currentRoundNumber: number;
-  stats: Stats;
 }
 
 export interface DashboardMessage {
@@ -443,8 +424,6 @@ export interface DynamicSettingsData {
   isTournamentSignUpEnabled: boolean;
   isFreePlayEnabled: boolean;
   isAutoSchedulerEnabled: boolean;
-  lobbyGroupAssignmentInterval: number 
-  lobbyForceGroupAssignmentInterval: number;
   lobbyOpenBeforeOffset: number;
   lobbyOpenAfterOffset: number;
   autoSchedulerHourInterval: number;

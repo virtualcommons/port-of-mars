@@ -62,8 +62,6 @@ export class RedisSettings {
       isAutoSchedulerEnabled: !!_.toNumber(settings.isAutoSchedulerEnabled),
       autoSchedulerHourInterval: _.toNumber(settings.autoSchedulerHourInterval),
       autoSchedulerDaysOut: _.toNumber(settings.autoSchedulerDaysOut),
-      lobbyGroupAssignmentInterval: _.toNumber(settings.lobbyGroupAssignmentInterval),
-      lobbyForceGroupAssignmentInterval: _.toNumber(settings.lobbyForceGroupAssignmentInterval),
       lobbyOpenBeforeOffset: _.toNumber(settings.lobbyOpenBeforeOffset),
       lobbyOpenAfterOffset: _.toNumber(settings.lobbyOpenAfterOffset),
     }
@@ -102,16 +100,6 @@ export class RedisSettings {
   // number of day in the future that the scheduler will attempt to schedule games for
   async autoSchedulerDaysOut(): Promise<number> {
     return _.toNumber(await this.client.hget('settings', 'autoSchedulerDaysOut'));
-  }
-
-  // interval at which the lobby attempts to form groups of 5 players
-  async lobbyGroupAssignmentInterval(): Promise<number> {
-    return _.toNumber(await this.client.hget('settings', 'lobbyGroupAssignmentInterval'));
-  }
-
-  // how much time should pass before a connected player will automatically be assigned to a group w/ bots
-  async lobbyForceGroupAssignmentInterval(): Promise<number> {
-    return _.toNumber(await this.client.hget('settings', 'lobbyForceGroupAssignmentInterval'));
   }
 
   // minutes BEFORE scheduled time that the lobby will be open for

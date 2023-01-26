@@ -37,7 +37,7 @@ export class AjaxRequest {
 
   errorRoutes: Map<number, string> = new Map([
     [401, LOGIN_PAGE],
-    [403, LOBBY_PAGE],
+    [403, REGISTER_PAGE],
     [404, LOBBY_PAGE],
   ]);
 
@@ -115,7 +115,7 @@ export class AjaxRequest {
       const serverErrorMessage: DashboardMessage = data;
       this.store.commit('SET_DASHBOARD_MESSAGE', serverErrorMessage);
       if (response.status > 400) {
-        const destinationPage = this.errorRoutes.has(response.status) ? this.errorRoutes.get(response.status) : LOBBY_PAGE;
+        const destinationPage = this.errorRoutes.has(response.status) ? this.errorRoutes.get(response.status) : REGISTER_PAGE;
         this.router.push({ name: destinationPage })
       }
     }
