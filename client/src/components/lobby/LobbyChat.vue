@@ -13,12 +13,13 @@
     <div id="input" class="flex-shrink-1">
       <b-form @submit.stop.prevent="submitToChat" class="p-2" inline>
         <b-form-input v-model="pendingMessage"
-          placeholder="Type a message..."
+          :placeholder="isMuted ? 'You are currently muted' : 'Send a message'"
           autocomplete="off"
           class="flex-grow-1 mr-2"
           @keyup.enter="submitToChat"
+          :disabled="isMuted"
         ></b-form-input>
-        <b-button variant="secondary" type="submit" title="Send message">
+        <b-button variant="secondary" type="submit" title="Send message" :disabled="isMuted">
           <b-icon-cursor></b-icon-cursor>
         </b-button>
       </b-form>
@@ -40,6 +41,10 @@ export default class LobbyChat extends Vue {
 
   get reversedMessages(): Array<LobbyChatMessageData> {
     return this.messages.slice().reverse();
+  }
+
+  get isMuted() {
+    return this.$tstore.state.user.isMuted;
   }
 
   updated() {

@@ -94,19 +94,19 @@ export class LobbyRoom extends Room<LobbyRoomState> {
 
   registerLobbyHandlers(): void {
     this.onMessage("start-with-bots", (client: Client, message: StartWithBots) => {
-      logger.trace("client %s requested to start a game with bots", client.id);
       this.startWithBots(client);
     });
     this.onMessage("vote-start-with-bots", (client: Client, message: VoteStartWithBots) => {
-      logger.trace("client %s requested to indicate ready start a game with bots", client.id);
       this.state.setClientReadiness(client.auth.username, message.value);
     });
     this.onMessage("send-lobby-chat-message", (client: Client, message: SendLobbyChatMessage) => {
-      logger.trace("client %s sent chat message", client.id);
+      if (client.auth.isMuted) {
+        logger.trace("client %s attempted to send a chat message while muted", client.auth.username);
+        return;
+      }
       this.state.addChatMessage(client.auth.username, message.value);
     });
     this.onMessage("start-solo-with-bots", (client: Client, message: StartSoloWithBots) => {
-      logger.trace("client %s requested to start a game solo with bots", client.id);
       this.lock();
       this.state.setRoomReadiness(true);
     });
