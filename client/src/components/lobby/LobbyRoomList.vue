@@ -40,12 +40,14 @@
     <b-col cols="5">
       <div id="actions" class="pl-3">
         <b-button size="lg"
+          v-if="rooms.length > 0"
+          title="Join the room with the most players"
           variant="primary"
           class="w-100 mb-3"
           @click.once="joinFullestRoom"
           :disabled="isBanned"
         >
-          <h4>Quick Start</h4>
+          <h4>Join Existing Room</h4>
         </b-button>
         <b-button size="lg"
           variant="warning"
