@@ -9,5 +9,5 @@
   "lobbyGroupAssignmentInterval": 1,
   "lobbyForceGroupAssignmentInterval": -1,
   "lobbyOpenBeforeOffset": 10,
-  "lobbyOpenAfterOffset": 5
+  "lobbyOpenAfterOffset": 1
 }
