@@ -12,7 +12,12 @@
     "emitDecoratorMetadata": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
-    "baseUrl": "./src"
+    "baseUrl": ".",
+    "paths": {
+      "@port-of-mars/shared/*": [
+        "src/*"
+      ]
+    }
   },
   "include": [
       "**/*.ts"
