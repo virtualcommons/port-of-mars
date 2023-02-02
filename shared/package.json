@@ -4,8 +4,7 @@
   "scripts": {
     "build": "tsc -p ."
   },
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "dependencies": {
     "@colyseus/schema": "^1.0.25"
   }
