@@ -94,6 +94,10 @@ dist/
 # JetBrains directories
 ./idea
 
+# VScode configs
+vetur.config.js
+.vscode/
+
 # vuepress build output
 .vuepress/dist
 
