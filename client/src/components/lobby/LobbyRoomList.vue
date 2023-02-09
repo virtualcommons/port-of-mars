@@ -50,14 +50,6 @@
           <h4>Join Existing Room</h4>
         </b-button>
         <b-button size="lg"
-          variant="warning"
-          class="w-100 mb-3"
-          @click.once="$emit('startSoloWithBots')"
-          :disabled="isBanned"
-        >
-          <h4>Play vs Bots</h4>
-        </b-button>
-        <b-button size="lg"
           variant="success"
           class="w-100 mb-3"
           @click.once="$emit('createRoom'); clickedCreateRoom = true"
@@ -66,12 +58,12 @@
           <h4>Create Room</h4>
         </b-button>
         <b-button size="lg"
-          variant="discord"
+          variant="warning"
           class="w-100 mb-3"
-          target="_blank"
-          :href="constants.DISCORD_URL"
+          @click.once="$emit('startSoloWithBots')"
+          :disabled="isBanned"
         >
-          <h4>Join the Discord</h4>
+          <h4>Play vs Bots</h4>
         </b-button>
         <MuteBanWarning class="mt-3"></MuteBanWarning>
       </div>
