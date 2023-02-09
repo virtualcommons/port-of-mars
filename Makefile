@@ -108,7 +108,7 @@ settings: $(SENTRY_DSN_PATH) $(SECRET_KEY_PATH) | keys
 	echo 'export const BUILD_ID = "${BUILD_ID}";' > $(SHARED_CONFIG_PATH)
 	echo 'export const SENTRY_DSN = "${SENTRY_DSN}";' >> $(SHARED_CONFIG_PATH)
 
-docker-compose.yml: base.yml staging.base.yml $(ENVIR).yml config.mk $(DB_DATA_PATH) $(DATA_DUMP_PATH) $(LOG_DATA_PATH) $(REDIS_SETTINGS_PATH) $(ORMCONFIG_PATH) $(NUXT_ORMCONFIG_PATH) $(PGPASS_PATH) settings
+docker-compose.yml: base.yml staging.base.yml $(ENVIR).yml config.mk $(DB_DATA_PATH) $(DATA_DUMP_PATH) $(LOG_DATA_PATH) $(REDIS_SETTINGS_PATH) $(ORMCONFIG_PATH) $(NUXT_ORMCONFIG_PATH) $(PGPASS_PATH) $(SERVER_ENV) settings
 	case "$(ENVIR)" in \
 	  dev) docker compose -f base.yml -f "$(ENVIR).yml" config > docker-compose.yml;; \
 	  staging|prod) docker compose -f base.yml -f staging.base.yml -f "$(ENVIR).yml" config > docker-compose.yml;; \
@@ -137,4 +137,4 @@ buildprod: docker-compose.yml
 
 .PHONY: clean
 clean:
-	docker compose run --rm server dropdb -h db -U ${DB_USER} ${TEST_DB_NAME}
+	rm -f server/.env # any other generated resources? SHARED_CONFIG_PATH?
