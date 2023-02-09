@@ -32,7 +32,7 @@ yarn run test:e2e
 
 ### Run your unit tests
 ```
-docker-compose exec client bash
+docker compose exec client bash
 yarn run test:unit
 ```
 

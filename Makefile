@@ -25,8 +25,8 @@ BUILD_ID=$(shell git describe --tags --abbrev=1)
 
 .PHONY: build
 build: docker-compose.yml
-	docker-compose pull db
-	docker-compose build --pull
+	docker compose pull db
+	docker compose build --pull
 
 .PHONY: browser
 browser:
@@ -53,7 +53,7 @@ keys:
 	mkdir -p keys
 
 $(DB_PASSWORD_PATH): | keys
-	DB_PASSWORD=$$(head /dev/urandom | tr -dc '[:alnum:]' | head -c42); \
+	DB_PASSWORD=$$(openssl rand -base64 48); \
 	TODAY=$$(date +%Y-%m-%d-%H:%M:%S); \
 	if [ -f $(DB_PASSWORD_PATH) ]; \
 	then \
@@ -110,31 +110,31 @@ settings: $(SENTRY_DSN_PATH) $(SECRET_KEY_PATH) | keys
 
 docker-compose.yml: base.yml staging.base.yml $(ENVIR).yml config.mk $(DB_DATA_PATH) $(DATA_DUMP_PATH) $(LOG_DATA_PATH) $(REDIS_SETTINGS_PATH) $(ORMCONFIG_PATH) $(NUXT_ORMCONFIG_PATH) $(PGPASS_PATH) settings
 	case "$(ENVIR)" in \
-	  dev) docker-compose -f base.yml -f "$(ENVIR).yml" config > docker-compose.yml;; \
-	  staging|prod) docker-compose -f base.yml -f staging.base.yml -f "$(ENVIR).yml" config > docker-compose.yml;; \
+	  dev) docker compose -f base.yml -f "$(ENVIR).yml" config > docker-compose.yml;; \
+	  staging|prod) docker compose -f base.yml -f staging.base.yml -f "$(ENVIR).yml" config > docker-compose.yml;; \
 	  *) echo "invalid environment. must be either dev, staging or prod" 1>&2; exit 1;; \
 	esac
 
 .PHONY: test-setup
 test-setup: docker-compose.yml
-	docker-compose run --rm server bash -c "dropdb --if-exists -h db -U ${DB_USER} ${TEST_DB_NAME} && createdb -h db -U ${DB_USER} ${TEST_DB_NAME} && yarn typeorm schema:sync -c test"
+	docker compose run --rm server bash -c "dropdb --if-exists -h db -U ${DB_USER} ${TEST_DB_NAME} && createdb -h db -U ${DB_USER} ${TEST_DB_NAME} && yarn typeorm schema:sync -c test"
 
 .PHONY: test
 test: test-setup
-	docker-compose run --rm client yarn test:unit
-	docker-compose run --rm server yarn test
+	docker compose run --rm client yarn test:unit
+	docker compose run --rm server yarn test
 
 .PHONY: deploy
 deploy: docker-compose.yml settings
-	docker-compose pull db redis
-	docker-compose build --pull
-	docker-compose up -d 
+	docker compose pull db redis
+	docker compose build --pull
+	docker compose up -d 
 
 .PHONY: buildprod
 buildprod: docker-compose.yml
-	docker-compose run --rm client yarn build
-	docker-compose run --rm server yarn build
+	docker compose run --rm client yarn build
+	docker compose run --rm server yarn build
 
 .PHONY: clean
 clean:
-	docker-compose run --rm server dropdb -h db -U ${DB_USER} ${TEST_DB_NAME}
+	docker compose run --rm server dropdb -h db -U ${DB_USER} ${TEST_DB_NAME}
