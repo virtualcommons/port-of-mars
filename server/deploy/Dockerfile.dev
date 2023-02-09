@@ -1,9 +1,9 @@
-FROM node:16-bullseye
+FROM node:16-bullseye-slim
 
 LABEL maintainer="Allen Lee <allen.lee@asu.edu>"
 
 RUN apt-get update \
-  && apt-get install -y gnupg2 lsb-release \
+  && apt-get install -y gnupg2 wget lsb-release \
   && echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
   && wget -q -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
   && apt update \

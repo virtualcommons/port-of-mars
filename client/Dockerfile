@@ -1,4 +1,4 @@
-FROM node:16-bullseye
+FROM node:16-bullseye-slim
 
 LABEL maintainer="Allen Lee <allen.lee@asu.edu>"
 
