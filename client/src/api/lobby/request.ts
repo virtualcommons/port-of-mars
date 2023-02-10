@@ -1,11 +1,14 @@
-import { Room } from 'colyseus.js';
+import { Room } from "colyseus.js";
 import {
-  WaitingRequests,
+  LobbyRequest,
   AcceptInvitation,
-  DistributeGroups
-} from '@port-of-mars/shared/lobby/requests';
+  StartWithBots,
+  VoteStartWithBots,
+  StartSoloWithBots,
+  SendLobbyChatMessage,
+} from "@port-of-mars/shared/lobby/requests";
 
-export class WaitingRequestAPI {
+export class LobbyRequestAPI {
   room!: Room;
 
   connect(room: Room) {
@@ -18,17 +21,39 @@ export class WaitingRequestAPI {
     }
   }
 
-  public send(req: WaitingRequests) {
+  public send(req: LobbyRequest) {
     this.room.send(req.kind, req);
   }
 
   public acceptInvitation() {
-    const msg: AcceptInvitation = { kind: 'accept-invitation' };
+    const msg: AcceptInvitation = { kind: "accept-invitation" };
     this.send(msg);
   }
 
-  public distributeGroups() {
-    const msg: DistributeGroups = { kind: 'distribute-groups' };
+  public startWithBots() {
+    const msg: StartWithBots = { kind: "start-with-bots" };
     this.send(msg);
   }
+
+  public startSoloWithBots() {
+    const msg: StartSoloWithBots = { kind: "start-solo-with-bots" };
+    this.send(msg);
+  }
+
+  public voteStartWithBots(vote: boolean) {
+    const msg: VoteStartWithBots = {
+      kind: "vote-start-with-bots",
+      value: vote
+    };
+    this.send(msg);
+  }
+
+  public sendChatMessage(message: string) {
+    const msg: SendLobbyChatMessage = {
+      kind: "send-lobby-chat-message",
+      value: message,
+    };
+    this.send(msg);
+  }
+
 }

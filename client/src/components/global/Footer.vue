@@ -12,7 +12,7 @@ ccarra1@asu.edu
           <b-link :to="login" title="Sign up or login">Sign In</b-link>
         </li>
         <li>
-          <b-link :to="dashboard" title="Play Port of Mars">Player Dashboard</b-link>
+          <b-link :to="lobby" title="Play Port of Mars">Game Lobby</b-link>
         </li>
         <li>
           <b-link :to="manual" title="User Manual">How to Play</b-link>
@@ -94,7 +94,7 @@ import { Component, Vue } from "vue-property-decorator";
 import { Constants } from "@port-of-mars/shared/settings";
 import {
   LOGIN_PAGE,
-  DASHBOARD_PAGE,
+  LOBBY_PAGE,
   REGISTER_PAGE,
   MANUAL_PAGE,
   PRIVACY_PAGE,
@@ -103,10 +103,10 @@ import {
 @Component({})
 export default class Footer extends Vue {
   currentYear = new Date().getFullYear();
-  dashboard = { name: DASHBOARD_PAGE };
   consent = { name: REGISTER_PAGE };
   manual = { name: MANUAL_PAGE };
   login = { name: LOGIN_PAGE };
+  lobby = { name: LOBBY_PAGE };
   privacy = { name: PRIVACY_PAGE };
 
   get constants() {

@@ -3,7 +3,6 @@
  */
 export * from "./admin";
 export * from "./auth";
-export * from "./dashboard";
 export * from "./game";
 export * from "./middleware";
 export * from "./quiz";

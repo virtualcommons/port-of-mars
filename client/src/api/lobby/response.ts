@@ -1,31 +1,30 @@
 import { Room } from 'colyseus.js';
+import { DataChange, Schema } from "@colyseus/schema";
 import {
   JoinedClientQueue,
   SentInvitation,
   RemovedClientFromLobby,
-  JoinFailure, JoinExistingGame
+  JoinFailure, JoinExistingGame,
 } from '@port-of-mars/shared/lobby/responses';
-import { DASHBOARD_PAGE, GAME_PAGE } from '@port-of-mars/shared/routes';
-import Lobby from '@port-of-mars/client/views/Lobby.vue';
+import {
+  LobbyChatMessageData,
+  LobbyClientData,
+} from '@port-of-mars/shared/types'
+import { LOBBY_PAGE, GAME_PAGE } from '@port-of-mars/shared/routes';
 
-// TODO: Temporary Implementation
-const GAME_DATA = 'gameData';
-interface GameData {
-  roomId: string;
-  sessionId: string;
+type Schemify<T> = T & Schema;
+
+function deschemify<T>(s: Schemify<T>): T {
+  return s.toJSON() as T;
 }
 
-// TODO: Temporary Implementation
-function setGameData(data: GameData) {
-  localStorage.setItem(GAME_DATA, JSON.stringify(data));
-}
-
-export function applyWaitingServerResponses<T>(
+export function applyLobbyResponses<T>(
   room: Room,
-  component: Lobby
+  component: any
 ) {
   const store = component.$tstore;
   const router = component.$router;
+
   room.onError((code: number, message?: string) => {
     console.log(`Error ${code} occurred in room: ${message} `);
     alert(
@@ -39,34 +38,42 @@ export function applyWaitingServerResponses<T>(
 
   room.onMessage('join-failure', (msg: JoinFailure) => {
     store.commit('SET_DASHBOARD_MESSAGE', { kind: 'warning', message: msg.reason});
-    router.push({ name: DASHBOARD_PAGE });
+    router.push({ name: LOBBY_PAGE });
   });
 
-  room.onMessage('joined-client-queue', (msg: JoinedClientQueue) => {
-    (component as any).joinedQueue = msg.value;
-  });
   room.onMessage('sent-invitation', (msg: SentInvitation) => {
     component.$ajax.roomId = msg.roomId;
-    room.send('accept-invitation', { kind: 'accept-invitation' });
+    store.commit('SET_LOBBY_READINESS', true);
+    setTimeout(() => {
+      room.send('accept-invitation', { kind: 'accept-invitation' });
+    }, 5 * 1000);
   });
+
   room.onMessage('removed-client-from-lobby', (msg: RemovedClientFromLobby) => {
-    console.log('Removed client from lobby (currently a NO-OP).');
     router.push({ name: GAME_PAGE });
   });
+
   room.onMessage('join-existing-game', (msg: JoinExistingGame) => {
     router.push({ name: GAME_PAGE });
-  })
+  });
 
-  room.state.onChange = (changes: Array<any>) => {
-    changes.forEach((change) => {
-      switch (change.field) {
-        case 'nextAssignmentTime':
-          (component as any).nextAssignmentTime = change.value;
-          break;
-        case 'waitingUserCount':
-          (component as any).waitingUserCount = change.value;
-          break;
-      }
-    });
+  room.state.clients.onAdd = (e: Schemify<LobbyClientData>, key: string) => {
+    store.commit('ADD_TO_LOBBY_CLIENTS', deschemify(e));
+    e.onChange = (changes: DataChange[]) => {
+      changes.forEach(change => {
+        if (change.field === 'ready') {
+          store.commit('SET_LOBBY_CLIENT_READINESS', { client: deschemify(e), ready: change.value });
+        }
+      });
+    }
   };
+  
+  room.state.clients.onRemove = (e: Schemify<LobbyClientData>, key: string) => {
+    store.commit('REMOVE_FROM_LOBBY_CLIENTS', deschemify(e));
+  };
+
+  room.state.chat.onAdd = (e: Schemify<LobbyChatMessageData>, key: string) => {
+    store.commit('ADD_TO_LOBBY_CHAT', deschemify(e));
+  }
+
 }

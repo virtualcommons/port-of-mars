@@ -11,30 +11,15 @@
               anyone aged 18 and over<AgeTooltip placement="right"/> can participate.
             </p>
             <b-row class="mt-3">
-              <b-col cols="5">
-                <b-button class="w-100" variant="primary" :to="login"
+              <b-col>
+                <b-button size="lg" variant="primary" :to="lobby"
                   ><h4 class="pt-1">Play Now</h4>
                 </b-button>
-              </b-col>
-              <b-col cols="7">
-                <p v-if="nextScheduledLaunch"><small>
-                  Games occur on a set schedule, every 3 hours. Sign up to be ready and join the game lobby before the next round starts.
-                </small></p>
               </b-col>
             </b-row>
           </b-col>
           <b-col md="12" lg="6" xl="5">
             <char-carousel></char-carousel>
-          </b-col>
-          <div class="w-100"></div>
-          <b-col>
-            <h2 v-if="nextScheduledLaunch" class="mb-3">Next Launch</h2>
-            <h2 v-else class="mb-3">No Games Scheduled</h2>
-            <countdown
-              v-if="nextScheduledLaunch"
-              :nextLaunch="nextScheduledLaunch"
-              style="color: #fff;"
-            ></countdown>
           </b-col>
           <div class="w-100 mb-3"></div>
           <b-button variant="link" @click="scrollToAboutSection">
@@ -110,11 +95,9 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
-import Countdown from "@port-of-mars/client/components/global/Countdown.vue";
 import CharCarousel from "@port-of-mars/client/components/global/CharCarousel.vue";
 import AgeTooltip from "@port-of-mars/client/components/global/AgeTooltip.vue";
-import Schedule from "@port-of-mars/client/components/dashboard/Schedule.vue";
-import { LOGIN_PAGE } from "@port-of-mars/shared/routes";
+import { LOBBY_PAGE } from "@port-of-mars/shared/routes";
 import { isDevOrStaging, Constants } from "@port-of-mars/shared/settings";
 
 @Component({
@@ -122,8 +105,6 @@ import { isDevOrStaging, Constants } from "@port-of-mars/shared/settings";
     AgeTooltip,
     CharCarousel,
     Footer,
-    Countdown,
-    Schedule,
   }
 })
 export default class Home extends Vue {
@@ -132,26 +113,10 @@ export default class Home extends Vue {
 
   isDevMode: boolean = false;
   currentYear = new Date().getFullYear();
-  login = { name: LOGIN_PAGE };
+  lobby = { name: LOBBY_PAGE };
 
   get constants() {
     return Constants;
-  }
-
-  get schedule() {
-    return this.$tstore.state.scheduledGames;
-  }
-
-  get nextScheduledLaunch() {
-    return this.schedule[0];
-  }
-
-  get dateRange() {
-    const schedule = this.schedule;
-    if (schedule.length > 0) {
-      return `from ${this.toDate(schedule[0])} to ${this.toDate(schedule[schedule.length - 1])}`;
-    }
-    return "";
   }
 
   async mounted() {
@@ -168,9 +133,6 @@ export default class Home extends Vue {
     }
   }
 
-  toDate(timestamp: number) {
-    return new Date(timestamp).toDateString();
-  }
 }
 </script>
 

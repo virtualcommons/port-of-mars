@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { getServices } from '@port-of-mars/server/services';
-import { getPagePath, DASHBOARD_PAGE } from '@port-of-mars/shared/routes';
+import { getPagePath, LOBBY_PAGE } from '@port-of-mars/shared/routes';
 import { settings, getLogger } from '@port-of-mars/server/settings';
 import { ServerError } from '@port-of-mars/server/util';
 
@@ -26,7 +26,7 @@ surveyRouter
         next(new ServerError({code: 400, message: "Missing data from end of survey redirect, please check survey " + surveyId}));
       }
       const referrer = req.get('Referrer');
-      res.redirect(`${settings.host}/${getPagePath(DASHBOARD_PAGE)}`)
+      res.redirect(`${settings.host}/${getPagePath(LOBBY_PAGE)}`)
     }
     catch (e) {
       logger.fatal("Unable to mark survey completion: %s", e);

@@ -1,347 +1,166 @@
 import { Room, Client, matchMaker } from 'colyseus';
-import schedule from 'node-schedule';
-import { ROLES } from '@port-of-mars/shared/types';
-import { isDev } from '@port-of-mars/shared/settings';
 import { buildGameOpts } from '@port-of-mars/server/util';
 import { GameRoom } from '@port-of-mars/server/rooms/game';
-import { LobbyRoomState } from '@port-of-mars/server/rooms/lobby/state';
+import { LobbyClient, LobbyRoomState } from '@port-of-mars/server/rooms/lobby/state';
 import { settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
 import _ from "lodash";
 import * as http from "http";
-import { DistributeGroups, WaitingResponses, LOBBY_NAME, AcceptInvitation } from "@port-of-mars/shared/lobby";
+import {
+  LobbyResponse,
+  LOBBY_NAME,
+  AcceptInvitation,
+  StartWithBots,
+  VoteStartWithBots,
+  SendLobbyChatMessage,
+  StartSoloWithBots,
+} from "@port-of-mars/shared/lobby";
 
 const logger = settings.logging.getLogger(__filename);
 
-class MatchmakingGroup {
-  clientStats: Array<ClientStat> = [];
-  ready = false;
-  confirmed = 0;
-
-  isFull(maxClients: number): boolean {
-    return this.clientStats.length >= maxClients;
-  }
-
-  hasConfirmedAllClients() {
-    return this.confirmed === this.clientStats.length;
-  }
+export const sendSafe = (client: Client, msg: LobbyResponse) => {
+  client.send(msg.kind, msg);
 }
 
-interface ClientStat {
-  client: Client;
-  priority?: boolean;
-  waitingTime: number;
-  options?: any;
-  group?: MatchmakingGroup;
-  rank: number;
-  confirmed?: boolean;
-  hasInvite?: boolean;
-}
-
-export class RankedLobbyRoom extends Room<LobbyRoomState> {
+export class LobbyRoom extends Room<LobbyRoomState> {
 
   public static get NAME(): string { return LOBBY_NAME }
 
-  /**
-   * Distribute clients into groups at this interval (minutes)
-   */
-  groupAssignmentInterval = 1;
-
-  /**
-   * Force assignment of connected players into a group after this much time has passed (in minutes)
-   */
-  forceGroupAssignmentInterval = -1;
-  
-  /**
-   * Number of minutes elapsed since this room has opened
-   */
-  elapsedMinutes = 0;
-
-  /**
-   * Groups of players per iteration
-   */
-  groups: Array<MatchmakingGroup> = [];
-
-  /**
-   * number of players in each game
-   */
-  numClientsToMatch = 5;
-
-  /**
-   * connected clients with additional priority, wait time, and confirmation metadata
-   */
-  clientStats: Array<ClientStat> = [];
-
-  /**
-   * determine if lobby should allow canned group assignment
-   */
-  devMode = false;
-
-  /**
-   * holds data for cron date
-   */
-  scheduler: any = undefined;
+  maxClients = 5;
+  patchRate = 1000 / 5; // sends state to client 5 times per second
 
   async onCreate(options: any) {
-    logger.info('RankedLobbyRoom: new room %s', this.roomId);
+    logger.trace("LobbyRoom '%s' created", this.roomId);
     this.setState(new LobbyRoomState());
-    const settings = getServices().settings;
-    this.groupAssignmentInterval = await settings.lobbyGroupAssignmentInterval();
-    this.forceGroupAssignmentInterval = await settings.lobbyForceGroupAssignmentInterval();
-    this.devMode = isDev();
+    this.resetMetadata();
     this.registerLobbyHandlers();
-
-    /**
-     * Redistribute clients into groups at every interval
-     */
-    this.scheduler = schedule.scheduleJob(
-      `*/${this.groupAssignmentInterval} * * * *`,
-      async () => {
-        logger.trace('SCHEDULED JOB: REDISTRIBUTE GROUPS EVERY %d', this.groupAssignmentInterval);
-        // force assign group with bots if its the last attempt in a scheduled window
-        this.redistributeGroups();
-        await this.updateLobbyNextAssignmentTime();
+    this.clock.setInterval(() => {
+      if (this.state.ready) {
+        this.sendInvitations();
       }
-    );
-    this.updateLobbyNextAssignmentTime();
+    }, 1000);
+  }
+  
+  onLeave(client: Client, consented: boolean): void {
+    logger.trace("Client %s left LobbyRoom %s", client.auth.username, this.roomId);
+    this.state.removeClient(client.auth.username);
+    this.resetMetadata();
   }
 
   onDispose() {
-    logger.trace('RankedLobbyRoom: disposing of %s, no connected clients. Cleaning up scheduler.', this.roomId);
-    if (this.scheduler) {
-      this.scheduler.cancel();
-    }
+    logger.info("Disposing of LobbyRoom %s, no connected clients", this.roomId);
   }
 
-  async updateLobbyNextAssignmentTime() {
-    if (this.scheduler) {
-      this.elapsedMinutes += this.groupAssignmentInterval;
-      if (this.forceGroupAssignmentInterval > 0 && this.elapsedMinutes >= this.forceGroupAssignmentInterval) {
-        this.elapsedMinutes = 0;
-        // force start a game
-        this.redistributeGroups(true);
-        return;
-      }
-      const nextInvocation: any = this.scheduler
-        .nextInvocation()
-        .toDate()
-        .getTime();
-      logger.trace("next invocation: %s", nextInvocation);
-      this.state.nextAssignmentTime = nextInvocation;
-      const scheduleService = getServices().schedule;
-      // const prevOpenState = this.state.isOpen
-      const isLobbyOpen = await scheduleService.isLobbyOpen();
-      // check if this is the last attempt
-      // logger.debug("previous open state: %s current open state: %s", prevOpenState, this.state.isOpen);
-      if (!isLobbyOpen) {
-        // the lobby time window has closed, place all connected participants into games with bots if needed
-        // and close this LobbyRoom down
-        this.redistributeGroups(true);
-      }
-    }
-  }
-
-  async onAuth(client: Client, options: { token: string }, request?: http.IncomingMessage) {
+  async onAuth(client: Client, options: any, request?: http.IncomingMessage) {
     try {
       const user = await getServices().account.findUserById((request as any).session.passport.user);
       if (user.isBanned) {
-        logger.info('Banned user %s attempted to join the lobby', user.username);
+        logger.info("Banned user %s attempted to join the lobby", user.username);
         return false;
       }
       return user;
     } catch (e) {
-      logger.fatal('Unable to authenticate client: %s', e);
+      logger.fatal("Unable to authenticate client: %s", e);
     }
     return false;
   }
 
   async onJoin(client: Client, options: any, auth: any) {
-    // FIXME: need to consider how this will scale and adjust if we go to the multiple-process Colyseus route, we may
-    // need to include process ID info in the Game table so we can find how many participants a given Colyseus process is servicing
-
-    // guard against too many connections, check total number of participants + currently waiting participants against
-    // the maxConnections threshold
     const sp = getServices();
-    const roomId = await sp.game.getActiveGameRoomId(client.auth.id);
-    if (roomId) {
-      this.sendSafe(client, {
-        kind: "join-existing-game"
-      })
-      logger.info('User %d joining existing game %s', client.auth.id, roomId)
-      return;
-    }
+    // if existing room found, give option to join that room
+    // reject join if max connections reached
     const numberOfActiveParticipants = await sp.game.getNumberOfActiveParticipants();
     const maxConnections = await sp.settings.maxConnections();
-    logger.debug("active participants: %d lobby clients: %d", numberOfActiveParticipants, this.clientStats.length);
-    if (numberOfActiveParticipants + this.clientStats.length > maxConnections) {
-      // abort the connection and send an error message to the client
-      this.sendSafe(client, { kind: 'join-failure', reason: 'Sorry, Port of Mars is currently full! Please try again later.' });
-      return;
-    }
-    const userAlreadyInLobby = this.clientStats.filter(cs => cs.client.auth.id === client.auth.id).length > 0;
-    if (userAlreadyInLobby) {
-      this.sendSafe(client, {
+    if (numberOfActiveParticipants + this.state.clients.length > maxConnections) {
+      sendSafe(client, {
         kind: "join-failure",
-        reason: "You are already in the lobby. Please check your other browser windows."
-      })
+        reason: "Sorry, Port of Mars is currently full! Please try again later."
+      });
       return;
     }
-    // check if user has an invite to a tournament other than the open beta tournament
-    // FIXME: handle clients with an invite differently than open beta players
-    const hasInvite = await sp.auth.checkUserHasTournamentInvite(auth.id);
-    if (hasInvite) logger.debug("user: %s has invite to a tournament", auth.id);
-    const clientStat = {
-      client: client,
-      rank: options.rank,
-      waitingTime: 0,
-      hasInvite,
-      options
-    };
-    this.clientStats.push(clientStat);
-    this.state.waitingUserCount = this.clientStats.length;
-    this.sendSafe(client, { kind: 'joined-client-queue', value: true });
-    // first come first serve semantics, allocate groups as soon as we have enough people to allocate
-    if (this.clientStats.length >= this.numClientsToMatch) {
-      this.redistributeGroups();
+    // if user is already in lobby, reject and offer troubleshooting
+    if (this.state.clients.find((c: LobbyClient) => c.id === client.auth.id)) {
+      sendSafe(client, {
+        kind: "join-failure",
+        reason: "You are already in a lobby. Please check your other browser windows."
+      });
+      return;
     }
+    // add client to lobby
+    logger.debug("attempting to add client %s to lobby room %s", client.auth.username, this.roomId);
+    this.state.addClient(client);
+    this.resetMetadata();
   }
 
   registerLobbyHandlers(): void {
-    this.onMessage('accept-invitation', (client, message: AcceptInvitation) => {
-      logger.trace('CLIENT ACCEPTED INVITATION');
-      const clientStat = this.clientStats.find(stat => stat.client === client);
-      if (clientStat?.group) {
-        const group = clientStat.group;
-        if (!clientStat.confirmed) {
-          clientStat.confirmed = true;
-          group.confirmed++;
-        }
-        //check if this group's confirmed count matches the total number of clients it is managing
-        if (group.hasConfirmedAllClients()) {
-          // if so, let's disconnect all clients from this lobby room so they can connect to their
-          // unique game instance
-          // stat.group.cancelConfirmationTimeout!.clear();
-          group.clientStats.forEach(clientStat => {
-            const client = clientStat.client;
-            this.removeClientStat(client);
-            this.sendSafe(client, { kind: 'removed-client-from-lobby' });
-            client.leave();
-          });
-          // now remove this group from the list of groups maintained by the Lobby
-          this.removeGroup(group);
-        }
-      }
+    this.onMessage("start-with-bots", (client: Client, message: StartWithBots) => {
+      this.startWithBots(client);
     });
-    this.onMessage('distribute-groups', (client: Client, message: DistributeGroups) => {
-      if (this.devMode) {
-        logger.debug("client requested force distribute groups");
-        this.redistributeGroups(true).then(() => logger.debug("Groups redistributed"));
+    this.onMessage("vote-start-with-bots", (client: Client, message: VoteStartWithBots) => {
+      this.state.setClientReadiness(client.auth.username, message.value);
+    });
+    this.onMessage("send-lobby-chat-message", (client: Client, message: SendLobbyChatMessage) => {
+      if (client.auth.isMuted) {
+        logger.trace("client %s attempted to send a chat message while muted", client.auth.username);
+        return;
+      }
+      this.state.addChatMessage(client.auth.username, message.value);
+    });
+    this.onMessage("start-solo-with-bots", (client: Client, message: StartSoloWithBots) => {
+      this.lock();
+      this.state.setRoomReadiness(true);
+    });
+    this.onMessage("accept-invitation", (client: Client, message: AcceptInvitation) => {
+      logger.trace("client %s accepted invitation to join a game");
+      this.state.setClientLeaving(client.auth.username);
+      if (this.state.allClientsLeaving()) {
+        this.state.clients.forEach((lc: LobbyClient) => {
+          sendSafe(lc.client, { kind: "removed-client-from-lobby" });
+          lc.client.leave();
+        });
       }
     });
   }
 
-  removeGroup(group: MatchmakingGroup): void {
-    const groupIndex = this.groups.indexOf(group);
-    this.groups.splice(groupIndex, 1);
-  }
-
-  onLeave(client: Client, consented: boolean): void {
-    logger.trace('WAITING LOBBY: onLeave %s', client.id);
-    this.removeClientStat(client);
-  }
-
-  createGroup(): MatchmakingGroup {
-    logger.trace('WAITING LOBBY: createGroup');
-    const group = new MatchmakingGroup();
-    this.groups.push(group);
-    return group;
-  }
-
-  async redistributeGroups(force=false) {
-    logger.trace('WAITING LOBBY:redistributeGroups: allocating connected clients to groups', this.clientStats);
-    if (this.clientStats.length === 0) {
-      logger.trace("WAITING LOBBY: not redistributing groups, no connected clients")
-      return;
+  startWithBots(client: Client) {
+    if (client.auth.username === this.state.leader.username) {
+      this.state.setRoomReadiness(true);
     }
-    // Re-set all groups
-    const shuffledClientStats = _.shuffle(this.clientStats);
-    this.groups = [];
-    let currentGroup = this.createGroup();
-    for (const clientStat of shuffledClientStats) {
-      clientStat.waitingTime += this.clock.deltaTime;
-      // do not attempt to re-assign groups for clients inside "ready" groups
-      if (clientStat.group && clientStat.group.ready) {
-        continue;
-      }
-      // Create a new group if the current group is full.
-      if (currentGroup.isFull(this.numClientsToMatch)) {
-        currentGroup = this.createGroup();
-      }
-      // register this ClientStat with the current MatchmakingGroup
-      clientStat.group = currentGroup;
-      currentGroup.clientStats.push(clientStat);
-    }
-    await this.checkGroupsReady(force);
   }
 
-  sendSafe(client: Client, msg: WaitingResponses) {
-    client.send(msg.kind, msg);
-  }
-
-  async fillUsernames(usernames: Array<string>) {
-    // if there aren't enough users, create bots to fill in
-    if (usernames.length < this.numClientsToMatch) {
-      const requiredBots = this.numClientsToMatch - usernames.length;
+  async getFilledUsernames(): Promise<Array<string>> {
+    let usernames: Array<string> = [];
+    this.state.clients.forEach((client: LobbyClient) => {
+      usernames.push(client.username);
+    });
+    if (usernames.length < this.state.maxClients) {
+      const requiredBots = this.state.maxClients - usernames.length;
       const bots = await getServices().account.getOrCreateBotUsers(requiredBots);
-      return usernames.concat(bots.map(u => u.username)).slice(0, this.numClientsToMatch);
+      return usernames.concat(bots.map(u => u.username)).slice(0, this.state.maxClients);
     }
     return usernames;
   }
 
-  isGroupReady(group: MatchmakingGroup): boolean {
-    logger.trace('WAITING LOBBY: isGroupReady %o',{ ready: group.ready, length: group.clientStats.length });
-    return group.ready || group.clientStats.length === this.numClientsToMatch;
+  // start a game by sending invitations to all clients in the lobby
+  async sendInvitations() {
+    // set ready to false so that invitations are only sent once
+    this.state.setRoomReadiness(false);
+    const usernames = await this.getFilledUsernames();
+    const gameOpts = await buildGameOpts(usernames);
+    const room = await matchMaker.createRoom(GameRoom.NAME, gameOpts);
+    logger.info("Lobby created room %o", room);
+    // send room data for new websocket connection
+    this.state.clients.forEach((client: LobbyClient) => {
+      sendSafe(client.client, {
+        kind: "sent-invitation",
+        roomId: room.roomId,
+      });
+    });
   }
 
-  async checkGroupsReady(force: boolean) {
-    for (const group of this.groups) {
-      logger.trace('WAITING LOBBY: checking group %o', group);
-      if (this.isGroupReady(group) || force) {
-        logger.debug('WAITING LOBBY: group was ready, creating room');
-        group.ready = true;
-        group.confirmed = 0;
-        // FIXME: for dev mode, make sure there are at least 5 valid usernames after taking into account
-        // connected usernames
-        const usernames = _.shuffle(await this.fillUsernames(group.clientStats.map(s => s.client.auth.username)));
-        // build game options to register the usernames and persister with a newly created room
-        const gameOpts = await buildGameOpts(usernames);
-        // Create room instance in the server.
-        const room = await matchMaker.createRoom(
-          GameRoom.NAME,
-          gameOpts
-        );
-        logger.debug('WAITING LOBBY: created room %o', room);
-        await Promise.all(
-          group.clientStats.map(async client => {
-            logger.debug('sending roomId', room.roomId, ' for client', client);
-            // Send room data for new WebSocket connection
-            this.sendSafe(client.client, {
-              kind: 'sent-invitation',
-              roomId: room.roomId
-            });
-          })
-        );
-      }
-    }
-  }
-
-  removeClientStat(client: Client) {
-    const index = this.clientStats.findIndex(stat => stat.client === client);
-    if (index > -1) {
-      logger.trace('WAITING LOBBY: removing client stat ', client.id);
-      this.clientStats.splice(index, 1);
-      this.state.waitingUserCount = this.clientStats.length;
-    }
+  resetMetadata() {
+    const leader = this.state.leader ? this.state.leader.username : "";
+    this.setMetadata({ dateCreated: this.state.dateCreated, leader });
   }
 
 }

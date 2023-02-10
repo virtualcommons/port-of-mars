@@ -3,6 +3,7 @@ import chat from './chat';
 import gameState from './gameState';
 import investment from './investment';
 import layout from './layout';
+import lobby from './lobby';
 import notifications from './notifications';
 import player from './player';
 import roundIntroduction from './roundIntroduction';
@@ -51,6 +52,7 @@ export default {
   ...gameState,
   ...investment,
   ...layout,
+  ...lobby,
   ...notifications,
   ...player,
   ...roundIntroduction,

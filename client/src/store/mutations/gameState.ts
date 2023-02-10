@@ -70,7 +70,7 @@ function SET_EVENT_VISIBILITY(state: State, payload: { id: number; visibility: b
 
 function SET_USER(state: State, payload: User) {
   state.user = _.pick(payload, [
-    "username", "isAdmin", "passedQuiz", "participantId", "isVerified"
+    "id", "username", "isAdmin", "isMuted", "isBanned", "passedQuiz", "participantId", "isVerified"
   ]);
 }
 

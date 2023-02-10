@@ -11,7 +11,7 @@ import { Client, Room } from "colyseus.js";
 import { applyGameServerResponses } from "@port-of-mars/client/api/game/response";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 import { url } from "@port-of-mars/client/util";
-import { DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
+import { LOBBY_PAGE } from "@port-of-mars/shared/routes";
 import { SfxManager } from "@port-of-mars/client/util";
 
 @Component({
@@ -64,7 +64,7 @@ export default class Game extends Vue {
         });
       }
       console.error("Unable to join room: ", e);
-      this.$router.push({ name: DASHBOARD_PAGE });
+      this.$router.push({ name: LOBBY_PAGE });
     }
   }
 

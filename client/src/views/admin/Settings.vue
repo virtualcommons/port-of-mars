@@ -36,7 +36,8 @@
                 ></b-form-input>
               </b-form-group>
             </div>
-            <div class="mb-4" id="scheduling">
+            <!-- Disabled until needed -->
+            <!-- <div class="mb-4" id="scheduling">
               <h4>Scheduling</h4>
               <hr class="my-2">
               <b-form-group
@@ -113,39 +114,7 @@
                   required
                 ></b-form-input>
               </b-form-group>
-            </div>
-            <div class="mb-4" id="lobby">
-              <h4>Lobby</h4>
-              <hr class="my-2">
-              <b-form-group
-                id="assignment-group"
-                label="Group Assignment Interval (minutes)"
-                label-for="assignment"
-                description="The number of minutes between each time the server will attempt to form full 5-person groups."
-              >
-                <b-form-input class="custom-form-input"
-                  id="assignment"
-                  type="number"
-                  min="1" max="15"
-                  v-model="form.lobbyGroupAssignmentInterval"
-                  required
-                ></b-form-input>
-              </b-form-group>
-              <b-form-group
-                id="force-assignment-group"
-                label="Forced Assignment Interval (minutes)"
-                label-for="force-assignment"
-                description="The number of minutes until the server will force any players into a group with bots. -1 to disable."
-              >
-                <b-form-input class="custom-form-input"
-                  id="force-assignment"
-                  type="number"
-                  min="-1" max="45"
-                  v-model="form.lobbyForceGroupAssignmentInterval"
-                  required
-                ></b-form-input>
-              </b-form-group>
-            </div>
+            </div> -->
             <b-button class="mr-2" type="submit" variant="success">Save</b-button>
             <b-button class="mr-2" type="reset" variant="primary">Reset</b-button>
           </b-form>
@@ -173,8 +142,6 @@ export default class Reports extends Vue {
     autoSchedulerHourInterval: 0,
     lobbyOpenBeforeOffset: 0,
     lobbyOpenAfterOffset: 0,
-    lobbyGroupAssignmentInterval: 0,
-    lobbyForceGroupAssignmentInterval: 0
   };
 
   intervalOptions = [

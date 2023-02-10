@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
+import { LOBBY_PAGE } from "@port-of-mars/shared/routes";
 import { url } from "@port-of-mars/client/util";
 
 @Component({})
@@ -49,7 +49,7 @@ export default class Verify extends Vue {
         kind: "success",
         message: "Email successfully verified."
       });
-      this.$router.push({ name: DASHBOARD_PAGE });
+      this.$router.push({ name: LOBBY_PAGE });
     });
   }
 }

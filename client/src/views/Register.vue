@@ -16,8 +16,8 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import Messages from "@port-of-mars/client/components/dashboard/Messages.vue";
-import ConsentForm from "@port-of-mars/client/components/dashboard/Consent.vue";
+import Messages from "@port-of-mars/client/components/global/Messages.vue";
+import ConsentForm from "@port-of-mars/client/components/global/Consent.vue";
 
 @Component({
   components: { Messages, ConsentForm }
@@ -26,9 +26,4 @@ export default class Register extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-#consent-wrapper {
-  // background: url("../assets/images/bg-dark-moon.png");
-  // background-position: center;
-}
-
 </style>

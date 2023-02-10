@@ -25,7 +25,7 @@
         </div>
       </div>
     </div>
-    <router-link :to="dashboard">
+    <router-link :to="lobby">
       <button class="lobby-button">Continue</button>
     </router-link>
   </div>
@@ -33,20 +33,14 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
+import { LOBBY_PAGE } from "@port-of-mars/shared/routes";
 
 @Component({
   name: "tutorialComplete",
   components: {}
 })
 export default class CompletedQuizModal extends Vue {
-  get dashboard() {
-    return { name: DASHBOARD_PAGE };
-  }
-  // async gotoDashboard() {
-  //   await this.$router.push({ name: DASHBOARD_PAGE });
-  //   return;
-  // }
+  lobby = { name: LOBBY_PAGE };
 }
 </script>
 

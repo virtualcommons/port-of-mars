@@ -3,7 +3,7 @@ import _ from "lodash";
 import { VueRouter } from "vue-router/types/router";
 import { TStore } from "@port-of-mars/client/plugins/tstore";
 import { RoomId } from "@port-of-mars/shared/types";
-import { LOGIN_PAGE, DASHBOARD_PAGE, REGISTER_PAGE, HOME_PAGE } from "@port-of-mars/shared/routes";
+import { LOGIN_PAGE, LOBBY_PAGE, REGISTER_PAGE, HOME_PAGE } from "@port-of-mars/shared/routes";
 import { DashboardMessage } from "@port-of-mars/shared/types";
 import { url } from "@port-of-mars/client/util";
 import { initialUserState } from '@port-of-mars/shared/game/client/state';
@@ -37,8 +37,8 @@ export class AjaxRequest {
 
   errorRoutes: Map<number, string> = new Map([
     [401, LOGIN_PAGE],
-    [403, DASHBOARD_PAGE],
-    [404, DASHBOARD_PAGE],
+    [403, REGISTER_PAGE],
+    [404, LOBBY_PAGE],
   ]);
 
   set roomId(r: RoomId | undefined) {
@@ -54,7 +54,7 @@ export class AjaxRequest {
     await this.post(devLoginUrl, ({ data, status }) => {
       if (status === 200) {
         this.store.commit("SET_USER", data.user);
-        if (data.user.isVerified) this.router.push({ name: DASHBOARD_PAGE });
+        if (data.user.isVerified) this.router.push({ name: LOBBY_PAGE });
         else this.router.push({ name: REGISTER_PAGE });
       } else {
         return data;
@@ -115,7 +115,7 @@ export class AjaxRequest {
       const serverErrorMessage: DashboardMessage = data;
       this.store.commit('SET_DASHBOARD_MESSAGE', serverErrorMessage);
       if (response.status > 400) {
-        const destinationPage = this.errorRoutes.has(response.status) ? this.errorRoutes.get(response.status) : DASHBOARD_PAGE;
+        const destinationPage = this.errorRoutes.has(response.status) ? this.errorRoutes.get(response.status) : REGISTER_PAGE;
         this.router.push({ name: destinationPage })
       }
     }
