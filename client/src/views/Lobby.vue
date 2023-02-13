@@ -56,7 +56,7 @@ export default class Lobby extends Vue {
   }
 
   async checkCanPlay() {
-    await this.$ajax.get(url("/registration/authenticated"), ({ data, status }) => {
+    await this.$ajax.get(url("/registration/authenticated"), ({ data }) => {
       if (data) {
         if (!data.isVerified || !data.dateConsented) {
           this.$router.push(this.register);

@@ -12,6 +12,7 @@
     >
       <template v-slot="tour">
         <transition name="fade">
+          <!-- eslint-disable vue/no-use-v-if-with-v-for -->
           <v-step
             v-if="tour.currentStep === index"
             v-for="(step, index) of tour.steps"
@@ -123,8 +124,7 @@ import { QuizAPI } from "@port-of-mars/client/api/tutorial/quiz";
 import { TutorialAPI } from "@port-of-mars/client/api/tutorial/request";
 import { tutorialSteps } from "@port-of-mars/client/api/tutorial/steps";
 import { Step } from "@port-of-mars/client/types/tutorial";
-import { url } from "@port-of-mars/client/util";
-import { CURATOR, Phase, QuizQuestionData, RESEARCHER } from "@port-of-mars/shared/types";
+import { QuizQuestionData } from "@port-of-mars/shared/types";
 
 import { isStagingOrProduction, isTest } from "@port-of-mars/shared/settings";
 
@@ -258,7 +258,7 @@ export default class Tutorial extends Vue {
     this.api.registerRef(this.$refs.forwardButton);
   }
 
-  async stopTourCallback(currentStep: number) {
+  async stopTourCallback() {
     await this.$el.classList.remove(this.BODY_TOUR);
     await this.$el
       .querySelector(`.${this.TOUR_ACTIVE_CLASS}`)!

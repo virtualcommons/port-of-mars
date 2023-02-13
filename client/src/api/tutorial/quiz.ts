@@ -30,12 +30,12 @@ export class QuizAPI {
     if (this.ajax.submissionId) {
       const retrieveSubmissionUrl = `${this.quizSubmissionEndpoint}/${this.ajax.submissionId}`;
       console.log(`retrieving quiz submission with id ${this.ajax.submissionId}`);
-      return await this.ajax.get(retrieveSubmissionUrl, ({ data, status }: any) => {
+      return await this.ajax.get(retrieveSubmissionUrl, ({ data }: any) => {
         return this.setQuizSubmissionData(data);
       });
     }
     const createQuizSubmissionUrl = this.quizSubmissionEndpoint;
-    return await this.ajax.post(createQuizSubmissionUrl, ({ data, status }: any) => {
+    return await this.ajax.post(createQuizSubmissionUrl, ({ data }: any) => {
       console.log("creating new quiz submission");
       return this.setQuizSubmissionData(data);
     });
@@ -45,11 +45,9 @@ export class QuizAPI {
   public async checkQuizQuestion(questionId: number, answer: number): Promise<boolean> {
     // FIXME: extract this and other URLs to shared/routes or elsewhere
     const submitResponseUrl = `${this.quizSubmissionEndpoint}/${this.ajax.submissionId}/${questionId}`;
-    return await this.ajax.post(
-      submitResponseUrl,
-      ({ data, status }: any) => Promise.resolve(data),
-      { answer: answer }
-    );
+    return await this.ajax.post(submitResponseUrl, ({ data }: any) => Promise.resolve(data), {
+      answer: answer,
+    });
   }
 
   //check for completion
@@ -59,7 +57,7 @@ export class QuizAPI {
     // quiz completion endpoint returns an array of incorrect question ids
     let status = [];
     try {
-      status = await this.ajax.get(quizCompletionUrl, ({ data, status }: any) => {
+      status = await this.ajax.get(quizCompletionUrl, ({ data }: any) => {
         return data;
       });
       console.log("QUIZ COMPLETION: ");
@@ -70,7 +68,6 @@ export class QuizAPI {
         this.notifyUserOfError("checkQuizCompletion (response)", error);
       }
     } finally {
-      this.ajax.setQuizCompletion(status.length === 0);
       console.log("USER HAS COMPLETED QUIZ:", status);
     }
   }

@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Inject, InjectReactive } from "vue-property-decorator";
+import { Vue, Component, Prop, Inject } from "vue-property-decorator";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 
 @Component({})

@@ -1,5 +1,5 @@
 import { State } from "@port-of-mars/shared/game/client/state";
-import { MarsLogMessageData, Role } from "@port-of-mars/shared/types";
+import { MarsLogMessageData } from "@port-of-mars/shared/types";
 
 export default {
   ADD_TO_MARS_LOG(state: State, payload: MarsLogMessageData) {

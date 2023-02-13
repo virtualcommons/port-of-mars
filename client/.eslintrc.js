@@ -14,6 +14,9 @@ module.exports = {
     "no-useless-constructor": "off",
     "no-empty-function": "off",
     "import/prefer-default-export": "off",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["warn", { destructuredArrayIgnorePattern: "^_" }],
+    "vue/multi-word-component-names": "off",
   },
   ignorePatterns: [
     "node_modules/*",

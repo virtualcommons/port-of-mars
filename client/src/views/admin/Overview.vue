@@ -60,7 +60,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 import { AdminAPI } from "@port-of-mars/client/api/admin/request";
 import { AdminStats } from "@port-of-mars/shared/types";
 import AdminStatCard from "@port-of-mars/client/components/admin/AdminStatCard.vue";

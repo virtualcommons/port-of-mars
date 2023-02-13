@@ -12,7 +12,7 @@ export class SfxCache {
 
   constructor() {
     this.cache = {};
-    for (const [name, relpath] of Object.entries(Sfx)) {
+    for (const [_name, relpath] of Object.entries(Sfx)) {
       this.cache[relpath] = new Howl({
         src: require(`@port-of-mars/client/assets/sfx/${relpath}`),
       });

@@ -1,5 +1,5 @@
 import { Step, LEFT } from "@port-of-mars/client/types/tutorial";
-import { ServerRole, RESEARCHER } from "@port-of-mars/shared/types";
+import { RESEARCHER } from "@port-of-mars/shared/types";
 
 const steps: Array<Step> = [
   {

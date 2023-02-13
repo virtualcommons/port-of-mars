@@ -69,10 +69,6 @@ export class AjaxRequest {
     return this.store.state.user.username;
   }
 
-  setQuizCompletion(passedQuiz: boolean) {
-    // no-op
-  }
-
   async denyConsent() {
     await this.post(url("/registration/deny-consent"), () => {});
     this.store.commit("SET_DASHBOARD_MESSAGE", {

@@ -4,7 +4,7 @@ import { AccomplishmentData, Role } from "@port-of-mars/shared/types";
 
 export default {
   DISCARD_ACCOMPLISHMENT(state: State, payload: { id: number; role: Role }) {
-    let index = _.findIndex(
+    const index = _.findIndex(
       state.players[payload.role].accomplishments.purchasable,
       (e: AccomplishmentData) => e.id === payload.id
     );

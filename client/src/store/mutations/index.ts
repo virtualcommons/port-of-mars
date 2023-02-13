@@ -15,12 +15,12 @@ import { DashboardMessage, Role, SystemHealthChangesData } from "@port-of-mars/s
 import _ from "lodash";
 
 export default {
-  RESET_STATE(state: State, options?: any) {
+  RESET_STATE(state: State) {
     Object.assign(state, _.cloneDeep(initialStoreState));
   },
 
   // reset game state, leaving user data, etc. intact
-  RESET_GAME_STATE(state: State, options?: any) {
+  RESET_GAME_STATE(state: State) {
     Object.assign(state, { ...state, ...initialGameState });
   },
 

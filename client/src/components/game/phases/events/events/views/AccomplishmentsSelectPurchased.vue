@@ -48,7 +48,6 @@ import EventNoChange from "@port-of-mars/client/components/game/phases/events/ev
 import { AccomplishmentCardType } from "@port-of-mars/client/types/cards";
 import { AccomplishmentData, MarsEventData, RESEARCHER } from "@port-of-mars/shared/types";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
-import _ from "lodash";
 
 @Component({
   components: {

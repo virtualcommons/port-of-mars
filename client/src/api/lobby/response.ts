@@ -1,12 +1,6 @@
 import { Room } from "colyseus.js";
 import { DataChange, Schema } from "@colyseus/schema";
-import {
-  JoinedClientQueue,
-  SentInvitation,
-  RemovedClientFromLobby,
-  JoinFailure,
-  JoinExistingGame,
-} from "@port-of-mars/shared/lobby/responses";
+import { SentInvitation, JoinFailure } from "@port-of-mars/shared/lobby/responses";
 import { LobbyChatMessageData, LobbyClientData } from "@port-of-mars/shared/types";
 import { LOBBY_PAGE, GAME_PAGE } from "@port-of-mars/shared/routes";
 
@@ -16,7 +10,7 @@ function deschemify<T>(s: Schemify<T>): T {
   return s.toJSON() as T;
 }
 
-export function applyLobbyResponses<T>(room: Room, component: any) {
+export function applyLobbyResponses(room: Room, component: any) {
   const store = component.$tstore;
   const router = component.$router;
 
@@ -42,15 +36,15 @@ export function applyLobbyResponses<T>(room: Room, component: any) {
     }, 5 * 1000);
   });
 
-  room.onMessage("removed-client-from-lobby", (msg: RemovedClientFromLobby) => {
+  room.onMessage("removed-client-from-lobby", () => {
     router.push({ name: GAME_PAGE });
   });
 
-  room.onMessage("join-existing-game", (msg: JoinExistingGame) => {
+  room.onMessage("join-existing-game", () => {
     router.push({ name: GAME_PAGE });
   });
 
-  room.state.clients.onAdd = (e: Schemify<LobbyClientData>, key: string) => {
+  room.state.clients.onAdd = (e: Schemify<LobbyClientData>) => {
     store.commit("ADD_TO_LOBBY_CLIENTS", deschemify(e));
     e.onChange = (changes: DataChange[]) => {
       changes.forEach(change => {
@@ -64,11 +58,11 @@ export function applyLobbyResponses<T>(room: Room, component: any) {
     };
   };
 
-  room.state.clients.onRemove = (e: Schemify<LobbyClientData>, key: string) => {
+  room.state.clients.onRemove = (e: Schemify<LobbyClientData>) => {
     store.commit("REMOVE_FROM_LOBBY_CLIENTS", deschemify(e));
   };
 
-  room.state.chat.onAdd = (e: Schemify<LobbyChatMessageData>, key: string) => {
+  room.state.chat.onAdd = (e: Schemify<LobbyChatMessageData>) => {
     store.commit("ADD_TO_LOBBY_CHAT", deschemify(e));
   };
 }

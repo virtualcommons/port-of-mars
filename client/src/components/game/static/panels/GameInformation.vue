@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Inject } from "vue-property-decorator";
+import { Vue, Component, Inject } from "vue-property-decorator";
 import { Phase, PHASE_LABELS } from "@port-of-mars/shared/types";
 import { AbstractGameAPI } from "@port-of-mars/client/api/game/types";
 
@@ -96,9 +96,8 @@ export default class GameInformation extends Vue {
       case Phase.invest:
         pendingInvestments = this.$tstore.getters.player.pendingInvestments;
         this.api.investTimeBlocks(pendingInvestments);
-      default:
-        this.api.setPlayerReadiness(true);
     }
+    this.api.setPlayerReadiness(true);
   }
 
   submitCancel() {

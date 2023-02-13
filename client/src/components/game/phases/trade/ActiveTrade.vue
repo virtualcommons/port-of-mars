@@ -153,14 +153,15 @@ export default class ActiveTrade extends Vue {
   get hasSufficientResources() {
     // retrieve local player's inventory
     const inventory = this.$store.state.players[this.role].inventory;
-    let validTrade: boolean = canPlayerMakeTrade(this.recipient.resourceAmount, inventory);
-
+    let validTrade = canPlayerMakeTrade(this.recipient.resourceAmount, inventory);
     if (this.role === this.recipient.role) {
       console.log(
         "canPlayerMakeTrade if you are recipient: ",
         canPlayerMakeTrade(this.recipient.resourceAmount, inventory)
       );
       return validTrade;
+    } else {
+      return false;
     }
   }
 

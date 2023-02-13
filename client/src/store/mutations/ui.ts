@@ -68,7 +68,7 @@ function SET_TOGGLE_YOUR_TRADES(state: State, payload: boolean) {
   state.userInterface.toggleYourTrades = payload;
 }
 
-function RESET_TRADE_MODAL(state: State, payload: any) {
+function RESET_TRADE_MODAL(state: State) {
   state.ui.tradeData = defaultTradeData();
 }
 

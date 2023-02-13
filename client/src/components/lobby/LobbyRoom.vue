@@ -190,7 +190,7 @@ export default class LobbyRoom extends Vue {
 
   beforeDestroy() {
     this.api.leave();
-    this.$tstore.commit("RESET_LOBBY_STATE", {});
+    this.$tstore.commit("RESET_LOBBY_STATE");
   }
 }
 </script>

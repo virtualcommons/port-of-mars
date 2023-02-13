@@ -182,7 +182,7 @@ export default class Reports extends Vue {
           solid: true,
         });
       })
-      .catch(err => {
+      .catch(() => {
         this.$bvToast.toast("Failed to update settings", {
           title: "Error",
           variant: "danger",

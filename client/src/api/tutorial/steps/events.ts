@@ -1,4 +1,3 @@
-import { StateTransform } from "./../../../types/tutorial";
 import { Step, RIGHT } from "@port-of-mars/client/types/tutorial";
 import { Phase, RESEARCHER } from "@port-of-mars/shared/types";
 

@@ -1,21 +1,7 @@
-import {
-  AccomplishmentData,
-  AccomplishmentSetData,
-  MarsEventData,
-  Phase,
-  PlayerData,
-  PlayerSetData,
-  Role,
-  ROLES,
-} from "@port-of-mars/shared/types";
+import { MarsEventData, Phase, Role } from "@port-of-mars/shared/types";
 import { Vue } from "vue-property-decorator";
 import * as _ from "lodash";
-import {
-  defaultPendingInvestment,
-  PlayerClientData,
-  State,
-  User,
-} from "@port-of-mars/shared/game/client/state";
+import { State, User } from "@port-of-mars/shared/game/client/state";
 
 function SET_GAME_PHASE(state: State, payload: Phase) {
   state.phase = payload;

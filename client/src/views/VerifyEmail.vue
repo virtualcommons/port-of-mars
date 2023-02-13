@@ -43,7 +43,7 @@ export default class Verify extends Vue {
 
   async submit() {
     console.log(`POSTING TO ${this.verifyUrl}`);
-    await this.$ajax.post(this.verifyUrl, ({ data, status }) => {
+    await this.$ajax.post(this.verifyUrl, () => {
       // FIXME: these types of store commits should be abstracted away by a coherent store API that all Vue components talk to
       this.$tstore.commit("SET_DASHBOARD_MESSAGE", {
         kind: "success",

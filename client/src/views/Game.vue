@@ -35,7 +35,7 @@ export default class Game extends Vue {
     console.log({ cachedRoomId });
     if (!cachedRoomId) {
       try {
-        await this.$ajax.get(url("/game/latest-active"), ({ data, status }) => {
+        await this.$ajax.get(url("/game/latest-active"), ({ data }) => {
           roomId = data;
         });
       } catch (e) {
@@ -70,7 +70,7 @@ export default class Game extends Vue {
 
   destroyed() {
     if (this.api.room) this.api.room.leave();
-    this.$tstore.commit("RESET_GAME_STATE", {});
+    this.$tstore.commit("RESET_GAME_STATE");
   }
 }
 </script>

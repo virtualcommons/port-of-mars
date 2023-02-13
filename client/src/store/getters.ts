@@ -78,7 +78,7 @@ export default {
    *
    */
   otherPlayers(state: State): Partial<PlayerClientSet> {
-    let op: Partial<PlayerClientSet> = {};
+    const op: Partial<PlayerClientSet> = {};
     for (const role of ROLES) {
       if (role !== state.role) {
         op[role] = state.players[role];
@@ -151,7 +151,7 @@ export default {
     return !(solarFlareIndex !== -1 && eventProcessedIndex <= eventProcessedIndex);
   },
 
-  categoryColorMap(state: State): Map<string, string> {
+  categoryColorMap(): Map<string, string> {
     return new Map([
       // round
       [MarsLogCategory.newRound, "var(--light-shade-05)"],

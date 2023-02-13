@@ -58,21 +58,21 @@ function applyCostResponses(role: Role, costs: any, store: TStore) {
 }
 
 function applyAccomplishmentResponse(role: Role, accomplishment: any, store: TStore) {
-  accomplishment.purchased.onAdd = (acc: any, index: number) => {
+  accomplishment.purchased.onAdd = (acc: any) => {
     const purchasedAccomplishment = deschemify(acc);
     store.commit("ADD_TO_PURCHASED_ACCOMPLISHMENTS", { role, data: purchasedAccomplishment });
   };
-  accomplishment.purchased.onRemove = (acc: any, index: number) => {
+  accomplishment.purchased.onRemove = (acc: any) => {
     const data = deschemify(acc);
     store.commit("REMOVE_FROM_PURCHASED_ACCOMPLISHMENTS", { role, data });
   };
 
-  accomplishment.purchasable.onAdd = (acc: any, index: number) => {
+  accomplishment.purchasable.onAdd = (acc: any) => {
     const purchasableAccomplishment = deschemify(acc);
     store.commit("ADD_TO_PURCHASABLE_ACCOMPLISHMENTS", { role, data: purchasableAccomplishment });
   };
 
-  accomplishment.purchasable.onRemove = (acc: any, index: number) => {
+  accomplishment.purchasable.onRemove = (acc: any) => {
     store.commit("REMOVE_FROM_PURCHASABLE_ACCOMPLISHMENTS", { role, data: deschemify(acc) });
   };
 }
@@ -123,39 +123,29 @@ function applyRoundIntroductionResponses(roundIntroduction: any, store: TStore) 
     });
   };
 
-  roundIntroduction.systemHealthMarsEvents.onAdd = (
-    e: Schemify<SystemHealthMarsEventData>,
-    index: number
-  ) => {
+  roundIntroduction.systemHealthMarsEvents.onAdd = (e: Schemify<SystemHealthMarsEventData>) => {
     store.commit("ADD_TO_ROUND_INTRO_SYSTEM_HEALTH_MARS_EVENTS", deschemify(e));
   };
 
-  roundIntroduction.systemHealthMarsEvents.onRemove = (
-    e: Schemify<SystemHealthMarsEventData>,
-    index: number
-  ) => {
+  roundIntroduction.systemHealthMarsEvents.onRemove = (e: Schemify<SystemHealthMarsEventData>) => {
     store.commit("REMOVE_FROM_ROUND_INTRO_SYSTEM_HEALTH_MARS_EVENTS", deschemify(e));
   };
 
-  roundIntroduction.accomplishmentPurchases.onAdd = (
-    e: Schemify<AccomplishmentPurchaseData>,
-    index: number
-  ) => {
+  roundIntroduction.accomplishmentPurchases.onAdd = (e: Schemify<AccomplishmentPurchaseData>) => {
     store.commit("ADD_TO_ROUND_INTRO_ACCOMPLISHMENT_PURCHASES", deschemify(e));
   };
 
   roundIntroduction.accomplishmentPurchases.onRemove = (
-    e: Schemify<AccomplishmentPurchaseData>,
-    index: number
+    e: Schemify<AccomplishmentPurchaseData>
   ) => {
     store.commit("REMOVE_FROM_ROUND_INTRO_ACCOMPLISHMENT_PURCHASES", deschemify(e));
   };
 
-  roundIntroduction.completedTrades.onAdd = (e: Schemify<TradeData>, index: number) => {
+  roundIntroduction.completedTrades.onAdd = (e: Schemify<TradeData>) => {
     store.commit("ADD_TO_ROUND_INTRO_COMPLETED_TRADES", deschemify(e));
   };
 
-  roundIntroduction.completedTrades.onRemove = (e: Schemify<TradeData>, index: number) => {
+  roundIntroduction.completedTrades.onRemove = (e: Schemify<TradeData>) => {
     store.commit("REMOVE_FROM_ROUND_INTRO_COMPLETED_TRADES", deschemify(e));
   };
 
@@ -170,7 +160,7 @@ const REFRESHABLE_WEBSOCKET_ERROR_CODES = [
   1002, 1003, 1005, 1006, 1007, 1008, 1009, 1010, 1011, 1012, 1013, 1014, 1015,
 ];
 
-export function applyGameServerResponses<T>(room: Room, store: TStore, sfx: SfxManager) {
+export function applyGameServerResponses(room: Room, store: TStore, sfx: SfxManager) {
   room.onStateChange.once((state: Schemify<GameData>) => {
     ROLES.forEach(role => applyPlayerResponses(role, state.players[role], store));
     // FIXME: needed to bootstrap / synchronize the client side players with the server
@@ -217,29 +207,29 @@ export function applyGameServerResponses<T>(room: Room, store: TStore, sfx: SfxM
   });
 
   // eslint-disable-next-line no-param-reassign
-  room.state.messages.onAdd = (msg: Schemify<ChatMessageData>, key: number) => {
+  room.state.messages.onAdd = (msg: Schemify<ChatMessageData>) => {
     store.commit("ADD_TO_CHAT", deschemify(msg));
   };
 
-  room.state.messages.onRemove = (msg: Schemify<ChatMessageData>, index: number) => {
+  room.state.messages.onRemove = (msg: Schemify<ChatMessageData>) => {
     store.commit("REMOVE_FROM_CHAT", deschemify(msg));
   };
 
-  room.state.logs.onAdd = (logMsg: Schemify<MarsLogMessageData>, index: number) => {
+  room.state.logs.onAdd = (logMsg: Schemify<MarsLogMessageData>) => {
     store.commit("ADD_TO_MARS_LOG", deschemify(logMsg));
   };
 
-  room.state.logs.onRemove = (logMsg: Schemify<MarsLogMessageData>, index: number) => {
+  room.state.logs.onRemove = (logMsg: Schemify<MarsLogMessageData>) => {
     store.commit("REMOVE_FROM_MARS_LOG", deschemify(logMsg));
   };
 
   // RESPONSES FOR EVENTS :: START
 
-  room.state.marsEvents.onAdd = (e: Schemify<MarsEventData>, index: number) => {
+  room.state.marsEvents.onAdd = (e: Schemify<MarsEventData>) => {
     store.commit("ADD_TO_EVENTS", deschemify(e));
   };
 
-  room.state.marsEvents.onRemove = (e: Schemify<MarsEventData>, index: number) => {
+  room.state.marsEvents.onRemove = (e: Schemify<MarsEventData>) => {
     store.commit("REMOVE_FROM_EVENTS", deschemify(e));
   };
 

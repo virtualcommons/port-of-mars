@@ -59,7 +59,6 @@ import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 export default class Events extends Vue {
   @Inject() readonly api!: GameRequestAPI;
 
-  selectedView: string = "Event Deck";
   currentEventModalId: string = "";
 
   // NOTE :: LIFECYCLE HOOKS & WATCHERS
@@ -101,13 +100,6 @@ export default class Events extends Vue {
 
   // NOTE :: VIEW HANDLING
 
-  @Watch("eventsProcessed", { immediate: true })
-  onEventsProcessedChange(val: any, oldVal: any) {
-    if (this.selectedView === "Active Accomplishments") {
-      this.selectedView = "Event Deck";
-    }
-  }
-
   // show event modal when there is a new event
   @Watch("currentEvent", { deep: true, immediate: true })
   onNewEvent(event: any) {
@@ -115,10 +107,6 @@ export default class Events extends Vue {
     let timestamp: number = Date.now();
     let modalId: string = `event-modal-${event.id}-${timestamp}`;
     this.currentEventModalId = modalId;
-  }
-
-  switchView(view: string) {
-    this.selectedView = view;
   }
 
   eventVisible(index: number) {

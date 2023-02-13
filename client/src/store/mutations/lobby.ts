@@ -36,7 +36,7 @@ export default {
     state.lobby.dateCreated = payload;
   },
 
-  RESET_LOBBY_STATE(state: State, options?: any) {
+  RESET_LOBBY_STATE(state: State) {
     console.log(defaultLobbyState().clients);
     state.lobby = defaultLobbyState();
   },

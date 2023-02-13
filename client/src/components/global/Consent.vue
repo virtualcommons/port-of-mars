@@ -247,7 +247,7 @@ export default class Consent extends Vue {
       const formData = { username: this.username, email: this.email, name: this.name };
       await this.$ajax.post(
         this.grantConsentUrl,
-        ({ data, status }) => {
+        ({ status }) => {
           if (status === 200) {
             this.$tstore.state.user.username = this.username;
             // temporarily disable verification

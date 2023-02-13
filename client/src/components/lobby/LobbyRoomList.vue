@@ -33,7 +33,7 @@
             </b-button>
           </template>
           <template #cell(dateCreated)></template>
-          <template #head(action)="data">
+          <template #head(action)>
             <b-button
               v-if="!refreshingRoomList"
               size="sm"

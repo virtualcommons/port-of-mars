@@ -100,7 +100,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 import { AdminAPI } from "@port-of-mars/client/api/admin/request";
 import { InspectData } from "@port-of-mars/shared/types";
 import Chat from "@port-of-mars/client/components/game/static/chat/Chat.vue";

@@ -1,4 +1,4 @@
-import { Step, LEFT, TOP, RIGHT, BOTTOM } from "@port-of-mars/client/types/tutorial";
+import { Step, LEFT, RIGHT } from "@port-of-mars/client/types/tutorial";
 import { Phase, RESEARCHER, CURATOR } from "@port-of-mars/shared/types";
 
 const steps: Array<Step> = [

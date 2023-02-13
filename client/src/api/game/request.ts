@@ -284,6 +284,6 @@ export class GameRequestAPI implements AbstractGameAPI {
   }
 
   public resetTradeModal() {
-    this.store.commit("RESET_TRADE_MODAL", null);
+    this.store.commit("RESET_TRADE_MODAL");
   }
 }

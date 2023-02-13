@@ -1,6 +1,5 @@
 import {
   AccomplishmentData,
-  InvestmentData,
   Resource,
   ResourceAmountData,
   Role,
@@ -52,19 +51,6 @@ export class TutorialAPI implements AbstractGameAPI {
   setNextPhase(): void {}
 
   resetGame(): void {}
-
-  savePersonalGainVote(vote: boolean): void {}
-
-  voteForPhilanthropist(vote: Role): void {}
-
-  saveBondingThroughAdversitySelection(influenceVoteData: {
-    role: Role;
-    influence: Resource;
-  }): void {}
-
-  saveBreakdownOfTrust(savedResources: InvestmentData): void {}
-
-  stageDiscardOfPurchasedAccomplishment(id: number) {}
 
   /*
     This adds the sigular state transform it received to the state

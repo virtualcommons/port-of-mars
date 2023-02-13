@@ -10,7 +10,7 @@ export interface TStore {
 
   commit<K extends keyof typeof Mutations>(
     name: K,
-    payload: Parameters<(typeof Mutations)[K]>[1]
+    payload?: Parameters<(typeof Mutations)[K]>[1]
   ): void;
 }
 
@@ -21,7 +21,7 @@ declare module "vue/types/vue" {
 }
 
 export const TypedStore = {
-  install(instance: VueConstructor, options: any) {
+  install(instance: VueConstructor) {
     Object.defineProperty(instance.prototype, "$tstore", {
       get: function (this: { $store: Store<any> }) {
         return this.$store;

@@ -6,7 +6,6 @@ import {
   ModerationActionData,
   InspectData,
   DynamicSettingsData,
-  GameStatus,
 } from "@port-of-mars/shared/types";
 import { TStore } from "@port-of-mars/client/plugins/tstore";
 import { AjaxRequest } from "@port-of-mars/client/plugins/ajax";
@@ -16,7 +15,7 @@ export class AdminAPI {
 
   async getAdminStats(): Promise<AdminStats> {
     try {
-      return await this.ajax.get(url("/admin/stats"), ({ data, status }) => {
+      return await this.ajax.get(url("/admin/stats"), ({ data }) => {
         return data;
       });
     } catch (e) {
@@ -28,7 +27,7 @@ export class AdminAPI {
 
   async getSettings(): Promise<DynamicSettingsData> {
     try {
-      return await this.ajax.get(url("/admin/settings"), ({ data, status }) => {
+      return await this.ajax.get(url("/admin/settings"), ({ data }) => {
         return data;
       });
     } catch (e) {
@@ -42,7 +41,7 @@ export class AdminAPI {
     try {
       await this.ajax.post(
         url("/admin/settings"),
-        ({ data, status }) => {
+        ({ status }) => {
           if (status !== 200) throw "Error submitting dynamic settings";
         },
         data
@@ -62,7 +61,7 @@ export class AdminAPI {
   ): Promise<any> {
     const params = `&start=${start}&end=${end}&bots=${bots}&defeats=${defeats}`;
     try {
-      return await this.ajax.get(url("/admin/completed-games?" + params), ({ data, status }) => {
+      return await this.ajax.get(url("/admin/completed-games?" + params), ({ data }) => {
         return data;
       });
     } catch (e) {
@@ -74,7 +73,7 @@ export class AdminAPI {
 
   async getActiveRooms(): Promise<any> {
     try {
-      return await this.ajax.get(url("/admin/rooms"), ({ data, status }) => {
+      return await this.ajax.get(url("/admin/rooms"), ({ data }) => {
         return data;
       });
     } catch (e) {
@@ -86,7 +85,7 @@ export class AdminAPI {
 
   async getLobbyData(): Promise<any> {
     try {
-      return await this.ajax.get(url("/admin/lobby"), ({ data, status }) => {
+      return await this.ajax.get(url("/admin/lobby"), ({ data }) => {
         return data;
       });
     } catch (e) {
@@ -98,7 +97,7 @@ export class AdminAPI {
 
   async getInspectData(roomId: string): Promise<InspectData> {
     try {
-      return await this.ajax.get(url("/admin/room?roomId=" + roomId), ({ data, status }) => {
+      return await this.ajax.get(url("/admin/room?roomId=" + roomId), ({ data }) => {
         return data;
       });
     } catch (e) {
@@ -110,12 +109,9 @@ export class AdminAPI {
 
   async getUnresolvedChatReports(): Promise<Array<ChatReportData>> {
     try {
-      return await this.ajax.get(
-        url("/admin/chat-reports?onlyUnresolved=true"),
-        ({ data, status }) => {
-          return data;
-        }
-      );
+      return await this.ajax.get(url("/admin/chat-reports?onlyUnresolved=true"), ({ data }) => {
+        return data;
+      });
     } catch (e) {
       console.log("Unable to retrieve chat reports");
       console.log(e);
@@ -125,7 +121,7 @@ export class AdminAPI {
 
   async getModerationActions(): Promise<Array<ModerationActionClientData>> {
     try {
-      return await this.ajax.get(url("/admin/moderation-actions"), ({ data, status }) => {
+      return await this.ajax.get(url("/admin/moderation-actions"), ({ data }) => {
         return data;
       });
     } catch (e) {
@@ -137,7 +133,7 @@ export class AdminAPI {
 
   async getBannedUsers(): Promise<Array<string>> {
     try {
-      return await this.ajax.get(url("/admin/banned-users"), ({ data, status }) => {
+      return await this.ajax.get(url("/admin/banned-users"), ({ data }) => {
         return data;
       });
     } catch (e) {
@@ -151,7 +147,7 @@ export class AdminAPI {
     try {
       await this.ajax.post(
         url("/admin/take-moderation-action"),
-        ({ data, status }) => {
+        ({ status }) => {
           if (status === 200) success();
         },
         data
@@ -170,7 +166,7 @@ export class AdminAPI {
     try {
       await this.ajax.post(
         url("/admin/undo-moderation-action"),
-        ({ data, status }) => {
+        ({ status }) => {
           if (status === 200) success();
         },
         data

@@ -120,7 +120,7 @@ export default class Chat extends Vue {
 
   focusChatInput() {
     if (this.isChatAvailable && !this.readOnly) {
-      (<any>this.$refs.chatInputRef).focus();
+      (this.$refs.chatInputRef as any).focus();
     }
   }
 
