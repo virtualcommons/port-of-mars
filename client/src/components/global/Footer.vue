@@ -54,9 +54,9 @@ ccarra1@asu.edu
       <h2>Connect with Us</h2>
       <ul>
         <li>
-          <a :href="constants.DISCORD_URL" title='Discord'>
-          Discord
-          <b-icon-discord></b-icon-discord>
+          <a :href="constants.DISCORD_URL" title="Discord">
+            Discord
+            <b-icon-discord></b-icon-discord>
           </a>
         </li>
         <li>

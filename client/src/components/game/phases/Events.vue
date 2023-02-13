@@ -53,8 +53,8 @@ import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
   components: {
     EventCard,
     EventContainer,
-    AccomplishmentCard
-  }
+    AccomplishmentCard,
+  },
 })
 export default class Events extends Vue {
   @Inject() readonly api!: GameRequestAPI;

@@ -1,6 +1,6 @@
-import { settings } from '@port-of-mars/server/settings';
+import { settings } from "@port-of-mars/server/settings";
 import { User } from "@port-of-mars/server/entity";
-import {BaseService} from "@port-of-mars/server/services/db";
+import { BaseService } from "@port-of-mars/server/services/db";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -11,15 +11,15 @@ export class AuthService extends BaseService {
       const currentRound = await tournamentService.getCurrentTournamentRound();
       tournamentRoundId = currentRound.id;
     }
-    // check that the given User has a valid TournamentRoundInvite 
+    // check that the given User has a valid TournamentRoundInvite
     // that hasn't already been marked as participated
     const result = await this.em
       .createQueryBuilder()
-      .from(User, 'user')
-      .innerJoin('user.invites', 'invite')
-      .innerJoin('invite.tournamentRound', 'round')
+      .from(User, "user")
+      .innerJoin("user.invites", "invite")
+      .innerJoin("invite.tournamentRound", "round")
       .where(`user.id = :userId`, { userId })
-      .select('count(*) > 0', 'validInvitation')
+      .select("count(*) > 0", "validInvitation")
       .getRawOne();
     logger.info("user %s can play the game? %o", userId, result?.validInvitation);
     return result?.validInvitation ? result.validInvitation : false;

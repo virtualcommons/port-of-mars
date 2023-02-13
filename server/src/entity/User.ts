@@ -23,10 +23,10 @@ export class User {
   @Column({ unique: true, nullable: true })
   email?: string;
 
-  @OneToMany((type) => Player, (player) => player.user)
+  @OneToMany(type => Player, player => player.user)
   players!: Array<Player>;
 
-  @OneToMany((type) => TournamentRoundInvite, (invite) => invite.user)
+  @OneToMany(type => TournamentRoundInvite, invite => invite.user)
   invites!: Array<TournamentRoundInvite>;
 
   @Column({ default: false })

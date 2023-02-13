@@ -1,7 +1,10 @@
 <template>
   <div v-if="messages.length > 0" id="messages-wrapper" class="lead w-100">
     <!-- MESSAGES -->
-    <b-alert dismissible fade show
+    <b-alert
+      dismissible
+      fade
+      show
       v-for="dm in messages"
       :key="dm.message"
       :variant="dm.kind"

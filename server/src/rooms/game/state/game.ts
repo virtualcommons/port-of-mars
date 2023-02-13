@@ -26,10 +26,10 @@ import MarsEventsDeck from "@port-of-mars/server/rooms/game/state/marsevents/Mar
 import { MarsEvent } from "@port-of-mars/server/rooms/game/state/marsevents/MarsEvent";
 import { Player, PlayerSet } from "@port-of-mars/server/rooms/game/state/player";
 import { SystemHealthMarsEvent } from "@port-of-mars/server/rooms/game/state/systemhealth";
-import { Trade } from "@port-of-mars/server/rooms/game/state/trade"
-import { ChatMessage, MarsLogMessage } from "@port-of-mars/server/rooms/game/state/message"
+import { Trade } from "@port-of-mars/server/rooms/game/state/trade";
+import { ChatMessage, MarsLogMessage } from "@port-of-mars/server/rooms/game/state/message";
 import { RoundIntroduction } from "@port-of-mars/server/rooms/game/state/roundintroduction";
-import { AccomplishmentPurchase } from "@port-of-mars/server/rooms/game/state/accomplishment"
+import { AccomplishmentPurchase } from "@port-of-mars/server/rooms/game/state/accomplishment";
 import { GameSerialized, RoundSummary } from "@port-of-mars/server/rooms/game/state/types";
 
 const logger = settings.logging.getLogger(__filename);
@@ -113,11 +113,7 @@ export class GameState
   constructor(data: GameStateOpts) {
     super();
     if (isProduction() && data.userRoles) {
-      assert.equal(
-        Object.keys(data.userRoles).length,
-        ROLES.length,
-        "Must have five players"
-      );
+      assert.equal(Object.keys(data.userRoles).length, ROLES.length, "Must have five players");
     }
     this.userRoles = data.userRoles;
     this.playerOpts = data.playerOpts;
@@ -159,27 +155,24 @@ export class GameState
     this.tradingEnabled = data.tradingEnabled;
     this.heroOrPariah = data.heroOrPariah;
 
-    const marsLogs = _.map(data.logs, (m) => new MarsLogMessage(m));
+    const marsLogs = _.map(data.logs, m => new MarsLogMessage(m));
     this.logs.splice(0, this.logs.length, ...marsLogs);
 
-    const chatMessages = _.map(data.messages, (m) => new ChatMessage(m));
+    const chatMessages = _.map(data.messages, m => new ChatMessage(m));
     this.messages.splice(0, this.messages.length, ...chatMessages);
 
-    const marsEvents = _.map(data.marsEvents, (e) => new MarsEvent(e));
+    const marsEvents = _.map(data.marsEvents, e => new MarsEvent(e));
     this.marsEvents.splice(0, this.marsEvents.length, ...marsEvents);
 
     this.marsEventsProcessed = data.marsEventsProcessed;
     this.marsEventDeck.fromJSON(data.marsEventDeck);
     this.clearTrades();
-    Object.keys(data.tradeSet).forEach((k) => {
+    Object.keys(data.tradeSet).forEach(k => {
       const tradeData: TradeData = data.tradeSet[k];
-      this.tradeSet.set(
-        k,
-        new Trade(k, tradeData.sender, tradeData.recipient, "Active")
-      );
+      this.tradeSet.set(k, new Trade(k, tradeData.sender, tradeData.recipient, "Active"));
     });
 
-    const winners = _.map(data.winners, (w) => w);
+    const winners = _.map(data.winners, w => w);
     this.winners.splice(0, this.winners.length, ...winners);
 
     return this;
@@ -191,10 +184,10 @@ export class GameState
       round: this.round,
       messagesLength: this.messages.length,
       logsLength: this.logs.length,
-      marsEventIds: _.map(this.marsEvents, (e) => e.id),
+      marsEventIds: _.map(this.marsEvents, e => e.id),
       marsEventsProcessed: this.marsEventsProcessed,
       players: this.players.getPlayerSetSummary(),
-    }
+    };
   }
 
   toJSON(): GameSerialized {
@@ -207,15 +200,15 @@ export class GameState
       round: this.round,
       phase: this.phase,
       systemHealth: this.systemHealth,
-      logs: _.map(this.logs, (x) => x.toJSON()),
-      messages: _.map(this.messages, (x) => x.toJSON()),
-      marsEvents: _.map(this.marsEvents, (e) => e.toJSON()),
+      logs: _.map(this.logs, x => x.toJSON()),
+      messages: _.map(this.messages, x => x.toJSON()),
+      marsEvents: _.map(this.marsEvents, e => e.toJSON()),
       marsEventsProcessed: this.marsEventsProcessed,
       marsEventDeck: this.marsEventDeck.toJSON(),
       roundIntroduction: this.roundIntroduction.toJSON(),
       tradeSet: this.tradeSet.toJSON(),
       tradingEnabled: this.tradingEnabled,
-      winners: _.map(this.winners, (w) => w),
+      winners: _.map(this.winners, w => w),
       heroOrPariah: this.heroOrPariah,
     };
   }
@@ -252,10 +245,7 @@ export class GameState
     if (this.hasUser(username)) {
       return this.players[this.userRoles[username]];
     }
-    logger.fatal(
-      "GameState.getPlayer: Unable to find player with username",
-      username
-    );
+    logger.fatal("GameState.getPlayer: Unable to find player with username", username);
     throw new Error(`No player found with ${username}`);
   }
 
@@ -321,11 +311,7 @@ export class GameState
     this.round += 1;
     this.roundIntroduction.updateSystemHealthGroupContributions(this.getPlayers());
     this.log(`Round ${this.round} begins.`, MarsLogCategory.newRound);
-    logger.debug(
-      "[game %d] current system health: %d",
-      this.gameId,
-      this.systemHealth
-    );
+    logger.debug("[game %d] current system health: %d", this.gameId, this.systemHealth);
     this.tradingEnabled = true;
     this.resetHeroOrPariah();
     for (const player of this.players) {
@@ -356,7 +342,7 @@ export class GameState
   }
 
   handleIncomplete(): void {
-    this.marsEvents = this.marsEvents.filter((event) => {
+    this.marsEvents = this.marsEvents.filter(event => {
       return !event.complete;
     });
   }
@@ -382,9 +368,7 @@ export class GameState
 
   nextRoundSystemHealth(): number {
     return _.clamp(
-      this.systemHealth +
-        this.totalSystemHealthContributions() +
-        this.systemHealthTaken(),
+      this.systemHealth + this.totalSystemHealthContributions() + this.systemHealthTaken(),
       0,
       100
     );
@@ -437,7 +421,7 @@ export class GameState
 
   applyMany(event: Array<GameEvent>): Array<Responses> {
     const responses: Array<Responses> = [];
-    event.forEach((e) => {
+    event.forEach(e => {
       const response = e.apply(this);
       if (response) {
         responses.push(response);
@@ -452,11 +436,7 @@ export class GameState
 
   // REFACTOR: DEFAULT CATEGORY
 
-  log(
-    message: string,
-    category: string,
-    performedBy: Role | ServerRole = SERVER
-  ): MarsLogMessage {
+  log(message: string, category: string, performedBy: Role | ServerRole = SERVER): MarsLogMessage {
     const msg = new MarsLogMessage({
       round: this.round,
       performedBy,
@@ -485,7 +465,7 @@ export class GameState
   evaluateGameWinners(): void {
     const playerScores: Array<[Role, number]> = this.players
       .asArray()
-      .map((p) => [p.role, p.victoryPoints]);
+      .map(p => [p.role, p.victoryPoints]);
     const winners: Array<Role> = [];
 
     for (const p of this.players) {
@@ -523,10 +503,7 @@ export class GameState
     const recipientRole: Role = trade.recipient.role;
     const senderRole: Role = trade.sender.role;
 
-    this.tradeSet.set(
-      trade.id,
-      new Trade(trade.id, trade.sender, trade.recipient, "Active")
-    );
+    this.tradeSet.set(trade.id, new Trade(trade.id, trade.sender, trade.recipient, "Active"));
 
     switch (reason) {
       case "sent-trade-request":
@@ -566,12 +543,10 @@ export class GameState
     const toTradeResources: ResourceAmountData = trade.recipient.resourceAmount;
 
     // apply trade resources to sender's inventory
-    sender.inventory.add(_.mapValues(trade.sender.resourceAmount, (r) => -r!));
+    sender.inventory.add(_.mapValues(trade.sender.resourceAmount, r => -r!));
     sender.inventory.add(trade.recipient.resourceAmount);
     // apply trade resources to recipient's inventory
-    recipient.inventory.add(
-      _.mapValues(trade.recipient.resourceAmount, (r) => -r!)
-    );
+    recipient.inventory.add(_.mapValues(trade.recipient.resourceAmount, r => -r!));
     recipient.inventory.add(trade.sender.resourceAmount);
 
     for (const [resource, amount] of Object.entries(toTradeResources)) {
@@ -593,7 +568,9 @@ export class GameState
       recipientTradeResources.push("nothing");
     }
 
-    const message = `${senderRole} traded ${senderTradeResources.join(", ")} to ${recipientRole} in exchange for ${recipientTradeResources.join(", ")}.`;
+    const message = `${senderRole} traded ${senderTradeResources.join(
+      ", "
+    )} to ${recipientRole} in exchange for ${recipientTradeResources.join(", ")}.`;
     const category = MarsLogCategory.acceptTrade;
     this.roundIntroduction.addCompletedTrade(this.tradeSet.get(id)!);
     this.log(message, category, performedBy);
@@ -641,18 +618,13 @@ export class GameState
   purchaseAccomplishment(role: Role, accomplishment: AccomplishmentData): void {
     const { label, systemHealth, victoryPoints } = accomplishment;
     const costArray: Array<string> = [];
-    const auditIndex = this.marsEvents.findIndex(
-      (event) => event.id === "audit"
-    );
-    const isUnderAudit =
-      auditIndex !== -1 && auditIndex <= this.marsEventsProcessed;
+    const auditIndex = this.marsEvents.findIndex(event => event.id === "audit");
+    const isUnderAudit = auditIndex !== -1 && auditIndex <= this.marsEventsProcessed;
 
     if (isUnderAudit) {
       for (const investment of INVESTMENTS) {
         if (accomplishment[investment] != 0) {
-          costArray.push(
-            `${INVESTMENT_LABELS[investment]} ${accomplishment[investment]}`
-          );
+          costArray.push(`${INVESTMENT_LABELS[investment]} ${accomplishment[investment]}`);
         }
       }
     } else if (systemHealth != 0) {
@@ -663,7 +635,11 @@ export class GameState
     const category: string = MarsLogCategory.purchaseAccomplishment;
     const performedBy: ServerRole = SERVER;
     this.players[role].purchaseAccomplishment(accomplishment);
-    const ap = new AccomplishmentPurchase({ name: label, victoryPoints, systemHealthModification: systemHealth });
+    const ap = new AccomplishmentPurchase({
+      name: label,
+      victoryPoints,
+      systemHealthModification: systemHealth,
+    });
     this.roundIntroduction.addAccomplishmentPurchase(ap);
     this.log(message, category, performedBy);
   }
@@ -678,7 +654,7 @@ export class GameState
 
   drawMarsEvents(nCards: number): void {
     const cards = this.marsEventDeck.peek(nCards);
-    const marsEvents = cards.map((e) => {
+    const marsEvents = cards.map(e => {
       const me = new MarsEvent(e);
       me.updateElapsed();
       return me;

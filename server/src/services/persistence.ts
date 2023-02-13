@@ -1,15 +1,15 @@
 import * as assert from "assert";
-import {Mutex} from "async-mutex";
-import {ClockTimer} from "@gamestdio/timer/lib/ClockTimer";
-import {EntityManager, In} from "typeorm";
+import { Mutex } from "async-mutex";
+import { ClockTimer } from "@gamestdio/timer/lib/ClockTimer";
+import { EntityManager, In } from "typeorm";
 import _ from "lodash";
 
-import {Game, GameEvent, Player, TournamentRoundInvite, User} from "@port-of-mars/server/entity";
+import { Game, GameEvent, Player, TournamentRoundInvite, User } from "@port-of-mars/server/entity";
 import * as ge from "@port-of-mars/server/rooms/game/events/types";
-import {GameOpts, Metadata, Persister} from "@port-of-mars/server/rooms/game/types";
-import {getServices, ServiceProvider} from "@port-of-mars/server/services/index";
-import {getLogger} from "@port-of-mars/server/settings";
-import {BUILD_ID} from "@port-of-mars/shared/settings";
+import { GameOpts, Metadata, Persister } from "@port-of-mars/server/rooms/game/types";
+import { getServices, ServiceProvider } from "@port-of-mars/server/services/index";
+import { getLogger } from "@port-of-mars/server/settings";
+import { BUILD_ID } from "@port-of-mars/shared/settings";
 
 const logger = getLogger(__filename);
 
@@ -17,22 +17,22 @@ function toDBRawGameEvent(gameEvent: ge.GameEvent, metadata: Metadata) {
   const ev = gameEvent.serialize();
   return {
     ...ev,
-    ...metadata
-  }
+    ...metadata,
+  };
 }
 
 export function toDBGameEvent(gameEvent: ge.GameEvent, metadata: Metadata) {
   const dbRawGameEvent = toDBRawGameEvent(gameEvent, metadata);
   const dbGameEvent = new GameEvent();
   Object.assign(dbGameEvent, dbRawGameEvent);
-  return dbGameEvent
+  return dbGameEvent;
 }
 
 export class GameConsoleService implements Persister {
   clock: ClockTimer = new ClockTimer();
 
   setSyncInterval(time = 5000) {
-    this.clock.setInterval(this.sync.bind(this), time)
+    this.clock.setInterval(this.sync.bind(this), time);
   }
 
   initialize(options: GameOpts, roomId: string): Promise<number> {
@@ -44,7 +44,7 @@ export class GameConsoleService implements Persister {
   }
 
   async sync() {
-    console.log('synced');
+    console.log("synced");
   }
 
   async persist(events: Array<ge.GameEvent>, metadata: Metadata): Promise<void> {
@@ -52,14 +52,13 @@ export class GameConsoleService implements Persister {
   }
 }
 
-export type PendingEvent = Omit<{ [k in keyof GameEvent]: GameEvent[k] }, 'id' | 'game'>
+export type PendingEvent = Omit<{ [k in keyof GameEvent]: GameEvent[k] }, "id" | "game">;
 
 export class DBPersister implements Persister {
   pendingEvents: Array<PendingEvent> = [];
   lock: Mutex = new Mutex();
 
-  constructor(public _sp?: ServiceProvider) {
-  }
+  constructor(public _sp?: ServiceProvider) {}
 
   get sp() {
     if (!this._sp) {
@@ -75,10 +74,10 @@ export class DBPersister implements Persister {
   async selectUsersByUsername(em: EntityManager, usernames: Array<string>) {
     const userRepo = em.getRepository(User);
     const rawUsers = await userRepo.find({
-      select: ['id', 'username', 'lastPlayerIp'],
+      select: ["id", "username", "lastPlayerIp"],
       where: {
-        username: In(usernames)
-      }
+        username: In(usernames),
+      },
     });
     /*
     const q = await userRepo.createQueryBuilder('user')
@@ -90,17 +89,22 @@ export class DBPersister implements Persister {
     */
 
     assert.equal(rawUsers.length, usernames.length);
-    return rawUsers
+    return rawUsers;
   }
 
-  async createPlayers(em: EntityManager, gameId: number, userRoles: GameOpts['userRoles'], rawUsers: Array<User>): Promise<Array<Player>> {
+  async createPlayers(
+    em: EntityManager,
+    gameId: number,
+    userRoles: GameOpts["userRoles"],
+    rawUsers: Array<User>
+  ): Promise<Array<Player>> {
     const players = [];
     for (const ru of rawUsers) {
       const p = {
         userId: ru.id,
         role: userRoles[ru.username],
         gameId,
-        playerIp: ru.lastPlayerIp
+        playerIp: ru.lastPlayerIp,
       };
       players.push(p);
     }
@@ -109,11 +113,11 @@ export class DBPersister implements Persister {
   }
 
   async initialize(options: GameOpts, roomId: string, shouldCreatePlayers = true): Promise<number> {
-    logger.debug('initializing game %s', roomId);
+    logger.debug("initializing game %s", roomId);
     const g = new Game();
     const f = async (em: EntityManager) => {
       if (_.isNull(options.tournamentRoundId)) {
-        throw new Error('could not find matching tournament round')
+        throw new Error("could not find matching tournament round");
       }
       g.buildId = BUILD_ID;
       g.tournamentRoundId = options.tournamentRoundId;
@@ -134,38 +138,41 @@ export class DBPersister implements Persister {
     }
   }
 
-  static FINAL_EVENTS = ['entered-defeat-phase', 'entered-victory-phase'];
+  static FINAL_EVENTS = ["entered-defeat-phase", "entered-victory-phase"];
 
   async finalize(gameId: number, shouldFinalizePlayers: boolean): Promise<[Game, Array<Player>]> {
     const f = async (em: EntityManager) => {
-      logger.debug('finalizing game %s', gameId);
+      logger.debug("finalizing game %s", gameId);
       const event = await em.getRepository(GameEvent).findOneOrFail({
-        where: {type: In(DBPersister.FINAL_EVENTS), gameId},
-        order: {id: "DESC", dateCreated: "DESC"}
+        where: { type: In(DBPersister.FINAL_EVENTS), gameId },
+        order: { id: "DESC", dateCreated: "DESC" },
       });
       const game = await em.getRepository(Game).findOneOrFail(gameId);
-      game.status = event.type === 'entered-defeat-phase' ? 'defeat' : 'victory';
+      game.status = event.type === "entered-defeat-phase" ? "defeat" : "victory";
       game.dateFinalized = this.sp.time.now();
       if (!shouldFinalizePlayers) {
         const res: [Game, Array<Player>] = [await em.save(game), []];
         return res;
       }
-      const players = await em.getRepository(Player).find({gameId});
+      const players = await em.getRepository(Player).find({ gameId });
       for (const p of players) {
         p.points = (event.payload as any)[p.role];
       }
 
       const userIds = players.map(p => p.userId);
       logger.debug("Finalizing invites and setting hasParticipated for users: %o", userIds);
-      await em.createQueryBuilder()
+      await em
+        .createQueryBuilder()
         .update(TournamentRoundInvite)
         .set({ hasParticipated: true })
-        .where('tournamentRoundId = :tournamentRoundId', { tournamentRoundId: game.tournamentRoundId })
-        .andWhere('userId in (:...userIds)', { userIds })
+        .where("tournamentRoundId = :tournamentRoundId", {
+          tournamentRoundId: game.tournamentRoundId,
+        })
+        .andWhere("userId in (:...userIds)", { userIds })
         .execute();
 
       const res = await Promise.all([em.save(game), em.save(players)]);
-      logger.debug('finalized game %s', gameId);
+      logger.debug("finalized game %s", gameId);
       return res;
     };
     if (this.em.queryRunner?.isTransactionActive) {
@@ -178,7 +185,8 @@ export class DBPersister implements Persister {
   async sync() {
     await this.lock.runExclusive(async () => {
       const f = async (em: EntityManager) => {
-        await this.em.getRepository(GameEvent)
+        await this.em
+          .getRepository(GameEvent)
           .createQueryBuilder()
           .insert()
           .values(this.pendingEvents)
@@ -186,19 +194,19 @@ export class DBPersister implements Persister {
         this.pendingEvents = [];
       };
       if (this.pendingEvents.length > 0) {
-        logger.trace('syncing to db')
+        logger.trace("syncing to db");
         if (this.em.queryRunner?.isTransactionActive) {
           await f(this.em);
         } else {
           await this.em.transaction(f);
         }
-        logger.trace('synced to db')
+        logger.trace("synced to db");
       }
-    })
+    });
   }
 
   async persist(events: Array<ge.GameEvent>, metadata: Metadata) {
-    logger.debug('events: %o', events);
+    logger.debug("events: %o", events);
     const rawGameEvents = events.map(ge => toDBRawGameEvent(ge, metadata));
     await this.lock.runExclusive(async () => {
       for (const rawEvent of rawGameEvents) {

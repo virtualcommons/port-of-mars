@@ -1,4 +1,11 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { User } from "@port-of-mars/server/entity/User";
 import { Quiz } from "./Quiz";
 import { QuestionResponse } from "@port-of-mars/server/entity/QuestionResponse";

@@ -1,5 +1,5 @@
 import { ChatReport, User } from "@port-of-mars/server/entity";
-import { MoreThan, IsNull, Not, In, Repository, UpdateResult } from "typeorm"
+import { MoreThan, IsNull, Not, In, Repository, UpdateResult } from "typeorm";
 import { settings } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { generateUsername } from "@port-of-mars/server/util";
@@ -18,25 +18,25 @@ export class AccountService extends BaseService {
 
   async getTotalRegisteredUsers(): Promise<number> {
     return await this.getRepository().count({
-      where: { isActive: true, isVerified: true }
+      where: { isActive: true, isVerified: true },
     });
   }
 
   async getTotalBannedUsers(): Promise<number> {
     return await this.getRepository().count({
-      where: { isBanned: true }
+      where: { isBanned: true },
     });
   }
 
-  async getTotalReportedUsers(): Promise<{ resolved: number, unresolved: number }> {
+  async getTotalReportedUsers(): Promise<{ resolved: number; unresolved: number }> {
     return {
       resolved: await this.em.getRepository(ChatReport).count({
-        where: { resolved: true }
+        where: { resolved: true },
       }),
       unresolved: await this.em.getRepository(ChatReport).count({
-        where: { resolved: false }
-      })
-    }
+        where: { resolved: false },
+      }),
+    };
   }
 
   async setAdminByUsername(username: string): Promise<User> {
@@ -88,19 +88,19 @@ export class AccountService extends BaseService {
 
   async getBannedUsers(): Promise<Array<User>> {
     return await this.getRepository().find({
-      where: { isBanned: true }
+      where: { isBanned: true },
     });
   }
 
   async findByUsername(username: string): Promise<User> {
-    return await this.getRepository().findOneOrFail({ username })
+    return await this.getRepository().findOneOrFail({ username });
   }
 
   async findUsers(usernames: Array<string>): Promise<Array<User>> {
     return await this.getRepository().find({
       where: {
-        username: In(usernames)
-      }
+        username: In(usernames),
+      },
     });
   }
 
@@ -111,7 +111,7 @@ export class AccountService extends BaseService {
     }
     return true;
   }
-  
+
   async isUsernameAvailable(username: string, user?: User): Promise<boolean> {
     const otherUser = await this.getRepository().findOne({ username });
     if (otherUser) {
@@ -125,18 +125,18 @@ export class AccountService extends BaseService {
 
   async getActiveUsers(after: Date): Promise<Array<User>> {
     return await this.getRepository().find({
-      select: ['name', 'email', 'username', 'dateCreated'],
-      where: { 
+      select: ["name", "email", "username", "dateCreated"],
+      where: {
         isActive: true,
         email: Not(IsNull()),
         dateCreated: MoreThan(after),
-       },
-    })
+      },
+    });
   }
 
   async getActiveEmails(after: Date): Promise<Array<string>> {
-    const users: Array<User> = await this.getActiveUsers(after)
-    return users.map(u => u.email ?? '');
+    const users: Array<User> = await this.getActiveUsers(after);
+    return users.map(u => u.email ?? "");
   }
 
   async deactivateUsers(emails: Array<string>): Promise<number> {
@@ -144,7 +144,7 @@ export class AccountService extends BaseService {
     const users = await repository.find({
       where: {
         email: In(emails),
-      }
+      },
     });
     for (const u of users) {
       u.isActive = false;
@@ -170,12 +170,11 @@ export class AccountService extends BaseService {
     if (!user) {
       user = new User();
       user.username = username;
-      user.name = '';
+      user.name = "";
       user.email = `${username}@email.com`;
-      logger.info('getOrCreateTestUser: not found, creating test user %s', user.username);
-    }
-    else {
-      logger.info('getOrCreateTestUser: test user %s exists', user.username);
+      logger.info("getOrCreateTestUser: not found, creating test user %s", user.username);
+    } else {
+      logger.info("getOrCreateTestUser: test user %s exists", user.username);
     }
     // test user, set fake data so they can immediately join a game
     // FIXME: use run-time configuration / settings to determine what user properties to bypass (passedQuiz, isVerified, hasParticipated, etc)
@@ -186,7 +185,7 @@ export class AccountService extends BaseService {
     return user;
   }
 
-  async getOrCreateUser(userData: { email: string, passportId?: string }): Promise<User> {
+  async getOrCreateUser(userData: { email: string; passportId?: string }): Promise<User> {
     let user: User | undefined;
     // try to find user by id
     if (userData.passportId) {
@@ -198,28 +197,30 @@ export class AccountService extends BaseService {
     }
     if (!user) {
       user = new User();
-      user.name = '';
+      user.name = "";
       user.email = userData.email;
-      user.passportId = userData.passportId ?? '';
+      user.passportId = userData.passportId ?? "";
       user.username = await generateUsername();
       user.isSystemBot = false;
-      logger.info('getOrCreateUser: not found, creating user %s', user.username);
+      logger.info("getOrCreateUser: not found, creating user %s", user.username);
       await this.getRepository().save(user);
-    }
-    else {
-      logger.info('getOrCreateUser: user %s exists', user.username);
+    } else {
+      logger.info("getOrCreateUser: user %s exists", user.username);
     }
     return user;
   }
 
   async getOrCreateBotUsers(requiredNumberOfBots: number): Promise<Array<User>> {
-    const bots = await this.getRepository().find({ where: { isSystemBot: true }, take: requiredNumberOfBots })
+    const bots = await this.getRepository().find({
+      where: { isSystemBot: true },
+      take: requiredNumberOfBots,
+    });
     const numberOfBotsToCreate = requiredNumberOfBots - bots.length;
     if (numberOfBotsToCreate > 0) {
       for (let i = 0; i < numberOfBotsToCreate; i++) {
         const bot = new User();
         bot.username = await generateUsername();
-        bot.name = `robot ${bot.username}`
+        bot.name = `robot ${bot.username}`;
         bot.isSystemBot = true;
         await this.getRepository().save(bot);
         bots.push(bot);

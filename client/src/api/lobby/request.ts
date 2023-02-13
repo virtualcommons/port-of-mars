@@ -43,7 +43,7 @@ export class LobbyRequestAPI {
   public voteStartWithBots(vote: boolean) {
     const msg: VoteStartWithBots = {
       kind: "vote-start-with-bots",
-      value: vote
+      value: vote,
     };
     this.send(msg);
   }
@@ -55,5 +55,4 @@ export class LobbyRequestAPI {
     };
     this.send(msg);
   }
-
 }

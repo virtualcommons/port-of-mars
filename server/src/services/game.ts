@@ -14,7 +14,7 @@ export class GameService extends BaseService {
 
   async findByRoomId(roomId: string): Promise<Game> {
     return await this.em.getRepository(Game).findOneOrFail({
-      where: { roomId }
+      where: { roomId },
     });
   }
 
@@ -25,15 +25,17 @@ export class GameService extends BaseService {
   }
 
   async getTotalCompletedGames(
-    status: GameStatus | Array<GameStatus> = [{ status: "victory" }, { status: "defeat" }] 
+    status: GameStatus | Array<GameStatus> = [{ status: "victory" }, { status: "defeat" }]
   ): Promise<number> {
     return await this.em.getRepository(Game).count({
-      where: status
+      where: status,
     });
   }
-        
+
   async getCompletedGames(
-    interval: { start: string, end: string }, bots: boolean, defeats: boolean
+    interval: { start: string; end: string },
+    bots: boolean,
+    defeats: boolean
   ): Promise<Array<Game>> {
     let query = this.em
       .getRepository(Game)
@@ -42,19 +44,15 @@ export class GameService extends BaseService {
       .leftJoinAndSelect("player.user", "user")
       .where("game.dateFinalized BETWEEN :start AND :end", interval);
     if (defeats) {
-      query = query
-        .andWhere("game.status IN (:...status)", { status: ["victory", "defeat"] });
+      query = query.andWhere("game.status IN (:...status)", { status: ["victory", "defeat"] });
     } else {
-      query = query
-        .andWhere("game.status = :status", { status: "victory" });
+      query = query.andWhere("game.status = :status", { status: "victory" });
     }
     if (bots) {
       return query.getMany();
     } else {
       return (
-        await query
-        .andWhere("user.isSystemBot = :isSystemBot", { isSystemBot: false })
-        .getMany()
+        await query.andWhere("user.isSystemBot = :isSystemBot", { isSystemBot: false }).getMany()
       ).filter((game: Game) => game.players.length > 1);
     }
   }
@@ -73,9 +71,7 @@ export class GameService extends BaseService {
   }
 
   async findEventsByGameId(gameId: number): Promise<Array<GameEvent>> {
-    return await this.em
-      .getRepository(GameEvent)
-      .find({ where: { gameId }, order: { id: "ASC" } });
+    return await this.em.getRepository(GameEvent).find({ where: { gameId }, order: { id: "ASC" } });
   }
 
   async getActiveGameRoomId(userId: number): Promise<string | undefined> {
@@ -92,12 +88,9 @@ export class GameService extends BaseService {
     return game?.roomId;
   }
 
-  async getNumberOfActiveParticipants(
-    tournamentRoundId?: number
-  ): Promise<number> {
+  async getNumberOfActiveParticipants(tournamentRoundId?: number): Promise<number> {
     if (!tournamentRoundId) {
-      tournamentRoundId = (await this.sp.tournament.getCurrentTournamentRound())
-        .id;
+      tournamentRoundId = (await this.sp.tournament.getCurrentTournamentRound()).id;
     }
     return await this.em
       .getRepository(Player)

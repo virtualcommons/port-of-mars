@@ -7,8 +7,8 @@
             <h1 class="section-title mb-3">Welcome to Port of Mars</h1>
             <p>
               Port of Mars is an online, game-based, social science experiment set on the first
-              human community on the Red Planet. We are now in an open beta where
-              anyone aged 18 and over<AgeTooltip placement="right"/> can participate.
+              human community on the Red Planet. We are now in an open beta where anyone aged 18 and
+              over<AgeTooltip placement="right" /> can participate.
             </p>
             <b-row class="mt-3">
               <b-col>
@@ -44,35 +44,37 @@
             <p class="text mb-3">
               Port of Mars is an interdisciplinary research project sponsored by the
               <a href="https://interplanetary.asu.edu/">Interplanetary Initiative</a> at
-              <a href="https://www.asu.edu/" target="_blank">Arizona State University</a>.
-              Its original incarnation was designed and implemented as a physical card game for 5
-              players. This application is a digital version of the Port of Mars card game that serves as a
-              scalable and evolving research testbed to study collective action.
+              <a href="https://www.asu.edu/" target="_blank">Arizona State University</a>. Its
+              original incarnation was designed and implemented as a physical card game for 5
+              players. This application is a digital version of the Port of Mars card game that
+              serves as a scalable and evolving research testbed to study collective action.
             </p>
             <p class="text mb-3">
               We're researching effective strategies for navigating dilemmas of shared resources,
               common good, and collective action under conditions of high uncertainty and high risk,
               like those in space. Players are citizens of an early Martian community charged with
               working together to provide for the sustained welfare of the settlement. All player
-              actions are tracked, allowing researchers to analyze and examine the behaviors that tend to produce success
-              or failure. Each individual game is a simulation and modeling exercise for future human space communities.
+              actions are tracked, allowing researchers to analyze and examine the behaviors that
+              tend to produce success or failure. Each individual game is a simulation and modeling
+              exercise for future human space communities.
             </p>
           </b-col>
-          <div class="w-100 my-5"><hr></div>
+          <div class="w-100 my-5"><hr /></div>
           <b-col md="12" lg="6" xl="5" class="text-left">
             <h1 class="section-title mb-3">Gameplay</h1>
             <p class="text mb-3">
               You are 1 of 5 residents at the Port of Mars, the first long-term habitat on the
-              planet. Each game consists of 8 — 12 rounds, and each round has phases for investing, trading,
-              purchasing, discarding, and reacting to Mars Events. Chance and player actions impact
-              System Health. If System Health falls to zero everyone in the community dies.
+              planet. Each game consists of 8 — 12 rounds, and each round has phases for investing,
+              trading, purchasing, discarding, and reacting to Mars Events. Chance and player
+              actions impact System Health. If System Health falls to zero everyone in the community
+              dies.
             </p>
             <p class="text mb-3">
-              Your mission is to stay alive and achieve as many Victory Points as you can.  
-              In each round you will receive time blocks that you can invest in System Health or Influence resources that can be
-              used to purchase Accomplishments. System Health will maintain the shared
-              infrastructure and keep your community alive, while Accomplishments will earn you the Victory Points 
-              necessary to win the game.
+              Your mission is to stay alive and achieve as many Victory Points as you can. In each
+              round you will receive time blocks that you can invest in System Health or Influence
+              resources that can be used to purchase Accomplishments. System Health will maintain
+              the shared infrastructure and keep your community alive, while Accomplishments will
+              earn you the Victory Points necessary to win the game.
             </p>
           </b-col>
           <b-col md="12" lg="6" xl="5" align-self="center">
@@ -105,11 +107,11 @@ import { isDevOrStaging, Constants } from "@port-of-mars/shared/settings";
     AgeTooltip,
     CharCarousel,
     Footer,
-  }
+  },
 })
 export default class Home extends Vue {
   @Prop({ default: false })
-  scrollToAbout!: boolean;  
+  scrollToAbout!: boolean;
 
   isDevMode: boolean = false;
   currentYear = new Date().getFullYear();
@@ -132,7 +134,6 @@ export default class Home extends Vue {
       el.scrollIntoView({ block: "start", behavior: "smooth" });
     }
   }
-
 }
 </script>
 
@@ -154,9 +155,9 @@ p {
 }
 
 .welcome {
-  min-height: calc( 100vh - 85px );
+  min-height: calc(100vh - 85px);
   background: url("../assets/images/stars-bg.jpg") no-repeat;
-  background-position: top; 
+  background-position: top;
   background-size: cover;
   background-attachment: fixed;
 }

@@ -2,9 +2,9 @@ import Mutations from "@port-of-mars/client/store/mutations";
 
 export type MockRoom = { send: (type: string, data: any) => void; leave: () => void };
 
-export type StateTransform =
-  { [K in keyof typeof Mutations]?: Parameters<typeof Mutations[K]>[1];} &
-  { required?: boolean; validationObject?: any }
+export type StateTransform = {
+  [K in keyof typeof Mutations]?: Parameters<(typeof Mutations)[K]>[1];
+} & { required?: boolean; validationObject?: any };
 
 export interface Step {
   target: string;
@@ -15,7 +15,6 @@ export interface Step {
   };
   stateTransform?: Array<StateTransform>;
 }
-
 
 //A blueprint for a step:
 /*

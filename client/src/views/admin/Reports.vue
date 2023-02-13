@@ -5,9 +5,12 @@
         <b-col cols="8" class="mh-100 p-2">
           <h4 class="header-nowrap">Reported Chat Messages</h4>
           <div class="h-100-header w-100 content-container">
-            <b-table dark sticky-header sort-icon-left
+            <b-table
+              dark
+              sticky-header
+              sort-icon-left
               class="h-100 m-0"
-              style="max-height: none;"
+              style="max-height: none"
               :fields="reportFields"
               :items="reports"
               sort-by="dateCreated"
@@ -20,8 +23,9 @@
                 {{ data.item.username }}
                 <span v-if="data.item.isMuted" class="text-warning"> [muted]</span>
                 <span v-if="data.item.isBanned" class="text-danger"> [banned]</span>
-                <span v-else-if="data.item.muteStrikes" class="text-light"> 
-                  ({{ data.item.muteStrikes }} {{ data.item.muteStrikes === 1 ? 'strike' : 'strikes' }})
+                <span v-else-if="data.item.muteStrikes" class="text-light">
+                  ({{ data.item.muteStrikes }}
+                  {{ data.item.muteStrikes === 1 ? "strike" : "strikes" }})
                 </span>
               </template>
               <template #cell(message)="data">
@@ -33,11 +37,17 @@
                     variant="secondary"
                     action="Hide"
                     :modalId="getModalId('none', data.item.id)"
-                    @confirmed="takeModerationAction({ reportId: data.item.id, action: 'none', username: data.item.username })"
+                    @confirmed="
+                      takeModerationAction({
+                        reportId: data.item.id,
+                        action: 'none',
+                        username: data.item.username,
+                      })
+                    "
                   >
                     <template>
-                      Resolve this report of user 
-                      <span class="text-danger">{{ data.item.username }}</span> 
+                      Resolve this report of user
+                      <span class="text-danger">{{ data.item.username }}</span>
                       without taking any action?
                     </template>
                   </ConfirmationModalButton>
@@ -45,23 +55,35 @@
                     variant="warning"
                     action="Mute"
                     :modalId="getModalId('mute', data.item.id)"
-                    @confirmed="takeModerationAction({ reportId: data.item.id, action: 'mute', username: data.item.username })"
+                    @confirmed="
+                      takeModerationAction({
+                        reportId: data.item.id,
+                        action: 'mute',
+                        username: data.item.username,
+                      })
+                    "
                   >
                     <template>
-                      Temporarily mute user 
-                      <span class="text-danger">{{ data.item.username }}</span>?
-                      This will prevent them from using the in-game chat.
+                      Temporarily mute user
+                      <span class="text-danger">{{ data.item.username }}</span
+                      >? This will prevent them from using the in-game chat.
                     </template>
                   </ConfirmationModalButton>
                   <ConfirmationModalButton
                     variant="danger"
                     action="Ban"
                     :modalId="getModalId('ban', data.item.id)"
-                    @confirmed="takeModerationAction({ reportId: data.item.id, action: 'ban', username: data.item.username })"
+                    @confirmed="
+                      takeModerationAction({
+                        reportId: data.item.id,
+                        action: 'ban',
+                        username: data.item.username,
+                      })
+                    "
                   >
                     <template>
-                      Ban user 
-                      <span class="text-danger">{{ data.item.username }}</span> 
+                      Ban user
+                      <span class="text-danger">{{ data.item.username }}</span>
                       from playing Port of Mars?
                     </template>
                   </ConfirmationModalButton>
@@ -73,24 +95,31 @@
         <b-col cols="4" class="mh-100 p-2">
           <h4 class="header-nowrap">Actions Log</h4>
           <div class="h-100-header w-100 content-container">
-            <b-table dark sticky-header sort-icon-left
+            <b-table
+              dark
+              sticky-header
+              sort-icon-left
               class="h-100 m-0"
-              style="max-height: none;"
+              style="max-height: none"
               :fields="moderationActionFields"
               :items="moderationActions"
             >
               <template #cell(dateMuteExpires)="data">
                 <span v-if="data.item.dateMuteExpires">
-                  <span v-if="new Date(data.item.dateMuteExpires) < new Date()" class="text-danger">expired</span>
+                  <span v-if="new Date(data.item.dateMuteExpires) < new Date()" class="text-danger"
+                    >expired</span
+                  >
                   <span v-else>{{ formatFutureTime(data.item.dateMuteExpires) }}</span>
                 </span>
               </template>
               <template #cell(undo)="data">
-                <b-button size="sm"
+                <b-button
+                  size="sm"
                   variant="success"
                   @click="undoModerationAction(data.item.id, data.item.username)"
                 >
-                Undo</b-button>
+                  Undo</b-button
+                >
               </template>
             </b-table>
           </div>
@@ -115,8 +144,8 @@ import ConfirmationModalButton from "@port-of-mars/client/components/admin/Confi
 @Component({
   components: {
     ChatMessage,
-    ConfirmationModalButton
-  }
+    ConfirmationModalButton,
+  },
 })
 export default class Reports extends Vue {
   api!: AdminAPI;
@@ -126,7 +155,7 @@ export default class Reports extends Vue {
     { key: "roomId", label: "Room" },
     { key: "user", label: "User" },
     { key: "message", label: "Message" },
-    { key: "action", label: "Action" }
+    { key: "action", label: "Action" },
   ];
   moderationActions: Array<ModerationActionClientData> = [];
   moderationActionFields = [
@@ -134,7 +163,7 @@ export default class Reports extends Vue {
     { key: "username", label: "User" },
     { key: "action", label: "Action", sortable: true },
     { key: "dateMuteExpires", label: "Expires" },
-    { key: "undo", label: "" }
+    { key: "undo", label: "" },
   ];
   pollingIntervalId = 0;
 
@@ -179,9 +208,9 @@ export default class Reports extends Vue {
     const hours = Math.floor(diff / 1000 / 60 / 60);
     const days = Math.floor(hours / 24);
     if (days > 0) {
-      return `${days} day${(days === 1) ? "" : "s"} ago`;
+      return `${days} day${days === 1 ? "" : "s"} ago`;
     } else if (hours > 0) {
-      return `${hours} hour${(hours === 1) ? "" : "s"} ago`;
+      return `${hours} hour${hours === 1 ? "" : "s"} ago`;
     } else {
       return "just now";
     }
@@ -194,9 +223,9 @@ export default class Reports extends Vue {
     const hours = Math.ceil(diff / 1000 / 60 / 60);
     const days = Math.ceil(hours / 24);
     if (days > 0) {
-      return `in ${days} day${(days === 1) ? "" : "s"}`;
+      return `in ${days} day${days === 1 ? "" : "s"}`;
     } else if (hours > 0) {
-      return `in ${hours} hour${(hours === 1) ? "" : "s"}`;
+      return `in ${hours} hour${hours === 1 ? "" : "s"}`;
     } else {
       return "soon";
     }
@@ -206,10 +235,15 @@ export default class Reports extends Vue {
     return `confirm-${action}-modal-${reportId}`;
   }
 
-  async takeModerationAction(data: { reportId: number, username: string, action: ModerationActionType, daysMuted?: number }) {
+  async takeModerationAction(data: {
+    reportId: number;
+    username: string;
+    action: ModerationActionType;
+    daysMuted?: number;
+  }) {
     const moderationActionData: ModerationActionData = {
       ...data,
-      adminUsername: this.$tstore.state.user.username
+      adminUsername: this.$tstore.state.user.username,
     };
     await this.api.takeModerationAction(moderationActionData, () => {
       this.$bvModal.hide(this.getModalId(data.action, data.reportId));
@@ -227,5 +261,4 @@ export default class Reports extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

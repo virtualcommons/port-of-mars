@@ -3,13 +3,15 @@
     <div id="text">
       <h4>How to Play</h4>
       <p>
-        Each round of a game consists of multiple phases for investing, trading with other
-        players, purchasing accomplishments, and reacting to Mars Events. Your goal is to score
-        victory points through accomplishments, while maintaining the vital infrastructure
-        keeping the community alive by investing in system health.
+        Each round of a game consists of multiple phases for investing, trading with other players,
+        purchasing accomplishments, and reacting to Mars Events. Your goal is to score victory
+        points through accomplishments, while maintaining the vital infrastructure keeping the
+        community alive by investing in system health.
+      </p>
+
       <p>
-        Individual choices, collective actions, and chance will affect the outcome of
-        the game. For more information, see the game manual or short tutorial video below.
+        Individual choices, collective actions, and chance will affect the outcome of the game. For
+        more information, see the game manual or short tutorial video below.
       </p>
     </div>
     <div id="links">
@@ -34,7 +36,6 @@ import { Constants } from "@port-of-mars/shared/settings";
 
 @Component({})
 export default class HelpPanel extends Vue {
-  
   manual = { name: MANUAL_PAGE };
 
   get constants() {
@@ -43,5 +44,4 @@ export default class HelpPanel extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

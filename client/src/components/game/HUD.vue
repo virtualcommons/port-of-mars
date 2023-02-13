@@ -19,8 +19,8 @@ import HUDRight from "@port-of-mars/client/components/game/HUDRight.vue";
 @Component({
   components: {
     HUDLeft,
-    HUDRight
-  }
+    HUDRight,
+  },
 })
 export default class HUD extends Vue {}
 </script>

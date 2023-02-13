@@ -10,8 +10,8 @@ import InfluencesDraw from "./views/InfluencesDraw.vue";
 @Component({
   components: {
     InfluencesSelect,
-    InfluencesDraw
-  }
+    InfluencesDraw,
+  },
 })
 export default class EventInfluences extends Vue {
   @Prop({ default: "" }) eventView!: string;

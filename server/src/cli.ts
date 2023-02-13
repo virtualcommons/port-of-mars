@@ -10,10 +10,7 @@ import {
   VictoryPointSummarizer,
 } from "@port-of-mars/server/services/replay";
 import { DBPersister } from "@port-of-mars/server/services/persistence";
-import {
-  EnteredDefeatPhase,
-  EnteredVictoryPhase,
-} from "@port-of-mars/server/rooms/game/events";
+import { EnteredDefeatPhase, EnteredVictoryPhase } from "@port-of-mars/server/rooms/game/events";
 import { Phase } from "@port-of-mars/shared/types";
 import { settings, getLogger } from "@port-of-mars/server/settings";
 import {
@@ -25,10 +22,7 @@ import {
   TournamentRoundInvite,
   User,
 } from "@port-of-mars/server/entity";
-import {
-  DYNAMIC_SETTINGS_PATH,
-  RedisSettings,
-} from "@port-of-mars/server/services/settings";
+import { DYNAMIC_SETTINGS_PATH, RedisSettings } from "@port-of-mars/server/services/settings";
 
 import { program } from "commander";
 import { mkdir, readFile, writeFile } from "fs/promises";
@@ -47,9 +41,7 @@ function getRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min) + min);
 }
 
-async function withConnection<T>(
-  f: (em: EntityManager) => Promise<T>
-): Promise<void> {
+async function withConnection<T>(f: (em: EntityManager) => Promise<T>): Promise<void> {
   const conn = await createConnection("default");
   const em = conn.createEntityManager();
   try {
@@ -59,41 +51,42 @@ async function withConnection<T>(
   }
 }
 
-async function exportData(em: EntityManager, tournamentRoundId: number, gameIds: Array<number>): Promise<void> {
+async function exportData(
+  em: EntityManager,
+  tournamentRoundId: number,
+  gameIds: Array<number>
+): Promise<void> {
   logger.debug("=====EXPORT DATA START=====");
-  let eventQuery = await em.getRepository(GameEvent)
+  let eventQuery = await em
+    .getRepository(GameEvent)
     .createQueryBuilder("ge")
     .leftJoinAndSelect("ge.game", "g")
-    .innerJoin(TournamentRound, 'tournamentRound', 'tournamentRound.id = g.tournamentRoundId')
-    .where('tournamentRound.id = :tournamentRoundId', { tournamentRoundId })
-    .orderBy('ge.id', 'ASC');
+    .innerJoin(TournamentRound, "tournamentRound", "tournamentRound.id = g.tournamentRoundId")
+    .where("tournamentRound.id = :tournamentRoundId", { tournamentRoundId })
+    .orderBy("ge.id", "ASC");
   if (gameIds && gameIds.length > 0) {
     eventQuery = eventQuery.andWhere('"gameId" in (:...gameIds)', { gameIds });
   }
-  const playerQuery = em.getRepository(Player)
-    .createQueryBuilder('player')
-    .innerJoinAndSelect(User, 'user', 'user.id = player.userId')
-    .innerJoin(Game, 'game', 'game.id = player.gameId')
-    .innerJoin(TournamentRound, 'tournamentRound', 'tournamentRound.id = game.tournamentRoundId')
-    .leftJoinAndSelect(TournamentRoundInvite, 'invitation', 'invitation.tournamentRoundId = tournamentRound.id AND player.userId = invitation.userId')
+  const playerQuery = em
+    .getRepository(Player)
+    .createQueryBuilder("player")
+    .innerJoinAndSelect(User, "user", "user.id = player.userId")
+    .innerJoin(Game, "game", "game.id = player.gameId")
+    .innerJoin(TournamentRound, "tournamentRound", "tournamentRound.id = game.tournamentRoundId")
+    .leftJoinAndSelect(
+      TournamentRoundInvite,
+      "invitation",
+      "invitation.tournamentRoundId = tournamentRound.id AND player.userId = invitation.userId"
+    )
     .andWhere("tournamentRound.id = :tournamentRoundId", { tournamentRoundId });
   const playerRaw = await playerQuery.getRawMany();
 
   const events = await eventQuery.getMany();
   await mkdir("/dump/processed", { recursive: true });
   await mkdir("/dump/raw", { recursive: true });
-  const marsLogSummarizer = new MarsLogSummarizer(
-    events,
-    "/dump/processed/marsLog.csv"
-  );
-  const playerSummarizer = new PlayerSummarizer(
-    playerRaw,
-    "/dump/processed/player.csv"
-  );
-  const gameEventSummarizer = new GameEventSummarizer(
-    events,
-    "/dump/processed/gameEvent.csv"
-  );
+  const marsLogSummarizer = new MarsLogSummarizer(events, "/dump/processed/marsLog.csv");
+  const playerSummarizer = new PlayerSummarizer(playerRaw, "/dump/processed/player.csv");
+  const gameEventSummarizer = new GameEventSummarizer(events, "/dump/processed/gameEvent.csv");
   const victoryPointSummarizer = new VictoryPointSummarizer(
     events,
     "/dump/processed/victoryPoint.csv"
@@ -102,10 +95,7 @@ async function exportData(em: EntityManager, tournamentRoundId: number, gameIds:
     events,
     "/dump/raw/playerInvestment.csv"
   );
-  const marsEventSummarizer = new MarsEventSummarizer(
-    events,
-    "/dump/processed/marsEvent.csv"
-  );
+  const marsEventSummarizer = new MarsEventSummarizer(events, "/dump/processed/marsEvent.csv");
   const accomplishmentSummarizer = new AccomplishmentSummarizer(
     "/dump/processed/accomplishment.csv"
   );
@@ -118,7 +108,7 @@ async function exportData(em: EntityManager, tournamentRoundId: number, gameIds:
       playerInvestmentSummarizer,
       marsEventSummarizer,
       accomplishmentSummarizer,
-    ].map((s) => s.save())
+    ].map(s => s.save())
   );
   logger.debug("=====EXPORTING DATA END=====");
 }
@@ -131,13 +121,13 @@ async function validate(em: EntityManager, gameId: number): Promise<void> {
     const results = replayer.validate();
     console.log("===== Validation results: =====");
     for (const result of results) {
-      console.log(`Round ${result.round}: ${result.success ? "SUCCESS" : "FAILED"}`)
+      console.log(`Round ${result.round}: ${result.success ? "SUCCESS" : "FAILED"}`);
       if (!result.success) {
         console.log(result.error);
       }
     }
     console.log("===============================");
-  } catch(e) {
+  } catch (e) {
     console.log(e);
   }
 }
@@ -152,14 +142,10 @@ async function finalize(em: EntityManager, gameId: number): Promise<void> {
   logger.debug(`Phase: ${Phase[gameState.phase]}`);
   if (![Phase.defeat, Phase.victory].includes(gameState.phase)) {
     if (gameState.systemHealth <= 0) {
-      logger.debug(
-        "game needs a entered defeat phase event. adding finalization event."
-      );
+      logger.debug("game needs a entered defeat phase event. adding finalization event.");
       gameEvents.push(new EnteredDefeatPhase(gameState.playerScores));
     } else if (gameState.round >= gameState.maxRound) {
-      logger.debug(
-        "game needs a entered victory phase event. adding finalization event."
-      );
+      logger.debug("game needs a entered victory phase event. adding finalization event.");
       gameEvents.push(new EnteredVictoryPhase(gameState.playerScores));
     } else {
       logger.debug("game was not completed. refusing to add finalize event.");
@@ -190,16 +176,13 @@ async function createTournament(
   });
 }
 
-async function setAdminUser(
-  em: EntityManager,
-  username: string
-): Promise<void> {
+async function setAdminUser(em: EntityManager, username: string): Promise<void> {
   const services = getServices(em);
   logger.debug("setting admin user: %s", username);
   try {
     const user = await services.account.setAdminByUsername(username);
     logger.info("set user '%s' (id: %s) as admin", user.username, user.id);
-  } catch(e) {
+  } catch (e) {
     logger.warn("error attempting to set '%s' as admin", username);
   }
 }
@@ -207,14 +190,11 @@ async function setAdminUser(
 /**
  * FIXME: these two are mostly defunct now.
  */
-async function checkQuizCompletion(
-  em: EntityManager,
-  ids: Array<number>
-): Promise<void> {
+async function checkQuizCompletion(em: EntityManager, ids: Array<number>): Promise<void> {
   const services = getServices(em);
   if (ids.length === 0) {
     const users = await services.quiz.getIncompleteQuizUsers();
-    ids = users.map((u) => u.id);
+    ids = users.map(u => u.id);
     logger.debug(
       "checking quiz completion for all verified users who haven't passed the quiz: %o",
       ids
@@ -226,10 +206,7 @@ async function checkQuizCompletion(
   }
 }
 
-async function completeQuizCompletion(
-  em: EntityManager,
-  ids: Array<number>
-): Promise<void> {
+async function completeQuizCompletion(em: EntityManager, ids: Array<number>): Promise<void> {
   const services = getServices(em);
   for (const id of ids) {
     await services.quiz.setUserQuizCompletion(id, true);
@@ -255,14 +232,16 @@ async function createRound(
 ): Promise<TournamentRound> {
   const s = getServices(em);
   let tournament = undefined;
-  let currentRound: Pick<TournamentRound, "roundNumber" | "introSurveyUrl" | "exitSurveyUrl"> | undefined
+  let currentRound:
+    | Pick<TournamentRound, "roundNumber" | "introSurveyUrl" | "exitSurveyUrl">
+    | undefined;
   if (open) {
     tournament = await s.tournament.getOpenTournament();
-    currentRound = await s.tournament.getOpenTournamentRound().catch((err) => undefined);
+    currentRound = await s.tournament.getOpenTournamentRound().catch(err => undefined);
   } else {
     if (id) tournament = await s.tournament.getTournament(id);
     else tournament = await s.tournament.getActiveTournament();
-    currentRound = await s.tournament.getCurrentTournamentRound().catch((err) => undefined);
+    currentRound = await s.tournament.getCurrentTournamentRound().catch(err => undefined);
   }
   if (!currentRound) {
     currentRound = {
@@ -279,19 +258,13 @@ async function createRound(
   }
   const round = await s.tournament.createRound({
     tournamentId: tournament.id,
-    introSurveyUrl: introSurveyUrl
-      ? introSurveyUrl
-      : currentRound.introSurveyUrl,
+    introSurveyUrl: introSurveyUrl ? introSurveyUrl : currentRound.introSurveyUrl,
     exitSurveyUrl: exitSurveyUrl ? exitSurveyUrl : currentRound.exitSurveyUrl,
     roundNumber: currentRound.roundNumber + 1,
     announcement,
     numberOfGameRounds,
   });
-  logger.info(
-    "created tournament round %d for tournament %s",
-    round.roundNumber,
-    tournament.name
-  );
+  logger.info("created tournament round %d for tournament %s", round.roundNumber, tournament.name);
   return round;
 }
 
@@ -302,11 +275,7 @@ async function createTournamentRoundInvites(
   hasParticipated: boolean
 ): Promise<number> {
   const sp = getServices(em);
-  const invites = await sp.tournament.createInvites(
-    userIds,
-    tournamentRoundId,
-    hasParticipated
-  );
+  const invites = await sp.tournament.createInvites(userIds, tournamentRoundId, hasParticipated);
   logger.debug("created tournament round invites for %s", userIds);
   return invites.length;
 }
@@ -326,7 +295,7 @@ async function exportActiveEmails(
   const sp = getServices(em);
   logger.debug("exporting emails after %s", after);
   const users = await sp.account.getActiveUsers(after);
-  const emails = users.map((u) => formatEmail(u, enableAmdfFormat));
+  const emails = users.map(u => formatEmail(u, enableAmdfFormat));
   try {
     await writeFile("active-emails.csv", emails.join("\n"));
     logger.debug("Exported all active users with emails to active-emails.csv");
@@ -356,10 +325,7 @@ async function createTournamentRoundDate(
   tournamentRoundId?: number
 ): Promise<void> {
   const sp = getServices(em);
-  const scheduledDate = await sp.tournament.createScheduledRoundDate(
-    date,
-    tournamentRoundId
-  );
+  const scheduledDate = await sp.tournament.createScheduledRoundDate(date, tournamentRoundId);
   logger.debug("created scheduled date: %o", scheduledDate);
 }
 
@@ -373,7 +339,7 @@ async function createScheduledGameDate(
   const scheduledDate = await sp.schedule.createScheduledGameDate({
     date,
     minutesOpenBefore,
-    minutesOpenAfter
+    minutesOpenAfter,
   });
 }
 
@@ -414,7 +380,7 @@ program
               .requiredOption(
                 "-d, --date <date>",
                 "UTC Datetime for an upcoming scheduled game",
-                (s) => new Date(Date.parse(s))
+                s => new Date(Date.parse(s))
               )
               .option(
                 "--tournamentRoundId <tournamentRoundId>",
@@ -422,8 +388,8 @@ program
                 customParseInt
               )
               .description("add a TournamentRoundDate for the given date")
-              .action(async (cmd) => {
-                await withConnection((em) =>
+              .action(async cmd => {
+                await withConnection(em =>
                   createTournamentRoundDate(em, cmd.date, cmd.tournamentRoundId)
                 );
               })
@@ -436,13 +402,9 @@ program
                 "ID of the tournament round",
                 customParseInt
               )
-              .description(
-                "report emails for all users in the given tournament round"
-              )
-              .action(async (cmd) => {
-                await withConnection((em) =>
-                  exportTournamentRoundEmails(em, cmd.tournamentRoundId)
-                );
+              .description("report emails for all users in the given tournament round")
+              .action(async cmd => {
+                await withConnection(em => exportTournamentRoundEmails(em, cmd.tournamentRoundId));
               })
           )
           .addCommand(
@@ -463,11 +425,9 @@ program
                 "-p, --participated",
                 "Set to mark these users as having already participated"
               )
-              .description(
-                "create invitations for the given users in the given tournament round"
-              )
-              .action(async (cmd) => {
-                await withConnection((em) =>
+              .description("create invitations for the given users in the given tournament round")
+              .action(async cmd => {
+                await withConnection(em =>
                   createTournamentRoundInvites(
                     em,
                     cmd.tournamentRoundId,
@@ -480,20 +440,13 @@ program
           .addCommand(
             program
               .createCommand("create")
-              .option(
-                "-o, --open",
-                "create an open beta tournament round"
-              )
+              .option("-o, --open", "create an open beta tournament round")
               .option(
                 "--tournamentId <tournamentId>",
                 "id of an existing tournament",
                 customParseInt
               )
-              .option(
-                "--introSurveyUrl <introSurveyUrl>",
-                "introductory survey URL",
-                ""
-              )
+              .option("--introSurveyUrl <introSurveyUrl>", "introductory survey URL", "")
               .option("--exitSurveyUrl <exitSurveyUrl>", "exit survey URL", "")
               .option(
                 "--numberOfGameRounds <numberOfGameRounds>",
@@ -501,14 +454,10 @@ program
                 customParseInt,
                 11
               )
-              .option(
-                "--announcement <announcement>",
-                "Tournament Round announcement message",
-                ""
-              )
+              .option("--announcement <announcement>", "Tournament Round announcement message", "")
               .description("create a tournament round")
-              .action(async (cmd) => {
-                await withConnection((em) =>
+              .action(async cmd => {
+                await withConnection(em =>
                   createRound(
                     em,
                     cmd.open,
@@ -532,31 +481,13 @@ program
       .addCommand(
         program
           .createCommand("create")
-          .requiredOption(
-            "--tournamentName <tournamentName>",
-            "string name of the tournament"
-          )
-          .option(
-            "--minRounds <minRounds>",
-            "Minimum number of game rounds",
-            customParseInt,
-            8
-          )
-          .option(
-            "--maxRounds <maxRounds>",
-            "Maximum number of game rounds",
-            customParseInt,
-            12
-          )
+          .requiredOption("--tournamentName <tournamentName>", "string name of the tournament")
+          .option("--minRounds <minRounds>", "Minimum number of game rounds", customParseInt, 8)
+          .option("--maxRounds <maxRounds>", "Maximum number of game rounds", customParseInt, 12)
           .description("create a tournament")
-          .action(async (cmd) => {
-            await withConnection((em) =>
-              createTournament(
-                em,
-                cmd.tournamentName,
-                cmd.minRounds,
-                cmd.maxRounds
-              )
+          .action(async cmd => {
+            await withConnection(em =>
+              createTournament(em, cmd.tournamentName, cmd.minRounds, cmd.maxRounds)
             );
             logger.debug("tournament create...");
           })
@@ -572,7 +503,7 @@ program
           .requiredOption(
             "--date <date>",
             "UTC Datetime for an upcoming scheduled game",
-            (s) => new Date(Date.parse(s))
+            s => new Date(Date.parse(s))
           )
           .option(
             "--before <minutesOpenBefore>",
@@ -587,14 +518,14 @@ program
             5
           )
           .description("add a new date to the schedule")
-          .action(async (cmd) => {
-            await withConnection((em) =>
+          .action(async cmd => {
+            await withConnection(em =>
               createScheduledGameDate(em, cmd.date, cmd.before, cmd.after)
             );
           })
       )
   )
-.addCommand(
+  .addCommand(
     program
       .createCommand("accounts")
       .description("account subcommands")
@@ -603,8 +534,8 @@ program
           .createCommand("setadmin")
           .description("set a user as an administrator")
           .requiredOption("--username <username>", "username of the user")
-          .action(async (cmd) => {
-            await withConnection((em) => setAdminUser(em, cmd.username));
+          .action(async cmd => {
+            await withConnection(em => setAdminUser(em, cmd.username));
           })
       )
   )
@@ -617,27 +548,34 @@ program
           .createCommand("finalize")
           .description("finalize a game that wasn't finalized properly")
           .requiredOption("--gameId <gameId>", "id of game", customParseInt)
-          .action(async (cmd) => {
-            await withConnection((em) => finalize(em, cmd.gameId));
+          .action(async cmd => {
+            await withConnection(em => finalize(em, cmd.gameId));
           })
       )
       .addCommand(
         program
           .createCommand("validate")
-          .description("verify that the replayer is producing correct results according to game state snaphots")
+          .description(
+            "verify that the replayer is producing correct results according to game state snaphots"
+          )
           .requiredOption("--gameId <gameId>", "id of game", customParseInt)
-          .action(async (cmd) => {
-            await withConnection((em) => validate(em, cmd.gameId));
+          .action(async cmd => {
+            await withConnection(em => validate(em, cmd.gameId));
           })
       )
   )
   .addCommand(
-    program.createCommand('dump')
-      .description('dump game data for a given tournament round id to a pile of CSV files')
-      .requiredOption('--tournamentRoundId <tournamentRoundId>', 'tournament round id', customParseInt)
-      .option('--gids <game_ids>', 'specific game ids to export', toIntArray, [] as Array<number>)
-      .action(async (cmd) => {
-        await withConnection((em) => exportData(em, cmd.tournamentRoundId, cmd.gids))
+    program
+      .createCommand("dump")
+      .description("dump game data for a given tournament round id to a pile of CSV files")
+      .requiredOption(
+        "--tournamentRoundId <tournamentRoundId>",
+        "tournament round id",
+        customParseInt
+      )
+      .option("--gids <game_ids>", "specific game ids to export", toIntArray, [] as Array<number>)
+      .action(async cmd => {
+        await withConnection(em => exportData(em, cmd.tournamentRoundId, cmd.gids));
       })
   )
   .addCommand(
@@ -650,8 +588,8 @@ program
         toIntArray,
         [] as Array<number>
       )
-      .action(async (cmd) => {
-        await withConnection((em) => checkQuizCompletion(em, cmd.ids));
+      .action(async cmd => {
+        await withConnection(em => checkQuizCompletion(em, cmd.ids));
       })
   )
   .addCommand(
@@ -664,8 +602,8 @@ program
         toIntArray,
         [] as Array<number>
       )
-      .action(async (cmd) => {
-        await withConnection((em) => completeQuizCompletion(em, cmd.ids));
+      .action(async cmd => {
+        await withConnection(em => completeQuizCompletion(em, cmd.ids));
       })
   )
   .addCommand(
@@ -674,17 +612,15 @@ program
       .option(
         "-a, --after <after_date>",
         "Only select participants created after the date yyyy-mm-dd",
-        (s) => new Date(Date.parse(s)),
+        s => new Date(Date.parse(s)),
         DEFAULT_AFTER_DATE
       )
       .option("-m, --enable-amdf", "Emit CSV in ASU AMDF email format")
       .description(
         "generate a CSV for mailchimp import of all active users with a valid email address"
       )
-      .action(async (cmd) => {
-        await withConnection((em) =>
-          exportActiveEmails(em, cmd.after, cmd.enableAmdf)
-        );
+      .action(async cmd => {
+        await withConnection(em => exportActiveEmails(em, cmd.after, cmd.enableAmdf));
       })
   )
   .addCommand(
@@ -695,11 +631,9 @@ program
         "A file with a list of emails to deactivate, one email per line.",
         "inactive.csv"
       )
-      .description(
-        "Deactivate users who have unsubscribed from emails (currently from mailchimp)."
-      )
-      .action(async (cmd) => {
-        await withConnection((em) => deactivateUsers(em, cmd.filename));
+      .description("Deactivate users who have unsubscribed from emails (currently from mailchimp).")
+      .action(async cmd => {
+        await withConnection(em => deactivateUsers(em, cmd.filename));
       })
   )
   .addCommand(
@@ -709,10 +643,8 @@ program
       .addCommand(
         program
           .createCommand("reload")
-          .description(
-            `reload settings from the file system at ${DYNAMIC_SETTINGS_PATH}`
-          )
-          .action(async (cmd) => {
+          .description(`reload settings from the file system at ${DYNAMIC_SETTINGS_PATH}`)
+          .action(async cmd => {
             try {
               const client = getRedis();
               logger.debug("reloading dynamic settings");
@@ -732,7 +664,7 @@ program
         program
           .createCommand("report")
           .description("Report current redis settings")
-          .action(async (cmd) => {
+          .action(async cmd => {
             try {
               const client = getRedis();
               const settings = new RedisSettings(client);

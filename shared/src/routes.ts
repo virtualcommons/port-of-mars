@@ -19,7 +19,7 @@ export type Page =
   | "Register"
   | "Verify"
   | "Manual"
-  | "Privacy"
+  | "Privacy";
 
 export const PAGES: Array<Page> = [
   ADMIN_PAGE,
@@ -48,7 +48,7 @@ export const PAGE_META: {
     path: string;
     name?: string;
     props?: any;
-    meta: { requiresAuth: boolean, requiresAdmin?: boolean };
+    meta: { requiresAuth: boolean; requiresAdmin?: boolean };
   };
 } = {
   [ADMIN_PAGE]: {
@@ -121,7 +121,7 @@ export const PAGE_META: {
     name: PRIVACY_PAGE,
     meta: {
       requiresAuth: false,
-    }
+    },
   },
 };
 

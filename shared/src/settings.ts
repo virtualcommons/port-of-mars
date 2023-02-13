@@ -1,22 +1,22 @@
 import { BUILD_ID, SENTRY_DSN } from "./assets/config";
 export { BUILD_ID, SENTRY_DSN } from "./assets/config";
 
-export const ENVIRONMENT = process.env.NODE_ENV || 'development';
+export const ENVIRONMENT = process.env.NODE_ENV || "development";
 
 export function isDev(): boolean {
-  return ENVIRONMENT === 'development';
+  return ENVIRONMENT === "development";
 }
 
 export function isStaging(): boolean {
-  return ENVIRONMENT === 'staging';
+  return ENVIRONMENT === "staging";
 }
 
 export function isProduction(): boolean {
-  return ENVIRONMENT === 'production';
+  return ENVIRONMENT === "production";
 }
 
 export function isTest(): boolean {
-  return ENVIRONMENT === 'test';
+  return ENVIRONMENT === "test";
 }
 
 export function isDevOrStaging(): boolean {

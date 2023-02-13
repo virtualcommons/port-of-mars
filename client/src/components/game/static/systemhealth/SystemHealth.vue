@@ -3,7 +3,7 @@
     <b-row class="px-4 tour-system-health" align-v="center">
       <h3 class="title mx-3 my-auto">
         <b-img
-        v-bind="systemHealthIconProps"
+          v-bind="systemHealthIconProps"
           :src="require(`@port-of-mars/client/assets/icons/systemHealth.svg`)"
           rounded="circle"
           left
@@ -11,18 +11,18 @@
           alt="System Health"
         />
         System Health
-     </h3>
+      </h3>
       <StatusBar class="statusbar" :setWidth="systemHealth" />
       <h3 class="mx-2">
         {{ systemHealth }}
         <b-img
-        v-bind="systemHealthIconProps"
-        class="ml-2 mt-2"
+          v-bind="systemHealthIconProps"
+          class="ml-2 mt-2"
           :src="require(`@port-of-mars/client/assets/icons/systemHealth.svg`)"
           right
           alt="System Health Icon"
         />
-       </h3>
+      </h3>
     </b-row>
   </b-container>
 </template>
@@ -44,8 +44,7 @@ export default class SystemHealth extends Vue {
   get systemHealthIconProps() {
     return {
       height: 25,
-    }
-
+    };
   }
 }
 </script>

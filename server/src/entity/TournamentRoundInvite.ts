@@ -3,13 +3,14 @@ import {
   Entity,
   ManyToOne,
   CreateDateColumn,
-  PrimaryGeneratedColumn, Unique,
-} from 'typeorm';
-import { TournamentRound } from '@port-of-mars/server/entity/TournamentRound';
-import { User } from '@port-of-mars/server/entity/User';
+  PrimaryGeneratedColumn,
+  Unique,
+} from "typeorm";
+import { TournamentRound } from "@port-of-mars/server/entity/TournamentRound";
+import { User } from "@port-of-mars/server/entity/User";
 
 @Entity()
-@Unique(['user', 'tournamentRound'])
+@Unique(["user", "tournamentRound"])
 export class TournamentRoundInvite {
   @PrimaryGeneratedColumn()
   id!: number;
@@ -17,10 +18,7 @@ export class TournamentRoundInvite {
   @Column()
   tournamentRoundId!: number;
 
-  @ManyToOne(
-    type => TournamentRound,
-    tournamentRound => tournamentRound.invitations
-  )
+  @ManyToOne(type => TournamentRound, tournamentRound => tournamentRound.invitations)
   tournamentRound!: TournamentRound;
 
   @Column()
@@ -29,13 +27,13 @@ export class TournamentRoundInvite {
   @ManyToOne(type => User, user => user.invites)
   user!: User;
 
-  @Column( { default: false })
+  @Column({ default: false })
   hasParticipated!: boolean;
 
-  @Column( { default: false })
+  @Column({ default: false })
   hasCompletedIntroSurvey!: boolean;
 
-  @Column( { default: false })
+  @Column({ default: false })
   hasCompletedExitSurvey!: boolean;
 
   @CreateDateColumn()

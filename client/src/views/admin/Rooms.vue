@@ -21,12 +21,15 @@
             </b-badge>
           </h4>
           <div class="h-100-header w-100 content-container">
-            <b-table dark sticky-header small
+            <b-table
+              dark
+              sticky-header
+              small
               class="h-100 m-0 custom-table"
               :fields="roomFields"
               :items="rooms"
               sort-by="elapsed"
-              :sort-desc="true" 
+              :sort-desc="true"
             >
               <template #cell(elapsed)="data">
                 {{ formatTime(data.item.elapsed) }}
@@ -38,7 +41,8 @@
                   class="float-right"
                   :disabled="isInspectedRoom(data.item.roomId)"
                   @click="fetchInspectData(data.item.roomId)"
-                >Inspect <b-icon-box-arrow-right class="float-right ml-2"></b-icon-box-arrow-right>
+                  >Inspect
+                  <b-icon-box-arrow-right class="float-right ml-2"></b-icon-box-arrow-right>
                 </b-button>
               </template>
             </b-table>
@@ -54,7 +58,10 @@
                 <StatusBar class="statusbar" :setWidth="inspectData.systemHealth" />
                 <h5 class="ml-2">{{ inspectData.systemHealth }}</h5>
               </div>
-              <b-table dark sticky-header small
+              <b-table
+                dark
+                sticky-header
+                small
                 thead-class="hidden-header"
                 class="h-75 m-0 custom-table"
                 :fields="inspectFields"
@@ -63,15 +70,11 @@
                 <template #cell(username)="data">
                   {{ data.item.username }} <b-badge v-if="data.item.isBot">bot</b-badge>
                 </template>
-                <template #cell(points)="data">
-                  {{ data.item.points }} points
-                </template>
+                <template #cell(points)="data"> {{ data.item.points }} points </template>
               </b-table>
             </div>
             <div v-else class="h-100 d-flex align-items-center justify-content-center">
-              <p style="color: rgba(241, 224, 197, 0.25)">
-                Inspect a game to see its state.
-              </p>
+              <p style="color: rgba(241, 224, 197, 0.25)">Inspect a game to see its state.</p>
             </div>
           </div>
         </b-col>
@@ -81,14 +84,14 @@
         <b-col cols="6" class="mh-100 w-100 p-2">
           <h4 class="header-nowrap">Mars Log</h4>
           <div class="h-100-header w-100 content-container" style="overflow-y: auto">
-            <MarsLog :logs="inspectData.marsLog"/>
+            <MarsLog :logs="inspectData.marsLog" />
           </div>
         </b-col>
         <!-- chat -->
         <b-col cols="6" class="mh-100 p-2">
           <h4 class="header-nowrap">Chat</h4>
           <div class="h-100-header w-100 content-container" style="overflow-y: auto">
-            <Chat :messages="inspectData.chatMessages" :readOnly="true" :reportable="false"/>
+            <Chat :messages="inspectData.chatMessages" :readOnly="true" :reportable="false" />
           </div>
         </b-col>
       </b-row>
@@ -108,8 +111,8 @@ import StatusBar from "@port-of-mars/client/components/game/static/systemhealth/
   components: {
     Chat,
     MarsLog,
-    StatusBar
-  }
+    StatusBar,
+  },
 })
 export default class Rooms extends Vue {
   api!: AdminAPI;
@@ -125,7 +128,7 @@ export default class Rooms extends Vue {
     players: [],
     systemHealth: 0,
     marsLog: [],
-    chatMessages: []
+    chatMessages: [],
   };
   inspectFields = [
     { key: "username", label: "Username", tdClass: "extra-small" },
@@ -139,12 +142,12 @@ export default class Rooms extends Vue {
     const mins = Math.floor(time / 1000 / 60);
     const hours = Math.floor(mins / 60);
     if (hours > 0) {
-      return `${hours} hour${(hours === 1) ? "" : "s"}`;
+      return `${hours} hour${hours === 1 ? "" : "s"}`;
     } else {
-      return `${mins} min${(mins === 1) ? "" : "s"}`;
+      return `${mins} min${mins === 1 ? "" : "s"}`;
     }
   }
-  
+
   isInspectedRoom(roomId: string) {
     return this.inspectedRoomId === roomId;
   }
@@ -191,7 +194,7 @@ export default class Rooms extends Vue {
           players: [],
           systemHealth: 0,
           marsLog: [],
-          chatMessages: []
+          chatMessages: [],
         });
         this.inspectedRoomId = "";
       }
@@ -200,5 +203,4 @@ export default class Rooms extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

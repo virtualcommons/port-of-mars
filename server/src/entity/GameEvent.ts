@@ -1,5 +1,5 @@
-import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
-import {Game} from "./Game";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Game } from "./Game";
 
 @Entity()
 export class GameEvent {
@@ -15,7 +15,7 @@ export class GameEvent {
   @Column()
   type!: string;
 
-  @Column({type: 'jsonb'})
+  @Column({ type: "jsonb" })
   payload!: object;
 
   @Column()

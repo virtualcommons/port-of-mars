@@ -4,9 +4,7 @@
     style="color: rgb(34, 26, 27)"
   >
     <b-col class="w-100 py-0 my-0">
-      <p class="py-0 my-0 title">
-        Round
-      </p>
+      <p class="py-0 my-0 title">Round</p>
       <p class="subtitle">
         {{ roundNumber }}
       </p>
@@ -26,9 +24,7 @@
       >
         Ready to Advance
       </b-button>
-      <b-button squared @click="submitCancel" v-else variant="danger">
-        Cancel Readiness
-      </b-button>
+      <b-button squared @click="submitCancel" v-else variant="danger"> Cancel Readiness </b-button>
     </b-col>
   </b-row>
 </template>
@@ -39,7 +35,7 @@ import { Phase, PHASE_LABELS } from "@port-of-mars/shared/types";
 import { AbstractGameAPI } from "@port-of-mars/client/api/game/types";
 
 @Component({
-  components: {}
+  components: {},
 })
 export default class GameInformation extends Vue {
   @Inject() private api!: AbstractGameAPI;

@@ -2,23 +2,28 @@
   <b-row class="h-100 w-100" no-gutters>
     <b-col cols="7">
       <div id="rooms" class="h-100 content-container mr-3">
-        <b-table dark sticky-header
+        <b-table
+          dark
+          sticky-header
           class="h-100 m-0 custom-table"
-          style="max-height: none;"
+          style="max-height: none"
           :fields="roomFields"
           :items="rooms"
           sort-by="dateCreated"
-          :sort-desc="true" 
+          :sort-desc="true"
         >
           <template #cell(numClients)="data">
-            <b-icon-person-fill v-for="i in data.item.numClients" :key="'filled-' + i"/>
-            <b-icon-person-fill variant="info" v-for="i in 5 - data.item.numClients" :key="'open-' + i"/>
+            <b-icon-person-fill v-for="i in data.item.numClients" :key="'filled-' + i" />
+            <b-icon-person-fill
+              variant="info"
+              v-for="i in 5 - data.item.numClients"
+              :key="'open-' + i"
+            />
           </template>
-          <template #cell(name)="data">
-            {{ data.item.leader }}'s room
-          </template>
+          <template #cell(name)="data"> {{ data.item.leader }}'s room </template>
           <template #cell(action)="data">
-            <b-button size="sm"
+            <b-button
+              size="sm"
               variant="primary"
               class="float-right"
               @click.once="$emit('joinRoom', data.item.id)"
@@ -29,17 +34,33 @@
           </template>
           <template #cell(dateCreated)></template>
           <template #head(action)="data">
-            <b-button v-if="!refreshingRoomList" size="sm" variant="link" class="float-right p-0" @click="refreshRoomList">
-              <b-icon-arrow-clockwise font-scale="1.5" style="color: white;"></b-icon-arrow-clockwise>
+            <b-button
+              v-if="!refreshingRoomList"
+              size="sm"
+              variant="link"
+              class="float-right p-0"
+              @click="refreshRoomList"
+            >
+              <b-icon-arrow-clockwise
+                font-scale="1.5"
+                style="color: white"
+              ></b-icon-arrow-clockwise>
             </b-button>
-            <b-spinner v-else small label="..." class="float-right mr-1 mb-1" style="margin-left:3px;"></b-spinner>
+            <b-spinner
+              v-else
+              small
+              label="..."
+              class="float-right mr-1 mb-1"
+              style="margin-left: 3px"
+            ></b-spinner>
           </template>
         </b-table>
       </div>
     </b-col>
     <b-col cols="5">
       <div id="actions" class="pl-3">
-        <b-button size="lg"
+        <b-button
+          size="lg"
           v-if="rooms.length > 0"
           title="Join the room with the most players"
           variant="primary"
@@ -49,15 +70,20 @@
         >
           <h4>Join Existing Room</h4>
         </b-button>
-        <b-button size="lg"
+        <b-button
+          size="lg"
           variant="success"
           class="w-100 mb-3"
-          @click.once="$emit('createRoom'); clickedCreateRoom = true"
+          @click.once="
+            $emit('createRoom');
+            clickedCreateRoom = true;
+          "
           :disabled="isBanned"
         >
           <h4>Create Room</h4>
         </b-button>
-        <b-button size="lg"
+        <b-button
+          size="lg"
           variant="warning"
           class="w-100 mb-3"
           @click.once="$emit('startSoloWithBots')"
@@ -80,8 +106,8 @@ import MuteBanWarning from "@port-of-mars/client/components/lobby/MuteBanWarning
 
 @Component({
   components: {
-    MuteBanWarning
-  }
+    MuteBanWarning,
+  },
 })
 export default class LobbyRoomList extends Vue {
   @Inject() readonly $client!: Client;
@@ -153,9 +179,7 @@ export default class LobbyRoomList extends Vue {
       this.$emit("createRoom");
     }
   }
-
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

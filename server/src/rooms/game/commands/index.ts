@@ -1,10 +1,6 @@
 import * as req from "@port-of-mars/shared/game/requests";
 import { InvestmentData, Phase, TradeData } from "@port-of-mars/shared/types";
-import {
-  GameState,
-  Player,
-  Trade,
-} from "@port-of-mars/server/rooms/game/state";
+import { GameState, Player, Trade } from "@port-of-mars/server/rooms/game/state";
 import {
   AcceptedTradeRequest,
   AddedSystemHealthContributions,
@@ -58,17 +54,9 @@ import { VoteHeroOrPariahRoleData } from "@port-of-mars/shared/game/requests";
 const logger = settings.logging.getLogger(__filename);
 
 export class SendChatMessageCmd implements Command {
-  constructor(
-    private message: string,
-    private state: GameState,
-    private player: Player
-  ) {}
+  constructor(private message: string, private state: GameState, private player: Player) {}
 
-  static fromReq(
-    r: req.SendChatMessageData,
-    state: GameState,
-    player: Player
-  ): SendChatMessageCmd {
+  static fromReq(r: req.SendChatMessageData, state: GameState, player: Player): SendChatMessageCmd {
     return new SendChatMessageCmd(r.message, state, player);
   }
 
@@ -76,14 +64,12 @@ export class SendChatMessageCmd implements Command {
     if (this.player.isMuted) {
       logger.debug(
         "[CHAT game %d] muted player: %s attempted to send a chat message",
-        this.state.gameId, this.player.username
+        this.state.gameId,
+        this.player.username
       );
       return [];
     }
-    logger.debug(
-      "[CHAT game %d] %s: %s",
-      this.state.gameId, this.player.role, this.message
-    );
+    logger.debug("[CHAT game %d] %s: %s", this.state.gameId, this.player.role, this.message);
     return [
       new SentChatMessage({
         message: this.message,
@@ -98,10 +84,7 @@ export class SendChatMessageCmd implements Command {
 export class PurchaseAccomplishmentCmd implements Command {
   constructor(private id: number, private player: Player) {}
 
-  static fromReq(
-    r: req.PurchaseAccomplishmentCardData,
-    player: Player
-  ): PurchaseAccomplishmentCmd {
+  static fromReq(r: req.PurchaseAccomplishmentCardData, player: Player): PurchaseAccomplishmentCmd {
     return new PurchaseAccomplishmentCmd(r.id, player);
   }
 
@@ -118,10 +101,7 @@ export class PurchaseAccomplishmentCmd implements Command {
 export class DiscardAccomplishmentCmd implements Command {
   constructor(private id: number, private player: Player) {}
 
-  static fromReq(
-    r: req.DiscardAccomplishmentCardData,
-    player: Player
-  ): DiscardAccomplishmentCmd {
+  static fromReq(r: req.DiscardAccomplishmentCardData, player: Player): DiscardAccomplishmentCmd {
     return new DiscardAccomplishmentCmd(r.id, player);
   }
 
@@ -165,10 +145,7 @@ export class TimeInvestmentCmd implements Command {
 export class SetPlayerReadinessCmd implements Command {
   constructor(private ready: boolean, private player: Player) {}
 
-  static fromReq(
-    r: req.SetPlayerReadinessData,
-    player: Player
-  ): SetPlayerReadinessCmd {
+  static fromReq(r: req.SetPlayerReadinessData, player: Player): SetPlayerReadinessCmd {
     return new SetPlayerReadinessCmd(r.value, player);
   }
 
@@ -197,10 +174,7 @@ export class ResetBotWarningCmd implements Command {
 export class AcceptTradeRequestCmd implements Command {
   constructor(private state: GameState, private id: string) {}
 
-  static fromReq(
-    r: req.AcceptTradeRequestData,
-    state: GameState
-  ): AcceptTradeRequestCmd {
+  static fromReq(r: req.AcceptTradeRequestData, state: GameState): AcceptTradeRequestCmd {
     return new AcceptTradeRequestCmd(state, r.id);
   }
 
@@ -239,10 +213,7 @@ export class RejectTradeRequestCmd implements Command {
 export class CancelTradeRequestCmd implements Command {
   constructor(private id: string, private player: Player) {}
 
-  static fromReq(
-    r: req.CancelTradeRequestData,
-    player: Player
-  ): CancelTradeRequestCmd {
+  static fromReq(r: req.CancelTradeRequestData, player: Player): CancelTradeRequestCmd {
     return new CancelTradeRequestCmd(r.id, player);
   }
 
@@ -254,10 +225,7 @@ export class CancelTradeRequestCmd implements Command {
 export class SendTradeRequestCmd implements Command {
   constructor(private trade: Omit<TradeData, "id">, private player: Player) {}
 
-  static fromReq(
-    r: req.SendTradeRequestData,
-    player: Player
-  ): SendTradeRequestCmd {
+  static fromReq(r: req.SendTradeRequestData, player: Player): SendTradeRequestCmd {
     return new SendTradeRequestCmd(r.trade, player);
   }
 
@@ -286,10 +254,7 @@ export class SetNextPhaseCmd implements Command {
       case Phase.newRound:
         // do not run mars events in the first round
         return this.state.isFirstRound()
-          ? [
-              new SubtractedSystemHealthWearAndTear(),
-              new EnteredInvestmentPhase(),
-            ]
+          ? [new SubtractedSystemHealthWearAndTear(), new EnteredInvestmentPhase()]
           : [
               new SubtractedSystemHealthWearAndTear(),
               new EnteredMarsEventPhase(),
@@ -324,10 +289,7 @@ export class SetNextPhaseCmd implements Command {
         const state = this.state;
         const snapshot = state.getRoundSummary();
         if (state.isLastRound()) {
-          return [
-            new TakenRoundSnapshot(snapshot),
-            new EnteredVictoryPhase(state.playerScores)
-          ];
+          return [new TakenRoundSnapshot(snapshot), new EnteredVictoryPhase(state.playerScores)];
         }
         return [
           new TakenRoundSnapshot(snapshot),
@@ -358,30 +320,19 @@ export class ResetGameCmd implements Command {
 export class PersonalGainVotes implements Command {
   constructor(private vote: boolean, private player: Player) {}
 
-  static fromReq(
-    r: req.PersonalGainVotesData,
-    player: Player
-  ): PersonalGainVotes {
+  static fromReq(r: req.PersonalGainVotesData, player: Player): PersonalGainVotes {
     return new PersonalGainVotes(r.vote, player);
   }
 
   execute(): Array<GameEvent> {
-    return [
-      new VotedForPersonalGain({ vote: this.vote, role: this.player.role }),
-    ];
+    return [new VotedForPersonalGain({ vote: this.vote, role: this.player.role })];
   }
 }
 
 export class VoteForPhilanthropistCmd implements Command {
-  constructor(
-    private voteData: req.VoteForPhilanthropistData,
-    private player: Player
-  ) {}
+  constructor(private voteData: req.VoteForPhilanthropistData, private player: Player) {}
 
-  static fromReq(
-    r: req.VoteForPhilanthropistData,
-    player: Player
-  ): VoteForPhilanthropistCmd {
+  static fromReq(r: req.VoteForPhilanthropistData, player: Player): VoteForPhilanthropistCmd {
     return new VoteForPhilanthropistCmd(r, player);
   }
 
@@ -396,15 +347,9 @@ export class VoteForPhilanthropistCmd implements Command {
 }
 
 export class OutOfCommissionCuratorCmd implements Command {
-  constructor(
-    private data: req.OutOfCommissionCuratorData,
-    private player: Player
-  ) {}
+  constructor(private data: req.OutOfCommissionCuratorData, private player: Player) {}
 
-  static fromReq(
-    r: req.OutOfCommissionCuratorData,
-    player: Player
-  ): OutOfCommissionCuratorCmd {
+  static fromReq(r: req.OutOfCommissionCuratorData, player: Player): OutOfCommissionCuratorCmd {
     return new OutOfCommissionCuratorCmd(r, player);
   }
 
@@ -414,10 +359,7 @@ export class OutOfCommissionCuratorCmd implements Command {
 }
 
 export class OutOfCommissionPoliticianCmd implements Command {
-  constructor(
-    private data: req.OutOfCommissionPoliticianData,
-    private player: Player
-  ) {}
+  constructor(private data: req.OutOfCommissionPoliticianData, private player: Player) {}
 
   static fromReq(
     r: req.OutOfCommissionPoliticianData,
@@ -432,10 +374,7 @@ export class OutOfCommissionPoliticianCmd implements Command {
 }
 
 export class OutOfCommissionResearcherCmd implements Command {
-  constructor(
-    private data: req.OutOfCommissionResearcherData,
-    private player: Player
-  ) {}
+  constructor(private data: req.OutOfCommissionResearcherData, private player: Player) {}
 
   static fromReq(
     r: req.OutOfCommissionResearcherData,
@@ -450,15 +389,9 @@ export class OutOfCommissionResearcherCmd implements Command {
 }
 
 export class OutOfCommissionPioneerCmd implements Command {
-  constructor(
-    private data: req.OutOfCommissionPioneerData,
-    private player: Player
-  ) {}
+  constructor(private data: req.OutOfCommissionPioneerData, private player: Player) {}
 
-  static fromReq(
-    r: req.OutOfCommissionPioneerData,
-    player: Player
-  ): OutOfCommissionPioneerCmd {
+  static fromReq(r: req.OutOfCommissionPioneerData, player: Player): OutOfCommissionPioneerCmd {
     return new OutOfCommissionPioneerCmd(r, player);
   }
 
@@ -468,10 +401,7 @@ export class OutOfCommissionPioneerCmd implements Command {
 }
 
 export class OutOfCommissionEntrepreneurCmd implements Command {
-  constructor(
-    private data: req.OutOfCommissionEntrepreneurData,
-    private player: Player
-  ) {}
+  constructor(private data: req.OutOfCommissionEntrepreneurData, private player: Player) {}
 
   static fromReq(
     r: req.OutOfCommissionEntrepreneurData,
@@ -486,15 +416,9 @@ export class OutOfCommissionEntrepreneurCmd implements Command {
 }
 
 export class BondingThroughAdversityCmd implements Command {
-  constructor(
-    private data: req.BondingThroughAdversityData,
-    private player: Player
-  ) {}
+  constructor(private data: req.BondingThroughAdversityData, private player: Player) {}
 
-  static fromReq(
-    r: req.BondingThroughAdversityData,
-    player: Player
-  ): BondingThroughAdversityCmd {
+  static fromReq(r: req.BondingThroughAdversityData, player: Player): BondingThroughAdversityCmd {
     return new BondingThroughAdversityCmd(r, player);
   }
 
@@ -511,10 +435,7 @@ export class BondingThroughAdversityCmd implements Command {
 export class BreakdownOfTrustCmd implements Command {
   constructor(private data: req.BreakdownOfTrustData, private player: Player) {}
 
-  static fromReq(
-    r: req.BreakdownOfTrustData,
-    player: Player
-  ): BreakdownOfTrustCmd {
+  static fromReq(r: req.BreakdownOfTrustData, player: Player): BreakdownOfTrustCmd {
     return new BreakdownOfTrustCmd(r, player);
   }
 
@@ -531,10 +452,7 @@ export class BreakdownOfTrustCmd implements Command {
 export class ChooseHeroOrPariahCmd implements Command {
   constructor(private data: req.VoteHeroOrPariahData, private player: Player) {}
 
-  static fromReq(
-    r: req.VoteHeroOrPariahData,
-    player: Player
-  ): ChooseHeroOrPariahCmd {
+  static fromReq(r: req.VoteHeroOrPariahData, player: Player): ChooseHeroOrPariahCmd {
     return new ChooseHeroOrPariahCmd(r, player);
   }
 
@@ -551,10 +469,7 @@ export class ChooseHeroOrPariahCmd implements Command {
 export class ChooseHeroOrPariahVoteRoleCmd implements Command {
   constructor(private data: VoteHeroOrPariahRoleData, private player: Player) {}
 
-  static fromReq(
-    r: req.VoteHeroOrPariahRoleData,
-    player: Player
-  ): ChooseHeroOrPariahVoteRoleCmd {
+  static fromReq(r: req.VoteHeroOrPariahRoleData, player: Player): ChooseHeroOrPariahVoteRoleCmd {
     return new ChooseHeroOrPariahVoteRoleCmd(r, player);
   }
 

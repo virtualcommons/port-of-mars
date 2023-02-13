@@ -2,7 +2,10 @@
   <b-row class="h-100 w-100" no-gutters>
     <b-col cols="7">
       <div id="rooms" class="h-100 content-container mr-3">
-        <div v-if="roomNotFound" class="h-100 d-flex flex-column justify-content-center align-items-center">
+        <div
+          v-if="roomNotFound"
+          class="h-100 d-flex flex-column justify-content-center align-items-center"
+        >
           <div class="text-center">
             <h4 class="mb-4">Room Not Found</h4>
             <b-button variant="outline-secondary" :to="lobby">
@@ -10,9 +13,12 @@
             </b-button>
           </div>
         </div>
-        <b-table dark sticky-header v-else
+        <b-table
+          dark
+          sticky-header
+          v-else
           class="h-100 m-0 custom-table"
-          style="max-height: none;"
+          style="max-height: none"
           :fields="clientFields"
           :items="clients"
         >
@@ -35,7 +41,8 @@
               <b-icon-arrow-left shift-v="3"></b-icon-arrow-left> Return to lobby
             </b-button>
           </template>
-        ></b-table>
+          ></b-table
+        >
       </div>
     </b-col>
     <b-col cols="5">
@@ -49,25 +56,31 @@
         <span v-else>
           <p>A game will launch as soon as the room fills up with 5 players.</p>
         </span>
-        <b-button v-if="isLeader($tstore.state.user.username)"
+        <b-button
+          v-if="isLeader($tstore.state.user.username)"
           size="lg"
           variant="success"
           class="w-100 mb-3"
           @click="api.startWithBots()"
-        ><h4>Start with {{ potentialBots }}</h4></b-button>
+          ><h4>Start with {{ potentialBots }}</h4></b-button
+        >
         <span v-else>
-          <b-button v-if="!playerReadiness"
+          <b-button
+            v-if="!playerReadiness"
             size="lg"
             variant="success"
             class="w-100 mb-3"
             @click="api.voteStartWithBots(true)"
-          ><h4>Vote to start with bots</h4></b-button>
-          <b-button v-else
+            ><h4>Vote to start with bots</h4></b-button
+          >
+          <b-button
+            v-else
             size="lg"
             variant="warning"
             class="w-100 mb-3"
             @click="api.voteStartWithBots(false)"
-          ><h4>Wait for more players</h4></b-button>
+            ><h4>Wait for more players</h4></b-button
+          >
         </span>
         <b-form-group
           label="Invite a friend by sharing this link."
@@ -96,13 +109,13 @@ import { Component, Inject, Prop, Vue } from "vue-property-decorator";
 import { Client } from "colyseus.js";
 import { LobbyRequestAPI } from "@port-of-mars/client/api/lobby/request";
 import { applyLobbyResponses } from "@port-of-mars/client/api/lobby/response";
-import{ LOBBY_PAGE } from "@port-of-mars/shared/routes";
+import { LOBBY_PAGE } from "@port-of-mars/shared/routes";
 import LobbyChat from "@port-of-mars/client/components/lobby/LobbyChat.vue";
 
 @Component({
   components: {
-    LobbyChat
-  }
+    LobbyChat,
+  },
 })
 export default class LobbyRoom extends Vue {
   @Inject() readonly $client!: Client;

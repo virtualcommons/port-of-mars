@@ -20,7 +20,8 @@
             <div id="filter-options" class="p-2">
               <b-form @submit="submitFilters" inline>
                 <span class="mr-1">Show from</span>
-                <b-form-datepicker dark
+                <b-form-datepicker
+                  dark
                   :date-format-options="datePickerFormat"
                   value-as-date
                   v-model="startDate"
@@ -30,7 +31,8 @@
                   class="mx-2"
                 ></b-form-datepicker>
                 <b-icon-arrow-right></b-icon-arrow-right>
-                <b-form-datepicker dark
+                <b-form-datepicker
+                  dark
                   :date-format-options="datePickerFormat"
                   value-as-date
                   v-model="endDate"
@@ -40,28 +42,31 @@
                   class="mx-2"
                 ></b-form-datepicker>
                 <b-form-checkbox v-model="includeDefeats" class="mx-3">
-                  <small style="line-height:1">Include<br>defeats</small>
+                  <small style="line-height: 1">Include<br />defeats</small>
                 </b-form-checkbox>
                 <b-form-checkbox v-model="includeBotGames" class="mx-3">
-                  <small style="line-height:1">Include<br>bot games</small>
+                  <small style="line-height: 1">Include<br />bot games</small>
                 </b-form-checkbox>
                 <b-button
                   type="submit"
                   variant="success"
                   class="ml-2"
-                  style="padding-top:.1rem; padding-bottom:.1rem;"
-                >Filter</b-button>
+                  style="padding-top: 0.1rem; padding-bottom: 0.1rem"
+                  >Filter</b-button
+                >
               </b-form>
             </div>
           </div>
           <div class="h-100-header w-100 content-container">
-            <b-table dark sticky-header
+            <b-table
+              dark
+              sticky-header
               class="h-100 m-0 custom-table"
-              style="max-height: none;"
+              style="max-height: none"
               :fields="gameFields"
               :items="games"
               sort-by="dateFinalized"
-              :sort-desc="true" 
+              :sort-desc="true"
             >
               <template #cell(dateFinalized)="data">
                 {{ new Date(data.item.dateFinalized).toDateString() }}
@@ -72,12 +77,17 @@
                 </b-badge>
               </template>
               <template #cell(players)="data">
-                <b-icon-person-fill v-for="i in getHumanCount(data.item.players)" :key="'bot'+i"/>
-                <b-icon-laptop v-for="i in getBotCount(data.item.players)" :key="'human'+i"/>
+                <b-icon-person-fill
+                  v-for="i in getHumanCount(data.item.players)"
+                  :key="'bot' + i"
+                />
+                <b-icon-laptop v-for="i in getBotCount(data.item.players)" :key="'human' + i" />
               </template>
               <template #cell(highScore)="data">
                 {{ data.item.highScore }}
-                <b-badge v-if="data.item.highScore === highestScore" variant="success">winner</b-badge>
+                <b-badge v-if="data.item.highScore === highestScore" variant="success"
+                  >winner</b-badge
+                >
               </template>
               <template #cell(inspect)="data">
                 <b-button
@@ -85,8 +95,12 @@
                   size="sm"
                   class="float-right"
                   :disabled="isInspectedGame(data.item.id)"
-                  @click="players = data.item.players; inspectedHighScore = data.item.highScore;"
-                >Scoreboard <b-icon-box-arrow-right class="float-right ml-2"></b-icon-box-arrow-right>
+                  @click="
+                    players = data.item.players;
+                    inspectedHighScore = data.item.highScore;
+                  "
+                  >Scoreboard
+                  <b-icon-box-arrow-right class="float-right ml-2"></b-icon-box-arrow-right>
                 </b-button>
               </template>
             </b-table>
@@ -94,18 +108,18 @@
         </b-col>
         <!-- players -->
         <b-col v-if="showPlayers" cols="5" class="mh-100 p-2">
-          <h4 class="header-nowrap">
-            Game #{{ this.players[0].gameId }} Scoreboard
-          </h4>
+          <h4 class="header-nowrap">Game #{{ this.players[0].gameId }} Scoreboard</h4>
           <div class="h-100-header w-100 content-container">
-            <b-table dark sticky-header
+            <b-table
+              dark
+              sticky-header
               class="h-100 m-0 custom-table"
-              style="max-height: none;"
+              style="max-height: none"
               :tbody-tr-attr="playerRowStyle"
               :fields="playerFields"
               :items="players"
               sort-by="points"
-              :sort-desc="true" 
+              :sort-desc="true"
             >
               <template #cell(username)="data">
                 <b-icon-laptop v-if="data.item.user.isSystemBot"></b-icon-laptop>
@@ -114,9 +128,15 @@
               </template>
               <template #cell(points)="data">
                 {{ data.item.points }}
-                <b-badge variant="success"
-                  v-if="isEligibleForPrize(data.item.user) && inspectedHighScore && data.item.points === inspectedHighScore"
-                >winner</b-badge>
+                <b-badge
+                  variant="success"
+                  v-if="
+                    isEligibleForPrize(data.item.user) &&
+                    inspectedHighScore &&
+                    data.item.points === inspectedHighScore
+                  "
+                  >winner</b-badge
+                >
               </template>
               <template #cell(contact)="data">
                 <b-button
@@ -125,11 +145,13 @@
                   size="sm"
                   class="py-0"
                   v-b-toggle="`contact-${data.item.user.id}`"
-                >Show contact info</b-button>
+                  >Show contact info</b-button
+                >
                 <b-collapse :id="`contact-${data.item.user.id}`">
                   <div class="backdrop p-2">
                     {{ data.item.user.name }}
-                    &lt;<a :href="`mailto:${data.item.user.email}`">{{ data.item.user.email }}</a>&gt;
+                    &lt;<a :href="`mailto:${data.item.user.email}`">{{ data.item.user.email }}</a
+                    >&gt;
                   </div>
                 </b-collapse>
               </template>
@@ -181,17 +203,17 @@ export default class Games extends Vue {
   get startDateConstraint() {
     return {
       min: new Date(2020, 0, 1),
-      max: this.endDate
+      max: this.endDate,
     };
   }
 
   get endDateConstraint() {
     return {
       min: this.startDate,
-      max: new Date()
-    }
+      max: new Date(),
+    };
   }
-  
+
   get showPlayers() {
     return this.players.length > 0;
   }
@@ -213,11 +235,12 @@ export default class Games extends Vue {
 
   playerRowStyle(item: any, type: any) {
     if (!item || type !== "row") return;
-    else return {
-      style: `background-color: var(--color-${item.role});`
-    }
+    else
+      return {
+        style: `background-color: var(--color-${item.role});`,
+      };
   }
-  
+
   async created() {
     this.api = new AdminAPI(this.$store, this.$ajax);
     await this.initialize();

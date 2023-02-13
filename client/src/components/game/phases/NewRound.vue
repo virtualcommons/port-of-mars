@@ -46,7 +46,8 @@
           <li>
             The rest of your group invested
             <b class="highlighted-number">
-              {{ otherPlayerSystemHealthContributions }} System Health</b>.
+              {{ otherPlayerSystemHealthContributions }} System Health</b
+            >.
           </li>
           <li>
             Total contributions:
@@ -70,9 +71,7 @@
           </li>
           <li>Standard Wear and Tear cost: <b class="highlighted-number">-25 System Health</b>.</li>
         </ul>
-        <h4>
-          Upcoming System Health
-        </h4>
+        <h4>Upcoming System Health</h4>
         <h4>
           <b-badge :variant="systemHealthBadgeVariant(systemHealth)">
             {{ upcomingSystemHealthCalculation }}
@@ -190,7 +189,7 @@ export default class NewRound extends Vue {
     return [
       { key: "name", label: "Purchased Accomplishment" },
       { key: "victoryPoints" },
-      { key: "systemHealthModification", label: "System Health" }
+      { key: "systemHealthModification", label: "System Health" },
     ];
   }
 
@@ -226,7 +225,7 @@ export default class NewRound extends Vue {
     return [
       { key: "role", label: "Source" },
       { key: "label", label: "Description" },
-      { key: "value", label: "System Health", class: "text-right" }
+      { key: "value", label: "System Health", class: "text-right" },
     ];
   }
 
@@ -235,31 +234,31 @@ export default class NewRound extends Vue {
       {
         label: "Prior System Health",
         role: "System",
-        value: this.priorSystemHealth
+        value: this.priorSystemHealth,
       },
       {
         label: "Group Contributions",
         role: "Players",
-        value: this.totalSystemHealthGroupContributions
-      }
+        value: this.totalSystemHealthGroupContributions,
+      },
     ];
     if (this.systemHealthAccomplishmentPurchasesCost !== 0) {
       items.push({
         role: "Players",
         label: "Accomplishments that cost System Health",
-        value: this.systemHealthAccomplishmentPurchasesCost
+        value: this.systemHealthAccomplishmentPurchasesCost,
       });
     }
     items.push(...this.systemHealthMarsEvents);
     items.push({
       role: "System",
       label: "Wear and Tear",
-      value: this.systemHealthMaintenanceCost
+      value: this.systemHealthMaintenanceCost,
     });
     items.push({
       label: "Upcoming System Health",
       role: "System",
-      value: this.nextRoundSystemHealth
+      value: this.nextRoundSystemHealth,
     });
     const isUnderAudit = this.$tstore.getters.isUnderAudit;
     if (isUnderAudit) {
@@ -275,7 +274,7 @@ export default class NewRound extends Vue {
       ({ label, systemHealthModification }) => ({
         label,
         role: "Mars Event",
-        value: systemHealthModification
+        value: systemHealthModification,
       })
     );
   }
@@ -300,7 +299,7 @@ export default class NewRound extends Vue {
       contributions.push({
         label: "System Health",
         role,
-        value: investment
+        value: investment,
       });
     });
     return contributions;

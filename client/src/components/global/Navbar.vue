@@ -17,52 +17,36 @@
           :to="admin"
           exact-active-class="active"
           title="Admin Dashboard"
-        >Admin</b-nav-item>
-        <b-nav-item
-          class="mx-2"
-          :to="about"
-          exact-active-class="active"
-          title="About Port of Mars"
-        >About</b-nav-item>
-        <b-nav-item
-          class="mx-2"
-          :to="consent"
-          exact-active-class="active"
-          title="Consent Form"
-        >Consent Form</b-nav-item>
+          >Admin</b-nav-item
+        >
+        <b-nav-item class="mx-2" :to="about" exact-active-class="active" title="About Port of Mars"
+          >About</b-nav-item
+        >
+        <b-nav-item class="mx-2" :to="consent" exact-active-class="active" title="Consent Form"
+          >Consent Form</b-nav-item
+        >
         <b-nav-item
           class="mx-2"
           :to="manual"
           target="_blank"
           exact-active-class="active"
           title="Game Manual"
-        >Manual</b-nav-item>
-        <b-nav-item
-          class="mx-2"
-          :to="lobby"
-          exact-active-class="active"
-          title="Game Lobby"
-        >Play</b-nav-item>
+          >Manual</b-nav-item
+        >
+        <b-nav-item class="mx-2" :to="lobby" exact-active-class="active" title="Game Lobby"
+          >Play</b-nav-item
+        >
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto">
-        <b-nav-item
-          class="mx-2"
-          target="_blank"
-          :href="constants.DISCORD_URL"
-          title="Discord"
-        ><b-icon-discord></b-icon-discord></b-nav-item>
-        <b-nav-item
-          class="mx-2"
-          target="_blank"
-          :href="constants.TWITTER_URL"
-          title="Twitter"
-        ><b-icon-twitter></b-icon-twitter></b-nav-item>
-        <b-nav-item
-          class="mx-2"
-          target="_blank"
-          :href="constants.INSTAGRAM_URL"
-          title="Instagram"
-        ><b-icon-instagram></b-icon-instagram></b-nav-item>
+        <b-nav-item class="mx-2" target="_blank" :href="constants.DISCORD_URL" title="Discord"
+          ><b-icon-discord></b-icon-discord
+        ></b-nav-item>
+        <b-nav-item class="mx-2" target="_blank" :href="constants.TWITTER_URL" title="Twitter"
+          ><b-icon-twitter></b-icon-twitter
+        ></b-nav-item>
+        <b-nav-item class="mx-2" target="_blank" :href="constants.INSTAGRAM_URL" title="Instagram"
+          ><b-icon-instagram></b-icon-instagram
+        ></b-nav-item>
         <div v-if="isAuthenticated">
           <b-nav-item-dropdown class="ml-3" :to="manual" right>
             <template #button-content>
@@ -105,7 +89,7 @@ export default class Header extends Vue {
   contactUrl: string = "mailto:portmars@asu.edu";
 
   portOfMarsLogoProps = {
-    height: 60
+    height: 60,
   };
   readonly SITE_URL = "https://portofmars.asu.edu";
 

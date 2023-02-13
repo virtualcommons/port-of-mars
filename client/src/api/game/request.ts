@@ -21,14 +21,14 @@ import {
   BreakdownOfTrustData,
   ResetBotWarningData,
   VoteHeroOrPariahData,
-  VoteHeroOrPariahRoleData
+  VoteHeroOrPariahRoleData,
 } from "@port-of-mars/shared/game/requests";
 import {
   AccomplishmentData,
   InvestmentData,
   Role,
   Resource,
-  ResourceAmountData
+  ResourceAmountData,
 } from "@port-of-mars/shared/types";
 import { ChatMarsLogView, HUDLeftView, HUDRightView } from "@port-of-mars/shared/game/client/panes";
 import { MockRoom } from "@port-of-mars/client/types/tutorial";
@@ -53,7 +53,7 @@ export class GameRequestAPI implements AbstractGameAPI {
   public resetPendingInvestments() {
     this.store.commit("SET_PENDING_INVESTMENTS", {
       role: this.store.state.role,
-      data: defaultPendingInvestment()
+      data: defaultPendingInvestment(),
     });
   }
 
@@ -65,7 +65,7 @@ export class GameRequestAPI implements AbstractGameAPI {
   public sendChatMessage(message: string) {
     const msg: SendChatMessageData = {
       message,
-      kind: "send-chat-message"
+      kind: "send-chat-message",
     };
     this.send(msg);
   }
@@ -87,7 +87,7 @@ export class GameRequestAPI implements AbstractGameAPI {
   public investTimeBlocks(investment: InvestmentData) {
     const msg: SetTimeInvestmentData = {
       ...investment,
-      kind: "set-time-investment"
+      kind: "set-time-investment",
     };
     this.send(msg);
   }
@@ -95,7 +95,7 @@ export class GameRequestAPI implements AbstractGameAPI {
   public purchaseAccomplishment(accomplishment: AccomplishmentData) {
     const msg: PurchaseAccomplishmentCardData = {
       kind: "purchase-accomplishment-card",
-      id: accomplishment.id
+      id: accomplishment.id,
     };
     this.send(msg);
     this.sfx.play({ kind: "set-sfx", sfx: Sfx.PURCHASE_ACCOMPLISHMENT });
@@ -104,7 +104,7 @@ export class GameRequestAPI implements AbstractGameAPI {
   public discardAccomplishment(id: number) {
     const msg: DiscardAccomplishmentCardData = {
       kind: "discard-accomplishment-card",
-      id
+      id,
     };
     this.send(msg);
     this.sfx.play({ kind: "set-sfx", sfx: Sfx.DISCARD_ACCOMPLISHMENT });
@@ -113,7 +113,7 @@ export class GameRequestAPI implements AbstractGameAPI {
   public stageDiscardOfPurchasedAccomplishment(id: number) {
     const msg: StageDiscardOfPurchasedAccomplishmentCardData = {
       kind: "stage-discard-of-purchased-accomplishment-card",
-      id
+      id,
     };
     this.send(msg);
   }
@@ -121,7 +121,7 @@ export class GameRequestAPI implements AbstractGameAPI {
   public sendTradeRequest(trade: SendTradeRequestData["trade"]) {
     const msg: SendTradeRequestData = {
       kind: "send-trade-request",
-      trade
+      trade,
     };
     this.send(msg);
     this.sfx.play({ kind: "set-sfx", sfx: Sfx.SEND_TRADE_REQUEST });
@@ -130,7 +130,7 @@ export class GameRequestAPI implements AbstractGameAPI {
   public acceptTradeRequest(id: string) {
     const msg: AcceptTradeRequestData = {
       kind: "accept-trade-request",
-      id
+      id,
     };
     this.send(msg);
   }
@@ -138,7 +138,7 @@ export class GameRequestAPI implements AbstractGameAPI {
   public rejectTradeRequest(id: string) {
     const msg: RejectTradeRequestData = {
       kind: "reject-trade-request",
-      id
+      id,
     };
     this.send(msg);
   }
@@ -146,7 +146,7 @@ export class GameRequestAPI implements AbstractGameAPI {
   public cancelTradeRequest(id: string) {
     const msg: CancelTradeRequestData = {
       kind: "cancel-trade-request",
-      id
+      id,
     };
     this.send(msg);
   }
@@ -154,7 +154,7 @@ export class GameRequestAPI implements AbstractGameAPI {
   public setPlayerReadiness(value: boolean) {
     const msg: SetPlayerReadinessData = {
       kind: "set-player-readiness",
-      value
+      value,
     };
     this.send(msg);
     if (value) {
@@ -172,7 +172,7 @@ export class GameRequestAPI implements AbstractGameAPI {
   public voteForPhilanthropist(vote: Role) {
     const msg: VoteForPhilanthropistData = {
       kind: "vote-for-philanthropist",
-      vote
+      vote,
     };
     this.send(msg);
   }
@@ -183,7 +183,7 @@ export class GameRequestAPI implements AbstractGameAPI {
   }) {
     const msg: BondingThroughAdversityData = {
       kind: "bonding-through-adversity",
-      influenceVoteData
+      influenceVoteData,
     };
     this.send(msg);
   }
@@ -191,7 +191,7 @@ export class GameRequestAPI implements AbstractGameAPI {
   public saveBreakdownOfTrust(savedResources: InvestmentData) {
     const msg: BreakdownOfTrustData = {
       kind: "breakdown-of-trust",
-      savedResources
+      savedResources,
     };
     console.log("Saving breakdown of trust resources: ", savedResources);
     this.send(msg);
@@ -200,7 +200,7 @@ export class GameRequestAPI implements AbstractGameAPI {
   public saveHeroOrPariah(heroOrPariah: "hero" | "pariah") {
     const msg: VoteHeroOrPariahData = {
       kind: "vote-hero-or-pariah",
-      heroOrPariah
+      heroOrPariah,
     };
     this.send(msg);
   }
@@ -208,7 +208,7 @@ export class GameRequestAPI implements AbstractGameAPI {
   public saveHeroOrPariahRole(vote: Role) {
     const msg: VoteHeroOrPariahRoleData = {
       kind: "vote-hero-or-pariah-role",
-      vote
+      vote,
     };
     this.send(msg);
   }

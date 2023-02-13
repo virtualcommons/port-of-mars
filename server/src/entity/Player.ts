@@ -1,7 +1,7 @@
-import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
-import {Role, ROLES} from "@port-of-mars/shared/types";
-import {User} from "./User";
-import {Game} from "@port-of-mars/server/entity/Game";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Role, ROLES } from "@port-of-mars/shared/types";
+import { User } from "./User";
+import { Game } from "@port-of-mars/server/entity/Game";
 
 @Entity()
 export class Player {
@@ -9,29 +9,21 @@ export class Player {
   id!: number;
 
   @Column({
-    type: 'enum',
-    enum: ROLES
+    type: "enum",
+    enum: ROLES,
   })
   role!: Role;
 
-  @ManyToOne(
-    type => User,
-    user => user.players,
-    { nullable: false }
-  )
+  @ManyToOne(type => User, user => user.players, { nullable: false })
   user!: User;
 
   @Column()
   userId!: number;
 
-  @Column({ default: '' })
+  @Column({ default: "" })
   playerIp!: string;
 
-  @ManyToOne(
-    type => Game,
-    game => game.players,
-    { nullable: false }
-  )
+  @ManyToOne(type => Game, game => game.players, { nullable: false })
   game!: Game;
 
   @Column()
@@ -39,5 +31,4 @@ export class Player {
 
   @Column("int", { nullable: true })
   points!: number | null;
-
 }

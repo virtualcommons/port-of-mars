@@ -2,17 +2,12 @@
   <b-row
     :style="getMessageColor(message)"
     class="h-auto w-100 my-1 flex-column justify-content-start"
-    style="color: rgb(241, 224, 197); background-color: rgba(241, 224, 197, 0.05);
-          font-size: 1rem;"
+    style="color: rgb(241, 224, 197); background-color: rgba(241, 224, 197, 0.05); font-size: 1rem"
   >
     <b-col align-self="end">
       <!-- role of sender (e.g. Curator) -->
-      <p
-        class="mb-0 mx-2 mt-2 text-uppercase"
-        style=" color: rgb(202, 166, 110);
-         font-weight: bold"
-      >
-        {{ message.role }}<span v-if="showUsername"> [{{username}}]</span>
+      <p class="mb-0 mx-2 mt-2 text-uppercase" style="color: rgb(202, 166, 110); font-weight: bold">
+        {{ message.role }}<span v-if="showUsername"> [{{ username }}]</span>
       </p>
       <!-- message of sender -->
       <p class="mx-2" style="word-wrap: break-word">
@@ -54,5 +49,4 @@ export default class ChatMessage extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

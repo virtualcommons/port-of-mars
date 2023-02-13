@@ -10,7 +10,7 @@ import { Phase } from "@port-of-mars/shared/types";
 import { PHASE_INSTRUCTIONS } from "@port-of-mars/client/repo/instructions";
 
 @Component({
-  components: {}
+  components: {},
 })
 export default class PhaseInstructions extends Vue {
   get phaseNumber() {

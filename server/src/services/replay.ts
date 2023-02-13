@@ -1,9 +1,5 @@
 import { strict as assert } from "assert";
-import {
-  GameSerialized,
-  GameState,
-  RoundSummary,
-} from "@port-of-mars/server/rooms/game/state";
+import { GameSerialized, GameState, RoundSummary } from "@port-of-mars/server/rooms/game/state";
 import { mockGameStateInitOpts } from "@port-of-mars/server/util";
 import * as entity from "@port-of-mars/server/entity";
 import {
@@ -44,11 +40,7 @@ import {
 import { createObjectCsvWriter } from "csv-writer";
 import { GameEvent } from "@port-of-mars/server/rooms/game/events/types";
 import { getAllAccomplishments } from "@port-of-mars/server/data/Accomplishment";
-import {
-  Player,
-  TournamentRoundInvite,
-  User,
-} from "@port-of-mars/server/entity";
+import { Player, TournamentRoundInvite, User } from "@port-of-mars/server/entity";
 
 const logger = getLogger(__filename);
 
@@ -68,9 +60,9 @@ export abstract class Summarizer<T> {
   events: Map<number, Array<entity.GameEvent>>;
 
   constructor(events: Array<entity.GameEvent>, public path: string) {
-    const gameIds = _.uniq(events.map((e) => e.gameId));
+    const gameIds = _.uniq(events.map(e => e.gameId));
     this.events = new Map();
-    gameIds.forEach((id) => this.events.set(id, []));
+    gameIds.forEach(id => this.events.set(id, []));
     for (const event of events) {
       this.events.get(event.gameId)?.push(event);
     }
@@ -86,7 +78,7 @@ export abstract class Summarizer<T> {
     const summaries = this.summarize();
     let result: IteratorResult<T> = summaries.next();
     // FIXME: Cannot convert undefined or null to object in earlier tournaments
-    const header = Object.keys(result.value).map((k) => ({ id: k, title: k }));
+    const header = Object.keys(result.value).map(k => ({ id: k, title: k }));
     const rows = [];
     while (!result.done) {
       rows.push(this.transform(result.value));
@@ -167,9 +159,7 @@ export class GameEventSummarizer extends Summarizer<GameEventSummary> {
     return { ...eventData, ...before, ...after, role };
   }
 
-  *_summarizeGame(
-    events: Array<entity.GameEvent>
-  ): Generator<GameEventSummary> {
+  *_summarizeGame(events: Array<entity.GameEvent>): Generator<GameEventSummary> {
     const game = loadSnapshot(events[0].payload as GameSerialized);
     const rows: Array<GameEventSummary> = [];
     for (const event of events) {
@@ -202,11 +192,7 @@ export class GameEventSummarizer extends Summarizer<GameEventSummary> {
     return { ...row, payload };
   }
 
-  extractRole(
-    g: GameState,
-    e: GameEvent,
-    event: entity.GameEvent
-  ): Role | ServerRole {
+  extractRole(g: GameState, e: GameEvent, event: entity.GameEvent): Role | ServerRole {
     const role = e.getRole?.(g) ?? (event.payload as any).role;
     return ROLES.includes(role) ? role : "Server";
   }
@@ -227,7 +213,7 @@ export class VictoryPointSummarizer extends Summarizer<VictoryPointExport> {
     game: GameState,
     event: entity.GameEvent
   ): Array<Omit<VictoryPointExport, "id" | "timeRemainingInitial">> {
-    return ROLES.map((role) => {
+    return ROLES.map(role => {
       return {
         gameId: event.gameId,
         role,
@@ -236,9 +222,7 @@ export class VictoryPointSummarizer extends Summarizer<VictoryPointExport> {
     });
   }
 
-  *_summarizeGame(
-    events: Array<entity.GameEvent>
-  ): Generator<VictoryPointExport> {
+  *_summarizeGame(events: Array<entity.GameEvent>): Generator<VictoryPointExport> {
     const game = loadSnapshot(events[0].payload as GameSerialized);
     let prev = this._summarizeEvent(game, events[0]);
     for (const row of prev) {
@@ -289,7 +273,7 @@ export class AccomplishmentSummarizer {
 
   async save() {
     const accomplishments = getAllAccomplishments();
-    const header = Object.keys(accomplishments[0]).map((name) => ({
+    const header = Object.keys(accomplishments[0]).map(name => ({
       id: name,
       title: name,
     }));
@@ -332,7 +316,7 @@ export class PlayerSummarizer {
   async save() {
     const summaries = this.summarize();
     let result: IteratorResult<PlayerExport> = summaries.next();
-    const header = Object.keys(result.value).map((k) => ({ id: k, title: k }));
+    const header = Object.keys(result.value).map(k => ({ id: k, title: k }));
     const rows = [result.value];
     // eslint-disable-next-line no-constant-condition
     while (true) {
@@ -416,9 +400,7 @@ export class PlayerInvestmentSummarizer extends Summarizer<PlayerInvestmentExpor
     ]);
   }
 
-  *_summarizeGame(
-    events: Array<entity.GameEvent>
-  ): Generator<PlayerInvestmentExport> {
+  *_summarizeGame(events: Array<entity.GameEvent>): Generator<PlayerInvestmentExport> {
     const initialEvent = events[0];
     const game = loadSnapshot(initialEvent.payload as GameSerialized);
     let prev = this._summarizeEvent(game, initialEvent);
@@ -472,10 +454,7 @@ export interface MarsEventExport {
  * goes through all the mars events that live inside the gameState and prints them out
  */
 export class MarsEventSummarizer extends Summarizer<MarsEventExport> {
-  _summarizeEvent(
-    game: GameState,
-    event: entity.GameEvent
-  ): Array<MarsEventExport> {
+  _summarizeEvent(game: GameState, event: entity.GameEvent): Array<MarsEventExport> {
     return game.marsEvents.map((marsEvent, index) => ({
       gameId: event.gameId,
       round: game.round,
@@ -503,11 +482,11 @@ export class MarsEventSummarizer extends Summarizer<MarsEventExport> {
       if (eventPayloadMap.has(event.type)) {
         const marsEventSummary = this._summarizeEvent(game, event);
         allMarsEvents = allMarsEvents.concat(marsEventSummary);
-      //   for (const row of marsEventSummary) {
-      //     // row in csv
-      //     yield row;
-      //   }
-      //
+        //   for (const row of marsEventSummary) {
+        //     // row in csv
+        //     yield row;
+        //   }
+        //
       }
     }
     return allMarsEvents;
@@ -534,9 +513,7 @@ export class MarsEventSummarizer extends Summarizer<MarsEventExport> {
       ExitedMarsEventPhase,
     ];
 
-    const eventPayloadMap = new Map(
-      events.map((e) => [_.kebabCase(e.name), {}])
-    );
+    const eventPayloadMap = new Map(events.map(e => [_.kebabCase(e.name), {}]));
     return eventPayloadMap;
   }
 }
@@ -570,9 +547,7 @@ export class GameReplayer {
   constructor(public events: Array<entity.GameEvent>) {}
 
   get endState(): GameState {
-    const events = this.events
-      .slice(1)
-      .map((e) => gameEventDeserializer.deserialize(e));
+    const events = this.events.slice(1).map(e => gameEventDeserializer.deserialize(e));
     const gameState = loadSnapshot(this.events[0].payload as GameSerialized);
     gameState.applyMany(events);
     return gameState;
@@ -582,14 +557,14 @@ export class GameReplayer {
    * replay all events and validate that the actual (snapshot) data lines up with the
    * simulated game state
    */
-  validate(): Array<{ round: number, success: boolean, error?: any }> {
+  validate(): Array<{ round: number; success: boolean; error?: any }> {
     // pull all events after the initial TakenStateSnapshot and deserialize them
     const events = this.events.slice(1);
     const gameState = loadSnapshot(this.events[0].payload as GameSerialized);
     let currentRoundGameEvents = [];
     const results = [];
     for (const event of events) {
-      if (event.type !== 'taken-round-snapshot') {
+      if (event.type !== "taken-round-snapshot") {
         currentRoundGameEvents.push(event);
       } else {
         // do the validation against event.payload against the currentRoundGameEvents
@@ -603,7 +578,7 @@ export class GameReplayer {
             round: gameState.round,
             success: true,
           });
-        } catch(e) {
+        } catch (e) {
           logger.trace(`failed to validate round ${gameState.round}`);
           logger.trace(e);
           results.push({
@@ -616,7 +591,9 @@ export class GameReplayer {
       }
     }
     if (!results.length) {
-      throw new Error("Game contains no round snapshots, nothing to validate against for legacy games");
+      throw new Error(
+        "Game contains no round snapshots, nothing to validate against for legacy games"
+      );
     }
     return results;
   }

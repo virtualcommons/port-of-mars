@@ -19,8 +19,8 @@ import EventNoChange from "./EventNoChange.vue";
     EventVote,
     EventInfluences,
     EventAccomplishments,
-    EventNoChange
-  }
+    EventNoChange,
+  },
 })
 export default class EventContainer extends Vue {
   @Prop() event!: MarsEventData;
@@ -28,7 +28,7 @@ export default class EventContainer extends Vue {
   eventVoteViews: Array<EventClientView> = [
     "VOTE_YES_NO",
     "VOTE_FOR_PLAYER_SINGLE",
-    "VOTE_FOR_PLAYER_HERO_PARIAH"
+    "VOTE_FOR_PLAYER_HERO_PARIAH",
   ];
   eventInfluencesViews: Array<EventClientView> = ["INFLUENCES_SELECT", "INFLUENCES_DRAW"];
   eventAccomplishmentsViews: Array<EventClientView> = ["ACCOMPLISHMENT_SELECT_PURCHASED"];

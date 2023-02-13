@@ -1,9 +1,4 @@
-import {
-  AccomplishmentData,
-  Resource,
-  ResourceAmountData,
-  RESOURCES,
-} from "./types";
+import { AccomplishmentData, Resource, ResourceAmountData, RESOURCES } from "./types";
 
 export function canPurchaseAccomplishment(
   accomplishment: AccomplishmentData,
@@ -33,10 +28,7 @@ export function makeTradeSafe(resources: ResourceAmountData) {
  * @param offer Resources that the local player offers in a trade request.
  * @param request Resources that the local player requests in a trade request.
  */
-export function isZeroTrade(
-  offer: ResourceAmountData,
-  request: ResourceAmountData
-) {
+export function isZeroTrade(offer: ResourceAmountData, request: ResourceAmountData) {
   let zeroTrade: boolean = true;
   for (const resource of RESOURCES) {
     zeroTrade = zeroTrade && offer[resource] == 0 && request[resource] == 0;

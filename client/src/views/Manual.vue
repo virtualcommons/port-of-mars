@@ -8,10 +8,10 @@
             <div class="content-container p-3">
               <h4>The Game</h4>
               <p class="mb-0">
-                You are 1 of 5 residents at the Port of Mars, the first long-term habitat on the planet.
-                Each game consists of 8—12 rounds, each with phases of investing, trading, purchasing,
-                discarding, and reacting to Mars events. Chance and player actions impact system health.
-                If system health falls to zero all players die.
+                You are 1 of 5 residents at the Port of Mars, the first long-term habitat on the
+                planet. Each game consists of 8—12 rounds, each with phases of investing, trading,
+                purchasing, discarding, and reacting to Mars events. Chance and player actions
+                impact system health. If system health falls to zero all players die.
               </p>
             </div>
           </b-col>
@@ -19,10 +19,10 @@
             <div class="content-container p-3">
               <h4>The Objective</h4>
               <p class="mb-0">
-                Your mission is to stay alive and achieve the most Victory Points.
-                In each round you will usually receive 10 time blocks that you can invest in System Health
-                or Influence resources. System Health keeps your team alive.
-                Influence resources are used to purchase Accomplishments that earn you Victory Points.
+                Your mission is to stay alive and achieve the most Victory Points. In each round you
+                will usually receive 10 time blocks that you can invest in System Health or
+                Influence resources. System Health keeps your team alive. Influence resources are
+                used to purchase Accomplishments that earn you Victory Points.
               </p>
             </div>
           </b-col>
@@ -30,14 +30,16 @@
         <div class="content-container p-3 mb-4">
           <h4>Roles</h4>
           <p>
-            Roles (Port of Mars residents, AKA characters) will be assigned randomly as the game begins.
+            Roles (Port of Mars residents, AKA characters) will be assigned randomly as the game
+            begins.
           </p>
           <b-row class="m-2 justify-content-around">
             <b-col sm="6" lg="2">
               <b-badge variant="researcher" class="d-flex justify-content-center">
                 <h4 class="m-1 item-title">Researcher</h4>
               </b-badge>
-              <b-img fluid
+              <b-img
+                fluid
                 :src="require(`@port-of-mars/client/assets/images/character-Researcher.png`)"
                 alt="Port of Mars character, the researcher, wears a purple suit and carries a transparent tablet"
               />
@@ -46,7 +48,8 @@
               <b-badge variant="politician" class="d-flex justify-content-center">
                 <h4 class="m-1 item-title">Politician</h4>
               </b-badge>
-              <b-img fluid
+              <b-img
+                fluid
                 :src="require(`@port-of-mars/client/assets/images/character-Politician.png`)"
                 alt="Port of Mars character, the Politician, wears a green suit with honorary sashes"
               />
@@ -55,7 +58,8 @@
               <b-badge variant="pioneer" class="d-flex justify-content-center">
                 <h4 class="m-1 item-title">Pioneer</h4>
               </b-badge>
-              <b-img fluid
+              <b-img
+                fluid
                 :src="require(`@port-of-mars/client/assets/images/character-Pioneer.png`)"
                 alt="Port of Mars character, the pioneer, wears a black suit with climbing equipment"
               />
@@ -64,7 +68,8 @@
               <b-badge variant="entrepreneur" class="d-flex justify-content-center">
                 <h4 class="m-1 item-title">Entrepreneur</h4>
               </b-badge>
-              <b-img fluid
+              <b-img
+                fluid
                 :src="require(`@port-of-mars/client/assets/images/character-Entreprenuer.png`)"
                 alt="Port of Mars character, the entrepreneur, wears a brown suit and looks at a transparent computer interface"
               />
@@ -73,7 +78,8 @@
               <b-badge variant="curator" class="d-flex justify-content-center">
                 <h4 class="m-1 item-title">Curator</h4>
               </b-badge>
-              <b-img fluid
+              <b-img
+                fluid
                 :src="require(`@port-of-mars/client/assets/images/character-Curator.png`)"
                 alt="Port of Mars character, the curator, wears a gray suit with a walking stick"
               />
@@ -83,7 +89,8 @@
         <div class="content-container p-3 mb-4">
           <h4>Phases</h4>
           <p>
-            A game consists of between 8 — 12 rounds with each round containing the following phases.
+            A game consists of between 8 — 12 rounds with each round containing the following
+            phases.
           </p>
           <div class="phase-block my-3 p-3">
             <h4><b-badge variant="primary">1</b-badge> New Round</h4>
@@ -105,44 +112,47 @@
             <h4><b-badge variant="primary">3</b-badge> Invest</h4>
             <p class="mb-0">
               Invest time blocks into resources and/or system health. Typically, you will be able to
-              allocate 10 time blocks, although this can increase or decrease due to active mars events.
+              allocate 10 time blocks, although this can increase or decrease due to active mars
+              events.
             </p>
           </div>
           <div class="phase-block my-3 p-3">
             <h4><b-badge variant="primary">4</b-badge> Trade</h4>
             <p class="mb-0">
-              Trade resources with other players. You can discuss and arrange trades using the in-game
-              chat.
+              Trade resources with other players. You can discuss and arrange trades using the
+              in-game chat.
             </p>
           </div>
           <div class="phase-block my-3 p-3">
             <h4><b-badge variant="primary">5</b-badge> Purchase</h4>
             <p class="mb-0">
-              Purchase accomplishment cards with collected resources. You will be able to see available
-              accomplishments before this phase, so make sure to plan ahead!
+              Purchase accomplishment cards with collected resources. You will be able to see
+              available accomplishments before this phase, so make sure to plan ahead!
             </p>
           </div>
           <div class="phase-block mt-3 p-3">
             <h4><b-badge variant="primary">6</b-badge> Discard</h4>
             <p class="mb-0">
-              Discard any unwanted accomplishment cards that will be replaced at the start of the next
-              round.
+              Discard any unwanted accomplishment cards that will be replaced at the start of the
+              next round.
             </p>
           </div>
         </div>
         <div class="content-container p-3 mb-4">
           <h4>Resources</h4>
           <p>
-            There are five different resource types in Port of Mars. These units can be acquired from
-            Mars events, time blocks, are trades. Use them to purchase accomplishment cards which earns
-            victory points.
+            There are five different resource types in Port of Mars. These units can be acquired
+            from Mars events, time blocks, are trades. Use them to purchase accomplishment cards
+            which earns victory points.
           </p>
           <b-row class="m-2 justify-content-around">
             <b-col sm="6" lg="2">
               <b-badge variant="researcher" class="d-flex justify-content-center">
                 <h4 class="m-1 item-title">Science</h4>
               </b-badge>
-              <b-img center class="my-3"
+              <b-img
+                center
+                class="my-3"
                 :src="require(`@port-of-mars/client/assets/images/icon-science.png`)"
                 alt="circular blue background with a white lab beaker"
               />
@@ -151,7 +161,9 @@
               <b-badge variant="politician" class="d-flex justify-content-center">
                 <h4 class="m-1 item-title">Government</h4>
               </b-badge>
-              <b-img center class="my-3"
+              <b-img
+                center
+                class="my-3"
                 :src="require(`@port-of-mars/client/assets/images/icon-government.png`)"
                 alt="circular red background with a white government building"
               />
@@ -160,7 +172,9 @@
               <b-badge variant="pioneer" class="d-flex justify-content-center">
                 <h4 class="m-1 item-title">Legacy</h4>
               </b-badge>
-              <b-img center class="my-3"
+              <b-img
+                center
+                class="my-3"
                 :src="require(`@port-of-mars/client/assets/images/icon-legacy.png`)"
                 alt="circular purple background with a white moon with a flag"
               />
@@ -169,7 +183,9 @@
               <b-badge variant="entrepreneur" class="d-flex justify-content-center">
                 <h4 class="m-1 item-title">Finance</h4>
               </b-badge>
-              <b-img center class="my-3"
+              <b-img
+                center
+                class="my-3"
                 :src="require(`@port-of-mars/client/assets/images/icon-finance.png`)"
                 alt="circular yellow background with three white coins"
               />
@@ -178,7 +194,9 @@
               <b-badge variant="curator" class="d-flex justify-content-center">
                 <h4 class="m-1 item-title">Culture</h4>
               </b-badge>
-              <b-img center class="my-3"
+              <b-img
+                center
+                class="my-3"
                 :src="require(`@port-of-mars/client/assets/images/icon-culture.png`)"
                 alt="circular brown background with a white paintbrush"
               />
@@ -210,31 +228,41 @@
             <b-col sm="12" lg="6">
               <div class="glossary-block m-2 p-3">
                 <h4 class="item-title">Investment</h4>
-                <p class="mb-0">Player’s allocation of time blocks into system health or resources</p>
+                <p class="mb-0">
+                  Player’s allocation of time blocks into system health or resources
+                </p>
               </div>
             </b-col>
             <b-col sm="12" lg="6">
               <div class="glossary-block m-2 p-3">
                 <h4 class="item-title">Mars Event</h4>
-                <p class="mb-0">The “chance” card of the game, can positively or negatively impact the game.</p>
+                <p class="mb-0">
+                  The “chance” card of the game, can positively or negatively impact the game.
+                </p>
               </div>
             </b-col>
             <b-col sm="12" lg="6">
               <div class="glossary-block m-2 p-3">
                 <h4 class="item-title">Mars Log</h4>
-                <p class="mb-0">Summarizes past events such as system health and accomplishment cards</p>
+                <p class="mb-0">
+                  Summarizes past events such as system health and accomplishment cards
+                </p>
               </div>
             </b-col>
             <b-col sm="12" lg="6">
               <div class="glossary-block m-2 p-3">
                 <h4 class="item-title">Phase</h4>
-                <p class="mb-0">Stages of a round- new round, Mars event, invest, trade, purchase, and discard</p>
+                <p class="mb-0">
+                  Stages of a round- new round, Mars event, invest, trade, purchase, and discard
+                </p>
               </div>
             </b-col>
             <b-col sm="12" lg="6">
               <div class="glossary-block m-2 p-3">
                 <h4 class="item-title">Role</h4>
-                <p class="mb-0">Characters- Curator, Entrepreneur, Pioneer, Politician, Researcher</p>
+                <p class="mb-0">
+                  Characters- Curator, Entrepreneur, Pioneer, Politician, Researcher
+                </p>
               </div>
             </b-col>
             <b-col sm="12" lg="6">
@@ -246,7 +274,10 @@
             <b-col sm="12" lg="6">
               <div class="glossary-block m-2 p-3">
                 <h4 class="item-title">System Health</h4>
-                <p class="mb-0">The condition of your environment in Port of Mars. If it falls to 0 all players die.</p>
+                <p class="mb-0">
+                  The condition of your environment in Port of Mars. If it falls to 0 all players
+                  die.
+                </p>
               </div>
             </b-col>
             <b-col sm="12" lg="6">
@@ -269,8 +300,8 @@ import Footer from "@port-of-mars/client/components/global/Footer.vue";
 
 @Component({
   components: {
-    Footer
-  }
+    Footer,
+  },
 })
 export default class Privacy extends Vue {}
 </script>

@@ -37,11 +37,11 @@
 </template>
 
 <script lang="ts">
-import {Component, Inject, Vue} from 'vue-property-decorator';
+import { Component, Inject, Vue } from "vue-property-decorator";
 
-import {GameRequestAPI} from '@port-of-mars/client/api/game/request';
-import {HUDLeftView} from '@port-of-mars/shared/game/client/panes';
-import {Phase} from "@port-of-mars/shared/types";
+import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
+import { HUDLeftView } from "@port-of-mars/shared/game/client/panes";
+import { Phase } from "@port-of-mars/shared/types";
 
 @Component({})
 export default class HUDLeftButtons extends Vue {
@@ -101,7 +101,7 @@ export default class HUDLeftButtons extends Vue {
    * @return SCSS class to style a selected button.
    */
   private buttonClass(buttonViewOption: HUDLeftView): string {
-    return buttonViewOption === this.currentView ? 'selected' : '';
+    return buttonViewOption === this.currentView ? "selected" : "";
   }
 }
 </script>

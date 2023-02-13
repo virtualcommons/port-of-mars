@@ -1,76 +1,58 @@
 <template>
   <b-container fluid class="h-100 w-100 m-0 p-0 overflow-auto">
     <b-row class="m-0 mt-5 mr-4">
-      <h4 style="margin-left: 2rem;">Games</h4>
+      <h4 style="margin-left: 2rem">Games</h4>
       <div class="w-100"></div>
       <b-col cols="12" md="6" xl="3">
-        <AdminStatCard
-          title="Total Games Completed"
-          :stat="stats.totalGames"
-        >
+        <AdminStatCard title="Total Games Completed" :stat="stats.totalGames">
           <b-icon-check-circle-fill variant="light" font-scale="3"></b-icon-check-circle-fill>
         </AdminStatCard>
       </b-col>
       <b-col cols="12" md="6" xl="3">
-        <AdminStatCard
-          title="Total Victories*"
-          :stat="stats.victories.withoutBots"
-        >
+        <AdminStatCard title="Total Victories*" :stat="stats.victories.withoutBots">
           <b-icon-trophy-fill variant="success" font-scale="3"></b-icon-trophy-fill>
         </AdminStatCard>
       </b-col>
       <b-col cols="12" md="6" xl="3">
-        <AdminStatCard
-          title="Total Defeats*"
-          :stat="stats.defeats.withoutBots"
-        >
+        <AdminStatCard title="Total Defeats*" :stat="stats.defeats.withoutBots">
           <b-icon-lightbulb-off-fill variant="danger" font-scale="3"></b-icon-lightbulb-off-fill>
         </AdminStatCard>
       </b-col>
       <b-col cols="12" md="6" xl="3">
-        <AdminStatCard
-          title="Active Games"
-          :stat="stats.activeGames"
-        >
+        <AdminStatCard title="Active Games" :stat="stats.activeGames">
           <b-icon-stopwatch-fill variant="warning" font-scale="3"></b-icon-stopwatch-fill>
         </AdminStatCard>
       </b-col>
       <div class="w-100"></div>
-      <p style="margin-left: 2rem;"><small>*Games with five human players</small></p>
+      <p style="margin-left: 2rem"><small>*Games with five human players</small></p>
     </b-row>
     <b-row class="m-0 mt-5 mr-4">
-      <h4 style="margin-left: 2rem;">Players</h4>
+      <h4 style="margin-left: 2rem">Players</h4>
       <div class="w-100"></div>
       <b-col cols="12" md="6" xl="3">
-        <AdminStatCard
-          title="Verified Users"
-          :stat="stats.totalUsers"
-        >
+        <AdminStatCard title="Verified Users" :stat="stats.totalUsers">
           <b-icon-people-fill variant="success" font-scale="3"></b-icon-people-fill>
         </AdminStatCard>
       </b-col>
       <b-col cols="12" md="6" xl="3">
-        <AdminStatCard
-          title="Banned Users"
-          :stat="stats.bannedUsers"
-        >
+        <AdminStatCard title="Banned Users" :stat="stats.bannedUsers">
           <b-icon-person-x-fill variant="warning" font-scale="3"></b-icon-person-x-fill>
         </AdminStatCard>
       </b-col>
       <b-col cols="12" md="6" xl="3">
-        <AdminStatCard
-          title="New Reports"
-          :stat="stats.reportedUsers.unresolved"
-        >
-          <b-icon-exclamation-circle-fill variant="danger" font-scale="3"></b-icon-exclamation-circle-fill>
+        <AdminStatCard title="New Reports" :stat="stats.reportedUsers.unresolved">
+          <b-icon-exclamation-circle-fill
+            variant="danger"
+            font-scale="3"
+          ></b-icon-exclamation-circle-fill>
         </AdminStatCard>
       </b-col>
       <b-col cols="12" md="6" xl="3">
-        <AdminStatCard
-          title="Resolved Reports"
-          :stat="stats.reportedUsers.resolved"
-        >
-          <b-icon-file-earmark-check-fill variant="light" font-scale="3"></b-icon-file-earmark-check-fill>
+        <AdminStatCard title="Resolved Reports" :stat="stats.reportedUsers.resolved">
+          <b-icon-file-earmark-check-fill
+            variant="light"
+            font-scale="3"
+          ></b-icon-file-earmark-check-fill>
         </AdminStatCard>
       </b-col>
     </b-row>
@@ -85,8 +67,8 @@ import AdminStatCard from "@port-of-mars/client/components/admin/AdminStatCard.v
 
 @Component({
   components: {
-    AdminStatCard
-  }
+    AdminStatCard,
+  },
 })
 export default class Overview extends Vue {
   api!: AdminAPI;
@@ -98,7 +80,7 @@ export default class Overview extends Vue {
     totalUsers: 0,
     reportedUsers: { resolved: 0, unresolved: 0 },
     bannedUsers: 0,
-  }
+  };
   pollingIntervalId = 0;
 
   async created() {
@@ -130,5 +112,4 @@ export default class Overview extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

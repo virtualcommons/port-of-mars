@@ -1,6 +1,6 @@
-import {Column, Entity, ManyToOne, PrimaryGeneratedColumn, CreateDateColumn} from "typeorm";
-import {Game} from "./Game";
-import {User} from "./User";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, CreateDateColumn } from "typeorm";
+import { Game } from "./Game";
+import { User } from "./User";
 
 @Entity()
 export class ChatReport {
@@ -22,7 +22,7 @@ export class ChatReport {
   @Column()
   userId!: number;
 
-  @Column({ type: 'jsonb' })
+  @Column({ type: "jsonb" })
   message!: object;
 
   @Column({ default: false })

@@ -7,8 +7,7 @@
       class="mb-2 mx-2 py-0 px-1"
       variant="outline-primary"
       size="sm"
-      style="position: absolute; right: 0; bottom: 0;
-        border-color: transparent; color: inherit;"
+      style="position: absolute; right: 0; bottom: 0; border-color: transparent; color: inherit"
     >
       Report
     </b-button>
@@ -43,7 +42,7 @@ import ReportModal from "@port-of-mars/client/components/game/modals/ReportModal
   components: {
     ChatMessage,
     ReportModal,
-  }
+  },
 })
 export default class Chat extends Vue {
   @Prop() message!: ChatMessageData;
@@ -67,10 +66,10 @@ export default class Chat extends Vue {
       roomId: this.$ajax.roomId!,
       username: this.username,
       message: this.message,
-    }
+    };
     await this.$ajax.post(
       this.submitChatReportUrl,
-      (response) => {
+      response => {
         if (response.status === 200) {
           this.$bvModal.hide(this.modalId);
         }
@@ -81,5 +80,4 @@ export default class Chat extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

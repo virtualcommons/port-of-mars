@@ -7,23 +7,29 @@
     <!-- height of b-container -->
     <b-row
       class="w-100 flex-grow-1 m-auto scroll-to-recent"
-      style="overflow-y: auto; overflow-x: hidden;"
+      style="overflow-y: auto; overflow-x: hidden"
       @click="focusChatInput"
     >
       <!-- b-row wrapper to achieve chat scroll effect -->
       <b-row class="w-100 justify-content-center" align-content="end">
         <!-- if there is no chat history to display -->
-        <p v-if="readOnly && messages.length === 0" class="m-5" style="color: rgba(241, 224, 197, 0.25)">
+        <p
+          v-if="readOnly && messages.length === 0"
+          class="m-5"
+          style="color: rgba(241, 224, 197, 0.25)"
+        >
           No chat history to display.
         </p>
         <p class="ml-4" v-if="!readOnly && messages.length === 0">
           Chat is recorded. Please adhere to the
-          <b><a target="_blank"
-               href="https://github.com/virtualcommons/port-of-mars/wiki/Port-of-Mars-Chat-Code-of-Conduct">
-               Port of Mars Code of Conduct
-            </a>
-          </b>.
-          You cannot send private messages to other members in your group.
+          <b
+            ><a
+              target="_blank"
+              href="https://github.com/virtualcommons/port-of-mars/wiki/Port-of-Mars-Chat-Code-of-Conduct"
+            >
+              Port of Mars Code of Conduct
+            </a> </b
+          >. You cannot send private messages to other members in your group.
         </p>
         <!-- chat message -->
         <ChatMessage
@@ -32,16 +38,15 @@
           :message="message"
           :showUsername="false"
         >
-        <!-- report button slot -->
-        <!-- TODO: hide report button on server-generated audit chat messages -->
+          <!-- report button slot -->
+          <!-- TODO: hide report button on server-generated audit chat messages -->
           <ReportButton v-if="reportable" :message="message" :showUsername="false"></ReportButton>
         </ChatMessage>
       </b-row>
     </b-row>
     <!-- flex-shrink-1: tells this row to shrink as needed to make room for other flex-items
     within the height constraints of b-container -->
-    <b-row v-if="!readOnly"
-      class="w-100 h-auto align-items-center flex-shrink-1 my-2 mx-auto">
+    <b-row v-if="!readOnly" class="w-100 h-auto align-items-center flex-shrink-1 my-2 mx-auto">
       <b-col class="w-100 px-0">
         <b-form-textarea
           no-resize
@@ -49,15 +54,24 @@
           :readonly="isMuted"
           ref="chatInputRef"
           class="h-100 flex-grow-1 backdrop"
-          style="color: rgb(241, 224, 197); font-size: 1rem; padding-right: 2rem;"
+          style="color: rgb(241, 224, 197); font-size: 1rem; padding-right: 2rem"
           @keydown.enter="submitToChat"
           v-model="pendingMessage"
-          :placeholder="isMuted ? 'You are currently muted' : 'Type and press enter to send a message'"
+          :placeholder="
+            isMuted ? 'You are currently muted' : 'Type and press enter to send a message'
+          "
         ></b-form-textarea>
         <b-button
           variant="link"
           size="lg"
-          style="position: relative; float: right; bottom: 50px; margin-bottom: -50px; padding: 0.5rem; color: var(--light)"
+          style="
+            position: relative;
+            float: right;
+            bottom: 50px;
+            margin-bottom: -50px;
+            padding: 0.5rem;
+            color: var(--light);
+          "
           :disabled="isMuted"
           v-b-tooltip.hover="'Send chat message'"
           @click="submitToChat"
@@ -71,8 +85,7 @@
   <b-row v-else class="h-100 w-100 m-0 p-0 justify-content-center align-items-center">
     <p
       class="m-0 p-0 text-center"
-      style="color: var(--dark-accent); font-weight: bold;
-         font-size: 1rem;"
+      style="color: var(--dark-accent); font-weight: bold; font-size: 1rem"
     >
       Chat is disabled this round.
     </p>
@@ -89,7 +102,7 @@ import ReportButton from "@port-of-mars/client/components/game/static/chat/Repor
   components: {
     ChatMessage,
     ReportButton,
-  }
+  },
 })
 export default class Chat extends Vue {
   @Inject({ default: null }) readonly api!: GameRequestAPI;
@@ -112,9 +125,7 @@ export default class Chat extends Vue {
   }
 
   get pendingMessageCleaned(): string {
-    return this.pendingMessage
-      .trim()
-      .replace(/(\n)/gm, " ");
+    return this.pendingMessage.trim().replace(/(\n)/gm, " ");
   }
 
   get isChatAvailable(): any {
@@ -142,5 +153,4 @@ export default class Chat extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

@@ -6,10 +6,7 @@ import {
 } from "@port-of-mars/shared/types";
 import _ from "lodash";
 
-export class SystemHealthMarsEvent
-  extends Schema
-  implements SystemHealthMarsEventData
-{
+export class SystemHealthMarsEvent extends Schema implements SystemHealthMarsEventData {
   @type("string")
   label: string;
 
@@ -35,10 +32,7 @@ export class SystemHealthMarsEvent
   }
 }
 
-export class PurchasedSystemHealth
-  extends Schema
-  implements PurchasedSystemHealthData
-{
+export class PurchasedSystemHealth extends Schema implements PurchasedSystemHealthData {
   constructor(data: PurchasedSystemHealthData) {
     super();
     this.description = data.description;
@@ -76,14 +70,14 @@ export class SystemHealthChanges
     this.purchases.splice(
       this.purchases.length,
       0,
-      ...data.purchases.map((p) => new PurchasedSystemHealth(p))
+      ...data.purchases.map(p => new PurchasedSystemHealth(p))
     );
   }
 
   toJSON(): SystemHealthChangesData {
     return {
       investment: this.investment,
-      purchases: this.purchases.map((p) => ({
+      purchases: this.purchases.map(p => ({
         description: p.description,
         systemHealth: p.systemHealth,
       })),

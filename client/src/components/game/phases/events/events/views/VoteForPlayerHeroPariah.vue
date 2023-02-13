@@ -24,9 +24,7 @@
           small
           v-if="!decidedHeroOrPariah && voteHeroOrPariah"
         />
-        <p class="voted m-2" v-if="!decidedHeroOrPariah && voteHeroOrPariah">
-          Processing votes...
-        </p>
+        <p class="voted m-2" v-if="!decidedHeroOrPariah && voteHeroOrPariah">Processing votes...</p>
       </b-col>
       <b-col v-if="decidedHeroOrPariah" :key="decidedHeroOrPariah">
         <!-- VOTE :: player to be hero or pariah -->
@@ -71,7 +69,7 @@ export default class VoteForPlayerHeroPariah extends Vue {
 
   options = [
     { text: "Hero", value: "hero" },
-    { text: "Pariah", value: "pariah" }
+    { text: "Pariah", value: "pariah" },
   ];
 
   get decidedHeroOrPariah() {

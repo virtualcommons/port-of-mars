@@ -36,8 +36,8 @@ const CONNECTION_NAME = NODE_ENV === "test" ? "test" : "default";
 // FIXME: make imports more consistent, replace `require` where possible
 
 const LocalStrategy = require("passport-local").Strategy;
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const FacebookStrategy = require('passport-facebook').Strategy;
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const FacebookStrategy = require("passport-facebook").Strategy;
 
 const RedisStore = connectRedis(session);
 const store = new RedisStore({ host: "redis", client: getRedis() });
@@ -48,48 +48,52 @@ const sessionParser = session({
   store,
 });
 
-passport.use(new GoogleStrategy({
-    clientID: settings.googleAuth.clientId,
-    clientSecret: settings.googleAuth.clientSecret,
-    callbackURL: `${settings.serverHost}/auth/google/callback`,
-    passReqToCallback: true
-  },
-  async function(request:any, accessToken:any, refreshToken:any, profile:any, done:any) {
-    const services = getServices();
-    const user = await services.account.getOrCreateUser({ 
-      email: profile.emails[0].value,
-      passportId: profile.id
-    });
-    return done(null, user);
-  }
-));
-
-passport.use(new FacebookStrategy({
-    clientID: settings.facebookAuth.clientId,
-    clientSecret: settings.facebookAuth.clientSecret,
-    callbackURL: `${settings.serverHost}/auth/facebook/callback`,
-    profileFields: ["id", "email"],
-    passReqToCallback: true
-  },
-  async function(request:any, accessToken:any, refreshToken:any, profile:any, done:any) {
-    if (!profile.emails && !profile.emails[0]) {
-      return done(null, false, { message: "You must use a Facebook account with a verified email address." });
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: settings.googleAuth.clientId,
+      clientSecret: settings.googleAuth.clientSecret,
+      callbackURL: `${settings.serverHost}/auth/google/callback`,
+      passReqToCallback: true,
+    },
+    async function (request: any, accessToken: any, refreshToken: any, profile: any, done: any) {
+      const services = getServices();
+      const user = await services.account.getOrCreateUser({
+        email: profile.emails[0].value,
+        passportId: profile.id,
+      });
+      return done(null, user);
     }
-    const services = getServices();
-    const user = await services.account.getOrCreateUser({ 
-      email: profile.emails[0].value,
-      passportId: profile.id
-    });
-    return done(null, user);
-  }
-));
+  )
+);
 
 passport.use(
-  new LocalStrategy(async function (
-    username: string,
-    password: string,
-    done: Function
-  ) {
+  new FacebookStrategy(
+    {
+      clientID: settings.facebookAuth.clientId,
+      clientSecret: settings.facebookAuth.clientSecret,
+      callbackURL: `${settings.serverHost}/auth/facebook/callback`,
+      profileFields: ["id", "email"],
+      passReqToCallback: true,
+    },
+    async function (request: any, accessToken: any, refreshToken: any, profile: any, done: any) {
+      if (!profile.emails && !profile.emails[0]) {
+        return done(null, false, {
+          message: "You must use a Facebook account with a verified email address.",
+        });
+      }
+      const services = getServices();
+      const user = await services.account.getOrCreateUser({
+        email: profile.emails[0].value,
+        passportId: profile.id,
+      });
+      return done(null, user);
+    }
+  )
+);
+
+passport.use(
+  new LocalStrategy(async function (username: string, password: string, done: Function) {
     const services = getServices();
     const user = await services.account.getOrCreateTestUser(username);
     // set all testing things on the user
@@ -110,8 +114,8 @@ passport.serializeUser(function (user: Pick<User, "id">, done: Function) {
 passport.deserializeUser(function (id: number, done: Function) {
   getServices()
     .account.findUserById(id)
-    .then((user) => done(null, user))
-    .catch((e) => {
+    .then(user => done(null, user))
+    .catch(e => {
       logger.fatal(`Could not find user with ${id}: `, e);
       done(e, null);
     });
@@ -180,9 +184,7 @@ async function createApp() {
   // make this conditional on isDev()
   app.post("/login", passport.authenticate("local"), function (req, res) {
     const _sessionId = req.sessionID;
-    logger.info(
-      `successful authentication for ${req.user}, setting session id ${_sessionId}`
-    );
+    logger.info(`successful authentication for ${req.user}, setting session id ${_sessionId}`);
     res.cookie("connect.sid", _sessionId, { signed: true });
     const sessionCookie: any = res.getHeaders()["set-cookie"];
     logger.info(sessionCookie);
@@ -197,7 +199,7 @@ async function createApp() {
   app.use("/status", statusRouter);
 
   app.get("/logout", function (req, res, next) {
-    req.logout(function(err) {
+    req.logout(function (err) {
       if (err) {
         return next(err);
       }
@@ -227,9 +229,7 @@ async function createApp() {
       res.status(err.code).json(err.toDashboardMessage());
     } else {
       logger.fatal(err);
-      res
-        .status(err.statusCode || 500)
-        .json({ kind: "danger", message: err.message });
+      res.status(err.statusCode || 500).json({ kind: "danger", message: err.message });
     }
   });
 
@@ -246,7 +246,7 @@ async function createApp() {
       await services.schedule.scheduleGames();
     }
   });
-  
+
   // run automated admin jobs (revoking expired mutes, etc) once a day
   await services.admin.unapplyExpiredMutes();
   const adminJob = schedule.scheduleJob("0 0 * * *", async () => {
@@ -255,7 +255,7 @@ async function createApp() {
 }
 
 createConnection(CONNECTION_NAME)
-  .then(async (connection) => {
+  .then(async connection => {
     await createApp();
   })
-  .catch((error) => logger.fatal(error));
+  .catch(error => logger.fatal(error));

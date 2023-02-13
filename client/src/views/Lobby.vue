@@ -2,7 +2,7 @@
   <b-container fluid class="h-100 w-100 m-0 p-0 backdrop">
     <div class="h-100 w-100 d-flex flex-column">
       <Messages class="p-3"></Messages>
-      <b-row class="h-100 w-100 mx-auto flex-grow-1 p-5" style="max-width:1400px;">
+      <b-row class="h-100 w-100 mx-auto flex-grow-1 p-5" style="max-width: 1400px">
         <b-col cols="4">
           <HelpPanel></HelpPanel>
         </b-col>
@@ -24,11 +24,7 @@ import { Client, Room } from "colyseus.js";
 import { applyLobbyResponses } from "@port-of-mars/client/api/lobby/response";
 import { LobbyRequestAPI } from "@port-of-mars/client/api/lobby/request";
 import { LOBBY_NAME } from "@port-of-mars/shared/lobby";
-import {
-  GAME_PAGE,
-  REGISTER_PAGE,
-  MANUAL_PAGE
-} from "@port-of-mars/shared/routes";
+import { GAME_PAGE, REGISTER_PAGE, MANUAL_PAGE } from "@port-of-mars/shared/routes";
 import { Constants } from "@port-of-mars/shared/settings";
 import { url } from "@port-of-mars/client/util";
 import Countdown from "@port-of-mars/client/components/global/Countdown.vue";
@@ -39,8 +35,8 @@ import Messages from "@port-of-mars/client/components/global/Messages.vue";
   components: {
     Countdown,
     HelpPanel,
-    Messages
-  }
+    Messages,
+  },
 })
 export default class Lobby extends Vue {
   @Inject() readonly $client!: Client;
@@ -68,7 +64,7 @@ export default class Lobby extends Vue {
       }
     });
   }
-  
+
   async rejoinIfActiveGame() {
     await this.$ajax.get(url("/game/has-active"), ({ data, status }) => {
       if (status === 200 && data === true) {
@@ -97,9 +93,7 @@ export default class Lobby extends Vue {
     applyLobbyResponses(room, this);
     this.api.connect(room);
   }
-
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

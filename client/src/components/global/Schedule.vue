@@ -74,15 +74,15 @@ export default class Schedule extends Vue {
           hour: "numeric",
           minute: "numeric",
           hour12: false,
-          timeZoneName: "short"
+          timeZoneName: "short",
         }),
         addToCalendar: {
           title: `Port of Mars Launch`,
           location: this.SITE_URL,
           start: scheduledDate,
           duration: [1, "hour"],
-          description: this.calendarDescription
-        }
+          description: this.calendarDescription,
+        },
       };
     });
   }

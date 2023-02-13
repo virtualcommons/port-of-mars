@@ -17,8 +17,8 @@ export default class MarsEventsDeck {
   toJSON(): { deck: Array<MarsEventData>; position: number } {
     return {
       deck: this.deck,
-      position: this.position
-    }
+      position: this.position,
+    };
   }
 
   updatePosition(cardsUsed: number): void {
@@ -26,7 +26,10 @@ export default class MarsEventsDeck {
   }
 
   public peek(nCardsToDraw: number): Array<MarsEventData> {
-    const cardsInds = _.map(_.range(this.position, this.position + nCardsToDraw), ind => ind % this.deck.length);
+    const cardsInds = _.map(
+      _.range(this.position, this.position + nCardsToDraw),
+      ind => ind % this.deck.length
+    );
     return _.map(cardsInds, ind => this.deck[ind]);
   }
 }

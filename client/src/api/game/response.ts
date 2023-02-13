@@ -13,7 +13,7 @@ import {
   Role,
   ROLES,
   SystemHealthMarsEventData,
-  TradeData
+  TradeData,
 } from "@port-of-mars/shared/types";
 import { SetError, SetPlayerRole, SetSfx } from "@port-of-mars/shared/game/responses";
 import { TStore } from "@port-of-mars/client/plugins/tstore";
@@ -42,7 +42,7 @@ const RESPONSE_MAP: ServerResponse = {
   ready: "SET_READINESS",
   victoryPoints: "SET_VICTORY_POINTS",
   systemHealthChanges: "SET_SYSTEM_HEALTH_CHANGES",
-  isCompulsivePhilanthropist: "SET_COMPULSIVE_PHILANTHROPIST"
+  isCompulsivePhilanthropist: "SET_COMPULSIVE_PHILANTHROPIST",
 };
 
 function applyCostResponses(role: Role, costs: any, store: TStore) {
@@ -51,7 +51,7 @@ function applyCostResponses(role: Role, costs: any, store: TStore) {
       store.commit("SET_INVESTMENT_COST", {
         role,
         resource: change.field as keyof ResourceAmountData,
-        data: change.value
+        data: change.value,
       });
     }
   };
@@ -167,19 +167,7 @@ function applyRoundIntroductionResponses(roundIntroduction: any, store: TStore) 
 // see https://github.com/Luka967/websocket-close-codes#websocket-close-codes
 // and https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent
 const REFRESHABLE_WEBSOCKET_ERROR_CODES = [
-  1002,
-  1003,
-  1005,
-  1006,
-  1007,
-  1008,
-  1009,
-  1010,
-  1011,
-  1012,
-  1013,
-  1014,
-  1015
+  1002, 1003, 1005, 1006, 1007, 1008, 1009, 1010, 1011, 1012, 1013, 1014, 1015,
 ];
 
 export function applyGameServerResponses<T>(room: Room, store: TStore, sfx: SfxManager) {
@@ -220,11 +208,11 @@ export function applyGameServerResponses<T>(room: Room, store: TStore, sfx: SfxM
   room.onMessage("set-player-role", (msg: SetPlayerRole) => {
     store.commit("SET_PLAYER_ROLE", msg.role);
   });
-  
+
   room.onMessage("set-error", (msg: SetError) => {
     store.commit("SET_DASHBOARD_MESSAGE", {
       kind: "warning",
-      message: msg.message
+      message: msg.message,
     });
   });
 

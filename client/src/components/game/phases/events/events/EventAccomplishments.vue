@@ -8,8 +8,8 @@ import AccomplishmentsSelectPurchased from "./views/AccomplishmentsSelectPurchas
 
 @Component({
   components: {
-    AccomplishmentsSelectPurchased
-  }
+    AccomplishmentsSelectPurchased,
+  },
 })
 export default class EventAccomplishments extends Vue {
   @Prop({ default: "" }) eventView!: string;

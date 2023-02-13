@@ -1,8 +1,5 @@
 import { State, defaultLobbyState } from "@port-of-mars/shared/game/client/state";
-import {
-  LobbyChatMessageData,
-  LobbyClientData,
-} from "@port-of-mars/shared/types";
+import { LobbyChatMessageData, LobbyClientData } from "@port-of-mars/shared/types";
 
 export default {
   ADD_TO_LOBBY_CLIENTS(state: State, payload: LobbyClientData) {
@@ -20,7 +17,7 @@ export default {
     state.lobby.ready = payload;
   },
 
-  SET_LOBBY_CLIENT_READINESS(state: State, payload: { client: LobbyClientData, ready: boolean }) {
+  SET_LOBBY_CLIENT_READINESS(state: State, payload: { client: LobbyClientData; ready: boolean }) {
     const index = state.lobby.clients.findIndex((c: any) => c.id === payload.client.id);
     if (index > -1) {
       state.lobby.clients[index].ready = payload.ready;
@@ -43,4 +40,4 @@ export default {
     console.log(defaultLobbyState().clients);
     state.lobby = defaultLobbyState();
   },
-}
+};

@@ -10,11 +10,7 @@ import {
   ServerRole,
   TradeData,
 } from "@port-of-mars/shared/types";
-import {
-  GameSerialized,
-  GameState,
-  RoundSummary,
-} from "@port-of-mars/server/rooms/game/state";
+import { GameSerialized, GameState, RoundSummary } from "@port-of-mars/server/rooms/game/state";
 import { GameEvent } from "@port-of-mars/server/rooms/game/events/types";
 import {
   BondingThroughAdversity,
@@ -35,8 +31,7 @@ import { Responses, Sfx } from "@port-of-mars/shared/game/responses";
 const logger = getLogger(__filename);
 
 class GameEventDeserializer {
-  protected lookups: { [classname: string]: { new (data?: any): GameEvent } } =
-    {};
+  protected lookups: { [classname: string]: { new (data?: any): GameEvent } } = {};
 
   register(event: { new (data: any): GameEvent }) {
     this.lookups[_.kebabCase(event.name)] = event;
@@ -103,18 +98,12 @@ gameEventDeserializer.register(SentChatMessage);
 export class PurchasedAccomplishment extends GameEventWithData {
   data: { accomplishment: AccomplishmentData; role: Role };
 
-  constructor(data: {
-    accomplishment: AccomplishmentData | { id: number };
-    role: Role;
-  }) {
+  constructor(data: { accomplishment: AccomplishmentData | { id: number }; role: Role }) {
     super();
     // to get around
     if (!this.isAccomplishmentData(data.accomplishment)) {
       this.data = {
-        accomplishment: getAccomplishmentByID(
-          data.role,
-          data.accomplishment.id
-        ),
+        accomplishment: getAccomplishmentByID(data.role, data.accomplishment.id),
         role: data.role,
       };
     } else {
@@ -122,17 +111,12 @@ export class PurchasedAccomplishment extends GameEventWithData {
     }
   }
 
-  isAccomplishmentData(
-    ad: AccomplishmentData | { id: number }
-  ): ad is AccomplishmentData {
+  isAccomplishmentData(ad: AccomplishmentData | { id: number }): ad is AccomplishmentData {
     return (ad as AccomplishmentData).label !== undefined;
   }
 
   apply(game: GameState): void {
-    logger.warn(
-      "accomplishment: %o",
-      _.fromPairs(_.toPairs(this.data.accomplishment))
-    );
+    logger.warn("accomplishment: %o", _.fromPairs(_.toPairs(this.data.accomplishment)));
     game.purchaseAccomplishment(this.data.role, this.data.accomplishment);
   }
 }
@@ -160,31 +144,25 @@ export class TimeInvested extends GameEventWithData {
     game.investTime(this.data.role, this.data.investment);
 
     // if Audit event is in effect
-    if (game.marsEvents.filter((event) => event.id === "audit").length > 0) {
+    if (game.marsEvents.filter(event => event.id === "audit").length > 0) {
       const resources = Object.keys(this.data.investment)
         // get a player's investments for system health and resources
-        .filter((investment) => {
+        .filter(investment => {
           // return time block investments for system health and any resource where investments > 0
-          return (
-            investment === "systemHealth" ||
-            this.data.investment[investment as Resource] > 0
-          );
+          return investment === "systemHealth" || this.data.investment[investment as Resource] > 0;
         })
 
-        .map((investment) => {
+        .map(investment => {
           // format resource type string
-          const pendingInvestment =
-            this.data.investment[investment as Resource];
-          const cost =
-            game.players[this.data.role].costs[investment as Resource];
+          const pendingInvestment = this.data.investment[investment as Resource];
+          const cost = game.players[this.data.role].costs[investment as Resource];
           // format time block investments string
           if (investment === "systemHealth") {
             return `and contributes ${pendingInvestment} to System Health (cost: ${
               pendingInvestment * cost
             } time blocks)`;
           } else {
-            const capitalizedResource =
-              investment.charAt(0).toUpperCase() + investment.slice(1);
+            const capitalizedResource = investment.charAt(0).toUpperCase() + investment.slice(1);
             return `${pendingInvestment} ${capitalizedResource} (cost: ${
               pendingInvestment * cost
             } time blocks)`;
@@ -451,11 +429,7 @@ export class EnteredDefeatPhase extends GameEventWithData {
     game.phase = Phase.defeat;
     logger.debug("phase: %s", Phase[game.phase]);
     game.timeRemaining = GameState.DEFAULT_PHASE_DURATION[game.phase]; // set timeRemaining = infinite to prevent phase transitioning after game is over
-    game.log(
-      `System Health has reached zero.`,
-      MarsLogCategory.systemHealth,
-      "Server"
-    );
+    game.log(`System Health has reached zero.`, MarsLogCategory.systemHealth, "Server");
   }
 }
 gameEventDeserializer.register(EnteredDefeatPhase);
@@ -540,7 +514,7 @@ export class TakenStateSnapshot implements GameEvent {
 
   apply(game: GameState): void {}
 
-  serialize(): { type: string; payload: GameSerialized} {
+  serialize(): { type: string; payload: GameSerialized } {
     return {
       type: this.kind,
       payload: this.data,
@@ -557,7 +531,7 @@ export class TakenRoundSnapshot implements GameEvent {
 
   apply(game: GameState): void {}
 
-  serialize(): { type: string; payload: RoundSummary} {
+  serialize(): { type: string; payload: RoundSummary } {
     return {
       type: this.kind,
       payload: this.data,
@@ -669,11 +643,7 @@ export class SelectedInfluence extends GameEventWithData {
   }
 
   apply(game: GameState): void {
-    logger.warn(
-      "bonding through adversity %o %o",
-      this,
-      game.currentEvent.state
-    );
+    logger.warn("bonding through adversity %o %o", this, game.currentEvent.state);
     let eventState: BondingThroughAdversity;
     if (game.currentEvent.state instanceof BondingThroughAdversity) {
       eventState = game.currentEvent.state;
@@ -698,7 +668,10 @@ export class BreakdownOfTrustOccurred extends GameEventWithData {
     } else {
       return;
     }
-    logger.debug("saved resources: %o", { role: this.data.role, savedResources: this.data.savedResources });
+    logger.debug("saved resources: %o", {
+      role: this.data.role,
+      savedResources: this.data.savedResources,
+    });
     eventState.setInventory(this.data.role, game, this.data.savedResources);
     game.players[this.data.role].updateReadiness(true);
   }
@@ -717,11 +690,7 @@ export class StagedDiscardOfPurchasedAccomplishment extends GameEventWithData {
       state.discardAccomplishment(this.data.role, this.data.id);
       game.setPlayerReadiness(this.data.role, true);
     } else {
-      logger.warn(
-        "Event Mismatch: got %s expected %s",
-        game.currentEvent.name,
-        "effortsWasted"
-      );
+      logger.warn("Event Mismatch: got %s expected %s", game.currentEvent.name, "effortsWasted");
     }
   }
 }
@@ -740,7 +709,7 @@ export class VoteHeroOrPariah extends GameEventWithData {
   }
 
   apply(game: GameState): void {
-    downCastEventState(HeroOrPariah, game, (eventState) => {
+    downCastEventState(HeroOrPariah, game, eventState => {
       eventState.voteHeroOrPariah(this.data.role, this.data.heroOrPariah, game);
     });
   }
@@ -755,7 +724,7 @@ export class VoteHeroOrPariahRole extends GameEventWithData {
   }
 
   apply(game: GameState): void {
-    downCastEventState(HeroOrPariah, game, (eventState) => {
+    downCastEventState(HeroOrPariah, game, eventState => {
       eventState.voteForPlayer(this.data.role, this.data.vote);
       game.players[this.data.role].updateReadiness(true);
     });

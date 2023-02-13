@@ -38,7 +38,7 @@ export class ModerationAction {
   @Column({
     generatedType: "STORED",
     asExpression: `case when "daysMuted" is not null then "dateCreated" + interval '1 day' * "daysMuted" else null end`,
-    nullable: true
+    nullable: true,
   })
   dateMuteExpires!: Date;
 

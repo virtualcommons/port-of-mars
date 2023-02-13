@@ -1,8 +1,4 @@
-import {
-  MarsEventData,
-  AccomplishmentData,
-  Role,
-} from "@port-of-mars/shared/types";
+import { MarsEventData, AccomplishmentData, Role } from "@port-of-mars/shared/types";
 
 export type ModalActivator = "Server" | "User" | "Default";
 

@@ -9,7 +9,7 @@ export default {
   REMOVE_FROM_TRADES(state: State, payload: { id: string }) {
     Vue.delete(state.tradeSet, payload.id);
   },
-  
+
   UPDATE_TRADE_STATUS(state: State, payload: { id: string; status: TradeStatus }) {
     state.tradeSet[payload.id].status = payload.status;
   },

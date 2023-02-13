@@ -4,12 +4,12 @@ import {
   Resource,
   ResourceAmountData,
   Role,
-  TradeData
+  TradeData,
 } from "@port-of-mars/shared/types";
 import {
   defaultPendingInvestment,
   initialStoreState,
-  State
+  State,
 } from "@port-of-mars/shared/game/client/state";
 import { ChatMarsLogView, HUDLeftView, HUDRightView } from "@port-of-mars/shared/game/client/panes";
 import * as _ from "lodash";
@@ -147,7 +147,7 @@ export class TutorialAPI implements AbstractGameAPI {
       message,
       role: this.store.state.role,
       dateCreated: new Date().getTime(),
-      round: 0
+      round: 0,
     });
 
     this.completedActionWithImplicitForward();
@@ -156,15 +156,15 @@ export class TutorialAPI implements AbstractGameAPI {
   purchaseAccomplishment(accomplishment: AccomplishmentData): void {
     this.store.commit("PURCHASE_ACCOMPLISHMENT", {
       data: accomplishment,
-      role: this.store.state.role
+      role: this.store.state.role,
     });
     this.store.commit("DISCARD_ACCOMPLISHMENT", {
       data: accomplishment.id,
-      role: this.store.state.role
+      role: this.store.state.role,
     });
     this.store.commit("SET_VICTORY_POINTS", {
       data: 7,
-      role: "Researcher"
+      role: "Researcher",
     });
     this.completedActionWithImplicitForward();
   }
@@ -269,7 +269,7 @@ export class TutorialAPI implements AbstractGameAPI {
   public sendTradeRequest(tradePackage: TradeData) {
     this.store.commit("ADD_TO_TRADES", {
       id: `mock-trade-${this.count}`,
-      trade: tradePackage
+      trade: tradePackage,
     });
     this.count++;
     this.completedActionWithImplicitForward();
@@ -277,26 +277,26 @@ export class TutorialAPI implements AbstractGameAPI {
 
   public acceptTradeRequest(id: string) {
     this.store.commit("REMOVE_FROM_TRADES", {
-      id
+      id,
     });
   }
 
   public rejectTradeRequest(id: string) {
     this.store.commit("REMOVE_FROM_TRADES", {
-      id
+      id,
     });
   }
 
   public cancelTradeRequest(id: string) {
     this.store.commit("REMOVE_FROM_TRADES", {
-      id
+      id,
     });
   }
 
   public resetPendingInvestments() {
     this.store.commit("SET_PENDING_INVESTMENTS", {
       role: this.store.state.role,
-      data: defaultPendingInvestment()
+      data: defaultPendingInvestment(),
     });
   }
 

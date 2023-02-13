@@ -1,4 +1,4 @@
-import pino, {LogFn} from 'pino';
+import pino, { LogFn } from "pino";
 
 export interface LogService {
   trace: LogFn;
@@ -16,32 +16,32 @@ export interface Logging {
 
 export class DevLogging implements Logging {
   logger = pino({
-    level: 'trace',
+    level: "trace",
     transport: {
-      target: 'pino-pretty'
-    }
+      target: "pino-pretty",
+    },
   });
-  previousLevel = '';
+  previousLevel = "";
 
   paths = [
     {
       match: /\/code\/server\/src\/rooms\/game\/events\/.*/,
-      level: 'trace'
+      level: "trace",
     },
     {
       match: /.*/,
-      level: 'trace'
+      level: "trace",
     },
     {
       match: /\/code\/server\/tests\/.*/,
-      level: 'info'
-    }
+      level: "info",
+    },
   ];
 
   findMatchingLogger(filename: string): LogService {
     for (const path of this.paths) {
       if (path.match.test(filename)) {
-        return this.logger.child({filename, level: path.level})
+        return this.logger.child({ filename, level: path.level });
       }
     }
     throw new Error(`couldn't find matching logger in ${this.paths}`);
@@ -53,7 +53,7 @@ export class DevLogging implements Logging {
 
   disable() {
     this.previousLevel = this.logger.level;
-    this.logger.level = 'silent'
+    this.logger.level = "silent";
   }
 
   // FIXME: does this do anything?

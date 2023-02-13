@@ -6,7 +6,7 @@ import {
   PlayerData,
   PlayerSetData,
   Role,
-  ROLES
+  ROLES,
 } from "@port-of-mars/shared/types";
 import { Vue } from "vue-property-decorator";
 import * as _ from "lodash";
@@ -14,7 +14,7 @@ import {
   defaultPendingInvestment,
   PlayerClientData,
   State,
-  User
+  User,
 } from "@port-of-mars/shared/game/client/state";
 
 function SET_GAME_PHASE(state: State, payload: Phase) {
@@ -70,7 +70,14 @@ function SET_EVENT_VISIBILITY(state: State, payload: { id: number; visibility: b
 
 function SET_USER(state: State, payload: User) {
   state.user = _.pick(payload, [
-    "id", "username", "isAdmin", "isMuted", "isBanned", "passedQuiz", "participantId", "isVerified"
+    "id",
+    "username",
+    "isAdmin",
+    "isMuted",
+    "isBanned",
+    "passedQuiz",
+    "participantId",
+    "isVerified",
   ]);
 }
 
@@ -93,7 +100,7 @@ function TOGGLE_LOADING(state: State) {
   state.loading = reverse;
 }
 
-function SET_HERO_OR_PARIAH(state: State, vote: 'hero' | 'pariah') {
+function SET_HERO_OR_PARIAH(state: State, vote: "hero" | "pariah") {
   state.heroOrPariah = vote;
 }
 
@@ -111,5 +118,5 @@ export default {
   SET_USER,
   SET_WINNERS,
   SET_HERO_OR_PARIAH,
-  TOGGLE_LOADING
+  TOGGLE_LOADING,
 };

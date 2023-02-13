@@ -34,9 +34,7 @@
         </div>
       </b-col>
       <b-col cols="6">
-        <h2 class="text-center p-2" style="background-color: var(--primary)">
-          Accomplishments
-        </h2>
+        <h2 class="text-center p-2" style="background-color: var(--primary)">Accomplishments</h2>
         <b-button-group class="w-100 my-3">
           <b-button
             squared
@@ -92,8 +90,8 @@ import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 @Component({
   components: {
     Inventory,
-    AccomplishmentCard
-  }
+    AccomplishmentCard,
+  },
 })
 export default class PlayerModal extends Vue {
   @Inject() readonly api!: GameRequestAPI;
@@ -103,7 +101,7 @@ export default class PlayerModal extends Vue {
   get roleData() {
     return {
       info: this.$tstore.state.players[this.role],
-      isSelf: this.role === this.$tstore.getters.player.role
+      isSelf: this.role === this.$tstore.getters.player.role,
     };
   }
 

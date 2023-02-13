@@ -38,19 +38,33 @@ const ADMIN_META = PAGE_META[ADMIN_PAGE].meta;
 const router = new VueRouter({
   mode: "hash",
   routes: [
-    { ...PAGE_META[ADMIN_PAGE], component: Admin, children: [
-      { path: "", name: "Admin", redirect: { name: "AdminOverview" }, meta: ADMIN_META },
-      { path: "overview", name: "AdminOverview", component: Overview, meta: ADMIN_META },
-      { path: "games", name: "AdminGames", component: Games, meta: ADMIN_META },
-      { path: "rooms", name: "AdminRooms", component: Rooms, meta: ADMIN_META },
-      { path: "reports", name: "AdminReports", component: Reports, meta: ADMIN_META },
-      { path: "settings", name: "AdminSettings", component: Settings, meta: ADMIN_META },
-    ] },
+    {
+      ...PAGE_META[ADMIN_PAGE],
+      component: Admin,
+      children: [
+        { path: "", name: "Admin", redirect: { name: "AdminOverview" }, meta: ADMIN_META },
+        { path: "overview", name: "AdminOverview", component: Overview, meta: ADMIN_META },
+        { path: "games", name: "AdminGames", component: Games, meta: ADMIN_META },
+        { path: "rooms", name: "AdminRooms", component: Rooms, meta: ADMIN_META },
+        { path: "reports", name: "AdminReports", component: Reports, meta: ADMIN_META },
+        { path: "settings", name: "AdminSettings", component: Settings, meta: ADMIN_META },
+      ],
+    },
     { ...PAGE_META[LOGIN_PAGE], component: Login },
-    { ...PAGE_META[LOBBY_PAGE], component: Lobby, children: [
-      { path: "", name: "Lobby", component: LobbyRoomList, meta: { requiresAuth: true } },
-      { path: "room/:id", name: "LobbyRoom", component: LobbyRoom, meta: { requiresAuth: true }, props: true },
-    ] },
+    {
+      ...PAGE_META[LOBBY_PAGE],
+      component: Lobby,
+      children: [
+        { path: "", name: "Lobby", component: LobbyRoomList, meta: { requiresAuth: true } },
+        {
+          path: "room/:id",
+          name: "LobbyRoom",
+          component: LobbyRoom,
+          meta: { requiresAuth: true },
+          props: true,
+        },
+      ],
+    },
     { ...PAGE_META[GAME_PAGE], component: Game },
     { ...PAGE_META[REGISTER_PAGE], component: Register },
     { ...PAGE_META[VERIFY_PAGE], component: Verify },
@@ -58,7 +72,7 @@ const router = new VueRouter({
     { ...PAGE_META[HOME_PAGE], component: Home },
     { ...PAGE_META[ABOUT_PAGE], component: Home },
     { ...PAGE_META[PRIVACY_PAGE], component: Privacy },
-  ]
+  ],
 });
 
 function isAuthenticated() {

@@ -1,15 +1,21 @@
-import {User, PlayerClientData, PlayerClientSet, State} from '@port-of-mars/shared/game/client/state';
+import {
+  User,
+  PlayerClientData,
+  PlayerClientSet,
+  State,
+} from "@port-of-mars/shared/game/client/state";
 import {
   EventClientView,
   MarsEventData,
   MarsLogCategory,
-  MarsLogMessageData, Phase,
+  MarsLogMessageData,
+  Phase,
   ROLES,
-} from '@port-of-mars/shared/types';
+} from "@port-of-mars/shared/types";
 
 export default {
   isAuthenticated(state: State): boolean {
-    return state.user?.username !== '';
+    return state.user?.username !== "";
   },
 
   isAdmin(state: State): boolean {
@@ -97,7 +103,6 @@ export default {
     return undefined;
   },
 
-
   /**
    * During events phase, gets current view of the center bottom container.
    * @param state The current state of the game.
@@ -112,7 +117,7 @@ export default {
       const view = current.clientViewHandler;
       return view;
     }
-    return 'NO_CHANGE';
+    return "NO_CHANGE";
   },
 
   /**
@@ -124,45 +129,48 @@ export default {
   isUnderAudit(state: State): boolean {
     const marsEvents = state.marsEvents;
     const eventProcessedIndex = state.marsEventsProcessed;
-    const auditEventIndex = marsEvents.findIndex(event => event.id === 'audit');
+    const auditEventIndex = marsEvents.findIndex(event => event.id === "audit");
     return auditEventIndex !== -1 && auditEventIndex <= eventProcessedIndex;
   },
 
   isEffortsWastedActive(state: State): boolean {
     const marsEvents = state.marsEvents;
     const processedIndex = state.marsEventsProcessed;
-    const effortsWastedIndex = marsEvents.findIndex(event => event.id === 'effortsWasted');
-    return state.phase === Phase.events && effortsWastedIndex !== -1 && effortsWastedIndex <= processedIndex;
+    const effortsWastedIndex = marsEvents.findIndex(event => event.id === "effortsWasted");
+    return (
+      state.phase === Phase.events &&
+      effortsWastedIndex !== -1 &&
+      effortsWastedIndex <= processedIndex
+    );
   },
 
   isChatAvailable(state: State): boolean {
     const marsEvents = state.marsEvents;
     const eventProcessedIndex = state.marsEventsProcessed;
-    const solarFlareIndex = marsEvents.findIndex(event => event.id === 'solarFlare');
+    const solarFlareIndex = marsEvents.findIndex(event => event.id === "solarFlare");
     return !(solarFlareIndex !== -1 && eventProcessedIndex <= eventProcessedIndex);
   },
 
   categoryColorMap(state: State): Map<string, string> {
-
     return new Map([
       // round
-      [MarsLogCategory.newRound, 'var(--light-shade-05)'],
+      [MarsLogCategory.newRound, "var(--light-shade-05)"],
 
       // system health
-      [MarsLogCategory.systemHealth, 'var(--marslog-red)'],
-      [MarsLogCategory.systemHealthContributions, 'var(--marslog-red)'],
+      [MarsLogCategory.systemHealth, "var(--marslog-red)"],
+      [MarsLogCategory.systemHealthContributions, "var(--marslog-red)"],
 
       // trade
-      [MarsLogCategory.trade, 'var(--marslog-purple)'],
-      [MarsLogCategory.sentTrade, 'var(--marslog-purple)'],
-      [MarsLogCategory.acceptTrade, 'var(--marslog-purple)'],
-      [MarsLogCategory.rejectTrade, 'var(--marslog-purple)'],
-      [MarsLogCategory.cancelTrade, 'var(--marslog-purple)'],
-      [MarsLogCategory.invalidTrade, 'var(--marslog-purple)'],
+      [MarsLogCategory.trade, "var(--marslog-purple)"],
+      [MarsLogCategory.sentTrade, "var(--marslog-purple)"],
+      [MarsLogCategory.acceptTrade, "var(--marslog-purple)"],
+      [MarsLogCategory.rejectTrade, "var(--marslog-purple)"],
+      [MarsLogCategory.cancelTrade, "var(--marslog-purple)"],
+      [MarsLogCategory.invalidTrade, "var(--marslog-purple)"],
 
       // accomplishment
-      [MarsLogCategory.accomplishment, 'var(--marslog-green)'],
-      [MarsLogCategory.purchaseAccomplishment, 'var(--marslog-green)'],
+      [MarsLogCategory.accomplishment, "var(--marslog-green)"],
+      [MarsLogCategory.purchaseAccomplishment, "var(--marslog-green)"],
     ]);
   },
 
@@ -183,7 +191,6 @@ export default {
   },
 
   lobbyPlayerReadiness(state: State) {
-    return state.lobby.clients
-      .find(client => client.username === state.user?.username)?.ready;
+    return state.lobby.clients.find(client => client.username === state.user?.username)?.ready;
   },
-}
+};

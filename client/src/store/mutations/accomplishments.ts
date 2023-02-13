@@ -1,6 +1,6 @@
-import * as _ from 'lodash';
-import { State } from '@port-of-mars/shared/game/client/state';
-import {AccomplishmentData, Role} from '@port-of-mars/shared/types';
+import * as _ from "lodash";
+import { State } from "@port-of-mars/shared/game/client/state";
+import { AccomplishmentData, Role } from "@port-of-mars/shared/types";
 
 export default {
   DISCARD_ACCOMPLISHMENT(state: State, payload: { id: number; role: Role }) {
@@ -14,13 +14,21 @@ export default {
     state.players[payload.role].accomplishments.purchased.push(payload.data);
   },
 
-  ADD_TO_PURCHASED_ACCOMPLISHMENTS(state: State, payload: { role: Role, data: AccomplishmentData }) {
+  ADD_TO_PURCHASED_ACCOMPLISHMENTS(
+    state: State,
+    payload: { role: Role; data: AccomplishmentData }
+  ) {
     state.players[payload.role].accomplishments.purchased.push(payload.data);
   },
 
-  REMOVE_FROM_PURCHASED_ACCOMPLISHMENTS(state: State, payload: { role: Role, data: AccomplishmentData}) {
+  REMOVE_FROM_PURCHASED_ACCOMPLISHMENTS(
+    state: State,
+    payload: { role: Role; data: AccomplishmentData }
+  ) {
     const purchased = state.players[payload.role].accomplishments.purchased;
-    const index = purchased.findIndex((accomplishment: AccomplishmentData) => accomplishment.id === payload.data.id);
+    const index = purchased.findIndex(
+      (accomplishment: AccomplishmentData) => accomplishment.id === payload.data.id
+    );
     if (index === -1) {
       console.log("Couldn't remove purchased accomplishment: ", payload.data);
       return;
@@ -28,17 +36,25 @@ export default {
     purchased.splice(index, 1);
   },
 
-  ADD_TO_PURCHASABLE_ACCOMPLISHMENTS(state: State, payload: { role: Role, data: AccomplishmentData }) {
+  ADD_TO_PURCHASABLE_ACCOMPLISHMENTS(
+    state: State,
+    payload: { role: Role; data: AccomplishmentData }
+  ) {
     state.players[payload.role].accomplishments.purchasable.push(payload.data);
   },
 
-  REMOVE_FROM_PURCHASABLE_ACCOMPLISHMENTS(state: State, payload: { role: Role, data: AccomplishmentData }) {
+  REMOVE_FROM_PURCHASABLE_ACCOMPLISHMENTS(
+    state: State,
+    payload: { role: Role; data: AccomplishmentData }
+  ) {
     const purchasable = state.players[payload.role].accomplishments.purchasable;
-    const index = purchasable.findIndex((accomplishment: AccomplishmentData) => accomplishment.id === payload.data.id);
+    const index = purchasable.findIndex(
+      (accomplishment: AccomplishmentData) => accomplishment.id === payload.data.id
+    );
     if (index === -1) {
       console.log("Couldn't remove purchasable accomplishment: ", payload.data);
       return;
     }
     purchasable.splice(index, 1);
-  }
+  },
 };

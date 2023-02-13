@@ -47,7 +47,7 @@ export default class Verify extends Vue {
       // FIXME: these types of store commits should be abstracted away by a coherent store API that all Vue components talk to
       this.$tstore.commit("SET_DASHBOARD_MESSAGE", {
         kind: "success",
-        message: "Email successfully verified."
+        message: "Email successfully verified.",
       });
       this.$router.push({ name: LOBBY_PAGE });
     });

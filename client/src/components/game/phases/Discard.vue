@@ -51,8 +51,8 @@ import { canPurchaseAccomplishment } from "@port-of-mars/shared/validation";
 @Component({
   components: {
     AccomplishmentCard,
-    Inventory
-  }
+    Inventory,
+  },
 })
 export default class Discard extends Vue {
   @Inject() readonly api!: GameRequestAPI;

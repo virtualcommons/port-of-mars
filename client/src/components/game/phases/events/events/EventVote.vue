@@ -12,8 +12,8 @@ import VoteForPlayerHeroPariah from "./views/VoteForPlayerHeroPariah.vue";
   components: {
     VoteYesNo,
     VoteForPlayerSingle,
-    VoteForPlayerHeroPariah
-  }
+    VoteForPlayerHeroPariah,
+  },
 })
 export default class EventVote extends Vue {
   @Prop({ default: "" }) eventView!: string;

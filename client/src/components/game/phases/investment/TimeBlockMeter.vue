@@ -1,15 +1,12 @@
 <template>
   <div class="status-o">
     <div class="progress" v-for="n in totalTimeBlocks" :key="n" />
-    <div
-      class="fader"
-      :style="{ width: `${100 - (100 / totalTimeBlocks) * usedTimeBlocks}%` }"
-    />
+    <div class="fader" :style="{ width: `${100 - (100 / totalTimeBlocks) * usedTimeBlocks}%` }" />
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop } from "vue-property-decorator";
 
 @Component({})
 export default class TimeBlockMeter extends Vue {
@@ -19,5 +16,5 @@ export default class TimeBlockMeter extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/investment/TimeBlockMeter.scss';
+@import "@port-of-mars/client/stylesheets/game/phases/investment/TimeBlockMeter.scss";
 </style>

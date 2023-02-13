@@ -45,13 +45,13 @@
     <b-row class="flex-grow-1 w-100 my-2 mx-auto p-0">
       <b-col cols="9" class="d-flex flex-column w-100">
         <!-- HUD -->
-        <b-row class="w-100 p-2 mx-0" style="border: 0.2rem solid rgba(241, 224, 197, 0.25);">
+        <b-row class="w-100 p-2 mx-0" style="border: 0.2rem solid rgba(241, 224, 197, 0.25)">
           <HUD></HUD>
         </b-row>
         <!-- Phase Switcher -->
         <b-row
           class="w-100 flex-grow-1 p-2 mt-2 mx-0"
-          style="border: 0.2rem solid rgba(241, 224, 197, 0.25);"
+          style="border: 0.2rem solid rgba(241, 224, 197, 0.25)"
         >
           <PhaseSwitcher></PhaseSwitcher>
         </b-row>
@@ -79,8 +79,8 @@ import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
     PhaseSwitcher,
     ProfileMenu,
     SystemHealth,
-    ChatMarsLog
-  }
+    ChatMarsLog,
+  },
 })
 export default class GameboardContainer extends Vue {
   @Inject()
@@ -104,5 +104,4 @@ export default class GameboardContainer extends Vue {
 body {
   color: $light-shade;
 }
-
 </style>

@@ -26,7 +26,7 @@
           <img
             :src="require(`@port-of-mars/client/assets/icons/${investment.name}.svg`)"
             alt="Influence"
-            style="height: 2rem; width: 2rem;"
+            style="height: 2rem; width: 2rem"
           />
           {{ investment.name }}
         </p>
@@ -49,7 +49,7 @@ import { Investment, Resource, RESOURCES, Phase } from "@port-of-mars/shared/typ
 import { Constants } from "@port-of-mars/shared/settings";
 
 @Component({
-  components: {}
+  components: {},
 })
 export default class Inventory extends Vue {
   @Prop({ default: true }) isSelf!: boolean;
@@ -71,7 +71,7 @@ export default class Inventory extends Vue {
       name,
       units: inventory[name as Resource],
       pendingUnits: pendingInventory[name as Resource],
-      cost: costs[name as Resource]
+      cost: costs[name as Resource],
     }));
   }
 
@@ -83,7 +83,7 @@ export default class Inventory extends Vue {
       name: "System Health",
       units: p.systemHealthChanges.investment,
       pendingUnits: pendingInvestment.systemHealth,
-      cost: costs.systemHealth
+      cost: costs.systemHealth,
     };
   }
 

@@ -1,15 +1,9 @@
-import {
-  Step,
-  TOP,
-  RIGHT,
-  BOTTOM,
-  LEFT,
-} from '@port-of-mars/client/types/tutorial';
-import { Phase, RESEARCHER } from '@port-of-mars/shared/types';
+import { Step, TOP, RIGHT, BOTTOM, LEFT } from "@port-of-mars/client/types/tutorial";
+import { Phase, RESEARCHER } from "@port-of-mars/shared/types";
 
 const steps: Array<Step> = [
   {
-    target: '.tour-invest',
+    target: ".tour-invest",
     content: `During the Invest phase, spend your time blocks to purchase Influence and improve
     System Health.`,
     params: {
@@ -25,7 +19,7 @@ const steps: Array<Step> = [
             government: 3,
             legacy: 3,
             science: 2,
-            systemHealth: 1
+            systemHealth: 1,
           },
           role: RESEARCHER,
         },
@@ -95,7 +89,7 @@ const steps: Array<Step> = [
   //   },
   // },
   {
-    target: '.tour-invest-action',
+    target: ".tour-invest-action",
     content: `Spend all time blocks to purchase 1 Science, 1 Legacy, 1 Government, and 2 System Health.`,
     params: {
       placement: TOP,
@@ -152,15 +146,14 @@ const steps: Array<Step> = [
   //   },
   // },
   {
-    target: '.tour-ready-to-advance-button',
-    content:
-      `Click <mark>Ready to Advance</mark> when you are finished. Phases will end as soon as all players are ready.`,
+    target: ".tour-ready-to-advance-button",
+    content: `Click <mark>Ready to Advance</mark> when you are finished. Phases will end as soon as all players are ready.`,
     params: {
       placement: BOTTOM,
     },
     stateTransform: [
       {
-        SET_LAYOUT: 'tutorial',
+        SET_LAYOUT: "tutorial",
         required: true,
       },
     ],

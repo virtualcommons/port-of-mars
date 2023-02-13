@@ -75,7 +75,7 @@ import {
   Resource,
   ResourceAmountData,
   InvestmentData,
-  RESOURCES
+  RESOURCES,
 } from "@port-of-mars/shared/types";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 import InvestmentCard from "@port-of-mars/client/components/game/phases/investment/InvestmentCard.vue";
@@ -95,8 +95,8 @@ import TimeBlockMeter from "@port-of-mars/client/components/game/phases/investme
 @Component({
   components: {
     TimeBlockMeter,
-    InvestmentCard
-  }
+    InvestmentCard,
+  },
 })
 export default class InfluencesSelect extends Vue {
   @Inject() readonly api!: GameRequestAPI;
@@ -105,7 +105,7 @@ export default class InfluencesSelect extends Vue {
     fluid: true,
     blankColor: "#bbb",
     width: 200,
-    height: 200
+    height: 200,
   };
 
   mounted() {
@@ -125,7 +125,7 @@ export default class InfluencesSelect extends Vue {
       return {
         name: resource,
         cost: 1,
-        pendingInvestment: this.pendingInvestments[resource]
+        pendingInvestment: this.pendingInvestments[resource],
       };
     });
   }
@@ -176,7 +176,7 @@ export default class InfluencesSelect extends Vue {
       this.api.investPendingTimeBlocks({
         investment: data.name,
         units: data.units,
-        role: this.$tstore.state.role
+        role: this.$tstore.state.role,
       });
     }
   }

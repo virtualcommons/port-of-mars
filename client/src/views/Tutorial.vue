@@ -139,8 +139,8 @@ Vue.use(VueTour);
   components: {
     GameDashboard,
     CompletedQuizModal,
-    TourModal
-  }
+    TourModal,
+  },
 })
 export default class Tutorial extends Vue {
   @Provide() api: TutorialAPI = new TutorialAPI();
@@ -153,7 +153,7 @@ export default class Tutorial extends Vue {
     onStart: this.startTourCallback,
     onPreviousStep: this.previousStepCallback,
     onNextStep: this.nextStepCallback,
-    onStop: this.stopTourCallback
+    onStop: this.stopTourCallback,
   };
 
   steps: Array<Step> = tutorialSteps;
@@ -281,7 +281,7 @@ export default class Tutorial extends Vue {
   get currentQuizQuestion() {
     const index = _.findIndex(this.quizQuestions, [
       "tutorialElementId",
-      this.currentTutorialElementId
+      this.currentTutorialElementId,
     ]);
     return this.quizQuestions[index];
   }

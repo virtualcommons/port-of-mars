@@ -30,12 +30,7 @@ import { User } from "@port-of-mars/server/entity";
 import { Command } from "@port-of-mars/server/rooms/game/commands/types";
 import { TakenStateSnapshot } from "@port-of-mars/server/rooms/game/events";
 import { GameState, Player, PlayerSerialized } from "@port-of-mars/server/rooms/game/state";
-import {
-  Game,
-  GameOpts,
-  Metadata,
-  Persister,
-} from "@port-of-mars/server/rooms/game/types";
+import { Game, GameOpts, Metadata, Persister } from "@port-of-mars/server/rooms/game/types";
 import { getServices } from "@port-of-mars/server/services";
 import { settings } from "@port-of-mars/server/settings";
 import { Requests, Responses } from "@port-of-mars/shared/game";
@@ -82,11 +77,7 @@ function gameLoop(room: GameRoomType): void {
   }
 }
 
-function prepareRequest(
-  room: Room<GameState> & Game,
-  r: Requests,
-  client: Client
-): Command {
+function prepareRequest(room: Room<GameState> & Game, r: Requests, client: Client): Command {
   logger.trace("prepareRequest from %s: %o", client.id, r);
   const player = room.getPlayer(client);
   player.resetElapsed();
@@ -162,11 +153,7 @@ async function onCreate(
     room.persister.persist(events, metadata);
   });
   logger.info("roomId: %s", room.roomId);
-  room.gameId = await room.persister.initialize(
-    options,
-    room.roomId,
-    shouldEnableDb
-  );
+  room.gameId = await room.persister.initialize(options, room.roomId, shouldEnableDb);
   const snapshot = room.state.toJSON();
   // FIXME: consider taking game state snapshots periodically during the game as well as at the end of the game
   // https://github.com/virtualcommons/port-of-mars/issues/718
@@ -227,24 +214,23 @@ export class GameRoom extends Room<GameState> implements Game {
     request: http.IncomingMessage
   ): Promise<User | boolean> {
     try {
-      logger.debug(
-        `GameRoom.onAuth: checking client ${client.id} in ${this.roomId}`
-      );
+      logger.debug(`GameRoom.onAuth: checking client ${client.id} in ${this.roomId}`);
       const userId = (request as any).session.passport.user;
       const user = await getServices().account.findUserById(userId);
       if (user) {
         const username = user.username;
         logger.debug(`GameRoom.onAuth found user ${username}`);
         // save user ip address
-        const ip = ((request.headers['x-forwarded-for'] || request.connection.remoteAddress) ?? "").toString();
+        const ip = (
+          (request.headers["x-forwarded-for"] || request.connection.remoteAddress) ??
+          ""
+        ).toString();
         await getServices().account.setLastPlayerIp(user.id, ip);
         if (this.state.hasUser(username)) {
           return user;
         }
       }
-      logger.debug(
-        `GameRoom.onAuth: ${userId} not found or does not belong to this GameRoom`
-      );
+      logger.debug(`GameRoom.onAuth: ${userId} not found or does not belong to this GameRoom`);
       return false;
     } catch (e) {
       logger.fatal(`GameRoom.onAuth exception: ${e}`);
@@ -277,12 +263,12 @@ export class GameRoom extends Room<GameState> implements Game {
           username: p.username,
           role: p.role,
           isBot: p.isBot,
-          points: p.victoryPoints
-        }
+          points: p.victoryPoints,
+        };
       }),
       systemHealth: state.systemHealth,
       marsLog: state.logs,
-      chatMessages: state.messages
+      chatMessages: state.messages,
     };
   }
 

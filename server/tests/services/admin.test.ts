@@ -1,8 +1,14 @@
 import { Tournament, TournamentRound, Game } from "@port-of-mars/server/entity";
 import { Connection, EntityManager, QueryRunner } from "typeorm";
 import { ServiceProvider } from "@port-of-mars/server/services";
-import { createRound, createTournament, createUsers, initTransaction, rollbackTransaction } from "./common";
-import { BAN, ModerationActionType, MUTE, NONE } from '@port-of-mars/shared/types';
+import {
+  createRound,
+  createTournament,
+  createUsers,
+  initTransaction,
+  rollbackTransaction,
+} from "./common";
+import { BAN, ModerationActionType, MUTE, NONE } from "@port-of-mars/shared/types";
 
 describe("users in a game", () => {
   let conn: Connection;
@@ -16,7 +22,7 @@ describe("users in a game", () => {
     [conn, qr, manager] = await initTransaction();
     sp = new ServiceProvider(qr.manager);
     t = await createTournament(sp, { name: "openbeta" });
-    tr = await createRound(sp, {tournamentId: t.id});
+    tr = await createRound(sp, { tournamentId: t.id });
     // create users
     await createUsers(manager, "steve", [1, 2, 3, 4, 5, 6]);
     await sp.account.getOrCreateTestUser("admin");
@@ -33,13 +39,13 @@ describe("users in a game", () => {
       message: "something rude",
       role: "Curator",
       dateCreated: jest.getRealSystemTime(),
-      round: 1
-    }
+      round: 1,
+    };
     const reportData = {
       roomId: "foobar",
       username: "steve1",
-      message: msg
-    }
+      message: msg,
+    };
     await sp.admin.submitChatReport(reportData);
     const reports = await sp.admin.getChatReports(false);
     expect(reports[0].message).toEqual(msg);
@@ -89,7 +95,7 @@ describe("users in a game", () => {
         username: report!.username,
         adminUsername: "admin",
         action: MUTE,
-        daysMuted: 3
+        daysMuted: 3,
       });
       user = await sp.account.findByUsername(username);
       expect(user.isMuted).toBe(true);
@@ -106,7 +112,7 @@ describe("users in a game", () => {
         reportId: report!.id,
         username: report!.username,
         adminUsername: "admin",
-        action: BAN
+        action: BAN,
       });
       user = await sp.account.findByUsername(username);
       expect(user.isBanned).toBe(true);
@@ -121,7 +127,7 @@ describe("users in a game", () => {
         username: report!.username,
         adminUsername: "admin",
         action: MUTE,
-        daysMuted: 3
+        daysMuted: 3,
       });
       let user = await sp.account.findByUsername(username);
       expect(user.isMuted).toBe(true);
@@ -143,7 +149,7 @@ describe("users in a game", () => {
         username: report!.username,
         adminUsername: "admin",
         action: MUTE,
-        daysMuted: 0
+        daysMuted: 0,
       });
       let user = await sp.account.findByUsername(username);
       expect(user.isMuted).toBe(true);
@@ -163,18 +169,22 @@ const createChatReports = async (sp: ServiceProvider, usernames: Array<string>) 
       message: `I am ${username} and I am rude`,
       role: "Curator",
       dateCreated: jest.getRealSystemTime(),
-      round: 1
-    }
+      round: 1,
+    };
     const data = {
       roomId: "foobar",
       username: username,
-      message: msg
-    }
+      message: msg,
+    };
     await sp.admin.submitChatReport(data);
   }
-}
+};
 
-const createModerationActions = async (sp: ServiceProvider, usernames: Array<string>, actions: Array<ModerationActionType>) => {
+const createModerationActions = async (
+  sp: ServiceProvider,
+  usernames: Array<string>,
+  actions: Array<ModerationActionType>
+) => {
   const reports = await sp.admin.getChatReports(false);
   for (const [i, u] of usernames.entries()) {
     const data = {
@@ -182,8 +192,8 @@ const createModerationActions = async (sp: ServiceProvider, usernames: Array<str
       username: u,
       adminUsername: "admin",
       action: actions[i],
-      daysMuted: actions[i] === MUTE ? 3 : undefined
-    }
+      daysMuted: actions[i] === MUTE ? 3 : undefined,
+    };
     await sp.admin.takeModerationAction(data);
   }
-}
+};

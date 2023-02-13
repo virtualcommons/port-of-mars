@@ -60,7 +60,7 @@ import {
   INVESTMENTS,
   Resource,
   ResourceCostData,
-  Role
+  Role,
 } from "@port-of-mars/shared/types";
 import { AbstractGameAPI } from "@port-of-mars/client/api/game/types";
 import TimeBlockMeter from "./investment/TimeBlockMeter.vue";
@@ -74,8 +74,8 @@ import { PlayerClientData, ROLE_TO_INVESTMENT_DATA } from "@port-of-mars/shared/
   components: {
     TimeBlockMeter,
     InvestmentCard,
-    AccomplishmentCard
-  }
+    AccomplishmentCard,
+  },
 })
 export default class Investments extends Vue {
   @Inject() readonly api!: AbstractGameAPI;
@@ -126,14 +126,14 @@ export default class Investments extends Vue {
       ROLE_TO_INVESTMENT_DATA[p.role].map(name => ({
         name,
         cost: p.costs[name],
-        pendingInvestment: this.pendingInvestments[name]
+        pendingInvestment: this.pendingInvestments[name],
       }))
     );
     // get influence costs base on local player's role
     return ROLE_TO_INVESTMENT_DATA[p.role].map(name => ({
       name,
       cost: p.costs[name],
-      pendingInvestment: this.pendingInvestments[name]
+      pendingInvestment: this.pendingInvestments[name],
     }));
   }
 
@@ -207,7 +207,7 @@ export default class Investments extends Vue {
       const data = {
         investment: investment.name,
         units: pendingInvestments[investment.name],
-        role: this.$tstore.state.role
+        role: this.$tstore.state.role,
       };
       this.api.investPendingTimeBlocks(data);
     }

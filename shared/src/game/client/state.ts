@@ -3,7 +3,11 @@ import {
   DashboardMessage,
   TournamentStatus,
   // game data
-  CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER,
+  CURATOR,
+  ENTREPRENEUR,
+  PIONEER,
+  POLITICIAN,
+  RESEARCHER,
   ChatMessageData,
   GameData,
   Investment,
@@ -22,60 +26,18 @@ import {
   LobbyChatMessageData,
   LobbyClientData,
 } from "@port-of-mars/shared/types";
-import {
-  ModalType,
-  ModalDataType,
-} from "@port-of-mars/shared/game/client/modals";
-import {
-  ChatMarsLogView,
-  HUDLeftView,
-  HUDRightView,
-} from "@port-of-mars/shared/game/client/panes";
+import { ModalType, ModalDataType } from "@port-of-mars/shared/game/client/modals";
+import { ChatMarsLogView, HUDLeftView, HUDRightView } from "@port-of-mars/shared/game/client/panes";
 import { Constants } from "@port-of-mars/shared/settings";
 
 export const ROLE_TO_INVESTMENT_DATA: {
   [role in Role]: Array<Investment>;
 } = {
-  [CURATOR]: [
-    "systemHealth",
-    "culture",
-    "finance",
-    "legacy",
-    "government",
-    "science",
-  ],
-  [ENTREPRENEUR]: [
-    "systemHealth",
-    "finance",
-    "culture",
-    "government",
-    "legacy",
-    "science",
-  ],
-  [POLITICIAN]: [
-    "systemHealth",
-    "government",
-    "finance",
-    "science",
-    "culture",
-    "legacy",
-  ],
-  [RESEARCHER]: [
-    "systemHealth",
-    "science",
-    "government",
-    "legacy",
-    "culture",
-    "finance",
-  ],
-  [PIONEER]: [
-    "systemHealth",
-    "legacy",
-    "culture",
-    "science",
-    "finance",
-    "government",
-  ],
+  [CURATOR]: ["systemHealth", "culture", "finance", "legacy", "government", "science"],
+  [ENTREPRENEUR]: ["systemHealth", "finance", "culture", "government", "legacy", "science"],
+  [POLITICIAN]: ["systemHealth", "government", "finance", "science", "culture", "legacy"],
+  [RESEARCHER]: ["systemHealth", "science", "government", "legacy", "culture", "finance"],
+  [PIONEER]: ["systemHealth", "legacy", "culture", "science", "finance", "government"],
 };
 
 export interface PlayerClientData extends PlayerData {
@@ -259,8 +221,8 @@ export const initialUserState: User = {
   isMuted: false,
   isBanned: false,
   passedQuiz: false,
-  isVerified: false
-}
+  isVerified: false,
+};
 
 export function defaultLobbyState(): Lobby {
   return {
@@ -268,16 +230,12 @@ export function defaultLobbyState(): Lobby {
     chat: [],
     ready: false,
     dateCreated: 0,
-  }
+  };
 }
 
-export const initialGameState: Omit<State,
-  | "user"
-  | "lobby"
-  | "scheduledGames"
-  | "dashboardMessages"
-  | "tournamentStatus"
-  | "signupEnabled"
+export const initialGameState: Omit<
+  State,
+  "user" | "lobby" | "scheduledGames" | "dashboardMessages" | "tournamentStatus" | "signupEnabled"
 > = {
   // GameData
   players: defaultPlayerClientSet(),
@@ -336,7 +294,7 @@ export const initialGameState: Omit<State,
     // TODO: Still needs to be refactored
     tradeData: defaultTradeData(),
   },
-}
+};
 
 export const initialStoreState: State = {
   ...initialGameState,
@@ -345,7 +303,11 @@ export const initialStoreState: State = {
   scheduledGames: [],
   dashboardMessages: [],
   tournamentStatus: {
-    round: 0, announcement: '', championship: false, description: '', schedule: []
+    round: 0,
+    announcement: "",
+    championship: false,
+    description: "",
+    schedule: [],
   },
   signupEnabled: true,
 };

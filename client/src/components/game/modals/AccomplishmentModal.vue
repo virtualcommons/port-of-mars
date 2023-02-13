@@ -48,7 +48,7 @@
       <!-- cost -->
       <b-col
         class="d-flex flex-wrap w-100 m-0 pt-1 justify-content-center px-4 py-2"
-        style="transition: all 0.15s ease-in-out;"
+        style="transition: all 0.15s ease-in-out"
       >
         <div
           :class="investment.available ? '' : 'unattainable-resource'"
@@ -86,8 +86,8 @@ export default class AccomplishmentModal extends Vue {
       culture: undefined,
       systemHealth: undefined,
       victoryPoints: undefined,
-      effect: undefined
-    })
+      effect: undefined,
+    }),
   })
   modalData!: AccomplishmentData;
   @Prop({ required: true }) costToPurchase!: { influence: Investment; available: boolean }[];

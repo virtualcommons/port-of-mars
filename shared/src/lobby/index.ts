@@ -1,4 +1,4 @@
-export * from './requests';
-export * from './responses';
+export * from "./requests";
+export * from "./responses";
 
-export const LOBBY_NAME = 'lobby';
+export const LOBBY_NAME = "lobby";

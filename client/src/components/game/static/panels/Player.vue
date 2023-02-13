@@ -9,9 +9,12 @@
       <b-row
         class="p-1 my-2 mx-auto"
         :style="indicatorStyle"
-        style="border-radius: 50%;
-           transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
-           height: 10rem; width: 10rem"
+        style="
+          border-radius: 50%;
+          transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+          height: 10rem;
+          width: 10rem;
+        "
       >
         <b-col class="h-100 w-100 m-0 p-0" style="border-radius: 50%" :style="frameColor">
           <b-img
@@ -24,9 +27,9 @@
         </b-col>
       </b-row>
       <b-row class="flex-column text-center">
-        <p class="mb-1" style="color: rgb(202, 166, 110); font-weight: bold;">Your Role</p>
-        <p class="mb-1" style="color: rgb(241, 224, 197); font-weight: bold;">{{ role }}</p>
-        <p class="m-0" style="color: rgb(241, 224, 197); font-weight: bold;">
+        <p class="mb-1" style="color: rgb(202, 166, 110); font-weight: bold">Your Role</p>
+        <p class="mb-1" style="color: rgb(241, 224, 197); font-weight: bold">{{ role }}</p>
+        <p class="m-0" style="color: rgb(241, 224, 197); font-weight: bold">
           Score: {{ playerScore }}
         </p>
       </b-row>
@@ -55,8 +58,8 @@ import { TutorialAPI } from "@port-of-mars/client/api/tutorial/request";
 import PlayerModal from "@port-of-mars/client/components/game/modals/PlayerModal.vue";
 @Component({
   components: {
-    PlayerModal
-  }
+    PlayerModal,
+  },
 })
 export default class Player extends Vue {
   @Inject()
@@ -67,7 +70,7 @@ export default class Player extends Vue {
     fluid: true,
     blankColor: "#bbb",
     width: 200,
-    height: 200
+    height: 200,
   };
 
   get role(): Role {

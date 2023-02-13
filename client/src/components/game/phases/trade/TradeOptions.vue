@@ -88,13 +88,13 @@ export default class TradeOptions extends Vue {
     fluid: true,
     blankColor: "#bbb",
     width: 50,
-    height: 50
+    height: 50,
   };
 
   get validResources() {
     if (this.mode === "outgoing") {
       return Object.keys(this.resources)
-        .filter((resource) => this.playerInventory[resource] > 0)
+        .filter(resource => this.playerInventory[resource] > 0)
         .reduce((obj, key) => {
           return Object.assign(obj, { [key]: this.resources[key as keyof ResourceAmountData] });
         }, {} as ResourceAmountData);
@@ -123,4 +123,3 @@ export default class TradeOptions extends Vue {
   background-color: $dark-shade-75;
 }
 </style>
-

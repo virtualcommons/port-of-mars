@@ -8,19 +8,8 @@ export const PIONEER: "Pioneer" = "Pioneer";
 export const ENTREPRENEUR: "Entrepreneur" = "Entrepreneur";
 export const POLITICIAN: "Politician" = "Politician";
 export const SERVER: "Server" = "Server";
-export const ROLES: Array<Role> = [
-  CURATOR,
-  ENTREPRENEUR,
-  PIONEER,
-  POLITICIAN,
-  RESEARCHER,
-];
-export type Role =
-  | "Researcher"
-  | "Curator"
-  | "Pioneer"
-  | "Entrepreneur"
-  | "Politician";
+export const ROLES: Array<Role> = [CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER];
+export type Role = "Researcher" | "Curator" | "Pioneer" | "Entrepreneur" | "Politician";
 export type ServerRole = "Server";
 
 export type ModerationActionType = "mute" | "ban" | "none";
@@ -55,7 +44,7 @@ export interface ChatReportRequestData {
   message: ChatMessageData;
 }
 
-export interface ChatReportData extends ChatReportRequestData{
+export interface ChatReportData extends ChatReportRequestData {
   id: number;
   resolved: boolean;
   isBanned: boolean;
@@ -110,13 +99,7 @@ export const INVESTMENTS: Array<Investment> = [
   "science",
   "systemHealth",
 ];
-export const RESOURCES: Array<Resource> = [
-  "culture",
-  "finance",
-  "government",
-  "legacy",
-  "science",
-];
+export const RESOURCES: Array<Resource> = ["culture", "finance", "government", "legacy", "science"];
 
 export const INVESTMENT_LABELS: { [k in keyof InvestmentData]: string } = {
   culture: "Culture",
@@ -282,9 +265,7 @@ export interface PurchasedSystemHealthData {
   systemHealth: number;
 }
 
-export interface SystemHealthChangesData<
-  PurchasedSystemHealth = PurchasedSystemHealthData
-> {
+export interface SystemHealthChangesData<PurchasedSystemHealth = PurchasedSystemHealthData> {
   investment: number;
   purchases: Array<PurchasedSystemHealth>;
 }
@@ -379,7 +360,7 @@ export interface GameStatus {
 }
 
 export interface InspectData {
-  players: Array<{ username: string, role: string, isBot: boolean, points: number }>;
+  players: Array<{ username: string; role: string; isBot: boolean; points: number }>;
   systemHealth: number;
   marsLog: Array<MarsLogMessageData>;
   chatMessages: Array<ChatMessageData>;

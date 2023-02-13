@@ -21,43 +21,48 @@
     >
       {{ selectedPlayer }}
     </p>
-    <button type="button" name="Submit Button" :disabled="selectedPlayer === null"
-            @click="submitSelectedPlayer">Done
+    <button
+      type="button"
+      name="Submit Button"
+      :disabled="selectedPlayer === null"
+      @click="submitSelectedPlayer"
+    >
+      Done
     </button>
   </div>
 </template>
 
 <script lang="ts">
-  import {Vue, Component, Inject} from 'vue-property-decorator';
-  import {Role, ROLES} from '@port-of-mars/shared/types';
-  import {GameRequestAPI} from "@port-of-mars/client/api/game/request";
-  import _ from "lodash";
+import { Vue, Component, Inject } from "vue-property-decorator";
+import { Role, ROLES } from "@port-of-mars/shared/types";
+import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
+import _ from "lodash";
 
-  @Component({})
-  export default class VoteForPlayerSingle extends Vue {
-    selectedPlayer: Role | null = null;
+@Component({})
+export default class VoteForPlayerSingle extends Vue {
+  selectedPlayer: Role | null = null;
 
-    @Inject()
-    api!: GameRequestAPI;
+  @Inject()
+  api!: GameRequestAPI;
 
-    get members(): Array<Role> {
-      return ROLES;
-    }
+  get members(): Array<Role> {
+    return ROLES;
+  }
 
-    handleSelectPlayer(member: Role): void {
-      this.selectedPlayer = member;
-      console.log('MEMBER: ', this.selectedPlayer);
-    }
+  handleSelectPlayer(member: Role): void {
+    this.selectedPlayer = member;
+    console.log("MEMBER: ", this.selectedPlayer);
+  }
 
-    submitSelectedPlayer(): void {
-      if (!_.isNull(this.selectedPlayer)) {
-        console.log('SUBMIT MEMBER: ', this.selectedPlayer);
-        this.api.voteForPhilanthropist(this.selectedPlayer);
-      }
+  submitSelectedPlayer(): void {
+    if (!_.isNull(this.selectedPlayer)) {
+      console.log("SUBMIT MEMBER: ", this.selectedPlayer);
+      this.api.voteForPhilanthropist(this.selectedPlayer);
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>
-  @import '@port-of-mars/client/stylesheets/game/phases/events/events/views/VoteForPlayerSingle.scss';
+@import "@port-of-mars/client/stylesheets/game/phases/events/events/views/VoteForPlayerSingle.scss";
 </style>

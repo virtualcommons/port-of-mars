@@ -6,13 +6,13 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component } from "vue-property-decorator";
 
 @Component({})
 export default class LoadingScreen extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-@import '~animate.css/source/attention_seekers/pulse.css';
-@import '@port-of-mars/client/stylesheets/global/LoadingScreen.scss';
+@import "~animate.css/source/attention_seekers/pulse.css";
+@import "@port-of-mars/client/stylesheets/global/LoadingScreen.scss";
 </style>

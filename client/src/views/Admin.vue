@@ -2,16 +2,17 @@
   <b-container class="h-100 p-0 m-0 bg" fluid>
     <b-row no-gutters class="h-100 w-100">
       <!-- admin sidebar -->
-      <b-nav pills class="sidebar" vertical style="display: block; position: fixed; width: 100%; max-width:145px;">
+      <b-nav
+        pills
+        class="sidebar"
+        vertical
+        style="display: block; position: fixed; width: 100%; max-width: 145px"
+      >
         <b-nav-item class="nav-link" active-class="active" to="/admin/overview">
           Overview
         </b-nav-item>
-        <b-nav-item class="nav-link" active-class="active" to="/admin/games">
-          Games
-        </b-nav-item>
-        <b-nav-item class="nav-link" active-class="active" to="/admin/rooms">
-          Activity
-        </b-nav-item>
+        <b-nav-item class="nav-link" active-class="active" to="/admin/games"> Games </b-nav-item>
+        <b-nav-item class="nav-link" active-class="active" to="/admin/rooms"> Activity </b-nav-item>
         <b-nav-item class="nav-link" active-class="active" to="/admin/reports">
           Reports
         </b-nav-item>
@@ -19,7 +20,10 @@
           Settings
         </b-nav-item>
       </b-nav>
-      <router-view class="h-100 backdrop" style="position: relative; margin-left: 145px !important;"></router-view>
+      <router-view
+        class="h-100 backdrop"
+        style="position: relative; margin-left: 145px !important"
+      ></router-view>
     </b-row>
   </b-container>
 </template>
@@ -28,8 +32,7 @@
 import { Component, Vue } from "vue-property-decorator";
 
 @Component({})
-export default class Admin extends Vue {
-}
+export default class Admin extends Vue {}
 </script>
 
 <style lang="scss" scoped>

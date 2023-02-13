@@ -8,7 +8,7 @@ import {
   InvestmentData,
   Resource,
   ResourceAmountData,
-  Role
+  Role,
 } from "@port-of-mars/shared/types";
 import { ChatMarsLogView, HUDLeftView, HUDRightView } from "@port-of-mars/shared/game/client/panes";
 

@@ -22,14 +22,11 @@
         <!-- active events for a given round -->
         <b-col v-show="currentView === view.ActiveEvents" class="w-100">
           <b-row class="w-100 justify-content-center">
-            <p v-if="eventsForTheRound.length === 0" class="text-center m-3">
-              No Active Events
-            </p>
+            <p v-if="eventsForTheRound.length === 0" class="text-center m-3">No Active Events</p>
 
             <div
               class="position-absolute ml-4 my-3"
-              style="overflow-y: auto; overflow-x: hidden;
-              max-height: 90%; max-width: 95%"
+              style="overflow-y: auto; overflow-x: hidden; max-height: 90%; max-width: 95%"
             >
               <EventCard
                 v-for="(event, index) in eventsForTheRound"
@@ -60,8 +57,8 @@ import { HUDRightView } from "@port-of-mars/shared/game/client/panes";
     HUDRightButtons,
     GameInformation,
     PhaseInstructions,
-    EventCard
-  }
+    EventCard,
+  },
 })
 export default class HUDRight extends Vue {
   get view() {

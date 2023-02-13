@@ -1,6 +1,6 @@
-import {Connection, EntityManager, QueryRunner} from "typeorm";
-import {ServiceProvider} from "@port-of-mars/server/services";
-import {initTransaction, rollbackTransaction} from "./common";
+import { Connection, EntityManager, QueryRunner } from "typeorm";
+import { ServiceProvider } from "@port-of-mars/server/services";
+import { initTransaction, rollbackTransaction } from "./common";
 
 describe("game scheduler", () => {
   let conn: Connection;
@@ -36,7 +36,7 @@ describe("game scheduler", () => {
     await services.schedule.createScheduledGameDate({
       date: new Date("January 1, 2022 06:00:00 UTC"),
       minutesOpenBefore: 15,
-      minutesOpenAfter: 15
+      minutesOpenAfter: 15,
     });
     expect(dates.length).toBe(8);
   });
@@ -46,7 +46,7 @@ describe("game scheduler", () => {
     await services.schedule.createScheduledGameDate({
       date: new Date("January 1, 2022 04:00:00 UTC"),
       minutesOpenBefore: 60,
-      minutesOpenAfter: 60
+      minutesOpenAfter: 60,
     });
     let dates = await services.schedule.getScheduledDates(false);
     expect(dates.length).toBe(9);
@@ -58,7 +58,7 @@ describe("game scheduler", () => {
     await services.schedule.createScheduledGameDate({
       date: new Date("January 1, 2022 04:00:00 UTC"),
       minutesOpenBefore: 60,
-      minutesOpenAfter: 60
+      minutesOpenAfter: 60,
     });
     expect(await services.schedule.isLobbyOpen()).toBe(true);
   });

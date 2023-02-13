@@ -6,15 +6,15 @@ const steps: Array<Step> = [
     target: ".tour-phase",
     content: `Information on the current state of the Port of Mars is always displayed here.`,
     params: {
-      placement: LEFT
-    }
+      placement: LEFT,
+    },
   },
   {
     target: ".tour-chat",
     content: `Use chat to communicate with players during the game.
       Send a chat message to continue.`,
     params: {
-      placement: LEFT
+      placement: LEFT,
     },
     stateTransform: [
       {
@@ -35,10 +35,10 @@ const steps: Array<Step> = [
             culture: 1,
             systemHealth: 0,
             victoryPoints: 3,
-            effect: ""
+            effect: "",
           },
-          role: RESEARCHER
-        }
+          role: RESEARCHER,
+        },
       },
       {
         ADD_TO_PURCHASABLE_ACCOMPLISHMENTS: {
@@ -55,10 +55,10 @@ const steps: Array<Step> = [
             culture: 0,
             systemHealth: 0,
             victoryPoints: 4,
-            effect: ""
+            effect: "",
           },
-          role: `Researcher`
-        }
+          role: `Researcher`,
+        },
       },
       {
         ADD_TO_PURCHASABLE_ACCOMPLISHMENTS: {
@@ -74,13 +74,13 @@ const steps: Array<Step> = [
             culture: 1,
             systemHealth: 0,
             victoryPoints: 5,
-            effect: ""
+            effect: "",
           },
-          role: RESEARCHER
-        }
-      }
-    ]
-  }
+          role: RESEARCHER,
+        },
+      },
+    ],
+  },
 ];
 
 export default steps;

@@ -1,9 +1,5 @@
 import * as _ from "lodash";
-import {
-  getEventName,
-  MarsEventState,
-  MarsEventStateConstructor,
-} from "./common";
+import { getEventName, MarsEventState, MarsEventStateConstructor } from "./common";
 import {
   ActionOrdering,
   GameState,
@@ -112,8 +108,7 @@ export class BondingThroughAdversity extends BaseEvent {
   // Clone Default Influence votes
   constructor(votes?: BondingThroughAdversityData) {
     super();
-    this.votes =
-      votes ?? _.cloneDeep(BondingThroughAdversity.defaultInfluenceVotes);
+    this.votes = votes ?? _.cloneDeep(BondingThroughAdversity.defaultInfluenceVotes);
   }
 
   /**
@@ -173,32 +168,24 @@ export type BreakdownOfTrustData = { [role in Role]: number };
 @assocEventId
 export class BreakdownOfTrust extends BaseEvent {
   //converts the roles array into an object that looks like BreakdownOfTrustData
-  private savedtimeBlockAllocations: BreakdownOfTrustData = ROLES.reduce(
-    (obj, role) => {
-      //these are placeholder values, they will be overridden.
-      obj[role] = 0;
-      return obj;
-    },
-    {} as BreakdownOfTrustData
-  );
+  private savedtimeBlockAllocations: BreakdownOfTrustData = ROLES.reduce((obj, role) => {
+    //these are placeholder values, they will be overridden.
+    obj[role] = 0;
+    return obj;
+  }, {} as BreakdownOfTrustData);
 
   initialize(game: GameState): void {
     for (const player of game.players) {
       // player.invertPendingInventory(); FIXME: why was this needed?
       // player.clearPendingInventory();
       // save the timeblock amount the player is allotted for the round
-      this.savedtimeBlockAllocations[player.role] =
-        player.currentTimeBlocksAmount;
+      this.savedtimeBlockAllocations[player.role] = player.currentTimeBlocksAmount;
       //set them to 2 for the event
       player.setTimeBlocks(2);
     }
   }
 
-  setInventory(
-    player: Role,
-    game: GameState,
-    updatedInventory: InvestmentData
-  ): void {
+  setInventory(player: Role, game: GameState, updatedInventory: InvestmentData): void {
     logger.debug("setting pending investments to: %o", { updatedInventory });
     game.players[player].pendingInvestments.updateAsInventory(updatedInventory);
   }
@@ -221,10 +208,7 @@ export class CompulsivePhilanthropy extends BaseEvent {
   votes: CompulsivePhilanthropyData;
   order: Array<Role>;
 
-  constructor(data?: {
-    votes: CompulsivePhilanthropyData;
-    order: Array<Role>;
-  }) {
+  constructor(data?: { votes: CompulsivePhilanthropyData; order: Array<Role> }) {
     super();
     this.votes = data?.votes ?? {
       [CURATOR]: CURATOR,
@@ -263,8 +247,7 @@ export class CompulsivePhilanthropy extends BaseEvent {
         winners.push(potentialWinner);
       }
     }
-    const winner: Role =
-      _.find(this.order, (w: Role) => winners.includes(w)) || this.order[0];
+    const winner: Role = _.find(this.order, (w: Role) => winners.includes(w)) || this.order[0];
     game.log(
       `The ${winner} was voted Compulsive Philanthropist with ${count} votes. The ${winner} must invest 
         all of their time blocks this round into System Health.`,
@@ -272,7 +255,7 @@ export class CompulsivePhilanthropy extends BaseEvent {
     );
     game.pendingMarsEventActions.push({
       ordering: ActionOrdering.LAST,
-      execute: (state) => {
+      execute: state => {
         const philanthropist = state.players[winner];
         philanthropist.setCompulsivePhilanthropist();
       },
@@ -324,10 +307,7 @@ export class EffortsWasted extends BaseEvent {
   fillAccomplishmentsToDiscard(game: GameState): void {
     for (const role of ROLES) {
       const purchased = game.players[role].accomplishments.purchased;
-      if (
-        _.isUndefined(this.accomplishmentsToDiscard[role]) &&
-        purchased.length > 0
-      ) {
+      if (_.isUndefined(this.accomplishmentsToDiscard[role]) && purchased.length > 0) {
         this.discardAccomplishment(role, purchased[0].id);
       }
     }
@@ -375,27 +355,20 @@ export class HeroOrPariah extends BaseEvent {
     order: Array<Role>;
   }) {
     super();
-    this.playerVotes =
-      data?.playerVotes ?? _.cloneDeep(HeroOrPariah.defaultPlayerVotes);
+    this.playerVotes = data?.playerVotes ?? _.cloneDeep(HeroOrPariah.defaultPlayerVotes);
   }
 
   hasVoted(role: Role): boolean {
     return !_.isUndefined(this.heroOrPariahVotes[role]);
   }
 
-  voteHeroOrPariah(
-    player: Role,
-    vote: "hero" | "pariah",
-    game: GameState
-  ): void {
+  voteHeroOrPariah(player: Role, vote: "hero" | "pariah", game: GameState): void {
     this.heroOrPariahVotes[player] = vote;
     logger.debug("votes: %o", this.heroOrPariahVotes);
     // check that all players have voted
     if (Object.keys(this.heroOrPariahVotes).length === ROLES.length) {
       // number of hero votes
-      const heroVotes = Object.values(this.heroOrPariahVotes).filter(
-        (v) => v == "hero"
-      ).length;
+      const heroVotes = Object.values(this.heroOrPariahVotes).filter(v => v == "hero").length;
 
       // FIXME this will probably end to change when we have > 5 players in a group
       game.heroOrPariah = heroVotes > 2 ? "hero" : "pariah";
@@ -408,8 +381,7 @@ export class HeroOrPariah extends BaseEvent {
 
   tie(votes: Array<[string, number]>): boolean {
     return (
-      _.filter(votes, (o) => o[1] == 2).length == 2 ||
-      _.filter(votes, (o) => o[1] == 1).length == 5
+      _.filter(votes, o => o[1] == 2).length == 2 || _.filter(votes, o => o[1] == 1).length == 5
     );
   }
 
@@ -430,7 +402,7 @@ export class HeroOrPariah extends BaseEvent {
     // order by: highest vote to lowest vote
     // _.toPairs => [[ROLE, vote], ... [ROLE, vote]]
     // _.orderBy => [[ROLE, highest vote], ... [ROLE, lowest vote]]
-    const winners = _.orderBy(_.toPairs(votes), (o) => o[1], "desc");
+    const winners = _.orderBy(_.toPairs(votes), o => o[1], "desc");
     logger.debug("winners: %o", winners);
     console.log("winners: ", winners);
 
@@ -438,15 +410,13 @@ export class HeroOrPariah extends BaseEvent {
       logger.debug("hero or pariah voting tie: %o", this.tie(winners));
       logger.debug(
         "2-way tie: %o",
-        _.filter(winners, (o) => o[1] == 2)
+        _.filter(winners, o => o[1] == 2)
       );
       logger.debug(
         "5-way tie: %o",
-        _.filter(winners, (o) => o[1] == 1)
+        _.filter(winners, o => o[1] == 1)
       );
-      this.winner = winners[
-        Math.floor(Math.random() * winners.length)
-      ][0] as Role;
+      this.winner = winners[Math.floor(Math.random() * winners.length)][0] as Role;
     } else this.winner = winners[0][0] as Role;
 
     // mars log messaging
@@ -464,9 +434,7 @@ export class HeroOrPariah extends BaseEvent {
         );
       } else {
         game.log(
-          `${
-            this.winner
-          } is voted a Hero and has gained 4 ${specialty} after receiving ${
+          `${this.winner} is voted a Hero and has gained 4 ${specialty} after receiving ${
             votes[this.winner]
           } 
       votes.`,
@@ -549,7 +517,7 @@ export class LostTime extends BaseEvent {
   finalize(game: GameState): void {
     game.pendingMarsEventActions.push({
       ordering: ActionOrdering.LAST,
-      execute: (state) => {
+      execute: state => {
         for (const role of ROLES) {
           const timeBlocks = state.players[role].timeBlocks - 5;
           state.players[role].timeBlocks = Math.max(0, timeBlocks);
@@ -592,12 +560,9 @@ abstract class OutOfCommission extends BaseEvent {
   finalize(game: GameState): void {
     game.pendingMarsEventActions.push({
       ordering: ActionOrdering.MIDDLE,
-      execute: (state) => {
+      execute: state => {
         state.players[this.player].timeBlocks = 3;
-        state.log(
-          `${this.player} has 3 time blocks to invest during this round.`,
-          this.title
-        );
+        state.log(`${this.player} has 3 time blocks to invest during this round.`, this.title);
       },
     });
   }
@@ -692,14 +657,14 @@ export class PersonalGain extends BaseEvent {
    * @returns
    */
   yesVotePlayers(voteResults: PersonalGainData): string {
-    return ROLES.filter((role) => voteResults[role]).join(", ");
+    return ROLES.filter(role => voteResults[role]).join(", ");
   }
 
   finalize(game: GameState): void {
     const yesVotePlayers = this.yesVotePlayers(this.votes);
     game.pendingMarsEventActions.push({
       ordering: ActionOrdering.FIRST,
-      execute: (state) => {
+      execute: state => {
         let systemHealthReduction = 0;
         for (const role of ROLES) {
           if (this.votes[role]) {

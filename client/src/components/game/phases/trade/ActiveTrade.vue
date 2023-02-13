@@ -3,7 +3,7 @@
     fluid
     :class="!active ? 'mb-2 p-0 hide-trade' : 'mb-2 p-0 backdrop'"
     :style="statusColor('borderColor')"
-    style="border: .125rem solid"
+    style="border: 0.125rem solid"
     v-show="show"
   >
     <!-- header -->
@@ -132,14 +132,14 @@ export default class ActiveTrade extends Vue {
     fluid: true,
     blankColor: "#bbb",
     width: 30,
-    height: 30
+    height: 30,
   };
 
   player = {
     fluid: true,
     blankColor: "#bbb",
     width: 100,
-    height: 100
+    height: 100,
   };
 
   get role() {

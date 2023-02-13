@@ -1,6 +1,10 @@
 <template>
   <b-container
-    style="width: 30%; background-color: var(--dark-shade); border: 0.2rem solid var(--light-shade-25)"
+    style="
+      width: 30%;
+      background-color: var(--dark-shade);
+      border: 0.2rem solid var(--light-shade-25);
+    "
   >
     <b-row align-h="center" class="h-100">
       <b-col align-self="start" style="color: var(--dark-shade)">
@@ -80,7 +84,7 @@ export default class InvestmentCard extends Vue {
     fluid: true,
     blankColor: "#bbb",
     width: 75,
-    height: 75
+    height: 75,
   };
   units: number = 0;
 
@@ -116,7 +120,7 @@ export default class InvestmentCard extends Vue {
     if (this.breakdownOfTrust) {
       // in a breakdown of trust event show existing influence resources
       // to let the player select 2 Influence resources to preserve
-      const influenceResourceName = this.name as Resource
+      const influenceResourceName = this.name as Resource;
       const influence = this.$tstore.getters.player.inventory[influenceResourceName];
       return Math.min(this.remainingTimeBlocks, influence);
     }
@@ -148,7 +152,7 @@ export default class InvestmentCard extends Vue {
     this.$emit("update", {
       name: this.name,
       units: units,
-      cost: this.cost
+      cost: this.cost,
     });
   }
 }

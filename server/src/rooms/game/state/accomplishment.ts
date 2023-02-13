@@ -14,15 +14,12 @@ import {
 import { settings } from "@port-of-mars/server/settings";
 import {
   AccomplishmentSetSerialized,
-  AccomplishmentSetSummary
+  AccomplishmentSetSummary,
 } from "@port-of-mars/server/rooms/game/state/types";
 
 const logger = settings.logging.getLogger(__filename);
 
-export class AccomplishmentPurchase
-  extends Schema
-  implements AccomplishmentPurchaseData
-{
+export class AccomplishmentPurchase extends Schema implements AccomplishmentPurchaseData {
   constructor(data: AccomplishmentPurchaseData) {
     super();
     this.name = data.name;
@@ -31,7 +28,11 @@ export class AccomplishmentPurchase
   }
 
   toJSON(): AccomplishmentPurchaseData {
-    return { name: this.name, victoryPoints: this.victoryPoints, systemHealthModification: this.systemHealthModification };
+    return {
+      name: this.name,
+      victoryPoints: this.victoryPoints,
+      systemHealthModification: this.systemHealthModification,
+    };
   }
 
   fromJSON(data: AccomplishmentPurchaseData): void {
@@ -114,10 +115,7 @@ export class Accomplishment extends Schema implements AccomplishmentData {
   effect: string;
 }
 
-export class AccomplishmentSet
-  extends Schema
-  implements AccomplishmentSetData<Accomplishment>
-{
+export class AccomplishmentSet extends Schema implements AccomplishmentSetData<Accomplishment> {
   constructor(role: Role) {
     super();
     this.role = role;
@@ -125,9 +123,7 @@ export class AccomplishmentSet
     const deck = _.shuffle(getAccomplishmentIDs(role));
     const purchasableInds: Array<number> = deck.slice(0, 3);
     this.purchasable = new ArraySchema<Accomplishment>(
-      ...purchasableInds.map(
-        (id) => new Accomplishment(getAccomplishmentByID(role, id))
-      )
+      ...purchasableInds.map(id => new Accomplishment(getAccomplishmentByID(role, id)))
     );
     this.deck = deck.slice(3);
   }
@@ -135,15 +131,15 @@ export class AccomplishmentSet
   fromJSON(data: AccomplishmentSetSerialized): void {
     this.role = data.role;
     const purchased = data.purchased.map(
-      (_id) => new Accomplishment(getAccomplishmentByID(this.role, _id))
+      _id => new Accomplishment(getAccomplishmentByID(this.role, _id))
     );
     const purchasable = data.purchasable.map(
-      (_id) => new Accomplishment(getAccomplishmentByID(this.role, _id))
+      _id => new Accomplishment(getAccomplishmentByID(this.role, _id))
     );
     this.purchased.splice(0, this.purchased.length, ...purchased);
     // this.purchasable.splice(0, this.purchasable.length, ...purchasable);
     this.purchasable.splice(0, this.purchasable.length);
-    purchasable.forEach((p) => this.purchasable.push(p));
+    purchasable.forEach(p => this.purchasable.push(p));
 
     this.deck = data.remaining;
   }
@@ -158,8 +154,8 @@ export class AccomplishmentSet
 
   getAccomplishmentSetSummary(): AccomplishmentSetSummary {
     return {
-      purchased: _.map(this.purchased, (x) => x.toJSON().id),
-      purchasable: _.map(this.purchasable, (x) => x.toJSON().id),
+      purchased: _.map(this.purchased, x => x.toJSON().id),
+      purchasable: _.map(this.purchasable, x => x.toJSON().id),
     };
   }
 
@@ -184,7 +180,7 @@ export class AccomplishmentSet
   }
 
   discardPurchased(id: number): void {
-    const ind = this.purchased.findIndex((acc) => acc.id === id);
+    const ind = this.purchased.findIndex(acc => acc.id === id);
     logger.info("Discarding purchase %d %d %o", ind, id, this.purchased);
     if (ind >= 0) {
       this.purchased.splice(ind, 1);
@@ -197,9 +193,7 @@ export class AccomplishmentSet
   }
 
   discard(id: number): void {
-    const index = this.purchasable.findIndex(
-      (card: Accomplishment) => card.id === id
-    );
+    const index = this.purchasable.findIndex((card: Accomplishment) => card.id === id);
     if (index < 0) {
       return;
     }
@@ -210,22 +204,14 @@ export class AccomplishmentSet
   draw(numberOfCards: number): void {
     for (let i = 0; i < numberOfCards; i++) {
       const id = this.deck.shift();
-      const newAccomplishment = new Accomplishment(
-        getAccomplishmentByID(this.role, id!)
-      );
+      const newAccomplishment = new Accomplishment(getAccomplishmentByID(this.role, id!));
       this.purchasable.push(newAccomplishment);
     }
-    assert.ok(
-      this.purchasable.length <= 3,
-      "Should never have more than 3 cards"
-    );
+    assert.ok(this.purchasable.length <= 3, "Should never have more than 3 cards");
   }
 
   refreshPurchasableAccomplishments(role: Role): void {
-    const numberOfAccomplishmentsToDraw = Math.min(
-      3 - this.purchasable.length,
-      this.deck.length
-    );
+    const numberOfAccomplishmentsToDraw = Math.min(3 - this.purchasable.length, this.deck.length);
     this.draw(numberOfAccomplishmentsToDraw);
   }
 
@@ -234,6 +220,6 @@ export class AccomplishmentSet
   }
 
   isPurchasable(accomplishment: AccomplishmentData): Accomplishment {
-    return this.purchasable.find((a) => a.id === accomplishment.id)!;
+    return this.purchasable.find(a => a.id === accomplishment.id)!;
   }
 }

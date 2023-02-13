@@ -42,7 +42,7 @@
       <!-- cost -->
       <b-col
         class="d-flex flex-wrap w-100 m-0 pt-1 justify-content-center px-4 py-2"
-        style="transition: all 0.15s ease-in-out;"
+        style="transition: all 0.15s ease-in-out"
       >
         <div
           :class="investment.available ? '' : 'unattainable-resource'"
@@ -79,7 +79,7 @@
       <!-- in discard phase, allow discard -->
       <b-col
         class="w-100 m-0 p-3 justify-content-center"
-        style="transition: all 0.15s ease-in-out;"
+        style="transition: all 0.15s ease-in-out"
         v-else-if="type === isDiscardType && showCard"
       >
         <b-button
@@ -142,7 +142,7 @@ import {
   InvestmentData,
   INVESTMENTS,
   Resource,
-  ResourceAmountData
+  ResourceAmountData,
 } from "@port-of-mars/shared/types";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 import { canPurchaseAccomplishment } from "@port-of-mars/shared/validation";
@@ -151,8 +151,8 @@ import * as _ from "lodash";
 
 @Component({
   components: {
-    AccomplishmentModal
-  }
+    AccomplishmentModal,
+  },
 })
 export default class AccomplishmentCard extends Vue {
   @Inject() readonly api!: GameRequestAPI;
@@ -170,8 +170,8 @@ export default class AccomplishmentCard extends Vue {
       culture: undefined,
       systemHealth: undefined,
       victoryPoints: undefined,
-      effect: undefined
-    })
+      effect: undefined,
+    }),
   })
   accomplishment!: AccomplishmentData;
 
@@ -263,7 +263,7 @@ export default class AccomplishmentCard extends Vue {
     for (const influence of costs) {
       costMap.push({
         influence,
-        available: this.isInfluenceAvailable(influence, inventory)
+        available: this.isInfluenceAvailable(influence, inventory),
       });
     }
 

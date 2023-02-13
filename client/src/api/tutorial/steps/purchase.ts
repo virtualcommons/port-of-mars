@@ -6,7 +6,7 @@ const steps: Array<Step> = [
     target: ".tour-purchase",
     content: `Now that we have invested and traded, it's time to purchase Accomplishments.`,
     params: {
-      placement: RIGHT
+      placement: RIGHT,
     },
     stateTransform: [
       {
@@ -18,9 +18,9 @@ const steps: Array<Step> = [
             government: 3,
             legacy: 3,
             science: 2,
-            systemHealth: 1
+            systemHealth: 1,
           },
-          role: RESEARCHER
+          role: RESEARCHER,
         },
         SET_INVENTORY: {
           data: {
@@ -29,31 +29,31 @@ const steps: Array<Step> = [
             government: 0,
             legacy: 10,
             science: 10,
-            systemHealth: 0
+            systemHealth: 0,
           },
-          role: "Researcher"
-        }
-      }
-    ]
+          role: "Researcher",
+        },
+      },
+    ],
   },
   {
     target: ".tour-purchase-action",
     content: `Accomplishments that you can purchase have an orange header and are moved to the top.
         Try purchasing one now!`,
     params: {
-      placement: TOP
+      placement: TOP,
     },
     stateTransform: [
       {
-        required: true
-      }
-    ]
+        required: true,
+      },
+    ],
   },
   {
     target: ".tour-ready-to-advance-button",
     content: `Click the Ready to Advance button when you are done purchasing Accomplishments. `,
     params: {
-      placement: LEFT
+      placement: LEFT,
     },
     stateTransform: [
       {
@@ -62,10 +62,10 @@ const steps: Array<Step> = [
         //   data: 3,
         //   role: 'Researcher',
         // },
-        required: true
-      }
-    ]
-  }
+        required: true,
+      },
+    ],
+  },
 ];
 
 export default steps;

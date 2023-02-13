@@ -1,1 +1,1 @@
-declare module 'vue-tour';
+declare module "vue-tour";

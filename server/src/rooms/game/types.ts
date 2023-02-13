@@ -6,7 +6,7 @@ import * as ge from "@port-of-mars/server/rooms/game/events/types";
 import { GameEvent } from "@port-of-mars/server/entity/GameEvent";
 import * as entity from "@port-of-mars/server/entity";
 
-export type PlayerReadiness = { [role in Role]: boolean }
+export type PlayerReadiness = { [role in Role]: boolean };
 
 export interface Game extends Room<GameState> {
   safeSend(client: Client, msg: Responses): void;
@@ -14,7 +14,7 @@ export interface Game extends Room<GameState> {
 }
 
 export interface PersistenceAPIConstructor {
-  new(connection: any): Persister;
+  new (connection: any): Persister;
 }
 
 export interface Persister {
@@ -30,7 +30,7 @@ export interface GameOpts extends GameStateOpts {
 
 export interface GameStateOpts {
   userRoles: { [username: string]: Role };
-  playerOpts: Map<Role, PlayerOptsData>,
+  playerOpts: Map<Role, PlayerOptsData>;
   deck: Array<MarsEventData>;
   numberOfGameRounds: number;
 }
@@ -41,4 +41,4 @@ export interface PlayerOptsData {
   isMuted: boolean;
 }
 
-export type Metadata = Pick<GameEvent, 'dateCreated' | 'timeRemaining' | 'gameId'>
+export type Metadata = Pick<GameEvent, "dateCreated" | "timeRemaining" | "gameId">;

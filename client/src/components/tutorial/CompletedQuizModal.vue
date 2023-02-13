@@ -37,7 +37,7 @@ import { LOBBY_PAGE } from "@port-of-mars/shared/routes";
 
 @Component({
   name: "tutorialComplete",
-  components: {}
+  components: {},
 })
 export default class CompletedQuizModal extends Vue {
   lobby = { name: LOBBY_PAGE };

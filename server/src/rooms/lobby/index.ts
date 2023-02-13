@@ -1,7 +1,7 @@
-import { Room, Client, matchMaker } from 'colyseus';
-import { buildGameOpts } from '@port-of-mars/server/util';
-import { GameRoom } from '@port-of-mars/server/rooms/game';
-import { LobbyClient, LobbyRoomState } from '@port-of-mars/server/rooms/lobby/state';
+import { Room, Client, matchMaker } from "colyseus";
+import { buildGameOpts } from "@port-of-mars/server/util";
+import { GameRoom } from "@port-of-mars/server/rooms/game";
+import { LobbyClient, LobbyRoomState } from "@port-of-mars/server/rooms/lobby/state";
 import { settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
 import _ from "lodash";
@@ -20,11 +20,12 @@ const logger = settings.logging.getLogger(__filename);
 
 export const sendSafe = (client: Client, msg: LobbyResponse) => {
   client.send(msg.kind, msg);
-}
+};
 
 export class LobbyRoom extends Room<LobbyRoomState> {
-
-  public static get NAME(): string { return LOBBY_NAME }
+  public static get NAME(): string {
+    return LOBBY_NAME;
+  }
 
   maxClients = 5;
   patchRate = 1000 / 5; // sends state to client 5 times per second
@@ -40,7 +41,7 @@ export class LobbyRoom extends Room<LobbyRoomState> {
       }
     }, 1000);
   }
-  
+
   onLeave(client: Client, consented: boolean): void {
     logger.trace("Client %s left LobbyRoom %s", client.auth.username, this.roomId);
     this.state.removeClient(client.auth.username);
@@ -74,7 +75,7 @@ export class LobbyRoom extends Room<LobbyRoomState> {
     if (numberOfActiveParticipants + this.state.clients.length > maxConnections) {
       sendSafe(client, {
         kind: "join-failure",
-        reason: "Sorry, Port of Mars is currently full! Please try again later."
+        reason: "Sorry, Port of Mars is currently full! Please try again later.",
       });
       return;
     }
@@ -82,7 +83,7 @@ export class LobbyRoom extends Room<LobbyRoomState> {
     if (this.state.clients.find((c: LobbyClient) => c.id === client.auth.id)) {
       sendSafe(client, {
         kind: "join-failure",
-        reason: "You are already in a lobby. Please check your other browser windows."
+        reason: "You are already in a lobby. Please check your other browser windows.",
       });
       return;
     }
@@ -101,7 +102,10 @@ export class LobbyRoom extends Room<LobbyRoomState> {
     });
     this.onMessage("send-lobby-chat-message", (client: Client, message: SendLobbyChatMessage) => {
       if (client.auth.isMuted) {
-        logger.trace("client %s attempted to send a chat message while muted", client.auth.username);
+        logger.trace(
+          "client %s attempted to send a chat message while muted",
+          client.auth.username
+        );
         return;
       }
       this.state.addChatMessage(client.auth.username, message.value);
@@ -162,5 +166,4 @@ export class LobbyRoom extends Room<LobbyRoomState> {
     const leader = this.state.leader ? this.state.leader.username : "";
     this.setMetadata({ dateCreated: this.state.dateCreated, leader });
   }
-
 }

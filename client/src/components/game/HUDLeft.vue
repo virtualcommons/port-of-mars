@@ -12,8 +12,7 @@
       cols="7"
       v-show="currentView === view.OtherPlayers"
       class="h-100 w-100 p-0 m-0 tour-players"
-      style="background-color: rgba(241, 224, 197, 0.05);
-             overflow-y: auto; overflow-x: hidden;"
+      style="background-color: rgba(241, 224, 197, 0.05); overflow-y: auto; overflow-x: hidden"
     >
       <OtherPlayers
         v-for="player in otherPlayers"
@@ -28,9 +27,9 @@
       cols="7"
       v-show="currentView === view.Inventory"
       class="h-100 w-100 p-0 m-0"
-      style="background-color: rgba(241, 224, 197, 0.05); overflow-y: auto; overflow-x: hidden;"
+      style="background-color: rgba(241, 224, 197, 0.05); overflow-y: auto; overflow-x: hidden"
     >
-      <div class="w-100 position-absolute" style="overflow-y: auto; overflow-x: hidden;">
+      <div class="w-100 position-absolute" style="overflow-y: auto; overflow-x: hidden">
         <Inventory :isSelf="true" :hideCosts="false" />
       </div>
     </b-col>
@@ -38,9 +37,9 @@
       cols="7"
       v-show="currentView === view.Accomplishments"
       class="h-100 w-100 p-0 m-0 tour-active-accomplishments"
-      style="background-color: rgba(241, 224, 197, 0.05);"
+      style="background-color: rgba(241, 224, 197, 0.05)"
     >
-      <div class="h-100 w-100 position-absolute" style="overflow-y: auto; overflow-x: hidden;">
+      <div class="h-100 w-100 position-absolute" style="overflow-y: auto; overflow-x: hidden">
         <AccomplishmentCard
           v-for="accomplishment in accomplishmentCards"
           :key="accomplishment.id"
@@ -70,8 +69,8 @@ import { Role } from "@port-of-mars/shared/types";
     HUDLeftButtons,
     OtherPlayers,
     Inventory,
-    AccomplishmentCard
-  }
+    AccomplishmentCard,
+  },
 })
 export default class HUDLeft extends Vue {
   get currentView() {

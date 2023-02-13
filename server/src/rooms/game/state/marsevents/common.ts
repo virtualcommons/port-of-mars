@@ -3,9 +3,8 @@ import _ from "lodash";
 import { GameState } from "@port-of-mars/server/rooms/game/state";
 import { MarsEventDeckItem, getMarsEventDeckItems } from "@port-of-mars/server/data/MarsEvents";
 
-
 export interface MarsEventStateConstructor {
-  new(data?: any): MarsEventState;
+  new (data?: any): MarsEventState;
 }
 
 export interface MarsEventState {
@@ -16,8 +15,8 @@ export interface MarsEventState {
 }
 
 export function expandCopies(marsEventsCollection: Array<MarsEventDeckItem>): Array<MarsEventData> {
-  return _.flatMap(marsEventsCollection,
-    (eventItem: MarsEventDeckItem) => _.map(_.range(eventItem.numberOfCopies), (i: number) => _.cloneDeep(eventItem.event))
+  return _.flatMap(marsEventsCollection, (eventItem: MarsEventDeckItem) =>
+    _.map(_.range(eventItem.numberOfCopies), (i: number) => _.cloneDeep(eventItem.event))
   );
 }
 
@@ -29,4 +28,4 @@ export function getRandomizedMarsEventDeck(): Array<MarsEventData> {
   return _.shuffle(getFixedMarsEventDeck());
 }
 
-export const getEventName = (cls: { new(): any } | Function) => _.camelCase(cls.name);
+export const getEventName = (cls: { new (): any } | Function) => _.camelCase(cls.name);

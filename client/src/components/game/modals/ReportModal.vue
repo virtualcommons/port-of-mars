@@ -1,17 +1,11 @@
 <template>
   <b-container fluid class="h-100">
-    <p>Selected chat message: </p>
-    <ChatMessage
-      :message="message"
-      :showUsername="showUsername"
-    ></ChatMessage>
+    <p>Selected chat message:</p>
+    <ChatMessage :message="message" :showUsername="showUsername"></ChatMessage>
     <div>
       <p>
-        If you believe this message violates our 
-        <b-button variant="link"
-          class="px-0"
-          v-b-toggle="'coc-collapse'"
-        >
+        If you believe this message violates our
+        <b-button variant="link" class="px-0" v-b-toggle="'coc-collapse'">
           code of conduct
         </b-button>
         please submit this report to our administrators.
@@ -20,8 +14,8 @@
         <ul>
           <li>Abstain from personal attacks or harassment</li>
           <li>
-            Abstain from using profanity or offensive language when
-            communicating with your fellow participants
+            Abstain from using profanity or offensive language when communicating with your fellow
+            participants
           </li>
           <li>Only communicate with other participants via the chat options within the game</li>
         </ul>
@@ -39,7 +33,7 @@ import ChatMessage from "@port-of-mars/client/components/game/static/chat/ChatMe
 @Component({
   components: {
     ChatMessage,
-  }
+  },
 })
 export default class ReportModal extends Vue {
   @Inject() readonly api!: GameRequestAPI;

@@ -1,14 +1,12 @@
 <template>
   <div class="user-header">
     <div class="problem">
-      <a href="mailto:portmars@asu.edu?subject=[port-of-mars]  Issue Submission" target="_blank">[ <span>BETA</span> ] <span>Report a Problem</span></a>
+      <a href="mailto:portmars@asu.edu?subject=[port-of-mars]  Issue Submission" target="_blank"
+        >[ <span>BETA</span> ] <span>Report a Problem</span></a
+      >
     </div>
     <div class="logout">
-      <button
-        @click="logoutUser"
-        @mouseover="handleHover(true)"
-        @mouseleave="handleHover(false)"
-      >
+      <button @click="logoutUser" @mouseover="handleHover(true)" @mouseleave="handleHover(false)">
         <span>{{ prependedText }}</span
         >{{ username }}
       </button>
@@ -17,11 +15,11 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component } from "vue-property-decorator";
 
 @Component({})
 export default class UserHUD extends Vue {
-  private prependedText: string = 'Logged in as ';
+  private prependedText: string = "Logged in as ";
 
   // NOTE :: VIEW & LOGOUT USER
 
@@ -31,20 +29,20 @@ export default class UserHUD extends Vue {
 
   private handleHover(option: boolean): void {
     if (option) {
-      this.prependedText = 'Logout ';
+      this.prependedText = "Logout ";
     } else {
-      this.prependedText = 'Logged in as ';
+      this.prependedText = "Logged in as ";
     }
   }
 
   private logoutUser(): void {
     this.$ajax.forgetLoginCreds();
     // TODO: Fully handle re-routing
-    this.$router.push({ name: 'Login' });
+    this.$router.push({ name: "Login" });
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/global/UserHeader.scss';
+@import "@port-of-mars/client/stylesheets/global/UserHeader.scss";
 </style>

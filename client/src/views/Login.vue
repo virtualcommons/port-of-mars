@@ -3,40 +3,48 @@
     <div id="login-container" class="content-container">
       <b-form>
         <h1 class="text-center">Login or Sign Up</h1>
-        <hr>
+        <hr />
         <p>
-          Port of Mars is now in Open Beta, where anyone aged 18 and over<AgeTooltip placement="top"/> can participate as long as they
-          agree to our <a target='_blank' href='https://researchintegrity.asu.edu/human-subjects'>Arizona State University IRB-approved</a> 
-          consent form and
-          <b-button variant="link"
-            class="p-0"
-            v-b-toggle="'coc-collapse'"
+          Port of Mars is now in Open Beta, where anyone aged 18 and over<AgeTooltip
+            placement="top"
+          />
+          can participate as long as they agree to our
+          <a target="_blank" href="https://researchintegrity.asu.edu/human-subjects"
+            >Arizona State University IRB-approved</a
           >
-            code of conduct
-          </b-button>.
+          consent form and
+          <b-button variant="link" class="p-0" v-b-toggle="'coc-collapse'">
+            code of conduct </b-button
+          >.
         </p>
         <b-collapse id="coc-collapse" class="p-2 backdrop">
           <ul>
             <li>Abstain from personal attacks or harassment</li>
             <li>
-              Abstain from using profanity or offensive language when
-              communicating with your fellow participants
+              Abstain from using profanity or offensive language when communicating with your fellow
+              participants
             </li>
             <li>Only communicate with other participants via the chat options within the game</li>
           </ul>
         </b-collapse>
-        <hr>
-        <div v-if=isDevMode>
+        <hr />
+        <div v-if="isDevMode">
           <b-form-checkbox v-model="toggleDevLogin">
             <p v-if="toggleDevLogin">Test Mode Enabled</p>
             <p v-else>Enable Test Mode</p>
           </b-form-checkbox>
           <b-form inline v-if="isDevMode && toggleDevLogin" @submit="devLogin">
-            <b-form-input class="w-100 mb-2" id="input-username" v-model="devLoginUsername"
-              placeholder="Sign up or sign back in with a username" description="Enter any unique-ish username" required>
+            <b-form-input
+              class="w-100 mb-2"
+              id="input-username"
+              v-model="devLoginUsername"
+              placeholder="Sign up or sign back in with a username"
+              description="Enter any unique-ish username"
+              required
+            >
             </b-form-input>
             <b-button class="w-100 mb-3" type="submit" variant="primary" size="lg">
-              <b-icon-file-earmark-code class="float-left"/>Sign in (Test Mode)
+              <b-icon-file-earmark-code class="float-left" />Sign in (Test Mode)
             </b-button>
           </b-form>
           <b-alert v-if="error" variant="warning">{{ error }}</b-alert>
@@ -45,7 +53,7 @@
           <b-icon-google class="float-left" />Sign in with Google
         </b-button>
         <b-button block variant="facebook" size="lg" class="mb-3" :href="facebookLoginUrl">
-          <b-icon-facebook class="float-left"/>Sign in with Facebook
+          <b-icon-facebook class="float-left" />Sign in with Facebook
         </b-button>
       </b-form>
     </div>
@@ -61,8 +69,8 @@ import AgeTooltip from "@port-of-mars/client/components/global/AgeTooltip.vue";
 
 @Component({
   components: {
-    AgeTooltip
-  }
+    AgeTooltip,
+  },
 })
 export default class Login extends Vue {
   isDevMode: boolean = false;
@@ -77,18 +85,18 @@ export default class Login extends Vue {
   }
 
   get googleLoginUrl() {
-    return url("/auth/google")
+    return url("/auth/google");
   }
 
   get facebookLoginUrl() {
-    return url("/auth/facebook")
+    return url("/auth/facebook");
   }
 
   async devLogin(e: Event) {
     e.preventDefault();
     const devLoginData: any = {
       username: this.devLoginUsername,
-      password: "testing"
+      password: "testing",
     };
     try {
       await this.$ajax.devLogin(devLoginData);
@@ -102,7 +110,6 @@ export default class Login extends Vue {
 </script>
 
 <style lang="scss" scoped>
-
 #login-container {
   padding: 2rem;
   width: 30rem;
@@ -112,5 +119,4 @@ ul {
   list-style: circle !important;
   padding-left: 2rem;
 }
-
 </style>

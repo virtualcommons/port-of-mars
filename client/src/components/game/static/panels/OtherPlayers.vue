@@ -2,8 +2,10 @@
   <b-container>
     <b-row
       class="m-0 p-0"
-      style="cursor: pointer; transition: color 0.15s ease-in-out, background-color 0.15s
-               ease-in-out;"
+      style="
+        cursor: pointer;
+        transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+      "
       fluid
       v-b-modal="`${role}-modal`"
     >
@@ -11,9 +13,12 @@
         <b-row
           :style="indicatorStyle"
           class="p-1 my-2 mx-auto"
-          style="border-radius: 50%;
-               height: 4rem; width: 4rem;  transition: color 0.15s ease-in-out,
-               background-color 0.15s ease-in-out;"
+          style="
+            border-radius: 50%;
+            height: 4rem;
+            width: 4rem;
+            transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+          "
         >
           <b-col :style="frameColor" class="w-100 h-100 m-0 p-0" style="border-radius: 50%">
             <img
@@ -54,8 +59,8 @@ import PlayerModal from "@port-of-mars/client/components/game/modals/PlayerModal
 
 @Component({
   components: {
-    PlayerModal
-  }
+    PlayerModal,
+  },
 })
 export default class OtherPlayers extends Vue {
   @Inject() readonly api!: GameRequestAPI;

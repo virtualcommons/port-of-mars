@@ -1,12 +1,6 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn
-} from 'typeorm';
-import { Question } from '@port-of-mars/server/entity/Question';
-import { QuizSubmission } from '@port-of-mars/server/entity/QuizSubmission';
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Question } from "@port-of-mars/server/entity/Question";
+import { QuizSubmission } from "@port-of-mars/server/entity/QuizSubmission";
 
 @Entity()
 export class QuestionResponse {
@@ -19,7 +13,9 @@ export class QuestionResponse {
   @Column()
   questionId!: number;
 
-  @ManyToOne(type => QuizSubmission, quizSubmission => quizSubmission.responses, { nullable: false })
+  @ManyToOne(type => QuizSubmission, quizSubmission => quizSubmission.responses, {
+    nullable: false,
+  })
   submission!: QuizSubmission;
 
   @Column()

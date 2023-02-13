@@ -7,9 +7,9 @@ const steps: Array<Step> = [
        At the start of each round, your habitat will <b>lose 25 System Health due to standard wear
        and tear</b>.`,
     params: {
-      placement: BOTTOM
-    }
-  }
+      placement: BOTTOM,
+    },
+  },
   // {
   //   target: '.tour-system-health',
   //   content: 'Quiz Question',

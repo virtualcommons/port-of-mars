@@ -20,8 +20,8 @@ import { Phase } from "@port-of-mars/shared/types";
 @Component({
   components: {
     GameboardContainer,
-    GameOver
-  }
+    GameOver,
+  },
 })
 export default class GameDashboard extends Vue {
   get phase() {

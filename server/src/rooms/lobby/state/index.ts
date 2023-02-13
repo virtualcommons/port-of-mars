@@ -1,6 +1,6 @@
 import { Schema, ArraySchema, type } from "@colyseus/schema";
-import { Client } from 'colyseus';
-import { LobbyChatMessageData } from '@port-of-mars/shared/types';
+import { Client } from "colyseus";
+import { LobbyChatMessageData } from "@port-of-mars/shared/types";
 import { settings } from "@port-of-mars/server/settings";
 
 const logger = settings.logging.getLogger(__filename);
@@ -121,10 +121,9 @@ export class LobbyRoomState extends Schema {
     const data = {
       username,
       message,
-      dateCreated: new Date().getTime()
-    }
+      dateCreated: new Date().getTime(),
+    };
     const chatMsg = new LobbyChatMessage(data);
     this.chat.push(chatMsg);
   }
-
 }

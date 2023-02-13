@@ -42,7 +42,9 @@ adminRouter.get("/completed-games", async (req: Request, res: Response, next) =>
   const defeats = req.query.defeats === "true";
   try {
     const games = await getServices().game.getCompletedGames(
-      { start: start, end: end }, bots, defeats
+      { start: start, end: end },
+      bots,
+      defeats
     );
     res.json(games);
   } catch (e) {

@@ -50,8 +50,8 @@ import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 @Component({
   components: {
     AccomplishmentCard,
-    Inventory
-  }
+    Inventory,
+  },
 })
 export default class Purchase extends Vue {
   @Inject() readonly api!: GameRequestAPI;

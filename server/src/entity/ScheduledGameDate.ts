@@ -1,9 +1,4 @@
-import {
-  Column,
-  Entity,
-  CreateDateColumn,
-  PrimaryGeneratedColumn
-} from 'typeorm';
+import { Column, Entity, CreateDateColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class ScheduledGameDate {
@@ -24,7 +19,7 @@ export class ScheduledGameDate {
   @Column({
     generatedType: "STORED",
     asExpression: `"date" + interval '1 minute' * "minutesOpenAfter"`,
-    nullable: true
+    nullable: true,
   })
   lobbyCloseDate!: Date;
 

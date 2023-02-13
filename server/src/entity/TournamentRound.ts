@@ -5,11 +5,11 @@ import {
   OneToMany,
   CreateDateColumn,
   PrimaryGeneratedColumn,
-} from 'typeorm';
-import { Game } from './Game';
-import { Tournament } from './Tournament';
-import { TournamentRoundDate } from './TournamentRoundDate';
-import { TournamentRoundInvite } from './TournamentRoundInvite';
+} from "typeorm";
+import { Game } from "./Game";
+import { Tournament } from "./Tournament";
+import { TournamentRoundDate } from "./TournamentRoundDate";
+import { TournamentRoundInvite } from "./TournamentRoundInvite";
 
 @Entity()
 export class TournamentRound {
@@ -19,28 +19,19 @@ export class TournamentRound {
   @Column()
   roundNumber!: number;
 
-  @Column({ default: 12})
+  @Column({ default: 12 })
   numberOfGameRounds!: number;
 
-  @OneToMany(
-    type => Game,
-    game => game.tournamentRound
-  )
+  @OneToMany(type => Game, game => game.tournamentRound)
   games!: Array<Game>;
 
   @Column()
   tournamentId!: number;
 
-  @ManyToOne(
-    type => Tournament,
-    tournament => tournament.rounds
-  )
+  @ManyToOne(type => Tournament, tournament => tournament.rounds)
   tournament!: Tournament;
 
-  @OneToMany(
-    type => TournamentRoundInvite,
-    invitation => invitation.tournamentRound
-  )
+  @OneToMany(type => TournamentRoundInvite, invitation => invitation.tournamentRound)
   invitations!: Array<TournamentRoundInvite>;
 
   @Column({ nullable: true })
@@ -58,9 +49,6 @@ export class TournamentRound {
   @CreateDateColumn()
   dateCreated!: Date;
 
-  @OneToMany(
-    type => TournamentRoundDate,
-    date => date.tournamentRound
-  )
+  @OneToMany(type => TournamentRoundDate, date => date.tournamentRound)
   scheduledDates!: Array<TournamentRoundDate>;
 }

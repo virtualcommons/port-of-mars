@@ -5,12 +5,12 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component } from "vue-property-decorator";
 
 @Component({})
 export default class Default extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/phases/Default.scss';
+@import "@port-of-mars/client/stylesheets/game/phases/Default.scss";
 </style>

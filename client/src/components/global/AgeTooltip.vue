@@ -1,9 +1,10 @@
 <template>
   <span>
-    <a><b-icon-question-circle id="age-info-popover" scale=".8"/></a>
+    <a><b-icon-question-circle id="age-info-popover" scale=".8" /></a>
     <b-popover target="age-info-popover" :placement="placement" triggers="hover focus">
       <template #title></template>
-      This is a requirement to be able to participate in the Port of Mars research study. Read more on our
+      This is a requirement to be able to participate in the Port of Mars research study. Read more
+      on our
       <b-link :to="consent">consent form</b-link>
     </b-popover>
   </span>
@@ -20,8 +21,6 @@ export default class Home extends Vue {
 
   consent = { name: REGISTER_PAGE };
 }
-
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

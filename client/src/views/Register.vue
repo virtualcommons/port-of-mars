@@ -20,10 +20,9 @@ import Messages from "@port-of-mars/client/components/global/Messages.vue";
 import ConsentForm from "@port-of-mars/client/components/global/Consent.vue";
 
 @Component({
-  components: { Messages, ConsentForm }
+  components: { Messages, ConsentForm },
 })
 export default class Register extends Vue {}
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

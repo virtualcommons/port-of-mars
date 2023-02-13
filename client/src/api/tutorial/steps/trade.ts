@@ -6,7 +6,7 @@ const steps: Array<Step> = [
     target: ".tour-trade",
     content: `During the Trade Phase, you can exchange Influence with other players.`,
     params: {
-      placement: RIGHT
+      placement: RIGHT,
     },
     stateTransform: [
       {
@@ -15,7 +15,7 @@ const steps: Array<Step> = [
             "Hey Researcher, can I have 2 Science and 1 Government in exchange for 3 Culture?",
           role: "Curator",
           dateCreated: new Date().getTime(),
-          round: 1
+          round: 1,
         },
         SET_INVENTORY: {
           data: {
@@ -24,9 +24,9 @@ const steps: Array<Step> = [
             government: 5,
             legacy: 0,
             science: 5,
-            systemHealth: 0
+            systemHealth: 0,
           },
-          role: RESEARCHER
+          role: RESEARCHER,
         },
         SET_INVESTMENT_COSTS: {
           data: {
@@ -35,9 +35,9 @@ const steps: Array<Step> = [
             government: 3,
             legacy: 3,
             science: 2,
-            systemHealth: 1
+            systemHealth: 1,
           },
-          role: RESEARCHER
+          role: RESEARCHER,
         },
         SET_PENDING_INVESTMENTS: {
           data: {
@@ -46,10 +46,10 @@ const steps: Array<Step> = [
             government: 0,
             legacy: 0,
             science: 0,
-            systemHealth: 0
+            systemHealth: 0,
           },
-          role: RESEARCHER
-        }
+          role: RESEARCHER,
+        },
       },
       { SET_GAME_PHASE: Phase.trade },
       {
@@ -63,8 +63,8 @@ const steps: Array<Step> = [
                 finance: 1,
                 government: 1,
                 legacy: 1,
-                science: 1
-              }
+                science: 1,
+              },
             },
             recipient: {
               role: RESEARCHER,
@@ -73,21 +73,21 @@ const steps: Array<Step> = [
                 finance: 1,
                 government: 1,
                 legacy: 1,
-                science: 1
-              }
+                science: 1,
+              },
             },
             status: "Active",
-            id: "mock-trade"
-          }
-        }
-      }
-    ]
+            id: "mock-trade",
+          },
+        },
+      },
+    ],
   },
   {
     target: ".tour-chat",
     content: `Discuss trade plans in chat with other players.`,
     params: {
-      placement: LEFT
+      placement: LEFT,
     },
     stateTransform: [
       {
@@ -95,10 +95,10 @@ const steps: Array<Step> = [
           message: "Sure, I will send you a trade request",
           role: "Researcher",
           dateCreated: new Date().getTime(),
-          round: 1
-        }
-      }
-    ]
+          round: 1,
+        },
+      },
+    ],
   },
   // {
   //   target: ".tour-request-trade",
@@ -209,15 +209,15 @@ const steps: Array<Step> = [
     target: ".tour-ready-to-advance-button",
     content: `Click the Ready to Advance button when you have finished trading.`,
     params: {
-      placement: LEFT
+      placement: LEFT,
     },
     stateTransform: [
       {
         SET_LAYOUT: "tutorial",
-        required: true
-      }
-    ]
-  }
+        required: true,
+      },
+    ],
+  },
 ];
 
 export default steps;

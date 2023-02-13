@@ -2,8 +2,8 @@ import Mail from "nodemailer/lib/mailer";
 
 import { settings } from "@port-of-mars/server/settings";
 
-import * as nodemailer from 'nodemailer';
-import mailgunTransport from 'nodemailer-mailgun-transport';
+import * as nodemailer from "nodemailer";
+import mailgunTransport from "nodemailer-mailgun-transport";
 
 type EmailCallback = (err: any, info: any) => void;
 
@@ -29,16 +29,15 @@ export class MemoryEmailer implements Emailer {
 
 /* eslint-disable @typescript-eslint/camelcase */
 export class MailgunEmailer implements Emailer {
-
   opts: any;
   transport: any;
 
   constructor(auth: { api_key: string; domain: string }) {
     if (!auth.api_key || !auth.domain) {
-      auth.api_key = 'invalid-api-key';
-      auth.domain = 'example.com';
+      auth.api_key = "invalid-api-key";
+      auth.domain = "example.com";
     }
-    this.opts = { auth }
+    this.opts = { auth };
     this.transport = nodemailer.createTransport(mailgunTransport(this.opts));
   }
 

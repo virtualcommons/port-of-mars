@@ -1,9 +1,6 @@
 <template>
   <b-container fluid class="h-100 w-100 m-0 p-0">
-    <b-row
-      class="w-100 h-100 m-auto scroll-to-recent"
-      style="overflow-y: auto; overflow-x: hidden;"
-    >
+    <b-row class="w-100 h-100 m-auto scroll-to-recent" style="overflow-y: auto; overflow-x: hidden">
       <b-row class="w-100 justify-content-center" align-content="end">
         <!-- if there is no history to display -->
         <p v-if="logs.length === 0" class="m-5" style="color: rgba(241, 224, 197, 0.25)">
@@ -48,7 +45,7 @@ import { Vue, Prop, Component } from "vue-property-decorator";
 import _ from "lodash";
 
 @Component({
-  components: {}
+  components: {},
 })
 export default class MarsLog extends Vue {
   @Prop({ default: false })

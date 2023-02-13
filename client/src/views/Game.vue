@@ -17,8 +17,8 @@ import { SfxManager } from "@port-of-mars/client/util";
 @Component({
   name: "game",
   components: {
-    GameDashboard
-  }
+    GameDashboard,
+  },
 })
 export default class Game extends Vue {
   @Inject() readonly $client!: Client;
@@ -60,7 +60,7 @@ export default class Game extends Vue {
       if (e instanceof Error) {
         this.$tstore.commit("SET_DASHBOARD_MESSAGE", {
           kind: "danger",
-          message: e.message
+          message: e.message,
         });
       }
       console.error("Unable to join room: ", e);

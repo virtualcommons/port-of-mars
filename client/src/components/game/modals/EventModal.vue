@@ -6,9 +6,7 @@
         <h5 class="p-2" style="background-color: var(--light-shade); color: black">
           {{ modalData.name }}
         </h5>
-        <b-badge v-if="showActiveIndicator" variant="success">
-          Active
-        </b-badge>
+        <b-badge v-if="showActiveIndicator" variant="success"> Active </b-badge>
       </b-col>
 
       <div class="w-100"></div>
@@ -46,8 +44,8 @@ export default class EventModal extends Vue {
       elapsed: undefined,
       name: undefined,
       flavorText: undefined,
-      effect: undefined
-    })
+      effect: undefined,
+    }),
   })
   modalData!: MarsEventData;
   @Prop({ default: false }) showActiveIndicator!: boolean;

@@ -11,17 +11,16 @@ export const gameRouter = Router();
 
 gameRouter.use(isVerified);
 
-gameRouter.get('/latest-active', async (req, res, next) => {
+gameRouter.get("/latest-active", async (req, res, next) => {
   try {
     const user = req.user as User;
     const roomId = await getServices().game.getActiveGameRoomId(user.id);
     if (roomId) {
-      logger.info('found active game with roomId %s for user %o', roomId, user);
+      logger.info("found active game with roomId %s for user %o", roomId, user);
       res.json(roomId);
-    }
-    else {
-      const message: DashboardMessage = { kind: 'danger', message: 'Did not find an active game.' }
-      logger.info('no game room for user %o', user);
+    } else {
+      const message: DashboardMessage = { kind: "danger", message: "Did not find an active game." };
+      logger.info("no game room for user %o", user);
       res.status(404).json(message);
     }
   } catch (e) {
@@ -29,7 +28,7 @@ gameRouter.get('/latest-active', async (req, res, next) => {
   }
 });
 
-gameRouter.get('/has-active', async (req, res, next) => {
+gameRouter.get("/has-active", async (req, res, next) => {
   try {
     const user = req.user as User;
     const roomId = await getServices().game.getActiveGameRoomId(user.id);

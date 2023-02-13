@@ -1,10 +1,6 @@
-import { State, defaultTradeData } from '@port-of-mars/shared/game/client/state';
-import { Role, ResourceAmountData } from '@port-of-mars/shared/types';
-import {
-  ChatMarsLogView,
-  HUDLeftView,
-  HUDRightView,
-} from '@port-of-mars/shared/game/client/panes';
+import { State, defaultTradeData } from "@port-of-mars/shared/game/client/state";
+import { Role, ResourceAmountData } from "@port-of-mars/shared/types";
+import { ChatMarsLogView, HUDLeftView, HUDRightView } from "@port-of-mars/shared/game/client/panes";
 
 // NOTE :: CONTROL MODAL VISIBILITY
 
@@ -90,5 +86,5 @@ export default {
   OPEN_TRADE_MODAL_WARM,
   RESET_TRADE_MODAL,
   SET_RESOURCE_COSTS_VISIBLE,
-  SET_TOGGLE_YOUR_TRADES
+  SET_TOGGLE_YOUR_TRADES,
 };

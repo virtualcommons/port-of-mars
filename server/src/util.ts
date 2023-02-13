@@ -1,24 +1,27 @@
 import _ from "lodash";
 import * as assert from "assert";
 import * as to from "typeorm";
-import {ROLES, DashboardMessage} from "@port-of-mars/shared/types";
-import {GameOpts, GameStateOpts} from "@port-of-mars/server/rooms/game/types";
-import {getFixedMarsEventDeck, getRandomizedMarsEventDeck} from "@port-of-mars/server/rooms/game/state/marsevents/common";
-import {Page, getPagePath} from "@port-of-mars/shared/routes";
-import {getLogger, settings} from "@port-of-mars/server/settings";
-import {getServices} from "@port-of-mars/server/services";
+import { ROLES, DashboardMessage } from "@port-of-mars/shared/types";
+import { GameOpts, GameStateOpts } from "@port-of-mars/server/rooms/game/types";
+import {
+  getFixedMarsEventDeck,
+  getRandomizedMarsEventDeck,
+} from "@port-of-mars/server/rooms/game/state/marsevents/common";
+import { Page, getPagePath } from "@port-of-mars/shared/routes";
+import { getLogger, settings } from "@port-of-mars/server/settings";
+import { getServices } from "@port-of-mars/server/services";
 
 const logger = getLogger(__filename);
 
 export function getConnection(): to.Connection {
-  const connectionName = process.env.NODE_ENV === 'test' ? 'test' : 'default';
-  return to.getConnection(connectionName)
+  const connectionName = process.env.NODE_ENV === "test" ? "test" : "default";
+  return to.getConnection(connectionName);
 }
 
 export function toUrl(page: Page): string {
   const pagePath = getPagePath(page);
   // getPagePath returns a string with initial slash
-  return `${settings.host}${pagePath}`
+  return `${settings.host}${pagePath}`;
 }
 
 export function getRandomIntInclusive(min: number, max: number): number {
@@ -34,15 +37,15 @@ export function getRandomIntInclusive(min: number, max: number): number {
  */
 export function mockGameStateInitOpts(
   nRoundStrategy: () => number = () => getRandomIntInclusive(8, 12),
-  username = 'bob'
+  username = "bob"
 ): GameStateOpts {
   const deck = getFixedMarsEventDeck();
   const numberOfGameRounds = nRoundStrategy();
   const usernames = [1, 2, 3, 4, 5].map(n => `${username}${n}`);
-  const playerData = usernames.map((username) => ({
+  const playerData = usernames.map(username => ({
     username: username,
     isBot: false,
-    isMuted: false
+    isMuted: false,
   }));
   const playerOpts: GameOpts["playerOpts"] = new Map();
   playerData.forEach((p, i) => {
@@ -52,7 +55,7 @@ export function mockGameStateInitOpts(
     userRoles: _.zipObject(usernames, ROLES),
     playerOpts,
     deck,
-    numberOfGameRounds
+    numberOfGameRounds,
   };
 }
 
@@ -64,7 +67,10 @@ export async function mockGameInitOpts(): Promise<GameOpts> {
   };
 }
 
-export async function buildGameOpts(usernames: Array<string>, isOpenGame: boolean = true): Promise<GameOpts> {
+export async function buildGameOpts(
+  usernames: Array<string>,
+  isOpenGame: boolean = true
+): Promise<GameOpts> {
   const services = getServices();
   const currentTournamentRound = await services.tournament.getCurrentTournamentRound();
   assert.equal(usernames.length, ROLES.length);
@@ -72,14 +78,16 @@ export async function buildGameOpts(usernames: Array<string>, isOpenGame: boolea
   for (const u of usernames) {
     logger.debug("username: %s", u);
   }
-  const playerData = await Promise.all(usernames.map(async (username) => {
-    const user = await services.account.findByUsername(username);
-    return {
-      username: username,
-      isBot: user.isSystemBot,
-      isMuted: user.isMuted
-    }
-  }));
+  const playerData = await Promise.all(
+    usernames.map(async username => {
+      const user = await services.account.findByUsername(username);
+      return {
+        username: username,
+        isBot: user.isSystemBot,
+        isMuted: user.isMuted,
+      };
+    })
+  );
   const playerOpts: GameOpts["playerOpts"] = new Map();
   playerData.forEach((p, i) => {
     playerOpts.set(ROLES[i], p);
@@ -101,8 +109,7 @@ export interface ServerErrorData {
 }
 
 export class ServerError extends Error implements ServerErrorData {
-
-  message = '';
+  message = "";
   code = 500;
   displayMessage?: string;
   error?: Error;
@@ -113,7 +120,7 @@ export class ServerError extends Error implements ServerErrorData {
   }
 
   toDashboardMessage(): DashboardMessage {
-    return {kind: 'warning', message: this.getDisplayMessage()};
+    return { kind: "warning", message: this.getDisplayMessage() };
   }
 
   getDisplayMessage(): string {
@@ -123,35 +130,35 @@ export class ServerError extends Error implements ServerErrorData {
 
 export async function generateUsername() {
   const NOUNS = [
-    'Ferret',
-    'Marmot',
-    'Bison',
-    'Parrot',
-    'Meerkat',
-    'Orca',
-    'Leopard',
-    'Raccoon',
-    'Quagga',
-    'Newt',
-    'Starfish',
-    'Chameleon',
-    'Orangutan',
-    'Wolverine',
-    'Ibex',
-    'Antelope',
-    'Axolotl',
-    'Lizard',
-    'Camel',
-    ];
-    
+    "Ferret",
+    "Marmot",
+    "Bison",
+    "Parrot",
+    "Meerkat",
+    "Orca",
+    "Leopard",
+    "Raccoon",
+    "Quagga",
+    "Newt",
+    "Starfish",
+    "Chameleon",
+    "Orangutan",
+    "Wolverine",
+    "Ibex",
+    "Antelope",
+    "Axolotl",
+    "Lizard",
+    "Camel",
+  ];
+
   const ADJECTIVES = [
-    'Astral',
-    'Celestial',
-    'Cosmic',
-    'Solar',
-    'Orbiting',
-    'Elliptical',
-    'Martian',
+    "Astral",
+    "Celestial",
+    "Cosmic",
+    "Solar",
+    "Orbiting",
+    "Elliptical",
+    "Martian",
   ];
 
   let isUnique = false;

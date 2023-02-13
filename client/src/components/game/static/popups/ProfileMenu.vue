@@ -22,9 +22,7 @@
         class="link"
       >
         <b-icon-exclamation-triangle-fill></b-icon-exclamation-triangle-fill>
-      <span
-          >Report a Problem</span
-        ></a
+        <span>Report a Problem</span></a
       >
       <button @click="enableDevtools" v-if="!devtoolsEnabled && isDevModeEnabled" class="link">
         <b-icon-terminal></b-icon-terminal>
@@ -45,7 +43,7 @@ import { isDev, isStaging } from "@port-of-mars/shared/settings";
 import { LOBBY_PAGE } from "@port-of-mars/shared/routes";
 
 @Component({
-  components: {}
+  components: {},
 })
 export default class ProfileMenu extends Vue {
   @Inject() readonly api!: GameRequestAPI;

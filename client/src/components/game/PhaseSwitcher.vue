@@ -25,8 +25,8 @@ import { Phase } from "@port-of-mars/shared/types";
     Discard,
     Events,
     Invest,
-    Default
-  }
+    Default,
+  },
 })
 export default class Phases extends Vue {
   get phase() {

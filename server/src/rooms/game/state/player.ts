@@ -19,10 +19,18 @@ import { GameEvent } from "@port-of-mars/server/rooms/game/events/types";
 import { SimpleBot } from "@port-of-mars/server/rooms/game/state/bot";
 import { settings } from "@port-of-mars/server/settings";
 import { GameState } from "@port-of-mars/server/rooms/game/state/game";
-import { SystemHealthChanges, PurchasedSystemHealth } from "@port-of-mars/server/rooms/game/state/systemhealth";
-import { AccomplishmentSet } from "@port-of-mars/server/rooms/game/state/accomplishment"
-import { ResourceInventory, ResourceCosts } from "@port-of-mars/server/rooms/game/state/resource"
-import { PlayerSetSerialized, PlayerSerialized, PlayerSummary, PlayerSetSummary } from "@port-of-mars/server/rooms/game/state/types";
+import {
+  SystemHealthChanges,
+  PurchasedSystemHealth,
+} from "@port-of-mars/server/rooms/game/state/systemhealth";
+import { AccomplishmentSet } from "@port-of-mars/server/rooms/game/state/accomplishment";
+import { ResourceInventory, ResourceCosts } from "@port-of-mars/server/rooms/game/state/resource";
+import {
+  PlayerSetSerialized,
+  PlayerSerialized,
+  PlayerSummary,
+  PlayerSetSummary,
+} from "@port-of-mars/server/rooms/game/state/types";
 import { GameStateOpts, PlayerOptsData } from "@port-of-mars/server/rooms/game/types";
 
 const logger = settings.logging.getLogger(__filename);
@@ -110,8 +118,7 @@ export interface Bot {
 
 export class Player
   extends Schema
-  implements
-    PlayerData<AccomplishmentSet, ResourceInventory, SystemHealthChanges>
+  implements PlayerData<AccomplishmentSet, ResourceInventory, SystemHealthChanges>
 {
   constructor(role: Role, data: PlayerOptsData) {
     super();
@@ -174,7 +181,7 @@ export class Player
       victoryPoints: this.victoryPoints,
       inventory: this.inventory.toJSON(),
       accomplishment: this.accomplishments.getAccomplishmentSetSummary(),
-    }
+    };
   }
 
   static defaults = {
@@ -188,7 +195,7 @@ export class Player
   username: string;
 
   @type("boolean")
-  isBot: boolean
+  isBot: boolean;
 
   @type(ResourceCosts)
   costs: ResourceCosts;
@@ -249,9 +256,7 @@ export class Player
     return this.costs.investmentWithinBudget(investment, this.timeBlocks);
   }
 
-  isAccomplishmentPurchaseFeasible(
-    accomplishment: AccomplishmentData
-  ): boolean {
+  isAccomplishmentPurchaseFeasible(accomplishment: AccomplishmentData): boolean {
     return (
       (this.accomplishments.isPurchasable(accomplishment) &&
         this.inventory.canAfford(accomplishment)) ??
@@ -278,11 +283,7 @@ export class Player
     };
     logger.trace(
       "accomplishments: %o",
-      JSON.stringify(
-        this.accomplishments.purchasable.map((p) =>
-          _.fromPairs(Object.entries(p))
-        )
-      )
+      JSON.stringify(this.accomplishments.purchasable.map(p => _.fromPairs(Object.entries(p))))
     );
     logger.trace(
       "accomplishment systemHealth: %d [%s] (%o)",
@@ -379,7 +380,7 @@ export class Player
 
   invest(): void {
     if (this.isCompulsivePhilanthropist) {
-      logger.info("compulsive philanthropist: adding all timeblocks to system health")
+      logger.info("compulsive philanthropist: adding all timeblocks to system health");
       this.pendingInvestments.reset();
       // take dynamic system health costs into account (Difficult Conditions Event)
       this.pendingInvestments.systemHealth = Math.floor(this.timeBlocks / this.costs.systemHealth);
@@ -480,13 +481,7 @@ export class PlayerSet extends Schema implements PlayerSetData<Player> {
   }
 
   asArray(): Array<Player> {
-    return [
-      this.Curator,
-      this.Entrepreneur,
-      this.Pioneer,
-      this.Politician,
-      this.Researcher,
-    ];
+    return [this.Curator, this.Entrepreneur, this.Pioneer, this.Politician, this.Researcher];
   }
 
   [Symbol.iterator](): Iterator<Player> {

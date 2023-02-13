@@ -2,15 +2,21 @@ import { State } from "@port-of-mars/shared/game/client/state";
 import {
   AccomplishmentPurchaseData,
   SystemHealthMarsEventData,
-  TradeData
+  TradeData,
 } from "@port-of-mars/shared/types";
 import _ from "lodash";
 
-function SET_ROUND_INTRODUCTION_FIELD(state: State, { field, value }: { field: string; value: number }) {
+function SET_ROUND_INTRODUCTION_FIELD(
+  state: State,
+  { field, value }: { field: string; value: number }
+) {
   (state.roundIntroduction as any)[field] = value;
 }
 
-function ADD_TO_ROUND_INTRO_SYSTEM_HEALTH_MARS_EVENTS(state: State, payload: SystemHealthMarsEventData) {
+function ADD_TO_ROUND_INTRO_SYSTEM_HEALTH_MARS_EVENTS(
+  state: State,
+  payload: SystemHealthMarsEventData
+) {
   state.roundIntroduction.systemHealthMarsEvents.push(payload);
 }
 
@@ -59,7 +65,10 @@ function REMOVE_FROM_ROUND_INTRO_COMPLETED_TRADES(state: State, payload: TradeDa
   completedTrades.splice(index, 1);
 }
 
-function UPDATE_SYSTEM_HEALTH_GROUP_CONTRIBUTION(state: State, data: { playerId: string, value: number}) {
+function UPDATE_SYSTEM_HEALTH_GROUP_CONTRIBUTION(
+  state: State,
+  data: { playerId: string; value: number }
+) {
   state.roundIntroduction.systemHealthGroupContributions.set(data.playerId, data.value);
 }
 

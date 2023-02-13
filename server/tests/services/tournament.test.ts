@@ -1,13 +1,19 @@
-import {TournamentRound} from "@port-of-mars/server/entity/TournamentRound";
-import {Tournament} from "@port-of-mars/server/entity/Tournament";
-import {Connection, EntityManager, QueryRunner} from "typeorm";
-import {ServiceProvider} from "@port-of-mars/server/services";
-import {TournamentRoundInvite} from "@port-of-mars/server/entity/TournamentRoundInvite";
-import {createRound, createTournament, createUsers, initTransaction, rollbackTransaction} from "./common";
-import {User} from "@port-of-mars/server/entity";
-import {DBPersister} from "@port-of-mars/server/services/persistence";
+import { TournamentRound } from "@port-of-mars/server/entity/TournamentRound";
+import { Tournament } from "@port-of-mars/server/entity/Tournament";
+import { Connection, EntityManager, QueryRunner } from "typeorm";
+import { ServiceProvider } from "@port-of-mars/server/services";
+import { TournamentRoundInvite } from "@port-of-mars/server/entity/TournamentRoundInvite";
+import {
+  createRound,
+  createTournament,
+  createUsers,
+  initTransaction,
+  rollbackTransaction,
+} from "./common";
+import { User } from "@port-of-mars/server/entity";
+import { DBPersister } from "@port-of-mars/server/services/persistence";
 
-describe.skip('first round', () => {
+describe.skip("first round", () => {
   let conn: Connection;
   let qr: QueryRunner;
   let manager: EntityManager;
@@ -20,18 +26,25 @@ describe.skip('first round', () => {
     [conn, qr, manager] = await initTransaction();
     services = new ServiceProvider(qr.manager);
     t = await createTournament(services);
-    tr = await createRound(services, {tournamentId: t.id})
+    tr = await createRound(services, { tournamentId: t.id });
   });
 
-  it('can be created', async () => {
+  it("can be created", async () => {
     expect(tr.tournamentId).toEqual(t.id);
   });
 
-  describe('users', () => {
-    it('can join if they\'ve completed registration, passed the tutorial and not played any games this round', async () => {
-      const bob = await services.account.getOrCreateUser({ email: 'bob@foo.com', passportId: 'foo' });
+  describe("users", () => {
+    it("can join if they've completed registration, passed the tutorial and not played any games this round", async () => {
+      const bob = await services.account.getOrCreateUser({
+        email: "bob@foo.com",
+        passportId: "foo",
+      });
       expect(await services.auth.checkUserHasTournamentInvite(bob.id, tr.id)).toBeFalsy();
-      await services.registration.submitRegistrationMetadata(bob, {username: 'bob', email: 'bob@foo.com', name: 'Bob'});
+      await services.registration.submitRegistrationMetadata(bob, {
+        username: "bob",
+        email: "bob@foo.com",
+        name: "Bob",
+      });
       expect(await services.auth.checkUserHasTournamentInvite(bob.id, tr.id)).toBeFalsy();
       // FIXME: invites are automatically created in submitRegistrationMetadata now for the first round of a tournament
       // we should test that an invite exists now since this is the first round of the Tournament
@@ -42,7 +55,6 @@ describe.skip('first round', () => {
       await services.quiz.setUserQuizCompletion(bob.id, true);
       await services.tournament.createInvite(bob.id, tr.id);
       expect(await services.auth.checkUserHasTournamentInvite(bob.id, tr.id)).toBeTruthy();
-
 
       // workaround to avoid creating and finalizing a game
       const invite = await services.tournament.getActiveRoundInvite(bob.id);

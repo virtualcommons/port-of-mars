@@ -1,12 +1,21 @@
 <template>
   <ol class="stepper">
-    <li v-for="(step, index) in steps" :key="step.name"
-      :class="['stepper-item', step.completed ? 'stepper-item-completed' : '']">
+    <li
+      v-for="(step, index) in steps"
+      :key="step.name"
+      :class="['stepper-item', step.completed ? 'stepper-item-completed' : '']"
+    >
       <p
-        :class="['step-dot', step.completed || step === activeStep ? 'step-dot-active-completed' : '']">
+        :class="[
+          'step-dot',
+          step.completed || step === activeStep ? 'step-dot-active-completed' : '',
+        ]"
+      >
         {{ index + 1 }}
       </p>
-      <p class="step-name"><small>{{ step.name }}</small></p>
+      <p class="step-name">
+        <small>{{ step.name }}</small>
+      </p>
     </li>
   </ol>
 </template>
@@ -34,7 +43,6 @@ export default class Stepper extends Vue {
 </script>
 
 <style lang="scss" scoped>
-
 .stepper {
   display: flex;
   padding: 0;
@@ -77,5 +85,4 @@ export default class Stepper extends Vue {
   color: var(--light-shade);
   background-color: $primary !important;
 }
-
 </style>

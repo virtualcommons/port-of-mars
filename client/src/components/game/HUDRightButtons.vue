@@ -21,7 +21,12 @@
       </button>
     </b-col>
     <b-col cols="3">
-      <b-button class="hud-button" v-b-tooltip.hover.top="'Game Manual'" :to="manual" target="_blank">
+      <b-button
+        class="hud-button"
+        v-b-tooltip.hover.top="'Game Manual'"
+        :to="manual"
+        target="_blank"
+      >
         <b-icon-question-lg scale="1.2" shift-v="-5"></b-icon-question-lg>
       </b-button>
     </b-col>

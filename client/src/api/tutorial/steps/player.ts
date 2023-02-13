@@ -7,7 +7,7 @@ const steps: Array<Step> = [
     content: `Find more information about past Events, Accomplishment purchases, or Trades
              in the Mars Log.`,
     params: {
-      placement: "top"
+      placement: "top",
     },
     stateTransform: [
       {
@@ -18,13 +18,13 @@ const steps: Array<Step> = [
             government: 3,
             legacy: 3,
             science: 2,
-            systemHealth: 1
+            systemHealth: 1,
           },
-          role: RESEARCHER
-        }
-      }
-    ]
-  }
+          role: RESEARCHER,
+        },
+      },
+    ],
+  },
 ];
 
 export default steps;

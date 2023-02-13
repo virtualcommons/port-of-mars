@@ -34,16 +34,16 @@
       <b-col
         v-show="currentView === view.MarsLog || currentView === view.Split"
         class="w-100 mt-2 tour-log-view overflow-hidden"
-        style="border: 0.125rem solid #A49CA6"
+        style="border: 0.125rem solid #a49ca6"
       >
-        <MarsLog :logs="logs"/>
+        <MarsLog :logs="logs" />
       </b-col>
       <b-col
         v-show="currentView === view.Chat || currentView === view.Split"
         class="w-100 mt-2 tour-chat overflow-hidden"
-        style="border: 0.125rem solid #A49CA6"
+        style="border: 0.125rem solid #a49ca6"
       >
-        <Chat :messages="messages"/>
+        <Chat :messages="messages" />
       </b-col>
     </b-row>
   </b-container>
@@ -59,8 +59,8 @@ import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 @Component({
   components: {
     Chat,
-    MarsLog
-  }
+    MarsLog,
+  },
 })
 export default class ChatMarsLog extends Vue {
   @Inject() readonly api!: GameRequestAPI;

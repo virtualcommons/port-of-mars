@@ -1,23 +1,23 @@
-import {EntityManager} from "typeorm";
-import {AdminService} from "@port-of-mars/server/services/admin";
-import {AuthService} from "@port-of-mars/server/services/auth";
-import {RegistrationService} from "@port-of-mars/server/services/registration";
-import {AccountService} from "@port-of-mars/server/services/account";
-import {TournamentService} from "@port-of-mars/server/services/tournament";
-import {ScheduleService} from "@port-of-mars/server/services/schedule";
-import {QuizService} from "@port-of-mars/server/services/quiz";
-import {SurveyService} from "@port-of-mars/server/services/survey";
-import {LeaderboardService} from "@port-of-mars/server/services/leaderboard";
-import {getConnection} from "@port-of-mars/server/util";
-import {TimeService} from "@port-of-mars/server/services/time";
-import {GameService} from "@port-of-mars/server/services/game";
-import {RedisSettings} from "@port-of-mars/server/services/settings";
-import {createClient, RedisClient} from "redis";
+import { EntityManager } from "typeorm";
+import { AdminService } from "@port-of-mars/server/services/admin";
+import { AuthService } from "@port-of-mars/server/services/auth";
+import { RegistrationService } from "@port-of-mars/server/services/registration";
+import { AccountService } from "@port-of-mars/server/services/account";
+import { TournamentService } from "@port-of-mars/server/services/tournament";
+import { ScheduleService } from "@port-of-mars/server/services/schedule";
+import { QuizService } from "@port-of-mars/server/services/quiz";
+import { SurveyService } from "@port-of-mars/server/services/survey";
+import { LeaderboardService } from "@port-of-mars/server/services/leaderboard";
+import { getConnection } from "@port-of-mars/server/util";
+import { TimeService } from "@port-of-mars/server/services/time";
+import { GameService } from "@port-of-mars/server/services/game";
+import { RedisSettings } from "@port-of-mars/server/services/settings";
+import { createClient, RedisClient } from "redis";
 
 export class ServiceProvider {
   constructor(public em: EntityManager) {}
 
-  private  _auth?: AuthService;
+  private _auth?: AuthService;
   get auth() {
     if (!this._auth) {
       this._auth = new AuthService(this);
@@ -52,7 +52,7 @@ export class ServiceProvider {
   private _registration?: RegistrationService;
   get registration() {
     if (!this._registration) {
-      this._registration = new RegistrationService(this)
+      this._registration = new RegistrationService(this);
     }
     return this._registration;
   }
@@ -83,7 +83,7 @@ export class ServiceProvider {
 
   private _survey?: SurveyService;
   get survey() {
-    if(!this._survey) {
+    if (!this._survey) {
       this._survey = new SurveyService(this);
     }
     return this._survey;
@@ -91,7 +91,7 @@ export class ServiceProvider {
 
   private _leaderboard?: LeaderboardService;
   get leaderboard() {
-    if(!this._leaderboard) {
+    if (!this._leaderboard) {
       this._leaderboard = new LeaderboardService(this);
     }
     return this._leaderboard;
@@ -108,7 +108,7 @@ export class ServiceProvider {
   private _settings?: RedisSettings;
   get settings() {
     if (!this._settings) {
-      this._settings = new RedisSettings(getRedis())
+      this._settings = new RedisSettings(getRedis());
     }
     return this._settings;
   }
@@ -117,7 +117,7 @@ export class ServiceProvider {
 let _redis!: RedisClient;
 export function getRedis(): RedisClient {
   if (!_redis) {
-    _redis = createClient({ host: 'redis' });
+    _redis = createClient({ host: "redis" });
   }
   return _redis;
 }

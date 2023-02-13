@@ -1,27 +1,23 @@
 <template>
   <div class="statusbar-outer" :class="styleOuter()">
-    <div
-      class="statusbar-inner"
-      :class="styleInner()"
-      :style="styleWidth()"
-    ></div>
+    <div class="statusbar-inner" :class="styleInner()" :style="styleWidth()"></div>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop } from "vue-property-decorator";
 
 @Component({})
 export default class StatusBar extends Vue {
   @Prop({ default: 0 }) private setWidth!: number;
 
-  @Prop({ default: 'statusbar-outer-white' }) private colorOuter!: string;
+  @Prop({ default: "statusbar-outer-white" }) private colorOuter!: string;
 
-  @Prop({ default: 'statusbar-inner-green' }) private colorStart!: string;
+  @Prop({ default: "statusbar-inner-green" }) private colorStart!: string;
 
-  @Prop({ default: 'statusbar-inner-yellow' }) private colorMiddle!: string;
+  @Prop({ default: "statusbar-inner-yellow" }) private colorMiddle!: string;
 
-  @Prop({ default: 'statusbar-inner-red' }) private colorEnd!: string;
+  @Prop({ default: "statusbar-inner-red" }) private colorEnd!: string;
 
   styleWidth(): object {
     return {
@@ -31,7 +27,7 @@ export default class StatusBar extends Vue {
 
   styleOuter(): string {
     if (this.setWidth <= 64) {
-      return 'statusbar-outer-low';
+      return "statusbar-outer-low";
     }
     return this.colorOuter;
   }
@@ -50,5 +46,5 @@ export default class StatusBar extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/static/systemhealth/StatusBar.scss';
+@import "@port-of-mars/client/stylesheets/game/static/systemhealth/StatusBar.scss";
 </style>

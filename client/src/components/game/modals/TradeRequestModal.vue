@@ -52,8 +52,8 @@ import { TutorialAPI } from "@port-of-mars/client/api/tutorial/request";
   components: {
     TradeRequest,
     Inventory,
-    AccomplishmentCard
-  }
+    AccomplishmentCard,
+  },
 })
 export default class TradeRequestModal extends Vue {
   @Inject() readonly api!: TutorialAPI;

@@ -1,10 +1,5 @@
 import { Schema, type } from "@colyseus/schema";
-import {
-  ChatMessageData,
-  MarsLogMessageData,
-  Role,
-  ServerRole,
-} from "@port-of-mars/shared/types";
+import { ChatMessageData, MarsLogMessageData, Role, ServerRole } from "@port-of-mars/shared/types";
 import _ from "lodash";
 
 export class ChatMessage extends Schema implements ChatMessageData {

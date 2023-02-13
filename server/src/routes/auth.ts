@@ -4,24 +4,19 @@ import { User } from "@port-of-mars/server/entity";
 import { settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
 import { ServerError, toUrl } from "@port-of-mars/server/util";
-import {
-  LOGIN_PAGE,
-  REGISTER_PAGE,
-  LOBBY_PAGE,
-} from "@port-of-mars/shared/routes";
+import { LOGIN_PAGE, REGISTER_PAGE, LOBBY_PAGE } from "@port-of-mars/shared/routes";
 
 const logger = settings.logging.getLogger(__filename);
 
 export const authRouter = Router();
 
-authRouter.get("/google",
-  passport.authenticate("google", { scope: ["email", "profile"] })
-);
+authRouter.get("/google", passport.authenticate("google", { scope: ["email", "profile"] }));
 
-authRouter.get("/google/callback",
+authRouter.get(
+  "/google/callback",
   passport.authenticate("google", {
     successRedirect: "/auth/google/success",
-    failureRedirect: "/auth/google/failure"
+    failureRedirect: "/auth/google/failure",
   })
 );
 
@@ -49,14 +44,13 @@ authRouter.get("/google/success", function (req, res) {
   }
 });
 
-authRouter.get("/facebook",
-  passport.authenticate("facebook", { scope: "email" })
-);
+authRouter.get("/facebook", passport.authenticate("facebook", { scope: "email" }));
 
-authRouter.get("/facebook/callback",
+authRouter.get(
+  "/facebook/callback",
   passport.authenticate("facebook", {
     successRedirect: "/auth/facebook/success",
-    failureRedirect: "/auth/facebook/failure"
+    failureRedirect: "/auth/facebook/failure",
   })
 );
 

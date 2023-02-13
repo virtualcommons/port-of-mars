@@ -1,5 +1,13 @@
 import { url } from "@port-of-mars/client/util";
-import { AdminStats, ChatReportData, ModerationActionClientData, ModerationActionData, InspectData, DynamicSettingsData, GameStatus } from "@port-of-mars/shared/types";
+import {
+  AdminStats,
+  ChatReportData,
+  ModerationActionClientData,
+  ModerationActionData,
+  InspectData,
+  DynamicSettingsData,
+  GameStatus,
+} from "@port-of-mars/shared/types";
 import { TStore } from "@port-of-mars/client/plugins/tstore";
 import { AjaxRequest } from "@port-of-mars/client/plugins/ajax";
 
@@ -32,9 +40,13 @@ export class AdminAPI {
 
   async updateSettings(data: DynamicSettingsData): Promise<void> {
     try {
-      await this.ajax.post(url("/admin/settings"), ({ data, status }) => {
+      await this.ajax.post(
+        url("/admin/settings"),
+        ({ data, status }) => {
           if (status !== 200) throw "Error submitting dynamic settings";
-        }, data);
+        },
+        data
+      );
     } catch (e) {
       console.log("Unable to submit chat report resolution");
       console.log(e);
@@ -43,7 +55,10 @@ export class AdminAPI {
   }
 
   async getCompletedGames(
-    start: string, end: string, bots: boolean, defeats: boolean
+    start: string,
+    end: string,
+    bots: boolean,
+    defeats: boolean
   ): Promise<any> {
     const params = `&start=${start}&end=${end}&bots=${bots}&defeats=${defeats}`;
     try {
@@ -95,9 +110,12 @@ export class AdminAPI {
 
   async getUnresolvedChatReports(): Promise<Array<ChatReportData>> {
     try {
-      return await this.ajax.get(url("/admin/chat-reports?onlyUnresolved=true"), ({ data, status }) => {
-        return data;
-      });
+      return await this.ajax.get(
+        url("/admin/chat-reports?onlyUnresolved=true"),
+        ({ data, status }) => {
+          return data;
+        }
+      );
     } catch (e) {
       console.log("Unable to retrieve chat reports");
       console.log(e);
@@ -131,9 +149,13 @@ export class AdminAPI {
 
   async takeModerationAction(data: ModerationActionData, success: () => void): Promise<void> {
     try {
-      await this.ajax.post(url("/admin/take-moderation-action"), ({ data, status }) => {
+      await this.ajax.post(
+        url("/admin/take-moderation-action"),
+        ({ data, status }) => {
           if (status === 200) success();
-        }, data);
+        },
+        data
+      );
     } catch (e) {
       console.log("Unable to submit chat report resolution");
       console.log(e);
@@ -141,11 +163,18 @@ export class AdminAPI {
     }
   }
 
-  async undoModerationAction(data: { moderationActionId: number, username: string }, success: () => void): Promise<void> {
+  async undoModerationAction(
+    data: { moderationActionId: number; username: string },
+    success: () => void
+  ): Promise<void> {
     try {
-      await this.ajax.post(url("/admin/undo-moderation-action"), ({ data, status }) => {
+      await this.ajax.post(
+        url("/admin/undo-moderation-action"),
+        ({ data, status }) => {
           if (status === 200) success();
-        }, data);
+        },
+        data
+      );
     } catch (e) {
       console.log("Unable to undo action");
       console.log(e);

@@ -76,8 +76,8 @@ import { BModal, BButton } from "bootstrap-vue";
 @Component({
   components: {
     BModal,
-    BButton
-  }
+    BButton,
+  },
 })
 export default class TourModal extends Vue {
   variants = ["primary", "secondary", "success", "warning", "danger", "info", "light", "dark"];

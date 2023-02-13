@@ -1,11 +1,11 @@
-import { User, Player, ScheduledGameDate } from '@port-of-mars/server/entity';
-import { MoreThan, SelectQueryBuilder } from 'typeorm';
-import { DateTime, Interval } from 'luxon';
+import { User, Player, ScheduledGameDate } from "@port-of-mars/server/entity";
+import { MoreThan, SelectQueryBuilder } from "typeorm";
+import { DateTime, Interval } from "luxon";
 import { settings, getLogger } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
-import { isDev } from '@port-of-mars/shared/settings';
+import { isDev } from "@port-of-mars/shared/settings";
 
-import * as _ from 'lodash';
+import * as _ from "lodash";
 
 const logger = getLogger(__filename);
 
@@ -16,14 +16,14 @@ interface DateWindow {
 }
 
 export class ScheduleService extends BaseService {
-
   /**
    * Creates a new scheduled game date
    * Returns the date scheduled or null if there was a conflict
    */
   async createScheduledGameDate(
-    gameDate: DateWindow, autoCreated: boolean = false
-  ): Promise<ScheduledGameDate|null> {
+    gameDate: DateWindow,
+    autoCreated: boolean = false
+  ): Promise<ScheduledGameDate | null> {
     const scheduledDates = await this.getScheduledDates();
     // don't allow games to be scheduled at the same time
     if (scheduledDates.find(e => e.date.getTime() === gameDate.date.getTime())) {
@@ -35,10 +35,14 @@ export class ScheduleService extends BaseService {
       date: gameDate.date,
       minutesOpenBefore: gameDate.minutesOpenBefore,
       minutesOpenAfter: gameDate.minutesOpenAfter,
-      autoCreated
+      autoCreated,
     });
-    logger.debug("scheduling a game for %s, min before: %d, min after: %d",
-      scheduledDate.date.toUTCString(), gameDate.minutesOpenBefore, gameDate.minutesOpenAfter);
+    logger.debug(
+      "scheduling a game for %s, min before: %d, min after: %d",
+      scheduledDate.date.toUTCString(),
+      gameDate.minutesOpenBefore,
+      gameDate.minutesOpenAfter
+    );
     return await repository.save(scheduledDate);
   }
 
@@ -48,16 +52,21 @@ export class ScheduleService extends BaseService {
    * @param {number} [interval=3] - hours between games, must be a divisor of 24
    * @param {number} [days=1] - days from current date to schedule games until
    */
-  async scheduleGames(options?: { before?: number, after?: number, interval?: number, days?: number }) {
-    const before = options?.before ?? await this.sp.settings.lobbyOpenBeforeOffset();
-    const after = options?.after ?? await this.sp.settings.lobbyOpenAfterOffset();
-    const interval = options?.interval ?? await this.sp.settings.autoSchedulerHourInterval();
-    const days = options?.days ?? await this.sp.settings.autoSchedulerDaysOut();
+  async scheduleGames(options?: {
+    before?: number;
+    after?: number;
+    interval?: number;
+    days?: number;
+  }) {
+    const before = options?.before ?? (await this.sp.settings.lobbyOpenBeforeOffset());
+    const after = options?.after ?? (await this.sp.settings.lobbyOpenAfterOffset());
+    const interval = options?.interval ?? (await this.sp.settings.autoSchedulerHourInterval());
+    const days = options?.days ?? (await this.sp.settings.autoSchedulerDaysOut());
 
     logger.debug("attempting to schedule games %d days out, every %d hours", days, interval);
     const scheduled = await this.getScheduledDates(true);
     const now = DateTime.fromJSDate(new Date()).toUTC();
-    // get the next hour to schedule a date at based off of 00:00 UTC 
+    // get the next hour to schedule a date at based off of 00:00 UTC
     // e.g. (now = 10:30, interval = 3 hours) => 12
     const nextHourToSchedule = interval * Math.ceil((now.hour + 1) / interval);
     const start = now.startOf("day").plus({ hours: nextHourToSchedule });
@@ -65,16 +74,18 @@ export class ScheduleService extends BaseService {
     // ending at [start] + [days]
     const datesToSchedule = Interval.fromDateTimes(start, start.plus({ days: days }))
       .splitBy({ hours: interval })
-      .map((e) => e.start); 
+      .map(e => e.start);
     for (const date of datesToSchedule) {
-      if (!scheduled.find((e) => e.date.getTime() === date.toMillis())) {
-        const scheduledDate = await this.createScheduledGameDate({
-          date: date.toJSDate(),
-          minutesOpenBefore: before,
-          minutesOpenAfter: after,
-        }, true);
-      }
-      else {
+      if (!scheduled.find(e => e.date.getTime() === date.toMillis())) {
+        const scheduledDate = await this.createScheduledGameDate(
+          {
+            date: date.toJSDate(),
+            minutesOpenBefore: before,
+            minutesOpenAfter: after,
+          },
+          true
+        );
+      } else {
         logger.debug("game already scheduled for %s, nothing scheduled", date.toString());
       }
     }
@@ -86,9 +97,9 @@ export class ScheduleService extends BaseService {
   async getScheduledDates(onlyAutoCreated: boolean = false): Promise<Array<DateWindow>> {
     // select scheduled dates for which the lobby has not closed for (lobbyCloseDate > now)
     let schedule = await this.em.getRepository(ScheduledGameDate).find({
-      select: ['date', 'minutesOpenBefore', 'minutesOpenAfter', 'lobbyCloseDate', 'autoCreated'],
+      select: ["date", "minutesOpenBefore", "minutesOpenAfter", "lobbyCloseDate", "autoCreated"],
       where: { lobbyCloseDate: MoreThan(new Date()) },
-      order: { date: 'ASC' }
+      order: { date: "ASC" },
     });
     if (onlyAutoCreated) {
       schedule = schedule.filter(s => s.autoCreated);
@@ -118,13 +129,12 @@ export class ScheduleService extends BaseService {
     const now = new Date();
     for (const gameDate of gameDates) {
       const gameTime = gameDate.date.getTime();
-      const openDate = new Date(gameTime - (gameDate.minutesOpenBefore * 60 * 1000));
-      const closeDate = new Date(gameTime + (gameDate.minutesOpenAfter * 60 * 1000));
+      const openDate = new Date(gameTime - gameDate.minutesOpenBefore * 60 * 1000);
+      const closeDate = new Date(gameTime + gameDate.minutesOpenAfter * 60 * 1000);
       if (now > openDate && now < closeDate) {
         return true;
       }
     }
     return false;
   }
-
 }

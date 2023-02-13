@@ -1,18 +1,17 @@
 <template>
   <div id="chat" class="h-100 d-flex flex-column">
     <div id="messages" class="flex-grow-1 d-flex flex-column-reverse justify-content-start p-2">
-      <div v-for="msg in reversedMessages" :key="msg.dateCreated"
-        class="mt-2 backdrop rounded p-1"
-      >
+      <div v-for="msg in reversedMessages" :key="msg.dateCreated" class="mt-2 backdrop rounded p-1">
         <p class="mb-0">
           <b class="text-light">{{ msg.username }}: </b>
           <span class="text-secondary">{{ msg.message }}</span>
         </p>
       </div>
-   </div>
+    </div>
     <div id="input" class="flex-shrink-1">
       <b-form @submit.stop.prevent="submitToChat" class="p-2" inline>
-        <b-form-input v-model="pendingMessage"
+        <b-form-input
+          v-model="pendingMessage"
           :placeholder="isMuted ? 'You are currently muted' : 'Send a message'"
           autocomplete="off"
           class="flex-grow-1 mr-2"
@@ -55,9 +54,7 @@ export default class LobbyChat extends Vue {
   }
 
   get pendingMessageCleaned(): string {
-    return this.pendingMessage
-      .trim()
-      .replace(/(\n)/gm, " ");
+    return this.pendingMessage.trim().replace(/(\n)/gm, " ");
   }
 
   async submitToChat() {

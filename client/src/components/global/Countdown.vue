@@ -28,7 +28,7 @@ export default class Countdown extends Vue {
 
   get secondsUntilLaunch() {
     const seconds = Math.trunc(this.nextLaunch / 1000) - this.now;
-    if (seconds <= 0 ) {
+    if (seconds <= 0) {
       this.$emit("launchTime");
       return 0;
     }
@@ -52,7 +52,7 @@ export default class Countdown extends Vue {
       this.now = Math.trunc(Date.now() / 1000);
     }, 1000);
   }
-  
+
   beforeDestroy() {
     clearInterval(this.secondInterval);
   }
@@ -95,7 +95,7 @@ export default class Countdown extends Vue {
   font-weight: bold;
   line-height: 1;
   margin-bottom: 5px;
-  &:before{
+  &:before {
     content: ":";
     position: absolute;
     left: -10px;

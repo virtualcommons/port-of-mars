@@ -29,8 +29,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
-import { Resource } from '@port-of-mars/shared/types';
+import { Component, Vue, Prop } from "vue-property-decorator";
+import { Resource } from "@port-of-mars/shared/types";
 
 @Component({
   components: {},
@@ -40,7 +40,7 @@ export default class InventoryTable extends Vue {
   @Prop() isVisible!: boolean;
 
   get headers() {
-    return ['Resource', 'Cost', `Inventory`];
+    return ["Resource", "Cost", `Inventory`];
   }
 
   get resourceNames() {
@@ -50,17 +50,17 @@ export default class InventoryTable extends Vue {
   resourceCosts(resource: Resource) {
     return this.isVisible
       ? this.playerData.info.costs[resource] > 1001
-        ? 'X'
+        ? "X"
         : this.playerData.info.costs[resource]
-      : '??';
+      : "??";
   }
 
   resourceAmounts(resource: Resource) {
-    return this.isVisible ? this.playerData.info.inventory[resource] : '??';
+    return this.isVisible ? this.playerData.info.inventory[resource] : "??";
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import '@port-of-mars/client/stylesheets/game/InventoryTable.scss';
+@import "@port-of-mars/client/stylesheets/game/InventoryTable.scss";
 </style>

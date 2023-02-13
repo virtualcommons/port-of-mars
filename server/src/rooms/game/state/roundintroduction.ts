@@ -4,13 +4,12 @@ import _ from "lodash";
 import { Constants } from "@port-of-mars/shared/settings";
 import { Player } from "@port-of-mars/server/rooms/game/state/player";
 import { SystemHealthMarsEvent } from "@port-of-mars/server/rooms/game/state/systemhealth";
-import { AccomplishmentPurchase } from "@port-of-mars/server/rooms/game/state/accomplishment"
-import { Trade } from "@port-of-mars/server/rooms/game/state/trade"
+import { AccomplishmentPurchase } from "@port-of-mars/server/rooms/game/state/accomplishment";
+import { Trade } from "@port-of-mars/server/rooms/game/state/trade";
 
 export class RoundIntroduction
   extends Schema
-  implements
-    RoundIntroductionData<SystemHealthMarsEvent, AccomplishmentPurchase, Trade>
+  implements RoundIntroductionData<SystemHealthMarsEvent, AccomplishmentPurchase, Trade>
 {
   constructor() {
     super();
@@ -26,21 +25,17 @@ export class RoundIntroduction
     this.systemHealthMarsEvents.splice(
       0,
       this.systemHealthMarsEvents.length,
-      ...data.systemHealthMarsEvents.map((d) => new SystemHealthMarsEvent(d))
+      ...data.systemHealthMarsEvents.map(d => new SystemHealthMarsEvent(d))
     );
     this.accomplishmentPurchases.splice(
       0,
       this.accomplishmentPurchases.length,
-      ...data.accomplishmentPurchases.map(
-        (ap) => new AccomplishmentPurchase(ap)
-      )
+      ...data.accomplishmentPurchases.map(ap => new AccomplishmentPurchase(ap))
     );
     this.completedTrades.splice(
       0,
       this.completedTrades.length,
-      ...data.completedTrades.map(
-        (ct) => new Trade(ct.id, ct.sender, ct.recipient, ct.status)
-      )
+      ...data.completedTrades.map(ct => new Trade(ct.id, ct.sender, ct.recipient, ct.status))
     );
   }
 
@@ -48,14 +43,10 @@ export class RoundIntroduction
     return {
       systemHealthGroupContributions: this.systemHealthGroupContributions.toJSON(),
       systemHealthAtStartOfRound: this.systemHealthAtStartOfRound,
-      systemHealthMarsEvents: this.systemHealthMarsEvents.map((e) =>
-        e.toJSON()
-      ),
+      systemHealthMarsEvents: this.systemHealthMarsEvents.map(e => e.toJSON()),
       systemHealthMaintenanceCost: this.systemHealthMaintenanceCost,
-      accomplishmentPurchases: this.accomplishmentPurchases.map((ap) =>
-        ap.toJSON()
-      ),
-      completedTrades: this.completedTrades.map((ct) => ct.toJSON()),
+      accomplishmentPurchases: this.accomplishmentPurchases.map(ap => ap.toJSON()),
+      completedTrades: this.completedTrades.map(ct => ct.toJSON()),
     };
   }
 
@@ -105,7 +96,9 @@ export class RoundIntroduction
    * @param systemHealthAtStartOfRound
    */
   initialize(systemHealthAtStartOfRound: number): void {
-    this.systemHealthGroupContributions.forEach((value, key) => this.systemHealthGroupContributions.set(key, 0));
+    this.systemHealthGroupContributions.forEach((value, key) =>
+      this.systemHealthGroupContributions.set(key, 0)
+    );
     this.systemHealthAtStartOfRound = systemHealthAtStartOfRound;
     this.accomplishmentPurchases.splice(0, this.accomplishmentPurchases.length);
     this.completedTrades.splice(0, this.completedTrades.length);

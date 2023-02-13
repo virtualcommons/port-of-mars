@@ -53,8 +53,8 @@ import _ from "lodash";
 @Component({
   components: {
     AccomplishmentCard,
-    EventNoChange
-  }
+    EventNoChange,
+  },
 })
 export default class AccomplishmentsSelectPurchased extends Vue {
   @Inject() readonly api!: GameRequestAPI;
@@ -71,7 +71,7 @@ export default class AccomplishmentsSelectPurchased extends Vue {
     culture: 0,
     systemHealth: 0,
     victoryPoints: 0,
-    effect: ""
+    effect: "",
   };
 
   get marsEvent(): MarsEventData {
@@ -97,5 +97,4 @@ export default class AccomplishmentsSelectPurchased extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

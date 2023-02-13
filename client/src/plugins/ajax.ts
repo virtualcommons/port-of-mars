@@ -1,4 +1,4 @@
-import Vue, { VueConstructor } from 'vue'
+import Vue, { VueConstructor } from "vue";
 import _ from "lodash";
 import { VueRouter } from "vue-router/types/router";
 import { TStore } from "@port-of-mars/client/plugins/tstore";
@@ -6,17 +6,17 @@ import { RoomId } from "@port-of-mars/shared/types";
 import { LOGIN_PAGE, LOBBY_PAGE, REGISTER_PAGE, HOME_PAGE } from "@port-of-mars/shared/routes";
 import { DashboardMessage } from "@port-of-mars/shared/types";
 import { url } from "@port-of-mars/client/util";
-import { initialUserState } from '@port-of-mars/shared/game/client/state';
+import { initialUserState } from "@port-of-mars/shared/game/client/state";
 
-declare module 'vue/types/vue' {
+declare module "vue/types/vue" {
   interface Vue {
     $ajax: AjaxRequest;
   }
 }
 
 interface ResponseData<T = any> {
-  data: T
-  status: number
+  data: T;
+  status: number;
 }
 
 export type AjaxResponse = Promise<any | void>;
@@ -27,11 +27,10 @@ export class AjaxResponseError extends Error {
   }
 }
 
-const SUBMISSION_ID = 'submissionId';
+const SUBMISSION_ID = "submissionId";
 
 export class AjaxRequest {
-  constructor(private router: VueRouter, private store: TStore) {
-  }
+  constructor(private router: VueRouter, private store: TStore) {}
 
   _roomId?: RoomId;
 
@@ -46,20 +45,24 @@ export class AjaxRequest {
   }
 
   get roomId() {
-    return this._roomId
+    return this._roomId;
   }
 
-  async devLogin(formData: { username: string, password: string }) {
-    const devLoginUrl = url('/login');
-    await this.post(devLoginUrl, ({ data, status }) => {
-      if (status === 200) {
-        this.store.commit("SET_USER", data.user);
-        if (data.user.isVerified) this.router.push({ name: LOBBY_PAGE });
-        else this.router.push({ name: REGISTER_PAGE });
-      } else {
-        return data;
-      }
-    }, formData);
+  async devLogin(formData: { username: string; password: string }) {
+    const devLoginUrl = url("/login");
+    await this.post(
+      devLoginUrl,
+      ({ data, status }) => {
+        if (status === 200) {
+          this.store.commit("SET_USER", data.user);
+          if (data.user.isVerified) this.router.push({ name: LOBBY_PAGE });
+          else this.router.push({ name: REGISTER_PAGE });
+        } else {
+          return data;
+        }
+      },
+      formData
+    );
   }
 
   get username(): string {
@@ -71,19 +74,18 @@ export class AjaxRequest {
   }
 
   async denyConsent() {
-    await this.post(url('/registration/deny-consent'), () => { });
-    this.store.commit('SET_DASHBOARD_MESSAGE',
-      {
-        kind: 'info',
-        message: 'You have denied consent to participate in this research project. Sorry to see you go!'
-      }
-    );
+    await this.post(url("/registration/deny-consent"), () => {});
+    this.store.commit("SET_DASHBOARD_MESSAGE", {
+      kind: "info",
+      message:
+        "You have denied consent to participate in this research project. Sorry to see you go!",
+    });
   }
 
   async forgetLoginCreds() {
     document.cookie = "connect.sid= ;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-    this.store.commit('SET_USER', initialUserState);
-    await this.get(url('/logout'), () => { });
+    this.store.commit("SET_USER", initialUserState);
+    await this.get(url("/logout"), () => {});
   }
 
   get submissionId(): number | null {
@@ -105,7 +107,7 @@ export class AjaxRequest {
   private async handleResponse(response: Response): Promise<ResponseData> {
     // ASSUMPTION we always receive JSON back from the server given an ajax request
     // so server side should never do a res.redirect(..) for instance
-    console.log("RECEIVED RESPONSE: ")
+    console.log("RECEIVED RESPONSE: ");
     console.log(response);
     const data = await response.json();
     if (response.status >= 400) {
@@ -113,45 +115,45 @@ export class AjaxRequest {
       // push the error onto the store and move on.
       console.error("error response from server: ", response);
       const serverErrorMessage: DashboardMessage = data;
-      this.store.commit('SET_DASHBOARD_MESSAGE', serverErrorMessage);
+      this.store.commit("SET_DASHBOARD_MESSAGE", serverErrorMessage);
       if (response.status > 400) {
-        const destinationPage = this.errorRoutes.has(response.status) ? this.errorRoutes.get(response.status) : REGISTER_PAGE;
-        this.router.push({ name: destinationPage })
+        const destinationPage = this.errorRoutes.has(response.status)
+          ? this.errorRoutes.get(response.status)
+          : REGISTER_PAGE;
+        this.router.push({ name: destinationPage });
       }
     }
     return { data, status: response.status };
   }
 
-  async post(path: string, done: (data: ResponseData) => Promise<any> | void, data?: any): AjaxResponse {
+  async post(
+    path: string,
+    done: (data: ResponseData) => Promise<any> | void,
+    data?: any
+  ): AjaxResponse {
     // FIXME: duplicated across post/get
     let response;
     try {
-      response = await fetch(
-        path,
-        {
-          method: 'POST',
-          cache: 'no-cache',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include',
-          redirect: 'follow',
-          referrerPolicy: "no-referrer",
-          body: JSON.stringify(data)
-        }
-      );
+      response = await fetch(path, {
+        method: "POST",
+        cache: "no-cache",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        redirect: "follow",
+        referrerPolicy: "no-referrer",
+        body: JSON.stringify(data),
+      });
       const responseData = await this.handleResponse(response);
       return done(responseData);
-    }
-    catch (e) {
+    } catch (e) {
       if (e instanceof AjaxResponseError) {
         throw e;
-      }
-      else {
+      } else {
         if (response && e instanceof Error) {
-          throw new AjaxResponseError({ kind: 'danger', message: e.message }, response);
-        }
-        else {
+          throw new AjaxResponseError({ kind: "danger", message: e.message }, response);
+        } else {
           console.error("Unhandled error in request, returning to home screen", e);
           // FIXME: add context so that login page has information about why they were redirected
           this.router.push({ name: LOGIN_PAGE });
@@ -164,30 +166,24 @@ export class AjaxRequest {
     // FIXME: duplicated across post/get
     let response;
     try {
-      response = await fetch(
-        path,
-        {
-          method: 'GET',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          redirect: 'follow',
-          referrerPolicy: "no-referrer",
-        }
-      );
+      response = await fetch(path, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        redirect: "follow",
+        referrerPolicy: "no-referrer",
+      });
       const responseData = await this.handleResponse(response);
       return done(responseData);
-    }
-    catch (e) {
+    } catch (e) {
       if (e instanceof AjaxResponseError) {
         throw e;
-      }
-      else {
+      } else {
         if (response && e instanceof Error) {
-          throw new AjaxResponseError({ kind: 'danger', message: e.message }, response);
-        }
-        else {
+          throw new AjaxResponseError({ kind: "danger", message: e.message }, response);
+        } else {
           console.error("Unhandled error in request, returning to home screen", e);
           this.router.push({ name: HOME_PAGE });
         }
@@ -197,7 +193,7 @@ export class AjaxRequest {
 }
 
 export const Ajax = {
-  install(instance: VueConstructor<Vue>, options: { router: VueRouter, store: TStore }) {
+  install(instance: VueConstructor<Vue>, options: { router: VueRouter; store: TStore }) {
     instance.prototype.$ajax = new AjaxRequest(options.router, options.store);
-  }
+  },
 };

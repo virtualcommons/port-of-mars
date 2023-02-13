@@ -14,7 +14,7 @@ import {
   ModerationActionClientData,
   ChatReportRequestData,
   BAN,
-  ModerationActionType
+  ModerationActionType,
 } from "@port-of-mars/shared/types";
 import { getLogger } from "@port-of-mars/server/settings";
 import _ from "lodash";
@@ -22,7 +22,6 @@ import _ from "lodash";
 const logger = getLogger(__filename);
 
 export class AdminService extends BaseService {
-
   async getAdminStats(): Promise<AdminStats> {
     const totalDefeats = await this.sp.game.getTotalCompletedGames({ status: "defeat" });
     const defeatsWithBots = await this.sp.game.getTotalGamesWithBots({ status: "defeat" });
@@ -42,7 +41,7 @@ export class AdminService extends BaseService {
       totalUsers: await this.sp.account.getTotalRegisteredUsers(),
       reportedUsers: await this.sp.account.getTotalReportedUsers(),
       bannedUsers: await this.sp.account.getTotalBannedUsers(),
-    }
+    };
   }
 
   async getLobbyData(): Promise<any> {
@@ -56,13 +55,13 @@ export class AdminService extends BaseService {
       return {
         roomId: g.roomId,
         clients: g.clients,
-        elapsed: Date.now() - new Date(g.createdAt).getTime()
-      }
+        elapsed: Date.now() - new Date(g.createdAt).getTime(),
+      };
     });
   }
 
   async getInspectData(roomId: string): Promise<InspectData | undefined> {
-    if (roomId && await matchMaker.query({ roomId })) {
+    if (roomId && (await matchMaker.query({ roomId }))) {
       try {
         const data = await matchMaker.remoteRoomCall(roomId, "getInspectData");
         return data;
@@ -89,8 +88,8 @@ export class AdminService extends BaseService {
         roomId: r.game.roomId,
         message: r.message as ChatMessageData,
         resolved: r.resolved,
-        dateCreated: r.dateCreated
-      }
+        dateCreated: r.dateCreated,
+      };
     });
     return onlyUnresolved ? reports.filter((r: ChatReportData) => !r.resolved) : reports;
   }
@@ -111,13 +110,16 @@ export class AdminService extends BaseService {
         adminUsername: i.admin.username,
         action: i.action,
         dateMuteExpires: i.dateMuteExpires,
-      }
+      };
     });
   }
 
   async submitChatReport(data: ChatReportRequestData) {
-    logger.debug("user in room: %s submitted report for chat message sent by: %s",
-      data.roomId, data.username);
+    logger.debug(
+      "user in room: %s submitted report for chat message sent by: %s",
+      data.roomId,
+      data.username
+    );
     const game = await this.sp.game.findByRoomId(data.roomId);
     const user = await this.sp.account.findByUsername(data.username);
     const message = data.message;
@@ -127,7 +129,7 @@ export class AdminService extends BaseService {
       gameId: game.id,
       user,
       userId: user.id,
-      message
+      message,
     });
     await repository.save(report);
   }
@@ -149,7 +151,7 @@ export class AdminService extends BaseService {
       userId: user.id,
       admin,
       adminId: admin.id,
-      ...moderationActionData
+      ...moderationActionData,
     });
     await moderationActionRepo.save(moderationAction);
     // mark user as muted/banned
@@ -160,10 +162,13 @@ export class AdminService extends BaseService {
     await reportRepo.save(report);
   }
 
-  async hasActiveModerationAction(username: string, action: ModerationActionType): Promise<boolean> {
+  async hasActiveModerationAction(
+    username: string,
+    action: ModerationActionType
+  ): Promise<boolean> {
     const activeModerationActions = await this.em
-      .getRepository(ModerationAction).
-      createQueryBuilder("moderationAction")
+      .getRepository(ModerationAction)
+      .createQueryBuilder("moderationAction")
       .innerJoinAndSelect("moderationAction.user", "user")
       .where("moderationAction.revoked = :revoked", { revoked: false })
       .andWhere("moderationAction.action = :action", { action })
@@ -176,10 +181,12 @@ export class AdminService extends BaseService {
     }
   }
 
-  async undoModerationAction(data: { moderationActionId: number, username: string }) {
+  async undoModerationAction(data: { moderationActionId: number; username: string }) {
     const moderationActionRepo = this.em.getRepository(ModerationAction);
     const reportRepo = this.em.getRepository(ChatReport);
-    const moderationAction = await moderationActionRepo.findOneOrFail({ id: data.moderationActionId });
+    const moderationAction = await moderationActionRepo.findOneOrFail({
+      id: data.moderationActionId,
+    });
     const report = await reportRepo.findOneOrFail({ id: moderationAction.reportId });
     // mark moderationAction as revoked
     moderationAction.revoked = true;

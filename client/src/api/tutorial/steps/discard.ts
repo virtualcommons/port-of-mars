@@ -8,7 +8,7 @@ const steps: Array<Step> = [
       `The last phase in a round is Discard. You can discard any Accomplishments you don't want to keep ` +
       `and draw up to three new Accomplishments at the beginning of the next round.`,
     params: {
-      placement: RIGHT
+      placement: RIGHT,
     },
     stateTransform: [
       {
@@ -20,38 +20,38 @@ const steps: Array<Step> = [
             government: 3,
             legacy: 3,
             science: 2,
-            systemHealth: 1
+            systemHealth: 1,
           },
-          role: RESEARCHER
-        }
-      }
-    ]
+          role: RESEARCHER,
+        },
+      },
+    ],
   },
   {
     target: ".tour-discard-action",
     content: `Please discard an Accomplishment to continue.`,
     params: {
-      placement: TOP
+      placement: TOP,
     },
     stateTransform: [
       {
-        required: true
-      }
-    ]
+        required: true,
+      },
+    ],
   },
   {
     target: ".tour-ready-to-advance-button",
     content: `Click the Ready to Advance to lock in your decisions.`,
     params: {
-      placement: LEFT
+      placement: LEFT,
     },
     stateTransform: [
       {
         SET_LAYOUT: "tutorial",
-        required: true
-      }
-    ]
-  }
+        required: true,
+      },
+    ],
+  },
 ];
 
 export default steps;

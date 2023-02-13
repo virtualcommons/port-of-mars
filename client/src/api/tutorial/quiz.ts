@@ -1,5 +1,5 @@
-import { AjaxResponseError } from '@port-of-mars/client/plugins/ajax';
-import { url } from '@port-of-mars/client/util';
+import { AjaxResponseError } from "@port-of-mars/client/plugins/ajax";
+import { url } from "@port-of-mars/client/util";
 
 export class QuizAPI {
   private ajax!: any;
@@ -10,7 +10,7 @@ export class QuizAPI {
 
   //hold the endpoint
   get quizSubmissionEndpoint() {
-    return url('/quiz/submission');
+    return url("/quiz/submission");
   }
 
   //set the submission id
@@ -19,9 +19,9 @@ export class QuizAPI {
   }
 
   //set submission data
-  public setQuizSubmissionData(data: { submissionId: number, quizQuestions: any }) {
+  public setQuizSubmissionData(data: { submissionId: number; quizQuestions: any }) {
     this.setSubmissionId(data.submissionId);
-    console.log('from quiz', data.quizQuestions)
+    console.log("from quiz", data.quizQuestions);
     return data.quizQuestions;
   }
 
@@ -36,7 +36,7 @@ export class QuizAPI {
     }
     const createQuizSubmissionUrl = this.quizSubmissionEndpoint;
     return await this.ajax.post(createQuizSubmissionUrl, ({ data, status }: any) => {
-      console.log('creating new quiz submission');
+      console.log("creating new quiz submission");
       return this.setQuizSubmissionData(data);
     });
   }
@@ -45,13 +45,17 @@ export class QuizAPI {
   public async checkQuizQuestion(questionId: number, answer: number): Promise<boolean> {
     // FIXME: extract this and other URLs to shared/routes or elsewhere
     const submitResponseUrl = `${this.quizSubmissionEndpoint}/${this.ajax.submissionId}/${questionId}`;
-    return await this.ajax.post(submitResponseUrl, ({ data, status }: any) => Promise.resolve(data), { answer: answer });
+    return await this.ajax.post(
+      submitResponseUrl,
+      ({ data, status }: any) => Promise.resolve(data),
+      { answer: answer }
+    );
   }
 
   //check for completion
   public async checkQuizCompletion(): Promise<void> {
     // FIXME: extract this and other URLs to shared/routes
-    const quizCompletionUrl = url('/quiz/complete');
+    const quizCompletionUrl = url("/quiz/complete");
     // quiz completion endpoint returns an array of incorrect question ids
     let status = [];
     try {
@@ -60,16 +64,14 @@ export class QuizAPI {
       });
       console.log("QUIZ COMPLETION: ");
       console.log(status);
-    }
-    catch (e) {
+    } catch (e) {
       if (e instanceof AjaxResponseError) {
-        const error = e.message
-        this.notifyUserOfError('checkQuizCompletion (response)', error);
+        const error = e.message;
+        this.notifyUserOfError("checkQuizCompletion (response)", error);
       }
-    }
-    finally {
+    } finally {
       this.ajax.setQuizCompletion(status.length === 0);
-      console.log('USER HAS COMPLETED QUIZ:', status);
+      console.log("USER HAS COMPLETED QUIZ:", status);
     }
   }
 
@@ -77,6 +79,6 @@ export class QuizAPI {
   private notifyUserOfError(call: string, error: any): void {
     // TODO: Show server error modal
     console.log(`ERROR FETCHING DATA AT ${call}!`);
-    console.log('RESPONSE FROM SERVER: ', error);
+    console.log("RESPONSE FROM SERVER: ", error);
   }
 }

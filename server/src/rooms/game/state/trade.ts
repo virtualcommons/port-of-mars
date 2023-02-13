@@ -83,11 +83,11 @@ export class Trade extends Schema implements TradeData<TradeAmount> {
     const pFrom = state.players[this.sender.role];
     const pTo = state.players[this.recipient.role];
 
-    pFrom.inventory.add(_.mapValues(this.sender.resourceAmount, (r) => -r!));
+    pFrom.inventory.add(_.mapValues(this.sender.resourceAmount, r => -r!));
     pFrom.inventory.add(this.recipient.resourceAmount);
     //pFrom.pendingInvestments.rollback({...this.from.resourceAmount,systemHealth:0});
 
-    pTo.inventory.add(_.mapValues(this.recipient.resourceAmount, (r) => -r!));
+    pTo.inventory.add(_.mapValues(this.recipient.resourceAmount, r => -r!));
     pTo.inventory.add(this.sender.resourceAmount);
 
     this.status = "Accepted";

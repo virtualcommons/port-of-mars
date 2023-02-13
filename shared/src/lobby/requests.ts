@@ -1,25 +1,25 @@
 export interface AcceptInvitation {
-  kind: 'accept-invitation';
+  kind: "accept-invitation";
   data?: any;
 }
 
 export interface StartWithBots {
-  kind: 'start-with-bots';
+  kind: "start-with-bots";
   data?: any;
 }
 
 export interface VoteStartWithBots {
-  kind: 'vote-start-with-bots';
+  kind: "vote-start-with-bots";
   value: boolean;
 }
 
 export interface SendLobbyChatMessage {
-  kind: 'send-lobby-chat-message';
+  kind: "send-lobby-chat-message";
   value: string;
 }
 
 export interface StartSoloWithBots {
-  kind: 'start-solo-with-bots';
+  kind: "start-solo-with-bots";
   data?: any;
 }
 

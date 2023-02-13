@@ -1,4 +1,13 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, JoinColumn, OneToOne } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  JoinColumn,
+  OneToOne,
+} from "typeorm";
 import { GameEvent } from "./GameEvent";
 import { Player } from "@port-of-mars/server/entity/Player";
 import { TournamentRound } from "./TournamentRound";
@@ -33,8 +42,8 @@ export class Game {
   @OneToMany(type => Player, player => player.game)
   players!: Array<Player>;
 
-  @Column({ default: 'incomplete',  })
-  status: 'incomplete' | 'defeat' | 'victory' | 'failure' = 'incomplete';
+  @Column({ default: "incomplete" })
+  status: "incomplete" | "defeat" | "victory" | "failure" = "incomplete";
 
   @OneToOne(type => Player, { nullable: true })
   @JoinColumn()

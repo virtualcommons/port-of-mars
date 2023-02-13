@@ -3,7 +3,7 @@ import {
   AccomplishmentSetData,
   InvestmentData,
   INVESTMENTS,
-  Role
+  Role,
 } from "@port-of-mars/shared/types";
 import { Vue } from "vue-property-decorator";
 
@@ -43,11 +43,11 @@ function SET_PENDING_INVESTMENTS(state: State, payload: { data: InvestmentData; 
   }
 }
 
-function SET_BOT_WARNING(state: State, payload: { data: boolean, role: Role }) {
+function SET_BOT_WARNING(state: State, payload: { data: boolean; role: Role }) {
   state.players[payload.role].botWarning = payload.data;
 }
 
-function SET_BOT_STATUS(state: State, payload: { data: boolean, role: Role }) {
+function SET_BOT_STATUS(state: State, payload: { data: boolean; role: Role }) {
   state.players[payload.role].isBot = payload.data;
 }
 

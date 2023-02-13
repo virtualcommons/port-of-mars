@@ -6,17 +6,19 @@
           <b-form class="mb-5" @submit="onSubmit" @reset="onReset">
             <div class="mb-4" id="general">
               <h4>General</h4>
-              <hr class="my-2">
+              <hr class="my-2" />
               <b-form-group
                 id="max-connections-group"
                 label="Max Connections"
                 label-for="max-connections"
                 description="The maximum number of clients that can connect to the game server at once."
               >
-                <b-form-input class="custom-form-input"
+                <b-form-input
+                  class="custom-form-input"
                   id="max-connections"
                   type="number"
-                  min="10" max="200"
+                  min="10"
+                  max="200"
                   v-model="form.maxConnections"
                   required
                 ></b-form-input>
@@ -27,10 +29,12 @@
                 label-for="mute-length"
                 description="The length that a player is muted for when they are muted by an admin."
               >
-                <b-form-input class="custom-form-input"
+                <b-form-input
+                  class="custom-form-input"
                   id="mute-length"
                   type="number"
-                  min="1" max="30"
+                  min="1"
+                  max="30"
                   v-model="form.defaultDaysMuted"
                   required
                 ></b-form-input>
@@ -150,7 +154,7 @@ export default class Reports extends Vue {
     { value: 3, text: "3 hours" },
     { value: 4, text: "4 hours" },
     { value: 6, text: "6 hours" },
-    { value: 12, text: "12 hours"}
+    { value: 12, text: "12 hours" },
   ];
 
   async created() {
@@ -169,19 +173,22 @@ export default class Reports extends Vue {
 
   async onSubmit(e: Event) {
     e.preventDefault();
-    this.api.updateSettings(this.form).then(() => {
-      this.$bvToast.toast("Settings updated successfully", {
-        title: "Success",
-        variant: "success",
-        solid: true
+    this.api
+      .updateSettings(this.form)
+      .then(() => {
+        this.$bvToast.toast("Settings updated successfully", {
+          title: "Success",
+          variant: "success",
+          solid: true,
+        });
+      })
+      .catch(err => {
+        this.$bvToast.toast("Failed to update settings", {
+          title: "Error",
+          variant: "danger",
+          solid: true,
+        });
       });
-    }).catch((err) => {
-      this.$bvToast.toast("Failed to update settings", {
-        title: "Error",
-        variant: "danger",
-        solid: true
-      });
-    });
   }
 
   async onReset(e: Event) {

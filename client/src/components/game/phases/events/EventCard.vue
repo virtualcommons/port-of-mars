@@ -1,7 +1,7 @@
 <template>
   <b-container
     fluid
-    style="border: .125rem solid var(--light-shade); background-color: var(--dark-shade)"
+    style="border: 0.125rem solid var(--light-shade); background-color: var(--dark-shade)"
     class="p-0 mx-0 mb-2"
     v-if="visible"
   >
@@ -18,9 +18,7 @@
           >
             {{ event.name }}
           </b-button>
-          <b-badge v-if="showActiveIndicator" variant="success">
-            Active
-          </b-badge>
+          <b-badge v-if="showActiveIndicator" variant="success"> Active </b-badge>
         </b-col>
       </template>
       <template v-else>
@@ -28,9 +26,7 @@
           <h5 class="p-2 text-center" style="background-color: var(--light-shade); color: black">
             {{ event.name }}
           </h5>
-          <b-badge v-if="showActiveIndicator" variant="success">
-            Active
-          </b-badge>
+          <b-badge v-if="showActiveIndicator" variant="success"> Active </b-badge>
         </b-col>
       </template>
       <!-- Equal-width columns that span multiple lines: https://bootstrap-vue.org/docs/components/layout#comp-ref-b-col -->
@@ -87,7 +83,7 @@ import EventModal from "@port-of-mars/client/components/game/modals/EventModal.v
 import { isUndefined } from "lodash";
 
 @Component({
-  components: { EventModal }
+  components: { EventModal },
 })
 export default class EventCard extends Vue {
   @Inject() readonly api!: GameRequestAPI;
@@ -99,8 +95,8 @@ export default class EventCard extends Vue {
       elapsed: undefined,
       name: undefined,
       flavorText: undefined,
-      effect: undefined
-    })
+      effect: undefined,
+    }),
   })
   event!: MarsEventData;
 

@@ -10,7 +10,7 @@ import {
   Role,
   RoundIntroductionData,
   SystemHealthChangesData,
-  TradeSetData
+  TradeSetData,
 } from "@port-of-mars/shared/types";
 
 export interface GameSerialized {
@@ -49,13 +49,8 @@ export interface MarsEventDeckSerialized {
   position: number;
 }
 
-export interface PlayerSummary extends Pick<PlayerSerialized,
-  | "role"
-  | "ready"
-  | "timeBlocks"
-  | "victoryPoints"
-  | "inventory" 
-> {
+export interface PlayerSummary
+  extends Pick<PlayerSerialized, "role" | "ready" | "timeBlocks" | "victoryPoints" | "inventory"> {
   accomplishment: AccomplishmentSetSummary;
 }
 

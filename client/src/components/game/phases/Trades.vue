@@ -63,8 +63,8 @@ import TradeRequestModal from "@port-of-mars/client/components/game/modals/Trade
 @Component({
   components: {
     ActiveTrade,
-    TradeRequestModal
-  }
+    TradeRequestModal,
+  },
 })
 export default class Trades extends Vue {
   @Inject()
@@ -101,7 +101,7 @@ export default class Trades extends Vue {
       id,
       sender: tradeSet[id].sender,
       recipient: tradeSet[id].recipient,
-      status: tradeSet[id].status
+      status: tradeSet[id].status,
     }));
 
     return (
@@ -167,7 +167,7 @@ export default class Trades extends Vue {
           toaster: "b-toaster-top-left",
           variant: "warning",
           solid: true,
-          autoHideDelay: 7000
+          autoHideDelay: 7000,
         }
       );
     }

@@ -71,8 +71,8 @@ import { AbstractGameAPI } from "@port-of-mars/client/api/game/types";
 
 @Component({
   components: {
-    TradeOptions
-  }
+    TradeOptions,
+  },
 })
 export default class TradeRequest extends Vue {
   @Inject() readonly api!: AbstractGameAPI;
@@ -82,7 +82,7 @@ export default class TradeRequest extends Vue {
     fluid: true,
     blankColor: "#bbb",
     width: 110,
-    height: 110
+    height: 110,
   };
 
   created() {
@@ -135,20 +135,20 @@ export default class TradeRequest extends Vue {
     if (this.validateTrade) {
       const senderPackage: TradeAmountData = {
         role: this.$tstore.state.role,
-        resourceAmount: makeTradeSafe(this.recipientResources)
+        resourceAmount: makeTradeSafe(this.recipientResources),
       };
       const recipientPackage: TradeAmountData = {
         role: this.selectedTradePartner as Role,
-        resourceAmount: makeTradeSafe(this.senderResources)
+        resourceAmount: makeTradeSafe(this.senderResources),
       };
       const tradeDataPackage: SendTradeRequestData["trade"] = {
         sender: senderPackage,
         recipient: recipientPackage,
-        status: "Active"
+        status: "Active",
       };
       this.api.sendTradeRequest(tradeDataPackage);
       // FIXME: magic string declared in Trades.vue
-      this.$bvModal.hide('trade-request-modal');
+      this.$bvModal.hide("trade-request-modal");
     }
   }
 

@@ -7,7 +7,7 @@ const steps: Array<Step> = [
     target: ".tour-phase",
     content: `Mars is unpredictable; many different events can happen!`,
     params: {
-      placement: RIGHT
+      placement: RIGHT,
     },
     stateTransform: [
       {
@@ -20,10 +20,10 @@ const steps: Array<Step> = [
             government: 3,
             legacy: 3,
             science: 2,
-            systemHealth: 1
+            systemHealth: 1,
           },
-          role: RESEARCHER
-        }
+          role: RESEARCHER,
+        },
       },
       {
         // FIXME: this should be pulling its data from MarsEvents, which I suppose makes a case for keeping them in shared instead?
@@ -36,19 +36,19 @@ const steps: Array<Step> = [
           flavorText: `Create contingencies for your contingencies and contingencies for
           those contingencies. Then prepare to improvise.`,
           clientViewHandler: "NO_CHANGE" as const,
-          duration: 1
-        }
-      }
-    ]
+          duration: 1,
+        },
+      },
+    ],
   },
   {
     target: ".tour-event",
     content: `As System Health decreases, you may encounter more than 1 event.`,
     params: {
-      placement: RIGHT
+      placement: RIGHT,
     },
-    stateTransform: []
-  }
+    stateTransform: [],
+  },
 ];
 
 export default steps;
