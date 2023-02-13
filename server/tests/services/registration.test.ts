@@ -1,10 +1,10 @@
 import { RegistrationService } from "@port-of-mars/server/services/registration";
-import { User, Tournament, TournamentRound } from "@port-of-mars/server/entity";
+import { User, Tournament } from "@port-of-mars/server/entity";
 import { settings } from "@port-of-mars/server/settings";
 import { Connection, EntityManager, QueryRunner } from "typeorm";
 import { ServiceProvider } from "@port-of-mars/server/services";
 import { ServerError } from "@port-of-mars/server/util";
-import { createRound, createTournament, initTransaction, rollbackTransaction } from "./common";
+import { createTournament, initTransaction, rollbackTransaction } from "./common";
 
 describe("a potential user", () => {
   const username = "ahacker";
@@ -13,14 +13,14 @@ describe("a potential user", () => {
   let manager: EntityManager;
   let sp: ServiceProvider;
   let t: Tournament;
-  let tr: TournamentRound;
+  // let tr: TournamentRound;
   let registrationService: RegistrationService;
 
   beforeAll(async () => {
     [conn, qr, manager] = await initTransaction();
     sp = new ServiceProvider(qr.manager);
     t = await createTournament(sp);
-    tr = await createRound(sp, { tournamentId: t.id });
+    // tr = await createRound(sp, { tournamentId: t.id });
     registrationService = sp.registration;
   });
 
@@ -40,7 +40,7 @@ describe("a potential user", () => {
   it("can submit their registration information", async () => {
     const email = "a@foo.bar";
     const name = "Alyssa P Hacker";
-    let user = await sp.account.getOrCreateUser({ email, passportId: "67890" });
+    const user = await sp.account.getOrCreateUser({ email, passportId: "67890" });
     const newEmail = "b@bar.foo";
     await registrationService.submitRegistrationMetadata(user, {
       username,

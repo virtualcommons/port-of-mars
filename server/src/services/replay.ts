@@ -34,7 +34,6 @@ import {
   RESOURCES,
   Role,
   ROLES,
-  SERVER,
   ServerRole,
 } from "@port-of-mars/shared/types";
 import { createObjectCsvWriter } from "csv-writer";
@@ -48,7 +47,7 @@ function loadSnapshot(data: GameSerialized): GameState {
   return new GameState(mockGameStateInitOpts()).fromJSON(data);
 }
 
-class ObjColumn<T> {
+class ObjColumn {
   constructor(private payload: any) {}
 
   toString() {
@@ -87,20 +86,6 @@ export abstract class Summarizer<T> {
 
     const writer = createObjectCsvWriter({ path: this.path, header });
     await writer.writeRecords(rows);
-  }
-}
-
-class RoleExtractor {
-  extractors: {
-    [name: string]: <T extends GameEvent>(event: T) => Role | ServerRole;
-  } = {};
-
-  extractRole(event: GameEvent): Role | ServerRole {
-    const extractor = this.extractors[event.constructor.name];
-    if (_.isEmpty(extractor)) {
-      return SERVER;
-    }
-    return this.extractors[event.constructor.name](event);
   }
 }
 

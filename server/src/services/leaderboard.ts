@@ -4,10 +4,7 @@ import { TournamentRound } from "@port-of-mars/server/entity/TournamentRound";
 import { Game, Player } from "@port-of-mars/server/entity";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { IsNull, Not, SelectQueryBuilder } from "typeorm";
-import { getLogger } from "@port-of-mars/server/settings";
 import _ from "lodash";
-
-const logger = getLogger(__filename);
 
 export class LeaderboardService extends BaseService {
   async getStats(user: User, tournamentRound: TournamentRound): Promise<Array<PlayerStatItem>> {

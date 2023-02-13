@@ -3,27 +3,19 @@ import { Tournament } from "@port-of-mars/server/entity/Tournament";
 import { Connection, EntityManager, QueryRunner } from "typeorm";
 import { ServiceProvider } from "@port-of-mars/server/services";
 import { TournamentRoundInvite } from "@port-of-mars/server/entity/TournamentRoundInvite";
-import {
-  createRound,
-  createTournament,
-  createUsers,
-  initTransaction,
-  rollbackTransaction,
-} from "./common";
-import { User } from "@port-of-mars/server/entity";
-import { DBPersister } from "@port-of-mars/server/services/persistence";
+import { createRound, createTournament, initTransaction, rollbackTransaction } from "./common";
 
 describe.skip("first round", () => {
   let conn: Connection;
   let qr: QueryRunner;
-  let manager: EntityManager;
+  let _manager: EntityManager;
   let services: ServiceProvider;
 
   let t: Tournament;
   let tr: TournamentRound;
 
   beforeAll(async () => {
-    [conn, qr, manager] = await initTransaction();
+    [conn, qr, _manager] = await initTransaction();
     services = new ServiceProvider(qr.manager);
     t = await createTournament(services);
     tr = await createRound(services, { tournamentId: t.id });

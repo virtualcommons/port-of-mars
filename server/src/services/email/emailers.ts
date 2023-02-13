@@ -27,7 +27,6 @@ export class MemoryEmailer implements Emailer {
   }
 }
 
-/* eslint-disable @typescript-eslint/camelcase */
 export class MailgunEmailer implements Emailer {
   opts: any;
   transport: any;

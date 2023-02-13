@@ -11,7 +11,6 @@ import {
   ResourceCostData,
   Role,
 } from "@port-of-mars/shared/types";
-import _ from "lodash";
 import { Constants } from "@port-of-mars/shared/settings";
 
 export class ResourceInventory extends Schema implements ResourceAmountData {

@@ -35,7 +35,7 @@ import { canPlayerMakeTrade } from "@port-of-mars/shared/validation";
 const logger = getLogger(__filename);
 
 function getTopAdversary(state: GameState, player: Player): Player {
-  let maxVictoryPoints: number = -1;
+  let maxVictoryPoints = -1;
   let adversary!: Player;
   for (const p of state.players) {
     if (p.role != player.role) {
@@ -156,6 +156,7 @@ export class MarsEventVisitor implements AbstractMarsEventVisitor {
   }
 }
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // bot actions: per phase
 export class ActorRunner implements Actor {
   marsEventVisitor = new MarsEventVisitor();
@@ -263,6 +264,7 @@ export class ActorRunner implements Actor {
     return [];
   }
 }
+/* eslint-enable */
 
 export class SimpleBot implements Bot {
   elapsed = 0;

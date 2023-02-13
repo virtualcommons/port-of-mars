@@ -1,6 +1,5 @@
 import { ArraySchema, MapSchema, Schema, type } from "@colyseus/schema";
 import { RoundIntroductionData } from "@port-of-mars/shared/types";
-import _ from "lodash";
 import { Constants } from "@port-of-mars/shared/settings";
 import { Player } from "@port-of-mars/server/rooms/game/state/player";
 import { SystemHealthMarsEvent } from "@port-of-mars/server/rooms/game/state/systemhealth";
@@ -86,10 +85,10 @@ export class RoundIntroduction
     this.accomplishmentPurchases.push(accomplishment);
   }
 
-  addCompletedTrade(trade: Trade) {
-    // FIXME: no-op for now, need to implement clone
-    // this.completedTrades.push(trade.clone());
-  }
+  // addCompletedTrade(trade: Trade) {
+  //   // FIXME: no-op for now, need to implement clone
+  //   // this.completedTrades.push(trade.clone());
+  // }
 
   /**
    * Invoked at the time that wear and tear is calculated and applied to the system health, currently at the end of each round.

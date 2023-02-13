@@ -1,13 +1,13 @@
-export const ADMIN_PAGE: "Admin" = "Admin";
-export const LOGIN_PAGE: "Login" = "Login";
-export const LOBBY_PAGE: "Lobby" = "Lobby";
-export const GAME_PAGE: "Game" = "Game";
-export const REGISTER_PAGE: "Register" = "Register";
+export const ADMIN_PAGE = "Admin" as const;
+export const LOGIN_PAGE = "Login" as const;
+export const LOBBY_PAGE = "Lobby" as const;
+export const GAME_PAGE = "Game" as const;
+export const REGISTER_PAGE = "Register" as const;
 export const VERIFY_PAGE = "Verify" as const;
-export const MANUAL_PAGE: "Manual" = "Manual";
-export const HOME_PAGE: "Home" = "Home";
-export const ABOUT_PAGE: "About" = "About";
-export const PRIVACY_PAGE: "Privacy" = "Privacy";
+export const MANUAL_PAGE = "Manual" as const;
+export const HOME_PAGE = "Home" as const;
+export const ABOUT_PAGE = "About" as const;
+export const PRIVACY_PAGE = "Privacy" as const;
 
 export type Page =
   | "Admin"

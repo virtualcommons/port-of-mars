@@ -4,7 +4,6 @@ import { GameRoom } from "@port-of-mars/server/rooms/game";
 import { LobbyClient, LobbyRoomState } from "@port-of-mars/server/rooms/lobby/state";
 import { settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
-import _ from "lodash";
 import * as http from "http";
 import {
   LobbyResponse,
@@ -133,7 +132,7 @@ export class LobbyRoom extends Room<LobbyRoomState> {
   }
 
   async getFilledUsernames(): Promise<Array<string>> {
-    let usernames: Array<string> = [];
+    const usernames: Array<string> = [];
     this.state.clients.forEach((client: LobbyClient) => {
       usernames.push(client.username);
     });

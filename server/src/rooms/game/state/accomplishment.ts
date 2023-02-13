@@ -210,7 +210,7 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData<A
     assert.ok(this.purchasable.length <= 3, "Should never have more than 3 cards");
   }
 
-  refreshPurchasableAccomplishments(role: Role): void {
+  refreshPurchasableAccomplishments(): void {
     const numberOfAccomplishmentsToDraw = Math.min(3 - this.purchasable.length, this.deck.length);
     this.draw(numberOfAccomplishmentsToDraw);
   }

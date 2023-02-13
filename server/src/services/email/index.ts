@@ -9,7 +9,7 @@ export async function sendIssue(issueText: string, userEmail: string): Promise<b
     html: `<p>${issueText}</p></br><p>Submitted by ${userEmail}<p>`,
   };
 
-  const info = await settings.emailer.sendMail(message);
+  await settings.emailer.sendMail(message);
 
   return true;
 }

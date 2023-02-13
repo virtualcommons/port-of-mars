@@ -4,7 +4,6 @@ import { Responses } from "@port-of-mars/shared/game/responses";
 import { MarsEventData, Role } from "@port-of-mars/shared/types";
 import * as ge from "@port-of-mars/server/rooms/game/events/types";
 import { GameEvent } from "@port-of-mars/server/entity/GameEvent";
-import * as entity from "@port-of-mars/server/entity";
 
 export type PlayerReadiness = { [role in Role]: boolean };
 

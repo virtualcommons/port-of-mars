@@ -2,20 +2,20 @@ import { Page } from "@port-of-mars/shared/routes";
 
 export type Dictionary<T> = { [key: string]: T };
 
-export const RESEARCHER: "Researcher" = "Researcher";
-export const CURATOR: "Curator" = "Curator";
-export const PIONEER: "Pioneer" = "Pioneer";
-export const ENTREPRENEUR: "Entrepreneur" = "Entrepreneur";
-export const POLITICIAN: "Politician" = "Politician";
-export const SERVER: "Server" = "Server";
+export const RESEARCHER = "Researcher" as const;
+export const CURATOR = "Curator" as const;
+export const PIONEER = "Pioneer" as const;
+export const ENTREPRENEUR = "Entrepreneur" as const;
+export const POLITICIAN = "Politician" as const;
+export const SERVER = "Server" as const;
 export const ROLES: Array<Role> = [CURATOR, ENTREPRENEUR, PIONEER, POLITICIAN, RESEARCHER];
 export type Role = "Researcher" | "Curator" | "Pioneer" | "Entrepreneur" | "Politician";
 export type ServerRole = "Server";
 
 export type ModerationActionType = "mute" | "ban" | "none";
-export const MUTE: "mute" = "mute";
-export const BAN: "ban" = "ban";
-export const NONE: "none" = "none";
+export const MUTE = "mute" as const;
+export const BAN = "ban" as const;
+export const NONE = "none" as const;
 export const MODERATION_ACTION_TYPES = [MUTE, BAN, NONE];
 
 export interface LobbyChatMessageData {
@@ -320,13 +320,13 @@ export interface QuizData {
   id: number;
   question: string;
   correct: number;
-  options: Array<String>;
+  options: Array<string>;
 }
 
 export interface QuizQuestionData {
   id: number;
   question: string;
-  options: Array<String>;
+  options: Array<string>;
 }
 
 export interface ActionItem {

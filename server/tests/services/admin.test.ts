@@ -8,7 +8,7 @@ import {
   initTransaction,
   rollbackTransaction,
 } from "./common";
-import { BAN, ModerationActionType, MUTE, NONE } from "@port-of-mars/shared/types";
+import { BAN, ModerationActionType, MUTE } from "@port-of-mars/shared/types";
 
 describe("users in a game", () => {
   let conn: Connection;

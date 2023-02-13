@@ -1,11 +1,9 @@
-import { User, Player, ScheduledGameDate } from "@port-of-mars/server/entity";
-import { MoreThan, SelectQueryBuilder } from "typeorm";
+import { ScheduledGameDate } from "@port-of-mars/server/entity";
+import { MoreThan } from "typeorm";
 import { DateTime, Interval } from "luxon";
-import { settings, getLogger } from "@port-of-mars/server/settings";
+import { getLogger } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { isDev } from "@port-of-mars/shared/settings";
-
-import * as _ from "lodash";
 
 const logger = getLogger(__filename);
 
@@ -22,7 +20,7 @@ export class ScheduleService extends BaseService {
    */
   async createScheduledGameDate(
     gameDate: DateWindow,
-    autoCreated: boolean = false
+    autoCreated = false
   ): Promise<ScheduledGameDate | null> {
     const scheduledDates = await this.getScheduledDates();
     // don't allow games to be scheduled at the same time
@@ -77,7 +75,7 @@ export class ScheduleService extends BaseService {
       .map(e => e.start);
     for (const date of datesToSchedule) {
       if (!scheduled.find(e => e.date.getTime() === date.toMillis())) {
-        const scheduledDate = await this.createScheduledGameDate(
+        await this.createScheduledGameDate(
           {
             date: date.toJSDate(),
             minutesOpenBefore: before,
@@ -94,7 +92,7 @@ export class ScheduleService extends BaseService {
   /**
    * Returns upcoming scheduled dates
    */
-  async getScheduledDates(onlyAutoCreated: boolean = false): Promise<Array<DateWindow>> {
+  async getScheduledDates(onlyAutoCreated = false): Promise<Array<DateWindow>> {
     // select scheduled dates for which the lobby has not closed for (lobbyCloseDate > now)
     let schedule = await this.em.getRepository(ScheduledGameDate).find({
       select: ["date", "minutesOpenBefore", "minutesOpenAfter", "lobbyCloseDate", "autoCreated"],

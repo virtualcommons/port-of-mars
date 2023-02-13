@@ -1,6 +1,5 @@
 import * as assert from "assert";
 import { Mutex } from "async-mutex";
-import { ClockTimer } from "@gamestdio/timer/lib/ClockTimer";
 import { EntityManager, In } from "typeorm";
 import _ from "lodash";
 
@@ -26,30 +25,6 @@ export function toDBGameEvent(gameEvent: ge.GameEvent, metadata: Metadata) {
   const dbGameEvent = new GameEvent();
   Object.assign(dbGameEvent, dbRawGameEvent);
   return dbGameEvent;
-}
-
-export class GameConsoleService implements Persister {
-  clock: ClockTimer = new ClockTimer();
-
-  setSyncInterval(time = 5000) {
-    this.clock.setInterval(this.sync.bind(this), time);
-  }
-
-  initialize(options: GameOpts, roomId: string): Promise<number> {
-    return Promise.resolve(1);
-  }
-
-  finalize(gameId: number): Promise<void> {
-    return Promise.resolve();
-  }
-
-  async sync() {
-    console.log("synced");
-  }
-
-  async persist(events: Array<ge.GameEvent>, metadata: Metadata): Promise<void> {
-    await this.sync();
-  }
 }
 
 export type PendingEvent = Omit<{ [k in keyof GameEvent]: GameEvent[k] }, "id" | "game">;
@@ -184,7 +159,7 @@ export class DBPersister implements Persister {
 
   async sync() {
     await this.lock.runExclusive(async () => {
-      const f = async (em: EntityManager) => {
+      const f = async () => {
         await this.em
           .getRepository(GameEvent)
           .createQueryBuilder()
@@ -196,7 +171,7 @@ export class DBPersister implements Persister {
       if (this.pendingEvents.length > 0) {
         logger.trace("syncing to db");
         if (this.em.queryRunner?.isTransactionActive) {
-          await f(this.em);
+          await f();
         } else {
           await this.em.transaction(f);
         }

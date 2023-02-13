@@ -4,7 +4,6 @@ import {
   PurchasedSystemHealthData,
   SystemHealthMarsEventData,
 } from "@port-of-mars/shared/types";
-import _ from "lodash";
 
 export class SystemHealthMarsEvent extends Schema implements SystemHealthMarsEventData {
   @type("string")

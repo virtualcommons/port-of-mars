@@ -9,8 +9,6 @@ import {
   CURATOR,
   PIONEER,
   RESEARCHER,
-  ENTREPRENEUR,
-  TradeData,
   Role,
   ResourceAmountData,
   RESOURCES,
@@ -19,7 +17,6 @@ import {
   getAccomplishmentByID,
   getAccomplishmentIDs,
 } from "@port-of-mars/server/data/Accomplishment";
-import * as _ from "lodash";
 import { mockGameStateInitOpts } from "@port-of-mars/server/util";
 import { getMarsEvent } from "@port-of-mars/server/data/MarsEvents";
 import {

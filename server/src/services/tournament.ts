@@ -6,13 +6,11 @@ import {
   TournamentRoundInvite,
 } from "@port-of-mars/server/entity";
 import { MoreThan, SelectQueryBuilder } from "typeorm";
-import { settings, getLogger } from "@port-of-mars/server/settings";
+import { getLogger } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { TournamentRoundDate } from "@port-of-mars/server/entity/TournamentRoundDate";
 import { TournamentStatus } from "@port-of-mars/shared/types";
 import { isDev } from "@port-of-mars/shared/settings";
-
-import * as _ from "lodash";
 
 const logger = getLogger(__filename);
 // FIXME: should probably be pulled from settings
@@ -313,10 +311,4 @@ export class TournamentService extends BaseService {
     }
     return false;
   }
-}
-
-interface RoundWinners {
-  roundId: number;
-  gameId: number;
-  winners: Array<number>;
 }

@@ -1,9 +1,9 @@
-import { Router, Request, Response } from "express";
+import { Router } from "express";
 import passport from "passport";
 import { User } from "@port-of-mars/server/entity";
 import { settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
-import { ServerError, toUrl } from "@port-of-mars/server/util";
+import { toUrl } from "@port-of-mars/server/util";
 import { LOGIN_PAGE, REGISTER_PAGE, LOBBY_PAGE } from "@port-of-mars/shared/routes";
 
 const logger = settings.logging.getLogger(__filename);

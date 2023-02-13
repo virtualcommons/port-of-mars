@@ -2,9 +2,7 @@ import { User } from "@port-of-mars/server/entity/User";
 import { TournamentRound } from "@port-of-mars/server/entity/TournamentRound";
 import { TournamentRoundInvite } from "@port-of-mars/server/entity";
 import { BaseService } from "@port-of-mars/server/services/db";
-import { getLogger, settings } from "@port-of-mars/server/settings";
-
-const logger = getLogger(__filename);
+import { settings } from "@port-of-mars/server/settings";
 
 // FIXME: created from the survey related code in the old dashboard service, should be refactored
 // if/when surveys will be used again in a tournament or otherwise

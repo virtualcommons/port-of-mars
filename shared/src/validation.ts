@@ -3,7 +3,7 @@ import { AccomplishmentData, Resource, ResourceAmountData, RESOURCES } from "./t
 export function canPurchaseAccomplishment(
   accomplishment: AccomplishmentData,
   inventory: ResourceAmountData
-) {
+): boolean {
   for (const k of Object.keys(inventory)) {
     const resource = k as Resource;
     if (inventory[resource] < Math.abs(accomplishment[resource])) {
@@ -14,7 +14,7 @@ export function canPurchaseAccomplishment(
 }
 
 //does not allow user to type in blank data
-export function makeTradeSafe(resources: ResourceAmountData) {
+export function makeTradeSafe(resources: ResourceAmountData): ResourceAmountData {
   for (const resource of RESOURCES) {
     if (typeof resources[resource] == "string") {
       resources[resource] = 0;
@@ -28,8 +28,8 @@ export function makeTradeSafe(resources: ResourceAmountData) {
  * @param offer Resources that the local player offers in a trade request.
  * @param request Resources that the local player requests in a trade request.
  */
-export function isZeroTrade(offer: ResourceAmountData, request: ResourceAmountData) {
-  let zeroTrade: boolean = true;
+export function isZeroTrade(offer: ResourceAmountData, request: ResourceAmountData): boolean {
+  let zeroTrade = true;
   for (const resource of RESOURCES) {
     zeroTrade = zeroTrade && offer[resource] == 0 && request[resource] == 0;
   }
@@ -40,7 +40,7 @@ export function isZeroTrade(offer: ResourceAmountData, request: ResourceAmountDa
 export function canPlayerMakeTrade(
   resourcesToTrade: ResourceAmountData,
   inventory: ResourceAmountData
-) {
+): boolean {
   let canMakeTrade = true;
   let isTradingSomething = false;
   for (const resource of RESOURCES) {

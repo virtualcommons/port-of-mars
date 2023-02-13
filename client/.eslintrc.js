@@ -15,7 +15,10 @@ module.exports = {
     "no-empty-function": "off",
     "import/prefer-default-export": "off",
     "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": ["warn", { destructuredArrayIgnorePattern: "^_" }],
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      { destructuredArrayIgnorePattern: "^_", ignoreRestSiblings: true, args: "none" },
+    ],
     "vue/multi-word-component-names": "off",
   },
   ignorePatterns: [

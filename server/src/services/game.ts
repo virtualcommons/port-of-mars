@@ -1,11 +1,7 @@
 import { Game, GameEvent, Player } from "@port-of-mars/server/entity";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { GameStatus } from "@port-of-mars/shared/types";
-import { IsNull, Not, SelectQueryBuilder } from "typeorm";
-import { getLogger } from "@port-of-mars/server/settings";
-import _ from "lodash";
-
-const logger = getLogger(__filename);
+import { IsNull } from "typeorm";
 
 export class GameService extends BaseService {
   async findById(id: number): Promise<Game> {

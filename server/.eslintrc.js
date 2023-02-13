@@ -13,8 +13,23 @@ module.exports = {
     "import/prefer-default-export": "off",
     "@typescript-eslint/camelcase": "off",
     "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
     "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": ["warn", { destructuredArrayIgnorePattern: "." }],
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      { destructuredArrayIgnorePattern: ".", ignoreRestSiblings: true, args: "none" },
+    ],
   },
+  overrides: [
+    {
+      files: ["**/tests/**/*.ts"],
+      env: {
+        jest: true,
+      },
+      rules: {
+        "@typescript-eslint/no-unused-vars": "off",
+      },
+    },
+  ],
   ignorePatterns: ["node_modules/*", "lib/*", "dist/*", "fixtures/*", "src/migrations/*"],
 };

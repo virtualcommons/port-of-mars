@@ -16,7 +16,7 @@ export interface MarsEventState {
 
 export function expandCopies(marsEventsCollection: Array<MarsEventDeckItem>): Array<MarsEventData> {
   return _.flatMap(marsEventsCollection, (eventItem: MarsEventDeckItem) =>
-    _.map(_.range(eventItem.numberOfCopies), (i: number) => _.cloneDeep(eventItem.event))
+    _.map(_.range(eventItem.numberOfCopies), () => _.cloneDeep(eventItem.event))
   );
 }
 
@@ -28,4 +28,5 @@ export function getRandomizedMarsEventDeck(): Array<MarsEventData> {
   return _.shuffle(getFixedMarsEventDeck());
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export const getEventName = (cls: { new (): any } | Function) => _.camelCase(cls.name);

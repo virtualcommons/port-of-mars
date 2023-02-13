@@ -1,11 +1,4 @@
-import {
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  Unique,
-} from "typeorm";
+import { Entity, OneToMany, PrimaryGeneratedColumn, Column, CreateDateColumn } from "typeorm";
 import { TournamentRound } from "./TournamentRound";
 
 @Entity()

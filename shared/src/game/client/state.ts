@@ -66,10 +66,10 @@ function defaultPlayerData(role: Role): PlayerClientData {
       purchased: [],
       purchasable: [],
     },
-    costs: defaultCostData(role),
+    costs: defaultCostData(),
     botWarning: false,
     specialty: "science",
-    inventory: defaultInventory(role),
+    inventory: defaultInventory(),
     ready: false,
     timeBlocks: 10,
     isCompulsivePhilanthropist: false,
@@ -83,7 +83,7 @@ function defaultPlayerData(role: Role): PlayerClientData {
   };
 }
 
-function defaultCostData(role: Role): ResourceCostData {
+function defaultCostData(): ResourceCostData {
   return {
     science: 0,
     government: 0,
@@ -94,7 +94,7 @@ function defaultCostData(role: Role): ResourceCostData {
   };
 }
 
-export function defaultInventory(role?: Role): ResourceAmountData {
+export function defaultInventory(): ResourceAmountData {
   return {
     science: 0,
     government: 0,

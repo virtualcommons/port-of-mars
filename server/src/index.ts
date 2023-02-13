@@ -27,14 +27,14 @@ import {
   surveyRouter,
   statusRouter,
 } from "@port-of-mars/server/routes";
-import { ServerError, toUrl } from "./util";
+import { ServerError } from "./util";
 
 const logger = settings.logging.getLogger(__filename);
 const NODE_ENV = process.env.NODE_ENV || "development";
 const CONNECTION_NAME = NODE_ENV === "test" ? "test" : "default";
 
 // FIXME: make imports more consistent, replace `require` where possible
-
+/* eslint-disable @typescript-eslint/no-var-requires */
 const LocalStrategy = require("passport-local").Strategy;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const FacebookStrategy = require("passport-facebook").Strategy;
@@ -93,7 +93,7 @@ passport.use(
 );
 
 passport.use(
-  new LocalStrategy(async function (username: string, password: string, done: Function) {
+  new LocalStrategy(async function (username: string, password: string, done: any) {
     const services = getServices();
     const user = await services.account.getOrCreateTestUser(username);
     // set all testing things on the user
@@ -107,11 +107,11 @@ passport.use(
   })
 );
 
-passport.serializeUser(function (user: Pick<User, "id">, done: Function) {
+passport.serializeUser(function (user: Pick<User, "id">, done: any) {
   done(null, user.id);
 } as any);
 
-passport.deserializeUser(function (id: number, done: Function) {
+passport.deserializeUser(function (id: number, done: any) {
   getServices()
     .account.findUserById(id)
     .then(user => done(null, user))
@@ -241,7 +241,7 @@ async function createApp() {
     await services.schedule.scheduleGames();
   }
   const schedule = require("node-schedule");
-  const scheduleJob = schedule.scheduleJob("0 * * * *", async () => {
+  schedule.scheduleJob("0 * * * *", async () => {
     if (await services.settings.isAutoSchedulerEnabled()) {
       await services.schedule.scheduleGames();
     }
@@ -249,7 +249,7 @@ async function createApp() {
 
   // run automated admin jobs (revoking expired mutes, etc) once a day
   await services.admin.unapplyExpiredMutes();
-  const adminJob = schedule.scheduleJob("0 0 * * *", async () => {
+  schedule.scheduleJob("0 0 * * *", async () => {
     await services.admin.unapplyExpiredMutes();
   });
 }

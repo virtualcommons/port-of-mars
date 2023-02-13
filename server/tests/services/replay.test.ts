@@ -38,18 +38,11 @@ import { GameEvent } from "@port-of-mars/server/rooms/game/events/types";
 import { Connection, EntityManager, QueryRunner } from "typeorm";
 import { Persister } from "@port-of-mars/server/rooms/game/types";
 import { ServiceProvider } from "@port-of-mars/server/services";
-import {
-  Player,
-  Tournament,
-  TournamentRound,
-  TournamentRoundInvite,
-  User,
-} from "@port-of-mars/server/entity";
+import { Player, Tournament, TournamentRound, User } from "@port-of-mars/server/entity";
 import { getAccomplishmentByID } from "@port-of-mars/server/data/Accomplishment";
 import {
   createRound,
   createTournament,
-  createTournamentRoundInvites,
   createUsers,
   initTransaction,
   rollbackTransaction,
@@ -316,7 +309,7 @@ describe("a game", () => {
     let sp: ServiceProvider;
     let t: Tournament;
     let tr: TournamentRound;
-    let invites: Array<TournamentRoundInvite>;
+    // let invites: Array<TournamentRoundInvite>;
     let users: Array<User>;
 
     beforeAll(async () => {
@@ -328,10 +321,10 @@ describe("a game", () => {
 
       // mock game state init opts wants five users with bob in the username
       users = await createUsers(manager, "bob", [1, 2, 3, 4, 5]);
-      invites = await createTournamentRoundInvites(sp, {
-        userIds: users.map(u => u.id),
-        tournamentRoundId: tr.id,
-      });
+      // invites = await createTournamentRoundInvites(sp, {
+      //   userIds: users.map(u => u.id),
+      //   tournamentRoundId: tr.id,
+      // });
     });
 
     it("can be loaded into the database and finalized", async () => {

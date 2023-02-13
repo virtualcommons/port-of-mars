@@ -324,7 +324,7 @@ export class Player
   }
 
   refreshPurchasableAccomplishments(): void {
-    this.accomplishments.refreshPurchasableAccomplishments(this.role);
+    this.accomplishments.refreshPurchasableAccomplishments();
   }
 
   setCompulsivePhilanthropist(): void {

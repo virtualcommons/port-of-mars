@@ -572,7 +572,7 @@ export class GameState
       ", "
     )} to ${recipientRole} in exchange for ${recipientTradeResources.join(", ")}.`;
     const category = MarsLogCategory.acceptTrade;
-    this.roundIntroduction.addCompletedTrade(this.tradeSet.get(id)!);
+    // this.roundIntroduction.addCompletedTrade(this.tradeSet.get(id)!);
     this.log(message, category, performedBy);
     this.tradeSet.get(id)!.status = "Accepted";
   }
@@ -603,9 +603,6 @@ export class GameState
     }
     const senderRole = trade.sender.role;
     const recipientRole = trade.recipient.role;
-    const sender = this.players[senderRole];
-    const recipient = this.players[recipientRole];
-    const fromTradeResources: ResourceAmountData = trade.sender.resourceAmount;
 
     const message = byServer
       ? `The ${senderRole} is unable to fulfill a trade request previously sent to the ${recipientRole}. The trade will be removed.`

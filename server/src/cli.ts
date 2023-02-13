@@ -12,7 +12,7 @@ import {
 import { DBPersister } from "@port-of-mars/server/services/persistence";
 import { EnteredDefeatPhase, EnteredVictoryPhase } from "@port-of-mars/server/rooms/game/events";
 import { Phase } from "@port-of-mars/shared/types";
-import { settings, getLogger } from "@port-of-mars/server/settings";
+import { getLogger } from "@port-of-mars/server/settings";
 import {
   Game,
   GameEvent,
@@ -336,7 +336,7 @@ async function createScheduledGameDate(
   minutesOpenAfter: number
 ): Promise<void> {
   const sp = getServices(em);
-  const scheduledDate = await sp.schedule.createScheduledGameDate({
+  await sp.schedule.createScheduledGameDate({
     date,
     minutesOpenBefore,
     minutesOpenAfter,

@@ -1,7 +1,6 @@
 import { Router, Request, Response } from "express";
 import { getServices } from "@port-of-mars/server/services";
 import { unless, isAdminAuthenticated } from "@port-of-mars/server/routes/middleware";
-import { GameStatus } from "@port-of-mars/shared/types";
 
 export const adminRouter = Router();
 

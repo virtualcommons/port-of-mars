@@ -13,11 +13,9 @@ import {
   MUTE,
   ModerationActionClientData,
   ChatReportRequestData,
-  BAN,
   ModerationActionType,
 } from "@port-of-mars/shared/types";
 import { getLogger } from "@port-of-mars/server/settings";
-import _ from "lodash";
 
 const logger = getLogger(__filename);
 

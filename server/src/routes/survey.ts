@@ -28,7 +28,6 @@ surveyRouter.get("/complete", async (req: Request, res: Response, next) => {
         })
       );
     }
-    const referrer = req.get("Referrer");
     res.redirect(`${settings.host}/${getPagePath(LOBBY_PAGE)}`);
   } catch (e) {
     logger.fatal("Unable to mark survey completion: %s", e);

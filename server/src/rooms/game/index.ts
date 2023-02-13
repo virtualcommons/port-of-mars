@@ -29,12 +29,12 @@ import {
 import { User } from "@port-of-mars/server/entity";
 import { Command } from "@port-of-mars/server/rooms/game/commands/types";
 import { TakenStateSnapshot } from "@port-of-mars/server/rooms/game/events";
-import { GameState, Player, PlayerSerialized } from "@port-of-mars/server/rooms/game/state";
+import { GameState, Player } from "@port-of-mars/server/rooms/game/state";
 import { Game, GameOpts, Metadata, Persister } from "@port-of-mars/server/rooms/game/types";
 import { getServices } from "@port-of-mars/server/services";
 import { settings } from "@port-of-mars/server/settings";
 import { Requests, Responses } from "@port-of-mars/shared/game";
-import { InspectData, Phase, Role, ROLES } from "@port-of-mars/shared/types";
+import { InspectData, Phase } from "@port-of-mars/shared/types";
 import { GameEvent } from "@port-of-mars/server/rooms/game/events/types";
 import _ from "lodash";
 import { DBPersister } from "@port-of-mars/server/services/persistence";
@@ -174,15 +174,15 @@ export class LoadTestGameRoom extends Room<GameState> implements Game {
     await onCreate(this, options, false);
   }
 
-  onJoin(client: Client, options: { username: string }): void | Promise<any> {
-    // commented out because this shouldn't be necessary if we use mockGameInitOpts
-    // to create canned user data
-    // const roles = _.difference(ROLES, Object.values(this.state.userRoles));
-    // if (roles.length === 0) {
-    //   logger.fatal("no available roles");
-    // }
-    // this.state.userRoles[client.id] = roles[0];
-  }
+  // onJoin(client: Client, options: { username: string }): void | Promise<any> {
+  //   commented out because this shouldn't be necessary if we use mockGameInitOpts
+  //   to create canned user data
+  //   const roles = _.difference(ROLES, Object.values(this.state.userRoles));
+  //   if (roles.length === 0) {
+  //     logger.fatal("no available roles");
+  //   }
+  //   this.state.userRoles[client.id] = roles[0];
+  // }
 
   getMetadata(): Metadata {
     return {
