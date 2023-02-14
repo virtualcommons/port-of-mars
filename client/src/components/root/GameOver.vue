@@ -1,20 +1,19 @@
 <template>
-  <b-container fluid class="h-100 m-0" style="background-color: var(--dark-shade-75)">
+  <b-container class="h-100 mx-auto" style="background-color: var(--dark-shade-75)">
     <b-row align-v="center" align-h="center" class="h-100 w-100">
-      <b-col cols="4" class="text-center">
-        <h1>Port of Mars</h1>
+      <b-col cols="6" class="text-center">
         <div v-if="isVictory">
-          <h2 class="my-2">Victory!</h2>
-          <h3 class="text-left">
+          <h1>Victory!</h1>
+          <p class="mt-2 text-left">
             You've successfully navigated the challenges of Mars and established an extraterrestrial
             society. Thanks to your efforts, future generations can flourish on Mars.
-          </h3>
+          </p>
         </div>
         <div v-else>
-          <h2>Game Over</h2>
-          <h3 class="mt-2 text-left">
+          <h1>Game Over</h1>
+          <p class="mt-2 text-left">
             Unfortunately, your team was not able to withstand the perils of Mars.
-          </h3>
+          </p>
         </div>
         <b-list-group dark>
           <b-list-group-item
@@ -30,14 +29,20 @@
           </b-list-group-item>
         </b-list-group>
         <h4 class="mt-5">Thank you for participating!</h4>
-        <b-button block class="w-50 mx-auto" squared variant="light" :to="lobby">
-          Return to lobby
+        <b-button block class="w-100" variant="success" size="lg" :to="lobby">
+          <b-icon-chevron-left shift-v="-2" class="float-left"></b-icon-chevron-left>
+          <h4 class="mb-0">Return to Lobby</h4>
         </b-button>
+        <SocialShare
+          class="text-left mt-3"
+          :isVictory="isVictory"
+          :victoryPoints="victoryPoints"
+        ></SocialShare>
       </b-col>
-      <b-col cols="8" class="h-75">
-        <h3>Final Mars Log</h3>
+      <b-col cols="6" class="h-75">
+        <h4>Final Mars Log</h4>
         <div
-          class="p-4"
+          class="p-2 content-container"
           style="
             overflow-y: auto;
             overflow-x: hidden;
@@ -57,11 +62,13 @@ import { Vue, Component } from "vue-property-decorator";
 import { LOBBY_PAGE } from "@port-of-mars/shared/routes";
 import { Phase, Role } from "@port-of-mars/shared/types";
 import MarsLog from "@port-of-mars/client/components/game/MarsLog.vue";
+import SocialShare from "@port-of-mars/client/components/global/SocialShare.vue";
 import _ from "lodash";
 
 @Component({
   components: {
     MarsLog,
+    SocialShare,
   },
 })
 export default class Victory extends Vue {
@@ -85,6 +92,10 @@ export default class Victory extends Vue {
 
   get isVictory() {
     return this.phase === Phase.victory;
+  }
+
+  get victoryPoints() {
+    return this.playerRole ? this.$tstore.state.players[this.playerRole].victoryPoints : 0;
   }
 
   roleLabel(role: Role) {

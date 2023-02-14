@@ -2,8 +2,17 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible"  content="IE=edge" />
+    <meta name="viewport"               content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="twitter:card"           content="summary_large_image" />
+    <meta name="twitter:site"           content="@portofmars" />
+    <meta name="twitter:image"          content="<%= BASE_URL %>banner.jpg" />
+    <meta property="og:image"           content="<%= BASE_URL %>banner.jpg" />
+    <meta property="og:url"             content="<%= BASE_URL %>" />
+    <meta property="og:type"            content="website" />
+    <meta property="og:title"           content="Port of Mars" />
+    <meta property="og:description"     content="An online, game-based, social science experiment set on Mars" />
+    <link rel="preload" href="<%= BASE_URL %>banner.jpg" as="image"/>
     <link rel="apple-touch-icon" sizes="180x180" href="<%= BASE_URL %>apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="<%= BASE_URL %>favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="<%= BASE_URL %>favicon-16x16.png" />
