@@ -114,9 +114,12 @@ function applyRoundIntroductionResponses(roundIntroduction: any, store: TStore) 
   roundIntroduction.onChange = (changes: Array<DataChange>) => {
     changes.forEach(change => {
       if (
-        !["systemHealthMarsEvents", "accomplishmentPurchases", "completedTrades"].includes(
-          change.field
-        )
+        ![
+          "systemHealthMarsEvents",
+          "accomplishmentPurchases",
+          "completedTrades",
+          "systemHealthGroupContributions",
+        ].includes(change.field)
       ) {
         store.commit("SET_ROUND_INTRODUCTION_FIELD", { field: change.field, value: change.value });
       }
