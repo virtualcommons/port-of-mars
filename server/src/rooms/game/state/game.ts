@@ -309,7 +309,6 @@ export class GameState
     this.phase = Phase.newRound;
     this.timeRemaining = GameState.DEFAULT_PHASE_DURATION[this.phase];
     this.round += 1;
-    this.roundIntroduction.updateSystemHealthGroupContributions(this.getPlayers());
     this.log(`Round ${this.round} begins.`, MarsLogCategory.newRound);
     logger.debug("[game %d] current system health: %d", this.gameId, this.systemHealth);
     this.tradingEnabled = true;
