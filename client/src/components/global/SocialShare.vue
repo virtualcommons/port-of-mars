@@ -24,8 +24,6 @@ export default class SocialShare extends Vue {
     } else {
       text += " However, we ultimately succumbed to the perils of Mars.";
     }
-    text +=
-      "\n\nWhat will it take to be a successful community on the hostile planet? Will you thrive or struggle to survive? Find out:";
     return text;
   }
 
