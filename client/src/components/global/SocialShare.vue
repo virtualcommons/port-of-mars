@@ -19,13 +19,9 @@ export default class SocialShare extends Vue {
 
   get shareText() {
     let text = `I just finished a game of Port of Mars with a score of ${this.victoryPoints}!`;
-    if (this.isVictory) {
-      text += " We were victorious in establishing an extraterrestrial society!";
-    } else {
-      text += " However, we ultimately succumbed to the perils of Mars.";
-    }
-    text +=
-      "\n\nWhat will it take to be a successful community on the hostile planet? Will you thrive or struggle to survive? Find out:";
+    text += this.isVictory
+      ? " We were victorious in establishing an extraterrestrial society!"
+      : " However, we ultimately succumbed to the perils of Mars.";
     return text;
   }
 
