@@ -152,6 +152,13 @@ function applyRoundIntroductionResponses(roundIntroduction: any, store: TStore) 
     store.commit("REMOVE_FROM_ROUND_INTRO_COMPLETED_TRADES", deschemify(e));
   };
 
+  roundIntroduction.systemHealthGroupContributions.onAdd = (value: number, playerId: string) => {
+    store.commit("ADD_TO_ROUND_INTRO_SYSTEM_HEALTH_GROUP_CONTRIBUTIONS", {
+      playerId,
+      value,
+    });
+  };
+
   roundIntroduction.systemHealthGroupContributions.onChange = (value: number, playerId: string) => {
     store.commit("UPDATE_SYSTEM_HEALTH_GROUP_CONTRIBUTION", { playerId, value });
   };
