@@ -33,6 +33,9 @@
           title="Game Manual"
           >Manual</b-nav-item
         >
+        <b-nav-item class="mx-2" :to="leaderboard" exact-active-class="active" title="Leaderboard"
+          >Leaderboard</b-nav-item
+        >
         <b-nav-item class="mx-2" :to="lobby" exact-active-class="active" title="Game Lobby"
           >Play</b-nav-item
         >
@@ -75,6 +78,7 @@ import {
   MANUAL_PAGE,
   GAME_PAGE,
   LOBBY_PAGE,
+  LEADERBOARD_PAGE,
 } from "@port-of-mars/shared/routes";
 import { isDevOrStaging, Constants } from "@port-of-mars/shared/settings";
 import _ from "lodash";
@@ -100,6 +104,7 @@ export default class Header extends Vue {
   login = { name: LOGIN_PAGE };
   manual = { name: MANUAL_PAGE };
   game = { name: GAME_PAGE };
+  leaderboard = { name: LEADERBOARD_PAGE };
   lobby = { name: LOBBY_PAGE };
 
   async created() {
