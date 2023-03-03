@@ -11,4 +11,3 @@ export * from "./Tournament";
 export * from "./TournamentRound";
 export * from "./TournamentRoundInvite";
 export * from "./User";
-export * from "./ScheduledGameDate";

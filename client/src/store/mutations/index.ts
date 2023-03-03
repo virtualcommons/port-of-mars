@@ -24,10 +24,6 @@ export default {
     Object.assign(state, { ...state, ...initialGameState });
   },
 
-  SET_SCHEDULED_GAMES(state: State, payload: Array<number>) {
-    Vue.set(state, "scheduledGames", payload);
-  },
-
   SET_DASHBOARD_MESSAGE(state: State, payload: DashboardMessage) {
     if (!_.some(state.dashboardMessages, payload)) {
       state.dashboardMessages.push(payload);

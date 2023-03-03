@@ -205,7 +205,6 @@ export interface State extends GameData {
   // webapp data: consider refactoring to separate in-game store data with
   // normal onboarding store data
   lobby: Lobby;
-  scheduledGames: Array<number>; // upcoming scheduled games in Unix timestamp millis (e.g., new Date().getTime())
   dashboardMessages: Array<DashboardMessage>;
   tournamentStatus: TournamentStatus;
   signupEnabled: boolean;
@@ -235,7 +234,7 @@ export function defaultLobbyState(): Lobby {
 
 export const initialGameState: Omit<
   State,
-  "user" | "lobby" | "scheduledGames" | "dashboardMessages" | "tournamentStatus" | "signupEnabled"
+  "user" | "lobby" | "dashboardMessages" | "tournamentStatus" | "signupEnabled"
 > = {
   // GameData
   players: defaultPlayerClientSet(),
@@ -300,7 +299,6 @@ export const initialStoreState: State = {
   ...initialGameState,
   lobby: defaultLobbyState(),
   user: initialUserState,
-  scheduledGames: [],
   dashboardMessages: [],
   tournamentStatus: {
     round: 0,

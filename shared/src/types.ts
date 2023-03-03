@@ -404,9 +404,4 @@ export interface DynamicSettingsData {
   defaultDaysMuted: number;
   isTournamentSignUpEnabled: boolean;
   isFreePlayEnabled: boolean;
-  isAutoSchedulerEnabled: boolean;
-  lobbyOpenBeforeOffset: number;
-  lobbyOpenAfterOffset: number;
-  autoSchedulerHourInterval: number;
-  autoSchedulerDaysOut: number;
 }

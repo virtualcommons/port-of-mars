@@ -59,11 +59,6 @@ export class RedisSettings {
       defaultDaysMuted: _.toNumber(settings.defaultDaysMuted),
       isTournamentSignUpEnabled: !!_.toNumber(settings.isTournamentSignUpEnabled),
       isFreePlayEnabled: !!_.toNumber(settings.isFreePlayEnabled),
-      isAutoSchedulerEnabled: !!_.toNumber(settings.isAutoSchedulerEnabled),
-      autoSchedulerHourInterval: _.toNumber(settings.autoSchedulerHourInterval),
-      autoSchedulerDaysOut: _.toNumber(settings.autoSchedulerDaysOut),
-      lobbyOpenBeforeOffset: _.toNumber(settings.lobbyOpenBeforeOffset),
-      lobbyOpenAfterOffset: _.toNumber(settings.lobbyOpenAfterOffset),
     };
   }
 
@@ -85,31 +80,6 @@ export class RedisSettings {
   // enables players to participate as many times as they wish
   async isFreePlayEnabled(): Promise<boolean> {
     return !!_.toNumber(await this.client.hget("settings", "isFreePlayEnabled"));
-  }
-
-  // whether to run the automatic game scheduler
-  async isAutoSchedulerEnabled(): Promise<boolean> {
-    return !!_.toNumber(await this.client.hget("settings", "isAutoSchedulerEnabled"));
-  }
-
-  // hours between games that the scheduler will attempt to schedule
-  async autoSchedulerHourInterval(): Promise<number> {
-    return _.toNumber(await this.client.hget("settings", "autoSchedulerHourInterval"));
-  }
-
-  // number of day in the future that the scheduler will attempt to schedule games for
-  async autoSchedulerDaysOut(): Promise<number> {
-    return _.toNumber(await this.client.hget("settings", "autoSchedulerDaysOut"));
-  }
-
-  // minutes BEFORE scheduled time that the lobby will be open for
-  async lobbyOpenBeforeOffset(): Promise<number> {
-    return _.toNumber(await this.client.hget("settings", "lobbyOpenBeforeOffset"));
-  }
-
-  // minutes AFTER scheduled time that the lobby will be open for
-  async lobbyOpenAfterOffset(): Promise<number> {
-    return _.toNumber(await this.client.hget("settings", "lobbyOpenAfterOffset"));
   }
 
   async report(): Promise<string> {

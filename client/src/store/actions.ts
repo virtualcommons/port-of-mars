@@ -20,7 +20,6 @@ export default {
     if (data.user) {
       context.commit("SET_USER", data.user);
     }
-    context.commit("SET_SCHEDULED_GAMES", data.schedule);
     return data.user;
   },
 };

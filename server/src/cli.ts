@@ -329,20 +329,6 @@ async function createTournamentRoundDate(
   logger.debug("created scheduled date: %o", scheduledDate);
 }
 
-async function createScheduledGameDate(
-  em: EntityManager,
-  date: Date,
-  minutesOpenBefore: number,
-  minutesOpenAfter: number
-): Promise<void> {
-  const sp = getServices(em);
-  await sp.schedule.createScheduledGameDate({
-    date,
-    minutesOpenBefore,
-    minutesOpenAfter,
-  });
-}
-
 function toIntArray(value: string, previous: Array<number>): Array<number> {
   return previous.concat([parseInt(value)]);
 }
@@ -490,38 +476,6 @@ program
               createTournament(em, cmd.tournamentName, cmd.minRounds, cmd.maxRounds)
             );
             logger.debug("tournament create...");
-          })
-      )
-  )
-  .addCommand(
-    program
-      .createCommand("schedule")
-      .description("scheduler subcommands")
-      .addCommand(
-        program
-          .createCommand("create")
-          .requiredOption(
-            "--date <date>",
-            "UTC Datetime for an upcoming scheduled game",
-            s => new Date(Date.parse(s))
-          )
-          .option(
-            "--before <minutesOpenBefore>",
-            "Number of minutes before the date that the lobby will open",
-            customParseInt,
-            10
-          )
-          .option(
-            "--after <minutesOpenAfter>",
-            "Number of minutes after the date that the lobby will close",
-            customParseInt,
-            5
-          )
-          .description("add a new date to the schedule")
-          .action(async cmd => {
-            await withConnection(em =>
-              createScheduledGameDate(em, cmd.date, cmd.before, cmd.after)
-            );
           })
       )
   )

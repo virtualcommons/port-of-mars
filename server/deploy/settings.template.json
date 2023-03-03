@@ -1,11 +1,6 @@
 {
   "isTournamentSignUpEnabled": false,
   "isFreePlayEnabled": true,
-  "isAutoSchedulerEnabled": false,
-  "autoSchedulerHourInterval": 3,
-  "autoSchedulerDaysOut": 1,
   "maxConnections": 200,
-  "defaultDaysMuted": 3,
-  "lobbyOpenBeforeOffset": 10,
-  "lobbyOpenAfterOffset": 1
+  "defaultDaysMuted": 3
 }

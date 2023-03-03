@@ -40,85 +40,6 @@
                 ></b-form-input>
               </b-form-group>
             </div>
-            <!-- Disabled until needed -->
-            <!-- <div class="mb-4" id="scheduling">
-              <h4>Scheduling</h4>
-              <hr class="my-2">
-              <b-form-group
-                id="enable-scheduler-group"
-                label=""
-                label-for="enable-scheduler"
-                description="When enabled, the server will automatically schedule games at the specified interval."
-              >
-                <b-form-checkbox switch
-                  size="lg"
-                  id="enable-scheduler"
-                  v-model="form.isAutoSchedulerEnabled"
-                >
-                  Enable Auto-Scheduler
-                </b-form-checkbox>
-              </b-form-group>
-              <b-form-group
-                id="days-out-group"
-                label="Days to Schedule For"
-                label-for="days-out"
-                description="The number of days into the future that the server will schedule games for."
-              >
-                <b-form-input class="custom-form-input"
-                  id="days-out"
-                  type="number"
-                  min="1" max="7"
-                  v-model="form.autoSchedulerDaysOut"
-                  :disabled="!form.isAutoSchedulerEnabled"
-                  required
-                ></b-form-input>
-              </b-form-group>
-              <b-form-group
-                id="interval-group"
-                label="Scheduling Interval (hours)"
-                label-for="interval"
-                description="Hours between each time the server will schedule games."
-              >
-                <b-form-select class="custom-form-input"
-                  id="interval"
-                  v-model="form.autoSchedulerHourInterval"
-                  :options="intervalOptions"
-                  :disabled="!form.isAutoSchedulerEnabled"
-                  required
-                >
-                </b-form-select>
-              </b-form-group>
-              <b-form-group
-                id="before-offset-group"
-                label="Lobby Open Before (minutes)"
-                label-for="before-offset"
-                description="The number of minutes BEFORE the scheduled game time that the lobby will open."
-              >
-                <b-form-input class="custom-form-input"
-                  id="before-offset"
-                  type="number"
-                  min="1" max="45"
-                  v-model="form.lobbyOpenBeforeOffset"
-                  :disabled="!form.isAutoSchedulerEnabled"
-                  required
-                ></b-form-input>
-              </b-form-group>
-              <b-form-group
-                id="after-offset-group"
-                label="Lobby Open After (minutes)"
-                label-for="after-offset"
-                description="The number of minutes AFTER the scheduled game time that the lobby will open."
-              >
-                <b-form-input class="custom-form-input"
-                  id="after-offset"
-                  type="number"
-                  min="1" max="45"
-                  v-model="form.lobbyOpenAfterOffset"
-                  :disabled="!form.isAutoSchedulerEnabled"
-                  required
-                ></b-form-input>
-              </b-form-group>
-            </div> -->
             <b-button class="mr-2" type="submit" variant="success">Save</b-button>
             <b-button class="mr-2" type="reset" variant="primary">Reset</b-button>
           </b-form>
@@ -139,13 +60,8 @@ export default class Reports extends Vue {
   form: DynamicSettingsData = {
     isTournamentSignUpEnabled: false,
     isFreePlayEnabled: false,
-    isAutoSchedulerEnabled: false,
     maxConnections: 0,
     defaultDaysMuted: 0,
-    autoSchedulerDaysOut: 0,
-    autoSchedulerHourInterval: 0,
-    lobbyOpenBeforeOffset: 0,
-    lobbyOpenAfterOffset: 0,
   };
 
   intervalOptions = [

@@ -236,17 +236,7 @@ async function createApp() {
   gameServer.listen(port);
 
   const services = getServices();
-  if (await services.settings.isAutoSchedulerEnabled()) {
-    // run scheduler once, then every hour if enabled
-    await services.schedule.scheduleGames();
-  }
   const schedule = require("node-schedule");
-  schedule.scheduleJob("0 * * * *", async () => {
-    if (await services.settings.isAutoSchedulerEnabled()) {
-      await services.schedule.scheduleGames();
-    }
-  });
-
   // run automated admin jobs (revoking expired mutes, etc) once a day
   await services.admin.unapplyExpiredMutes();
   schedule.scheduleJob("0 0 * * *", async () => {
