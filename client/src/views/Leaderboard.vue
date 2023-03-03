@@ -1,5 +1,8 @@
 <template>
   <p>Hello world I am a leaderboard</p>
+  <div>
+    <b-table striped hover :items="items"></b-table>
+  </div>
 </template>
 
 <script lang="ts">
