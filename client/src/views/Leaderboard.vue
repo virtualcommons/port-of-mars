@@ -1,20 +1,29 @@
 <!-- Initializes table -->
 <template>
-  <div class="h-100-header w-100 content-container">
-    <b-table
-      dark
-      sticky-header
-      small
-      class="h-100 m-0 custom-table"
-      :fields="exFields"
-      :items="exItems"
-      col
-      style="width: 100rem"
-      :sort-by.sync="sortBy"
-      :sort-desc.sync="sortDesc"
-    >
-    </b-table>
-  </div>
+  <b-container class="bv-row">
+    <b-col>
+      <b-button-group size="sm">
+        <b-button @click="getBotData" variant="primary">Bot Data</b-button>
+        <b-button @click="getNoBotData" variant="primary">No Bot Data</b-button>
+      </b-button-group>
+
+      <b-row class="text-center">
+        <b-table
+          dark
+          sticky-header
+          small
+          class="h-100 m-0 custom-table"
+          :fields="exFields"
+          :items="exItems"
+          col
+          style="width: 100rem"
+          :sort-by.sync="sortBy"
+          :sort-desc.sync="sortDesc"
+        >
+        </b-table>
+      </b-row>
+    </b-col>
+  </b-container>
 </template>
 
 <!-- Initializes table components & orders rank in ascending order-->
@@ -27,6 +36,7 @@ export default class Leaderboard extends Vue {
   exItems: any;
   sortBy: any;
   sortDesc: any;
+
   data() {
     return {
       sortBy: "rank",
@@ -40,6 +50,10 @@ export default class Leaderboard extends Vue {
       ],
     };
   }
+
+  getBotData() {}
+
+  getNoBotData() {}
 }
 </script>
 
