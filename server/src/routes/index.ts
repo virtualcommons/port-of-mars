@@ -4,6 +4,7 @@
 export * from "./admin";
 export * from "./auth";
 export * from "./game";
+export * from "./leaderboard";
 export * from "./middleware";
 export * from "./quiz";
 export * from "./registration";

@@ -18,6 +18,19 @@ export const BAN = "ban" as const;
 export const NONE = "none" as const;
 export const MODERATION_ACTION_TYPES = [MUTE, BAN, NONE];
 
+export interface LeaderboardItem {
+  rank: number;
+  username: string;
+  points: number;
+  wins: number;
+  losses: number;
+}
+
+export interface LeaderboardData {
+  withBots: Array<LeaderboardItem>;
+  withoutBots: Array<LeaderboardItem>;
+}
+
 export interface LobbyChatMessageData {
   username: string;
   message: string;
