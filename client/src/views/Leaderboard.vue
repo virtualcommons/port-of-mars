@@ -42,7 +42,7 @@ import { LeaderboardData } from "@port-of-mars/shared/types";
 export default class Leaderboard extends Vue {
   api!: LeaderboardAPI;
 
-  showWithBots: boolean = true;
+  showWithBots = true;
 
   leaderboardData: LeaderboardData = {
     withBots: [],
