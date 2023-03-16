@@ -1,9 +1,5 @@
 <!-- Initializes table -->
 <template>
-  <!--<b-button-group size="sm">
-        <b-button @click="getBotData" variant="primary">Bot Data</b-button>
-        <b-button @click="getNoBotData" variant="primary">No Bot Data</b-button>
-      </b-button-group> -->
   <b-container fluid class="h-100 w-100 m-0 p-0 overflow-auto backdrop">
     <div class="h-100 w-100 p-3">
       <b-row class="h-100 w-100 m-0">
@@ -43,7 +39,7 @@ import { LeaderboardData } from "@port-of-mars/shared/types";
 export default class Leaderboard extends Vue {
   api!: LeaderboardAPI;
 
-  showWithBots = true;
+  showWithBot: boolean = true;
 
   leaderboardData: LeaderboardData = {
     withBots: [],
@@ -52,6 +48,7 @@ export default class Leaderboard extends Vue {
   leaderboardFields: any = []; // FIXME: replace with fields
 
   // example data
+  showWithBots = [alert("checked")];
   exFields = ["rank", "user_name", "position", "points"];
   exItems = [
     { rank: 2, user_name: "hotdogs", position: "Entrepreneur", points: 32 },
