@@ -6,9 +6,10 @@
         <b-col cols="12" class="mh-100 p-2">
           <h4 class="header-nowrap">Leaderboard</h4>
           <div id="filter-options" class="p-2">
-            <b-form-checkbox v-model="showWithBots" class="mx-3">
+            <b-form-checkbox v-model="showWithBots" name="check-button" class="mx-3">
               Include games with bots
             </b-form-checkbox>
+            <!--<div>State: <strong>{{ showWithBots }}</strong></div> -->
           </div>
           <div class="h-100-header w-100 content-container">
             <b-table
@@ -16,11 +17,13 @@
               sticky-header
               style="max-height: none"
               class="h-100 m-0 custom-table"
-              :fields="exFields"
-              :items="exItems"
+              :fields="leaderboardFields"
+              :items="showWithBots ? leaderboardData.withBots : leaderboardData.withoutBots"
               sort-by="rank"
               :sort-asc="true"
             >
+            <!-- custom columns with scoped slots https://bootstrap-vue.org/docs/components/table#custom-data-rendering -->
+            <!-- TODO: add styling ~experiment away -->
             </b-table>
           </div>
         </b-col>
@@ -39,23 +42,14 @@ import { LeaderboardData } from "@port-of-mars/shared/types";
 export default class Leaderboard extends Vue {
   api!: LeaderboardAPI;
 
-  showWithBot: boolean = true;
+  showWithBots: boolean = true;
 
   leaderboardData: LeaderboardData = {
     withBots: [],
     withoutBots: [],
   };
-  leaderboardFields: any = []; // FIXME: replace with fields
-
-  // example data
-  showWithBots = [alert("checked")];
-  exFields = ["rank", "user_name", "position", "points"];
-  exItems = [
-    { rank: 2, user_name: "hotdogs", position: "Entrepreneur", points: 32 },
-    { rank: 10, user_name: "popcorn", position: "Politician", points: 50 },
-    { rank: 39, user_name: "cupcakes", position: "Scientist", points: 45 },
-    { rank: 24, user_name: "barkingdogs", position: "Lawyer", points: 20 },
-  ];
+  leaderboardFields: any = ["rank", "username", "points"]; // FIXME: add the rest of leaderboard item fields (shared/types.ts file)
+  // FIXME: expand to array of objects w/ additional properties https://bootstrap-vue.org/docs/components/table#fields-as-an-array-of-objects
 
   async created() {
     await this.fetchLeaderboardData();
