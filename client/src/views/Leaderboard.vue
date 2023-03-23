@@ -22,8 +22,8 @@
               sort-by="rank"
               :sort-asc="true"
             >
-            <!-- custom columns with scoped slots https://bootstrap-vue.org/docs/components/table#custom-data-rendering -->
-            <!-- TODO: add styling ~experiment away -->
+              <!-- custom columns with scoped slots https://bootstrap-vue.org/docs/components/table#custom-data-rendering -->
+              <!-- TODO: add styling ~experiment away -->
             </b-table>
           </div>
         </b-col>
@@ -48,8 +48,20 @@ export default class Leaderboard extends Vue {
     withBots: [],
     withoutBots: [],
   };
-  leaderboardFields: any = ["rank", "username", "points"]; // FIXME: add the rest of leaderboard item fields (shared/types.ts file)
-  // FIXME: expand to array of objects w/ additional properties https://bootstrap-vue.org/docs/components/table#fields-as-an-array-of-objects
+  leaderboardFields: any = [
+    {
+      key: "rank",
+      sortable: true,
+    },
+    {
+      key: "username",
+      sortable: true,
+    },
+    { key: "points" },
+    { key: "wins" },
+    { key: "losses" },
+  ]; // FIXME: (FINISHED) add the rest of leaderboard item fields (shared/types.ts file)
+  // FIXME: (FINISHED) expand to array of objects w/ additional properties https://bootstrap-vue.org/docs/components/table#fields-as-an-array-of-objects
 
   async created() {
     await this.fetchLeaderboardData();
