@@ -1,20 +1,19 @@
 import { User } from "@port-of-mars/server/entity/User";
 import { LeaderboardData, PlayerStatItem } from "@port-of-mars/shared/types";
-import { TournamentRound } from "@port-of-mars/server/entity/TournamentRound";
+// import { TournamentRound } from "@port-of-mars/server/entity/TournamentRound";
 import { Game, Player } from "@port-of-mars/server/entity";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { IsNull, Not, SelectQueryBuilder } from "typeorm";
 import _ from "lodash";
 
 export class LeaderboardService extends BaseService {
-  async getStats(user: User, tournamentRound: TournamentRound): Promise<Array<PlayerStatItem>> {
+  async getStats(user: User): Promise<Array<PlayerStatItem>> {
     const games = await this.em.getRepository(Game).find({
       join: { alias: "games", innerJoin: { players: "games.players" } },
       where: (qb: SelectQueryBuilder<Game>) => {
-        qb.where({ tournamentRound, dateFinalized: Not(IsNull()) }).andWhere(
-          "players.user.id = :userId",
-          { userId: user.id }
-        );
+        qb.where({ dateFinalized: Not(IsNull()) }).andWhere("players.user.id = :userId", {
+          userId: user.id,
+        });
       },
       relations: ["players"],
     });
@@ -38,8 +37,7 @@ export class LeaderboardService extends BaseService {
 
       return {
         time: g.dateCreated.getTime(),
-        round: tournamentRound.id,
-        tournamentName: tournamentRound.tournament.name,
+        round: g.tournamentRoundId,
         playerScores,
         victory: g.status === "victory",
       };

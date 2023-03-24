@@ -354,7 +354,6 @@ export interface ActionItem {
 export interface GameMetadata {
   time: number; // unix timestamp
   round: number;
-  tournamentName: string;
 }
 
 export type PlayerScores = Array<{
