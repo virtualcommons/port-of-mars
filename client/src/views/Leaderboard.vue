@@ -54,14 +54,21 @@ export default class Leaderboard extends Vue {
       sortable: true,
     },
     {
-      key: "username",
+      key: "username"
+    },
+    { 
+      key: "points",
+      sortable: true, 
+    },
+    { 
+      key: "wins",
       sortable: true,
     },
-    { key: "points" },
-    { key: "wins" },
-    { key: "losses" },
-  ]; // FIXME: (FINISHED) add the rest of leaderboard item fields (shared/types.ts file)
-  // FIXME: (FINISHED) expand to array of objects w/ additional properties https://bootstrap-vue.org/docs/components/table#fields-as-an-array-of-objects
+    {
+      key: "losses",
+      sortable: true,
+    },
+  ]; 
 
   async created() {
     await this.fetchLeaderboardData();
