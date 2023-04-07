@@ -197,6 +197,17 @@ button {
   }
 }
 
+.custom-table {
+  @extend .table-dark;
+  th {
+    @extend h4;
+    font-size: 1.1rem;
+  }
+  td {
+    @extend p;
+  }
+}
+
 // override bootstrap-vue dark text
 .text-dark {
   color: $white !important;
