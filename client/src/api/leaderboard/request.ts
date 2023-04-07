@@ -6,9 +6,10 @@ import { AjaxRequest } from "@port-of-mars/client/plugins/ajax";
 export class LeaderboardAPI {
   constructor(public store: TStore, public ajax: AjaxRequest) {}
 
-  async getLeaderboardData(): Promise<LeaderboardData> {
+  async getLeaderboardData(limit?: number): Promise<LeaderboardData> {
     try {
-      return await this.ajax.get(url("/leaderboard"), ({ data }) => {
+      const params = limit ? `?limit=${limit}` : "";
+      return await this.ajax.get(url(`/leaderboard${params}`), ({ data }) => {
         return data;
       });
     } catch (e) {

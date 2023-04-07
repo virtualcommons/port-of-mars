@@ -5,8 +5,10 @@ import { User } from "@port-of-mars/server/entity";
 export const leaderboardRouter = Router();
 
 leaderboardRouter.get("/", async (req, res, next) => {
+  const limitStr = req.query.limit as string;
+  const limit = parseInt(limitStr) || 50;
   try {
-    const roomId = await getServices().leaderboard.getLeaderboardData();
+    const roomId = await getServices().leaderboard.getLeaderboardData(limit);
     res.json(roomId);
   } catch (e) {
     next(e);
