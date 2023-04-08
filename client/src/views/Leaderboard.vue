@@ -28,7 +28,7 @@ import LeaderboardTable from "@port-of-mars/client/components/leaderboard/Leader
   },
 })
 export default class Leaderboard extends Vue {
-  showWithBots = true;
+  showWithBots = false;
 }
 </script>
 

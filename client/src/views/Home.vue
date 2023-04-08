@@ -90,26 +90,26 @@
           <b-col md="12" lg="6" xl="5" class="text-left">
             <h1 class="section-title mb-3">Community</h1>
             <p class="text mb-3">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl ut
-              tincidunt luctus, nunc odio lacinia nunc, eget aliquam massa nisl eget nunc. Sed
-              tincidunt, nisl eget aliquam malesuada, nunc nisl aliquet nisl, eget aliquam massa
-              nisl eget nunc. Sed euismod, nisl ut tincidunt luctus, nunc odio lacinia nunc, eget
+              Whether you are looking to discuss the game or find a team, connect with other players
+              by joining our
+              <a :href="constants.DISCORD_URL">community Discord</a> or by joining a room in the
+              <b-link :to="lobby">game lobby</b-link> and using the built-in chat.
             </p>
             <p class="text mb-3">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl ut
-              tincidunt luctus, nunc odio lacinia nunc, eget aliquam massa nisl eget nunc. Sed
-              tincidunt, nisl eget aliquam malesuada, nunc nisl aliquet nisl, eget aliquam massa
-              nisl eget nunc. Sed euismod, nisl ut tincidunt luctus, nunc odio lacinia nunc, eget.
-              <b-link :to="leaderboard">See the full leaderboard.</b-link>
+              Keep track of your performance with your
+              <b-link :to="playerStats">personal stats page</b-link> and visit the
+              <b-link :to="leaderboard">full leaderboard</b-link>
+              to see how you stack up against other players.
             </p>
           </b-col>
           <b-col md="12" lg="6" xl="5" align-self="center">
-            <h4 class="mb-2 text-white">Global Highscores</h4>
+            <h4 class="mb-2 text-white">Top Players</h4>
             <div class="content-container">
               <LeaderboardTable
                 :showWithBots="false"
                 :showGameStats="false"
                 :limit="10"
+                maxHeight="300px"
               ></LeaderboardTable>
             </div>
           </b-col>
@@ -127,7 +127,7 @@ import Footer from "@port-of-mars/client/components/global/Footer.vue";
 import CharCarousel from "@port-of-mars/client/components/global/CharCarousel.vue";
 import AgeTooltip from "@port-of-mars/client/components/global/AgeTooltip.vue";
 import LeaderboardTable from "@port-of-mars/client/components/leaderboard/LeaderboardTable.vue";
-import { LEADERBOARD_PAGE, LOBBY_PAGE } from "@port-of-mars/shared/routes";
+import { LEADERBOARD_PAGE, LOBBY_PAGE, PLAYER_STATS_PAGE } from "@port-of-mars/shared/routes";
 import { isDevOrStaging, Constants } from "@port-of-mars/shared/settings";
 
 @Component({
@@ -146,6 +146,7 @@ export default class Home extends Vue {
   currentYear = new Date().getFullYear();
   lobby = { name: LOBBY_PAGE };
   leaderboard = { name: LEADERBOARD_PAGE };
+  playerStats = { name: PLAYER_STATS_PAGE };
 
   get constants() {
     return Constants;

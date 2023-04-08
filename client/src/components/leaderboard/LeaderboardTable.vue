@@ -4,7 +4,7 @@
     sticky-header
     no-border-collapse
     fixed
-    style="max-height: none"
+    :style="`max-height: ${maxHeight}`"
     class="h-100 m-0 custom-table"
     :fields="showGameStats ? leaderboardFields.concat(gameStatsFields) : leaderboardFields"
     :items="showWithBots ? leaderboardData.withBots : leaderboardData.withoutBots"
@@ -48,6 +48,7 @@ export default class Leaderboard extends Vue {
   @Prop({ default: false }) showWithBots!: boolean;
   @Prop({ default: 50 }) limit!: number;
   @Prop({ default: true }) showGameStats!: boolean;
+  @Prop({ default: "none" }) maxHeight!: string;
 
   api!: LeaderboardAPI;
 
