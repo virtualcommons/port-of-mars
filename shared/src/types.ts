@@ -360,6 +360,7 @@ export type PlayerScores = Array<{
   role: Role;
   points: number;
   winner: boolean;
+  isSelf?: boolean;
 }>;
 
 export type PlayerStatItem = GameMetadata & {

@@ -37,7 +37,7 @@ export class LeaderboardService extends BaseService {
         isSelf: player.userId === user.id,
       }));
       // sort players by points descending
-      playerScores.sort((a, b) => b.points - a.points);
+      playerScores.sort((a, b) => a.role.localeCompare(b.role));
 
       return {
         time: g.dateCreated.getTime(),

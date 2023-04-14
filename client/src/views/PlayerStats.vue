@@ -1,6 +1,6 @@
 <template>
-  <b-container fluid class="h-100 w-100 m-0 p-0 overflow-auto backdrop">
-    <div class="h-100 w-100 p-3">
+  <b-container fluid class="h-100 w-100 m-0 p-0 backdrop">
+    <div class="h-100 w-100 p-3 overflow-auto">
       <b-row class="h-100 w-100 m-0">
         <b-col cols="12" class="mh-100 p-2">
           <PlayerStat v-for="item in playerStatItems" :key="item.time" :playerStatItem="item">
