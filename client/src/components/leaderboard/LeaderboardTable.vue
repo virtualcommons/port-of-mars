@@ -4,6 +4,7 @@
     sticky-header
     no-border-collapse
     fixed
+    striped
     :style="`max-height: ${maxHeight}`"
     class="h-100 m-0 custom-table"
     :fields="showGameStats ? leaderboardFields.concat(gameStatsFields) : leaderboardFields"
@@ -20,19 +21,19 @@
         <b-icon-question-circle id="points-tooltip" class="ml-2" scale="1" />
       </small>
       <b-tooltip target="points-tooltip" placement="top" variant="light">
-        The total number of victory points a player has earned in games that survived.
+        The total number of Victory Points a player has earned in games where the entire group survived.
       </b-tooltip>
     </template>
-    <template #head(winPercent)> Victory % </template>
-    <template #head(numGames)> Games Played </template>
+    <template #head(victoryPercentage)> Victory % </template>
+    <template #head(totalGames)> Games Played </template>
     <!-- cells -->
     <template #cell(rank)="data">
       {{ "#" + data.item.rank }}
     </template>
-    <template #cell(winPercent)="data">
-      {{ getVictoryPercent(data.item) + "%" }}
+    <template #cell(victoryPercentage)="data">
+      {{ getVictoryPercentage(data.item) }}%
     </template>
-    <template #cell(numGames)="data">
+    <template #cell(totalGames)="data">
       {{ getTotalGamesPlayed(data.item) }}
     </template>
   </b-table>
@@ -57,7 +58,7 @@ export default class Leaderboard extends Vue {
     withoutBots: [],
   };
   leaderboardFields = [{ key: "rank", sortable: true }, { key: "username" }, { key: "points" }];
-  gameStatsFields = [{ key: "winPercent" }, { key: "numGames" }];
+  gameStatsFields = [{ key: "victoryPercentage" }, { key: "totalGames" }];
 
   async created() {
     await this.fetchLeaderboardData();
@@ -66,26 +67,35 @@ export default class Leaderboard extends Vue {
   async fetchLeaderboardData() {
     this.api = new LeaderboardAPI(this.$store, this.$ajax);
     this.leaderboardData = await this.api.getLeaderboardData(this.limit);
+    // highlight top player(s)
+    const noBots = this.leaderboardData.withoutBots;
+    if (noBots && noBots.length > 0) {
+      const topPlayer = noBots[0];
+      const maxPoints = topPlayer.points;
+      for (const player of noBots) {
+        if (player.points < maxPoints) break;
+        // FIXME: look for a better color palette
+        player._rowVariant = "success";
+      }
+    }
   }
 
-  parseNumGames(item: any) {
+  extractWinsLosses(item: any) {
     return {
       wins: parseInt(item.wins),
       losses: parseInt(item.losses),
     };
   }
 
-  getVictoryPercent(item: any) {
-    const { wins, losses } = this.parseNumGames(item);
+  getVictoryPercentage(item: any) {
+    const { wins, losses } = this.extractWinsLosses(item);
     const percentage = (wins / (wins + losses)) * 100;
-    return percentage === 100 ? 100 : percentage.toFixed(1);
+    return percentage === 100 ? 100 : percentage.toFixed(0);
   }
 
   getTotalGamesPlayed(item: any) {
-    const { wins, losses } = this.parseNumGames(item);
+    const { wins, losses } = this.extractWinsLosses(item);
     return wins + losses;
   }
 }
 </script>
-
-<style lang="scss" scoped></style>
