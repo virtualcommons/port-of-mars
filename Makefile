@@ -109,9 +109,6 @@ settings: $(SENTRY_DSN_PATH) $(SECRET_KEY_PATH) | keys
 	echo 'export const SENTRY_DSN = "${SENTRY_DSN}";' >> $(SHARED_CONFIG_PATH)
 
 
-build: docker-compose.yml settings
-	docker compose build --pull
-
 initialize: build
 	docker compose run --rm server yarn initdb
 

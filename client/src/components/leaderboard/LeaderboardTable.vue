@@ -24,7 +24,14 @@
         The total number of Victory Points a player has earned in games where the entire group survived.
       </b-tooltip>
     </template>
-    <template #head(victoryPercentage)> Victory % </template>
+    <template #head(victoryPercentage)> Victory % 
+      <small>
+        <b-icon-question-circle id="victory-percentage-tooltip" class="ml-2" scale="1" />
+      </small>
+      <b-tooltip target="victory-percentage-tooltip" placement="top" variant="light">
+      Percentage of games that ended in victory that this player has participated in (not necessarily as the highest scoring player).
+      </b-tooltip>
+    </template>
     <template #head(totalGames)> Games Played </template>
     <!-- cells -->
     <template #cell(rank)="data">
@@ -74,8 +81,8 @@ export default class Leaderboard extends Vue {
       const maxPoints = topPlayer.points;
       for (const player of noBots) {
         if (player.points < maxPoints) break;
-        // FIXME: look for a better color palette
-        player._rowVariant = "success";
+        // FIXME: look into better color palette
+        (player as any)._rowVariant = "success";
       }
     }
   }
