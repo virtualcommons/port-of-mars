@@ -35,7 +35,7 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 import { PlayerStatItem } from "@port-of-mars/shared/types";
 
 @Component({})
-export default class PlayerStatGame extends Vue {
+export default class GameStats extends Vue {
   @Prop() playerStatItem!: PlayerStatItem;
 
   get formattedDate() {

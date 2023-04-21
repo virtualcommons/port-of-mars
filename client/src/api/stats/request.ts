@@ -3,13 +3,13 @@ import { LeaderboardData, PlayerStatItem } from "@port-of-mars/shared/types";
 import { TStore } from "@port-of-mars/client/plugins/tstore";
 import { AjaxRequest } from "@port-of-mars/client/plugins/ajax";
 
-export class LeaderboardAPI {
+export class StatsAPI {
   constructor(public store: TStore, public ajax: AjaxRequest) {}
 
   async getLeaderboardData(limit?: number): Promise<LeaderboardData> {
     try {
       const params = limit ? `?limit=${limit}` : "";
-      return await this.ajax.get(url(`/leaderboard${params}`), ({ data }) => {
+      return await this.ajax.get(url(`/stats/leaderboard${params}`), ({ data }) => {
         return data;
       });
     } catch (e) {
@@ -19,13 +19,13 @@ export class LeaderboardAPI {
     }
   }
 
-  async getPlayerStats(): Promise<Array<PlayerStatItem>> {
+  async getPlayerHistory(): Promise<Array<PlayerStatItem>> {
     try {
-      return await this.ajax.get(url("/leaderboard/stats"), ({ data }) => {
+      return await this.ajax.get(url("/stats/history"), ({ data }) => {
         return data;
       });
     } catch (e) {
-      console.log("Unable to retrieve player stats");
+      console.log("Unable to retrieve player game history");
       console.log(e);
       throw e;
     }

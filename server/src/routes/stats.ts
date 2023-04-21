@@ -2,9 +2,9 @@ import { Router } from "express";
 import { getServices } from "@port-of-mars/server/services";
 import { User } from "@port-of-mars/server/entity";
 
-export const leaderboardRouter = Router();
+export const statsRouter = Router();
 
-leaderboardRouter.get("/", async (req, res, next) => {
+statsRouter.get("/leaderboard", async (req, res, next) => {
   const limitStr = req.query.limit as string;
   const limit = parseInt(limitStr) || 50;
   try {
@@ -15,10 +15,10 @@ leaderboardRouter.get("/", async (req, res, next) => {
   }
 });
 
-leaderboardRouter.get("/stats", async (req, res, next) => {
+statsRouter.get("/history", async (req, res, next) => {
   try {
     const user = req.user as User;
-    const playerStats = await getServices().leaderboard.getStats(user);
+    const playerStats = await getServices().leaderboard.getPlayerHistory(user);
     res.json(playerStats);
   } catch (e) {
     next(e);

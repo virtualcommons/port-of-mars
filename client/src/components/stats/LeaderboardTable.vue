@@ -49,7 +49,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { LeaderboardAPI } from "@port-of-mars/client/api/leaderboard/request";
+import { StatsAPI } from "@port-of-mars/client/api/stats/request";
 import { LeaderboardData } from "@port-of-mars/shared/types";
 
 @Component({})
@@ -59,7 +59,7 @@ export default class Leaderboard extends Vue {
   @Prop({ default: true }) showGameStats!: boolean;
   @Prop({ default: "none" }) maxHeight!: string;
 
-  api!: LeaderboardAPI;
+  api!: StatsAPI;
 
   leaderboardData: LeaderboardData = {
     withBots: [],
@@ -73,7 +73,7 @@ export default class Leaderboard extends Vue {
   }
 
   async fetchLeaderboardData() {
-    this.api = new LeaderboardAPI(this.$store, this.$ajax);
+    this.api = new StatsAPI(this.$store, this.$ajax);
     this.leaderboardData = await this.api.getLeaderboardData(this.limit);
     // highlight top player(s)
     const noBots = this.leaderboardData.withoutBots;

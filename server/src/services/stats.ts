@@ -4,7 +4,7 @@ import { Game, Player } from "@port-of-mars/server/entity";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { IsNull, Not, SelectQueryBuilder } from "typeorm";
 
-export class LeaderboardService extends BaseService {
+export class StatsService extends BaseService {
   /* Player stats */
   async getGamesWithUser(user: User): Promise<Array<Game>> {
     return this.em.getRepository(Game).find({
@@ -19,7 +19,7 @@ export class LeaderboardService extends BaseService {
     });
   }
 
-  async getStats(user: User): Promise<Array<PlayerStatItem>> {
+  async getPlayerHistory(user: User): Promise<Array<PlayerStatItem>> {
     const games = await this.getGamesWithUser(user);
 
     return games.map(g => {

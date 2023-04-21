@@ -97,7 +97,7 @@
             </p>
             <p class="text mb-3">
               Keep track of your performance with your
-              <b-link :to="playerStats">personal stats page</b-link> and visit the
+              <b-link :to="GameStats">personal stats page</b-link> and visit the
               <b-link :to="leaderboard">full leaderboard</b-link>
               to see how you stack up against other players.
             </p>
@@ -126,8 +126,8 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
 import CharCarousel from "@port-of-mars/client/components/global/CharCarousel.vue";
 import AgeTooltip from "@port-of-mars/client/components/global/AgeTooltip.vue";
-import LeaderboardTable from "@port-of-mars/client/components/leaderboard/LeaderboardTable.vue";
-import { LEADERBOARD_PAGE, LOBBY_PAGE, PLAYER_STATS_PAGE } from "@port-of-mars/shared/routes";
+import LeaderboardTable from "@port-of-mars/client/components/stats/LeaderboardTable.vue";
+import { LEADERBOARD_PAGE, LOBBY_PAGE, PLAYER_HISTORY_PAGE } from "@port-of-mars/shared/routes";
 import { isDevOrStaging, Constants } from "@port-of-mars/shared/settings";
 
 @Component({
@@ -146,7 +146,7 @@ export default class Home extends Vue {
   currentYear = new Date().getFullYear();
   lobby = { name: LOBBY_PAGE };
   leaderboard = { name: LEADERBOARD_PAGE };
-  playerStats = { name: PLAYER_STATS_PAGE };
+  GameStats = { name: PLAYER_HISTORY_PAGE };
 
   get constants() {
     return Constants;

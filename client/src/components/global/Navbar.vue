@@ -56,7 +56,7 @@
               <b-icon-person-fill></b-icon-person-fill>
               {{ username }}
             </template>
-            <b-dropdown-item :to="playerStats">My Stats</b-dropdown-item>
+            <b-dropdown-item :to="history">Game History</b-dropdown-item>
             <b-dropdown-item @click="logout">Sign Out</b-dropdown-item>
           </b-nav-item-dropdown>
         </div>
@@ -79,7 +79,7 @@ import {
   MANUAL_PAGE,
   GAME_PAGE,
   LOBBY_PAGE,
-  PLAYER_STATS_PAGE,
+  PLAYER_HISTORY_PAGE,
   LEADERBOARD_PAGE,
 } from "@port-of-mars/shared/routes";
 import { isDevOrStaging, Constants } from "@port-of-mars/shared/settings";
@@ -107,7 +107,7 @@ export default class Header extends Vue {
   manual = { name: MANUAL_PAGE };
   game = { name: GAME_PAGE };
   leaderboard = { name: LEADERBOARD_PAGE };
-  playerStats = { name: PLAYER_STATS_PAGE };
+  history = { name: PLAYER_HISTORY_PAGE };
   lobby = { name: LOBBY_PAGE };
 
   async created() {

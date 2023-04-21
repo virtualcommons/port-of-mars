@@ -20,7 +20,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import LeaderboardTable from "@port-of-mars/client/components/leaderboard/LeaderboardTable.vue";
+import LeaderboardTable from "@port-of-mars/client/components/stats/LeaderboardTable.vue";
 
 @Component({
   components: {

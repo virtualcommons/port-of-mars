@@ -3,8 +3,8 @@
     <div class="h-100 w-100 p-3 overflow-auto">
       <b-row class="h-100 w-100 m-0">
         <b-col cols="12" class="mh-100 p-2">
-          <PlayerStat v-for="item in playerStatItems" :key="item.time" :playerStatItem="item">
-          </PlayerStat>
+          <GameStats v-for="item in playerStatItems" :key="item.time" :playerStatItem="item">
+          </GameStats>
         </b-col>
       </b-row>
     </div>
@@ -13,27 +13,27 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { LeaderboardAPI } from "@port-of-mars/client/api/leaderboard/request";
+import { StatsAPI } from "@port-of-mars/client/api/stats/request";
 import { PlayerStatItem } from "@port-of-mars/shared/types";
-import PlayerStat from "@port-of-mars/client/components/leaderboard/PlayerStatItem.vue";
+import GameStats from "@port-of-mars/client/components/stats/GameStats.vue";
 
 @Component({
   components: {
-    PlayerStat,
+    GameStats,
   },
 })
-export default class PlayerStats extends Vue {
-  api!: LeaderboardAPI;
+export default class PlayerHistory extends Vue {
+  api!: StatsAPI;
 
   playerStatItems: Array<PlayerStatItem> = [];
 
   async created() {
-    await this.fetchLeaderboardData();
+    await this.fetchPlayerStats();
   }
 
-  async fetchLeaderboardData() {
-    this.api = new LeaderboardAPI(this.$store, this.$ajax);
-    this.playerStatItems = await this.api.getPlayerStats();
+  async fetchPlayerStats() {
+    this.api = new StatsAPI(this.$store, this.$ajax);
+    this.playerStatItems = await this.api.getPlayerHistory();
   }
 }
 </script>
