@@ -24,7 +24,7 @@ export class LeaderboardService extends BaseService {
 
     return games.map(g => {
       const maxScore = g.players.reduce((currentMax: number, player: Player) => {
-        if (player.points ?? 0 > currentMax) {
+        if ((player.points ?? 0) > currentMax) {
           return player.points ?? 0;
         } else {
           return currentMax;
