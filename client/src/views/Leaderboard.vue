@@ -10,7 +10,7 @@
             </b-form-checkbox>
           </div>
           <div class="h-100-header w-100 content-container">
-            <leaderboardTable :showWithBots="showWithBots" :limit="50"></leaderboardTable>
+            <LeaderboardTable :showWithBots="showWithBots" :limit="50" />
           </div>
         </b-col>
       </b-row>

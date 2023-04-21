@@ -36,7 +36,7 @@ export class LeaderboardService extends BaseService {
         winner: player.points === maxScore,
         isSelf: player.userId === user.id,
       }));
-      // sort players by points descending
+      // sort by role
       playerScores.sort((a, b) => a.role.localeCompare(b.role));
 
       return {
