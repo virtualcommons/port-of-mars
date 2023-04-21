@@ -21,15 +21,18 @@
         <b-icon-question-circle id="points-tooltip" class="ml-2" scale="1" />
       </small>
       <b-tooltip target="points-tooltip" placement="top" variant="light">
-        The total number of Victory Points a player has earned in games where the entire group survived.
+        The total number of Victory Points a player has earned in games where the entire group
+        survived.
       </b-tooltip>
     </template>
-    <template #head(victoryPercentage)> Victory % 
+    <template #head(victoryPercentage)>
+      Victory %
       <small>
         <b-icon-question-circle id="victory-percentage-tooltip" class="ml-2" scale="1" />
       </small>
       <b-tooltip target="victory-percentage-tooltip" placement="top" variant="light">
-      Percentage of games that ended in victory that this player has participated in (not necessarily as the highest scoring player).
+        Percentage of games that ended in victory that this player has participated in (not
+        necessarily as the highest scoring player).
       </b-tooltip>
     </template>
     <template #head(totalGames)> Games Played </template>
@@ -37,9 +40,7 @@
     <template #cell(rank)="data">
       {{ "#" + data.item.rank }}
     </template>
-    <template #cell(victoryPercentage)="data">
-      {{ getVictoryPercentage(data.item) }}%
-    </template>
+    <template #cell(victoryPercentage)="data"> {{ getVictoryPercentage(data.item) }}% </template>
     <template #cell(totalGames)="data">
       {{ getTotalGamesPlayed(data.item) }}
     </template>

@@ -3,7 +3,7 @@ services:
     build:
       context: .
     restart: always
-    image: port-of-mars/server/dev:latest
+    image: port-of-mars/server:dev
     depends_on:
       - redis
       - db
@@ -15,6 +15,7 @@ services:
       - ./keys:/run/secrets
       - ./scripts:/scripts
       - ./server/.env:/code/server/.env
+      - ./.prettierrc:/code/.prettierrc
         #  XXX: nuxt disabled until typeorm + auth support is properly added
         #  https://github.com/virtualcommons/port-of-mars/issues/795
         #  https://github.com/virtualcommons/port-of-mars/issues/809
