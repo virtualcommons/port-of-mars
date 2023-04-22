@@ -88,7 +88,7 @@ export default class Leaderboard extends Vue {
     }
   }
 
-  extractWinsLosses(item: any) {
+  getWinsLosses(item: any) {
     return {
       wins: parseInt(item.wins),
       losses: parseInt(item.losses),
@@ -96,13 +96,13 @@ export default class Leaderboard extends Vue {
   }
 
   getVictoryPercentage(item: any) {
-    const { wins, losses } = this.extractWinsLosses(item);
+    const { wins, losses } = this.getWinsLosses(item);
     const percentage = (wins / (wins + losses)) * 100;
     return percentage === 100 ? 100 : percentage.toFixed(0);
   }
 
   getTotalGamesPlayed(item: any) {
-    const { wins, losses } = this.extractWinsLosses(item);
+    const { wins, losses } = this.getWinsLosses(item);
     return wins + losses;
   }
 }
