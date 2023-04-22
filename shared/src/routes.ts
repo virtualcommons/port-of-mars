@@ -2,6 +2,8 @@ export const ADMIN_PAGE = "Admin" as const;
 export const LOGIN_PAGE = "Login" as const;
 export const LOBBY_PAGE = "Lobby" as const;
 export const GAME_PAGE = "Game" as const;
+export const LEADERBOARD_PAGE = "Leaderboard" as const;
+export const PLAYER_HISTORY_PAGE = "PlayerHistory" as const;
 export const REGISTER_PAGE = "Register" as const;
 export const VERIFY_PAGE = "Verify" as const;
 export const MANUAL_PAGE = "Manual" as const;
@@ -16,6 +18,8 @@ export type Page =
   | "Login"
   | "Lobby"
   | "Game"
+  | "PlayerHistory"
+  | "Leaderboard"
   | "Register"
   | "Verify"
   | "Manual"
@@ -26,6 +30,8 @@ export const PAGES: Array<Page> = [
   LOGIN_PAGE,
   LOBBY_PAGE,
   GAME_PAGE,
+  PLAYER_HISTORY_PAGE,
+  LEADERBOARD_PAGE,
   REGISTER_PAGE,
   VERIFY_PAGE,
   MANUAL_PAGE,
@@ -68,6 +74,20 @@ export const PAGE_META: {
   [GAME_PAGE]: {
     path: "/game",
     name: GAME_PAGE,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  [LEADERBOARD_PAGE]: {
+    path: "/leaderboard",
+    name: LEADERBOARD_PAGE,
+    meta: {
+      requiresAuth: false,
+    },
+  },
+  [PLAYER_HISTORY_PAGE]: {
+    path: "/history",
+    name: PLAYER_HISTORY_PAGE,
     meta: {
       requiresAuth: true,
     },

@@ -18,6 +18,19 @@ export const BAN = "ban" as const;
 export const NONE = "none" as const;
 export const MODERATION_ACTION_TYPES = [MUTE, BAN, NONE];
 
+export interface LeaderboardItem {
+  rank: number;
+  username: string;
+  points: number;
+  wins: number;
+  losses: number;
+}
+
+export interface LeaderboardData {
+  withBots: Array<LeaderboardItem>;
+  withoutBots: Array<LeaderboardItem>;
+}
+
 export interface LobbyChatMessageData {
   username: string;
   message: string;
@@ -341,13 +354,13 @@ export interface ActionItem {
 export interface GameMetadata {
   time: number; // unix timestamp
   round: number;
-  tournamentName: string;
 }
 
 export type PlayerScores = Array<{
   role: Role;
   points: number;
   winner: boolean;
+  isSelf?: boolean;
 }>;
 
 export type PlayerStatItem = GameMetadata & {

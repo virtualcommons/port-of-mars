@@ -26,6 +26,7 @@ import {
   registrationRouter,
   surveyRouter,
   statusRouter,
+  statsRouter,
 } from "@port-of-mars/server/routes";
 import { ServerError } from "./util";
 
@@ -193,6 +194,7 @@ async function createApp() {
   app.use("/admin", adminRouter);
   app.use("/auth", authRouter);
   app.use("/survey", surveyRouter);
+  app.use("/stats", statsRouter);
   app.use("/game", gameRouter);
   app.use("/quiz", quizRouter);
   app.use("/registration", registrationRouter);

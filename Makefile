@@ -109,16 +109,13 @@ settings: $(SENTRY_DSN_PATH) $(SECRET_KEY_PATH) | keys
 	echo 'export const SENTRY_DSN = "${SENTRY_DSN}";' >> $(SHARED_CONFIG_PATH)
 
 
-build: docker-compose.yml settings
-	docker compose build --pull
-
 initialize: build
 	docker compose run --rm server yarn initdb
 
-docker-compose.yml: base.yml staging.base.yml $(ENVIR).yml config.mk $(DB_DATA_PATH) $(DATA_DUMP_PATH) $(LOG_DATA_PATH) $(REDIS_SETTINGS_PATH) $(ORMCONFIG_PATH) $(NUXT_ORMCONFIG_PATH) $(PGPASS_PATH) $(SERVER_ENV) settings
+docker-compose.yml: base.yml $(ENVIR).yml config.mk $(DB_DATA_PATH) $(DATA_DUMP_PATH) $(LOG_DATA_PATH) $(REDIS_SETTINGS_PATH) $(ORMCONFIG_PATH) $(NUXT_ORMCONFIG_PATH) $(PGPASS_PATH) $(SERVER_ENV) settings
 	case "$(ENVIR)" in \
 	  dev) docker compose -f base.yml -f "$(ENVIR).yml" config > docker-compose.yml;; \
-	  staging|prod) docker compose -f base.yml -f staging.base.yml -f "$(ENVIR).yml" config > docker-compose.yml;; \
+	  staging|prod) docker compose -f base.yml -f staging.yml -f "$(ENVIR).yml" config > docker-compose.yml;; \
 	  *) echo "invalid environment. must be either dev, staging or prod" 1>&2; exit 1;; \
 	esac
 

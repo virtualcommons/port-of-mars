@@ -30,15 +30,6 @@
       <div id="about" class="w-100 d-flex align-items-center about" ref="aboutSection">
         <b-row class="w-100 mx-0 my-5 px-3" align-v="start" align-h="center">
           <div class="w-100 mt-5"></div>
-          <b-col md="12" lg="6" xl="5" align-self="center">
-            <b-embed
-              class="p-1"
-              type="iframe"
-              aspect="16by9"
-              :src="constants.TRAILER_VIDEO_URL"
-              allowfullscreen
-            ></b-embed>
-          </b-col>
           <b-col md="12" lg="6" xl="5" class="text-left">
             <h1 class="section-title mb-3">About</h1>
             <p class="text mb-3">
@@ -59,7 +50,25 @@
               exercise for future human space communities.
             </p>
           </b-col>
+          <b-col md="12" lg="6" xl="5" align-self="center">
+            <b-embed
+              class="p-1"
+              type="iframe"
+              aspect="16by9"
+              :src="constants.TRAILER_VIDEO_URL"
+              allowfullscreen
+            ></b-embed>
+          </b-col>
           <div class="w-100 my-5"><hr /></div>
+          <b-col md="12" lg="6" xl="5" align-self="center">
+            <b-embed
+              class="p-1"
+              type="iframe"
+              aspect="16by9"
+              :src="constants.TUTORIAL_VIDEO_URL"
+              allowfullscreen
+            ></b-embed>
+          </b-col>
           <b-col md="12" lg="6" xl="5" class="text-left">
             <h1 class="section-title mb-3">Gameplay</h1>
             <p class="text mb-3">
@@ -77,14 +86,32 @@
               earn you the Victory Points necessary to win the game.
             </p>
           </b-col>
+          <div class="w-100 my-5"><hr /></div>
+          <b-col md="12" lg="6" xl="5" class="text-left">
+            <h1 class="section-title mb-3">Community</h1>
+            <p class="text mb-3">
+              Whether you are looking to discuss the game or find a team, connect with other players
+              by joining our
+              <a :href="constants.DISCORD_URL">community Discord</a> or by joining a room in the
+              <b-link :to="lobby">game lobby</b-link> and using the built-in chat.
+            </p>
+            <p class="text mb-3">
+              Keep track of your performance with your
+              <b-link :to="GameStats">personal stats page</b-link> and visit the
+              <b-link :to="leaderboard">full leaderboard</b-link>
+              to see how you stack up against other players.
+            </p>
+          </b-col>
           <b-col md="12" lg="6" xl="5" align-self="center">
-            <b-embed
-              class="p-1"
-              type="iframe"
-              aspect="16by9"
-              :src="constants.TUTORIAL_VIDEO_URL"
-              allowfullscreen
-            ></b-embed>
+            <h4 class="mb-2 text-white">Top Players</h4>
+            <div class="content-container">
+              <LeaderboardTable
+                :showWithBots="false"
+                :showGameStats="false"
+                :limit="10"
+                maxHeight="300px"
+              ></LeaderboardTable>
+            </div>
           </b-col>
           <div class="w-100 mb-5"></div>
         </b-row>
@@ -99,7 +126,8 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
 import CharCarousel from "@port-of-mars/client/components/global/CharCarousel.vue";
 import AgeTooltip from "@port-of-mars/client/components/global/AgeTooltip.vue";
-import { LOBBY_PAGE } from "@port-of-mars/shared/routes";
+import LeaderboardTable from "@port-of-mars/client/components/stats/LeaderboardTable.vue";
+import { LEADERBOARD_PAGE, LOBBY_PAGE, PLAYER_HISTORY_PAGE } from "@port-of-mars/shared/routes";
 import { isDevOrStaging, Constants } from "@port-of-mars/shared/settings";
 
 @Component({
@@ -107,6 +135,7 @@ import { isDevOrStaging, Constants } from "@port-of-mars/shared/settings";
     AgeTooltip,
     CharCarousel,
     Footer,
+    LeaderboardTable,
   },
 })
 export default class Home extends Vue {
@@ -116,6 +145,8 @@ export default class Home extends Vue {
   isDevMode: boolean = false;
   currentYear = new Date().getFullYear();
   lobby = { name: LOBBY_PAGE };
+  leaderboard = { name: LEADERBOARD_PAGE };
+  GameStats = { name: PLAYER_HISTORY_PAGE };
 
   get constants() {
     return Constants;

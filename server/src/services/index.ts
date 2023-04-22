@@ -6,7 +6,7 @@ import { AccountService } from "@port-of-mars/server/services/account";
 import { TournamentService } from "@port-of-mars/server/services/tournament";
 import { QuizService } from "@port-of-mars/server/services/quiz";
 import { SurveyService } from "@port-of-mars/server/services/survey";
-import { LeaderboardService } from "@port-of-mars/server/services/leaderboard";
+import { StatsService } from "@port-of-mars/server/services/stats";
 import { getConnection } from "@port-of-mars/server/util";
 import { TimeService } from "@port-of-mars/server/services/time";
 import { GameService } from "@port-of-mars/server/services/game";
@@ -80,10 +80,10 @@ export class ServiceProvider {
     return this._survey;
   }
 
-  private _leaderboard?: LeaderboardService;
+  private _leaderboard?: StatsService;
   get leaderboard() {
     if (!this._leaderboard) {
-      this._leaderboard = new LeaderboardService(this);
+      this._leaderboard = new StatsService(this);
     }
     return this._leaderboard;
   }

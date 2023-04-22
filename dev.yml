@@ -4,12 +4,13 @@ services:
       dockerfile: client/Dockerfile
       context: .
     restart: always
-    image: port-of-mars/client/dev:latest
+    image: port-of-mars/client:dev
     volumes:
       - ./client:/code/client
       - ./keys/sentry_dsn:/run/secrets/sentry_dsn
       - ./shared/src:/code/shared/src
       - /code/client/node_modules
+      - ./.prettierrc:/code/.prettierrc
     command: './dev.sh'
     ports:
       - '127.0.0.1:8081:8080'

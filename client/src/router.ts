@@ -7,6 +7,8 @@ import Rooms from "@port-of-mars/client/views/admin/Rooms.vue";
 import Reports from "@port-of-mars/client/views/admin/Reports.vue";
 import Settings from "@port-of-mars/client/views/admin/Settings.vue";
 import Login from "@port-of-mars/client/views/Login.vue";
+import Leaderboard from "@port-of-mars/client/views/Leaderboard.vue";
+import PlayerHistory from "@port-of-mars/client/views/PlayerHistory.vue";
 import Lobby from "@port-of-mars/client/views/Lobby.vue";
 import LobbyRoom from "@port-of-mars/client/components/lobby/LobbyRoom.vue";
 import LobbyRoomList from "@port-of-mars/client/components/lobby/LobbyRoomList.vue";
@@ -23,6 +25,8 @@ import {
   LOGIN_PAGE,
   LOBBY_PAGE,
   GAME_PAGE,
+  LEADERBOARD_PAGE,
+  PLAYER_HISTORY_PAGE,
   REGISTER_PAGE,
   VERIFY_PAGE,
   MANUAL_PAGE,
@@ -66,6 +70,8 @@ const router = new VueRouter({
       ],
     },
     { ...PAGE_META[GAME_PAGE], component: Game },
+    { ...PAGE_META[LEADERBOARD_PAGE], component: Leaderboard },
+    { ...PAGE_META[PLAYER_HISTORY_PAGE], component: PlayerHistory },
     { ...PAGE_META[REGISTER_PAGE], component: Register },
     { ...PAGE_META[VERIFY_PAGE], component: Verify },
     { ...PAGE_META[MANUAL_PAGE], component: Manual },
