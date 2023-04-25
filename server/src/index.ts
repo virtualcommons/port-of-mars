@@ -10,7 +10,7 @@ import connectRedis from "connect-redis";
 import * as Sentry from "@sentry/node";
 import { Server } from "colyseus";
 
-import { Constants, isDev } from "@port-of-mars/shared/settings";
+import { Constants, isDevOrStaging } from "@port-of-mars/shared/settings";
 
 // server side imports
 import { GameRoom, LoadTestGameRoom } from "@port-of-mars/server/rooms/game";
@@ -93,20 +93,22 @@ passport.use(
   )
 );
 
-passport.use(
-  new LocalStrategy(async function (username: string, password: string, done: any) {
-    const services = getServices();
-    const user = await services.account.getOrCreateTestUser(username);
-    // set all testing things on the user
-    // const tournamentRound = await services.tournament.getCurrentTournamentRound();
-    // const invite = await services.tournament.getOrCreateInvite(
-    //   user.id,
-    //   tournamentRound,
-    //   true
-    // );
-    await done(null, user);
-  })
-);
+if (isDevOrStaging()) {
+  passport.use(
+    new LocalStrategy(async function (username: string, password: string, done: any) {
+      const services = getServices();
+      const user = await services.account.getOrCreateTestUser(username);
+      // set all testing things on the user
+      // const tournamentRound = await services.tournament.getCurrentTournamentRound();
+      // const invite = await services.tournament.getOrCreateInvite(
+      //   user.id,
+      //   tournamentRound,
+      //   true
+      // );
+      await done(null, user);
+    })
+  );
+}
 
 passport.serializeUser(function (user: Pick<User, "id">, done: any) {
   done(null, user.id);
@@ -183,14 +185,16 @@ async function createApp() {
   app.use(passport.session());
 
   // make this conditional on isDev()
-  app.post("/login", passport.authenticate("local"), function (req, res) {
-    const _sessionId = req.sessionID;
-    logger.info(`successful authentication for ${req.user}, setting session id ${_sessionId}`);
-    res.cookie("connect.sid", _sessionId, { signed: true });
-    const sessionCookie: any = res.getHeaders()["set-cookie"];
-    logger.info(sessionCookie);
-    res.json({ user: req.user, sessionCookie });
-  });
+  if (isDevOrStaging()) {
+    app.post("/login", passport.authenticate("local"), function (req, res) {
+      const _sessionId = req.sessionID;
+      logger.info(`successful authentication for ${req.user}, setting session id ${_sessionId}`);
+      res.cookie("connect.sid", _sessionId, { signed: true });
+      const sessionCookie: any = res.getHeaders()["set-cookie"];
+      logger.info(sessionCookie);
+      res.json({ user: req.user, sessionCookie });
+    });
+  }
   app.use("/admin", adminRouter);
   app.use("/auth", authRouter);
   app.use("/survey", surveyRouter);
