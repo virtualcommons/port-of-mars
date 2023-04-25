@@ -10,7 +10,7 @@ import connectRedis from "connect-redis";
 import * as Sentry from "@sentry/node";
 import { Server } from "colyseus";
 
-import { Constants, isDevOrStaging } from "@port-of-mars/shared/settings";
+import { Constants, isDev, isDevOrStaging } from "@port-of-mars/shared/settings";
 
 // server side imports
 import { GameRoom, LoadTestGameRoom } from "@port-of-mars/server/rooms/game";
