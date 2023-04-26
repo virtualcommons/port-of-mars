@@ -128,38 +128,6 @@ export class ServerError extends Error implements ServerErrorData {
 }
 
 export async function generateUsername() {
-  const NOUNS = [
-    "Ferret",
-    "Marmot",
-    "Bison",
-    "Parrot",
-    "Meerkat",
-    "Orca",
-    "Leopard",
-    "Raccoon",
-    "Quagga",
-    "Newt",
-    "Starfish",
-    "Chameleon",
-    "Orangutan",
-    "Wolverine",
-    "Ibex",
-    "Antelope",
-    "Axolotl",
-    "Lizard",
-    "Camel",
-  ];
-
-  const ADJECTIVES = [
-    "Astral",
-    "Celestial",
-    "Cosmic",
-    "Solar",
-    "Orbiting",
-    "Elliptical",
-    "Martian",
-  ];
-
   let isUnique = false;
   let username = "";
   while (!isUnique) {
@@ -172,3 +140,59 @@ export async function generateUsername() {
 
   return username;
 }
+
+const NOUNS = [
+  "Ferret",
+  "Marmot",
+  "Bison",
+  "Parrot",
+  "Meerkat",
+  "Orca",
+  "Leopard",
+  "Raccoon",
+  "Quagga",
+  "Newt",
+  "Starfish",
+  "Chameleon",
+  "Orangutan",
+  "Wolverine",
+  "Ibex",
+  "Antelope",
+  "Axolotl",
+  "Lizard",
+  "Camel",
+  "Dingo",
+  "Dolphin",
+  "Canary",
+  "Eagle",
+  "Falcon",
+  "Fox",
+  "Giraffe",
+  "Hedgehog",
+  "Heron",
+  "Hyena",
+  "Iguana",
+  "Koala",
+  "Lemur",
+];
+
+const ADJECTIVES = [
+  "Astral",
+  "Celestial",
+  "Cosmic",
+  "Solar",
+  "Orbiting",
+  "Elliptical",
+  "Martian",
+  "Lunar",
+  "Illustrious",
+  "Lunar",
+  "Stellar",
+  "Asteroidal",
+  "Cometary",
+  "Galactic",
+  "Interstellar",
+  "Nebular",
+  "Planetary",
+  "Auroral",
+];
