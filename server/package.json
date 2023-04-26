@@ -14,7 +14,7 @@
     "start": "ts-node-dev -r tsconfig-paths/register src/index.ts | tee -a /var/log/port-of-mars/index.log",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "dangerously-dropdb": "dropdb -U marsmadness -h db port_of_mars",
-    "initdb": "createdb -U marsmadness -h db port_of_mars && yarn typeorm migration:run && /scripts/openbeta/setup.sh",
+    "initdb": "createdb -U marsmadness -h db port_of_mars ; yarn typeorm migration:run && /scripts/openbeta/setup.sh",
     "dangerously-loaddb": "psql -h db -U marsmadness port_of_mars < pom-db.sql",
     "dangerously-resetdb": "dropdb -U marsmadness -h db port_of_mars && createdb -U marsmadness -h db port_of_mars && yarn typeorm migration:run",
     "migrate": "yarn typeorm migration:run",
