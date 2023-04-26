@@ -48,11 +48,12 @@ export function mockGameStateInitOpts(
     isMuted: false,
   }));
   const playerOpts: GameOpts["playerOpts"] = new Map();
+  const shuffledRoles = _.shuffle(ROLES);
   playerData.forEach((p, i) => {
-    playerOpts.set(ROLES[i], p);
+    playerOpts.set(shuffledRoles[i], p);
   });
   return {
-    userRoles: _.zipObject(usernames, ROLES),
+    userRoles: _.zipObject(usernames, shuffledRoles),
     playerOpts,
     deck,
     numberOfGameRounds,
@@ -86,11 +87,12 @@ export async function buildGameOpts(usernames: Array<string>): Promise<GameOpts>
     })
   );
   const playerOpts: GameOpts["playerOpts"] = new Map();
+  const shuffledRoles = _.shuffle(ROLES);
   playerData.forEach((p, i) => {
-    playerOpts.set(ROLES[i], p);
+    playerOpts.set(shuffledRoles[i], p);
   });
   return {
-    userRoles: _.zipObject(usernames, ROLES),
+    userRoles: _.zipObject(usernames, shuffledRoles),
     playerOpts,
     deck: getRandomizedMarsEventDeck(),
     numberOfGameRounds: currentTournamentRound.numberOfGameRounds,
