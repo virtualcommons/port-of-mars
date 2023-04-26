@@ -2,6 +2,7 @@ import { NextFunction, Request, Response, Router } from "express";
 import { getServices } from "@port-of-mars/server/services";
 import { User } from "@port-of-mars/server/entity/User";
 import { isAuthenticated } from "@port-of-mars/server/routes/middleware";
+import { ServerError } from "@port-of-mars/server/util";
 import { getLogger } from "@port-of-mars/server/settings";
 
 const logger = getLogger(__filename);
@@ -30,7 +31,17 @@ registrationRouter.post(
           message: `The username ${data.username} is already taken. Please try another one.`,
         });
       } else {
-        await services.registration.submitRegistrationMetadata(user, data);
+        try {
+          await services.registration.submitRegistrationMetadata(user, data);
+        } catch (e) {
+          if (e instanceof ServerError) {
+            res.status(e.code).json({
+              kind: "danger",
+              message: e.displayMessage,
+            });
+          }
+          return;
+        }
         res.json(true);
       }
     } catch (e) {

@@ -23,6 +23,27 @@ export class RegistrationService extends BaseService {
     user.name = data.name;
     user.email = data.email;
     user.dateConsented = new Date();
+    if (!validator.isEmail(user.email)) {
+      throw new ServerError({
+        code: 400,
+        message: `Invalid email address`,
+        displayMessage: `Please enter a valid email address.`,
+      });
+    }
+    if (!validator.isLength(user.username, { min: 1, max: 30 })) {
+      throw new ServerError({
+        code: 400,
+        message: `Invalid username length`,
+        displayMessage: `Please choose a username between 1 and 30 characters long`,
+      });
+    }
+    if (!validator.isAlphanumeric(user.username, "en-US", { ignore: "_" })) {
+      throw new ServerError({
+        code: 400,
+        message: `Invalid username characters`,
+        displayMessage: `Please choose a username with only letters, numbers and underscores`,
+      });
+    }
     await repo.save(user);
     logger.debug("updated registration metadata for user %o", data);
     await this.sendEmailVerification(user);

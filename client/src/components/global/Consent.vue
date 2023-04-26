@@ -107,6 +107,7 @@
             required
             size="lg"
             type="text"
+            :state="username.length <= 30 && username.length > 0 ? true : false"
           >
           </b-form-input>
         </b-form-group>
