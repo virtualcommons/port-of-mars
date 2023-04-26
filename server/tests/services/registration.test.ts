@@ -37,6 +37,31 @@ describe("a potential user", () => {
     expect(newUser).toEqual(oldUser);
   });
 
+  it("rejects registration with an invalid username", async () => {
+    const user = await sp.account.getOrCreateUser({ email: "john@rick.com", passportId: "99999" });
+    await expect(
+      registrationService.submitRegistrationMetadata(user, {
+        username: "@john",
+        email: "john@rick.com",
+        name: "John Rick",
+      })
+    ).rejects.toThrowError(ServerError);
+  });
+
+  it("rejects registration with an invalid email", async () => {
+    const user = await sp.account.getOrCreateUser({
+      email: "mikayla@mail.com",
+      passportId: "99999",
+    });
+    await expect(
+      registrationService.submitRegistrationMetadata(user, {
+        username: "mbs_1959",
+        email: "mikayla@mail",
+        name: "",
+      })
+    ).rejects.toThrowError(ServerError);
+  });
+
   it("can submit their registration information", async () => {
     const email = "a@foo.bar";
     const name = "Alyssa P Hacker";
