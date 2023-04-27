@@ -1,7 +1,7 @@
 <template>
   <b-container class="h-auto p-3 d-flex flex-column" fluid>
     <h1>Port of Mars Consent Form</h1>
-    <div class="consent-form-text">
+    <div class="content-container p-3">
       <p>Dear Participant,</p>
       <p>
         I am a professor in the
@@ -144,10 +144,5 @@ a {
 
 p {
   font-size: 1.2rem;
-}
-
-.consent-form-text {
-  padding: 0.5rem;
-  background-color: $light-shade-05;
 }
 </style>

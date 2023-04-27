@@ -1,5 +1,5 @@
 <template>
-  <b-container fluid class="h-auto m-0 p-0 bg-dark">
+  <b-container fluid class="h-auto m-0 p-0 bg-content">
     <Messages class="position-fixed p-3"></Messages>
     <div id="consent-form-container" class="mx-auto my-5">
       <ConsentForm></ConsentForm>

@@ -8,17 +8,14 @@ export class AccountAPI {
 
   async grantConsent(): Promise<void> {
     try {
-      await this.ajax.post(
-        url("/account/grant-consent"),
-        ({ data }) => {
-          this.store.commit("SET_USER", data);
-          this.store.commit("SET_DASHBOARD_MESSAGE", {
-            kind: "info",
-            message:
-              "You have granted consent to participate in this research project. Welcome to the Port of Mars!",
-          });
-        }
-      );
+      await this.ajax.post(url("/account/grant-consent"), ({ data }) => {
+        this.store.commit("SET_USER", data);
+        this.store.commit("SET_DASHBOARD_MESSAGE", {
+          kind: "info",
+          message:
+            "You have granted consent to participate in this research project. Welcome to the Port of Mars!",
+        });
+      });
     } catch (e) {
       console.log("Unable to deny consent");
       console.log(e);
