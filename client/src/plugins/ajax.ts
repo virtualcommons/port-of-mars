@@ -3,7 +3,7 @@ import _ from "lodash";
 import { VueRouter } from "vue-router/types/router";
 import { TStore } from "@port-of-mars/client/plugins/tstore";
 import { RoomId } from "@port-of-mars/shared/types";
-import { LOGIN_PAGE, LOBBY_PAGE, REGISTER_PAGE, HOME_PAGE } from "@port-of-mars/shared/routes";
+import { LOGIN_PAGE, LOBBY_PAGE, CONSENT_PAGE, HOME_PAGE } from "@port-of-mars/shared/routes";
 import { DashboardMessage } from "@port-of-mars/shared/types";
 import { url } from "@port-of-mars/client/util";
 import { initialUserState } from "@port-of-mars/shared/game/client/state";
@@ -36,7 +36,7 @@ export class AjaxRequest {
 
   errorRoutes: Map<number, string> = new Map([
     [401, LOGIN_PAGE],
-    [403, REGISTER_PAGE],
+    [403, CONSENT_PAGE],
     [404, LOBBY_PAGE],
   ]);
 
@@ -56,7 +56,7 @@ export class AjaxRequest {
         if (status === 200) {
           this.store.commit("SET_USER", data.user);
           if (data.user.isVerified) this.router.push({ name: LOBBY_PAGE });
-          else this.router.push({ name: REGISTER_PAGE });
+          else this.router.push({ name: CONSENT_PAGE });
         } else {
           return data;
         }
@@ -75,6 +75,15 @@ export class AjaxRequest {
       kind: "info",
       message:
         "You have denied consent to participate in this research project. Sorry to see you go!",
+    });
+  }
+
+  async grantConsent() {
+    await this.post(url("/registration/grant-consent"), () => {});
+    this.store.commit("SET_DASHBOARD_MESSAGE", {
+      kind: "info",
+      message:
+        "You have granted consent to participate in this research project. Welcome to the Port of Mars!",
     });
   }
 
@@ -115,7 +124,7 @@ export class AjaxRequest {
       if (response.status > 400) {
         const destinationPage = this.errorRoutes.has(response.status)
           ? this.errorRoutes.get(response.status)
-          : REGISTER_PAGE;
+          : CONSENT_PAGE;
         this.router.push({ name: destinationPage });
       }
     }

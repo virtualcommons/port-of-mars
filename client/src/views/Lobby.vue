@@ -24,7 +24,7 @@ import { Client, Room } from "colyseus.js";
 import { applyLobbyResponses } from "@port-of-mars/client/api/lobby/response";
 import { LobbyRequestAPI } from "@port-of-mars/client/api/lobby/request";
 import { LOBBY_NAME } from "@port-of-mars/shared/lobby";
-import { GAME_PAGE, REGISTER_PAGE, MANUAL_PAGE } from "@port-of-mars/shared/routes";
+import { GAME_PAGE, CONSENT_PAGE, MANUAL_PAGE } from "@port-of-mars/shared/routes";
 import { Constants } from "@port-of-mars/shared/settings";
 import { url } from "@port-of-mars/client/util";
 import Countdown from "@port-of-mars/client/components/global/Countdown.vue";
@@ -44,7 +44,7 @@ export default class Lobby extends Vue {
 
   game = { name: GAME_PAGE };
   manual = { name: MANUAL_PAGE };
-  register = { name: REGISTER_PAGE };
+  register = { name: CONSENT_PAGE };
 
   get constants() {
     return Constants;

@@ -64,7 +64,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import { url } from "@port-of-mars/client/util";
 import { isDevOrStaging } from "@port-of-mars/shared/settings";
-import { REGISTER_PAGE } from "@port-of-mars/shared/routes";
+import { CONSENT_PAGE } from "@port-of-mars/shared/routes";
 import AgeTooltip from "@port-of-mars/client/components/global/AgeTooltip.vue";
 
 @Component({
@@ -78,7 +78,7 @@ export default class Login extends Vue {
   devLoginUsername: string = "";
   error: string = "";
 
-  register = { name: REGISTER_PAGE };
+  register = { name: CONSENT_PAGE };
 
   async created() {
     this.isDevMode = isDevOrStaging();

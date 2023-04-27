@@ -4,7 +4,7 @@ import { User } from "@port-of-mars/server/entity";
 import { settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
 import { toUrl } from "@port-of-mars/server/util";
-import { LOGIN_PAGE, REGISTER_PAGE, LOBBY_PAGE } from "@port-of-mars/shared/routes";
+import { LOGIN_PAGE, CONSENT_PAGE, LOBBY_PAGE } from "@port-of-mars/shared/routes";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -36,7 +36,7 @@ authRouter.get("/google/success", function (req, res) {
       res.redirect(toUrl(LOBBY_PAGE));
     } else {
       logger.warn("invalid / unregistered user %o", user);
-      res.redirect(toUrl(REGISTER_PAGE));
+      res.redirect(toUrl(CONSENT_PAGE));
     }
   } else {
     logger.warn("no user on the request, returning to login %o", req);
@@ -70,7 +70,7 @@ authRouter.get("/facebook/success", function (req, res) {
       res.redirect(toUrl(LOBBY_PAGE));
     } else {
       logger.warn("invalid / unregistered user %o", user);
-      res.redirect(toUrl(REGISTER_PAGE));
+      res.redirect(toUrl(CONSENT_PAGE));
     }
   } else {
     logger.warn("no user on the request, returning to login %o", req);

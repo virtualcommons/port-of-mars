@@ -22,6 +22,10 @@ export default {
     return state.user?.isAdmin;
   },
 
+  hasConsented(state: State): boolean {
+    return !!state.user?.dateConsented;
+  },
+
   user(state: State): User {
     return state.user;
   },

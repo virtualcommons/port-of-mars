@@ -75,7 +75,7 @@ import {
   HOME_PAGE,
   ABOUT_PAGE,
   LOGIN_PAGE,
-  REGISTER_PAGE,
+  CONSENT_PAGE,
   MANUAL_PAGE,
   GAME_PAGE,
   LOBBY_PAGE,
@@ -100,7 +100,7 @@ export default class Header extends Vue {
   readonly SITE_URL = "https://portofmars.asu.edu";
 
   admin = { name: ADMIN_PAGE };
-  consent = { name: REGISTER_PAGE };
+  register = { name: CONSENT_PAGE };
   home = { name: HOME_PAGE };
   about = { name: ABOUT_PAGE };
   login = { name: LOGIN_PAGE };

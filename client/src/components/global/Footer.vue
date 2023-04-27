@@ -95,7 +95,7 @@ import { Constants } from "@port-of-mars/shared/settings";
 import {
   LOGIN_PAGE,
   LOBBY_PAGE,
-  REGISTER_PAGE,
+  CONSENT_PAGE,
   MANUAL_PAGE,
   PRIVACY_PAGE,
 } from "@port-of-mars/shared/routes";
@@ -103,7 +103,7 @@ import {
 @Component({})
 export default class Footer extends Vue {
   currentYear = new Date().getFullYear();
-  consent = { name: REGISTER_PAGE };
+  register = { name: CONSENT_PAGE };
   manual = { name: MANUAL_PAGE };
   login = { name: LOGIN_PAGE };
   lobby = { name: LOBBY_PAGE };

@@ -16,6 +16,20 @@ registrationRouter.post(
   async (req: Request, res: Response, next: NextFunction) => {
     const user = req.user as User;
     try {
+      getServices().registration.grantConsent(user);
+      res.json(true);
+    } catch (e) {
+      logger.warn("Unable to grant consent for user %o", user);
+      next(e);
+    }
+  }
+);
+
+registrationRouter.post(
+  "/update-profile",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = req.user as User;
+    try {
       const services = getServices();
       const data = { ...req.body };
       const emailAvailable = await services.account.isEmailAvailable(user, data.email);
@@ -32,7 +46,7 @@ registrationRouter.post(
         });
       } else {
         try {
-          await services.registration.submitRegistrationMetadata(user, data);
+          await services.account.updateProfile(user, data);
         } catch (e) {
           if (e instanceof ServerError) {
             res.status(e.code).json({
@@ -45,7 +59,7 @@ registrationRouter.post(
         res.json(true);
       }
     } catch (e) {
-      logger.warn("unable to process registration metadata for %s", user.username);
+      logger.warn("unable to update profile metadata for user ID %s", user.id);
       next(e);
     }
   }
@@ -71,7 +85,7 @@ registrationRouter.post(
   async (req: Request, res: Response, next: NextFunction) => {
     const user = req.user as User;
     try {
-      await getServices().registration.sendEmailVerification(user);
+      await getServices().account.sendEmailVerification(user);
       res.json(true);
     } catch (e) {
       logger.warn("Unable to send verification email for %s", user.username);

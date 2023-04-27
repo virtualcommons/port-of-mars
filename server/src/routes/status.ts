@@ -1,9 +1,6 @@
 import { Router, Request, Response } from "express";
 import { User } from "@port-of-mars/server/entity";
 
-import { getLogger } from "@port-of-mars/server/settings";
-const logger = getLogger(__filename);
-
 export const statusRouter = Router();
 
 statusRouter.get("/", async (req: Request, res: Response, next) => {
