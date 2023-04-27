@@ -32,7 +32,7 @@ describe.skip("first round", () => {
         passportId: "foo",
       });
       expect(await services.auth.checkUserHasTournamentInvite(bob.id, tr.id)).toBeFalsy();
-      await services.registration.submitRegistrationMetadata(bob, {
+      await services.account.updateProfile(bob, {
         username: "bob",
         email: "bob@foo.com",
         name: "Bob",
@@ -41,7 +41,7 @@ describe.skip("first round", () => {
       // FIXME: invites are automatically created in submitRegistrationMetadata now for the first round of a tournament
       // we should test that an invite exists now since this is the first round of the Tournament
 
-      await services.registration.verifyUnregisteredUser(bob, bob.registrationToken);
+      await services.account.verifyUnregisteredUser(bob, bob.registrationToken);
       expect(await services.auth.checkUserHasTournamentInvite(bob.id, tr.id)).toBeFalsy();
 
       await services.quiz.setUserQuizCompletion(bob.id, true);

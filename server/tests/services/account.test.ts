@@ -40,7 +40,7 @@ describe("a potential user", () => {
   it("rejects updating profile with an invalid username", async () => {
     const user = await sp.account.getOrCreateUser({ email: "john@rick.com", passportId: "99999" });
     await expect(
-      accountService.updateProfile(user, {
+      accountService.validateUserProfile(user, {
         username: "@john",
         email: "john@rick.com",
         name: "John Rick",
@@ -54,7 +54,7 @@ describe("a potential user", () => {
       passportId: "99999",
     });
     await expect(
-      accountService.updateProfile(user, {
+      accountService.validateUserProfile(user, {
         username: "mbs_1959",
         email: "mikayla@mail",
         name: "",
