@@ -44,7 +44,7 @@ export default class Lobby extends Vue {
 
   game = { name: GAME_PAGE };
   manual = { name: MANUAL_PAGE };
-  register = { name: CONSENT_PAGE };
+  consent = { name: CONSENT_PAGE };
 
   get constants() {
     return Constants;
@@ -56,10 +56,10 @@ export default class Lobby extends Vue {
   }
 
   async checkCanPlay() {
-    await this.$ajax.get(url("/registration/authenticated"), ({ data }) => {
+    await this.$ajax.get(url("/account/authenticated"), ({ data }) => {
       if (data) {
         if (!data.isVerified || !data.dateConsented) {
-          this.$router.push(this.register);
+          this.$router.push(this.consent);
         }
       }
     });

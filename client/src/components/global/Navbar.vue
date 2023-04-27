@@ -100,7 +100,7 @@ export default class Header extends Vue {
   readonly SITE_URL = "https://portofmars.asu.edu";
 
   admin = { name: ADMIN_PAGE };
-  register = { name: CONSENT_PAGE };
+  consent = { name: CONSENT_PAGE };
   home = { name: HOME_PAGE };
   about = { name: ABOUT_PAGE };
   login = { name: LOGIN_PAGE };

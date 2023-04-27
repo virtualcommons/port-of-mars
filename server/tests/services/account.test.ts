@@ -1,4 +1,4 @@
-import { RegistrationService } from "@port-of-mars/server/services/registration";
+import { AccountService } from "@port-of-mars/server/services/account";
 import { User, Tournament } from "@port-of-mars/server/entity";
 import { settings } from "@port-of-mars/server/settings";
 import { Connection, EntityManager, QueryRunner } from "typeorm";
@@ -14,14 +14,14 @@ describe("a potential user", () => {
   let sp: ServiceProvider;
   let t: Tournament;
   // let tr: TournamentRound;
-  let registrationService: RegistrationService;
+  let accountService: AccountService;
 
   beforeAll(async () => {
     [conn, qr, manager] = await initTransaction();
     sp = new ServiceProvider(qr.manager);
     t = await createTournament(sp);
     // tr = await createRound(sp, { tournamentId: t.id });
-    registrationService = sp.registration;
+    accountService = sp.account;
   });
 
   it("can begin registration", async () => {
@@ -37,10 +37,10 @@ describe("a potential user", () => {
     expect(newUser).toEqual(oldUser);
   });
 
-  it("rejects registration with an invalid username", async () => {
+  it("rejects updating profile with an invalid username", async () => {
     const user = await sp.account.getOrCreateUser({ email: "john@rick.com", passportId: "99999" });
     await expect(
-      registrationService.submitRegistrationMetadata(user, {
+      accountService.updateProfile(user, {
         username: "@john",
         email: "john@rick.com",
         name: "John Rick",
@@ -48,13 +48,13 @@ describe("a potential user", () => {
     ).rejects.toThrowError(ServerError);
   });
 
-  it("rejects registration with an invalid email", async () => {
+  it("rejects updating profile with an invalid email", async () => {
     const user = await sp.account.getOrCreateUser({
       email: "mikayla@mail.com",
       passportId: "99999",
     });
     await expect(
-      registrationService.submitRegistrationMetadata(user, {
+      accountService.updateProfile(user, {
         username: "mbs_1959",
         email: "mikayla@mail",
         name: "",
@@ -62,12 +62,12 @@ describe("a potential user", () => {
     ).rejects.toThrowError(ServerError);
   });
 
-  it("can submit their registration information", async () => {
+  it("can update profile information", async () => {
     const email = "a@foo.bar";
     const name = "Alyssa P Hacker";
     const user = await sp.account.getOrCreateUser({ email, passportId: "67890" });
     const newEmail = "b@bar.foo";
-    await registrationService.submitRegistrationMetadata(user, {
+    await accountService.updateProfile(user, {
       username,
       email: newEmail,
       name: name,
@@ -79,13 +79,13 @@ describe("a potential user", () => {
 
   it("can be sent an email verification email", async () => {
     const u = await qr.manager.getRepository(User).findOneOrFail({ username });
-    await registrationService.sendEmailVerification(u);
+    await accountService.sendEmailVerification(u);
     expect(settings.emailer.lastEmail?.from).toBe("Port of Mars <portmars@asu.edu>");
     expect(settings.emailer.lastEmail?.text).toContain(
-      registrationService.createVerificationUrl(u.registrationToken)
+      accountService.createVerificationUrl(u.registrationToken)
     );
     expect(settings.emailer.lastEmail?.html).toContain(
-      registrationService.createVerificationUrl(u.registrationToken)
+      accountService.createVerificationUrl(u.registrationToken)
     );
   });
 
@@ -93,10 +93,10 @@ describe("a potential user", () => {
     let u = await qr.manager.getRepository(User).findOneOrFail({ username });
 
     await expect(
-      registrationService.verifyUnregisteredUser(u, "invalid-registration-token")
+      accountService.verifyUnregisteredUser(u, "invalid-registration-token")
     ).rejects.toThrow(`Invalid registration token invalid-registration-token`);
 
-    await registrationService.verifyUnregisteredUser(u, u.registrationToken);
+    await accountService.verifyUnregisteredUser(u, u.registrationToken);
     u = await qr.manager.getRepository(User).findOneOrFail({ username });
     expect(u.isVerified).toBeTruthy();
   });
@@ -104,7 +104,7 @@ describe("a potential user", () => {
   it("rejects user verification using an invalid verification token", async () => {
     const u = await qr.manager.getRepository(User).findOneOrFail({ username });
     await expect(
-      registrationService.verifyUnregisteredUser(u, "invalid-registration-token")
+      accountService.verifyUnregisteredUser(u, "invalid-registration-token")
     ).rejects.toThrowError(ServerError);
   });
   afterAll(async () => rollbackTransaction(conn, qr));

@@ -7,16 +7,18 @@ import { getLogger } from "@port-of-mars/server/settings";
 
 const logger = getLogger(__filename);
 
-export const registrationRouter = Router();
+export const accountRouter = Router();
 
-registrationRouter.use(isAuthenticated);
+accountRouter.use(isAuthenticated);
 
-registrationRouter.post(
+accountRouter.post(
   "/grant-consent",
   async (req: Request, res: Response, next: NextFunction) => {
     const user = req.user as User;
     try {
-      getServices().registration.grantConsent(user);
+      const services = getServices();
+      await services.account.grantConsent(user.id);
+      logger.debug(user.dateConsented);
       res.json(true);
     } catch (e) {
       logger.warn("Unable to grant consent for user %o", user);
@@ -25,7 +27,7 @@ registrationRouter.post(
   }
 );
 
-registrationRouter.post(
+accountRouter.post(
   "/update-profile",
   async (req: Request, res: Response, next: NextFunction) => {
     const user = req.user as User;
@@ -65,7 +67,7 @@ registrationRouter.post(
   }
 );
 
-registrationRouter.post(
+accountRouter.post(
   "/deny-consent",
   async (req: Request, res: Response, next: NextFunction) => {
     const user = req.user as User;
@@ -80,7 +82,7 @@ registrationRouter.post(
   }
 );
 
-registrationRouter.post(
+accountRouter.post(
   "/send-email-verification",
   async (req: Request, res: Response, next: NextFunction) => {
     const user = req.user as User;
@@ -94,14 +96,14 @@ registrationRouter.post(
   }
 );
 
-registrationRouter.post(
+accountRouter.post(
   "/verify/:registrationToken",
   async (req: Request, res: Response, next: NextFunction) => {
     const user = req.user as User;
     const registrationToken = req.params.registrationToken;
     const s = getServices();
     try {
-      await s.registration.verifyUnregisteredUser(user, registrationToken);
+      await s.account.verifyUnregisteredUser(user, registrationToken);
       res.json(await s.settings.isTournamentSignUpEnabled());
     } catch (e) {
       logger.warn(
@@ -112,7 +114,7 @@ registrationRouter.post(
   }
 );
 
-registrationRouter.get(
+accountRouter.get(
   "/authenticated",
   async (req: Request, res: Response, next: NextFunction) => {
     const user = req.user as User;

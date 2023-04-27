@@ -5,14 +5,12 @@ import { settings } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { generateUsername, ServerError } from "@port-of-mars/server/util";
 import { ModerationActionType, BAN, MUTE } from "@port-of-mars/shared/types";
-import _ from "lodash";
 
 const logger = settings.logging.getLogger(__filename);
 
 export class AccountService extends BaseService {
   getRepository(): Repository<User> {
-    return this.em.getRepository(User);
-  }
+    return this.em.getRepository(User); }
 
   isRegisteredAndValid(user: User): boolean {
     return !!user.isVerified && !!user.email && !!user.isActive;
@@ -159,8 +157,18 @@ export class AccountService extends BaseService {
     return await this.getRepository().findOneOrFail(id);
   }
 
-  async denyConsent(id: number): Promise<UpdateResult> {
-    return await this.getRepository().update(id, { dateConsented: undefined });
+  async denyConsent(id: number): Promise<User> {
+    return await this.getRepository().save({
+      id,
+      dateConsented: undefined,
+    });
+  }
+
+  async grantConsent(id: number): Promise<User> {
+    return await this.getRepository().save({
+      id,
+      dateConsented: new Date(),
+    });
   }
 
   async setLastPlayerIp(id: number, ip: string): Promise<UpdateResult> {
@@ -178,7 +186,7 @@ export class AccountService extends BaseService {
     }
     user.dateConsented = new Date();
     // FIXME: consider consolidating validation logic in
-    // registration route (isEmailAvailable / isUsernameAvailable)
+    // account route (isEmailAvailable / isUsernameAvailable)
     // here as well
     if (!validator.isEmail(data.email)) {
       throw new ServerError({
@@ -214,7 +222,7 @@ export class AccountService extends BaseService {
   }
 
   async sendEmailVerification(u: User): Promise<void> {
-    if (_.isEmpty(u.email)) {
+    if (u.email) {
       logger.warn("Trying to send email verification to a user with no email.");
       return;
     }
@@ -253,6 +261,49 @@ export class AccountService extends BaseService {
       }
     );
     return;
+  }
+
+  async findUnregisteredUserByRegistrationToken(
+    registrationToken: string
+  ): Promise<User | undefined> {
+    return await this.em.getRepository(User).findOne({ registrationToken });
+  }
+
+  async verifyUnregisteredUser(u: User, registrationToken: string): Promise<UpdateResult> {
+    let r: UpdateResult;
+    if (!validator.isUUID(registrationToken)) {
+      throw new ServerError({
+        code: 400,
+        message: `Invalid registration token ${registrationToken}`,
+        displayMessage: `Sorry, your registration token does not appear to be valid. Please try to verify your account again and contact us if this continues.`,
+      });
+    }
+    try {
+      r = await this.em
+        .getRepository(User)
+        .update({ username: u.username, registrationToken }, { isVerified: true });
+    } catch (e) {
+      logger.fatal(
+        "error while updating user %s registration token %s",
+        u.username,
+        registrationToken
+      );
+      throw new ServerError({
+        code: 400,
+        error: e as Error,
+        message: `Invalid user and registration token ${u.username}, ${registrationToken}`,
+        displayMessage: `Sorry, your registration token ${registrationToken} does not appear to be valid. Please try to verify your account again and contact us if this continues.`,
+      });
+    }
+    if (r.affected !== 1) {
+      logger.debug("affected more than one row in registration update: %s", u.username);
+      throw new ServerError({
+        code: 404,
+        message: `Invalid user and registration token ${u.username}, ${registrationToken}`,
+        displayMessage: `Sorry, your registration token does not appear to be valid. Please try to verify your account again and contact us if this continues.`,
+      });
+    }
+    return r;
   }
 
   async getOrCreateTestUser(username: string): Promise<User> {

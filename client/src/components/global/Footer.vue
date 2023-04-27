@@ -103,7 +103,7 @@ import {
 @Component({})
 export default class Footer extends Vue {
   currentYear = new Date().getFullYear();
-  register = { name: CONSENT_PAGE };
+  consent = { name: CONSENT_PAGE };
   manual = { name: MANUAL_PAGE };
   login = { name: LOGIN_PAGE };
   lobby = { name: LOBBY_PAGE };

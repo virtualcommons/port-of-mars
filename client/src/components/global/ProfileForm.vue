@@ -104,7 +104,7 @@ export default class ProfileForm extends Vue {
   isVerificationDisabled = false;
 
   async created() {
-    await this.$ajax.get(url("/registration/authenticated"), response => {
+    await this.$ajax.get(url("/account/authenticated"), response => {
       if (response.data) {
         const data = response.data;
         this.username = data.username;

@@ -117,10 +117,6 @@ export default class Consent extends Vue {
     return this.username.length === 0 || this.email.length === 0 || !this.emailsMatch;
   }
 
-  get grantConsentUrl() {
-    return url("/registration/grant-consent");
-  }
-
   async grantConsent() {
     await this.$ajax.grantConsent();
     // FIXME: push to update profile form

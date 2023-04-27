@@ -78,7 +78,7 @@ export default class Login extends Vue {
   devLoginUsername: string = "";
   error: string = "";
 
-  register = { name: CONSENT_PAGE };
+  consent = { name: CONSENT_PAGE };
 
   async created() {
     this.isDevMode = isDevOrStaging();

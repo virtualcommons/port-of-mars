@@ -1,7 +1,6 @@
 import { EntityManager } from "typeorm";
 import { AdminService } from "@port-of-mars/server/services/admin";
 import { AuthService } from "@port-of-mars/server/services/auth";
-import { RegistrationService } from "@port-of-mars/server/services/registration";
 import { AccountService } from "@port-of-mars/server/services/account";
 import { TournamentService } from "@port-of-mars/server/services/tournament";
 import { QuizService } from "@port-of-mars/server/services/quiz";
@@ -46,14 +45,6 @@ export class ServiceProvider {
       this._quiz = new QuizService(this);
     }
     return this._quiz;
-  }
-
-  private _registration?: RegistrationService;
-  get registration() {
-    if (!this._registration) {
-      this._registration = new RegistrationService(this);
-    }
-    return this._registration;
   }
 
   private _time?: TimeService;

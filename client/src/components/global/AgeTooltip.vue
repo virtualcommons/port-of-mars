@@ -19,7 +19,7 @@ export default class Home extends Vue {
   @Prop({ default: "top" })
   placement!: string;
 
-  register = { name: CONSENT_PAGE };
+  consent = { name: CONSENT_PAGE };
 }
 </script>
 

@@ -23,7 +23,7 @@ import {
   authRouter,
   gameRouter,
   quizRouter,
-  registrationRouter,
+  accountRouter,
   surveyRouter,
   statusRouter,
   statsRouter,
@@ -201,7 +201,7 @@ async function createApp() {
   app.use("/stats", statsRouter);
   app.use("/game", gameRouter);
   app.use("/quiz", quizRouter);
-  app.use("/registration", registrationRouter);
+  app.use("/account", accountRouter);
   app.use("/status", statusRouter);
 
   app.get("/logout", function (req, res, next) {

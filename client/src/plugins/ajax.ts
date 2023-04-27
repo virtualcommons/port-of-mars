@@ -70,7 +70,7 @@ export class AjaxRequest {
   }
 
   async denyConsent() {
-    await this.post(url("/registration/deny-consent"), () => {});
+    await this.post(url("/account/deny-consent"), () => {});
     this.store.commit("SET_DASHBOARD_MESSAGE", {
       kind: "info",
       message:
@@ -79,7 +79,7 @@ export class AjaxRequest {
   }
 
   async grantConsent() {
-    await this.post(url("/registration/grant-consent"), () => {});
+    await this.post(url("/account/grant-consent"), () => {});
     this.store.commit("SET_DASHBOARD_MESSAGE", {
       kind: "info",
       message:
