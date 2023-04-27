@@ -18,6 +18,24 @@ export const BAN = "ban" as const;
 export const NONE = "none" as const;
 export const MODERATION_ACTION_TYPES = [MUTE, BAN, NONE];
 
+export interface ClientSafeUser {
+  id: number;
+  username: string;
+  isAdmin: boolean;
+  isMuted: boolean;
+  isBanned: boolean;
+  passedQuiz?: boolean;
+  isVerified?: boolean;
+  dateConsented?: Date;
+  participantId?: string;
+}
+
+export interface ProfileData {
+  username: string;
+  name: string;
+  email: string;
+}
+
 export interface LeaderboardItem {
   rank: number;
   username: string;

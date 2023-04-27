@@ -10,6 +10,8 @@ import {
 import { Page, getPagePath } from "@port-of-mars/shared/routes";
 import { getLogger, settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
+import { User } from "@port-of-mars/server/entity";
+import { ClientSafeUser } from "@port-of-mars/shared/types";
 
 const logger = getLogger(__filename);
 
@@ -28,6 +30,21 @@ export function getRandomIntInclusive(min: number, max: number): number {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
+}
+
+export function toClientSafeUser(user: User): ClientSafeUser {
+  const safeUser = {
+    id: user.id,
+    username: user.username,
+    isAdmin: user.isAdmin,
+    isMuted: user.isMuted,
+    isBanned: user.isBanned,
+    passedQuiz: user.passedQuiz,
+    isVerified: user.isVerified,
+    dateConsented: user.dateConsented,
+    participantId: user.participantId,
+  };
+  return safeUser;
 }
 
 /**
@@ -124,6 +141,12 @@ export class ServerError extends Error implements ServerErrorData {
 
   getDisplayMessage(): string {
     return this.displayMessage ?? this.message;
+  }
+}
+
+export class ValidationError extends ServerError {
+  constructor(data: { displayMessage: string }) {
+    super({ ...data, message: "Invalid request", code: 400 });
   }
 }
 

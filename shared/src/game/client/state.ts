@@ -25,6 +25,7 @@ import {
   TradeDataWithNull,
   LobbyChatMessageData,
   LobbyClientData,
+  ClientSafeUser,
 } from "@port-of-mars/shared/types";
 import { ModalType, ModalDataType } from "@port-of-mars/shared/game/client/modals";
 import { ChatMarsLogView, HUDLeftView, HUDRightView } from "@port-of-mars/shared/game/client/panes";
@@ -129,17 +130,7 @@ export function defaultTradeData(): TradeDataWithNull<"" | Role> {
   };
 }
 
-export interface User {
-  id: number;
-  username: string;
-  isAdmin: boolean;
-  isMuted: boolean;
-  isBanned: boolean;
-  passedQuiz?: boolean;
-  isVerified?: boolean;
-  dateConsented?: Date;
-  participantId?: string;
-}
+export type User = ClientSafeUser;
 
 // NOTE :: State - userInterface
 

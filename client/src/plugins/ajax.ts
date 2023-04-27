@@ -69,24 +69,6 @@ export class AjaxRequest {
     return this.store.state.user.username;
   }
 
-  async denyConsent() {
-    await this.post(url("/account/deny-consent"), () => {});
-    this.store.commit("SET_DASHBOARD_MESSAGE", {
-      kind: "info",
-      message:
-        "You have denied consent to participate in this research project. Sorry to see you go!",
-    });
-  }
-
-  async grantConsent() {
-    await this.post(url("/account/grant-consent"), () => {});
-    this.store.commit("SET_DASHBOARD_MESSAGE", {
-      kind: "info",
-      message:
-        "You have granted consent to participate in this research project. Welcome to the Port of Mars!",
-    });
-  }
-
   async forgetLoginCreds() {
     document.cookie = "connect.sid= ;expires=Thu, 01 Jan 1970 00:00:00 GMT";
     this.store.commit("SET_USER", initialUserState);

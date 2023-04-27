@@ -23,7 +23,11 @@ export default {
   },
 
   hasConsented(state: State): boolean {
-    return !!state.user?.dateConsented;
+    return state.user?.dateConsented !== undefined;
+  },
+
+  isVerified(state: State): boolean {
+    return !!state.user?.isVerified;
   },
 
   user(state: State): User {

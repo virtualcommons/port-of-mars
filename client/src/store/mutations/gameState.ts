@@ -63,6 +63,7 @@ function SET_USER(state: State, payload: User) {
     "isBanned",
     "passedQuiz",
     "participantId",
+    "dateConsented",
     "isVerified",
   ]);
 }

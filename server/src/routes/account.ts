@@ -2,7 +2,7 @@ import { NextFunction, Request, Response, Router } from "express";
 import { getServices } from "@port-of-mars/server/services";
 import { User } from "@port-of-mars/server/entity/User";
 import { isAuthenticated } from "@port-of-mars/server/routes/middleware";
-import { ServerError } from "@port-of-mars/server/util";
+import { ValidationError } from "@port-of-mars/server/util";
 import { getLogger } from "@port-of-mars/server/settings";
 
 const logger = getLogger(__filename);
@@ -11,76 +11,47 @@ export const accountRouter = Router();
 
 accountRouter.use(isAuthenticated);
 
-accountRouter.post(
-  "/grant-consent",
-  async (req: Request, res: Response, next: NextFunction) => {
-    const user = req.user as User;
-    try {
-      const services = getServices();
-      await services.account.grantConsent(user.id);
-      logger.debug(user.dateConsented);
-      res.json(true);
-    } catch (e) {
-      logger.warn("Unable to grant consent for user %o", user);
-      next(e);
-    }
-  }
-);
-
-accountRouter.post(
-  "/update-profile",
-  async (req: Request, res: Response, next: NextFunction) => {
-    const user = req.user as User;
-    try {
-      const services = getServices();
-      const data = { ...req.body };
-      const emailAvailable = await services.account.isEmailAvailable(user, data.email);
-      const usernameAvailable = await services.account.isUsernameAvailable(data.username, user);
-      if (!emailAvailable) {
-        res.status(400).json({
-          kind: "danger",
-          message: `The email ${data.email} is already taken. Please try another one.`,
-        });
-      } else if (!usernameAvailable) {
-        res.status(400).json({
-          kind: "danger",
-          message: `The username ${data.username} is already taken. Please try another one.`,
-        });
-      } else {
-        try {
-          await services.account.updateProfile(user, data);
-        } catch (e) {
-          if (e instanceof ServerError) {
-            res.status(e.code).json({
-              kind: "danger",
-              message: e.displayMessage,
-            });
-          }
-          return;
-        }
-        res.json(true);
-      }
-    } catch (e) {
+accountRouter.post("/update-profile", async (req: Request, res: Response, next: NextFunction) => {
+  const user = req.user as User;
+  try {
+    const services = getServices();
+    const data = { ...req.body };
+    await services.account.validateUserProfile(user, data);
+    const updatedUser = await services.account.updateProfile(user, data);
+    res.json(updatedUser);
+  } catch (e) {
+    if (e instanceof ValidationError) {
+      res.status(e.code).json(e.toDashboardMessage());
+    } else {
       logger.warn("unable to update profile metadata for user ID %s", user.id);
       next(e);
     }
   }
-);
+});
 
-accountRouter.post(
-  "/deny-consent",
-  async (req: Request, res: Response, next: NextFunction) => {
-    const user = req.user as User;
-    try {
-      const services = getServices();
-      await services.account.denyConsent(user.id);
-      res.json(true);
-    } catch (e) {
-      logger.warn("unable to deny consent for %s", user.username);
-      next(e);
-    }
+accountRouter.post("/grant-consent", async (req: Request, res: Response, next: NextFunction) => {
+  const user = req.user as User;
+  try {
+    const services = getServices();
+    const updatedUser = await services.account.grantConsent(user.id);
+    res.json(updatedUser);
+  } catch (e) {
+    logger.warn("Unable to grant consent for user %o", user);
+    next(e);
   }
-);
+});
+
+accountRouter.post("/deny-consent", async (req: Request, res: Response, next: NextFunction) => {
+  const user = req.user as User;
+  try {
+    const services = getServices();
+    const updatedUser = await services.account.denyConsent(user.id);
+    res.json(updatedUser);
+  } catch (e) {
+    logger.warn("unable to deny consent for %s", user.username);
+    next(e);
+  }
+});
 
 accountRouter.post(
   "/send-email-verification",
@@ -114,21 +85,18 @@ accountRouter.post(
   }
 );
 
-accountRouter.get(
-  "/authenticated",
-  async (req: Request, res: Response, next: NextFunction) => {
-    const user = req.user as User;
-    try {
-      res.json({
-        username: user.username,
-        name: user.name,
-        email: user.email,
-        dateConsented: user.dateConsented ?? null,
-        isVerified: user.isVerified,
-      });
-    } catch (e) {
-      logger.warn(`Unable to authorize user for registration ${user.username}`);
-      next(e);
-    }
+accountRouter.get("/authenticated", async (req: Request, res: Response, next: NextFunction) => {
+  const user = req.user as User;
+  try {
+    res.json({
+      username: user.username,
+      name: user.name,
+      email: user.email,
+      dateConsented: user.dateConsented ?? null,
+      isVerified: user.isVerified,
+    });
+  } catch (e) {
+    logger.warn(`Unable to authorize user for registration ${user.username}`);
+    next(e);
   }
-);
+});

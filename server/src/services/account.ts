@@ -3,14 +3,26 @@ import { MoreThan, IsNull, Not, In, Repository, UpdateResult } from "typeorm";
 import validator from "validator";
 import { settings } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
-import { generateUsername, ServerError } from "@port-of-mars/server/util";
-import { ModerationActionType, BAN, MUTE } from "@port-of-mars/shared/types";
+import {
+  generateUsername,
+  ServerError,
+  toClientSafeUser,
+  ValidationError,
+} from "@port-of-mars/server/util";
+import {
+  ModerationActionType,
+  BAN,
+  MUTE,
+  ClientSafeUser,
+  ProfileData,
+} from "@port-of-mars/shared/types";
 
 const logger = settings.logging.getLogger(__filename);
 
 export class AccountService extends BaseService {
   getRepository(): Repository<User> {
-    return this.em.getRepository(User); }
+    return this.em.getRepository(User);
+  }
 
   isRegisteredAndValid(user: User): boolean {
     return !!user.isVerified && !!user.email && !!user.isActive;
@@ -157,63 +169,71 @@ export class AccountService extends BaseService {
     return await this.getRepository().findOneOrFail(id);
   }
 
-  async denyConsent(id: number): Promise<User> {
-    return await this.getRepository().save({
-      id,
-      dateConsented: undefined,
-    });
+  async denyConsent(id: number): Promise<ClientSafeUser> {
+    const repo = this.getRepository();
+    const user = await repo.findOneOrFail(id);
+    user.dateConsented = undefined;
+    await repo.save(user);
+    return toClientSafeUser(user);
   }
 
-  async grantConsent(id: number): Promise<User> {
-    return await this.getRepository().save({
-      id,
-      dateConsented: new Date(),
-    });
+  async grantConsent(id: number): Promise<ClientSafeUser> {
+    const repo = this.getRepository();
+    const user = await repo.findOneOrFail(id);
+    user.dateConsented = new Date();
+    await repo.save(user);
+    return toClientSafeUser(user);
   }
 
   async setLastPlayerIp(id: number, ip: string): Promise<UpdateResult> {
     return await this.getRepository().update(id, { lastPlayerIp: ip });
   }
 
-  async updateProfile(user: User, data: { username: string; email: string; name: string }) {
-    const repo = this.em.getRepository(User);
-    let shouldVerifyEmail = !user.isVerified;
-    user.username = data.username;
-    user.name = data.name;
-    if (user.email && data.email && user.email !== data.email) {
-      user.email = data.email;
-      shouldVerifyEmail = true;
+  async validateUserProfile(user: User, profileData: ProfileData): Promise<void> {
+    const isEmailAvailable = await this.isEmailAvailable(user, profileData.email);
+    const isUsernameAvailable = await this.isUsernameAvailable(profileData.username, user);
+    if (!isEmailAvailable) {
+      throw new ValidationError({
+        displayMessage: `The email ${profileData.email} is already taken. Please try another one.`,
+      });
     }
-    user.dateConsented = new Date();
-    // FIXME: consider consolidating validation logic in
-    // account route (isEmailAvailable / isUsernameAvailable)
-    // here as well
-    if (!validator.isEmail(data.email)) {
-      throw new ServerError({
-        code: 400,
-        message: `Invalid email address`,
+    if (!isUsernameAvailable) {
+      throw new ValidationError({
+        displayMessage: `The username ${profileData.username} is already taken. Please try another one.`,
+      });
+    }
+    if (!validator.isEmail(profileData.email)) {
+      throw new ValidationError({
         displayMessage: `Please enter a valid email address.`,
       });
     }
-    if (!validator.isLength(user.username, { min: 1, max: 30 })) {
-      throw new ServerError({
-        code: 400,
-        message: `Invalid username length`,
+    if (!validator.isLength(profileData.username, { min: 1, max: 30 })) {
+      throw new ValidationError({
         displayMessage: `Please choose a username between 1 and 30 characters long`,
       });
     }
-    if (!validator.isAlphanumeric(user.username, "en-US", { ignore: "_" })) {
-      throw new ServerError({
-        code: 400,
-        message: `Invalid username characters`,
+    if (!validator.isAlphanumeric(profileData.username, "en-US", { ignore: "_" })) {
+      throw new ValidationError({
         displayMessage: `Please choose a username with only letters, numbers and underscores`,
       });
     }
-    await repo.save(user);
-    logger.debug("updated registration metadata for user %o", data);
-    if (shouldVerifyEmail) {
+  }
+
+  async updateProfile(user: User, profileData: ProfileData): Promise<ClientSafeUser> {
+    const repo = this.em.getRepository(User);
+    user.username = profileData.username;
+    user.name = profileData.name;
+    if (user.email && profileData.email && user.email !== profileData.email) {
+      user.email = profileData.email;
+      user.isVerified = false;
+    }
+    user.dateConsented = new Date();
+    const updatedUser = await repo.save(user);
+    logger.debug("updated profile data for user %o", profileData);
+    if (!user.isVerified) {
       await this.sendEmailVerification(user);
     }
+    return toClientSafeUser(updatedUser);
   }
 
   createVerificationUrl(registrationToken: string) {
@@ -222,7 +242,7 @@ export class AccountService extends BaseService {
   }
 
   async sendEmailVerification(u: User): Promise<void> {
-    if (u.email) {
+    if (!u.email) {
       logger.warn("Trying to send email verification to a user with no email.");
       return;
     }
