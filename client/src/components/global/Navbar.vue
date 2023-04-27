@@ -56,6 +56,7 @@
               <b-icon-person-fill></b-icon-person-fill>
               {{ username }}
             </template>
+            <b-dropdown-item :to="profile">Edit Profile</b-dropdown-item>
             <b-dropdown-item :to="history">Game History</b-dropdown-item>
             <b-dropdown-item @click="logout">Sign Out</b-dropdown-item>
           </b-nav-item-dropdown>
@@ -81,6 +82,7 @@ import {
   LOBBY_PAGE,
   PLAYER_HISTORY_PAGE,
   LEADERBOARD_PAGE,
+  PROFILE_PAGE,
 } from "@port-of-mars/shared/routes";
 import { isDevOrStaging, Constants } from "@port-of-mars/shared/settings";
 import _ from "lodash";
@@ -109,6 +111,7 @@ export default class Header extends Vue {
   leaderboard = { name: LEADERBOARD_PAGE };
   history = { name: PLAYER_HISTORY_PAGE };
   lobby = { name: LOBBY_PAGE };
+  profile = { name: PROFILE_PAGE };
 
   async created() {
     this.isDevMode = isDevOrStaging();

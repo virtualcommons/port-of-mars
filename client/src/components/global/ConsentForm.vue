@@ -67,17 +67,15 @@
         </small>
       </p>
     </div>
-    <div v-if="isVerified" class="mt-4 align-self-start text-success">
-      <p>
+    <div>
+      <p v-if="hasConsented" class="text-success mb-0 mt-3">
         <b-icon-patch-check-fill></b-icon-patch-check-fill>
-        You have agreed to the consent form and successfully been verified!
-        <small>If you've changed your mind, you can deny consent below.</small>
-        <b-button variant="danger" @click="denyConsent" class="mx-2"> Deny Consent </b-button>
+        You have consented to the terms of this research project.
       </p>
-    </div>
-    <div v-else>
       <b-button-group class="my-3 align-self-start">
-        <b-button variant="success" @click="grantConsent"> Grant Consent </b-button>
+        <b-button variant="success" @click="grantConsent" :disabled="isVerified && hasConsented">
+          {{ grantConsentMsg }}
+        </b-button>
         <b-button variant="danger" @click="denyConsent" class="mx-2"> Deny Consent </b-button>
       </b-button-group>
     </div>
@@ -86,45 +84,45 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { url } from "@port-of-mars/client/util";
 import { Constants } from "@port-of-mars/shared/settings";
+import { AccountAPI } from "@port-of-mars/client/api/account/request";
+import { PROFILE_PAGE } from "@port-of-mars/shared/routes";
 
 @Component({})
 export default class Consent extends Vue {
-  username = "";
-  name = "";
-  email = "";
-  consented = false;
-  verifyEmail = "";
-  dateConsented: Date | null = null;
-  hasConsented = false;
-  isVerified = false;
-  isVerificationDisabled = false;
+  api!: AccountAPI;
 
   get constants() {
     return Constants;
   }
 
-  get existingUser() {
-    return this.dateConsented !== null;
+  get hasConsented() {
+    return this.$store.getters.hasConsented;
   }
 
-  get emailsMatch(): boolean {
-    return this.email === this.verifyEmail;
+  get isVerified() {
+    return this.$store.getters.isVerified;
   }
 
-  get submitDisabled() {
-    return this.username.length === 0 || this.email.length === 0 || !this.emailsMatch;
+  get grantConsentMsg(): string | boolean {
+    if (this.hasConsented && !this.isVerified) {
+      return "Continue to Verification";
+    } else {
+      return "Grant Consent";
+    }
+  }
+
+  async created() {
+    this.api = new AccountAPI(this.$store, this.$ajax);
   }
 
   async grantConsent() {
-    await this.$ajax.grantConsent();
-    // FIXME: push to update profile form
+    await this.api.grantConsent();
+    this.$router.push({ name: PROFILE_PAGE });
   }
 
   async denyConsent() {
-    await this.$ajax.denyConsent();
-    // FIXME: push to landing page
+    await this.api.denyConsent();
   }
 }
 </script>
