@@ -8,6 +8,7 @@ import session from "express-session";
 import connectRedis from "connect-redis";
 import * as Sentry from "@sentry/node";
 import { Server } from "colyseus";
+import schedule from "node-schedule";
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { Strategy as FacebookStrategy } from "passport-facebook";
@@ -218,7 +219,6 @@ async function createApp() {
   gameServer.listen(port);
 
   const services = getServices();
-  const schedule = require("node-schedule");
   // run automated admin jobs (revoking expired mutes, etc) once a day
   await services.admin.unapplyExpiredMutes();
   schedule.scheduleJob("0 0 * * *", async () => {
