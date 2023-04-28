@@ -48,8 +48,8 @@ export class AjaxRequest {
     return this._roomId;
   }
 
-  async devLogin(formData: { username: string; password: string }) {
-    const devLoginUrl = url("/login");
+  async devLogin(formData: { username: string; password: string }, shouldSkipVerification = true) {
+    const devLoginUrl = url(`/auth/login?shouldSkipVerification=${shouldSkipVerification}`);
     await this.post(
       devLoginUrl,
       ({ data, status }) => {
@@ -65,14 +65,10 @@ export class AjaxRequest {
     );
   }
 
-  get username(): string {
-    return this.store.state.user.username;
-  }
-
   async forgetLoginCreds() {
     document.cookie = "connect.sid= ;expires=Thu, 01 Jan 1970 00:00:00 GMT";
     this.store.commit("SET_USER", initialUserState);
-    await this.get(url("/logout"), () => {});
+    await this.get(url("/auth/logout"), () => {});
   }
 
   get submissionId(): number | null {

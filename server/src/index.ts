@@ -4,18 +4,21 @@ import express, { Response } from "express";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import passport from "passport";
 import session from "express-session";
 import connectRedis from "connect-redis";
 import * as Sentry from "@sentry/node";
 import { Server } from "colyseus";
+import passport from "passport";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import { Strategy as FacebookStrategy } from "passport-facebook";
+import { Strategy as LocalStrategy } from "passport-local";
 
 import { Constants, isDev, isDevOrStaging } from "@port-of-mars/shared/settings";
 
 // server side imports
 import { GameRoom, LoadTestGameRoom } from "@port-of-mars/server/rooms/game";
-import { LobbyRoom } from "@port-of-mars/server/rooms/lobby";
 import { User } from "@port-of-mars/server/entity";
+import { LobbyRoom } from "@port-of-mars/server/rooms/lobby";
 import { settings } from "@port-of-mars/server/settings";
 import { getRedis, getServices } from "@port-of-mars/server/services";
 import {
@@ -33,12 +36,6 @@ import { ServerError } from "./util";
 const logger = settings.logging.getLogger(__filename);
 const NODE_ENV = process.env.NODE_ENV || "development";
 const CONNECTION_NAME = NODE_ENV === "test" ? "test" : "default";
-
-// FIXME: make imports more consistent, replace `require` where possible
-/* eslint-disable @typescript-eslint/no-var-requires */
-const LocalStrategy = require("passport-local").Strategy;
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const FacebookStrategy = require("passport-facebook").Strategy;
 
 const RedisStore = connectRedis(session);
 const store = new RedisStore({ host: "redis", client: getRedis() });
@@ -58,8 +55,7 @@ passport.use(
       passReqToCallback: true,
     },
     async function (request: any, accessToken: any, refreshToken: any, profile: any, done: any) {
-      const services = getServices();
-      const user = await services.account.getOrCreateUser({
+      const user = await getServices().account.getOrCreateUser({
         email: profile.emails[0].value,
         passportId: profile.id,
       });
@@ -83,8 +79,7 @@ passport.use(
           message: "You must use a Facebook account with a verified email address.",
         });
       }
-      const services = getServices();
-      const user = await services.account.getOrCreateUser({
+      const user = await getServices().account.getOrCreateUser({
         email: profile.emails[0].value,
         passportId: profile.id,
       });
@@ -95,18 +90,19 @@ passport.use(
 
 if (isDevOrStaging()) {
   passport.use(
-    new LocalStrategy(async function (username: string, password: string, done: any) {
-      const services = getServices();
-      const user = await services.account.getOrCreateTestUser(username);
-      // set all testing things on the user
-      // const tournamentRound = await services.tournament.getCurrentTournamentRound();
-      // const invite = await services.tournament.getOrCreateInvite(
-      //   user.id,
-      //   tournamentRound,
-      //   true
-      // );
-      await done(null, user);
-    })
+    new LocalStrategy(
+      {
+        passReqToCallback: true,
+      },
+      async function (req: any, username: string, password: string, done: any) {
+        const shouldSkipVerification = req.query.shouldSkipVerification === "true";
+        const user = await getServices().account.getOrCreateTestUser(
+          username,
+          shouldSkipVerification
+        );
+        await done(null, user);
+      }
+    )
   );
 }
 
@@ -184,17 +180,6 @@ async function createApp() {
   app.use(passport.initialize());
   app.use(passport.session());
 
-  // dev/testing auth route in dev / staging
-  if (isDevOrStaging()) {
-    app.post("/login", passport.authenticate("local"), function (req, res) {
-      const _sessionId = req.sessionID;
-      logger.info(`dev/testing auth for user %o, setting session id ${_sessionId}`, req.user);
-      res.cookie("connect.sid", _sessionId, { signed: true });
-      const sessionCookie: any = res.getHeaders()["set-cookie"];
-      logger.info(sessionCookie);
-      res.json({ user: req.user, sessionCookie });
-    });
-  }
   app.use("/admin", adminRouter);
   app.use("/auth", authRouter);
   app.use("/survey", surveyRouter);
@@ -203,15 +188,6 @@ async function createApp() {
   app.use("/quiz", quizRouter);
   app.use("/account", accountRouter);
   app.use("/status", statusRouter);
-
-  app.get("/logout", function (req, res, next) {
-    req.logout(function (err) {
-      if (err) {
-        return next(err);
-      }
-      return res.json({ user: {} });
-    });
-  });
 
   const server = http.createServer(app);
   const gameServer = new Server({

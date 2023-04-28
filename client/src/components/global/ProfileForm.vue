@@ -80,7 +80,6 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import Messages from "@port-of-mars/client/components/global/Messages.vue";
-import { url } from "@port-of-mars/client/util";
 import { ProfileData } from "@port-of-mars/shared/types";
 import { AccountAPI } from "@port-of-mars/client/api/account/request";
 
@@ -96,9 +95,10 @@ export default class ProfileForm extends Vue {
     email: "",
   };
   confirmEmail = "";
+  // track whether to show validation error on confirm email field
+  // null: none, false: invalid, true: valid https://bootstrap-vue.org/docs/components/form-input#contextual-states
   emailVerificationState: boolean | null = null;
   submitted = false;
-
   // used to temporarily disable sending a verification email
   // to prevent overloading mailgun and spamming
   isVerificationDisabled = false;
@@ -113,17 +113,16 @@ export default class ProfileForm extends Vue {
 
   async created() {
     this.api = new AccountAPI(this.$store, this.$ajax);
-    await this.$ajax.get(url("/account/authenticated"), response => {
-      if (response.data) {
-        const { username, name, email } = response.data;
-        this.form.username = username;
-        this.form.email = email;
-        this.form.name = name;
-        if (response.data.isVerified) {
-          this.confirmEmail = email;
-        }
+    const data = await this.api.authenticate();
+    if (data) {
+      const { username, email, name, isVerified } = data;
+      this.form.username = username;
+      this.form.email = email;
+      this.form.name = name;
+      if (isVerified) {
+        this.confirmEmail = email;
       }
-    });
+    }
   }
 
   async updateProfile(e: Event) {

@@ -23,6 +23,7 @@ import { Component, Provide, Inject, Vue } from "vue-property-decorator";
 import { Client, Room } from "colyseus.js";
 import { applyLobbyResponses } from "@port-of-mars/client/api/lobby/response";
 import { LobbyRequestAPI } from "@port-of-mars/client/api/lobby/request";
+import { AccountAPI } from "@port-of-mars/client/api/account/request";
 import { LOBBY_NAME } from "@port-of-mars/shared/lobby";
 import { GAME_PAGE, CONSENT_PAGE, MANUAL_PAGE } from "@port-of-mars/shared/routes";
 import { Constants } from "@port-of-mars/shared/settings";
@@ -41,6 +42,7 @@ import Messages from "@port-of-mars/client/components/global/Messages.vue";
 export default class Lobby extends Vue {
   @Inject() readonly $client!: Client;
   @Provide() api: LobbyRequestAPI = new LobbyRequestAPI();
+  accountApi!: AccountAPI;
 
   game = { name: GAME_PAGE };
   manual = { name: MANUAL_PAGE };
@@ -51,18 +53,18 @@ export default class Lobby extends Vue {
   }
 
   async created() {
+    this.accountApi = new AccountAPI(this.$store, this.$ajax);
     await this.checkCanPlay();
     await this.rejoinIfActiveGame();
   }
 
   async checkCanPlay() {
-    await this.$ajax.get(url("/account/authenticated"), ({ data }) => {
-      if (data) {
-        if (!data.isVerified || !data.dateConsented) {
-          this.$router.push(this.consent);
-        }
+    const data = await this.accountApi.authenticate();
+    if (data) {
+      if (!data.isVerified || !data.dateConsented) {
+        this.$router.push(this.consent);
       }
-    });
+    }
   }
 
   async rejoinIfActiveGame() {

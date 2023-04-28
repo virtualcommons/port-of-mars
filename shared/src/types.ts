@@ -36,6 +36,11 @@ export interface ProfileData {
   email: string;
 }
 
+export type AuthData = ProfileData & {
+  dateConsented: Date | undefined | null;
+  isVerified: boolean;
+};
+
 export interface LeaderboardItem {
   rank: number;
   username: string;

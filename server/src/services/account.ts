@@ -301,7 +301,7 @@ export class AccountService extends BaseService {
     try {
       r = await this.em
         .getRepository(User)
-        .update({ username: u.username, registrationToken }, { isVerified: true });
+        .update({ id: u.id, registrationToken }, { isVerified: true });
     } catch (e) {
       logger.fatal(
         "error while updating user %s registration token %s",
@@ -326,7 +326,7 @@ export class AccountService extends BaseService {
     return r;
   }
 
-  async getOrCreateTestUser(username: string): Promise<User> {
+  async getOrCreateTestUser(username: string, shouldSkipVerification = true): Promise<User> {
     let user = await this.getRepository().findOne({ username });
     if (!user) {
       user = new User();
@@ -338,10 +338,10 @@ export class AccountService extends BaseService {
       logger.info("getOrCreateTestUser: test user %s exists", user.username);
     }
     // test user, set fake data so they can immediately join a game
-    // FIXME: use run-time configuration / settings to determine what user properties to bypass (passedQuiz, isVerified, hasParticipated, etc)
-    user.dateConsented = new Date();
-    user.isVerified = true;
-    // user.passedQuiz = true;
+    if (shouldSkipVerification) {
+      user.dateConsented = new Date();
+      user.isVerified = true;
+    }
     await this.getRepository().save(user);
     return user;
   }

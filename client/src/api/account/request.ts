@@ -1,5 +1,5 @@
 import { url } from "@port-of-mars/client/util";
-import { ProfileData } from "@port-of-mars/shared/types";
+import { AuthData, ProfileData } from "@port-of-mars/shared/types";
 import { TStore } from "@port-of-mars/client/plugins/tstore";
 import { AjaxRequest } from "@port-of-mars/client/plugins/ajax";
 
@@ -68,6 +68,18 @@ export class AccountAPI {
         profileData
       );
     } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  }
+
+  async authenticate(): Promise<AuthData | void> {
+    try {
+      return await this.ajax.get(url("/account/authenticated"), ({ data }) => {
+        return data;
+      });
+    } catch (e) {
+      console.log("Unable to authenticate user");
       console.log(e);
       throw e;
     }
