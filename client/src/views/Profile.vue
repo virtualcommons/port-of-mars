@@ -13,7 +13,7 @@ import ProfileForm from "@port-of-mars/client/components/global/ProfileForm.vue"
 @Component({
   components: { ProfileForm },
 })
-export default class App extends Vue {}
+export default class Profile extends Vue {}
 </script>
 <style lang="scss" scoped>
 #profile-form-container {

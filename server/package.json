@@ -16,7 +16,7 @@
     "dangerously-dropdb": "dropdb -U marsmadness -h db port_of_mars",
     "initdb": "createdb -U marsmadness -h db port_of_mars ; yarn typeorm migration:run && /scripts/openbeta/setup.sh",
     "dangerously-loaddb": "psql -h db -U marsmadness port_of_mars < pom-db.sql",
-    "dangerously-resetdb": "dropdb -U marsmadness -h db port_of_mars && createdb -U marsmadness -h db port_of_mars && yarn typeorm migration:run",
+    "dangerously-resetdb": "dropdb -U marsmadness -h db port_of_mars && createdb -U marsmadness -h db port_of_mars",
     "migrate": "yarn typeorm migration:run",
     "repl": "yarn ts-node -r tsconfig-paths/register",
     "sql": "pgcli -U marsmadness -d port_of_mars -h db",

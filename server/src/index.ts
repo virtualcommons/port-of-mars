@@ -188,7 +188,7 @@ async function createApp() {
   if (isDevOrStaging()) {
     app.post("/login", passport.authenticate("local"), function (req, res) {
       const _sessionId = req.sessionID;
-      logger.info(`successful authentication for ${req.user}, setting session id ${_sessionId}`);
+      logger.info(`successful authentication for user # ${req.user.id}, setting session id ${_sessionId}`);
       res.cookie("connect.sid", _sessionId, { signed: true });
       const sessionCookie: any = res.getHeaders()["set-cookie"];
       logger.info(sessionCookie);
