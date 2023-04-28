@@ -184,11 +184,11 @@ async function createApp() {
   app.use(passport.initialize());
   app.use(passport.session());
 
-  // make this conditional on isDev()
+  // dev/testing auth route in dev / staging
   if (isDevOrStaging()) {
     app.post("/login", passport.authenticate("local"), function (req, res) {
       const _sessionId = req.sessionID;
-      logger.info(`successful authentication for user # ${req.user.id}, setting session id ${_sessionId}`);
+      logger.info(`dev/testing auth for user %o, setting session id ${_sessionId}`, req.user);
       res.cookie("connect.sid", _sessionId, { signed: true });
       const sessionCookie: any = res.getHeaders()["set-cookie"];
       logger.info(sessionCookie);

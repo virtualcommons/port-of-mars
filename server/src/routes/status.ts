@@ -8,8 +8,8 @@ statusRouter.get("/", async (req: Request, res: Response, next) => {
   // provide initial data to client
   try {
     const user = req.user as User;
-    const safeUser = toClientSafeUser(user);
     if (user) {
+      const safeUser = toClientSafeUser(user);
       res.json({
         user: { ...safeUser },
       });
