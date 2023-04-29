@@ -7,6 +7,6 @@ export * from "./game";
 export * from "./stats";
 export * from "./middleware";
 export * from "./quiz";
-export * from "./registration";
+export * from "./account";
 export * from "./status";
 export * from "./survey";

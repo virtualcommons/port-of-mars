@@ -10,6 +10,8 @@ import {
 import { Page, getPagePath } from "@port-of-mars/shared/routes";
 import { getLogger, settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
+import { User } from "@port-of-mars/server/entity";
+import { ClientSafeUser } from "@port-of-mars/shared/types";
 
 const logger = getLogger(__filename);
 
@@ -30,6 +32,21 @@ export function getRandomIntInclusive(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
 }
 
+export function toClientSafeUser(user: User): ClientSafeUser {
+  const safeUser = {
+    id: user.id,
+    username: user.username,
+    isAdmin: user.isAdmin,
+    isMuted: user.isMuted,
+    isBanned: user.isBanned,
+    passedQuiz: user.passedQuiz,
+    isVerified: user.isVerified,
+    dateConsented: user.dateConsented,
+    participantId: user.participantId,
+  };
+  return safeUser;
+}
+
 /**
  * This function needs some documentation some day.
  * @param deckStrategy
@@ -48,11 +65,12 @@ export function mockGameStateInitOpts(
     isMuted: false,
   }));
   const playerOpts: GameOpts["playerOpts"] = new Map();
+  const shuffledRoles = _.shuffle(ROLES);
   playerData.forEach((p, i) => {
-    playerOpts.set(ROLES[i], p);
+    playerOpts.set(shuffledRoles[i], p);
   });
   return {
-    userRoles: _.zipObject(usernames, ROLES),
+    userRoles: _.zipObject(usernames, shuffledRoles),
     playerOpts,
     deck,
     numberOfGameRounds,
@@ -86,11 +104,12 @@ export async function buildGameOpts(usernames: Array<string>): Promise<GameOpts>
     })
   );
   const playerOpts: GameOpts["playerOpts"] = new Map();
+  const shuffledRoles = _.shuffle(ROLES);
   playerData.forEach((p, i) => {
-    playerOpts.set(ROLES[i], p);
+    playerOpts.set(shuffledRoles[i], p);
   });
   return {
-    userRoles: _.zipObject(usernames, ROLES),
+    userRoles: _.zipObject(usernames, shuffledRoles),
     playerOpts,
     deck: getRandomizedMarsEventDeck(),
     numberOfGameRounds: currentTournamentRound.numberOfGameRounds,
@@ -125,39 +144,13 @@ export class ServerError extends Error implements ServerErrorData {
   }
 }
 
+export class ValidationError extends ServerError {
+  constructor(data: { displayMessage: string }) {
+    super({ ...data, message: "Invalid request", code: 400 });
+  }
+}
+
 export async function generateUsername() {
-  const NOUNS = [
-    "Ferret",
-    "Marmot",
-    "Bison",
-    "Parrot",
-    "Meerkat",
-    "Orca",
-    "Leopard",
-    "Raccoon",
-    "Quagga",
-    "Newt",
-    "Starfish",
-    "Chameleon",
-    "Orangutan",
-    "Wolverine",
-    "Ibex",
-    "Antelope",
-    "Axolotl",
-    "Lizard",
-    "Camel",
-  ];
-
-  const ADJECTIVES = [
-    "Astral",
-    "Celestial",
-    "Cosmic",
-    "Solar",
-    "Orbiting",
-    "Elliptical",
-    "Martian",
-  ];
-
   let isUnique = false;
   let username = "";
   while (!isUnique) {
@@ -170,3 +163,59 @@ export async function generateUsername() {
 
   return username;
 }
+
+const NOUNS = [
+  "Ferret",
+  "Marmot",
+  "Bison",
+  "Parrot",
+  "Meerkat",
+  "Orca",
+  "Leopard",
+  "Raccoon",
+  "Quagga",
+  "Newt",
+  "Starfish",
+  "Chameleon",
+  "Orangutan",
+  "Wolverine",
+  "Ibex",
+  "Antelope",
+  "Axolotl",
+  "Lizard",
+  "Camel",
+  "Dingo",
+  "Dolphin",
+  "Canary",
+  "Eagle",
+  "Falcon",
+  "Fox",
+  "Giraffe",
+  "Hedgehog",
+  "Heron",
+  "Hyena",
+  "Iguana",
+  "Koala",
+  "Lemur",
+];
+
+const ADJECTIVES = [
+  "Astral",
+  "Celestial",
+  "Cosmic",
+  "Solar",
+  "Orbiting",
+  "Elliptical",
+  "Martian",
+  "Lunar",
+  "Illustrious",
+  "Lunar",
+  "Stellar",
+  "Asteroidal",
+  "Cometary",
+  "Galactic",
+  "Interstellar",
+  "Nebular",
+  "Planetary",
+  "Auroral",
+];

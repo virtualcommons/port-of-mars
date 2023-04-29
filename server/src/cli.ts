@@ -23,6 +23,7 @@ import {
   User,
 } from "@port-of-mars/server/entity";
 import { DYNAMIC_SETTINGS_PATH, RedisSettings } from "@port-of-mars/server/services/settings";
+import { generateUsername } from "@port-of-mars/server/util";
 
 import { program } from "commander";
 import { mkdir, readFile, writeFile } from "fs/promises";
@@ -184,6 +185,29 @@ async function setAdminUser(em: EntityManager, username: string): Promise<void> 
     logger.info("set user '%s' (id: %s) as admin", user.username, user.id);
   } catch (e) {
     logger.warn("error attempting to set '%s' as admin", username);
+  }
+}
+
+async function anonymizeUsernames(
+  em: EntityManager,
+  startId: number,
+  endId: number
+): Promise<void> {
+  const repo = em.getRepository(User);
+  try {
+    const users = await repo
+      .createQueryBuilder("user")
+      .where("user.id BETWEEN :startId AND :endId", { startId, endId })
+      .getMany();
+    const anonUsers = await Promise.all(
+      users.map(async user => {
+        user.username = await generateUsername();
+        return user;
+      })
+    );
+    await repo.save(anonUsers);
+  } catch (e) {
+    logger.fatal("error anonymizing usernames: %o", e);
   }
 }
 
@@ -490,6 +514,16 @@ program
           .requiredOption("--username <username>", "username of the user")
           .action(async cmd => {
             await withConnection(em => setAdminUser(em, cmd.username));
+          })
+      )
+      .addCommand(
+        program
+          .createCommand("anon")
+          .description("anonymize a range of users' usernames")
+          .requiredOption("--startId <startUserId>", "initial user ID in range", customParseInt, 1)
+          .requiredOption("--endId <endUserId>", "end user ID in range", customParseInt, 1942)
+          .action(async cmd => {
+            await withConnection(em => anonymizeUsernames(em, cmd.startId, cmd.endId));
           })
       )
   )

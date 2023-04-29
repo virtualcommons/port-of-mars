@@ -22,6 +22,14 @@ export default {
     return state.user?.isAdmin;
   },
 
+  hasConsented(state: State): boolean {
+    return !!state.user?.dateConsented;
+  },
+
+  isVerified(state: State): boolean {
+    return !!state.user?.isVerified;
+  },
+
   user(state: State): User {
     return state.user;
   },

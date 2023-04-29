@@ -13,11 +13,12 @@ import Lobby from "@port-of-mars/client/views/Lobby.vue";
 import LobbyRoom from "@port-of-mars/client/components/lobby/LobbyRoom.vue";
 import LobbyRoomList from "@port-of-mars/client/components/lobby/LobbyRoomList.vue";
 import Game from "@port-of-mars/client/views/Game.vue";
-import Register from "@port-of-mars/client/views/Register.vue";
+import Consent from "@port-of-mars/client/views/Consent.vue";
 import Verify from "@port-of-mars/client/views/VerifyEmail.vue";
 import Manual from "@port-of-mars/client/views/Manual.vue";
 import Home from "@port-of-mars/client/views/Home.vue";
 import Privacy from "@port-of-mars/client/views/Privacy.vue";
+import Profile from "@port-of-mars/client/views/Profile.vue";
 import store from "@port-of-mars/client/store";
 import {
   ADMIN_PAGE,
@@ -27,12 +28,13 @@ import {
   GAME_PAGE,
   LEADERBOARD_PAGE,
   PLAYER_HISTORY_PAGE,
-  REGISTER_PAGE,
+  CONSENT_PAGE,
   VERIFY_PAGE,
   MANUAL_PAGE,
   HOME_PAGE,
   ABOUT_PAGE,
   PRIVACY_PAGE,
+  PROFILE_PAGE,
 } from "@port-of-mars/shared/routes";
 
 Vue.use(VueRouter);
@@ -72,12 +74,13 @@ const router = new VueRouter({
     { ...PAGE_META[GAME_PAGE], component: Game },
     { ...PAGE_META[LEADERBOARD_PAGE], component: Leaderboard },
     { ...PAGE_META[PLAYER_HISTORY_PAGE], component: PlayerHistory },
-    { ...PAGE_META[REGISTER_PAGE], component: Register },
+    { ...PAGE_META[CONSENT_PAGE], component: Consent },
     { ...PAGE_META[VERIFY_PAGE], component: Verify },
     { ...PAGE_META[MANUAL_PAGE], component: Manual },
     { ...PAGE_META[HOME_PAGE], component: Home },
     { ...PAGE_META[ABOUT_PAGE], component: Home },
     { ...PAGE_META[PRIVACY_PAGE], component: Privacy },
+    { ...PAGE_META[PROFILE_PAGE], component: Profile },
   ],
 });
 
@@ -87,6 +90,10 @@ function isAuthenticated() {
 
 function isAdmin() {
   return store.getters.isAdmin;
+}
+
+function hasConsented() {
+  return store.getters.hasConsented;
 }
 
 router.beforeEach((to, from, next) => {
@@ -111,6 +118,8 @@ router.beforeEach((to: any, from: any, next: any) => {
     next({ name: LOGIN_PAGE });
   } else if (to.name === LOGIN_PAGE && isAuthenticated()) {
     next({ name: HOME_PAGE });
+  } else if (to.name === PROFILE_PAGE && !hasConsented()) {
+    next({ name: CONSENT_PAGE });
   } else if (to.meta.requiresAdmin && !isAdmin()) {
     next({ name: HOME_PAGE });
   } else {

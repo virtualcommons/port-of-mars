@@ -4,11 +4,32 @@ import { User } from "@port-of-mars/server/entity";
 import { settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
 import { toUrl } from "@port-of-mars/server/util";
-import { LOGIN_PAGE, REGISTER_PAGE, LOBBY_PAGE } from "@port-of-mars/shared/routes";
+import { LOGIN_PAGE, CONSENT_PAGE, LOBBY_PAGE } from "@port-of-mars/shared/routes";
+import { isDevOrStaging } from "@port-of-mars/shared/settings";
 
 const logger = settings.logging.getLogger(__filename);
 
 export const authRouter = Router();
+
+if (isDevOrStaging()) {
+  authRouter.post("/login", passport.authenticate("local"), function (req, res) {
+    const _sessionId = req.sessionID;
+    logger.info(`dev/testing auth for user %o, setting session id ${_sessionId}`, req.user);
+    res.cookie("connect.sid", _sessionId, { signed: true });
+    const sessionCookie: any = res.getHeaders()["set-cookie"];
+    logger.info(sessionCookie);
+    res.json({ user: req.user, sessionCookie });
+  });
+}
+
+authRouter.get("/logout", function (req, res, next) {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    return res.json({ user: {} });
+  });
+});
 
 authRouter.get("/google", passport.authenticate("google", { scope: ["email", "profile"] }));
 
@@ -36,7 +57,7 @@ authRouter.get("/google/success", function (req, res) {
       res.redirect(toUrl(LOBBY_PAGE));
     } else {
       logger.warn("invalid / unregistered user %o", user);
-      res.redirect(toUrl(REGISTER_PAGE));
+      res.redirect(toUrl(CONSENT_PAGE));
     }
   } else {
     logger.warn("no user on the request, returning to login %o", req);
@@ -70,7 +91,7 @@ authRouter.get("/facebook/success", function (req, res) {
       res.redirect(toUrl(LOBBY_PAGE));
     } else {
       logger.warn("invalid / unregistered user %o", user);
-      res.redirect(toUrl(REGISTER_PAGE));
+      res.redirect(toUrl(CONSENT_PAGE));
     }
   } else {
     logger.warn("no user on the request, returning to login %o", req);

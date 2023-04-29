@@ -12,14 +12,14 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { REGISTER_PAGE } from "@port-of-mars/shared/routes";
+import { CONSENT_PAGE } from "@port-of-mars/shared/routes";
 
 @Component({})
 export default class Home extends Vue {
   @Prop({ default: "top" })
   placement!: string;
 
-  consent = { name: REGISTER_PAGE };
+  consent = { name: CONSENT_PAGE };
 }
 </script>
 

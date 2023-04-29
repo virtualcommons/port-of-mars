@@ -34,6 +34,9 @@
             <p v-else>Enable Test Mode</p>
           </b-form-checkbox>
           <b-form inline v-if="isDevMode && toggleDevLogin" @submit="devLogin">
+            <b-form-checkbox v-model="shouldSkipVerification">
+              <p>Skip consent/verification</p>
+            </b-form-checkbox>
             <b-form-input
               class="w-100 mb-2"
               id="input-username"
@@ -64,7 +67,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import { url } from "@port-of-mars/client/util";
 import { isDevOrStaging } from "@port-of-mars/shared/settings";
-import { REGISTER_PAGE } from "@port-of-mars/shared/routes";
+import { CONSENT_PAGE } from "@port-of-mars/shared/routes";
 import AgeTooltip from "@port-of-mars/client/components/global/AgeTooltip.vue";
 
 @Component({
@@ -75,10 +78,11 @@ import AgeTooltip from "@port-of-mars/client/components/global/AgeTooltip.vue";
 export default class Login extends Vue {
   isDevMode: boolean = false;
   toggleDevLogin: boolean = false;
+  shouldSkipVerification: boolean = true;
   devLoginUsername: string = "";
   error: string = "";
 
-  register = { name: REGISTER_PAGE };
+  consent = { name: CONSENT_PAGE };
 
   async created() {
     this.isDevMode = isDevOrStaging();
@@ -99,7 +103,8 @@ export default class Login extends Vue {
       password: "testing",
     };
     try {
-      await this.$ajax.devLogin(devLoginData);
+      console.log(this.shouldSkipVerification);
+      await this.$ajax.devLogin(devLoginData, this.shouldSkipVerification);
     } catch (e) {
       if (e instanceof Error) {
         this.error = e.message;

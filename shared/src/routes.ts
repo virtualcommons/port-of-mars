@@ -4,12 +4,13 @@ export const LOBBY_PAGE = "Lobby" as const;
 export const GAME_PAGE = "Game" as const;
 export const LEADERBOARD_PAGE = "Leaderboard" as const;
 export const PLAYER_HISTORY_PAGE = "PlayerHistory" as const;
-export const REGISTER_PAGE = "Register" as const;
+export const CONSENT_PAGE = "Consent" as const;
 export const VERIFY_PAGE = "Verify" as const;
 export const MANUAL_PAGE = "Manual" as const;
 export const HOME_PAGE = "Home" as const;
 export const ABOUT_PAGE = "About" as const;
 export const PRIVACY_PAGE = "Privacy" as const;
+export const PROFILE_PAGE = "Profile" as const;
 
 export type Page =
   | "Admin"
@@ -20,7 +21,8 @@ export type Page =
   | "Game"
   | "PlayerHistory"
   | "Leaderboard"
-  | "Register"
+  | "Consent"
+  | "Profile"
   | "Verify"
   | "Manual"
   | "Privacy";
@@ -32,7 +34,8 @@ export const PAGES: Array<Page> = [
   GAME_PAGE,
   PLAYER_HISTORY_PAGE,
   LEADERBOARD_PAGE,
-  REGISTER_PAGE,
+  CONSENT_PAGE,
+  PROFILE_PAGE,
   VERIFY_PAGE,
   MANUAL_PAGE,
   HOME_PAGE,
@@ -64,9 +67,9 @@ export const PAGE_META: {
       requiresAdmin: true,
     },
   },
-  [REGISTER_PAGE]: {
-    path: "/register",
-    name: REGISTER_PAGE,
+  [CONSENT_PAGE]: {
+    path: "/consent",
+    name: CONSENT_PAGE,
     meta: {
       requiresAuth: true,
     },
@@ -141,6 +144,13 @@ export const PAGE_META: {
     name: PRIVACY_PAGE,
     meta: {
       requiresAuth: false,
+    },
+  },
+  [PROFILE_PAGE]: {
+    path: "/profile",
+    name: PROFILE_PAGE,
+    meta: {
+      requiresAuth: true,
     },
   },
 };

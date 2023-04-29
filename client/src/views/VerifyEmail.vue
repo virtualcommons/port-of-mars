@@ -38,7 +38,7 @@ export default class Verify extends Vue {
   private verifyEmail: boolean = true;
 
   get verifyUrl() {
-    return url(`/registration/verify/${this.token}`);
+    return url(`/account/verify/${this.token}`);
   }
 
   async submit() {
