@@ -1,5 +1,4 @@
 import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn, CreateDateColumn, JoinColumn } from "typeorm";
-import { Role, ROLES } from "@port-of-mars/shared/types";
 import { User } from "./User";
 import { SoloGame } from "@port-of-mars/server/entity/SoloGame";
 
