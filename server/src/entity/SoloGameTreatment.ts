@@ -25,5 +25,5 @@ export class SoloPlayer {
   @ManyToOne(type => SoloGameRound, game => game.player, { nullable: false })
   @JoinColumn()
   game!: SoloGameRound;
-
+  
 }
