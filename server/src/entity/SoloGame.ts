@@ -1,20 +1,29 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, CreateDateColumn, JoinColumn } from "typeorm";
+import { Column, Entity, OneToOne, ManyToOne, PrimaryGeneratedColumn, CreateDateColumn, JoinColumn } from "typeorm";
 import { User } from "./User";
 import { SoloGameTreatment } from "@port-of-mars/server/entity/SoloGameTreatment";
+import { SoloMarsEventDeck } from "./SoloMarsEventDeck";
 
 @Entity()
 export class SoloGame{
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @ManyToOne(type => SoloGameTreatment, game => game.player, { nullable: false })
+  @ManyToOne(type => SoloGameTreatment, { nullable: false })
   @JoinColumn()
-  game!: SoloGameTreatment;
+  treatment!: SoloGameTreatment;
 
   @Column()
-  SoloGameTreatmentId!: number;
+  treatmentId!: number;
   
   @CreateDateColumn()
   dateCreated!: Date;
+
+  @OneToOne(type => SoloMarsEventDeck, { nullable: false })
+  @JoinColumn()
+  deck!: SoloMarsEventDeck;
+
+  @Column()
+  deckId!: number;
+
  
 }

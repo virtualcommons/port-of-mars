@@ -14,7 +14,7 @@ export class SoloGameRound {
   @CreateDateColumn()
   dateCreated!: Date;
 
-  @OneToOne(type => SoloPlayerDecision, game => game.player, { nullable: false })
+  @OneToOne(type => SoloPlayerDecision, { nullable: false })
   @JoinColumn()
-  game!: SoloPlayerDecision;
+  decision!: SoloPlayerDecision;
 }

@@ -12,5 +12,5 @@ export class SoloMarsEventDeck {
 
   @OneToMany(type => SoloMarsEventDeckCard, game => game.player, { nullable: false })
   @JoinColumn()
-  game!: SoloMarsEventDeckCard;
+  deckCard!: SoloMarsEventDeckCard;
 }
