@@ -2,7 +2,7 @@ import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn } from "typeor
 import { User } from "./User";
 
 @Entity()
-export class SoloPlayer {
+export class SoloMarsEventDeckCard{
   @PrimaryGeneratedColumn()
   id!: number;
 
