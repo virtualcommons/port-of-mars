@@ -27,4 +27,4 @@ COPY ./shared /code/shared
 
 ENV NODE_ENV=development
 
-CMD ["/code/server/deploy/dev.sh"]
+CMD ["yarn", "start"]

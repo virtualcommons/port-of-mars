@@ -5,8 +5,10 @@ services:
     restart: always
     image: port-of-mars/server:dev
     depends_on:
-      - redis
-      - db
+      redis:
+        condition: service_started
+      db:
+        condition: service_healthy
     volumes:
       - ./docker/dump:/dump
       - ./docker/logs:/var/log/port-of-mars
@@ -35,6 +37,11 @@ services:
     image: redis:7
     restart: always
   db:
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     image: postgres:12
     restart: always
     environment:

@@ -51,16 +51,13 @@ RUN apt-get update \
 
 COPY ./server/fixtures /code/server/fixtures
 COPY ./server/deploy/prod.sh /code/server
-COPY ./server/deploy/wait-for-it.sh /code/server
 COPY --from=pom-server-base /code/server/lib /code
 COPY --from=pom-server-base /code/server/node_modules /code/server/node_modules
 COPY --from=pom-client-builder-base /code/client/dist /code/server/static
 
 WORKDIR /code/server
 
-RUN chmod u+x prod.sh wait-for-it.sh
-
 ARG NODE_ARG=production
 ENV NODE_ENV=${NODE_ARG}
 
-CMD ["/code/server/prod.sh"]
+CMD ["yarn", "start:prod"] 
