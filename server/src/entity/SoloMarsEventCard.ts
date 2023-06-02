@@ -1,9 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToMany } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, ManyToMany, JoinColumn} from "typeorm";
 import { User } from "./User";
 import { SoloMarsEventDeck } from "@port-of-mars/server/entity/SoloMarsEventDeck";
 
 @Entity()
-export class SoloPlayer {
+export class SoloMarsEventCard {
   @PrimaryGeneratedColumn()
   id!: number;
 

@@ -1,9 +1,9 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, CreateDateColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, CreateDateColumn, JoinColumn } from "typeorm";
 import { User } from "./User";
 import { SoloGameTreatment } from "@port-of-mars/server/entity/SoloGameTreatment";
 
 @Entity()
-export class SoloPlayer {
+export class SoloGame{
   @PrimaryGeneratedColumn()
   id!: number;
 
@@ -16,8 +16,5 @@ export class SoloPlayer {
   
   @CreateDateColumn()
   dateCreated!: Date;
-
-  //FIXME: configuration parameters definition and type?
-  @Column()
-  configurationParameters!: string; 
+ 
 }

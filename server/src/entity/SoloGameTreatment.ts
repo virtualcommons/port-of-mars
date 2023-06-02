@@ -3,7 +3,7 @@ import { User } from "./User";
 import { SoloGameRound } from "@port-of-mars/server/entity/SoloGameRound";
 
 @Entity()
-export class SoloPlayer {
+export class SoloGameTreatment {
   @PrimaryGeneratedColumn()
   id!: number;
 
