@@ -11,7 +11,7 @@ services:
       - ./shared/src:/code/shared/src
       - /code/client/node_modules
       - ./.prettierrc:/code/.prettierrc
-    command: './dev.sh'
+    command: 'yarn install && yarn start'
     ports:
       - '127.0.0.1:8081:8080'
   server:
