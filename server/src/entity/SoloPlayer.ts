@@ -16,7 +16,7 @@ export class SoloPlayer {
   @Column({ default: "" })
   playerIp!: string;
 
-  @OneToOne(type => SoloGame, game => game.player, { nullable: false })
+  @OneToOne(type => SoloGame)
   @JoinColumn()
   game!: SoloGame;
 

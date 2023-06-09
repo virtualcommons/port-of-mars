@@ -1,5 +1,4 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToMany, JoinColumn} from "typeorm";
-import { User } from "./User";
 import { SoloMarsEventDeck } from "@port-of-mars/server/entity/SoloMarsEventDeck";
 
 @Entity()
@@ -16,7 +15,4 @@ export class SoloMarsEventCard {
   @Column()
   codeName!: string;
 
-  @ManyToMany(type => SoloMarsEventDeck, soloMarsEventCard=>soloMarsEventCard.deck, { nullable: false })
-  @JoinColumn()
-  deck!: SoloMarsEventDeck;
 }

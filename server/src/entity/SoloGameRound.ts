@@ -1,5 +1,4 @@
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn, CreateDateColumn, JoinColumn} from "typeorm";
-import { User } from "./User";
 import { SoloPlayerDecision } from "@port-of-mars/server/entity/SoloPlayerDecision";
 
 @Entity()

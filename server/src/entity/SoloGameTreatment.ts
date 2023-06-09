@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, JoinColumn } from "typeorm";
-import { User } from "./User";
 import { SoloGameRound } from "@port-of-mars/server/entity/SoloGameRound";
 
+export type ThresholdInformation = "unknown" | "range" | "known";
 @Entity()
 export class SoloGameTreatment {
   @PrimaryGeneratedColumn()
@@ -19,11 +19,11 @@ export class SoloGameTreatment {
   @Column()
   isEventDeckKnown! : boolean;
   
-  @Column()
-  thresholdInformation! : string;
-  
-  @ManyToOne(type => SoloGameRound, soloGameTreatment=>soloGameTreatment.round, { nullable: false })
-  @JoinColumn()
-  round!: SoloGameRound;
-  
+  @Column({
+    type: "enum",
+    enum: ["unknown", "range", "known"]
+  })
+  thresholdInformation! : ThresholdInformation;
+
+   
 }
