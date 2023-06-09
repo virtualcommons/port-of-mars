@@ -1,5 +1,4 @@
 import { Column, Entity, PrimaryGeneratedColumn, OneToMany, JoinColumn} from "typeorm";
-import { User } from "./User";
 import { SoloMarsEventDeckCard } from "@port-of-mars/server/entity/SoloMarsEventDeckCard";
 
 @Entity()
@@ -10,7 +9,7 @@ export class SoloMarsEventDeck {
   @Column()
   codeName!: string;
 
-  @OneToMany(type => SoloMarsEventDeckCard, soloMarsEventDeck=>soloMarsEventDeck.deckCard, { nullable: true })
+  @OneToMany(type => SoloMarsEventDeckCard, card=>card.deck, { nullable: true })
   @JoinColumn()
-  deckCard!: SoloMarsEventDeckCard;
+  cards!: SoloMarsEventDeckCard[];
 }
