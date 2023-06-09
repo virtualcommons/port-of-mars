@@ -16,7 +16,7 @@ export class SoloMarsEventCard {
   @Column()
   codeName!: string;
 
-  @ManyToMany(type => SoloMarsEventDeck, soloMarsEventCard=>soloMarsEventCard.soloMarsEventDeck, { nullable: false })
+  @ManyToMany(type => SoloMarsEventDeck, soloMarsEventCard=>soloMarsEventCard.deck, { nullable: false })
   @JoinColumn()
   deck!: SoloMarsEventDeck;
 }

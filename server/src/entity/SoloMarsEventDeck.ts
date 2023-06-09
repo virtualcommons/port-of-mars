@@ -10,7 +10,7 @@ export class SoloMarsEventDeck {
   @Column()
   codeName!: string;
 
-  @OneToMany(type => SoloMarsEventDeckCard, soloMarsEventDeck=>soloMarsEventDeck.soloMarsEventDeckCard, { nullable: true })
+  @OneToMany(type => SoloMarsEventDeckCard, soloMarsEventDeck=>soloMarsEventDeck.deckCard, { nullable: true })
   @JoinColumn()
   deckCard!: SoloMarsEventDeckCard;
 }
