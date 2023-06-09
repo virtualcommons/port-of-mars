@@ -22,7 +22,7 @@ export class SoloGameTreatment {
   @Column()
   thresholdInformation! : string;
   
-  @ManyToOne(type => SoloGameRound, soloGameTreatment=>soloGameTreatment.soloGameRound, { nullable: false })
+  @ManyToOne(type => SoloGameRound, soloGameTreatment=>soloGameTreatment.round, { nullable: false })
   @JoinColumn()
   round!: SoloGameRound;
   
