@@ -7,7 +7,6 @@ export class SoloGameRound {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  //FIXME: how to implement gameID?
   @Column()
   gameId!: number;
   
