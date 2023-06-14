@@ -9,6 +9,7 @@ import { StatsService } from "@port-of-mars/server/services/stats";
 import { getConnection } from "@port-of-mars/server/util";
 import { TimeService } from "@port-of-mars/server/services/time";
 import { GameService } from "@port-of-mars/server/services/game";
+import { SoloGameService } from "@port-of-mars/server/services/sologame";
 import { RedisSettings } from "@port-of-mars/server/services/settings";
 import { createClient, RedisClient } from "redis";
 
@@ -37,6 +38,14 @@ export class ServiceProvider {
       this._game = new GameService(this);
     }
     return this._game;
+  }
+
+  private _sologame?: SoloGameService;
+  get sologame(): SoloGameService {
+    if (!this._sologame) {
+      this._sologame = new SoloGameService(this);
+    }
+    return this._sologame;
   }
 
   private _quiz?: QuizService;
