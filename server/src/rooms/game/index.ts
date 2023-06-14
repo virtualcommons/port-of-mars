@@ -222,7 +222,7 @@ export class GameRoom extends Room<GameState> implements Game {
         logger.debug(`GameRoom.onAuth found user ${username}`);
         // save user ip address
         const ip = (
-          (request.headers["x-forwarded-for"] || request.connection.remoteAddress) ??
+          (request.headers["x-forwarded-for"] || request.socket.remoteAddress) ??
           ""
         ).toString();
         await getServices().account.setLastPlayerIp(user.id, ip);

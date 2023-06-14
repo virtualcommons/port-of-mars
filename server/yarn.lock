@@ -301,6 +301,13 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@colyseus/command@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@colyseus/command/-/command-0.2.1.tgz#3d287da435e0286f93b164a5985bfff3224901bd"
+  integrity sha512-kwNvJTNDRshuxfcKZyFoO0hpcaUQKTpncl551eLsZr8xgAiu2uyhmuQTcsPYmrDZ1fV8MxcbBlEfu8H+4JtbhA==
+  dependencies:
+    debug "^4.1.1"
+
 "@colyseus/core@^0.14.20", "@colyseus/core@^0.14.33":
   version "0.14.36"
   resolved "https://registry.yarnpkg.com/@colyseus/core/-/core-0.14.36.tgz#651c1a13ee72b781798e29daa3af050c32bff113"
