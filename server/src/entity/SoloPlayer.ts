@@ -1,4 +1,12 @@
-import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn, CreateDateColumn, JoinColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  JoinColumn,
+} from "typeorm";
 import { User } from "./User";
 import { SoloGame } from "@port-of-mars/server/entity/SoloGame";
 

@@ -1,4 +1,11 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn, CreateDateColumn, JoinColumn} from "typeorm";
+import {
+  Column,
+  Entity,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  JoinColumn,
+} from "typeorm";
 import { SoloPlayerDecision } from "@port-of-mars/server/entity/SoloPlayerDecision";
 
 @Entity()
@@ -8,7 +15,7 @@ export class SoloGameRound {
 
   @Column()
   gameId!: number;
-  
+
   @CreateDateColumn()
   dateCreated!: Date;
 

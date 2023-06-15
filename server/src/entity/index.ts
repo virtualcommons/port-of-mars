@@ -19,5 +19,3 @@ export * from "./SoloMarsEventDeck";
 export * from "./SoloMarsEventDeckCard";
 export * from "./SoloPlayer";
 export * from "./SoloPlayerDecision";
-
-
