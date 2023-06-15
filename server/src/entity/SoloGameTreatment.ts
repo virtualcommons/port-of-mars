@@ -1,5 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, JoinColumn } from "typeorm";
-import { SoloGameRound } from "@port-of-mars/server/entity/SoloGameRound";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 export type ThresholdInformation = "unknown" | "range" | "known";
 @Entity()
@@ -8,22 +7,20 @@ export class SoloGameTreatment {
   id!: number;
 
   @Column()
-  name! : string;
+  name!: string;
 
   @Column()
-  order! : number;
+  order!: number;
 
   @Column()
-  isKnownNumberofRounds! : boolean;
+  isKnownNumberofRounds!: boolean;
 
   @Column()
-  isEventDeckKnown! : boolean;
-  
+  isEventDeckKnown!: boolean;
+
   @Column({
     type: "enum",
-    enum: ["unknown", "range", "known"]
+    enum: ["unknown", "range", "known"],
   })
-  thresholdInformation! : ThresholdInformation;
-
-   
+  thresholdInformation!: ThresholdInformation;
 }

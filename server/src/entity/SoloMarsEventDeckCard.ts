@@ -4,14 +4,14 @@ import { SoloGameRound } from "./SoloGameRound";
 import { SoloMarsEventCard } from "./SoloMarsEventCard";
 
 @Entity()
-export class SoloMarsEventDeckCard{
+export class SoloMarsEventDeckCard {
   @PrimaryGeneratedColumn()
   id!: number;
 
   @CreateDateColumn()
   dateCreated!: Date;
 
-  @ManyToOne(type => SoloMarsEventDeck, deck=>deck.cards, { nullable: true })
+  @ManyToOne(type => SoloMarsEventDeck, deck => deck.cards, { nullable: true })
   deck!: SoloMarsEventDeck;
 
   @Column()
@@ -28,5 +28,4 @@ export class SoloMarsEventDeckCard{
 
   @Column()
   roundId!: number;
-
 }

@@ -1,9 +1,17 @@
-import { Column, Entity, OneToOne, ManyToOne, PrimaryGeneratedColumn, CreateDateColumn, JoinColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  OneToOne,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  JoinColumn,
+} from "typeorm";
 import { SoloGameTreatment } from "@port-of-mars/server/entity/SoloGameTreatment";
 import { SoloMarsEventDeck } from "./SoloMarsEventDeck";
 
 @Entity()
-export class SoloGame{
+export class SoloGame {
   @PrimaryGeneratedColumn()
   id!: number;
 
@@ -13,7 +21,7 @@ export class SoloGame{
 
   @Column()
   treatmentId!: number;
-  
+
   @CreateDateColumn()
   dateCreated!: Date;
 
@@ -23,6 +31,4 @@ export class SoloGame{
 
   @Column()
   deckId!: number;
-
- 
 }
