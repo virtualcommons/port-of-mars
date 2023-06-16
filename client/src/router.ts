@@ -13,6 +13,7 @@ import Lobby from "@port-of-mars/client/views/Lobby.vue";
 import LobbyRoom from "@port-of-mars/client/components/lobby/LobbyRoom.vue";
 import LobbyRoomList from "@port-of-mars/client/components/lobby/LobbyRoomList.vue";
 import Game from "@port-of-mars/client/views/Game.vue";
+import SoloGame from "@port-of-mars/client/views/SoloGame.vue";
 import Consent from "@port-of-mars/client/views/Consent.vue";
 import Verify from "@port-of-mars/client/views/VerifyEmail.vue";
 import Manual from "@port-of-mars/client/views/Manual.vue";
@@ -26,6 +27,7 @@ import {
   LOGIN_PAGE,
   LOBBY_PAGE,
   GAME_PAGE,
+  SOLO_GAME_PAGE,
   LEADERBOARD_PAGE,
   PLAYER_HISTORY_PAGE,
   CONSENT_PAGE,
@@ -72,6 +74,7 @@ const router = new VueRouter({
       ],
     },
     { ...PAGE_META[GAME_PAGE], component: Game },
+    { ...PAGE_META[SOLO_GAME_PAGE], component: SoloGame },
     { ...PAGE_META[LEADERBOARD_PAGE], component: Leaderboard },
     { ...PAGE_META[PLAYER_HISTORY_PAGE], component: PlayerHistory },
     { ...PAGE_META[CONSENT_PAGE], component: Consent },

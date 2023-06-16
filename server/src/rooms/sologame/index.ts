@@ -21,6 +21,10 @@ export class SoloGameRoom extends Room<SoloGameState> {
   dispatcher = new Dispatcher(this);
   eventTimeout: Delayed | null = null;
 
+  get client() {
+    return this.clients[0];
+  }
+
   onCreate(options: any) {
     // do we need any options? most things are set up after onJoin is called
     logger.trace("SoloGameRoom '%s' created", this.roomId);
