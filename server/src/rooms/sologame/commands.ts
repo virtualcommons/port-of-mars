@@ -5,9 +5,9 @@ import { SoloGameRoom } from "@port-of-mars/server/rooms/sologame";
 import { getServices } from "@port-of-mars/server/services";
 import { getRandomIntInclusive } from "@port-of-mars/server/util";
 import { EventCard, SoloGameState, TreatmentParams } from "./state";
-import { settings } from "@port-of-mars/server/settings";
+// import { settings } from "@port-of-mars/server/settings";
 
-const logger = settings.logging.getLogger(__filename);
+// const logger = settings.logging.getLogger(__filename);
 
 abstract class Cmd<Payload> extends Command<SoloGameRoom, Payload> {}
 abstract class CmdWithoutPayload extends Cmd<Record<string, never>> {}
@@ -76,13 +76,32 @@ export class SetFirstRoundCmd extends CmdWithoutPayload {
     this.state.timeRemaining = defaults.timeRemaining;
     this.state.player.resources = defaults.resources;
 
-    logger.debug(this.state.twoCardThreshold.toString());
-    logger.debug(this.state.threeCardThreshold.toString());
-
-    return new DrawCardsCmd();
+    return [new SendHiddenParamsCmd(), new DrawCardsCmd()];
   }
 }
 
+export class SendHiddenParamsCmd extends CmdWithoutPayload {
+  execute() {
+    const data: any = {};
+    if (this.state.treatmentParams.isEventDeckKnown) {
+      data.eventCardDeck = this.state.eventCardDeck.map(card => card.toJSON());
+    }
+    if (this.state.treatmentParams.isKnownNumberOfRounds) {
+      data.maxRound = this.state.maxRound;
+    }
+    if (this.state.treatmentParams.thresholdInformation === "known") {
+      data.twoCardThreshold = this.state.twoCardThreshold;
+      data.threeCardThreshold = this.state.threeCardThreshold;
+    } else if (this.state.treatmentParams.thresholdInformation === "range") {
+      data.twoCardThresholdRange = SoloGameState.DEFAULTS.twoCardThreshold;
+      data.threeCardThresholdRange = SoloGameState.DEFAULTS.threeCardThreshold;
+    }
+    this.room.client.send("set-hidden-params", {
+      kind: "set-hidden-params",
+      data,
+    });
+  }
+}
 export class ApplyCardCmd extends Cmd<{ playerSkipped: boolean }> {
   validate() {
     return (
