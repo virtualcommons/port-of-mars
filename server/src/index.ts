@@ -17,7 +17,8 @@ import { Strategy as LocalStrategy } from "passport-local";
 import { Constants, isDev, isDevOrStaging } from "@port-of-mars/shared/settings";
 
 // server side imports
-import { GameRoom, LoadTestGameRoom } from "@port-of-mars/server/rooms/game";
+import { GameRoom } from "@port-of-mars/server/rooms/game";
+import { SoloGameRoom } from "@port-of-mars/server/rooms/sologame";
 import { User } from "@port-of-mars/server/entity";
 import { LobbyRoom } from "@port-of-mars/server/rooms/lobby";
 import { settings } from "@port-of-mars/server/settings";
@@ -201,8 +202,8 @@ async function createApp() {
 
   // register your room handlers
   gameServer.define(GameRoom.NAME, GameRoom);
-  gameServer.define("loadtest-game", LoadTestGameRoom);
   gameServer.define(LobbyRoom.NAME, LobbyRoom);
+  gameServer.define(SoloGameRoom.NAME, SoloGameRoom);
 
   applyInStagingOrProd(() => app.use(Sentry.Handlers.errorHandler()));
   // Final error handling middleware
