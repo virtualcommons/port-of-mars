@@ -6,32 +6,35 @@ export class SoloMarsEventCard {
   id!: number;
 
   @Column()
-  description!: string;
+  codeName!: string;
 
   @Column()
   displayName!: string;
 
   @Column()
-  codeName!: string;
+  flavorText!: string;
 
   @Column()
-  minHealth!: number;
+  effect!: string;
 
   @Column()
-  maxHealth!: number;
+  drawMin!: number;
 
   @Column()
-  minPoints!: number;
+  drawMax!: number;
 
   @Column()
-  maxPoints!: number;
+  rollMin!: number;
 
   @Column()
-  minBlocks!: number;
+  rollMax!: number;
 
   @Column()
-  maxBlocks!: number;
+  systemHealthMultiplier!: number;
 
   @Column()
-  draw2!: string;
+  pointsMultiplier!: number;
+
+  @Column()
+  resourcesMultiplier!: number;
 }

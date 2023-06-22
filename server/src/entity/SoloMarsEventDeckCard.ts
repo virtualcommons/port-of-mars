@@ -23,9 +23,21 @@ export class SoloMarsEventDeckCard {
   @Column()
   cardId!: number;
 
-  @ManyToOne(type => SoloGameRound)
-  round!: SoloGameRound;
+  @Column()
+  effectText!: string;
 
   @Column()
+  systemHealthEffect!: number;
+
+  @Column()
+  resourcesEffect!: number;
+
+  @Column()
+  pointsEffect!: number;
+
+  @ManyToOne(type => SoloGameRound, round => round.cards, { nullable: true })
+  round!: SoloGameRound;
+
+  @Column({ nullable: true })
   roundId!: number;
 }
