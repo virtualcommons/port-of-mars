@@ -2,73 +2,61 @@ entity: SoloGameTreatment
 items:
   treatment1:
     id: 1
-    name: treatment1
     isKnownNumberOfRounds: false
     isEventDeckKnown: false
     thresholdInformation: unknown
   treatment2:
     id: 2
-    name: treatment2
     isKnownNumberOfRounds: false
     isEventDeckKnown: false
     thresholdInformation: range
   treatment3:
     id: 3
-    name: treatment3
     isKnownNumberOfRounds: false
     isEventDeckKnown: false
     thresholdInformation: known
   treatment4:
     id: 4
-    name: treatment4
     isKnownNumberOfRounds: false
     isEventDeckKnown: true
     thresholdInformation: unknown
   treatment5:
     id: 5
-    name: treatment5
     isKnownNumberOfRounds: false
     isEventDeckKnown: true
     thresholdInformation: range
   treatment6:
     id: 6
-    name: treatment6
     isKnownNumberOfRounds: false
     isEventDeckKnown: true
     thresholdInformation: known
   treatment7:
     id: 7
-    name: treatment7
     isKnownNumberOfRounds: true
     isEventDeckKnown: false
     thresholdInformation: unknown
   treatment8:
     id: 8
-    name: treatment8
     isKnownNumberOfRounds: true
     isEventDeckKnown: false
     thresholdInformation: range
   treatment9:
     id: 9
-    name: treatment9
     isKnownNumberOfRounds: true
     isEventDeckKnown: false
     thresholdInformation: known
   treatment10:
     id: 10
-    name: treatment10
     isKnownNumberOfRounds: true
     isEventDeckKnown: true
     thresholdInformation: unknown
   treatment11:
     id: 11
-    name: treatment11
     isKnownNumberOfRounds: true
     isEventDeckKnown: true
     thresholdInformation: range
   treatment12:
     id: 12
-    name: treatment12
     isKnownNumberOfRounds: true
     isEventDeckKnown: true
     thresholdInformation: known
