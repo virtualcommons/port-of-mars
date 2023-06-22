@@ -5,7 +5,6 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  JoinColumn,
 } from "typeorm";
 import { User } from "./User";
 import { SoloGame } from "@port-of-mars/server/entity/SoloGame";
@@ -15,7 +14,7 @@ export class SoloPlayer {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @ManyToOne(type => User, user => user.players, { nullable: false })
+  @ManyToOne(type => User, user => user.soloPlayers, { nullable: false })
   user!: User;
 
   @Column()
@@ -24,11 +23,10 @@ export class SoloPlayer {
   @Column({ default: "" })
   playerIp!: string;
 
-  @OneToOne(type => SoloGame)
-  @JoinColumn()
+  @OneToOne(type => SoloGame, game => game.player, { nullable: true })
   game!: SoloGame;
 
-  @Column()
+  @Column({ nullable: true })
   gameId!: number;
 
   @Column("int", { nullable: true })

@@ -5,9 +5,7 @@ import { SoloGameRoom } from "@port-of-mars/server/rooms/sologame";
 import { getServices } from "@port-of-mars/server/services";
 import { getRandomIntInclusive } from "@port-of-mars/server/util";
 import { EventCard, SoloGameState, TreatmentParams } from "./state";
-// import { settings } from "@port-of-mars/server/settings";
-
-// const logger = settings.logging.getLogger(__filename);
+import { SoloGameStatus } from "@port-of-mars/shared/sologame";
 
 abstract class Cmd<Payload> extends Command<SoloGameRoom, Payload> {}
 abstract class CmdWithoutPayload extends Cmd<Record<string, never>> {}
@@ -18,6 +16,8 @@ export class InitGameCmd extends Cmd<{ user: User }> {
       new SetPlayerCmd().setPayload({ user }),
       new CreateDeckCmd(),
       new SetTreatmentParamsCmd().setPayload({ user }),
+      new SetGameParamsCmd(),
+      new PersistGameCmd(),
       new SetFirstRoundCmd(),
     ];
   }
@@ -26,6 +26,7 @@ export class InitGameCmd extends Cmd<{ user: User }> {
 export class SetPlayerCmd extends Cmd<{ user: User }> {
   execute({ user } = this.payload) {
     this.state.player.assign({
+      userId: user.id,
       username: user.username,
       points: 0,
     });
@@ -48,13 +49,11 @@ export class SetTreatmentParamsCmd extends Cmd<{ user: User }> {
     if (treatmentIds.length > 0) {
       const treatmentId = treatmentIds[Math.floor(Math.random() * treatmentIds.length)];
       this.state.treatmentParams = new TreatmentParams(await service.getTreatmentById(treatmentId));
-    } else {
-      this.state.treatmentParams = new TreatmentParams(await service.getRandomTreatment());
     }
   }
 }
 
-export class SetFirstRoundCmd extends CmdWithoutPayload {
+export class SetGameParamsCmd extends CmdWithoutPayload {
   execute() {
     const defaults = SoloGameState.DEFAULTS;
     this.state.maxRound = getRandomIntInclusive(defaults.maxRound.min, defaults.maxRound.max);
@@ -71,6 +70,24 @@ export class SetFirstRoundCmd extends CmdWithoutPayload {
       defaults.threeCardThreshold.min,
       threeCardThresholdMax
     );
+  }
+}
+
+export class PersistGameCmd extends CmdWithoutPayload {
+  async execute() {
+    const { sologame: service } = getServices();
+    const game = await service.createGame(this.state);
+    this.state.gameId = game.id;
+    // keep track of deck card db ids after persisting the deck
+    this.state.eventCardDeck.forEach((card, index) => {
+      card.deckCardId = game.deck.cards[index].id;
+    });
+  }
+}
+
+export class SetFirstRoundCmd extends CmdWithoutPayload {
+  execute() {
+    const defaults = SoloGameState.DEFAULTS;
     this.state.round = 1;
     this.state.systemHealth = defaults.systemHealthMax;
     this.state.timeRemaining = defaults.timeRemaining;
@@ -114,11 +131,11 @@ export class ApplyCardCmd extends Cmd<{ playerSkipped: boolean }> {
     if (playerSkipped) {
       this.room.eventTimeout?.clear();
     }
-    this.state.player.points += this.state.activeRoundCard!.pointsDelta;
-    this.state.player.resources += this.state.activeRoundCard!.resourcesDelta;
+    this.state.player.points += this.state.activeRoundCard!.pointsEffect;
+    this.state.player.resources += this.state.activeRoundCard!.resourcesEffect;
     this.state.systemHealth = Math.min(
       SoloGameState.DEFAULTS.systemHealthMax,
-      this.state.systemHealth + this.state.activeRoundCard!.systemHealthDelta
+      this.state.systemHealth + this.state.activeRoundCard!.systemHealthEffect
     );
     if (this.state.systemHealth <= 0) {
       return new EndGameCmd().setPayload({ status: "defeat" });
@@ -176,14 +193,22 @@ export class InvestCmd extends Cmd<{ systemHealthInvestment: number }> {
       this.state.systemHealth + systemHealthInvestment
     );
     this.state.player.points += surplus;
-    return new SetNextRoundCmd();
+    return new SetNextRoundCmd().setPayload({
+      systemHealthInvestment,
+      pointsInvestment: surplus,
+    });
   }
 }
 
-export class SetNextRoundCmd extends CmdWithoutPayload {
-  execute() {
+export class SetNextRoundCmd extends Cmd<{
+  systemHealthInvestment: number;
+  pointsInvestment: number;
+}> {
+  async execute({ systemHealthInvestment, pointsInvestment } = this.payload) {
+    const { sologame: service } = getServices();
+    await service.createRound(this.state, systemHealthInvestment, pointsInvestment);
+
     const defaults = SoloGameState.DEFAULTS;
-    // TODO: persist round
     this.state.round += 1;
     if (this.state.round > this.state.maxRound) {
       return new EndGameCmd().setPayload({ status: "victory" });
@@ -199,10 +224,13 @@ export class SetNextRoundCmd extends CmdWithoutPayload {
   }
 }
 
-export class EndGameCmd extends Cmd<{ status: string }> {
-  execute({ status } = this.payload) {
-    // do any cleanup
+export class EndGameCmd extends Cmd<{ status: SoloGameStatus }> {
+  async execute({ status } = this.payload) {
+    // do any additional cleanup
+    const { sologame: service } = getServices();
     this.state.status = status;
+    await service.updateGameStatus(this.state.gameId, status);
+    await service.updatePlayerPoints(this.state.gameId, this.state.player.points);
     this.room.disconnect();
   }
 }

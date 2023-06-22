@@ -1,19 +1,13 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { ThresholdInformation } from "@port-of-mars/shared/sologame/types";
 
-export type ThresholdInformation = "unknown" | "range" | "known";
 @Entity()
 export class SoloGameTreatment {
   @PrimaryGeneratedColumn()
   id!: number;
 
   @Column()
-  name!: string;
-
-  @Column()
-  order!: number;
-
-  @Column()
-  isKnownNumberofRounds!: boolean;
+  isKnownNumberOfRounds!: boolean;
 
   @Column()
   isEventDeckKnown!: boolean;

@@ -34,7 +34,12 @@ export class SoloGameRoom extends Room<SoloGameState> {
     this.clock.setInterval(() => {
       this.state.timeRemaining -= 1;
       if (this.state.timeRemaining <= 0) {
-        this.dispatcher.dispatch(new SetNextRoundCmd());
+        this.dispatcher.dispatch(
+          new SetNextRoundCmd().setPayload({
+            systemHealthInvestment: 0,
+            pointsInvestment: 0,
+          })
+        );
       }
     }, 1000);
   }

@@ -1,14 +1,20 @@
 export interface EventCardData {
+  id: number;
   codeName: string;
   displayName: string;
-  description: string;
-  pointsDelta: number;
-  resourcesDelta: number;
-  systemHealthDelta: number;
+  flavorText: string;
+  effectText: string;
+  pointsEffect: number;
+  resourcesEffect: number;
+  systemHealthEffect: number;
 }
+
+export type ThresholdInformation = "unknown" | "range" | "known";
 
 export interface TreatmentData {
   isKnownNumberOfRounds: boolean;
   isEventDeckKnown: boolean;
-  thresholdInformation: "unknown" | "range" | "known";
+  thresholdInformation: ThresholdInformation;
 }
+
+export type SoloGameStatus = "incomplete" | "victory" | "defeat";

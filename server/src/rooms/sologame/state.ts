@@ -1,30 +1,36 @@
 import { Schema, ArraySchema, type } from "@colyseus/schema";
-import { EventCardData, TreatmentData } from "@port-of-mars/shared/sologame";
+import { EventCardData, SoloGameStatus, TreatmentData } from "@port-of-mars/shared/sologame";
 
 export class EventCard extends Schema {
+  id = 0;
+  deckCardId = 0;
   @type("string") codeName = "";
   @type("string") displayName = "";
-  @type("string") description = "";
-  @type("int8") pointsDelta = 0;
-  @type("int8") resourcesDelta = 0;
-  @type("int8") systemHealthDelta = 0;
+  @type("string") flavorText = "";
+  @type("string") effectText = "";
+  @type("int8") pointsEffect = 0;
+  @type("int8") resourcesEffect = 0;
+  @type("int8") systemHealthEffect = 0;
 
   constructor(data: EventCardData) {
     super();
+    this.id = data.id;
     this.codeName = data.codeName;
     this.displayName = data.displayName;
-    this.description = data.description;
-    this.pointsDelta = data.pointsDelta;
-    this.resourcesDelta = data.resourcesDelta;
-    this.systemHealthDelta = data.systemHealthDelta;
+    this.flavorText = data.flavorText;
+    this.effectText = data.effectText;
+    this.pointsEffect = data.pointsEffect;
+    this.resourcesEffect = data.resourcesEffect;
+    this.systemHealthEffect = data.systemHealthEffect;
   }
 
   get isMurphysLaw() {
-    return this.codeName === "murphys-law";
+    return this.codeName === "murphysLaw";
   }
 }
 
 export class Player extends Schema {
+  userId = 0;
   @type("string") username = "";
   @type("uint8") resources = SoloGameState.DEFAULTS.resources;
   @type("uint8") points = SoloGameState.DEFAULTS.points;
@@ -45,18 +51,21 @@ export class TreatmentParams extends Schema {
 }
 
 export class SoloGameState extends Schema {
-  @type("string") status = "incomplete";
+  @type("string") status: SoloGameStatus = "incomplete";
   @type("int8") systemHealth = SoloGameState.DEFAULTS.systemHealthMax;
-  @type("uint8") twoCardThreshold = SoloGameState.DEFAULTS.twoCardThreshold.max;
-  @type("uint8") threeCardThreshold = SoloGameState.DEFAULTS.threeCardThreshold.max;
   @type("uint8") timeRemaining = SoloGameState.DEFAULTS.timeRemaining;
-  @type("uint8") maxRound = SoloGameState.DEFAULTS.maxRound.max;
   @type("uint8") round = 1;
   @type(TreatmentParams) treatmentParams = new TreatmentParams();
   @type(Player) player: Player = new Player();
-  @type([EventCard]) eventCardDeck = new ArraySchema<EventCard>();
   @type([EventCard]) roundEventCards = new ArraySchema<EventCard>();
   @type("uint8") activeRoundCardIndex = -1;
+
+  gameId = 0;
+  // hidden properties
+  maxRound = SoloGameState.DEFAULTS.maxRound.max;
+  twoCardThreshold = SoloGameState.DEFAULTS.twoCardThreshold.max;
+  threeCardThreshold = SoloGameState.DEFAULTS.threeCardThreshold.max;
+  eventCardDeck: Array<EventCard> = [];
 
   get points() {
     return this.player.points;
