@@ -39,6 +39,9 @@
         <b-nav-item class="mx-2" :to="lobby" exact-active-class="active" title="Game Lobby"
           >Play</b-nav-item
         >
+        <b-nav-item class="mx-2" :to="solo" exact-active-class="active" title="Singleplayer Game">
+          Singleplayer <small><b-badge variant="primary">NEW</b-badge></small>
+        </b-nav-item>
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto">
         <b-nav-item class="mx-2" target="_blank" :href="constants.DISCORD_URL" title="Discord"
@@ -79,6 +82,7 @@ import {
   CONSENT_PAGE,
   MANUAL_PAGE,
   GAME_PAGE,
+  SOLO_GAME_PAGE,
   LOBBY_PAGE,
   PLAYER_HISTORY_PAGE,
   LEADERBOARD_PAGE,
@@ -108,6 +112,7 @@ export default class Header extends Vue {
   login = { name: LOGIN_PAGE };
   manual = { name: MANUAL_PAGE };
   game = { name: GAME_PAGE };
+  solo = { name: SOLO_GAME_PAGE };
   leaderboard = { name: LEADERBOARD_PAGE };
   history = { name: PLAYER_HISTORY_PAGE };
   lobby = { name: LOBBY_PAGE };
