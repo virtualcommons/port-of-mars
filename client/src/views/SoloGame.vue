@@ -1,7 +1,23 @@
 <template>
-  <div class="d-flex flex-column">
-    <p>{{ state }}</p>
-  </div>
+  <!-- extremely basic layout w/ BS grid + flex -->
+  <!-- likely need to start over but serves as an example of some css/flex concepts -->
+  <b-container fluid class="h-100 w-100 d-flex flex-column">
+    <b-row class="w-100 flex-shrink-1 p-2" no-gutters>
+      <b-col cols="12" class="content-container">SYSTEM HEALTH: {{ state.systemHealth }}</b-col>
+    </b-row>
+    <b-row class="w-100 flex-grow-1" no-gutters>
+      <b-col cols="12">
+        <b-row class="w-100 p-2" no-gutters>
+          <b-col cols="6" class="content-container">POINTS: {{ state.player.points }}</b-col>
+          <b-col cols="6" class="content-container">TIMER: {{ state.timeRemaining }}</b-col>
+        </b-row>
+        <b-row class="w-100 p-2" no-gutters>
+          <b-col cols="4" class="content-container">EVENTS: {{ state.roundEventCards }} </b-col>
+          <b-col cols="8" class="content-container">DECK: {{ state.eventCardDeck }}</b-col>
+        </b-row>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script lang="ts">
