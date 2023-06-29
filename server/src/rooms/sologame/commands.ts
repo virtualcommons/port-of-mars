@@ -93,7 +93,7 @@ export class SetFirstRoundCmd extends CmdWithoutPayload {
     this.state.timeRemaining = defaults.timeRemaining;
     this.state.player.resources = defaults.resources;
 
-    return [new SendHiddenParamsCmd(), new DrawCardsCmd()];
+    return [new SendHiddenParamsCmd()];
   }
 }
 
@@ -145,6 +145,8 @@ export class ApplyCardCmd extends Cmd<{ playerSkipped: boolean }> {
     if (this.state.activeRoundCardIndex < this.state.roundEventCards.length - 1) {
       this.state.activeRoundCardIndex += 1;
       return new StartEventTimerCmd();
+    } else {
+      this.state.canInvest = true;
     }
   }
 }
@@ -183,7 +185,7 @@ export class DrawCardsCmd extends CmdWithoutPayload {
 
 export class InvestCmd extends Cmd<{ systemHealthInvestment: number }> {
   validate({ systemHealthInvestment } = this.payload) {
-    return systemHealthInvestment <= this.state.resources;
+    return this.state.canInvest && systemHealthInvestment <= this.state.resources;
   }
 
   execute({ systemHealthInvestment } = this.payload) {
@@ -205,6 +207,8 @@ export class SetNextRoundCmd extends Cmd<{
   pointsInvestment: number;
 }> {
   async execute({ systemHealthInvestment, pointsInvestment } = this.payload) {
+    this.state.canInvest = false; // disable investment until all cards are applied
+
     const { sologame: service } = getServices();
     await service.createRound(this.state, systemHealthInvestment, pointsInvestment);
 

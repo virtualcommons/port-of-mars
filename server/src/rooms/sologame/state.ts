@@ -59,6 +59,7 @@ export class SoloGameState extends Schema {
   @type(Player) player: Player = new Player();
   @type([EventCard]) roundEventCards = new ArraySchema<EventCard>();
   @type("uint8") activeRoundCardIndex = -1;
+  @type("boolean") canInvest = true;
 
   gameId = 0;
   // hidden properties
