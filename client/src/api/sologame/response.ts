@@ -60,6 +60,9 @@ export function applySoloGameServerResponses(room: Room, component: any) {
       if (change.field === "activeRoundCardIndex") {
         component.state.activeRoundCardIndex = change.value;
       }
+      if (change.field === "canInvest") {
+        component.state.canInvest = change.value;
+      }
     });
   };
 

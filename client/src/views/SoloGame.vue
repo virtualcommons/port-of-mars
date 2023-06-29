@@ -48,7 +48,9 @@ investment input - https://bootstrap-vue.org/docs/components/form-spinbutton
                 :max="state.player.resources"
               ></b-form-spinbutton>
               <p>{{ pendingSystemHealthInvestment }}</p>
-              <b-button @click="handleInvestButtonClick">Invest in System Health</b-button>
+              <b-button @click="handleInvestButtonClick" :disabled="!state.canInvest"
+                >Invest in System Health</b-button
+              >
             </b-col>
           </b-row>
         </b-row>
@@ -83,6 +85,7 @@ export interface SoloGameState {
   eventCardDeck?: Array<EventCardData>;
   roundEventCards: Array<EventCardData>;
   activeRoundCardIndex: number;
+  canInvest: boolean;
 }
 
 @Component({
@@ -112,6 +115,7 @@ export default class Game extends Vue {
     },
     roundEventCards: [],
     activeRoundCardIndex: 0,
+    canInvest: true,
   };
 
   handleInvestButtonClick() {
