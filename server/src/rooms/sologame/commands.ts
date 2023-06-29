@@ -131,8 +131,19 @@ export class ApplyCardCmd extends Cmd<{ playerSkipped: boolean }> {
     if (playerSkipped) {
       this.room.eventTimeout?.clear();
     }
-    this.state.player.points += this.state.activeRoundCard!.pointsEffect;
-    this.state.player.resources += this.state.activeRoundCard!.resourcesEffect;
+
+    if (this.state.player.points < -this.state.activeRoundCard!.pointsEffect) {
+      this.state.player.points = 0; // prevent overflow
+    } else {
+      this.state.player.points += this.state.activeRoundCard!.pointsEffect;
+    }
+
+    if (this.state.player.resources < -this.state.activeRoundCard!.resourcesEffect) {
+      this.state.player.resources = 0;
+    } else {
+      this.state.player.resources += this.state.activeRoundCard!.resourcesEffect;
+    }
+
     this.state.systemHealth = Math.min(
       SoloGameState.DEFAULTS.systemHealthMax,
       this.state.systemHealth + this.state.activeRoundCard!.systemHealthEffect
