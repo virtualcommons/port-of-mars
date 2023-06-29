@@ -1,3 +1,28 @@
+<!-- 
++-----------------------------------------------------------------+
+|                      HEALTH BAR                                 |
++------------------------------------------------+----------------+
+|+---------------++--------------++-------------+|                |
+||               ||              ||             ||                |
+||               ||  ROUND #     ||             ||                |
+||  SYSTEM       ||  out of (?)  ||             ||                |
+||  "DIAGNOSTICS"|+--------------+|   ROUND     ||                |
+||  (thresholds) |+--------------+|   EVENTS    ||                |
+||               ||   TIMER      ||             ||    DECK        |
+||               ||              ||             ||                |
+|+---------------++--------------++-------------+|                |
+|+------------------++--------------------------+|                |
+||                  ||                          ||                |
+||     POINTS /     ||                          ||                |
+||     RESOURCES    ||       INVEST INPUT       ||                |
+||                  ||                          ||                |
+||                  ||                          ||                |
+|+------------------++--------------------------+|                |
++------------------------------------------------+----------------+
+
+investment input - https://bootstrap-vue.org/docs/components/form-spinbutton
+ -->
+
 <template>
   <!-- extremely basic layout w/ BS grid + flex -->
   <!-- likely need to start over but serves as an example of some css/flex concepts -->
@@ -14,6 +39,18 @@
         <b-row class="w-100 p-2" no-gutters>
           <b-col cols="4" class="content-container">EVENTS: {{ state.roundEventCards }} </b-col>
           <b-col cols="8" class="content-container">DECK: {{ state.eventCardDeck }}</b-col>
+          <b-row class="w-25 flex-shrink-1 p-2" no-gutters>
+            <b-col cols="12" class="content-container">
+              <b-form-spinbutton
+                id="invest-input"
+                v-model="pendingSystemHealthInvestment"
+                min="0"
+                :max="state.player.resources"
+              ></b-form-spinbutton>
+              <p>{{ pendingSystemHealthInvestment }}</p>
+              <b-button @click="handleInvestButtonClick">Invest in System Health</b-button>
+            </b-col>
+          </b-row>
         </b-row>
       </b-col>
     </b-row>
@@ -56,6 +93,8 @@ export default class Game extends Vue {
   @Provide() private api: SoloGameRequestAPI = new SoloGameRequestAPI();
   hasApi: boolean = false;
 
+  pendingSystemHealthInvestment = 0;
+
   // FIXME: move this to a vuex store after splitting up the multiplayer game and
   // onboarding/etc. stores
   state: SoloGameState = {
@@ -74,6 +113,13 @@ export default class Game extends Vue {
     roundEventCards: [],
     activeRoundCardIndex: 0,
   };
+
+  handleInvestButtonClick() {
+    //add how button behaves here
+    this.api.invest(this.pendingSystemHealthInvestment);
+    // TODO: add boundary case (try-catch?) for if investment doesn't go through
+    this.pendingSystemHealthInvestment = 0;
+  }
 
   async created() {
     this.api.room?.leave();
