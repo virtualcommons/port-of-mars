@@ -96,15 +96,19 @@ export class SoloGameService extends BaseService {
     /**
      * create a new SoloGame in the db and return it
      */
-    const repo = this.em.getRepository(SoloGame);
-    const game = repo.create({
-      player: await this.createPlayer(state.player.userId),
+    const gameRepo = this.em.getRepository(SoloGame);
+    const playerRepo = this.em.getRepository(SoloPlayer);
+    const player = await this.createPlayer(state.player.userId);
+    const game = gameRepo.create({
+      player,
       treatment: await this.createTreatment(state.treatmentParams),
       deck: await this.createDeck(state.eventCardDeck),
       status: state.status,
     });
-    await repo.save(game);
-    return repo.findOneOrFail(game.id, { relations: ["deck", "deck.cards"] });
+    await gameRepo.save(game);
+    player.gameId = game.id;
+    await playerRepo.save(player);
+    return gameRepo.findOneOrFail(game.id, { relations: ["deck", "deck.cards"] });
   }
 
   async createPlayer(userId: number): Promise<SoloPlayer> {
