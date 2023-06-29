@@ -33,12 +33,29 @@ investment input - https://bootstrap-vue.org/docs/components/form-spinbutton
     <b-row class="w-100 flex-grow-1" no-gutters>
       <b-col cols="12">
         <b-row class="w-100 p-2" no-gutters>
-          <b-col cols="6" class="content-container">POINTS: {{ state.player.points }}</b-col>
+          <b-col cols="6" class="content-container">
+            <div>
+              <h4>Round</h4>
+              <p>
+                {{ state.round }}
+                <span v-if="state.treatmentParams.isKnownNumberOfRounds">
+                  of {{ state.maxRound }}
+                </span>
+                <span v-else></span>
+              </p>
+            </div>
+          </b-col>
           <b-col cols="6" class="content-container">TIMER: {{ state.timeRemaining }}</b-col>
         </b-row>
         <b-row class="w-100 p-2" no-gutters>
-          <b-col cols="4" class="content-container">EVENTS: {{ state.roundEventCards }} </b-col>
-          <b-col cols="8" class="content-container">DECK: {{ state.eventCardDeck }}</b-col>
+          <b-col cols="4" class="content-container">
+            <div>
+              <div v-for="event in state.roundEventCards" :key="event.codeName">
+                <EventCard :event="event" />
+              </div>
+            </div>
+          </b-col>
+          <b-col cols="8" class="content-container">DECK: {{  state.treatmentParams.isEventDeckKnown }}</b-col>
           <b-row class="w-25 flex-shrink-1 p-2" no-gutters>
             <b-col cols="12" class="content-container">
               <b-form-spinbutton
@@ -65,6 +82,7 @@ import { Client } from "colyseus.js";
 import { SoloGameRequestAPI } from "@port-of-mars/client/api/sologame/request";
 import { applySoloGameServerResponses } from "@port-of-mars/client/api/sologame/response";
 import { EventCardData, SOLO_ROOM_NAME } from "@port-of-mars/shared/sologame";
+import EventCard from "@port-of-mars/client/components/sologame/EventCard.vue";
 
 export interface SoloGameState {
   timeRemaining: number;
@@ -90,6 +108,9 @@ export interface SoloGameState {
 
 @Component({
   name: "sologame",
+  components: {
+    EventCard,
+  }
 })
 export default class Game extends Vue {
   @Inject() readonly $client!: Client;
