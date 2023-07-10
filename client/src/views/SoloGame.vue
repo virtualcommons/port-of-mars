@@ -28,7 +28,23 @@ investment input - https://bootstrap-vue.org/docs/components/form-spinbutton
   <!-- likely need to start over but serves as an example of some css/flex concepts -->
   <b-container fluid class="h-100 w-100 d-flex flex-column">
     <b-row class="w-100 flex-shrink-1 p-2" no-gutters>
-      <b-col cols="12" class="content-container">SYSTEM HEALTH: {{ state.systemHealth }}</b-col>
+      <b-col cols="12" class="content-container"
+        >SYSTEM HEALTH: {{ state.systemHealth }}
+        <b-col class="statusbar-outer" no-gutters>
+          <b-col class="statusbar-inner" no-gutters></b-col>
+          <b-img
+            v-bind="systemHealthIconProps"
+            :src="require(`@port-of-mars/client/assets/icons/systemHealth.svg`)"
+            rounded="circle"
+            left
+            class="mr-1 mt-2"
+            alt="System Health"
+            contain
+            height="50px"
+            width="75px"
+          />
+        </b-col>
+      </b-col>
     </b-row>
     <b-row class="w-100 flex-grow-1" no-gutters>
       <b-col cols="12">
@@ -55,7 +71,9 @@ investment input - https://bootstrap-vue.org/docs/components/form-spinbutton
               </div>
             </div>
           </b-col>
-          <b-col cols="8" class="content-container">DECK: {{  state.treatmentParams.isEventDeckKnown }}</b-col>
+          <b-col cols="8" class="content-container"
+            >DECK: {{ state.treatmentParams.isEventDeckKnown }}</b-col
+          >
           <b-row class="w-25 flex-shrink-1 p-2" no-gutters>
             <b-col cols="12" class="content-container">
               <b-form-spinbutton
@@ -63,7 +81,14 @@ investment input - https://bootstrap-vue.org/docs/components/form-spinbutton
                 v-model="pendingSystemHealthInvestment"
                 min="0"
                 :max="state.player.resources"
-              ></b-form-spinbutton>
+              >
+                <template #decrement>
+                  <b-icon-dash scale="1.00" color="#f1e0c5"></b-icon-dash>
+                </template>
+                <template #increment>
+                  <b-icon-plus scale="1.00" color="#f1e0c5"></b-icon-plus>
+                </template>
+              </b-form-spinbutton>
               <p>{{ pendingSystemHealthInvestment }}</p>
               <b-button @click="handleInvestButtonClick" :disabled="!state.canInvest"
                 >Invest in System Health</b-button
@@ -110,7 +135,7 @@ export interface SoloGameState {
   name: "sologame",
   components: {
     EventCard,
-  }
+  },
 })
 export default class Game extends Vue {
   @Inject() readonly $client!: Client;
