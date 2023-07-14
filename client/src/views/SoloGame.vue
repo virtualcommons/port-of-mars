@@ -33,6 +33,10 @@ investment input - https://bootstrap-vue.org/docs/components/form-spinbutton
         <b-col class="statusbar-outer" no-gutters>
           <b-col class="statusbar-inner" no-gutters></b-col>
           <SystemHealth class="systemhealth" :setWidth="state.systemHealth" />
+
+          <SegmentedBar :min="0" :max="50" v-model="tempVal" />
+          {{ tempVal }}
+
           <b-img
             v-bind="systemHealthIconProps"
             :src="require(`@port-of-mars/client/assets/icons/systemHealth.svg`)"
@@ -110,7 +114,8 @@ import { applySoloGameServerResponses } from "@port-of-mars/client/api/sologame/
 import { EventCardData, SOLO_ROOM_NAME } from "@port-of-mars/shared/sologame";
 import EventCard from "@port-of-mars/client/components/sologame/EventCard.vue";
 import HealthBar from "@port-of-mars/client/components/sologame/HealthBar.vue";
-import SystemHealth from "../components/game/static/systemhealth/SystemHealth.vue";
+import SystemHealth from "@port-of-mars/client/components/game/static/systemhealth/SystemHealth.vue";
+import SegmentedBar from "@port-of-mars/client/components/global/SegmentedBar.vue";
 
 export interface SoloGameState {
   timeRemaining: number;
@@ -140,6 +145,7 @@ export interface SoloGameState {
     EventCard,
     HealthBar,
     SystemHealth,
+    SegmentedBar,
   },
 })
 export default class Game extends Vue {
@@ -148,6 +154,8 @@ export default class Game extends Vue {
   hasApi: boolean = false;
 
   pendingSystemHealthInvestment = 0;
+
+  tempVal = 0;
 
   // FIXME: move this to a vuex store after splitting up the multiplayer game and
   // onboarding/etc. stores

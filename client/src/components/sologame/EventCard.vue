@@ -1,7 +1,9 @@
 <template>
   <div>
     <h4>{{ event.displayName }}</h4>
-    <p><i>{{ event.flavorText }}</i></p>
+    <p>
+      <i>{{ event.flavorText }}</i>
+    </p>
     <p>{{ event.effectText }}</p>
   </div>
 </template>
