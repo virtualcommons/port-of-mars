@@ -72,7 +72,11 @@ investment input - https://bootstrap-vue.org/docs/components/form-spinbutton
             </div>
           </b-col>
           <b-col cols="8" class="content-container"
-            >DECK: {{ state.treatmentParams.isEventDeckKnown }}</b-col
+            >
+            <div>
+              DECK: {{ state.treatmentParams.isEventDeckKnown }}
+            </div>
+            </b-col
           >
           <b-row class="w-25 flex-shrink-1 p-2" no-gutters>
             <b-col cols="12" class="content-container">
