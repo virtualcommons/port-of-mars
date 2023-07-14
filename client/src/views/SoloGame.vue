@@ -32,6 +32,7 @@ investment input - https://bootstrap-vue.org/docs/components/form-spinbutton
         >SYSTEM HEALTH: {{ state.systemHealth }}
         <b-col class="statusbar-outer" no-gutters>
           <b-col class="statusbar-inner" no-gutters></b-col>
+          <SystemHealth class="systemhealth" :setWidth="state.systemHealth" />
           <b-img
             v-bind="systemHealthIconProps"
             :src="require(`@port-of-mars/client/assets/icons/systemHealth.svg`)"
@@ -41,7 +42,7 @@ investment input - https://bootstrap-vue.org/docs/components/form-spinbutton
             alt="System Health"
             contain
             height="50px"
-            width="75px"
+            width="50px"
           />
         </b-col>
       </b-col>
@@ -108,6 +109,8 @@ import { SoloGameRequestAPI } from "@port-of-mars/client/api/sologame/request";
 import { applySoloGameServerResponses } from "@port-of-mars/client/api/sologame/response";
 import { EventCardData, SOLO_ROOM_NAME } from "@port-of-mars/shared/sologame";
 import EventCard from "@port-of-mars/client/components/sologame/EventCard.vue";
+import HealthBar from "@port-of-mars/client/components/sologame/HealthBar.vue";
+import SystemHealth from "../components/game/static/systemhealth/SystemHealth.vue";
 
 export interface SoloGameState {
   timeRemaining: number;
@@ -135,6 +138,8 @@ export interface SoloGameState {
   name: "sologame",
   components: {
     EventCard,
+    HealthBar,
+    SystemHealth,
   },
 })
 export default class Game extends Vue {
