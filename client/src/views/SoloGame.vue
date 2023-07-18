@@ -65,21 +65,21 @@ investment input - https://bootstrap-vue.org/docs/components/form-spinbutton
         </b-row>
         <b-row class="w-100 p-2" no-gutters>
           <b-col cols="4" class="content-container">
-            <div>
+            <div>  
               <div v-for="event in state.roundEventCards" :key="event.codeName">
                 <EventCard :event="event" />
               </div>
             </div>
           </b-col>
           <b-col cols="8" class="content-container">
-            DECK: 
             <span v-if="state.treatmentParams.isEventDeckKnown">
-              TRUE
-              <div v-for="deck in state.eventCardDeck" :key="deck.codeName">
-                <Deck :event="deck" />
-              </div>
+                <div v-for="event in state.eventCardDeck" :key="event.codeName">
+                  <Deck :event="event" />
+                </div>
             </span>
-            <span v-else>FALSE</span>
+            <span v-else>
+              FALSE
+            </span>
           </b-col>
           <b-row class="w-25 flex-shrink-1 p-2" no-gutters>
             <b-col cols="12" class="content-container">
@@ -98,8 +98,7 @@ investment input - https://bootstrap-vue.org/docs/components/form-spinbutton
               </b-form-spinbutton>
               <p>{{ pendingSystemHealthInvestment }}</p>
               <b-button @click="handleInvestButtonClick" :disabled="!state.canInvest"
-                >Invest in System Health</b-button
-              >
+                >Invest in System Health</b-button>
             </b-col>
           </b-row>
         </b-row>
@@ -115,6 +114,7 @@ import { SoloGameRequestAPI } from "@port-of-mars/client/api/sologame/request";
 import { applySoloGameServerResponses } from "@port-of-mars/client/api/sologame/response";
 import { EventCardData, SOLO_ROOM_NAME } from "@port-of-mars/shared/sologame";
 import EventCard from "@port-of-mars/client/components/sologame/EventCard.vue";
+import Deck from "@port-of-mars/client/components/sologame/Deck.vue";
 
 export interface SoloGameState {
   timeRemaining: number;
@@ -142,6 +142,7 @@ export interface SoloGameState {
   name: "sologame",
   components: {
     EventCard,
+    Deck,
   },
 })
 export default class Game extends Vue {
