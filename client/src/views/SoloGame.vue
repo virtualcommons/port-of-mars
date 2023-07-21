@@ -30,25 +30,23 @@ investment input - https://bootstrap-vue.org/docs/components/form-spinbutton
     <b-row class="w-100 flex-shrink-1 p-2" no-gutters>
       <b-col cols="12" class="content-container"
         >SYSTEM HEALTH: {{ state.systemHealth }}
-        <b-col class="statusbar-outer" no-gutters>
-          <b-col class="statusbar-inner" no-gutters></b-col>
-          <SystemHealth class="systemhealth" :setWidth="state.systemHealth" />
 
-          <SegmentedBar :min="0" :max="50" v-model="tempVal" />
-          {{ tempVal }}
+        <!-- <SystemHealth class="systemhealth" :setWidth="state.systemHealth" /> -->
 
-          <b-img
-            v-bind="systemHealthIconProps"
-            :src="require(`@port-of-mars/client/assets/icons/systemHealth.svg`)"
-            rounded="circle"
-            left
-            class="mr-1 mt-2"
-            alt="System Health"
-            contain
-            height="50px"
-            width="50px"
-          />
-        </b-col>
+        <SegmentedBar :min="0" :max="50" v-model="state.systemHealth" :disabled="false" />
+        {{ tempVal }}
+
+        <b-img
+          v-bind="systemHealthIconProps"
+          :src="require(`@port-of-mars/client/assets/icons/systemHealth.svg`)"
+          rounded="circle"
+          left
+          class="mr-1 mt-2"
+          alt="System Health"
+          contain
+          height="50px"
+          width="50px"
+        />
       </b-col>
     </b-row>
     <b-row class="w-100 flex-grow-1" no-gutters>
@@ -81,7 +79,7 @@ investment input - https://bootstrap-vue.org/docs/components/form-spinbutton
           >
           <b-row class="w-25 flex-shrink-1 p-2" no-gutters>
             <b-col cols="12" class="content-container">
-              <b-form-spinbutton
+              <!-- <b-form-spinbutton
                 id="invest-input"
                 v-model="pendingSystemHealthInvestment"
                 min="0"
@@ -93,8 +91,16 @@ investment input - https://bootstrap-vue.org/docs/components/form-spinbutton
                 <template #increment>
                   <b-icon-plus scale="1.00" color="#f1e0c5"></b-icon-plus>
                 </template>
-              </b-form-spinbutton>
-              <p>{{ pendingSystemHealthInvestment }}</p>
+              </b-form-spinbutton> -->
+              <b-col cols="12" class="content-container">
+                <SegmentedBar
+                  :min="0"
+                  :max="state.player.resources"
+                  v-model="pendingSystemHealthInvestment"
+                  :asInput="true"
+                />
+              </b-col>
+              <!-- <p>{{ pendingSystemHealthInvestment }}</p> -->
               <b-button @click="handleInvestButtonClick" :disabled="!state.canInvest"
                 >Invest in System Health</b-button
               >
