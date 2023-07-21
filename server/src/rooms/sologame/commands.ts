@@ -158,6 +158,7 @@ export class ApplyCardCmd extends Cmd<{ playerSkipped: boolean }> {
       return new StartEventTimerCmd();
     } else {
       this.state.canInvest = true;
+      this.state.activeRoundCardIndex = -1;
     }
   }
 }
