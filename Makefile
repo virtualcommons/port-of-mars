@@ -10,10 +10,6 @@ REDIS_SETTINGS_PATH=keys/settings.json
 ORMCONFIG_PATH=keys/ormconfig.json
 SERVER_ENV_TEMPLATE=server/.env.template
 SERVER_ENV=server/.env
-# FIXME: makeshift until we fully unify server + nuxt, then remove legacy ORMCONFIG_PATH
-TYPEORM_DATA_SOURCE_TEMPLATE=database/data-source.template.ts
-TYPEORM_DATA_SOURCE_PATH=keys/data-source.ts
-
 PGPASS_PATH=keys/.pgpass
 SECRET_KEY_PATH=keys/secret_key
 SENTRY_DSN_PATH=keys/sentry_dsn
@@ -73,10 +69,6 @@ $(REDIS_SETTINGS_PATH): server/deploy/settings.template.json | keys
 $(ORMCONFIG_PATH): server/ormconfig.template.json $(DB_PASSWORD_PATH)
 	DB_PASSWORD=$$(cat $(DB_PASSWORD_PATH)); \
 	sed "s|DB_PASSWORD|$$DB_PASSWORD|g" server/ormconfig.template.json > $(ORMCONFIG_PATH)
-
-$(TYPEORM_DATA_SOURCE_PATH): pom-nuxt/$(TYPEORM_DATA_SOURCE_TEMPLATE) $(DB_PASSWORD_PATH)
-	DB_PASSWORD=$$(cat $(DB_PASSWORD_PATH)); \
-	sed "s|DB_PASSWORD|$$DB_PASSWORD|g" pom-nuxt/${TYPEORM_DATA_SOURCE_TEMPLATE) > $(TYPEORM_DATA_SOURCE_PATH)
 
 $(SERVER_ENV): $(SERVER_ENV_TEMPLATE) $(SECRETS)
 	POM_BASE_URL=${POM_BASE_URL} \
