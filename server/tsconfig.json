@@ -11,9 +11,6 @@
     "experimentalDecorators": true,
     "baseUrl": ".",
     "paths": {
-      "@port-of-mars/nuxt/*": [
-        "../pom-nuxt/src/*"
-      ],
       "@port-of-mars/server/*": [
         "src/*"
       ],
