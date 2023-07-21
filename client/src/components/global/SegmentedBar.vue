@@ -1,23 +1,31 @@
 <template>
   <div>
     <div class="input-container">
-      <h1 @click="setValue(value - 1)" style="margin-right: 20px; user-select: none">-</h1>
+      <!-- <h1 @click="setValue(value - 1)" style="margin-right: 20px; user-select: none">-</h1> -->
+      <!-- <h1 @click="decrement" :style="{ cursor: isDecrementDisabled ? 'not-allowed' : 'pointer' }">
+        -
+      </h1> -->
+      <h1 v-if="!disableInputs" @click="decrement">-</h1>
       <div
         class="bar"
         @mousemove="checkAndSetValue($event)"
-        @mouseup="drag = false"
-        @mouseleave="drag = false"
+        @mouseup="!disabled && (drag = false)"
+        @mouseleave="!disabled && (drag = false)"
       >
         <div
           class="segment"
           v-for="(segment, index) in segments"
           :key="index"
           :class="{ 'bg-success': index < value }"
-          @click="setValue(index + 1)"
-          @mousedown="drag = true"
+          @click="!disabled && setValue(index + 1)"
+          @mousedown="!disabled && (drag = true)"
         ></div>
       </div>
-      <h1 @click="setValue(value + 1)" style="margin-left: 20px; user-select: none">+</h1>
+      <!-- <h1 @click="setValue(value + 1)" style="margin-left: 20px; user-select: none">+</h1> -->
+      <!-- <h1 @click="increment" :style="{ cursor: isIncrementDisabled ? 'not-allowed' : 'pointer' }">
+        +
+      </h1> -->
+      <h1 v-if="!disabled" @click="increment">+</h1>
     </div>
     <h1>{{ value }}</h1>
   </div>
@@ -32,6 +40,7 @@ export default class SegmentedBar extends Vue {
   @Prop() max!: number;
   @Prop({ default: false }) asInput!: boolean;
   @Prop({ default: 0 }) value!: number;
+  @Prop({ default: false }) disabled!: boolean;
 
   segments = Array(this.max).fill(0);
   drag = false;
@@ -51,6 +60,14 @@ export default class SegmentedBar extends Vue {
     const segmentWidth = boundingRect.width / this.segments.length;
     const relativeX = event.clientX - boundingRect.left;
     this.setValue(Math.ceil(relativeX / segmentWidth));
+  }
+
+  get isDecrementDisabled() {
+    return this.value <= this.min;
+  }
+
+  get isIncrementDisabled() {
+    return this.value >= this.max;
   }
 }
 </script>
