@@ -1,31 +1,36 @@
 <template>
   <div>
     <div class="input-container">
-      <!-- <h1 @click="setValue(value - 1)" style="margin-right: 20px; user-select: none">-</h1> -->
-      <!-- <h1 @click="decrement" :style="{ cursor: isDecrementDisabled ? 'not-allowed' : 'pointer' }">
-        -
-      </h1> -->
-      <h1 v-if="!disableInputs" @click="decrement">-</h1>
+      <b-button v-if="asInput" @click="decrement" variant="link">
+        <h1>-</h1>
+      </b-button>
       <div
+        v-if="asInput"
         class="bar"
         @mousemove="checkAndSetValue($event)"
-        @mouseup="!disabled && (drag = false)"
-        @mouseleave="!disabled && (drag = false)"
+        @mouseup="setDragging(false)"
+        @mouseleave="setDragging(false)"
       >
         <div
           class="segment"
-          v-for="(segment, index) in segments"
+          v-for="index in max"
           :key="index"
-          :class="{ 'bg-success': index < value }"
-          @click="!disabled && setValue(index + 1)"
-          @mousedown="!disabled && (drag = true)"
+          :class="{ 'bg-success': index <= value }"
+          @click="localValue = index"
+          @mousedown="setDragging(true)"
         ></div>
       </div>
-      <!-- <h1 @click="setValue(value + 1)" style="margin-left: 20px; user-select: none">+</h1> -->
-      <!-- <h1 @click="increment" :style="{ cursor: isIncrementDisabled ? 'not-allowed' : 'pointer' }">
-        +
-      </h1> -->
-      <h1 v-if="!disabled" @click="increment">+</h1>
+      <div v-else class="bar">
+        <div
+          class="segment"
+          v-for="index in max"
+          :key="index"
+          :class="{ 'bg-success': index <= value }"
+        ></div>
+      </div>
+      <b-button v-if="asInput" @click="increment" variant="link">
+        <h1>+</h1>
+      </b-button>
     </div>
     <h1>{{ value }}</h1>
   </div>
@@ -39,17 +44,22 @@ export default class SegmentedBar extends Vue {
   @Prop({ default: 0 }) min!: number;
   @Prop() max!: number;
   @Prop({ default: false }) asInput!: boolean;
-  @Prop({ default: 0 }) value!: number;
-  @Prop({ default: false }) disabled!: boolean;
+  @Prop({ default: 0 }) readonly value!: number;
 
-  segments = Array(this.max).fill(0);
-  drag = false;
+  dragging = false;
 
-  setValue(value: number) {
+  get localValue(): number {
+    return this.value;
+  }
+
+  set localValue(value: number) {
     if (value >= this.min && value <= this.max) {
-      this.value = value;
-      this.$emit("input", this.value);
+      this.$emit("input", value);
     }
+  }
+
+  setDragging(value: boolean) {
+    this.dragging = value;
   }
 
   checkAndSetValue(event: any) {
@@ -57,17 +67,17 @@ export default class SegmentedBar extends Vue {
       return;
     }
     const boundingRect = event.currentTarget.getBoundingClientRect();
-    const segmentWidth = boundingRect.width / this.segments.length;
+    const segmentWidth = boundingRect.width / this.max;
     const relativeX = event.clientX - boundingRect.left;
-    this.setValue(Math.ceil(relativeX / segmentWidth));
+    this.localValue = Math.ceil(relativeX / segmentWidth);
   }
 
-  get isDecrementDisabled() {
-    return this.value <= this.min;
+  decrement() {
+    this.localValue = this.localValue - 1;
   }
 
-  get isIncrementDisabled() {
-    return this.value >= this.max;
+  increment() {
+    this.localValue = this.localValue + 1;
   }
 }
 </script>
