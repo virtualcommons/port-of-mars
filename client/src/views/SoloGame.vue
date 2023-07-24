@@ -31,22 +31,8 @@ investment input - https://bootstrap-vue.org/docs/components/form-spinbutton
       <b-col cols="12" class="content-container"
         >SYSTEM HEALTH: {{ state.systemHealth }}
 
-        <!-- <SystemHealth class="systemhealth" :setWidth="state.systemHealth" /> -->
-
-        <SegmentedBar :min="0" :max="50" v-model="state.systemHealth" :disabled="false" />
+        <SegmentedBar :min="0" :max="25" v-model="state.systemHealth" />
         {{ tempVal }}
-
-        <b-img
-          v-bind="systemHealthIconProps"
-          :src="require(`@port-of-mars/client/assets/icons/systemHealth.svg`)"
-          rounded="circle"
-          left
-          class="mr-1 mt-2"
-          alt="System Health"
-          contain
-          height="50px"
-          width="50px"
-        />
       </b-col>
     </b-row>
     <b-row class="w-100 flex-grow-1" no-gutters>
@@ -79,28 +65,13 @@ investment input - https://bootstrap-vue.org/docs/components/form-spinbutton
           >
           <b-row class="w-25 flex-shrink-1 p-2" no-gutters>
             <b-col cols="12" class="content-container">
-              <!-- <b-form-spinbutton
-                id="invest-input"
-                v-model="pendingSystemHealthInvestment"
-                min="0"
+              <SegmentedBar
+                :min="0"
                 :max="state.player.resources"
-              >
-                <template #decrement>
-                  <b-icon-dash scale="1.00" color="#f1e0c5"></b-icon-dash>
-                </template>
-                <template #increment>
-                  <b-icon-plus scale="1.00" color="#f1e0c5"></b-icon-plus>
-                </template>
-              </b-form-spinbutton> -->
-              <b-col cols="12" class="content-container">
-                <SegmentedBar
-                  :min="0"
-                  :max="state.player.resources"
-                  v-model="pendingSystemHealthInvestment"
-                  :asInput="true"
-                />
-              </b-col>
-              <!-- <p>{{ pendingSystemHealthInvestment }}</p> -->
+                v-model="pendingSystemHealthInvestment"
+                :asInput="true"
+              />
+
               <b-button @click="handleInvestButtonClick" :disabled="!state.canInvest"
                 >Invest in System Health</b-button
               >
