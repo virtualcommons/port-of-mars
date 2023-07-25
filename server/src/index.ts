@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import session from "express-session";
 import connectRedis from "connect-redis";
+import pRetry from "p-retry";
 import * as Sentry from "@sentry/node";
 import { Server } from "colyseus";
 import schedule from "node-schedule";
@@ -226,8 +227,18 @@ async function createApp() {
   });
 }
 
-createConnection(CONNECTION_NAME)
-  .then(async connection => {
+// connect to the database and start the server, retrying if the connection fails
+pRetry(
+  async () => {
+    await createConnection(CONNECTION_NAME);
     await createApp();
-  })
-  .catch(error => logger.fatal(error));
+  },
+  {
+    onFailedAttempt: error => {
+      logger.warn(`Connection to db failed on attempt number ${error.attemptNumber}, retrying...`);
+    },
+    retries: 10,
+    minTimeout: 1 * 1000,
+    maxTimeout: 60 * 1000,
+  }
+).catch(error => logger.fatal(error));
