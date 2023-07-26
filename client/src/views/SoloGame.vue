@@ -74,11 +74,18 @@ investment input - https://bootstrap-vue.org/docs/components/form-spinbutton
           <b-col cols="8" class="content-container">
             <span v-if="state.treatmentParams.isEventDeckKnown">
                 <div v-for="event in state.eventCardDeck" :key="event.codeName">
-                  <Deck :event="event" />
+                  <Deck :event="event"></Deck>
+                  
+                  <b-button v-b-modal.my-modal>Continue</b-button>
+                  <b-button v-b-modal="'my-modal'">Continue</b-button>
+                  <b-modal id="my-modal">Modal Message</b-modal>
                 </div>
             </span>
             <span v-else>
               FALSE
+              <b-button v-b-modal.my-modal>Continue</b-button>
+              <b-button v-b-modal="'my-modal'">Continue</b-button>
+              <b-modal id="my-modal">Modal Message</b-modal>
             </span>
           </b-col>
           <b-row class="w-25 flex-shrink-1 p-2" no-gutters>
