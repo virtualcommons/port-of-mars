@@ -128,7 +128,7 @@ deploy: build
 
 .PHONY: buildprod
 buildprod: docker-compose.yml
-	docker compose run --rm client yarn build
+	docker compose run --rm client yarn type-check-build
 	docker compose run --rm server yarn build
 
 .PHONY: clean
