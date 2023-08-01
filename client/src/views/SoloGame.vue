@@ -32,7 +32,6 @@ investment input - https://bootstrap-vue.org/docs/components/form-spinbutton
         >SYSTEM HEALTH: {{ state.systemHealth }}
 
         <SegmentedBar :min="0" :max="25" v-model="state.systemHealth" />
-        {{ tempVal }}
       </b-col>
     </b-row>
     <b-row class="w-100 flex-grow-1" no-gutters>
@@ -63,16 +62,22 @@ investment input - https://bootstrap-vue.org/docs/components/form-spinbutton
           <b-col cols="8" class="content-container"
             >DECK: {{ state.treatmentParams.isEventDeckKnown }}</b-col
           >
-          <b-row class="w-25 flex-shrink-1 p-2" no-gutters>
-            <b-col cols="12" class="content-container">
+          <b-row class="w-50 p-2" no-gutters>
+            <b-col cols="8" class="content-container">
               <SegmentedBar
                 :min="0"
                 :max="state.player.resources"
                 v-model="pendingSystemHealthInvestment"
                 :asInput="true"
+                :segment-class="{ 'glowing-shadow': shouldFlashInvestInput }"
               />
 
-              <b-button @click="handleInvestButtonClick" :disabled="!state.canInvest"
+              <b-button
+                @click="handleInvestButtonClick"
+                :disabled="!state.canInvest"
+                variant="success"
+                block
+                :class="{ 'glowing-shadow': shouldFlashInvestButton }"
                 >Invest in System Health</b-button
               >
             </b-col>
@@ -154,6 +159,14 @@ export default class Game extends Vue {
     canInvest: true,
   };
 
+  get shouldFlashInvestButton() {
+    return this.pendingSystemHealthInvestment > 0 && this.state.round === 1;
+  }
+
+  get shouldFlashInvestInput() {
+    return this.pendingSystemHealthInvestment === 0 && this.state.round === 1;
+  }
+
   handleInvestButtonClick() {
     //add how button behaves here
     this.api.invest(this.pendingSystemHealthInvestment);
@@ -173,4 +186,22 @@ export default class Game extends Vue {
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+@keyframes glowing {
+  0% {
+    box-shadow: 0 0 0px #2ba805;
+  }
+  50% {
+    box-shadow: 0 0 15px #49e819;
+  }
+  100% {
+    box-shadow: 0 0 0px #2ba805;
+  }
+}
+
+.glowing-shadow {
+  box-shadow: 0 0 10px #28a745;
+  animation: glowing 1s infinite;
+  transition: box-shadow 0.5s ease-in-out;
+}
+</style>

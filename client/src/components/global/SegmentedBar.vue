@@ -12,20 +12,18 @@
         @mouseleave="setDragging(false)"
       >
         <div
-          class="segment"
           v-for="index in max"
           :key="index"
-          :class="{ 'bg-success': index <= value }"
+          :class="['segment', segmentClass, { 'bg-success': index <= value }]"
           @click="localValue = index"
           @mousedown="setDragging(true)"
         ></div>
       </div>
       <div v-else class="bar">
         <div
-          class="segment"
           v-for="index in max"
           :key="index"
-          :class="{ 'bg-success': index <= value }"
+          :class="['segment', segmentClass, { 'bg-success': index <= value }]"
         ></div>
       </div>
       <b-button v-if="asInput" @click="increment" variant="link">
@@ -45,6 +43,7 @@ export default class SegmentedBar extends Vue {
   @Prop() max!: number;
   @Prop({ default: false }) asInput!: boolean;
   @Prop({ default: 0 }) readonly value!: number;
+  @Prop({ default: "" }) segmentClass!: string;
 
   dragging = false;
 
@@ -93,6 +92,7 @@ export default class SegmentedBar extends Vue {
   display: flex;
   flex-grow: 1;
   user-select: none;
+  // @extend .glowing-shadow;
 }
 
 .segment {
@@ -102,6 +102,7 @@ export default class SegmentedBar extends Vue {
   margin: 2px;
   transform: skew(-15deg);
   border: 2px solid darkslategrey;
+  //@extend .glowing-shadow;
 }
 
 .segment.selected {
