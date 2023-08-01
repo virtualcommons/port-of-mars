@@ -4,16 +4,16 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "type-check-build": "tsc --noEmit && vue-cli-service build",
+    "build": "yarn type-check && yarn build-only",
+    "build-only": "vue-cli-service build",
+    "type-check": "tsc --noEmit",
     "loadtest": "ts-node -r tsconfig-paths/register src/loadtest.ts",
     "test:unit": "NODE_ENV=test vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "eslint ./ --ext .ts,.vue",
     "lint:fix": "eslint --fix ./ --ext .ts,.vue",
     "style": "prettier --config ../.prettierrc --check 'src/**/*.{ts,vue}'",
-    "style:fix": "prettier --config ../.prettierrc --write 'src/**/*.{ts,vue}'",
-    "type-check": "tsc --noEmit"
+    "style:fix": "prettier --config ../.prettierrc --write 'src/**/*.{ts,vue}'"
   },
   "dependencies": {
     "@colyseus/schema": "^1.0.9",
