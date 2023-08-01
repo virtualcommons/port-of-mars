@@ -11,7 +11,8 @@
     "lint": "eslint ./ --ext .ts,.vue",
     "lint:fix": "eslint --fix ./ --ext .ts,.vue",
     "style": "prettier --config ../.prettierrc --check 'src/**/*.{ts,vue}'",
-    "style:fix": "prettier --config ../.prettierrc --write 'src/**/*.{ts,vue}'"
+    "style:fix": "prettier --config ../.prettierrc --write 'src/**/*.{ts,vue}'",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@colyseus/schema": "^1.0.9",

@@ -14,10 +14,9 @@ import { ChatMarsLogView, HUDLeftView, HUDRightView } from "@port-of-mars/shared
 import * as _ from "lodash";
 import { Store } from "vuex/types/index";
 import { StateTransform } from "@port-of-mars/client/types/tutorial";
-import { AbstractGameAPI } from "@port-of-mars/client/api/game/types";
 import { SfxManager } from "@port-of-mars/client/util";
 
-export class TutorialAPI implements AbstractGameAPI {
+export class TutorialAPI {
   count: number = 1;
   private store!: Store<State>;
   private stateStack: Array<StateTransform[]> = [];
