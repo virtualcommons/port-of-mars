@@ -53,15 +53,29 @@ investment input - https://bootstrap-vue.org/docs/components/form-spinbutton
         </b-row>
         <b-row class="w-100 p-2" no-gutters>
           <b-col cols="4" class="content-container">
-            <div>
+            <div>  
               <div v-for="event in state.roundEventCards" :key="event.codeName">
                 <EventCard :event="event" />
               </div>
             </div>
           </b-col>
-          <b-col cols="8" class="content-container"
-            >DECK: {{ state.treatmentParams.isEventDeckKnown }}</b-col
-          >
+          <b-col cols="8" class="content-container">
+            <span v-if="state.treatmentParams.isEventDeckKnown">
+                <div v-for="event in state.eventCardDeck" :key="event.codeName">
+                  <Deck :event="event"></Deck>
+                  
+                  <b-button v-b-modal.my-modal>Continue</b-button>
+                  <b-button v-b-modal="'my-modal'">Continue</b-button>
+                  <b-modal id="my-modal">Modal Message</b-modal>
+                </div>
+            </span>
+            <span v-else>
+              FALSE
+              <b-button v-b-modal.my-modal>Continue</b-button>
+              <b-button v-b-modal="'my-modal'">Continue</b-button>
+              <b-modal id="my-modal">Modal Message</b-modal>
+            </span>
+          </b-col>
           <b-row class="w-100 p-2" no-gutters>
             <b-col cols="6" class="content-container">
               <div>
@@ -106,6 +120,7 @@ import EventCard from "@port-of-mars/client/components/sologame/EventCard.vue";
 import HealthBar from "@port-of-mars/client/components/sologame/HealthBar.vue";
 import SystemHealth from "@port-of-mars/client/components/game/static/systemhealth/SystemHealth.vue";
 import SegmentedBar from "@port-of-mars/client/components/global/SegmentedBar.vue";
+import Deck from "@port-of-mars/client/components/sologame/Deck.vue";
 
 export interface SoloGameState {
   timeRemaining: number;
@@ -133,6 +148,7 @@ export interface SoloGameState {
   name: "sologame",
   components: {
     EventCard,
+    Deck,
     HealthBar,
     SystemHealth,
     SegmentedBar,
@@ -144,8 +160,6 @@ export default class Game extends Vue {
   hasApi: boolean = false;
 
   pendingSystemHealthInvestment = 0;
-
-  tempVal = 0;
 
   // FIXME: move this to a vuex store after splitting up the multiplayer game and
   // onboarding/etc. stores
