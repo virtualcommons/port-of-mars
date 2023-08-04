@@ -5,9 +5,9 @@
     </div>
     <div class="d-flex flex-row flex-grow-1 overflow-hidden">
       <div class="d-flex flex-column flex-grow-1 overflow-hidden">
-        <div class="d-flex flex-md-row flex-column flex-grow-1 overflow-hidden">
-          <div class="cell-grow">thresholds</div>
-          <div class="d-flex flex-md-column flex-row flex-grow-1 overflow-hidden">
+        <div class="d-flex flex-md-row flex-column flex-grow-1 overflow-hidden mh-50">
+          <div class="cell-grow mw-35">thresholds</div>
+          <div class="d-flex flex-md-column flex-row flex-grow-1 overflow-hidden mw-35">
             <div class="cell-grow">
               <div>
                 <h4>Round</h4>
@@ -22,22 +22,23 @@
             </div>
             <div class="cell-grow">Time remaining: {{ state.timeRemaining }}</div>
           </div>
-          <div class="cell-grow">
+          <div class="cell-grow mw-35">
             <Deck :events="state.roundEventCards" />
           </div>
         </div>
-        <div class="d-flex flex-md-row flex-column flex-grow-1 overflow-hidden">
-          <div class="cell-grow">
+        <div class="d-flex flex-md-row flex-column flex-grow-1 overflow-hidden mh-50">
+          <div class="cell-grow mw-50">
             <h5>TOTAL POINTS: {{ state.player.points }}</h5>
             <h5>RESOURCES AVAILABLE: {{ state.player.resources }}</h5>
           </div>
-          <div class="cell-grow">
+          <div class="cell-grow mw-50">
             <Investment :state="state" @invest="handleInvest" />
           </div>
         </div>
       </div>
       <div class="cell-shrink mw-25">
         <Deck v-if="state.treatmentParams.isEventDeckKnown" :events="state.eventCardDeck" />
+        <div v-else>Event deck is unknown</div>
       </div>
     </div>
   </div>
@@ -158,20 +159,32 @@ export default class SoloGame extends Vue {
   max-width: 25%;
 }
 
+.mw-35 {
+  max-width: 35%;
+}
+
+.mw-50 {
+  max-width: 50%;
+}
+
+.mh-50 {
+  max-height: 50%;
+}
+
 @keyframes glowing {
   0% {
-    box-shadow: 0 0 0px #2ba805;
+    box-shadow: 0 0 0px $success;
   }
   50% {
-    box-shadow: 0 0 15px #49e819;
+    box-shadow: 0 0 15px $success;
   }
   100% {
-    box-shadow: 0 0 0px #2ba805;
+    box-shadow: 0 0 0px $success;
   }
 }
 
 .glowing-shadow {
-  box-shadow: 0 0 10px #28a745;
+  box-shadow: 0 0 10px $success;
   animation: glowing 1s infinite;
   transition: box-shadow 0.5s ease-in-out;
 }

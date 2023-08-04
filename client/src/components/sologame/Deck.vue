@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="e in events" :key="e.id">
+    <div v-for="e in events" :key="e.id" class="mb-2">
       <EventCard :event="e" />
     </div>
   </div>
