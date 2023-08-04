@@ -62,8 +62,14 @@ investment input - https://bootstrap-vue.org/docs/components/form-spinbutton
           <b-col cols="8" class="content-container"
             >DECK: {{ state.treatmentParams.isEventDeckKnown }}</b-col
           >
-          <b-row class="w-50 p-2" no-gutters>
-            <b-col cols="8" class="content-container">
+          <b-row class="w-100 p-2" no-gutters>
+            <b-col cols="6" class="content-container">
+              <div>
+                <h5>TOTAL POINTS: {{ state.player.points }}</h5>
+                <p><h5>RESOURCES AVAILABLE: {{ state.player.resources }}</h5></p>
+              </div>
+            </b-col>
+            <b-col cols="6" class="content-container">
               <SegmentedBar
                 :min="0"
                 :max="state.player.resources"
@@ -71,6 +77,8 @@ investment input - https://bootstrap-vue.org/docs/components/form-spinbutton
                 :asInput="true"
                 :segment-class="{ 'glowing-shadow': shouldFlashInvestInput }"
               />
+
+              <h5>{{ pendingPointsValue }} RESOURCES WILL BE DIVERTED TO POINTS.</h5>
 
               <b-button
                 @click="handleInvestButtonClick"
@@ -167,6 +175,9 @@ export default class Game extends Vue {
     return this.pendingSystemHealthInvestment === 0 && this.state.round === 1;
   }
 
+  get pendingPointsValue() {
+    return this.state.player.resources - this.pendingSystemHealthInvestment;
+  }
   handleInvestButtonClick() {
     //add how button behaves here
     this.api.invest(this.pendingSystemHealthInvestment);
