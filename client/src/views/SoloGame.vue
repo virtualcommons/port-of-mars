@@ -30,20 +30,8 @@ investment input - https://bootstrap-vue.org/docs/components/form-spinbutton
     <b-row class="w-100 flex-shrink-1 p-2" no-gutters>
       <b-col cols="12" class="content-container"
         >SYSTEM HEALTH: {{ state.systemHealth }}
-        <b-col class="statusbar-outer" no-gutters>
-          <b-col class="statusbar-inner" no-gutters></b-col>
-          <b-img
-            v-bind="systemHealthIconProps"
-            :src="require(`@port-of-mars/client/assets/icons/systemHealth.svg`)"
-            rounded="circle"
-            left
-            class="mr-1 mt-2"
-            alt="System Health"
-            contain
-            height="50px"
-            width="75px"
-          />
-        </b-col>
+
+        <SegmentedBar :min="0" :max="25" v-model="state.systemHealth" />
       </b-col>
     </b-row>
     <b-row class="w-100 flex-grow-1" no-gutters>
@@ -74,23 +62,30 @@ investment input - https://bootstrap-vue.org/docs/components/form-spinbutton
           <b-col cols="8" class="content-container"
             >DECK: {{ state.treatmentParams.isEventDeckKnown }}</b-col
           >
-          <b-row class="w-25 flex-shrink-1 p-2" no-gutters>
-            <b-col cols="12" class="content-container">
-              <b-form-spinbutton
-                id="invest-input"
-                v-model="pendingSystemHealthInvestment"
-                min="0"
+          <b-row class="w-100 p-2" no-gutters>
+            <b-col cols="6" class="content-container">
+              <div>
+                <h5>TOTAL POINTS: {{ state.player.points }}</h5>
+                <p><h5>RESOURCES AVAILABLE: {{ state.player.resources }}</h5></p>
+              </div>
+            </b-col>
+            <b-col cols="6" class="content-container">
+              <SegmentedBar
+                :min="0"
                 :max="state.player.resources"
-              >
-                <template #decrement>
-                  <b-icon-dash scale="1.00" color="#f1e0c5"></b-icon-dash>
-                </template>
-                <template #increment>
-                  <b-icon-plus scale="1.00" color="#f1e0c5"></b-icon-plus>
-                </template>
-              </b-form-spinbutton>
-              <p>{{ pendingSystemHealthInvestment }}</p>
-              <b-button @click="handleInvestButtonClick" :disabled="!state.canInvest"
+                v-model="pendingSystemHealthInvestment"
+                :asInput="true"
+                :segment-class="{ 'glowing-shadow': shouldFlashInvestInput }"
+              />
+
+              <h5>{{ pendingPointsValue }} RESOURCES WILL BE DIVERTED TO POINTS.</h5>
+
+              <b-button
+                @click="handleInvestButtonClick"
+                :disabled="!state.canInvest"
+                variant="success"
+                block
+                :class="{ 'glowing-shadow': shouldFlashInvestButton }"
                 >Invest in System Health</b-button
               >
             </b-col>
@@ -108,6 +103,9 @@ import { SoloGameRequestAPI } from "@port-of-mars/client/api/sologame/request";
 import { applySoloGameServerResponses } from "@port-of-mars/client/api/sologame/response";
 import { EventCardData, SOLO_ROOM_NAME } from "@port-of-mars/shared/sologame";
 import EventCard from "@port-of-mars/client/components/sologame/EventCard.vue";
+import HealthBar from "@port-of-mars/client/components/sologame/HealthBar.vue";
+import SystemHealth from "@port-of-mars/client/components/game/static/systemhealth/SystemHealth.vue";
+import SegmentedBar from "@port-of-mars/client/components/global/SegmentedBar.vue";
 
 export interface SoloGameState {
   timeRemaining: number;
@@ -135,6 +133,9 @@ export interface SoloGameState {
   name: "sologame",
   components: {
     EventCard,
+    HealthBar,
+    SystemHealth,
+    SegmentedBar,
   },
 })
 export default class Game extends Vue {
@@ -143,6 +144,8 @@ export default class Game extends Vue {
   hasApi: boolean = false;
 
   pendingSystemHealthInvestment = 0;
+
+  tempVal = 0;
 
   // FIXME: move this to a vuex store after splitting up the multiplayer game and
   // onboarding/etc. stores
@@ -164,6 +167,17 @@ export default class Game extends Vue {
     canInvest: true,
   };
 
+  get shouldFlashInvestButton() {
+    return this.pendingSystemHealthInvestment > 0 && this.state.round === 1;
+  }
+
+  get shouldFlashInvestInput() {
+    return this.pendingSystemHealthInvestment === 0 && this.state.round === 1;
+  }
+
+  get pendingPointsValue() {
+    return this.state.player.resources - this.pendingSystemHealthInvestment;
+  }
   handleInvestButtonClick() {
     //add how button behaves here
     this.api.invest(this.pendingSystemHealthInvestment);
@@ -183,4 +197,22 @@ export default class Game extends Vue {
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+@keyframes glowing {
+  0% {
+    box-shadow: 0 0 0px #2ba805;
+  }
+  50% {
+    box-shadow: 0 0 15px #49e819;
+  }
+  100% {
+    box-shadow: 0 0 0px #2ba805;
+  }
+}
+
+.glowing-shadow {
+  box-shadow: 0 0 10px #28a745;
+  animation: glowing 1s infinite;
+  transition: box-shadow 0.5s ease-in-out;
+}
+</style>
