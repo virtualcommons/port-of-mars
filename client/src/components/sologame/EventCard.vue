@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="content-container p-2">
     <h4>{{ event.displayName }}</h4>
     <p>
       <i>{{ event.flavorText }}</i>
