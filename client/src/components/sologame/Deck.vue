@@ -1,18 +1,23 @@
 <template>
   <div>
-    <h4>{{ event.displayName }}</h4>
-    <p><i>{{ event.flavorText }}</i></p>
-    <p>{{ event.effectText }}</p>
+    <div v-for="e in events" :key="e.id">
+      <EventCard :event="e" />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
+import EventCard from "@port-of-mars/client/components/sologame/EventCard.vue";
 import { EventCardData } from "@port-of-mars/shared/sologame";
 
-@Component({})
-export default class EventCard extends Vue {
-  @Prop() event!: EventCardData;
+@Component({
+  components: {
+    EventCard,
+  },
+})
+export default class Deck extends Vue {
+  @Prop() events!: EventCardData[];
 }
 </script>
 

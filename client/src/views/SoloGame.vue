@@ -1,113 +1,46 @@
-<!-- 
-+-----------------------------------------------------------------+
-|                      HEALTH BAR                                 |
-+------------------------------------------------+----------------+
-|+---------------++--------------++-------------+|                |
-||               ||              ||             ||                |
-||               ||  ROUND #     ||             ||                |
-||  SYSTEM       ||  out of (?)  ||             ||                |
-||  "DIAGNOSTICS"|+--------------+|   ROUND     ||                |
-||  (thresholds) |+--------------+|   EVENTS    ||                |
-||               ||   TIMER      ||             ||    DECK        |
-||               ||              ||             ||                |
-|+---------------++--------------++-------------+|                |
-|+------------------++--------------------------+|                |
-||                  ||                          ||                |
-||     POINTS /     ||                          ||                |
-||     RESOURCES    ||       INVEST INPUT       ||                |
-||                  ||                          ||                |
-||                  ||                          ||                |
-|+------------------++--------------------------+|                |
-+------------------------------------------------+----------------+
-
-investment input - https://bootstrap-vue.org/docs/components/form-spinbutton
- -->
-
 <template>
-  <!-- extremely basic layout w/ BS grid + flex -->
-  <!-- likely need to start over but serves as an example of some css/flex concepts -->
-  <b-container fluid class="h-100 w-100 d-flex flex-column">
-    <b-row class="w-100 flex-shrink-1 p-2" no-gutters>
-      <b-col cols="12" class="content-container"
-        >SYSTEM HEALTH: {{ state.systemHealth }}
-
-        <SegmentedBar :min="0" :max="25" v-model="state.systemHealth" />
-      </b-col>
-    </b-row>
-    <b-row class="w-100 flex-grow-1" no-gutters>
-      <b-col cols="12">
-        <b-row class="w-100 p-2" no-gutters>
-          <b-col cols="6" class="content-container">
-            <div>
-              <h4>Round</h4>
-              <p>
-                {{ state.round }}
-                <span v-if="state.treatmentParams.isKnownNumberOfRounds">
-                  of {{ state.maxRound }}
-                </span>
-                <span v-else></span>
-              </p>
-            </div>
-          </b-col>
-          <b-col cols="6" class="content-container">TIMER: {{ state.timeRemaining }}</b-col>
-        </b-row>
-        <b-row class="w-100 p-2" no-gutters>
-          <b-col cols="4" class="content-container">
-            <div>  
-              <div v-for="event in state.roundEventCards" :key="event.codeName">
-                <EventCard :event="event" />
-              </div>
-            </div>
-          </b-col>
-          <b-col cols="8" class="content-container">
-            <span v-if="state.treatmentParams.isEventDeckKnown">
-                <div v-for="event in state.eventCardDeck" :key="event.codeName">
-                  <Deck :event="event"></Deck>
-                  
-                  <b-button v-b-modal.my-modal>Continue</b-button>
-                  <b-button v-b-modal="'my-modal'">Continue</b-button>
-                  <b-modal id="my-modal">Modal Message</b-modal>
-                </div>
-            </span>
-            <span v-else>
-              FALSE
-              <b-button v-b-modal.my-modal>Continue</b-button>
-              <b-button v-b-modal="'my-modal'">Continue</b-button>
-              <b-modal id="my-modal">Modal Message</b-modal>
-            </span>
-          </b-col>
-          <b-row class="w-100 p-2" no-gutters>
-            <b-col cols="6" class="content-container">
+  <div class="d-flex flex-column backdrop p-2 h-100 overflow-hidden">
+    <div class="d-flex flex-shrink-1 m-2 mt-3">
+      <SegmentedBar :min="0" :max="25" v-model="state.systemHealth" class="w-100" />
+    </div>
+    <div class="d-flex flex-row flex-grow-1 overflow-hidden">
+      <div class="d-flex flex-column flex-grow-1 overflow-hidden">
+        <div class="d-flex flex-md-row flex-column flex-grow-1 overflow-hidden">
+          <div class="cell-grow">thresholds</div>
+          <div class="d-flex flex-md-column flex-row flex-grow-1 overflow-hidden">
+            <div class="cell-grow">
               <div>
-                <h5>TOTAL POINTS: {{ state.player.points }}</h5>
-                <p><h5>RESOURCES AVAILABLE: {{ state.player.resources }}</h5></p>
+                <h4>Round</h4>
+                <p>
+                  {{ state.round }}
+                  <span v-if="state.treatmentParams.isKnownNumberOfRounds">
+                    of {{ state.maxRound }}
+                  </span>
+                  <span v-else></span>
+                </p>
               </div>
-            </b-col>
-            <b-col cols="6" class="content-container">
-              <SegmentedBar
-                :min="0"
-                :max="state.player.resources"
-                v-model="pendingSystemHealthInvestment"
-                :asInput="true"
-                :segment-class="{ 'glowing-shadow': shouldFlashInvestInput }"
-              />
-
-              <h5>{{ pendingPointsValue }} RESOURCES WILL BE DIVERTED TO POINTS.</h5>
-
-              <b-button
-                @click="handleInvestButtonClick"
-                :disabled="!state.canInvest"
-                variant="success"
-                block
-                :class="{ 'glowing-shadow': shouldFlashInvestButton }"
-                >Invest in System Health</b-button
-              >
-            </b-col>
-          </b-row>
-        </b-row>
-      </b-col>
-    </b-row>
-  </b-container>
+            </div>
+            <div class="cell-grow">Time remaining: {{ state.timeRemaining }}</div>
+          </div>
+          <div class="cell-grow">
+            <Deck :events="state.roundEventCards" />
+          </div>
+        </div>
+        <div class="d-flex flex-md-row flex-column flex-grow-1 overflow-hidden">
+          <div class="cell-grow">
+            <h5>TOTAL POINTS: {{ state.player.points }}</h5>
+            <h5>RESOURCES AVAILABLE: {{ state.player.resources }}</h5>
+          </div>
+          <div class="cell-grow">
+            <Investment :state="state" @invest="handleInvest" />
+          </div>
+        </div>
+      </div>
+      <div class="cell-shrink mw-25">
+        <Deck v-if="state.treatmentParams.isEventDeckKnown" :events="state.eventCardDeck" />
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -121,6 +54,7 @@ import HealthBar from "@port-of-mars/client/components/sologame/HealthBar.vue";
 import SystemHealth from "@port-of-mars/client/components/game/static/systemhealth/SystemHealth.vue";
 import SegmentedBar from "@port-of-mars/client/components/global/SegmentedBar.vue";
 import Deck from "@port-of-mars/client/components/sologame/Deck.vue";
+import Investment from "@port-of-mars/client/components/sologame/Investment.vue";
 
 export interface SoloGameState {
   timeRemaining: number;
@@ -152,14 +86,15 @@ export interface SoloGameState {
     HealthBar,
     SystemHealth,
     SegmentedBar,
+    Investment,
   },
 })
-export default class Game extends Vue {
+export default class SoloGame extends Vue {
   @Inject() readonly $client!: Client;
   @Provide() private api: SoloGameRequestAPI = new SoloGameRequestAPI();
   hasApi: boolean = false;
 
-  pendingSystemHealthInvestment = 0;
+  // pendingSystemHealthInvestment = 0;
 
   // FIXME: move this to a vuex store after splitting up the multiplayer game and
   // onboarding/etc. stores
@@ -181,22 +116,9 @@ export default class Game extends Vue {
     canInvest: true,
   };
 
-  get shouldFlashInvestButton() {
-    return this.pendingSystemHealthInvestment > 0 && this.state.round === 1;
-  }
-
-  get shouldFlashInvestInput() {
-    return this.pendingSystemHealthInvestment === 0 && this.state.round === 1;
-  }
-
-  get pendingPointsValue() {
-    return this.state.player.resources - this.pendingSystemHealthInvestment;
-  }
-  handleInvestButtonClick() {
-    //add how button behaves here
-    this.api.invest(this.pendingSystemHealthInvestment);
+  handleInvest(investment: number) {
+    this.api.invest(investment);
     // TODO: add boundary case (try-catch?) for if investment doesn't go through
-    this.pendingSystemHealthInvestment = 0;
   }
 
   async created() {
@@ -212,6 +134,30 @@ export default class Game extends Vue {
 </script>
 
 <style lang="scss">
+.cell {
+  background-color: $dark-shade-75;
+  border: 0.2rem solid $light-shade-25;
+  overflow: scroll;
+  margin: 0.5rem;
+  padding: 0.5rem;
+}
+
+.cell-grow {
+  @extend .cell;
+  flex-grow: 1;
+  flex-shrink: 0;
+}
+
+.cell-shrink {
+  @extend .cell;
+  flex-grow: 0;
+  flex-shrink: 1;
+}
+
+.mw-25 {
+  max-width: 25%;
+}
+
 @keyframes glowing {
   0% {
     box-shadow: 0 0 0px #2ba805;
