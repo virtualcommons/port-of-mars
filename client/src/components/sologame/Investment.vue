@@ -8,11 +8,9 @@
       :segment-class="{ 'glowing-shadow': shouldFlashInvestInput }"
     />
 
-    <h5 class="text-segmented-reg">{{ pendingPointsValue }}</h5>
-    <h5 class="text-segmented-itl">{{ pendingPointsValue }}</h5>
-    <h5 class="text-segmented-reg">RESOURCES WILL BE DIVERTED TO POINTS.</h5>
-    <h5 class="text-segmented-itl">RESOURCES WILL BE DIVERTED TO POINTS.</h5>
-    <h5>RESOURCES WILL BE DIVERTED TO POINTS.</h5>
+    <h5 class="text-segmented">
+      {{ pendingPointsValue }} <i>RESOURCES WILL BE DIVERTED TO POINTS.</i>
+    </h5>
     <b-button
       @click="handleInvestButtonClick"
       :disabled="!state.canInvest"
