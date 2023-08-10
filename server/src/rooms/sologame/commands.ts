@@ -247,6 +247,8 @@ export class EndGameCmd extends Cmd<{ status: SoloGameStatus }> {
     this.state.status = status;
     await service.updateGameStatus(this.state.gameId, status);
     await service.updatePlayerPoints(this.state.gameId, this.state.player.points);
+    // wait for the update to be sent to the client
+    await new Promise(resolve => setTimeout(resolve, 5000));
     this.room.disconnect();
   }
 }

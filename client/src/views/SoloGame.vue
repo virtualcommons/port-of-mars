@@ -55,7 +55,7 @@ import { Vue, Component, Inject, Provide } from "vue-property-decorator";
 import { Client } from "colyseus.js";
 import { SoloGameRequestAPI } from "@port-of-mars/client/api/sologame/request";
 import { applySoloGameServerResponses } from "@port-of-mars/client/api/sologame/response";
-import { EventCardData, SOLO_ROOM_NAME } from "@port-of-mars/shared/sologame";
+import { EventCardData, SoloGameStatus, SOLO_ROOM_NAME } from "@port-of-mars/shared/sologame";
 import EventCard from "@port-of-mars/client/components/sologame/EventCard.vue";
 import EventModal from "@port-of-mars/client/components/sologame/EventModal.vue";
 import HealthBar from "@port-of-mars/client/components/sologame/HealthBar.vue";
@@ -64,6 +64,7 @@ import Deck from "@port-of-mars/client/components/sologame/Deck.vue";
 import Investment from "@port-of-mars/client/components/sologame/Investment.vue";
 
 export interface SoloGameState {
+  status: SoloGameStatus;
   timeRemaining: number;
   systemHealth: number;
   twoCardThreshold?: number;
@@ -106,6 +107,7 @@ export default class SoloGame extends Vue {
   // FIXME: move this to a vuex store after splitting up the multiplayer game and
   // onboarding/etc. stores
   state: SoloGameState = {
+    status: "incomplete",
     timeRemaining: 0,
     systemHealth: 0,
     round: 0,
