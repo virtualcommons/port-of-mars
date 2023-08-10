@@ -29,8 +29,8 @@
       <b-button v-if="asInput" @click="increment" variant="link">
         <h1>+</h1>
       </b-button>
+      <h1>{{ value }}</h1>
     </div>
-    <h1>{{ value }}</h1>
   </div>
 </template>
 
@@ -92,7 +92,6 @@ export default class SegmentedBar extends Vue {
   display: flex;
   flex-grow: 1;
   user-select: none;
-  // @extend .glowing-shadow;
 }
 
 .segment {
@@ -100,9 +99,6 @@ export default class SegmentedBar extends Vue {
   height: 30px;
   background: black;
   margin: 2px;
-  transform: skew(-15deg);
-  border: 2px solid darkslategrey;
-  //@extend .glowing-shadow;
 }
 
 .segment.selected {
