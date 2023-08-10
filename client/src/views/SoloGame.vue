@@ -1,5 +1,11 @@
 <template>
   <div class="d-flex flex-column backdrop p-2 h-100 overflow-hidden">
+    <EventModal
+      v-if="state.activeRoundCardIndex >= 0"
+      :event="state.roundEventCards[state.activeRoundCardIndex]"
+      :visible="state.activeRoundCardIndex >= 0"
+      @continue="handleEventContinue"
+    />
     <div class="d-flex flex-shrink-1 m-2 mt-3">
       <SegmentedBar :min="0" :max="25" v-model="state.systemHealth" class="w-100" />
     </div>
@@ -51,8 +57,8 @@ import { SoloGameRequestAPI } from "@port-of-mars/client/api/sologame/request";
 import { applySoloGameServerResponses } from "@port-of-mars/client/api/sologame/response";
 import { EventCardData, SOLO_ROOM_NAME } from "@port-of-mars/shared/sologame";
 import EventCard from "@port-of-mars/client/components/sologame/EventCard.vue";
+import EventModal from "@port-of-mars/client/components/sologame/EventModal.vue";
 import HealthBar from "@port-of-mars/client/components/sologame/HealthBar.vue";
-import SystemHealth from "@port-of-mars/client/components/game/static/systemhealth/SystemHealth.vue";
 import SegmentedBar from "@port-of-mars/client/components/global/SegmentedBar.vue";
 import Deck from "@port-of-mars/client/components/sologame/Deck.vue";
 import Investment from "@port-of-mars/client/components/sologame/Investment.vue";
@@ -85,9 +91,9 @@ export interface SoloGameState {
     EventCard,
     Deck,
     HealthBar,
-    SystemHealth,
     SegmentedBar,
     Investment,
+    EventModal,
   },
 })
 export default class SoloGame extends Vue {
@@ -113,13 +119,17 @@ export default class SoloGame extends Vue {
       points: 0,
     },
     roundEventCards: [],
-    activeRoundCardIndex: 0,
+    activeRoundCardIndex: -1,
     canInvest: true,
   };
 
   handleInvest(investment: number) {
     this.api.invest(investment);
     // TODO: add boundary case (try-catch?) for if investment doesn't go through
+  }
+
+  handleEventContinue() {
+    this.api.eventContinue();
   }
 
   async created() {
