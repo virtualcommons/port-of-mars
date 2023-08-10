@@ -15,6 +15,9 @@
 // Khula
 @import url("https://fonts.googleapis.com/css2?family=Khula:wght@400;600;700&display=swap");
 
+
+
+
 // ----- HTML ELEMENTS -----
 
 html {
@@ -177,6 +180,29 @@ button {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+@font-face {
+  font-family: 'DSEG14Reg';
+  src: url(/Users/slnels16/work/port-of-mars/client/src/assets/fonts/DSEG14Classic-Regular.ttf) format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+//DSEG 14 Regular
+.text-segmented-reg {
+  font-family: 'DSEG14Reg';
+}
+
+@font-face {
+  font-family: 'DSEG14itl';
+  src: url(/Users/slnels16/work/port-of-mars/client/src/assets/fonts/DSEG14Classic-LightItalic.ttf) format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+//DSEG 14 Italic
+.text-segmented-itl {
+  font-family: 'DSEG14itl'
 }
 
 // override bootstrap-vue dark table variant
