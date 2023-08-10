@@ -1,6 +1,6 @@
 import { Room } from "colyseus.js";
 import { DataChange, Schema } from "@colyseus/schema";
-import { SetHiddenParams } from "@port-of-mars/shared/sologame";
+import { SetHiddenParams, SoloGameStatus } from "@port-of-mars/shared/sologame";
 
 type Schemify<T> = T & Schema;
 
@@ -62,6 +62,9 @@ export function applySoloGameServerResponses(room: Room, component: any) {
       }
       if (change.field === "canInvest") {
         component.state.canInvest = change.value;
+      }
+      if (change.field === "status") {
+        component.state.status = change.value;
       }
     });
   };
