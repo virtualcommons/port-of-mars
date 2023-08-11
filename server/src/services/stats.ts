@@ -1,6 +1,11 @@
 import { User } from "@port-of-mars/server/entity/User";
-import { LeaderboardData, PlayerStatItem } from "@port-of-mars/shared/types";
-import { Game, Player } from "@port-of-mars/server/entity";
+import {
+  LeaderboardData,
+  PlayerStatItem,
+  SoloHighscoresData,
+  SoloPlayerStatItem,
+} from "@port-of-mars/shared/types";
+import { Game, Player, SoloGame, SoloPlayer } from "@port-of-mars/server/entity";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { IsNull, Not, SelectQueryBuilder } from "typeorm";
 
@@ -100,5 +105,40 @@ export class StatsService extends BaseService {
       withBots: await this.getLeaderboardWithBots(limit),
       withoutBots: await this.getLeaderboardWithoutBots(limit),
     };
+  }
+
+  async getSoloHighscoresData(limit: number): Promise<SoloHighscoresData> {
+    // get the high-score (max) for each user that has played the solo game
+    return this.em
+      .getRepository(SoloPlayer)
+      .createQueryBuilder("player")
+      .select("u.username", "username")
+      .addSelect("MAX(player.points)", "points")
+      .addSelect("RANK() OVER (ORDER BY MAX(player.points) DESC)", "rank")
+      .innerJoin(SoloGame, "game", "game.playerId = player.id")
+      .innerJoin(User, "u", "u.id = player.userId")
+      .where("game.status = :status", { status: "victory" })
+      .groupBy("u.username")
+      .having("MAX(player.points) > 0")
+      .orderBy("points", "DESC")
+      .limit(limit)
+      .getRawMany();
+  }
+
+  async getSoloPlayerHistory(user: User): Promise<Array<SoloPlayerStatItem>> {
+    const playerStats = await this.em
+      .getRepository(SoloPlayer)
+      .createQueryBuilder("player")
+      .innerJoinAndSelect("player.game", "game")
+      .where("player.user.id = :userId", { userId: user.id })
+      .orderBy("game.dateCreated", "DESC")
+      .select(["game.dateCreated", "game.status", "player.points"])
+      .getMany();
+
+    return playerStats.map(stat => ({
+      time: stat.game.dateCreated.getTime(),
+      points: stat.points ?? 0,
+      victory: stat.game.status === "victory",
+    }));
   }
 }

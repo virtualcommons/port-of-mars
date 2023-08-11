@@ -41,6 +41,12 @@ export type AuthData = ProfileData & {
   isVerified: boolean;
 };
 
+export type SoloHighscoresData = Array<{
+  rank: number;
+  username: string;
+  points: number;
+}>;
+
 export interface LeaderboardItem {
   rank: number;
   username: string;
@@ -390,6 +396,12 @@ export type PlayerStatItem = GameMetadata & {
   playerScores: PlayerScores;
   victory: boolean;
 };
+
+export interface SoloPlayerStatItem {
+  time: number; // unix timestamp
+  points: number;
+  victory: boolean;
+}
 
 export interface GameStatus {
   status: "incomplete" | "defeat" | "victory" | "failure" | "incomplete";

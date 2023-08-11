@@ -84,6 +84,7 @@ export interface SoloGameState {
   roundEventCards: Array<EventCardData>;
   activeRoundCardIndex: number;
   canInvest: boolean;
+  isRoundTransitioning: boolean;
 }
 
 @Component({
@@ -123,6 +124,7 @@ export default class SoloGame extends Vue {
     roundEventCards: [],
     activeRoundCardIndex: -1,
     canInvest: true,
+    isRoundTransitioning: false,
   };
 
   handleInvest(investment: number) {

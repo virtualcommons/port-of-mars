@@ -1,6 +1,6 @@
 import { Room } from "colyseus.js";
 import { DataChange, Schema } from "@colyseus/schema";
-import { SetHiddenParams, SoloGameStatus } from "@port-of-mars/shared/sologame";
+import { SetHiddenParams } from "@port-of-mars/shared/sologame";
 
 type Schemify<T> = T & Schema;
 
@@ -21,52 +21,36 @@ export function applySoloGameServerResponses(room: Room, component: any) {
     console.log(`client left the room: ${code}`);
   });
 
-  room.state.player.onChange = (changes: DataChange[]) => {
+  function applyChanges(target: any, changes: DataChange[], fields: string[]) {
     changes.forEach(change => {
-      if (change.field === "points") {
-        component.state.player.points = change.value;
-      }
-      if (change.field === "resources") {
-        component.state.player.resources = change.value;
+      if (fields.includes(change.field)) {
+        target[change.field] = change.value;
       }
     });
+  }
+
+  room.state.player.onChange = (changes: DataChange[]) => {
+    applyChanges(component.state.player, changes, ["points", "resources"]);
   };
 
   room.state.treatmentParams.onChange = (changes: DataChange[]) => {
-    changes.forEach(change => {
-      if (change.field === "isKnownNumberOfRounds") {
-        component.state.treatmentParams.isKnownNumberOfRounds = change.value;
-      }
-      if (change.field === "isEventDeckKnown") {
-        component.state.treatmentParams.isEventDeckKnown = change.value;
-      }
-      if (change.field === "thresholdInformation") {
-        component.state.treatmentParams.thresholdInformation = change.value;
-      }
-    });
+    applyChanges(component.state.treatmentParams, changes, [
+      "isKnownNumberOfRounds",
+      "isEventDeckKnown",
+      "thresholdInformation",
+    ]);
   };
 
   room.state.onChange = (changes: DataChange[]) => {
-    changes.forEach(change => {
-      if (change.field === "round") {
-        component.state.round = change.value;
-      }
-      if (change.field === "timeRemaining") {
-        component.state.timeRemaining = change.value;
-      }
-      if (change.field === "systemHealth") {
-        component.state.systemHealth = change.value;
-      }
-      if (change.field === "activeRoundCardIndex") {
-        component.state.activeRoundCardIndex = change.value;
-      }
-      if (change.field === "canInvest") {
-        component.state.canInvest = change.value;
-      }
-      if (change.field === "status") {
-        component.state.status = change.value;
-      }
-    });
+    applyChanges(component.state, changes, [
+      "round",
+      "timeRemaining",
+      "systemHealth",
+      "activeRoundCardIndex",
+      "canInvest",
+      "isRoundTransitioning",
+      "status",
+    ]);
   };
 
   room.state.roundEventCards.onAdd = (eventCard: any, key: number) => {

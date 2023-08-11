@@ -89,9 +89,10 @@ export class SetFirstRoundCmd extends CmdWithoutPayload {
   execute() {
     const defaults = SoloGameState.DEFAULTS;
     this.state.round = 1;
-    this.state.systemHealth = defaults.systemHealthMax;
+    this.state.systemHealth = defaults.systemHealthMax - defaults.systemHealthWear;
     this.state.timeRemaining = defaults.timeRemaining;
     this.state.player.resources = defaults.resources;
+    this.state.isRoundTransitioning = false;
 
     return [new SendHiddenParamsCmd()];
   }
@@ -200,13 +201,20 @@ export class InvestCmd extends Cmd<{ systemHealthInvestment: number }> {
     return this.state.canInvest && systemHealthInvestment <= this.state.resources;
   }
 
-  execute({ systemHealthInvestment } = this.payload) {
+  async execute({ systemHealthInvestment } = this.payload) {
     const surplus = this.state.resources - systemHealthInvestment;
     this.state.systemHealth = Math.min(
       SoloGameState.DEFAULTS.systemHealthMax,
       this.state.systemHealth + systemHealthInvestment
     );
     this.state.player.points += surplus;
+    // wait a bit for the round transition so we can see the investment before deducting wear+tear
+    this.state.timeRemaining = SoloGameState.DEFAULTS.roundTransitionDuration;
+    this.state.isRoundTransitioning = true;
+    this.state.canInvest = false;
+    await new Promise(resolve =>
+      setTimeout(resolve, SoloGameState.DEFAULTS.roundTransitionDuration * 1000)
+    );
     return new SetNextRoundCmd().setPayload({
       systemHealthInvestment,
       pointsInvestment: surplus,
@@ -220,6 +228,7 @@ export class SetNextRoundCmd extends Cmd<{
 }> {
   async execute({ systemHealthInvestment, pointsInvestment } = this.payload) {
     this.state.canInvest = false; // disable investment until all cards are applied
+    this.state.isRoundTransitioning = false;
 
     const { sologame: service } = getServices();
     await service.createRound(this.state, systemHealthInvestment, pointsInvestment);
