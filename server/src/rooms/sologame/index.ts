@@ -32,8 +32,9 @@ export class SoloGameRoom extends Room<SoloGameState> {
     this.setPrivate(true);
     this.registerAllHandlers();
     this.clock.setInterval(() => {
-      this.state.timeRemaining -= 1;
-      if (this.state.timeRemaining <= 0) {
+      if (this.state.timeRemaining > 0) {
+        this.state.timeRemaining -= 1;
+      } else if (!this.state.isRoundTransitioning) {
         this.dispatcher.dispatch(
           new SetNextRoundCmd().setPayload({
             systemHealthInvestment: 0,

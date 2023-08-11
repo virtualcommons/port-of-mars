@@ -60,6 +60,7 @@ export class SoloGameState extends Schema {
   @type([EventCard]) roundEventCards = new ArraySchema<EventCard>();
   @type("int8") activeRoundCardIndex = -1;
   @type("boolean") canInvest = true;
+  @type("boolean") isRoundTransitioning = false;
 
   gameId = 0;
   // hidden properties
@@ -84,6 +85,7 @@ export class SoloGameState extends Schema {
 
   static DEFAULTS = {
     maxRound: { min: 6, max: 14 },
+    roundTransitionDuration: 3,
     twoCardThreshold: { min: 12, max: 20 },
     threeCardThreshold: { min: 5, max: 15 },
     systemHealthMax: 25,
