@@ -7,6 +7,12 @@
       @continue="handleEventContinue"
     />
     <div class="d-flex flex-shrink-1 m-2 mt-3">
+      <h5>System Health</h5>
+      <img
+        src="@port-of-mars/client/assets/icons/systemHealth.svg"
+        style="width: 50px; height: 50px"
+      />
+
       <SegmentedBar :min="0" :max="25" v-model="state.systemHealth" class="w-100" />
     </div>
     <div class="d-flex flex-row flex-grow-1 overflow-hidden">
@@ -26,7 +32,10 @@
                 </p>
               </div>
             </div>
-            <div class="cell-grow">Time remaining: {{ state.timeRemaining }}</div>
+            <div class="cell-grow">
+              <h5>Time remaining:</h5>
+              <h5 class="text-segmented">{{ state.timeRemaining }}</h5>
+            </div>
           </div>
           <div class="cell-grow mw-35">
             <Deck :events="state.roundEventCards" />
@@ -34,8 +43,10 @@
         </div>
         <div class="d-flex flex-md-row flex-column flex-grow-1 overflow-hidden mh-50">
           <div class="cell-grow mw-50">
-            <h5>TOTAL POINTS: {{ state.player.points }}</h5>
-            <h5>RESOURCES AVAILABLE: {{ state.player.resources }}</h5>
+            <h5>TOTAL POINTS:</h5>
+            <h5 class="text-segmented">{{ state.player.points }}</h5>
+            <h5>RESOURCES AVAILABLE:</h5>
+            <h5 class="text-segmented">{{ state.player.resources }}</h5>
           </div>
           <div class="cell-grow mw-50">
             <Investment :state="state" @invest="handleInvest" />
@@ -201,5 +212,9 @@ export default class SoloGame extends Vue {
   box-shadow: 0 0 10px $success;
   animation: glowing 1s infinite;
   transition: box-shadow 0.5s ease-in-out;
+}
+
+.custom-font {
+  font-family: "DSEG 14 Regular";
 }
 </style>
