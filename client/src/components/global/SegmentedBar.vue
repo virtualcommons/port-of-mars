@@ -29,7 +29,7 @@
       <b-button v-if="asInput" @click="increment" variant="link">
         <h1>+</h1>
       </b-button>
-      <h1>{{ value }}</h1>
+      <h5 class="text-segmented">{{ value }}</h5>
     </div>
   </div>
 </template>
@@ -103,5 +103,9 @@ export default class SegmentedBar extends Vue {
 
 .segment.selected {
   background: lightgreen;
+}
+
+.custom-font {
+  font-family: "DSEG 14 Regular";
 }
 </style>
