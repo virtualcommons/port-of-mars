@@ -8,11 +8,6 @@
     />
     <div class="d-flex flex-shrink-1 m-2 mt-3">
       <h5>System Health</h5>
-      <img
-        src="@port-of-mars/client/assets/icons/systemHealth.svg"
-        style="width: 50px; height: 50px"
-      />
-
       <SegmentedBar :min="0" :max="25" v-model="state.systemHealth" class="w-100" />
     </div>
     <div class="d-flex flex-row flex-grow-1 overflow-hidden">
@@ -23,18 +18,20 @@
             <div class="cell-grow">
               <div>
                 <h4>Round</h4>
-                <p>
-                  {{ state.round }}
+
+                <h5>
+                  <span class="text-segmented"> {{ state.round }} </span>
                   <span v-if="state.treatmentParams.isKnownNumberOfRounds">
-                    of {{ state.maxRound }}
+                    <span class="ml-2"> of </span>
+                    <span class="text-segmented"> {{ state.maxRound }} </span>
+                    <span class="ml-2"></span>
                   </span>
-                  <span v-else></span>
-                </p>
+                </h5>
               </div>
             </div>
             <div class="cell-grow">
               <h5>Time remaining:</h5>
-              <h5 class="text-segmented">{{ state.timeRemaining }}</h5>
+              <h5 class="text-segmented">{{ formattedTimeRemaining }}</h5>
             </div>
           </div>
           <div class="cell-grow mw-35">
@@ -43,10 +40,14 @@
         </div>
         <div class="d-flex flex-md-row flex-column flex-grow-1 overflow-hidden mh-50">
           <div class="cell-grow mw-50">
-            <h5>TOTAL POINTS:</h5>
-            <h5 class="text-segmented">{{ state.player.points }}</h5>
-            <h5>RESOURCES AVAILABLE:</h5>
-            <h5 class="text-segmented">{{ state.player.resources }}</h5>
+            <h5>
+              Total Points:
+              <span class="text-segmented">{{ state.player.points }}</span>
+            </h5>
+            <h5>
+              Resources Available:
+              <span class="text-segmented">{{ state.player.resources }} </span>
+            </h5>
           </div>
           <div class="cell-grow mw-50">
             <Investment :state="state" @invest="handleInvest" />
@@ -141,6 +142,16 @@ export default class SoloGame extends Vue {
   handleInvest(investment: number) {
     this.api.invest(investment);
     // TODO: add boundary case (try-catch?) for if investment doesn't go through
+  }
+
+  formatRemainingTime(timeInSeconds: number): string {
+    const minutes = Math.floor(timeInSeconds / 60);
+    const seconds = timeInSeconds % 60;
+    return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+  }
+
+  get formattedTimeRemaining(): string {
+    return this.formatRemainingTime(this.state.timeRemaining);
   }
 
   handleEventContinue() {
