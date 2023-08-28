@@ -121,12 +121,16 @@ docker-compose.yml: base.yml $(ENVIR).yml config.mk $(DB_DATA_PATH) $(DATA_DUMP_
 
 .PHONY: test-setup
 test-setup: docker-compose.yml
-	docker compose run --rm server bash -c "dropdb --if-exists -h db -U ${DB_USER} ${TEST_DB_NAME} && createdb -h db -U ${DB_USER} ${TEST_DB_NAME} && yarn typeorm schema:sync -c test"
+	docker compose run --rm server bash -c "dropdb --if-exists -h db -U ${DB_USER} ${TEST_DB_NAME} && createdb -h db -U ${DB_USER} ${TEST_DB_NAME} && yarn typeorm schema:sync -c test && yarn load-fixtures ./fixtures/sologame -cn test"
 
 .PHONY: test
 test: test-setup
 	docker compose run --rm client yarn test:unit
 	docker compose run --rm server yarn test
+
+.PHONY: test-server
+test-server: test-setup
+	docker compose run --rm server yarn test $(tests)
 
 .PHONY: deploy
 deploy: build
