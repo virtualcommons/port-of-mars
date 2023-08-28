@@ -193,9 +193,9 @@ button {
 
 // segmented font
 .text-segmented {
-  font-family: "DSEG14 Regular";
+  font-family: "DSEG14 Regular" !important;
   &.i {
-    font-family: "DSEG14 Italic";
+    font-family: "DSEG14 Italic" !important;
   }
 }
 
