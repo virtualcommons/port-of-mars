@@ -1,5 +1,8 @@
 <template>
-  <div>
+  <div class="vfd-container p-3">
+    <div v-if="label">
+      <h4 class="mb-0">{{ label }}</h4>
+    </div>
     <div class="input-container">
       <b-button v-if="asInput" @click="decrement" variant="link">
         <h1>-</h1>
@@ -14,7 +17,7 @@
         <div
           v-for="index in max"
           :key="index"
-          :class="['segment', segmentClass, { 'bg-success': index <= value }]"
+          :class="['segment', segmentClass, index <= value ? 'vfd-bg-glow' : 'vfd-bg-underlay']"
           @click="localValue = index"
           @mousedown="setDragging(true)"
         ></div>
@@ -23,27 +26,33 @@
         <div
           v-for="index in max"
           :key="index"
-          :class="['segment', segmentClass, { 'bg-success': index <= value }]"
+          :class="['segment', segmentClass, index <= value ? 'vfd-bg-glow' : 'vfd-bg-underlay']"
         ></div>
       </div>
       <b-button v-if="asInput" @click="increment" variant="link">
         <h1>+</h1>
       </b-button>
-      <p class="text-segmented h2">{{ value }}</p>
+      <VFDNumberDisplay :value="value" class="ml-3" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
+import VFDNumberDisplay from "@/components/sologame/VFDNumberDisplay.vue";
 
-@Component({})
+@Component({
+  components: {
+    VFDNumberDisplay,
+  },
+})
 export default class SegmentedBar extends Vue {
   @Prop({ default: 0 }) min!: number;
   @Prop() max!: number;
   @Prop({ default: false }) asInput!: boolean;
   @Prop({ default: 0 }) readonly value!: number;
   @Prop({ default: "" }) segmentClass!: string;
+  @Prop({ default: "" }) label!: string;
 
   dragging = false;
 
@@ -96,13 +105,9 @@ export default class SegmentedBar extends Vue {
 
 .segment {
   flex: 1;
-  height: 2rem;
-  background: black;
-  margin: 2px;
-}
-
-.segment.selected {
-  background: lightgreen;
+  border-radius: 1px;
+  height: 3rem;
+  margin: 0.25rem;
 }
 
 .custom-font {
