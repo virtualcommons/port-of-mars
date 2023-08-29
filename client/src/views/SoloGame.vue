@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex flex-column backdrop p-2 h-100 overflow-hidden">
+  <div class="d-flex flex-column p-2 h-100 overflow-hidden solo-game">
     <EventModal
       v-if="state.activeRoundCardIndex >= 0"
       :event="state.roundEventCards[state.activeRoundCardIndex]"
@@ -7,8 +7,13 @@
       @continue="handleEventContinue"
     />
     <div class="d-flex flex-shrink-1 m-2 mt-3">
-      <h5>System Health</h5>
-      <SegmentedBar :min="0" :max="25" v-model="state.systemHealth" class="w-100" />
+      <SegmentedBar
+        :min="0"
+        :max="25"
+        v-model="state.systemHealth"
+        label="System Health"
+        class="w-100"
+      />
     </div>
     <div class="d-flex flex-row flex-grow-1 overflow-hidden">
       <div class="d-flex flex-column flex-grow-1 overflow-hidden">
@@ -30,24 +35,23 @@
               </div>
             </div>
             <div class="cell-grow">
-              <h5>Time remaining:</h5>
-              <h5 class="text-segmented">{{ formattedTimeRemaining }}</h5>
+              <h4>Time remaining</h4>
+              <div class="d-flex justify-content-center">
+                <Clock :timeRemaining="state.timeRemaining" :size="3" />
+              </div>
             </div>
           </div>
           <div class="cell-grow mw-35">
+            <h4>This Round's Events</h4>
             <Deck :events="state.roundEventCards" />
           </div>
         </div>
         <div class="d-flex flex-md-row flex-column flex-grow-1 overflow-hidden mh-50">
           <div class="cell-grow mw-50">
-            <h5>
-              Total Points:
-              <span class="text-segmented">{{ state.player.points }}</span>
-            </h5>
-            <h5>
-              Resources Available:
-              <span class="text-segmented">{{ state.player.resources }} </span>
-            </h5>
+            <h4>Points</h4>
+            <SegmentedBar :min="0" :max="25" v-model="state.player.points" class="mb-3" />
+            <h4>Resources</h4>
+            <SegmentedBar :min="0" :max="15" v-model="state.player.resources" />
           </div>
           <div class="cell-grow mw-50">
             <Investment :state="state" @invest="handleInvest" />
@@ -55,6 +59,7 @@
         </div>
       </div>
       <div class="cell-shrink mw-25">
+        <h4>All Events</h4>
         <Deck v-if="state.treatmentParams.isEventDeckKnown" :events="state.eventCardDeck" />
         <div v-else>Event deck is unknown</div>
       </div>
@@ -74,6 +79,7 @@ import HealthBar from "@port-of-mars/client/components/sologame/HealthBar.vue";
 import SegmentedBar from "@port-of-mars/client/components/global/SegmentedBar.vue";
 import Deck from "@port-of-mars/client/components/sologame/Deck.vue";
 import Investment from "@port-of-mars/client/components/sologame/Investment.vue";
+import Clock from "@port-of-mars/client/components/sologame/Clock.vue";
 
 export interface SoloGameState {
   status: SoloGameStatus;
@@ -108,6 +114,7 @@ export interface SoloGameState {
     SegmentedBar,
     Investment,
     EventModal,
+    Clock,
   },
 })
 export default class SoloGame extends Vue {
@@ -144,16 +151,6 @@ export default class SoloGame extends Vue {
     // TODO: add boundary case (try-catch?) for if investment doesn't go through
   }
 
-  formatRemainingTime(timeInSeconds: number): string {
-    const minutes = Math.floor(timeInSeconds / 60);
-    const seconds = timeInSeconds % 60;
-    return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-  }
-
-  get formattedTimeRemaining(): string {
-    return this.formatRemainingTime(this.state.timeRemaining);
-  }
-
   handleEventContinue() {
     this.api.eventContinue();
   }
@@ -172,8 +169,8 @@ export default class SoloGame extends Vue {
 
 <style lang="scss">
 .cell {
-  background-color: $dark-shade-75;
-  border: 0.2rem solid $light-shade-25;
+  background-color: rgba(255, 255, 255, 0.025);
+  border-radius: 0.25rem;
   overflow: scroll;
   margin: 0.5rem;
   padding: 0.5rem;
