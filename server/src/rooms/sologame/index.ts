@@ -4,7 +4,7 @@ import * as http from "http";
 import { SoloGameState } from "@port-of-mars/server/rooms/sologame/state";
 import { settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
-import { ApplyCardCmd, InitGameCmd, InvestCmd, SetNextRoundCmd } from "./commands";
+import { ApplyCardCmd, InitGameCmd, InvestCmd, PersistRoundCmd, SetNextRoundCmd } from "./commands";
 import { User } from "@port-of-mars/server/entity";
 import { EventContinue, Invest, SOLO_ROOM_NAME } from "@port-of-mars/shared/sologame";
 
@@ -36,11 +36,12 @@ export class SoloGameRoom extends Room<SoloGameState> {
         this.state.timeRemaining -= 1;
       } else if (!this.state.isRoundTransitioning) {
         this.dispatcher.dispatch(
-          new SetNextRoundCmd().setPayload({
+          new PersistRoundCmd().setPayload({
             systemHealthInvestment: 0,
             pointsInvestment: 0,
           })
         );
+        this.dispatcher.dispatch(new SetNextRoundCmd());
       }
     }, 1000);
   }

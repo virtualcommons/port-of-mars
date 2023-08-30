@@ -144,13 +144,23 @@ export class ApplyCardCmd extends Cmd<{ playerSkipped: boolean }> {
     } else {
       this.state.player.resources += this.state.activeRoundCard!.resourcesEffect;
     }
-
-    this.state.systemHealth = Math.min(
-      SoloGameState.DEFAULTS.systemHealthMax,
-      this.state.systemHealth + this.state.activeRoundCard!.systemHealthEffect
+    // system health shouldn't go above the max or below 0
+    this.state.systemHealth = Math.max(
+      0,
+      Math.min(
+        SoloGameState.DEFAULTS.systemHealthMax,
+        this.state.systemHealth + this.state.activeRoundCard!.systemHealthEffect
+      )
     );
+
     if (this.state.systemHealth <= 0) {
-      return new EndGameCmd().setPayload({ status: "defeat" });
+      return [
+        new PersistRoundCmd().setPayload({
+          systemHealthInvestment: 0,
+          pointsInvestment: 0,
+        }),
+        new EndGameCmd().setPayload({ status: "defeat" }),
+      ];
     }
 
     // if we still have cards left, prepare the next one
@@ -182,6 +192,7 @@ export class DrawCardsCmd extends CmdWithoutPayload {
     } else {
       drawCount = 3;
     }
+    // FIXME:
     // this crashes if we run out of cards, should find a way to handle that (rare) case
     // min of 30 cards max of 14 rounds, max of ~35 cards encountered though very unlikely
     this.state.roundEventCards.push(...this.state.eventCardDeck.splice(0, drawCount));
@@ -215,23 +226,30 @@ export class InvestCmd extends Cmd<{ systemHealthInvestment: number }> {
     await new Promise(resolve =>
       setTimeout(resolve, SoloGameState.DEFAULTS.roundTransitionDuration * 1000)
     );
-    return new SetNextRoundCmd().setPayload({
-      systemHealthInvestment,
-      pointsInvestment: surplus,
-    });
+    return [
+      new PersistRoundCmd().setPayload({
+        systemHealthInvestment,
+        pointsInvestment: surplus,
+      }),
+      new SetNextRoundCmd(),
+    ];
   }
 }
 
-export class SetNextRoundCmd extends Cmd<{
+export class PersistRoundCmd extends Cmd<{
   systemHealthInvestment: number;
   pointsInvestment: number;
 }> {
   async execute({ systemHealthInvestment, pointsInvestment } = this.payload) {
-    this.state.canInvest = false; // disable investment until all cards are applied
-    this.state.isRoundTransitioning = false;
-
     const { sologame: service } = getServices();
     await service.createRound(this.state, systemHealthInvestment, pointsInvestment);
+  }
+}
+
+export class SetNextRoundCmd extends CmdWithoutPayload {
+  async execute() {
+    this.state.canInvest = false; // disable investment until all cards are applied
+    this.state.isRoundTransitioning = false;
 
     const defaults = SoloGameState.DEFAULTS;
     this.state.round += 1;
