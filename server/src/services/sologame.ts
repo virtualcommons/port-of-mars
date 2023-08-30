@@ -13,9 +13,9 @@ import {
 } from "@port-of-mars/server/entity";
 import { getRandomIntInclusive } from "@port-of-mars/server/util";
 import { SoloGameState } from "@port-of-mars/server/rooms/sologame/state";
-// import { getLogger } from "@port-of-mars/server/settings";
+import { getLogger } from "@port-of-mars/server/settings";
 
-// const logger = getLogger(__filename);
+const logger = getLogger(__filename);
 
 export class SoloGameService extends BaseService {
   async drawEventCardDeck(): Promise<EventCardData[]> {
@@ -60,32 +60,24 @@ export class SoloGameService extends BaseService {
      */
     const numTreatments = await this.em.getRepository(SoloGameTreatment).count();
     const allTreatments = Array.from({ length: numTreatments }, (_, i) => i + 1);
-    const user = await this.em
+    const playedTreatments = await this.em
       .getRepository(User)
       .createQueryBuilder("user")
       .leftJoin("user.soloPlayers", "soloPlayer")
       .leftJoin("soloPlayer.game", "soloGame")
-      .addSelect("soloGame.treatmentId")
+      .select("soloGame.treatmentId")
       .where("user.id = :userId", { userId })
-      .getOne();
+      .getRawMany();
 
-    if (!user) {
-      throw new Error("User not found");
-    }
-    if (!user.soloPlayers) {
+    if (!playedTreatments || playedTreatments.length === 0) {
       return allTreatments;
     }
+    const playedTreatmentIds = playedTreatments.map(pt => pt.treatmentId).filter(Boolean);
 
-    const treatmentIds = user.soloPlayers
-      .map(player => player.game && player.game.treatmentId)
-      .filter(Boolean);
-
-    if (treatmentIds.length === numTreatments) {
-      // return [1, ... numTreatments] if they have gone through all the treatments
+    if (playedTreatmentIds.length === numTreatments) {
       return allTreatments;
     }
-
-    return allTreatments.filter(id => !treatmentIds.includes(id));
+    return allTreatments.filter(id => !playedTreatmentIds.includes(id));
   }
 
   async getTreatmentById(id: number): Promise<TreatmentData> {
@@ -101,7 +93,7 @@ export class SoloGameService extends BaseService {
     const player = await this.createPlayer(state.player.userId);
     const game = gameRepo.create({
       player,
-      treatment: await this.createTreatment(state.treatmentParams),
+      treatment: await this.findTreatment(state.treatmentParams),
       deck: await this.createDeck(state.eventCardDeck),
       status: state.status,
     });
@@ -120,15 +112,14 @@ export class SoloGameService extends BaseService {
     return player;
   }
 
-  async createTreatment(treatmentData: TreatmentData): Promise<SoloGameTreatment> {
-    const repo = this.em.getRepository(SoloGameTreatment);
-    const treatment = repo.create({
-      isKnownNumberOfRounds: treatmentData.isKnownNumberOfRounds,
-      isEventDeckKnown: treatmentData.isEventDeckKnown,
-      thresholdInformation: treatmentData.thresholdInformation,
+  async findTreatment(treatmentData: TreatmentData): Promise<SoloGameTreatment> {
+    return this.em.getRepository(SoloGameTreatment).findOneOrFail({
+      where: {
+        isKnownNumberOfRounds: treatmentData.isKnownNumberOfRounds,
+        isEventDeckKnown: treatmentData.isEventDeckKnown,
+        thresholdInformation: treatmentData.thresholdInformation,
+      },
     });
-    await repo.save(treatment);
-    return treatment;
   }
 
   async createDeck(cardData: EventCardData[]): Promise<SoloMarsEventDeck> {

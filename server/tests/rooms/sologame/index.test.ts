@@ -17,10 +17,14 @@ import {
   CreateDeckCmd,
   InitGameCmd,
   SetPlayerCmd,
+  SetTreatmentParamsCmd,
 } from "@port-of-mars/server/rooms/sologame/commands";
 import { SoloGameRoom } from "@port-of-mars/server/rooms/sologame";
 import { Dispatcher } from "@colyseus/command";
 import { SoloGameService } from "@port-of-mars/server/services/sologame";
+import { getLogger } from "@port-of-mars/server/settings";
+
+const logger = getLogger(__filename);
 
 /**
  * Contains tests for the solo game server logic
@@ -73,6 +77,16 @@ describe("a solo game", () => {
     it("draws a deck from the db", async () => {
       await dispatcher.dispatch(new CreateDeckCmd());
       expect(state.eventCardDeck.length).toBeGreaterThan(0);
+    });
+
+    it("selects treatment params from the db", async () => {
+      // TODO: we also need to test this harder to make sure that the treatments are randomized
+      // and not repeated for the player's first 12 games, but this describe block is for running
+      // through a normal game, so we'll do that elsewhere
+      await dispatcher.dispatch(new SetTreatmentParamsCmd().setPayload({ user: user1 }));
+      expect(state.treatmentParams.isEventDeckKnown).toBeDefined();
+      expect(state.treatmentParams.isKnownNumberOfRounds).toBeDefined();
+      expect(state.treatmentParams.thresholdInformation).toBeDefined();
     });
 
     // continue with game logic/command tests, intent is to run through a game
