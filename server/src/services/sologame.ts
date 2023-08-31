@@ -96,6 +96,8 @@ export class SoloGameService extends BaseService {
       treatment: await this.findTreatment(state.treatmentParams),
       deck: await this.createDeck(state.eventCardDeck),
       status: state.status,
+      twoCardThreshold: state.twoCardThreshold,
+      threeCardThreshold: state.threeCardThreshold,
     });
     await gameRepo.save(game);
     player.gameId = game.id;
