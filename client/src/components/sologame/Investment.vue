@@ -16,7 +16,7 @@
     <b-button
       @click="handleInvestButtonClick"
       :disabled="!state.canInvest"
-      variant="success"
+      variant="primary"
       block
       :class="{ 'glowing-shadow': shouldFlashInvestButton }"
       >Invest in System Health</b-button
@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from "vue-property-decorator";
+import { Vue, Component, Prop } from "vue-property-decorator";
 import SegmentedBar from "@port-of-mars/client/components/global/SegmentedBar.vue";
 
 @Component({
@@ -53,12 +53,6 @@ export default class Investment extends Vue {
   handleInvestButtonClick() {
     this.$emit("invest", this.pendingSystemHealthInvestment);
     // FIXME: only reset to 0 if invest was successful
-    this.pendingSystemHealthInvestment = 0;
-  }
-
-  @Watch("state.round")
-  onRoundChanged() {
-    // reset to 0 when round changes
     this.pendingSystemHealthInvestment = 0;
   }
 }

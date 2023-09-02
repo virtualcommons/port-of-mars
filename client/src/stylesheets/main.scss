@@ -155,9 +155,24 @@ body {
   --trade-request-blue: #659be8;
 
   // solo mini-game specific colors
+
+  --vfd-background: rgb(27, 31, 28);
+
   --vfd-green: rgb(166, 247, 216);
   --vfd-green-glow: rgb(0, 255, 106);
-  --vfd-background: rgb(27, 31, 28);
+
+  --vfd-blue: rgba(165, 225, 241, 0.091);
+  --vfd-blue-glow: rgb(0, 162, 255);
+
+  --vfd-orange: rgb(246, 177, 134);
+  --vfd-orange-glow: rgb(255, 119, 0);
+
+  --vfd-red: rgb(245, 160, 150);
+  --vfd-red-glow: rgb(255, 42, 0);
+
+  --vfd-yellow: rgb(244, 239, 158);
+  --vfd-yellow-glow: rgb(255, 238, 0);
+  
 
   --brown: #754c29;
   --beige: #d9cfc6;
@@ -229,12 +244,29 @@ button {
 
 // TODO: add variants: red/orange/blue
 
+// .vfd-text-glow {
+//   color: textColor;
+//   text-shadow: 0 0 5px glowColor, 0 0 10px glowColor;
+//   z-index: 1;
+//   display: flex;
+//   justify-content: flex-end;
+// }
+
 .vfd-text-glow {
-  color: $vfd-green;
-  text-shadow: 0 0 5px $vfd-green-glow, 0 0 10px $vfd-green-glow;
+  color: var(--vfd-green); 
+  text-shadow: 0 0 5px var(--vfd-green-glow), 0 0 10px var(--vfd-green-glow); 
   z-index: 1;
   display: flex;
   justify-content: flex-end;
+}
+.vfd-text-glow.vfd-blue {
+  color: var(--vfd-blue);
+  text-shadow: 0 0 5px var(--vfd-blue-glow), 0 0 10px var(--vfd-blue-glow);
+}
+
+.vfd-text-glow.vfd-red {
+  color: var(--vfd-red);
+  text-shadow: 0 0 5px var(--vfd-red-glow), 0 0 10px var(--vfd-red-glow);
 }
 
 .vfd-bg-underlay {

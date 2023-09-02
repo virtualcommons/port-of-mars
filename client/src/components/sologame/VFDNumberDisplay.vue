@@ -17,6 +17,8 @@ export default class VFDNumberDisplay extends Vue {
   @Prop() digits?: number;
   @Prop({ default: 3 }) size!: number; // in rem
   @Prop({ default: false }) padZeros!: boolean;
+  @Prop({ default: "vfd-green" }) textColor!: string;
+  @Prop({ default: "vfd-green-glow" }) glowColor!: string;
 
   get underlay(): string {
     if (this.digits) {

@@ -1,6 +1,11 @@
 <template>
   <div class="d-flex py-2 px-3 vfd-container">
-    <VFDNumberDisplay :digits="2" :value="minutesRemaining" />
+    <VFDNumberDisplay
+      :textColor="'vfd-red'"
+      :glowColor="'vfd-red-glow'"
+      :digits="2"
+      :value="minutesRemaining"
+    />
     <p style="font-size: 3rem" class="vfd-text-glow">:</p>
     <VFDNumberDisplay :digits="2" :value="secondsRemaining" :padZeros="true" />
   </div>

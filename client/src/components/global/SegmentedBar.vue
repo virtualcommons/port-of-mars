@@ -32,7 +32,12 @@
       <b-button v-if="asInput" @click="increment" variant="link">
         <h1>+</h1>
       </b-button>
-      <VFDNumberDisplay :value="value" class="ml-3" />
+      <VFDNumberDisplay
+        :textColor="'vfd-blue'"
+        :glowColor="'vfd-blue-glow'"
+        :value="value"
+        class="ml-3"
+      />
     </div>
   </div>
 </template>
