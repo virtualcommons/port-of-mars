@@ -18,7 +18,12 @@
     <div class="d-flex flex-row flex-grow-1 overflow-hidden">
       <div class="d-flex flex-column flex-grow-1 overflow-hidden">
         <div class="d-flex flex-md-row flex-column flex-grow-1 overflow-hidden mh-50">
-          <div class="cell-grow mw-35">thresholds</div>
+          <div class="cell-grow mw-35">
+            <h4>Threshold</h4>
+            <Threshold v-if="state.treatmentParams.thresholdInformation == 'known'" state="2"></Threshold>
+            <Threshold v-else-if="state.treatmentParams.thresholdInformation == 'unknown'" state="0"></Threshold>
+            <Threshold v-else-if="state.treatmentParams.thresholdInformation == 'range'" state="1"></Threshold>
+          </div>
           <div class="d-flex flex-md-column flex-row flex-grow-1 overflow-hidden mw-35">
             <div class="cell-grow">
               <div>
@@ -81,6 +86,7 @@ import SegmentedBar from "@port-of-mars/client/components/global/SegmentedBar.vu
 import Deck from "@port-of-mars/client/components/sologame/Deck.vue";
 import Investment from "@port-of-mars/client/components/sologame/Investment.vue";
 import Clock from "@port-of-mars/client/components/sologame/Clock.vue";
+import Threshold from "@port-of-mars/client/components/sologame/Threshold.vue";
 
 export interface SoloGameState {
   status: SoloGameStatus;
@@ -116,6 +122,7 @@ export interface SoloGameState {
     Investment,
     EventModal,
     Clock,
+    Threshold,
   },
 })
 export default class SoloGame extends Vue {
