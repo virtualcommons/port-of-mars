@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div v-for="e in events" :key="e.id" class="mb-2">
+    <div v-for="e in events" :key="e.id" class="mb-2"
+    style="background-color: var(--dark-shade);"
+    v-box-shadow="34"
+    >
       <EventCard :event="e" />
     </div>
   </div>

@@ -58,10 +58,11 @@
           </div>
         </div>
       </div>
-      <div class="cell-shrink mw-25">
+      <div class="cell-shrink mw-25" style="min-width: 25%; padding: 0.5em;">
         <h4>All Events</h4>
         <Deck v-if="state.treatmentParams.isEventDeckKnown" :events="state.eventCardDeck" />
-        <div v-else>Event deck is unknown</div>
+        <div id="event-bg" v-else>
+        </div>
       </div>
     </div>
   </div>
@@ -225,4 +226,15 @@ export default class SoloGame extends Vue {
 .custom-font {
   font-family: "DSEG 14 Regular";
 }
+
+#event-bg {
+  min-height: 90%;
+  background-size: contain;
+  overflow: hidden;
+  background-size: auto 100%;
+  background-position: relative;
+  box-shadow: inset 0 0 0.3em 0.3em #000;
+  background: url("../assets/images/broken-screen.jpg") no-repeat;
+}
+
 </style>
