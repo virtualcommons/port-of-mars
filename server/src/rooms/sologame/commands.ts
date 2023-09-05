@@ -155,7 +155,6 @@ export class ApplyCardCmd extends Cmd<{ playerSkipped: boolean }> {
     );
 
     if (this.state.systemHealth <= 0) {
-      await new Promise(resolve => setTimeout(resolve, 3000));
       return [
         new PersistRoundCmd().setPayload({
           systemHealthInvestment: 0,
@@ -260,10 +259,9 @@ export class SetNextRoundCmd extends CmdWithoutPayload {
     }
 
     this.state.round += 1;
-    this.state.systemHealth -= defaults.systemHealthWear;
+    this.state.systemHealth -= Math.max(defaults.systemHealthWear, 0);
 
-    if (this.state.systemHealth <= defaults.systemHealthWear) {
-      await new Promise(resolve => setTimeout(resolve, 3000));
+    if (this.state.systemHealth <= 0) {
       return new EndGameCmd().setPayload({ status: "defeat" });
     }
 
@@ -276,11 +274,15 @@ export class SetNextRoundCmd extends CmdWithoutPayload {
 
 export class EndGameCmd extends Cmd<{ status: SoloGameStatus }> {
   async execute({ status } = this.payload) {
-    // do any additional cleanup
+    this.clock.clear();
+    // wait for a few seconds so the client can see the final state
+    await new Promise(resolve => setTimeout(resolve, 3000));
+
     const { sologame: service } = getServices();
     this.state.status = status;
     await service.updateGameStatus(this.state.gameId, status);
     await service.updatePlayerPoints(this.state.gameId, this.state.player.points);
+
     // wait for the update to be sent to the client
     await new Promise(resolve => setTimeout(resolve, 5000));
     this.room.disconnect();
