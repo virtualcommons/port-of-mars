@@ -53,7 +53,7 @@
 .vfd-container {
   background-color: $vfd-background;
   border-radius: 0.25rem;
-  box-shadow: inset 0 0.25rem 0.5rem rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 0.25rem 0.5rem rgba(0, 0, 0, 0.25);
 }
 
 .vfd-button {
@@ -103,21 +103,32 @@
   }
 }
 
-@keyframes glowing {
-  0% {
-    box-shadow: none;
-  }
-  50% {
-    background-color: rgba($vfd-green, 0.25);
-    box-shadow: 0 0 5px rgba($vfd-green-glow, 0.25), 0 0 10px rgba($vfd-green-glow, 0.25);
-  }
-  100% {
-    box-shadow: none;
+.vfd-bg-glow-dim {
+  @each $name, $colors in $vfd-colors {
+    &.#{$name} {
+      background-color: rgba(nth($colors, 1), 0.075);
+      box-shadow: 0 0 5px rgba(nth($colors, 2), 0.05), 0 0 10px rgba(nth($colors, 2), 0.05);
+    }
   }
 }
 
-.glowing-shadow {
-  box-shadow: 0 0 10px $vfd-green-glow;
-  animation: glowing 1s infinite;
-  transition: box-shadow 0.5s ease-in-out;
+@each $name, $colors in $vfd-colors {
+  @keyframes flashing-#{$name} {
+    0%, 100% {
+      box-shadow: none;
+    }
+    50% {
+      background-color: rgba(nth($colors, 1), 0.5);
+      box-shadow: 0 0 5px rgba(nth($colors, 2), 0.25), 0 0 10px rgba(nth($colors, 2), 0.25);
+    }
+  }
+}
+
+.animate-flashing {
+  @each $name, $colors in $vfd-colors {
+    &.#{$name} {
+      animation: flashing-#{$name} 1s infinite;
+      transition: box-shadow 0.5s ease-in-out;
+    }
+  }
 }

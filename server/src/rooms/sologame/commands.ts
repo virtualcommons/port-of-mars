@@ -259,7 +259,7 @@ export class SetNextRoundCmd extends CmdWithoutPayload {
     }
 
     this.state.round += 1;
-    this.state.systemHealth -= Math.max(defaults.systemHealthWear, 0);
+    this.state.systemHealth = Math.max(0, this.state.systemHealth - defaults.systemHealthWear);
 
     if (this.state.systemHealth <= 0) {
       return new EndGameCmd().setPayload({ status: "defeat" });
@@ -278,8 +278,8 @@ export class EndGameCmd extends Cmd<{ status: SoloGameStatus }> {
     // wait for a few seconds so the client can see the final state
     await new Promise(resolve => setTimeout(resolve, 3000));
 
-    const { sologame: service } = getServices();
     this.state.status = status;
+    const { sologame: service } = getServices();
     await service.updateGameStatus(this.state.gameId, status);
     await service.updatePlayerPoints(this.state.gameId, this.state.player.points);
 

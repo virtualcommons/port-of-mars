@@ -10,6 +10,7 @@
       <SegmentedBar
         :min="0"
         :max="25"
+        :delta="pendingSystemHealthInvestment"
         v-model="state.systemHealth"
         label="System Health"
         class="w-100"
@@ -20,69 +21,74 @@
       <div class="d-flex flex-column flex-grow-1 overflow-hidden">
         <div class="d-flex flex-md-row flex-column flex-grow-1 overflow-hidden mh-50">
           <div class="cell-grow mw-35">
-            <h4>Threshold</h4>
+            <h4>Thresholds</h4>
             <Threshold
-              v-if="state.treatmentParams.thresholdInformation == 'known'"
-              state="2"
-            ></Threshold>
-            <Threshold
-              v-else-if="state.treatmentParams.thresholdInformation == 'unknown'"
-              state="0"
-            ></Threshold>
-            <Threshold
-              v-else-if="state.treatmentParams.thresholdInformation == 'range'"
-              state="1"
-            ></Threshold>
+              v-if="state.treatmentParams.thresholdInformation !== 'unknown'"
+              :state="state"
+            />
+            <div v-else class="d-flex flex-column h-75 align-items-center justify-content-center">
+              <h1 class="text-danger mb-3"><b-icon icon="eye-slash-fill" /></h1>
+              <h4 class="text-danger display-5">UNAVAILABLE</h4>
+            </div>
           </div>
           <div class="d-flex flex-md-column flex-row flex-grow-1 overflow-hidden mw-35">
             <div class="cell-grow">
               <div>
-                <h4>Round</h4>
-
-                <h5>
-                  <span class="text-segmented"> {{ state.round }} </span>
-                  <span v-if="state.treatmentParams.isKnownNumberOfRounds">
-                    <span class="ml-2"> of </span>
-                    <span class="text-segmented"> {{ state.maxRound }} </span>
-                    <span class="ml-2"></span>
-                  </span>
-                </h5>
+                <h4 class="text-center">Round</h4>
+                <div class="d-flex justify-content-center align-items-center">
+                  <div class="vfd-container p-2">
+                    <VFDNumberDisplay :digits="2" :value="state.round" variant="red" size="2" />
+                  </div>
+                  <h4 v-if="state.treatmentParams.isKnownNumberOfRounds" class="mx-2">/</h4>
+                  <div v-if="state.treatmentParams.isKnownNumberOfRounds" class="vfd-container p-2">
+                    <VFDNumberDisplay :digits="2" :value="state.maxRound" variant="red" size="2" />
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="cell-grow">
-              <h4>Time remaining</h4>
+            <div class="cell-grow d-flex flex-column">
+              <h4 class="text-center">Time remaining</h4>
               <div class="d-flex justify-content-center">
                 <Clock :timeRemaining="state.timeRemaining" :size="3" />
               </div>
             </div>
           </div>
           <div class="cell-grow mw-35">
-            <h4>This Round's Events</h4>
+            <h4>Events this round</h4>
             <Deck :events="state.roundEventCards" />
           </div>
         </div>
         <div class="d-flex flex-md-row flex-column flex-grow-1 overflow-hidden mh-50">
-          <div class="cell-grow mw-50">
-            <h4>Points</h4>
-            <SegmentedBar
-              :min="0"
-              :max="25"
-              v-model="state.player.points"
-              class="mb-3"
-              size="md"
-              variant="yellow"
-            />
-            <h4>Resources</h4>
-            <SegmentedBar
-              :min="0"
-              :max="15"
-              v-model="state.player.resources"
-              variant="blue"
-              size="md"
-            />
+          <div class="cell-grow mw-50 d-flex flex-column justify-content-around">
+            <div>
+              <h4>Points</h4>
+              <SegmentedBar
+                :min="0"
+                :max="25"
+                v-model="state.player.points"
+                :delta="state.player.resources - pendingSystemHealthInvestment"
+                class="mb-3"
+                size="md"
+                variant="yellow"
+              />
+            </div>
+            <div>
+              <h4>Available Resources</h4>
+              <SegmentedBar
+                :min="0"
+                :max="15"
+                v-model="state.player.resources"
+                variant="blue"
+                size="md"
+              />
+            </div>
           </div>
           <div class="cell-grow mw-50">
-            <Investment :state="state" @invest="handleInvest" />
+            <Investment
+              :state="state"
+              v-model="pendingSystemHealthInvestment"
+              @invest="handleInvest"
+            />
           </div>
         </div>
       </div>
@@ -110,9 +116,9 @@ import Deck from "@port-of-mars/client/components/sologame/Deck.vue";
 import Investment from "@port-of-mars/client/components/sologame/Investment.vue";
 import Clock from "@port-of-mars/client/components/sologame/Clock.vue";
 import Threshold from "@port-of-mars/client/components/sologame/Threshold.vue";
+import VFDNumberDisplay from "@port-of-mars/client/components/sologame/VFDNumberDisplay.vue";
 
 @Component({
-  name: "sologame",
   components: {
     EventCard,
     Deck,
@@ -122,15 +128,17 @@ import Threshold from "@port-of-mars/client/components/sologame/Threshold.vue";
     EventModal,
     Clock,
     Threshold,
+    VFDNumberDisplay,
   },
 })
 export default class Dashboard extends Vue {
   @Inject() readonly api!: SoloGameRequestAPI;
   @Prop() state!: SoloGameClientState;
 
+  pendingSystemHealthInvestment = 0;
+
   handleInvest(investment: number) {
     this.api.invest(investment);
-    // TODO: add boundary case (try-catch?) for if investment doesn't go through
   }
 
   handleEventContinue() {

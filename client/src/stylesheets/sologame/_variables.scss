@@ -10,7 +10,7 @@ $vfd-red-glow: rgb(224, 63, 0);
 $vfd-yellow: rgb(255, 235, 192);
 $vfd-yellow-glow: rgb(255, 166, 0);
 
-$vfd-background: rgb(24, 24, 20);
+$vfd-background: rgba(0, 0, 0, 0.25);
 
 $vfd-colors: (
   "vfd-green": ($vfd-green, $vfd-green-glow),
