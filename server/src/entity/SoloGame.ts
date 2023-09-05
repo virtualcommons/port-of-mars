@@ -46,4 +46,10 @@ export class SoloGame {
     enum: ["incomplete", "victory", "defeat"],
   })
   status!: SoloGameStatus;
+
+  @Column()
+  twoCardThreshold!: number;
+
+  @Column()
+  threeCardThreshold!: number;
 }

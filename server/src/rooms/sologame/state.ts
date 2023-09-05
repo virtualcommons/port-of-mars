@@ -52,7 +52,8 @@ export class TreatmentParams extends Schema {
 
 export class SoloGameState extends Schema {
   @type("string") status: SoloGameStatus = "incomplete";
-  @type("int8") systemHealth = SoloGameState.DEFAULTS.systemHealthMax;
+  @type("int8") systemHealth =
+    SoloGameState.DEFAULTS.systemHealthMax - SoloGameState.DEFAULTS.systemHealthWear;
   @type("uint8") timeRemaining = SoloGameState.DEFAULTS.timeRemaining;
   @type("uint8") round = 1;
   @type(TreatmentParams) treatmentParams = new TreatmentParams();
