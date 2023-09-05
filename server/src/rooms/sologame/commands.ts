@@ -124,11 +124,12 @@ export class ApplyCardCmd extends Cmd<{ playerSkipped: boolean }> {
   validate() {
     return (
       this.state.activeRoundCardIndex >= 0 &&
-      this.state.activeRoundCardIndex < this.state.roundEventCards.length
+      this.state.activeRoundCardIndex < this.state.roundEventCards.length &&
+      this.state.status === "incomplete"
     );
   }
 
-  execute({ playerSkipped } = this.payload) {
+  async execute({ playerSkipped } = this.payload) {
     if (playerSkipped) {
       this.room.eventTimeout?.clear();
     }
@@ -150,6 +151,7 @@ export class ApplyCardCmd extends Cmd<{ playerSkipped: boolean }> {
       this.state.systemHealth + this.state.activeRoundCard!.systemHealthEffect
     );
     if (this.state.systemHealth <= 0) {
+      await new Promise(resolve => setTimeout(resolve, 3000));
       return new EndGameCmd().setPayload({ status: "defeat" });
     }
 
@@ -232,16 +234,20 @@ export class SetNextRoundCmd extends Cmd<{
 
     const { sologame: service } = getServices();
     await service.createRound(this.state, systemHealthInvestment, pointsInvestment);
-
     const defaults = SoloGameState.DEFAULTS;
-    this.state.round += 1;
-    if (this.state.round > this.state.maxRound) {
+
+    if (this.state.round + 1 > this.state.maxRound) {
       return new EndGameCmd().setPayload({ status: "victory" });
     }
+
+    this.state.round += 1;
+    this.state.systemHealth -= defaults.systemHealthWear;
+
     if (this.state.systemHealth <= defaults.systemHealthWear) {
+      await new Promise(resolve => setTimeout(resolve, 3000));
       return new EndGameCmd().setPayload({ status: "defeat" });
     }
-    this.state.systemHealth -= defaults.systemHealthWear;
+
     this.state.player.resources = defaults.resources;
     this.state.timeRemaining = defaults.timeRemaining;
     this.state.roundEventCards.splice(0, this.state.roundEventCards.length);

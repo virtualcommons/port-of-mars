@@ -40,7 +40,7 @@
           >Play</b-nav-item
         >
         <b-nav-item class="mx-2" :to="solo" exact-active-class="active" title="Singleplayer Game">
-          Singleplayer <small><b-badge variant="primary">NEW</b-badge></small>
+          Singleplayer
         </b-nav-item>
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto">

@@ -18,3 +18,27 @@ export interface TreatmentData {
 }
 
 export type SoloGameStatus = "incomplete" | "victory" | "defeat";
+
+export interface SoloGameClientState {
+  status: SoloGameStatus;
+  timeRemaining: number;
+  systemHealth: number;
+  twoCardThreshold?: number;
+  threeCardThreshold?: number;
+  maxRound?: number;
+  round: number;
+  treatmentParams: {
+    isKnownNumberOfRounds: boolean;
+    isEventDeckKnown: boolean;
+    thresholdInformation: "unknown" | "range" | "known";
+  };
+  player: {
+    resources: number;
+    points: number;
+  };
+  eventCardDeck?: Array<EventCardData>;
+  roundEventCards: Array<EventCardData>;
+  activeRoundCardIndex: number;
+  canInvest: boolean;
+  isRoundTransitioning: boolean;
+}

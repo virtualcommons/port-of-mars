@@ -1,0 +1,123 @@
+@import "variables";
+
+.cell {
+  background-color: rgba(255, 255, 255, 0.025);
+  border-radius: 0.25rem;
+  overflow: scroll;
+  margin: 0.5rem;
+  padding: 0.5rem;
+}
+
+.cell-grow {
+  @extend .cell;
+  flex-grow: 1;
+  flex-shrink: 0;
+}
+
+.cell-shrink {
+  @extend .cell;
+  flex-grow: 0;
+  flex-shrink: 1;
+}
+
+.mw-25 {
+  max-width: 25%;
+}
+
+.mw-35 {
+  max-width: 35%;
+}
+
+.mw-50 {
+  max-width: 50%;
+}
+
+.mh-50 {
+  max-height: 50%;
+}
+
+.text-segmented {
+  font-family: "DSEG14 Regular" !important;
+  &.i {
+    font-family: "DSEG14 Italic" !important;
+  }
+}
+
+.solo-game {
+  h1,h4 {
+    font-family: $exo !important;
+    letter-spacing: -1px;
+  }
+}
+
+.vfd-container {
+  background-color: $vfd-background;
+  border-radius: 0.25rem;
+  box-shadow: inset 0 0.25rem 0.5rem rgba(0, 0, 0, 0.5);
+}
+
+.vfd-button {
+  border-radius: 0.25rem;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.02);
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5), -3px -3px 5px rgba(255, 255, 255, 0.1);
+  color: $light-shade;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0);
+  }
+}
+
+.vfd-text-underlay,
+.vfd-text-glow {
+  @extend .text-segmented;
+}
+
+.vfd-text-underlay {
+  color: rgba(255, 255, 255, 0.025);
+  position: absolute;
+}
+
+.vfd-text-glow {
+  z-index: 1;
+  display: flex;
+  justify-content: flex-end;
+
+  @each $name, $colors in $vfd-colors {
+    &.#{$name} {
+      color: nth($colors, 1);
+      text-shadow: 0 0 5px nth($colors, 2), 0 0 10px nth($colors, 2);
+    }
+  }
+}
+
+.vfd-bg-underlay {
+  background-color: rgba(255, 255, 255, 0.025);
+}
+
+.vfd-bg-glow {
+  @each $name, $colors in $vfd-colors {
+    &.#{$name} {
+      background-color: nth($colors, 1);
+      box-shadow: 0 0 5px nth($colors, 2), 0 0 10px nth($colors, 2);
+    }
+  }
+}
+
+@keyframes glowing {
+  0% {
+    box-shadow: none;
+  }
+  50% {
+    background-color: rgba($vfd-green, 0.25);
+    box-shadow: 0 0 5px rgba($vfd-green-glow, 0.25), 0 0 10px rgba($vfd-green-glow, 0.25);
+  }
+  100% {
+    box-shadow: none;
+  }
+}
+
+.glowing-shadow {
+  box-shadow: 0 0 10px $vfd-green-glow;
+  animation: glowing 1s infinite;
+  transition: box-shadow 0.5s ease-in-out;
+}

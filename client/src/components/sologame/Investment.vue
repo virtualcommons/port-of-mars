@@ -26,7 +26,8 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
-import SegmentedBar from "@port-of-mars/client/components/global/SegmentedBar.vue";
+import SegmentedBar from "@port-of-mars/client/components/sologame/SegmentedBar.vue";
+import { SoloGameClientState } from "@port-of-mars/shared/sologame";
 
 @Component({
   components: {
@@ -34,16 +35,24 @@ import SegmentedBar from "@port-of-mars/client/components/global/SegmentedBar.vu
   },
 })
 export default class Investment extends Vue {
-  @Prop() state!: any; // FIXME: use SoloGameState type
+  @Prop() state!: SoloGameClientState;
 
   pendingSystemHealthInvestment = 0;
 
   get shouldFlashInvestButton() {
-    return this.pendingSystemHealthInvestment > 0 && this.state.round === 1;
+    return (
+      this.pendingSystemHealthInvestment > 0 &&
+      this.state.round === 1 &&
+      !this.state.isRoundTransitioning
+    );
   }
 
   get shouldFlashInvestInput() {
-    return this.pendingSystemHealthInvestment === 0 && this.state.round === 1;
+    return (
+      this.pendingSystemHealthInvestment === 0 &&
+      this.state.round === 1 &&
+      !this.state.isRoundTransitioning
+    );
   }
 
   get pendingPointsValue() {
@@ -58,8 +67,4 @@ export default class Investment extends Vue {
 }
 </script>
 
-<style lang="scss">
-.custom-font {
-  font-family: "DSEG 14 Regular";
-}
-</style>
+<style lang="scss" scoped></style>

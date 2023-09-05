@@ -1,8 +1,14 @@
 <!-- Vacuum flourescent display styled numbers -->
 <template>
-  <div class="text-container">
-    <div class="vfd-text-underlay" :style="textStyle">{{ underlay }}</div>
-    <div class="vfd-text-glow d-flex justify-content-end" :style="textStyle">
+  <div class="d-flex align-items-center position-relative">
+    <div class="vfd-text-underlay" :style="textStyle">
+      {{ underlay }}
+    </div>
+    <div
+      class="vfd-text-glow d-flex justify-content-end"
+      :class="`vfd-${variant}`"
+      :style="textStyle"
+    >
       {{ numberDisplay }}
     </div>
   </div>
@@ -15,10 +21,9 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 export default class VFDNumberDisplay extends Vue {
   @Prop({ default: 0 }) value!: number;
   @Prop() digits?: number;
-  @Prop({ default: 3 }) size!: number; // in rem
   @Prop({ default: false }) padZeros!: boolean;
-  @Prop({ default: "vfd-green" }) textColor!: string;
-  @Prop({ default: "vfd-green-glow" }) glowColor!: string;
+  @Prop({ default: 3 }) size!: 1 | 2 | 3; // in rem
+  @Prop({ default: "green" }) variant!: "green" | "blue" | "red" | "yellow";
 
   get underlay(): string {
     if (this.digits) {
@@ -32,7 +37,8 @@ export default class VFDNumberDisplay extends Vue {
     if (!this.padZeros && this.value === 0) {
       return "!".repeat(this.digits || 0);
     }
-    return this.value.toString().padStart(this.digits || 0, this.padZeros ? "0" : "!"); // ! is a space
+    // ! is a space in the font
+    return this.value.toString().padStart(this.digits || 0, this.padZeros ? "0" : "!");
   }
 
   get textStyle(): string {
@@ -41,10 +47,4 @@ export default class VFDNumberDisplay extends Vue {
 }
 </script>
 
-<style lang="scss">
-.text-container {
-  display: flex;
-  align-items: center;
-  position: relative;
-}
-</style>
+<style lang="scss" scoped></style>
