@@ -2,9 +2,11 @@
   <div class="content-container p-2">
     <h4>{{ event.displayName }}</h4>
     <p>
-      <i>{{ event.flavorText }}</i>
+      <small
+        ><i>{{ event.flavorText }}</i></small
+      >
     </p>
-    <p>{{ event.effectText }}</p>
+    <p class="mb-0">{{ event.effectText }}</p>
   </div>
 </template>
 
