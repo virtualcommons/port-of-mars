@@ -25,6 +25,8 @@ export interface SoloGameClientState {
   systemHealth: number;
   twoCardThreshold?: number;
   threeCardThreshold?: number;
+  twoCardThresholdRange?: { min: number; max: number };
+  threeCardThresholdRange?: { min: number; max: number };
   maxRound?: number;
   round: number;
   treatmentParams: {

@@ -13,9 +13,6 @@ import {
 } from "@port-of-mars/server/entity";
 import { getRandomIntInclusive } from "@port-of-mars/server/util";
 import { SoloGameState } from "@port-of-mars/server/rooms/sologame/state";
-import { getLogger } from "@port-of-mars/server/settings";
-
-const logger = getLogger(__filename);
 
 export class SoloGameService extends BaseService {
   async drawEventCardDeck(): Promise<EventCardData[]> {

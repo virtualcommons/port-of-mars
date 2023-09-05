@@ -1,26 +1,24 @@
 <template>
-  <div>
+  <div class="h-100 d-flex flex-column justify-content-center">
     <SegmentedBar
       :min="0"
       :max="state.player.resources"
       v-model="pendingSystemHealthInvestment"
       :asInput="true"
-      :segment-class="{ 'glowing-shadow': shouldFlashInvestInput }"
+      :segment-class="{ 'animate-flashing vfd-green': shouldFlashInvestInput }"
+      class="mb-3"
     />
-
-    <h5>
-      <span class="text-segmented">{{ pendingPointsValue }}</span>
-
-      <span class="ml-2"> Resources will be diverted to points.</span>
-    </h5>
-    <b-button
-      @click="handleInvestButtonClick"
-      :disabled="!state.canInvest"
-      variant="primary"
-      block
-      :class="{ 'glowing-shadow': shouldFlashInvestButton }"
-      >Invest in System Health</b-button
-    >
+    <div class="text-center">
+      <b-button
+        @click="handleInvestButtonClick"
+        :disabled="!state.canInvest"
+        variant="primary"
+        size="lg"
+        :class="{ 'animate-flashing vfd-red': shouldFlashInvestButton }"
+      >
+        <h4 class="mb-0">Invest in System Health</h4></b-button
+      >
+    </div>
   </div>
 </template>
 
@@ -36,8 +34,15 @@ import { SoloGameClientState } from "@port-of-mars/shared/sologame";
 })
 export default class Investment extends Vue {
   @Prop() state!: SoloGameClientState;
+  @Prop({ default: 0 }) readonly value!: number;
 
-  pendingSystemHealthInvestment = 0;
+  get pendingSystemHealthInvestment(): number {
+    return this.value;
+  }
+
+  set pendingSystemHealthInvestment(value: number) {
+    this.$emit("input", value);
+  }
 
   get shouldFlashInvestButton() {
     return (

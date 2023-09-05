@@ -65,6 +65,7 @@ export default class SegmentedBar extends Vue {
   @Prop() max!: number;
   @Prop({ default: false }) asInput!: boolean;
   @Prop({ default: 0 }) readonly value!: number;
+  @Prop({ default: 0 }) delta!: number;
   @Prop({ default: "" }) segmentClass!: string;
   @Prop({ default: "" }) label!: string;
   @Prop({ default: "lg" }) size!: "sm" | "md" | "lg";
@@ -98,8 +99,29 @@ export default class SegmentedBar extends Vue {
       `vfd-${this.variant}`,
       this.size,
       this.segmentClass,
-      index <= this.value ? "vfd-bg-glow" : "vfd-bg-underlay",
+      this.getGlowClass(index),
     ];
+  }
+
+  // getGlowClass(index: number): string {
+  //   if (index <= this.value) {
+  //     return "vfd-bg-glow";
+  //   } else if (index <= this.value + this.delta) {
+  //     return "vfd-bg-glow-dim";
+  //   } else {
+  //     return "vfd-bg-underlay";
+  //   }
+  // }
+  //  }
+  getGlowClass(index: number): string {
+    let dimStart = this.value + this.delta;
+    if (index <= Math.min(this.value, dimStart)) {
+      return "vfd-bg-glow";
+    } else if (index <= Math.max(this.value, dimStart)) {
+      return "vfd-bg-glow-dim";
+    } else {
+      return "vfd-bg-underlay";
+    }
   }
 
   setDragging(value: boolean) {
