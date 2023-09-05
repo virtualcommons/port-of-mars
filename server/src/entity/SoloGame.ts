@@ -48,6 +48,9 @@ export class SoloGame {
   status!: SoloGameStatus;
 
   @Column()
+  maxRound!: number;
+
+  @Column()
   twoCardThreshold!: number;
 
   @Column()
