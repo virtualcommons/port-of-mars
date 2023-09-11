@@ -55,26 +55,23 @@ export class SoloGameService extends BaseService {
      * get the next treatment (in order) that a user has not yet seen. If they have seen all
      * then return a random one.
      */
-    const numTreatments = await this.em.getRepository(SoloGameTreatment).count();
-    const playedTreatments = await this.em
-      .getRepository(User)
-      .createQueryBuilder("user")
-      .leftJoin("user.soloPlayers", "soloPlayer")
-      .leftJoin("soloPlayer.game", "soloGame")
-      .select("soloGame.treatmentId as treatment")
-      .where("user.id = :userId", { userId })
-      .getRawMany();
-
-    const playedTreatmentIds = new Set(playedTreatments.map(pt => pt.treatment));
     const treatmentRepo = this.em.getRepository(SoloGameTreatment);
-    if (playedTreatmentIds.size < numTreatments) {
-      for (let i = 1; i <= numTreatments; i++) {
-        if (!playedTreatmentIds.has(i)) {
-          return treatmentRepo.findOneOrFail(i);
-        }
-      }
-    }
+    const numTreatments = await treatmentRepo.count();
 
+    const highestPlayedTreatment = (
+      await this.em
+        .getRepository(User)
+        .createQueryBuilder("user")
+        .leftJoin("user.soloPlayers", "soloPlayer")
+        .leftJoin("soloPlayer.game", "soloGame")
+        .select("COALESCE(MAX(soloGame.treatmentId), 0)", "max")
+        .where("user.id = :userId", { userId })
+        .getRawOne()
+    ).max;
+
+    if (highestPlayedTreatment < numTreatments) {
+      return treatmentRepo.findOneOrFail(highestPlayedTreatment + 1);
+    }
     return treatmentRepo.findOneOrFail(getRandomIntInclusive(1, numTreatments));
   }
 
