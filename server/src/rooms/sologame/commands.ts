@@ -44,12 +44,7 @@ export class CreateDeckCmd extends CmdWithoutPayload {
 export class SetTreatmentParamsCmd extends Cmd<{ user: User }> {
   async execute({ user } = this.payload) {
     const { sologame: service } = getServices();
-    // pick a random (unseen, if user hasn't been through them all) treatment configuration
-    const treatmentIds = await service.getUserRemainingTreatments(user.id);
-    if (treatmentIds.length > 0) {
-      const treatmentId = treatmentIds[Math.floor(Math.random() * treatmentIds.length)];
-      this.state.treatmentParams = new TreatmentParams(await service.getTreatmentById(treatmentId));
-    }
+    this.state.treatmentParams = new TreatmentParams(await service.getUserNextTreatment(user.id));
   }
 }
 

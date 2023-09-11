@@ -50,31 +50,32 @@ export class SoloGameService extends BaseService {
     return deck;
   }
 
-  async getUserRemainingTreatments(userId: number): Promise<Array<number>> {
+  async getUserNextTreatment(userId: number): Promise<TreatmentData> {
     /**
-     * get the treatment Ids that a user has not yet played a game with. If they
-     * have played all the treatments, return the full range
+     * get the next treatment (in order) that a user has not yet seen. If they have seen all
+     * then return a random one.
      */
     const numTreatments = await this.em.getRepository(SoloGameTreatment).count();
-    const allTreatments = Array.from({ length: numTreatments }, (_, i) => i + 1);
     const playedTreatments = await this.em
       .getRepository(User)
       .createQueryBuilder("user")
       .leftJoin("user.soloPlayers", "soloPlayer")
       .leftJoin("soloPlayer.game", "soloGame")
-      .select("soloGame.treatmentId")
+      .select("soloGame.treatmentId as treatment")
       .where("user.id = :userId", { userId })
       .getRawMany();
 
-    if (!playedTreatments || playedTreatments.length === 0) {
-      return allTreatments;
+    const playedTreatmentIds = new Set(playedTreatments.map(pt => pt.treatment));
+    const treatmentRepo = this.em.getRepository(SoloGameTreatment);
+    if (playedTreatmentIds.size < numTreatments) {
+      for (let i = 1; i <= numTreatments; i++) {
+        if (!playedTreatmentIds.has(i)) {
+          return treatmentRepo.findOneOrFail(i);
+        }
+      }
     }
-    const playedTreatmentIds = playedTreatments.map(pt => pt.treatmentId).filter(Boolean);
 
-    if (playedTreatmentIds.length === numTreatments) {
-      return allTreatments;
-    }
-    return allTreatments.filter(id => !playedTreatmentIds.includes(id));
+    return treatmentRepo.findOneOrFail(getRandomIntInclusive(1, numTreatments));
   }
 
   async getTreatmentById(id: number): Promise<TreatmentData> {
@@ -93,6 +94,7 @@ export class SoloGameService extends BaseService {
       treatment: await this.findTreatment(state.treatmentParams),
       deck: await this.createDeck(state.eventCardDeck),
       status: state.status,
+      maxRound: state.maxRound,
       twoCardThreshold: state.twoCardThreshold,
       threeCardThreshold: state.threeCardThreshold,
     });
