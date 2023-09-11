@@ -34,9 +34,6 @@ export default class VFDNumberDisplay extends Vue {
   }
 
   get numberDisplay(): string {
-    if (!this.padZeros && this.value === 0) {
-      return "!".repeat(this.digits || 0);
-    }
     // ! is a space in the font
     return this.value.toString().padStart(this.digits || 0, this.padZeros ? "0" : "!");
   }

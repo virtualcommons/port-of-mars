@@ -19,7 +19,12 @@
         <div class="w-50 pr-3">
           <h4>Points Earned</h4>
           <div class="py-2 px-3 vfd-container">
-            <VFDNumberDisplay :digits="2" :value="points" variant="green" :size="3" />
+            <VFDNumberDisplay
+              :digits="2"
+              :value="isVictory ? points : 0"
+              variant="green"
+              :size="3"
+            />
           </div>
         </div>
         <div class="w-50 pl-3">
