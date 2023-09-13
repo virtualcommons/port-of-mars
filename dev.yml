@@ -2,6 +2,10 @@ services:
   client:
     build:
       dockerfile: client/Dockerfile
+      args:
+        BASE_IMAGE: node:16-bullseye-slim
+        # FIXME: client doesn't seem to work with arm64v8 image
+        # BASE_IMAGE: ${POM_DEV_ARCH}node:16-bullseye-slim
       context: .
     restart: always
     image: port-of-mars/client:dev
@@ -12,13 +16,19 @@ services:
       - /code/client/node_modules
       - ./.prettierrc:/code/.prettierrc
     ports:
-      - '127.0.0.1:8081:8080'
+      - "127.0.0.1:8081:8080"
   server:
     build:
       dockerfile: server/deploy/Dockerfile.dev
+      args:
+        BASE_IMAGE: ${POM_DEV_ARCH}node:16-bullseye-slim
     ports:
-      - '127.0.0.1:2567:2567'
+      - "127.0.0.1:2567:2567"
     volumes:
       - ./server:/code/server
       - ./shared:/code/shared
       - /code/server/node_modules
+  db:
+    image: ${POM_DEV_ARCH}postgres:12
+  redis:
+    image: ${POM_DEV_ARCH}redis:7
