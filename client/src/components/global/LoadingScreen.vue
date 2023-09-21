@@ -13,6 +13,6 @@ export default class LoadingScreen extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-@import "~animate.css/source/attention_seekers/pulse.css";
+@import "~/animate.css/source/attention_seekers/pulse.css";
 @import "@port-of-mars/client/stylesheets/global/LoadingScreen.scss";
 </style>

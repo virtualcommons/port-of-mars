@@ -10,11 +10,7 @@
     <tbody>
       <tr class="data" v-for="resource in resourceNames" :key="resource">
         <td class="resource-name-data">
-          <img
-            class="icon"
-            :src="require(`@port-of-mars/client/assets/icons/${resource}.svg`)"
-            :alt="resource"
-          />
+          <img class="icon" :src="$getAssetUrl(`icons/${resource}.svg`)" :alt="resource" />
           {{ resource }}
         </td>
         <td class="resource-costs-data">

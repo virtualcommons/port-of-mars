@@ -7,6 +7,10 @@ export function url(path: string) {
   return `${process.env.SERVER_URL_HTTP}${path}`;
 }
 
+export function getAssetUrl(path: string) {
+  return new URL(`./assets/${path}`, import.meta.url).href;
+}
+
 export class SfxCache {
   cache: Record<string, Howl>;
 
@@ -14,7 +18,7 @@ export class SfxCache {
     this.cache = {};
     for (const [_name, relpath] of Object.entries(Sfx)) {
       this.cache[relpath] = new Howl({
-        src: require(`@port-of-mars/client/assets/sfx/${relpath}`),
+        src: getAssetUrl(`sfx/${relpath}`),
       });
     }
   }

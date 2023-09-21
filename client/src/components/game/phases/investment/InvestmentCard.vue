@@ -19,13 +19,7 @@
            a col https://bootstrap-vue.org/docs/components/layout#columns-b-col -->
       <div class="w-100"></div>
       <b-col align-self="center">
-        <b-img
-          right
-          v-bind="icon"
-          :src="require(`@port-of-mars/client/assets/icons/${name}.svg`)"
-          :alt="name"
-        >
-        </b-img>
+        <b-img right v-bind="icon" :src="$getAssetUrl(`icons/${name}.svg`)" :alt="name"> </b-img>
       </b-col>
       <b-col align-self="center">
         <!-- FIXME:  adjustment for large screens?  offset-lg="3" lg="6" -->

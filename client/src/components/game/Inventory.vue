@@ -24,7 +24,7 @@
       <b-col md="4" :lg="costsVisible ? 6 : 10" class="m-0 p-0 text-left">
         <p class="my-auto">
           <img
-            :src="require(`@port-of-mars/client/assets/icons/${investment.name}.svg`)"
+            :src="$getAssetUrl(`icons/${investment.name}.svg`)"
             alt="Influence"
             style="height: 2rem; width: 2rem"
           />

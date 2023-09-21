@@ -10,7 +10,7 @@
       >
         <img
           @click="handleSelectPlayer(member)"
-          :src="require(`@port-of-mars/client/assets/characters/${member}.png`)"
+          :src="$getAssetUrl(`characters/${member}.png`)"
           alt="Player"
         />
       </div>

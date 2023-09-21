@@ -10,7 +10,7 @@
       >
         <img
           @click="handleDrawInfluence(influence)"
-          :src="require(`@port-of-mars/client/assets/icons/${influence}.svg`)"
+          :src="$getAssetUrl(`icons/${influence}.svg`)"
           alt="Investment"
           v-b-tooltip.hover.bottom="influence"
         />
@@ -27,7 +27,7 @@
       <div class="event-select-influences-selected-influence">
         <img
           @click="handleUndrawInfluence"
-          :src="require(`@port-of-mars/client/assets/icons/${drawnInfluence}.svg`)"
+          :src="$getAssetUrl(`icons/${drawnInfluence}.svg`)"
           alt="Investment"
           v-b-tooltip.hover.bottom="'Click to clear selection'"
         />

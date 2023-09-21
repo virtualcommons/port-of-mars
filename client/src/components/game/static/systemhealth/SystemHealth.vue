@@ -4,7 +4,7 @@
       <h3 class="title mx-3 my-auto">
         <b-img
           v-bind="systemHealthIconProps"
-          :src="require(`@port-of-mars/client/assets/icons/systemHealth.svg`)"
+          :src="$getAssetUrl(`icons/systemHealth.svg`)"
           rounded="circle"
           left
           class="mr-1 mt-2"
@@ -18,7 +18,7 @@
         <b-img
           v-bind="systemHealthIconProps"
           class="ml-2 mt-2"
-          :src="require(`@port-of-mars/client/assets/icons/systemHealth.svg`)"
+          :src="$getAssetUrl(`icons/systemHealth.svg`)"
           right
           alt="System Health Icon"
         />

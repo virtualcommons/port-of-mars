@@ -4,7 +4,7 @@
       <b-img
         id="logo"
         v-bind="portOfMarsLogoProps"
-        :src="require('@port-of-mars/client/assets/images/logo-Port-of-Mars-White.svg')"
+        :src="$getAssetUrl(`images/logo-Port-of-Mars-White.svg`)"
         alt="the planet mars illustrated in white above Port of Mars"
       ></b-img>
     </b-navbar-brand>

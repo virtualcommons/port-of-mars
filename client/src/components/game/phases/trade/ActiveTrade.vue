@@ -26,7 +26,7 @@
         <b-row align-h="start" align-v="center" class="w-100" :style="frameStyle(sender.role)">
           <b-img
             v-bind="player"
-            :src="require(`@port-of-mars/client/assets/characters/${sender.role}.png`)"
+            :src="$getAssetUrl(`characters/${sender.role}.png`)"
             :alt="sender.role"
           />
           <p>{{ sender.role }} offers</p>
@@ -36,7 +36,7 @@
           <b-col :key="name" v-for="(value, name) in sender.resourceAmount" class="pt-2">
             <b-img
               v-bind="investment"
-              :src="require(`@port-of-mars/client/assets/icons/${name}.svg`)"
+              :src="$getAssetUrl(`icons/${name}.svg`)"
               :alt="name"
               :title="name"
               v-b-tooltip.hover.bottom
@@ -52,7 +52,7 @@
           <p>In exchange for</p>
           <b-img
             v-bind="player"
-            :src="require(`@port-of-mars/client/assets/characters/${recipient.role}.png`)"
+            :src="$getAssetUrl(`characters/${recipient.role}.png`)"
             :alt="recipient.role"
           />
         </b-row>
@@ -60,7 +60,7 @@
           <b-col :key="name" v-for="(value, name) in recipient.resourceAmount" class="pt-2">
             <b-img
               v-bind="investment"
-              :src="require(`@port-of-mars/client/assets/icons/${name}.svg`)"
+              :src="$getAssetUrl(`icons/${name}.svg`)"
               :alt="name"
               :title="name"
               v-b-tooltip.hover.bottom

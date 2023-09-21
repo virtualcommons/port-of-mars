@@ -40,7 +40,7 @@
               </b-badge>
               <b-img
                 fluid
-                :src="require(`@port-of-mars/client/assets/images/character-Researcher.png`)"
+                :src="$getAssetUrl(`images/character-Researcher.png`)"
                 alt="Port of Mars character, the researcher, wears a purple suit and carries a transparent tablet"
               />
             </b-col>
@@ -50,7 +50,7 @@
               </b-badge>
               <b-img
                 fluid
-                :src="require(`@port-of-mars/client/assets/images/character-Politician.png`)"
+                :src="$getAssetUrl(`images/character-Politician.png`)"
                 alt="Port of Mars character, the Politician, wears a green suit with honorary sashes"
               />
             </b-col>
@@ -60,7 +60,7 @@
               </b-badge>
               <b-img
                 fluid
-                :src="require(`@port-of-mars/client/assets/images/character-Pioneer.png`)"
+                :src="$getAssetUrl(`images/character-Pioneer.png`)"
                 alt="Port of Mars character, the pioneer, wears a black suit with climbing equipment"
               />
             </b-col>
@@ -70,7 +70,7 @@
               </b-badge>
               <b-img
                 fluid
-                :src="require(`@port-of-mars/client/assets/images/character-Entreprenuer.png`)"
+                :src="$getAssetUrl(`images/character-Entreprenuer.png`)"
                 alt="Port of Mars character, the entrepreneur, wears a brown suit and looks at a transparent computer interface"
               />
             </b-col>
@@ -80,7 +80,7 @@
               </b-badge>
               <b-img
                 fluid
-                :src="require(`@port-of-mars/client/assets/images/character-Curator.png`)"
+                :src="$getAssetUrl(`images/character-Curator.png`)"
                 alt="Port of Mars character, the curator, wears a gray suit with a walking stick"
               />
             </b-col>
@@ -153,7 +153,7 @@
               <b-img
                 center
                 class="my-3"
-                :src="require(`@port-of-mars/client/assets/images/icon-science.png`)"
+                :src="$getAssetUrl(`images/icon-science.png`)"
                 alt="circular blue background with a white lab beaker"
               />
             </b-col>
@@ -164,7 +164,7 @@
               <b-img
                 center
                 class="my-3"
-                :src="require(`@port-of-mars/client/assets/images/icon-government.png`)"
+                :src="$getAssetUrl(`images/icon-government.png`)"
                 alt="circular red background with a white government building"
               />
             </b-col>
@@ -175,7 +175,7 @@
               <b-img
                 center
                 class="my-3"
-                :src="require(`@port-of-mars/client/assets/images/icon-legacy.png`)"
+                :src="$getAssetUrl(`images/icon-legacy.png`)"
                 alt="circular purple background with a white moon with a flag"
               />
             </b-col>
@@ -186,7 +186,7 @@
               <b-img
                 center
                 class="my-3"
-                :src="require(`@port-of-mars/client/assets/images/icon-finance.png`)"
+                :src="$getAssetUrl(`images/icon-finance.png`)"
                 alt="circular yellow background with three white coins"
               />
             </b-col>
@@ -197,7 +197,7 @@
               <b-img
                 center
                 class="my-3"
-                :src="require(`@port-of-mars/client/assets/images/icon-culture.png`)"
+                :src="$getAssetUrl(`images/icon-culture.png`)"
                 alt="circular brown background with a white paintbrush"
               />
             </b-col>
@@ -303,7 +303,7 @@ import Footer from "@port-of-mars/client/components/global/Footer.vue";
     Footer,
   },
 })
-export default class Privacy extends Vue {}
+export default class Manual extends Vue {}
 </script>
 
 <style lang="scss" scoped>

@@ -56,10 +56,7 @@
           v-for="investment in costToPurchase"
           :key="investment.name"
         >
-          <img
-            :src="require(`@port-of-mars/client/assets/icons/${investment.influence}.svg`)"
-            :alt="investment.name"
-          />
+          <img :src="$getAssetUrl(`icons/${investment.influence}.svg`)" :alt="investment.name" />
         </div>
       </b-col>
     </b-row>
