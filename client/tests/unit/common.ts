@@ -1,21 +1,21 @@
-import {TStore, TypedStore} from "@port-of-mars/client/plugins/tstore";
+import { TStore, TypedStore } from "@port-of-mars/client/plugins/tstore";
 
 import {
   createLocalVue as _createLocalVue,
   mount,
   shallowMount,
   ThisTypedMountOptions,
-  VueClass
-} from '@vue/test-utils';
-import Vuex from 'vuex';
+  VueClass,
+} from "@vue/test-utils";
+import Vuex from "vuex";
 import getters from "@port-of-mars/client/store/getters";
 import mutations from "@port-of-mars/client/store/mutations";
 import _ from "lodash";
-import {initialStoreState} from "@port-of-mars/shared/game/client/state";
+import { initialStoreState } from "@port-of-mars/shared/game/client/state";
 import BootstrapVue from "bootstrap-vue";
 import router from "@port-of-mars/client/router";
-import {Ajax} from "@port-of-mars/client/plugins/ajax";
-import {VueRouter} from "vue-router/types/router";
+import { Ajax } from "@port-of-mars/client/plugins/ajax";
+import { VueRouter } from "vue-router/types/router";
 
 export function createLocalVue() {
   const localVue = _createLocalVue();
@@ -30,7 +30,7 @@ export function createStore() {
   return new Vuex.Store({
     state,
     getters,
-    mutations
+    mutations,
   });
 }
 
@@ -38,40 +38,48 @@ export function provideClient() {
   return {
     provide: {
       $client: {
-        joinOrCreate: jest.fn().mockImplementation((roomName: string) => null)
-      }
-    }
-  }
+        joinOrCreate: function (roomName: string) {
+          return null;
+        },
+      },
+    },
+  };
 }
 
 export function mockRoomSetup() {
   return {
     methods: {
-      setupRoom() {}
-    }
-  }
+      setupRoom() {},
+    },
+  };
 }
 
-export function mountPOM<V extends Vue>(component: VueClass<V>, options: ThisTypedMountOptions<V> = {}) {
+export function mountPOM<V extends Vue>(
+  component: VueClass<V>,
+  options: ThisTypedMountOptions<V> = {}
+) {
   const localVue = createLocalVue();
   const store = createStore();
-  localVue.use(Ajax, {router, store});
+  localVue.use(Ajax, { router, store });
   return mount(component, {
     localVue,
     store,
     router,
     ...options,
-  })
+  });
 }
 
-export function shallowMountPOM<V extends Vue>(component: VueClass<V>, options: ThisTypedMountOptions<V> = {}) {
+export function shallowMountPOM<V extends Vue>(
+  component: VueClass<V>,
+  options: ThisTypedMountOptions<V> = {}
+) {
   const localVue = createLocalVue();
   const store = createStore();
-  localVue.use(Ajax, {router, store});
+  localVue.use(Ajax, { router, store });
   return shallowMount(component, {
     localVue,
     store,
     router,
     ...options,
-  })
+  });
 }
