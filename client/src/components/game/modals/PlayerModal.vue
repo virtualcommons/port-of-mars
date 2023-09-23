@@ -132,8 +132,8 @@ export default class PlayerModal extends Vue {
 
   get roleImage(): any {
     return this.role
-      ? require(`@port-of-mars/client/assets/characters/${this.role}.png`)
-      : require(`@port-of-mars/client/assets/characters/Researcher.png`);
+      ? this.$getAssetUrl(`characters/${this.role}.png`)
+      : this.$getAssetUrl(`characters/Researcher.png`);
   }
 
   get frameColor(): object {

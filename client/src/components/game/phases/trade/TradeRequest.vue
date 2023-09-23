@@ -18,7 +18,7 @@
         >
           <b-img
             v-bind="mainProps"
-            :src="require(`@port-of-mars/client/assets/characters/${player}.png`)"
+            :src="$getAssetUrl(`characters/${player}.png`)"
             :alt="player"
             :style="{ backgroundColor: frameStyle(player) }"
           >

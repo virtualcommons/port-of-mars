@@ -40,7 +40,7 @@
               v-for="player in roles"
             >
               <img
-                :src="require(`@port-of-mars/client/assets/characters/${player}.png`)"
+                :src="$getAssetUrl(`characters/${player}.png`)"
                 @click="selectRole(player)"
                 alt="Player"
               />

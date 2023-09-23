@@ -2,23 +2,20 @@
   <b-container>
     <h2>Thanks to our sponsors</h2>
     <b-row align-v="center" align-h="center">
+      <img :src="$getAssetUrl(`sponsors/compute_canada.png`)" alt="Compute Canada" />
       <img
-        :src="require(`@port-of-mars/client/assets/sponsors/compute_canada.png`)"
-        alt="Compute Canada"
-      />
-      <img
-        :src="require(`@port-of-mars/client/assets/sponsors/asu_gbci.png`)"
+        :src="$getAssetUrl(`sponsors/asu_gbci.png`)"
         alt="ASU Global Biosocial Complexity Initiative"
       />
       <img
-        :src="require(`@port-of-mars/client/assets/sponsors/asu_interplanetary_initiative.png`)"
+        :src="$getAssetUrl(`sponsors/asu_interplanetary_initiative.png`)"
         alt="ASU Interplanetary Initiative"
       />
     </b-row>
   </b-container>
 </template>
 
-<script>
+<script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 
 @Component({})

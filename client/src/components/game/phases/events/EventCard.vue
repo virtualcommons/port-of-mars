@@ -154,5 +154,5 @@ export default class EventCard extends Vue {
 
 <style lang="scss" scoped>
 @import "@port-of-mars/client/stylesheets/game/phases/events/EventCard.scss";
-@import "~animate.css/source/attention_seekers/pulse.css";
+@import "~/animate.css/source/attention_seekers/pulse.css";
 </style>

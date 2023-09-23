@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "module": "es6",
+    "target": "ESNext",
+    "module": "ESNext",
     "strict": true,
     "importHelpers": true,
     "moduleResolution": "node",
@@ -22,14 +22,14 @@
     "lib": [
       "es6",
       "dom"
-    ]
+    ],
+    "types": ["vitest/globals"],
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.vue",
     "tests/**/*.ts",
     "../shared/**/*.ts",
-    "node_modules/@types/jest/index.d.ts"
   ],
   "exclude": [
     "node_modules"

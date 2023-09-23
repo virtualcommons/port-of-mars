@@ -55,5 +55,5 @@ export default class EventContainer extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import "~animate.css/source/attention_seekers/pulse.css";
+@import "~/animate.css/source/attention_seekers/pulse.css";
 </style>

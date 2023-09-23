@@ -1,6 +1,5 @@
 import { createLocalVue, shallowMountPOM, mountPOM } from "./common";
 import App from "@port-of-mars/client/App.vue";
-jest.mock("@port-of-mars/client/components/game/static/chat/Chat.vue");
 
 describe("App.vue", () => {
   it("renders", () => {

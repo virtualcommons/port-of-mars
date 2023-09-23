@@ -18,7 +18,7 @@
           <b-img
             v-bind="mainProps"
             rounded="circle"
-            :src="require(`@port-of-mars/client/assets/icons/${resource}.svg`)"
+            :src="$getAssetUrl(`icons/${resource}.svg`)"
             :alt="resource"
             class="m-3"
           >

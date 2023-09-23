@@ -38,7 +38,7 @@
         <b-img
           v-for="resource in toBeSaved"
           :key="resource.name"
-          :src="require(`@port-of-mars/client/assets/icons/${resource.name}.svg`)"
+          :src="$getAssetUrl(`icons/${resource.name}.svg`)"
           v-bind="icon"
         ></b-img>
       </b-row> -->
