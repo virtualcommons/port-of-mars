@@ -47,7 +47,7 @@ export class SoloGame {
   })
   status!: SoloGameStatus;
 
-  @Column()
+  @Column({ default: 0 })
   maxRound!: number;
 
   @Column()

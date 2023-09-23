@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
-import VFDNumberDisplay from "@/components/sologame/VFDNumberDisplay.vue";
+import VFDNumberDisplay from "@port-of-mars/client/components/sologame/VFDNumberDisplay.vue";
 
 @Component({
   components: {
