@@ -3,7 +3,9 @@ import { EventCardData, SoloGameStatus, TreatmentData } from "@port-of-mars/shar
 
 export class EventCard extends Schema {
   id = 0;
-  deckCardId = 0;
+  @type("boolean") expired = false;
+  @type("boolean") active = false;
+  @type("int32") deckCardId = 0;
   @type("string") codeName = "";
   @type("string") displayName = "";
   @type("string") flavorText = "";
@@ -60,6 +62,7 @@ export class SoloGameState extends Schema {
   @type(Player) player: Player = new Player();
   @type([EventCard]) roundEventCards = new ArraySchema<EventCard>();
   @type("int8") activeRoundCardIndex = -1;
+  @type("int8") activeDeckCardIndex = -1;
   @type("boolean") canInvest = true;
   @type("boolean") isRoundTransitioning = false;
 

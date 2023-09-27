@@ -1,5 +1,8 @@
 export interface EventCardData {
   id: number;
+  deckCardId?: number;
+  expired?: boolean;
+  active?: boolean;
   codeName: string;
   displayName: string;
   flavorText: string;

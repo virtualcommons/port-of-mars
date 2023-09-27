@@ -149,6 +149,9 @@ export class ApplyCardCmd extends Cmd<{ playerSkipped: boolean }> {
       )
     );
 
+    this.state.eventCardDeck[this.state.activeDeckCardIndex].expired = true; // expire the card
+    this.state.activeDeckCardIndex += 1;
+
     if (this.state.systemHealth <= 0) {
       return [
         new PersistRoundCmd().setPayload({
@@ -199,6 +202,7 @@ export class DrawCardsCmd extends CmdWithoutPayload {
     }
     this.state.timeRemaining += SoloGameState.DEFAULTS.eventTimeout * drawCount;
     this.state.activeRoundCardIndex = 0;
+    this.state.activeDeckCardIndex = 0;
     return new StartEventTimerCmd();
   }
 }

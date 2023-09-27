@@ -47,6 +47,7 @@ export function applySoloGameServerResponses(room: Room, component: any) {
       "timeRemaining",
       "systemHealth",
       "activeRoundCardIndex",
+      "activeDeckCardIndex",
       "canInvest",
       "isRoundTransitioning",
       "status",

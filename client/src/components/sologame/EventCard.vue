@@ -6,6 +6,7 @@
         ><i>{{ event.flavorText }}</i></small
       >
     </p>
+    <b-badge variant="danger" v-if="event.expired">expired</b-badge>
     <p class="mb-0">{{ event.effectText }}</p>
   </div>
 </template>
