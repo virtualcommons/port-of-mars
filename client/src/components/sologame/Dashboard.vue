@@ -1,9 +1,9 @@
 <template>
   <div class="d-flex flex-column p-2 h-100 overflow-hidden solo-game">
     <EventModal
-      v-if="state.activeRoundCardIndex >= 0"
-      :event="state.roundEventCards[state.activeRoundCardIndex]"
-      :visible="state.activeRoundCardIndex >= 0"
+      v-if="state.activeCardId >= 0"
+      :event="activeCard"
+      :visible="state.activeCardId >= 0"
       @continue="handleEventContinue"
     />
     <div class="d-flex flex-shrink-1 m-2 mt-3">
@@ -53,10 +53,7 @@
               </div>
             </div>
           </div>
-          <div class="cell-grow mw-35">
-            <h4>Events this round</h4>
-            <Deck :events="state.roundEventCards" />
-          </div>
+          <div class="cell-grow mw-35"></div>
         </div>
         <div class="d-flex flex-md-row flex-column flex-grow-1 overflow-hidden mh-50">
           <div class="cell-grow mw-50 d-flex flex-column justify-content-around">
@@ -93,12 +90,8 @@
         </div>
       </div>
       <div class="cell-shrink mw-25" style="min-width: 25%; padding: 0.5em">
-        <h4>All Events</h4>
-        <Deck v-if="state.treatmentParams.isEventDeckKnown" :events="state.eventCardDeck" />
-        <div v-else class="d-flex flex-column h-75 align-items-center justify-content-center">
-          <h1 class="text-danger mb-3"><b-icon icon="eye-slash-fill" /></h1>
-          <h4 class="text-danger display-5">UNAVAILABLE</h4>
-        </div>
+        <h4>Events</h4>
+        <Deck :events="state.visibleEventCards" @active-card-changed="handleActiveCardChange" />
       </div>
     </div>
   </div>
@@ -137,12 +130,23 @@ export default class Dashboard extends Vue {
 
   pendingSystemHealthInvestment = 0;
 
+  get activeCard() {
+    return this.state.visibleEventCards.find(card => card.deckCardId === this.state.activeCardId);
+  }
+
   handleInvest(investment: number) {
     this.api.invest(investment);
   }
 
   handleEventContinue() {
     this.api.eventContinue();
+  }
+
+  handleActiveCardChange(el: HTMLElement) {
+    // scroll to the new cards in play for a round
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
   }
 }
 </script>

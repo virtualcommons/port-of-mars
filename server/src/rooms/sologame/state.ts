@@ -4,7 +4,7 @@ import { EventCardData, SoloGameStatus, TreatmentData } from "@port-of-mars/shar
 export class EventCard extends Schema {
   id = 0;
   @type("boolean") expired = false;
-  @type("boolean") active = false;
+  @type("boolean") inPlay = false; // indicates that the card has been drawn for current round
   @type("int32") deckCardId = 0;
   @type("string") codeName = "";
   @type("string") displayName = "";
@@ -60,9 +60,14 @@ export class SoloGameState extends Schema {
   @type("uint8") round = 1;
   @type(TreatmentParams) treatmentParams = new TreatmentParams();
   @type(Player) player: Player = new Player();
-  @type([EventCard]) roundEventCards = new ArraySchema<EventCard>();
-  @type("int8") activeRoundCardIndex = -1;
-  @type("int8") activeDeckCardIndex = -1;
+  // @type([EventCard]) roundEventCards = new ArraySchema<EventCard>();
+
+  // mirrors deck when deck is visible, otherwise show round cards
+  @type([EventCard]) visibleEventCards = new ArraySchema<EventCard>();
+  @type("int32") activeCardId = -1; // refers to the deckCardId of the active (shown in modal) card
+
+  // @type("uint8") activeRoundCardIndex = -1;
+  // @type("uint8") activeDeckCardIndex = -1;
   @type("boolean") canInvest = true;
   @type("boolean") isRoundTransitioning = false;
 
@@ -81,9 +86,30 @@ export class SoloGameState extends Schema {
     return this.player.resources;
   }
 
-  get activeRoundCard() {
-    if (this.activeRoundCardIndex >= 0 && this.activeRoundCardIndex < this.roundEventCards.length) {
-      return this.roundEventCards[this.activeRoundCardIndex];
+  get activeCard() {
+    return this.eventCardDeck.find(card => card.deckCardId === this.activeCardId);
+  }
+
+  get unexpiredCards() {
+    return this.eventCardDeck.filter(card => !card.expired);
+  }
+
+  get roundEventCards() {
+    return this.eventCardDeck.filter(card => card.inPlay);
+  }
+
+  get nextRoundCard() {
+    return this.roundEventCards.find(card => !card.expired);
+  }
+
+  updateVisibleCards() {
+    // update visible cards, needs to be called after making changes to the deck that should be
+    // reflected on the client
+    if (this.treatmentParams.isEventDeckKnown) {
+      // probably a more efficient way to do this
+      this.visibleEventCards = new ArraySchema(...this.eventCardDeck);
+    } else {
+      this.visibleEventCards = new ArraySchema(...this.roundEventCards);
     }
   }
 

@@ -2,7 +2,7 @@ export interface EventCardData {
   id: number;
   deckCardId?: number;
   expired?: boolean;
-  active?: boolean;
+  inPlay?: boolean;
   codeName: string;
   displayName: string;
   flavorText: string;
@@ -41,9 +41,8 @@ export interface SoloGameClientState {
     resources: number;
     points: number;
   };
-  eventCardDeck?: Array<EventCardData>;
-  roundEventCards: Array<EventCardData>;
-  activeRoundCardIndex: number;
+  visibleEventCards: Array<EventCardData>;
+  activeCardId: number;
   canInvest: boolean;
   isRoundTransitioning: boolean;
 }

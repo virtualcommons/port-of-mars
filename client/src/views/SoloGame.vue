@@ -53,8 +53,8 @@ export default class SoloGame extends Vue {
       resources: 0,
       points: 0,
     },
-    roundEventCards: [],
-    activeRoundCardIndex: -1,
+    visibleEventCards: [],
+    activeCardId: -1,
     canInvest: true,
     isRoundTransitioning: false,
   };

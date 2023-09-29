@@ -1,5 +1,5 @@
 <template>
-  <div class="content-container p-2">
+  <div class="content-container p-2" :class="{ 'bg-success': event.inPlay }">
     <h4>{{ event.displayName }}</h4>
     <p>
       <small
