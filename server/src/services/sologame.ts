@@ -147,11 +147,20 @@ export class SoloGameService extends BaseService {
     await repo.save(game);
   }
 
-  async updatePlayerPoints(gameId: number, points: number) {
+  async updatePlayerPoints(
+    gameId: number,
+    points: number,
+    maxRound: number,
+    status: SoloGameStatus
+  ) {
     const repo = this.em.getRepository(SoloPlayer);
     const player = await repo.findOneOrFail({ gameId });
     player.points = points;
     await repo.save(player);
+    // if the game was a success, update the highscores table as well
+    if (status === "victory") {
+      await this.sp.leaderboard.updateSoloHighscores(gameId, points, maxRound);
+    }
   }
 
   async createRound(
