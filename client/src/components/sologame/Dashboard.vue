@@ -6,46 +6,34 @@
       :visible="state.activeCardId >= 0"
       @continue="handleEventContinue"
     />
-    <div class="d-flex flex-shrink-1 m-2 mt-3">
-      <SegmentedBar
-        :min="0"
-        :max="25"
-        :delta="pendingSystemHealthInvestment"
-        v-model="state.systemHealth"
-        label="System Health"
-        class="w-100"
-        variant="green"
-      />
-    </div>
     <div class="d-flex flex-row flex-grow-1 overflow-hidden">
       <div class="d-flex flex-column flex-grow-1 overflow-hidden">
+        <div class="d-flex flex-shrink-1 m-2 mt-3">
+          <SegmentedBar
+            :min="0"
+            :max="25"
+            :delta="pendingSystemHealthInvestment"
+            v-model="state.systemHealth"
+            label="System Health"
+            class="flex-grow-1"
+            variant="green"
+          />
+        </div>
         <div class="d-flex flex-md-row flex-column flex-grow-1 overflow-hidden mh-50">
           <div class="cell-grow mw-35">
-            <h4>Thresholds</h4>
-            <Threshold
-              v-if="state.treatmentParams.thresholdInformation !== 'unknown'"
-              :state="state"
-            />
-            <div v-else class="d-flex flex-column h-75 align-items-center justify-content-center">
-              <h1 class="text-danger mb-3"><b-icon icon="eye-slash-fill" /></h1>
-              <h4 class="text-danger display-5">UNAVAILABLE</h4>
-            </div>
-          </div>
-          <div class="d-flex flex-md-column flex-row flex-grow-1 overflow-hidden mw-35">
-            <div class="cell-grow">
-              <div>
-                <h4 class="text-center">Round</h4>
-                <div class="d-flex justify-content-center align-items-center">
-                  <div class="vfd-container p-2">
-                    <VFDNumberDisplay :digits="2" :value="state.round" variant="red" size="2" />
-                  </div>
-                  <h4 v-if="state.treatmentParams.isKnownNumberOfRounds" class="mx-2">/</h4>
-                  <div v-if="state.treatmentParams.isKnownNumberOfRounds" class="vfd-container p-2">
-                    <VFDNumberDisplay :digits="2" :value="state.maxRound" variant="red" size="2" />
-                  </div>
-                </div>
+            <div>
+              <h4>Thresholds</h4>
+              <Threshold
+                v-if="state.treatmentParams.thresholdInformation !== 'unknown'"
+                :state="state"
+              />
+              <div v-else class="d-flex flex-column h-40 align-items-center justify-content-center">
+                <h1 class="text-danger mb-3"><b-icon icon="eye-slash-fill" /></h1>
+                <h4 class="text-danger display-5">UNAVAILABLE</h4>
               </div>
             </div>
+          </div>
+          <div class="cell-grow mw-35">
             <div class="cell-grow d-flex flex-column">
               <h4 class="text-center">Time remaining</h4>
               <div class="d-flex justify-content-center">
@@ -53,10 +41,23 @@
               </div>
             </div>
           </div>
-          <div class="cell-grow mw-35"></div>
+          <div class="cell-grow mw-25">
+            <div>
+              <h4 class="text-center">Round</h4>
+            </div>
+            <div class="d-flex justify-content-center align-items-center">
+              <div class="vfd-container p-2">
+                <VFDNumberDisplay :digits="2" :value="state.round" variant="red" size="2" />
+              </div>
+              <h4 v-if="state.treatmentParams.isKnownNumberOfRounds" class="mx-2">/</h4>
+              <div v-if="state.treatmentParams.isKnownNumberOfRounds" class="vfd-container p-2">
+                <VFDNumberDisplay :digits="2" :value="state.maxRound" variant="red" size="2" />
+              </div>
+            </div>
+          </div>
         </div>
         <div class="d-flex flex-md-row flex-column flex-grow-1 overflow-hidden mh-50">
-          <div class="cell-grow mw-50 d-flex flex-column justify-content-around">
+          <div class="cell-grow mw-50 d-flex flex-column">
             <div>
               <h4>Points</h4>
               <SegmentedBar

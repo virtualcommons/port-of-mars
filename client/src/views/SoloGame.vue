@@ -1,6 +1,6 @@
 <template>
   <div class="backdrop">
-    <b-container class="content-container p-0 my-5" no-gutters style="max-width: none">
+    <b-container class="content-container p-0 my-5" no-gutters style="max-width: 85%">
       <Splash v-if="!started" @begin="begin" />
       <GameOver
         v-else-if="isGameOver"
