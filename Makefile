@@ -18,6 +18,9 @@ MAIL_API_KEY_PATH=keys/mail_api_key
 SECRETS=$(MAIL_API_KEY_PATH) $(DB_PASSWORD_PATH) $(ORMCONFIG_PATH) $(PGPASS_PATH) $(SENTRY_DSN_PATH) $(SECRET_KEY_PATH)
 SHARED_CONFIG_PATH=shared/src/assets/config.ts
 BUILD_ID=$(shell git describe --tags --abbrev=1)
+POM_DEV_ARCH=$(if $(findstring aarch64,$(shell uname -m)),arm64v8/,)
+
+export POM_DEV_ARCH
 
 .PHONY: build
 build: docker-compose.yml

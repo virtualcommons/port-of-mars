@@ -1,4 +1,5 @@
-FROM node:16-bullseye-slim
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
 
 LABEL maintainer="Allen Lee <allen.lee@asu.edu>"
 
