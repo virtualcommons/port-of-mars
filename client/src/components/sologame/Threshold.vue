@@ -1,13 +1,17 @@
 <template>
-  <div v-if="loaded" class="d-flex flex-column h-75 justify-content-around p-3">
-    <p>
-      <strong>Two</strong> event cards will be drawn when system health is
+  <div v-if="loaded" class="d-flex flex-column justify-content-around p-3">
+    <b-alert show variant="warning" class="px-2 py-1 dim-unless-hover">
+      <h4 class="d-inline mr-1">+1</h4>
+      additional event will occur below
       <strong>{{ twoCardThreshold }}</strong>
-    </p>
-    <p>
-      <strong>Three</strong> event cards will be drawn when system health is
+      system health
+    </b-alert>
+    <b-alert show variant="danger" class="px-2 py-1 m-0 dim-unless-hover">
+      <h4 class="d-inline mr-1">+2</h4>
+      additional events will occur below
       <strong>{{ threeCardThreshold }}</strong>
-    </p>
+      system health
+    </b-alert>
   </div>
 </template>
 
@@ -21,19 +25,19 @@ export default class Thresholds extends Vue {
 
   get twoCardThreshold(): string {
     if (this.state.treatmentParams.thresholdInformation === "known") {
-      return `${this.state.twoCardThreshold} or lower`;
+      return `${this.state.twoCardThreshold}`;
     } else {
       const range = this.state.twoCardThresholdRange!;
-      return `between ${range.min} and ${range.max}`;
+      return `around ${range.min}-${range.max}`;
     }
   }
 
   get threeCardThreshold(): string {
     if (this.state.treatmentParams.thresholdInformation === "known") {
-      return `${this.state.threeCardThreshold} or lower`;
+      return `${this.state.threeCardThreshold}`;
     } else {
       const range = this.state.threeCardThresholdRange!;
-      return `between ${range.min} and ${range.max}`;
+      return `around ${range.min}-${range.max}`;
     }
   }
 
@@ -46,4 +50,12 @@ export default class Thresholds extends Vue {
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss" scoped>
+.dim-unless-hover {
+  opacity: 0.6;
+  transition: opacity 0.2s;
+  &:hover {
+    opacity: 1;
+  }
+}
+</style>

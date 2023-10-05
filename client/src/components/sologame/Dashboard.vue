@@ -22,26 +22,23 @@
         <div class="d-flex flex-md-row flex-column flex-grow-1 overflow-hidden mh-50">
           <div class="cell-grow mw-35">
             <div>
-              <h4>Thresholds</h4>
               <Threshold
                 v-if="state.treatmentParams.thresholdInformation !== 'unknown'"
                 :state="state"
               />
-              <div v-else class="d-flex flex-column h-40 align-items-center justify-content-center">
+              <div v-else class="d-flex flex-column align-items-center justify-content-center">
                 <h1 class="text-danger mb-3"><b-icon icon="eye-slash-fill" /></h1>
-                <h4 class="text-danger display-5">UNAVAILABLE</h4>
+                <h4 class="text-danger text-center">THRESHOLDS UNAVAILABLE</h4>
               </div>
             </div>
           </div>
-          <div class="cell-grow mw-35">
-            <div class="cell-grow d-flex flex-column">
-              <h4 class="text-center">Time remaining</h4>
-              <div class="d-flex justify-content-center">
-                <Clock :timeRemaining="state.timeRemaining" :size="3" />
-              </div>
+          <div class="cell-grow mw-35 d-flex flex-column justify-content-center">
+            <h4 class="text-center">Time remaining</h4>
+            <div class="d-flex justify-content-center">
+              <Clock :timeRemaining="state.timeRemaining" :size="3" />
             </div>
           </div>
-          <div class="cell-grow mw-25">
+          <div class="cell-grow mw-25 d-flex flex-column justify-content-center">
             <div>
               <h4 class="text-center">Round</h4>
             </div>
@@ -56,7 +53,10 @@
             </div>
           </div>
         </div>
-        <div class="d-flex flex-md-row flex-column flex-grow-1 overflow-hidden mh-50">
+        <div
+          class="d-flex flex-md-row flex-column flex-grow-1 overflow-hidden mh-50"
+          style="min-height: 18rem"
+        >
           <div class="cell-grow mw-50 d-flex flex-column">
             <div>
               <h4>Points</h4>

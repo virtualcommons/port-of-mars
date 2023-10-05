@@ -1,6 +1,6 @@
 <template>
-  <div class="backdrop">
-    <b-container class="content-container p-0 my-5" no-gutters style="max-width: 85%">
+  <div class="backdrop d-flex justify-content-center align-items-center">
+    <b-container class="h-100 solo-dashboard-container content-container p-0" no-gutters>
       <Splash v-if="!started" @begin="begin" />
       <GameOver
         v-else-if="isGameOver"
@@ -87,4 +87,9 @@ export default class SoloGame extends Vue {
 
 <style lang="scss">
 @import "@port-of-mars/client/stylesheets/sologame";
+
+.solo-dashboard-container {
+  max-width: 1200px;
+  max-height: 700px;
+}
 </style>
