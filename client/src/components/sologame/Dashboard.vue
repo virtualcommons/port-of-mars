@@ -33,12 +33,20 @@
             </div>
           </div>
           <div class="cell-grow mw-35 d-flex flex-column justify-content-center">
-            <h4 class="text-center">Time remaining</h4>
+            <h4 class="text-center">
+              {{ state.isRoundTransitioning ? "New round in" : "Time Remaining" }}
+            </h4>
             <div class="d-flex justify-content-center">
               <Clock :timeRemaining="state.timeRemaining" :size="3" />
             </div>
           </div>
-          <div class="cell-grow mw-25 d-flex flex-column justify-content-center">
+          <div
+            v-if="state.isRoundTransitioning"
+            class="cell-grow mw-25 d-flex flex-column justify-content-center"
+          >
+            <HealthGained :systemHealthGained="systemHealthGained" :pointsGained="pointsGained" />
+          </div>
+          <div v-else class="cell-grow mw-25 d-flex flex-column justify-content-center">
             <div>
               <h4 class="text-center">Round</h4>
             </div>
@@ -104,25 +112,25 @@ import { SoloGameRequestAPI } from "@port-of-mars/client/api/sologame/request";
 import { SoloGameClientState } from "@port-of-mars/shared/sologame";
 import EventCard from "@port-of-mars/client/components/sologame/EventCard.vue";
 import EventModal from "@port-of-mars/client/components/sologame/EventModal.vue";
-import HealthBar from "@port-of-mars/client/components/sologame/HealthBar.vue";
 import SegmentedBar from "@port-of-mars/client/components/sologame/SegmentedBar.vue";
 import Deck from "@port-of-mars/client/components/sologame/Deck.vue";
 import Investment from "@port-of-mars/client/components/sologame/Investment.vue";
 import Clock from "@port-of-mars/client/components/sologame/Clock.vue";
 import Threshold from "@port-of-mars/client/components/sologame/Threshold.vue";
 import VFDNumberDisplay from "@port-of-mars/client/components/sologame/VFDNumberDisplay.vue";
+import HealthGained from "@port-of-mars/client/components/sologame/HealthGained.vue";
 
 @Component({
   components: {
     EventCard,
     Deck,
-    HealthBar,
     SegmentedBar,
     Investment,
     EventModal,
     Clock,
     Threshold,
     VFDNumberDisplay,
+    HealthGained,
   },
 })
 export default class Dashboard extends Vue {
@@ -130,12 +138,17 @@ export default class Dashboard extends Vue {
   @Prop() state!: SoloGameClientState;
 
   pendingSystemHealthInvestment = 0;
+  // used for animating a snackbar-style animation for SH increase during round transition
+  systemHealthGained = 0;
+  pointsGained = 0;
 
   get activeCard() {
     return this.state.visibleEventCards.find(card => card.deckCardId === this.state.activeCardId);
   }
 
   handleInvest(investment: number) {
+    this.pointsGained = this.state.player.resources - investment;
+    this.systemHealthGained = investment;
     this.api.invest(investment);
   }
 
