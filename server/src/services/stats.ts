@@ -157,9 +157,6 @@ export class StatsService extends BaseService {
       .orderBy("highscores.pointsPerRound", "DESC")
       .limit(limit)
       .getRawMany();
-
-    const user = await this.em.getRepository(User).findOneOrFail({ username: "scott" });
-    logger.fatal(await this.getSoloPlayerHistory(user));
     return highscoresData as SoloHighscoresData;
   }
 
