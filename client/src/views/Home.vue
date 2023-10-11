@@ -107,7 +107,7 @@
           </b-col>
           <b-col md="12" lg="6" xl="5" align-self="center">
             <h4 class="mb-2 text-white">Top Players</h4>
-            <div class="content-container">
+            <div class="bg-dark p-3">
               <LeaderboardTable
                 :showWithBots="false"
                 :showgameStats="false"
@@ -116,7 +116,6 @@
               ></LeaderboardTable>
             </div>
           </b-col>
-          <div class="w-100 mb-5"></div>
         </b-row>
       </div>
     </b-row>
