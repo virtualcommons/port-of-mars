@@ -17,9 +17,9 @@
       <template #head(points)>
         Points
         <small>
-          <b-icon-question-circle id="points-tooltip" class="ml-2" scale="1" />
+          <b-icon-question-circle id="hs-points-tooltip" class="ml-2" scale="1" />
         </small>
-        <b-tooltip target="points-tooltip" placement="top" variant="light">
+        <b-tooltip target="hs-points-tooltip" placement="top" variant="light">
           The total number of Victory Points a player has earned in games where the entire group
           survived.
         </b-tooltip>
@@ -27,9 +27,9 @@
       <template #head(victoryPercentage)>
         Victory %
         <small>
-          <b-icon-question-circle id="victory-percentage-tooltip" class="ml-2" scale="1" />
+          <b-icon-question-circle id="hs-victory-percentage-tooltip" class="ml-2" scale="1" />
         </small>
-        <b-tooltip target="victory-percentage-tooltip" placement="top" variant="light">
+        <b-tooltip target="hs-victory-percentage-tooltip" placement="top" variant="light">
           Percentage of games that ended in victory that this player has participated in (not
           necessarily as the highest scoring player).
         </b-tooltip>
@@ -70,6 +70,15 @@
     async fetchSoloHighscoresData() {
       this.api = new StatsAPI(this.$store, this.$ajax);
       this.highscoresData = await this.api.getSoloHighscoresData(this.limit);
+      // highlight the top score
+      const highscores = this.highscoresData;
+      if (highscores.length > 0) {
+        const topScore = highscores[0].points;
+        for (const player of highscores) {
+          if (player.points < topScore) break;
+          (player as any)._rowVariant = "success";
+        }
+      }
     }
   
     getWinsLosses(item: any) {

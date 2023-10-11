@@ -18,9 +18,9 @@
     <template #head(points)>
       Points
       <small>
-        <b-icon-question-circle id="points-tooltip" class="ml-2" scale="1" />
+        <b-icon-question-circle id="l-points-tooltip" class="ml-2" scale="1" />
       </small>
-      <b-tooltip target="points-tooltip" placement="top" variant="light">
+      <b-tooltip target="l-points-tooltip" placement="top" variant="light">
         The total number of Victory Points a player has earned in games where the entire group
         survived.
       </b-tooltip>
@@ -28,9 +28,9 @@
     <template #head(victoryPercentage)>
       Victory %
       <small>
-        <b-icon-question-circle id="victory-percentage-tooltip" class="ml-2" scale="1" />
+        <b-icon-question-circle id="l-victory-percentage-tooltip" class="ml-2" scale="1" />
       </small>
-      <b-tooltip target="victory-percentage-tooltip" placement="top" variant="light">
+      <b-tooltip target="l-victory-percentage-tooltip" placement="top" variant="light">
         Percentage of games that ended in victory that this player has participated in (not
         necessarily as the highest scoring player).
       </b-tooltip>
