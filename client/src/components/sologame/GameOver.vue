@@ -40,10 +40,10 @@
           Play again
         </h4>
       </b-button>
-      <b-button variant="primary" size="lg" :to="home" class="pl-1"
+      <b-button variant="primary" size="lg" @click="routeToHighscores"
         ><h4 class="mb-0">
-          <b-icon-chevron-left />
-          Return home
+          <b-icon-trophy scale="0.75" />
+          Highscores
         </h4></b-button
       >
     </div>
@@ -52,7 +52,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
-import { HOME_PAGE } from "@port-of-mars/shared/routes";
+import { LEADERBOARD_PAGE } from "@port-of-mars/shared/routes";
 import VFDNumberDisplay from "@port-of-mars/client/components/sologame/VFDNumberDisplay.vue";
 
 @Component({
@@ -65,14 +65,16 @@ export default class GameOver extends Vue {
   @Prop() points!: number;
   @Prop() round!: number;
 
-  home = { name: HOME_PAGE };
-
   get isVictory() {
     return this.status === "victory";
   }
 
   reload() {
     window.location.reload();
+  }
+
+  routeToHighscores() {
+    this.$router.push({ name: LEADERBOARD_PAGE, params: { showSolo: true } as any });
   }
 }
 </script>

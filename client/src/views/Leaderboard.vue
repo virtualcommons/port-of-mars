@@ -4,7 +4,7 @@
       <b-row class="h-100 m-0">
         <b-col cols="12" class="mh-100 p-2">
           <b-tabs pills content-class="mt-3 h-100" class="h-100" active-tab-class="h-100">
-            <b-tab title="Leaderboard" active>
+            <b-tab title="Leaderboard" :active="!showSolo">
               <div id="filter-options" class="p-2">
                 <b-form-checkbox v-model="showWithBots" name="check-button" class="mx-3">
                   Include games with bots
@@ -14,7 +14,7 @@
                 <LeaderboardTable :showWithBots="showWithBots" :limit="50" />
               </div>
             </b-tab>
-            <b-tab title="Solo Highscores">
+            <b-tab title="Solo Highscores" :active="showSolo">
               <div class="h-100-header w-100 content-container">
                 <SoloHighscoresTable :limit="50" />
               </div>
@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 import LeaderboardTable from "@port-of-mars/client/components/stats/LeaderboardTable.vue";
 import SoloHighscoresTable from "@port-of-mars/client/components/stats/SoloHighscoresTable.vue";
 
@@ -38,6 +38,8 @@ import SoloHighscoresTable from "@port-of-mars/client/components/stats/SoloHighs
   },
 })
 export default class Leaderboard extends Vue {
+  @Prop({ default: false }) showSolo!: boolean;
+
   showWithBots = false;
 }
 </script>
