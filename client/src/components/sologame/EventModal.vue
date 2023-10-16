@@ -1,6 +1,6 @@
 <template>
   <b-modal
-    v-model="visible"
+    v-model="localVisible"
     centered
     no-stacking
     hide-header
@@ -27,13 +27,25 @@ export default class EventModal extends Vue {
   @Prop() event!: EventCardData;
   @Prop({ default: false }) visible!: boolean;
 
+  localVisible = false;
+
+  created() {
+    this.localVisible = this.visible;
+  }
+
+  // avoid mutating visible directly
+  @Watch("visible")
+  onVisibleChanged(newVal: boolean) {
+    this.localVisible = newVal;
+  }
+
   // briefly close the modal when the event changes to show the transition
   @Watch("event.deckCardId")
   async onDeckCardIdChanged() {
-    this.visible = false;
+    this.localVisible = false;
     await this.$nextTick();
     await new Promise(resolve => setTimeout(resolve, 300));
-    this.visible = true;
+    this.localVisible = true;
   }
 }
 </script>
