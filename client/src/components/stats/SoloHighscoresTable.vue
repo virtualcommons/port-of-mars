@@ -30,6 +30,9 @@
     <template #cell(rank)="data">
       {{ "#" + data.item.rank }}
     </template>
+    <template #cell(pointsPerRound)="data">
+      {{ data.item.pointsPerRound.toFixed(2) }}
+    </template>
   </b-table>
 </template>
 
