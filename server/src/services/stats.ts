@@ -8,6 +8,7 @@ import {
 import { Game, Player, SoloGame, SoloPlayer } from "@port-of-mars/server/entity";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { IsNull, Not, SelectQueryBuilder } from "typeorm";
+import { SoloHighscores } from "@port-of-mars/server/entity/SoloHighscores";
 
 export class StatsService extends BaseService {
   /* Player stats */
@@ -107,22 +108,53 @@ export class StatsService extends BaseService {
     };
   }
 
+  async updateSoloHighscores(gameId: number, points: number, maxRound: number): Promise<void> {
+    // update the solo highscores table with data from a victory game and return the player's entry with rank
+    const highscoresRepo = this.em.getRepository(SoloHighscores);
+    const pointsPerRound = points / maxRound;
+    const game = await this.em.getRepository(SoloGame).findOneOrFail(gameId, {
+      relations: ["player", "player.user"],
+    });
+    const user = game.player.user;
+    let highscore = await highscoresRepo.findOne({ user });
+
+    if (highscore) {
+      if (pointsPerRound > highscore.pointsPerRound) {
+        highscore.pointsPerRound = pointsPerRound;
+        highscore.maxRound = maxRound;
+        highscore.points = points;
+        highscore.gameId = gameId;
+        await highscoresRepo.save(highscore);
+      }
+    } else {
+      const newHighscore = highscoresRepo.create({
+        user,
+        maxRound,
+        pointsPerRound,
+        points,
+        gameId,
+      });
+      await highscoresRepo.save(newHighscore);
+      highscore = newHighscore;
+    }
+  }
+
   async getSoloHighscoresData(limit: number): Promise<SoloHighscoresData> {
-    // get the high-score (max) for each user that has played the solo game
-    return this.em
-      .getRepository(SoloPlayer)
-      .createQueryBuilder("player")
-      .select("u.username", "username")
-      .addSelect("MAX(player.points)", "points")
-      .addSelect("RANK() OVER (ORDER BY MAX(player.points) DESC)", "rank")
-      .innerJoin(SoloGame, "game", "game.playerId = player.id")
-      .innerJoin(User, "u", "u.id = player.userId")
-      .where("game.status = :status", { status: "victory" })
-      .groupBy("u.username")
-      .having("MAX(player.points) > 0")
-      .orderBy("points", "DESC")
+    // get the top players in the solo highscores table
+    const highscoresData = await this.em
+      .getRepository(SoloHighscores)
+      .createQueryBuilder("highscores")
+      .select("ROW_NUMBER() OVER (ORDER BY highscores.pointsPerRound DESC)::integer as rank")
+      .addSelect("user.username", "username")
+      .addSelect("highscores.points", "points")
+      .addSelect("highscores.maxRound", "maxRound")
+      .addSelect("highscores.pointsPerRound", "pointsPerRound")
+      .innerJoin("highscores.user", "user")
+      .where("highscores.pointsPerRound IS NOT NULL")
+      .orderBy("highscores.pointsPerRound", "DESC")
       .limit(limit)
       .getRawMany();
+    return highscoresData as SoloHighscoresData;
   }
 
   async getSoloPlayerHistory(user: User): Promise<Array<SoloPlayerStatItem>> {
@@ -132,13 +164,14 @@ export class StatsService extends BaseService {
       .innerJoinAndSelect("player.game", "game")
       .where("player.user.id = :userId", { userId: user.id })
       .orderBy("game.dateCreated", "DESC")
-      .select(["game.dateCreated", "game.status", "player.points"])
+      .select(["game.dateCreated", "game.status", "player.points", "game.maxRound"])
       .getMany();
 
     return playerStats.map(stat => ({
       time: stat.game.dateCreated.getTime(),
       points: stat.points ?? 0,
       victory: stat.game.status === "victory",
+      maxRound: stat.game.maxRound,
     }));
   }
 }

@@ -94,6 +94,7 @@ export const PAGE_META: {
   [LEADERBOARD_PAGE]: {
     path: "/leaderboard",
     name: LEADERBOARD_PAGE,
+    props: true,
     meta: {
       requiresAuth: false,
     },
