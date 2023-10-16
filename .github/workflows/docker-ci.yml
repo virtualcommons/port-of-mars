@@ -2,9 +2,9 @@ name: Build/Test Docker Image CI
 
 on:
   push:
-    branches: [ main, solo ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, solo ]
+    branches: [ main ]
 
 jobs:
 
