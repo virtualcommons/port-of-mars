@@ -3,20 +3,20 @@
     <div class="h-100 m-auto p-5" style="max-width: 1200px">
       <b-row class="h-100 m-0">
         <b-col cols="12" class="mh-100 p-2">
-          <b-tabs content-class="mt-3">
+          <b-tabs pills content-class="mt-3 h-100" class="h-100" active-tab-class="h-100">
             <b-tab title="Leaderboard" active>
               <div id="filter-options" class="p-2">
-              <b-form-checkbox v-model="showWithBots" name="check-button" class="mx-3">
-                Include games with bots
-              </b-form-checkbox>
+                <b-form-checkbox v-model="showWithBots" name="check-button" class="mx-3">
+                  Include games with bots
+                </b-form-checkbox>
               </div>
               <div class="h-100-header w-100 content-container">
                 <LeaderboardTable :showWithBots="showWithBots" :limit="50" />
               </div>
             </b-tab>
-            <b-tab title="High Scores">
+            <b-tab title="Solo Highscores">
               <div class="h-100-header w-100 content-container">
-                <HighScoreTable :limit="50" />
+                <SoloHighscoresTable :limit="50" />
               </div>
             </b-tab>
           </b-tabs>
@@ -29,12 +29,12 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import LeaderboardTable from "@port-of-mars/client/components/stats/LeaderboardTable.vue";
-import HighScoreTable from "@port-of-mars/client/components/stats/HighScoreTable.vue";
+import SoloHighscoresTable from "@port-of-mars/client/components/stats/SoloHighscoresTable.vue";
 
 @Component({
   components: {
     LeaderboardTable,
-    HighScoreTable
+    SoloHighscoresTable,
   },
 })
 export default class Leaderboard extends Vue {

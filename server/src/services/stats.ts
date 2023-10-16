@@ -8,10 +8,7 @@ import {
 import { Game, Player, SoloGame, SoloPlayer } from "@port-of-mars/server/entity";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { IsNull, Not, SelectQueryBuilder } from "typeorm";
-import { settings } from "@port-of-mars/server/settings";
 import { SoloHighscores } from "@port-of-mars/server/entity/SoloHighscores";
-
-const logger = settings.logging.getLogger(__filename);
 
 export class StatsService extends BaseService {
   /* Player stats */

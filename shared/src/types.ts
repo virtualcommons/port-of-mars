@@ -47,7 +47,7 @@ export interface SoloHighscoresItem {
   points: number;
   maxRound: number;
   pointsPerRound: number;
-};
+}
 
 export type SoloHighscoresData = Array<SoloHighscoresItem>;
 

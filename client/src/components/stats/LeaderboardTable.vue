@@ -50,7 +50,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { StatsAPI } from "@port-of-mars/client/api/stats/request";
-import { LeaderboardData } from "@port-of-mars/shared/types";
+import { LeaderboardData, LeaderboardItem } from "@port-of-mars/shared/types";
 
 @Component({})
 export default class Leaderboard extends Vue {
@@ -75,17 +75,27 @@ export default class Leaderboard extends Vue {
   async fetchLeaderboardData() {
     this.api = new StatsAPI(this.$store, this.$ajax);
     this.leaderboardData = await this.api.getLeaderboardData(this.limit);
-    // highlight top player(s)
-    const noBots = this.leaderboardData.withoutBots;
-    if (noBots && noBots.length > 0) {
-      const topPlayer = noBots[0];
-      const maxPoints = topPlayer.points;
-      for (const player of noBots) {
-        if (player.points < maxPoints) break;
-        // FIXME: look into better color palette
-        (player as any)._rowVariant = "success";
-      }
-    }
+    this.highlightLeaderAndSelf();
+  }
+
+  highlightLeaderAndSelf() {
+    // dont highlight leader in the 'with bots' table
+    this.highlightLeader(this.leaderboardData.withoutBots);
+    this.highlightSelf(this.leaderboardData.withoutBots);
+    this.highlightSelf(this.leaderboardData.withBots);
+  }
+
+  highlightLeader(leaderboard: LeaderboardItem[]) {
+    const topScore = leaderboard[0].points;
+    leaderboard
+      .filter(player => player.points === topScore)
+      .forEach(player => ((player as any)._rowVariant = "success"));
+  }
+
+  highlightSelf(withOrWithoutBots: LeaderboardItem[]) {
+    const { username } = this.$store.state.user;
+    const self = withOrWithoutBots.find(player => player.username === username);
+    if (self) (self as any)._rowVariant = "primary";
   }
 
   getWinsLosses(item: any) {
