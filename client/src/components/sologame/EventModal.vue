@@ -1,6 +1,6 @@
 <template>
   <b-modal
-    v-model="visible"
+    v-model="localVisible"
     centered
     no-stacking
     hide-header
@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from "vue-property-decorator";
+import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import EventCard from "@port-of-mars/client/components/sologame/EventCard.vue";
 import { EventCardData } from "@port-of-mars/shared/sologame";
 
@@ -26,6 +26,27 @@ import { EventCardData } from "@port-of-mars/shared/sologame";
 export default class EventModal extends Vue {
   @Prop() event!: EventCardData;
   @Prop({ default: false }) visible!: boolean;
+
+  localVisible = false;
+
+  created() {
+    this.localVisible = this.visible;
+  }
+
+  // avoid mutating visible directly
+  @Watch("visible")
+  onVisibleChanged(newVal: boolean) {
+    this.localVisible = newVal;
+  }
+
+  // briefly close the modal when the event changes to show the transition
+  @Watch("event.deckCardId")
+  async onDeckCardIdChanged() {
+    this.localVisible = false;
+    await this.$nextTick();
+    await new Promise(resolve => setTimeout(resolve, 300));
+    this.localVisible = true;
+  }
 }
 </script>
 

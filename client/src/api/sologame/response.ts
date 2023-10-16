@@ -46,19 +46,19 @@ export function applySoloGameServerResponses(room: Room, component: any) {
       "round",
       "timeRemaining",
       "systemHealth",
-      "activeRoundCardIndex",
+      "activeCardId",
       "canInvest",
       "isRoundTransitioning",
       "status",
     ]);
   };
 
-  room.state.roundEventCards.onAdd = (eventCard: any, key: number) => {
-    component.state.roundEventCards.push(deschemify(eventCard));
+  room.state.visibleEventCards.onAdd = (eventCard: any, key: number) => {
+    component.state.visibleEventCards.push(deschemify(eventCard));
   };
 
-  room.state.roundEventCards.onRemove = (eventCard: any, key: number) => {
-    component.state.roundEventCards.shift();
+  room.state.visibleEventCards.onRemove = (eventCard: any, key: number) => {
+    component.state.visibleEventCards.shift();
   };
 
   room.onMessage("set-hidden-params", (msg: SetHiddenParams) => {

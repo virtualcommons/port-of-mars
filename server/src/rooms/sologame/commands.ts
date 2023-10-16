@@ -65,6 +65,7 @@ export class SetGameParamsCmd extends CmdWithoutPayload {
       defaults.threeCardThreshold.min,
       threeCardThresholdMax
     );
+    this.state.updateVisibleCards();
   }
 }
 
@@ -117,37 +118,38 @@ export class SendHiddenParamsCmd extends CmdWithoutPayload {
 }
 export class ApplyCardCmd extends Cmd<{ playerSkipped: boolean }> {
   validate() {
-    return (
-      this.state.activeRoundCardIndex >= 0 &&
-      this.state.activeRoundCardIndex < this.state.roundEventCards.length &&
-      this.state.status === "incomplete"
-    );
+    return this.state.activeCardId >= 0 && this.state.status === "incomplete";
   }
 
   async execute({ playerSkipped } = this.payload) {
+    if (!this.state.activeCard) return;
+
     if (playerSkipped) {
       this.room.eventTimeout?.clear();
     }
 
-    if (this.state.player.points < -this.state.activeRoundCard!.pointsEffect) {
+    if (this.state.player.points < -this.state.activeCard.pointsEffect) {
       this.state.player.points = 0; // prevent overflow
     } else {
-      this.state.player.points += this.state.activeRoundCard!.pointsEffect;
+      this.state.player.points += this.state.activeCard.pointsEffect;
     }
 
-    if (this.state.player.resources < -this.state.activeRoundCard!.resourcesEffect) {
+    if (this.state.player.resources < -this.state.activeCard.resourcesEffect) {
       this.state.player.resources = 0;
     } else {
-      this.state.player.resources += this.state.activeRoundCard!.resourcesEffect;
+      this.state.player.resources += this.state.activeCard.resourcesEffect;
     }
     // system health shouldn't go above the max or below 0
     this.state.systemHealth = Math.max(
       0,
       Math.min(
         SoloGameState.DEFAULTS.systemHealthMax,
-        this.state.systemHealth + this.state.activeRoundCard!.systemHealthEffect
+        this.state.systemHealth + this.state.activeCard.systemHealthEffect
       )
     );
+
+    this.state.activeCard.expired = true; // expire the card
+    this.state.updateVisibleCards();
 
     if (this.state.systemHealth <= 0) {
       return [
@@ -160,12 +162,13 @@ export class ApplyCardCmd extends Cmd<{ playerSkipped: boolean }> {
     }
 
     // if we still have cards left, prepare the next one
-    if (this.state.activeRoundCardIndex < this.state.roundEventCards.length - 1) {
-      this.state.activeRoundCardIndex += 1;
+    const nextRoundCard = this.state.nextRoundCard;
+    if (nextRoundCard) {
+      this.state.activeCardId = nextRoundCard.deckCardId;
       return new StartEventTimerCmd();
     } else {
       this.state.canInvest = true;
-      this.state.activeRoundCardIndex = -1;
+      this.state.activeCardId = -1;
     }
   }
 }
@@ -180,26 +183,41 @@ export class StartEventTimerCmd extends CmdWithoutPayload {
 
 export class DrawCardsCmd extends CmdWithoutPayload {
   execute() {
-    let drawCount = 1;
-    if (this.state.systemHealth > this.state.twoCardThreshold) {
-      drawCount = 1;
-    } else if (this.state.systemHealth > this.state.threeCardThreshold) {
-      drawCount = 2;
-    } else {
-      drawCount = 3;
-    }
+    let drawCount = this.getDrawCount();
     // FIXME:
     // this crashes if we run out of cards, should find a way to handle that (rare) case
     // min of 30 cards max of 14 rounds, max of ~35 cards encountered though very unlikely
-    this.state.roundEventCards.push(...this.state.eventCardDeck.splice(0, drawCount));
+    this.drawRoundCards(drawCount);
     // draw 2 more if murphy's law is in play
     if (this.state.roundEventCards.some(card => card.isMurphysLaw)) {
       drawCount += 2;
-      this.state.roundEventCards.push(...this.state.eventCardDeck.splice(0, 2));
+      this.drawRoundCards(2);
     }
     this.state.timeRemaining += SoloGameState.DEFAULTS.eventTimeout * drawCount;
-    this.state.activeRoundCardIndex = 0;
+    const nextRoundCard = this.state.nextRoundCard;
+    if (nextRoundCard) {
+      this.state.activeCardId = nextRoundCard.deckCardId;
+    } else {
+      this.state.activeCardId = -1;
+    }
+    this.state.updateVisibleCards();
     return new StartEventTimerCmd();
+  }
+
+  drawRoundCards(count: number) {
+    let drawn = 0;
+    for (const card of this.state.eventCardDeck) {
+      if (!card.expired && drawn < count) {
+        card.inPlay = true;
+        drawn++;
+      }
+    }
+  }
+
+  getDrawCount() {
+    if (this.state.systemHealth > this.state.twoCardThreshold) return 1;
+    if (this.state.systemHealth > this.state.threeCardThreshold) return 2;
+    return 3;
   }
 }
 
@@ -262,7 +280,11 @@ export class SetNextRoundCmd extends CmdWithoutPayload {
 
     this.state.player.resources = defaults.resources;
     this.state.timeRemaining = defaults.timeRemaining;
-    this.state.roundEventCards.splice(0, this.state.roundEventCards.length);
+
+    this.state.eventCardDeck.forEach(card => {
+      card.inPlay = false;
+    });
+    this.state.updateVisibleCards();
     return new DrawCardsCmd();
   }
 }
