@@ -1,4 +1,4 @@
-<!-- Vacuum flourescent display styled numbers -->
+<!-- vacuum fluorescent display style numbers -->
 <template>
   <div class="d-flex align-items-center position-relative">
     <div class="vfd-text-underlay" :style="textStyle">

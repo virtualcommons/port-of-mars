@@ -10,7 +10,7 @@ const _marsEvents: Array<MarsEventData> = [
   {
     id: "audit",
     name: "Audit",
-    effect: `In this round, players SOLO_ROOM_NAMEwill be able to view each other's accomplishments, inventories, resources and investment decisions.`,
+    effect: `In this round, players will be able to view each other's accomplishments, inventories, resources and investment decisions.`,
     flavorText: `"Of course we trust everyone to be truthful. But it doesn't hurt to check now and again." - The Politician`,
     clientViewHandler: "AUDIT" as const,
     duration: 1,
