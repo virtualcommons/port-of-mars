@@ -4,14 +4,13 @@
       <div v-if="isVictory" class="mb-5">
         <h1 class="text-success">Success</h1>
         <p>
-          You've successfully passed the rigors and challenges of this Port of Mars solo trial. Congratulations!
+          You've successfully passed the rigors and challenges of this Port of Mars solo trial.
+          Congratulations!
         </p>
       </div>
       <div v-else class="mb-5">
         <h1 class="text-danger">Simulation Failed</h1>
-        <p>
-          The simulated environment on Port of Mars is harsh and unforgiving. Please try again!
-        </p>
+        <p>The simulated environment on Port of Mars is harsh and unforgiving. Please try again!</p>
       </div>
       <div class="d-flex mb-5">
         <div class="w-50 pr-3">

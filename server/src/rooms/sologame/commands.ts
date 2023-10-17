@@ -206,11 +206,12 @@ export class DrawCardsCmd extends CmdWithoutPayload {
 
   drawRoundCards(count: number) {
     let drawn = 0;
-    for (const card of this.state.eventCardDeck) {
-      if (!card.expired && drawn < count) {
-        card.inPlay = true;
-        drawn++;
+    for (const card of this.state.upcomingEventCards) {
+      if (drawn === count) {
+        break;
       }
+      card.inPlay = true;
+      drawn++;
     }
   }
 

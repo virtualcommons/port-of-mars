@@ -28,7 +28,9 @@
               />
               <div v-else class="d-flex flex-column align-items-center justify-content-center">
                 <h1 class="text-danger mb-3"><b-icon icon="eye-slash-fill" /></h1>
-                <h4 class="text-danger text-uppercase text-center">Warning: Threshold Sensors Unavailable</h4>
+                <h4 class="text-danger text-uppercase text-center">
+                  Warning: Threshold Sensors Unavailable
+                </h4>
               </div>
             </div>
           </div>

@@ -3,24 +3,31 @@
     <div class="w-75 mb-5">
       <h4>Port of Mars: Solo Mode</h4>
       <p>
-        In this Port of Mars solo game you must balance investing resources for yourself
-        versus investing in the maintenance of your habitat's life support systems, called <b>System Health</b>. 
-        There'll be a limited number of rounds where you can invest your time in System Health or
-        keep them for yourself to earn Points.
+        In this Port of Mars solo game you must balance investing resources for yourself versus
+        investing in the maintenance of your habitat's life support systems, called
+        <b>System Health</b>. There'll be a limited number of rounds where you can invest your time
+        in System Health or keep them for yourself to earn Points.
       </p>
       <div class="w-50 m-auto">
         <SegmentedBar :min="0" :max="7" :asInput="true" v-model="demoValue" />
         <p class="text-center">
-          <i><small>Click, scroll, or drag to increase or decrease your investment in System Health</small></i>
+          <i
+            ><small
+              >Click, scroll, or drag to increase or decrease your investment in System
+              Health</small
+            ></i
+          >
         </p>
       </div>
       <p>
-        Whatever you don't invest in System Health will be converted to Points and added to your Total Points.
-        In other words, the more you invest in System Health, the less Points you will earn, and vice versa.
-        If System Health drops to 0, your life support systems will fail and the game will end.
+        Whatever you don't invest in System Health will be converted to Points and added to your
+        Total Points. In other words, the more you invest in System Health, the less Points you will
+        earn, and vice versa. If System Health drops to 0, your life support systems will fail and
+        the game will end.
       </p>
       <p>
-        On each round after the first round, random event cards will be drawn that can have a variety of effects on the game.
+        On each round after the first round, random event cards will be drawn that can have a
+        variety of effects on the game.
       </p>
     </div>
     <p>Click Start to begin Port of Mars: Solo Mode</p>

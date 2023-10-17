@@ -98,6 +98,10 @@ export class SoloGameState extends Schema {
     return this.eventCardDeck.filter(card => card.inPlay);
   }
 
+  get upcomingEventCards() {
+    return this.eventCardDeck.filter(card => !card.inPlay && !card.expired);
+  }
+
   get nextRoundCard() {
     return this.roundEventCards.find(card => !card.expired);
   }
