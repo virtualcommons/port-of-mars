@@ -21,7 +21,7 @@ BUILD_ID=$(shell git describe --tags --abbrev=1)
 
 .PHONY: build
 build: docker-compose.yml
-	docker compose pull db
+	docker compose pull db redis
 	docker compose build --pull
 
 .PHONY: browser
@@ -126,14 +126,18 @@ test-server: test-setup
 
 .PHONY: deploy
 deploy: build
-	docker compose pull db redis
 	docker compose up -d 
-
 
 .PHONY: buildprod
 buildprod: docker-compose.yml
 	docker compose run --rm client yarn build
 	docker compose run --rm server yarn build
+
+.PHONY: docker-clean
+docker-clean:
+	docker volume prune -a -f
+	docker compose down
+	docker compose build --pull --no-cache
 
 .PHONY: clean
 clean:
