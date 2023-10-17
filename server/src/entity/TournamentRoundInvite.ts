@@ -6,8 +6,8 @@ import {
   PrimaryGeneratedColumn,
   Unique,
 } from "typeorm";
-import { TournamentRound } from "@port-of-mars/server/entity/TournamentRound";
-import { User } from "@port-of-mars/server/entity/User";
+import { TournamentRound } from "./TournamentRound";
+import { User } from "./User";
 
 @Entity()
 @Unique(["user", "tournamentRound"])

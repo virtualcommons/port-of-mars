@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, OneToMany, JoinColumn } from "typeorm";
-import { SoloMarsEventDeckCard } from "@port-of-mars/server/entity/SoloMarsEventDeckCard";
+import { SoloMarsEventDeckCard } from "./SoloMarsEventDeckCard";
 
 @Entity()
 export class SoloMarsEventDeck {

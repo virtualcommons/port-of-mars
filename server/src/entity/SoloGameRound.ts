@@ -7,7 +7,7 @@ import {
   JoinColumn,
   OneToMany,
 } from "typeorm";
-import { SoloPlayerDecision } from "@port-of-mars/server/entity/SoloPlayerDecision";
+import { SoloPlayerDecision } from "./SoloPlayerDecision";
 import { SoloMarsEventDeckCard } from "./SoloMarsEventDeckCard";
 
 @Entity()

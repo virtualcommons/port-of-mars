@@ -144,6 +144,7 @@ export class StatsService extends BaseService {
     const highscoresData = await this.em
       .getRepository(SoloHighScore)
       .createQueryBuilder("highscores")
+      // rank is the row number when ordered by pointsPerRound (normalized score)
       .select("ROW_NUMBER() OVER (ORDER BY highscores.pointsPerRound DESC)::integer as rank")
       .addSelect("user.username", "username")
       .addSelect("highscores.points", "points")

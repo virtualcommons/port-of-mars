@@ -7,7 +7,7 @@ import {
   CreateDateColumn,
   JoinColumn,
 } from "typeorm";
-import { SoloGameTreatment } from "@port-of-mars/server/entity/SoloGameTreatment";
+import { SoloGameTreatment } from "./SoloGameTreatment";
 import { SoloMarsEventDeck } from "./SoloMarsEventDeck";
 import { SoloPlayer } from "./SoloPlayer";
 import { SoloGameStatus } from "@port-of-mars/shared/sologame";

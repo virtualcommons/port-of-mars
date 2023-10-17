@@ -8,7 +8,7 @@ import {
   ManyToOne,
 } from "typeorm";
 import { User } from "./User";
-import { SoloGame } from "@port-of-mars/server/entity/SoloGame";
+import { SoloGame } from "./SoloGame";
 
 @Entity()
 export class SoloHighScore {
