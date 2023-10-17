@@ -11,7 +11,7 @@ import { User } from "./User";
 import { SoloGame } from "@port-of-mars/server/entity/SoloGame";
 
 @Entity()
-export class SoloHighscores {
+export class SoloHighScore {
   @PrimaryGeneratedColumn()
   id!: number;
 

@@ -2,7 +2,7 @@ import { url } from "@port-of-mars/client/util";
 import {
   LeaderboardData,
   PlayerStatItem,
-  SoloHighscoresData,
+  SoloHighScoreData,
   SoloPlayerStatItem,
 } from "@port-of-mars/shared/types";
 import { TStore } from "@port-of-mars/client/plugins/tstore";
@@ -36,7 +36,7 @@ export class StatsAPI {
     }
   }
 
-  async getSoloHighscoresData(limit?: number): Promise<SoloHighscoresData> {
+  async getSoloHighScoreData(limit?: number): Promise<SoloHighScoreData> {
     try {
       const params = limit ? `?limit=${limit}` : "";
       return await this.ajax.get(url(`/stats/solo/highscores${params}`), ({ data }) => {

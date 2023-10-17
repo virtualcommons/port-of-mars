@@ -29,8 +29,8 @@ statsRouter.get("/solo/highscores", async (req, res, next) => {
   const limitStr = req.query.limit as string;
   const limit = parseInt(limitStr) || 50;
   try {
-    const highscoresData = await getServices().leaderboard.getSoloHighscoresData(limit);
-    res.json(highscoresData);
+    const highscoreData = await getServices().leaderboard.getSoloHighScoreData(limit);
+    res.json(highscoreData);
   } catch (e) {
     next(e);
   }

@@ -14,9 +14,9 @@
                 <LeaderboardTable :showWithBots="showWithBots" :limit="50" />
               </div>
             </b-tab>
-            <b-tab title="Solo Highscores" :active="showSolo">
+            <b-tab title="Solo High Scores" :active="showSolo">
               <div class="h-100-header w-100 content-container">
-                <SoloHighscoresTable :limit="50" />
+                <SoloHighScoresTable :limit="50" />
               </div>
             </b-tab>
           </b-tabs>
@@ -29,12 +29,12 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import LeaderboardTable from "@port-of-mars/client/components/stats/LeaderboardTable.vue";
-import SoloHighscoresTable from "@port-of-mars/client/components/stats/SoloHighscoresTable.vue";
+import SoloHighScoresTable from "@port-of-mars/client/components/stats/SoloHighScoresTable.vue";
 
 @Component({
   components: {
     LeaderboardTable,
-    SoloHighscoresTable,
+    SoloHighScoresTable,
   },
 })
 export default class Leaderboard extends Vue {

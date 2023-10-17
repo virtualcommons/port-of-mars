@@ -41,7 +41,7 @@ export type AuthData = ProfileData & {
   isVerified: boolean;
 };
 
-export interface SoloHighscoresItem {
+export interface SoloHighScoreItem {
   rank: number;
   username: string;
   points: number;
@@ -49,7 +49,7 @@ export interface SoloHighscoresItem {
   pointsPerRound: number;
 }
 
-export type SoloHighscoresData = Array<SoloHighscoresItem>;
+export type SoloHighScoreData = Array<SoloHighScoreItem>;
 
 export interface LeaderboardItem {
   rank: number;

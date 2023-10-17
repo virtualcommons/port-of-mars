@@ -7,8 +7,8 @@
     striped
     :style="`max-height: ${maxHeight}`"
     class="h-100 m-0 custom-table"
-    :fields="highscoresFields"
-    :items="highscoresData"
+    :fields="highscoreFields"
+    :items="highscoreData"
     sort-by="rank"
     :sort-asc="true"
     sort-icon-left
@@ -39,18 +39,18 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { StatsAPI } from "@port-of-mars/client/api/stats/request";
-import { SoloHighscoresData } from "@port-of-mars/shared/types";
+import { SoloHighScoreData } from "@port-of-mars/shared/types";
 
 @Component({})
-export default class SoloHighscoresTable extends Vue {
+export default class SoloHighScoresTable extends Vue {
   @Prop({ default: 50 }) limit!: number;
   @Prop({ default: true }) showGameStats!: boolean;
   @Prop({ default: "none" }) maxHeight!: string;
 
   api!: StatsAPI;
 
-  highscoresData: SoloHighscoresData = [];
-  highscoresFields = [
+  highscoreData: SoloHighScoreData = [];
+  highscoreFields = [
     { key: "rank", sortable: true },
     { key: "username" },
     { key: "pointsPerRound" },
@@ -58,17 +58,16 @@ export default class SoloHighscoresTable extends Vue {
   ];
 
   async created() {
-    await this.fetchSoloHighscoresData();
+    await this.fetchSoloHighScoreData();
   }
-
-  async fetchSoloHighscoresData() {
+  async fetchSoloHighScoreData() {
     this.api = new StatsAPI(this.$store, this.$ajax);
-    this.highscoresData = await this.api.getSoloHighscoresData(this.limit);
+    this.highscoreData = await this.api.getSoloHighScoreData(this.limit);
     this.highlightLeaderAndSelf();
   }
 
   highlightLeaderAndSelf() {
-    const highscores = this.highscoresData;
+    const highscores = this.highscoreData;
     const { username } = this.$store.state.user;
     const topScore = highscores[0].points;
 

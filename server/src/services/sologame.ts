@@ -157,9 +157,9 @@ export class SoloGameService extends BaseService {
     const player = await repo.findOneOrFail({ gameId });
     player.points = points;
     await repo.save(player);
-    // if the game was a success, update the highscores table as well
+    // if the game was a success, update the player's highscore table as well
     if (status === "victory") {
-      await this.sp.leaderboard.updateSoloHighscores(gameId, points, maxRound);
+      await this.sp.leaderboard.updateSoloHighScore(gameId, points, maxRound);
     }
   }
 
