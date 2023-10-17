@@ -68,7 +68,7 @@ items:
   event6:
     id: 6
     codeName: "hullBreach"
-    displayName: "hullBreach"
+    displayName: "Hull Breach"
     flavorText: "Accidents happen. It's unavoidable. Our job is to do our best to avoid them all the same."
     effect: "Lose {roll} system health."
     drawMin: 4
@@ -106,8 +106,8 @@ items:
     resourcesMultiplier: 0
   event9:
     id: 9
-    codeName: "hitTheMotherload"
-    displayName: "Hit the Motherload"
+    codeName: "hitTheMotherlode"
+    displayName: "Hit the Motherlode"
     flavorText: "A valuable find. Fortunately for us, not that useful for repairs."
     effect: "Gain {roll} point{s}."
     drawMin: 4
