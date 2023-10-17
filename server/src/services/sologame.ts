@@ -66,6 +66,7 @@ export class SoloGameService extends BaseService {
         .leftJoin("soloPlayer.game", "soloGame")
         .select("COALESCE(MAX(soloGame.treatmentId), 0)", "max")
         .where("user.id = :userId", { userId })
+        .andWhere("soloGame.status != :status", { status: "incomplete" })
         .getRawOne()
     ).max;
 
