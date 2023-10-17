@@ -39,14 +39,14 @@ export class Player extends Schema {
 }
 
 export class TreatmentParams extends Schema {
-  @type("boolean") isKnownNumberOfRounds = false;
+  @type("boolean") isNumberOfRoundsKnown = false;
   @type("boolean") isEventDeckKnown = false;
   @type("string") thresholdInformation: "unknown" | "range" | "known" = "unknown";
 
   constructor(data?: TreatmentData) {
     super();
     if (!data) return;
-    this.isKnownNumberOfRounds = data.isKnownNumberOfRounds;
+    this.isNumberOfRoundsKnown = data.isNumberOfRoundsKnown;
     this.isEventDeckKnown = data.isEventDeckKnown;
     this.thresholdInformation = data.thresholdInformation;
   }
@@ -74,8 +74,8 @@ export class SoloGameState extends Schema {
   gameId = 0;
   // hidden properties
   maxRound = SoloGameState.DEFAULTS.maxRound.max;
-  twoCardThreshold = SoloGameState.DEFAULTS.twoCardThreshold.max;
-  threeCardThreshold = SoloGameState.DEFAULTS.threeCardThreshold.max;
+  twoEventsThreshold = SoloGameState.DEFAULTS.twoEventsThreshold.max;
+  threeEventsThreshold = SoloGameState.DEFAULTS.threeEventsThreshold.max;
   eventCardDeck: Array<EventCard> = [];
 
   get points() {
@@ -120,8 +120,8 @@ export class SoloGameState extends Schema {
   static DEFAULTS = {
     maxRound: { min: 6, max: 14 },
     roundTransitionDuration: 3,
-    twoCardThreshold: { min: 12, max: 20 },
-    threeCardThreshold: { min: 5, max: 15 },
+    twoEventsThreshold: { min: 12, max: 20 },
+    threeEventsThreshold: { min: 5, max: 15 },
     systemHealthMax: 25,
     systemHealthWear: 5,
     timeRemaining: 30,

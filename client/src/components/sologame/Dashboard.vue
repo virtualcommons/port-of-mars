@@ -56,8 +56,8 @@
               <div class="vfd-container p-2">
                 <VFDNumberDisplay :digits="2" :value="state.round" variant="red" size="2" />
               </div>
-              <h4 v-if="state.treatmentParams.isKnownNumberOfRounds" class="mx-2">/</h4>
-              <div v-if="state.treatmentParams.isKnownNumberOfRounds" class="vfd-container p-2">
+              <h4 v-if="state.treatmentParams.isNumberOfRoundsKnown" class="mx-2">/</h4>
+              <div v-if="state.treatmentParams.isNumberOfRoundsKnown" class="vfd-container p-2">
                 <VFDNumberDisplay :digits="2" :value="state.maxRound" variant="red" size="2" />
               </div>
             </div>

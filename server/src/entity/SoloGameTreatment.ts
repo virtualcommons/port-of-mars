@@ -7,7 +7,7 @@ export class SoloGameTreatment {
   id!: number;
 
   @Column()
-  isKnownNumberOfRounds!: boolean;
+  isNumberOfRoundsKnown!: boolean;
 
   @Column()
   isEventDeckKnown!: boolean;

@@ -93,8 +93,8 @@ export class SoloGameService extends BaseService {
       deck: await this.createDeck(state.eventCardDeck),
       status: state.status,
       maxRound: state.maxRound,
-      twoCardThreshold: state.twoCardThreshold,
-      threeCardThreshold: state.threeCardThreshold,
+      twoEventsThreshold: state.twoEventsThreshold,
+      threeEventsThreshold: state.threeEventsThreshold,
     });
     await gameRepo.save(game);
     player.gameId = game.id;
@@ -114,7 +114,7 @@ export class SoloGameService extends BaseService {
   async findTreatment(treatmentData: TreatmentData): Promise<SoloGameTreatment> {
     return this.em.getRepository(SoloGameTreatment).findOneOrFail({
       where: {
-        isKnownNumberOfRounds: treatmentData.isKnownNumberOfRounds,
+        isNumberOfRoundsKnown: treatmentData.isNumberOfRoundsKnown,
         isEventDeckKnown: treatmentData.isEventDeckKnown,
         thresholdInformation: treatmentData.thresholdInformation,
       },

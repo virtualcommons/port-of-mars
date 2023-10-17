@@ -15,7 +15,7 @@ export interface EventCardData {
 export type ThresholdInformation = "unknown" | "range" | "known";
 
 export interface TreatmentData {
-  isKnownNumberOfRounds: boolean;
+  isNumberOfRoundsKnown: boolean;
   isEventDeckKnown: boolean;
   thresholdInformation: ThresholdInformation;
 }
@@ -26,14 +26,14 @@ export interface SoloGameClientState {
   status: SoloGameStatus;
   timeRemaining: number;
   systemHealth: number;
-  twoCardThreshold?: number;
-  threeCardThreshold?: number;
-  twoCardThresholdRange?: { min: number; max: number };
-  threeCardThresholdRange?: { min: number; max: number };
+  twoEventsThreshold?: number;
+  threeEventsThreshold?: number;
+  twoEventsThresholdRange?: { min: number; max: number };
+  threeEventsThresholdRange?: { min: number; max: number };
   maxRound?: number;
   round: number;
   treatmentParams: {
-    isKnownNumberOfRounds: boolean;
+    isNumberOfRoundsKnown: boolean;
     isEventDeckKnown: boolean;
     thresholdInformation: "unknown" | "range" | "known";
   };

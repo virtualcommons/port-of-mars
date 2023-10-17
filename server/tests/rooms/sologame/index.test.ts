@@ -85,7 +85,7 @@ describe("a solo game", () => {
       // through a normal game, so we'll do that elsewhere
       await dispatcher.dispatch(new SetTreatmentParamsCmd().setPayload({ user: user1 }));
       expect(state.treatmentParams.isEventDeckKnown).toBeDefined();
-      expect(state.treatmentParams.isKnownNumberOfRounds).toBeDefined();
+      expect(state.treatmentParams.isNumberOfRoundsKnown).toBeDefined();
       expect(state.treatmentParams.thresholdInformation).toBeDefined();
     });
 

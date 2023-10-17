@@ -51,8 +51,8 @@ export class SoloGame {
   maxRound!: number;
 
   @Column()
-  twoCardThreshold!: number;
+  twoEventsThreshold!: number;
 
   @Column()
-  threeCardThreshold!: number;
+  threeEventsThreshold!: number;
 }

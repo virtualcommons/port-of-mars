@@ -52,18 +52,18 @@ export class SetGameParamsCmd extends CmdWithoutPayload {
   execute() {
     const defaults = SoloGameState.DEFAULTS;
     this.state.maxRound = getRandomIntInclusive(defaults.maxRound.min, defaults.maxRound.max);
-    this.state.twoCardThreshold = getRandomIntInclusive(
-      defaults.twoCardThreshold.min,
-      defaults.twoCardThreshold.max
+    this.state.twoEventsThreshold = getRandomIntInclusive(
+      defaults.twoEventsThreshold.min,
+      defaults.twoEventsThreshold.max
     );
     // this formula may need tweaking
-    const threeCardThresholdMax = Math.min(
-      defaults.threeCardThreshold.max,
-      this.state.twoCardThreshold - 3
+    const threeEventsThresholdMax = Math.min(
+      defaults.threeEventsThreshold.max,
+      this.state.twoEventsThreshold - 3
     );
-    this.state.threeCardThreshold = getRandomIntInclusive(
-      defaults.threeCardThreshold.min,
-      threeCardThresholdMax
+    this.state.threeEventsThreshold = getRandomIntInclusive(
+      defaults.threeEventsThreshold.min,
+      threeEventsThresholdMax
     );
     this.state.updateVisibleCards();
   }
@@ -100,15 +100,15 @@ export class SendHiddenParamsCmd extends CmdWithoutPayload {
     if (this.state.treatmentParams.isEventDeckKnown) {
       data.eventCardDeck = this.state.eventCardDeck.map(card => card.toJSON());
     }
-    if (this.state.treatmentParams.isKnownNumberOfRounds) {
+    if (this.state.treatmentParams.isNumberOfRoundsKnown) {
       data.maxRound = this.state.maxRound;
     }
     if (this.state.treatmentParams.thresholdInformation === "known") {
-      data.twoCardThreshold = this.state.twoCardThreshold;
-      data.threeCardThreshold = this.state.threeCardThreshold;
+      data.twoEventsThreshold = this.state.twoEventsThreshold;
+      data.threeEventsThreshold = this.state.threeEventsThreshold;
     } else if (this.state.treatmentParams.thresholdInformation === "range") {
-      data.twoCardThresholdRange = SoloGameState.DEFAULTS.twoCardThreshold;
-      data.threeCardThresholdRange = SoloGameState.DEFAULTS.threeCardThreshold;
+      data.twoEventsThresholdRange = SoloGameState.DEFAULTS.twoEventsThreshold;
+      data.threeEventsThresholdRange = SoloGameState.DEFAULTS.threeEventsThreshold;
     }
     this.room.client.send("set-hidden-params", {
       kind: "set-hidden-params",
@@ -216,8 +216,8 @@ export class DrawCardsCmd extends CmdWithoutPayload {
   }
 
   getDrawCount() {
-    if (this.state.systemHealth > this.state.twoCardThreshold) return 1;
-    if (this.state.systemHealth > this.state.threeCardThreshold) return 2;
+    if (this.state.systemHealth > this.state.twoEventsThreshold) return 1;
+    if (this.state.systemHealth > this.state.threeEventsThreshold) return 2;
     return 3;
   }
 }

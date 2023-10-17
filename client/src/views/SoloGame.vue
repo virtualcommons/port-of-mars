@@ -45,7 +45,7 @@ export default class SoloGame extends Vue {
     systemHealth: 0,
     round: 0,
     treatmentParams: {
-      isKnownNumberOfRounds: false,
+      isNumberOfRoundsKnown: false,
       isEventDeckKnown: false,
       thresholdInformation: "unknown",
     },

@@ -35,7 +35,7 @@ export function applySoloGameServerResponses(room: Room, component: any) {
 
   room.state.treatmentParams.onChange = (changes: DataChange[]) => {
     applyChanges(component.state.treatmentParams, changes, [
-      "isKnownNumberOfRounds",
+      "isNumberOfRoundsKnown",
       "isEventDeckKnown",
       "thresholdInformation",
     ]);
