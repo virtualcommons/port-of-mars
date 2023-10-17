@@ -1,26 +1,26 @@
 <template>
   <div class="d-flex flex-column align-items-center justify-content-center p-3 h-100 solo-game">
     <div class="w-75 mb-5">
-      <h4>How to Play</h4>
+      <h4>Port of Mars: Solo Mode</h4>
       <p>
-        This is a simple investment game where your goal is to balance saving resources for yourself
-        with keeping the system afloat. You will have a limited number of rounds to play, and each
-        round you will be presented with a choice of how much of your limited resources to invest in
-        maintaining the health of the system with a control module like this:
+        In this Port of Mars solo trial you must balance investing resources for yourself
+        versus investing in the maintenance of your habitat's life support systems, called <b>System Health</b>. 
+        You will have a limited number of rounds where you can make decisions to invest your time in System Health or
+        keep them for yourself to earn Points.
       </p>
       <div class="w-50 m-auto">
         <SegmentedBar :min="0" :max="7" :asInput="true" v-model="demoValue" />
         <p class="text-center">
-          <i><small>Click, scroll, or drag to increase your investment</small></i>
+          <i><small>Click, scroll, or drag to increase or decrease your investment in System Health</small></i>
         </p>
       </div>
       <p>
-        The less you invest, the more points you will earn. If you invest too little, however, the
-        system health will drop to zero and the game will end in defeat.
+        Whatever you don't invest in System Health will be converted to Points and added to your Total Points.
+        In other words, the more you invest in System Health, the less Points you will earn and vice versa.
+        If System Health drops to 0, your life support systems will fail and the simulation will end.
       </p>
       <p>
-        On every round after the first, random event cards that can influence anything in the game
-        will be drawn.
+        On each round after the first round, random event cards will be drawn that can have a variety of effects on your simulation.
       </p>
     </div>
     <p>Ready?</p>
