@@ -20,7 +20,7 @@ import { SoloGameClientState } from "@port-of-mars/shared/sologame";
 import { Vue, Component, Prop } from "vue-property-decorator";
 
 @Component
-export default class Thresholds extends Vue {
+export default class ThresholdInfo extends Vue {
   @Prop() state!: SoloGameClientState;
 
   get twoCardThresholdInfo(): string {

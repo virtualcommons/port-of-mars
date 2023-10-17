@@ -22,7 +22,7 @@
         <div class="d-flex flex-md-row flex-column flex-grow-1 overflow-hidden mh-50">
           <div class="cell-grow mw-35">
             <div>
-              <Threshold
+              <ThresholdInfo
                 v-if="state.treatmentParams.thresholdInformation !== 'unknown'"
                 :state="state"
               />
@@ -116,7 +116,7 @@ import SegmentedBar from "@port-of-mars/client/components/sologame/SegmentedBar.
 import Deck from "@port-of-mars/client/components/sologame/Deck.vue";
 import Investment from "@port-of-mars/client/components/sologame/Investment.vue";
 import Clock from "@port-of-mars/client/components/sologame/Clock.vue";
-import Threshold from "@port-of-mars/client/components/sologame/Threshold.vue";
+import ThresholdInfo from "@port-of-mars/client/components/sologame/ThresholdInfo.vue";
 import VFDNumberDisplay from "@port-of-mars/client/components/sologame/VFDNumberDisplay.vue";
 import HealthGained from "@port-of-mars/client/components/sologame/HealthGained.vue";
 
@@ -128,7 +128,7 @@ import HealthGained from "@port-of-mars/client/components/sologame/HealthGained.
     Investment,
     EventModal,
     Clock,
-    Threshold,
+    ThresholdInfo,
     VFDNumberDisplay,
     HealthGained,
   },
