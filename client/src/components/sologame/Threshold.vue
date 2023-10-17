@@ -2,14 +2,14 @@
   <div v-if="loaded" class="d-flex flex-column justify-content-around p-3">
     <b-alert show variant="warning" class="px-2 py-1 dim-unless-hover">
       <h5 class="d-inline mr-1">+1</h5>
-      additional event will occur at or below
-      <strong>{{ twoCardThreshold }}</strong>
+      additional event(s) will occur
+      <strong>{{ twoCardThresholdInfo }}</strong>
       system health
     </b-alert>
     <b-alert show variant="danger" class="px-2 py-1 m-0 dim-unless-hover">
       <h5 class="d-inline mr-1">+2</h5>
-      additional events will occur at or below
-      <strong>{{ threeCardThreshold }}</strong>
+      additional events will occur
+      <strong>{{ threeCardThresholdInfo }}</strong>
       system health
     </b-alert>
   </div>
@@ -23,21 +23,21 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 export default class Thresholds extends Vue {
   @Prop() state!: SoloGameClientState;
 
-  get twoCardThreshold(): string {
+  get twoCardThresholdInfo(): string {
     if (this.state.treatmentParams.thresholdInformation === "known") {
-      return `${this.state.twoCardThreshold}`;
+      return `at or below ${this.state.twoCardThreshold}`;
     } else {
       const range = this.state.twoCardThresholdRange!;
-      return `around ${range.min}-${range.max}`;
+      return `between ${range.min}-${range.max}`;
     }
   }
 
-  get threeCardThreshold(): string {
+  get threeCardThresholdInfo(): string {
     if (this.state.treatmentParams.thresholdInformation === "known") {
-      return `${this.state.threeCardThreshold}`;
+      return `at or below ${this.state.threeCardThreshold}`;
     } else {
       const range = this.state.threeCardThresholdRange!;
-      return `around ${range.min}-${range.max}`;
+      return `between ${range.min}-${range.max}`;
     }
   }
 
