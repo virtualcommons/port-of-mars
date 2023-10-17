@@ -103,21 +103,13 @@ export default class SegmentedBar extends Vue {
     ];
   }
 
-  // getGlowClass(index: number): string {
-  //   if (index <= this.value) {
-  //     return "vfd-bg-glow";
-  //   } else if (index <= this.value + this.delta) {
-  //     return "vfd-bg-glow-dim";
-  //   } else {
-  //     return "vfd-bg-underlay";
-  //   }
-  // }
-  //  }
   getGlowClass(index: number): string {
-    let dimStart = this.value + this.delta;
-    if (index <= Math.min(this.value, dimStart)) {
+    const dimStart = this.value + this.delta;
+    const minDim = Math.min(this.value, dimStart);
+    const maxDim = Math.max(this.value, dimStart);
+    if (index <= minDim) {
       return "vfd-bg-glow";
-    } else if (index <= Math.max(this.value, dimStart)) {
+    } else if (index <= maxDim) {
       return "vfd-bg-glow-dim";
     } else {
       return "vfd-bg-underlay";
@@ -147,6 +139,8 @@ export default class SegmentedBar extends Vue {
   }
 
   mounted() {
+    // FIXME: consider if we really want to use scroll wheel to increment / decrement the value, keyboard input might be
+    // better for accessibility (+ / -) (<- ->)?
     if (this.asInput) {
       (this.$refs.bar as HTMLElement).addEventListener("wheel", this.handleWheel);
     }

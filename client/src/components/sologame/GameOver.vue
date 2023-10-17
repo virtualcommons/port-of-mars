@@ -9,8 +9,8 @@
         </p>
       </div>
       <div v-else class="mb-5">
-        <h1 class="text-danger">Simulation Failed</h1>
-        <p>The simulated environment on Port of Mars is harsh and unforgiving. Please try again!</p>
+        <h1 class="text-danger">Game Over</h1>
+        <p>Unfortunately you were unable to withstand the perils of Mars. Please try again!</p>
       </div>
       <div class="d-flex mb-5">
         <div class="w-50 pr-3">
@@ -37,7 +37,7 @@
           Play again
         </h4>
       </b-button>
-      <b-button variant="secondary" size="lg" @click="routeToHighscores"
+      <b-button variant="secondary" size="lg" @click="gotoHighScorePage"
         ><h4 class="mb-0">
           <b-icon-trophy scale="0.75" />
           High Scores
@@ -67,10 +67,11 @@ export default class GameOver extends Vue {
   }
 
   reload() {
+    // FIXME: is a full refresh required or would `this.$router.go(0)` or equivalent cache-busting router call work?
     window.location.reload();
   }
 
-  routeToHighscores() {
+  gotoHighScorePage() {
     this.$router.push({ name: LEADERBOARD_PAGE, params: { showSolo: true } as any });
   }
 }
