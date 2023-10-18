@@ -36,10 +36,10 @@
         <b-nav-item class="mx-2" :to="leaderboard" exact-active-class="active" title="Leaderboard"
           >Leaderboard</b-nav-item
         >
-        <b-nav-item class="mx-2" :to="lobby" exact-active-class="active" title="Game Lobby">
+        <b-nav-item class="mx-2" :to="solo" exact-active-class="active" title="Solo Minigame">
           Solo Mode
         </b-nav-item>
-        <b-nav-item class="mx-2" :to="solo" exact-active-class="active" title="Solo Minigame">
+        <b-nav-item class="mx-2" :to="lobby" exact-active-class="active" title="Game Lobby">
           Play Port of Mars
         </b-nav-item>
       </b-navbar-nav>
