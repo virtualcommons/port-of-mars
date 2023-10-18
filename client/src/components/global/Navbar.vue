@@ -1,5 +1,5 @@
 <template>
-  <b-navbar tag="header" toggleable="md" type="dark" variant="dark" class="w-100" fixed="top">
+  <b-navbar tag="header" toggleable="lg" type="dark" variant="dark" class="w-100" fixed="top">
     <b-navbar-brand :to="home">
       <b-img
         id="logo"
@@ -37,10 +37,10 @@
           >Leaderboard</b-nav-item
         >
         <b-nav-item class="mx-2" :to="lobby" exact-active-class="active" title="Game Lobby">
-          Play
+          Solo Mode
         </b-nav-item>
         <b-nav-item class="mx-2" :to="solo" exact-active-class="active" title="Solo Minigame">
-          Play Solo
+          Play Port of Mars
         </b-nav-item>
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto">
