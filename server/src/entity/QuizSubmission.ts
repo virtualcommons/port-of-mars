@@ -6,9 +6,9 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { User } from "@port-of-mars/server/entity/User";
+import { User } from "./User";
 import { Quiz } from "./Quiz";
-import { QuestionResponse } from "@port-of-mars/server/entity/QuestionResponse";
+import { QuestionResponse } from "./QuestionResponse";
 
 @Entity()
 export class QuizSubmission {

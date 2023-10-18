@@ -14,7 +14,7 @@
     "start": "ts-node-dev -r tsconfig-paths/register src/index.ts | tee -a /var/log/port-of-mars/index.log",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "dangerously-dropdb": "dropdb -U marsmadness -h db port_of_mars",
-    "initdb": "createdb -U marsmadness -h db port_of_mars ; yarn typeorm migration:run && /scripts/openbeta/setup.sh",
+    "initdb": "createdb -U marsmadness -h db port_of_mars ; yarn typeorm migration:run && /scripts/openbeta/setup.sh ; yarn load-fixtures ./fixtures/sologame",
     "dangerously-loaddb": "psql -h db -U marsmadness port_of_mars < pom-db.sql",
     "dangerously-resetdb": "dropdb -U marsmadness -h db port_of_mars && createdb -U marsmadness -h db port_of_mars",
     "migrate": "yarn typeorm migration:run",
@@ -25,7 +25,7 @@
     "lint:fix": "eslint --fix -c .eslintrc.js ./ ../shared --ext .ts",
     "style": "prettier --config ../.prettierrc --check './**/*.ts' '../shared/**/*.ts'",
     "style:fix": "prettier --config ../.prettierrc --write './**/*.ts' '../shared/**/*.ts'",
-    "load-fixtures": "fixtures ./fixtures --config ormconfig.json --require ts-node/register --require tsconfig-paths/register"
+    "load-fixtures": "fixtures --config ormconfig.json --require ts-node/register --require tsconfig-paths/register"
   },
   "author": "Center for Behavior, Institutions, and the Environment (https://cbie.asu.edu)",
   "license": "MIT",
@@ -72,6 +72,7 @@
     "yamljs": "^0.3.0"
   },
   "dependencies": {
+    "@colyseus/command": "^0.2.1",
     "@colyseus/schema": "^1.0.25",
     "@sentry/node": "~5.29.2",
     "@types/luxon": "^3.0.2",

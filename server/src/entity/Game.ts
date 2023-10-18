@@ -9,7 +9,7 @@ import {
   OneToOne,
 } from "typeorm";
 import { GameEvent } from "./GameEvent";
-import { Player } from "@port-of-mars/server/entity/Player";
+import { Player } from "./Player";
 import { TournamentRound } from "./TournamentRound";
 
 @Entity()

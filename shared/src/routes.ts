@@ -2,6 +2,7 @@ export const ADMIN_PAGE = "Admin" as const;
 export const LOGIN_PAGE = "Login" as const;
 export const LOBBY_PAGE = "Lobby" as const;
 export const GAME_PAGE = "Game" as const;
+export const SOLO_GAME_PAGE = "SoloGame" as const;
 export const LEADERBOARD_PAGE = "Leaderboard" as const;
 export const PLAYER_HISTORY_PAGE = "PlayerHistory" as const;
 export const CONSENT_PAGE = "Consent" as const;
@@ -19,6 +20,7 @@ export type Page =
   | "Login"
   | "Lobby"
   | "Game"
+  | "SoloGame"
   | "PlayerHistory"
   | "Leaderboard"
   | "Consent"
@@ -32,6 +34,7 @@ export const PAGES: Array<Page> = [
   LOGIN_PAGE,
   LOBBY_PAGE,
   GAME_PAGE,
+  SOLO_GAME_PAGE,
   PLAYER_HISTORY_PAGE,
   LEADERBOARD_PAGE,
   CONSENT_PAGE,
@@ -81,9 +84,17 @@ export const PAGE_META: {
       requiresAuth: true,
     },
   },
+  [SOLO_GAME_PAGE]: {
+    path: "/solo",
+    name: SOLO_GAME_PAGE,
+    meta: {
+      requiresAuth: true,
+    },
+  },
   [LEADERBOARD_PAGE]: {
     path: "/leaderboard",
     name: LEADERBOARD_PAGE,
+    props: true,
     meta: {
       requiresAuth: false,
     },

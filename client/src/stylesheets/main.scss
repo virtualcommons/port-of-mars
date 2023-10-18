@@ -15,6 +15,18 @@
 // Khula
 @import url("https://fonts.googleapis.com/css2?family=Khula:wght@400;600;700&display=swap");
 
+// DSEG14
+@font-face {
+  font-family: "DSEG14 Regular";
+  src: url("./assets/fonts/DSEG14Classic-Regular.woff") format("woff");
+}
+
+@font-face {
+  font-family: "DSEG14 Italic";
+  src: url("./assets/fonts/DSEG14Classic-Italic.woff") format("woff");
+}
+
+
 // ----- HTML ELEMENTS -----
 
 html {
@@ -141,6 +153,7 @@ body {
   --marslog-orange: rgba(170, 111, 0, 0.2);
   --marslog-green: rgba(9, 92, 41, 0.2);
   --trade-request-blue: #659be8;
+
 
   --brown: #754c29;
   --beige: #d9cfc6;

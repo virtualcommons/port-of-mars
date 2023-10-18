@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Question } from "@port-of-mars/server/entity/Question";
-import { QuizSubmission } from "@port-of-mars/server/entity/QuizSubmission";
+import { Question } from "./Question";
+import { QuizSubmission } from "./QuizSubmission";
 
 @Entity()
 export class Quiz {

@@ -24,3 +24,24 @@ statsRouter.get("/history", async (req, res, next) => {
     next(e);
   }
 });
+
+statsRouter.get("/solo/highscores", async (req, res, next) => {
+  const limitStr = req.query.limit as string;
+  const limit = parseInt(limitStr) || 50;
+  try {
+    const highscoreData = await getServices().leaderboard.getSoloHighScoreData(limit);
+    res.json(highscoreData);
+  } catch (e) {
+    next(e);
+  }
+});
+
+statsRouter.get("/solo/history", async (req, res, next) => {
+  try {
+    const user = req.user as User;
+    const playerStats = await getServices().leaderboard.getSoloPlayerHistory(user);
+    res.json(playerStats);
+  } catch (e) {
+    next(e);
+  }
+});

@@ -1,0 +1,119 @@
+entity: SoloMarsEventCard
+items:
+  event1:
+    id: 1
+    codeName: "lifeAsUsual"
+    displayName: "Life As Usual"
+    flavorText: "As the first human outpost on Mars, having a \"usual\" day is pretty unusual."
+    effect: "No special effect."
+    drawMin: 10
+    drawMax: 20
+    rollMin: 0
+    rollMax: 0
+    systemHealthMultiplier: 0
+    pointsMultiplier: 0
+    resourcesMultiplier: 0
+  event2: # needs special casing (draw 2 more cards)
+    id: 2
+    codeName: "murphysLaw"
+    displayName: "Murphy's Law"
+    flavorText: "Residents at Port of Mars know better than to ask, \"what ELSE could go wrong?\""
+    effect: "Reveal 2 more events for this round."
+    drawMin: 1
+    drawMax: 1
+    rollMin: 0
+    rollMax: 0
+    systemHealthMultiplier: 0
+    pointsMultiplier: 0
+    resourcesMultiplier: 0
+  event3:
+    id: 3
+    codeName: "lostTime"
+    displayName: "Lost Time"
+    flavorText: "Time flies when you're trying to stay alive."
+    effect: "Lose {roll} resource{s} for this round."
+    drawMin: 1
+    drawMax: 1
+    rollMin: 1
+    rollMax: 8
+    systemHealthMultiplier: 0
+    pointsMultiplier: 0
+    resourcesMultiplier: -1
+  event4:
+    id: 4
+    codeName: "richDeposit"
+    displayName: "Rich Deposit"
+    flavorText: "A stroke of luck in an otherwise unlucky day."
+    effect: "Gain {roll} resource{s} for this round."
+    drawMin: 1
+    drawMax: 1
+    rollMin: 1
+    rollMax: 8
+    systemHealthMultiplier: 0
+    pointsMultiplier: 0
+    resourcesMultiplier: 1
+  event5:
+    id: 5
+    codeName: "urgentRepairs"
+    displayName: "Urgent Repairs"
+    flavorText: "No pneumatic tires on mars, but there are always holes to patch."
+    effect: "{roll} resource{s} are immediately diverted to system health."
+    drawMin: 1
+    drawMax: 1
+    rollMin: 2
+    rollMax: 7
+    systemHealthMultiplier: 1
+    pointsMultiplier: 0
+    resourcesMultiplier: -1
+  event6:
+    id: 6
+    codeName: "hullBreach"
+    displayName: "Hull Breach"
+    flavorText: "Accidents happen. It's unavoidable. Our job is to do our best to avoid them all the same."
+    effect: "Lose {roll} system health."
+    drawMin: 4
+    drawMax: 4
+    rollMin: 1
+    rollMax: 10
+    systemHealthMultiplier: -1
+    pointsMultiplier: 0
+    resourcesMultiplier: 0
+  event7:
+    id: 7
+    codeName: "softwareUpgrade"
+    displayName: "Software Upgrade"
+    flavorText: "A much needed patch to the system comes online."
+    effect: "Gain {roll} system health."
+    drawMin: 4
+    drawMax: 4
+    rollMin: 1
+    rollMax: 10
+    systemHealthMultiplier: 1
+    pointsMultiplier: 0
+    resourcesMultiplier: 0
+  event8:
+    id: 8
+    codeName: "lostCargo"
+    displayName: "Lost Cargo"
+    flavorText: "Precious cargo, now forever Martian property."
+    effect: "Lose {roll} point{s}."
+    drawMin: 4
+    drawMax: 4
+    rollMin: 1
+    rollMax: 10
+    systemHealthMultiplier: 0
+    pointsMultiplier: -1
+    resourcesMultiplier: 0
+  event9:
+    id: 9
+    codeName: "hitTheMotherlode"
+    displayName: "Hit the Motherlode"
+    flavorText: "A valuable find. Fortunately for us, not that useful for repairs."
+    effect: "Gain {roll} point{s}."
+    drawMin: 4
+    drawMax: 4
+    rollMin: 1
+    rollMax: 10
+    systemHealthMultiplier: 0
+    pointsMultiplier: 1
+    resourcesMultiplier: 0

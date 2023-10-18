@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Player } from "./Player";
+import { SoloPlayer } from "./SoloPlayer";
 import { TournamentRoundInvite } from "./TournamentRoundInvite";
 
 @Entity()
@@ -28,6 +29,9 @@ export class User {
 
   @OneToMany(type => TournamentRoundInvite, invite => invite.user)
   invites!: Array<TournamentRoundInvite>;
+
+  @OneToMany(type => SoloPlayer, soloPlayer => soloPlayer.user)
+  soloPlayers!: Array<SoloPlayer>;
 
   @Column({ default: false })
   passedQuiz!: boolean;
