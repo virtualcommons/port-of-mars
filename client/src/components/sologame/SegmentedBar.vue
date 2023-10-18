@@ -64,6 +64,7 @@ export default class SegmentedBar extends Vue {
   @Prop({ default: 0 }) min!: number;
   @Prop() max!: number;
   @Prop({ default: false }) asInput!: boolean;
+  @Prop({ default: false }) disabled!: boolean; // keep input mode but temporarily disable
   @Prop({ default: 0 }) readonly value!: number;
   @Prop({ default: 0 }) delta!: number;
   @Prop({ default: "" }) segmentClass!: string;
@@ -138,11 +139,21 @@ export default class SegmentedBar extends Vue {
     this.localValue = this.localValue + 1;
   }
 
-  mounted() {
-    // FIXME: consider if we really want to use scroll wheel to increment / decrement the value, keyboard input might be
-    // better for accessibility (+ / -) (<- ->)?
-    if (this.asInput) {
-      (this.$refs.bar as HTMLElement).addEventListener("wheel", this.handleWheel);
+  created() {
+    window.addEventListener("keydown", this.handleKeyDown);
+  }
+
+  handleKeyDown(event: KeyboardEvent) {
+    if (!this.asInput || this.disabled) {
+      return;
+    }
+    switch (event.key) {
+      case "ArrowLeft":
+        this.decrement();
+        break;
+      case "ArrowRight":
+        this.increment();
+        break;
     }
   }
 

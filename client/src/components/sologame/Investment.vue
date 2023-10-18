@@ -5,12 +5,13 @@
       :max="state.player.resources"
       v-model="pendingSystemHealthInvestment"
       :asInput="true"
+      :disabled="!state.canInvest"
       :segment-class="{ 'animate-flashing vfd-green': shouldFlashInvestInput }"
       class="mb-3"
     />
     <div class="text-center">
       <b-button
-        @click="handleInvestButtonClick"
+        @click="handleInvest"
         :disabled="!state.canInvest"
         variant="primary"
         size="lg"
@@ -64,7 +65,20 @@ export default class Investment extends Vue {
     return this.state.player.resources - this.pendingSystemHealthInvestment;
   }
 
-  handleInvestButtonClick() {
+  created() {
+    window.addEventListener("keydown", this.handleKeyDown);
+  }
+
+  handleKeyDown(event: KeyboardEvent) {
+    if (!this.state.canInvest) {
+      return;
+    }
+    if (event.key === "Enter") {
+      this.handleInvest();
+    }
+  }
+
+  handleInvest() {
     this.$emit("invest", this.pendingSystemHealthInvestment);
     // FIXME: only reset to 0 if invest was successful
     this.pendingSystemHealthInvestment = 0;

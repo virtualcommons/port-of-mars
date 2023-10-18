@@ -8,15 +8,21 @@
         <b>System Health</b>. There'll be a limited number of rounds where you can invest your time
         in System Health or keep them for yourself to earn Points.
       </p>
-      <div class="w-50 m-auto">
-        <SegmentedBar :min="0" :max="7" :asInput="true" v-model="demoValue" />
-        <p class="text-center">
-          <i
-            ><small
-              >Click, scroll, or drag to increase or decrease your investment in System
-              Health</small
-            ></i
-          >
+      <div class="cell w-75 mx-auto mb-3 p-3">
+        <SegmentedBar class="mb-3" :min="0" :max="7" :asInput="true" v-model="demoValue" />
+        <p class="text-center text-secondary">
+          <span> Change your investment by clicking, dragging, or using the arrow keys </span>
+          <span>
+            <b-icon-arrow-left-square-fill class="mx-2" scale="1.3"></b-icon-arrow-left-square-fill>
+            <b-icon-arrow-right-square-fill scale="1.3"></b-icon-arrow-right-square-fill>
+          </span>
+        </p>
+        <p class="text-center mb-0">
+          <span class="text-secondary">Press </span>
+          <span class="bg-secondary text-black rounded px-1">Enter</span>
+          <span class="text-secondary"> to submit your investment and </span>
+          <span class="bg-secondary text-black rounded px-1">Space</span>
+          <span class="text-secondary"> to continue through events</span>
         </p>
       </div>
       <p>

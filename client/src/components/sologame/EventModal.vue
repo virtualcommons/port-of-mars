@@ -31,6 +31,13 @@ export default class EventModal extends Vue {
 
   created() {
     this.localVisible = this.visible;
+    window.addEventListener("keydown", this.handleKeyDown);
+  }
+
+  handleKeyDown(event: KeyboardEvent) {
+    if (event.key === " ") {
+      this.$emit("continue");
+    }
   }
 
   // avoid mutating visible directly
