@@ -1,4 +1,4 @@
-FROM node:16-bullseye-slim
+FROM node:lts-bookworm
 
 LABEL maintainer="Allen Lee <allen.lee@asu.edu>"
 
