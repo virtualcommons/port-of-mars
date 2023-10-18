@@ -1,4 +1,4 @@
-import { Room, Client, matchMaker } from "colyseus";
+import { Room, Client, matchMaker, ServerError } from "colyseus";
 import { buildGameOpts } from "@port-of-mars/server/util";
 import { GameRoom } from "@port-of-mars/server/rooms/game";
 import { LobbyClient, LobbyRoomState } from "@port-of-mars/server/rooms/lobby/state";
@@ -52,6 +52,10 @@ export class LobbyRoom extends Room<LobbyRoomState> {
   }
 
   async onAuth(client: Client, options: any, request?: http.IncomingMessage) {
+    const isFreePlayEnabled = await getServices().settings.isFreePlayEnabled();
+    if (!isFreePlayEnabled) {
+      throw new ServerError(400, "Free play is currently disabled.");
+    }
     try {
       const user = await getServices().account.findUserById((request as any).session.passport.user);
       if (user.isBanned) {

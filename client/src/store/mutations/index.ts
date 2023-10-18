@@ -24,6 +24,14 @@ export default {
     Object.assign(state, { ...state, ...initialGameState });
   },
 
+  SET_TOURNAMENT_ENABLED(state: State, enabled: boolean) {
+    state.isTournamentEnabled = enabled;
+  },
+
+  SET_FREE_PLAY_ENABLED(state: State, enabled: boolean) {
+    state.isFreePlayEnabled = enabled;
+  },
+
   SET_DASHBOARD_MESSAGE(state: State, payload: DashboardMessage) {
     if (!_.some(state.dashboardMessages, payload)) {
       state.dashboardMessages.push(payload);

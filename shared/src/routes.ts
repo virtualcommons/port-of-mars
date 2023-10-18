@@ -55,13 +55,23 @@ export function getPagePath(page: Page): string {
   return `/#${PAGE_META[page].path}`;
 }
 
+export interface RouteMeta {
+  requiresAuth: boolean;
+  requiresConsent?: boolean;
+  requiresAdmin?: boolean;
+  requiresTournamentEnabled?: boolean;
+  requiresFreePlayEnabled?: boolean;
+}
+
+export interface Route {
+  path: string;
+  name?: string;
+  props?: any;
+  meta: RouteMeta;
+}
+
 export const PAGE_META: {
-  [p in Page]: {
-    path: string;
-    name?: string;
-    props?: any;
-    meta: { requiresAuth: boolean; requiresAdmin?: boolean };
-  };
+  [p in Page]: Route;
 } = {
   [ADMIN_PAGE]: {
     path: "/admin",
@@ -110,6 +120,7 @@ export const PAGE_META: {
     path: "/lobby",
     meta: {
       requiresAuth: true,
+      requiresFreePlayEnabled: true,
     },
   },
   [HOME_PAGE]: {
@@ -162,6 +173,7 @@ export const PAGE_META: {
     name: PROFILE_PAGE,
     meta: {
       requiresAuth: true,
+      requiresConsent: true,
     },
   },
 };

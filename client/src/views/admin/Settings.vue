@@ -58,7 +58,7 @@ import { AdminAPI } from "@port-of-mars/client/api/admin/request";
 export default class Reports extends Vue {
   api!: AdminAPI;
   form: DynamicSettingsData = {
-    isTournamentSignUpEnabled: false,
+    isTournamentEnabled: false,
     isFreePlayEnabled: false,
     maxConnections: 0,
     defaultDaysMuted: 0,

@@ -445,6 +445,12 @@ export interface TournamentStatus {
   description: string;
 }
 
+export interface ClientInitData {
+  isTournamentEnabled: boolean;
+  isFreePlayEnabled: boolean;
+  user: ClientSafeUser | null;
+}
+
 export interface DashboardMessage {
   kind: "success" | "danger" | "info" | "warning";
   message: string;
@@ -455,6 +461,6 @@ export type RoomId = string;
 export interface DynamicSettingsData {
   maxConnections: number;
   defaultDaysMuted: number;
-  isTournamentSignUpEnabled: boolean;
+  isTournamentEnabled: boolean;
   isFreePlayEnabled: boolean;
 }

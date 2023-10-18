@@ -57,7 +57,7 @@ export class RedisSettings {
     return {
       maxConnections: _.toNumber(settings.maxConnections),
       defaultDaysMuted: _.toNumber(settings.defaultDaysMuted),
-      isTournamentSignUpEnabled: !!_.toNumber(settings.isTournamentSignUpEnabled),
+      isTournamentEnabled: !!_.toNumber(settings.isTournamentEnabled),
       isFreePlayEnabled: !!_.toNumber(settings.isFreePlayEnabled),
     };
   }
@@ -73,8 +73,8 @@ export class RedisSettings {
   }
 
   // sign up enabled controls where the user is redirected once their email is verified
-  async isTournamentSignUpEnabled(): Promise<boolean> {
-    return !!_.toNumber(await this.client.hget("settings", "isTournamentSignUpEnabled"));
+  async isTournamentEnabled(): Promise<boolean> {
+    return !!_.toNumber(await this.client.hget("settings", "isTournamentEnabled"));
   }
 
   // enables players to participate as many times as they wish

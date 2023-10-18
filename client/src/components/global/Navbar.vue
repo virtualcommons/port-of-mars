@@ -39,7 +39,13 @@
         <b-nav-item class="mx-2" :to="solo" exact-active-class="active" title="Solo Mode">
           Solo Mode
         </b-nav-item>
-        <b-nav-item class="mx-2" :to="lobby" exact-active-class="active" title="Game Lobby">
+        <b-nav-item
+          v-if="$tstore.state.isFreePlayEnabled"
+          class="mx-2"
+          :to="lobby"
+          exact-active-class="active"
+          title="Game Lobby"
+        >
           Play Port of Mars
         </b-nav-item>
       </b-navbar-nav>

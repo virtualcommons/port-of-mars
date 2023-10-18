@@ -1,5 +1,5 @@
 import Vue from "vue";
-import VueRouter from "vue-router";
+import VueRouter, { NavigationGuardNext } from "vue-router";
 import Admin from "@port-of-mars/client/views/Admin.vue";
 import Overview from "@port-of-mars/client/views/admin/Overview.vue";
 import Games from "@port-of-mars/client/views/admin/Games.vue";
@@ -42,6 +42,7 @@ import {
 Vue.use(VueRouter);
 
 const ADMIN_META = PAGE_META[ADMIN_PAGE].meta;
+const LOBBY_META = PAGE_META[LOBBY_PAGE].meta;
 
 const router = new VueRouter({
   mode: "hash",
@@ -63,12 +64,12 @@ const router = new VueRouter({
       ...PAGE_META[LOBBY_PAGE],
       component: Lobby,
       children: [
-        { path: "", name: "Lobby", component: LobbyRoomList, meta: { requiresAuth: true } },
+        { path: "", name: "Lobby", component: LobbyRoomList, meta: LOBBY_META },
         {
           path: "room/:id",
           name: "LobbyRoom",
           component: LobbyRoom,
-          meta: { requiresAuth: true },
+          meta: LOBBY_META,
           props: true,
         },
       ],
@@ -87,6 +88,14 @@ const router = new VueRouter({
   ],
 });
 
+function isFreePlayEnabled() {
+  return store.state.isFreePlayEnabled;
+}
+
+function isTournamentEnabled() {
+  return store.state.isTournamentEnabled;
+}
+
 function isAuthenticated() {
   return store.getters.isAuthenticated;
 }
@@ -99,7 +108,7 @@ function hasConsented() {
   return store.getters.hasConsented;
 }
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to: any, from: any, next: NavigationGuardNext) => {
   if (from === VueRouter.START_LOCATION) {
     console.log("initializing store");
     store
@@ -116,14 +125,20 @@ router.beforeEach((to, from, next) => {
   }
 });
 
-router.beforeEach((to: any, from: any, next: any) => {
+router.beforeEach((to: any, from: any, next: NavigationGuardNext) => {
+  // somewhat ugly but alternatives are worse, consider cleaning up the whole router
+  // setup at some point as its been gradually outgrowing the original design
   if (to.meta.requiresAuth && !isAuthenticated()) {
     next({ name: LOGIN_PAGE });
-  } else if (to.name === LOGIN_PAGE && isAuthenticated()) {
-    next({ name: HOME_PAGE });
-  } else if (to.name === PROFILE_PAGE && !hasConsented()) {
+  } else if (to.meta.requiresConsent && !hasConsented()) {
     next({ name: CONSENT_PAGE });
   } else if (to.meta.requiresAdmin && !isAdmin()) {
+    next({ name: HOME_PAGE });
+  } else if (to.meta.requiresTournamentEnabled && !isTournamentEnabled()) {
+    next({ name: HOME_PAGE });
+  } else if (to.meta.requiresFreePlayEnabled && !isFreePlayEnabled()) {
+    next({ name: HOME_PAGE });
+  } else if (to.name === LOGIN_PAGE && isAuthenticated()) {
     next({ name: HOME_PAGE });
   } else {
     next();
