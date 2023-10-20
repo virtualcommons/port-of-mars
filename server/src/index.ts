@@ -22,6 +22,7 @@ import { GameRoom } from "@port-of-mars/server/rooms/game";
 import { SoloGameRoom } from "@port-of-mars/server/rooms/sologame";
 import { User } from "@port-of-mars/server/entity";
 import { FreePlayLobbyRoom } from "@port-of-mars/server/rooms/lobby/freeplay";
+import { TournamentLobbyRoom } from "@port-of-mars/server/rooms/lobby/tournament";
 import { settings } from "@port-of-mars/server/settings";
 import { getRedis, getServices } from "@port-of-mars/server/services";
 import {
@@ -204,6 +205,7 @@ async function createApp() {
   // register your room handlers
   gameServer.define(GameRoom.NAME, GameRoom);
   gameServer.define(FreePlayLobbyRoom.NAME, FreePlayLobbyRoom);
+  gameServer.define(TournamentLobbyRoom.NAME, TournamentLobbyRoom);
   gameServer.define(SoloGameRoom.NAME, SoloGameRoom);
 
   applyInStagingOrProd(() => app.use(Sentry.Handlers.errorHandler()));

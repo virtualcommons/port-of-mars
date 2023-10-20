@@ -3,12 +3,7 @@ import { LobbyClient, LobbyRoomState } from "@port-of-mars/server/rooms/lobby/co
 import { settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
 import * as http from "http";
-import {
-  BASE_LOBBY_NAME,
-  LobbyResponse,
-  AcceptInvitation,
-  SendLobbyChatMessage,
-} from "@port-of-mars/shared/lobby";
+import { BASE_LOBBY_NAME, LobbyResponse, SendLobbyChatMessage } from "@port-of-mars/shared/lobby";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -63,23 +58,23 @@ export abstract class LobbyRoom<RoomStateType extends LobbyRoomState> extends Ro
   /**
    * Called in onAuth to check whether the lobby can be joined by anyone
    */
-  async checkLobbyIsOpen(): Promise<boolean> {
+  async isLobbyOpen(): Promise<boolean> {
     return true;
   }
 
   /**
    * Called in onAuth to check whether client can join the lobby
    */
-  async checkClientCanJoin(client: Client): Promise<boolean> {
+  async canClientJoin(client: Client): Promise<boolean> {
     return true;
   }
 
   async onAuth(client: Client, options: any, request?: http.IncomingMessage) {
     try {
-      if (!(await this.checkLobbyIsOpen())) {
+      if (!(await this.isLobbyOpen())) {
         return false;
       }
-      if (!(await this.checkClientCanJoin(client))) {
+      if (!(await this.canClientJoin(client))) {
         return false;
       }
       const user = await getServices().account.findUserById((request as any).session.passport.user);
@@ -130,16 +125,6 @@ export abstract class LobbyRoom<RoomStateType extends LobbyRoomState> extends Ro
         return;
       }
       this.state.addChatMessage(client.auth.username, message.value);
-    });
-    this.onMessage("accept-invitation", (client: Client, message: AcceptInvitation) => {
-      logger.trace(`client ${client.auth.username} accepted invitation to join a game`);
-      this.state.setClientLeaving(client.auth.username);
-      if (this.state.allClientsLeaving()) {
-        this.state.clients.forEach((lc: LobbyClient) => {
-          this.sendSafe(lc.client, { kind: "removed-client-from-lobby" });
-          lc.client.leave();
-        });
-      }
     });
   }
 

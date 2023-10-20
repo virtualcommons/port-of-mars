@@ -8,6 +8,7 @@ import {
   StartWithBots,
   VoteStartWithBots,
   StartSoloWithBots,
+  AcceptInvitation,
 } from "@port-of-mars/shared/lobby";
 import { FreePlayLobbyRoomState } from "@port-of-mars/server/rooms/lobby/freeplay/state";
 import { LobbyClient } from "@port-of-mars/server/rooms/lobby/common/state";
@@ -40,7 +41,7 @@ export class FreePlayLobbyRoom extends LobbyRoom<FreePlayLobbyRoomState> {
     const usernames = await this.getFilledUsernames();
     const gameOpts = await buildGameOpts(usernames);
     const room = await matchMaker.createRoom(GameRoom.NAME, gameOpts);
-    logger.info("Lobby created room %o", room);
+    logger.info(`${this.roomName} created game room ${room.roomId}`);
     // send room data for new websocket connection
     this.state.clients.forEach((client: LobbyClient) => {
       this.sendSafe(client.client, {
@@ -50,13 +51,12 @@ export class FreePlayLobbyRoom extends LobbyRoom<FreePlayLobbyRoomState> {
     });
   }
 
-  async checkLobbyIsOpen() {
+  async isLobbyOpen() {
     return getServices().settings.isFreePlayEnabled();
   }
 
   registerLobbyHandlers(): void {
     super.registerLobbyHandlers();
-
     this.onMessage("start-with-bots", (client: Client, message: StartWithBots) => {
       this.startWithBots(client);
     });
@@ -66,6 +66,16 @@ export class FreePlayLobbyRoom extends LobbyRoom<FreePlayLobbyRoomState> {
     this.onMessage("start-solo-with-bots", (client: Client, message: StartSoloWithBots) => {
       this.lock();
       this.state.setRoomReadiness(true);
+    });
+    this.onMessage("accept-invitation", (client: Client, message: AcceptInvitation) => {
+      logger.trace(`client ${client.auth.username} accepted invitation to join a game`);
+      this.state.setClientLeaving(client.auth.username);
+      if (this.state.allClientsLeaving()) {
+        this.state.clients.forEach((lc: LobbyClient) => {
+          this.sendSafe(lc.client, { kind: "removed-client-from-lobby" });
+          lc.client.leave();
+        });
+      }
     });
   }
 

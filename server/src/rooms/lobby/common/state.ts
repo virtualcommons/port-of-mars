@@ -9,6 +9,7 @@ export class LobbyClient extends Schema {
   @type("number") id: number;
   @type("string") username: string;
   @type("boolean") ready: boolean;
+  @type("number") dateJoined: number;
   client: Client;
   leaving: boolean;
 
@@ -19,6 +20,7 @@ export class LobbyClient extends Schema {
     this.id = this.client.auth.id;
     this.ready = false;
     this.leaving = false;
+    this.dateJoined = new Date().getTime();
   }
 }
 
