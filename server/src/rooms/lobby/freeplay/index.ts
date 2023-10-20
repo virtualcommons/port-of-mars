@@ -1,0 +1,82 @@
+import { Client, matchMaker } from "colyseus";
+import { buildGameOpts } from "@port-of-mars/server/util";
+import { GameRoom } from "@port-of-mars/server/rooms/game";
+import { settings } from "@port-of-mars/server/settings";
+import { getServices } from "@port-of-mars/server/services";
+import {
+  FREE_PLAY_LOBBY_NAME,
+  StartWithBots,
+  VoteStartWithBots,
+  StartSoloWithBots,
+} from "@port-of-mars/shared/lobby";
+import { FreePlayLobbyRoomState } from "@port-of-mars/server/rooms/lobby/freeplay/state";
+import { LobbyClient } from "@port-of-mars/server/rooms/lobby/common/state";
+import { LobbyRoom } from "@port-of-mars/server/rooms/lobby/common";
+
+const logger = settings.logging.getLogger(__filename);
+
+export class FreePlayLobbyRoom extends LobbyRoom<FreePlayLobbyRoomState> {
+  roomName = FREE_PLAY_LOBBY_NAME;
+  static get NAME() {
+    return FREE_PLAY_LOBBY_NAME;
+  }
+
+  maxClients = 5;
+
+  createState() {
+    return new FreePlayLobbyRoomState();
+  }
+
+  async trySendInvitations() {
+    if (this.state.ready) {
+      this.sendInvitations();
+    }
+  }
+
+  // start a game by sending invitations to all clients in the lobby
+  async sendInvitations() {
+    // set ready to false so that invitations are only sent once
+    this.state.setRoomReadiness(false);
+    const usernames = await this.getFilledUsernames();
+    const gameOpts = await buildGameOpts(usernames);
+    const room = await matchMaker.createRoom(GameRoom.NAME, gameOpts);
+    logger.info("Lobby created room %o", room);
+    // send room data for new websocket connection
+    this.state.clients.forEach((client: LobbyClient) => {
+      this.sendSafe(client.client, {
+        kind: "sent-invitation",
+        roomId: room.roomId,
+      });
+    });
+  }
+
+  async checkLobbyIsOpen() {
+    return getServices().settings.isFreePlayEnabled();
+  }
+
+  registerLobbyHandlers(): void {
+    super.registerLobbyHandlers();
+
+    this.onMessage("start-with-bots", (client: Client, message: StartWithBots) => {
+      this.startWithBots(client);
+    });
+    this.onMessage("vote-start-with-bots", (client: Client, message: VoteStartWithBots) => {
+      this.state.setClientReadiness(client.auth.username, message.value);
+    });
+    this.onMessage("start-solo-with-bots", (client: Client, message: StartSoloWithBots) => {
+      this.lock();
+      this.state.setRoomReadiness(true);
+    });
+  }
+
+  startWithBots(client: Client) {
+    if (client.auth.username === this.state.leader.username) {
+      this.state.setRoomReadiness(true);
+    }
+  }
+
+  resetMetadata() {
+    const leader = this.state.leader ? this.state.leader.username : "";
+    this.setMetadata({ dateCreated: this.state.dateCreated, leader });
+  }
+}

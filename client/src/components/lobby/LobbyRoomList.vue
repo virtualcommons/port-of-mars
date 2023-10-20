@@ -100,7 +100,7 @@
 <script lang="ts">
 import { Component, Inject, Vue } from "vue-property-decorator";
 import { Client } from "colyseus.js";
-import { LOBBY_NAME } from "@port-of-mars/shared/lobby";
+import { FREE_PLAY_LOBBY_NAME } from "@port-of-mars/shared/lobby";
 import { Constants } from "@port-of-mars/shared/settings";
 import MuteBanWarning from "@port-of-mars/client/components/lobby/MuteBanWarning.vue";
 
@@ -150,7 +150,7 @@ export default class LobbyRoomList extends Vue {
 
   async refreshRoomList() {
     this.refreshingRoomList = true;
-    const roomList = await this.$client.getAvailableRooms(LOBBY_NAME);
+    const roomList = await this.$client.getAvailableRooms(FREE_PLAY_LOBBY_NAME);
     this.rooms = roomList.map((room: any) => {
       return {
         id: room.roomId,

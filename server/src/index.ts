@@ -21,7 +21,7 @@ import { Constants, isDev, isDevOrStaging } from "@port-of-mars/shared/settings"
 import { GameRoom } from "@port-of-mars/server/rooms/game";
 import { SoloGameRoom } from "@port-of-mars/server/rooms/sologame";
 import { User } from "@port-of-mars/server/entity";
-import { LobbyRoom } from "@port-of-mars/server/rooms/lobby";
+import { FreePlayLobbyRoom } from "@port-of-mars/server/rooms/lobby/freeplay";
 import { settings } from "@port-of-mars/server/settings";
 import { getRedis, getServices } from "@port-of-mars/server/services";
 import {
@@ -203,7 +203,7 @@ async function createApp() {
 
   // register your room handlers
   gameServer.define(GameRoom.NAME, GameRoom);
-  gameServer.define(LobbyRoom.NAME, LobbyRoom);
+  gameServer.define(FreePlayLobbyRoom.NAME, FreePlayLobbyRoom);
   gameServer.define(SoloGameRoom.NAME, SoloGameRoom);
 
   applyInStagingOrProd(() => app.use(Sentry.Handlers.errorHandler()));
