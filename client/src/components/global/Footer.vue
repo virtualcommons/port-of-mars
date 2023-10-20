@@ -15,7 +15,7 @@ ccarra1@asu.edu
           <b-link :to="solo" title="Solo Mode">Solo Mode</b-link>
         </li>
         <li>
-          <b-link :to="lobby" title="Play Port of Mars">Play Port of Mars</b-link>
+          <b-link :to="freePlayLobby" title="Play Port of Mars">Play Port of Mars</b-link>
         </li>
         <li>
           <b-link :to="manual" title="User Manual">How to Play</b-link>
@@ -97,7 +97,7 @@ import { Component, Vue } from "vue-property-decorator";
 import { Constants } from "@port-of-mars/shared/settings";
 import {
   LOGIN_PAGE,
-  LOBBY_PAGE,
+  FREE_PLAY_LOBBY_PAGE,
   CONSENT_PAGE,
   MANUAL_PAGE,
   PRIVACY_PAGE,
@@ -110,7 +110,7 @@ export default class Footer extends Vue {
   consent = { name: CONSENT_PAGE };
   manual = { name: MANUAL_PAGE };
   login = { name: LOGIN_PAGE };
-  lobby = { name: LOBBY_PAGE };
+  freePlayLobby = { name: FREE_PLAY_LOBBY_PAGE };
   privacy = { name: PRIVACY_PAGE };
   solo = { name: SOLO_GAME_PAGE };
 

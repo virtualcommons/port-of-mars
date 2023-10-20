@@ -2,7 +2,7 @@ import { Room } from "colyseus.js";
 import { DataChange, Schema } from "@colyseus/schema";
 import { SentInvitation, JoinFailure } from "@port-of-mars/shared/lobby/responses";
 import { LobbyChatMessageData, LobbyClientData } from "@port-of-mars/shared/types";
-import { LOBBY_PAGE, GAME_PAGE } from "@port-of-mars/shared/routes";
+import { FREE_PLAY_LOBBY_PAGE, GAME_PAGE } from "@port-of-mars/shared/routes";
 
 type Schemify<T> = T & Schema;
 
@@ -25,7 +25,7 @@ export function applyLobbyResponses(room: Room, component: any) {
 
   room.onMessage("join-failure", (msg: JoinFailure) => {
     store.commit("SET_DASHBOARD_MESSAGE", { kind: "warning", message: msg.reason });
-    router.push({ name: LOBBY_PAGE });
+    router.push({ name: FREE_PLAY_LOBBY_PAGE });
   });
 
   room.onMessage("sent-invitation", (msg: SentInvitation) => {

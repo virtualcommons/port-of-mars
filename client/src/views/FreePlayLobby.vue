@@ -39,7 +39,7 @@ import Messages from "@port-of-mars/client/components/global/Messages.vue";
     Messages,
   },
 })
-export default class Lobby extends Vue {
+export default class FreePlayLobby extends Vue {
   @Inject() readonly $client!: Client;
   @Provide() api: LobbyRequestAPI = new LobbyRequestAPI();
   accountApi!: AccountAPI;
@@ -91,7 +91,7 @@ export default class Lobby extends Vue {
   }
 
   async connectAndRedirect(room: Room) {
-    this.$router.push({ name: "LobbyRoom", params: { id: room.id } });
+    this.$router.push({ name: "FreePlayLobbyRoom", params: { id: room.id } });
     applyLobbyResponses(room, this);
     this.api.connect(room);
   }

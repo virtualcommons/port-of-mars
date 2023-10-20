@@ -42,7 +42,7 @@
         <b-nav-item
           v-if="$tstore.state.isFreePlayEnabled"
           class="mx-2"
-          :to="lobby"
+          :to="freePlayLobby"
           exact-active-class="active"
           title="Game Lobby"
         >
@@ -89,7 +89,7 @@ import {
   MANUAL_PAGE,
   GAME_PAGE,
   SOLO_GAME_PAGE,
-  LOBBY_PAGE,
+  FREE_PLAY_LOBBY_PAGE,
   PLAYER_HISTORY_PAGE,
   LEADERBOARD_PAGE,
   PROFILE_PAGE,
@@ -98,7 +98,7 @@ import { isDevOrStaging, Constants } from "@port-of-mars/shared/settings";
 import _ from "lodash";
 
 @Component({})
-export default class Header extends Vue {
+export default class Navbar extends Vue {
   @Prop({ default: "Mission Control Dashboard" })
   title!: string;
 
@@ -121,7 +121,7 @@ export default class Header extends Vue {
   solo = { name: SOLO_GAME_PAGE };
   leaderboard = { name: LEADERBOARD_PAGE };
   history = { name: PLAYER_HISTORY_PAGE };
-  lobby = { name: LOBBY_PAGE };
+  freePlayLobby = { name: FREE_PLAY_LOBBY_PAGE };
   profile = { name: PROFILE_PAGE };
 
   async created() {
@@ -153,7 +153,7 @@ export default class Header extends Vue {
     if (_.isNil(this.$route.name)) {
       return false;
     } else {
-      return this.game.name == this.$route.name || this.lobby.name == this.$route.name;
+      return this.game.name == this.$route.name || this.freePlayLobby.name == this.$route.name;
     }
   }
 

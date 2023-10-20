@@ -15,7 +15,7 @@
                 <b-button size="lg" class="px-5 mr-3" variant="secondary" :to="solo"
                   ><h4 class="pt-1">Solo Mode</h4>
                 </b-button>
-                <b-button size="lg" variant="primary" :to="lobby"
+                <b-button size="lg" variant="primary" :to="freePlayLobby"
                   ><h4 class="pt-1">Play Port of Mars</h4>
                 </b-button>
               </b-col>
@@ -96,7 +96,7 @@
               Whether you are looking to discuss the game or find a team, connect with other players
               by joining our
               <a :href="constants.DISCORD_URL">community Discord</a> or by joining a room in the
-              <b-link :to="lobby">game lobby</b-link> and using the built-in chat.
+              <b-link :to="freePlayLobby">game lobby</b-link> and using the built-in chat.
             </p>
             <p class="text mb-3">
               Keep track of your performance with your
@@ -131,7 +131,7 @@ import AgeTooltip from "@port-of-mars/client/components/global/AgeTooltip.vue";
 import LeaderboardTable from "@port-of-mars/client/components/stats/LeaderboardTable.vue";
 import {
   LEADERBOARD_PAGE,
-  LOBBY_PAGE,
+  FREE_PLAY_LOBBY_PAGE,
   PLAYER_HISTORY_PAGE,
   SOLO_GAME_PAGE,
 } from "@port-of-mars/shared/routes";
@@ -151,7 +151,7 @@ export default class Home extends Vue {
 
   isDevMode: boolean = false;
   currentYear = new Date().getFullYear();
-  lobby = { name: LOBBY_PAGE };
+  freePlayLobby = { name: FREE_PLAY_LOBBY_PAGE };
   leaderboard = { name: LEADERBOARD_PAGE };
   gameStats = { name: PLAYER_HISTORY_PAGE };
   solo = { name: SOLO_GAME_PAGE };

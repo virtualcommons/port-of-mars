@@ -1,6 +1,6 @@
 import { Router, Request, Response } from "express";
 import { getServices } from "@port-of-mars/server/services";
-import { getPagePath, LOBBY_PAGE } from "@port-of-mars/shared/routes";
+import { getPagePath, FREE_PLAY_LOBBY_PAGE } from "@port-of-mars/shared/routes";
 import { settings, getLogger } from "@port-of-mars/server/settings";
 import { ServerError } from "@port-of-mars/server/util";
 
@@ -28,7 +28,7 @@ surveyRouter.get("/complete", async (req: Request, res: Response, next) => {
         })
       );
     }
-    res.redirect(`${settings.host}/${getPagePath(LOBBY_PAGE)}`);
+    res.redirect(`${settings.host}/${getPagePath(FREE_PLAY_LOBBY_PAGE)}`);
   } catch (e) {
     logger.fatal("Unable to mark survey completion: %s", e);
     next(e);
