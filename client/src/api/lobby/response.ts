@@ -1,8 +1,12 @@
 import { Room } from "colyseus.js";
 import { DataChange, Schema } from "@colyseus/schema";
 import { SentInvitation, JoinFailure } from "@port-of-mars/shared/lobby/responses";
-import { LobbyChatMessageData, LobbyClientData } from "@port-of-mars/shared/types";
-import { FREE_PLAY_LOBBY_PAGE, GAME_PAGE } from "@port-of-mars/shared/routes";
+import { LobbyChatMessageData, LobbyClientData, LobbyType } from "@port-of-mars/shared/types";
+import {
+  FREE_PLAY_LOBBY_PAGE,
+  GAME_PAGE,
+  TOURNAMENT_LOBBY_PAGE,
+} from "@port-of-mars/shared/routes";
 
 type Schemify<T> = T & Schema;
 
@@ -10,9 +14,11 @@ function deschemify<T>(s: Schemify<T>): T {
   return s.toJSON() as T;
 }
 
-export function applyLobbyResponses(room: Room, component: any) {
+export function applyLobbyResponses(room: Room, component: any, lobbyType: LobbyType) {
   const store = component.$tstore;
   const router = component.$router;
+
+  store.commit("SET_LOBBY_TYPE", lobbyType);
 
   room.onError((code: number, message?: string) => {
     console.log(`Error ${code} occurred in room: ${message} `);
@@ -25,15 +31,22 @@ export function applyLobbyResponses(room: Room, component: any) {
 
   room.onMessage("join-failure", (msg: JoinFailure) => {
     store.commit("SET_DASHBOARD_MESSAGE", { kind: "warning", message: msg.reason });
-    router.push({ name: FREE_PLAY_LOBBY_PAGE });
+    router.push({
+      name: lobbyType === "freeplay" ? FREE_PLAY_LOBBY_PAGE : TOURNAMENT_LOBBY_PAGE,
+    });
   });
 
   room.onMessage("sent-invitation", (msg: SentInvitation) => {
     component.$ajax.roomId = msg.roomId;
-    store.commit("SET_LOBBY_READINESS", true);
-    setTimeout(() => {
+    // set ready and wait for freeplay, in a tournament we just put them right into a game
+    if (lobbyType === "freeplay") {
+      store.commit("SET_LOBBY_READINESS", true);
+      setTimeout(() => {
+        room.send("accept-invitation", { kind: "accept-invitation" });
+      }, 5 * 1000);
+    } else {
       room.send("accept-invitation", { kind: "accept-invitation" });
-    }, 5 * 1000);
+    }
   });
 
   room.onMessage("removed-client-from-lobby", () => {

@@ -23,6 +23,7 @@ import {
   ResourceCostData,
   Role,
   TradeDataWithNull,
+  LobbyType,
   LobbyChatMessageData,
   LobbyClientData,
   ClientSafeUser,
@@ -163,6 +164,7 @@ export interface Lobby {
   chat: Array<LobbyChatMessageData>;
   ready: boolean;
   dateCreated: number;
+  type: LobbyType;
 }
 
 export interface State extends GameData {
@@ -221,6 +223,7 @@ export function defaultLobbyState(): Lobby {
     chat: [],
     ready: false,
     dateCreated: 0,
+    type: "freeplay",
   };
 }
 

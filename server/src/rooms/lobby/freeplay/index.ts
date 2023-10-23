@@ -85,6 +85,11 @@ export class FreePlayLobbyRoom extends LobbyRoom<FreePlayLobbyRoomState> {
     }
   }
 
+  onLeave(client: Client, consented: boolean) {
+    super.onLeave(client, consented);
+    this.resetMetadata();
+  }
+
   resetMetadata() {
     const leader = this.state.leader ? this.state.leader.username : "";
     this.setMetadata({ dateCreated: this.state.dateCreated, leader });

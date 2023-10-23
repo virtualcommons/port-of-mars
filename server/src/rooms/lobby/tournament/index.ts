@@ -82,6 +82,7 @@ export class TournamentLobbyRoom extends LobbyRoom<TournamentLobbyRoomState> {
   }
 
   onLeave(client: Client, consented: boolean) {
+    super.onLeave(client, consented);
     // if a client in the pending group leaves, clear the group to try again
     const index = this.pendingGroup.findIndex(lc => lc.client.id === client.id);
     if (index) {

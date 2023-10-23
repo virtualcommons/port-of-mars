@@ -22,7 +22,7 @@
 import { Component, Provide, Inject, Vue } from "vue-property-decorator";
 import { Client, Room } from "colyseus.js";
 import { applyLobbyResponses } from "@port-of-mars/client/api/lobby/response";
-import { LobbyRequestAPI } from "@port-of-mars/client/api/lobby/request";
+import { FreePlayLobbyRequestAPI } from "@port-of-mars/client/api/lobby/request";
 import { AccountAPI } from "@port-of-mars/client/api/account/request";
 import { FREE_PLAY_LOBBY_NAME } from "@port-of-mars/shared/lobby";
 import { GAME_PAGE, CONSENT_PAGE, MANUAL_PAGE } from "@port-of-mars/shared/routes";
@@ -41,7 +41,7 @@ import Messages from "@port-of-mars/client/components/global/Messages.vue";
 })
 export default class FreePlayLobby extends Vue {
   @Inject() readonly $client!: Client;
-  @Provide() api: LobbyRequestAPI = new LobbyRequestAPI();
+  @Provide() api: FreePlayLobbyRequestAPI = new FreePlayLobbyRequestAPI();
   accountApi!: AccountAPI;
 
   game = { name: GAME_PAGE };
@@ -92,7 +92,7 @@ export default class FreePlayLobby extends Vue {
 
   async connectAndRedirect(room: Room) {
     this.$router.push({ name: "FreePlayLobbyRoom", params: { id: room.id } });
-    applyLobbyResponses(room, this);
+    applyLobbyResponses(room, this, "freeplay");
     this.api.connect(room);
   }
 }

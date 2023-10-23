@@ -64,6 +64,8 @@ export interface LeaderboardData {
   withoutBots: Array<LeaderboardItem>;
 }
 
+export type LobbyType = "freeplay" | "tournament";
+
 export interface LobbyChatMessageData {
   username: string;
   message: string;

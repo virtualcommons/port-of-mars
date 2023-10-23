@@ -112,7 +112,7 @@
 <script lang="ts">
 import { Component, Inject, Prop, Vue } from "vue-property-decorator";
 import { Client } from "colyseus.js";
-import { LobbyRequestAPI } from "@port-of-mars/client/api/lobby/request";
+import { FreePlayLobbyRequestAPI } from "@port-of-mars/client/api/lobby/request";
 import { applyLobbyResponses } from "@port-of-mars/client/api/lobby/response";
 import { FREE_PLAY_LOBBY_PAGE } from "@port-of-mars/shared/routes";
 import LobbyChat from "@port-of-mars/client/components/lobby/LobbyChat.vue";
@@ -124,7 +124,7 @@ import LobbyChat from "@port-of-mars/client/components/lobby/LobbyChat.vue";
 })
 export default class LobbyRoom extends Vue {
   @Inject() readonly $client!: Client;
-  @Inject() readonly api!: LobbyRequestAPI;
+  @Inject() readonly api!: FreePlayLobbyRequestAPI;
   @Prop() id!: string;
 
   freePlayLobby = { name: FREE_PLAY_LOBBY_PAGE };
@@ -185,7 +185,8 @@ export default class LobbyRoom extends Vue {
     if (!this.api.room) {
       try {
         const room = await this.$client.joinById(this.id);
-        applyLobbyResponses(room, this);
+        // FIXME: do we need to call this here as well as the parent lobby view?
+        applyLobbyResponses(room, this, "freeplay");
         this.api.connect(room);
       } catch (e) {
         this.roomNotFound = true;

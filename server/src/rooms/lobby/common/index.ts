@@ -48,7 +48,6 @@ export abstract class LobbyRoom<RoomStateType extends LobbyRoomState> extends Ro
   onLeave(client: Client, consented: boolean): void {
     logger.trace(`Client ${client.auth.username} left ${this.roomName} ${this.roomId}`);
     this.state.removeClient(client.auth.username);
-    this.resetMetadata();
   }
 
   onDispose() {
