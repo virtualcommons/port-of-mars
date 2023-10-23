@@ -39,6 +39,72 @@
                   required
                 ></b-form-input>
               </b-form-group>
+              <b-form-group
+                id="free-play-enabled-group"
+                label-for="free-play-enabled"
+                description="Free play allows anyone to join the free play lobby and play with others and bots."
+              >
+                <b-form-checkbox
+                  class="custom-form-input"
+                  id="free-play-enabled"
+                  type="boolean"
+                  v-model="form.isFreePlayEnabled"
+                  required
+                >
+                  Enable Free Play
+                </b-form-checkbox>
+              </b-form-group>
+            </div>
+            <div class="mb-4" id="tournament">
+              <h4>Tournament</h4>
+              <hr class="my-2" />
+              <b-form-group
+                id="tournament-enabled-group"
+                label-for="tournament-enabled"
+                description="Open the tournament lobby (launch times will still need to be scheduled)."
+              >
+                <b-form-checkbox
+                  class="custom-form-input"
+                  id="tournament-enabled"
+                  type="boolean"
+                  v-model="form.isTournamentEnabled"
+                  required
+                >
+                  Enable Tournament Mode
+                </b-form-checkbox>
+              </b-form-group>
+              <b-form-group
+                id="before-offset-group"
+                label="Tournament Lobby Open Before (minutes)"
+                label-for="before-offset"
+                description="Minutes before a tournament start time that the lobby will be open."
+              >
+                <b-form-input
+                  class="custom-form-input"
+                  id="before-offset"
+                  type="number"
+                  min="0"
+                  max="60"
+                  v-model="form.tournamentLobbyOpenBeforeOffset"
+                  required
+                ></b-form-input>
+              </b-form-group>
+              <b-form-group
+                id="after-offset-group"
+                label="Tournament Lobby Open After (minutes)"
+                label-for="after-offset"
+                description="Minutes after a tournament start time that the lobby will remain open."
+              >
+                <b-form-input
+                  class="custom-form-input"
+                  id="after-offset"
+                  type="number"
+                  min="0"
+                  max="60"
+                  v-model="form.tournamentLobbyOpenAfterOffset"
+                  required
+                ></b-form-input>
+              </b-form-group>
             </div>
             <b-button class="mr-2" type="submit" variant="success">Save</b-button>
             <b-button class="mr-2" type="reset" variant="primary">Reset</b-button>
@@ -62,6 +128,8 @@ export default class Reports extends Vue {
     isFreePlayEnabled: false,
     maxConnections: 0,
     defaultDaysMuted: 0,
+    tournamentLobbyOpenBeforeOffset: 10,
+    tournamentLobbyOpenAfterOffset: 30,
   };
 
   intervalOptions = [

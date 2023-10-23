@@ -6,6 +6,7 @@ import {
   TournamentRoundInvite,
 } from "@port-of-mars/server/entity";
 import { MoreThan, SelectQueryBuilder } from "typeorm";
+import { getServices } from "@port-of-mars/server/services";
 import { getLogger } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { TournamentRoundDate } from "@port-of-mars/server/entity/TournamentRoundDate";
@@ -13,10 +14,6 @@ import { TournamentStatus } from "@port-of-mars/shared/types";
 import { isDev } from "@port-of-mars/shared/settings";
 
 const logger = getLogger(__filename);
-// FIXME: should probably be pulled from settings
-// 30 minutes in milliseconds offset for checking when the lobby is open
-const LOBBY_OPEN_BEFORE_OFFSET = 10 * 60 * 1000;
-const LOBBY_OPEN_AFTER_OFFSET = 30 * 60 * 1000;
 
 export class TournamentService extends BaseService {
   async getActiveTournament(): Promise<Tournament> {
@@ -84,7 +81,8 @@ export class TournamentService extends BaseService {
     }
     // scheduled dates within 30 minutes of the scheduled tournament date should
     // still be available
-    const offsetTime = new Date().getTime() - LOBBY_OPEN_AFTER_OFFSET;
+    const afterOffset = await this.getAfterOffset();
+    const offsetTime = new Date().getTime() - afterOffset;
     const schedule = await this.em.getRepository(TournamentRoundDate).find({
       select: ["date"],
       where: { tournamentRoundId: tournamentRound.id, date: MoreThan(new Date(offsetTime)) },
@@ -300,15 +298,27 @@ export class TournamentService extends BaseService {
     if (gameDates.length === 0) {
       return false;
     }
+    const beforeOffset = await this.getBeforeOffset();
+    const afterOffset = await this.getAfterOffset();
     const now = new Date();
     for (const date of gameDates) {
       const gameTime = date.getTime();
-      const openDate = new Date(gameTime - LOBBY_OPEN_BEFORE_OFFSET);
-      const closeDate = new Date(gameTime + LOBBY_OPEN_AFTER_OFFSET);
+      const openDate = new Date(gameTime - beforeOffset);
+      const closeDate = new Date(gameTime + afterOffset);
       if (now > openDate && now < closeDate) {
         return true;
       }
     }
     return false;
+  }
+
+  async getBeforeOffset(): Promise<number> {
+    const offset = await getServices().settings.tournamentLobbyOpenBeforeOffset();
+    return offset * 60 * 1000;
+  }
+
+  async getAfterOffset(): Promise<number> {
+    const offset = await getServices().settings.tournamentLobbyOpenAfterOffset();
+    return offset * 60 * 1000;
   }
 }

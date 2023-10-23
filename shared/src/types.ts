@@ -465,4 +465,6 @@ export interface DynamicSettingsData {
   defaultDaysMuted: number;
   isTournamentEnabled: boolean;
   isFreePlayEnabled: boolean;
+  tournamentLobbyOpenBeforeOffset: number;
+  tournamentLobbyOpenAfterOffset: number;
 }
