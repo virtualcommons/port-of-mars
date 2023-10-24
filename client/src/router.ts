@@ -11,6 +11,7 @@ import Leaderboard from "@port-of-mars/client/views/Leaderboard.vue";
 import PlayerHistory from "@port-of-mars/client/views/PlayerHistory.vue";
 import FreePlayLobby from "@port-of-mars/client/views/FreePlayLobby.vue";
 import TournamentLobby from "@port-of-mars/client/views/TournamentLobby.vue";
+import TournamentDashboard from "@port-of-mars/client/views/TournamentDashboard.vue";
 import LobbyRoom from "@port-of-mars/client/components/lobby/LobbyRoom.vue";
 import LobbyRoomList from "@port-of-mars/client/components/lobby/LobbyRoomList.vue";
 import Game from "@port-of-mars/client/views/Game.vue";
@@ -28,6 +29,7 @@ import {
   LOGIN_PAGE,
   FREE_PLAY_LOBBY_PAGE,
   TOURNAMENT_LOBBY_PAGE,
+  TOURNAMENT_DASHBOARD_PAGE,
   GAME_PAGE,
   SOLO_GAME_PAGE,
   LEADERBOARD_PAGE,
@@ -77,6 +79,7 @@ const router = new VueRouter({
       ],
     },
     { ...PAGE_META[TOURNAMENT_LOBBY_PAGE], component: TournamentLobby },
+    { ...PAGE_META[TOURNAMENT_DASHBOARD_PAGE], component: TournamentDashboard },
     { ...PAGE_META[GAME_PAGE], component: Game },
     { ...PAGE_META[SOLO_GAME_PAGE], component: SoloGame },
     { ...PAGE_META[LEADERBOARD_PAGE], component: Leaderboard },

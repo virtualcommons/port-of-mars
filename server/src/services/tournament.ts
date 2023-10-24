@@ -10,7 +10,7 @@ import { getServices } from "@port-of-mars/server/services";
 import { getLogger } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { TournamentRoundDate } from "@port-of-mars/server/entity/TournamentRoundDate";
-import { TournamentStatus } from "@port-of-mars/shared/types";
+import { TournamentDashboardData, TournamentStatus } from "@port-of-mars/shared/types";
 import { isDev } from "@port-of-mars/shared/settings";
 
 const logger = getLogger(__filename);
@@ -52,6 +52,7 @@ export class TournamentService extends BaseService {
     });
   }
 
+  // FIXME: rename this stuff to use freePlay instead of open or vice versa
   async getOpenTournamentRound(): Promise<TournamentRound> {
     const tournamentId = (await this.getOpenTournament()).id;
     return await this.em.getRepository(TournamentRound).findOneOrFail({
@@ -282,6 +283,32 @@ export class TournamentService extends BaseService {
       logger.debug("participant %s completed exit survey %s", invite.user.username, exitSurveyUrl);
     }
     this.em.save(invite);
+  }
+
+  /**
+   * Aggregrates and returns Tournament Dashboard data (survey status, schedule, etc.)
+   */
+  async getDashboardData(userId: number): Promise<TournamentDashboardData | undefined> {
+    const invite = await this.getActiveRoundInvite(userId);
+    if (invite) {
+      const tournamentRound = await this.getCurrentTournamentRound();
+      const scheduledDates = await this.getScheduledDates(tournamentRound);
+      const announcement = tournamentRound.announcement ?? "";
+      const description = tournamentRound.tournament.description ?? "";
+      const status = {
+        schedule: scheduledDates.map((date: Date) => date.getTime()),
+        championship: tournamentRound.championship,
+        round: tournamentRound.roundNumber,
+        announcement,
+        description,
+      };
+      return {
+        status,
+        introSurveyUrl: "", // TODO: build survey url
+        hasCompletedIntroSurvey: invite.hasCompletedIntroSurvey,
+        hasParticipated: invite.hasParticipated,
+      };
+    }
   }
 
   /**

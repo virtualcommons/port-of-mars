@@ -31,7 +31,7 @@ import {
   gameRouter,
   quizRouter,
   accountRouter,
-  surveyRouter,
+  tournamentRouter,
   statusRouter,
   statsRouter,
 } from "@port-of-mars/server/routes";
@@ -186,7 +186,7 @@ async function createApp() {
 
   app.use("/admin", adminRouter);
   app.use("/auth", authRouter);
-  app.use("/survey", surveyRouter);
+  app.use("/tournament", tournamentRouter);
   app.use("/stats", statsRouter);
   app.use("/game", gameRouter);
   app.use("/quiz", quizRouter);

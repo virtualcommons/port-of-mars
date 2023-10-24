@@ -1,7 +1,7 @@
 import { Client, Room } from "colyseus";
 import { GameState, Player } from "@port-of-mars/server/rooms/game/state";
 import { Responses } from "@port-of-mars/shared/game/responses";
-import { MarsEventData, Role } from "@port-of-mars/shared/types";
+import { GameType, MarsEventData, Role } from "@port-of-mars/shared/types";
 import * as ge from "@port-of-mars/server/rooms/game/events/types";
 import { GameEvent } from "@port-of-mars/server/entity/GameEvent";
 
@@ -24,6 +24,7 @@ export interface Persister {
 }
 
 export interface GameOpts extends GameStateOpts {
+  type: GameType;
   tournamentRoundId: number;
 }
 

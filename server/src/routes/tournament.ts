@@ -1,17 +1,17 @@
 import { Router, Request, Response } from "express";
+import { User } from "@port-of-mars/server/entity";
 import { getServices } from "@port-of-mars/server/services";
 import { getPagePath, FREE_PLAY_LOBBY_PAGE } from "@port-of-mars/shared/routes";
 import { settings, getLogger } from "@port-of-mars/server/settings";
 import { ServerError } from "@port-of-mars/server/util";
 
-export const surveyRouter = Router();
+export const tournamentRouter = Router();
 
 const logger = getLogger(__filename);
 
-// https://portofmars.asu.edu/survey/complete/?pid=${e://Field/pid}&surveyId=${e://Field/SurveyID}&tid=${e://Field/tid}
-// http://localhost:8081/survey/complete?pid=cdf6a97d-d537-4fc5-b655-7c22651cc61c&tid=2&surveyId=SV_0c8tCMZkAUh4V8x
-
-surveyRouter.get("/complete", async (req: Request, res: Response, next) => {
+// https://portofmars.asu.edu/tournament/survey/complete/?pid=${e://Field/pid}&surveyId=${e://Field/SurveyID}&tid=${e://Field/tid}
+// http://localhost:8081/tournament/survey/complete?pid=cdf6a97d-d537-4fc5-b655-7c22651cc61c&tid=2&surveyId=SV_0c8tCMZkAUh4V8x
+tournamentRouter.get("/survey/complete", async (req: Request, res: Response, next) => {
   logger.debug("trying to mark survey complete");
   try {
     const participantId = String(req.query.pid);
@@ -31,6 +31,26 @@ surveyRouter.get("/complete", async (req: Request, res: Response, next) => {
     res.redirect(`${settings.host}/${getPagePath(FREE_PLAY_LOBBY_PAGE)}`);
   } catch (e) {
     logger.fatal("Unable to mark survey completion: %s", e);
+    next(e);
+  }
+});
+
+tournamentRouter.get("/dashboard", async (req: Request, res: Response, next) => {
+  try {
+    const user = req.user as User;
+    if (user) {
+      res.status(401);
+    }
+    const tournamentData = await getServices().tournament.getDashboardData(user.id);
+    if (!tournamentData) {
+      res.status(404).json({
+        kind: "danger",
+        message: "You do not have a valid invitation to the current tournament round.",
+      });
+    }
+    res.json(tournamentData);
+  } catch (e) {
+    logger.fatal("Unable to get tournament dashboard data: %s", e);
     next(e);
   }
 });

@@ -2,6 +2,7 @@ export const ADMIN_PAGE = "Admin" as const;
 export const LOGIN_PAGE = "Login" as const;
 export const FREE_PLAY_LOBBY_PAGE = "FreePlayLobby" as const;
 export const TOURNAMENT_LOBBY_PAGE = "TournamentLobby" as const;
+export const TOURNAMENT_DASHBOARD_PAGE = "TournamentDashboard" as const;
 export const GAME_PAGE = "Game" as const;
 export const SOLO_GAME_PAGE = "SoloGame" as const;
 export const LEADERBOARD_PAGE = "Leaderboard" as const;
@@ -21,6 +22,7 @@ export type Page =
   | "Login"
   | "FreePlayLobby"
   | "TournamentLobby"
+  | "TournamentDashboard"
   | "Game"
   | "SoloGame"
   | "PlayerHistory"
@@ -36,6 +38,7 @@ export const PAGES: Array<Page> = [
   LOGIN_PAGE,
   FREE_PLAY_LOBBY_PAGE,
   TOURNAMENT_LOBBY_PAGE,
+  TOURNAMENT_DASHBOARD_PAGE,
   GAME_PAGE,
   SOLO_GAME_PAGE,
   PLAYER_HISTORY_PAGE,
@@ -127,7 +130,16 @@ export const PAGE_META: {
     },
   },
   [TOURNAMENT_LOBBY_PAGE]: {
-    path: "/tournament",
+    path: "/tournament/lobby",
+    meta: {
+      requiresAuth: true,
+      requiresTournamentEnabled: true,
+    },
+  },
+  [TOURNAMENT_DASHBOARD_PAGE]: {
+    path: "/tournament/dashboard",
+    name: TOURNAMENT_DASHBOARD_PAGE,
+    props: true,
     meta: {
       requiresAuth: true,
       requiresTournamentEnabled: true,

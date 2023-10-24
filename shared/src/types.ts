@@ -64,7 +64,8 @@ export interface LeaderboardData {
   withoutBots: Array<LeaderboardItem>;
 }
 
-export type LobbyType = "freeplay" | "tournament";
+export type GameType = "freeplay" | "tournament";
+export type LobbyType = GameType;
 
 export interface LobbyChatMessageData {
   username: string;
@@ -431,20 +432,20 @@ export interface AdminStats {
   bannedUsers: number;
 }
 
-export interface TournamentPlayerData {
-  hasInvite: boolean;
-  mustTakeTutorial: boolean;
-  mustTakeIntroSurvey: boolean;
-  canPlayGame: boolean;
-  shouldTakeExitSurvey: boolean;
-}
-
 export interface TournamentStatus {
   round: number;
   schedule: Array<number>; // list of timestamps for upcoming games
   championship: boolean;
   announcement: string;
   description: string;
+}
+
+export interface TournamentDashboardData {
+  // mirrors a round invite (TournamentRoundInvite) for use in the tournament pre-lobby dashboard
+  status: TournamentStatus;
+  introSurveyUrl: string;
+  hasCompletedIntroSurvey: boolean;
+  hasParticipated: boolean;
 }
 
 export interface ClientInitData {

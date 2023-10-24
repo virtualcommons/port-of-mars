@@ -39,7 +39,7 @@ export class FreePlayLobbyRoom extends LobbyRoom<FreePlayLobbyRoomState> {
     // set ready to false so that invitations are only sent once
     this.state.setRoomReadiness(false);
     const usernames = await this.getFilledUsernames();
-    const gameOpts = await buildGameOpts(usernames);
+    const gameOpts = await buildGameOpts(usernames, "freeplay");
     const room = await matchMaker.createRoom(GameRoom.NAME, gameOpts);
     logger.info(`${this.roomName} created game room ${room.roomId}`);
     // send room data for new websocket connection

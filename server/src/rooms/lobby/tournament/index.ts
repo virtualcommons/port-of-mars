@@ -41,7 +41,7 @@ export class TournamentLobbyRoom extends LobbyRoom<TournamentLobbyRoomState> {
 
   async sendGroupInvitations() {
     const usernames = this.pendingGroup.map(client => client.username);
-    const gameOpts = await buildGameOpts(usernames);
+    const gameOpts = await buildGameOpts(usernames, "tournament");
     const room = await matchMaker.createRoom(GameRoom.NAME, gameOpts);
     logger.info(`${this.roomName} created game room ${room.roomId}`);
     // send room data for new websocket connection

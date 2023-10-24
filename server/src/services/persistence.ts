@@ -89,22 +89,23 @@ export class DBPersister implements Persister {
 
   async initialize(options: GameOpts, roomId: string, shouldCreatePlayers = true): Promise<number> {
     logger.debug("initializing game %s", roomId);
-    const g = new Game();
+    const game = new Game();
     const f = async (em: EntityManager) => {
       if (_.isNull(options.tournamentRoundId)) {
         throw new Error("could not find matching tournament round");
       }
-      g.buildId = BUILD_ID;
-      g.tournamentRoundId = options.tournamentRoundId;
-      g.roomId = roomId;
+      game.buildId = BUILD_ID;
+      game.tournamentRoundId = options.tournamentRoundId;
+      game.roomId = roomId;
+      game.type = options.type;
 
-      await em.save(g);
+      await em.save(game);
       if (shouldCreatePlayers) {
         const rawUsers = await this.selectUsersByUsername(em, Object.keys(options.userRoles));
-        await this.createPlayers(em, g.id, options.userRoles, rawUsers);
+        await this.createPlayers(em, game.id, options.userRoles, rawUsers);
       }
 
-      return g.id;
+      return game.id;
     };
     if (this.em.queryRunner?.isTransactionActive) {
       return await f(this.em);

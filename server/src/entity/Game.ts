@@ -1,3 +1,4 @@
+import { GameType } from "@port-of-mars/shared/types";
 import {
   Column,
   CreateDateColumn,
@@ -38,6 +39,9 @@ export class Game {
 
   @Column()
   tournamentRoundId!: number;
+
+  @Column({ default: "freeplay" })
+  type!: GameType;
 
   @OneToMany(type => Player, player => player.game)
   players!: Array<Player>;
