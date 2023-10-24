@@ -12,7 +12,10 @@ ccarra1@asu.edu
           <b-link :to="login" title="Sign up or login">Sign In</b-link>
         </li>
         <li>
-          <b-link :to="lobby" title="Play Port of Mars">Game Lobby</b-link>
+          <b-link :to="solo" title="Solo Mode">Solo Mode</b-link>
+        </li>
+        <li>
+          <b-link :to="lobby" title="Play Port of Mars">Play Port of Mars</b-link>
         </li>
         <li>
           <b-link :to="manual" title="User Manual">How to Play</b-link>
@@ -98,6 +101,7 @@ import {
   CONSENT_PAGE,
   MANUAL_PAGE,
   PRIVACY_PAGE,
+  SOLO_GAME_PAGE,
 } from "@port-of-mars/shared/routes";
 
 @Component({})
@@ -108,6 +112,7 @@ export default class Footer extends Vue {
   login = { name: LOGIN_PAGE };
   lobby = { name: LOBBY_PAGE };
   privacy = { name: PRIVACY_PAGE };
+  solo = { name: SOLO_GAME_PAGE };
 
   get constants() {
     return Constants;

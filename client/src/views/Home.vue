@@ -12,11 +12,11 @@
             </p>
             <b-row class="mt-3">
               <b-col>
-                <b-button size="lg" variant="primary" :to="lobby" class="px-5 mr-3"
-                  ><h4 class="pt-1">Play Now</h4>
+                <b-button size="lg" class="px-5 mr-3" variant="secondary" :to="solo"
+                  ><h4 class="pt-1">Solo Mode</h4>
                 </b-button>
-                <b-button size="lg" variant="secondary" :to="solo"
-                  ><h4 class="pt-1">Solo Minigame</h4>
+                <b-button size="lg" variant="primary" :to="lobby"
+                  ><h4 class="pt-1">Play Port of Mars</h4>
                 </b-button>
               </b-col>
             </b-row>
