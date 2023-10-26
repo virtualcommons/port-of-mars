@@ -199,7 +199,7 @@ export interface State extends GameData {
   // normal onboarding store data
   lobby: Lobby;
   dashboardMessages: Array<DashboardMessage>;
-  tournamentStatus: TournamentStatus;
+  tournamentStatus: TournamentStatus | null;
   isFreePlayEnabled: boolean;
   isTournamentEnabled: boolean;
 
@@ -300,13 +300,7 @@ export const initialStoreState: State = {
   lobby: defaultLobbyState(),
   user: initialUserState,
   dashboardMessages: [],
-  tournamentStatus: {
-    round: 0,
-    announcement: "",
-    championship: false,
-    description: "",
-    schedule: [],
-  },
+  tournamentStatus: null,
   isFreePlayEnabled: true,
   isTournamentEnabled: false,
 };
