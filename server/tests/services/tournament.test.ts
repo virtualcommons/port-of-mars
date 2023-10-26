@@ -49,7 +49,7 @@ describe.skip("first round", () => {
       expect(await services.auth.checkUserHasTournamentInvite(bob.id, tr.id)).toBeTruthy();
 
       // workaround to avoid creating and finalizing a game
-      const invite = await services.tournament.getActiveRoundInvite(bob.id);
+      const invite = await services.tournament.getTournamentRoundInvite(bob, tr);
       expect(invite).toBeDefined();
       if (invite) {
         invite.hasParticipated = true;

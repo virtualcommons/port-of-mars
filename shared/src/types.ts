@@ -433,25 +433,27 @@ export interface AdminStats {
 }
 
 export interface TournamentStatus {
-  round: number;
-  schedule: Array<number>; // list of timestamps for upcoming games
-  championship: boolean;
-  announcement: string;
+  name: string;
   description: string;
+  currentRound: {
+    round: number;
+    schedule: Array<number>; // list of timestamps for upcoming games
+    championship: boolean;
+    announcement: string;
+  };
 }
 
-export interface TournamentDashboardData {
-  // mirrors a round invite (TournamentRoundInvite) for use in the tournament pre-lobby dashboard
-  status: TournamentStatus;
+export interface TournamentRoundInviteStatus {
   introSurveyUrl: string;
   hasCompletedIntroSurvey: boolean;
   hasParticipated: boolean;
 }
 
-export interface ClientInitData {
+export interface ClientInitStatus {
   isTournamentEnabled: boolean;
   isFreePlayEnabled: boolean;
   user: ClientSafeUser | null;
+  tournamentStatus: TournamentStatus | null;
 }
 
 export interface DashboardMessage {

@@ -65,6 +65,11 @@ export class TournamentLobbyRoom extends LobbyRoom<TournamentLobbyRoomState> {
     return false;
   }
 
+  async canClientJoin(client: Client) {
+    const services = getServices();
+    return services.tournament.canPlayInRound(client.auth);
+  }
+
   registerLobbyHandlers(): void {
     super.registerLobbyHandlers();
     this.onMessage("accept-invitation", (client: Client, message: AcceptInvitation) => {

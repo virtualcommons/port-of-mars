@@ -167,7 +167,7 @@ async function createTournament(
   name: string,
   minRounds: number,
   maxRounds: number,
-  description: string,
+  description: string
 ): Promise<Tournament> {
   const services = getServices(em);
   return await services.tournament.createTournament({
@@ -262,8 +262,8 @@ async function createRound(
     | Pick<TournamentRound, "roundNumber" | "introSurveyUrl" | "exitSurveyUrl">
     | undefined;
   if (open) {
-    tournament = await s.tournament.getOpenTournament();
-    currentRound = await s.tournament.getOpenTournamentRound().catch(err => undefined);
+    tournament = await s.tournament.getFreePlayTournament();
+    currentRound = await s.tournament.getFreePlayTournamentRound().catch(err => undefined);
   } else {
     if (id) tournament = await s.tournament.getTournament(id);
     else tournament = await s.tournament.getActiveTournament();
@@ -500,7 +500,13 @@ program
           .description("create a tournament")
           .action(async cmd => {
             await withConnection(em =>
-              createTournament(em, cmd.tournamentName, cmd.minRounds, cmd.maxRounds, cmd.description)
+              createTournament(
+                em,
+                cmd.tournamentName,
+                cmd.minRounds,
+                cmd.maxRounds,
+                cmd.description
+              )
             );
             logger.debug("created tournament %s", cmd.tournamentName);
           })

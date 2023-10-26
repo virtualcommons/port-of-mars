@@ -75,6 +75,7 @@ export function mockGameStateInitOpts(
     playerOpts,
     deck,
     numberOfGameRounds,
+    type: "freeplay",
   };
 }
 
@@ -83,7 +84,6 @@ export async function mockGameInitOpts(): Promise<GameOpts> {
   return {
     ...mockGameStateInitOpts(),
     tournamentRoundId: currentTournamentRound.id,
-    type: "tournament",
   };
 }
 
@@ -91,7 +91,7 @@ async function getCurrentTournamentRound(type: GameType) {
   // get the current tournament round, if freeplay game then get the special open/freeplay tournament round
   const tournamentService = getServices().tournament;
   if (type === "freeplay") {
-    return await tournamentService.getOpenTournamentRound();
+    return await tournamentService.getFreePlayTournamentRound();
   } else {
     return await tournamentService.getCurrentTournamentRound();
   }

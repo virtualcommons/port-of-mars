@@ -35,13 +35,13 @@ tournamentRouter.get("/survey/complete", async (req: Request, res: Response, nex
   }
 });
 
-tournamentRouter.get("/dashboard", async (req: Request, res: Response, next) => {
+tournamentRouter.get("/invite-status", async (req: Request, res: Response, next) => {
   try {
     const user = req.user as User;
     if (user) {
       res.status(401);
     }
-    const tournamentData = await getServices().tournament.getDashboardData(user.id);
+    const tournamentData = await getServices().tournament.getTournamentRoundInviteStatus(user);
     if (!tournamentData) {
       res.status(404).json({
         kind: "danger",
@@ -50,7 +50,23 @@ tournamentRouter.get("/dashboard", async (req: Request, res: Response, next) => 
     }
     res.json(tournamentData);
   } catch (e) {
-    logger.fatal("Unable to get tournament dashboard data: %s", e);
+    logger.fatal("Unable to get tournament invite status: %s", e);
+    next(e);
+  }
+});
+
+tournamentRouter.get("/status", async (req: Request, res: Response, next) => {
+  try {
+    const tournamentData = await getServices().tournament.getTournamentStatus();
+    if (!tournamentData) {
+      res.status(404).json({
+        kind: "danger",
+        message: "There is currently no active tournament.",
+      });
+    }
+    res.json(tournamentData);
+  } catch (e) {
+    logger.fatal("Unable to get tournament status: %s", e);
     next(e);
   }
 });

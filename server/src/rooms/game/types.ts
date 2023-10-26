@@ -24,7 +24,6 @@ export interface Persister {
 }
 
 export interface GameOpts extends GameStateOpts {
-  type: GameType;
   tournamentRoundId: number;
 }
 
@@ -33,6 +32,7 @@ export interface GameStateOpts {
   playerOpts: Map<Role, PlayerOptsData>;
   deck: Array<MarsEventData>;
   numberOfGameRounds: number;
+  type: GameType;
 }
 
 export interface PlayerOptsData {
