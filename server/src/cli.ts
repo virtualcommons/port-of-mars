@@ -166,13 +166,15 @@ async function createTournament(
   em: EntityManager,
   name: string,
   minRounds: number,
-  maxRounds: number
+  maxRounds: number,
+  description: string,
 ): Promise<Tournament> {
   const services = getServices(em);
   return await services.tournament.createTournament({
     name,
     minNumberOfGameRounds: minRounds,
     maxNumberOfGameRounds: maxRounds,
+    description: description,
     active: true,
   });
 }
@@ -494,12 +496,13 @@ program
           .requiredOption("--tournamentName <tournamentName>", "string name of the tournament")
           .option("--minRounds <minRounds>", "Minimum number of game rounds", customParseInt, 8)
           .option("--maxRounds <maxRounds>", "Maximum number of game rounds", customParseInt, 12)
+          .option("--description <description>", "Description of the tournament")
           .description("create a tournament")
           .action(async cmd => {
             await withConnection(em =>
-              createTournament(em, cmd.tournamentName, cmd.minRounds, cmd.maxRounds)
+              createTournament(em, cmd.tournamentName, cmd.minRounds, cmd.maxRounds, cmd.description)
             );
-            logger.debug("tournament create...");
+            logger.debug("created tournament %s", cmd.tournamentName);
           })
       )
   )
