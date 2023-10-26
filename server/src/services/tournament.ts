@@ -11,7 +11,6 @@ import { getLogger } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { TournamentRoundDate } from "@port-of-mars/server/entity/TournamentRoundDate";
 import { TournamentRoundInviteStatus, TournamentStatus } from "@port-of-mars/shared/types";
-import { isDev } from "@port-of-mars/shared/settings";
 
 const logger = getLogger(__filename);
 
@@ -301,9 +300,6 @@ export class TournamentService extends BaseService {
   async isLobbyOpen(gameDates?: Array<Date>, tournamentRound?: TournamentRound): Promise<boolean> {
     if (!gameDates) {
       gameDates = await this.getScheduledDates(tournamentRound);
-    }
-    if (isDev()) {
-      return true;
     }
     if (gameDates.length === 0) {
       return false;
