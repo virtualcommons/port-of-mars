@@ -17,6 +17,7 @@ export class TournamentLobbyRoom extends LobbyRoom<TournamentLobbyRoomState> {
   }
 
   maxClients = 100;
+  clockInterval = 1000 * 60; // try to send invitations every minute
 
   // list of group ids that the room is currently trying to put into a game
   private pendingGroup: LobbyClient[] = [];
@@ -29,14 +30,19 @@ export class TournamentLobbyRoom extends LobbyRoom<TournamentLobbyRoomState> {
     // only try to send invitations if there are enough players and we are not in the middle
     // of trying to put a group into a game
     if (this.pendingGroup.length === 0 && this.state.clients.length >= 5) {
-      this.pendingGroup = this.getGroupByJoinDate();
+      this.pendingGroup = this.formRandomizedGroup();
       await this.sendGroupInvitations();
     }
   }
 
-  getGroupByJoinDate() {
+  formGroupByJoinDate() {
     // build a group of clients by selecting the first 5 by dateJoined
     return this.state.clients.sort((a, b) => a.dateJoined - b.dateJoined).slice(0, 5);
+  }
+
+  formRandomizedGroup() {
+    // build a group by selecting 5 random clients from the lobby
+    return this.state.clients.sort(() => Math.random() - 0.5).slice(0, 5);
   }
 
   async sendGroupInvitations() {

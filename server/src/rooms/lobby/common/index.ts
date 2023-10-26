@@ -14,7 +14,7 @@ const logger = settings.logging.getLogger(__filename);
 export abstract class LobbyRoom<RoomStateType extends LobbyRoomState> extends Room<RoomStateType> {
   abstract maxClients: number;
   patchRate = 1000 / 5; // sends state to client 5 times per second
-  clockInterval = 1000;
+  clockInterval = 1000 * 5; // try to send invitations every 5 seconds
 
   roomName = BASE_LOBBY_NAME;
   static get NAME() {
