@@ -4,12 +4,13 @@
       <Messages class="p-3"></Messages>
       <b-row class="h-100 w-100 mx-auto flex-grow-1 p-5" style="max-width: 1400px">
         <b-col cols="6" class="h-100 d-flex flex-column justify-content-between">
-          <span v-if="!expandSchedule">
-            <TournamentInfo />
+          <span v-if="!expandSchedule" class="mb-3">
+            <h4>Mars Madness Tournament {{ $tstore.getters.tournamentStartMonthYear }}</h4>
+            <p>{{ status?.description }}</p>
           </span>
           <div class="overflow-auto">
             <div class="d-flex">
-              <h4>Schedule</h4>
+              <h4>Round {{ status?.currentRound.round }} Schedule</h4>
               <b-button variant="link" @click="expandSchedule = !expandSchedule">
                 <span v-if="expandSchedule">
                   Show Tournament Info
@@ -77,7 +78,6 @@ import { Constants } from "@port-of-mars/shared/settings";
 import Countdown from "@port-of-mars/client/components/global/Countdown.vue";
 import Messages from "@port-of-mars/client/components/global/Messages.vue";
 import Schedule from "@port-of-mars/client/components/global/Schedule.vue";
-import TournamentInfo from "@port-of-mars/client/components/global/TournamentInfo.vue";
 import TournamentOnboardingSteps from "@port-of-mars/client/components/global/TournamentOnboardingSteps.vue";
 
 @Component({
@@ -85,7 +85,6 @@ import TournamentOnboardingSteps from "@port-of-mars/client/components/global/To
     Countdown,
     Messages,
     Schedule,
-    TournamentInfo,
     TournamentOnboardingSteps,
   },
 })
@@ -112,6 +111,10 @@ export default class TournamentDashboard extends Vue {
 
   get isLobbyOpen() {
     return this.$tstore.getters.isTournamentLobbyOpen;
+  }
+
+  get status() {
+    return this.$tstore.getters.tournamentStatus;
   }
 
   async created() {

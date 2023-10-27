@@ -1,6 +1,7 @@
 <template>
   <b-container fluid class="h-100 m-0 p-0">
-    <b-row>
+    <div>
+      <TournamentBanner v-if="shouldShowTournamentBanner"></TournamentBanner>
       <div id="welcome" class="w-100 d-flex align-items-center welcome">
         <b-row class="w-100 mx-0 my-5 px-3" align-v="center" align-h="center">
           <b-col md="12" lg="6" xl="5" class="text-left">
@@ -118,24 +119,26 @@
           </b-col>
         </b-row>
       </div>
-    </b-row>
+    </div>
     <Footer></Footer>
   </b-container>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import Footer from "@port-of-mars/client/components/global/Footer.vue";
-import CharCarousel from "@port-of-mars/client/components/global/CharCarousel.vue";
-import AgeTooltip from "@port-of-mars/client/components/global/AgeTooltip.vue";
-import LeaderboardTable from "@port-of-mars/client/components/stats/LeaderboardTable.vue";
 import {
   LEADERBOARD_PAGE,
   FREE_PLAY_LOBBY_PAGE,
   PLAYER_HISTORY_PAGE,
   SOLO_GAME_PAGE,
+  TOURNAMENT_DASHBOARD_PAGE,
 } from "@port-of-mars/shared/routes";
 import { isDevOrStaging, Constants } from "@port-of-mars/shared/settings";
+import Footer from "@port-of-mars/client/components/global/Footer.vue";
+import CharCarousel from "@port-of-mars/client/components/global/CharCarousel.vue";
+import AgeTooltip from "@port-of-mars/client/components/global/AgeTooltip.vue";
+import LeaderboardTable from "@port-of-mars/client/components/stats/LeaderboardTable.vue";
+import TournamentBanner from "@port-of-mars/client/components/global/TournamentBanner.vue";
 
 @Component({
   components: {
@@ -143,6 +146,7 @@ import { isDevOrStaging, Constants } from "@port-of-mars/shared/settings";
     CharCarousel,
     Footer,
     LeaderboardTable,
+    TournamentBanner,
   },
 })
 export default class Home extends Vue {
@@ -152,12 +156,17 @@ export default class Home extends Vue {
   isDevMode: boolean = false;
   currentYear = new Date().getFullYear();
   freePlayLobby = { name: FREE_PLAY_LOBBY_PAGE };
+  tournamentDashboard = { name: TOURNAMENT_DASHBOARD_PAGE };
   leaderboard = { name: LEADERBOARD_PAGE };
   gameStats = { name: PLAYER_HISTORY_PAGE };
   solo = { name: SOLO_GAME_PAGE };
 
   get constants() {
     return Constants;
+  }
+
+  get shouldShowTournamentBanner() {
+    return this.$tstore.state.isTournamentEnabled && this.$store.getters.tournamentStatus;
   }
 
   async mounted() {

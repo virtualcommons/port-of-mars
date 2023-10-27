@@ -93,6 +93,7 @@ import {
   PLAYER_HISTORY_PAGE,
   LEADERBOARD_PAGE,
   PROFILE_PAGE,
+  TOURNAMENT_DASHBOARD_PAGE,
 } from "@port-of-mars/shared/routes";
 import { isDevOrStaging, Constants } from "@port-of-mars/shared/settings";
 import _ from "lodash";
@@ -121,6 +122,7 @@ export default class Navbar extends Vue {
   solo = { name: SOLO_GAME_PAGE };
   leaderboard = { name: LEADERBOARD_PAGE };
   history = { name: PLAYER_HISTORY_PAGE };
+  tournamentDashboard = { name: TOURNAMENT_DASHBOARD_PAGE };
   freePlayLobby = { name: FREE_PLAY_LOBBY_PAGE };
   profile = { name: PROFILE_PAGE };
 
