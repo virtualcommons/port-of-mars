@@ -18,11 +18,10 @@ const logger = settings.logging.getLogger(__filename);
 
 export class FreePlayLobbyRoom extends LobbyRoom<FreePlayLobbyRoomState> {
   roomName = FREE_PLAY_LOBBY_NAME;
+
   static get NAME() {
     return FREE_PLAY_LOBBY_NAME;
   }
-
-  maxClients = 5;
 
   createState() {
     return new FreePlayLobbyRoomState();
@@ -30,7 +29,7 @@ export class FreePlayLobbyRoom extends LobbyRoom<FreePlayLobbyRoomState> {
 
   async trySendInvitations() {
     if (this.state.ready) {
-      this.sendInvitations();
+      await this.sendInvitations();
     }
   }
 

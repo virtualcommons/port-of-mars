@@ -45,9 +45,11 @@ export class LobbyChatMessage extends Schema implements LobbyChatMessageData {
  * actual game room. Limited to 5 players as the game room is
  */
 export abstract class LobbyRoomState extends Schema {
-  @type([LobbyClient]) clients = new ArraySchema<LobbyClient>();
+  @type([LobbyClient]) clients = new ArraySchema<LobbyClient>(); // FIXME: use a MapSchema<LobbyClient, Group> instead?
   @type([LobbyChatMessage]) chat = new ArraySchema<LobbyChatMessage>();
   @type("number") dateCreated: number;
+  // FIXME: we might want to relate this to service.settings.maxConnections() also but probably OK for now
+  // to be a max connections to a Lobby constraint versus total number of allowable players on the server
   maxClients = 100;
 
   constructor() {
@@ -80,7 +82,7 @@ export abstract class LobbyRoomState extends Schema {
     }
   }
 
-  // incidate that client has accepted invitation to start a new game
+  // indicate that client has accepted invitation to join a game
   setClientLeaving(username: string) {
     const index = this.clients.findIndex((c: LobbyClient) => c.username === username);
     if (index > -1) {

@@ -12,11 +12,12 @@ const logger = settings.logging.getLogger(__filename);
 // };
 
 export abstract class LobbyRoom<RoomStateType extends LobbyRoomState> extends Room<RoomStateType> {
-  abstract maxClients: number;
+  groupSize = 5; // number of players per game (may need to be parameterizable someday)
   patchRate = 1000 / 5; // sends state to client 5 times per second
-  clockInterval = 1000 * 5; // try to send invitations every 5 seconds
+  clockInterval = 1000 * 5; // try to form new gamerooms with groupSize clients every 5 seconds
 
   roomName = BASE_LOBBY_NAME;
+
   static get NAME() {
     return BASE_LOBBY_NAME;
   }
@@ -40,8 +41,8 @@ export abstract class LobbyRoom<RoomStateType extends LobbyRoomState> extends Ro
     this.setState(this.createState());
     this.resetMetadata();
     this.registerLobbyHandlers();
-    this.clock.setInterval(() => {
-      this.trySendInvitations();
+    this.clock.setInterval(async () => {
+      await this.trySendInvitations();
     }, this.clockInterval);
   }
 
@@ -52,6 +53,14 @@ export abstract class LobbyRoom<RoomStateType extends LobbyRoomState> extends Ro
 
   onDispose() {
     logger.trace(`Disposing of ${this.roomName} ${this.roomId}, no connected clients`);
+  }
+
+  async getMaxConnections() {
+    return await getServices().settings.maxConnections();
+  }
+
+  async getNumberOfActiveParticipants() {
+    return await getServices().game.getNumberOfActiveParticipants();
   }
 
   /**
@@ -128,14 +137,11 @@ export abstract class LobbyRoom<RoomStateType extends LobbyRoomState> extends Ro
   }
 
   async getFilledUsernames(): Promise<Array<string>> {
-    const usernames: Array<string> = [];
-    this.state.clients.forEach((client: LobbyClient) => {
-      usernames.push(client.username);
-    });
-    if (usernames.length < this.state.maxClients) {
-      const requiredBots = this.state.maxClients - usernames.length;
-      const bots = await getServices().account.getOrCreateBotUsers(requiredBots);
-      return usernames.concat(bots.map(u => u.username)).slice(0, this.state.maxClients);
+    const usernames: Array<string> = this.state.clients.map(c => c.username);
+    if (usernames.length < this.groupSize) {
+      const numberOfRequiredBots = this.groupSize - usernames.length;
+      const bots = await getServices().account.getOrCreateBotUsers(numberOfRequiredBots);
+      return usernames.concat(bots.map(u => u.username)).slice(0, this.groupSize);
     }
     return usernames;
   }

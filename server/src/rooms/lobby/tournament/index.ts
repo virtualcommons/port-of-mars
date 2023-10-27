@@ -7,6 +7,7 @@ import { TOURNAMENT_LOBBY_NAME, AcceptInvitation } from "@port-of-mars/shared/lo
 import { TournamentLobbyRoomState } from "@port-of-mars/server/rooms/lobby/tournament/state";
 import { LobbyClient } from "@port-of-mars/server/rooms/lobby/common/state";
 import { LobbyRoom } from "@port-of-mars/server/rooms/lobby/common";
+import * as _ from "lodash";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -16,11 +17,8 @@ export class TournamentLobbyRoom extends LobbyRoom<TournamentLobbyRoomState> {
     return TOURNAMENT_LOBBY_NAME;
   }
 
-  maxClients = 100;
-  clockInterval = 1000 * 60; // try to send invitations every minute
-
-  // list of group ids that the room is currently trying to put into a game
-  private pendingGroup: LobbyClient[] = [];
+  clockInterval = 1000 * 60; // try to form groups every 60 seconds
+  processingClients = false; // naive lock to attempt to prevent concurrent access to trySendInvitations
 
   createState() {
     return new TournamentLobbyRoomState();
@@ -28,39 +26,35 @@ export class TournamentLobbyRoom extends LobbyRoom<TournamentLobbyRoomState> {
 
   async trySendInvitations() {
     // only try to send invitations if there are enough players and we are not in the middle
-    // of trying to put a group into a game
-    if (this.pendingGroup.length === 0 && this.state.clients.length >= 5) {
-      this.pendingGroup = this.formRandomizedGroup();
-      await this.sendGroupInvitations();
+    // of trying to put groups into a game
+    if (this.processingClients) {
+      return;
     }
+    this.processingClients = true;
+    const clients = this.state.getEligibleClients();
+    if (clients.length >= 5) {
+      const shuffledClients = _.shuffle(clients);
+      while (shuffledClients.length >= 5) {
+        const group = shuffledClients.splice(0, 5);
+        await this.sendGroupInvitations(group);
+      }
+    }
+    this.processingClients = false;
   }
 
-  formGroupByJoinDate() {
-    // build a group of clients by selecting the first 5 by dateJoined
-    return this.state.clients.sort((a, b) => a.dateJoined - b.dateJoined).slice(0, 5);
-  }
-
-  formRandomizedGroup() {
-    // build a group by selecting 5 random clients from the lobby
-    return this.state.clients.sort(() => Math.random() - 0.5).slice(0, 5);
-  }
-
-  async sendGroupInvitations() {
-    const usernames = this.pendingGroup.map(client => client.username);
+  async sendGroupInvitations(group: LobbyClient[]) {
+    const usernames = group.map(client => client.username);
     const gameOpts = await buildGameOpts(usernames, "tournament");
     const room = await matchMaker.createRoom(GameRoom.NAME, gameOpts);
     logger.info(`${this.roomName} created game room ${room.roomId}`);
     // send room data for new websocket connection
-    this.pendingGroup.forEach((client: LobbyClient) => {
-      this.sendSafe(client.client, {
+    group.forEach((lobbyClient: LobbyClient) => {
+      this.state.addClientToGroup(lobbyClient.client, group);
+      this.sendSafe(lobbyClient.client, {
         kind: "sent-invitation",
         roomId: room.roomId,
       });
     });
-  }
-
-  allGroupClientsLeaving() {
-    return this.pendingGroup.every(client => client.leaving);
   }
 
   async isLobbyOpen() {
@@ -73,7 +67,15 @@ export class TournamentLobbyRoom extends LobbyRoom<TournamentLobbyRoomState> {
 
   async canClientJoin(client: Client) {
     const services = getServices();
-    return services.tournament.canPlayInRound(client.auth);
+    const numberOfActiveParticipants = await services.game.getNumberOfActiveParticipants();
+    const maxConnections = await this.getMaxConnections();
+    return (
+      numberOfActiveParticipants < maxConnections && services.tournament.canPlayInRound(client.auth)
+    );
+  }
+
+  allGroupClientsLeaving(group: LobbyClient[]) {
+    return group.every(client => client.leaving);
   }
 
   registerLobbyHandlers(): void {
@@ -81,25 +83,31 @@ export class TournamentLobbyRoom extends LobbyRoom<TournamentLobbyRoomState> {
     this.onMessage("accept-invitation", (client: Client, message: AcceptInvitation) => {
       logger.trace(`client ${client.auth.username} accepted invitation to join a game`);
       this.state.setClientLeaving(client.auth.username);
+      const pendingGroup = this.state.getPendingGroup(client);
       // check that all clients in the group are leaving
-      if (this.allGroupClientsLeaving()) {
-        this.pendingGroup.forEach((lc: LobbyClient) => {
+      if (!pendingGroup) {
+        logger.fatal(`no client group found for client ${client.auth.username}`);
+        return;
+      }
+      // FIXME: consider refactoring to some better abstractions,
+      // with a ClientGroup class that can encapsulate this logic + cleanup
+      // etc.
+      if (this.allGroupClientsLeaving(pendingGroup)) {
+        pendingGroup.forEach((lc: LobbyClient) => {
           this.sendSafe(lc.client, { kind: "removed-client-from-lobby" });
           lc.client.leave();
         });
-        this.pendingGroup = [];
+        // clear this group from the state and remove from the list of connected
+        // clients
+        this.state.clearPendingGroup(pendingGroup);
       }
     });
   }
 
   onLeave(client: Client, consented: boolean) {
+    // cleans up the client state
     super.onLeave(client, consented);
-    // if a client in the pending group leaves, clear the group to try again
-    const index = this.pendingGroup.findIndex(lc => lc.client.id === client.id);
-    if (index) {
-      this.pendingGroup.splice(index, 1);
-      this.pendingGroup.forEach(lc => (lc.leaving = false));
-      this.pendingGroup = [];
-    }
+    // if a client in a pending group leaves, reset all other clients in the group
+    this.state.resetPendingGroup(client);
   }
 }
