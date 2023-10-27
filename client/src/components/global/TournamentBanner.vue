@@ -1,5 +1,5 @@
 <template>
-  <b-alert class="bg-light border-0 m-0 rounded-0" variant="dark" show dismissible>
+  <b-alert class="bg-light border-0 m-0 rounded-0" variant="dark" show>
     <div class="d-flex justify-content-center align-items-center">
       <div class="text-center mw-50 mx-3">
         <h4>
@@ -7,8 +7,9 @@
           <span v-if="status.currentRound.round === 1">is starting!</span>
           <span v-else>is active!</span>
         </h4>
-        <!-- <p>{{ status.description }}</p> -->
-        <!-- FIXME: use a shorter description here -->
+        <p>
+          <small>{{ status.description }}</small>
+        </p>
         <p class="mb-0">
           {{ status.currentRound.announcement }}
         </p>
