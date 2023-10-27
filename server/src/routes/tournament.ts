@@ -1,7 +1,7 @@
 import { Router, Request, Response } from "express";
 import { User } from "@port-of-mars/server/entity";
 import { getServices } from "@port-of-mars/server/services";
-import { getPagePath, FREE_PLAY_LOBBY_PAGE } from "@port-of-mars/shared/routes";
+import { getPagePath, TOURNAMENT_DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
 import { settings, getLogger } from "@port-of-mars/server/settings";
 import { ServerError } from "@port-of-mars/server/util";
 
@@ -28,7 +28,7 @@ tournamentRouter.get("/survey/complete", async (req: Request, res: Response, nex
         })
       );
     }
-    res.redirect(`${settings.host}/${getPagePath(FREE_PLAY_LOBBY_PAGE)}`);
+    res.redirect(`${settings.host}/${getPagePath(TOURNAMENT_DASHBOARD_PAGE)}`);
   } catch (e) {
     logger.fatal("Unable to mark survey completion: %s", e);
     next(e);
