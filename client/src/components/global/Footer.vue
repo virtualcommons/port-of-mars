@@ -15,7 +15,20 @@ ccarra1@asu.edu
           <b-link :to="solo" title="Solo Mode">Solo Mode</b-link>
         </li>
         <li>
-          <b-link :to="freePlayLobby" title="Play Port of Mars">Play Port of Mars</b-link>
+          <b-link
+            v-if="$tstore.state.isFreePlayEnabled"
+            :to="freePlayLobby"
+            title="Port of Mars Free Play"
+            >Free Play</b-link
+          >
+        </li>
+        <li>
+          <b-link
+            v-if="$tstore.state.isFreePlayEnabled"
+            :to="tournamentDashboard"
+            title="Join Mars Madness"
+            >Join Mars Madness</b-link
+          >
         </li>
         <li>
           <b-link :to="manual" title="User Manual">How to Play</b-link>
@@ -102,6 +115,7 @@ import {
   MANUAL_PAGE,
   PRIVACY_PAGE,
   SOLO_GAME_PAGE,
+  TOURNAMENT_DASHBOARD_PAGE,
 } from "@port-of-mars/shared/routes";
 
 @Component({})
@@ -111,6 +125,7 @@ export default class Footer extends Vue {
   manual = { name: MANUAL_PAGE };
   login = { name: LOGIN_PAGE };
   freePlayLobby = { name: FREE_PLAY_LOBBY_PAGE };
+  tournamentDashboard = { name: TOURNAMENT_DASHBOARD_PAGE };
   privacy = { name: PRIVACY_PAGE };
   solo = { name: SOLO_GAME_PAGE };
 

@@ -1,5 +1,5 @@
 <template>
-  <b-navbar tag="header" toggleable="lg" type="dark" variant="dark" class="w-100" fixed="top">
+  <b-navbar tag="header" toggleable="xl" type="dark" variant="dark" class="w-100" fixed="top">
     <b-navbar-brand :to="home">
       <b-img
         id="logo"
@@ -23,7 +23,7 @@
           >About</b-nav-item
         >
         <b-nav-item class="mx-2" :to="consent" exact-active-class="active" title="Consent Form"
-          >Consent Form</b-nav-item
+          >Consent</b-nav-item
         >
         <b-nav-item
           class="mx-2"
@@ -36,17 +36,32 @@
         <b-nav-item class="mx-2" :to="leaderboard" exact-active-class="active" title="Leaderboard"
           >Leaderboard</b-nav-item
         >
-        <b-nav-item class="mx-2" :to="solo" exact-active-class="active" title="Solo Mode">
+        <b-nav-item
+          class="mx-2 text-nowrap"
+          :to="solo"
+          exact-active-class="active"
+          title="Solo Mode"
+        >
           Solo Mode
         </b-nav-item>
         <b-nav-item
           v-if="$tstore.state.isFreePlayEnabled"
-          class="mx-2"
+          class="mx-2 text-nowrap"
           :to="freePlayLobby"
           exact-active-class="active"
-          title="Game Lobby"
+          title="Free Play (Open) Game Lobby"
         >
-          Play Port of Mars
+          Free Play
+        </b-nav-item>
+        <b-nav-item
+          v-if="$tstore.state.isTournamentEnabled"
+          class="mx-2 text-nowrap"
+          link-classes="btn btn-success text-white"
+          :to="tournamentDashboard"
+          exact-active-class="active"
+          title="Free Play (Open) Game Lobby"
+        >
+          <b>Join Mars Madness</b>
         </b-nav-item>
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto">

@@ -17,7 +17,7 @@
       <div class="mx-3">
         <Countdown size="2" :nextLaunch="$tstore.getters.nextLaunchTime"></Countdown>
         <b-button variant="success" :to="tournamentDashboard" class="text-nowrap mx-2">
-          <b>See the schedule and get prepared!</b>
+          <p class="mb-0">See the schedule and get prepared!</p>
         </b-button>
       </div>
     </div>

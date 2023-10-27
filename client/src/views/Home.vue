@@ -13,11 +13,20 @@
             </p>
             <b-row class="mt-3">
               <b-col>
-                <b-button size="lg" class="px-5 mr-3" variant="secondary" :to="solo"
-                  ><h4 class="pt-1">Solo Mode</h4>
+                <b-button class="mt-3 mr-3" size="md" variant="secondary" :to="solo">
+                  <h4 class="p-1">Solo Mode</h4>
                 </b-button>
-                <b-button size="lg" variant="primary" :to="freePlayLobby"
-                  ><h4 class="pt-1">Play Port of Mars</h4>
+                <b-button class="mt-3 mr-3" size="md" variant="primary" :to="freePlayLobby">
+                  <h4 class="p-1">Free Play</h4>
+                </b-button>
+                <b-button
+                  class="mt-3"
+                  size="md"
+                  v-if="shouldShowTournamentBanner"
+                  variant="success"
+                  :to="tournamentDashboard"
+                >
+                  <h4 class="p-1">Join Mars Madness</h4>
                 </b-button>
               </b-col>
             </b-row>
