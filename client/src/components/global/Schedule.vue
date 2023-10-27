@@ -11,7 +11,7 @@
           :key="game.date.getTime()"
         >
           <div class="launch-date">
-            <b>{{ formatTime(game.date) }}</b> ({{ localTimeZone }})
+            <b>{{ formatTime(game.date) }}</b>
           </div>
           <b-button-group>
             <a
@@ -56,25 +56,18 @@ export default class Schedule extends Vue {
   @Prop()
   schedule!: Array<number>;
 
-  readonly SITE_URL = "https://portofmars.asu.edu";
+  static readonly SITE_URL = "https://portofmars.asu.edu";
 
   get launchTimes() {
     return this.groupLaunchTimesByDate(this.schedule);
   }
 
-  get localTimeZone() {
-    return new Date()
-      .toLocaleTimeString(undefined, {
-        timeZoneName: "short",
-      })
-      .split(" ")[2];
-  }
-
   groupLaunchTimesByDate(launchTimes: number[]) {
-    // returns an object with date strings mapped to indivual launch times and invite links
+    // returns an object with date strings mapped to individual launch times and invite links
+    // could use a Map<string, object> also
     const grouped: LaunchTimes = {};
     for (const time of launchTimes) {
-      const dateStr = new Date(time).toLocaleDateString(undefined, {
+      const dateStr = new Date(time).toLocaleDateString([], {
         weekday: "long",
         month: "long",
         day: "numeric",
@@ -96,7 +89,7 @@ export default class Schedule extends Vue {
   buildGoogleInviteLink(start: Date) {
     return google({
       title: `Port of Mars Launch`,
-      location: this.SITE_URL,
+      location: Schedule.SITE_URL,
       start,
       duration: [1, "hour"],
     });
@@ -105,16 +98,17 @@ export default class Schedule extends Vue {
   buildIcsInviteLink(start: Date) {
     return ics({
       title: `Port of Mars Launch`,
-      location: this.SITE_URL,
+      location: Schedule.SITE_URL,
       start,
       duration: [1, "hour"],
     });
   }
 
   formatTime(date: Date) {
-    return date.toLocaleTimeString(undefined, {
+    return date.toLocaleTimeString([], {
       hour: "numeric",
       minute: "numeric",
+      timeZoneName: "short",
     });
   }
 }

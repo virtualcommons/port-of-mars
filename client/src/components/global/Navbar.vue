@@ -2,7 +2,7 @@
   <b-navbar tag="header" toggleable="xl" type="dark" variant="dark" class="w-100" fixed="top">
     <b-navbar-brand :to="home">
       <b-img
-        id="logo"
+        class="logo"
         v-bind="portOfMarsLogoProps"
         :src="$getAssetUrl(`images/logo-Port-of-Mars-White.svg`)"
         alt="the planet mars illustrated in white above Port of Mars"
@@ -17,8 +17,9 @@
           :to="admin"
           exact-active-class="active"
           title="Admin Dashboard"
-          >Admin</b-nav-item
         >
+          Admin
+        </b-nav-item>
         <b-nav-item class="mx-2" :to="about" exact-active-class="active" title="About Port of Mars"
           >About</b-nav-item
         >
@@ -31,8 +32,9 @@
           target="_blank"
           exact-active-class="active"
           title="Game Manual"
-          >Manual</b-nav-item
         >
+          Manual
+        </b-nav-item>
         <b-nav-item class="mx-2" :to="leaderboard" exact-active-class="active" title="Leaderboard"
           >Leaderboard</b-nav-item
         >
@@ -45,21 +47,21 @@
           Solo Mode
         </b-nav-item>
         <b-nav-item
-          v-if="$tstore.state.isFreePlayEnabled"
+          v-if="isFreePlayEnabled"
           class="mx-2 text-nowrap"
           :to="freePlayLobby"
           exact-active-class="active"
-          title="Free Play (Open) Game Lobby"
+          title="Free Play Game Lobby"
         >
           Free Play
         </b-nav-item>
         <b-nav-item
-          v-if="$tstore.state.isTournamentEnabled"
+          v-if="isTournamentEnabled"
           class="mx-2 text-nowrap"
           link-classes="btn btn-success text-white"
           :to="tournamentDashboard"
           exact-active-class="active"
-          title="Free Play (Open) Game Lobby"
+          title="Tournament Dashboard"
         >
           <b>Join Mars Madness</b>
         </b-nav-item>
@@ -94,7 +96,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 import {
   ADMIN_PAGE,
   HOME_PAGE,
@@ -110,20 +112,14 @@ import {
   PROFILE_PAGE,
   TOURNAMENT_DASHBOARD_PAGE,
 } from "@port-of-mars/shared/routes";
-import { isDevOrStaging, Constants } from "@port-of-mars/shared/settings";
+import { Constants } from "@port-of-mars/shared/settings";
 import _ from "lodash";
 
 @Component({})
 export default class Navbar extends Vue {
-  @Prop({ default: "Mission Control Dashboard" })
-  title!: string;
-
-  isDevMode: boolean = false;
-
-  contactUrl: string = "mailto:portmars@asu.edu";
-
   portOfMarsLogoProps = {
     height: 60,
+    width: 200,
   };
   readonly SITE_URL = "https://portofmars.asu.edu";
 
@@ -141,15 +137,6 @@ export default class Navbar extends Vue {
   freePlayLobby = { name: FREE_PLAY_LOBBY_PAGE };
   profile = { name: PROFILE_PAGE };
 
-  async created() {
-    this.isDevMode = isDevOrStaging();
-  }
-
-  mounted() {
-    console.log("route name: ", this.$route.name);
-    console.log("route.name = login", this.$route.name == this.login.name);
-  }
-
   get constants() {
     return Constants;
   }
@@ -166,12 +153,12 @@ export default class Navbar extends Vue {
     return this.$tstore.getters.isAdmin;
   }
 
-  get isInGame() {
-    if (_.isNil(this.$route.name)) {
-      return false;
-    } else {
-      return this.game.name == this.$route.name || this.freePlayLobby.name == this.$route.name;
-    }
+  get isTournamentEnabled() {
+    return this.$tstore.state.isTournamentEnabled;
+  }
+
+  get isFreePlayEnabled() {
+    return this.$tstore.state.isFreePlayEnabled;
   }
 
   logout() {
@@ -182,8 +169,4 @@ export default class Navbar extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-#logo {
-  width: 200px;
-}
-</style>
+<style lang="scss" scoped></style>

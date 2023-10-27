@@ -15,18 +15,12 @@ ccarra1@asu.edu
           <b-link :to="solo" title="Solo Mode">Solo Mode</b-link>
         </li>
         <li>
-          <b-link
-            v-if="$tstore.state.isFreePlayEnabled"
-            :to="freePlayLobby"
-            title="Port of Mars Free Play"
+          <b-link v-if="isFreePlayEnabled" :to="freePlayLobby" title="Port of Mars Free Play"
             >Free Play</b-link
           >
         </li>
         <li>
-          <b-link
-            v-if="$tstore.state.isFreePlayEnabled"
-            :to="tournamentDashboard"
-            title="Join Mars Madness"
+          <b-link v-if="isTournamentEnabled" :to="tournamentDashboard" title="Join Mars Madness"
             >Join Mars Madness</b-link
           >
         </li>
@@ -131,6 +125,14 @@ export default class Footer extends Vue {
 
   get constants() {
     return Constants;
+  }
+
+  get isTournamentEnabled() {
+    return this.$tstore.state.isTournamentEnabled;
+  }
+
+  get isFreePlayEnabled() {
+    return this.$tstore.state.isFreePlayEnabled;
   }
 }
 </script>
