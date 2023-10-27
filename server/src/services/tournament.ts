@@ -214,6 +214,8 @@ export class TournamentService extends BaseService {
     return {
       name: tournament.name,
       description: tournament.description ?? "",
+      lobbyOpenBeforeOffset: await this.getBeforeOffset(),
+      lobbyOpenAfterOffset: await this.getAfterOffset(),
       currentRound: {
         round: tournamentRound.roundNumber,
         schedule: scheduledDates.map((date: Date) => date.getTime()),

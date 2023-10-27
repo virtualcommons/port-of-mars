@@ -38,7 +38,7 @@ tournamentRouter.get("/survey/complete", async (req: Request, res: Response, nex
 tournamentRouter.get("/invite-status", async (req: Request, res: Response, next) => {
   try {
     const user = req.user as User;
-    if (user) {
+    if (!user) {
       res.status(401);
     }
     const tournamentData = await getServices().tournament.getTournamentRoundInviteStatus(user);

@@ -435,6 +435,8 @@ export interface AdminStats {
 export interface TournamentStatus {
   name: string;
   description: string;
+  lobbyOpenBeforeOffset: number;
+  lobbyOpenAfterOffset: number;
   currentRound: {
     round: number;
     schedule: Array<number>; // list of timestamps for upcoming games

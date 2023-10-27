@@ -49,7 +49,12 @@ import { applyLobbyResponses } from "@port-of-mars/client/api/lobby/response";
 import { TournamentLobbyRequestAPI } from "@port-of-mars/client/api/lobby/request";
 import { AccountAPI } from "@port-of-mars/client/api/account/request";
 import { TOURNAMENT_LOBBY_NAME } from "@port-of-mars/shared/lobby";
-import { GAME_PAGE, CONSENT_PAGE, MANUAL_PAGE } from "@port-of-mars/shared/routes";
+import {
+  GAME_PAGE,
+  CONSENT_PAGE,
+  MANUAL_PAGE,
+  TOURNAMENT_DASHBOARD_PAGE,
+} from "@port-of-mars/shared/routes";
 import { Constants } from "@port-of-mars/shared/settings";
 import Countdown from "@port-of-mars/client/components/global/Countdown.vue";
 import HelpPanel from "@port-of-mars/client/components/lobby/HelpPanel.vue";
@@ -70,6 +75,7 @@ export default class TournamentLobby extends Vue {
   accountApi!: AccountAPI;
 
   game = { name: GAME_PAGE };
+  dashboard = { name: TOURNAMENT_DASHBOARD_PAGE };
   manual = { name: MANUAL_PAGE };
   consent = { name: CONSENT_PAGE };
 
@@ -88,10 +94,13 @@ export default class TournamentLobby extends Vue {
   }
 
   async created() {
-    // FIXME: additional checks for player
-    const room = await this.$client.joinOrCreate(TOURNAMENT_LOBBY_NAME);
-    applyLobbyResponses(room, this, "tournament");
-    this.api.connect(room);
+    try {
+      const room = await this.$client.joinOrCreate(TOURNAMENT_LOBBY_NAME);
+      applyLobbyResponses(room, this, "tournament");
+      this.api.connect(room);
+    } catch (e) {
+      this.$router.push(this.dashboard);
+    }
   }
 
   beforeDestroy() {

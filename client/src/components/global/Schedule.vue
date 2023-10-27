@@ -1,55 +1,52 @@
 <template>
-  <div class="mx-5">
-    <template v-if="schedule.length > 0">
-      <h4 :id="scheduleId">Schedule</h4>
-      <ul v-if="showInstructions" class="lead p-1">
-        <li>Sign in and <em>join the game lobby</em> when a game is scheduled</li>
-        <li>Games will automatically start in the lobby when at least 5 players are connected</li>
-        <li>
-          The game lobby opens 10 minutes before launch time and stays open for 30 minutes after
-          launch time
-        </li>
-      </ul></template
-    >
-
-    <h3 v-else>There are currently no scheduled games.</h3>
-    <b-list-group horizontal="lg" class="p-1">
-      <b-list-group-item
-        class="p-1 text-center"
-        v-for="game in upcomingGames"
-        :key="game.launchId"
-        variant="dark"
-      >
-        <div class="launch-date">
-          {{ game.launchDate }}
-          <br />
-          <span class="launch-time">{{ game.launchTime }}</span>
-        </div>
-        <b-button-group>
-          <a
-            class="btn btn-primary"
-            :href="googleInviteLink(game.addToCalendar)"
-            title="add to Google Calendar"
-            target="_blank"
-          >
-            <b-icon-google scale=".8"></b-icon-google>
-          </a>
-          <a
-            class="btn btn-info"
-            :href="icsInviteLink(game.addToCalendar)"
-            title="download as ics"
-            target="_blank"
-          >
-            <b-icon-calendar-plus-fill scale=".8"></b-icon-calendar-plus-fill>
-          </a>
-        </b-button-group>
-      </b-list-group-item>
+  <div>
+    <b-list-group class="p-1">
+      <template v-for="(times, date) in launchTimes">
+        <b-list-group-item class="text-center bg-primary border-0 my-1" :key="date">
+          <b>{{ date }}</b>
+        </b-list-group-item>
+        <b-list-group-item
+          class="p-3 text-center bg-dark border-0 my-1 d-flex justify-content-between"
+          v-for="game in times"
+          :key="game.date.getTime()"
+        >
+          <div class="launch-date">
+            <b>{{ formatTime(game.date) }}</b> ({{ localTimeZone }})
+          </div>
+          <b-button-group>
+            <a
+              class="btn btn-secondary py-0"
+              :href="game.googleInviteURL"
+              title="add to Google Calendar"
+              target="_blank"
+            >
+              <b-icon-google scale=".8"></b-icon-google>
+            </a>
+            <a
+              class="btn btn-primary py-0"
+              :href="game.icsInviteURL"
+              title="download as ics"
+              target="_blank"
+            >
+              <b-icon-calendar-plus-fill scale=".8"></b-icon-calendar-plus-fill>
+            </a>
+          </b-button-group>
+        </b-list-group-item>
+      </template>
     </b-list-group>
   </div>
 </template>
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { google, ics } from "calendar-link";
+
+interface LaunchTimes {
+  [date: string]: {
+    date: Date;
+    googleInviteURL: string;
+    icsInviteURL: string;
+  }[];
+}
 
 @Component({})
 export default class Schedule extends Vue {
@@ -59,74 +56,67 @@ export default class Schedule extends Vue {
   @Prop()
   schedule!: Array<number>;
 
-  @Prop({ default: false })
-  showInstructions!: boolean;
-
   readonly SITE_URL = "https://portofmars.asu.edu";
 
-  get upcomingGames() {
-    return this.schedule.map(gameTime => {
-      const scheduledDate = new Date(gameTime);
-      return {
-        launchId: gameTime,
-        launchDate: scheduledDate.toLocaleDateString("en-US"),
-        launchTime: scheduledDate.toLocaleTimeString("en-US", {
-          hour: "numeric",
-          minute: "numeric",
-          hour12: false,
-          timeZoneName: "short",
-        }),
-        addToCalendar: {
-          title: `Port of Mars Launch`,
-          location: this.SITE_URL,
-          start: scheduledDate,
-          duration: [1, "hour"],
-          description: this.calendarDescription,
-        },
-      };
+  get launchTimes() {
+    return this.groupLaunchTimesByDate(this.schedule);
+  }
+
+  get localTimeZone() {
+    return new Date()
+      .toLocaleTimeString(undefined, {
+        timeZoneName: "short",
+      })
+      .split(" ")[2];
+  }
+
+  groupLaunchTimesByDate(launchTimes: number[]) {
+    // returns an object with date strings mapped to indivual launch times and invite links
+    const grouped: LaunchTimes = {};
+    for (const time of launchTimes) {
+      const dateStr = new Date(time).toLocaleDateString(undefined, {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+      });
+      if (!grouped[dateStr]) {
+        grouped[dateStr] = [];
+      }
+      const googleInviteURL = this.buildGoogleInviteLink(new Date(time));
+      const icsInviteURL = this.buildIcsInviteLink(new Date(time));
+      grouped[dateStr].push({
+        date: new Date(time),
+        googleInviteURL,
+        icsInviteURL,
+      });
+    }
+    return grouped;
+  }
+
+  buildGoogleInviteLink(start: Date) {
+    return google({
+      title: `Port of Mars Launch`,
+      location: this.SITE_URL,
+      start,
+      duration: [1, "hour"],
     });
   }
 
-  get calendarDescription() {
-    return (
-      `Register and complete all Port of Mars Mission Control onboarding tasks at ${this.SITE_URL}.` +
-      `Sign in and join the game lobby up to 10 minutes before launch time. Games will automatically start when at least 5 players are connected to the game lobby.`
-    );
+  buildIcsInviteLink(start: Date) {
+    return ics({
+      title: `Port of Mars Launch`,
+      location: this.SITE_URL,
+      start,
+      duration: [1, "hour"],
+    });
   }
 
-  googleInviteLink(invite: {
-    title: string;
-    location: string;
-    start: Date;
-    end: Date;
-    details: string;
-  }) {
-    return google(invite);
-  }
-
-  icsInviteLink(invite: {
-    title: string;
-    location: string;
-    start: Date;
-    end: Date;
-    details: string;
-  }) {
-    return ics(invite);
+  formatTime(date: Date) {
+    return date.toLocaleTimeString(undefined, {
+      hour: "numeric",
+      minute: "numeric",
+    });
   }
 }
 </script>
-<style scoped>
-h4 {
-  color: white;
-}
-
-.launch-date {
-  font-size: 1.2rem;
-  font-weight: bolder;
-  line-height: 0.9;
-}
-
-.launch-time {
-  font-size: 1rem;
-}
-</style>
+<style lang="scss" scoped></style>

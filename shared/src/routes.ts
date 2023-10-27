@@ -124,6 +124,7 @@ export const PAGE_META: {
   },
   [FREE_PLAY_LOBBY_PAGE]: {
     path: "/lobby",
+    name: FREE_PLAY_LOBBY_PAGE,
     meta: {
       requiresAuth: true,
       requiresFreePlayEnabled: true,
@@ -131,6 +132,7 @@ export const PAGE_META: {
   },
   [TOURNAMENT_LOBBY_PAGE]: {
     path: "/tournament/lobby",
+    name: TOURNAMENT_LOBBY_PAGE,
     meta: {
       requiresAuth: true,
       requiresTournamentEnabled: true,
