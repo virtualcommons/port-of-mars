@@ -14,8 +14,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: configure for prod environment
-      run: ./configure prod
+    - name: configure for dev environment to run tests
+      run: ./configure dev
     - name: Compile TS code for production
       run: make buildprod
     - name: Run tests
