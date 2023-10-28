@@ -41,7 +41,7 @@
           <div class="h-100 p-2 scrollable">
             <AccomplishmentCard
               v-for="accomplishment in purchasableAccomplishments"
-              :key="accomplishment.label + Math.random()"
+              :key="accomplishment.id"
               :accomplishment="accomplishment"
               :enableModal="true"
             ></AccomplishmentCard>

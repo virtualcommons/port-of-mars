@@ -67,7 +67,8 @@ export default class Schedule extends Vue {
     // could use a Map<string, object> also
     const grouped: LaunchTimes = {};
     for (const time of launchTimes) {
-      const dateStr = new Date(time).toLocaleDateString([], {
+      const launchDate = new Date(time);
+      const dateStr = launchDate.toLocaleDateString([], {
         weekday: "long",
         month: "long",
         day: "numeric",
@@ -75,8 +76,9 @@ export default class Schedule extends Vue {
       if (!grouped[dateStr]) {
         grouped[dateStr] = [];
       }
-      const googleInviteURL = this.buildGoogleInviteLink(new Date(time));
-      const icsInviteURL = this.buildIcsInviteLink(new Date(time));
+      const calendarEvent = this.buildCalendarEvent(launchDate);
+      const googleInviteURL = google(calendarEvent);
+      const icsInviteURL = ics(calendarEvent);
       grouped[dateStr].push({
         date: new Date(time),
         googleInviteURL,
@@ -86,22 +88,22 @@ export default class Schedule extends Vue {
     return grouped;
   }
 
-  buildGoogleInviteLink(start: Date) {
-    return google({
-      title: `Port of Mars Launch`,
-      location: Schedule.SITE_URL,
-      start,
-      duration: [1, "hour"],
-    });
+  get calendarEventDescription() {
+    return (
+      `Register and complete all Port of Mars onboarding tasks at ${Schedule.SITE_URL} ASAP. \n\n` +
+      `Sign in and join the tournament lobby up to 10 minutes before launch time. \n\n` +
+      `Games will automatically start when at least 5 players are connected to the game lobby.`
+    );
   }
 
-  buildIcsInviteLink(start: Date) {
-    return ics({
-      title: `Port of Mars Launch`,
+  buildCalendarEvent(start: Date) {
+    return {
+      title: `Port of Mars Mars Madness Launch`,
       location: Schedule.SITE_URL,
       start,
+      description: this.calendarEventDescription,
       duration: [1, "hour"],
-    });
+    };
   }
 
   formatTime(date: Date) {

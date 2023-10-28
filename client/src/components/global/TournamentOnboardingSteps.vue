@@ -3,19 +3,12 @@
     <div class="d-flex align-items-center flex-shrink-1">
       <div class="flex-shrink-1 mr-5">
         <h2 class="mb-0">
-          <b-icon-check-circle
-            v-if="$tstore.getters.hasConsented"
-            variant="success"
-          ></b-icon-check-circle>
+          <b-icon-check-circle v-if="hasConsented" variant="success"></b-icon-check-circle>
           <b-icon-x-circle v-else variant="secondary"></b-icon-x-circle>
         </h2>
       </div>
       <div class="flex-grow-1">
-        <b-button
-          variant="primary"
-          :disabled="$store.getters.hasConsented"
-          :to="consent"
-          class="w-100"
+        <b-button variant="primary" :disabled="hasConsented" :to="consent" class="w-100"
           ><h4 class="mb-0">Grant Consent</h4></b-button
         >
       </div>
@@ -83,12 +76,8 @@ export default class TournamentOnboardingSteps extends Vue {
     return this.$tstore.getters.tournamentStatus;
   }
 
-  get shortMonthYear() {
-    const date = new Date(this.$tstore.getters.nextLaunchTime ?? 0);
-    return date.toLocaleDateString("en-US", {
-      month: "short",
-      year: "numeric",
-    });
+  get hasConsented() {
+    return this.$store.getters.hasConsented;
   }
 }
 </script>

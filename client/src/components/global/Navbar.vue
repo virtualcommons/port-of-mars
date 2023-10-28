@@ -113,7 +113,6 @@ import {
   TOURNAMENT_DASHBOARD_PAGE,
 } from "@port-of-mars/shared/routes";
 import { Constants } from "@port-of-mars/shared/settings";
-import _ from "lodash";
 
 @Component({})
 export default class Navbar extends Vue {

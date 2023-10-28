@@ -103,10 +103,9 @@
           <b-col md="12" lg="6" xl="5" class="text-left">
             <h1 class="section-title mb-3">Community</h1>
             <p class="text mb-3">
-              Whether you are looking to discuss the game or find a team, connect with other players
-              by joining our
-              <a :href="constants.DISCORD_URL">community Discord</a> or by joining a room in the
-              <b-link :to="freePlayLobby">game lobby</b-link> and using the built-in chat.
+              Discuss the game, find a game to play, or connect with other players in our
+              <a :href="constants.DISCORD_URL">community Discord</a> or by joining a room in our
+              <b-link :to="freePlayLobby">free play lobby</b-link> and using the built-in chat.
             </p>
             <p class="text mb-3">
               Keep track of your performance with your
@@ -142,7 +141,7 @@ import {
   SOLO_GAME_PAGE,
   TOURNAMENT_DASHBOARD_PAGE,
 } from "@port-of-mars/shared/routes";
-import { isDevOrStaging, Constants } from "@port-of-mars/shared/settings";
+import { Constants } from "@port-of-mars/shared/settings";
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
 import CharCarousel from "@port-of-mars/client/components/global/CharCarousel.vue";
 import AgeTooltip from "@port-of-mars/client/components/global/AgeTooltip.vue";
@@ -162,7 +161,6 @@ export default class Home extends Vue {
   @Prop({ default: false })
   scrollToAbout!: boolean;
 
-  isDevMode: boolean = false;
   currentYear = new Date().getFullYear();
   freePlayLobby = { name: FREE_PLAY_LOBBY_PAGE };
   tournamentDashboard = { name: TOURNAMENT_DASHBOARD_PAGE };
@@ -179,7 +177,6 @@ export default class Home extends Vue {
   }
 
   async mounted() {
-    this.isDevMode = isDevOrStaging();
     if (this.scrollToAbout) {
       this.scrollToAboutSection();
     }

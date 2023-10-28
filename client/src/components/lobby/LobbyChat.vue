@@ -1,7 +1,11 @@
 <template>
   <div id="chat" class="h-100 d-flex flex-column">
     <div id="messages" class="flex-grow-1 d-flex flex-column-reverse justify-content-start p-2">
-      <div v-for="msg in reversedMessages" :key="msg.dateCreated" class="mt-2 backdrop rounded p-1">
+      <div
+        v-for="msg in reversedMessages"
+        :key="msg.username + msg.dateCreated"
+        class="mt-2 backdrop rounded p-1"
+      >
         <p class="mb-0">
           <b class="text-light">{{ msg.username }}: </b>
           <span class="text-secondary">{{ msg.message }}</span>

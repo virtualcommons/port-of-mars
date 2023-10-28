@@ -42,7 +42,7 @@ export class AjaxRequest {
   errorRoutes: Map<number, string> = new Map([
     [401, LOGIN_PAGE],
     [403, CONSENT_PAGE],
-    [404, FREE_PLAY_LOBBY_PAGE],
+    [404, HOME_PAGE],
   ]);
 
   set roomId(r: RoomId | undefined) {
@@ -60,6 +60,7 @@ export class AjaxRequest {
       ({ data, status }) => {
         if (status === 200) {
           this.store.commit("SET_USER", data.user);
+          // FIXME: not terribly important but we might want to move to the tournament dashboard if isTournamentEnabled
           if (data.user.isVerified) this.router.push({ name: FREE_PLAY_LOBBY_PAGE });
           else this.router.push({ name: CONSENT_PAGE });
         } else {
