@@ -12,6 +12,7 @@
     sort-by="rank"
     :sort-asc="true"
     sort-icon-left
+    show-empty
   >
     <!-- headers -->
     <template #head(username)> Player </template>
@@ -44,6 +45,7 @@
     <template #cell(totalGames)="data">
       {{ getTotalGamesPlayed(data.item) }}
     </template>
+    <template #empty> No players found. Be the first! </template>
   </b-table>
 </template>
 
@@ -86,6 +88,9 @@ export default class Leaderboard extends Vue {
   }
 
   highlightLeader(leaderboard: LeaderboardItem[]) {
+    if (leaderboard.length === 0) {
+      return;
+    }
     const topScore = leaderboard[0].points;
     leaderboard
       .filter(player => player.points === topScore)

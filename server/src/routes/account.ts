@@ -75,7 +75,7 @@ accountRouter.post(
     const s = getServices();
     try {
       await s.account.verifyUnregisteredUser(user, registrationToken);
-      res.json(await s.settings.isTournamentSignUpEnabled());
+      res.json(await s.settings.isTournamentEnabled());
     } catch (e) {
       logger.warn(
         `Unable to verify unregistered user ${user.username} with token ${registrationToken}}`

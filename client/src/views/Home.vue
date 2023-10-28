@@ -1,6 +1,7 @@
 <template>
   <b-container fluid class="h-100 m-0 p-0">
-    <b-row>
+    <div>
+      <TournamentBanner v-if="shouldShowTournamentBanner"></TournamentBanner>
       <div id="welcome" class="w-100 d-flex align-items-center welcome">
         <b-row class="w-100 mx-0 my-5 px-3" align-v="center" align-h="center">
           <b-col md="12" lg="6" xl="5" class="text-left">
@@ -12,11 +13,20 @@
             </p>
             <b-row class="mt-3">
               <b-col>
-                <b-button size="lg" class="px-5 mr-3" variant="secondary" :to="solo"
-                  ><h4 class="pt-1">Solo Mode</h4>
+                <b-button class="mt-3 mr-3" size="md" variant="secondary" :to="solo">
+                  <h4 class="p-1">Solo Mode</h4>
                 </b-button>
-                <b-button size="lg" variant="primary" :to="lobby"
-                  ><h4 class="pt-1">Play Port of Mars</h4>
+                <b-button class="mt-3 mr-3" size="md" variant="primary" :to="freePlayLobby">
+                  <h4 class="p-1">Free Play</h4>
+                </b-button>
+                <b-button
+                  class="mt-3"
+                  size="md"
+                  v-if="shouldShowTournamentBanner"
+                  variant="success"
+                  :to="tournamentDashboard"
+                >
+                  <h4 class="p-1">Join Mars Madness</h4>
                 </b-button>
               </b-col>
             </b-row>
@@ -93,10 +103,9 @@
           <b-col md="12" lg="6" xl="5" class="text-left">
             <h1 class="section-title mb-3">Community</h1>
             <p class="text mb-3">
-              Whether you are looking to discuss the game or find a team, connect with other players
-              by joining our
-              <a :href="constants.DISCORD_URL">community Discord</a> or by joining a room in the
-              <b-link :to="lobby">game lobby</b-link> and using the built-in chat.
+              Discuss the game, find a game to play, or connect with other players in our
+              <a :href="constants.DISCORD_URL">community Discord</a> or by joining a room in our
+              <b-link :to="freePlayLobby">free play lobby</b-link> and using the built-in chat.
             </p>
             <p class="text mb-3">
               Keep track of your performance with your
@@ -118,24 +127,26 @@
           </b-col>
         </b-row>
       </div>
-    </b-row>
+    </div>
     <Footer></Footer>
   </b-container>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
+import {
+  LEADERBOARD_PAGE,
+  FREE_PLAY_LOBBY_PAGE,
+  PLAYER_HISTORY_PAGE,
+  SOLO_GAME_PAGE,
+  TOURNAMENT_DASHBOARD_PAGE,
+} from "@port-of-mars/shared/routes";
+import { Constants } from "@port-of-mars/shared/settings";
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
 import CharCarousel from "@port-of-mars/client/components/global/CharCarousel.vue";
 import AgeTooltip from "@port-of-mars/client/components/global/AgeTooltip.vue";
 import LeaderboardTable from "@port-of-mars/client/components/stats/LeaderboardTable.vue";
-import {
-  LEADERBOARD_PAGE,
-  LOBBY_PAGE,
-  PLAYER_HISTORY_PAGE,
-  SOLO_GAME_PAGE,
-} from "@port-of-mars/shared/routes";
-import { isDevOrStaging, Constants } from "@port-of-mars/shared/settings";
+import TournamentBanner from "@port-of-mars/client/components/global/TournamentBanner.vue";
 
 @Component({
   components: {
@@ -143,15 +154,16 @@ import { isDevOrStaging, Constants } from "@port-of-mars/shared/settings";
     CharCarousel,
     Footer,
     LeaderboardTable,
+    TournamentBanner,
   },
 })
 export default class Home extends Vue {
   @Prop({ default: false })
   scrollToAbout!: boolean;
 
-  isDevMode: boolean = false;
   currentYear = new Date().getFullYear();
-  lobby = { name: LOBBY_PAGE };
+  freePlayLobby = { name: FREE_PLAY_LOBBY_PAGE };
+  tournamentDashboard = { name: TOURNAMENT_DASHBOARD_PAGE };
   leaderboard = { name: LEADERBOARD_PAGE };
   gameStats = { name: PLAYER_HISTORY_PAGE };
   solo = { name: SOLO_GAME_PAGE };
@@ -160,8 +172,11 @@ export default class Home extends Vue {
     return Constants;
   }
 
+  get shouldShowTournamentBanner() {
+    return this.$tstore.state.isTournamentEnabled && this.$store.getters.tournamentStatus;
+  }
+
   async mounted() {
-    this.isDevMode = isDevOrStaging();
     if (this.scrollToAbout) {
       this.scrollToAboutSection();
     }

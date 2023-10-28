@@ -11,7 +11,12 @@ import trading from "./trading";
 import ui from "./ui";
 import Vue from "vue";
 import { State, initialStoreState, initialGameState } from "@port-of-mars/shared/game/client/state";
-import { DashboardMessage, Role, SystemHealthChangesData } from "@port-of-mars/shared/types";
+import {
+  DashboardMessage,
+  Role,
+  SystemHealthChangesData,
+  TournamentStatus,
+} from "@port-of-mars/shared/types";
 import _ from "lodash";
 
 export default {
@@ -22,6 +27,18 @@ export default {
   // reset game state, leaving user data, etc. intact
   RESET_GAME_STATE(state: State) {
     Object.assign(state, { ...state, ...initialGameState });
+  },
+
+  SET_TOURNAMENT_ENABLED(state: State, enabled: boolean) {
+    state.isTournamentEnabled = enabled;
+  },
+
+  SET_FREE_PLAY_ENABLED(state: State, enabled: boolean) {
+    state.isFreePlayEnabled = enabled;
+  },
+
+  SET_TOURNAMENT_STATUS(state: State, status: TournamentStatus) {
+    state.tournamentStatus = status;
   },
 
   SET_DASHBOARD_MESSAGE(state: State, payload: DashboardMessage) {

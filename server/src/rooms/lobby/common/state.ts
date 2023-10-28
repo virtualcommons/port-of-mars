@@ -1,9 +1,6 @@
 import { Schema, ArraySchema, type } from "@colyseus/schema";
 import { Client } from "colyseus";
 import { LobbyChatMessageData } from "@port-of-mars/shared/types";
-import { settings } from "@port-of-mars/server/settings";
-
-const logger = settings.logging.getLogger(__filename);
 
 /**
  * Connected client with additional metadata
@@ -12,16 +9,18 @@ export class LobbyClient extends Schema {
   @type("number") id: number;
   @type("string") username: string;
   @type("boolean") ready: boolean;
+  @type("number") dateJoined: number;
   client: Client;
   leaving: boolean;
 
   constructor(client: Client) {
     super();
     this.client = client;
-    this.ready = false;
     this.username = client.auth.username;
     this.id = this.client.auth.id;
+    this.ready = false;
     this.leaving = false;
+    this.dateJoined = new Date().getTime();
   }
 }
 
@@ -45,22 +44,17 @@ export class LobbyChatMessage extends Schema implements LobbyChatMessageData {
  * state of lobby room that represents a transition room between dashboard and
  * actual game room. Limited to 5 players as the game room is
  */
-export class LobbyRoomState extends Schema {
-  @type([LobbyClient]) clients = new ArraySchema<LobbyClient>();
+export abstract class LobbyRoomState extends Schema {
+  @type([LobbyClient]) clients = new ArraySchema<LobbyClient>(); // FIXME: use a MapSchema<LobbyClient, Group> instead?
   @type([LobbyChatMessage]) chat = new ArraySchema<LobbyChatMessage>();
   @type("number") dateCreated: number;
-  @type("boolean") ready: boolean;
-
-  maxClients = 5;
+  // FIXME: we might want to relate this to service.settings.maxConnections() also but probably OK for now
+  // to be a max connections to a Lobby constraint versus total number of allowable players on the server
+  maxClients = 100;
 
   constructor() {
     super();
-    this.ready = false;
     this.dateCreated = new Date().getTime();
-  }
-
-  get leader(): LobbyClient {
-    return this.clients[0];
   }
 
   isFull() {
@@ -74,18 +68,10 @@ export class LobbyRoomState extends Schema {
     return true;
   }
 
-  // set room to ready, meaning a game will start soon
-  setRoomReadiness(ready: boolean) {
-    this.ready = ready;
-  }
-
   addClient(client: Client) {
     const lobbyClient = new LobbyClient(client);
     if (!this.isFull()) {
       this.clients.push(lobbyClient);
-    }
-    if (this.isFull()) {
-      this.ready = true;
     }
   }
 
@@ -96,20 +82,7 @@ export class LobbyRoomState extends Schema {
     }
   }
 
-  // set client to ready, meaning they have indicated they are ready to start with bots
-  setClientReadiness(username: string, vote: boolean) {
-    if (username !== this.leader.username) {
-      const index = this.clients.findIndex((c: LobbyClient) => c.username === username);
-      if (index > -1) {
-        this.clients[index].ready = vote;
-      }
-      logger.debug(index);
-      logger.debug(this.clients);
-      logger.debug(vote);
-    }
-  }
-
-  // incidate that client has accepted invitation to start a new game
+  // indicate that client has accepted invitation to join a game
   setClientLeaving(username: string) {
     const index = this.clients.findIndex((c: LobbyClient) => c.username === username);
     if (index > -1) {

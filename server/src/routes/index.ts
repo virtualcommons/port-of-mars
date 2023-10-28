@@ -9,4 +9,4 @@ export * from "./middleware";
 export * from "./quiz";
 export * from "./account";
 export * from "./status";
-export * from "./survey";
+export * from "./tournament";

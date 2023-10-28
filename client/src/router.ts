@@ -1,5 +1,5 @@
 import Vue from "vue";
-import VueRouter from "vue-router";
+import VueRouter, { NavigationGuardNext } from "vue-router";
 import Admin from "@port-of-mars/client/views/Admin.vue";
 import Overview from "@port-of-mars/client/views/admin/Overview.vue";
 import Games from "@port-of-mars/client/views/admin/Games.vue";
@@ -9,7 +9,9 @@ import Settings from "@port-of-mars/client/views/admin/Settings.vue";
 import Login from "@port-of-mars/client/views/Login.vue";
 import Leaderboard from "@port-of-mars/client/views/Leaderboard.vue";
 import PlayerHistory from "@port-of-mars/client/views/PlayerHistory.vue";
-import Lobby from "@port-of-mars/client/views/Lobby.vue";
+import FreePlayLobby from "@port-of-mars/client/views/FreePlayLobby.vue";
+import TournamentLobby from "@port-of-mars/client/views/TournamentLobby.vue";
+import TournamentDashboard from "@port-of-mars/client/views/TournamentDashboard.vue";
 import LobbyRoom from "@port-of-mars/client/components/lobby/LobbyRoom.vue";
 import LobbyRoomList from "@port-of-mars/client/components/lobby/LobbyRoomList.vue";
 import Game from "@port-of-mars/client/views/Game.vue";
@@ -25,7 +27,9 @@ import {
   ADMIN_PAGE,
   PAGE_META,
   LOGIN_PAGE,
-  LOBBY_PAGE,
+  FREE_PLAY_LOBBY_PAGE,
+  TOURNAMENT_LOBBY_PAGE,
+  TOURNAMENT_DASHBOARD_PAGE,
   GAME_PAGE,
   SOLO_GAME_PAGE,
   LEADERBOARD_PAGE,
@@ -42,6 +46,7 @@ import {
 Vue.use(VueRouter);
 
 const ADMIN_META = PAGE_META[ADMIN_PAGE].meta;
+const FREE_PLAY_LOBBY_META = PAGE_META[FREE_PLAY_LOBBY_PAGE].meta;
 
 const router = new VueRouter({
   mode: "hash",
@@ -60,19 +65,21 @@ const router = new VueRouter({
     },
     { ...PAGE_META[LOGIN_PAGE], component: Login },
     {
-      ...PAGE_META[LOBBY_PAGE],
-      component: Lobby,
+      ...PAGE_META[FREE_PLAY_LOBBY_PAGE],
+      component: FreePlayLobby,
       children: [
-        { path: "", name: "Lobby", component: LobbyRoomList, meta: { requiresAuth: true } },
+        { path: "", name: "FreePlayLobby", component: LobbyRoomList, meta: FREE_PLAY_LOBBY_META },
         {
           path: "room/:id",
-          name: "LobbyRoom",
+          name: "FreePlayLobbyRoom",
           component: LobbyRoom,
-          meta: { requiresAuth: true },
+          meta: FREE_PLAY_LOBBY_META,
           props: true,
         },
       ],
     },
+    { ...PAGE_META[TOURNAMENT_LOBBY_PAGE], component: TournamentLobby },
+    { ...PAGE_META[TOURNAMENT_DASHBOARD_PAGE], component: TournamentDashboard },
     { ...PAGE_META[GAME_PAGE], component: Game },
     { ...PAGE_META[SOLO_GAME_PAGE], component: SoloGame },
     { ...PAGE_META[LEADERBOARD_PAGE], component: Leaderboard },
@@ -87,6 +94,14 @@ const router = new VueRouter({
   ],
 });
 
+function isFreePlayEnabled() {
+  return store.state.isFreePlayEnabled;
+}
+
+function isTournamentEnabled() {
+  return store.state.isTournamentEnabled;
+}
+
 function isAuthenticated() {
   return store.getters.isAuthenticated;
 }
@@ -99,7 +114,7 @@ function hasConsented() {
   return store.getters.hasConsented;
 }
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to: any, from: any, next: NavigationGuardNext) => {
   if (from === VueRouter.START_LOCATION) {
     console.log("initializing store");
     store
@@ -116,14 +131,20 @@ router.beforeEach((to, from, next) => {
   }
 });
 
-router.beforeEach((to: any, from: any, next: any) => {
+router.beforeEach((to: any, from: any, next: NavigationGuardNext) => {
+  // somewhat ugly but alternatives are worse, consider cleaning up the whole router
+  // setup at some point as its been gradually outgrowing the original design
   if (to.meta.requiresAuth && !isAuthenticated()) {
     next({ name: LOGIN_PAGE });
-  } else if (to.name === LOGIN_PAGE && isAuthenticated()) {
-    next({ name: HOME_PAGE });
-  } else if (to.name === PROFILE_PAGE && !hasConsented()) {
+  } else if (to.meta.requiresConsent && !hasConsented()) {
     next({ name: CONSENT_PAGE });
   } else if (to.meta.requiresAdmin && !isAdmin()) {
+    next({ name: HOME_PAGE });
+  } else if (to.meta.requiresTournamentEnabled && !isTournamentEnabled()) {
+    next({ name: HOME_PAGE });
+  } else if (to.meta.requiresFreePlayEnabled && !isFreePlayEnabled()) {
+    next({ name: HOME_PAGE });
+  } else if (to.name === LOGIN_PAGE && isAuthenticated()) {
     next({ name: HOME_PAGE });
   } else {
     next();

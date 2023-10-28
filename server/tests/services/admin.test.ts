@@ -21,7 +21,7 @@ describe("users in a game", () => {
   beforeAll(async () => {
     [conn, qr, manager] = await initTransaction();
     sp = new ServiceProvider(qr.manager);
-    t = await createTournament(sp, { name: "openbeta" });
+    t = await createTournament(sp, { name: "freeplay" });
     tr = await createRound(sp, { tournamentId: t.id });
     // create users
     await createUsers(manager, "steve", [1, 2, 3, 4, 5, 6]);

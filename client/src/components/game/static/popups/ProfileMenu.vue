@@ -6,7 +6,7 @@
     </button>
     <div class="wrapper" v-show="profileMenuVisible">
       <p>Logged in as {{ username }}</p>
-      <router-link :to="lobby" class="link">
+      <router-link :to="freePlayLobby" class="link">
         <button>
           <b-icon-person-fill></b-icon-person-fill>
           <span>Return to Lobby</span>
@@ -40,7 +40,7 @@
 import { Vue, Component, Inject } from "vue-property-decorator";
 import { GameRequestAPI } from "@port-of-mars/client/api/game/request";
 import { isDev, isStaging } from "@port-of-mars/shared/settings";
-import { LOBBY_PAGE } from "@port-of-mars/shared/routes";
+import { FREE_PLAY_LOBBY_PAGE } from "@port-of-mars/shared/routes";
 
 @Component({
   components: {},
@@ -49,7 +49,7 @@ export default class ProfileMenu extends Vue {
   @Inject() readonly api!: GameRequestAPI;
   devtoolsEnabled: boolean = false;
 
-  lobby = { name: LOBBY_PAGE };
+  freePlayLobby = { name: FREE_PLAY_LOBBY_PAGE };
 
   get profileMenuVisible() {
     return this.$tstore.state.userInterface.profileMenuView.visible;

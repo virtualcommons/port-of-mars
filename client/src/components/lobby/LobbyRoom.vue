@@ -8,7 +8,7 @@
         >
           <div class="text-center">
             <h4 class="mb-4">Room Not Found</h4>
-            <b-button variant="outline-secondary" :to="lobby">
+            <b-button variant="outline-secondary" :to="freePlayLobby">
               <b-icon-arrow-left shift-v="3"></b-icon-arrow-left> Return to lobby
             </b-button>
           </div>
@@ -37,7 +37,12 @@
             </b-badge>
           </template>
           <template #head(ready)>
-            <b-button size="sm" variant="outline-secondary" class="float-right py-0" :to="lobby">
+            <b-button
+              size="sm"
+              variant="outline-secondary"
+              class="float-right py-0"
+              :to="freePlayLobby"
+            >
               <b-icon-arrow-left shift-v="3"></b-icon-arrow-left> Return to lobby
             </b-button>
           </template>
@@ -107,9 +112,9 @@
 <script lang="ts">
 import { Component, Inject, Prop, Vue } from "vue-property-decorator";
 import { Client } from "colyseus.js";
-import { LobbyRequestAPI } from "@port-of-mars/client/api/lobby/request";
+import { FreePlayLobbyRequestAPI } from "@port-of-mars/client/api/lobby/request";
 import { applyLobbyResponses } from "@port-of-mars/client/api/lobby/response";
-import { LOBBY_PAGE } from "@port-of-mars/shared/routes";
+import { FREE_PLAY_LOBBY_PAGE } from "@port-of-mars/shared/routes";
 import LobbyChat from "@port-of-mars/client/components/lobby/LobbyChat.vue";
 
 @Component({
@@ -119,10 +124,10 @@ import LobbyChat from "@port-of-mars/client/components/lobby/LobbyChat.vue";
 })
 export default class LobbyRoom extends Vue {
   @Inject() readonly $client!: Client;
-  @Inject() readonly api!: LobbyRequestAPI;
+  @Inject() readonly api!: FreePlayLobbyRequestAPI;
   @Prop() id!: string;
 
-  lobby = { name: LOBBY_PAGE };
+  freePlayLobby = { name: FREE_PLAY_LOBBY_PAGE };
 
   clientFields = [
     { key: "username", label: "Player" },
@@ -180,7 +185,8 @@ export default class LobbyRoom extends Vue {
     if (!this.api.room) {
       try {
         const room = await this.$client.joinById(this.id);
-        applyLobbyResponses(room, this);
+        // FIXME: do we need to call this here as well as the parent lobby view?
+        applyLobbyResponses(room, this, "freeplay");
         this.api.connect(room);
       } catch (e) {
         this.roomNotFound = true;

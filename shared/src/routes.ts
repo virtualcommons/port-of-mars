@@ -1,6 +1,8 @@
 export const ADMIN_PAGE = "Admin" as const;
 export const LOGIN_PAGE = "Login" as const;
-export const LOBBY_PAGE = "Lobby" as const;
+export const FREE_PLAY_LOBBY_PAGE = "FreePlayLobby" as const;
+export const TOURNAMENT_LOBBY_PAGE = "TournamentLobby" as const;
+export const TOURNAMENT_DASHBOARD_PAGE = "TournamentDashboard" as const;
 export const GAME_PAGE = "Game" as const;
 export const SOLO_GAME_PAGE = "SoloGame" as const;
 export const LEADERBOARD_PAGE = "Leaderboard" as const;
@@ -18,7 +20,9 @@ export type Page =
   | "Home"
   | "About"
   | "Login"
-  | "Lobby"
+  | "FreePlayLobby"
+  | "TournamentLobby"
+  | "TournamentDashboard"
   | "Game"
   | "SoloGame"
   | "PlayerHistory"
@@ -32,7 +36,9 @@ export type Page =
 export const PAGES: Array<Page> = [
   ADMIN_PAGE,
   LOGIN_PAGE,
-  LOBBY_PAGE,
+  FREE_PLAY_LOBBY_PAGE,
+  TOURNAMENT_LOBBY_PAGE,
+  TOURNAMENT_DASHBOARD_PAGE,
   GAME_PAGE,
   SOLO_GAME_PAGE,
   PLAYER_HISTORY_PAGE,
@@ -55,13 +61,23 @@ export function getPagePath(page: Page): string {
   return `/#${PAGE_META[page].path}`;
 }
 
+export interface RouteMeta {
+  requiresAuth: boolean;
+  requiresConsent?: boolean;
+  requiresAdmin?: boolean;
+  requiresTournamentEnabled?: boolean;
+  requiresFreePlayEnabled?: boolean;
+}
+
+export interface Route {
+  path: string;
+  name?: string;
+  props?: any;
+  meta: RouteMeta;
+}
+
 export const PAGE_META: {
-  [p in Page]: {
-    path: string;
-    name?: string;
-    props?: any;
-    meta: { requiresAuth: boolean; requiresAdmin?: boolean };
-  };
+  [p in Page]: Route;
 } = {
   [ADMIN_PAGE]: {
     path: "/admin",
@@ -106,10 +122,29 @@ export const PAGE_META: {
       requiresAuth: true,
     },
   },
-  [LOBBY_PAGE]: {
+  [FREE_PLAY_LOBBY_PAGE]: {
     path: "/lobby",
+    name: FREE_PLAY_LOBBY_PAGE,
     meta: {
       requiresAuth: true,
+      requiresFreePlayEnabled: true,
+    },
+  },
+  [TOURNAMENT_LOBBY_PAGE]: {
+    path: "/tournament/lobby",
+    name: TOURNAMENT_LOBBY_PAGE,
+    meta: {
+      requiresAuth: true,
+      requiresTournamentEnabled: true,
+    },
+  },
+  [TOURNAMENT_DASHBOARD_PAGE]: {
+    path: "/tournament/dashboard",
+    name: TOURNAMENT_DASHBOARD_PAGE,
+    props: true,
+    meta: {
+      requiresAuth: true,
+      requiresTournamentEnabled: true,
     },
   },
   [HOME_PAGE]: {
@@ -162,6 +197,7 @@ export const PAGE_META: {
     name: PROFILE_PAGE,
     meta: {
       requiresAuth: true,
+      requiresConsent: true,
     },
   },
 };

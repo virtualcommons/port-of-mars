@@ -57,8 +57,10 @@ export class RedisSettings {
     return {
       maxConnections: _.toNumber(settings.maxConnections),
       defaultDaysMuted: _.toNumber(settings.defaultDaysMuted),
-      isTournamentSignUpEnabled: !!_.toNumber(settings.isTournamentSignUpEnabled),
+      isTournamentEnabled: !!_.toNumber(settings.isTournamentEnabled),
       isFreePlayEnabled: !!_.toNumber(settings.isFreePlayEnabled),
+      tournamentLobbyOpenBeforeOffset: _.toNumber(settings.tournamentLobbyOpenBeforeOffset),
+      tournamentLobbyOpenAfterOffset: _.toNumber(settings.tournamentLobbyOpenAfterOffset),
     };
   }
 
@@ -73,13 +75,23 @@ export class RedisSettings {
   }
 
   // sign up enabled controls where the user is redirected once their email is verified
-  async isTournamentSignUpEnabled(): Promise<boolean> {
-    return !!_.toNumber(await this.client.hget("settings", "isTournamentSignUpEnabled"));
+  async isTournamentEnabled(): Promise<boolean> {
+    return !!_.toNumber(await this.client.hget("settings", "isTournamentEnabled"));
   }
 
   // enables players to participate as many times as they wish
   async isFreePlayEnabled(): Promise<boolean> {
     return !!_.toNumber(await this.client.hget("settings", "isFreePlayEnabled"));
+  }
+
+  // how many minutes before the tournament starts that the lobby will open (min)
+  async tournamentLobbyOpenBeforeOffset(): Promise<number> {
+    return _.toNumber(await this.client.hget("settings", "tournamentLobbyOpenBeforeOffset"));
+  }
+
+  // how many minutes after the tournament starts that the lobby will remain open (min)
+  async tournamentLobbyOpenAfterOffset(): Promise<number> {
+    return _.toNumber(await this.client.hget("settings", "tournamentLobbyOpenAfterOffset"));
   }
 
   async report(): Promise<string> {

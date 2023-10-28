@@ -25,7 +25,7 @@
         </div>
       </div>
     </div>
-    <router-link :to="lobby">
+    <router-link :to="freePlayLobby">
       <button class="lobby-button">Continue</button>
     </router-link>
   </div>
@@ -33,14 +33,14 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { LOBBY_PAGE } from "@port-of-mars/shared/routes";
+import { FREE_PLAY_LOBBY_PAGE } from "@port-of-mars/shared/routes";
 
 @Component({
   name: "tutorialComplete",
   components: {},
 })
 export default class CompletedQuizModal extends Vue {
-  lobby = { name: LOBBY_PAGE };
+  freePlayLobby = { name: FREE_PLAY_LOBBY_PAGE };
 }
 </script>
 

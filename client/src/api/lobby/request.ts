@@ -30,6 +30,16 @@ export class LobbyRequestAPI {
     this.send(msg);
   }
 
+  public sendChatMessage(message: string) {
+    const msg: SendLobbyChatMessage = {
+      kind: "send-lobby-chat-message",
+      value: message,
+    };
+    this.send(msg);
+  }
+}
+
+export class FreePlayLobbyRequestAPI extends LobbyRequestAPI {
   public startWithBots() {
     const msg: StartWithBots = { kind: "start-with-bots" };
     this.send(msg);
@@ -47,12 +57,6 @@ export class LobbyRequestAPI {
     };
     this.send(msg);
   }
-
-  public sendChatMessage(message: string) {
-    const msg: SendLobbyChatMessage = {
-      kind: "send-lobby-chat-message",
-      value: message,
-    };
-    this.send(msg);
-  }
 }
+
+export class TournamentLobbyRequestAPI extends LobbyRequestAPI {}

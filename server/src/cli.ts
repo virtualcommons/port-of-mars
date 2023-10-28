@@ -166,13 +166,15 @@ async function createTournament(
   em: EntityManager,
   name: string,
   minRounds: number,
-  maxRounds: number
+  maxRounds: number,
+  description: string
 ): Promise<Tournament> {
   const services = getServices(em);
   return await services.tournament.createTournament({
     name,
     minNumberOfGameRounds: minRounds,
     maxNumberOfGameRounds: maxRounds,
+    description: description,
     active: true,
   });
 }
@@ -260,8 +262,8 @@ async function createRound(
     | Pick<TournamentRound, "roundNumber" | "introSurveyUrl" | "exitSurveyUrl">
     | undefined;
   if (open) {
-    tournament = await s.tournament.getOpenTournament();
-    currentRound = await s.tournament.getOpenTournamentRound().catch(err => undefined);
+    tournament = await s.tournament.getFreePlayTournament();
+    currentRound = await s.tournament.getFreePlayTournamentRound().catch(err => undefined);
   } else {
     if (id) tournament = await s.tournament.getTournament(id);
     else tournament = await s.tournament.getActiveTournament();
@@ -494,12 +496,19 @@ program
           .requiredOption("--tournamentName <tournamentName>", "string name of the tournament")
           .option("--minRounds <minRounds>", "Minimum number of game rounds", customParseInt, 8)
           .option("--maxRounds <maxRounds>", "Maximum number of game rounds", customParseInt, 12)
+          .option("--description <description>", "Description of the tournament")
           .description("create a tournament")
           .action(async cmd => {
             await withConnection(em =>
-              createTournament(em, cmd.tournamentName, cmd.minRounds, cmd.maxRounds)
+              createTournament(
+                em,
+                cmd.tournamentName,
+                cmd.minRounds,
+                cmd.maxRounds,
+                cmd.description
+              )
             );
-            logger.debug("tournament create...");
+            logger.debug("created tournament %s", cmd.tournamentName);
           })
       )
   )

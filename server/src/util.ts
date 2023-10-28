@@ -1,7 +1,7 @@
 import _ from "lodash";
 import * as assert from "assert";
 import * as to from "typeorm";
-import { ROLES, DashboardMessage } from "@port-of-mars/shared/types";
+import { ROLES, DashboardMessage, GameType } from "@port-of-mars/shared/types";
 import { GameOpts, GameStateOpts } from "@port-of-mars/server/rooms/game/types";
 import {
   getFixedMarsEventDeck,
@@ -75,6 +75,7 @@ export function mockGameStateInitOpts(
     playerOpts,
     deck,
     numberOfGameRounds,
+    type: "freeplay",
   };
 }
 
@@ -86,9 +87,19 @@ export async function mockGameInitOpts(): Promise<GameOpts> {
   };
 }
 
-export async function buildGameOpts(usernames: Array<string>): Promise<GameOpts> {
+async function getCurrentTournamentRound(type: GameType) {
+  // get the current tournament round, if freeplay game then get the special open/freeplay tournament round
+  const tournamentService = getServices().tournament;
+  if (type === "freeplay") {
+    return await tournamentService.getFreePlayTournamentRound();
+  } else {
+    return await tournamentService.getCurrentTournamentRound();
+  }
+}
+
+export async function buildGameOpts(usernames: Array<string>, type: GameType): Promise<GameOpts> {
   const services = getServices();
-  const currentTournamentRound = await services.tournament.getCurrentTournamentRound();
+  const currentTournamentRound = await getCurrentTournamentRound(type);
   assert.strictEqual(usernames.length, ROLES.length);
   logger.info("building game opts with current tournament round [%d]", currentTournamentRound.id);
   for (const u of usernames) {
@@ -115,6 +126,7 @@ export async function buildGameOpts(usernames: Array<string>): Promise<GameOpts>
     deck: getRandomizedMarsEventDeck(),
     numberOfGameRounds: currentTournamentRound.numberOfGameRounds,
     tournamentRoundId: currentTournamentRound.id,
+    type,
   };
 }
 

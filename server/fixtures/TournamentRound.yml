@@ -1,6 +1,0 @@
-entity: TournamentRound
-items:
-  openTournamentRound:
-    roundNumber: 1
-    tournament: '@openTournament'
-    numberOfGameRounds: 8

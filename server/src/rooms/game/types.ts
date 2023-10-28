@@ -1,7 +1,7 @@
 import { Client, Room } from "colyseus";
 import { GameState, Player } from "@port-of-mars/server/rooms/game/state";
 import { Responses } from "@port-of-mars/shared/game/responses";
-import { MarsEventData, Role } from "@port-of-mars/shared/types";
+import { GameType, MarsEventData, Role } from "@port-of-mars/shared/types";
 import * as ge from "@port-of-mars/server/rooms/game/events/types";
 import { GameEvent } from "@port-of-mars/server/entity/GameEvent";
 
@@ -32,6 +32,7 @@ export interface GameStateOpts {
   playerOpts: Map<Role, PlayerOptsData>;
   deck: Array<MarsEventData>;
   numberOfGameRounds: number;
+  type: GameType;
 }
 
 export interface PlayerOptsData {

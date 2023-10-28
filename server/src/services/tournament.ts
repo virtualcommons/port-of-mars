@@ -6,17 +6,13 @@ import {
   TournamentRoundInvite,
 } from "@port-of-mars/server/entity";
 import { MoreThan, SelectQueryBuilder } from "typeorm";
+import { getServices } from "@port-of-mars/server/services";
 import { getLogger } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { TournamentRoundDate } from "@port-of-mars/server/entity/TournamentRoundDate";
-import { TournamentStatus } from "@port-of-mars/shared/types";
-import { isDev } from "@port-of-mars/shared/settings";
+import { TournamentRoundInviteStatus, TournamentStatus } from "@port-of-mars/shared/types";
 
 const logger = getLogger(__filename);
-// FIXME: should probably be pulled from settings
-// 30 minutes in milliseconds offset for checking when the lobby is open
-const LOBBY_OPEN_BEFORE_OFFSET = 10 * 60 * 1000;
-const LOBBY_OPEN_AFTER_OFFSET = 30 * 60 * 1000;
 
 export class TournamentService extends BaseService {
   async getActiveTournament(): Promise<Tournament> {
@@ -36,9 +32,9 @@ export class TournamentService extends BaseService {
     }
   }
 
-  async getOpenTournament(): Promise<Tournament> {
+  async getFreePlayTournament(): Promise<Tournament> {
     return await this.em.getRepository(Tournament).findOneOrFail({
-      where: { name: "openbeta" },
+      where: { name: "freeplay" },
     });
   }
 
@@ -55,8 +51,8 @@ export class TournamentService extends BaseService {
     });
   }
 
-  async getOpenTournamentRound(): Promise<TournamentRound> {
-    const tournamentId = (await this.getOpenTournament()).id;
+  async getFreePlayTournamentRound(): Promise<TournamentRound> {
+    const tournamentId = (await this.getFreePlayTournament()).id;
     return await this.em.getRepository(TournamentRound).findOneOrFail({
       relations: ["tournament"],
       where: { tournamentId },
@@ -84,7 +80,8 @@ export class TournamentService extends BaseService {
     }
     // scheduled dates within 30 minutes of the scheduled tournament date should
     // still be available
-    const offsetTime = new Date().getTime() - LOBBY_OPEN_AFTER_OFFSET;
+    const afterOffset = await this.getAfterOffset();
+    const offsetTime = new Date().getTime() - afterOffset;
     const schedule = await this.em.getRepository(TournamentRoundDate).find({
       select: ["date"],
       where: { tournamentRoundId: tournamentRound.id, date: MoreThan(new Date(offsetTime)) },
@@ -140,43 +137,57 @@ export class TournamentService extends BaseService {
     return await repository.save(invite);
   }
 
-  async getOrCreateInvite(
-    userId: number,
-    tournamentRound: TournamentRound,
-    skipSurveys = false
-  ): Promise<TournamentRoundInvite> {
-    let invite = await this.getActiveRoundInvite(userId, tournamentRound);
-    if (!invite) {
-      invite = await this.createInvite(userId, tournamentRound.id);
-    }
-    if (skipSurveys) {
-      invite.hasCompletedIntroSurvey = true;
-      invite.hasCompletedExitSurvey = true;
-      await this.em.getRepository(TournamentRoundInvite).save(invite);
-    }
-    return invite;
+  async getTournamentRoundInvite(user: User, tournamentRound: TournamentRound) {
+    const tournamentRoundId = tournamentRound.id;
+    return this.em.getRepository(TournamentRoundInvite).findOne({
+      where: {
+        tournamentRoundId,
+        userId: user.id,
+      },
+    });
   }
 
-  async getActiveRoundInvite(
-    userId: number,
-    tournamentRound?: TournamentRound
-  ): Promise<TournamentRoundInvite | undefined> {
+  /**
+   * Checks whether a user has an invite for a given or current round and has completed
+   * the intro survey + has not participated yet
+   */
+  async canPlayInRound(user: User, tournamentRound?: TournamentRound) {
     if (!tournamentRound) {
       tournamentRound = await this.getCurrentTournamentRound();
     }
-    const tournamentRoundId = tournamentRound.id;
-    const invite = await this.em.getRepository(TournamentRoundInvite).findOne({
-      where: {
-        tournamentRoundId,
-        userId,
-      },
-    });
-    // NOTE: we'll need to manually invite users for a non-open tournament
-    // special case for the first round of a tournament where everyone's invited
-    // if (!invite && tournamentRound.roundNumber === 1) {
-    //   return await this.createInvite(userId, tournamentRoundId);
-    // }
-    return invite;
+    const invite = await this.getTournamentRoundInvite(user, tournamentRound);
+    if (invite) {
+      return invite.hasParticipated === false && invite.hasCompletedIntroSurvey === true;
+    }
+    return false;
+  }
+
+  /**
+   * returns the invite status for a user (survey status + url, hasParticipated)
+   * if the round is open (1st round) and no invite exists, one will be created
+   */
+  async getTournamentRoundInviteStatus(
+    user: User,
+    tournamentRound?: TournamentRound
+  ): Promise<TournamentRoundInviteStatus | null> {
+    if (!tournamentRound) {
+      tournamentRound = await this.getCurrentTournamentRound();
+    }
+    let invite = await this.getTournamentRoundInvite(user, tournamentRound);
+    if (!invite) {
+      // NOTE: we'll need to manually invite users for a non-open tournament
+      // special case for the first round of a tournament where everyone's invited
+      if (tournamentRound.roundNumber === 1) {
+        invite = await this.createInvite(user.id, tournamentRound.id);
+      } else {
+        return null;
+      }
+    }
+    return {
+      introSurveyUrl: getServices().survey.getIntroSurveyUrl(user, tournamentRound, invite),
+      hasCompletedIntroSurvey: invite.hasCompletedIntroSurvey,
+      hasParticipated: invite.hasParticipated,
+    };
   }
 
   async createTournament(
@@ -198,15 +209,19 @@ export class TournamentService extends BaseService {
     if (!tournamentRound) {
       tournamentRound = await this.getCurrentTournamentRound();
     }
+    const tournament = tournamentRound.tournament;
     const scheduledDates = await this.getScheduledDates(tournamentRound);
-    const announcement = tournamentRound.announcement ?? "";
-    const description = tournamentRound.tournament.description ?? "";
     return {
-      schedule: scheduledDates.map((date: Date) => date.getTime()),
-      championship: tournamentRound.championship,
-      round: tournamentRound.roundNumber,
-      announcement,
-      description,
+      name: tournament.name,
+      description: tournament.description ?? "",
+      lobbyOpenBeforeOffset: await this.getBeforeOffset(),
+      lobbyOpenAfterOffset: await this.getAfterOffset(),
+      currentRound: {
+        round: tournamentRound.roundNumber,
+        schedule: scheduledDates.map((date: Date) => date.getTime()),
+        championship: tournamentRound.championship,
+        announcement: tournamentRound.announcement ?? "",
+      },
     };
   }
 
@@ -253,12 +268,6 @@ export class TournamentService extends BaseService {
       .select("u.userId", "id");
   }
 
-  async getTournamentRoundInvite(id: number): Promise<TournamentRoundInvite> {
-    return await this.em
-      .getRepository(TournamentRoundInvite)
-      .findOneOrFail(id, { relations: ["user", "tournamentRound"] });
-  }
-
   async getTournamentRound(id?: number): Promise<TournamentRound> {
     if (id) {
       return await this.em.getRepository(TournamentRound).findOneOrFail(id);
@@ -268,7 +277,9 @@ export class TournamentService extends BaseService {
   }
 
   async setSurveyComplete(data: { inviteId: number; surveyId: string }) {
-    const invite = await this.getTournamentRoundInvite(data.inviteId);
+    const invite = await this.em
+      .getRepository(TournamentRoundInvite)
+      .findOneOrFail(data.inviteId, { relations: ["user", "tournamentRound"] });
     const tournamentRound = invite.tournamentRound;
     const introSurveyUrl = tournamentRound.introSurveyUrl;
     const exitSurveyUrl = tournamentRound.exitSurveyUrl;
@@ -294,21 +305,30 @@ export class TournamentService extends BaseService {
     if (!gameDates) {
       gameDates = await this.getScheduledDates(tournamentRound);
     }
-    if (isDev()) {
-      return true;
-    }
     if (gameDates.length === 0) {
       return false;
     }
+    const beforeOffset = await this.getBeforeOffset();
+    const afterOffset = await this.getAfterOffset();
     const now = new Date();
     for (const date of gameDates) {
       const gameTime = date.getTime();
-      const openDate = new Date(gameTime - LOBBY_OPEN_BEFORE_OFFSET);
-      const closeDate = new Date(gameTime + LOBBY_OPEN_AFTER_OFFSET);
+      const openDate = new Date(gameTime - beforeOffset);
+      const closeDate = new Date(gameTime + afterOffset);
       if (now > openDate && now < closeDate) {
         return true;
       }
     }
     return false;
+  }
+
+  async getBeforeOffset(): Promise<number> {
+    const offset = await getServices().settings.tournamentLobbyOpenBeforeOffset();
+    return offset * 60 * 1000;
+  }
+
+  async getAfterOffset(): Promise<number> {
+    const offset = await getServices().settings.tournamentLobbyOpenAfterOffset();
+    return offset * 60 * 1000;
   }
 }

@@ -3,7 +3,12 @@ import _ from "lodash";
 import { VueRouter } from "vue-router/types/router";
 import { TStore } from "@port-of-mars/client/plugins/tstore";
 import { RoomId } from "@port-of-mars/shared/types";
-import { LOGIN_PAGE, LOBBY_PAGE, CONSENT_PAGE, HOME_PAGE } from "@port-of-mars/shared/routes";
+import {
+  LOGIN_PAGE,
+  FREE_PLAY_LOBBY_PAGE,
+  CONSENT_PAGE,
+  HOME_PAGE,
+} from "@port-of-mars/shared/routes";
 import { DashboardMessage } from "@port-of-mars/shared/types";
 import { url } from "@port-of-mars/client/util";
 import { initialUserState } from "@port-of-mars/shared/game/client/state";
@@ -37,7 +42,7 @@ export class AjaxRequest {
   errorRoutes: Map<number, string> = new Map([
     [401, LOGIN_PAGE],
     [403, CONSENT_PAGE],
-    [404, LOBBY_PAGE],
+    [404, HOME_PAGE],
   ]);
 
   set roomId(r: RoomId | undefined) {
@@ -55,7 +60,8 @@ export class AjaxRequest {
       ({ data, status }) => {
         if (status === 200) {
           this.store.commit("SET_USER", data.user);
-          if (data.user.isVerified) this.router.push({ name: LOBBY_PAGE });
+          // FIXME: not terribly important but we might want to move to the tournament dashboard if isTournamentEnabled
+          if (data.user.isVerified) this.router.push({ name: FREE_PLAY_LOBBY_PAGE });
           else this.router.push({ name: CONSENT_PAGE });
         } else {
           return data;

@@ -15,7 +15,7 @@ import Footer from "@port-of-mars/client/components/global/Footer.vue";
 import {
   GAME_PAGE,
   MANUAL_PAGE,
-  LOBBY_PAGE,
+  FREE_PLAY_LOBBY_PAGE,
   HOME_PAGE,
   ABOUT_PAGE,
   PRIVACY_PAGE,
@@ -32,7 +32,7 @@ Vue.use(BootstrapVue);
 export default class App extends Vue {
   game = { name: GAME_PAGE };
   manual = { name: MANUAL_PAGE };
-  lobby = { name: LOBBY_PAGE };
+  freePlayLobby = { name: FREE_PLAY_LOBBY_PAGE };
   home = { name: HOME_PAGE };
   about = { name: ABOUT_PAGE };
   privacy = { name: PRIVACY_PAGE };

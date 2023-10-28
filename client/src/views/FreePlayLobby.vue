@@ -22,9 +22,9 @@
 import { Component, Provide, Inject, Vue } from "vue-property-decorator";
 import { Client, Room } from "colyseus.js";
 import { applyLobbyResponses } from "@port-of-mars/client/api/lobby/response";
-import { LobbyRequestAPI } from "@port-of-mars/client/api/lobby/request";
+import { FreePlayLobbyRequestAPI } from "@port-of-mars/client/api/lobby/request";
 import { AccountAPI } from "@port-of-mars/client/api/account/request";
-import { LOBBY_NAME } from "@port-of-mars/shared/lobby";
+import { FREE_PLAY_LOBBY_NAME } from "@port-of-mars/shared/lobby";
 import { GAME_PAGE, CONSENT_PAGE, MANUAL_PAGE } from "@port-of-mars/shared/routes";
 import { Constants } from "@port-of-mars/shared/settings";
 import { url } from "@port-of-mars/client/util";
@@ -39,9 +39,9 @@ import Messages from "@port-of-mars/client/components/global/Messages.vue";
     Messages,
   },
 })
-export default class Lobby extends Vue {
+export default class FreePlayLobby extends Vue {
   @Inject() readonly $client!: Client;
-  @Provide() api: LobbyRequestAPI = new LobbyRequestAPI();
+  @Provide() api: FreePlayLobbyRequestAPI = new FreePlayLobbyRequestAPI();
   accountApi!: AccountAPI;
 
   game = { name: GAME_PAGE };
@@ -76,7 +76,7 @@ export default class Lobby extends Vue {
   }
 
   async createRoom() {
-    const room = await this.$client.create(LOBBY_NAME);
+    const room = await this.$client.create(FREE_PLAY_LOBBY_NAME);
     await this.connectAndRedirect(room);
   }
 
@@ -91,8 +91,8 @@ export default class Lobby extends Vue {
   }
 
   async connectAndRedirect(room: Room) {
-    this.$router.push({ name: "LobbyRoom", params: { id: room.id } });
-    applyLobbyResponses(room, this);
+    this.$router.push({ name: "FreePlayLobbyRoom", params: { id: room.id } });
+    applyLobbyResponses(room, this, "freeplay");
     this.api.connect(room);
   }
 }

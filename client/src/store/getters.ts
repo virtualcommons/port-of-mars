@@ -201,4 +201,35 @@ export default {
   lobbyPlayerReadiness(state: State) {
     return state.lobby.clients.find(client => client.username === state.user?.username)?.ready;
   },
+
+  tournamentStatus(state: State) {
+    return state.tournamentStatus;
+  },
+
+  tournamentStartMonthYear(state: State) {
+    const date = new Date(state.tournamentStatus?.currentRound.schedule[0] ?? 0);
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      year: "numeric",
+    });
+  },
+
+  tournamentSchedule(state: State) {
+    return state.tournamentStatus?.currentRound.schedule;
+  },
+
+  nextLaunchTime(state: State) {
+    return state.tournamentStatus?.currentRound.schedule[0];
+  },
+
+  isTournamentLobbyOpen(state: State) {
+    if (!state.tournamentStatus) {
+      return false;
+    }
+    const beforeOffset = state.tournamentStatus.lobbyOpenBeforeOffset;
+    const afterOffset = state.tournamentStatus.lobbyOpenAfterOffset;
+    const nextLaunchTime = state.tournamentStatus.currentRound.schedule[0];
+    const timeNow = new Date().getTime();
+    return timeNow >= nextLaunchTime - beforeOffset && timeNow <= nextLaunchTime + afterOffset;
+  },
 };

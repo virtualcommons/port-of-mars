@@ -64,6 +64,9 @@ export interface LeaderboardData {
   withoutBots: Array<LeaderboardItem>;
 }
 
+export type GameType = "freeplay" | "tournament";
+export type LobbyType = GameType;
+
 export interface LobbyChatMessageData {
   username: string;
   message: string;
@@ -429,20 +432,30 @@ export interface AdminStats {
   bannedUsers: number;
 }
 
-export interface TournamentPlayerData {
-  hasInvite: boolean;
-  mustTakeTutorial: boolean;
-  mustTakeIntroSurvey: boolean;
-  canPlayGame: boolean;
-  shouldTakeExitSurvey: boolean;
+export interface TournamentStatus {
+  name: string;
+  description: string;
+  lobbyOpenBeforeOffset: number;
+  lobbyOpenAfterOffset: number;
+  currentRound: {
+    round: number;
+    schedule: Array<number>; // list of timestamps for upcoming games
+    championship: boolean;
+    announcement: string;
+  };
 }
 
-export interface TournamentStatus {
-  round: number;
-  schedule: Array<number>; // list of timestamps for upcoming games
-  championship: boolean;
-  announcement: string;
-  description: string;
+export interface TournamentRoundInviteStatus {
+  introSurveyUrl: string;
+  hasCompletedIntroSurvey: boolean;
+  hasParticipated: boolean;
+}
+
+export interface ClientInitStatus {
+  isTournamentEnabled: boolean;
+  isFreePlayEnabled: boolean;
+  user: ClientSafeUser | null;
+  tournamentStatus: TournamentStatus | null;
 }
 
 export interface DashboardMessage {
@@ -455,6 +468,8 @@ export type RoomId = string;
 export interface DynamicSettingsData {
   maxConnections: number;
   defaultDaysMuted: number;
-  isTournamentSignUpEnabled: boolean;
+  isTournamentEnabled: boolean;
   isFreePlayEnabled: boolean;
+  tournamentLobbyOpenBeforeOffset: number;
+  tournamentLobbyOpenAfterOffset: number;
 }

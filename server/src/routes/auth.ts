@@ -4,7 +4,7 @@ import { User } from "@port-of-mars/server/entity";
 import { settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
 import { toUrl } from "@port-of-mars/server/util";
-import { LOGIN_PAGE, CONSENT_PAGE, LOBBY_PAGE } from "@port-of-mars/shared/routes";
+import { LOGIN_PAGE, CONSENT_PAGE, FREE_PLAY_LOBBY_PAGE } from "@port-of-mars/shared/routes";
 import { isDevOrStaging } from "@port-of-mars/shared/settings";
 
 const logger = settings.logging.getLogger(__filename);
@@ -54,7 +54,7 @@ authRouter.get("/google/success", function (req, res) {
       logger.warn("inactivated user attempted to login %o", user);
       res.redirect(toUrl(LOGIN_PAGE));
     } else if (getServices().account.isRegisteredAndValid(user)) {
-      res.redirect(toUrl(LOBBY_PAGE));
+      res.redirect(toUrl(FREE_PLAY_LOBBY_PAGE));
     } else {
       logger.warn("invalid / unregistered user %o", user);
       res.redirect(toUrl(CONSENT_PAGE));
@@ -88,7 +88,7 @@ authRouter.get("/facebook/success", function (req, res) {
       logger.warn("inactivated user attempted to login %o", user);
       res.redirect(toUrl(LOGIN_PAGE));
     } else if (getServices().account.isRegisteredAndValid(user)) {
-      res.redirect(toUrl(LOBBY_PAGE));
+      res.redirect(toUrl(FREE_PLAY_LOBBY_PAGE));
     } else {
       logger.warn("invalid / unregistered user %o", user);
       res.redirect(toUrl(CONSENT_PAGE));

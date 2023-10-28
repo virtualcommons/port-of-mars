@@ -23,6 +23,7 @@ import {
   ResourceCostData,
   Role,
   TradeDataWithNull,
+  LobbyType,
   LobbyChatMessageData,
   LobbyClientData,
   ClientSafeUser,
@@ -163,6 +164,7 @@ export interface Lobby {
   chat: Array<LobbyChatMessageData>;
   ready: boolean;
   dateCreated: number;
+  type: LobbyType;
 }
 
 export interface State extends GameData {
@@ -197,8 +199,9 @@ export interface State extends GameData {
   // normal onboarding store data
   lobby: Lobby;
   dashboardMessages: Array<DashboardMessage>;
-  tournamentStatus: TournamentStatus;
-  signupEnabled: boolean;
+  tournamentStatus: TournamentStatus | null;
+  isFreePlayEnabled: boolean;
+  isTournamentEnabled: boolean;
 
   // TODO: rename UserInterfaceTwo to something more descriptive
   ui: UserInterfaceTwo;
@@ -220,12 +223,18 @@ export function defaultLobbyState(): Lobby {
     chat: [],
     ready: false,
     dateCreated: 0,
+    type: "freeplay",
   };
 }
 
 export const initialGameState: Omit<
   State,
-  "user" | "lobby" | "dashboardMessages" | "tournamentStatus" | "signupEnabled"
+  | "user"
+  | "lobby"
+  | "dashboardMessages"
+  | "tournamentStatus"
+  | "isFreePlayEnabled"
+  | "isTournamentEnabled"
 > = {
   // GameData
   players: defaultPlayerClientSet(),
@@ -291,12 +300,7 @@ export const initialStoreState: State = {
   lobby: defaultLobbyState(),
   user: initialUserState,
   dashboardMessages: [],
-  tournamentStatus: {
-    round: 0,
-    announcement: "",
-    championship: false,
-    description: "",
-    schedule: [],
-  },
-  signupEnabled: true,
+  tournamentStatus: null,
+  isFreePlayEnabled: true,
+  isTournamentEnabled: false,
 };

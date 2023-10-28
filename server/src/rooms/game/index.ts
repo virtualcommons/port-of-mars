@@ -155,8 +155,6 @@ async function onCreate(
   logger.info("roomId: %s", room.roomId);
   room.gameId = await room.persister.initialize(options, room.roomId, shouldEnableDb);
   const snapshot = room.state.toJSON();
-  // FIXME: consider taking game state snapshots periodically during the game as well as at the end of the game
-  // https://github.com/virtualcommons/port-of-mars/issues/718
   const event = new TakenStateSnapshot(snapshot);
   room.persister.persist([event], room.getMetadata());
   room.clock.setInterval(() => gameLoop(room), 1000);
