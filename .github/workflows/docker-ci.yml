@@ -13,9 +13,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: configure for staging environment
-      run: ./configure dev
+    - uses: actions/checkout@v4
+    - name: configure for prod environment
+      run: ./configure prod
     - name: Compile TS code for production
       run: make buildprod
     - name: Run tests
