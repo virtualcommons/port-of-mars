@@ -168,7 +168,6 @@ export class TournamentLobbyRoom extends LobbyRoom<TournamentLobbyRoomState> {
   }
 
   async isLobbyOpen() {
-    return true;
     const services = getServices();
     if (await services.settings.isTournamentEnabled()) {
       return services.tournament.isLobbyOpen();
