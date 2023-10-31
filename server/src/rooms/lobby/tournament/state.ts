@@ -1,8 +1,5 @@
 import { Client } from "colyseus";
-import { settings } from "@port-of-mars/server/settings";
 import { LobbyClient, LobbyRoomState } from "@port-of-mars/server/rooms/lobby/common/state";
-
-const logger = settings.logging.getLogger(__filename);
 
 /**
  * Lobby room state for tournaments that fills up up and allocates games
@@ -12,49 +9,51 @@ const logger = settings.logging.getLogger(__filename);
 export class TournamentLobbyRoomState extends LobbyRoomState {
   maxClients = 200;
 
-  clientsToGroups = new Map<string, LobbyClient[]>();
+  // only holds clients that still need to be put into a group
+  queue: LobbyClient[] = [];
+  // groups indexed by a unique group id
+  pendingGroups: Map<string, LobbyClient[]> = new Map();
+  // map client username to group id
+  clientToGroup: Map<string, string> = new Map();
 
-  /**
-   * Returns clients that haven't been put into a group yet.
-   */
-  getEligibleClients() {
-    return this.clients.filter((client: LobbyClient) => this.clientsToGroups.has(client.username));
+  allGroupClientsAccepted(groupId: string) {
+    const group = this.pendingGroups.get(groupId);
+    if (group) {
+      return group.every(client => client.accepted);
+    }
+    return false;
   }
 
-  getPendingGroup(client: Client) {
-    return this.clientsToGroups.get(client.auth.username);
+  getClientPendingGroupId(client: Client) {
+    return this.clientToGroup.get(client.auth.username);
   }
 
-  addClientToGroup(client: Client, group: LobbyClient[]) {
-    this.clientsToGroups.set(client.auth.username, group);
+  getPendingGroup(id: string) {
+    return this.pendingGroups.get(id);
   }
 
-  /**
-   * Clears a pending group as having successfully joined a game
-   * @param group clients to remove from pending group
-   */
-  clearPendingGroup(group: LobbyClient[]) {
-    group.forEach((lobbyClient: LobbyClient) => {
-      const username = lobbyClient.username;
-      this.clientsToGroups.delete(username);
-      this.removeClient(username);
+  setPendingGroup(id: string, group: LobbyClient[]) {
+    this.pendingGroups.set(id, group);
+    group.forEach(client => {
+      this.clientToGroup.set(client.username, id);
     });
   }
 
   /**
-   * Resets a pending group as having failed to join a game (usually because one player left before all players accepted).
-   * removes the client to group mapping and resets the leaving flag on the client
-   * @param group clients to reset from pending group
+   * Clear a group and add the clients back to the queue, optionally leaving one client out
+   * in the case that they left the lobby entirely
    */
-  resetPendingGroup(client: Client) {
-    const group = this.getPendingGroup(client);
+  resetPendingGroup(id: string, leavingClient?: Client) {
+    const group = this.pendingGroups.get(id);
     if (group) {
-      group.forEach((lobbyClient: LobbyClient) => {
-        this.clientsToGroups.delete(lobbyClient.username);
-        lobbyClient.leaving = false;
+      group.forEach(client => {
+        this.clientToGroup.delete(client.username);
+        client.accepted = false;
+        // if a client left the group, don't add them back to the queue
+        if (!leavingClient || client.username !== leavingClient.auth.username)
+          this.queue.push(client);
       });
-    } else {
-      logger.warn(`resetPendingGroup: client ${client.auth.username} not found in pending groups`);
+      this.pendingGroups.delete(id);
     }
   }
 }

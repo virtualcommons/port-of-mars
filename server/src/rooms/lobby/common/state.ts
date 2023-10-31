@@ -11,7 +11,7 @@ export class LobbyClient extends Schema {
   @type("boolean") ready: boolean;
   @type("number") dateJoined: number;
   client: Client;
-  leaving: boolean;
+  accepted: boolean;
 
   constructor(client: Client) {
     super();
@@ -19,7 +19,7 @@ export class LobbyClient extends Schema {
     this.username = client.auth.username;
     this.id = this.client.auth.id;
     this.ready = false;
-    this.leaving = false;
+    this.accepted = false;
     this.dateJoined = new Date().getTime();
   }
 }
@@ -61,9 +61,9 @@ export abstract class LobbyRoomState extends Schema {
     return this.clients.length >= this.maxClients;
   }
 
-  allClientsLeaving() {
+  allClientsAccepted() {
     this.clients.forEach((c: LobbyClient) => {
-      if (!c.leaving) return false;
+      if (!c.accepted) return false;
     });
     return true;
   }
@@ -83,10 +83,10 @@ export abstract class LobbyRoomState extends Schema {
   }
 
   // indicate that client has accepted invitation to join a game
-  setClientLeaving(username: string) {
+  setClientAccepted(username: string) {
     const index = this.clients.findIndex((c: LobbyClient) => c.username === username);
     if (index > -1) {
-      this.clients[index].leaving = true;
+      this.clients[index].accepted = true;
     }
   }
 

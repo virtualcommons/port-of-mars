@@ -1,4 +1,7 @@
 import { Client, matchMaker } from "colyseus";
+import _ from "lodash";
+import { v4 as uuidv4 } from "uuid";
+import { Mutex } from "async-mutex";
 import { buildGameOpts } from "@port-of-mars/server/util";
 import { GameRoom } from "@port-of-mars/server/rooms/game";
 import { settings } from "@port-of-mars/server/settings";
@@ -7,7 +10,6 @@ import { TOURNAMENT_LOBBY_NAME, AcceptInvitation } from "@port-of-mars/shared/lo
 import { TournamentLobbyRoomState } from "@port-of-mars/server/rooms/lobby/tournament/state";
 import { LobbyClient } from "@port-of-mars/server/rooms/lobby/common/state";
 import { LobbyRoom } from "@port-of-mars/server/rooms/lobby/common";
-import * as _ from "lodash";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -18,7 +20,11 @@ export class TournamentLobbyRoom extends LobbyRoom<TournamentLobbyRoomState> {
   }
 
   clockInterval = 1000 * 60; // try to form groups every 60 seconds
-  processingClients = false; // naive lock to attempt to prevent concurrent access to trySendInvitations
+
+  private mutex = new Mutex();
+
+  // track acceptance timeouts for each group to be able to clear them
+  private groupTimeouts: Map<string, NodeJS.Timeout> = new Map();
 
   createState() {
     return new TournamentLobbyRoomState();
@@ -27,19 +33,56 @@ export class TournamentLobbyRoom extends LobbyRoom<TournamentLobbyRoomState> {
   async trySendInvitations() {
     // only try to send invitations if there are enough players and we are not in the middle
     // of trying to put groups into a game
-    if (this.processingClients) {
-      return;
+    const release = await this.mutex.acquire();
+    try {
+      this.formAndInviteGroups();
+    } finally {
+      release();
     }
-    this.processingClients = true;
-    const clients = this.state.getEligibleClients();
-    if (clients.length >= 5) {
-      const shuffledClients = _.shuffle(clients);
-      while (shuffledClients.length >= 5) {
-        const group = shuffledClients.splice(0, 5);
+  }
+
+  async formAndInviteGroups() {
+    while (this.state.queue.length >= this.groupSize) {
+      const groupId = this.formGroup();
+      const group = this.state.getPendingGroup(groupId);
+      if (group) {
         await this.sendGroupInvitations(group);
+        this.setGroupAcceptanceTimeout(groupId);
       }
     }
-    this.processingClients = false;
+  }
+
+  setGroupAcceptanceTimeout(groupId: string) {
+    // set a timeout for 10 seconds to accept the invitation, otherwise assume something
+    // bad happened and clear the group
+    const timeout = setTimeout(() => {
+      if (!this.state.allGroupClientsAccepted(groupId)) {
+        this.state.resetPendingGroup(groupId);
+      }
+      this.groupTimeouts.delete(groupId);
+    }, 1000 * 10);
+    this.groupTimeouts.set(groupId, timeout);
+  }
+
+  clearGroupAcceptanceTimeout(groupId: string) {
+    const timeout = this.groupTimeouts.get(groupId);
+    if (timeout) {
+      clearTimeout(timeout);
+      this.groupTimeouts.delete(groupId);
+    }
+  }
+
+  formGroup(): string {
+    const group = [];
+    const groupId = uuidv4();
+    _.shuffle(this.state.queue);
+    for (let i = 0; i < this.groupSize; i++) {
+      const client = this.state.queue.pop()!;
+      client.accepted = true;
+      group.push(client);
+    }
+    this.state.setPendingGroup(groupId, group);
+    return groupId;
   }
 
   async sendGroupInvitations(group: LobbyClient[]) {
@@ -49,7 +92,6 @@ export class TournamentLobbyRoom extends LobbyRoom<TournamentLobbyRoomState> {
     logger.info(`${this.roomName} created game room ${room.roomId}`);
     // send room data for new websocket connection
     group.forEach((lobbyClient: LobbyClient) => {
-      this.state.addClientToGroup(lobbyClient.client, group);
       this.sendSafe(lobbyClient.client, {
         kind: "sent-invitation",
         roomId: room.roomId,
@@ -74,40 +116,33 @@ export class TournamentLobbyRoom extends LobbyRoom<TournamentLobbyRoomState> {
     );
   }
 
-  allGroupClientsLeaving(group: LobbyClient[]) {
-    return group.every(client => client.leaving);
-  }
-
-  registerLobbyHandlers(): void {
-    super.registerLobbyHandlers();
-    this.onMessage("accept-invitation", (client: Client, message: AcceptInvitation) => {
-      logger.trace(`client ${client.auth.username} accepted invitation to join a game`);
-      this.state.setClientLeaving(client.auth.username);
-      const pendingGroup = this.state.getPendingGroup(client);
-      // check that all clients in the group are leaving
-      if (!pendingGroup) {
-        logger.fatal(`no client group found for client ${client.auth.username}`);
-        return;
-      }
-      // FIXME: consider refactoring to some better abstractions,
-      // with a ClientGroup class that can encapsulate this logic + cleanup
-      // etc.
-      if (this.allGroupClientsLeaving(pendingGroup)) {
-        pendingGroup.forEach((lc: LobbyClient) => {
-          this.sendSafe(lc.client, { kind: "removed-client-from-lobby" });
-          lc.client.leave();
-        });
-        // clear this group from the state and remove from the list of connected
-        // clients
-        this.state.clearPendingGroup(pendingGroup);
-      }
-    });
+  onAcceptInvitation(client: Client, message: AcceptInvitation) {
+    logger.trace(`client ${client.auth.username} accepted invitation to join a game`);
+    this.state.setClientAccepted(client.auth.username);
+    const groupId = this.state.getClientPendingGroupId(client);
+    // check that all clients in the group have accepted the invitation
+    if (!groupId) {
+      logger.warn(`no client group found for client ${client.auth.username}`);
+      return;
+    }
+    const group = this.state.getPendingGroup(groupId);
+    if (group && this.state.allGroupClientsAccepted(groupId)) {
+      this.clearGroupAcceptanceTimeout(groupId);
+      group.forEach((lc: LobbyClient) => {
+        this.sendSafe(lc.client, { kind: "removed-client-from-lobby" });
+        lc.client.leave();
+      });
+      this.state.pendingGroups.delete(groupId);
+    }
   }
 
   onLeave(client: Client, consented: boolean) {
     // cleans up the client state
     super.onLeave(client, consented);
     // if a client in a pending group leaves, reset all other clients in the group
-    this.state.resetPendingGroup(client);
+    const groupId = this.state.getClientPendingGroupId(client);
+    if (groupId) {
+      this.state.resetPendingGroup(groupId, client);
+    }
   }
 }

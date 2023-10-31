@@ -3,7 +3,12 @@ import { LobbyClient, LobbyRoomState } from "@port-of-mars/server/rooms/lobby/co
 import { settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
 import * as http from "http";
-import { BASE_LOBBY_NAME, LobbyResponse, SendLobbyChatMessage } from "@port-of-mars/shared/lobby";
+import {
+  AcceptInvitation,
+  BASE_LOBBY_NAME,
+  LobbyResponse,
+  SendLobbyChatMessage,
+} from "@port-of-mars/shared/lobby";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -126,6 +131,11 @@ export abstract class LobbyRoom<RoomStateType extends LobbyRoomState> extends Ro
     this.resetMetadata();
   }
 
+  /**
+   * Handle client accepting an invitation to start a game
+   */
+  abstract onAcceptInvitation(client: Client, message: AcceptInvitation): void;
+
   registerLobbyHandlers(): void {
     this.onMessage("send-lobby-chat-message", (client: Client, message: SendLobbyChatMessage) => {
       if (client.auth.isMuted) {
@@ -133,6 +143,9 @@ export abstract class LobbyRoom<RoomStateType extends LobbyRoomState> extends Ro
         return;
       }
       this.state.addChatMessage(client.auth.username, message.value);
+    });
+    this.onMessage("accept-invitation", (client: Client, message: AcceptInvitation) => {
+      this.onAcceptInvitation(client, message);
     });
   }
 
