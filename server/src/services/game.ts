@@ -1,6 +1,6 @@
 import { Game, GameEvent, Player } from "@port-of-mars/server/entity";
 import { BaseService } from "@port-of-mars/server/services/db";
-import { GameStatus } from "@port-of-mars/shared/types";
+import { GameStatus, GameType } from "@port-of-mars/shared/types";
 import { IsNull } from "typeorm";
 
 export class GameService extends BaseService {
@@ -70,17 +70,20 @@ export class GameService extends BaseService {
     return await this.em.getRepository(GameEvent).find({ where: { gameId }, order: { id: "ASC" } });
   }
 
-  async getActiveGameRoomId(userId: number): Promise<string | undefined> {
-    const game = await this.em
+  async getActiveGameRoomId(userId: number, type?: GameType): Promise<string | undefined> {
+    const query = this.em
       .getRepository(Game)
       .createQueryBuilder("game")
       .innerJoin("game.players", "player")
       .innerJoin("player.user", "user")
       .where("game.status = 'incomplete'")
-      .andWhere("user.id = :userId", { userId })
-      .orderBy("game.dateCreated", "DESC")
-      .getOne();
+      .andWhere("user.id = :userId", { userId });
 
+    if (type) {
+      // only select by type if its provided
+      query.andWhere("game.type = :type", { type });
+    }
+    const game = await query.orderBy("game.dateCreated", "DESC").getOne();
     return game?.roomId;
   }
 

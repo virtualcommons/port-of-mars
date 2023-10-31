@@ -68,7 +68,7 @@ export default class FreePlayLobby extends Vue {
   }
 
   async rejoinIfActiveGame() {
-    await this.$ajax.get(url("/game/has-active"), ({ data, status }) => {
+    await this.$ajax.get(url("/game/has-active?type=freeplay"), ({ data, status }) => {
       if (status === 200 && data === true) {
         this.$router.push(this.game);
       }
