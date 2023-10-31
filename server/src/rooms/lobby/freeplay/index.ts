@@ -27,7 +27,7 @@ export class FreePlayLobbyRoom extends LobbyRoom<FreePlayLobbyRoomState> {
     return new FreePlayLobbyRoomState();
   }
 
-  async trySendInvitations() {
+  async onClockInterval() {
     if (this.state.ready) {
       await this.sendInvitations();
     }
