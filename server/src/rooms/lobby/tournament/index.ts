@@ -22,7 +22,7 @@ class Group {
   id: string;
   size: number;
   clients: LobbyClient[];
-  forceMoveTimeout: NodeJS.Timeout | null = null;
+  forceMoveTimeout: ReturnType<typeof setTimeout> | null = null;
 
   constructor(clients: LobbyClient[], size = MAX_GROUP_SIZE) {
     this.id = uuidv4();
@@ -52,7 +52,7 @@ class GroupManager {
   clientToGroup: Map<string, Group> = new Map(); // username -> group
 
   shuffleQueue() {
-    _.shuffle(this.queue);
+    this.queue = _.shuffle(this.queue);
   }
 
   addClientToQueue(client: Client) {
@@ -111,7 +111,7 @@ export class TournamentLobbyRoom extends LobbyRoom<TournamentLobbyRoomState> {
 
   private mutex = new Mutex();
 
-  private groupManager = new GroupManager();
+  groupManager = new GroupManager();
 
   get queue() {
     return this.groupManager.queue;

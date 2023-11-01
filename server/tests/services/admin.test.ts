@@ -7,7 +7,7 @@ import {
   createUsers,
   initTransaction,
   rollbackTransaction,
-} from "./common";
+} from "../common";
 import { BAN, ModerationActionType, MUTE } from "@port-of-mars/shared/types";
 
 describe("users in a game", () => {

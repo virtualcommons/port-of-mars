@@ -46,7 +46,7 @@ import {
   createUsers,
   initTransaction,
   rollbackTransaction,
-} from "./common";
+} from "../common";
 import { getFixedMarsEventDeck } from "@port-of-mars/server/rooms/game/state/marsevents/common";
 
 describe("a game", () => {
