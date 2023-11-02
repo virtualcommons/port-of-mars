@@ -5,6 +5,7 @@ import {
   AccomplishmentPurchaseData,
   ChatMessageData,
   GameData,
+  GameType,
   MarsEventData,
   MarsLogMessageData,
   Phase,
@@ -291,6 +292,10 @@ export function applyGameServerResponses(room: Room, store: TStore, sfx: SfxMana
       if (change.field === "heroOrPariah") {
         const heroOrPariah: "hero" | "pariah" = change.value;
         store.commit("SET_HERO_OR_PARIAH", heroOrPariah);
+      }
+      if (change.field === "type") {
+        const gameType: GameType = change.value;
+        store.commit("SET_GAME_TYPE", gameType);
       }
     });
   };

@@ -185,6 +185,7 @@ export class TournamentService extends BaseService {
     }
     return {
       introSurveyUrl: getServices().survey.getIntroSurveyUrl(user, tournamentRound, invite),
+      exitSurveyUrl: getServices().survey.getExitSurveyUrl(user, tournamentRound, invite),
       hasCompletedIntroSurvey: invite.hasCompletedIntroSurvey,
       hasParticipated: invite.hasParticipated,
     };

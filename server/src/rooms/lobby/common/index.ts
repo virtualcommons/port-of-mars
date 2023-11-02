@@ -159,16 +159,6 @@ export abstract class LobbyRoom<RoomStateType extends LobbyRoomState> extends Ro
     });
   }
 
-  async getFilledUsernames(): Promise<Array<string>> {
-    const usernames: Array<string> = this.state.clients.map(c => c.username);
-    if (usernames.length < this.groupSize) {
-      const numberOfRequiredBots = this.groupSize - usernames.length;
-      const bots = await getServices().account.getOrCreateBotUsers(numberOfRequiredBots);
-      return usernames.concat(bots.map(u => u.username)).slice(0, this.groupSize);
-    }
-    return usernames;
-  }
-
   resetMetadata() {
     this.setMetadata({ dateCreated: this.state.dateCreated });
   }

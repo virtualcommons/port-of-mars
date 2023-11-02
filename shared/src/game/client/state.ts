@@ -27,6 +27,7 @@ import {
   LobbyChatMessageData,
   LobbyClientData,
   ClientSafeUser,
+  GameType,
 } from "@port-of-mars/shared/types";
 import { ModalType, ModalDataType } from "@port-of-mars/shared/game/client/modals";
 import { ChatMarsLogView, HUDLeftView, HUDRightView } from "@port-of-mars/shared/game/client/panes";
@@ -179,6 +180,7 @@ export interface State extends GameData {
   role: Role;
   winners: Array<Role>;
   heroOrPariah: "" | "hero" | "pariah";
+  gameType: GameType;
   logs: Array<MarsLogMessageData>;
   players: PlayerClientSet;
   phase: Phase;
@@ -257,6 +259,7 @@ export const initialGameState: Omit<
   tradeSet: {},
   winners: [],
   heroOrPariah: "",
+  gameType: "freeplay",
 
   // State
   role: RESEARCHER,

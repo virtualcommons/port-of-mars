@@ -45,7 +45,7 @@ export class LobbyChatMessage extends Schema implements LobbyChatMessageData {
  * actual game room. Limited to 5 players as the game room is
  */
 export abstract class LobbyRoomState extends Schema {
-  @type([LobbyClient]) clients = new ArraySchema<LobbyClient>(); // FIXME: use a MapSchema<LobbyClient, Group> instead?
+  @type([LobbyClient]) clients = new ArraySchema<LobbyClient>();
   @type([LobbyChatMessage]) chat = new ArraySchema<LobbyChatMessage>();
   @type("number") dateCreated: number;
   // FIXME: we might want to relate this to service.settings.maxConnections() also but probably OK for now
