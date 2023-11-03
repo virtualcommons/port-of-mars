@@ -125,7 +125,7 @@ export class GameState
     this.lastTimePolled = new Date();
     this.maxRound = data.numberOfGameRounds;
     this.players = new PlayerSet(data.playerOpts);
-    this.type = "tournament";
+    this.type = data.type;
   }
 
   static DEFAULTS = {

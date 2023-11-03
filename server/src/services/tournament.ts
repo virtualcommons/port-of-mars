@@ -5,28 +5,38 @@ import {
   TournamentRound,
   TournamentRoundInvite,
 } from "@port-of-mars/server/entity";
-import { MoreThan, SelectQueryBuilder } from "typeorm";
+import { MoreThan, Not, SelectQueryBuilder } from "typeorm";
 import { getServices } from "@port-of-mars/server/services";
 import { getLogger } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { TournamentRoundDate } from "@port-of-mars/server/entity/TournamentRoundDate";
-import { TournamentRoundInviteStatus, TournamentStatus } from "@port-of-mars/shared/types";
+import {
+  GameType,
+  TournamentRoundInviteStatus,
+  TournamentStatus,
+} from "@port-of-mars/shared/types";
 
 const logger = getLogger(__filename);
 
 export class TournamentService extends BaseService {
   async getActiveTournament(): Promise<Tournament> {
-    return await this.em.getRepository(Tournament).findOneOrFail({
-      where: { active: true },
+    const x = await this.em.getRepository(Tournament).findOneOrFail({
+      where: { active: true, name: Not("freeplay") },
       order: {
         id: "DESC",
       },
     });
+    return x;
   }
 
   async getTournament(id?: number): Promise<Tournament> {
     if (id) {
-      return await this.em.getRepository(Tournament).findOneOrFail(id);
+      return await this.em.getRepository(Tournament).findOneOrFail({
+        where: {
+          id: id,
+          name: Not("freeplay"),
+        },
+      });
     } else {
       return await this.getActiveTournament();
     }
@@ -40,6 +50,16 @@ export class TournamentService extends BaseService {
 
   async getTournamentByName(name: string): Promise<Tournament> {
     return await this.em.getRepository(Tournament).findOneOrFail({ name });
+  }
+
+  async getCurrentTournamentRoundByType(type: GameType) {
+    // get the current tournament round, if freeplay game then get the special open/freeplay tournament round
+    const tournamentService = getServices().tournament;
+    if (type === "freeplay") {
+      return await this.getFreePlayTournamentRound();
+    } else {
+      return await tournamentService.getCurrentTournamentRound();
+    }
   }
 
   async getCurrentTournamentRound(tournamentId?: number): Promise<TournamentRound> {
@@ -168,11 +188,9 @@ export class TournamentService extends BaseService {
    */
   async getTournamentRoundInviteStatus(
     user: User,
-    tournamentRound?: TournamentRound
+    gameType: GameType = "freeplay"
   ): Promise<TournamentRoundInviteStatus | null> {
-    if (!tournamentRound) {
-      tournamentRound = await this.getCurrentTournamentRound();
-    }
+    const tournamentRound = await this.getCurrentTournamentRoundByType(gameType);
     let invite = await this.getTournamentRoundInvite(user, tournamentRound);
     if (!invite) {
       // NOTE: we'll need to manually invite users for a non-open tournament

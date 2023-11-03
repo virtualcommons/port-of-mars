@@ -4,6 +4,7 @@ import { getServices } from "@port-of-mars/server/services";
 import { getPagePath, TOURNAMENT_DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
 import { settings, getLogger } from "@port-of-mars/server/settings";
 import { ServerError } from "@port-of-mars/server/util";
+import { GameType } from "@port-of-mars/shared/types";
 
 export const tournamentRouter = Router();
 
@@ -41,7 +42,11 @@ tournamentRouter.get("/invite-status", async (req: Request, res: Response, next)
     if (!user) {
       res.status(401);
     }
-    const tournamentData = await getServices().tournament.getTournamentRoundInviteStatus(user);
+    const gameType = String(req.query.gameType) as GameType;
+    const tournamentData = await getServices().tournament.getTournamentRoundInviteStatus(
+      user,
+      gameType
+    );
     if (!tournamentData) {
       res.status(404).json({
         kind: "danger",

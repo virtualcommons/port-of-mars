@@ -68,6 +68,17 @@
               sort-by="dateFinalized"
               :sort-desc="true"
             >
+              <template #cell(tournamentRound)="data">
+                <b-badge
+                  variant="secondary"
+                  v-if="data.item.tournamentRound.tournament.name === 'freeplay'"
+                  >Freeplay</b-badge
+                >
+                <b-badge variant="primary" v-else>
+                  {{ data.item.tournamentRound.tournament.name }}
+                  (Round {{ data.item.tournamentRound.roundNumber }})
+                </b-badge>
+              </template>
               <template #cell(dateFinalized)="data">
                 {{ new Date(data.item.dateFinalized).toDateString() }}
               </template>
@@ -108,7 +119,7 @@
         </b-col>
         <!-- players -->
         <b-col v-if="showPlayers" cols="5" class="mh-100 p-2">
-          <h4 class="header-nowrap">Game #{{ this.players[0].gameId }} Scoreboard</h4>
+          <h4 class="header-nowrap">Game #{{ players[0].gameId }} Scoreboard</h4>
           <div class="h-100-header w-100 content-container">
             <b-table
               dark
@@ -174,7 +185,7 @@ export default class Games extends Vue {
   games: any = [];
   gameFields = [
     { key: "id", label: "Game ID" },
-    { key: "tournamentRoundId", label: "Round" },
+    { key: "tournamentRound", label: "Tournament" },
     { key: "dateFinalized", label: "Date" },
     { key: "status", label: "Status" },
     { key: "players", label: "Players" },

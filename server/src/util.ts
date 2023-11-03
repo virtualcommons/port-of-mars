@@ -87,19 +87,9 @@ export async function mockGameInitOpts(): Promise<GameOpts> {
   };
 }
 
-async function getCurrentTournamentRound(type: GameType) {
-  // get the current tournament round, if freeplay game then get the special open/freeplay tournament round
-  const tournamentService = getServices().tournament;
-  if (type === "freeplay") {
-    return await tournamentService.getFreePlayTournamentRound();
-  } else {
-    return await tournamentService.getCurrentTournamentRound();
-  }
-}
-
 export async function buildGameOpts(usernames: Array<string>, type: GameType): Promise<GameOpts> {
   const services = getServices();
-  const currentTournamentRound = await getCurrentTournamentRound(type);
+  const currentTournamentRound = await services.tournament.getCurrentTournamentRoundByType(type);
   assert.strictEqual(usernames.length, ROLES.length);
   logger.info("building game opts with current tournament round [%d]", currentTournamentRound.id);
   for (const u of usernames) {

@@ -432,6 +432,11 @@ export interface AdminStats {
   bannedUsers: number;
 }
 
+export interface LobbyActivityData {
+  freeplay: any[];
+  tournament: any[];
+}
+
 export interface TournamentStatus {
   name: string;
   description: string;

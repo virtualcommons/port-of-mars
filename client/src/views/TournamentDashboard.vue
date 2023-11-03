@@ -119,7 +119,7 @@ export default class TournamentDashboard extends Vue {
 
   async created() {
     this.api = new TournamentAPI(this.$tstore, this.$ajax);
-    this.invite = await this.api.getInviteStatus();
+    this.invite = await this.api.getInviteStatus("tournament");
     this.loaded = true;
   }
 }

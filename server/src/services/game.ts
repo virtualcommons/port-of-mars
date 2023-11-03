@@ -38,6 +38,8 @@ export class GameService extends BaseService {
       .createQueryBuilder("game")
       .leftJoinAndSelect("game.players", "player")
       .leftJoinAndSelect("player.user", "user")
+      .leftJoinAndSelect("game.tournamentRound", "tournamentRound")
+      .leftJoinAndSelect("tournamentRound.tournament", "tournament")
       .where("game.dateFinalized BETWEEN :start AND :end", interval);
     if (defeats) {
       query = query.andWhere("game.status IN (:...status)", { status: ["victory", "defeat"] });
