@@ -1,3 +1,4 @@
+import { MarsEventOverride } from "@port-of-mars/shared/types";
 import {
   OneToMany,
   Column,
@@ -27,10 +28,7 @@ export class Treatment {
   tournaments!: Array<Tournament>;
 
   @Column("jsonb", { nullable: true })
-  marsEventOverrides!: {
-    eventId: string;
-    quantity: number;
-  }[];
+  marsEventOverrides!: MarsEventOverride[];
 
   @OneToMany(type => Game, game => game.treatment, { nullable: true })
   games!: Array<Game>;

@@ -55,5 +55,8 @@ export class Game {
   winner?: Player;
 
   @ManyToOne(type => Treatment, treatment => treatment.games)
-  treatment!: Treatment;
+  treatment?: Treatment;
+
+  @Column({ nullable: true })
+  treatmentId?: number;
 }

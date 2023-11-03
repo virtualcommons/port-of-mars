@@ -110,12 +110,15 @@ export async function buildGameOpts(usernames: Array<string>, type: GameType): P
   playerData.forEach((p, i) => {
     playerOpts.set(shuffledRoles[i], p);
   });
+  const treatment = await services.tournament.getNextTreatment(currentTournamentRound.tournamentId);
+  const eventOverrides = treatment?.marsEventOverrides ?? null;
   return {
     userRoles: _.zipObject(usernames, shuffledRoles),
     playerOpts,
-    deck: getRandomizedMarsEventDeck(),
+    deck: getRandomizedMarsEventDeck(eventOverrides),
     numberOfGameRounds: currentTournamentRound.numberOfGameRounds,
     tournamentRoundId: currentTournamentRound.id,
+    treatmentId: treatment?.id,
     type,
   };
 }

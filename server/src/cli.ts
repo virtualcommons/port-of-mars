@@ -11,7 +11,7 @@ import {
 } from "@port-of-mars/server/services/replay";
 import { DBPersister } from "@port-of-mars/server/services/persistence";
 import { EnteredDefeatPhase, EnteredVictoryPhase } from "@port-of-mars/server/rooms/game/events";
-import { Phase } from "@port-of-mars/shared/types";
+import { MarsEventOverride, Phase } from "@port-of-mars/shared/types";
 import { getLogger } from "@port-of-mars/server/settings";
 import {
   Game,
@@ -345,6 +345,29 @@ async function exportTournamentRoundEmails(
   }
 }
 
+async function createTournamentTreatment(
+  em: EntityManager,
+  name: string,
+  description: string,
+  overridesRaw: string,
+  tournamentId?: number
+): Promise<void> {
+  const sp = getServices(em);
+  let overrides: MarsEventOverride[];
+  try {
+    overrides = JSON.parse(overridesRaw);
+    const treatment = await sp.tournament.createTreatment(
+      name,
+      description,
+      overrides,
+      tournamentId
+    );
+    logger.debug("created tournament treatment: %o", treatment);
+  } catch (e) {
+    logger.fatal("Unable to create treatment: %s", e);
+  }
+}
+
 async function createTournamentRoundDate(
   em: EntityManager,
   date: Date,
@@ -382,6 +405,34 @@ program
     program
       .createCommand("tournament")
       .description("tournamament subcommands")
+      .addCommand(
+        program
+          .createCommand("treatment")
+          .description("treatment subcommands")
+          .addCommand(
+            program
+              .createCommand("create")
+              .requiredOption("-n --name <name>", "Treatment name")
+              .requiredOption("-d --description <description>", "Treatment description")
+              .requiredOption(
+                "-o --overrides <overrides>",
+                "Mars event overrides (JSON string, e.g., '[ {'eventId': 'lifeAsUsual', 'quantity': 12} ])"
+              )
+              .option("--tournamentId <tournamentId>", "ID of the tournament", customParseInt)
+              .description("add a Treatment (set of mars event overrides) to a Tournament")
+              .action(async cmd => {
+                await withConnection(em =>
+                  createTournamentTreatment(
+                    em,
+                    cmd.name,
+                    cmd.description,
+                    cmd.overrides,
+                    cmd.tournamentId
+                  )
+                );
+              })
+          )
+      )
       .addCommand(
         program
           .createCommand("round")

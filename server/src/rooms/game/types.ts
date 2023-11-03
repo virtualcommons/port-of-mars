@@ -25,6 +25,7 @@ export interface Persister {
 
 export interface GameOpts extends GameStateOpts {
   tournamentRoundId: number;
+  treatmentId?: number;
 }
 
 export interface GameStateOpts {

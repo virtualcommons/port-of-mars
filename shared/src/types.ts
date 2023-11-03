@@ -231,6 +231,11 @@ export interface MarsEventData {
   timeDuration?: number;
 }
 
+export interface MarsEventOverride {
+  eventId: string;
+  quantity: number;
+}
+
 export enum MarsLogCategory {
   audit = "AUDIT",
   newRound = "NEW ROUND",

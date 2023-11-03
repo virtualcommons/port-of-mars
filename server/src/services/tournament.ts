@@ -4,6 +4,8 @@ import {
   Tournament,
   TournamentRound,
   TournamentRoundInvite,
+  Treatment,
+  Game,
 } from "@port-of-mars/server/entity";
 import { MoreThan, Not, SelectQueryBuilder } from "typeorm";
 import { getServices } from "@port-of-mars/server/services";
@@ -12,6 +14,7 @@ import { BaseService } from "@port-of-mars/server/services/db";
 import { TournamentRoundDate } from "@port-of-mars/server/entity/TournamentRoundDate";
 import {
   GameType,
+  MarsEventOverride,
   TournamentRoundInviteStatus,
   TournamentStatus,
 } from "@port-of-mars/shared/types";
@@ -242,6 +245,86 @@ export class TournamentService extends BaseService {
         announcement: tournamentRound.announcement ?? "",
       },
     };
+  }
+
+  /**
+   * Create a treatment and add it to the given or current tournament
+   */
+  async createTreatment(
+    name: string,
+    description: string,
+    overrides: MarsEventOverride[],
+    tournamentId?: number
+  ) {
+    let treatment = new Treatment();
+    treatment.name = name;
+    treatment.description = description;
+    treatment.marsEventOverrides = overrides;
+    treatment = await this.em.getRepository(Treatment).save(treatment);
+
+    let tournament;
+    if (!tournamentId) {
+      tournament = await this.getActiveTournament();
+    } else {
+      tournament = await this.em.getRepository(Tournament).findOne({
+        where: { id: tournamentId },
+        relations: ["treatments"],
+      });
+      if (!tournament) {
+        throw new Error(`Tournament with ID ${tournamentId} not found`);
+      }
+    }
+    if (!tournament.treatments) {
+      tournament.treatments = [];
+    }
+    tournament.treatments.push(treatment);
+    await this.em.getRepository(Tournament).save(tournament);
+
+    return treatment;
+  }
+
+  /**
+   * Retrieve the set of treatments for a given tournament
+   */
+  async getTreatments(tournamentId: number): Promise<Treatment[]> {
+    const tournament = await this.em
+      .getRepository(Tournament)
+      .createQueryBuilder("tournament")
+      .leftJoinAndSelect("tournament.treatments", "treatment")
+      .where("tournament.id = :tournamentId", { tournamentId })
+      .getOne();
+
+    return tournament ? tournament.treatments : [];
+  }
+
+  /**
+   * Retrieve the next treatment to use for a given tournament
+   * Treatments are cycled through in order
+   */
+  async getNextTreatment(tournamentId: number): Promise<Treatment | null> {
+    const treatments = await this.getTreatments(tournamentId);
+    if (treatments.length === 0) {
+      return null;
+    }
+    // get the last game played in the tournament
+    const lastGame = await this.em
+      .getRepository(Game)
+      .createQueryBuilder("game")
+      .select("game.treatmentId")
+      .innerJoin("game.tournamentRound", "tournamentRound")
+      .where("tournamentRound.tournamentId = :tournamentId", { tournamentId })
+      .orderBy("game.id", "DESC")
+      .getOne();
+
+    // determine the next treatment by cycling through the list
+    let nextTreatment;
+    if (lastGame && lastGame.treatmentId) {
+      const lastTreatmentIndex = treatments.findIndex(t => t.id === lastGame.treatmentId);
+      nextTreatment = treatments[(lastTreatmentIndex + 1) % treatments.length];
+    } else {
+      [nextTreatment] = treatments; // start with the first if no games played yet
+    }
+    return nextTreatment;
   }
 
   async createRound(

@@ -98,8 +98,11 @@ export class DBPersister implements Persister {
       game.tournamentRoundId = options.tournamentRoundId;
       game.roomId = roomId;
       game.type = options.type;
-
+      if (options.treatmentId) {
+        game.treatmentId = options.treatmentId;
+      }
       await em.save(game);
+
       if (shouldCreatePlayers) {
         const rawUsers = await this.selectUsersByUsername(em, Object.keys(options.userRoles));
         await this.createPlayers(em, game.id, options.userRoles, rawUsers);
