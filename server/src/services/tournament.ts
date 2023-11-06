@@ -9,7 +9,6 @@ import {
 } from "@port-of-mars/server/entity";
 import { MoreThan, Not, SelectQueryBuilder } from "typeorm";
 import { getServices } from "@port-of-mars/server/services";
-import { getLogger } from "@port-of-mars/server/settings";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { TournamentRoundDate } from "@port-of-mars/server/entity/TournamentRoundDate";
 import {
@@ -18,50 +17,49 @@ import {
   TournamentRoundInviteStatus,
   TournamentStatus,
 } from "@port-of-mars/shared/types";
+// import { getLogger } from "@port-of-mars/server/settings";
 
-const logger = getLogger(__filename);
+// const logger = getLogger(__filename);
 
 export class TournamentService extends BaseService {
   async getActiveTournament(): Promise<Tournament> {
-    const x = await this.em.getRepository(Tournament).findOneOrFail({
+    return this.em.getRepository(Tournament).findOneOrFail({
       where: { active: true, name: Not("freeplay") },
       order: {
         id: "DESC",
       },
     });
-    return x;
   }
 
   async getTournament(id?: number): Promise<Tournament> {
     if (id) {
-      return await this.em.getRepository(Tournament).findOneOrFail({
+      return this.em.getRepository(Tournament).findOneOrFail({
         where: {
           id: id,
           name: Not("freeplay"),
         },
       });
     } else {
-      return await this.getActiveTournament();
+      return this.getActiveTournament();
     }
   }
 
   async getFreePlayTournament(): Promise<Tournament> {
-    return await this.em.getRepository(Tournament).findOneOrFail({
+    return this.em.getRepository(Tournament).findOneOrFail({
       where: { name: "freeplay" },
     });
   }
 
   async getTournamentByName(name: string): Promise<Tournament> {
-    return await this.em.getRepository(Tournament).findOneOrFail({ name });
+    return this.em.getRepository(Tournament).findOneOrFail({ name });
   }
 
   async getCurrentTournamentRoundByType(type: GameType) {
     // get the current tournament round, if freeplay game then get the special open/freeplay tournament round
-    const tournamentService = getServices().tournament;
     if (type === "freeplay") {
       return await this.getFreePlayTournamentRound();
     } else {
-      return await tournamentService.getCurrentTournamentRound();
+      return await this.getCurrentTournamentRound();
     }
   }
 
@@ -90,21 +88,19 @@ export class TournamentService extends BaseService {
     const tournamentRound = await this.getTournamentRound(tournamentRoundId);
     const repository = this.em.getRepository(TournamentRoundDate);
     const scheduledDate = repository.create({ tournamentRoundId: tournamentRound.id, date });
-    return await repository.save(scheduledDate);
+    return repository.save(scheduledDate);
   }
 
   async getScheduledDates(tournamentRound?: TournamentRound): Promise<Array<Date>> {
     /**
-     * Returns upcoming scheduled dates for the given TournamentRound with 30 minutes of wiggle room e.g.,
-     * if round is scheduled at 2021-01-03 1900, it will return that date up until 2021-01-03 1930.
+     * Returns upcoming scheduled dates for the given TournamentRound
+     * includes past dates if they are within <beforeOffset> of now
      */
     if (!tournamentRound) {
       tournamentRound = await this.getCurrentTournamentRound();
     }
-    // scheduled dates within 30 minutes of the scheduled tournament date should
-    // still be available
-    const afterOffset = await this.getAfterOffset();
-    const offsetTime = new Date().getTime() - afterOffset;
+    const beforeOffset = await this.getBeforeOffset();
+    const offsetTime = new Date().getTime() - beforeOffset;
     const schedule = await this.em.getRepository(TournamentRoundDate).find({
       select: ["date"],
       where: { tournamentRoundId: tournamentRound.id, date: MoreThan(new Date(offsetTime)) },
@@ -189,11 +185,8 @@ export class TournamentService extends BaseService {
    * returns the invite status for a user (survey status + url, hasParticipated)
    * if the round is open (1st round) and no invite exists, one will be created
    */
-  async getTournamentRoundInviteStatus(
-    user: User,
-    gameType: GameType = "freeplay"
-  ): Promise<TournamentRoundInviteStatus | null> {
-    const tournamentRound = await this.getCurrentTournamentRoundByType(gameType);
+  async getTournamentRoundInviteStatus(user: User): Promise<TournamentRoundInviteStatus | null> {
+    const tournamentRound = await this.getCurrentTournamentRoundByType("tournament");
     let invite = await this.getTournamentRoundInvite(user, tournamentRound);
     if (!invite) {
       // NOTE: we'll need to manually invite users for a non-open tournament
@@ -405,12 +398,12 @@ export class TournamentService extends BaseService {
   }
 
   async getBeforeOffset(): Promise<number> {
-    const offset = await getServices().settings.tournamentLobbyOpenBeforeOffset();
+    const offset = (await getServices().settings.tournamentLobbyOpenBeforeOffset()) || 10;
     return offset * 60 * 1000;
   }
 
   async getAfterOffset(): Promise<number> {
-    const offset = await getServices().settings.tournamentLobbyOpenAfterOffset();
+    const offset = (await getServices().settings.tournamentLobbyOpenAfterOffset()) || 30;
     return offset * 60 * 1000;
   }
 }

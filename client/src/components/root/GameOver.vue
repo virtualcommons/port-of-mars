@@ -126,9 +126,11 @@ export default class Victory extends Vue {
 
   async created() {
     this.tournamentAPI = new TournamentAPI(this.$tstore, this.$ajax);
-    const invite = await this.tournamentAPI.getInviteStatus(this.$tstore.state.gameType);
-    if (invite) {
-      this.exitSurveyUrl = invite.exitSurveyUrl;
+    if (this.isTournament) {
+      const invite = await this.tournamentAPI.getInviteStatus();
+      if (invite) {
+        this.exitSurveyUrl = invite.exitSurveyUrl;
+      }
     }
   }
 }

@@ -52,7 +52,7 @@ export async function createTournament(
 
 export async function createRound(
   sp: ServiceProvider,
-  data: { roundNumber?: number; tournamentId: number }
+  data: { roundNumber?: number; tournamentId: number; introSurveyUrl?: string }
 ) {
   const d = {
     exitSurveyUrl: "",
