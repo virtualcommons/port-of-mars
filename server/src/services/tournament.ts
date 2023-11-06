@@ -205,6 +205,7 @@ export class TournamentService extends BaseService {
       }
     }
     return {
+      id: invite.id,
       introSurveyUrl: getServices().survey.getIntroSurveyUrl(user, tournamentRound, invite),
       exitSurveyUrl: getServices().survey.getExitSurveyUrl(user, tournamentRound, invite),
       hasCompletedIntroSurvey: invite.hasCompletedIntroSurvey,
@@ -376,27 +377,6 @@ export class TournamentService extends BaseService {
     } else {
       return await this.getCurrentTournamentRound();
     }
-  }
-
-  async setSurveyComplete(data: { inviteId: number; surveyId: string }) {
-    const invite = await this.em
-      .getRepository(TournamentRoundInvite)
-      .findOneOrFail(data.inviteId, { relations: ["user", "tournamentRound"] });
-    const tournamentRound = invite.tournamentRound;
-    const introSurveyUrl = tournamentRound.introSurveyUrl;
-    const exitSurveyUrl = tournamentRound.exitSurveyUrl;
-    if (introSurveyUrl && introSurveyUrl.includes(data.surveyId)) {
-      invite.hasCompletedIntroSurvey = true;
-      logger.debug(
-        "participant %s completed intro survey %s",
-        invite.user.username,
-        introSurveyUrl
-      );
-    } else if (exitSurveyUrl && exitSurveyUrl.includes(data.surveyId)) {
-      invite.hasCompletedExitSurvey = true;
-      logger.debug("participant %s completed exit survey %s", invite.user.username, exitSurveyUrl);
-    }
-    this.em.save(invite);
   }
 
   /**

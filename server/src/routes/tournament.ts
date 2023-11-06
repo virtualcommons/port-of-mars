@@ -5,6 +5,7 @@ import { getPagePath, TOURNAMENT_DASHBOARD_PAGE } from "@port-of-mars/shared/rou
 import { settings, getLogger } from "@port-of-mars/server/settings";
 import { ServerError } from "@port-of-mars/server/util";
 import { GameType } from "@port-of-mars/shared/types";
+import { isDevOrStaging } from "@port-of-mars/shared/settings";
 
 export const tournamentRouter = Router();
 
@@ -15,12 +16,12 @@ const logger = getLogger(__filename);
 tournamentRouter.get("/survey/complete", async (req: Request, res: Response, next) => {
   logger.debug("trying to mark survey complete");
   try {
-    const participantId = String(req.query.pid);
+    const participantId = String(req.query.pid ?? "");
+    const surveyId = String(req.query.surveyId ?? "");
     const inviteId = Number(req.query.tid);
-    const surveyId = String(req.query.surveyId);
     logger.debug("marking survey %s completion for %s on %d", surveyId, participantId, inviteId);
-    if (participantId && surveyId && inviteId) {
-      await getServices().tournament.setSurveyComplete({ inviteId, surveyId });
+    if (inviteId && (isDevOrStaging() || (participantId && surveyId))) {
+      await getServices().survey.setSurveyComplete({ inviteId, surveyId });
     } else {
       next(
         new ServerError({
