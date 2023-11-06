@@ -23,6 +23,11 @@ describe("a tournament", () => {
   const surveyId = "ABC123";
   const surveyUrl = `https://example.com/${surveyId}`;
 
+  // currently need to manually define these otherwise redis settings get used and
+  // cause the tests to hang, need to figure out a better solution here
+  const beforeOffset = 10 * 60 * 1000;
+  const afterOffset = 30 * 60 * 1000;
+
   beforeAll(async () => {
     [conn, qr, manager] = await initTransaction();
     services = new ServiceProvider(qr.manager);
@@ -47,7 +52,7 @@ describe("a tournament", () => {
     await services.tournament.createScheduledRoundDate(date1, tournamentRound.id);
     await services.tournament.createScheduledRoundDate(date2, tournamentRound.id);
     await services.tournament.createScheduledRoundDate(date3, tournamentRound.id);
-    const dates = await services.tournament.getScheduledDates(tournamentRound);
+    const dates = await services.tournament.getScheduledDates({ tournamentRound, beforeOffset });
     expect(dates).toEqual([date1, date2, date3]);
   });
 
@@ -78,10 +83,10 @@ describe("a tournament", () => {
   });
 
   it("lobby opens and closes depending on dates", async () => {
-    expect(await services.tournament.isLobbyOpen()).toBe(false);
+    expect(await services.tournament.isLobbyOpen({ beforeOffset, afterOffset })).toBe(false);
     const now = new Date();
     await services.tournament.createScheduledRoundDate(now, tournamentRound.id);
-    expect(await services.tournament.isLobbyOpen()).toBe(true);
+    expect(await services.tournament.isLobbyOpen({ beforeOffset, afterOffset })).toBe(true);
   });
 
   describe("players", () => {

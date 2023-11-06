@@ -91,15 +91,17 @@ export class TournamentService extends BaseService {
     return repository.save(scheduledDate);
   }
 
-  async getScheduledDates(tournamentRound?: TournamentRound): Promise<Array<Date>> {
+  async getScheduledDates(options?: {
+    tournamentRound?: TournamentRound;
+    beforeOffset?: number;
+  }): Promise<Array<Date>> {
     /**
      * Returns upcoming scheduled dates for the given TournamentRound
      * includes past dates if they are within <beforeOffset> of now
      */
-    if (!tournamentRound) {
-      tournamentRound = await this.getCurrentTournamentRound();
-    }
-    const beforeOffset = await this.getBeforeOffset();
+    let { tournamentRound, beforeOffset } = options ?? {};
+    if (!tournamentRound) tournamentRound = await this.getCurrentTournamentRound();
+    if (!beforeOffset) beforeOffset = await this.getBeforeOffset();
     const offsetTime = new Date().getTime() - beforeOffset;
     const schedule = await this.em.getRepository(TournamentRoundDate).find({
       select: ["date"],
@@ -226,7 +228,7 @@ export class TournamentService extends BaseService {
       tournamentRound = await this.getCurrentTournamentRound();
     }
     const tournament = tournamentRound.tournament;
-    const scheduledDates = await this.getScheduledDates(tournamentRound);
+    const scheduledDates = await this.getScheduledDates({ tournamentRound });
     return {
       name: tournament.name,
       description: tournament.description ?? "",
@@ -376,15 +378,23 @@ export class TournamentService extends BaseService {
    * Returns true if there is a scheduled game within a specific time window of now. Currently set to open 10 mins before the
    * scheduled game, and 30 minutes after the scheduled game (i.e., 40 minute window).
    */
-  async isLobbyOpen(gameDates?: Array<Date>, tournamentRound?: TournamentRound): Promise<boolean> {
-    if (!gameDates) {
-      gameDates = await this.getScheduledDates(tournamentRound);
-    }
+  async isLobbyOpen(options?: {
+    gameDates?: Array<Date>;
+    tournamentRound?: TournamentRound;
+    beforeOffset?: number;
+    afterOffset?: number;
+  }): Promise<boolean> {
+    let { gameDates, beforeOffset, afterOffset } = options ?? {};
+    if (!gameDates)
+      gameDates = await this.getScheduledDates({
+        tournamentRound: options?.tournamentRound,
+        beforeOffset,
+      });
     if (gameDates.length === 0) {
       return false;
     }
-    const beforeOffset = await this.getBeforeOffset();
-    const afterOffset = await this.getAfterOffset();
+    if (!beforeOffset) beforeOffset = await this.getBeforeOffset();
+    if (!afterOffset) afterOffset = await this.getAfterOffset();
     const now = new Date();
     for (const date of gameDates) {
       const gameTime = date.getTime();
@@ -398,12 +408,12 @@ export class TournamentService extends BaseService {
   }
 
   async getBeforeOffset(): Promise<number> {
-    const offset = (await getServices().settings.tournamentLobbyOpenBeforeOffset()) || 10;
+    const offset = await getServices().settings.tournamentLobbyOpenBeforeOffset();
     return offset * 60 * 1000;
   }
 
   async getAfterOffset(): Promise<number> {
-    const offset = (await getServices().settings.tournamentLobbyOpenAfterOffset()) || 30;
+    const offset = await getServices().settings.tournamentLobbyOpenAfterOffset();
     return offset * 60 * 1000;
   }
 }
