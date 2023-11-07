@@ -460,6 +460,7 @@ export interface TournamentRoundInviteStatus {
   introSurveyUrl: string;
   exitSurveyUrl: string;
   hasCompletedIntroSurvey: boolean;
+  hasCompletedExitSurvey: boolean;
   hasParticipated: boolean;
 }
 

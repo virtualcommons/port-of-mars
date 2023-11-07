@@ -48,7 +48,7 @@
             </span>
             <span v-else></span>
           </div>
-          <div v-else class="h-100 d-flex flex-column justify-content-around align-items-center">
+          <div v-else class="h-100 d-flex flex-column justify-content-center align-items-center">
             <b-alert show v-if="loaded" variant="danger" class="mx-5">
               <h4><b-icon-exclamation-circle></b-icon-exclamation-circle></h4>
               <span v-if="invite?.hasParticipated">
@@ -62,6 +62,14 @@
               </span>
             </b-alert>
             <b-spinner v-else></b-spinner>
+            <b-button
+              v-if="invite?.hasParticipated && !invite.hasCompletedExitSurvey"
+              variant="success"
+              size="lg"
+              :href="invite.exitSurveyUrl"
+            >
+              <h4 class="mb-0">Take Exit Survey</h4>
+            </b-button>
           </div>
         </b-col>
       </b-row>

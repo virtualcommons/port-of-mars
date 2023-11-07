@@ -97,7 +97,7 @@ export class TournamentService extends BaseService {
   }): Promise<Array<Date>> {
     /**
      * Returns upcoming scheduled dates for the given TournamentRound
-     * includes past dates if they are within <beforeOffset> of now
+     * includes past dates if they are within <afterOffset> of now
      * 1230 should be included for a 1200 launchtime with an afterOffset of 30
      */
     let { tournamentRound, afterOffset } = options ?? {};
@@ -205,6 +205,7 @@ export class TournamentService extends BaseService {
       introSurveyUrl: getServices().survey.getIntroSurveyUrl(user, tournamentRound, invite),
       exitSurveyUrl: getServices().survey.getExitSurveyUrl(user, tournamentRound, invite),
       hasCompletedIntroSurvey: invite.hasCompletedIntroSurvey,
+      hasCompletedExitSurvey: invite.hasCompletedExitSurvey,
       hasParticipated: invite.hasParticipated,
     };
   }
