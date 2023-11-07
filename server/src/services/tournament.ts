@@ -7,7 +7,7 @@ import {
   Treatment,
   Game,
 } from "@port-of-mars/server/entity";
-import { MoreThan, Not, SelectQueryBuilder } from "typeorm";
+import { MoreThanOrEqual, Not, SelectQueryBuilder } from "typeorm";
 import { getServices } from "@port-of-mars/server/services";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { TournamentRoundDate } from "@port-of-mars/server/entity/TournamentRoundDate";
@@ -93,19 +93,20 @@ export class TournamentService extends BaseService {
 
   async getScheduledDates(options?: {
     tournamentRound?: TournamentRound;
-    beforeOffset?: number;
+    afterOffset?: number;
   }): Promise<Array<Date>> {
     /**
      * Returns upcoming scheduled dates for the given TournamentRound
      * includes past dates if they are within <beforeOffset> of now
+     * 1230 should be included for a 1200 launchtime with an afterOffset of 30
      */
-    let { tournamentRound, beforeOffset } = options ?? {};
+    let { tournamentRound, afterOffset } = options ?? {};
     if (!tournamentRound) tournamentRound = await this.getCurrentTournamentRound();
-    if (!beforeOffset) beforeOffset = await this.getBeforeOffset();
-    const offsetTime = new Date().getTime() - beforeOffset;
+    if (!afterOffset) afterOffset = await this.getAfterOffset();
+    const offsetTime = new Date().getTime() - afterOffset;
     const schedule = await this.em.getRepository(TournamentRoundDate).find({
       select: ["date"],
-      where: { tournamentRoundId: tournamentRound.id, date: MoreThan(new Date(offsetTime)) },
+      where: { tournamentRoundId: tournamentRound.id, date: MoreThanOrEqual(new Date(offsetTime)) },
       order: { date: "ASC" },
     });
     return schedule.map(s => s.date);
@@ -385,7 +386,7 @@ export class TournamentService extends BaseService {
     if (!gameDates)
       gameDates = await this.getScheduledDates({
         tournamentRound: options?.tournamentRound,
-        beforeOffset,
+        afterOffset: afterOffset,
       });
     if (gameDates.length === 0) {
       return false;

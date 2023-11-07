@@ -52,7 +52,7 @@ describe("a tournament", () => {
     await services.tournament.createScheduledRoundDate(date1, tournamentRound.id);
     await services.tournament.createScheduledRoundDate(date2, tournamentRound.id);
     await services.tournament.createScheduledRoundDate(date3, tournamentRound.id);
-    const dates = await services.tournament.getScheduledDates({ tournamentRound, beforeOffset });
+    const dates = await services.tournament.getScheduledDates({ tournamentRound, afterOffset });
     expect(dates).toEqual([date1, date2, date3]);
   });
 
