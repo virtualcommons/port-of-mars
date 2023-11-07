@@ -89,18 +89,12 @@ export class GameService extends BaseService {
     return game?.roomId;
   }
 
-  async getNumberOfActiveParticipants(tournamentRoundId?: number): Promise<number> {
-    if (!tournamentRoundId) {
-      tournamentRoundId = (await this.sp.tournament.getCurrentTournamentRound()).id;
-    }
+  async getNumberOfActiveParticipants(): Promise<number> {
     return await this.em
       .getRepository(Player)
       .createQueryBuilder("player")
       .innerJoin("player.game", "game")
       .where("game.status = 'incomplete'")
-      .andWhere("game.tournamentRoundId = :tournamentRoundId", {
-        tournamentRoundId,
-      })
       .getCount();
   }
 

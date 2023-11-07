@@ -258,23 +258,20 @@ export class TournamentService extends BaseService {
     treatment.marsEventOverrides = overrides;
     treatment = await this.em.getRepository(Treatment).save(treatment);
 
-    let tournament;
-    if (!tournamentId) {
-      tournament = await this.getActiveTournament();
-    } else {
-      tournament = await this.em.getRepository(Tournament).findOne({
-        where: { id: tournamentId },
-        relations: ["treatments"],
-      });
-      if (!tournament) {
-        throw new Error(`Tournament with ID ${tournamentId} not found`);
-      }
+    const tournament = await this.em.getRepository(Tournament).findOne({
+      where: tournamentId ? { id: tournamentId } : { active: true, name: Not("freeplay") },
+      relations: ["treatments"],
+      order: {
+        id: "DESC",
+      },
+    });
+
+    if (!tournament) {
+      throw new Error(`Tournament with ID ${tournamentId} not found`);
     }
-    if (!tournament.treatments) {
-      tournament.treatments = [];
-    }
-    tournament.treatments.push(treatment);
-    await this.em.getRepository(Tournament).save(tournament);
+
+    tournament.treatments = [...(tournament.treatments ?? []), treatment];
+    await this.em.getRepository(Tournament).save(tournament, { reload: true });
 
     return treatment;
   }
