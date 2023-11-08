@@ -1,6 +1,7 @@
 import { Schema, ArraySchema, type } from "@colyseus/schema";
 import { Client } from "colyseus";
 import { LobbyChatMessageData } from "@port-of-mars/shared/types";
+import { User } from "@port-of-mars/server/entity";
 
 /**
  * Connected client with additional metadata
@@ -30,11 +31,13 @@ export class LobbyClient extends Schema {
 export class LobbyChatMessage extends Schema implements LobbyChatMessageData {
   constructor(msg: LobbyChatMessageData) {
     super();
+    this.userId = msg.userId;
     this.username = msg.username;
     this.message = msg.message;
     this.dateCreated = msg.dateCreated;
   }
 
+  @type("number") userId: number;
   @type("string") username: string;
   @type("string") message: string;
   @type("number") dateCreated: number;
@@ -90,9 +93,10 @@ export abstract class LobbyRoomState extends Schema {
     }
   }
 
-  addChatMessage(username: string, message: string) {
+  addChatMessage(user: User, message: string) {
     const data = {
-      username,
+      userId: user.id,
+      username: user.username,
       message,
       dateCreated: new Date().getTime(),
     };

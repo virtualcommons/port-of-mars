@@ -51,6 +51,12 @@ export abstract class LobbyRoom<RoomStateType extends LobbyRoomState> extends Ro
 
   onDispose() {
     logger.trace(`Disposing of ${this.roomName} ${this.roomId}, no connected clients`);
+    logger.debug("Saving all lobby chat messages");
+    const chatMessages = [...this.state.chat];
+    logger.debug("lobby chat messages %s", chatMessages);
+    if (chatMessages) {
+      getServices().tournament.saveLobbyChatMessages(this.roomId, "tournament", chatMessages);
+    }
   }
 
   async getMaxConnections() {
@@ -152,7 +158,7 @@ export abstract class LobbyRoom<RoomStateType extends LobbyRoomState> extends Ro
         logger.trace(`client ${client.auth.username} attempted to send a chat message while muted`);
         return;
       }
-      this.state.addChatMessage(client.auth.username, message.value);
+      this.state.addChatMessage(client.auth, message.value);
     });
     this.onMessage("accept-invitation", (client: Client, message: AcceptInvitation) => {
       this.onAcceptInvitation(client, message);

@@ -68,6 +68,7 @@ export type GameType = "freeplay" | "tournament";
 export type LobbyType = GameType;
 
 export interface LobbyChatMessageData {
+  userId: number;
   username: string;
   message: string;
   dateCreated: number;

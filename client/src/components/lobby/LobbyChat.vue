@@ -6,7 +6,7 @@
         :key="msg.username + msg.dateCreated"
         class="mt-2 backdrop rounded p-1"
       >
-        <p class="mb-0">
+        <p class="mb-0 text-break">
           <b class="text-light">{{ msg.username }}: </b>
           <span class="text-secondary">{{ msg.message }}</span>
         </p>

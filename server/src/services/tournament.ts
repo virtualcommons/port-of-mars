@@ -1,3 +1,4 @@
+import { MoreThanOrEqual, Not, SelectQueryBuilder } from "typeorm";
 import {
   User,
   Player,
@@ -7,12 +8,13 @@ import {
   Treatment,
   Game,
 } from "@port-of-mars/server/entity";
-import { MoreThanOrEqual, Not, SelectQueryBuilder } from "typeorm";
 import { getServices } from "@port-of-mars/server/services";
 import { BaseService } from "@port-of-mars/server/services/db";
+import { LobbyChatMessage } from "@port-of-mars/server/entity/LobbyChatMessage";
 import { TournamentRoundDate } from "@port-of-mars/server/entity/TournamentRoundDate";
 import {
   GameType,
+  LobbyChatMessageData,
   MarsEventOverride,
   TournamentRoundInviteStatus,
   TournamentStatus,
@@ -290,8 +292,8 @@ export class TournamentService extends BaseService {
       .where("tournament.id = :tournamentId", { tournamentId })
       .getOne();
 
-    return tournament ?
-      tournament.treatments.sort((a: Treatment, b: Treatment) => a.id - b.id)
+    return tournament
+      ? tournament.treatments.sort((a: Treatment, b: Treatment) => a.id - b.id)
       : [];
   }
 
@@ -417,5 +419,28 @@ export class TournamentService extends BaseService {
   async getAfterOffset(): Promise<number> {
     const offset = await getServices().settings.tournamentLobbyOpenAfterOffset();
     return offset * 60 * 1000;
+  }
+
+  /**
+   * FIXME: might move this into a separate service at some point
+   * @param roomId
+   * @param messages
+   */
+  async saveLobbyChatMessages(
+    roomId: string,
+    roomType: GameType,
+    messages: Array<LobbyChatMessageData>
+  ) {
+    const repository = this.em.getRepository(LobbyChatMessage);
+    const lobbyChatMessages = messages.map(message =>
+      repository.create({
+        roomId,
+        lobbyType: roomType,
+        message: message.message,
+        dateCreated: new Date(message.dateCreated),
+        userId: message.userId,
+      })
+    );
+    await repository.save(lobbyChatMessages);
   }
 }
