@@ -10,7 +10,8 @@ import {
   rollbackTransaction,
 } from "../common";
 import { getRandomizedMarsEventDeck } from "@port-of-mars/server/rooms/game/state/marsevents/common";
-import { TournamentRoundInvite, User } from "@port-of-mars/server/entity";
+import { Game, TournamentRoundInvite, Treatment, User } from "@port-of-mars/server/entity";
+import { TournamentRoundDate } from "@port-of-mars/server/entity/TournamentRoundDate";
 
 describe("a tournament", () => {
   let conn: Connection;
@@ -20,6 +21,7 @@ describe("a tournament", () => {
 
   let tournament: Tournament;
   let tournamentRound: TournamentRound;
+  const treatments: Treatment[] = [];
   const surveyId = "ABC123";
   const surveyUrl = `https://example.com/${surveyId}`;
 
@@ -57,11 +59,13 @@ describe("a tournament", () => {
   });
 
   it("can add and apply treatments", async () => {
-    await services.tournament.createTreatment(
-      "less LAU",
-      "only use 5 life as usual event cards",
-      [{ eventId: "lifeAsUsual", quantity: 5 }],
-      tournament.id
+    treatments.push(
+      await services.tournament.createTreatment(
+        `Treatment 1`,
+        `use 5 LAU cards`,
+        [{ eventId: "lifeAsUsual", quantity: 5 }],
+        tournament.id
+      )
     );
     const treatment = await services.tournament.getNextTreatment(tournament.id);
     const overrides = treatment?.marsEventOverrides ?? null;
@@ -69,6 +73,42 @@ describe("a tournament", () => {
     const deck = getRandomizedMarsEventDeck(overrides);
     const lauCards = deck.filter(event => event.id === "lifeAsUsual");
     expect(lauCards.length).toBe(5);
+  });
+
+  it("can select the next treatment based on previous games played", async () => {
+    for (const [num, index] of [10, 15].entries()) {
+      treatments.push(
+        await services.tournament.createTreatment(
+          `Treatment ${index + 1}`,
+          `use ${num} LAU cards`,
+          [{ eventId: "lifeAsUsual", quantity: num }],
+          tournament.id
+        )
+      );
+    }
+    const selectedTreatments: Treatment[] = [];
+    for (let i = 0; i < 9; i++) {
+      const treatment = await services.tournament.getNextTreatment(tournament.id);
+      selectedTreatments.push(treatment!);
+      // create a game with this treatment
+      const repo = manager.getRepository(Game);
+      const game = repo.create({
+        roomId: "123",
+        buildId: "123",
+        type: "tournament",
+        treatment: treatment!,
+        treatmentId: treatment!.id,
+        tournamentRound: tournamentRound,
+        tournamentRoundId: tournamentRound.id,
+      });
+      await repo.save(game);
+    }
+    // expect 3 of each treatment in selected treatments
+    const counts = selectedTreatments.reduce((acc, treatment) => {
+      acc[treatment.id] = (acc[treatment.id] || 0) + 1;
+      return acc;
+    }, {} as { [key: string]: number });
+    expect(Object.values(counts)).toEqual([3, 3, 3]);
   });
 
   it("can differentiate between freeplay and tournament", async () => {
@@ -82,10 +122,31 @@ describe("a tournament", () => {
     expect(mmTournamentRound.tournamentId).toBe(tournament.id);
   });
 
-  it("lobby opens and closes depending on dates", async () => {
+  it("opens the lobby at the correct time", async () => {
+    const now = new Date().getTime();
+    // 11 min in the future (should remain closed)
+    const furtherFuture = new Date(now + (beforeOffset + 1000 * 60));
+    await services.tournament.createScheduledRoundDate(furtherFuture, tournamentRound.id);
     expect(await services.tournament.isLobbyOpen({ beforeOffset, afterOffset })).toBe(false);
-    const now = new Date();
-    await services.tournament.createScheduledRoundDate(now, tournamentRound.id);
+    // 9 min in the future (should be open)
+    const nearFuture = new Date(now + (beforeOffset - 1000 * 60));
+    await services.tournament.createScheduledRoundDate(nearFuture, tournamentRound.id);
+    expect(await services.tournament.isLobbyOpen({ beforeOffset, afterOffset })).toBe(true);
+    // reset dates
+    await manager
+      .getRepository(TournamentRoundDate)
+      .delete({ tournamentRoundId: tournamentRound.id });
+  });
+
+  it("closes the lobby at the correct time", async () => {
+    const now = new Date().getTime();
+    // 31 min in the past (should remain closed)
+    const furtherPast = new Date(now - (afterOffset + 1000 * 60));
+    await services.tournament.createScheduledRoundDate(furtherPast, tournamentRound.id);
+    expect(await services.tournament.isLobbyOpen({ beforeOffset, afterOffset })).toBe(false);
+    // 29 min in the past (should be open)
+    const nearPast = new Date(now - (beforeOffset - 1000 * 60));
+    await services.tournament.createScheduledRoundDate(nearPast, tournamentRound.id);
     expect(await services.tournament.isLobbyOpen({ beforeOffset, afterOffset })).toBe(true);
   });
 

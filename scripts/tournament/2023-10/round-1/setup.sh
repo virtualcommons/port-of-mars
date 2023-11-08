@@ -6,7 +6,6 @@ CLI_CMD="${1:-cli}" # in prod change to cli:prod e.g., `./setup.sh cli:prod`
 
 yarn ${CLI_CMD} tournament create --tournamentName="2023-11 Mars Madness" --description="The next Mars Madness tournament begins November 10, 2023! Top-scoring players on surviving teams will advance to the next round. Players who make it to the championship round will receive a tabletop game version of Port of Mars, and the winner of the championship will receive a top prize of \$1000 USD!"
 # add variable life as usual card treatments to the tournament
-# FIXME: change this to the specific treatments we actually want
 yarn ${CLI_CMD} tournament treatment create -n "Less LAU" -d "50% less (6) Life as Usual cards" -o "[{\"eventId\": \"lifeAsUsual\", \"quantity\": 6}]"
 yarn ${CLI_CMD} tournament treatment create -n "Normal LAU" -d "Default (12) Life as Usual cards" -o "[{\"eventId\": \"lifeAsUsual\", \"quantity\": 12}]"
 yarn ${CLI_CMD} tournament treatment create -n "More LAU" -d "50% more (18) Life as Usual cards" -o "[{\"eventId\": \"lifeAsUsual\", \"quantity\": 18}]"

@@ -179,7 +179,6 @@ export class TournamentLobbyRoom extends LobbyRoom<TournamentLobbyRoomState> {
     const services = getServices();
     const numberOfActiveParticipants = await services.game.getNumberOfActiveParticipants();
     const maxConnections = await this.getMaxConnections();
-    logger.fatal(`${user}`);
     return numberOfActiveParticipants < maxConnections && services.tournament.canPlayInRound(user);
   }
 
