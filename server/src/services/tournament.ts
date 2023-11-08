@@ -282,6 +282,7 @@ export class TournamentService extends BaseService {
    * Retrieve the set of treatments for a given tournament
    */
   async getTreatments(tournamentId: number): Promise<Treatment[]> {
+    // FIXME: consider querying by Treatment.tournaments.id instead
     const tournament = await this.em
       .getRepository(Tournament)
       .createQueryBuilder("tournament")
@@ -289,7 +290,9 @@ export class TournamentService extends BaseService {
       .where("tournament.id = :tournamentId", { tournamentId })
       .getOne();
 
-    return tournament ? tournament.treatments : [];
+    return tournament ?
+      tournament.treatments.sort((a: Treatment, b: Treatment) => a.id - b.id)
+      : [];
   }
 
   /**
