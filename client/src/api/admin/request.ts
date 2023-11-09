@@ -6,6 +6,7 @@ import {
   ModerationActionData,
   InspectData,
   DynamicSettingsData,
+  LobbyActivityData,
 } from "@port-of-mars/shared/types";
 import { TStore } from "@port-of-mars/client/plugins/tstore";
 import { AjaxRequest } from "@port-of-mars/client/plugins/ajax";
@@ -83,7 +84,7 @@ export class AdminAPI {
     }
   }
 
-  async getLobbyData(): Promise<any> {
+  async getLobbyData(): Promise<LobbyActivityData> {
     try {
       return await this.ajax.get(url("/admin/lobby"), ({ data }) => {
         return data;

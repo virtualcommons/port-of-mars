@@ -6,12 +6,23 @@
         :key="msg.username + msg.dateCreated"
         class="mt-2 backdrop rounded p-1"
       >
-        <p class="mb-0">
+        <p class="mb-0 text-break">
           <b class="text-light">{{ msg.username }}: </b>
           <span class="text-secondary">{{ msg.message }}</span>
         </p>
       </div>
     </div>
+    <p class="m-3" v-if="showConductWarning">
+      Chat messages may be recorded. Please adhere to the
+      <b
+        ><a
+          target="_blank"
+          href="https://github.com/virtualcommons/port-of-mars/wiki/Port-of-Mars-Chat-Code-of-Conduct"
+        >
+          Port of Mars Code of Conduct
+        </a></b
+      >
+    </p>
     <div id="input" class="flex-shrink-1">
       <b-form @submit.stop.prevent="submitToChat" class="p-2" inline>
         <b-form-input
@@ -41,6 +52,7 @@ export default class LobbyChat extends Vue {
   @Prop() messages!: Array<LobbyChatMessageData>;
 
   pendingMessage: string = "";
+  showConductWarning = true;
 
   get reversedMessages(): Array<LobbyChatMessageData> {
     return this.messages.slice().reverse();
@@ -62,6 +74,7 @@ export default class LobbyChat extends Vue {
   }
 
   async submitToChat() {
+    this.showConductWarning = false;
     if (this.pendingMessageCleaned && this.pendingMessageCleaned !== "") {
       await this.api.sendChatMessage(this.pendingMessageCleaned);
       this.pendingMessage = "";

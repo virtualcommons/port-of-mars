@@ -1,4 +1,13 @@
-import { Entity, OneToMany, PrimaryGeneratedColumn, Column, CreateDateColumn } from "typeorm";
+import {
+  Entity,
+  OneToMany,
+  ManyToMany,
+  JoinTable,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+} from "typeorm";
+import { Treatment } from "./Treatment";
 import { TournamentRound } from "./TournamentRound";
 
 @Entity()
@@ -26,4 +35,8 @@ export class Tournament {
 
   @CreateDateColumn()
   dateCreated!: Date;
+
+  @ManyToMany(() => Treatment)
+  @JoinTable()
+  treatments!: Treatment[];
 }

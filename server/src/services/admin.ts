@@ -14,8 +14,10 @@ import {
   ModerationActionClientData,
   ChatReportRequestData,
   ModerationActionType,
+  LobbyActivityData,
 } from "@port-of-mars/shared/types";
 import { getLogger } from "@port-of-mars/server/settings";
+import { TournamentLobbyRoom } from "../rooms/lobby/tournament";
 
 const logger = getLogger(__filename);
 
@@ -42,10 +44,11 @@ export class AdminService extends BaseService {
     };
   }
 
-  async getLobbyData(): Promise<any> {
-    // FIXME: need to look at all lobby rooms (tournament)
-    const lobby = await matchMaker.findOneRoomAvailable(FreePlayLobbyRoom.NAME, {});
-    return lobby ?? {};
+  async getLobbyData(): Promise<LobbyActivityData> {
+    return {
+      freeplay: await matchMaker.query({ name: FreePlayLobbyRoom.NAME }),
+      tournament: await matchMaker.query({ name: TournamentLobbyRoom.NAME }),
+    };
   }
 
   async getActiveRooms(): Promise<any> {
@@ -55,6 +58,7 @@ export class AdminService extends BaseService {
         roomId: g.roomId,
         clients: g.clients,
         elapsed: Date.now() - new Date(g.createdAt).getTime(),
+        type: g.type,
       };
     });
   }

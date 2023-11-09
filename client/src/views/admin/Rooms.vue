@@ -11,15 +11,22 @@
       -------------------- ---------------------
      -->
     <div class="p-3 h-100">
-      <b-row class="h-30 m-0">
+      <div class="m-2 d-flex">
+        <h4 class="mr-3">
+          <b-badge v-if="$tstore.state.isFreePlayEnabled" variant="secondary">
+            Free Play Lobby: {{ totalFreePlayLobbyClients }} Player(s) waiting
+          </b-badge>
+        </h4>
+        <h4>
+          <b-badge v-if="$tstore.state.isTournamentEnabled" variant="primary">
+            Tournament Lobby: {{ totalTournamentLobbyClients }} Player(s) waiting
+          </b-badge>
+        </h4>
+      </div>
+      <b-row class="h-40 m-0">
         <!-- game list -->
         <b-col cols="6" class="mh-100 p-2">
-          <h4 class="header-nowrap">
-            Games List
-            <b-badge v-if="lobby.clients" class="float-right" variant="warning">
-              {{ lobby.clients }} Player(s) in lobby
-            </b-badge>
-          </h4>
+          <h4 class="header-nowrap">Games List</h4>
           <div class="h-100-header w-100 content-container">
             <b-table
               dark
@@ -79,7 +86,7 @@
           </div>
         </b-col>
       </b-row>
-      <b-row class="h-70 w-100 m-0">
+      <b-row class="h-50 w-100 m-0">
         <!-- mars log -->
         <b-col cols="6" class="mh-100 w-100 p-2">
           <h4 class="header-nowrap">Mars Log</h4>
@@ -102,7 +109,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { AdminAPI } from "@port-of-mars/client/api/admin/request";
-import { InspectData } from "@port-of-mars/shared/types";
+import { InspectData, LobbyActivityData } from "@port-of-mars/shared/types";
 import Chat from "@port-of-mars/client/components/game/static/chat/Chat.vue";
 import MarsLog from "@port-of-mars/client/components/game/MarsLog.vue";
 import StatusBar from "@port-of-mars/client/components/game/static/systemhealth/StatusBar.vue";
@@ -123,7 +130,10 @@ export default class Rooms extends Vue {
     { key: "clients", label: "Players" },
     { key: "inspect", label: "" },
   ];
-  lobby: any = {};
+  lobby: LobbyActivityData = {
+    freeplay: [],
+    tournament: [],
+  };
   inspectData: InspectData = {
     players: [],
     systemHealth: 0,
@@ -137,6 +147,14 @@ export default class Rooms extends Vue {
   ];
   inspectedRoomId: string = "";
   pollingIntervalId = 0;
+
+  get totalTournamentLobbyClients() {
+    return this.lobby.tournament.reduce((acc, room) => acc + room.clients, 0);
+  }
+
+  get totalFreePlayLobbyClients() {
+    return this.lobby.freeplay.reduce((acc, room) => acc + room.clients, 0);
+  }
 
   formatTime(time: number) {
     const mins = Math.floor(time / 1000 / 60);

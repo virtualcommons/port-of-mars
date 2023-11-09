@@ -27,7 +27,7 @@ export class FreePlayLobbyRoom extends LobbyRoom<FreePlayLobbyRoomState> {
     return new FreePlayLobbyRoomState();
   }
 
-  async trySendInvitations() {
+  async onClockInterval() {
     if (this.state.ready) {
       await this.sendInvitations();
     }
@@ -50,8 +50,29 @@ export class FreePlayLobbyRoom extends LobbyRoom<FreePlayLobbyRoomState> {
     });
   }
 
+  async getFilledUsernames(): Promise<Array<string>> {
+    const usernames: Array<string> = this.state.clients.map(c => c.username);
+    if (usernames.length < this.groupSize) {
+      const numberOfRequiredBots = this.groupSize - usernames.length;
+      const bots = await getServices().account.getOrCreateBotUsers(numberOfRequiredBots);
+      return usernames.concat(bots.map(u => u.username)).slice(0, this.groupSize);
+    }
+    return usernames;
+  }
+
   async isLobbyOpen() {
     return getServices().settings.isFreePlayEnabled();
+  }
+
+  onAcceptInvitation(client: Client, message: AcceptInvitation): void {
+    logger.trace(`client ${client.auth.username} accepted invitation to join a game`);
+    this.state.setClientAccepted(client.auth.username);
+    if (this.state.allClientsAccepted()) {
+      this.state.clients.forEach((lc: LobbyClient) => {
+        this.sendSafe(lc.client, { kind: "removed-client-from-lobby" });
+        lc.client.leave();
+      });
+    }
   }
 
   registerLobbyHandlers(): void {
@@ -65,16 +86,6 @@ export class FreePlayLobbyRoom extends LobbyRoom<FreePlayLobbyRoomState> {
     this.onMessage("start-solo-with-bots", (client: Client, message: StartSoloWithBots) => {
       this.lock();
       this.state.setRoomReadiness(true);
-    });
-    this.onMessage("accept-invitation", (client: Client, message: AcceptInvitation) => {
-      logger.trace(`client ${client.auth.username} accepted invitation to join a game`);
-      this.state.setClientLeaving(client.auth.username);
-      if (this.state.allClientsLeaving()) {
-        this.state.clients.forEach((lc: LobbyClient) => {
-          this.sendSafe(lc.client, { kind: "removed-client-from-lobby" });
-          lc.client.leave();
-        });
-      }
     });
   }
 

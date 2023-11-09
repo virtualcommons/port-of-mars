@@ -219,7 +219,7 @@ const _marsEvents: Array<MarsEventData> = [
   },
 ];
 
-export function getMarsEventDeckItems(): Array<MarsEventDeckItem> {
+export function getDefaultMarsEventDeck(): Array<MarsEventDeckItem> {
   const AVAILABLE_EVENTS: Array<[string, number]> = [
     ["audit", 1],
     ["bondingThroughAdversity", 1],

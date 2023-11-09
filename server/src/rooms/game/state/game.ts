@@ -15,6 +15,7 @@ import {
   MarsLogCategory,
   INVESTMENTS,
   INVESTMENT_LABELS,
+  GameType,
 } from "@port-of-mars/shared/types";
 import _ from "lodash";
 import * as assert from "assert";
@@ -110,6 +111,9 @@ export class GameState
   @type("string")
   heroOrPariah: "" | "hero" | "pariah" = "";
 
+  @type("string")
+  type: GameType;
+
   constructor(data: GameStateOpts) {
     super();
     if (isProduction() && data.userRoles) {
@@ -121,6 +125,7 @@ export class GameState
     this.lastTimePolled = new Date();
     this.maxRound = data.numberOfGameRounds;
     this.players = new PlayerSet(data.playerOpts);
+    this.type = data.type;
   }
 
   static DEFAULTS = {

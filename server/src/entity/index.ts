@@ -8,6 +8,7 @@ export * from "./QuestionResponse";
 export * from "./Quiz";
 export * from "./QuizSubmission";
 export * from "./Tournament";
+export * from "./Treatment";
 export * from "./TournamentRound";
 export * from "./TournamentRoundInvite";
 export * from "./User";

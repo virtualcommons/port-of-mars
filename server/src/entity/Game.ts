@@ -12,6 +12,7 @@ import {
 import { GameEvent } from "./GameEvent";
 import { Player } from "./Player";
 import { TournamentRound } from "./TournamentRound";
+import { Treatment } from "./Treatment";
 
 @Entity()
 export class Game {
@@ -52,4 +53,10 @@ export class Game {
   @OneToOne(type => Player, { nullable: true })
   @JoinColumn()
   winner?: Player;
+
+  @ManyToOne(type => Treatment, treatment => treatment.games)
+  treatment?: Treatment;
+
+  @Column({ nullable: true })
+  treatmentId?: number;
 }

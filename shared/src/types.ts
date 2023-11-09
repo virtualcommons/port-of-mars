@@ -68,6 +68,7 @@ export type GameType = "freeplay" | "tournament";
 export type LobbyType = GameType;
 
 export interface LobbyChatMessageData {
+  userId: number;
   username: string;
   message: string;
   dateCreated: number;
@@ -229,6 +230,11 @@ export interface MarsEventData {
   duration: number;
   // real time duration of the round in seconds (overrides the default phase length)
   timeDuration?: number;
+}
+
+export interface MarsEventOverride {
+  eventId: string;
+  quantity: number;
 }
 
 export enum MarsLogCategory {
@@ -432,6 +438,11 @@ export interface AdminStats {
   bannedUsers: number;
 }
 
+export interface LobbyActivityData {
+  freeplay: any[];
+  tournament: any[];
+}
+
 export interface TournamentStatus {
   name: string;
   description: string;
@@ -446,8 +457,11 @@ export interface TournamentStatus {
 }
 
 export interface TournamentRoundInviteStatus {
+  id: number;
   introSurveyUrl: string;
+  exitSurveyUrl: string;
   hasCompletedIntroSurvey: boolean;
+  hasCompletedExitSurvey: boolean;
   hasParticipated: boolean;
 }
 

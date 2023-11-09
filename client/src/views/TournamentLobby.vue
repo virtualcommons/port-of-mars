@@ -55,6 +55,7 @@ import {
   MANUAL_PAGE,
   TOURNAMENT_DASHBOARD_PAGE,
 } from "@port-of-mars/shared/routes";
+import { url } from "@port-of-mars/client/util";
 import { Constants } from "@port-of-mars/shared/settings";
 import Countdown from "@port-of-mars/client/components/global/Countdown.vue";
 import HelpPanel from "@port-of-mars/client/components/lobby/HelpPanel.vue";
@@ -94,6 +95,7 @@ export default class TournamentLobby extends Vue {
   }
 
   async created() {
+    await this.rejoinIfActiveGame();
     try {
       const room = await this.$client.joinOrCreate(TOURNAMENT_LOBBY_NAME);
       applyLobbyResponses(room, this, "tournament");
@@ -101,6 +103,14 @@ export default class TournamentLobby extends Vue {
     } catch (e) {
       this.$router.push(this.dashboard);
     }
+  }
+
+  async rejoinIfActiveGame() {
+    await this.$ajax.get(url("/game/has-active?type=tournament"), ({ data, status }) => {
+      if (status === 200 && data === true) {
+        this.$router.push(this.game);
+      }
+    });
   }
 
   beforeDestroy() {

@@ -2,8 +2,11 @@ $enable-rounded: true;
 
 // Custom Sizes
 
+// generates utility classes like w-10 (width: 10%), mh-40 (max-height: 40%), etc.
 $sizes: (
+  "10" : 10%,
   "30" : 30%,
+  "40" : 40%,
   "70" : 70%,
 );
 

@@ -2,7 +2,7 @@ import { Router } from "express";
 import { getServices } from "@port-of-mars/server/services";
 import { User } from "@port-of-mars/server/entity";
 import { settings } from "@port-of-mars/server/settings";
-import { DashboardMessage } from "@port-of-mars/shared/types";
+import { DashboardMessage, GameType } from "@port-of-mars/shared/types";
 import { isVerified } from "@port-of-mars/server/routes/middleware";
 
 const logger = settings.logging.getLogger(__filename);
@@ -30,8 +30,9 @@ gameRouter.get("/latest-active", async (req, res, next) => {
 
 gameRouter.get("/has-active", async (req, res, next) => {
   try {
+    const type = req.query.type as GameType | undefined;
     const user = req.user as User;
-    const roomId = await getServices().game.getActiveGameRoomId(user.id);
+    const roomId = await getServices().game.getActiveGameRoomId(user.id, type);
     res.json(!!roomId);
   } catch (e) {
     next(e);

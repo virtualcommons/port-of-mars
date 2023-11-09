@@ -29,7 +29,19 @@
           </b-list-group-item>
         </b-list-group>
         <h4 class="mt-5">Thank you for participating!</h4>
-        <b-button block class="w-100" variant="success" size="lg" :to="freePlayLobby">
+        <b-button
+          v-if="isTournament"
+          block
+          class="w-100"
+          variant="success"
+          size="lg"
+          :href="exitSurveyUrl"
+          :disabled="!exitSurveyUrl"
+        >
+          <h4 class="mb-0" v-if="exitSurveyUrl">Take Exit Survey</h4>
+          <h4 class="mb-0" v-else><b-spinner></b-spinner></h4>
+        </b-button>
+        <b-button v-else block class="w-100" variant="success" size="lg" :to="freePlayLobby">
           <b-icon-chevron-left shift-v="-2" class="float-left"></b-icon-chevron-left>
           <h4 class="mb-0">Return to Lobby</h4>
         </b-button>
@@ -59,11 +71,12 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import { FREE_PLAY_LOBBY_PAGE } from "@port-of-mars/shared/routes";
+import { FREE_PLAY_LOBBY_PAGE, TOURNAMENT_DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
 import { Phase, Role } from "@port-of-mars/shared/types";
 import MarsLog from "@port-of-mars/client/components/game/MarsLog.vue";
 import SocialShare from "@port-of-mars/client/components/global/SocialShare.vue";
 import _ from "lodash";
+import { TournamentAPI } from "@port-of-mars/client/api/tournament/request";
 
 @Component({
   components: {
@@ -73,6 +86,11 @@ import _ from "lodash";
 })
 export default class Victory extends Vue {
   freePlayLobby = { name: FREE_PLAY_LOBBY_PAGE };
+  tournamentDashboard = { name: TOURNAMENT_DASHBOARD_PAGE };
+
+  tournamentAPI!: TournamentAPI;
+
+  exitSurveyUrl: string | null = null;
 
   get players() {
     return _.orderBy(this.$tstore.state.players, ["victoryPoints"], ["desc"]);
@@ -94,12 +112,26 @@ export default class Victory extends Vue {
     return this.phase === Phase.victory;
   }
 
+  get isTournament() {
+    return this.$tstore.state.gameType === "tournament";
+  }
+
   get victoryPoints() {
     return this.playerRole ? this.$tstore.state.players[this.playerRole].victoryPoints : 0;
   }
 
   roleLabel(role: Role) {
     return role === this.playerRole ? `${role} (Your Role)` : role;
+  }
+
+  async created() {
+    this.tournamentAPI = new TournamentAPI(this.$tstore, this.$ajax);
+    if (this.isTournament) {
+      const invite = await this.tournamentAPI.getInviteStatus();
+      if (invite) {
+        this.exitSurveyUrl = invite.exitSurveyUrl;
+      }
+    }
   }
 }
 </script>

@@ -1,6 +1,7 @@
 import { Schema, ArraySchema, type } from "@colyseus/schema";
 import { Client } from "colyseus";
 import { LobbyChatMessageData } from "@port-of-mars/shared/types";
+import { User } from "@port-of-mars/server/entity";
 
 /**
  * Connected client with additional metadata
@@ -11,7 +12,7 @@ export class LobbyClient extends Schema {
   @type("boolean") ready: boolean;
   @type("number") dateJoined: number;
   client: Client;
-  leaving: boolean;
+  accepted: boolean;
 
   constructor(client: Client) {
     super();
@@ -19,7 +20,7 @@ export class LobbyClient extends Schema {
     this.username = client.auth.username;
     this.id = this.client.auth.id;
     this.ready = false;
-    this.leaving = false;
+    this.accepted = false;
     this.dateJoined = new Date().getTime();
   }
 }
@@ -30,11 +31,13 @@ export class LobbyClient extends Schema {
 export class LobbyChatMessage extends Schema implements LobbyChatMessageData {
   constructor(msg: LobbyChatMessageData) {
     super();
+    this.userId = msg.userId;
     this.username = msg.username;
     this.message = msg.message;
     this.dateCreated = msg.dateCreated;
   }
 
+  @type("number") userId: number;
   @type("string") username: string;
   @type("string") message: string;
   @type("number") dateCreated: number;
@@ -45,7 +48,7 @@ export class LobbyChatMessage extends Schema implements LobbyChatMessageData {
  * actual game room. Limited to 5 players as the game room is
  */
 export abstract class LobbyRoomState extends Schema {
-  @type([LobbyClient]) clients = new ArraySchema<LobbyClient>(); // FIXME: use a MapSchema<LobbyClient, Group> instead?
+  @type([LobbyClient]) clients = new ArraySchema<LobbyClient>();
   @type([LobbyChatMessage]) chat = new ArraySchema<LobbyChatMessage>();
   @type("number") dateCreated: number;
   // FIXME: we might want to relate this to service.settings.maxConnections() also but probably OK for now
@@ -61,9 +64,9 @@ export abstract class LobbyRoomState extends Schema {
     return this.clients.length >= this.maxClients;
   }
 
-  allClientsLeaving() {
+  allClientsAccepted() {
     this.clients.forEach((c: LobbyClient) => {
-      if (!c.leaving) return false;
+      if (!c.accepted) return false;
     });
     return true;
   }
@@ -83,16 +86,17 @@ export abstract class LobbyRoomState extends Schema {
   }
 
   // indicate that client has accepted invitation to join a game
-  setClientLeaving(username: string) {
+  setClientAccepted(username: string) {
     const index = this.clients.findIndex((c: LobbyClient) => c.username === username);
     if (index > -1) {
-      this.clients[index].leaving = true;
+      this.clients[index].accepted = true;
     }
   }
 
-  addChatMessage(username: string, message: string) {
+  addChatMessage(user: User, message: string) {
     const data = {
-      username,
+      userId: user.id,
+      username: user.username,
       message,
       dateCreated: new Date().getTime(),
     };

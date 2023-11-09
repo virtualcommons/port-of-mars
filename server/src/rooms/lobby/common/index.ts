@@ -3,16 +3,19 @@ import { LobbyClient, LobbyRoomState } from "@port-of-mars/server/rooms/lobby/co
 import { settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
 import * as http from "http";
-import { BASE_LOBBY_NAME, LobbyResponse, SendLobbyChatMessage } from "@port-of-mars/shared/lobby";
+import {
+  AcceptInvitation,
+  BASE_LOBBY_NAME,
+  MAX_GROUP_SIZE,
+  LobbyResponse,
+  SendLobbyChatMessage,
+} from "@port-of-mars/shared/lobby";
+import { User } from "@port-of-mars/server/entity";
 
 const logger = settings.logging.getLogger(__filename);
 
-// export const sendSafe = (client: Client, msg: LobbyResponse) => {
-//   client.send(msg.kind, msg);
-// };
-
 export abstract class LobbyRoom<RoomStateType extends LobbyRoomState> extends Room<RoomStateType> {
-  groupSize = 5; // number of players per game (may need to be parameterizable someday)
+  groupSize = MAX_GROUP_SIZE; // number of players per game (may need to be parameterizable someday)
   patchRate = 1000 / 5; // sends state to client 5 times per second
   clockInterval = 1000 * 5; // try to form new gamerooms with groupSize clients every 5 seconds
 
@@ -30,7 +33,7 @@ export abstract class LobbyRoom<RoomStateType extends LobbyRoomState> extends Ro
   /**
    * Called at each interval to send invitations to clients deemed ready to start a game
    */
-  abstract trySendInvitations(): Promise<void>;
+  abstract onClockInterval(): Promise<void>;
 
   sendSafe(client: Client, msg: LobbyResponse) {
     client.send(msg.kind, msg);
@@ -42,17 +45,18 @@ export abstract class LobbyRoom<RoomStateType extends LobbyRoomState> extends Ro
     this.resetMetadata();
     this.registerLobbyHandlers();
     this.clock.setInterval(async () => {
-      await this.trySendInvitations();
+      await this.onClockInterval();
     }, this.clockInterval);
-  }
-
-  onLeave(client: Client, consented: boolean): void {
-    logger.trace(`Client ${client.auth.username} left ${this.roomName} ${this.roomId}`);
-    this.state.removeClient(client.auth.username);
   }
 
   onDispose() {
     logger.trace(`Disposing of ${this.roomName} ${this.roomId}, no connected clients`);
+    logger.debug("Saving all lobby chat messages");
+    const chatMessages = [...this.state.chat];
+    logger.debug("lobby chat messages %s", chatMessages);
+    if (chatMessages) {
+      getServices().tournament.saveLobbyChatMessages(this.roomId, "tournament", chatMessages);
+    }
   }
 
   async getMaxConnections() {
@@ -71,9 +75,9 @@ export abstract class LobbyRoom<RoomStateType extends LobbyRoomState> extends Ro
   }
 
   /**
-   * Called in onAuth to check whether client can join the lobby
+   * Called in onAuth to check whether a user can join the lobby
    */
-  async canClientJoin(client: Client): Promise<boolean> {
+  async canUserJoin(user: User): Promise<boolean> {
     return true;
   }
 
@@ -82,10 +86,10 @@ export abstract class LobbyRoom<RoomStateType extends LobbyRoomState> extends Ro
       if (!(await this.isLobbyOpen())) {
         return false;
       }
-      if (!(await this.canClientJoin(client))) {
+      const user = await getServices().account.findUserById((request as any).session.passport.user);
+      if (!(await this.canUserJoin(user))) {
         return false;
       }
-      const user = await getServices().account.findUserById((request as any).session.passport.user);
       if (user.isBanned) {
         logger.info(`Banned user ${user.username} attempted to join ${this.roomName}`);
         return false;
@@ -96,6 +100,11 @@ export abstract class LobbyRoom<RoomStateType extends LobbyRoomState> extends Ro
     }
     return false;
   }
+
+  /**
+   * Hook that gets called after onJoin
+   */
+  afterJoin(client: Client): void {}
 
   async onJoin(client: Client, options: any, auth: any) {
     const sp = getServices();
@@ -124,7 +133,24 @@ export abstract class LobbyRoom<RoomStateType extends LobbyRoomState> extends Ro
     );
     this.state.addClient(client);
     this.resetMetadata();
+    this.afterJoin(client);
   }
+
+  /**
+   * Hook that gets called after onLeave
+   */
+  afterLeave(client: Client): void {}
+
+  onLeave(client: Client, consented: boolean): void {
+    logger.trace(`Client ${client.auth.username} left ${this.roomName} ${this.roomId}`);
+    this.state.removeClient(client.auth.username);
+    this.afterLeave(client);
+  }
+
+  /**
+   * Handle client accepting an invitation to start a game
+   */
+  abstract onAcceptInvitation(client: Client, message: AcceptInvitation): void;
 
   registerLobbyHandlers(): void {
     this.onMessage("send-lobby-chat-message", (client: Client, message: SendLobbyChatMessage) => {
@@ -132,18 +158,11 @@ export abstract class LobbyRoom<RoomStateType extends LobbyRoomState> extends Ro
         logger.trace(`client ${client.auth.username} attempted to send a chat message while muted`);
         return;
       }
-      this.state.addChatMessage(client.auth.username, message.value);
+      this.state.addChatMessage(client.auth, message.value);
     });
-  }
-
-  async getFilledUsernames(): Promise<Array<string>> {
-    const usernames: Array<string> = this.state.clients.map(c => c.username);
-    if (usernames.length < this.groupSize) {
-      const numberOfRequiredBots = this.groupSize - usernames.length;
-      const bots = await getServices().account.getOrCreateBotUsers(numberOfRequiredBots);
-      return usernames.concat(bots.map(u => u.username)).slice(0, this.groupSize);
-    }
-    return usernames;
+    this.onMessage("accept-invitation", (client: Client, message: AcceptInvitation) => {
+      this.onAcceptInvitation(client, message);
+    });
   }
 
   resetMetadata() {

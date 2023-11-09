@@ -1,4 +1,4 @@
-import { MarsEventData, Phase, Role } from "@port-of-mars/shared/types";
+import { GameType, MarsEventData, Phase, Role } from "@port-of-mars/shared/types";
 import { Vue } from "vue-property-decorator";
 import * as _ from "lodash";
 import { State, User } from "@port-of-mars/shared/game/client/state";
@@ -91,6 +91,10 @@ function SET_HERO_OR_PARIAH(state: State, vote: "hero" | "pariah") {
   state.heroOrPariah = vote;
 }
 
+function SET_GAME_TYPE(state: State, type: GameType) {
+  state.gameType = type;
+}
+
 export default {
   SET_GAME_PHASE,
   SET_ROUND,
@@ -105,5 +109,6 @@ export default {
   SET_USER,
   SET_WINNERS,
   SET_HERO_OR_PARIAH,
+  SET_GAME_TYPE,
   TOGGLE_LOADING,
 };

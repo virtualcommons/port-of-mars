@@ -12,7 +12,7 @@ import {
 import { SoloGameState } from "@port-of-mars/server/rooms/sologame/state";
 import { Connection, EntityManager, QueryRunner } from "typeorm";
 import { ServiceProvider } from "@port-of-mars/server/services";
-import { createUsers, initTransaction, rollbackTransaction } from "../../services/common";
+import { createUsers, initTransaction, rollbackTransaction } from "../common";
 import {
   CreateDeckCmd,
   InitGameCmd,
@@ -65,6 +65,9 @@ describe("a solo game", () => {
     });
 
     afterAll(() => {
+      // manually dispose of the room, otherwise it hangs for 15s while it waits for the
+      // auto-dispose timeout
+      room._events.emit("dispose");
       room.eventTimeout?.clear();
       room.clock.clear();
     });

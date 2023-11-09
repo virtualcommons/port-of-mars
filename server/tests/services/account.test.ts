@@ -4,7 +4,7 @@ import { settings } from "@port-of-mars/server/settings";
 import { Connection, EntityManager, QueryRunner } from "typeorm";
 import { ServiceProvider } from "@port-of-mars/server/services";
 import { ServerError } from "@port-of-mars/server/util";
-import { createTournament, initTransaction, rollbackTransaction } from "./common";
+import { createTournament, initTransaction, rollbackTransaction } from "../common";
 
 describe("a potential user", () => {
   const username = "ahacker";

@@ -1,6 +1,8 @@
 import { Connection, createConnection, EntityManager, QueryRunner } from "typeorm";
 import { ServiceProvider } from "@port-of-mars/server/services";
 import { Tournament, User } from "@port-of-mars/server/entity";
+import { Client } from "colyseus";
+import EventEmitter from "events";
 
 export async function initTransaction(): Promise<[Connection, QueryRunner, EntityManager]> {
   const conn = await createConnection("test");
@@ -50,7 +52,7 @@ export async function createTournament(
 
 export async function createRound(
   sp: ServiceProvider,
-  data: { roundNumber?: number; tournamentId: number }
+  data: { roundNumber?: number; tournamentId: number; introSurveyUrl?: string }
 ) {
   const d = {
     exitSurveyUrl: "",
@@ -69,4 +71,24 @@ export async function createTournamentRoundInvites(
   data: { userIds: Array<number>; tournamentRoundId: number }
 ) {
   return await sp.tournament.createInvites(data.userIds, data.tournamentRoundId);
+}
+
+export function mockColyseusClients(name: string, ids: number[]): Client[] {
+  return ids.map(id => {
+    return {
+      readyState: 1,
+      id: `${id}`,
+      sessionId: `session${id}`,
+      state: {} as any,
+      ref: new EventEmitter(),
+      auth: { username: `${name}${id}`, id },
+      raw: () => {},
+      enqueueRaw: () => {},
+      send: () => {},
+      error: () => {},
+      leave: () => {},
+      close: () => {},
+      _afterNextPatchQueue: [],
+    };
+  });
 }

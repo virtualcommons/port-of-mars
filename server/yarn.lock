@@ -1518,12 +1518,12 @@ astral-regex@^2.0.0:
   resolved "https://registry.yarnpkg.com/astral-regex/-/astral-regex-2.0.0.tgz#483143c567aeed4785759c0865786dc77d7d2e31"
   integrity sha512-Z7tMw1ytTXt5jqMcOP+OQteU1VuNK9Y02uuJtKQ1Sv69jXQKKg5cibLwGJow8yzZP+eAc18EmLGPal0bp36rvQ==
 
-async-mutex@^0.2.6:
-  version "0.2.6"
-  resolved "https://registry.yarnpkg.com/async-mutex/-/async-mutex-0.2.6.tgz#0d7a3deb978bc2b984d5908a2038e1ae2e54ff40"
-  integrity sha512-Hs4R+4SPgamu6rSGW8C7cV9gaWUKEHykfzCCvIRuaVv636Ju10ZdeUbvb4TBEW0INuq2DHZqXbK4Nd3yG4RaRw==
+async-mutex@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/async-mutex/-/async-mutex-0.4.0.tgz#ae8048cd4d04ace94347507504b3cf15e631c25f"
+  integrity sha512-eJFZ1YhRR8UN8eBLoNzcDPcy/jqjsg6I1AP+KvWQX80BqOSW1oJPJXDylPUEeMr2ZQvHgnQ//Lp6f3RQ1zI7HA==
   dependencies:
-    tslib "^2.0.0"
+    tslib "^2.4.0"
 
 async@^3.2.3:
   version "3.2.4"
@@ -3918,9 +3918,9 @@ mongoose-legacy-pluralize@1.0.2:
   integrity sha512-Yo/7qQU4/EyIS8YDFSeenIvXxZN+ld7YdV9LqFVQJzTLye8unujAWPZ4NWKfFA+RNjh+wvTWKY9Z3E5XM6ZZiQ==
 
 mongoose@^5.11.3:
-  version "5.13.20"
-  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.13.20.tgz#247d3b2c6c4c4b71779d07dda0c72e1bd48a7370"
-  integrity sha512-TjGFa/XnJYt+wLmn8y9ssjyO2OhBMeEBtOHb9iJM16EWu2Du6L1Q6zSiEK2ziyYQM8agb4tumNIQFzqbxId7MA==
+  version "5.13.21"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.13.21.tgz#32ef5a444a744945d7fd08ea7eaccbc208b6e01d"
+  integrity sha512-EvSrXrCBogenxY131qKasFcT1Pj+9Pg5AXj17vQ8S1mOEArK3CpOx965u1wTIrdnQ7DjFC+SRwPxNcqUjMAVyQ==
   dependencies:
     "@types/bson" "1.x || 4.0.x"
     "@types/mongodb" "^3.5.27"
@@ -5309,7 +5309,7 @@ tslib@^1.8.1, tslib@^1.9.3:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
-tslib@^2.0.0, tslib@^2.1.0:
+tslib@^2.1.0, tslib@^2.4.0:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.6.2.tgz#703ac29425e7b37cd6fd456e92404d46d1f3e4ae"
   integrity sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==

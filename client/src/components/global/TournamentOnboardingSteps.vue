@@ -34,6 +34,9 @@
         >
       </div>
     </div>
+    <b-button v-if="isDevMode" variant="link" :href="skipSurveyUrl"
+      >Skip survey (test mode)</b-button
+    >
     <div class="line"></div>
     <div class="d-flex align-items-center">
       <div class="flex-shrink-1 mr-5">
@@ -58,13 +61,15 @@
 import { CONSENT_PAGE, MANUAL_PAGE } from "@port-of-mars/shared/routes";
 import { TournamentRoundInviteStatus } from "@port-of-mars/shared/types";
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { Constants } from "@port-of-mars/shared/settings";
+import { Constants, isDevOrStaging } from "@port-of-mars/shared/settings";
+import { url } from "@port-of-mars/client/util";
 
 @Component({})
 export default class TournamentOnboardingSteps extends Vue {
   @Prop()
   invite!: TournamentRoundInviteStatus;
 
+  isDevMode = false;
   consent = { name: CONSENT_PAGE };
   manual = { name: MANUAL_PAGE };
 
@@ -78,6 +83,14 @@ export default class TournamentOnboardingSteps extends Vue {
 
   get hasConsented() {
     return this.$store.getters.hasConsented;
+  }
+
+  get skipSurveyUrl() {
+    return url(`/tournament/survey/complete?tid=${this.invite.id}`);
+  }
+
+  created() {
+    this.isDevMode = isDevOrStaging();
   }
 }
 </script>
