@@ -16,7 +16,13 @@
                 <b-button class="mt-3 mr-3" size="md" variant="secondary" :to="solo">
                   <h4 class="p-1">Solo Mode</h4>
                 </b-button>
-                <b-button class="mt-3 mr-3" size="md" variant="primary" :to="freePlayLobby">
+                <b-button
+                  v-if="isFreePlayEnabled"
+                  class="mt-3 mr-3"
+                  size="md"
+                  variant="primary"
+                  :to="freePlayLobby"
+                >
                   <h4 class="p-1">Free Play</h4>
                 </b-button>
                 <b-button
@@ -174,6 +180,10 @@ export default class Home extends Vue {
 
   get shouldShowTournamentBanner() {
     return this.$tstore.state.isTournamentEnabled && this.$store.getters.tournamentStatus;
+  }
+
+  get isFreePlayEnabled() {
+    return this.$tstore.state.isFreePlayEnabled;
   }
 
   async mounted() {
