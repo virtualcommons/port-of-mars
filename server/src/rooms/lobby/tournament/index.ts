@@ -204,4 +204,14 @@ export class TournamentLobbyRoom extends LobbyRoom<TournamentLobbyRoomState> {
     });
     this.groupManager.removeGroup(group);
   }
+
+  async onDispose() {
+    super.onDispose();
+    logger.debug("Saving all lobby chat messages");
+    const chatMessages = [...this.state.chat];
+    logger.debug("lobby chat messages %s", chatMessages);
+    if (chatMessages.length) {
+      await getServices().tournament.saveLobbyChatMessages(this.roomId, "tournament", chatMessages);
+    }
+  }
 }

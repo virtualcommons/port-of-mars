@@ -51,12 +51,6 @@ export abstract class LobbyRoom<RoomStateType extends LobbyRoomState> extends Ro
 
   onDispose() {
     logger.trace(`Disposing of ${this.roomName} ${this.roomId}, no connected clients`);
-    logger.debug("Saving all lobby chat messages");
-    const chatMessages = [...this.state.chat];
-    logger.debug("lobby chat messages %s", chatMessages);
-    if (chatMessages) {
-      getServices().tournament.saveLobbyChatMessages(this.roomId, "tournament", chatMessages);
-    }
   }
 
   async getMaxConnections() {

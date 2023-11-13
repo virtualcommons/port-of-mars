@@ -23,10 +23,9 @@ describe("a tournament lobby room", () => {
   });
 
   afterAll(() => {
-    // manually dispose of the room, otherwise it hangs for 15s while it waits for the
+    // manually dispose of the room, otherwise it lingers  while it waits for the
     // auto-dispose timeout
     room._events.emit("dispose");
-    room.clock.clear();
   });
 
   afterEach(() => {
