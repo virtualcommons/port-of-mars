@@ -179,7 +179,7 @@ export default class Home extends Vue {
   }
 
   get shouldShowTournamentBanner() {
-    return this.$tstore.state.isTournamentEnabled && this.$store.getters.tournamentStatus;
+    return this.$tstore.state.isTournamentEnabled && this.$tstore.getters.tournamentStatus;
   }
 
   get isFreePlayEnabled() {

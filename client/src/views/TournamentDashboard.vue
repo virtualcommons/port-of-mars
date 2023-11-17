@@ -5,7 +5,7 @@
       <b-row class="h-100 w-100 mx-auto flex-grow-1 p-5" style="max-width: 1400px">
         <b-col cols="6" class="h-100 d-flex flex-column justify-content-between">
           <span v-if="!expandSchedule" class="mb-3">
-            <h4>Mars Madness Tournament {{ $tstore.getters.tournamentStartMonthYear }}</h4>
+            <h4>Mars Madness Tournament {{ new Date().getFullYear() }}</h4>
             <p>{{ status?.description }}</p>
           </span>
           <div class="overflow-auto">
@@ -22,6 +22,9 @@
                 </span>
               </b-button>
             </div>
+            <p v-if="!$tstore.getters.tournamentRoundHasUpcomingLaunch">
+              No scheduled launch times
+            </p>
             <Schedule :schedule="$tstore.getters.tournamentSchedule" />
           </div>
         </b-col>
@@ -80,7 +83,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { TournamentAPI } from "@port-of-mars/client/api/tournament/request";
-import { MANUAL_PAGE, TOURNAMENT_LOBBY_PAGE } from "@port-of-mars/shared/routes";
+import { HOME_PAGE, MANUAL_PAGE, TOURNAMENT_LOBBY_PAGE } from "@port-of-mars/shared/routes";
 import { TournamentRoundInviteStatus } from "@port-of-mars/shared/types";
 import { Constants } from "@port-of-mars/shared/settings";
 import Countdown from "@port-of-mars/client/components/global/Countdown.vue";
@@ -99,6 +102,7 @@ import TournamentOnboardingSteps from "@port-of-mars/client/components/global/To
 export default class TournamentDashboard extends Vue {
   tournamentLobby = { name: TOURNAMENT_LOBBY_PAGE };
   manual = { name: MANUAL_PAGE };
+  home = { name: HOME_PAGE };
   api!: TournamentAPI;
 
   invite: TournamentRoundInviteStatus | null = null;

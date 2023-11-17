@@ -206,12 +206,8 @@ export default {
     return state.tournamentStatus;
   },
 
-  tournamentStartMonthYear(state: State) {
-    const date = new Date(state.tournamentStatus?.currentRound.schedule[0] ?? 0);
-    return date.toLocaleDateString("en-US", {
-      month: "short",
-      year: "numeric",
-    });
+  tournamentRoundHasUpcomingLaunch(state: State) {
+    return !!state.tournamentStatus?.currentRound.schedule.length;
   },
 
   tournamentSchedule(state: State) {
