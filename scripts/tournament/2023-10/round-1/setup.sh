@@ -11,7 +11,7 @@ yarn ${CLI_CMD} tournament treatment create -n "Normal LAU" -d "Default (12) Lif
 yarn ${CLI_CMD} tournament treatment create -n "More LAU" -d "50% more (18) Life as Usual cards" -o "[{\"eventId\": \"lifeAsUsual\", \"quantity\": 18}]"
 yarn ${CLI_CMD} tournament round create --introSurveyUrl=https://asu.co1.qualtrics.com/jfe/form/SV_0c8tCMZkAUh4V8x --exitSurveyUrl=https://asu.co1.qualtrics.com/jfe/form/SV_6FNhPbsBuybTjEN --announcement="REGISTRATION FOR ROUND 1 IS NOW OPEN. Register, complete the Port of Mars Mission Control onboarding, and sign in during a scheduled launch time to compete in the next Mars Madness tournament!"
 # set up 3 launch dates per day from 2023-11-10 to 2023-11-16
-for day in 10 11 12 13 14 15 16; do
+for day in {10..26}; do
     yarn ${CLI_CMD} tournament round date --date="2023-11-${day}T12:00:00-07:00";
     yarn ${CLI_CMD} tournament round date --date="2023-11-${day}T15:00:00-07:00";
     yarn ${CLI_CMD} tournament round date --date="2023-11-${day}T19:00:00-07:00";
