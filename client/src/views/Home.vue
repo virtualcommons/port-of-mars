@@ -110,13 +110,13 @@
             <h1 class="section-title mb-3">Community</h1>
             <p class="text mb-3">
               Discuss the game, find a game to play, or connect with other players in our
-              <a :href="constants.DISCORD_URL">community Discord</a> or by joining a room in our
-              <b-link :to="freePlayLobby">free play lobby</b-link> and using the built-in chat.
+              <a :href="constants.DISCORD_URL">community Discord</a>.
             </p>
             <p class="text mb-3">
               Keep track of your performance with your
-              <b-link :to="gameStats">personal stats page</b-link> and visit the
-              <b-link :to="leaderboard">full leaderboard</b-link>
+              <b-link :to="gameStats">personal stats page</b-link>
+              or check out the
+              <b-link :to="leaderboard">leaderboard</b-link>
               to see how you stack up against other players.
             </p>
           </b-col>
