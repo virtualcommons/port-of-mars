@@ -14,7 +14,7 @@
     <div class="p-3 h-100">
       <b-row class="h-100 m-0">
         <!-- games -->
-        <b-col :cols="showPlayers ? '7' : '12'" class="mh-100 p-2">
+        <b-col :cols="inspectedGame ? '7' : '12'" class="mh-100 p-2">
           <div>
             <h4 class="header-nowrap">Games</h4>
             <div id="filter-options" class="p-2">
@@ -105,11 +105,8 @@
                   variant="light"
                   size="sm"
                   class="float-right"
-                  :disabled="isInspectedGame(data.item.id)"
-                  @click="
-                    players = data.item.players;
-                    inspectedHighScore = data.item.highScore;
-                  "
+                  :disabled="data.item.id === inspectedGame?.id"
+                  @click="inspectedGame = data.item"
                   >Scoreboard
                   <b-icon-box-arrow-right class="float-right ml-2"></b-icon-box-arrow-right>
                 </b-button>
@@ -118,8 +115,8 @@
           </div>
         </b-col>
         <!-- players -->
-        <b-col v-if="showPlayers" cols="5" class="mh-100 p-2">
-          <h4 class="header-nowrap">Game #{{ players[0].gameId }} Scoreboard</h4>
+        <b-col v-if="inspectedGame" cols="5" class="mh-100 p-2">
+          <h4 class="header-nowrap">Game #{{ inspectedGame.players[0].gameId }} Scoreboard</h4>
           <div class="h-100-header w-100 content-container">
             <b-table
               dark
@@ -128,7 +125,7 @@
               style="max-height: none"
               :tbody-tr-attr="playerRowStyle"
               :fields="playerFields"
-              :items="players"
+              :items="inspectedGame.players"
               sort-by="points"
               :sort-desc="true"
             >
@@ -143,8 +140,8 @@
                   variant="success"
                   v-if="
                     isEligibleForPrize(data.item.user) &&
-                    inspectedHighScore &&
-                    data.item.points === inspectedHighScore
+                    inspectedGame.highScore &&
+                    data.item.points === inspectedGame.highScore
                   "
                   >winner</b-badge
                 >
@@ -177,12 +174,13 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { AdminAPI } from "@port-of-mars/client/api/admin/request";
+import { AdminGameData, ClientSafeUser } from "@port-of-mars/shared/types";
 
 @Component({})
 export default class Games extends Vue {
   api!: AdminAPI;
 
-  games: any = [];
+  games: AdminGameData[] = [];
   gameFields = [
     { key: "id", label: "Game ID" },
     { key: "tournamentRound", label: "Tournament" },
@@ -192,7 +190,6 @@ export default class Games extends Vue {
     { key: "highScore", label: "High Score" },
     { key: "inspect", label: "" },
   ];
-  players: any = [];
   playerFields = [
     { key: "username", label: "Username" },
     { key: "role", label: "Role" },
@@ -201,7 +198,7 @@ export default class Games extends Vue {
   ];
 
   highestScore = 0;
-  inspectedHighScore = 0;
+  inspectedGame: AdminGameData | null = null;
   datePickerFormat = { year: "2-digit", month: "2-digit", day: "2-digit" };
   // default to last 14 days
   startDate = new Date(new Date().setDate(new Date().getDate() - 14));
@@ -225,23 +222,12 @@ export default class Games extends Vue {
     };
   }
 
-  get showPlayers() {
-    return this.players.length > 0;
+  getBotCount(players: AdminGameData["players"]) {
+    return players.filter(p => p.user.isSystemBot).length;
   }
 
-  isInspectedGame(id: number) {
-    if (this.players.length === 0) {
-      return false;
-    }
-    return id === this.players[0].gameId;
-  }
-
-  getBotCount(players: any) {
-    return players.filter((p: any) => p.user.isSystemBot).length;
-  }
-
-  getHumanCount(players: any) {
-    return players.filter((p: any) => !p.user.isSystemBot).length;
+  getHumanCount(players: AdminGameData["players"]) {
+    return players.filter(p => !p.user.isSystemBot).length;
   }
 
   playerRowStyle(item: any, type: any) {
@@ -277,26 +263,26 @@ export default class Games extends Vue {
   }
 
   findHighScores() {
-    // find the highest eligible (player is human, has email and name) score for each game
+    // find the highest eligible (player is human, has email) score for each game
     this.highestScore = 0;
-    this.games.forEach((game: any) => {
-      game.highScore = 0;
-      game.players.forEach((player: any) => {
-        if (this.isEligibleForPrize(player.user)) {
-          console.log("elligble");
-          if (player.points > game.highScore) {
-            game.highScore = player.points;
+    this.games
+      .filter((game: AdminGameData) => game.status === "victory")
+      .forEach((game: AdminGameData) => {
+        game.players.forEach((player: any) => {
+          if (this.isEligibleForPrize(player.user)) {
+            if (player.points > (game.highScore ?? 0)) {
+              game.highScore = player.points;
+            }
           }
-        }
-        if (game.highScore > this.highestScore) {
-          this.highestScore = game.highScore;
-        }
+          if ((game.highScore ?? 0) > this.highestScore) {
+            this.highestScore = game.highScore ?? 0;
+          }
+        });
       });
-    });
   }
 
-  isEligibleForPrize(user: any) {
-    return !user.isSystemBot && user.email && user.name;
+  isEligibleForPrize(user: ClientSafeUser) {
+    return !user.isSystemBot && user.email;
   }
 }
 </script>

@@ -1,4 +1,4 @@
-import { GameType } from "@port-of-mars/shared/types";
+import { GameStatus, GameType } from "@port-of-mars/shared/types";
 import {
   Column,
   CreateDateColumn,
@@ -48,7 +48,7 @@ export class Game {
   players!: Array<Player>;
 
   @Column({ default: "incomplete" })
-  status: "incomplete" | "defeat" | "victory" | "failure" = "incomplete";
+  status: GameStatus = "incomplete";
 
   @OneToOne(type => Player, { nullable: true })
   @JoinColumn()

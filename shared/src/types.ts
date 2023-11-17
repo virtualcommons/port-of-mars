@@ -20,12 +20,15 @@ export const MODERATION_ACTION_TYPES = [MUTE, BAN, NONE];
 
 export interface ClientSafeUser {
   id: number;
+  email?: string;
+  name?: string;
   username: string;
   isAdmin: boolean;
   isMuted: boolean;
   isBanned: boolean;
   passedQuiz?: boolean;
   isVerified?: boolean;
+  isSystemBot?: boolean;
   dateConsented?: Date;
   participantId?: string;
 }
@@ -118,6 +121,28 @@ export interface ModerationActionClientData {
   adminUsername: string;
   action: ModerationActionType;
   dateMuteExpires?: Date;
+}
+
+export interface AdminGameData {
+  id: string;
+  status: GameStatus;
+  type: GameType;
+  roomId: string;
+  buildId: string;
+  dateCreated: string;
+  dateFinalized: string;
+  tournamentRoundId: number;
+  treatmentId?: number;
+  highScore?: number;
+  players: Array<{
+    id: number;
+    role: Role;
+    userId: number;
+    playerIp: string;
+    gameId: number;
+    points: number;
+    user: ClientSafeUser;
+  }>;
 }
 
 export interface MarsLogData {
@@ -417,9 +442,7 @@ export interface SoloPlayerStatItem {
   maxRound: number;
 }
 
-export interface GameStatus {
-  status: "incomplete" | "defeat" | "victory" | "failure" | "incomplete";
-}
+export type GameStatus = "incomplete" | "defeat" | "victory" | "failure" | "incomplete";
 
 export interface InspectData {
   players: Array<{ username: string; role: string; isBot: boolean; points: number }>;

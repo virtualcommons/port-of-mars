@@ -21,7 +21,10 @@ export class GameService extends BaseService {
   }
 
   async getTotalCompletedGames(
-    status: GameStatus | Array<GameStatus> = [{ status: "victory" }, { status: "defeat" }]
+    status: { status: GameStatus } | Array<{ status: GameStatus }> = [
+      { status: "victory" },
+      { status: "defeat" },
+    ]
   ): Promise<number> {
     return await this.em.getRepository(Game).count({
       where: status,
@@ -56,7 +59,10 @@ export class GameService extends BaseService {
   }
 
   async getTotalGamesWithBots(
-    status: GameStatus | Array<GameStatus> = [{ status: "victory" }, { status: "defeat" }]
+    status: { status: GameStatus } | Array<{ status: GameStatus }> = [
+      { status: "victory" },
+      { status: "defeat" },
+    ]
   ): Promise<number> {
     return this.em
       .getRepository(Game)
