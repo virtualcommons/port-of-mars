@@ -227,11 +227,12 @@ export class TournamentService extends BaseService {
     await this.em.getRepository(Tournament).update({}, { active: false });
   }
 
-  async getTournamentStatus(tournamentRound?: TournamentRound): Promise<TournamentStatus> {
+  async getTournamentStatus(tournamentRound?: TournamentRound): Promise<TournamentStatus | null> {
     if (!tournamentRound) {
       tournamentRound = await this.getCurrentTournamentRound();
     }
     const tournament = tournamentRound.tournament;
+    if (!tournament) return null;
     const scheduledDates = await this.getScheduledDates({ tournamentRound });
     return {
       name: tournament.name,

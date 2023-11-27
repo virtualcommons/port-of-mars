@@ -43,12 +43,6 @@ tournamentRouter.get("/invite-status", async (req: Request, res: Response, next)
       res.status(401);
     }
     const tournamentData = await getServices().tournament.getTournamentRoundInviteStatus(user);
-    if (!tournamentData) {
-      res.status(404).json({
-        kind: "danger",
-        message: "You do not have a valid invitation to the current tournament round.",
-      });
-    }
     res.json(tournamentData);
   } catch (e) {
     logger.fatal("Unable to get tournament invite status: %s", e);
@@ -59,12 +53,6 @@ tournamentRouter.get("/invite-status", async (req: Request, res: Response, next)
 tournamentRouter.get("/status", async (req: Request, res: Response, next) => {
   try {
     const tournamentData = await getServices().tournament.getTournamentStatus();
-    if (!tournamentData) {
-      res.status(404).json({
-        kind: "danger",
-        message: "There is currently no active tournament.",
-      });
-    }
     res.json(tournamentData);
   } catch (e) {
     logger.fatal("Unable to get tournament status: %s", e);
