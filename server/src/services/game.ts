@@ -36,6 +36,11 @@ export class GameService extends BaseService {
     bots: boolean,
     defeats: boolean
   ): Promise<Array<Game>> {
+    // increment the interval end date by 1 day to include the full end date
+    const endDate = new Date(interval.end);
+    endDate.setDate(endDate.getDate() + 1);
+    interval.end = endDate.toISOString().split("T")[0];
+
     let query = this.em
       .getRepository(Game)
       .createQueryBuilder("game")
