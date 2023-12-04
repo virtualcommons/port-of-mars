@@ -12,8 +12,8 @@ statusRouter.get("/", async (req: Request, res: Response, next) => {
     const services = getServices();
     const user = req.user as User;
     const safeUser = user ? { ...toClientSafeUser(user) } : null;
-    const isFreePlayEnabled = await services.settings.isFreePlayEnabled();
-    const isTournamentEnabled = await services.settings.isTournamentEnabled();
+    const settings = await services.settings.getSettings();
+    const { isFreePlayEnabled, isTournamentEnabled, announcementBannerText } = settings;
     const tournamentStatus = isTournamentEnabled
       ? await services.tournament.getTournamentStatus()
       : null;
@@ -23,6 +23,7 @@ statusRouter.get("/", async (req: Request, res: Response, next) => {
       isTournamentEnabled,
       user: safeUser,
       tournamentStatus,
+      announcementBannerText,
     };
     res.json(status);
   } catch (e) {

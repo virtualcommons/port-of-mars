@@ -48,7 +48,13 @@ export class RedisSettings {
   async setSettings(settings: DynamicSettingsData): Promise<void> {
     for (const k of _.keys(settings)) {
       const key = k as keyof DynamicSettingsData;
-      await this.client.hset(["settings", key, _.toNumber(settings[key]).toString()]);
+      let value = "";
+      if (typeof settings[key] === "string") {
+        value = settings[key] as string;
+      } else {
+        value = _.toNumber(settings[key]).toString();
+      }
+      await this.client.hset(["settings", key, value]);
     }
   }
 
@@ -61,6 +67,7 @@ export class RedisSettings {
       isFreePlayEnabled: !!_.toNumber(settings.isFreePlayEnabled),
       tournamentLobbyOpenBeforeOffset: _.toNumber(settings.tournamentLobbyOpenBeforeOffset),
       tournamentLobbyOpenAfterOffset: _.toNumber(settings.tournamentLobbyOpenAfterOffset),
+      announcementBannerText: settings.announcementBannerText,
     };
   }
 
@@ -92,6 +99,12 @@ export class RedisSettings {
   // how many minutes after the tournament starts that the lobby will remain open (min)
   async tournamentLobbyOpenAfterOffset(): Promise<number> {
     return _.toNumber(await this.client.hget("settings", "tournamentLobbyOpenAfterOffset"));
+  }
+
+  // text to display on a banner visible at the top of the landing page
+  // an empty string will not display a banner
+  async announcementBannerText(): Promise<string> {
+    return this.client.hget("settings", "announcementBannerText");
   }
 
   async report(): Promise<string> {

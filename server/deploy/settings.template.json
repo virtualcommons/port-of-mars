@@ -4,5 +4,6 @@
   "maxConnections": 200,
   "defaultDaysMuted": 3,
   "tournamentLobbyOpenBeforeOffset": 10,
-  "tournamentLobbyOpenAfterOffset": 30
+  "tournamentLobbyOpenAfterOffset": 30,
+  "announcementBannerText": ""
 }

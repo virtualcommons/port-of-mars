@@ -168,7 +168,7 @@ export interface Lobby {
   type: LobbyType;
 }
 
-export interface State extends GameData {
+export interface GameState extends GameData {
   timeRemaining: number;
   round: number;
   systemHealth: number;
@@ -188,7 +188,6 @@ export interface State extends GameData {
   loading: boolean;
   quizQuestions: Array<QuizQuestionData>;
   eventCardsVisible: Array<any>;
-  user: User;
   environment: string;
   consent: boolean;
 
@@ -196,17 +195,20 @@ export interface State extends GameData {
   tutorialTradeGive: ResourceAmountData;
   tutorialTradeGet: ResourceAmountData;
   userInterface: UserInterface;
+  // TODO: rename UserInterfaceTwo to something more descriptive
+  ui: UserInterfaceTwo;
+}
 
-  // webapp data: consider refactoring to separate in-game store data with
-  // normal onboarding store data
+// webapp data: consider refactoring to separate in-game store data with
+// normal onboarding store data
+export interface State extends GameState {
+  user: User;
   lobby: Lobby;
   dashboardMessages: Array<DashboardMessage>;
   tournamentStatus: TournamentStatus | null;
   isFreePlayEnabled: boolean;
   isTournamentEnabled: boolean;
-
-  // TODO: rename UserInterfaceTwo to something more descriptive
-  ui: UserInterfaceTwo;
+  announcementBannerText: string;
 }
 
 export const initialUserState: User = {
@@ -229,15 +231,7 @@ export function defaultLobbyState(): Lobby {
   };
 }
 
-export const initialGameState: Omit<
-  State,
-  | "user"
-  | "lobby"
-  | "dashboardMessages"
-  | "tournamentStatus"
-  | "isFreePlayEnabled"
-  | "isTournamentEnabled"
-> = {
+export const initialGameState: GameState = {
   // GameData
   players: defaultPlayerClientSet(),
   timeRemaining: 300,
@@ -306,4 +300,5 @@ export const initialStoreState: State = {
   tournamentStatus: null,
   isFreePlayEnabled: true,
   isTournamentEnabled: false,
+  announcementBannerText: "",
 };

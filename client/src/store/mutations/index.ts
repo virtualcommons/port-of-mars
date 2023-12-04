@@ -41,6 +41,10 @@ export default {
     state.tournamentStatus = status;
   },
 
+  SET_ANNOUNCEMENT_BANNER_TEXT(state: State, text: string) {
+    state.announcementBannerText = text;
+  },
+
   SET_DASHBOARD_MESSAGE(state: State, payload: DashboardMessage) {
     if (!_.some(state.dashboardMessages, payload)) {
       state.dashboardMessages.push(payload);

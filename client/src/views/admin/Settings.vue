@@ -40,6 +40,31 @@
                 ></b-form-input>
               </b-form-group>
               <b-form-group
+                id="announcement-banner-group"
+                label="Announcement Banner"
+                label-for="announcement-banner"
+                description="Text to be displayed in a banner at the top of the landing page. Set empty to disable."
+              >
+                <div class="custom-form-input">
+                  <b-button
+                    class="float-right py-0 px-1"
+                    style="margin-top: -2rem"
+                    variant="primary"
+                    size="sm"
+                    @click="form.announcementBannerText = ''"
+                  >
+                    Clear
+                  </b-button>
+                  <b-form-textarea
+                    class="custom-form-input"
+                    id="mute-length"
+                    rows="2"
+                    max-rows="5"
+                    v-model="form.announcementBannerText"
+                  ></b-form-textarea>
+                </div>
+              </b-form-group>
+              <b-form-group
                 id="free-play-enabled-group"
                 label-for="free-play-enabled"
                 description="Free play allows anyone to join the free play lobby and play with others and bots."
@@ -130,6 +155,7 @@ export default class Reports extends Vue {
     defaultDaysMuted: 0,
     tournamentLobbyOpenBeforeOffset: 10,
     tournamentLobbyOpenAfterOffset: 30,
+    announcementBannerText: "",
   };
 
   intervalOptions = [
@@ -160,7 +186,7 @@ export default class Reports extends Vue {
     this.api
       .updateSettings(this.form)
       .then(() => {
-        this.$bvToast.toast("Settings updated successfully", {
+        this.$bvToast.toast("Settings updated successfully. Reload the page to see changes", {
           title: "Success",
           variant: "success",
           solid: true,

@@ -493,6 +493,7 @@ export interface ClientInitStatus {
   isFreePlayEnabled: boolean;
   user: ClientSafeUser | null;
   tournamentStatus: TournamentStatus | null;
+  announcementBannerText: string;
 }
 
 export interface DashboardMessage {
@@ -509,4 +510,5 @@ export interface DynamicSettingsData {
   isFreePlayEnabled: boolean;
   tournamentLobbyOpenBeforeOffset: number;
   tournamentLobbyOpenAfterOffset: number;
+  announcementBannerText: string;
 }

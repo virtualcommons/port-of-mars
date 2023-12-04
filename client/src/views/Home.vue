@@ -2,6 +2,10 @@
   <b-container fluid class="h-100 m-0 p-0">
     <div>
       <TournamentBanner v-if="shouldShowTournamentBanner"></TournamentBanner>
+      <AnnouncementBanner
+        v-if="announcementBannerText"
+        :text="announcementBannerText"
+      ></AnnouncementBanner>
       <div id="welcome" class="w-100 d-flex align-items-center welcome">
         <b-row class="w-100 mx-0 my-5 px-3" align-v="center" align-h="center">
           <b-col md="12" lg="6" xl="5" class="text-left">
@@ -153,6 +157,7 @@ import CharCarousel from "@port-of-mars/client/components/global/CharCarousel.vu
 import AgeTooltip from "@port-of-mars/client/components/global/AgeTooltip.vue";
 import LeaderboardTable from "@port-of-mars/client/components/stats/LeaderboardTable.vue";
 import TournamentBanner from "@port-of-mars/client/components/global/TournamentBanner.vue";
+import AnnouncementBanner from "@port-of-mars/client/components/global/AnnouncementBanner.vue";
 
 @Component({
   components: {
@@ -161,6 +166,7 @@ import TournamentBanner from "@port-of-mars/client/components/global/TournamentB
     Footer,
     LeaderboardTable,
     TournamentBanner,
+    AnnouncementBanner,
   },
 })
 export default class Home extends Vue {
@@ -184,6 +190,10 @@ export default class Home extends Vue {
 
   get isFreePlayEnabled() {
     return this.$tstore.state.isFreePlayEnabled;
+  }
+
+  get announcementBannerText() {
+    return this.$tstore.state.announcementBannerText;
   }
 
   async mounted() {
