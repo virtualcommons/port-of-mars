@@ -180,14 +180,17 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData<A
   }
 
   discardPurchased(id: number): void {
-    const ind = this.purchased.findIndex(acc => acc.id === id);
-    logger.info("Discarding purchase %d %d %o", ind, id, this.purchased);
-    if (ind >= 0) {
-      this.purchased.splice(ind, 1);
+    const discardedAccomplishmentIndex = this.purchased.findIndex(acc => acc.id === id);
+    logger.info("Discarding purchased accomplishment [%d] from deck {%s}", id, this.purchased);
+    if (discardedAccomplishmentIndex >= 0) {
+      this.purchased.splice(discardedAccomplishmentIndex, 1);
+      // make the discarded card available for purchase again
+      this.deck.push(id);
     }
   }
 
   discardAll(): void {
+    // discard into the bottom of the deck
     this.deck.push(...this.purchasable.map((card: Accomplishment) => card.id));
     this.purchasable.splice(0, this.purchasable.length);
   }
@@ -203,8 +206,11 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData<A
 
   draw(numberOfCards: number): void {
     for (let i = 0; i < numberOfCards; i++) {
-      const id = this.deck.shift();
-      const newAccomplishment = new Accomplishment(getAccomplishmentByID(this.role, id!));
+      logger.debug("drawing an accomplishment from deck %s", this.deck);
+      const accomplishmentId = this.deck.shift();
+      const newAccomplishment = new Accomplishment(
+        getAccomplishmentByID(this.role, accomplishmentId!)
+      );
       this.purchasable.push(newAccomplishment);
     }
     assert.ok(this.purchasable.length <= 3, "Should never have more than 3 cards");
