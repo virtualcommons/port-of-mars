@@ -1,8 +1,6 @@
 <template>
   <b-alert class="bg-primary border-0 m-0 rounded-0" show>
-    <div class="d-flex justify-content-center align-items-center">
-      <p class="text-center text-white preserve-newline mb-0">{{ text }}</p>
-    </div>
+    <h5 class="p-1 text-center text-white m-3">{{ text }}</h5>
   </b-alert>
 </template>
 
