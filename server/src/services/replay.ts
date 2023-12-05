@@ -55,6 +55,9 @@ class ObjColumn {
   }
 }
 
+/**
+ * FIXME: should probably be renamed to GameEventSummarizer since that's what it does. Then GameEventSummarizer turns into AllGameEventsSummarizer, or something
+ */
 export abstract class Summarizer<T> {
   events: Map<number, Array<entity.GameEvent>>;
 
@@ -264,6 +267,19 @@ export class AccomplishmentSummarizer {
     }));
     const writer = createObjectCsvWriter({ path: this.path, header });
     await writer.writeRecords(accomplishments);
+  }
+}
+
+export class GameSummarizer {
+  constructor(public games: Array<entity.Game>, public path: string) {}
+
+  async save() {
+    const header = Object.keys(this.games[0]).map(name => ({
+      id: name,
+      title: name,
+    }));
+    const writer = createObjectCsvWriter({ path: this.path, header });
+    await writer.writeRecords(this.games);
   }
 }
 

@@ -1,6 +1,7 @@
 import { getRedis, getServices } from "@port-of-mars/server/services";
 import {
   AccomplishmentSummarizer,
+  GameSummarizer,
   GameEventSummarizer,
   GameReplayer,
   MarsEventSummarizer,
@@ -83,8 +84,16 @@ async function exportData(
   const playerRaw = await playerQuery.getRawMany();
 
   const events = await eventQuery.getMany();
+  const gameQuery = em
+    .getRepository(Game)
+    .createQueryBuilder("game")
+    .where("game.tournamentRound.id = :tournamentRoundId", { tournamentRoundId });
+  const games = await gameQuery.getMany();
+
   await mkdir("/dump/processed", { recursive: true });
   await mkdir("/dump/raw", { recursive: true });
+
+  const gameSummarizer = new GameSummarizer(games, "/dump/raw/games.csv");
   const marsLogSummarizer = new MarsLogSummarizer(events, "/dump/processed/marsLog.csv");
   const playerSummarizer = new PlayerSummarizer(playerRaw, "/dump/processed/player.csv");
   const gameEventSummarizer = new GameEventSummarizer(events, "/dump/processed/gameEvent.csv");
@@ -104,6 +113,7 @@ async function exportData(
     [
       marsLogSummarizer,
       playerSummarizer,
+      gameSummarizer,
       gameEventSummarizer,
       victoryPointSummarizer,
       playerInvestmentSummarizer,
