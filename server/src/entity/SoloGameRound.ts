@@ -33,6 +33,13 @@ export class SoloGameRound {
   @OneToMany(type => SoloMarsEventDeckCard, card => card.round)
   cards!: SoloMarsEventDeckCard[];
 
+  // these are the initial values AFTER wear and tear
+  @Column()
+  initialSystemHealth!: number;
+
+  @Column()
+  initialPoints!: number;
+
   @OneToOne(type => SoloPlayerDecision, { nullable: false })
   @JoinColumn()
   decision!: SoloPlayerDecision;

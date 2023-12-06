@@ -72,6 +72,8 @@ export class SoloGameState extends Schema {
   @type("boolean") isRoundTransitioning = false;
 
   gameId = 0;
+  roundInitialSystemHealth = SoloGameState.DEFAULTS.systemHealthMax;
+  roundInitialPoints = 0;
   // hidden properties
   maxRound = SoloGameState.DEFAULTS.maxRound.max;
   twoEventsThreshold = SoloGameState.DEFAULTS.twoEventsThreshold.max;
@@ -104,6 +106,11 @@ export class SoloGameState extends Schema {
 
   get nextRoundCard() {
     return this.roundEventCards.find(card => !card.expired);
+  }
+
+  updateRoundInitialValues() {
+    this.roundInitialSystemHealth = this.systemHealth;
+    this.roundInitialPoints = this.points;
   }
 
   updateVisibleCards() {
