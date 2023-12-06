@@ -53,12 +53,23 @@ async function withConnection<T>(f: (em: EntityManager) => Promise<T>): Promise<
   }
 }
 
-async function exportData(
+async function exportTournament(em: EntityManager, tournamentId: number): Promise<void> {
+  logger.debug("=====EXPORT TOURNAMENT [%d] DATA START=====", tournamentId);
+  const s = getServices(em);
+  const tournament = await s.tournament.getTournament(tournamentId, true);
+  const rounds = tournament.rounds;
+  for (const round of rounds) {
+    await exportTournamentRound(em, round.id, round.roundNumber);
+  }
+}
+
+async function exportTournamentRound(
   em: EntityManager,
   tournamentRoundId: number,
-  gameIds: Array<number>
+  tournamentRoundNumber: number,
+  gameIds?: Array<number>
 ): Promise<void> {
-  logger.debug("=====EXPORT DATA START=====");
+  logger.debug("=====EXPORT TOURNAMENT ROUND [%d] START=====", tournamentRoundId);
   let eventQuery = await em
     .getRepository(GameEvent)
     .createQueryBuilder("ge")
@@ -66,7 +77,7 @@ async function exportData(
     .innerJoin(TournamentRound, "tournamentRound", "tournamentRound.id = g.tournamentRoundId")
     .where("tournamentRound.id = :tournamentRoundId", { tournamentRoundId })
     .orderBy("ge.id", "ASC");
-  if (gameIds && gameIds.length > 0) {
+  if (typeof gameIds !== "undefined" && gameIds.length > 0) {
     eventQuery = eventQuery.andWhere('"gameId" in (:...gameIds)', { gameIds });
   }
   const playerQuery = em
@@ -90,24 +101,27 @@ async function exportData(
     .where("game.tournamentRound.id = :tournamentRoundId", { tournamentRoundId });
   const games = await gameQuery.getMany();
 
-  await mkdir("/dump/processed", { recursive: true });
-  await mkdir("/dump/raw", { recursive: true });
+  const rawDir = `/dump/${tournamentRoundNumber}/raw`;
+  const processedDir = `/dump/${tournamentRoundNumber}/processed`;
 
-  const gameSummarizer = new GameSummarizer(games, "/dump/raw/games.csv");
-  const marsLogSummarizer = new MarsLogSummarizer(events, "/dump/processed/marsLog.csv");
-  const playerSummarizer = new PlayerSummarizer(playerRaw, "/dump/processed/player.csv");
-  const gameEventSummarizer = new GameEventSummarizer(events, "/dump/processed/gameEvent.csv");
-  const victoryPointSummarizer = new VictoryPointSummarizer(
-    events,
-    "/dump/processed/victoryPoint.csv"
-  );
+  await mkdir(rawDir, { recursive: true });
+  await mkdir(processedDir, { recursive: true });
+
+  const gameSummarizer = new GameSummarizer(games, `${rawDir}/games.csv`);
   const playerInvestmentSummarizer = new PlayerInvestmentSummarizer(
     events,
-    "/dump/raw/playerInvestment.csv"
+    `${rawDir}/playerInvestment.csv`
   );
-  const marsEventSummarizer = new MarsEventSummarizer(events, "/dump/processed/marsEvent.csv");
+  const marsLogSummarizer = new MarsLogSummarizer(events, `${processedDir}/marsLog.csv`);
+  const playerSummarizer = new PlayerSummarizer(playerRaw, `${processedDir}/player.csv`);
+  const gameEventSummarizer = new GameEventSummarizer(events, `${processedDir}/gameEvent.csv`);
+  const victoryPointSummarizer = new VictoryPointSummarizer(
+    events,
+    `${processedDir}/victoryPoint.csv`
+  );
+  const marsEventSummarizer = new MarsEventSummarizer(events, `${processedDir}/marsEvent.csv`);
   const accomplishmentSummarizer = new AccomplishmentSummarizer(
-    "/dump/processed/accomplishment.csv"
+    `${processedDir}/accomplishment.csv`
   );
   await Promise.all(
     [
@@ -121,7 +135,7 @@ async function exportData(
       accomplishmentSummarizer,
     ].map(s => s.save())
   );
-  logger.debug("=====EXPORTING DATA END=====");
+  logger.debug("=====EXPORTING TOURNAMENT ROUND [%d] END=====", tournamentRoundId);
 }
 
 async function validate(em: EntityManager, gameId: number): Promise<void> {
@@ -513,7 +527,7 @@ program
           .addCommand(
             program
               .createCommand("create")
-              .option("-o, --open", "create an open beta tournament round")
+              .option("-o, --open", "create a tournament round")
               .option(
                 "--tournamentId <tournamentId>",
                 "id of an existing tournament",
@@ -625,16 +639,35 @@ program
   .addCommand(
     program
       .createCommand("dump")
-      .description("dump game data for a given tournament round id to a pile of CSV files")
-      .requiredOption(
-        "--tournamentRoundId <tournamentRoundId>",
-        "tournament round id",
-        customParseInt
+      .description("subcommands to dump game data for a tournament or tournament round")
+      .addCommand(
+        program
+          .createCommand("tournament")
+          .description("dump game data for a given tournament round id to a pile of CSV files")
+          .requiredOption("--tournamentId <tournamentId>", "tournament id", customParseInt)
+          .action(async cmd => {
+            await withConnection(em => exportTournament(em, cmd.tournamentId));
+          })
       )
-      .option("--gids <game_ids>", "specific game ids to export", toIntArray, [] as Array<number>)
-      .action(async cmd => {
-        await withConnection(em => exportData(em, cmd.tournamentRoundId, cmd.gids));
-      })
+      .addCommand(
+        program
+          .createCommand("round")
+          .description("dump game data for a given tournament round id")
+          .requiredOption(
+            "--tournamentRoundId <tournamentRoundId>",
+            "tournament round id",
+            customParseInt
+          )
+          .option(
+            "--gids <game_ids>",
+            "specific game ids to export",
+            toIntArray,
+            [] as Array<number>
+          )
+          .action(async cmd => {
+            await withConnection(em => exportTournamentRound(em, cmd.tournamentId, cmd.gids));
+          })
+      )
   )
   .addCommand(
     program

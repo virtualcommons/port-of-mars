@@ -33,12 +33,19 @@ export class TournamentService extends BaseService {
     });
   }
 
-  async getTournament(id?: number): Promise<Tournament> {
+  async getTournament(id?: number, includeRounds = false): Promise<Tournament> {
     if (id) {
+      if (includeRounds) {
+        return this.em.getRepository(Tournament).findOneOrFail({
+          where: {
+            id: id,
+          },
+          relations: ["rounds"],
+        });
+      }
       return this.em.getRepository(Tournament).findOneOrFail({
         where: {
           id: id,
-          name: Not("freeplay"),
         },
       });
     } else {
