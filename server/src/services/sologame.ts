@@ -13,6 +13,10 @@ import {
 } from "@port-of-mars/server/entity";
 import { getRandomIntInclusive } from "@port-of-mars/server/util";
 import { SoloGameState } from "@port-of-mars/server/rooms/sologame/state";
+import { createObjectCsvWriter } from "csv-writer";
+import { getLogger } from "@port-of-mars/server/settings";
+
+const logger = getLogger(__filename);
 
 export class SoloGameService extends BaseService {
   async drawEventCardDeck(): Promise<EventCardData[]> {
@@ -184,6 +188,8 @@ export class SoloGameService extends BaseService {
     const round = roundRepo.create({
       gameId: state.gameId,
       roundNumber: state.round,
+      initialSystemHealth: state.roundInitialSystemHealth,
+      initialPoints: state.roundInitialPoints,
       decision,
     });
     await roundRepo.save(round);
@@ -198,5 +204,145 @@ export class SoloGameService extends BaseService {
       }
     }
     return round;
+  }
+
+  async getGameIdsBetween(start: Date, end: Date): Promise<Array<number>> {
+    const query = this.em
+      .getRepository(SoloGame)
+      .createQueryBuilder("game")
+      .select("game.id")
+      .where("game.dateCreated BETWEEN :start AND :end", {
+        start: start.toISOString().split("T")[0],
+        end: end.toISOString().split("T")[0],
+      });
+    const result = await query.getRawMany();
+    return result.map(row => row.game_id);
+  }
+
+  async exportGamesCsv(path: string, gameIds?: Array<number>) {
+    /**
+     * export a flat csv of past games specified by gameIds,
+     * or all games if gameIds is undefined
+     * gameId, userId. username, status, points, dateCreated, ...treatment
+     */
+    let query = this.em
+      .getRepository(SoloGame)
+      .createQueryBuilder("game")
+      .leftJoinAndSelect("game.player", "player")
+      .leftJoinAndSelect("player.user", "user")
+      .leftJoinAndSelect("game.treatment", "treatment");
+    if (gameIds) {
+      query = query.where("game.id IN (:...gameIds)", { gameIds });
+    }
+    try {
+      const games = await query.getMany();
+      const formattedGames = games.map(game => ({
+        gameId: game.id,
+        userId: game.player.user.id,
+        username: game.player.user.username,
+        status: game.status,
+        points: game.player.points,
+        knownEventDeck: game.treatment.isEventDeckKnown,
+        knownEndRound: game.treatment.isNumberOfRoundsKnown,
+        thresholdInformation: game.treatment.thresholdInformation,
+        dateCreated: game.dateCreated.toISOString(),
+      }));
+      const header = Object.keys(formattedGames[0]).map(name => ({
+        id: name,
+        title: name,
+      }));
+      const writer = createObjectCsvWriter({ path, header });
+      await writer.writeRecords(formattedGames);
+      logger.info(`Solo game data exported successfully to ${path}`);
+    } catch (error) {
+      logger.fatal(`Error exporting solo game data: ${error}`);
+    }
+  }
+
+  async exportEventCardsCsv(path: string, gameIds?: Array<number>) {
+    /**
+     * export a flat csv of all event cards drawn in past games specified by gameIds
+     * or all games if gameIds is undefined
+     *
+     * gameId, cardId, roundId, roundNumber, name, effectText, systemHealthEffect,
+     * resourcesEffect, pointsEffect
+     */
+    let query = this.em
+      .getRepository(SoloMarsEventDeckCard)
+      .createQueryBuilder("deckCard")
+      .leftJoinAndSelect("deckCard.round", "round")
+      .leftJoinAndSelect("round.game", "game")
+      .leftJoinAndSelect("deckCard.card", "eventCard")
+      .where("round.gameId IS NOT NULL");
+    if (gameIds && gameIds.length > 0) {
+      query = query.andWhere("game.id IN (:...gameIds)", { gameIds });
+    }
+    try {
+      const deckCards = await query.getMany();
+      const formattedDeckCards = deckCards.map(deckCard => ({
+        gameId: deckCard.round.gameId,
+        cardId: deckCard.id,
+        roundId: deckCard.round.id,
+        roundNumber: deckCard.round.roundNumber,
+        name: deckCard.card.displayName,
+        effectText: deckCard.effectText,
+        systemHealthEffect: deckCard.systemHealthEffect,
+        resourcesEffect: deckCard.resourcesEffect,
+        pointsEffect: deckCard.pointsEffect,
+      }));
+      const header = Object.keys(formattedDeckCards[0]).map(name => ({
+        id: name,
+        title: name,
+      }));
+      const writer = createObjectCsvWriter({ path, header });
+      await writer.writeRecords(formattedDeckCards);
+      logger.info(`Event cards data exported successfully to ${path}`);
+    } catch (error) {
+      logger.fatal(`Error exporting event cards data: ${error}`);
+    }
+  }
+
+  async exportInvestmentsCsv(path: string, gameIds?: Array<number>) {
+    /**
+     * export a flat csv of all player-made investments in past games specified by gameIds
+     * or all games if gameIds is undefined
+     *
+     * gameId, roundId, roundNumber, initialSystemHealth, initialPoints,
+     * systemHealthInvestment, pointsInvestment, dateCreated
+     *
+     * initial values are the values at the start of each round AFTER wear
+     * and tear has been applied
+     */
+    let query = this.em
+      .getRepository(SoloGameRound)
+      .createQueryBuilder("round")
+      .leftJoinAndSelect("round.game", "game")
+      .leftJoinAndSelect("round.decision", "decision")
+      .where("round.gameId IS NOT NULL");
+    if (gameIds && gameIds.length > 0) {
+      query = query.andWhere("game.id IN (:...gameIds)", { gameIds });
+    }
+    try {
+      const rounds = await query.getMany();
+      const formattedRounds = rounds.map(round => ({
+        gameId: round.gameId,
+        roundId: round.id,
+        roundNumber: round.roundNumber,
+        initialSystemHealth: round.initialSystemHealth,
+        initialPoints: round.initialPoints,
+        systemHealthInvestment: round.decision.systemHealthInvestment,
+        pointsInvestment: round.decision.pointsInvestment,
+        dateCreated: round.dateCreated.toISOString(),
+      }));
+      const header = Object.keys(formattedRounds[0]).map(name => ({
+        id: name,
+        title: name,
+      }));
+      const writer = createObjectCsvWriter({ path, header });
+      await writer.writeRecords(formattedRounds);
+      logger.info(`Investment data exported successfully to ${path}`);
+    } catch (error) {
+      logger.fatal(`Error exporting investment data: ${error}`);
+    }
   }
 }

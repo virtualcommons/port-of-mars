@@ -53,6 +53,27 @@ async function withConnection<T>(f: (em: EntityManager) => Promise<T>): Promise<
   }
 }
 
+async function exportSoloData(em: EntityManager, start?: string, end?: string) {
+  const soloGameService = getServices().sologame;
+  await mkdir("/dump/solo", { recursive: true });
+  let gameIds;
+  if (start && end) {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+      logger.fatal("Invalid date format");
+      return;
+    }
+    gameIds = await soloGameService.getGameIdsBetween(startDate, endDate);
+  } else if (start || end) {
+    logger.fatal("Must specify both start and end dates or neither");
+    return;
+  }
+  await getServices().sologame.exportGamesCsv("/dump/solo/games.csv", gameIds);
+  await getServices().sologame.exportEventCardsCsv("/dump/solo/eventcards.csv", gameIds);
+  await getServices().sologame.exportInvestmentsCsv("/dump/solo/investments.csv", gameIds);
+}
+
 async function exportTournament(em: EntityManager, tournamentId: number): Promise<void> {
   logger.debug("=====EXPORT TOURNAMENT [%d] DATA START=====", tournamentId);
   const s = getServices(em);
@@ -70,7 +91,7 @@ async function exportTournamentRound(
   gameIds?: Array<number>
 ): Promise<void> {
   logger.debug("=====EXPORT TOURNAMENT ROUND [%d] START=====", tournamentRoundId);
-  let eventQuery = await em
+  let eventQuery = em
     .getRepository(GameEvent)
     .createQueryBuilder("ge")
     .leftJoinAndSelect("ge.game", "g")
@@ -639,7 +660,9 @@ program
   .addCommand(
     program
       .createCommand("dump")
-      .description("subcommands to dump game data for a tournament or tournament round")
+      .description(
+        "subcommands to dump game data for a given tournament/round or from the solo minigame"
+      )
       .addCommand(
         program
           .createCommand("tournament")
@@ -666,6 +689,16 @@ program
           )
           .action(async cmd => {
             await withConnection(em => exportTournamentRound(em, cmd.tournamentId, cmd.gids));
+          })
+      )
+      .addCommand(
+        program
+          .createCommand("solo")
+          .description("export solo game data to flat CSV files")
+          .option("-s, --start <date>", "Start date (YYYY-MM-DD)")
+          .option("-e, --end <date>", "End date (YYYY-MM-DD)")
+          .action(async cmd => {
+            await withConnection(em => exportSoloData(em, cmd.start, cmd.end));
           })
       )
   )

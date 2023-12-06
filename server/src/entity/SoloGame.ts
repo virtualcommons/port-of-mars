@@ -6,10 +6,12 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   JoinColumn,
+  OneToMany,
 } from "typeorm";
 import { SoloGameTreatment } from "./SoloGameTreatment";
 import { SoloMarsEventDeck } from "./SoloMarsEventDeck";
 import { SoloPlayer } from "./SoloPlayer";
+import { SoloGameRound } from "./SoloGameRound";
 import { SoloGameStatus } from "@port-of-mars/shared/sologame";
 
 @Entity()
@@ -33,6 +35,9 @@ export class SoloGame {
 
   @Column()
   treatmentId!: number;
+
+  @OneToMany(() => SoloGameRound, round => round.game)
+  rounds!: SoloGameRound[];
 
   @OneToOne(type => SoloMarsEventDeck, { nullable: false })
   @JoinColumn()

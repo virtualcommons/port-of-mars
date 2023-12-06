@@ -88,6 +88,7 @@ export class SetFirstRoundCmd extends CmdWithoutPayload {
     this.state.systemHealth = defaults.systemHealthMax - defaults.systemHealthWear;
     this.state.timeRemaining = defaults.timeRemaining;
     this.state.player.resources = defaults.resources;
+    this.state.updateRoundInitialValues();
     this.state.isRoundTransitioning = false;
 
     return [new SendHiddenParamsCmd()];
@@ -118,7 +119,11 @@ export class SendHiddenParamsCmd extends CmdWithoutPayload {
 }
 export class ApplyCardCmd extends Cmd<{ playerSkipped: boolean }> {
   validate() {
-    return this.state.activeCardId >= 0 && this.state.status === "incomplete";
+    return (
+      this.state.activeCardId >= 0 &&
+      this.state.status === "incomplete" &&
+      this.state.systemHealth > 0
+    );
   }
 
   async execute({ playerSkipped } = this.payload) {
@@ -274,6 +279,7 @@ export class SetNextRoundCmd extends CmdWithoutPayload {
 
     this.state.round += 1;
     this.state.systemHealth = Math.max(0, this.state.systemHealth - defaults.systemHealthWear);
+    this.state.updateRoundInitialValues();
 
     if (this.state.systemHealth <= 0) {
       return new EndGameCmd().setPayload({ status: "defeat" });
