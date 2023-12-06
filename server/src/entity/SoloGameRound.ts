@@ -6,9 +6,11 @@ import {
   CreateDateColumn,
   JoinColumn,
   OneToMany,
+  ManyToOne,
 } from "typeorm";
 import { SoloPlayerDecision } from "./SoloPlayerDecision";
 import { SoloMarsEventDeckCard } from "./SoloMarsEventDeckCard";
+import { SoloGame } from "./SoloGame";
 
 @Entity()
 export class SoloGameRound {
@@ -20,6 +22,10 @@ export class SoloGameRound {
 
   @Column()
   gameId!: number;
+
+  @ManyToOne(type => SoloGame, game => game.rounds)
+  @JoinColumn({ name: "gameId" })
+  game!: SoloGame;
 
   @Column()
   roundNumber!: number;

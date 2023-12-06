@@ -118,7 +118,11 @@ export class SendHiddenParamsCmd extends CmdWithoutPayload {
 }
 export class ApplyCardCmd extends Cmd<{ playerSkipped: boolean }> {
   validate() {
-    return this.state.activeCardId >= 0 && this.state.status === "incomplete";
+    return (
+      this.state.activeCardId >= 0 &&
+      this.state.status === "incomplete" &&
+      this.state.systemHealth > 0
+    );
   }
 
   async execute({ playerSkipped } = this.payload) {
