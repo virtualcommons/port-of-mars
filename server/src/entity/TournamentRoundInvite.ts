@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  ManyToMany,
   ManyToOne,
   CreateDateColumn,
   PrimaryGeneratedColumn,
@@ -8,6 +9,7 @@ import {
 } from "typeorm";
 import { TournamentRound } from "./TournamentRound";
 import { User } from "./User";
+import { TournamentRoundDate } from "./TournamentRoundDate";
 
 @Entity()
 @Unique(["user", "tournamentRound"])
@@ -20,6 +22,9 @@ export class TournamentRoundInvite {
 
   @ManyToOne(type => TournamentRound, tournamentRound => tournamentRound.invitations)
   tournamentRound!: TournamentRound;
+
+  @ManyToMany(type => TournamentRoundDate, tournamentRoundDate => tournamentRoundDate.signups)
+  signupDates!: TournamentRoundDate[];
 
   @Column()
   userId!: number;
