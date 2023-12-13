@@ -1,4 +1,5 @@
 import { Room } from "colyseus.js";
+import { AjaxRequest } from "@port-of-mars/client/plugins/ajax";
 import {
   LobbyRequest,
   AcceptInvitation,
@@ -7,8 +8,12 @@ import {
   StartSoloWithBots,
   SendLobbyChatMessage,
 } from "@port-of-mars/shared/lobby/requests";
+import { url } from "@port-of-mars/client/util";
+import { GameType } from "@port-of-mars/shared/types";
 
 export class LobbyRequestAPI {
+  constructor(public ajax: AjaxRequest) {}
+
   room!: Room;
 
   connect(room: Room) {
@@ -18,6 +23,19 @@ export class LobbyRequestAPI {
   public leave() {
     if (this.room) {
       this.room.leave();
+    }
+  }
+
+  public async hasActiveGame(type?: GameType) {
+    try {
+      const params = type ? `?type=${type}` : "";
+      return await this.ajax.get(url(`/game/has-active${params}`), ({ data }) => {
+        return data;
+      });
+    } catch (e) {
+      console.log("Unable to query active game status");
+      console.log(e);
+      throw e;
     }
   }
 

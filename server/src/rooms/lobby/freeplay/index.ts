@@ -13,6 +13,7 @@ import {
 import { FreePlayLobbyRoomState } from "@port-of-mars/server/rooms/lobby/freeplay/state";
 import { LobbyClient } from "@port-of-mars/server/rooms/lobby/common/state";
 import { LobbyRoom } from "@port-of-mars/server/rooms/lobby/common";
+import { User } from "@port-of-mars/server/entity";
 
 const logger = settings.logging.getLogger(__filename);
 
@@ -62,6 +63,18 @@ export class FreePlayLobbyRoom extends LobbyRoom<FreePlayLobbyRoomState> {
 
   async isLobbyOpen() {
     return getServices().settings.isFreePlayEnabled();
+  }
+
+  async canUserJoin(user: User) {
+    const services = getServices();
+    const activeGame = await services.game.getActiveGameRoomId(user.id, "freeplay");
+    if (activeGame) {
+      logger.warn(
+        `client ${user.username} attempted to join ${this.roomName} while in another game`
+      );
+      return false;
+    }
+    return true;
   }
 
   onAcceptInvitation(client: Client, message: AcceptInvitation): void {

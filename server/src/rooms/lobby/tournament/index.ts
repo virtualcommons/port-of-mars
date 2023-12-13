@@ -177,6 +177,13 @@ export class TournamentLobbyRoom extends LobbyRoom<TournamentLobbyRoomState> {
 
   async canUserJoin(user: User) {
     const services = getServices();
+    const activeGame = await services.game.getActiveGameRoomId(user.id, "tournament");
+    if (activeGame) {
+      logger.warn(
+        `client ${user.username} attempted to join ${this.roomName} while in another game`
+      );
+      return false;
+    }
     const numberOfActiveParticipants = await services.game.getNumberOfActiveParticipants();
     const maxConnections = await this.getMaxConnections();
     return numberOfActiveParticipants < maxConnections && services.tournament.canPlayInRound(user);

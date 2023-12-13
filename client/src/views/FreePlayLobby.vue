@@ -27,7 +27,6 @@ import { AccountAPI } from "@port-of-mars/client/api/account/request";
 import { FREE_PLAY_LOBBY_NAME } from "@port-of-mars/shared/lobby";
 import { GAME_PAGE, CONSENT_PAGE, MANUAL_PAGE } from "@port-of-mars/shared/routes";
 import { Constants } from "@port-of-mars/shared/settings";
-import { url } from "@port-of-mars/client/util";
 import Countdown from "@port-of-mars/client/components/global/Countdown.vue";
 import HelpPanel from "@port-of-mars/client/components/lobby/HelpPanel.vue";
 import Messages from "@port-of-mars/client/components/global/Messages.vue";
@@ -41,7 +40,7 @@ import Messages from "@port-of-mars/client/components/global/Messages.vue";
 })
 export default class FreePlayLobby extends Vue {
   @Inject() readonly $client!: Client;
-  @Provide() api: FreePlayLobbyRequestAPI = new FreePlayLobbyRequestAPI();
+  @Provide() api: FreePlayLobbyRequestAPI = new FreePlayLobbyRequestAPI(this.$ajax);
   accountApi!: AccountAPI;
 
   game = { name: GAME_PAGE };
@@ -55,7 +54,10 @@ export default class FreePlayLobby extends Vue {
   async created() {
     this.accountApi = new AccountAPI(this.$store, this.$ajax);
     await this.checkCanPlay();
-    await this.rejoinIfActiveGame();
+    const hasActiveGame = await this.api.hasActiveGame("freeplay");
+    if (hasActiveGame) {
+      this.$router.push(this.game);
+    }
   }
 
   async checkCanPlay() {
@@ -65,14 +67,6 @@ export default class FreePlayLobby extends Vue {
         this.$router.push(this.consent);
       }
     }
-  }
-
-  async rejoinIfActiveGame() {
-    await this.$ajax.get(url("/game/has-active?type=freeplay"), ({ data, status }) => {
-      if (status === 200 && data === true) {
-        this.$router.push(this.game);
-      }
-    });
   }
 
   async createRoom() {
