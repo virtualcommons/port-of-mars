@@ -581,7 +581,7 @@ export class GameReplayer {
           });
         } catch (e) {
           logger.trace(`failed to validate round ${gameState.round}`);
-          logger.trace(e);
+          logger.fatal(e as Error);
           results.push({
             round: gameState.round,
             success: false,

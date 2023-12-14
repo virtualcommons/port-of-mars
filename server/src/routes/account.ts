@@ -23,7 +23,7 @@ accountRouter.post("/update-profile", async (req: Request, res: Response, next: 
     if (e instanceof ValidationError) {
       res.status(e.code).json(e.toDashboardMessage());
     } else {
-      logger.warn("unable to update profile metadata for user ID %s", user.id);
+      logger.warn("unable to update profile metadata for user ID %d", user.id);
       next(e);
     }
   }

@@ -112,7 +112,7 @@ export class MarsEventVisitor implements AbstractMarsEventVisitor {
           downCastEventState(HeroOrPariah, state, eventState => {
             if (!eventState.hasVoted(player.role)) {
               const choice = _.random(0, 1) ? "hero" : "pariah";
-              logger.debug("player %s choice %o", player.role, choice);
+              logger.debug("player %s choice %s", player.role, choice);
               return [new VoteHeroOrPariah({ role: player.role, heroOrPariah: choice })];
             } else return [];
           }) ?? []

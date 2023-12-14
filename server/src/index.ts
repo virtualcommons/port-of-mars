@@ -119,7 +119,7 @@ passport.deserializeUser(function (id: number, done: any) {
     .account.findUserById(id)
     .then(user => done(null, user))
     .catch(e => {
-      logger.fatal(`Could not find user with ${id}: `, e);
+      logger.fatal(`Could not find user with ${id}: ${e}`);
       done(e, null);
     });
 });
@@ -143,7 +143,7 @@ async function createApp() {
 
   logger.info(
     "starting (%s) server: [build id: %s, settings.host %s]",
-    process.env.NODE_ENV,
+    NODE_ENV,
     Constants.BUILD_ID,
     settings.host
   );

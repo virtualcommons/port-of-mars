@@ -121,7 +121,7 @@ export class DBPersister implements Persister {
 
   async finalize(gameId: number, shouldFinalizePlayers: boolean): Promise<[Game, Array<Player>]> {
     const f = async (em: EntityManager) => {
-      logger.debug("finalizing game %s", gameId);
+      logger.debug("finalizing game %d", gameId);
       const event = await em.getRepository(GameEvent).findOneOrFail({
         where: { type: In(DBPersister.FINAL_EVENTS), gameId },
         order: { id: "DESC", dateCreated: "DESC" },
@@ -151,7 +151,7 @@ export class DBPersister implements Persister {
         .execute();
 
       const res = await Promise.all([em.save(game), em.save(players)]);
-      logger.debug("finalized game %s", gameId);
+      logger.debug("finalized game %d", gameId);
       return res;
     };
     if (this.em.queryRunner?.isTransactionActive) {

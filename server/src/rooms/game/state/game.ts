@@ -250,7 +250,7 @@ export class GameState
     if (this.hasUser(username)) {
       return this.players[this.userRoles[username]];
     }
-    logger.fatal("GameState.getPlayer: Unable to find player with username", username);
+    logger.fatal("GameState.getPlayer: Unable to find player with username %s", username);
     throw new Error(`No player found with ${username}`);
   }
 

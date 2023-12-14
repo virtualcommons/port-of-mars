@@ -14,7 +14,7 @@ export const authRouter = Router();
 if (isDevOrStaging()) {
   authRouter.post("/login", passport.authenticate("local"), function (req, res) {
     const _sessionId = req.sessionID;
-    logger.info(`dev/testing auth for user %o, setting session id ${_sessionId}`, req.user);
+    logger.info(`dev/testing auth for user ${req.user}, setting session id ${_sessionId}`);
     res.cookie("connect.sid", _sessionId, { signed: true });
     const sessionCookie: any = res.getHeaders()["set-cookie"];
     logger.info(sessionCookie);
@@ -42,12 +42,11 @@ authRouter.get(
 );
 
 authRouter.get("/google/failure", function (req, res) {
-  logger.debug("google login failure, user: %o ", req.user);
+  logger.fatal("google login failure, user: %o ", req);
   res.redirect(toUrl(LOGIN_PAGE));
 });
 
 authRouter.get("/google/success", function (req, res) {
-  logger.debug("google login success, user: %o ", req.user);
   if (req.user) {
     const user = req.user as User;
     if (!user.isActive) {
@@ -76,12 +75,12 @@ authRouter.get(
 );
 
 authRouter.get("/facebook/failure", function (req, res) {
-  logger.debug("facebook login failure, user: %o ", req.user);
+  logger.debug("facebook login failure, user: %o ", req);
   res.redirect(toUrl(LOGIN_PAGE));
 });
 
 authRouter.get("/facebook/success", function (req, res) {
-  logger.debug("facebook login success, user: %o ", req.user);
+  logger.debug("facebook login success, user: %o ", req);
   if (req.user) {
     const user = req.user as User;
     if (!user.isActive) {

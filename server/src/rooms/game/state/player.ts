@@ -282,7 +282,7 @@ export class Player
       science: -accomplishment.science,
     };
     logger.trace(
-      "accomplishments: %o",
+      "accomplishments: %s",
       JSON.stringify(this.accomplishments.purchasable.map(p => _.fromPairs(Object.entries(p))))
     );
     logger.trace(

@@ -31,7 +31,8 @@ tournamentRouter.get("/survey/complete", async (req: Request, res: Response, nex
     }
     res.redirect(`${settings.host}/${getPagePath(TOURNAMENT_DASHBOARD_PAGE)}`);
   } catch (e) {
-    logger.fatal("Unable to mark survey completion: %s", e);
+    logger.fatal("Unable to mark survey completion");
+    logger.fatal(e as Error);
     next(e);
   }
 });
@@ -45,7 +46,8 @@ tournamentRouter.get("/invite-status", async (req: Request, res: Response, next)
     const tournamentData = await getServices().tournament.getTournamentRoundInviteStatus(user);
     res.json(tournamentData);
   } catch (e) {
-    logger.fatal("Unable to get tournament invite status: %s", e);
+    logger.fatal("Unable to get tournament invite status for user %o", req);
+    logger.fatal(e as Error);
     next(e);
   }
 });
@@ -55,7 +57,8 @@ tournamentRouter.get("/status", async (req: Request, res: Response, next) => {
     const tournamentData = await getServices().tournament.getTournamentStatus();
     res.json(tournamentData);
   } catch (e) {
-    logger.fatal("Unable to get tournament status: %s", e);
+    logger.fatal("Unable to get tournament status");
+    logger.fatal(e as Error);
     next(e);
   }
 });

@@ -181,7 +181,11 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData<A
 
   discardPurchased(id: number): void {
     const discardedAccomplishmentIndex = this.purchased.findIndex(acc => acc.id === id);
-    logger.info("Discarding purchased accomplishment [%d] from deck {%s}", id, this.purchased);
+    logger.info(
+      "Discarding purchased accomplishment [%d] from deck {%s}",
+      id,
+      this.purchased.toString()
+    );
     if (discardedAccomplishmentIndex >= 0) {
       this.purchased.splice(discardedAccomplishmentIndex, 1);
       // make the discarded card available for purchase again
@@ -206,7 +210,7 @@ export class AccomplishmentSet extends Schema implements AccomplishmentSetData<A
 
   draw(numberOfCards: number): void {
     for (let i = 0; i < numberOfCards; i++) {
-      logger.debug("drawing an accomplishment from deck %s", this.deck);
+      logger.debug("drawing an accomplishment from deck %s", this.deck.toString());
       const accomplishmentId = this.deck.shift();
       const newAccomplishment = new Accomplishment(
         getAccomplishmentByID(this.role, accomplishmentId!)

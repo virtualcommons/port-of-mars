@@ -30,7 +30,7 @@ quizRouter.get("/submission/:id", async (req: Request, res: Response, next: Next
       let statusCode = 200;
       if (!submission) {
         quiz = await quizService.getDefaultQuiz({ relations: ["questions"] });
-        logger.debug("created new submission after looking up id ", id);
+        logger.debug("created new submission after looking up id %d", id);
         submission = await quizService.createQuizSubmission(user.id, quiz.id);
         statusCode = 201;
       }

@@ -226,12 +226,12 @@ async function createTournament(
 
 async function setAdminUser(em: EntityManager, username: string): Promise<void> {
   const services = getServices(em);
-  logger.debug("setting admin user: %s", username);
   try {
     const user = await services.account.setAdminByUsername(username);
-    logger.info("set user '%s' (id: %s) as admin", user.username, user.id);
+    logger.info("set user '%s' (id: %d) as admin", user.username, user.id);
   } catch (e) {
-    logger.warn("error attempting to set '%s' as admin", username);
+    logger.warn("unable to set '%s' as admin", username);
+    logger.warn(e as Error);
   }
 }
 
@@ -254,7 +254,7 @@ async function anonymizeUsernames(
     );
     await repo.save(anonUsers);
   } catch (e) {
-    logger.fatal("error anonymizing usernames: %o", e);
+    logger.fatal(e as Error);
   }
 }
 
@@ -347,7 +347,7 @@ async function createTournamentRoundInvites(
 ): Promise<number> {
   const sp = getServices(em);
   const invites = await sp.tournament.createInvites(userIds, tournamentRoundId, hasParticipated);
-  logger.debug("created tournament round invites for %s", userIds);
+  logger.debug("created tournament round invites for %s", userIds.toString());
   return invites.length;
 }
 
@@ -364,14 +364,15 @@ async function exportActiveEmails(
   enableAmdfFormat: boolean
 ): Promise<void> {
   const sp = getServices(em);
-  logger.debug("exporting emails after %s", after);
+  logger.debug("exporting emails after %s", after.toISOString());
   const users = await sp.account.getActiveUsers(after);
   const emails = users.map(u => formatEmail(u, enableAmdfFormat));
   try {
     await writeFile("active-emails.csv", emails.join("\n"));
     logger.debug("Exported all active users with emails to active-emails.csv");
-  } catch (err) {
-    logger.fatal("unable to export active emails: %s", err);
+  } catch (e) {
+    logger.fatal("unable to export active emails");
+    logger.fatal(e as Error);
   }
 }
 
@@ -385,8 +386,9 @@ async function exportTournamentRoundEmails(
   try {
     await writeFile(outputFile, emails.join("\n"));
     logger.debug(`exported round invitation emails to ${outputFile}`);
-  } catch (err) {
-    logger.fatal("Unable to export emails", err);
+  } catch (e) {
+    logger.fatal("Unable to export emails");
+    logger.fatal(e as Error);
   }
 }
 
@@ -409,7 +411,8 @@ async function createTournamentTreatment(
     );
     logger.debug("created tournament treatment: %o", treatment);
   } catch (e) {
-    logger.fatal("Unable to create treatment: %s", e);
+    logger.fatal("Unable to create treatment");
+    logger.fatal(e as Error);
   }
 }
 
