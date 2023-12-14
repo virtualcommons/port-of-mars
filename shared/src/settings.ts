@@ -1,5 +1,5 @@
-import { BUILD_ID, SENTRY_DSN } from "./assets/config";
-export { BUILD_ID, SENTRY_DSN } from "./assets/config";
+import { BUILD_ID, SENTRY_DSN, GA_TAG } from "./assets/config";
+export { BUILD_ID, SENTRY_DSN, GA_TAG } from "./assets/config";
 
 export const ENVIRONMENT = process.env.NODE_ENV || "development";
 
@@ -39,6 +39,7 @@ export class Constants {
   public static readonly ENVIRONMENT = ENVIRONMENT;
   public static readonly BUILD_ID = BUILD_ID;
   public static readonly SENTRY_DSN = SENTRY_DSN;
+  public static readonly GA_TAG = GA_TAG;
   public static readonly GIFT_CARD_AMOUNT = 10;
   public static readonly SYSTEM_HEALTH_MAINTENANCE_COST = 25;
   public static readonly MAXIMUM_COST = 1000;
