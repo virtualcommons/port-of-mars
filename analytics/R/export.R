@@ -29,4 +29,14 @@ run_pipeline <- function(base_dir) {
   readr::write_csv(chat_messages, fs::path_join(c(base_dir, "processed/chatMessages.csv")))
 }
 
-run_pipeline("/dump")
+process_all_rounds <- function(base_path) {
+  # assumes that all numeric directories contain exported tournament round data
+  entries <- fs::dir_ls(base_path)
+  tournament_dirs <- entries[fs::path_ext(entries) == '' & grepl("^[0-9]+$", fs::path_file(entries))]
+
+  for (dir in tournament_dirs) {
+    run_pipeline(dir)
+  }
+}
+
+process_all_rounds("/dump")

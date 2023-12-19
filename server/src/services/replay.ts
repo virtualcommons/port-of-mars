@@ -273,13 +273,26 @@ export class AccomplishmentSummarizer {
 export class GameSummarizer {
   constructor(public games: Array<entity.Game>, public path: string) {}
 
+  flattenTreatmentData(game: entity.Game) {
+    const { treatment, ...rest } = game;
+    if (!treatment) return game;
+
+    return {
+      ...rest,
+      treatmentName: treatment.name,
+      treatmentDescription: treatment.description,
+      treatmentMarsEventOverrides: JSON.stringify(treatment.marsEventOverrides),
+    };
+  }
+
   async save() {
-    const header = Object.keys(this.games[0]).map(name => ({
+    const flattenedGames = this.games.map(g => this.flattenTreatmentData(g));
+    const header = Object.keys(flattenedGames[0]).map(name => ({
       id: name,
       title: name,
     }));
     const writer = createObjectCsvWriter({ path: this.path, header });
-    await writer.writeRecords(this.games);
+    await writer.writeRecords(flattenedGames);
   }
 }
 

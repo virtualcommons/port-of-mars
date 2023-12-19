@@ -119,6 +119,7 @@ async function exportTournamentRound(
   const gameQuery = em
     .getRepository(Game)
     .createQueryBuilder("game")
+    .leftJoinAndSelect("game.treatment", "treatment")
     .where("game.tournamentRound.id = :tournamentRoundId", { tournamentRoundId });
   const games = await gameQuery.getMany();
 
