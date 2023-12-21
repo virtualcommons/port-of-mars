@@ -2,6 +2,6 @@
 
 set -o errexit
 
-yarn install
-exec yarn serve
+npm install
+exec npm run serve
 

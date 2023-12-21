@@ -12,12 +12,12 @@ services:
       - /code/client/node_modules
       - ./.prettierrc:/code/.prettierrc
     ports:
-      - '127.0.0.1:8081:8080'
+      - "127.0.0.1:8081:8080"
   server:
     build:
       dockerfile: server/deploy/Dockerfile.dev
     ports:
-      - '127.0.0.1:2567:2567'
+      - "127.0.0.1:2567:2567"
     volumes:
       - ./server:/code/server
       - ./shared:/code/shared

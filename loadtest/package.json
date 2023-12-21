@@ -11,5 +11,8 @@
   "devDependencies": {
     "@types/blessed": "^0.1.17",
     "@types/lodash": "^4.14.157"
+  },
+  "engines": {
+    "yarn": "\n\n! Use npm !\n\n"
   }
 }

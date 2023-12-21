@@ -12,15 +12,15 @@ ENV LANG=C.UTF-8
 
 WORKDIR /code/server
 
-COPY ./server/package.json ./server/yarn.lock /code/server/
-RUN yarn install
+COPY ./server/package.json ./server/package-lock.json /code/server/
+RUN npm install
 
-COPY ./shared/package.json ./shared/yarn.lock /code/shared/
-RUN cd /code/shared && yarn install
+COPY ./shared/package.json ./shared/package-lock.json /code/shared/
+RUN cd /code/shared && npm install
 
 COPY ./server /code/server
 COPY ./shared /code/shared
 
 ENV NODE_ENV=development
 
-CMD ["yarn", "start"]
+CMD ["npm", "run", "start"]

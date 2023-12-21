@@ -11,9 +11,9 @@ Port Of Mars Digital Version
 - `loadtest/example.ts`: scriptable client for the loadtest tool (see `npm run loadtest`)
 - `package.json`:
     - `scripts`:
-        - `yarn start`: runs `ts-node index.ts`
-        - `yarn loadtest`: runs the [`@colyseus/loadtest`](https://github.com/colyseus/colyseus-loadtest/) tool for testing the connection, using the `loadtest/example.ts` script.
-	- `yarn load-fixtures`: loads test data into the database
+        - `npm run start`: runs `ts-node index.ts`
+        - `npm run loadtest`: runs the [`@colyseus/loadtest`](https://github.com/colyseus/colyseus-loadtest/) tool for testing the connection, using the `loadtest/example.ts` script.
+	- `npm run load-fixtures`: loads test data into the database
     - `dependencies`:
         - `colyseus`
         - `@colyseus/monitor`

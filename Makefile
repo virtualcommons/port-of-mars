@@ -108,7 +108,7 @@ settings: $(SENTRY_DSN_PATH) $(SECRET_KEY_PATH) | keys
 
 
 initialize: build
-	docker compose run --rm server yarn initdb
+	docker compose run --rm server npm run initdb
 
 docker-compose.yml: base.yml $(ENVIR).yml config.mk $(DB_DATA_PATH) $(DATA_DUMP_PATH) $(LOG_DATA_PATH) $(REDIS_SETTINGS_PATH) $(ORMCONFIG_PATH) $(NUXT_ORMCONFIG_PATH) $(PGPASS_PATH) $(SERVER_ENV) settings
 	case "$(ENVIR)" in \
@@ -119,16 +119,16 @@ docker-compose.yml: base.yml $(ENVIR).yml config.mk $(DB_DATA_PATH) $(DATA_DUMP_
 
 .PHONY: test-setup
 test-setup: docker-compose.yml
-	docker compose run --rm server bash -c "dropdb --if-exists -h db -U ${DB_USER} ${TEST_DB_NAME} && createdb -h db -U ${DB_USER} ${TEST_DB_NAME} && yarn typeorm schema:sync -c test && yarn load-fixtures ./fixtures/sologame -cn test"
+	docker compose run --rm server bash -c "dropdb --if-exists -h db -U ${DB_USER} ${TEST_DB_NAME} && createdb -h db -U ${DB_USER} ${TEST_DB_NAME} && npm run typeorm -- schema:sync -c test && npm run load-fixtures -- ./fixtures/sologame -cn test"
 
 .PHONY: test
 test: test-setup
-	docker compose run --rm client yarn test:unit
-	docker compose run --rm server yarn test
+	docker compose run --rm client npm run test:unit
+	docker compose run --rm server npm run test
 
 .PHONY: test-server
 test-server: test-setup
-	docker compose run --rm server yarn test $(tests)
+	docker compose run --rm server npm run test $(tests)
 
 .PHONY: deploy
 deploy: build
@@ -136,8 +136,8 @@ deploy: build
 
 .PHONY: buildprod
 buildprod: docker-compose.yml
-	docker compose run --rm client yarn build
-	docker compose run --rm server yarn build
+	docker compose run --rm client npm run build
+	docker compose run --rm server npm run build
 
 .PHONY: docker-clean
 docker-clean:
