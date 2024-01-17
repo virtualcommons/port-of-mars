@@ -15,6 +15,7 @@ import {
   DashboardMessage,
   Role,
   SystemHealthChangesData,
+  TournamentRoundScheduleDate,
   TournamentStatus,
 } from "@port-of-mars/shared/types";
 import _ from "lodash";
@@ -39,6 +40,10 @@ export default {
 
   SET_TOURNAMENT_STATUS(state: State, status: TournamentStatus) {
     state.tournamentStatus = status;
+  },
+
+  SET_TOURNAMENT_ROUND_SCHEDULE(state: State, schedule: Array<TournamentRoundScheduleDate>) {
+    state.tournamentRoundSchedule = schedule;
   },
 
   SET_ANNOUNCEMENT_BANNER_TEXT(state: State, text: string) {

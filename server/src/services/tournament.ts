@@ -17,11 +17,13 @@ import {
   LobbyChatMessageData,
   MarsEventOverride,
   TournamentRoundInviteStatus,
+  TournamentRoundScheduleDate,
   TournamentStatus,
 } from "@port-of-mars/shared/types";
-// import { getLogger } from "@port-of-mars/server/settings";
+import { TournamentRoundSignup } from "../entity/TournamentRoundSignup";
+import { getLogger } from "@port-of-mars/server/settings";
 
-// const logger = getLogger(__filename);
+const logger = getLogger(__filename);
 
 export class TournamentService extends BaseService {
   async getActiveTournament(): Promise<Tournament> {
@@ -119,6 +121,62 @@ export class TournamentService extends BaseService {
       order: { date: "ASC" },
     });
     return schedule.map(s => s.date);
+  }
+
+  async getTournamentRoundSchedule(options?: {
+    tournamentRound?: TournamentRound;
+    user?: User;
+    afterOffset?: number;
+  }): Promise<Array<TournamentRoundScheduleDate>> {
+    /**
+     * Returns the upcoming schedule for the given TournamentRound
+     * includes past dates if they are within <afterOffset> of now
+     * 1230 should be included for a 1200 launchtime with an afterOffset of 30
+     *
+     * for a simple array of dates, use getScheduledDates
+     */
+    // eslint-disable-next-line prefer-const
+    let { tournamentRound, afterOffset, user } = options ?? {};
+    if (!tournamentRound) tournamentRound = await this.getCurrentTournamentRound();
+    if (!afterOffset) afterOffset = await this.getAfterOffset();
+    const offsetTime = new Date().getTime() - afterOffset;
+
+    // get each date with associated signups
+    const query = this.em
+      .getRepository(TournamentRoundDate)
+      .createQueryBuilder("roundDate")
+      .leftJoin("roundDate.signups", "signup")
+      .leftJoin("signup.tournamentRoundInvite", "invite")
+      .select("roundDate.id", "tournamentRoundDateId")
+      .addSelect("roundDate.date", "date")
+      .addSelect("COUNT(signup.tournamentRoundDateId)", "signupCount")
+      .where("roundDate.tournamentRoundId = :tournamentRoundId", {
+        tournamentRoundId: tournamentRound.id,
+      })
+      .andWhere("roundDate.date >= :offset", { offset: new Date(offsetTime) })
+      .groupBy("roundDate.id")
+      .addGroupBy("roundDate.date")
+      .orderBy("roundDate.date", "ASC");
+
+    if (user) {
+      // use a subquery to check if the user is signed up for each date
+      query.addSelect(subQuery => {
+        return subQuery
+          .select("1")
+          .from(TournamentRoundSignup, "subSignup")
+          .innerJoin("subSignup.tournamentRoundInvite", "subInvite")
+          .where("subSignup.tournamentRoundDateId = roundDate.id")
+          .andWhere("subInvite.userId = :userId", { userId: user!.id });
+      }, "isSignedUp");
+    }
+
+    const schedule = await query.getRawMany();
+    return schedule.map(s => ({
+      tournamentRoundDateId: parseInt(s.tournamentRoundDateId),
+      timestamp: s.date.getTime(),
+      signupCount: parseInt(s.signupCount),
+      isSignedUp: user ? s.isSignedUp !== null : false,
+    }));
   }
 
   async getEmails(tournamentRoundId?: number): Promise<Array<string>> {
@@ -240,7 +298,6 @@ export class TournamentService extends BaseService {
     }
     const tournament = tournamentRound.tournament;
     if (!tournament) return null;
-    const scheduledDates = await this.getScheduledDates({ tournamentRound });
     return {
       name: tournament.name,
       description: tournament.description ?? "",
@@ -248,7 +305,6 @@ export class TournamentService extends BaseService {
       lobbyOpenAfterOffset: await this.getAfterOffset(),
       currentRound: {
         round: tournamentRound.roundNumber,
-        schedule: scheduledDates.map((date: Date) => date.getTime()),
         championship: tournamentRound.championship,
         announcement: tournamentRound.announcement ?? "",
       },
@@ -402,6 +458,7 @@ export class TournamentService extends BaseService {
         tournamentRound: options?.tournamentRound,
         afterOffset: afterOffset,
       });
+
     if (gameDates.length === 0) {
       return false;
     }

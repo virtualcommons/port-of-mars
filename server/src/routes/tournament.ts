@@ -62,3 +62,14 @@ tournamentRouter.get("/status", async (req: Request, res: Response, next) => {
     next(e);
   }
 });
+
+tournamentRouter.get("/schedule", async (req: Request, res: Response, next) => {
+  const user = req.user as User;
+  try {
+    const schedule = await getServices().tournament.getTournamentRoundSchedule({ user });
+    res.json(schedule);
+  } catch (e) {
+    logger.fatal("Unable to get tournament round schedule: %s", e);
+    next(e);
+  }
+});

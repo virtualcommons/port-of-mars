@@ -39,13 +39,16 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { google, ics } from "calendar-link";
+import { TournamentRoundScheduleDate } from "@port-of-mars/shared/types";
 
 interface LaunchTimes {
-  [date: string]: {
-    date: Date;
-    googleInviteURL: string;
-    icsInviteURL: string;
-  }[];
+  [date: string]: Array<
+    TournamentRoundScheduleDate & {
+      date: Date;
+      googleInviteURL: string;
+      icsInviteURL: string;
+    }
+  >;
 }
 
 @Component({})
@@ -54,7 +57,7 @@ export default class Schedule extends Vue {
   scheduleId!: string;
 
   @Prop()
-  schedule!: Array<number>;
+  schedule!: Array<TournamentRoundScheduleDate>;
 
   static readonly SITE_URL = "https://portofmars.asu.edu";
 
@@ -62,12 +65,11 @@ export default class Schedule extends Vue {
     return this.groupLaunchTimesByDate(this.schedule);
   }
 
-  groupLaunchTimesByDate(launchTimes: number[]) {
-    // returns an object with date strings mapped to individual launch times and invite links
-    // could use a Map<string, object> also
+  groupLaunchTimesByDate(schedule: Array<TournamentRoundScheduleDate>): LaunchTimes {
+    // returns an object with date strings mapped to individual scheduled dates with invite links
     const grouped: LaunchTimes = {};
-    for (const time of launchTimes) {
-      const launchDate = new Date(time);
+    for (const scheduleDate of schedule) {
+      const launchDate = new Date(scheduleDate.timestamp);
       const dateStr = launchDate.toLocaleDateString([], {
         weekday: "long",
         month: "long",
@@ -80,7 +82,8 @@ export default class Schedule extends Vue {
       const googleInviteURL = google(calendarEvent);
       const icsInviteURL = ics(calendarEvent);
       grouped[dateStr].push({
-        date: new Date(time),
+        ...scheduleDate,
+        date: launchDate,
         googleInviteURL,
         icsInviteURL,
       });

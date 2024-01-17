@@ -207,24 +207,26 @@ export default {
   },
 
   tournamentRoundHasUpcomingLaunch(state: State) {
-    return !!state.tournamentStatus?.currentRound.schedule.length;
+    return !!state.tournamentRoundSchedule?.length;
   },
 
   tournamentSchedule(state: State) {
-    return state.tournamentStatus?.currentRound.schedule;
+    return state.tournamentRoundSchedule;
   },
 
   nextLaunchTime(state: State) {
-    return state.tournamentStatus?.currentRound.schedule[0];
+    if (state.tournamentRoundSchedule?.length) {
+      return state.tournamentRoundSchedule[0].timestamp;
+    }
   },
 
   isTournamentLobbyOpen(state: State) {
-    if (!state.tournamentStatus) {
+    if (!state.tournamentStatus || !state.tournamentRoundSchedule?.length) {
       return false;
     }
     const beforeOffset = state.tournamentStatus.lobbyOpenBeforeOffset;
     const afterOffset = state.tournamentStatus.lobbyOpenAfterOffset;
-    const nextLaunchTime = state.tournamentStatus.currentRound.schedule[0];
+    const nextLaunchTime = state.tournamentRoundSchedule[0].timestamp;
     const timeNow = new Date().getTime();
     return timeNow >= nextLaunchTime - beforeOffset && timeNow <= nextLaunchTime + afterOffset;
   },

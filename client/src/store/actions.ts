@@ -24,6 +24,9 @@ export default {
     if (data.tournamentStatus) {
       context.commit("SET_TOURNAMENT_STATUS", data.tournamentStatus);
     }
+    if (data.tournamentRoundSchedule) {
+      context.commit("SET_TOURNAMENT_ROUND_SCHEDULE", data.tournamentRoundSchedule);
+    }
     context.commit("SET_FREE_PLAY_ENABLED", data.isFreePlayEnabled);
     context.commit("SET_TOURNAMENT_ENABLED", data.isTournamentEnabled);
     context.commit("SET_ANNOUNCEMENT_BANNER_TEXT", data.announcementBannerText);

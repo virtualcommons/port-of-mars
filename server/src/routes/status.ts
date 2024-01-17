@@ -14,15 +14,19 @@ statusRouter.get("/", async (req: Request, res: Response, next) => {
     const safeUser = user ? { ...toClientSafeUser(user) } : null;
     const settings = await services.settings.getSettings();
     const { isFreePlayEnabled, isTournamentEnabled, announcementBannerText } = settings;
-    const tournamentStatus = isTournamentEnabled
-      ? await services.tournament.getTournamentStatus()
-      : null;
+    let tournamentStatus = null;
+    let tournamentRoundSchedule = null;
+    if (isTournamentEnabled) {
+      tournamentStatus = await services.tournament.getTournamentStatus();
+      tournamentRoundSchedule = await services.tournament.getTournamentRoundSchedule({ user });
+    }
 
     const status: ClientInitStatus = {
       isFreePlayEnabled,
       isTournamentEnabled,
       user: safeUser,
       tournamentStatus,
+      tournamentRoundSchedule,
       announcementBannerText,
     };
     res.json(status);
