@@ -7,7 +7,7 @@ import Vuex from "vuex";
 import * as Sentry from "@sentry/browser";
 import { Vue as VueIntegration } from "@sentry/integrations";
 import { Integrations } from "@sentry/tracing";
-import { isStagingOrProduction, isProduction, Constants } from "@port-of-mars/shared/settings";
+import { isStagingOrProduction, Constants } from "@port-of-mars/shared/settings";
 import { Ajax } from "@port-of-mars/client/plugins/ajax";
 import { TypedStore } from "@port-of-mars/client/plugins/tstore";
 import { getAssetUrl, SfxManager } from "@port-of-mars/client/util";
@@ -29,8 +29,6 @@ if (isStagingOrProduction()) {
     integrations: [new VueIntegration({ Vue, tracing: true }), new Integrations.BrowserTracing()],
     tracesSampleRate: 1,
   });
-}
-if (isProduction()) {
   Vue.use(
     VueGtag,
     {
