@@ -216,7 +216,7 @@ export class TournamentLobbyRoom extends LobbyRoom<TournamentLobbyRoomState> {
     super.onDispose();
     logger.debug("Saving all lobby chat messages");
     const chatMessages = [...this.state.chat];
-    logger.debug("lobby chat messages %s", chatMessages);
+    logger.debug("lobby chat messages %s", chatMessages.toString());
     if (chatMessages.length) {
       await getServices().tournament.saveLobbyChatMessages(this.roomId, "tournament", chatMessages);
     }

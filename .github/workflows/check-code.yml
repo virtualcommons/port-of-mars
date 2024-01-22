@@ -19,13 +19,13 @@ jobs:
         with:
           node-version: 18
       - name: Clean install
-        run: yarn install --frozen-lockfile
+        run: npm ci
       - name: Lint
-        run: yarn lint
+        run: npm run lint
       - name: Check formatting
         # run regardless of whether linting caught errors
         if: ${{ success() || failure() }}
-        run: yarn style
+        run: npm run style
 
   server:
     runs-on: ubuntu-latest
@@ -39,10 +39,10 @@ jobs:
         with:
           node-version: 18
       - name: Clean install
-        run: yarn install --frozen-lockfile
+        run: npm ci
       - name: Lint
-        run: yarn lint
+        run: npm run lint
       - name: Check formatting
         # run regardless of whether linting caught errors
         if: ${{ success() || failure() }}
-        run: yarn style
+        run: npm run style

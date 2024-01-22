@@ -55,7 +55,7 @@ export class SurveyService extends BaseService {
       logger.debug(
         "participant %s completed intro survey %s",
         invite.user.username,
-        introSurveyUrl
+        introSurveyUrl || "no survey url?"
       );
     } else if (exitSurveyUrl && exitSurveyUrl.includes(data.surveyId)) {
       invite.hasCompletedExitSurvey = true;

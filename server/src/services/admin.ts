@@ -217,7 +217,7 @@ export class AdminService extends BaseService {
       .andWhere("moderationAction.dateMuteExpires < :now", { now: new Date() })
       .getMany();
     for (const action of expiredMuteActions) {
-      logger.trace("mute %s for user: %s has expired", action.id, action.user.username);
+      logger.trace("mute [%d] for user (%s) has expired", action.id, action.user.username);
       if (!(await this.hasActiveModerationAction(action.user.username, MUTE))) {
         await this.sp.account.expireMute(action.user.username);
       }

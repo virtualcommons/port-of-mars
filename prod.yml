@@ -4,6 +4,9 @@ services:
       - ./docker/redis:/data
   server:
     build:
+      dockerfile: server/deploy/Dockerfile.prod
       args:
         NODE_ARG: production
     image: port-of-mars/server:prod
+    ports:
+      - '2567:2567'

@@ -18,6 +18,8 @@ MAIL_API_KEY_PATH=keys/mail_api_key
 SECRETS=$(MAIL_API_KEY_PATH) $(DB_PASSWORD_PATH) $(ORMCONFIG_PATH) $(PGPASS_PATH) $(SENTRY_DSN_PATH) $(SECRET_KEY_PATH)
 SHARED_CONFIG_PATH=shared/src/assets/config.ts
 BUILD_ID=$(shell git describe --tags --abbrev=1)
+GA_TAG_PATH=keys/ga_tag
+GA_TAG=$(shell cat $(GA_TAG_PATH))
 
 .PHONY: build
 build: docker-compose.yml
@@ -85,6 +87,9 @@ $(MAIL_API_KEY_PATH): | keys
 $(SENTRY_DSN_PATH): | keys
 	touch "$(SENTRY_DSN_PATH)"
 
+$(GA_TAG_PATH): | keys
+	touch "$(GA_TAG_PATH)"
+
 $(DB_DATA_PATH):
 	mkdir -p "$(DB_DATA_PATH)"
 
@@ -99,30 +104,30 @@ $(SECRET_KEY_PATH): | keys
 settings: $(SENTRY_DSN_PATH) $(SECRET_KEY_PATH) | keys
 	echo 'export const BUILD_ID = "${BUILD_ID}";' > $(SHARED_CONFIG_PATH)
 	echo 'export const SENTRY_DSN = "${SENTRY_DSN}";' >> $(SHARED_CONFIG_PATH)
+	echo 'export const GA_TAG = "${GA_TAG}";' >> $(SHARED_CONFIG_PATH)
 
 
 initialize: build
-	docker compose run --rm server yarn initdb
+	docker compose run --rm server npm run initdb
 
 docker-compose.yml: base.yml $(ENVIR).yml config.mk $(DB_DATA_PATH) $(DATA_DUMP_PATH) $(LOG_DATA_PATH) $(REDIS_SETTINGS_PATH) $(ORMCONFIG_PATH) $(NUXT_ORMCONFIG_PATH) $(PGPASS_PATH) $(SERVER_ENV) settings
 	case "$(ENVIR)" in \
-	  dev) docker compose -f base.yml -f "$(ENVIR).yml" config > docker-compose.yml;; \
-	  staging|prod) docker compose -f base.yml -f staging.yml -f "$(ENVIR).yml" config > docker-compose.yml;; \
+	  dev|staging|prod) docker compose -f base.yml -f "$(ENVIR).yml" config > docker-compose.yml;; \
 	  *) echo "invalid environment. must be either dev, staging or prod" 1>&2; exit 1;; \
 	esac
 
 .PHONY: test-setup
 test-setup: docker-compose.yml
-	docker compose run --rm server bash -c "dropdb --if-exists -h db -U ${DB_USER} ${TEST_DB_NAME} && createdb -h db -U ${DB_USER} ${TEST_DB_NAME} && yarn typeorm schema:sync -c test && yarn load-fixtures ./fixtures/sologame -cn test"
+	docker compose run --rm server bash -c "dropdb --if-exists -h db -U ${DB_USER} ${TEST_DB_NAME} && createdb -h db -U ${DB_USER} ${TEST_DB_NAME} && npm run typeorm -- schema:sync -c test && npm run load-fixtures -- ./fixtures/sologame -cn test"
 
 .PHONY: test
 test: test-setup
-	docker compose run --rm client yarn test:unit
-	docker compose run --rm server yarn test
+	docker compose run --rm client npm run test:unit
+	docker compose run --rm server npm run test
 
 .PHONY: test-server
 test-server: test-setup
-	docker compose run --rm server yarn test $(tests)
+	docker compose run --rm server npm run test $(tests)
 
 .PHONY: deploy
 deploy: build
@@ -130,8 +135,8 @@ deploy: build
 
 .PHONY: buildprod
 buildprod: docker-compose.yml
-	docker compose run --rm client yarn build
-	docker compose run --rm server yarn build
+	docker compose run --rm client npm run build
+	docker compose run --rm server npm run build
 
 .PHONY: docker-clean
 docker-clean:

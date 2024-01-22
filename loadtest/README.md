@@ -1,6 +1,6 @@
 # Loadtesting Setup
 
 ```
-yarn global add @colyseus/loadtest
+npm install @colyseus/loadtest --global
 colyseus-loadtest --numClients 5 --room loadtest-game
 ```

@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc -p .",
-    "build:deploy": "yarn build && rm -rf /code/server/src /code/shared && mv lib/server/src /code/server/src && mv lib/shared /code/shared",
+    "build:deploy": "npm run build && rm -rf /code/server/src /code/shared && mv lib/server/src /code/server/src && mv lib/shared /code/shared",
     "backupdb": "pg_dump -h db -U marsmadness port_of_mars > pom-$(date +%Y-%m-%d-%H.%M.%S).sql",
     "cli": "ts-node -r tsconfig-paths/register src/cli.ts",
     "loadtest": "ts-node -r tsconfig-paths/register src/loadtest.ts",
@@ -14,11 +14,11 @@
     "start": "ts-node-dev -r tsconfig-paths/register src/index.ts | tee -a /var/log/port-of-mars/index.log",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "dangerously-dropdb": "dropdb -U marsmadness -h db port_of_mars",
-    "initdb": "createdb -U marsmadness -h db port_of_mars ; yarn typeorm migration:run && /scripts/freeplay/setup.sh ; yarn load-fixtures ./fixtures/sologame",
+    "initdb": "createdb -U marsmadness -h db port_of_mars ; npm run typeorm migration:run && /scripts/freeplay/setup.sh ; npm run load-fixtures ./fixtures/sologame",
     "dangerously-loaddb": "psql -h db -U marsmadness port_of_mars < pom-db.sql",
     "dangerously-resetdb": "dropdb -U marsmadness -h db port_of_mars && createdb -U marsmadness -h db port_of_mars",
-    "migrate": "yarn typeorm migration:run",
-    "repl": "yarn ts-node -r tsconfig-paths/register",
+    "migrate": "npm run typeorm migration:run",
+    "repl": "npm run ts-node -r tsconfig-paths/register",
     "sql": "pgcli -U marsmadness -d port_of_mars -h db",
     "test": "NODE_ENV=test jest",
     "lint": "eslint -c .eslintrc.js ./ ../shared --ext .ts",
@@ -41,6 +41,7 @@
     "@types/cors": "^2.8.9",
     "@types/express": "^4.17.10",
     "@types/express-session": "^1.17.3",
+    "@types/ioredis": "^4.28.3",
     "@types/jest": "^27.0.2",
     "@types/jsonwebtoken": "^8.5.0",
     "@types/lodash": "^4.14.167",
@@ -106,12 +107,15 @@
     "passport-local": "^1.0.0",
     "pg": "^8.5.1",
     "pino": "^8.7.0",
-    "pino-pretty": "^9.1.1",
+    "pino-pretty": "^10.3.0",
     "redis": "^3.1.1",
     "reflect-metadata": "^0.1.10",
     "tinyqueue": "^2.0.3",
     "typeorm": "^0.2.30",
     "uuid": "^8.3.2",
     "validator": "^13.5.2"
+  },
+  "engines": {
+    "yarn": "\n\n! Use npm !\n\n"
   }
 }

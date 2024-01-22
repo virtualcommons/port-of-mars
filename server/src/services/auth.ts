@@ -21,7 +21,7 @@ export class AuthService extends BaseService {
       .where(`user.id = :userId`, { userId })
       .select("count(*) > 0", "validInvitation")
       .getRawOne();
-    logger.info("user %s can play the game? %o", userId, result?.validInvitation);
+    logger.info("user %d can play the game? %o", userId, result?.validInvitation);
     return result?.validInvitation ? result.validInvitation : false;
   }
 }

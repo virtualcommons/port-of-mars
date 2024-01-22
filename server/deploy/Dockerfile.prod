@@ -2,11 +2,11 @@ FROM node:lts-bookworm AS pom-client-builder-base
 
 WORKDIR /code/client
 
-COPY ./client/package.json ./client/yarn.lock /code/client/
-RUN yarn install
+COPY ./client/package.json ./client/package-lock.json /code/client/
+RUN npm install
 
-COPY ./shared/package.json ./shared/yarn.lock /code/shared/
-RUN cd /code/shared && yarn install
+COPY ./shared/package.json ./shared/package-lock.json /code/shared/
+RUN cd /code/shared && npm install
 
 COPY ./client /code/client
 COPY ./shared /code/shared
@@ -14,23 +14,23 @@ COPY ./shared /code/shared
 ARG NODE_ARG=production
 ENV NODE_ENV=${NODE_ARG}
 
-RUN yarn build
+RUN npm run build
 
 
 FROM node:lts-bookworm AS pom-server-base
 
 WORKDIR /code/server
 
-COPY ./server/package.json ./server/yarn.lock /code/server/
-RUN yarn install
+COPY ./server/package.json ./server/package-lock.json /code/server/
+RUN npm install
 
-COPY ./shared/package.json ./shared/yarn.lock /code/shared/
-RUN cd /code/shared && yarn install
+COPY ./shared/package.json ./shared/package-lock.json /code/shared/
+RUN cd /code/shared && npm install
 
 COPY ./server /code/server
 COPY ./shared /code/shared
 
-RUN yarn build \
+RUN npm run build \
   && cp tsconfig.json package.json lib/server/
 
 
@@ -53,4 +53,4 @@ WORKDIR /code/server
 ARG NODE_ARG=production
 ENV NODE_ENV=${NODE_ARG}
 
-CMD ["yarn", "start:prod"] 
+CMD ["npm", "run", "start:prod"] 

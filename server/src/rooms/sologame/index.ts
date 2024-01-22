@@ -55,7 +55,8 @@ export class SoloGameRoom extends Room<SoloGameState> {
       }
       return user;
     } catch (e) {
-      logger.fatal("Unable to authenticate user: %s", e);
+      logger.fatal("Unable to authenticate user");
+      logger.fatal(e as Error);
     }
     return false;
   }

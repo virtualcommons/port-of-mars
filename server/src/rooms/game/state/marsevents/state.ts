@@ -404,10 +404,10 @@ export class HeroOrPariah extends BaseEvent {
     // _.orderBy => [[ROLE, highest vote], ... [ROLE, lowest vote]]
     const winners = _.orderBy(_.toPairs(votes), o => o[1], "desc");
     logger.debug("winners: %o", winners);
-    console.log("winners: ", winners);
 
-    if (this.tie(winners)) {
-      logger.debug("hero or pariah voting tie: %o", this.tie(winners));
+    const isTie = this.tie(winners);
+
+    if (isTie) {
       logger.debug(
         "2-way tie: %o",
         _.filter(winners, o => o[1] == 2)
@@ -416,8 +416,11 @@ export class HeroOrPariah extends BaseEvent {
         "5-way tie: %o",
         _.filter(winners, o => o[1] == 1)
       );
+      // pick a winner randomly
       this.winner = winners[Math.floor(Math.random() * winners.length)][0] as Role;
-    } else this.winner = winners[0][0] as Role;
+    } else {
+      this.winner = winners[0][0] as Role;
+    }
 
     // mars log messaging
 
@@ -427,7 +430,7 @@ export class HeroOrPariah extends BaseEvent {
       const specialty = game.players[this.winner].specialty;
       game.players[this.winner].inventory[specialty] += 4;
 
-      if (this.tie(winners)) {
+      if (isTie) {
         game.log(
           `Because of a voting tie, ${this.winner} is randomly voted a Hero and has gained 4 ${specialty}.`,
           this.title
@@ -449,7 +452,7 @@ export class HeroOrPariah extends BaseEvent {
         game.players[this.winner].inventory[resource] = 0;
       }
 
-      if (this.tie(winners)) {
+      if (isTie) {
         game.log(
           `Because of a voting tie, ${this.winner} is randomly voted a Pariah and has lost all 
         their Influence resources.`,
@@ -738,6 +741,6 @@ export function downCastEventState<T extends BaseEvent, R>(
   if (eventState instanceof classDef) {
     return callBack(eventState);
   } else {
-    logger.warn("the expected event state is the wrong type %s", eventState);
+    logger.warn("expected event state is the wrong type %o", eventState);
   }
 }

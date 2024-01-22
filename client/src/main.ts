@@ -1,6 +1,7 @@
 import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 import * as Colyseus from "colyseus.js";
 import Vue from "vue";
+import VueGtag from "vue-gtag";
 import VueMeta from "vue-meta";
 import Vuex from "vuex";
 import * as Sentry from "@sentry/browser";
@@ -20,7 +21,6 @@ Vue.use(Ajax, { router, store });
 Vue.use(BootstrapVue);
 Vue.use(VueMeta);
 Vue.use(IconsPlugin); // FIXME: import only the icons we need
-
 Vue.config.productionTip = false;
 
 if (isStagingOrProduction()) {
@@ -29,6 +29,15 @@ if (isStagingOrProduction()) {
     integrations: [new VueIntegration({ Vue, tracing: true }), new Integrations.BrowserTracing()],
     tracesSampleRate: 1,
   });
+  Vue.use(
+    VueGtag,
+    {
+      config: {
+        id: Constants.GA_TAG,
+      },
+    },
+    router
+  );
 }
 
 const $client = new Colyseus.Client(process.env.SERVER_URL_WS || undefined);

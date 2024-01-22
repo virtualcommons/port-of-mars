@@ -281,10 +281,10 @@ export class GameRoom extends Room<GameState> implements Game {
   }
 
   async onDispose(): Promise<void> {
-    logger.info("Disposing of room", this.roomId);
+    logger.info("Disposing of room %s", this.roomId);
     await this.persister.sync();
     await this.persister.finalize(this.gameId, true);
-    logger.info("Disposed of room", this.roomId);
+    logger.info("Disposed of room %s", this.roomId);
   }
 
   set gameId(id: number) {

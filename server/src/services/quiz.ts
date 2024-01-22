@@ -117,21 +117,15 @@ export class QuizService extends BaseService {
       ? await this.getQuizById(quizId, { relations: ["questions"] })
       : await this.getDefaultQuiz({ relations: ["questions"] });
     const quizSubmission = await this.getLatestQuizSubmission(userId, quiz.id);
-    logger.debug(
-      "retrieved quiz submission for user %d and quiz %d: %o",
-      userId,
-      quiz.id,
-      quizSubmission
-    );
     const questionIds = quiz.questions.map(q => q.id);
     if (!quizSubmission) {
       // the quiz submission does not exist, or it has no responses, so return all question IDs as "incorrect"
-      logger.debug("User has not created a quiz submission yet, should send to tutorial.");
+      logger.debug("User has not created a quiz submission yet, send to tutorial.");
       return questionIds;
     }
     const quizResponses = await this.getQuizResponses(quizSubmission.id);
     logger.debug(
-      "Checking %d responses for user %d (quiz submission %d)",
+      "Checking %d responses for user %d (quiz submission: %d)",
       quizResponses.length,
       userId,
       quizSubmission.id
