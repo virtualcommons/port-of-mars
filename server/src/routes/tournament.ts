@@ -73,3 +73,31 @@ tournamentRouter.get("/schedule", async (req: Request, res: Response, next) => {
     next(e);
   }
 });
+
+tournamentRouter.post("/signup/add", async (req: Request, res: Response, next) => {
+  const user = req.user as User;
+  const tournamentRoundDateId = Number(req.query.tournamentRoundDateId);
+  const inviteId = Number(req.query.inviteId);
+  try {
+    await getServices().tournament.addSignup(user, tournamentRoundDateId, inviteId);
+    const schedule = await getServices().tournament.getTournamentRoundSchedule({ user });
+    res.json(schedule);
+  } catch (e) {
+    logger.fatal("Unable to add tournament signup: %s", e);
+    next(e);
+  }
+});
+
+tournamentRouter.post("/signup/remove", async (req: Request, res: Response, next) => {
+  const user = req.user as User;
+  const tournamentRoundDateId = Number(req.query.tournamentRoundDateId);
+  const inviteId = Number(req.query.inviteId);
+  try {
+    await getServices().tournament.removeSignup(user, tournamentRoundDateId, inviteId);
+    const schedule = await getServices().tournament.getTournamentRoundSchedule({ user });
+    res.json(schedule);
+  } catch (e) {
+    logger.fatal("Unable to remove tournament signup: %s", e);
+    next(e);
+  }
+});

@@ -1,4 +1,4 @@
-import { MoreThanOrEqual, Not, SelectQueryBuilder } from "typeorm";
+import { MoreThanOrEqual, Not, SelectQueryBuilder, Between } from "typeorm";
 import {
   User,
   Player,
@@ -20,8 +20,9 @@ import {
   TournamentRoundScheduleDate,
   TournamentStatus,
 } from "@port-of-mars/shared/types";
-import { TournamentRoundSignup } from "../entity/TournamentRoundSignup";
-import { getLogger } from "@port-of-mars/server/settings";
+import { TournamentRoundSignup } from "@port-of-mars/server/entity/TournamentRoundSignup";
+import { ServerError } from "@port-of-mars/server/util";
+import { settings, getLogger } from "@port-of-mars/server/settings";
 
 const logger = getLogger(__filename);
 
@@ -100,6 +101,118 @@ export class TournamentService extends BaseService {
     const repository = this.em.getRepository(TournamentRoundDate);
     const scheduledDate = repository.create({ tournamentRoundId: tournamentRound.id, date });
     return repository.save(scheduledDate);
+  }
+
+  async getUpcomingScheduledRoundDates(minutesInFuture = 60): Promise<Array<TournamentRoundDate>> {
+    const now = new Date();
+    const future = new Date(now.getTime() + minutesInFuture * 60 * 1000);
+    return this.em.getRepository(TournamentRoundDate).find({
+      where: { date: Between(now, future) },
+    });
+  }
+
+  async sendRoundDateReminderEmails(minutesInFuture = 60): Promise<void> {
+    /**
+     * Sends reminder emails to users that have signed up for a round that is
+     * scheduled to start within <minutesInFuture> from now
+     */
+    const roundDates = await this.getUpcomingScheduledRoundDates(minutesInFuture);
+    for (const roundDate of roundDates) {
+      logger.info("Sending reminder emails for round date: %s", JSON.stringify(roundDate));
+      const minutesUntilLaunch = Math.round(
+        (roundDate.date.getTime() - new Date().getTime()) / (60 * 1000)
+      );
+      const users = await this.getSignedUpUsersForDate(roundDate.id);
+      for (const user of users) {
+        settings.emailer.sendMail(
+          {
+            from: `Port of Mars <${settings.supportEmail}>`,
+            to: user.email,
+            subject: "[Port of Mars] Launch Reminder",
+            text: `Hello ${user.username},
+            
+            The launch time that you signed up to be notified for is starting in
+            ${minutesUntilLaunch} minutes! Head over to the tournament dashboard at
+            ${settings.host}/#/tournament/dashboard and make sure you are
+            ready to join the lobby once it opens.
+
+            Good luck!
+            the Port of Mars team
+            `,
+            html: `Hello ${user.username},
+            <p>
+            The launch time that you signed up to be notified for is starting in
+            <b>${minutesUntilLaunch} minutes!</b>
+            </p>
+            <p>
+            Head over to the <a href='${settings.host}/#/tournament/dashboard'>tournament dashboard</a>
+            and make sure you are ready to join the lobby once it opens.
+            </p>
+            <p>Good luck!</p>
+            <p><i>the Port of Mars team</i></p>
+            `,
+          },
+          function (err, info) {
+            if (err) {
+              logger.warn(`error : $err`);
+              throw new ServerError(err);
+            } else {
+              logger.info(`Successfully sent? %o`, info);
+            }
+          }
+        );
+      }
+    }
+  }
+
+  async addSignup(user: User, tournamentRoundDateId: number, inviteId: number) {
+    const invite = await this.em.getRepository(TournamentRoundInvite).findOneOrFail(inviteId);
+    if (invite.userId !== user.id) {
+      throw new ServerError({
+        code: 403,
+        message: "Invalid tournament invitation",
+      });
+    }
+    const roundDate = await this.em
+      .getRepository(TournamentRoundDate)
+      .findOneOrFail(tournamentRoundDateId);
+
+    const signup = this.em.getRepository(TournamentRoundSignup).create({
+      tournamentRoundInvite: invite,
+      tournamentRoundDate: roundDate,
+    });
+    await this.em.getRepository(TournamentRoundSignup).save(signup);
+  }
+
+  async removeSignup(user: User, tournamentRoundDateId: number, inviteId?: number) {
+    const invite = await this.em.getRepository(TournamentRoundInvite).findOneOrFail(inviteId);
+    if (invite.userId !== user.id) {
+      throw new ServerError({
+        code: 403,
+        message: "Invalid tournament invitation",
+      });
+    }
+    const roundDate = await this.em
+      .getRepository(TournamentRoundDate)
+      .findOneOrFail(tournamentRoundDateId);
+    await this.em.getRepository(TournamentRoundSignup).delete({
+      tournamentRoundInvite: invite,
+      tournamentRoundDate: roundDate,
+    });
+  }
+
+  async getSignedUpUsersForDate(tournamentRoundDateId: number) {
+    const query = this.em
+      .getRepository(User)
+      .createQueryBuilder("user")
+      .leftJoin("user.invites", "invite")
+      .leftJoin("invite.signups", "signup")
+      .where("signup.tournamentRoundDateId = :tournamentRoundDateId", { tournamentRoundDateId })
+      .select("user.email")
+      .addSelect("user.username")
+      .distinct(true);
+    const users = await query.getMany();
+    return users.filter(u => u.email); // shouldn't be possible, but just in case
   }
 
   async getScheduledDates(options?: {

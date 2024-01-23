@@ -222,11 +222,18 @@ async function createApp() {
 
   gameServer.listen(port);
 
+  // schedule recurring jobs
   const services = getServices();
-  // run automated admin jobs (revoking expired mutes, etc) once a day
-  await services.admin.unapplyExpiredMutes();
   schedule.scheduleJob("0 0 * * *", async () => {
     await services.admin.unapplyExpiredMutes();
+  });
+
+  schedule.scheduleJob("30 * * * *", async () => {
+    const isTournamentEnabled = await services.settings.isTournamentEnabled();
+    if (!isTournamentEnabled) {
+      return;
+    }
+    await services.tournament.sendRoundDateReminderEmails();
   });
 }
 
