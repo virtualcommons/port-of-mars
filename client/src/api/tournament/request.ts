@@ -39,4 +39,30 @@ export class TournamentAPI {
       throw e;
     }
   }
+
+  async addSignup(tournamentRoundDateId: number) {
+    try {
+      return this.ajax.post(
+        url(`/tournament/signup/add?tournamentRoundDateId=${tournamentRoundDateId}`),
+        ({ data }) => data
+      );
+    } catch (e) {
+      console.log("Unable to add tournament signup");
+      console.log(e);
+      throw e;
+    }
+  }
+
+  async removeSignup(tournamentRoundDateId: number) {
+    try {
+      return this.ajax.post(
+        url(`/tournament/signup/remove?tournamentRoundDateId=${tournamentRoundDateId}`),
+        ({ data }) => data
+      );
+    } catch (e) {
+      console.log("Unable to remove tournament signup");
+      console.log(e);
+      throw e;
+    }
+  }
 }

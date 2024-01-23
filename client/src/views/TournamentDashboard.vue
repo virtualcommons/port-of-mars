@@ -81,7 +81,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Provide, Vue } from "vue-property-decorator";
 import { TournamentAPI } from "@port-of-mars/client/api/tournament/request";
 import { HOME_PAGE, MANUAL_PAGE, TOURNAMENT_LOBBY_PAGE } from "@port-of-mars/shared/routes";
 import { TournamentRoundInviteStatus } from "@port-of-mars/shared/types";
@@ -103,7 +103,7 @@ export default class TournamentDashboard extends Vue {
   tournamentLobby = { name: TOURNAMENT_LOBBY_PAGE };
   manual = { name: MANUAL_PAGE };
   home = { name: HOME_PAGE };
-  api!: TournamentAPI;
+  @Provide() api!: TournamentAPI;
 
   invite: TournamentRoundInviteStatus | null = null;
   loaded = false;

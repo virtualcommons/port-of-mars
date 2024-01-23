@@ -65,6 +65,9 @@ tournamentRouter.get("/status", async (req: Request, res: Response, next) => {
 
 tournamentRouter.get("/schedule", async (req: Request, res: Response, next) => {
   const user = req.user as User;
+  if (!user) {
+    res.status(401);
+  }
   try {
     const schedule = await getServices().tournament.getTournamentRoundSchedule({ user });
     res.json(schedule);
@@ -76,6 +79,9 @@ tournamentRouter.get("/schedule", async (req: Request, res: Response, next) => {
 
 tournamentRouter.post("/signup/add", async (req: Request, res: Response, next) => {
   const user = req.user as User;
+  if (!user) {
+    res.status(401);
+  }
   const tournamentRoundDateId = Number(req.query.tournamentRoundDateId);
   const inviteId = Number(req.query.inviteId);
   try {
@@ -90,6 +96,9 @@ tournamentRouter.post("/signup/add", async (req: Request, res: Response, next) =
 
 tournamentRouter.post("/signup/remove", async (req: Request, res: Response, next) => {
   const user = req.user as User;
+  if (!user) {
+    res.status(401);
+  }
   const tournamentRoundDateId = Number(req.query.tournamentRoundDateId);
   const inviteId = Number(req.query.inviteId);
   try {
