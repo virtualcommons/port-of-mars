@@ -40,27 +40,27 @@ export class TournamentAPI {
     }
   }
 
-  async addSignup(tournamentRoundDateId: number) {
+  async addSignup(tournamentRoundDateId: number, inviteId: number): Promise<void> {
     try {
-      return this.ajax.post(
-        url(`/tournament/signup/add?tournamentRoundDateId=${tournamentRoundDateId}`),
-        ({ data }) => data
-      );
+      const params = `?tournamentRoundDateId=${tournamentRoundDateId}&inviteId=${inviteId}`;
+      await this.ajax.post(url(`/tournament/signup/add${params}`), ({ data }) => {
+        this.store.commit("SET_TOURNAMENT_ROUND_SCHEDULE", data);
+      });
     } catch (e) {
-      console.log("Unable to add tournament signup");
+      console.log("Unable to add signup");
       console.log(e);
       throw e;
     }
   }
 
-  async removeSignup(tournamentRoundDateId: number) {
+  async removeSignup(tournamentRoundDateId: number, inviteId: number): Promise<void> {
     try {
-      return this.ajax.post(
-        url(`/tournament/signup/remove?tournamentRoundDateId=${tournamentRoundDateId}`),
-        ({ data }) => data
-      );
+      const params = `?tournamentRoundDateId=${tournamentRoundDateId}&inviteId=${inviteId}`;
+      await this.ajax.post(url(`/tournament/signup/remove${params}`), ({ data }) => {
+        this.store.commit("SET_TOURNAMENT_ROUND_SCHEDULE", data);
+      });
     } catch (e) {
-      console.log("Unable to remove tournament signup");
+      console.log("Unable to add signup");
       console.log(e);
       throw e;
     }

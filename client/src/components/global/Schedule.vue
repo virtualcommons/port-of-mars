@@ -1,48 +1,71 @@
 <template>
   <div>
     <b-list-group class="p-1">
-      <template v-for="(times, date) in launchTimes">
+      <template v-for="(launchTimes, date) in groupedLaunchTimes">
         <b-list-group-item class="text-center bg-primary border-0 my-1" :key="date">
           <b>{{ date }}</b>
         </b-list-group-item>
         <b-list-group-item
-          class="p-3 text-center bg-dark border-0 my-1 d-flex justify-content-between"
-          v-for="game in times"
-          :key="game.date.getTime()"
+          class="p-3 text-center bg-dark border-0 my-1 d-flex justify-content-between align-items-center"
+          v-for="launchTime in launchTimes"
+          :key="launchTime.date.getTime()"
         >
           <div class="launch-date">
-            <b>{{ formatTime(game.date) }}</b>
+            <b>{{ formatTime(launchTime.date) }}</b>
           </div>
-
-          <div class="label">
-            <input
-              type="checkbox"
-              class="toggle-input"
-              @change="handleToggleChange(date, game.date, $event.target.checked)"
-            />
+          <div class="d-flex align-items-between">
+            <div class="d-flex align-items-center mr-3">
+              <label class="mb-0 mr-2" for="signup-toggle">
+                <small v-if="launchTime.isSignedUp" class="text-success">Signed up</small>
+                <small v-else>Sign up</small>
+              </label>
+              <input
+                id="signup-toggle"
+                v-model="launchTime.isSignedUp"
+                type="checkbox"
+                class="toggle-input"
+                @click="handleSignupClicked(launchTime)"
+              />
+            </div>
+            <b-button-group>
+              <a
+                id="add-to-gcal"
+                class="btn btn-dark py-0"
+                :href="launchTime.googleInviteURL"
+                title="add to Google Calendar"
+                target="_blank"
+              >
+                <b-icon-google scale=".8"></b-icon-google>
+              </a>
+              <b-popover target="add-to-gcal" placement="bottom" triggers="hover focus">
+                <template #title></template>
+                add to Google Calendar
+              </b-popover>
+              <a
+                id="download-ics"
+                class="btn btn-dark py-0"
+                :href="launchTime.icsInviteURL"
+                title="download as ics"
+                target="_blank"
+              >
+                <b-icon-calendar-plus-fill scale=".8"></b-icon-calendar-plus-fill>
+              </a>
+              <b-popover target="download-ics" placement="bottom" triggers="hover focus">
+                <template #title></template>
+                download as .ics
+              </b-popover>
+            </b-button-group>
           </div>
-
-          <b-button-group>
-            <a
-              class="btn btn-secondary py-0"
-              :href="game.googleInviteURL"
-              title="add to Google Calendar"
-              target="_blank"
-            >
-              <b-icon-google scale=".8"></b-icon-google>
-            </a>
-            <a
-              class="btn btn-primary py-0"
-              :href="game.icsInviteURL"
-              title="download as ics"
-              target="_blank"
-            >
-              <b-icon-calendar-plus-fill scale=".8"></b-icon-calendar-plus-fill>
-            </a>
-          </b-button-group>
         </b-list-group-item>
       </template>
     </b-list-group>
+    <p>
+      <small>
+        * Signing up will increase the interest level for a launch time. This helps other players
+        find the best time to participate. We will also send you an email reminder 30 minutes prior
+        to launch.
+      </small>
+    </p>
   </div>
 </template>
 <script lang="ts">
@@ -51,32 +74,33 @@ import { google, ics } from "calendar-link";
 import { TournamentRoundScheduleDate } from "@port-of-mars/shared/types";
 import { TournamentAPI } from "@port-of-mars/client/api/tournament/request";
 
-interface LaunchTimes {
-  [date: string]: Array<
-    TournamentRoundScheduleDate & {
-      date: Date;
-      googleInviteURL: string;
-      icsInviteURL: string;
-    }
-  >;
+interface LaunchTime extends TournamentRoundScheduleDate {
+  date: Date;
+  googleInviteURL: string;
+  icsInviteURL: string;
+}
+
+interface GroupedLaunchTimes {
+  [date: string]: Array<LaunchTime>;
 }
 
 @Component({})
 export default class Schedule extends Vue {
   @Prop({ default: "schedule-header" }) scheduleId!: string;
   @Prop() schedule!: Array<TournamentRoundScheduleDate>;
+  @Prop() inviteId!: number;
 
-  @Inject() api!: TournamentAPI;
+  @Inject() readonly api!: TournamentAPI;
 
   static readonly SITE_URL = "https://portofmars.asu.edu";
 
-  get launchTimes() {
+  get groupedLaunchTimes() {
     return this.groupLaunchTimesByDate(this.schedule);
   }
 
-  groupLaunchTimesByDate(schedule: Array<TournamentRoundScheduleDate>): LaunchTimes {
+  groupLaunchTimesByDate(schedule: Array<TournamentRoundScheduleDate>): GroupedLaunchTimes {
     // returns an object with date strings mapped to individual scheduled dates with invite links
-    const grouped: LaunchTimes = {};
+    const grouped: GroupedLaunchTimes = {};
     for (const scheduleDate of schedule) {
       const launchDate = new Date(scheduleDate.timestamp);
       const dateStr = launchDate.toLocaleDateString([], {
@@ -100,17 +124,13 @@ export default class Schedule extends Vue {
     return grouped;
   }
 
-  // Handle toggle switch change event
-  handleToggleChange(date: string, gameDate: Date, isChecked: boolean) {
-    if (isChecked) {
-      // Add the email to the distribution list corresponding to the date
-      this.api.addSignup(); // FIXME: get tournamentRoundDateId on schedule
+  async handleSignupClicked(launchTime: LaunchTime) {
+    const tournamentRoundDateId = launchTime.tournamentRoundDateId;
+    if (launchTime.isSignedUp) {
+      await this.api.removeSignup(tournamentRoundDateId, this.inviteId);
     } else {
-      // Remove the email from the distribution list
-      this.api.removeSignup(); // FIXME: get tournamentRoundDateId on schedule
+      await this.api.addSignup(tournamentRoundDateId, this.inviteId);
     }
-    // Update the toggle state
-    this.toggleStates[date] = isChecked;
   }
 
   get calendarEventDescription() {
@@ -127,7 +147,7 @@ export default class Schedule extends Vue {
       location: Schedule.SITE_URL,
       start,
       description: this.calendarEventDescription,
-      duration: [1, "hour"],
+      duration: [1, "hour"] as any,
     };
   }
 

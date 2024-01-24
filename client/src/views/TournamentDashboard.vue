@@ -25,7 +25,7 @@
             <p v-if="!$tstore.getters.tournamentRoundHasUpcomingLaunch">
               No scheduled launch times
             </p>
-            <Schedule :schedule="$tstore.getters.tournamentSchedule" />
+            <Schedule :schedule="$tstore.getters.tournamentSchedule" :inviteId="invite?.id" />
           </div>
         </b-col>
         <b-col cols="6" class="content-container h-100">
@@ -100,10 +100,11 @@ import TournamentOnboardingSteps from "@port-of-mars/client/components/global/To
   },
 })
 export default class TournamentDashboard extends Vue {
+  @Provide() api: TournamentAPI = new TournamentAPI(this.$tstore, this.$ajax);
+
   tournamentLobby = { name: TOURNAMENT_LOBBY_PAGE };
   manual = { name: MANUAL_PAGE };
   home = { name: HOME_PAGE };
-  @Provide() api!: TournamentAPI;
 
   invite: TournamentRoundInviteStatus | null = null;
   loaded = false;
@@ -130,7 +131,6 @@ export default class TournamentDashboard extends Vue {
   }
 
   async created() {
-    this.api = new TournamentAPI(this.$tstore, this.$ajax);
     this.invite = await this.api.getInviteStatus();
     this.loaded = true;
   }
