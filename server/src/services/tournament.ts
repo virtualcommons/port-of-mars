@@ -349,6 +349,15 @@ export class TournamentService extends BaseService {
     });
   }
 
+  async getOrCreateInvite(user: User, tournamentRound: TournamentRound) {
+    const invite = await this.getTournamentRoundInvite(user, tournamentRound);
+    if (invite) {
+      return invite;
+    } else {
+      return await this.createInvite(user.id, tournamentRound.id);
+    }
+  }
+
   /**
    * Checks whether a user has an invite for a given or current round and has completed
    * the intro survey + has not participated yet

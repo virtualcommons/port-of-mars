@@ -12,6 +12,9 @@ import {
 import { getRandomizedMarsEventDeck } from "@port-of-mars/server/rooms/game/state/marsevents/common";
 import { Game, TournamentRoundInvite, Treatment, User } from "@port-of-mars/server/entity";
 import { TournamentRoundDate } from "@port-of-mars/server/entity/TournamentRoundDate";
+import { ServerError } from "@port-of-mars/server/util";
+import { settings } from "@port-of-mars/server/settings";
+import { TournamentRoundSignup } from "@port-of-mars/server/entity/TournamentRoundSignup";
 
 describe("a tournament", () => {
   let conn: Connection;
@@ -148,6 +151,10 @@ describe("a tournament", () => {
     const nearPast = new Date(now - (beforeOffset - 1000 * 60));
     await services.tournament.createScheduledRoundDate(nearPast, tournamentRound.id);
     expect(await services.tournament.isLobbyOpen({ beforeOffset, afterOffset })).toBe(true);
+    // reset dates
+    await manager
+      .getRepository(TournamentRoundDate)
+      .delete({ tournamentRoundId: tournamentRound.id });
   });
 
   describe("players", () => {
@@ -195,6 +202,102 @@ describe("a tournament", () => {
       invite.hasParticipated = true;
       await manager.getRepository(TournamentRoundInvite).save(invite);
       expect(await services.tournament.canPlayInRound(player1, tournamentRound)).toBe(false);
+    });
+
+    it("can sign up for tournament round dates", async () => {
+      await services.tournament.createScheduledRoundDate(
+        new Date(new Date().getTime() + 60 * 1000 * 60),
+        tournamentRound.id
+      );
+      await services.tournament.createScheduledRoundDate(
+        new Date(new Date().getTime() + 120 * 1000 * 60),
+        tournamentRound.id
+      );
+      let schedule = await services.tournament.getTournamentRoundSchedule({
+        user: player1,
+        afterOffset,
+      });
+      const date1Id = schedule[0].tournamentRoundDateId;
+      const date2Id = schedule[1].tournamentRoundDateId;
+      const invite1Id = (await services.tournament.getOrCreateInvite(player1, tournamentRound)).id;
+      const invite2Id = (await services.tournament.getOrCreateInvite(player2, tournamentRound)).id;
+      // player 1 signs up for date 1
+      await services.tournament.addSignup(player1, date1Id, invite1Id);
+      schedule = await services.tournament.getTournamentRoundSchedule({
+        user: player1,
+        afterOffset,
+      });
+      expect(schedule[0].isSignedUp).toBe(true);
+      expect(schedule[0].signupCount).toBe(1);
+      // two players sign up for the same date
+      await services.tournament.addSignup(player2, date1Id, invite2Id);
+      schedule = await services.tournament.getTournamentRoundSchedule({
+        user: player2,
+        afterOffset,
+      });
+      expect(schedule[0].isSignedUp).toBe(true);
+      expect(schedule[0].signupCount).toBe(2);
+      // player 2 signs up for date 2
+      await services.tournament.addSignup(player2, date2Id, invite2Id);
+      schedule = await services.tournament.getTournamentRoundSchedule({
+        user: player2,
+        afterOffset,
+      });
+      expect(schedule[1].isSignedUp).toBe(true);
+      expect(schedule[1].signupCount).toBe(1);
+      // both players cancel signups for date 1
+      await services.tournament.removeSignup(player1, date1Id, invite1Id);
+      await services.tournament.removeSignup(player2, date1Id, invite2Id);
+      schedule = await services.tournament.getTournamentRoundSchedule({
+        user: player2,
+        afterOffset,
+      });
+      expect(schedule[0].isSignedUp).toBe(false);
+      expect(schedule[0].signupCount).toBe(0);
+      await services.tournament.removeSignup(player2, date2Id, invite2Id);
+    });
+
+    it("handles invalid signup requests", async () => {
+      await services.tournament.createScheduledRoundDate(
+        new Date(new Date().getTime() + 60 * 1000 * 60),
+        tournamentRound.id
+      );
+      // player cannot sign up for the same date twice
+      let schedule = await services.tournament.getTournamentRoundSchedule({
+        user: player1,
+        afterOffset,
+      });
+      const date1Id = schedule[0].tournamentRoundDateId;
+      const invite1Id = (await services.tournament.getOrCreateInvite(player1, tournamentRound)).id;
+      const invite2Id = (await services.tournament.getOrCreateInvite(player2, tournamentRound)).id;
+      await services.tournament.addSignup(player1, date1Id, invite1Id);
+      await services.tournament.addSignup(player1, date1Id, invite1Id);
+      schedule = await services.tournament.getTournamentRoundSchedule({
+        user: player1,
+        afterOffset,
+      });
+      expect(schedule[0].signupCount).toBe(1);
+      // user cannot sign up a different player for a date
+      await expect(services.tournament.addSignup(player1, date1Id, invite2Id)).rejects.toThrowError(
+        ServerError
+      );
+    });
+
+    it("gets sent an email reminder", async () => {
+      await services.tournament.createScheduledRoundDate(
+        new Date(new Date().getTime() + 5 * 1000 * 60),
+        tournamentRound.id
+      );
+      const schedule = await services.tournament.getTournamentRoundSchedule({
+        user: player1,
+        afterOffset,
+      });
+      const nearestDateId = schedule[0].tournamentRoundDateId;
+      const invite1Id = (await services.tournament.getOrCreateInvite(player1, tournamentRound)).id;
+      await services.tournament.addSignup(player1, nearestDateId, invite1Id);
+      await services.tournament.sendRoundDateReminderEmails();
+      expect(settings.emailer.lastEmail?.from).toBe("Port of Mars <portmars@asu.edu>");
+      expect(settings.emailer.lastEmail?.to).toBe(player1.email);
     });
   });
 
