@@ -27,6 +27,13 @@
             </p>
             <Schedule :schedule="$tstore.getters.tournamentSchedule" :inviteId="invite?.id" />
           </div>
+          <p>
+            <small>
+              * Signing up is not necessary to participate at any given time, but it will increase
+              the interest level for a launch time which helps other players find the best time to
+              participate. We will also send you an email reminder 30 minutes prior to launch.
+            </small>
+          </p>
         </b-col>
         <b-col cols="6" class="content-container h-100">
           <div

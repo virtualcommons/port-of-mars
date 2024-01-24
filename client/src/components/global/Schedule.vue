@@ -6,66 +6,73 @@
           <b>{{ date }}</b>
         </b-list-group-item>
         <b-list-group-item
-          class="p-3 text-center bg-dark border-0 my-1 d-flex justify-content-between align-items-center"
+          class="p-0 bg-dark border-0 my-1 d-flex flex-column"
           v-for="launchTime in launchTimes"
           :key="launchTime.date.getTime()"
         >
-          <div class="launch-date">
-            <b>{{ formatTime(launchTime.date) }}</b>
-          </div>
-          <div class="d-flex align-items-between">
-            <div class="d-flex align-items-center mr-3">
-              <label class="mb-0 mr-2" for="signup-toggle">
-                <small v-if="launchTime.isSignedUp" class="text-success">Signed up</small>
-                <small v-else>Sign up</small>
-              </label>
-              <input
-                id="signup-toggle"
-                v-model="launchTime.isSignedUp"
-                type="checkbox"
-                class="toggle-input"
-                @click="handleSignupClicked(launchTime)"
-              />
+          <div class="p-3 text-center d-flex justify-content-between align-items-center">
+            <div class="launch-date">
+              <b>{{ formatTime(launchTime.date) }}</b>
             </div>
-            <b-button-group>
-              <a
-                id="add-to-gcal"
-                class="btn btn-dark py-0"
-                :href="launchTime.googleInviteURL"
-                title="add to Google Calendar"
-                target="_blank"
-              >
-                <b-icon-google scale=".8"></b-icon-google>
-              </a>
-              <b-popover target="add-to-gcal" placement="bottom" triggers="hover focus">
-                <template #title></template>
-                add to Google Calendar
-              </b-popover>
-              <a
-                id="download-ics"
-                class="btn btn-dark py-0"
-                :href="launchTime.icsInviteURL"
-                title="download as ics"
-                target="_blank"
-              >
-                <b-icon-calendar-plus-fill scale=".8"></b-icon-calendar-plus-fill>
-              </a>
-              <b-popover target="download-ics" placement="bottom" triggers="hover focus">
-                <template #title></template>
-                download as .ics
-              </b-popover>
-            </b-button-group>
+            <div class="d-flex align-items-between">
+              <div class="d-flex align-items-center mr-3">
+                <label class="mb-0 mr-2" for="signup-toggle">
+                  <small v-if="launchTime.isSignedUp" class="text-success">Signed up</small>
+                  <small v-else>Sign up</small>
+                </label>
+                <input
+                  id="signup-toggle"
+                  v-model="launchTime.isSignedUp"
+                  type="checkbox"
+                  class="toggle-input"
+                  @click="handleSignupClicked(launchTime)"
+                />
+              </div>
+              <b-button-group>
+                <a
+                  id="add-to-gcal"
+                  class="btn btn-dark py-0"
+                  :href="launchTime.googleInviteURL"
+                  title="add to Google Calendar"
+                  target="_blank"
+                >
+                  <b-icon-google scale=".8"></b-icon-google>
+                </a>
+                <b-popover target="add-to-gcal" placement="bottom" triggers="hover focus">
+                  <template #title></template>
+                  add to Google Calendar
+                </b-popover>
+                <a
+                  id="download-ics"
+                  class="btn btn-dark py-0"
+                  :href="launchTime.icsInviteURL"
+                  title="download as ics"
+                  target="_blank"
+                >
+                  <b-icon-calendar-plus-fill scale=".8"></b-icon-calendar-plus-fill>
+                </a>
+                <b-popover target="download-ics" placement="bottom" triggers="hover focus">
+                  <template #title></template>
+                  download as .ics
+                </b-popover>
+              </b-button-group>
+            </div>
           </div>
+          <span>
+            <b-progress
+              id="interest-bar"
+              :value="launchTime.signupCount + 1"
+              :max="maxInterestLevel"
+              class="bg-dark"
+              height=".5rem"
+              variant="success"
+              :style="getInterestBarOpacity(launchTime.signupCount)"
+              title="interest level"
+            ></b-progress>
+          </span>
         </b-list-group-item>
       </template>
     </b-list-group>
-    <p>
-      <small>
-        * Signing up will increase the interest level for a launch time. This helps other players
-        find the best time to participate. We will also send you an email reminder 30 minutes prior
-        to launch.
-      </small>
-    </p>
   </div>
 </template>
 <script lang="ts">
@@ -96,6 +103,19 @@ export default class Schedule extends Vue {
 
   get groupedLaunchTimes() {
     return this.groupLaunchTimesByDate(this.schedule);
+  }
+
+  get maxInterestLevel() {
+    // currently average signup count + 5
+    const signupCounts = this.schedule.map(t => t.signupCount);
+    const total = signupCounts.reduce((a, b) => a + b, 0);
+    return total / signupCounts.length + 5;
+  }
+
+  getInterestBarOpacity(signupCount: number) {
+    const maxInterestLevel = this.maxInterestLevel;
+    const opacity = (signupCount + 1) / maxInterestLevel;
+    return `opacity: ${opacity}`;
   }
 
   groupLaunchTimesByDate(schedule: Array<TournamentRoundScheduleDate>): GroupedLaunchTimes {
