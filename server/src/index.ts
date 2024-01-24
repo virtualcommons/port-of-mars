@@ -166,10 +166,21 @@ async function createApp() {
         useDefaults: false,
         directives: {
           defaultSrc: ["'self'"],
-          connectSrc: ["'self'", "sentry.comses.net", "https://*.google-analytics.com", "https://*.analytics.google.com", "https://*.googletagmanager.com"],
+          connectSrc: [
+            "'self'",
+            "sentry.comses.net",
+            "https://*.google-analytics.com",
+            "https://*.analytics.google.com",
+            "https://*.googletagmanager.com",
+          ],
           frameSrc: ["'self'", "player.vimeo.com", "youtube.com", "https://www.youtube.com"],
           scriptSrc: ["'self'", "sentry.comses.net", "https://*.googletagmanager.com"],
-          imgSrc: ["'self'", "data:", "https://*.google-analytics.com", "https://*.googletagmanager.com"],
+          imgSrc: [
+            "'self'",
+            "data:",
+            "https://*.google-analytics.com",
+            "https://*.googletagmanager.com",
+          ],
           styleSrc: ["'self'", "fonts.googleapis.com", "'unsafe-inline'"],
           fontSrc: ["'self'", "fonts.gstatic.com"],
           objectSrc: ["'none'"],
