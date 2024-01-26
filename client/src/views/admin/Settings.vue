@@ -99,6 +99,22 @@
                 </b-form-checkbox>
               </b-form-group>
               <b-form-group
+                id="signups-threshold-group"
+                label="Scheduled Date Signups Popularity Threshold"
+                label-for="signups-threshold"
+                description="Number of signups at which a date will be considered 'most popular'"
+              >
+                <b-form-input
+                  class="custom-form-input"
+                  id="signups-threshold"
+                  type="number"
+                  min="1"
+                  max="100"
+                  v-model="form.tournamentSignupsPopularityThreshold"
+                  required
+                ></b-form-input>
+              </b-form-group>
+              <b-form-group
                 id="before-offset-group"
                 label="Tournament Lobby Open Before (minutes)"
                 label-for="before-offset"
@@ -155,6 +171,7 @@ export default class Reports extends Vue {
     defaultDaysMuted: 0,
     tournamentLobbyOpenBeforeOffset: 10,
     tournamentLobbyOpenAfterOffset: 30,
+    tournamentSignupsPopularityThreshold: 10,
     announcementBannerText: "",
   };
 

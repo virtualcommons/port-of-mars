@@ -67,6 +67,9 @@ export class RedisSettings {
       isFreePlayEnabled: !!_.toNumber(settings.isFreePlayEnabled),
       tournamentLobbyOpenBeforeOffset: _.toNumber(settings.tournamentLobbyOpenBeforeOffset),
       tournamentLobbyOpenAfterOffset: _.toNumber(settings.tournamentLobbyOpenAfterOffset),
+      tournamentSignupsPopularityThreshold: _.toNumber(
+        settings.tournamentSignupsPopularityThreshold
+      ),
       announcementBannerText: settings.announcementBannerText,
     };
   }
@@ -99,6 +102,11 @@ export class RedisSettings {
   // how many minutes after the tournament starts that the lobby will remain open (min)
   async tournamentLobbyOpenAfterOffset(): Promise<number> {
     return _.toNumber(await this.client.hget("settings", "tournamentLobbyOpenAfterOffset"));
+  }
+
+  // the number of signups at which a round date is considered popular
+  async tournamentSignupsPopularityThreshold(): Promise<number> {
+    return _.toNumber(await this.client.hget("settings", "tournamentSignupsPopularityThreshold"));
   }
 
   // text to display on a banner visible at the top of the landing page

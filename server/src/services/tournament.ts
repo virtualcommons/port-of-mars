@@ -165,18 +165,28 @@ export class TournamentService extends BaseService {
     }
   }
 
-  async addSignup(user: User, tournamentRoundDateId: number, inviteId: number) {
+  async getAndConfirmValidInvite(user: User, inviteId: number): Promise<TournamentRoundInvite> {
     const invite = await this.em.getRepository(TournamentRoundInvite).findOneOrFail(inviteId);
     if (invite.userId !== user.id) {
       throw new ServerError({
-        code: 403,
+        code: 400,
         message: "Invalid tournament invitation",
       });
     }
+    if (invite.hasParticipated) {
+      throw new ServerError({
+        code: 400,
+        message: "You have already participated in a game for this round",
+      });
+    }
+    return invite;
+  }
+
+  async addSignup(user: User, tournamentRoundDateId: number, inviteId: number) {
+    const invite = await this.getAndConfirmValidInvite(user, inviteId);
     const roundDate = await this.em
       .getRepository(TournamentRoundDate)
       .findOneOrFail(tournamentRoundDateId);
-
     const signup = this.em.getRepository(TournamentRoundSignup).create({
       tournamentRoundInvite: invite,
       tournamentRoundDate: roundDate,
@@ -184,14 +194,8 @@ export class TournamentService extends BaseService {
     await this.em.getRepository(TournamentRoundSignup).save(signup);
   }
 
-  async removeSignup(user: User, tournamentRoundDateId: number, inviteId?: number) {
-    const invite = await this.em.getRepository(TournamentRoundInvite).findOneOrFail(inviteId);
-    if (invite.userId !== user.id) {
-      throw new ServerError({
-        code: 403,
-        message: "Invalid tournament invitation",
-      });
-    }
+  async removeSignup(user: User, tournamentRoundDateId: number, inviteId: number) {
+    const invite = await this.getAndConfirmValidInvite(user, inviteId);
     const roundDate = await this.em
       .getRepository(TournamentRoundDate)
       .findOneOrFail(tournamentRoundDateId);
@@ -202,12 +206,18 @@ export class TournamentService extends BaseService {
   }
 
   async getSignedUpUsersForDate(tournamentRoundDateId: number) {
+    /**
+     * Returns an array of users that have signed up for the given round date
+     * and have not already participated in a game for that round
+     */
     const query = this.em
       .getRepository(User)
       .createQueryBuilder("user")
-      .leftJoin("user.invites", "invite")
-      .leftJoin("invite.signups", "signup")
+      .leftJoin("user.invites", "invites")
+      .leftJoin("invites.signups", "signup")
+      .leftJoin("signup.tournamentRoundInvite", "invite")
       .where("signup.tournamentRoundDateId = :tournamentRoundDateId", { tournamentRoundDateId })
+      .andWhere("invite.hasParticipated = false")
       .select("user.email")
       .addSelect("user.username")
       .distinct(true);
@@ -262,7 +272,10 @@ export class TournamentService extends BaseService {
       .leftJoin("signup.tournamentRoundInvite", "invite")
       .select("roundDate.id", "tournamentRoundDateId")
       .addSelect("roundDate.date", "date")
-      .addSelect("COUNT(signup.tournamentRoundDateId)", "signupCount")
+      .addSelect(
+        "COUNT(CASE WHEN invite.hasParticipated = false THEN 1 ELSE null END)",
+        "signupCount"
+      ) // only count signups for players that have not participated yet
       .where("roundDate.tournamentRoundId = :tournamentRoundId", {
         tournamentRoundId: tournamentRound.id,
       })
@@ -279,7 +292,8 @@ export class TournamentService extends BaseService {
           .from(TournamentRoundSignup, "subSignup")
           .innerJoin("subSignup.tournamentRoundInvite", "subInvite")
           .where("subSignup.tournamentRoundDateId = roundDate.id")
-          .andWhere("subInvite.userId = :userId", { userId: user!.id });
+          .andWhere("subInvite.userId = :userId", { userId: user!.id })
+          .andWhere("subInvite.hasParticipated = false");
       }, "isSignedUp");
     }
 
@@ -420,11 +434,14 @@ export class TournamentService extends BaseService {
     }
     const tournament = tournamentRound.tournament;
     if (!tournament) return null;
+    const signupsPopularityThreshold =
+      await getServices().settings.tournamentSignupsPopularityThreshold();
     return {
       name: tournament.name,
       description: tournament.description ?? "",
       lobbyOpenBeforeOffset: await this.getBeforeOffset(),
       lobbyOpenAfterOffset: await this.getAfterOffset(),
+      signupsPopularityThreshold,
       currentRound: {
         round: tournamentRound.roundNumber,
         championship: tournamentRound.championship,

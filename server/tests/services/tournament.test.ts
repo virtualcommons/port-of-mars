@@ -165,6 +165,16 @@ describe("a tournament", () => {
       [player1, player2] = await createUsers(manager, "mary", [1, 2]);
     });
 
+    async function resetHasParticipated() {
+      for (const p of [player1, player2]) {
+        const invite = await services.tournament.getTournamentRoundInvite(p, tournamentRound);
+        if (invite) {
+          invite.hasParticipated = false;
+          await manager.getRepository(TournamentRoundInvite).save(invite);
+        }
+      }
+    }
+
     it("will be automatically given an invite for round 1", async () => {
       expect((await services.tournament.getCurrentTournamentRound()).roundNumber).toBe(1);
       const inviteStatus = await services.tournament.getTournamentRoundInviteStatus(player1);
@@ -205,6 +215,7 @@ describe("a tournament", () => {
     });
 
     it("can sign up for tournament round dates", async () => {
+      await resetHasParticipated();
       await services.tournament.createScheduledRoundDate(
         new Date(new Date().getTime() + 60 * 1000 * 60),
         tournamentRound.id
@@ -258,6 +269,7 @@ describe("a tournament", () => {
     });
 
     it("handles invalid signup requests", async () => {
+      await resetHasParticipated();
       await services.tournament.createScheduledRoundDate(
         new Date(new Date().getTime() + 60 * 1000 * 60),
         tournamentRound.id
@@ -278,12 +290,29 @@ describe("a tournament", () => {
       });
       expect(schedule[0].signupCount).toBe(1);
       // user cannot sign up a different player for a date
-      await expect(services.tournament.addSignup(player1, date1Id, invite2Id)).rejects.toThrowError(
-        ServerError
-      );
+      await expect(
+        services.tournament.addSignup(player1, date1Id, invite2Id)
+      ).rejects.toThrowError();
+      // user cannot sign up after participating in the round
+      const invite = (await services.tournament.getTournamentRoundInvite(
+        player1,
+        tournamentRound
+      ))!;
+      invite.hasParticipated = true;
+      await manager.getRepository(TournamentRoundInvite).save(invite);
+      await expect(
+        services.tournament.addSignup(player1, date1Id, invite1Id)
+      ).rejects.toThrowError();
+      // user's signup is now discounted after participating
+      schedule = await services.tournament.getTournamentRoundSchedule({
+        user: player1,
+        afterOffset,
+      });
+      expect(schedule[0].signupCount).toBe(0);
     });
 
     it("gets sent an email reminder", async () => {
+      await resetHasParticipated();
       await services.tournament.createScheduledRoundDate(
         new Date(new Date().getTime() + 5 * 1000 * 60),
         tournamentRound.id

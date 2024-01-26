@@ -471,6 +471,7 @@ export interface TournamentStatus {
   description: string;
   lobbyOpenBeforeOffset: number;
   lobbyOpenAfterOffset: number;
+  signupsPopularityThreshold: number;
   currentRound: {
     round: number;
     championship: boolean;
@@ -517,5 +518,6 @@ export interface DynamicSettingsData {
   isFreePlayEnabled: boolean;
   tournamentLobbyOpenBeforeOffset: number;
   tournamentLobbyOpenAfterOffset: number;
+  tournamentSignupsPopularityThreshold: number;
   announcementBannerText: string;
 }

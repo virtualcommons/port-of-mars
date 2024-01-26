@@ -5,5 +5,6 @@
   "defaultDaysMuted": 3,
   "tournamentLobbyOpenBeforeOffset": 10,
   "tournamentLobbyOpenAfterOffset": 30,
+  "tournamentSignupsPopularityThreshold": 10,
   "announcementBannerText": ""
 }
