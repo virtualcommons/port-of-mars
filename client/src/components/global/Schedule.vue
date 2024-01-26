@@ -15,10 +15,10 @@
               <b>{{ formatTime(launchTime.date) }}</b>
             </div>
             <div class="d-flex align-items-between">
-              <div class="d-flex align-items-center mr-3">
+              <div v-if="!invite.hasParticipated" class="d-flex align-items-center mr-3">
                 <label class="mb-0 mr-2" for="signup-toggle">
                   <small v-if="launchTime.isSignedUp" class="text-success">Signed up</small>
-                  <small v-else>Sign up</small>
+                  <small v-else>Sign up to get notified *</small>
                 </label>
                 <input
                   id="signup-toggle"
@@ -58,18 +58,18 @@
               </b-button-group>
             </div>
           </div>
-          <span>
+          <div>
             <b-progress
               id="interest-bar"
-              :value="launchTime.signupCount + 1"
-              :max="maxInterestLevel"
+              :value="launchTime.signupCount + 0.5"
+              :max="signupsPopularityThreshold"
               class="bg-dark"
-              height=".5rem"
-              variant="success"
-              :style="getInterestBarOpacity(launchTime.signupCount)"
+              height="0.5rem"
+              :variant="getInterestBarVariant(launchTime.signupCount)"
               title="interest level"
+              style="opacity: 0.5"
             ></b-progress>
-          </span>
+          </div>
         </b-list-group-item>
       </template>
     </b-list-group>
@@ -78,7 +78,10 @@
 <script lang="ts">
 import { Component, Inject, Prop, Vue } from "vue-property-decorator";
 import { google, ics } from "calendar-link";
-import { TournamentRoundScheduleDate } from "@port-of-mars/shared/types";
+import {
+  TournamentRoundInviteStatus,
+  TournamentRoundScheduleDate,
+} from "@port-of-mars/shared/types";
 import { TournamentAPI } from "@port-of-mars/client/api/tournament/request";
 
 interface LaunchTime extends TournamentRoundScheduleDate {
@@ -95,7 +98,7 @@ interface GroupedLaunchTimes {
 export default class Schedule extends Vue {
   @Prop({ default: "schedule-header" }) scheduleId!: string;
   @Prop() schedule!: Array<TournamentRoundScheduleDate>;
-  @Prop() inviteId!: number;
+  @Prop() invite!: TournamentRoundInviteStatus;
 
   @Inject() readonly api!: TournamentAPI;
 
@@ -105,17 +108,12 @@ export default class Schedule extends Vue {
     return this.groupLaunchTimesByDate(this.schedule);
   }
 
-  get maxInterestLevel() {
-    // currently average signup count + 5
-    const signupCounts = this.schedule.map(t => t.signupCount);
-    const total = signupCounts.reduce((a, b) => a + b, 0);
-    return total / signupCounts.length + 5;
+  get signupsPopularityThreshold() {
+    return this.$store.getters.tournamentStatus.signupsPopularityThreshold;
   }
 
-  getInterestBarOpacity(signupCount: number) {
-    const maxInterestLevel = this.maxInterestLevel;
-    const opacity = (signupCount + 1) / maxInterestLevel;
-    return `opacity: ${opacity}`;
+  getInterestBarVariant(signupCount: number) {
+    return signupCount < this.signupsPopularityThreshold / 2 ? "warning" : "success";
   }
 
   groupLaunchTimesByDate(schedule: Array<TournamentRoundScheduleDate>): GroupedLaunchTimes {
@@ -147,9 +145,9 @@ export default class Schedule extends Vue {
   async handleSignupClicked(launchTime: LaunchTime) {
     const tournamentRoundDateId = launchTime.tournamentRoundDateId;
     if (launchTime.isSignedUp) {
-      await this.api.removeSignup(tournamentRoundDateId, this.inviteId);
+      await this.api.removeSignup(tournamentRoundDateId, this.invite.id);
     } else {
-      await this.api.addSignup(tournamentRoundDateId, this.inviteId);
+      await this.api.addSignup(tournamentRoundDateId, this.invite.id);
     }
   }
 

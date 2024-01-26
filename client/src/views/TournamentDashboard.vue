@@ -25,13 +25,14 @@
             <p v-if="!$tstore.getters.tournamentRoundHasUpcomingLaunch">
               No scheduled launch times
             </p>
-            <Schedule :schedule="$tstore.getters.tournamentSchedule" :inviteId="invite?.id" />
+            <Schedule :schedule="$tstore.getters.tournamentSchedule" :invite="invite" />
           </div>
           <p>
             <small>
-              * Signing up is not necessary to participate at any given time, but it will increase
-              the interest level for a launch time which helps other players find the best time to
-              participate. We will also send you an email reminder 30 minutes prior to launch.
+              * We will send you an email reminder 30 minutes prior to launch. Signing up is not
+              necessary to participate at any given time, but it will increase the interest level
+              shown below each time-slot which helps other players find the best time to
+              participate.
             </small>
           </p>
         </b-col>
