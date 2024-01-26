@@ -213,9 +213,8 @@ export class TournamentService extends BaseService {
     const query = this.em
       .getRepository(User)
       .createQueryBuilder("user")
-      .leftJoin("user.invites", "invites")
-      .leftJoin("invites.signups", "signup")
-      .leftJoin("signup.tournamentRoundInvite", "invite")
+      .leftJoin("user.invites", "invite")
+      .leftJoin("invite.signups", "signup")
       .where("signup.tournamentRoundDateId = :tournamentRoundDateId", { tournamentRoundDateId })
       .andWhere("invite.hasParticipated = false")
       .select("user.email")
