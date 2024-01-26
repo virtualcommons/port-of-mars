@@ -15,13 +15,13 @@
               <b>{{ formatTime(launchTime.date) }}</b>
             </div>
             <div class="d-flex align-items-between">
-              <div v-if="!invite.hasParticipated" class="d-flex align-items-center mr-3">
-                <label class="mb-0 mr-2" for="signup-toggle">
+              <div v-if="!invite?.hasParticipated" class="d-flex align-items-center mr-3">
+                <label class="mb-0 mr-2" :for="`signup-toggle-${launchTime.tournamentRoundDateId}`">
                   <small v-if="launchTime.isSignedUp" class="text-success">Signed up</small>
                   <small v-else>Sign up to get notified *</small>
                 </label>
                 <input
-                  id="signup-toggle"
+                  :id="`signup-toggle-${launchTime.tournamentRoundDateId}`"
                   v-model="launchTime.isSignedUp"
                   type="checkbox"
                   class="toggle-input"
@@ -98,7 +98,7 @@ interface GroupedLaunchTimes {
 export default class Schedule extends Vue {
   @Prop({ default: "schedule-header" }) scheduleId!: string;
   @Prop() schedule!: Array<TournamentRoundScheduleDate>;
-  @Prop() invite!: TournamentRoundInviteStatus;
+  @Prop() invite!: TournamentRoundInviteStatus | null;
 
   @Inject() readonly api!: TournamentAPI;
 
@@ -144,6 +144,7 @@ export default class Schedule extends Vue {
 
   async handleSignupClicked(launchTime: LaunchTime) {
     const tournamentRoundDateId = launchTime.tournamentRoundDateId;
+    if (!this.invite) return;
     if (launchTime.isSignedUp) {
       await this.api.removeSignup(tournamentRoundDateId, this.invite.id);
     } else {
