@@ -7,7 +7,7 @@ export class Teacher {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @OneToOne(type => User, user => user.teacher, { nullable: false })
+  @OneToOne(type => User, user => user, { nullable: false })
   @JoinColumn()
   user!: User;
 
