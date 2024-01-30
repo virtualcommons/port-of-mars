@@ -40,27 +40,18 @@ export class TournamentAPI {
     }
   }
 
-  async addSignup(tournamentRoundDateId: number, inviteId: number): Promise<void> {
+  async addOrRemoveSignup(
+    action: "add" | "remove",
+    tournamentRoundDateId: number,
+    inviteId: number
+  ) {
     try {
       const params = `?tournamentRoundDateId=${tournamentRoundDateId}&inviteId=${inviteId}`;
-      await this.ajax.post(url(`/tournament/signup/add${params}`), ({ data }) => {
+      return this.ajax.post(url(`/tournament/signup/${action}${params}`), ({ data }) => {
         this.store.commit("SET_TOURNAMENT_ROUND_SCHEDULE", data);
       });
     } catch (e) {
-      console.log("Unable to add signup");
-      console.log(e);
-      throw e;
-    }
-  }
-
-  async removeSignup(tournamentRoundDateId: number, inviteId: number): Promise<void> {
-    try {
-      const params = `?tournamentRoundDateId=${tournamentRoundDateId}&inviteId=${inviteId}`;
-      await this.ajax.post(url(`/tournament/signup/remove${params}`), ({ data }) => {
-        this.store.commit("SET_TOURNAMENT_ROUND_SCHEDULE", data);
-      });
-    } catch (e) {
-      console.log("Unable to add signup");
+      console.log(`Unable to ${action} signup`);
       console.log(e);
       throw e;
     }

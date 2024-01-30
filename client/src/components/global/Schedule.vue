@@ -20,11 +20,9 @@
                   <small v-if="launchTime.isSignedUp" class="text-success">Signed up</small>
                   <small v-else>Sign up to get notified *</small>
                 </label>
-                <input
+                <Toggle
                   :id="`signup-toggle-${launchTime.tournamentRoundDateId}`"
                   v-model="launchTime.isSignedUp"
-                  type="checkbox"
-                  class="toggle-input"
                   @click="handleSignupClicked(launchTime)"
                 />
               </div>
@@ -83,6 +81,7 @@ import {
   TournamentRoundScheduleDate,
 } from "@port-of-mars/shared/types";
 import { TournamentAPI } from "@port-of-mars/client/api/tournament/request";
+import Toggle from "@port-of-mars/client/components/global/Toggle.vue";
 
 interface LaunchTime extends TournamentRoundScheduleDate {
   date: Date;
@@ -94,7 +93,11 @@ interface GroupedLaunchTimes {
   [date: string]: Array<LaunchTime>;
 }
 
-@Component({})
+@Component({
+  components: {
+    Toggle,
+  },
+})
 export default class Schedule extends Vue {
   @Prop({ default: "schedule-header" }) scheduleId!: string;
   @Prop() schedule!: Array<TournamentRoundScheduleDate>;
@@ -145,11 +148,8 @@ export default class Schedule extends Vue {
   async handleSignupClicked(launchTime: LaunchTime) {
     const tournamentRoundDateId = launchTime.tournamentRoundDateId;
     if (!this.invite) return;
-    if (launchTime.isSignedUp) {
-      await this.api.removeSignup(tournamentRoundDateId, this.invite.id);
-    } else {
-      await this.api.addSignup(tournamentRoundDateId, this.invite.id);
-    }
+    const action = launchTime.isSignedUp ? "remove" : "add";
+    await this.api.addOrRemoveSignup(action, tournamentRoundDateId, this.invite.id);
   }
 
   get calendarEventDescription() {
@@ -179,48 +179,4 @@ export default class Schedule extends Vue {
   }
 }
 </script>
-<style lang="scss" scoped>
-.switch.square label .lever {
-  width: 54px;
-  height: 34px;
-  border-radius: 0px;
-}
-.switch.square label .lever:after {
-  width: 26px;
-  height: 26px;
-  border-radius: 0px;
-  left: 4px;
-  top: 4px;
-}
-
-.toggle-input {
-  position: relative;
-  appearance: none;
-  width: 45px; /* Adjust the width as needed */
-  height: 25px; /* Adjust the height as needed */
-  background-color: #a49ca6; /* Background color when the toggle is off */
-  border-radius: 2px; /* Square corners */
-  cursor: pointer;
-  outline: none;
-}
-
-.toggle-input:checked {
-  background-color: rgb(95, 141, 75); /* Background color when the toggle is on */
-}
-
-.toggle-input::before {
-  content: "";
-  position: absolute;
-  width: 20px; /* Width of the toggle button */
-  height: 20px; /* Height of the toggle button */
-  background-color: #fff; /* Color of the toggle button */
-  border-radius: 5%; /* Make it a rounded square*/
-  top: 3px; /* Adjust the vertical position */
-  left: 3px; /* Adjust the horizontal position */
-  transition: 0.3s; /* Transition for smooth animation */
-}
-
-.toggle-input:checked::before {
-  transform: translateX(20px); /* Move the toggle button to the right when checked */
-}
-</style>
+<style lang="scss" scoped></style>
