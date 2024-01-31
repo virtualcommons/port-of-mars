@@ -23,7 +23,7 @@
                 <Toggle
                   :id="`signup-toggle-${launchTime.tournamentRoundDateId}`"
                   v-model="launchTime.isSignedUp"
-                  @click="handleSignupClicked(launchTime)"
+                  @click="toggleSignup(launchTime)"
                 />
               </div>
               <b-button-group>
@@ -145,11 +145,12 @@ export default class Schedule extends Vue {
     return grouped;
   }
 
-  async handleSignupClicked(launchTime: LaunchTime) {
+  async toggleSignup(launchTime: LaunchTime) {
     const tournamentRoundDateId = launchTime.tournamentRoundDateId;
     if (!this.invite) return;
-    const action = launchTime.isSignedUp ? "remove" : "add";
-    await this.api.addOrRemoveSignup(action, tournamentRoundDateId, this.invite.id);
+    // toggle signup - if launchTime.isSignedUp is true they were already registered for this launchTime
+    const shouldSignUp = !launchTime.isSignedUp;
+    await this.api.setSignup(shouldSignUp, tournamentRoundDateId, this.invite.id);
   }
 
   get calendarEventDescription() {

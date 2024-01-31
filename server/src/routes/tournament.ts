@@ -85,6 +85,8 @@ tournamentRouter.post("/signup/add", async (req: Request, res: Response, next) =
   const tournamentRoundDateId = Number(req.query.tournamentRoundDateId);
   const inviteId = Number(req.query.inviteId);
   try {
+    // consider sending an immediate google calendar via email
+    // https://github.com/virtualcommons/planning/issues/69
     await getServices().tournament.addSignup(user, tournamentRoundDateId, inviteId);
     const schedule = await getServices().tournament.getTournamentRoundSchedule({ user });
     res.json(schedule);

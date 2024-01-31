@@ -29,10 +29,9 @@
           </div>
           <p>
             <small>
-              * We will send you an email reminder 30 minutes prior to launch. Signing up is not
-              necessary to participate at any given time, but it will increase the interest level
-              shown below each time-slot which helps other players find the best time to
-              participate.
+              * Sign up for a session and receive automated email reminders 30 minutes prior to
+              launch. Signing up is not required to participate but it can help other players find
+              good times to participate.
             </small>
           </p>
         </b-col>

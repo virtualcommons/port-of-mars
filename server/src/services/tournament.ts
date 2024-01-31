@@ -21,10 +21,12 @@ import {
   TournamentStatus,
 } from "@port-of-mars/shared/types";
 import { TournamentRoundSignup } from "@port-of-mars/server/entity/TournamentRoundSignup";
-import { ServerError } from "@port-of-mars/server/util";
+import { toUrl, ServerError, ValidationError } from "@port-of-mars/server/util";
 import { settings, getLogger } from "@port-of-mars/server/settings";
+import { TOURNAMENT_DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
 
 const logger = getLogger(__filename);
+const MILLISECONDS_PER_MINUTE = 60 * 1000;
 
 export class TournamentService extends BaseService {
   async getActiveTournament(): Promise<Tournament> {
@@ -105,7 +107,7 @@ export class TournamentService extends BaseService {
 
   async getUpcomingScheduledRoundDates(minutesInFuture = 60): Promise<Array<TournamentRoundDate>> {
     const now = new Date();
-    const future = new Date(now.getTime() + minutesInFuture * 60 * 1000);
+    const future = new Date(now.getTime() + minutesInFuture * MILLISECONDS_PER_MINUTE);
     return this.em.getRepository(TournamentRoundDate).find({
       where: { date: Between(now, future) },
     });
@@ -117,23 +119,26 @@ export class TournamentService extends BaseService {
      * scheduled to start within <minutesInFuture> from now
      */
     const roundDates = await this.getUpcomingScheduledRoundDates(minutesInFuture);
+    const currentTime = new Date().getTime();
+    const tournamentDashboardUrl = toUrl(TOURNAMENT_DASHBOARD_PAGE);
     for (const roundDate of roundDates) {
       logger.info("Sending reminder emails for round date: %s", JSON.stringify(roundDate));
       const minutesUntilLaunch = Math.round(
-        (roundDate.date.getTime() - new Date().getTime()) / (60 * 1000)
+        (roundDate.date.getTime() - currentTime) / MILLISECONDS_PER_MINUTE
       );
       const users = await this.getSignedUpUsersForDate(roundDate.id);
       for (const user of users) {
+        // FIXME: consider using a template engine for emails
         settings.emailer.sendMail(
           {
             from: `Port of Mars <${settings.supportEmail}>`,
             to: user.email,
-            subject: "[Port of Mars] Launch Reminder",
+            subject: "[Port of Mars] Launch Reminder: T-Minus 30 minutes",
             text: `Hello ${user.username},
             
-            The launch time that you signed up to be notified for is starting in
+            The Port of Mars launch time that you signed up for is starting in
             ${minutesUntilLaunch} minutes! Head over to the tournament dashboard at
-            ${settings.host}/#/tournament/dashboard and make sure you are
+            ${tournamentDashboardUrl} and make sure you are
             ready to join the lobby once it opens.
 
             Good luck!
@@ -141,11 +146,11 @@ export class TournamentService extends BaseService {
             `,
             html: `Hello ${user.username},
             <p>
-            The launch time that you signed up to be notified for is starting in
+            The Port of Mars launch time that you signed up for is starting in
             <b>${minutesUntilLaunch} minutes!</b>
             </p>
             <p>
-            Head over to the <a href='${settings.host}/#/tournament/dashboard'>tournament dashboard</a>
+            Head over to the <a href='${tournamentDashboardUrl}'>tournament dashboard</a>
             and make sure you are ready to join the lobby once it opens.
             </p>
             <p>Good luck!</p>
@@ -168,15 +173,13 @@ export class TournamentService extends BaseService {
   async getAndConfirmValidInvite(user: User, inviteId: number): Promise<TournamentRoundInvite> {
     const invite = await this.em.getRepository(TournamentRoundInvite).findOneOrFail(inviteId);
     if (invite.userId !== user.id) {
-      throw new ServerError({
-        code: 400,
-        message: "Invalid tournament invitation",
+      throw new ValidationError({
+        displayMessage: "Invalid tournament invitation",
       });
     }
     if (invite.hasParticipated) {
-      throw new ServerError({
-        code: 400,
-        message: "You have already participated in a game for this round",
+      throw new ValidationError({
+        displayMessage: "You have already participated in a game for this round",
       });
     }
     return invite;

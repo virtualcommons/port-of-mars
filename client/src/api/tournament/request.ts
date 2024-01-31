@@ -40,11 +40,8 @@ export class TournamentAPI {
     }
   }
 
-  async addOrRemoveSignup(
-    action: "add" | "remove",
-    tournamentRoundDateId: number,
-    inviteId: number
-  ) {
+  async setSignup(signup: boolean, tournamentRoundDateId: number, inviteId: number) {
+    const action = signup ? "add" : "remove";
     try {
       const params = `?tournamentRoundDateId=${tournamentRoundDateId}&inviteId=${inviteId}`;
       return this.ajax.post(url(`/tournament/signup/${action}${params}`), ({ data }) => {
