@@ -30,10 +30,6 @@
         </li>
         <li>Only communicate with other participants via the chat options within the game</li>
       </ul>
-      <p v-if="constants.GIFT_CARD_AMOUNT">
-        If you win the game, and 4 other human players participated, your name will be added to a
-        weekly drawing for a ${{ constants.GIFT_CARD_AMOUNT }} USD Amazon gift card.
-      </p>
       <p>
         Society may benefit from this research because an understanding of how people make decisions
         can help us to design policies and that sustain the use of shared resources, in this
@@ -84,7 +80,6 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { Constants } from "@port-of-mars/shared/settings";
 import { AccountAPI } from "@port-of-mars/client/api/account/request";
 import { PROFILE_PAGE } from "@port-of-mars/shared/routes";
 
@@ -92,21 +87,17 @@ import { PROFILE_PAGE } from "@port-of-mars/shared/routes";
 export default class Consent extends Vue {
   api!: AccountAPI;
 
-  get constants() {
-    return Constants;
-  }
-
   get hasConsented() {
-    return this.$store.getters.hasConsented;
+    return this.$tstore.getters.hasConsented;
   }
 
   get isVerified() {
-    return this.$store.getters.isVerified;
+    return this.$tstore.getters.isVerified;
   }
 
   get grantConsentMsg(): string | boolean {
     if (this.hasConsented && !this.isVerified) {
-      return "Continue to Verification";
+      return "Verify Email";
     } else {
       return "Grant Consent";
     }
