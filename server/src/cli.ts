@@ -393,6 +393,15 @@ async function exportTournamentRoundEmails(
   }
 }
 
+async function addTreatments(
+  em: EntityManager,
+  treatmentIds: Array<number>,
+  tournamentId?: number
+) {
+  const sp = getServices(em);
+  await sp.tournament.addTreatmentsToTournament(treatmentIds, tournamentId);
+}
+
 async function createTournamentTreatment(
   em: EntityManager,
   name: string,
@@ -462,6 +471,21 @@ program
         program
           .createCommand("treatment")
           .description("treatment subcommands")
+          .addCommand(
+            program
+              .createCommand("add")
+              .requiredOption(
+                "--treatmentIds <treatmentIds...>",
+                "space separated list of treatment ids to add",
+                toIntArray,
+                [] as Array<number>
+              )
+              .option("--tournamentId <tournamentId>", "ID of the tournament", customParseInt)
+              .description("link existing Treatments to a given Tournament")
+              .action(async cmd => {
+                await withConnection(em => addTreatments(em, cmd.treatmentIds, cmd.tournamentId));
+              })
+          )
           .addCommand(
             program
               .createCommand("create")

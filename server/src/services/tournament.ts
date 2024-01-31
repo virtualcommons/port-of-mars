@@ -1,4 +1,4 @@
-import { MoreThanOrEqual, Not, SelectQueryBuilder, Between } from "typeorm";
+import { Between, In, MoreThanOrEqual, Not, SelectQueryBuilder } from "typeorm";
 import {
   User,
   Player,
@@ -450,6 +450,19 @@ export class TournamentService extends BaseService {
         announcement: tournamentRound.announcement ?? "",
       },
     };
+  }
+
+  async addTreatmentsToTournament(treatmentIds: number[], tournamentId?: number) {
+    const tournament = await this.getTournament(tournamentId);
+    if (treatmentIds.length === 0) {
+      treatmentIds = [1, 2, 3];
+    }
+    const treatments = await this.em.getRepository(Treatment).find({
+      where: { id: In(treatmentIds) },
+    });
+    tournament.treatments = treatments;
+    logger.debug("linking treatments to tournament: %o", treatments);
+    await this.em.getRepository(Tournament).save(tournament);
   }
 
   /**
