@@ -5,9 +5,11 @@ import {
   CreateDateColumn,
   PrimaryGeneratedColumn,
   Unique,
+  OneToMany,
 } from "typeorm";
 import { TournamentRound } from "./TournamentRound";
 import { User } from "./User";
+import { TournamentRoundSignup } from "./TournamentRoundSignup";
 
 @Entity()
 @Unique(["user", "tournamentRound"])
@@ -20,6 +22,9 @@ export class TournamentRoundInvite {
 
   @ManyToOne(type => TournamentRound, tournamentRound => tournamentRound.invitations)
   tournamentRound!: TournamentRound;
+
+  @OneToMany(type => TournamentRoundSignup, signup => signup.tournamentRoundInvite)
+  signups!: TournamentRoundSignup[];
 
   @Column()
   userId!: number;

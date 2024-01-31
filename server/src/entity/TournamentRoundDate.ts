@@ -1,5 +1,13 @@
-import { Column, Entity, ManyToOne, CreateDateColumn, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  CreateDateColumn,
+  PrimaryGeneratedColumn,
+  OneToMany,
+} from "typeorm";
 import { TournamentRound } from "./TournamentRound";
+import { TournamentRoundSignup } from "./TournamentRoundSignup";
 
 @Entity()
 export class TournamentRoundDate {
@@ -11,6 +19,9 @@ export class TournamentRoundDate {
 
   @ManyToOne(type => TournamentRound, tournamentRound => tournamentRound.scheduledDates)
   tournamentRound!: TournamentRound;
+
+  @OneToMany(type => TournamentRoundSignup, signup => signup.tournamentRoundDate)
+  signups!: TournamentRoundSignup[];
 
   @CreateDateColumn()
   dateCreated!: Date;

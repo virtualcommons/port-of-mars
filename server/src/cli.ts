@@ -423,6 +423,10 @@ async function createTournamentRoundDate(
   tournamentRoundId?: number
 ): Promise<void> {
   const sp = getServices(em);
+  if (date.getMinutes() !== 0) {
+    logger.fatal("Only dates on the hour are currently supported");
+    return;
+  }
   const scheduledDate = await sp.tournament.createScheduledRoundDate(date, tournamentRoundId);
   logger.debug("created scheduled date: %o", scheduledDate);
 }

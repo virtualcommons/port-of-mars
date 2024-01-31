@@ -62,3 +62,53 @@ tournamentRouter.get("/status", async (req: Request, res: Response, next) => {
     next(e);
   }
 });
+
+tournamentRouter.get("/schedule", async (req: Request, res: Response, next) => {
+  const user = req.user as User;
+  if (!user) {
+    res.status(401);
+  }
+  try {
+    const schedule = await getServices().tournament.getTournamentRoundSchedule({ user });
+    res.json(schedule);
+  } catch (e) {
+    logger.fatal("Unable to get tournament round schedule: %s", e);
+    next(e);
+  }
+});
+
+tournamentRouter.post("/signup/add", async (req: Request, res: Response, next) => {
+  const user = req.user as User;
+  if (!user) {
+    res.status(401);
+  }
+  const tournamentRoundDateId = Number(req.query.tournamentRoundDateId);
+  const inviteId = Number(req.query.inviteId);
+  try {
+    // consider sending an immediate google calendar via email
+    // https://github.com/virtualcommons/planning/issues/69
+    await getServices().tournament.addSignup(user, tournamentRoundDateId, inviteId);
+    const schedule = await getServices().tournament.getTournamentRoundSchedule({ user });
+    res.json(schedule);
+  } catch (e) {
+    logger.fatal("Unable to add tournament signup: %s", e);
+    next(e);
+  }
+});
+
+tournamentRouter.post("/signup/remove", async (req: Request, res: Response, next) => {
+  const user = req.user as User;
+  if (!user) {
+    res.status(401);
+  }
+  const tournamentRoundDateId = Number(req.query.tournamentRoundDateId);
+  const inviteId = Number(req.query.inviteId);
+  try {
+    await getServices().tournament.removeSignup(user, tournamentRoundDateId, inviteId);
+    const schedule = await getServices().tournament.getTournamentRoundSchedule({ user });
+    res.json(schedule);
+  } catch (e) {
+    logger.fatal("Unable to remove tournament signup: %s", e);
+    next(e);
+  }
+});

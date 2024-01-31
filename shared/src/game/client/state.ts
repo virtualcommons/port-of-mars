@@ -28,6 +28,7 @@ import {
   LobbyClientData,
   ClientSafeUser,
   GameType,
+  TournamentRoundScheduleDate,
 } from "@port-of-mars/shared/types";
 import { ModalType, ModalDataType } from "@port-of-mars/shared/game/client/modals";
 import { ChatMarsLogView, HUDLeftView, HUDRightView } from "@port-of-mars/shared/game/client/panes";
@@ -206,6 +207,7 @@ export interface State extends GameState {
   lobby: Lobby;
   dashboardMessages: Array<DashboardMessage>;
   tournamentStatus: TournamentStatus | null;
+  tournamentRoundSchedule: Array<TournamentRoundScheduleDate> | null;
   isFreePlayEnabled: boolean;
   isTournamentEnabled: boolean;
   announcementBannerText: string;
@@ -298,6 +300,7 @@ export const initialStoreState: State = {
   user: initialUserState,
   dashboardMessages: [],
   tournamentStatus: null,
+  tournamentRoundSchedule: null,
   isFreePlayEnabled: true,
   isTournamentEnabled: false,
   announcementBannerText: "",

@@ -471,12 +471,19 @@ export interface TournamentStatus {
   description: string;
   lobbyOpenBeforeOffset: number;
   lobbyOpenAfterOffset: number;
+  signupsPopularityThreshold: number;
   currentRound: {
     round: number;
-    schedule: Array<number>; // list of timestamps for upcoming games
     championship: boolean;
     announcement: string;
   };
+}
+
+export interface TournamentRoundScheduleDate {
+  tournamentRoundDateId: number;
+  timestamp: number;
+  signupCount: number;
+  isSignedUp: boolean;
 }
 
 export interface TournamentRoundInviteStatus {
@@ -493,6 +500,7 @@ export interface ClientInitStatus {
   isFreePlayEnabled: boolean;
   user: ClientSafeUser | null;
   tournamentStatus: TournamentStatus | null;
+  tournamentRoundSchedule: Array<TournamentRoundScheduleDate> | null;
   announcementBannerText: string;
 }
 
@@ -510,5 +518,6 @@ export interface DynamicSettingsData {
   isFreePlayEnabled: boolean;
   tournamentLobbyOpenBeforeOffset: number;
   tournamentLobbyOpenAfterOffset: number;
+  tournamentSignupsPopularityThreshold: number;
   announcementBannerText: string;
 }

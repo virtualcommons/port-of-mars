@@ -1,4 +1,4 @@
-import { MoreThanOrEqual, Not, SelectQueryBuilder } from "typeorm";
+import { MoreThanOrEqual, Not, SelectQueryBuilder, Between } from "typeorm";
 import {
   User,
   Player,
@@ -17,11 +17,16 @@ import {
   LobbyChatMessageData,
   MarsEventOverride,
   TournamentRoundInviteStatus,
+  TournamentRoundScheduleDate,
   TournamentStatus,
 } from "@port-of-mars/shared/types";
-// import { getLogger } from "@port-of-mars/server/settings";
+import { TournamentRoundSignup } from "@port-of-mars/server/entity/TournamentRoundSignup";
+import { toUrl, ServerError, ValidationError } from "@port-of-mars/server/util";
+import { settings, getLogger } from "@port-of-mars/server/settings";
+import { TOURNAMENT_DASHBOARD_PAGE } from "@port-of-mars/shared/routes";
 
-// const logger = getLogger(__filename);
+const logger = getLogger(__filename);
+const MILLISECONDS_PER_MINUTE = 60 * 1000;
 
 export class TournamentService extends BaseService {
   async getActiveTournament(): Promise<Tournament> {
@@ -100,6 +105,128 @@ export class TournamentService extends BaseService {
     return repository.save(scheduledDate);
   }
 
+  async getUpcomingScheduledRoundDates(minutesInFuture = 60): Promise<Array<TournamentRoundDate>> {
+    const now = new Date();
+    const future = new Date(now.getTime() + minutesInFuture * MILLISECONDS_PER_MINUTE);
+    return this.em.getRepository(TournamentRoundDate).find({
+      where: { date: Between(now, future) },
+    });
+  }
+
+  async sendRoundDateReminderEmails(minutesInFuture = 60): Promise<void> {
+    /**
+     * Sends reminder emails to users that have signed up for a round that is
+     * scheduled to start within <minutesInFuture> from now
+     */
+    const roundDates = await this.getUpcomingScheduledRoundDates(minutesInFuture);
+    const currentTime = new Date().getTime();
+    const tournamentDashboardUrl = toUrl(TOURNAMENT_DASHBOARD_PAGE);
+    for (const roundDate of roundDates) {
+      logger.info("Sending reminder emails for round date: %s", JSON.stringify(roundDate));
+      const minutesUntilLaunch = Math.round(
+        (roundDate.date.getTime() - currentTime) / MILLISECONDS_PER_MINUTE
+      );
+      const users = await this.getSignedUpUsersForDate(roundDate.id);
+      for (const user of users) {
+        // FIXME: consider using a template engine for emails
+        settings.emailer.sendMail(
+          {
+            from: `Port of Mars <${settings.supportEmail}>`,
+            to: user.email,
+            subject: "[Port of Mars] Launch Reminder: T-Minus 30 minutes",
+            text: `Hello ${user.username},
+            
+            The Port of Mars launch time that you signed up for is starting in
+            ${minutesUntilLaunch} minutes! Head over to the tournament dashboard at
+            ${tournamentDashboardUrl} and make sure you are
+            ready to join the lobby once it opens.
+
+            Good luck!
+            the Port of Mars team
+            `,
+            html: `Hello ${user.username},
+            <p>
+            The Port of Mars launch time that you signed up for is starting in
+            <b>${minutesUntilLaunch} minutes!</b>
+            </p>
+            <p>
+            Head over to the <a href='${tournamentDashboardUrl}'>tournament dashboard</a>
+            and make sure you are ready to join the lobby once it opens.
+            </p>
+            <p>Good luck!</p>
+            <p><i>the Port of Mars team</i></p>
+            `,
+          },
+          function (err, info) {
+            if (err) {
+              logger.warn(`error : $err`);
+              throw new ServerError(err);
+            } else {
+              logger.info(`Successfully sent? %o`, info);
+            }
+          }
+        );
+      }
+    }
+  }
+
+  async getAndConfirmValidInvite(user: User, inviteId: number): Promise<TournamentRoundInvite> {
+    const invite = await this.em.getRepository(TournamentRoundInvite).findOneOrFail(inviteId);
+    if (invite.userId !== user.id) {
+      throw new ValidationError({
+        displayMessage: "Invalid tournament invitation",
+      });
+    }
+    if (invite.hasParticipated) {
+      throw new ValidationError({
+        displayMessage: "You have already participated in a game for this round",
+      });
+    }
+    return invite;
+  }
+
+  async addSignup(user: User, tournamentRoundDateId: number, inviteId: number) {
+    const invite = await this.getAndConfirmValidInvite(user, inviteId);
+    const roundDate = await this.em
+      .getRepository(TournamentRoundDate)
+      .findOneOrFail(tournamentRoundDateId);
+    const signup = this.em.getRepository(TournamentRoundSignup).create({
+      tournamentRoundInvite: invite,
+      tournamentRoundDate: roundDate,
+    });
+    await this.em.getRepository(TournamentRoundSignup).save(signup);
+  }
+
+  async removeSignup(user: User, tournamentRoundDateId: number, inviteId: number) {
+    const invite = await this.getAndConfirmValidInvite(user, inviteId);
+    const roundDate = await this.em
+      .getRepository(TournamentRoundDate)
+      .findOneOrFail(tournamentRoundDateId);
+    await this.em.getRepository(TournamentRoundSignup).delete({
+      tournamentRoundInvite: invite,
+      tournamentRoundDate: roundDate,
+    });
+  }
+
+  async getSignedUpUsersForDate(tournamentRoundDateId: number) {
+    /**
+     * Returns an array of users that have signed up for the given round date
+     * and have not already participated in a game for that round
+     */
+    const query = this.em
+      .getRepository(User)
+      .createQueryBuilder("user")
+      .leftJoin("user.invites", "invite")
+      .leftJoin("invite.signups", "signup")
+      .where("signup.tournamentRoundDateId = :tournamentRoundDateId", { tournamentRoundDateId })
+      .andWhere("invite.hasParticipated = false")
+      .select("user.email")
+      .addSelect("user.username")
+      .distinct(true);
+    const users = await query.getMany();
+    return users.filter(u => u.email); // shouldn't be possible, but just in case
+  }
+
   async getScheduledDates(options?: {
     tournamentRound?: TournamentRound;
     afterOffset?: number;
@@ -119,6 +246,66 @@ export class TournamentService extends BaseService {
       order: { date: "ASC" },
     });
     return schedule.map(s => s.date);
+  }
+
+  async getTournamentRoundSchedule(options?: {
+    tournamentRound?: TournamentRound;
+    user?: User;
+    afterOffset?: number;
+  }): Promise<Array<TournamentRoundScheduleDate>> {
+    /**
+     * Returns the upcoming schedule for the given TournamentRound
+     * includes past dates if they are within <afterOffset> of now
+     * 1230 should be included for a 1200 launchtime with an afterOffset of 30
+     *
+     * for a simple array of dates, use getScheduledDates
+     */
+    // eslint-disable-next-line prefer-const
+    let { tournamentRound, afterOffset, user } = options ?? {};
+    if (!tournamentRound) tournamentRound = await this.getCurrentTournamentRound();
+    if (!afterOffset) afterOffset = await this.getAfterOffset();
+    const offsetTime = new Date().getTime() - afterOffset;
+
+    // get each date with associated signups
+    const query = this.em
+      .getRepository(TournamentRoundDate)
+      .createQueryBuilder("roundDate")
+      .leftJoin("roundDate.signups", "signup")
+      .leftJoin("signup.tournamentRoundInvite", "invite")
+      .select("roundDate.id", "tournamentRoundDateId")
+      .addSelect("roundDate.date", "date")
+      .addSelect(
+        "COUNT(CASE WHEN invite.hasParticipated = false THEN 1 ELSE null END)",
+        "signupCount"
+      ) // only count signups for players that have not participated yet
+      .where("roundDate.tournamentRoundId = :tournamentRoundId", {
+        tournamentRoundId: tournamentRound.id,
+      })
+      .andWhere("roundDate.date >= :offset", { offset: new Date(offsetTime) })
+      .groupBy("roundDate.id")
+      .addGroupBy("roundDate.date")
+      .orderBy("roundDate.date", "ASC");
+
+    if (user) {
+      // use a subquery to check if the user is signed up for each date
+      query.addSelect(subQuery => {
+        return subQuery
+          .select("1")
+          .from(TournamentRoundSignup, "subSignup")
+          .innerJoin("subSignup.tournamentRoundInvite", "subInvite")
+          .where("subSignup.tournamentRoundDateId = roundDate.id")
+          .andWhere("subInvite.userId = :userId", { userId: user!.id })
+          .andWhere("subInvite.hasParticipated = false");
+      }, "isSignedUp");
+    }
+
+    const schedule = await query.getRawMany();
+    return schedule.map(s => ({
+      tournamentRoundDateId: parseInt(s.tournamentRoundDateId),
+      timestamp: s.date.getTime(),
+      signupCount: parseInt(s.signupCount),
+      isSignedUp: user ? s.isSignedUp !== null : false,
+    }));
   }
 
   async getEmails(tournamentRoundId?: number): Promise<Array<string>> {
@@ -176,6 +363,15 @@ export class TournamentService extends BaseService {
         userId: user.id,
       },
     });
+  }
+
+  async getOrCreateInvite(user: User, tournamentRound: TournamentRound) {
+    const invite = await this.getTournamentRoundInvite(user, tournamentRound);
+    if (invite) {
+      return invite;
+    } else {
+      return await this.createInvite(user.id, tournamentRound.id);
+    }
   }
 
   /**
@@ -240,15 +436,16 @@ export class TournamentService extends BaseService {
     }
     const tournament = tournamentRound.tournament;
     if (!tournament) return null;
-    const scheduledDates = await this.getScheduledDates({ tournamentRound });
+    const signupsPopularityThreshold =
+      await getServices().settings.tournamentSignupsPopularityThreshold();
     return {
       name: tournament.name,
       description: tournament.description ?? "",
       lobbyOpenBeforeOffset: await this.getBeforeOffset(),
       lobbyOpenAfterOffset: await this.getAfterOffset(),
+      signupsPopularityThreshold,
       currentRound: {
         round: tournamentRound.roundNumber,
-        schedule: scheduledDates.map((date: Date) => date.getTime()),
         championship: tournamentRound.championship,
         announcement: tournamentRound.announcement ?? "",
       },
@@ -402,6 +599,7 @@ export class TournamentService extends BaseService {
         tournamentRound: options?.tournamentRound,
         afterOffset: afterOffset,
       });
+
     if (gameDates.length === 0) {
       return false;
     }

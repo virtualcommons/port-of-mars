@@ -25,8 +25,15 @@
             <p v-if="!$tstore.getters.tournamentRoundHasUpcomingLaunch">
               No scheduled launch times
             </p>
-            <Schedule :schedule="$tstore.getters.tournamentSchedule" />
+            <Schedule :schedule="$tstore.getters.tournamentSchedule" :invite="invite" />
           </div>
+          <p>
+            <small>
+              * Sign up for a session and receive automated email reminders 30 minutes prior to
+              launch. Signing up is not required to participate but it can help other players find
+              good times to participate.
+            </small>
+          </p>
         </b-col>
         <b-col cols="6" class="content-container h-100">
           <div
@@ -81,7 +88,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Provide, Vue } from "vue-property-decorator";
 import { TournamentAPI } from "@port-of-mars/client/api/tournament/request";
 import { HOME_PAGE, MANUAL_PAGE, TOURNAMENT_LOBBY_PAGE } from "@port-of-mars/shared/routes";
 import { TournamentRoundInviteStatus } from "@port-of-mars/shared/types";
@@ -100,10 +107,11 @@ import TournamentOnboardingSteps from "@port-of-mars/client/components/global/To
   },
 })
 export default class TournamentDashboard extends Vue {
+  @Provide() api: TournamentAPI = new TournamentAPI(this.$tstore, this.$ajax);
+
   tournamentLobby = { name: TOURNAMENT_LOBBY_PAGE };
   manual = { name: MANUAL_PAGE };
   home = { name: HOME_PAGE };
-  api!: TournamentAPI;
 
   invite: TournamentRoundInviteStatus | null = null;
   loaded = false;
@@ -130,7 +138,6 @@ export default class TournamentDashboard extends Vue {
   }
 
   async created() {
-    this.api = new TournamentAPI(this.$tstore, this.$ajax);
     this.invite = await this.api.getInviteStatus();
     this.loaded = true;
   }

@@ -166,10 +166,21 @@ async function createApp() {
         useDefaults: false,
         directives: {
           defaultSrc: ["'self'"],
-          connectSrc: ["'self'", "sentry.comses.net", "https://*.google-analytics.com", "https://*.analytics.google.com", "https://*.googletagmanager.com"],
+          connectSrc: [
+            "'self'",
+            "sentry.comses.net",
+            "https://*.google-analytics.com",
+            "https://*.analytics.google.com",
+            "https://*.googletagmanager.com",
+          ],
           frameSrc: ["'self'", "player.vimeo.com", "youtube.com", "https://www.youtube.com"],
           scriptSrc: ["'self'", "sentry.comses.net", "https://*.googletagmanager.com"],
-          imgSrc: ["'self'", "data:", "https://*.google-analytics.com", "https://*.googletagmanager.com"],
+          imgSrc: [
+            "'self'",
+            "data:",
+            "https://*.google-analytics.com",
+            "https://*.googletagmanager.com",
+          ],
           styleSrc: ["'self'", "fonts.googleapis.com", "'unsafe-inline'"],
           fontSrc: ["'self'", "fonts.gstatic.com"],
           objectSrc: ["'none'"],
@@ -222,11 +233,18 @@ async function createApp() {
 
   gameServer.listen(port);
 
+  // schedule recurring jobs
   const services = getServices();
-  // run automated admin jobs (revoking expired mutes, etc) once a day
-  await services.admin.unapplyExpiredMutes();
   schedule.scheduleJob("0 0 * * *", async () => {
     await services.admin.unapplyExpiredMutes();
+  });
+
+  schedule.scheduleJob("30 * * * *", async () => {
+    const isTournamentEnabled = await services.settings.isTournamentEnabled();
+    if (!isTournamentEnabled) {
+      return;
+    }
+    await services.tournament.sendRoundDateReminderEmails();
   });
 }
 
