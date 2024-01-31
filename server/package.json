@@ -1,6 +1,6 @@
 {
   "name": "port-of-mars-server",
-  "version": "v0.1.0",
+  "version": "v2024.01",
   "description": "Port Of Mars digital version",
   "main": "lib/index.js",
   "scripts": {

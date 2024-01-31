@@ -1,6 +1,6 @@
 {
   "name": "port-of-mars-client",
-  "version": "0.1.0",
+  "version": "v2024.01",
   "private": true,
   "scripts": {
     "serve": "vite",

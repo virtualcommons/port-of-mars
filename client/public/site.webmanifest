@@ -1,6 +1,6 @@
 {
-  "name": "Port of Mars Client",
-  "short_name": "Port of Mars Client",
+  "name": "the Port of Mars",
+  "short_name": "port-of-mars",
   "icons": [
     { "src": "/android-chrome-192x192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "/android-chrome-512x512.png", "sizes": "512x512", "type": "image/png" }
