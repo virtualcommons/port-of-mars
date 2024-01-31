@@ -18,7 +18,7 @@
               <div v-if="!invite?.hasParticipated" class="d-flex align-items-center mr-3">
                 <label class="mb-0 mr-2" :for="`signup-toggle-${launchTime.tournamentRoundDateId}`">
                   <small v-if="launchTime.isSignedUp" class="text-success">Signed up</small>
-                  <small v-else>Sign up to get notified *</small>
+                  <small v-else>Sign Up<sup>*</sup></small>
                 </label>
                 <Toggle
                   :id="`signup-toggle-${launchTime.tournamentRoundDateId}`"
@@ -44,7 +44,7 @@
                   id="download-ics"
                   class="btn btn-dark py-0"
                   :href="launchTime.icsInviteURL"
-                  title="download as ics"
+                  title="download ics calendar file"
                   target="_blank"
                 >
                   <b-icon-calendar-plus-fill scale=".8"></b-icon-calendar-plus-fill>

@@ -29,9 +29,14 @@
           </div>
           <p>
             <small>
-              * Sign up for a session and receive automated email reminders 30 minutes prior to
-              launch. Signing up is not required to participate but it can help other players find
-              good times to participate.
+              <sup>*</sup> Sign up for a session to receive an automated email reminder 30 minutes
+              prior to launch. Signing up is not required to participate but can help other players
+              find good times to participate.
+              <mark>
+                <strong>
+                  <em>You can only participate in one game session per tournament round.</em>
+                </strong>
+              </mark>
             </small>
           </p>
         </b-col>
