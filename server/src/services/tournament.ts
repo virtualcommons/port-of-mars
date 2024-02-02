@@ -65,7 +65,7 @@ export class TournamentService extends BaseService {
   }
 
   async getTournamentByName(name: string): Promise<Tournament> {
-    return this.em.getRepository(Tournament).findOneOrFail({ name });
+    return this.em.getRepository(Tournament).findOneByOrFail({ name });
   }
 
   async getCurrentTournamentRoundByType(type: GameType) {
@@ -171,7 +171,9 @@ export class TournamentService extends BaseService {
   }
 
   async getAndConfirmValidInvite(user: User, inviteId: number): Promise<TournamentRoundInvite> {
-    const invite = await this.em.getRepository(TournamentRoundInvite).findOneOrFail(inviteId);
+    const invite = await this.em
+      .getRepository(TournamentRoundInvite)
+      .findOneByOrFail({ id: inviteId });
     if (invite.userId !== user.id) {
       throw new ValidationError({
         displayMessage: "Invalid tournament invitation",
@@ -189,7 +191,7 @@ export class TournamentService extends BaseService {
     const invite = await this.getAndConfirmValidInvite(user, inviteId);
     const roundDate = await this.em
       .getRepository(TournamentRoundDate)
-      .findOneOrFail(tournamentRoundDateId);
+      .findOneByOrFail({ id: tournamentRoundDateId });
     const signup = this.em.getRepository(TournamentRoundSignup).create({
       tournamentRoundInvite: invite,
       tournamentRoundDate: roundDate,
@@ -201,7 +203,7 @@ export class TournamentService extends BaseService {
     const invite = await this.getAndConfirmValidInvite(user, inviteId);
     const roundDate = await this.em
       .getRepository(TournamentRoundDate)
-      .findOneOrFail(tournamentRoundDateId);
+      .findOneByOrFail({ id: tournamentRoundDateId });
     await this.em.getRepository(TournamentRoundSignup).delete({
       tournamentRoundInvite: invite,
       tournamentRoundDate: roundDate,
@@ -590,7 +592,7 @@ export class TournamentService extends BaseService {
 
   async getTournamentRound(id?: number): Promise<TournamentRound> {
     if (id) {
-      return await this.em.getRepository(TournamentRound).findOneOrFail(id);
+      return await this.em.getRepository(TournamentRound).findOneByOrFail({ id });
     } else {
       return await this.getCurrentTournamentRound();
     }

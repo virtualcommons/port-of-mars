@@ -126,14 +126,14 @@ export class DBPersister implements Persister {
         where: { type: In(DBPersister.FINAL_EVENTS), gameId },
         order: { id: "DESC", dateCreated: "DESC" },
       });
-      const game = await em.getRepository(Game).findOneOrFail(gameId);
+      const game = await em.getRepository(Game).findOneByOrFail({ id: gameId });
       game.status = event.type === "entered-defeat-phase" ? "defeat" : "victory";
       game.dateFinalized = this.sp.time.now();
       if (!shouldFinalizePlayers) {
         const res: [Game, Array<Player>] = [await em.save(game), []];
         return res;
       }
-      const players = await em.getRepository(Player).find({ gameId });
+      const players = await em.getRepository(Player).findBy({ gameId });
       for (const p of players) {
         p.points = (event.payload as any)[p.role];
       }

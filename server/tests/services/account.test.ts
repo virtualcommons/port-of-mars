@@ -78,7 +78,7 @@ describe("a potential user", () => {
   });
 
   it("can be sent an email verification email", async () => {
-    const u = await qr.manager.getRepository(User).findOneOrFail({ username });
+    const u = await qr.manager.getRepository(User).findOneByOrFail({ username });
     await accountService.sendEmailVerification(u);
     expect(settings.emailer.lastEmail?.from).toBe("Port of Mars <portmars@asu.edu>");
     expect(settings.emailer.lastEmail?.text).toContain(
@@ -90,19 +90,19 @@ describe("a potential user", () => {
   });
 
   it("can verify their email using a valid verification token", async () => {
-    let u = await qr.manager.getRepository(User).findOneOrFail({ username });
+    let u = await qr.manager.getRepository(User).findOneByOrFail({ username });
 
     await expect(
       accountService.verifyUnregisteredUser(u, "invalid-registration-token")
     ).rejects.toThrow(`Invalid registration token invalid-registration-token`);
 
     await accountService.verifyUnregisteredUser(u, u.registrationToken);
-    u = await qr.manager.getRepository(User).findOneOrFail({ username });
+    u = await qr.manager.getRepository(User).findOneByOrFail({ username });
     expect(u.isVerified).toBeTruthy();
   });
 
   it("rejects user verification using an invalid verification token", async () => {
-    const u = await qr.manager.getRepository(User).findOneOrFail({ username });
+    const u = await qr.manager.getRepository(User).findOneByOrFail({ username });
     await expect(
       accountService.verifyUnregisteredUser(u, "invalid-registration-token")
     ).rejects.toThrowError(ServerError);
