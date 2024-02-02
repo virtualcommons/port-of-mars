@@ -26,7 +26,7 @@ export class QuizService extends BaseService {
     await this.em.getRepository(QuestionResponse).save(questionResponse);
     questionResponse.question = await this.em
       .getRepository(Question)
-      .findOneOrFail({ id: questionId });
+      .findOneByOrFail({ id: questionId });
     return questionResponse;
   }
 
@@ -40,8 +40,8 @@ export class QuizService extends BaseService {
   async findQuizSubmission(
     id: number,
     opts?: FindOneOptions<QuizSubmission>
-  ): Promise<QuizSubmission | undefined> {
-    return this.em.getRepository(QuizSubmission).findOne(id, opts);
+  ): Promise<QuizSubmission | null> {
+    return this.em.getRepository(QuizSubmission).findOneBy({ ...opts, id });
   }
 
   async getDefaultQuiz(opts?: FindOneOptions<Quiz>): Promise<Quiz> {
@@ -50,7 +50,7 @@ export class QuizService extends BaseService {
   }
 
   async getQuizById(id: number, opts?: FindOneOptions<Quiz>): Promise<Quiz> {
-    return await this.em.getRepository(Quiz).findOneOrFail(id, opts);
+    return await this.em.getRepository(Quiz).findOneByOrFail({ ...opts, id });
   }
 
   async getQuizByName(name: string, opts?: FindOneOptions<Quiz>): Promise<Quiz> {
@@ -65,7 +65,7 @@ export class QuizService extends BaseService {
     userId: number,
     quizId: number,
     opts: FindOneOptions<QuizSubmission> = {}
-  ): Promise<QuizSubmission | undefined> {
+  ): Promise<QuizSubmission | null> {
     opts = { order: { dateCreated: "DESC" }, ...opts };
     return await this.em
       .getRepository(QuizSubmission)
@@ -82,7 +82,7 @@ export class QuizService extends BaseService {
   }
 
   async findQuestion(id: number): Promise<Question> {
-    return await this.em.getRepository(Question).findOneOrFail(id);
+    return await this.em.getRepository(Question).findOneByOrFail({ id });
   }
 
   async isCorrect(questionResponse: QuestionResponse): Promise<boolean> {

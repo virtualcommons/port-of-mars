@@ -105,7 +105,7 @@ export class AccountService extends BaseService {
   }
 
   async findByUsername(username: string): Promise<User> {
-    return await this.getRepository().findOneOrFail({ username });
+    return await this.getRepository().findOneByOrFail({ username });
   }
 
   async findUsers(usernames: Array<string>): Promise<Array<User>> {
@@ -117,7 +117,7 @@ export class AccountService extends BaseService {
   }
 
   async isEmailAvailable(user: User, email: string): Promise<boolean> {
-    const otherUser = await this.getRepository().findOne({ email });
+    const otherUser = await this.getRepository().findOneBy({ email });
     if (otherUser) {
       return otherUser.id === user.id;
     }
@@ -125,7 +125,7 @@ export class AccountService extends BaseService {
   }
 
   async isUsernameAvailable(username: string, user?: User): Promise<boolean> {
-    const otherUser = await this.getRepository().findOne({ username });
+    const otherUser = await this.getRepository().findOneBy({ username });
     if (otherUser) {
       if (!user) {
         return false;
@@ -166,12 +166,12 @@ export class AccountService extends BaseService {
   }
 
   async findUserById(id: number): Promise<User> {
-    return await this.getRepository().findOneOrFail(id);
+    return await this.getRepository().findOneByOrFail({ id });
   }
 
   async denyConsent(id: number): Promise<ClientSafeUser> {
     const repo = this.getRepository();
-    const user = await repo.findOneOrFail(id);
+    const user = await repo.findOneByOrFail({ id });
     user.dateConsented = undefined;
     await repo.save(user);
     return toClientSafeUser(user);
@@ -179,7 +179,7 @@ export class AccountService extends BaseService {
 
   async grantConsent(id: number): Promise<ClientSafeUser> {
     const repo = this.getRepository();
-    const user = await repo.findOneOrFail(id);
+    const user = await repo.findOneByOrFail({ id });
     user.dateConsented = new Date();
     await repo.save(user);
     return toClientSafeUser(user);
@@ -283,10 +283,8 @@ export class AccountService extends BaseService {
     return;
   }
 
-  async findUnregisteredUserByRegistrationToken(
-    registrationToken: string
-  ): Promise<User | undefined> {
-    return await this.em.getRepository(User).findOne({ registrationToken });
+  async findUnregisteredUserByRegistrationToken(registrationToken: string): Promise<User | null> {
+    return await this.em.getRepository(User).findOneBy({ registrationToken });
   }
 
   async verifyUnregisteredUser(u: User, registrationToken: string): Promise<UpdateResult> {
@@ -327,7 +325,7 @@ export class AccountService extends BaseService {
   }
 
   async getOrCreateTestUser(username: string, shouldSkipVerification = true): Promise<User> {
-    let user = await this.getRepository().findOne({ username });
+    let user = await this.getRepository().findOneBy({ username });
     if (!user) {
       user = new User();
       user.username = username;
@@ -347,14 +345,14 @@ export class AccountService extends BaseService {
   }
 
   async getOrCreateUser(userData: { email: string; passportId?: string }): Promise<User> {
-    let user: User | undefined;
+    let user: User | null = null;
     // try to find user by id
     if (userData.passportId) {
-      user = await this.getRepository().findOne({ passportId: userData.passportId });
+      user = await this.getRepository().findOneBy({ passportId: userData.passportId });
     }
     // if no id or find by id turned up empty, try to find user by email
     if (!userData.passportId || !user) {
-      user = await this.getRepository().findOne({ email: userData.email });
+      user = await this.getRepository().findOneBy({ email: userData.email });
     }
     if (!user) {
       user = new User();

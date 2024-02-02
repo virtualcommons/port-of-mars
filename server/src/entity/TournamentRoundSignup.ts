@@ -1,12 +1,18 @@
-import { Entity, ManyToOne } from "typeorm";
+import { Entity, ManyToOne, PrimaryColumn } from "typeorm";
 import { TournamentRoundInvite } from "./TournamentRoundInvite";
 import { TournamentRoundDate } from "./TournamentRoundDate";
 
 @Entity()
 export class TournamentRoundSignup {
-  @ManyToOne(type => TournamentRoundInvite, invite => invite.signups, { primary: true })
+  @PrimaryColumn()
+  tournamentRoundInviteId!: number;
+
+  @ManyToOne(() => TournamentRoundInvite, invite => invite.signups)
   tournamentRoundInvite!: TournamentRoundInvite;
 
-  @ManyToOne(type => TournamentRoundDate, date => date.signups, { primary: true })
+  @PrimaryColumn()
+  tournamentRoundDateId!: number;
+
+  @ManyToOne(() => TournamentRoundDate, date => date.signups)
   tournamentRoundDate!: TournamentRoundDate;
 }
