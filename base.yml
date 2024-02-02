@@ -12,7 +12,6 @@ services:
     volumes:
       - ./docker/dump:/dump
       - ./docker/logs:/var/log/port-of-mars
-      - ./keys/ormconfig.json:/code/server/ormconfig.json
       - ./keys/.pgpass:/root/.pgpass
       - ./keys:/run/secrets
       - ./scripts:/scripts

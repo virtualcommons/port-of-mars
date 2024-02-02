@@ -137,7 +137,12 @@ export class AccountService extends BaseService {
 
   async getActiveUsers(after: Date): Promise<Array<User>> {
     return await this.getRepository().find({
-      select: ["name", "email", "username", "dateCreated"],
+      select: {
+        name: true,
+        email: true,
+        username: true,
+        dateCreated: true,
+      },
       where: {
         isActive: true,
         email: Not(IsNull()),

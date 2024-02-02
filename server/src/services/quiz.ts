@@ -97,7 +97,7 @@ export class QuizService extends BaseService {
   async getQuizResponses(submissionId: number): Promise<Array<QuestionResponse>> {
     return await this.em
       .getRepository(QuestionResponse)
-      .find({ where: { submissionId }, relations: ["question"] });
+      .find({ where: { submissionId }, relations: { question: true } });
   }
 
   async getIncompleteQuizUsers(): Promise<Array<User>> {
@@ -114,8 +114,8 @@ export class QuizService extends BaseService {
    */
   async checkQuizCompletion(userId: number, quizId?: number): Promise<Array<number>> {
     const quiz: Quiz = quizId
-      ? await this.getQuizById(quizId, { relations: ["questions"] })
-      : await this.getDefaultQuiz({ relations: ["questions"] });
+      ? await this.getQuizById(quizId, { relations: { questions: true } })
+      : await this.getDefaultQuiz({ relations: { questions: true } });
     const quizSubmission = await this.getLatestQuizSubmission(userId, quiz.id);
     const questionIds = quiz.questions.map(q => q.id);
     if (!quizSubmission) {

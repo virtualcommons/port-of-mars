@@ -45,7 +45,7 @@ export class TournamentService extends BaseService {
           where: {
             id: id,
           },
-          relations: ["rounds"],
+          relations: { rounds: true },
         });
       }
       return this.em.getRepository(Tournament).findOneOrFail({
@@ -80,7 +80,7 @@ export class TournamentService extends BaseService {
   async getCurrentTournamentRound(tournamentId?: number): Promise<TournamentRound> {
     tournamentId = (await this.getTournament(tournamentId)).id;
     return await this.em.getRepository(TournamentRound).findOneOrFail({
-      relations: ["tournament"],
+      relations: { tournament: true },
       where: { tournamentId },
       order: { roundNumber: "DESC" },
     });
@@ -89,7 +89,7 @@ export class TournamentService extends BaseService {
   async getFreePlayTournamentRound(): Promise<TournamentRound> {
     const tournamentId = (await this.getFreePlayTournament()).id;
     return await this.em.getRepository(TournamentRound).findOneOrFail({
-      relations: ["tournament"],
+      relations: { tournament: true },
       where: { tournamentId },
       order: { roundNumber: "DESC" },
     });
@@ -243,7 +243,7 @@ export class TournamentService extends BaseService {
     if (!afterOffset) afterOffset = await this.getAfterOffset();
     const offsetTime = new Date().getTime() - afterOffset;
     const schedule = await this.em.getRepository(TournamentRoundDate).find({
-      select: ["date"],
+      select: { date: true },
       where: { tournamentRoundId: tournamentRound.id, date: MoreThanOrEqual(new Date(offsetTime)) },
       order: { date: "ASC" },
     });
@@ -484,7 +484,7 @@ export class TournamentService extends BaseService {
 
     const tournament = await this.em.getRepository(Tournament).findOne({
       where: tournamentId ? { id: tournamentId } : { active: true, name: Not("freeplay") },
-      relations: ["treatments"],
+      relations: { treatments: true },
       order: {
         id: "DESC",
       },
