@@ -1,5 +1,5 @@
 import { Tournament, TournamentRound, Game } from "@port-of-mars/server/entity";
-import { Connection, EntityManager, QueryRunner } from "typeorm";
+import { EntityManager, QueryRunner } from "typeorm";
 import { ServiceProvider } from "@port-of-mars/server/services";
 import {
   createRound,
@@ -11,7 +11,6 @@ import {
 import { BAN, ModerationActionType, MUTE } from "@port-of-mars/shared/types";
 
 describe("users in a game", () => {
-  let conn: Connection;
   let qr: QueryRunner;
   let manager: EntityManager;
   let sp: ServiceProvider;
@@ -19,7 +18,7 @@ describe("users in a game", () => {
   let tr: TournamentRound;
 
   beforeAll(async () => {
-    [conn, qr, manager] = await initTransaction();
+    [qr, manager] = await initTransaction();
     sp = new ServiceProvider(qr.manager);
     t = await createTournament(sp, { name: "freeplay" });
     tr = await createRound(sp, { tournamentId: t.id });
@@ -160,7 +159,7 @@ describe("users in a game", () => {
       expect(user.muteStrikes).toBe(1);
     });
   });
-  afterAll(async () => await rollbackTransaction(conn, qr));
+  afterAll(async () => await rollbackTransaction(qr));
 });
 
 const createChatReports = async (sp: ServiceProvider, usernames: Array<string>) => {

@@ -12,25 +12,14 @@ import { SoloHighScore } from "@port-of-mars/server/entity/SoloHighScore";
 
 export class StatsService extends BaseService {
   /* Player stats */
-  // async getGamesWithUser(user: User): Promise<Array<Game>> {
-  //   return this.em.getRepository(Game).find({
-  //     join: { alias: "games", innerJoin: { players: "games.players" } },
-  //     where: (qb: SelectQueryBuilder<Game>) => {
-  //       qb.where({ dateFinalized: Not(IsNull()) }).andWhere("players.user.id = :userId", {
-  //         userId: user.id,
-  //       });
-  //     },
-  //     relations: ["players"],
-  //     order: { dateCreated: "DESC" },
-  //   });
-  // }
-  // TODO: verify this
   async getGamesWithUser(user: User): Promise<Game[]> {
     const games = await this.em
       .createQueryBuilder(Game, "game")
-      .innerJoin("game.players", "player")
+      .leftJoinAndSelect("game.players", "player")
+      .innerJoin("game.players", "playerFilter", "playerFilter.userId = :userId", {
+        userId: user.id,
+      })
       .where("game.dateFinalized IS NOT NULL")
-      .andWhere("player.userId = :userId", { userId: user.id })
       .orderBy("game.dateCreated", "DESC")
       .getMany();
 
@@ -126,7 +115,11 @@ export class StatsService extends BaseService {
     const pointsPerRound = points / maxRound;
     const game = await this.em.getRepository(SoloGame).findOneOrFail({
       where: { id: gameId },
-      relations: ["player", "player.user"],
+      relations: {
+        player: {
+          user: true,
+        },
+      },
     });
     const user = game.player.user;
     let highscore = await highscoreRepo.findOneBy({ user });

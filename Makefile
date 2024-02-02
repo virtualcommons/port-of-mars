@@ -7,7 +7,6 @@ DATA_DUMP_PATH=docker/dump
 LOG_DATA_PATH=docker/logs
 DB_PASSWORD_PATH=keys/pom_db_password
 REDIS_SETTINGS_PATH=keys/settings.json
-ORMCONFIG_PATH=keys/ormconfig.json
 SERVER_ENV_TEMPLATE=server/.env.template
 SERVER_ENV=server/.env
 PGPASS_PATH=keys/.pgpass
@@ -15,7 +14,7 @@ SECRET_KEY_PATH=keys/secret_key
 SENTRY_DSN_PATH=keys/sentry_dsn
 SENTRY_DSN=$(shell cat $(SENTRY_DSN_PATH))
 MAIL_API_KEY_PATH=keys/mail_api_key
-SECRETS=$(MAIL_API_KEY_PATH) $(DB_PASSWORD_PATH) $(ORMCONFIG_PATH) $(PGPASS_PATH) $(SENTRY_DSN_PATH) $(SECRET_KEY_PATH)
+SECRETS=$(MAIL_API_KEY_PATH) $(DB_PASSWORD_PATH) $(PGPASS_PATH) $(SENTRY_DSN_PATH) $(SECRET_KEY_PATH)
 SHARED_CONFIG_PATH=shared/src/assets/config.ts
 BUILD_ID=$(shell git describe --tags --abbrev=1)
 GA_TAG_PATH=keys/ga_tag
@@ -68,12 +67,9 @@ $(DATA_DUMP_PATH):
 $(REDIS_SETTINGS_PATH): server/deploy/settings.template.json | keys
 	cp server/deploy/settings.template.json $(REDIS_SETTINGS_PATH)
 
-$(ORMCONFIG_PATH): server/ormconfig.template.json $(DB_PASSWORD_PATH)
-	DB_PASSWORD=$$(cat $(DB_PASSWORD_PATH)); \
-	sed "s|DB_PASSWORD|$$DB_PASSWORD|g" server/ormconfig.template.json > $(ORMCONFIG_PATH)
-
 $(SERVER_ENV): $(SERVER_ENV_TEMPLATE) $(SECRETS)
 	POM_BASE_URL=${POM_BASE_URL} \
+	DB_PASSWORD=$$(cat $(DB_PASSWORD_PATH)); \
 		envsubst < $(SERVER_ENV_TEMPLATE) > $(SERVER_ENV)
 	
 $(PGPASS_PATH): $(DB_PASSWORD_PATH) server/deploy/pgpass.template | keys
@@ -110,7 +106,7 @@ settings: $(SENTRY_DSN_PATH) $(SECRET_KEY_PATH) | keys
 initialize: build
 	docker compose run --rm server npm run initdb
 
-docker-compose.yml: base.yml $(ENVIR).yml config.mk $(DB_DATA_PATH) $(DATA_DUMP_PATH) $(LOG_DATA_PATH) $(REDIS_SETTINGS_PATH) $(ORMCONFIG_PATH) $(NUXT_ORMCONFIG_PATH) $(PGPASS_PATH) $(SERVER_ENV) settings
+docker-compose.yml: base.yml $(ENVIR).yml config.mk $(DB_DATA_PATH) $(DATA_DUMP_PATH) $(LOG_DATA_PATH) $(REDIS_SETTINGS_PATH) $(PGPASS_PATH) $(SERVER_ENV) settings
 	case "$(ENVIR)" in \
 	  dev|staging|prod) docker compose -f base.yml -f "$(ENVIR).yml" config > docker-compose.yml;; \
 	  *) echo "invalid environment. must be either dev, staging or prod" 1>&2; exit 1;; \
@@ -118,7 +114,7 @@ docker-compose.yml: base.yml $(ENVIR).yml config.mk $(DB_DATA_PATH) $(DATA_DUMP_
 
 .PHONY: test-setup
 test-setup: docker-compose.yml
-	docker compose run --rm server bash -c "dropdb --if-exists -h db -U ${DB_USER} ${TEST_DB_NAME} && createdb -h db -U ${DB_USER} ${TEST_DB_NAME} && npm run typeorm -- schema:sync -c test && npm run load-fixtures -- ./fixtures/sologame -cn test"
+	docker compose run --rm server bash -c "dropdb --if-exists -h db -U ${DB_USER} ${TEST_DB_NAME} && createdb -h db -U ${DB_USER} ${TEST_DB_NAME} && npm run typeorm -- schema:sync && npm run load-fixtures ./fixtures/sologame"
 
 .PHONY: test
 test: test-setup

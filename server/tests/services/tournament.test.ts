@@ -1,6 +1,6 @@
 import { TournamentRound } from "@port-of-mars/server/entity/TournamentRound";
 import { Tournament } from "@port-of-mars/server/entity/Tournament";
-import { Connection, EntityManager, QueryRunner } from "typeorm";
+import { EntityManager, QueryRunner } from "typeorm";
 import { ServiceProvider } from "@port-of-mars/server/services";
 import {
   createRound,
@@ -17,7 +17,6 @@ import { settings } from "@port-of-mars/server/settings";
 import { TournamentRoundSignup } from "@port-of-mars/server/entity/TournamentRoundSignup";
 
 describe("a tournament", () => {
-  let conn: Connection;
   let qr: QueryRunner;
   let manager: EntityManager;
   let services: ServiceProvider;
@@ -34,7 +33,7 @@ describe("a tournament", () => {
   const afterOffset = 30 * 60 * 1000;
 
   beforeAll(async () => {
-    [conn, qr, manager] = await initTransaction();
+    [qr, manager] = await initTransaction();
     services = new ServiceProvider(qr.manager);
     // create special freeplay tournament
     const freeplayTournament = await createTournament(services, { name: "freeplay" });
@@ -330,5 +329,5 @@ describe("a tournament", () => {
     });
   });
 
-  afterAll(async () => rollbackTransaction(conn, qr));
+  afterAll(async () => rollbackTransaction(qr));
 });

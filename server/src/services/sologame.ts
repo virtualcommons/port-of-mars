@@ -105,7 +105,11 @@ export class SoloGameService extends BaseService {
     await playerRepo.save(player);
     return gameRepo.findOneOrFail({
       where: { id: game.id },
-      relations: ["deck", "deck.cards"],
+      relations: {
+        deck: {
+          cards: true,
+        },
+      },
     });
   }
 

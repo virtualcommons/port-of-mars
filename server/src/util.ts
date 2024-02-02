@@ -15,11 +15,6 @@ import { ClientSafeUser } from "@port-of-mars/shared/types";
 
 const logger = getLogger(__filename);
 
-export function getConnection(): to.Connection {
-  const connectionName = process.env.NODE_ENV === "test" ? "test" : "default";
-  return to.getConnection(connectionName);
-}
-
 export function toUrl(page: Page): string {
   const pagePath = getPagePath(page);
   // getPagePath returns a string with initial slash

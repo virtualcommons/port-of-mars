@@ -1,14 +1,13 @@
 import { AccountService } from "@port-of-mars/server/services/account";
 import { User, Tournament } from "@port-of-mars/server/entity";
 import { settings } from "@port-of-mars/server/settings";
-import { Connection, EntityManager, QueryRunner } from "typeorm";
+import { EntityManager, QueryRunner } from "typeorm";
 import { ServiceProvider } from "@port-of-mars/server/services";
 import { ServerError } from "@port-of-mars/server/util";
 import { createTournament, initTransaction, rollbackTransaction } from "../common";
 
 describe("a potential user", () => {
   const username = "ahacker";
-  let conn: Connection;
   let qr: QueryRunner;
   let manager: EntityManager;
   let sp: ServiceProvider;
@@ -17,7 +16,7 @@ describe("a potential user", () => {
   let accountService: AccountService;
 
   beforeAll(async () => {
-    [conn, qr, manager] = await initTransaction();
+    [qr, manager] = await initTransaction();
     sp = new ServiceProvider(qr.manager);
     t = await createTournament(sp);
     // tr = await createRound(sp, { tournamentId: t.id });
@@ -107,5 +106,5 @@ describe("a potential user", () => {
       accountService.verifyUnregisteredUser(u, "invalid-registration-token")
     ).rejects.toThrowError(ServerError);
   });
-  afterAll(async () => rollbackTransaction(conn, qr));
+  afterAll(async () => rollbackTransaction(qr));
 });

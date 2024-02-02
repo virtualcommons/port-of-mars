@@ -12,7 +12,7 @@
     "cli:prod": "node -r tsconfig-paths/register src/cli.js",
     "start:prod": "node -r tsconfig-paths/register src/index.js | tee -a /var/log/port-of-mars/index.log",
     "start": "ts-node-dev -r tsconfig-paths/register src/index.ts | tee -a /var/log/port-of-mars/index.log",
-    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource src/datasource.ts",
     "dangerously-dropdb": "dropdb -U marsmadness -h db port_of_mars",
     "initdb": "createdb -U marsmadness -h db port_of_mars ; npm run typeorm migration:run && /scripts/freeplay/setup.sh ; npm run load-fixtures ./fixtures/sologame",
     "dangerously-loaddb": "psql -h db -U marsmadness port_of_mars < pom-db.sql",
@@ -25,7 +25,7 @@
     "lint:fix": "eslint --fix -c .eslintrc.js ./ ../shared --ext .ts",
     "style": "prettier --config ../.prettierrc --check './**/*.ts' '../shared/**/*.ts'",
     "style:fix": "prettier --config ../.prettierrc --write './**/*.ts' '../shared/**/*.ts'",
-    "load-fixtures": "fixtures --config ormconfig.json --require ts-node/register --require tsconfig-paths/register"
+    "load-fixtures": "fixtures load  --require ts-node/register --require tsconfig-paths/register -d src/datasource.ts"
   },
   "author": "Center for Behavior, Institutions, and the Environment (https://cbie.asu.edu)",
   "license": "MIT",

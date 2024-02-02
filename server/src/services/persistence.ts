@@ -49,7 +49,11 @@ export class DBPersister implements Persister {
   async selectUsersByUsername(em: EntityManager, usernames: Array<string>) {
     const userRepo = em.getRepository(User);
     const rawUsers = await userRepo.find({
-      select: ["id", "username", "lastPlayerIp"],
+      select: {
+        id: true,
+        username: true,
+        lastPlayerIp: true,
+      },
       where: {
         username: In(usernames),
       },

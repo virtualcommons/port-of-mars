@@ -1,4 +1,3 @@
-import { createConnection } from "typeorm";
 import http from "http";
 import express, { Response } from "express";
 import helmet from "helmet";
@@ -35,11 +34,11 @@ import {
   statusRouter,
   statsRouter,
 } from "@port-of-mars/server/routes";
-import { ServerError } from "./util";
+import { ServerError } from "@port-of-mars/server/util";
+import dataSource from "@port-of-mars/server/datasource";
 
 const logger = settings.logging.getLogger(__filename);
 const NODE_ENV = process.env.NODE_ENV || "development";
-const CONNECTION_NAME = NODE_ENV === "test" ? "test" : "default";
 
 const RedisStore = connectRedis(session);
 const store = new RedisStore({ host: "redis", client: getRedis() });
@@ -251,12 +250,14 @@ async function createApp() {
 // connect to the database and start the server, retrying if the connection fails
 pRetry(
   async () => {
-    await createConnection(CONNECTION_NAME);
+    await dataSource.initialize();
     await createApp();
   },
   {
     onFailedAttempt: error => {
-      logger.warn(`Connection to db failed on attempt number ${error.attemptNumber}, retrying...`);
+      logger.warn(
+        `Connection to db failed on attempt number ${error.attemptNumber}, retrying ${error.retriesLeft} more times...`
+      );
     },
     retries: 10,
     minTimeout: 1 * 1000,
