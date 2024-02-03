@@ -17,7 +17,7 @@ describe("a potential user", () => {
 
   beforeAll(async () => {
     [qr, manager] = await initTransaction();
-    sp = new ServiceProvider(qr.manager);
+    sp = new ServiceProvider(manager);
     t = await createTournament(sp);
     // tr = await createRound(sp, { tournamentId: t.id });
     accountService = sp.account;

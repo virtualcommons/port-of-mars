@@ -114,7 +114,7 @@ docker-compose.yml: base.yml $(ENVIR).yml config.mk $(DB_DATA_PATH) $(DATA_DUMP_
 
 .PHONY: test-setup
 test-setup: docker-compose.yml
-	docker compose run --rm server bash -c "dropdb --if-exists -h db -U ${DB_USER} ${TEST_DB_NAME} && createdb -h db -U ${DB_USER} ${TEST_DB_NAME} && npm run typeorm -- schema:sync && npm run load-fixtures ./fixtures/sologame"
+	docker compose run --rm server bash -c "dropdb --if-exists -h db -U ${DB_USER} ${TEST_DB_NAME} && createdb -h db -U ${DB_USER} ${TEST_DB_NAME} && npm run test-setup"
 
 .PHONY: test
 test: test-setup

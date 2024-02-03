@@ -34,7 +34,7 @@ describe("a tournament", () => {
 
   beforeAll(async () => {
     [qr, manager] = await initTransaction();
-    services = new ServiceProvider(qr.manager);
+    services = new ServiceProvider(manager);
     // create special freeplay tournament
     const freeplayTournament = await createTournament(services, { name: "freeplay" });
     await createRound(services, { tournamentId: freeplayTournament.id });

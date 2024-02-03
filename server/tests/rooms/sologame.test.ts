@@ -43,7 +43,7 @@ describe("a solo game", () => {
 
   beforeAll(async () => {
     [qr, manager] = await initTransaction();
-    sp = new ServiceProvider(qr.manager);
+    sp = new ServiceProvider(manager);
     // create users paul1 paul2 paul3
     [user1, user2, user3] = await createUsers(manager, "paul", [1, 2, 3]);
   });

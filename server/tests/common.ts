@@ -6,6 +6,13 @@ import EventEmitter from "events";
 import testDataSource from "@port-of-mars/server/datasource";
 
 export async function initTransaction(): Promise<[QueryRunner, EntityManager]> {
+  /**
+   * sets up the test db datasource and returns a queryrunner and that queryrunner's manager
+   * which should be used for interacting with the db in tests
+   */
+  // FIXME: we need to initialize the datasource + sync for each test suite
+  // after already doing so in the test setup. may or may not be faster to
+  // just setup once and run sequentially
   await testDataSource.initialize();
   await testDataSource.synchronize();
   const qr = testDataSource.createQueryRunner();

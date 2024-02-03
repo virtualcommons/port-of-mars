@@ -304,7 +304,7 @@ describe("a game", () => {
   describe("event stream", () => {
     let manager: EntityManager;
     let persister: Persister;
-    let qs: QueryRunner;
+    let qr: QueryRunner;
     let sp: ServiceProvider;
     let t: Tournament;
     let tr: TournamentRound;
@@ -312,7 +312,7 @@ describe("a game", () => {
     let users: Array<User>;
 
     beforeAll(async () => {
-      [qs, manager] = await initTransaction();
+      [qr, manager] = await initTransaction();
       sp = new ServiceProvider(manager);
       persister = new DBPersister(sp);
       t = await createTournament(sp);
@@ -350,7 +350,7 @@ describe("a game", () => {
       }
     });
 
-    afterAll(async () => rollbackTransaction(qs));
+    afterAll(async () => rollbackTransaction(qr));
   });
 
   it("correctly isolates all mars events", () => {
