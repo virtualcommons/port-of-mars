@@ -65,6 +65,17 @@
         >
           <b>Join Mars Madness</b>
         </b-nav-item>
+        <!-- FIXME:  TEMP -->
+        <b-nav-item
+          class="mx-2 text-nowrap"
+          link-classes="btn btn-warning text-white"
+          :to="classroomLobby"
+          exact-active-class="active"
+          title="Classroom lobby"
+        >
+          <b>Classroom lobby</b>
+        </b-nav-item>
+        <!-- END TEMP -->
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto">
         <b-nav-item class="mx-2" target="_blank" :href="$settings.DISCORD_URL" title="Discord"
@@ -89,6 +100,16 @@
         </div>
         <b-nav-form v-else class="ml-3">
           <b-button title="Sign In" variant="primary" :to="login">Sign In</b-button>
+          <!-- FIXME:  TEMP -->
+          <b-button title="Sign In (Student)" variant="secondary" :to="studentLogin"
+            >Sign In (Student)</b-button
+          >
+          <!--
+          <b-button title="Sign In (Educator)" variant="primary" :to="educatorLogin"
+            >Sign In (Educator)</b-button
+          >
+          -->
+          <!-- END  TEMP -->
         </b-nav-form>
       </b-navbar-nav>
     </b-collapse>
@@ -111,6 +132,9 @@ import {
   LEADERBOARD_PAGE,
   PROFILE_PAGE,
   TOURNAMENT_DASHBOARD_PAGE,
+  STUDENT_LOGIN_PAGE,
+  EDUCATOR_LOGIN_PAGE,
+  CLASSROOM_LOBBY_PAGE,
 } from "@port-of-mars/shared/routes";
 
 @Component({})
@@ -134,6 +158,9 @@ export default class Navbar extends Vue {
   tournamentDashboard = { name: TOURNAMENT_DASHBOARD_PAGE };
   freePlayLobby = { name: FREE_PLAY_LOBBY_PAGE };
   profile = { name: PROFILE_PAGE };
+  studentLogin = { name: STUDENT_LOGIN_PAGE };
+  educatorLogin = { name: EDUCATOR_LOGIN_PAGE };
+  classroomLobby = { name: CLASSROOM_LOBBY_PAGE };
 
   get username() {
     return this.$tstore.state.user.username;

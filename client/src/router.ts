@@ -24,6 +24,8 @@ import Home from "@port-of-mars/client/views/Home.vue";
 import Privacy from "@port-of-mars/client/views/Privacy.vue";
 import Profile from "@port-of-mars/client/views/Profile.vue";
 import ProlificStudy from "@port-of-mars/client/views/ProlificStudy.vue";
+import StudentLogin from "@port-of-mars/client/views/StudentLogin.vue";
+import ClassroomLobby from "@port-of-mars/client/views/ClassroomLobby.vue";
 import store from "@port-of-mars/client/store";
 import {
   ADMIN_PAGE,
@@ -44,6 +46,8 @@ import {
   PRIVACY_PAGE,
   PROFILE_PAGE,
   PROLIFIC_STUDY_PAGE,
+  STUDENT_LOGIN_PAGE,
+  CLASSROOM_LOBBY_PAGE,
 } from "@port-of-mars/shared/routes";
 
 Vue.use(VueRouter);
@@ -96,6 +100,8 @@ const router = new VueRouter({
     { ...PAGE_META[PRIVACY_PAGE], component: Privacy },
     { ...PAGE_META[PROFILE_PAGE], component: Profile },
     { ...PAGE_META[PROLIFIC_STUDY_PAGE], component: ProlificStudy },
+    { ...PAGE_META[STUDENT_LOGIN_PAGE], component: StudentLogin },
+    { ...PAGE_META[CLASSROOM_LOBBY_PAGE], component: ClassroomLobby },
   ],
 });
 
