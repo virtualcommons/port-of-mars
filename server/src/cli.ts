@@ -44,6 +44,16 @@ function getRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min) + min);
 }
 
+async function withDataSource<T>(func: (em: EntityManager) => Promise<T>): Promise<void> {
+  await appDataSource.initialize();
+  const em = appDataSource.manager;
+  try {
+    await func(em);
+  } finally {
+    await appDataSource.destroy();
+  }
+}
+
 async function exportSoloData(em: EntityManager, start?: string, end?: string) {
   const soloGameService = getServices().sologame;
   await mkdir("/dump/solo", { recursive: true });
@@ -474,7 +484,7 @@ program
               .option("--tournamentId <tournamentId>", "ID of the tournament", customParseInt)
               .description("link existing Treatments to a given Tournament")
               .action(async cmd => {
-                await appDataSource.transaction(async em =>
+                await withDataSource(async em =>
                   addTreatments(em, cmd.treatmentIds, cmd.tournamentId)
                 );
               })
@@ -491,7 +501,7 @@ program
               .option("--tournamentId <tournamentId>", "ID of the tournament", customParseInt)
               .description("add a Treatment (set of mars event overrides) to a Tournament")
               .action(async cmd => {
-                await appDataSource.transaction(async em =>
+                await withDataSource(async em =>
                   createTournamentTreatment(
                     em,
                     cmd.name,
@@ -522,7 +532,7 @@ program
               )
               .description("add a TournamentRoundDate for the given date")
               .action(async cmd => {
-                await appDataSource.transaction(async em =>
+                await withDataSource(async em =>
                   createTournamentRoundDate(em, cmd.date, cmd.tournamentRoundId)
                 );
               })
@@ -537,7 +547,7 @@ program
               )
               .description("report emails for all users in the given tournament round")
               .action(async cmd => {
-                await appDataSource.transaction(async em =>
+                await withDataSource(async em =>
                   exportTournamentRoundEmails(em, cmd.tournamentRoundId)
                 );
               })
@@ -562,7 +572,7 @@ program
               )
               .description("create invitations for the given users in the given tournament round")
               .action(async cmd => {
-                await appDataSource.transaction(async em =>
+                await withDataSource(async em =>
                   createTournamentRoundInvites(
                     em,
                     cmd.tournamentRoundId,
@@ -592,7 +602,7 @@ program
               .option("--announcement <announcement>", "Tournament Round announcement message", "")
               .description("create a tournament round")
               .action(async cmd => {
-                await appDataSource.transaction(async em =>
+                await withDataSource(async em =>
                   createRound(
                     em,
                     cmd.open,
@@ -622,7 +632,7 @@ program
           .option("--description <description>", "Description of the tournament")
           .description("create a tournament")
           .action(async cmd => {
-            await appDataSource.transaction(async em =>
+            await withDataSource(async em =>
               createTournament(
                 em,
                 cmd.tournamentName,
@@ -645,7 +655,7 @@ program
           .description("set a user as an administrator")
           .requiredOption("--username <username>", "username of the user")
           .action(async cmd => {
-            await appDataSource.transaction(async em => setAdminUser(em, cmd.username));
+            await withDataSource(async em => setAdminUser(em, cmd.username));
           })
       )
       .addCommand(
@@ -655,9 +665,7 @@ program
           .requiredOption("--startId <startUserId>", "initial user ID in range", customParseInt, 1)
           .requiredOption("--endId <endUserId>", "end user ID in range", customParseInt, 1942)
           .action(async cmd => {
-            await appDataSource.transaction(async em =>
-              anonymizeUsernames(em, cmd.startId, cmd.endId)
-            );
+            await withDataSource(async em => anonymizeUsernames(em, cmd.startId, cmd.endId));
           })
       )
   )
@@ -671,7 +679,7 @@ program
           .description("finalize a game that wasn't finalized properly")
           .requiredOption("--gameId <gameId>", "id of game", customParseInt)
           .action(async cmd => {
-            await appDataSource.transaction(async em => finalize(em, cmd.gameId));
+            await withDataSource(async em => finalize(em, cmd.gameId));
           })
       )
       .addCommand(
@@ -682,7 +690,7 @@ program
           )
           .requiredOption("--gameId <gameId>", "id of game", customParseInt)
           .action(async cmd => {
-            await appDataSource.transaction(async em => validate(em, cmd.gameId));
+            await withDataSource(async em => validate(em, cmd.gameId));
           })
       )
   )
@@ -698,7 +706,7 @@ program
           .description("dump game data for a given tournament round id to a pile of CSV files")
           .requiredOption("--tournamentId <tournamentId>", "tournament id", customParseInt)
           .action(async cmd => {
-            await appDataSource.transaction(async em => exportTournament(em, cmd.tournamentId));
+            await withDataSource(async em => exportTournament(em, cmd.tournamentId));
           })
       )
       .addCommand(
@@ -717,9 +725,7 @@ program
             [] as Array<number>
           )
           .action(async cmd => {
-            await appDataSource.transaction(async em =>
-              exportTournamentRound(em, cmd.tournamentId, cmd.gids)
-            );
+            await withDataSource(async em => exportTournamentRound(em, cmd.tournamentId, cmd.gids));
           })
       )
       .addCommand(
@@ -729,7 +735,7 @@ program
           .option("-s, --start <date>", "Start date (YYYY-MM-DD)")
           .option("-e, --end <date>", "End date (YYYY-MM-DD)")
           .action(async cmd => {
-            await appDataSource.transaction(async em => exportSoloData(em, cmd.start, cmd.end));
+            await withDataSource(async em => exportSoloData(em, cmd.start, cmd.end));
           })
       )
   )
@@ -744,7 +750,7 @@ program
         [] as Array<number>
       )
       .action(async cmd => {
-        await appDataSource.transaction(async em => checkQuizCompletion(em, cmd.ids));
+        await withDataSource(async em => checkQuizCompletion(em, cmd.ids));
       })
   )
   .addCommand(
@@ -758,7 +764,7 @@ program
         [] as Array<number>
       )
       .action(async cmd => {
-        await appDataSource.transaction(async em => completeQuizCompletion(em, cmd.ids));
+        await withDataSource(async em => completeQuizCompletion(em, cmd.ids));
       })
   )
   .addCommand(
@@ -775,9 +781,7 @@ program
         "generate a CSV for mailchimp import of all active users with a valid email address"
       )
       .action(async cmd => {
-        await appDataSource.transaction(async em =>
-          exportActiveEmails(em, cmd.after, cmd.enableAmdf)
-        );
+        await withDataSource(async em => exportActiveEmails(em, cmd.after, cmd.enableAmdf));
       })
   )
   .addCommand(
@@ -790,7 +794,7 @@ program
       )
       .description("Deactivate users who have unsubscribed from emails (currently from mailchimp).")
       .action(async cmd => {
-        await appDataSource.transaction(async em => deactivateUsers(em, cmd.filename));
+        await withDataSource(async em => deactivateUsers(em, cmd.filename));
       })
   )
   .addCommand(
