@@ -9,8 +9,6 @@ import * as dotenv from "dotenv";
 
 dotenv.config();
 
-export const SECRET_KEY: string = fs.readFileSync("/run/secrets/secret_key", "utf8").trim();
-
 export interface AppSettings {
   emailer: Emailer;
   host: string;
@@ -34,7 +32,7 @@ const dev: () => AppSettings = () => ({
   host: process.env.BASE_URL || "http://localhost:8081",
   serverHost: "http://localhost:2567",
   logging: new DevLogging(),
-  secret: SECRET_KEY,
+  secret: process.env.SECRET_KEY || "",
   googleAuth: {
     clientId: process.env.GOOGLE_CLIENT_ID || "",
     clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
@@ -49,11 +47,11 @@ const dev: () => AppSettings = () => ({
 
 const staging: () => AppSettings = () => {
   const devSettings = dev();
-  const apiKey = fs.readFileSync("/run/secrets/mail_api_key", "utf-8").trim();
+  const mailApiKey = process.env.MAIL_API_KEY || "";
   const domain = "mg.comses.net";
   return {
     ...devSettings,
-    emailer: new MailgunEmailer({ api_key: apiKey, domain }),
+    emailer: new MailgunEmailer({ api_key: mailApiKey, domain }),
     host: process.env.BASE_URL || "https://staging.portofmars.asu.edu",
     serverHost: process.env.BASE_URL || "https://staging.portofmars.asu.edu",
   };

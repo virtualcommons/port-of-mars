@@ -68,10 +68,19 @@ $(REDIS_SETTINGS_PATH): server/deploy/settings.template.json | keys
 	cp server/deploy/settings.template.json $(REDIS_SETTINGS_PATH)
 
 $(SERVER_ENV): $(SERVER_ENV_TEMPLATE) $(SECRETS)
-	POM_BASE_URL=${POM_BASE_URL} \
-	DB_PASSWORD=$$(cat $(DB_PASSWORD_PATH)); \
-		envsubst < $(SERVER_ENV_TEMPLATE) > $(SERVER_ENV)
-	
+	if [ ! -f $(SERVER_ENV) ]; then \
+		cp $(SERVER_ENV_TEMPLATE) $(SERVER_ENV); \
+		DB_PASSWORD=$$(cat $(DB_PASSWORD_PATH)); \
+		SECRET_KEY=$$(cat $(SECRET_KEY_PATH)); \
+		sed \
+			-e "s|BASE_URL=.*|BASE_URL=${POM_BASE_URL}|" \
+			-e "s|DB_PASSWORD=.*|DB_PASSWORD=$${DB_PASSWORD}|" \
+			-e "s|SECRET_KEY=.*|SECRET_KEY=$${SECRET_KEY}|" \
+			$(SERVER_ENV_TEMPLATE) > $(SERVER_ENV); \
+	else \
+		echo "$(SERVER_ENV) already exists. skipping"; \
+	fi
+
 $(PGPASS_PATH): $(DB_PASSWORD_PATH) server/deploy/pgpass.template | keys
 	DB_PASSWORD=$$(cat $(DB_PASSWORD_PATH)); \
 	sed "s|DB_PASSWORD|$$DB_PASSWORD|g" server/deploy/pgpass.template > $(PGPASS_PATH)
@@ -97,7 +106,7 @@ $(SECRET_KEY_PATH): | keys
 	echo $${SECRET_KEY} > $(SECRET_KEY_PATH)
 
 .PHONY: settings
-settings: $(SENTRY_DSN_PATH) $(SECRET_KEY_PATH) | keys
+settings: $(SENTRY_DSN_PATH) $(SECRET_KEY_PATH) $(GA_TAG_PATH) | keys
 	echo 'export const BUILD_ID = "${BUILD_ID}";' > $(SHARED_CONFIG_PATH)
 	echo 'export const SENTRY_DSN = "${SENTRY_DSN}";' >> $(SHARED_CONFIG_PATH)
 	echo 'export const GA_TAG = "${GA_TAG}";' >> $(SHARED_CONFIG_PATH)
