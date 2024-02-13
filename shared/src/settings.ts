@@ -35,6 +35,12 @@ export const BASE_URL = baseUrlMap[ENVIRONMENT];
 export const SERVER_URL_WS = isDev() ? "ws://localhost:2567" : "";
 export const SERVER_URL_HTTP = isDev() ? "http://localhost:2567" : "";
 
+export function isEducatorMode(): boolean {
+  // FIXME: APP_MODE is in config.ts temporarily. ideally config.ts can be replaced
+  // entirely with an env file
+  return APP_MODE === "educator";
+}
+
 export function isDev(): boolean {
   return ENVIRONMENT === "development";
 }
