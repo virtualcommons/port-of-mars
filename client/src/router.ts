@@ -67,9 +67,8 @@ function isAdmin() {
   return store.getters.isAdmin;
 }
 
-function isEducator() {
-  // FIXME: we need an educator flag on the user that gets passed to the client state
-  return true;
+function isTeacher() {
+  return store.getters.isTeacher;
 }
 
 function hasConsented() {
@@ -192,7 +191,7 @@ function getEducatorRouter() {
       next({ name: STUDENT_LOGIN_PAGE });
     } else if (to.meta.requiresAdmin && !isAdmin()) {
       next({ name: EDUCATOR_LOGIN_PAGE });
-    } else if (to.meta.requiresEducator && !isEducator()) {
+    } else if (to.meta.requiresTeacher && !isTeacher()) {
       next({ name: EDUCATOR_LOGIN_PAGE });
     } else if (
       (to.name === STUDENT_LOGIN_PAGE || to.name === EDUCATOR_LOGIN_PAGE) &&
