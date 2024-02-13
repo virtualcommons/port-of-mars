@@ -73,6 +73,7 @@ export interface RouteMeta {
   requiresAuth: boolean;
   requiresConsent?: boolean;
   requiresAdmin?: boolean;
+  requiresEducator?: boolean;
   requiresTournamentEnabled?: boolean;
   requiresFreePlayEnabled?: boolean;
 }
