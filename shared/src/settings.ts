@@ -38,7 +38,7 @@ export const SERVER_URL_HTTP = isDev() ? "http://localhost:2567" : "";
 export function isEducatorMode(): boolean {
   // FIXME: APP_MODE is in config.ts temporarily. ideally config.ts can be replaced
   // entirely with an env file
-  return APP_MODE === "educator";
+  return (APP_MODE as any) === "educator";
 }
 
 export function isDev(): boolean {
