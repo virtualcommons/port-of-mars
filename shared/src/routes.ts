@@ -227,7 +227,8 @@ export const PAGE_META: {
     path: "/classroom",
     name: CLASSROOM_LOBBY_PAGE,
     meta: {
-      requiresAuth: true,
+      // FIXME: temp
+      requiresAuth: false,
     },
   },
 };
