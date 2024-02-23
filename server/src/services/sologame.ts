@@ -75,13 +75,13 @@ export class SoloGameService extends BaseService {
     ).max;
 
     if (highestPlayedTreatment < numTreatments) {
-      return treatmentRepo.findOneOrFail(highestPlayedTreatment + 1);
+      return treatmentRepo.findOneByOrFail({ id: highestPlayedTreatment + 1 });
     }
-    return treatmentRepo.findOneOrFail(getRandomIntInclusive(1, numTreatments));
+    return treatmentRepo.findOneByOrFail({ id: getRandomIntInclusive(1, numTreatments) });
   }
 
   async getTreatmentById(id: number): Promise<TreatmentData> {
-    return this.em.getRepository(SoloGameTreatment).findOneOrFail(id);
+    return this.em.getRepository(SoloGameTreatment).findOneByOrFail({ id });
   }
 
   async createGame(state: SoloGameState): Promise<SoloGame> {
@@ -103,7 +103,14 @@ export class SoloGameService extends BaseService {
     await gameRepo.save(game);
     player.gameId = game.id;
     await playerRepo.save(player);
-    return gameRepo.findOneOrFail(game.id, { relations: ["deck", "deck.cards"] });
+    return gameRepo.findOneOrFail({
+      where: { id: game.id },
+      relations: {
+        deck: {
+          cards: true,
+        },
+      },
+    });
   }
 
   async createPlayer(userId: number): Promise<SoloPlayer> {
@@ -147,7 +154,7 @@ export class SoloGameService extends BaseService {
 
   async updateGameStatus(gameId: number, status: SoloGameStatus) {
     const repo = this.em.getRepository(SoloGame);
-    const game = await repo.findOneOrFail(gameId);
+    const game = await repo.findOneByOrFail({ id: gameId });
     game.status = status;
     await repo.save(game);
   }
@@ -159,7 +166,7 @@ export class SoloGameService extends BaseService {
     status: SoloGameStatus
   ) {
     const repo = this.em.getRepository(SoloPlayer);
-    const player = await repo.findOneOrFail({ gameId });
+    const player = await repo.findOneByOrFail({ gameId });
     player.points = points;
     await repo.save(player);
     // if the game was a success, update the player's highscore table as well
@@ -197,7 +204,7 @@ export class SoloGameService extends BaseService {
     // additionally, set the round on all cards that were drawn this round
     const cards = state.roundEventCards;
     for (const card of cards) {
-      const deckCard = await deckCardRepo.findOneOrFail({ id: card.deckCardId });
+      const deckCard = await deckCardRepo.findOneByOrFail({ id: card.deckCardId });
       if (deckCard) {
         deckCard.round = round;
         await deckCardRepo.save(deckCard);

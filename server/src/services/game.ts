@@ -5,7 +5,7 @@ import { IsNull } from "typeorm";
 
 export class GameService extends BaseService {
   async findById(id: number): Promise<Game> {
-    return await this.em.getRepository(Game).findOneOrFail(id);
+    return await this.em.getRepository(Game).findOneByOrFail({ id });
   }
 
   async findByRoomId(roomId: string): Promise<Game> {
@@ -16,7 +16,9 @@ export class GameService extends BaseService {
 
   async getTotalActiveGames(): Promise<number> {
     return await this.em.getRepository(Game).count({
-      dateFinalized: IsNull(),
+      where: {
+        dateFinalized: IsNull(),
+      },
     });
   }
 
