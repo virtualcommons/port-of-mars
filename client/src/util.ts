@@ -1,10 +1,11 @@
 import { SetSfx } from "@port-of-mars/shared/game/responses";
 import { Sfx } from "@port-of-mars/shared/game/responses";
+import { SERVER_URL_HTTP } from "@port-of-mars/shared/settings";
 import { Howl } from "howler";
 
 export function url(path: string) {
   // workaround to connect to localhost:2567 server endpoints
-  return `${process.env.SERVER_URL_HTTP}${path}`;
+  return `${SERVER_URL_HTTP}${path}`;
 }
 
 export function getAssetUrl(path: string) {

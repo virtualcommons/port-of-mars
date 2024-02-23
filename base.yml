@@ -4,6 +4,14 @@ services:
       context: .
     restart: always
     image: port-of-mars/server:dev
+    secrets:
+      - pom_db_password
+      - mail_api_key
+      - secret_key
+      - google_client_secret
+      - facebook_client_secret
+    env_file:
+      - .env
     depends_on:
       redis:
         condition: service_started
@@ -13,9 +21,8 @@ services:
       - ./docker/dump:/dump
       - ./docker/logs:/var/log/port-of-mars
       - ./keys/.pgpass:/root/.pgpass
-      - ./keys:/run/secrets
+      - ./keys/settings.json:/run/secrets/settings.json
       - ./scripts:/scripts
-      - ./server/.env:/code/server/.env
       - ./.prettierrc:/code/.prettierrc
   redis:
     image: redis:7
@@ -27,12 +34,25 @@ services:
       timeout: 5s
       retries: 5
     image: postgres:12
+    secrets:
+      - pom_db_password
     restart: always
     environment:
-      POSTGRES_USER: marsmadness
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD_FILE: /run/secrets/pom_db_password
-      POSTGRES_DB: port_of_mars
       PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
-      - ./keys/pom_db_password:/run/secrets/pom_db_password:ro
       - ./docker/data:/var/lib/postgresql/data/pgdata
+
+secrets:
+  pom_db_password:
+    file: ./keys/pom_db_password
+  mail_api_key:
+    file: ./keys/mail_api_key
+  secret_key:
+    file: ./keys/secret_key
+  google_client_secret:
+    file: ./keys/google_client_secret
+  facebook_client_secret:
+    file: ./keys/facebook_client_secret

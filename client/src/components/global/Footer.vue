@@ -93,7 +93,7 @@ ccarra1@asu.edu
       &copy; 2020-{{ currentYear }}
       <a href="https://www.azregents.edu/">Arizona Board of Regents</a> |
 
-      <a :href="constants.GITHUB_URL">{{ constants.BUILD_ID }}</a>
+      <a :href="constants.GITHUB_URL">{{ constants.RELEASE_VERSION }}</a>
     </div>
   </footer>
   <!-- </b-container> -->

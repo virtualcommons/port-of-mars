@@ -1,13 +1,7 @@
 import vue from "@vitejs/plugin-vue2";
 import { defineConfig } from "vite";
 import path from "path";
-import fs from "fs";
 import autoprefixer from "autoprefixer";
-
-let SENTRY_DSN = "";
-if (fs.existsSync("/run/secrets/sentry_dsn")) {
-  SENTRY_DSN = fs.readFileSync("/run/secrets/sentry_dsn", "utf8").trim();
-}
 
 export default defineConfig({
   plugins: [vue()],
@@ -36,12 +30,10 @@ export default defineConfig({
     },
   },
   define: {
-    "process.env.SERVER_URL_WS": JSON.stringify(
-      process.env.NODE_ENV === "development" ? "ws://localhost:2567" : ""
-    ),
-    "process.env.SERVER_URL_HTTP": JSON.stringify(
-      process.env.NODE_ENV === "development" ? "http://localhost:2567" : ""
-    ),
-    "process.env.SENTRY_DSN": JSON.stringify(SENTRY_DSN),
+    // make process.env work on the client
+    ...Object.keys(process.env).reduce((acc, key) => {
+      acc[`process.env.${key}`] = JSON.stringify(process.env[key]);
+      return acc;
+    }, {}),
   },
 });

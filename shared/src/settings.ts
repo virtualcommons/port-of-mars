@@ -1,7 +1,20 @@
-import { BUILD_ID, SENTRY_DSN, GA_TAG } from "./assets/config";
-export { BUILD_ID, SENTRY_DSN, GA_TAG } from "./assets/config";
+type Environment = "development" | "staging" | "production" | "test";
 
-export const ENVIRONMENT = process.env.NODE_ENV || "development";
+export const ENVIRONMENT = (process.env.NODE_ENV || "development") as Environment;
+export const RELEASE_VERSION = process.env.RELEASE_VERSION || "unknown";
+export const SENTRY_DSN = process.env.SENTRY_DSN || "";
+export const GA_TAG = process.env.GA_TAG || "";
+
+const baseUrlMap = {
+  development: "http://localhost:8081",
+  staging: "https://staging.portofmars.com",
+  production: "https://portofmars.com",
+  test: "http://localhost:8081",
+};
+
+export const BASE_URL = baseUrlMap[ENVIRONMENT];
+export const SERVER_URL_WS = isDev() ? "ws://localhost:2567" : "";
+export const SERVER_URL_HTTP = isDev() ? "http://localhost:2567" : "";
 
 export function isDev(): boolean {
   return ENVIRONMENT === "development";
@@ -28,7 +41,8 @@ export function isStagingOrProduction(): boolean {
 }
 
 export class Constants {
-  // FIXME: we could support reading values from a settings file as well/instead?
+  // FIXME: this is rather cumbersome to use, rather just export consts directly
+  // also consider putting some of these in .env config
   public static readonly TRAILER_VIDEO_URL = "https://www.youtube.com/embed/CiB4q3CnyCY";
   public static readonly TUTORIAL_VIDEO_URL = "https://www.youtube.com/embed/D4FfofyrlkA";
   public static readonly DISCORD_URL = "https://discord.gg/AFEtAJZfEM";
@@ -37,7 +51,7 @@ export class Constants {
   public static readonly GITHUB_URL = "https://github.com/virtualcommons/port-of-mars";
   public static readonly CONTACT_EMAIL = "portmars@asu.edu";
   public static readonly ENVIRONMENT = ENVIRONMENT;
-  public static readonly BUILD_ID = BUILD_ID;
+  public static readonly RELEASE_VERSION = RELEASE_VERSION;
   public static readonly SENTRY_DSN = SENTRY_DSN;
   public static readonly GA_TAG = GA_TAG;
   public static readonly GIFT_CARD_AMOUNT = 10;
