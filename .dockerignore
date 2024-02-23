@@ -1,6 +1,7 @@
 client/node_modules
 server/node_modules
-server/deploy/Dockerfile*
+server/Dockerfile.dev
+server/Dockerfile.prod
 server/output
 docker
 keys

@@ -4,10 +4,12 @@ import {
   MailgunEmailer,
 } from "@port-of-mars/server/services/email/emailers";
 import { LogService, DevLogging, Logging } from "@port-of-mars/server/services/logging";
+import { BASE_URL, SERVER_URL_HTTP } from "@port-of-mars/shared/settings";
 import * as fs from "fs";
-import * as dotenv from "dotenv";
 
-dotenv.config();
+const readSecret = (filename: string): string => {
+  return fs.readFileSync(`/run/secrets/${filename}`, "utf8").trim();
+};
 
 export interface AppSettings {
   emailer: Emailer;
@@ -29,17 +31,17 @@ export interface AppSettings {
 
 const dev: () => AppSettings = () => ({
   emailer: new MemoryEmailer(),
-  host: process.env.BASE_URL || "http://localhost:8081",
-  serverHost: "http://localhost:2567",
+  host: BASE_URL || "http://localhost:8081",
+  serverHost: SERVER_URL_HTTP || "http://localhost:2567",
   logging: new DevLogging(),
-  secret: process.env.SECRET_KEY || "",
+  secret: readSecret("secret_key"),
   googleAuth: {
     clientId: process.env.GOOGLE_CLIENT_ID || "",
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+    clientSecret: readSecret("google_client_secret"),
   },
   facebookAuth: {
     clientId: process.env.FACEBOOK_CLIENT_ID || "",
-    clientSecret: process.env.FACEBOOK_CLIENT_SECRET || "",
+    clientSecret: readSecret("facebook_client_secret"),
   },
   supportEmail: "portmars@asu.edu",
   isProduction: false,
@@ -47,13 +49,13 @@ const dev: () => AppSettings = () => ({
 
 const staging: () => AppSettings = () => {
   const devSettings = dev();
-  const mailApiKey = process.env.MAIL_API_KEY || "";
+  const mailApiKey = readSecret("mail_api_key");
   const domain = "mg.comses.net";
   return {
     ...devSettings,
     emailer: new MailgunEmailer({ api_key: mailApiKey, domain }),
-    host: process.env.BASE_URL || "https://staging.portofmars.asu.edu",
-    serverHost: process.env.BASE_URL || "https://staging.portofmars.asu.edu",
+    host: BASE_URL || "https://staging.portofmars.asu.edu",
+    serverHost: BASE_URL || "https://staging.portofmars.asu.edu",
   };
 };
 
@@ -61,8 +63,8 @@ const prod: () => AppSettings = () => {
   const stagingSettings = staging();
   return {
     ...stagingSettings,
-    host: process.env.BASE_URL || "https://portofmars.asu.edu",
-    serverHost: process.env.BASE_URL || "https://portofmars.asu.edu",
+    host: BASE_URL || "https://portofmars.asu.edu",
+    serverHost: BASE_URL || "https://portofmars.asu.edu",
     isProduction: true,
   };
 };

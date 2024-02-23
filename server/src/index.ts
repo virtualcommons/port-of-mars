@@ -141,9 +141,9 @@ async function createApp() {
   })();
 
   logger.info(
-    "starting (%s) server: [build id: %s, settings.host %s]",
+    "starting (%s) server: [release version: %s, settings.host %s]",
     NODE_ENV,
-    Constants.BUILD_ID,
+    Constants.RELEASE_VERSION,
     settings.host
   );
   const port = Number(process.env.PORT || 2567);
@@ -258,6 +258,7 @@ pRetry(
       logger.warn(
         `Connection to db failed on attempt number ${error.attemptNumber}, retrying ${error.retriesLeft} more times...`
       );
+      logger.warn(`cause: ${error.message}`);
     },
     retries: 10,
     minTimeout: 1 * 1000,

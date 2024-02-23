@@ -1,14 +1,12 @@
 import { DataSourceOptions, DataSource } from "typeorm";
-import * as dotenv from "dotenv";
-
-dotenv.config();
+import * as fs from "fs";
 
 const postgresConnectionOptions: DataSourceOptions = {
   type: "postgres",
   host: "db",
   port: 5432,
   username: "marsmadness",
-  password: process.env.DB_PASSWORD,
+  password: fs.readFileSync("/run/secrets/pom_db_password", "utf8").trim(),
   synchronize: false,
   logging: false,
   entities: ["src/entity/**/*.{js,ts}"],
