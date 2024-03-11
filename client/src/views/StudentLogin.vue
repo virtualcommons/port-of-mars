@@ -4,11 +4,23 @@
     <div id="login-container" class="content-container rounded d-flex flex-column justify-content-center align-items-center backdrop" style="padding-left: 0.1rem; padding-right: 0.1rem;">
       <!-- Rounded text field for game code -->
       <b-form-input
+        v-if="!alreadyJoined"
         v-model="gameCode"
         class="rounded-input w-70"
         placeholder="GAME CODE"
+        required
       ></b-form-input>
-          
+
+     <!-- Rounded text field for password (displayed when already joined a game) -->
+      <b-form-input
+        v-model="password"
+        :type="passwordVisible ? 'text' : 'password'" 
+        class="rounded-input w-70"
+        placeholder="PASSWORD"
+        required
+        v-if="alreadyJoined"
+      ></b-form-input>
+
       <!-- Rounded Enter button -->
       <b-button
         variant="primary"
@@ -17,11 +29,18 @@
         class="rounded-button w-70"
         style="background-color: white; color: black"
       >
-         <span class="enter-text">Enter</span>
-      </b-button>
+         <span class="enter-text" v-if="!alreadyJoined">Join Game</span>
+         <span class="enter-text" v-if="alreadyJoined">Re-join Game</span>
+    </b-button>
+      
+      <!-- Checkbox for indicating if already joined a game -->
+      <b-form-checkbox v-model="alreadyJoined" class="already-joined-checkbox">
+        Already joined a game?
+      </b-form-checkbox>
     </div>
   </b-container>
 </template>
+
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
@@ -30,6 +49,9 @@ import { isDevOrStaging } from "@port-of-mars/shared/settings";
 @Component
 export default class StudentLogin extends Vue {
   gameCode: string = '';
+  alreadyJoined: boolean = false;
+  password: string = '';
+  passwordVisible: boolean = false; // For toggling password visibility
 
   created() {
     
@@ -38,7 +60,15 @@ export default class StudentLogin extends Vue {
   enterGame() {
     // Handle entering the game here
     console.log("Enter button clicked");
-    console.log("Game code entered:", this.gameCode);
+    if (this.alreadyJoined) {
+      console.log("Password entered:", this.password);
+    } else {
+      console.log("Game code entered:", this.gameCode);
+    }
+  }
+
+  togglePasswordVisibility() {
+    this.passwordVisible = !this.passwordVisible; // Toggle password visibility
   }
 }
 </script>
@@ -52,23 +82,23 @@ export default class StudentLogin extends Vue {
 
 .join-game-label {
   color: white;
-  font-size: 1.5rem;
+  font-size: 2rem;
   margin-bottom: 1rem;
   display: block; /* Ensure label takes full width */
-  font-weight: bold; /* Make the label bold */
-  position: relative; /* Set position to relative */
-  top: -110px; /* Move the label up by 50px */
-  left: 310px; /* Move the label to the right by 50px */
+  font-weight: bold; 
+  position: relative; 
+  top: -165px; 
+  left: 335px; 
 }
 
 .rounded-input, .rounded-button {
-  width: 70%; /* Set the width to 70% for both */
+  width: 70%; 
   border-radius: 20px;
   margin-bottom: 1rem;
-  padding: 0.5rem; /* Add padding to make it visually appealing */
-  display: flex; /* Use flexbox */
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
+  padding: 0.5rem;
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
   text-align: center;
   font-size: 20px;
   font-weight: bold;
@@ -76,11 +106,18 @@ export default class StudentLogin extends Vue {
 
 .rounded-button {
   min-width: 150px;
-  margin-top: 1rem; /* Add margin to separate the button from the text field */
+  margin-top: 1rem; 
 }
 
 .enter-text {
-  font-weight: bold; /* Make the button text bold */
+  font-weight: bold; 
   font-size: 20px;
 }
+
+.already-joined-checkbox {
+  color: white; 
+  margin-bottom: 1rem; 
+  padding: 0.5rem;
+}
+
 </style>
