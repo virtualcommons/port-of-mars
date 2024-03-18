@@ -94,6 +94,7 @@ passport.use(
 
 if (isDevOrStaging()) {
   passport.use(
+    "local-dev",
     new LocalStrategy(
       {
         passReqToCallback: true,
@@ -104,7 +105,29 @@ if (isDevOrStaging()) {
           username,
           shouldSkipVerification
         );
-        await done(null, user);
+        return done(null, user);
+      }
+    )
+  );
+}
+
+if (isEducatorMode()) {
+  passport.use(
+    "local-student",
+    new LocalStrategy(
+      {
+        usernameField: "classroomAuthToken",
+        passwordField: "password",
+        passReqToCallback: true,
+      },
+      async function (req: any, classroomAuthToken: string, password: string, done: any) {
+        logger.fatal("creating student with classroomAuthToken: %s", classroomAuthToken);
+        try {
+          const user = await getServices().educator.createStudent(classroomAuthToken);
+          return done(null, user);
+        } catch (e) {
+          return done(e);
+        }
       }
     )
   );
