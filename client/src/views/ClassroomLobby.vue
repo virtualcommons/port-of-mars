@@ -1,44 +1,23 @@
 <template>
   <b-container fluid class="h-100 w-100 m-0 p-0 backdrop">
-    <div class="h-100 w-100 d-flex flex-column">
-      <Messages class="p-3"></Messages>
-      <b-row class="h-100 w-100 mx-auto flex-grow-1 p-5" style="max-width: 1400px">
-        <b-col cols="4">
-          <HelpPanel></HelpPanel>
-        </b-col>
-        <b-col cols="8">
-          <b-row class="h-100 w-100" no-gutters>
-            <b-col cols="7">
-              <div id="rooms" class="h-100 content-container mr-3">
-                <b-table
-                  dark
-                  sticky-header
-                  class="h-100 m-0 custom-table"
-                  style="max-height: none"
-                  :fields="clientFields"
-                  :items="clients"
-                >
-                  <template #cell(username)="data">
-                    <b-icon-person-fill></b-icon-person-fill> {{ data.item.username }}
-                  </template>
-                  ></b-table
-                >
-              </div>
-            </b-col>
-            <b-col cols="5">
-              <div id="actions" class="h-100 pl-3 d-flex flex-column">
-                <h4>Port of Mars Tournament Lobby</h4>
-                <p>A game will launch as soon as the waiting room fills up with 5 players.</p>
-                <h4 class="mt-3">Room Chat</h4>
-                <div class="flex-grow-1 content-container">
-                  <LobbyChat :messages="chatMessages"></LobbyChat>
-                </div>
-              </div>
-            </b-col>
-          </b-row>
-        </b-col>
-      </b-row>
+    <div class="total-joined text-right">Total joined: {{ clients.length }}</div>
+    <div class="d-flex flex-grow-1 flex-column align-items-center justify-content-start pt-2">
+      <div class="">
+        <h1>WELCOME TO THE LOBBY</h1>
+        <div class="text-center">
+          <p>Please wait patiently for your teacher to start game....</p>
+        </div>
+      </div>
+      <div class="player-grid">
+        <div class="player-card" v-for="client in clients" :key="client.id">
+          <span>{{ client.username }}</span>
+        </div>
+      </div>
     </div>
+    <!-- <b-row class="justify-content-between align-items-center mb-2">
+      <b-col> </b-col>
+      <b-col cols="auto" class="text-right"> Total joined: {{ clients.length }} </b-col>
+    </b-row> -->
   </b-container>
 </template>
 
@@ -129,4 +108,63 @@ export default class TournamentLobby extends Vue {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.backdrop {
+  display: flex;
+  flex-direction: column;
+}
+
+.player-count {
+  position: absolute; // Absolute positioning to place it on top right
+  top: 0;
+  right: 0;
+  padding: 1rem; // Padding to not stick to the edges
+  z-index: 10; // Ensure it's above other elements
+}
+
+.total-joined {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 7rem;
+  z-index: 10;
+}
+
+// .header {
+//   text-align: center;
+//   background-color: transparent;
+
+//   p {
+//     color: #ffffff;
+//   }
+// }
+
+.player-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  @media (min-width: 1000px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media (min-width: 1200px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  @media (min-width: 1600px) {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  grid-gap: 1.5rem;
+  width: 100%;
+  max-width: 900px;
+}
+
+.player-card {
+  background-color: #333333;
+  border: 3px solid #444444;
+  border-radius: 1rem;
+  padding: 1rem;
+  text-align: center;
+  height: 70px;
+  width: 210px;
+}
+</style>
