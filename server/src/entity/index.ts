@@ -20,3 +20,6 @@ export * from "./SoloMarsEventDeck";
 export * from "./SoloMarsEventDeckCard";
 export * from "./SoloPlayer";
 export * from "./SoloPlayerDecision";
+export * from "./Student";
+export * from "./Teacher";
+export * from "./Classroom";

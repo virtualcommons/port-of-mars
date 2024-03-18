@@ -5,20 +5,21 @@ import { settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
 import { toUrl } from "@port-of-mars/server/util";
 import { LOGIN_PAGE, CONSENT_PAGE, FREE_PLAY_LOBBY_PAGE } from "@port-of-mars/shared/routes";
-import { isDevOrStaging } from "@port-of-mars/shared/settings";
+import { isDevOrStaging, isEducatorMode } from "@port-of-mars/shared/settings";
 
 const logger = settings.logging.getLogger(__filename);
 
 export const authRouter = Router();
 
 if (isDevOrStaging()) {
-  authRouter.post("/login", passport.authenticate("local"), function (req, res) {
-    const _sessionId = req.sessionID;
-    logger.info(`dev/testing auth for user ${req.user}, setting session id ${_sessionId}`);
-    res.cookie("connect.sid", _sessionId, { signed: true });
-    const sessionCookie: any = res.getHeaders()["set-cookie"];
-    logger.info(sessionCookie);
-    res.json({ user: req.user, sessionCookie });
+  authRouter.post("/dev-login", passport.authenticate("local-dev"), function (req, res) {
+    res.json({ user: req.user });
+  });
+}
+
+if (isEducatorMode()) {
+  authRouter.post("/student-login", passport.authenticate("local-student"), function (req, res) {
+    res.json({ user: req.user });
   });
 }
 

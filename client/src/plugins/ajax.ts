@@ -53,24 +53,6 @@ export class AjaxRequest {
     return this._roomId;
   }
 
-  async devLogin(formData: { username: string; password: string }, shouldSkipVerification = true) {
-    const devLoginUrl = url(`/auth/login?shouldSkipVerification=${shouldSkipVerification}`);
-    await this.post(
-      devLoginUrl,
-      ({ data, status }) => {
-        if (status === 200) {
-          this.store.commit("SET_USER", data.user);
-          // FIXME: not terribly important but we might want to move to the tournament dashboard if isTournamentEnabled
-          if (data.user.isVerified) this.router.push({ name: FREE_PLAY_LOBBY_PAGE });
-          else this.router.push({ name: CONSENT_PAGE });
-        } else {
-          return data;
-        }
-      },
-      formData
-    );
-  }
-
   async forgetLoginCreds() {
     document.cookie = "connect.sid= ;expires=Thu, 01 Jan 1970 00:00:00 GMT";
     this.store.commit("SET_USER", initialUserState);

@@ -45,7 +45,7 @@ import LobbyChat from "@port-of-mars/client/components/lobby/LobbyChat.vue";
     LobbyChat,
   },
 })
-export default class TournamentLobby extends Vue {
+export default class ClassroomLobby extends Vue {
   @Inject() readonly $client!: Client;
   // @Provide() api: TournamentLobbyRequestAPI = new TournamentLobbyRequestAPI(this.$ajax);
   // accountApi!: AccountAPI;
