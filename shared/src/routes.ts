@@ -15,6 +15,7 @@ export const ABOUT_PAGE = "About" as const;
 export const PRIVACY_PAGE = "Privacy" as const;
 export const PROFILE_PAGE = "Profile" as const;
 export const STUDENT_LOGIN_PAGE = "StudentLogin" as const;
+export const STUDENT_CONFIRM_PAGE = "StudentConfirm" as const;
 export const EDUCATOR_LOGIN_PAGE = "EducatorLogin" as const;
 export const CLASSROOM_LOBBY_PAGE = "ClassroomLobby" as const;
 
@@ -36,6 +37,7 @@ export type Page =
   | "Manual"
   | "Privacy"
   | "StudentLogin"
+  | "StudentConfirm"
   | "EducatorLogin"
   | "ClassroomLobby";
 
@@ -57,6 +59,7 @@ export const PAGES: Array<Page> = [
   ABOUT_PAGE,
   PRIVACY_PAGE,
   STUDENT_LOGIN_PAGE,
+  STUDENT_CONFIRM_PAGE,
   EDUCATOR_LOGIN_PAGE,
 ];
 
@@ -214,6 +217,13 @@ export const PAGE_META: {
     name: STUDENT_LOGIN_PAGE,
     meta: {
       requiresAuth: false,
+    },
+  },
+  [STUDENT_CONFIRM_PAGE]: {
+    path: "/student-confirm",
+    name: STUDENT_CONFIRM_PAGE,
+    meta: {
+      requiresAuth: false, //FIXME: change back to true
     },
   },
   [EDUCATOR_LOGIN_PAGE]: {
