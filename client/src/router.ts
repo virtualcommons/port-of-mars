@@ -25,6 +25,7 @@ import Privacy from "@port-of-mars/client/views/Privacy.vue";
 import Profile from "@port-of-mars/client/views/Profile.vue";
 import ProlificStudy from "@port-of-mars/client/views/ProlificStudy.vue";
 import StudentLogin from "@port-of-mars/client/views/StudentLogin.vue";
+import StudentConfirm from "@port-of-mars/client/views/StudentConfirm.vue";
 import ClassroomLobby from "@port-of-mars/client/views/ClassroomLobby.vue";
 import store from "@port-of-mars/client/store";
 import {
@@ -47,6 +48,7 @@ import {
   PROFILE_PAGE,
   PROLIFIC_STUDY_PAGE,
   STUDENT_LOGIN_PAGE,
+  STUDENT_CONFIRM_PAGE,
   CLASSROOM_LOBBY_PAGE,
   EDUCATOR_LOGIN_PAGE,
 } from "@port-of-mars/shared/routes";
@@ -185,6 +187,7 @@ function getEducatorRouter() {
       // redirect straight to student login page
       { path: "", name: "Home", redirect: { name: STUDENT_LOGIN_PAGE } },
       { ...PAGE_META[STUDENT_LOGIN_PAGE], component: StudentLogin },
+      { ...PAGE_META[STUDENT_CONFIRM_PAGE], component: StudentConfirm },
       { ...PAGE_META[CLASSROOM_LOBBY_PAGE], component: ClassroomLobby },
     ],
   });
