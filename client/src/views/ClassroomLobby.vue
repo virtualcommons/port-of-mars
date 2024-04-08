@@ -1,7 +1,7 @@
 <template>
   <b-container fluid class="h-100 w-100 m-0 p-0 backdrop">
     <!--<div class="total-joined text-right">joined: {{ clients.length }}</div>-->
-    <div class="d-flex flex-grow-1 flex-column align-items-center justify-content-start pt-2">
+    <div class="mt-5 d-flex flex-grow-1 flex-column align-items-center justify-content-start pt-2">
       <div class="">
         <h1>WELCOME TO THE LOBBY</h1>
         <div class="text-center">
@@ -69,7 +69,7 @@ export default class ClassroomLobby extends Vue {
         id: 1,
         dateJoined: new Date().getTime(),
       },
-      { username: "Player 2", id: 2, dateJoined: new Date().getTime() },
+      { username: this.$tstore.state.user.username, id: 2, dateJoined: new Date().getTime() },
       { username: "Player 3", id: 3, dateJoined: new Date().getTime() },
       { username: "Player 4", id: 4, dateJoined: new Date().getTime() },
       { username: "Player 5", id: 5, dateJoined: new Date().getTime() },

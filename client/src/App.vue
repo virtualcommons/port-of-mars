@@ -1,7 +1,8 @@
 <template>
   <b-container class="h-100 p-0 m-0 bg" fluid>
     <b-row no-gutters class="h-100 w-100">
-      <Navbar v-if="showNav"></Navbar>
+      <ClassroomNavbar v-if="isEducatorMode"></ClassroomNavbar>
+      <Navbar v-else-if="showNav"></Navbar>
       <router-view :class="bodyClass" :key="topLevelPath"></router-view>
     </b-row>
   </b-container>
@@ -11,6 +12,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import BootstrapVue from "bootstrap-vue";
 import Navbar from "@port-of-mars/client/components/global/Navbar.vue";
+import ClassroomNavbar from "@port-of-mars/client/components/global/ClassroomNavbar.vue";
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
 import {
   GAME_PAGE,
@@ -21,11 +23,13 @@ import {
   PRIVACY_PAGE,
   PROLIFIC_STUDY_PAGE,
 } from "@port-of-mars/shared/routes";
+import { isEducatorMode } from "@port-of-mars/shared/settings";
 Vue.use(BootstrapVue);
 
 @Component({
   components: {
     Navbar,
+    ClassroomNavbar,
     Footer,
   },
 })
@@ -50,6 +54,10 @@ export default class App extends Vue {
       default:
         return true;
     }
+  }
+
+  get isEducatorMode() {
+    return isEducatorMode();
   }
 
   get isScrollable() {

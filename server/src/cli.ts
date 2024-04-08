@@ -250,6 +250,27 @@ async function createTournament(
   });
 }
 
+async function createTeacher(
+  em: EntityManager,
+  email: string,
+  username: string,
+  name: string
+): Promise<void> {
+  const services = getServices(em);
+  const teacher = await services.educator.createTeacher(email, username, name);
+  // TODO: print password
+}
+
+async function createClassroom(
+  em: EntityManager,
+  teacherUsername: string,
+  descriptor: string
+): Promise<void> {
+  const services = getServices(em);
+  const classroom = await services.educator.createClassroomForTeacher(teacherUsername, descriptor);
+  // TODO: print classroom auth token
+}
+
 async function setAdminUser(em: EntityManager, username: string): Promise<void> {
   const services = getServices(em);
   try {
@@ -896,6 +917,34 @@ program
             );
             logger.debug("created study record");
           })
+      )
+      .createCommand("edu")
+      .description("subcommands for educator mode administration")
+      .addCommand(
+        program
+          .createCommand("teacher")
+          .description("subcommands for teachers within educator mode")
+          .addCommand(
+            program
+              .createCommand("create")
+              .description("create a new teacher user")
+              .requiredOption("--email <email>", "teacher's email")
+              .requiredOption("--username <username>", "username")
+              .requiredOption("--name <name>", "full name")
+              .action(async cmd => {
+                await withDataSource(em => createTeacher(em, cmd.email, cmd.username, cmd.name));
+              })
+          )
+          .addCommand(
+            program
+              .createCommand("classroom")
+              .description("create a new classroom for a teacher")
+              .requiredOption("--username <username>", "username of the teacher")
+              .requiredOption("--descriptor <descriptor>", "classroom descriptor")
+              .action(async cmd => {
+                await withDataSource(em => createClassroom(em, cmd.username, cmd.descriptor));
+              })
+          )
       )
   );
 

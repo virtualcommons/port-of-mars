@@ -16,4 +16,7 @@ export class Teacher {
 
   @OneToMany(type => Classroom, classroom => classroom.teacher)
   classrooms!: Classroom;
+
+  @Column()
+  password!: string;
 }

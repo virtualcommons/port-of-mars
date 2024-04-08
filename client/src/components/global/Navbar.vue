@@ -100,16 +100,6 @@
         </div>
         <b-nav-form v-else class="ml-3">
           <b-button title="Sign In" variant="primary" :to="login">Sign In</b-button>
-          <!-- FIXME:  TEMP -->
-          <b-button title="Sign In (Student)" variant="secondary" :to="studentLogin"
-            >Sign In (Student)</b-button
-          >
-          <!--
-          <b-button title="Sign In (Educator)" variant="primary" :to="educatorLogin"
-            >Sign In (Educator)</b-button
-          >
-          -->
-          <!-- END  TEMP -->
         </b-nav-form>
       </b-navbar-nav>
     </b-collapse>
