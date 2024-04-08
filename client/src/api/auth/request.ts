@@ -1,7 +1,11 @@
 import { url } from "@port-of-mars/client/util";
 import { TStore } from "@port-of-mars/client/plugins/tstore";
 import { AjaxRequest } from "@port-of-mars/client/plugins/ajax";
-import { CONSENT_PAGE, FREE_PLAY_LOBBY_PAGE } from "@port-of-mars/shared/routes";
+import {
+  CONSENT_PAGE,
+  FREE_PLAY_LOBBY_PAGE,
+  STUDENT_CONFIRM_PAGE,
+} from "@port-of-mars/shared/routes";
 import VueRouter from "vue-router";
 
 export class AuthAPI {
@@ -39,8 +43,7 @@ export class AuthAPI {
         ({ data, status }) => {
           if (status === 200) {
             this.store.commit("SET_USER", data.user);
-            // FIXME: route to the page after the login page that asks for a name and gives rejoin code
-            // this.router.push({ name:  });
+            this.router.push({ name: STUDENT_CONFIRM_PAGE });
           } else {
             return data;
           }

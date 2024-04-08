@@ -18,4 +18,7 @@ export class Classroom {
 
   @Column()
   authToken!: string;
+
+  @Column()
+  descriptor!: string;
 }

@@ -20,12 +20,6 @@
         >
           Admin
         </b-nav-item>
-        <!-- <b-nav-item class="mx-2" :to="about" exact-active-class="active" title="About Port of Mars"
-          >About</b-nav-item
-        >
-        <b-nav-item class="mx-2" :to="consent" exact-active-class="active" title="Consent Form"
-          >Consent</b-nav-item
-        > -->
         <b-nav-item
           class="mx-2"
           :to="manual"
@@ -35,47 +29,14 @@
         >
           Manual
         </b-nav-item>
-        <!-- <b-nav-item class="mx-2" :to="leaderboard" exact-active-class="active" title="Leaderboard"
-          >Leaderboard</b-nav-item
-        >
         <b-nav-item
-          class="mx-2 text-nowrap"
-          :to="solo"
-          exact-active-class="active"
-          title="Solo Mode"
-        >
-          Solo Mode
-        </b-nav-item> -->
-        <!-- <b-nav-item
-          v-if="isFreePlayEnabled"
-          class="mx-2 text-nowrap"
-          :to="freePlayLobby"
-          exact-active-class="active"
-          title="Free Play Game Lobby"
-        >
-          Free Play
-        </b-nav-item> -->
-        <!-- <b-nav-item
-          v-if="isTournamentEnabled"
-          class="mx-2 text-nowrap"
-          link-classes="btn btn-success text-white"
-          :to="tournamentDashboard"
-          exact-active-class="active"
-          title="Tournament Dashboard"
-        >
-          <b>Join Mars Madness</b>
-        </b-nav-item> -->
-        <!-- FIXME:  TEMP -->
-        <b-nav-item
-          class="mx-2 text-nowrap"
-          link-classes="btn btn-warning text-white"
+          class="mx-2"
           :to="classroomLobby"
           exact-active-class="active"
           title="Classroom lobby"
         >
           <b>Classroom lobby</b>
         </b-nav-item>
-        <!-- END TEMP -->
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto">
         <b-nav-item class="mx-2" target="_blank" :href="constants.DISCORD_URL" title="Discord"
@@ -87,7 +48,7 @@
         <b-nav-item class="mx-2" target="_blank" :href="constants.INSTAGRAM_URL" title="Instagram"
           ><b-icon-instagram></b-icon-instagram
         ></b-nav-item>
-        <!-- <div v-if="isAuthenticated">
+        <div v-if="isAuthenticated">
           <b-nav-item-dropdown class="ml-3" :to="manual" right>
             <template #button-content>
               <b-icon-person-fill></b-icon-person-fill>
@@ -97,19 +58,8 @@
             <b-dropdown-item :to="history">Game History</b-dropdown-item>
             <b-dropdown-item @click="logout">Sign Out</b-dropdown-item>
           </b-nav-item-dropdown>
-        </div> -->
-
-        <b-button title="Sign In" variant="primary" :to="login">Sign In</b-button>
-        <!-- FIXME:  TEMP -->
-        <b-button title="Sign In (Student)" variant="secondary" :to="studentLogin"
-          >Sign In (Student)</b-button
-        >
-        <!--
-          <b-button title="Sign In (Educator)" variant="primary" :to="educatorLogin"
-            >Sign In (Educator)</b-button
-          >
-          -->
-        <!-- END  TEMP -->
+        </div>
+        <b-button v-else title="Sign In" variant="primary" :to="studentLogin">Sign In</b-button>
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>

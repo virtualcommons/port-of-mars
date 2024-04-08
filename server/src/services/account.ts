@@ -349,8 +349,13 @@ export class AccountService extends BaseService {
     return user;
   }
 
-  async getOrCreateUser(userData: { email: string; passportId?: string }): Promise<User> {
-    let user: User | null = null;
+  async getOrCreateUser(userData: {
+    email: string;
+    passportId?: string;
+    name?: string;
+    username?: string;
+  }): Promise<User> {
+    let user: User | null;
     // try to find user by id
     if (userData.passportId) {
       user = await this.getRepository().findOneBy({ passportId: userData.passportId });
@@ -361,10 +366,10 @@ export class AccountService extends BaseService {
     }
     if (!user) {
       user = new User();
-      user.name = "";
       user.email = userData.email;
       user.passportId = userData.passportId ?? "";
-      user.username = await generateUsername();
+      user.username = userData.username || (await generateUsername());
+      user.name = userData.name || "";
       user.isSystemBot = false;
       logger.info("getOrCreateUser: not found, creating user %s", user.username);
       await this.getRepository().save(user);

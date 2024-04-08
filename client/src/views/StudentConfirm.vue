@@ -1,9 +1,15 @@
 <template>
-  <b-container fluid class="h-100 w-100 d-flex flex-column justify-content-center align-items-center backdrop">
+  <b-container
+    fluid
+    class="h-100 w-100 d-flex flex-column justify-content-center align-items-center backdrop"
+  >
     <!-- Display generated username -->
     <h3 class="mb-3">Your username is: {{ username }}</h3>
-    
-    <div id="confirm-container" class="content-container rounded d-flex flex-column justify-content-center align-items-center backdrop px-0">
+
+    <div
+      id="confirm-container"
+      class="content-container rounded d-flex flex-column justify-content-center align-items-center backdrop px-0"
+    >
       <!-- First Name Input -->
       <b-form-input
         v-model="firstName"
@@ -12,7 +18,7 @@
         placeholder="FIRST NAME"
         required
       ></b-form-input>
-      
+
       <!-- Last Name Input -->
       <b-form-input
         v-model="lastName"
@@ -22,24 +28,38 @@
         required
       ></b-form-input>
 
-    <!-- Password Display Section -->
-    <div style="width: 70%; display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 1rem; margin-top: 1rem;">
-      <div style="border: 1px solid #e6dbac; padding: .75rem 1.25rem; font-size: 1.25rem; background-color: transparent; width: 100%;" class="rounded text-center">
-        PASSWORD: {{ password }}
+      <!-- Password Display Section -->
+      <!-- FIXME: replace with util classes -->
+      <div
+        style="
+          width: 70%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          margin-bottom: 1rem;
+          margin-top: 1rem;
+        "
+      >
+        <div
+          style="
+            border: 1px solid #e6dbac;
+            padding: 0.75rem 1.25rem;
+            font-size: 1.25rem;
+            background-color: transparent;
+            width: 100%;
+          "
+          class="rounded text-center"
+        >
+          PASSWORD: {{ password }}
+        </div>
+        <div style="font-size: 1.2rem; font-weight: bold; margin-top: 0.5rem">
+          Write down this passcode to rejoin
+        </div>
       </div>
-      <div style="font-size: 1.2rem; font-weight: bold; margin-top: .5rem;">
-        Write down this passcode to rejoin
-      </div>
-    </div>
 
       <!-- Join Class Lobby Button -->
-      <b-button
-        variant="primary"
-        rounded
-        @click="joinClassLobby"
-        class="w-70"
-        size="lg"
-      >
+      <b-button variant="primary" rounded @click="joinClassLobby" class="w-70" size="lg">
         <h4 class="mb-0">Join Class Lobby</h4>
       </b-button>
     </div>
@@ -53,19 +73,23 @@ import { Component, Vue } from "vue-property-decorator";
 export default class StudentConfirm extends Vue {
   firstName: string = "";
   lastName: string = "";
-  username: string = ""; 
-  password: string = ""; 
+  password: string = "placeholder";
 
   joinClassLobby() {
-    console.log("Join Class Lobby button clicked");
+    // FIXME: should send request to update user info and then redirect
+    this.$router.push("/classroom");
   }
 
-  created() {
+  get username() {
+    return this.$tstore.state.user.username;
   }
+
+  created() {}
 }
 </script>
 
 <style lang="scss" scoped>
+// FIXME: ideally replace with util classes
 #confirm-container {
   padding: 2rem;
   width: 30rem;

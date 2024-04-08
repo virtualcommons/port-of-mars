@@ -1,6 +1,7 @@
 import { BaseService } from "@port-of-mars/server/services/db";
 import { Teacher, Classroom, Student, User } from "@port-of-mars/server/entity";
 import { ServerError, generateUsername } from "@port-of-mars/server/util";
+import { getServices } from "@port-of-mars/server/services";
 // import { settings } from "@port-of-mars/server/settings";
 
 // const logger = settings.logging.getLogger(__filename);
@@ -40,5 +41,39 @@ export class EducatorService extends BaseService {
     await studentRepo.save(student);
 
     return user;
+  }
+
+  async createTeacher(email: string, username: string, name: string) {
+    const userRepo = this.em.getRepository(User);
+    const teacherRepo = this.em.getRepository(Teacher);
+    const user = await getServices().account.getOrCreateUser({ email, username, name });
+    // skip the usual verification/consent
+    user.dateConsented = new Date();
+    user.isVerified = true;
+    userRepo.save(user);
+    const teacher = teacherRepo.create({
+      user,
+      userId: user.id,
+      password: "", // FIXME: generate a password, guess we need to do salted hashing too
+    });
+    return teacherRepo.save(teacher);
+  }
+
+  async createClassroomForTeacher(username: string, descriptor: string) {
+    const teacher = await this.em
+      .getRepository(Teacher)
+      .createQueryBuilder("teacher")
+      .innerJoinAndSelect("teacher.user", "user")
+      .where("user.username = :username", { username })
+      .getOneOrFail();
+
+    const repo = this.em.getRepository(Classroom);
+    const classroom = repo.create({
+      teacher,
+      teacherId: teacher.id,
+      descriptor,
+      authToken: "asdf", // FIXME: generate this
+    });
+    return repo.save(classroom);
   }
 }
