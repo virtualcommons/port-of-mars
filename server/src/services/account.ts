@@ -57,6 +57,12 @@ export class AccountService extends BaseService {
     return await this.getRepository().save(user);
   }
 
+  async setName(userId: number, name: string): Promise<User> {
+    const user = await this.findUserById(userId);
+    user.name = name;
+    return await this.getRepository().save(user);
+  }
+
   async muteOrBanByUsername(username: string, action: ModerationActionType): Promise<User> {
     const user = await this.findByUsername(username);
     if (action === MUTE) {

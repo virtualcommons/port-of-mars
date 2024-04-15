@@ -13,6 +13,8 @@ export class EducatorService extends BaseService {
     });
   }
 
+  async generateStudentPassword() {}
+
   async createStudent(classroomAuthToken: string) {
     /**
      * Create a new user account and matching Student in the given classroom
@@ -54,7 +56,7 @@ export class EducatorService extends BaseService {
     const teacher = teacherRepo.create({
       user,
       userId: user.id,
-      password: "", // FIXME: generate a password, guess we need to do salted hashing too
+      password: "", // FIXME: generate a password, how to keep this secure but generated?
     });
     return teacherRepo.save(teacher);
   }
