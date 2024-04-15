@@ -164,7 +164,13 @@ export class ValidationError extends ServerError {
   }
 }
 
+export async function generatePassword() {
+  // TODO: take in N param for num of words to use
+  // use random-words package?
+}
+
 export async function generateUsername() {
+  // FIXME: take in N param for numbers to tack on the end, default 4
   let isUnique = false;
   let username = "";
   while (!isUnique) {
