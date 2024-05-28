@@ -1,12 +1,14 @@
 <template>
   <b-container fluid class="h-100 w-100 m-0 p-0 backdrop">
-    <!--<div class="total-joined text-right">joined: {{ clients.length }}</div>-->
     <div class="mt-5 d-flex flex-grow-1 flex-column align-items-center justify-content-start pt-2">
       <div class="">
         <h1>WELCOME TO THE LOBBY</h1>
-        <div class="text-center">
+        <div class="text-center" style="padding: 1rem;">
           <p>Total joined: {{ clients.length }}</p>
           <p>Please wait patiently for your teacher to start game....</p>
+          <div v-if="isTeacher" class="start-game-button" style="padding: 1rem;">
+            <b-button @click="startGame">Start Game</b-button>
+          </div>
         </div>
       </div>
       <div class="player-grid">
@@ -23,7 +25,7 @@ import { Component, Provide, Inject, Vue } from "vue-property-decorator";
 import { Client } from "colyseus.js";
 import { applyLobbyResponses } from "@port-of-mars/client/api/lobby/response";
 import { TournamentLobbyRequestAPI } from "@port-of-mars/client/api/lobby/request";
-import { AccountAPI } from "@port-of-mars/client/api/account/request";
+import { EducatorAPI } from "@port-of-mars/client/api/educator/request";
 import { TOURNAMENT_LOBBY_NAME } from "@port-of-mars/shared/lobby";
 import {
   GAME_PAGE,
@@ -48,12 +50,14 @@ import LobbyChat from "@port-of-mars/client/components/lobby/LobbyChat.vue";
 export default class ClassroomLobby extends Vue {
   @Inject() readonly $client!: Client;
   // @Provide() api: TournamentLobbyRequestAPI = new TournamentLobbyRequestAPI(this.$ajax);
-  // accountApi!: AccountAPI;
+  educatorApi!: EducatorAPI;
 
   game = { name: GAME_PAGE };
   dashboard = { name: TOURNAMENT_DASHBOARD_PAGE };
   manual = { name: MANUAL_PAGE };
   consent = { name: CONSENT_PAGE };
+  isTeacher = false;
+  startGame = {};
 
   clientFields = [{ key: "username", label: "Player" }];
 
@@ -69,7 +73,7 @@ export default class ClassroomLobby extends Vue {
         id: 1,
         dateJoined: new Date().getTime(),
       },
-      { username: this.$tstore.state.user.username, id: 2, dateJoined: new Date().getTime() },
+      { username: this.$store.state.user.username, id: 2, dateJoined: new Date().getTime() },
       { username: "Player 3", id: 3, dateJoined: new Date().getTime() },
       { username: "Player 4", id: 4, dateJoined: new Date().getTime() },
       { username: "Player 5", id: 5, dateJoined: new Date().getTime() },
@@ -85,6 +89,13 @@ export default class ClassroomLobby extends Vue {
   get chatMessages() {
     return [];
     // return this.$tstore.state.lobby.chat;
+  }
+
+  async created() {
+    //call to server to find out user's role
+    // then add button above for starting game if user is a teacher
+    this.educatorApi = new EducatorAPI(this.$store, this.$ajax);
+    this.isTeacher = await this.educatorApi.authenticateTeacher();
   }
 }
 </script>
