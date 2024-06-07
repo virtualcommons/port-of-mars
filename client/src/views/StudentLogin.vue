@@ -11,7 +11,7 @@
         >
           <b-tab title="JOIN A GAME" active>
             <div class="d-flex flex-column align-items-center">
-            <p>default join tab</p>
+            <p>default</p>
             <b-form-input
               v-model="gameCode"
               class="w-70 mb-3 text-center"
@@ -76,7 +76,7 @@
             <b-button
               variant="primary"
               rounded
-              @click="enterGame"
+              @click="enterTeacher"
               class="w-70 mb-3"
               size="lg"
             >
@@ -156,6 +156,11 @@ export default class StudentLogin extends Vue {
       console.log("Game code entered:", this.gameCode);
       this.authApi.studentLogin(this.gameCode);
     }
+  }
+
+  enterTeacher(){
+    console.log("Enter teacher dashboard button clicked");
+    this.authApi.teacherLogin({username: this.username, password: this.password});
   }
 
   togglePasswordVisibility() {

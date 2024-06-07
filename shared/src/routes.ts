@@ -18,6 +18,7 @@ export const STUDENT_LOGIN_PAGE = "StudentLogin" as const;
 export const STUDENT_CONFIRM_PAGE = "StudentConfirm" as const;
 export const EDUCATOR_LOGIN_PAGE = "EducatorLogin" as const;
 export const CLASSROOM_LOBBY_PAGE = "ClassroomLobby" as const;
+export const TEACHER_DASHBOARD_PAGE = "TeacherDashboard" as const;
 
 export type Page =
   | "Admin"
@@ -39,7 +40,8 @@ export type Page =
   | "StudentLogin"
   | "StudentConfirm"
   | "EducatorLogin"
-  | "ClassroomLobby";
+  | "ClassroomLobby"
+  | "TeacherDashboard";
 
 export const PAGES: Array<Page> = [
   ADMIN_PAGE,
@@ -61,6 +63,7 @@ export const PAGES: Array<Page> = [
   STUDENT_LOGIN_PAGE,
   STUDENT_CONFIRM_PAGE,
   EDUCATOR_LOGIN_PAGE,
+  TEACHER_DASHBOARD_PAGE,
 ];
 
 export function isPage(pageName: string): pageName is Page {
@@ -241,6 +244,13 @@ export const PAGE_META: {
       requiresAuth: false,
     },
   },
+  [TEACHER_DASHBOARD_PAGE]:{
+    path: "/teacher-dashboard",
+    name: TEACHER_DASHBOARD_PAGE,
+    meta: {
+      requiresAuth: false, //FIXME: change back to true
+    }
+  }
 };
 
 export const PAGE_DEFAULT = PAGE_META[HOME_PAGE];
