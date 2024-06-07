@@ -37,6 +37,15 @@
         >
           <b>Classroom lobby</b>
         </b-nav-item>
+        <b-nav-item
+          class="mx-2"
+          :to="teacherDashboard"
+          exact-active-class="active"
+          title="Teacher Dashboard"
+        >
+          <b>Teacher Dashboard</b>
+        </b-nav-item>
+
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto">
         <b-nav-item class="mx-2" target="_blank" :href="constants.DISCORD_URL" title="Discord"
@@ -84,6 +93,7 @@ import {
   STUDENT_LOGIN_PAGE,
   EDUCATOR_LOGIN_PAGE,
   CLASSROOM_LOBBY_PAGE,
+  TEACHER_DASHBOARD_PAGE,
 } from "@port-of-mars/shared/routes";
 import { Constants } from "@port-of-mars/shared/settings";
 
@@ -111,6 +121,7 @@ export default class Navbar extends Vue {
   studentLogin = { name: STUDENT_LOGIN_PAGE };
   educatorLogin = { name: EDUCATOR_LOGIN_PAGE };
   classroomLobby = { name: CLASSROOM_LOBBY_PAGE };
+  teacherDashboard = {name: TEACHER_DASHBOARD_PAGE};
 
   get constants() {
     return Constants;
