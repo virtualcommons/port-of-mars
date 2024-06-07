@@ -25,6 +25,7 @@ import Profile from "@port-of-mars/client/views/Profile.vue";
 import StudentLogin from "@port-of-mars/client/views/StudentLogin.vue";
 import StudentConfirm from "@port-of-mars/client/views/StudentConfirm.vue";
 import ClassroomLobby from "@port-of-mars/client/views/ClassroomLobby.vue";
+import TeacherDashboard from "@port-of-mars/client/views/TeacherDashboard.vue";
 import store from "@port-of-mars/client/store";
 import {
   ADMIN_PAGE,
@@ -48,6 +49,7 @@ import {
   STUDENT_CONFIRM_PAGE,
   CLASSROOM_LOBBY_PAGE,
   EDUCATOR_LOGIN_PAGE,
+  TEACHER_DASHBOARD_PAGE,
 } from "@port-of-mars/shared/routes";
 import { isEducatorMode } from "@port-of-mars/shared/settings";
 
@@ -185,6 +187,7 @@ function getEducatorRouter() {
       { ...PAGE_META[STUDENT_CONFIRM_PAGE], component: StudentConfirm},
       // FIXME: add EDUCATOR_LOGIN_PAGE
       { ...PAGE_META[CLASSROOM_LOBBY_PAGE], component: ClassroomLobby },
+      { ...PAGE_META[TEACHER_DASHBOARD_PAGE], component: TeacherDashboard},
     ],
   });
 

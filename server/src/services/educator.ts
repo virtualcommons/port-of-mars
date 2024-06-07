@@ -40,6 +40,7 @@ export class EducatorService extends BaseService {
     const student = new Student();
     student.user = user;
     student.classroom = classroom;
+    student.password = "something"; //FIXME
     await studentRepo.save(student);
 
     return user;
