@@ -7,8 +7,8 @@ export const GA_TAG = process.env.GA_TAG || "";
 
 const baseUrlMap = {
   development: "http://localhost:8081",
-  staging: "https://staging.portofmars.com",
-  production: "https://portofmars.com",
+  staging: "https://staging.portofmars.asu.edu",
+  production: "https://portofmars.asu.edu",
   test: "http://localhost:8081",
 };
 
