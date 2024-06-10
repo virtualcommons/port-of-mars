@@ -522,3 +522,13 @@ export interface DynamicSettingsData {
   tournamentSignupsPopularityThreshold: number;
   announcementBannerText: string;
 }
+
+// educator mode-specific types
+
+export interface StudentAuthData {
+  id: number;
+  userId: number;
+  user?: ClientSafeUser;
+  classroomId: number;
+  rejoinCode: string;
+}

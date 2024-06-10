@@ -16,7 +16,7 @@ export class Classroom {
   @Column()
   teacherId!: number;
 
-  @Column()
+  @Column({ unique: true })
   authToken!: string;
 
   @Column()
