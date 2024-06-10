@@ -547,3 +547,12 @@ export interface ProlificParticipantPointData {
   prolificId: string;
   points: number;
 }
+
+// educator mode-specific types
+export interface StudentAuthData {
+  id: number;
+  userId: number;
+  user?: ClientSafeUser;
+  classroomId: number;
+  rejoinCode: string;
+}

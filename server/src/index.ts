@@ -14,7 +14,12 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { Strategy as FacebookStrategy } from "passport-facebook";
 import { Strategy as LocalStrategy } from "passport-local";
 
-import { settings as sharedSettings, isDev, isDevOrStaging } from "@port-of-mars/shared/settings";
+import {
+  settings as sharedSettings,
+  isDev,
+  isDevOrStaging,
+  isEducatorMode,
+} from "@port-of-mars/shared/settings";
 
 // server side imports
 import { GameRoom } from "@port-of-mars/server/rooms/game";
@@ -34,6 +39,7 @@ import {
   statusRouter,
   statsRouter,
   studyRouter,
+  educatorRouter,
 } from "@port-of-mars/server/routes";
 import { ServerError } from "@port-of-mars/server/util";
 import dataSource from "@port-of-mars/server/datasource";
@@ -249,6 +255,9 @@ async function createApp() {
   app.use("/account", accountRouter);
   app.use("/status", statusRouter);
   app.use("/study", studyRouter);
+  if (isEducatorMode()) {
+    app.use("/educator", educatorRouter);
+  }
 
   const server = http.createServer(app);
   const gameServer = new Server({

@@ -11,3 +11,4 @@ export * from "./account";
 export * from "./status";
 export * from "./tournament";
 export * from "./study";
+export * from "./educator";

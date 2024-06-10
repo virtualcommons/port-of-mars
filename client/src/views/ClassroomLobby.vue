@@ -3,10 +3,10 @@
     <div class="mt-5 d-flex flex-grow-1 flex-column align-items-center justify-content-start pt-2">
       <div class="">
         <h1>WELCOME TO THE LOBBY</h1>
-        <div class="text-center" style="padding: 1rem;">
+        <div class="text-center" style="padding: 1rem">
           <p>Total joined: {{ clients.length }}</p>
           <p>Please wait patiently for your teacher to start game....</p>
-          <div v-if="isTeacher" class="start-game-button" style="padding: 1rem;">
+          <div v-if="isTeacher" class="start-game-button" style="padding: 1rem">
             <b-button @click="startGame">Start Game</b-button>
           </div>
         </div>
@@ -95,7 +95,7 @@ export default class ClassroomLobby extends Vue {
     //call to server to find out user's role
     // then add button above for starting game if user is a teacher
     this.educatorApi = new EducatorAPI(this.$store, this.$ajax);
-    this.isTeacher = await this.educatorApi.authenticateTeacher();
+    this.isTeacher = await this.educatorApi.authTeacher();
   }
 }
 </script>
