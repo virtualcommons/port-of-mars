@@ -78,7 +78,7 @@
               class="p-1"
               type="iframe"
               aspect="16by9"
-              :src="constants.TUTORIAL_VIDEO_URL"
+              :src="$settings.TUTORIAL_VIDEO_URL"
               allowfullscreen
             ></b-embed>
           </b-col>
@@ -88,7 +88,7 @@
               class="p-1"
               type="iframe"
               aspect="16by9"
-              :src="constants.TRAILER_VIDEO_URL"
+              :src="$settings.TRAILER_VIDEO_URL"
               allowfullscreen
             ></b-embed>
           </b-col>
@@ -117,7 +117,7 @@
             <h1 class="section-title mb-3">Community</h1>
             <p class="text mb-3">
               Discuss the game, find a game to play, or connect with other players in our
-              <a :href="constants.DISCORD_URL">community Discord</a>.
+              <a :href="$settings.DISCORD_URL">community Discord</a>.
             </p>
             <p class="text mb-3">
               Keep track of your performance with your
@@ -155,7 +155,6 @@ import {
   TOURNAMENT_DASHBOARD_PAGE,
   MANUAL_PAGE,
 } from "@port-of-mars/shared/routes";
-import { Constants } from "@port-of-mars/shared/settings";
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
 import CharCarousel from "@port-of-mars/client/components/global/CharCarousel.vue";
 import AgeTooltip from "@port-of-mars/client/components/global/AgeTooltip.vue";
@@ -184,10 +183,6 @@ export default class Home extends Vue {
   gameStats = { name: PLAYER_HISTORY_PAGE };
   solo = { name: SOLO_GAME_PAGE };
   manual = { name: MANUAL_PAGE };
-
-  get constants() {
-    return Constants;
-  }
 
   get shouldShowTournamentBanner() {
     return this.$tstore.state.isTournamentEnabled && this.$tstore.getters.tournamentStatus;

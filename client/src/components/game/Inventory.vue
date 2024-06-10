@@ -46,7 +46,6 @@
 import { Vue, Component, Prop } from "vue-property-decorator";
 import { Role, RESEARCHER } from "@port-of-mars/shared/types";
 import { Investment, Resource, RESOURCES, Phase } from "@port-of-mars/shared/types";
-import { Constants } from "@port-of-mars/shared/settings";
 
 @Component({
   components: {},
@@ -96,7 +95,7 @@ export default class Inventory extends Vue {
   }
 
   canInvest(cost: number): boolean {
-    return cost < Constants.MAXIMUM_COST;
+    return cost < this.$settings.MAXIMUM_COST;
   }
 
   toggleCosts() {

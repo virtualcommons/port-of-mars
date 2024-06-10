@@ -14,7 +14,7 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { Strategy as FacebookStrategy } from "passport-facebook";
 import { Strategy as LocalStrategy } from "passport-local";
 
-import { Constants, isDev, isDevOrStaging } from "@port-of-mars/shared/settings";
+import { settings as sharedSettings, isDev, isDevOrStaging } from "@port-of-mars/shared/settings";
 
 // server side imports
 import { GameRoom } from "@port-of-mars/server/rooms/game";
@@ -130,8 +130,8 @@ function applyInStagingOrProd(f: () => void) {
 }
 
 applyInStagingOrProd(() => {
-  Sentry.init({ dsn: Constants.SENTRY_DSN });
-  logger.debug("Setting up sentry: %s", Constants.SENTRY_DSN);
+  Sentry.init({ dsn: sharedSettings.SENTRY_DSN });
+  logger.debug("Setting up sentry: %s", sharedSettings.SENTRY_DSN);
 });
 
 async function createApp() {
@@ -143,7 +143,7 @@ async function createApp() {
   logger.info(
     "starting (%s) server: [release version: %s, settings.host %s]",
     NODE_ENV,
-    Constants.RELEASE_VERSION,
+    sharedSettings.RELEASE_VERSION,
     settings.host
   );
   const port = Number(process.env.PORT || 2567);

@@ -48,7 +48,7 @@
         <h4>Learn How to Play</h4>
         <b-button-group size="sm">
           <b-button variant="secondary" :to="manual" target="_blank">Read the manual</b-button>
-          <b-button variant="primary" :href="constants.TUTORIAL_VIDEO_URL" target="_blank"
+          <b-button variant="primary" :href="$settings.TUTORIAL_VIDEO_URL" target="_blank"
             >Watch the tutorial</b-button
           >
         </b-button-group>
@@ -61,7 +61,7 @@
 import { CONSENT_PAGE, MANUAL_PAGE } from "@port-of-mars/shared/routes";
 import { TournamentRoundInviteStatus } from "@port-of-mars/shared/types";
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { Constants, isDevOrStaging } from "@port-of-mars/shared/settings";
+import { isDevOrStaging } from "@port-of-mars/shared/settings";
 import { url } from "@port-of-mars/client/util";
 
 @Component({})
@@ -72,10 +72,6 @@ export default class TournamentOnboardingSteps extends Vue {
   isDevMode = false;
   consent = { name: CONSENT_PAGE };
   manual = { name: MANUAL_PAGE };
-
-  get constants() {
-    return Constants;
-  }
 
   get status() {
     return this.$tstore.getters.tournamentStatus;

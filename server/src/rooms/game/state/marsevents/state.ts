@@ -19,7 +19,7 @@ import {
   Role,
   ROLES,
 } from "@port-of-mars/shared/types";
-import { Constants } from "@port-of-mars/shared/settings";
+import { settings } from "@port-of-mars/shared/settings";
 import { getLogger } from "@port-of-mars/server/settings";
 import { getAccomplishmentByID } from "@port-of-mars/server/data/Accomplishment";
 import { getMarsEvent } from "@port-of-mars/server/data/MarsEvents";
@@ -492,7 +492,7 @@ export class Interdisciplinary extends BaseEvent {
 
   makeResourcesAvailable(costs: ResourceCostData): void {
     for (const resource of RESOURCES) {
-      if (costs[resource] === Constants.MAXIMUM_COST) {
+      if (costs[resource] === settings.MAXIMUM_COST) {
         costs[resource] = 3;
       }
     }
@@ -726,7 +726,7 @@ export class SolarFlare extends BaseEvent {
 export class Stymied extends BaseEvent {
   finalize(game: GameState): void {
     for (const player of game.players) {
-      player.costs[player.specialty] = Constants.MAXIMUM_COST;
+      player.costs[player.specialty] = settings.MAXIMUM_COST;
     }
     game.log(this.effect, this.title);
   }

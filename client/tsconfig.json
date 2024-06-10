@@ -23,7 +23,7 @@
       "es6",
       "dom"
     ],
-    "types": ["vitest/globals"],
+    "types": ["vitest/globals", "vite/client"],
   },
   "include": [
     "src/**/*.ts",

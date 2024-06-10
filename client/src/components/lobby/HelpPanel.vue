@@ -22,7 +22,7 @@
         id="tutorialVideo"
         type="iframe"
         aspect="16by9"
-        :src="constants.TUTORIAL_VIDEO_URL"
+        :src="$settings.TUTORIAL_VIDEO_URL"
         allowfullscreen
       ></b-embed>
     </div>
@@ -32,15 +32,10 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { MANUAL_PAGE } from "@port-of-mars/shared/routes";
-import { Constants } from "@port-of-mars/shared/settings";
 
 @Component({})
 export default class HelpPanel extends Vue {
   manual = { name: MANUAL_PAGE };
-
-  get constants() {
-    return Constants;
-  }
 }
 </script>
 

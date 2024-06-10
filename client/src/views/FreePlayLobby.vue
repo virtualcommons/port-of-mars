@@ -26,7 +26,6 @@ import { FreePlayLobbyRequestAPI } from "@port-of-mars/client/api/lobby/request"
 import { AccountAPI } from "@port-of-mars/client/api/account/request";
 import { FREE_PLAY_LOBBY_NAME } from "@port-of-mars/shared/lobby";
 import { GAME_PAGE, CONSENT_PAGE, MANUAL_PAGE } from "@port-of-mars/shared/routes";
-import { Constants } from "@port-of-mars/shared/settings";
 import Countdown from "@port-of-mars/client/components/global/Countdown.vue";
 import HelpPanel from "@port-of-mars/client/components/lobby/HelpPanel.vue";
 import Messages from "@port-of-mars/client/components/global/Messages.vue";
@@ -46,10 +45,6 @@ export default class FreePlayLobby extends Vue {
   game = { name: GAME_PAGE };
   manual = { name: MANUAL_PAGE };
   consent = { name: CONSENT_PAGE };
-
-  get constants() {
-    return Constants;
-  }
 
   async created() {
     this.accountApi = new AccountAPI(this.$store, this.$ajax);

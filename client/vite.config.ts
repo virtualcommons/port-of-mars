@@ -9,6 +9,8 @@ export default defineConfig({
     host: "0.0.0.0",
     port: 8080,
   },
+  envPrefix: "SHARED_",
+  // envDir: path.resolve("../"),
   resolve: {
     alias: {
       "@port-of-mars/shared": path.resolve("../shared/src"),
@@ -30,10 +32,6 @@ export default defineConfig({
     },
   },
   define: {
-    // make process.env work on the client
-    ...Object.keys(process.env).reduce((acc, key) => {
-      acc[`process.env.${key}`] = JSON.stringify(process.env[key]);
-      return acc;
-    }, {}),
+    "process.env": process.env,
   },
 });

@@ -64,7 +64,7 @@ secrets: keys $(GENERATED_SECRETS)
 
 .PHONY: release-version
 release-version: .env
-	$(ENVREPLACE) RELEASE_VERSION $$(git describe --tags --abbrev=1) .env
+	$(ENVREPLACE) SHARED_RELEASE_VERSION $$(git describe --tags --abbrev=1) .env
 
 docker-compose.yml: base.yml $(DEPLOY_ENVIRONMENT).yml config.mk $(DB_DATA_PATH) $(DATA_DUMP_PATH) $(LOG_DATA_PATH) $(DYNAMIC_SETTINGS_PATH) secrets $(PGPASS_PATH) release-version
 	case "$(DEPLOY_ENVIRONMENT)" in \
