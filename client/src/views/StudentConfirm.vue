@@ -51,7 +51,7 @@
           "
           class="rounded text-center"
         >
-          PASSWORD: {{ password }}
+          PASSWORD: {{ rejoinCode }}
         </div>
         <div style="font-size: 1.2rem; font-weight: bold; margin-top: 0.5rem">
           Write down this passcode to rejoin
@@ -59,7 +59,7 @@
       </div>
 
       <!-- Join Class Lobby Button -->
-      <b-button variant="primary" rounded @click="joinClassLobby" class="w-70" size="lg">
+      <b-button variant="primary" rounded @click="handleSubmit" class="w-70" size="lg">
         <h4 class="mb-0">Join Class Lobby</h4>
       </b-button>
     </div>
@@ -68,23 +68,39 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import { EducatorAPI } from "@port-of-mars/client/api/educator/request";
+import { CLASSROOM_LOBBY_PAGE, STUDENT_LOGIN_PAGE } from "@port-of-mars/shared/routes";
 
 @Component
 export default class StudentConfirm extends Vue {
+  educatorApi: EducatorAPI = new EducatorAPI(this.$store, this.$ajax);
   firstName: string = "";
   lastName: string = "";
-  password: string = "placeholder";
-
-  joinClassLobby() {
-    // FIXME: should send request to update user info and then redirect
-    this.$router.push("/classroom");
-  }
+  rejoinCode: string = "placeholder";
 
   get username() {
     return this.$tstore.state.user.username;
   }
 
-  created() {}
+  async handleSubmit() {
+    try {
+      await this.educatorApi.confirmStudent({
+        name: `${this.firstName} ${this.lastName}`,
+      });
+      this.$router.push({ name: CLASSROOM_LOBBY_PAGE });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  async created() {
+    const data = await this.educatorApi.authStudent();
+    if (!data) {
+      this.$router.push({ name: STUDENT_LOGIN_PAGE });
+    } else {
+      this.rejoinCode = data.rejoinCode;
+    }
+  }
 }
 </script>
 

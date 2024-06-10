@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from "uuid";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { Teacher, Classroom, Student, User } from "@port-of-mars/server/entity";
 import { ServerError, generateUsername } from "@port-of-mars/server/util";
@@ -7,13 +8,24 @@ import { getServices } from "@port-of-mars/server/services";
 // const logger = settings.logging.getLogger(__filename);
 
 export class EducatorService extends BaseService {
-  async getTeacherByUserId(userId: number) {
+  async getTeacherByUserId(userId: number, withUser = false) {
     return this.em.getRepository(Teacher).findOne({
       where: { userId },
+      relations: withUser ? ["user"] : [],
     });
   }
 
-  async generateStudentPassword() {}
+  async getStudentByUser(userId: number, withUser = false) {
+    return this.em.getRepository(Student).findOne({
+      where: { userId },
+      relations: withUser ? ["user"] : [],
+    });
+  }
+
+  async generateStudentRejoinCode(): Promise<string> {
+    // FIXME: generate a unique rejoin code
+    return uuidv4();
+  }
 
   async createStudent(classroomAuthToken: string) {
     /**
@@ -37,10 +49,13 @@ export class EducatorService extends BaseService {
     user.username = await generateUsername();
     await userRepo.save(user);
 
-    const student = new Student();
-    student.user = user;
-    student.classroom = classroom;
-    student.password = "something"; //FIXME
+    const student = studentRepo.create({
+      user,
+      userId: user.id,
+      classroom,
+      classroomId: classroom.id,
+      rejoinCode: await this.generateStudentRejoinCode(),
+    });
     await studentRepo.save(student);
 
     return user;

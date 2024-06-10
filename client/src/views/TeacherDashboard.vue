@@ -205,7 +205,7 @@ export default class TeacherDashboard extends Vue {
     //call to server to find out user's role
     // then add button above for starting game if user is a teacher
     this.educatorApi = new EducatorAPI(this.$store, this.$ajax);
-    this.isTeacher = await this.educatorApi.authenticateTeacher();
+    this.isTeacher = await this.educatorApi.authTeacher();
   }
 }
 </script>

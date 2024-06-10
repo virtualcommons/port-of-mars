@@ -33,6 +33,7 @@ import {
   tournamentRouter,
   statusRouter,
   statsRouter,
+  educatorRouter,
 } from "@port-of-mars/server/routes";
 import { ServerError } from "@port-of-mars/server/util";
 import dataSource from "@port-of-mars/server/datasource";
@@ -225,6 +226,9 @@ async function createApp() {
   app.use("/quiz", quizRouter);
   app.use("/account", accountRouter);
   app.use("/status", statusRouter);
+  if (isEducatorMode()) {
+    app.use("/educator", educatorRouter);
+  }
 
   const server = http.createServer(app);
   const gameServer = new Server({

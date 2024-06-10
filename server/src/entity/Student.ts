@@ -20,6 +20,6 @@ export class Student {
   @Column()
   classroomId!: number;
 
-  @Column()
-  password!: string;
+  @Column({ unique: true })
+  rejoinCode!: string;
 }
