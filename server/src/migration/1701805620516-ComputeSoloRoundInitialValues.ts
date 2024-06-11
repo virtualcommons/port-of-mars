@@ -51,7 +51,12 @@ export class ComputeSoloRoundInitialValues1701805620516 implements MigrationInte
   private async computeMissingInitialValues(queryRunner: QueryRunner): Promise<void> {
     // fetch all existing games with rounds, cards, decisions
     const games = await queryRunner.manager.find(SoloGame, {
-      relations: ["rounds", "rounds.cards", "rounds.decision"],
+      relations: {
+        rounds: {
+          cards: true,
+          decision: true,
+        },
+      },
     });
     for (const game of games) {
       let initialSystemHealth = MAX_SYSTEM_HEALTH;

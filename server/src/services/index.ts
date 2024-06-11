@@ -6,11 +6,11 @@ import { TournamentService } from "@port-of-mars/server/services/tournament";
 import { QuizService } from "@port-of-mars/server/services/quiz";
 import { SurveyService } from "@port-of-mars/server/services/survey";
 import { StatsService } from "@port-of-mars/server/services/stats";
-import { getConnection } from "@port-of-mars/server/util";
 import { TimeService } from "@port-of-mars/server/services/time";
 import { GameService } from "@port-of-mars/server/services/game";
 import { SoloGameService } from "@port-of-mars/server/services/sologame";
 import { RedisSettings } from "@port-of-mars/server/services/settings";
+import dataSource from "@port-of-mars/server/datasource";
 import { createClient, RedisClient } from "redis";
 
 export class ServiceProvider {
@@ -114,5 +114,5 @@ export function getRedis(): RedisClient {
 }
 
 export function getServices(em?: EntityManager) {
-  return new ServiceProvider(em ?? getConnection().manager);
+  return new ServiceProvider(em ?? dataSource.manager);
 }

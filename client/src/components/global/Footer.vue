@@ -64,25 +64,25 @@ ccarra1@asu.edu
       <h2>Connect with Us</h2>
       <ul>
         <li>
-          <a :href="constants.DISCORD_URL" title="Discord">
+          <a :href="$settings.DISCORD_URL" title="Discord">
             Discord
             <b-icon-discord></b-icon-discord>
           </a>
         </li>
         <li>
-          <a :href="'mailto:' + constants.CONTACT_EMAIL" title="Email us">
+          <a :href="'mailto:' + $settings.CONTACT_EMAIL" title="Email us">
             Email
             <b-icon-envelope class="mx-1"></b-icon-envelope>
           </a>
         </li>
         <li>
-          <a :href="constants.INSTAGRAM_URL" title="Instagram">
+          <a :href="$settings.INSTAGRAM_URL" title="Instagram">
             Instagram
             <b-icon-instagram class="mx-1"></b-icon-instagram>
           </a>
         </li>
         <li>
-          <a :href="constants.TWITTER_URL" title="Twitter">
+          <a :href="$settings.TWITTER_URL" title="Twitter">
             Twitter
             <b-icon-twitter class="mx-1"></b-icon-twitter>
           </a>
@@ -93,7 +93,7 @@ ccarra1@asu.edu
       &copy; 2020-{{ currentYear }}
       <a href="https://www.azregents.edu/">Arizona Board of Regents</a> |
 
-      <a :href="constants.GITHUB_URL">{{ constants.BUILD_ID }}</a>
+      <a :href="$settings.GITHUB_URL">{{ RELEASE_VERSION }}</a>
     </div>
   </footer>
   <!-- </b-container> -->
@@ -101,7 +101,6 @@ ccarra1@asu.edu
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { Constants } from "@port-of-mars/shared/settings";
 import {
   LOGIN_PAGE,
   FREE_PLAY_LOBBY_PAGE,
@@ -123,8 +122,8 @@ export default class Footer extends Vue {
   privacy = { name: PRIVACY_PAGE };
   solo = { name: SOLO_GAME_PAGE };
 
-  get constants() {
-    return Constants;
+  get RELEASE_VERSION() {
+    return import.meta.env.SHARED_RELEASE_VERSION;
   }
 
   get isTournamentEnabled() {

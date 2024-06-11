@@ -45,7 +45,7 @@ export class TournamentService extends BaseService {
           where: {
             id: id,
           },
-          relations: ["rounds"],
+          relations: { rounds: true },
         });
       }
       return this.em.getRepository(Tournament).findOneOrFail({
@@ -65,7 +65,7 @@ export class TournamentService extends BaseService {
   }
 
   async getTournamentByName(name: string): Promise<Tournament> {
-    return this.em.getRepository(Tournament).findOneOrFail({ name });
+    return this.em.getRepository(Tournament).findOneByOrFail({ name });
   }
 
   async getCurrentTournamentRoundByType(type: GameType) {
@@ -80,7 +80,7 @@ export class TournamentService extends BaseService {
   async getCurrentTournamentRound(tournamentId?: number): Promise<TournamentRound> {
     tournamentId = (await this.getTournament(tournamentId)).id;
     return await this.em.getRepository(TournamentRound).findOneOrFail({
-      relations: ["tournament"],
+      relations: { tournament: true },
       where: { tournamentId },
       order: { roundNumber: "DESC" },
     });
@@ -89,7 +89,7 @@ export class TournamentService extends BaseService {
   async getFreePlayTournamentRound(): Promise<TournamentRound> {
     const tournamentId = (await this.getFreePlayTournament()).id;
     return await this.em.getRepository(TournamentRound).findOneOrFail({
-      relations: ["tournament"],
+      relations: { tournament: true },
       where: { tournamentId },
       order: { roundNumber: "DESC" },
     });
@@ -171,7 +171,9 @@ export class TournamentService extends BaseService {
   }
 
   async getAndConfirmValidInvite(user: User, inviteId: number): Promise<TournamentRoundInvite> {
-    const invite = await this.em.getRepository(TournamentRoundInvite).findOneOrFail(inviteId);
+    const invite = await this.em
+      .getRepository(TournamentRoundInvite)
+      .findOneByOrFail({ id: inviteId });
     if (invite.userId !== user.id) {
       throw new ValidationError({
         displayMessage: "Invalid tournament invitation",
@@ -189,7 +191,7 @@ export class TournamentService extends BaseService {
     const invite = await this.getAndConfirmValidInvite(user, inviteId);
     const roundDate = await this.em
       .getRepository(TournamentRoundDate)
-      .findOneOrFail(tournamentRoundDateId);
+      .findOneByOrFail({ id: tournamentRoundDateId });
     const signup = this.em.getRepository(TournamentRoundSignup).create({
       tournamentRoundInvite: invite,
       tournamentRoundDate: roundDate,
@@ -201,7 +203,7 @@ export class TournamentService extends BaseService {
     const invite = await this.getAndConfirmValidInvite(user, inviteId);
     const roundDate = await this.em
       .getRepository(TournamentRoundDate)
-      .findOneOrFail(tournamentRoundDateId);
+      .findOneByOrFail({ id: tournamentRoundDateId });
     await this.em.getRepository(TournamentRoundSignup).delete({
       tournamentRoundInvite: invite,
       tournamentRoundDate: roundDate,
@@ -241,7 +243,7 @@ export class TournamentService extends BaseService {
     if (!afterOffset) afterOffset = await this.getAfterOffset();
     const offsetTime = new Date().getTime() - afterOffset;
     const schedule = await this.em.getRepository(TournamentRoundDate).find({
-      select: ["date"],
+      select: { date: true },
       where: { tournamentRoundId: tournamentRound.id, date: MoreThanOrEqual(new Date(offsetTime)) },
       order: { date: "ASC" },
     });
@@ -482,7 +484,7 @@ export class TournamentService extends BaseService {
 
     const tournament = await this.em.getRepository(Tournament).findOne({
       where: tournamentId ? { id: tournamentId } : { active: true, name: Not("freeplay") },
-      relations: ["treatments"],
+      relations: { treatments: true },
       order: {
         id: "DESC",
       },
@@ -590,7 +592,7 @@ export class TournamentService extends BaseService {
 
   async getTournamentRound(id?: number): Promise<TournamentRound> {
     if (id) {
-      return await this.em.getRepository(TournamentRound).findOneOrFail(id);
+      return await this.em.getRepository(TournamentRound).findOneByOrFail({ id });
     } else {
       return await this.getCurrentTournamentRound();
     }

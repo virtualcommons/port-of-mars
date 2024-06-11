@@ -78,7 +78,7 @@
       <p>
         If you have any questions or concerns about our Privacy Policy or the collection, use, or
         sharing of your personal information, please contact us at
-        <a :href="`mailto:${constants.CONTACT_EMAIL}`">{{ constants.CONTACT_EMAIL }}</a
+        <a :href="`mailto:${$settings.CONTACT_EMAIL}`">{{ $settings.CONTACT_EMAIL }}</a
         >.
       </p>
     </div>
@@ -88,7 +88,6 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { Constants } from "@port-of-mars/shared/settings";
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
 
 @Component({
@@ -96,11 +95,7 @@ import Footer from "@port-of-mars/client/components/global/Footer.vue";
     Footer,
   },
 })
-export default class Privacy extends Vue {
-  get constants() {
-    return Constants;
-  }
-}
+export default class Privacy extends Vue {}
 </script>
 
 <style lang="scss" scoped>

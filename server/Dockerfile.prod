@@ -11,6 +11,8 @@ RUN cd /code/shared && npm install
 COPY ./client /code/client
 COPY ./shared /code/shared
 
+COPY ./.env /code/client/
+
 ARG NODE_ARG=production
 ENV NODE_ENV=${NODE_ARG}
 

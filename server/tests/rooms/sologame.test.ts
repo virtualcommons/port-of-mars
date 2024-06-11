@@ -10,7 +10,7 @@ import {
   User,
 } from "@port-of-mars/server/entity";
 import { SoloGameState } from "@port-of-mars/server/rooms/sologame/state";
-import { Connection, EntityManager, QueryRunner } from "typeorm";
+import { EntityManager, QueryRunner } from "typeorm";
 import { ServiceProvider } from "@port-of-mars/server/services";
 import { createUsers, initTransaction, rollbackTransaction } from "../common";
 import {
@@ -34,7 +34,6 @@ const logger = getLogger(__filename);
  */
 
 describe("a solo game", () => {
-  let conn: Connection;
   let qr: QueryRunner;
   let manager: EntityManager;
   let sp: ServiceProvider;
@@ -43,13 +42,13 @@ describe("a solo game", () => {
   let user3: User;
 
   beforeAll(async () => {
-    [conn, qr, manager] = await initTransaction();
-    sp = new ServiceProvider(qr.manager);
+    [qr, manager] = await initTransaction();
+    sp = new ServiceProvider(manager);
     // create users paul1 paul2 paul3
     [user1, user2, user3] = await createUsers(manager, "paul", [1, 2, 3]);
   });
 
-  afterAll(async () => await rollbackTransaction(conn, qr));
+  afterAll(async () => await rollbackTransaction(qr));
 
   describe("a solo game room", () => {
     let room: SoloGameRoom;

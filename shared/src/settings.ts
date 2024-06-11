@@ -1,7 +1,39 @@
-import { BUILD_ID, SENTRY_DSN, GA_TAG } from "./assets/config";
-export { BUILD_ID, SENTRY_DSN, GA_TAG } from "./assets/config";
+type Environment = "development" | "staging" | "production" | "test";
 
-export const ENVIRONMENT = process.env.NODE_ENV || "development";
+export const ENVIRONMENT = (process.env.NODE_ENV || "development") as Environment;
+
+// client-safe env vars are prefixed with SHARED_
+// https://vitejs.dev/guide/env-and-mode.html#env-loading-modes
+
+// client must use import.meta.env to access any value that comes from an environment variable
+// instead of process.env or from the settings below
+export const settings = {
+  ENVIRONMENT: ENVIRONMENT,
+  RELEASE_VERSION: process.env.SHARED_RELEASE_VERSION || "version unknown",
+  SENTRY_DSN: process.env.SHARED_SENTRY_DSN || "",
+  GA_TAG: process.env.SHARED_GA_TAG || "",
+  TRAILER_VIDEO_URL: "https://www.youtube.com/embed/CiB4q3CnyCY",
+  TUTORIAL_VIDEO_URL: "https://www.youtube.com/embed/D4FfofyrlkA",
+  DISCORD_URL: "https://discord.gg/AFEtAJZfEM",
+  INSTAGRAM_URL: "https://www.instagram.com/portofmars/",
+  TWITTER_URL: "https://twitter.com/PortOfMars",
+  GITHUB_URL: "https://github.com/virtualcommons/port-of-mars",
+  CONTACT_EMAIL: "portmars@asu.edu",
+  GIFT_CARD_AMOUNT: 10,
+  SYSTEM_HEALTH_MAINTENANCE_COST: 25,
+  MAXIMUM_COST: 1000,
+};
+
+const baseUrlMap = {
+  development: "http://localhost:8081",
+  staging: "https://staging.portofmars.asu.edu",
+  production: "https://portofmars.asu.edu",
+  test: "http://localhost:8081",
+};
+
+export const BASE_URL = baseUrlMap[ENVIRONMENT];
+export const SERVER_URL_WS = isDev() ? "ws://localhost:2567" : "";
+export const SERVER_URL_HTTP = isDev() ? "http://localhost:2567" : "";
 
 export function isDev(): boolean {
   return ENVIRONMENT === "development";
@@ -25,22 +57,4 @@ export function isDevOrStaging(): boolean {
 
 export function isStagingOrProduction(): boolean {
   return isStaging() || isProduction();
-}
-
-export class Constants {
-  // FIXME: we could support reading values from a settings file as well/instead?
-  public static readonly TRAILER_VIDEO_URL = "https://www.youtube.com/embed/CiB4q3CnyCY";
-  public static readonly TUTORIAL_VIDEO_URL = "https://www.youtube.com/embed/D4FfofyrlkA";
-  public static readonly DISCORD_URL = "https://discord.gg/AFEtAJZfEM";
-  public static readonly INSTAGRAM_URL = "https://www.instagram.com/portofmars/";
-  public static readonly TWITTER_URL = "https://twitter.com/PortOfMars";
-  public static readonly GITHUB_URL = "https://github.com/virtualcommons/port-of-mars";
-  public static readonly CONTACT_EMAIL = "portmars@asu.edu";
-  public static readonly ENVIRONMENT = ENVIRONMENT;
-  public static readonly BUILD_ID = BUILD_ID;
-  public static readonly SENTRY_DSN = SENTRY_DSN;
-  public static readonly GA_TAG = GA_TAG;
-  public static readonly GIFT_CARD_AMOUNT = 10;
-  public static readonly SYSTEM_HEALTH_MAINTENANCE_COST = 25;
-  public static readonly MAXIMUM_COST = 1000;
 }

@@ -4,18 +4,8 @@ set -o nounset
 set -o pipefail
 set -o errexit
 
-declare -A url_map
+DEPLOY_ENVIRONMENT=${1:-dev} # dev|staging|prod
 
-url_map['dev']='http://localhost:8081'
-url_map['staging']='https://staging.portofmars.asu.edu'
-url_map['prod']='https://portofmars.asu.edu'
+echo "configuring for **${DEPLOY_ENVIRONMENT}** environment"
 
-ENVIR=${1:-dev} # dev|staging|prod
-POM_BASE_URL=${url_map[$ENVIR]}
-
-echo "configuring for **${ENVIR}** environment with base url $POM_BASE_URL"
-
-envsubst > config.mk <<EOF
-ENVIR=$ENVIR
-POM_BASE_URL=$POM_BASE_URL
-EOF
+echo "DEPLOY_ENVIRONMENT=${DEPLOY_ENVIRONMENT}" > config.mk

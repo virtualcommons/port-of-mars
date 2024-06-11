@@ -140,7 +140,7 @@ export class AdminService extends BaseService {
   async takeModerationAction(data: ModerationActionData) {
     const moderationActionRepo = this.em.getRepository(ModerationAction);
     const reportRepo = this.em.getRepository(ChatReport);
-    const report = await reportRepo.findOneOrFail({ id: data.reportId });
+    const report = await reportRepo.findOneByOrFail({ id: data.reportId });
     const user = await this.sp.account.findByUsername(data.username);
     const admin = await this.sp.account.findByUsername(data.adminUsername);
     const { username, adminUsername, ...moderationActionData } = data;
@@ -187,10 +187,10 @@ export class AdminService extends BaseService {
   async undoModerationAction(data: { moderationActionId: number; username: string }) {
     const moderationActionRepo = this.em.getRepository(ModerationAction);
     const reportRepo = this.em.getRepository(ChatReport);
-    const moderationAction = await moderationActionRepo.findOneOrFail({
+    const moderationAction = await moderationActionRepo.findOneByOrFail({
       id: data.moderationActionId,
     });
-    const report = await reportRepo.findOneOrFail({ id: moderationAction.reportId });
+    const report = await reportRepo.findOneByOrFail({ id: moderationAction.reportId });
     // mark moderationAction as revoked
     moderationAction.revoked = true;
     await moderationActionRepo.save(moderationAction);

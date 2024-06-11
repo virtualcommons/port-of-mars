@@ -55,7 +55,6 @@ import {
   MANUAL_PAGE,
   TOURNAMENT_DASHBOARD_PAGE,
 } from "@port-of-mars/shared/routes";
-import { Constants } from "@port-of-mars/shared/settings";
 import Countdown from "@port-of-mars/client/components/global/Countdown.vue";
 import HelpPanel from "@port-of-mars/client/components/lobby/HelpPanel.vue";
 import Messages from "@port-of-mars/client/components/global/Messages.vue";
@@ -80,10 +79,6 @@ export default class TournamentLobby extends Vue {
   consent = { name: CONSENT_PAGE };
 
   clientFields = [{ key: "username", label: "Player" }];
-
-  get constants() {
-    return Constants;
-  }
 
   get clients() {
     return this.$tstore.state.lobby.clients;

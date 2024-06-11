@@ -43,9 +43,13 @@ export class SurveyService extends BaseService {
   }
 
   async setSurveyComplete(data: { inviteId: number; surveyId: string }) {
-    const invite = await this.em
-      .getRepository(TournamentRoundInvite)
-      .findOneOrFail(data.inviteId, { relations: ["user", "tournamentRound"] });
+    const invite = await this.em.getRepository(TournamentRoundInvite).findOneOrFail({
+      where: { id: data.inviteId },
+      relations: {
+        user: true,
+        tournamentRound: true,
+      },
+    });
     const tournamentRound = invite.tournamentRound;
     const introSurveyUrl = tournamentRound.introSurveyUrl;
     const exitSurveyUrl = tournamentRound.exitSurveyUrl;

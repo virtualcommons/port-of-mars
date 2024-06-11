@@ -32,7 +32,7 @@ import {
 } from "@port-of-mars/shared/types";
 import { ModalType, ModalDataType } from "@port-of-mars/shared/game/client/modals";
 import { ChatMarsLogView, HUDLeftView, HUDRightView } from "@port-of-mars/shared/game/client/panes";
-import { Constants } from "@port-of-mars/shared/settings";
+import { settings } from "@port-of-mars/shared/settings";
 
 export const ROLE_TO_INVESTMENT_DATA: {
   [role in Role]: Array<Investment>;
@@ -248,7 +248,7 @@ export const initialGameState: GameState = {
     systemHealthGroupContributions: new Map<string, number>(),
     systemHealthAtStartOfRound: 100,
     systemHealthMarsEvents: [],
-    systemHealthMaintenanceCost: -Constants.SYSTEM_HEALTH_MAINTENANCE_COST,
+    systemHealthMaintenanceCost: -settings.SYSTEM_HEALTH_MAINTENANCE_COST,
     accomplishmentPurchases: [],
     completedTrades: [],
   },

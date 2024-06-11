@@ -56,7 +56,6 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { Investment, Resource } from "@port-of-mars/shared/types";
-import { Constants } from "@port-of-mars/shared/settings";
 
 @Component({})
 export default class InvestmentCard extends Vue {
@@ -100,7 +99,7 @@ export default class InvestmentCard extends Vue {
    * Define if investment is affordable.
    */
   get cannotPurchase(): boolean {
-    return this.cost >= Constants.MAXIMUM_COST;
+    return this.cost >= this.$settings.MAXIMUM_COST;
   }
 
   /**

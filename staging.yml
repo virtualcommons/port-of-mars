@@ -1,7 +1,7 @@
 services:
   server:
     build:
-      dockerfile: server/deploy/Dockerfile.prod
+      dockerfile: server/Dockerfile.prod
       args:
         NODE_ARG: staging
     image: port-of-mars/server:staging

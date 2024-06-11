@@ -1,6 +1,6 @@
 import _ from "lodash";
 import * as assert from "assert";
-import * as to from "typeorm";
+import { Builder, Loader, Parser, Resolver, fixturesIterator } from "typeorm-fixtures-cli/dist";
 import { ROLES, DashboardMessage, GameType } from "@port-of-mars/shared/types";
 import { GameOpts, GameStateOpts } from "@port-of-mars/server/rooms/game/types";
 import {
@@ -12,12 +12,20 @@ import { getLogger, settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
 import { User } from "@port-of-mars/server/entity";
 import { ClientSafeUser } from "@port-of-mars/shared/types";
+import dataSource from "@port-of-mars/server/datasource";
 
 const logger = getLogger(__filename);
 
-export function getConnection(): to.Connection {
-  const connectionName = process.env.NODE_ENV === "test" ? "test" : "default";
-  return to.getConnection(connectionName);
+export async function loadFixtures() {
+  const loader = new Loader();
+  loader.load(__dirname + "/../fixtures");
+  const resolver = new Resolver();
+  const fixtures = resolver.resolve(loader.fixtureConfigs);
+  const builder = new Builder(dataSource, new Parser(), false);
+  for (const fixture of fixturesIterator(fixtures)) {
+    const entity = await builder.build(fixture);
+    await dataSource.getRepository(fixture.entity).save(entity);
+  }
 }
 
 export function toUrl(page: Page): string {

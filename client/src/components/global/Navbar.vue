@@ -67,13 +67,13 @@
         </b-nav-item>
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto">
-        <b-nav-item class="mx-2" target="_blank" :href="constants.DISCORD_URL" title="Discord"
+        <b-nav-item class="mx-2" target="_blank" :href="$settings.DISCORD_URL" title="Discord"
           ><b-icon-discord></b-icon-discord
         ></b-nav-item>
-        <b-nav-item class="mx-2" target="_blank" :href="constants.TWITTER_URL" title="Twitter"
+        <b-nav-item class="mx-2" target="_blank" :href="$settings.TWITTER_URL" title="Twitter"
           ><b-icon-twitter></b-icon-twitter
         ></b-nav-item>
-        <b-nav-item class="mx-2" target="_blank" :href="constants.INSTAGRAM_URL" title="Instagram"
+        <b-nav-item class="mx-2" target="_blank" :href="$settings.INSTAGRAM_URL" title="Instagram"
           ><b-icon-instagram></b-icon-instagram
         ></b-nav-item>
         <div v-if="isAuthenticated">
@@ -112,7 +112,6 @@ import {
   PROFILE_PAGE,
   TOURNAMENT_DASHBOARD_PAGE,
 } from "@port-of-mars/shared/routes";
-import { Constants } from "@port-of-mars/shared/settings";
 
 @Component({})
 export default class Navbar extends Vue {
@@ -135,10 +134,6 @@ export default class Navbar extends Vue {
   tournamentDashboard = { name: TOURNAMENT_DASHBOARD_PAGE };
   freePlayLobby = { name: FREE_PLAY_LOBBY_PAGE };
   profile = { name: PROFILE_PAGE };
-
-  get constants() {
-    return Constants;
-  }
 
   get username() {
     return this.$tstore.state.user.username;

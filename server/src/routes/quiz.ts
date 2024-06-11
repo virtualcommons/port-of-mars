@@ -24,12 +24,16 @@ quizRouter.get("/submission/:id", async (req: Request, res: Response, next: Next
       const id = parseInt(req.params.id);
       let submission = await quizService.findQuizSubmission(id, {
         where: { userId: user.id },
-        relations: ["quiz", "quiz.questions"],
+        relations: {
+          quiz: {
+            questions: true,
+          },
+        },
       });
       let quiz = submission?.quiz;
       let statusCode = 200;
       if (!submission) {
-        quiz = await quizService.getDefaultQuiz({ relations: ["questions"] });
+        quiz = await quizService.getDefaultQuiz({ relations: { questions: true } });
         logger.debug("created new submission after looking up id %d", id);
         submission = await quizService.createQuizSubmission(user.id, quiz.id);
         statusCode = 201;
@@ -47,7 +51,7 @@ quizRouter.post("/submission", async (req: Request, res: Response, next: NextFun
     const user = req.user as User;
     if (user) {
       const userId = user!.id;
-      const quiz = await quizService.getDefaultQuiz({ relations: ["questions"] });
+      const quiz = await quizService.getDefaultQuiz({ relations: { questions: true } });
       const quizId = quiz!.id;
       const quizQuestions = quiz.questions;
       const submission = await quizService.createQuizSubmission(userId, quizId);

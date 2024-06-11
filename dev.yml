@@ -5,9 +5,10 @@ services:
       context: .
     restart: always
     image: port-of-mars/client:dev
+    env_file:
+      - .env
     volumes:
       - ./client:/code/client
-      - ./keys/sentry_dsn:/run/secrets/sentry_dsn
       - ./shared/src:/code/shared/src
       - /code/client/node_modules
       - ./.prettierrc:/code/.prettierrc
@@ -15,7 +16,7 @@ services:
       - "127.0.0.1:8081:8080"
   server:
     build:
-      dockerfile: server/deploy/Dockerfile.dev
+      dockerfile: server/Dockerfile.dev
     ports:
       - "127.0.0.1:2567:2567"
     volumes:

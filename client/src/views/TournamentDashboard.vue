@@ -72,7 +72,7 @@
               <span v-else>
                 We couldn't find your invitation for the current tournament round. If this appears
                 to be a mistake please contact us at
-                <a :href="`mailto:${constants.CONTACT_EMAIL}`">{{ constants.CONTACT_EMAIL }}</a
+                <a :href="`mailto:${$settings.CONTACT_EMAIL}`">{{ $settings.CONTACT_EMAIL }}</a
                 >.
               </span>
             </b-alert>
@@ -97,7 +97,6 @@ import { Component, Provide, Vue } from "vue-property-decorator";
 import { TournamentAPI } from "@port-of-mars/client/api/tournament/request";
 import { HOME_PAGE, MANUAL_PAGE, TOURNAMENT_LOBBY_PAGE } from "@port-of-mars/shared/routes";
 import { TournamentRoundInviteStatus } from "@port-of-mars/shared/types";
-import { Constants } from "@port-of-mars/shared/settings";
 import Countdown from "@port-of-mars/client/components/global/Countdown.vue";
 import Messages from "@port-of-mars/client/components/global/Messages.vue";
 import Schedule from "@port-of-mars/client/components/global/Schedule.vue";
@@ -121,10 +120,6 @@ export default class TournamentDashboard extends Vue {
   invite: TournamentRoundInviteStatus | null = null;
   loaded = false;
   expandSchedule = false;
-
-  get constants() {
-    return Constants;
-  }
 
   get isJoinLobbyDisabled() {
     return (

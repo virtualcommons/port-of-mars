@@ -35,7 +35,7 @@ import {
 import { DBPersister, toDBGameEvent } from "@port-of-mars/server/services/persistence";
 import { GameReplayer, MarsEventSummarizer } from "@port-of-mars/server/services/replay";
 import { GameEvent } from "@port-of-mars/server/rooms/game/events/types";
-import { Connection, EntityManager, QueryRunner } from "typeorm";
+import { EntityManager, QueryRunner } from "typeorm";
 import { Persister } from "@port-of-mars/server/rooms/game/types";
 import { ServiceProvider } from "@port-of-mars/server/services";
 import { Player, Tournament, TournamentRound, User } from "@port-of-mars/server/entity";
@@ -302,10 +302,9 @@ describe("a game", () => {
   ];
 
   describe("event stream", () => {
-    let conn: Connection;
     let manager: EntityManager;
     let persister: Persister;
-    let qs: QueryRunner;
+    let qr: QueryRunner;
     let sp: ServiceProvider;
     let t: Tournament;
     let tr: TournamentRound;
@@ -313,7 +312,7 @@ describe("a game", () => {
     let users: Array<User>;
 
     beforeAll(async () => {
-      [conn, qs, manager] = await initTransaction();
+      [qr, manager] = await initTransaction();
       sp = new ServiceProvider(manager);
       persister = new DBPersister(sp);
       t = await createTournament(sp);
@@ -351,7 +350,7 @@ describe("a game", () => {
       }
     });
 
-    afterAll(async () => rollbackTransaction(conn, qs));
+    afterAll(async () => rollbackTransaction(qr));
   });
 
   it("correctly isolates all mars events", () => {

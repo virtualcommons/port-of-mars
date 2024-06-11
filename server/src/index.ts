@@ -1,4 +1,3 @@
-import { createConnection } from "typeorm";
 import http from "http";
 import express, { Response } from "express";
 import helmet from "helmet";
@@ -15,7 +14,7 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { Strategy as FacebookStrategy } from "passport-facebook";
 import { Strategy as LocalStrategy } from "passport-local";
 
-import { Constants, isDev, isDevOrStaging } from "@port-of-mars/shared/settings";
+import { settings as sharedSettings, isDev, isDevOrStaging } from "@port-of-mars/shared/settings";
 
 // server side imports
 import { GameRoom } from "@port-of-mars/server/rooms/game";
@@ -35,11 +34,11 @@ import {
   statusRouter,
   statsRouter,
 } from "@port-of-mars/server/routes";
-import { ServerError } from "./util";
+import { ServerError } from "@port-of-mars/server/util";
+import dataSource from "@port-of-mars/server/datasource";
 
 const logger = settings.logging.getLogger(__filename);
 const NODE_ENV = process.env.NODE_ENV || "development";
-const CONNECTION_NAME = NODE_ENV === "test" ? "test" : "default";
 
 const RedisStore = connectRedis(session);
 const store = new RedisStore({ host: "redis", client: getRedis() });
@@ -131,8 +130,8 @@ function applyInStagingOrProd(f: () => void) {
 }
 
 applyInStagingOrProd(() => {
-  Sentry.init({ dsn: Constants.SENTRY_DSN });
-  logger.debug("Setting up sentry: %s", Constants.SENTRY_DSN);
+  Sentry.init({ dsn: sharedSettings.SENTRY_DSN });
+  logger.debug("Setting up sentry: %s", sharedSettings.SENTRY_DSN);
 });
 
 async function createApp() {
@@ -142,9 +141,9 @@ async function createApp() {
   })();
 
   logger.info(
-    "starting (%s) server: [build id: %s, settings.host %s]",
+    "starting (%s) server: [release version: %s, settings.host %s]",
     NODE_ENV,
-    Constants.BUILD_ID,
+    sharedSettings.RELEASE_VERSION,
     settings.host
   );
   const port = Number(process.env.PORT || 2567);
@@ -251,12 +250,15 @@ async function createApp() {
 // connect to the database and start the server, retrying if the connection fails
 pRetry(
   async () => {
-    await createConnection(CONNECTION_NAME);
+    await dataSource.initialize();
     await createApp();
   },
   {
     onFailedAttempt: error => {
-      logger.warn(`Connection to db failed on attempt number ${error.attemptNumber}, retrying...`);
+      logger.warn(
+        `Connection to db failed on attempt number ${error.attemptNumber}, retrying ${error.retriesLeft} more times...`
+      );
+      logger.warn(`cause: ${error.message}`);
     },
     retries: 10,
     minTimeout: 1 * 1000,

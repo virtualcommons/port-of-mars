@@ -8,7 +8,7 @@ import * as ge from "@port-of-mars/server/rooms/game/events/types";
 import { GameOpts, Metadata, Persister } from "@port-of-mars/server/rooms/game/types";
 import { getServices, ServiceProvider } from "@port-of-mars/server/services/index";
 import { getLogger } from "@port-of-mars/server/settings";
-import { BUILD_ID } from "@port-of-mars/shared/settings";
+import { settings } from "@port-of-mars/shared/settings";
 
 const logger = getLogger(__filename);
 
@@ -49,7 +49,11 @@ export class DBPersister implements Persister {
   async selectUsersByUsername(em: EntityManager, usernames: Array<string>) {
     const userRepo = em.getRepository(User);
     const rawUsers = await userRepo.find({
-      select: ["id", "username", "lastPlayerIp"],
+      select: {
+        id: true,
+        username: true,
+        lastPlayerIp: true,
+      },
       where: {
         username: In(usernames),
       },
@@ -94,7 +98,7 @@ export class DBPersister implements Persister {
       if (_.isNull(options.tournamentRoundId)) {
         throw new Error("could not find matching tournament round");
       }
-      game.buildId = BUILD_ID;
+      game.buildId = settings.RELEASE_VERSION;
       game.tournamentRoundId = options.tournamentRoundId;
       game.roomId = roomId;
       game.type = options.type;
@@ -126,14 +130,14 @@ export class DBPersister implements Persister {
         where: { type: In(DBPersister.FINAL_EVENTS), gameId },
         order: { id: "DESC", dateCreated: "DESC" },
       });
-      const game = await em.getRepository(Game).findOneOrFail(gameId);
+      const game = await em.getRepository(Game).findOneByOrFail({ id: gameId });
       game.status = event.type === "entered-defeat-phase" ? "defeat" : "victory";
       game.dateFinalized = this.sp.time.now();
       if (!shouldFinalizePlayers) {
         const res: [Game, Array<Player>] = [await em.save(game), []];
         return res;
       }
-      const players = await em.getRepository(Player).find({ gameId });
+      const players = await em.getRepository(Player).findBy({ gameId });
       for (const p of players) {
         p.points = (event.payload as any)[p.role];
       }

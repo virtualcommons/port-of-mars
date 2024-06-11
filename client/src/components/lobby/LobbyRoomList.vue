@@ -101,7 +101,6 @@
 import { Component, Inject, Vue } from "vue-property-decorator";
 import { Client } from "colyseus.js";
 import { FREE_PLAY_LOBBY_NAME } from "@port-of-mars/shared/lobby";
-import { Constants } from "@port-of-mars/shared/settings";
 import MuteBanWarning from "@port-of-mars/client/components/lobby/MuteBanWarning.vue";
 
 @Component({
@@ -122,10 +121,6 @@ export default class LobbyRoomList extends Vue {
 
   refreshingRoomList = false;
   pollingIntervalId = 0;
-
-  get constants() {
-    return Constants;
-  }
 
   get isBanned() {
     return this.$store.state.user.isBanned;

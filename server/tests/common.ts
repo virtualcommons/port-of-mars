@@ -1,21 +1,30 @@
-import { Connection, createConnection, EntityManager, QueryRunner } from "typeorm";
+import { EntityManager, QueryRunner } from "typeorm";
 import { ServiceProvider } from "@port-of-mars/server/services";
 import { Tournament, User } from "@port-of-mars/server/entity";
 import { Client } from "colyseus";
 import EventEmitter from "events";
+import testDataSource from "@port-of-mars/server/datasource";
 
-export async function initTransaction(): Promise<[Connection, QueryRunner, EntityManager]> {
-  const conn = await createConnection("test");
-  const qs = conn.createQueryRunner();
-  await qs.startTransaction();
-  const manager = qs.manager;
-  return [conn, qs, manager];
+export async function initTransaction(): Promise<[QueryRunner, EntityManager]> {
+  /**
+   * sets up the test db datasource and returns a queryrunner and that queryrunner's manager
+   * which should be used for interacting with the db in tests
+   */
+  // FIXME: we need to initialize the datasource + sync for each test suite
+  // after already doing so in the test setup. may or may not be faster to
+  // just setup once and run sequentially
+  await testDataSource.initialize();
+  await testDataSource.synchronize();
+  const qr = testDataSource.createQueryRunner();
+  await qr.startTransaction();
+  const manager = qr.manager;
+  return [qr, manager];
 }
 
-export async function rollbackTransaction(conn: Connection, qs: QueryRunner) {
-  await qs.rollbackTransaction();
-  await qs.release();
-  await conn.close();
+export async function rollbackTransaction(qr: QueryRunner) {
+  await qr.rollbackTransaction();
+  await qr.release();
+  await testDataSource.destroy();
 }
 
 export async function createUsers(
