@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from "uuid";
 import { BaseService } from "@port-of-mars/server/services/db";
 import { Teacher, Classroom, Student, User } from "@port-of-mars/server/entity";
 import { ServerError, generateUsername } from "@port-of-mars/server/util";
@@ -24,7 +23,33 @@ export class EducatorService extends BaseService {
 
   async generateStudentRejoinCode(): Promise<string> {
     // FIXME: generate a unique rejoin code
-    return uuidv4();
+    let rejoinCode = "";
+    do {
+      rejoinCode = generateCode(7, true);
+    } while (await this.em.getRepository(Student).findOne({ where: { rejoinCode } })){
+      rejoinCode = generateCode(7, true);
+    }
+    return rejoinCode;
+  }
+
+  async generateTeacherPassword(): Promise<string> {
+    let password = "";
+    do {
+      password = generateCode(10);
+    } while (await this.em.getRepository(Teacher).findOne({ where: { password } })){
+      password = generateCode(10);
+    }
+    return password;
+  }
+
+  async generateAuthToken(): Promise<string> {
+    let authToken = "";
+    do {
+      authToken = generateCode(5);
+    } while (await this.em.getRepository(Classroom).findOne({ where: { authToken } })){
+      authToken = generateCode(5);
+    }
+    return authToken;
   }
 
   async createStudent(classroomAuthToken: string) {
@@ -72,7 +97,7 @@ export class EducatorService extends BaseService {
     const teacher = teacherRepo.create({
       user,
       userId: user.id,
-      password: "", // FIXME: generate a password, how to keep this secure but generated?
+      password: await this.generateTeacherPassword(), // FIXME: generate a password, how to keep this secure but generated?
     });
     return teacherRepo.save(teacher);
   }
@@ -90,8 +115,26 @@ export class EducatorService extends BaseService {
       teacher,
       teacherId: teacher.id,
       descriptor,
-      authToken: "asdf", // FIXME: generate this
+      authToken: await this.generateAuthToken(), //FIXME: make a test suite for this
     });
     return repo.save(classroom);
   }
+}
+
+function generateCode(length: number, alphabet?: boolean): string {
+  const str = 'abcdefghijklmnopqrstuvwxyz0123456789'; 
+  let code = '';
+
+  if (alphabet){
+    while (code.length !== length){
+      const index = Math.floor(Math.random() * 26);
+      code += str.charAt(index);
+    }  
+  } else { 
+      while (code.length !== length){
+        const index = Math.floor(Math.random() * str.length);
+        code += str.charAt(index);
+      }
+    }
+  return code;
 }
