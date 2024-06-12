@@ -41,13 +41,23 @@ describe("the educator service", () => {
   });
 
   it("generates a unique authToken (game code) for a classroom", async () => {
-    // TODO:
-    expect(true).toBe(true);
+    const authTokens = [];
+    for (let i = 0; i < 10; i++){
+      const authToken = await educatorService.generateAuthToken();
+      console.log("classroom code: ", authToken);
+      expect(authTokens.includes(authToken)).toBe(false);
+      authTokens.push(authToken);
+    }
   });
 
   it("generates a unique educator password", async () => {
-    // TODO:
-    expect(true).toBe(true);
+    const passwords = [];
+    for (let i = 0; i < 10; i++){
+      const password = await educatorService.generateTeacherPassword();
+      console.log("educator password: ", password);
+      expect(passwords.includes(password)).toBe(false);
+      passwords.push(password);
+    }
   });
 
   afterAll(async () => rollbackTransaction(conn, qr));
