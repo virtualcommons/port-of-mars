@@ -1,86 +1,101 @@
 <template>
-    <div>
+  <div>
     <b-container fluid>
-        <b-row class="justify-content-start">
-            <b-col cols="3">
-            </b-col>
-            <b-col>
-                <h2>Teacher Dashboard</h2>
-            </b-col>
-        </b-row>
-    <b-row>
-      <b-col cols="3" class="sidebar">
-        <h4>Classrooms</h4>
-        <b-button-group vertical>
-          <b-button
-            v-for="classroom in classrooms"
-            :key="classroom.id"
-            variant="primary"
-            class="mb-2"
-            @click="selectClassroom(classroom)"
-          >
-            {{ classroom.name }}
-          </b-button>
-        </b-button-group>
-        <div class="mt-auto">
-            <b-button variant="success" @click="addClassroom">
-                Add Classroom
+      <b-row class="justify-content-start">
+        <b-col cols="3"> </b-col>
+        <b-col>
+          <h2>Teacher Dashboard</h2>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col cols="3" class="!sidebar">
+          <div class="d-flex align-items-start mb-2">
+            <b-row>
+              <h4 class="mb-0">Classrooms</h4>
+              <p class="h4 mb-2">
+                <b-icon
+                  icon="plus"
+                  class="icon ml-2"
+                  style="color: white; margin: 0; cursor: pointer"
+                  @click="addClassroom"
+                ></b-icon>
+              </p>
+            </b-row>
+          </div>
+
+          <b-button-group vertical>
+            <b-button
+              v-for="classroom in classrooms"
+              :key="classroom.id"
+              variant="primary"
+              class="mb-2"
+              @click="selectClassroom(classroom)"
+            >
+              {{ classroom.name }}
             </b-button>
-        </div>
-      </b-col>
-      <b-col>
-        <div v-if="classrooms.length > 0">
-        <h4>{{ selectedClassroom.name }}</h4>
-        <h4>The Game Code for this Classroom is: </h4>
-        <b-row class="mb-3">
-            <b-col cols="2"><b-button variant="success">Start Game</b-button></b-col>
-            <b-col cols="2"><b-button variant="danger">Stop Game</b-button></b-col>
-        </b-row>
-        <b-tabs pills card>
-            <b-tab title="Students" active>
-                <b-card header="Students" :header-style="{ backgroundColor: '#f8f9fa' }">
-                <b-card-text >
-                    Students
-                </b-card-text>
-                </b-card>
+          </b-button-group>
+        </b-col>
+        <b-col>
+          <div v-if="classrooms.length > 0">
+            <h4>{{ selectedClassroom.name }}</h4>
+            <h4>The Game Code for this Classroom is:</h4>
+
+            <b-row class="mb-3">
+              <b-col cols="2"><b-button variant="success">Start Game</b-button></b-col>
+              <b-col cols="2"><b-button variant="danger">Stop Game</b-button></b-col>
+            </b-row>
+            <b-tabs pills card>
+              <b-tab title="Students" active>
+                <p>Students in Classroom: {{ clients.length }}</p>
                 <b-row>
-                    <b-col cols="6" v-for="client in clients" :key="client.id" class="mb-3">
-                        <div class="player-card">
-                            <span>{{ client.username }}</span>
-                        </div>
-                    </b-col>
+                  <b-col cols="6" v-for="client in clients" :key="client.id" class="mb-3">
+                    <div class="player-card">
+                      <span>{{ client.username }}</span>
+                    </div>
+                  </b-col>
                 </b-row>
-            </b-tab>
-            <b-tab title="Groups">
-                <b-card-text>Groups
-                </b-card-text>
-            </b-tab>
-            <b-tab title="Reports">
+              </b-tab>
+              <b-tab title="Groups">
                 <b-card-text>
-                    <b-tabs content-class="mt-3" align="left">
-                        <b-tab title="Table1" active><p>Table 1</p></b-tab>
-                        <b-tab title="Table2"><p>Table 2</p></b-tab>
-                        <b-tab title="Table3"><p>Table 3</p></b-tab>
-                    </b-tabs>
+                  <b-button-group>
+                    <b-button
+                      v-for="group in groups"
+                      :key="group.id"
+                      variant="primary"
+                      class="mb-2"
+                      @click="selectGroup(group)"
+                      >{{ group.name }}</b-button
+                    >
+                  </b-button-group>
                 </b-card-text>
-            </b-tab>
-            <b-tab title="Settings">
-                <b-card-text>Classroom Settings 
+              </b-tab>
+              <b-tab title="Reports">
+                <b-card-text>
+                  <b-tabs content-class="mt-3" align="left">
+                    <b-tab title="Table1" active><p>Table 1</p></b-tab>
+                    <b-tab title="Table2"><p>Table 2</p></b-tab>
+                    <b-tab title="Graph"><p>Graph</p></b-tab>
+                  </b-tabs>
                 </b-card-text>
+              </b-tab>
+              <b-tab title="Settings">
+                <b-card-text>Classroom Settings </b-card-text>
                 <b-row>
-                    <b-button variant="warning" @click="deleteClassroom">Delete this Classroom</b-button>
+                  <b-button variant="warning" @click="deleteClassroom"
+                    >Delete this Classroom</b-button
+                  >
                 </b-row>
-            </b-tab>
-        </b-tabs>
-        </div>
-        <div v-else>
+              </b-tab>
+            </b-tabs>
+          </div>
+          <div v-else>
             <h3>No Classrooms Available</h3>
-            <p>Please add a classroom using the button on the left</p>
-        </div>
-      </b-col>
-    </b-row>
-  </b-container>
-</div>
+            <p>Please add a classroom using the plus sign button on the left</p>
+          </div>
+        </b-col>
+      </b-row>
+    </b-container>
+  </div>
 </template>
 
 <script lang="ts">
@@ -110,7 +125,6 @@ import LobbyChat from "@port-of-mars/client/components/lobby/LobbyChat.vue";
     LobbyChat,
   },
 })
-
 export default class TeacherDashboard extends Vue {
   @Inject() readonly $client!: Client;
   // @Provide() api: TournamentLobbyRequestAPI = new TournamentLobbyRequestAPI(this.$ajax);
@@ -134,67 +148,87 @@ export default class TeacherDashboard extends Vue {
     { id: 2, name: "Classroom #2" },
   ];
 
-  selectedClassroom: Classroom = this.classrooms[0];
+  groups: Group[] = [
+    { id: 1, name: "Group #1" },
+    { id: 2, name: "Group #2" },
+  ];
 
-  selectClassroom(classroom: Classroom){
+  selectedClassroom: Classroom = this.classrooms[0];
+  selectedGroup: Group = this.groups[0];
+
+  nextClassroomID: number = this.classrooms.length + 1;
+
+  selectClassroom(classroom: Classroom) {
     this.selectedClassroom = classroom;
   }
 
-  addClassroom(){
-    const classroomId = this.classrooms.length + 1;
+  selectGroup(group: Group) {
+    this.selectGroup = group;
+  }
+
+  addClassroom() {
     const newClassroom: Classroom = {
-        id: classroomId, name: `Classroom #${classroomId}`,
-    }
+      id: this.nextClassroomID,
+      name: `Classroom #${this.nextClassroomID}`,
+    };
 
     this.classrooms.push(newClassroom);
     this.selectedClassroom = newClassroom;
+    this.nextClassroomID++;
   }
 
-  deleteClassroom(){
-    if (this.classrooms.length === 0){
-        return;
+  deleteClassroom() {
+    if (this.classrooms.length === 0) {
+      return;
     }
     this.classrooms = this.classrooms.filter(c => c.id !== this.selectedClassroom.id);
     delete this.studentsByClassroom[this.selectedClassroom.id];
 
-    if (this.classrooms.length > 0){
-        this.selectedClassroom = this.classrooms[0];
+    if (this.classrooms.length > 0) {
+      this.selectedClassroom = this.classrooms[0];
     } else {
-        this.selectedClassroom = {id: 0, name: "No Classrooms Exist"};
+      this.selectedClassroom = { id: 0, name: "No Classrooms Exist" };
+      this.nextClassroomID = 1;
     }
   }
 
-
-  get clients(){
+  get clients() {
     return this.studentsByClassroom[this.selectedClassroom.id] || [];
   }
 
-  studentsByClassroom: {[key: number]: Student[] } = {
+  studentsByClassroom: { [key: number]: Student[] } = {
     1: [
-        { username: "Player 1", id: 1, dateJoined: new Date().getTime()},
-        { username: this.$store.state.user.username, id: 2, dateJoined: new Date().getTime()},
-        { username: "Player 3", id: 3, dateJoined: new Date().getTime()},
-        { username: "Player 4", id: 4, dateJoined: new Date().getTime() },
-        { username: "Player 5", id: 5, dateJoined: new Date().getTime() },
-        { username: "Player 6", id: 6, dateJoined: new Date().getTime() },
-        { username: "Player 7", id: 7, dateJoined: new Date().getTime() },
-        { username: "Player 8", id: 8, dateJoined: new Date().getTime() },
-        { username: "Player 9", id: 9, dateJoined: new Date().getTime() },
-        { username: "Player 10", id: 10, dateJoined: new Date().getTime() },
+      { username: "Player 1", id: 1, dateJoined: new Date().getTime() },
+      { username: this.$store.state.user.username, id: 2, dateJoined: new Date().getTime() },
+      { username: "Player 3", id: 3, dateJoined: new Date().getTime() },
+      { username: "Player 4", id: 4, dateJoined: new Date().getTime() },
+      { username: "Player 5", id: 5, dateJoined: new Date().getTime() },
+      { username: "Player 6", id: 6, dateJoined: new Date().getTime() },
+      { username: "Player 7", id: 7, dateJoined: new Date().getTime() },
+      { username: "Player 8", id: 8, dateJoined: new Date().getTime() },
+      { username: "Player 9", id: 9, dateJoined: new Date().getTime() },
+      { username: "Player 10", id: 10, dateJoined: new Date().getTime() },
     ],
     2: [
-        { username: "Player 11", id: 11, dateJoined: new Date().getTime()},
-        { username: "Player 12", id: 12, dateJoined: new Date().getTime()},
-        { username: "Player 13", id: 13, dateJoined: new Date().getTime()},
-        { username: "Player 14", id: 14, dateJoined: new Date().getTime() },
-        { username: "Player 15", id: 15, dateJoined: new Date().getTime() },
-        { username: "Player 16", id: 16, dateJoined: new Date().getTime() },
-        { username: "Player 17", id: 17, dateJoined: new Date().getTime() },
-        { username: "Player 18", id: 18, dateJoined: new Date().getTime() },
-        { username: "Player 19", id: 19, dateJoined: new Date().getTime() },
-        { username: "Player 20", id: 20, dateJoined: new Date().getTime() },
+      { username: "Player 11", id: 11, dateJoined: new Date().getTime() },
+      { username: "Player 12", id: 12, dateJoined: new Date().getTime() },
+      { username: "Player 13", id: 13, dateJoined: new Date().getTime() },
+      { username: "Player 14", id: 14, dateJoined: new Date().getTime() },
+      { username: "Player 15", id: 15, dateJoined: new Date().getTime() },
+      { username: "Player 16", id: 16, dateJoined: new Date().getTime() },
+      { username: "Player 17", id: 17, dateJoined: new Date().getTime() },
+      { username: "Player 18", id: 18, dateJoined: new Date().getTime() },
+      { username: "Player 19", id: 19, dateJoined: new Date().getTime() },
+      { username: "Player 20", id: 20, dateJoined: new Date().getTime() },
     ],
-    };
+
+    3: [
+      { username: "Player 21", id: 21, dateJoined: new Date().getTime() },
+      { username: "Player 22", id: 22, dateJoined: new Date().getTime() },
+      { username: "Player 23", id: 23, dateJoined: new Date().getTime() },
+      { username: "Player 24", id: 24, dateJoined: new Date().getTime() },
+    ],
+  };
 
   get chatMessages() {
     return [];
@@ -228,4 +262,8 @@ export default class TeacherDashboard extends Vue {
   height: 100vh;
 }
 
+.icon {
+  vertical-align: text-top !important;
+  font-size: 2rem;
+}
 </style>

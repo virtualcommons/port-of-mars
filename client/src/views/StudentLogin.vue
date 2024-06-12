@@ -29,6 +29,7 @@
             >
               <h4 class="mb-0">Join Game</h4>
             </b-button>
+            <b-alert variant="danger" v-if="errorMessage" show>{{ errorMessage }}</b-alert>
             </div>
           </b-tab>
           <b-tab title="RE-JOIN A GAME">
@@ -59,10 +60,10 @@
             <div class="d-flex flex-column align-items-center">
             <p>teacher login tab</p>
             <b-form-input
-              v-model="username"
+              v-model="email"
               class="w-70 mb-3 text-center"
               size="lg"
-              placeholder="USERNAME"
+              placeholder="EMAIL"
               required
             ></b-form-input>
             <b-form-input
@@ -141,6 +142,8 @@ export default class StudentLogin extends Vue {
   alreadyJoined: boolean = false;
   password: string = "";
   username: string = "";
+  email: string = "";
+  errorMessage: string = "";
   passwordVisible: boolean = false; // For toggling password visibility
 
   created() {
@@ -150,12 +153,17 @@ export default class StudentLogin extends Vue {
   enterGame() {
     // Handle entering the game here
     console.log("Enter button clicked");
-    if (this.alreadyJoined) {
-      console.log("Password entered:", this.password);
-    } else {
-      console.log("Game code entered:", this.gameCode);
-      this.authApi.studentLogin(this.gameCode);
+    try {
+      if (this.alreadyJoined) {
+        console.log("Password entered:", this.password);
+      } else {
+        console.log("Game code entered:", this.gameCode);
+        this.authApi.studentLogin(this.gameCode);
+      }
+    } catch (error) {
+      this.errorMessage = "Game code does not exist or is incorrect";
     }
+
   }
 
   enterTeacher(){
