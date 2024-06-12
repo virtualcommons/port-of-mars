@@ -24,6 +24,7 @@ export interface ClientSafeUser {
   email?: string;
   name?: string;
   username: string;
+  rejoinPassword: string;
   isAdmin: boolean;
   isTeacher?: boolean;
   isMuted: boolean;

@@ -256,6 +256,7 @@ export const PAGE_META: {
     name: TEACHER_DASHBOARD_PAGE,
     meta: {
       requiresAuth: false, //FIXME: change back to true
+      
     }
   }
 };
