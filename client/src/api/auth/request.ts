@@ -46,7 +46,7 @@ export class AuthAPI {
             this.store.commit("SET_USER", data.user);
             this.router.push({ name: STUDENT_CONFIRM_PAGE });
           } else {
-            return data;
+            throw new Error(data.message || "Login failed");
           }
         },
         { classroomAuthToken, password: "unused" }
@@ -58,15 +58,15 @@ export class AuthAPI {
     }
   }
 
-  async teacherLogin(formData: { username: string; password: string }){
+  async teacherLogin(formData: { username: string; password: string }) {
     try {
       const teacherLoginUrl = url("/auth/teacher-login");
       await this.ajax.post(
         teacherLoginUrl,
         ({ data, status }) => {
-          if (status === 200){
+          if (status === 200) {
             this.store.commit("SET_USER", data.user);
-            this.router.push({ name: TEACHER_DASHBOARD_PAGE}); //temporary push
+            this.router.push({ name: TEACHER_DASHBOARD_PAGE }); //temporary push
           } else {
             return data;
           }
@@ -77,6 +77,6 @@ export class AuthAPI {
       console.log("Unable to login");
       console.log(e);
       throw e;
+    }
   }
-}
 }

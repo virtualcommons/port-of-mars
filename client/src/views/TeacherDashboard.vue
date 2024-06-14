@@ -1,18 +1,12 @@
 <template>
-  <div>
-    <b-container fluid>
-      <b-row class="justify-content-start">
-        <b-col cols="3"> </b-col>
-        <b-col>
-          <h2>Teacher Dashboard</h2>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col cols="3" class="!sidebar">
+  <b-container fluid class="h-100 w-100 m-0 p-0 backdrop">
+    <div class="h-100 w-100 d-flex flex-column">
+      <b-row class="h-100 w-100 mx-auto flex-grow-1 p-5" style="max-width: 1400px">
+        <b-col :cols="sidebarExpanded ? 3 : 1" class="sidebar">
           <div class="d-flex align-items-start mb-2">
             <b-row>
-              <h4 class="mb-0">Classrooms</h4>
-              <p class="h4 mb-2">
+              <h4 class="mb-0" v-if="sidebarExpanded">Classrooms</h4>
+              <p class="h4 mb-2" v-if="sidebarExpanded">
                 <b-icon
                   icon="plus"
                   class="icon ml-2"
@@ -20,10 +14,18 @@
                   @click="addClassroom"
                 ></b-icon>
               </p>
+              <p class="h4 mb-2">
+                <b-icon
+                  :icon="sidebarExpanded ? 'chevron-left' : 'chevron-right'"
+                  class="icon ml-2"
+                  style="margin: 0; cursor: pointer"
+                  variant="danger"
+                  @click="toggleSidebar"
+                ></b-icon>
+              </p>
             </b-row>
           </div>
-
-          <b-button-group vertical>
+          <b-button-group vertical v-if="sidebarExpanded">
             <b-button
               v-for="classroom in classrooms"
               :key="classroom.id"
@@ -35,58 +37,65 @@
             </b-button>
           </b-button-group>
         </b-col>
-        <b-col>
+        <b-col
+          :cols="sidebarExpanded ? 9 : 11"
+          :class="{ 'content-container-collapsed': '!sidebarExpanded' }"
+          class="content-container h-100"
+        >
           <div v-if="classrooms.length > 0">
             <h4>{{ selectedClassroom.name }}</h4>
             <h4>The Game Code for this Classroom is:</h4>
-
-            <b-row class="mb-3">
+            <b-row class="mb-3 d-flex align-items-start">
               <b-col cols="2"><b-button variant="success">Start Game</b-button></b-col>
               <b-col cols="2"><b-button variant="danger">Stop Game</b-button></b-col>
             </b-row>
-            <b-tabs pills card>
-              <b-tab title="Students" active>
-                <p>Students in Classroom: {{ clients.length }}</p>
-                <b-row>
-                  <b-col cols="6" v-for="client in clients" :key="client.id" class="mb-3">
-                    <div class="player-card">
-                      <span>{{ client.username }}</span>
-                    </div>
-                  </b-col>
-                </b-row>
-              </b-tab>
-              <b-tab title="Groups">
-                <b-card-text>
-                  <b-button-group>
-                    <b-button
-                      v-for="group in groups"
-                      :key="group.id"
-                      variant="primary"
-                      class="mb-2"
-                      @click="selectGroup(group)"
-                      >{{ group.name }}</b-button
-                    >
-                  </b-button-group>
-                </b-card-text>
-              </b-tab>
-              <b-tab title="Reports">
-                <b-card-text>
-                  <b-tabs content-class="mt-3" align="left">
-                    <b-tab title="Table1" active><p>Table 1</p></b-tab>
-                    <b-tab title="Table2"><p>Table 2</p></b-tab>
-                    <b-tab title="Graph"><p>Graph</p></b-tab>
-                  </b-tabs>
-                </b-card-text>
-              </b-tab>
-              <b-tab title="Settings">
-                <b-card-text>Classroom Settings </b-card-text>
-                <b-row>
-                  <b-button variant="warning" @click="deleteClassroom"
-                    >Delete this Classroom</b-button
-                  >
-                </b-row>
-              </b-tab>
-            </b-tabs>
+            <b-row class="mb-3 d-flex align-items-start">
+              <div class="tabs-container">
+                <b-tabs pills card>
+                  <b-tab title="Students" active>
+                    <p>Students in Classroom: {{ clients.length }}</p>
+                    <b-row>
+                      <b-col cols="6" v-for="client in clients" :key="client.id" class="mb-3">
+                        <div class="player-card">
+                          <span>{{ client.username }}</span>
+                        </div>
+                      </b-col>
+                    </b-row>
+                  </b-tab>
+                  <b-tab title="Groups">
+                    <b-card-text>
+                      <b-button-group>
+                        <b-button
+                          v-for="group in groups"
+                          :key="group.id"
+                          variant="primary"
+                          class="mb-2"
+                          @click="selectGroup(group)"
+                          >{{ group.name }}</b-button
+                        >
+                      </b-button-group>
+                    </b-card-text>
+                  </b-tab>
+                  <b-tab title="Reports">
+                    <b-card-text>
+                      <b-tabs content-class="mt-3" align="left">
+                        <b-tab title="Table1" active><p>Table 1</p></b-tab>
+                        <b-tab title="Table2"><p>Table 2</p></b-tab>
+                        <b-tab title="Graph"><p>Graph</p></b-tab>
+                      </b-tabs>
+                    </b-card-text>
+                  </b-tab>
+                  <b-tab title="Settings">
+                    <b-card-text>Classroom Settings </b-card-text>
+                    <b-row>
+                      <b-button variant="warning" @click="deleteClassroom"
+                        >Delete this Classroom</b-button
+                      >
+                    </b-row>
+                  </b-tab>
+                </b-tabs>
+              </div>
+            </b-row>
           </div>
           <div v-else>
             <h3>No Classrooms Available</h3>
@@ -94,8 +103,8 @@
           </div>
         </b-col>
       </b-row>
-    </b-container>
-  </div>
+    </div>
+  </b-container>
 </template>
 
 <script lang="ts">
@@ -136,6 +145,7 @@ export default class TeacherDashboard extends Vue {
   consent = { name: CONSENT_PAGE };
   isTeacher = false;
   startGame = {};
+  sidebarExpanded = true;
 
   clientFields = [{ key: "username", label: "Player" }];
 
@@ -190,6 +200,10 @@ export default class TeacherDashboard extends Vue {
       this.selectedClassroom = { id: 0, name: "No Classrooms Exist" };
       this.nextClassroomID = 1;
     }
+  }
+
+  toggleSidebar() {
+    this.sidebarExpanded = !this.sidebarExpanded;
   }
 
   get clients() {
@@ -265,5 +279,14 @@ export default class TeacherDashboard extends Vue {
 .icon {
   vertical-align: text-top !important;
   font-size: 2rem;
+}
+
+.tabs-container {
+  padding-left: 0.3rem;
+}
+
+.content-container-collapsed {
+  padding-left: 1rem;
+  margin-left: 1rem;
 }
 </style>
