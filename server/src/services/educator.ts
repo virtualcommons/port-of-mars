@@ -1,6 +1,6 @@
 import { BaseService } from "@port-of-mars/server/services/db";
 import { Teacher, Classroom, Student, User } from "@port-of-mars/server/entity";
-import { ServerError, generateUsername } from "@port-of-mars/server/util";
+import { ServerError, generateUsername, generateCode } from "@port-of-mars/server/util";
 import { getServices } from "@port-of-mars/server/services";
 // import { settings } from "@port-of-mars/server/settings";
 
@@ -22,13 +22,11 @@ export class EducatorService extends BaseService {
   }
 
   async generateStudentRejoinCode(): Promise<string> {
-    // FIXME: generate a unique rejoin code
     let rejoinCode = "";
     do {
-      rejoinCode = generateCode(7, true);
-    } while (await this.em.getRepository(Student).findOne({ where: { rejoinCode } })){
-      rejoinCode = generateCode(7, true);
-    }
+      rejoinCode = generateCode(7, 'alphabetic');
+    } while (await this.em.getRepository(Student).findOne({ where: { rejoinCode } }))
+
     return rejoinCode;
   }
 
@@ -36,19 +34,15 @@ export class EducatorService extends BaseService {
     let password = "";
     do {
       password = generateCode(10);
-    } while (await this.em.getRepository(Teacher).findOne({ where: { password } })){
-      password = generateCode(10);
-    }
+    } while (await this.em.getRepository(Teacher).findOne({ where: { password } }))
     return password;
   }
 
   async generateAuthToken(): Promise<string> {
     let authToken = "";
     do {
-      authToken = generateCode(5);
-    } while (await this.em.getRepository(Classroom).findOne({ where: { authToken } })){
-      authToken = generateCode(5);
-    }
+      authToken = generateCode(5, 'numeric');
+    } while (await this.em.getRepository(Classroom).findOne({ where: { authToken } }))
     return authToken;
   }
 
@@ -97,7 +91,7 @@ export class EducatorService extends BaseService {
     const teacher = teacherRepo.create({
       user,
       userId: user.id,
-      password: await this.generateTeacherPassword(), // FIXME: generate a password, how to keep this secure but generated?
+      password: await this.generateTeacherPassword(), 
     });
     return teacherRepo.save(teacher);
   }
@@ -115,26 +109,8 @@ export class EducatorService extends BaseService {
       teacher,
       teacherId: teacher.id,
       descriptor,
-      authToken: await this.generateAuthToken(), //FIXME: make a test suite for this
+      authToken: await this.generateAuthToken(),
     });
     return repo.save(classroom);
   }
-}
-
-function generateCode(length: number, alphabet?: boolean): string {
-  const str = 'abcdefghijklmnopqrstuvwxyz0123456789'; 
-  let code = '';
-
-  if (alphabet){
-    while (code.length !== length){
-      const index = Math.floor(Math.random() * 26);
-      code += str.charAt(index);
-    }  
-  } else { 
-      while (code.length !== length){
-        const index = Math.floor(Math.random() * str.length);
-        code += str.charAt(index);
-      }
-    }
-  return code;
 }
