@@ -184,6 +184,25 @@ export async function generateUsername() {
   return username;
 }
 
+export function generateCode(length: number, options?: string): string {
+  const alphabet = 'abcdefghijklmnopqrstuvwxyz'; 
+  const numbers = '0123456789';
+  let charset = '';
+  let code = '';
+  if (options === 'alphabetic'){
+    charset += alphabet;
+  } else if (options === 'numeric'){
+    charset += numbers;
+  } else {
+    charset = alphabet + numbers; //Default: alphanumeric
+  }
+  while(code.length !== length){
+    const index = Math.floor(Math.random() * charset.length);
+    code += charset.charAt(index);
+  }
+  return code;
+}
+
 const NOUNS = [
   "Ferret",
   "Marmot",

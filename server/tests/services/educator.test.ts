@@ -1,21 +1,22 @@
 import { AccountService } from "@port-of-mars/server/services/account";
-import { User, Teacher, Tournament } from "@port-of-mars/server/entity";
+import { User, Teacher, Tournament, Classroom, Student } from "@port-of-mars/server/entity";
 import { settings } from "@port-of-mars/server/settings";
-import { Connection, EntityManager, QueryRunner } from "typeorm";
+import { Column, Connection, EntityManager, QueryRunner, getConnection } from "typeorm";
 import { ServiceProvider } from "@port-of-mars/server/services";
 import { ServerError } from "@port-of-mars/server/util";
 import { createTournament, initTransaction, rollbackTransaction } from "../common";
 import { EducatorService } from "@port-of-mars/server/services/educator";
+import { colorizerFactory } from "pino-pretty";
 
 describe("the educator service", () => {
   let conn: Connection;
   let qr: QueryRunner;
   let manager: EntityManager;
   let sp: ServiceProvider;
-  let t: Tournament;
+  //let t: Tournament;
   let accountService: AccountService;
   let educatorService: EducatorService;
-  const teacherUsername = "teacher1";
+  const teacherUsername = "teacher";
   let teacher: Teacher;
 
   beforeAll(async () => {
@@ -24,41 +25,49 @@ describe("the educator service", () => {
     accountService = sp.account;
     educatorService = sp.educator;
     teacher = await educatorService.createTeacher(
-      "teacher1@example.com",
+      "teacher@example.com",
       teacherUsername,
       "Teacher One"
     );
   });
 
-  it("generates a unique student passcode", async () => {
-    const rejoinCodes = [];
-    for (let i = 0; i < 10; i++) {
-      const rejoinCode = await educatorService.generateStudentRejoinCode();
-      console.log("student rejoin code: ", rejoinCode);
-      expect(rejoinCodes.includes(rejoinCode)).toBe(false);
-      rejoinCodes.push(rejoinCode);
+  it("educators can sign up", async() => {
+    for (let i = 0; i < 10; i++){ //Creates mock data of teachers
+      const username = teacherUsername + `${i}`;
+      const email = username + "@gmail.com";
+      const name = teacherUsername.toUpperCase() + ` ${i}`;
+      await sp.educator.createTeacher(email, username, name);
     }
+    //Retrieve all passwords in Teacher repo to check uniqueness
+    const teacherRepo = educatorService.em.getRepository(Teacher);
+    const data = await teacherRepo.find({ select: ["password"] });
+    const passwords = data.map(teacher => teacher.password);
+    const uniquePasswords = new Set(passwords);
+    expect(passwords.length).toEqual(uniquePasswords.size);
   });
 
-  it("generates a unique authToken (game code) for a classroom", async () => {
-    const authTokens = [];
+  it("classrooms can be created", async () => {
+    const descriptor = "desc";
     for (let i = 0; i < 10; i++){
-      const authToken = await educatorService.generateAuthToken();
-      console.log("classroom code: ", authToken);
-      expect(authTokens.includes(authToken)).toBe(false);
-      authTokens.push(authToken);
+      await sp.educator.createClassroomForTeacher(teacher.user.username, descriptor + `${i}`);
     }
+    const classroomRepo = educatorService.em.getRepository(Classroom);
+    const data = await classroomRepo.find({ select: ["authToken"] });
+    const tokens = data.map(classroom => classroom.authToken);
+    const uniqueTokens = new Set(tokens);
+    expect(tokens.length).toEqual(uniqueTokens.size);
   });
 
-  it("generates a unique educator password", async () => {
-    const passwords = [];
+  it("students can sign up", async () => {
+    const classroom = await sp.educator.createClassroomForTeacher(teacher.user.username, "descriptor");
     for (let i = 0; i < 10; i++){
-      const password = await educatorService.generateTeacherPassword();
-      console.log("educator password: ", password);
-      expect(passwords.includes(password)).toBe(false);
-      passwords.push(password);
+      await sp.educator.createStudent(classroom.authToken);
     }
+    const studentRepo = educatorService.em.getRepository(Student);
+    const data = await studentRepo.find({ select: ["rejoinCode"] });
+    const rejoinCodes = data.map(student => student.rejoinCode);
+    const uniqueRejoinCodes = new Set(rejoinCodes);
+    expect(rejoinCodes.length).toEqual(uniqueRejoinCodes.size);
   });
-
   afterAll(async () => rollbackTransaction(conn, qr));
 });
