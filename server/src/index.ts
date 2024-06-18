@@ -13,7 +13,6 @@ import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { Strategy as FacebookStrategy } from "passport-facebook";
 import { Strategy as LocalStrategy } from "passport-local";
-
 import {
   settings as sharedSettings,
   isDev,
@@ -127,7 +126,7 @@ if (isEducatorMode()) {
         passReqToCallback: true,
       },
       async function (req: any, classroomAuthToken: string, password: string, done: any) {
-        logger.fatal("creating student with classroomAuthToken: %s", classroomAuthToken);
+        logger.debug("creating student with classroomAuthToken: %s", classroomAuthToken);
         try {
           const user = await getServices().educator.createStudent(classroomAuthToken);
           return done(null, user);

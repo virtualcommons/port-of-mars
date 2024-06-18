@@ -1,14 +1,19 @@
 type Environment = "development" | "staging" | "production" | "test";
+type AppMode = "default" | "educator";
 
 export const ENVIRONMENT = (process.env.NODE_ENV || "development") as Environment;
+export const APP_MODE = (process.env.SHARED_APP_MODE || "default") as AppMode;
 
 // client-safe env vars are prefixed with SHARED_
 // https://vitejs.dev/guide/env-and-mode.html#env-loading-modes
 
+// !!! NOTE: !!!
 // client must use import.meta.env to access any value that comes from an environment variable
 // instead of process.env or from the settings below
+// FIXME: a way around this would be ideal
 export const settings = {
   ENVIRONMENT: ENVIRONMENT,
+  APP_MODE: APP_MODE,
   RELEASE_VERSION: process.env.SHARED_RELEASE_VERSION || "version unknown",
   SENTRY_DSN: process.env.SHARED_SENTRY_DSN || "",
   GA_TAG: process.env.SHARED_GA_TAG || "",
@@ -36,8 +41,6 @@ export const SERVER_URL_WS = isDev() ? "ws://localhost:2567" : "";
 export const SERVER_URL_HTTP = isDev() ? "http://localhost:2567" : "";
 
 export function isEducatorMode(): boolean {
-  // FIXME: APP_MODE is in config.ts temporarily. ideally config.ts can be replaced
-  // entirely with an env file
   return (APP_MODE as any) === "educator";
 }
 

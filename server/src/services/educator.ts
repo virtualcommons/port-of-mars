@@ -24,8 +24,8 @@ export class EducatorService extends BaseService {
   async generateStudentRejoinCode(): Promise<string> {
     let rejoinCode = "";
     do {
-      rejoinCode = generateCode(7, 'alphabetic');
-    } while (await this.em.getRepository(Student).findOne({ where: { rejoinCode } }))
+      rejoinCode = generateCode(7, "alphabetic");
+    } while (await this.em.getRepository(Student).findOne({ where: { rejoinCode } }));
 
     return rejoinCode;
   }
@@ -34,15 +34,15 @@ export class EducatorService extends BaseService {
     let password = "";
     do {
       password = generateCode(10);
-    } while (await this.em.getRepository(Teacher).findOne({ where: { password } }))
+    } while (await this.em.getRepository(Teacher).findOne({ where: { password } }));
     return password;
   }
 
   async generateAuthToken(): Promise<string> {
     let authToken = "";
     do {
-      authToken = generateCode(5, 'numeric');
-    } while (await this.em.getRepository(Classroom).findOne({ where: { authToken } }))
+      authToken = generateCode(5, "numeric");
+    } while (await this.em.getRepository(Classroom).findOne({ where: { authToken } }));
     return authToken;
   }
 
@@ -91,7 +91,7 @@ export class EducatorService extends BaseService {
     const teacher = teacherRepo.create({
       user,
       userId: user.id,
-      password: await this.generateTeacherPassword(), 
+      password: await this.generateTeacherPassword(),
     });
     return teacherRepo.save(teacher);
   }
