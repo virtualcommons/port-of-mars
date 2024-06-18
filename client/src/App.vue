@@ -24,7 +24,7 @@ import {
   ABOUT_PAGE,
   PRIVACY_PAGE,
 } from "@port-of-mars/shared/routes";
-import { isEducatorMode } from "@port-of-mars/shared/settings";
+import { isEducatorMode } from "@port-of-mars/client/util";
 import _ from "lodash";
 Vue.use(BootstrapVue);
 

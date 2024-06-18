@@ -108,19 +108,15 @@
 </template>
 
 <script lang="ts">
-import { Component, Provide, Inject, Vue } from "vue-property-decorator";
+import { Component, Inject, Vue } from "vue-property-decorator";
 import { Client } from "colyseus.js";
-import { applyLobbyResponses } from "@port-of-mars/client/api/lobby/response";
-import { TournamentLobbyRequestAPI } from "@port-of-mars/client/api/lobby/request";
 import { EducatorAPI } from "@port-of-mars/client/api/educator/request";
-import { TOURNAMENT_LOBBY_NAME } from "@port-of-mars/shared/lobby";
 import {
   GAME_PAGE,
   CONSENT_PAGE,
   MANUAL_PAGE,
   TOURNAMENT_DASHBOARD_PAGE,
 } from "@port-of-mars/shared/routes";
-import { Constants } from "@port-of-mars/shared/settings";
 import Countdown from "@port-of-mars/client/components/global/Countdown.vue";
 import HelpPanel from "@port-of-mars/client/components/lobby/HelpPanel.vue";
 import Messages from "@port-of-mars/client/components/global/Messages.vue";
@@ -148,10 +144,6 @@ export default class TeacherDashboard extends Vue {
   sidebarExpanded = true;
 
   clientFields = [{ key: "username", label: "Player" }];
-
-  get constants() {
-    return Constants;
-  }
 
   classrooms: Classroom[] = [
     { id: 1, name: "Classroom #1" },
