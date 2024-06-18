@@ -361,7 +361,7 @@ export class AccountService extends BaseService {
     name?: string;
     username?: string;
   }): Promise<User> {
-    let user: User | null;
+    let user: User | null = null;
     // try to find user by id
     if (userData.passportId) {
       user = await this.getRepository().findOneBy({ passportId: userData.passportId });

@@ -12,6 +12,10 @@ export function getAssetUrl(path: string) {
   return new URL(`./assets/${path}`, import.meta.url).href;
 }
 
+export function isEducatorMode(): boolean {
+  return import.meta.env.SHARED_APP_MODE === "educator";
+}
+
 export class SfxCache {
   cache: Record<string, Howl>;
 

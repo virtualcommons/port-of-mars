@@ -65,17 +65,6 @@
         >
           <b>Join Mars Madness</b>
         </b-nav-item>
-        <!-- FIXME:  TEMP -->
-        <b-nav-item
-          class="mx-2 text-nowrap"
-          link-classes="btn btn-warning text-white"
-          :to="classroomLobby"
-          exact-active-class="active"
-          title="Classroom lobby"
-        >
-          <b>Classroom lobby</b>
-        </b-nav-item>
-        <!-- END TEMP -->
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto">
         <b-nav-item class="mx-2" target="_blank" :href="$settings.DISCORD_URL" title="Discord"
