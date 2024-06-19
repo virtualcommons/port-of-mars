@@ -234,7 +234,7 @@ async function createTeacher(
 ): Promise<void> {
   const services = getServices(em);
   const teacher = await services.educator.createTeacher(email, username, name);
-  // TODO: print password
+  console.log("Generated Teacher with password: ", teacher.password);
 }
 
 async function createClassroom(
@@ -244,7 +244,7 @@ async function createClassroom(
 ): Promise<void> {
   const services = getServices(em);
   const classroom = await services.educator.createClassroomForTeacher(teacherUsername, descriptor);
-  // TODO: print classroom auth token
+  console.log("Generated classroom with auth token: ", classroom.authToken);
 }
 
 async function setAdminUser(em: EntityManager, username: string): Promise<void> {
@@ -875,7 +875,7 @@ program
               .requiredOption("--username <username>", "username")
               .requiredOption("--name <name>", "full name")
               .action(async cmd => {
-                await withConnection(em => createTeacher(em, cmd.email, cmd.username, cmd.name));
+                await withDataSource(em => createTeacher(em, cmd.email, cmd.username, cmd.name));
               })
           )
           .addCommand(
@@ -885,7 +885,7 @@ program
               .requiredOption("--username <username>", "username of the teacher")
               .requiredOption("--descriptor <descriptor>", "classroom descriptor")
               .action(async cmd => {
-                await withConnection(em => createClassroom(em, cmd.username, cmd.descriptor));
+                await withDataSource(em => createClassroom(em, cmd.username, cmd.descriptor));
               })
           )
       )

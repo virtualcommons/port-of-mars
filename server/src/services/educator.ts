@@ -14,6 +14,13 @@ export class EducatorService extends BaseService {
     });
   }
 
+  async getTeacherByUsernameAndPassword(username: string, password: string, withUser = false) {
+    return this.em.getRepository(Teacher).findOne({
+      where: { user: { username }, password },
+      relations: ["user"],
+    });
+  }
+
   async getStudentByUser(userId: number, withUser = false) {
     return this.em.getRepository(Student).findOne({
       where: { userId },
