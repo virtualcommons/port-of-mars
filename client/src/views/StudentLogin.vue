@@ -46,15 +46,19 @@
               <b-button variant="primary" rounded @click="enterGame" class="w-70 mb-3" size="lg">
                 <h4 class="mb-0">Re-join Game</h4>
               </b-button>
+              <b-alert variant="danger" v-if="rejoinErrorMessage" show>{{
+                rejoinErrorMessage
+              }}</b-alert>
             </div>
           </b-tab>
           <b-tab title="SIGN IN AS TEACHER">
             <div class="d-flex flex-column align-items-center">
               <b-form-input
-                v-model="email"
+                v-model="username"
                 class="w-70 mb-3 text-center"
                 size="lg"
-                placeholder="EMAIL"
+                placeholder="USERNAME"
+                @input="clearTeacherErrorMessage"
                 required
               ></b-form-input>
               <b-form-input
@@ -63,11 +67,15 @@
                 class="w-70 mb-3 text-center"
                 size="lg"
                 placeholder="PASSWORD"
+                @input="clearTeacherErrorMessage"
                 required
               ></b-form-input>
               <b-button variant="primary" rounded @click="enterTeacher" class="w-70 mb-3" size="lg">
                 <h4 class="mb-0">Login</h4>
               </b-button>
+              <b-alert variant="danger" v-if="teacherErrorMessage" show>{{
+                teacherErrorMessage
+              }}</b-alert>
             </div>
           </b-tab>
         </b-tabs>
@@ -93,28 +101,52 @@ export default class StudentLogin extends Vue {
   alreadyJoined: boolean = false;
   password: string = "";
   username: string = "";
-  email: string = "";
   errorMessage: string = "";
+  rejoinErrorMessage: string = "";
+  teacherErrorMessage: string = "";
   passwordVisible: boolean = false; // For toggling password visibility
 
   created() {
     this.authApi = new AuthAPI(this.$store, this.$ajax, this.$router);
   }
 
+  // async enterGame() {
+  //   console.log("Enter button clicked");
+  //   this.errorMessage = "";
+  //   try {
+  //     if (this.alreadyJoined) {
+  //       console.log("Password entered:", this.password);
+  //       //add in api for student rejoin
+  //     } else {
+  //       console.log("Game code entered:", this.gameCode);
+  //       await this.authApi.studentLogin(this.gameCode);
+  //     }
+  //   } catch (error: any) {
+  //     this.errorMessage =
+  //       error.response?.data?.message || "Game code does not exist or is incorrect";
+  //   }
+  // }
+
   async enterGame() {
     console.log("Enter button clicked");
     this.errorMessage = "";
-    try {
-      if (this.alreadyJoined) {
+
+    if (this.alreadyJoined) {
+      try {
         console.log("Password entered:", this.password);
         //add in api for student rejoin
-      } else {
+      } catch (error: any) {
+        this.rejoinErrorMessage =
+          error.response?.data?.message || "Rejoin code does not exist or is incorrect";
+      }
+    } else {
+      try {
         console.log("Game code entered:", this.gameCode);
         await this.authApi.studentLogin(this.gameCode);
+      } catch (error: any) {
+        this.errorMessage =
+          error.response?.data?.message || "Game code does not exist or is incorrect";
       }
-    } catch (error: any) {
-      this.errorMessage =
-        error.response?.data?.message || "Game code does not exist or is incorrect";
     }
   }
 
@@ -122,9 +154,26 @@ export default class StudentLogin extends Vue {
     this.errorMessage = "";
   }
 
-  enterTeacher() {
+  clearRejoinErrorMessage() {
+    this.rejoinErrorMessage = "";
+  }
+
+  clearTeacherErrorMessage() {
+    this.teacherErrorMessage = "";
+  }
+
+  async enterTeacher() {
     console.log("Enter teacher dashboard button clicked");
-    this.authApi.teacherLogin({ username: this.username, password: this.password });
+    this.teacherErrorMessage = "";
+    try {
+      console.log("Teacher username info entered:", this.username);
+      console.log("Teacher password entered:", this.password);
+      await this.authApi.teacherLogin({ username: this.username, password: this.password });
+    } catch (error: any) {
+      this.teacherErrorMessage =
+        error.response?.data?.message ||
+        "Educator account does not exist or incorrect login information";
+    }
   }
 
   togglePasswordVisibility() {
