@@ -135,6 +135,34 @@ if (isEducatorMode()) {
       }
     )
   );
+
+  passport.use(
+    "local-teacher",
+    new LocalStrategy(
+      {
+        usernameField: "username",
+        passwordField: "password",
+        passReqToCallback: true,
+      },
+      async function (req: any, username: string, password: string, done: any) {
+        try {
+          const teacher = await getServices().educator.getTeacherByUsernameAndPassword(
+            username,
+            password
+          );
+          logger.debug(teacher);
+          if (!teacher) {
+            return done(null, false, {
+              message: "Incorrect username or password",
+            });
+          }
+          return done(null, teacher.user);
+        } catch (error) {
+          return done(error);
+        }
+      }
+    )
+  );
 }
 
 passport.serializeUser(function (user: Pick<User, "id">, done: any) {

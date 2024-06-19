@@ -4,7 +4,12 @@ import { User } from "@port-of-mars/server/entity";
 import { settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
 import { toUrl } from "@port-of-mars/server/util";
-import { LOGIN_PAGE, CONSENT_PAGE, FREE_PLAY_LOBBY_PAGE } from "@port-of-mars/shared/routes";
+import {
+  LOGIN_PAGE,
+  CONSENT_PAGE,
+  FREE_PLAY_LOBBY_PAGE,
+  TEACHER_DASHBOARD_PAGE,
+} from "@port-of-mars/shared/routes";
 import { isDevOrStaging, isEducatorMode } from "@port-of-mars/shared/settings";
 
 const logger = settings.logging.getLogger(__filename);
@@ -19,6 +24,10 @@ if (isDevOrStaging()) {
 
 if (isEducatorMode()) {
   authRouter.post("/student-login", passport.authenticate("local-student"), function (req, res) {
+    res.json({ user: req.user });
+  });
+
+  authRouter.post("/teacher-login", passport.authenticate("local-teacher"), function (req, res) {
     res.json({ user: req.user });
   });
 }
