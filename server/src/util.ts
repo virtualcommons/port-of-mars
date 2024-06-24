@@ -164,11 +164,6 @@ export class ValidationError extends ServerError {
   }
 }
 
-export async function generatePassword() {
-  // TODO: take in N param for num of words to use
-  // use random-words package?
-}
-
 export async function generateUsername() {
   // FIXME: take in N param for numbers to tack on the end, default 4
   let isUnique = false;
@@ -184,24 +179,24 @@ export async function generateUsername() {
   return username;
 }
 
-export function generateCode(length: number, options?: string): string {
+export function generateCode(charset: number, options?: "alphabetic" | "numeric" | "alphanumeric"): string {
   const alphabet = 'abcdefghijklmnopqrstuvwxyz'; 
   const numbers = '0123456789';
-  let charset = '';
+  let characters = '';
   let code = '';
-  if (options === 'alphabetic'){
-    charset += alphabet;
-  } else if (options === 'numeric'){
-    charset += numbers;
+  if (options === "alphabetic"){
+    characters += alphabet;
+  } else if (options === "numeric"){
+    characters += numbers;
   } else {
-    charset = alphabet + numbers; //Default: alphanumeric
+    characters = alphabet + numbers; //Default: alphanumeric
   }
-  while(code.length !== length){
-    const index = Math.floor(Math.random() * charset.length);
-    code += charset.charAt(index);
+  while(code.length !== charset){
+    const index = Math.floor(Math.random() * characters.length);
+    code += characters.charAt(index);
   }
   return code;
-}
+}  
 
 const NOUNS = [
   "Ferret",
