@@ -29,13 +29,13 @@ describe("the educator service", () => {
 
   it("educators can sign up", async () => {
     for (let i = 0; i < 10; i++) {
-      //Creates mock data of teachers
+      //Creates mock data
       const username = teacherUsername + `${i}`;
       const email = username + "@gmail.com";
       const name = teacherUsername.toUpperCase() + ` ${i}`;
       await sp.educator.createTeacher(email, username, name);
     }
-    //Retrieve all passwords in Teacher repo to check uniqueness
+    //Retrieve all passwords in repo to check uniqueness
     const teacherRepo = educatorService.em.getRepository(Teacher);
     const data = await teacherRepo.find({ select: { password: true } });
     const passwords = data.map(teacher => teacher.password);
@@ -68,6 +68,15 @@ describe("the educator service", () => {
     const rejoinCodes = data.map(student => student.rejoinCode);
     const uniqueRejoinCodes = new Set(rejoinCodes);
     expect(rejoinCodes.length).toEqual(uniqueRejoinCodes.size);
+  });
+
+  it("groups are partitioned evenly", async () => {
+    /*TODO: make mock data of students to perform partition algo. on. 
+      Expect the result to:
+      1. All count up to the total number to students
+      2. Each group is at most 5 and at least 3 (might fail with 6 students)
+    */
+
   });
   afterAll(async () => rollbackTransaction(qr));
 });
