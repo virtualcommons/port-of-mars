@@ -59,7 +59,14 @@
       </div>
 
       <!-- Join Class Lobby Button -->
-      <b-button variant="primary" rounded @click="handleSubmit" class="w-70" size="lg">
+      <b-button
+        :disabled="!isFormValid"
+        variant="primary"
+        rounded
+        @click="handleSubmit"
+        class="w-70"
+        size="lg"
+      >
         <h4 class="mb-0">Join Class Lobby</h4>
       </b-button>
     </div>
@@ -80,6 +87,10 @@ export default class StudentConfirm extends Vue {
 
   get username() {
     return this.$tstore.state.user.username;
+  }
+
+  get isFormValid() {
+    return this.firstName.trim() !== "" && this.lastName.trim() !== "";
   }
 
   async handleSubmit() {

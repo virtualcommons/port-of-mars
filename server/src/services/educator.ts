@@ -2,6 +2,7 @@ import { BaseService } from "@port-of-mars/server/services/db";
 import { Teacher, Classroom, Student, User } from "@port-of-mars/server/entity";
 import { ServerError, generateUsername, generateCode } from "@port-of-mars/server/util";
 import { getServices } from "@port-of-mars/server/services";
+import { error } from "console";
 // import { settings } from "@port-of-mars/server/settings";
 
 // const logger = settings.logging.getLogger(__filename);
@@ -26,6 +27,10 @@ export class EducatorService extends BaseService {
       where: { userId },
       relations: withUser ? ["user"] : [],
     });
+  }
+
+  async getStudentByRejoinCode(rejoinCode: string, withUser = false) {
+    return this.em.getRepository(Student).findOne({ where: { rejoinCode }, relations: ["user"] });
   }
 
   async generateStudentRejoinCode(): Promise<string> {
@@ -85,6 +90,22 @@ export class EducatorService extends BaseService {
     await studentRepo.save(student);
 
     return user;
+  }
+
+  //set name and set to verified
+
+  async setStudentName(userId: number, name: string) {
+    const studentRepo = this.em.getRepository(Student);
+    const student = await this.getStudentByUser(userId);
+    if (!student) {
+      throw new ServerError({
+        code: 404,
+        message: "Student not found",
+      });
+    }
+    student.user.name = name;
+    student.isVerified = true;
+    return await studentRepo.save(student);
   }
 
   async createTeacher(email: string, username: string, name: string) {

@@ -22,4 +22,7 @@ export class Student {
 
   @Column({ unique: true })
   rejoinCode!: string;
+
+  @Column({ default: false })
+  isVerified!: boolean;
 }

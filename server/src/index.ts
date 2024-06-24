@@ -23,7 +23,7 @@ import {
 // server side imports
 import { GameRoom } from "@port-of-mars/server/rooms/game";
 import { SoloGameRoom } from "@port-of-mars/server/rooms/sologame";
-import { User } from "@port-of-mars/server/entity";
+import { Teacher, User } from "@port-of-mars/server/entity";
 import { FreePlayLobbyRoom } from "@port-of-mars/server/rooms/lobby/freeplay";
 import { TournamentLobbyRoom } from "@port-of-mars/server/rooms/lobby/tournament";
 import { settings } from "@port-of-mars/server/settings";
@@ -39,6 +39,7 @@ import {
   statsRouter,
   studyRouter,
   educatorRouter,
+  isVerified,
 } from "@port-of-mars/server/routes";
 import { ServerError } from "@port-of-mars/server/util";
 import dataSource from "@port-of-mars/server/datasource";
@@ -130,6 +131,30 @@ if (isEducatorMode()) {
         try {
           const user = await getServices().educator.createStudent(classroomAuthToken);
           return done(null, user);
+        } catch (e) {
+          return done(e);
+        }
+      }
+    )
+  );
+
+  passport.use(
+    "local-rejoin",
+    new LocalStrategy(
+      {
+        usernameField: "rejoinCode",
+        passwordField: "password",
+        passReqToCallback: true,
+      },
+      async function (req: any, rejoinCode: string, password: string, done: any) {
+        try {
+          const student = await getServices().educator.getStudentByRejoinCode(rejoinCode);
+          if (!student) {
+            return done(null, false, {
+              message: "Invalid rejoin code",
+            });
+          }
+          return done(null, student.user, {isVerified: student.isVerified});
         } catch (e) {
           return done(e);
         }
