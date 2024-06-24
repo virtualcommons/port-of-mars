@@ -38,14 +38,13 @@ export class EducatorService extends BaseService {
     do {
       rejoinCode = generateCode(7, "alphabetic");
     } while (await this.em.getRepository(Student).findOne({ where: { rejoinCode } }));
-
     return rejoinCode;
   }
 
   async generateTeacherPassword(): Promise<string> {
     let password = "";
     do {
-      password = generateCode(10);
+      password = generateCode(10, "alphanumeric");
     } while (await this.em.getRepository(Teacher).findOne({ where: { password } }));
     return password;
   }
@@ -141,4 +140,26 @@ export class EducatorService extends BaseService {
     });
     return repo.save(classroom);
   }
+  
+  //This algo. works weird with specfically 6 -> [2,4] 
+  async partition(students: number): Promise<number[]> {
+    const arr = [];
+    const fullGroups = Math.floor(students / 5);
+    const leftOver = students % 5;
+    for (let i = 0; i < fullGroups; i++){
+      arr.push(5);
+    }
+    if (leftOver > 0){
+      arr.push(leftOver);
+    }
+    for (let i = arr.length - 1; i > 0; i--){
+      while (arr[i] < 4){
+        arr[i] += 1;
+        arr[i - 1] -= 1;
+      }
+    }
+    return arr;
+  }
+
+
 }
