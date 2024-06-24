@@ -35,11 +35,11 @@
           <b-tab title="RE-JOIN A GAME">
             <div class="d-flex flex-column align-items-center">
               <b-form-input
-                v-model="password"
+                v-model="rejoinCode"
                 :type="passwordVisible ? 'text' : 'password'"
                 class="w-70 mb-3 text-center"
                 size="lg"
-                placeholder="PASSWORD"
+                placeholder="REJOIN CODE"
                 required
               ></b-form-input>
               <!-- Rounded Enter button -->
@@ -98,6 +98,7 @@ export default class StudentLogin extends Vue {
   authApi!: AuthAPI;
 
   gameCode: string = "";
+  rejoinCode: string = "";
   alreadyJoined: boolean = false;
   password: string = "";
   username: string = "";
@@ -133,8 +134,9 @@ export default class StudentLogin extends Vue {
 
     if (this.alreadyJoined) {
       try {
-        console.log("Password entered:", this.password);
+        console.log("Rejoin Code entered:", this.rejoinCode);
         //add in api for student rejoin
+        await this.authApi.studentRejoin(this.rejoinCode);
       } catch (error: any) {
         this.rejoinErrorMessage =
           error.response?.data?.message || "Rejoin code does not exist or is incorrect";
