@@ -8,14 +8,15 @@ export class Student {
   id!: number;
 
   @OneToOne(type => User, { nullable: false })
+
+  @ManyToOne(type => Classroom, classroom => classroom.students)
+  classroom!: Classroom;
+
   @JoinColumn()
   user!: User;
 
   @Column()
   userId!: number;
-
-  @ManyToOne(type => Classroom, classroom => classroom.students)
-  classroom!: Classroom;
 
   @Column()
   classroomId!: number;
