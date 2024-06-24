@@ -27,6 +27,10 @@ if (isEducatorMode()) {
     res.json({ user: req.user });
   });
 
+  authRouter.post("/student-rejoin", passport.authenticate("local-rejoin"), function (req, res) {
+    res.json({ user: req.user });
+  });
+
   authRouter.post("/teacher-login", passport.authenticate("local-teacher"), function (req, res) {
     res.json({ user: req.user });
   });

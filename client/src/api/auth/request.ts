@@ -2,6 +2,7 @@ import { url } from "@port-of-mars/client/util";
 import { TStore } from "@port-of-mars/client/plugins/tstore";
 import { AjaxRequest } from "@port-of-mars/client/plugins/ajax";
 import {
+  CLASSROOM_LOBBY_PAGE,
   CONSENT_PAGE,
   FREE_PLAY_LOBBY_PAGE,
   STUDENT_CONFIRM_PAGE,
@@ -56,6 +57,34 @@ export class AuthAPI {
       console.log(e);
       throw e;
     }
+  }
+
+  async studentRejoin(rejoinCode: string) {
+    const rejoinUrl = url("/auth/student-rejoin");
+    await this.ajax.post(
+      rejoinUrl,
+      ({ data, status }) => {
+        if (status === 200) {
+          console.log(data);
+          this.store.commit("SET_USER", data.user);
+
+          if (data.user.isVerified){
+            this.router.push({ name: CLASSROOM_LOBBY_PAGE });
+          }else {
+            this.router.push({ name: STUDENT_CONFIRM_PAGE });
+          }
+          
+        } else {
+          throw new Error(data.message || "Rejoin failed");
+        }
+      },
+      { rejoinCode, password: "unused" }
+    );
+  }
+  catch(e: any) {
+    console.log("Unable to rejoin");
+    console.log(e);
+    throw e;
   }
 
   async teacherLogin(formData: { username: string; password: string }) {

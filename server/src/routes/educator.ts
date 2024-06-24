@@ -33,7 +33,12 @@ educatorRouter.post("/confirm-student", async (req: Request, res: Response, next
   try {
     const services = getServices();
     const data = { ...req.body };
-    await services.account.setName(user.id, data.name);
+
+    //make sure that first and last name are filled out
+
+    //replace with setStudentName
+    //await services.account.setName(user.id, data.name);
+    await services.educator.setStudentName(user.id, data.name);
     res.json(true);
   } catch (e) {
     if (e instanceof ValidationError) {
