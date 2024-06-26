@@ -136,7 +136,7 @@ export default class StudentLogin extends Vue {
       try {
         console.log("Rejoin Code entered:", this.rejoinCode);
         //add in api for student rejoin
-        await this.authApi.studentRejoin(this.rejoinCode);
+        await this.authApi.studentLogin(this.rejoinCode);
       } catch (error: any) {
         this.rejoinErrorMessage =
           error.response?.data?.message || "Rejoin code does not exist or is incorrect";
