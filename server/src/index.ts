@@ -148,13 +148,13 @@ if (isEducatorMode()) {
       },
       async function (req: any, rejoinCode: string, password: string, done: any) {
         try {
-          const student = await getServices().educator.getStudentByRejoinCode(rejoinCode);
+          const student = await getServices().educator.getStudentByRejoinCode(rejoinCode, true);
           if (!student) {
             return done(null, false, {
               message: "Invalid rejoin code",
             });
           }
-          return done(null, student.user, {isVerified: student.isVerified});
+          return done(null, student.user, student.isVerified);
         } catch (e) {
           return done(e);
         }
