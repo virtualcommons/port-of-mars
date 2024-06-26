@@ -2,50 +2,54 @@
   <b-container fluid class="h-100 w-100 m-0 p-0 backdrop">
     <div class="h-100 w-100 d-flex flex-column">
       <b-row class="h-100 w-100 mx-auto flex-grow-1 p-5" style="max-width: 1400px">
+        <!--Classrooms Sidebar-->
         <b-col :cols="sidebarExpanded ? 3 : 1" class="sidebar">
           <div class="d-flex align-items-start mb-2">
             <b-row>
-              <h4 class="mb-0" v-if="sidebarExpanded">Classrooms</h4>
+              <h4 class="mb-0 mt-2" v-if="sidebarExpanded">Classrooms</h4>
               <p class="h4 mb-2" v-if="sidebarExpanded">
                 <b-icon
                   icon="plus"
-                  class="icon ml-2"
-                  style="color: white; margin: 0; cursor: pointer"
+                  class="icon ml-2 mt-2"
+                  style="color: white; cursor: pointer"
                   @click="addClassroom"
                 ></b-icon>
               </p>
               <p class="h4 mb-2">
                 <b-icon
                   :icon="sidebarExpanded ? 'chevron-left' : 'chevron-right'"
-                  class="icon ml-2"
-                  style="margin: 0; cursor: pointer"
+                  class="icon ml-2 mt-2"
+                  style="cursor: pointer"
                   variant="danger"
                   @click="toggleSidebar"
                 ></b-icon>
               </p>
             </b-row>
           </div>
-          <b-button-group vertical v-if="sidebarExpanded">
-            <b-button
-              v-for="classroom in classrooms"
-              :key="classroom.id"
-              variant="primary"
-              class="mb-2"
-              @click="selectClassroom(classroom)"
-            >
-              {{ classroom.name }}
-            </b-button>
-          </b-button-group>
+          <div class="classrooms">
+            <b-button-group vertical v-if="sidebarExpanded">
+              <b-button
+                v-for="classroom in classrooms"
+                :key="classroom.id"
+                variant="primary"
+                class="mb-2 rounded"
+                @click="selectClassroom(classroom)"
+              >
+                {{ classroom.name }}
+              </b-button>
+            </b-button-group>
+          </div>
         </b-col>
+        <!--Main dashboard-->
         <b-col
           :cols="sidebarExpanded ? 9 : 11"
           :class="{ 'content-container-collapsed': '!sidebarExpanded' }"
-          class="content-container h-100"
+          class="content-container h-100 overflow-hidden"
         >
           <div v-if="classrooms.length > 0">
-            <h4>{{ selectedClassroom.name }}</h4>
+            <h4 class="mt-2">{{ selectedClassroom.name }}</h4>
             <h4>The Game Code for this Classroom is:</h4>
-            <b-row class="mb-3 d-flex align-items-start">
+            <b-row class="mb-3 d-flex align-items-left">
               <b-col cols="2"><b-button variant="success">Start Game</b-button></b-col>
               <b-col cols="2"><b-button variant="danger">Stop Game</b-button></b-col>
             </b-row>
@@ -54,7 +58,7 @@
                 <b-tabs pills card>
                   <b-tab title="Students" active>
                     <p>Students in Classroom: {{ clients.length }}</p>
-                    <b-row>
+                    <b-row style="overflow-y: auto; max-height: 50vh">
                       <b-col cols="6" v-for="client in clients" :key="client.id" class="mb-3">
                         <div class="player-card">
                           <span>{{ client.username }}</span>
@@ -87,18 +91,33 @@
                   </b-tab>
                   <b-tab title="Settings">
                     <b-card-text>Classroom Settings </b-card-text>
-                    <b-row>
+                    <b-row class="mb-3" align-h="between">
                       <b-button variant="warning" @click="deleteClassroom"
                         >Delete this Classroom</b-button
                       >
+                      <b-button v-b-toggle.my-collapase variant="warning"
+                        >Rename this Classroom</b-button
+                        >
                     </b-row>
+                    <b-collapse id="my-collapase" v-model="isCollapsed">
+                      <b-form-input v-model="classroomName" placeholder="Enter classroom name"></b-form-input>
+                      <b-input-group-append>
+                        <b-button classroomName-clear
+                          class="mt-1" 
+                          size="sm" 
+                          variant="success" 
+                          @click="renameClassroom"
+                          >Submit</b-button
+                        >
+                      </b-input-group-append>
+                    </b-collapse>
                   </b-tab>
                 </b-tabs>
               </div>
             </b-row>
           </div>
           <div v-else>
-            <h3>No Classrooms Available</h3>
+            <h3 class="mt-2">No Classrooms Available</h3>
             <p>Please add a classroom using the plus sign button on the left</p>
           </div>
         </b-col>
@@ -142,6 +161,8 @@ export default class TeacherDashboard extends Vue {
   isTeacher = false;
   startGame = {};
   sidebarExpanded = true;
+  classroomName = "";
+  isCollapsed = true;
 
   clientFields = [{ key: "username", label: "Player" }];
 
@@ -194,6 +215,11 @@ export default class TeacherDashboard extends Vue {
     }
   }
 
+  renameClassroom() {
+    this.selectedClassroom.name = this.classroomName;
+    this.isCollapsed = false;
+  }
+
   toggleSidebar() {
     this.sidebarExpanded = !this.sidebarExpanded;
   }
@@ -226,14 +252,17 @@ export default class TeacherDashboard extends Vue {
       { username: "Player 18", id: 18, dateJoined: new Date().getTime() },
       { username: "Player 19", id: 19, dateJoined: new Date().getTime() },
       { username: "Player 20", id: 20, dateJoined: new Date().getTime() },
-    ],
-
-    3: [
       { username: "Player 21", id: 21, dateJoined: new Date().getTime() },
       { username: "Player 22", id: 22, dateJoined: new Date().getTime() },
       { username: "Player 23", id: 23, dateJoined: new Date().getTime() },
       { username: "Player 24", id: 24, dateJoined: new Date().getTime() },
+      { username: "Player 25", id: 25, dateJoined: new Date().getTime() },
     ],
+
+    3: [
+      { username: "Player 26", id: 26, dateJoined: new Date().getTime() },
+      { username: "Player 27", id: 27, dateJoined: new Date().getTime() },
+      { username: "Player 28", id: 28, dateJoined: new Date().getTime() },    ],
   };
 
   get chatMessages() {
@@ -251,8 +280,22 @@ export default class TeacherDashboard extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.classrooms {
+  padding-left: 0.5rem;
+  padding-top: 0.2rem;
+  max-height: 72.5vh;
+  overflow-y: scroll;
+}
+.classrooms::-webkit-scrollbar {
+  display: none;
+}
+
+.scroll::-webkit-scrollbar {
+  display: none;
+}
+
 .player-card {
-  background-color: #333333;
+  background-color: #232324;
   border: 1x solid #444444;
   border-radius: 1rem;
   padding: 1rem;
@@ -262,7 +305,7 @@ export default class TeacherDashboard extends Vue {
   word-wrap: break-word;
 }
 
-.sidebar {
+ .sidebar { //FIXME: Does not show up in the webpage
   background-color: lightgrey;
   padding: 1rem;
   height: 100vh;
