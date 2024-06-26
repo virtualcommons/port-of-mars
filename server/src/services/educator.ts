@@ -29,6 +29,7 @@ export class EducatorService extends BaseService {
     });
   }
 
+
   async getStudentByRejoinCode(rejoinCode: string, withUser = false) {
     return this.em.getRepository(Student).findOne({ where: { rejoinCode }, relations: ["user"] });
   }
@@ -95,17 +96,28 @@ export class EducatorService extends BaseService {
 
   async setStudentName(userId: number, name: string) {
     const studentRepo = this.em.getRepository(Student);
-    const student = await this.getStudentByUser(userId);
+    const student = await this.getStudentByUser(userId, true);
     if (!student) {
       throw new ServerError({
         code: 404,
         message: "Student not found",
       });
     }
+
+    console.log('Fetched student:', student);
     student.user.name = name;
+    await studentRepo.save(student);
+
     student.isVerified = true;
-    return await studentRepo.save(student);
+    await studentRepo.save(student.user);
+
+    await this.em.getRepository(User).save(student.user);
+
+    console.log('Updated student:', student);
+    await studentRepo.save(student);
+    return student;
   }
+
 
   async createTeacher(email: string, username: string, name: string) {
     const userRepo = this.em.getRepository(User);
