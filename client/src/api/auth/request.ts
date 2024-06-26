@@ -68,9 +68,11 @@ export class AuthAPI {
           console.log(data);
           this.store.commit("SET_USER", data.user);
 
-          if (data.user.isVerified){
+          if (data.isVerified){
+            console.log("Student verified");
             this.router.push({ name: CLASSROOM_LOBBY_PAGE });
           }else {
+            console.log("Student not verified");
             this.router.push({ name: STUDENT_CONFIRM_PAGE });
           }
           
