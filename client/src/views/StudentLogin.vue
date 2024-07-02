@@ -111,22 +111,6 @@ export default class StudentLogin extends Vue {
     this.authApi = new AuthAPI(this.$store, this.$ajax, this.$router);
   }
 
-  // async enterGame() {
-  //   console.log("Enter button clicked");
-  //   this.errorMessage = "";
-  //   try {
-  //     if (this.alreadyJoined) {
-  //       console.log("Password entered:", this.password);
-  //       //add in api for student rejoin
-  //     } else {
-  //       console.log("Game code entered:", this.gameCode);
-  //       await this.authApi.studentLogin(this.gameCode);
-  //     }
-  //   } catch (error: any) {
-  //     this.errorMessage =
-  //       error.response?.data?.message || "Game code does not exist or is incorrect";
-  //   }
-  // }
 
   async enterGame() {
     console.log("Enter button clicked");
@@ -136,7 +120,7 @@ export default class StudentLogin extends Vue {
       try {
         console.log("Rejoin Code entered:", this.rejoinCode);
         //add in api for student rejoin
-        await this.authApi.studentLogin(this.rejoinCode);
+        await this.authApi.studentRejoin(this.rejoinCode);
       } catch (error: any) {
         this.rejoinErrorMessage =
           error.response?.data?.message || "Rejoin code does not exist or is incorrect";

@@ -13,7 +13,7 @@ export class Student {
 
   @ManyToOne(type => Classroom, classroom => classroom.students)
   classroom!: Classroom;
-  
+
   @Column()
   userId!: number;
 
@@ -22,7 +22,4 @@ export class Student {
 
   @Column({ unique: true })
   rejoinCode!: string;
-
-  @Column({ default: false })
-  isVerified!: boolean;
 }
