@@ -1,3 +1,4 @@
+
 import { NextFunction, Request, Response, Router } from "express";
 import { getServices } from "@port-of-mars/server/services";
 import { User } from "@port-of-mars/server/entity/User";
@@ -10,6 +11,7 @@ const logger = getLogger(__filename);
 export const educatorRouter = Router();
 
 educatorRouter.use(isAuthenticated);
+
 
 educatorRouter.get("/student", async (req: Request, res: Response, next: NextFunction) => {
   const user = req.user as User;
@@ -42,9 +44,11 @@ educatorRouter.post("/confirm-student", async (req: Request, res: Response, next
     }
 
     //replace with setStudentName
-    //await services.account.setName(user.id, data.name);
-    const student = await services.educator.setStudentName(user.id, data.name);
-    res.json(student);
+    // await services.account.setName(user.id, data.name);
+    
+    await services.educator.setStudentName(user.id, data.name);
+    res.status(200).json({ message: "Student confirmed successfully" });
+    //res.json(student);
     return;
   } catch (e) {
     if (e instanceof ValidationError) {
@@ -55,3 +59,4 @@ educatorRouter.post("/confirm-student", async (req: Request, res: Response, next
     }
   }
 });
+
