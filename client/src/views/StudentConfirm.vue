@@ -100,7 +100,7 @@ export default class StudentConfirm extends Vue {
       });
       this.$router.push({ name: CLASSROOM_LOBBY_PAGE });
     } catch (e) {
-      console.error(e);
+      console.error("Error in handle submit in confirm:", e);
     }
   }
 

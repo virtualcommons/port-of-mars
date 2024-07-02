@@ -29,7 +29,6 @@ export class EducatorService extends BaseService {
     });
   }
 
-
   async getStudentByRejoinCode(rejoinCode: string, withUser = false) {
     return this.em.getRepository(Student).findOne({ where: { rejoinCode }, relations: ["user"] });
   }
@@ -108,7 +107,7 @@ export class EducatorService extends BaseService {
     student.user.name = name;
     await studentRepo.save(student);
 
-    student.isVerified = true;
+    student.user.isVerified = true;
     await studentRepo.save(student.user);
 
     await this.em.getRepository(User).save(student.user);
