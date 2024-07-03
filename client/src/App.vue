@@ -12,7 +12,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import BootstrapVue from "bootstrap-vue";
 import Navbar from "@port-of-mars/client/components/global/Navbar.vue";
-import ClassroomNavbar from "@port-of-mars/client/components/global/ClassroomNavbar.vue";
+import EducatorNavbar from "@port-of-mars/client/components/global/EducatorNavbar.vue";
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
 import {
   GAME_PAGE,
@@ -29,7 +29,7 @@ Vue.use(BootstrapVue);
 @Component({
   components: {
     Navbar,
-    ClassroomNavbar,
+    EducatorNavbar,
     Footer,
   },
 })

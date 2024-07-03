@@ -1,17 +1,17 @@
-
 import { NextFunction, Request, Response, Router } from "express";
 import { getServices } from "@port-of-mars/server/services";
 import { User } from "@port-of-mars/server/entity/User";
 import { isAuthenticated } from "@port-of-mars/server/routes/middleware";
 import { ValidationError } from "@port-of-mars/server/util";
 import { getLogger } from "@port-of-mars/server/settings";
+import { ClassroomLobbyRoom } from "../rooms/lobby/classroom";
+import { matchMaker } from "colyseus";
 
 const logger = getLogger(__filename);
 
 export const educatorRouter = Router();
 
 educatorRouter.use(isAuthenticated);
-
 
 educatorRouter.get("/student", async (req: Request, res: Response, next: NextFunction) => {
   const user = req.user as User;
@@ -37,15 +37,15 @@ educatorRouter.post("/confirm-student", async (req: Request, res: Response, next
     const data = { ...req.body };
 
     //make sure that first and last name are filled out
-    if (!data.name){
+    if (!data.name) {
       throw new ValidationError({
-        displayMessage: "Student name is required" 
+        displayMessage: "Student name is required",
       });
     }
 
     //replace with setStudentName
     // await services.account.setName(user.id, data.name);
-    
+
     await services.educator.setStudentName(user.id, data.name);
     res.status(200).json({ message: "Student confirmed successfully" });
     //res.json(student);
@@ -54,9 +54,34 @@ educatorRouter.post("/confirm-student", async (req: Request, res: Response, next
     if (e instanceof ValidationError) {
       res.status(e.code).json(e.toDashboardMessage());
     } else {
-      logger.warn("unable to update profile metadata for user ID %d", user.id);
+      logger.warn("unable to confirm student: user ID %d", user.id);
       next(e);
     }
   }
-});
 
+  educatorRouter.post(
+    "/start-classroom-games",
+    async (req: Request, res: Response, next: NextFunction) => {
+      const user = req.user as User;
+      const { classroomId } = req.body;
+      try {
+        const services = getServices();
+        const teacher = await services.educator.getTeacherByUserId(user.id);
+        if (!(teacher || user.isAdmin)) {
+          res.status(403).json({ message: "Only teachers can start the game" });
+          return;
+        }
+        const room = (await matchMaker.query({
+          name: ClassroomLobbyRoom.NAME,
+          classroomId,
+        })) as any;
+        await matchMaker.remoteRoomCall(room.roomId, "startGames");
+        res.status(200).json({ message: "Games have been started" });
+        return;
+      } catch (e) {
+        logger.warn("Unable to start classroom games", e);
+        next(e);
+      }
+    }
+  );
+});

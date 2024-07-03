@@ -3,12 +3,19 @@ import { DataChange, Schema } from "@colyseus/schema";
 import { SentInvitation, JoinFailure } from "@port-of-mars/shared/lobby/responses";
 import { LobbyChatMessageData, LobbyClientData, LobbyType } from "@port-of-mars/shared/types";
 import {
+  CLASSROOM_LOBBY_PAGE,
   FREE_PLAY_LOBBY_PAGE,
   GAME_PAGE,
   TOURNAMENT_LOBBY_PAGE,
 } from "@port-of-mars/shared/routes";
 
 type Schemify<T> = T & Schema;
+
+const lobbyPageMap = {
+  freeplay: FREE_PLAY_LOBBY_PAGE,
+  tournament: TOURNAMENT_LOBBY_PAGE,
+  classroom: CLASSROOM_LOBBY_PAGE,
+};
 
 function deschemify<T>(s: Schemify<T>): T {
   return s.toJSON() as T;
@@ -32,7 +39,7 @@ export function applyLobbyResponses(room: Room, component: any, lobbyType: Lobby
   room.onMessage("join-failure", (msg: JoinFailure) => {
     store.commit("SET_DASHBOARD_MESSAGE", { kind: "warning", message: msg.reason });
     router.push({
-      name: lobbyType === "freeplay" ? FREE_PLAY_LOBBY_PAGE : TOURNAMENT_LOBBY_PAGE,
+      name: lobbyPageMap[lobbyType],
     });
   });
 

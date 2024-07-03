@@ -23,7 +23,7 @@ import {
 // server side imports
 import { GameRoom } from "@port-of-mars/server/rooms/game";
 import { SoloGameRoom } from "@port-of-mars/server/rooms/sologame";
-import { Teacher, User } from "@port-of-mars/server/entity";
+import { User } from "@port-of-mars/server/entity";
 import { FreePlayLobbyRoom } from "@port-of-mars/server/rooms/lobby/freeplay";
 import { TournamentLobbyRoom } from "@port-of-mars/server/rooms/lobby/tournament";
 import { settings } from "@port-of-mars/server/settings";
@@ -39,10 +39,10 @@ import {
   statsRouter,
   studyRouter,
   educatorRouter,
-  isVerified,
 } from "@port-of-mars/server/routes";
 import { ServerError } from "@port-of-mars/server/util";
 import dataSource from "@port-of-mars/server/datasource";
+import { ClassroomLobbyRoom } from "./rooms/lobby/classroom";
 
 const logger = settings.logging.getLogger(__filename);
 const NODE_ENV = process.env.NODE_ENV || "development";
@@ -154,7 +154,7 @@ if (isEducatorMode()) {
               message: "Invalid rejoin code",
             });
           }
-          return done(null, student.user, student.isVerified);
+          return done(null, student.user);
         } catch (e) {
           return done(e);
         }
@@ -321,6 +321,9 @@ async function createApp() {
   });
 
   // register your room handlers
+  if (isEducatorMode()) {
+    gameServer.define(ClassroomLobbyRoom.NAME, ClassroomLobbyRoom);
+  }
   gameServer.define(GameRoom.NAME, GameRoom);
   gameServer.define(FreePlayLobbyRoom.NAME, FreePlayLobbyRoom);
   gameServer.define(TournamentLobbyRoom.NAME, TournamentLobbyRoom);

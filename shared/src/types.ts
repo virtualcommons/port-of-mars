@@ -69,7 +69,7 @@ export interface LeaderboardData {
   withoutBots: Array<LeaderboardItem>;
 }
 
-export type GameType = "freeplay" | "tournament";
+export type GameType = "freeplay" | "tournament" | "classroom";
 export type LobbyType = GameType;
 
 export interface LobbyChatMessageData {
