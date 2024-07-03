@@ -122,7 +122,6 @@ const sharedRoutes = [
   { ...PAGE_META[PLAYER_HISTORY_PAGE], component: PlayerHistory },
   { ...PAGE_META[MANUAL_PAGE], component: Manual },
   { ...PAGE_META[PRIVACY_PAGE], component: Privacy },
-  { ...PAGE_META[PROFILE_PAGE], component: Profile },
 ];
 
 function getDefaultRouter() {
@@ -154,6 +153,7 @@ function getDefaultRouter() {
       { ...PAGE_META[HOME_PAGE], component: Home },
       { ...PAGE_META[ABOUT_PAGE], component: Home },
       { ...PAGE_META[PROLIFIC_STUDY_PAGE], component: ProlificStudy },
+      { ...PAGE_META[PROFILE_PAGE], component: Profile },
     ],
   });
 
