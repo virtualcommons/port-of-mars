@@ -83,6 +83,11 @@ export default class ClassroomLobby extends Vue {
     // this.educatorApi = new EducatorAPI(this.$store, this.$ajax);
     // this.isTeacher = await this.educatorApi.authTeacher();
   }
+
+  beforeDestroy() {
+    this.api.leave();
+    this.$tstore.commit("RESET_LOBBY_STATE");
+  }
 }
 </script>
 
