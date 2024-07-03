@@ -205,6 +205,7 @@ export class GameRoom extends Room<GameState> implements Game {
   }
   autoDispose = false;
   persister!: Persister;
+  classroomId?: number;
 
   async onAuth(
     client: Client,
@@ -237,6 +238,7 @@ export class GameRoom extends Room<GameState> implements Game {
   }
 
   async onCreate(options: GameOpts): Promise<void> {
+    this.classroomId = options.classroomId;
     await onCreate(this, options, true);
   }
 

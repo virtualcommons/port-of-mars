@@ -21,19 +21,17 @@
 </template>
 
 <script lang="ts">
-import { Component, Inject, Vue } from "vue-property-decorator";
+import { Component, Inject, Vue, Provide } from "vue-property-decorator";
 import { Client } from "colyseus.js";
 import { EducatorAPI } from "@port-of-mars/client/api/educator/request";
-import {
-  GAME_PAGE,
-  CONSENT_PAGE,
-  MANUAL_PAGE,
-  TOURNAMENT_DASHBOARD_PAGE,
-} from "@port-of-mars/shared/routes";
+import { GAME_PAGE, MANUAL_PAGE, HOME_PAGE } from "@port-of-mars/shared/routes";
 import Countdown from "@port-of-mars/client/components/global/Countdown.vue";
 import HelpPanel from "@port-of-mars/client/components/lobby/HelpPanel.vue";
 import Messages from "@port-of-mars/client/components/global/Messages.vue";
 import LobbyChat from "@port-of-mars/client/components/lobby/LobbyChat.vue";
+import { ClassroomLobbyRequestAPI } from "@port-of-mars/client/api/lobby/request";
+import { CLASSROOM_LOBBY_NAME } from "@port-of-mars/shared/lobby";
+import { applyLobbyResponses } from "../api/lobby/response";
 
 @Component({
   components: {
@@ -45,49 +43,45 @@ import LobbyChat from "@port-of-mars/client/components/lobby/LobbyChat.vue";
 })
 export default class ClassroomLobby extends Vue {
   @Inject() readonly $client!: Client;
-  // @Provide() api: TournamentLobbyRequestAPI = new TournamentLobbyRequestAPI(this.$ajax);
+  @Provide() api: ClassroomLobbyRequestAPI = new ClassroomLobbyRequestAPI(this.$ajax);
   educatorApi!: EducatorAPI;
 
   game = { name: GAME_PAGE };
-  dashboard = { name: TOURNAMENT_DASHBOARD_PAGE };
+  home = { name: HOME_PAGE };
   manual = { name: MANUAL_PAGE };
-  consent = { name: CONSENT_PAGE };
   isTeacher = false;
   startGame = {};
 
   clientFields = [{ key: "username", label: "Player" }];
 
   get clients() {
-    // mocked clients for UI building
-    return [
-      {
-        username: "Player 1",
-        id: 1,
-        dateJoined: new Date().getTime(),
-      },
-      { username: this.$store.state.user.username, id: 2, dateJoined: new Date().getTime() },
-      { username: "Player 3", id: 3, dateJoined: new Date().getTime() },
-      { username: "Player 4", id: 4, dateJoined: new Date().getTime() },
-      { username: "Player 5", id: 5, dateJoined: new Date().getTime() },
-      { username: "Player 6", id: 6, dateJoined: new Date().getTime() },
-      { username: "Player 7", id: 7, dateJoined: new Date().getTime() },
-      { username: "Player 8", id: 8, dateJoined: new Date().getTime() },
-      { username: "Player 9", id: 9, dateJoined: new Date().getTime() },
-      { username: "Player 10", id: 10, dateJoined: new Date().getTime() },
-    ];
-    // return this.$tstore.state.lobby.clients;
+    return this.$tstore.state.lobby.clients;
   }
 
   get chatMessages() {
     return [];
+    // FIXME: dont think we'll have a chat in the classroom lobby,
+    // can just ignore it in the UI
     // return this.$tstore.state.lobby.chat;
   }
 
   async created() {
-    //call to server to find out user's role
+    const hasActiveGame = await this.api.hasActiveGame("classroom");
+    if (hasActiveGame) {
+      this.$router.push(this.game);
+      return;
+    }
+    try {
+      const room = await this.$client.joinOrCreate(CLASSROOM_LOBBY_NAME);
+      applyLobbyResponses(room, this, "classroom");
+    } catch (e) {
+      this.$router.push(this.home);
+    }
+    // FIXME: do we want this button in here? or on the teacher dashboard, both?
+    // call to server to find out user's role
     // then add button above for starting game if user is a teacher
-    this.educatorApi = new EducatorAPI(this.$store, this.$ajax);
-    this.isTeacher = await this.educatorApi.authTeacher();
+    // this.educatorApi = new EducatorAPI(this.$store, this.$ajax);
+    // this.isTeacher = await this.educatorApi.authTeacher();
   }
 }
 </script>

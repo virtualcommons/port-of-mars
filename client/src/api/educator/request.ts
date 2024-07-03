@@ -39,9 +39,7 @@ export class EducatorAPI {
           if (status === 200) {
             return data;
           } else {
-            console.log('confirm student gave this status: ${status}');
-            throw new Error('Unexpected response status: ${status}');
-            return data;
+            throw new Error(data.message || "Student confirmation failed");
           }
         },
         formData

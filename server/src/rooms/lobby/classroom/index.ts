@@ -1,11 +1,10 @@
 import { Client, matchMaker } from "colyseus";
-import { Mutex } from "async-mutex";
-import { buildGameOpts } from "@port-of-mars/server/util";
+import { buildGameOpts, evenlyPartition } from "@port-of-mars/server/util";
 import { GameRoom } from "@port-of-mars/server/rooms/game";
 import { settings } from "@port-of-mars/server/settings";
 import { getServices } from "@port-of-mars/server/services";
-import { TOURNAMENT_LOBBY_NAME, AcceptInvitation } from "@port-of-mars/shared/lobby";
-import { TournamentLobbyRoomState } from "@port-of-mars/server/rooms/lobby/tournament/state";
+import { AcceptInvitation, MAX_GROUP_SIZE, CLASSROOM_LOBBY_NAME } from "@port-of-mars/shared/lobby";
+import { ClassroomLobbyRoomState } from "@port-of-mars/server/rooms/lobby/classroom/state";
 import { LobbyClient } from "@port-of-mars/server/rooms/lobby/common/state";
 import { LobbyRoom } from "@port-of-mars/server/rooms/lobby/common";
 import { User } from "@port-of-mars/server/entity";
@@ -14,28 +13,34 @@ import { Group, GroupManager } from "@port-of-mars/server/rooms/lobby/common/gro
 const logger = settings.logging.getLogger(__filename);
 
 /**
- * Lobby room for tournaments that fills up up and allocates games
- * to a random shuffling of participants at periodic times whenever
- * number of players >= the max group size
+ * Lobby game room for a classroom in educator mode
+ * functions similarly to the tournament lobby room besides only
+ * starting games when the teacher (or an admin) presses a button to call startGames
+ *
+ * group partitioning is done by evenly partitioning the queue of clients rather than
+ * filling up to 5
  */
-export class TournamentLobbyRoom extends LobbyRoom<TournamentLobbyRoomState> {
-  roomName = TOURNAMENT_LOBBY_NAME;
+export class ClassroomLobbyRoom extends LobbyRoom<ClassroomLobbyRoomState> {
+  classroomId = -1;
+  roomName = CLASSROOM_LOBBY_NAME;
+  started = false;
   static get NAME() {
-    return TOURNAMENT_LOBBY_NAME;
+    return CLASSROOM_LOBBY_NAME;
   }
 
-  clockInterval = 1000 * 60; // try to form groups every 60 seconds
-
-  private mutex = new Mutex();
-
   groupManager = new GroupManager();
+
+  onClockInterval(): Promise<void> {
+    // noop
+    return Promise.resolve();
+  }
 
   get queue() {
     return this.groupManager.queue;
   }
 
   createState() {
-    return new TournamentLobbyRoomState();
+    return new ClassroomLobbyRoomState();
   }
 
   afterJoin(client: Client) {
@@ -46,21 +51,25 @@ export class TournamentLobbyRoom extends LobbyRoom<TournamentLobbyRoomState> {
     this.groupManager.removeClientFromQueue(client);
   }
 
-  async onClockInterval() {
-    // only try to send invitations if there are enough players and we are not in the middle
-    // of trying to put groups into a game
-    const release = await this.mutex.acquire();
-    try {
-      await this.formAndInviteGroups();
-    } finally {
-      release();
+  async startGames() {
+    if (!this.started) {
+      this.started = true;
+      await this.lock();
+      try {
+        await this.formAndInviteGroups();
+      } catch (e) {
+        logger.fatal("error forming and inviting groups", e);
+        this.started = false;
+        await this.unlock();
+      }
     }
   }
 
   async formAndInviteGroups() {
     this.groupManager.shuffleQueue();
-    while (this.queue.length >= this.groupSize) {
-      const group = this.groupManager.formGroupFromQueue();
+    const groupSizes = evenlyPartition(this.queue.length, MAX_GROUP_SIZE);
+    for (const size of groupSizes) {
+      const group = this.groupManager.formGroupFromQueue(size);
       if (group) {
         await this.sendGroupInvitations(group);
         group.setForceMoveTimeout(() => {
@@ -72,7 +81,7 @@ export class TournamentLobbyRoom extends LobbyRoom<TournamentLobbyRoomState> {
 
   async sendGroupInvitations(group: Group) {
     const usernames = group.clients.map(client => client.username);
-    const gameOpts = await buildGameOpts(usernames, "tournament");
+    const gameOpts = await buildGameOpts(usernames, "classroom", this.classroomId);
     const room = await matchMaker.createRoom(GameRoom.NAME, gameOpts);
     logger.info(`${this.roomName} created game room ${room.roomId}`);
     // send room data for new websocket connection
@@ -85,25 +94,29 @@ export class TournamentLobbyRoom extends LobbyRoom<TournamentLobbyRoomState> {
   }
 
   async isLobbyOpen() {
-    const services = getServices();
-    if (await services.settings.isTournamentEnabled()) {
-      return services.tournament.isLobbyOpen();
-    }
-    return false;
+    return true && !this.locked;
   }
 
   async canUserJoin(user: User) {
     const services = getServices();
-    const activeGame = await services.game.getActiveGameRoomId(user.id, "tournament");
-    if (activeGame) {
-      logger.warn(
-        `client ${user.username} attempted to join ${this.roomName} while in another game`
-      );
+    const student = await services.educator.getStudentByUser(user.id);
+    if (student) {
+      // set classroomId if this is the first client in here
+      if (this.classroomId === -1) {
+        // also, make sure this classroom exists
+        const classroom = await services.educator.getClassroomById(student.classroomId);
+        if (!classroom) return false;
+        this.classroomId = student.classroomId;
+      } else {
+        if (student.classroomId !== this.classroomId) return false;
+      }
+    } else {
       return false;
     }
+
     const numberOfActiveParticipants = await services.game.getNumberOfActiveParticipants();
     const maxConnections = await this.getMaxConnections();
-    return numberOfActiveParticipants < maxConnections && services.tournament.canPlayInRound(user);
+    return numberOfActiveParticipants < maxConnections;
   }
 
   onAcceptInvitation(client: Client, message: AcceptInvitation) {
@@ -127,15 +140,5 @@ export class TournamentLobbyRoom extends LobbyRoom<TournamentLobbyRoomState> {
       lc.client.leave();
     });
     this.groupManager.removeGroup(group);
-  }
-
-  async onDispose() {
-    super.onDispose();
-    logger.debug("Saving all lobby chat messages");
-    const chatMessages = [...this.state.chat];
-    logger.debug("lobby chat messages %s", chatMessages.toString());
-    if (chatMessages.length) {
-      await getServices().tournament.saveLobbyChatMessages(this.roomId, "tournament", chatMessages);
-    }
   }
 }
