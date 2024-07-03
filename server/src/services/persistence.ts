@@ -102,6 +102,9 @@ export class DBPersister implements Persister {
       game.tournamentRoundId = options.tournamentRoundId;
       game.roomId = roomId;
       game.type = options.type;
+      if (options.classroomId) {
+        game.classroomId = options.classroomId;
+      }
       if (options.treatmentId) {
         game.treatmentId = options.treatmentId;
       }
