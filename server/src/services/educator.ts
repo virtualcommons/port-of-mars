@@ -33,6 +33,13 @@ export class EducatorService extends BaseService {
     return this.em.getRepository(Student).findOne({ where: { rejoinCode }, relations: ["user"] });
   }
 
+  async getClassroomById(id: number, withTeacher = false) {
+    return this.em.getRepository(Classroom).findOne({
+      where: { id },
+      relations: withTeacher ? ["teacher"] : [],
+    });
+  }
+
   async generateStudentRejoinCode(): Promise<string> {
     let rejoinCode = "";
     do {
@@ -91,10 +98,7 @@ export class EducatorService extends BaseService {
     return user;
   }
 
-  //set name and set to verified
-
   async setStudentName(userId: number, name: string) {
-    const studentRepo = this.em.getRepository(Student);
     const student = await this.getStudentByUser(userId, true);
     if (!student) {
       throw new ServerError({
@@ -103,20 +107,12 @@ export class EducatorService extends BaseService {
       });
     }
 
-    console.log('Fetched student:', student);
-    student.user.name = name;
-    await studentRepo.save(student);
-
-    student.user.isVerified = true;
-    await studentRepo.save(student.user);
-
-    await this.em.getRepository(User).save(student.user);
-
-    console.log('Updated student:', student);
-    await studentRepo.save(student);
+    const user = student.user;
+    user.name = name;
+    user.isVerified = true;
+    await this.em.getRepository(User).save(user);
     return student;
   }
-
 
   async createTeacher(email: string, username: string, name: string) {
     const userRepo = this.em.getRepository(User);
@@ -151,26 +147,4 @@ export class EducatorService extends BaseService {
     });
     return repo.save(classroom);
   }
-  
-  //This algo. works weird with specfically 6 -> [2,4] 
-  async partition(students: number): Promise<number[]> {
-    const arr = [];
-    const fullGroups = Math.floor(students / 5);
-    const leftOver = students % 5;
-    for (let i = 0; i < fullGroups; i++){
-      arr.push(5);
-    }
-    if (leftOver > 0){
-      arr.push(leftOver);
-    }
-    for (let i = arr.length - 1; i > 0; i--){
-      while (arr[i] < 4){
-        arr[i] += 1;
-        arr[i - 1] -= 1;
-      }
-    }
-    return arr;
-  }
-
-
 }

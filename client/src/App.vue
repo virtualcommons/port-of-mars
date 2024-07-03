@@ -2,7 +2,7 @@
   <b-container class="h-100 p-0 m-0 bg" fluid>
     <b-row no-gutters class="h-100 w-100">
       <span v-if="!isGamePage">
-        <ClassroomNavbar v-if="isEducatorMode"></ClassroomNavbar>
+        <EducatorNavbar v-if="isEducatorMode"></EducatorNavbar>
         <Navbar v-else></Navbar>
       </span>
       <router-view :class="bodyClass" :key="topLevelPath"></router-view>
@@ -14,7 +14,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import BootstrapVue from "bootstrap-vue";
 import Navbar from "@port-of-mars/client/components/global/Navbar.vue";
-import ClassroomNavbar from "@port-of-mars/client/components/global/ClassroomNavbar.vue";
+import EducatorNavbar from "@port-of-mars/client/components/global/EducatorNavbar.vue";
 import Footer from "@port-of-mars/client/components/global/Footer.vue";
 import {
   GAME_PAGE,
@@ -31,7 +31,7 @@ Vue.use(BootstrapVue);
 @Component({
   components: {
     Navbar,
-    ClassroomNavbar,
+    EducatorNavbar,
     Footer,
   },
 })
