@@ -1,8 +1,11 @@
 import { BaseService } from "@port-of-mars/server/services/db";
-import { Teacher, Classroom, Student, User } from "@port-of-mars/server/entity";
+import { matchMaker } from "colyseus";
+import { Teacher, Classroom, Student, User, Game } from "@port-of-mars/server/entity";
+import { GameRoom } from "@port-of-mars/server/rooms/game"; //FIXME; may need to adjust for educator version
 import { ServerError, generateUsername, generateCode } from "@port-of-mars/server/util";
 import { getServices } from "@port-of-mars/server/services";
 import { error } from "console";
+import { getRepository } from "typeorm";
 // import { settings } from "@port-of-mars/server/settings";
 
 // const logger = settings.logging.getLogger(__filename);
@@ -63,6 +66,46 @@ export class EducatorService extends BaseService {
     } while (await this.em.getRepository(Classroom).findOne({ where: { authToken } }));
     return authToken;
   }
+
+  async getActiveRooms(): Promise<any> {
+    const games = await matchMaker.query({ name: GameRoom.NAME });
+    return games.map((g: any) => {
+      return {
+        roomId: g.roomId,
+        clients: g.clients,
+        elapsed: Date.now() - new Date(g.createdAt).getTime(),
+        type: g.type,
+      };
+    });
+  }
+
+  async getActiveRoomsForClassroom(classroomId: number): Promise<any> {
+    const gameRepo = this.em.getRepository(Game);
+    const activeGames = gameRepo.find({
+      where: {id: classroomId, status: "incomplete"},
+      },
+    ); //FIXME: may need to add in relations
+    return activeGames;
+  }
+
+  async getClassroomsForTeacher(userId: number): Promise<any>{
+    const classroomRepo = this.em.getRepository(Classroom);
+    const teacher = await this.getTeacherByUserId(userId);
+
+    if (!teacher){
+      throw new ServerError({
+        code: 404,
+        message: "Teacher not found",
+      });
+    }
+    const classrooms = classroomRepo.find({ 
+      where: {teacher: teacher },
+      relations: ["students", "games"],
+    },
+    ); //FIXME: may need to fix in relations
+    return classrooms;
+  }
+
 
   async createStudent(classroomAuthToken: string) {
     /**

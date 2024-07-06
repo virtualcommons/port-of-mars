@@ -6,6 +6,7 @@ import { ValidationError } from "@port-of-mars/server/util";
 import { getLogger } from "@port-of-mars/server/settings";
 import { ClassroomLobbyRoom } from "../rooms/lobby/classroom";
 import { matchMaker } from "colyseus";
+import { Classroom } from "../entity";
 
 const logger = getLogger(__filename);
 
@@ -26,6 +27,41 @@ educatorRouter.get("/student", async (req: Request, res: Response, next: NextFun
     return;
   } catch (e) {
     logger.warn("Unable to authorize student for user ID %d", user.id);
+    next(e);
+  }
+});
+
+educatorRouter.get("/rooms", async (req: Request, res: Response, next) => {
+  try {
+    const rooms = await getServices().educator.getActiveRooms();
+    res.json(rooms);
+  } catch (e) {
+    logger.warn("Unable to get rooms", e)
+    next(e);
+  }
+});
+
+educatorRouter.get("/classroom-games", async (req: Request, res: Response, next) => {
+  const user = req.user as User;
+  const { classroomId } = req.body;
+  try {
+    const services = getServices();
+    const games = await services.educator.getActiveRoomsForClassroom(Number(classroomId));
+    res.json(games);
+  } catch (e) {
+    logger.warn("Unable to get classroom games for classroom ID %d", classroomId); 
+    next(e);
+  }
+});
+
+educatorRouter.get("/classrooms",  async (req: Request, res: Response, next) =>{
+  const user = req.user as User;
+  try {
+    const services = getServices();
+    const classrooms = await services.educator.getClassroomsForTeacher(user.id);
+    res.json(classrooms);
+  } catch (e) {
+    logger.warn("Unable to get classrooms for teacher with user IF %d", user.id);
     next(e);
   }
 });
