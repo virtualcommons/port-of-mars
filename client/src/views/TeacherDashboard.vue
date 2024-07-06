@@ -91,13 +91,9 @@
                   </b-tab>
                   <b-tab title="Settings">
                     <b-card-text>Classroom Settings </b-card-text>
-                    <b-row class="mb-3" align-h="between">
-                      <b-button variant="warning" @click="deleteClassroom"
-                        >Delete this Classroom</b-button
-                      >
-                      <b-button v-b-toggle.my-collapase variant="warning"
-                        >Rename this Classroom</b-button
-                        >
+                    <b-row class="mb-3 d-flex align-items-left">
+                      <b-col cols="6"><b-button :pressed="false" class="w-150 mb-2" variant="warning" @click="deleteClassroom">Delete Classroom</b-button></b-col>
+                      <b-col cols="6"><b-button :pressed="false" class="w-150 mb-2 text-nowrap"  variant="warning" @click="toggleRename">Rename Classroom</b-button></b-col>
                     </b-row>
                     <b-collapse id="my-collapase" v-model="isCollapsed">
                       <b-form-input v-model="classroomName" placeholder="Enter classroom name"></b-form-input>
@@ -217,7 +213,11 @@ export default class TeacherDashboard extends Vue {
 
   renameClassroom() {
     this.selectedClassroom.name = this.classroomName;
-    this.isCollapsed = false;
+    this.isCollapsed = true;
+  }
+
+  toggleRename(){
+    this.isCollapsed = !this.isCollapsed;
   }
 
   toggleSidebar() {

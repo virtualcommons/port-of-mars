@@ -83,7 +83,7 @@
               {{ username }}
             </template>
             <b-dropdown-item :to="profile">Edit Profile</b-dropdown-item>
-            <b-dropdown-item :to="history">Game History</b-dropdown-item>
+            <b-dropdown-item :to="history">Game History</b-dropdown-item> 
             <b-dropdown-item @click="logout">Sign Out</b-dropdown-item>
           </b-nav-item-dropdown>
         </div>
