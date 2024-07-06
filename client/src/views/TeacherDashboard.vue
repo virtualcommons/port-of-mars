@@ -1,13 +1,13 @@
 <template>
   <b-container fluid class="h-100 w-100 m-0 p-0 backdrop">
     <div class="h-100 w-100 d-flex flex-column">
-      <b-row class="h-100 w-100 mx-auto flex-grow-1 p-5" style="max-width: 1400px">
+      <b-row class="h-100 w-100 mx-auto flex-grow-1 p-3">
         <!--Classrooms Sidebar-->
-        <b-col :cols="sidebarExpanded ? 3 : 1" class="sidebar">
-          <div class="d-flex align-items-start mb-2">
+        <b-col cols="2" class="pl-5">
+          <div class="d-flex mb-2 ml-3">
             <b-row>
-              <h4 class="mb-0 mt-2" v-if="sidebarExpanded">Classrooms</h4>
-              <p class="h4 mb-2" v-if="sidebarExpanded">
+              <h4 class="mb-0 mt-2">Classrooms</h4>
+              <p class="h4 mb-1">
                 <b-icon
                   icon="plus"
                   class="icon ml-2 mt-2"
@@ -15,25 +15,19 @@
                   @click="addClassroom"
                 ></b-icon>
               </p>
-              <p class="h4 mb-2">
-                <b-icon
-                  :icon="sidebarExpanded ? 'chevron-left' : 'chevron-right'"
-                  class="icon ml-2 mt-2"
-                  style="cursor: pointer"
-                  variant="danger"
-                  @click="toggleSidebar"
-                ></b-icon>
-              </p>
             </b-row>
           </div>
           <div class="classrooms">
-            <b-button-group vertical v-if="sidebarExpanded">
+            <b-button-group vertical>
               <b-button
                 v-for="classroom in classrooms"
                 :key="classroom.id"
                 variant="primary"
                 class="mb-2 rounded"
-                @click="selectClassroom(classroom)"
+                @click="
+                  selectClassroom(classroom);
+                  clearRenameErrorMessage();
+                "
               >
                 {{ classroom.name }}
               </b-button>
@@ -41,71 +35,217 @@
           </div>
         </b-col>
         <!--Main dashboard-->
-        <b-col
-          :cols="sidebarExpanded ? 9 : 11"
-          :class="{ 'content-container-collapsed': '!sidebarExpanded' }"
-          class="content-container h-100 overflow-hidden"
-        >
+        <b-col cols="10" class="content-container h-100 w-100 p-3 overflow-hidden">
           <div v-if="classrooms.length > 0">
-            <h4 class="mt-2">{{ selectedClassroom.name }}</h4>
-            <h4>The Game Code for this Classroom is:</h4>
-            <b-row class="mb-3 d-flex align-items-left">
-              <b-col cols="2"><b-button variant="success">Start Game</b-button></b-col>
-              <b-col cols="2"><b-button variant="danger">Stop Game</b-button></b-col>
-            </b-row>
-            <b-row class="mb-3 d-flex align-items-start">
+            <div class="row pl-3 justify-content-between">
+              <div>
+                <h4>{{ selectedClassroom.name }}</h4>
+                <h4>The Game Code for this Classroom is:</h4>
+              </div>
+              <b-cols class="mt-1">
+                <b-button variant="success">Start Game</b-button>
+                <b-button variant="danger" class="mx-3">Stop Game</b-button>
+              </b-cols>
+            </div>
+            <b-row>
               <div class="tabs-container">
                 <b-tabs pills card>
-                  <b-tab title="Students" active>
+                  <b-tab title="Students" class="tab-header">
                     <p>Students in Classroom: {{ clients.length }}</p>
-                    <b-row style="overflow-y: auto; max-height: 50vh">
-                      <b-col cols="6" v-for="client in clients" :key="client.id" class="mb-3">
+                    <b-row class="overflow-y-auto overflow-x-hidden pt-1 px-4">
+                      <b-col cols="2" v-for="client in clients" :key="client.id" class="mb-4">
                         <div class="player-card">
+                          <p class="mb-1">[First Name] [Last Initial].</p>
                           <span>{{ client.username }}</span>
                         </div>
                       </b-col>
                     </b-row>
                   </b-tab>
-                  <b-tab title="Groups">
-                    <b-card-text>
-                      <b-button-group>
-                        <b-button
-                          v-for="group in groups"
-                          :key="group.id"
-                          variant="primary"
-                          class="mb-2"
-                          @click="selectGroup(group)"
-                          >{{ group.name }}</b-button
+                  <b-tab title="Group">
+                    <div v-if="rooms.length < 1">
+                      <h3 class="ml-1">Groups will display here once a game has started.</h3>
+                    </div>
+                    <b-row class="mb-2" style="width: 80.5vw" v-else>
+                      <!-- game list -->
+                      <b-col cols="6">
+                        <h4 class="header-nowrap">Games List</h4>
+                        <div
+                          class="h-100-header w-100 content-container overflow-y-auto"
+                          style="height: 28vh"
                         >
-                      </b-button-group>
-                    </b-card-text>
-                  </b-tab>
-                  <b-tab title="Reports">
-                    <b-card-text>
-                      <b-tabs content-class="mt-3" align="left">
-                        <b-tab title="Table1" active><p>Table 1</p></b-tab>
-                        <b-tab title="Table2"><p>Table 2</p></b-tab>
-                        <b-tab title="Graph"><p>Graph</p></b-tab>
-                      </b-tabs>
-                    </b-card-text>
-                  </b-tab>
-                  <b-tab title="Settings">
-                    <b-card-text>Classroom Settings </b-card-text>
-                    <b-row class="mb-3 d-flex align-items-left">
-                      <b-col cols="6"><b-button :pressed="false" class="w-150 mb-2" variant="warning" @click="deleteClassroom">Delete Classroom</b-button></b-col>
-                      <b-col cols="6"><b-button :pressed="false" class="w-150 mb-2 text-nowrap"  variant="warning" @click="toggleRename">Rename Classroom</b-button></b-col>
+                          <b-table
+                            dark
+                            sticky-header
+                            small
+                            class="h-100 custom-table overflow-hidden"
+                            :fields="roomFields"
+                            :items="rooms"
+                            sort-by="elapsed"
+                            :sort-desc="true"
+                          >
+                            <template #cell(elapsed)="data">
+                              {{ formatTime(data.item.elapsed) }}
+                            </template>
+                            <template #cell(inspect)="data">
+                              <b-button
+                                variant="primary"
+                                size="sm"
+                                class="float-right"
+                                :disabled="isInspectedRoom(data.item.roomId)"
+                                @click="fetchInspectData(data.item.roomId)"
+                                >Inspect
+                                <b-icon-box-arrow-right
+                                  class="float-right ml-2"
+                                ></b-icon-box-arrow-right>
+                              </b-button>
+                            </template>
+                          </b-table>
+                        </div>
+                      </b-col>
+                      <!-- info -->
+                      <b-col cols="6">
+                        <h4 class="header-nowrap">Inspect Data</h4>
+                        <div
+                          class="h-100-header w-100 content-container overflow-y-auto"
+                          style="height: 28vh"
+                        >
+                          <div v-if="inspectedRoomId" class="h-100 p-2">
+                            <div class="d-flex align-items-start">
+                              <h5 class="mr-2">System Health</h5>
+                              <StatusBar class="statusbar" :setWidth="inspectData.systemHealth" />
+                              <h5 class="ml-2">{{ inspectData.systemHealth }}</h5>
+                            </div>
+                            <b-table
+                              dark
+                              sticky-header
+                              small
+                              thead-class="hidden-header"
+                              class="h-75 m-0 custom-table"
+                              :fields="inspectFields"
+                              :items="inspectData.players"
+                            >
+                              <template #cell(username)="data">
+                                {{ data.item.username }}
+                                <b-badge v-if="data.item.isBot">bot</b-badge>
+                              </template>
+                              <template #cell(points)="data">
+                                {{ data.item.points }} points
+                              </template>
+                            </b-table>
+                          </div>
+                          <div
+                            v-else
+                            class="h-100 d-flex align-items-center justify-content-center"
+                          >
+                            <p style="color: rgba(241, 224, 197, 0.25)">
+                              Inspect a game to see its state.
+                            </p>
+                          </div>
+                        </div>
+                      </b-col>
                     </b-row>
-                    <b-collapse id="my-collapase" v-model="isCollapsed">
-                      <b-form-input v-model="classroomName" placeholder="Enter classroom name"></b-form-input>
-                      <b-input-group-append>
-                        <b-button classroomName-clear
-                          class="mt-1" 
-                          size="sm" 
-                          variant="success" 
-                          @click="renameClassroom"
-                          >Submit</b-button
+                    <b-row>
+                      <!-- mars log -->
+                      <b-col cols="6">
+                        <h4 class="header-nowrap">Mars Log</h4>
+                        <div
+                          class="h-100-header w-100 content-container overflow-y-auto"
+                          style="height: 28vh"
                         >
-                      </b-input-group-append>
+                          <MarsLog :logs="inspectData.marsLog" />
+                        </div>
+                      </b-col>
+                      <!-- chat -->
+                      <b-col cols="6">
+                        <h4 class="header-nowrap">Chat</h4>
+                        <div
+                          class="h-100-header w-100 content-container overflow-y-auto"
+                          style="height: 28vh"
+                        >
+                          <Chat
+                            :messages="inspectData.chatMessages"
+                            :readonly="true"
+                            :reportable="false"
+                          />
+                        </div>
+                      </b-col>
+                    </b-row>
+                  </b-tab>
+                  <b-tab title="Reports" class="tab-header">
+                    <b-row class="mb-2" style="width: 80.5vw">
+                      <b-col cols="8">
+                        <!-- report list -->
+                        <h4 class="header-nowrap">Reported Chat Messages</h4>
+                        <div class="h-100-header w-100 content-container" style="height: 61vh">
+                          <b-table
+                            dark
+                            sticky-header
+                            sort-icon-left
+                            class="h-100 m-0"
+                            style="max-height: none"
+                            :fields="reportFields"
+                            :items="reports"
+                            sort-by="dateCreated"
+                            :sort-desc="true"
+                          ></b-table>
+                        </div>
+                      </b-col>
+                      <b-col cols="4">
+                        <!-- action log -->
+                        <h4 class="header-nowrap">Actions Log</h4>
+                        <div class="h-100-header w-100 content-container">
+                          <b-table
+                            dark
+                            sticky-header
+                            sort-icon-left
+                            class="h-100 m-0"
+                            style="max-height: none"
+                            :fields="moderationActionFields"
+                            :items="moderationActions"
+                          ></b-table>
+                        </div>
+                      </b-col>
+                    </b-row>
+                  </b-tab>
+                  <b-tab title="Settings" class="tab-header">
+                    <b-card-text>Classroom Settings</b-card-text>
+                    <b-row class="mb-3 d-flex align-items-left">
+                      <b-col cols="6"
+                        ><b-button
+                          :pressed="false"
+                          class="w-150 mb-2"
+                          variant="warning"
+                          @click="deleteClassroom"
+                          >Delete Classroom</b-button
+                        ></b-col
+                      >
+                      <b-col cols="6"
+                        ><b-button
+                          :pressed="false"
+                          class="w-150 mb-2 text-nowrap"
+                          variant="warning"
+                          @click="toggleRename"
+                          >Rename Classroom</b-button
+                        ></b-col
+                      >
+                    </b-row>
+                    <b-collapse class="pt-1" id="renameCollapase" v-model="isCollapsed">
+                      <b-form-input
+                        v-model="classroomName"
+                        placeholder="Enter classroom name (max. 20 characters)"
+                        @input="clearRenameErrorMessage"
+                      >
+                      </b-form-input>
+                      <b-button
+                        class="mt-1 mb-1"
+                        size="sm"
+                        variant="success"
+                        @click="renameClassroom"
+                        >Submit</b-button
+                      >
+                      <b-alert variant="danger" v-if="renameErrorMessage" show>{{
+                        renameErrorMessage
+                      }}</b-alert>
                     </b-collapse>
                   </b-tab>
                 </b-tabs>
@@ -136,6 +276,11 @@ import Countdown from "@port-of-mars/client/components/global/Countdown.vue";
 import HelpPanel from "@port-of-mars/client/components/lobby/HelpPanel.vue";
 import Messages from "@port-of-mars/client/components/global/Messages.vue";
 import LobbyChat from "@port-of-mars/client/components/lobby/LobbyChat.vue";
+import {
+  InspectData,
+  ChatReportData,
+  ModerationActionClientData,
+} from "@port-of-mars/shared/types";
 
 @Component({
   components: {
@@ -157,8 +302,9 @@ export default class TeacherDashboard extends Vue {
   isTeacher = false;
   startGame = {};
   sidebarExpanded = true;
+  isCollapsed = false;
   classroomName = "";
-  isCollapsed = true;
+  renameErrorMessage = "";
 
   clientFields = [{ key: "username", label: "Player" }];
 
@@ -167,22 +313,55 @@ export default class TeacherDashboard extends Vue {
     { id: 2, name: "Classroom #2" },
   ];
 
-  groups: Group[] = [
-    { id: 1, name: "Group #1" },
-    { id: 2, name: "Group #2" },
-  ];
-
   selectedClassroom: Classroom = this.classrooms[0];
-  selectedGroup: Group = this.groups[0];
 
   nextClassroomID: number = this.classrooms.length + 1;
 
+  //WIP: Implement into the group container
+  roomFields = [
+    { key: "roomId", label: "Room ID" },
+    { key: "elapsed", label: "Elapsed", sortable: true },
+    { key: "clients", label: "Players" },
+    { key: "inspect", label: "" },
+  ];
+  rooms: any = [{ roomId: "12sfa98h", elapsed: 0, clients: 5, inspect: "N/A" }]; //Temporary room
+
+  inspectData: InspectData = {
+    players: [],
+    systemHealth: 0,
+    marsLog: [],
+    chatMessages: [],
+  };
+  inspectFields = [
+    { key: "username", label: "Username", tdClass: "extra-small" },
+    { key: "role", label: "Role", tdClass: "extra-small" },
+    { key: "points", label: "Points", tdClass: "extra-small" },
+  ];
+  inspectedRoomId: string = "";
+
+  //WIP: Implement into the reports container
+  reports: Array<ChatReportData> = [];
+  reportFields = [
+    { key: "dateCreated", label: "Time", sortable: true },
+    { key: "roomId", label: "Room" },
+    { key: "user", label: "User" },
+    { key: "message", label: "Message" },
+    { key: "action", label: "Action" },
+  ];
+
+  moderationActions: Array<ModerationActionClientData> = [];
+  moderationActionFields = [
+    { key: "adminUsername", label: "Admin" },
+    { key: "username", label: "User" },
+    { key: "action", label: "Action", sortable: true },
+    { key: "dateMuteExpires", label: "Expires" },
+    { key: "undo", label: "" },
+  ];
+
   selectClassroom(classroom: Classroom) {
     this.selectedClassroom = classroom;
-  }
-
-  selectGroup(group: Group) {
-    this.selectGroup = group;
+    this.isCollapsed = false;
+    this.classroomName = "";
   }
 
   addClassroom() {
@@ -203,6 +382,12 @@ export default class TeacherDashboard extends Vue {
     this.classrooms = this.classrooms.filter(c => c.id !== this.selectedClassroom.id);
     delete this.studentsByClassroom[this.selectedClassroom.id];
 
+    if (this.classroomName || this.renameErrorMessage) {
+      this.classroomName = "";
+      this.renameErrorMessage = "";
+    }
+    this.isCollapsed = false;
+
     if (this.classrooms.length > 0) {
       this.selectedClassroom = this.classrooms[0];
     } else {
@@ -212,16 +397,42 @@ export default class TeacherDashboard extends Vue {
   }
 
   renameClassroom() {
-    this.selectedClassroom.name = this.classroomName;
-    this.isCollapsed = true;
+    if (this.classroomName.length > 20) {
+      this.renameErrorMessage = "Invalid classroom name. Please try again.";
+    } else {
+      this.selectedClassroom.name = this.classroomName;
+      this.isCollapsed = false;
+      this.classroomName = "";
+    }
   }
 
-  toggleRename(){
+  clearRenameErrorMessage() {
+    this.renameErrorMessage = "";
+  }
+
+  toggleRename() {
     this.isCollapsed = !this.isCollapsed;
   }
-
   toggleSidebar() {
     this.sidebarExpanded = !this.sidebarExpanded;
+  }
+
+  formatTime(time: number) {
+    const mins = Math.floor(time / 1000 / 60);
+    const hours = Math.floor(mins / 60);
+    if (hours > 0) {
+      return `${hours} hour${hours === 1 ? "" : "s"}`;
+    } else {
+      return `${mins} min${mins === 1 ? "" : "s"}`;
+    }
+  }
+
+  isInspectedRoom(roomId: string) {
+    return this.inspectedRoomId === roomId;
+  }
+
+  async fetchInspectData(roomId: string) {
+    //TODO: Implement data from game session depending on group selected
   }
 
   get clients() {
@@ -262,7 +473,8 @@ export default class TeacherDashboard extends Vue {
     3: [
       { username: "Player 26", id: 26, dateJoined: new Date().getTime() },
       { username: "Player 27", id: 27, dateJoined: new Date().getTime() },
-      { username: "Player 28", id: 28, dateJoined: new Date().getTime() },    ],
+      { username: "Player 28", id: 28, dateJoined: new Date().getTime() },
+    ],
   };
 
   get chatMessages() {
@@ -281,43 +493,34 @@ export default class TeacherDashboard extends Vue {
 
 <style lang="scss" scoped>
 .classrooms {
-  padding-left: 0.5rem;
-  padding-top: 0.2rem;
-  max-height: 72.5vh;
-  overflow-y: scroll;
+  height: 80vh;
+  overflow-y: auto;
 }
 .classrooms::-webkit-scrollbar {
   display: none;
 }
 
-.scroll::-webkit-scrollbar {
-  display: none;
-}
-
 .player-card {
-  background-color: #232324;
-  border: 1x solid #444444;
+  background-color: #333333;
+  border: 2px solid #444444;
   border-radius: 1rem;
-  padding: 1rem;
-  text-align: center;
-  height: 3rem;
-  width: 100%;
-  word-wrap: break-word;
+  padding: 0.5rem 1rem;
+  overflow: hidden;
+  text-align: left;
+  max-width: 4.5rem;
+  max-width: 19rem;
 }
 
- .sidebar { //FIXME: Does not show up in the webpage
+.sidebar {
+  //FIXME: Does not show up in the webpage
   background-color: lightgrey;
-  padding: 1rem;
+  padding: 3rem;
   height: 100vh;
 }
 
 .icon {
   vertical-align: text-top !important;
   font-size: 2rem;
-}
-
-.tabs-container {
-  padding-left: 0.3rem;
 }
 
 .content-container-collapsed {
