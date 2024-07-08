@@ -42,7 +42,6 @@ educatorRouter.get("/rooms", async (req: Request, res: Response, next) => {
 });
 
 educatorRouter.get("/classroom-games", async (req: Request, res: Response, next) => {
-  const user = req.user as User;
   const { classroomId } = req.body;
   try {
     const services = getServices();
@@ -61,7 +60,103 @@ educatorRouter.get("/classrooms",  async (req: Request, res: Response, next) =>{
     const classrooms = await services.educator.getClassroomsForTeacher(user.id);
     res.json(classrooms);
   } catch (e) {
-    logger.warn("Unable to get classrooms for teacher with user IF %d", user.id);
+    logger.warn("Unable to get classrooms for teacher with user ID %d", user.id);
+    next(e);
+  }
+});
+
+educatorRouter.get("/students", async (req: Request, res: Response, next) =>{
+  const { classroomId } = req.body;
+  try {
+    const services = getServices();
+    const students = await services.educator.getStudentsByClassroomId(Number(classroomId));
+    res.json(students);
+
+  } catch (e) {
+    logger.warn("Unable to get students from classroom with ID %d", classroomId);
+    next(e);
+  }
+});
+
+educatorRouter.post("/classroom", async (req: Request, res: Response, next) =>{
+  const user = req.user as User;
+  const { descriptor } = req.body;
+  try {
+    const services = getServices();
+    const teacher = await services.educator.getTeacherByUserId(user.id);
+    if (!teacher){
+      res.status(403).json({ message: "Only teachers can create a classroom" });
+      return;
+    }
+    const classroomRepo = services.em.getRepository(Classroom);
+    const newClassroom = classroomRepo.create({
+      descriptor: descriptor,
+      teacher: teacher,
+    })
+    await classroomRepo.save(newClassroom);
+    res.status(201).json(newClassroom);
+  } catch (e) {
+    logger.warn("Unable to create a new classroom for the teacher");
+    next(e);
+  }
+});
+
+educatorRouter.delete("/classroom", async (req: Request, res: Response, next) =>{
+  const user = req.user as User;
+  const { classroomId } = req.body;
+  try {
+    const services = getServices();
+    const teacher = await services.educator.getTeacherByUserId(user.id);
+    if (!teacher){
+      res.status(403).json({ message: "Only teachers can delete a classroom" });
+      return;
+    }
+    const classroomRepo = services.em.getRepository(Classroom);
+    const classroom = await classroomRepo.findOne({
+      where: {id: classroomId, teacher: {id: teacher.id}},
+    })
+    if (!classroom){
+      res.status(404).json({ message: "Classroom not found" });
+      return;
+    }
+    //if number of games or number of students in classroom is greater than 0, then error
+    const students = await services.educator.getStudentsByClassroomId(classroomId);
+    const games = await services.educator.getActiveRoomsForClassroom(classroomId);
+    if (students.length > 0 || games.length > 0){
+      res.status(400).json({ message: "Classroom cannot be deleted because it has active games and/or students"});
+      return;
+    }
+    await classroomRepo.remove(classroom);
+  } catch (e) {
+    logger.warn("Unable to delete classroom");
+    next(e);
+  }
+});
+
+educatorRouter.put("/classroom", async (req: Request, res: Response, next) =>{
+  const user = req.user as User;
+  const { classroomId, descriptor } = req.body;
+
+  try {
+    const services = getServices();
+    const teacher = await services.educator.getTeacherByUserId(user.id);
+    if (!teacher){
+      res.status(403).json({ message: "Only teachers can update a classroom" });
+      return;
+    }
+    const classroomRepo = services.em.getRepository(Classroom);
+    const classroom = await classroomRepo.findOne({
+      where: {id: classroomId, teacher: {id: teacher.id}},
+    })
+    if (!classroom){
+      res.status(404).json({ message: "Classroom not found" });
+      return;
+    }
+    classroom.descriptor = descriptor;
+    await classroomRepo.save(classroom);
+    res.status(200).json(classroom);
+  } catch (e) {
+    logger.warn("Unable to update classroom");
     next(e);
   }
 });
@@ -78,13 +173,8 @@ educatorRouter.post("/confirm-student", async (req: Request, res: Response, next
         displayMessage: "Student name is required",
       });
     }
-
-    //replace with setStudentName
-    // await services.account.setName(user.id, data.name);
-
     await services.educator.setStudentName(user.id, data.name);
     res.status(200).json({ message: "Student confirmed successfully" });
-    //res.json(student);
     return;
   } catch (e) {
     if (e instanceof ValidationError) {

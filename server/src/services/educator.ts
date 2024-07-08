@@ -106,6 +106,15 @@ export class EducatorService extends BaseService {
     return classrooms;
   }
 
+  async getStudentsByClassroomId(classroomId: number): Promise<any>{
+    const studentRepo = this.em.getRepository(Student);
+    const students = studentRepo.find({
+      where: {classroomId: classroomId},
+      relations: ["classroom"],
+    });
+    return students;
+  }
+
 
   async createStudent(classroomAuthToken: string) {
     /**
