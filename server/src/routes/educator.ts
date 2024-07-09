@@ -6,7 +6,7 @@ import { ValidationError } from "@port-of-mars/server/util";
 import { getLogger } from "@port-of-mars/server/settings";
 import { ClassroomLobbyRoom } from "../rooms/lobby/classroom";
 import { matchMaker } from "colyseus";
-import { Classroom } from "../entity";
+import { Classroom, Teacher } from "../entity";
 
 const logger = getLogger(__filename);
 
@@ -71,7 +71,6 @@ educatorRouter.get("/students", async (req: Request, res: Response, next) =>{
     const services = getServices();
     const students = await services.educator.getStudentsByClassroomId(Number(classroomId));
     res.json(students);
-
   } catch (e) {
     logger.warn("Unable to get students from classroom with ID %d", classroomId);
     next(e);
@@ -84,16 +83,11 @@ educatorRouter.post("/classroom", async (req: Request, res: Response, next) =>{
   try {
     const services = getServices();
     const teacher = await services.educator.getTeacherByUserId(user.id);
-    if (!teacher){
+    if (!teacher || user.isAdmin){
       res.status(403).json({ message: "Only teachers can create a classroom" });
       return;
     }
-    const classroomRepo = services.em.getRepository(Classroom);
-    const newClassroom = classroomRepo.create({
-      descriptor: descriptor,
-      teacher: teacher,
-    })
-    await classroomRepo.save(newClassroom);
+    const newClassroom = await services.educator.createNewClassroom(teacher, descriptor);
     res.status(201).json(newClassroom);
   } catch (e) {
     logger.warn("Unable to create a new classroom for the teacher");
@@ -107,26 +101,28 @@ educatorRouter.delete("/classroom", async (req: Request, res: Response, next) =>
   try {
     const services = getServices();
     const teacher = await services.educator.getTeacherByUserId(user.id);
-    if (!teacher){
+    if (!teacher || user.isAdmin){
       res.status(403).json({ message: "Only teachers can delete a classroom" });
       return;
     }
-    const classroomRepo = services.em.getRepository(Classroom);
-    const classroom = await classroomRepo.findOne({
-      where: {id: classroomId, teacher: {id: teacher.id}},
-    })
-    if (!classroom){
-      res.status(404).json({ message: "Classroom not found" });
-      return;
-    }
-    //if number of games or number of students in classroom is greater than 0, then error
-    const students = await services.educator.getStudentsByClassroomId(classroomId);
-    const games = await services.educator.getActiveRoomsForClassroom(classroomId);
-    if (students.length > 0 || games.length > 0){
-      res.status(400).json({ message: "Classroom cannot be deleted because it has active games and/or students"});
-      return;
-    }
-    await classroomRepo.remove(classroom);
+    // const classroomRepo = services.em.getRepository(Classroom);
+    // const classroom = await classroomRepo.findOne({
+    //   where: {id: classroomId, teacher: {id: teacher.id}},
+    // })
+    // if (!classroom){
+    //   res.status(404).json({ message: "Classroom not found" });
+    //   return;
+    // }
+    // //if number of games or number of students in classroom is greater than 0, then error
+    // const students = await services.educator.getStudentsByClassroomId(classroomId);
+    // const games = await services.educator.getActiveRoomsForClassroom(classroomId);
+    // if (students.length > 0 || games.length > 0){
+    //   res.status(400).json({ message: "Classroom cannot be deleted because it has active games and/or students"});
+    //   return;
+    // }
+    // await classroomRepo.remove(classroom);
+
+    await services.educator.deleteClassroom(teacher, classroomId);
   } catch (e) {
     logger.warn("Unable to delete classroom");
     next(e);
@@ -140,25 +136,47 @@ educatorRouter.put("/classroom", async (req: Request, res: Response, next) =>{
   try {
     const services = getServices();
     const teacher = await services.educator.getTeacherByUserId(user.id);
-    if (!teacher){
+    if (!teacher || user.isAdmin){
       res.status(403).json({ message: "Only teachers can update a classroom" });
       return;
     }
-    const classroomRepo = services.em.getRepository(Classroom);
-    const classroom = await classroomRepo.findOne({
-      where: {id: classroomId, teacher: {id: teacher.id}},
-    })
-    if (!classroom){
-      res.status(404).json({ message: "Classroom not found" });
-      return;
-    }
-    classroom.descriptor = descriptor;
-    await classroomRepo.save(classroom);
+    const classroom = await services.educator.updateClassroom(teacher, classroomId, descriptor);   
     res.status(200).json(classroom);
   } catch (e) {
     logger.warn("Unable to update classroom");
     next(e);
   }
+});
+
+educatorRouter.get("/lobby", async (req: Request, res: Response, next) =>{
+  const user = req.user as User;
+  const { classroomId} = req.body;
+  try {
+    const services = getServices();
+    const teacher = await services.educator.getTeacherByUserId(user.id);
+    if (!teacher || user.isAdmin){
+      res.status(403).json({ message: "Only teachers can get a list of clients for the classroom lobby" });
+      return;
+    }
+
+    const lobbies = (await matchMaker.query({
+      name: ClassroomLobbyRoom.NAME,
+      classroomId,
+    })) as any;
+    const lobby = lobbies.find((room: any) => lobby.classroomId === classroomId);
+
+    if (!lobby){
+      res.status(404).json({ message: "Classroom lobby not found" });
+      return;
+    }
+    const clients = lobby.clients;
+    res.status(200).json(clients);
+
+  } catch (e) {
+    logger.warn("Unable to get list of clients for the classroom lobby");
+    next(e);
+  }
+
 });
 
 educatorRouter.post("/confirm-student", async (req: Request, res: Response, next: NextFunction) => {
