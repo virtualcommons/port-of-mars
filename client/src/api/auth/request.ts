@@ -60,33 +60,31 @@ export class AuthAPI {
   }
 
   async studentRejoin(rejoinCode: string) {
-    const rejoinUrl = url("/auth/student-rejoin");
-    await this.ajax.post(
-      rejoinUrl,
-      ({ data, status }) => {
-        if (status === 200) {
-          console.log(data);
-          this.store.commit("SET_USER", data.user);
-
-          if (data.user.isVerified){
-            console.log("Student verified");
-            this.router.push({ name: CLASSROOM_LOBBY_PAGE });
-          }else {
-            console.log("Student not verified");
-            this.router.push({ name: STUDENT_CONFIRM_PAGE });
+    try {
+      const rejoinUrl = url("/auth/student-rejoin");
+      await this.ajax.post(
+        rejoinUrl,
+        ({ data, status }) => {
+          if (status === 200) {
+            console.log(data);
+            this.store.commit("SET_USER", data.user);
+            if (data.user.isVerified) {
+              console.log("Student verified");
+              this.router.push({ name: CLASSROOM_LOBBY_PAGE });
+            } else {
+              console.log("Student not verified");
+              this.router.push({ name: STUDENT_CONFIRM_PAGE });
+            }
+          } else {
+            throw new Error(data.message || "Rejoin failed");
           }
-          
-        } else {
-          throw new Error(data.message || "Rejoin failed");
-        }
-      },
-      { rejoinCode, password: "unused" }
-    );
-  }
-  catch(e: any) {
-    console.log("Unable to rejoin");
-    console.log(e);
-    throw e;
+        },
+        { rejoinCode, password: "unused" }
+      );
+    } catch (e) {
+      console.log("Unable to rejoin", e);
+      throw new Error("Invalid rejoin code");
+    }
   }
 
   async teacherLogin(formData: { username: string; password: string }) {
@@ -105,9 +103,8 @@ export class AuthAPI {
         formData
       );
     } catch (e) {
-      console.log("Unable to login");
-      console.log(e);
-      throw e;
+      console.log("Unable to login", e);
+      throw new Error("Invalid username or password");
     }
   }
 }
