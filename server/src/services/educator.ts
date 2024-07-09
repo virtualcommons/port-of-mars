@@ -6,6 +6,10 @@ import { ServerError, generateUsername, generateCode } from "@port-of-mars/serve
 import { getServices } from "@port-of-mars/server/services";
 import { error } from "console";
 import { getRepository } from "typeorm";
+import { ClassroomLobbyRoom } from "../rooms/lobby/classroom";
+import {
+  LobbyActivityData,
+} from "@port-of-mars/shared/types";
 // import { settings } from "@port-of-mars/server/settings";
 
 // const logger = settings.logging.getLogger(__filename);
@@ -79,6 +83,28 @@ export class EducatorService extends BaseService {
     });
   }
 
+  async updateClassroom(teacher: Teacher, classroomId: number, descriptor: string): Promise<any>{
+    const classroomRepo = this.em.getRepository(Classroom);
+    const classroom = await classroomRepo.findOne({
+      where: {id: classroomId, teacher: {id: teacher.id}},
+    })
+    if (!classroom){
+      throw new Error("Classroom not found");
+    }
+    classroom.descriptor = descriptor;
+    await classroomRepo.save(classroom);
+    return classroom;
+  }
+
+  async createNewClassroom(teacher: Teacher, descriptor: string): Promise<any> {
+    const classroomRepo = this.em.getRepository(Classroom);
+    const newClassroom = classroomRepo.create({
+      descriptor: descriptor,
+      teacher: teacher,
+    })
+    await classroomRepo.save(newClassroom);
+    return newClassroom;
+  }
   async getActiveRoomsForClassroom(classroomId: number): Promise<any> {
     const gameRepo = this.em.getRepository(Game);
     const activeGames = gameRepo.find({
@@ -88,6 +114,25 @@ export class EducatorService extends BaseService {
     return activeGames;
   }
 
+  async deleteClassroom(teacher: Teacher, classroomId: number): Promise<any>{
+    const classroomRepo = this.em.getRepository(Classroom);
+    const classroom = await classroomRepo.findOne({
+      where: {id: classroomId, teacher: {id: teacher.id}},
+    })
+    if (!classroom){
+      throw new Error("Classroom not found");
+      return;
+    }
+    //if number of games or number of students in classroom is greater than 0, then error
+    const students = await this.getStudentsByClassroomId(classroomId);
+    const games = await this.getActiveRoomsForClassroom(classroomId);
+    if (students.length > 0 || games.length > 0){
+      throw new Error("Classroom cannot be deleted because it has active games and/or students");
+      return;
+    }
+    await classroomRepo.remove(classroom);
+    return;
+  }
   async getClassroomsForTeacher(userId: number): Promise<any>{
     const classroomRepo = this.em.getRepository(Classroom);
     const teacher = await this.getTeacherByUserId(userId);
@@ -106,6 +151,7 @@ export class EducatorService extends BaseService {
     return classrooms;
   }
 
+  //get all students in a specified classroom
   async getStudentsByClassroomId(classroomId: number): Promise<any>{
     const studentRepo = this.em.getRepository(Student);
     const students = studentRepo.find({
