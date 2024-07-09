@@ -49,7 +49,6 @@ import {
   STUDENT_LOGIN_PAGE,
   STUDENT_CONFIRM_PAGE,
   CLASSROOM_LOBBY_PAGE,
-  EDUCATOR_LOGIN_PAGE,
   TEACHER_DASHBOARD_PAGE,
 } from "@port-of-mars/shared/routes";
 
@@ -196,14 +195,13 @@ function getEducatorRouter() {
     if (to.meta.requiresAuth && !isAuthenticated()) {
       next({ name: STUDENT_LOGIN_PAGE });
     } else if (to.meta.requiresAdmin && !isAdmin()) {
-      next({ name: EDUCATOR_LOGIN_PAGE });
+      next({ name: STUDENT_LOGIN_PAGE });
     } else if (to.meta.requiresTeacher && !isTeacher()) {
-      next({ name: EDUCATOR_LOGIN_PAGE });
-    } else if (
-      (to.name === STUDENT_LOGIN_PAGE || to.name === EDUCATOR_LOGIN_PAGE) &&
-      isAuthenticated()
-    ) {
+      next({ name: STUDENT_LOGIN_PAGE });
+    } else if (to.name === STUDENT_LOGIN_PAGE && isAuthenticated()) {
       next({ name: CLASSROOM_LOBBY_PAGE });
+    } else if (to.name === CLASSROOM_LOBBY_PAGE && isTeacher()) {
+      next({ name: TEACHER_DASHBOARD_PAGE });
     } else {
       next();
     }

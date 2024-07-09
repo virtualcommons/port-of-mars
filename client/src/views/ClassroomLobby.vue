@@ -2,17 +2,17 @@
   <b-container fluid class="h-100 w-100 m-0 p-0 backdrop">
     <div class="mt-5 d-flex flex-grow-1 flex-column align-items-center justify-content-start pt-2">
       <div class="">
-        <h1>WELCOME TO THE LOBBY</h1>
+        <h1>Classroom Lobby</h1>
         <div class="text-center" style="padding: 1rem">
           <p>Total joined: {{ clients.length }}</p>
-          <p>Please wait patiently for your teacher to start game....</p>
+          <p>Please wait patiently for your teacher to start the game...</p>
           <div v-if="isTeacher" class="start-game-button" style="padding: 1rem">
             <b-button @click="startGame">Start Game</b-button>
           </div>
         </div>
       </div>
       <div class="player-grid">
-        <div class="player-card" v-for="client in clients" :key="client.id">
+        <div class="player-card content-container" v-for="client in clients" :key="client.id">
           <span>{{ client.username }}</span>
         </div>
       </div>
@@ -127,8 +127,6 @@ export default class ClassroomLobby extends Vue {
 }
 
 .player-card {
-  background-color: #333333;
-  border: 3px solid #444444;
   border-radius: 1rem;
   padding: 1rem;
   text-align: center;
