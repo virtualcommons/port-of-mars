@@ -16,7 +16,6 @@ export const PRIVACY_PAGE = "Privacy" as const;
 export const PROFILE_PAGE = "Profile" as const;
 export const STUDENT_LOGIN_PAGE = "StudentLogin" as const;
 export const STUDENT_CONFIRM_PAGE = "StudentConfirm" as const;
-export const EDUCATOR_LOGIN_PAGE = "EducatorLogin" as const;
 export const CLASSROOM_LOBBY_PAGE = "ClassroomLobby" as const;
 export const TEACHER_DASHBOARD_PAGE = "TeacherDashboard" as const;
 
@@ -39,7 +38,6 @@ export type Page =
   | "Privacy"
   | "StudentLogin"
   | "StudentConfirm"
-  | "EducatorLogin"
   | "ClassroomLobby"
   | "TeacherDashboard";
 
@@ -62,7 +60,6 @@ export const PAGES: Array<Page> = [
   PRIVACY_PAGE,
   STUDENT_LOGIN_PAGE,
   STUDENT_CONFIRM_PAGE,
-  EDUCATOR_LOGIN_PAGE,
   TEACHER_DASHBOARD_PAGE,
 ];
 
@@ -229,13 +226,6 @@ export const PAGE_META: {
       requiresAuth: false, //FIXME: change back to true
     },
   },
-  [EDUCATOR_LOGIN_PAGE]: {
-    path: "/educator-login",
-    name: EDUCATOR_LOGIN_PAGE,
-    meta: {
-      requiresAuth: false,
-    },
-  },
   [CLASSROOM_LOBBY_PAGE]: {
     path: "/classroom",
     name: CLASSROOM_LOBBY_PAGE,
@@ -244,14 +234,13 @@ export const PAGE_META: {
       requiresAuth: false,
     },
   },
-  [TEACHER_DASHBOARD_PAGE]:{
+  [TEACHER_DASHBOARD_PAGE]: {
     path: "/teacher-dashboard",
     name: TEACHER_DASHBOARD_PAGE,
     meta: {
       requiresAuth: false, //FIXME: change back to true
-      
-    }
-  }
+    },
+  },
 };
 
 export const PAGE_DEFAULT = PAGE_META[HOME_PAGE];

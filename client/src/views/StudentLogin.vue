@@ -3,80 +3,88 @@
     fluid
     class="h-100 w-100 d-flex flex-column justify-content-center align-items-center backdrop"
   >
-    <h2 class="mb-3">JOIN A GAME</h2>
-    <div
-      id="login-container"
-      class="content-container rounded d-flex flex-column justify-content-center align-items-center backdrop px-0"
-    >
-      <div>
+    <b-img
+      class="logo mb-5"
+      v-bind="{ height: 120, width: 400 }"
+      :src="$getAssetUrl(`images/logo-Port-of-Mars-White.svg`)"
+      alt="the planet mars illustrated in white above Port of Mars"
+    ></b-img>
+    <div class="d-flex flex-column justify-content-center align-items-center px-0">
+      <div style="width: 30rem">
         <b-tabs
-          active-nav-item-class="font-weight-bold text-uppercase text-danger"
-          active-tab-class="font-weight-bold text-success"
-          content-class="mt-3"
+          active-nav-item-class="font-weight-bold"
+          active-tab-class="font-weight-bold"
+          content-class="backdrop content-container rounded p-5 mt-3"
           @input="handleTabChange"
+          pills
         >
-          <b-tab title="JOIN A GAME" active>
-            <div class="d-flex flex-column align-items-center">
+          <b-tab active>
+            <template #title> <b-icon-stars class="mr-2" />Join a game </template>
+            <b-form @submit="handleJoinGame" class="d-flex flex-column align-items-center">
               <b-form-input
                 v-model="gameCode"
-                class="w-70 mb-3 text-center"
+                class="w-100 mb-3 text-center"
                 size="lg"
-                placeholder="GAME CODE"
-                @input="clearErrorMessage"
+                placeholder="Classroom code"
+                @input="clearErrorMsg"
                 required
               ></b-form-input>
-              <!-- Rounded Enter button -->
-              <b-button variant="primary" rounded @click="enterGame" class="w-70 mb-3" size="lg">
-                <h4 class="mb-0">Join Game</h4>
+              <b-button type="submit" variant="success" rounded class="w-100" size="lg">
+                <h4 class="mb-0">Enter</h4>
               </b-button>
-              <b-alert variant="danger" v-if="errorMessage" show>{{ errorMessage }}</b-alert>
-            </div>
+              <b-alert variant="danger" class="mt-5 mb-0 w-100 text-center" v-if="errorMsg" show>{{
+                errorMsg
+              }}</b-alert>
+            </b-form>
           </b-tab>
-          <b-tab title="RE-JOIN A GAME">
-            <div class="d-flex flex-column align-items-center">
+          <b-tab title="Rejoin a game" title-link-class="small">
+            <p class="text-muted text-left">
+              Enter a rejoin code to sign back in if you were disconnected from a game
+            </p>
+            <b-form @submit="handleRejoinGame" class="d-flex flex-column align-items-center">
               <b-form-input
                 v-model="rejoinCode"
-                :type="passwordVisible ? 'text' : 'password'"
-                class="w-70 mb-3 text-center"
+                type="text"
+                class="w-100 mb-3 text-center"
                 size="lg"
-                placeholder="REJOIN CODE"
+                placeholder="Rejoin code"
                 required
               ></b-form-input>
-              <!-- Rounded Enter button -->
-              <b-button variant="primary" rounded @click="enterGame" class="w-70 mb-3" size="lg">
-                <h4 class="mb-0">Re-join Game</h4>
+              <b-button type="submit" variant="success" rounded class="w-100" size="lg">
+                <h4 class="mb-0">Rejoin Game</h4>
               </b-button>
-              <b-alert variant="danger" v-if="rejoinErrorMessage" show>{{
-                rejoinErrorMessage
+              <b-alert variant="danger" class="mt-5 mb-0 w-100 text-center" v-if="errorMsg" show>{{
+                errorMsg
               }}</b-alert>
-            </div>
+            </b-form>
           </b-tab>
-          <b-tab title="SIGN IN AS TEACHER">
-            <div class="d-flex flex-column align-items-center">
+          <b-tab title-link-class="small">
+            <template #title> <b-icon-lock-fill class="mr-1" />Sign in as an educator</template>
+            <b-form @submit="handleTeacherLogin" class="d-flex flex-column align-items-center">
               <b-form-input
                 v-model="username"
-                class="w-70 mb-3 text-center"
+                class="w-100 mb-3 text-center"
                 size="lg"
-                placeholder="USERNAME"
-                @input="clearTeacherErrorMessage"
+                placeholder="Username"
+                @input="clearErrorMsg"
                 required
               ></b-form-input>
               <b-form-input
                 v-model="password"
                 :type="passwordVisible ? 'text' : 'password'"
-                class="w-70 mb-3 text-center"
+                class="w-100 mb-3 text-center"
                 size="lg"
-                placeholder="PASSWORD"
-                @input="clearTeacherErrorMessage"
+                placeholder="Password"
+                @input="clearErrorMsg"
                 required
               ></b-form-input>
-              <b-button variant="primary" rounded @click="enterTeacher" class="w-70 mb-3" size="lg">
+              <b-button type="submit" variant="success" rounded class="w-100" size="lg">
                 <h4 class="mb-0">Login</h4>
               </b-button>
-              <b-alert variant="danger" v-if="teacherErrorMessage" show>{{
-                teacherErrorMessage
+              <b-alert variant="danger" class="mt-5 mb-0 w-100 text-center" v-if="errorMsg" show>{{
+                errorMsg
               }}</b-alert>
-            </div>
+            </b-form>
           </b-tab>
         </b-tabs>
       </div>
@@ -97,86 +105,57 @@ import Messages from "@port-of-mars/client/components/global/Messages.vue";
 export default class StudentLogin extends Vue {
   authApi!: AuthAPI;
 
-  gameCode: string = "";
-  rejoinCode: string = "";
-  alreadyJoined: boolean = false;
-  password: string = "";
-  username: string = "";
-  errorMessage: string = "";
-  rejoinErrorMessage: string = "";
-  teacherErrorMessage: string = "";
-  passwordVisible: boolean = false; // For toggling password visibility
+  errorMsg = "";
+  gameCode = "";
+  rejoinCode = "";
+  password = "";
+  username = "";
+  passwordVisible = false;
 
   created() {
     this.authApi = new AuthAPI(this.$store, this.$ajax, this.$router);
   }
 
-
-  async enterGame() {
-    console.log("Enter button clicked");
-    this.errorMessage = "";
-
-    if (this.alreadyJoined) {
-      try {
-        console.log("Rejoin Code entered:", this.rejoinCode);
-        //add in api for student rejoin
-        await this.authApi.studentRejoin(this.rejoinCode);
-      } catch (error: any) {
-        this.rejoinErrorMessage =
-          error.response?.data?.message || "Rejoin code does not exist or is incorrect";
-      }
-    } else {
-      try {
-        console.log("Game code entered:", this.gameCode);
-        await this.authApi.studentLogin(this.gameCode);
-      } catch (error: any) {
-        this.errorMessage =
-          error.response?.data?.message || "Game code does not exist or is incorrect";
-      }
-    }
-  }
-
-  clearErrorMessage() {
-    this.errorMessage = "";
-  }
-
-  clearRejoinErrorMessage() {
-    this.rejoinErrorMessage = "";
-  }
-
-  clearTeacherErrorMessage() {
-    this.teacherErrorMessage = "";
-  }
-
-  async enterTeacher() {
-    console.log("Enter teacher dashboard button clicked");
-    this.teacherErrorMessage = "";
+  async handleJoinGame() {
     try {
-      console.log("Teacher username info entered:", this.username);
-      console.log("Teacher password entered:", this.password);
-      await this.authApi.teacherLogin({ username: this.username, password: this.password });
-    } catch (error: any) {
-      this.teacherErrorMessage =
-        error.response?.data?.message ||
-        "Educator account does not exist or incorrect login information";
+      await this.authApi.studentLogin(this.gameCode);
+    } catch (e) {
+      this.errorMsg = (e as Error).message;
     }
+  }
+
+  async handleRejoinGame() {
+    try {
+      await this.authApi.studentRejoin(this.rejoinCode);
+    } catch (e) {
+      this.errorMsg = (e as Error).message;
+    }
+  }
+
+  async handleTeacherLogin() {
+    try {
+      await this.authApi.teacherLogin({ username: this.username, password: this.password });
+    } catch (e) {
+      this.errorMsg = (e as Error).message;
+    }
+  }
+
+  clearErrorMsg() {
+    this.errorMsg = "";
+  }
+
+  handleTabChange() {
+    this.clearErrorMsg();
+    this.gameCode = "";
+    this.rejoinCode = "";
+    this.username = "";
+    this.password = "";
   }
 
   togglePasswordVisibility() {
-    this.passwordVisible = !this.passwordVisible; // Toggle password visibility
-  }
-
-  handleTabChange(index: number) {
-    //already joined set to true when on rejoin tab (index 1)
-    this.alreadyJoined = index === 1;
+    this.passwordVisible = !this.passwordVisible;
   }
 }
 </script>
 
-<style lang="scss" scoped>
-#login-container {
-  padding: 2rem;
-  width: 30rem;
-  text-align: center;
-}
-</style>
+<style lang="scss" scoped></style>

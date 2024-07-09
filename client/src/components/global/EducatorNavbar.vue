@@ -1,5 +1,5 @@
 <template>
-  <b-navbar tag="header" toggleable="xl" type="dark" variant="dark" class="w-100" fixed="top">
+  <b-navbar tag="header" toggleable="sm" type="dark" variant="dark" class="w-100" fixed="top">
     <b-navbar-brand :to="home">
       <b-img
         class="logo"
@@ -38,6 +38,7 @@
           <b>Classroom lobby</b>
         </b-nav-item>
         <b-nav-item
+          v-if="isTeacher"
           class="mx-2"
           :to="teacherDashboard"
           exact-active-class="active"
@@ -47,15 +48,6 @@
         </b-nav-item>
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto">
-        <b-nav-item class="mx-2" target="_blank" :href="$settings.DISCORD_URL" title="Discord"
-          ><b-icon-discord></b-icon-discord
-        ></b-nav-item>
-        <b-nav-item class="mx-2" target="_blank" :href="$settings.TWITTER_URL" title="Twitter"
-          ><b-icon-twitter></b-icon-twitter
-        ></b-nav-item>
-        <b-nav-item class="mx-2" target="_blank" :href="$settings.INSTAGRAM_URL" title="Instagram"
-          ><b-icon-instagram></b-icon-instagram
-        ></b-nav-item>
         <div v-if="isAuthenticated">
           <b-nav-item-dropdown class="ml-3" :to="manual" right>
             <template #button-content>
@@ -88,7 +80,6 @@ import {
   LEADERBOARD_PAGE,
   TOURNAMENT_DASHBOARD_PAGE,
   STUDENT_LOGIN_PAGE,
-  EDUCATOR_LOGIN_PAGE,
   CLASSROOM_LOBBY_PAGE,
   TEACHER_DASHBOARD_PAGE,
 } from "@port-of-mars/shared/routes";
@@ -114,7 +105,6 @@ export default class Navbar extends Vue {
   tournamentDashboard = { name: TOURNAMENT_DASHBOARD_PAGE };
   freePlayLobby = { name: FREE_PLAY_LOBBY_PAGE };
   studentLogin = { name: STUDENT_LOGIN_PAGE };
-  educatorLogin = { name: EDUCATOR_LOGIN_PAGE };
   classroomLobby = { name: CLASSROOM_LOBBY_PAGE };
   teacherDashboard = { name: TEACHER_DASHBOARD_PAGE };
 
@@ -128,6 +118,10 @@ export default class Navbar extends Vue {
 
   get isAdmin() {
     return this.$tstore.getters.isAdmin;
+  }
+
+  get isTeacher() {
+    return this.$tstore.getters.isTeacher;
   }
 
   get isTournamentEnabled() {
