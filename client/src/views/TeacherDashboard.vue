@@ -3,7 +3,7 @@
     <div class="h-100 w-100 d-flex flex-column">
       <b-row class="h-100 w-100 mx-auto flex-grow-1 p-3">
         <!--Classrooms Sidebar-->
-        <b-col cols="2" class="pl-5">
+        <b-col cols="2" class="pl-4">
           <div class="d-flex mb-2 ml-3">
             <b-row>
               <h4 class="mb-0 mt-2">Classrooms</h4>
@@ -42,42 +42,59 @@
                 <h4>{{ selectedClassroom.name }}</h4>
                 <h4>The Game Code for this Classroom is:</h4>
               </div>
-              <b-cols class="mt-1">
+              <b-cols class="mr-3">
                 <b-button variant="success">Start Game</b-button>
-                <b-button variant="danger" class="mx-3">Stop Game</b-button>
               </b-cols>
             </div>
             <b-row>
-              <div class="tabs-container">
+              <div class="tabs-container w-100 h-100">
                 <b-tabs pills card>
+                  <!-- classroom roster -->
                   <b-tab title="Students" class="tab-header">
-                    <p>Students in Classroom: {{ clients.length }}</p>
-                    <b-row class="overflow-y-auto overflow-x-hidden pt-1 px-4">
-                      <b-col cols="2" v-for="client in clients" :key="client.id" class="mb-4">
-                        <div class="player-card">
-                          <p class="mb-1">[First Name] [Last Initial].</p>
-                          <span>{{ client.username }}</span>
+                    <b-card-text>Students in Classroom: {{ clients.length }}</b-card-text>
+                    <b-row>
+                      <b-col cols="12">
+                        <div class="content-container">
+                          <b-table
+                            dark
+                            sticky-header
+                            sort-icon-left
+                            class="h-100 m-0 custom-table"
+                            style="max-height: 61vh; overflow-y: auto"
+                            :fields="clientFields"
+                            :items="clients"
+                            sort-by="lastName"
+                            :sort-desc="true"
+                          >
+                            <template #cell(status)="data">
+                              <b-badge
+                                :variant="data.item.status === 'active' ? 'success' : 'danger'"
+                              >
+                                {{ data.item.status ? data.item.status : "inactive" }}
+                              </b-badge>
+                            </template>
+                          </b-table>
                         </div>
                       </b-col>
                     </b-row>
                   </b-tab>
+
                   <b-tab title="Group">
                     <div v-if="rooms.length < 1">
                       <h3 class="ml-1">Groups will display here once a game has started.</h3>
                     </div>
-                    <b-row class="mb-2" style="width: 80.5vw" v-else>
-                      <!-- game list -->
+                    <b-row class="mb-2" v-else>
+                      <!-- groups list -->
                       <b-col cols="6">
-                        <h4 class="header-nowrap">Games List</h4>
-                        <div
-                          class="h-100-header w-100 content-container overflow-y-auto"
-                          style="height: 28vh"
-                        >
+                        <h4 class="header-nowrap">Groups List</h4>
+                        <div class="content-container" style="height: 28vh">
                           <b-table
                             dark
                             sticky-header
                             small
-                            class="h-100 custom-table overflow-hidden"
+                            sort-icon-left
+                            class="m-0 custom-table"
+                            style="max-height: 27.5vh"
                             :fields="roomFields"
                             :items="rooms"
                             sort-by="elapsed"
@@ -105,10 +122,7 @@
                       <!-- info -->
                       <b-col cols="6">
                         <h4 class="header-nowrap">Inspect Data</h4>
-                        <div
-                          class="h-100-header w-100 content-container overflow-y-auto"
-                          style="height: 28vh"
-                        >
+                        <div class="content-container overflow-auto" style="height: 28vh">
                           <div v-if="inspectedRoomId" class="h-100 p-2">
                             <div class="d-flex align-items-start">
                               <h5 class="mr-2">System Health</h5>
@@ -148,20 +162,14 @@
                       <!-- mars log -->
                       <b-col cols="6">
                         <h4 class="header-nowrap">Mars Log</h4>
-                        <div
-                          class="h-100-header w-100 content-container overflow-y-auto"
-                          style="height: 28vh"
-                        >
+                        <div class="content-container overflow-auto" style="height: 28vh">
                           <MarsLog :logs="inspectData.marsLog" />
                         </div>
                       </b-col>
                       <!-- chat -->
                       <b-col cols="6">
                         <h4 class="header-nowrap">Chat</h4>
-                        <div
-                          class="h-100-header w-100 content-container overflow-y-auto"
-                          style="height: 28vh"
-                        >
+                        <div class="content-container overflow-auto" style="height: 28vh">
                           <Chat
                             :messages="inspectData.chatMessages"
                             :readonly="true"
@@ -172,48 +180,20 @@
                     </b-row>
                   </b-tab>
                   <b-tab title="Reports" class="tab-header">
-                    <b-row class="mb-2" style="width: 80.5vw">
-                      <b-col cols="8">
-                        <!-- report list -->
-                        <h4 class="header-nowrap">Reported Chat Messages</h4>
-                        <div class="h-100-header w-100 content-container" style="height: 61vh">
-                          <b-table
-                            dark
-                            sticky-header
-                            sort-icon-left
-                            class="h-100 m-0"
-                            style="max-height: none"
-                            :fields="reportFields"
-                            :items="reports"
-                            sort-by="dateCreated"
-                            :sort-desc="true"
-                          ></b-table>
-                        </div>
-                      </b-col>
-                      <b-col cols="4">
-                        <!-- action log -->
-                        <h4 class="header-nowrap">Actions Log</h4>
-                        <div class="h-100-header w-100 content-container">
-                          <b-table
-                            dark
-                            sticky-header
-                            sort-icon-left
-                            class="h-100 m-0"
-                            style="max-height: none"
-                            :fields="moderationActionFields"
-                            :items="moderationActions"
-                          ></b-table>
-                        </div>
-                      </b-col>
+                    <div v-if="completedGames < 1">
+                      <h3 class="ml-1">Reports will appear once games have finished.</h3>
+                    </div>
+                    <b-row class="mb-2" v-else>
+                      <div class="h-100 w-100 content-container"></div>
                     </b-row>
                   </b-tab>
-                  <b-tab title="Settings" class="tab-header">
-                    <b-card-text>Classroom Settings</b-card-text>
+                  <b-tab title="Settings">
+                    <b-card-text>Classroom Settings </b-card-text>
                     <b-row class="mb-3 d-flex align-items-left">
                       <b-col cols="6"
                         ><b-button
                           :pressed="false"
-                          class="w-150 mb-2"
+                          class="w-150"
                           variant="warning"
                           @click="deleteClassroom"
                           >Delete Classroom</b-button
@@ -222,28 +202,28 @@
                       <b-col cols="6"
                         ><b-button
                           :pressed="false"
-                          class="w-150 mb-2 text-nowrap"
+                          class="w-150 text-nowrap"
                           variant="warning"
                           @click="toggleRename"
                           >Rename Classroom</b-button
                         ></b-col
                       >
                     </b-row>
-                    <b-collapse class="pt-1" id="renameCollapase" v-model="isCollapsed">
-                      <b-form-input
-                        v-model="classroomName"
-                        placeholder="Enter classroom name (max. 20 characters)"
-                        @input="clearRenameErrorMessage"
-                      >
-                      </b-form-input>
+                    <b-collapse id="my-collapase" v-model="isCollapsed">
+                      <b-form-group description="Must be no more than 20 characters.">
+                        <b-form-input
+                          v-model="classroomName"
+                          placeholder="Enter classroom name"
+                        ></b-form-input>
+                      </b-form-group>
                       <b-button
-                        class="mt-1 mb-1"
+                        classroomName-clear
                         size="sm"
                         variant="success"
                         @click="renameClassroom"
                         >Submit</b-button
                       >
-                      <b-alert variant="danger" v-if="renameErrorMessage" show>{{
+                      <b-alert class="mt-1" variant="danger" v-if="renameErrorMessage" show>{{
                         renameErrorMessage
                       }}</b-alert>
                     </b-collapse>
@@ -281,6 +261,8 @@ import {
   ChatReportData,
   ModerationActionClientData,
 } from "@port-of-mars/shared/types";
+import { AdminAPI } from "../api/admin/request";
+import { removeAllListeners } from "process";
 
 @Component({
   components: {
@@ -305,8 +287,14 @@ export default class TeacherDashboard extends Vue {
   isCollapsed = false;
   classroomName = "";
   renameErrorMessage = "";
+  completedGames = 1; //Temporary until finished games are implemented
 
-  clientFields = [{ key: "username", label: "Player" }];
+  clientFields = [
+    { key: "username", label: "Username" },
+    { key: "firstName", label: "First" },
+    { key: "lastName", label: "Last", sortable: true },
+    { key: "status", label: "Lobby Status", sortable: true },
+  ];
 
   classrooms: Classroom[] = [
     { id: 1, name: "Classroom #1" },
@@ -324,7 +312,14 @@ export default class TeacherDashboard extends Vue {
     { key: "clients", label: "Players" },
     { key: "inspect", label: "" },
   ];
-  rooms: any = [{ roomId: "12sfa98h", elapsed: 0, clients: 5, inspect: "N/A" }]; //Temporary room
+  rooms: any = [
+    { roomId: "1", elapsed: 0, clients: 5 },
+    { roomId: "2", elapsed: 0, clients: 3 },
+    { roomId: "3", elapsed: 0, clients: 5 },
+    { roomId: "4", elapsed: 0, clients: 5 },
+    { roomId: "5", elapsed: 0, clients: 5 },
+    { roomId: "6", elapsed: 0, clients: 5 },
+  ]; //Mock room data
 
   inspectData: InspectData = {
     players: [],
@@ -338,6 +333,40 @@ export default class TeacherDashboard extends Vue {
     { key: "points", label: "Points", tdClass: "extra-small" },
   ];
   inspectedRoomId: string = "";
+
+  formatTime(time: number) {
+    const mins = Math.floor(time / 1000 / 60);
+    const hours = Math.floor(mins / 60);
+    if (hours > 0) {
+      return `${hours} hour${hours === 1 ? "" : "s"}`;
+    } else {
+      return `${mins} min${mins === 1 ? "" : "s"}`;
+    }
+  }
+
+  isInspectedRoom(roomId: string) {
+    return this.inspectedRoomId === roomId;
+  }
+
+  async fetchInspectData(roomId: string) {
+    if (roomId) {
+      //FIXME: using admin api, inspecting causes redirecting error
+      this.inspectedRoomId = roomId;
+      try {
+        const data = await this.adminApi.getInspectData(roomId);
+        Vue.set(this, "inspectData", data);
+      } catch (e) {
+        console.log(e);
+        Vue.set(this, "inspectData", {
+          players: [],
+          systemHealth: 0,
+          marsLog: [],
+          chatMessages: [],
+        });
+        this.inspectedRoomId = "";
+      }
+    }
+  }
 
   //WIP: Implement into the reports container
   reports: Array<ChatReportData> = [];
@@ -417,40 +446,28 @@ export default class TeacherDashboard extends Vue {
     this.sidebarExpanded = !this.sidebarExpanded;
   }
 
-  formatTime(time: number) {
-    const mins = Math.floor(time / 1000 / 60);
-    const hours = Math.floor(mins / 60);
-    if (hours > 0) {
-      return `${hours} hour${hours === 1 ? "" : "s"}`;
-    } else {
-      return `${mins} min${mins === 1 ? "" : "s"}`;
-    }
-  }
-
-  isInspectedRoom(roomId: string) {
-    return this.inspectedRoomId === roomId;
-  }
-
-  async fetchInspectData(roomId: string) {
-    //TODO: Implement data from game session depending on group selected
-  }
-
   get clients() {
     return this.studentsByClassroom[this.selectedClassroom.id] || [];
   }
 
   studentsByClassroom: { [key: number]: Student[] } = {
     1: [
-      { username: "Player 1", id: 1, dateJoined: new Date().getTime() },
-      { username: this.$store.state.user.username, id: 2, dateJoined: new Date().getTime() },
+      {
+        username: "Player 1",
+        id: 1,
+        firstName: "Mary",
+        lastName: "Jones",
+        dateJoined: new Date().getTime(),
+        status: "active",
+      },
+      { username: "Player 2", id: 2, dateJoined: new Date().getTime() },
       { username: "Player 3", id: 3, dateJoined: new Date().getTime() },
       { username: "Player 4", id: 4, dateJoined: new Date().getTime() },
       { username: "Player 5", id: 5, dateJoined: new Date().getTime() },
       { username: "Player 6", id: 6, dateJoined: new Date().getTime() },
-      { username: "Player 7", id: 7, dateJoined: new Date().getTime() },
+      { username: "Player 7", id: 7, dateJoined: new Date().getTime(), status: "active" },
       { username: "Player 8", id: 8, dateJoined: new Date().getTime() },
       { username: "Player 9", id: 9, dateJoined: new Date().getTime() },
-      { username: "Player 10", id: 10, dateJoined: new Date().getTime() },
     ],
     2: [
       { username: "Player 11", id: 11, dateJoined: new Date().getTime() },
@@ -466,14 +483,6 @@ export default class TeacherDashboard extends Vue {
       { username: "Player 21", id: 21, dateJoined: new Date().getTime() },
       { username: "Player 22", id: 22, dateJoined: new Date().getTime() },
       { username: "Player 23", id: 23, dateJoined: new Date().getTime() },
-      { username: "Player 24", id: 24, dateJoined: new Date().getTime() },
-      { username: "Player 25", id: 25, dateJoined: new Date().getTime() },
-    ],
-
-    3: [
-      { username: "Player 26", id: 26, dateJoined: new Date().getTime() },
-      { username: "Player 27", id: 27, dateJoined: new Date().getTime() },
-      { username: "Player 28", id: 28, dateJoined: new Date().getTime() },
     ],
   };
 
@@ -493,38 +502,16 @@ export default class TeacherDashboard extends Vue {
 
 <style lang="scss" scoped>
 .classrooms {
-  height: 80vh;
+  padding: 0.1rem;
+  height: 82vh;
   overflow-y: auto;
 }
 .classrooms::-webkit-scrollbar {
   display: none;
 }
 
-.player-card {
-  background-color: #333333;
-  border: 2px solid #444444;
-  border-radius: 1rem;
-  padding: 0.5rem 1rem;
-  overflow: hidden;
-  text-align: left;
-  max-width: 4.5rem;
-  max-width: 19rem;
-}
-
-.sidebar {
-  //FIXME: Does not show up in the webpage
-  background-color: lightgrey;
-  padding: 3rem;
-  height: 100vh;
-}
-
 .icon {
   vertical-align: text-top !important;
   font-size: 2rem;
-}
-
-.content-container-collapsed {
-  padding-left: 1rem;
-  margin-left: 1rem;
 }
 </style>
