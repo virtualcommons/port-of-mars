@@ -46,13 +46,21 @@ describe("the educator service", () => {
   it("classrooms can be created", async () => {
     const descriptor = "desc";
     for (let i = 0; i < 10; i++) {
-      await sp.educator.createClassroomForTeacher(teacher.user.username, descriptor + `${i}`);
+      await sp.educator.createNewClassroom(teacher, descriptor + `${i}`);
     }
     const classroomRepo = educatorService.em.getRepository(Classroom);
     const data = await classroomRepo.find({ select: { authToken: true } });
     const tokens = data.map(classroom => classroom.authToken);
     const uniqueTokens = new Set(tokens);
     expect(tokens.length).toEqual(uniqueTokens.size);
+  });
+
+  it("classrooms can be updated", async () => {
+    let classroom = await educatorService.createNewClassroom(teacher, "update me");
+    const updatedDesc = "updated";
+    await educatorService.updateClassroom(teacher, classroom.id, updatedDesc);
+    classroom = await educatorService.getClassroomById(classroom.id);
+    expect(classroom.descriptor).toEqual(updatedDesc);
   });
 
   it("students can sign up", async () => {
@@ -85,5 +93,9 @@ describe("the educator service", () => {
     */
 
   });
+
+  
+
+
   afterAll(async () => rollbackTransaction(qr));
 });

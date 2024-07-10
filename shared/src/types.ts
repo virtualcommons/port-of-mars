@@ -532,3 +532,10 @@ export interface StudentAuthData {
   classroomId: number;
   rejoinCode: string;
 }
+
+export interface StudentData {
+  id: number;
+  classroomId: number;
+  user: ClientSafeUser;
+  inLobby: boolean;
+}
