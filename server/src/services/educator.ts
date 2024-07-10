@@ -2,13 +2,14 @@ import { BaseService } from "@port-of-mars/server/services/db";
 import { matchMaker } from "colyseus";
 import { Teacher, Classroom, Student, User, Game } from "@port-of-mars/server/entity";
 import { GameRoom } from "@port-of-mars/server/rooms/game"; //FIXME; may need to adjust for educator version
-import { ServerError, generateUsername, generateCode } from "@port-of-mars/server/util";
+import { ServerError, generateUsername, generateCode, toClientSafeUser } from "@port-of-mars/server/util";
 import { getServices } from "@port-of-mars/server/services";
 import { error } from "console";
 import { getRepository } from "typeorm";
 import { ClassroomLobbyRoom } from "../rooms/lobby/classroom";
 import {
   LobbyActivityData,
+  StudentData,
 } from "@port-of-mars/shared/types";
 // import { settings } from "@port-of-mars/server/settings";
 
@@ -152,13 +153,20 @@ export class EducatorService extends BaseService {
   }
 
   //get all students in a specified classroom
-  async getStudentsByClassroomId(classroomId: number): Promise<any>{
+  async getStudentsByClassroomId(classroomId: number): Promise<StudentData[]>{
     const studentRepo = this.em.getRepository(Student);
-    const students = studentRepo.find({
+    const students = await studentRepo.find({
       where: {classroomId: classroomId},
-      relations: ["classroom"],
+      relations: ["user"],
     });
-    return students;
+    return students.map((student) => {
+      return {
+        id: student.id,
+        classroomId: student.classroomId,
+        user: toClientSafeUser(student.user),
+        inLobby: false // FIXME: need to look this up
+      };
+    });
   }
 
 
