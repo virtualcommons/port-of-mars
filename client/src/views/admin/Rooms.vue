@@ -32,6 +32,7 @@
               dark
               sticky-header
               small
+              sort-icon-left
               class="h-100 m-0 custom-table"
               :fields="roomFields"
               :items="rooms"
