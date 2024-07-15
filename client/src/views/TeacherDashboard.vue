@@ -1,12 +1,12 @@
 <template>
-  <b-container fluid class="h-100 w-100 m-0 p-0 backdrop">
+  <b-container fluid class="h-100 w-100 m-0 p-0 backdrop overflow-hidden">
     <div class="h-100 w-100 d-flex flex-column">
       <b-row class="h-100 w-100 mx-auto flex-grow-1 p-3">
         <!--Classrooms Sidebar-->
-        <b-col cols="2" class="pl-4">
-          <div class="d-flex mb-2 ml-3">
+        <b-col cols="2">
+          <div class="mb-2 ml-3">
             <b-row>
-              <h4 class="mb-0 mt-2">Classrooms</h4>
+              <h4 class="header-nowrap mt-2">Classrooms</h4>
               <p class="h4 mb-1">
                 <b-icon
                   icon="plus"
@@ -36,7 +36,7 @@
         </b-col>
         <!--Main dashboard-->
         <b-col cols="10" class="content-container h-100 w-100 p-3 overflow-hidden">
-          <div v-if="classrooms.length > 0">
+          <div v-if="classrooms.length > 0" class="h-100 w-100">
             <div class="row pl-3 justify-content-between">
               <div>
                 <h4>{{ selectedClassroom?.descriptor }}</h4>
@@ -51,16 +51,24 @@
                 <b-tabs pills card>
                   <!-- classroom roster -->
                   <b-tab title="Students" class="tab-header">
-                    <b-card-text>Students in Classroom: {{ clients.length }}</b-card-text>
-                    <b-row>
-                      <b-col cols="12">
+                    <div
+                      v-if="clients.length < 1"
+                      class="h-100 d-flex align-items-center justify-content-center"
+                    >
+                      <p style="color: rgba(241, 224, 197, 0.25)">
+                        Waiting for students to join...
+                      </p>
+                    </div>
+                    <div v-else>
+                      <b-col cols="13">
+                        <b-card-text>Students in Classroom: {{ clients.length }}</b-card-text>
                         <div class="content-container">
                           <b-table
                             dark
                             sticky-header
                             sort-icon-left
                             class="h-100 m-0 custom-table"
-                            style="max-height: 61vh; overflow-y: auto"
+                            style="overflow-y: auto; max-height: 60vh"
                             :fields="clientFields"
                             :items="clients"
                             sort-by="lastName"
@@ -76,41 +84,157 @@
                           </b-table>
                         </div>
                       </b-col>
-                    </b-row>
+                    </div>
                   </b-tab>
 
                   <b-tab title="Group">
-                    <div v-if="rooms.length < 1">
-                      <h3 class="ml-1">Groups will display here once a game has started.</h3>
+                    <div
+                      v-if="rooms.length < 1"
+                      class="h-100 d-flex align-items-center justify-content-center"
+                    >
+                      <p style="color: rgba(241, 224, 197, 0.25)">
+                        Groups will display here once a game session has started.
+                      </p>
                     </div>
-                    <b-row class="mb-2" v-else>
-                      <!-- groups list -->
-                      <b-col cols="6">
-                        <h4 class="header-nowrap">Groups List</h4>
-                        <div class="content-container" style="height: 28vh">
+                    <div v-else>
+                      <b-row class="mb-2">
+                        <!-- groups list -->
+                        <b-col cols="6">
+                          <h4 class="header-nowrap">Groups List</h4>
+                          <div class="content-container" style="height: 28vh">
+                            <b-table
+                              dark
+                              sticky-header
+                              small
+                              sort-icon-left
+                              class="custom-table"
+                              style="max-height: 27.5vh"
+                              :fields="roomFields"
+                              :items="rooms"
+                              sort-by="elapsed"
+                              :sort-desc="true"
+                            >
+                              <template #cell(elapsed)="data">
+                                {{ formatTime(data.item.elapsed) }}
+                              </template>
+                              <template #cell(inspect)="data">
+                                <b-button
+                                  variant="primary"
+                                  size="sm"
+                                  class="float-right"
+                                  :disabled="isInspectedRoom(data.item.roomId)"
+                                  @click="fetchInspectData(data.item.roomId)"
+                                  >Inspect
+                                  <b-icon-box-arrow-right
+                                    class="float-right ml-2"
+                                  ></b-icon-box-arrow-right>
+                                </b-button>
+                              </template>
+                            </b-table>
+                          </div>
+                        </b-col>
+                        <!-- info -->
+                        <b-col cols="6">
+                          <h4 class="header-nowrap">Inspect Data</h4>
+                          <div class="content-container overflow-auto" style="height: 28vh">
+                            <div v-if="inspectedRoomId" class="h-100 p-2">
+                              <div class="d-flex align-items-start">
+                                <h5 class="mr-2">System Health</h5>
+                                <StatusBar class="statusbar" :setWidth="inspectData.systemHealth" />
+                                <h5 class="ml-2">{{ inspectData.systemHealth }}</h5>
+                              </div>
+                              <b-table
+                                dark
+                                sticky-header
+                                small
+                                thead-class="hidden-header"
+                                class="h-75 m-0 custom-table"
+                                :fields="inspectFields"
+                                :items="inspectData.players"
+                              >
+                                <template #cell(username)="data">
+                                  {{ data.item.username }}
+                                  <b-badge v-if="data.item.isBot">bot</b-badge>
+                                </template>
+                                <template #cell(points)="data">
+                                  {{ data.item.points }} points
+                                </template>
+                              </b-table>
+                            </div>
+                          </div>
+                        </b-col>
+                      </b-row>
+                      <b-row>
+                        <!-- mars log -->
+                        <b-col cols="6">
+                          <h4 class="header-nowrap">Mars Log</h4>
+                          <div class="content-container overflow-auto" style="height: 28vh">
+                            <MarsLog :logs="inspectData.marsLog" />
+                          </div>
+                        </b-col>
+                        <!-- chat -->
+                        <b-col cols="6">
+                          <h4 class="header-nowrap">Chat</h4>
+                          <div class="content-container overflow-auto" style="height: 28vh">
+                            <Chat
+                              :messages="inspectData.chatMessages"
+                              :readonly="true"
+                              :reportable="false"
+                            />
+                          </div>
+                        </b-col>
+                      </b-row>
+                    </div>
+                  </b-tab>
+
+                  <b-tab title="Reports" class="tab-header">
+                    <div
+                      v-if="completedGames < 1"
+                      class="h-100 d-flex align-items-center justify-content-center"
+                    >
+                      <p style="color: rgba(241, 224, 197, 0.25)">
+                        Reports will display once games have concluded.
+                      </p>
+                    </div>
+                    <b-row v-else>
+                      <!-- finished games -->
+                      <b-col :cols="inspectedGame ? '7' : '12'">
+                        <h4 class="header-nowrap">Completed Games</h4>
+                        <div class="content-container">
                           <b-table
                             dark
                             sticky-header
-                            small
-                            sort-icon-left
-                            class="m-0 custom-table"
-                            style="max-height: 27.5vh"
-                            :fields="roomFields"
-                            :items="rooms"
-                            sort-by="elapsed"
+                            class="h-100 m-0 custom-table"
+                            style="overflow-y: auto; max-height: 64vh"
+                            :fields="gameFields"
+                            :items="games"
+                            sort-by="highScore"
                             :sort-desc="true"
                           >
-                            <template #cell(elapsed)="data">
-                              {{ formatTime(data.item.elapsed) }}
+                            <template #cell(timeFinalized)="data">
+                              {{ new Date(data.item.timeFinalized).toLocaleTimeString() }}
+                            </template>
+                            <template #cell(status)="data">
+                              <b-badge
+                                :variant="data.item.status === 'victory' ? 'success' : 'danger'"
+                              >
+                                {{ data.item.status }}
+                              </b-badge>
+                            </template>
+                            <template #cell(players)="data">
+                              <b-icon-person-fill
+                                v-for="i in data.item.players"
+                                :key="'human' + i"
+                              />
                             </template>
                             <template #cell(inspect)="data">
                               <b-button
-                                variant="primary"
+                                variant="light"
                                 size="sm"
                                 class="float-right"
-                                :disabled="isInspectedRoom(data.item.roomId)"
-                                @click="fetchInspectData(data.item.roomId)"
-                                >Inspect
+                                :disabled="data.item.id === inspectedGame?.id"
+                                @click="inspectedGame = data.item"
+                                >Scoreboard
                                 <b-icon-box-arrow-right
                                   class="float-right ml-2"
                                 ></b-icon-box-arrow-right>
@@ -118,102 +242,59 @@
                             </template>
                           </b-table>
                         </div>
+                        <!-- scoreboard -->
                       </b-col>
-                      <!-- info -->
-                      <b-col cols="6">
-                        <h4 class="header-nowrap">Inspect Data</h4>
-                        <div class="content-container overflow-auto" style="height: 28vh">
-                          <div v-if="inspectedRoomId" class="h-100 p-2">
-                            <div class="d-flex align-items-start">
-                              <h5 class="mr-2">System Health</h5>
-                              <StatusBar class="statusbar" :setWidth="inspectData.systemHealth" />
-                              <h5 class="ml-2">{{ inspectData.systemHealth }}</h5>
-                            </div>
-                            <b-table
-                              dark
-                              sticky-header
-                              small
-                              thead-class="hidden-header"
-                              class="h-75 m-0 custom-table"
-                              :fields="inspectFields"
-                              :items="inspectData.players"
-                            >
-                              <template #cell(username)="data">
-                                {{ data.item.username }}
-                                <b-badge v-if="data.item.isBot">bot</b-badge>
-                              </template>
-                              <template #cell(points)="data">
-                                {{ data.item.points }} points
-                              </template>
-                            </b-table>
-                          </div>
-                          <div
-                            v-else
-                            class="h-100 d-flex align-items-center justify-content-center"
+                      <b-col v-if="inspectedGame" cols="5" class="h-100 w-100">
+                        <h4 class="header-nowrap">Game #{{ inspectedGame.id }} Scoreboard</h4>
+                        <div class="content-container">
+                          <b-table
+                            dark
+                            sticky-header
+                            class="m-0 custom-table"
+                            :tbody-tr-attr="playerRowStyle"
+                            :fields="playerFields"
+                            :items="inspectedGame.players"
+                            sort-by="timeFinalized"
+                            :sort-desc="true"
                           >
-                            <p style="color: rgba(241, 224, 197, 0.25)">
-                              Inspect a game to see its state.
-                            </p>
-                          </div>
-                        </div>
-                      </b-col>
-                    </b-row>
-                    <b-row>
-                      <!-- mars log -->
-                      <b-col cols="6">
-                        <h4 class="header-nowrap">Mars Log</h4>
-                        <div class="content-container overflow-auto" style="height: 28vh">
-                          <MarsLog :logs="inspectData.marsLog" />
-                        </div>
-                      </b-col>
-                      <!-- chat -->
-                      <b-col cols="6">
-                        <h4 class="header-nowrap">Chat</h4>
-                        <div class="content-container overflow-auto" style="height: 28vh">
-                          <Chat
-                            :messages="inspectData.chatMessages"
-                            :readonly="true"
-                            :reportable="false"
-                          />
+                            <template #cell(username)="data">
+                              <b-icon-person-fill></b-icon-person-fill>
+                              {{ data.item.username }}
+                            </template>
+                          </b-table>
                         </div>
                       </b-col>
                     </b-row>
                   </b-tab>
-                  <b-tab title="Reports" class="tab-header">
-                    <div v-if="completedGames < 1">
-                      <h3 class="ml-1">Reports will appear once games have finished.</h3>
-                    </div>
-                    <b-row class="mb-2" v-else>
-                      <div class="h-100 w-100 content-container"></div>
-                    </b-row>
-                  </b-tab>
-                  <b-tab title="Settings">
+
+                  <b-tab title="Settings" class="w-75">
                     <b-card-text>Classroom Settings </b-card-text>
-                    <b-row class="mb-3 d-flex align-items-left">
-                      <b-col cols="6"
+                    <b-row class="mb-3">
+                      <b-col cols="2"
                         ><b-button
                           :pressed="false"
-                          class="w-150"
+                          class="text-nowrap"
                           variant="warning"
                           @click="deleteClassroom"
                           >Delete Classroom</b-button
                         ></b-col
                       >
-                      <b-col cols="6"
+                      <b-col
                         ><b-button
                           :pressed="false"
-                          class="w-150 text-nowrap"
+                          class="text-nowrap"
                           variant="warning"
                           @click="toggleRename"
                           >Rename Classroom</b-button
                         ></b-col
                       >
                     </b-row>
-                    <b-collapse id="my-collapase" v-model="isCollapsed">
+                    <b-collapse v-model="isCollapsed" style="width: 35%">
                       <b-form-group description="Must be no more than 20 characters.">
                         <b-form-input
                           v-model="classroomDescriptor"
                           placeholder="Enter classroom name"
+                          @input="clearRenameErrorMessage"
                         ></b-form-input>
                       </b-form-group>
                       <b-button
@@ -256,13 +337,7 @@ import Countdown from "@port-of-mars/client/components/global/Countdown.vue";
 import HelpPanel from "@port-of-mars/client/components/lobby/HelpPanel.vue";
 import Messages from "@port-of-mars/client/components/global/Messages.vue";
 import LobbyChat from "@port-of-mars/client/components/lobby/LobbyChat.vue";
-import {
-  InspectData,
-  ChatReportData,
-  ModerationActionClientData,
-} from "@port-of-mars/shared/types";
-import { AdminAPI } from "../api/admin/request";
-import { removeAllListeners } from "process";
+import { InspectData, AdminGameData } from "@port-of-mars/shared/types";
 
 @Component({
   components: {
@@ -283,7 +358,6 @@ export default class TeacherDashboard extends Vue {
   consent = { name: CONSENT_PAGE };
   isTeacher = false;
   startGame = {};
-  sidebarExpanded = true;
   isCollapsed = false;
   classroomDescriptor = "";
   renameErrorMessage = "";
@@ -345,43 +419,65 @@ export default class TeacherDashboard extends Vue {
   }
 
   async fetchInspectData(roomId: string) {
-    if (roomId) {
-      //FIXME: using admin api, inspecting causes redirecting error
-      this.inspectedRoomId = roomId;
-      try {
-        const data = await this.adminApi.getInspectData(roomId);
-        Vue.set(this, "inspectData", data);
-      } catch (e) {
-        console.log(e);
-        Vue.set(this, "inspectData", {
-          players: [],
-          systemHealth: 0,
-          marsLog: [],
-          chatMessages: [],
-        });
-        this.inspectedRoomId = "";
-      }
-    }
+    //FIXME: using admin api, inspecting causes redirecting error
   }
 
   //WIP: Implement into the reports container
-  reports: Array<ChatReportData> = [];
-  reportFields = [
-    { key: "dateCreated", label: "Time", sortable: true },
-    { key: "roomId", label: "Room" },
-    { key: "user", label: "User" },
-    { key: "message", label: "Message" },
-    { key: "action", label: "Action" },
+  gameFields = [
+    { key: "id", label: "Room ID" },
+    { key: "timeFinalized", label: "Time Finished" },
+    { key: "status", label: "Status" },
+    { key: "players", label: "Players" },
+    { key: "highScore", label: "High Score" },
+    { key: "inspect", label: "" },
   ];
+  playerFields = [
+    { key: "username", label: "Username" },
+    { key: "role", label: "Role" },
+    { key: "points", label: "Points" },
+  ];
+  games = [
+    //Temporary finished games
+    {
+      id: 1,
+      timeFinalized: new Date(),
+      status: "defeat",
+      players: [
+        { username: "1", role: "Researcher", points: 5 },
+        { username: "2", role: "Curator", points: 3 },
+        { username: "3", role: "Pioneer", points: 8 },
+        { username: "4", role: "Entrepreneur", points: 12 },
+        { username: "5", role: "Politician", points: 2 },
+      ],
+      highScore: 30,
+      inspect: "",
+    },
+    {
+      id: 2,
+      timeFinalized: new Date(),
+      status: "victory",
+      players: [
+        { username: "1", role: "Researcher", points: 12 },
+        { username: "2", role: "Curator", points: 56 },
+        { username: "3", role: "Pioneer", points: 24 },
+      ],
+      highScore: 92,
+      inspect: "",
+    },
+  ];
+  inspectedGame: any | null = null;
 
-  moderationActions: Array<ModerationActionClientData> = [];
-  moderationActionFields = [
-    { key: "adminUsername", label: "Admin" },
-    { key: "username", label: "User" },
-    { key: "action", label: "Action", sortable: true },
-    { key: "dateMuteExpires", label: "Expires" },
-    { key: "undo", label: "" },
-  ];
+  getHumanCount(players: AdminGameData["players"]) {
+    //TODO: Implement once we can get finished games req.
+  }
+
+  playerRowStyle(item: any, type: any) {
+    if (!item || type !== "row") return;
+    else
+      return {
+        style: `background-color: var(--color-${item.role});`,
+      };
+  }
 
   selectClassroom(classroom: Classroom) {
     console.log("Selected Classroom:", classroom);
@@ -457,9 +553,6 @@ export default class TeacherDashboard extends Vue {
   toggleRename() {
     this.isCollapsed = !this.isCollapsed;
   }
-  toggleSidebar() {
-    this.sidebarExpanded = !this.sidebarExpanded;
-  }
 
   get clients() {
     return this.studentsByClassroom[this.selectedClassroom.id] || [];
@@ -480,7 +573,7 @@ export default class TeacherDashboard extends Vue {
       { username: "Player 4", id: 4, dateJoined: new Date().getTime() },
       { username: "Player 5", id: 5, dateJoined: new Date().getTime() },
       { username: "Player 6", id: 6, dateJoined: new Date().getTime() },
-      { username: "Player 7", id: 7, dateJoined: new Date().getTime(), status: "active" },
+      { username: "Player 7", id: 7, dateJoined: new Date().getTime() },
       { username: "Player 8", id: 8, dateJoined: new Date().getTime() },
       { username: "Player 9", id: 9, dateJoined: new Date().getTime() },
     ],
@@ -530,7 +623,7 @@ export default class TeacherDashboard extends Vue {
 <style lang="scss" scoped>
 .classrooms {
   padding: 0.1rem;
-  height: 82vh;
+  height: 83%;
   overflow-y: auto;
 }
 .classrooms::-webkit-scrollbar {
