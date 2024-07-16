@@ -122,4 +122,25 @@ export class EducatorAPI {
       throw e;
     }
   }
+
+  async startGames(classroomId: number): Promise<any> {
+    const payload = { classroomId };
+    try {
+      return await this.ajax.post(
+        url("/educator/start-classroom-games"),
+        ({ data, status }) => {
+          if (status === 200) {
+            return data;
+          } else {
+            throw new Error(data.message || "games failed to start");
+          }
+        },
+        payload
+      );
+    } catch (e) {
+      console.log("unable to start games");
+      console.log(e);
+      throw e;
+    }
+  }
 }
