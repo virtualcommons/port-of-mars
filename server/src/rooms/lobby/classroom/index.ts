@@ -79,8 +79,19 @@ export class ClassroomLobbyRoom extends LobbyRoom<ClassroomLobbyRoomState> {
     }
   }
 
+  async getFilledUsernames(clients: Array<LobbyClient>): Promise<Array<string>> {
+    // FIXME: duplicated in freeplay lobby
+    const usernames: Array<string> = clients.map(c => c.username);
+    if (usernames.length < MAX_GROUP_SIZE) {
+      const numberOfRequiredBots = MAX_GROUP_SIZE - usernames.length;
+      const bots = await getServices().account.getOrCreateBotUsers(numberOfRequiredBots);
+      return usernames.concat(bots.map(u => u.username)).slice(0, MAX_GROUP_SIZE);
+    }
+    return usernames;
+  }
+
   async sendGroupInvitations(group: Group) {
-    const usernames = group.clients.map(client => client.username);
+    const usernames = await this.getFilledUsernames(group.clients);
     const gameOpts = await buildGameOpts(usernames, "classroom", this.classroomId);
     const room = await matchMaker.createRoom(GameRoom.NAME, gameOpts);
     logger.info(`${this.roomName} created game room ${room.roomId}`);
@@ -107,6 +118,7 @@ export class ClassroomLobbyRoom extends LobbyRoom<ClassroomLobbyRoomState> {
         const classroom = await services.educator.getClassroomById(student.classroomId);
         if (!classroom) return false;
         this.classroomId = student.classroomId;
+        this.setMetadata({ classroomId: this.classroomId });
       } else {
         if (student.classroomId !== this.classroomId) return false;
       }
