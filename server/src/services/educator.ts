@@ -99,13 +99,16 @@ export class EducatorService extends BaseService {
 
   async createNewClassroom(teacher: Teacher, descriptor: string): Promise<any> {
     const classroomRepo = this.em.getRepository(Classroom);
+    const authToken = await this.generateAuthToken();
     const newClassroom = classroomRepo.create({
       descriptor: descriptor,
       teacher: teacher,
+      authToken: authToken,
     })
     await classroomRepo.save(newClassroom);
     return newClassroom;
   }
+
   async getActiveRoomsForClassroom(classroomId: number): Promise<any> {
     const gameRepo = this.em.getRepository(Game);
     const activeGames = gameRepo.find({
@@ -146,9 +149,8 @@ export class EducatorService extends BaseService {
     }
     const classrooms = classroomRepo.find({ 
       where: {teacher: teacher },
-      relations: ["students", "games"],
     },
-    ); //FIXME: may need to fix in relations
+    ); //FIXME: may need to fix relations
     return classrooms;
   }
 
