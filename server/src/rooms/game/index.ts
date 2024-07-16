@@ -142,6 +142,10 @@ async function onCreate(
   room.setState(new GameState(options));
   room.setPrivate(true);
   room.persister = new DBPersister();
+  // if we have a classroomId, make it available in queries
+  if (options.classroomId) {
+    room.setMetadata({ classroomId: options.classroomId });
+  }
   room.onMessage("*", (client, type, message) => {
     // we can refactor this.prepareRequest to not run a billion long switch statement and instead have
     // lots of small onMessages coupled with Commands that modify the state (within the Command itself, not here)

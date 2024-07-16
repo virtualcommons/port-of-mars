@@ -205,30 +205,34 @@ educatorRouter.post("/confirm-student", async (req: Request, res: Response, next
       next(e);
     }
   }
-
-  educatorRouter.post(
-    "/start-classroom-games",
-    async (req: Request, res: Response, next: NextFunction) => {
-      const user = req.user as User;
-      const { classroomId } = req.body;
-      try {
-        const services = getServices();
-        const teacher = await services.educator.getTeacherByUserId(user.id);
-        if (!(teacher || user.isAdmin)) {
-          res.status(403).json({ message: "Only teachers can start the game" });
-          return;
-        }
-        const room = (await matchMaker.query({
-          name: ClassroomLobbyRoom.NAME,
-          classroomId,
-        })) as any;
-        await matchMaker.remoteRoomCall(room.roomId, "startGames");
-        res.status(200).json({ message: "Games have been started" });
-        return;
-      } catch (e) {
-        logger.warn("Unable to start classroom games", e);
-        next(e);
-      }
-    }
-  );
 });
+
+educatorRouter.post(
+  "/start-classroom-games",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = req.user as User;
+    const { classroomId } = req.body;
+    try {
+      const services = getServices();
+      const teacher = await services.educator.getTeacherByUserId(user.id);
+      if (!(teacher || user.isAdmin)) {
+        res.status(403).json({ message: "Only teachers can start the game" });
+        return;
+      }
+      const rooms = await matchMaker.query({
+        name: ClassroomLobbyRoom.NAME,
+      });
+      const room = rooms.filter((room: any) => room.metadata.classroomId === classroomId)[0];
+      if (!room) {
+        res.status(404).json({ message: "Classroom lobby not found" });
+        return;
+      }
+      await matchMaker.remoteRoomCall(room.roomId, "startGames");
+      res.status(200).json({ message: "Games have been started" });
+      return;
+    } catch (e) {
+      logger.warn("Unable to start classroom games", e);
+      next(e);
+    }
+  }
+);
