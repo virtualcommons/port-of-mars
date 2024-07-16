@@ -29,7 +29,7 @@
                   clearRenameErrorMessage();
                 "
               >
-                {{ classroom.name }}
+                {{ classroom.descriptor }}
               </b-button>
             </b-button-group>
           </div>
@@ -39,8 +39,8 @@
           <div v-if="classrooms.length > 0">
             <div class="row pl-3 justify-content-between">
               <div>
-                <h4>{{ selectedClassroom.name }}</h4>
-                <h4>The Game Code for this Classroom is:</h4>
+                <h4>{{ selectedClassroom?.descriptor }}</h4>
+                <h4>The Game Code for this Classroom is: {{ selectedClassroom.authToken }}</h4>
               </div>
               <b-cols class="mr-3">
                 <b-button variant="success">Start Game</b-button>
@@ -212,12 +212,12 @@
                     <b-collapse id="my-collapase" v-model="isCollapsed">
                       <b-form-group description="Must be no more than 20 characters.">
                         <b-form-input
-                          v-model="classroomName"
+                          v-model="classroomDescriptor"
                           placeholder="Enter classroom name"
                         ></b-form-input>
                       </b-form-group>
                       <b-button
-                        classroomName-clear
+                        classroomDescriptor-clear
                         size="sm"
                         variant="success"
                         @click="renameClassroom"
@@ -285,7 +285,7 @@ export default class TeacherDashboard extends Vue {
   startGame = {};
   sidebarExpanded = true;
   isCollapsed = false;
-  classroomName = "";
+  classroomDescriptor = "";
   renameErrorMessage = "";
   completedGames = 1; //Temporary until finished games are implemented
 
@@ -296,12 +296,8 @@ export default class TeacherDashboard extends Vue {
     { key: "status", label: "Lobby Status", sortable: true },
   ];
 
-  classrooms: Classroom[] = [
-    { id: 1, name: "Classroom #1" },
-    { id: 2, name: "Classroom #2" },
-  ];
-
-  selectedClassroom: Classroom = this.classrooms[0];
+  classrooms: Classroom[] = [];
+  selectedClassroom: Classroom | null = null;
 
   nextClassroomID: number = this.classrooms.length + 1;
 
@@ -388,50 +384,69 @@ export default class TeacherDashboard extends Vue {
   ];
 
   selectClassroom(classroom: Classroom) {
-    this.selectedClassroom = classroom;
+    console.log("Selected Classroom:", classroom);
+    this.selectedClassroom = {...classroom};
     this.isCollapsed = false;
-    this.classroomName = "";
+    //this.classroomDescriptor = "";
   }
 
-  addClassroom() {
-    const newClassroom: Classroom = {
-      id: this.nextClassroomID,
-      name: `Classroom #${this.nextClassroomID}`,
-    };
-
-    this.classrooms.push(newClassroom);
-    this.selectedClassroom = newClassroom;
-    this.nextClassroomID++;
+  async addClassroom() {
+    const descriptor = prompt("enter descriptor"); //FIXME: make stylized pop up
+    if (!descriptor) {
+      return; //FIXME: add in error message
+    }
+    try {
+      const newClassroom = await this.educatorApi.createClassroom(descriptor);
+      console.log("New Classroom:", newClassroom);
+      this.classrooms.push(newClassroom);
+      this.selectedClassroom = newClassroom;
+    } catch (e) {
+      console.error("Failed to add a new classroom:", e);
+      
+    }
   }
 
-  deleteClassroom() {
+
+
+  async deleteClassroom() {
     if (this.classrooms.length === 0) {
       return;
     }
-    this.classrooms = this.classrooms.filter(c => c.id !== this.selectedClassroom.id);
-    delete this.studentsByClassroom[this.selectedClassroom.id];
 
-    if (this.classroomName || this.renameErrorMessage) {
-      this.classroomName = "";
-      this.renameErrorMessage = "";
-    }
-    this.isCollapsed = false;
+    try {
+      await this.educatorApi.deleteClassroom(this.selectedClassroom.id);
+      this.classrooms = await this.educatorApi.getClassrooms();
+      // await this.fetchClassrooms();
+      // this.classrooms = await this.educatorApi.getClassrooms();
+      // this.classrooms = this.classrooms.filter(c => c.id !== this.selectedClassroom.id);
+      
+      if (this.classrooms.length > 0) {
+        this.selectedClassroom = this.classrooms[0];
+      } else {
+        this.selectedClassroom = null;
+      }
+      this.isCollapsed = false;
+      console.log("Classroom deleted successfully");
 
-    if (this.classrooms.length > 0) {
-      this.selectedClassroom = this.classrooms[0];
-    } else {
-      this.selectedClassroom = { id: 0, name: "No Classrooms Exist" };
-      this.nextClassroomID = 1;
+    } catch (e) {
+      console.error("Failed to delete classroom:", e);
     }
   }
+  
 
-  renameClassroom() {
-    if (this.classroomName.length > 20) {
+  async renameClassroom() {
+    if (this.classroomDescriptor.length > 20) {
       this.renameErrorMessage = "Invalid classroom name. Please try again.";
     } else {
-      this.selectedClassroom.name = this.classroomName;
-      this.isCollapsed = false;
-      this.classroomName = "";
+      try {
+        await this.educatorApi.updateClassroom(this.selectedClassroom.id, this.classroomDescriptor);
+        this.selectedClassroom.descriptor = this.classroomDescriptor;
+        this.isCollapsed = false;
+        //this.classroomDescriptor = "";
+      } catch (e) {
+        console.error("Failed to rename classroom", e);
+        this.renameErrorMessage = "Failed to rename classroom. Please try again.";
+      }
     }
   }
 
@@ -496,6 +511,18 @@ export default class TeacherDashboard extends Vue {
     // then add button above for starting game if user is a teacher
     this.educatorApi = new EducatorAPI(this.$store, this.$ajax);
     this.isTeacher = await this.educatorApi.authTeacher();
+    await this.fetchClassrooms();
+  }
+
+  async fetchClassrooms() {
+    try {
+      this.classrooms = await this.educatorApi.getClassrooms();
+      if (this.classrooms.length > 0){
+        this.selectedClassroom = this.classrooms[0];
+      }
+    } catch (e) {
+      console.error("Failed to fetch classrooms:", e);
+    }
   }
 }
 </script>
