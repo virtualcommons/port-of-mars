@@ -35,6 +35,9 @@ export class AjaxResponseError extends Error {
 const SUBMISSION_ID = "submissionId";
 
 export class AjaxRequest {
+  // delete(arg0: string, arg1: { data: { classroomId: number; }; }) {
+  //   throw new Error("Method not implemented.");
+  // }
   constructor(private router: VueRouter, private store: TStore) {}
 
   _roomId?: RoomId;
@@ -97,16 +100,16 @@ export class AjaxRequest {
     return { data, status: response.status };
   }
 
-  async post(
+  async request(
+    method: "GET" | "POST" | "PUT" | "DELETE",
     path: string,
     done: (data: ResponseData) => Promise<any> | void,
     data?: any
-  ): AjaxResponse {
-    // FIXME: duplicated across post/get
+  ) {
     let response;
     try {
-      response = await fetch(path, {
-        method: "POST",
+      const options = {
+        method: method,
         cache: "no-cache",
         headers: {
           "Content-Type": "application/json",
@@ -114,8 +117,11 @@ export class AjaxRequest {
         credentials: "include",
         redirect: "follow",
         referrerPolicy: "no-referrer",
-        body: JSON.stringify(data),
-      });
+      } as RequestInit;
+      if (method !== "GET") {
+        options.body = JSON.stringify(data);
+      }
+      response = await fetch(path, options);
       const responseData = await this.handleResponse(response);
       return done(responseData);
     } catch (e) {
@@ -133,34 +139,87 @@ export class AjaxRequest {
     }
   }
 
-  async get(path: string, done: (data: ResponseData) => Promise<any> | void): AjaxResponse {
-    // FIXME: duplicated across post/get
-    let response;
-    try {
-      response = await fetch(path, {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        redirect: "follow",
-        referrerPolicy: "no-referrer",
-      });
-      const responseData = await this.handleResponse(response);
-      return done(responseData);
-    } catch (e) {
-      if (e instanceof AjaxResponseError) {
-        throw e;
-      } else {
-        if (response && e instanceof Error) {
-          throw new AjaxResponseError({ kind: "danger", message: e.message }, response);
-        } else {
-          console.error("Unhandled error in request, returning to home screen", e);
-          this.router.push({ name: HOME_PAGE });
-        }
-      }
-    }
+  async get(path: string, done: (data: ResponseData) => Promise<any> | void) {
+    return this.request("GET", path, done);
   }
+
+  async post(path: string, done: (data: ResponseData) => Promise<any> | void, data?: any) {
+    return this.request("POST", path, done, data);
+  }
+
+  async update(path: string, done: (data: ResponseData) => Promise<any> | void, data?: any) {
+    return this.request("PUT", path, done, data);
+  }
+
+  async delete(path: string, done: (data: ResponseData) => Promise<any> | void, data?: any) {
+    return this.request("DELETE", path, done, data);
+  }
+
+//   async post(
+//     path: string,
+//     done: (data: ResponseData) => Promise<any> | void,
+//     data?: any
+//   ): AjaxResponse {
+//     // FIXME: duplicated across post/get
+//     let response;
+//     try {
+//       response = await fetch(path, {
+//         method: "POST",
+//         cache: "no-cache",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         credentials: "include",
+//         redirect: "follow",
+//         referrerPolicy: "no-referrer",
+//         body: JSON.stringify(data),
+//       });
+//       const responseData = await this.handleResponse(response);
+//       return done(responseData);
+//     } catch (e) {
+//       if (e instanceof AjaxResponseError) {
+//         throw e;
+//       } else {
+//         if (response && e instanceof Error) {
+//           throw new AjaxResponseError({ kind: "danger", message: e.message }, response);
+//         } else {
+//           console.error("Unhandled error in request, returning to home screen", e);
+//           // FIXME: add context so that login page has information about why they were redirected
+//           this.router.push({ name: LOGIN_PAGE });
+//         }
+//       }
+//     }
+//   }
+
+//   async get(path: string, done: (data: ResponseData) => Promise<any> | void): AjaxResponse {
+//     // FIXME: duplicated across post/get
+//     let response;
+//     try {
+//       response = await fetch(path, {
+//         method: "GET",
+//         credentials: "include",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         redirect: "follow",
+//         referrerPolicy: "no-referrer",
+//       });
+//       const responseData = await this.handleResponse(response);
+//       return done(responseData);
+//     } catch (e) {
+//       if (e instanceof AjaxResponseError) {
+//         throw e;
+//       } else {
+//         if (response && e instanceof Error) {
+//           throw new AjaxResponseError({ kind: "danger", message: e.message }, response);
+//         } else {
+//           console.error("Unhandled error in request, returning to home screen", e);
+//           this.router.push({ name: HOME_PAGE });
+//         }
+//       }
+//     }
+//   }
+// }
 }
 
 export const Ajax = {

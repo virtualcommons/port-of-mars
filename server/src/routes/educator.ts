@@ -80,6 +80,8 @@ educatorRouter.get("/students", async (req: Request, res: Response, next) =>{
 educatorRouter.post("/classroom", async (req: Request, res: Response, next) =>{
   const user = req.user as User;
   const { descriptor } = req.body;
+
+  logger.info("Request body: ", req.body);
   try {
     const services = getServices();
     const teacher = await services.educator.getTeacherByUserId(user.id);
@@ -91,9 +93,16 @@ educatorRouter.post("/classroom", async (req: Request, res: Response, next) =>{
     res.status(201).json(newClassroom);
   } catch (e) {
     logger.warn("Unable to create a new classroom for the teacher");
+    if (e instanceof Error) {
+      res.status(400).json({message: e.message});
+    } else {
+      res.status(400).json({message: "Unknown error occurred"});
+    }
     next(e);
   }
 });
+
+
 
 educatorRouter.delete("/classroom", async (req: Request, res: Response, next) =>{
   const user = req.user as User;
@@ -105,23 +114,6 @@ educatorRouter.delete("/classroom", async (req: Request, res: Response, next) =>
       res.status(403).json({ message: "Only teachers can delete a classroom" });
       return;
     }
-    // const classroomRepo = services.em.getRepository(Classroom);
-    // const classroom = await classroomRepo.findOne({
-    //   where: {id: classroomId, teacher: {id: teacher.id}},
-    // })
-    // if (!classroom){
-    //   res.status(404).json({ message: "Classroom not found" });
-    //   return;
-    // }
-    // //if number of games or number of students in classroom is greater than 0, then error
-    // const students = await services.educator.getStudentsByClassroomId(classroomId);
-    // const games = await services.educator.getActiveRoomsForClassroom(classroomId);
-    // if (students.length > 0 || games.length > 0){
-    //   res.status(400).json({ message: "Classroom cannot be deleted because it has active games and/or students"});
-    //   return;
-    // }
-    // await classroomRepo.remove(classroom);
-
     await services.educator.deleteClassroom(teacher, classroomId);
   } catch (e) {
     logger.warn("Unable to delete classroom");
@@ -147,6 +139,17 @@ educatorRouter.put("/classroom", async (req: Request, res: Response, next) =>{
     next(e);
   }
 });
+
+// educatorRouter.get("/completed-games", async(req: Request, res: Response, next) => {
+//   const user = req.user as User;
+
+//   try {
+
+//   } catch (e) {
+//     logger.warn("Unable to get a list of finalized games for classroom");
+//     next(e);
+//   }
+// })
 
 educatorRouter.get("/lobby", async (req: Request, res: Response, next) =>{
   const user = req.user as User;
