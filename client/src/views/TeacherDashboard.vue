@@ -43,7 +43,7 @@
                 <h4>The Game Code for this Classroom is: {{ selectedClassroom.authToken }}</h4>
               </div>
               <b-cols class="mr-3">
-                <b-button variant="success">Start Game</b-button>
+                <b-button variant="success" @click="startGames">Start Game</b-button>
               </b-cols>
             </div>
             <b-row>
@@ -614,6 +614,14 @@ export default class TeacherDashboard extends Vue {
         console.error("Failed to rename classroom", e);
         this.renameErrorMessage = "Failed to rename classroom. Please try again.";
       }
+    }
+  }
+
+  async startGames() {
+    try {
+      await this.educatorApi.startGames(this.selectedClassroom.id);
+    } catch (e) {
+      console.error("Failed to start games:", e);
     }
   }
 
