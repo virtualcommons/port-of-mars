@@ -92,7 +92,7 @@ export class EducatorAPI {
       return await this.ajax.update(
         url("/educator/classroom"),
         ({data, status}) => {
-          if (status === 201){
+          if (status === 200){
             return data;
           } else {
             throw new Error(data.message || "Classroom renaming failed");

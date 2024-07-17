@@ -12,7 +12,7 @@
                   icon="plus"
                   class="icon ml-2 mt-2"
                   style="color: white; cursor: pointer"
-                  @click="addClassroom"
+                  v-b-modal.add-classroom-modal
                 ></b-icon>
               </p>
             </b-row>
@@ -320,6 +320,29 @@
         </b-col>
       </b-row>
     </div>
+    <b-modal id="add-classroom-modal" 
+      size="lg" 
+      title="Add a New Classroom" 
+      @ok="handleDescriptorSubmit"
+      body-bg-variant="info" 
+      header-bg-variant="info" 
+      footer-bg-variant="info"
+    >
+    <form ref="form" @submit.stop.prevent="handleDescriptorSubmit">
+      <b-form-group
+          label="Enter Classroom Descriptor"
+          label-for="descriptor-input"
+          invalid-feedback="Descriptor is required"
+        >
+          <b-form-input
+            id="descriptor-input"
+            v-model="classroomDescriptor"   
+            :state="descriptorState"
+            required
+          ></b-form-input>
+        </b-form-group>
+    </form>
+  </b-modal>
   </b-container>
 </template>
 
@@ -362,6 +385,7 @@ export default class TeacherDashboard extends Vue {
   classroomDescriptor = "";
   renameErrorMessage = "";
   completedGames = 1; //Temporary until finished games are implemented
+  descriptorState: boolean | null = null;
 
   clientFields = [
     { key: "username", label: "Username" },
@@ -486,13 +510,33 @@ export default class TeacherDashboard extends Vue {
     //this.classroomDescriptor = "";
   }
 
+  checkDescriptorForm() {
+    const form = this.$refs.form as HTMLFormElement | undefined;
+    if (!form) {
+      console.error("Form is not available");
+      return false;
+    }
+    const valid = form.checkValidity();
+    this.descriptorState = valid;
+    return valid;
+  }
+
+  handleDescriptorSubmit(){
+    if (!this.checkDescriptorForm){
+      console.error("Descriptor form is not completed");
+      return;
+    } else {
+      this.addClassroom();
+    }
+  }
+
   async addClassroom() {
-    const descriptor = prompt("enter descriptor"); //FIXME: make stylized pop up
-    if (!descriptor) {
+    //const descriptor = prompt("enter descriptor"); //FIXME: make stylized pop up
+    if (!this.classroomDescriptor) {
       return; //FIXME: add in error message
     }
     try {
-      const newClassroom = await this.educatorApi.createClassroom(descriptor);
+      const newClassroom = await this.educatorApi.createClassroom(this.classroomDescriptor);
       console.log("New Classroom:", newClassroom);
       this.classrooms.push(newClassroom);
       this.selectedClassroom = newClassroom;
@@ -502,28 +546,42 @@ export default class TeacherDashboard extends Vue {
     }
   }
 
-
-
   async deleteClassroom() {
     if (this.classrooms.length === 0) {
       return;
     }
 
     try {
-      await this.educatorApi.deleteClassroom(this.selectedClassroom.id);
-      this.classrooms = await this.educatorApi.getClassrooms();
-      // await this.fetchClassrooms();
-      // this.classrooms = await this.educatorApi.getClassrooms();
-      // this.classrooms = this.classrooms.filter(c => c.id !== this.selectedClassroom.id);
       
+      //this.classrooms = await this.educatorApi.getClassrooms();
+      //await this.fetchClassrooms();
+      // this.classrooms = await this.educatorApi.getClassrooms();
+      console.log("selected class id", this.selectedClassroom.id);
+      const index = this.classrooms.findIndex(
+          (classroom) => classroom.id === this.selectedClassroom.id
+        );
+        console.log("index", index);
+      this.classrooms = this.classrooms.filter(c => c.id !== this.selectedClassroom.id);
+
+      console.log("selected class id", this.selectedClassroom.id);
+      await this.educatorApi.deleteClassroom(this.selectedClassroom.id);
+      console.log("selected class id", this.selectedClassroom.id);
+      console.log("Classroom deleted successfully");   
+
+      if (index !== -1){
+        
+        this.classrooms.splice(index, 1);
+        
+        console.log("Classroom list updated successfully");
+      }
       if (this.classrooms.length > 0) {
         this.selectedClassroom = this.classrooms[0];
       } else {
         this.selectedClassroom = null;
       }
       this.isCollapsed = false;
-      console.log("Classroom deleted successfully");
-
+      console.log("Classroom list updated successfully");
+        
     } catch (e) {
       console.error("Failed to delete classroom:", e);
     }
@@ -536,6 +594,19 @@ export default class TeacherDashboard extends Vue {
     } else {
       try {
         await this.educatorApi.updateClassroom(this.selectedClassroom.id, this.classroomDescriptor);
+        console.log("Classroom updated successfully");
+        const index = this.classrooms.findIndex(
+          (classroom) => classroom.id === this.selectedClassroom.id
+        );
+
+        if (index !== -1){
+          this.$set(this.classrooms, index, {
+            ...this.classrooms[index],
+            descriptor: this.classroomDescriptor,
+          });
+          console.log("Classroom list updated successfully");
+        }
+
         this.selectedClassroom.descriptor = this.classroomDescriptor;
         this.isCollapsed = false;
         //this.classroomDescriptor = "";
