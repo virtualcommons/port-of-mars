@@ -36,7 +36,7 @@ educatorRouter.get("/rooms", async (req: Request, res: Response, next) => {
     const rooms = await getServices().educator.getActiveRooms();
     res.json(rooms);
   } catch (e) {
-    logger.warn("Unable to get rooms", e)
+    logger.warn("Unable to get rooms", e);
     next(e);
   }
 });
@@ -48,12 +48,12 @@ educatorRouter.get("/classroom-games", async (req: Request, res: Response, next)
     const games = await services.educator.getActiveRoomsForClassroom(Number(classroomId));
     res.json(games);
   } catch (e) {
-    logger.warn("Unable to get classroom games for classroom ID %d", classroomId); 
+    logger.warn("Unable to get classroom games for classroom ID %d", classroomId);
     next(e);
   }
 });
 
-educatorRouter.get("/classrooms",  async (req: Request, res: Response, next) =>{
+educatorRouter.get("/classrooms", async (req: Request, res: Response, next) => {
   const user = req.user as User;
   try {
     const services = getServices();
@@ -65,7 +65,7 @@ educatorRouter.get("/classrooms",  async (req: Request, res: Response, next) =>{
   }
 });
 
-educatorRouter.get("/students", async (req: Request, res: Response, next) =>{
+educatorRouter.get("/students", async (req: Request, res: Response, next) => {
   const { classroomId } = req.body;
   try {
     const services = getServices();
@@ -77,7 +77,7 @@ educatorRouter.get("/students", async (req: Request, res: Response, next) =>{
   }
 });
 
-educatorRouter.post("/classroom", async (req: Request, res: Response, next) =>{
+educatorRouter.post("/classroom", async (req: Request, res: Response, next) => {
   const user = req.user as User;
   const { descriptor } = req.body;
 
@@ -85,7 +85,7 @@ educatorRouter.post("/classroom", async (req: Request, res: Response, next) =>{
   try {
     const services = getServices();
     const teacher = await services.educator.getTeacherByUserId(user.id);
-    if (!teacher || user.isAdmin){
+    if (!teacher || !user.isAdmin) {
       res.status(403).json({ message: "Only teachers can create a classroom" });
       return;
     }
@@ -94,45 +94,44 @@ educatorRouter.post("/classroom", async (req: Request, res: Response, next) =>{
   } catch (e) {
     logger.warn("Unable to create a new classroom for the teacher");
     if (e instanceof Error) {
-      res.status(400).json({message: e.message});
+      res.status(400).json({ message: e.message });
     } else {
-      res.status(400).json({message: "Unknown error occurred"});
+      res.status(400).json({ message: "Unknown error occurred" });
     }
     next(e);
   }
 });
 
-
-
-educatorRouter.delete("/classroom", async (req: Request, res: Response, next) =>{
+educatorRouter.delete("/classroom", async (req: Request, res: Response, next) => {
   const user = req.user as User;
   const { classroomId } = req.body;
   try {
     const services = getServices();
     const teacher = await services.educator.getTeacherByUserId(user.id);
-    if (!teacher || user.isAdmin){
+    if (!teacher || !user.isAdmin) {
       res.status(403).json({ message: "Only teachers can delete a classroom" });
       return;
     }
     await services.educator.deleteClassroom(teacher, classroomId);
+    res.status(200).json({ message: "Classroom deleted successfully" });
   } catch (e) {
     logger.warn("Unable to delete classroom");
     next(e);
   }
 });
 
-educatorRouter.put("/classroom", async (req: Request, res: Response, next) =>{
+educatorRouter.put("/classroom", async (req: Request, res: Response, next) => {
   const user = req.user as User;
   const { classroomId, descriptor } = req.body;
 
   try {
     const services = getServices();
     const teacher = await services.educator.getTeacherByUserId(user.id);
-    if (!teacher || user.isAdmin){
+    if (!teacher || !user.isAdmin) {
       res.status(403).json({ message: "Only teachers can update a classroom" });
       return;
     }
-    const classroom = await services.educator.updateClassroom(teacher, classroomId, descriptor);   
+    const classroom = await services.educator.updateClassroom(teacher, classroomId, descriptor);
     res.status(200).json(classroom);
   } catch (e) {
     logger.warn("Unable to update classroom");
@@ -151,14 +150,16 @@ educatorRouter.put("/classroom", async (req: Request, res: Response, next) =>{
 //   }
 // })
 
-educatorRouter.get("/lobby", async (req: Request, res: Response, next) =>{
+educatorRouter.get("/lobby", async (req: Request, res: Response, next) => {
   const user = req.user as User;
-  const { classroomId} = req.body;
+  const { classroomId } = req.body;
   try {
     const services = getServices();
     const teacher = await services.educator.getTeacherByUserId(user.id);
-    if (!teacher || user.isAdmin){
-      res.status(403).json({ message: "Only teachers can get a list of clients for the classroom lobby" });
+    if (!teacher || !user.isAdmin) {
+      res
+        .status(403)
+        .json({ message: "Only teachers can get a list of clients for the classroom lobby" });
       return;
     }
 
@@ -168,18 +169,16 @@ educatorRouter.get("/lobby", async (req: Request, res: Response, next) =>{
     })) as any;
     const lobby = lobbies.find((room: any) => lobby.classroomId === classroomId);
 
-    if (!lobby){
+    if (!lobby) {
       res.status(404).json({ message: "Classroom lobby not found" });
       return;
     }
     const clients = lobby.clients;
     res.status(200).json(clients);
-
   } catch (e) {
     logger.warn("Unable to get list of clients for the classroom lobby");
     next(e);
   }
-
 });
 
 educatorRouter.post("/confirm-student", async (req: Request, res: Response, next: NextFunction) => {
@@ -215,7 +214,7 @@ educatorRouter.post(
     try {
       const services = getServices();
       const teacher = await services.educator.getTeacherByUserId(user.id);
-      if (!(teacher || user.isAdmin)) {
+      if (!(teacher || !user.isAdmin)) {
         res.status(403).json({ message: "Only teachers can start the game" });
         return;
       }
