@@ -20,7 +20,10 @@
         >
           <b-tab active>
             <template #title> <b-icon-stars class="mr-2" />Join a game </template>
-            <b-form @submit="handleJoinGame" class="d-flex flex-column align-items-center">
+            <b-form
+              @submit.stop.prevent="handleJoinGame"
+              class="d-flex flex-column align-items-center"
+            >
               <b-form-input
                 v-model="gameCode"
                 class="w-100 mb-3 text-center"
@@ -41,7 +44,10 @@
             <p class="text-muted text-left">
               Enter a rejoin code to sign back in if you were disconnected from a game
             </p>
-            <b-form @submit="handleRejoinGame" class="d-flex flex-column align-items-center">
+            <b-form
+              @submit.stop.prevent="handleRejoinGame"
+              class="d-flex flex-column align-items-center"
+            >
               <b-form-input
                 v-model="rejoinCode"
                 type="text"
@@ -60,7 +66,10 @@
           </b-tab>
           <b-tab title-link-class="small">
             <template #title> <b-icon-lock-fill class="mr-1" />Sign in as an educator</template>
-            <b-form @submit="handleTeacherLogin" class="d-flex flex-column align-items-center">
+            <b-form
+              @submit.stop.prevent="handleTeacherLogin"
+              class="d-flex flex-column align-items-center"
+            >
               <b-form-input
                 v-model="username"
                 class="w-100 mb-3 text-center"
