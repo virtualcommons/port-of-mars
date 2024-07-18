@@ -2,15 +2,14 @@ import { BaseService } from "@port-of-mars/server/services/db";
 import { matchMaker } from "colyseus";
 import { Teacher, Classroom, Student, User, Game } from "@port-of-mars/server/entity";
 import { GameRoom } from "@port-of-mars/server/rooms/game"; //FIXME; may need to adjust for educator version
-import { ServerError, generateUsername, generateCode, toClientSafeUser } from "@port-of-mars/server/util";
-import { getServices } from "@port-of-mars/server/services";
-import { error } from "console";
-import { getRepository } from "typeorm";
-import { ClassroomLobbyRoom } from "../rooms/lobby/classroom";
 import {
-  LobbyActivityData,
-  StudentData,
-} from "@port-of-mars/shared/types";
+  ServerError,
+  generateUsername,
+  generateCode,
+  toClientSafeUser,
+} from "@port-of-mars/server/util";
+import { getServices } from "@port-of-mars/server/services";
+import { StudentData } from "@port-of-mars/shared/types";
 // import { settings } from "@port-of-mars/server/settings";
 
 // const logger = settings.logging.getLogger(__filename);
@@ -84,12 +83,12 @@ export class EducatorService extends BaseService {
     });
   }
 
-  async updateClassroom(teacher: Teacher, classroomId: number, descriptor: string): Promise<any>{
+  async updateClassroom(teacher: Teacher, classroomId: number, descriptor: string): Promise<any> {
     const classroomRepo = this.em.getRepository(Classroom);
     const classroom = await classroomRepo.findOne({
-      where: {id: classroomId, teacher: {id: teacher.id}},
-    })
-    if (!classroom){
+      where: { id: classroomId, teacher: { id: teacher.id } },
+    });
+    if (!classroom) {
       throw new Error("Classroom not found");
     }
     classroom.descriptor = descriptor;
@@ -104,7 +103,7 @@ export class EducatorService extends BaseService {
       descriptor: descriptor,
       teacher: teacher,
       authToken: authToken,
-    })
+    });
     await classroomRepo.save(newClassroom);
     return newClassroom;
   }
@@ -112,65 +111,63 @@ export class EducatorService extends BaseService {
   async getActiveRoomsForClassroom(classroomId: number): Promise<any> {
     const gameRepo = this.em.getRepository(Game);
     const activeGames = gameRepo.find({
-      where: {id: classroomId, status: "incomplete"},
-      },
-    ); //FIXME: may need to add in relations
+      where: { id: classroomId, status: "incomplete" },
+    }); //FIXME: may need to add in relations
     return activeGames;
   }
 
-  async deleteClassroom(teacher: Teacher, classroomId: number): Promise<any>{
+  async deleteClassroom(teacher: Teacher, classroomId: number): Promise<any> {
     const classroomRepo = this.em.getRepository(Classroom);
     const classroom = await classroomRepo.findOne({
-      where: {id: classroomId, teacher: {id: teacher.id}},
-    })
-    if (!classroom){
+      where: { id: classroomId, teacher: { id: teacher.id } },
+    });
+    if (!classroom) {
       throw new Error("Classroom not found");
       return;
     }
     //if number of games or number of students in classroom is greater than 0, then error
     const students = await this.getStudentsByClassroomId(classroomId);
     const games = await this.getActiveRoomsForClassroom(classroomId);
-    if (students.length > 0 || games.length > 0){
+    if (students.length > 0 || games.length > 0) {
       throw new Error("Classroom cannot be deleted because it has active games and/or students");
       return;
     }
     await classroomRepo.remove(classroom);
     return;
   }
-  async getClassroomsForTeacher(userId: number): Promise<any>{
+  async getClassroomsForTeacher(userId: number): Promise<any> {
     const classroomRepo = this.em.getRepository(Classroom);
     const teacher = await this.getTeacherByUserId(userId);
 
-    if (!teacher){
+    if (!teacher) {
       throw new ServerError({
         code: 404,
         message: "Teacher not found",
       });
     }
-    const classrooms = classroomRepo.find({ 
-      where: {teacher: teacher },
-    },
-    ); //FIXME: may need to fix relations
+    const classrooms = classroomRepo.find({
+      where: { teacher: teacher },
+      order: { authToken: "DESC" },
+    }); //FIXME: may need to fix relations
     return classrooms;
   }
 
   //get all students in a specified classroom
-  async getStudentsByClassroomId(classroomId: number): Promise<StudentData[]>{
+  async getStudentsByClassroomId(classroomId: number): Promise<StudentData[]> {
     const studentRepo = this.em.getRepository(Student);
     const students = await studentRepo.find({
-      where: {classroomId: classroomId},
+      where: { classroomId: classroomId },
       relations: ["user"],
     });
-    return students.map((student) => {
+    return students.map(student => {
       return {
         id: student.id,
         classroomId: student.classroomId,
         user: toClientSafeUser(student.user),
-        inLobby: false // FIXME: need to look this up
+        inLobby: false, // FIXME: need to look this up
       };
     });
   }
-
 
   async createStudent(classroomAuthToken: string) {
     /**

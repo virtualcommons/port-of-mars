@@ -25,7 +25,7 @@
                 variant="primary"
                 class="mb-2 rounded"
                 @click="
-                  selectClassroom(classroom);
+                  selectClassroom(classroom.id);
                   clearRenameErrorMessage();
                 "
               >
@@ -42,9 +42,9 @@
                 <h4>{{ selectedClassroom?.descriptor }}</h4>
                 <h4>The Game Code for this Classroom is: {{ selectedClassroom.authToken }}</h4>
               </div>
-              <b-cols class="mr-3">
+              <b-col class="mr-3">
                 <b-button variant="success" @click="startGames">Start Game</b-button>
-              </b-cols>
+              </b-col>
             </div>
             <b-row>
               <div class="tabs-container w-100 h-100">
@@ -223,7 +223,7 @@
                             </template>
                             <template #cell(players)="data">
                               <b-icon-person-fill
-                                v-for="i in data.item.players"
+                                v-for="i in data.item.players.length"
                                 :key="'human' + i"
                               />
                             </template>
@@ -284,12 +284,12 @@
                           :pressed="false"
                           class="text-nowrap"
                           variant="warning"
-                          @click="toggleRename"
+                          v-b-toggle="'rename-collapse'"
                           >Rename Classroom</b-button
                         ></b-col
                       >
                     </b-row>
-                    <b-collapse v-model="isCollapsed" style="width: 35%">
+                    <b-collapse id="rename-collapse" style="width: 35%">
                       <b-form-group description="Must be no more than 20 characters.">
                         <b-form-input
                           v-model="classroomDescriptor"
@@ -320,29 +320,30 @@
         </b-col>
       </b-row>
     </div>
-    <b-modal id="add-classroom-modal" 
-      size="lg" 
-      title="Add a New Classroom" 
+    <b-modal
+      id="add-classroom-modal"
+      size="lg"
+      title="Add a New Classroom"
       @ok="handleDescriptorSubmit"
-      body-bg-variant="info" 
-      header-bg-variant="info" 
+      body-bg-variant="info"
+      header-bg-variant="info"
       footer-bg-variant="info"
     >
-    <form ref="form" @submit.stop.prevent="handleDescriptorSubmit">
-      <b-form-group
+      <form ref="form" @submit.stop.prevent="handleDescriptorSubmit">
+        <b-form-group
           label="Enter Classroom Descriptor"
           label-for="descriptor-input"
           invalid-feedback="Descriptor is required"
         >
           <b-form-input
             id="descriptor-input"
-            v-model="classroomDescriptor"   
+            v-model="classroomDescriptor"
             :state="descriptorState"
             required
           ></b-form-input>
         </b-form-group>
-    </form>
-  </b-modal>
+      </form>
+    </b-modal>
   </b-container>
 </template>
 
@@ -356,6 +357,8 @@ import {
   MANUAL_PAGE,
   TOURNAMENT_DASHBOARD_PAGE,
 } from "@port-of-mars/shared/routes";
+import MarsLog from "@port-of-mars/client/components/game/MarsLog.vue";
+import Chat from "@port-of-mars/client/components/game/static/chat/Chat.vue";
 import Countdown from "@port-of-mars/client/components/global/Countdown.vue";
 import HelpPanel from "@port-of-mars/client/components/lobby/HelpPanel.vue";
 import Messages from "@port-of-mars/client/components/global/Messages.vue";
@@ -368,11 +371,12 @@ import { InspectData, AdminGameData } from "@port-of-mars/shared/types";
     HelpPanel,
     Messages,
     LobbyChat,
+    MarsLog,
+    Chat,
   },
 })
 export default class TeacherDashboard extends Vue {
   @Inject() readonly $client!: Client;
-  // @Provide() api: TournamentLobbyRequestAPI = new TournamentLobbyRequestAPI(this.$ajax);
   educatorApi!: EducatorAPI;
 
   game = { name: GAME_PAGE };
@@ -381,7 +385,6 @@ export default class TeacherDashboard extends Vue {
   consent = { name: CONSENT_PAGE };
   isTeacher = false;
   startGame = {};
-  isCollapsed = false;
   classroomDescriptor = "";
   renameErrorMessage = "";
   completedGames = 1; //Temporary until finished games are implemented
@@ -394,6 +397,7 @@ export default class TeacherDashboard extends Vue {
     { key: "status", label: "Lobby Status", sortable: true },
   ];
 
+  // FIXME: define these types
   classrooms: Classroom[] = [];
   selectedClassroom: Classroom | null = null;
 
@@ -503,11 +507,11 @@ export default class TeacherDashboard extends Vue {
       };
   }
 
-  selectClassroom(classroom: Classroom) {
+  selectClassroom(classroomId: number) {
+    const classroom = this.classrooms.find(c => c.id === classroomId);
+    console.log(this.classrooms);
     console.log("Selected Classroom:", classroom);
-    this.selectedClassroom = {...classroom};
-    this.isCollapsed = false;
-    //this.classroomDescriptor = "";
+    this.selectedClassroom = classroom;
   }
 
   checkDescriptorForm() {
@@ -521,8 +525,8 @@ export default class TeacherDashboard extends Vue {
     return valid;
   }
 
-  handleDescriptorSubmit(){
-    if (!this.checkDescriptorForm){
+  handleDescriptorSubmit() {
+    if (!this.checkDescriptorForm) {
       console.error("Descriptor form is not completed");
       return;
     } else {
@@ -538,11 +542,10 @@ export default class TeacherDashboard extends Vue {
     try {
       const newClassroom = await this.educatorApi.createClassroom(this.classroomDescriptor);
       console.log("New Classroom:", newClassroom);
-      this.classrooms.push(newClassroom);
-      this.selectedClassroom = newClassroom;
+      this.classrooms = await this.educatorApi.getClassrooms();
+      this.selectClassroom(newClassroom.id);
     } catch (e) {
       console.error("Failed to add a new classroom:", e);
-      
     }
   }
 
@@ -550,43 +553,14 @@ export default class TeacherDashboard extends Vue {
     if (this.classrooms.length === 0) {
       return;
     }
-
     try {
-      
-      //this.classrooms = await this.educatorApi.getClassrooms();
-      //await this.fetchClassrooms();
-      // this.classrooms = await this.educatorApi.getClassrooms();
-      console.log("selected class id", this.selectedClassroom.id);
-      const index = this.classrooms.findIndex(
-          (classroom) => classroom.id === this.selectedClassroom.id
-        );
-        console.log("index", index);
-      this.classrooms = this.classrooms.filter(c => c.id !== this.selectedClassroom.id);
-
-      console.log("selected class id", this.selectedClassroom.id);
-      await this.educatorApi.deleteClassroom(this.selectedClassroom.id);
-      console.log("selected class id", this.selectedClassroom.id);
-      console.log("Classroom deleted successfully");   
-
-      if (index !== -1){
-        
-        this.classrooms.splice(index, 1);
-        
-        console.log("Classroom list updated successfully");
-      }
-      if (this.classrooms.length > 0) {
-        this.selectedClassroom = this.classrooms[0];
-      } else {
-        this.selectedClassroom = null;
-      }
-      this.isCollapsed = false;
+      this.classrooms = await this.educatorApi.deleteClassroom(this.selectedClassroom.id);
+      await this.fetchClassrooms();
       console.log("Classroom list updated successfully");
-        
     } catch (e) {
       console.error("Failed to delete classroom:", e);
     }
   }
-  
 
   async renameClassroom() {
     if (this.classroomDescriptor.length > 20) {
@@ -594,22 +568,11 @@ export default class TeacherDashboard extends Vue {
     } else {
       try {
         await this.educatorApi.updateClassroom(this.selectedClassroom.id, this.classroomDescriptor);
+        this.classrooms = await this.educatorApi.getClassrooms();
         console.log("Classroom updated successfully");
-        const index = this.classrooms.findIndex(
-          (classroom) => classroom.id === this.selectedClassroom.id
-        );
-
-        if (index !== -1){
-          this.$set(this.classrooms, index, {
-            ...this.classrooms[index],
-            descriptor: this.classroomDescriptor,
-          });
-          console.log("Classroom list updated successfully");
-        }
-
-        this.selectedClassroom.descriptor = this.classroomDescriptor;
-        this.isCollapsed = false;
-        //this.classroomDescriptor = "";
+        this.$root.$emit("bv::toggle::collapse", "rename-collapse");
+        this.classroomDescriptor = "";
+        this.selectClassroom(this.selectedClassroom.id);
       } catch (e) {
         console.error("Failed to rename classroom", e);
         this.renameErrorMessage = "Failed to rename classroom. Please try again.";
@@ -627,10 +590,6 @@ export default class TeacherDashboard extends Vue {
 
   clearRenameErrorMessage() {
     this.renameErrorMessage = "";
-  }
-
-  toggleRename() {
-    this.isCollapsed = !this.isCollapsed;
   }
 
   get clients() {
@@ -689,7 +648,7 @@ export default class TeacherDashboard extends Vue {
   async fetchClassrooms() {
     try {
       this.classrooms = await this.educatorApi.getClassrooms();
-      if (this.classrooms.length > 0){
+      if (this.classrooms.length > 0) {
         this.selectedClassroom = this.classrooms[0];
       }
     } catch (e) {
