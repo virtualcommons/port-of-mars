@@ -143,4 +143,23 @@ export class EducatorAPI {
       throw e;
     }
   }
+
+  async getClassroomGames(classroomId: number): Promise<any> {
+    try {
+      return await this.ajax.get(
+        url(`/educator/classroom-games?classroomId=${classroomId}`),
+        ({ data, status }) => {
+          if (status === 200){
+            return data;
+          } else {
+            throw new Error(data.message || "failed to fetch classroom games");
+          }
+        }
+      );
+    } catch (e) {
+      console.log("unable to get classroom's active games");
+      console.log(e);
+      throw e;
+    }
+  }
 }
