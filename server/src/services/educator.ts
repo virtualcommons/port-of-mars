@@ -9,7 +9,7 @@ import {
   toClientSafeUser,
 } from "@port-of-mars/server/util";
 import { getServices } from "@port-of-mars/server/services";
-import { StudentData } from "@port-of-mars/shared/types";
+import { StudentData, InspectData } from "@port-of-mars/shared/types";
 // import { settings } from "@port-of-mars/server/settings";
 
 // const logger = settings.logging.getLogger(__filename);
@@ -71,18 +71,6 @@ export class EducatorService extends BaseService {
     return authToken;
   }
 
-  async getActiveRooms(): Promise<any> {
-    const games = await matchMaker.query({ name: GameRoom.NAME });
-    return games.map((g: any) => {
-      return {
-        roomId: g.roomId,
-        clients: g.clients,
-        elapsed: Date.now() - new Date(g.createdAt).getTime(),
-        type: g.type,
-      };
-    });
-  }
-
   async updateClassroom(teacher: Teacher, classroomId: number, descriptor: string): Promise<any> {
     const classroomRepo = this.em.getRepository(Classroom);
     const classroom = await classroomRepo.findOne({
@@ -109,11 +97,31 @@ export class EducatorService extends BaseService {
   }
 
   async getActiveRoomsForClassroom(classroomId: number): Promise<any> {
-    const gameRepo = this.em.getRepository(Game);
-    const activeGames = gameRepo.find({
-      where: { id: classroomId, status: "incomplete" },
-    }); //FIXME: may need to add in relations
-    return activeGames;
+    const classroomGames = await matchMaker.query({ name: GameRoom.NAME });
+    //FIXME: classroomId isn't set properly in the game metadata
+    // const classroomGames = games.filter((game: any) => game.metadata.classroomId === classroomId);
+    if (!classroomGames) {
+      throw new Error("No active classroom games found.");
+    }
+    return classroomGames.map((g: any) => {
+      return {
+        roomId: g.roomId,
+        clients: g.clients,
+        elapsed: Date.now() - new Date(g.createdAt).getTime(),
+        type: g.type,
+      };
+    });
+  }
+
+  async getInspectData(roomId: string): Promise<InspectData | undefined> {
+    if (roomId && (await matchMaker.query({ roomId }))) {
+      try {
+        const data = await matchMaker.remoteRoomCall(roomId, "getInspectData");
+        return data;
+      } catch (e) {
+        return undefined;
+      }
+    }
   }
 
   async deleteClassroom(teacher: Teacher, classroomId: number): Promise<any> {
@@ -147,7 +155,6 @@ export class EducatorService extends BaseService {
     }
     const classrooms = classroomRepo.find({
       where: { teacher: teacher },
-      order: { authToken: "DESC" },
     }); //FIXME: may need to fix relations
     return classrooms;
   }

@@ -96,12 +96,6 @@
           </div>
         </b-col>
         <!-- chat -->
-        <b-col cols="6" class="mh-100 p-2">
-          <h4 class="header-nowrap">Chat</h4>
-          <div class="h-100-header w-100 content-container" style="overflow-y: auto">
-            <Chat :messages="inspectData.chatMessages" :readOnly="true" :reportable="false" />
-          </div>
-        </b-col>
       </b-row>
     </div>
   </b-container>

@@ -1,7 +1,7 @@
 import { url } from "@port-of-mars/client/util";
 import { TStore } from "@port-of-mars/client/plugins/tstore";
 import { AjaxRequest } from "@port-of-mars/client/plugins/ajax";
-import { StudentAuthData } from "@port-of-mars/shared/types";
+import { StudentAuthData, InspectData } from "@port-of-mars/shared/types";
 
 export class EducatorAPI {
   http: any;
@@ -52,18 +52,20 @@ export class EducatorAPI {
     }
   }
 
-  async createClassroom(descriptor: string): Promise<any>{
+  async createClassroom(descriptor: string): Promise<any> {
     const payload = { descriptor };
     console.log("Sending payload:", payload);
     try {
       return await this.ajax.post(
-        url("/educator/classroom"), ({data, status}) => {
-          if (status === 201){
+        url("/educator/classroom"),
+        ({ data, status }) => {
+          if (status === 201) {
             return data;
           } else {
             throw new Error(data.message || "Classroom creation failed");
           }
-        }, payload
+        },
+        payload
       );
     } catch (e) {
       console.log("Unable to create classroom");
@@ -72,14 +74,11 @@ export class EducatorAPI {
     }
   }
 
-
   async getClassrooms() {
     try {
-      return await this.ajax.get(
-        url("/educator/classrooms"), ({data, status}) => {
-          return data;
-        }
-      );
+      return await this.ajax.get(url("/educator/classrooms"), ({ data, status }) => {
+        return data;
+      });
     } catch (e) {
       console.log("Unable to get classrooms");
       console.log(e);
@@ -87,17 +86,18 @@ export class EducatorAPI {
     }
   }
 
-  async updateClassroom(classroomId: number, descriptor: string){
+  async updateClassroom(classroomId: number, descriptor: string) {
     try {
       return await this.ajax.update(
         url("/educator/classroom"),
-        ({data, status}) => {
-          if (status === 200){
+        ({ data, status }) => {
+          if (status === 200) {
             return data;
           } else {
             throw new Error(data.message || "Classroom renaming failed");
           }
-        }, {classroomId, descriptor}
+        },
+        { classroomId, descriptor }
       );
     } catch (e) {
       console.log("Unable to update classroom");
@@ -109,11 +109,11 @@ export class EducatorAPI {
   async deleteClassroom(classroomId: number) {
     try {
       return await this.ajax.delete(
-        url("/educator/classroom"), 
-        ({data, status}) => {
+        url("/educator/classroom"),
+        ({ data, status }) => {
           return data;
-        }, 
-        {classroomId}
+        },
+        { classroomId }
       );
       console.log("Classroom deleted successfully");
     } catch (e) {
@@ -149,15 +149,26 @@ export class EducatorAPI {
       return await this.ajax.get(
         url(`/educator/classroom-games?classroomId=${classroomId}`),
         ({ data, status }) => {
-          if (status === 200){
-            return data;
-          } else {
-            throw new Error(data.message || "failed to fetch classroom games");
-          }
+          return data;
         }
       );
     } catch (e) {
       console.log("unable to get classroom's active games");
+      console.log(e);
+      throw e;
+    }
+  }
+
+  async getInspectData(roomId: string): Promise<InspectData> {
+    try {
+      return await this.ajax.get(
+        url(`/educator/inspect-room?roomId=${roomId}`),
+        ({ data, status }) => {
+          return data;
+        }
+      );
+    } catch (e) {
+      console.log("Unable to retrieve room state");
       console.log(e);
       throw e;
     }

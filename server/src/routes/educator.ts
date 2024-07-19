@@ -31,24 +31,28 @@ educatorRouter.get("/student", async (req: Request, res: Response, next: NextFun
   }
 });
 
-educatorRouter.get("/rooms", async (req: Request, res: Response, next) => {
-  try {
-    const rooms = await getServices().educator.getActiveRooms();
-    res.json(rooms);
-  } catch (e) {
-    logger.warn("Unable to get rooms", e);
-    next(e);
-  }
-});
-
 educatorRouter.get("/classroom-games", async (req: Request, res: Response, next) => {
   const { classroomId } = req.body;
   try {
     const services = getServices();
-    const games = await services.educator.getActiveRoomsForClassroom(Number(classroomId));
-    res.json(games);
+    const games = await services.educator.getActiveRoomsForClassroom(classroomId);
+    res.status(200).json(games);
   } catch (e) {
-    logger.warn("Unable to get classroom games for classroom ID %d", classroomId);
+    logger.warn(`Unable to get classroom games for classroom ID ${classroomId}`);
+    next(e);
+  }
+});
+
+educatorRouter.get("/inspect-room", async (req: Request, res: Response, next) => {
+  const roomId = req.query.roomId as string;
+  try {
+    const room = await getServices().educator.getInspectData(roomId);
+    if (!room) {
+      res.status(204).send(`"Room ${roomId} not found"`);
+      return;
+    }
+    res.json(room);
+  } catch (e) {
     next(e);
   }
 });

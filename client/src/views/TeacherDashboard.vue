@@ -37,14 +37,14 @@
         <!--Main dashboard-->
         <b-col cols="10" class="content-container h-100 w-100 p-3 overflow-hidden">
           <div v-if="classrooms.length > 0" class="h-100 w-100">
-            <div class="row pl-3 justify-content-between">
+            <div class="pl-3 row justify-content-between">
               <div>
                 <h4>{{ selectedClassroom?.descriptor }}</h4>
                 <h4>The Game Code for this Classroom is: {{ selectedClassroom.authToken }}</h4>
               </div>
-              <b-col class="mr-3">
+              <div class="column mr-3">
                 <b-button variant="success" @click="startGames">Start Game</b-button>
-              </b-col>
+              </div>
             </div>
             <b-row>
               <div class="tabs-container w-100 h-100">
@@ -87,7 +87,7 @@
                     </div>
                   </b-tab>
 
-                  <b-tab title="Group">
+                  <b-tab title="Group" @click="fetchActiveRooms">
                     <div
                       v-if="rooms.length < 1"
                       class="h-100 d-flex align-items-center justify-content-center"
@@ -161,6 +161,14 @@
                                 </template>
                               </b-table>
                             </div>
+                            <div
+                              v-else
+                              class="h-100 d-flex align-items-center justify-content-center"
+                            >
+                              <p style="color: rgba(241, 224, 197, 0.25)">
+                                Inspect a game to see its state.
+                              </p>
+                            </div>
                           </div>
                         </b-col>
                       </b-row>
@@ -173,7 +181,7 @@
                           </div>
                         </b-col>
                         <!-- chat -->
-                        <b-col cols="6">
+                        <b-col cols="6" class="p-2">
                           <h4 class="header-nowrap">Chat</h4>
                           <div class="content-container overflow-auto" style="height: 28vh">
                             <Chat
@@ -189,7 +197,7 @@
 
                   <b-tab title="Reports" class="tab-header">
                     <div
-                      v-if="completedGames < 1"
+                      v-if="games.length < 1"
                       class="h-100 d-flex align-items-center justify-content-center"
                     >
                       <p style="color: rgba(241, 224, 197, 0.25)">
@@ -266,18 +274,15 @@
                       </b-col>
                     </b-row>
                   </b-tab>
-
-                  <b-tab title="Settings" class="w-75">
-                    <b-card-text>Classroom Settings </b-card-text>
-                    <b-row class="mb-3">
-                      <b-col cols="2"
-                        ><b-button
-                          :pressed="false"
-                          class="text-nowrap"
-                          variant="warning"
-                          @click="deleteClassroom"
-                          >Delete Classroom</b-button
-                        ></b-col
+                  <b-tab title="Settings">
+                    <b-card-text>Classroom Settings</b-card-text>
+                    <b-row class="mb-3 pl-3">
+                      <b-button
+                        :pressed="false"
+                        class="text-nowrap"
+                        variant="warning"
+                        @click="deleteClassroom"
+                        >Delete Classroom</b-button
                       >
                       <b-col
                         ><b-button
@@ -289,7 +294,7 @@
                         ></b-col
                       >
                     </b-row>
-                    <b-collapse id="rename-collapse" style="width: 35%">
+                    <b-collapse id="rename-collapse" style="width: 30%">
                       <b-form-group description="Must be no more than 20 characters.">
                         <b-form-input
                           v-model="classroomDescriptor"
@@ -324,7 +329,6 @@
       id="add-classroom-modal"
       size="lg"
       title="Add a New Classroom"
-      
       body-bg-variant="info"
       header-bg-variant="info"
       footer-bg-variant="info"
@@ -344,8 +348,12 @@
             :state="descriptorState"
             required
           ></b-form-input>
-          <b-form-invalid-feedback v-if="!descriptorState && !this.descriptorErrorMessage">Descriptor is required</b-form-invalid-feedback>
-          <b-form-invalid-feedback v-else-if="descriptorErrorMessage">{{ descriptorErrorMessage }}</b-form-invalid-feedback>
+          <b-form-invalid-feedback v-if="!descriptorState && !this.descriptorErrorMessage"
+            >Descriptor is required</b-form-invalid-feedback
+          >
+          <b-form-invalid-feedback v-else-if="descriptorErrorMessage">{{
+            descriptorErrorMessage
+          }}</b-form-invalid-feedback>
         </b-form-group>
       </form>
     </b-modal>
@@ -366,18 +374,16 @@ import MarsLog from "@port-of-mars/client/components/game/MarsLog.vue";
 import Chat from "@port-of-mars/client/components/game/static/chat/Chat.vue";
 import Countdown from "@port-of-mars/client/components/global/Countdown.vue";
 import HelpPanel from "@port-of-mars/client/components/lobby/HelpPanel.vue";
-import Messages from "@port-of-mars/client/components/global/Messages.vue";
-import LobbyChat from "@port-of-mars/client/components/lobby/LobbyChat.vue";
 import { InspectData, AdminGameData } from "@port-of-mars/shared/types";
+import StatusBar from "@port-of-mars/client/components/game/static/systemhealth/StatusBar.vue";
 
 @Component({
   components: {
     Countdown,
     HelpPanel,
-    Messages,
-    LobbyChat,
-    MarsLog,
     Chat,
+    MarsLog,
+    StatusBar,
   },
 })
 export default class TeacherDashboard extends Vue {
@@ -393,7 +399,6 @@ export default class TeacherDashboard extends Vue {
   classroomDescriptor = "";
   renameErrorMessage = "";
   descriptorErrorMessage = "";
-  completedGames = 1; //Temporary until finished games are implemented
   descriptorState: boolean | null = null;
 
   clientFields = [
@@ -416,14 +421,7 @@ export default class TeacherDashboard extends Vue {
     { key: "clients", label: "Players" },
     { key: "inspect", label: "" },
   ];
-  rooms: any = [
-    { roomId: "1", elapsed: 0, clients: 5 },
-    { roomId: "2", elapsed: 0, clients: 3 },
-    { roomId: "3", elapsed: 0, clients: 5 },
-    { roomId: "4", elapsed: 0, clients: 5 },
-    { roomId: "5", elapsed: 0, clients: 5 },
-    { roomId: "6", elapsed: 0, clients: 5 },
-  ]; //Mock room data
+  rooms: any = [];
 
   inspectData: InspectData = {
     players: [],
@@ -452,8 +450,34 @@ export default class TeacherDashboard extends Vue {
     return this.inspectedRoomId === roomId;
   }
 
+  //FIXME: implement a way to auto refresh updated game stats
+  async fetchActiveRooms() {
+    try {
+      const rooms = await this.educatorApi.getClassroomGames(this.selectedClassroom.id);
+      Vue.set(this, "rooms", rooms);
+      console.log("Current active games: " + this.rooms.length);
+    } catch (e) {
+      console.error("Failed to get active rooms:", e);
+    }
+  }
+
   async fetchInspectData(roomId: string) {
-    //FIXME: using admin api, inspecting causes redirecting error
+    if (roomId) {
+      this.inspectedRoomId = roomId;
+      try {
+        const data = await this.educatorApi.getInspectData(roomId);
+        Vue.set(this, "inspectData", data);
+      } catch (e) {
+        console.log(e);
+        Vue.set(this, "inspectData", {
+          players: [],
+          systemHealth: 0,
+          marsLog: [],
+          chatMessages: [], //FIXME: remove messaging feature at the start
+        });
+        this.inspectedRoomId = "";
+      }
+    }
   }
 
   //WIP: Implement into the reports container
@@ -470,35 +494,7 @@ export default class TeacherDashboard extends Vue {
     { key: "role", label: "Role" },
     { key: "points", label: "Points" },
   ];
-  games = [
-    //Temporary finished games
-    {
-      id: 1,
-      timeFinalized: new Date(),
-      status: "defeat",
-      players: [
-        { username: "1", role: "Researcher", points: 5 },
-        { username: "2", role: "Curator", points: 3 },
-        { username: "3", role: "Pioneer", points: 8 },
-        { username: "4", role: "Entrepreneur", points: 12 },
-        { username: "5", role: "Politician", points: 2 },
-      ],
-      highScore: 30,
-      inspect: "",
-    },
-    {
-      id: 2,
-      timeFinalized: new Date(),
-      status: "victory",
-      players: [
-        { username: "1", role: "Researcher", points: 12 },
-        { username: "2", role: "Curator", points: 56 },
-        { username: "3", role: "Pioneer", points: 24 },
-      ],
-      highScore: 92,
-      inspect: "",
-    },
-  ];
+  games = [];
   inspectedGame: any | null = null;
 
   getHumanCount(players: AdminGameData["players"]) {
@@ -531,13 +527,14 @@ export default class TeacherDashboard extends Vue {
     return valid;
   }
 
-  handleDescriptorOk(bvModalEvent: { preventDefault: () => void; }){
-    if (!this.checkDescriptorForm()){
+  handleDescriptorOk(bvModalEvent: { preventDefault: () => void }) {
+    if (!this.checkDescriptorForm()) {
       bvModalEvent.preventDefault();
     } else {
-
-    const isDuplicate = this.classrooms.some(classroom => classroom.descriptor === this.classroomDescriptor);
-      if (isDuplicate){
+      const isDuplicate = this.classrooms.some(
+        classroom => classroom.descriptor === this.classroomDescriptor
+      );
+      if (isDuplicate) {
         this.descriptorState = false;
         this.descriptorErrorMessage = "A classroom with this name already exists";
         bvModalEvent.preventDefault();
@@ -545,7 +542,6 @@ export default class TeacherDashboard extends Vue {
       } else {
         this.handleDescriptorSubmit();
       }
-      
     }
   }
 
@@ -556,22 +552,22 @@ export default class TeacherDashboard extends Vue {
     } else {
       this.addClassroom();
       this.$nextTick(() => {
-        this.$bvModal.hide('add-classroom-modal')
+        this.$bvModal.hide("add-classroom-modal");
       });
     }
   }
 
-  resetDescriptorModal(){
+  resetDescriptorModal() {
     this.classroomDescriptor = "";
     this.descriptorState = null;
   }
 
   async addClassroom() {
     if (!this.classroomDescriptor) {
-      console.error("Empty classroom descriptor")
-      return; 
+      console.error("Empty classroom descriptor");
+      return;
     }
-    
+
     try {
       const newClassroom = await this.educatorApi.createClassroom(this.classroomDescriptor);
       console.log("New Classroom:", newClassroom);
@@ -599,12 +595,17 @@ export default class TeacherDashboard extends Vue {
     if (this.classroomDescriptor.length > 20 || !this.classroomDescriptor) {
       this.renameErrorMessage = "Invalid classroom name. Please try again.";
     } else {
-      const isDuplicate = this.classrooms.some(classroom => classroom.descriptor === this.classroomDescriptor);
-      if (isDuplicate){
+      const isDuplicate = this.classrooms.some(
+        classroom => classroom.descriptor === this.classroomDescriptor
+      );
+      if (isDuplicate) {
         this.renameErrorMessage = "A classroom with this name already exists";
       } else {
         try {
-          await this.educatorApi.updateClassroom(this.selectedClassroom.id, this.classroomDescriptor);
+          await this.educatorApi.updateClassroom(
+            this.selectedClassroom.id,
+            this.classroomDescriptor
+          );
           this.classrooms = await this.educatorApi.getClassrooms();
           console.log("Classroom updated successfully");
           this.$root.$emit("bv::toggle::collapse", "rename-collapse");
