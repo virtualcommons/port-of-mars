@@ -6,7 +6,7 @@
     <b-form
       class="content-container rounded d-flex flex-column justify-content-center align-items-center backdrop p-5"
       style="width: 30rem"
-      @submit="handleSubmit"
+      @submit.stop.prevent="handleSubmit"
     >
       <h4>Welcome, {{ username }}</h4>
       <p class="mb-4">Please enter your name to continue to the classroom lobby</p>
