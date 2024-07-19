@@ -324,16 +324,19 @@
       id="add-classroom-modal"
       size="lg"
       title="Add a New Classroom"
-      @ok="handleDescriptorSubmit"
+      
       body-bg-variant="info"
       header-bg-variant="info"
       footer-bg-variant="info"
+      @ok="handleDescriptorOk"
+      @show="resetDescriptorModal"
+      @hidden="resetDescriptorModal"
     >
       <form ref="form" @submit.stop.prevent="handleDescriptorSubmit">
         <b-form-group
           label="Enter Classroom Descriptor"
           label-for="descriptor-input"
-          invalid-feedback="Descriptor is required"
+          :state="descriptorState"
         >
           <b-form-input
             id="descriptor-input"
@@ -341,6 +344,8 @@
             :state="descriptorState"
             required
           ></b-form-input>
+          <b-form-invalid-feedback v-if="!descriptorState && !this.descriptorErrorMessage">Descriptor is required</b-form-invalid-feedback>
+          <b-form-invalid-feedback v-else-if="descriptorErrorMessage">{{ descriptorErrorMessage }}</b-form-invalid-feedback>
         </b-form-group>
       </form>
     </b-modal>
@@ -387,6 +392,7 @@ export default class TeacherDashboard extends Vue {
   startGame = {};
   classroomDescriptor = "";
   renameErrorMessage = "";
+  descriptorErrorMessage = "";
   completedGames = 1; //Temporary until finished games are implemented
   descriptorState: boolean | null = null;
 
@@ -525,20 +531,47 @@ export default class TeacherDashboard extends Vue {
     return valid;
   }
 
+  handleDescriptorOk(bvModalEvent: { preventDefault: () => void; }){
+    if (!this.checkDescriptorForm()){
+      bvModalEvent.preventDefault();
+    } else {
+
+    const isDuplicate = this.classrooms.some(classroom => classroom.descriptor === this.classroomDescriptor);
+      if (isDuplicate){
+        this.descriptorState = false;
+        this.descriptorErrorMessage = "A classroom with this name already exists";
+        bvModalEvent.preventDefault();
+        return;
+      } else {
+        this.handleDescriptorSubmit();
+      }
+      
+    }
+  }
+
   handleDescriptorSubmit() {
     if (!this.checkDescriptorForm) {
       console.error("Descriptor form is not completed");
       return;
     } else {
       this.addClassroom();
+      this.$nextTick(() => {
+        this.$bvModal.hide('add-classroom-modal')
+      });
     }
   }
 
+  resetDescriptorModal(){
+    this.classroomDescriptor = "";
+    this.descriptorState = null;
+  }
+
   async addClassroom() {
-    //const descriptor = prompt("enter descriptor"); //FIXME: make stylized pop up
     if (!this.classroomDescriptor) {
-      return; //FIXME: add in error message
+      console.error("Empty classroom descriptor")
+      return; 
     }
+    
     try {
       const newClassroom = await this.educatorApi.createClassroom(this.classroomDescriptor);
       console.log("New Classroom:", newClassroom);
@@ -563,19 +596,24 @@ export default class TeacherDashboard extends Vue {
   }
 
   async renameClassroom() {
-    if (this.classroomDescriptor.length > 20) {
+    if (this.classroomDescriptor.length > 20 || !this.classroomDescriptor) {
       this.renameErrorMessage = "Invalid classroom name. Please try again.";
     } else {
-      try {
-        await this.educatorApi.updateClassroom(this.selectedClassroom.id, this.classroomDescriptor);
-        this.classrooms = await this.educatorApi.getClassrooms();
-        console.log("Classroom updated successfully");
-        this.$root.$emit("bv::toggle::collapse", "rename-collapse");
-        this.classroomDescriptor = "";
-        this.selectClassroom(this.selectedClassroom.id);
-      } catch (e) {
-        console.error("Failed to rename classroom", e);
-        this.renameErrorMessage = "Failed to rename classroom. Please try again.";
+      const isDuplicate = this.classrooms.some(classroom => classroom.descriptor === this.classroomDescriptor);
+      if (isDuplicate){
+        this.renameErrorMessage = "A classroom with this name already exists";
+      } else {
+        try {
+          await this.educatorApi.updateClassroom(this.selectedClassroom.id, this.classroomDescriptor);
+          this.classrooms = await this.educatorApi.getClassrooms();
+          console.log("Classroom updated successfully");
+          this.$root.$emit("bv::toggle::collapse", "rename-collapse");
+          this.classroomDescriptor = "";
+          this.selectClassroom(this.selectedClassroom.id);
+        } catch (e) {
+          console.error("Failed to rename classroom", e);
+          this.renameErrorMessage = "Failed to rename classroom. Please try again.";
+        }
       }
     }
   }
