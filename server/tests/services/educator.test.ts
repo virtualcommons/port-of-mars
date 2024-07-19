@@ -88,23 +88,11 @@ describe("the educator service", () => {
   });
 
   it("invalid rejoin codes are caught", async () => {
-    for (let i=0; i<10; i++){
+    for (let i = 0; i < 10; i++) {
       const invalidCode = "invalidCode" + `${i}`;
-      expect(educatorService.getStudentByRejoinCode(invalidCode)).resolves.toBeNull(); 
+      expect(educatorService.getStudentByRejoinCode(invalidCode)).resolves.toBeNull();
     }
   });
-
-  it("groups are partitioned evenly", async () => {
-    /*TODO: make mock data of students to perform partition algo. on. 
-      Expect the result to:
-      1. All count up to the total number to students
-      2. Each group is at most 5 and at least 3 (might fail with 6 students)
-    */
-
-  });
-
-  
-
 
   afterAll(async () => rollbackTransaction(qr));
 });
