@@ -124,6 +124,20 @@ export class EducatorService extends BaseService {
     }
   }
 
+  async getCompletedGamesForClassroom(classroomId: number): Promise<any> {
+    
+    const query = this.em
+    .getRepository(Game)
+    .createQueryBuilder("game")
+    .leftJoinAndSelect("game.players", "player")
+    .leftJoinAndSelect("player.user", "user")
+    .leftJoinAndSelect("game.tournamentRound", "tournamentRound")
+    .leftJoinAndSelect("tournamentRound.tournament", "tournament")
+    .where("game.classroomId = :classroomId", {classroomId});
+
+    return query.getMany();
+  }
+
   async deleteClassroom(teacher: Teacher, classroomId: number): Promise<any> {
     const classroomRepo = this.em.getRepository(Classroom);
     const classroom = await classroomRepo.findOne({
