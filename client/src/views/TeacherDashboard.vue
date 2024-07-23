@@ -176,17 +176,20 @@
                         <!-- mars log -->
                         <b-col cols="6">
                           <h4 class="header-nowrap">Mars Log</h4>
-                          <div class="content-container overflow-auto" style="height: 28vh">
+                          <div
+                            class="content-container overflow-auto pl-3 py-1"
+                            style="height: 28vh"
+                          >
                             <MarsLog :logs="inspectData.marsLog" />
                           </div>
                         </b-col>
                         <!-- chat -->
-                        <b-col cols="6" class="p-2">
+                        <b-col cols="6">
                           <h4 class="header-nowrap">Chat</h4>
-                          <div class="content-container overflow-auto" style="height: 28vh">
+                          <div class="content-container overflow-auto p-2" style="height: 28vh">
                             <Chat
                               :messages="inspectData.chatMessages"
-                              :readonly="true"
+                              :readOnly="true"
                               :reportable="false"
                             />
                           </div>
@@ -195,9 +198,9 @@
                     </div>
                   </b-tab>
 
-                  <b-tab title="Reports" class="tab-header">
+                  <b-tab title="Reports" class="tab-header" @click="fetchCompletedGames">
                     <div
-                      v-if="games.length < 1"
+                      v-if="completedGames.length < 1"
                       class="h-100 d-flex align-items-center justify-content-center"
                     >
                       <p style="color: rgba(241, 224, 197, 0.25)">
@@ -206,21 +209,21 @@
                     </div>
                     <b-row v-else>
                       <!-- finished games -->
-                      <b-col :cols="inspectedGame ? '7' : '12'">
+                      <b-col :cols="inspectedCompletedGame ? '7' : '12'">
                         <h4 class="header-nowrap">Completed Games</h4>
                         <div class="content-container">
                           <b-table
                             dark
                             sticky-header
                             class="h-100 m-0 custom-table"
-                            style="overflow-y: auto; max-height: 64vh"
-                            :fields="gameFields"
-                            :items="games"
+                            style="overflow-y: auto; max-height: 61vh"
+                            :fields="completedGameFields"
+                            :items="completedGames"
                             sort-by="highScore"
                             :sort-desc="true"
                           >
-                            <template #cell(timeFinalized)="data">
-                              {{ new Date(data.item.timeFinalized).toLocaleTimeString() }}
+                            <template #cell(dateFinalized)="data">
+                              {{ new Date(data.item.dateFinalized).toLocaleTimeString() }}
                             </template>
                             <template #cell(status)="data">
                               <b-badge
@@ -231,17 +234,24 @@
                             </template>
                             <template #cell(players)="data">
                               <b-icon-person-fill
-                                v-for="i in data.item.players.length"
+                                v-for="i in getHumanCount(data.item.players)"
+                                :key="'bot' + i"
+                              />
+                              <b-icon-laptop
+                                v-for="i in getBotCount(data.item.players)"
                                 :key="'human' + i"
                               />
+                            </template>
+                            <template #cell(highScore)="data">
+                              {{ data.item.highScore }}
                             </template>
                             <template #cell(inspect)="data">
                               <b-button
                                 variant="light"
                                 size="sm"
                                 class="float-right"
-                                :disabled="data.item.id === inspectedGame?.id"
-                                @click="inspectedGame = data.item"
+                                :disabled="data.item.id === inspectedCompletedGame?.id"
+                                @click="inspectedCompletedGame = data.item"
                                 >Scoreboard
                                 <b-icon-box-arrow-right
                                   class="float-right ml-2"
@@ -252,22 +262,44 @@
                         </div>
                         <!-- scoreboard -->
                       </b-col>
-                      <b-col v-if="inspectedGame" cols="5" class="h-100 w-100">
-                        <h4 class="header-nowrap">Game #{{ inspectedGame.id }} Scoreboard</h4>
+                      <b-col v-if="inspectedCompletedGame" cols="5" class="h-100 w-100">
+                        <h4 class="header-nowrap">
+                          Game #{{ inspectedCompletedGame.id }} Scoreboard
+                        </h4>
                         <div class="content-container">
                           <b-table
                             dark
                             sticky-header
                             class="m-0 custom-table"
+                            style="overflow-y: auto; max-height: 61vh"
                             :tbody-tr-attr="playerRowStyle"
                             :fields="playerFields"
-                            :items="inspectedGame.players"
-                            sort-by="timeFinalized"
+                            :items="inspectedCompletedGame.players"
+                            sort-by="points"
                             :sort-desc="true"
                           >
                             <template #cell(username)="data">
-                              <b-icon-person-fill></b-icon-person-fill>
-                              {{ data.item.username }}
+                              <b-icon-laptop v-if="data.item.user.isSystemBot"></b-icon-laptop>
+                              <b-icon-person-fill v-else></b-icon-person-fill>
+                              {{ data.item.user.username }}
+                              <p
+                                style="margin-left: 1.3rem; margin-bottom: 0"
+                                v-if="!data.item.user.isSystemBot"
+                              >
+                                {{ data.item.user.name }}
+                              </p>
+                            </template>
+                            <template #cell(points)="data">
+                              {{ data.item.points }}
+                              <b-badge
+                                variant="success"
+                                v-if="
+                                  isEligibleForPrize(data.item.user) &&
+                                  inspectedCompletedGame.highScore &&
+                                  data.item.points === inspectedCompletedGame.highScore
+                                "
+                                >winner</b-badge
+                              >
                             </template>
                           </b-table>
                         </div>
@@ -374,7 +406,7 @@ import MarsLog from "@port-of-mars/client/components/game/MarsLog.vue";
 import Chat from "@port-of-mars/client/components/game/static/chat/Chat.vue";
 import Countdown from "@port-of-mars/client/components/global/Countdown.vue";
 import HelpPanel from "@port-of-mars/client/components/lobby/HelpPanel.vue";
-import { InspectData, AdminGameData } from "@port-of-mars/shared/types";
+import { InspectData, AdminGameData, ClientSafeUser } from "@port-of-mars/shared/types";
 import StatusBar from "@port-of-mars/client/components/game/static/systemhealth/StatusBar.vue";
 
 @Component({
@@ -450,7 +482,7 @@ export default class TeacherDashboard extends Vue {
     return this.inspectedRoomId === roomId;
   }
 
-  //FIXME: implement a way to auto refresh updated game stats
+  //FIXME: auto refresh to update game stats
   async fetchActiveRooms() {
     try {
       const rooms = await this.educatorApi.getClassroomGames(this.selectedClassroom.id);
@@ -473,7 +505,7 @@ export default class TeacherDashboard extends Vue {
           players: [],
           systemHealth: 0,
           marsLog: [],
-          chatMessages: [], //FIXME: remove messaging feature at the start
+          chatMessages: [],
         });
         this.inspectedRoomId = "";
       }
@@ -481,24 +513,40 @@ export default class TeacherDashboard extends Vue {
   }
 
   //WIP: Implement into the reports container
-  gameFields = [
-    { key: "id", label: "Room ID" },
-    { key: "timeFinalized", label: "Time Finished" },
-    { key: "status", label: "Status" },
-    { key: "players", label: "Players" },
-    { key: "highScore", label: "High Score" },
-    { key: "inspect", label: "" },
-  ];
   playerFields = [
     { key: "username", label: "Username" },
     { key: "role", label: "Role" },
     { key: "points", label: "Points" },
   ];
-  games = [];
-  inspectedGame: any | null = null;
+  completedGameFields = [
+    { key: "id", label: "Game ID" },
+    { key: "dateFinalized", label: "Time Finished" },
+    { key: "status", label: "Status" },
+    { key: "players", label: "Players" },
+    { key: "highScore", label: "High Score" },
+    { key: "inspect", label: "" },
+  ];
+
+  completedGames: AdminGameData[] = [];
+  highestScore = 0;
+  inspectedCompletedGame: AdminGameData | null = null;
+
+  async fetchCompletedGames() {
+    try {
+      // this.completedGames = await this.educatorApi.getCompletedGames(this.selectedClassroom.id);
+      // this.findHighScores();
+      console.log("Completed games: " + this.completedGames.length);
+    } catch (e) {
+      console.error("Failed to fetched completed games", e);
+    }
+  }
 
   getHumanCount(players: AdminGameData["players"]) {
-    //TODO: Implement once we can get finished games req.
+    return players.filter(p => !p.user.isSystemBot).length;
+  }
+
+  getBotCount(players: AdminGameData["players"]) {
+    return players.filter(p => p.user.isSystemBot).length;
   }
 
   playerRowStyle(item: any, type: any) {
@@ -507,6 +555,28 @@ export default class TeacherDashboard extends Vue {
       return {
         style: `background-color: var(--color-${item.role});`,
       };
+  }
+
+  findHighScores() {
+    this.highestScore = 0;
+    this.completedGames
+      .filter((game: AdminGameData) => game.status === "victory")
+      .forEach((game: AdminGameData) => {
+        game.players.forEach((player: any) => {
+          if (this.isEligibleForPrize(player.user)) {
+            if (player.points > (game.highScore ?? 0)) {
+              game.highScore = player.points;
+            }
+          }
+          if ((game.highScore ?? 0) > this.highestScore) {
+            this.highestScore = game.highScore ?? 0;
+          }
+        });
+      });
+  }
+
+  isEligibleForPrize(user: ClientSafeUser) {
+    return !user.isSystemBot && user.isVerified;
   }
 
   selectClassroom(classroomId: number) {

@@ -153,7 +153,7 @@ export class EducatorAPI {
         }
       );
     } catch (e) {
-      console.log("unable to get classroom's active games");
+      console.log("Unable to get classroom's active games");
       console.log(e);
       throw e;
     }
@@ -173,4 +173,19 @@ export class EducatorAPI {
       throw e;
     }
   }
+
+  // async getCompletedGames(classroomId: number): Promise<any> {
+  //   try {
+  //     return await this.ajax.get(
+  //       url(`/educator/completed-games?classroomId=${classroomId}`),
+  //       ({ data, status }) => {
+  //         return data;
+  //       }
+  //     );
+  //   } catch (e) {
+  //     console.log("Unable to retrieve completed games");
+  //     console.log(e);
+  //     throw e;
+  //   }
+  // }
 }

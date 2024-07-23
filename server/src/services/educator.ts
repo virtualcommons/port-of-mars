@@ -97,9 +97,8 @@ export class EducatorService extends BaseService {
   }
 
   async getActiveRoomsForClassroom(classroomId: number): Promise<any> {
-    const classroomGames = await matchMaker.query({ name: GameRoom.NAME });
-    //FIXME: classroomId isn't set properly in the game metadata
-    // const classroomGames = games.filter((game: any) => game.metadata.classroomId === classroomId);
+    const games = await matchMaker.query({ name: GameRoom.NAME });
+    const classroomGames = games.filter((game: any) => game.metadata.classroomId === classroomId);
     if (!classroomGames) {
       throw new Error("No active classroom games found.");
     }
@@ -125,15 +124,14 @@ export class EducatorService extends BaseService {
   }
 
   async getCompletedGamesForClassroom(classroomId: number): Promise<any> {
-    
     const query = this.em
-    .getRepository(Game)
-    .createQueryBuilder("game")
-    .leftJoinAndSelect("game.players", "player")
-    .leftJoinAndSelect("player.user", "user")
-    .leftJoinAndSelect("game.tournamentRound", "tournamentRound")
-    .leftJoinAndSelect("tournamentRound.tournament", "tournament")
-    .where("game.classroomId = :classroomId", {classroomId});
+      .getRepository(Game)
+      .createQueryBuilder("game")
+      .leftJoinAndSelect("game.players", "player")
+      .leftJoinAndSelect("player.user", "user")
+      .leftJoinAndSelect("game.tournamentRound", "tournamentRound")
+      .leftJoinAndSelect("tournamentRound.tournament", "tournament")
+      .where("game.classroomId = :classroomId", { classroomId });
 
     return query.getMany();
   }
